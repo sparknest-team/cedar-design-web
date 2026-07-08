@@ -194,8 +194,8 @@ onMounted(() => {
   state.accessToken = localStorage.getItem(STORAGE_KEY) || ''
   // eslint-disable-next-line
   // @ts-ignore
-  // TODO: 脱敏迁移 - 暂时注释 @nio-pow/mfe-vue3
-  // import('@nio-pow/mfe-vue3').then(({ Auth, Env, SaaSConf, Fetch, globalConfig }) => {
+  // TODO: 脱敏迁移 - 暂时注释 @maplejs/mfe-vue3
+  // import('@maplejs/mfe-vue3').then(({ Auth, Env, SaaSConf, Fetch, globalConfig }) => {
     state.Auth = Auth
     state.Env = Env
     state.SaaSConf = SaaSConf

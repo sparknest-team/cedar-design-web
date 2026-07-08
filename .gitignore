@@ -1,14 +1,40 @@
-.idea/
-# .vscode/
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-node_modules/
-storybook-static/
-**/.DS_Store
-
-package-lock.json
-lerna-debug.log
-npm-debug.log
-pnpm-debug.log
-
-package-lock.json
-yarn.lock
+node_modules
+dist
+es
+dist-ssr
+*.local
+src/icon/*
+src/components/icon/*
+icon/icons.json
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+lib
+.historie
+.husky
+.vscode
+.vite-node
+.temp
+.cache

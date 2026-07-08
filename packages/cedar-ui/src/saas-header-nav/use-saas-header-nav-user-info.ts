@@ -15,7 +15,7 @@ export interface ISaasHeaderNavUserInfoAction {
 }
 
 export interface IMfeSdkProp {
-  // TODO: 脱敏迁移 - 暂时注释 @nio-pow/mfe-vue3，后续替换为公有包
+  // TODO: 脱敏迁移 - 暂时注释 @maplejs/mfe-vue3，后续替换为公有包
   Auth: any
   Env: any
   SaaSConf: any

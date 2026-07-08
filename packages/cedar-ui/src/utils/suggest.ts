@@ -1,5 +1,5 @@
-// TODO: 脱敏迁移 - 暂时注释 @nio-pow/map-core，后续替换为公有包
-// import { PoiInfo } from '@nio-pow/map-core'
+// TODO: 脱敏迁移 - 暂时注释 @maplejs/map-core，后续替换为公有包
+// import { PoiInfo } from '@maplejs/map-core'
 
 export const useSuggest = (fetch?: { get: any; post: any }, basePath?: string) => {
   const geoUrl = basePath + '/gis/v2/in/map/suggest'

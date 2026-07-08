@@ -1,6 +1,6 @@
 import { Popconfirm } from '@arco-design/web-vue'
-// TODO: 脱敏迁移 - 暂时注释 @nio-pow/map-core，后续替换为公有包
-// import { LngLat, Map, MapService, PoiInfo, SearchResult, SearchService } from '@nio-pow/map-core'
+// TODO: 脱敏迁移 - 暂时注释 @maplejs/map-core，后续替换为公有包
+// import { LngLat, Map, MapService, PoiInfo, SearchResult, SearchService } from '@maplejs/map-core'
 import { computed, defineComponent, getCurrentInstance, h, onMounted, ref, toRaw, useAttrs, useSlots, watch } from 'vue'
 import { IconEdit, IconSearch } from '../icon'
 import Input from '../input'

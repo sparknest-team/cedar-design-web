@@ -63,8 +63,8 @@ const buildScssFull = async () => {
   // })
   await new Promise((resolve) => {
     src([
-      // TODO: 脱敏迁移 - 暂时注释 @nio-pow/map-core，后续替换为公有包
-      // `${root}/node_modules/@nio-pow/map-core/dist/index.css`,
+      // TODO: 脱敏迁移 - 暂时注释 @maplejs/map-core，后续替换为公有包
+      // `${root}/node_modules/@maplejs/map-core/dist/index.css`,
       `${output}/index.css`,
     ])
       .pipe(concat('index.css'))

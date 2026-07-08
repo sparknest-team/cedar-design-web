@@ -17,7 +17,8 @@
     "dtsgen": "pnpm --filter @cedar/ui dtsgen",
     "watch": "pnpm --filter @cedar/ui watch",
     "clean-cache": "pnpm --filter @cedar/ui clean-cache",
-    "preview": "pnpm --filter @cedar/ui preview"
+    "preview": "pnpm --filter @cedar/ui preview",
+    "prepare": "husky install packages/cedar-ui/.husky"
   },
   "packageManager": "pnpm@9.6.0",
   "engines": {

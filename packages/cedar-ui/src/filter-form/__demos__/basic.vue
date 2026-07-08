@@ -44,8 +44,8 @@ const fetch = ref<any>()
 onMounted(() => {
   // eslint-disable-next-line
   // @ts-ignore
-  // TODO: 脱敏迁移 - 暂时注释 @nio-pow/mfe-vue3
-  // import('@nio-pow/mfe-vue3').then(({ Fetch }) => {
+  // TODO: 脱敏迁移 - 暂时注释 @maplejs/mfe-vue3
+  // import('@maplejs/mfe-vue3').then(({ Fetch }) => {
     fetch.value = Fetch.genFetch('powerpro-api-dev.xxxx.com', {
       needAuth: true,
       openLoginInterceptor: false,

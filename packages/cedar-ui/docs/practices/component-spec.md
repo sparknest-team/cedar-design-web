@@ -243,12 +243,12 @@ export default Comp
 
 ## 6. 父子组件通信
 
-需要父子配置继承时（如 `ButtonGroup` ↔ `Button`），统一使用 `@nio-pow/maple-use` 的 `useChildren` / `useParent`：
+需要父子配置继承时（如 `ButtonGroup` ↔ `Button`），统一使用 `@maplejs/maple-use` 的 `useChildren` / `useParent`：
 
 ```ts
 // provide.ts
 import type { ComputedRef } from 'vue'
-import { useChildren, useParent } from '@nio-pow/maple-use'
+import { useChildren, useParent } from '@maplejs/maple-use'
 
 export interface XxxGroupProvider {
   status: ComputedRef<Status>

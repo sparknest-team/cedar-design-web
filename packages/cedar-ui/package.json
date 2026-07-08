@@ -32,7 +32,6 @@
     "test:watch": "vitest",
     "test": "vitest --run",
     "coverage": "vitest run --coverage",
-    "prepare": "husky install",
     "format": "prettier --write .",
     "lint-staged": "lint-staged",
     "clean-cache": "rm -rf docs/.vuepress/.cache && rm -rf docs/.vuepress/.temp && rm -rf node_modules/.vite",
