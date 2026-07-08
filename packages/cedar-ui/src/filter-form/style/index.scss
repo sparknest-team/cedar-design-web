@@ -1,0 +1,26 @@
+.cedar-filter-form {
+  border-radius: var(--border-radius-medium);
+  background-color: var(--fill-0);
+
+  .cedar-form-item {
+    margin-bottom: 16px;
+  }
+
+  .filter-form-suffix {
+    justify-content: flex-end;
+  }
+
+  .filter-form-suffix .collapsed-btn {
+    color: var(--color-text-secondary);
+    margin-right: 16px;
+    cursor: pointer;
+  }
+
+  .cedar-select-view-multiple .cedar-select-view-inner .cedar-select-view-input {
+    transition: none !important;
+  }
+}
+
+.cedar-filter-form-remember-selections {
+  margin-top: -4px;
+}

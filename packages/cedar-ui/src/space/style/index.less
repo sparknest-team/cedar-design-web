@@ -1,0 +1,25 @@
+@import '../../style/theme/index.less';
+@import './token.less';
+
+.c-space {
+  display: inline-flex;
+
+  &--block {
+    display: flex;
+  }
+
+  &--auto {
+    width: auto;
+  }
+
+  &__item {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  &__item-split {
+    align-self: stretch;
+    display: inline-flex;
+    align-items: center;
+  }
+}

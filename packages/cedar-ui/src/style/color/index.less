@@ -1,0 +1,130 @@
+// 替换 @use 为 @import
+@import 'index-var.less';
+@import 'index-var-redirect.less';
+
+// 定义关键 token 列表
+@key-token: primary, success, warning, danger, link;
+
+// 生成关键 token 类的递归 Mixin
+.generate-key-tokens(@index) when (@index > 0) {
+  @key: extract(@key-token, @index);
+
+  // 基础类
+  .@{key} {
+    color: rgb(var(~'--@{key}')) !important;
+  }
+
+  // 状态类
+  .@{key}-default {
+    color: rgb(var(~'--@{key}-default')) !important;
+  }
+  .@{key}-hover {
+    color: rgb(var(~'--@{key}-hover')) !important;
+  }
+  .@{key}-pressed {
+    color: rgb(var(~'--@{key}-pressed')) !important;
+  }
+  .@{key}-disabled {
+    color: rgb(var(~'--@{key}-disabled')) !important;
+  }
+
+  // 背景类
+  .bg-@{key} {
+    background-color: rgb(var(~'--bg-@{key}')) !important;
+  }
+
+  // 生成1-10色号的类
+  .generate-color-shades(@key, 1);
+
+  // 处理下一个 token
+  .generate-key-tokens(@index - 1);
+}
+
+// 生成颜色深浅的递归 Mixin
+.generate-color-shades(@key, @i) when (@i <= 10) {
+  .bg-@{key}-@{i} {
+    background-color: rgb(var(~'--@{key}-@{i}')) !important;
+  }
+  .@{key}-@{i} {
+    color: rgb(var(~'--@{key}-@{i}')) !important;
+  }
+
+  // 递归调用处理下一个色号
+  .generate-color-shades(@key, @i + 1);
+}
+
+// 初始化关键 token 生成
+.generate-key-tokens(length(@key-token));
+
+// 处理边框颜色
+@color-border-list:
+  1 --neutral-2,
+  2 --neutral-3,
+  3 --neutral-4,
+  4 --neutral-6;
+
+.generate-border-classes(@index) when (@index > 0) {
+  @pair: extract(@color-border-list, @index);
+  @color: extract(@pair, 1);
+  @var: extract(@pair, 2);
+
+  .border-@{color} {
+    border-color: var(~'@{var}') !important;
+  }
+
+  .generate-border-classes(@index - 1);
+}
+.generate-border-classes(length(@color-border-list));
+
+// 处理填充颜色
+@color-fill-list:
+  1 --neutral-1,
+  2 --neutral-2,
+  3 --neutral-3,
+  4 --neutral-4;
+
+.generate-fill-classes(@index) when (@index > 0) {
+  @pair: extract(@color-fill-list, @index);
+  @color: extract(@pair, 1);
+  @var: extract(@pair, 2);
+
+  .fill-@{color} {
+    background-color: var(~'@{var}') !important;
+  }
+
+  .generate-fill-classes(@index - 1);
+}
+.generate-fill-classes(length(@color-fill-list));
+
+// 处理信息文本 token
+@color-info-token: text-primary, text-secondary, text-tertiary, text-disabled, text-placeholder;
+
+.generate-info-tokens(@index) when (@index > 0) {
+  @token: extract(@color-info-token, @index);
+
+  .@{token} {
+    color: var(~'--@{token}') !important;
+  }
+
+  .generate-info-tokens(@index - 1);
+}
+.generate-info-tokens(length(@color-info-token));
+
+// 处理背景颜色
+@color-bg-list:
+  bg-0 var(--bg-0),
+  bg-1 var(--bg-1),
+  bg-2 var(--bg-2);
+
+.generate-bg-classes(@index) when (@index > 0) {
+  @pair: extract(@color-bg-list, @index);
+  @class: extract(@pair, 1);
+  @var: extract(@pair, 2);
+
+  .@{class} {
+    background-color: @var !important;
+  }
+
+  .generate-bg-classes(@index - 1);
+}
+.generate-bg-classes(length(@color-bg-list));

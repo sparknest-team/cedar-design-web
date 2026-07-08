@@ -1,0 +1,9 @@
+// Vitest Snapshot v1
+
+exports[`Ellipsis > render 1`] = `
+"<div>
+  <div class=\\"cedar-ellipsis cedar-ellipsis--line\\" cedar-ellipsis-cover=\\"\\"><span></span></div>
+  <!--teleport start-->
+  <!--teleport end-->
+</div>"
+`;

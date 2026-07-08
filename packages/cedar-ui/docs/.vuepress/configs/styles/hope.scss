@@ -1,0 +1,126 @@
+:root {
+  --vp-c-accent: rgb(0 190 190);
+  --vp-c-accent-bg: rgb(0 190 190);
+  --vp-c-accent-hover: rgb(55, 209, 204);
+  --c-brand: rgb(0 190 190);
+  --c-brand-light: rgb(0 190 190);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.vp-page {
+  margin: 0;
+  max-width: unset;
+}
+
+html.dark {
+  --c-brand: rgb(0 190 190);
+  --c-brand-light: rgb(0 190 190);
+}
+
+:not(pre) > code {
+  background: transparent;
+  color: #006bd6;
+}
+
+h2 {
+  border-bottom: unset;
+  padding-bottom: unset;
+  padding-top: unset;
+}
+
+code,
+kbd,
+samp {
+  font-size: 0.85em;
+}
+
+th,
+td {
+  padding: 0;
+  border: 0 none;
+}
+
+.vp-page a:not(.header-anchor):hover {
+  text-decoration: none;
+}
+
+.vp-page {
+  tr {
+    border-top: unset;
+    transition: unset;
+  }
+
+  tr:nth-child(2n) {
+    background-color: unset;
+  }
+
+  table {
+    display: table;
+    margin: 0;
+    width: 100%;
+
+    code {
+      line-height: 28px;
+    }
+  }
+
+  th:not(.c-table-th),
+  td:not(.c-table-td, .c-descriptions-item, .c-descriptions-item-label, .c-descriptions-item-value) {
+    padding: 0.6em 1em;
+    border: 1px solid var(--c-border-dark);
+  }
+}
+
+.page {
+  .page-meta,
+  .page-nav,
+  .vp-page {
+    max-width: 100%;
+  }
+}
+
+body {
+  font-size: 14px;
+}
+
+.vp-page-nav,
+.vp-page-meta {
+  max-width: unset;
+}
+
+.vp-page > div > ul > li {
+  margin: 4px 0;
+}
+
+.theme-hope-content:not(.custom) h1:first-child,
+.theme-hope-content:not(.custom) h2:first-child,
+.theme-hope-content:not(.custom) h3:first-child,
+.theme-hope-content:not(.custom) h4:first-child,
+.theme-hope-content:not(.custom) h5:first-child,
+.theme-hope-content:not(.custom) h6:first-child {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.vp-page-title > h1:not(.c-typography) {
+  margin-top: calc(0px - var(--navbar-height)) !important;
+  margin-bottom: 1rem;
+  padding-top: var(--navbar-height) !important;
+}
+
+.vp-sidebar {
+  padding-inline-start: 0;
+  scrollbar-color: auto;
+  scrollbar-width: auto;
+}
+
+.vp-hero-action.primary {
+  color: var(--vp-c-white) !important;
+}
+
+tbody tr:nth-child(odd) {
+  background: unset;
+}

@@ -1,0 +1,16 @@
+import comp from "/Users/mengshuai/github-ui/cedar/packages/cedar-ui/docs/.vuepress/.temp/pages/components/notification/index.html.vue"
+const data = JSON.parse("{\"path\":\"/components/notification/\",\"title\":\"Notification 通知提醒框\",\"lang\":\"zh-CN\",\"frontmatter\":{\"permalink\":\"/components/notification/\",\"gitInclude\":[],\"description\":\"Notification 通知提醒框 全局展示通知提醒，将信息及时有效的传达给用户。 案例 基本用法 基本用法。 API Notification 全局方法 Notification 提供的全局方法，可以通过以下三种方法使用： 通过 this.$notification 调用 在 Composition API 中，通过 getCurrentInsta...\",\"head\":[[\"meta\",{\"property\":\"og:url\",\"content\":\"https://xxx.com/pages/cedar-design-web/components/notification/\"}],[\"meta\",{\"property\":\"og:site_name\",\"content\":\"Cedar Design Web\"}],[\"meta\",{\"property\":\"og:title\",\"content\":\"Notification 通知提醒框\"}],[\"meta\",{\"property\":\"og:description\",\"content\":\"Notification 通知提醒框 全局展示通知提醒，将信息及时有效的传达给用户。 案例 基本用法 基本用法。 API Notification 全局方法 Notification 提供的全局方法，可以通过以下三种方法使用： 通过 this.$notification 调用 在 Composition API 中，通过 getCurrentInsta...\"}],[\"meta\",{\"property\":\"og:type\",\"content\":\"article\"}],[\"meta\",{\"property\":\"og:locale\",\"content\":\"zh-CN\"}],[\"script\",{\"type\":\"application/ld+json\"},\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@type\\\":\\\"Article\\\",\\\"headline\\\":\\\"Notification 通知提醒框\\\",\\\"image\\\":[\\\"\\\"],\\\"dateModified\\\":null,\\\"author\\\":[{\\\"@type\\\":\\\"Person\\\",\\\"name\\\":\\\"shuai.meng, jiaming.wu, qinglin.wang\\\"}]}\"]]},\"headers\":[{\"level\":2,\"title\":\"案例\",\"slug\":\"案例\",\"link\":\"#案例\",\"children\":[{\"level\":3,\"title\":\"基本用法\",\"slug\":\"基本用法\",\"link\":\"#基本用法\",\"children\":[]}]},{\"level\":2,\"title\":\"API\",\"slug\":\"api\",\"link\":\"#api\",\"children\":[{\"level\":3,\"title\":\"Notification 全局方法\",\"slug\":\"notification-全局方法\",\"link\":\"#notification-全局方法\",\"children\":[]},{\"level\":3,\"title\":\"NotificationMethod\",\"slug\":\"notificationmethod\",\"link\":\"#notificationmethod\",\"children\":[]},{\"level\":3,\"title\":\"NotificationConfig\",\"slug\":\"notificationconfig\",\"link\":\"#notificationconfig\",\"children\":[]},{\"level\":3,\"title\":\"NotificationReturn\",\"slug\":\"notificationreturn\",\"link\":\"#notificationreturn\",\"children\":[]},{\"level\":3,\"title\":\"类型定义\",\"slug\":\"类型定义\",\"link\":\"#类型定义\",\"children\":[]}]}],\"readingTime\":{\"minutes\":1.42,\"words\":426},\"filePathRelative\":\"../src/notification/README.md\",\"autoDesc\":true,\"excerpt\":\"\\n<p>全局展示通知提醒，将信息及时有效的传达给用户。</p>\\n<h2>案例</h2>\\n<h3>基本用法</h3>\\n<p>基本用法。</p>\\n<h2>API</h2>\\n<h3><code>Notification</code> 全局方法</h3>\\n<p><code>Notification</code> 提供的全局方法，可以通过以下三种方法使用：</p>\\n<ol>\\n<li>通过 <code>this.$notification</code> 调用</li>\\n<li>在 Composition API 中，通过 <code>getCurrentInstance().appContext.config.globalProperties.$notification</code> 调用</li>\\n<li>导入 <code>Notification</code>，通过 <code>Notification</code> 本身调用</li>\\n</ol>\"}")
+export { comp, data }
+
+if (import.meta.webpackHot) {
+  import.meta.webpackHot.accept()
+  if (__VUE_HMR_RUNTIME__.updatePageData) {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  }
+}
+
+if (import.meta.hot) {
+  import.meta.hot.accept(({ data }) => {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  })
+}

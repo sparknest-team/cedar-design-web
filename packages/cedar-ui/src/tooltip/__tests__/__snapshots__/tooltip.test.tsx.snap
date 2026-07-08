@@ -1,0 +1,6 @@
+// Vitest Snapshot v1
+
+exports[`Tooltip > render 1`] = `
+"<!--teleport start-->
+<!--teleport end-->"
+`;

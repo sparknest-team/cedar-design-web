@@ -1,0 +1,16 @@
+import comp from "/Users/mengshuai/github-ui/cedar/packages/cedar-ui/docs/.vuepress/.temp/pages/components/page-header/index.html.vue"
+const data = JSON.parse("{\"path\":\"/components/page-header/\",\"title\":\"PageHeader\",\"lang\":\"zh-CN\",\"frontmatter\":{\"permalink\":\"/components/page-header/\",\"gitInclude\":[],\"description\":\"PageHeader 基础页头，适合使用在需要简单描述的场景。默认是没有底色的。 案例 基础用法 基础用法。 带有面包屑 在页头中展示面包屑。 API PageHeader Props PageHeader Events PageHeader Slots 类型定义 组件导出以下类型定义\",\"head\":[[\"meta\",{\"property\":\"og:url\",\"content\":\"https://xxx.com/pages/cedar-design-web/components/page-header/\"}],[\"meta\",{\"property\":\"og:site_name\",\"content\":\"Cedar Design Web\"}],[\"meta\",{\"property\":\"og:title\",\"content\":\"PageHeader\"}],[\"meta\",{\"property\":\"og:description\",\"content\":\"PageHeader 基础页头，适合使用在需要简单描述的场景。默认是没有底色的。 案例 基础用法 基础用法。 带有面包屑 在页头中展示面包屑。 API PageHeader Props PageHeader Events PageHeader Slots 类型定义 组件导出以下类型定义\"}],[\"meta\",{\"property\":\"og:type\",\"content\":\"article\"}],[\"meta\",{\"property\":\"og:locale\",\"content\":\"zh-CN\"}],[\"script\",{\"type\":\"application/ld+json\"},\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@type\\\":\\\"Article\\\",\\\"headline\\\":\\\"PageHeader\\\",\\\"image\\\":[\\\"\\\"],\\\"dateModified\\\":null,\\\"author\\\":[{\\\"@type\\\":\\\"Person\\\",\\\"name\\\":\\\"shuai.meng, jiaming.wu, qinglin.wang\\\"}]}\"]]},\"headers\":[{\"level\":2,\"title\":\"案例\",\"slug\":\"案例\",\"link\":\"#案例\",\"children\":[{\"level\":3,\"title\":\"基础用法\",\"slug\":\"基础用法\",\"link\":\"#基础用法\",\"children\":[]},{\"level\":3,\"title\":\"带有面包屑\",\"slug\":\"带有面包屑\",\"link\":\"#带有面包屑\",\"children\":[]}]},{\"level\":2,\"title\":\"API\",\"slug\":\"api\",\"link\":\"#api\",\"children\":[{\"level\":3,\"title\":\"PageHeader Props\",\"slug\":\"pageheader-props\",\"link\":\"#pageheader-props\",\"children\":[]},{\"level\":3,\"title\":\"PageHeader Events\",\"slug\":\"pageheader-events\",\"link\":\"#pageheader-events\",\"children\":[]},{\"level\":3,\"title\":\"PageHeader Slots\",\"slug\":\"pageheader-slots\",\"link\":\"#pageheader-slots\",\"children\":[]}]},{\"level\":2,\"title\":\"类型定义\",\"slug\":\"类型定义\",\"link\":\"#类型定义\",\"children\":[]}],\"readingTime\":{\"minutes\":0.59,\"words\":178},\"filePathRelative\":\"../src/page-header/README.md\",\"autoDesc\":true,\"excerpt\":\"\\n<p>基础页头，适合使用在需要简单描述的场景。默认是没有底色的。</p>\\n<h2>案例</h2>\\n<h3>基础用法</h3>\\n<p>基础用法。</p>\\n<h3>带有面包屑</h3>\\n<p>在页头中展示面包屑。</p>\\n<h2>API</h2>\\n<h3>PageHeader Props</h3>\\n<table>\\n<thead>\\n<tr>\\n<th>属性</th>\\n<th>说明</th>\\n<th>类型</th>\\n<th>默认值</th>\\n</tr>\\n</thead>\\n<tbody>\\n<tr>\\n<td>title</td>\\n<td>页头的主标题</td>\\n<td><code>string</code></td>\\n<td><code>-</code></td>\\n</tr>\\n<tr>\\n<td>subtitle</td>\\n<td>页头的次标题</td>\\n<td><code>string</code></td>\\n<td><code>-</code></td>\\n</tr>\\n<tr>\\n<td>show-back</td>\\n<td>是否显示返回按钮</td>\\n<td><code>boolean</code></td>\\n<td><code>false</code></td>\\n</tr>\\n</tbody>\\n</table>\"}")
+export { comp, data }
+
+if (import.meta.webpackHot) {
+  import.meta.webpackHot.accept()
+  if (__VUE_HMR_RUNTIME__.updatePageData) {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  }
+}
+
+if (import.meta.hot) {
+  import.meta.hot.accept(({ data }) => {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  })
+}

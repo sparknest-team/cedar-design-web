@@ -1,0 +1,22 @@
+.border(@cls) {
+  .@{cls}__border,
+  .@{cls}__border-state {
+    box-sizing: border-box;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    border: 1px solid var(~'--c-color-outline');
+    transition:
+      box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+  }
+  .@{cls}__border-state {
+    z-index: 1;
+    border: 1px solid var(~'--c-color-outline-medium');
+  }
+}

@@ -1,0 +1,28 @@
+@import './token.less';
+@import '../../input/style/token.less';
+
+.c-verification-code {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  column-gap: 4px;
+
+  .c-input__wrapper {
+    padding-right: 0;
+    padding-left: 0;
+    .c-input__inner {
+      text-align: center;
+    }
+  }
+  .size(@size) {
+    .c-input--size-@{size} {
+      width: var(~'--c-input-size-@{size}-height');
+    }
+  }
+
+  .size(xs);
+  .size(sm);
+  .size(md);
+  .size(lg);
+}

@@ -1,0 +1,46 @@
+@import '../../input-label/style/input-label.less';
+@import '../../../input-tag/style/input-tag.less';
+@import './token.less';
+
+.c-select-single,
+.c-select-multiple {
+  .input-label-style(~'c-select-single');
+  .input-tag-style(~'c-select-multiple');
+
+  .c-select-multiple--disabled-input {
+    cursor: pointer;
+  }
+
+  &__suffix .c-feedback-icon {
+    margin-left: 4px;
+  }
+
+  &__clear-btn,
+  &__icon {
+    svg {
+      display: block;
+      font-size: @select-size-icon;
+    }
+  }
+
+  &--opened &__arrow-icon {
+    transform: rotateZ(180deg);
+  }
+
+  &__expand-icon {
+    transform: rotate(-45deg);
+  }
+
+  &__clear-btn {
+    display: none;
+    cursor: pointer;
+  }
+
+  &:hover &__clear-btn {
+    display: block;
+
+    & ~ * {
+      display: none;
+    }
+  }
+}

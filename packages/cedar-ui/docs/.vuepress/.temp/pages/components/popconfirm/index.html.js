@@ -1,0 +1,16 @@
+import comp from "/Users/mengshuai/github-ui/cedar/packages/cedar-ui/docs/.vuepress/.temp/pages/components/popconfirm/index.html.vue"
+const data = JSON.parse("{\"path\":\"/components/popconfirm/\",\"title\":\"Popconfirm\",\"lang\":\"zh-CN\",\"frontmatter\":{\"permalink\":\"/components/popconfirm/\",\"gitInclude\":[],\"description\":\"Popconfirm 点击元素，弹出气泡式的确认框。 案例 基础用法 折叠列表的基本使用方法。 自定义按钮 自定义按钮的文字或图标。 弹出位置 popconfirm 支持 12 个不同的方位。分别为：上左 上 上右 下左 下 下右 左上 左 左下 右上 右 右下。 确认框类型 通过 type 属性可以设置确认框类型。 API <popconfirm> ...\",\"head\":[[\"meta\",{\"property\":\"og:url\",\"content\":\"https://xxx.com/pages/cedar-design-web/components/popconfirm/\"}],[\"meta\",{\"property\":\"og:site_name\",\"content\":\"Cedar Design Web\"}],[\"meta\",{\"property\":\"og:title\",\"content\":\"Popconfirm\"}],[\"meta\",{\"property\":\"og:description\",\"content\":\"Popconfirm 点击元素，弹出气泡式的确认框。 案例 基础用法 折叠列表的基本使用方法。 自定义按钮 自定义按钮的文字或图标。 弹出位置 popconfirm 支持 12 个不同的方位。分别为：上左 上 上右 下左 下 下右 左上 左 左下 右上 右 右下。 确认框类型 通过 type 属性可以设置确认框类型。 API <popconfirm> ...\"}],[\"meta\",{\"property\":\"og:type\",\"content\":\"article\"}],[\"meta\",{\"property\":\"og:locale\",\"content\":\"zh-CN\"}],[\"script\",{\"type\":\"application/ld+json\"},\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@type\\\":\\\"Article\\\",\\\"headline\\\":\\\"Popconfirm\\\",\\\"image\\\":[\\\"\\\"],\\\"dateModified\\\":null,\\\"author\\\":[{\\\"@type\\\":\\\"Person\\\",\\\"name\\\":\\\"shuai.meng, jiaming.wu, qinglin.wang\\\"}]}\"]]},\"headers\":[{\"level\":2,\"title\":\"案例\",\"slug\":\"案例\",\"link\":\"#案例\",\"children\":[{\"level\":3,\"title\":\"基础用法\",\"slug\":\"基础用法\",\"link\":\"#基础用法\",\"children\":[]},{\"level\":3,\"title\":\"自定义按钮\",\"slug\":\"自定义按钮\",\"link\":\"#自定义按钮\",\"children\":[]},{\"level\":3,\"title\":\"弹出位置\",\"slug\":\"弹出位置\",\"link\":\"#弹出位置\",\"children\":[]},{\"level\":3,\"title\":\"确认框类型\",\"slug\":\"确认框类型\",\"link\":\"#确认框类型\",\"children\":[]}]},{\"level\":2,\"title\":\"API\",\"slug\":\"api\",\"link\":\"#api\",\"children\":[{\"level\":3,\"title\":\"<popconfirm> Props\",\"slug\":\"popconfirm-props\",\"link\":\"#popconfirm-props\",\"children\":[]},{\"level\":3,\"title\":\"<popconfirm> Events\",\"slug\":\"popconfirm-events\",\"link\":\"#popconfirm-events\",\"children\":[]},{\"level\":3,\"title\":\"<popconfirm> Slots\",\"slug\":\"popconfirm-slots\",\"link\":\"#popconfirm-slots\",\"children\":[]},{\"level\":3,\"title\":\"类型定义\",\"slug\":\"类型定义\",\"link\":\"#类型定义\",\"children\":[]}]}],\"readingTime\":{\"minutes\":1.59,\"words\":477},\"filePathRelative\":\"../src/popconfirm/README.md\",\"autoDesc\":true,\"excerpt\":\"\\n<p>点击元素，弹出气泡式的确认框。</p>\\n<h2>案例</h2>\\n<h3>基础用法</h3>\\n<p>折叠列表的基本使用方法。</p>\\n<h3>自定义按钮</h3>\\n<p>自定义按钮的文字或图标。</p>\\n<h3>弹出位置</h3>\\n<p><code>popconfirm</code> 支持 12 个不同的方位。分别为：<code>上左</code> <code>上</code> <code>上右</code> <code>下左</code> <code>下</code> <code>下右</code> <code>左上</code> <code>左</code> <code>左下</code> <code>右上</code> <code>右</code> <code>右下</code>。</p>\"}")
+export { comp, data }
+
+if (import.meta.webpackHot) {
+  import.meta.webpackHot.accept()
+  if (__VUE_HMR_RUNTIME__.updatePageData) {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  }
+}
+
+if (import.meta.hot) {
+  import.meta.hot.accept(({ data }) => {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  })
+}

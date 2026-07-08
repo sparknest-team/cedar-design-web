@@ -1,0 +1,140 @@
+@import '../../style/theme/index.less';
+
+:root {
+  // default
+  --c-button-text-color: #555;
+  --c-button-bg-color: #fff;
+  --c-button-icon-color: #555;
+  --c-button-icon-container-color: #f5f5f5;
+  --c-button-border-color: transparent;
+  --c-button-box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.06), 0 2px 2px 0 rgba(0, 0, 0, 0.04),
+    0 1px 8px 0 rgba(0, 0, 0, 0.04);
+
+  // default (status)
+  --c-button-status-default-text-color: var(~'--c-button-text-color');
+  --c-button-status-default-bg-color: var(~'--c-button-bg-color');
+  --c-button-default-icon-color: var(~'--c-button-icon-color');
+  --c-button-default-icon-container-color: var(~'--c-button-icon-container-color');
+
+  // contrast
+  --c-button-status-contrast-text-color: #fff;
+  --c-button-status-contrast-bg-color: #000;
+  --c-button-contrast-icon-color: #fff;
+  --c-button-contrast-icon-container-color: #fff;
+
+  // secondary
+  --c-button-status-secondary-text-color: #767c82;
+  --c-button-status-secondary-bg-color:#fff;
+  --c-button-secondary-icon-color: #fff;
+  --c-button-secondary-icon-container-color: #fff;
+
+  // primary
+  --c-button-status-primary-text-color: #fff;
+  --c-button-status-primary-bg-color: @color-primary-6;
+  --c-button-primary-icon-color: #fff;
+  --c-button-primary-icon-container-color: #fff;
+
+  // success
+  --c-button-status-success-text-color: #fff;
+  --c-button-status-success-bg-color: @color-success-6;
+  --c-button-success-icon-color: #fff;
+  --c-button-success-icon-container-color: #fff;
+
+  // info
+  --c-button-status-info-text-color: #fff;
+  --c-button-status-info-bg-color: @color-info-6;
+  --c-button-info-icon-color: #fff;
+  --c-button-info-icon-container-color: #fff;
+
+  // danger
+  --c-button-status-danger-text-color: #fff;
+  --c-button-status-danger-bg-color: @color-danger-6;
+  --c-button-danger-icon-color: #fff;
+  --c-button-danger-icon-container-color: #fff;
+
+  // warning
+  --c-button-status-warning-text-color: #fff;
+  --c-button-status-warning-bg-color: @color-warning-6;
+  --c-button-warning-icon-color: #fff;
+  --c-button-warning-icon-container-color: #fff;
+
+  --c-button-variant-tonal-color: #555;
+  --c-button-variant-tonal-status-contrast-color: #000;
+  --c-button-variant-tonal-status-secondary-color: #767c82;
+  --c-button-variant-tonal-status-success-color: @color-success-6;
+  --c-button-variant-tonal-status-info-color: @color-info-6;
+  --c-button-variant-tonal-status-danger-color: @color-danger-6;
+  --c-button-variant-tonal-status-warning-color: @color-warning-6;
+  --c-button-variant-tonal-status-primary-color: @color-primary-6;
+
+  --c-button-variant-outline-color: #555;
+  --c-button-variant-outline-border-color: var(~'--c-color-neutral-4');
+  --c-button-variant-outline-status-default-color: #555;
+  --c-button-variant-outline-status-default-border-color: var(~'--c-color-neutral-4');
+  --c-button-variant-outline-status-contrast-color: #000;
+  --c-button-variant-outline-status-contrast-border-color: currentColor;
+  --c-button-variant-outline-status-secondary-color: #767c82;
+  --c-button-variant-outline-status-secondary-border-color: var(~'--c-color-neutral-4');
+  --c-button-variant-outline-status-success-color: @color-success-6;
+  --c-button-variant-outline-status-info-color: @color-info-6;
+  --c-button-variant-outline-status-danger-color: @color-danger-6;
+  --c-button-variant-outline-status-warning-color: @color-warning-6;
+  --c-button-variant-outline-status-primary-color: @color-primary-6;
+
+  --c-button-variant-text-color: #555;
+  --c-button-variant-text-status-contrast-color: #000;
+  --c-button-variant-text-status-secondary-color: #767c82;
+  --c-button-variant-text-status-success-color: @color-success-6;
+  --c-button-variant-text-status-info-color: @color-info-6;
+  --c-button-variant-text-status-danger-color: @color-danger-6;
+  --c-button-variant-text-status-warning-color: @color-warning-6;
+  --c-button-variant-text-status-primary-color: @color-primary-6;
+
+  --c-button-variant-link-color: #555;
+  --c-button-variant-link-status-contrast-color: #000;
+  --c-button-variant-link-status-secondary-color: #767c82;
+  --c-button-variant-link-status-success-color: @color-success-6;
+  --c-button-variant-link-status-info-color: @color-info-6;
+  --c-button-variant-link-status-danger-color: @color-danger-6;
+  --c-button-variant-link-status-warning-color: @color-warning-6;
+  --c-button-variant-link-status-primary-color: @color-primary-6;
+  // size
+  --c-button-size-xs-height: @size-xs;
+  --c-button-size-sm-height: @size-sm;
+  --c-button-size-md-height: @size-md;
+  --c-button-size-lg-height: @size-lg;
+  --c-button-size-xl-height: @size-xl;
+
+  --c-button-size-xs-stacked-height: @size-md;
+  --c-button-size-sm-stacked-height: @size-lg;
+  --c-button-size-md-stacked-height: @size-xl;
+  --c-button-size-lg-stacked-height: @size-xl;
+  --c-button-size-xl-stacked-height: @size-2xl;
+
+  --c-button-size-xs-padding: 0 11px;
+  --c-button-size-sm-padding: 0 15px;
+  --c-button-size-md-padding: 0 15px;
+  --c-button-size-lg-padding: 0 19px;
+  --c-button-size-xl-padding: 0 23px;
+
+  --c-button-size-xs-font-size: @font-size-body-1;
+  --c-button-size-sm-font-size: @font-size-body-3;
+  --c-button-size-md-font-size: @font-size-body-3;
+  --c-button-size-lg-font-size: @font-size-body-3;
+  --c-button-size-xl-font-size: @font-size-body-3;
+
+  --c-button-size-xs-radius: 4px;
+  --c-button-size-sm-radius: 4px;
+  --c-button-size-md-radius: 4px;
+  --c-button-size-lg-radius: 4px;
+  --c-button-size-xl-radius: 4px;
+
+  // disabled
+  --c-button-disabled-text-color: @color-text-4;
+  --c-button-disabled-color: @color-fill-2;
+
+  // loading
+  --c-button-transition-duration-1: @transition-duration-1;
+  --c-button-transition-timing-function-linear: @transition-timing-function-linear;
+  --c-button-icon-margin-right: @spacing-2;
+}

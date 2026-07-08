@@ -1,0 +1,16 @@
+import comp from "/Users/mengshuai/github-ui/cedar/packages/cedar-ui/docs/.vuepress/.temp/pages/components/space/index.html.vue"
+const data = JSON.parse("{\"path\":\"/components/space/\",\"title\":\"Space\",\"lang\":\"zh-CN\",\"frontmatter\":{\"permalink\":\"/components/space/\",\"gitInclude\":[],\"description\":\"Space 对flex布局的子元素进行间距设置，是对flex布局的扩展，并不会破坏子元素的原有dom结构。 案例 基础用法 垂直间距 可以设置垂直方向排列的间距。 尺寸 内置 4 个尺寸，xs - 4px sm - 8px (默认) md - 16px lg - 24px，也支持传数字来自定义尺寸。 对齐 内置 4 种对齐方式，分别为 start ce...\",\"head\":[[\"meta\",{\"property\":\"og:url\",\"content\":\"https://xxx.com/pages/cedar-design-web/components/space/\"}],[\"meta\",{\"property\":\"og:site_name\",\"content\":\"Cedar Design Web\"}],[\"meta\",{\"property\":\"og:title\",\"content\":\"Space\"}],[\"meta\",{\"property\":\"og:description\",\"content\":\"Space 对flex布局的子元素进行间距设置，是对flex布局的扩展，并不会破坏子元素的原有dom结构。 案例 基础用法 垂直间距 可以设置垂直方向排列的间距。 尺寸 内置 4 个尺寸，xs - 4px sm - 8px (默认) md - 16px lg - 24px，也支持传数字来自定义尺寸。 对齐 内置 4 种对齐方式，分别为 start ce...\"}],[\"meta\",{\"property\":\"og:type\",\"content\":\"article\"}],[\"meta\",{\"property\":\"og:locale\",\"content\":\"zh-CN\"}],[\"script\",{\"type\":\"application/ld+json\"},\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@type\\\":\\\"Article\\\",\\\"headline\\\":\\\"Space\\\",\\\"image\\\":[\\\"\\\"],\\\"dateModified\\\":null,\\\"author\\\":[{\\\"@type\\\":\\\"Person\\\",\\\"name\\\":\\\"shuai.meng, jiaming.wu, qinglin.wang\\\"}]}\"]]},\"headers\":[{\"level\":2,\"title\":\"案例\",\"slug\":\"案例\",\"link\":\"#案例\",\"children\":[{\"level\":3,\"title\":\"基础用法\",\"slug\":\"基础用法\",\"link\":\"#基础用法\",\"children\":[]},{\"level\":3,\"title\":\"垂直间距\",\"slug\":\"垂直间距\",\"link\":\"#垂直间距\",\"children\":[]},{\"level\":3,\"title\":\"尺寸\",\"slug\":\"尺寸\",\"link\":\"#尺寸\",\"children\":[]},{\"level\":3,\"title\":\"对齐\",\"slug\":\"对齐\",\"link\":\"#对齐\",\"children\":[]},{\"level\":3,\"title\":\"环绕\",\"slug\":\"环绕\",\"link\":\"#环绕\",\"children\":[]},{\"level\":3,\"title\":\"分隔符\",\"slug\":\"分隔符\",\"link\":\"#分隔符\",\"children\":[]}]},{\"level\":2,\"title\":\"API\",\"slug\":\"api\",\"link\":\"#api\",\"children\":[{\"level\":3,\"title\":\"Space Props\",\"slug\":\"space-props\",\"link\":\"#space-props\",\"children\":[]},{\"level\":3,\"title\":\"属性\",\"slug\":\"属性\",\"link\":\"#属性\",\"children\":[]},{\"level\":3,\"title\":\"插槽\",\"slug\":\"插槽\",\"link\":\"#插槽\",\"children\":[]},{\"level\":3,\"title\":\"样式变量\",\"slug\":\"样式变量\",\"link\":\"#样式变量\",\"children\":[]}]}],\"readingTime\":{\"minutes\":1.41,\"words\":423},\"filePathRelative\":\"../src/space/README.md\",\"autoDesc\":true,\"excerpt\":\"\\n<p>对flex布局的子元素进行间距设置，是对flex布局的扩展，并不会破坏子元素的原有dom结构。</p>\\n<h2>案例</h2>\\n<h3>基础用法</h3>\\n<h3>垂直间距</h3>\\n<p>可以设置垂直方向排列的间距。</p>\\n<h3>尺寸</h3>\\n<p>内置 4 个尺寸，xs - 4px sm - 8px (默认) md - 16px lg - 24px，也支持传数字来自定义尺寸。</p>\\n<h3>对齐</h3>\\n<p>内置 4 种对齐方式，分别为 start center end baseline，在水平模式下默认为 start。</p>\\n<h3>环绕</h3>\\n<p>环绕类型的间距，四周都有间距，一般用于换行的场景。</p>\"}")
+export { comp, data }
+
+if (import.meta.webpackHot) {
+  import.meta.webpackHot.accept()
+  if (__VUE_HMR_RUNTIME__.updatePageData) {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  }
+}
+
+if (import.meta.hot) {
+  import.meta.hot.accept(({ data }) => {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  })
+}

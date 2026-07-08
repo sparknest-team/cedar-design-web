@@ -1,0 +1,3 @@
+// Vitest Snapshot v1
+
+exports[`Steps > render 1`] = `"<div class=\\"arco-steps arco-steps-horizontal arco-steps-label-horizontal arco-steps-mode-default\\"></div>"`;

@@ -1,0 +1,51 @@
+@import '../../style/mixins/index.less';
+@import './token.less';
+
+.c-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  line-height: @page-header-line-height;
+
+  &-main {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    // 最小高度避免按钮hover下背景被hidden
+    min-height: @page-header-size-prefix-bg_hover;
+
+    // 带有返回按钮时，避免 overflow:hidden 导致返回按钮hover状态背景色显示不全
+    &-with-back {
+      margin-left: (@page-header-size-prefix / 2) - (@page-header-size-prefix-bg_hover / 2);
+      padding-left: (@page-header-size-prefix-bg_hover / 2) - (@page-header-size-prefix / 2);
+    }
+  }
+
+  &-extra {
+    padding-left: @page-header-extra-padding-left;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  &-title {
+    &-text {
+      color: @page-header-color-title-text;
+      font-weight: @page-header-weight-title-text;
+      font-size: @page-header-size-title-text;
+    }
+  }
+
+  &-divider {
+    width: @page-header-size-divider-width;
+    height: @page-header-size-divider-height;
+    margin-right: @page-header-margin-divider-right;
+    margin-left: @page-header-margin-divider-left;
+    background-color: @page-header-color-divider-bg;
+  }
+
+  &-subtitle {
+    white-space: nowrap;
+    color: @page-header-color-sub-title-text;
+    font-size: @page-header-size-sub-title-text;
+  }
+}

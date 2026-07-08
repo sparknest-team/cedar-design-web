@@ -1,0 +1,29 @@
+.cedar-ellipsis {
+  &[cedar-ellipsis-cover] {
+    width: 100%;
+    overflow: hidden;
+    vertical-align: bottom;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  &--clamp[cedar-ellipsis-cover] {
+    display: -webkit-inline-box;
+    -webkit-box-orient: vertical;
+  }
+
+  &--line[cedar-ellipsis-cover] {
+    display: inline-block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  &--cursor[cedar-ellipsis-cover] {
+    cursor: pointer;
+  }
+
+  &--expand[cedar-ellipsis-cover] {
+    display: inline-block;
+    white-space: wrap;
+    overflow: visible;
+  }
+}

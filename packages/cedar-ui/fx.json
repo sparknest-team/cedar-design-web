@@ -1,0 +1,388 @@
+{
+  "fallback": [
+    {
+      "src": "/guide/i18n/**",
+      "dest": "/guide/i18n/index.html"
+    },
+    {
+      "src": "/guide/questions/**",
+      "dest": "/guide/questions/index.html"
+    },
+    {
+      "src": "/guide/start/**",
+      "dest": "/guide/start/index.html"
+    },
+    {
+      "src": "/practices/ai-collaboration/**",
+      "dest": "/practices/ai-collaboration/index.html"
+    },
+    {
+      "src": "/practices/card/**",
+      "dest": "/practices/card/index.html"
+    },
+    {
+      "src": "/practices/component-spec/**",
+      "dest": "/practices/component-spec/index.html"
+    },
+    {
+      "src": "/practices/description/**",
+      "dest": "/practices/description/index.html"
+    },
+    {
+      "src": "/practices/detail/**",
+      "dest": "/practices/detail/index.html"
+    },
+    {
+      "src": "/practices/list/**",
+      "dest": "/practices/list/index.html"
+    },
+    {
+      "src": "/components/affix/**",
+      "dest": "/components/affix/index.html"
+    },
+    {
+      "src": "/components/alert/**",
+      "dest": "/components/alert/index.html"
+    },
+    {
+      "src": "/components/anchor/**",
+      "dest": "/components/anchor/index.html"
+    },
+    {
+      "src": "/components/auto-complete/**",
+      "dest": "/components/auto-complete/index.html"
+    },
+    {
+      "src": "/components/avatar/**",
+      "dest": "/components/avatar/index.html"
+    },
+    {
+      "src": "/components/back-top/**",
+      "dest": "/components/back-top/index.html"
+    },
+    {
+      "src": "/components/badge/**",
+      "dest": "/components/badge/index.html"
+    },
+    {
+      "src": "/components/breadcrumb/**",
+      "dest": "/components/breadcrumb/index.html"
+    },
+    {
+      "src": "/components/button/**",
+      "dest": "/components/button/index.html"
+    },
+    {
+      "src": "/components/calendar/**",
+      "dest": "/components/calendar/index.html"
+    },
+    {
+      "src": "/components/card/**",
+      "dest": "/components/card/index.html"
+    },
+    {
+      "src": "/components/carousel/**",
+      "dest": "/components/carousel/index.html"
+    },
+    {
+      "src": "/components/cascader/**",
+      "dest": "/components/cascader/index.html"
+    },
+    {
+      "src": "/components/checkbox/**",
+      "dest": "/components/checkbox/index.html"
+    },
+    {
+      "src": "/components/collapse/**",
+      "dest": "/components/collapse/index.html"
+    },
+    {
+      "src": "/components/color-picker/**",
+      "dest": "/components/color-picker/index.html"
+    },
+    {
+      "src": "/components/comment/**",
+      "dest": "/components/comment/index.html"
+    },
+    {
+      "src": "/components/config-provider/**",
+      "dest": "/components/config-provider/index.html"
+    },
+    {
+      "src": "/components/date-picker/**",
+      "dest": "/components/date-picker/index.html"
+    },
+    {
+      "src": "/components/descriptions/**",
+      "dest": "/components/descriptions/index.html"
+    },
+    {
+      "src": "/components/divider/**",
+      "dest": "/components/divider/index.html"
+    },
+    {
+      "src": "/components/drag-container/**",
+      "dest": "/components/drag-container/index.html"
+    },
+    {
+      "src": "/components/drawer/**",
+      "dest": "/components/drawer/index.html"
+    },
+    {
+      "src": "/components/dropdown/**",
+      "dest": "/components/dropdown/index.html"
+    },
+    {
+      "src": "/components/ellipsis/**",
+      "dest": "/components/ellipsis/index.html"
+    },
+    {
+      "src": "/components/empty/**",
+      "dest": "/components/empty/index.html"
+    },
+    {
+      "src": "/components/filter-form/**",
+      "dest": "/components/filter-form/index.html"
+    },
+    {
+      "src": "/components/form/**",
+      "dest": "/components/form/index.html"
+    },
+    {
+      "src": "/components/grid/**",
+      "dest": "/components/grid/index.html"
+    },
+    {
+      "src": "/components/icon-component/**",
+      "dest": "/components/icon-component/index.html"
+    },
+    {
+      "src": "/components/image/**",
+      "dest": "/components/image/index.html"
+    },
+    {
+      "src": "/components/input/**",
+      "dest": "/components/input/index.html"
+    },
+    {
+      "src": "/components/input-number/**",
+      "dest": "/components/input-number/index.html"
+    },
+    {
+      "src": "/components/input-tag/**",
+      "dest": "/components/input-tag/index.html"
+    },
+    {
+      "src": "/components/layout/**",
+      "dest": "/components/layout/index.html"
+    },
+    {
+      "src": "/components/layout-form/**",
+      "dest": "/components/layout-form/index.html"
+    },
+    {
+      "src": "/components/link/**",
+      "dest": "/components/link/index.html"
+    },
+    {
+      "src": "/components/list/**",
+      "dest": "/components/list/index.html"
+    },
+    {
+      "src": "/components/loading/**",
+      "dest": "/components/loading/index.html"
+    },
+    {
+      "src": "/components/map/**",
+      "dest": "/components/map/index.html"
+    },
+    {
+      "src": "/components/mention/**",
+      "dest": "/components/mention/index.html"
+    },
+    {
+      "src": "/components/menu/**",
+      "dest": "/components/menu/index.html"
+    },
+    {
+      "src": "/components/message/**",
+      "dest": "/components/message/index.html"
+    },
+    {
+      "src": "/components/modal/**",
+      "dest": "/components/modal/index.html"
+    },
+    {
+      "src": "/components/notification/**",
+      "dest": "/components/notification/index.html"
+    },
+    {
+      "src": "/components/overflow-list/**",
+      "dest": "/components/overflow-list/index.html"
+    },
+    {
+      "src": "/components/page-header/**",
+      "dest": "/components/page-header/index.html"
+    },
+    {
+      "src": "/components/pagination/**",
+      "dest": "/components/pagination/index.html"
+    },
+    {
+      "src": "/components/people-select/**",
+      "dest": "/components/people-select/index.html"
+    },
+    {
+      "src": "/components/popconfirm/**",
+      "dest": "/components/popconfirm/index.html"
+    },
+    {
+      "src": "/components/popover/**",
+      "dest": "/components/popover/index.html"
+    },
+    {
+      "src": "/components/progress/**",
+      "dest": "/components/progress/index.html"
+    },
+    {
+      "src": "/components/radio/**",
+      "dest": "/components/radio/index.html"
+    },
+    {
+      "src": "/components/rate/**",
+      "dest": "/components/rate/index.html"
+    },
+    {
+      "src": "/components/resize-box/**",
+      "dest": "/components/resize-box/index.html"
+    },
+    {
+      "src": "/components/result/**",
+      "dest": "/components/result/index.html"
+    },
+    {
+      "src": "/components/saas-header-nav/**",
+      "dest": "/components/saas-header-nav/index.html"
+    },
+    {
+      "src": "/components/saas-page/**",
+      "dest": "/components/saas-page/index.html"
+    },
+    {
+      "src": "/components/scrollbar/**",
+      "dest": "/components/scrollbar/index.html"
+    },
+    {
+      "src": "/components/search/**",
+      "dest": "/components/search/index.html"
+    },
+    {
+      "src": "/components/select/**",
+      "dest": "/components/select/index.html"
+    },
+    {
+      "src": "/components/select-panel/**",
+      "dest": "/components/select-panel/index.html"
+    },
+    {
+      "src": "/components/select-transfer/**",
+      "dest": "/components/select-transfer/index.html"
+    },
+    {
+      "src": "/components/skeleton/**",
+      "dest": "/components/skeleton/index.html"
+    },
+    {
+      "src": "/components/slider/**",
+      "dest": "/components/slider/index.html"
+    },
+    {
+      "src": "/components/space/**",
+      "dest": "/components/space/index.html"
+    },
+    {
+      "src": "/components/spin/**",
+      "dest": "/components/spin/index.html"
+    },
+    {
+      "src": "/components/split/**",
+      "dest": "/components/split/index.html"
+    },
+    {
+      "src": "/components/statistic/**",
+      "dest": "/components/statistic/index.html"
+    },
+    {
+      "src": "/components/steps/**",
+      "dest": "/components/steps/index.html"
+    },
+    {
+      "src": "/components/switch/**",
+      "dest": "/components/switch/index.html"
+    },
+    {
+      "src": "/components/table/**",
+      "dest": "/components/table/index.html"
+    },
+    {
+      "src": "/components/tabs/**",
+      "dest": "/components/tabs/index.html"
+    },
+    {
+      "src": "/components/tag/**",
+      "dest": "/components/tag/index.html"
+    },
+    {
+      "src": "/components/textarea/**",
+      "dest": "/components/textarea/index.html"
+    },
+    {
+      "src": "/components/time-picker/**",
+      "dest": "/components/time-picker/index.html"
+    },
+    {
+      "src": "/components/timeline/**",
+      "dest": "/components/timeline/index.html"
+    },
+    {
+      "src": "/components/tooltip/**",
+      "dest": "/components/tooltip/index.html"
+    },
+    {
+      "src": "/components/transfer/**",
+      "dest": "/components/transfer/index.html"
+    },
+    {
+      "src": "/components/tree/**",
+      "dest": "/components/tree/index.html"
+    },
+    {
+      "src": "/components/tree-select/**",
+      "dest": "/components/tree-select/index.html"
+    },
+    {
+      "src": "/components/trigger/**",
+      "dest": "/components/trigger/index.html"
+    },
+    {
+      "src": "/components/typography/**",
+      "dest": "/components/typography/index.html"
+    },
+    {
+      "src": "/components/upload/**",
+      "dest": "/components/upload/index.html"
+    },
+    {
+      "src": "/components/verification-code/**",
+      "dest": "/components/verification-code/index.html"
+    },
+    {
+      "src": "/components/watermark/**",
+      "dest": "/components/watermark/index.html"
+    },
+    {
+      "src": "/components/icon/**",
+      "dest": "/components/icon/index.html"
+    }
+  ]
+}

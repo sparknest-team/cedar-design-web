@@ -1,0 +1,123 @@
+.c-button-group {
+  display: inline-flex;
+  border-radius: var(--c-button-size-md-radius, 4px);
+  max-width: 100%;
+  overflow: auto;
+
+  .c-button {
+    &:active {
+      box-shadow: none;
+    }
+  }
+
+  &--horizontal {
+    .c-button {
+      &:first-child {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+
+      &:last-child {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+
+      &:not(:first-child):not(:last-child) {
+        border-radius: 0;
+      }
+    }
+  }
+
+  &--horizontal&--variant-text {
+    .c-button {
+      border-right: thin solid currentColor;
+
+      &:last-child {
+        border: none;
+      }
+    }
+  }
+
+  &--horizontal&--variant-outline {
+    // 非首个元素：移除左侧圆角，添加负边距以重叠边框
+    & > *:not(:first-child) {
+      position: relative;
+      box-sizing: border-box;
+      margin-left: -1px !important;
+      border-top-left-radius: 0 !important;
+      border-bottom-left-radius: 0 !important;
+    }
+    & > *:not(:first-child) {
+      &,
+      .c-button {
+        border-top-left-radius: 0 !important;
+        border-bottom-left-radius: 0 !important;
+      }
+    }
+
+    // 非末尾元素：移除右侧圆角
+    & > *:not(:last-child) {
+      &,
+      .c-button {
+        border-top-right-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+      }
+    }
+  }
+
+  &--vertical {
+    flex-direction: column;
+
+    .c-button {
+      &:first-child {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+
+      &:last-child {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+      }
+
+      &:not(:first-child):not(:last-child) {
+        border-radius: 0;
+      }
+    }
+  }
+
+  &--vertical&--variant-text {
+    .c-button {
+      border-bottom: thin solid currentColor;
+
+      &:last-child {
+        border: none;
+      }
+    }
+  }
+
+  &--vertical&--variant-outline {
+    & > *:not(:first-child) {
+      position: relative;
+      box-sizing: border-box;
+      margin-top: -1px !important;
+      border-top-right-radius: 0 !important;
+      border-top-left-radius: 0 !important;
+    }
+    & > *:not(:first-child) {
+      &,
+      .c-button {
+        border-top-right-radius: 0 !important;
+        border-top-left-radius: 0 !important;
+      }
+    }
+
+    // 非末尾元素：移除右侧圆角
+    & > *:not(:last-child) {
+      &,
+      .c-button {
+        border-bottom-left-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+      }
+    }
+  }
+}

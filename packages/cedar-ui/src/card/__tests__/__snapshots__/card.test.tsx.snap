@@ -1,0 +1,12 @@
+// Vitest Snapshot v1
+
+exports[`Card > render 1`] = `
+"<div class=\\"arco-card arco-card-size-medium arco-card-bordered\\">
+  <!---->
+  <!---->
+  <div class=\\"arco-card-body\\">
+    <!---->
+    <!---->
+  </div>
+</div>"
+`;

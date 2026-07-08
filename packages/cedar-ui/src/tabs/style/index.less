@@ -1,0 +1,538 @@
+@import './token.less';
+@import '../../style/mixins/index';
+
+// tabs icon style
+
+.icon-hover(~'c-tabs', @tabs-size-icon, @tabs-size-icon-bg);
+
+.c-tabs {
+  display: flex;
+  width: 100%;
+  & &-icon-hover {
+    color: @tabs-color-icon;
+    font-size: @tabs-size-icon;
+    user-select: none;
+  }
+
+  &-dropdown-icon {
+    margin-left: @tabs-spacing-nav-icon-header;
+    font-size: @tabs-size-icon;
+    user-select: none;
+  }
+
+  &-tab__close-btn {
+    margin-left: @tabs-margin-close-icon-left;
+    user-select: none;
+  }
+
+  &-nav__add-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: @tabs-size-icon;
+    user-select: none;
+  }
+
+  &__add {
+    position: relative;
+  }
+  &-nav__button-wrapper {
+    display: flex;
+    gap: 8px;
+  }
+  &-nav-button {
+    display: inline-flex;
+    // &--left {
+    //   margin-right: @tabs-spacing-nav-icon-header;
+    //   margin-left: @tabs-padding-header-wrapper-horizontal;
+    // }
+
+    // &--right {
+    //   margin-right: @tabs-padding-header-wrapper-horizontal;
+    //   margin-left: @tabs-spacing-nav-icon-header;
+    // }
+
+    // &--up {
+    //   margin-bottom: @tabs-padding-header-wrapper-horizontal;
+    // }
+
+    // &--down {
+    //   margin-top: @tabs-padding-header-wrapper-horizontal;
+    // }
+
+    &--disabled {
+      color: @tabs-color-icon_disabled;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.c-tabs {
+  position: relative;
+  overflow: hidden;
+
+  &-nav {
+    display: flex;
+    position: relative;
+    flex-shrink: 0;
+
+    &::before {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      display: none;
+      clear: both;
+      height: @tabs-line-size-header-border;
+      background-color: @tabs-line-color-header-border;
+      content: '';
+    }
+  }
+
+  &-nav__tab {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  &-nav__tab-list {
+    position: relative;
+    display: inline-flex;
+    white-space: nowrap;
+    transition: transform @transition-duration-2 @transition-timing-function-standard;
+  }
+
+  &-tab {
+    display: inline-flex;
+    align-items: center;
+    box-sizing: border-box;
+    padding: var(~'--tabs-size-md-tab-padding');
+    color: @tabs-color-title-text;
+    font-size: @tabs-size-md-font-size;
+    line-height: 1.5715;
+    outline: none;
+    cursor: pointer;
+    transition: color @transition-duration-2 @transition-timing-function-linear;
+    gap: 8px;
+
+    &__title {
+      display: inline-block;
+    }
+
+    &:hover {
+      color: @tabs-color-title-text_hover;
+      font-weight: @tabs-line-font-title-text-weight_hover;
+    }
+
+    &--disabled,
+    &--disabled:hover {
+      color: @tabs-color-title-text_disabled;
+      cursor: not-allowed;
+    }
+
+    &--active,
+    &--active:hover {
+      color: @tabs-color-title-text_active;
+      font-weight: @tabs-line-font-title-text-weight_active;
+
+      &.c-tabs-tab--disabled {
+        color: @tabs-color-title-text_disabled_active;
+      }
+    }
+
+    &--item-vertical {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    &__icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  &-nav-ink {
+    position: absolute;
+    top: initial;
+    right: initial;
+    bottom: 0;
+    height: @tabs-line-size-ink-stroke;
+    background-color: @tabs-line-color-ink-bg;
+    transition:
+      left @transition-duration-2 @transition-timing-function-standard,
+      width @transition-duration-2 @transition-timing-function-standard;
+
+    &.c-tabs__header-ink-no-animation {
+      transition: none;
+    }
+
+    &--disabled {
+      background-color: @tabs-line-color-ink-bg_disabled;
+    }
+  }
+}
+
+// variant = outline card
+
+.c-tabs {
+  // variant = line
+  &--variant-line {
+    .c-tabs-nav::before {
+      display: block;
+    }
+  }
+
+  &--variant-line &-nav__suffix {
+    line-height: @tabs-size-md-header-height_line;
+  }
+
+  &--variant-line &-tab {
+    padding: 12px 0;
+    line-height: var(~'--c-line-height');
+
+    &__title {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      padding: var(~'--tabs-size-md-tab-title-padding');
+
+      &::before {
+        position: absolute;
+        top: 0;
+        right: -@tabs-padding-title-text-horizontal;
+        bottom: 0;
+        left: -@tabs-padding-title-text-horizontal;
+        z-index: -1;
+        background-color: @tabs-line-color-title-bg;
+        border-radius: @tabs-line-border-radius;
+        opacity: 1;
+        transition:
+          background-color @transition-duration-2 @transition-timing-function-linear,
+          opacity @transition-duration-2 @transition-timing-function-linear;
+        content: '';
+      }
+    }
+
+    &:hover {
+      .c-tabs-tab__title::before {
+        background-color: @tabs-line-color-title-bg_hover;
+      }
+    }
+
+    &--active,
+    &--active:hover {
+      .c-tabs-tab__title::before {
+        background-color: @tabs-line-color-title-bg_active;
+      }
+    }
+
+    &--disabled,
+    &--disabled:hover {
+      .c-tabs-tab__title::before {
+        opacity: 0;
+      }
+    }
+
+    &:focus-visible {
+      .c-tabs-tab__title::before {
+        border: 2px solid @color-primary-6;
+      }
+    }
+  }
+
+  &--variant-line&--vertical > &-nav__tab:first-of-type {
+    margin-left: @tabs-line-margin-title-horizontal_first;
+  }
+
+  // headerPadding=false & variant === line/plain & vertical (tabs on the side)
+  &--variant-line&--vertical &-nav__tab-list-no-padding > &-nav__tab:first-of-type,
+  &--variant-plain&--vertical &-nav__tab-list-no-padding > &-nav__tab:first-of-type {
+    margin-left: 0;
+  }
+
+  // variant = outline card
+  &--variant-outline,
+  &--variant-card {
+    .c-tabs-nav::before {
+      display: block;
+    }
+
+    .c-tabs-tab {
+      position: relative;
+      padding: var(~'--tabs-size-md-tab-padding');
+      font-size: @tabs-size-md-font-size_card;
+      border: @tabs-outline-border-width solid @tabs-outline-color-title-border;
+      transition:
+        padding @transition-duration-2 @transition-timing-function-linear,
+        color @transition-duration-2 @transition-timing-function-linear;
+
+      &--closable {
+        padding-right: @tabs-outline-padding-title-right_editable;
+      }
+
+      &--closable:not(.c-tabs-tab--active):hover .c-icon-hover:hover::before {
+        background-color: @tabs-outline-color-close-icon-bg_hover;
+      }
+
+      &:focus-visible::before {
+        position: absolute;
+        top: -1px;
+        right: 0;
+        bottom: -1px;
+        left: -1px;
+        border: 2px solid @color-primary-6;
+        content: '';
+      }
+
+      &:last-child:focus-visible::before {
+        right: -1px;
+      }
+    }
+  }
+
+  &--variant-outline &-tab {
+    border-color: transparent;
+
+    &:hover {
+      color: @tabs-outline-color-title_hover;
+    }
+
+    &--disabled,
+    &--disabled:hover {
+      color: @tabs-outline-color-title_disabled;
+    }
+
+    &--active,
+    &--active:hover {
+      color: @tabs-outline-color-title_active;
+      border-color: @tabs-outline-color-title-border;
+      border-bottom-color: var(~'--c-color-bg-2');
+    }
+  }
+
+  &--variant-card &-tab {
+    margin-left: @tabs-card-spacing-horizontal;
+    background-color: @tabs-card-color-title-bg;
+    border-right: @tabs-outline-border-width solid @tabs-outline-color-title-border;
+    border-radius: @tabs-outline-border-radius @tabs-outline-border-radius 0 0;
+
+    &:hover {
+      background-color: @tabs-card-color-title-bg_hover;
+    }
+
+    &--disabled,
+    &--disabled:hover {
+      background-color: @tabs-card-color-title-bg_disabled;
+    }
+
+    &--active,
+    &--active:hover {
+      background-color: @tabs-card-color-title-bg_active;
+      border-bottom-color: var(~'--c-color-bg-2');
+    }
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+
+  // variant = plain
+  &--variant-plain {
+    .c-tabs-tab {
+      position: relative;
+      padding: var(~'--tabs-size-md-tab-padding');
+      font-size: @tabs-size-md-font-size_text;
+      line-height: 1.5715;
+
+      &:hover {
+        background-color: transparent;
+      }
+
+      &--active.c-tabs-tab,
+      &--active.c-tabs-tab:hover {
+        background-color: transparent;
+      }
+
+      &--disabled.c-tabs-tab,
+      &--disabled.c-tabs-tab:hover {
+        background-color: @tabs-text-color-title-bg_disabled;
+      }
+
+      &--active&--disabled.c-tabs-tab,
+      &--active&--disabled.c-tabs-tab:hover {
+        background-color: @tabs-text-color-title-bg_disabled_active;
+      }
+
+      &:focus-visible.c-tabs-tab {
+        border: 2px solid @color-primary-6;
+      }
+    }
+  }
+
+  &--variant-capsule {
+    .c-tabs-tab {
+      padding: var(~'--tabs-size-md-tab-padding');
+      padding-right: @tabs-rounded-padding-title-horizontal;
+      padding-left: @tabs-rounded-padding-title-horizontal;
+      font-size: @tabs-size-md-font-size_rounded;
+      background-color: @tabs-rounded-color-title-bg;
+      border-radius: @tabs-size-md-header-height_rounded;
+
+      &:hover {
+        background-color: @tabs-rounded-color-title-bg_hover;
+        color: @tabs-color-title-text_hover;
+      }
+
+      &--disabled:hover {
+        background-color: @tabs-rounded-color-title-bg_disabled;
+      }
+
+      &--active,
+      &--active:hover {
+        background-color: @tabs-rounded-color-title-bg_active;
+      }
+
+      &:focus-visible {
+        border-color: @color-primary-6;
+      }
+    }
+  }
+
+  &--variant-enclosed {
+    .c-tabs-nav__tab-list {
+      line-height: 1;
+      background-color: @tabs-capsule-color-header-bg;
+      border-radius: @tabs-capsule-border-header-radius;
+    }
+
+    .c-tabs-tab {
+      position: relative;
+      font-size: @tabs-size-md-font-size_capsule;
+      background-color: @tabs-capsule-color-title-bg;
+
+      &:hover {
+        background-color: @tabs-capsule-color-title-bg_hover;
+      }
+
+      &--disabled:hover {
+        background-color: unset;
+      }
+
+      &--active,
+      &--active:hover {
+        background-color: @tabs-capsule-color-title-bg_active;
+      }
+
+      &:focus-visible {
+        border-color: @color-primary-6;
+      }
+    }
+  }
+}
+
+//   /** header */
+
+.c-tabs {
+  &-nav {
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  &__content {
+    box-sizing: border-box;
+    width: 100%;
+    overflow: hidden;
+
+    &-hide {
+      display: none;
+    }
+
+    .c-tabs__content-list {
+      display: flex;
+      width: 100%;
+    }
+
+    .c-tabs__content-item {
+      flex-shrink: 0;
+      width: 100%;
+      height: 0;
+      overflow: hidden;
+
+      &.c-tabs--content-item-active {
+        height: auto;
+      }
+    }
+  }
+
+  &__variant-card,
+  &__variant-outline {
+    > .c-tabs-content {
+      border: @tabs-outline-border-content-width solid @tabs-line-color-header-border;
+      border-top: none;
+    }
+  }
+
+  &__content-animation {
+    transition: all @transition-duration-2 @transition-timing-function-standard;
+  }
+
+  &--orientation-horizontal&--justify {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .c-tabs__content,
+    .c-tabs__content-list,
+    .c-tabs__pane {
+      height: 100%;
+    }
+  }
+}
+
+@sizes: xs, sm, md, lg, xl;
+
+.for(@data, @i: 1) when (@i =< length(@data)) {
+  @size: extract(@data, @i);
+
+  .c-tabs--size-@{size} {
+    .c-tabs-tab {
+      padding: var(~'--c-tabs-size-@{size}-tab-padding');
+      height: var(~'--c-tabs-size-@{size}-tab-height');
+      font-size: var(~'--c-tabs-size-@{size}-tab-font-size');
+    }
+
+    &.c-tabs--variant-enclosed {
+      .c-tabs-nav__tab-list {
+        padding: var(~'--c-tabs-variant-enclosed-size-@{size}-padding-header-y')
+          var(~'--c-tabs-variant-enclosed-size-@{size}-padding-header-x');
+      }
+      .c-tabs-tab {
+        padding: var(~'--c-tabs-variant-enclosed-size-@{size}-tab-padding');
+      }
+    }
+  }
+
+  .for(@data, (@i + 1));
+}
+
+.for(@sizes);
+
+@import './vertical.less';
+@import './rtl.less';
+
+:root[cedar-theme='dark'] {
+  .c-tabs--variant-enclosed {
+    .c-tabs-tab {
+      &--active {
+        background-color: var(~'--c-color-fill-3');
+      }
+
+      &:hover {
+        background-color: var(~'--c-color-fill-3');
+      }
+    }
+  }
+}

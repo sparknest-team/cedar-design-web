@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`Breadcrumb > render 1`] = `
+"<div role=\\"list\\" class=\\"c-breadcrumb\\">
+  <!---->
+</div>"
+`;

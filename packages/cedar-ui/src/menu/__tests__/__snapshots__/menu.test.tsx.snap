@@ -1,0 +1,8 @@
+// Vitest Snapshot v1
+
+exports[`Menu > render 1`] = `
+"<div class=\\"arco-menu arco-menu-light arco-menu-vertical\\">
+  <div class=\\"arco-menu-inner\\"></div>
+  <!--v-if-->
+</div>"
+`;

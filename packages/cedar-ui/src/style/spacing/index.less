@@ -1,0 +1,36 @@
+@import 'index-var.less';
+// 1. 定义映射为列表
+.types() {
+  m: margin;
+  p: padding;
+}
+
+.directions() {
+  t: top;
+  r: right;
+  b: bottom;
+  l: left;
+  x: left right;
+  y: top bottom;
+  a: top right bottom left;
+}
+
+// 生成0-64的数值类
+.generate-classes() {
+  each(.types(), .(@tv, @tk, @ti) {
+    each(.directions(), .(@dv, @dk, @di) {
+      each(range(64), {
+        @realK: replace(@dk, 'a', '');
+
+        .@{tk}@{realK}-@{value} {
+          each(@dv, .(@dvv, @dkk, @dii) {
+            @{tv}-@{dvv}: (@value * 1px);
+          });
+        }
+      });
+    });
+  });
+}
+
+// 执行生成
+.generate-classes();

@@ -1,0 +1,1242 @@
+{
+  "cedar-`<affix>`": {
+    "attributes": [
+      "change"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<affix>`)"
+  },
+  "cedar-`<alert>`": {
+    "attributes": [
+      "type",
+      "variant",
+      "color",
+      "title",
+      "message",
+      "show-icon",
+      "closable",
+      "banner",
+      "center",
+      "elevation",
+      "close",
+      "after-close"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<alert>`)"
+  },
+  "cedar-`<anchor>`": {
+    "attributes": [
+      "select",
+      "change"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<anchor>`)"
+  },
+  "cedar-`<anchor-link>`": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<anchor-link>`)"
+  },
+  "cedar-`<auto-complete>`": {
+    "attributes": [
+      "change",
+      "search",
+      "select",
+      "clear",
+      "dropdown-scroll",
+      "dropdown-reach-bottom"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<autocomplete>`)"
+  },
+  "cedar-`<back-top>`": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<back-top>`)"
+  },
+  "cedar-`<badge>`": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<badge>`)"
+  },
+  "cedar-breadcrumb": {
+    "attributes": [
+      "max-count",
+      "routes",
+      "separator",
+      "custom-url",
+      "sticky",
+      "offset-top",
+      "offset-bottom",
+      "target",
+      "target-container"
+    ],
+    "description": "面包屑是辅助导航模式，用于识别页面在层次结构内的位置，并根据需要向上返回。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#breadcrumb)"
+  },
+  "cedar-breadcrumb-item": {
+    "attributes": [
+      "separator",
+      "droplist",
+      "dropdown-props",
+      "click"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#breadcrumbitem)"
+  },
+  "cedar-`<button>`": {
+    "attributes": [
+      "status",
+      "variant",
+      "size",
+      "round",
+      "block",
+      "loading",
+      "loadingType",
+      "autoLoading",
+      "disabled",
+      "stacked",
+      "iconContainer",
+      "ripple",
+      "focusable",
+      "autofocus",
+      "htmlType",
+      "component",
+      "color",
+      "textColor",
+      "elevation",
+      "click",
+      "touchstart"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<button>`)"
+  },
+  "cedar-`<button-group>`": {
+    "attributes": [
+      "size",
+      "status",
+      "variant",
+      "color",
+      "textColor",
+      "stacked",
+      "disabled",
+      "vertical",
+      "elevation"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<buttongroup>`)"
+  },
+  "cedar-`<calendar>`": {
+    "attributes": [
+      "change",
+      "panel-change"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<calendar>`)"
+  },
+  "cedar-`<card>`": {
+    "attributes": [
+      "bordered",
+      "top-divider",
+      "loading",
+      "hoverable",
+      "size",
+      "header-style",
+      "body-style",
+      "title",
+      "body-padding",
+      "direction",
+      "elevation"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<card>`)"
+  },
+  "cedar-`<carousel>`": {
+    "attributes": [
+      "current(`v-model`)",
+      "default-current",
+      "auto-play",
+      "move-speed",
+      "animation-name",
+      "trigger",
+      "direction",
+      "show-arrow",
+      "arrow-class",
+      "indicator-type",
+      "indicator-position",
+      "indicator-class",
+      "transition-timing-function",
+      "change"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<carousel>`)"
+  },
+  "cedar-`<cascader>`": {
+    "attributes": [
+      "change",
+      "input-value-change",
+      "clear",
+      "search",
+      "popup-visible-change",
+      "focus",
+      "blur"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<cascader>`)"
+  },
+  "cedar-`<cascader-panel>`": {
+    "attributes": [
+      "change"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<cascaderpanel>`)"
+  },
+  "cedar-checkbox": {
+    "attributes": [
+      "model-value(v-model)",
+      "default-checked",
+      "value",
+      "disabled",
+      "indeterminate",
+      "change"
+    ],
+    "description": "在一组数据中，用户可通过复选框选择一个或多个数据。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#checkbox)"
+  },
+  "cedar-checkbox-group": {
+    "attributes": [
+      "model-value(v-model)",
+      "default-value",
+      "max",
+      "options",
+      "direction",
+      "indeterminate",
+      "disabled",
+      "change"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#checkboxgroup)"
+  },
+  "cedar-`<collapse>`": {
+    "attributes": [
+      "change"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<collapse>`)"
+  },
+  "cedar-`<collapse-item>`": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<collapse-item>`)"
+  },
+  "cedar-`<color-picker>`": {
+    "attributes": [
+      "change",
+      "popup-visible-change"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<color-picker>`)"
+  },
+  "cedar-`<comment>`": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<comment>`)"
+  },
+  "cedar-config-provider": {
+    "attributes": [
+      "type",
+      "click"
+    ],
+    "description": "在应用的最外层进行配置，一次设置，全局生效。一般用于设置国际化语言等功能。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#configprovider)"
+  },
+  "cedar-`common`": {
+    "attributes": [
+      "change",
+      "select",
+      "popup-visible-change",
+      "ok",
+      "clear",
+      "select-shortcut",
+      "picker-value-change"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`common`)"
+  },
+  "cedar-`<date-picker>`": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<datepicker>`)"
+  },
+  "cedar-`<month-picker>`": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<monthpicker>`)"
+  },
+  "cedar-`<year-picker>`": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<yearpicker>`)"
+  },
+  "cedar-`<quarter-picker>`": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<quarterpicker>`)"
+  },
+  "cedar-`<week-picker>`": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<weekpicker>`)"
+  },
+  "cedar-`<range-picker>`": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<rangepicker>`)"
+  },
+  "cedar-`<rangeicker>`": {
+    "attributes": [
+      "change",
+      "select",
+      "popup-visible-change",
+      "ok",
+      "clear",
+      "select-shortcut",
+      "picker-value-change"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<rangeicker>`)"
+  },
+  "cedar-`<descriptions>`": {
+    "attributes": [
+      "data",
+      "column",
+      "title",
+      "layout",
+      "align",
+      "size",
+      "bordered",
+      "label-style",
+      "value-style",
+      "table-layout"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<descriptions>`)"
+  },
+  "cedar-`<descriptions-item>`": {
+    "attributes": [
+      "span",
+      "label"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<descriptionsitem>`)"
+  },
+  "cedar-divider": {
+    "attributes": [
+      "text-align",
+      "description",
+      "size-x",
+      "size-y",
+      "orientation",
+      "type",
+      "thickness",
+      "hairline",
+      "color",
+      "opacity"
+    ],
+    "description": "划分内容区域，对模块做分隔。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#divider)"
+  },
+  "cedar-drag-container": {
+    "attributes": [
+      "modelValue",
+      "dragOption",
+      "change"
+    ],
+    "description": "组件描述。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#dragcontainer)"
+  },
+  "cedar-`<drawer>`": {
+    "attributes": [
+      "visible **(v-model)**",
+      "default-visible",
+      "placement",
+      "title",
+      "size",
+      "mask",
+      "mask-closable",
+      "closable",
+      "ok-text",
+      "cancel-text",
+      "ok-loading",
+      "ok-button-props",
+      "cancel-button-props",
+      "unmount-on-close",
+      "width",
+      "height",
+      "popup-container",
+      "drawer-style",
+      "on-before-ok",
+      "on-before-cancel",
+      "esc-to-close",
+      "render-to-body",
+      "header",
+      "footer",
+      "hide-cancel",
+      "ok",
+      "cancel",
+      "open",
+      "close",
+      "before-open",
+      "before-close"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<drawer>`)"
+  },
+  "cedar-`<dropdown>`": {
+    "attributes": [
+      "popup-visible-change",
+      "select"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<dropdown>`)"
+  },
+  "cedar-`<doption>`": {
+    "attributes": [
+      "click"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<doption>`)"
+  },
+  "cedar-`<dgroup>`": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<dgroup>`)"
+  },
+  "cedar-`<dsubmenu>`": {
+    "attributes": [
+      "popup-visible-change"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<dsubmenu>`)"
+  },
+  "cedar-`<dropdown-button>`": {
+    "attributes": [
+      "popup-visible-change",
+      "click",
+      "select"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<dropdown-button>`)"
+  },
+  "cedar-ellipsis": {
+    "attributes": [
+      "expand",
+      "expandTrigger",
+      "lineClamp",
+      "tooltip",
+      "update:expand"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#ellipsis)"
+  },
+  "cedar-`<empty>`": {
+    "attributes": [
+      "description",
+      "img-src",
+      "icon",
+      "image-size",
+      "in-config-provider"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<empty>`)"
+  },
+  "cedar-filter-form": {
+    "attributes": [
+      "model **(v-model)**",
+      "components",
+      "collapsed",
+      "cols",
+      "gridProps",
+      "store",
+      "defaultConfig",
+      "fieldConfig",
+      "showRememberSelections",
+      "rememberUserKey",
+      "autoRemember",
+      "change"
+    ],
+    "description": "用于列表的筛选项。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#filterform)"
+  },
+  "cedar-i-component": {
+    "attributes": [
+      "visible",
+      "name",
+      "props",
+      "gridItemProps",
+      "formItemProps"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#icomponent)"
+  },
+  "cedar-config": {
+    "attributes": [
+      "remember",
+      "removeIfNotInOptions",
+      "required"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#config)"
+  },
+  "cedar-`<form>`": {
+    "attributes": [
+      "submit",
+      "submit-success",
+      "submit-failed"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<form>`)"
+  },
+  "cedar-`<form-item>`": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<formitem>`)"
+  },
+  "cedar-row": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#row)"
+  },
+  "cedar-col": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#col)"
+  },
+  "cedar-grid": {
+    "description": "栅格可以有效的保证页面的一致性、逻辑性、加强团队协作和统一。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#grid)"
+  },
+  "cedar-grid-item": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#griditem)"
+  },
+  "cedar-icon": {
+    "attributes": [
+      "type",
+      "size",
+      "rotate",
+      "spin",
+      "click"
+    ],
+    "description": "这里有 Cedar Design 内置的大量图标。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#icon)"
+  },
+  "cedar-icon-xxx": {
+    "attributes": [
+      "strokeWidth",
+      "strokeLinecap",
+      "strokeLinejoin",
+      "size",
+      "rotate",
+      "spin"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#icon-xxx)"
+  },
+  "cedar-`<image>`": {
+    "attributes": [
+      "preview-visible-change"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<image>`)"
+  },
+  "cedar-`<image-preview>`": {
+    "attributes": [
+      "close"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<image-preview>`)"
+  },
+  "cedar-`<image-preview-group>`": {
+    "attributes": [
+      "change",
+      "visible-change"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<image-preview-group>`)"
+  },
+  "cedar-`<image-preview-action>`-(2.17.0)": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<image-preview-action>`-(2.17.0))"
+  },
+  "cedar-`<input>`": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<input>`)"
+  },
+  "cedar-`<input-password>`": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<inputpassword>`)"
+  },
+  "cedar-`<input-search>`": {
+    "attributes": [
+      "search"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<inputsearch>`)"
+  },
+  "cedar-`<input-number>`": {
+    "attributes": [
+      "change",
+      "focus",
+      "blur",
+      "clear",
+      "input"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<input-number>`)"
+  },
+  "cedar-`<input-tag>`": {
+    "attributes": [
+      "change",
+      "input-value-change",
+      "press-enter",
+      "remove",
+      "clear",
+      "focus",
+      "blur"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<input-tag>`)"
+  },
+  "cedar-layout": {
+    "description": "页面的基础布局框架，常与组件嵌套使用，构建页面整体布局。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#layout)"
+  },
+  "cedar-layout-header": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#layout-header)"
+  },
+  "cedar-layout-content": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#layout-content)"
+  },
+  "cedar-layout-footer": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#layout-footer)"
+  },
+  "cedar-layout-sider": {
+    "attributes": [
+      "collapse",
+      "breakpoint"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#layout-sider)"
+  },
+  "cedar-layout-form": {
+    "attributes": [
+      "componentTree",
+      "value",
+      "noBottomSpace",
+      "emptyText",
+      "showEmptyText",
+      "rules",
+      "store",
+      "compMapping",
+      "change"
+    ],
+    "description": "自适应表单组件，适用于列表的筛选。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#layoutform)"
+  },
+  "cedar-component-tree-form": {
+    "attributes": [
+      "maxVisibleRow",
+      "layoutCol",
+      "layoutColArr",
+      "labelPosition",
+      "labelWidth"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#componenttree-form)"
+  },
+  "cedar-`<link>`": {
+    "attributes": [
+      "href",
+      "status",
+      "hoverable",
+      "icon",
+      "loading",
+      "disabled",
+      "click"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<link>`)"
+  },
+  "cedar-`<list>`": {
+    "attributes": [
+      "scroll",
+      "reach-bottom",
+      "page-change",
+      "page-size-change"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<list>`)"
+  },
+  "cedar-`<list-item>`": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<list-item>`)"
+  },
+  "cedar-`<list-item-meta>`": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<list-item-meta>`)"
+  },
+  "cedar-virtual-list": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#virtuallist)"
+  },
+  "cedar-loading": {
+    "attributes": [
+      "type",
+      "click"
+    ],
+    "description": "组件描述。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#loading)"
+  },
+  "cedar-map": {
+    "attributes": [
+      "modelValue(**v-model**)",
+      "defaultValue",
+      "driver",
+      "fetch",
+      "geocoderUrl",
+      "geocoderHandler",
+      "basePath",
+      "isInternational",
+      "showName",
+      "showLocateMeButton",
+      "showEditAddressButton",
+      "showMapTips",
+      "mapType",
+      "enableGisSearch",
+      "valueKeyScope",
+      "valueKeyAlias",
+      "change",
+      "init",
+      "loading:address",
+      "loaded:address"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#map)"
+  },
+  "cedar-`<mention>`": {
+    "attributes": [
+      "change",
+      "search",
+      "select",
+      "clear",
+      "focus",
+      "blur"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<mention>`)"
+  },
+  "cedar-menu": {
+    "attributes": [
+      "theme",
+      "mode",
+      "level-indent",
+      "auto-open",
+      "collapsed(**v-model**)",
+      "default-collapsed",
+      "collapsed-width",
+      "accordion",
+      "auto-scroll-into-view",
+      "show-collapse-button",
+      "selected-keys(**v-model**)",
+      "default-selected-keys",
+      "open-keys(**v-model**)",
+      "default-open-keys",
+      "scroll-config",
+      "trigger-props",
+      "tooltip-props",
+      "auto-open-selected",
+      "breakpoint",
+      "popup-max-height",
+      "collapse",
+      "menu-item-click",
+      "sub-menu-click"
+    ],
+    "description": "收纳、排列并展示一系列选项的列表。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#menu)"
+  },
+  "cedar-sub-menu": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#submenu)"
+  },
+  "cedar-menu-item-group": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#menuitemgroup)"
+  },
+  "cedar-menu-item": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#menuitem)"
+  },
+  "cedar-`<modal>`": {
+    "attributes": [
+      "ok",
+      "cancel",
+      "open",
+      "close",
+      "before-open",
+      "before-close"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<modal>`)"
+  },
+  "cedar-`<overflow-list>`": {
+    "attributes": [
+      "change"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<overflow-list>`)"
+  },
+  "cedar-page-header": {
+    "attributes": [
+      "title",
+      "subtitle",
+      "show-back",
+      "back"
+    ],
+    "description": "基础页头，适合使用在需要简单描述的场景。默认是没有底色的。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#pageheader)"
+  },
+  "cedar-pagination": {
+    "attributes": [
+      "total(**必填**)",
+      "current(**v-model**)",
+      "default-current",
+      "page-size(**v-model**)",
+      "default-page-size",
+      "hide-on-single-page",
+      "simple",
+      "show-total",
+      "show-more",
+      "show-jumper",
+      "show-page-size",
+      "page-size-options",
+      "page-size-props",
+      "size",
+      "page-item-style",
+      "active-page-item-style",
+      "base-size",
+      "buffer-size",
+      "auto-adjust",
+      "change",
+      "page-size-change"
+    ],
+    "description": "采用分页控制单页内的信息数量，也可进行页面跳转。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#pagination)"
+  },
+  "cedar-people-select": {
+    "attributes": [
+      "change",
+      "clear"
+    ],
+    "description": "人员选择组件。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#peopleselect)"
+  },
+  "cedar-`<popconfirm>`": {
+    "attributes": [
+      "popup-visible-change",
+      "ok",
+      "cancel"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<popconfirm>`)"
+  },
+  "cedar-popover": {
+    "attributes": [
+      "type",
+      "click"
+    ],
+    "description": "鼠标悬停、聚焦或点击在某个组件时，弹出的气泡式的卡片浮层。可以对卡片上的元素进行操作。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#popover)"
+  },
+  "cedar-progress": {
+    "attributes": [
+      "type",
+      "status",
+      "size",
+      "percent",
+      "click"
+    ],
+    "description": "组件描述。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#progress)"
+  },
+  "cedar-radio": {
+    "attributes": [
+      "model-value(v-model)",
+      "default-checked",
+      "value",
+      "type",
+      "disabled",
+      "change"
+    ],
+    "description": "在一组相关且互斥数据中，用户仅能选择一个选项。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#radio)"
+  },
+  "cedar-radio-group": {
+    "attributes": [
+      "model-value(v-model)",
+      "default-value",
+      "type",
+      "size",
+      "options",
+      "direction",
+      "disabled",
+      "change"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#radiogroup)"
+  },
+  "cedar-`<rate>`": {
+    "attributes": [
+      "change",
+      "hover-change"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<rate>`)"
+  },
+  "cedar-`<resize-box>`": {
+    "attributes": [
+      "moving-start",
+      "moving",
+      "moving-end"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<resize-box>`)"
+  },
+  "cedar-`<result>`": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<result>`)"
+  },
+  "cedar-saas-header-nav": {
+    "attributes": [
+      "fixed",
+      "showTenantInfo",
+      "showWorkbench",
+      "showAccountBasicInfo",
+      "showTenantSwitch",
+      "showLogout",
+      "showToMgmt",
+      "userActions",
+      "fetch",
+      "mfeSdk",
+      "userSelect"
+    ],
+    "description": "SaaS平台通用头部导航\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#saasheadernav)"
+  },
+  "cedar-`<saas-page>`": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<saaspage>`)"
+  },
+  "cedar-`<scrollbar>`": {
+    "attributes": [
+      "scroll"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<scrollbar>`)"
+  },
+  "cedar-search": {
+    "attributes": [
+      "defaultField",
+      "model **(v-model)**",
+      "searchText",
+      "searchField",
+      "fields",
+      "placeholder",
+      "selectStyle",
+      "search",
+      "change"
+    ],
+    "description": "搜索组件（用于列表页等场景）\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#search)"
+  },
+  "cedar-select": {
+    "attributes": [
+      "multiple",
+      "model-value **(v-model)**",
+      "default-value",
+      "input-value **(v-model)**",
+      "default-input-value",
+      "size",
+      "placeholder",
+      "loading",
+      "disabled",
+      "error",
+      "variant",
+      "clearable",
+      "filterable",
+      "creatable",
+      "max-tag-count",
+      "popup-container",
+      "bordered",
+      "default-active-first-option",
+      "popup-visible **(v-model)**",
+      "default-popup-visible",
+      "unmount-on-close",
+      "filter-option",
+      "options",
+      "virtual-list-props",
+      "trigger-props",
+      "format-label",
+      "fallback-option",
+      "show-extra-options",
+      "value-key",
+      "search-delay",
+      "limit",
+      "field-names",
+      "scrollbar",
+      "show-header-on-empty",
+      "show-footer-on-empty",
+      "change",
+      "input-value-change",
+      "popup-visible-change",
+      "clear",
+      "remove",
+      "search",
+      "dropdown-scroll",
+      "dropdown-reach-bottom",
+      "exceed-limit"
+    ],
+    "description": "当用户需要从一组同类数据中选择一个或多个时，可以使用下拉选择器，点击后选择对应项。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select)"
+  },
+  "cedar-`<option>`": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<option>`)"
+  },
+  "cedar-`<optgroup>`": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<optgroup>`)"
+  },
+  "cedar-`<skeleton>`": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<skeleton>`)"
+  },
+  "cedar-`<skeleton-line>`": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<skeleton-line>`)"
+  },
+  "cedar-`<skeleton-shape>`": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<skeleton-shape>`)"
+  },
+  "cedar-slider": {
+    "attributes": [
+      "type",
+      "click"
+    ],
+    "description": "组件描述。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#slider)"
+  },
+  "cedar-`<spin>`": {
+    "attributes": [
+      "size",
+      "loading",
+      "dot",
+      "tip",
+      "hide-icon"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<spin>`)"
+  },
+  "cedar-`<split>`": {
+    "attributes": [
+      "move-start",
+      "moving",
+      "move-end"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<split>`)"
+  },
+  "cedar-`<statistic>`": {
+    "attributes": [
+      "`title`",
+      "`value`",
+      "`format`",
+      "`extra`",
+      "`start`",
+      "`precision`",
+      "`separator`",
+      "`show-group-separator`",
+      "`animation`",
+      "`animation-duration`",
+      "`value-from`",
+      "`placeholder`",
+      "`value-style`"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<statistic>`)"
+  },
+  "cedar-`<countdown>`": {
+    "attributes": [
+      "`title`",
+      "`value`",
+      "`now`",
+      "`format`",
+      "`start`",
+      "`value-style`",
+      "`finish`"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<countdown>`)"
+  },
+  "cedar-steps": {
+    "attributes": [
+      "type",
+      "direction",
+      "label-placement",
+      "current(**v-model**)",
+      "default-current",
+      "status",
+      "show-line",
+      "small",
+      "changeable",
+      "change"
+    ],
+    "description": "明示任务流程和当前完成程度，引导用户按照步骤完成任务。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#steps)"
+  },
+  "cedar-step": {
+    "attributes": [
+      "title",
+      "description",
+      "status",
+      "disabled"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#step)"
+  },
+  "cedar-switch": {
+    "attributes": [
+      "model-value(**v-model**)",
+      "default-checked",
+      "disabled",
+      "loading",
+      "type",
+      "size",
+      "checked-value",
+      "unchecked-value",
+      "checked-color",
+      "unchecked-color",
+      "before-change",
+      "checked-text",
+      "unchecked-text",
+      "change",
+      "focus",
+      "blur"
+    ],
+    "description": "互斥性的操作控件，用户可打开或关闭某个功能。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#switch)"
+  },
+  "cedar-`<table>`": {
+    "attributes": [
+      "expand",
+      "expanded-change",
+      "select",
+      "select-all",
+      "selection-change",
+      "sorter-change",
+      "filter-change",
+      "page-change",
+      "page-size-change",
+      "change",
+      "cell-mouse-enter",
+      "cell-mouse-leave",
+      "cell-click",
+      "row-click",
+      "header-click",
+      "column-resize",
+      "row-dblclick",
+      "cell-dblclick",
+      "row-contextmenu",
+      "cell-contextmenu"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<table>`)"
+  },
+  "cedar-`<table-column>`": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tablecolumn>`)"
+  },
+  "cedar-table-columns-config": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#tablecolumnsconfig)"
+  },
+  "cedar-`<tabs>`": {
+    "attributes": [
+      "active-key **(v-model)**",
+      "default-active-key",
+      "indicator-position",
+      "size",
+      "type",
+      "vertical",
+      "editable",
+      "show-add-button",
+      "destroy-on-hide",
+      "lazy-load",
+      "justify",
+      "animation",
+      "header-padding",
+      "body-padding",
+      "auto-switch",
+      "hide-content",
+      "trigger",
+      "change",
+      "tab-click",
+      "add",
+      "delete"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tabs>`)"
+  },
+  "cedar-`<tab-pane>`": {
+    "attributes": [
+      "title",
+      "disabled",
+      "closable",
+      "destroy-on-hide"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tabpane>`)"
+  },
+  "cedar-`<tag>`": {
+    "attributes": [
+      "color",
+      "status",
+      "variant",
+      "size",
+      "visible **(v-model)**",
+      "default-visible",
+      "loading",
+      "closable",
+      "checkable",
+      "checked **(v-model)**",
+      "default-checked",
+      "close",
+      "check"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tag>`)"
+  },
+  "cedar-textarea": {
+    "attributes": [
+      "model-value(**v-model**)",
+      "default-value",
+      "placeholder",
+      "disabled",
+      "error",
+      "max-length",
+      "show-word-limit",
+      "clearable",
+      "auto-size",
+      "word-length",
+      "word-slice",
+      "input",
+      "change",
+      "clear",
+      "focus",
+      "blur"
+    ],
+    "description": "多行纯文本编辑控件，适用于评论或反馈表单中的一段意见。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#textarea)"
+  },
+  "cedar-time-picker": {
+    "attributes": [
+      "change",
+      "select",
+      "clear",
+      "popup-visible-change"
+    ],
+    "description": "在弹出面板上选择时间，以便捷完成时间输入的控件。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#timepicker)"
+  },
+  "cedar-`<timeline>`": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<timeline>`)"
+  },
+  "cedar-`<timeline-item>`": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<timeline-item>`)"
+  },
+  "cedar-tooltip": {
+    "attributes": [
+      "popup-visible **(v-model)**",
+      "default-popup-visible",
+      "content",
+      "position",
+      "xs",
+      "background-color",
+      "content-class",
+      "content-style",
+      "arrow-class",
+      "arrow-style",
+      "popup-container",
+      "popup-visible-change"
+    ],
+    "description": "鼠标悬停、聚焦或点击在某个组件时，弹出的文字提示。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#tooltip)"
+  },
+  "cedar-`<transfer>`": {
+    "attributes": [
+      "change",
+      "select",
+      "search"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<transfer>`)"
+  },
+  "cedar-`<tree>`": {
+    "attributes": [
+      "select",
+      "check",
+      "expand",
+      "drag-start",
+      "drag-end",
+      "drag-over",
+      "drag-leave",
+      "drop"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tree>`)"
+  },
+  "cedar-tree-select": {
+    "attributes": [
+      "type",
+      "click"
+    ],
+    "description": "可以对树形结构数据进行选择。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#treeselect)"
+  },
+  "cedar-trigger": {
+    "attributes": [
+      "type",
+      "click"
+    ],
+    "description": "组件描述。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#trigger)"
+  },
+  "cedar-upload": {
+    "attributes": [
+      "file-list **(v-model)**",
+      "default-file-list",
+      "accept",
+      "action",
+      "disabled",
+      "multiple",
+      "directory",
+      "draggable",
+      "tip",
+      "headers",
+      "data",
+      "name",
+      "with-credentials",
+      "custom-request",
+      "limit",
+      "auto-upload",
+      "show-file-list",
+      "show-remove-button",
+      "show-retry-button",
+      "show-cancel-button",
+      "show-upload-button",
+      "show-preview-button",
+      "download",
+      "show-link",
+      "image-loading",
+      "list-type",
+      "response-url-key",
+      "custom-icon",
+      "image-preview",
+      "on-before-upload",
+      "on-before-remove",
+      "on-button-click",
+      "progress-mode",
+      "exceed-limit",
+      "change",
+      "progress",
+      "preview",
+      "success",
+      "error"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload)"
+  },
+  "cedar-`<verification-code>`": {
+    "attributes": [
+      "change",
+      "finish",
+      "input"
+    ],
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<verification-code>`)"
+  },
+  "cedar-`<watermark>`": {
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<watermark>`)"
+  }
+}

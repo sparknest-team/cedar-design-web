@@ -1,0 +1,26 @@
+.cedar-search {
+  // select的宽度需要自适应。
+  .cedar-select-view {
+    width: auto;
+  }
+
+  .search-icon {
+    cursor: pointer;
+  }
+
+  // 自定义的popup
+  .cedar-search-input-wrapper {
+    width: 100%;
+    position: relative;
+
+    .cedar-trigger-popup {
+      width: 100%;
+      margin-top: 5px;
+    }
+  }
+
+  .cedar-search-input-wrapper:not(:first-child) > .cedar-input-wrapper {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+}

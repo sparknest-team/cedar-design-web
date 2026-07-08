@@ -1,0 +1,35 @@
+.c-textarea__wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.c-textarea__clear-wrapper {
+  &:hover {
+    .c-textarea__clear-icon {
+      display: inline-block;
+    }
+  }
+  .c-textarea {
+    padding-right: @icon-hover-size-md-height;
+  }
+}
+
+.c-textarea {
+  &__word-limit {
+    position: absolute;
+    right: var(~'--c-textarea-layout-tip-right');
+    bottom: var(~'--c-textarea-layout-tip-bottom');
+    color: var(~'--c-textarea-color-tip-text');
+    font-size: var(~'--c-textarea-font-tip-size');
+    user-select: none;
+  }
+
+  &__clear-icon {
+    position: absolute;
+    top: var(~'--c-textarea-layout-top-icon-clear');
+    right: var(~'--c-textarea-layout-tip-right');
+    display: none;
+    font-size: var(~'--c-textarea-size-icon-clear');
+  }
+}

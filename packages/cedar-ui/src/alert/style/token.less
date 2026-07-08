@@ -1,0 +1,111 @@
+@import '../../style/theme/index.less';
+
+:root {
+  --c-alert-padding-vertical: 8px;
+  --c-alert-padding-horizontal: 16px;
+  --c-alert-padding-vertical-with-title: 16px;
+  --c-alert-padding-horizontal-with-title: 16px;
+  --c-alert-border-radius: 4px;
+  --c-alert-border-width: 1px;
+
+  --c-alert-font-size-content: 14px;
+  --c-alert-font-size-title: 16px;
+  --c-alert-font-weight-title: 500;
+  --c-alert-line-height: 1.5715;
+  --c-alert-line-height-title: 1.5;
+  --c-alert-title-margin-bottom: 4px;
+
+  --c-alert-icon-size: 16px;
+  --c-alert-icon-margin-right: 8px;
+  --c-alert-action-margin-left: 12px;
+  --c-alert-close-margin-left: 8px;
+
+  // ===== type × variant 颜色 =====
+  // 命名约定：--c-alert-{variant}-{type}-{bg|border|title|content|icon}
+  // standard：浅色填充 (color-1) + 描边 (color-3)
+  // tonal：偏深一档浅填充 (color-2)，无描边
+  // outlined：透明填充 + 主色描边 (color-6)，标题/内容/图标走主色 (color-7)
+
+  // ---- standard ----
+  --c-alert-standard-info-bg: @color-info-1;
+  --c-alert-standard-info-border: @color-info-3;
+  --c-alert-standard-info-title: @color-info-7;
+  --c-alert-standard-info-content: @color-info-7;
+  --c-alert-standard-info-icon: @color-info-6;
+
+  --c-alert-standard-success-bg: @color-success-1;
+  --c-alert-standard-success-border: @color-success-3;
+  --c-alert-standard-success-title: @color-success-7;
+  --c-alert-standard-success-content: @color-success-7;
+  --c-alert-standard-success-icon: @color-success-6;
+
+  --c-alert-standard-warning-bg: @color-warning-1;
+  --c-alert-standard-warning-border: @color-warning-3;
+  --c-alert-standard-warning-title: @color-warning-7;
+  --c-alert-standard-warning-content: @color-warning-7;
+  --c-alert-standard-warning-icon: @color-warning-6;
+
+  --c-alert-standard-danger-bg: @color-danger-1;
+  --c-alert-standard-danger-border: @color-danger-3;
+  --c-alert-standard-danger-title: @color-danger-7;
+  --c-alert-standard-danger-content: @color-danger-7;
+  --c-alert-standard-danger-icon: @color-danger-6;
+
+  --c-alert-standard-default-bg: @color-fill-2;
+  --c-alert-standard-default-border: @color-border-2;
+  --c-alert-standard-default-title: @color-text-1;
+  --c-alert-standard-default-content: @color-text-2;
+  --c-alert-standard-default-icon: @color-text-2;
+
+  // ---- tonal ----（与 standard 同浅填充，无描边）
+  --c-alert-tonal-info-bg: @color-info-1;
+  --c-alert-tonal-info-title: @color-info-7;
+  --c-alert-tonal-info-content: @color-info-7;
+  --c-alert-tonal-info-icon: @color-info-6;
+
+  --c-alert-tonal-success-bg: @color-success-1;
+  --c-alert-tonal-success-title: @color-success-7;
+  --c-alert-tonal-success-content: @color-success-7;
+  --c-alert-tonal-success-icon: @color-success-6;
+
+  --c-alert-tonal-warning-bg: @color-warning-1;
+  --c-alert-tonal-warning-title: @color-warning-7;
+  --c-alert-tonal-warning-content: @color-warning-7;
+  --c-alert-tonal-warning-icon: @color-warning-6;
+
+  --c-alert-tonal-danger-bg: @color-danger-1;
+  --c-alert-tonal-danger-title: @color-danger-7;
+  --c-alert-tonal-danger-content: @color-danger-7;
+  --c-alert-tonal-danger-icon: @color-danger-6;
+
+  --c-alert-tonal-default-bg: @color-fill-2;
+  --c-alert-tonal-default-title: @color-text-1;
+  --c-alert-tonal-default-content: @color-text-2;
+  --c-alert-tonal-default-icon: @color-text-2;
+
+  // ---- outlined ----（透明 + 描边）
+  --c-alert-outlined-info-border: @color-info-6;
+  --c-alert-outlined-info-title: @color-info-7;
+  --c-alert-outlined-info-content: @color-info-7;
+  --c-alert-outlined-info-icon: @color-info-6;
+
+  --c-alert-outlined-success-border: @color-success-6;
+  --c-alert-outlined-success-title: @color-success-7;
+  --c-alert-outlined-success-content: @color-success-7;
+  --c-alert-outlined-success-icon: @color-success-6;
+
+  --c-alert-outlined-warning-border: @color-warning-6;
+  --c-alert-outlined-warning-title: @color-warning-7;
+  --c-alert-outlined-warning-content: @color-warning-7;
+  --c-alert-outlined-warning-icon: @color-warning-6;
+
+  --c-alert-outlined-danger-border: @color-danger-6;
+  --c-alert-outlined-danger-title: @color-danger-7;
+  --c-alert-outlined-danger-content: @color-danger-7;
+  --c-alert-outlined-danger-icon: @color-danger-6;
+
+  --c-alert-outlined-default-border: @color-border-2;
+  --c-alert-outlined-default-title: @color-text-1;
+  --c-alert-outlined-default-content: @color-text-2;
+  --c-alert-outlined-default-icon: @color-text-2;
+}

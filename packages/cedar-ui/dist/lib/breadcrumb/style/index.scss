@@ -1,0 +1,20 @@
+.cedar-breadcrumb-item a {
+  cursor: pointer;
+}
+
+.cedar-affix {
+  .cedar-breadcrumb {
+    background-color: rgb(var(--bg-white));
+    width: 100%;
+  }
+}
+
+.cedar-breadcrumb {
+  width: 100%;
+  transition: background-color 0.5s ease;
+  // 面包屑不换行
+  .cedar-breadcrumb-item {
+    white-space: nowrap;
+    text-wrap: nowrap;
+  }
+}

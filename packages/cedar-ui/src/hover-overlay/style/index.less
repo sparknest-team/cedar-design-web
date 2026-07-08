@@ -1,0 +1,26 @@
+@import '../../style/mixins/index.less';
+@import './token.less';
+
+.c-hover-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: inherit;
+  background-color: transparent;
+  opacity: 0;
+  // transition: opacity 0.15s;
+  // will-change: opacity;
+  pointer-events: none;
+
+  &--hovering {
+    background-color: currentColor;
+    opacity: var(~'--c-hover-overlay-opacity');
+  }
+
+  &--focusing {
+    background-color: currentColor;
+    opacity: var(~'--c-hover-overlay-focusing-opacity');
+  }
+}

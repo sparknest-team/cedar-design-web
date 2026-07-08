@@ -1,0 +1,146 @@
+@import './token.less';
+
+// for input & textarea
+.input-status(@status) {
+  .c-input-wrapper:not(.c-input-disabled),
+  .c-textarea-wrapper:not(.c-textarea-disabled) {
+    background-color: ~'@{form-color-bg_@{status}}';
+    border-color: ~'@{form-color-border_@{status}}';
+
+    &:hover {
+      background-color: ~'@{form-color-bg_@{status}_hover}';
+      border-color: ~'@{form-color-border_@{status}_hover}';
+    }
+  }
+
+  .c-input-wrapper:not(.c-input-disabled).c-input-focus,
+  .c-textarea-wrapper:not(.c-textarea-disabled).c-textarea-focus {
+    background-color: ~'@{form-color-bg_@{status}_focus}';
+    border-color: ~'@{form-color-border_@{status}_focus}';
+    box-shadow: 0 0 0 ~'@{form-size-shadow_@{status}_focus}' ~'@{form-color-shadow_@{status}_focus}';
+  }
+}
+
+.select-view-status(@status) {
+  .c-select-view:not(.c-select-view-disabled),
+  .c-input-tag:not(.c-input-tag-disabled) {
+    background-color: ~'@{form-color-bg_@{status}}';
+    border-color: ~'@{form-color-border_@{status}}';
+
+    &:hover {
+      background-color: ~'@{form-color-bg_@{status}_hover}';
+      border-color: ~'@{form-color-border_@{status}_hover}';
+    }
+  }
+
+  .c-select-view:not(.c-select-view-disabled).c-select-view-focus,
+  .c-input-tag:not(.c-input-tag-disabled).c-input-tag-focus {
+    background-color: ~'@{form-color-bg_@{status}_focus}';
+    border-color: ~'@{form-color-border_@{status}_focus}';
+    box-shadow: 0 0 0 ~'@{form-size-shadow_@{status}_focus}' ~'@{form-color-shadow_@{status}_focus}';
+  }
+}
+
+// datepicker
+.picker(@status) {
+  .c-picker:not(.c-picker-disabled) {
+    border-color: ~'@{form-color-border_@{status}}';
+    background-color: ~'@{form-color-bg_@{status}}';
+
+    &:hover {
+      border-color: ~'@{form-color-border_@{status}_hover}';
+      background-color: ~'@{form-color-bg_@{status}_hover}';
+    }
+  }
+
+  .c-picker-focused:not(.c-picker-disabled) {
+    &,
+    &:hover {
+      border-color: ~'@{form-color-border_@{status}_focus}';
+      background-color: ~'@{form-color-bg_@{status}_focus}';
+      box-shadow: 0 0 0 ~'@{form-size-shadow_@{status}_focus}' ~'@{form-color-shadow_@{status}_focus}';
+    }
+  }
+}
+
+.validate-status (@status) {
+  .c-form-item-status-@{status} {
+    .input-status(@status);
+    .select-view-status(@status);
+    .picker(@status);
+  }
+
+  .c-form-item-status-@{status} {
+    .c-form-item-message-help {
+      color: ~'@{form-color-tip-text_@{status}}';
+    }
+
+    .c-form-item-feedback {
+      color: ~'@{form-color-tip-icon-text_@{status}}';
+    }
+  }
+}
+
+.validate-status(validating);
+
+.validate-status(success);
+
+.validate-status(warning);
+
+.validate-status(error);
+
+.c-form-item-control-children {
+  position: relative;
+}
+
+.c-form-item-feedback {
+  position: absolute;
+  top: 50%;
+  right: 9px;
+  font-size: 14px;
+  transform: translateY(-50%);
+
+  .c-icon-loading {
+    font-size: 12px;
+  }
+}
+
+.c-form-item-has-feedback {
+  .select-view(@prefix) {
+    .c.c-multiple .c-view,
+    .c.c-single .c-view {
+      padding-right: 28px;
+    }
+
+    .c.c-multiple .c-suffix {
+      padding-right: 0;
+    }
+  }
+
+  .c-input,
+  .c-input-inner-wrapper,
+  .c-textarea {
+    padding-right: 28px;
+  }
+
+  .c-input-number-mode-embed .c-input-number-step-layer {
+    right: 24px;
+  }
+
+  .select-view(~'c-select');
+  .select-view(~'c-cascader');
+  .select-view(~'c-tree-select');
+
+  // datepicker timepicker
+  .c-picker {
+    padding-right: 28px;
+  }
+
+  .c-picker-suffix {
+    .c-picker-suffix-icon,
+    .c-picker-clear-icon {
+      margin-right: 0;
+      margin-left: 0;
+    }
+  }
+}

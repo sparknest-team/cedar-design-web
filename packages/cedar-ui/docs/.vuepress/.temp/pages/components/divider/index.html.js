@@ -1,0 +1,16 @@
+import comp from "/Users/mengshuai/github-ui/cedar/packages/cedar-ui/docs/.vuepress/.temp/pages/components/divider/index.html.vue"
+const data = JSON.parse("{\"path\":\"/components/divider/\",\"title\":\"Divider\",\"lang\":\"zh-CN\",\"frontmatter\":{\"permalink\":\"/components/divider/\",\"gitInclude\":[],\"description\":\"Divider 划分内容区域，对模块做分隔。 案例 基础用法。 通过 type 指定分割线类型。 带有文字的分割线 通过 text-align 指定分割线文字位置，通过 description 为分割线添加描述文字。 尺寸和间距 指定 size 和 inset 即可调整尺寸和间距，其中 size 必须大于1，如果想使用0.5px的线请使用 hairli...\",\"head\":[[\"meta\",{\"property\":\"og:url\",\"content\":\"https://xxx.com/pages/cedar-design-web/components/divider/\"}],[\"meta\",{\"property\":\"og:site_name\",\"content\":\"Cedar Design Web\"}],[\"meta\",{\"property\":\"og:title\",\"content\":\"Divider\"}],[\"meta\",{\"property\":\"og:description\",\"content\":\"Divider 划分内容区域，对模块做分隔。 案例 基础用法。 通过 type 指定分割线类型。 带有文字的分割线 通过 text-align 指定分割线文字位置，通过 description 为分割线添加描述文字。 尺寸和间距 指定 size 和 inset 即可调整尺寸和间距，其中 size 必须大于1，如果想使用0.5px的线请使用 hairli...\"}],[\"meta\",{\"property\":\"og:type\",\"content\":\"article\"}],[\"meta\",{\"property\":\"og:locale\",\"content\":\"zh-CN\"}],[\"script\",{\"type\":\"application/ld+json\"},\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@type\\\":\\\"Article\\\",\\\"headline\\\":\\\"Divider\\\",\\\"image\\\":[\\\"\\\"],\\\"dateModified\\\":null,\\\"author\\\":[{\\\"@type\\\":\\\"Person\\\",\\\"name\\\":\\\"shuai.meng, jiaming.wu, qinglin.wang\\\"}]}\"]]},\"headers\":[{\"level\":2,\"title\":\"案例\",\"slug\":\"案例\",\"link\":\"#案例\",\"children\":[{\"level\":3,\"title\":\"基础用法。\",\"slug\":\"基础用法。\",\"link\":\"#基础用法。\",\"children\":[]},{\"level\":3,\"title\":\"带有文字的分割线\",\"slug\":\"带有文字的分割线\",\"link\":\"#带有文字的分割线\",\"children\":[]},{\"level\":3,\"title\":\"尺寸和间距\",\"slug\":\"尺寸和间距\",\"link\":\"#尺寸和间距\",\"children\":[]},{\"level\":3,\"title\":\"颜色和透明度\",\"slug\":\"颜色和透明度\",\"link\":\"#颜色和透明度\",\"children\":[]},{\"level\":3,\"title\":\"垂直分割线\",\"slug\":\"垂直分割线\",\"link\":\"#垂直分割线\",\"children\":[]}]},{\"level\":2,\"title\":\"API\",\"slug\":\"api\",\"link\":\"#api\",\"children\":[{\"level\":3,\"title\":\"Divider Props\",\"slug\":\"divider-props\",\"link\":\"#divider-props\",\"children\":[]},{\"level\":3,\"title\":\"Divider Slots\",\"slug\":\"divider-slots\",\"link\":\"#divider-slots\",\"children\":[]}]},{\"level\":2,\"title\":\"类型定义\",\"slug\":\"类型定义\",\"link\":\"#类型定义\",\"children\":[{\"level\":3,\"title\":\"样式变量\",\"slug\":\"样式变量\",\"link\":\"#样式变量\",\"children\":[]}]}],\"readingTime\":{\"minutes\":1.99,\"words\":598},\"filePathRelative\":\"../src/divider/README.md\",\"autoDesc\":true,\"excerpt\":\"\\n<p>划分内容区域，对模块做分隔。</p>\\n<h2>案例</h2>\\n<h3>基础用法。</h3>\\n<p>通过 type 指定分割线类型。</p>\\n<h3>带有文字的分割线</h3>\\n<p>通过 text-align 指定分割线文字位置，通过 description 为分割线添加描述文字。</p>\\n<h3>尺寸和间距</h3>\\n<p>指定 size 和 inset 即可调整尺寸和间距，其中 size 必须大于1，如果想使用0.5px的线请使用 hairline。</p>\\n<h3>颜色和透明度</h3>\\n<p>指定 color 和 opacity 设置分割线颜色和透明度，如果背景色过深，可以适当调高透明度。</p>\"}")
+export { comp, data }
+
+if (import.meta.webpackHot) {
+  import.meta.webpackHot.accept()
+  if (__VUE_HMR_RUNTIME__.updatePageData) {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  }
+}
+
+if (import.meta.hot) {
+  import.meta.hot.accept(({ data }) => {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  })
+}

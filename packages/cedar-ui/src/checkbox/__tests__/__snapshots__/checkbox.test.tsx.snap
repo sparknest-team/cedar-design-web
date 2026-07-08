@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`Checkbox > render 1`] = `
+"<label class=\\"arco-checkbox\\"><input type=\\"checkbox\\" class=\\"arco-checkbox-target\\" value=\\"false\\"><span class=\\"arco-icon-hover arco-checkbox-icon-hover\\"><div class=\\"arco-checkbox-icon\\"><!----></div></span>
+  <!---->
+</label>"
+`;

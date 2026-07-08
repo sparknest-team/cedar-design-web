@@ -1,0 +1,62 @@
+@import '../../style/theme/index.less';
+@import '../../input/style/token.less';
+
+:root {
+  --c-color-preview-size-xs: var(~'--c-size-4');
+  --c-color-preview-size-sm: 22px;
+  --c-color-preview-size-md: var(~'--c-size-6');
+  --c-color-preview-size-lg: 26px;
+
+  --c-color-input-size-xs-padding: calc(
+      (var(~'--c-input-size-xs-height') - var(~'--c-color-preview-size-xs')) / 2
+    )
+    4px;
+  --c-color-input-size-sm-padding: calc(
+      (var(~'--c-input-size-sm-height') - var(~'--c-color-preview-size-sm')) / 2
+    )
+    4px;
+  --c-color-input-size-md-padding: calc(
+      (var(~'--c-input-size-md-height') - var(~'--c-color-preview-size-md')) / 2
+    )
+    4px;
+  --c-color-input-size-lg-padding: calc(
+      (var(~'--c-input-size-lg-height') - var(~'--c-color-preview-size-lg')) / 2
+    )
+    5px;
+
+  --c-color-input-bg-color: var(~'--c-color-fill-2');
+  --c-color-value-margin-left: 4px;
+  --c-color-value-font-color: var(~'--c-color-text-1');
+  --c-color-value-font-color_disabled: var(~'--c-color-text-4');
+
+  --c-color-panel-width: 260px;
+  --c-color-panel-padding: 24px;
+  --c-color-panel-border-radius: var(~'--c-border-radius-small');
+  --c-color-panel-bg-color: var(~'--c-color-bg-1');
+  --c-color-panel-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 10%);
+
+  --c-color-palette-height: 178px;
+  --c-color-palette-handle-size: var(~'--c-size-4');
+  --c-color-palette-handle-border-size: var(~'--c-border-2');
+
+  --c-color-control-bar-width: 182px;
+  --c-color-control-bar-height: 14px;
+  --c-color-control-bar-handle-size: var(~'--c-size-4');
+  --c-color-control-bar-alpha-margin-top: 24px;
+  --c-color-control-bar-border-radius: 10px;
+
+  --c-color-panel-input-margin-top: 24px;
+  --c-color-panel-input-group-margin-left: 24px;
+  --c-color-panel-preview-size: 40px;
+  --c-color-panel-format-select-width: 58px;
+  --c-color-panel-alpha-input-width: 52px;
+
+  --c-color-panel-section-title-font-size: var(~'--c-font-size-caption');
+  --c-color-panel-empty-font-size: var(~'--c-font-size-body-1');
+
+  --c-color-panel-block-size: var(~'--c-size-4');
+  --c-color-panel-block-margin: 12px;
+  --c-color-panel-block-border-radius: var(~'--c-border-2');
+
+  --c-color-panel-border-color: var(~'--c-color-border-2');
+}

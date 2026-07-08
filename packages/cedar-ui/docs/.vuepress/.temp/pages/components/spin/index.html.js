@@ -1,0 +1,16 @@
+import comp from "/Users/mengshuai/github-ui/cedar/packages/cedar-ui/docs/.vuepress/.temp/pages/components/spin/index.html.vue"
+const data = JSON.parse("{\"path\":\"/components/spin/\",\"title\":\"Spin\",\"lang\":\"zh-CN\",\"frontmatter\":{\"permalink\":\"/components/spin/\",\"gitInclude\":[],\"description\":\"Spin 用于页面和区块的加载中状态 - 页面局部处于等待异步数据或正在渲染过程时，合适的加载动效会有效缓解用户的焦虑。 案例 基础用法 用于展示加载中的状态。 不同尺寸 设置 size 可以得到不同尺寸的加载图标。 点类型指示符 通过 dot 属性，可以展示点类型的指示符。 容器中 可以给任意内容添加加载中指示符。 添加描述文案 通过 tip 属性添...\",\"head\":[[\"meta\",{\"property\":\"og:url\",\"content\":\"https://xxx.com/pages/cedar-design-web/components/spin/\"}],[\"meta\",{\"property\":\"og:site_name\",\"content\":\"Cedar Design Web\"}],[\"meta\",{\"property\":\"og:title\",\"content\":\"Spin\"}],[\"meta\",{\"property\":\"og:description\",\"content\":\"Spin 用于页面和区块的加载中状态 - 页面局部处于等待异步数据或正在渲染过程时，合适的加载动效会有效缓解用户的焦虑。 案例 基础用法 用于展示加载中的状态。 不同尺寸 设置 size 可以得到不同尺寸的加载图标。 点类型指示符 通过 dot 属性，可以展示点类型的指示符。 容器中 可以给任意内容添加加载中指示符。 添加描述文案 通过 tip 属性添...\"}],[\"meta\",{\"property\":\"og:type\",\"content\":\"article\"}],[\"meta\",{\"property\":\"og:locale\",\"content\":\"zh-CN\"}],[\"script\",{\"type\":\"application/ld+json\"},\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@type\\\":\\\"Article\\\",\\\"headline\\\":\\\"Spin\\\",\\\"image\\\":[\\\"\\\"],\\\"dateModified\\\":null,\\\"author\\\":[{\\\"@type\\\":\\\"Person\\\",\\\"name\\\":\\\"shuai.meng, jiaming.wu, qinglin.wang\\\"}]}\"]]},\"headers\":[{\"level\":2,\"title\":\"案例\",\"slug\":\"案例\",\"link\":\"#案例\",\"children\":[{\"level\":3,\"title\":\"基础用法\",\"slug\":\"基础用法\",\"link\":\"#基础用法\",\"children\":[]},{\"level\":3,\"title\":\"不同尺寸\",\"slug\":\"不同尺寸\",\"link\":\"#不同尺寸\",\"children\":[]},{\"level\":3,\"title\":\"点类型指示符\",\"slug\":\"点类型指示符\",\"link\":\"#点类型指示符\",\"children\":[]},{\"level\":3,\"title\":\"容器中\",\"slug\":\"容器中\",\"link\":\"#容器中\",\"children\":[]},{\"level\":3,\"title\":\"添加描述文案\",\"slug\":\"添加描述文案\",\"link\":\"#添加描述文案\",\"children\":[]},{\"level\":3,\"title\":\"自定义图标\",\"slug\":\"自定义图标\",\"link\":\"#自定义图标\",\"children\":[]}]},{\"level\":2,\"title\":\"API\",\"slug\":\"api\",\"link\":\"#api\",\"children\":[{\"level\":3,\"title\":\"<Spin> Props\",\"slug\":\"spin-props\",\"link\":\"#spin-props\",\"children\":[]},{\"level\":3,\"title\":\"<Spin> Slots\",\"slug\":\"spin-slots\",\"link\":\"#spin-slots\",\"children\":[]},{\"level\":3,\"title\":\"类型定义\",\"slug\":\"类型定义\",\"link\":\"#类型定义\",\"children\":[]}]}],\"readingTime\":{\"minutes\":1.02,\"words\":307},\"filePathRelative\":\"../src/spin/README.md\",\"autoDesc\":true,\"excerpt\":\"\\n<p>用于页面和区块的加载中状态 - 页面局部处于等待异步数据或正在渲染过程时，合适的加载动效会有效缓解用户的焦虑。</p>\\n<h2>案例</h2>\\n<h3>基础用法</h3>\\n<p>用于展示加载中的状态。</p>\\n<h3>不同尺寸</h3>\\n<p>设置 <code>size</code> 可以得到不同尺寸的加载图标。</p>\\n<h3>点类型指示符</h3>\\n<p>通过 <code>dot</code> 属性，可以展示点类型的指示符。</p>\\n<h3>容器中</h3>\\n<p>可以给任意内容添加加载中指示符。</p>\\n<h3>添加描述文案</h3>\\n<p>通过 <code>tip</code> 属性添加描述文案。</p>\"}")
+export { comp, data }
+
+if (import.meta.webpackHot) {
+  import.meta.webpackHot.accept()
+  if (__VUE_HMR_RUNTIME__.updatePageData) {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  }
+}
+
+if (import.meta.hot) {
+  import.meta.hot.accept(({ data }) => {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  })
+}

@@ -1,0 +1,15 @@
+// Vitest Snapshot v1
+
+exports[`Button > render 1`] = `
+"<button class=\\"c-button c--box c-button--size-md c-button--status-default c-button--variant-default c--inline-flex\\" type=\\"button\\" disabled=\\"false\\" autofocus=\\"false\\">
+  <!-- 加载中 loading -->
+  <!--v-if-->
+  <!-- icon图标 -->
+  <!--v-if-->
+  <!-- 内容 --><span class=\\"c-button__content\\"></span><!-- 底色 -->
+  <div class=\\"c-button--underlay\\"></div><!-- 上色 -->
+  <div class=\\"c-button--overlay\\"></div><!-- 边框 -->
+  <div class=\\"c-button__border\\"></div>
+  <div class=\\"c-button__border-state\\"></div>
+</button>"
+`;

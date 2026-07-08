@@ -1,0 +1,35 @@
+@import './token.less';
+
+.c-empty {
+  box-sizing: border-box;
+  width: 100%;
+  padding: @empty-spacing-padding 0;
+  text-align: center;
+
+  &-image {
+    margin-bottom: @empty-spacing-image-margin-bottom;
+    color: @empty-color-icon;
+    font-size: @empty-font-size-image;
+    line-height: 1;
+
+    img {
+      height: @empty-size-img-height;
+    }
+
+    // size variants
+    &--xs { font-size: 60px; img { height: 60px; } }
+    &--sm { font-size: 80px; img { height: 80px; } }
+    &--md { font-size: 100px; img { height: 100px; } }
+    &--lg { font-size: 140px; img { height: 140px; } }
+    &--xl { font-size: 180px; img { height: 180px; } }
+  }
+
+  & &-description {
+    color: @empty-color-text;
+    font-size: @empty-font-size-text;
+  }
+
+  &-extra {
+    margin-top: @empty-spacing-padding;
+  }
+}

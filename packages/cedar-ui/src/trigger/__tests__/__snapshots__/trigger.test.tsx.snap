@@ -1,0 +1,6 @@
+// Vitest Snapshot v1
+
+exports[`Trigger > render 1`] = `
+"<!--teleport start-->
+<!--teleport end-->"
+`;

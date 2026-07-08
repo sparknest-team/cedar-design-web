@@ -1,0 +1,198 @@
+/* Vertical (tabs on the side) */
+.c-tabs {
+  flex-direction: column;
+
+  &--vertical {
+    flex-direction: row;
+
+    .c-tabs-nav {
+      flex-direction: column;
+      align-items: stretch;
+
+      &::before {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: initial;
+        clear: both;
+        width: @tabs-line-size-header-border;
+        height: 100%;
+      }
+    }
+    .c-tabs-nav__button-wrapper {
+      padding-block: 12px;
+      flex-direction: column;
+      align-items: center;
+    }
+    .c-tabs-nav__suffix,
+    .c-tabs-nav__prefix {
+      display: flex;
+      justify-content: center;
+    }
+
+    .c-tabs-nav__tab {
+      flex-direction: column;
+    }
+
+    .c-tabs-nav-ink {
+      position: absolute;
+      top: initial;
+      bottom: initial;
+      width: @tabs-line-size-ink-stroke;
+      transition:
+        top @transition-duration-2 @transition-timing-function-standard,
+        height @transition-duration-2 @transition-timing-function-standard;
+    }
+    .c-tabs-nav__tab-list {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  /* Default (horizontal, tabs on top) - no modifier class */
+  &:not(.c-tabs--vertical) {
+    .c-tabs-nav {
+      flex-direction: row;
+      align-items: stretch;
+      &::before {
+        position: absolute;
+        top: initial;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        clear: both;
+        height: 1px;
+      }
+    }
+    .c-tabs-nav__button-wrapper {
+      padding-inline: 12px;
+      flex-direction: row;
+      align-items: center;
+    }
+    .c-tabs-nav__prefix,
+    .c-tabs-nav__suffix {
+      display: flex;
+      align-items: center;
+    }
+    .c-tabs-nav-ink {
+      position: absolute;
+      right: initial;
+      left: initial;
+      width: @tabs-line-size-ink-stroke;
+      transition:
+        left @transition-duration-2 @transition-timing-function-standard,
+        width @transition-duration-2 @transition-timing-function-standard;
+    }
+    .c-tabs-nav__tab-list {
+      flex-direction: row;
+    }
+  }
+}
+
+/* Indicator position - only affects ink bar within the nav, not the overall layout */
+.c-tabs {
+  &.c-tabs--indicator-normal {
+    .c-tabs-nav-ink {
+      top: initial;
+      bottom: 0;
+    }
+    .c-tabs-nav::before {
+      top: initial;
+      bottom: 0;
+    }
+  }
+
+  &.c-tabs--indicator-reverse {
+    .c-tabs-nav-ink {
+      top: 0;
+      bottom: initial;
+    }
+    .c-tabs-nav::before {
+      top: 0;
+      bottom: initial;
+    }
+  }
+
+  /* Vertical + indicator variants */
+  &.c-tabs--vertical {
+    &.c-tabs--indicator-normal {
+      .c-tabs-nav-ink {
+        left: initial;
+        right: 0;
+      }
+    }
+    &.c-tabs--indicator-reverse {
+      .c-tabs-nav-ink {
+        left: 0;
+        right: initial;
+      }
+      .c-tabs-nav::before {
+        right: initial;
+        left: 0;
+      }
+    }
+  }
+}
+
+.c-tabs-nav--horizontal .c-tabs-nav__tab-list {
+  height: auto;
+
+  &-overflow-scroll {
+    padding: @tabs-padding-header-wrapper-vertical 0;
+  }
+}
+
+/* Vertical + variant styles */
+.c-tabs--vertical {
+  &.c-tabs--variant-line .c-tabs-tab {
+    padding: 0 @tabs-line-padding-title-horizontal_vertical;
+  }
+
+  &.c-tabs--variant-card .c-tabs-tab {
+    position: relative;
+    margin: 0;
+    border: @tabs-outline-border-width solid @tabs-outline-color-title-border;
+    border-right-color: @color-transparent;
+
+    &:first-child {
+      border-top-left-radius: @tabs-outline-border-radius;
+    }
+
+    &.c-tabs-tab--active,
+    &.c-tabs-tab--active:hover {
+      border-right-color: var(~'--c-color-bg-2');
+    }
+
+    &:last-child {
+      border-right: @tabs-outline-border-width solid @tabs-outline-color-title-border;
+      border-bottom-left-radius: @tabs-outline-border-radius;
+    }
+  }
+
+  &.c-tabs--variant-outline .c-tabs-tab {
+    position: relative;
+    margin: 0;
+    border: @tabs-outline-border-width solid @color-transparent;
+
+    &:first-child {
+      border-top-left-radius: @tabs-outline-border-radius;
+    }
+
+    &.c-tabs-tab--active,
+    &.c-tabs-tab--active:hover {
+      border-color: @tabs-outline-color-title-border;
+      border-right-color: var(~'--c-color-bg-2');
+    }
+
+    &:last-child {
+      border-bottom-left-radius: @tabs-outline-border-radius;
+    }
+  }
+
+  .c-tabs__content {
+    width: auto;
+    height: 100%;
+    padding: 0;
+  }
+}

@@ -1,0 +1,171 @@
+@import '../../style/theme/index.less';
+
+@tag-border-width: 1px;
+@tag-border-type: solid;
+@tag-padding-horizontal: 8px;
+@tag-padding-vertical: 0;
+@tag-icon-margin-right: @spacing-2;
+@tag-text-font-weight: @font-weight-500;
+@tag-border-radius: @radius-sm;
+
+@tag-size-xs: @size-4;
+@tag-size-sm: @size-5;
+@tag-size-md: @size-6;
+@tag-size-lg: @size-7;
+@tag-size-xl: @size-8;
+
+@tag-size-xs-font-size: 12px;
+@tag-size-sm-font-size: 12px;
+@tag-size-md-font-size: 12px;
+@tag-size-lg-font-size: 14px;
+@tag-size-xl-font-size: 14px;
+
+@tag-color-bg-not-checked_hover: var(~'--c-color-fill-2');
+
+@tag-custom-color-text: var(~'--c-color-white');
+@tag-custom-color-icon-bg_hover: rgba(255, 255, 255, 0.2);
+
+@tag-default-color-bg: var(~'--c-color-fill-2');
+@tag-default-color-bg_hover: var(~'--c-color-fill-3');
+@tag-default-color-icon: var(~'--c-color-text-2');
+@tag-default-color-text: var(~'--c-color-text-1');
+@tag-default-color-border: @color-transparent;
+@tag-default-color-border_hover: @color-transparent;
+
+@tag-red-color-bg: rgb(var(~'--c-red-1'));
+@tag-red-color-bg_hover: rgb(var(~'--c-red-2'));
+@tag-red-color-border: @color-transparent;
+@tag-red-color-border_hover: @color-transparent;
+@tag-red-color-icon: rgb(var(~'--c-red-6'));
+@tag-red-color-icon-bg_hover: rgb(var(~'--c-red-2'));
+@tag-red-color-text: rgb(var(~'--c-red-6'));
+
+@tag-orangered-color-bg: rgb(var(~'--c-orangered-1'));
+@tag-orangered-color-bg_hover: rgb(var(~'--c-orangered-2'));
+@tag-orangered-color-border: @color-transparent;
+@tag-orangered-color-border_hover: @color-transparent;
+@tag-orangered-color-icon: rgb(var(~'--c-orangered-6'));
+@tag-orangered-color-icon-bg_hover: rgb(var(~'--c-orangered-2'));
+@tag-orangered-color-text: rgb(var(~'--c-orangered-6'));
+
+@tag-orange-color-bg: rgb(var(~'--c-orange-1'));
+@tag-orange-color-bg_hover: rgb(var(~'--c-orange-2'));
+@tag-orange-color-border: @color-transparent;
+@tag-orange-color-border_hover: @color-transparent;
+@tag-orange-color-icon: rgb(var(~'--c-orange-6'));
+@tag-orange-color-icon-bg_hover: rgb(var(~'--c-orange-2'));
+@tag-orange-color-text: rgb(var(~'--c-orange-6'));
+
+@tag-gold-color-bg: rgb(var(~'--c-gold-1'));
+@tag-gold-color-bg_hover: rgb(var(~'--c-gold-3'));
+@tag-gold-color-border: @color-transparent;
+@tag-gold-color-border_hover: @color-transparent;
+@tag-gold-color-icon: rgb(var(~'--c-gold-6'));
+@tag-gold-color-icon-bg_hover: rgb(var(~'--c-gold-2'));
+@tag-gold-color-text: rgb(var(~'--c-gold-6'));
+
+@tag-lime-color-bg: rgb(var(~'--c-lime-1'));
+@tag-lime-color-bg_hover: rgb(var(~'--c-lime-2'));
+@tag-lime-color-border: @color-transparent;
+@tag-lime-color-border_hover: @color-transparent;
+@tag-lime-color-icon: rgb(var(~'--c-lime-6'));
+@tag-lime-color-icon-bg_hover: rgb(var(~'--c-lime-2'));
+@tag-lime-color-text: rgb(var(~'--c-lime-6'));
+
+@tag-green-color-bg: rgb(var(~'--c-green-1'));
+@tag-green-color-bg_hover: rgb(var(~'--c-green-2'));
+@tag-green-color-border: @color-transparent;
+@tag-green-color-border_hover: @color-transparent;
+@tag-green-color-icon: rgb(var(~'--c-green-6'));
+@tag-green-color-icon-bg_hover: rgb(var(~'--c-green-2'));
+@tag-green-color-text: rgb(var(~'--c-green-6'));
+
+@tag-cyan-color-bg: rgb(var(~'--c-cyan-1'));
+@tag-cyan-color-bg_hover: rgb(var(~'--c-cyan-2'));
+@tag-cyan-color-border: @color-transparent;
+@tag-cyan-color-border_hover: @color-transparent;
+@tag-cyan-color-icon: rgb(var(~'--c-cyan-6'));
+@tag-cyan-color-icon-bg_hover: rgb(var(~'--c-cyan-2'));
+@tag-cyan-color-text: rgb(var(~'--c-cyan-6'));
+
+@tag-blue-color-bg: rgb(var(~'--c-blue-1'));
+@tag-blue-color-bg_hover: rgb(var(~'--c-blue-2'));
+@tag-blue-color-border: @color-transparent;
+@tag-blue-color-border_hover: @color-transparent;
+@tag-blue-color-icon: rgb(var(~'--c-blue-6'));
+@tag-blue-color-icon-bg_hover: rgb(var(~'--c-blue-2'));
+@tag-blue-color-text: rgb(var(~'--c-blue-6'));
+
+@tag-brand-color-bg: rgb(var(~'--c-brand-1'));
+@tag-brand-color-bg_hover: rgb(var(~'--c-brand-2'));
+@tag-brand-color-border: @color-transparent;
+@tag-brand-color-border_hover: @color-transparent;
+@tag-brand-color-icon: rgb(var(~'--c-brand-6'));
+@tag-brand-color-icon-bg_hover: rgb(var(~'--c-brand-2'));
+@tag-brand-color-text: rgb(var(~'--c-brand-6'));
+
+@tag-purple-color-bg: rgb(var(~'--c-purple-1'));
+@tag-purple-color-bg_hover: rgb(var(~'--c-purple-2'));
+@tag-purple-color-border: @color-transparent;
+@tag-purple-color-border_hover: @color-transparent;
+@tag-purple-color-icon: rgb(var(~'--c-purple-6'));
+@tag-purple-color-icon-bg_hover: rgb(var(~'--c-purple-2'));
+@tag-purple-color-text: rgb(var(~'--c-purple-6'));
+
+@tag-pinkpurple-color-bg: rgb(var(~'--c-pinkpurple-1'));
+@tag-pinkpurple-color-bg_hover: rgb(var(~'--c-pinkpurple-2'));
+@tag-pinkpurple-color-border: @color-transparent;
+@tag-pinkpurple-color-border_hover: @color-transparent;
+@tag-pinkpurple-color-icon: rgb(var(~'--c-pinkpurple-6'));
+@tag-pinkpurple-color-icon-bg_hover: rgb(var(~'--c-pinkpurple-2'));
+@tag-pinkpurple-color-text: rgb(var(~'--c-pinkpurple-6'));
+
+@tag-magenta-color-bg: rgb(var(~'--c-magenta-1'));
+@tag-magenta-color-bg_hover: rgb(var(~'--c-magenta-2'));
+@tag-magenta-color-border: @color-transparent;
+@tag-magenta-color-border_hover: @color-transparent;
+@tag-magenta-color-icon: rgb(var(~'--c-magenta-6'));
+@tag-magenta-color-icon-bg_hover: rgb(var(~'--c-magenta-2'));
+@tag-magenta-color-text: rgb(var(~'--c-magenta-6'));
+
+@tag-gray-color-bg: rgb(var(~'--c-gray-2'));
+@tag-gray-color-bg_hover: rgb(var(~'--c-gray-3'));
+@tag-gray-color-border: @color-transparent;
+@tag-gray-color-border_hover: @color-transparent;
+@tag-gray-color-icon: rgb(var(~'--c-gray-6'));
+@tag-gray-color-icon-bg_hover: rgb(var(~'--c-gray-3'));
+@tag-gray-color-text: rgb(var(~'--c-gray-6'));
+
+// vue overwrite token
+@tag-size-medium: @tag-size-md;
+@tag-size-medium-font-size: @tag-size-md-font-size;
+
+// status × variant tokens（与 13 色 tag 思路对齐：浅底深字 / 透明描边）
+:root {
+  // default(filled): bg = color-2 (浅)，text = color-6 (深)，border 透明
+  --c-tag-status-primary-bg-color: rgb(var(~'--c-primary-2'));
+  --c-tag-status-primary-text-color: rgb(var(~'--c-primary-6'));
+  --c-tag-status-secondary-bg-color: rgb(var(~'--c-gray-2'));
+  --c-tag-status-secondary-text-color: rgb(var(~'--c-gray-7'));
+  --c-tag-status-tertiary-bg-color: rgb(var(~'--c-gray-1'));
+  --c-tag-status-tertiary-text-color: rgb(var(~'--c-gray-6'));
+  --c-tag-status-info-bg-color: rgb(var(~'--c-blue-2'));
+  --c-tag-status-info-text-color: rgb(var(~'--c-blue-6'));
+  --c-tag-status-success-bg-color: rgb(var(~'--c-green-2'));
+  --c-tag-status-success-text-color: rgb(var(~'--c-green-6'));
+  --c-tag-status-warning-bg-color: rgb(var(~'--c-orange-2'));
+  --c-tag-status-warning-text-color: rgb(var(~'--c-orange-6'));
+  --c-tag-status-danger-bg-color: rgb(var(~'--c-red-2'));
+  --c-tag-status-danger-text-color: rgb(var(~'--c-red-6'));
+
+  // outline: 透明背景 + 同色文字与描边
+  --c-tag-variant-outline-status-primary-color: rgb(var(~'--c-primary-6'));
+  --c-tag-variant-outline-status-secondary-color: rgb(var(~'--c-gray-7'));
+  --c-tag-variant-outline-status-tertiary-color: rgb(var(~'--c-gray-6'));
+  --c-tag-variant-outline-status-info-color: rgb(var(~'--c-blue-6'));
+  --c-tag-variant-outline-status-success-color: rgb(var(~'--c-green-6'));
+  --c-tag-variant-outline-status-warning-color: rgb(var(~'--c-orange-6'));
+  --c-tag-variant-outline-status-danger-color: rgb(var(~'--c-red-6'));
+  --c-tag-variant-outline-default-color: var(~'--c-color-text-1');
+  --c-tag-variant-outline-default-border-color: var(~'--c-color-border-2');
+}

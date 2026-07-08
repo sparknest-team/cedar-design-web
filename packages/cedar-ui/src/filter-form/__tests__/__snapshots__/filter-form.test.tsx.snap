@@ -1,0 +1,10 @@
+// Vitest Snapshot v1
+
+exports[`FilterForm > render 1`] = `
+"<form class=\\"arco-form arco-form-layout-vertical arco-form-size-medium cedar-filter-form\\" collapsed=\\"true\\" cols=\\"[object Object]\\" showrememberselections=\\"false\\" autoremember=\\"true\\" fieldconfig=\\"[object Object]\\" defaultconfig=\\"[object Object]\\"><input style=\\"display: none;\\" type=\\"hidden\\">
+  <div class=\\"arco-grid\\" style=\\"gap: 0px 16px; grid-template-columns: repeat(24, minmax(0px, 1fr));\\"></div>
+  <div class=\\"cedar-filter-form-remember-selections\\">
+    <!--v-if-->
+  </div>
+</form>"
+`;

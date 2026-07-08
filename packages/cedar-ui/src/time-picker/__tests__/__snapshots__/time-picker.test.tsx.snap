@@ -1,0 +1,14 @@
+// Vitest Snapshot v1
+
+exports[`TimePicker > render 1`] = `
+"<div class=\\"arco-picker arco-picker-size-medium\\" visible=\\"false\\" editable=\\"true\\">
+  <!--v-if-->
+  <div class=\\"arco-picker-input\\"><input placeholder=\\"请选择时间\\" class=\\"arco-picker-start-time\\"></div>
+  <div class=\\"arco-picker-suffix\\">
+    <!--v-if--><span class=\\"arco-picker-suffix-icon\\"><svg viewBox=\\"0 0 48 48\\" fill=\\"none\\" xmlns=\\"http://www.w3.org/2000/svg\\" stroke=\\"currentColor\\" class=\\"arco-icon arco-icon-clock-circle\\" stroke-width=\\"4\\" stroke-linecap=\\"butt\\" stroke-linejoin=\\"miter\\"><path d=\\"M24 14v10h9.5m8.5 0c0 9.941-8.059 18-18 18S6 33.941 6 24 14.059 6 24 6s18 8.059 18 18Z\\"></path></svg></span>
+    <!--v-if-->
+  </div>
+</div>
+<!--teleport start-->
+<!--teleport end-->"
+`;

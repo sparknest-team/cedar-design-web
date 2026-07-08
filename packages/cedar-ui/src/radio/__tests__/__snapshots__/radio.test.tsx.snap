@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`Radio > render 1`] = `
+"<label class=\\"arco-radio\\"><input type=\\"radio\\" class=\\"arco-radio-target\\" value=\\"true\\"><span class=\\"arco-icon-hover arco-radio-icon-hover\\"><span class=\\"arco-radio-icon\\"></span></span>
+  <!---->
+</label>"
+`;

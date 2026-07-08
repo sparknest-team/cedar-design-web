@@ -1,0 +1,26 @@
+{
+  "name": "cedar-design-web-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm --filter @cedar/ui dev",
+    "build": "pnpm --filter @cedar/ui build",
+    "build:lib": "pnpm --filter @cedar/ui build:lib",
+    "build:doc": "pnpm --filter @cedar/ui build:doc",
+    "test": "pnpm --filter @cedar/ui test",
+    "test:watch": "pnpm --filter @cedar/ui test:watch",
+    "format": "pnpm --filter @cedar/ui format",
+    "icongen": "pnpm --filter @cedar/ui icongen",
+    "generatePaths": "pnpm --filter @cedar/ui generatePaths",
+    "ui:gen": "pnpm --filter @cedar/ui ui:gen",
+    "dtsgen": "pnpm --filter @cedar/ui dtsgen",
+    "watch": "pnpm --filter @cedar/ui watch",
+    "clean-cache": "pnpm --filter @cedar/ui clean-cache",
+    "preview": "pnpm --filter @cedar/ui preview"
+  },
+  "packageManager": "pnpm@9.6.0",
+  "engines": {
+    "pnpm": ">=9.6.0"
+  }
+}

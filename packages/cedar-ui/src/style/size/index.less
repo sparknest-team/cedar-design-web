@@ -1,0 +1,41 @@
+// 定义状态列表
+@states: unset, auto;
+
+// 定义数值列表
+@values: 10, 20, 30, 40, 50, 60, 70, 80, 90, 100;
+
+// 生成状态类
+.generate-state-classes(@index) when (@index > 0) {
+  @state: extract(@states, @index);
+
+  .h-@{state} {
+    height: @state !important;
+  }
+
+  .w-@{state} {
+    width: @state !important;
+  }
+
+  // 处理下一个状态
+  .generate-state-classes(@index - 1);
+}
+
+// 生成数值类
+.generate-value-classes(@index) when (@index > 0) {
+  @value: extract(@values, @index);
+
+  .h-@{value} {
+    height: (@value * 1%) !important;
+  }
+
+  .w-@{value} {
+    width: (@value * 1%) !important;
+  }
+
+  // 处理下一个数值
+  .generate-value-classes(@index - 1);
+}
+
+// 初始化循环
+.generate-state-classes(length(@states));
+.generate-value-classes(length(@values));

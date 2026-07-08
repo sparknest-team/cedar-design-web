@@ -1,0 +1,24 @@
+@import './token.less';
+
+.c-tooltip {
+  &-content {
+    max-width: 350px;
+    padding: @tooltip-padding-vertical @tooltip-padding-horizontal;
+    color: @tooltip-color-text;
+    font-size: @tooltip-font-size;
+    line-height: var(~'--c-line-height');
+    text-align: left;
+    word-wrap: break-word;
+    background-color: @tooltip-color-bg;
+    border-radius: @tooltip-border-radius;
+  }
+
+  &-xs {
+    padding: @tooltip-xs-padding-vertical @tooltip-xs-padding-horizontal;
+    font-size: @tooltip-xs-font-size;
+  }
+
+  &-popup-arrow {
+    background-color: @tooltip-color-bg;
+  }
+}

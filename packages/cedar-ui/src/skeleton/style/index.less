@@ -1,0 +1,63 @@
+@import './token.less';
+
+.c-skeleton {
+  &-shape {
+    width: @skeleton-size-image_md;
+    height: @skeleton-size-image_md;
+    background-color: @skeleton-color-bg-base;
+    border-radius: @skeleton-radius-image-border;
+
+    &-circle {
+      border-radius: 50%;
+    }
+
+    &-sm {
+      width: @skeleton-size-image_sm;
+      height: @skeleton-size-image_sm;
+    }
+
+    &-lg {
+      width: @skeleton-size-image_lg;
+      height: @skeleton-size-image_lg;
+    }
+  }
+
+  &-line {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    &-row {
+      height: @skeleton-size-row-height;
+      background-color: @skeleton-color-bg-base;
+    }
+
+    &-row:not(:last-child) {
+      margin-bottom: @skeleton-spacing-last_row-margin-bottom;
+    }
+  }
+
+  &-animation {
+    .c-skeleton-shape,
+    .c-skeleton-line-row {
+      background: linear-gradient(
+        90deg,
+        @skeleton-color-bg-base 25%,
+        @skeleton-color-animate-bg 37%,
+        @skeleton-color-bg-base 63%
+      );
+      background-size: 400% 100%;
+      animation: ~'c-skeleton-circle' 1.5s @transition-timing-function-linear infinite;
+    }
+  }
+}
+
+@keyframes ~'c-skeleton-circle' {
+  0% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0 50%;
+  }
+}

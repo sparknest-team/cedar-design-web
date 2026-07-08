@@ -1,0 +1,35 @@
+@import '../../style/mixins/index.less';
+@import './input.less';
+@import './token.less';
+
+
+.c-input {
+  position: relative;
+  .field-wrapper-style(~'c-input');
+
+  .c-input__inner {
+    .input-style();
+  }
+  .size(@size) {
+    &--size-@{size} {
+      .c-input__inner {
+        .input-size(@size);
+      }
+    }
+  }
+  .size(xs);
+  .size(sm);
+  .size(md);
+  .size(lg);
+
+  .c-input__word-limit {
+    color: var(~'--c-input-color-tip-text');
+    font-size: var(~'--c-input-font-tip-size');
+    margin-left: var(~'--c-input-padding-word-limit-left');
+  }
+}
+
+@import './group.less';
+@import './textarea.less';
+@import './search.less';
+@import './password.less';

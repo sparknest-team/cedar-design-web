@@ -1,0 +1,3 @@
+// Vitest Snapshot v1
+
+exports[`Form > render 1`] = `"<form class=\\"arco-form arco-form-layout-horizontal arco-form-size-medium\\"></form>"`;

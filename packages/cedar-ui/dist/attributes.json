@@ -1,0 +1,2897 @@
+{
+  "cedar-`<affix>`/change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<affix>`-events)"
+  },
+  "cedar-`<alert>`/type": {
+    "type": "`'info' | 'success' | 'warning' | 'danger' | 'default'`",
+    "options": [
+      "success",
+      "warning",
+      "danger"
+    ],
+    "description": "警告提示的类型, default: `'info'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<alert>`-props)"
+  },
+  "cedar-`<alert>`/variant": {
+    "type": "`'standard' | 'tonal' | 'outlined'`",
+    "options": [
+      "tonal"
+    ],
+    "description": "视觉变体, default: `'standard'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<alert>`-props)"
+  },
+  "cedar-`<alert>`/color": {
+    "type": "`string`",
+    "description": "自定义背景色（覆盖 type 派生背景）\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<alert>`-props)"
+  },
+  "cedar-`<alert>`/title": {
+    "type": "`string`",
+    "description": "警告提示的标题\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<alert>`-props)"
+  },
+  "cedar-`<alert>`/message": {
+    "type": "`string`",
+    "description": "内容文本（亦可使用默认插槽）\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<alert>`-props)"
+  },
+  "cedar-`<alert>`/show-icon": {
+    "type": "`boolean`",
+    "description": "是否展示图标, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<alert>`-props)"
+  },
+  "cedar-`<alert>`/closable": {
+    "type": "`boolean`",
+    "description": "是否展示关闭按钮, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<alert>`-props)"
+  },
+  "cedar-`<alert>`/banner": {
+    "type": "`boolean`",
+    "description": "是否作为顶部公告使用（去除边框和圆角）, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<alert>`-props)"
+  },
+  "cedar-`<alert>`/center": {
+    "type": "`boolean`",
+    "description": "内容是否居中显示, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<alert>`-props)"
+  },
+  "cedar-`<alert>`/elevation": {
+    "type": "`boolean | string | number`",
+    "description": "阴影层级，可选 `true` / `false` 或 `0-24`, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<alert>`-props)"
+  },
+  "cedar-`<alert>`/close": {
+    "type": "event",
+    "description": "点击关闭按钮时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<alert>`-events)"
+  },
+  "cedar-`<alert>`/after-close": {
+    "type": "event",
+    "description": "关闭动画结束后触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<alert>`-events)"
+  },
+  "cedar-`<anchor>`/select": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<anchor>`-events)"
+  },
+  "cedar-`<anchor>`/change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<anchor>`-events)"
+  },
+  "cedar-`<auto-complete>`/change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<autocomplete>`-events)"
+  },
+  "cedar-`<auto-complete>`/search": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<autocomplete>`-events)"
+  },
+  "cedar-`<auto-complete>`/select": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<autocomplete>`-events)"
+  },
+  "cedar-`<auto-complete>`/clear": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<autocomplete>`-events)"
+  },
+  "cedar-`<auto-complete>`/dropdown-scroll": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<autocomplete>`-events)"
+  },
+  "cedar-`<auto-complete>`/dropdown-reach-bottom": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<autocomplete>`-events)"
+  },
+  "cedar-breadcrumb/max-count": {
+    "type": "`number`",
+    "description": "最多展示的面包屑数量(0表示不限制), default: `0`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#breadcrumb-props)"
+  },
+  "cedar-breadcrumb/routes": {
+    "type": "`BreadcrumbRoute[]`",
+    "description": "设置路径, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#breadcrumb-props)"
+  },
+  "cedar-breadcrumb/separator": {
+    "type": "`string | number`",
+    "description": "分隔符文字, default: `/`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#breadcrumb-props)"
+  },
+  "cedar-breadcrumb/custom-url": {
+    "type": "`(paths:string[])=>string`",
+    "description": "自定义链接地址, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#breadcrumb-props)"
+  },
+  "cedar-breadcrumb/sticky": {
+    "type": "`boolean`",
+    "description": "是否开启滚动吸附（基于 Affix 组件）, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#breadcrumb-props)"
+  },
+  "cedar-breadcrumb/offset-top": {
+    "type": "`number`",
+    "description": "距窗口顶部达到指定偏移量后触发，仅 `sticky` 为 `true` 时生效, default: `0`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#breadcrumb-props)"
+  },
+  "cedar-breadcrumb/offset-bottom": {
+    "type": "`number`",
+    "description": "距窗口底部达到指定偏移量后触发，仅 `sticky` 为 `true` 时生效, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#breadcrumb-props)"
+  },
+  "cedar-breadcrumb/target": {
+    "type": "`string | HTMLElement | Window`",
+    "description": "滚动容器，默认 `window`，仅 `sticky` 为 `true` 时生效, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#breadcrumb-props)"
+  },
+  "cedar-breadcrumb/target-container": {
+    "type": "`string | HTMLElement | Window`",
+    "description": "`target` 的外层滚动元素，默认 `window`。Affix 会监听该元素的滚动事件以避免固定块跨出容器，仅 `sticky` 为 `true` 时生效, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#breadcrumb-props)"
+  },
+  "cedar-breadcrumb-item/separator": {
+    "type": "`string | number`",
+    "description": "分隔符文字, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#breadcrumbitem-props)"
+  },
+  "cedar-breadcrumb-item/droplist": {
+    "type": "`BreadcrumbRoute['children']`",
+    "description": "下拉菜单内容, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#breadcrumbitem-props)"
+  },
+  "cedar-breadcrumb-item/dropdown-props": {
+    "type": "`DropDownProps`",
+    "description": "下拉菜单属性, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#breadcrumbitem-props)"
+  },
+  "cedar-breadcrumb-item/click": {
+    "type": "event",
+    "description": "点击事件\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#breadcrumbitem-events)"
+  },
+  "cedar-`<button>`/status": {
+    "type": "`'primary' | 'secondary' | 'tertiary' | 'info' | 'success' | 'warning' | 'danger'`",
+    "options": [
+      "secondary",
+      "tertiary",
+      "info",
+      "success",
+      "warning"
+    ],
+    "description": "按钮主题色\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<button>`-props)"
+  },
+  "cedar-`<button>`/variant": {
+    "type": "`'default' | 'text' | 'outline' | 'link' | 'tonal'`",
+    "options": [
+      "text",
+      "outline",
+      "link"
+    ],
+    "description": "按钮变体样式, default: `'default'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<button>`-props)"
+  },
+  "cedar-`<button>`/size": {
+    "type": "`'xs' | 'sm' | 'md' | 'lg'`",
+    "options": [
+      "sm",
+      "md"
+    ],
+    "description": "按钮尺寸, default: `'md'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<button>`-props)"
+  },
+  "cedar-`<button>`/round": {
+    "type": "`boolean`",
+    "description": "是否为圆形按钮, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<button>`-props)"
+  },
+  "cedar-`<button>`/block": {
+    "type": "`boolean`",
+    "description": "是否为块级元素（宽度占满容器）, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<button>`-props)"
+  },
+  "cedar-`<button>`/loading": {
+    "type": "`boolean`",
+    "description": "是否为加载中状态, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<button>`-props)"
+  },
+  "cedar-`<button>`/loadingType": {
+    "type": "`'default' | 'fill' | 'line'`",
+    "options": [
+      "fill"
+    ],
+    "description": "加载类型, default: `'default'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<button>`-props)"
+  },
+  "cedar-`<button>`/autoLoading": {
+    "type": "`boolean`",
+    "description": "是否自动loading，方便处理异步任务, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<button>`-props)"
+  },
+  "cedar-`<button>`/disabled": {
+    "type": "`boolean`",
+    "description": "是否为禁用状态\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<button>`-props)"
+  },
+  "cedar-`<button>`/stacked": {
+    "type": "`boolean`",
+    "description": "是否为堆叠状态（图标和文字垂直排列）\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<button>`-props)"
+  },
+  "cedar-`<button>`/iconContainer": {
+    "type": "`boolean`",
+    "description": "是否为图标容器, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<button>`-props)"
+  },
+  "cedar-`<button>`/ripple": {
+    "type": "`boolean`",
+    "description": "是否使用水波纹效果, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<button>`-props)"
+  },
+  "cedar-`<button>`/focusable": {
+    "type": "`boolean`",
+    "description": "是否可以被聚焦, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<button>`-props)"
+  },
+  "cedar-`<button>`/autofocus": {
+    "type": "`boolean`",
+    "description": "是否自动聚焦, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<button>`-props)"
+  },
+  "cedar-`<button>`/htmlType": {
+    "type": "`'button' | 'submit' | 'reset'`",
+    "options": [
+      "submit"
+    ],
+    "description": "原生按钮类型，可选值参考 [HTML 标准](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#attr-type '_blank'), default: `'button'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<button>`-props)"
+  },
+  "cedar-`<button>`/component": {
+    "type": "`'button' | 'a'`",
+    "description": "组件标签，设置为 `'a'` 时渲染为链接, default: `'button'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<button>`-props)"
+  },
+  "cedar-`<button>`/color": {
+    "type": "`string`",
+    "description": "自定义背景颜色\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<button>`-props)"
+  },
+  "cedar-`<button>`/textColor": {
+    "type": "`string`",
+    "description": "自定义文字颜色\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<button>`-props)"
+  },
+  "cedar-`<button>`/elevation": {
+    "type": "`boolean | number`",
+    "description": "海拔高度，可选值为 `true`、`false` 和 `0-24` 的等级（仅 `variant='default'` 时生效）, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<button>`-props)"
+  },
+  "cedar-`<button>`/click": {
+    "type": "event",
+    "description": "点击触发的事件\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<button>`-events)"
+  },
+  "cedar-`<button>`/touchstart": {
+    "type": "event",
+    "description": "触摸开始事件\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<button>`-events)"
+  },
+  "cedar-`<button-group>`/size": {
+    "type": "`'xs' | 'sm' | 'md' | 'lg'`",
+    "options": [
+      "sm",
+      "md"
+    ],
+    "description": "按钮组尺寸，子按钮会继承此设置, default: `'md'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<buttongroup>`-props)"
+  },
+  "cedar-`<button-group>`/status": {
+    "type": "`'primary' | 'secondary' | 'tertiary' | 'info' | 'success' | 'warning' | 'danger'`",
+    "options": [
+      "secondary",
+      "tertiary",
+      "info",
+      "success",
+      "warning"
+    ],
+    "description": "按钮组主题色，子按钮会继承此设置, default: `'default'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<buttongroup>`-props)"
+  },
+  "cedar-`<button-group>`/variant": {
+    "type": "`'default' | 'text' | 'outline' | 'link' | 'tonal'`",
+    "options": [
+      "text",
+      "outline",
+      "link"
+    ],
+    "description": "按钮组变体样式，子按钮会继承此设置, default: `'default'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<buttongroup>`-props)"
+  },
+  "cedar-`<button-group>`/color": {
+    "type": "`string`",
+    "description": "按钮组背景颜色，子按钮会继承此设置, default: `''`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<buttongroup>`-props)"
+  },
+  "cedar-`<button-group>`/textColor": {
+    "type": "`string`",
+    "description": "按钮组文字颜色，子按钮会继承此设置, default: `''`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<buttongroup>`-props)"
+  },
+  "cedar-`<button-group>`/stacked": {
+    "type": "`boolean`",
+    "description": "是否为堆叠状态（图标和文字垂直排列），子按钮会继承此设置, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<buttongroup>`-props)"
+  },
+  "cedar-`<button-group>`/disabled": {
+    "type": "`boolean`",
+    "description": "是否禁用所有子按钮, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<buttongroup>`-props)"
+  },
+  "cedar-`<button-group>`/vertical": {
+    "type": "`boolean`",
+    "description": "是否为垂直排列, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<buttongroup>`-props)"
+  },
+  "cedar-`<button-group>`/elevation": {
+    "type": "`boolean | number`",
+    "description": "海拔高度，可选值为 `true`、`false` 和 `0-24` 的等级（仅 `variant='default'` 时生效）, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<buttongroup>`-props)"
+  },
+  "cedar-`<calendar>`/change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<calendar>`-events)"
+  },
+  "cedar-`<calendar>`/panel-change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<calendar>`-events)"
+  },
+  "cedar-`<card>`/bordered": {
+    "type": "`boolean`",
+    "description": "是否有边框, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<card>`-props)"
+  },
+  "cedar-`<card>`/top-divider": {
+    "type": "`boolean`",
+    "description": "是否有上分割线, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<card>`-props)"
+  },
+  "cedar-`<card>`/loading": {
+    "type": "`boolean`",
+    "description": "是否为加载中, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<card>`-props)"
+  },
+  "cedar-`<card>`/hoverable": {
+    "type": "`boolean`",
+    "description": "是否可悬浮, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<card>`-props)"
+  },
+  "cedar-`<card>`/size": {
+    "type": "`lg | md | sm`",
+    "description": "卡片尺寸, default: `md`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<card>`-props)"
+  },
+  "cedar-`<card>`/header-style": {
+    "type": "`object`",
+    "description": "自定义标题区域样式\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<card>`-props)"
+  },
+  "cedar-`<card>`/body-style": {
+    "type": "`object`",
+    "description": "内容区域自定义样式\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<card>`-props)"
+  },
+  "cedar-`<card>`/title": {
+    "type": "`string`",
+    "description": "卡片标题\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<card>`-props)"
+  },
+  "cedar-`<card>`/body-padding": {
+    "type": "`boolean`",
+    "description": "content的边距, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<card>`-props)"
+  },
+  "cedar-`<card>`/direction": {
+    "type": "`row` | `column` | `row-reverse`",
+    "description": "卡片布局, default: `column`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<card>`-props)"
+  },
+  "cedar-`<card>`/elevation": {
+    "type": "`boolean` | `number` | `string`",
+    "description": "卡片阴影，最大值为9，传入true时，阴影值为1, default: `1`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<card>`-props)"
+  },
+  "cedar-`<carousel>`/current(`v-model`)": {
+    "type": "number",
+    "description": "当前展示索引\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<carousel>`-props)"
+  },
+  "cedar-`<carousel>`/default-current": {
+    "type": "number",
+    "description": "当前展示索引（默认值）, default: 1.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<carousel>`-props)"
+  },
+  "cedar-`<carousel>`/auto-play": {
+    "type": "boolean | CarouselAutoPlayConfig",
+    "description": "是否自动循环展示，或传入高级配置对象 `{ interval: 时间间隔, hoverToPause: 是否暂停}`, default: false.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<carousel>`-props)"
+  },
+  "cedar-`<carousel>`/move-speed": {
+    "type": "number",
+    "description": "幻灯片移动速率（毫秒）, default: 500.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<carousel>`-props)"
+  },
+  "cedar-`<carousel>`/animation-name": {
+    "type": "'slide' | 'fade' | 'card'",
+    "options": [
+      "slide",
+      "fade",
+      "card"
+    ],
+    "description": "切换动画类型, default: 'slide'.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<carousel>`-props)"
+  },
+  "cedar-`<carousel>`/trigger": {
+    "type": "'click' | 'hover'",
+    "options": [
+      "click",
+      "hover"
+    ],
+    "description": "幻灯片切换触发方式, default: 'click'.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<carousel>`-props)"
+  },
+  "cedar-`<carousel>`/direction": {
+    "type": "'horizontal' | 'vertical'",
+    "options": [
+      "horizontal",
+      "vertical"
+    ],
+    "description": "幻灯片移动方向, default: 'horizontal'.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<carousel>`-props)"
+  },
+  "cedar-`<carousel>`/show-arrow": {
+    "type": "'always' | 'hover' | 'never'",
+    "options": [
+      "always",
+      "hover",
+      "never"
+    ],
+    "description": "切换箭头显示时机, default: 'always'.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<carousel>`-props)"
+  },
+  "cedar-`<carousel>`/arrow-class": {
+    "type": "string",
+    "description": "切换箭头样式, default: ''.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<carousel>`-props)"
+  },
+  "cedar-`<carousel>`/indicator-type": {
+    "type": "'line' | 'dot' | 'slider' | 'never'",
+    "options": [
+      "line",
+      "dot",
+      "slider",
+      "never"
+    ],
+    "description": "指示器类型, default: 'dot'.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<carousel>`-props)"
+  },
+  "cedar-`<carousel>`/indicator-position": {
+    "type": "'bottom' | 'top' | 'left' | 'right' | 'outer'",
+    "options": [
+      "bottom",
+      "top",
+      "left",
+      "right",
+      "outer"
+    ],
+    "description": "指示器位置, default: 'bottom'.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<carousel>`-props)"
+  },
+  "cedar-`<carousel>`/indicator-class": {
+    "type": "string",
+    "description": "指示器的样式, default: ''.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<carousel>`-props)"
+  },
+  "cedar-`<carousel>`/transition-timing-function": {
+    "type": "string",
+    "description": "过渡速度曲线，默认匀速, default: 'cubic-bezier(0.34, 0.69, 0.1, 1)'.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<carousel>`-props)"
+  },
+  "cedar-`<carousel>`/change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<carousel>`-events)"
+  },
+  "cedar-`<cascader>`/change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<cascader>`-events)"
+  },
+  "cedar-`<cascader>`/input-value-change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<cascader>`-events)"
+  },
+  "cedar-`<cascader>`/clear": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<cascader>`-events)"
+  },
+  "cedar-`<cascader>`/search": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<cascader>`-events)"
+  },
+  "cedar-`<cascader>`/popup-visible-change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<cascader>`-events)"
+  },
+  "cedar-`<cascader>`/focus": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<cascader>`-events)"
+  },
+  "cedar-`<cascader>`/blur": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<cascader>`-events)"
+  },
+  "cedar-`<cascader-panel>`/change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<cascaderpanel>`-events)"
+  },
+  "cedar-checkbox/model-value(v-model)": {
+    "type": "boolean | Array<string | number | boolean>",
+    "description": "绑定值\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#checkbox-props)"
+  },
+  "cedar-checkbox/default-checked": {
+    "type": "boolean",
+    "description": "默认是否选中（非受控状态）, default: false.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#checkbox-props)"
+  },
+  "cedar-checkbox/value": {
+    "type": "string|number|boolean",
+    "description": "选项的 `value`, default: '-'.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#checkbox-props)"
+  },
+  "cedar-checkbox/disabled": {
+    "type": "boolean",
+    "description": "是否禁用, default: false.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#checkbox-props)"
+  },
+  "cedar-checkbox/indeterminate": {
+    "type": "boolean",
+    "description": "是否为半选状态, default: false.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#checkbox-props)"
+  },
+  "cedar-checkbox/change": {
+    "type": "event",
+    "description": "值改变触发的事件\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#checkbox-events)"
+  },
+  "cedar-checkbox-group/model-value(v-model)": {
+    "type": "Array<string | number | boolean>",
+    "description": "绑定值\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#checkboxgroup-props)"
+  },
+  "cedar-checkbox-group/default-value": {
+    "type": "Array<string | number | boolean>",
+    "description": "默认值（非受控状态）, default: [].\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#checkboxgroup-props)"
+  },
+  "cedar-checkbox-group/max": {
+    "type": "number",
+    "description": "支持最多选中的数量\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#checkboxgroup-props)"
+  },
+  "cedar-checkbox-group/options": {
+    "type": "Array<string | number| CheckboxOption>",
+    "description": "选项\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#checkboxgroup-props)"
+  },
+  "cedar-checkbox-group/direction": {
+    "type": "Direction",
+    "description": "复选框的排列方向, default: 'horizontal'.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#checkboxgroup-props)"
+  },
+  "cedar-checkbox-group/indeterminate": {
+    "type": "boolean",
+    "description": "是否为半选状态, default: false.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#checkboxgroup-props)"
+  },
+  "cedar-checkbox-group/disabled": {
+    "type": "boolean",
+    "description": "是否禁用, default: false.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#checkboxgroup-props)"
+  },
+  "cedar-checkbox-group/change": {
+    "type": "event",
+    "description": "值改变触发的事件\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#checkboxgroup-events)"
+  },
+  "cedar-`<collapse>`/change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<collapse>`-events)"
+  },
+  "cedar-`<color-picker>`/change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<color-picker>`-events)"
+  },
+  "cedar-`<color-picker>`/popup-visible-change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<color-picker>`-events)"
+  },
+  "cedar-config-provider/type": {
+    "type": "string",
+    "description": "参数类型\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#configprovider-props)"
+  },
+  "cedar-config-provider/click": {
+    "type": "event",
+    "description": "点击触发的事件\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#configprovider-events)"
+  },
+  "cedar-`common`/change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`common`-events)"
+  },
+  "cedar-`common`/select": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`common`-events)"
+  },
+  "cedar-`common`/popup-visible-change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`common`-events)"
+  },
+  "cedar-`common`/ok": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`common`-events)"
+  },
+  "cedar-`common`/clear": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`common`-events)"
+  },
+  "cedar-`common`/select-shortcut": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`common`-events)"
+  },
+  "cedar-`common`/picker-value-change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`common`-events)"
+  },
+  "cedar-`<rangeicker>`/change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<rangeicker>`-events)"
+  },
+  "cedar-`<rangeicker>`/select": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<rangeicker>`-events)"
+  },
+  "cedar-`<rangeicker>`/popup-visible-change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<rangeicker>`-events)"
+  },
+  "cedar-`<rangeicker>`/ok": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<rangeicker>`-events)"
+  },
+  "cedar-`<rangeicker>`/clear": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<rangeicker>`-events)"
+  },
+  "cedar-`<rangeicker>`/select-shortcut": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<rangeicker>`-events)"
+  },
+  "cedar-`<rangeicker>`/picker-value-change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<rangeicker>`-events)"
+  },
+  "cedar-`<descriptions>`/data": {
+    "type": "`DescData[]`",
+    "description": "描述列表的数据, default: `[]`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<descriptions>`-props)"
+  },
+  "cedar-`<descriptions>`/column": {
+    "type": "`number | ResponsiveValue`",
+    "description": "每行放置的数据个数。2.20.0 版本支持响应式配置，配置可参考 Grid, default: `3`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<descriptions>`-props)"
+  },
+  "cedar-`<descriptions>`/title": {
+    "type": "`string`",
+    "description": "描述列表的标题, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<descriptions>`-props)"
+  },
+  "cedar-`<descriptions>`/layout": {
+    "type": "`'horizontal' | 'vertical' | 'inline-horizontal' | 'inline-vertical'`",
+    "options": [
+      "vertical"
+    ],
+    "description": "描述列表的排列方式, default: `'horizontal'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<descriptions>`-props)"
+  },
+  "cedar-`<descriptions>`/align": {
+    "type": "`TextAlign | { label?: TextAlign; value?: TextAlign }`",
+    "description": "文字的对齐位置, default: `'left'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<descriptions>`-props)"
+  },
+  "cedar-`<descriptions>`/size": {
+    "type": "`'xs' | 'sm' | 'md' | 'lg' | 'xl'`",
+    "options": [
+      "sm",
+      "md",
+      "lg"
+    ],
+    "description": "描述列表的大小, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<descriptions>`-props)"
+  },
+  "cedar-`<descriptions>`/bordered": {
+    "type": "`boolean`",
+    "description": "是否显示边框, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<descriptions>`-props)"
+  },
+  "cedar-`<descriptions>`/label-style": {
+    "type": "`CSSProperties`",
+    "description": "数据标签的样式, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<descriptions>`-props)"
+  },
+  "cedar-`<descriptions>`/value-style": {
+    "type": "`CSSProperties`",
+    "description": "数据内容的样式, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<descriptions>`-props)"
+  },
+  "cedar-`<descriptions>`/table-layout": {
+    "type": "`'auto' | 'fixed'`",
+    "description": "描述中表格样式的 `layout-fixed`，当设置成 `fixed` 时，宽度会均分。, default: `'auto'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<descriptions>`-props)"
+  },
+  "cedar-`<descriptions-item>`/span": {
+    "type": "`number`",
+    "description": "所占列数, default: `1`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<descriptionsitem>`-props)"
+  },
+  "cedar-`<descriptions-item>`/label": {
+    "type": "`string`",
+    "description": "标签\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<descriptionsitem>`-props)"
+  },
+  "cedar-divider/text-align": {
+    "type": "`start`|`center`|`end`",
+    "description": "分割线文字位置, default: `'center'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#divider-props)"
+  },
+  "cedar-divider/description": {
+    "type": "_string_",
+    "description": "分割线文字描述, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#divider-props)"
+  },
+  "cedar-divider/size-x": {
+    "type": "_number | string | number[]| string[]_",
+    "description": "设置上下间距，支持'5px'、5、[5, 0]、xs、sm、md、lg、xg, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#divider-props)"
+  },
+  "cedar-divider/size-y": {
+    "type": "_number | string | number[]| string[]_",
+    "description": "设置左右间距，支持'5px'、5、[5, 0]、xs、sm、md、lg、xg, default: `md`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#divider-props)"
+  },
+  "cedar-divider/orientation": {
+    "type": "`horizontal` | `vertical`",
+    "description": "是否垂直，如果是'vertical'，则size-x控制上下间距，size-y控制左右间距。, default: `horizontal`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#divider-props)"
+  },
+  "cedar-divider/type": {
+    "type": "`dashed` | `dotted` | `solid` | `double`",
+    "description": "分割线类型, default: `solid`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#divider-props)"
+  },
+  "cedar-divider/thickness": {
+    "type": "_number_",
+    "description": "分割线宽度/高度（thickness必须大于1）, default: `1`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#divider-props)"
+  },
+  "cedar-divider/hairline": {
+    "type": "_boolean_",
+    "description": "0.5px 的分割线, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#divider-props)"
+  },
+  "cedar-divider/color": {
+    "type": "_string_",
+    "description": "分割线颜色, default: `#363c54`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#divider-props)"
+  },
+  "cedar-divider/opacity": {
+    "type": "_number_",
+    "description": "分割线透明度, default: `0.12`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#divider-props)"
+  },
+  "cedar-drag-container/modelValue": {
+    "type": "Array",
+    "description": "托管的拖拽列表\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#dragcontainer-props)"
+  },
+  "cedar-drag-container/dragOption": {
+    "type": "------",
+    "description": "DragOptions, default: ------.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#dragcontainer-props)"
+  },
+  "cedar-drag-container/change": {
+    "type": "event",
+    "description": "拖拽完成回调\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#dragcontainer-events)"
+  },
+  "cedar-`<drawer>`/visible **(v-model)**": {
+    "type": "`boolean`",
+    "description": "抽屉是否可见, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<drawer>`-props)"
+  },
+  "cedar-`<drawer>`/default-visible": {
+    "type": "`boolean`",
+    "description": "抽屉默认是否可见（非受控模式）, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<drawer>`-props)"
+  },
+  "cedar-`<drawer>`/placement": {
+    "type": "`'top' | 'right' | 'bottom' | 'left'`",
+    "options": [
+      "right",
+      "bottom"
+    ],
+    "description": "抽屉放置的位置, default: `'right'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<drawer>`-props)"
+  },
+  "cedar-`<drawer>`/title": {
+    "type": "`string`",
+    "description": "标题\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<drawer>`-props)"
+  },
+  "cedar-`<drawer>`/size": {
+    "type": "`'sm' | 'md' | 'lg' | 'xl'`",
+    "options": [
+      "md",
+      "lg"
+    ],
+    "description": "尺寸, default: `md`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<drawer>`-props)"
+  },
+  "cedar-`<drawer>`/mask": {
+    "type": "`boolean`",
+    "description": "是否显示遮罩层, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<drawer>`-props)"
+  },
+  "cedar-`<drawer>`/mask-closable": {
+    "type": "`boolean`",
+    "description": "点击遮罩层是否可以关闭, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<drawer>`-props)"
+  },
+  "cedar-`<drawer>`/closable": {
+    "type": "`boolean`",
+    "description": "是否展示关闭按钮, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<drawer>`-props)"
+  },
+  "cedar-`<drawer>`/ok-text": {
+    "type": "`string`",
+    "description": "确认按钮的内容\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<drawer>`-props)"
+  },
+  "cedar-`<drawer>`/cancel-text": {
+    "type": "`string`",
+    "description": "取消按钮的内容\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<drawer>`-props)"
+  },
+  "cedar-`<drawer>`/ok-loading": {
+    "type": "`boolean`",
+    "description": "确认按钮是否为加载中状态, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<drawer>`-props)"
+  },
+  "cedar-`<drawer>`/ok-button-props": {
+    "type": "`ButtonProps`",
+    "description": "确认按钮的Props\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<drawer>`-props)"
+  },
+  "cedar-`<drawer>`/cancel-button-props": {
+    "type": "`ButtonProps`",
+    "description": "取消按钮的Props\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<drawer>`-props)"
+  },
+  "cedar-`<drawer>`/unmount-on-close": {
+    "type": "`boolean`",
+    "description": "关闭时是否卸载节点, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<drawer>`-props)"
+  },
+  "cedar-`<drawer>`/width": {
+    "type": "`number|string`",
+    "description": "抽屉的宽度（仅在placement为right,left时可用）, default: `250`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<drawer>`-props)"
+  },
+  "cedar-`<drawer>`/height": {
+    "type": "`number|string`",
+    "description": "抽屉的高度（仅在placement为top,bottom时可用）, default: `250`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<drawer>`-props)"
+  },
+  "cedar-`<drawer>`/popup-container": {
+    "type": "`string | HTMLElement`",
+    "description": "弹出框的挂载容器, default: `'body'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<drawer>`-props)"
+  },
+  "cedar-`<drawer>`/drawer-style": {
+    "type": "`CSSProperties`",
+    "description": "抽屉的样式\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<drawer>`-props)"
+  },
+  "cedar-`<drawer>`/on-before-ok": {
+    "type": "`( done: (closed: boolean) => void) => void | boolean | Promise<void | boolean>`",
+    "description": "触发 ok 事件前的回调函数。如果返回 false 则不会触发后续事件，也可使用 done 进行异步关闭。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<drawer>`-props)"
+  },
+  "cedar-`<drawer>`/on-before-cancel": {
+    "type": "`() => boolean`",
+    "description": "触发 cancel 事件前的回调函数。如果返回 false 则不会触发后续事件。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<drawer>`-props)"
+  },
+  "cedar-`<drawer>`/esc-to-close": {
+    "type": "`boolean`",
+    "description": "是否支持 ESC 键关闭抽屉, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<drawer>`-props)"
+  },
+  "cedar-`<drawer>`/render-to-body": {
+    "type": "`boolean`",
+    "description": "抽屉是否挂载在 `body` 元素下, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<drawer>`-props)"
+  },
+  "cedar-`<drawer>`/header": {
+    "type": "`boolean`",
+    "description": "是否展示头部内容, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<drawer>`-props)"
+  },
+  "cedar-`<drawer>`/footer": {
+    "type": "`boolean`",
+    "description": "是否展示底部内容, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<drawer>`-props)"
+  },
+  "cedar-`<drawer>`/hide-cancel": {
+    "type": "`boolean`",
+    "description": "是否隐藏取消按钮, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<drawer>`-props)"
+  },
+  "cedar-`<drawer>`/ok": {
+    "type": "event",
+    "description": "点击确定按钮时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<drawer>`-events)"
+  },
+  "cedar-`<drawer>`/cancel": {
+    "type": "event",
+    "description": "点击取消、关闭按钮时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<drawer>`-events)"
+  },
+  "cedar-`<drawer>`/open": {
+    "type": "event",
+    "description": "抽屉打开后（动画结束）触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<drawer>`-events)"
+  },
+  "cedar-`<drawer>`/close": {
+    "type": "event",
+    "description": "抽屉关闭后（动画结束）触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<drawer>`-events)"
+  },
+  "cedar-`<drawer>`/before-open": {
+    "type": "event",
+    "description": "对话框打开前触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<drawer>`-events)"
+  },
+  "cedar-`<drawer>`/before-close": {
+    "type": "event",
+    "description": "对话框关闭前触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<drawer>`-events)"
+  },
+  "cedar-`<dropdown>`/popup-visible-change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<dropdown>`-events)"
+  },
+  "cedar-`<dropdown>`/select": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<dropdown>`-events)"
+  },
+  "cedar-`<doption>`/click": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<doption>`-events)"
+  },
+  "cedar-`<dsubmenu>`/popup-visible-change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<dsubmenu>`-events)"
+  },
+  "cedar-`<dropdown-button>`/popup-visible-change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<dropdown-button>`-events)"
+  },
+  "cedar-`<dropdown-button>`/click": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<dropdown-button>`-events)"
+  },
+  "cedar-`<dropdown-button>`/select": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<dropdown-button>`-events)"
+  },
+  "cedar-ellipsis/expand": {
+    "type": "`boolean`",
+    "description": "是否展开, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#ellipsis-props)"
+  },
+  "cedar-ellipsis/expandTrigger": {
+    "type": "`'click'`",
+    "description": "展开触发方式, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#ellipsis-props)"
+  },
+  "cedar-ellipsis/lineClamp": {
+    "type": "`number | string`",
+    "description": "多行省略的行数, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#ellipsis-props)"
+  },
+  "cedar-ellipsis/tooltip": {
+    "type": "`object | boolean`",
+    "description": "tooltip 配置，`false` 表示禁用, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#ellipsis-props)"
+  },
+  "cedar-ellipsis/update:expand": {
+    "type": "event",
+    "description": "展开状态改变时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#ellipsis-events)"
+  },
+  "cedar-`<empty>`/description": {
+    "type": "`string`",
+    "description": "描述内容\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<empty>`-props)"
+  },
+  "cedar-`<empty>`/img-src": {
+    "type": "`string`",
+    "description": "自定义图片的地址\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<empty>`-props)"
+  },
+  "cedar-`<empty>`/icon": {
+    "type": "`string`",
+    "description": "自定义图标名\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<empty>`-props)"
+  },
+  "cedar-`<empty>`/image-size": {
+    "type": "`'xs' | 'sm' | 'md' | 'lg' | 'xl' | number`",
+    "options": [
+      "sm",
+      "md",
+      "lg",
+      "xl"
+    ],
+    "description": "图片/图标尺寸, default: `'md'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<empty>`-props)"
+  },
+  "cedar-`<empty>`/in-config-provider": {
+    "type": "`boolean`",
+    "description": "是否在 ConfigProvider 中使用, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<empty>`-props)"
+  },
+  "cedar-filter-form/model **(v-model)**": {
+    "type": "any",
+    "description": "表单的值，默认会同步更改。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#filterform-props)"
+  },
+  "cedar-filter-form/components": {
+    "type": "IComponent[]",
+    "description": "所有可以配置的组件\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#filterform-props)"
+  },
+  "cedar-filter-form/collapsed": {
+    "type": "boolean",
+    "description": "默认是否收起表单项, default: true.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#filterform-props)"
+  },
+  "cedar-filter-form/cols": {
+    "type": "object",
+    "description": "响应式布局, default: &lbrace; xs: 1, sm: 2, md: 3, lg: 3, xl: 4, xxl: 5 &rbrace;.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#filterform-props)"
+  },
+  "cedar-filter-form/gridProps": {
+    "type": "object",
+    "description": "Grid组件的属性，优先级最高。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#filterform-props)"
+  },
+  "cedar-filter-form/store": {
+    "type": "object",
+    "description": "`select`、`cascader`的options选项\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#filterform-props)"
+  },
+  "cedar-filter-form/defaultConfig": {
+    "type": "config",
+    "description": "所有字段的全局配置\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#filterform-props)"
+  },
+  "cedar-filter-form/fieldConfig": {
+    "type": "<[prop: string]: config>",
+    "description": "字段配置，单个字段的配置会覆盖全局配置\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#filterform-props)"
+  },
+  "cedar-filter-form/showRememberSelections": {
+    "type": "boolean",
+    "description": "是否显示`记住我的选择`这个选项\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#filterform-props)"
+  },
+  "cedar-filter-form/rememberUserKey": {
+    "type": "string",
+    "description": "全局缓存的key，需要确保全局唯一，如果showRememberSelections 为 true，则必传。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#filterform-props)"
+  },
+  "cedar-filter-form/autoRemember": {
+    "type": "boolean",
+    "description": "如果数据变化会自动触发缓存记忆，否则需要手动调用方法进行控制。, default: true.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#filterform-props)"
+  },
+  "cedar-filter-form/change": {
+    "type": "event",
+    "description": "change事件\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#filterform-events)"
+  },
+  "cedar-i-component/visible": {
+    "type": "boolean",
+    "description": "是否可见, default: true.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#icomponent-props)"
+  },
+  "cedar-i-component/name": {
+    "type": "string",
+    "description": "组件名字`select`、`people-select`、`input`、`date-picker`、`range-picker`、`cascader`。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#icomponent-props)"
+  },
+  "cedar-i-component/props": {
+    "type": "{autoEmitChange: boolean} & any",
+    "description": "组件属性。autoEmitChange仅在输入类组件生效。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#icomponent-props)"
+  },
+  "cedar-i-component/gridItemProps": {
+    "type": "any",
+    "description": "GridItem组件的属性，优先级最高。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#icomponent-props)"
+  },
+  "cedar-i-component/formItemProps": {
+    "type": "any",
+    "description": "FormItem组件属性，优先级最高。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#icomponent-props)"
+  },
+  "cedar-config/remember": {
+    "type": "boolean",
+    "description": "是否记忆, default: true.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#config-props)"
+  },
+  "cedar-config/removeIfNotInOptions": {
+    "type": "boolean",
+    "description": "仅针对select组件，如果在options可选项中不存在，则删除这个记忆的value。, default: true.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#config-props)"
+  },
+  "cedar-config/required": {
+    "type": "boolean",
+    "description": "仅针对select组件，是否必选，如果是则会在options里面取第一个选项中的value。, default: false.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#config-props)"
+  },
+  "cedar-`<form>`/submit": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<form>`-events)"
+  },
+  "cedar-`<form>`/submit-success": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<form>`-events)"
+  },
+  "cedar-`<form>`/submit-failed": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<form>`-events)"
+  },
+  "cedar-icon/type": {
+    "type": "string",
+    "description": "图标类型\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#icon-props)"
+  },
+  "cedar-icon/size": {
+    "type": "number | string",
+    "description": "大小\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#icon-props)"
+  },
+  "cedar-icon/rotate": {
+    "type": "number",
+    "description": "旋转角度\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#icon-props)"
+  },
+  "cedar-icon/spin": {
+    "type": "boolean",
+    "description": "是否旋转, default: false.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#icon-props)"
+  },
+  "cedar-icon/click": {
+    "type": "event",
+    "description": "点击触发的事件\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#icon-events)"
+  },
+  "cedar-icon-xxx/strokeWidth": {
+    "type": "number",
+    "description": "线宽, default: 4.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#icon-xxx-props)"
+  },
+  "cedar-icon-xxx/strokeLinecap": {
+    "type": "'butt' | 'round' | 'square'",
+    "options": [
+      "butt",
+      "round",
+      "square"
+    ],
+    "description": "端点类型, default: 'butt'.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#icon-xxx-props)"
+  },
+  "cedar-icon-xxx/strokeLinejoin": {
+    "type": "'arcs' | 'bevel' | 'miter' | 'miter-clip' | 'round'",
+    "options": [
+      "arcs",
+      "bevel",
+      "miter",
+      "round"
+    ],
+    "description": "拐角类型, default: 'miter'.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#icon-xxx-props)"
+  },
+  "cedar-icon-xxx/size": {
+    "type": "number | string",
+    "description": "大小\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#icon-xxx-props)"
+  },
+  "cedar-icon-xxx/rotate": {
+    "type": "number",
+    "description": "旋转角度\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#icon-xxx-props)"
+  },
+  "cedar-icon-xxx/spin": {
+    "type": "boolean",
+    "description": "是否旋转, default: false.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#icon-xxx-props)"
+  },
+  "cedar-`<image>`/preview-visible-change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<image>`-events)"
+  },
+  "cedar-`<image-preview>`/close": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<image-preview>`-events)"
+  },
+  "cedar-`<image-preview-group>`/change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<image-preview-group>`-events)"
+  },
+  "cedar-`<image-preview-group>`/visible-change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<image-preview-group>`-events)"
+  },
+  "cedar-`<input>`/input": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<input>`-events)"
+  },
+  "cedar-`<input>`/change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<input>`-events)"
+  },
+  "cedar-`<input>`/press-enter": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<input>`-events)"
+  },
+  "cedar-`<input>`/clear": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<input>`-events)"
+  },
+  "cedar-`<input>`/focus": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<input>`-events)"
+  },
+  "cedar-`<input>`/blur": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<input>`-events)"
+  },
+  "cedar-`<input-search>`/search": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<inputsearch>`-events)"
+  },
+  "cedar-`<input-number>`/change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<input-number>`-events)"
+  },
+  "cedar-`<input-number>`/focus": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<input-number>`-events)"
+  },
+  "cedar-`<input-number>`/blur": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<input-number>`-events)"
+  },
+  "cedar-`<input-number>`/clear": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<input-number>`-events)"
+  },
+  "cedar-`<input-number>`/input": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<input-number>`-events)"
+  },
+  "cedar-`<input-tag>`/change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<input-tag>`-events)"
+  },
+  "cedar-`<input-tag>`/input-value-change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<input-tag>`-events)"
+  },
+  "cedar-`<input-tag>`/press-enter": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<input-tag>`-events)"
+  },
+  "cedar-`<input-tag>`/remove": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<input-tag>`-events)"
+  },
+  "cedar-`<input-tag>`/clear": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<input-tag>`-events)"
+  },
+  "cedar-`<input-tag>`/focus": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<input-tag>`-events)"
+  },
+  "cedar-`<input-tag>`/blur": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<input-tag>`-events)"
+  },
+  "cedar-layout-sider/collapse": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#layout-sider-events)"
+  },
+  "cedar-layout-sider/breakpoint": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#layout-sider-events)"
+  },
+  "cedar-layout-form/componentTree": {
+    "type": "object",
+    "description": "参数类型\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#layoutform-props)"
+  },
+  "cedar-layout-form/value": {
+    "type": "object",
+    "description": "表单值\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#layoutform-props)"
+  },
+  "cedar-layout-form/noBottomSpace": {
+    "type": "boolean",
+    "description": "表单底部是否有间距, default: false.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#layoutform-props)"
+  },
+  "cedar-layout-form/emptyText": {
+    "type": "string",
+    "description": "表单值为空的默认显示文案, default: '-'.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#layoutform-props)"
+  },
+  "cedar-layout-form/showEmptyText": {
+    "type": "boolean",
+    "description": "是否显示默认的空值, default: false.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#layoutform-props)"
+  },
+  "cedar-layout-form/rules": {
+    "type": "object",
+    "description": "表单校验规则, default: false.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#layoutform-props)"
+  },
+  "cedar-layout-form/store": {
+    "type": "object",
+    "description": "表单可选项映射, default: false.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#layoutform-props)"
+  },
+  "cedar-layout-form/compMapping": {
+    "type": "object",
+    "description": "自定义组件映射, default: false.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#layoutform-props)"
+  },
+  "cedar-layout-form/change": {
+    "type": "event",
+    "description": "表单值变化后触发的事件\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#layoutform-events)"
+  },
+  "cedar-component-tree-form/maxVisibleRow": {
+    "type": "object",
+    "description": "最大可见行数\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#componenttree-form-props)"
+  },
+  "cedar-component-tree-form/layoutCol": {
+    "type": "object",
+    "description": "每列个数\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#componenttree-form-props)"
+  },
+  "cedar-component-tree-form/layoutColArr": {
+    "type": "object",
+    "description": "响应式的每列个数，比如：[2, 3, 6]，对应尺寸[768, 1440, 1980]\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#componenttree-form-props)"
+  },
+  "cedar-component-tree-form/labelPosition": {
+    "type": "object",
+    "description": "表单label的位置\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#componenttree-form-props)"
+  },
+  "cedar-component-tree-form/labelWidth": {
+    "type": "object",
+    "description": "表单label的宽度\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#componenttree-form-props)"
+  },
+  "cedar-`<link>`/href": {
+    "type": "`string`",
+    "description": "链接地址\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<link>`-props)"
+  },
+  "cedar-`<link>`/status": {
+    "type": "`normal | warning | success | danger`",
+    "description": "链接的状态, default: `success`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<link>`-props)"
+  },
+  "cedar-`<link>`/hoverable": {
+    "type": "`boolean`",
+    "description": "鼠标悬浮时存在底色, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<link>`-props)"
+  },
+  "cedar-`<link>`/icon": {
+    "type": "`boolean`",
+    "description": "图标, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<link>`-props)"
+  },
+  "cedar-`<link>`/loading": {
+    "type": "`boolean`",
+    "description": "链接是否为加载中状态, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<link>`-props)"
+  },
+  "cedar-`<link>`/disabled": {
+    "type": "`boolean`",
+    "description": "链接是否禁用, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<link>`-props)"
+  },
+  "cedar-`<link>`/click": {
+    "type": "event",
+    "description": "点击触发的事件\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<link>`-events)"
+  },
+  "cedar-`<list>`/scroll": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<list>`-events)"
+  },
+  "cedar-`<list>`/reach-bottom": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<list>`-events)"
+  },
+  "cedar-`<list>`/page-change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<list>`-events)"
+  },
+  "cedar-`<list>`/page-size-change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<list>`-events)"
+  },
+  "cedar-loading/type": {
+    "type": "string",
+    "description": "参数类型\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#loading-props)"
+  },
+  "cedar-loading/click": {
+    "type": "event",
+    "description": "点击触发的事件\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#loading-events)"
+  },
+  "cedar-map/modelValue(**v-model**)": {
+    "type": "`Object`",
+    "description": "地图的初始值，表示所选位置的信息。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#map-props)"
+  },
+  "cedar-map/defaultValue": {
+    "type": "`{ [key in valueKeyAlias[keys]]: any }`",
+    "description": "用来设置默认地图中心点\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#map-props)"
+  },
+  "cedar-map/driver": {
+    "type": "`Driver`",
+    "description": "`Fetch.genDriiver`的返回值, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#map-props)"
+  },
+  "cedar-map/fetch": {
+    "type": "`CoreService`",
+    "description": "`Fetch.genFetch`的返回值, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#map-props)"
+  },
+  "cedar-map/geocoderUrl": {
+    "type": "`string`",
+    "description": "geocoderUrl接口路径, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#map-props)"
+  },
+  "cedar-map/geocoderHandler": {
+    "type": "`(longitude: number, latitude: number)=>{})`",
+    "description": "用于处理地图编码服务的响应。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#map-props)"
+  },
+  "cedar-map/basePath": {
+    "type": "`String`",
+    "description": "地图的基础路径，配置获取地图数据的基础 URL。, default: `'/pe/powerpro'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#map-props)"
+  },
+  "cedar-map/isInternational": {
+    "type": "`Boolean`",
+    "description": "指示地图是否为谷歌地图。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#map-props)"
+  },
+  "cedar-map/showName": {
+    "type": "`boolean`",
+    "description": "是否展示悬浮框名称, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#map-props)"
+  },
+  "cedar-map/showLocateMeButton": {
+    "type": "`boolean`",
+    "description": "是否展示定位到当前位置按钮, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#map-props)"
+  },
+  "cedar-map/showEditAddressButton": {
+    "type": "`boolean`",
+    "description": "是否展示修改地点悬浮按钮, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#map-props)"
+  },
+  "cedar-map/showMapTips": {
+    "type": "`boolean`",
+    "description": "是否展示地图上方tips, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#map-props)"
+  },
+  "cedar-map/mapType": {
+    "type": "`'qqmaps'|'bmapGL'|'amaps'`",
+    "options": [
+      "bmapGL"
+    ],
+    "description": "要显示的地图类型。, default: `'amaps'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#map-props)"
+  },
+  "cedar-map/enableGisSearch": {
+    "type": "`boolean`",
+    "description": "是否启用gis搜索(**开启时`fetch`为必传**), default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#map-props)"
+  },
+  "cedar-map/valueKeyScope": {
+    "type": "`Array`",
+    "description": "一个字符串数组，表示要在地图上显示的值列表。, default: `valueKeyScope`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#map-props)"
+  },
+  "cedar-map/valueKeyAlias": {
+    "type": "`Object`",
+    "description": "一个对象，表示地图键到值的映射关系。, default: `valueKeyAlias`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#map-props)"
+  },
+  "cedar-map/change": {
+    "type": "event",
+    "description": "当地址发生变化时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#map-events)"
+  },
+  "cedar-map/init": {
+    "type": "event",
+    "description": "初始化地图完成时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#map-events)"
+  },
+  "cedar-map/loading:address": {
+    "type": "event",
+    "description": "选择地点，地址解析中触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#map-events)"
+  },
+  "cedar-map/loaded:address": {
+    "type": "event",
+    "description": "选择地点，地址解析完成触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#map-events)"
+  },
+  "cedar-`<mention>`/change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<mention>`-events)"
+  },
+  "cedar-`<mention>`/search": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<mention>`-events)"
+  },
+  "cedar-`<mention>`/select": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<mention>`-events)"
+  },
+  "cedar-`<mention>`/clear": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<mention>`-events)"
+  },
+  "cedar-`<mention>`/focus": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<mention>`-events)"
+  },
+  "cedar-`<mention>`/blur": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<mention>`-events)"
+  },
+  "cedar-menu/theme": {
+    "type": "`'light'|'dark'`",
+    "description": "菜单的主题, default: `'light'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#menu-props)"
+  },
+  "cedar-menu/mode": {
+    "type": "`'vertical'|'horizontal'|'pop'|'popButton'`",
+    "options": [
+      "horizontal",
+      "pop"
+    ],
+    "description": "菜单的模式, default: `'vertical'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#menu-props)"
+  },
+  "cedar-menu/level-indent": {
+    "type": "`number`",
+    "description": "层级之间的缩进, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#menu-props)"
+  },
+  "cedar-menu/auto-open": {
+    "type": "`boolean`",
+    "description": "默认展开所有多级菜单, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#menu-props)"
+  },
+  "cedar-menu/collapsed(**v-model**)": {
+    "type": "`boolean`",
+    "description": "是否折叠菜单, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#menu-props)"
+  },
+  "cedar-menu/default-collapsed": {
+    "type": "`boolean`",
+    "description": "默认是否折叠菜单, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#menu-props)"
+  },
+  "cedar-menu/collapsed-width": {
+    "type": "`number`",
+    "description": "折叠菜单宽度, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#menu-props)"
+  },
+  "cedar-menu/accordion": {
+    "type": "`boolean`",
+    "description": "开启手风琴模式, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#menu-props)"
+  },
+  "cedar-menu/auto-scroll-into-view": {
+    "type": "`boolean`",
+    "description": "是否自动滚动选中项目到可视区域, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#menu-props)"
+  },
+  "cedar-menu/show-collapse-button": {
+    "type": "`boolean`",
+    "description": "是否显示折叠按钮, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#menu-props)"
+  },
+  "cedar-menu/selected-keys(**v-model**)": {
+    "type": "`string[]`",
+    "description": "展开的菜单项key数组, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#menu-props)"
+  },
+  "cedar-menu/default-selected-keys": {
+    "type": "`string[]`",
+    "description": "默认选中的菜单项key数组, default: `[]`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#menu-props)"
+  },
+  "cedar-menu/open-keys(**v-model**)": {
+    "type": "`string[]`",
+    "description": "展开的子菜单项key数组, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#menu-props)"
+  },
+  "cedar-menu/default-open-keys": {
+    "type": "`string[]`",
+    "description": "默认展开的子菜单项key数组, default: `[]`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#menu-props)"
+  },
+  "cedar-menu/scroll-config": {
+    "type": "`{[key :string]: any}`",
+    "description": "滚动到可见区域的配置项，接收所有`scroll-into-view-if-needed`的参数, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#menu-props)"
+  },
+  "cedar-menu/trigger-props": {
+    "type": "`TriggerProps`",
+    "description": "弹出模式下可接受所有`Trigger`的`props`, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#menu-props)"
+  },
+  "cedar-menu/tooltip-props": {
+    "type": "`object`",
+    "description": "弹出模式下可接受所有`Tooltip`的`props`, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#menu-props)"
+  },
+  "cedar-menu/auto-open-selected": {
+    "type": "`boolean`",
+    "description": "默认选中的菜单, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#menu-props)"
+  },
+  "cedar-menu/breakpoint": {
+    "type": "`'xxl'|'xl'|'lg'|'md'|'sm'|'x'|'s'`",
+    "options": [
+      "xl",
+      "lg",
+      "md",
+      "sm",
+      "x"
+    ],
+    "description": "响应式收缩的断点, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#menu-props)"
+  },
+  "cedar-menu/popup-max-height": {
+    "type": "`boolean| number`",
+    "description": "弹出模式下的最大高度, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#menu-props)"
+  },
+  "cedar-menu/collapse": {
+    "type": "event",
+    "description": "菜单折叠状态改变时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#menu-events)"
+  },
+  "cedar-menu/menu-item-click": {
+    "type": "event",
+    "description": "菜单项点击时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#menu-events)"
+  },
+  "cedar-menu/sub-menu-click": {
+    "type": "event",
+    "description": "子菜单点击时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#menu-events)"
+  },
+  "cedar-`<modal>`/ok": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<modal>`-events)"
+  },
+  "cedar-`<modal>`/cancel": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<modal>`-events)"
+  },
+  "cedar-`<modal>`/open": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<modal>`-events)"
+  },
+  "cedar-`<modal>`/close": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<modal>`-events)"
+  },
+  "cedar-`<modal>`/before-open": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<modal>`-events)"
+  },
+  "cedar-`<modal>`/before-close": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<modal>`-events)"
+  },
+  "cedar-`<overflow-list>`/change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<overflow-list>`-events)"
+  },
+  "cedar-page-header/title": {
+    "type": "`string`",
+    "description": "页头的主标题, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#pageheader-props)"
+  },
+  "cedar-page-header/subtitle": {
+    "type": "`string`",
+    "description": "页头的次标题, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#pageheader-props)"
+  },
+  "cedar-page-header/show-back": {
+    "type": "`boolean`",
+    "description": "是否显示返回按钮, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#pageheader-props)"
+  },
+  "cedar-page-header/back": {
+    "type": "event",
+    "description": "点击返回按钮时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#pageheader-events)"
+  },
+  "cedar-pagination/total(**必填**)": {
+    "type": "`number`",
+    "description": "数据总数, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#pagination-props)"
+  },
+  "cedar-pagination/current(**v-model**)": {
+    "type": "`number`",
+    "description": "当前页数, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#pagination-props)"
+  },
+  "cedar-pagination/default-current": {
+    "type": "`number`",
+    "description": "默认当前页数, default: `1`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#pagination-props)"
+  },
+  "cedar-pagination/page-size(**v-model**)": {
+    "type": "`number`",
+    "description": "每页条数, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#pagination-props)"
+  },
+  "cedar-pagination/default-page-size": {
+    "type": "`number`",
+    "description": "默认每页展示的数据条数(非受控状态), default: `10`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#pagination-props)"
+  },
+  "cedar-pagination/hide-on-single-page": {
+    "type": "`boolean`",
+    "description": "只有一页时是否隐藏分页, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#pagination-props)"
+  },
+  "cedar-pagination/simple": {
+    "type": "`boolean`",
+    "description": "是否使用简洁模式, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#pagination-props)"
+  },
+  "cedar-pagination/show-total": {
+    "type": "`boolean`",
+    "description": "是否展示总数, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#pagination-props)"
+  },
+  "cedar-pagination/show-more": {
+    "type": "`boolean`",
+    "description": "是否展示更多按钮, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#pagination-props)"
+  },
+  "cedar-pagination/show-jumper": {
+    "type": "`boolean`",
+    "description": "是否展示跳转输入框, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#pagination-props)"
+  },
+  "cedar-pagination/show-page-size": {
+    "type": "`boolean`",
+    "description": "是否展示每页条数选择器, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#pagination-props)"
+  },
+  "cedar-pagination/page-size-options": {
+    "type": "`number[]`",
+    "description": "每页条数选择器选项, default: `[10, 20, 30, 40,50]`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#pagination-props)"
+  },
+  "cedar-pagination/page-size-props": {
+    "type": "`SelectProps`",
+    "description": "每页条数选择器属性, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#pagination-props)"
+  },
+  "cedar-pagination/size": {
+    "type": "`Size`",
+    "description": "尺寸, default: `medium`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#pagination-props)"
+  },
+  "cedar-pagination/page-item-style": {
+    "type": "`CSSProperties`",
+    "description": "分页按钮样式, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#pagination-props)"
+  },
+  "cedar-pagination/active-page-item-style": {
+    "type": "`CSSProperties`",
+    "description": "当前分页按钮样式, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#pagination-props)"
+  },
+  "cedar-pagination/base-size": {
+    "type": "`number`",
+    "description": "计算显示省略的基础个数，显示省略的个数为`baseSize+2*bufferSize`, default: `6`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#pagination-props)"
+  },
+  "cedar-pagination/buffer-size": {
+    "type": "`number`",
+    "description": "显示省略号时，当前页码左右显示的页码个数, default: `2`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#pagination-props)"
+  },
+  "cedar-pagination/auto-adjust": {
+    "type": "`boolean`",
+    "description": "是否在改变数据条数时自动调整页码, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#pagination-props)"
+  },
+  "cedar-pagination/change": {
+    "type": "event",
+    "description": "页码改变时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#pagination-events)"
+  },
+  "cedar-pagination/page-size-change": {
+    "type": "event",
+    "description": "每页条数改变时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#pagination-events)"
+  },
+  "cedar-people-select/change": {
+    "type": "event",
+    "description": "选人时候触发的事件\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#peopleselect-events)"
+  },
+  "cedar-people-select/clear": {
+    "type": "event",
+    "description": "点击清除触发的事件\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#peopleselect-events)"
+  },
+  "cedar-`<popconfirm>`/popup-visible-change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<popconfirm>`-events)"
+  },
+  "cedar-`<popconfirm>`/ok": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<popconfirm>`-events)"
+  },
+  "cedar-`<popconfirm>`/cancel": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<popconfirm>`-events)"
+  },
+  "cedar-popover/type": {
+    "type": "string",
+    "description": "参数类型\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#popover-props)"
+  },
+  "cedar-popover/click": {
+    "type": "event",
+    "description": "点击触发的事件\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#popover-events)"
+  },
+  "cedar-progress/type": {
+    "type": "string",
+    "description": "类型\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#progress-props)"
+  },
+  "cedar-progress/status": {
+    "type": "string",
+    "description": "状态\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#progress-props)"
+  },
+  "cedar-progress/size": {
+    "type": "string",
+    "description": "大小\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#progress-props)"
+  },
+  "cedar-progress/percent": {
+    "type": "number",
+    "description": "进度数值\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#progress-props)"
+  },
+  "cedar-progress/click": {
+    "type": "event",
+    "description": "点击触发的事件\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#progress-events)"
+  },
+  "cedar-radio/model-value(v-model)": {
+    "type": "`string|number |boolean`",
+    "description": "绑定值, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#radio-props)"
+  },
+  "cedar-radio/default-checked": {
+    "type": "`boolean`",
+    "description": "默认是否选中(非受控状态), default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#radio-props)"
+  },
+  "cedar-radio/value": {
+    "type": "`string|number|boolean`",
+    "description": "选项的`value`, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#radio-props)"
+  },
+  "cedar-radio/type": {
+    "type": "`'radio'|'button'`",
+    "description": "单选的类型, default: `'radio'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#radio-props)"
+  },
+  "cedar-radio/disabled": {
+    "type": "`boolean`",
+    "description": "是否禁用, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#radio-props)"
+  },
+  "cedar-radio/change": {
+    "type": "event",
+    "description": "值改变时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#radio-events)"
+  },
+  "cedar-radio-group/model-value(v-model)": {
+    "type": "`string|number |boolean`",
+    "description": "绑定值, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#radiogroup-props)"
+  },
+  "cedar-radio-group/default-value": {
+    "type": "`string|number|boolean`",
+    "description": "默认值(非受控状态), default: `''`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#radiogroup-props)"
+  },
+  "cedar-radio-group/type": {
+    "type": "`'radio'|'button'`",
+    "description": "单选框组的类型, default: `'radio'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#radiogroup-props)"
+  },
+  "cedar-radio-group/size": {
+    "type": "`'xs'|'sm'|'md'|'lg'|'xl'`",
+    "options": [
+      "sm",
+      "md",
+      "lg"
+    ],
+    "description": "单选框组的尺寸, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#radiogroup-props)"
+  },
+  "cedar-radio-group/options": {
+    "type": "`Array<string | number| RadioOption>`",
+    "description": "选项, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#radiogroup-props)"
+  },
+  "cedar-radio-group/direction": {
+    "type": "`'horizontal'|'vertical'`",
+    "description": "单选框组的方向, default: `'horizontal'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#radiogroup-props)"
+  },
+  "cedar-radio-group/disabled": {
+    "type": "`boolean`",
+    "description": "是否禁用, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#radiogroup-props)"
+  },
+  "cedar-radio-group/change": {
+    "type": "event",
+    "description": "值改变时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#radiogroup-events)"
+  },
+  "cedar-`<rate>`/change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<rate>`-events)"
+  },
+  "cedar-`<rate>`/hover-change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<rate>`-events)"
+  },
+  "cedar-`<resize-box>`/moving-start": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<resize-box>`-events)"
+  },
+  "cedar-`<resize-box>`/moving": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<resize-box>`-events)"
+  },
+  "cedar-`<resize-box>`/moving-end": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<resize-box>`-events)"
+  },
+  "cedar-saas-header-nav/fixed": {
+    "type": "boolean",
+    "description": "是否开启悬浮定位, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#saasheadernav-props)"
+  },
+  "cedar-saas-header-nav/showTenantInfo": {
+    "type": "boolean",
+    "description": "是否显示租户/企业信息（包括logo/name）, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#saasheadernav-props)"
+  },
+  "cedar-saas-header-nav/showWorkbench": {
+    "type": "boolean",
+    "description": "（v1.2.27）是否显示我的应用列表/工作台入口, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#saasheadernav-props)"
+  },
+  "cedar-saas-header-nav/showAccountBasicInfo": {
+    "type": "boolean",
+    "description": "（v1.2.27）右侧用户模块下拉框内是否显示“个人中心”入口口, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#saasheadernav-props)"
+  },
+  "cedar-saas-header-nav/showTenantSwitch": {
+    "type": "boolean",
+    "description": "是否显示切换租户/企业入口（在右侧用户信息下拉框内，当可切换企业/租户数量大于 1 时才有效）, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#saasheadernav-props)"
+  },
+  "cedar-saas-header-nav/showLogout": {
+    "type": "boolean | 'auto'",
+    "options": [
+      "auto"
+    ],
+    "description": "右侧用户模块下拉框是否显示“退出登录”, default: 默认 'auto'，自动适配：对外SaaS显示，非对外SaaS隐藏.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#saasheadernav-props)"
+  },
+  "cedar-saas-header-nav/showToMgmt": {
+    "type": "boolean | 'auto'",
+    "options": [
+      "auto"
+    ],
+    "description": "右侧用户模块下拉框是否显示“进入管理平台”（该内容是否显示同时也收到权限影响）, default: 默认 'auto'，自动适配：对外SaaS平台且有权限时显示，否则隐藏.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#saasheadernav-props)"
+  },
+  "cedar-saas-header-nav/userActions": {
+    "description": "自定义右侧用户模块的下拉操作内容\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#saasheadernav-props)"
+  },
+  "cedar-saas-header-nav/fetch": {
+    "type": "Function",
+    "description": "内部发请求用（目前主要推出登录需要）\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#saasheadernav-props)"
+  },
+  "cedar-saas-header-nav/mfeSdk": {
+    "type": "{ Auth, Env, SaaSConf }",
+    "description": "内部各种逻辑判定及查询配置信息需要\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#saasheadernav-props)"
+  },
+  "cedar-saas-header-nav/userSelect": {
+    "type": "event",
+    "description": "点击触发的事件\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#saasheadernav-events)"
+  },
+  "cedar-`<scrollbar>`/scroll": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<scrollbar>`-events)"
+  },
+  "cedar-search/defaultField": {
+    "type": "string",
+    "description": "搜索字段的key\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#search-props)"
+  },
+  "cedar-search/model **(v-model)**": {
+    "type": "object",
+    "description": "表单数据对象，组件内部触发change事件后，会自动修改model相关属性的值。\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#search-props)"
+  },
+  "cedar-search/searchText": {
+    "type": "string",
+    "description": "搜索字段的value，支持v-model:searchText (老的名字是searchText还兼容)\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#search-props)"
+  },
+  "cedar-search/searchField": {
+    "type": "string",
+    "description": "搜索字段的key\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#search-props)"
+  },
+  "cedar-search/fields": {
+    "type": "Array<[SearchField](#searchfield)>",
+    "description": "搜索字段可选项（默认选中第一个）, default: [].\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#search-props)"
+  },
+  "cedar-search/placeholder": {
+    "type": "string",
+    "description": "搜索框占位文案（优先级低于 SearchField 内的占位文案）, default: '请输入'.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#search-props)"
+  },
+  "cedar-search/selectStyle": {
+    "type": "object",
+    "description": "传入fields后生效，对search组件中的select增加style属性\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#search-props)"
+  },
+  "cedar-search/search": {
+    "type": "event",
+    "description": "回车或者点击搜索按钮触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#search-events)"
+  },
+  "cedar-search/change": {
+    "type": "event",
+    "description": "当搜索的key或者value变化时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#search-events)"
+  },
+  "cedar-select/multiple": {
+    "type": "`boolean`",
+    "description": "是否开启多选模式（多选模式默认开启搜索）, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/model-value **(v-model)**": {
+    "type": "`string| number| Record<string, any>| (string | number | Record<string, any>)[]`",
+    "description": "绑定值, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/default-value": {
+    "type": "`string| number| Record<string, unknown>| (string | number | Record<string, unknown>)[]`",
+    "description": "默认值（非受控模式）, default: `'' | []`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/input-value **(v-model)**": {
+    "type": "`string`",
+    "description": "输入框的值, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/default-input-value": {
+    "type": "`string`",
+    "description": "输入框的默认值（非受控模式）, default: `''`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/size": {
+    "type": "`'xs' | 'sm' | 'md' | 'lg' | 'xl'`",
+    "options": [
+      "sm",
+      "md",
+      "lg"
+    ],
+    "description": "选择框的大小, default: `'md'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/placeholder": {
+    "type": "`string`",
+    "description": "占位符, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/loading": {
+    "type": "`boolean`",
+    "description": "是否为加载中状态, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/disabled": {
+    "type": "`boolean`",
+    "description": "是否禁用, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/error": {
+    "type": "`boolean`",
+    "description": "是否为错误状态, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/variant": {
+    "type": "`'outline' | 'default'`",
+    "description": "选择框的变体, default: `'default'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/clearable": {
+    "type": "`boolean`",
+    "description": "是否允许清空, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/filterable": {
+    "type": "`boolean | { retainInputValue?: boolean }`",
+    "description": "是否允许搜索, default: `false (single) | true (multiple)`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/creatable": {
+    "type": "`boolean`",
+    "description": "是否允许创建, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/max-tag-count": {
+    "type": "`number`",
+    "description": "多选模式下，最多显示的标签数量。0 表示不限制, default: `0`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/popup-container": {
+    "type": "`string | HTMLElement`",
+    "description": "弹出框的挂载容器, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/bordered": {
+    "type": "`boolean`",
+    "description": "是否显示输入框的边框, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/default-active-first-option": {
+    "type": "`boolean`",
+    "description": "是否在无值时默认选择第一个选项, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/popup-visible **(v-model)**": {
+    "type": "`boolean`",
+    "description": "是否显示下拉菜单, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/default-popup-visible": {
+    "type": "`boolean`",
+    "description": "弹出框默认是否可见（非受控模式）, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/unmount-on-close": {
+    "type": "`boolean`",
+    "description": "是否在下拉菜单关闭时销毁元素, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/filter-option": {
+    "type": "`boolean | ((inputValue: string, option: SelectOptionData) => boolean)`",
+    "description": "是否过滤选项, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/options": {
+    "type": "`(string | number | SelectOptionData | SelectOptionGroup)[]`",
+    "description": "选项数据, default: `[]`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/virtual-list-props": {
+    "type": "`VirtualListProps`",
+    "description": "传递虚拟列表属性，传入此参数以开启虚拟滚动 [VirtualListProps](#VirtualListProps), default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/trigger-props": {
+    "type": "`TriggerProps`",
+    "description": "下拉菜单的触发器属性, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/format-label": {
+    "type": "`(data: SelectOptionData) => string`",
+    "description": "格式化显示内容, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/fallback-option": {
+    "type": "`boolean| ((    value: string | number | Record<string, unknown>  ) => SelectOptionData)`",
+    "description": "自定义值中不存在的选项, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/show-extra-options": {
+    "type": "`boolean`",
+    "description": "是否在下拉菜单中显示额外选项, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/value-key": {
+    "type": "`string`",
+    "description": "用于确定选项键值的属性名, default: `'value'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/search-delay": {
+    "type": "`number`",
+    "description": "触发搜索事件的延迟时间, default: `500`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/limit": {
+    "type": "`number`",
+    "description": "多选时最多的选择个数, default: `0`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/field-names": {
+    "type": "`SelectFieldNames`",
+    "description": "自定义 `SelectOptionData` 中的字段, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/scrollbar": {
+    "type": "`boolean | ScrollbarProps`",
+    "description": "是否开启虚拟滚动条, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/show-header-on-empty": {
+    "type": "`boolean`",
+    "description": "空状态时是否显示header, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/show-footer-on-empty": {
+    "type": "`false`",
+    "description": "空状态时是否显示footer｜`boolean`\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-props)"
+  },
+  "cedar-select/change": {
+    "type": "event",
+    "description": "值发生改变时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-events)"
+  },
+  "cedar-select/input-value-change": {
+    "type": "event",
+    "description": "输入框的值发生改变时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-events)"
+  },
+  "cedar-select/popup-visible-change": {
+    "type": "event",
+    "description": "下拉框的显示状态改变时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-events)"
+  },
+  "cedar-select/clear": {
+    "type": "event",
+    "description": "点击清除按钮时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-events)"
+  },
+  "cedar-select/remove": {
+    "type": "event",
+    "description": "点击标签的删除按钮时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-events)"
+  },
+  "cedar-select/search": {
+    "type": "event",
+    "description": "用户搜索时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-events)"
+  },
+  "cedar-select/dropdown-scroll": {
+    "type": "event",
+    "description": "下拉菜单发生滚动时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-events)"
+  },
+  "cedar-select/dropdown-reach-bottom": {
+    "type": "event",
+    "description": "下拉菜单滚动到底部时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-events)"
+  },
+  "cedar-select/exceed-limit": {
+    "type": "event",
+    "description": "多选超出限制时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#select-events)"
+  },
+  "cedar-slider/type": {
+    "type": "string",
+    "description": "参数类型\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#slider-props)"
+  },
+  "cedar-slider/click": {
+    "type": "event",
+    "description": "点击触发的事件\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#slider-events)"
+  },
+  "cedar-`<spin>`/size": {
+    "type": "`number`",
+    "description": "尺寸\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<spin>`-props)"
+  },
+  "cedar-`<spin>`/loading": {
+    "type": "`boolean`",
+    "description": "是否为加载中状态（仅在容器模式下生效）, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<spin>`-props)"
+  },
+  "cedar-`<spin>`/dot": {
+    "type": "`boolean`",
+    "description": "是否使用点类型的动画, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<spin>`-props)"
+  },
+  "cedar-`<spin>`/tip": {
+    "type": "`string`",
+    "description": "提示内容\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<spin>`-props)"
+  },
+  "cedar-`<spin>`/hide-icon": {
+    "type": "`boolean`",
+    "description": "是否隐藏图标, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<spin>`-props)"
+  },
+  "cedar-`<split>`/move-start": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<split>`-events)"
+  },
+  "cedar-`<split>`/moving": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<split>`-events)"
+  },
+  "cedar-`<split>`/move-end": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<split>`-events)"
+  },
+  "cedar-`<statistic>`/`title`": {
+    "type": "`string`",
+    "description": "数值展示的标题\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<statistic>`-props)"
+  },
+  "cedar-`<statistic>`/`value`": {
+    "type": "`number | Date`",
+    "description": "数值展示的值\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<statistic>`-props)"
+  },
+  "cedar-`<statistic>`/`format`": {
+    "type": "`string`",
+    "description": "数值展示的格式（日期模式使用）, default: `'HH:mm:ss'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<statistic>`-props)"
+  },
+  "cedar-`<statistic>`/`extra`": {
+    "type": "`string`",
+    "description": "额外的显示内容\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<statistic>`-props)"
+  },
+  "cedar-`<statistic>`/`start`": {
+    "type": "`boolean`",
+    "description": "是否开始动画, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<statistic>`-props)"
+  },
+  "cedar-`<statistic>`/`precision`": {
+    "type": "`number`",
+    "description": "小数保留位数（数字模式使用）, default: `0`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<statistic>`-props)"
+  },
+  "cedar-`<statistic>`/`separator`": {
+    "type": "`string`",
+    "description": "进位分隔符（数字模式使用）\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<statistic>`-props)"
+  },
+  "cedar-`<statistic>`/`show-group-separator`": {
+    "type": "`boolean`",
+    "description": "是否展示进位分隔符（数字模式使用）, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<statistic>`-props)"
+  },
+  "cedar-`<statistic>`/`animation`": {
+    "type": "`boolean`",
+    "description": "是否开启动画, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<statistic>`-props)"
+  },
+  "cedar-`<statistic>`/`animation-duration`": {
+    "type": "`number`",
+    "description": "动画的过渡时间, default: `2000`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<statistic>`-props)"
+  },
+  "cedar-`<statistic>`/`value-from`": {
+    "type": "`number`",
+    "description": "动画的起始值\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<statistic>`-props)"
+  },
+  "cedar-`<statistic>`/`placeholder`": {
+    "type": "`string`",
+    "description": "提示文字（当 `value` 为 `undefined` 时显示）\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<statistic>`-props)"
+  },
+  "cedar-`<statistic>`/`value-style`": {
+    "type": "`CSSProperties`",
+    "description": "自定义显示值的样式\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<statistic>`-props)"
+  },
+  "cedar-`<countdown>`/`title`": {
+    "type": "`string`",
+    "description": "倒计时的标题\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<countdown>`-props)"
+  },
+  "cedar-`<countdown>`/`value`": {
+    "type": "`number`",
+    "description": "倒计时的值, default: `() => Date.now() + 300000`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<countdown>`-props)"
+  },
+  "cedar-`<countdown>`/`now`": {
+    "type": "`number`",
+    "description": "用于修正初始化时间显示不正确, default: `() => Date.now()`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<countdown>`-props)"
+  },
+  "cedar-`<countdown>`/`format`": {
+    "type": "`string`",
+    "description": "倒计时的展示格式（使用 `dayjs`）, default: `'HH:mm:ss'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<countdown>`-props)"
+  },
+  "cedar-`<countdown>`/`start`": {
+    "type": "`boolean`",
+    "description": "是否开始倒计时, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<countdown>`-props)"
+  },
+  "cedar-`<countdown>`/`value-style`": {
+    "type": "`CSSProperties`",
+    "description": "自定义显示值的样式\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<countdown>`-props)"
+  },
+  "cedar-`<countdown>`/`finish`": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<countdown>`-events)"
+  },
+  "cedar-steps/type": {
+    "type": "`'default'` | `'arrow'` | `'dot'` | `'navigation'`",
+    "description": "步骤条的类型, default: `'default'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#steps-props)"
+  },
+  "cedar-steps/direction": {
+    "type": "`'horizontal'` | `'vertical'`",
+    "description": "步骤条的方向, default: `'horizontal'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#steps-props)"
+  },
+  "cedar-steps/label-placement": {
+    "type": "`'horizontal'` | `'vertical'`",
+    "description": "描述标签放置位置, default: `'horizontal'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#steps-props)"
+  },
+  "cedar-steps/current(**v-model**)": {
+    "type": "`number`",
+    "description": "当前步骤数, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#steps-props)"
+  },
+  "cedar-steps/default-current": {
+    "type": "`number`",
+    "description": "默认的步骤数(非受控状态), default: `1`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#steps-props)"
+  },
+  "cedar-steps/status": {
+    "type": "`'wait'` | `'process'` | `'finish'` | `'error'`",
+    "description": "当前步骤状态, default: `'process'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#steps-props)"
+  },
+  "cedar-steps/show-line": {
+    "type": "`boolean`",
+    "description": "是否显示连接线, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#steps-props)"
+  },
+  "cedar-steps/small": {
+    "type": "`boolean`",
+    "description": "是否使用小型连接线, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#steps-props)"
+  },
+  "cedar-steps/changeable": {
+    "type": "`boolean`",
+    "description": "是否可以点击切换步骤, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#steps-props)"
+  },
+  "cedar-steps/change": {
+    "type": "event",
+    "description": "步骤数发生改变时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#steps-events)"
+  },
+  "cedar-step/title": {
+    "type": "`string`",
+    "description": "步骤的标题, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#step-props)"
+  },
+  "cedar-step/description": {
+    "type": "`string`",
+    "description": "步骤的描述, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#step-props)"
+  },
+  "cedar-step/status": {
+    "type": "`'wait'` | `'process'` | `'finish'` | `'error'`",
+    "description": "步骤的状态, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#step-props)"
+  },
+  "cedar-step/disabled": {
+    "type": "`boolean`",
+    "description": "是否禁用步骤, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#step-props)"
+  },
+  "cedar-switch/model-value(**v-model**)": {
+    "type": "`string|number|boolean`",
+    "description": "绑定值, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#switch-props)"
+  },
+  "cedar-switch/default-checked": {
+    "type": "`boolean`",
+    "description": "默认选中状态(非受控状态), default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#switch-props)"
+  },
+  "cedar-switch/disabled": {
+    "type": "`boolean`",
+    "description": "是否禁用, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#switch-props)"
+  },
+  "cedar-switch/loading": {
+    "type": "`boolean`",
+    "description": "是否为加载中状态, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#switch-props)"
+  },
+  "cedar-switch/type": {
+    "type": "`'circle'|'round'|'line'`",
+    "options": [
+      "round"
+    ],
+    "description": "开关的类型, default: `'circle'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#switch-props)"
+  },
+  "cedar-switch/size": {
+    "type": "`'sm'|'md'|'lg'`",
+    "options": [
+      "md"
+    ],
+    "description": "开关的大小, default: `'md'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#switch-props)"
+  },
+  "cedar-switch/checked-value": {
+    "type": "`string|number|boolean`",
+    "description": "选中时的值, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#switch-props)"
+  },
+  "cedar-switch/unchecked-value": {
+    "type": "`string|number|boolean`",
+    "description": "为选中时的值, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#switch-props)"
+  },
+  "cedar-switch/checked-color": {
+    "type": "`string`",
+    "description": "选中时的开关颜色, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#switch-props)"
+  },
+  "cedar-switch/unchecked-color": {
+    "type": "`string`",
+    "description": "未选中时的开关颜色, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#switch-props)"
+  },
+  "cedar-switch/before-change": {
+    "type": "`( newValue: string | number | boolean) => Promise<boolean | void> | boolean | void`",
+    "description": "switch状态改变前的钩子，返回false或者返回Promise且被reject则停止切换。, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#switch-props)"
+  },
+  "cedar-switch/checked-text": {
+    "type": "`string`",
+    "description": "打开状态时的文案(`type='line'`和`size='sm'`时不生效), default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#switch-props)"
+  },
+  "cedar-switch/unchecked-text": {
+    "type": "`string`",
+    "description": "关闭状态时的文案(`type='line'`和`size='sm'`时不生效), default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#switch-props)"
+  },
+  "cedar-switch/change": {
+    "type": "event",
+    "description": "值改变时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#switch-events)"
+  },
+  "cedar-switch/focus": {
+    "type": "event",
+    "description": "组件获得焦点时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#switch-events)"
+  },
+  "cedar-switch/blur": {
+    "type": "event",
+    "description": "组件失去焦点时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#switch-events)"
+  },
+  "cedar-`<table>`/expand": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<table>`-events)"
+  },
+  "cedar-`<table>`/expanded-change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<table>`-events)"
+  },
+  "cedar-`<table>`/select": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<table>`-events)"
+  },
+  "cedar-`<table>`/select-all": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<table>`-events)"
+  },
+  "cedar-`<table>`/selection-change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<table>`-events)"
+  },
+  "cedar-`<table>`/sorter-change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<table>`-events)"
+  },
+  "cedar-`<table>`/filter-change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<table>`-events)"
+  },
+  "cedar-`<table>`/page-change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<table>`-events)"
+  },
+  "cedar-`<table>`/page-size-change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<table>`-events)"
+  },
+  "cedar-`<table>`/change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<table>`-events)"
+  },
+  "cedar-`<table>`/cell-mouse-enter": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<table>`-events)"
+  },
+  "cedar-`<table>`/cell-mouse-leave": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<table>`-events)"
+  },
+  "cedar-`<table>`/cell-click": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<table>`-events)"
+  },
+  "cedar-`<table>`/row-click": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<table>`-events)"
+  },
+  "cedar-`<table>`/header-click": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<table>`-events)"
+  },
+  "cedar-`<table>`/column-resize": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<table>`-events)"
+  },
+  "cedar-`<table>`/row-dblclick": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<table>`-events)"
+  },
+  "cedar-`<table>`/cell-dblclick": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<table>`-events)"
+  },
+  "cedar-`<table>`/row-contextmenu": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<table>`-events)"
+  },
+  "cedar-`<table>`/cell-contextmenu": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<table>`-events)"
+  },
+  "cedar-`<tabs>`/active-key **(v-model)**": {
+    "type": "`string | number`",
+    "description": "当前选中的标签的 `key`\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tabs>`-props)"
+  },
+  "cedar-`<tabs>`/default-active-key": {
+    "type": "`string | number`",
+    "description": "默认选中的标签的`key`（非受控状态，为空时选中第一个标签页）\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tabs>`-props)"
+  },
+  "cedar-`<tabs>`/indicator-position": {
+    "type": "`'normal' | 'reverse'`",
+    "description": "指示器位置, default: `'normal'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tabs>`-props)"
+  },
+  "cedar-`<tabs>`/size": {
+    "type": "`'xs' | 'sm' | 'md' | 'lg'`",
+    "options": [
+      "sm",
+      "md"
+    ],
+    "description": "选项卡的大小, default: `'md'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tabs>`-props)"
+  },
+  "cedar-`<tabs>`/type": {
+    "type": "`'line' | 'card' | 'outline' | 'plain' | 'capsule' | 'enclosed'`",
+    "options": [
+      "card",
+      "outline",
+      "plain",
+      "capsule"
+    ],
+    "description": "选项卡的类型, default: `'line'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tabs>`-props)"
+  },
+  "cedar-`<tabs>`/vertical": {
+    "type": "`boolean`",
+    "description": "是否垂直展示（选项卡在左侧）, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tabs>`-props)"
+  },
+  "cedar-`<tabs>`/editable": {
+    "type": "`boolean`",
+    "description": "是否开启可编辑模式, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tabs>`-props)"
+  },
+  "cedar-`<tabs>`/show-add-button": {
+    "type": "`boolean`",
+    "description": "是否显示增加按钮（仅在可编辑模式可用）, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tabs>`-props)"
+  },
+  "cedar-`<tabs>`/destroy-on-hide": {
+    "type": "`boolean`",
+    "description": "是否在不显示标签时销毁内容, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tabs>`-props)"
+  },
+  "cedar-`<tabs>`/lazy-load": {
+    "type": "`boolean`",
+    "description": "是否在首次展示标签时挂载内容, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tabs>`-props)"
+  },
+  "cedar-`<tabs>`/justify": {
+    "type": "`boolean`",
+    "description": "高度撑满容器，只在水平模式下生效。, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tabs>`-props)"
+  },
+  "cedar-`<tabs>`/animation": {
+    "type": "`boolean`",
+    "description": "是否开启选项内容过渡动画, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tabs>`-props)"
+  },
+  "cedar-`<tabs>`/header-padding": {
+    "type": "`boolean`",
+    "description": "选项卡头部是否存在水平边距。仅对`type` 等于`line`、`text`类型的选项卡生效, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tabs>`-props)"
+  },
+  "cedar-`<tabs>`/body-padding": {
+    "type": "`boolean`",
+    "description": "content的边距, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tabs>`-props)"
+  },
+  "cedar-`<tabs>`/auto-switch": {
+    "type": "`boolean`",
+    "description": "创建标签后是否切换到新标签（最后一个）, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tabs>`-props)"
+  },
+  "cedar-`<tabs>`/hide-content": {
+    "type": "`boolean`",
+    "description": "是否隐藏内容, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tabs>`-props)"
+  },
+  "cedar-`<tabs>`/trigger": {
+    "type": "`'hover' | 'click'`",
+    "description": "触发方式, default: `'click'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tabs>`-props)"
+  },
+  "cedar-`<tabs>`/change": {
+    "type": "event",
+    "description": "当前标签值改变时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tabs>`-events)"
+  },
+  "cedar-`<tabs>`/tab-click": {
+    "type": "event",
+    "description": "用户点击标签时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tabs>`-events)"
+  },
+  "cedar-`<tabs>`/add": {
+    "type": "event",
+    "description": "用户点击增加按钮时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tabs>`-events)"
+  },
+  "cedar-`<tabs>`/delete": {
+    "type": "event",
+    "description": "用户点击删除按钮时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tabs>`-events)"
+  },
+  "cedar-`<tab-pane>`/title": {
+    "type": "`string`",
+    "description": "选项卡的标题\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tabpane>`-props)"
+  },
+  "cedar-`<tab-pane>`/disabled": {
+    "type": "`boolean`",
+    "description": "是否禁用, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tabpane>`-props)"
+  },
+  "cedar-`<tab-pane>`/closable": {
+    "type": "`boolean`",
+    "description": "是否允许关闭此选项卡（仅在可编辑模式生效）, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tabpane>`-props)"
+  },
+  "cedar-`<tab-pane>`/destroy-on-hide": {
+    "type": "`boolean`",
+    "description": "是否在不显示标签时销毁内容, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tabpane>`-props)"
+  },
+  "cedar-`<tag>`/color": {
+    "type": "`'red' | 'orangered' | 'orange' | 'gold' | 'lime' | 'green' | 'cyan' | 'blue' | 'brand' | 'purple' | 'pinkpurple' | 'magenta' | 'gray'`",
+    "options": [
+      "orangered",
+      "orange",
+      "gold",
+      "lime",
+      "green",
+      "cyan",
+      "blue",
+      "brand",
+      "purple",
+      "pinkpurple",
+      "magenta"
+    ],
+    "description": "标签的颜色\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tag>`-props)"
+  },
+  "cedar-`<tag>`/status": {
+    "type": "`'primary' | 'secondary' | 'tertiary' | 'info' | 'success' | 'warning' | 'danger'`",
+    "options": [
+      "secondary",
+      "tertiary",
+      "info",
+      "success",
+      "warning"
+    ],
+    "description": "标签状态色（与 Button 对齐，与 `color` 互斥，`color` 优先）\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tag>`-props)"
+  },
+  "cedar-`<tag>`/variant": {
+    "type": "`'default' | 'outline'`",
+    "description": "标签变体（与 Button 对齐）, default: `'default'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tag>`-props)"
+  },
+  "cedar-`<tag>`/size": {
+    "type": "`'xs' | 'sm' | 'md' | 'lg' | 'xl'`",
+    "options": [
+      "sm",
+      "md",
+      "lg"
+    ],
+    "description": "标签的大小, default: `'md'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tag>`-props)"
+  },
+  "cedar-`<tag>`/visible **(v-model)**": {
+    "type": "`boolean`",
+    "description": "标签是否可见\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tag>`-props)"
+  },
+  "cedar-`<tag>`/default-visible": {
+    "type": "`boolean`",
+    "description": "标签默认是否可见, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tag>`-props)"
+  },
+  "cedar-`<tag>`/loading": {
+    "type": "`boolean`",
+    "description": "标签是否为加载中状态, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tag>`-props)"
+  },
+  "cedar-`<tag>`/closable": {
+    "type": "`boolean`",
+    "description": "标签是否可关闭, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tag>`-props)"
+  },
+  "cedar-`<tag>`/checkable": {
+    "type": "`boolean`",
+    "description": "标签是否可选中, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tag>`-props)"
+  },
+  "cedar-`<tag>`/checked **(v-model)**": {
+    "type": "`boolean`",
+    "description": "标签是否选中（标签可选中时可用）\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tag>`-props)"
+  },
+  "cedar-`<tag>`/default-checked": {
+    "type": "`boolean`",
+    "description": "标签默认选中状态（标签可选中时可用）, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tag>`-props)"
+  },
+  "cedar-`<tag>`/close": {
+    "type": "event",
+    "description": "点击关闭按钮时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tag>`-events)"
+  },
+  "cedar-`<tag>`/check": {
+    "type": "event",
+    "description": "用户选中时触发（仅在可选中模式下触发）\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tag>`-events)"
+  },
+  "cedar-textarea/model-value(**v-model**)": {
+    "type": "`-`",
+    "description": "绑定值｜`string`\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#textarea-props)"
+  },
+  "cedar-textarea/default-value": {
+    "type": "`string`",
+    "description": "默认值(非受控状态), default: `''`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#textarea-props)"
+  },
+  "cedar-textarea/placeholder": {
+    "type": "`string`",
+    "description": "提示文字, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#textarea-props)"
+  },
+  "cedar-textarea/disabled": {
+    "type": "`boolean`",
+    "description": "是否禁用, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#textarea-props)"
+  },
+  "cedar-textarea/error": {
+    "type": "`boolean`",
+    "description": "是否为错误状态, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#textarea-props)"
+  },
+  "cedar-textarea/max-length": {
+    "type": "`number|{length:number,errorOnly?:boolean`",
+    "description": "输入的最大长度, default: `0`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#textarea-props)"
+  },
+  "cedar-textarea/show-word-limit": {
+    "type": "`boolean`",
+    "description": "是否显示字数统计, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#textarea-props)"
+  },
+  "cedar-textarea/clearable": {
+    "type": "`boolean`",
+    "description": "是否允许清空文本域, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#textarea-props)"
+  },
+  "cedar-textarea/auto-size": {
+    "type": "`boolean|{minRows?;number,maxRows?;number`",
+    "description": "是否让文本自适应内容高度, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#textarea-props)"
+  },
+  "cedar-textarea/word-length": {
+    "type": "`(value:string)=>number`",
+    "description": "字符长度的计算方法, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#textarea-props)"
+  },
+  "cedar-textarea/word-slice": {
+    "type": "`(value:string,maxLength:number)=>string`",
+    "description": "字符截取方法，同wordLength一起使用, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#textarea-props)"
+  },
+  "cedar-textarea/input": {
+    "type": "event",
+    "description": "用户输入时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#textarea-events)"
+  },
+  "cedar-textarea/change": {
+    "type": "event",
+    "description": "仅在文本框失焦时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#textarea-events)"
+  },
+  "cedar-textarea/clear": {
+    "type": "event",
+    "description": "点击清除按钮时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#textarea-events)"
+  },
+  "cedar-textarea/focus": {
+    "type": "event",
+    "description": "文本框获取焦点时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#textarea-events)"
+  },
+  "cedar-textarea/blur": {
+    "type": "event",
+    "description": "文本框失去焦点时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#textarea-events)"
+  },
+  "cedar-time-picker/change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#events)"
+  },
+  "cedar-time-picker/select": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#events)"
+  },
+  "cedar-time-picker/clear": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#events)"
+  },
+  "cedar-time-picker/popup-visible-change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#events)"
+  },
+  "cedar-tooltip/popup-visible **(v-model)**": {
+    "type": "`boolean`",
+    "description": "文字气泡是否可见, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#tooltip-props)"
+  },
+  "cedar-tooltip/default-popup-visible": {
+    "type": "`boolean`",
+    "description": "文字气泡默认是否可见（非受控模式）, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#tooltip-props)"
+  },
+  "cedar-tooltip/content": {
+    "type": "`string`",
+    "description": "文字气泡内容, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#tooltip-props)"
+  },
+  "cedar-tooltip/position": {
+    "type": "`'top' | 'tl' | 'tr' | 'bottom' | 'bl' | 'br' | 'left' | 'lt' | 'lb' | 'right' | 'rt' | 'rb'`",
+    "options": [
+      "tl",
+      "tr",
+      "bottom",
+      "bl",
+      "br",
+      "left",
+      "lt",
+      "lb",
+      "right",
+      "rt"
+    ],
+    "description": "弹出位置, default: `'top'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#tooltip-props)"
+  },
+  "cedar-tooltip/xs": {
+    "type": "`boolean`",
+    "description": "是否展示为迷你尺寸, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#tooltip-props)"
+  },
+  "cedar-tooltip/background-color": {
+    "type": "`string`",
+    "description": "弹出框的背景颜色, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#tooltip-props)"
+  },
+  "cedar-tooltip/content-class": {
+    "type": "`ClassName`",
+    "description": "弹出框内容的类名, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#tooltip-props)"
+  },
+  "cedar-tooltip/content-style": {
+    "type": "`CSSProperties`",
+    "description": "弹出框内容的样式, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#tooltip-props)"
+  },
+  "cedar-tooltip/arrow-class": {
+    "type": "`ClassName`",
+    "description": "弹出框箭头的类名, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#tooltip-props)"
+  },
+  "cedar-tooltip/arrow-style": {
+    "type": "`CSSProperties`",
+    "description": "弹出框箭头的样式, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#tooltip-props)"
+  },
+  "cedar-tooltip/popup-container": {
+    "type": "`string | HTMLElement`",
+    "description": "弹出框的挂载容器, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#tooltip-props)"
+  },
+  "cedar-tooltip/popup-visible-change": {
+    "type": "event",
+    "description": "文字气泡显示状态改变时触发\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#tooltip-events)"
+  },
+  "cedar-`<transfer>`/change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<transfer>`-events)"
+  },
+  "cedar-`<transfer>`/select": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<transfer>`-events)"
+  },
+  "cedar-`<transfer>`/search": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<transfer>`-events)"
+  },
+  "cedar-`<tree>`/select": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tree>`-events)"
+  },
+  "cedar-`<tree>`/check": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tree>`-events)"
+  },
+  "cedar-`<tree>`/expand": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tree>`-events)"
+  },
+  "cedar-`<tree>`/drag-start": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tree>`-events)"
+  },
+  "cedar-`<tree>`/drag-end": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tree>`-events)"
+  },
+  "cedar-`<tree>`/drag-over": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tree>`-events)"
+  },
+  "cedar-`<tree>`/drag-leave": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tree>`-events)"
+  },
+  "cedar-`<tree>`/drop": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<tree>`-events)"
+  },
+  "cedar-tree-select/type": {
+    "type": "string",
+    "description": "参数类型\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#treeselect-props)"
+  },
+  "cedar-tree-select/click": {
+    "type": "event",
+    "description": "点击触发的事件\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#treeselect-events)"
+  },
+  "cedar-trigger/type": {
+    "type": "string",
+    "description": "参数类型\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#trigger-props)"
+  },
+  "cedar-trigger/click": {
+    "type": "event",
+    "description": "点击触发的事件\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#trigger-events)"
+  },
+  "cedar-upload/file-list **(v-model)**": {
+    "type": "`FileItem[]`",
+    "description": "文件列表, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-props)"
+  },
+  "cedar-upload/default-file-list": {
+    "type": "`FileItem[]`",
+    "description": "默认的文件列表（非受控状态）, default: `[]`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-props)"
+  },
+  "cedar-upload/accept": {
+    "type": "`string`",
+    "description": "接收的上传文件类型，具体参考 [HTML 标准](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#htmlattrdefaccept '_blank'), default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-props)"
+  },
+  "cedar-upload/action": {
+    "type": "`string`",
+    "description": "上传的 URL, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-props)"
+  },
+  "cedar-upload/disabled": {
+    "type": "`boolean`",
+    "description": "是否禁用, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-props)"
+  },
+  "cedar-upload/multiple": {
+    "type": "`boolean`",
+    "description": "是否支持多文件上传, default: `false` <br>若`limit=1`则固定为false.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-props)"
+  },
+  "cedar-upload/directory": {
+    "type": "`boolean`",
+    "description": "是否支持文件夹上传（需要浏览器支持）, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-props)"
+  },
+  "cedar-upload/draggable": {
+    "type": "`boolean`",
+    "description": "是否支持拖拽上传, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-props)"
+  },
+  "cedar-upload/tip": {
+    "type": "`string`",
+    "description": "提示文字, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-props)"
+  },
+  "cedar-upload/headers": {
+    "type": "`Record<string, string>`",
+    "description": "上传请求附加的头信息, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-props)"
+  },
+  "cedar-upload/data": {
+    "type": "`Record<string, string | Blob>| ((fileItem: FileItem) => Record<string, string | Blob>)`",
+    "description": "上传请求附加的数据, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-props)"
+  },
+  "cedar-upload/name": {
+    "type": "`string | ((fileItem: FileItem) => string)`",
+    "description": "上传的文件名, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-props)"
+  },
+  "cedar-upload/with-credentials": {
+    "type": "`boolean`",
+    "description": "上传请求是否携带 cookie, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-props)"
+  },
+  "cedar-upload/custom-request": {
+    "type": "`(option: RequestOption) => UploadRequest`",
+    "description": "自定义上传行为, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-props)"
+  },
+  "cedar-upload/limit": {
+    "type": "`number`",
+    "description": "限制上传文件的数量。`0`表示不限制, default: `0`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-props)"
+  },
+  "cedar-upload/auto-upload": {
+    "type": "`boolean`",
+    "description": "是否自动上传文件, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-props)"
+  },
+  "cedar-upload/show-file-list": {
+    "type": "`boolean`",
+    "description": "是否显示文件列表, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-props)"
+  },
+  "cedar-upload/show-remove-button": {
+    "type": "`boolean`",
+    "description": "是否显示删除按钮, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-props)"
+  },
+  "cedar-upload/show-retry-button": {
+    "type": "`boolean`",
+    "description": "是否显示重试按钮, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-props)"
+  },
+  "cedar-upload/show-cancel-button": {
+    "type": "`boolean`",
+    "description": "是否显示取消按钮, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-props)"
+  },
+  "cedar-upload/show-upload-button": {
+    "type": "`boolean | { showOnExceedLimit: boolean }`",
+    "description": "是否显示上传按钮, default: `true` <br>若开启了 `draggable` 则默认为 `{ showOnExceedLimit: true }`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-props)"
+  },
+  "cedar-upload/show-preview-button": {
+    "type": "`boolean`",
+    "description": "照片墙是否显示预览按钮, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-props)"
+  },
+  "cedar-upload/download": {
+    "type": "`boolean`",
+    "description": "是否在 `<a>` 链接上添加 download 属性, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-props)"
+  },
+  "cedar-upload/show-link": {
+    "type": "`boolean`",
+    "description": "在列表模式下，如果上传的文件存在 URL 则展示链接。如果关闭仅展示文字并且点击可以触发 `preview` 事件。, default: `true`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-props)"
+  },
+  "cedar-upload/image-loading": {
+    "type": "`'eager' | 'lazy'`",
+    "description": "`<img>` 的原生 HTML 属性，需要浏览器支持, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-props)"
+  },
+  "cedar-upload/list-type": {
+    "type": "`'text' | 'picture' | 'picture-card'`",
+    "options": [
+      "picture"
+    ],
+    "description": "图片列表类型, default: `'text'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-props)"
+  },
+  "cedar-upload/response-url-key": {
+    "type": "`string | ((fileItem: FileItem) => string)`",
+    "description": "Response 中获取图片 URL 的 key，开启后会用上传的图片替换预加载的图片, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-props)"
+  },
+  "cedar-upload/custom-icon": {
+    "type": "`CustomIcon`",
+    "description": "自定义图标, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-props)"
+  },
+  "cedar-upload/image-preview": {
+    "type": "`boolean`",
+    "description": "是否使用 ImagePreview 组件进行预览, default: `false`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-props)"
+  },
+  "cedar-upload/on-before-upload": {
+    "type": "`(file: File) => boolean | Promise<boolean | File>`",
+    "description": "上传文件前触发, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-props)"
+  },
+  "cedar-upload/on-before-remove": {
+    "type": "`(fileItem: FileItem) => Promise<boolean>`",
+    "description": "移除文件前触发, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-props)"
+  },
+  "cedar-upload/on-button-click": {
+    "type": "`(event: Event) => Promise<FileList> | void`",
+    "description": "点击上传按钮触发（如果返回 Promise 则会关闭默认 input 上传）, default: `-`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-props)"
+  },
+  "cedar-upload/progress-mode": {
+    "type": "`'loading' | 'progress'`",
+    "description": "上传进度模式, default: `'loading'`.\n\n[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-props)"
+  },
+  "cedar-upload/exceed-limit": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-events)"
+  },
+  "cedar-upload/change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-events)"
+  },
+  "cedar-upload/progress": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-events)"
+  },
+  "cedar-upload/preview": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-events)"
+  },
+  "cedar-upload/success": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-events)"
+  },
+  "cedar-upload/error": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#upload-events)"
+  },
+  "cedar-`<verification-code>`/change": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<verification-code>`-events)"
+  },
+  "cedar-`<verification-code>`/finish": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<verification-code>`-events)"
+  },
+  "cedar-`<verification-code>`/input": {
+    "type": "event",
+    "description": "[Docs](https://github.com/bfehub/vlib-starter/components/Users/#`<verification-code>`-events)"
+  }
+}

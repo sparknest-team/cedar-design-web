@@ -1,0 +1,9 @@
+// Vitest Snapshot v1
+
+exports[`Textarea > render 1`] = `
+"<div class=\\"arco-textarea-wrapper\\">
+  <!--v-if--><textarea class=\\"arco-textarea\\"></textarea>
+  <!--v-if-->
+  <!--v-if-->
+</div>"
+`;

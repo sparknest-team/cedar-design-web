@@ -1,0 +1,99 @@
+@import './token.less';
+
+.c-input-group {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  width: 100%;
+
+  .c-input-group-label {
+    border-radius: var(~'--c-input-border-radius');
+    position: relative;
+    user-select: none;
+    -webkit-user-select: none;
+    box-sizing: border-box;
+    padding: 0 var(~'--c-input-padding-x');
+    display: inline-block;
+    background-color: var(--c-input-color-bg);
+    color: var(--c-input-group-label-text-color);
+    font-size: var(~'--c-input-font-size');
+    flex-shrink: 0;
+    white-space: nowrap;
+    .c-input-group-label__border {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      border-radius: inherit;
+      border: 1px solid var(~'--c-color-outline');
+      transition: border-color 0s ease 0s;
+      opacity: 0;
+    }
+  }
+
+  // 定义可组合的输入类组件选择器
+  @input-components: ~'.c-input, .c-input-tag, .c-select-single, .c-select-multiple';
+  @input-components-border: ~'.c-input__border, .c-input-tag__border, .c-select-single__border, .c-select-multiple__border';
+
+  // 非首个元素：移除左侧圆角，添加负边距以重叠边框
+  & > *:not(:first-child) {
+    position: relative;
+    box-sizing: border-box;
+    margin-left: -1px !important;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+  }
+  & > *:not(:first-child) {
+    &,
+    @{input-components} {
+      border-top-left-radius: 0 !important;
+      border-bottom-left-radius: 0 !important;
+    }
+  }
+
+  // 非末尾元素：移除右侧圆角
+  & > *:not(:last-child) {
+    &,
+    @{input-components} {
+      border-top-right-radius: 0 !important;
+      border-bottom-right-radius: 0 !important;
+    }
+  }
+
+  &--variant-default {
+    .c-input-group-label {
+      background-color: var(~'--c-input-color-bg');
+      color: var(~'--c-input-group-label-text-color');
+      font-size: var(~'--c-input-font-size');
+    }
+    & > *:not(:first-child) {
+      @{input-components-border} {
+        opacity: 1;
+        border-width: 0;
+        border-inline-start-width: 1px;
+      }
+    }
+  }
+  &--variant-outline {
+    .c-input-group-label .c-input-group-label__border {
+      opacity: 1;
+    }
+  }
+
+  &--disabled .c-input-group-label {
+    cursor: not-allowed;
+  }
+
+  .size(@size) {
+    &--size-@{size} .c-input-group-label {
+      height: var(~'--c-input-size-@{size}-height');
+      line-height: var(~'--c-input-size-@{size}-height');
+    }
+  }
+
+  .size(xs);
+  .size(sm);
+  .size(md);
+  .size(lg);
+}

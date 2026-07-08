@@ -1,0 +1,3 @@
+// Vitest Snapshot v1
+
+exports[`Tag > render 1`] = `"<span class=\\"arco-tag arco-tag-size-medium arco-tag-checked\\"><!--v-if--><!--v-if--><!--v-if--></span>"`;

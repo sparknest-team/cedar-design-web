@@ -1,0 +1,107 @@
+$prefix: 'cedar-select-panel';
+
+.#{$prefix}__container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  &:not(.has-selected) {
+    overflow: unset;
+  }
+
+  .#{$prefix}__selected-value-container {
+    width: 100%;
+    padding: 0 16px;
+    .#{$prefix}__selected-value-list {
+      width: 100%;
+      height: 32px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      &::-webkit-scrollbar-track {
+        width: 0px;
+      }
+      &::-webkit-scrollbar-track-piece {
+        width: 0px; /* 设置滚动条的宽度 */
+      }
+
+      &::-webkit-scrollbar-thumb {
+        width: 0px;
+      }
+    }
+  }
+  .cedar-checkbox-label {
+    overflow: hidden;
+    display: flex;
+  }
+
+  .#{$prefix}__search {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 16px;
+    z-index: 1;
+    position: sticky;
+    top: 0;
+    background-color: var(--bg-0);
+  }
+
+  .#{$prefix}__group-list {
+    overflow-y: auto;
+    padding: 0 0 16px;
+    width: 100%;
+    box-sizing: border-box;
+    border-right: 2.5px solid transparent;
+
+    &::-webkit-scrollbar-track-piece {
+      width: 8px; /* 设置滚动条的宽度 */
+      background: transparent; /* 滚动条的背景色 */
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: rgb(var(--gray-2)); /* 滑块的颜色 */
+      border-radius: 8px; /* 滑块的圆角 */
+    }
+
+    .#{$prefix}__group-item {
+      .#{$prefix}__group-name {
+        padding: 0 16px;
+        height: 36px;
+        line-height: 36px;
+        font-size: 14px;
+        font-weight: 400;
+        text-align: left;
+        color: #69718c;
+      }
+      .#{$prefix}__checkbox-item-tooltip {
+        margin-left: 4px;
+      }
+    }
+    .#{$prefix}__checkbox-list {
+      padding: 0 16px;
+      width: 100%;
+      height: 36px;
+      line-height: 36px;
+      box-sizing: border-box;
+
+      &:has(.#{$prefix}__checkbox-item):hover {
+        background: var(--color-fill-1);
+      }
+      .#{$prefix}__checkbox-item {
+        width: 100%;
+        .#{$prefix}__checkbox-item-title {
+          overflow: hidden;
+          flex: 1;
+          margin-left: 8px;
+
+          &.disabled {
+            color: var(--color-text-4);
+          }
+        }
+      }
+    }
+  }
+}

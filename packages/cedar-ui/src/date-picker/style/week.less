@@ -1,0 +1,67 @@
+@import './token.less';
+
+.c-panel-week {
+  box-sizing: border-box;
+
+  &-wrapper {
+    display: flex;
+  }
+
+  &-inner {
+    width: @picker-panel-week-width;
+  }
+
+  &-inner .c-picker-body {
+    padding-top: 0;
+  }
+
+  .c-picker-row-week {
+    cursor: pointer;
+
+    .c-picker-date-value {
+      width: 100%;
+      border-radius: 0;
+    }
+  }
+
+  .c-picker-cell {
+    .c-picker-date {
+      border-radius: 0;
+    }
+
+    &:nth-child(2) {
+      .c-picker-date {
+        padding-left: 4px;
+        border-top-left-radius: @picker-panel-cell-boundary-border-radius;
+        border-bottom-left-radius: @picker-panel-cell-boundary-border-radius;
+
+        .c-picker-date-value {
+          border-top-left-radius: @picker-panel-cell-border-radius;
+          border-bottom-left-radius: @picker-panel-cell-border-radius;
+        }
+      }
+    }
+
+    &:nth-child(8) {
+      .c-picker-date {
+        padding-right: 4px;
+        border-top-right-radius: @picker-panel-cell-boundary-border-radius;
+        border-bottom-right-radius: @picker-panel-cell-boundary-border-radius;
+
+        .c-picker-date-value {
+          border-top-right-radius: @picker-panel-cell-border-radius;
+          border-bottom-right-radius: @picker-panel-cell-border-radius;
+        }
+      }
+    }
+  }
+
+  .c-picker-row-week:hover
+    .c-picker-cell:not(.c-picker-cell-week):not(.c-picker-cell-selected):not(
+      .c-picker-cell-range-start
+    ):not(.c-picker-cell-range-end) {
+    .c-picker-date-value {
+      background-color: @picker-panel-color-bg-cell_hover;
+    }
+  }
+}

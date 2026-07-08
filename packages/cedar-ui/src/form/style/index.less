@@ -1,0 +1,250 @@
+@import './token.less';
+@import './status.less';
+
+.c-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  &-layout-inline {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  &-layout-inline &-item {
+    width: auto;
+    margin-bottom: @form-inline-margin-item-bottom;
+  }
+
+  &-auto-label-width &-item-label-col {
+    > .c-form-item-label {
+      white-space: nowrap;
+    }
+  }
+
+  &-item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    margin-bottom: @form-size-md-margin-item-bottom;
+
+    &-layout-vertical {
+      display: block;
+
+      > .c-form-item-label-col {
+        justify-content: flex-start;
+        margin-bottom: @form-vertical-margin-label-bottom;
+        padding: 0;
+        line-height: var(~'--c-line-height');
+        white-space: normal;
+      }
+    }
+
+    &-layout-inline {
+      margin-right: @form-inline-margin-item-right;
+    }
+
+    &-label-col {
+      padding-right: @form-margin-label-right;
+    }
+
+    &&-error,
+    &&-has-help {
+      margin-bottom: 0;
+    }
+  }
+
+  // 用处不明
+  &-item-wrapper-flex.c-col {
+    flex: 1;
+  }
+
+  /** size style **/
+  &-size-xs &-item-label-col {
+    line-height: @size-xs;
+
+    > .c-form-item-label {
+      font-size: @form-size-xs-font-label-size;
+    }
+  }
+
+  &-size-xs &-item-content {
+    min-height: @size-xs;
+  }
+
+  &-size-xs &-item-wrapper-col {
+    min-height: @size-xs;
+  }
+
+  &-size-sm &-item-label-col {
+    line-height: @size-sm;
+
+    > .c-form-item-label {
+      font-size: @form-size-sm-font-label-size;
+    }
+  }
+
+  &-size-sm &-item-content {
+    min-height: @size-sm;
+  }
+
+  &-size-sm &-item-wrapper-col {
+    min-height: @size-sm;
+  }
+
+  &-size-lg &-item-label-col {
+    line-height: @size-lg;
+
+    > .c-form-item-label {
+      font-size: @form-size-lg-font-label-size;
+    }
+  }
+
+  &-size-lg &-item-content {
+    min-height: @size-lg;
+  }
+
+  &-size-lg &-item-wrapper-col {
+    min-height: @size-lg;
+  }
+
+  &-item-extra {
+    margin-top: @form-margin-extra-top;
+    color: @form-color-extra-text;
+    font-size: @form-font-extra-text-size;
+  }
+
+  &-item-message {
+    min-height: @form-size-md-margin-item-bottom;
+    color: @form-color-tip-text_error;
+    font-size: @form-font-error-text-size;
+    line-height: @form-size-md-margin-item-bottom;
+
+    &-help {
+      color: @form-color-extra-text;
+    }
+
+    + .c-form-item-extra {
+      margin-top: 0;
+      margin-bottom: @form-margin-extra-bottom;
+    }
+  }
+
+  &-item-label-col {
+    display: flex;
+    flex-shrink: 0;
+    justify-content: flex-end;
+    line-height: @size-md;
+    white-space: nowrap;
+
+    &-left {
+      justify-content: flex-start;
+    }
+
+    > .c-form-item-label {
+      max-width: 100%;
+      color: @form-color-text-label;
+      font-size: @form-size-md-font-label-size;
+      white-space: normal;
+    }
+
+    &&-flex {
+      box-sizing: content-box;
+    }
+
+    // 用处不明
+    //&-flex.c-col {
+    //  flex: 0;
+    //
+    //  > label {
+    //    white-space: nowrap;
+    //  }
+    //}
+  }
+
+  &-item-wrapper-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    min-width: 0;
+    min-height: @size-md;
+  }
+
+  &-item-content {
+    flex: 1;
+    max-width: 100%;
+    min-height: @size-md;
+
+    &-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      width: 100%;
+    }
+
+    &-flex {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+  }
+
+  /** slider display: block **/
+
+  .c-slider {
+    display: block;
+  }
+}
+
+.c-form-item-label {
+  &-required-symbol {
+    color: @color-danger-6;
+    font-size: @font-size-body-1;
+    line-height: 1;
+
+    svg {
+      display: inline-block;
+      transform: scale(0.5);
+    }
+  }
+
+  &-tooltip {
+    margin-left: @form-margin-tooltip-left;
+    color: @form-color-text-tooltip;
+  }
+}
+
+.form-blink-enter-from,
+.form-blink-appear-from {
+  opacity: 0;
+}
+
+.form-blink-enter-to,
+.form-blink-appear-to {
+  opacity: 1;
+}
+
+.form-blink-enter-active,
+.form-blink-appear-active {
+  transition: opacity @transition-duration-3 @transition-timing-function-linear;
+  animation: ~'c-form-blink' @transition-duration-5 @transition-timing-function-linear;
+}
+
+.form-blink-enter-done {
+}
+
+@keyframes ~ 'c-form-blink' {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.2;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}

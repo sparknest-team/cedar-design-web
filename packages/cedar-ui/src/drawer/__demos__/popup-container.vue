@@ -1,0 +1,40 @@
+<template>
+  <div>
+    <div
+      id="parentNode"
+      style="
+        width: 100%;
+        height: 300px;
+        background-color: var(--fill-0);
+        position: relative;
+        overflow: hidden;
+        line-height: 300px;
+        text-align: center;
+      "
+    >
+      <c-button type="primary" @click="handleClick">Open Drawer</c-button>
+    </div>
+  </div>
+  <c-drawer popup-container="#parentNode" :visible="visible" @ok="handleOk" @cancel="handleCancel">
+    <template #title>Title</template>
+    <div>
+      You can customize modal body text by the current situation. This modal will be closed immediately once you press
+      the OK button.
+    </div>
+  </c-drawer>
+</template>
+
+<script lang="ts" setup>
+import { ref } from 'vue'
+const visible = ref(false)
+
+const handleClick = () => {
+  visible.value = true
+}
+const handleOk = () => {
+  visible.value = false
+}
+const handleCancel = () => {
+  visible.value = false
+}
+</script>
