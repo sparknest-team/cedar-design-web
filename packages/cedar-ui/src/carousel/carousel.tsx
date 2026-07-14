@@ -1,333 +1,544 @@
 import type { PropType } from 'vue'
-import { defineComponent, computed, toRefs, ref, watchEffect, onBeforeUnmount, provide, reactive } from 'vue'
-import { getPrefixCls, createNamespace } from '../_utils/global-config'
-import CarouselIndicator from './carousel-indicator.vue'
-import CarouselArrow from './carousel-arrow.vue'
+import {
+  defineComponent, computed, ref, watch, onMounted, onBeforeUnmount, provide, nextTick, onActivated,
+} from 'vue'
+import { getPrefixCls } from '../_utils/global-config'
 import { carouselInjectionKey } from './context'
-import { isNumber, isObject } from '../_utils/is'
+import { isObject } from '../_utils/is'
 import type {
-  CarouselArrowType,
-  CarouselAutoPlayConfig,
-  CarouselIndicatorPosition,
-  CarouselIndicatorType,
-  CarouselTriggerEvent,
+  CarouselArrowType, CarouselAutoPlayConfig, CarouselIndicatorPosition,
+  CarouselIndicatorType, CarouselTriggerEvent,
 } from './types'
 import { Direction } from '../_utils/constant'
 import { useChildrenComponents } from '../_hooks/use-children-components'
+import { useResizeObserver } from '../_hooks/use-resize-observer'
+import IconLeft from '../icon/icon-left'
+import IconRight from '../icon/icon-right'
+import IconUp from '../icon/icon-up'
+import IconDown from '../icon/icon-down'
 
-const DEFAULT_AUTO_PLAY = {
-  interval: 3000,
-  hoverToPause: true,
+function toSizeUnit(v: unknown): string | undefined {
+  if (v == null) return undefined
+  if (typeof v === 'number' || /^\d+(\.\d+)?$/.test(String(v))) return `${v}px`
+  return String(v)
 }
 
-function getValidIndex(i: number, length: number): number {
-  const indexNumber = +i
-  return typeof indexNumber === 'number' && !Number.isNaN(indexNumber) ? (indexNumber + length) % length : i
+function clamp(v: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, v))
 }
-
-
-const { name } = createNamespace('carousel')
 
 export default defineComponent({
-  name,
+  name: 'Carousel',
   props: {
-    /**
-     * @zh 当前展示索引
-     * @en The index of current slide which starts from 1
-     * @vModel
-     */
-    current: {
-      type: Number,
-    },
-    /**
-     * @zh 当前展示索引
-     * @en Default index of current slide
-     */
-    defaultCurrent: {
-      type: Number,
-      default: 1,
-    },
-    /**
-     * @zh 是否自动循环展示，或者传入 `{ interval: 自动切换的时间间隔(默认: 3000), hoverToPause: 鼠标悬浮时是否暂停自动切换(默认: true) }` 进行高级配置
-     * @en* Whether to automatically loop the display, or pass in `{ interval: the time interval for switching (default: 3000),
-     * hoverToPause: whether to pause switching while hover (default: true) }` for configuration (object is supported from `2.14.0`)
-     */
-    autoPlay: {
-      type: [Boolean, Object] as PropType<boolean | CarouselAutoPlayConfig>,
-      default: false,
-    },
-    /**
-     * @zh 幻灯片移动速率(ms)
-     * @en The duration of the slide movement(ms)
-     */
-    moveSpeed: {
-      type: Number,
-      default: 500,
-    },
-    /**
-     * @zh 切换动画
-     * @en The animation of the slide movement
-     */
-    animationName: {
-      type: String as PropType<'slide' | 'fade' | 'card'>,
-      default: 'slide',
-    },
-    /**
-     * @zh 幻灯片切换触发方式, click/hover 指示器
-     * @en How to trigger the slide switch, click/hover the indicator
-     * @values 'click', 'hover'
-     */
-    trigger: {
-      type: String as PropType<CarouselTriggerEvent>,
-      default: 'click',
-    },
-    /**
-     * @zh 幻灯片移动方向
-     * @en The direction of the slide movement
-     * @values 'horizontal', 'vertical'
-     */
-    direction: {
-      type: String as PropType<Direction>,
-      default: 'horizontal',
-    },
-    /**
-     * @zh 切换箭头显示时机
-     * @en When to show the arrow used to switch
-     * @values 'always', 'hover', 'never'
-     */
-    showArrow: {
-      type: String as PropType<CarouselArrowType>,
-      default: 'always',
-    },
-    /**
-     * @zh 切换箭头样式
-     * @en The additional css class to arrow used to switch
-     */
-    arrowClass: {
-      type: String,
-      default: '',
-    },
-    /**
-     * @zh 指示器类型，可为小方块和小圆点或不显示
-     * @en Type of indicator
-     * @values 'line', 'dot', 'slider', 'never'
-     */
-    indicatorType: {
-      type: String as PropType<CarouselIndicatorType>,
-      default: 'dot',
-    },
-    /**
-     * @zh 指示器位置
-     * @en Position of indication
-     * @values 'bottom', 'top', 'left', 'right', 'outer'
-     */
-    indicatorPosition: {
-      type: String as PropType<CarouselIndicatorPosition>,
-      default: 'bottom',
-    },
-    /**
-     * @zh 指示器的样式
-     * @en The additional css class to indicator
-     */
-    indicatorClass: {
-      type: String,
-      default: '',
-    },
-    /**
-     * @zh 过渡速度曲线, 默认匀速 [transition-timing-function](https://developer.mozilla.org/zh-CN/docs/Web/CSS/transition-timing-function)
-     * @en How intermediate values are calculated for CSS properties being affected by a transition effect.
-     * [transition-timing-function](https://developer.mozilla.org/zh-CN/docs/Web/CSS/transition-timing-function)
-     */
-    transitionTimingFunction: {
-      type: String,
-      default: 'cubic-bezier(0.34, 0.69, 0.1, 1)',
-    },
+    current: Number,
+    defaultCurrent: { type: Number, default: 0 },
+    loop: { type: Boolean, default: true },
+    autoPlay: { type: [Boolean, Object] as PropType<boolean | CarouselAutoPlayConfig>, default: false },
+    moveSpeed: { type: Number, default: 500 },
+    animationName: { type: String as PropType<'slide' | 'fade' | 'card'>, default: 'slide' },
+    effect: { type: String as PropType<'slide' | 'fade' | 'card'>, default: 'slide' },
+    trigger: { type: String as PropType<CarouselTriggerEvent>, default: 'click' },
+    direction: { type: String as PropType<Direction>, default: 'horizontal' },
+    vertical: { type: Boolean, default: false },
+    showArrow: { type: String as PropType<CarouselArrowType>, default: 'always' },
+    navigation: { type: [Boolean, String] as PropType<boolean | CarouselArrowType>, default: false },
+    arrowClass: String,
+    indicator: { type: Boolean, default: true },
+    indicatorType: { type: String as PropType<CarouselIndicatorType>, default: 'dot' },
+    indicatorPosition: { type: String as PropType<CarouselIndicatorPosition>, default: 'bottom' },
+    indicatorClass: String,
+    indicatorColor: String,
+    height: String,
+    transitionTimingFunction: { type: String, default: 'cubic-bezier(0.34, 0.69, 0.1, 1)' },
+    touchable: { type: Boolean, default: true },
+    draggable: { type: Boolean, default: false },
+    mousewheel: { type: Boolean, default: false },
+    keyboard: { type: Boolean, default: false },
+    slidesPerView: { type: [String, Number] as PropType<number | 'auto'>, default: 1 },
+    spaceBetween: { type: [String, Number], default: 0 },
+    centeredSlides: { type: Boolean, default: false },
   },
-  emits: {
-    'update:current': (index: number) => true,
-    /**
-     * @zh 幻灯片发生切换时的回调函数
-     * @en Callback when slide changes
-     * @param {number} index
-     * @param {number} prevIndex
-     * @param {boolean} isManual
-     */
-    change: (index: number, prevIndex: number, isManual: boolean) => true,
-  },
-  setup(props, { emit, slots }) {
-    const { current, animationName, moveSpeed, transitionTimingFunction } = toRefs(props)
+  emits: ['update:current', 'change'],
+  setup(props, { emit, expose, slots }) {
     const prefixCls = getPrefixCls('carousel')
-
+    const elRef = ref<HTMLElement>()
+    const size = ref(0)
+    const trackSize = ref(0)
+    const trackTranslate = ref(0)
+    const lockDuration = ref(false)
+    const index = ref(0)
+    const prevIndex = ref(-1)
+    const hovering = ref(false)
     const isPause = ref(false)
-    const previousIndex = ref<number>()
-    const slideDirection = ref<'positive' | 'negative'>()
-    const computedAutoPlay = computed<CarouselAutoPlayConfig>(() => {
+    const { children, components } = useChildrenComponents('CarouselItem')
+    const length = computed(() => components.value.length)
+    const vertical = computed(() => props.vertical || props.direction === 'vertical')
+    const resolvedEffect = computed(() => props.effect || props.animationName)
+    const showArrowComputed = computed(() => {
+      if (props.showArrow === 'never') return false
+      if (props.navigation === true || props.navigation === 'always') return true
+      if (props.navigation === 'hover') return hovering.value
+      return props.showArrow === 'always' || (props.showArrow === 'hover' && hovering.value)
+    })
+
+    const slideSize = computed(() => {
+      if (props.slidesPerView === 'auto') return size.value
+      return size.value / Math.max(1, Number(props.slidesPerView))
+    })
+
+    // Item translate tracking
+    const itemTransforms = new Map<number, (v: number) => void>()
+    function registerItem(uid: number, setTranslate: (v: number) => void) {
+      itemTransforms.set(uid, setTranslate)
+    }
+    function unregisterItem(uid: number) {
+      itemTransforms.delete(uid)
+    }
+    function resetItemTransforms() {
+      itemTransforms.forEach((fn) => fn(0))
+    }
+    function findItemTransform(idx: number) {
+      const uid = components.value[idx]
+      if (uid === undefined) return undefined
+      return itemTransforms.get(uid)
+    }
+
+    // Provide for CarouselItem
+    provide(carouselInjectionKey, { items: components, size, vertical, registerItem, unregisterItem })
+
+    let initialized = false
+    let timer = -1
+
+    function clampIndex(i: number) {
+      if (!length.value) return 0
+      if (props.loop) {
+        if (i < 0) return length.value + i
+        if (i >= length.value) return i - length.value
+        return i
+      }
+      return clamp(i, 0, length.value - 1)
+    }
+
+    function initIndex() {
+      if (initialized) return
+      const start = props.current !== undefined ? props.current : props.defaultCurrent
+      index.value = clampIndex(start)
+      initialized = true
+    }
+
+    function dispatchCarouselItems() {
+      if (!props.loop || length.value <= 1) return
+      const sv = props.slidesPerView === 'auto' ? size.value : slideSize.value
+      const sp = Number(props.spaceBetween) || 0
+      if (trackTranslate.value >= 0) {
+        findItemTransform(length.value - 1)?.(-(trackSize.value))
+      }
+      if (trackTranslate.value <= -(trackSize.value - size.value)) {
+        findItemTransform(0)?.(trackSize.value)
+      }
+      if (trackTranslate.value > -(trackSize.value - size.value) && trackTranslate.value < 0) {
+        findItemTransform(length.value - 1)?.(0)
+        findItemTransform(0)?.(0)
+      }
+    }
+
+    async function fixPosition() {
+      const sv = props.slidesPerView === 'auto' ? size.value : slideSize.value
+      const sp = Number(props.spaceBetween) || 0
+      const overLeft = trackTranslate.value >= sv + sp
+      const overRight = trackTranslate.value <= -trackSize.value
+      lockDuration.value = true
+      if (overLeft || overRight) {
+        trackTranslate.value = overRight ? 0 : -(trackSize.value - size.value)
+        findItemTransform(0)?.(0)
+        findItemTransform(length.value - 1)?.(0)
+      }
+      await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)))
+      lockDuration.value = false
+    }
+
+    async function slideTo(targetIdx: number, isManual: boolean) {
+      if (length.value <= 1) return
+      const prev = index.value
+      const next = clampIndex(targetIdx)
+      if (next === prev) return
+      prevIndex.value = prev
+      index.value = next
+      const sv = props.slidesPerView === 'auto' ? size.value : slideSize.value
+      const sp = Number(props.spaceBetween) || 0
+
+      // If track is in abnormal position (from previous loop animation), snap it back first
+      if (trackTranslate.value <= -trackSize.value || trackTranslate.value >= sv + sp) {
+        lockDuration.value = true
+        trackTranslate.value = -(prev * (sv + sp))
+        resetItemTransforms()
+        await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)))
+        lockDuration.value = false
+      }
+
+      // Seamless loop: offset item to opposite end for smooth transition
+      if (prev === length.value - 1 && next === 0 && props.loop) {
+        // Forward wrap: last → first
+        resetItemTransforms()
+        findItemTransform(0)?.(trackSize.value)
+        trackTranslate.value = length.value * -(sv + sp)
+      } else if (prev === 0 && next === length.value - 1 && props.loop) {
+        // Backward wrap: first → last — offset last item to left for seamless loop
+        resetItemTransforms()
+        findItemTransform(length.value - 1)?.(-trackSize.value)
+        trackTranslate.value = sv + sp
+      } else {
+        resetItemTransforms()
+        trackTranslate.value = -(next * (sv + sp))
+      }
+      emit('update:current', next)
+      emit('change', next, prev, isManual)
+    }
+
+    async function next() { await slideTo(index.value + 1, true) }
+    async function prev() { await slideTo(index.value - 1, true) }
+    async function to(idx: number) { await slideTo(idx, true) }
+
+    // Autoplay
+    const autoPlayConfig = computed(() => {
+      if (!props.autoPlay) return { interval: 0, hoverToPause: false }
       if (isObject(props.autoPlay)) {
         return {
-          ...DEFAULT_AUTO_PLAY,
-          ...props.autoPlay,
+          interval: Number(props.autoPlay.interval) || 3000,
+          hoverToPause: props.autoPlay.hoverToPause ?? true,
         }
       }
-      return props.autoPlay ? DEFAULT_AUTO_PLAY : {}
-    })
-    let intervalTimer = 0
-    let animationTimer = 0
-    const { children, components } = useChildrenComponents('CarouselItem')
-    const _index = ref(props.defaultCurrent - 1)
-
-    const mergedIndexes = computed(() => {
-      const childrenLength = components.value.length
-      const mergedIndex = isNumber(current.value) ? getValidIndex(current.value - 1, childrenLength) : _index.value
-      const prevIndex = getValidIndex(mergedIndex - 1, childrenLength)
-      const nextIndex = getValidIndex(mergedIndex + 1, childrenLength)
-      return {
-        mergedIndex,
-        mergedPrevIndex: prevIndex,
-        mergedNextIndex: nextIndex,
-      }
+      return { interval: 3000, hoverToPause: true }
     })
 
-    const carouselContext = reactive({
-      items: components,
-      slideTo,
-      mergedIndexes,
-      previousIndex,
-      animationName,
-      slideDirection,
-      transitionTimingFunction,
-      moveSpeed,
-    })
-    provide(carouselInjectionKey, carouselContext)
-
-    const clearTimer = () => {
-      if (intervalTimer) {
-        window.clearInterval(intervalTimer)
-      }
+    function start() {
+      const { interval } = autoPlayConfig.value
+      if (!interval || interval <= 0 || length.value <= 1 || isPause.value) return
+      stop()
+      timer = window.setTimeout(() => {
+        slideTo(index.value + 1, false)
+        start()
+      }, interval)
     }
 
-    watchEffect(() => {
-      const { interval } = computedAutoPlay.value || {}
-      const { mergedNextIndex } = mergedIndexes.value
-      const shouldInterval = components.value?.length > 1 && !isPause.value && Boolean(interval)
-      clearTimer()
-      if (shouldInterval) {
-        intervalTimer = window.setInterval(() => {
-          slideTo({
-            targetIndex: mergedNextIndex,
-          })
-        }, interval)
-      }
+    function stop() {
+      if (timer !== -1) { clearTimeout(timer); timer = -1 }
+    }
+
+    function resize() {
+      if (!elRef.value || !length.value) return
+      lockDuration.value = true
+      size.value = vertical.value ? elRef.value.offsetHeight : elRef.value.offsetWidth
+      const sv = props.slidesPerView === 'auto' ? size.value : slideSize.value
+      const sp = Number(props.spaceBetween) || 0
+      trackSize.value = length.value * (sv + sp) - sp
+      trackTranslate.value = -(index.value * (sv + sp))
+      resetItemTransforms()
+      start()
+      nextTick(() => { lockDuration.value = false })
+    }
+
+    // ResizeObserver
+    const { createResizeObserver, destroyResizeObserver } = useResizeObserver({
+      elementRef: elRef,
+      onResize: () => nextTick(() => resize()),
     })
+
+    // Lifecycle
+    watch(() => length.value, async () => {
+      await nextTick()
+      initIndex()
+      resize()
+    })
+
+    onMounted(() => {
+      initIndex()
+      requestAnimationFrame(() => resize())
+      createResizeObserver()
+      window.addEventListener('keydown', handleKeydown)
+      setupWheelListener()
+    })
+
+    onActivated(resize)
 
     onBeforeUnmount(() => {
-      clearTimer()
+      stop()
+      destroyResizeObserver()
+      window.removeEventListener('keydown', handleKeydown)
+      if (wheelHandler && elRef.value) {
+        elRef.value.removeEventListener('wheel', wheelHandler, wheelEventOptions)
+      }
     })
 
-    function slideTo({
-      targetIndex,
-      isNegative = false,
-      isManual = false,
-    }: {
-      targetIndex: number
-      isNegative?: boolean
-      isManual?: boolean
-    }) {
-      if (!animationTimer && targetIndex !== mergedIndexes.value.mergedIndex) {
-        previousIndex.value = _index.value
-        _index.value = targetIndex
-        slideDirection.value = isNegative ? 'negative' : 'positive'
-        animationTimer = window.setTimeout(() => {
-          animationTimer = 0
-        }, moveSpeed.value)
-        emit('update:current', _index.value + 1)
-        emit('change', _index.value + 1, previousIndex.value + 1, isManual)
+    // Touch state
+    const touchStartX = ref(0)
+    const touchStartY = ref(0)
+    const touchStartTime = ref(0)
+    const touchDeltaX = ref(0)
+    const touchDeltaY = ref(0)
+    const touching = ref(false)
+
+    async function onTouchstart(e: TouchEvent) {
+      if (!props.touchable || length.value <= 1) return
+      touchStartX.value = e.touches[0].clientX
+      touchStartY.value = e.touches[0].clientY
+      touchDeltaX.value = 0
+      touchDeltaY.value = 0
+      touchStartTime.value = Date.now()
+      touching.value = true
+      stop()
+      await fixPosition()
+      lockDuration.value = true
+    }
+
+    function onTouchmove(e: TouchEvent) {
+      if (!props.touchable || length.value <= 1 || !touching.value) return
+      const dx = e.touches[0].clientX - touchStartX.value
+      const dy = e.touches[0].clientY - touchStartY.value
+      touchDeltaX.value = dx
+      touchDeltaY.value = dy
+      const sv = props.slidesPerView === 'auto' ? size.value : slideSize.value
+      const sp = Number(props.spaceBetween) || 0
+      trackTranslate.value = -(index.value * (sv + sp)) + (vertical.value ? dy : dx)
+      dispatchCarouselItems()
+    }
+
+    function onTouchend() {
+      if (!props.touchable || length.value <= 1 || !touching.value) return
+      touching.value = false
+      const dx = touchDeltaX.value
+      const dy = touchDeltaY.value
+      const diff = vertical.value ? dy : dx
+      const sv = props.slidesPerView === 'auto' ? size.value : slideSize.value
+      const sp = Number(props.spaceBetween) || 0
+      const quickSwiping = Date.now() - touchStartTime.value <= 250 && Math.abs(diff) >= 20
+      const targetIdx = quickSwiping
+        ? clampIndex(diff < 0 ? index.value + 1 : index.value - 1)
+        : index.value
+      const prevIdx = index.value
+      index.value = targetIdx
+      lockDuration.value = false
+      if (prevIdx === length.value - 1 && targetIdx === 0 && props.loop) {
+        // Forward wrap: last → first
+        resetItemTransforms()
+        findItemTransform(0)?.(trackSize.value)
+        trackTranslate.value = length.value * -(sv + sp)
+      } else if (prevIdx === 0 && targetIdx === length.value - 1 && props.loop) {
+        // Backward wrap: first → last
+        resetItemTransforms()
+        findItemTransform(length.value - 1)?.(-trackSize.value)
+        trackTranslate.value = sv + sp
+      } else {
+        resetItemTransforms()
+        trackTranslate.value = -(targetIdx * (sv + sp))
+      }
+      if (prevIdx !== index.value) {
+        emit('update:current', index.value)
+        emit('change', index.value, prevIdx, true)
+      }
+      start()
+    }
+
+    // Drag state
+    const isDragging = ref(false)
+    const dragStartX = ref(0)
+    const dragStartY = ref(0)
+
+    async function onMousedown(e: MouseEvent) {
+      if (!props.draggable || props.touchable || length.value <= 1) return
+      isDragging.value = true
+      dragStartX.value = e.clientX
+      dragStartY.value = e.clientY
+      stop()
+      await fixPosition()
+      lockDuration.value = true
+
+      const handleMousemove = (ev: MouseEvent) => {
+        if (!isDragging.value) return
+        const dx = ev.clientX - dragStartX.value
+        const dy = ev.clientY - dragStartY.value
+        const sv = props.slidesPerView === 'auto' ? size.value : slideSize.value
+        const sp = Number(props.spaceBetween) || 0
+        trackTranslate.value = -(index.value * (sv + sp)) + (vertical.value ? dy : dx)
+        dispatchCarouselItems()
+      }
+
+      const handleMouseup = (ev: MouseEvent) => {
+        if (!isDragging.value) return
+        isDragging.value = false
+        document.removeEventListener('mousemove', handleMousemove)
+        document.removeEventListener('mouseup', handleMouseup)
+        const dx = ev.clientX - dragStartX.value
+        const dy = ev.clientY - dragStartY.value
+        const diff = vertical.value ? dy : dx
+        const sv = props.slidesPerView === 'auto' ? size.value : slideSize.value
+        const sp = Number(props.spaceBetween) || 0
+        const quickSwiping = Math.abs(diff) >= 20
+        const targetIdx = quickSwiping
+          ? clampIndex(diff < 0 ? index.value + 1 : index.value - 1)
+          : index.value
+        const prevIdx = index.value
+        index.value = targetIdx
+        lockDuration.value = false
+        if (prevIdx === length.value - 1 && targetIdx === 0 && props.loop) {
+          // Forward wrap: last → first
+          resetItemTransforms()
+          findItemTransform(0)?.(trackSize.value)
+          trackTranslate.value = length.value * -(sv + sp)
+        } else if (prevIdx === 0 && targetIdx === length.value - 1 && props.loop) {
+          // Backward wrap: first → last
+          resetItemTransforms()
+          findItemTransform(length.value - 1)?.(-trackSize.value)
+          trackTranslate.value = sv + sp
+        } else {
+          resetItemTransforms()
+          trackTranslate.value = -(targetIdx * (sv + sp))
+        }
+        if (prevIdx !== index.value) {
+          emit('update:current', index.value)
+          emit('change', index.value, prevIdx, true)
+        }
+        start()
+      }
+
+      document.addEventListener('mousemove', handleMousemove)
+      document.addEventListener('mouseup', handleMouseup)
+    }
+
+    // Keyboard
+    function handleKeydown(e: KeyboardEvent) {
+      if (!props.keyboard || length.value <= 1) return
+      const key = e.key
+      if (props.direction === 'horizontal') {
+        if (key === 'ArrowLeft') slideTo(index.value - 1, true)
+        else if (key === 'ArrowRight') slideTo(index.value + 1, true)
+      } else {
+        if (key === 'ArrowUp') slideTo(index.value - 1, true)
+        else if (key === 'ArrowDown') slideTo(index.value + 1, true)
       }
     }
 
-    const onPreviousClick = () =>
-      slideTo({
-        targetIndex: mergedIndexes.value.mergedPrevIndex,
-        isNegative: true,
-        isManual: true,
-      })
+    // Manual wheel listener (Vue 3 registers wheel as passive by default)
+    let wheelHandler: ((e: WheelEvent) => void) | null = null
 
-    const onNextClick = () =>
-      slideTo({
-        targetIndex: mergedIndexes.value.mergedNextIndex,
-        isManual: true,
-      })
+    const isMousewheelDisabled = computed(() => !props.mousewheel || length.value <= 1)
 
-    const onSelect = (index: number) =>
-      slideTo({
-        targetIndex: index,
-        isNegative: index < mergedIndexes.value.mergedIndex,
-        isManual: true,
-      })
+    // Handle wheel event — calls slideTo for consistent loop behavior
+    function handleWheel(e: WheelEvent) {
+      if (isMousewheelDisabled.value) return
+      const delta = e.deltaY
+      if (Math.abs(delta) < 10) return
+      e.preventDefault()
+      slideTo(index.value + (delta > 0 ? 1 : -1), true)
+    }
 
-    const eventHandlers = computed(() => {
-      return computedAutoPlay.value.hoverToPause
-        ? {
-            onMouseenter: () => {
-              isPause.value = true
-            },
-            onMouseleave: () => {
-              isPause.value = false
-            },
-          }
-        : {}
-    })
+    let wheelEventOptions: AddEventListenerOptions = { passive: false }
 
-    const hasIndicator = computed(() => {
-      return props.indicatorType !== 'never' && components.value.length > 1
-    })
+    function setupWheelListener() {
+      if (wheelHandler && elRef.value) {
+        elRef.value.removeEventListener('wheel', wheelHandler, wheelEventOptions)
+        wheelHandler = null
+      }
+      if (!props.mousewheel || !elRef.value) return
+      wheelHandler = (e: WheelEvent) => {
+        handleWheel(e)
+      }
+      elRef.value.addEventListener('wheel', wheelHandler, wheelEventOptions)
+    }
 
-    const hasArrow = computed(() => {
-      return props.showArrow !== 'never' && components.value.length > 1
-    })
+    // Set up wheel listener when mousewheel prop changes
+    watch(() => props.mousewheel, setupWheelListener)
 
-    const cls = computed(() => {
-      return [prefixCls, `${prefixCls}-indicator-position-${props.indicatorPosition}`]
-    })
+    expose({ next, prev, to, resize })
 
-    const contentCls = computed(() => {
-      return [
-        `${prefixCls}-${props.animationName}`,
-        `${prefixCls}-${props.direction}`,
-        { [`${prefixCls}-negative`]: slideDirection.value === 'negative' },
-      ]
-    })
+    const slotScope = computed(() => ({
+      index: index.value,
+      length: length.value,
+      prev, next, to,
+      hovering: hovering.value,
+    }))
 
-    const indicatorCls = computed(() => {
-      return [`${prefixCls}-indicator-wrapper`, `${prefixCls}-indicator-wrapper-${props.indicatorPosition}`]
-    })
+    const hasIndicator = computed(() =>
+      props.indicator && props.indicatorType !== 'never' && length.value > 1)
 
     return () => {
       children.value = slots.default?.()
 
+      const sv = props.slidesPerView === 'auto' ? size.value : slideSize.value
+      const sp = Number(props.spaceBetween) || 0
+
       return (
-        <div class={cls.value} {...eventHandlers.value}>
-          <div class={contentCls.value}>{children.value}</div>
-          {hasIndicator.value && (
-            <div class={indicatorCls.value}>
-              <CarouselIndicator
-                class={props.indicatorClass}
-                type={props.indicatorType}
-                count={components.value.length}
-                activeIndex={mergedIndexes.value.mergedIndex}
-                position={props.indicatorPosition}
-                trigger={props.trigger}
-                onSelect={onSelect}
-              />
+        <div
+          ref={elRef}
+          class={[
+            prefixCls,
+            `${prefixCls}-indicator-position-${props.indicatorPosition}`,
+          ]}
+          style={props.height ? { height: props.height } : undefined}
+          onMouseenter={() => { hovering.value = true; if (autoPlayConfig.value.hoverToPause) stop() }}
+          onMouseleave={() => { hovering.value = false; if (autoPlayConfig.value.hoverToPause) start() }}
+        >
+          {/* Track */}
+          <div
+            class={[`${prefixCls}-track`, vertical.value ? `${prefixCls}-track-vertical` : '']}
+            style={{
+              width: !vertical.value ? toSizeUnit(trackSize.value) : undefined,
+              height: vertical.value ? toSizeUnit(trackSize.value) : undefined,
+              transform: `translate${vertical.value ? 'Y' : 'X'}(${toSizeUnit(trackTranslate.value)})`,
+              transitionDuration: lockDuration.value ? '0ms' : `${props.moveSpeed}ms`,
+              transitionTimingFunction: props.transitionTimingFunction,
+              gap: props.spaceBetween ? toSizeUnit(props.spaceBetween) : undefined,
+            }}
+            onTouchstart={props.touchable ? onTouchstart : undefined}
+            onTouchmove={props.touchable ? onTouchmove : undefined}
+            onTouchend={props.touchable ? onTouchend : undefined}
+            onMousedown={props.draggable ? onMousedown : undefined}
+          >
+            {children.value}
+          </div>
+
+          {/* Indicator */}
+          {hasIndicator.value && (slots.indicator
+            ? slots.indicator(slotScope.value)
+            : (
+            <div class={`${prefixCls}-indicator-wrapper ${prefixCls}-indicator-wrapper-${props.indicatorPosition}`}>
+              <div class={`${prefixCls}-indicator ${prefixCls}-indicator-${props.indicatorType} ${prefixCls}-indicator-${props.indicatorPosition}`}>
+                {props.indicatorType === 'slider' ? (
+                  <span
+                    class={[`${prefixCls}-indicator-item`, `${prefixCls}-indicator-item-active`]}
+                    style={{ width: `${100 / length.value}%`, left: `${index.value * (100 / length.value)}%` }}
+                  />
+                ) : Array.from({ length: length.value }).map((_, i) => (
+                  <span
+                    key={i}
+                    class={[
+                      `${prefixCls}-indicator-item`,
+                      { [`${prefixCls}-indicator-item-active`]: i === index.value },
+                    ]}
+                    style={props.indicatorColor ? { background: props.indicatorColor } : undefined}
+                    onClick={() => slideTo(i, true)}
+                    onMouseover={props.trigger === 'hover' ? () => slideTo(i, true) : undefined}
+                  />
+                ))}
+              </div>
             </div>
+            )
           )}
-          {hasArrow.value && (
-            <CarouselArrow
-              class={props.arrowClass}
-              direction={props.direction}
-              showArrow={props.showArrow}
-              onPreviousClick={onPreviousClick}
-              onNextClick={onNextClick}
-            />
+
+          {/* Arrows */}
+          {showArrowComputed.value && (
+            <div class={`${prefixCls}-arrow`}>
+              {slots.prev ? slots.prev(slotScope.value) : (
+                <div class={`${prefixCls}-arrow-left`} onClick={prev}>
+                  {vertical.value ? <IconUp /> : <IconLeft />}
+                </div>
+              )}
+              {slots.next ? slots.next(slotScope.value) : (
+                <div class={`${prefixCls}-arrow-right`} onClick={next}>
+                  {vertical.value ? <IconDown /> : <IconRight />}
+                </div>
+              )}
+            </div>
           )}
         </div>
       )

@@ -1,189 +1,43 @@
 @import './token.less';
-@import './slide.less';
+
+.c-carousel-item {
+  flex-shrink: 0;
+  overflow: hidden;
+  &:focus { outline: none; }
+}
 
 .c-carousel {
   position: relative;
+  overflow: hidden;
+  width: 100%;
+  overscroll-behavior: contain;
 
   &-indicator-position-outer {
-    margin-bottom: @carousel-indicator-position * 2 + @carousel-indicator-dot-size;
+    margin-bottom: 30px;
   }
 
-  &-slide,
-  &-card,
-  &-fade {
-    position: relative;
+  &-track {
+    display: flex;
     width: 100%;
     height: 100%;
-    overflow: hidden;
+    transition-property: transform;
 
-    > * {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
+    &-vertical {
+      flex-direction: column;
     }
   }
 
-  &-item-current {
-    z-index: 1;
-  }
-
-  &-slide {
-    > *:not(.c-carousel-item-current) {
-      display: none;
-      visibility: hidden;
-    }
-
-    .item-position(@direction) {
-      .c-carousel-item-slide-out {
-        display: block;
-        animation: ~'c-carousel-slide-@{direction}-out';
-      }
-
-      .c-carousel-item-slide-in {
-        display: block;
-        animation: ~'c-carousel-slide-@{direction}-in';
-      }
-
-      &.c-carousel-negative {
-        .c-carousel-item-slide-out {
-          animation: ~'c-carousel-slide-@{direction}-out-reverse';
-        }
-
-        .c-carousel-item-slide-in {
-          animation: ~'c-carousel-slide-@{direction}-in-reverse';
-        }
-      }
-    }
-
-    &.c-carousel-horizontal {
-      .item-position(x);
-    }
-
-    &.c-carousel-vertical {
-      .item-position(y);
-    }
-  }
-
-  &-card {
-    // Get different depth of field relationships by changing the perspective
-    perspective: 800px;
-
-    > * {
-      left: 50%;
-      transform: translateX(-50%) translateZ(-400px);
-      opacity: 0;
-      animation: ~'c-carousel-card-middle-to-bottom';
-    }
-
-    // prev 右边对齐容器中线
-    .c-carousel-item-prev {
-      transform: translateX(-100%) translateZ(-200px);
-      opacity: 0.4;
-      animation: ~'c-carousel-card-top-to-middle';
-    }
-
-    // next 左边对齐容器中线
-    .c-carousel-item-next {
-      transform: translateX(0%) translateZ(-200px);
-      opacity: 0.4;
-      animation: ~'c-carousel-card-bottom-to-middle';
-    }
-
-    // current 居中
-    .c-carousel-item-current {
-      transform: translateX(-50%) translateZ(0);
-      opacity: 1;
-      animation: ~'c-carousel-card-middle-to-top';
-    }
-
-    &.c-carousel-negative {
-      > * {
-        animation: ~'c-carousel-card-middle-to-bottom-reverse';
-      }
-
-      // prev 右边对齐容器中线
-      .c-carousel-item-prev {
-        animation: ~'c-carousel-card-bottom-to-middle-reverse';
-      }
-
-      // next 左边对齐容器中线
-      .c-carousel-item-next {
-        animation: ~'c-carousel-card-top-to-middle-reverse';
-      }
-
-      // current 居中
-      .c-carousel-item-current {
-        animation: ~'c-carousel-card-middle-to-top-reverse';
-      }
-    }
-  }
-
-  &-fade {
-    > * {
-      left: 50%;
-      transform: translateX(-50%);
-      opacity: 0;
-    }
-
-    .c-carousel-item-current {
-      opacity: 1;
-    }
-  }
-
-  // 指示器样式
+  // Indicator
   &-indicator {
     position: absolute;
     display: flex;
-    margin: 0;
-    padding: 0;
+    align-items: center;
+    gap: @carousel-indicator-gap;
+    z-index: 10;
 
-    &-wrapper {
-      position: absolute;
-      z-index: 2;
-
-      &-top {
-        top: 0;
-        right: 0;
-        left: 0;
-        height: @carousel-indicator-size-wrapper;
-        background: linear-gradient(180deg, @carousel-indicator-color-bg-wrapper 0%, rgba(0, 0, 0, 0) 87%);
-      }
-
-      &-bottom {
-        right: 0;
-        bottom: 0;
-        left: 0;
-        height: @carousel-indicator-size-wrapper;
-        background: linear-gradient(180deg, rgba(0, 0, 0, 0) 13%, @carousel-indicator-color-bg-wrapper 100%);
-      }
-
-      &-left {
-        top: 0;
-        left: 0;
-        width: @carousel-indicator-size-wrapper;
-        height: 100%;
-        background: linear-gradient(90deg, @carousel-indicator-color-bg-wrapper 0%, rgba(0, 0, 0, 0) 87%);
-      }
-
-      &-right {
-        top: 0;
-        right: 0;
-        width: @carousel-indicator-size-wrapper;
-        height: 100%;
-        background: linear-gradient(90deg, rgba(0, 0, 0, 0) 13%, @carousel-indicator-color-bg-wrapper 100%);
-      }
-
-      &-outer {
-        right: 0;
-        left: 0;
-        background: none;
-      }
-    }
-
-    &-bottom {
+    &-dot,
+    &-line,
+    &-slider {
       bottom: @carousel-indicator-position;
       left: 50%;
       transform: translateX(-50%);
@@ -191,191 +45,129 @@
 
     &-top {
       top: @carousel-indicator-position;
+      bottom: auto;
       left: 50%;
       transform: translateX(-50%);
-    }
-
-    &-left {
-      top: 50%;
-      left: @carousel-indicator-position;
-      transform: translate(-50%, -50%) rotate(90deg);
-    }
-
-    &-right {
-      top: 50%;
-      right: @carousel-indicator-position;
-      transform: translate(50%, -50%) rotate(90deg);
-    }
-
-    // Indicator style on the outside
-    &-outer {
-      left: 50%;
-      padding: @carousel-indicator-outer-padding;
-      background-color: @carousel-indicator-outer-color-bg;
-      border-radius: @carousel-indicator-outer-border-radius;
-      transform: translateX(-50%);
-
-      &.c-carousel-indicator-dot {
-        bottom: -(@carousel-indicator-position + @carousel-indicator-dot-size + $padding);
-      }
-
-      &.c-carousel-indicator-line {
-        bottom: -(@carousel-indicator-position + @carousel-indicator-line-size-height + $padding);
-      }
-
-      &.c-carousel-indicator-slider {
-        bottom: -(@carousel-indicator-position + @carousel-indicator-slider-size-height + $padding);
-        padding: 0;
-        background-color: @carousel-indicator-outer-color_default;
-      }
-
-      .c-carousel-indicator-item {
-        background-color: @carousel-indicator-outer-color_default;
-
-        &:hover,
-        &-active {
-          background-color: @carousel-indicator-outer-color_active;
-        }
-      }
     }
 
     &-item {
-      display: inline-block;
-      background-color: @carousel-indicator-color_default;
-      border-radius: @carousel-indicator-border-radius;
+      display: block;
+      border-radius: 50%;
+      width: @carousel-indicator-dot-size;
+      height: @carousel-indicator-dot-size;
+      background: @carousel-indicator-color-default;
       cursor: pointer;
+      transition: background 0.3s, width 0.3s;
 
-      &:hover,
       &-active {
-        background-color: @carousel-indicator-color_active;
+        background: @carousel-indicator-color-active;
       }
     }
 
-    &-dot {
-      .c-carousel-indicator-item {
-        width: @carousel-indicator-dot-size;
-        height: $width;
-        border-radius: 50%;
-
-        &:not(:last-child) {
-          margin-right: @carousel-indicator-gap;
-        }
-      }
-    }
-
-    &-line {
-      .c-carousel-indicator-item {
-        width: @carousel-indicator-line-size-width;
-        height: @carousel-indicator-line-size-height;
-
-        &:not(:last-child) {
-          margin-right: @carousel-indicator-gap;
-        }
-      }
+    &-line &-item {
+      width: 12px;
+      height: 3px;
+      border-radius: 2px;
     }
 
     &-slider {
-      width: @carousel-indicator-slider-size-width;
-      height: @carousel-indicator-slider-size-height;
-      background-color: @carousel-indicator-color_default;
-      border-radius: @carousel-indicator-border-radius;
-      cursor: pointer;
+      height: 3px;
+      background: @carousel-indicator-color-default;
+      border-radius: 2px;
 
-      .c-carousel-indicator-item {
+      .c-carousel-indicator-item-active {
         position: absolute;
         top: 0;
         height: 100%;
+        background: @carousel-indicator-color-active;
+        border-radius: 2px;
         transition: left 0.3s;
       }
     }
   }
 
-  &-arrow {
-    > div {
-      position: absolute;
-      z-index: 2;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: @carousel-arrow-size;
-      height: @carousel-arrow-size;
-      color: @carousel-arrow-color-icon;
-      background-color: @carousel-arrow-color-bg;
-      border-radius: 50%;
-      cursor: pointer;
+  &-indicator-wrapper {
+    position: absolute;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
 
-      > svg {
-        color: @carousel-arrow-color-icon;
-        font-size: @carousel-arrow-font-size;
-      }
-
-      &:hover {
-        background-color: @carousel-arrow-color-bg_hover;
-      }
-    }
-
-    &-left {
-      top: 50%;
-      left: @carousel-arrow-position;
-      transform: translateY(-50%);
-    }
-
-    &-right {
-      top: 50%;
-      right: @carousel-arrow-position;
-      transform: translateY(-50%);
+    &-bottom {
+      bottom: @carousel-indicator-position;
+      left: 0;
+      right: 0;
     }
 
     &-top {
-      top: @carousel-arrow-position;
-      left: 50%;
-      transform: translateX(-50%);
+      top: @carousel-indicator-position;
+      left: 0;
+      right: 0;
     }
 
-    &-bottom {
-      bottom: @carousel-arrow-position;
-      left: 50%;
-      transform: translateX(-50%);
+    &-left {
+      left: @carousel-indicator-position;
+      top: 50%;
+      transform: translateY(-50%);
+      flex-direction: column;
     }
-  }
 
-  &-arrow-hover div {
-    opacity: 0;
-    transition: all 0.3s;
-  }
-
-  &:hover {
-    .c-carousel-arrow-hover div {
-      opacity: 1;
+    &-right {
+      right: @carousel-indicator-position;
+      top: 50%;
+      transform: translateY(-50%);
+      flex-direction: column;
     }
-  }
-}
 
-:root[cedar-theme='dark'] {
-  .c-carousel-arrow > div {
-    background-color: rgba(@dark-gray-1, 0.3);
+    &-outer {
+      bottom: -@carousel-indicator-position;
+      left: 0;
+      right: 0;
+    }
 
-    &:hover {
-      background-color: rgba(@dark-gray-1, 0.5);
+    .c-carousel-indicator {
+      position: static;
+      transform: none;
     }
   }
 
-  .c-carousel-indicator-item,
-  .c-carousel-indicator-slider {
-    background-color: rgba(@dark-gray-1, 0.3);
+  // Arrow
+  &-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    z-index: 10;
+    pointer-events: none;
+
+    &-left,
+    &-right {
+      pointer-events: auto;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.3);
+      color: #fff;
+      font-size: 16px;
+      transition: background 0.2s;
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.5);
+      }
+    }
+
+    &-left { margin-left: 8px; }
+    &-right { margin-right: 8px; }
   }
 
-  .c-carousel-indicator-item-active,
-  .c-carousel-indicator-item:hover {
-    background-color: @carousel-indicator-color_active;
-  }
-
-  .c-carousel-indicator-outer.c-carousel-indicator-slider {
-    background-color: @carousel-indicator-outer-color_default;
-  }
-
-  .c-carousel-indicator-outer .c-carousel-indicator-item:hover,
-  .c-carousel-indicator-outer .c-carousel-indicator-item-active {
-    background-color: @carousel-indicator-outer-color_active;
+  &-indicator-position-outer {
+    margin-bottom: 30px;
   }
 }

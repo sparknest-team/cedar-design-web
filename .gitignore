@@ -36,5 +36,5 @@ lib
 .husky
 .vscode
 .vite-node
-.temp
-.cache
+**/.temp
+**/.cache

@@ -1,18 +1,11 @@
-import { InjectionKey } from 'vue'
+import { type Ref, InjectionKey } from 'vue'
 
 export interface CarouselContext {
-  items: number[]
-  slideTo: (info: { targetIndex: number; isNegative: boolean; isManual: boolean }) => void
-  mergedIndexes: {
-    mergedIndex: number
-    mergedPrevIndex: number
-    mergedNextIndex: number
-  }
-  previousIndex: number | undefined
-  animationName: string
-  slideDirection: string | undefined
-  transitionTimingFunction: string
-  moveSpeed: number
+  items: Ref<number[]>
+  size: Ref<number>
+  vertical: Ref<boolean>
+  registerItem: (uid: number, setTranslate: (v: number) => void) => void
+  unregisterItem: (uid: number) => void
 }
 
-export const carouselInjectionKey: InjectionKey<CarouselContext> = Symbol('ArcoCarousel')
+export const carouselInjectionKey: InjectionKey<CarouselContext> = Symbol('CCarousel')

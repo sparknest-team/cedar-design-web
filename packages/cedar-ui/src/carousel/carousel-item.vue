@@ -1,11 +1,16 @@
 <template>
-  <div :aria-hidden="!isCurrent" :class="cls" :style="animationStyle">
+  <div
+    :class="itemCls"
+    :style="itemStyle"
+    :aria-hidden="!isCurrent"
+    tabindex="-1"
+  >
     <slot />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, getCurrentInstance, inject, computed } from 'vue'
+import { defineComponent, getCurrentInstance, inject, computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import { getPrefixCls } from '../_utils/global-config'
 import { carouselInjectionKey, CarouselContext } from './context'
 
@@ -14,33 +19,37 @@ export default defineComponent({
   setup() {
     const prefixCls = getPrefixCls('carousel-item')
     const instance = getCurrentInstance()
-    const context = inject<Partial<CarouselContext>>(carouselInjectionKey, {})
-    const index = computed(() => context.items?.indexOf(instance?.uid ?? -1) ?? -1)
-    const isCurrent = computed(() => context.mergedIndexes?.mergedIndex === index.value)
-    const cls = computed(() => {
-      const { previousIndex, animationName, slideDirection, mergedIndexes } = context
-      return {
-        [`${prefixCls}-prev`]: index.value === mergedIndexes?.mergedPrevIndex,
-        [`${prefixCls}-next`]: index.value === mergedIndexes?.mergedNextIndex,
-        [`${prefixCls}-current`]: isCurrent.value,
-        [`${prefixCls}-slide-in`]: animationName === 'slide' && slideDirection && isCurrent.value,
-        [`${prefixCls}-slide-out`]: animationName === 'slide' && slideDirection && index.value === previousIndex,
-      }
+    const context = inject<CarouselContext>(carouselInjectionKey)!
+    const index = computed(() => context.items.value?.indexOf(instance?.uid ?? -1) ?? -1)
+    const translate = ref(0)
+
+    const isCurrent = computed(() => false)
+
+    const itemCls = computed(() => [prefixCls])
+
+    const setTranslate = (v: number) => { translate.value = v }
+
+    onMounted(() => {
+      if (instance?.uid) context.registerItem(instance.uid, setTranslate)
     })
-    const animationStyle = computed(() => {
-      const { transitionTimingFunction, moveSpeed } = context
-      return {
-        transitionTimingFunction,
-        transitionDuration: `${moveSpeed}ms`,
-        animationTimingFunction: transitionTimingFunction,
-        animationDuration: `${moveSpeed}ms`,
-      }
+    onBeforeUnmount(() => {
+      if (instance?.uid) context.unregisterItem(instance.uid)
     })
-    return {
-      cls,
-      animationStyle,
-      isCurrent,
-    }
+
+    const itemStyle = computed(() => {
+      const s = context.size.value
+      if (!s) return {}
+      const base = context.vertical.value
+        ? { flexShrink: 0, height: `${s}px` }
+        : { flexShrink: 0, width: `${s}px` }
+      if (translate.value) {
+        const axis = context.vertical.value ? 'Y' : 'X'
+        return { ...base, transform: `translate${axis}(${translate.value}px)` }
+      }
+      return base
+    })
+
+    return { itemCls, itemStyle, isCurrent }
   },
 })
 </script>
