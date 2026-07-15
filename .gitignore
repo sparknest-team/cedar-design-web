@@ -10,6 +10,7 @@ lerna-debug.log*
 node_modules
 dist
 es
+lib
 dist-ssr
 *.local
 src/icon/*
