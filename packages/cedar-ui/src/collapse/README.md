@@ -2,6 +2,7 @@
 permalink: /components/collapse/
 ---
 
+
 # Collapse
 
 可以折叠 / 展开的内容区域。
@@ -16,9 +17,15 @@ permalink: /components/collapse/
 
 ### 手风琴模式
 
-通过 `accordion` 开启手风琴模式，同时只能打开一个面板。
+通过 `accordion` 开启手风琴模式，同时只能打开一个面板。手风琴模式下 `activeNames` 仍为数组，最多包含一项。
 
 <demo src="./__demos__/accordion.vue"></demo>
+
+### 禁用
+
+通过 `disabled` 禁用面板。
+
+<demo src="./__demos__/disabled.vue"></demo>
 
 ### 嵌套面板
 
@@ -31,6 +38,18 @@ permalink: /components/collapse/
 通过设置 `bordered="false"` 隐藏边框。
 
 <demo src="./__demos__/border-less.vue"></demo>
+
+### 分割线
+
+通过 `divider` 控制面板之间的分割线。
+
+<demo src="./__demos__/divider.vue"></demo>
+
+### 展开间距
+
+通过 `offset` 控制展开面板之间的间距。
+
+<demo src="./__demos__/offset.vue"></demo>
 
 ### 额外节点
 
@@ -62,53 +81,77 @@ permalink: /components/collapse/
 
 <demo src="./__demos__/destroy.vue"></demo>
 
+### 切换全部
+
+通过 `toggleAll` 批量展开 / 收起面板。手风琴模式下不可用。
+
+<demo src="./__demos__/toggle-all.vue"></demo>
+
 ## API
 
 ### `<collapse>` Props
 
-| 参数名                   | 描述                                  | 类型                   |  默认值  | 版本   |
-| ------------------------ | ------------------------------------- | ---------------------- | :------: | :----- |
-| active-key **(v-model)** | 当前展开的面板的 `key`                | `(string \| number)[]` |   `-`    |        |
-| default-active-key       | 默认展开的面板的 `key` （非受控模式） | `(string \| number)[]` |   `[]`   |        |
-| accordion                | 是否开启手风琴模式                    | `boolean`              | `false`  |        |
-| show-expand-icon         | 是否显示展开图标                      | `boolean`              |   `-`    | 2.33.0 |
-| expand-icon-position     | 展开图标显示的位置                    | `'left' \| 'right'`    | `'left'` |        |
-| bordered                 | 是否显示边框                          | `boolean`              |  `true`  |        |
-| destroy-on-hide          | 是否在隐藏时销毁内容                  | `boolean`              | `false`  | 2.27.0 |
+| 参数名                     | 描述                                    | 类型                   |  默认值  |
+| -------------------------- | --------------------------------------- | ---------------------- | :------: |
+| active-names **(v-model)** | 当前展开的面板的 `name`                 | `(string \| number)[]` |   `-`    |
+| default-active-names       | 默认展开的面板的 `name` （非受控模式）  | `(string \| number)[]` |   `[]`   |
+| accordion                  | 是否开启手风琴模式                      | `boolean`              | `false`  |
+| show-expand-icon           | 是否显示展开图标                        | `boolean`              |   `-`    |
+| expand-icon-position       | 展开图标显示的位置                      | `'left' \| 'right'`    | `'left'` |
+| bordered                   | 是否显示边框                            | `boolean`              |  `true`  |
+| divider                    | 是否显示面板分割线                      | `boolean`              |  `true`  |
+| offset                     | 展开面板是否显示间距                    | `boolean`              | `false`  |
+| destroy-on-hide            | 是否在隐藏时销毁内容                    | `boolean`              | `false`  |
 
 ### `<collapse>` Events
 
-| 事件名 | 描述                     | 参数                                             |
-| ------ | ------------------------ | ------------------------------------------------ |
-| change | 展开的面板发生改变时触发 | activeKey: `(string \| number)[]`<br>ev: `Event` |
+| 事件名 | 描述                     | 参数                                                 |
+| ------ | ------------------------ | ---------------------------------------------------- |
+| change | 展开的面板发生改变时触发 | activeNames: `(string \| number)[]`<br>ev: `Event` |
+
+### `<collapse>` Methods
+
+| 方法名      | 描述                                   | 参数                                | 返回值 |
+| ----------- | -------------------------------------- | ----------------------------------- | ------ |
+| `toggleAll` | 开启或关闭所有面板（手风琴模式下无效） | `options: CollapseToggleAllOptions` | `-`    |
+
+#### CollapseToggleAllOptions
+
+| 参数           | 描述                                                     | 类型                   | 默认值  |
+| -------------- | -------------------------------------------------------- | ---------------------- | ------- |
+| `expand`       | `'inverse'` 切换全部；`boolean` 控制全部展开或收起       | `'inverse' \| boolean` | `-`     |
+| `skipDisabled` | 是否跳过禁用面板                                         | `boolean`              | `false` |
+
+### `<collapse>` Slots
+
+| 插槽名      |   描述   | 参数                                                                      |
+| ----------- | :------: | ------------------------------------------------------------------------- |
+| expand-icon | 展开图标 | active: `boolean`<br>disabled: `boolean`<br>position: `'left' \| 'right'` |
+| default     | 面板内容 | -                                                                         |
 
 ### `<collapse-item>` Props
 
-| 参数名           | 描述                 | 类型      | 默认值  | 版本   |
-| ---------------- | -------------------- | --------- | :-----: | :----- |
-| header           | 面板的标题           | `string`  |   `-`   |        |
-| disabled         | 是否禁用             | `boolean` | `false` |        |
-| show-expand-icon | 是否显示展开图标     | `boolean` | `true`  |        |
-| destroy-on-hide  | 是否在隐藏时销毁内容 | `boolean` | `false` | 2.27.0 |
+| 参数名           | 描述                                   | 类型                 | 默认值  |
+| ---------------- | -------------------------------------- | -------------------- | :-----: |
+| name **(必填)**  | 面板唯一标识，对应 `activeNames` 中的值 | `string \| number`  |   `-`   |
+| title            | 面板的标题                             | `string`             |   `-`   |
+| disabled         | 是否禁用                               | `boolean`            | `false` |
+| show-expand-icon | 是否显示展开图标                       | `boolean`            | `true`  |
+| destroy-on-hide  | 是否在隐藏时销毁内容                   | `boolean`            | `false` |
 
 ### `<collapse-item>` Slots
 
-| 插槽名      |    描述    | 参数                                                                      | 版本   |
-| ----------- | :--------: | ------------------------------------------------------------------------- | :----- |
-| extra       |  额外内容  | -                                                                         |        |
-| expand-icon |  展开图标  | active: `boolean`<br>disabled: `boolean`<br>position: `'left' \| 'right'` | 2.33.0 |
-| header      | 面板的标题 | -                                                                         |        |
+| 插槽名      |    描述    | 参数                                                                      |
+| ----------- | :--------: | ------------------------------------------------------------------------- |
+| title       | 面板的标题 | -                                                                         |
+| extra       |  额外内容  | -                                                                         |
+| expand-icon |  展开图标  | active: `boolean`<br>disabled: `boolean`<br>position: `'left' \| 'right'` |
+| default     | 面板内容   | -                                                                         |
 
 ### 类型定义
 
 组件导出以下类型定义
 
 ```ts
-import type { CollapseInstance } from '@cedar/ui'
+import type { CollapseInstance, CollapseToggleAllOptions } from '@cedar/ui'
 ```
-
-## FAQ
-
-### `<CollapseItem>` 组件的 `key` 属性为必填
-
-在 `<Collapse>` 组件中每个 `<CollapseItem>` 都需要指定唯一的 `key` 属性，`key` 对应 `activeKey` 中的值。

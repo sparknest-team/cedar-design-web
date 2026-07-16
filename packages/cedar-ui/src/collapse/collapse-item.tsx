@@ -1,23 +1,40 @@
-import { computed, defineComponent, getCurrentInstance, inject, ref, Transition, TransitionProps, watch } from 'vue'
+import {
+  computed,
+  defineComponent,
+  inject,
+  onBeforeUnmount,
+  onMounted,
+  PropType,
+  ref,
+  Transition,
+  TransitionProps,
+  watch,
+} from 'vue'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
 import { CollapseContext, collapseKey } from './context'
 import IconHover from '../_components/icon-hover.vue'
 import IconCaretRight from '../icon/icon-caret-right'
 import IconCaretLeft from '../icon/icon-caret-left'
-import { isNumber } from '../_utils/is'
 
-
-const { name } = createNamespace('collapse-item')
+const { name: componentName } = createNamespace('collapse-item')
 
 export default defineComponent({
-  name,
+  name: componentName,
   components: { IconHover, IconCaretRight, IconCaretLeft },
   props: {
+    /**
+     * @zh 面板唯一标识，对应 `activeNames` 中的值
+     * @en Unique identifier of the panel, corresponding to values in `activeNames`
+     */
+    name: {
+      type: [String, Number] as PropType<string | number>,
+      required: true,
+    },
     /**
      * @zh 面板的标题
      * @en The title of the panel
      */
-    header: String,
+    title: String,
     /**
      * @zh 是否禁用
      * @en Whether to disable
@@ -37,7 +54,6 @@ export default defineComponent({
     /**
      * @zh 是否在隐藏时销毁内容
      * @en Whether to destroy content when hidden
-     * @version 2.27.0
      */
     destroyOnHide: {
       type: Boolean,
@@ -47,7 +63,7 @@ export default defineComponent({
   /**
    * @zh 面板的标题
    * @en The title of the panel
-   * @slot header
+   * @slot title
    */
   /**
    * @zh 展开图标
@@ -56,7 +72,6 @@ export default defineComponent({
    * @binding {boolean} active
    * @binding {boolean} disabled
    * @binding {'left' | 'right'} position
-   * @version 2.33.0
    */
   /**
    * @zh 额外内容
@@ -64,25 +79,48 @@ export default defineComponent({
    * @slot extra
    */
   setup(props, { slots }) {
-    const instance = getCurrentInstance()
     const prefixCls = getPrefixCls('collapse-item')
     const collapseCtx = inject<Partial<CollapseContext>>(collapseKey, {})
 
-    const key = instance && isNumber(instance?.vnode.key) ? instance.vnode.key : String(instance?.vnode.key ?? '')
-    const isActive = computed(() => collapseCtx.activeKeys?.includes(key))
+    const isActive = computed(() => collapseCtx.activeNames?.includes(props.name))
     const mergedDestroyOnHide = computed(() => collapseCtx.destroyOnHide || props.destroyOnHide)
     const mergedShowExpandIcon = computed(() => collapseCtx?.showExpandIcon ?? props.showExpandIcon)
     const mounted = ref(mergedDestroyOnHide.value ? isActive.value : true)
     const expandIconPosition = computed(() => collapseCtx?.expandIconPosition ?? 'left')
+    const disabledRef = computed(() => props.disabled)
+
+    onMounted(() => {
+      collapseCtx.addItem?.({
+        name: props.name,
+        disabled: disabledRef,
+      })
+    })
+
+    onBeforeUnmount(() => {
+      collapseCtx.removeItem?.(props.name)
+    })
+
+    watch(
+      () => props.name,
+      (name, prevName) => {
+        if (prevName !== undefined) {
+          collapseCtx.removeItem?.(prevName)
+        }
+        collapseCtx.addItem?.({
+          name,
+          disabled: disabledRef,
+        })
+      },
+    )
 
     const handleClick = (e: MouseEvent) => {
       if (!props.disabled) {
-        collapseCtx.handleClick?.(key, e)
+        collapseCtx.handleClick?.(props.name, e)
       }
     }
 
-    watch(isActive, (isActive) => {
-      if (isActive && !mounted.value) {
+    watch(isActive, (active) => {
+      if (active && !mounted.value) {
         mounted.value = true
       }
     })
@@ -165,7 +203,7 @@ export default defineComponent({
             onClick={handleClick}
           >
             {expandIconRender()}
-            <div class={`${prefixCls}-header-title`}>{slots.header?.() ?? props.header}</div>
+            <div class={`${prefixCls}-header-title`}>{slots.title?.() ?? props.title}</div>
             {slots.extra && <div class={`${prefixCls}-header-extra`}>{slots.extra?.()}</div>}
           </div>
           <Transition name="collapse-slider" {...transitionEvents}>

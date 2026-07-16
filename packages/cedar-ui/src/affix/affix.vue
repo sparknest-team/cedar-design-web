@@ -1,31 +1,27 @@
 <template>
-  <ResizeObserver @resize="updatePositionThrottle">
+  <ResizeObserver v-if="!cssMode" @resize="updatePositionThrottle">
     <div ref="wrapperRef">
-      <div v-if="isFixed" :style="placeholderStyles" />
-      <div :class="classNames" :style="fixedStyles">
+      <div v-if="isFixed && !disabled" :style="placeholderStyles" />
+      <div :class="classNames" :style="contentStyles">
         <ResizeObserver @resize="updatePositionThrottle">
           <slot />
         </ResizeObserver>
       </div>
     </div>
   </ResizeObserver>
+  <div v-else ref="wrapperRef" :class="classNames" :style="stickyStyles">
+    <slot />
+  </div>
 </template>
 
 <script lang="ts">
-import type { CSSProperties, PropType, Ref } from 'vue';
-import {
-  defineComponent,
-  toRefs,
-  ref,
-  watchEffect,
-  computed,
-  onMounted,
-} from 'vue';
-import ResizeObserver from '../_components/resize-observer';
-import { getPrefixCls } from '../_utils/global-config';
-import { throttleByRaf } from '../_utils/throttle-by-raf';
-import { isWindow, isUndefined } from '../_utils/is';
-import { on, off, getElement } from '../_utils/dom';
+import type { CSSProperties, PropType, Ref } from 'vue'
+import { computed, defineComponent, onMounted, ref, toRefs, watchEffect } from 'vue'
+import ResizeObserver from '../_components/resize-observer'
+import { getPrefixCls } from '../_utils/global-config'
+import { getElement, on, off } from '../_utils/dom'
+import { isUndefined, isWindow } from '../_utils/is'
+import { throttleByRaf } from '../_utils/throttle-by-raf'
 
 function getTargetRect(target: HTMLElement | Window) {
   return isWindow(target)
@@ -33,7 +29,7 @@ function getTargetRect(target: HTMLElement | Window) {
         top: 0,
         bottom: window.innerHeight,
       }
-    : target.getBoundingClientRect();
+    : target.getBoundingClientRect()
 }
 
 export default defineComponent({
@@ -62,18 +58,38 @@ export default defineComponent({
      * @en Scroll container, default is `window`
      */
     target: {
-      type: [String, Object, Function] as PropType<
-        string | HTMLElement | Window
-      >,
+      type: [String, Object, Function] as PropType<string | HTMLElement | Window>,
     },
     /**
-     * @zh `target`的外层滚动元素，默认是 `window`。`Affix `将会监听该元素的滚动事件，并实时更新固钉的位置。主要是为了解决 `target` 属性指定为非 `window` 元素时，如果外层元素滚动，可能会导致固钉跑出容器问题
-     * @en The outer scroll element of `target`, the default is `window`. `Affix` will monitor the scroll event of the element and update the position of the anchor in real time. The main purpose is to solve the problem that if the outer element scrolls when the target attribute is specified as a non-window element, it may cause the nail to escape from the container.
+     * @zh `target`的外层滚动元素，默认是 `window`
+     * @en The outer scroll element of `target`, the default is `window`
      */
     targetContainer: {
-      type: [String, Object, Function] as PropType<
-        string | HTMLElement | Window
-      >,
+      type: [String, Object, Function] as PropType<string | HTMLElement | Window>,
+    },
+    /**
+     * @zh 固钉时的 z-index
+     * @en z-index when affixed
+     */
+    zIndex: {
+      type: Number,
+      default: 10,
+    },
+    /**
+     * @zh 是否禁用固钉
+     * @en Whether to disable affix
+     */
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    /**
+     * @zh 是否使用原生 `position: sticky`
+     * @en Whether to use native `position: sticky`
+     */
+    cssMode: {
+      type: Boolean,
+      default: false,
     },
   },
   emits: {
@@ -84,127 +100,150 @@ export default defineComponent({
      */
     change: (fixed: boolean) => true,
   },
-  setup(props, { emit }) {
-    const prefixCls = getPrefixCls('affix');
-    const { target, targetContainer } = toRefs(props);
-    const wrapperRef = ref<HTMLElement>();
-    const targetRef = ref<HTMLElement | Window>();
-    const isFixed = ref(false);
-    const placeholderStyles: Ref<CSSProperties> = ref({});
-    const fixedStyles: Ref<CSSProperties> = ref({});
-    const classNames = computed(() => ({ [prefixCls]: isFixed.value }));
+  setup(props, { emit, expose }) {
+    const prefixCls = getPrefixCls('affix')
+    const { target, targetContainer, cssMode, disabled, zIndex } = toRefs(props)
+    const wrapperRef = ref<HTMLElement>()
+    const targetRef = ref<HTMLElement | Window>()
+    const isFixed = ref(false)
+    const placeholderStyles: Ref<CSSProperties> = ref({})
+    const fixedStyles: Ref<CSSProperties> = ref({})
+    const classNames = computed(() => ({
+      [prefixCls]: isFixed.value,
+      [`${prefixCls}-css-mode`]: cssMode.value,
+    }))
+
+    const stickyStyles = computed<CSSProperties>(() => ({
+      position: 'sticky',
+      top: `${props.offsetTop}px`,
+      zIndex: zIndex.value,
+    }))
+
+    const contentStyles = computed(() => {
+      if (cssMode.value) {
+        return stickyStyles.value
+      }
+
+      return fixedStyles.value
+    })
 
     const updatePositionThrottle = throttleByRaf(() => {
-      if (!wrapperRef.value || !targetRef.value) return;
+      if (cssMode.value || disabled.value || !wrapperRef.value || !targetRef.value) {
+        if (isFixed.value) {
+          isFixed.value = false
+          emit('change', false)
+        }
+        placeholderStyles.value = {}
+        fixedStyles.value = {}
+        return
+      }
 
-      const { offsetTop, offsetBottom } = props;
-      const offsetType = isUndefined(offsetBottom) ? 'top' : 'bottom';
-      const wrapperRect = wrapperRef.value.getBoundingClientRect();
-      const targetRect = getTargetRect(targetRef.value);
-      let newIsFixed = false;
-      let newFixedStyles = {};
+      const { offsetTop, offsetBottom } = props
+      const offsetType = isUndefined(offsetBottom) ? 'top' : 'bottom'
+      const wrapperRect = wrapperRef.value.getBoundingClientRect()
+      const targetRect = getTargetRect(targetRef.value)
+      let newIsFixed = false
+      let newFixedStyles: CSSProperties = {}
       const newPlaceholderStyles: CSSProperties = {
         width: `${wrapperRef.value.offsetWidth}px`,
         height: `${wrapperRef.value.offsetHeight}px`,
-      };
+      }
 
       if (offsetType === 'top') {
-        newIsFixed = wrapperRect.top - targetRect.top < (offsetTop || 0);
+        newIsFixed = wrapperRect.top - targetRect.top < (offsetTop || 0)
         newFixedStyles = newIsFixed
           ? {
               position: 'fixed',
               top: `${targetRect.top + (offsetTop || 0)}px`,
+              zIndex: zIndex.value,
             }
-          : {};
+          : {}
       } else {
-        newIsFixed =
-          targetRect.bottom - wrapperRect.bottom < (offsetBottom || 0);
+        newIsFixed = targetRect.bottom - wrapperRect.bottom < (offsetBottom || 0)
         newFixedStyles = newIsFixed
           ? {
               position: 'fixed',
-              bottom: `${
-                window.innerHeight - targetRect.bottom + (offsetBottom || 0)
-              }px`,
+              bottom: `${window.innerHeight - targetRect.bottom + (offsetBottom || 0)}px`,
+              zIndex: zIndex.value,
             }
-          : {};
+          : {}
       }
 
-      // update isFixed
       if (newIsFixed !== isFixed.value) {
-        isFixed.value = newIsFixed;
-        emit('change', newIsFixed);
+        isFixed.value = newIsFixed
+        emit('change', newIsFixed)
       }
-      // update placeholderStyles
-      placeholderStyles.value = newPlaceholderStyles;
-      // update fixedStyles
+
+      placeholderStyles.value = newPlaceholderStyles
       fixedStyles.value = {
         ...newFixedStyles,
         ...(newIsFixed ? newPlaceholderStyles : {}),
-      };
-    });
+      }
+    })
 
     onMounted(() => {
-      // Binding of scroll events inside the scroll container
+      if (cssMode.value) {
+        return
+      }
+
       watchEffect((onInvalidate) => {
         const element =
-          (target &&
+          (target.value &&
             target.value !== window &&
             getElement(target.value as string | HTMLElement)) ||
-          window;
+          window
 
-        targetRef.value = element;
+        targetRef.value = element
 
         if (element) {
-          on(element, 'scroll', updatePositionThrottle);
-          on(element, 'resize', updatePositionThrottle);
+          on(element, 'scroll', updatePositionThrottle)
+          on(element, 'resize', updatePositionThrottle)
 
           onInvalidate(() => {
-            off(element, 'scroll', updatePositionThrottle);
-            off(element, 'resize', updatePositionThrottle);
-          });
+            off(element, 'scroll', updatePositionThrottle)
+            off(element, 'resize', updatePositionThrottle)
+          })
         }
-      });
+      })
 
-      // When the scroll container is not a window, you need to bind the outer scroll event of the scroll container to update the position
       watchEffect((onInvalidate) => {
-        if (!targetRef.value) return;
+        if (!targetRef.value) return
 
         const container =
-          (targetContainer &&
+          (targetContainer.value &&
             targetContainer.value !== window &&
             getElement(targetContainer.value as string | HTMLElement)) ||
-          window;
+          window
 
         if (container) {
-          on(container, 'scroll', updatePositionThrottle);
-          on(container, 'resize', updatePositionThrottle);
+          on(container, 'scroll', updatePositionThrottle)
+          on(container, 'resize', updatePositionThrottle)
 
           onInvalidate(() => {
-            off(container, 'scroll', updatePositionThrottle);
-            off(container, 'resize', updatePositionThrottle);
-          });
+            off(container, 'scroll', updatePositionThrottle)
+            off(container, 'resize', updatePositionThrottle)
+          })
         }
-      });
-    });
+      })
+    })
+
+    expose({
+      updatePosition: () => {
+        updatePositionThrottle()
+      },
+    })
 
     return {
       wrapperRef,
       isFixed,
+      disabled,
+      cssMode,
       classNames,
       placeholderStyles,
-      fixedStyles,
+      contentStyles,
+      stickyStyles,
       updatePositionThrottle,
-    };
+    }
   },
-  methods: {
-    /**
-     * @zh 更新位置
-     * @en Update position
-     * @public
-     */
-    updatePosition() {
-      this.updatePositionThrottle();
-    },
-  },
-});
+})
 </script>

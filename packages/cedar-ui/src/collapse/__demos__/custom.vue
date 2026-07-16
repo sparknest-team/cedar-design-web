@@ -1,14 +1,14 @@
 <template>
-  <c-collapse :default-active-key="['1', 2]" :bordered="false">
-    <c-collapse-item header="Beijing Toutiao Technology Co., Ltd." :style="customStyle" key="1">
+  <c-collapse :default-active-names="['1', 2]" :bordered="false">
+    <c-collapse-item title="Beijing Toutiao Technology Co., Ltd." :style="customStyle" name="1">
       <div>Beijing Toutiao Technology Co., Ltd.</div>
       <div>Beijing Toutiao Technology Co., Ltd.</div>
     </c-collapse-item>
-    <c-collapse-item header="Beijing Toutiao Technology Co., Ltd." :style="customStyle" :key="2">
+    <c-collapse-item title="Beijing Toutiao Technology Co., Ltd." :style="customStyle" :name="2">
       <div>Beijing Toutiao Technology Co., Ltd.</div>
       <div>Beijing Toutiao Technology Co., Ltd.</div>
     </c-collapse-item>
-    <c-collapse-item header="Beijing Toutiao Technology Co., Ltd." :style="customStyle" key="3">
+    <c-collapse-item title="Beijing Toutiao Technology Co., Ltd." :style="customStyle" name="3">
       <div>Beijing Toutiao Technology Co., Ltd.</div>
       <div>Beijing Toutiao Technology Co., Ltd.</div>
     </c-collapse-item>

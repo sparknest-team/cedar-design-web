@@ -7,6 +7,7 @@
     "moduleResolution": "Node",
     "strict": true,
     "jsx": "preserve",
+    "jsxImportSource": "vue",
     "sourceMap": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -23,5 +24,5 @@
     "emitDecoratorMetadata": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["../.vuepress/**/*", "../components/**/*.vue", "../../src/**/*.vue", "../.vuepress/auto-imports.d.ts", "./auto-imports.d.ts"]
+  "include": ["../.vuepress/**/*", "../components/**/*.vue", "../../src/**/*.vue", "../../src/**/*.tsx", "../.vuepress/auto-imports.d.ts", "./auto-imports.d.ts"]
 }

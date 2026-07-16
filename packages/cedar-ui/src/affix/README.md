@@ -53,6 +53,9 @@ permalink: /components/affix/
 | offset-bottom    | 距离窗口底部达到指定偏移量后触发                                                                                                                                                                    | `number`                          |  `-`   |
 | target           | 滚动容器，默认是 `window`                                                                                                                                                                           | `string \| HTMLElement \| Window` |  `-`   |
 | target-container | `target`的外层滚动元素，默认是 `window`。`Affix `将会监听该元素的滚动事件，并实时更新固钉的位置。主要是为了解决 `target` 属性指定为非 `window` 元素时，如果外层元素滚动，可能会导致固钉跑出容器问题 | `string \| HTMLElement \| Window` |  `-`   |
+| z-index          | 固钉时的层级                                                                                                                                                                                        | `number`                          | `10`   |
+| disabled         | 是否禁用固钉                                                                                                                                                                                        | `boolean`                         | `false` |
+| css-mode         | 是否使用原生 `position: sticky`                                                                                                                                                                     | `boolean`                         | `false` |
 
 ### `<affix>` Events
 

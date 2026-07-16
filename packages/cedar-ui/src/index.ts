@@ -32,7 +32,7 @@ export type { CascaderFieldNames, CascaderInstance, CascaderPanelInstance, Casca
 export { default as Checkbox, CheckboxGroup } from './checkbox'
 export type { CheckboxGroupInstance, CheckboxInstance, CheckboxOption } from './checkbox'
 export { default as Collapse, CollapseItem } from './collapse'
-export type { CollapseInstance, CollapseItemInstance } from './collapse'
+export type { CollapseInstance, CollapseItemInstance, CollapseToggleAllOptions } from './collapse'
 export { default as Comment } from './comment'
 export type { CommentInstance } from './comment'
 export { default as ColorPicker } from './color-picker'
@@ -93,7 +93,7 @@ export type {
 } from './grid'
 export { default as Icon } from './icon-component'
 export type { IconInstance, IconProps } from './icon-component'
-export { default as Image, ImagePreviewAction, ImagePreview, ImagePreviewGroup } from './image'
+export { default as Image, ImagePreviewAction, ImagePreview, ImagePreviewGroup, previewImage } from './image'
 export type {
   ImageInstance,
   ImagePreviewActionInstance,

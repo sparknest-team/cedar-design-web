@@ -157,6 +157,28 @@
     border: none;
   }
 
+  &.c-collapse-no-divider {
+    > .c-collapse-item {
+      border-bottom: none;
+
+      > .c-collapse-item-header,
+      &.c-collapse-item-active > .c-collapse-item-header {
+        border-bottom-color: transparent;
+      }
+    }
+  }
+
+  &.c-collapse-offset {
+    > .c-collapse-item-active {
+      border-bottom: none;
+    }
+
+    > .c-collapse-item-active + .c-collapse-item,
+    > .c-collapse-item-active:not(:first-child) {
+      margin-top: @collapse-item-margin-top;
+    }
+  }
+
   &::after {
     display: table;
     clear: both;

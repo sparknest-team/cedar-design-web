@@ -7,8 +7,8 @@
       </c-radio-group>
       <c-checkbox v-model="hideIcon">Hide Expand Icon</c-checkbox>
     </c-space>
-    <c-collapse :default-active-key="['1']" :expand-icon-position="position" :show-expand-icon="!hideIcon">
-      <c-collapse-item header="Beijing Toutiao Technology Co., Ltd." key="1">
+    <c-collapse :default-active-names="['1']" :expand-icon-position="position" :show-expand-icon="!hideIcon">
+      <c-collapse-item title="Beijing Toutiao Technology Co., Ltd." name="1">
         <template #expand-icon>
           <c-icon-plus />
         </template>
@@ -19,12 +19,12 @@
         <div>Beijing Toutiao Technology Co., Ltd.</div>
         <div>Beijing Toutiao Technology Co., Ltd.</div>
       </c-collapse-item>
-      <c-collapse-item header="Beijing Toutiao Technology Co., Ltd." key="2" disabled>
+      <c-collapse-item title="Beijing Toutiao Technology Co., Ltd." name="2" disabled>
         <div>Beijing Toutiao Technology Co., Ltd.</div>
         <div>Beijing Toutiao Technology Co., Ltd.</div>
         <div>Beijing Toutiao Technology Co., Ltd.</div>
       </c-collapse-item>
-      <c-collapse-item header="Beijing Toutiao Technology Co., Ltd." key="3">
+      <c-collapse-item title="Beijing Toutiao Technology Co., Ltd." name="3">
         <div>Beijing Toutiao Technology Co., Ltd.</div>
         <div>Beijing Toutiao Technology Co., Ltd.</div>
         <div>Beijing Toutiao Technology Co., Ltd.</div>

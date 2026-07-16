@@ -4,78 +4,59 @@ permalink: /components/image/
 
 # Image
 
-展示和预览图片。
+展示图片。预览相关能力见 [ImagePreview](/components/image-preview/)。
 
 ## 案例
 
 ### 基础用法
 
-需要查看图片的时候，简单的设置 `src` 属性，就能获得一个有预览图片功能的组件。
+设置 `src` 即可获得带预览能力的图片组件。
 
 <demo src="./__demos__/basic.vue"></demo>
 
 ### 显示 Caption
 
-通过设置 `title` 和 `description` 可以将图片的标题和描述显示在图片内部或者底部，显示的位置通过 `footerPosition` 控制。
+通过 `title`、`description` 和 `footerPosition` 控制图片说明的展示位置。
 
 <demo src="./__demos__/caption.vue"></demo>
 
 ### 额外操作
 
-组件提供了具名插槽 `extra` 供用户在页脚定制额外的内容。
+通过 `extra` 插槽在页脚定制额外内容。
 
 <demo src="./__demos__/extra.vue"></demo>
 
 ### 错误状态
 
-当加载图片失败的时候显示的内容。
+图片加载失败时的展示内容。
 
 <demo src="./__demos__/error.vue"></demo>
 
 ### 加载状态
 
-默认情况下，加载效果是不显示的，可通过设置 `showLoader` 为 `true` 显示默认加载效果。如果默认加载效果不符合需求, 还可以通过
-具名插槽 `loader` 自行设置加载样式。
+通过 `showLoader` 显示默认加载效果，或通过 `loader` 插槽自定义。
 
 <demo src="./__demos__/loader.vue"></demo>
 
-### 加载状态
+### 渐进加载
 
-大图可通过给 `loader` 传递一个小一些的图片，让其在原图未被加载成功时显示，以此来模拟渐进加载。
+通过 `loader` 插槽传入小图，模拟渐进加载。
 
 <demo src="./__demos__/progressive-loader.vue"></demo>
 
-### 自定义预览操作栏
+### 填充模式
 
-通过设置 `actionsLayout` 可以调整预览操作栏中功能按钮的顺序，同时可以过滤功能按钮，只有在 `actionsLayout` 中的按钮才会出现。
+<demo src="./__demos__/fit-mode.vue"></demo>
 
-<demo src="./__demos__/custom-preview-actions.vue"></demo>
+### 禁用预览
 
-### 多图预览
+<demo src="./__demos__/disable-preview.vue"></demo>
 
-`<image-preview-group>` 可单独使用，需控制 `visible` 。在图片的展示上分为两种场景，一是通过 `defaultCurrent`
-指定第一张展示的图片；二是控制 `current` 来决定当前显示的是第几张图片。
+### 错误时仍显示 Footer
 
-<demo src="./__demos__/preview-group.vue"></demo>
+`hide-footer="never"` 可在加载失败时仍展示底部信息。
 
-### 单独使用预览组件
-
-`image-preview` 可单独使用，需要手动控制 `visible`。
-
-<demo src="./__demos__/component-preview.vue"></demo>
-
-### 单独使用多图预览组件
-
-需要查看图片的时候，简单的设置 `src` 属性，就能获得一个有预览图片功能的组件。
-
-`<image-preview-group>` 可单独使用，需控制 `visible` 。在图片的展示上分为两种场景，一是通过 `defaultCurrent`
-指定第一张展示的图片；二是控制 `current` 来决定当前显示的是第几张图片。
-
-### 挂载节点
-
-可以通过 `popupContainer` 指定预览挂载的父级节点。
-
-<demo src="./__demos__/preview-popup-container.vue"></demo>
+<demo src="./__demos__/hide-footer-never.vue"></demo>
 
 ## API
 
@@ -90,14 +71,15 @@ permalink: /components/image/
 | description                   | 描述，将显示在底部，如果 alt 没有值，则会将其设置给 alt                        | `string`                                                   |    `-`    |        |
 | fit                           | 确定图片如何适应容器框                                                         | `'contain' \| 'cover' \| 'fill' \| 'none' \| 'scale-down'` |    `-`    |        |
 | alt                           | 图片的文字描述                                                                 | `string`                                                   |    `-`    |        |
-| hide-footer                   | 是否隐藏 footer（2.36.0 版本支持 'never' 参数，支持在加载错误时显示底部内容）  | `boolean \| 'never'`                                       |  `false`  |        |
+| hide-footer                   | 是否隐藏 footer（支持 `'never'`，错误时仍显示底部）                            | `boolean \| 'never'`                                       |  `false`  |        |
 | footer-position               | 底部显示的位置                                                                 | `'inner' \| 'outer'`                                       | `'inner'` |        |
 | show-loader                   | 是否显示加载中效果                                                             | `boolean`                                                  |  `false`  |        |
 | preview                       | 是否开启预览                                                                   | `boolean`                                                  |  `true`   |        |
-| preview-visible **(v-model)** | 控制预览的打开状态，可与 previewVisibleChange 配合使用                         | `boolean`                                                  |    `-`    |        |
+| preview-visible **(v-model)** | 控制预览的打开状态                                                             | `boolean`                                                  |    `-`    |        |
 | default-preview-visible       | 预览的默认打开状态                                                             | `boolean`                                                  |  `false`  |        |
-| preview-props                 | 预览的配置项（所有选项都是可选的） [ImagePreviewProps](#image-preview%20Props) | `ImagePreviewProps`                                        |    `-`    |        |
+| preview-props                 | 预览的配置项                                                                   | `ImagePreviewProps`                                        |    `-`    |        |
 | footer-class                  | 底部显示区域的类名                                                             | `string\|array\|object`                                    |    `-`    | 2.23.0 |
+| render-to-body                | 预览是否挂载到 body                                                            | `boolean`                                                  |  `true`   |        |
 
 ### `<image>` Events
 
@@ -113,6 +95,7 @@ permalink: /components/image/
 | error-icon | 自定义错误状态的图标 | -    |
 | loader     |  自定义加载状态效果  | -    |
 | extra      |     底部额外内容     | -    |
+| preview-actions | 自定义预览工具栏 | - |
 
 ### `<image-preview>` Props
 
@@ -147,7 +130,8 @@ permalink: /components/image/
 
 | 参数名                | 描述                                                              | 类型                    |                                           默认值                                           |
 | --------------------- | ----------------------------------------------------------------- | ----------------------- | :----------------------------------------------------------------------------------------: |
-| src-list              | 图片列表（设置了本属性之后，将不再收集 a-image 子组件的图片信息） | `string[]`              |                                            `-`                                             |
+| src-list              | 图片列表（设置了本属性之后，将不再收集子 Image 的图片信息）       | `string[]`              |                                            `-`                                             |
+| images                | 图片列表（与 `src-list` 等价，统一 API 命名）                   | `string[]`              |                                            `-`                                             |
 | current **(v-model)** | 当前展示的图片的下标                                              | `number`                |                                            `-`                                             |
 | default-current       | 第一张展示的图片的下标                                            | `number`                |                                            `0`                                             |
 | infinite              | 是否无限循环                                                      | `boolean`               |                                          `false`                                           |
@@ -180,11 +164,19 @@ permalink: /components/image/
 
 ### 类型定义
 
-组件导出以下类型定义
-
 ```ts
 import type { ImageInstance } from '@cedar/ui'
+import { previewImage } from '@cedar/ui'
 ```
+
+### `previewImage` 方法
+
+| 方法名 | 描述 | 参数 |
+| ------ | ---- | ---- |
+| `previewImage` | 打开图片预览 | `url \| url[] \| ImagePreviewOptions` |
+| `previewImage.close` | 关闭预览 | `-` |
+| `previewImage.setDefaultOptions` | 设置默认配置 | `ImagePreviewOptions` |
+| `previewImage.resetDefaultOptions` | 重置默认配置 | `-` |
 
 ## FAQ
 
@@ -201,4 +193,4 @@ import type { ImageInstance } from '@cedar/ui'
 
 2. 默认缩放比例 `defaultScale` 此属性定义了默认的图片缩放比例。例如，当设置为 1.5 时，图片将默认放大到原始大小的 1.5 倍。
 
-3. 滚动缩放速率 `zoomSate` 属性控制了在滚动操作时图片的缩放速率。以 1.3 为例，每次滚动操作都会使图片放大或缩小 1.3 倍。
+3. 滚动缩放速率 `zoomRate` 属性控制了在滚动操作时图片的缩放速率。以 1.3 为例，每次滚动操作都会使图片放大或缩小 1.3 倍。

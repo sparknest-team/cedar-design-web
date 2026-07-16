@@ -1,9 +1,9 @@
-@import '../../style/mixins/index.less';
-@import './token.less';
-@import '../../style/utils.less';
+@import "../../style/mixins/index.less";
+@import "./token.less";
+@import "../../style/utils.less";
 
 // 定义可交互状态的选择器前缀（排除 disabled 和 loading 状态）
-@interactive-selector: ~':not(.c-button--disabled):not(.c-button--loading)';
+@interactive-selector: ~":not(.c-button--disabled):not(.c-button--loading)";
 
 .c-button {
   font-weight: normal;
@@ -31,12 +31,12 @@
     width: 100%;
   }
 
-  .border(~'c-button');
+  .border(~"c-button");
 
   &--variant-default {
-    color: var(~'--c-button-text-color');
-    background-color: var(~'--c-button-bg-color');
-    box-shadow: var(~'--c-button-box-shadow');
+    color: var(~"--c-button-text-color");
+    background-color: var(~"--c-button-bg-color");
+    box-shadow: var(~"--c-button-box-shadow");
     border: 0 none;
     &--overlay {
       opacity: 0;
@@ -60,8 +60,8 @@
 
   .status(@status) {
     &--variant-default&.c-button--status-@{status} {
-      color: var(~'--c-button-status-@{status}-text-color');
-      background-color: var(~'--c-button-status-@{status}-bg-color');
+      color: var(~"--c-button-status-@{status}-text-color");
+      background-color: var(~"--c-button-status-@{status}-bg-color");
     }
   }
 
@@ -75,7 +75,7 @@
   .status(danger);
 
   &--variant-tonal {
-    color: var(~'--c-button-variant-tonal-color');
+    color: var(~"--c-button-variant-tonal-color");
 
     @{interactive-selector}:hover > .c-button--overlay {
       background-color: #fff;
@@ -98,7 +98,7 @@
 
   .tonalStatus(@status) {
     &--variant-tonal.c-button--status-@{status} {
-      color: var(~'--c-button-variant-tonal-status-@{status}-color');
+      color: var(~"--c-button-variant-tonal-status-@{status}-color");
     }
 
     &--variant-tonal@{interactive-selector}:hover > .c-button--overlay {
@@ -122,25 +122,31 @@
   .tonalStatus(danger);
 
   &--variant-outline {
-    color: var(~'--c-button-variant-outline-color');
+    color: var(~"--c-button-variant-outline-color");
     background-color: transparent;
 
     .c-button__border {
       opacity: 1;
-      border-color: var(~'--c-button-variant-outline-border-color', currentColor);
+      border-color: var(
+        ~"--c-button-variant-outline-border-color",
+        currentColor
+      );
     }
 
     &@{interactive-selector}:hover {
       .c-button__border-state {
         opacity: 1;
-        border-color: var(~'--c-button-variant-outline-border-color', currentColor);
+        border-color: var(
+          ~"--c-button-variant-outline-border-color",
+          currentColor
+        );
       }
     }
 
     &@{interactive-selector}.c-button--focus {
       .c-button__border-state {
         opacity: 1;
-        border-color: var(~'--c-color-outline-strong');
+        border-color: var(~"--c-color-outline-strong");
       }
     }
 
@@ -151,10 +157,13 @@
   }
   .outlineStatus(@status) {
     &--variant-outline&.c-button--status-@{status} {
-      color: var(~'--c-button-variant-outline-status-@{status}-color');
+      color: var(~"--c-button-variant-outline-status-@{status}-color");
 
       .c-button__border {
-        border-color: var(~'--c-button-variant-outline-status-@{status}-border-color', currentColor);
+        border-color: var(
+          ~"--c-button-variant-outline-status-@{status}-border-color",
+          currentColor
+        );
       }
     }
 
@@ -170,14 +179,20 @@
     &--variant-outline@{interactive-selector}:hover {
       .c-button__border-state {
         opacity: 1;
-        border-color: var(~'--c-button-variant-outline-status-@{status}-border-color', currentColor);
+        border-color: var(
+          ~"--c-button-variant-outline-status-@{status}-border-color",
+          currentColor
+        );
       }
     }
 
     &--variant-outline@{interactive-selector}:active {
       .c-button__border-state {
         opacity: 1;
-        border-color: var(~'--c-button-variant-outline-status-@{status}-border-color', currentColor);
+        border-color: var(
+          ~"--c-button-variant-outline-status-@{status}-border-color",
+          currentColor
+        );
       }
     }
   }
@@ -191,9 +206,13 @@
 
   &--variant-text {
     background-color: transparent;
-    color: var(~'--c-button-variant-text-color');
+    color: var(~"--c-button-variant-text-color");
     &@{interactive-selector}.c-button--hovering {
-      color: color-mix(in srgb, var(~'--c-button-variant-text-color') 70%, transparent);
+      color: color-mix(
+        in srgb,
+        var(~"--c-button-variant-text-color") 70%,
+        transparent
+      );
     }
 
     &@{interactive-selector}:hover > .c-button--overlay {
@@ -211,9 +230,13 @@
   }
   .textStatus(@status) {
     &--variant-text&.c-button--status-@{status} {
-      color: var(~'--c-button-variant-text-status-@{status}-color');
+      color: var(~"--c-button-variant-text-status-@{status}-color");
       &@{interactive-selector}.c-button--hovering {
-        color: color-mix(in srgb, var(~'--c-button-variant-text-status-@{status}-color') 70%, transparent);
+        color: color-mix(
+          in srgb,
+          var(~"--c-button-variant-text-status-@{status}-color") 70%,
+          transparent
+        );
       }
 
       &@{interactive-selector}:hover > .c-button--overlay {
@@ -238,13 +261,21 @@
     .c-button--overlay {
       background-color: transparent;
     }
-    color: var(~'--c-button-variant-link-color');
+    color: var(~"--c-button-variant-link-color");
     padding: 0;
     &@{interactive-selector}:hover {
-      color: color-mix(in srgb, var(~'--c-button-variant-link-color') 70%, transparent);
+      color: color-mix(
+        in srgb,
+        var(~"--c-button-variant-link-color") 70%,
+        transparent
+      );
     }
     &@{interactive-selector}:active {
-      color: color-mix(in srgb, var(~'--c-button-variant-link-color') 100%, transparent);
+      color: color-mix(
+        in srgb,
+        var(~"--c-button-variant-link-color") 100%,
+        transparent
+      );
     }
     &.c-button--disabled {
       cursor: not-allowed;
@@ -253,21 +284,24 @@
   }
   .linkStatus(@status) {
     &--variant-link&.c-button--status-@{status} {
-      color: var(~'--c-button-variant-link-status-@{status}-color');
+      color: var(~"--c-button-variant-link-status-@{status}-color");
 
       &@{interactive-selector}:hover {
         color: color-mix(
           in srgb,
-          var(~'--c-button-variant-link-status-@{status}-color')
-            var(~'--c-button-variant-link-status-@{status}-hover-opacity', 70%),
+          var(~"--c-button-variant-link-status-@{status}-color")
+            var(~"--c-button-variant-link-status-@{status}-hover-opacity", 70%),
           transparent
         );
       }
       &@{interactive-selector}:active {
         color: color-mix(
           in srgb,
-          var(~'--c-button-variant-link-status-@{status}-color')
-            var(~'--c-button-variant-link-status-@{status}-active-opacity', 100%),
+          var(~"--c-button-variant-link-status-@{status}-color")
+            var(
+              ~"--c-button-variant-link-status-@{status}-active-opacity",
+              100%
+            ),
           transparent
         );
       }
@@ -283,13 +317,13 @@
 
   .size(@size) {
     &.c-button--size-@{size} {
-      height: var(~'--c-button-size-@{size}-height');
-      padding: var(~'--c-button-size-@{size}-padding');
-      font-size: var(~'--c-button-size-@{size}-font-size');
-      border-radius: var(~'--c-button-size-@{size}-radius');
+      height: var(~"--c-button-size-@{size}-height");
+      padding: var(~"--c-button-size-@{size}-padding");
+      font-size: var(~"--c-button-size-@{size}-font-size");
+      border-radius: var(~"--c-button-size-@{size}-radius");
 
       &.c-button--stacked {
-        height: var(~'--c-button-size-@{size}-stacked-height');
+        height: var(~"--c-button-size-@{size}-stacked-height");
         display: flex;
         flex-direction: column;
         gap: 2px;
@@ -324,7 +358,7 @@
 
   &__border-state {
     z-index: 1;
-    border: 1px solid var(~'--c-color-outline-medium');
+    border: 1px solid var(~"--c-color-outline-medium");
   }
 
   &__content {
@@ -338,7 +372,8 @@
     .c-button--overlay {
       background-color: #fff;
       opacity: 0.4;
-      transition: opacity var(~'--c-button-transition-duration-1') var(~'--c-button-transition-timing-function-linear');
+      transition: opacity var(~"--c-button-transition-duration-1")
+        var(~"--c-button-transition-timing-function-linear");
     }
   }
 
@@ -359,6 +394,7 @@
     bottom: 0;
     left: 0;
     width: 100%;
+    opacity: 0.5;
     border-bottom-left-radius: inherit;
     border-bottom-right-radius: inherit;
   }
@@ -383,7 +419,7 @@
   }
 
   &--icon {
-    margin-right: var(~'--c-button-icon-margin-right');
+    margin-right: var(~"--c-button-icon-margin-right");
   }
 
   &--hidden {
@@ -391,4 +427,4 @@
   }
 }
 
-@import './buttonGroup.less';
+@import "./buttonGroup.less";

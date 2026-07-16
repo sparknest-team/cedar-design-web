@@ -1,12 +1,21 @@
-import type { InjectionKey, Slots } from 'vue'
+import type { ComputedRef, InjectionKey, Slots } from 'vue'
+
+export interface CollapseItemContext {
+  name: string | number
+  disabled: ComputedRef<boolean>
+}
 
 export interface CollapseContext {
-  activeKeys: (string | number)[]
+  activeNames: (string | number)[]
   slots: Slots
   showExpandIcon?: boolean
   expandIconPosition: string
   destroyOnHide: boolean
-  handleClick: (key: string | number, e: MouseEvent) => void
+  divider: boolean
+  offset: boolean
+  handleClick: (name: string | number, e: MouseEvent) => void
+  addItem: (item: CollapseItemContext) => void
+  removeItem: (name: string | number) => void
 }
 
 export const collapseKey: InjectionKey<CollapseContext> = Symbol('collapseCtx')

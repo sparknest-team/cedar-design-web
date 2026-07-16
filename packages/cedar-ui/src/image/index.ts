@@ -5,10 +5,12 @@ import _Image from './image.vue'
 import _ImagePreview from './preview.vue'
 import _ImagePreviewGroup from './preview-group.vue'
 import _ImagePreviewAction from './preview-action'
+import previewImage from './preview-api'
 
 const Image = Object.assign(_Image, {
   Preview: _ImagePreview,
   PreviewGroup: _ImagePreviewGroup,
+  preview: previewImage,
   install: (app: App, options?: ArcoOptions) => {
     setGlobalConfig(app, options)
     const componentPrefix = getComponentPrefix(options)
@@ -29,6 +31,8 @@ export {
   _ImagePreview as ImagePreview,
   _ImagePreviewGroup as ImagePreviewGroup,
   _ImagePreviewAction as ImagePreviewAction,
+  previewImage,
+  previewImage as ImagePreviewFn,
 }
 
 export default Image

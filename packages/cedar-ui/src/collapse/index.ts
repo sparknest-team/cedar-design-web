@@ -17,6 +17,7 @@ const Collapse = Object.assign(_Collapse, {
 
 export type CollapseInstance = InstanceType<typeof _Collapse>
 export type CollapseItemInstance = InstanceType<typeof _CollapseItem>
+export type { CollapseToggleAllOptions } from './types'
 
 export { _CollapseItem as CollapseItem }
 

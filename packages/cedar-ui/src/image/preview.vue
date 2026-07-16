@@ -99,9 +99,17 @@ import IconRotateRight from '../icon/icon-rotate-right'
 import IconOriginalSize from '../icon/icon-original-size'
 import usePopupOverHidden from '../_hooks/use-popup-overflow-hidden'
 import usePopupContainer from '../_hooks/use-popup-container'
+import usePopupManager from '../_hooks/use-popup-manager'
 import getScale, { getScaleByRate, minScale, maxScale } from './utils/get-scale'
 import { useI18n } from '../locale'
-import usePopupManager from '../_hooks/use-popup-manager'
+import { imagePlatformConfig } from './platform.config'
+import {
+  resolveActionsLayout,
+  resolveClosable,
+  resolveEscToClose,
+  resolveMaskClosable,
+  resolveTeleport,
+} from './utils/resolvePreviewAliases'
 
 const ROTATE_STEP = 90
 
@@ -135,6 +143,14 @@ export default defineComponent({
       default: undefined,
     },
     /**
+     * @zh 是否可见（visible 的别名）
+     * @en Whether is visible (alias of visible)
+     */
+    show: {
+      type: Boolean,
+      default: undefined,
+    },
+    /**
      * @zh 默认是否可见，非受控
      * @en Default visibility
      */
@@ -148,7 +164,7 @@ export default defineComponent({
      */
     maskClosable: {
       type: Boolean,
-      default: true,
+      default: undefined,
     },
     /**
      * @zh 是否显示关闭按钮
@@ -156,7 +172,15 @@ export default defineComponent({
      */
     closable: {
       type: Boolean,
-      default: true,
+      default: undefined,
+    },
+    /**
+     * @zh 是否显示关闭按钮（closable 的别名）
+     * @en Whether to show close button (alias of closable)
+     */
+    closeable: {
+      type: Boolean,
+      default: undefined,
     },
     /**
      * @zh 操作项的布局
@@ -164,13 +188,28 @@ export default defineComponent({
      */
     actionsLayout: {
       type: Array as PropType<string[]>,
-      default: () => ['fullScreen', 'rotateRight', 'rotateLeft', 'zoomIn', 'zoomOut', 'originalSize'],
+      default: undefined,
+    },
+    /**
+     * @zh 操作项的布局（actionsLayout 的别名）
+     * @en Layout of action list (alias of actionsLayout)
+     */
+    actions: {
+      type: Array as PropType<string[]>,
+      default: undefined,
     },
     /**
      * @zh 设置弹出框的挂载点，同 `teleport` 的 `to`，缺省值是 document.body
      * @en Set the mount point of the pop-up box, the same as the `to` of `teleport`, the default value is document.body
      */
     popupContainer: {
+      type: [Object, String] as PropType<HTMLElement | string>,
+    },
+    /**
+     * @zh 设置弹出框的挂载点（popupContainer 的别名）
+     * @en Mount point alias of popupContainer
+     */
+    teleport: {
       type: [Object, String] as PropType<HTMLElement | string>,
     },
     inGroup: {
@@ -187,7 +226,15 @@ export default defineComponent({
      */
     escToClose: {
       type: Boolean,
-      default: true,
+      default: undefined,
+    },
+    /**
+     * @zh 是否支持 ESC 键关闭预览（escToClose 的别名）
+     * @en Whether to support ESC key to close (alias of escToClose)
+     */
+    closeOnKeyEscape: {
+      type: Boolean,
+      default: undefined,
     },
     /**
      * @zh 是否开启滚轮缩放
@@ -221,15 +268,14 @@ export default defineComponent({
       type: Number,
       default: 1.1,
     },
+    onPreviewVisibleChange: {
+      type: Function as PropType<(visible: boolean) => void>,
+    },
+    onVisibleChange: {
+      type: Function as PropType<(visible: boolean) => void>,
+    },
   },
-  emits: [
-    /**
-     * @zh 关闭事件
-     * @en Close event
-     */
-    'close',
-    'update:visible',
-  ],
+  emits: ['close', 'update:visible', 'update:show', 'visible-change', 'preview-visible-change'],
   /**
    * @zh 自定义额外的操作项
    * @en Customize additional action items
@@ -238,12 +284,20 @@ export default defineComponent({
    */
   setup(props, { emit }) {
     const { t } = useI18n()
-    const { src, popupContainer, visible, defaultVisible, maskClosable, actionsLayout, defaultScale, zoomRate } =
+    const { src, visible, show, defaultVisible, defaultScale, zoomRate, inGroup, groupArrowProps, renderToBody } =
       toRefs(props)
+
+    const controlledVisible = computed(() => visible.value ?? show.value)
+    const maskClosable = computed(() => resolveMaskClosable(props, imagePlatformConfig.defaultMaskClosable))
+    const closable = computed(() => resolveClosable(props, imagePlatformConfig.defaultClosable))
+    const actionsLayout = computed(() => resolveActionsLayout(props, imagePlatformConfig.toolbarActions))
+    const popupContainer = computed(() => resolveTeleport(props) as HTMLElement | string | undefined)
+    const escToClose = computed(() => resolveEscToClose(props))
+
     const refWrapper = ref()
     const refImage = ref()
     const prefixCls = getPrefixCls('image-preview')
-    const [mergedVisible, setVisible] = useMergeState(defaultVisible.value, reactive({ value: visible }))
+    const [mergedVisible, setVisible] = useMergeState(defaultVisible.value, reactive({ value: controlledVisible }))
     const classNames = computed(() => [
       prefixCls,
       {
@@ -304,7 +358,7 @@ export default defineComponent({
 
       switch (ev.key) {
         case KEYBOARD_KEY.ESC:
-          props.escToClose && close()
+          escToClose.value && close()
           break
         case KEYBOARD_KEY.ARROW_LEFT:
           props.groupArrowProps.onPrev && props.groupArrowProps.onPrev()
@@ -367,10 +421,19 @@ export default defineComponent({
       }
     })
 
+    function emitVisibleChange(value: boolean) {
+      emit('update:visible', value)
+      emit('update:show', value)
+      emit('visible-change', value)
+      emit('preview-visible-change', value)
+      props.onPreviewVisibleChange?.(value)
+      props.onVisibleChange?.(value)
+    }
+
     function close() {
       if (mergedVisible.value) {
         emit('close')
-        emit('update:visible', false)
+        emitVisibleChange(false)
         setVisible(false)
       }
     }
@@ -432,6 +495,12 @@ export default defineComponent({
       scaleValueVisible,
       refWrapper,
       refImage,
+      closable,
+      maskClosable,
+      actionsLayout,
+      inGroup,
+      groupArrowProps,
+      renderToBody,
       onWheel,
       onMaskClick,
       onCloseClick: close,

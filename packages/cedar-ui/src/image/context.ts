@@ -1,8 +1,6 @@
-import { InjectionKey } from 'vue'
+import type { InjectionKey } from 'vue'
+import type { PreviewGroupContext } from './types.unified'
 
-export type PreviewGroupContext = Readonly<{
-  registerImageUrl: (id: number, url: string, canPreview: boolean) => () => void
-  preview: (imageId: number) => void
-}>
+export type { PreviewGroupContext }
 
 export const PreviewGroupInjectionKey: InjectionKey<PreviewGroupContext> = Symbol('PreviewGroupInjectionKey')

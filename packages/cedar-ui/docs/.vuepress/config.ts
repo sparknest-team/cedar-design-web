@@ -38,6 +38,9 @@ export default defineUserConfig({
     viteOptions: {
       root: path.resolve(projRoot, 'docs/.vuepress/.temp/vite-root'),
       configFile: false,
+      esbuild: {
+        jsx: 'preserve',
+      },
       plugins: [
         // @ts-ignore
         vueJsx(),
