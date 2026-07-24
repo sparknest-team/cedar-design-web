@@ -13,9 +13,9 @@
 <script setup lang="ts">
 const handleClick = () => {
   console.log('click')
-  Modal.open({
+  Dialog.open({
     title: '标题',
-    content: '内容',
+    message: '内容',
   })
 }
 </script>

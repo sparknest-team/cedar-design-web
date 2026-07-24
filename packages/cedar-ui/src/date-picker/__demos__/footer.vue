@@ -1,11 +1,11 @@
 <template>
-  <c-date-picker style="width: 200px; margin-bottom: 20px">
+  <c-date-picker style="margin-bottom: 20px">
     <template #extra>Extra footer</template>
   </c-date-picker>
   <br />
-  <c-range-picker showTime style="width: 360px">
+  <c-date-range-picker showTime>
     <template #extra>Extra footer</template>
-  </c-range-picker>
+  </c-date-range-picker>
 </template>
 
 <script lang="ts">

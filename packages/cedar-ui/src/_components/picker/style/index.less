@@ -16,6 +16,7 @@
   &-input {
     display: inline-flex;
     flex: 1;
+    align-items: center;
   }
 
   input {
@@ -145,6 +146,15 @@
     min-width: 10px;
     padding: 0 8px;
     color: @picker-color-separator;
+  }
+
+  &-next-day {
+    flex-shrink: 0;
+    margin-right: 4px;
+    color: var(~'--c-color-text-3');
+    font-size: 12px;
+    line-height: 1;
+    white-space: nowrap;
   }
 
   &-disabled &-separator {

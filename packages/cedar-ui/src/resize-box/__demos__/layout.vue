@@ -15,10 +15,10 @@
 </script>
 
 <style scoped>
-.layout-demo :deep(.cedar-layout-header),
-.layout-demo :deep(.cedar-layout-footer),
-.layout-demo :deep(.cedar-layout-sider-children),
-.layout-demo :deep(.cedar-layout-content) {
+.layout-demo :deep(.c-layout-header),
+.layout-demo :deep(.c-layout-footer),
+.layout-demo :deep(.c-layout-sider-children),
+.layout-demo :deep(.c-layout-content) {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -28,13 +28,13 @@
   text-align: center;
 }
 
-.layout-demo :deep(.cedar-layout-header),
-.layout-demo :deep(.cedar-layout-footer) {
+.layout-demo :deep(.c-layout-header),
+.layout-demo :deep(.c-layout-footer) {
   height: 64px;
   background-color: var(--color-primary-light-4);
 }
 
-.layout-demo :deep(.cedar-layout-sider) {
+.layout-demo :deep(.c-layout-sider) {
   width: 206px;
   background-color: var(--color-primary-light-3);
   min-width: 150px;
@@ -42,7 +42,7 @@
   height: 200px;
 }
 
-.layout-demo :deep(.cedar-layout-content) {
+.layout-demo :deep(.c-layout-content) {
   background-color: rgb(var(--brand-6));
 }
 </style>

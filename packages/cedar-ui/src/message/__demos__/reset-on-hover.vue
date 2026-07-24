@@ -1,0 +1,22 @@
+<template>
+  <c-button @click="handleClick">Reset On Hover</c-button>
+</template>
+<script lang="ts">
+import { defineComponent } from 'vue'
+import { Message } from '@cedar/ui'
+
+export default defineComponent({
+  setup() {
+    const handleClick = () => {
+      Message.info({
+        content: 'Hover to pause auto close',
+        duration: 3000,
+        resetOnHover: true,
+      })
+    }
+    return {
+      handleClick,
+    }
+  },
+})
+</script>

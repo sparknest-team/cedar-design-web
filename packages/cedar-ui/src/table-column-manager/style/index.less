@@ -1,0 +1,121 @@
+.c-table-column-manager {
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-0);
+  display: flex;
+  font-size: 14px;
+  flex-direction: column;
+
+  &-header {
+    display: flex;
+    border: 1px solid var(--color-border-3);
+    border-bottom: none;
+  }
+
+  &-header-item {
+    display: flex;
+    justify-content: flex-start;
+    flex: 1;
+    padding: 0 16px;
+    max-height: 44px;
+    line-height: 44px;
+    background: var(--color-neutral-2);
+
+    &:not(:last-child) {
+      border-right: 1px solid var(--color-border-3);
+    }
+  }
+
+  &-selected-clear {
+    margin-left: auto;
+  }
+
+  &-body {
+    display: flex;
+    height: 100%;
+    min-height: 0;
+    overflow-y: auto;
+    border: 1px solid var(--color-border-3);
+  }
+
+  &-body-item {
+    flex: 1;
+    width: 0;
+    min-height: 0;
+
+    &:not(:last-child) {
+      border-right: 1px solid var(--color-border-3);
+    }
+  }
+
+  &-selected-and-available-count {
+    color: rgb(var(--gray-10));
+    letter-spacing: 1px;
+  }
+
+  &-count-value {
+    margin-left: 8px;
+  }
+
+  &-selected-count {
+    font-weight: bold;
+  }
+
+  &-selected-list {
+    height: 100%;
+  }
+
+  &-draggable-list {
+    height: 100%;
+    padding: 16px 0;
+    overflow-y: auto;
+    border-right: 2.5px solid transparent;
+
+    &::-webkit-scrollbar-track-piece {
+      width: 8px;
+      background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: rgb(var(--gray-2));
+      border-radius: 8px;
+    }
+  }
+
+  &-draggable-item {
+    height: 36px;
+    line-height: 36px;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    box-sizing: border-box;
+    --visibleStatus: hidden;
+
+    &:hover {
+      background: var(--color-fill-1);
+      --visibleStatus: visible;
+    }
+  }
+
+  &-fixed-item {
+    background-color: var(--bg-4);
+  }
+
+  &-item-title {
+    overflow: hidden;
+    flex: 1;
+    margin-left: 8px;
+  }
+
+  &-item-title-input {
+    flex: 1;
+    margin-left: 8px;
+  }
+
+  &-draggable-item-control {
+    margin-left: auto;
+    display: flex;
+    gap: 4px;
+    visibility: var(--visibleStatus);
+  }
+}

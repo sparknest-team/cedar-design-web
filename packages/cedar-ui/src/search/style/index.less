@@ -1,0 +1,29 @@
+.c-search {
+  // select的宽度需要自适应。
+  .c-select-view {
+    width: auto;
+  }
+
+  .search-icon {
+    cursor: pointer;
+  }
+
+  &-input-wrapper {
+    width: 100%;
+    position: relative;
+
+    .c-trigger-popup {
+      width: 100%;
+      margin-top: 5px;
+    }
+
+    &:not(:first-child) > .c-input-wrapper {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+
+  &-noselect {
+    // keep for layout when no field select
+  }
+}

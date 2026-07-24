@@ -24,9 +24,17 @@ describe('Alert', () => {
     }
   })
 
-  test('default type renders fallback info-circle-fill icon', async () => {
+  test('default type hides built-in icon', async () => {
     const wrapper = mount(Alert, { props: { type: 'default' } })
-    expect(wrapper.find('.c-alert__icon').exists()).toBe(true)
+    expect(wrapper.find('.c-alert__icon').exists()).toBe(false)
+  })
+
+  test('default type shows custom icon slot', async () => {
+    const wrapper = mount(Alert, {
+      props: { type: 'default' },
+      slots: { icon: () => <i class="custom-icon" /> },
+    })
+    expect(wrapper.find('.c-alert__icon .custom-icon').exists()).toBe(true)
   })
 
   test('showIcon=false hides icon', async () => {

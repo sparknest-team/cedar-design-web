@@ -82,11 +82,11 @@ export const getComponentIndex = ({ name, componentName }: { name: string; compo
   // language=TypeScript
   // prettier-ignore
   `import type { App } from 'vue';
-import type { ArcoIconOptions } from '../../_utils/types';
+import type { CedarIconOptions } from '../../_utils/types';
 import _${componentName} from './${name}.vue';
 
 export const ${componentName} = Object.assign(_${componentName}, {
-  install: (app: App, options?: ArcoIconOptions) => {
+  install: (app: App, options?: CedarIconOptions) => {
     const iconPrefix = options?.iconPrefix ?? '';
     app.component(iconPrefix + _${componentName}.name, _${componentName});
   }
@@ -95,35 +95,35 @@ export const ${componentName} = Object.assign(_${componentName}, {
 export default ${componentName};
 `
 
-export const getArcoVueIcon = ({ imports, components }: { imports: string[]; components: string[] }) =>
+export const getCedarVueIcon = ({ imports, components }: { imports: string[]; components: string[] }) =>
   // language=TypeScript
   // prettier-ignore
   `import type { App, Plugin } from 'vue';
-import type { ArcoIconOptions } from '../_utils/types';
+import type { CedarIconOptions } from '../_utils/types';
 ${imports.join('\n')}
 
 const icons: Record<string, Plugin> = {
   ${components.join(',\n  ')}
 };
 
-const install = (app: App, options?: ArcoIconOptions) => {
+const install = (app: App, options?: CedarIconOptions) => {
   for (const key of Object.keys(icons)) {
     app.use(icons[key], options);
   }
 };
 
-const ArcoVueIcon = {
+const CedarVueIcon = {
   ...icons,
   install
 };
 
-export default ArcoVueIcon;
+export default CedarVueIcon;
 `
 
 export const getIndex = ({ exports }: { exports: string[] }) =>
   // language=TypeScript
   // prettier-ignore
-  `export { default } from './arco-vue-icon';
+  `export { default } from './cedar-vue-icon';
 ${exports.join('\n')}
 export type {} from './icon-components';
 `

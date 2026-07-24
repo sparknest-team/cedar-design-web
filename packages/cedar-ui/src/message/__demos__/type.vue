@@ -20,7 +20,7 @@
         "
         >Normal Message With Icon
       </c-button>
-      <c-button @click="() => Message.loading('This is a loading message!')" status="primary">Loading Message </c-button>
+      <c-button @click="handleLoading" status="primary">Loading Message </c-button>
     </c-space>
   </div>
 </template>
@@ -32,8 +32,18 @@ import { Message, IconExclamationCircleFill } from '@cedar/ui'
 export default defineComponent({
   setup() {
     const renderIcon = () => h(IconExclamationCircleFill)
+
+    const handleLoading = () => {
+      const message = Message.loading('This is a loading message!')
+      setTimeout(() => {
+        message.close()
+        Message.success('Loaded')
+      }, 2000)
+    }
+
     return {
       renderIcon,
+      handleLoading,
       Message,
     }
   },

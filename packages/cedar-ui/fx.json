@@ -101,10 +101,6 @@
       "dest": "/components/color-picker/index.html"
     },
     {
-      "src": "/components/comment/**",
-      "dest": "/components/comment/index.html"
-    },
-    {
       "src": "/components/config-provider/**",
       "dest": "/components/config-provider/index.html"
     },
@@ -209,8 +205,8 @@
       "dest": "/components/message/index.html"
     },
     {
-      "src": "/components/modal/**",
-      "dest": "/components/modal/index.html"
+      "src": "/components/dialog/**",
+      "dest": "/components/dialog/index.html"
     },
     {
       "src": "/components/notification/**",
@@ -285,8 +281,8 @@
       "dest": "/components/select-panel/index.html"
     },
     {
-      "src": "/components/select-transfer/**",
-      "dest": "/components/select-transfer/index.html"
+      "src": "/components/table-column-manager/**",
+      "dest": "/components/table-column-manager/index.html"
     },
     {
       "src": "/components/skeleton/**",

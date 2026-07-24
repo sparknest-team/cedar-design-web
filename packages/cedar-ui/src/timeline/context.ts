@@ -10,4 +10,4 @@ export interface TimelineContext {
   mode: ModeType
 }
 
-export const timelineInjectionKey: InjectionKey<TimelineContext> = Symbol('ArcoTimeline')
+export const timelineInjectionKey: InjectionKey<TimelineContext> = Symbol('CedarTimeline')

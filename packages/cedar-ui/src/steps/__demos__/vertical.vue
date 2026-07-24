@@ -2,7 +2,7 @@
   <div class="frame-bg">
     <div class="frame-body">
       <div class="frame-aside">
-        <c-steps :current="current" direction="column">
+        <c-steps :current="current" direction="vertical">
           <c-step>Succeeded</c-step>
           <c-step>Processing</c-step>
           <c-step>Pending</c-step>

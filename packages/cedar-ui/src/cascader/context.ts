@@ -14,4 +14,4 @@ export interface CascaderContext {
   expandTrigger: 'click' | 'hover'
 }
 
-export const cascaderInjectionKey: InjectionKey<CascaderContext> = Symbol('ArcoCascader')
+export const cascaderInjectionKey: InjectionKey<CascaderContext> = Symbol('CedarCascader')

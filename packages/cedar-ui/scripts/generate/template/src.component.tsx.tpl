@@ -1,5 +1,4 @@
 import { defineComponent, useAttrs, useSlots } from 'vue'
-import { <%= pascalCaseName %> } from '@arco-design/web-vue'
 // import { <%= camelCaseName %>Props } from './props'
 
 export default defineComponent({
@@ -13,6 +12,6 @@ export default defineComponent({
     const attrs = useAttrs()
     const slots = useSlots()
 
-    return () => <<%= pascalCaseName %> {...attrs} v-slots={slots}></<%= pascalCaseName %>>
+    return () => <div {...attrs} v-slots={slots}></div>
   },
 })

@@ -1,7 +1,7 @@
 <template>
   <c-space>
-    <c-date-picker v-model="value" style="width: 200px" />
-    <c-range-picker v-model="rangeValue" style="width: 300px" />
+    <c-date-picker v-model="value" />
+    <c-date-range-picker v-model="rangeValue" />
   </c-space>
 </template>
 

@@ -2,7 +2,7 @@ import { type Directive, type DirectiveBinding, createVNode, defineComponent, h,
 import Tooltip from './tooltip.vue'
 import { isPureTextElement, isTextOverflow } from './utils'
 
-const TOOLTIP_KEY = Symbol('ArcoTooltip')
+const TOOLTIP_KEY = Symbol('CedarTooltip')
 type Position = 'top' | 'tl' | 'tr' | 'bottom' | 'bl' | 'br' | 'left' | 'lt' | 'lb' | 'right' | 'rt' | 'rb' | 'ellipsis'
 
 export interface TooltipOptions {

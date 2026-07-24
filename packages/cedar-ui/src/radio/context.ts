@@ -5,7 +5,7 @@ export const RADIO_TYPES = ['radio', 'button'] as const
 export type RadioType = (typeof RADIO_TYPES)[number]
 
 export interface RadioGroupContext {
-  name: 'ArcoRadioGroup'
+  name: 'CedarRadioGroup'
   value: string | number | boolean
   size: Size
   type: RadioType

@@ -48,7 +48,7 @@ export function CedarResolver(options: CedarResolverOptions = {}): ComponentReso
   }
 }
 
-const functionArray = ['Modal', 'Message', 'Notification']
+const functionArray = ['Dialog', 'Message', 'Notification']
 
 export function CedarImport(options: CedarResolverOptions): ComponentResolver {
   return {

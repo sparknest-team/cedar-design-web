@@ -211,7 +211,7 @@ const components = [
     },
   },
   {
-    name: 'range-picker',
+    name: 'date-range-picker',
     props: {
       prop: 'startTimeArr',
       clearable: true,

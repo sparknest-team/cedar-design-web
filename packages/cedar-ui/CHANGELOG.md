@@ -14,6 +14,9 @@ permalink: /changelog/
 
 #### Breaking Change
 
+- **Steps** 与移动端 (`maple-design-mobile`) 完成 API 对齐：
+  - 事件改为 listener prop：`onChange` / `onUpdate:current`（模板 `@change` / `v-model:current` 仍可用）
+  - 抽出 `props.ts`，补齐 `StepsProps` / `StepProps` / `StepStatus` / `StepsType` 等类型导出
 - **Alert** 与移动端 (`maple-design-mobile`) 完成 API 对齐：
   - `type="error"` → `type="danger"`（与 `Status` 枚举统一）
   - `type="normal"` → `type="default"`
@@ -22,6 +25,7 @@ permalink: /changelog/
 
 #### Feature
 
+- **Steps** 修 `vertical` demo（`direction="vertical"`）、`changeable` demo（`setCurrent` 参数遮蔽）
 - **Alert** 新增 `variant`（`standard` / `tonal` / `outlined`）、`color`、`elevation` 属性；新增 `default` 类型；新增 `after-close` 事件。
 - **Alert** 样式重构为完全 CSS 变量驱动（`style/token.less`），覆盖 5 类型 × 3 变体颜色矩阵。
 
@@ -45,9 +49,9 @@ permalink: /changelog/
 
 - `FilterForm`组件Input类型输入框防抖优化、多选框动画优化。
 
-**Modal 组件**
+**Dialog 组件**
 
-- `Modal`组件空内容样式优化
+- `Dialog`组件空内容样式优化
 
 ## 1.2.75
 
@@ -181,7 +185,7 @@ permalink: /changelog/
 - 新增 `description-ellipsis` 属性，实现描述文本溢出时自动省略。
 - 新增 `description-tooltip` 实现描述文本溢出时，鼠标悬停时是否显示完整描述内容的提示。
 
-**Modal 组件**
+**Dialog 组件**
 
 - 新增 `size` 属性，支持自定义弹窗尺寸 (small, medium, large)，提供更多布局选择。
 - 新增最大高度限制，当弹窗内容高度超过视窗高度时，弹窗内容区域可滚动。
@@ -260,7 +264,7 @@ permalink: /changelog/
 
 - 新增 `bodyPadding` 属性。
 
-**Modal 组件**
+**Dialog 组件**
 
 - 新增 `bodyPadding` 属性。
 - 修复组件弹出后页面出现双层滚动条的问题。

@@ -29,7 +29,7 @@
       </c-sub-menu>
       <c-sub-menu key="2">
         <template #icon>
-          <c-icon-blub></c-icon-blub>
+          <c-icon-bulb></c-icon-bulb>
         </template>
         <template #title>Navigation 3</template>
         <c-menu-item key="2_0">Menu 1</c-menu-item>

@@ -78,8 +78,8 @@ export interface MessageConfig {
    */
   closable?: boolean
   /**
-   * @zh 消息显示的持续时间
-   * @en The duration of the message display
+   * @zh 消息显示的持续时间，单位毫秒。`0` 表示不自动关闭。`Message.loading` 默认 `0`
+   * @en Duration in ms. `0` means no auto close. `Message.loading` defaults to `0`
    */
   duration?: number
   /**

@@ -26,24 +26,13 @@
 </template>
 
 <script lang="ts">
-import {
-  computed,
-  defineComponent,
-  getCurrentInstance,
-  inject,
-  onBeforeUnmount,
-  PropType,
-  reactive,
-  ref,
-  watch,
-} from 'vue'
+import { computed, defineComponent, getCurrentInstance, inject, onBeforeUnmount, reactive, ref, toRefs } from 'vue'
 import { getPrefixCls } from '../_utils/global-config'
 import IconCheck from '../icon/icon-check'
 import IconClose from '../icon/icon-close'
-import { StepStatus, StepsType } from './types'
-import { Direction } from '../_utils/constant'
 import { stepsInjectionKey } from './context'
 import { useIndex } from '../_hooks/use-index'
+import { stepProps } from './props'
 
 export default defineComponent({
   name: 'Step',
@@ -51,54 +40,9 @@ export default defineComponent({
     IconCheck,
     IconClose,
   },
-  props: {
-    /**
-     * @zh 步骤的标题
-     * @en Title of the step
-     */
-    title: String,
-    /**
-     * @zh 步骤的描述信息
-     * @en Description of the step
-     */
-    description: String,
-    /**
-     * @zh 步骤的状态
-     * @en Status of the step
-     * @values 'wait', 'process', 'finish', 'error'
-     */
-    status: {
-      type: String as PropType<StepStatus>,
-    },
-    /**
-     * @zh 是否禁用
-     * @en Whether to disable
-     */
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  /**
-   * @zh 节点
-   * @en Node
-   * @slot node
-   * @binding {number} step
-   * @binding {string} status
-   */
-  /**
-   * @zh 图标
-   * @en Icon
-   * @slot icon
-   * @binding {number} step
-   * @binding {string} status
-   */
-  /**
-   * @zh 描述内容
-   * @en Description
-   * @slot description
-   */
+  props: stepProps,
   setup(props) {
+    const { title, description } = toRefs(props)
     const prefixCls = getPrefixCls('steps-item')
     const instance = getCurrentInstance()
     const iconCls = getPrefixCls('steps-icon')
@@ -152,7 +96,6 @@ export default defineComponent({
         [`${prefixCls}-active`]: stepNumber.value === stepsCtx?.current,
         [`${prefixCls}-next-error`]: nextStepError.value,
         [`${prefixCls}-disabled`]: props.disabled,
-        // [`${prefixCls}-custom`]: !!icon,
       },
     ])
 
@@ -165,6 +108,8 @@ export default defineComponent({
       stepNumber,
       computedStatus,
       type,
+      title,
+      description,
       handleClick,
     }
   },

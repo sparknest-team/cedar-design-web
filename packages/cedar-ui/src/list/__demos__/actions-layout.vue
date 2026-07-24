@@ -9,7 +9,7 @@
         </template>
         <template #extra>
           <div class="image-area">
-            <img alt="arco-design" :src="item.imageSrc" />
+            <img alt="cedar-design" :src="item.imageSrc" />
           </div>
         </template>
         <c-list-item-meta :title="item.title" :description="item.description">

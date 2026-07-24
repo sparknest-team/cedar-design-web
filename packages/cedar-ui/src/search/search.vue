@@ -1,8 +1,8 @@
 <template>
   <InputGroup
     :class="{
-      'cedar-search': true,
-      'cedar-search-noselect': !fields.length,
+      [prefixCls]: true,
+      [`${prefixCls}-noselect`]: !fields.length,
     }"
   >
     <Select v-if="fields.length" :modelValue="searchField_" :style="selectStyle" bordered @change="onSelectChange">
@@ -10,17 +10,17 @@
         {{ item.label }}
       </Option>
     </Select>
-    <div ref="wrapper" class="cedar-search-input-wrapper">
+    <div ref="wrapper" :class="`${prefixCls}-input-wrapper`">
       <Input
         ref="ins"
-        v-model:modelValue="searchText_"
+        v-model="searchText_"
         :placeholder="placeholder"
         clearable
         @change="onInputChange"
         @click="showHistoryPop"
         @clear="onInputClear"
         @input="onInput"
-        @keyup="onKeyUp"
+        @press-enter="onPressEnter"
       >
         <template #suffix>
           <IconSearch class="search-icon" @click="onSearch" />
@@ -40,19 +40,20 @@
   </InputGroup>
 </template>
 <script lang="ts" setup>
-import type { AutoCompleteInstance } from '@cedar/ui'
 import { computed, ref, watch, getCurrentInstance } from 'vue'
-import { InputGroup, Input } from '@arco-design/web-vue'
+import Input, { InputGroup, type InputInstance } from '../input'
 import Dropdown, { Doption } from '../dropdown'
 import type { SearchField, SearchProps } from './props'
 import type { SearchResult } from './result'
 import Select, { Option } from '../select'
 import { IconSearch } from '../icon'
 import { searchHistory } from './search-history'
+import { getPrefixCls } from '../_utils/global-config'
 
 defineOptions({
   name: 'Search',
 })
+const prefixCls = getPrefixCls('search')
 const props = withDefaults(defineProps<SearchProps>(), {
   fields: () => [],
   enableSearchHistory: true,
@@ -67,16 +68,16 @@ const isUsingVModel = computed(() => {
   // 判断是否传入了 `modelValue` prop 并且有 `update:modelValue` 事件监听器
   return Boolean(isUsingModelValue.value && instance?.vnode.props && instance.vnode.props['onUpdate:model'])
 })
-const ins = ref<AutoCompleteInstance>()
+const ins = ref<InputInstance>()
 const wrapper = ref<HTMLElement>()
 const model_ = ref()
 const visible = ref(false)
 const searchText_ = ref()
 const searchField_ = ref()
 const data_ = ref<string[]>([])
-const { push, getArray } = searchHistory(props.searchHistoryKey as string, props.searchHistoryMaxCount as number)
+const { push, getlist } = searchHistory(props.searchHistoryKey as string, props.searchHistoryMaxCount as number)
 
-data_.value = getArray()
+data_.value = getlist()
 
 const updateModel = () => {
   model_.value = model_.value || {}
@@ -101,7 +102,7 @@ function emitSearch() {
     model: model_.value,
   } as SearchResult)
   push(searchText_.value)
-  data_.value = getArray()
+  data_.value = getlist()
   visible.value = false
 }
 
@@ -122,12 +123,10 @@ const onSelect = (item) => {
     model: model_.value,
   } as SearchResult)
 }
-const onKeyUp = (e: KeyboardEvent) => {
-  if (e.code === 'Enter') {
-    updateModel()
-    emitSearch()
-    ins.value?.blur()
-  }
+const onPressEnter = () => {
+  updateModel()
+  emitSearch()
+  ins.value?.blur()
 }
 
 const onSelectChange = (val: any) => {

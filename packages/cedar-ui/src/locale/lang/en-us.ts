@@ -1,7 +1,7 @@
 import { DefaultValidateMessage } from 'b-validate'
-import { ArcoCalendarLang, ArcoLang } from '../types'
+import { CedarCalendarLang, CedarLang } from '../types'
 
-const calendarLang: ArcoCalendarLang = {
+const calendarLang: CedarCalendarLang = {
   formatYear: 'YYYY',
   formatMonth: 'MMM YYYY',
   today: 'Today',
@@ -65,7 +65,7 @@ const calendarLang: ArcoCalendarLang = {
   },
 }
 
-const lang: ArcoLang = {
+const lang: CedarLang = {
   locale: 'en-US',
   common: {
     placeholderSelect: 'Please select',
@@ -94,12 +94,6 @@ const lang: ArcoLang = {
     expandMore: 'Expand',
     collapseMore: 'Collapse',
   },
-  selectTransfer: {
-    freezeToTop: 'Freeze to Top',
-    freezeToBottom: 'Freeze to Bottom',
-    unfreeze: 'Unfreeze',
-    deleteItem: 'Delete Item',
-  },
   empty: {
     description: 'No Data',
   },
@@ -111,9 +105,9 @@ const lang: ArcoLang = {
     okText: 'Ok',
     cancelText: 'Cancel',
   },
-  modal: {
-    okText: 'Ok',
-    cancelText: 'Cancel',
+  dialog: {
+    confirmButtonText: 'Ok',
+    cancelButtonText: 'Cancel',
   },
   pagination: {
     goto: 'Goto',
@@ -124,12 +118,31 @@ const lang: ArcoLang = {
   table: {
     okText: 'Ok',
     resetText: 'Reset',
-
-    customColumnsConfig: 'Custom Columns Config',
+    customColumnsConfig: 'Column Manager',
     selectAll: 'Select All',
     selected: 'Selected',
     placeholderInputKeyword: 'Please enter a keyword',
     clear: 'Empty',
+    columnManager: {
+      freezeToLeft: 'Freeze to Left',
+      freezeToRight: 'Freeze to Right',
+      unfreeze: 'Unfreeze',
+      deleteItem: 'Delete Item',
+      renameColumn: 'Rename',
+      insertLeft: 'Insert Column Left',
+      insertRight: 'Insert Column Right',
+      insertColumn: 'Insert Column',
+      freezeColumn: 'Freeze Column',
+      unfreezeColumn: 'Unfreeze Column',
+      editColumn: 'Edit Column',
+      deleteColumn: 'Delete Column',
+      noInsertableColumns: 'No columns available to insert',
+      groupTitle: 'Group Title',
+      groupTitlePlaceholder: 'Leave empty for no group',
+      groupTitleHint: 'Adjacent columns with the same group title are merged automatically',
+      columnTitle: 'Column Name',
+      columnTitlePlaceholder: 'Enter column name',
+    },
   },
   upload: {
     drag: 'Drag file to this area to upload or',
@@ -169,6 +182,10 @@ const lang: ArcoLang = {
     today: 'Today',
     now: 'Now',
     ok: 'Ok',
+    startTime: 'Start time',
+    endTime: 'End time',
+    rangeSeparator: 'to',
+    nextDay: 'Next day',
   },
   image: {
     loading: 'loading',

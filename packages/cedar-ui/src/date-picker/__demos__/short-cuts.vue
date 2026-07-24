@@ -1,6 +1,5 @@
 <template>
-  <c-date-picker
-    style="width: 194px; margin: 0 24px 24px 0"
+  <c-date-picker style="margin: 0 24px 24px 0"
     :shortcuts="[
       {
         label: '2 hours later',

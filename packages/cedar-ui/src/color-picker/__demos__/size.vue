@@ -1,11 +1,8 @@
 <template>
   <c-space>
-    <c-color-picker defaultValue="#00BEBE" size="xs" />
-    <c-color-picker defaultValue="#00BEBE" size="sm" />
-    <c-color-picker defaultValue="#00BEBE" size="md" />
-    <c-color-picker defaultValue="#00BEBE" size="lg" />
+    <c-color-picker defaultValue="#00BEBE" size="xs" :hide-trigger="false" />
+    <c-color-picker defaultValue="#00BEBE" size="sm" :hide-trigger="false" />
+    <c-color-picker defaultValue="#00BEBE" size="md" :hide-trigger="false" />
+    <c-color-picker defaultValue="#00BEBE" size="lg" :hide-trigger="false" />
   </c-space>
 </template>
-
-<script lang="ts" setup>
-</script>

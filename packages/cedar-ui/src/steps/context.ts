@@ -16,4 +16,4 @@ export interface StepsContext {
   parentCls: string
 }
 
-export const stepsInjectionKey: InjectionKey<StepsContext> = Symbol('ArcoSteps')
+export const stepsInjectionKey: InjectionKey<StepsContext> = Symbol('CedarSteps')

@@ -17,7 +17,7 @@
     "dist/*",
     "es/**/style/*",
     "lib/**/style/*",
-    "*.scss"
+    "*.less"
   ],
   "scripts": {
     "generatePaths": "tsx scripts/generate/generatePaths",
@@ -42,13 +42,10 @@
     "preview": "histoire preview"
   },
   "dependencies": {
-    "@arco-design/color": "^0.4.0",
-    "@arco-design/web-vue": "^2.56.3",
     "@maplejs/maple-shared": "workspace:*",
     "@maplejs/maple-touch-emulator": "workspace:*",
     "@maplejs/maple-use": "workspace:*",
     "b-validate": "^1.5.3",
-    "color": "^5.0.0",
     "dayjs": "^1.10.3",
     "kotlin-playground": "^1.30.0",
     "lodash": "^4.17.21",
@@ -103,6 +100,7 @@
     "@vuepress/plugin-slimsearch": "2.0.0-rc.63",
     "@vuepress/theme-default": "^2.0.0-rc.26",
     "@vueuse/core": "^10.9.0",
+    "color": "^4.2.3",
     "commitizen": "^4.3.0",
     "components-helper": "^2.0.0",
     "conventional-changelog-cli": "^4.1.0",

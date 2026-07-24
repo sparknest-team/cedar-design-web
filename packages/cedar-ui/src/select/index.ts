@@ -1,5 +1,5 @@
 import type { App } from 'vue'
-import type { ArcoOptions } from '../_utils/types'
+import type { CedarOptions } from '../_utils/types'
 import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
 import _Select from './select'
 import _Option from './option.vue'
@@ -8,7 +8,7 @@ import _Optgroup from './optgroup.vue'
 const Select = Object.assign(_Select, {
   Option: _Option,
   OptGroup: _Optgroup,
-  install: (app: App, options?: ArcoOptions) => {
+  install: (app: App, options?: CedarOptions) => {
     setGlobalConfig(app, options)
     const componentPrefix = getComponentPrefix(options)
 

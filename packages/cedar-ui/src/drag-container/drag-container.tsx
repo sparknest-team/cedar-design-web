@@ -1,8 +1,7 @@
-import { defineComponent, useAttrs, useSlots, ref, onMounted } from 'vue'
+import { defineComponent, useSlots, ref, onMounted } from 'vue'
 import { dragContainerProps } from './props'
 import Sortable from 'sortablejs'
-import { createNamespace } from '../_utils/global-config'
-
+import { getPrefixCls, createNamespace } from '../_utils/global-config'
 
 const { name } = createNamespace('drag-container')
 
@@ -14,8 +13,8 @@ export default defineComponent({
   emits: ['click', 'change', 'update:modelValue'],
 
   setup(props, { emit }) {
-    const attrs = useAttrs()
     const slots = useSlots()
+    const prefixCls = getPrefixCls('drag-container')
 
     const containerRef = ref<HTMLElement | null>(null)
 
@@ -24,7 +23,6 @@ export default defineComponent({
 
     const initSortable = () => {
       if (containerRef.value) {
-        // const childElements = containerRef.value.children
         const dragConfig = {
           animation: 150,
           ...props.dragOptions,
@@ -44,7 +42,7 @@ export default defineComponent({
           },
         }
         if (containerRef.value) {
-          const listElement = containerRef.value as HTMLElement // 获取Container唯一的子元素
+          const listElement = containerRef.value as HTMLElement
           if (listElement) {
             sortableInstance = Sortable.create(listElement, dragConfig)
           }
@@ -57,7 +55,7 @@ export default defineComponent({
     })
 
     return () => (
-      <div ref={containerRef} class="drag-container">
+      <div ref={containerRef} class={prefixCls}>
         {slots.default?.()}
       </div>
     )

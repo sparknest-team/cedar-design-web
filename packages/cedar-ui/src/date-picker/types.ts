@@ -109,7 +109,7 @@ export type PickerProps = BasePickerProps &
     mode: Mode
   }
 
-export interface RangePickerProps extends BasePickerProps {
+export interface DateRangePickerProps extends BasePickerProps {
   mode: Mode
   modelValue?: CalendarValue[]
   defaultValue?: CalendarValue[]

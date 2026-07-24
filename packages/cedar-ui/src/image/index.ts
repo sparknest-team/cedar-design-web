@@ -1,5 +1,5 @@
 import { App } from 'vue'
-import { ArcoOptions } from '../_utils/types'
+import { CedarOptions } from '../_utils/types'
 import { getComponentPrefix, setGlobalConfig } from '../_utils/global-config'
 import _Image from './image.vue'
 import _ImagePreview from './preview.vue'
@@ -11,7 +11,7 @@ const Image = Object.assign(_Image, {
   Preview: _ImagePreview,
   PreviewGroup: _ImagePreviewGroup,
   preview: previewImage,
-  install: (app: App, options?: ArcoOptions) => {
+  install: (app: App, options?: CedarOptions) => {
     setGlobalConfig(app, options)
     const componentPrefix = getComponentPrefix(options)
 

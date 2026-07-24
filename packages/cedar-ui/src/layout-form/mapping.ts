@@ -1,7 +1,9 @@
 // ColorPicker,
 import { Row } from '../grid'
 import Cascader from '../cascader'
-import DatePicker, { RangePicker } from '../date-picker'
+import Date from '../date'
+import DateRange from '../date-range'
+import Color from '../color'
 import Form, { FormItem } from '../form'
 import Input from '../input'
 import InputNumber from '../input-number'
@@ -20,7 +22,7 @@ export enum ComponentEnum {
   PEOPLE_SELECT = 'people-select',
   RESOURCE_SUGGEST = 'resource-suggest',
   CASCADER = 'c-cascader',
-  COLOR_PICKER = 'color-picker',
+  COLOR_PICKER = 'c-color',
   IMAGE_UPLOAD = 'portal-upload',
   FILE_UPLOAD = 'file-upload',
   INPUT = 'c-input',
@@ -33,8 +35,8 @@ export enum ComponentEnum {
   FORM = 'c-form',
   DIV = 'div',
   ROW = 'c-row',
-  DATEPICKER = 'c-date-picker',
-  DATEPICKER_RANGE = 'c-range-picker',
+  DATEPICKER = 'c-date',
+  DATEPICKER_RANGE = 'c-date-range',
   SWITCH = 'c-switch',
   RADIO_GROUP = 'c-radio-group',
 }
@@ -83,14 +85,14 @@ export const mapping = {
   [ComponentEnum.FORM]: Form,
   [ComponentEnum.FORM_ITEM]: FormItem,
   [ComponentEnum.OPTION]: Option,
-  // [ComponentEnum.COLOR_PICKER]: ColorPicker,
+  [ComponentEnum.COLOR_PICKER]: Color,
   // [ComponentEnum.IMAGE_UPLOAD]: ImageUpload,
   // [ComponentEnum.FILE_UPLOAD]: FileUpload,
   [ComponentEnum.INPUT]: Input,
   [ComponentEnum.TEXTAREA]: Textarea,
   [ComponentEnum.INPUT_NUMBER]: InputNumber,
-  [ComponentEnum.DATEPICKER]: DatePicker,
-  [ComponentEnum.DATEPICKER_RANGE]: RangePicker,
+  [ComponentEnum.DATEPICKER]: Date,
+  [ComponentEnum.DATEPICKER_RANGE]: DateRange,
   [ComponentEnum.SELECT]: Select,
   [ComponentEnum.SWITCH]: Switch,
   [ComponentEnum.RADIO_GROUP]: RadioGroup,

@@ -139,7 +139,7 @@ export default defineComponent({
     provide(
       radioGroupKey,
       reactive({
-        name: 'ArcoRadioGroup',
+        name: 'CedarRadioGroup',
         value: computedValue,
         size: mergedSize,
         type,

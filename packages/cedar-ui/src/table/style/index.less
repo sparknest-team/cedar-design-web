@@ -70,10 +70,42 @@
       padding: ~'@{table-size-@{size}-padding-vertical}' ~'@{table-size-@{size}-padding-horizontal}';
     }
   }
+
+  // 末列扩展列：收紧左右内边距与图标尺寸
+  .c-table-th.c-table-extra-column-cell,
+  .c-table-td.c-table-extra-column-cell {
+    .c-table-cell {
+      justify-content: center;
+      padding: ~'@{table-size-@{size}-padding-vertical}' ~'@{table-size-@{size}-extra-padding-horizontal}';
+    }
+
+    .c-table-extra-column-icon {
+      font-size: ~'@{table-font-size-@{size}-extra-icon}';
+
+      .c-icon {
+        font-size: inherit;
+      }
+    }
+  }
 }
 
 .c-table {
   position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  // flex 子项默认 min-width:auto，会被表格内容撑开并与列宽计算形成正反馈
+  min-width: 0;
+  overflow: hidden;
+
+  // sticky-header / sticky-pagination 相对外层滚动容器定位，祖先 overflow:hidden 会失效
+  &-scrollport-visible {
+    overflow: visible;
+
+    .c-table-container {
+      overflow: visible;
+    }
+  }
 
   &-column-handle {
     position: absolute;
@@ -85,10 +117,70 @@
     cursor: col-resize;
   }
 
+  &-extra-column-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(~'--c-color-text-2');
+    cursor: pointer;
+
+    &:hover {
+      color: var(~'--c-color-text-1');
+    }
+  }
+
+  &-header-cell-action {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    margin-left: 2px;
+    color: var(~'--c-color-text-3');
+    vertical-align: middle;
+    cursor: pointer;
+
+    &:hover {
+      color: var(~'--c-color-text-1');
+    }
+  }
+
+  &-th-main {
+    display: inline-flex;
+    flex: 1;
+    align-items: center;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  &-th-title {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &-th-actions {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    margin-left: 8px;
+
+    .c-table-filters-align-left {
+      margin-left: 0;
+    }
+  }
+
+  &-cell-with-actions {
+    width: 100%;
+    min-width: 0;
+  }
+
   // spin
   .c-spin {
     display: flex;
     flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
     height: 100%;
   }
 
@@ -122,10 +214,14 @@
 
   .c-table-element {
     width: 100%;
-    min-width: 100%;
     margin: 0;
     border-collapse: separate;
     border-spacing: 0;
+  }
+
+  // 需要横滚时由 JS 设置明确像素宽，并保证不小于容器
+  &-scroll-x .c-table-element {
+    min-width: 100%;
   }
 
   &-th {
@@ -505,7 +601,10 @@
   &-container {
     box-sizing: border-box;
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
     min-height: 0;
+    overflow: hidden;
 
     // chrome not fluent: https://codepen.io/quanqqq/pen/BaLpEQd?editors=0010
     // border-radius: @table-border-radius @table-border-radius 0 0 0;
@@ -513,7 +612,10 @@
     .c-table-content {
       display: flex;
       flex-direction: column;
-      width: auto;
+      box-sizing: border-box;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
       height: 100%;
 
       &-scroll-x {
@@ -568,14 +670,18 @@
   &-header {
     overflow-x: hidden;
     overflow-y: hidden;
+    max-width: 100%;
+    min-width: 0;
     background-color: @table-color-bg-header-cell;
     scrollbar-color: transparent transparent;
+  }
 
-    &-sticky {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
+  // sticky 包裹层：独立于 .c-scrollbar，避免 position:relative 覆盖 sticky
+  &-header-sticky {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: @table-color-bg-header-cell;
   }
 
   &:not(&-empty) &-header::-webkit-scrollbar {
@@ -591,9 +697,16 @@
   &-body {
     position: relative;
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
     min-height: @table-size-body-min-width;
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
     background-color: @table-color-body-background;
+  }
+
+  &-scroll-x &-body {
+    overflow-x: auto;
   }
 
   &-border {
@@ -773,6 +886,8 @@
     z-index: 1;
     flex-shrink: 0;
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
     overflow-x: auto;
     background-color: @table-color-bg-tfoot;
     box-shadow: 0 -@table-border-width 0 @table-color-border;
@@ -842,6 +957,15 @@
     margin-top: 0;
     margin-bottom: @table-spacing-pagination-margin;
   }
+
+  &-sticky {
+    position: sticky;
+    bottom: 0;
+    z-index: 100;
+    box-sizing: border-box;
+    padding: 12px 0;
+    background-color: var(--color-bg-1, #fff);
+  }
 }
 
 .c-virtual-list {
@@ -853,5 +977,36 @@
 :root[cedar-theme='dark'] {
   .c-table-tr-checked .c-table-td {
     background-color: @table-color-bg-body-row_active_dark;
+  }
+}
+
+.c-table-column-insert {
+  box-sizing: border-box;
+  max-height: calc(100vh - 160px);
+  padding: 16px 20px;
+  overflow: auto;
+
+  &-empty {
+    color: var(~'--c-color-text-3');
+    font-size: 14px;
+    line-height: 22px;
+  }
+
+  &-group + &-group {
+    margin-top: 16px;
+  }
+
+  &-group-title {
+    margin-bottom: 8px;
+    color: var(~'--c-color-text-3');
+    font-size: 12px;
+    line-height: 20px;
+  }
+
+  &-item {
+    display: flex;
+    align-items: center;
+    min-height: 32px;
+    cursor: pointer;
   }
 }

@@ -122,7 +122,7 @@ export default defineComponent({
     provide(
       checkboxGroupKey,
       reactive({
-        name: 'ArcoCheckboxGroup',
+        name: 'CedarCheckboxGroup',
         computedValue,
         disabled: mergedDisabled,
         isMaxed,

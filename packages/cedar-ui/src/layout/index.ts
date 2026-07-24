@@ -1,5 +1,5 @@
 import type { App } from 'vue'
-import type { ArcoOptions } from '../_utils/types'
+import type { CedarOptions } from '../_utils/types'
 import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
 import _Layout from './layout.vue'
 import _LayoutHeader from './header.vue'
@@ -12,7 +12,7 @@ const Layout = Object.assign(_Layout, {
   Content: _LayoutContent,
   Footer: _LayoutFooter,
   Sider: _LayoutSider,
-  install: (app: App, options?: ArcoOptions) => {
+  install: (app: App, options?: CedarOptions) => {
     setGlobalConfig(app, options)
     const componentPrefix = getComponentPrefix(options)
 

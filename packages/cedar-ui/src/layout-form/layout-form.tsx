@@ -11,7 +11,7 @@ import { getPropByPath } from './util'
 import { ComponentEnum, formItemMapping, mapping } from './mapping'
 import { getRadioGroupOptions, getVNode } from './event'
 import { useI18n } from '../locale'
-import { createNamespace } from '../_utils/global-config'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
 
 export type { LayoutFormProps } from './props'
 
@@ -30,6 +30,7 @@ export default defineComponent({
   emits: ['update:value', 'change'],
   setup(props, { slots, emit, expose, attrs }) {
     const { t } = useI18n()
+    const prefixCls = getPrefixCls('layout-form')
 
     const flg = ref(false)
     setTimeout(() => {
@@ -596,7 +597,7 @@ export default defineComponent({
       props.componentTree.componentId = props.componentTree.componentId || data.index++
       data.treeLength = 0
       return (
-        <div {...attrs} class="cedar-layout-form">
+        <div {...attrs} class={prefixCls}>
           {renderComponent(props.componentTree, props.componentTree.level, 0)}
           {slots.default?.()}
         </div>

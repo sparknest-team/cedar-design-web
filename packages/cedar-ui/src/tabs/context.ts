@@ -28,5 +28,5 @@ export interface TabsNavContext {
   onDelete: (key: string | number, ev: Event) => void
 }
 
-export const tabsInjectionKey: InjectionKey<TabsContext> = Symbol('ArcoTabs')
-export const tabsNavInjectionKey: InjectionKey<TabsNavContext> = Symbol('ArcoTabsNav')
+export const tabsInjectionKey: InjectionKey<TabsContext> = Symbol('CedarTabs')
+export const tabsNavInjectionKey: InjectionKey<TabsNavContext> = Symbol('CedarTabsNav')

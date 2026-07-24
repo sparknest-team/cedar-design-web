@@ -4,7 +4,7 @@
       <template #checked> ON</template>
       <template #unchecked>OFF</template>
     </c-switch>
-    <c-color-picker defaultValue="#00BEBE" :trigger-props="triggerProps" />
+    <c-color-picker defaultValue="#00BEBE" :hide-trigger="false" :trigger-props="triggerProps" />
   </c-space>
 </template>
 

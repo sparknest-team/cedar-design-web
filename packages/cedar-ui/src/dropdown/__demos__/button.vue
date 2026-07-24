@@ -38,7 +38,7 @@ const handleSelect = (v) => {
 </script>
 
 <style>
-.cedar-dropdown-open .cedar-icon-down {
+.c-dropdown-open .c-icon-down {
   transform: rotate(180deg);
 }
 </style>

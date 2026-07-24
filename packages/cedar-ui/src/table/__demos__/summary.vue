@@ -1,6 +1,6 @@
 <template>
   <c-table :columns="columns" :data="data" :summary="true" :summary-span-method="spanMethod" />
-  <c-table :columns="columns" :data="data" :scroll="scroll" :expandable="expandable" :summary="summary">
+  <c-table :columns="columns" :data="data" :height="200" :expandable="expandable" :summary="summary">
     <template #summary-cell="{ column, record, rowIndex }">
       <div :style="getColorStyle(column, record)">{{ record[column.dataIndex] }}</div>
     </template>
@@ -13,10 +13,6 @@ const expandable = {
   title: 'Expand',
   width: 80,
 }
-const scroll = {
-  x: 2000,
-  y: 200,
-}
 const columns = reactive([
   {
     title: 'Name',
@@ -27,6 +23,7 @@ const columns = reactive([
   {
     title: 'Salary',
     dataIndex: 'salary',
+    minWidth: 200,
     summaryCellStyle: (record) => {
       if (record.salary > 100000) {
         return {
@@ -39,10 +36,12 @@ const columns = reactive([
   {
     title: 'Data1',
     dataIndex: 'data1',
+    minWidth: 300,
   },
   {
     title: 'Data2',
     dataIndex: 'data2',
+    minWidth: 300,
   },
 ])
 const data = reactive([

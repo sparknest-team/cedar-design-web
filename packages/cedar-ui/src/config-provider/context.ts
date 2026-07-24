@@ -1,11 +1,11 @@
 import { InjectionKey, Slots } from 'vue'
-import { ArcoLang } from '../locale/types'
+import { CedarLang } from '../locale/types'
 import { Size } from '../_utils/constant'
 
 export interface ConfigProvider {
   slots: Slots
   prefixCls?: string
-  locale?: ArcoLang
+  locale?: CedarLang
   size?: Size
   updateAtScroll?: boolean
   scrollToClose?: boolean

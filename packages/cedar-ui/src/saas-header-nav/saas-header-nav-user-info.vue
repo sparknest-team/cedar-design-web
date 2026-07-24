@@ -4,21 +4,21 @@
     position="br"
     trigger="hover"
     id="cedarSaaSHeaderNavUserInfoDropdown"
-    :class="`cedar-saas-header-user-info-dropdown-theme-${theme}`"
+    :class="`c-saas-header-user-info-dropdown-theme-${theme}`"
     @select="handleActionClick"
     @popup-visible-change="handleActiveStatusChange"
   >
-    <div class="cedar-saas-header-user-info-wrapper has-actions" :data-theme="theme">
+    <div class="c-saas-header-user-info-wrapper has-actions" :data-theme="theme">
       <!-- 用户头像 -->
-      <div class="cedar-saas-header-user-avatar">
-        <img class="cedar-saas-header-user-avatar-img" :src="getUserAvatar()" />
+      <div class="c-saas-header-user-avatar">
+        <img class="c-saas-header-user-avatar-img" :src="getUserAvatar()" />
       </div>
 
       <!-- 用户名称 -->
-      <div class="cedar-saas-header-user-name">{{ getUserNameTxt() }}</div>
+      <div class="c-saas-header-user-name">{{ getUserNameTxt() }}</div>
 
-      <IconUp v-if="isActive" class="cedar-saas-header-user-info-arrow" />
-      <IconDown v-else class="cedar-saas-header-user-info-arrow" />
+      <IconUp v-if="isActive" class="c-saas-header-user-info-arrow" />
+      <IconDown v-else class="c-saas-header-user-info-arrow" />
     </div>
 
     <template #content>
@@ -55,15 +55,15 @@
     </template>
   </Dropdown>
 
-  <div v-else class="cedar-saas-header-user-info-wrapper" :data-theme="theme">
-    <div class="cedar-saas-header-user-avatar">
+  <div v-else class="c-saas-header-user-info-wrapper" :data-theme="theme">
+    <div class="c-saas-header-user-avatar">
       <img
-        class="cedar-saas-header-user-avatar-img"
+        class="c-saas-header-user-avatar-img"
         src="https://xxx.com/pe-fe-statics/powercloud/user-avatar-default.png"
       />
     </div>
 
-    <div class="cedar-saas-header-user-name">
+    <div class="c-saas-header-user-name">
       {{ getUserNameTxt() }}
     </div>
   </div>

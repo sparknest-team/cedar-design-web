@@ -6,6 +6,8 @@ permalink: /components/form/
 
 具有数据收集、校验和提交功能的表单，包含复选框、单选框、输入框、下拉选择框等元素。
 
+标签一律由 `FormItem` 的 `label`（或 label 插槽）负责渲染；控件本身只提供 `placeholder` 等占位文案，不承担字段标签。
+
 ## 案例
 
 ### 基础用法
@@ -14,7 +16,9 @@ permalink: /components/form/
 
 ### 表单布局
 
-表单支持三种布局方式： horizontal - 水平排列 （默认）， vertical - 垂直排列， inline - 行内排列。
+表单支持三种布局方式： horizontal - 水平排列（默认，标签在左、控件在右）， vertical - 垂直排列（标签在上、控件在下）， inline - 行内排列。
+
+通过 `Form.layout`（或单项覆盖）切换上下 / 左右标签布局。
 
 <demo src="./__demos__/layout.vue"></demo>
 

@@ -110,7 +110,11 @@ const message = types.reduce((pre, value) => {
     if (isString(config)) {
       config = { content: config }
     }
-    const _config: _MessageConfig = { type: value, ...config }
+    const _config: _MessageConfig = {
+      type: value,
+      ...(value === 'loading' && config.duration == null ? { duration: 0 } : {}),
+      ...config,
+    }
     const { position = 'top' } = _config
     if (!messageInstance[position]) {
       messageInstance[position] = new MessageManger(_config, appContext)

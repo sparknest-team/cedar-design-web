@@ -93,9 +93,10 @@ permalink: /components/steps/
 
 ### Steps Events
 
-| 事件名 | 说明                 | 参数                         |
-| ------ | -------------------- | ---------------------------- |
-| change | 步骤数发生改变时触发 | step:`number`<br/>ev:`Event` |
+| 事件名              | 说明                           | 参数                         |
+| ------------------- | ------------------------------ | ---------------------------- |
+| change              | 步骤数发生改变时触发（需开启 `changeable`） | step:`number`<br/>ev:`Event` |
+| update:current      | `v-model:current` 同步         | step:`number`                |
 
 ### Step Props
 
@@ -119,5 +120,12 @@ permalink: /components/steps/
 组件导出以下类型定义
 
 ```ts
-import type { StepsProps } from '@cedar/ui'
+import type {
+  StepsProps,
+  StepProps,
+  StepsType,
+  StepStatus,
+  StepsInstance,
+  StepsStepInstance,
+} from '@cedar/ui'
 ```

@@ -3,15 +3,15 @@
     <Tooltip v-bind="tooltipProps">
       <div
         :class="[
-          bem(),
+          prefixCls,
           {
-            'cedar-ellipsis--line': !lineClamp,
-            'cedar-ellipsis--clamp': lineClamp,
-            'cedar-ellipsis--cursor': expandTrigger,
-            'cedar-ellipsis--expand': expanding,
+            [`${prefixCls}--line`]: !lineClamp,
+            [`${prefixCls}--clamp`]: lineClamp,
+            [`${prefixCls}--cursor`]: expandTrigger,
+            [`${prefixCls}--expand`]: expanding,
           },
         ]"
-        cedar-ellipsis-cover
+        c-ellipsis-cover
         :style="rootStyles"
         @click="handleClick"
       >
@@ -35,13 +35,13 @@ import { computed, ref, watch, type CSSProperties, type PropType } from 'vue'
 import Tooltip, { tooltipProps as _tooltipProps } from '../../tooltip'
 import { ellipsisProps } from './props'
 import { type ExtractPublicPropTypes } from '../../_utils/components'
-import { createNamespace } from '../../_utils/create'
+import { getPrefixCls } from '../../_utils/global-config'
 
 defineOptions({
   name: 'Ellipsis',
 })
 
-const [name, bem] = createNamespace('ellipsis')
+const prefixCls = getPrefixCls('ellipsis')
 
 const emit = defineEmits(['update:expand'])
 

@@ -1,0 +1,53 @@
+<template>
+  <div :class="n()">
+    <slot :value="displayValue">{{ displayValue }}</slot>
+  </div>
+</template>
+
+<script lang="ts" setup>
+import { computed, onMounted, watch } from 'vue'
+import { call, floor, toNumber } from '@maplejs/maple-shared'
+import { useMotion } from '@maplejs/maple-use'
+import { createNamespace } from '../_utils/global-config'
+import { countToProps } from './props'
+
+defineOptions({
+  name: createNamespace('count-to').name,
+})
+
+const { n } = createNamespace('count-to')
+const props = defineProps(countToProps)
+
+const {
+  value: motionValue,
+  reset: resetMotion,
+  start,
+  pause,
+} = useMotion({
+  from: () => toNumber(props.from),
+  to: () => toNumber(props.to),
+  duration: () => toNumber(props.duration),
+  timingFunction: props.timingFunction,
+  onFinished() {
+    call(props.onEnd)
+  },
+})
+
+const displayValue = computed(() => floor(motionValue.value, toNumber(props.precision)))
+
+function reset() {
+  resetMotion()
+  if (props.autoStart) {
+    start()
+  }
+}
+
+watch(() => [props.from, props.to, props.duration], reset)
+onMounted(reset)
+
+defineExpose({
+  start,
+  pause,
+  reset,
+})
+</script>

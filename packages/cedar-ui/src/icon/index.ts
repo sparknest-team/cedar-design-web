@@ -1,4 +1,4 @@
-export { default } from './arco-vue-icon';
+export { default } from './cedar-vue-icon';
 export { IconArrowDown } from './icon-arrow-down';
 export { IconArrowFall } from './icon-arrow-fall';
 export { IconArrowLeft } from './icon-arrow-left';

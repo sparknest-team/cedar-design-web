@@ -1,55 +1,48 @@
 <template>
-  <c-space
-    ><c-button type="primary" @click="handleClick">sticky -24</c-button>
-    <c-button type="primary" @click="handleClick2">sticky -14</c-button>
-  </c-space>
-  <c-table stickyPagination :columns="columns" :data="data1" :pagination="pagination" />
-  <c-drawer :width="540" v-model:visible="visible" unmountOnClose>
-    <c-table :sticky-pagination="-24" :columns="columns" :data="data" :pagination="pagination" />
-  </c-drawer>
-  <c-drawer :width="540" v-model:visible="visible2" unmountOnClose>
-    <c-table :sticky-pagination="-14" :columns="columns" :data="data" :pagination="pagination" />
-  </c-drawer>
+  <p style="margin-bottom: 8px; color: var(--color-text-3); font-size: 13px">
+    <code>sticky-pagination</code> 相对<strong>页面/外层滚动容器</strong>吸底。适合长列表翻页时分页条常驻视口底部；数字为距底部偏移（px）。
+  </p>
+  <c-table
+    :columns="columns"
+    :data="data"
+    sticky-pagination
+    :pagination="{ pageSize: 20 }"
+  />
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
-const visible = ref(false)
-const visible2 = ref(false)
-const handleClick = () => {
-  visible.value = true
-}
-const handleClick2 = () => {
-  visible2.value = true
-}
-const pagination = { pageSize: 100 }
+import { reactive } from 'vue'
 
 const columns = [
   {
     title: 'Name',
     dataIndex: 'name',
+    width: 140,
   },
   {
     title: 'Salary',
     dataIndex: 'salary',
+    minWidth: 120,
   },
   {
     title: 'Address',
     dataIndex: 'address',
+    minWidth: 200,
   },
   {
     title: 'Email',
     dataIndex: 'email',
+    minWidth: 180,
   },
 ]
-const data = ref<any[]>([])
-const data1 = ref<any[]>([])
-data.value = Array.from({ length: 1000 }, (_, index) => ({
-  key: index.toString(),
-  name: `Jane Doe ${index}`,
-  salary: 23000,
-  address: '32 Park Road, London',
-  email: 'jane.doe@example.com',
-}))
-data1.value = data.value.slice(0, 10)
+
+const data = reactive(
+  Array.from({ length: 80 }, (_, index) => ({
+    key: String(index + 1),
+    name: `User ${index + 1}`,
+    salary: 17000 + index * 500,
+    address: `${30 + (index % 20)} Park Road, London`,
+    email: `user.${index + 1}@example.com`,
+  })),
+)
 </script>

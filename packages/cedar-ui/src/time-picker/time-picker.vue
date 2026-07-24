@@ -1,5 +1,6 @@
 <template>
   <Trigger
+    v-if="!hideTrigger"
     trigger="click"
     animation-name="slide-dynamic-origin"
     auto-fit-transform-origin
@@ -59,6 +60,7 @@
           :disabled-seconds="disabledSeconds"
           :hide-disabled-options="hideDisabledOptions"
           :hide-footer="disableConfirm"
+          :show-next-day="showNextDay"
           @select="onPanelSelect"
           @confirm="onPanelConfirm"
         >
@@ -69,6 +71,29 @@
       </div>
     </template>
   </Trigger>
+  <div v-else :class="`${prefixCls}-container`">
+    <component
+      :is="isRange ? 'RangePanel' : 'Panel'"
+      v-bind="{ ...$attrs, ...panelProps }"
+      :value="panelValue"
+      :visible="true"
+      :format="computedFormat"
+      :use12-hours="computedUse12Hours"
+      :step="step"
+      :disabled-hours="disabledHours"
+      :disabled-minutes="disabledMinutes"
+      :disabled-seconds="disabledSeconds"
+      :hide-disabled-options="hideDisabledOptions"
+      :hide-footer="disableConfirm"
+      :show-next-day="showNextDay"
+      @select="onPanelSelect"
+      @confirm="onPanelConfirm"
+    >
+      <template v-if="$slots.extra" #extra-footer>
+        <slot name="extra" />
+      </template>
+    </component>
+  </div>
 </template>
 
 <script lang="ts">
@@ -84,9 +109,9 @@ import IconClockCircle from '../icon/icon-clock-circle'
 import useState from '../_hooks/use-state'
 import useTimeFormat from './hooks/use-time-format'
 import useTimeState from './hooks/use-time-state'
-import { getFormattedValue, isValidInputValue, isValidRangeValue } from './utils'
+import { getFormattedValue, isValidInputValue, isValidRangeValue, isTimeRangeNextDay } from './utils'
 import Panel from './panel.vue'
-import RangePanel from './range-panel'
+import RangePanel from './range-panel.vue'
 import useIsDisabledTime from './hooks/use-is-disabled-time'
 import useMergeState from '../_hooks/use-merge-state'
 import { useI18n } from '../locale'
@@ -279,6 +304,21 @@ export default defineComponent({
     unmountOnClose: {
       type: Boolean,
     },
+    /**
+     * @zh 没有触发元素，只显示选择面板（默认 true）
+     * @en Panel only without trigger (default true)
+     */
+    hideTrigger: {
+      type: Boolean,
+      default: true,
+    },
+    /**
+     * @zh 结束时间早于开始时间时，在字段与面板结束侧显示「次日」，并关闭确认时的起止交换
+     * @en Show next-day marker when end is earlier than start, and skip range sort on confirm
+     */
+    showNextDay: {
+      type: Boolean,
+    },
   },
   emits: {
     /**
@@ -343,6 +383,7 @@ export default defineComponent({
       disabledHours,
       disabledMinutes,
       disabledSeconds,
+      hideTrigger,
     } = toRefs(props)
 
     const { mergedDisabled, eventHandlers } = useFormItem({ disabled })
@@ -431,7 +472,7 @@ export default defineComponent({
           }
           return item
         })
-        if (isValidRangeValue(newValue)) {
+        if (isValidRangeValue(newValue) && !props.showNextDay) {
           newValue = getSortedDayjsArray(newValue as Dayjs[])
         }
         if (newValue?.length === 0) {
@@ -442,8 +483,10 @@ export default defineComponent({
       emitChange(newValue)
       setValue(newValue)
 
-      if (showPanel !== panelVisible.value) {
-        setPanelVisible(showPanel)
+      // 面板模式保持展开
+      const nextVisible = hideTrigger.value ? true : showPanel
+      if (nextVisible !== panelVisible.value) {
+        setPanelVisible(nextVisible)
       }
     }
 
@@ -568,6 +611,7 @@ export default defineComponent({
 
     const inputProps = computed(() => {
       if (isRange.value) {
+        const range = panelValue.value as Array<Dayjs | undefined> | undefined
         return {
           focusedIndex: focusedInputIndex.value,
           onFocusedIndexChange: (index: number) => {
@@ -575,6 +619,8 @@ export default defineComponent({
           },
           onChange: onRangeInputChange,
           onPressEnter: onRangeInputPressEnter,
+          showNextDayLabel: props.showNextDay && isTimeRangeNextDay(range?.[0], range?.[1]),
+          nextDayText: t('datePicker.nextDay'),
         }
       }
       return {
@@ -610,6 +656,8 @@ export default defineComponent({
       inputProps,
       panelProps,
       mergedDisabled,
+      hideTrigger,
+      showNextDay: computed(() => props.showNextDay),
       onPanelVisibleChange: onPanelVisibleChange as any,
       onInputClear: onClear,
       onPanelSelect,

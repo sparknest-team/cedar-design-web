@@ -1,15 +1,15 @@
 <template>
-  <Layout class="cedar-saas-page-layout">
+  <Layout class="c-saas-page-layout">
     <Affix :offsetTop="offsetTop" style="background-color: #f4f7fc">
       <LayoutHeader
-        class="cedar-saas-page-layout_header"
+        class="c-saas-page-layout-header"
         :style="{ background: offsetTop ? '#f4f7fc' : 'transparent' }"
       >
         <slot name="header"></slot>
       </LayoutHeader>
     </Affix>
 
-    <LayoutContent class="cedar-saas-page-layout_content">
+    <LayoutContent class="c-saas-page-layout-content">
       <slot></slot>
     </LayoutContent>
   </Layout>

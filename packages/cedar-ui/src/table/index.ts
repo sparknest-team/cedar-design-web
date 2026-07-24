@@ -1,5 +1,5 @@
 import type { App } from 'vue'
-import type { ArcoOptions } from '../_utils/types'
+import type { CedarOptions } from '../_utils/types'
 import { getComponentPrefix, setGlobalConfig } from '../_utils/global-config'
 import _Table from './table'
 import _Thead from './table-thead'
@@ -16,7 +16,7 @@ const Table = Object.assign(_Table, {
   Th: _Th,
   Td: _Td,
   Column: _Column,
-  install: (app: App, options?: ArcoOptions) => {
+  install: (app: App, options?: CedarOptions) => {
     setGlobalConfig(app, options)
     const componentPrefix = getComponentPrefix(options)
 
@@ -50,6 +50,8 @@ export type {
   TableDraggable,
   TableChangeExtra,
 } from './types'
+export type { TableExtraColumnConfig } from './extra-column'
+export { TABLE_EXTRA_COLUMN_KEY, resolveExtraColumnConfig, getExtraColumnWidth } from './extra-column'
 
 export { _Thead as Thead, _Tbody as Tbody, _Tr as Tr, _Th as Th, _Td as Td, _Column as TableColumn }
 

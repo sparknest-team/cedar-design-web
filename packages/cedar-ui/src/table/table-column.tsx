@@ -36,13 +36,13 @@ export default defineComponent({
      */
     title: String,
     /**
-     * @zh 列宽度
-     * @en Column width
+     * @zh 列宽度。设置后为固定列宽，不参与剩余空间分配
+     * @en Column width. Fixed width when set; does not participate in remaining space distribution
      */
     width: Number,
     /**
-     * @zh 最小列宽
-     * @en Minimum column width
+     * @zh 最小列宽。未设置 `width` 的列按 `minWidth` 比例分配剩余空间；默认 80
+     * @en Minimum column width. Columns without `width` share remaining space by `minWidth` ratio; defaults to 80
      */
     minWidth: Number,
     /**

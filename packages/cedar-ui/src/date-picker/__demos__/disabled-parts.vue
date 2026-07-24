@@ -1,10 +1,8 @@
 <template>
-  <c-date-picker
-    style="width: 194px; margin: 0 24px 24px 0"
+  <c-date-picker style="margin: 0 24px 24px 0"
     :disabled-date="(current: any) => dayjs(current).isBefore(dayjs())"
   />
-  <c-date-picker
-    style="width: 200px; margin-right: 24px; margin-bottom: 24px"
+  <c-date-picker style="margin-right: 24px; margin-bottom: 24px"
     show-time
     :disabled-date="(current: any) => dayjs(current).isBefore(dayjs())"
     :disabled-time="getDisabledTime"

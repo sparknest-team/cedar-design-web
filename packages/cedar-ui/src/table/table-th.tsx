@@ -10,12 +10,11 @@ import IconFilter from '../icon/icon-filter'
 import { TableColumnData, TableOperationColumn } from './types'
 import { useColumnSorter } from './hooks/use-column-sorter'
 import { useColumnFilter } from './hooks/use-column-filter'
-import { useI18n } from '../locale'
 import { getFixedCls, getStyle } from './utils'
 import { isBoolean, isFunction, isObject } from '../_utils/is'
-import IconHover from '../_components/icon-hover.vue'
 import { TableContext, tableInjectionKey } from './context'
 import AutoTooltip from '../_components/auto-tooltip/auto-tooltip'
+import { TABLE_EXTRA_COLUMN_KEY } from './extra-column'
 
 
 const { name } = createNamespace('th')
@@ -40,7 +39,6 @@ export default defineComponent({
   setup(props, { slots }) {
     const { column } = toRefs(props)
     const prefixCls = getPrefixCls('table')
-    const { t } = useI18n()
 
     const tableCtx = inject<Partial<TableContext>>(tableInjectionKey, {})
 
@@ -175,7 +173,7 @@ export default defineComponent({
           popupVisible={filterPopupVisible.value}
           trigger="click"
           autoFitPosition
-          popupOffset={filterIconAlignLeft.value ? 4 : 0}
+          popupOffset={inlineFilter.value ? 4 : 0}
           onPopupVisibleChange={handleFilterPopupVisibleChange}
           {...filterable.triggerProps}
         >
@@ -185,10 +183,10 @@ export default defineComponent({
               {
                 [`${prefixCls}-filters-active`]: isFilterActive.value,
                 [`${prefixCls}-filters-open`]: filterPopupVisible.value,
-                [`${prefixCls}-filters-align-left`]: filterIconAlignLeft.value,
+                [`${prefixCls}-filters-align-left`]: inlineFilter.value,
               },
             ]}
-            disabled={!filterIconAlignLeft.value}
+            disabled={!inlineFilter.value}
             // @ts-ignore
             onClick={(ev: Event) => ev.stopPropagation()}
           >
@@ -215,6 +213,10 @@ export default defineComponent({
         cls.push(`${prefixCls}-cell-with-filter`)
       }
 
+      if (showHeaderActions.value) {
+        cls.push(`${prefixCls}-cell-with-actions`)
+      }
+
       return cls
     })
 
@@ -236,48 +238,110 @@ export default defineComponent({
       return props.column.title
     }
 
-    const renderCell = () => (
-      <span class={cellCls.value} onClick={hasSorter.value ? handleClickSorter : undefined}>
-        {props.column?.ellipsis && props.column?.tooltip ? (
+    const isExtraColumn = computed(() => {
+      const key = tableCtx.extraColumnDataIndex ?? TABLE_EXTRA_COLUMN_KEY
+      return props.column?.dataIndex === key
+    })
+
+    /** 叶子列且外部提供了 #header-cell-actions 时展示操作区（插槽在 render 时再调用） */
+    const showHeaderActions = computed(() => {
+      if (isExtraColumn.value || props.column?.children?.length || !props.column?.dataIndex) {
+        return false
+      }
+      return Boolean(tableCtx.slots?.['header-cell-actions'])
+    })
+
+    const renderHeaderActions = () => {
+      if (!showHeaderActions.value || !props.column?.dataIndex) return null
+      return tableCtx.slots?.['header-cell-actions']?.({
+        column: props.column,
+        dataIndex: props.column.dataIndex,
+      })
+    }
+
+    // 表头操作区（筛选 + 外部 actions）固定在右侧；显式 alignLeft 时筛选仍跟在标题旁
+    const filterInActions = computed(() => {
+      return Boolean(showHeaderActions.value && props.column?.filterable && !filterIconAlignLeft.value)
+    })
+
+    const inlineFilter = computed(() => filterIconAlignLeft.value || filterInActions.value)
+
+    const renderTitleNode = () => {
+      if (props.column?.ellipsis && props.column?.tooltip) {
+        return (
           <AutoTooltip class={`${prefixCls}-th-title`} tooltipProps={tooltipProps.value}>
             {renderTitle()}
           </AutoTooltip>
-        ) : (
-          <span class={[`${prefixCls}-th-title`, { [`${prefixCls}-text-ellipsis`]: props.column?.ellipsis }]}>
-            {renderTitle()}
+        )
+      }
+      return (
+        <span class={[`${prefixCls}-th-title`, { [`${prefixCls}-text-ellipsis`]: props.column?.ellipsis }]}>
+          {renderTitle()}
+        </span>
+      )
+    }
+
+    const renderSorterNode = () => {
+      if (!hasSorter.value) return null
+      return (
+        <span class={`${prefixCls}-sorter`}>
+          {hasAscendBtn.value && (
+            <div
+              class={[
+                `${prefixCls}-sorter-icon`,
+                {
+                  [`${prefixCls}-sorter-icon-active`]: sortOrder.value === 'ascend',
+                },
+              ]}
+            >
+              <IconCaretUp />
+            </div>
+          )}
+          {hasDescendBtn.value && (
+            <div
+              class={[
+                `${prefixCls}-sorter-icon`,
+                {
+                  [`${prefixCls}-sorter-icon-active`]: sortOrder.value === 'descend',
+                },
+              ]}
+            >
+              <IconCaretDown />
+            </div>
+          )}
+        </span>
+      )
+    }
+
+    const renderCell = () => {
+      if (isExtraColumn.value) {
+        const extraHeader =
+          tableCtx.slots?.['extra-column-header']?.({
+            column: props.column,
+          }) ?? renderTitle()
+        return <span class={[`${prefixCls}-cell`, `${prefixCls}-cell-align-center`]}>{extraHeader}</span>
+      }
+
+      return (
+        <span class={cellCls.value} onClick={hasSorter.value ? handleClickSorter : undefined}>
+          <span class={`${prefixCls}-th-main`}>
+            {renderTitleNode()}
+            {renderSorterNode()}
+            {filterIconAlignLeft.value && renderFilter()}
           </span>
-        )}
-        {hasSorter.value && (
-          <span class={`${prefixCls}-sorter`}>
-            {hasAscendBtn.value && (
-              <div
-                class={[
-                  `${prefixCls}-sorter-icon`,
-                  {
-                    [`${prefixCls}-sorter-icon-active`]: sortOrder.value === 'ascend',
-                  },
-                ]}
-              >
-                <IconCaretUp />
-              </div>
-            )}
-            {hasDescendBtn.value && (
-              <div
-                class={[
-                  `${prefixCls}-sorter-icon`,
-                  {
-                    [`${prefixCls}-sorter-icon-active`]: sortOrder.value === 'descend',
-                  },
-                ]}
-              >
-                <IconCaretDown />
-              </div>
-            )}
-          </span>
-        )}
-        {filterIconAlignLeft.value && renderFilter()}
-      </span>
-    )
+          {showHeaderActions.value && (
+            <span
+              class={`${prefixCls}-th-actions`}
+              // @ts-ignore
+              onClick={(ev: Event) => ev.stopPropagation()}
+            >
+              {filterInActions.value && renderFilter()}
+              {renderHeaderActions()}
+            </span>
+          )}
+        </span>
+      )
+    }
 
     const style = computed(() => {
       return {
@@ -324,7 +388,7 @@ export default defineComponent({
         {
           default: () => [
             renderCell(),
-            !filterIconAlignLeft.value && renderFilter(),
+            !inlineFilter.value && renderFilter(),
             props.resizable && <span class={`${prefixCls}-column-handle`} onMousedown={handleMouseDown} />,
           ],
         },

@@ -41,8 +41,8 @@ export default {
       current.value = Math.min(3, current.value + 1)
     }
 
-    const setCurrent = (current) => {
-      current.value = current
+    const setCurrent = (step: number) => {
+      current.value = step
     }
 
     return {

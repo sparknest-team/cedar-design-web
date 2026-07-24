@@ -1,12 +1,12 @@
 import { App } from 'vue'
-import { ArcoOptions } from '../_utils/types'
+import { CedarOptions } from '../_utils/types'
 import { getComponentPrefix, setGlobalConfig } from '../_utils/global-config'
 import _Tree from './tree.vue'
 
 export type { TreeNodeData, TreeFieldNames } from './types'
 
 const Tree = Object.assign(_Tree, {
-  install: (app: App, options?: ArcoOptions) => {
+  install: (app: App, options?: CedarOptions) => {
     setGlobalConfig(app, options)
     const componentPrefix = getComponentPrefix(options)
 

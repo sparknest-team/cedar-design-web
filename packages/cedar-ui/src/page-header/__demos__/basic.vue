@@ -1,8 +1,14 @@
 <template>
   <div :style="{ background: 'var(--color-fill-2)', padding: '28px' }">
-    <c-page-header class="demo-style" title="列表页标题 normal texttext normal texttext" :show-back="true" subtitle="subtitle描述信息">
+    <c-page-header
+      :style="{ background: 'var(--color-bg-2)' }"
+      title="Cedar Design"
+      subtitle="页面级标题区"
+      show-back
+      @back="onBack"
+    >
       <template #extra>
-        <c-radio-group type="button" default-value="lg">
+        <c-radio-group type="button" default-value="md">
           <c-radio value="xs">xs</c-radio>
           <c-radio value="sm">sm</c-radio>
           <c-radio value="md">md</c-radio>
@@ -13,14 +19,9 @@
 </template>
 
 <script lang="ts" setup>
-</script>
+import { Message } from '@cedar/ui'
 
-<style lang="scss" scoped>
-.demo-style {
-  background: var(--color-fill-2);
-
-  + .demo-style {
-    margin-top: 20px;
-  }
+const onBack = () => {
+  Message.info('点击返回')
 }
-</style>
+</script>

@@ -39,7 +39,7 @@ export const spaceProps = {
     default: 'flex-start',
   },
   /**
-   * 交叉轴排列方式，未传入时根据 `direction` 推断（`row` → `center`，`column` → `start`）
+   * 交叉轴排列方式，未传入时根据 `direction` 推断（`row` → `center`，`column` → `stretch`）
    */
   align: {
     type: String as PropType<SpaceAlign>,

@@ -59,7 +59,7 @@ const dataSize = [
 </script>
 
 <style lang="scss">
-.table-line-height-unset .cedar-table-td {
+.table-line-height-unset .c-table-td {
   line-height: unset;
 }
 </style>

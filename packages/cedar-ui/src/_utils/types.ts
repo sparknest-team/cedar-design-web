@@ -1,16 +1,16 @@
 import type { App, RenderFunction } from 'vue'
 import { VNode } from 'vue'
 
-export interface ArcoOptions {
+export interface CedarOptions {
   classPrefix?: string
   componentPrefix?: string
 }
 
-export interface ArcoIconOptions {
+export interface CedarIconOptions {
   iconPrefix?: string
 }
 
-export interface ArcoGlobalConfig {
+export interface CedarGlobalConfig {
   classPrefix?: string
 }
 
@@ -35,7 +35,7 @@ export type EmitType<T> = T | T[]
 
 export type SFCWithInstall<T, D = Record<string, never>> = T &
   D & {
-    install: (app: App, opt?: ArcoOptions) => void
+    install: (app: App, opt?: CedarOptions) => void
   }
 
 export type ClassName = string | Record<string, boolean> | (string | Record<string, boolean>)[]

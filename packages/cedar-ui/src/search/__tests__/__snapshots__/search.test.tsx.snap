@@ -1,9 +1,9 @@
 // Vitest Snapshot v1
 
 exports[`Search > render 1`] = `
-"<div class=\\"arco-input-group cedar-search cedar-search-noselect\\">
+"<div class=\\"c-input-group c-search c-search-noselect\\">
   <!--v-if-->
-  <div class=\\"cedar-search-input-wrapper\\"><span class=\\"arco-input-wrapper\\"><!----><input class=\\"arco-input arco-input-size-medium\\" type=\\"text\\"><!----><span class=\\"arco-input-suffix\\"><!----><svg xmlns=\\"http://www.w3.org/2000/svg\\" fill=\\"none\\" stroke=\\"currentColor\\" viewBox=\\"0 0 48 48\\" class=\\"arco-icon arco-icon-search search-icon\\" stroke-width=\\"4\\" stroke-linecap=\\"butt\\" stroke-linejoin=\\"miter\\"><path d=\\"M33.072 33.071c6.248-6.248 6.248-16.379 0-22.627-6.249-6.249-16.38-6.249-22.628 0s-6.248 16.379 0 22.627 16.38 6.248 22.628 0Zm0 0 8.485 8.485\\"></path></svg><!----></span></span></div>
+  <div class=\\"c-search-input-wrapper\\"><span class=\\"c-input-wrapper\\"><!----><input class=\\"c-input c-input-size-medium\\" type=\\"text\\"><!----><span class=\\"c-input-suffix\\"><!----><svg xmlns=\\"http://www.w3.org/2000/svg\\" fill=\\"none\\" stroke=\\"currentColor\\" viewBox=\\"0 0 48 48\\" class=\\"c-icon c-icon-search search-icon\\" stroke-width=\\"4\\" stroke-linecap=\\"butt\\" stroke-linejoin=\\"miter\\"><path d=\\"M33.072 33.071c6.248-6.248 6.248-16.379 0-22.627-6.249-6.249-16.38-6.249-22.628 0s-6.248 16.379 0 22.627 16.38 6.248 22.628 0Zm0 0 8.485 8.485\\"></path></svg><!----></span></span></div>
   <!--v-if-->
 </div>"
 `;

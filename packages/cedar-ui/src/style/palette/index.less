@@ -12,7 +12,7 @@
     background-color: rgb(var(~'--@{color}-@{i}')) !important;
   }
 
-  .color-@{color}-@{i} {
+  .@{color}-@{i} {
     color: rgb(var(~'--@{color}-@{i}')) !important;
   }
 
@@ -22,7 +22,6 @@
 // 使用 each() 函数循环遍历
 each(@color-scheme, {
     @color: @value; // 当前颜色值
-    @index: @key; // 当前索引（从1开始）
 
     // 生成基础颜色类
     .@{color} {
@@ -31,12 +30,7 @@ each(@color-scheme, {
 
     // 生成背景颜色类
     .bg-@{color} {
-        background-color: rgb(var(~'--bg-@{color}-6')) !important;
-    }
-
-    // 生成带索引的类（示例）
-    .color-index-@{index} {
-        content: "@{color} (index: @{index})";
+        background-color: rgb(var(~'--@{color}-6')) !important;
     }
 
     // 生成1-10的深浅色类

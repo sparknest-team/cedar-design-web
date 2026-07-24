@@ -76,20 +76,69 @@ permalink: /components/table/
 
 <demo src="./__demos__/custom-filter.vue"></demo>
 
-### 表格滚动
+### 表格布局 table-layout
 
-设置 scroll 属性可以开启表格滚动。x 指表格的实际宽度，一般设置的值会大于表格容器宽度；y 指表格的显示高度，表格实际高度超出后会显示滚动条。
-x, y 均可设置百分比。y 设置为 100% 可以让表格容器高度跟随外层容器，超出后自动显示滚动条。
+Element / Cedar 的 CSS 布局只有两种：
+
+| 值 | 含义 |
+| --- | --- |
+| `fixed`（默认） | 列宽由 JS + `<col>` 决定，**不被单元格内容撑开**；`width` / `min-width` / `fit` 自适应都在这套下工作 |
+| `auto` | 交给浏览器按内容分配列宽；长文本可能把列撑得很宽 |
+
+什么时候会从你设置的值变成 `fixed`：
+
+- 设置了 `max-height` → **强制 fixed**（与 Element 一致）
+- 任意列开启了 `ellipsis` → 强制 fixed（保证省略可靠）
+
+注意：列宽「自适应铺满」不是换了一种 `table-layout`，而是在 **`fixed` + `fit: true`** 下用 `min-width` 做剩余空间分配。
+
+<demo src="./__demos__/table-layout.vue"></demo>
+
+### 列宽自适应（fixed + fit）
+
+默认 `table-layout: fixed` + `fit: true`。
+
+- 设了 `width` 的列为固定宽，不参与剩余空间分配
+- 只设 `min-width`（或不设，默认 80）的列为弹性列，按 `min-width` 比例分配剩余宽度
+- 当 `Σ(width | minWidth) ≤ 容器宽` 时铺满容器，**无横向滚动**
+
+<demo src="./__demos__/column-width-fit.vue"></demo>
+
+### 横向滚动
+
+当列最小宽之和大于容器宽度时，自动出现横向滚动条；弹性列停在各自的 `min-width`。
+
+<demo src="./__demos__/column-scroll-x.vue"></demo>
+
+### fit 开关
+
+`fit` 控制弹性列是否自动撑满容器。关闭后列宽不再扩张。
+
+<demo src="./__demos__/column-fit.vue"></demo>
+
+### 纵向滚动（height）
+
+通过 `height` 开启固定高度：表头固定，表体纵向滚动。
 
 <demo src="./__demos__/scroll.vue"></demo>
 
+### 流体高度（max-height）
+
+`max-height`：内容少时收缩，超出后滚动；并强制 `table-layout: fixed`。可与固定列组合。
+
+<demo src="./__demos__/fluid-height.vue"></demo>
+
 ### 固定列
 
-在 `columns` 中指定 `fixed: 'left'` 或 `fixed: 'right'`，可将列固定到左侧或右侧。设置了 `fixed` 的列必须设置 `width`
-指定列的宽度。
-注意：要配合 `:scroll="{ x: number }"` 使用。此外 `columns` 中至少需要有一列不设置宽度，自适应，不然会有样式问题。
+在 `columns` 中指定 `fixed: 'left'` 或 `fixed: 'right'`，可将列固定到左侧或右侧。固定列建议设置 `width`。当列最小宽之和超过容器时会自动出现横向滚动。
 
 <demo src="./__demos__/fixed.vue"></demo>
+
+### 固定列 + 固定表头
+
+同时设置 `height` 与左右固定列（对齐 Element 的 fixed column and header 场景）。
+
+<demo src="./__demos__/fixed-column-and-header.vue"></demo>
 
 ### 单元格合并
 
@@ -97,15 +146,19 @@ x, y 均可设置百分比。y 设置为 100% 可以让表格容器高度跟随�
 
 <demo src="./__demos__/span-method.vue"></demo>
 
-### 表头吸顶
+### 表头吸顶（页面滚动）
 
-通过 `sticky-header` 设置表头吸顶。表头吸顶的计算容器为最近滚动容器，设置数字时可指定距离滚动容器顶部的高度。
+`sticky-header` 是相对**页面/外层滚动容器**的 CSS sticky，和 `height` 造成的「表体内滚动 + 表头固定」不是一回事。
+
+- 适用：表格很高、页面整体滚动时希望表头贴在视口顶部
+- 不适用：只想在表格内部滚动看数据 → 用 `height` / `max-height`
+- 传数字可指定距顶部偏移（例如避开全局导航）
 
 <demo src="./__demos__/sticky-header.vue"></demo>
 
-### 分页吸底
+### 分页吸底（页面滚动）
 
-通过 `sticky-stickyPanation` 设置分页吸底。分页吸底的计算容器为最近滚动容器，设置数字时可指定距离滚动容器底部的高度。
+`sticky-pagination` 相对**页面/外层滚动容器**吸底，翻长列表时分页条留在视口底部。传数字可指定距底部偏移。
 
 <demo src="./__demos__/sticky-panation.vue"></demo>
 
@@ -177,9 +230,29 @@ x, y 均可设置百分比。y 设置为 100% 可以让表格容器高度跟随�
 
 <demo src="./__demos__/virtual-list-props.vue"></demo>
 
-### 自定义表头
+### 自定义表头 / 列管理
+
+Table **不内置**列管理。通过扩展点与外部 `TableColumnManager` 组合：
+
+- `extra-column`：末尾扩展列（如设置图标），内容用 `#extra-column-header` / `#extra-column-cell`
+- `#header-cell-actions`：表头右侧操作区，菜单内容由外部完全控制
+- `v-model:columns` + `@column-resize`：外部改列并触发重渲染
+
+基础组合：
+
+<demo src="./__demos__/column-manager-basic.vue"></demo>
+
+自定义入口与本地记忆：
 
 <demo src="./__demos__/custom-table-columns.vue"></demo>
+
+### 异步目录
+
+`TableColumnManager` 的 `loadOptions` / `remoteSearch` 在外部弹层中使用。
+
+<demo src="./__demos__/column-manager-async.vue"></demo>
+
+详见 [`TableColumnManager`](/components/table-column-manager/)。
 
 ## API
 
@@ -193,11 +266,13 @@ x, y 均可设置百分比。y 设置为 100% 可以让表格容器高度跟随�
 | hoverable                   | 是否显示选中效果                                                                           | `boolean`                                                                                                                                                                     |   `true`    |
 | stripe                      | 是否开启斑马纹效果                                                                         | `boolean`                                                                                                                                                                     |   `false`   |
 | size                        | 表格的大小                                                                                 | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`                                                                                                                                        |   `'md'`    |
-| table-layout-fixed          | 表格的 table-layout 属性设置为 fixed，设置为 fixed 后，表格的宽度不会被内容撑开超出 100%。 | `boolean`                                                                                                                                                                     |   `false`   |
+| table-layout                | 表格布局算法，同 CSS `table-layout`。默认 `fixed`，列宽由计算决定不被内容撑开           | `'fixed' \| 'auto'`                                                                                                                                                           |  `'fixed'`  |
 | loading                     | 是否为加载中状态                                                                           | `boolean\|object`                                                                                                                                                             |   `false`   |
 | row-selection               | 表格的行选择器配置                                                                         | `TableRowSelection`                                                                                                                                                           |     `-`     |
 | expandable                  | 表格的展开行配置                                                                           | `TableExpandable`                                                                                                                                                             |     `-`     |
-| scroll                      | 表格的滚动属性配置。增加字符型值的支持。增加 `minWidth`,`maxHeight` 的支持。               | `{  x?: number \| string;  y?: number \| string;  minWidth?: number \| string;  maxHeight?: number \| string;}`                                                               |     `-`     |
+| height                      | 表格高度。设置后表头固定，表体滚动。数字单位为 px                                          | `number \| string`                                                                                                                                                            |     `-`     |
+| max-height                  | 表格最大高度。内容不足时收缩，超出后表体滚动。数字单位为 px                                | `number \| string`                                                                                                                                                            |     `-`     |
+| fit                         | 列宽是否自动撑满容器。未设置 `width` 的列按 `minWidth` 比例分配剩余空间                    | `boolean`                                                                                                                                                                     |   `true`    |
 | pagination                  | 分页的属性配置                                                                             | `boolean \| PaginationProps`                                                                                                                                                  |   `true`    |
 | page-position               | 分页选择器的位置                                                                           | `'tl' \| 'top' \| tr' \| 'bl' \| 'bottom' \| 'br'`                                                                                                                            |   `'br'`    |
 | indent-size                 | 树形表格的缩进距离                                                                         | `number`                                                                                                                                                                      |    `16`     |
@@ -220,11 +295,11 @@ x, y 均可设置百分比。y 设置为 100% 可以让表格容器高度跟随�
 | expanded-keys               | 显示的展开行、子树（受控模式）优先于 `expandable`                                          | `(string \| number)[]`                                                                                                                                                        |     `-`     |
 | default-expanded-keys       | 默认显示的展开行、子树（非受控模式）优先于 `expandable`                                    | `(string \| number)[]`                                                                                                                                                        |     `-`     |
 | default-expand-all-rows     | 是否默认展开所有的行                                                                       | `boolean`                                                                                                                                                                     |   `false`   |
-| sticky-header               | 是否开启表头吸顶                                                                           | `boolean\|number`                                                                                                                                                             |   `false`   |
-| sticky-pagination           | 是否开启分页条吸顶                                                                         | `boolean\|number`                                                                                                                                                             |   `false`   |
+| sticky-header               | 表头相对页面/外层滚动容器吸顶；数字为距顶部偏移（px）                                      | `boolean \| number`                                                                                                                                                           |   `false`   |
+| sticky-pagination           | 分页相对页面/外层滚动容器吸底；数字为距底部偏移（px）                                      | `boolean \| number`                                                                                                                                                           |   `false`   |
 | scrollbar                   | 是否开启虚拟滚动条                                                                         | `boolean \| ScrollbarProps`                                                                                                                                                   |   `true`    |
 | show-empty-tree             | 是否展示空子树                                                                             | `boolean`                                                                                                                                                                     |   `false`   |
-| beforeConfirm               | 自定义表头弹窗确认之前触发，根据返回值决定是否关闭弹窗                                     | `(value:ColumnsServer) => boolean`                                                                                                                                            |
+| extra-column                | 在表格末尾插入扩展列（如设置按钮）；内容由插槽提供                                         | `boolean \| TableExtraColumnConfig`                                                                                                                                           |   `false`   |
 | emptyType                   | 空白状态类型                                                                               | <br/>`default`\|`network`\|`unknown`\|`success` <br/> <br/>                                                                                                                   |  `default`  |
 | emptyText                   | 空白状态类型文案                                                                           | <br/>`string` <br/> <br/>                                                                                                                                                     |     `-`     |
 
@@ -242,6 +317,7 @@ x, y 均可设置百分比。y 设置为 100% 可以让表格容器高度跟随�
 | page-change      | 表格分页发生改变时触发         | page: `number`                                                                     |
 | page-size-change | 表格每页数据数量发生改变时触发 | pageSize: `number`                                                                 |
 | change           | 表格数据发生变化时触发         | data: `TableData[]`<br>extra: `TableChangeExtra`<br>currentData: `TableData[]`     |
+| update:columns   | 列配置变更时触发（配合 v-model:columns） | columns: `TableColumnData[]`                                                       |
 | cell-mouse-enter | 单元格hover进入时触发          | record: `TableData`<br>column: `TableColumnData`<br>ev: `Event`                    |
 | cell-mouse-leave | 单元格hover退出时触发          | record: `TableData`<br>column: `TableColumnData`<br>ev: `Event`                    |
 | cell-click       | 点击单元格时触发               | record: `TableData`<br>column: `TableColumnData`<br>ev: `Event`                    |
@@ -284,6 +360,9 @@ x, y 均可设置百分比。y 设置为 100% 可以让表格容器高度跟随�
 | expand-row       |              展开行内容               | record: `TableData`                                                    |
 | expand-icon      |              展开行图标               | expanded: `boolean`<br>record: `TableData`                             |
 | columns          | 表格列定义。启用时会屏蔽 columns 属性 | -                                                                      |
+| extra-column-header | 末列扩展列表头内容 | - |
+| extra-column-cell | 末列扩展列单元格内容 | record / rowIndex 等 |
+| header-cell-actions | 表头右侧操作区（叶子列）；内容由外部完全控制 | column / dataIndex |
 
 ### `<TableColumn>` Props
 
@@ -292,6 +371,7 @@ x, y 均可设置百分比。y 设置为 100% 可以让表格容器高度跟随�
 | data-index         | 列信息的标识，对应TableData中的数据 | `string`                                                  |   `-`   |
 | title              | 列标题                              | `string`                                                  |   `-`   |
 | width              | 列宽度                              | `number`                                                  |   `-`   |
+| min-width          | 最小列宽                            | `number`                                                  |   `80`  |
 | align              | 对齐方向                            | `TableColumnData['align']`                                |   `-`   |
 | fixed              | 固定位置                            | `TableColumnData['fixed']`                                |   `-`   |
 | ellipsis           | 是否显示为省略                      | `boolean`                                                 | `false` |
@@ -363,7 +443,8 @@ x, y 均可设置百分比。y 设置为 100% 可以让表格容器高度跟随�
 | ---------------- | ------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | :-----: |
 | dataIndex        | 列信息的标识，对应 `TableData` 中的数据                 | `string`                                                                                            |   `-`   |
 | title            | 列标题                                                  | `string \| RenderFunction`                                                                          |   `-`   |
-| width            | 列宽度                                                  | `number`                                                                                            |   `-`   |
+| width            | 列宽度。设置后为固定列宽，不参与剩余空间分配            | `number`                                                                                            |   `-`   |
+| minWidth         | 最小列宽。未设置 `width` 时按比例分配剩余空间；默认 80  | `number`                                                                                            |   `80`  |
 | align            | 对齐方向                                                | `'left' \| 'center' \| 'right'`                                                                     |   `-`   |
 | fixed            | 固定位置                                                | `'left' \| 'right'`                                                                                 |   `-`   |
 | ellipsis         | 是否显示省略号                                          | `boolean`                                                                                           | `false` |
@@ -450,16 +531,11 @@ x, y 均可设置百分比。y 设置为 100% 可以让表格容器高度跟随�
 | estimatedSize      | 元素高度不固定时的预估高度。                                       | `number`           |   `-`   |
 | buffer             | 视口边界外提前挂载的元素数量。                                     | `number`           |  `10`   |
 
-### TableColumnsConfigProps
+### TableExtraColumnConfig
 
-| 参数名                | 描述                                            | 类型                                              | 默认值 |
-| :-------------------- | ----------------------------------------------- | ------------------------------------------------- | :----: |
-| columnsMetadata       | columns元数据，用于描述列默认选中/必选等        | `ColumnsMetaDataType`                             |  `[]`  |
-| columns               | 同table的columns                                | `ColumnLocal[]`                                   |  `[]`  |
-| columnRememberHandler | 当`ennableColumnRemember`为true时，会调用该函数 | `() => Promise<ColumnServer[]> \| ColumnServer[]` |  `[]`  |
-
-### TableColumnsConfigSlot
-
-| 插槽名 |         描述          | 参数                   |
-| ------ | :-------------------: | ---------------------- |
-| label  | 自定义表头外显的label | `showDrawer: ()=>void` |
+| 参数名 | 描述 | 类型 | 默认值 |
+| :----- | ---- | ---- | :----: |
+| width | 列宽；未传按表格 size | `number` | xs 28 / sm 32 / md·lg·xl 36 |
+| fixed | 固定位置 | `'left' \| 'right'` | `'right'` |
+| align | 对齐 | `'left' \| 'center' \| 'right'` | `'center'` |
+| dataIndex | 列标识 | `string` | `__cedar_table_extra__` |

@@ -1,12 +1,12 @@
 import type { App } from 'vue'
-import type { ArcoOptions } from '../_utils/types'
+import type { CedarOptions } from '../_utils/types'
 import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
 import _Checkbox from './checkbox'
 import _CheckboxGroup from './checkbox-group'
 
 const Checkbox = Object.assign(_Checkbox, {
   Group: _CheckboxGroup,
-  install: (app: App, options?: ArcoOptions) => {
+  install: (app: App, options?: CedarOptions) => {
     setGlobalConfig(app, options)
     const componentPrefix = getComponentPrefix(options)
 

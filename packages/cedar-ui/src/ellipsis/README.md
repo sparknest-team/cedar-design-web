@@ -74,7 +74,7 @@ import type { EllipsisProps, EllipsisExpandTrigger } from '@cedar/ui'
 
 | 名称 | 默认值 | 说明 |
 | ---- | ------ | ---- |
-| --cedar-ellipsis-background | `transparent` | 省略组件背景色 |
+| --c-ellipsis-background | `transparent` | 省略组件背景色 |
 
 ## 使用说明
 

@@ -1,9 +1,9 @@
 <template>
   <c-space direction="column" fill>
-    <c-date-picker style="width: 252px" size="xs" />
-    <c-date-picker style="width: 252px" size="sm" />
-    <c-date-picker style="width: 252px" size="md" />
-    <c-date-picker style="width: 252px" size="lg" />
+    <c-date-picker size="xs" />
+    <c-date-picker size="sm" />
+    <c-date-picker size="md" />
+    <c-date-picker size="lg" />
   </c-space>
 </template>
 

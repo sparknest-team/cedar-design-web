@@ -3,26 +3,26 @@
     :data-fixed="fixed"
     :data-theme="theme"
     :style="'--header-nav-height:' + headerHeight"
-    class="cedar-saas-header-nav-wrapper"
+    class="c-saas-header-nav-wrapper"
   >
-    <div class="cedar-saas-header-nav-left">
+    <div class="c-saas-header-nav-left">
       <!-- 租户信息 -->
-      <div class="cedar-saas-header-nav-left-inner">
+      <div class="c-saas-header-nav-left-inner">
         <template v-if="showTenantInfo">
           <!-- 租户logo -->
-          <img v-if="state.tenantLogo" :src="state.tenantLogo" class="cedar-saas-header-nav-tenant-logo" />
+          <img v-if="state.tenantLogo" :src="state.tenantLogo" class="c-saas-header-nav-tenant-logo" />
           <!-- 租户名称 -->
-          <div class="cedar-saas-header-nav-tenant-name">
+          <div class="c-saas-header-nav-tenant-name">
             {{ state.tenantName }}
           </div>
         </template>
-        <div v-if="slots['left-prefix']" class="cedar-saas-header-nav-left-prefix">
+        <div v-if="slots['left-prefix']" class="c-saas-header-nav-left-prefix">
           <slot name="left-prefix"></slot>
         </div>
       </div>
     </div>
 
-    <div class="cedar-saas-header-nav-right">
+    <div class="c-saas-header-nav-right">
       <slot name="user-info-prefix"></slot>
 
       <Tooltip content="应用列表" position="bottom">

@@ -88,4 +88,59 @@
       margin-left: auto;
     }
   }
+
+  &-range {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &-range-wrapper {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 8px;
+  }
+
+  &-range-panel {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: var(~'--c-color-bg-popup');
+    border: 1px solid @timepicker-color-border;
+    border-radius: @timepicker-wrapper-border-radius;
+  }
+
+  &-range-panel-active {
+    background-color: var(~'--c-color-fill-1');
+  }
+
+  &-range-panel-title {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    color: var(~'--c-color-text-2');
+    font-size: @font-size-body-1;
+    line-height: 22px;
+    text-align: center;
+    border-bottom: 1px solid @timepicker-color-border;
+  }
+
+  &-range-next-day {
+    color: var(~'--c-color-text-3');
+    font-size: 12px;
+    line-height: 1;
+  }
+
+  &-range-panel-body {
+    display: flex;
+  }
+
+  &-range-separator {
+    flex-shrink: 0;
+    color: var(~'--c-color-text-3');
+    font-size: @font-size-body-1;
+    line-height: 22px;
+  }
 }

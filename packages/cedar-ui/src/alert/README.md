@@ -32,6 +32,36 @@ permalink: /components/alert/
 
 <demo src="./__demos__/title.vue"></demo>
 
+### 居中
+
+通过设置 `center`，内容居中显示。
+
+<demo src="./__demos__/center.vue"></demo>
+
+### 顶部公告
+
+通过设置 `banner`，可将警告提示作为顶部公告使用（去除边框和圆角）。
+
+<demo src="./__demos__/banner.vue"></demo>
+
+### 隐藏图标
+
+通过设置 `:show-icon="false"` 来隐藏图标。
+
+<demo src="./__demos__/show-icon.vue"></demo>
+
+### 自定义图标
+
+通过 `#icon` 插槽自定义前置图标。
+
+<demo src="./__demos__/custom-icon.vue"></demo>
+
+### 操作项
+
+通过 `#action` 插槽自定义操作按钮。
+
+<demo src="./__demos__/action.vue"></demo>
+
 ### 可关闭
 
 通过设置 `closable`，可开启关闭按钮。
@@ -43,24 +73,6 @@ permalink: /components/alert/
 指定 `close-icon` slot，自定义关闭元素。
 
 <demo src="./__demos__/close-icon.vue"></demo>
-
-### 隐藏图标
-
-通过设置 `:show-icon="false"` 来隐藏图标。
-
-<demo src="./__demos__/show-icon.vue"></demo>
-
-### 操作项
-
-通过 `#action` 插槽自定义操作按钮。
-
-<demo src="./__demos__/action.vue"></demo>
-
-### 顶部公告
-
-通过设置 `banner`，可将警告提示作为顶部公告使用（去除边框和圆角）。
-
-<demo src="./__demos__/banner.vue"></demo>
 
 ## API
 
@@ -130,3 +142,5 @@ import type {
 | `#close-element` slot | `#close-icon` slot |
 
 新增能力：`variant` / `color` / `elevation` / `default` 类型 / `after-close` 事件。
+
+`type="default"` 不渲染内置图标；需要图标时用 `#icon`。

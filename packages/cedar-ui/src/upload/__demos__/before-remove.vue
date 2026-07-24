@@ -24,7 +24,7 @@ export default defineComponent({
   setup() {
     const beforeRemove = (file) => {
       return new Promise((resolve, reject) => {
-        Modal.confirm({
+        Dialog.confirm({
           title: 'on-before-remove',
           content: `确认删除 ${file.name}`,
           onOk: () => resolve(true),

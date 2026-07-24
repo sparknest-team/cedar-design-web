@@ -26,4 +26,5 @@ export interface PaginationProps {
   activePageItemStyle?: CSSProperties
   baseSize?: number
   bufferSize?: number
+  autoAdjust?: boolean
 }

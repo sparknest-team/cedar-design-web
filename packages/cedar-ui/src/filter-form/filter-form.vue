@@ -2,7 +2,7 @@
   <Form
     ref="formRef"
     :model="model_"
-    class="cedar-filter-form"
+    class="c-filter-form"
     layout="vertical"
     v-bind="{ ...$props, ...$attrs }"
   >
@@ -80,28 +80,26 @@
               @blur="formInputBlur(item, $event)"
             >
             </Textarea>
-            <DatePicker
-              v-if="item.name === 'date-picker'"
+            <Date
+              v-if="item.name === 'date-picker' || item.name === 'date'"
               :modelValue="getPropByPath(model_, item.props.prop, true).v"
               :time-picker-props="item.props.timePickerProps || { defaultValue: '00:00:00' }"
-              :type="item.props.type || 'datetime'"
               :valueFormat="item.props.valueFormat || 'timestamp'"
               v-bind="item.props"
               @change="formChange(item, $event)"
               @blur="formInputBlur(item, $event)"
             >
-            </DatePicker>
-            <RangePicker
-              v-if="item.name === 'range-picker'"
+            </Date>
+            <DateRange
+              v-if="item.name === 'date-range-picker' || item.name === 'date-range'"
               :modelValue="getPropByPath(model_, item.props.prop, true).v"
               :time-picker-props="item.props.timePickerProps || { defaultValue: ['00:00:00', '00:00:00'] }"
-              :type="item.props.type || 'datetimerange'"
               :valueFormat="item.props.valueFormat || 'timestamp'"
               v-bind="item.props"
               @change="formChange(item, $event)"
               @blur="formInputBlur(item, $event)"
             >
-            </RangePicker>
+            </DateRange>
           </FormItem>
         </GridItem>
       </template>
@@ -111,7 +109,7 @@
         suffix
       >
         <FormItem
-          content-class="filter-form-suffix"
+          content-class="c-filter-form-suffix"
           label="&nbsp;"
         >
           <div v-if="overflow || !collapsed_" class="collapsed-btn" @click="collapseHandler">
@@ -132,7 +130,7 @@
     </template>
     <div
       v-if="showRememberSelections"
-      class="cedar-filter-form-remember-selections"
+      class="c-filter-form-remember-selections"
     >
       <Checkbox
         :model-value="rememberUserSelections_"
@@ -156,7 +154,8 @@ import Cascader from '../cascader'
 import InputNumber from '../input-number'
 import Input from '../input'
 import Textarea from '../textarea'
-import DatePicker, { RangePicker } from '../date-picker'
+import Date from '../date'
+import DateRange from '../date-range'
 import IconDownCircle, { IconUpCircle } from '../icon'
 import { useI18n } from '../locale'
 import type { IComponent } from './IComponent'

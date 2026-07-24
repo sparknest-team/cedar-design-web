@@ -51,7 +51,7 @@ export default defineComponent({
                   ? 'center'
                   : align.value
                 : !align.value
-                  ? 'start'
+                  ? 'stretch'
                   : align.value,
             ),
             flexWrap: wrap.value ? 'wrap' : 'nowrap',

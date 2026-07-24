@@ -106,7 +106,7 @@ export default defineComponent({
         const { isMirror = false, props = {} } = options || {}
         return (
           <SubMenu
-            key={`__arco-menu-overflow-sub-menu${isMirror ? '-mirror' : ''}`}
+            key={`__c-menu-overflow-sub-menu${isMirror ? '-mirror' : ''}`}
             class={isMirror ? overflowSubMenuMirrorClass : overflowSubMenuClass}
             {...props}
             v-slots={{

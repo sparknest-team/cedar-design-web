@@ -1,5 +1,5 @@
 import type { App } from 'vue'
-import type { ArcoOptions } from '../_utils/types'
+import type { CedarOptions } from '../_utils/types'
 import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
 import _Tabs from './tabs'
 import _TabNav from './tab-nav.vue'
@@ -12,7 +12,7 @@ const Tabs = Object.assign(_Tabs, {
   TabItem: _TabItem,
   TabsNavs: _TabsNavs,
   TabsItems: _TabsItems,
-  install: (app: App, options?: ArcoOptions) => {
+  install: (app: App, options?: CedarOptions) => {
     setGlobalConfig(app, options)
     const componentPrefix = getComponentPrefix(options)
 

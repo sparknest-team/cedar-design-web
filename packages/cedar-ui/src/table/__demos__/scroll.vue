@@ -1,77 +1,52 @@
 <template>
-  <div style="margin-bottom: 20px">
+  <div style="margin-bottom: 16px">
     <c-switch v-model="scrollbar" />
     Virtual Scrollbar
   </div>
-  <c-table :columns="columns" :data="data" :scroll="scroll" :scrollbar="scrollbar" />
+  <p style="margin-bottom: 8px">固定高度 <code>height</code>：表头固定，表体纵向滚动。</p>
+  <c-table :columns="columns" :data="data" :height="200" :pagination="false" :scrollbar="scrollbar" />
   <br />
-  <c-table :columns="columns" :data="data" :scroll="scrollPercent" :scrollbar="scrollbar" />
+  <p style="margin-bottom: 8px">百分比高度：外层定高，表格 <code>height="100%"</code> 填满。</p>
+  <div style="height: 220px">
+    <c-table :columns="columns" :data="data" height="100%" :pagination="false" :scrollbar="scrollbar" />
+  </div>
 </template>
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
+
 const scrollbar = ref(true)
-const scroll = {
-  x: 2000,
-  y: 200,
-}
-const scrollPercent = {
-  x: '120%',
-  y: '100%',
-}
+
 const columns = [
   {
     title: 'Name',
     dataIndex: 'name',
+    width: 140,
   },
   {
     title: 'Salary',
     dataIndex: 'salary',
+    minWidth: 120,
   },
   {
     title: 'Address',
     dataIndex: 'address',
+    minWidth: 200,
   },
   {
     title: 'Email',
     dataIndex: 'email',
+    minWidth: 180,
   },
 ]
-const data = reactive([
-  {
-    key: '1',
-    name: 'Jane Doe',
-    salary: 23000,
-    address: '32 Park Road, London',
-    email: 'jane.doe@example.com',
-  },
-  {
-    key: '2',
-    name: 'Alisa Ross',
-    salary: 25000,
-    address: '35 Park Road, London',
-    email: 'alisa.ross@example.com',
-  },
-  {
-    key: '3',
-    name: 'Kevin Sandra',
-    salary: 22000,
-    address: '31 Park Road, London',
-    email: 'kevin.sandra@example.com',
-  },
-  {
-    key: '4',
-    name: 'Ed Hellen',
-    salary: 17000,
-    address: '42 Park Road, London',
-    email: 'ed.hellen@example.com',
-  },
-  {
-    key: '5',
-    name: 'William Smith',
-    salary: 27000,
-    address: '62 Park Road, London',
-    email: 'william.smith@example.com',
-  },
-])
+
+const data = reactive(
+  Array.from({ length: 8 }, (_, index) => ({
+    key: String(index + 1),
+    name: `User ${index + 1}`,
+    salary: 17000 + index * 1000,
+    address: `${30 + index} Park Road, London`,
+    email: `user.${index + 1}@example.com`,
+  })),
+)
 </script>

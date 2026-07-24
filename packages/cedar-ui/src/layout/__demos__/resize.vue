@@ -36,7 +36,7 @@ export default defineComponent({
   height: 100px;
   background-color: rgb(var(--brand-5));
 
-  .cedar-layout-sider-children {
+  .c-layout-sider-children {
     display: flex;
     justify-content: center;
     align-items: center;

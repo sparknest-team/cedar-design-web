@@ -3,7 +3,7 @@
     <c-radio-group type="button" v-model="format">
       <c-radio v-for="item in formatList" :value="item">{{ item }}</c-radio>
     </c-radio-group>
-    <c-color-picker defaultValue="#00BEBE" :format="format" showText />
+    <c-color-picker defaultValue="#00BEBE" :format="format" showText :hide-trigger="false" />
   </c-space>
 </template>
 

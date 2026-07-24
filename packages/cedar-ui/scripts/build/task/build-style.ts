@@ -1,7 +1,7 @@
 import { dest, src } from 'gulp'
 import path from 'path'
-import dartSass from 'sass'
-import gulpSass from 'gulp-sass'
+import { Transform } from 'stream'
+import less from 'less'
 import autoprefixer from 'gulp-autoprefixer'
 import cleanCSS from 'gulp-clean-css'
 import concat from 'gulp-concat'
@@ -12,11 +12,36 @@ import { srcRoot, output, outputEsm, outputCjs, root } from '../utils/paths'
 import { generatePaths } from '../utils/rollup'
 
 /**
- * [src/*.scss] to [es/*.scss, lib/*.scss]
+ * gulp 流式编译 less -> css
  */
-const buildScssCopy = async () => {
+const compileLess = () =>
+  new Transform({
+    objectMode: true,
+    transform(file, _enc, callback) {
+      if (file.isNull() || file.isDirectory()) {
+        callback(null, file)
+        return
+      }
+      less
+        .render(file.contents.toString(), {
+          filename: file.path,
+          javascriptEnabled: true,
+        })
+        .then((result) => {
+          file.contents = Buffer.from(result.css)
+          file.path = file.path.replace(/\.less$/, '.css')
+          callback(null, file)
+        })
+        .catch((err) => callback(err))
+    },
+  })
+
+/**
+ * [src/**\/*.less] to [es/**\/*.less, lib/**\/*.less]
+ */
+const buildLessCopy = async () => {
   await new Promise((resolve) => {
-    src(`${srcRoot}/**/*.scss`)
+    src(`${srcRoot}/**/*.less`)
       .pipe(dest(outputEsm))
       .pipe(dest(outputCjs))
       .on('end', resolve)
@@ -24,13 +49,12 @@ const buildScssCopy = async () => {
 }
 
 /**
- * [src/**\/style/*.scss] to [es/**\/style/*.css, lib/**\/style/*.css]
+ * [src/**\/style/index.less] to [es/**\/style/index.css, lib/**\/style/index.css]
  */
-const buildScssModules = async () => {
-  const sass = gulpSass(dartSass)
+const buildLessModules = async () => {
   await new Promise((resolve) => {
-    src(`${srcRoot}/**/style/*.scss`)
-      .pipe(sass.sync())
+    src(`${srcRoot}/**/style/index.less`)
+      .pipe(compileLess())
       .pipe(autoprefixer({ cascade: false }))
       .pipe(cleanCSS())
       .pipe(dest(outputEsm))
@@ -40,27 +64,17 @@ const buildScssModules = async () => {
 }
 
 /**
- * [src/*.scss] to [dist/*.css]
+ * [src/index.less] to [dist/index.css]
  */
-const buildScssFull = async () => {
-  const sass = gulpSass(dartSass)
+const buildLessFull = async () => {
   await new Promise((resolve) => {
-    src(`${srcRoot}/*.scss`)
-      .pipe(sass.sync())
+    src(`${srcRoot}/index.less`)
+      .pipe(compileLess())
       .pipe(autoprefixer({ cascade: false }))
       .pipe(cleanCSS())
       .pipe(dest(output))
       .on('end', resolve)
   })
-  // await new Promise((resolve) => {
-  //   src([
-  //     `${root}/node_modules/@arco-design/web-vue/dist/arco.min.css`,
-  //     `${output}/index.css`,
-  //   ])
-  //     .pipe(concat(`index.css`))
-  //     .pipe(dest(output))
-  //     .on('end', resolve)
-  // })
   await new Promise((resolve) => {
     src([
       // TODO: 脱敏迁移 - 暂时注释 @maplejs/map-core，后续替换为公有包
@@ -120,9 +134,9 @@ const buildStyleModules = async () => {
 
 export const buildStyle = async () => {
   await Promise.all([
-    buildScssCopy(),
-    buildScssModules(),
-    buildScssFull(),
+    buildLessCopy(),
+    buildLessModules(),
+    buildLessFull(),
     buildStyleModules(),
   ])
 }

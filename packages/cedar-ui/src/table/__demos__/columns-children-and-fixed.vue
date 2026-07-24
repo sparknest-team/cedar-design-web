@@ -1,5 +1,5 @@
 <template>
-  <c-table :columns="columns" :data="data" :bordered="{ cell: true }" :scroll="{ x: 2000 }" />
+  <c-table :columns="columns" :data="data" :bordered="{ cell: true }" />
 </template>
 
 <script lang="ts" setup>
@@ -32,10 +32,12 @@ const columns = [
           {
             title: 'Road',
             dataIndex: 'road',
+            minWidth: 200,
           },
           {
             title: 'No.',
             dataIndex: 'no',
+            minWidth: 120,
           },
         ],
       },
@@ -47,10 +49,12 @@ const columns = [
       {
         title: 'Email',
         dataIndex: 'email',
+        minWidth: 240,
       },
       {
         title: 'Phone',
         dataIndex: 'phone',
+        minWidth: 160,
       },
     ],
   },
@@ -90,7 +94,7 @@ const data = reactive([
     salary: 22000,
     birthday: '1992-02-11',
     city: 'Paris',
-    road: 'Arco',
+    road: 'Cedar',
     no: '67',
     phone: '12345678',
     email: 'kevin.sandra@example.com',

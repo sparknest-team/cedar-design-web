@@ -1,5 +1,5 @@
 import type { App } from 'vue'
-import type { ArcoOptions } from '../_utils/types'
+import type { CedarOptions } from '../_utils/types'
 import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
 import _Dropdown from './dropdown.vue'
 import _DropdownOption from './dropdown-option.vue'
@@ -12,7 +12,7 @@ const Dropdown = Object.assign(_Dropdown, {
   Group: _DropdownGroup,
   Submenu: _DropdownSubmenu,
   Button: _DropdownButton,
-  install: (app: App, options?: ArcoOptions) => {
+  install: (app: App, options?: CedarOptions) => {
     setGlobalConfig(app, options)
     const componentPrefix = getComponentPrefix(options)
 

@@ -22,6 +22,9 @@ export interface TableContext {
   onSorterChange: (dataIndex: string, direction: 'ascend' | 'descend' | '', ev: Event) => void
   onFilterChange: (dataIndex: string, filteredValues: string[], ev: Event) => void
   onThMouseDown: (dataIndex: string, ev: MouseEvent) => void
+
+  /** 末列扩展列 dataIndex（配合 #extra-column-header / #extra-column-cell） */
+  extraColumnDataIndex?: string
 }
 
 export interface TableColumnContext {
@@ -29,6 +32,6 @@ export interface TableColumnContext {
   removeChild: (id: number) => void
 }
 
-export const tableInjectionKey: InjectionKey<TableContext> = Symbol('ArcoTable')
+export const tableInjectionKey: InjectionKey<TableContext> = Symbol('CedarTable')
 
-export const tableColumnInjectionKey: InjectionKey<TableColumnContext> = Symbol('ArcoTableColumn')
+export const tableColumnInjectionKey: InjectionKey<TableColumnContext> = Symbol('CedarTableColumn')

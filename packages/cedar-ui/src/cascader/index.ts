@@ -1,12 +1,12 @@
 import type { App } from 'vue'
-import type { ArcoOptions } from '../_utils/types'
+import type { CedarOptions } from '../_utils/types'
 import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
 import _Cascader from './cascader.vue'
 import _CascaderPanel from './cascader-panel.vue'
 
 const Cascader = Object.assign(_Cascader, {
   CascaderPanel: _CascaderPanel,
-  install: (app: App, options?: ArcoOptions) => {
+  install: (app: App, options?: CedarOptions) => {
     setGlobalConfig(app, options)
     const componentPrefix = getComponentPrefix(options)
 

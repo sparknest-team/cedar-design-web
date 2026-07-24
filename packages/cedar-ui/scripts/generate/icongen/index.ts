@@ -6,7 +6,7 @@ import { JSDOM } from 'jsdom'
 import paths from '../../utils/paths'
 import { toKebabCase, toPascalCase } from '../../utils/convert-case'
 import svgoConfig from './svgo.config'
-import { getArcoVueIcon, getComponentIndex, getIconVue, getIndex, getType } from './vue-template'
+import { getCedarVueIcon, getComponentIndex, getIconVue, getIndex, getType } from './vue-template'
 
 interface IconData {
   title: string
@@ -140,14 +140,14 @@ function buildIndex(data: IconData[]) {
     }
   }
 
-  const arcoContent = getArcoVueIcon({ imports, components })
+  const cedarIconContent = getCedarVueIcon({ imports, components })
   const indexContent = getIndex({ exports })
 
-  fs.outputFile(path.resolve(paths.iconComponents, 'arco-vue-icon.ts'), arcoContent, (err) => {
+  fs.outputFile(path.resolve(paths.iconComponents, 'cedar-vue-icon.ts'), cedarIconContent, (err) => {
     if (err) {
-      console.log(`Build ArcoVueIcon Failed: ${err}`)
+      console.log(`Build CedarVueIcon Failed: ${err}`)
     } else {
-      console.log('Build ArcoVueIcon Success!')
+      console.log('Build CedarVueIcon Success!')
     }
   })
 

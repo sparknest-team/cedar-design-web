@@ -204,7 +204,7 @@ export type ButtonProps = ExtractPropTypes<typeof buttonProps>
 
 ```ts
 import type { App } from 'vue'
-import type { ArcoOptions } from '../_utils/types'
+import type { CedarOptions } from '../_utils/types'
 import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
 import _Comp from './comp.vue'
 import _CompSub from './comp-sub.vue' // 可选
@@ -212,7 +212,7 @@ import { compProps, compSubProps } from './props'
 
 const Comp = Object.assign(_Comp, {
   Sub: _CompSub, // 可选：把子组件挂为静态成员
-  install: (app: App, options?: ArcoOptions) => {
+  install: (app: App, options?: CedarOptions) => {
     setGlobalConfig(app, options)
     const componentPrefix = getComponentPrefix(options)
     app.component(componentPrefix + _Comp.name, _Comp)
@@ -396,3 +396,17 @@ Alert 是首个走完 OpenSpec 流程完成 PC ↔ Mobile API 对齐的组件，
 - 类型导出齐备：`AlertProps` / `AlertType` / `AlertVariant` / `AlertInstance` 与 `alertProps` / `_AlertComponent`。
 
 OpenSpec change：`openspec/changes/align-alert-spec/`。
+
+## 附录 B：跨端对齐案例 — Steps
+
+Steps 按 Pagination 语义完成 PC ↔ Mobile API 对齐（进度序号，不是 Tabs 的 key 选中）。
+
+**核心约定**：
+- 进度 prop：`current` / `defaultCurrent`（**1-based**）；不用 `active`。
+- 状态：`status: wait | process | finish | error`；子项可覆盖；推导规则 `step < current → finish`。
+- 点击：`changeable` 门控 + `onChange(step, ev)` / `v-model:current`。
+- Step 内容：`title` / `description` / `disabled` + `#icon` / `#description`。
+- PC 独有：`type` / `labelPlacement` / `small` / `showLine` / `#node`（移动不实现）。
+- 移动移除：`activeColor` / 三态 icon props / `click-step`。
+
+OpenSpec change：`openspec/changes/align-steps-spec/`。

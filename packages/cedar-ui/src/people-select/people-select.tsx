@@ -1,5 +1,5 @@
 import { computed, defineComponent, onMounted, reactive, ref, useAttrs, useSlots, watch } from 'vue'
-import { Select, Option } from '@arco-design/web-vue'
+import Select, { Option } from '../select'
 import { peopleSelectProps } from './props'
 import Empty from '../empty'
 import { useFetch } from '../_utils/use-fetch'

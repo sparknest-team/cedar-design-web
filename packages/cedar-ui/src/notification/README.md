@@ -29,7 +29,7 @@ permalink: /components/notification/
 
 ```ts
 import { createApp } from 'vue'
-import { Notification } from '@arco-design/web-vue'
+import { Notification } from '@cedar/ui'
 
 const app = createApp(App)
 Notification._context = app._context

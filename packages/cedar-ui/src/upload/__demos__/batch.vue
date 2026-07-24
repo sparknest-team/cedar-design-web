@@ -1,16 +1,16 @@
 <template>
   <c-button @click="visible = true">批量上传</c-button>
 
-  <c-modal
-    v-model:visible="visible"
+  <c-dialog
+    v-model:show="visible"
     title="批量上传"
     width="440px"
     unmount-on-close
-    :mask-closable="false"
-    @before-ok="handleSubmit"
+    :close-on-click-overlay="false"
+    @before-close="handleSubmit"
   >
     <c-upload ref="uploadRef" multiple :custom-request="upload" draggable :auto-upload="false"> </c-upload>
-  </c-modal>
+  </c-dialog>
 </template>
 
 <script lang="ts">

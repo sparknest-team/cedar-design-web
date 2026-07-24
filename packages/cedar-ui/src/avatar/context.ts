@@ -9,4 +9,4 @@ export interface AvatarGroupContext {
   total: number
 }
 
-export const avatarGroupInjectionKey: InjectionKey<AvatarGroupContext> = Symbol('ArcoAvatarGroup')
+export const avatarGroupInjectionKey: InjectionKey<AvatarGroupContext> = Symbol('CedarAvatarGroup')

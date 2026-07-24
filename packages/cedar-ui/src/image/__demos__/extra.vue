@@ -2,7 +2,7 @@
   <c-image
     src="https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a8c8cdb109cb051163646151a4a5083b.png~tplv-uwbnlip3yd-webp.webp"
     title="A user’s avatar"
-    description="Present by Arco Design"
+    description="Present by Cedar Design"
     width="260"
     style="margin-right: 67px; vertical-align: top"
     :preview-visible="visible1"
@@ -33,7 +33,7 @@
   <c-image
     src="https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a8c8cdb109cb051163646151a4a5083b.png~tplv-uwbnlip3yd-webp.webp"
     title="A user’s avatar"
-    description="Present by Arco Design"
+    description="Present by Cedar Design"
     width="260"
     footer-position="outer"
     :preview-visible="visible2"

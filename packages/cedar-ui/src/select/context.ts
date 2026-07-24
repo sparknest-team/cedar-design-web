@@ -16,4 +16,4 @@ export interface SelectContext {
   removeSlotOptionInfo: (id: number) => void
 }
 
-export const selectInjectionKey: InjectionKey<SelectContext> = Symbol('ArcoSelectContext')
+export const selectInjectionKey: InjectionKey<SelectContext> = Symbol('CedarSelectContext')

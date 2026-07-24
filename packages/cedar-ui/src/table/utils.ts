@@ -54,6 +54,27 @@ const setParentFixed = (column: TableColumnData, fixed: 'left' | 'right') => {
   }
 }
 
+/** 若分组下所有叶子 fixed 一致，返回该值；否则 undefined */
+const getUniformLeafFixed = (column: TableColumnData): 'left' | 'right' | undefined => {
+  const leaves: TableColumnData[] = []
+  const walk = (cols: TableColumnData[]) => {
+    cols.forEach((col) => {
+      if (isArray(col.children) && col.children.length) {
+        walk(col.children)
+      } else {
+        leaves.push(col)
+      }
+    })
+  }
+  if (isArray(column.children) && column.children.length) {
+    walk(column.children)
+  }
+  if (!leaves.length) return undefined
+  const first = leaves[0].fixed
+  if (first !== 'left' && first !== 'right') return undefined
+  return leaves.every((leaf) => leaf.fixed === first) ? first : undefined
+}
+
 // Get the grouped header row data
 export const getGroupColumns = (
   columns: TableColumnData[],
@@ -88,6 +109,13 @@ export const getGroupColumns = (
         const colSpan = getDataColumnsNumber(cell.children)
         if (colSpan > 1) {
           cell.colSpan = colSpan
+        }
+        // 子列全部同侧冻结时，分组表头也要带上 fixed，否则横滚时表头不会跟着固定
+        if (!cell.fixed) {
+          const uniformFixed = getUniformLeafFixed(cell)
+          if (uniformFixed) {
+            cell.fixed = uniformFixed
+          }
         }
         groupColumns[level].push(cell)
         travelColumns(cell.children, {
@@ -196,20 +224,20 @@ export const getFixedNumber = (
       if (first.dataIndex === item.dataIndex) {
         break
       }
-      count += item._resizeWidth ?? item.width ?? 0
+      count += item._resizeWidth ?? item._realWidth ?? item.width ?? 0
     }
     return count
   }
 
   const last = getLastDataColumn(column)
-  for (let i = dataColumns.length - 1; i > 0; i--) {
+  for (let i = dataColumns.length - 1; i >= 0; i--) {
     const item = dataColumns[i]
     if (last.dataIndex === item.dataIndex) {
       break
     }
 
     if (item.fixed === 'right') {
-      count += item.width as number
+      count += item._resizeWidth ?? item._realWidth ?? item.width ?? 0
     }
   }
   return count

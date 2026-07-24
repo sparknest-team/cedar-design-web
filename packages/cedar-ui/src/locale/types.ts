@@ -1,4 +1,4 @@
-export interface ArcoCalendarLang {
+export interface CedarCalendarLang {
   formatYear: string
   formatMonth: string
   today: string
@@ -109,7 +109,7 @@ export interface ValidateMessage {
   }
 }
 
-export interface ArcoLang {
+export interface CedarLang {
   locale: string
   common: {
     placeholderSelect: string
@@ -138,16 +138,10 @@ export interface ArcoLang {
     expandMore: string
     collapseMore: string
   }
-  selectTransfer: {
-    freezeToTop: string
-    freezeToBottom: string
-    unfreeze: string
-    deleteItem: string
-  }
   empty: {
     description: string
   }
-  calendar: ArcoCalendarLang
+  calendar: CedarCalendarLang
   drawer: {
     okText: string
     cancelText: string
@@ -156,9 +150,9 @@ export interface ArcoLang {
     okText: string
     cancelText: string
   }
-  modal: {
-    okText: string
-    cancelText: string
+  dialog: {
+    confirmButtonText: string
+    cancelButtonText: string
   }
   pagination: {
     goto: string
@@ -169,12 +163,31 @@ export interface ArcoLang {
   table: {
     okText: string
     resetText: string
-    // new
     customColumnsConfig: string
     selectAll: string
     selected: string
     placeholderInputKeyword: string
     clear: string
+    columnManager: {
+      freezeToLeft: string
+      freezeToRight: string
+      unfreeze: string
+      deleteItem: string
+      renameColumn: string
+      insertLeft: string
+      insertRight: string
+      insertColumn: string
+      freezeColumn: string
+      unfreezeColumn: string
+      editColumn: string
+      deleteColumn: string
+      noInsertableColumns: string
+      groupTitle: string
+      groupTitlePlaceholder: string
+      groupTitleHint: string
+      columnTitle: string
+      columnTitlePlaceholder: string
+    }
   }
   upload: {
     start: string
@@ -190,9 +203,9 @@ export interface ArcoLang {
     click: string
   }
   datePicker: {
-    view: ArcoCalendarLang['view']
-    month: ArcoCalendarLang['month']
-    week: ArcoCalendarLang['week']
+    view: CedarCalendarLang['view']
+    month: CedarCalendarLang['month']
+    week: CedarCalendarLang['week']
     placeholder: {
       date: string
       week: string
@@ -213,6 +226,10 @@ export interface ArcoLang {
     today: string
     now: string
     ok: string
+    startTime: string
+    endTime: string
+    rangeSeparator: string
+    nextDay: string
   }
   image: {
     loading: string
@@ -243,4 +260,4 @@ export interface ArcoLang {
   }
 }
 
-export type ArcoI18nMessages = Record<string, ArcoLang>
+export type CedarI18nMessages = Record<string, CedarLang>

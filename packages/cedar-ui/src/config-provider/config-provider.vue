@@ -6,7 +6,7 @@
 import type { PropType } from 'vue'
 import { defineComponent, provide, reactive, toRefs, getCurrentInstance } from 'vue'
 import { configProviderInjectionKey } from './context'
-import { ArcoLang } from '../locale/types'
+import { CedarLang } from '../locale/types'
 import { Size } from '../_utils/constant'
 import { createNamespace } from '../_utils/global-config'
 
@@ -28,7 +28,7 @@ export default defineComponent({
      * @en Configure language pack
      */
     locale: {
-      type: Object as PropType<ArcoLang>,
+      type: Object as PropType<CedarLang>,
     },
     /**
      * @zh 大小

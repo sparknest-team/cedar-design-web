@@ -21,6 +21,7 @@ import { getGroupColumns, mapArrayWithChildren, mapRawTableData } from './utils'
 import { useRowSelection } from './hooks/use-row-selection'
 import { useExpand } from './hooks/use-expand'
 import { usePagination } from './hooks/use-pagination'
+import { updateColumnsWidth } from './hooks/use-columns-layout'
 import IconPlus from '../icon/icon-plus'
 import IconMinus from '../icon/icon-minus'
 import Spin from '../spin'
@@ -52,6 +53,11 @@ import { useComponentRef } from '../_hooks/use-component-ref'
 import type { BaseType } from '../_utils/types'
 import { useScrollbar } from '../_hooks/use-scrollbar'
 import { getValueByPath, setValueByPath } from '../_utils/get-value-by-path'
+import {
+  resolveExtraColumnConfig,
+  getExtraColumnWidth,
+  type TableExtraColumnConfig,
+} from './extra-column'
 
 const DEFAULT_BORDERED = {
   wrapper: true,
@@ -117,12 +123,12 @@ export default defineComponent({
       default: () => inject(configProviderInjectionKey, undefined)?.size ?? 'md',
     },
     /**
-     * @zh 表格的 table-layout 属性设置为 fixed，设置为 fixed 后，表格的宽度不会被内容撑开超出 100%。
-     * @en The table-layout property of the table is set to fixed. After it is set to fixed, the width of the table will not be stretched beyond 100% by the content.
+     * @zh 表格布局算法，同 CSS `table-layout`。默认 `fixed`，列宽由 JS 计算后写入，不被单元格内容撑开
+     * @en Table layout algorithm, same as CSS `table-layout`. Defaults to `fixed`; column widths are computed in JS and not stretched by cell content
      */
-    tableLayoutFixed: {
-      type: Boolean,
-      default: false,
+    tableLayout: {
+      type: String as PropType<'fixed' | 'auto'>,
+      default: 'fixed',
     },
     /**
      * @zh 是否为加载中状态
@@ -147,16 +153,26 @@ export default defineComponent({
       type: Object as PropType<TableExpandable>,
     },
     /**
-     * @zh 表格的滚动属性配置。`2.13.0` 版本增加字符型值的支持。`2.20.0` 版本增加 `minWidth`,`maxHeight` 的支持。
-     * @en Scrolling attribute configuration of the table. The `2.13.0` version adds support for character values. `2.20.0` version adds support for `minWidth`, `maxHeight`.
+     * @zh 表格高度。设置后表头固定，表体区域滚动。数字单位为 px
+     * @en Table height. Fixes the header and scrolls the body when set. Number values are in px
      */
-    scroll: {
-      type: Object as PropType<{
-        x?: number | string
-        y?: number | string
-        minWidth?: number | string
-        maxHeight?: number | string
-      }>,
+    height: {
+      type: [Number, String] as PropType<number | string>,
+    },
+    /**
+     * @zh 表格最大高度。内容不足时表格收缩，超出后表体滚动。数字单位为 px
+     * @en Table max height. Table shrinks when content is short; body scrolls when exceeded. Number values are in px
+     */
+    maxHeight: {
+      type: [Number, String] as PropType<number | string>,
+    },
+    /**
+     * @zh 列宽是否自动撑满容器。为 true 时，未设置 `width` 的列按 `minWidth` 比例分配剩余空间
+     * @en Whether column widths automatically fit the container. When true, columns without `width` share remaining space by `minWidth` ratio
+     */
+    fit: {
+      type: Boolean,
+      default: true,
     },
     /**
      * @zh 分页的属性配置
@@ -365,11 +381,19 @@ export default defineComponent({
       default: false,
     },
     /**
-     * @zh 是否开启表头吸顶
-     * @en Whether to open the sticky header
+     * @zh 是否开启表头吸顶。相对**页面/外层滚动容器**吸顶，不是表格内部滚动。数字为距离滚动容器顶部的偏移（px）
+     * @en Sticky header relative to the page/outer scroll container (not table body scroll). Number is top offset in px
      * @version 2.30.0
      */
     stickyHeader: {
+      type: [Boolean, Number],
+      default: false,
+    },
+    /**
+     * @zh 是否开启分页条吸底。相对**页面/外层滚动容器**吸底，不是表格内部滚动。数字为距离滚动容器底部的偏移（px）
+     * @en Sticky pagination relative to the page/outer scroll container. Number is bottom offset in px
+     */
+    stickyPagination: {
       type: [Boolean, Number],
       default: false,
     },
@@ -391,10 +415,19 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    /**
+     * @zh 在表格末尾插入扩展列（如设置按钮），内容由 #extra-column-header / #extra-column-cell 提供
+     * @en Insert an extra column at the end of the table (e.g. settings button). Content is provided via #extra-column-header / #extra-column-cell
+     */
+    extraColumn: {
+      type: [Boolean, Object] as PropType<boolean | TableExtraColumnConfig>,
+      default: false,
+    },
   },
   emits: {
     'update:selectedKeys': (rowKeys: (string | number)[]) => true,
     'update:expandedKeys': (rowKeys: (string | number)[]) => true,
+    'update:columns': (columns: TableColumnData[]) => true,
     /**
      * @zh 点击展开行时触发
      * @en Triggered when a row is clicked to expand
@@ -631,6 +664,24 @@ export default defineComponent({
    * @binding {TableColumnData} column
    * @version 2.26.0
    */
+  /**
+   * @zh 扩展列表头内容
+   * @en Extra column header content
+   * @slot extra-column-header
+   */
+  /**
+   * @zh 扩展列单元格内容
+   * @en Extra column cell content
+   * @slot extra-column-cell
+   * @binding {TableData} record
+   */
+  /**
+   * @zh 表头单元格操作区（如列管理菜单）
+   * @en Header cell actions area (e.g. column manager menu)
+   * @slot header-cell-actions
+   * @binding {TableColumnData} column
+   * @binding {string} dataIndex
+   */
   setup(props, { emit, slots }) {
     const {
       columns,
@@ -651,6 +702,7 @@ export default defineComponent({
       showEmptyTree,
     } = toRefs(props)
     const prefixCls = getPrefixCls('table')
+    const extraColumnConfig = computed(() => resolveExtraColumnConfig(props.extraColumn))
     const configCtx = inject(configProviderInjectionKey, undefined)
     const bordered = computed(() => {
       if (isObject(props.bordered)) {
@@ -663,11 +715,15 @@ export default defineComponent({
 
     const { displayScrollbar, scrollbarProps } = useScrollbar(scrollbar)
 
+    const tableWidth = ref(0)
+    const scrollX = ref(false)
+    const bodyWidth = ref(0)
+    const columnRealWidth = reactive<Record<string, number>>({})
+
     // whether to scroll
     const isScroll = computed(() => {
-      const x = Boolean(props.scroll?.x || props.scroll?.minWidth)
-      const y = Boolean(props.scroll?.y || props.scroll?.maxHeight)
-      return { x, y }
+      const y = props.height != null || props.maxHeight != null
+      return { x: scrollX.value, y }
     })
 
     // const theadRef = ref<HTMLElement>();
@@ -696,6 +752,35 @@ export default defineComponent({
         (isScroll.value.x && flattenData.value.length === 0),
     )
 
+    const toCssSize = (value: number | string) => (isNumber(value) ? `${value}px` : value)
+
+    const bodyMaxHeight = computed(() => {
+      if (props.maxHeight != null) {
+        return toCssSize(props.maxHeight)
+      }
+      if (props.height != null) {
+        return isNumber(props.height) ? `${props.height}px` : '100%'
+      }
+      return undefined
+    })
+
+    const tableContainerRef = ref<HTMLElement>()
+
+    const updateTableWidth = () => {
+      // 必须量 container：边框画在 container 上，根节点 clientWidth 会偏大，
+      // 列宽按根节点铺满后 scrollWidth > clientWidth，虚拟滚动条会一直出现
+      const el = tableContainerRef.value
+      if (!el) return
+      const width = Math.floor(el.clientWidth)
+      if (width > 0 && width !== tableWidth.value) {
+        tableWidth.value = width
+      }
+    }
+
+    const handleTableResize = () => {
+      updateTableWidth()
+    }
+
     const slotColumnMap = reactive(new Map<number, TableColumnData>())
     const slotColumns = ref<TableColumnData[]>()
 
@@ -720,9 +805,30 @@ export default defineComponent({
     const { resizingColumn, columnWidth, handleThMouseDown } = useColumnResize(thRefs, emit)
 
     watch(
-      [columns, slotColumns, columnWidth],
+      [
+        columns,
+        slotColumns,
+        columnWidth,
+        () => extraColumnConfig.value,
+        () => props.size,
+      ],
       ([columns, slotColumns]) => {
-        const result = getGroupColumns(slotColumns ?? columns ?? [], dataColumnMap, columnWidth)
+        const baseColumns = [...(slotColumns ?? columns ?? [])]
+        if (extraColumnConfig.value.enabled) {
+          const extraCls = `${prefixCls}-extra-column-cell`
+          baseColumns.push({
+            dataIndex: extraColumnConfig.value.dataIndex,
+            title: '',
+            width: getExtraColumnWidth(props.size, extraColumnConfig.value.width),
+            fixed: extraColumnConfig.value.fixed,
+            align: extraColumnConfig.value.align,
+            headerCellClass: extraCls,
+            cellClass: extraCls,
+            slotName: 'extra-column-cell',
+            render: () => null,
+          })
+        }
+        const result = getGroupColumns(baseColumns, dataColumnMap, columnWidth)
         dataColumns.value = result.dataColumns
         groupColumns.value = result.groupColumns
       },
@@ -1268,28 +1374,60 @@ export default defineComponent({
       return isFunction(operationsFn) ? operationsFn({ dragHandle, expand, selection }) : operations
     })
 
-    const headerStyle = computed(() => {
-      if (isScroll.value.x) {
-        const style: CSSProperties = {
-          width: isNumber(props.scroll?.x) ? `${props.scroll?.x}px` : props.scroll?.x,
+    // 与 Element 一致：默认 fixed；仅 max-height（以及 ellipsis）会强制 fixed
+    const resolvedTableLayout = computed<'fixed' | 'auto'>(() => {
+      if (props.maxHeight != null) return 'fixed'
+      if (hasEllipsis.value) return 'fixed'
+      return props.tableLayout
+    })
+
+    const syncColumnsLayout = () => {
+      const result = updateColumnsWidth({
+        containerWidth: tableWidth.value,
+        dataColumns: dataColumns.value,
+        operations: operations.value,
+        fit: props.fit,
+      })
+      scrollX.value = result.scrollX
+      bodyWidth.value = result.bodyWidth
+      Object.keys(columnRealWidth).forEach((key) => {
+        if (!(key in result.columnRealWidth)) {
+          delete columnRealWidth[key]
         }
-        if (props.scroll?.minWidth) {
-          style.minWidth = isNumber(props.scroll.minWidth) ? `${props.scroll.minWidth}px` : props.scroll.minWidth
-        }
-        return style
+      })
+      Object.assign(columnRealWidth, result.columnRealWidth)
+    }
+
+    watch(
+      [
+        dataColumns,
+        operations,
+        tableWidth,
+        () => props.fit,
+        resolvedTableLayout,
+        () =>
+          Object.keys(columnWidth)
+            .map((key) => `${key}:${columnWidth[key]}`)
+            .join('|'),
+      ],
+      () => {
+        syncColumnsLayout()
+      },
+      { immediate: true },
+    )
+
+    const tableContentWidthStyle = computed(() => {
+      if (isScroll.value.x && bodyWidth.value > 0) {
+        return { width: `${bodyWidth.value}px` } as CSSProperties
       }
       return undefined
     })
 
+    const headerStyle = computed(() => tableContentWidthStyle.value)
+
     const contentStyle = computed(() => {
       if (isScroll.value.x && flattenData.value.length > 0) {
-        const style: CSSProperties = {
-          width: isNumber(props.scroll?.x) ? `${props.scroll?.x}px` : props.scroll?.x,
-        }
-        if (props.scroll?.minWidth) {
-          style.minWidth = isNumber(props.scroll.minWidth) ? `${props.scroll.minWidth}px` : props.scroll.minWidth
-        }
-        return style
+        return tableContentWidthStyle.value
       }
       return undefined
     })
@@ -1323,6 +1461,9 @@ export default defineComponent({
         onSorterChange: handleSorterChange,
         onFilterChange: handleFilterChange,
         onThMouseDown: handleThMouseDown,
+        extraColumnDataIndex: computed(() =>
+          extraColumnConfig.value.enabled ? extraColumnConfig.value.dataIndex : undefined,
+        ),
       }),
     )
 
@@ -1339,8 +1480,9 @@ export default defineComponent({
         [`${prefixCls}-dragging`]: dragState.dragging,
         [`${prefixCls}-type-selection`]: Boolean(props.rowSelection),
         [`${prefixCls}-empty`]: props.data && flattenData.value.length === 0,
-        [`${prefixCls}-layout-fixed`]:
-          props.tableLayoutFixed || isScroll.value.x || splitTable.value || hasEllipsis.value,
+        [`${prefixCls}-layout-fixed`]: resolvedTableLayout.value === 'fixed',
+        // sticky 依赖祖先可滚动且不能有 overflow:hidden；开启吸顶/吸底时放开裁剪
+        [`${prefixCls}-scrollport-visible`]: Boolean(props.stickyHeader || props.stickyPagination),
       },
     ])
 
@@ -1358,6 +1500,7 @@ export default defineComponent({
       const cls = getTableFixedCls()
 
       if (isScroll.value.x) {
+        cls.push(`${prefixCls}-scroll-x`)
         cls.push(getTableScrollCls())
       }
 
@@ -1826,48 +1969,49 @@ export default defineComponent({
 
     const renderContent = () => {
       if (splitTable.value) {
-        const top = isNumber(props.stickyHeader) ? `${props.stickyHeader}px` : undefined
-
-        const mergeOuterClass = [scrollbarProps.value?.outerClass]
-        if (props.stickyHeader) {
-          mergeOuterClass.push(`${prefixCls}-header-sticky`)
-        }
-
-        const mergeOuterStyle = { top, ...scrollbarProps.value?.outerStyle }
-
+        const stickyTop = isNumber(props.stickyHeader) ? `${props.stickyHeader}px` : undefined
         const Component = displayScrollbar.value ? Scrollbar : 'div'
+
+        const renderHeaderPanel = () => (
+          <Component
+            ref={theadComRef}
+            class={`${prefixCls}-header`}
+            style={{
+              overflowY: hasScrollBar.value ? 'scroll' : undefined,
+            }}
+            {...(scrollbar.value
+              ? {
+                  hide: flattenData.value.length !== 0,
+                  disableVertical: true,
+                  ...scrollbarProps.value,
+                  disableHorizontal: !isScroll.value.x,
+                }
+              : undefined)}
+          >
+            <table class={`${prefixCls}-element`} style={headerStyle.value} cellpadding={0} cellspacing={0}>
+              <ColGroup
+                dataColumns={dataColumns.value}
+                operations={operations.value}
+                columnWidth={columnWidth}
+                columnRealWidth={columnRealWidth}
+                tableLayout={resolvedTableLayout.value}
+              />
+              {renderHeader()}
+            </table>
+          </Component>
+        )
 
         return (
           <>
-            {props.showHeader && (
-              <Component
-                ref={theadComRef}
-                class={[
-                  `${prefixCls}-header`,
-                  {
-                    [`${prefixCls}-header-sticky`]: props.stickyHeader && !displayScrollbar.value,
-                  },
-                ]}
-                style={{
-                  overflowY: hasScrollBar.value ? 'scroll' : undefined,
-                  top: !displayScrollbar.value ? top : undefined,
-                }}
-                {...(scrollbar.value
-                  ? {
-                      hide: flattenData.value.length !== 0,
-                      disableVertical: true,
-                      ...scrollbarProps.value,
-                      outerClass: mergeOuterClass,
-                      outerStyle: mergeOuterStyle,
-                    }
-                  : undefined)}
-              >
-                <table class={`${prefixCls}-element`} style={headerStyle.value} cellpadding={0} cellspacing={0}>
-                  <ColGroup dataColumns={dataColumns.value} operations={operations.value} columnWidth={columnWidth} />
-                  {renderHeader()}
-                </table>
-              </Component>
-            )}
+            {props.showHeader &&
+              (props.stickyHeader ? (
+                // sticky 单独包一层，避免与 .c-scrollbar { position: relative } 互相覆盖
+                <div class={`${prefixCls}-header-sticky`} style={stickyTop ? { top: stickyTop } : undefined}>
+                  {renderHeaderPanel()}
+                </div>
+              ) : (
+                renderHeaderPanel()
+              ))}
             <ResizeObserver onResize={handleTbodyResize}>
               {isVirtualList.value && flattenData.value.length ? (
                 <VirtualList
@@ -1898,12 +2042,13 @@ export default defineComponent({
                   ref={tbodyComRef}
                   class={`${prefixCls}-body`}
                   style={{
-                    maxHeight: isNumber(props.scroll?.y) ? `${props.scroll?.y}px` : '100%',
+                    maxHeight: bodyMaxHeight.value ?? '100%',
                   }}
                   {...(scrollbar.value
                     ? {
                         outerStyle: { display: 'flex', minHeight: '0' },
                         ...scrollbarProps.value,
+                        disableHorizontal: !isScroll.value.x,
                       }
                     : undefined)}
                   onScroll={onTbodyScroll}
@@ -1914,6 +2059,8 @@ export default defineComponent({
                         dataColumns={dataColumns.value}
                         operations={operations.value}
                         columnWidth={columnWidth}
+                        columnRealWidth={columnRealWidth}
+                        tableLayout={resolvedTableLayout.value}
                       />
                     )}
                     {renderBody()}
@@ -1930,7 +2077,13 @@ export default defineComponent({
                 }}
               >
                 <table class={`${prefixCls}-element`} style={contentStyle.value} cellpadding={0} cellspacing={0}>
-                  <ColGroup dataColumns={dataColumns.value} operations={operations.value} columnWidth={columnWidth} />
+                  <ColGroup
+                    dataColumns={dataColumns.value}
+                    operations={operations.value}
+                    columnWidth={columnWidth}
+                    columnRealWidth={columnRealWidth}
+                    tableLayout={resolvedTableLayout.value}
+                  />
                   {renderSummary()}
                 </table>
               </div>
@@ -1942,7 +2095,13 @@ export default defineComponent({
       return (
         <ResizeObserver onResize={() => setAlignPosition()}>
           <table class={`${prefixCls}-element`} cellpadding={0} cellspacing={0} style={contentStyle.value}>
-            <ColGroup dataColumns={dataColumns.value} operations={operations.value} columnWidth={columnWidth} />
+            <ColGroup
+              dataColumns={dataColumns.value}
+              operations={operations.value}
+              columnWidth={columnWidth}
+              columnRealWidth={columnRealWidth}
+              tableLayout={resolvedTableLayout.value}
+            />
             {props.showHeader && renderHeader()}
             {renderBody()}
             {summaryData.value && summaryData.value.length > 0 && renderSummary()}
@@ -1952,23 +2111,27 @@ export default defineComponent({
     }
 
     const renderTable = (content?: Slot) => {
-      const style = props.scroll?.maxHeight ? { maxHeight: props.scroll.maxHeight } : undefined
-
       const Component = displayScrollbar.value ? Scrollbar : 'div'
 
       return (
         <>
-          <div class={[`${prefixCls}-container`, tableCls.value]}>
+          <div ref={tableContainerRef} class={[`${prefixCls}-container`, tableCls.value]}>
             <Component
               ref={contentComRef}
               class={[
                 `${prefixCls}-content`,
                 {
-                  [`${prefixCls}-content-scroll-x`]: !splitTable.value,
+                  // 仅在确实需要横滚时开启，避免列宽铺满后的亚像素溢出一直露出滚动条
+                  [`${prefixCls}-content-scroll-x`]: !splitTable.value && isScroll.value.x,
                 },
               ]}
-              style={style}
-              {...(scrollbar.value ? { outerStyle: { height: '100%' }, ...scrollbarProps.value } : undefined)}
+              {...(scrollbar.value
+                ? {
+                    outerStyle: { height: '100%' },
+                    ...scrollbarProps.value,
+                    disableHorizontal: !isScroll.value.x,
+                  }
+                : undefined)}
               onScroll={handleScroll}
             >
               {content ? (
@@ -1990,8 +2153,20 @@ export default defineComponent({
         ? omit(props.pagination, ['current', 'pageSize', 'defaultCurrent', 'defaultPageSize'])
         : {}
 
+      const stickyStyle: CSSProperties | undefined = isNumber(props.stickyPagination)
+        ? { bottom: `${props.stickyPagination}px` }
+        : undefined
+
       return (
-        <div class={paginationCls.value}>
+        <div
+          class={[
+            paginationCls.value,
+            {
+              [`${prefixCls}-pagination-sticky`]: Boolean(props.stickyPagination),
+            },
+          ]}
+          style={stickyStyle}
+        >
           {slots['pagination-left']?.()}
           <Pagination
             total={validData.value.length}
@@ -2013,33 +2188,39 @@ export default defineComponent({
     }
 
     const style = computed<CSSProperties | undefined>(() => {
-      if (isString(props.scroll?.y)) {
-        return { height: props.scroll?.y }
+      if (isString(props.height)) {
+        return { height: props.height }
       }
       return undefined
     })
 
     const render = () => {
       if (slots.default) {
-        return <div class={cls.value}>{renderTable(slots.default)}</div>
+        return (
+          <ResizeObserver onResize={handleTableResize}>
+            <div class={cls.value}>{renderTable(slots.default)}</div>
+          </ResizeObserver>
+        )
       }
       children.value = slots.columns?.()
       // fix #1724 sortedData.value.length > 0
       return (
-        <div class={cls.value} style={style.value}>
-          {children.value}
-          <Spin {...spinProps.value}>
-            {props.pagination !== false &&
-              (flattenData.value.length > 0 || sortedData.value.length > 0) &&
-              isPaginationTop.value &&
-              renderPagination()}
-            {renderTable()}
-            {props.pagination !== false &&
-              (flattenData.value.length > 0 || sortedData.value.length > 0) &&
-              !isPaginationTop.value &&
-              renderPagination()}
-          </Spin>
-        </div>
+        <ResizeObserver onResize={handleTableResize}>
+          <div class={cls.value} style={style.value}>
+            {children.value}
+            <Spin {...spinProps.value}>
+              {props.pagination !== false &&
+                (flattenData.value.length > 0 || sortedData.value.length > 0) &&
+                isPaginationTop.value &&
+                renderPagination()}
+              {renderTable()}
+              {props.pagination !== false &&
+                (flattenData.value.length > 0 || sortedData.value.length > 0) &&
+                !isPaginationTop.value &&
+                renderPagination()}
+            </Spin>
+          </div>
+        </ResizeObserver>
       )
     }
 

@@ -1,6 +1,6 @@
 <template>
   <span :class="prefixCls">
-    <arco-select
+    <Select
       :model-value="pageSize"
       :options="options"
       :size="size"
@@ -15,12 +15,12 @@
 import { computed, defineComponent, PropType } from 'vue'
 import { useI18n } from '../locale'
 import { getPrefixCls } from '../_utils/global-config'
-import ArcoSelect from '../select'
+import Select from '../select'
 
 export default defineComponent({
   name: 'PageOptions',
   components: {
-    ArcoSelect,
+    Select,
   },
   props: {
     sizeOptions: {

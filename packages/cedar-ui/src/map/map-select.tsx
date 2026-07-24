@@ -3,7 +3,7 @@ import { setValueWithAlias, dataToScope, realTransformAlias } from '../utils/use
 import { mapProps, type PoiKeys } from './props'
 import { IconLocation, IconLoading } from '../icon'
 import Input from '../input'
-import Modal from '../modal'
+import Dialog from '../dialog'
 import Map from './map'
 import { useI18n } from '../locale'
 import _ from 'lodash'
@@ -212,20 +212,20 @@ export default defineComponent({
             emit('clear')
           }}
         ></Input>
-        <Modal
+        <Dialog
           class="map-select-model"
           width="960px"
           title={t('map.title')}
-          visible={show.value}
-          popupContainer={props.popupContainer}
-          onUpdate:visible={(v: boolean) => {
+          show={show.value}
+          teleport={props.popupContainer}
+          onUpdate:show={(v: boolean) => {
             show.value = v
           }}
           onCancel={() => {
             show.value = false
           }}
-          onOk={handleOk}
-          okLoading={okLoading.value}
+          onConfirm={handleOk}
+          confirmButtonLoading={okLoading.value}
         >
           {show.value ? (
             <Map
@@ -254,7 +254,7 @@ export default defineComponent({
           ) : (
             ''
           )}
-        </Modal>
+        </Dialog>
       </>
     )
   },

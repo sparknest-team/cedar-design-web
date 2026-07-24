@@ -5,104 +5,17 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, provide, reactive, ref, toRefs } from 'vue'
-import { Direction } from '../_utils/constant'
+import { computed, defineComponent, provide, reactive, ref, toRefs } from 'vue'
+import { call } from '@maplejs/maple-shared'
 import { getPrefixCls } from '../_utils/global-config'
-import { StepData, StepStatus, StepsType } from './types'
+import { StepData, StepStatus } from './types'
 import { stepsInjectionKey } from './context'
+import { stepsProps } from './props'
 
 export default defineComponent({
   name: 'Steps',
-  props: {
-    /**
-     * @zh 步骤条的类型
-     * @en The type of the steps
-     * @values 'default', 'arrow', 'dot', 'navigation'
-     */
-    type: {
-      type: String as PropType<StepsType>,
-      default: 'default',
-    },
-    /**
-     * @zh 步骤条的显示方向
-     * @en The direction of the steps
-     * @values 'horizontal', 'vertical'
-     */
-    direction: {
-      type: String as PropType<Direction>,
-      default: 'horizontal',
-    },
-    /**
-     * @zh 标签描述文字放置的位置
-     * @en The location where the label description is placed.
-     * @values 'horizontal', 'vertical'
-     */
-    labelPlacement: {
-      type: String as PropType<Direction>,
-      default: 'horizontal',
-    },
-    /**
-     * @zh 当前步骤数
-     * @en Number of current step
-     * @vModel
-     */
-    current: {
-      type: Number,
-      default: undefined,
-    },
-    /**
-     * @zh 默认的步骤数（非受控状态）
-     * @en The default number of step (uncontrolled state)
-     */
-    defaultCurrent: {
-      type: Number,
-      default: 1,
-    },
-    /**
-     * @zh 当前步骤的状态
-     * @en The status of the current step
-     * @values 'wait', 'process', 'finish', 'error'
-     */
-    status: {
-      type: String as PropType<StepStatus>,
-      default: 'process',
-    },
-    /**
-     * @zh 是否显示连接线
-     * @en Whether to show the connection line
-     */
-     showLine: {
-      type: Boolean,
-      default: true,
-    },
-    /**
-     * @zh 是否使用小型步骤条
-     * @en Whether to use a small step bar
-     */
-    small: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否可以点击切换
-     * @en Whether you can click to switch
-     */
-    changeable: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  emits: {
-    'update:current': (step: number) => true,
-    /**
-     * @zh 步骤数发生改变时触发
-     * @en Triggered when the number of steps changes
-     * @param {number} step
-     * @param {Event} ev
-     */
-    change: (step: number, ev: Event) => true,
-  },
-  setup(props, { emit, slots }) {
+  props: stepsProps,
+  setup(props) {
     const { type, showLine } = toRefs(props)
     const prefixCls = getPrefixCls('steps')
     const _current = ref(props.defaultCurrent)
@@ -131,11 +44,10 @@ export default defineComponent({
     }
 
     const handleClick = (step: number, e: Event) => {
-      if (props.changeable) {
-        _current.value = step
-        emit('update:current', step)
-        emit('change', step, e)
-      }
+      if (!props.changeable) return
+      _current.value = step
+      call(props['onUpdate:current'], step)
+      call(props.onChange, step, e)
     }
 
     const stepMap = reactive(new Map<number, StepData>())

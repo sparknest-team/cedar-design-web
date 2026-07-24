@@ -58,23 +58,23 @@
 </script>
 
 <style scoped>
-.grid-demo .cedar-col {
+.grid-demo .c-col {
   height: 48px;
   color: var(--color-white);
 }
 
-.grid-demo .cedar-col > div {
+.grid-demo .c-col > div {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100%;
 }
 
-.grid-demo .cedar-col:nth-child(2n) > div {
+.grid-demo .c-col:nth-child(2n) > div {
   background-color: rgba(var(--brand-6), 0.9);
 }
 
-.grid-demo .cedar-col:nth-child(2n + 1) > div {
+.grid-demo .c-col:nth-child(2n + 1) > div {
   background-color: var(--color-primary-light-4);
 }
 </style>

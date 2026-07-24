@@ -1,6 +1,6 @@
 <template>
   <slot v-if="noStyle" />
-  <ArcoRow
+  <Row
     v-else
     :class="[
       cls,
@@ -12,7 +12,7 @@
     :div="layout !== 'horizontal' || hideLabel"
     v-bind="rowProps"
   >
-    <ArcoCol v-if="!hideLabel" :class="labelColCls" :style="mergedLabelStyle" v-bind="mergedLabelCol">
+    <Col v-if="!hideLabel" :class="labelColCls" :style="mergedLabelStyle" v-bind="mergedLabelCol">
       <FormItemLabel
         :required="hideAsterisk ? false : isRequired"
         :show-colon="showColon"
@@ -23,8 +23,8 @@
       >
         <slot v-if="$slots.label || label" name="label">{{ label }}</slot>
       </FormItemLabel>
-    </ArcoCol>
-    <ArcoCol :class="wrapperColCls" :style="mergedWrapperStyle" v-bind="mergedWrapperCol">
+    </Col>
+    <Col :class="wrapperColCls" :style="mergedWrapperStyle" v-bind="mergedWrapperCol">
       <div :class="`${prefixCls}-content-wrapper`">
         <div
           :class="[
@@ -46,8 +46,8 @@
       <div v-if="$slots.extra || extra" :class="`${prefixCls}-extra`">
         <slot name="extra">{{ extra }}</slot>
       </div>
-    </ArcoCol>
-  </ArcoRow>
+    </Col>
+  </Row>
 </template>
 
 <script lang="ts">
@@ -69,7 +69,7 @@ import {
 import { Schema } from 'b-validate'
 import { FormContext, formInjectionKey, FormItemInfo, formItemInjectionKey } from './context'
 import { FieldData, FieldRule, ValidateStatus, ValidateTrigger, FormItemEventHandler } from './types'
-import { Row as ArcoRow, Col as ArcoCol } from '../grid'
+import { Row, Col } from '../grid'
 import FormItemLabel from './form-item-label.vue'
 import FormItemMessage from './form-item-message.vue'
 import { getPrefixCls } from '../_utils/global-config'
@@ -81,8 +81,8 @@ import { useI18n } from '../locale'
 export default defineComponent({
   name: 'FormItem',
   components: {
-    ArcoRow,
-    ArcoCol,
+    Row,
+    Col,
     FormItemLabel,
     FormItemMessage,
   },

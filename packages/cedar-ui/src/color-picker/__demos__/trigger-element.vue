@@ -1,6 +1,6 @@
 <template>
   <c-space>
-    <c-color-picker v-model="value" size="xs">
+    <c-color-picker v-model="value" size="xs" :hide-trigger="false">
       <c-tag :color="value">
         {{ value }}
       </c-tag>

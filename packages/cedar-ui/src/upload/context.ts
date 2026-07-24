@@ -20,4 +20,4 @@ export interface UploadContext {
   onPreview: (fileItem: FileItem) => void
 }
 
-export const uploadInjectionKey: InjectionKey<UploadContext> = Symbol('ArcoUpload')
+export const uploadInjectionKey: InjectionKey<UploadContext> = Symbol('CedarUpload')

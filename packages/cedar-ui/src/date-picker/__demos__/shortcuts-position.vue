@@ -1,7 +1,7 @@
 <template>
-  <c-date-picker style="width: 194px; margin: 0 24px 24px 0" shortcuts-position="left" :shortcuts="shortcuts" />
-  <c-date-picker style="width: 194px; margin: 0 24px 24px 0" shortcuts-position="right" :shortcuts="shortcuts" />
-  <c-date-picker style="width: 194px; margin: 0 24px 24px 0" shortcuts-position="bottom" :shortcuts="shortcuts" />
+  <c-date-picker style="margin: 0 24px 24px 0" shortcuts-position="left" :shortcuts="shortcuts" />
+  <c-date-picker style="margin: 0 24px 24px 0" shortcuts-position="right" :shortcuts="shortcuts" />
+  <c-date-picker style="margin: 0 24px 24px 0" shortcuts-position="bottom" :shortcuts="shortcuts" />
 </template>
 
 <script lang="ts">

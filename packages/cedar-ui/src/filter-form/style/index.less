@@ -1,0 +1,29 @@
+.c-filter-form {
+  border-radius: var(--border-radius-medium);
+  background-color: var(--fill-0);
+
+  .c-form-item {
+    margin-bottom: 16px;
+  }
+
+  &-suffix {
+    justify-content: flex-end;
+
+    .collapsed-btn {
+      margin-right: 16px;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+    }
+  }
+
+  .c-select-multiple,
+  .c-select-single {
+    .c-select-view-input {
+      transition: none !important;
+    }
+  }
+}
+
+.c-filter-form-remember-selections {
+  margin-top: -4px;
+}

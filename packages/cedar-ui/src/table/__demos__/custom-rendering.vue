@@ -1,7 +1,7 @@
 <template>
   <c-table :columns="columns" :data="data">
     <template #optional="{ record }">
-      <c-button @click="$modal.info({ title: 'Name', content: record.name })">view</c-button>
+      <c-button @click="$dialog.info({ title: 'Name', content: record.name })">view</c-button>
     </template>
   </c-table>
   <c-table :data="data" style="margin-top: 30px">
@@ -15,7 +15,7 @@
       <c-table-column data-index="email" title="Email"></c-table-column>
       <c-table-column title="Optional">
         <template #cell="{ record }">
-          <c-button @click="$modal.info({ title: 'Name', content: record.name })">view</c-button>
+          <c-button @click="$dialog.info({ title: 'Name', content: record.name })">view</c-button>
         </template>
       </c-table-column>
     </template>

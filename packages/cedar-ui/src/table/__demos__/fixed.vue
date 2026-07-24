@@ -1,5 +1,5 @@
 <template>
-  <c-table :columns="columns" :data="data" :scroll="scroll" :expandable="expandable" />
+  <c-table :columns="columns" :data="data" :height="200" :expandable="expandable" />
 </template>
 
 <script lang="ts" setup>
@@ -14,10 +14,12 @@ const columns = [
   {
     title: 'Salary',
     dataIndex: 'salary',
+    minWidth: 200,
   },
   {
     title: 'Address',
     dataIndex: 'address',
+    minWidth: 400,
   },
   {
     title: 'Email',
@@ -30,11 +32,6 @@ const columns = [
 const expandable = {
   title: 'Expand',
   width: 80,
-}
-
-const scroll = {
-  x: 2000,
-  y: 200,
 }
 
 const data = reactive([

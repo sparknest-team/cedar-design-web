@@ -86,7 +86,7 @@ export default defineComponent({
     const prefixCls = getPrefixCls('checkbox')
     const checkboxRef = ref<HTMLInputElement>()
     const checkboxGroupCtx = !props.uninjectGroupContext ? inject(checkboxGroupKey, undefined) : undefined
-    const isGroup = checkboxGroupCtx?.name === 'ArcoCheckboxGroup'
+    const isGroup = checkboxGroupCtx?.name === 'CedarCheckboxGroup'
     const { mergedDisabled: _mergedDisabled, eventHandlers } = useFormItem({
       disabled,
     })

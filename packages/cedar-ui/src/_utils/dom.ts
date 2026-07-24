@@ -96,11 +96,11 @@ export const contains = (root: Node | null | undefined, ele: Node | null) => {
   return false
 }
 
-export const OVERLAY_TYPES = ['modal', 'message', 'notification', 'drawer'] as const
+export const OVERLAY_TYPES = ['dialog', 'message', 'notification', 'drawer'] as const
 
 export const getOverlay = (type: (typeof OVERLAY_TYPES)[number]) => {
   const popper = document.createElement('div')
-  popper.setAttribute('class', `arco-overlay arco-overlay-${type}`)
+  popper.setAttribute('class', `c-overlay c-overlay-${type}`)
   return popper
 }
 

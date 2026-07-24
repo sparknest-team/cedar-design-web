@@ -18,18 +18,18 @@
 </script>
 
 <style scoped>
-.grid-demo .cedar-col {
+.grid-demo .c-col {
   height: 48px;
   line-height: 48px;
   color: var(--color-white);
   text-align: center;
 }
 
-.grid-demo .cedar-col:nth-child(2n) {
+.grid-demo .c-col:nth-child(2n) {
   background-color: rgba(var(--brand-6), 0.9);
 }
 
-.grid-demo .cedar-col:nth-child(2n + 1) {
+.grid-demo .c-col:nth-child(2n + 1) {
   background-color: var(--color-primary-light-4);
 }
 </style>

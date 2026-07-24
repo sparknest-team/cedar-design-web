@@ -20,6 +20,7 @@
       <slot name="separator"> - </slot>
     </span>
     <div :class="getInputWrapClassName(1)">
+      <span v-if="showNextDayLabel" :class="`${prefixCls}-next-day`">{{ nextDayText }}</span>
       <input
         ref="refInput1"
         :disabled="disabled1"
@@ -103,6 +104,13 @@ export default defineComponent({
     format: {
       type: [String, Function] as PropType<string | ((value: Dayjs) => string)>,
       required: true,
+    },
+    showNextDayLabel: {
+      type: Boolean,
+    },
+    nextDayText: {
+      type: String,
+      default: '',
     },
   },
   emits: ['focused-index-change', 'update:focusedIndex', 'change', 'clear', 'press-enter'],
@@ -194,6 +202,8 @@ export default defineComponent({
       getInputWrapClassName,
       displayValue0,
       displayValue1,
+      showNextDayLabel: computed(() => props.showNextDayLabel),
+      nextDayText: computed(() => props.nextDayText),
       changeFocusedInput,
       onChange,
       onPressEnter,

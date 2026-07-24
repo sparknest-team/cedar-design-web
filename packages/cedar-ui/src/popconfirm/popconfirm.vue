@@ -31,12 +31,12 @@
         </span>
       </div>
       <div :class="`${prefixCls}-footer`">
-        <arco-button size="xs" v-bind="cancelButtonProps" @click="handleCancel">
+        <Button size="xs" v-bind="cancelButtonProps" @click="handleCancel">
           {{ cancelText || t('popconfirm.cancelText') }}
-        </arco-button>
-        <arco-button type="primary" size="xs" v-bind="okButtonProps" :loading="mergedOkLoading" @click="handleOk">
+        </Button>
+        <Button type="primary" size="xs" v-bind="okButtonProps" :loading="mergedOkLoading" @click="handleOk">
           {{ okText || t('popconfirm.okText') }}
-        </arco-button>
+        </Button>
       </div>
     </template>
   </trigger>
@@ -51,7 +51,7 @@ import IconInfoCircleFill from '../icon/icon-info-circle-fill'
 import IconCheckCircleFill from '../icon/icon-check-circle-fill'
 import IconExclamationCircleFill from '../icon/icon-exclamation-circle-fill'
 import IconCloseCircleFill from '../icon/icon-close-circle-fill'
-import ArcoButton, { ButtonProps } from '../button'
+import Button, { ButtonProps } from '../button'
 import Trigger from '../trigger'
 import { useI18n } from '../locale'
 import { ClassName } from '../_utils/types'
@@ -60,7 +60,7 @@ import { isBoolean, isFunction, isPromise } from '../_utils/is'
 export default defineComponent({
   name: 'Popconfirm',
   components: {
-    ArcoButton,
+    Button,
     Trigger,
     IconInfoCircleFill,
     IconCheckCircleFill,

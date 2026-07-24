@@ -6,6 +6,6 @@
 // biome-ignore lint: disable
 export {}
 declare global {
+  const Dialog: typeof import('@cedar/ui').Dialog
   const Message: typeof import('@cedar/ui').Message
-  const Modal: typeof import('@cedar/ui').Modal
 }

@@ -1,7 +1,7 @@
 // import '@maplejs/maple-touch-emulator'
 
 import { Ellipsis } from './ellipsis'
-export { default } from './arco-vue'
+export { default } from './cedar-vue'
 export { addI18nMessages, useLocale, getLocale } from './locale'
 export type { Size, Status, MessageType, Direction } from './_utils/constant'
 export { default as Affix } from './affix'
@@ -33,25 +33,29 @@ export { default as Checkbox, CheckboxGroup } from './checkbox'
 export type { CheckboxGroupInstance, CheckboxInstance, CheckboxOption } from './checkbox'
 export { default as Collapse, CollapseItem } from './collapse'
 export type { CollapseInstance, CollapseItemInstance, CollapseToggleAllOptions } from './collapse'
-export { default as Comment } from './comment'
-export type { CommentInstance } from './comment'
 export { default as ColorPicker } from './color-picker'
 export type { ColorPickerInstance } from './color-picker'
+export { default as Color } from './color'
+export type { ColorInstance } from './color'
 export { default as ConfigProvider } from './config-provider'
 export type { ConfigProviderInstance } from './config-provider'
-export { default as DatePicker, MonthPicker, QuarterPicker, WeekPicker, YearPicker, RangePicker } from './date-picker'
+export { default as DatePicker, DateRangePicker } from './date-picker'
 export type {
   DatePickerInstance,
-  MonthPickerInstance,
-  QuarterPickerInstance,
-  RangePickerInstance,
+  DateRangePickerInstance,
   ShortcutType,
-  WeekPickerInstance,
-  YearPickerInstance,
 } from './date-picker'
+export { default as Date } from './date'
+export type { DateInstance } from './date'
+export { default as DateRange } from './date-range'
+export type { DateRangeInstance } from './date-range'
 export { default as Descriptions, DescriptionsItem } from './descriptions'
 export type { DescData, DescriptionsInstance, DescriptionsItemInstance } from './descriptions'
 export { default as Divider } from './divider'
+export { default as CountTo } from './count-to'
+export type { CountToInstance, CountToProps } from './count-to'
+export { default as DragContainer } from './drag-container'
+export type { DragContainerInstance, DragContainerProps, DragOptions } from './drag-container'
 export { default as Drawer } from './drawer'
 export type { DrawerConfig, DrawerInstance, DrawerMethod, DrawerReturn } from './drawer'
 export { default as Dropdown, Dgroup, Doption, DropdownButton, Dsubmenu } from './dropdown'
@@ -132,12 +136,12 @@ export { default as Menu, MenuItem, MenuItemGroup, SubMenu } from './menu'
 export type { MenuInstance, MenuItemInstance, MenuItemGroupInstance, MenuSubMenuInstance } from './menu'
 export { default as Message } from './message'
 export type { MessageMethod, MessageConfig, MessageReturn } from './message'
-export { default as Modal } from './modal'
-export type { ModalMethod, ModalConfig, ModalReturn } from './modal'
+export { default as Dialog } from './dialog'
+export type { DialogMethod, DialogConfig, DialogReturn } from './dialog'
 export { default as Notification } from './notification'
 export type { NotificationMethod, NotificationConfig, NotificationReturn } from './notification'
 export { default as PageHeader } from './page-header'
-export type { PageHeaderInstance } from './page-header'
+export type { PageHeaderInstance, PageHeaderProps } from './page-header'
 export { default as Pagination } from './pagination'
 export type { PaginationInstance, PaginationProps } from './pagination'
 export { default as Popconfirm } from './popconfirm'
@@ -156,6 +160,8 @@ export { default as Result } from './result'
 export type { ResultInstance } from './result'
 export { default as Scrollbar } from './scrollbar'
 export type { ScrollbarInstance, ScrollbarProps } from './scrollbar'
+export { default as Search } from './search'
+export type { SearchInstance, SearchField, SearchProps } from './search'
 export { default as Select, Optgroup, Option } from './select'
 export type {
   FilterOption,
@@ -168,8 +174,39 @@ export type {
   SelectOptionInstance,
   SelectProps,
 } from './select'
-export { default as SelectTransfer } from './select-transfer'
-export type { SelectTransferInstance } from './select-transfer'
+export { default as SelectPanel } from './select-panel'
+export type { SelectPanelInstance } from './select-panel'
+export { default as TableColumnManager } from './table-column-manager'
+export type {
+  TableColumnManagerInstance,
+  TableColumnManagerProps,
+  ColumnCatalog,
+  ColumnCatalogGroup,
+  ColumnCatalogItem,
+  ColumnEditInput,
+  ColumnManagerInsertAt,
+  ColumnManagerLayoutNode,
+  ColumnManagerResult,
+  ColumnManagerState,
+} from './table-column-manager'
+export {
+  applyInsertAt,
+  applyInsertToLayout,
+  applyColumnEdit,
+  applyColumnFixed,
+  buildColumnsFromState,
+  buildColumnsResult,
+  catalogToOptions,
+  findLeafColumn,
+  flattenCatalog,
+  getColumnEditInitialValues,
+  getLeafGroupTitles,
+  groupKeyFromTitle,
+  layoutFromColumns,
+  mapLeafColumns,
+  mergeLayoutByAdjacentGroupTitles,
+  stateFromColumns,
+} from './table-column-manager'
 export { default as Skeleton, SkeletonLine, SkeletonShape } from './skeleton'
 export type { SkeletonInstance, SkeletonLineInstance, SkeletonShapeInstance } from './skeleton'
 export { default as Slider } from './slider'
@@ -182,8 +219,15 @@ export { default as Split } from './split'
 export type { SplitInstance } from './split'
 export { default as Statistic, Countdown } from './statistic'
 export type { CountdownInstance, StatisticInstance } from './statistic'
-export { default as Steps, Step } from './steps'
-export type { StepsInstance, StepsStepInstance } from './steps'
+export { default as Steps, Step, stepsProps, stepProps } from './steps'
+export type {
+  StepsInstance,
+  StepsStepInstance,
+  StepsProps,
+  StepProps,
+  StepsType,
+  StepStatus,
+} from './steps'
 export { default as Switch } from './switch'
 export type { SwitchInstance } from './switch'
 export { default as Table, Thead, Td, Th, Tr, Tbody, TableColumn } from './table'
@@ -195,6 +239,7 @@ export type {
   TableData,
   TableDraggable,
   TableExpandable,
+  TableExtraColumnConfig,
   TableFilterable,
   TableFilterData,
   TableInstance,
@@ -206,14 +251,19 @@ export type {
   ThInstance,
   TrInstance,
 } from './table'
+export { TABLE_EXTRA_COLUMN_KEY, getExtraColumnWidth, resolveExtraColumnConfig } from './table'
 export { default as Tabs, TabNav, TabItem, TabsNavs, TabsItems } from './tabs'
 export type { TabNavInstance, TabItemInstance, TabsInstance } from './tabs'
 export { default as Tag } from './tag'
 export type { TagColor, TagInstance, TagProps } from './tag'
 export { default as Textarea } from './textarea'
 export type { TextareaInstance } from './textarea'
-export { default as TimePicker } from './time-picker'
-export type { TimePickerInstance } from './time-picker'
+export { default as TimePicker, TimeRangePicker } from './time-picker'
+export type { TimePickerInstance, TimeRangePickerInstance } from './time-picker'
+export { default as Time } from './time'
+export type { TimeInstance } from './time'
+export { default as TimeRange } from './time-range'
+export type { TimeRangeInstance } from './time-range'
 export { default as Timeline, TimelineItem } from './timeline'
 export type { TimelineInstance, TimelineItemInstance } from './timeline'
 export { default as Tooltip } from './tooltip'

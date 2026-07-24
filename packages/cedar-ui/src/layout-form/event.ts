@@ -3,7 +3,7 @@ import { ComponentEnum, eventMapping, formItemMapping } from './mapping'
 import { getPropByPath, setValueByPath } from './util'
 import type { VNode } from 'vue'
 import { h } from 'vue'
-import { Radio } from '@arco-design/web-vue'
+import Radio from '../radio'
 
 const isVue2 = false
 
@@ -12,21 +12,10 @@ export function getRadioGroupOptions(model: IRenderComponent, props: any) {
   model.props = model.props || {}
   const prop = model.props.prop
   const options = model.props.options || (props.store && props.store[prop])
-  // 内置三种风格：radio、button、border
-  let buttonStyle: any
-  let border = false
-  if (model.props.buttonStyle === 'border') {
-    buttonStyle = Radio
-    border = true
-  } else {
-    buttonStyle = Radio
-  }
   options?.forEach((item: any) => {
     let p = {
-      border,
       disabled: item.disabled,
-      label: item.value,
-      name: item.name,
+      value: item.value,
       onClick: (e: any) => {
         if (e.target.nodeName.toLocaleLowerCase() === 'input') {
           // e.target._value 是原始数据类型，e.target.value 是字符串
@@ -37,17 +26,15 @@ export function getRadioGroupOptions(model: IRenderComponent, props: any) {
     if (isVue2) {
       p = {
         props: {
-          border: p.border,
           disabled: p.disabled,
-          label: p.label,
-          name: p.name,
+          value: p.value,
         },
         nativeOn: {
           click: p.onClick,
         },
       }
     }
-    const option = h(buttonStyle, p, item.label)
+    const option = h(Radio, p, () => item.label)
     temp.push(option)
   })
   return temp
@@ -127,8 +114,13 @@ export function getVNode(model: IRenderComponent, props: any, emit: any, form: a
           value: v,
         })
       }
-      if (model.componentName === 'c-date-picker' || model.componentName === 'c-date-picker-range') {
-        // 日期组件没有change事件，，，头大
+      if (
+        model.componentName === 'c-date' ||
+        model.componentName === 'c-date-range' ||
+        model.componentName === 'c-date-picker' ||
+        model.componentName === 'c-date-range-picker'
+      ) {
+        // 日期组件没有 change 以外的统一回写，用 update:modelValue
         dataV['onUpdate:modelValue'] = dataV.onChange
       }
       if (model.on && model.on.enter) {

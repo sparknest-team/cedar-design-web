@@ -11,7 +11,7 @@
           [hasTitle, n('--with-title')],
           [banner, n('--banner')],
           [center, n('--center')],
-          formatElevation(elevation, 0),
+          formatElevation(elevation, 2),
         )
       "
       :style="rootStyle"
@@ -21,7 +21,7 @@
           <icon-check-circle-fill v-if="type === 'success'" />
           <icon-exclamation-circle-fill v-else-if="type === 'warning'" />
           <icon-close-circle-fill v-else-if="type === 'danger'" />
-          <icon-info-circle-fill v-else />
+          <icon-info-circle-fill v-else-if="type === 'info'" />
         </slot>
       </div>
 
@@ -80,11 +80,10 @@ const visible = ref(true)
 
 const hasTitle = computed(() => Boolean(props.title || slots.title))
 
-// 是否渲染 icon 容器
 const showIconNode = computed(() => {
   if (!props.showIcon) return false
-  // 全部 type 均提供内置图标，default 亦退化到 info-circle-fill
-  return true
+  if (slots.icon) return true
+  return props.type !== 'default'
 })
 
 const rootStyle = computed<CSSProperties>(() => {

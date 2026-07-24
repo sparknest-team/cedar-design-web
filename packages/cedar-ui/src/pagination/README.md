@@ -28,13 +28,13 @@ permalink: /components/pagination/
 
 ### 页码跳转
 
-通过设置`show-jump`,展示页码跳转输入框 。
+通过设置`show-jumper`,展示页码跳转输入框 。
 
 <demo src="./__demos__/show-jumper.vue"></demo>
 
 ### 分页尺寸
 
-分页分为`xs`、`sm`、`md`、`lg`四种尺寸。
+分页分为`xs`、`sm`、`md`、`lg`、`xl`五种尺寸。
 
 <demo src="./__demos__/size.vue"></demo>
 
@@ -66,27 +66,28 @@ permalink: /components/pagination/
 
 ### Pagination Props
 
-| 属性                   | 说明                                                            | 类型            | 默认值                |
-| ---------------------- | --------------------------------------------------------------- | --------------- | --------------------- |
-| total(**必填**)        | 数据总数                                                        | `number`        | `-`                   |
-| current(**v-model**)   | 当前页数                                                        | `number`        | `-`                   |
-| default-current        | 默认当前页数                                                    | `number`        | `1`                   |
-| page-size(**v-model**) | 每页条数                                                        | `number`        | `-`                   |
-| default-page-size      | 默认每页展示的数据条数(非受控状态)                              | `number`        | `10`                  |
-| hide-on-single-page    | 只有一页时是否隐藏分页                                          | `boolean`       | `false`               |
-| simple                 | 是否使用简洁模式                                                | `boolean`       | `false`               |
-| show-total             | 是否展示总数                                                    | `boolean`       | `false`               |
-| show-more              | 是否展示更多按钮                                                | `boolean`       | `false`               |
-| show-jumper            | 是否展示跳转输入框                                              | `boolean`       | `false`               |
-| show-page-size         | 是否展示每页条数选择器                                          | `boolean`       | `false`               |
-| page-size-options      | 每页条数选择器选项                                              | `number[]`      | `[10, 20, 30, 40,50]` |
-| page-size-props        | 每页条数选择器属性                                              | `SelectProps`   | `-`                   |
-| size                   | 尺寸                                                            | `Size`          | `medium`              |
-| page-item-style        | 分页按钮样式                                                    | `CSSProperties` | `-`                   |
-| active-page-item-style | 当前分页按钮样式                                                | `CSSProperties` | `-`                   |
-| base-size              | 计算显示省略的基础个数，显示省略的个数为`baseSize+2*bufferSize` | `number`        | `6`                   |
-| buffer-size            | 显示省略号时，当前页码左右显示的页码个数                        | `number`        | `2`                   |
-| auto-adjust            | 是否在改变数据条数时自动调整页码                                | `boolean`       | `true`                |
+| 属性                   | 说明                                                            | 类型            | 默认值                 |
+| ---------------------- | --------------------------------------------------------------- | --------------- | ---------------------- |
+| total(**必填**)        | 数据总数                                                        | `number`        | `-`                    |
+| current(**v-model**)   | 当前页数                                                        | `number`        | `-`                    |
+| default-current        | 默认当前页数                                                    | `number`        | `1`                    |
+| page-size(**v-model**) | 每页条数                                                        | `number`        | `-`                    |
+| default-page-size      | 默认每页展示的数据条数(非受控状态)                              | `number`        | `10`                   |
+| disabled               | 是否禁用                                                        | `boolean`       | `false`                |
+| hide-on-single-page    | 只有一页时是否隐藏分页                                          | `boolean`       | `false`                |
+| simple                 | 是否使用简洁模式                                                | `boolean`       | `false`                |
+| show-total             | 是否展示总数                                                    | `boolean`       | `false`                |
+| show-more              | 是否展示更多按钮                                                | `boolean`       | `false`                |
+| show-jumper            | 是否展示跳转输入框                                              | `boolean`       | `false`                |
+| show-page-size         | 是否展示每页条数选择器                                          | `boolean`       | `false`                |
+| page-size-options      | 每页条数选择器选项                                              | `number[]`      | `[10, 20, 30, 40, 50]` |
+| page-size-props        | 每页条数选择器属性                                              | `SelectProps`   | `-`                    |
+| size                   | 尺寸                                                            | `Size`          | `md`                   |
+| page-item-style        | 分页按钮样式                                                    | `CSSProperties` | `-`                    |
+| active-page-item-style | 当前分页按钮样式                                                | `CSSProperties` | `-`                    |
+| base-size              | 计算显示省略的基础个数，显示省略的个数为`baseSize+2*bufferSize` | `number`        | `6`                    |
+| buffer-size            | 显示省略号时，当前页码左右显示的页码个数                        | `number`        | `2`                    |
+| auto-adjust            | 是否在改变数据条数时自动调整页码                                | `boolean`       | `true`                 |
 
 ### Pagination Events
 
@@ -97,12 +98,14 @@ permalink: /components/pagination/
 
 ### Pagination Slots
 
-| 插槽名             | 说明                | 参数                                                |
-| ------------------ | ------------------- | --------------------------------------------------- | --- |
-| total              | 总数 total:`number` |
-| page-item-ellipsis | 分页按钮(省略)      | `-`                                                 |
-| page-item-step     | 分页按钮(步)        | type:`'previous'\|'next'`The type of page item step |
-| page-item          | 分页按钮            | page:`'number'`The page number of the paging button |     |
+| 插槽名             | 说明           | 参数                          |
+| ------------------ | -------------- | ----------------------------- |
+| total              | 总数           | total:`number`                |
+| page-item-ellipsis | 分页按钮(省略) | `-`                           |
+| page-item-step     | 分页按钮(步)   | type:`'previous'\|'next'`     |
+| page-item          | 分页按钮       | page:`number`                 |
+| jumper-prepend     | 跳转前缀       | `-`                           |
+| jumper-append      | 跳转后缀       | `-`                           |
 
 ## 类型定义
 

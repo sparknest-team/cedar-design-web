@@ -4,8 +4,7 @@
     :data="data"
     :row-selection="rowSelection"
     :virtual-list-props="{ height: 400 }"
-    :pagination="false"
-    :scroll="{ x: 1000 }" />
+    :pagination="false" />
 </template>
 
 <script lang="ts" setup>
@@ -20,10 +19,12 @@ const columns = [
   {
     title: 'Address',
     dataIndex: 'address',
+    minWidth: 400,
   },
   {
     title: 'Email',
     dataIndex: 'email',
+    minWidth: 300,
   },
 ]
 const data = reactive(

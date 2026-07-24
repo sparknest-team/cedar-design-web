@@ -2,7 +2,7 @@
 
 exports[`Ellipsis > render 1`] = `
 "<div>
-  <div class=\\"cedar-ellipsis cedar-ellipsis--line\\" cedar-ellipsis-cover=\\"\\"><span></span></div>
+  <div class=\\"c-ellipsis c-ellipsis--line\\" c-ellipsis-cover=\\"\\"><span></span></div>
   <!--teleport start-->
   <!--teleport end-->
 </div>"

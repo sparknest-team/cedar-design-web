@@ -1,23 +1,39 @@
 @import '../../style/mixins/index.less';
 @import './token.less';
 
-.c-page-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  line-height: @page-header-line-height;
+@page-header-prefix-cls: ~'@{prefix}-page-header';
+
+.@{page-header-prefix-cls} {
+  padding: @page-header-padding-vertical 0;
+
+  &-breadcrumb + &-header {
+    margin-top: @page-header-margin-breadcrumb-bottom;
+  }
+
+  &-wrapper {
+    padding-right: @page-header-padding-right;
+    padding-left: @page-header-padding-left;
+  }
+
+  &-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    line-height: @page-header-line-height;
+  }
 
   &-main {
     display: flex;
     align-items: center;
     flex: 1;
-    // 最小高度避免按钮hover下背景被hidden
-    min-height: @page-header-size-prefix-bg_hover;
+    min-width: 0;
+    // 最小高度避免按钮 hover 下背景被裁切
+    min-height: @page-header-size-back-icon-bg_hover;
 
-    // 带有返回按钮时，避免 overflow:hidden 导致返回按钮hover状态背景色显示不全
+    // 带有返回按钮时，避免 overflow:hidden 导致返回按钮 hover 背景显示不全
     &-with-back {
-      margin-left: (@page-header-size-prefix / 2) - (@page-header-size-prefix-bg_hover / 2);
-      padding-left: (@page-header-size-prefix-bg_hover / 2) - (@page-header-size-prefix / 2);
+      margin-left: (@page-header-size-back-icon / 2) - (@page-header-size-back-icon-bg_hover / 2);
+      padding-left: (@page-header-size-back-icon-bg_hover / 2) - (@page-header-size-back-icon / 2);
     }
   }
 
@@ -27,7 +43,19 @@
     white-space: nowrap;
   }
 
+  .icon-hover(@page-header-prefix-cls, @page-header-size-back-icon, @page-header-size-back-icon-bg_hover);
+  .icon-hover-bg(@page-header-prefix-cls, @page-header-color-back-icon-bg_hover);
+
+  &-back-btn {
+    margin-right: @page-header-margin-back-icon-right;
+    color: @page-header-color-back-icon;
+    font-size: @page-header-size-back-icon;
+    cursor: pointer;
+  }
+
   &-title {
+    .text-ellipsis();
+
     &-text {
       color: @page-header-color-title-text;
       font-weight: @page-header-weight-title-text;
@@ -36,6 +64,7 @@
   }
 
   &-divider {
+    flex-shrink: 0;
     width: @page-header-size-divider-width;
     height: @page-header-size-divider-height;
     margin-right: @page-header-margin-divider-right;
@@ -44,8 +73,23 @@
   }
 
   &-subtitle {
-    white-space: nowrap;
+    .text-ellipsis();
+
     color: @page-header-color-sub-title-text;
     font-size: @page-header-size-sub-title-text;
+  }
+
+  &-content {
+    padding: @page-header-padding-content-vertical @page-header-padding-content-horizontal;
+    border-top: @page-header-border-header-width @page-header-border-header-style
+      @page-header-color-header-border;
+  }
+
+  &-with-breadcrumb {
+    padding: @page-header-padding-vertical_breadcrumb 0;
+  }
+
+  &-with-content &-wrapper {
+    padding-bottom: @page-header-padding-vertical_breadcrumb;
   }
 }

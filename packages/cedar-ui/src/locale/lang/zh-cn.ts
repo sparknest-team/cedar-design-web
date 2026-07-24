@@ -1,6 +1,6 @@
-import { ArcoCalendarLang, ArcoLang } from '../types'
+import { CedarCalendarLang, CedarLang } from '../types'
 
-const calendarLang: ArcoCalendarLang = {
+const calendarLang: CedarCalendarLang = {
   formatYear: 'YYYY 年',
   formatMonth: 'YYYY 年 MM 月',
   today: '今天',
@@ -64,7 +64,7 @@ const calendarLang: ArcoCalendarLang = {
   },
 }
 
-const lang: ArcoLang = {
+const lang: CedarLang = {
   locale: 'zh-CN',
   common: {
     placeholderSelect: '请选择',
@@ -93,12 +93,6 @@ const lang: ArcoLang = {
     expandMore: '展开',
     collapseMore: '收起',
   },
-  selectTransfer: {
-    freezeToTop: '冻结至顶部',
-    freezeToBottom: '冻结至底部',
-    unfreeze: '取消冻结',
-    deleteItem: '删除此项',
-  },
   empty: {
     description: '暂无数据',
   },
@@ -110,9 +104,9 @@ const lang: ArcoLang = {
     okText: '确定',
     cancelText: '取消',
   },
-  modal: {
-    okText: '确定',
-    cancelText: '取消',
+  dialog: {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
   },
   pagination: {
     goto: '前往',
@@ -123,12 +117,31 @@ const lang: ArcoLang = {
   table: {
     okText: '确定',
     resetText: '重置',
-    // new
-    customColumnsConfig: '自定义表头配置',
+    customColumnsConfig: '列管理',
     selectAll: '全选',
     selected: '已选',
     placeholderInputKeyword: '请输入关键词搜索',
     clear: '清空',
+    columnManager: {
+      freezeToLeft: '冻结至左侧',
+      freezeToRight: '冻结至右侧',
+      unfreeze: '取消冻结',
+      deleteItem: '删除此项',
+      renameColumn: '重命名',
+      insertLeft: '向左插入列',
+      insertRight: '向右插入列',
+      insertColumn: '插入列',
+      freezeColumn: '冻结列',
+      unfreezeColumn: '取消冻结',
+      editColumn: '编辑列',
+      deleteColumn: '删除列',
+      noInsertableColumns: '没有可插入的列',
+      groupTitle: '一级分组标题',
+      groupTitlePlaceholder: '留空表示不分组',
+      groupTitleHint: '相邻列的一级标题相同时会自动合并为同一分组',
+      columnTitle: '列名称',
+      columnTitlePlaceholder: '请输入列名称',
+    },
   },
   upload: {
     drag: '将文件拖拽到此处，或',
@@ -168,6 +181,10 @@ const lang: ArcoLang = {
     today: '今天',
     now: '此刻',
     ok: '确定',
+    startTime: '开始时间',
+    endTime: '结束时间',
+    rangeSeparator: '至',
+    nextDay: '次日',
   },
   image: {
     loading: '加载中',

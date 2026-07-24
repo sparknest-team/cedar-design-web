@@ -1,17 +1,7 @@
 <template>
-  <c-time-picker use12Hours defaultValue="12:20:20 AM" format="hh:mm:ss A" style="width: 194px; margin: 0 24px 24px 0" />
-  <c-time-picker use12Hours defaultValue="09:20:20 pm" format="hh:mm:ss a" style="width: 194px; margin: 0 24px 24px 0" />
-  <c-time-picker use12Hours defaultValue="2:20 AM" format="h:mm A" style="width: 194px; margin: 0 24px 24px 0" />
-  <c-time-picker
-    type="time-range"
-    use12Hours
-    :defaultValue="['12:20:20 AM', '08:30:30 PM']"
-    format="hh:mm:ss A"
-    style="width: 300px; margin: 0 24px 24px 0" />
+  <c-space>
+    <c-time-picker use12-hours default-value="12:20:20 AM" format="hh:mm:ss A" />
+    <c-time-picker use12-hours default-value="09:20:20 pm" format="hh:mm:ss a" />
+    <c-time-picker use12-hours default-value="2:20 AM" format="h:mm A" />
+  </c-space>
 </template>
-
-<script lang="ts">
-import { defineComponent } from 'vue'
-export default defineComponent({
-  })
-</script>

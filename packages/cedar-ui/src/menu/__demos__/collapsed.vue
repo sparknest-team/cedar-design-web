@@ -1,13 +1,18 @@
 <template>
   <div class="menu-demo">
-    <Button
-      :style="{ padding: '0 12px', height: '30px', lineHeight: '30px', marginBottom: '4px' }"
+    <c-button
+      :style="{
+        padding: '0 12px',
+        height: '30px',
+        lineHeight: '30px',
+        marginBottom: '4px',
+      }"
       type="primary"
       @click="toggleCollapse"
     >
       <c-icon-menu-unfold v-if="collapsed" />
       <c-icon-menu-fold v-else />
-    </Button>
+    </c-button>
     <c-menu
       :style="{ width: '200px', borderRadius: '4px' }"
       theme="dark"
@@ -50,19 +55,19 @@
   </div>
 </template>
 <script lang="ts">
-import { ref } from 'vue'
+import { ref } from "vue";
 
 export default {
   setup() {
-    const collapsed = ref(false)
+    const collapsed = ref(false);
     return {
       collapsed,
       toggleCollapse: () => {
-        collapsed.value = !collapsed.value
+        collapsed.value = !collapsed.value;
       },
-    }
+    };
   },
-}
+};
 </script>
 <style lang="scss" scoped>
 .menu-demo {

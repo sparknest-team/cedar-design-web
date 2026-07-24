@@ -79,6 +79,16 @@ export function isValidRangeValue(value: any): value is undefined | Dayjs[] {
   return value.length === 0 || (value.length === 2 && isDayjs(value[0]) && isDayjs(value[1]))
 }
 
+/** True when both sides are Dayjs and end clock time is earlier than start (overnight). */
+export function isTimeRangeNextDay(start?: Dayjs, end?: Dayjs): boolean {
+  if (!start || !end || !isDayjs(start) || !isDayjs(end)) {
+    return false
+  }
+  const startSeconds = start.hour() * 3600 + start.minute() * 60 + start.second()
+  const endSeconds = end.hour() * 3600 + end.minute() * 60 + end.second()
+  return endSeconds < startSeconds
+}
+
 export function isValidInputValue(time: string, format: string): boolean {
   if (!time) return false
 

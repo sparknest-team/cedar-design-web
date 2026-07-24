@@ -1,6 +1,5 @@
 <template>
-  <c-range-picker
-    style="width: 300px"
+  <c-date-range-picker
     @select="onSelect"
     @popupVisibleChange="onPopupVisibleChange"
     :disabledDate="disabledDate" />

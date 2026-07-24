@@ -136,6 +136,172 @@ export const zhSideBar: SidebarConfig = {
       ],
     },
     {
+      text: "导航",
+      children: [
+        {
+          text: "Breadcrumb 面包屑",
+          link: "/components/breadcrumb/",
+        },
+        {
+          text: "Menu 菜单",
+          link: "/components/menu/",
+        },
+        {
+          text: "Dropdown 下拉菜单",
+          link: "/components/dropdown/",
+        },
+        {
+          text: "PageHeader 页头",
+          link: "/components/page-header/",
+        },
+        {
+          text: "Pagination 分页",
+          link: "/components/pagination/",
+        },
+        {
+          text: "Steps 步骤条",
+          link: "/components/steps/",
+        },
+      ],
+    },
+    {
+      text: "数据输入",
+      children: [
+        {
+          text: "Form 表单",
+          link: "/components/form/",
+        },
+        {
+          text: "LayoutForm 布局表单",
+          link: "/components/layout-form/",
+        },
+        {
+          text: "FilterForm 表单筛选器",
+          link: "/components/filter-form/",
+        },
+        {
+          text: "Input 输入框",
+          link: "/components/input/",
+        },
+        {
+          text: "Textarea 文本域",
+          link: "/components/textarea/",
+        },
+        {
+          text: "InputNumber 数字输入框",
+          link: "/components/input-number/",
+        },
+        {
+          text: "InputTag 标签输入框",
+          link: "/components/input-tag/",
+        },
+        {
+          text: "VerificationCode 验证码输入",
+          link: "/components/verification-code/",
+        },
+        {
+          text: "AutoComplete 自动补全",
+          link: "/components/auto-complete/",
+        },
+        {
+          text: "Search 搜索框",
+          link: "/components/search/",
+        },
+        {
+          text: "Mention 提及",
+          link: "/components/mention/",
+        },
+        {
+          text: "Select 下拉框",
+          link: "/components/select/",
+        },
+        {
+          text: "SelectPanel 选择面板",
+          link: "/components/select-panel/",
+        },
+        {
+          text: "TableColumnManager 表格列管理",
+          link: "/components/table-column-manager/",
+        },
+        {
+          text: "Cascader 级联选择",
+          link: "/components/cascader/",
+        },
+        {
+          text: "Transfer 数据穿梭框",
+          link: "/components/transfer/",
+        },
+        {
+          text: "PeopleSelect 人员选择",
+          link: "/components/people-select/",
+        },
+        {
+          text: "Map 地图",
+          link: "/components/map/",
+        },
+        {
+          text: "Checkbox 复选框",
+          link: "/components/checkbox/",
+        },
+        {
+          text: "Radio 单选框",
+          link: "/components/radio/",
+        },
+        {
+          text: "Switch 开关",
+          link: "/components/switch/",
+        },
+        {
+          text: "Rate 评分",
+          link: "/components/rate/",
+        },
+        {
+          text: "Color 颜色字段",
+          link: "/components/color-field/",
+        },
+        {
+          text: "ColorPicker 颜色面板",
+          link: "/components/color-picker/",
+        },
+        {
+          text: "Date 日期字段",
+          link: "/components/date/",
+        },
+        {
+          text: "DateRange 日期范围字段",
+          link: "/components/date-range/",
+        },
+        {
+          text: "DatePicker 日期面板",
+          link: "/components/date-picker/",
+        },
+        {
+          text: "DateRangePicker 日期范围面板",
+          link: "/components/date-range-picker/",
+        },
+        {
+          text: "Time 时间字段",
+          link: "/components/time/",
+        },
+        {
+          text: "TimeRange 时间范围字段",
+          link: "/components/time-range/",
+        },
+        {
+          text: "TimePicker 时间面板",
+          link: "/components/time-picker/",
+        },
+        {
+          text: "TimeRangePicker 时间范围面板",
+          link: "/components/time-range-picker/",
+        },
+        {
+          text: "Upload 上传",
+          link: "/components/upload/",
+        },
+      ],
+    },
+    {
       text: "数据展示",
       children: [
         {
@@ -143,24 +309,8 @@ export const zhSideBar: SidebarConfig = {
           link: "/components/badge/",
         },
         {
-          text: "Calendar 日历",
-          link: "/components/calendar/",
-        },
-        {
-          text: "Card 卡片",
-          link: "/components/card/",
-        },
-        {
-          text: "Carousel 图片轮播",
-          link: "/components/carousel/",
-        },
-        {
-          text: "Collapse 折叠面板",
-          link: "/components/collapse/",
-        },
-        {
-          text: "Comment 评论",
-          link: "/components/comment/",
+          text: "Tag 标签",
+          link: "/components/tag/",
         },
         {
           text: "Ellipsis 文本省略",
@@ -179,44 +329,60 @@ export const zhSideBar: SidebarConfig = {
           link: "/components/image-preview/",
         },
         {
+          text: "Tabs 标签页",
+          link: "/components/tabs/",
+        },
+        {
+          text: "Collapse 折叠面板",
+          link: "/components/collapse/",
+        },
+        {
           text: "List 列表",
           link: "/components/list/",
         },
         {
-          text: "Popover 气泡卡片",
-          link: "/components/popover/",
+          text: "Carousel 图片轮播",
+          link: "/components/carousel/",
         },
         {
-          text: "Table 表格",
-          link: "/components/table/",
+          text: "Card 卡片",
+          link: "/components/card/",
         },
         {
-          text: "Tabs 标签页",
-          link: "/components/tabs/",
+          text: "Calendar 日历",
+          link: "/components/calendar/",
         },
         {
           text: "Descriptions 描述列表",
           link: "/components/descriptions/",
         },
         {
-          text: "Tag 标签",
-          link: "/components/tag/",
-        },
-        {
-          text: "Timeline 时间轴",
-          link: "/components/timeline/",
-        },
-        {
-          text: "Tooltip 文字气泡",
-          link: "/components/tooltip/",
+          text: "Table 表格",
+          link: "/components/table/",
         },
         {
           text: "Tree 树",
           link: "/components/tree/",
         },
         {
+          text: "Timeline 时间轴",
+          link: "/components/timeline/",
+        },
+        {
           text: "Statistic 数值展示",
           link: "/components/statistic/",
+        },
+        {
+          text: "CountTo 数字动画",
+          link: "/components/count-to/",
+        },
+        {
+          text: "Popover 气泡卡片",
+          link: "/components/popover/",
+        },
+        {
+          text: "Tooltip 文字气泡",
+          link: "/components/tooltip/",
         },
         {
           text: "DragContainer 拖拽容器",
@@ -225,123 +391,10 @@ export const zhSideBar: SidebarConfig = {
       ],
     },
     {
-      text: "数据输入",
-      children: [
-        {
-          text: "AutoComplete 自动补全",
-          link: "/components/auto-complete/",
-        },
-        {
-          text: "Cascader 级联选择",
-          link: "/components/cascader/",
-        },
-        {
-          text: "Checkbox 复选框",
-          link: "/components/checkbox/",
-        },
-        {
-          text: "ColorPicker 颜色选择器",
-          link: "/components/color-picker/",
-        },
-        {
-          text: "Datepicker 日期选择器",
-          link: "/components/date-picker/",
-        },
-        {
-          text: "Form 表单",
-          link: "/components/form/",
-        },
-        {
-          text: "Input 输入框",
-          link: "/components/input/",
-        },
-        {
-          text: "InputNumber 数字输入框",
-          link: "/components/input-number/",
-        },
-        {
-          text: "VerificationCode 验证码输入",
-          link: "/components/verification-code/",
-        },
-        {
-          text: "InputTag 标签输入框",
-          link: "/components/input-tag/",
-        },
-        {
-          text: "Mention 提及",
-          link: "/components/mention/",
-        },
-        {
-          text: "LayoutForm 布局表单",
-          link: "/components/layout-form/",
-        },
-        {
-          text: "FilterForm 表单筛选器",
-          link: "/components/filter-form/",
-        },
-        {
-          text: "Map 地图",
-          link: "/components/map/",
-        },
-        {
-          text: "PeopleSelect 人员选择",
-          link: "/components/people-select/",
-        },
-        {
-          text: "Radio 单选框",
-          link: "/components/radio/",
-        },
-        {
-          text: "Rate 评分",
-          link: "/components/rate/",
-        },
-        {
-          text: "Search 搜索框",
-          link: "/components/search/",
-        },
-        {
-          text: "Select 下拉框",
-          link: "/components/select/",
-        },
-        {
-          text: "SelectTransfer 选择穿梭框",
-          link: "/components/select-transfer/",
-        },
-        {
-          text: "SelectPanel 选择面板",
-          link: "/components/select-panel/",
-        },
-        {
-          text: "Switch 开关",
-          link: "/components/switch/",
-        },
-        {
-          text: "Textarea 文本域",
-          link: "/components/textarea/",
-        },
-        {
-          text: "TimePicker 时间选择器",
-          link: "/components/time-picker/",
-        },
-        {
-          text: "Transfer 数据穿梭框",
-          link: "/components/transfer/",
-        },
-        {
-          text: "Upload 上传",
-          link: "/components/upload/",
-        },
-      ],
-    },
-    {
       text: "反馈",
       children: [
         {
-          text: "抽屉 Drawer",
-          link: "/components/drawer/",
-        },
-        {
-          text: "警告提示 Alert",
+          text: "Alert 警告提示",
           link: "/components/alert/",
         },
         {
@@ -349,12 +402,16 @@ export const zhSideBar: SidebarConfig = {
           link: "/components/message/",
         },
         {
-          text: "Modal 对话框",
-          link: "/components/modal/",
-        },
-        {
           text: "Notification 通知提醒框",
           link: "/components/notification/",
+        },
+        {
+          text: "Dialog 对话框",
+          link: "/components/dialog/",
+        },
+        {
+          text: "Drawer 抽屉",
+          link: "/components/drawer/",
         },
         {
           text: "Popconfirm 气泡确认框",
@@ -379,35 +436,6 @@ export const zhSideBar: SidebarConfig = {
         {
           text: "Result 结果",
           link: "/components/result/",
-        },
-      ],
-    },
-    {
-      text: "导航",
-      children: [
-        {
-          text: "Breadcrumb 面包屑",
-          link: "/components/breadcrumb/",
-        },
-        {
-          text: "Menu 菜单",
-          link: "/components/menu/",
-        },
-        {
-          text: "PageHeader 页头",
-          link: "/components/page-header/",
-        },
-        {
-          text: "Pagination 分页",
-          link: "/components/pagination/",
-        },
-        {
-          text: "Steps 步骤条",
-          link: "/components/steps/",
-        },
-        {
-          text: "Dropdown 下拉菜单",
-          link: "/components/dropdown/",
         },
       ],
     },
@@ -440,6 +468,14 @@ export const zhSideBar: SidebarConfig = {
           link: "/components/back-top/",
         },
         {
+          text: "Watermark 水印",
+          link: "/components/watermark/",
+        },
+        {
+          text: "Scrollbar 滚动条",
+          link: "/components/scrollbar/",
+        },
+        {
           text: "ResizeBox 伸缩框",
           link: "/components/resize-box/",
         },
@@ -450,14 +486,6 @@ export const zhSideBar: SidebarConfig = {
         {
           text: "OverflowList 折叠列表",
           link: "/components/overflow-list/",
-        },
-        {
-          text: "Scrollbar 滚动条",
-          link: "/components/scrollbar/",
-        },
-        {
-          text: "Watermark 水印",
-          link: "/components/watermark/",
         },
       ],
     },

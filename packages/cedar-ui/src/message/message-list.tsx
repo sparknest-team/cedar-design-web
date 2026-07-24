@@ -45,6 +45,7 @@ export default defineComponent({
               type={item.type}
               duration={item.duration}
               closable={item.closable}
+              showIcon={item.showIcon}
               resetOnUpdate={item.resetOnUpdate}
               resetOnHover={item.resetOnHover}
               v-slots={slots}

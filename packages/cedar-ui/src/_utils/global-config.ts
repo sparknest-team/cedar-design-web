@@ -1,18 +1,18 @@
 import type { App } from 'vue'
 import { getCurrentInstance, inject } from 'vue'
 import { configProviderInjectionKey } from '../config-provider/context'
-import type { ArcoOptions } from './types'
+import type { CedarOptions } from './types'
 import { createNamespaceFn } from '@maplejs/maple-shared'
 
 const COMPONENT_PREFIX = 'C'
 const CLASS_PREFIX = 'c'
 const GLOBAL_CONFIG_NAME = '$cedar'
 
-export const getComponentPrefix = (options?: ArcoOptions) => {
+export const getComponentPrefix = (options?: CedarOptions) => {
   return options?.componentPrefix ?? COMPONENT_PREFIX
 }
 
-export const setGlobalConfig = (app: App, options?: ArcoOptions): void => {
+export const setGlobalConfig = (app: App, options?: CedarOptions): void => {
   if (options && options.classPrefix) {
     app.config.globalProperties[GLOBAL_CONFIG_NAME] = {
       ...(app.config.globalProperties[GLOBAL_CONFIG_NAME] ?? {}),

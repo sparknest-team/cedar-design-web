@@ -1,9 +1,3 @@
 <template>
-  <c-date-picker style="width: 200px" />
+  <c-date-picker default-value="2019-06-03" />
 </template>
-
-<script lang="ts">
-import { defineComponent } from 'vue'
-export default defineComponent({
-  })
-</script>

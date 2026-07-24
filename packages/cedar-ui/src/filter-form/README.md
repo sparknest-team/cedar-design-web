@@ -43,7 +43,7 @@ FilterForm目前不支持children嵌套children。
 | 属性          | 说明                                                                                    | 类型                            | 默认值 |
 | ------------- | --------------------------------------------------------------------------------------- | ------------------------------- | ------ |
 | visible       | 是否可见                                                                                | boolean                         | true   |
-| name          | 组件名字`select`、`people-select`、`input`、`date-picker`、`range-picker`、`cascader`。 | string                          | -      |
+| name          | 组件名字`select`、`people-select`、`input`、`date`、`date-picker`、`date-range`、`date-range-picker`、`cascader`。 | string                          | -      |
 | props         | 组件属性。autoEmitChange仅在输入类组件生效。                                            | {autoEmitChange: boolean} & any | -      |
 | gridItemProps | GridItem组件的属性，优先级最高。                                                        | any                             | -      |
 | formItemProps | FormItem组件属性，优先级最高。                                                          | any                             | -      |

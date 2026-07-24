@@ -26,7 +26,7 @@ permalink: /components/space/
 
 ### 对齐
 
-内置 4 种对齐方式，分别为 start center end baseline，在水平模式下默认为 start。
+内置多种对齐方式，分别为 `flex-start` `center` `flex-end` `stretch` `baseline`。未传入时：`row` 默认为 `center`，`column` 默认为 `stretch`。
 
 <demo src="./__demos__/align.vue"></demo>
 
@@ -52,7 +52,7 @@ permalink: /components/space/
 | --------- | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | ---------------------- |
 | direction | 布局方向 可选值为 `row` `column`                                                                     | _string_                                                   | `row`                  |
 | justify   | 主轴排列方式 可选值为 `flex-start` `flex-end` `center` `space-around` `space-between` `space-evenly` | _string_                                                   | `flex-start`           |
-| align     | 交叉轴排列方式 可选值为 `flex-start` `flex-end` `center` `stretch` `baseline`                        | _string_                                                   | `center`或`flex-start` |
+| align     | 交叉轴排列方式 可选值为 `flex-start` `flex-end` `center` `stretch` `baseline`，未传时根据 `direction` 推断（`row` → `center`，`column` → `stretch`） | _string_                                                   | `-`                    |
 | size      | 间距，可选值为 `xs` `sm` `md` `lg` `xl` 或 `[rowGap, columnGap]` (支持长度单位和简写方式)            | _string \| number \| [string \| number, string \| number]_ | `md`                   |
 | wrap      | 是否超出换行                                                                                         | _boolean_                                                  | `false`                |
 | block     | 是否为flex元素                                                                                       | _boolean_                                                  | `true`                 |

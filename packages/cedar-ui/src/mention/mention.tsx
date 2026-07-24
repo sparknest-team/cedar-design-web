@@ -10,8 +10,8 @@ import {
   nextTick,
   toRef,
 } from 'vue'
-import ArcoTextarea from '../textarea'
-import ArcoInput from '../input'
+import Textarea from '../textarea'
+import Input from '../input'
 import Trigger from '../trigger'
 import SelectDropdown from '../select/select-dropdown.vue'
 import Option from '../select/option.vue'
@@ -345,7 +345,7 @@ export default defineComponent({
         return (
           <div class={prefixCls}>
             <ResizeObserver onResize={handleResize}>
-              <ArcoTextarea
+              <Textarea
                 {...attrs}
                 ref={inputRef}
                 clearable={props.clearable}
@@ -395,7 +395,7 @@ export default defineComponent({
           disabled={mergedDisabled.value}
           onPopupVisibleChange={handlePopupVisibleChange}
         >
-          <ArcoInput
+          <Input
             v-slots={slots}
             {...attrs}
             ref={inputRef}

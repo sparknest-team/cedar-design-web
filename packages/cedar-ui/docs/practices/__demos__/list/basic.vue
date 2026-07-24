@@ -43,7 +43,7 @@
         @page-size-change="onPageSizeChange"
       ></Table>
     </Card>
-    <Modal v-model:visible="visible" :body-style="{ height: '400px' }" @cancel="handleCancel" @ok="handleOk">
+    <Dialog v-model:show="visible" :body-style="{ height: '400px' }" @cancel="handleCancel" @confirm="handleOk">
       <template #title>title2</template>
       <template #footer>
         <div class="flex justify-space-between align-center">
@@ -98,7 +98,7 @@
           </GridItem>
         </Grid>
       </Form>
-    </Modal>
+    </Dialog>
   </div>
 </template>
 <script lang="ts" setup>
@@ -112,7 +112,7 @@ import {
   Button,
   IconPlus,
   Space,
-  Modal,
+  Dialog,
   Search,
   Form,
   Grid,

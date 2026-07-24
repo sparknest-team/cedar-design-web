@@ -1,7 +1,7 @@
 // Vitest Snapshot v1
 
 exports[`Descriptions > render 1`] = `
-"<div class=\\"arco-descriptions arco-descriptions-layout-horizontal arco-descriptions-size-medium cedar-descriptions\\">
+"<div class=\\"arco-descriptions arco-descriptions-layout-horizontal arco-descriptions-size-medium c-descriptions\\">
   <!---->
   <div class=\\"arco-descriptions-body\\">
     <table class=\\"arco-descriptions-table\\">

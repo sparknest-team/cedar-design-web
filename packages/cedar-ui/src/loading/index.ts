@@ -1,7 +1,7 @@
 import { createApp, defineComponent, h, type Directive, type DirectiveBinding } from 'vue'
 import Loading from './loading.vue'
 
-const INSTANCE_KEY = Symbol('ArcoLoading')
+const INSTANCE_KEY = Symbol('CedarLoading')
 
 export interface LoadingOptions {
   text?: string
@@ -36,15 +36,15 @@ const createInstance = (el: ElementLoading, binding: DirectiveBinding<boolean | 
 
   const instance = createApp(LoadingComponent, { options })
   const loadingElement = document.createElement('div')
-  loadingElement.className = 'cedar-loading'
+  loadingElement.className = 'c-loading'
   instance.mount(loadingElement)
 
   if (options.fullscreen) {
-    document.body.classList.add('cedar-loading-parent--hidden')
+    document.body.classList.add('c-loading-parent--hidden')
     document.body.appendChild(loadingElement)
   } else {
     el.appendChild(loadingElement)
-    el.classList.add('cedar-loading-parent--relative')
+    el.classList.add('c-loading-parent--relative')
   }
 
   el[INSTANCE_KEY] = {
@@ -81,16 +81,16 @@ export const vLoading: Directive<ElementLoading, boolean | LoadingOptions> = {
         if (el.contains(instance?.dom as HTMLElement)) {
           el.removeChild(instance?.dom as HTMLElement)
         }
-        el.classList.remove('cedar-loading-parent--relative')
-        document.body.classList.remove('cedar-loading-parent--hidden')
+        el.classList.remove('c-loading-parent--relative')
+        document.body.classList.remove('c-loading-parent--hidden')
         el[INSTANCE_KEY] = undefined
       }
     }
   },
   unmounted(el) {
     el[INSTANCE_KEY]?.instance.unmount()
-    el.classList.remove('cedar-loading-parent--relative')
-    document.body.classList.remove('cedar-loading-parent--hidden')
+    el.classList.remove('c-loading-parent--relative')
+    document.body.classList.remove('c-loading-parent--hidden')
     el[INSTANCE_KEY] = undefined
   },
 }

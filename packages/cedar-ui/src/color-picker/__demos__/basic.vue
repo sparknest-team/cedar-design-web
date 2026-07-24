@@ -1,11 +1,3 @@
 <template>
-  <c-space>
-    <c-color-picker v-model="value" />
-    <c-color-picker defaultValue="#00BEBE" showText disabledAlpha />
-  </c-space>
+  <c-color-picker default-value="#00BEBE" />
 </template>
-
-<script lang="ts" setup>
-import { ref } from 'vue'
-const value = ref('#00BEBE')
-</script>

@@ -1,7 +1,7 @@
 <template>
   <c-button @click="handleOpenModal">点击弹出Modal</c-button>
   <c-button @click="handleOpenDrawer">点击弹出Drawer</c-button>
-  <c-drawer v-model:visible="visibleDrawer" title="插入列" @ok="handleOk">
+  <c-drawer v-model:show="visibleDrawer" title="插入列" @confirm="handleOk">
     <c-select-panel
       v-model:modelValue="modelValue"
       :options="options"
@@ -23,7 +23,7 @@
       </template>
     </c-select-panel>
   </c-drawer>
-  <c-modal v-model:visible="visibleModal" title="插入列" @ok="handleOk" :body-padding="false">
+  <c-dialog v-model:show="visibleModal" title="插入列" @confirm="handleOk" :body-padding="false">
     <c-select-panel
       :defaultValue="defaultValue"
       :options="options"
@@ -31,7 +31,7 @@
       :fallbackOptions="fallbackOptions"
       @change="handleChange"
     ></c-select-panel>
-  </c-modal>
+  </c-dialog>
 </template>
 
 <script setup lang="ts">

@@ -1,11 +1,11 @@
 <template>
   <c-space>
-    <c-date-picker style="width: 268px" v-model="value">
+    <c-date-picker v-model="value" :hide-trigger="false">
       <c-button>{{ value || '请选择日期' }}</c-button>
     </c-date-picker>
-    <c-range-picker style="width: 268px" v-model="rangeValue">
+    <c-date-range-picker v-model="rangeValue" :hide-trigger="false">
       <c-button>{{ (rangeValue && rangeValue.join(' - ')) || '请选择日期范围' }}</c-button>
-    </c-range-picker>
+    </c-date-range-picker>
   </c-space>
 </template>
 

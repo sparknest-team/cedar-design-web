@@ -37,12 +37,12 @@
             </div>
             <div v-if="footer" :class="`${prefixCls}-footer`">
               <slot name="footer">
-                <arco-button v-if="!hideCancel" v-bind="cancelButtonProps" @click="handleCancel">
+                <Button v-if="!hideCancel" v-bind="cancelButtonProps" @click="handleCancel">
                   {{ cancelText || t('drawer.cancelText') }}
-                </arco-button>
-                <arco-button type="primary" :loading="mergedOkLoading" v-bind="okButtonProps" @click="handleOk">
+                </Button>
+                <Button type="primary" :loading="mergedOkLoading" v-bind="okButtonProps" @click="handleOk">
                   {{ okText || t('drawer.okText') }}
-                </arco-button>
+                </Button>
               </slot>
             </div>
           </div>
@@ -57,7 +57,7 @@ import type { CSSProperties, PropType, StyleValue } from 'vue'
 import { computed, defineComponent, onBeforeUnmount, onMounted, ref, toRefs, watch } from 'vue'
 import { getPrefixCls } from '../_utils/global-config'
 import ClientOnly from '../_components/client-only'
-import ArcoButton, { ButtonProps } from '../button'
+import Button, { ButtonProps } from '../button'
 import IconHover from '../_components/icon-hover.vue'
 import IconClose from '../icon/icon-close'
 import { useI18n } from '../locale'
@@ -75,7 +75,7 @@ export default defineComponent({
   name: 'Drawer',
   components: {
     ClientOnly,
-    ArcoButton,
+    Button,
     IconHover,
     IconClose,
   },

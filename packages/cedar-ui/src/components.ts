@@ -2,7 +2,7 @@
 // @ts-nocheck
 import { MessageMethod } from './message'
 import { NotificationMethod } from './notification'
-import { ModalMethod } from './modal'
+import { DialogMethod } from './dialog'
 import { DrawerMethod } from './drawer'
 
 declare module 'vue' {
@@ -33,17 +33,17 @@ declare module 'vue' {
     CCollapse: (typeof import('@cedar/ui/web-vue'))['Collapse']
     CCollapseItem: (typeof import('@cedar/ui/web-vue'))['CollapseItem']
     CColorPicker: (typeof import('@cedar/ui/web-vue'))['ColorPicker']
-    CComment: (typeof import('@cedar/ui/web-vue'))['Comment']
+    CColor: (typeof import('@cedar/ui/web-vue'))['Color']
     CConfigProvider: (typeof import('@cedar/ui/web-vue'))['ConfigProvider']
     CDatePicker: (typeof import('@cedar/ui/web-vue'))['DatePicker']
-    CWeekPicker: (typeof import('@cedar/ui/web-vue'))['WeekPicker']
-    CMonthPicker: (typeof import('@cedar/ui/web-vue'))['MonthPicker']
-    CYearPicker: (typeof import('@cedar/ui/web-vue'))['YearPicker']
-    CQuarterPicker: (typeof import('@cedar/ui/web-vue'))['QuarterPicker']
-    CRangePicker: (typeof import('@cedar/ui/web-vue'))['RangePicker']
+    CDate: (typeof import('@cedar/ui/web-vue'))['Date']
+    CDateRangePicker: (typeof import('@cedar/ui/web-vue'))['DateRangePicker']
+    CDateRange: (typeof import('@cedar/ui/web-vue'))['DateRange']
     CDescriptions: (typeof import('@cedar/ui/web-vue'))['Descriptions']
     CDescriptionsItem: (typeof import('@cedar/ui/web-vue'))['DescriptionsItem']
     CDivider: (typeof import('@cedar/ui/web-vue'))['Divider']
+    CCountTo: (typeof import('@cedar/ui/web-vue'))['CountTo']
+    CDragContainer: (typeof import('@cedar/ui/web-vue'))['DragContainer']
     CDrawer: (typeof import('@cedar/ui/web-vue'))['Drawer']
     CDropdown: (typeof import('@cedar/ui/web-vue'))['Dropdown']
     CDoption: (typeof import('@cedar/ui/web-vue'))['Doption']
@@ -80,7 +80,7 @@ declare module 'vue' {
     CMenuItem: (typeof import('@cedar/ui/web-vue'))['MenuItem']
     CMenuItemGroup: (typeof import('@cedar/ui/web-vue'))['MenuItemGroup']
     CSubMenu: (typeof import('@cedar/ui/web-vue'))['SubMenu']
-    CModal: (typeof import('@cedar/ui/web-vue'))['Modal']
+    CDialog: (typeof import('@cedar/ui/web-vue'))['Dialog']
     CPageHeader: (typeof import('@cedar/ui/web-vue'))['PageHeader']
     CPagination: (typeof import('@cedar/ui/web-vue'))['Pagination']
     CPopconfirm: (typeof import('@cedar/ui/web-vue'))['Popconfirm']
@@ -91,9 +91,11 @@ declare module 'vue' {
     CRate: (typeof import('@cedar/ui/web-vue'))['Rate']
     CResizeBox: (typeof import('@cedar/ui/web-vue'))['ResizeBox']
     CResult: (typeof import('@cedar/ui/web-vue'))['Result']
+    CSearch: (typeof import('@cedar/ui/web-vue'))['Search']
     CSelect: (typeof import('@cedar/ui/web-vue'))['Select']
     COption: (typeof import('@cedar/ui/web-vue'))['Option']
     COptgroup: (typeof import('@cedar/ui/web-vue'))['Optgroup']
+    CSelectPanel: (typeof import('@cedar/ui/web-vue'))['SelectPanel']
     CSkeleton: (typeof import('@cedar/ui/web-vue'))['Skeleton']
     CSkeletonLine: (typeof import('@cedar/ui/web-vue'))['SkeletonLine']
     CSkeletonShape: (typeof import('@cedar/ui/web-vue'))['SkeletonShape']
@@ -107,6 +109,7 @@ declare module 'vue' {
     CStep: (typeof import('@cedar/ui/web-vue'))['Step']
     CSwitch: (typeof import('@cedar/ui/web-vue'))['Switch']
     CTable: (typeof import('@cedar/ui/web-vue'))['Table']
+    CTableColumnManager: (typeof import('@cedar/ui/web-vue'))['TableColumnManager']
     CThead: (typeof import('@cedar/ui/web-vue'))['Thead']
     CTd: (typeof import('@cedar/ui/web-vue'))['Td']
     CTh: (typeof import('@cedar/ui/web-vue'))['Th']
@@ -121,6 +124,9 @@ declare module 'vue' {
     CTag: (typeof import('@cedar/ui/web-vue'))['Tag']
     CTextarea: (typeof import('@cedar/ui/web-vue'))['Textarea']
     CTimePicker: (typeof import('@cedar/ui/web-vue'))['TimePicker']
+    CTimeRangePicker: (typeof import('@cedar/ui/web-vue'))['TimeRangePicker']
+    CTime: (typeof import('@cedar/ui/web-vue'))['Time']
+    CTimeRange: (typeof import('@cedar/ui/web-vue'))['TimeRange']
     CTimeline: (typeof import('@cedar/ui/web-vue'))['Timeline']
     CTimelineItem: (typeof import('@cedar/ui/web-vue'))['TimelineItem']
     CTooltip: (typeof import('@cedar/ui/web-vue'))['Tooltip']
@@ -140,7 +146,7 @@ declare module 'vue' {
   export interface ComponentCustomProperties {
     $message: MessageMethod
     $notification: NotificationMethod
-    $modal: ModalMethod
+    $dialog: DialogMethod
     $drawer: DrawerMethod
   }
 }

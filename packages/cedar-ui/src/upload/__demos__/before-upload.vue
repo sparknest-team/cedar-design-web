@@ -10,7 +10,7 @@ export default defineComponent({
   setup() {
     const beforeUpload = (file) => {
       return new Promise((resolve, reject) => {
-        Modal.confirm({
+        Dialog.confirm({
           title: 'beforeUpload',
           content: `确认上传 ${file.name}`,
           onOk: () => resolve(true),

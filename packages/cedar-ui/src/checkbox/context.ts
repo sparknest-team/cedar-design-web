@@ -1,7 +1,7 @@
 import type { InjectionKey, Slots } from 'vue'
 
 export interface CheckboxGroupContext {
-  name: 'ArcoCheckboxGroup'
+  name: 'CedarCheckboxGroup'
   computedValue: Array<string | number>
   disabled: boolean
   isMaxed: boolean
@@ -9,4 +9,4 @@ export interface CheckboxGroupContext {
   handleChange: (value: Array<string | number | boolean>, e: Event) => void
 }
 
-export const checkboxGroupKey: InjectionKey<CheckboxGroupContext> = Symbol('ArcoCheckboxGroup')
+export const checkboxGroupKey: InjectionKey<CheckboxGroupContext> = Symbol('CedarCheckboxGroup')

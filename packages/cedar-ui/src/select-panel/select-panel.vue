@@ -1,17 +1,18 @@
 <template>
-  <div :class="bem('container')">
+  <div :class="prefixCls">
     <Search
       v-model:searchText="searchValue"
       :placeholder="props.placeholder || t('table.placeholderInputKeyword')"
-      :class="bem('search')"
+      :enable-search-history="false"
+      :class="`${prefixCls}-search`"
       @change="handleSearch"
     />
-    <div :class="bem('selected-value-container')" v-if="props.showSelected && selectedItemList.length">
-      <Space :class="bem('selected-value-list')">
+    <div :class="`${prefixCls}-selected-value-container`" v-if="props.showSelected && selectedItemList.length">
+      <Space :class="`${prefixCls}-selected-value-list`">
         <Tag
           v-for="item in selectedItemList"
           :key="item?.value"
-          :class="bem('selected-value-item')"
+          :class="`${prefixCls}-selected-value-item`"
           closable
           @close="handleClear(item?.value)"
         >
@@ -21,29 +22,30 @@
     </div>
     <CheckboxGroup
       :modelValue="selectedValueList"
-      :class="bem('group-list')"
+      direction="vertical"
+      :class="`${prefixCls}-group-list`"
       @change="handleCheckChange"
       v-loading="loading"
     >
       <template v-for="item in localOptions" :key="item.value">
-        <div v-if="item.options?.length" :class="bem('group-item')">
-          <div :class="bem('group-name')">
+        <div v-if="item.options?.length" :class="`${prefixCls}-group-item`">
+          <div :class="`${prefixCls}-group-name`">
             {{ item.label }}
           </div>
           <template v-for="groupItem in item.options" :key="groupItem.value">
-            <div :class="bem('checkbox-list')">
+            <div :class="`${prefixCls}-checkbox-list`">
               <Checkbox
                 :disabled="groupItem.disabled || groupItem.required"
                 :value="groupItem.value"
-                :class="bem('checkbox-item')"
+                :class="`${prefixCls}-checkbox-item`"
               >
-                <div v-tooltip:ellipsis="groupItem.label" :class="bem('checkbox-item-title')">
+                <div v-tooltip:ellipsis="groupItem.label" :class="`${prefixCls}-checkbox-item-title`">
                   {{ groupItem.label }}
                 </div>
                 <slot name="tooltip" :item="groupItem">
                   <template v-if="groupItem.tip">
                     <Tooltip :content="groupItem.tip">
-                      <div :class="bem('checkbox-item-tooltip')">
+                      <div :class="`${prefixCls}-checkbox-item-tooltip`">
                         <IconInfoCircle />
                       </div>
                     </Tooltip>
@@ -53,15 +55,19 @@
             </div>
           </template>
         </div>
-        <div v-else-if="typeof item.options === 'undefined'" :key="item.value" :class="bem('group-item')">
-          <div :key="item.value" :class="bem('checkbox-list')">
-            <Checkbox :disabled="item.disabled || item.required" :value="item.value" :class="bem('checkbox-item')">
-              <div v-tooltip:ellipsis="item.label" :class="bem('checkbox-item-title')">
+        <div v-else-if="typeof item.options === 'undefined'" :key="item.value" :class="`${prefixCls}-group-item`">
+          <div :key="item.value" :class="`${prefixCls}-checkbox-list`">
+            <Checkbox
+              :disabled="item.disabled || item.required"
+              :value="item.value"
+              :class="`${prefixCls}-checkbox-item`"
+            >
+              <div v-tooltip:ellipsis="item.label" :class="`${prefixCls}-checkbox-item-title`">
                 {{ item.label }}
               </div>
               <slot name="tooltip" :item="item">
                 <Tooltip :content="item.tip" v-if="item.tip" background-color="#fff">
-                  <div :class="bem('checkbox-item-tooltip')">
+                  <div :class="`${prefixCls}-checkbox-item-tooltip`">
                     <IconInfoCircle />
                   </div>
                 </Tooltip>
@@ -88,11 +94,13 @@ import { vLoading } from '../loading'
 import { vTooltip } from '../tooltip/tooltip.directive'
 import { promiseDebounce } from './utils/promiseDebounce'
 import type { Option, OptionData, OptionGroup } from './types'
-import { createNamespace } from '../_utils/create'
+import { getPrefixCls } from '../_utils/global-config'
 import { cloneDeep } from 'lodash-es'
 
+defineOptions({ name: 'SelectPanel' })
+
 const { t } = useI18n()
-const [name, bem] = createNamespace('select-panel')
+const prefixCls = getPrefixCls('select-panel')
 const props = withDefaults(defineProps<SelectPanelProps>(), {
   multiple: false,
   showSelected: true,
@@ -292,9 +300,29 @@ const init = () => {
     },
     { immediate: true },
   )
-  selectedValueList.value = localFlatOptions.value.filter((item) => item.required).map((item) => item.value)
+
+  // 保留 modelValue 选中态；仅补齐必选项，避免打开时被「仅 required」覆盖
+  const requiredValues = localFlatOptions.value
+    .filter((item) => item.required)
+    .map((item) => item.value)
+  const missingRequired = requiredValues.filter((value) => !selectedValueList.value.includes(value))
+  if (missingRequired.length) {
+    selectedValueList.value = [...missingRequired, ...selectedValueList.value]
+  }
+  if (!selectedValueList.value.length && requiredValues.length) {
+    selectedValueList.value = [...requiredValues]
+  }
+  selectedValueList.value.forEach((value: string) => {
+    const option = getOptionWithFallback(value)
+    if (option) {
+      setOptionsCache(option)
+    }
+  })
+
   emit('init', [...selectedValueList.value], {
-    option: localFlatOptions.value.filter((item) => item.required),
+    option: selectedValueList.value
+      .map((value) => getOptionWithFallback(value))
+      .filter(Boolean) as OptionData[],
   })
 }
 init()

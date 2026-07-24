@@ -88,6 +88,7 @@ export default defineComponent({
      * */
     hideTrigger: {
       type: Boolean,
+      default: true,
     },
     /**
      * @zh 接受所有 [Trigger](/vue/component/trigger) 组件的Props
