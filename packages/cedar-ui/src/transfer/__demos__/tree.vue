@@ -6,7 +6,8 @@
         checked-strategy="child"
         :checked-keys="selectedKeys"
         :data="getTreeData(data)"
-        @check="onSelect" />
+        @check="onSelect"
+      />
     </template>
   </c-transfer>
 </template>
@@ -89,5 +90,5 @@ const getTreeData = (data = []) => {
 
 const transferData = getTransferData(treeData)
 
-const value = ['0-0-2-1']
+const value = [{ value: '0-0-2-1' }]
 </script>

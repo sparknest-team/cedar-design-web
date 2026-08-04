@@ -12,8 +12,13 @@ const Trigger = Object.assign(_Trigger, {
   },
 })
 
-export type TriggerInstance = InstanceType<typeof _Trigger>
+export interface TriggerExposed {
+  resize: () => void
+}
+
+export type TriggerInstance = InstanceType<typeof _Trigger> & TriggerExposed
 export type { TriggerEvent, TriggerPosition } from '../_utils/constant'
 export type { TriggerProps, TriggerPopupTranslate } from './types'
+export { Trigger }
 
 export default Trigger

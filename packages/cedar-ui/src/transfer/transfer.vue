@@ -1,5 +1,5 @@
 <template>
-  <div :class="cls">
+  <div v-bind="$attrs" :class="cls">
     <transfer-view
       type="source"
       :class="`${prefixCls}-view-source`"
@@ -8,10 +8,13 @@
       :data="dataInfo.sourceInfo.data"
       :disabled="mergedDisabled"
       :selected="computedSelected"
-      :show-search="showSearch"
+      :show-search="sourceShowSearch"
+      :filter-option="mergedFilter"
       :show-select-all="showSelectAll"
-      :simple="simple"
-      :input-search-props="sourceInputSearchProps"
+      :simple="false"
+      :search-props="mergedSourceSearchProps"
+      :virtual-scroll="virtualScroll"
+      :total="data.length"
       @search="handleSearch"
     >
       <template v-if="$slots.source" #default="slotData">
@@ -21,33 +24,6 @@
         <slot name="source-title" v-bind="titleProps" />
       </template>
     </transfer-view>
-    <div v-if="!simple" :class="[`${prefixCls}-operations`]">
-      <Button
-        tabindex="-1"
-        aria-label="Move selected right"
-        size="sm"
-        shape="round"
-        :disabled="dataInfo.sourceInfo.validSelected.length === 0"
-        @click="handleClick('target')"
-      >
-        <template #icon>
-          <slot name="to-target-icon"> <icon-right /> </slot>
-        </template>
-      </Button>
-      <Button
-        v-if="!oneWay"
-        tabindex="-1"
-        aria-label="Move selected left"
-        size="sm"
-        shape="round"
-        :disabled="dataInfo.targetInfo.validSelected.length === 0"
-        @click="handleClick('source')"
-      >
-        <template #icon>
-          <slot name="to-source-icon"><icon-left /></slot>
-        </template>
-      </Button>
-    </div>
     <transfer-view
       type="target"
       :class="`${prefixCls}-view-target`"
@@ -56,11 +32,17 @@
       :data="dataInfo.targetInfo.data"
       :disabled="mergedDisabled"
       :selected="computedSelected"
-      :clearable="oneWay"
-      :show-search="showSearch"
+      clearable
+      :show-search="targetShowSearch"
+      :filter-option="mergedFilter"
       :show-select-all="showSelectAll"
-      :simple="simple"
-      :input-search-props="targetInputSearchProps"
+      :simple="false"
+      :search-props="mergedTargetSearchProps"
+      :virtual-scroll="virtualScroll"
+      :target-draggable="targetDraggable"
+      :target-operation="targetOperation"
+      :total="data.length"
+      :clear-text="mergedClearText"
       @search="handleSearch"
     >
       <template v-if="$slots.target" #default="slotData">
@@ -71,26 +53,36 @@
       </template>
     </transfer-view>
   </div>
+  <Dialog
+    :show="renameVisible"
+    title="重命名"
+    :width="420"
+    unmount-on-close
+    @update:show="renameVisible = $event"
+    @confirm="commitRename"
+  >
+    <Input v-model="renameDraft" placeholder="请输入名称" @press-enter="commitRename" />
+  </Dialog>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, PropType, provide, reactive, ref, toRef } from 'vue'
 import { getPrefixCls } from '../_utils/global-config'
-import Button from '../button'
 import TransferView from './transfer-view.vue'
-import IconLeft from '../icon/icon-left'
-import IconRight from '../icon/icon-right'
-import { DataInfo, TransferItem } from './types'
+import type { DataInfo, TransferFilter, TransferItem, TransferTargetItem, TransferValue } from './types'
 import { transferInjectionKey } from './context'
 import { useFormItem } from '../_hooks/use-form-item'
+import Dialog from '../dialog'
+import Input from '../input'
+import type { TransferFixed, TransferTargetAction } from './types'
 
 export default defineComponent({
   name: 'Transfer',
+  inheritAttrs: false,
   components: {
-    Button,
     TransferView,
-    IconLeft,
-    IconRight,
+    Dialog,
+    Input,
   },
   props: {
     /**
@@ -107,7 +99,7 @@ export default defineComponent({
      * @vModel
      */
     modelValue: {
-      type: Array as PropType<string[]>,
+      type: Array as PropType<TransferTargetItem[]>,
       default: undefined,
     },
     /**
@@ -115,24 +107,7 @@ export default defineComponent({
      * @en The default value in the target selection box (uncontrolled state)
      */
     defaultValue: {
-      type: Array as PropType<string[]>,
-      default: () => [],
-    },
-    /**
-     * @zh 选中的选项值
-     * @en Selected option value
-     * @vModel
-     */
-    selected: {
-      type: Array as PropType<string[]>,
-      default: undefined,
-    },
-    /**
-     * @zh 默认选中的选项值（非受控状态）
-     * @en The option value selected by default (uncontrolled state)
-     */
-    defaultSelected: {
-      type: Array as PropType<string[]>,
+      type: Array as PropType<TransferTargetItem[]>,
       default: () => [],
     },
     /**
@@ -143,21 +118,19 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-    /**
-     * @zh 是否开启简单模式（点击选项即移动）
-     * @en Whether to open the simple mode (click the option to move)
-     */
-    simple: {
-      type: Boolean,
-      default: false,
+    /** 是否启用虚拟滚动，适用于大数据。 */
+    virtualScroll: Boolean,
+    /** 是否允许拖拽调整右侧已选项顺序。 */
+    targetDraggable: Boolean,
+    /** 右侧操作方式：删除图标或完整操作菜单。 */
+    targetOperation: {
+      type: String as PropType<'remove' | 'menu'>,
+      default: 'remove',
     },
-    /**
-     * @zh 是否开启单向模式（仅可移动到目标选择框）
-     * @en Whether to open the one-way mode (only move to the target selection box)
-     */
-    oneWay: {
-      type: Boolean,
-      default: false,
+    clearText: String,
+    targetActions: {
+      type: Array as PropType<TransferTargetAction[]>,
+      default: () => [],
     },
     /**
      * @zh 是否显示搜索框
@@ -167,6 +140,33 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    /** 同时开启左右两侧搜索，兼容 Naive UI 的旧属性。 */
+    filterable: {
+      type: Boolean,
+      default: undefined,
+    },
+    /** 是否开启源列表搜索。 */
+    sourceFilterable: Boolean,
+    /** 是否开启目标列表搜索。 */
+    targetFilterable: Boolean,
+    /** Naive UI 风格的搜索过滤函数。 */
+    filter: {
+      type: Function as PropType<TransferFilter>,
+      default: (value: string, item: TransferItem) => item.label.toLowerCase().includes(value.toLowerCase()),
+    },
+    /** Cedar 旧版搜索过滤函数，优先级高于 filter。 */
+    filterOption: {
+      type: Function as PropType<TransferFilter>,
+    },
+    sourceFilterPlaceholder: String,
+    targetFilterPlaceholder: String,
+    /** 是否在源列表中保留已经选中的选项。 */
+    showSelected: {
+      type: Boolean,
+      default: true,
+    },
+    sourceTitle: String,
+    targetTitle: String,
     /**
      * @zh 是否展示全选勾选框
      * @en Whether show select all checkbox on the header
@@ -182,14 +182,14 @@ export default defineComponent({
      */
     title: {
       type: Array as PropType<string[]>,
-      default: () => ['Source', 'Target'],
+      default: () => ['全选', '已选'],
     },
     /**
      * @zh 源选择框的搜索框配置
      * @en Search box configuration for source selection box
      * @version 2.51.1
      */
-    sourceInputSearchProps: {
+    sourceSearchProps: {
       type: Object,
     },
     /**
@@ -197,25 +197,18 @@ export default defineComponent({
      * @en Search box configuration for target selection box
      * @version 2.51.1
      */
-    targetInputSearchProps: {
+    targetSearchProps: {
       type: Object,
     },
   },
   emits: {
-    'update:modelValue': (value: string[]) => true,
-    'update:selected': (selected: string[]) => true,
+    'update:modelValue': (value: TransferTargetItem[]) => true,
     /**
      * @zh 目标选择框的值改变时触发
      * @en Triggered when the value of the target selection box changes
      * @property {string[]} value
      */
-    change: (value: string[]) => true,
-    /**
-     * @zh 选中的值改变时触发
-     * @en Triggered when the selected value changes
-     * @property {string[]} selected
-     */
-    select: (selected: string[]) => true,
+    change: (value: TransferTargetItem[]) => true,
     /**
      * @zh 用户搜索时触发
      * @en Triggered when the user searches
@@ -223,6 +216,8 @@ export default defineComponent({
      * @property {'target'|'source'} type
      */
     search: (value: string, type: 'target' | 'source') => true,
+    rename: (value: TransferValue, label: string) => true,
+    targetAction: (key: string, item: TransferItem) => true,
   },
   /**
    * @zh 选项
@@ -293,13 +288,26 @@ export default defineComponent({
     })
     const prefixCls = getPrefixCls('transfer')
 
-    const _target = ref(props.defaultValue)
+    const _target = ref<TransferTargetItem[]>(props.defaultValue.map((item) => ({ ...item })))
+    const renameVisible = ref(false)
+    const renamingValue = ref<TransferValue>()
+    const renameDraft = ref('')
     const computedTarget = computed(() => props.modelValue ?? _target.value)
-    const _selected = ref(props.defaultSelected)
-    const computedSelected = computed(() => props.selected ?? _selected.value)
-
-    const sourceTitle = computed(() => props.title?.[0])
-    const targetTitle = computed(() => props.title?.[1])
+    const computedTargetValues = computed(() => computedTarget.value.map((item) => item.value))
+    const sourceTitle = computed(() => props.sourceTitle ?? props.title?.[0])
+    const targetTitle = computed(() => props.targetTitle ?? props.title?.[1])
+    const sourceShowSearch = computed(() => props.showSearch || props.filterable === true || props.sourceFilterable)
+    const targetShowSearch = computed(() => props.showSearch || props.filterable === true || props.targetFilterable)
+    const mergedFilter = computed(() => props.filterOption ?? props.filter)
+    const mergedSourceSearchProps = computed(() => ({
+      ...props.sourceSearchProps,
+      placeholder: props.sourceFilterPlaceholder ?? props.sourceSearchProps?.placeholder,
+    }))
+    const mergedTargetSearchProps = computed(() => ({
+      ...props.targetSearchProps,
+      placeholder: props.targetFilterPlaceholder ?? props.targetSearchProps?.placeholder,
+    }))
+    const mergedClearText = computed(() => props.clearText ?? '清空')
 
     const dataInfo = computed(() => {
       const sourceInfo: DataInfo = {
@@ -316,30 +324,41 @@ export default defineComponent({
         validSelected: [],
       }
 
+      const itemByValue = new Map(props.data.map((item) => [item.value, item]))
+      const targetState = new Map(computedTarget.value.map((item) => [item.value, item]))
+      const displayItem = (item: TransferItem, isTarget: boolean): TransferItem => {
+        const state = targetState.get(item.value)
+        return {
+          ...item,
+          label: state?.label ?? item.label,
+          fixed: isTarget ? state?.fixed : item.fixed,
+        }
+      }
+
       for (const item of props.data) {
-        if (computedTarget.value.includes(item.value)) {
-          targetInfo.data.push(item)
-          if (!item.disabled) {
-            targetInfo.allValidValues.push(item.value)
-          }
-          if (computedSelected.value.includes(item.value)) {
-            targetInfo.selected.push(item.value)
-            if (!item.disabled) {
-              targetInfo.validSelected.push(item.value)
-            }
-          }
-        } else {
-          sourceInfo.data.push(item)
-          if (!item.disabled) {
+        const isTarget = computedTargetValues.value.includes(item.value)
+        if (props.showSelected || !isTarget) {
+          sourceInfo.data.push(displayItem(item, isTarget))
+          if (!item.disabled && !item.required) {
             sourceInfo.allValidValues.push(item.value)
           }
-          if (computedSelected.value.includes(item.value)) {
-            sourceInfo.selected.push(item.value)
-            if (!item.disabled) {
-              sourceInfo.validSelected.push(item.value)
-            }
+        }
+        if (isTarget) {
+          sourceInfo.selected.push(item.value)
+          if (!item.disabled && !item.required) {
+            sourceInfo.validSelected.push(item.value)
           }
         }
+      }
+
+      for (const targetItem of computedTarget.value) {
+        const value = targetItem.value
+        const item = itemByValue.get(value)
+        if (!item) continue
+        targetInfo.data.push(displayItem(item, true))
+        if (!item.disabled && !item.required) targetInfo.allValidValues.push(value)
+        targetInfo.selected.push(value)
+        if (!item.disabled && !item.required) targetInfo.validSelected.push(value)
       }
 
       return {
@@ -352,58 +371,144 @@ export default defineComponent({
       emit('search', value, type)
     }
 
-    const moveTo = (values: string[], target: 'target' | 'source') => {
-      const newTarget =
-        target === 'target'
-          ? [...computedTarget.value, ...values]
-          : computedTarget.value.filter((value) => !values.includes(value))
-      handleSelect(dataInfo.value[target === 'target' ? 'targetInfo' : 'sourceInfo'].selected)
-      _target.value = newTarget
-      emit('update:modelValue', newTarget)
-      emit('change', newTarget)
+    const moveTo = (values: TransferValue[], target: 'target' | 'source') => {
+      const existing = new Set(computedTargetValues.value)
+      const sourceItems = new Map(props.data.map((item) => [item.value, item]))
+      let newTarget: TransferTargetItem[]
+      if (target === 'target') {
+        const added = values
+          .filter((value) => !existing.has(value))
+          .map((value) => ({
+            value,
+            ...(sourceItems.get(value)?.fixed ? { fixed: sourceItems.get(value)!.fixed } : {}),
+          }))
+        const combined = [...computedTarget.value, ...added]
+        newTarget = [
+          ...combined.filter((item) => item.fixed === 'left'),
+          ...combined.filter((item) => !item.fixed),
+          ...combined.filter((item) => item.fixed === 'right'),
+        ]
+      } else {
+        newTarget = computedTarget.value.filter((item) => !values.includes(item.value))
+      }
+      updateTarget(newTarget)
+    }
+
+    const handleSelect = (values: TransferValue[]) => {
+      const selected = new Set(values)
+      const existing = new Map(computedTarget.value.map((item) => [item.value, item]))
+      const sourceItems = new Map(props.data.map((item) => [item.value, item]))
+      const next = values
+        .map((value) => {
+          const current = existing.get(value)
+          if (current) return current
+          const fixed = sourceItems.get(value)?.fixed
+          return { value, ...(fixed ? { fixed } : {}) }
+        })
+        .filter((item) => selected.has(item.value))
+      updateTarget([
+        ...next.filter((item) => item.fixed === 'left'),
+        ...next.filter((item) => !item.fixed),
+        ...next.filter((item) => item.fixed === 'right'),
+      ])
+    }
+
+    const updateTarget = (items: TransferTargetItem[]) => {
+      const next = items.map((item) => ({ ...item }))
+      _target.value = next
+      emit('update:modelValue', next)
+      emit('change', next)
       eventHandlers.value?.onChange?.()
     }
 
-    const handleClick = (target: 'target' | 'source') => {
-      const values =
-        target === 'target' ? dataInfo.value.sourceInfo.validSelected : dataInfo.value.targetInfo.validSelected
-      moveTo(values, target)
+    const handleFreeze = (value: TransferValue, fixed?: TransferFixed) => {
+      const current = computedTarget.value.find((item) => item.value === value)
+      const previous = current?.fixed
+      if (!fixed && !previous) return
+
+      const changed = { ...(current ?? { value }), fixed }
+      if (!fixed) delete changed.fixed
+      const remaining = computedTarget.value.filter((item) => item.value !== value)
+      const left = remaining.filter((item) => item.fixed === 'left')
+      const other = remaining.filter((item) => !item.fixed)
+      const right = remaining.filter((item) => item.fixed === 'right')
+
+      if (fixed === 'left') left.push(changed)
+      else if (fixed === 'right') right.unshift(changed)
+      else if (previous === 'left') other.unshift(changed)
+      else other.push(changed)
+
+      updateTarget([...left, ...other, ...right])
     }
 
-    const handleSelect = (values: string[]) => {
-      _selected.value = values
-      emit('update:selected', values)
-      emit('select', values)
+    const handleReorder = (items: TransferItem[], detail: { oldValue?: TransferItem; newValue?: TransferItem }) => {
+      const existing = new Map(computedTarget.value.map((item) => [item.value, item]))
+      const movedValue = detail.oldValue?.value
+      updateTarget(
+        items.map((item) => {
+          const targetItem = { ...(existing.get(item.value) ?? { value: item.value }) }
+          if (item.value === movedValue) {
+            if (detail.newValue?.fixed) targetItem.fixed = detail.newValue.fixed
+            else delete targetItem.fixed
+          }
+          return targetItem
+        })
+      )
+    }
+
+    const startRename = (item: TransferItem) => {
+      renamingValue.value = item.value
+      renameDraft.value = item.label
+      renameVisible.value = true
+    }
+
+    const commitRename = () => {
+      const label = renameDraft.value.trim()
+      if (typeof renamingValue.value === 'undefined' || !label) return
+      updateTarget(computedTarget.value.map((item) => (item.value === renamingValue.value ? { ...item, label } : item)))
+      emit('rename', renamingValue.value, label)
+      renameVisible.value = false
+    }
+
+    const handleTargetAction = (action: TransferTargetAction, item: TransferItem) => {
+      emit('targetAction', action.key, item)
     }
 
     provide(
       transferInjectionKey,
       reactive({
-        selected: computedSelected,
+        selected: computedTargetValues,
         slots,
         moveTo,
         onSelect: handleSelect,
-      }),
+        onReorder: handleReorder,
+        onFreeze: handleFreeze,
+        onRename: startRename,
+        onTargetAction: handleTargetAction,
+        targetActions: computed(() => props.targetActions),
+      })
     )
 
-    const cls = computed(() => [
-      prefixCls,
-      {
-        [`${prefixCls}-simple`]: props.simple,
-        [`${prefixCls}-disabled`]: mergedDisabled.value,
-      },
-    ])
+    const cls = computed(() => [prefixCls, { [`${prefixCls}-disabled`]: mergedDisabled.value }])
 
     return {
       prefixCls,
       cls,
       dataInfo,
-      computedSelected,
+      computedSelected: computedTargetValues,
       mergedDisabled,
       sourceTitle,
       targetTitle,
-      handleClick,
+      sourceShowSearch,
+      targetShowSearch,
+      mergedFilter,
+      mergedSourceSearchProps,
+      mergedTargetSearchProps,
+      mergedClearText,
       handleSearch,
+      renameVisible,
+      renameDraft,
+      commitRename,
     }
   },
 })

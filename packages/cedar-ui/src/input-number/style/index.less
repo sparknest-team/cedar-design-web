@@ -142,14 +142,18 @@
       position: relative;
     }
 
-    .c-input-suffix {
+    .c-input__suffix {
+      margin-right: calc(-1 * var(~'--c-input-padding-x'));
+
       .c-input-number-step-button {
-        margin-right: calc(-1 * var(~'--c-input-padding-x'));
+        margin-right: 0;
       }
     }
-    .c-input-prefix {
+    .c-input__prefix {
+      margin-left: calc(-1 * var(~'--c-input-padding-x'));
+
       .c-input-number-step-button {
-        margin-left: calc(-1 * var(~'--c-input-padding-x'));
+        margin-left: 0;
       }
     }
     .c-input-number-step-button {

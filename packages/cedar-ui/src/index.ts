@@ -40,11 +40,7 @@ export type { ColorInstance } from './color'
 export { default as ConfigProvider } from './config-provider'
 export type { ConfigProviderInstance } from './config-provider'
 export { default as DatePicker, DateRangePicker } from './date-picker'
-export type {
-  DatePickerInstance,
-  DateRangePickerInstance,
-  ShortcutType,
-} from './date-picker'
+export type { DatePickerInstance, DateRangePickerInstance, ShortcutType } from './date-picker'
 export { default as Date } from './date'
 export type { DateInstance } from './date'
 export { default as DateRange } from './date-range'
@@ -58,19 +54,6 @@ export { default as DragContainer } from './drag-container'
 export type { DragContainerInstance, DragContainerProps, DragOptions } from './drag-container'
 export { default as Drawer } from './drawer'
 export type { DrawerConfig, DrawerInstance, DrawerMethod, DrawerReturn } from './drawer'
-export { default as Dropdown, Dgroup, Doption, DropdownButton, Dsubmenu } from './dropdown'
-export type {
-  DGroup,
-  DOption,
-  DropdownButtonInstance,
-  DropdownGroupInstance,
-  DropdownInstance,
-  DropdownOption,
-  DropdownOptionInstance,
-  DropDownProps,
-  DropdownSubmenuInstance,
-  DSubmenu,
-} from './dropdown'
 export { default as Empty } from './empty'
 export type { EmptyInstance } from './empty'
 export { default as Form, FormItem } from './form'
@@ -104,14 +87,8 @@ export type {
   ImagePreviewInstance,
   ImagePreviewGroupInstance,
 } from './image'
-export { default as Input, InputGroup, InputGroupLabel, InputPassword, InputSearch } from './input'
-export type {
-  InputGroupInstance,
-  InputGroupLabelInstance,
-  InputInstance,
-  InputPasswordInstance,
-  InputSearchInstance,
-} from './input'
+export { default as Input, InputGroup, InputGroupLabel, InputPassword } from './input'
+export type { InputGroupInstance, InputGroupLabelInstance, InputInstance, InputPasswordInstance } from './input'
 export { default as InputNumber } from './input-number'
 export type { InputNumberInstance } from './input-number'
 export { default as InputTag } from './input-tag'
@@ -132,8 +109,27 @@ export { default as List, ListItem, ListItemMeta } from './list'
 export type { ListInstance, ListItemInstance, ListItemMetaInstance } from './list'
 export { default as Mention } from './mention'
 export type { MentionInstance } from './mention'
-export { default as Menu, MenuItem, MenuItemGroup, SubMenu } from './menu'
-export type { MenuInstance, MenuItemInstance, MenuItemGroupInstance, MenuSubMenuInstance } from './menu'
+export { default as Menu, MenuButton, MenuGroup, MenuOption, MenuSubmenu } from './menu'
+export type {
+  MenuButtonInstance,
+  MenuGroupConfig,
+  MenuGroupInstance,
+  MenuInstance,
+  MenuOptionConfig,
+  MenuOptionData,
+  MenuOptionInstance,
+  MenuProps,
+  MenuSubmenuConfig,
+  MenuSubmenuInstance,
+} from './menu'
+export { default as NavMenu, NavMenuItem, NavMenuItemGroup, NavMenuSubMenu } from './nav-menu'
+export type {
+  NavMenuInstance,
+  NavMenuItemInstance,
+  NavMenuItemGroupInstance,
+  NavMenuSubMenuInstance,
+  NavMenuProps,
+} from './nav-menu'
 export { default as Message } from './message'
 export type { MessageMethod, MessageConfig, MessageReturn } from './message'
 export { default as Dialog } from './dialog'
@@ -147,7 +143,7 @@ export type { PaginationInstance, PaginationProps } from './pagination'
 export { default as Popconfirm } from './popconfirm'
 export type { PopconfirmInstance } from './popconfirm'
 export { default as Popover } from './popover'
-export type { PopoverInstance } from './popover'
+export type { PopoverInstance, PopoverPlacement, PopoverProps, PopoverTrigger } from './popover'
 export { default as Progress } from './progress'
 export type { ProgressInstance } from './progress'
 export { default as Radio, RadioGroup } from './radio'
@@ -161,7 +157,7 @@ export type { ResultInstance } from './result'
 export { default as Scrollbar } from './scrollbar'
 export type { ScrollbarInstance, ScrollbarProps } from './scrollbar'
 export { default as Search } from './search'
-export type { SearchInstance, SearchField, SearchProps } from './search'
+export type { SearchInstance, SearchField, SearchProps, SearchResult } from './search'
 export { default as Select, Optgroup, Option } from './select'
 export type {
   FilterOption,
@@ -174,8 +170,6 @@ export type {
   SelectOptionInstance,
   SelectProps,
 } from './select'
-export { default as SelectPanel } from './select-panel'
-export type { SelectPanelInstance } from './select-panel'
 export { default as TableColumnManager } from './table-column-manager'
 export type {
   TableColumnManagerInstance,
@@ -183,11 +177,33 @@ export type {
   ColumnCatalog,
   ColumnCatalogGroup,
   ColumnCatalogItem,
+  ColumnDefinition,
+  ColumnDefinitionGroup,
+  ColumnDefinitions,
+  ColumnDefinitionSearchParams,
+  ColumnDefinitionSearchResult,
+  ColumnDefinitionSource,
+  ManagedTableColumn,
+  ColumnManagerMeta,
   ColumnEditInput,
   ColumnManagerInsertAt,
+  ColumnManagerDefaultState,
+  ColumnManagerItem,
   ColumnManagerLayoutNode,
   ColumnManagerResult,
   ColumnManagerState,
+} from './table-column-manager'
+export { COLUMN_MANAGER_STATE_VERSION } from './table-column-manager'
+export { useTableColumnManager } from './table-column-manager'
+export type {
+  UseTableColumnManagerOptions,
+  UseTableColumnManagerReturn,
+  EditColumnState,
+  InsertColumnContext,
+  HeaderActionKey,
+  TableColumnManagerBindings,
+  TableColumnManagerExposed,
+  TableColumnHeaderActionBindings,
 } from './table-column-manager'
 export {
   applyInsertAt,
@@ -196,7 +212,6 @@ export {
   applyColumnFixed,
   buildColumnsFromState,
   buildColumnsResult,
-  catalogToOptions,
   findLeafColumn,
   flattenCatalog,
   getColumnEditInitialValues,
@@ -205,6 +220,8 @@ export {
   layoutFromColumns,
   mapLeafColumns,
   mergeLayoutByAdjacentGroupTitles,
+  normalizeColumnManagerState,
+  stateFromCatalog,
   stateFromColumns,
 } from './table-column-manager'
 export { default as Skeleton, SkeletonLine, SkeletonShape } from './skeleton'
@@ -220,14 +237,7 @@ export type { SplitInstance } from './split'
 export { default as Statistic, Countdown } from './statistic'
 export type { CountdownInstance, StatisticInstance } from './statistic'
 export { default as Steps, Step, stepsProps, stepProps } from './steps'
-export type {
-  StepsInstance,
-  StepsStepInstance,
-  StepsProps,
-  StepProps,
-  StepsType,
-  StepStatus,
-} from './steps'
+export type { StepsInstance, StepsStepInstance, StepsProps, StepProps, StepsType, StepStatus } from './steps'
 export { default as Switch } from './switch'
 export type { SwitchInstance } from './switch'
 export { default as Table, Thead, Td, Th, Tr, Tbody, TableColumn } from './table'
@@ -251,7 +261,12 @@ export type {
   ThInstance,
   TrInstance,
 } from './table'
-export { TABLE_EXTRA_COLUMN_KEY, getExtraColumnWidth, resolveExtraColumnConfig } from './table'
+export {
+  TABLE_EXTRA_COLUMN_KEY,
+  getExtraColumnWidth,
+  resolveExtraColumnConfig,
+  DEFAULT_EXTRA_COLUMN_WIDTH,
+} from './table'
 export { default as Tabs, TabNav, TabItem, TabsNavs, TabsItems } from './tabs'
 export type { TabNavInstance, TabItemInstance, TabsInstance } from './tabs'
 export { default as Tag } from './tag'
@@ -269,7 +284,16 @@ export type { TimelineInstance, TimelineItemInstance } from './timeline'
 export { default as Tooltip } from './tooltip'
 export type { TooltipInstance } from './tooltip'
 export { default as Transfer } from './transfer'
-export type { TransferInstance } from './transfer'
+export type {
+  TransferFilter,
+  TransferFixed,
+  TransferInstance,
+  TransferItem,
+  TransferTargetAction,
+  TransferTargetItem,
+  TransferTargetOperation,
+  TransferValue,
+} from './transfer'
 export { default as Tree } from './tree'
 export type { TreeFieldNames, TreeInstance, TreeNodeData } from './tree'
 export { default as TreeSelect } from './tree-select'
@@ -285,7 +309,18 @@ export type {
   TypographyTitleInstance,
 } from './typography'
 export { default as Upload } from './upload'
-export type { CustomIcon, FileItem, FileStatus, RequestOption, UploadInstance, UploadRequest } from './upload'
+export type {
+  UploadInstance,
+  UploadCustomRequest,
+  UploadRequest,
+  UploadFileItem,
+  UploadImageFit,
+  UploadListType,
+  UploadProgressEvent,
+  UploadPublicMethods,
+  UploadRejectedFile,
+  UploadStatus,
+} from './upload'
 export { default as OverflowList } from './overflow-list'
 export type { OverflowListInstance } from './overflow-list'
 export { default as VerificationCode } from './verification-code'

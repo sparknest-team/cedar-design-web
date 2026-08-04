@@ -13,19 +13,24 @@ export interface ColumnsLayoutResult {
 /**
  * Element Plus 风格列宽分配：
  * - 有 width（或拖拽宽度）→ 固定列
- * - 无 width → 弹性列，按 minWidth（默认 80）比例分配剩余空间
+ * - 无 width → 弹性列：fit=true 时按 minWidth（默认 80）比例吸收剩余空间
  * - 列最小宽之和超过容器 → 开启横向滚动
+ * - 列宽之和不足容器 → 剩余空间按各列基础宽度比例放大撑满（与 fit 无关；
+ *   exactDataIndexes 中的钉死列如 extra-column 不参与放大，保持原宽）
  */
 export const updateColumnsWidth = ({
   containerWidth,
   dataColumns,
   operations,
   fit,
+  exactDataIndexes,
 }: {
   containerWidth: number
   dataColumns: TableColumnData[]
   operations: TableOperationColumn[]
   fit: boolean
+  /** 钉死列（如 extra-column）的 dataIndex：任何情况下都保持显式宽度，不参与放大 */
+  exactDataIndexes?: string[]
 }): ColumnsLayoutResult => {
   const columnRealWidth: Record<string, number> = {}
   let operationsWidth = 0
@@ -153,6 +158,40 @@ export const updateColumnsWidth = ({
       column._realWidth = width
     }
     bodyMinWidth += width
+  }
+
+  // 列宽之和不足容器：剩余空间按各列基础宽度比例放大（钉死列保持原宽），
+  // 保证表格至少铺满父容器宽度——与 fit 无关，fit 只决定有弹性列时剩余空间
+  // 是全给弹性列（fit=true，显式 width 的列保持原宽）还是按比例分摊（fit=false）。
+  // element 在 fit=false 时表格缩为列宽之和，cedar 按业务要求不缩。
+  if (bodyMinWidth < containerWidth) {
+    const scalable = dataColumns.filter(
+      (column) => column.dataIndex && !exactDataIndexes?.includes(column.dataIndex),
+    )
+    const totalBase = scalable.reduce(
+      (prev, column) => prev + columnRealWidth[column.dataIndex!],
+      0,
+    )
+    if (scalable.length > 0 && totalBase > 0) {
+      const leftover = containerWidth - bodyMinWidth
+      let assigned = 0
+      scalable.forEach((column, index) => {
+        const key = column.dataIndex!
+        if (index === scalable.length - 1) {
+          columnRealWidth[key] += leftover - assigned
+        } else {
+          const share = Math.floor((leftover * columnRealWidth[key]) / totalBase)
+          columnRealWidth[key] += share
+          assigned += share
+        }
+        column._realWidth = columnRealWidth[key]
+      })
+      return {
+        scrollX: false,
+        bodyWidth: containerWidth,
+        columnRealWidth,
+      }
+    }
   }
 
   return {

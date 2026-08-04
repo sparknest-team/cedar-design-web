@@ -13,5 +13,14 @@ const Transfer = Object.assign(_Transfer, {
 })
 
 export type TransferInstance = InstanceType<typeof _Transfer>
+export type {
+  TransferFilter,
+  TransferFixed,
+  TransferItem,
+  TransferTargetAction,
+  TransferTargetItem,
+  TransferTargetOperation,
+  TransferValue,
+} from './types'
 
 export default Transfer

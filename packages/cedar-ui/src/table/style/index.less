@@ -93,7 +93,12 @@
   position: relative;
   box-sizing: border-box;
   width: 100%;
-  max-width: 100%;
+  // 祖先链没有宽度约束时（如存在 width:max-content 的祖先），width/max-width 的
+  // 百分比无法解析，表格像素宽会把容器一路撑大 → 容器宽追逐内容宽 → 引擎永远
+  // 看不到溢出 → 不出现内部滚动条、页面被撑破。兜底视口宽：任何布局下表格都
+  // 不超过视口，列宽之和超出时走内部横向滚动（实测 max(100%,100vw) 在百分比
+  // 不可解析时整条失效，必须用 min）。
+  max-width: ~'min(100%, 100vw)';
   // flex 子项默认 min-width:auto，会被表格内容撑开并与列宽计算形成正反馈
   min-width: 0;
   overflow: hidden;

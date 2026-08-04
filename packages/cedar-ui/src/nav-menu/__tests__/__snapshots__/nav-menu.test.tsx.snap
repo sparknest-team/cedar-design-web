@@ -1,0 +1,8 @@
+// Vitest Snapshot v1
+
+exports[`NavMenu > render 1`] = `
+"<div class=\\"c-nav-menu c-nav-menu-light c-nav-menu-vertical\\">
+  <div class=\\"c-nav-menu-inner\\"></div>
+  <!--v-if-->
+</div>"
+`;

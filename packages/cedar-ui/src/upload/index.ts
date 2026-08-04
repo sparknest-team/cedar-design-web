@@ -14,6 +14,24 @@ const Upload = Object.assign(_Upload, {
 
 export type UploadInstance = InstanceType<typeof _Upload>
 
-export type { FileStatus, FileItem, CustomIcon, RequestOption, UploadRequest } from './interfaces'
+export type {
+  UploadBeforeRead,
+  UploadBeforeRemove,
+  UploadBeforeUpload,
+  UploadCreateThumbnailUrl,
+  UploadCustomRequest,
+  UploadFileItem,
+  UploadHeaders,
+  UploadImageFit,
+  UploadListType,
+  UploadPublicMethods,
+  UploadProgressEvent,
+  UploadRejectedFile,
+  UploadRequest,
+  UploadStatus,
+} from './interfaces'
+
+export { uploadProps } from './props'
+export { useUploader } from './composables/use-uploader'
 
 export default Upload

@@ -1,8 +1,10 @@
 <template>
   <trigger
+    ref="triggerRef"
     :class="prefixCls"
-    :trigger="trigger"
-    :position="position"
+    :trigger="triggerEvents"
+    :disabled="disabled"
+    :position="triggerPosition"
     :popup-visible="computedPopupVisible"
     :popup-offset="10"
     :content-class="contentCls"
@@ -14,6 +16,9 @@
     animation-name="zoom-in-fade-out"
     auto-fit-transform-origin
     @popup-visible-change="handlePopupVisibleChange"
+    @show="handleOpened"
+    @hide="handleClosed"
+    @click-outside="handleClickOutside"
   >
     <slot />
     <template #content>
@@ -29,11 +34,27 @@
 
 <script lang="ts">
 import type { PropType } from 'vue'
-import { computed, CSSProperties, defineComponent, ref } from 'vue'
+import { computed, CSSProperties, defineComponent, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { getPrefixCls } from '../_utils/global-config'
 import type { TriggerEvent, TriggerPosition } from '../_utils/constant'
-import Trigger from '../trigger'
-import { ClassName, EmitType } from '../_utils/types'
+import Trigger, { type TriggerInstance } from '../trigger'
+import { ClassName } from '../_utils/types'
+import type { PopoverPlacement, PopoverTrigger } from './types'
+
+const placementToPosition: Record<PopoverPlacement, TriggerPosition> = {
+  top: 'top',
+  'top-start': 'tl',
+  'top-end': 'tr',
+  bottom: 'bottom',
+  'bottom-start': 'bl',
+  'bottom-end': 'br',
+  left: 'left',
+  'left-start': 'lt',
+  'left-end': 'lb',
+  right: 'right',
+  'right-start': 'rt',
+  'right-end': 'rb',
+}
 
 export default defineComponent({
   name: 'Popover',
@@ -71,19 +92,27 @@ export default defineComponent({
     /**
      * @zh 触发方式
      * @en Trigger method
-     * @values 'hover','click','focus','contextMenu'
+     * @values 'hover','click','focus','contextMenu','manual'
      */
     trigger: {
-      type: [String, Array] as PropType<TriggerEvent | TriggerEvent[]>,
+      type: [String, Array] as PropType<PopoverTrigger | PopoverTrigger[]>,
       default: 'hover',
+    },
+    /**
+     * @zh 是否禁用
+     * @en Whether to disable the popover
+     */
+    disabled: {
+      type: Boolean,
+      default: false,
     },
     /**
      * @zh 弹出位置
      * @en Pop-up position
-     * @values 'top','tl','tr','bottom','bl','br','left','lt','lb','right','rt','rb'
+     * @values 'top','top-start','top-end','bottom','bottom-start','bottom-end','left','left-start','left-end','right','right-start','right-end'
      */
-    position: {
-      type: String as PropType<TriggerPosition>,
+    placement: {
+      type: String as PropType<PopoverPlacement>,
       default: 'top',
     },
     /**
@@ -121,6 +150,14 @@ export default defineComponent({
     popupContainer: {
       type: [String, Object] as PropType<string | HTMLElement>,
     },
+    /**
+     * @zh 是否支持按 ESC 键关闭
+     * @en Whether to close the popover when Escape is pressed
+     */
+    closeOnKeyEscape: {
+      type: Boolean,
+      default: true,
+    },
   },
   emits: {
     'update:popupVisible': (visible: boolean) => true,
@@ -130,6 +167,31 @@ export default defineComponent({
      * @param {boolean} visible
      */
     popupVisibleChange: (visible: boolean) => true,
+    /**
+     * @zh 气泡卡片打开时触发
+     * @en Triggered when the popover opens
+     */
+    open: () => true,
+    /**
+     * @zh 气泡卡片打开动画结束后触发
+     * @en Triggered after the popover opening transition ends
+     */
+    opened: () => true,
+    /**
+     * @zh 气泡卡片关闭时触发
+     * @en Triggered when the popover closes
+     */
+    close: () => true,
+    /**
+     * @zh 气泡卡片关闭动画结束后触发
+     * @en Triggered after the popover closing transition ends
+     */
+    closed: () => true,
+    /**
+     * @zh 点击气泡卡片外部时触发
+     * @en Triggered when clicking outside the popover
+     */
+    clickOutside: (event: Event) => true,
   },
   /**
    * @zh 标题
@@ -143,8 +205,13 @@ export default defineComponent({
    */
   setup(props, { emit }) {
     const prefixCls = getPrefixCls('popover')
+    const triggerRef = ref<TriggerInstance>()
     const _popupVisible = ref(props.defaultPopupVisible)
     const computedPopupVisible = computed(() => props.popupVisible ?? _popupVisible.value)
+    const triggerPosition = computed(() => placementToPosition[props.placement])
+    const triggerEvents = computed(() =>
+      ([] as PopoverTrigger[]).concat(props.trigger).filter((event): event is TriggerEvent => event !== 'manual'),
+    )
 
     const handlePopupVisibleChange = (visible: boolean) => {
       _popupVisible.value = visible
@@ -152,16 +219,52 @@ export default defineComponent({
       emit('popupVisibleChange', visible)
     }
 
+    const open = () => {
+      if (!props.disabled) {
+        handlePopupVisibleChange(true)
+      }
+    }
+    const close = () => handlePopupVisibleChange(false)
+    const handleOpened = () => emit('opened')
+    const handleClosed = () => emit('closed')
+    const handleClickOutside = (event: Event) => emit('clickOutside', event)
+    const resize = () => triggerRef.value?.resize()
+    const handleKeydown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && props.closeOnKeyEscape && computedPopupVisible.value) {
+        close()
+      }
+    }
+
+    onMounted(() => window.addEventListener('keydown', handleKeydown))
+    onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown))
+
+    watch(computedPopupVisible, (visible) => {
+      if (visible) {
+        emit('open')
+      } else {
+        emit('close')
+      }
+    })
+
     const contentCls = computed(() => [`${prefixCls}-popup-content`, props.contentClass])
 
     const arrowCls = computed(() => [`${prefixCls}-popup-arrow`, props.arrowClass])
 
     return {
       prefixCls,
+      triggerRef,
+      triggerPosition,
+      triggerEvents,
       computedPopupVisible,
       contentCls,
       arrowCls,
       handlePopupVisibleChange,
+      handleOpened,
+      handleClosed,
+      open,
+      close,
+      resize,
+      handleClickOutside,
     }
   },
 })

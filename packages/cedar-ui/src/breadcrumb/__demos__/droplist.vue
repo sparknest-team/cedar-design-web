@@ -10,21 +10,21 @@
       <c-breadcrumb-item>Home</c-breadcrumb-item>
       <c-breadcrumb-item>
         <template #droplist>
-          <c-doption>Option 1</c-doption>
-          <c-dsubmenu value="option-1">
+          <c-menu-option>Option 1</c-menu-option>
+          <c-menu-submenu value="option-1">
             <template #default>Option 2</template>
             <template #content>
-              <c-doption>Option 2-1</c-doption>
-              <c-doption>Option 2-2</c-doption>
-              <c-doption>Option 2-3</c-doption>
+              <c-menu-option>Option 2-1</c-menu-option>
+              <c-menu-option>Option 2-2</c-menu-option>
+              <c-menu-option>Option 2-3</c-menu-option>
             </template>
             <template #footer>
               <div style="padding: 6px; text-align: center">
                 <c-button>Click</c-button>
               </div>
             </template>
-          </c-dsubmenu>
-          <c-doption>Option 3</c-doption>
+          </c-menu-submenu>
+          <c-menu-option>Option 3</c-menu-option>
         </template>
         Channel
       </c-breadcrumb-item>

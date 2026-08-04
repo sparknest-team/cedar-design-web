@@ -145,6 +145,7 @@ export default defineComponent({
         style={style.value}
         rowspan={props.rowSpan > 1 ? props.rowSpan : undefined}
         colspan={props.colSpan > 1 ? props.colSpan : undefined}
+        data-operation-key={props.operationColumn.name}
       >
         <span class={`${prefixCls}-cell`}>{renderContent()}</span>
       </td>

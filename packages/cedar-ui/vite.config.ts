@@ -35,5 +35,10 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     globals: true,
+    // jsx/tsx 文件按 web 模式转译，避免 @vitejs/plugin-vue-jsx 注入
+    // SSR register helper 导致 jsdom 环境 mount 失败
+    transformMode: {
+      web: [/\.[jt]sx$/],
+    },
   },
 })

@@ -92,7 +92,12 @@ export default defineComponent({
     ])
 
     return () => (
-      <th class={cls.value} style={style.value} rowspan={props.rowSpan > 1 ? props.rowSpan : undefined}>
+      <th
+        class={cls.value}
+        style={style.value}
+        rowspan={props.rowSpan > 1 ? props.rowSpan : undefined}
+        data-operation-key={props.operationColumn.name}
+      >
         <span class={`${prefixCls}-cell`}>{renderContent()}</span>
       </th>
     )

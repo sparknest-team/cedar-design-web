@@ -1,4 +1,3 @@
-import type { Option, OptionData } from '../select-panel/types'
 import type { TableColumnData } from '../table/types'
 import type {
   ColumnCatalog,
@@ -6,9 +5,11 @@ import type {
   ColumnCatalogItem,
   ColumnManagerInsertAt,
   ColumnManagerLayoutNode,
+  ColumnManagerItem,
   ColumnManagerResult,
   ColumnManagerState,
 } from './types'
+import { COLUMN_MANAGER_STATE_VERSION } from './types'
 
 export function isColumnCatalogGroup(item: ColumnCatalogGroup | ColumnCatalogItem): item is ColumnCatalogGroup {
   return Array.isArray((item as ColumnCatalogGroup).children)
@@ -39,60 +40,7 @@ export function flattenTableColumns(columns: TableColumnData[] = []): TableColum
   return result
 }
 
-export function catalogToOptions(catalog: ColumnCatalog = [], requiredKeys: string[] = []): Option[] {
-  const requiredSet = new Set(requiredKeys)
-  return catalog.map((item) => {
-    if (isColumnCatalogGroup(item)) {
-      return {
-        label: item.label,
-        value: item.key,
-        options: (item.children ?? []).map((child) => catalogItemToOption(child, requiredSet)),
-      }
-    }
-    return catalogItemToOption(item, requiredSet)
-  })
-}
-
-function catalogItemToOption(item: ColumnCatalogItem, requiredSet: Set<string>): OptionData {
-  const fixed = item.fixed === 'left' ? 'start' : item.fixed === 'right' ? 'end' : undefined
-  return {
-    label: item.title,
-    value: item.dataIndex,
-    required: item.required || requiredSet.has(item.dataIndex),
-    disabled: item.disabled,
-    tip: item.tip,
-    fixed,
-  }
-}
-
-export function fixedToInternal(fixed?: 'left' | 'right'): 'start' | 'end' | undefined {
-  if (fixed === 'left') return 'start'
-  if (fixed === 'right') return 'end'
-  return undefined
-}
-
-export function fixedFromInternal(fixed?: 'start' | 'end'): 'left' | 'right' | undefined {
-  if (fixed === 'start') return 'left'
-  if (fixed === 'end') return 'right'
-  return undefined
-}
-
-export function buildFixedMap(items: { value: string; fixed?: 'start' | 'end' }[]): Record<string, 'left' | 'right'> {
-  const map: Record<string, 'left' | 'right'> = {}
-  items.forEach((item) => {
-    const fixed = fixedFromInternal(item.fixed)
-    if (fixed) {
-      map[item.value] = fixed
-    }
-  })
-  return map
-}
-
-export function applyInsertAt(
-  resultKeys: string[],
-  prevKeys: string[],
-  insertAt?: ColumnManagerInsertAt,
-): string[] {
+export function applyInsertAt(resultKeys: string[], prevKeys: string[], insertAt?: ColumnManagerInsertAt): string[] {
   if (!insertAt) {
     return resultKeys
   }
@@ -119,7 +67,7 @@ export function applyInsertAt(
 export function applyInsertToLayout(
   layout: ColumnManagerLayoutNode[] | undefined,
   insertAt: ColumnManagerInsertAt,
-  addedKeys: string[],
+  addedKeys: string[]
 ): ColumnManagerLayoutNode[] | undefined {
   if (!addedKeys.length) return layout
 
@@ -128,7 +76,7 @@ export function applyInsertToLayout(
   }
 
   const next: ColumnManagerLayoutNode[] = layout.map((node) =>
-    node.type === 'group' ? { ...node, children: [...node.children] } : { ...node },
+    node.type === 'group' ? { ...node, children: [...node.children] } : { ...node }
   )
 
   for (let i = 0; i < next.length; i += 1) {
@@ -161,46 +109,43 @@ export function applyInsertToLayout(
  * - undefined：取消冻结；原左冻插入非冻结区最前，原右冻插入非冻结区最后
  */
 export function applyColumnFixed(params: {
-  keys: string[]
-  fixedMap: Record<string, 'left' | 'right'>
+  items: ColumnManagerItem[]
   dataIndex: string
   fixed?: 'left' | 'right'
-}): { keys: string[]; fixedMap: Record<string, 'left' | 'right'> } {
-  const { keys, dataIndex, fixed } = params
-  if (!dataIndex || !keys.includes(dataIndex)) {
-    return { keys: [...keys], fixedMap: { ...params.fixedMap } }
+}): ColumnManagerItem[] {
+  const { items, dataIndex, fixed } = params
+  const current = items.find((item) => item.dataIndex === dataIndex)
+  if (!dataIndex || !current) {
+    return items.map((item) => ({ ...item }))
   }
 
-  const prevFixed = params.fixedMap[dataIndex]
+  const prevFixed = current.fixed
   if (!fixed && !prevFixed) {
-    return { keys: [...keys], fixedMap: { ...params.fixedMap } }
+    return items.map((item) => ({ ...item }))
   }
 
-  const left: string[] = []
-  const other: string[] = []
-  const right: string[] = []
-  keys.forEach((key) => {
-    if (key === dataIndex) return
-    const side = params.fixedMap[key]
-    if (side === 'left') left.push(key)
-    else if (side === 'right') right.push(key)
-    else other.push(key)
+  const left: ColumnManagerItem[] = []
+  const other: ColumnManagerItem[] = []
+  const right: ColumnManagerItem[] = []
+  items.forEach((item) => {
+    if (item.dataIndex === dataIndex) return
+    if (item.fixed === 'left') left.push({ ...item })
+    else if (item.fixed === 'right') right.push({ ...item })
+    else other.push({ ...item })
   })
 
-  const fixedMap = { ...params.fixedMap }
+  const changed: ColumnManagerItem = { ...current, fixed }
   if (!fixed) {
-    delete fixedMap[dataIndex]
-    if (prevFixed === 'left') other.unshift(dataIndex)
-    else other.push(dataIndex)
+    delete changed.fixed
+    if (prevFixed === 'left') other.unshift(changed)
+    else other.push(changed)
   } else if (fixed === 'left') {
-    fixedMap[dataIndex] = 'left'
-    left.push(dataIndex)
+    left.push(changed)
   } else {
-    fixedMap[dataIndex] = 'right'
-    right.unshift(dataIndex)
+    right.unshift(changed)
   }
 
-  return { keys: [...left, ...other, ...right], fixedMap }
+  return [...left, ...other, ...right]
 }
 
 function getCatalogGroupOf(catalog: ColumnCatalog, dataIndex: string): ColumnCatalogGroup | undefined {
@@ -215,7 +160,7 @@ function getCatalogGroupOf(catalog: ColumnCatalog, dataIndex: string): ColumnCat
 /** 从 layout 反查叶子所属分组 */
 function getLayoutGroupOf(
   layout: ColumnManagerLayoutNode[] | undefined,
-  dataIndex: string,
+  dataIndex: string
 ): Extract<ColumnManagerLayoutNode, { type: 'group' }> | undefined {
   if (!layout?.length) return undefined
   for (const node of layout) {
@@ -229,7 +174,7 @@ function getLayoutGroupOf(
 function resolveGroupMeta(
   dataIndex: string,
   catalog: ColumnCatalog,
-  layout?: ColumnManagerLayoutNode[],
+  layout?: ColumnManagerLayoutNode[]
 ): { key: string; title: string } | undefined {
   const layoutGroup = getLayoutGroupOf(layout, dataIndex)
   if (layoutGroup) {
@@ -237,39 +182,50 @@ function resolveGroupMeta(
   }
   const catalogGroup = getCatalogGroupOf(catalog, dataIndex)
   if (catalogGroup) {
-    return { key: catalogGroup.key, title: catalogGroup.label }
+    return { key: catalogGroup.key, title: catalogGroup.title }
   }
   return undefined
 }
 
 function buildLeafColumn(
-  key: string,
+  item: ColumnManagerItem,
   columnMap: Map<string, TableColumnData>,
   catalogMap: Map<string, ColumnCatalogItem>,
-  fixedMap: Record<string, 'left' | 'right'>,
-  widthMap?: Record<string, number>,
-  titleMap?: Record<string, string>,
+  columnDefaults: Partial<TableColumnData> = {},
+  createColumn?: (definition: ColumnCatalogItem) => TableColumnData
 ): TableColumnData {
+  const key = item.dataIndex
   const existing = columnMap.get(key)
   const catalogItem = catalogMap.get(key)
   const base: TableColumnData = existing
     ? { ...existing, children: undefined }
     : {
+        ...columnDefaults,
         dataIndex: key,
         title: catalogItem?.title ?? key,
-        ...(catalogItem?.column ?? {}),
+        ...(catalogItem && createColumn ? createColumn(catalogItem) : {}),
       }
+  // 丢弃 Table 运行期写入的内部状态，避免 manager 重建后的列携带过时的 _realWidth / _resizeWidth 等，
+  // 导致列宽、分组、固定列偏移在插入/删除后计算异常。
+  delete (base as any).isLastLeftFixed
+  delete (base as any).isFirstRightFixed
+  delete (base as any).colSpan
+  delete (base as any).rowSpan
+  delete (base as any).index
+  delete (base as any).parent
+  delete (base as any)._resizeWidth
+  delete (base as any)._realWidth
   if (!existing && catalogItem?.title && base.title === undefined) {
     base.title = catalogItem.title
   }
-  if (titleMap?.[key] != null) {
-    base.title = titleMap[key]
+  if (item.title != null) {
+    base.title = item.title
     delete base.titleSlotName
   }
-  if (widthMap?.[key] != null) {
-    base.width = widthMap[key]
+  if (item.width != null) {
+    base.width = item.width
   }
-  const fixed = fixedMap[key]
+  const fixed = item.fixed
   if (fixed) {
     base.fixed = fixed
   } else {
@@ -282,7 +238,7 @@ function buildLeafColumn(
 function nestLeaves(
   leaves: TableColumnData[],
   catalog: ColumnCatalog,
-  layout?: ColumnManagerLayoutNode[],
+  layout?: ColumnManagerLayoutNode[]
 ): TableColumnData[] {
   const hasGroups = Boolean(layout?.some((n) => n.type === 'group')) || catalog.some(isColumnCatalogGroup)
   if (!hasGroups) {
@@ -312,8 +268,7 @@ function nestLeaves(
       children.push(leaves[index])
       index += 1
     }
-    const groupFixed =
-      children[0].fixed === 'left' || children[0].fixed === 'right' ? children[0].fixed : undefined
+    const groupFixed = children[0].fixed === 'left' || children[0].fixed === 'right' ? children[0].fixed : undefined
     columns.push({
       title: groupTitle,
       children,
@@ -326,7 +281,7 @@ function nestLeaves(
 /** 从当前 columns 树提取顶层 layout */
 export function layoutFromColumns(
   columns: TableColumnData[] = [],
-  catalog: ColumnCatalog = [],
+  catalog: ColumnCatalog = []
 ): ColumnManagerLayoutNode[] {
   return columns
     .map((col, index): ColumnManagerLayoutNode | null => {
@@ -338,7 +293,7 @@ export function layoutFromColumns(
         return {
           type: 'group',
           key: catalogGroup?.key ?? `group-${index}`,
-          title: typeof col.title === 'string' ? col.title : (catalogGroup?.label ?? ''),
+          title: typeof col.title === 'string' ? col.title : catalogGroup?.title ?? '',
           children: childKeys,
         }
       }
@@ -349,21 +304,22 @@ export function layoutFromColumns(
 }
 
 export function buildColumnsResult(params: {
-  keys: string[]
-  fixedMap: Record<string, 'left' | 'right'>
+  items: ColumnManagerItem[]
   columns: TableColumnData[]
+  registryColumns?: TableColumnData[]
   catalog: ColumnCatalog
   insertAt?: ColumnManagerInsertAt
   prevKeys?: string[]
-  widthMap?: Record<string, number>
-  titleMap?: Record<string, string>
   layout?: ColumnManagerLayoutNode[]
+  columnDefaults?: Partial<TableColumnData>
+  createColumn?: (definition: ColumnCatalogItem) => TableColumnData
 }): ColumnManagerResult {
-  const prevKeys = params.prevKeys ?? params.keys
-  const keys = applyInsertAt(params.keys, prevKeys, params.insertAt)
+  const inputKeys = params.items.map((item) => item.dataIndex)
+  const prevKeys = params.prevKeys ?? inputKeys
+  const keys = applyInsertAt(inputKeys, prevKeys, params.insertAt)
+  const itemMap = new Map(params.items.map((item) => [item.dataIndex, item]))
+  const items = keys.map((key) => itemMap.get(key) ?? { dataIndex: key })
   const prevState = stateFromColumns(params.columns, params.catalog)
-  const widthMap = { ...prevState.widthMap, ...params.widthMap }
-  const titleMap = { ...prevState.titleMap, ...params.titleMap }
   let layout = params.layout ?? prevState.layout
 
   // 插入时把新列写入锚点所在分组，一级标题 / colspan 才能正确
@@ -373,77 +329,197 @@ export function buildColumnsResult(params: {
     layout = applyInsertToLayout(layout, params.insertAt, added)
   }
 
-  const columnMap = new Map(flattenTableColumns(params.columns).map((col) => [col.dataIndex as string, col]))
+  const columnMap = new Map(
+    [...flattenTableColumns(params.registryColumns), ...flattenTableColumns(params.columns)].map((col) => [
+      col.dataIndex as string,
+      col,
+    ])
+  )
   const catalogMap = new Map(flattenCatalog(params.catalog).map((item) => [item.dataIndex, item]))
 
-  const leaves = keys.map((key) =>
-    buildLeafColumn(key, columnMap, catalogMap, params.fixedMap, widthMap, titleMap),
+  const leaves = items.map((item) =>
+    buildLeafColumn(item, columnMap, catalogMap, params.columnDefaults, params.createColumn)
   )
   const columns = nestLeaves(leaves, params.catalog, layout)
-  const state = stateFromColumns(columns, params.catalog)
+  const widthKeys = new Set(items.filter((item) => item.width != null).map((item) => item.dataIndex))
+  const state = stateFromColumns(columns, params.catalog, { widthKeys })
 
   return {
     columns,
-    keys: state.keys,
-    fixedMap: state.fixedMap,
-    widthMap: state.widthMap,
-    titleMap: state.titleMap,
+    version: state.version,
+    items: state.items,
     layout: state.layout,
   }
 }
 
 /** 仅用 state + catalog（及可选的当前列作元数据兜底）重建 columns */
 export function buildColumnsFromState(params: {
-  state: ColumnManagerState
+  state: unknown
   catalog: ColumnCatalog
   columns?: TableColumnData[]
 }): TableColumnData[] {
+  const state = normalizeColumnManagerState({
+    state: params.state,
+    catalog: params.catalog,
+  })
   return buildColumnsResult({
-    keys: params.state.keys,
-    fixedMap: params.state.fixedMap ?? {},
-    widthMap: params.state.widthMap,
-    titleMap: params.state.titleMap,
-    layout: params.state.layout,
+    items: state.items,
+    layout: state.layout,
     columns: params.columns ?? [],
     catalog: params.catalog,
   }).columns
 }
 
+function defaultStateFromCatalog(catalog: ColumnCatalog): ColumnManagerState {
+  const items: ColumnManagerItem[] = []
+  const layout: ColumnManagerLayoutNode[] = []
+  catalog.forEach((entry) => {
+    if (isColumnCatalogGroup(entry)) {
+      const children = entry.children
+        .filter(() => true)
+        .map((item) => {
+          items.push({ dataIndex: item.dataIndex })
+          return item.dataIndex
+        })
+      if (children.length) layout.push({ type: 'group', key: entry.key, title: entry.title, children })
+      return
+    }
+    items.push({ dataIndex: entry.dataIndex })
+    layout.push({ type: 'leaf', dataIndex: entry.dataIndex })
+  })
+  return { version: COLUMN_MANAGER_STATE_VERSION, items, ...(layout.length ? { layout } : {}) }
+}
+
+/** 从唯一列目录生成初始/重置状态，并清洗可选的业务默认状态。 */
+export function stateFromCatalog(
+  catalog: ColumnCatalog,
+  defaultState?: Omit<ColumnManagerState, 'version'>
+): ColumnManagerState {
+  const fallback = defaultStateFromCatalog(catalog)
+  if (!defaultState) return normalizeColumnManagerState({ state: fallback, catalog })
+  return normalizeColumnManagerState({
+    state: { ...defaultState, version: COLUMN_MANAGER_STATE_VERSION },
+    catalog,
+  })
+}
+
 export function stateFromColumns(
   columns: TableColumnData[] = [],
   catalog: ColumnCatalog = [],
+  options: { widthKeys?: ReadonlySet<string> } = {}
 ): ColumnManagerState {
-  const keys: string[] = []
-  const fixedMap: Record<string, 'left' | 'right'> = {}
-  const widthMap: Record<string, number> = {}
-  const titleMap: Record<string, string> = {}
+  const items: ColumnManagerItem[] = []
+  const catalogMap = new Map(flattenCatalog(catalog).map((item) => [item.dataIndex, item]))
 
   flattenTableColumns(columns).forEach((col) => {
     if (!col.dataIndex) return
-    keys.push(col.dataIndex)
-    if (col.fixed === 'left' || col.fixed === 'right') {
-      fixedMap[col.dataIndex] = col.fixed
+    const item: ColumnManagerItem = { dataIndex: col.dataIndex }
+    if (col.fixed === 'left' || col.fixed === 'right') item.fixed = col.fixed
+    if (typeof col.title === 'string' && col.title !== catalogMap.get(col.dataIndex)?.title) {
+      item.title = col.title
     }
-    if (typeof col.width === 'number') {
-      widthMap[col.dataIndex] = col.width
-    }
-    if (typeof col.title === 'string') {
-      titleMap[col.dataIndex] = col.title
-    }
+    if (options.widthKeys?.has(col.dataIndex) && Number.isFinite(col.width) && col.width! > 0) item.width = col.width
+    items.push(item)
   })
 
   const layout = layoutFromColumns(columns, catalog)
-  const state: ColumnManagerState = { keys, fixedMap }
-  if (Object.keys(widthMap).length) state.widthMap = widthMap
-  if (Object.keys(titleMap).length) state.titleMap = titleMap
+  const state: ColumnManagerState = { version: COLUMN_MANAGER_STATE_VERSION, items }
   if (layout.length) state.layout = layout
+  return state
+}
+
+/** 清洗外部状态、补齐必选列，并修复冻结区与布局。版本不兼容时返回默认状态。 */
+export function normalizeColumnManagerState(params: {
+  state: unknown
+  catalog: ColumnCatalog
+  defaultState?: Omit<ColumnManagerState, 'version'>
+}): ColumnManagerState {
+  const catalogDefaultState = defaultStateFromCatalog(params.catalog)
+  const fallbackState = params.defaultState
+    ? { ...params.defaultState, version: COLUMN_MANAGER_STATE_VERSION }
+    : catalogDefaultState
+  const candidate = params.state as Partial<ColumnManagerState> | null
+  const input =
+    candidate?.version === COLUMN_MANAGER_STATE_VERSION && Array.isArray(candidate.items) ? candidate : fallbackState
+
+  const catalogItems = flattenCatalog(params.catalog)
+  const catalogMap = new Map(catalogItems.map((item) => [item.dataIndex, item]))
+  const validKeys = new Set(catalogMap.keys())
+  const seen = new Set<string>()
+  const items: ColumnManagerItem[] = []
+
+  input.items.forEach((raw) => {
+    if (!raw || typeof raw.dataIndex !== 'string' || !validKeys.has(raw.dataIndex) || seen.has(raw.dataIndex)) return
+    seen.add(raw.dataIndex)
+    const item: ColumnManagerItem = { dataIndex: raw.dataIndex }
+    if (typeof raw.title === 'string' && raw.title.trim() && raw.title !== catalogMap.get(raw.dataIndex)?.title) {
+      item.title = raw.title.trim()
+    }
+    if (raw.fixed === 'left' || raw.fixed === 'right') item.fixed = raw.fixed
+    if (Number.isFinite(raw.width) && raw.width! > 0) item.width = raw.width
+    items.push(item)
+  })
+
+  const missingRequired: ColumnManagerItem[] = []
+  catalogItems.forEach((catalogItem) => {
+    if (!catalogItem.required || seen.has(catalogItem.dataIndex)) return
+    seen.add(catalogItem.dataIndex)
+    missingRequired.push(
+      fallbackState.items.find((item) => item.dataIndex === catalogItem.dataIndex) ?? {
+        dataIndex: catalogItem.dataIndex,
+      }
+    )
+  })
+  const completeItems = [...missingRequired, ...items]
+  const orderedItems = [
+    ...completeItems.filter((item) => item.fixed === 'left'),
+    ...completeItems.filter((item) => !item.fixed),
+    ...completeItems.filter((item) => item.fixed === 'right'),
+  ]
+  const selectedKeys = new Set(orderedItems.map((item) => item.dataIndex))
+  const layoutSeen = new Set<string>()
+  const layout = Array.isArray(input.layout)
+    ? (input.layout
+        .map((node): ColumnManagerLayoutNode | undefined => {
+          if (!node || typeof node !== 'object') return undefined
+          if (node.type === 'leaf') {
+            if (
+              typeof node.dataIndex !== 'string' ||
+              !selectedKeys.has(node.dataIndex) ||
+              layoutSeen.has(node.dataIndex)
+            ) {
+              return undefined
+            }
+            layoutSeen.add(node.dataIndex)
+            return { type: 'leaf', dataIndex: node.dataIndex }
+          }
+          if (node.type !== 'group' || !Array.isArray(node.children)) return undefined
+          const children = node.children.filter((key) => {
+            if (typeof key !== 'string' || !selectedKeys.has(key) || layoutSeen.has(key)) return false
+            layoutSeen.add(key)
+            return true
+          })
+          return children.length
+            ? {
+                type: 'group',
+                key: typeof node.key === 'string' ? node.key : `group:${children[0]}`,
+                title: typeof node.title === 'string' ? node.title : '',
+                children,
+              }
+            : undefined
+        })
+        .filter(Boolean) as ColumnManagerLayoutNode[])
+    : undefined
+
+  const state: ColumnManagerState = { version: COLUMN_MANAGER_STATE_VERSION, items: orderedItems }
+  if (layout?.length) state.layout = layout
   return state
 }
 
 /** 递归更新 / 删除叶子列；空分组会被移除 */
 export function mapLeafColumns(
   columns: TableColumnData[],
-  mapper: (col: TableColumnData) => TableColumnData | null,
+  mapper: (col: TableColumnData) => TableColumnData | null
 ): TableColumnData[] {
   const next: TableColumnData[] = []
   columns.forEach((col) => {
@@ -460,10 +536,7 @@ export function mapLeafColumns(
   return next
 }
 
-export function findLeafColumn(
-  columns: TableColumnData[] = [],
-  dataIndex: string,
-): TableColumnData | undefined {
+export function findLeafColumn(columns: TableColumnData[] = [], dataIndex: string): TableColumnData | undefined {
   return flattenTableColumns(columns).find((col) => col.dataIndex === dataIndex)
 }
 
@@ -473,10 +546,7 @@ export function groupKeyFromTitle(title: string): string {
 }
 
 /** 读取每个叶子当前的一级分组标题（无分组则为空串） */
-export function getLeafGroupTitles(
-  keys: string[],
-  layout?: ColumnManagerLayoutNode[],
-): string[] {
+export function getLeafGroupTitles(keys: string[], layout?: ColumnManagerLayoutNode[]): string[] {
   const map = new Map<string, string>()
   layout?.forEach((node) => {
     if (node.type === 'group') {
@@ -489,10 +559,7 @@ export function getLeafGroupTitles(
 /**
  * 按叶子顺序，将相邻且一级标题相同的列合并为分组；空标题表示顶层独立列。
  */
-export function mergeLayoutByAdjacentGroupTitles(
-  keys: string[],
-  groupTitles: string[],
-): ColumnManagerLayoutNode[] {
+export function mergeLayoutByAdjacentGroupTitles(keys: string[], groupTitles: string[]): ColumnManagerLayoutNode[] {
   const layout: ColumnManagerLayoutNode[] = []
   let index = 0
   while (index < keys.length) {
@@ -534,36 +601,31 @@ export function applyColumnEdit(params: {
   edit: ColumnEditInput
 }): ColumnManagerResult {
   const state = stateFromColumns(params.columns, params.catalog)
-  const focusIndex = state.keys.indexOf(params.edit.dataIndex)
+  const keys = state.items.map((item) => item.dataIndex)
+  const focusIndex = keys.indexOf(params.edit.dataIndex)
   if (focusIndex === -1) {
     return buildColumnsResult({
-      keys: state.keys,
-      fixedMap: state.fixedMap,
-      widthMap: state.widthMap,
-      titleMap: state.titleMap,
+      items: state.items,
       layout: state.layout,
       columns: params.columns,
       catalog: params.catalog,
     })
   }
 
-  const groupTitles = getLeafGroupTitles(state.keys, state.layout)
+  const groupTitles = getLeafGroupTitles(keys, state.layout)
   groupTitles[focusIndex] = params.edit.groupTitle.trim()
-  const layout = mergeLayoutByAdjacentGroupTitles(state.keys, groupTitles)
+  const layout = mergeLayoutByAdjacentGroupTitles(keys, groupTitles)
 
-  const titleMap = { ...(state.titleMap ?? {}) }
+  let items = state.items.map((item) => ({ ...item }))
   if (params.edit.columnTitle != null) {
     const nextTitle = params.edit.columnTitle.trim()
     if (nextTitle) {
-      titleMap[params.edit.dataIndex] = nextTitle
+      items = items.map((item) => (item.dataIndex === params.edit.dataIndex ? { ...item, title: nextTitle } : item))
     }
   }
 
   return buildColumnsResult({
-    keys: state.keys,
-    fixedMap: state.fixedMap,
-    widthMap: state.widthMap,
-    titleMap,
+    items,
     layout,
     columns: params.columns,
     catalog: params.catalog,
@@ -578,12 +640,13 @@ export function getColumnEditInitialValues(params: {
 }): { groupTitle: string; columnTitle: string } {
   const state = stateFromColumns(params.columns, params.catalog)
   const leaf = findLeafColumn(params.columns, params.dataIndex)
-  const idx = state.keys.indexOf(params.dataIndex)
-  const groupTitles = getLeafGroupTitles(state.keys, state.layout)
+  const keys = state.items.map((item) => item.dataIndex)
+  const idx = keys.indexOf(params.dataIndex)
+  const groupTitles = getLeafGroupTitles(keys, state.layout)
   const groupTitle = idx >= 0 ? groupTitles[idx] : ''
   const columnTitle =
     (typeof leaf?.title === 'string' ? leaf.title : undefined) ??
-    state.titleMap?.[params.dataIndex] ??
+    state.items.find((item) => item.dataIndex === params.dataIndex)?.title ??
     flattenCatalog(params.catalog).find((item) => item.dataIndex === params.dataIndex)?.title ??
     params.dataIndex
   return { groupTitle, columnTitle }

@@ -1,54 +1,45 @@
 <template>
   <div style="display: flex; justify-content: flex-end; margin-bottom: 8px; gap: 12px">
-    <c-link @click="visible = true">列管理</c-link>
+    <c-link @click="open">列管理</c-link>
     <c-link @click="resetColumns">重置列</c-link>
   </div>
 
   <c-table v-model:columns="columns" :data="data" :pagination="false" size="xs" />
 
-  <c-drawer v-model:visible="visible" title="列管理" :width="720" unmount-on-close @ok="handleOk">
-    <div style="height: calc(100vh - 120px)">
-      <c-table-column-manager
-        ref="mgrRef"
-        v-model="keys"
-        v-model:fixed-map="fixedMap"
-        :columns="columns"
-        :options="catalog"
-        :required-keys="['connectorId', 'deviceName']"
-      />
-    </div>
-  </c-drawer>
+  <c-table-column-manager v-bind="managerProps" />
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
-import { stateFromColumns } from '@cedar/ui'
-import type {
-  ColumnCatalog,
-  TableColumnData,
-  TableColumnManagerInstance,
-} from '@cedar/ui'
+import { onMounted, ref, watch } from 'vue'
+import { useTableColumnManager } from '@cedar/ui'
+import type { ColumnDefinitions, ManagedTableColumn } from '@cedar/ui'
 
 const STORAGE_KEY = 'cedar-demo-table-columns'
-const visible = ref(false)
-const mgrRef = ref<TableColumnManagerInstance>()
-const keys = ref<string[]>([])
-const fixedMap = ref<Record<string, 'left' | 'right'>>({})
+let storage: Storage | undefined
+const storageReady = ref(false)
 
-const defaultColumns: TableColumnData[] = [
-  { dataIndex: 'connectorId', title: '枪ID', width: 100, fixed: 'left' },
+const defaultColumns: ManagedTableColumn[] = [
+  {
+    dataIndex: 'connectorId',
+    title: '枪ID',
+    width: 100,
+    fixed: 'left',
+    manager: { required: true },
+  },
   { dataIndex: 'connectorName', title: '枪名称', width: 120 },
-  { dataIndex: 'deviceName', title: '设备名称', width: 140 },
+  { dataIndex: 'deviceName', title: '设备名称', width: 140, manager: { required: true } },
 ]
 
-const columns = ref<TableColumnData[]>([...defaultColumns])
-
-const catalog: ColumnCatalog = [
+const columnDefinitions: ColumnDefinitions = [
   {
-    label: '枪基本信息',
+    title: '枪基本信息',
     key: 'connectorBasicInfo',
     children: [
-      { dataIndex: 'connectorId', title: '枪ID', required: true, tip: '必选列' },
+      {
+        dataIndex: 'connectorId',
+        title: '枪ID',
+        tip: '必选列',
+      },
       { dataIndex: 'connectorName', title: '枪名称' },
       { dataIndex: 'connectorNo', title: '枪序号' },
       { dataIndex: 'workingStatus', title: '工作状态' },
@@ -57,64 +48,67 @@ const catalog: ColumnCatalog = [
     ],
   },
   {
-    label: '桩基本信息',
+    title: '桩基本信息',
     key: 'chargerBasicInfo',
     children: [
       { dataIndex: 'deviceId', title: '设备ID' },
-      { dataIndex: 'deviceName', title: '设备名称', required: true },
+      { dataIndex: 'deviceName', title: '设备名称', tip: '必选规则来自 defaultColumns' },
       { dataIndex: 'lockStatus', title: '地锁' },
-      { dataIndex: 'ratedVoltage', title: '额定电压', column: { width: 100 } },
+      { dataIndex: 'ratedVoltage', title: '额定电压' },
     ],
   },
   {
-    label: '其他信息',
+    title: '其他信息',
     key: 'other',
     children: [
-      { dataIndex: 'batteryStatus', title: '电池状态', column: { width: 100 } },
-      { dataIndex: 'temperature', title: '温度', column: { width: 80 } },
-      { dataIndex: 'current', title: '电流', column: { width: 80 } },
-      { dataIndex: 'power', title: '功率', column: { width: 80 } },
-      { dataIndex: 'action', title: '操作', column: { fixed: 'right', width: 100 } },
+      { dataIndex: 'batteryStatus', title: '电池状态' },
+      { dataIndex: 'temperature', title: '温度' },
+      { dataIndex: 'current', title: '电流' },
+      { dataIndex: 'power', title: '功率' },
+      { dataIndex: 'action', title: '操作' },
     ],
   },
 ]
 
-watch(visible, (val) => {
-  if (!val) return
-  const state = stateFromColumns(columns.value, catalog)
-  keys.value = [...state.keys]
-  fixedMap.value = { ...state.fixedMap }
+const { columns, state, restore, managerProps, open, resetToDefault } = useTableColumnManager({
+  defaultColumns,
+  columnDefinitions,
+  columnDefaults: { width: 110, ellipsis: true },
+  createColumn: (definition) => ({
+    dataIndex: definition.dataIndex,
+    title: definition.title,
+    ...(definition.dataIndex === 'action' ? { width: 100, fixed: 'right' } : {}),
+  }),
 })
 
-const handleOk = () => {
-  const result = mgrRef.value?.getResult?.()
-  if (result) {
-    columns.value = result.columns
-    try {
-      localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify({
-          keys: result.keys,
-          fixedMap: result.fixedMap,
-          widthMap: result.widthMap,
-          titleMap: result.titleMap,
-          layout: result.layout,
-        }),
-      )
-    } catch {
-      // ignore
-    }
+onMounted(async () => {
+  storage = window.localStorage
+  try {
+    const raw = storage.getItem(STORAGE_KEY)
+    if (raw) await restore(JSON.parse(raw))
+  } catch {
+    storage.removeItem(STORAGE_KEY)
+  } finally {
+    storageReady.value = true
   }
-  visible.value = false
-}
+})
+
+watch(
+  state,
+  (value) => {
+    if (!storageReady.value) return
+    storage?.setItem(STORAGE_KEY, JSON.stringify(value))
+  },
+  { deep: true }
+)
 
 const resetColumns = () => {
   try {
-    localStorage.removeItem(STORAGE_KEY)
+    storage?.removeItem(STORAGE_KEY)
   } catch {
     // ignore
   }
-  columns.value = [...defaultColumns]
+  resetToDefault()
 }
 
 const data = ref([

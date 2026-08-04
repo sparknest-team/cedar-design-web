@@ -57,7 +57,7 @@
 import { defineComponent, reactive, useSlots } from 'vue'
 import Tooltip from '../tooltip'
 import { LayoutHeader } from '../layout'
-import { Doption } from '../dropdown'
+import { MenuOption } from '../menu'
 import SaasHeaderNavUserInfo from './saas-header-nav-user-info.vue'
 import { headerNavDefaultHeight } from './saas-header-nav-const'
 import { saasHeaderNavUserInfoProps } from './use-saas-header-nav-user-info'
@@ -66,7 +66,7 @@ export default defineComponent({
   name: 'SaasHeaderNav',
   components: {
     LayoutHeader,
-    Doption,
+    MenuOption,
     Tooltip,
     SaasHeaderNavUserInfo,
   },

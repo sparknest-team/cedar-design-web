@@ -2,149 +2,155 @@
 permalink: /components/menu/
 ---
 
-# Menu
+# Menu 下拉菜单
 
-收纳、排列并展示一系列选项的列表。
+页面上的命令过多时，可将备选命令收纳到向下展开的浮层容器中。
+
+---
 
 ## 案例
 
-### 顶部导航菜单
+### 基础用法
 
-设置`mode`为 `horizontal`，使用水平菜单。
+下拉菜单的基本用法。下拉菜单开启后会为触发元素添加 `c-menu-open` 类名。
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### 深色模式导航
+<br/><br/>
 
-通过`theme`指定主题，分为`light`和`dark`两种。
+### 按钮下拉框
 
-<demo src="./__demos__/theme.vue"></demo>
+可以使用 `<menu-button>` 组件用来展示右边是额外相关功能菜单的按钮。
 
-### 缩起内嵌菜单
+<demo src="./__demos__/button.vue"></demo>
 
-通过`collapsed`属性控制菜单的展开和收起。
+<br/><br/>
 
-<demo src="./__demos__/collapsed.vue"></demo>
+### 弹出方向
 
-### 响应式收缩
+通过 `position` 支持指定 6 种弹出方位，分别是：top: 向上, tl: 左上, tr: 右上, bottom: 下方(默认), bl: 左下, br: 右下。
 
-设置`breakpoint`属性，可触发响应式收缩。
+<demo src="./__demos__/position.vue"></demo>
 
-<demo src="./__demos__/breakpoint.vue"></demo>
+### 右键菜单
 
-### 内嵌菜单
+移入区域后，可点击鼠标右键触发。
 
-菜单内可以嵌入多个子项，通过`openKeys`可以设置默认打开的子项，
-
-<demo src="./__demos__/sub-menu.vue"></demo>
-
-### 不同大小菜单
-
-通过`style`自由指定菜单的宽度和菜单项的高度。
-
-<demo src="./__demos__/size.vue"></demo>
-
-### 悬浮菜单
-
-指定`mode`为`pop`可以使用悬浮菜单。
-
-<demo src="./__demos__/hover.vue"></demo>
-
-### 悬浮按钮菜单
-
-指定`mode`为`popButton`可以使用悬浮按钮菜单。
-
-<demo src="./__demos__/hover-button.vue"></demo>
+<demo src="./__demos__/context-menu.vue"></demo>
 
 ## API
 
-### Menu Props
+### `<menu>` Props
 
-| 属性                       | 说明                                                               | 类型                                           | 默认值       |
-| -------------------------- | ------------------------------------------------------------------ | ---------------------------------------------- | ------------ |
-| theme                      | 菜单的主题                                                         | `'light'\|'dark'`                              | `'light'`    |
-| mode                       | 菜单的模式                                                         | `'vertical'\|'horizontal'\|'pop'\|'popButton'` | `'vertical'` |
-| level-indent               | 层级之间的缩进                                                     | `number`                                       | `-`          |
-| auto-open                  | 默认展开所有多级菜单                                               | `boolean`                                      | `false`      |
-| collapsed(**v-model**)     | 是否折叠菜单                                                       | `boolean`                                      | `-`          |
-| default-collapsed          | 默认是否折叠菜单                                                   | `boolean`                                      | `false`      |
-| collapsed-width            | 折叠菜单宽度                                                       | `number`                                       | `-`          |
-| accordion                  | 开启手风琴模式                                                     | `boolean`                                      | `false`      |
-| auto-scroll-into-view      | 是否自动滚动选中项目到可视区域                                     | `boolean`                                      | `false`      |
-| show-collapse-button       | 是否显示折叠按钮                                                   | `boolean`                                      | `false`      |
-| selected-keys(**v-model**) | 展开的菜单项key数组                                                | `string[]`                                     | `-`          |
-| default-selected-keys      | 默认选中的菜单项key数组                                            | `string[]`                                     | `[]`         |
-| open-keys(**v-model**)     | 展开的子菜单项key数组                                              | `string[]`                                     | `-`          |
-| default-open-keys          | 默认展开的子菜单项key数组                                          | `string[]`                                     | `[]`         |
-| scroll-config              | 滚动到可见区域的配置项，接收所有`scroll-into-view-if-needed`的参数 | `{[key :string]: any}`                         | `-`          |
-| trigger-props              | 弹出模式下可接受所有`Trigger`的`props`                             | `TriggerProps`                                 | `-`          |
-| tooltip-props              | 弹出模式下可接受所有`Tooltip`的`props`                             | `object`                                       | `-`          |
-| auto-open-selected         | 默认选中的菜单                                                     | `boolean`                                      | `false`      |
-| breakpoint                 | 响应式收缩的断点                                                   | `'xxl'\|'xl'\|'lg'\|'md'\|'sm'\|'x'\|'s'`      | `-`          |
-| popup-max-height           | 弹出模式下的最大高度                                               | `boolean\| number`                             | `true`       |
+| 参数名                      | 描述                             | 类型                                                |   默认值   |
+| --------------------------- | -------------------------------- | --------------------------------------------------- | :--------: |
+| model-value **(v-model)**   | 选中的值                         | `string \| number \| Record<string, any>`           |    `-`     |
+| popup-visible **(v-model)** | 弹出框是否可见                   | `boolean`                                           |    `-`     |
+| default-popup-visible       | 弹出框默认是否可见（非受控模式） | `boolean`                                           |  `false`   |
+| trigger                     | 触发方式                         | `'hover' \| 'click' \| 'focus' \| 'contextMenu'`    | `'click'`  |
+| position                    | 弹出位置                         | `'top' \| 'tl' \| 'tr' \| 'bottom' \| 'bl' \| 'br'` | `'bottom'` |
+| popup-container             | 弹出框的挂载容器                 | `string \| HTMLElement`                             |    `-`     |
+| hide-on-select              | 是否在用户选择菜单项后隐藏弹出框 | `boolean`                                           |   `true`   |
+| auto-fit-popup-width        | 是否将弹出框宽度设置为触发器宽度 | `boolean`                                           |  `false`   |
 
-### Menu Events
+### `<menu>` Events
 
-| 事件名          | 说明                   | 参数                                                         |
-| --------------- | ---------------------- | ------------------------------------------------------------ | --- |
-| collapse        | 菜单折叠状态改变时触发 | `collapsed: boolean`<br/>`type:'clickTrigger'\|'responsive'` |
-| menu-item-click | 菜单项点击时触发       | `key: string`                                                |
-| sub-menu-click  | 子菜单点击时触发       | `key: string`<br/>`openKeys:string[]`                        |     |
+| 事件名               | 描述                         | 参数                                                                          |
+| -------------------- | ---------------------------- | ----------------------------------------------------------------------------- |
+| update:model-value   | 选中值请求更新时触发         | value: `string \| number \| Record<string, any> \| undefined`                 |
+| popup-visible-change | 下拉框显示状态发生改变时触发 | visible: `boolean`                                                            |
+| select               | 用户选择菜单项时触发；受控模式下是否产生选中态取决于 `model-value` 是否更新 | value: `string \| number \| Record<string, any> \| undefined `<br>ev: `Event` |
 
-### Menu Slots
+### `<menu>` Slots
 
-| 插槽名            | 说明           | 参数                 |
-| ----------------- | -------------- | -------------------- |
-| collapse-icon     | 自定义折叠按钮 | `collapsed: boolean` |
-| expand-icon-right | 向右展开的图标 | `-`                  |
-| expand-icon-down  | 向下展开的图标 | `-`                  |
+| 插槽名  | 描述 | 参数 |
+| ------- | :--: | ---- |
+| content | 内容 | -    |
+| footer  | 页脚 | -    |
 
-### SubMenu Props
+### `<menu-option>` Props
 
-| 参数名           | 说明                                                             | 类型                                   | 默认值  |
-| ---------------- | ---------------------------------------------------------------- | -------------------------------------- | ------- |
-| title            | 子菜单标题                                                       | `string`                               | `-`     |
-| selectable       | 弹出模式下，是否将多级菜单头也作为一个菜单项，支持点击选中等状态 | `boolean`                              | `false` |
-| popup            | 是否强制使用弹出模式，`level`表示当前子菜单的层级                | `boolean\|((level:number) => boolean)` | `false` |
-| popup-max-height | 弹出模式下的最大高度                                             | `boolean\| number`                     | `true`  |
+| 参数名   | 描述                                      | 类型                     | 默认值  |
+| -------- | ----------------------------------------- | ------------------------ | :-----: |
+| label    | 选项显示内容，不传 `value` 时也作为选项值 | `string\|number`         |   `-`   |
+| value    | 选项值                                    | `string\|number\|object` |   `-`   |
+| disabled | 是否禁用                                  | `boolean`                | `false` |
 
-### SubMenu Slots
+### `<menu-option>` Events
 
-| 插槽名            | 说明           | 参数 |
-| ----------------- | -------------- | ---- |
-| title             | 标题           | `-`  |
-| expand-icon-right | 向右展开的图标 | `-`  |
-| expand-icon-down  | 向下展开的图标 | `-`  |
-| icon              | 菜单的图标     | `-`  |
+| 事件名 | 描述           | 参数             |
+| ------ | -------------- | ---------------- |
+| click  | 点击按钮时触发 | ev: `MouseEvent` |
 
-### MenuItemGroup Props
+### `<menu-option>` Slots
 
-| 参数名 | 说明         | 类型     | 默认值 |
-| ------ | ------------ | -------- | ------ |
-| title  | 菜单组的标题 | `string` | `-`    |
+| 插槽名 | 描述 | 参数 |
+| ------ | :--: | ---- |
+| icon   | 图标 | -    |
 
-### MenuItemGroup Slots
+### `<menu-group>` Props
 
-| 插槽名 | 说明 | 参数 |
-| ------ | ---- | ---- |
-| title  | 标题 | `-`  |
+| 参数名 | 描述     | 类型     | 默认值 |
+| ------ | -------- | -------- | :----: |
+| title  | 分组标题 | `string` |  `-`   |
 
-### MenuItem Props
+### `<menu-group>` Slots
 
-| 参数名   | 说明     | 类型      | 默认值  |
-| -------- | -------- | --------- | ------- |
-| disabled | 是否禁用 | `boolean` | `false` |
+| 插槽名 |   描述   | 参数 |
+| ------ | :------: | ---- |
+| title  | 分组标题 | -    |
 
-### MenuItem Slots
+### `<menu-submenu>` Props
 
-| 插槽名 | 说明       | 参数 |
-| ------ | ---------- | ---- |
-| icon   | 菜单的图标 | `-`  |
+| 参数名                      | 描述                             | 类型                 |  默认值   |
+| --------------------------- | -------------------------------- | -------------------- | :-------: |
+| disabled                    | 是否禁用                         | `boolean`            |  `false`  |
+| trigger                     | 触发方式                         | `'hover' \| 'click'` | `'click'` |
+| position                    | 弹出位置                         | `'rt' \| 'lt'`       |  `'rt'`   |
+| popup-visible **(v-model)** | 弹出框是否可见                   | `boolean`            |    `-`    |
+| default-popup-visible       | 弹出框默认是否可见（非受控模式） | `boolean`            |  `false`  |
+| option-props                | 自定义选项属性                   | `object`             |    `-`    |
 
-## 类型定义
+### `<menu-submenu>` Events
 
-组件导出以下类型定义
+| 事件名               | 描述                         | 参数               |
+| -------------------- | ---------------------------- | ------------------ |
+| popup-visible-change | 下拉框显示状态发生改变时触发 | visible: `boolean` |
 
-```ts
-import type { MenuProps } from '@cedar/ui'
-```
+### `<menu-submenu>` Slots
+
+| 插槽名  |    描述    | 参数 |
+| ------- | :--------: | ---- |
+| icon    |    图标    | `-`  |
+| content | 子菜单内容 | `-`  |
+| footer  |    页脚    | `-`  |
+
+### `<menu-button>` Props
+
+| 参数名                      | 描述                             | 类型                                                |  默认值   |
+| --------------------------- | -------------------------------- | --------------------------------------------------- | :-------: |
+| popup-visible **(v-model)** | 弹出框是否可见                   | `boolean`                                           |    `-`    |
+| default-popup-visible       | 弹出框默认是否可见（非受控模式） | `boolean`                                           |  `false`  |
+| trigger                     | 触发方式                         | `'hover' \| 'click' \| 'focus' \| 'contextMenu'`    | `'click'` |
+| position                    | 弹出位置                         | `'top' \| 'tl' \| 'tr' \| 'bottom' \| 'bl' \| 'br'` |  `'br'`   |
+| popup-container             | 弹出框的挂载容器                 | `string \| HTMLElement`                             |    `-`    |
+| disabled                    | 是否禁用                         | `boolean`                                           |  `false`  |
+| type                        | 按钮类型                         | `string`                                            |    `-`    |
+| size                        | 按钮大小                         | `string`                                            |    `-`    |
+| button-props                | 按钮属性                         | `ButtonProps`                                       |    `-`    |
+| hide-on-select              | 是否在用户选择菜单项后隐藏弹出框 | `boolean`                                           |  `true`   |
+
+### `<menu-button>` Events
+
+| 事件名               | 描述                         | 参数                                                                         |
+| -------------------- | ---------------------------- | ---------------------------------------------------------------------------- |
+| popup-visible-change | 下拉框显示状态发生改变时触发 | visible: `boolean`                                                           |
+| click                | 点击按钮时触发               | ev: `MouseEvent`                                                             |
+| select               | 用户选择菜单项时触发；受控模式下是否产生选中态取决于 `model-value` 是否更新 | value: `string \| number \| Record<string, any> \| undefined`<br>ev: `Event` |
+
+### `<menu-button>` Slots
+
+| 插槽名  |   描述   | 参数                    |
+| ------- | :------: | ----------------------- |
+| icon    | 按钮图标 | popupVisible: `boolean` |
+| content |   内容   | -                       |

@@ -25,6 +25,13 @@ export interface TableContext {
 
   /** 末列扩展列 dataIndex（配合 #extra-column-header / #extra-column-cell） */
   extraColumnDataIndex?: string
+
+  /**
+   * 当前生效的 table-layout（reactive provide 自动解包为字符串）。
+   * auto 布局下列宽由浏览器按内容分配，冻结偏移须用渲染后测量回写的 _realWidth，
+   * 忽略拖拽写入的 _resizeWidth（浏览器并不执行它）。
+   */
+  tableLayout?: 'fixed' | 'auto'
 }
 
 export interface TableColumnContext {

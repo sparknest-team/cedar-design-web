@@ -185,7 +185,7 @@ export const getOperationFixedNumber = (column: TableOperationColumn, operations
   let count = 0
   const _operations = operations.slice(0, index)
   for (const item of _operations) {
-    count += item.width ?? 0
+    count += item._realWidth ?? item.width ?? 0
   }
 
   return count
@@ -212,19 +212,28 @@ export const getFixedNumber = (
     dataColumns: TableColumnData[]
     operations: TableOperationColumn[]
   },
+  tableLayout?: 'fixed' | 'auto',
 ) => {
+  // auto 布局下浏览器按内容分配列宽，不执行拖拽写入的 _resizeWidth，
+  // 偏移必须以渲染后测量回写的 _realWidth 为准，否则 sticky 错位
+  const widthOf = (item: TableColumnData) =>
+    tableLayout === 'auto'
+      ? item._realWidth ?? item.width ?? 0
+      : item._resizeWidth ?? item._realWidth ?? item.width ?? 0
+
   let count = 0
 
   if (column.fixed === 'left') {
     for (const item of operations) {
-      count += item.width ?? 40
+      // auto 布局下渲染后回写的真实宽度优先（见 table.tsx syncAutoLayoutRealWidths）
+      count += item._realWidth ?? item.width ?? 40
     }
     const first = getFirstDataColumn(column)
     for (const item of dataColumns) {
       if (first.dataIndex === item.dataIndex) {
         break
       }
-      count += item._resizeWidth ?? item._realWidth ?? item.width ?? 0
+      count += widthOf(item)
     }
     return count
   }
@@ -237,7 +246,7 @@ export const getFixedNumber = (
     }
 
     if (item.fixed === 'right') {
-      count += item._resizeWidth ?? item._realWidth ?? item.width ?? 0
+      count += widthOf(item)
     }
   }
   return count
@@ -287,9 +296,10 @@ export const getStyle = (
     dataColumns: TableColumnData[]
     operations: TableOperationColumn[]
   },
+  tableLayout?: 'fixed' | 'auto',
 ): CSSProperties => {
   if (column.fixed) {
-    const offset = `${getFixedNumber(column, { dataColumns, operations })}px`
+    const offset = `${getFixedNumber(column, { dataColumns, operations }, tableLayout)}px`
     if (column.fixed === 'left') {
       return {
         left: offset,

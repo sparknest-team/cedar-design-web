@@ -1,5 +1,5 @@
 <template>
-  <Dropdown
+  <Menu
     v-if="isShowDropdown"
     position="br"
     trigger="hover"
@@ -25,35 +25,35 @@
       <!-- 用户自定义下拉框操作 -->
       <slot name="dropdownContent">
         <template v-if="!!(userActions && userActions.length)">
-          <Doption v-for="(item, index) in userActions" :key="index" :value="item.value" :disabled="item.disabled">
+          <MenuOption v-for="(item, index) in userActions" :key="index" :value="item.value" :disabled="item.disabled">
             {{ item.name || item.value }}
-          </Doption>
+          </MenuOption>
         </template>
       </slot>
 
-      <Doption v-if="showAccountBasicInfo" :value="baseState.dOptionValueAccountBasicInfo"> 个人中心 </Doption>
+      <MenuOption v-if="showAccountBasicInfo" :value="baseState.dOptionValueAccountBasicInfo"> 个人中心 </MenuOption>
 
-      <Doption v-if="isShowToMgmt" :value="baseState.dOptionValueMgmt"> 进入管理后台 </Doption>
+      <MenuOption v-if="isShowToMgmt" :value="baseState.dOptionValueMgmt"> 进入管理后台 </MenuOption>
 
       <!-- 当配置了租户/企业切换功能，且可切换列表长度大于 1 时，才展示租户/企业切换下拉框 -->
-      <Dsubmenu v-if="curShowTenantSwitch" trigger="hover" popup-container="#cedarSaaSHeaderNavUserInfoDropdown">
+      <MenuSubmenu v-if="curShowTenantSwitch" trigger="hover" popup-container="#cedarSaaSHeaderNavUserInfoDropdown">
         切换企业
         <template #content>
-          <Doption
+          <MenuOption
             v-for="item of getTenantList()"
             :key="item.lesseeCode"
             :value="baseState.dOptionValueTenantSwitch + baseState.dOptionValueSplitSymbol + item.lesseeCode"
             :style="{
               color: item.lesseeCode === getCurTenantCode() ? 'rgb(var(--primary-6))' : undefined,
             }"
-            >{{ item.lesseeName }}</Doption
+            >{{ item.lesseeName }}</MenuOption
           >
         </template>
-      </Dsubmenu>
+      </MenuSubmenu>
 
-      <Doption v-if="isShowLogout" :value="baseState.dOptionValueLogout"> 退出登录 </Doption>
+      <MenuOption v-if="isShowLogout" :value="baseState.dOptionValueLogout"> 退出登录 </MenuOption>
     </template>
-  </Dropdown>
+  </Menu>
 
   <div v-else class="c-saas-header-user-info-wrapper" :data-theme="theme">
     <div class="c-saas-header-user-avatar">
@@ -71,16 +71,16 @@
 
 <script lang="ts">
 import { defineComponent, reactive, computed } from 'vue'
-import Dropdown, { Doption, Dsubmenu } from '../dropdown'
+import Menu, { MenuOption, MenuSubmenu } from '../menu'
 import { IconDown, IconUp } from '../icon'
 import { saasHeaderNavUserInfoProps, useSaasHeaderNavUserInfo } from './use-saas-header-nav-user-info'
 
 export default defineComponent({
   name: 'SaasHeaderNavUserInfo',
   components: {
-    Dropdown,
-    Doption,
-    Dsubmenu,
+    Menu,
+    MenuOption,
+    MenuSubmenu,
     IconDown,
     IconUp,
   },

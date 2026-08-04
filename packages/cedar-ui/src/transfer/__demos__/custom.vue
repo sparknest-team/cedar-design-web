@@ -14,5 +14,5 @@ const data = Array(8)
     value: `option${index + 1}`,
     label: `Option ${index + 1}`,
   }))
-const value = ['option1', 'option3', 'option5']
+const value = [{ value: 'option1' }, { value: 'option3' }, { value: 'option5' }]
 </script>

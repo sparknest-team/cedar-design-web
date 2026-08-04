@@ -5,7 +5,7 @@ import IconDown from '../icon/icon-down'
 import IconObliqueLine from '../icon/icon-oblique-line'
 import { useBreadcrumb } from './provide'
 import { breadcrumbItemProps } from './props'
-import Dropdown, { Doption } from '../dropdown'
+import Menu, { MenuOption } from '../menu'
 
 
 const { name, n, classes } = createNamespace('breadcrumb-item')
@@ -84,17 +84,17 @@ export default defineComponent({
     )
 
     const renderDropdownContent = () =>
-      slots.droplist?.() ?? props.droplist?.map((item) => <Doption value={item.path}>{item.label}</Doption>)
+      slots.droplist?.() ?? props.droplist?.map((item) => <MenuOption value={item.path}>{item.label}</MenuOption>)
 
     const renderDropdown = () => (
-      <Dropdown
+      <Menu
         v-slots={{ content: renderDropdownContent }}
         popupVisible={dropdownVisible.value}
         onPopupVisibleChange={handleVisibleChange}
         {...props.dropdownProps}
       >
         {renderItem()}
-      </Dropdown>
+      </Menu>
     )
 
     return () => {

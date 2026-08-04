@@ -1,0 +1,117 @@
+@import '../../style/theme/index.less';
+
+@nav-menu-font-size: 14px;
+@nav-menu-line-height: var(~'--c-line-height');
+@nav-menu-border-radius: @radius-sm;
+@nav-menu-font-weight-item-selected: @font-weight-500;
+@nav-menu-color-label-item-selected: @color-primary-6;
+@nav-menu-height-label-item-selected: 3px;
+@nav-menu-margin-left-item-suffix-icon: @spacing-3;
+@nav-menu-margin-right-item-prefix-icon: @spacing-7;
+@nav-menu-horizontal-margin-right-item-prefix-icon: @spacing-7;
+
+// vertical 模式下 item 之间的间隙
+@nav-menu-item-gap: @spacing-2;
+// vertical 下嵌套子菜单的层级缩进
+@nav-menu-item-indent-spacing: @spacing-8;
+
+// 折叠按钮
+@nav-menu-width-collapse-button: @size-6;
+@nav-menu-height-collapse-button: @size-6;
+@nav-menu-border-radius-collapse-button: @radius-sm;
+
+/**********************************************
+ * theme: light / dark
+ * status: default / disabled / selected / hover
+ **********************************************/
+@nav-menu-light-color-bg: var(~'--c-color-menu-light-bg');
+@nav-menu-light-color-bg-item_default: @nav-menu-light-color-bg;
+@nav-menu-light-color-bg-item_hover: var(~'--c-color-fill-2');
+@nav-menu-light-color-bg-item_selected: var(~'--c-color-fill-2');
+@nav-menu-light-color-bg-item_disabled: @nav-menu-light-color-bg;
+@nav-menu-light-color-item_default: var(~'--c-color-text-2');
+@nav-menu-light-color-item_hover: var(~'--c-color-text-2');
+@nav-menu-light-color-item_selected: @color-primary-6;
+@nav-menu-light-color-submenu_selected: @color-primary-6;
+@nav-menu-light-color-bg-submenu_selected_hover: var(~'--c-color-fill-2');
+@nav-menu-light-color-item_disabled: var(~'--c-color-text-4');
+@nav-menu-light-color-icon_default: var(~'--c-color-text-3');
+@nav-menu-light-color-icon_hover: var(~'--c-color-text-3');
+@nav-menu-light-color-icon_selected: @color-primary-6;
+@nav-menu-light-color-icon_disabled: var(~'--c-color-text-4');
+@nav-menu-light-color-group-title: var(~'--c-color-text-3');
+
+@nav-menu-dark-color-bg: var(~'--c-color-menu-dark-bg');
+@nav-menu-dark-color-bg-item_default: @nav-menu-dark-color-bg;
+@nav-menu-dark-color-bg-item_hover: var(~'--c-color-menu-dark-hover');
+@nav-menu-dark-color-bg-item_selected: var(~'--c-color-menu-dark-hover');
+@nav-menu-dark-color-bg-item_disabled: @nav-menu-dark-color-bg;
+@nav-menu-dark-color-submenu_selected: @color-primary-6;
+@nav-menu-dark-color-bg-submenu_selected_hover: var(~'--c-color-menu-dark-hover');
+@nav-menu-dark-color-item_default: var(~'--c-color-text-4');
+@nav-menu-dark-color-item_hover: var(~'--c-color-text-4');
+@nav-menu-dark-color-item_selected: var(~'--c-color-white');
+@nav-menu-dark-color-item_disabled: var(~'--c-color-text-2');
+@nav-menu-dark-color-icon_default: var(~'--c-color-text-3');
+@nav-menu-dark-color-icon_hover: var(~'--c-color-text-3');
+@nav-menu-dark-color-icon_selected: var(~'--c-color-white');
+@nav-menu-dark-color-icon_disabled: var(~'--c-color-text-2');
+@nav-menu-dark-color-group-title: var(~'--c-color-text-3');
+
+// popup sub-menu
+@nav-menu-color-border-popup: var(~'--c-color-neutral-3');
+
+// collapse button style
+@nav-menu-light-color-bg-button: var(~'--c-color-fill-1');
+@nav-menu-light-color-bg-button_hover: var(~'--c-color-fill-3');
+@nav-menu-light-color-button: var(~'--c-color-text-3');
+@nav-menu-dark-color-bg-button: @color-primary-6;
+@nav-menu-dark-color-bg-button_hover: @color-primary-7;
+@nav-menu-dark-color-button: var(~'--c-color-white');
+
+/**********************************************
+ * horizontal / vertical
+ **********************************************/
+@nav-menu-horizontal-padding-vertical: 14px;
+@nav-menu-horizontal-padding-horizontal: @spacing-8;
+@nav-menu-horizontal-item-gap: @spacing-6;
+@nav-menu-horizontal-item-height: 30px;
+@nav-menu-horizontal-item-padding-horizontal: @spacing-6;
+
+@nav-menu-vertical-padding-vertical: @spacing-2;
+@nav-menu-vertical-padding-horizontal: @spacing-4;
+@nav-menu-vertical-item-height: 40px;
+@nav-menu-vertical-item-padding-horizontal: @spacing-6;
+
+/************************************************
+ * collapse
+ ***********************************************/
+@nav-menu-collapse-width: @size-12;
+@nav-menu-collapse-padding-vertical: @spacing-2;
+@nav-menu-collapse-padding-horizontal: @spacing-2;
+
+/************************************************
+ * popButton
+ ***********************************************/
+@nav-menu-pop-button-size: @size-10;
+@nav-menu-pop-button-margin-bottom: @spacing-7;
+@nav-menu-pop-button-box-shadow: @shadow2-down;
+@nav-menu-pop-button-border-color: @color-transparent;
+
+/**********************************************
+ * Theme dark in menu
+ **********************************************/
+@menu-dark-color-bg: var(~'--c-color-menu-dark-bg');
+@menu-dark-color-border: @menu-dark-color-bg;
+
+@menu-dark-option-color-bg_default: @color-transparent;
+@menu-dark-option-color-bg_hover: var(~'--c-color-menu-dark-hover');
+@menu-dark-option-color-bg_selected: @color-transparent;
+@menu-dark-option-color-bg_disabled: @color-transparent;
+
+@menu-dark-option-color-text_default: var(~'--c-color-text-4');
+@menu-dark-option-color-text_hover: var(~'--c-color-text-4');
+@menu-dark-option-color-text_selected: var(~'--c-color-white');
+@menu-dark-option-color-text_disabled: var(~'--c-color-text-2');
+
+@menu-dark-group-title-color-text: var(~'--c-color-text-3');

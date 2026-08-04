@@ -1,10 +1,11 @@
-<template>
-  <c-space direction="column" :style="{ width: '100%' }">
-    <c-upload action="/" directory />
-  </c-space>
-</template>
-<script lang="ts">
-import { defineComponent } from 'vue'
-export default defineComponent({
-  })
+<script setup lang="ts">
+import { ref } from 'vue'
+import type { UploadFileItem } from '@cedar/ui'
+
+const files = ref<UploadFileItem[]>([
+  { uid: 'folder-1', name: 'assets/logo.svg', url: '/assets/logo.svg', status: 'success', percent: 100 },
+  { uid: 'folder-2', name: 'assets/readme.md', url: '/assets/readme.md', status: 'success', percent: 100 },
+])
 </script>
+
+<template><c-upload v-model:file-list="files" directory /></template>

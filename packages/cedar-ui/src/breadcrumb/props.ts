@@ -1,7 +1,7 @@
 import type { ExtractPropTypes, PropType } from 'vue'
 import { defineListenerProp } from '../_utils/components'
 import type { BreadcrumbRoute } from './types'
-import type { DropDownProps } from '../dropdown'
+import type { MenuProps } from '../menu'
 
 
 export const breadcrumbProps = {
@@ -84,7 +84,7 @@ export const breadcrumbItemProps = {
    * 下拉菜单属性
    */
   dropdownProps: {
-    type: Object as PropType<DropDownProps>,
+    type: Object as PropType<MenuProps>,
   },
   /**
    * 点击事件

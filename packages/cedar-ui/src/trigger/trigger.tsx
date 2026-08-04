@@ -348,6 +348,11 @@ export default defineComponent({
      * @version 2.18.0
      */
     hide: () => true,
+    /**
+     * @zh 点击弹出框外部时触发
+     * @en Triggered when clicking outside the popup
+     */
+    clickOutside: (event: Event) => true,
     // for internal
     resize: () => true,
   },
@@ -356,7 +361,7 @@ export default defineComponent({
    * @en Popup content
    * @slot content
    */
-  setup(props, { emit, slots, attrs }) {
+  setup(props, { emit, slots, attrs, expose }) {
     const { popupContainer } = toRefs(props)
     const prefixCls = getPrefixCls('trigger')
     const popupAttrs = computed(() => omit(attrs, TRIGGER_EVENTS))
@@ -617,6 +622,7 @@ export default defineComponent({
       }
 
       removeOutsideListener()
+      emit('clickOutside', e)
       changeVisible(false)
     }
 
@@ -673,6 +679,10 @@ export default defineComponent({
       handleResize()
       emit('resize')
     }
+
+    expose({
+      resize: updatePopupStyle,
+    })
 
     const handlePopupMouseDown = (e: Event) => {
       if (props.preventFocus) {

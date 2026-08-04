@@ -7,14 +7,7 @@
 
   <c-drawer v-model:visible="visible" title="列管理" :width="720" unmount-on-close @ok="handleOk">
     <div style="height: calc(100vh - 120px)">
-      <c-table-column-manager
-        ref="mgrRef"
-        v-model="keys"
-        v-model:fixed-map="fixedMap"
-        :columns="columns"
-        :options="catalog"
-        :required-keys="['name']"
-      />
+      <c-table-column-manager ref="mgrRef" v-model="items" :columns="columns" :options="columnDefinitions" />
     </div>
   </c-drawer>
 </template>
@@ -22,16 +15,11 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { stateFromColumns } from '@cedar/ui'
-import type {
-  ColumnCatalog,
-  TableColumnData,
-  TableColumnManagerInstance,
-} from '@cedar/ui'
+import type { ColumnDefinitions, TableColumnData, TableColumnManagerInstance } from '@cedar/ui'
 
 const visible = ref(false)
 const mgrRef = ref<TableColumnManagerInstance>()
-const keys = ref<string[]>([])
-const fixedMap = ref<Record<string, 'left' | 'right'>>({})
+const items = ref([])
 
 const columns = ref<TableColumnData[]>([
   { dataIndex: 'name', title: '姓名', width: 120 },
@@ -39,9 +27,9 @@ const columns = ref<TableColumnData[]>([
   { dataIndex: 'address', title: '地址', width: 180 },
 ])
 
-const catalog: ColumnCatalog = [
+const columnDefinitions: ColumnDefinitions = [
   {
-    label: '基础',
+    title: '基础',
     key: 'basic',
     children: [
       { dataIndex: 'name', title: '姓名', required: true },
@@ -54,9 +42,8 @@ const catalog: ColumnCatalog = [
 
 watch(visible, (val) => {
   if (!val) return
-  const state = stateFromColumns(columns.value, catalog)
-  keys.value = [...state.keys]
-  fixedMap.value = { ...state.fixedMap }
+  const state = stateFromColumns(columns.value, columnDefinitions)
+  items.value = state.items
 })
 
 const handleOk = () => {

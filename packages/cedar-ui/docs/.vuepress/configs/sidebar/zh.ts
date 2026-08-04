@@ -143,12 +143,12 @@ export const zhSideBar: SidebarConfig = {
           link: "/components/breadcrumb/",
         },
         {
-          text: "Menu 菜单",
-          link: "/components/menu/",
+          text: "NavMenu 导航菜单",
+          link: "/components/nav-menu/",
         },
         {
-          text: "Dropdown 下拉菜单",
-          link: "/components/dropdown/",
+          text: "Menu 下拉菜单",
+          link: "/components/menu/",
         },
         {
           text: "PageHeader 页头",
@@ -214,10 +214,6 @@ export const zhSideBar: SidebarConfig = {
         {
           text: "Select 下拉框",
           link: "/components/select/",
-        },
-        {
-          text: "SelectPanel 选择面板",
-          link: "/components/select-panel/",
         },
         {
           text: "TableColumnManager 表格列管理",

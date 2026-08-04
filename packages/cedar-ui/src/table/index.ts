@@ -51,7 +51,7 @@ export type {
   TableChangeExtra,
 } from './types'
 export type { TableExtraColumnConfig } from './extra-column'
-export { TABLE_EXTRA_COLUMN_KEY, resolveExtraColumnConfig, getExtraColumnWidth } from './extra-column'
+export { TABLE_EXTRA_COLUMN_KEY, resolveExtraColumnConfig, getExtraColumnWidth, DEFAULT_EXTRA_COLUMN_WIDTH } from './extra-column'
 
 export { _Thead as Thead, _Tbody as Tbody, _Tr as Tr, _Th as Th, _Td as Td, _Column as TableColumn }
 

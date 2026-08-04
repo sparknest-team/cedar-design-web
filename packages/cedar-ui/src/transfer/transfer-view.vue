@@ -25,9 +25,21 @@
           >
             {{ title }}
           </checkbox>
+          <span v-if="clearable" :class="`${prefixCls}-header-selected-count`">
+            <strong>{{ dataInfo.data.length }}</strong> / {{ total }}
+          </span>
         </span>
+        <button
+          v-if="clearable && clearText"
+          type="button"
+          :disabled="disabled || dataInfo.data.length === 0"
+          :class="`${prefixCls}-header-clear-text`"
+          @click="handleClear"
+        >
+          {{ clearText }}
+        </button>
         <icon-hover
-          v-if="clearable"
+          v-else-if="clearable"
           :disabled="disabled"
           :class="`${prefixCls}-header-clear-btn`"
           @click="handleClear"
@@ -40,24 +52,74 @@
       </slot>
     </div>
     <div v-if="showSearch" :class="`${prefixCls}-search`">
-      <input-search v-model="filter" :disabled="disabled" v-bind="inputSearchProps" @change="handleSearch" />
+      <Search v-model="filter" :disabled="disabled" v-bind="searchProps" @change="handleSearch" />
     </div>
     <div :class="`${prefixCls}-body`">
-      <Scrollbar v-if="filteredData.length > 0">
-        <slot :data="filteredData" :selected-keys="transferCtx?.selected" :on-select="transferCtx?.onSelect">
-          <list :class="`${prefixCls}-list`" :bordered="false" :scrollbar="false">
+      <template v-if="filteredData.length > 0">
+        <slot
+          v-if="$slots.default"
+          :data="filteredData"
+          :selected-keys="transferCtx?.selected"
+          :on-select="transferCtx?.onSelect"
+        />
+        <VirtualList
+          v-else-if="virtualScroll && !targetDraggable"
+          :data="filteredData"
+          item-key="value"
+          height="100%"
+          fixed-size
+          :estimated-size="36"
+        >
+          <template #item="{ item }">
+            <div v-if="showGroupTitle(item)" :class="`${prefixCls}-group-title`">
+              {{ item.group }}
+            </div>
+            <transfer-list-item
+              :type="type"
+              :data="item"
+              :simple="simple"
+              :clearable="clearable"
+              :operation-mode="targetOperation"
+              :disabled="disabled || item.disabled || (type === 'source' && item.required)"
+            />
+          </template>
+        </VirtualList>
+        <Scrollbar v-else>
+          <DragContainer
+            v-if="targetDraggable && type === 'target'"
+            :model-value="filteredData"
+            :drag-options="{ handle: `.${prefixCls}-drag-handle` }"
+            :class="`${prefixCls}-draggable-list`"
+            @change="handleTargetOrder"
+          >
             <transfer-list-item
               v-for="item of filteredData"
               :key="item.value"
               :type="type"
               :data="item"
-              :simple="simple"
-              :clearable="clearable"
+              draggable
+              clearable
+              :operation-mode="targetOperation"
               :disabled="disabled || item.disabled"
             />
+          </DragContainer>
+          <list v-else :class="`${prefixCls}-list`" :bordered="false" :scrollbar="false">
+            <template v-for="(item, index) of filteredData" :key="item.value">
+              <div v-if="showGroupTitle(item, index)" :class="`${prefixCls}-group-title`">
+                {{ item.group }}
+              </div>
+              <transfer-list-item
+                :type="type"
+                :data="item"
+                :simple="simple"
+                :clearable="clearable"
+                :operation-mode="targetOperation"
+                :disabled="disabled || item.disabled || (type === 'source' && item.required)"
+              />
+            </template>
           </list>
-        </slot>
-      </Scrollbar>
+        </Scrollbar>
+      </template>
       <Empty v-else :class="`${prefixCls}-empty`" />
     </div>
   </div>
@@ -69,13 +131,15 @@ import { getPrefixCls } from '../_utils/global-config'
 import Checkbox from '../checkbox'
 import IconHover from '../_components/icon-hover.vue'
 import IconDelete from '../icon/icon-delete'
-import Input from '../input'
+import Search from '../search'
 import List from '../list'
 import TransferListItem from './transfer-list-item'
-import { DataInfo, TransferItem } from './types'
+import type { DataInfo, TransferFilter, TransferItem, TransferValue } from './types'
 import { transferInjectionKey } from './context'
 import Scrollbar from '../scrollbar'
 import Empty from '../empty/empty'
+import VirtualList from '../_components/virtual-list-v2'
+import DragContainer from '../drag-container'
 
 export default defineComponent({
   name: 'TransferView',
@@ -84,10 +148,12 @@ export default defineComponent({
     Checkbox,
     IconHover,
     IconDelete,
-    InputSearch: Input.Search,
+    Search,
     List,
     TransferListItem,
     Scrollbar,
+    VirtualList,
+    DragContainer,
   },
   props: {
     type: {
@@ -105,14 +171,26 @@ export default defineComponent({
     disabled: Boolean,
     clearable: Boolean,
     selected: {
-      type: Array as PropType<string[]>,
+      type: Array as PropType<TransferValue[]>,
       required: true,
     },
     showSearch: Boolean,
     showSelectAll: Boolean,
+    virtualScroll: Boolean,
+    targetDraggable: Boolean,
+    targetOperation: {
+      type: String as PropType<'remove' | 'menu'>,
+      default: 'remove',
+    },
+    total: Number,
+    clearText: String,
     simple: Boolean,
-    inputSearchProps: {
+    searchProps: {
       type: Object,
+    },
+    filterOption: {
+      type: Function as PropType<TransferFilter>,
+      required: true,
     },
   },
   emits: ['search'],
@@ -123,30 +201,34 @@ export default defineComponent({
     const countSelected = computed(() => props.dataInfo.selected.length)
     const countRendered = computed(() => props.dataInfo.data.length)
 
+    const filteredData = computed(() =>
+      props.dataInfo.data.filter(
+        (item) => !filter.value || props.filterOption(filter.value, item, props.type ?? 'source')
+      )
+    )
+    const filteredValidValues = computed(() =>
+      filteredData.value.filter((item) => !item.disabled).map((item) => item.value)
+    )
+    const filteredSelectedValues = computed(() =>
+      filteredValidValues.value.filter((value) => props.selected.includes(value))
+    )
     const checked = computed(
       () =>
-        props.dataInfo.selected.length > 0 && props.dataInfo.selected.length === props.dataInfo.allValidValues.length,
+        filteredValidValues.value.length > 0 && filteredSelectedValues.value.length === filteredValidValues.value.length
     )
     const indeterminate = computed(
-      () => props.dataInfo.selected.length > 0 && props.dataInfo.selected.length < props.dataInfo.allValidValues.length,
+      () =>
+        filteredSelectedValues.value.length > 0 &&
+        filteredSelectedValues.value.length < filteredValidValues.value.length
     )
 
     const handleSelectAllChange = (checked: boolean) => {
       if (checked) {
-        transferCtx?.onSelect([...props.selected, ...props.dataInfo.allValidValues])
+        transferCtx?.onSelect([...new Set([...props.selected, ...filteredValidValues.value])])
       } else {
-        transferCtx?.onSelect(props.selected.filter((value) => !props.dataInfo.allValidValues.includes(value)))
+        transferCtx?.onSelect(props.selected.filter((value) => !filteredValidValues.value.includes(value)))
       }
     }
-
-    const filteredData = computed(() =>
-      props.dataInfo.data.filter((item) => {
-        if (filter.value) {
-          return item.label.includes(filter.value)
-        }
-        return true
-      }),
-    )
 
     const handleSearch = (value: string) => {
       emit('search', value, props.type)
@@ -155,6 +237,15 @@ export default defineComponent({
     const handleClear = () => {
       transferCtx?.moveTo(props.dataInfo.allValidValues, 'source')
     }
+
+    const showGroupTitle = (item: TransferItem, index?: number) => {
+      if (props.type !== 'source' || !item.group) return false
+      const itemIndex = index ?? filteredData.value.indexOf(item)
+      return itemIndex === 0 || filteredData.value[itemIndex - 1]?.group !== item.group
+    }
+
+    const handleTargetOrder = (items: TransferItem[], detail: { oldValue?: TransferItem; newValue?: TransferItem }) =>
+      transferCtx?.onReorder(items, detail)
 
     return {
       prefixCls,
@@ -167,6 +258,8 @@ export default defineComponent({
       handleSelectAllChange,
       handleSearch,
       handleClear,
+      showGroupTitle,
+      handleTargetOrder,
       transferCtx,
     }
   },

@@ -125,8 +125,8 @@
       "dest": "/components/drawer/index.html"
     },
     {
-      "src": "/components/dropdown/**",
-      "dest": "/components/dropdown/index.html"
+      "src": "/components/menu/**",
+      "dest": "/components/menu/index.html"
     },
     {
       "src": "/components/ellipsis/**",
@@ -197,8 +197,8 @@
       "dest": "/components/mention/index.html"
     },
     {
-      "src": "/components/menu/**",
-      "dest": "/components/menu/index.html"
+      "src": "/components/nav-menu/**",
+      "dest": "/components/nav-menu/index.html"
     },
     {
       "src": "/components/message/**",
@@ -275,10 +275,6 @@
     {
       "src": "/components/select/**",
       "dest": "/components/select/index.html"
-    },
-    {
-      "src": "/components/select-panel/**",
-      "dest": "/components/select-panel/index.html"
     },
     {
       "src": "/components/table-column-manager/**",

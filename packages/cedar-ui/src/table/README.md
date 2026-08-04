@@ -112,9 +112,21 @@ Element / Cedar 的 CSS 布局只有两种：
 
 ### fit 开关
 
-`fit` 控制弹性列是否自动撑满容器。关闭后列宽不再扩张。
+`fit` 决定剩余空间如何分配：开启时全部给未设 `width` 的弹性列；关闭时按各列基础宽度（`width` / `minWidth`）比例放大分摊。无论开关，表格都至少铺满父容器宽度（列宽之和溢出才横向滚动）。
 
 <demo src="./__demos__/column-fit.vue"></demo>
+
+### 布局 × fit × 分组 排列组合
+
+平铺/分组 × `table-layout` × `fit` 共 8 种组合的对照矩阵：
+
+- `fit: true` 剩余空间全给弹性列（示例中只设 `min-width` 的 **名称**、**更新时间**）；`fit: false` 按各列基础宽度比例放大分摊
+- **拖拽调宽仅 `fixed` 布局可用**：`auto` 布局不渲染拖拽把手（列宽由浏览器按内容分配，拖拽宽度不会生效）
+- `auto` 布局下冻结列（示例中 **优先级** 左冻结、**状态** 右冻结）的 sticky 偏移以渲染后测量的真实宽度为准
+
+<demo src="./__demos__/layout-fit-matrix.vue"></demo>
+
+<demo src="./__demos__/width-chase-test.vue"></demo>
 
 ### 纵向滚动（height）
 
@@ -172,7 +184,7 @@ Element / Cedar 的 CSS 布局只有两种：
 
 ### 调整列宽
 
-使用 `column-resizable` 属性开启列宽调整。建议初始设置除最后一列外其他列的默认列宽。
+使用 `column-resizable` 属性开启列宽调整。建议初始设置除最后一列外其他列的默认列宽。仅 `table-layout: fixed` 下生效——`auto` 布局列宽由浏览器按内容分配，不渲染拖拽把手。
 
 <demo src="./__demos__/column-resizable.vue"></demo>
 
@@ -234,7 +246,7 @@ Element / Cedar 的 CSS 布局只有两种：
 
 Table **不内置**列管理。通过扩展点与外部 `TableColumnManager` 组合：
 
-- `extra-column`：末尾扩展列（如设置图标），内容用 `#extra-column-header` / `#extra-column-cell`
+- `extra-column`：末尾扩展列（如设置图标），内容用 `#extra-column-header` / `#extra-column-cell`；默认宽度 **28px**，可通过 `extraColumn: { width: number }` 覆盖
 - `#header-cell-actions`：表头右侧操作区，菜单内容由外部完全控制
 - `v-model:columns` + `@column-resize`：外部改列并触发重渲染
 
@@ -272,7 +284,7 @@ Table **不内置**列管理。通过扩展点与外部 `TableColumnManager` 组
 | expandable                  | 表格的展开行配置                                                                           | `TableExpandable`                                                                                                                                                             |     `-`     |
 | height                      | 表格高度。设置后表头固定，表体滚动。数字单位为 px                                          | `number \| string`                                                                                                                                                            |     `-`     |
 | max-height                  | 表格最大高度。内容不足时收缩，超出后表体滚动。数字单位为 px                                | `number \| string`                                                                                                                                                            |     `-`     |
-| fit                         | 列宽是否自动撑满容器。未设置 `width` 的列按 `minWidth` 比例分配剩余空间                    | `boolean`                                                                                                                                                                     |   `true`    |
+| fit                         | 剩余空间的分配方式（表格始终至少铺满父容器）。`true`：全给未设 `width` 的弹性列；`false`：按各列基础宽度比例放大分摊 | `boolean`                                                                                                                                                                     |   `true`    |
 | pagination                  | 分页的属性配置                                                                             | `boolean \| PaginationProps`                                                                                                                                                  |   `true`    |
 | page-position               | 分页选择器的位置                                                                           | `'tl' \| 'top' \| tr' \| 'bl' \| 'bottom' \| 'br'`                                                                                                                            |   `'br'`    |
 | indent-size                 | 树形表格的缩进距离                                                                         | `number`                                                                                                                                                                      |    `16`     |
@@ -286,7 +298,7 @@ Table **不内置**列管理。通过扩展点与外部 `TableColumnManager` 组
 | hide-expand-button-on-empty | 是否在子树为空时隐藏展开按钮                                                               | `boolean`                                                                                                                                                                     |   `false`   |
 | row-class                   | 表格行元素的类名。                                                                         | `string\| any[]\| Record<string, any>\| ((record: TableData, rowIndex: number) => any)`                                                                                       |     `-`     |
 | draggable                   | 表格拖拽排序的配置                                                                         | `TableDraggable`                                                                                                                                                              |     `-`     |
-| column-resizable            | 是否允许调整列宽                                                                           | `boolean`                                                                                                                                                                     |   `false`   |
+| column-resizable            | 是否允许调整列宽（仅 `table-layout: fixed` 下渲染拖拽把手）                                | `boolean`                                                                                                                                                                     |   `false`   |
 | summary                     | 显示表尾总结行                                                                             | `boolean\| ((params: {    columns: TableColumnData[];    data: TableData[];  }) => TableData[])`                                                                              |     `-`     |
 | summary-text                | 总结行的首列文字                                                                           | `string`                                                                                                                                                                      | `'Summary'` |
 | summary-span-method         | 总结行的单元格合并方法                                                                     | `(data: {  record: TableData;  column: TableColumnData \| TableOperationColumn;  rowIndex: number;  columnIndex: number;}) => { rowspan?: number; colspan?: number } \| void` |     `-`     |

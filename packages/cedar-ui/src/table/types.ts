@@ -426,6 +426,8 @@ export interface TableOperationColumn {
   fixed?: boolean
   render?: (record: TableData) => VNodeChild
   isLastLeftFixed?: boolean
+  /** auto 布局下渲染后测量回写的真实宽度，用于冻结偏移计算 */
+  _realWidth?: number
 }
 
 export interface TableComponents {

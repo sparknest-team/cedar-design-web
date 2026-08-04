@@ -1,18 +1,36 @@
-import { computed, createVNode, defineComponent, inject, PropType, ref, VNode } from 'vue'
-import { getPrefixCls, createNamespace } from '../_utils/global-config'
-import { TableColumnData, TableData, TableDataWithRaw, TableOperationColumn } from './types'
-import { getFixedCls, getStyle } from './utils'
-import { getValueByPath } from '../_utils/get-value-by-path'
-import IconLoading from '../icon/icon-loading'
-import { isFunction, isObject } from '../_utils/is'
-import { TableContext, tableInjectionKey } from './context'
-import AutoTooltip from '../_components/auto-tooltip/auto-tooltip'
+import {
+  computed,
+  createVNode,
+  defineComponent,
+  inject,
+  PropType,
+  ref,
+  VNode,
+} from "vue";
+import { getPrefixCls, createNamespace } from "../_utils/global-config";
+import {
+  TableColumnData,
+  TableData,
+  TableDataWithRaw,
+  TableOperationColumn,
+} from "./types";
+import { getFixedCls, getStyle } from "./utils";
+import { getValueByPath } from "../_utils/get-value-by-path";
+import IconLoading from "../icon/icon-loading";
+import { isFunction, isObject } from "../_utils/is";
+import { TableContext, tableInjectionKey } from "./context";
+import AutoTooltip from "../_components/auto-tooltip/auto-tooltip";
 
-const TD_TYPES = ['normal', 'operation', 'checkbox', 'radio', 'expand'] as const
-type TdTypes = (typeof TD_TYPES)[number]
+const TD_TYPES = [
+  "normal",
+  "operation",
+  "checkbox",
+  "radio",
+  "expand",
+] as const;
+type TdTypes = (typeof TD_TYPES)[number];
 
-
-const { name } = createNamespace('td')
+const { name } = createNamespace("td");
 
 export default defineComponent({
   name,
@@ -28,7 +46,7 @@ export default defineComponent({
     },
     type: {
       type: String as PropType<TdTypes>,
-      default: 'normal',
+      default: "normal",
     },
     operations: {
       type: Array as PropType<TableOperationColumn[]>,
@@ -62,7 +80,9 @@ export default defineComponent({
       default: 0,
     },
     renderExpandBtn: {
-      type: Function as PropType<(record: TableDataWithRaw, stopPropagation?: boolean) => VNode>,
+      type: Function as PropType<
+        (record: TableDataWithRaw, stopPropagation?: boolean) => VNode
+      >,
     },
     summary: {
       type: Boolean,
@@ -70,29 +90,37 @@ export default defineComponent({
     },
   },
   setup(props, { slots }) {
-    const prefixCls = getPrefixCls('table')
+    const prefixCls = getPrefixCls("table");
 
     const tooltipProps = computed(() => {
       if (isObject(props.column?.tooltip)) {
-        return props.column.tooltip
+        return props.column.tooltip;
       }
-      return undefined
-    })
+      return undefined;
+    });
 
-    const isSorted = computed(() => props.column?.dataIndex && tableCtx.sorter?.field === props.column.dataIndex)
+    const isSorted = computed(
+      () =>
+        props.column?.dataIndex &&
+        tableCtx.sorter?.field === props.column.dataIndex,
+    );
 
-    const resizing = computed(() => props.column?.dataIndex && tableCtx.resizingColumn === props.column.dataIndex)
+    const resizing = computed(
+      () =>
+        props.column?.dataIndex &&
+        tableCtx.resizingColumn === props.column.dataIndex,
+    );
 
     const getCustomClass = () => {
       if (props.summary) {
         return isFunction(props.column?.summaryCellClass)
           ? props.column.summaryCellClass(props.record?.raw)
-          : props.column?.summaryCellClass
+          : props.column?.summaryCellClass;
       }
       return isFunction(props.column?.bodyCellClass)
         ? props.column.bodyCellClass(props.record?.raw)
-        : props.column?.bodyCellClass
-    }
+        : props.column?.bodyCellClass;
+    };
 
     const cls = computed(() => [
       `${prefixCls}-td`,
@@ -103,88 +131,98 @@ export default defineComponent({
       ...getFixedCls(prefixCls, props.column),
       props.column?.cellClass,
       getCustomClass(),
-    ])
+    ]);
+
+    const tableCtx = inject<Partial<TableContext>>(tableInjectionKey, {});
 
     const getCustomStyle = () => {
       if (props.summary) {
         return isFunction(props.column?.summaryCellStyle)
           ? props.column.summaryCellStyle(props.record?.raw)
-          : props.column?.summaryCellStyle
+          : props.column?.summaryCellStyle;
       }
       return isFunction(props.column?.bodyCellStyle)
         ? props.column.bodyCellStyle(props.record?.raw)
-        : props.column?.bodyCellStyle
-    }
+        : props.column?.bodyCellStyle;
+    };
 
     const style = computed(() => {
-      const style = getStyle(props.column, {
-        dataColumns: props.dataColumns,
-        operations: props.operations,
-      })
-      const customStyle = getCustomStyle()
+      const baseStyle = getStyle(
+        props.column,
+        {
+          dataColumns: props.dataColumns,
+          operations: props.operations,
+        },
+        tableCtx.tableLayout,
+      );
+      const customStyle = getCustomStyle();
       return {
-        ...style,
+        ...baseStyle,
         ...props.column?.cellStyle,
         ...customStyle,
-      }
-    })
+      };
+    });
 
     const cellStyle = computed(() => {
       if (props.isFixedExpand && props.containerWidth) {
         return {
           width: `${props.containerWidth}px`,
-        }
+        };
       }
-      return undefined
-    })
-
-    const tableCtx = inject<Partial<TableContext>>(tableInjectionKey, {})
+      return undefined;
+    });
 
     const renderContent = () => {
       if (slots.default) {
-        return slots.default()
+        return slots.default();
       }
       const data = {
         record: props.record?.raw,
         column: props.column,
         rowIndex: props.rowIndex ?? -1,
-      }
+      };
       if (slots.cell) {
-        return slots.cell(data)
+        return slots.cell(data);
       }
       if (props.column.slots?.cell) {
-        return props.column.slots.cell(data)
+        return props.column.slots.cell(data);
       }
       if (props.column.render) {
-        return props.column.render(data)
+        return props.column.render(data);
       }
       if (props.column.slotName && tableCtx.slots?.[props.column.slotName]) {
-        return tableCtx.slots[props.column.slotName]?.(data)
+        return tableCtx.slots[props.column.slotName]?.(data);
       }
-      return String(getValueByPath(props.record?.raw, props.column.dataIndex) ?? '')
-    }
+      return String(
+        getValueByPath(props.record?.raw, props.column.dataIndex) ?? "",
+      );
+    };
 
-    const isLoading = ref(false)
+    const isLoading = ref(false);
 
     const handleClick = (ev: Event) => {
-      if (isFunction(tableCtx.loadMore) && !props.record?.isLeaf && !props.record?.children) {
-        isLoading.value = true
+      if (
+        isFunction(tableCtx.loadMore) &&
+        !props.record?.isLeaf &&
+        !props.record?.children
+      ) {
+        isLoading.value = true;
         new Promise<TableData[] | undefined>((resolve) => {
-          tableCtx.loadMore?.(props.record.raw, resolve)
+          tableCtx.loadMore?.(props.record.raw, resolve);
         }).then((children?: TableData[]) => {
-          tableCtx.addLazyLoadData?.(children, props.record)
-          isLoading.value = false
-        })
+          tableCtx.addLazyLoadData?.(children, props.record);
+          isLoading.value = false;
+        });
       }
-      ev.stopPropagation()
-    }
+      ev.stopPropagation();
+    };
 
     const renderCell = () => {
       return (
         <span
           class={[
             `${prefixCls}-cell`,
-            `${prefixCls}-cell-align-${props.column?.align ?? 'left'}`,
+            `${prefixCls}-cell-align-${props.column?.align ?? "left"}`,
             {
               [`${prefixCls}-cell-fixed-expand`]: props.isFixedExpand,
               [`${prefixCls}-cell-expand-icon`]: props.showExpandBtn,
@@ -201,11 +239,18 @@ export default defineComponent({
           )}
           {props.showExpandBtn && (
             <span class={`${prefixCls}-cell-inline-icon`} onClick={handleClick}>
-              {isLoading.value ? <IconLoading /> : props.renderExpandBtn?.(props.record, false)}
+              {isLoading.value ? (
+                <IconLoading />
+              ) : (
+                props.renderExpandBtn?.(props.record, false)
+              )}
             </span>
           )}
           {props.column?.ellipsis && props.column?.tooltip ? (
-            <AutoTooltip class={`${prefixCls}-td-content`} tooltipProps={tooltipProps.value}>
+            <AutoTooltip
+              class={`${prefixCls}-td-content`}
+              tooltipProps={tooltipProps.value}
+            >
               {renderContent()}
             </AutoTooltip>
           ) : (
@@ -221,8 +266,8 @@ export default defineComponent({
             </span>
           )}
         </span>
-      )
-    }
+      );
+    };
 
     return () => {
       return createVNode(
@@ -230,17 +275,19 @@ export default defineComponent({
           record: props.record?.raw,
           column: props.column,
           rowIndex: props.rowIndex ?? -1,
-        })[0] ?? 'td',
+        })[0] ?? "td",
         {
           class: cls.value,
           style: style.value,
           rowspan: props.rowSpan > 1 ? props.rowSpan : undefined,
           colspan: props.colSpan > 1 ? props.colSpan : undefined,
+          // auto 布局下渲染后按此 key 量宽回写，修正冻结列 sticky 偏移
+          "data-column-key": props.column?.dataIndex,
         },
         {
           default: () => [renderCell()],
         },
-      )
-    }
+      );
+    };
   },
-})
+});

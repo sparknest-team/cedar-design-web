@@ -8,9 +8,44 @@ import { codeBlockPlugin } from './plugin-code-block/src/node'
 import { shikiPlugin } from '@vuepress/plugin-shiki'
 import components from 'unplugin-vue-components/vite'
 import AutoImport from 'unplugin-auto-import/vite'
+import type { Plugin } from 'vite'
 import { CedarResolver, CedarImport } from '../../src/resolver'
 
 const projRoot = path.resolve(__dirname, '../../')
+
+function uploadMockPlugin(): Plugin {
+  return {
+    name: 'cedar-upload-mock',
+    configureServer(server) {
+      server.middlewares.use('/api/mock/upload', (request, response, next) => {
+        if (request.method !== 'POST') {
+          next()
+          return
+        }
+
+        let receivedBytes = 0
+        request.on('data', (chunk: Buffer) => {
+          receivedBytes += chunk.length
+        })
+        request.on('end', () => {
+          setTimeout(() => {
+            response.statusCode = 200
+            response.setHeader('Content-Type', 'application/json')
+            response.end(JSON.stringify({
+              code: 0,
+              message: 'Upload completed',
+              data: {
+                url: '/upload-cat.jpg',
+                receivedBytes,
+              },
+            }))
+          }, 600)
+        })
+      })
+    },
+  }
+}
+
 export default defineUserConfig({
   title: 'Cedar Design Web',
   description: 'Cedar Design Web',
@@ -42,6 +77,7 @@ export default defineUserConfig({
         jsx: 'preserve',
       },
       plugins: [
+        uploadMockPlugin(),
         // @ts-ignore
         vueJsx(),
         components({

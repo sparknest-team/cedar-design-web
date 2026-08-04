@@ -13,5 +13,7 @@ const Popover = Object.assign(_Popover, {
 })
 
 export type PopoverInstance = InstanceType<typeof _Popover>
+export type { PopoverPlacement, PopoverProps, PopoverTrigger } from './types'
+export { Popover }
 
 export default Popover

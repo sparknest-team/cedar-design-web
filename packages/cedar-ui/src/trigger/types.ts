@@ -39,4 +39,5 @@ export interface TriggerProps {
   popupContainer?: string | HTMLElement
   updateAtScroll?: boolean
   autoFitPosition?: boolean
+  onClickOutside?: (event: Event) => void
 }

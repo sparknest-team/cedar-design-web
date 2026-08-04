@@ -1,46 +1,10 @@
-import { InjectionKey, VNodeTypes } from 'vue'
-import { InternalMenuProps, MenuData } from './types'
+import type { InjectionKey, Ref } from "vue";
+import type { MenuValue } from "./types";
 
-export const MenuInjectionKey: InjectionKey<MenuContext> = Symbol('MenuInjectionKey')
+export interface MenuContext {
+  popupMaxHeight: boolean | number;
+  modelValue?: Ref<MenuValue>;
+  onOptionClick: (value: MenuValue, ev: Event) => void;
+}
 
-export type MenuContext = Readonly<
-  Pick<
-    InternalMenuProps,
-    | 'mode'
-    | 'theme'
-    | 'levelIndent'
-    | 'autoScrollIntoView'
-    | 'scrollConfig'
-    | 'inTrigger'
-    | 'triggerProps'
-    | 'tooltipProps'
-    | 'popupMaxHeight'
-  > & {
-    selectedKeys: string[]
-    openKeys: string[]
-    prefixCls: string
-    collapsed: boolean
-    expandIconDown?: () => VNodeTypes
-    expandIconRight?: () => VNodeTypes
-    onSubMenuClick?: (key: string, level: number) => void
-    onMenuItemClick?: (key: string) => void
-  }
->
-
-export const LevelInjectionKey: InjectionKey<LevelContext> = Symbol('LevelInjectionKey')
-
-export type LevelContext = Readonly<{
-  level: number
-}>
-
-export type MenuMapType = Map<string, string[]>
-
-export const DataCollectorInjectionKey: InjectionKey<DataCollectorContext> = Symbol('DataCollectorInjectionKey')
-
-export type DataCollectorContext = Readonly<{
-  collectSubMenu: (key: string, children: MenuData, isReport?: boolean) => void
-  removeSubMenu: (key: string) => void
-  collectMenuItem: (key: string) => void
-  removeMenuItem: (keys: string) => void
-  reportMenuData: (data: MenuData) => void
-}>
+export const menuInjectionKey: InjectionKey<MenuContext> = Symbol("CedarMenu");

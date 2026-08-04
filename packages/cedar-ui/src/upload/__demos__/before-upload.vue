@@ -1,26 +1,11 @@
-<template>
-  <c-space direction="column" :style="{ width: '100%' }">
-    <c-upload action="/" @before-upload="beforeUpload" />
-  </c-space>
-</template>
+<script setup lang="ts">
+import { ref } from 'vue'
+import type { UploadFileItem } from '@cedar/ui'
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-export default defineComponent({
-  setup() {
-    const beforeUpload = (file) => {
-      return new Promise((resolve, reject) => {
-        Dialog.confirm({
-          title: 'beforeUpload',
-          content: `确认上传 ${file.name}`,
-          onOk: () => resolve(true),
-          onCancel: () => reject('cancel'),
-        })
-      })
-    }
-    return {
-      beforeUpload,
-    }
-  },
-})
+const files = ref<UploadFileItem[]>([
+  { uid: 'validate-1', name: 'validated-image.jpg', url: '/upload-cat.jpg', status: 'success', percent: 100 },
+])
+const beforeRead = (file: File) => file.type.startsWith('image/')
 </script>
+
+<template><c-upload v-model:file-list="files" multiple :before-read="beforeRead" /></template>

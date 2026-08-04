@@ -1,4 +1,4 @@
 import '../../style/index.less'
-import '../../dropdown/style'
-import '../../tooltip/style'
+import '../../trigger/style'
+import '../../scrollbar/style'
 import './index.less'

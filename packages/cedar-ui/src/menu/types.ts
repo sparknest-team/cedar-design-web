@@ -1,82 +1,47 @@
-import { StyleValue } from 'vue'
-import { Breakpoint } from '../_utils/responsive-observe'
-import { Data } from '../_utils/types'
-import { TriggerProps } from '../trigger'
+import { Slot, Slots } from "vue";
+import { TriggerEvent, TriggerPosition } from "../_utils/constant";
 
-export type MenuTheme = 'light' | 'dark'
-
-export type MenuMode = 'vertical' | 'horizontal' | 'pop' | 'popButton'
-
-export interface SubMenuChildDataType {
-  key: string
-  children?: SubMenuChildDataType[]
-}
-
-export type PopupMenuMaxHeightType = boolean | number
+export type MenuPosition = "top" | "tl" | "tr" | "bottom" | "bl" | "br";
+export type MenuValue = string | number | Record<string, any> | undefined;
 
 export interface MenuProps {
-  style: StyleValue | undefined
-  theme: MenuTheme | undefined
-  mode: MenuMode
-  levelIndent: number | undefined
-  autoOpen: boolean
-  collapsed: boolean | undefined
-  defaultCollapsed: boolean
-  collapsedWidth: number | undefined
-  accordion: boolean
-  autoScrollIntoView: boolean
-  showCollapseButton: boolean
-  selectedKeys: string[] | undefined
-  defaultSelectedKeys: string[]
-  openKeys: string[] | undefined
-  defaultOpenKeys: string[]
-  scrollConfig: { [key: string]: any } | undefined
-  triggerProps: TriggerProps | undefined
-  tooltipProps: Data | undefined
-  autoOpenSelected: boolean
-  breakpoint: Breakpoint | undefined
-  popupMaxHeight: PopupMenuMaxHeightType
+  modelValue?: MenuValue;
+  popupVisible?: boolean;
+  defaultPopupVisible?: boolean;
+  trigger?: TriggerEvent | TriggerEvent[];
+  position?: MenuPosition;
+  popupContainer?: string | HTMLElement;
+  popupMaxHeight?: boolean | number;
+  hideOnSelect?: boolean;
+  autoFitPopupWidth?: boolean;
 }
 
-export interface InternalMenuProps extends MenuProps {
-  prefixCls: string | undefined
-  inTrigger: boolean
-  siderCollapsed: boolean
-  isRoot: boolean
+export interface MenuOptionConfig {
+  label?: string | number;
+  value: MenuValue;
+  disabled?: boolean;
+
+  _props?: Record<string, any>;
+  _slots?: Slots;
 }
 
-export interface SubMenuProps {
-  key: string | undefined
-  title: string | undefined
-  selectable: boolean
-  popup: boolean | ((level: number) => boolean)
-  popupMaxHeight: PopupMenuMaxHeightType | undefined
+export interface MenuGroupConfig {
+  isGroup: true;
+  options: MenuOptionData[];
+  title?: string;
+
+  _props?: Record<string, any>;
+  _slots?: Slots;
 }
 
-export interface MenuItemGroupProps {
-  title: string | undefined
+export interface MenuSubmenuConfig extends MenuOptionConfig {
+  isSubmenu: true;
+  render: Slot;
+  children: MenuOptionData[];
+  trigger?: TriggerEvent;
+  position?: TriggerPosition;
+  footer?: Slot;
 }
 
-export interface MenuItemProps {
-  key: string | undefined
-  disabled?: boolean
-}
-
-export interface SubMenuInlineProps {
-  title: string | undefined
-  isChildrenSelected: boolean
-}
-
-export interface SubMenuPopProps {
-  title: string | undefined
-  selectable: boolean
-  isChildrenSelected: boolean
-  popupMaxHeight: PopupMenuMaxHeightType | undefined
-}
-
-export interface MenuDataItem {
-  key: string
-  children?: MenuData
-}
-
-export type MenuData = MenuDataItem[]
+export type MenuOptionData =
+  MenuOptionConfig | MenuGroupConfig | MenuSubmenuConfig;

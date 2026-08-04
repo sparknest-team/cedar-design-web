@@ -1,150 +1,115 @@
-import type { RenderFunction, VNode } from 'vue'
+import type { CSSProperties, VNodeChild } from 'vue'
+import type { InputHTMLAttributes } from 'vue'
 
-export type ListType = 'text' | 'picture' | 'picture-card'
+export type UploadStatus = 'ready' | 'reading' | 'uploading' | 'success' | 'error' | 'canceled' | 'removed'
 
-export type FileStatus = 'init' | 'uploading' | 'done' | 'error'
+export type UploadListType = 'text' | 'picture' | 'picture-card'
 
-export interface FileItem {
-  /**
-   * @zh 当前上传文件的唯一标示
-   * @en The unique identifier of the currently uploaded file
-   */
+export type UploadImageFit = 'fill' | 'contain' | 'cover' | 'none' | 'scale-down'
+
+export type UploadResolveType = 'file' | 'data-url' | 'object-url'
+
+export type UploadCapture = InputHTMLAttributes['capture']
+
+export type UploadRejectedReason = 'accept' | 'before-add' | 'max-file-size' | 'max-total-size' | 'max-files' | 'before-read'
+
+export interface UploadFileItem {
   uid: string
-  /**
-   * @zh 当前上传文件的状态
-   * @en The status of the currently uploaded file
-   */
-  status?: FileStatus
-  /**
-   * @zh 文件对象
-   * @en File object
-   */
-  file?: File
-  /**
-   * @zh 上传进度百分比
-   * @en Upload progress percentage
-   */
-  percent?: number
-  /**
-   * @zh 当前文件上传请求返回的响应
-   * @en The response returned by the current file upload request
-   */
-  response?: any
-  /**
-   * @zh 文件地址
-   * @en The file address
-   */
-  url?: string
-  /**
-   * @zh 文件名
-   * @en The file name
-   */
   name?: string
+  size?: number
+  type?: string
+  file?: File
+  url?: string
+  thumbnailUrl?: string
+  response?: unknown
+  error?: unknown
+  status: UploadStatus
+  percent: number
 }
 
-export interface CustomIcon {
-  /**
-   * @zh 开始图标
-   * @en Start icon
-   */
-  startIcon?: RenderFunction
-  /**
-   * @zh 取消图标
-   * @en Cancel icon
-   */
-  cancelIcon?: RenderFunction
-  /**
-   * @zh 重试图标
-   * @en Retry icon
-   */
-  retryIcon?: RenderFunction
-
-  /**
-   * @zh 成功图标
-   * @en Success icon
-   */
-  successIcon?: RenderFunction
-  /**
-   * @zh 失败图标
-   * @en Error icon
-   */
-  errorIcon?: RenderFunction
-  /**
-   * @zh 移除图标
-   * @en Remove icon
-   */
-  removeIcon?: RenderFunction
-  /**
-   * @zh 预览图标
-   * @en Preview icon
-   */
-  previewIcon?: RenderFunction
-  /**
-   * @zh 文件图标
-   * @en File icon
-   * @param {FileItem} fileItem
-   */
-  fileIcon?: (fileItem: FileItem) => VNode
-  /**
-   * @zh 文件名
-   * @en File name
-   * @param {FileItem} fileItem
-   */
-  fileName?: (fileItem: FileItem) => string | VNode
+export interface UploadRejectedFile {
+  file: File
+  reason: UploadRejectedReason
+  message?: string
 }
 
-export interface RequestOption {
-  /**
-   * @zh 上传的URL
-   * @en Uploaded URL
-   * */
+export interface UploadProgressEvent extends ProgressEvent {
+  percent: number
+}
+
+export type UploadData =
+  | Record<string, string | Blob | number | boolean | undefined | null>
+  | ((file: UploadFileItem) => Record<string, string | Blob | number | boolean | undefined | null> | Promise<Record<string, string | Blob | number | boolean | undefined | null>>)
+
+export type UploadHeaders =
+  | Record<string, string | number | undefined | null>
+  | ((file: UploadFileItem) => Record<string, string | number | undefined | null> | Promise<Record<string, string | number | undefined | null>>)
+
+export interface UploadRequestOptions {
   action?: string
-  /**
-   * @zh 请求报文的头信息
-   * @en Header information of the request message
-   * */
-  headers?: Record<string, string>
-  /**
-   * @zh 上传文件的文件名
-   * @en File name of the uploaded file
-   * */
-  name?: string | ((fileItem: FileItem) => string)
-  /**
-   * @zh 上传文件
-   * @en upload files
-   * */
-  fileItem: FileItem
-  /**
-   * @zh 附加的请求信息
-   * @en Additional requested information
-   * */
-  data?: Record<string, string | Blob> | ((fileItem: FileItem) => Record<string, string | Blob>)
-  /**
-   * @zh 是否携带cookie信息
-   * @en Whether to carry cookie information
-   * */
-  withCredentials?: boolean
-  /**
-   * @zh 更新当前文件的上传进度。percent: 当前上传进度百分比
-   * @en Update the upload progress of the current file. percent: current upload progress percentage
-   * */
-  onProgress: (percent: number, event?: ProgressEvent) => void
-  /**
-   * @zh 上传成功后，调用onSuccess方法，传入的response参数将会附加到当前上传文件的response字段上
-   * @en After the upload is successful, call the onSuccess method, the incoming response parameter will be appended to the response field of the currently uploaded file
-   * */
-  onSuccess: (response?: any) => void
-  /**
-   * @zh 上传失败后，调用onError方法，传入的response参数将会附加到当前上传文件的response字段上
-   * @en After the upload fails, call the onError method, and the response parameter passed in will be appended to the response field of the currently uploaded file
-   * */
-  onError: (response?: any) => void
+  method: string
+  headers?: UploadHeaders
+  data?: UploadData
+  name: string | ((file: UploadFileItem) => string)
+  file: UploadFileItem
+  withCredentials: boolean
+  isSuccessResponse?: (xhr: XMLHttpRequest, file: UploadFileItem) => boolean
+  onProgress: (event: UploadProgressEvent) => void
+  onSuccess: (response?: unknown, event?: ProgressEvent) => void
+  onError: (error?: unknown, event?: ProgressEvent) => void
 }
 
-export interface UploadRequest extends Record<string, unknown> {
-  /**
-   * @zh 终止上传
-   * @en Terminate upload
-   * */
+export interface UploadRequest {
   abort?: () => void
+}
+
+export type UploadCustomRequest = (options: UploadRequestOptions) => UploadRequest | Promise<UploadRequest | void> | void
+
+export interface UploadThumbnailOptions {
+  file: File
+  fileItem: UploadFileItem
+  resolveType: UploadResolveType
+}
+
+export type UploadCreateThumbnailUrl = (options: UploadThumbnailOptions) => string | Promise<string | undefined> | undefined
+
+export type UploadBeforeRead = (file: File) => boolean | File | Promise<boolean | File>
+
+export type UploadBeforeUpload = (file: UploadFileItem) => boolean | File | Blob | Promise<boolean | File | Blob>
+
+export type UploadBeforeRemove = (file: UploadFileItem, fileList: UploadFileItem[]) => boolean | Promise<boolean>
+
+export type UploadIsSuccessResponse = (xhr: XMLHttpRequest, file: UploadFileItem) => boolean
+
+export type UploadRenderFile = (file: UploadFileItem, index: number) => VNodeChild
+
+export interface UploadPublicMethods {
+  chooseFile: () => void
+  submit: (file?: UploadFileItem) => void
+  abort: (file?: UploadFileItem) => void
+  retry: (file: UploadFileItem) => void
+  remove: (file: UploadFileItem) => void
+  reset: () => void
+  clearSuccess: () => void
+  clearError: () => void
+  getFiles: (status?: UploadStatus) => UploadFileItem[]
+}
+
+export interface UploadTriggerSlotProps {
+  chooseFile: () => void
+  dragOver: boolean
+  disabled: boolean
+}
+
+export interface UploadItemSlotProps {
+  file: UploadFileItem
+  index: number
+  remove: () => void
+  retry: () => void
+  abort: () => void
+}
+
+export interface UploadStyleProps {
+  class?: string
+  style?: string | CSSProperties
 }

@@ -1,7 +1,7 @@
 import type { App } from 'vue'
 import type { CedarOptions } from '../_utils/types'
 import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
-import _Search from './search.vue'
+import _Search from './search'
 
 const Search = Object.assign(_Search, {
   install: (app: App, options?: CedarOptions) => {

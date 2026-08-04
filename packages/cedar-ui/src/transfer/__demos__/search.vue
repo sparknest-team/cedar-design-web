@@ -1,14 +1,12 @@
 <template>
   <c-transfer
-    show-search
+    source-filterable
+    target-filterable
     :data="data"
     :default-value="value"
-    :source-input-search-props="{
-      placeholder: 'source item search',
-    }"
-    :target-input-search-props="{
-      placeholder: 'target item search',
-    }" />
+    source-filter-placeholder="搜索待选项"
+    target-filter-placeholder="搜索已选项"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -18,5 +16,5 @@ const data = Array(8)
     value: `option${index + 1}`,
     label: `Option ${index + 1}`,
   }))
-const value = ['option1', 'option3', 'option5']
+const value = [{ value: 'option1' }, { value: 'option3' }, { value: 'option5' }]
 </script>

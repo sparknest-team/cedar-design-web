@@ -1,23 +1,29 @@
-import { computed, createVNode, defineComponent, inject, PropType, toRefs } from 'vue'
-import { getPrefixCls, createNamespace } from '../_utils/global-config'
-import Checkbox from '../checkbox'
-import Radio from '../radio'
-import Button from '../button'
-import Trigger from '../trigger'
-import IconCaretDown from '../icon/icon-caret-down'
-import IconCaretUp from '../icon/icon-caret-up'
-import IconFilter from '../icon/icon-filter'
-import { TableColumnData, TableOperationColumn } from './types'
-import { useColumnSorter } from './hooks/use-column-sorter'
-import { useColumnFilter } from './hooks/use-column-filter'
-import { getFixedCls, getStyle } from './utils'
-import { isBoolean, isFunction, isObject } from '../_utils/is'
-import { TableContext, tableInjectionKey } from './context'
-import AutoTooltip from '../_components/auto-tooltip/auto-tooltip'
-import { TABLE_EXTRA_COLUMN_KEY } from './extra-column'
+import {
+  computed,
+  createVNode,
+  defineComponent,
+  inject,
+  PropType,
+  toRefs,
+} from "vue";
+import { getPrefixCls, createNamespace } from "../_utils/global-config";
+import Checkbox from "../checkbox";
+import Radio from "../radio";
+import Button from "../button";
+import Trigger from "../trigger";
+import IconCaretDown from "../icon/icon-caret-down";
+import IconCaretUp from "../icon/icon-caret-up";
+import IconFilter from "../icon/icon-filter";
+import { TableColumnData, TableOperationColumn } from "./types";
+import { useColumnSorter } from "./hooks/use-column-sorter";
+import { useColumnFilter } from "./hooks/use-column-filter";
+import { getFixedCls, getStyle } from "./utils";
+import { isBoolean, isFunction, isObject } from "../_utils/is";
+import { TableContext, tableInjectionKey } from "./context";
+import AutoTooltip from "../_components/auto-tooltip/auto-tooltip";
+import { TABLE_EXTRA_COLUMN_KEY } from "./extra-column";
 
-
-const { name } = createNamespace('th')
+const { name } = createNamespace("th");
 
 export default defineComponent({
   name,
@@ -37,26 +43,33 @@ export default defineComponent({
     resizable: Boolean,
   },
   setup(props, { slots }) {
-    const { column } = toRefs(props)
-    const prefixCls = getPrefixCls('table')
+    const { column } = toRefs(props);
+    const prefixCls = getPrefixCls("table");
 
-    const tableCtx = inject<Partial<TableContext>>(tableInjectionKey, {})
+    const tableCtx = inject<Partial<TableContext>>(tableInjectionKey, {});
 
-    const resizing = computed(() => props.column?.dataIndex && tableCtx.resizingColumn === props.column.dataIndex)
+    const resizing = computed(
+      () =>
+        props.column?.dataIndex &&
+        tableCtx.resizingColumn === props.column.dataIndex,
+    );
 
     const tooltipProps = computed(() => {
       if (isObject(props.column?.tooltip)) {
-        return props.column.tooltip
+        return props.column.tooltip;
       }
-      return undefined
-    })
+      return undefined;
+    });
 
     const filterIconAlignLeft = computed(() => {
-      if (props.column?.filterable && isBoolean(props.column.filterable.alignLeft)) {
-        return props.column.filterable.alignLeft
+      if (
+        props.column?.filterable &&
+        isBoolean(props.column.filterable.alignLeft)
+      ) {
+        return props.column.filterable.alignLeft;
       }
-      return tableCtx.filterIconAlignLeft
-    })
+      return tableCtx.filterIconAlignLeft;
+    });
 
     const {
       sortOrder,
@@ -69,7 +82,7 @@ export default defineComponent({
     } = useColumnSorter({
       column,
       tableCtx,
-    })
+    });
 
     const {
       filterPopupVisible,
@@ -85,18 +98,18 @@ export default defineComponent({
     } = useColumnFilter({
       column,
       tableCtx,
-    })
+    });
 
     const renderFilterContent = () => {
-      const { filterable } = props.column
+      const { filterable } = props.column;
 
-      if (props.column.slots?.['filter-content']) {
-        return props.column.slots?.['filter-content']({
+      if (props.column.slots?.["filter-content"]) {
+        return props.column.slots?.["filter-content"]({
           filterValue: columnFilterValue.value,
           setFilterValue,
           handleFilterConfirm,
           handleFilterReset,
-        })
+        });
       }
 
       if (filterable?.slotName) {
@@ -105,7 +118,7 @@ export default defineComponent({
           setFilterValue,
           handleFilterConfirm,
           handleFilterReset,
-        })
+        });
       }
 
       if (filterable?.renderContent) {
@@ -114,7 +127,7 @@ export default defineComponent({
           setFilterValue,
           handleFilterConfirm,
           handleFilterReset,
-        })
+        });
       }
 
       return (
@@ -136,7 +149,7 @@ export default defineComponent({
                   ) : (
                     <Radio
                       value={item.value}
-                      modelValue={columnFilterValue.value[0] ?? ''}
+                      modelValue={columnFilterValue.value[0] ?? ""}
                       uninjectGroupContext
                       // @ts-ignore
                       onChange={handleRadioFilterChange}
@@ -145,26 +158,26 @@ export default defineComponent({
                     </Radio>
                   )}
                 </li>
-              )
+              );
             })}
           </ul>
           <div class={`${prefixCls}-filters-bottom`}>
             <Button size="xs" onClick={handleFilterReset}>
-              {t('table.resetText')}
+              {t("table.resetText")}
             </Button>
             <Button type="primary" size="xs" onClick={handleFilterConfirm}>
-              {t('table.okText')}
+              {t("table.okText")}
             </Button>
           </div>
         </div>
-      )
-    }
+      );
+    };
 
     const renderFilter = () => {
-      const { filterable } = props.column
+      const { filterable } = props.column;
 
       if (!filterable) {
-        return null
+        return null;
       }
 
       return (
@@ -190,99 +203,122 @@ export default defineComponent({
             // @ts-ignore
             onClick={(ev: Event) => ev.stopPropagation()}
           >
-            {props.column.slots?.['filter-icon']?.() ?? filterable.icon?.() ?? <IconFilter />}
+            {props.column.slots?.["filter-icon"]?.() ?? filterable.icon?.() ?? (
+              <IconFilter />
+            )}
           </IconHover>
         </Trigger>
-      )
-    }
+      );
+    };
 
     const cellCls = computed(() => {
       const cls: any[] = [
         `${prefixCls}-cell`,
-        `${prefixCls}-cell-align-${props.column?.align ?? (props.column.children ? 'center' : 'left')}`,
-      ]
+        `${prefixCls}-cell-align-${props.column?.align ?? (props.column.children ? "center" : "left")}`,
+      ];
 
       if (hasSorter.value) {
         cls.push(`${prefixCls}-cell-with-sorter`, {
-          [`${prefixCls}-cell-next-ascend`]: nextSortOrder.value === 'ascend',
-          [`${prefixCls}-cell-next-descend`]: nextSortOrder.value === 'descend',
-        })
+          [`${prefixCls}-cell-next-ascend`]: nextSortOrder.value === "ascend",
+          [`${prefixCls}-cell-next-descend`]: nextSortOrder.value === "descend",
+        });
       }
 
       if (filterIconAlignLeft.value) {
-        cls.push(`${prefixCls}-cell-with-filter`)
+        cls.push(`${prefixCls}-cell-with-filter`);
       }
 
       if (showHeaderActions.value) {
-        cls.push(`${prefixCls}-cell-with-actions`)
+        cls.push(`${prefixCls}-cell-with-actions`);
       }
 
-      return cls
-    })
+      return cls;
+    });
 
     const renderTitle = () => {
       if (slots.default) {
-        return slots.default()
+        return slots.default();
       }
-      if (props.column?.titleSlotName && tableCtx.slots?.[props.column.titleSlotName]) {
+      if (
+        props.column?.titleSlotName &&
+        tableCtx.slots?.[props.column.titleSlotName]
+      ) {
         return tableCtx.slots[props.column.titleSlotName]?.({
           column: props.column,
-        })
+        });
       }
       if (props.column?.slots?.title) {
-        return props.column.slots.title()
+        return props.column.slots.title();
       }
       if (isFunction(props.column.title)) {
-        return props.column.title()
+        return props.column.title();
       }
-      return props.column.title
-    }
+      return props.column.title;
+    };
 
     const isExtraColumn = computed(() => {
-      const key = tableCtx.extraColumnDataIndex ?? TABLE_EXTRA_COLUMN_KEY
-      return props.column?.dataIndex === key
-    })
+      const key = tableCtx.extraColumnDataIndex ?? TABLE_EXTRA_COLUMN_KEY;
+      return props.column?.dataIndex === key;
+    });
 
     /** 叶子列且外部提供了 #header-cell-actions 时展示操作区（插槽在 render 时再调用） */
     const showHeaderActions = computed(() => {
-      if (isExtraColumn.value || props.column?.children?.length || !props.column?.dataIndex) {
-        return false
+      if (
+        isExtraColumn.value ||
+        props.column?.children?.length ||
+        !props.column?.dataIndex
+      ) {
+        return false;
       }
-      return Boolean(tableCtx.slots?.['header-cell-actions'])
-    })
+      return Boolean(tableCtx.slots?.["header-cell-actions"]);
+    });
 
     const renderHeaderActions = () => {
-      if (!showHeaderActions.value || !props.column?.dataIndex) return null
-      return tableCtx.slots?.['header-cell-actions']?.({
+      if (!showHeaderActions.value || !props.column?.dataIndex) return null;
+      return tableCtx.slots?.["header-cell-actions"]?.({
         column: props.column,
         dataIndex: props.column.dataIndex,
-      })
-    }
+      });
+    };
 
     // 表头操作区（筛选 + 外部 actions）固定在右侧；显式 alignLeft 时筛选仍跟在标题旁
     const filterInActions = computed(() => {
-      return Boolean(showHeaderActions.value && props.column?.filterable && !filterIconAlignLeft.value)
-    })
+      return Boolean(
+        showHeaderActions.value &&
+        props.column?.filterable &&
+        !filterIconAlignLeft.value,
+      );
+    });
 
-    const inlineFilter = computed(() => filterIconAlignLeft.value || filterInActions.value)
+    const inlineFilter = computed(
+      () => filterIconAlignLeft.value || filterInActions.value,
+    );
 
     const renderTitleNode = () => {
       if (props.column?.ellipsis && props.column?.tooltip) {
         return (
-          <AutoTooltip class={`${prefixCls}-th-title`} tooltipProps={tooltipProps.value}>
+          <AutoTooltip
+            class={`${prefixCls}-th-title`}
+            tooltipProps={tooltipProps.value}
+          >
             {renderTitle()}
           </AutoTooltip>
-        )
+        );
       }
       return (
-        <span class={[`${prefixCls}-th-title`, { [`${prefixCls}-text-ellipsis`]: props.column?.ellipsis }]}>
+        <span
+          class={[
+            `${prefixCls}-th-title`,
+            { [`${prefixCls}-text-ellipsis`]: props.column?.ellipsis },
+          ]}
+        >
           {renderTitle()}
         </span>
-      )
-    }
+      );
+    };
 
     const renderSorterNode = () => {
-      if (!hasSorter.value) return null
+      if (!hasSorter.value) return null;
       return (
         <span class={`${prefixCls}-sorter`}>
           {hasAscendBtn.value && (
@@ -290,7 +326,8 @@ export default defineComponent({
               class={[
                 `${prefixCls}-sorter-icon`,
                 {
-                  [`${prefixCls}-sorter-icon-active`]: sortOrder.value === 'ascend',
+                  [`${prefixCls}-sorter-icon-active`]:
+                    sortOrder.value === "ascend",
                 },
               ]}
             >
@@ -302,7 +339,8 @@ export default defineComponent({
               class={[
                 `${prefixCls}-sorter-icon`,
                 {
-                  [`${prefixCls}-sorter-icon-active`]: sortOrder.value === 'descend',
+                  [`${prefixCls}-sorter-icon-active`]:
+                    sortOrder.value === "descend",
                 },
               ]}
             >
@@ -310,20 +348,27 @@ export default defineComponent({
             </div>
           )}
         </span>
-      )
-    }
+      );
+    };
 
     const renderCell = () => {
       if (isExtraColumn.value) {
         const extraHeader =
-          tableCtx.slots?.['extra-column-header']?.({
+          tableCtx.slots?.["extra-column-header"]?.({
             column: props.column,
-          }) ?? renderTitle()
-        return <span class={[`${prefixCls}-cell`, `${prefixCls}-cell-align-center`]}>{extraHeader}</span>
+          }) ?? renderTitle();
+        return (
+          <span class={[`${prefixCls}-cell`, `${prefixCls}-cell-align-center`]}>
+            {extraHeader}
+          </span>
+        );
       }
 
       return (
-        <span class={cellCls.value} onClick={hasSorter.value ? handleClickSorter : undefined}>
+        <span
+          class={cellCls.value}
+          onClick={hasSorter.value ? handleClickSorter : undefined}
+        >
           <span class={`${prefixCls}-th-main`}>
             {renderTitleNode()}
             {renderSorterNode()}
@@ -340,19 +385,24 @@ export default defineComponent({
             </span>
           )}
         </span>
-      )
-    }
+      );
+    };
 
     const style = computed(() => {
-      return {
-        ...getStyle(props.column, {
+      const baseStyle = getStyle(
+        props.column,
+        {
           dataColumns: props.dataColumns,
           operations: props.operations,
-        }),
+        },
+        tableCtx.tableLayout,
+      );
+      return {
+        ...baseStyle,
         ...props.column?.cellStyle,
         ...props.column?.headerCellStyle,
-      }
-    })
+      };
+    });
 
     const cls = computed(() => [
       `${prefixCls}-th`,
@@ -363,36 +413,43 @@ export default defineComponent({
       ...getFixedCls(prefixCls, props.column),
       props.column?.cellClass,
       props.column?.headerCellClass,
-    ])
+    ]);
 
     const handleMouseDown = (ev: MouseEvent) => {
       if (props.column?.dataIndex) {
-        tableCtx.onThMouseDown?.(props.column?.dataIndex, ev)
+        tableCtx.onThMouseDown?.(props.column?.dataIndex, ev);
       }
-    }
+    };
 
     return () => {
-      const colSpan = props.column.colSpan ?? 1
-      const rowSpan = props.column.rowSpan ?? 1
+      const colSpan = props.column.colSpan ?? 1;
+      const rowSpan = props.column.rowSpan ?? 1;
 
       return createVNode(
         slots.th?.({
           column: props.column,
-        })[0] ?? 'th',
+        })[0] ?? "th",
         {
           class: cls.value,
           style: style.value,
           colspan: colSpan > 1 ? colSpan : undefined,
           rowspan: rowSpan > 1 ? rowSpan : undefined,
+          // auto 布局下渲染后按此 key 量宽回写，修正冻结列 sticky 偏移
+          "data-column-key": props.column.dataIndex,
         },
         {
           default: () => [
             renderCell(),
             !inlineFilter.value && renderFilter(),
-            props.resizable && <span class={`${prefixCls}-column-handle`} onMousedown={handleMouseDown} />,
+            props.resizable && (
+              <span
+                class={`${prefixCls}-column-handle`}
+                onMousedown={handleMouseDown}
+              />
+            ),
           ],
         },
-      )
-    }
+      );
+    };
   },
-})
+});

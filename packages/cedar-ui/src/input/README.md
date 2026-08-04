@@ -25,12 +25,6 @@ permalink: /components/input/
 
 <demo src="./__demos__/size.vue"></demo>
 
-### 搜索
-
-设置`max-recent-searches` 可以限制最近搜索记录的最大数量。开发者根据 `search` 事件返回的 `recent-searches` 属性，可以自行缓存到本地或者服务器，初始化的时候通过 `recent-searches` 属性初始化输入框的搜索历史记录。
-
-<demo src="./__demos__/search.vue"></demo>
-
 ### 输入框组合
 
 通过 input-group 可以组合使用输入框。
@@ -119,23 +113,6 @@ permalink: /components/input/
 | 参数名            | 描述                 | 参数              |
 | ----------------- | -------------------- | ----------------- |
 | visibility-change | visibility改变时触发 | `visible:boolean` |
-
-### `<InputSearch>` Props
-
-| 参数名        | 描述                                   | 类型                                   | 默认值  |
-| ------------- | -------------------------------------- | -------------------------------------- | :-----: |
-| search-button | 是否为后置按钮模式                     | `boolean`                              | `false` |
-| loading       | 是否为加载中状态                       | `boolean`                              | `false` |
-| disabled      | 是否禁用                               | `boolean`                              | `false` |
-| size          | 输入框大小                             | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'`  |
-| button-text   | 搜索按钮的文字，使用后会替换原本的图标 | `string`                               |   `-`   |
-| button-props  | 搜索按钮的属性                         | `ButtonProps`                          |   `-`   |
-
-### `<InputSearch>` Events
-
-| 事件名 | 描述               | 参数                                |
-| ------ | ------------------ | ----------------------------------- |
-| search | 单击搜索按钮时触发 | value: `string`<br>ev: `MouseEvent` |
 
 ## 类型定义
 

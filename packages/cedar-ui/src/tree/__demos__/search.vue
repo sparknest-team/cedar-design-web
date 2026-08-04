@@ -1,6 +1,6 @@
 <template>
   <div>
-    <c-input-search style="margin-bottom: 8px; max-width: 240px" v-model="searchKey" />
+    <c-search style="margin-bottom: 8px; max-width: 240px" v-model="searchKey" />
     <c-tree :data="treeData">
       <template #title="nodeData">
         <template v-if="(index = getMatchIndex(nodeData?.title)) < 0">

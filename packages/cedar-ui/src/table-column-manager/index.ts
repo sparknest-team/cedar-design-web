@@ -17,11 +17,22 @@ export type {
   ColumnCatalog,
   ColumnCatalogGroup,
   ColumnCatalogItem,
+  ColumnDefinition,
+  ColumnDefinitionGroup,
+  ColumnDefinitions,
+  ColumnDefinitionSearchParams,
+  ColumnDefinitionSearchResult,
+  ColumnDefinitionSource,
+  ManagedTableColumn,
+  ColumnManagerMeta,
   ColumnManagerInsertAt,
+  ColumnManagerDefaultState,
+  ColumnManagerItem,
   ColumnManagerLayoutNode,
   ColumnManagerResult,
   ColumnManagerState,
 } from './types'
+export { COLUMN_MANAGER_STATE_VERSION } from './types'
 export type { ColumnEditInput } from './utils'
 export {
   applyInsertAt,
@@ -30,7 +41,6 @@ export {
   applyColumnFixed,
   buildColumnsFromState,
   buildColumnsResult,
-  catalogToOptions,
   findLeafColumn,
   flattenCatalog,
   flattenTableColumns,
@@ -40,8 +50,22 @@ export {
   layoutFromColumns,
   mapLeafColumns,
   mergeLayoutByAdjacentGroupTitles,
+  normalizeColumnManagerState,
+  stateFromCatalog,
   stateFromColumns,
 } from './utils'
+
+export { useTableColumnManager } from './use-table-column-manager'
+export type {
+  UseTableColumnManagerOptions,
+  UseTableColumnManagerReturn,
+  EditColumnState,
+  InsertColumnContext,
+  HeaderActionKey,
+  TableColumnManagerBindings,
+  TableColumnManagerExposed,
+  TableColumnHeaderActionBindings,
+} from './use-table-column-manager'
 
 export { TableColumnManager }
 

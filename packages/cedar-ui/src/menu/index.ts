@@ -1,31 +1,43 @@
 import type { App } from 'vue'
 import type { CedarOptions } from '../_utils/types'
 import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
-import _Menu from './menu'
-import _MenuItem from './item'
-import _MenuItemGroup from './item-group.vue'
-import _MenuSubMenu from './sub-menu'
+import _Menu from './menu.vue'
+import _MenuOption from './menu-option.vue'
+import _MenuGroup from './menu-group.vue'
+import _MenuSubmenu from './menu-submenu.vue'
+import _MenuButton from './menu-button.vue'
 
 const Menu = Object.assign(_Menu, {
-  Item: _MenuItem,
-  ItemGroup: _MenuItemGroup,
-  SubMenu: _MenuSubMenu,
+  Option: _MenuOption,
+  Group: _MenuGroup,
+  Submenu: _MenuSubmenu,
+  Button: _MenuButton,
   install: (app: App, options?: CedarOptions) => {
     setGlobalConfig(app, options)
     const componentPrefix = getComponentPrefix(options)
 
     app.component(componentPrefix + _Menu.name, _Menu)
-    app.component(componentPrefix + _MenuItem.name, _MenuItem)
-    app.component(componentPrefix + _MenuItemGroup.name, _MenuItemGroup)
-    app.component(componentPrefix + _MenuSubMenu.name, _MenuSubMenu)
+    app.component(componentPrefix + _MenuOption.name, _MenuOption)
+    app.component(componentPrefix + _MenuGroup.name, _MenuGroup)
+    app.component(componentPrefix + _MenuSubmenu.name, _MenuSubmenu)
+    app.component(componentPrefix + _MenuButton.name, _MenuButton)
   },
 })
 
 export type MenuInstance = InstanceType<typeof _Menu>
-export type MenuItemInstance = InstanceType<typeof _MenuItem>
-export type MenuItemGroupInstance = InstanceType<typeof _MenuItemGroup>
-export type MenuSubMenuInstance = InstanceType<typeof _MenuSubMenu>
+export type MenuOptionInstance = InstanceType<typeof _MenuOption>
+export type MenuGroupInstance = InstanceType<typeof _MenuGroup>
+export type MenuSubmenuInstance = InstanceType<typeof _MenuSubmenu>
+export type MenuButtonInstance = InstanceType<typeof _MenuButton>
 
-export { _MenuItem as MenuItem, _MenuItemGroup as MenuItemGroup, _MenuSubMenu as SubMenu }
+export type { MenuProps, MenuOptionData, MenuOptionConfig, MenuGroupConfig, MenuSubmenuConfig } from './types'
+
+export {
+  Menu,
+  _MenuOption as MenuOption,
+  _MenuGroup as MenuGroup,
+  _MenuSubmenu as MenuSubmenu,
+  _MenuButton as MenuButton,
+}
 
 export default Menu

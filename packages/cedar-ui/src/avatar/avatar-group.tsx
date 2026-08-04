@@ -2,8 +2,7 @@ import { defineComponent, PropType, CSSProperties, reactive, ref, provide, toRef
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
 import { AvatarShape } from './types'
 import Avatar from './avatar.vue'
-import Popover from '../popover'
-import { TriggerProps } from '../trigger'
+import Popover, { type PopoverProps } from '../popover'
 import { getAllElements } from '../_utils/vue-utils'
 import { avatarGroupInjectionKey } from './context'
 import { configProviderInjectionKey } from '../config-provider/context'
@@ -60,12 +59,12 @@ const AvatarGroup = defineComponent({
       type: Object as PropType<CSSProperties>,
     },
     /**
-     * @zh 多余头像气泡的 `TriggerProps`
-     * @en TriggerProps for popover around +x.
+     * @zh 多余头像气泡的 `PopoverProps`
+     * @en PopoverProps for popover around +x.
      * @version 2.7.0
      */
-    maxPopoverTriggerProps: {
-      type: Object as PropType<TriggerProps>,
+    maxPopoverProps: {
+      type: Object as PropType<PopoverProps>,
     },
   },
   setup(props, { slots }) {
@@ -105,7 +104,7 @@ const AvatarGroup = defineComponent({
               v-slots={{
                 content: () => <div>{avatarsInPopover}</div>,
               }}
-              {...props.maxPopoverTriggerProps}
+              {...props.maxPopoverProps}
             >
               <Avatar class={`${prefixCls}-max-count-avatar`} style={props.maxStyle}>
                 +{avatarsInPopover.length}

@@ -1,14 +1,10 @@
-<template>
-  <div>
-    <c-upload multiple action="/" :limit="3" />
-  </div>
-  <br />
-  <div>
-    <c-upload multiple action="/" :limit="1" />
-  </div>
-</template>
-<script lang="ts">
-import { defineComponent } from 'vue'
-export default defineComponent({
-  })
+<script setup lang="ts">
+import { ref } from 'vue'
+import type { UploadFileItem } from '@cedar/ui'
+
+const files = ref<UploadFileItem[]>([
+  { uid: 'limit-1', name: 'existing-file.pdf', url: '/existing-file.pdf', status: 'success', percent: 100 },
+])
 </script>
+
+<template><c-upload v-model:file-list="files" multiple :max-files="3" :max-file-size="1048576" /></template>

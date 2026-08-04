@@ -8,4 +8,5 @@ export {}
 declare global {
   const Dialog: typeof import('@cedar/ui').Dialog
   const Message: typeof import('@cedar/ui').Message
+  const Notification: typeof import('@cedar/ui').Notification
 }

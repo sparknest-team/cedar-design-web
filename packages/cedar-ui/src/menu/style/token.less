@@ -1,117 +1,40 @@
-@import '../../style/theme/index.less';
-
-@menu-font-size: 14px;
-@menu-line-height: var(~'--c-line-height');
-@menu-border-radius: @radius-sm;
-@menu-font-weight-item-selected: @font-weight-500;
-@menu-color-label-item-selected: @color-primary-6;
-@menu-height-label-item-selected: 3px;
-@menu-margin-left-item-suffix-icon: @spacing-3;
-@menu-margin-right-item-prefix-icon: @spacing-7;
-@menu-horizontal-margin-right-item-prefix-icon: @spacing-7;
-
-// vertical 模式下 item 之间的间隙
-@menu-item-gap: @spacing-2;
-// vertical 下嵌套子菜单的层级缩进
-@menu-item-indent-spacing: @spacing-8;
-
-// 折叠按钮
-@menu-width-collapse-button: @size-6;
-@menu-height-collapse-button: @size-6;
-@menu-border-radius-collapse-button: @radius-sm;
+@import "../../style/theme/index.less";
 
 /**********************************************
- * theme: light / dark
+ * Popup Box
+ **********************************************/
+@menu-max-height: @size-50;
+@menu-border-radius: @radius-md;
+@menu-padding-vertical: @spacing-2;
+@menu-font-size: @font-size-body-3;
+@menu-color-bg: var(~"--c-color-bg-popup");
+@menu-color-border: var(~"--c-color-fill-3");
+@menu-box-shadow: @shadow2-down;
+
+/**********************************************
+ * Popup Options
  * status: default / disabled / selected / hover
  **********************************************/
-@menu-light-color-bg: var(~'--c-color-menu-light-bg');
-@menu-light-color-bg-item_default: @menu-light-color-bg;
-@menu-light-color-bg-item_hover: var(~'--c-color-fill-2');
-@menu-light-color-bg-item_selected: var(~'--c-color-fill-2');
-@menu-light-color-bg-item_disabled: @menu-light-color-bg;
-@menu-light-color-item_default: var(~'--c-color-text-2');
-@menu-light-color-item_hover: var(~'--c-color-text-2');
-@menu-light-color-item_selected: @color-primary-6;
-@menu-light-color-submenu_selected: @color-primary-6;
-@menu-light-color-bg-submenu_selected_hover: var(~'--c-color-fill-2');
-@menu-light-color-item_disabled: var(~'--c-color-text-4');
-@menu-light-color-icon_default: var(~'--c-color-text-3');
-@menu-light-color-icon_hover: var(~'--c-color-text-3');
-@menu-light-color-icon_selected: @color-primary-6;
-@menu-light-color-icon_disabled: var(~'--c-color-text-4');
-@menu-light-color-group-title: var(~'--c-color-text-3');
+@menu-option-height: @size-9;
+@menu-option-padding-horizontal: @spacing-6;
+@menu-option-font-weight_selected: @font-weight-500;
 
-@menu-dark-color-bg: var(~'--c-color-menu-dark-bg');
-@menu-dark-color-bg-item_default: @menu-dark-color-bg;
-@menu-dark-color-bg-item_hover: var(~'--c-color-menu-dark-hover');
-@menu-dark-color-bg-item_selected: var(~'--c-color-menu-dark-hover');
-@menu-dark-color-bg-item_disabled: @menu-dark-color-bg;
-@menu-dark-color-submenu_selected: @color-primary-6;
-@menu-dark-color-bg-submenu_selected_hover: var(~'--c-color-menu-dark-hover');
-@menu-dark-color-item_default: var(~'--c-color-text-4');
-@menu-dark-color-item_hover: var(~'--c-color-text-4');
-@menu-dark-color-item_selected: var(~'--c-color-white');
-@menu-dark-color-item_disabled: var(~'--c-color-text-2');
-@menu-dark-color-icon_default: var(~'--c-color-text-3');
-@menu-dark-color-icon_hover: var(~'--c-color-text-3');
-@menu-dark-color-icon_selected: var(~'--c-color-white');
-@menu-dark-color-icon_disabled: var(~'--c-color-text-2');
-@menu-dark-color-group-title: var(~'--c-color-text-3');
+@menu-option-color-bg_default: @color-transparent;
+@menu-option-color-bg_hover: var(~"--c-color-fill-2");
+@menu-option-color-bg_selected: var(~"--c-color-fill-2");
+@menu-option-color-bg_disabled: @color-transparent;
 
-// popup sub-menu
-@menu-color-border-popup: var(~'--c-color-neutral-3');
+@menu-option-color-text_default: var(~"--c-color-text-2");
+@menu-option-color-text_hover: var(~"--c-color-text-1");
+@menu-option-color-text_selected: var(~"--c-color-text-1");
+@menu-option-color-text_disabled: var(~"--c-color-text-4");
 
-// collapse button style
-@menu-light-color-bg-button: var(~'--c-color-fill-1');
-@menu-light-color-bg-button_hover: var(~'--c-color-fill-3');
-@menu-light-color-button: var(~'--c-color-text-3');
-@menu-dark-color-bg-button: @color-primary-6;
-@menu-dark-color-bg-button_hover: @color-primary-7;
-@menu-dark-color-button: var(~'--c-color-white');
+// option group title
+@menu-group-title-height: @size-5;
+@menu-group-title-padding-horizontal: @spacing-6;
+@menu-group-title-padding-top: @spacing-4;
+@menu-group-title-margin-top: @spacing-4;
+@menu-group-title-font-size: @font-size-body-1;
+@menu-group-title-color-text: var(~"--c-color-text-3");
 
-/**********************************************
- * horizontal / vertical
- **********************************************/
-@menu-horizontal-padding-vertical: 14px;
-@menu-horizontal-padding-horizontal: @spacing-8;
-@menu-horizontal-item-gap: @spacing-6;
-@menu-horizontal-item-height: 30px;
-@menu-horizontal-item-padding-horizontal: @spacing-6;
-
-@menu-vertical-padding-vertical: @spacing-2;
-@menu-vertical-padding-horizontal: @spacing-4;
-@menu-vertical-item-height: 40px;
-@menu-vertical-item-padding-horizontal: @spacing-6;
-
-/************************************************
- * collapse
- ***********************************************/
-@menu-collapse-width: @size-12;
-@menu-collapse-padding-vertical: @spacing-2;
-@menu-collapse-padding-horizontal: @spacing-2;
-
-/************************************************
- * popButton
- ***********************************************/
-@menu-pop-button-size: @size-10;
-@menu-pop-button-margin-bottom: @spacing-7;
-@menu-pop-button-box-shadow: @shadow2-down;
-@menu-pop-button-border-color: @color-transparent;
-
-/**********************************************
- * Theme dark in dropdown
- **********************************************/
-@dropdown-dark-color-bg: var(~'--c-color-menu-dark-bg');
-@dropdown-dark-color-border: @dropdown-dark-color-bg;
-
-@dropdown-dark-option-color-bg_default: @color-transparent;
-@dropdown-dark-option-color-bg_hover: var(~'--c-color-menu-dark-hover');
-@dropdown-dark-option-color-bg_selected: @color-transparent;
-@dropdown-dark-option-color-bg_disabled: @color-transparent;
-
-@dropdown-dark-option-color-text_default: var(~'--c-color-text-4');
-@dropdown-dark-option-color-text_hover: var(~'--c-color-text-4');
-@dropdown-dark-option-color-text_selected: var(~'--c-color-white');
-@dropdown-dark-option-color-text_disabled: var(~'--c-color-text-2');
-
-@dropdown-dark-group-title-color-text: var(~'--c-color-text-3');
+@menu-margin-left-suffix-icon: @spacing-6;

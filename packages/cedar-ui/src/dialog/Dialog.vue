@@ -389,10 +389,6 @@ export default defineComponent({
         return
       }
 
-      if (isFunction(props.onConfirm)) {
-        props.onConfirm(e)
-      }
-
       emit('confirm', e)
       close()
     }
@@ -402,19 +398,11 @@ export default defineComponent({
         return
       }
 
-      if (isFunction(props.onCancel)) {
-        props.onCancel(e)
-      }
-
       emit('cancel', e)
       close()
     }
 
     const handleKeyEscape = (e: Event) => {
-      if (isFunction(props.onKeyEscape)) {
-        props.onKeyEscape()
-      }
-
       emit('key-escape')
 
       if (!props.closeOnKeyEscape) {
@@ -433,19 +421,11 @@ export default defineComponent({
     }
 
     const handleOverlayClick = (e: Event) => {
-      if (isFunction(props.onClickOverlay)) {
-        props.onClickOverlay()
-      }
-
       emit('click-overlay')
 
       if (props.overlay && props.closeOnClickOverlay && currentIsOverlay.value) {
         if (runBeforeClose('close', e)) {
           return
-        }
-
-        if (isFunction(props.onCancel)) {
-          props.onCancel(e)
         }
 
         emit('cancel', e)

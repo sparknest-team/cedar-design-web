@@ -27,20 +27,20 @@ import Divider from './divider'
 import CountTo from './count-to'
 import DragContainer from './drag-container'
 import Drawer from './drawer'
-import Dropdown, { Doption, Dgroup, Dsubmenu, DropdownButton } from './dropdown'
+import Menu, { MenuOption, MenuGroup, MenuSubmenu, MenuButton } from './menu'
 import Empty from './empty'
 import Form, { FormItem } from './form'
 import Grid, { Row, Col, GridItem } from './grid'
 import Icon from './icon-component'
 import Image, { ImagePreview, ImagePreviewAction, ImagePreviewGroup } from './image'
-import Input, { InputGroup, InputSearch, InputPassword } from './input'
+import Input, { InputGroup, InputPassword } from './input'
 import InputNumber from './input-number'
 import InputTag from './input-tag'
 import Layout, { LayoutHeader, LayoutContent, LayoutFooter, LayoutSider } from './layout'
 import Link from './link'
 import List, { ListItem, ListItemMeta } from './list'
 import Mention from './mention'
-import Menu, { MenuItem, MenuItemGroup, SubMenu } from './menu'
+import NavMenu, { NavMenuItem, NavMenuItemGroup, NavMenuSubMenu } from './nav-menu'
 import Message from './message'
 import Dialog from './dialog'
 import Notification from './notification'
@@ -56,7 +56,6 @@ import Result from './result'
 import Scrollbar from './scrollbar'
 import Search from './search'
 import Select, { Option, Optgroup } from './select'
-import SelectPanel from './select-panel'
 import Skeleton, { SkeletonLine, SkeletonShape } from './skeleton'
 import Slider from './slider'
 import Space from './space'
@@ -152,8 +151,8 @@ const components: Record<string, Plugin> = {
   Spin,
   Skeleton,
   Breadcrumb,
-  Dropdown,
   Menu,
+  NavMenu,
   PageHeader,
   Pagination,
   Steps,
@@ -169,7 +168,6 @@ const components: Record<string, Plugin> = {
   Watermark,
   VerificationCode,
   Search,
-  SelectPanel,
   DragContainer,
 }
 
@@ -196,19 +194,17 @@ const CedarVue = {
   DescriptionsItem,
   DateRangePicker,
   TimeRangePicker,
-  Doption,
-  Dgroup,
-  Dsubmenu,
-  DropdownButton,
-  FormItem,
-  Row,
+  MenuOption,
+  MenuGroup,
+  MenuSubmenu,
+  MenuButton,
+  FormItem,  Row,
   Col,
   GridItem,
   ImagePreview,
   ImagePreviewAction,
   ImagePreviewGroup,
   InputGroup,
-  InputSearch,
   InputPassword,
   LayoutHeader,
   LayoutContent,
@@ -216,9 +212,9 @@ const CedarVue = {
   LayoutSider,
   ListItem,
   ListItemMeta,
-  MenuItem,
-  MenuItemGroup,
-  SubMenu,
+  NavMenuItem,
+  NavMenuItemGroup,
+  NavMenuSubMenu,
   RadioGroup,
   Option,
   Optgroup,
