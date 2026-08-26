@@ -1,17 +1,19 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Tooltip from './tooltip.vue'
+import { tooltipProps } from './props'
+import { vTooltip } from './tooltip.directive'
 
-const Tooltip = Object.assign(_Tooltip, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _Tooltip.name, _Tooltip)
+const Tooltip = withInstall(_Tooltip, Object.assign(_Tooltip, {
+  directive: vTooltip,
+}), {
+  setup: (app) => {
+    app.directive('tooltip', vTooltip)
   },
 })
 
 export type TooltipInstance = InstanceType<typeof _Tooltip>
+export type { TooltipProps } from './props'
+export { Tooltip, tooltipProps, vTooltip }
+export const _TooltipComponent = Tooltip
 
 export default Tooltip

@@ -1,5 +1,5 @@
 <template>
-  <c-result status="error" title="This is title content">
+  <c-result status="danger" title="This is title content">
     <template #subtitle> This is subtitle content </template>
 
     <template #extra>

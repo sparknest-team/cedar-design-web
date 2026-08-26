@@ -1,7 +1,20 @@
 // TODO: 脱敏迁移 - 暂时注释 @maplejs/map-core，后续替换为公有包
 // import { LngLat, Map, MapService, PoiInfo, SearchResult, SearchService } from '@maplejs/map-core'
+type PoiInfo = Record<string, any>
+type SearchResult<T> = { list: T[] }
+type MapCoreLngLat = { getLng: () => number; getLat: () => number }
+type MapCoreMap = {
+  setCenter: (lngLat: MapCoreLngLat) => void
+  getCenter: () => MapCoreLngLat
+  on: (event: string, handler: (...args: any[]) => void, ...rest: any[]) => void
+}
+declare const LngLat: new (...args: any[]) => MapCoreLngLat
+declare const Map: new (options: Record<string, any>) => MapCoreMap
+declare const MapService: { init: (...args: any[]) => Promise<void> }
+declare const PoiInfo: new () => PoiInfo
+declare const SearchService: new (...args: any[]) => any
 import { computed, defineComponent, getCurrentInstance, h, onMounted, ref, toRaw, useAttrs, useSlots, watch } from 'vue'
-import { IconEdit, IconSearch } from '../icon'
+import { IconEdit, IconSearch } from '@cedarjs/icons-vue'
 import Input from '../input'
 import { useI18n } from '../locale'
 import Popconfirm from '../popconfirm'
@@ -55,8 +68,7 @@ export default defineComponent({
     const isInited = ref<boolean>(false)
     const searchVal = ref('')
 
-    const searchRes = ref<SearchResult<PoiInfo>>(new SearchResult())
-    searchRes.value.list = []
+    const searchRes = ref<SearchResult<PoiInfo>>({ list: [] })
     const value_ = ref<any>({})
     const value = ref<any>(props.modelValue)
     const valueModel_ = ref<any>({})
@@ -64,7 +76,7 @@ export default defineComponent({
     const isMapInit = ref<boolean>(false)
     const isUpdating = ref(false)
     const isLoading = ref(false)
-    const map = ref<InstanceType<typeof Map>>()
+    const map = ref<MapCoreMap>()
     let service: InstanceType<typeof SearchService>
     const id = ref()
 
@@ -124,6 +136,14 @@ export default defineComponent({
     }
 
     const initMap = async () => {
+      if (
+        typeof MapService === 'undefined' ||
+        typeof SearchService === 'undefined' ||
+        typeof LngLat === 'undefined'
+      ) {
+        isInited.value = true
+        return
+      }
       const { key, geoUrl } = getMapInitData(props.mapType, props.basePath)
       if (props.modelValue?.[valueKeyAlias.address]) {
         value_.value[valueKeyAlias.address] = props.modelValue[valueKeyAlias.address]
@@ -409,7 +429,18 @@ export default defineComponent({
             {searchRes.value.list.length ? (
               <div class="map-search-box" style={{ display: show.value ? 'block' : 'none' }}>
                 {searchRes.value.list.map((item) => (
-                  <div class="map-search-box-item" onClick={() => getAddr(item)}>
+                  <div
+                    class="map-search-box-item"
+                    role="button"
+                    tabindex={0}
+                    onClick={() => getAddr(item)}
+                    onKeydown={(event: KeyboardEvent) => {
+                      if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault()
+                        getAddr(item)
+                      }
+                    }}
+                  >
                     <div class="map-search-box-item-name">{item.name}</div>
                     <div class="map-search-box-item-address">{item.address}</div>
                   </div>
@@ -423,7 +454,19 @@ export default defineComponent({
           </div>
           <img src="https://xxx.com/pe-fe-statics/map-cur-position.png" alt="" class="position-dot" />
           {props.showLocateMeButton ? (
-            <div class="locate-me-btn" onClick={() => locateMe()}>
+            <div
+              class="locate-me-btn"
+              role="button"
+              tabindex={0}
+              aria-label="定位到当前位置"
+              onClick={() => locateMe()}
+              onKeydown={(event: KeyboardEvent) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault()
+                  locateMe()
+                }
+              }}
+            >
               {isLocating.value ? (
                 <Spin />
               ) : (
@@ -461,7 +504,8 @@ export default defineComponent({
                         value_.value[valueKeyAlias.address] = newAddress.value
                         updateModelValue()
                       }}
-                      onPopupVisibleChange={() => (newAddress.value = value_.value[valueKeyAlias.address])}
+                      onOpenChange={() => (newAddress.value = value_.value[valueKeyAlias.address])}
+                      onUpdate:open={() => (newAddress.value = value_.value[valueKeyAlias.address])}
                     >
                       <IconEdit class="edit-address-btn" />
                     </Popconfirm>

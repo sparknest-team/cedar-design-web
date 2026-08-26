@@ -27,15 +27,15 @@
     align-items: center;
     justify-content: center;
     height: 100%;
-    color: @split-trigger-color-icon;
-    font-size: @split-trigger-font-size-icon;
+    color: var(~'--c-split-trigger-icon-color');
+    font-size: var(~'--c-split-trigger-font-size-icon');
     line-height: 1;
-    background-color: @split-trigger-color-background;
+    background-color: var(~'--c-split-trigger-bg');
   }
 
   &-icon {
     display: inline-block;
-    margin: -(@resizeBox-trigger-font-size-icon / 4);
+    margin: calc(var(~'--c-split-trigger-font-size-icon') / -4);
   }
 
   &-vertical {

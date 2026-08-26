@@ -1,48 +1,95 @@
 @import '../../style/theme/index.less';
 
-// Global
-@switch-size-default: @size-6;
-@switch-size-small: @size-4;
-@switch-font-size-text: @font-size-caption;
+:root {
+  // Global
+  --c-switch-size-default: var(~'--c-size-6');
+  --c-switch-size-small: var(~'--c-size-4');
+  --c-switch-font-size-text: var(~'--c-font-size-caption');
 
-// circle and round
-@switch-size-dot-default: @size-4;
-@switch-size-dot-small: 12px;
+  // circle and round
+  --c-switch-dot-size-default: var(~'--c-size-4');
+  --c-switch-dot-size-small: var(~'--c-size-3');
 
-// line
-@switch-line-size-dot-default: @size-5;
-@switch-line-size-dot-small: @size-4;
+  // line
+  --c-switch-line-dot-size-default: var(~'--c-size-5');
+  --c-switch-line-dot-size-small: var(~'--c-size-4');
 
-// Circle
-@switch-circle-default-width: @size-10;
-@switch-circle-small-width: @size-7;
+  // Circle
+  --c-switch-circle-width-default: var(~'--c-size-10');
+  --c-switch-circle-width-small: var(~'--c-size-7');
 
-// Round
-@switch-round-default-width: @size-10;
-@switch-round-small-width: @size-7;
+  // Round
+  --c-switch-round-width-default: var(~'--c-size-10');
+  --c-switch-round-width-small: var(~'--c-size-7');
+  --c-switch-round-border-radius: var(~'--c-border-radius-sm');
+  --c-switch-round-handle-border-radius: var(~'--c-border-radius-sm');
+  --c-switch-round-small-border-radius: var(~'--c-border-radius-sm');
+  --c-switch-round-small-handle-border-radius: 1px;
 
-// Line
-@switch-line-default-width: @size-9;
-@switch-line-small-width: @size-7;
-@switch-line-height-bg-line: 6px;
-@switch-line-color-dot-shadow: var(~'--c-color-neutral-6');
+  // Line
+  --c-switch-line-width-default: var(~'--c-size-9');
+  --c-switch-line-width-small: var(~'--c-size-7');
+  --c-switch-line-bg-height: var(~'--c-spacing-3');
+  --c-switch-line-dot-shadow-color: var(~'--c-color-neutral-6');
 
-@switch-color-bg_on: @color-primary-6;
-@switch-color-bg_off: var(~'--c-color-fill-4');
-@switch-color-bg_on_disabled: var(~'--c-color-primary-light-3');
-@switch-color-bg_off_disabled: var(~'--c-color-fill-2');
-@switch-color-bg_on_loading: var(~'--c-color-primary-light-3');
-@switch-color-bg_off_loading: var(~'--c-color-fill-2');
-@switch-color-dot-bg: var(~'--c-color-bg-white');
-@switch-color-text_on: var(~'--c-color-white');
-@switch-color-text_off: var(~'--c-color-white');
-@switch-color-text_on_disabled: var(~'--c-color-white');
-@switch-color-text_off_disabled: var(~'--c-color-white');
-@switch-color-text_on_loading: var(~'--c-color-primary-light-1');
-@switch-color-text_off_loading: var(~'--c-color-white');
-@switch-color-dot-icon_on: @color-primary-6;
-@switch-color-dot-icon_off: var(~'--c-color-neutral-3');
-@switch-color-dot-icon_on_disabled: var(~'--c-color-primary-light-3');
-@switch-color-dot-icon_off_disabled: var(~'--c-color-fill-2');
-@switch-color-dot-icon_on_loading: var(~'--c-color-primary-light-3');
-@switch-color-dot-icon_off_loading: var(~'--c-color-neutral-3');
+  // derived gaps / radii
+  --c-switch-gap-default: calc(
+    (var(~'--c-switch-size-default') - var(~'--c-switch-dot-size-default')) / 2
+  );
+  --c-switch-gap-small: calc(
+    (var(~'--c-switch-size-small') - var(~'--c-switch-dot-size-small')) / 2
+  );
+  --c-switch-line-gap-default: calc(
+    (var(~'--c-switch-size-default') - var(~'--c-switch-line-dot-size-default')) / 2
+  );
+  --c-switch-line-gap-small: calc(
+    (var(~'--c-switch-size-small') - var(~'--c-switch-line-dot-size-small')) / 2
+  );
+  --c-switch-border-radius-default: calc(var(~'--c-switch-size-default') / 2);
+  --c-switch-border-radius-small: calc(var(~'--c-switch-size-small') / 2);
+  --c-switch-line-bg-border-radius: calc(var(~'--c-switch-line-bg-height') / 2);
+  --c-switch-line-handle-border-radius-default: calc(var(~'--c-switch-line-dot-size-default') / 2);
+  --c-switch-text-offset: calc(
+    var(~'--c-switch-dot-size-default') + var(~'--c-switch-gap-default') + var(~'--c-spacing-3')
+  );
+  --c-switch-text-padding-inline: var(~'--c-spacing-4');
+  --c-switch-handle-font-size: var(~'--c-font-size-body-1');
+  --c-switch-handle-checked-left: calc(
+    100% - var(~'--c-switch-dot-size-default') - var(~'--c-switch-gap-default')
+  );
+  --c-switch-handle-checked-left-small: calc(
+    100% - var(~'--c-switch-dot-size-small') - var(~'--c-switch-gap-small')
+  );
+  --c-switch-line-handle-checked-left: calc(100% - var(~'--c-switch-line-dot-size-default'));
+  --c-switch-line-handle-checked-left-small: calc(
+    100% - var(~'--c-switch-line-dot-size-small') - var(~'--c-switch-line-gap-small')
+  );
+  --c-switch-gap-small-neg: calc(var(~'--c-switch-gap-small') * -1);
+  --c-switch-line-gap-small-neg: calc(var(~'--c-switch-line-gap-small') * -1);
+
+  --c-switch-bg-on: rgb(var(~'--c-primary-6'));
+  --c-switch-bg-off: var(~'--c-color-fill-4');
+  --c-switch-bg-on-disabled: var(~'--c-color-primary-light-3');
+  --c-switch-bg-off-disabled: var(~'--c-color-fill-2');
+  --c-switch-bg-on-loading: var(~'--c-color-primary-light-3');
+  --c-switch-bg-off-loading: var(~'--c-color-fill-2');
+  --c-switch-dot-bg: var(~'--c-color-bg-white');
+  --c-switch-text-color-on: var(~'--c-color-white');
+  --c-switch-text-color-off: var(~'--c-color-white');
+  --c-switch-text-color-on-disabled: var(~'--c-color-white');
+  --c-switch-text-color-off-disabled: var(~'--c-color-white');
+  --c-switch-text-color-on-loading: var(~'--c-color-primary-light-1');
+  --c-switch-text-color-off-loading: var(~'--c-color-white');
+  --c-switch-dot-icon-color-on: rgb(var(~'--c-primary-6'));
+  --c-switch-dot-icon-color-off: var(~'--c-color-neutral-3');
+  --c-switch-dot-icon-color-on-disabled: var(~'--c-color-primary-light-3');
+  --c-switch-dot-icon-color-off-disabled: var(~'--c-color-fill-2');
+  --c-switch-dot-icon-color-on-loading: var(~'--c-color-primary-light-3');
+  --c-switch-dot-icon-color-off-loading: var(~'--c-color-neutral-3');
+
+  --c-switch-custom-color: var(~'--c-switch-bg-off');
+
+  --c-switch-transition-duration: var(~'--c-transition-duration-2');
+  --c-switch-transition-timing-function: var(~'--c-transition-timing-function-standard');
+  --c-switch-line-dot-box-shadow: 0 1px 3px var(~'--c-switch-line-dot-shadow-color');
+}

@@ -1,5 +1,5 @@
 import { type App, type Directive, type DirectiveBinding, type Plugin } from 'vue'
-import { camelize, inMobile, isFunction } from '@maplejs/maple-shared'
+import { camelize, inMobile, isFunction } from '@cedarjs/shared'
 
 export type HoverValue = Record<string, any> | ((isHovering: boolean) => void)
 
@@ -178,5 +178,7 @@ const Hover: Directive & Plugin = {
 }
 
 export const _HoverComponent = Hover
+
+export { Hover }
 
 export default Hover

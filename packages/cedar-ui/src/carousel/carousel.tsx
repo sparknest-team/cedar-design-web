@@ -1,21 +1,16 @@
-import type { PropType } from 'vue'
 import {
   defineComponent, computed, ref, watch, onMounted, onBeforeUnmount, provide, nextTick, onActivated,
 } from 'vue'
-import { getPrefixCls } from '../_utils/global-config'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import { carouselInjectionKey } from './context'
 import { isObject } from '../_utils/is'
-import type {
-  CarouselArrowType, CarouselAutoPlayConfig, CarouselIndicatorPosition,
-  CarouselIndicatorType, CarouselTriggerEvent,
-} from './types'
-import { Direction } from '../_utils/constant'
 import { useChildrenComponents } from '../_hooks/use-children-components'
 import { useResizeObserver } from '../_hooks/use-resize-observer'
-import IconLeft from '../icon/icon-left'
-import IconRight from '../icon/icon-right'
-import IconUp from '../icon/icon-up'
-import IconDown from '../icon/icon-down'
+import { IconLeft } from '@cedarjs/icons-vue/icon-left'
+import { IconRight } from '@cedarjs/icons-vue/icon-right'
+import { IconUp } from '@cedarjs/icons-vue/icon-up'
+import { IconDown } from '@cedarjs/icons-vue/icon-down'
+import { carouselProps } from './props'
 
 function toSizeUnit(v: unknown): string | undefined {
   if (v == null) return undefined
@@ -28,36 +23,8 @@ function clamp(v: number, min: number, max: number) {
 }
 
 export default defineComponent({
-  name: 'Carousel',
-  props: {
-    current: Number,
-    defaultCurrent: { type: Number, default: 0 },
-    loop: { type: Boolean, default: true },
-    autoPlay: { type: [Boolean, Object] as PropType<boolean | CarouselAutoPlayConfig>, default: false },
-    moveSpeed: { type: Number, default: 500 },
-    animationName: { type: String as PropType<'slide' | 'fade' | 'card'>, default: 'slide' },
-    effect: { type: String as PropType<'slide' | 'fade' | 'card'>, default: 'slide' },
-    trigger: { type: String as PropType<CarouselTriggerEvent>, default: 'click' },
-    direction: { type: String as PropType<Direction>, default: 'horizontal' },
-    vertical: { type: Boolean, default: false },
-    showArrow: { type: String as PropType<CarouselArrowType>, default: 'always' },
-    navigation: { type: [Boolean, String] as PropType<boolean | CarouselArrowType>, default: false },
-    arrowClass: String,
-    indicator: { type: Boolean, default: true },
-    indicatorType: { type: String as PropType<CarouselIndicatorType>, default: 'dot' },
-    indicatorPosition: { type: String as PropType<CarouselIndicatorPosition>, default: 'bottom' },
-    indicatorClass: String,
-    indicatorColor: String,
-    height: String,
-    transitionTimingFunction: { type: String, default: 'cubic-bezier(0.34, 0.69, 0.1, 1)' },
-    touchable: { type: Boolean, default: true },
-    draggable: { type: Boolean, default: false },
-    mousewheel: { type: Boolean, default: false },
-    keyboard: { type: Boolean, default: false },
-    slidesPerView: { type: [String, Number] as PropType<number | 'auto'>, default: 1 },
-    spaceBetween: { type: [String, Number], default: 0 },
-    centeredSlides: { type: Boolean, default: false },
-  },
+  name: createNamespace('carousel').name,
+  props: carouselProps,
   emits: ['update:current', 'change'],
   setup(props, { emit, expose, slots }) {
     const prefixCls = getPrefixCls('carousel')
@@ -70,14 +37,11 @@ export default defineComponent({
     const prevIndex = ref(-1)
     const hovering = ref(false)
     const isPause = ref(false)
-    const { children, components } = useChildrenComponents('CarouselItem')
+    const { children, components } = useChildrenComponents(createNamespace('carousel-item').name)
     const length = computed(() => components.value.length)
-    const vertical = computed(() => props.vertical || props.direction === 'vertical')
-    const resolvedEffect = computed(() => props.effect || props.animationName)
+    const vertical = computed(() => props.direction === 'vertical')
     const showArrowComputed = computed(() => {
       if (props.showArrow === 'never') return false
-      if (props.navigation === true || props.navigation === 'always') return true
-      if (props.navigation === 'hover') return hovering.value
       return props.showArrow === 'always' || (props.showArrow === 'hover' && hovering.value)
     })
 
@@ -104,7 +68,7 @@ export default defineComponent({
     }
 
     // Provide for CarouselItem
-    provide(carouselInjectionKey, { items: components, size, vertical, registerItem, unregisterItem })
+    provide(carouselInjectionKey, { items: components, current: index, size, vertical, registerItem, unregisterItem })
 
     let initialized = false
     let timer = -1
@@ -255,7 +219,6 @@ export default defineComponent({
       initIndex()
       requestAnimationFrame(() => resize())
       createResizeObserver()
-      window.addEventListener('keydown', handleKeydown)
       setupWheelListener()
     })
 
@@ -264,7 +227,6 @@ export default defineComponent({
     onBeforeUnmount(() => {
       stop()
       destroyResizeObserver()
-      window.removeEventListener('keydown', handleKeydown)
       if (wheelHandler && elRef.value) {
         elRef.value.removeEventListener('wheel', wheelHandler, wheelEventOptions)
       }
@@ -470,6 +432,10 @@ export default defineComponent({
       return (
         <div
           ref={elRef}
+          role="region"
+          aria-roledescription="carousel"
+          aria-label={props.ariaLabel}
+          tabindex={props.keyboard ? 0 : undefined}
           class={[
             prefixCls,
             `${prefixCls}-indicator-position-${props.indicatorPosition}`,
@@ -477,6 +443,7 @@ export default defineComponent({
           style={props.height ? { height: props.height } : undefined}
           onMouseenter={() => { hovering.value = true; if (autoPlayConfig.value.hoverToPause) stop() }}
           onMouseleave={() => { hovering.value = false; if (autoPlayConfig.value.hoverToPause) start() }}
+          onKeydown={props.keyboard ? handleKeydown : undefined}
         >
           {/* Track */}
           <div
@@ -502,21 +469,34 @@ export default defineComponent({
             ? slots.indicator(slotScope.value)
             : (
             <div class={`${prefixCls}-indicator-wrapper ${prefixCls}-indicator-wrapper-${props.indicatorPosition}`}>
-              <div class={`${prefixCls}-indicator ${prefixCls}-indicator-${props.indicatorType} ${prefixCls}-indicator-${props.indicatorPosition}`}>
+              <div class={[`${prefixCls}-indicator`, `${prefixCls}-indicator-${props.indicatorType}`, `${prefixCls}-indicator-${props.indicatorPosition}`, props.indicatorClass]}>
                 {props.indicatorType === 'slider' ? (
-                  <span
+                  <button
+                    type="button"
+                    aria-label={`Go to slide ${index.value + 1}`}
+                    aria-current="true"
                     class={[`${prefixCls}-indicator-item`, `${prefixCls}-indicator-item-active`]}
                     style={{ width: `${100 / length.value}%`, left: `${index.value * (100 / length.value)}%` }}
                   />
                 ) : Array.from({ length: length.value }).map((_, i) => (
                   <span
                     key={i}
+                    role="button"
+                    tabindex={0}
+                    aria-label={`切换到第 ${i + 1} 页`}
+                    aria-current={i === index.value ? 'true' : undefined}
                     class={[
                       `${prefixCls}-indicator-item`,
                       { [`${prefixCls}-indicator-item-active`]: i === index.value },
                     ]}
                     style={props.indicatorColor ? { background: props.indicatorColor } : undefined}
                     onClick={() => slideTo(i, true)}
+                    onKeydown={(event: KeyboardEvent) => {
+                      if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault()
+                        slideTo(i, true)
+                      }
+                    }}
                     onMouseover={props.trigger === 'hover' ? () => slideTo(i, true) : undefined}
                   />
                 ))}
@@ -529,14 +509,14 @@ export default defineComponent({
           {showArrowComputed.value && (
             <div class={`${prefixCls}-arrow`}>
               {slots.prev ? slots.prev(slotScope.value) : (
-                <div class={`${prefixCls}-arrow-left`} onClick={prev}>
+                <button type="button" aria-label={props.previousButtonAriaLabel} class={[`${prefixCls}-arrow-left`, props.arrowClass]} onClick={prev}>
                   {vertical.value ? <IconUp /> : <IconLeft />}
-                </div>
+                </button>
               )}
               {slots.next ? slots.next(slotScope.value) : (
-                <div class={`${prefixCls}-arrow-right`} onClick={next}>
+                <button type="button" aria-label={props.nextButtonAriaLabel} class={[`${prefixCls}-arrow-right`, props.arrowClass]} onClick={next}>
                   {vertical.value ? <IconDown /> : <IconRight />}
-                </div>
+                </button>
               )}
             </div>
           )}

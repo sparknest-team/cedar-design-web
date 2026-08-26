@@ -16,7 +16,7 @@
 
 <script lang="ts" setup>
 import { reactive, h } from 'vue'
-import { IconSearch } from '@cedar/ui'
+import { Search } from '@cedarjs/ui'
 const columns = [
   {
     title: 'Name',
@@ -24,7 +24,7 @@ const columns = [
     filterable: {
       filter: (value, record) => record.name.includes(value),
       slotName: 'name-filter',
-      icon: () => h(IconSearch),
+      icon: () => h(Search),
     },
   },
   {

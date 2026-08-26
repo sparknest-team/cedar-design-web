@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { UploadFileItem } from '@cedar/ui'
+import type { UploadFileItem } from '@cedarjs/ui'
 
 const files = ref<UploadFileItem[]>([
   {
@@ -21,5 +21,5 @@ const files = ref<UploadFileItem[]>([
 </script>
 
 <template>
-  <c-upload v-model:file-list="files" list-type="picture-card" multiple image-fit="cover" />
+  <c-upload v-model="files" list-type="picture-card" multiple image-fit="cover" />
 </template>

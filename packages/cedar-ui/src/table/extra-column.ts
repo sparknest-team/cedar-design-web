@@ -1,4 +1,4 @@
-import type { Size } from "../_utils/constant";
+import type { ComponentSize } from "../_utils/constant";
 
 /** 末列扩展列（如设置按钮）的默认 dataIndex */
 export const TABLE_EXTRA_COLUMN_KEY = "__cedar_table_extra__";
@@ -42,7 +42,7 @@ export function resolveExtraColumnConfig(
 }
 
 export function getExtraColumnWidth(
-  size?: Size | string,
+  size?: ComponentSize | string,
   customWidth?: number,
 ): number {
   if (customWidth != null) return customWidth;

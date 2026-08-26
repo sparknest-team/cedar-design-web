@@ -7,7 +7,7 @@
   >
     <c-card
       title="Title Card Title Card Title Card Title Card Title Card Title Card"
-      sub-title="Sub Title Card"
+      subtitle="Sub Title Card"
       description="Description Card"
       :loading="loading"
       spinTip="加载中..."
@@ -24,7 +24,7 @@
     <br />
     <c-card
       title="Title Card2"
-      sub-title="Sub Title Card2"
+      subtitle="Sub Title Card2"
       description="Description Card2"
       :loading="loading2"
       spinTip="5秒后消失，加载中..."

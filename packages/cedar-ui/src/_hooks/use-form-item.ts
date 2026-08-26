@@ -1,6 +1,6 @@
 import { computed, inject, Ref, toRef } from 'vue'
 import { FormItemContext, formItemInjectionKey } from '../form/context'
-import { Size } from '../_utils/constant'
+import { ComponentSize } from '../_utils/constant'
 
 export const useFormItem = ({
   size,
@@ -8,7 +8,7 @@ export const useFormItem = ({
   error,
   uninject,
 }: {
-  size?: Ref<Size | undefined>
+  size?: Ref<ComponentSize | undefined>
   disabled?: Ref<boolean>
   error?: Ref<boolean>
   // private

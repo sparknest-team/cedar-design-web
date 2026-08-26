@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { UploadCustomRequest, UploadFileItem, UploadProgressEvent } from '@cedar/ui'
+import type { UploadCustomRequest, UploadFileItem, UploadProgressEvent } from '@cedarjs/ui'
 
 const files = ref<UploadFileItem[]>([])
 
@@ -54,7 +54,7 @@ const customRequest: UploadCustomRequest = (options) => {
 
 <template>
   <c-upload
-    v-model:file-list="files"
+    v-model="files"
     accept="image/*"
     list-type="picture"
     multiple

@@ -11,7 +11,7 @@
   <c-drawer
     :width="340"
     :height="340"
-    :visible="visible"
+    :open="visible"
     :placement="position"
     @ok="handleOk"
     @cancel="handleCancel"

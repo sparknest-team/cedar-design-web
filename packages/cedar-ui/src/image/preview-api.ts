@@ -4,7 +4,7 @@ import ImagePreviewGroup from './preview-group.vue'
 import { imagePlatformConfig } from './platform.config'
 import type { ImagePreviewOptions, UserImagePreviewOptions } from './types.unified'
 import { normalizePreviewOptions } from './utils/normalizePreviewOptions'
-import { resolveLoop, resolveTeleport } from './utils/resolvePreviewAliases'
+import { resolveLoop, resolvePopupContainer } from './utils/resolvePreviewOptions'
 
 let singletonApp: App | null = null
 let singletonHost: HTMLElement | null = null
@@ -32,8 +32,7 @@ function previewImage(options: UserImagePreviewOptions) {
   const imagePreviewOptions = normalizePreviewOptions(options, defaultOptions)
   const reactiveOptions = reactive({
     ...imagePreviewOptions,
-    visible: true,
-    show: true,
+    open: true,
     closable: imagePreviewOptions.closable ?? imagePlatformConfig.defaultClosable,
     maskClosable: imagePreviewOptions.maskClosable ?? imagePlatformConfig.defaultMaskClosable,
     actionsLayout: imagePreviewOptions.actionsLayout ?? imagePlatformConfig.toolbarActions,
@@ -44,7 +43,7 @@ function previewImage(options: UserImagePreviewOptions) {
   const images = reactiveOptions.images ?? []
   const useGroup = images.length > 1
   const loop = resolveLoop(reactiveOptions, imagePlatformConfig.defaultLoop)
-  const popupContainer = resolveTeleport(reactiveOptions)
+  const popupContainer = resolvePopupContainer(reactiveOptions) as string | HTMLElement | undefined
 
   singletonHost = document.createElement('div')
   document.body.appendChild(singletonHost)
@@ -55,32 +54,25 @@ function previewImage(options: UserImagePreviewOptions) {
         if (useGroup) {
           return h(ImagePreviewGroup, {
             images,
-            srcList: images,
-            visible: reactiveOptions.visible,
+            open: reactiveOptions.open,
             current: reactiveOptions.current ?? 0,
             loop,
-            infinite: loop,
             closable: reactiveOptions.closable,
             maskClosable: reactiveOptions.maskClosable,
             actionsLayout: reactiveOptions.actionsLayout,
             popupContainer,
-            teleport: popupContainer,
             previewProps: reactiveOptions,
-            'onUpdate:visible': (value: boolean) => {
-              reactiveOptions.visible = value
-              reactiveOptions.show = value
+            'onUpdate:open': (value: boolean) => {
+              reactiveOptions.open = value
               if (!value) {
                 callClose()
               }
             },
-            onPreviewVisibleChange: (value: boolean) => {
-              reactiveOptions.onPreviewVisibleChange?.(value)
+            onOpenChange: (value: boolean) => {
+              reactiveOptions.onOpenChange?.(value)
               if (!value) {
                 callClose()
               }
-            },
-            onVisibleChange: (value: boolean) => {
-              reactiveOptions.onVisibleChange?.(value)
             },
             onChange: (index: number) => {
               reactiveOptions.current = index
@@ -91,26 +83,20 @@ function previewImage(options: UserImagePreviewOptions) {
 
         return h(ImagePreview, {
           src: images[0] ?? reactiveOptions.src,
-          visible: reactiveOptions.visible,
-          show: reactiveOptions.show,
+          open: reactiveOptions.open,
           closable: reactiveOptions.closable,
           maskClosable: reactiveOptions.maskClosable,
           actionsLayout: reactiveOptions.actionsLayout,
           popupContainer,
-          teleport: popupContainer,
-          wheelZoom: reactiveOptions.wheelZoom,
-          keyboard: reactiveOptions.keyboard,
-          escToClose: reactiveOptions.escToClose ?? reactiveOptions.closeOnKeyEscape,
-          closeOnKeyEscape: reactiveOptions.closeOnKeyEscape ?? reactiveOptions.escToClose,
+          wheelZoom: reactiveOptions.wheelZoom ?? true,
+          keyboard: reactiveOptions.keyboard ?? true,
+          escToClose: reactiveOptions.escToClose,
           onClose: () => {
             reactiveOptions.onClose?.()
             callClose()
           },
-          onPreviewVisibleChange: (value: boolean) => {
-            reactiveOptions.onPreviewVisibleChange?.(value)
-          },
-          onVisibleChange: (value: boolean) => {
-            reactiveOptions.onVisibleChange?.(value)
+          onOpenChange: (value: boolean) => {
+            reactiveOptions.onOpenChange?.(value)
           },
         })
       }
@@ -131,8 +117,7 @@ previewImage.close = () => {
     singletonOptions = null
 
     nextTick().then(() => {
-      prevOptions.visible = false
-      prevOptions.show = false
+      prevOptions.open = false
       unmountSingleton()
     })
   }

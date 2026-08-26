@@ -5,10 +5,10 @@
     description="Present by Cedar Design"
     width="260"
     style="margin-right: 67px; vertical-align: top"
-    :preview-visible="visible1"
-    @preview-visible-change="
+    :preview-open="open1"
+    @preview-open-change="
       () => {
-        visible1 = false
+        open1 = false
       }
     "
   >
@@ -18,7 +18,7 @@
           class="action"
           @click="
             () => {
-              visible1 = true
+              open1 = true
             }
           "
           ><c-icon-eye
@@ -36,10 +36,10 @@
     description="Present by Cedar Design"
     width="260"
     footer-position="outer"
-    :preview-visible="visible2"
-    @preview-visible-change="
+    :preview-open="open2"
+    @preview-open-change="
       () => {
-        visible2 = false
+        open2 = false
       }
     "
   >
@@ -49,7 +49,7 @@
           class="action"
           @click="
             () => {
-              visible2 = true
+              open2 = true
             }
           "
           ><c-icon-eye
@@ -66,8 +66,8 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-const visible1 = ref(false)
-const visible2 = ref(false)
+const open1 = ref(false)
+const open2 = ref(false)
 
 const onDownLoad = () => {
   console.log('download')

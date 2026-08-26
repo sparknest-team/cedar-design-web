@@ -1,4 +1,4 @@
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 import { computed, nextTick, reactive, toRefs, watch } from 'vue'
 import pick from '../../_utils/pick'
 import { getSortedDayjsArray, methods } from '../../_utils/date'

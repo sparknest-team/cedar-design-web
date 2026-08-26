@@ -69,5 +69,5 @@ permalink: /components/spin/
 组件导出以下类型定义
 
 ```ts
-import type { SpinProps } from '@cedar/ui'
+import type { SpinProps } from '@cedarjs/ui'
 ```

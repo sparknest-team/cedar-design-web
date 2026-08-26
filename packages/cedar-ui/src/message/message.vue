@@ -17,29 +17,28 @@
     <span :class="`${prefixCls}-content`">
       <slot />
     </span>
-    <span v-if="closable" :class="`${prefixCls}-close-btn`" @click="handleClose">
+    <button v-if="closable" type="button" :aria-label="closeButtonAriaLabel" :class="`${prefixCls}-close-btn`" @click="handleClose">
       <a-icon-hover>
         <icon-close />
       </a-icon-hover>
-    </span>
+    </button>
   </li>
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue'
 import { defineComponent, onMounted, onUnmounted, onUpdated } from 'vue'
-import { getPrefixCls } from '../_utils/global-config'
-import { MESSAGE_TYPES, MessageType } from '../_utils/constant'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import AIconHover from '../_components/icon-hover.vue'
-import IconClose from '../icon/icon-close'
-import IconInfoCircleFill from '../icon/icon-info-circle-fill'
-import IconCheckCircleFill from '../icon/icon-check-circle-fill'
-import IconExclamationCircleFill from '../icon/icon-exclamation-circle-fill'
-import IconCloseCircleFill from '../icon/icon-close-circle-fill'
-import IconLoading from '../icon/icon-loading'
+import { IconClose } from '@cedarjs/icons-vue/icon-close'
+import { IconInfoCircleFill } from '@cedarjs/icons-vue/icon-info-circle-fill'
+import { IconCheckCircleFill } from '@cedarjs/icons-vue/icon-check-circle-fill'
+import { IconExclamationCircleFill } from '@cedarjs/icons-vue/icon-exclamation-circle-fill'
+import { IconCloseCircleFill } from '@cedarjs/icons-vue/icon-close-circle-fill'
+import { IconLoading } from '@cedarjs/icons-vue/icon-loading'
+import { messageProps } from './props'
 
 export default defineComponent({
-  name: 'Message',
+  name: createNamespace('message').name,
   components: {
     AIconHover,
     IconInfoCircleFill,
@@ -49,32 +48,7 @@ export default defineComponent({
     IconClose,
     IconLoading,
   },
-  props: {
-    type: {
-      type: String as PropType<MessageType | 'loading' | 'normal'>,
-      default: 'info',
-    },
-    closable: {
-      type: Boolean,
-      default: false,
-    },
-    showIcon: {
-      type: Boolean,
-      default: true,
-    },
-    duration: {
-      type: Number,
-      default: 3000,
-    },
-    resetOnUpdate: {
-      type: Boolean,
-      default: false,
-    },
-    resetOnHover: {
-      type: Boolean,
-      default: false,
-    },
-  },
+  props: messageProps,
   emits: ['close'],
   setup(props, { emit }) {
     const prefixCls = getPrefixCls('message')

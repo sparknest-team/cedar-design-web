@@ -19,6 +19,7 @@ import Collapse, { CollapseItem } from './collapse'
 import ColorPicker from './color-picker'
 import Color from './color'
 import ConfigProvider from './config-provider'
+import StyleProvider from './style-provider'
 import DatePicker, { DateRangePicker } from './date-picker'
 import Date from './date'
 import DateRange from './date-range'
@@ -27,7 +28,8 @@ import Divider from './divider'
 import CountTo from './count-to'
 import DragContainer from './drag-container'
 import Drawer from './drawer'
-import Menu, { MenuOption, MenuGroup, MenuSubmenu, MenuButton } from './menu'
+import Menu, { MenuOption, MenuGroup, MenuSubmenu } from './menu'
+import SplitButton from './split-button'
 import Empty from './empty'
 import Form, { FormItem } from './form'
 import Grid, { Row, Col, GridItem } from './grid'
@@ -55,6 +57,7 @@ import ResizeBox from './resize-box'
 import Result from './result'
 import Scrollbar from './scrollbar'
 import Search from './search'
+import Segmented from './segmented'
 import Select, { Option, Optgroup } from './select'
 import Skeleton, { SkeletonLine, SkeletonShape } from './skeleton'
 import Slider from './slider'
@@ -130,6 +133,7 @@ const components: Record<string, Plugin> = {
   Radio,
   Rate,
   Select,
+  Segmented,
   Slider,
   Switch,
   Textarea,
@@ -152,6 +156,7 @@ const components: Record<string, Plugin> = {
   Skeleton,
   Breadcrumb,
   Menu,
+  SplitButton,
   NavMenu,
   PageHeader,
   Pagination,
@@ -160,6 +165,7 @@ const components: Record<string, Plugin> = {
   Anchor,
   BackTop,
   ConfigProvider,
+  StyleProvider,
   ResizeBox,
   Trigger,
   Split,
@@ -177,7 +183,7 @@ const install = (app: App, options?: CedarOptions) => {
   }
 }
 
-const CedarVue = {
+const CedarVue: Record<string, any> = {
   ...components,
   // Historical reason
   Alter: Alert,
@@ -197,7 +203,7 @@ const CedarVue = {
   MenuOption,
   MenuGroup,
   MenuSubmenu,
-  MenuButton,
+  SplitButton,
   FormItem,  Row,
   Col,
   GridItem,

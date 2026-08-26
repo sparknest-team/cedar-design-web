@@ -37,5 +37,5 @@ permalink: /components/loading/
 组件导出以下类型定义
 
 ```ts
-import type { LoadingProps } from '@cedar/ui'
+import type { LoadingProps } from '@cedarjs/ui'
 ```

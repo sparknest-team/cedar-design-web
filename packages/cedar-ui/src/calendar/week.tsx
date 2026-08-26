@@ -1,5 +1,5 @@
 import { defineComponent, toRefs, PropType } from 'vue'
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
 import { useI18n } from '../locale'
 

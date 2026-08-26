@@ -17,6 +17,5 @@ const handleClick = async () => {
 }
 
 const handleClick2 = async () => {
-    console.log('handleClick2')
 }
 </script>

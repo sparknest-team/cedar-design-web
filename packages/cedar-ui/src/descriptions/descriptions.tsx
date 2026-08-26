@@ -1,98 +1,19 @@
-import type { PropType, VNode, CSSProperties } from 'vue'
+import type { VNode, CSSProperties } from 'vue'
 import { computed, defineComponent, isVNode, toRefs } from 'vue'
-import type { Size, TextAlign } from '../_utils/constant'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
 import { isFunction, isObject } from '../_utils/is'
 import { DescData, RenderData } from './types'
 import { getAllElements, isSlotsChildren } from '../_utils/vue-utils'
 import { useResponsiveState } from '../grid/hook/use-responsive-state'
-import { ResponsiveValue } from '../grid'
 import { useSize } from '../_hooks/use-size'
+import { descriptionsProps } from './props'
 
 
 const { name } = createNamespace('descriptions')
 
 export default defineComponent({
   name,
-  props: {
-    /**
-     * @zh 描述列表的数据
-     * @en Data for descriptions
-     */
-    data: {
-      type: Array as PropType<DescData[]>,
-      default: () => [],
-    },
-    /**
-     * @zh 每行放置的数据个数。2.20.0 版本支持响应式配置，配置可参考 Grid
-     * @en The number of data placed in each row. Version 2.20.0 supports reactive configuration, the configuration can refer to Grid
-     */
-    column: {
-      type: [Number, Object] as PropType<number | ResponsiveValue>,
-      default: 3,
-    },
-    /**
-     * @zh 描述列表的标题
-     * @en Title of descriptions
-     */
-    title: String,
-    /**
-     * @zh 描述列表的排列方式
-     * @en Arrangement of descriptions
-     */
-    layout: {
-      type: String as PropType<'horizontal' | 'vertical' | 'inline-horizontal' | 'inline-vertical'>,
-      default: 'horizontal',
-    },
-    /**
-     *  @zh 文字的对齐位置
-     *  @en Alignment position of text
-     */
-    align: {
-      type: [String, Object] as PropType<TextAlign | { label?: TextAlign; value?: TextAlign }>,
-      default: 'left',
-    },
-    /**
-     * @zh 描述列表的大小
-     * @en The size of the descriptions
-     * @values 'xs', 'sm', 'md', 'lg', 'xl'
-     */
-    size: {
-      type: String as PropType<Size>,
-    },
-    /**
-     * @zh 是否显示边框
-     * @en Whether to show the border
-     */
-    bordered: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 数据标签的样式
-     * @en Data label style
-     */
-    labelStyle: {
-      type: Object as PropType<CSSProperties>,
-    },
-    /**
-     * @zh 数据内容的样式
-     * @en Data content style
-     */
-    valueStyle: {
-      type: Object as PropType<CSSProperties>,
-    },
-    /**
-     * @zh 描述中表格样式的 `layout-fixed`，当设置成 `fixed` 时，宽度会均分。
-     * @en The `layout-fixed` of the table style in the description. The width will be evenly distributed when it's set to `fixed`.
-     * @defaultValue 'auto'
-     * @version 2.38.0
-     */
-    tableLayout: {
-      type: String as PropType<'auto' | 'fixed'>,
-      default: 'auto',
-    },
-  },
+  props: descriptionsProps,
   /**
    * @zh 标题
    * @en Title
@@ -195,14 +116,15 @@ export default defineComponent({
       <>
         <tr class={`${prefixCls}-row`}>
           {data.map((item, index) => (
-            <td
+            <th
+              scope="col"
               key={`label-${index}`}
               class={[`${prefixCls}-item-label`, `${prefixCls}-item-label-block`]}
               style={labelStyle.value}
               colspan={item.span}
             >
               {renderLabel(item.data, index)}
-            </td>
+            </th>
           ))}
         </tr>
         <tr class={`${prefixCls}-row`}>
@@ -224,9 +146,9 @@ export default defineComponent({
       <tr class={`${prefixCls}-row`} key={`tr-${index}`}>
         {data.map((item) => (
           <>
-            <td class={[`${prefixCls}-item-label`, `${prefixCls}-item-label-block`]} style={labelStyle.value}>
+            <th scope="row" class={[`${prefixCls}-item-label`, `${prefixCls}-item-label-block`]} style={labelStyle.value}>
               {renderLabel(item.data, index)}
-            </td>
+            </th>
             <td
               class={[`${prefixCls}-item-value`, `${prefixCls}-item-value-block`]}
               style={valueStyle.value}
@@ -291,7 +213,7 @@ export default defineComponent({
         <div class={cls.value}>
           {renderTitle()}
           <div class={`${prefixCls}-body`}>
-            <table class={`${prefixCls}-table`}>
+            <table class={`${prefixCls}-table`} aria-label={props.ariaLabel ?? props.title}>
               <tbody>{_groupedData.map((data, index) => renderItems(data, index))}</tbody>
             </table>
           </div>

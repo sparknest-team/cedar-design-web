@@ -1,4 +1,4 @@
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 import { isArray } from '../../_utils/is'
 import { TimePickerProps } from '../types'
 import { isDisabledTime } from '../utils'

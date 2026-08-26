@@ -1,29 +1,21 @@
 @import '../../style/theme/index.less';
 
-/**********************************************
- * Popup Box
- **********************************************/
-@auto-complete-popup-max-height: @size-50;
-@auto-complete-popup-border-radius: @radius-md;
-@auto-complete-popup-padding-vertical: @spacing-2;
-@auto-complete-popup-font-size: @font-size-body-3;
-@auto-complete-popup-color-border: var(~'--c-color-fill-3');
-@auto-complete-popup-box-shadow: @shadow2-down;
-
-/**********************************************
- * Popup Options
- * status: default / disabled / selected / hover
- **********************************************/
-@auto-complete-option-height: @size-9;
-@auto-complete-option-font-weight_selected: @font-weight-500;
-@auto-complete-option-padding-horizontal: @spacing-6;
-
-@auto-complete-option-color-bg_default: var(~'--c-color-bg-popup');
-@auto-complete-option-color-bg_hover: var(~'--c-color-fill-2');
-@auto-complete-option-color-bg_selected: var(~'--c-color-bg-popup');
-@auto-complete-option-color-bg_disabled: var(~'--c-color-bg-popup');
-
-@auto-complete-option-color-text_default: var(~'--c-color-text-1');
-@auto-complete-option-color-text_hover: var(~'--c-color-text-1');
-@auto-complete-option-color-text_selected: var(~'--c-color-text-1');
-@auto-complete-option-color-text_disabled: var(~'--c-color-text-4');
+:root {
+  --c-auto-complete-popup-max-height: var(~'--c-size-50');
+  --c-auto-complete-popup-border-radius: var(~'--c-border-radius-md');
+  --c-auto-complete-popup-padding-vertical: var(~'--c-spacing-2');
+  --c-auto-complete-popup-font-size: var(~'--c-font-size-body-3');
+  --c-auto-complete-popup-border-color: var(~'--c-color-fill-3');
+  --c-auto-complete-popup-box-shadow: var(~'--c-shadow2-down');
+  --c-auto-complete-option-height: var(~'--c-size-9');
+  --c-auto-complete-option-font-weight-selected: var(~'--c-font-weight-500');
+  --c-auto-complete-option-padding-horizontal: var(~'--c-spacing-6');
+  --c-auto-complete-option-bg-default: var(~'--c-color-bg-popup');
+  --c-auto-complete-option-bg-hover: var(~'--c-color-fill-2');
+  --c-auto-complete-option-bg-selected: var(~'--c-color-bg-popup');
+  --c-auto-complete-option-bg-disabled: var(~'--c-color-bg-popup');
+  --c-auto-complete-option-text-color-default: var(~'--c-color-text-1');
+  --c-auto-complete-option-text-color-hover: var(~'--c-color-text-1');
+  --c-auto-complete-option-text-color-selected: var(~'--c-color-text-1');
+  --c-auto-complete-option-text-color-disabled: var(~'--c-color-text-4');
+}

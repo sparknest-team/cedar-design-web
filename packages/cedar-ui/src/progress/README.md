@@ -19,12 +19,12 @@ permalink: /components/progress/
 
 ## 进度条状态
 
-通过`type`指定进度条类型
+通过 `status` 指定进度条语义状态。
 <demo src="./__demos__/status.vue"></demo>
 
 ## 环状进度条
 
-设置 `type="circle"` 将会展示环形进度条。
+设置 `mode="circle"` 将会展示环形进度条。
 <demo src="./__demos__/circle.vue"></demo>
 
 ## 迷你进度条
@@ -48,8 +48,8 @@ permalink: /components/progress/
 
 | 属性    | 说明     | 类型   | 默认值 |
 | ------- | -------- | ------ | ------ |
-| type    | 类型     | string | -      |
-| status  | 状态     | string | -      |
+| mode    | 展示模式 | `'line' \| 'circle'` | `'line'` |
+| status  | 状态     | `SemanticStatus` | `'default'` |
 | size    | 大小     | string | -      |
 | percent | 进度数值 | number | -      |
 
@@ -70,5 +70,5 @@ permalink: /components/progress/
 组件导出以下类型定义
 
 ```ts
-import type { ProgressProps } from '@cedar/ui'
+import type { ProgressProps } from '@cedarjs/ui'
 ```

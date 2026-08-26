@@ -13,12 +13,13 @@
   </div>
 </template>
 <script lang="tsx">
+import { createNamespace } from '../_utils/global-config'
 import { defineComponent, PropType, toRefs, computed } from 'vue'
 import RenderFunction, { RenderFunc } from '../_components/render-function'
 import { getPrefixCls } from '../_utils/global-config'
 import PreviewAction from './preview-action'
 
-interface ActionType {
+export interface ActionType {
   key: string
   name: string
   content: RenderFunc
@@ -27,7 +28,7 @@ interface ActionType {
 }
 
 export default defineComponent({
-  name: 'ImagePreviewToolbar',
+  name: createNamespace("image-preview-toolbar").name,
   components: {
     RenderFunction,
     PreviewAction,

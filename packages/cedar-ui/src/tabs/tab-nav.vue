@@ -9,7 +9,7 @@ import { tabsInjectionKey } from './context'
 import type { TabsContext } from './context'
 
 export default defineComponent({
-  name: 'CTabNav',
+  name: createNamespace('tab-nav').name,
   props: {
     /**
      * @zh 选项卡的标题

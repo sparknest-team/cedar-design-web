@@ -40,8 +40,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useTableColumnManager } from '@cedar/ui'
-import type { ColumnDefinitions, ManagedTableColumn } from '@cedar/ui'
+import { useTableColumnManager } from '@cedarjs/ui'
+import type { ColumnDefinitions, ManagedTableColumn } from '@cedarjs/ui'
 
 const defaultColumns: ManagedTableColumn[] = [
   {

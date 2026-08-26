@@ -7,10 +7,9 @@
       </ul>
     </div>
     <c-back-top
-      target="#target-scroll"
-      :visibility-height="120"
+      target-container="#target-scroll"
+      :visible-height="120"
       :duration="300"
-      :teleport="false"
       :right="16"
       :bottom="16"
     />

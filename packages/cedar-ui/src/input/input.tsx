@@ -1,11 +1,10 @@
-import type { PropType } from 'vue'
 import { computed, defineComponent, ref, nextTick, toRefs, watch, inject } from 'vue'
 import { createNamespace } from '../_utils/global-config'
-import { INPUT_EVENTS, Size } from '../_utils/constant'
+import { INPUT_EVENTS } from '../_utils/constant'
 import FeedbackIcon from '../_components/feedback-icon.vue'
 import { Enter } from '../_utils/keycode'
 import IconHover from '../_components/icon-hover.vue'
-import IconClose from '../icon/icon-close'
+import { IconClose } from '@cedarjs/icons-vue/icon-close'
 import { omit } from '../_utils/omit'
 import pick from '../_utils/pick'
 import { isFunction, isNull, isObject, isUndefined } from '../_utils/is'
@@ -13,117 +12,16 @@ import { useFormItem } from '../_hooks/use-form-item'
 import { useSize } from '../_hooks/use-size'
 import { useCursor } from '../_hooks/use-cursor'
 import { GroupFieldContext, fieldInjectionKey } from './context'
+import { inputProps } from './props'
+import { useI18n } from '../locale'
+import FieldDecorator from '../field-decorator'
+
+const { n: fieldN, classes: fieldClasses } = createNamespace('field-decorator')
 
 export default defineComponent({
-  name: 'CInput',
+  name: createNamespace('input').name,
   inheritAttrs: false,
-  props: {
-    variant: {
-      type: String as PropType<'outline' | 'default'>,
-    },
-    /**
-     * @zh 绑定值
-     * @en Value
-     */
-    modelValue: String,
-    /**
-     * @zh 默认值（非受控状态）
-     * @en Default value (uncontrolled state)
-     */
-    defaultValue: {
-      type: String,
-      default: '',
-    },
-    /**
-     * @zh 输入框大小
-     * @en Input size
-     * @values 'xs','sm','md','lg','xl'
-     * @defaultValue 'md'
-     */
-    size: {
-      type: String as PropType<Size>,
-    },
-    /**
-     * @zh 是否允许清空输入框
-     * @en Whether to allow the input to be cleared
-     */
-    clearable: {
-      type: Boolean,
-      default: true,
-    },
-    /**
-     * @zh 是否禁用
-     * @en Whether to disable
-     */
-    disabled: {
-      type: Boolean,
-    },
-    /**
-     * @zh 是否为只读状态
-     * @en Whether it is read-only
-     */
-    readonly: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否为错误状态
-     * @en Whether it is an error state
-     */
-    error: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 提示文字
-     * @en Prompt text
-     */
-    placeholder: String,
-    /**
-     * @zh 输入值的最大长度，errorOnly 属性在 2.12.0 版本添加
-     * @en Enter the maximum length of the value, the errorOnly attribute was added in version 2.12.0
-     */
-    maxLength: {
-      type: [Number, Object] as PropType<number | { length: number; errorOnly?: boolean }>,
-      default: 0,
-    },
-    /**
-     * @zh 是否显示字数统计
-     * @en Whether to display word count
-     */
-    showWordLimit: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 字符长度的计算方法
-     * @en Calculation method of word length
-     */
-    wordLength: {
-      type: Function as PropType<(value: string) => number>,
-    },
-    /**
-     * @zh 字符截取方法，同 wordLength 一起使用
-     * @en Character interception method, used together with wordLength
-     * @version 2.12.0
-     */
-    wordSlice: {
-      type: Function as PropType<(value: string, maxLength: number) => string>,
-    },
-    /**
-     * @zh 内部 input 元素的属性
-     * @en Attributes of inner input elements
-     * @version 2.27.0
-     */
-    inputAttrs: {
-      type: Object,
-    },
-    // private
-    type: {
-      type: String as PropType<'text' | 'password'>,
-      default: 'text',
-    },
-  },
+  props: inputProps,
   emits: {
     'update:modelValue': (value: string) => true,
     /**
@@ -176,14 +74,15 @@ export default defineComponent({
    * @slot suffix
    */
   setup(props, { emit, slots, attrs }) {
-    const { prefix, n, classes } = createNamespace('input')
+    const { n, classes } = createNamespace('input')
+    const { t } = useI18n()
 
     const { size, disabled, error, modelValue, variant } = toRefs(props)
     const inputRef = ref<HTMLInputElement>()
     const groupContext = inject<GroupFieldContext>(fieldInjectionKey, {} as GroupFieldContext)
     const _size = computed(() => size.value ?? groupContext?.size ?? 'md')
     const _disabled = computed(() => Boolean(disabled.value ?? groupContext?.disabled ?? false))
-    const mergedVariant = computed(() => variant.value ?? groupContext?.variant ?? 'default')
+    const mergedVariant = computed(() => variant.value ?? groupContext?.variant ?? 'filled')
     const {
       mergedSize: _mergedSize,
       mergedDisabled,
@@ -353,6 +252,13 @@ export default defineComponent({
       emit('clear', ev)
     }
 
+    const handleClearKeydown = (ev: KeyboardEvent) => {
+      if (ev.key === 'Enter' || ev.key === ' ') {
+        ev.preventDefault()
+        ;(ev.currentTarget as HTMLElement).click()
+      }
+    }
+
     const handleKeyDown = (e: KeyboardEvent) => {
       const keyCode = e.key || e.code
       if (!isComposition.value && keyCode === Enter.key) {
@@ -360,17 +266,6 @@ export default defineComponent({
         emit('pressEnter', e)
       }
     }
-
-    const wrapperCls = computed(() =>
-      classes(
-        n(),
-        [mergedError.value, n('--error')],
-        [mergedSize.value, n(`--size-${mergedSize.value}`)],
-        [mergedDisabled.value, n('--disabled')],
-        [mergedVariant.value, n(`--variant-${mergedVariant.value}`)],
-        [focused.value, n('--focus')],
-      ),
-    )
 
     const cls = computed(() => classes(n('inner')))
 
@@ -387,62 +282,75 @@ export default defineComponent({
       return attrs
     })
 
-    const renderInput = (hasOuter?: boolean) => (
-      <div class={wrapperCls.value} onMousedown={handleMousedown} {...(!hasOuter ? wrapperAttrs.value : undefined)}>
-        {slots.prefix && <span class={classes(n('prefix'))}>{slots.prefix()}</span>}
-        <input
-          ref={inputRef}
-          class={cls.value}
-          value={computedValue.value}
-          type={props.type}
-          placeholder={props.placeholder}
-          readonly={props.readonly}
-          disabled={mergedDisabled.value}
-          onInput={handleInput}
-          onKeydown={handleKeyDown}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          onCompositionstart={handleComposition}
-          onCompositionupdate={handleComposition}
-          onCompositionend={handleComposition}
-          {...mergeInputAttrs.value}
-        />
-
-        {(slots.suffix ||
-          (Boolean(props.maxLength) && props.showWordLimit) ||
-          Boolean(feedback.value) ||
-          showClearBtn.value) && (
-          <>
-            <span class={classes(n('suffix'), [feedback.value, n('suffix-has-feedback')])}>
-              {showClearBtn.value && (
-                <IconHover
-                  prefix={prefix}
-                  class={classes(n('clear-btn'))}
-                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                  // @ts-expect-error
-                  onClick={handleClear}
-                >
-                  <IconClose />
-                </IconHover>
-              )}
-              {Boolean(props.maxLength) && props.showWordLimit && (
-                <span class={classes(n('word-limit'))}>
-                  {valueLength.value}/{maxLength.value}
-                </span>
-              )}
-              {slots.suffix?.()}
-              {Boolean(feedback.value) && <FeedbackIcon type={feedback.value} />}
-            </span>
-          </>
-        )}
-        <div class={classes(n('border'))}></div>
-        <div class={classes(n('border-state'))}></div>
-      </div>
+    const hasSuffix = computed(
+      () =>
+        Boolean(slots.suffix) ||
+        (Boolean(props.maxLength) && props.showWordLimit) ||
+        Boolean(feedback.value) ||
+        showClearBtn.value,
     )
 
-    const render = () => {
-      return renderInput()
-    }
+    const render = () => (
+      <div class={n()} onMousedown={handleMousedown} {...wrapperAttrs.value}>
+        <FieldDecorator
+          variant={mergedVariant.value}
+          size={mergedSize.value}
+          disabled={mergedDisabled.value}
+          error={mergedError.value}
+          focused={focused.value}
+          v-slots={{
+            prefix: slots.prefix,
+            suffix: hasSuffix.value
+              ? () => (
+                  <>
+                    {showClearBtn.value && (
+                      <IconHover
+                        {...({
+                          prefix: 'c-field-decorator',
+                          class: fieldClasses(fieldN('clear-btn')),
+                          role: 'button',
+                          tabindex: 0,
+                          'aria-label': t('common.clear'),
+                          onClick: handleClear,
+                          onKeydown: handleClearKeydown,
+                        } as any)}
+                      >
+                        <IconClose />
+                      </IconHover>
+                    )}
+                    {Boolean(props.maxLength) && props.showWordLimit && (
+                      <span class={classes(n('word-limit'))}>
+                        {valueLength.value}/{maxLength.value}
+                      </span>
+                    )}
+                    {slots.suffix?.()}
+                    {Boolean(feedback.value) && <FeedbackIcon type={feedback.value} />}
+                  </>
+                )
+              : undefined,
+            default: () => (
+              <input
+                ref={inputRef}
+                class={cls.value}
+                value={computedValue.value}
+                type={props.type}
+                placeholder={props.placeholder}
+                readonly={props.readonly}
+                disabled={mergedDisabled.value}
+                onInput={handleInput}
+                onKeydown={handleKeyDown}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+                onCompositionstart={handleComposition}
+                onCompositionupdate={handleComposition}
+                onCompositionend={handleComposition}
+                {...mergeInputAttrs.value}
+              />
+            ),
+          }}
+        />
+      </div>
+    )
 
     return {
       inputRef,

@@ -28,5 +28,5 @@ import {
   IconPlus,
   IconEdit,
   IconDelete,
-} from '@cedar/ui'
+} from '@cedarjs/icons-vue'
 </script>

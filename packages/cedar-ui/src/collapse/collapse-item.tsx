@@ -4,7 +4,6 @@ import {
   inject,
   onBeforeUnmount,
   onMounted,
-  PropType,
   ref,
   Transition,
   TransitionProps,
@@ -13,53 +12,17 @@ import {
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
 import { CollapseContext, collapseKey } from './context'
 import IconHover from '../_components/icon-hover.vue'
-import IconCaretRight from '../icon/icon-caret-right'
-import IconCaretLeft from '../icon/icon-caret-left'
+import { IconCaretRight } from '@cedarjs/icons-vue/icon-caret-right'
+import { IconCaretLeft } from '@cedarjs/icons-vue/icon-caret-left'
+import { collapseItemProps } from './props'
+import type { CollapseName } from './props'
 
 const { name: componentName } = createNamespace('collapse-item')
 
 export default defineComponent({
   name: componentName,
   components: { IconHover, IconCaretRight, IconCaretLeft },
-  props: {
-    /**
-     * @zh 面板唯一标识，对应 `activeNames` 中的值
-     * @en Unique identifier of the panel, corresponding to values in `activeNames`
-     */
-    name: {
-      type: [String, Number] as PropType<string | number>,
-      required: true,
-    },
-    /**
-     * @zh 面板的标题
-     * @en The title of the panel
-     */
-    title: String,
-    /**
-     * @zh 是否禁用
-     * @en Whether to disable
-     */
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否显示展开图标
-     * @en Whether to show the expand icon
-     */
-    showExpandIcon: {
-      type: Boolean,
-      default: true,
-    },
-    /**
-     * @zh 是否在隐藏时销毁内容
-     * @en Whether to destroy content when hidden
-     */
-    destroyOnHide: {
-      type: Boolean,
-      default: false,
-    },
-  },
+  props: collapseItemProps,
   /**
    * @zh 面板的标题
    * @en The title of the panel
@@ -81,8 +44,9 @@ export default defineComponent({
   setup(props, { slots }) {
     const prefixCls = getPrefixCls('collapse-item')
     const collapseCtx = inject<Partial<CollapseContext>>(collapseKey, {})
+    const itemName = computed(() => props.name as CollapseName)
 
-    const isActive = computed(() => collapseCtx.activeNames?.includes(props.name))
+    const isActive = computed(() => collapseCtx.activeNames?.includes(itemName.value))
     const mergedDestroyOnHide = computed(() => collapseCtx.destroyOnHide || props.destroyOnHide)
     const mergedShowExpandIcon = computed(() => collapseCtx?.showExpandIcon ?? props.showExpandIcon)
     const mounted = ref(mergedDestroyOnHide.value ? isActive.value : true)
@@ -91,17 +55,17 @@ export default defineComponent({
 
     onMounted(() => {
       collapseCtx.addItem?.({
-        name: props.name,
+        name: itemName.value,
         disabled: disabledRef,
       })
     })
 
     onBeforeUnmount(() => {
-      collapseCtx.removeItem?.(props.name)
+      collapseCtx.removeItem?.(itemName.value)
     })
 
     watch(
-      () => props.name,
+      itemName,
       (name, prevName) => {
         if (prevName !== undefined) {
           collapseCtx.removeItem?.(prevName)
@@ -113,9 +77,9 @@ export default defineComponent({
       },
     )
 
-    const handleClick = (e: MouseEvent) => {
+    const handleClick = (e: Event) => {
       if (!props.disabled) {
-        collapseCtx.handleClick?.(props.name, e)
+        collapseCtx.handleClick?.(itemName.value, e)
       }
     }
 
@@ -173,6 +137,8 @@ export default defineComponent({
       },
     ])
 
+    const idBase = computed(() => `${prefixCls}-${String(itemName.value).replace(/[^\w-]/g, '-')}`)
+
     const defaultExpandIcon = () =>
       expandIconPosition.value === 'right' ? (
         <icon-caret-left class={`${prefixCls}-expand-icon`} />
@@ -198,16 +164,30 @@ export default defineComponent({
             role="button"
             aria-disabled={props.disabled}
             aria-expanded={isActive.value}
-            tabindex="0"
+            aria-controls={`${idBase.value}-panel`}
+            id={`${idBase.value}-header`}
+            tabindex={props.disabled ? -1 : 0}
             class={headerCls.value}
             onClick={handleClick}
+            onKeydown={(event: KeyboardEvent) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault()
+                handleClick(event)
+              }
+            }}
           >
             {expandIconRender()}
             <div class={`${prefixCls}-header-title`}>{slots.title?.() ?? props.title}</div>
             {slots.extra && <div class={`${prefixCls}-header-extra`}>{slots.extra?.()}</div>}
           </div>
           <Transition name="collapse-slider" {...transitionEvents}>
-            <div v-show={isActive.value} role="region" class={contentCls.value}>
+            <div
+              v-show={isActive.value}
+              id={`${idBase.value}-panel`}
+              role="region"
+              aria-labelledby={`${idBase.value}-header`}
+              class={contentCls.value}
+            >
               {mounted.value && (
                 <div ref="contentBoxRef" class={`${prefixCls}-content-box`}>
                   {slots.default?.()}

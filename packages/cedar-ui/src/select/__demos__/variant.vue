@@ -1,8 +1,9 @@
 <template>
   <c-space direction="column">
     <c-radio-group v-model="variant">
-      <c-radio value="outline">Outline</c-radio>
-      <c-radio value="default">Default</c-radio>
+      <c-radio value="outlined">Outlined</c-radio>
+      <c-radio value="standard">Standard</c-radio>
+      <c-radio value="filled">Filled</c-radio>
     </c-radio-group>
     <c-select placeholder="Please select ..." :variant="variant">
       <c-option>Beijing</c-option>
@@ -24,5 +25,5 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-const variant = ref('default')
+const variant = ref('filled')
 </script>

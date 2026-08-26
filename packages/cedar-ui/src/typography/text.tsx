@@ -1,19 +1,14 @@
-import { computed, defineComponent, PropType, toRefs } from 'vue'
-import { BaseProps } from './types'
+import { computed, defineComponent, toRefs } from 'vue'
 import Base from './base'
 import { createNamespace } from '../_utils/global-config'
+import { typographyTextProps } from './props'
 
 const { name } = createNamespace('typography-text')
 
 export default defineComponent({
   name,
   inheritAttrs: false,
-  props: {
-    ellipsis: {
-      type: [Boolean, Object] as PropType<BaseProps['ellipsis']>,
-      default: false,
-    },
-  },
+  props: typographyTextProps,
   setup(props) {
     const { ellipsis } = toRefs(props)
     const component = computed(() => (ellipsis?.value ? 'div' : 'span'))
@@ -28,7 +23,7 @@ export default defineComponent({
     return (
       <Base
         {...this.$attrs}
-        ellipsis={ellipsis}
+        {...this.$props}
         component={component}
         v-slots={this.$slots}
       />

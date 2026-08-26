@@ -20,6 +20,7 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../../_utils/global-config'
 import { defineComponent, PropType } from 'vue'
 import { ShortcutType } from '../types'
 import Button from '../../button'
@@ -33,7 +34,7 @@ export interface ShortcutsProps {
 }
 
 export default defineComponent({
-  name: 'PanelShortcuts',
+  name: createNamespace('date-picker-shortcuts').name,
   components: {
     Button,
     RenderFunction,

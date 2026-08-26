@@ -242,7 +242,7 @@ export const getChildrenComponents = (
   props?: Data | ((node: VNode, index: number) => Data),
   startIndex = 0,
 ): VNode[] => {
-  const result = []
+  const result: VNode[] = []
   for (const item of children) {
     if (isNamedComponent(item, name)) {
       if (props) {

@@ -1,25 +1,28 @@
 @import '../../style/theme/index.less';
 
-@timeline-color-content-text: var(~'--c-color-text-1');
-@timeline-color-label-text: var(~'--c-color-text-3');
-@timeline-color-dot-bg: @color-primary-6;
-@timeline-color-line-bg: var(~'--c-color-neutral-3');
-
-@timeline-font-content-size: @font-size-body-3;
-@timeline-font-label-size: @font-size-body-1;
-@timeline-item-min-height: 78px;
-
-@timeline-dot-size-width: 6px;
-@timeline-dot-border-radius: @radius-circle;
-@timeline-dot-border-width_hollow: @border-2;
-
-@timeline-color-dot-bg_hollow: var(~'--c-color-bg-2');
-@timeline-horizontal-margin-content-spacing: @spacing-7;
-@timeline-horizontal-margin-line-left: @spacing-3;
-@timeline-horizontal-margin-line-right: @spacing-2;
-
-@timeline-vertical-margin-content-bottom: @spacing-2;
-@timeline-vertical-margin-content-left: @spacing-7;
-@timeline-vertical-margin-line-top: @spacing-2;
-@timeline-vertical-margin-line-bottom: @spacing-2;
-@timeline-size-line-width: @border-1;
+:root {
+  --c-timeline-content-text-color: var(~'--c-color-text-1');
+  --c-timeline-label-text-color: var(~'--c-color-text-3');
+  --c-timeline-dot-bg: rgb(var(~'--c-primary-6'));
+  --c-timeline-line-bg: var(~'--c-color-neutral-3');
+  --c-timeline-font-content-size: var(~'--c-font-size-body-3');
+  --c-timeline-font-label-size: var(~'--c-font-size-body-1');
+  --c-timeline-item-min-height: 78px;
+  --c-timeline-dot-size-width: var(~'--c-spacing-3');
+  --c-timeline-dot-border-radius: var(~'--c-border-radius-circle');
+  --c-timeline-dot-border-width-hollow: var(~'--c-border-width-2');
+  --c-timeline-dot-bg-hollow: var(~'--c-color-bg-2');
+  --c-timeline-horizontal-margin-content-spacing: var(~'--c-spacing-7');
+  --c-timeline-horizontal-margin-line-left: var(~'--c-spacing-3');
+  --c-timeline-horizontal-margin-line-right: var(~'--c-spacing-2');
+  --c-timeline-vertical-margin-content-bottom: var(~'--c-spacing-2');
+  --c-timeline-vertical-margin-content-left: var(~'--c-spacing-7');
+  --c-timeline-vertical-margin-line-top: var(~'--c-spacing-2');
+  --c-timeline-vertical-margin-line-bottom: var(~'--c-spacing-2');
+  --c-timeline-size-line-width: var(~'--c-border-width-1');
+  --c-timeline-label-relative-max-width: var(~'--c-size-25');
+  --c-timeline-label-relative-margin: var(~'--c-size-25');
+  --c-timeline-label-relative-horizontal-margin: var(~'--c-size-13');
+  --c-timeline-horizontal-dot-content-height: var(~'--c-spacing-3');
+  --c-timeline-alternate-horizontal-min-height: var(~'--c-size-50');
+}

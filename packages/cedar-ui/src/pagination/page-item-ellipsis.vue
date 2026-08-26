@@ -8,12 +8,12 @@
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
-import { getPrefixCls } from '../_utils/global-config'
-import IconMore from '../icon/icon-more'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
+import { IconMore } from '@cedarjs/icons-vue/icon-more'
 import { getLegalPage } from './utils'
 
 export default defineComponent({
-  name: 'EllipsisPager',
+  name: createNamespace('pagination-ellipsis').name,
   components: {
     IconMore,
   },

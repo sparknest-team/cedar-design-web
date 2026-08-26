@@ -1,18 +1,22 @@
 <template>
-  <li :class="`${prefixCls}-title`">
-    <slot name="title">
-      {{ title }}
-    </slot>
+  <li :class="prefixCls">
+    <div :class="`${prefixCls}-title`">
+      <slot name="title">
+        {{ title }}
+      </slot>
+    </div>
+    <ul :class="`${prefixCls}-list`">
+      <slot />
+    </ul>
   </li>
-  <slot />
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { getPrefixCls } from '../_utils/global-config'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
 
 export default defineComponent({
-  name: 'MenuGroup',
+  name: createNamespace('menu-group').name,
   props: {
     /**
      * @zh 分组标题
@@ -24,7 +28,6 @@ export default defineComponent({
    * @zh 分组标题
    * @en Group title
    * @slot title
-   * @version 2.10.0
    */
   setup() {
     const prefixCls = getPrefixCls('menu-group')

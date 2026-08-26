@@ -1,7 +1,10 @@
 <template>
   <span :class="cls">
-    <span v-if="!simple" :class="[`${prefixCls}-prepend`, `${prefixCls}-text-goto`]">
-      <slot name="jumper-prepend">{{ t('pagination.goto') }}</slot>
+    <span
+      v-if="!simple"
+      :class="[`${prefixCls}-prepend`, `${prefixCls}-text-goto`]"
+    >
+      <slot name="jumper-prepend">{{ t("pagination.goto") }}</slot>
     </span>
     <input-number
       v-model="inputValue"
@@ -10,11 +13,13 @@
       :max="pages"
       :size="size"
       :disabled="disabled"
-      hide-button
+      mode="input"
       :formatter="handleFormatter"
       @change="handleChange"
     />
-    <span v-if="$slots['jumper-append']" :class="`${prefixCls}-append`"><slot name="jumper-append" /></span>
+    <span v-if="$slots['jumper-append']" :class="`${prefixCls}-append`"
+      ><slot name="jumper-append"
+    /></span>
     <template v-if="simple">
       <span :class="`${prefixCls}-separator`">/</span>
       <span :class="`${prefixCls}-total-page`">{{ pages }}</span>
@@ -23,13 +28,14 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, nextTick, PropType, ref, watch } from 'vue'
-import { useI18n } from '../locale'
-import { getPrefixCls } from '../_utils/global-config'
-import InputNumber from '../input-number'
+import { computed, defineComponent, nextTick, PropType, ref, watch } from "vue";
+import { useI18n } from "../locale";
+import { createNamespace, getPrefixCls } from "../_utils/global-config";
+import type { ComponentSize } from "../_utils/constant";
+import InputNumber from "../input-number";
 
 export default defineComponent({
-  name: 'PageJumper',
+  name: createNamespace("pagination-jumper").name,
   components: {
     InputNumber,
   },
@@ -51,47 +57,47 @@ export default defineComponent({
       required: true,
     },
     size: {
-      type: String,
+      type: String as PropType<ComponentSize>,
     },
     onChange: {
       type: Function as PropType<(value: number) => void>,
     },
   },
-  emits: ['change'],
+  emits: ["change"],
   setup(props, { emit }) {
-    const prefixCls = getPrefixCls('pagination-jumper')
-    const { t } = useI18n()
-    const inputValue = ref(props.simple ? props.current : undefined)
+    const prefixCls = getPrefixCls("pagination-jumper");
+    const { t } = useI18n();
+    const inputValue = ref(props.simple ? props.current : undefined);
 
-    const handleFormatter = (value: number) => {
-      const parseIntVal = parseInt(value.toString(), 10)
-      return Number.isNaN(parseIntVal) ? undefined : String(parseIntVal)
-    }
+    const handleFormatter = (value: string) => {
+      const parseIntVal = parseInt(value, 10);
+      return Number.isNaN(parseIntVal) ? "" : String(parseIntVal);
+    };
 
-    const handleChange = (value: number) => {
-      emit('change', inputValue.value)
+    const handleChange = (value: number | undefined) => {
+      emit("change", inputValue.value);
       nextTick(() => {
         if (!props.simple) {
-          inputValue.value = undefined
+          inputValue.value = undefined;
         }
-      })
-    }
+      });
+    };
 
     watch(
       () => props.current,
       (value) => {
         if (props.simple && value !== inputValue.value) {
-          inputValue.value = value
+          inputValue.value = value;
         }
       },
-    )
+    );
 
     const cls = computed(() => [
       prefixCls,
       {
         [`${prefixCls}-simple`]: props.simple,
       },
-    ])
+    ]);
 
     return {
       prefixCls,
@@ -100,7 +106,7 @@ export default defineComponent({
       inputValue,
       handleChange,
       handleFormatter,
-    }
+    };
   },
-})
+});
 </script>

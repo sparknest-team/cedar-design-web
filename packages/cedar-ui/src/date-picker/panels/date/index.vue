@@ -32,7 +32,7 @@
         v-bind="{
           ...timePickerProps,
           ...disabledTimeProps,
-        }"
+        } as any"
         hide-footer
         :value="value || isRange ? timePickerValue : undefined"
         :disabled="disabled"
@@ -65,8 +65,9 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../../../_utils/global-config'
 import { computed, defineComponent, PropType, reactive, toRefs } from 'vue'
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 import { RenderFunc } from '../../../_components/render-function'
 import { TimePickerProps } from '../../../time-picker/types'
 import { getPrefixCls } from '../../../_utils/global-config'
@@ -86,8 +87,8 @@ import PanelHeader, { HeaderLabelClickFunc } from '../header.vue'
 import PanelBody from '../body.vue'
 import PanelWeekList from '../week-list.vue'
 import TimePanel from '../../../time-picker/panel.vue'
-import IconCalendar from '../../../icon/icon-calendar'
-import IconClockCircle from '../../../icon/icon-clock-circle'
+import { IconCalendar } from '@cedarjs/icons-vue/icon-calendar'
+import { IconClockCircle } from '@cedarjs/icons-vue/icon-clock-circle'
 import useMergeState from '../../../_hooks/use-merge-state'
 import useDatePickerTransform from '../../hooks/use-inject-datepicker-transform'
 
@@ -103,7 +104,7 @@ function getCellData(time: Dayjs) {
 }
 
 export default defineComponent({
-  name: 'DatePanel',
+  name: createNamespace('date-picker-date-panel').name,
   components: {
     PanelHeader,
     PanelBody,

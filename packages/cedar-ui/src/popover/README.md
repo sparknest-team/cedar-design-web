@@ -18,8 +18,8 @@ permalink: /components/popover/
 
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| popup-visible **(v-model)** | 气泡卡片是否可见 | `boolean` | `-` |
-| default-popup-visible | 气泡卡片默认是否可见（非受控模式） | `boolean` | `false` |
+| open **(v-model)** | 气泡卡片是否可见 | `boolean` | `-` |
+| default-open | 气泡卡片默认是否可见（非受控模式） | `boolean` | `false` |
 | title | 标题 | `string` | `-` |
 | content | 内容 | `string` | `-` |
 | trigger | 触发方式 | `'hover' \| 'click' \| 'focus' \| 'contextMenu' \| 'manual'` | `'hover'` |
@@ -30,13 +30,13 @@ permalink: /components/popover/
 | arrow-class | 箭头类名 | `ClassName` | `-` |
 | arrow-style | 箭头样式 | `CSSProperties` | `-` |
 | popup-container | 弹出框挂载容器 | `string \| HTMLElement` | `-` |
-| close-on-key-escape | 是否支持按 ESC 键关闭 | `boolean` | `true` |
+| esc-to-close | 是否支持按 ESC 键关闭 | `boolean` | `true` |
 
 ### Popover Events
 
 | 事件名 | 说明 | 参数 |
 | --- | --- | --- |
-| popup-visible-change | 显示状态改变时触发 | `visible: boolean` |
+| open-change | 显示状态改变时触发 | `open: boolean` |
 | open | 开始打开时触发 | `-` |
 | opened | 打开动画结束后触发 | `-` |
 | close | 开始关闭时触发 | `-` |
@@ -64,5 +64,5 @@ permalink: /components/popover/
 组件导出以下类型定义
 
 ```ts
-import type { PopoverInstance, PopoverPlacement, PopoverProps, PopoverTrigger } from '@cedar/ui'
+import type { PopoverInstance, PopoverPlacement, PopoverProps, PopoverTrigger } from '@cedarjs/ui'
 ```

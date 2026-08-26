@@ -1,23 +1,21 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Cascader from './cascader.vue'
 import _CascaderPanel from './cascader-panel.vue'
+import { cascaderProps } from './props'
 
-const Cascader = Object.assign(_Cascader, {
+const Cascader = withInstall(_Cascader, Object.assign(_Cascader, {
   CascaderPanel: _CascaderPanel,
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _Cascader.name, _Cascader)
-    app.component(componentPrefix + _CascaderPanel.name, _CascaderPanel)
-  },
-})
+}), { components: [_Cascader, _CascaderPanel] })
 
 export type CascaderInstance = InstanceType<typeof _Cascader>
 export type CascaderPanelInstance = InstanceType<typeof _CascaderPanel>
 export type { CascaderOption, CascaderFieldNames } from './types'
 
 export { _CascaderPanel as CascaderPanel }
+export const _CascaderComponent = Cascader
+
+export { Cascader }
+
+export { cascaderProps }
+
 export default Cascader

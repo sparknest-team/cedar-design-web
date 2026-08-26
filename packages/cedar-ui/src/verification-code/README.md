@@ -73,5 +73,5 @@ permalink: /components/verification-code/
 组件导出以下类型定义
 
 ```ts
-import type { VerificationCodeInstance } from '@cedar/ui'
+import type { VerificationCodeInstance } from '@cedarjs/ui'
 ```

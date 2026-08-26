@@ -1,5 +1,5 @@
 import { reactive, toRefs, Ref, ref, watch, computed } from 'vue'
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 import useTimeFormat from '../../time-picker/hooks/use-time-format'
 import { getDayjsValue, getNow } from '../../_utils/date'
 import { TimePickerProps, TimeValue } from '../../time-picker/types'

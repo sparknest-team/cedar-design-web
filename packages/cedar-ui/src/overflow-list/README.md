@@ -45,5 +45,5 @@ permalink: /components/overflow-list/
 组件导出以下类型定义
 
 ```ts
-import type { BadgeInstance } from '@cedar/ui'
+import type { BadgeInstance } from '@cedarjs/ui'
 ```

@@ -1,7 +1,7 @@
 import { CSSProperties } from 'vue'
 import { TreeFieldNames, TreeNodeData, TreeProps, TreeNodeKey, LoadMore, CheckedStrategy } from '../tree/types'
 import { TriggerProps } from '../trigger'
-import { Size } from '../_utils/constant'
+import { ComponentSize } from '../_utils/constant'
 
 export interface LabelValue {
   value: TreeNodeKey
@@ -16,7 +16,7 @@ export type FallbackOption = boolean | ((key: TreeNodeKey) => TreeNodeData | boo
 
 export type ChangeHandler = (selectedValue: TreeSelectValue | undefined) => void
 
-export type PopupVisibleChangeHandler = (popupVisible: boolean) => void
+export type OpenChangeHandler = (open: boolean) => void
 
 export type SearchHandler = (searchKey: string) => void
 
@@ -26,7 +26,7 @@ export interface TreeSelectProps {
   disabled: boolean
   loading: boolean
   error: boolean
-  size: Size
+  size: ComponentSize
   border: boolean
   allowSearch: boolean
   clearable: boolean
@@ -44,8 +44,8 @@ export interface TreeSelectProps {
   treeCheckedStrategy: CheckedStrategy
   treeProps: Partial<TreeProps> | undefined
   triggerProps: Partial<TriggerProps> | undefined
-  popupVisible: boolean | undefined
-  defaultPopupVisible: boolean
+  open: boolean | undefined
+  defaultOpen: boolean
   dropdownStyle: CSSProperties | undefined
   dropdownClassName: string | string[] | undefined
   filterTreeNode: FilterTreeNode | undefined

@@ -124,7 +124,7 @@ export default defineComponent({
     const textContent = ref('')
     const value = computed(() => props.value ?? props.label ?? textContent.value)
     const label = computed(() => props.label ?? textContent.value)
-    const key = computed(() => getKeyFromValue(value.value, selectCtx?.valueKey))
+    const key = computed(() => getKeyFromValue(value.value, selectCtx?.fieldNames?.value))
     const component = computed(() => selectCtx?.component ?? 'li')
 
     const setTextContent = () => {
@@ -140,7 +140,7 @@ export default defineComponent({
     onUpdated(() => setTextContent())
 
     const isSelected = computed(() => selectCtx?.valueKeys.includes(key.value) ?? false)
-    const isActive = computed(() => selectCtx?.activeKey === key.value ?? false)
+    const isActive = computed(() => selectCtx?.activeKey === key.value)
     let isValid = ref(true)
 
     if (!props.internal) {

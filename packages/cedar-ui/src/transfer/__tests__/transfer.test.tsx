@@ -34,23 +34,23 @@ describe('Transfer', () => {
   })
 
   test('filters each panel with the custom filter', async () => {
-    const filterOption = vi.fn((value: string, item: (typeof data)[number]) =>
+    const filter = vi.fn((value: string, item: (typeof data)[number]) =>
       item.label.toLowerCase().startsWith(value.toLowerCase())
     )
     const wrapper = mount(Transfer, {
-      props: { data, defaultValue: [{ value: '1' }, { value: '2' }], showSearch: true, filterOption },
+      props: { data, defaultValue: [{ value: '1' }, { value: '2' }], showSearch: true, filter },
     })
 
-    wrapper.find('.c-transfer-view-source').findComponent({ name: 'Search' }).vm.$emit('update:modelValue', 'option 2')
+    wrapper.find('.c-transfer-view-source').findComponent({ name: 'CSearch' }).vm.$emit('update:modelValue', 'option 2')
     await nextTick()
 
     const source = wrapper.find('.c-transfer-view-source')
     expect(source.text()).toContain('Option 2')
     expect(source.text()).not.toContain('Option 1')
-    expect(filterOption).toHaveBeenCalled()
+    expect(filter).toHaveBeenCalled()
   })
 
-  test('supports naive-ui filterable props and placeholders', () => {
+  test('supports source/target filterable props and placeholders', () => {
     const wrapper = mount(Transfer, {
       props: {
         data,
@@ -61,7 +61,7 @@ describe('Transfer', () => {
       },
     })
 
-    const searches = wrapper.findAllComponents({ name: 'Search' })
+    const searches = wrapper.findAllComponents({ name: 'CSearch' })
     expect(searches).toHaveLength(2)
     expect(wrapper.find('.c-transfer-view-source .c-search input').attributes('placeholder')).toBe('Search source')
     expect(wrapper.find('.c-transfer-view-target .c-search input').attributes('placeholder')).toBe('Search target')
@@ -125,7 +125,7 @@ describe('Transfer', () => {
       },
     })
 
-    const popover = wrapper.findAllComponents({ name: 'Popover' }).at(-1)!
+    const popover = wrapper.findAllComponents({ name: 'CPopover' }).at(-1)!
     const menu = popover.vm.$slots.content?.()[0] as VNode
     const collectButtons = (node: unknown): VNode[] => {
       if (Array.isArray(node)) return node.flatMap(collectButtons)

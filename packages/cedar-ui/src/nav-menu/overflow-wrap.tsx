@@ -121,7 +121,7 @@ export default defineComponent({
         const originChildren = slots.default?.() || []
         const children = unFragment(originChildren) as VNode[]
 
-        let overflowSubMenu = null
+        let overflowSubMenu: JSX.Element | null = null
         const overflowSubMenuMirror = renderSubMenu(null, { isMirror: true })
 
         const menuItems = children.map((child, index) => {

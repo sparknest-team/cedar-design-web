@@ -1,22 +1,28 @@
 import type { ExtractPropTypes, PropType } from 'vue'
-import { Status, Size } from '../_utils/constant'
+import { SemanticStatus, ComponentSize } from '../_utils/constant'
 import { defineListenerProp } from '../_utils/components'
+import { componentSizes, semanticStatuses } from '../_utils/constant'
 
 
 export type ButtonVariant = 'default' | 'text' | 'outline' | 'link' | 'tonal'
+export const buttonVariants = ['default', 'text', 'outline', 'link', 'tonal'] as const
+export const buttonHtmlTypes = ['button', 'submit', 'reset'] as const
+export const buttonComponents = ['button', 'a'] as const
 
 export const buttonProps = {
   /**
    * 按钮主题色
    */
   status: {
-    type: String as PropType<Status>,
+    type: String as PropType<SemanticStatus>,
+    validator: (value: unknown): value is SemanticStatus => semanticStatuses.includes(value as SemanticStatus),
   },
   /**
    * 变体
    */
   variant: {
     type: String as PropType<ButtonVariant>,
+    validator: (value: unknown): value is ButtonVariant => buttonVariants.includes(value as ButtonVariant),
   },
   /**
    * 是否为圆形按钮
@@ -31,6 +37,7 @@ export const buttonProps = {
   htmlType: {
     type: String as PropType<'button' | 'submit' | 'reset'>,
     default: 'button',
+    validator: (value: unknown) => buttonHtmlTypes.includes(value as any),
   },
   /**
    * 组件标签
@@ -38,6 +45,7 @@ export const buttonProps = {
   component: {
     type: String as PropType<'button' | 'a'>,
     default: 'button',
+    validator: (value: unknown) => buttonComponents.includes(value as any),
   },
   /**
    * 是否为块级元素
@@ -50,7 +58,8 @@ export const buttonProps = {
    * 按钮尺寸
    */
   size: {
-    type: String as PropType<Size>
+    type: String as PropType<ComponentSize>,
+    validator: (value: unknown): value is ComponentSize => componentSizes.includes(value as ComponentSize),
   },
   /**
    * 是否为加载中状态
@@ -144,14 +153,14 @@ export const buttonGroupProps = {
    * 按钮组尺寸
    */
   size: {
-    type: String as PropType<Size>,
+    type: String as PropType<ComponentSize>,
     default: 'md',
   },
   /**
    * 按钮组主题色
    */
   status: {
-    type: String as PropType<Status>,
+    type: String as PropType<SemanticStatus>,
     default: 'default',
   },
   /**

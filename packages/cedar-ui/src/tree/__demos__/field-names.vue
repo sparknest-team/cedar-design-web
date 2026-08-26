@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts" setup>
-import { IconDriveFile, IconStar } from '@cedar/ui'
+import { IconDriveFile, IconStar } from '@cedarjs/icons-vue'
 import { h } from 'vue'
 
 const treeData = [

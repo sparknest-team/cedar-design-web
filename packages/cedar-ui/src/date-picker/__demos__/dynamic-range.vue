@@ -1,7 +1,7 @@
 <template>
   <c-date-range-picker
     @select="onSelect"
-    @popupVisibleChange="onPopupVisibleChange"
+    @openChange="onOpenChange"
     :disabledDate="disabledDate" />
 </template>
 
@@ -16,8 +16,8 @@ export default defineComponent({
       onSelect(valueString, value) {
         dateArr.value = value
       },
-      onPopupVisibleChange(visible) {
-        if (!visible) {
+      onOpenChange(open) {
+        if (!open) {
           dateArr.value = []
         }
       },

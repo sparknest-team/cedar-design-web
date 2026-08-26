@@ -19,7 +19,7 @@
       </div>
       <div class="icon-item">
         <c-icon-face-book-circle-fill :size="32" />
-        <span class="icon-name">icon-faceBook-circle-fill</span>
+        <span class="icon-name">icon-face-book-circle-fill</span>
       </div>
       <div class="icon-item">
         <c-icon-facebook-square-fill :size="32" />

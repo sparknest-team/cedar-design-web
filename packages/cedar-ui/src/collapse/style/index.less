@@ -3,30 +3,30 @@
 
 .icon-hover(
   ~'c-collapse-item',
-  @collapse-expand-icon-size,
-  @collapse-expand-icon-size-bg
+  var(~'--c-collapse-expand-icon-size'),
+  var(~'--c-collapse-expand-icon-size-bg')
 );
 
-.icon-hover-bg(~'c-collapse-item', @collapse-expand-icon-color-bg);
+.icon-hover-bg(~'c-collapse-item', var(~'--c-collapse-expand-icon-bg'));
 
 .c-collapse {
   overflow: hidden;
-  line-height: @collapse-line-height;
-  border: @collapse-border-width solid @collapse-color-border;
-  border-radius: @collapse-border-radius;
+  line-height: var(~'--c-collapse-line-height');
+  border: var(~'--c-collapse-border-width') solid var(~'--c-collapse-border-color');
+  border-radius: var(~'--c-collapse-border-radius');
 
   &-item {
     box-sizing: border-box;
-    border-bottom: @collapse-title-border-width solid @collapse-item-color-border;
+    border-bottom: var(~'--c-collapse-title-border-width') solid var(~'--c-collapse-item-border-color');
 
     &-active {
       > .c-collapse-item-header {
-        background-color: @collapse-title-color-bg_active;
-        border-color: @collapse-title-color-border;
+        background-color: var(~'--c-collapse-title-bg-active');
+        border-color: var(~'--c-collapse-title-border-color');
         transition: border-color 0s ease 0s;
 
         .c-collapse-item-header-title {
-          font-weight: @collapse-title-font-weight_active;
+          font-weight: var(~'--c-collapse-title-font-weight-active');
         }
 
         .c-collapse-item-expand-icon {
@@ -45,41 +45,45 @@
       align-items: center;
       justify-content: space-between;
       box-sizing: border-box;
-      padding-top: @collapse-title-padding-vertical;
+      padding-top: var(~'--c-collapse-title-padding-vertical');
       padding-bottom: $padding-top;
       overflow: hidden;
-      color: @collapse-title-color-text;
-      font-size: @collapse-title-font-size;
-      line-height: @collapse-title-line-height;
-      background-color: @collapse-title-color-bg;
-      border-bottom: 1px solid @color-transparent;
+      color: var(~'--c-collapse-title-text-color');
+      font-size: var(~'--c-collapse-title-font-size');
+      line-height: var(~'--c-collapse-title-line-height');
+      background-color: var(~'--c-collapse-title-bg');
+      border-bottom: 1px solid transparent;
       cursor: pointer;
       // Ensure that the border is hidden when the collapse animation is complete
       transition: border-color 0s ease 0.19s;
 
       &-left {
-        padding-right: @collapse-title-padding-horizontal;
-        padding-left: @collapse-title-padding-horizontal + @collapse-expand-icon-size-bg +
-          @collapse-expand-icon-spacing-text;
+        padding-right: var(~'--c-collapse-title-padding-horizontal');
+        padding-left: calc(
+          var(~'--c-collapse-title-padding-horizontal') + var(~'--c-collapse-expand-icon-size-bg') +
+            var(~'--c-collapse-expand-icon-spacing-text')
+        );
       }
 
       &-right {
-        padding-right: @collapse-title-padding-horizontal + @collapse-expand-icon-size-bg +
-          @collapse-expand-icon-spacing-text;
-        padding-left: @collapse-title-padding-horizontal;
+        padding-right: calc(
+          var(~'--c-collapse-title-padding-horizontal') + var(~'--c-collapse-expand-icon-size-bg') +
+            var(~'--c-collapse-expand-icon-spacing-text')
+        );
+        padding-left: var(~'--c-collapse-title-padding-horizontal');
 
         + .c-collapse-item-content {
-          padding-left: @collapse-title-padding-horizontal;
+          padding-left: var(~'--c-collapse-title-padding-horizontal');
         }
       }
 
       &-disabled {
-        color: @collapse-title-color-text_disabled;
-        background-color: @collapse-title-color-bg_disabled;
+        color: var(~'--c-collapse-title-text-color-disabled');
+        background-color: var(~'--c-collapse-title-bg-disabled');
         cursor: not-allowed;
 
         .c-collapse-item-header-icon {
-          color: @collapse-title-color-text_disabled;
+          color: var(~'--c-collapse-title-text-color-disabled');
         }
       }
 
@@ -96,13 +100,13 @@
     & &-icon-hover {
       position: absolute;
       top: 50%;
-      left: @collapse-title-padding-horizontal;
+      left: var(~'--c-collapse-title-padding-horizontal');
       text-align: center;
       transform: translateY(-50%);
     }
 
     & &-icon-right {
-      right: @collapse-title-padding-horizontal;
+      right: var(~'--c-collapse-title-padding-horizontal');
       left: unset;
 
       > .c-collapse-item-header-icon-down {
@@ -113,21 +117,23 @@
     & &-expand-icon {
       position: relative;
       display: block;
-      color: @collapse-color-expand-icon;
-      font-size: @collapse-expand-icon-size;
+      color: var(~'--c-collapse-expand-icon');
+      font-size: var(~'--c-collapse-expand-icon-size');
       vertical-align: middle;
-      transition: transform @transition-duration-2 @transition-timing-function-standard;
+      transition: transform var(~'--c-transition-duration-2') var(~'--c-transition-timing-function-standard');
     }
 
     &-content {
       position: relative;
-      padding-right: @collapse-title-padding-horizontal;
-      padding-left: @collapse-title-padding-horizontal + @collapse-expand-icon-size-bg +
-        @collapse-expand-icon-spacing-text;
+      padding-right: var(~'--c-collapse-title-padding-horizontal');
+      padding-left: calc(
+        var(~'--c-collapse-title-padding-horizontal') + var(~'--c-collapse-expand-icon-size-bg') +
+          var(~'--c-collapse-expand-icon-spacing-text')
+      );
       overflow: hidden;
-      color: @collapse-content-color-text;
-      font-size: @collapse-content-font-size;
-      background-color: @collapse-content-color-bg;
+      color: var(~'--c-collapse-content-text-color');
+      font-size: var(~'--c-collapse-content-font-size');
+      background-color: var(~'--c-collapse-content-bg');
 
       &-expanded {
         display: block;
@@ -135,17 +141,17 @@
       }
 
       &-box {
-        padding: @collapse-content-padding-vertical 0;
+        padding: var(~'--c-collapse-content-padding-vertical') 0;
       }
     }
 
     &&-disabled > &-content {
-      color: @collapse-content-color-text_disabled;
+      color: var(~'--c-collapse-content-text-color-disabled');
     }
 
     &-no-icon > &-header {
-      padding-right: @collapse-title-padding-horizontal;
-      padding-left: @collapse-title-padding-horizontal;
+      padding-right: var(~'--c-collapse-title-padding-horizontal');
+      padding-left: var(~'--c-collapse-title-padding-horizontal');
     }
 
     &:last-of-type {
@@ -175,7 +181,7 @@
 
     > .c-collapse-item-active + .c-collapse-item,
     > .c-collapse-item-active:not(:first-child) {
-      margin-top: @collapse-item-margin-top;
+      margin-top: var(~'--c-collapse-item-margin-top');
     }
   }
 
@@ -193,5 +199,5 @@
 
 .collapse-slider-enter-active,
 .collapse-slider-leave-active {
-  transition: height @transition-duration-2 @transition-timing-function-standard;
+  transition: height var(~'--c-transition-duration-2') var(~'--c-transition-timing-function-standard');
 }

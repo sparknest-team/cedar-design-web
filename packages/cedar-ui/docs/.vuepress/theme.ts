@@ -47,10 +47,6 @@ export default hopeTheme(
 
       // prismjs: false,
       // markdownMath: true,
-      slimsearch: {
-        suggestion: false,
-      },
-
       // // All features are enabled for demo, only preserve features you need here
       // mdEnhance: {
       //   align: true,

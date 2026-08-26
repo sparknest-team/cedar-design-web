@@ -5,7 +5,7 @@ import { isString } from '../_utils/is'
 interface PopupContainerProps {
   popupContainer: string | HTMLElement | undefined
 }
-export default function usePopupContainer(defaultPopupContainer: HTMLElement, props: PopupContainerProps) {
+export default function usePopupContainer(defaultPopupContainer: HTMLElement | undefined, props: PopupContainerProps) {
   const { popupContainer } = toRefs(props)
 
   const container = computed(
@@ -14,5 +14,5 @@ export default function usePopupContainer(defaultPopupContainer: HTMLElement, pr
       defaultPopupContainer,
   )
 
-  return container as ComputedRef<HTMLElement>
+  return container as ComputedRef<HTMLElement | undefined>
 }

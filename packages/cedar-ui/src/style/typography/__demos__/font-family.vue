@@ -7,22 +7,22 @@ import { columns } from './columns'
 const dataFamily = [
   {
     class: 'font-regular',
-    properties: 'font-family: var(--font-regular);',
+    properties: 'font-family: var(--c-font-regular);',
     effective: 'font-family: Auto;',
   },
   {
     class: 'font-number',
-    properties: 'font-family: var(--font-number-bold);',
+    properties: 'font-family: var(--c-font-number-bold);',
     effective: 'font-family: Barlow-Bold;',
   },
   {
     class: 'font-number-regular',
-    properties: 'font-family: var(--font-number-regular);',
+    properties: 'font-family: var(--c-font-number-regular);',
     effective: 'font-family: Barlow-Regular;',
   },
   {
     class: 'font-number-bold',
-    properties: 'font-family: var(--font-number-bold);',
+    properties: 'font-family: var(--c-font-number-bold);',
     effective: 'font-family: Barlow-Bold;',
   },
 ]

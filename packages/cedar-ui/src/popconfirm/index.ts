@@ -1,17 +1,13 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Popconfirm from './popconfirm.vue'
+import { popconfirmProps } from './props'
 
-const Popconfirm = Object.assign(_Popconfirm, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _Popconfirm.name, _Popconfirm)
-  },
-})
+const Popconfirm = withInstall(_Popconfirm, Object.assign(_Popconfirm, {
+}), { components: [_Popconfirm] })
 
 export type PopconfirmInstance = InstanceType<typeof _Popconfirm>
+export type { PopconfirmBeforeOk, PopconfirmProps } from './props'
+export { Popconfirm, popconfirmProps }
+export const _PopconfirmComponent = Popconfirm
 
 export default Popconfirm

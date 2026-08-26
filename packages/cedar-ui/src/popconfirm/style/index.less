@@ -1,47 +1,46 @@
 @import './token.less';
-@import '../../popover/style/token.less';
 
 .c-popconfirm {
   &-popup-content {
     box-sizing: border-box;
-    padding: @popconfirm-padding-vertical @popconfirm-padding-horizontal;
-    color: @popup-color-content-text;
-    font-size: @popup-font-size;
-    line-height: var(~'--c-line-height');
-    background-color: @popconfirm-color-content-bg;
-    border: @border-1 solid @popconfirm-color-border;
-    border-radius: @popconfirm-border-radius;
-    box-shadow: @popconfirm-shadow;
+    padding: var(~'--c-popconfirm-padding-vertical') var(~'--c-popconfirm-padding-horizontal');
+    color: var(~'--c-popconfirm-content-text-color');
+    font-size: var(~'--c-popconfirm-font-size');
+    line-height: var(~'--c-popconfirm-line-height');
+    background-color: var(~'--c-popconfirm-content-bg');
+    border: var(~'--c-popconfirm-border-width') solid var(~'--c-popconfirm-border-color');
+    border-radius: var(~'--c-popconfirm-border-radius');
+    box-shadow: var(~'--c-popconfirm-box-shadow');
 
     .c-popconfirm-body {
       position: relative;
       display: flex;
       align-items: flex-start;
-      margin-bottom: @popconfirm-margin-title-bottom;
-      color: @popconfirm-color-title-text;
-      font-size: @popconfirm-font-title-size;
+      margin-bottom: var(~'--c-popconfirm-title-margin-bottom');
+      color: var(~'--c-popconfirm-title-text-color');
+      font-size: var(~'--c-popconfirm-title-font-size');
 
       .c-popconfirm-icon {
         display: inline-flex;
         align-items: center;
-        height: calc(var(~'--c-line-height') * @popconfirm-font-title-size);
-        margin-right: @popconfirm-margin-icon-right;
-        font-size: @popconfirm-size-title-icon;
+        height: calc(var(~'--c-popconfirm-line-height') * var(~'--c-popconfirm-title-font-size'));
+        margin-right: var(~'--c-popconfirm-icon-margin-right');
+        font-size: var(~'--c-popconfirm-title-icon-size');
 
         .c-icon-exclamation-circle-fill {
-          color: @popconfirm-color-title-icon;
+          color: var(~'--c-popconfirm-title-icon-color');
         }
 
         .c-icon-check-circle-fill {
-          color: @popconfirm-color-title-icon_success;
+          color: var(~'--c-popconfirm-status-success-title-icon-color');
         }
 
         .c-icon-info-circle-fill {
-          color: @popconfirm-color-title-icon_info;
+          color: var(~'--c-popconfirm-status-info-title-icon-color');
         }
 
         .c-icon-close-circle-fill {
-          color: @popconfirm-color-title-icon_danger;
+          color: var(~'--c-popconfirm-status-danger-title-icon-color');
         }
       }
 
@@ -55,14 +54,14 @@
       text-align: right;
 
       > button {
-        margin-left: @popconfirm-margin-button-left;
+        margin-left: var(~'--c-popconfirm-button-margin-left');
       }
     }
   }
 
   &-popup-arrow {
     z-index: 1;
-    background-color: @popup-color-content-bg;
-    border: @border-1 solid @popup-color-border;
+    background-color: var(~'--c-popconfirm-content-bg');
+    border: var(~'--c-popconfirm-border-width') solid var(~'--c-popconfirm-border-color');
   }
 }

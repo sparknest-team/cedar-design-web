@@ -1,5 +1,5 @@
 <template>
-  <c-popconfirm @before-ok="handleBeforeOk">
+  <c-popconfirm :before-ok="handleBeforeOk">
     <c-button>Click To Show</c-button>
     <template #content>
       <Form>

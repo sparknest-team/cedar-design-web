@@ -1,5 +1,5 @@
 <template>
-  <div role="progressbar" aria-valuemin="0" aria-valuemax="100" :aria-valuenow="percent" :class="classes(n('wrapper'))">
+  <div role="progressbar" aria-valuemin="0" aria-valuemax="1" :aria-valuenow="percent" :class="classes(n('wrapper'))">
     <div :class="classes(n())" :style="style">
       <div :class="classes(n('bar-buffer'))" />
       <div v-if="indeterminate" :class="classes(n('indeterminate'))" >
@@ -22,8 +22,8 @@ import { computed, defineComponent, PropType } from 'vue'
 import NP from 'number-precision'
 import { createNamespace } from '../_utils/global-config'
 import { isObject } from '../_utils/is'
-import IconExclamationCircleFill from '../icon/icon-exclamation-circle-fill'
-import { Status } from '../_utils/constant'
+import { IconExclamationCircleFill } from '@cedarjs/icons-vue/icon-exclamation-circle-fill'
+import { SemanticStatus } from '../_utils/constant'
 
 const DEFAULT_STROKE_WIDTH = {
   sm: 3,
@@ -87,7 +87,7 @@ export default defineComponent({
       default: undefined,
     },
     type: {
-      type: String as PropType<Status>,
+      type: String as PropType<SemanticStatus>,
     },
     showText: Boolean,
     indeterminate: {

@@ -6,18 +6,19 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  column-gap: 4px;
+  column-gap: var(~'--c-verification-code-column-gap');
 
-  .c-input__wrapper {
+  .c-field-decorator {
     padding-right: 0;
     padding-left: 0;
+
     .c-input__inner {
       text-align: center;
     }
   }
   .size(@size) {
     .c-input--size-@{size} {
-      width: var(~'--c-input-size-@{size}-height');
+      width: var(~'--c-field-size-@{size}-height');
     }
   }
 
@@ -25,4 +26,5 @@
   .size(sm);
   .size(md);
   .size(lg);
+  .size(xl);
 }

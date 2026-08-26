@@ -1,53 +1,5 @@
 import type { RenderFunction } from 'vue'
 import { FieldString } from '../_utils/types'
-import { Size } from '../_utils/constant'
-import { VirtualListProps } from '../_components/virtual-list-v2/interface'
-import { TriggerProps } from '../trigger'
-
-export interface SelectProps {
-  options?: (string | number | boolean | SelectOptionData | SelectOptionGroup)[]
-  multiple?: boolean
-  modelValue?:
-    | string
-    | number
-    | boolean
-    | Record<string, unknown>
-    | (string | number | boolean | Record<string, unknown>)[]
-  defaultValue?:
-    | string
-    | number
-    | boolean
-    | Record<string, unknown>
-    | (string | number | boolean | Record<string, unknown>)[]
-  inputValue?: string
-  defaultInputValue?: string
-  size?: Size
-  placeholder?: string
-  loading?: boolean
-  disabled?: boolean
-  error?: boolean
-  clearable?: boolean
-  filterable?: boolean | { retainInputValue?: boolean }
-  creatable?: boolean
-  maxTagCount?: number
-  popupContainer?: string | HTMLElement
-  bordered?: boolean
-  popupVisible?: boolean
-  defaultPopupVisible?: boolean
-  unmountOnClose?: boolean
-  filterOption?: boolean | ((inputValue: string, option: SelectOptionData) => boolean)
-  virtualListProps?: VirtualListProps
-  triggerProps?: TriggerProps
-  formatLabel?: (data: SelectOptionData) => string
-  fallbackOption?: boolean | ((value: string | number | boolean | Record<string, unknown>) => SelectOptionData)
-  showExtraOptions?: boolean
-  valueKey?: string
-  searchDelay?: number
-  limit?: number
-  fieldNames?: SelectFieldNames
-  showHeaderOnEmpty?: boolean
-  showFooterOnEmpty?: boolean
-}
 
 export type SelectOptionValue = string | number | boolean | Record<string, unknown>
 

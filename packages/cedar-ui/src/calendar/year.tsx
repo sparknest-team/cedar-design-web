@@ -1,5 +1,5 @@
 import { defineComponent, computed, toRefs, inject, PropType } from 'vue'
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 import { padStart } from '../_utils/pad'
 import { dayjs } from '../_utils/date'
 import Month from './month'

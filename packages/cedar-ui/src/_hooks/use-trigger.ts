@@ -3,36 +3,36 @@ import { computed, ref, watch } from 'vue'
 import type { EmitFn2 } from '../_utils/types'
 
 export const useTrigger = ({
-  popupVisible,
-  defaultPopupVisible,
+  open,
+  defaultOpen,
   emit,
 }: {
-  popupVisible?: Ref<boolean | undefined>
-  defaultPopupVisible?: Ref<boolean>
+  open?: Ref<boolean | undefined>
+  defaultOpen?: Ref<boolean>
   emit: EmitFn2<{
-    'update:popupVisible': (visible: boolean) => true
-    popupVisibleChange: (visible: boolean) => true
+    'update:open': (visible: boolean) => true
+    openChange: (visible: boolean) => true
   }>
 }) => {
-  const _popupVisible = ref(defaultPopupVisible?.value ?? false)
-  const computedPopupVisible = computed(() => popupVisible?.value ?? _popupVisible.value)
+  const _open = ref(defaultOpen?.value ?? false)
+  const computedOpen = computed(() => open?.value ?? _open.value)
 
-  const handlePopupVisibleChange = (visible: boolean) => {
-    if (visible !== computedPopupVisible.value) {
-      _popupVisible.value = visible
-      emit('update:popupVisible', visible)
-      emit('popupVisibleChange', visible)
+  const handleOpenChange = (visible: boolean) => {
+    if (visible !== computedOpen.value) {
+      _open.value = visible
+      emit('update:open', visible)
+      emit('openChange', visible)
     }
   }
 
-  watch(computedPopupVisible, (visible) => {
-    if (_popupVisible.value !== visible) {
-      _popupVisible.value = visible
+  watch(computedOpen, (visible) => {
+    if (_open.value !== visible) {
+      _open.value = visible
     }
   })
 
   return {
-    computedPopupVisible,
-    handlePopupVisibleChange,
+    computedOpen,
+    handleOpenChange,
   }
 }

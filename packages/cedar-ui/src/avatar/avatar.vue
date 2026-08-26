@@ -29,7 +29,7 @@
               height: size + 'px',
               objectFit: objectFit,
             }"
-            alt="avatar"
+            :alt="alt"
             @load="handleImgLoad"
             @error="handleImgError"
           />
@@ -57,80 +57,27 @@ import {
   onMounted,
   nextTick,
   CSSProperties,
-  PropType,
   inject,
 } from 'vue';
-import { getPrefixCls } from '../_utils/global-config';
-import { AvatarShape, AvatarTriggerType, ObjectFit } from './types';
+import { createNamespace, getPrefixCls } from '../_utils/global-config';
+import type { AvatarTriggerType } from './types';
 import { useIndex } from '../_hooks/use-index';
 import ResizeObserver from '../_components/resize-observer-v2';
 import { avatarGroupInjectionKey } from './context';
 import { isNumber } from '../_utils/is';
-import IconImageClose from '../icon/icon-image-close';
-import IconLoading from '../icon/icon-loading';
+import { IconImageClose } from '@cedarjs/icons-vue/icon-image-close'
+import { IconLoading } from '@cedarjs/icons-vue/icon-loading'
 import { configProviderInjectionKey } from '../config-provider/context';
+import { avatarProps } from './props';
 
 export default defineComponent({
-  name: 'Avatar',
+  name: createNamespace('avatar').name,
   components: {
     ResizeObserver,
     IconImageClose,
     IconLoading,
   },
-  props: {
-    /**
-     * @zh 头像的形状，有圆形(circle)和正方形(square)两种
-     * @en The shape of the avatar, there are two kinds of circle (circle) and square (square)
-     * @values 'circle', 'square'
-     */
-    shape: {
-      type: String as PropType<AvatarShape>,
-      default: 'circle',
-    },
-    /**
-     * @zh 自定义头像图片地址，如果传入该属性，会默认渲染img标签
-     * @en Custom avatar image address. If this attribute is passed in, the img tag will be rendered by default
-     * @version 2.40.0
-     */
-    imageUrl: String,
-    /**
-     * @zh 头像的尺寸大小，单位是 `px`。未填写时使用样式中的大小 `40px`
-     * @en The size of the avatar, the unit is `px`. Use size `40px` in styles when not filled
-     */
-    size: Number,
-    /**
-     * @zh 是否自动根据头像尺寸调整字体大小
-     * @en Whether to automatically adjust the font size according to the size of the avatar.
-     */
-    autoFixFontSize: {
-      type: Boolean,
-      default: true,
-    },
-    /**
-     * @zh 可点击的头像交互类型
-     * @en Clickable avatar interaction type
-     * @values 'mask', 'button'
-     */
-    triggerType: {
-      type: String as PropType<AvatarTriggerType>,
-      default: 'button',
-    },
-    /**
-     * @zh 交互图标的样式
-     * @en Interactive icon style
-     */
-    triggerIconStyle: {
-      type: Object as PropType<CSSProperties>,
-    },
-    /**
-     * @zh 图片在容器内的的适应类型
-     * @en Object-fit type of the image in the container
-     * @version 2.52.0
-     */
-    objectFit: {
-      type: String as PropType<ObjectFit>,
-    },
-  },
+  props: avatarProps,
   emits: {
     /**
      * @zh 点击回调

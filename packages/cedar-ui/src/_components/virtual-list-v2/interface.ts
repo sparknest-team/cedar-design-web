@@ -51,7 +51,7 @@ export interface VirtualListProps {
    * @version 2.34.1
    */
   buffer?: number
-  data?: unknown[]
+  data?: any[]
   itemKey?: string | ((item: unknown) => VirtualItemKey)
   component?: keyof HTMLElementTagNameMap
 }

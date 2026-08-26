@@ -7,7 +7,7 @@ import { delay } from '../../_utils/maple/test'
 describe('CountTo', () => {
   test('plugin', () => {
     const app = createApp({}).use(CountTo)
-    expect(app.component(`C${CountTo.name}`)).toBeTruthy()
+    expect(app.component(CountTo.name)).toBeTruthy()
   })
 
   const DURATION = 100

@@ -1,13 +1,13 @@
 <template>
   <Trigger
-    :popup-visible="computedPopupVisible"
+    :open="computedOpen"
     :trigger="trigger"
-    :position="position"
+    :placement="placement"
     :disabled="disabled"
     :popup-offset="4"
-    @popup-visible-change="handlePopupVisibleChange"
+    @open-change="handleOpenChange"
   >
-    <menu-option v-bind="optionProps" :active="computedPopupVisible" uninject-context>
+    <menu-option v-bind="optionProps" :active="computedOpen" uninject-context>
       <slot />
       <template v-if="$slots.icon" #icon>
         <slot name="icon" />
@@ -30,16 +30,17 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../_utils/global-config'
 import { defineComponent, PropType, toRefs } from 'vue'
 import Trigger from '../trigger'
 import MenuPanel from './menu-panel.vue'
 import MenuOption from './menu-option.vue'
-import IconRight from '../icon/icon-right'
+import { IconRight } from '@cedarjs/icons-vue/icon-right'
 import { getPrefixCls } from '../_utils/global-config'
 import { useTrigger } from '../_hooks/use-trigger'
 
 export default defineComponent({
-  name: 'MenuSubmenu',
+  name: createNamespace("menu-submenu").name,
   components: {
     Trigger,
     MenuPanel,
@@ -48,16 +49,8 @@ export default defineComponent({
   },
   props: {
     /**
-     * @zh 选项值（2.16.0 版本后暂无用处）
-     * @en Value (Not useful after version 2.16.0)
-     */
-    value: {
-      type: [String, Number],
-    },
-    /**
      * @zh 是否禁用
      * @en Whether to disable
-     * @version 2.10.0
      */
     disabled: {
       type: Boolean,
@@ -75,11 +68,11 @@ export default defineComponent({
     },
     /**
      * @zh 弹出位置
-     * @en Popup position
+     * @en Popup placement
      * @values 'rt','lt'
      * @version 2.10.0
      */
-    position: {
+    placement: {
       type: String as PropType<'rt' | 'lt'>,
       default: 'rt',
     },
@@ -88,7 +81,7 @@ export default defineComponent({
      * @en Whether the popup is visible
      * @vModel
      */
-    popupVisible: {
+    open: {
       type: Boolean,
       default: undefined,
     },
@@ -96,7 +89,7 @@ export default defineComponent({
      * @zh 弹出框默认是否可见（非受控模式）
      * @en Whether the popup is visible by default (uncontrolled mode)
      */
-    defaultPopupVisible: {
+    defaultOpen: {
       type: Boolean,
       default: false,
     },
@@ -110,13 +103,13 @@ export default defineComponent({
     },
   },
   emits: {
-    'update:popupVisible': (visible: boolean) => true,
+    'update:open': (visible: boolean) => true,
     /**
      * @zh 下拉框显示状态发生改变时触发
      * @en Triggered when the display status of the drop-down box changes
      * @property {boolean} visible
      */
-    popupVisibleChange: (visible: boolean) => true,
+    openChange: (visible: boolean) => true,
   },
   /**
    * @zh 子菜单内容
@@ -136,19 +129,19 @@ export default defineComponent({
    * @version 2.29.0
    */
   setup(props, { emit }) {
-    const { defaultPopupVisible, popupVisible } = toRefs(props)
+    const { defaultOpen, open } = toRefs(props)
     const prefixCls = getPrefixCls('menu')
 
-    const { computedPopupVisible, handlePopupVisibleChange } = useTrigger({
-      defaultPopupVisible,
-      popupVisible,
+    const { computedOpen, handleOpenChange } = useTrigger({
+      defaultOpen,
+      open,
       emit,
     })
 
     return {
       prefixCls,
-      computedPopupVisible,
-      handlePopupVisibleChange,
+      computedOpen,
+      handleOpenChange,
     }
   },
 })

@@ -45,16 +45,17 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../_utils/global-config'
 import { computed, defineComponent, ref } from 'vue'
 import type { EllipsisConfig } from '../typography/types'
 import { getPrefixCls } from '../_utils/global-config'
 import IconHover from '../_components/icon-hover.vue'
-import IconLeft from '../icon/icon-left'
+import { IconLeft } from '@cedarjs/icons-vue/icon-left'
 import { TypographyTitle } from '../typography'
 import { pageHeaderProps } from './props'
 
 export default defineComponent({
-  name: 'PageHeader',
+  name: createNamespace("page-header").name,
   components: { IconHover, IconLeft, TypographyTitle },
   props: pageHeaderProps,
   emits: {

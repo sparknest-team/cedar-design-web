@@ -127,5 +127,5 @@ import type {
   StepStatus,
   StepsInstance,
   StepsStepInstance,
-} from '@cedar/ui'
+} from '@cedarjs/ui'
 ```

@@ -1,19 +1,18 @@
-import { App } from 'vue'
-import { CedarOptions } from '../_utils/types'
-import { getComponentPrefix, setGlobalConfig } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Tree from './tree.vue'
+import { treeProps } from './props'
 
 export type { TreeNodeData, TreeFieldNames } from './types'
 
-const Tree = Object.assign(_Tree, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _Tree.name, _Tree)
-  },
-})
+const Tree = withInstall(_Tree, Object.assign(_Tree, {
+}), { components: [_Tree] })
 
 export type TreeInstance = InstanceType<typeof _Tree>
+
+export const _TreeComponent = Tree
+
+export { Tree }
+
+export { treeProps }
 
 export default Tree

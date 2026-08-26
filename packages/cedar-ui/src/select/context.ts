@@ -1,9 +1,9 @@
 import type { InjectionKey } from 'vue'
-import type { FilterOption, SelectOptionInfo } from './types'
+import type { FilterOption, SelectFieldNames, SelectOptionInfo } from './types'
 
 export interface SelectContext {
   multiple?: boolean
-  valueKey?: string
+  fieldNames?: Required<SelectFieldNames>
   inputValue?: string
   filterOption?: FilterOption
   component?: string

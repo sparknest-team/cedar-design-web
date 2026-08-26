@@ -13,7 +13,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import type { SearchResult } from '@cedar/ui'
+import type { SearchResult } from '@cedarjs/ui'
 
 const inputStyle = { width: '360px' }
 const storageKey = '__cedar_search_history__'

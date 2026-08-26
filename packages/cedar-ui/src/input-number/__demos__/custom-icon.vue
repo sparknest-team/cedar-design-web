@@ -1,6 +1,10 @@
 <template>
   <c-space direction="column" size="lg">
-    <c-input-number :style="{ width: '320px' }" placeholder="Please enter something" clearable>
+    <c-input-number
+      :style="{ width: '320px' }"
+      placeholder="Please enter something"
+      clearable
+    >
       <template #plus>
         <c-icon-plus />
       </template>

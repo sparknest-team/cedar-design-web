@@ -9,4 +9,15 @@ describe('Progress', () => {
     await nextTick()
     expect(wrapper.html()).toMatchSnapshot()
   })
+
+  test('uses the documented zero-to-one accessibility range', () => {
+    const wrapper = mount(Progress, { props: { percent: 0.75 } })
+    const progressbar = wrapper.get('[role="progressbar"]')
+
+    expect(progressbar.attributes()).toMatchObject({
+      'aria-valuemin': '0',
+      'aria-valuemax': '1',
+      'aria-valuenow': '0.75',
+    })
+  })
 })

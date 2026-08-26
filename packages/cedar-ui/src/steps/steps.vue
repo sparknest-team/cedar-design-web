@@ -5,17 +5,21 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../_utils/global-config'
 import { computed, defineComponent, provide, reactive, ref, toRefs } from 'vue'
-import { call } from '@maplejs/maple-shared'
 import { getPrefixCls } from '../_utils/global-config'
 import { StepData, StepStatus } from './types'
 import { stepsInjectionKey } from './context'
 import { stepsProps } from './props'
 
 export default defineComponent({
-  name: 'Steps',
+  name: createNamespace("steps").name,
   props: stepsProps,
-  setup(props) {
+  emits: {
+    change: (_step: number, _event: Event) => true,
+    'update:current': (_step: number) => true,
+  },
+  setup(props, { emit }) {
     const { type, showLine } = toRefs(props)
     const prefixCls = getPrefixCls('steps')
     const _current = ref(props.defaultCurrent)
@@ -46,8 +50,8 @@ export default defineComponent({
     const handleClick = (step: number, e: Event) => {
       if (!props.changeable) return
       _current.value = step
-      call(props['onUpdate:current'], step)
-      call(props.onChange, step, e)
+      emit('update:current', step)
+      emit('change', step, e)
     }
 
     const stepMap = reactive(new Map<number, StepData>())

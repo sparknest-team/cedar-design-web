@@ -8,29 +8,24 @@ import { columns } from './columns'
 
 const data = reactive([
   {
-    properties: 'rgb(var(--gray-10))',
+    properties: 'var(--c-color-text-1)',
     description: '强调/正文标题、一级文字',
-    class: 'text-primary',
+    class: 'c-text-1',
   },
   {
-    properties: 'rgb(var(--gray-8))',
+    properties: 'var(--c-color-text-2)',
     description: '次强调/正文标题、二级文字 图标',
-    class: 'text-secondary',
+    class: 'c-text-2',
   },
   {
-    properties: 'rgb(var(--gray-7))',
+    properties: 'var(--c-color-text-3)',
     description: '次要信息、三级文字',
-    class: 'text-tertiary',
+    class: 'c-text-3',
   },
   {
-    properties: 'rgb(var(--gray-6))',
-    description: '置灰禁用',
-    class: 'text-disabled',
-  },
-  {
-    properties: 'rgb(var(--gray-6))',
-    description: '暗文占位',
-    class: 'text-placeholder',
+    properties: 'var(--c-color-text-4)',
+    description: '置灰禁用 / 占位',
+    class: 'c-text-4',
   },
 ])
 </script>

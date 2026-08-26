@@ -1,5 +1,5 @@
 import { defineComponent, toRefs, PropType, computed } from 'vue'
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 import { dayjs, methods } from '../_utils/date'
 import { padStart } from '../_utils/pad'
 import Week from './week'

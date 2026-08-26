@@ -1,0 +1,192 @@
+.c--box {
+  box-sizing: border-box;
+}
+.c--box * {
+  box-sizing: border-box;
+}
+.c--lock {
+  overflow: hidden !important;
+}
+.c--ellipsis {
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.c--inline-block {
+  display: inline-block;
+}
+.c--flex {
+  display: flex;
+}
+.c--inline-flex {
+  display: inline-flex;
+}
+/******** borderSize *******/
+/******** borderStyle *******/
+/******** radius *******/
+/******** shadow distance *******/
+/******** size *******/
+/******** spacing *******/
+/******** shadow *******/
+/******** opacity *******/
+/******** fontSize *******/
+/******** fontWeight ********/
+/******** Primary *******/
+/******** success *******/
+/******** info *******/
+/******** warning *******/
+/******** danger *******/
+/******** link *******/
+/******** radius *******/
+/******** motion *******/
+/******** z-index *******/
+/******** scale CSS var wrappers (public Less API) *******/
+/********* icon hover *********/
+:root {
+  --c-time-picker-border-radius: var(--c-border-radius-md);
+  --c-time-picker-column-width: var(--c-size-16);
+  --c-time-picker-column-height: 224px;
+  --c-time-picker-cell-height: var(--c-size-6);
+  --c-time-picker-cell-spacing: var(--c-spacing-2);
+  --c-time-picker-cell-padding-left: var(--c-spacing-9);
+  --c-time-picker-cell-font-size: var(--c-font-size-body-3);
+  --c-time-picker-border-color: var(--c-color-neutral-3);
+  --c-time-picker-cell-text-color: var(--c-color-text-1);
+  --c-time-picker-cell-bg-hover: var(--c-color-fill-2);
+  --c-time-picker-cell-bg-active: var(--c-color-fill-2);
+  --c-time-picker-cell-text-color-disabled: var(--c-color-text-4);
+  --c-time-picker-cell-font-weight: var(--c-font-weight-500);
+  --c-time-picker-cell-font-weight-active: var(--c-font-weight-500);
+  --c-time-picker-box-shadow: var(--c-shadow1-down);
+  --c-time-picker-footer-padding: var(--c-spacing-4);
+  --c-time-picker-footer-extra-font-size: var(--c-font-size-body-1);
+  --c-time-picker-range-gap: var(--c-spacing-6);
+  --c-time-picker-range-wrapper-padding: var(--c-spacing-4);
+  --c-time-picker-range-panel-title-gap: var(--c-spacing-3);
+  --c-time-picker-range-panel-title-padding-vertical: var(--c-spacing-3);
+  --c-time-picker-range-panel-title-padding-horizontal: var(--c-spacing-6);
+  --c-time-picker-range-panel-title-line-height: 22px;
+  --c-time-picker-range-next-day-font-size: var(--c-font-size-body-1);
+}
+.c-timepicker {
+  position: relative;
+  display: flex;
+  box-sizing: border-box;
+  padding: 0;
+}
+.c-timepicker-container {
+  overflow: hidden;
+  background-color: var(--c-color-bg-popup);
+  border: 1px solid var(--c-time-picker-border-color);
+  border-radius: var(--c-time-picker-border-radius);
+  box-shadow: var(--c-time-picker-box-shadow);
+}
+.c-timepicker-column {
+  box-sizing: border-box;
+  width: var(--c-time-picker-column-width);
+  height: var(--c-time-picker-column-height);
+  overflow: hidden;
+}
+.c-timepicker-column:not(:last-child) {
+  border-right: 1px solid var(--c-time-picker-border-color);
+}
+.c-timepicker-column:hover {
+  overflow-y: auto;
+}
+.c-timepicker-column ul {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.c-timepicker-column ul::after {
+  display: block;
+  width: 100%;
+  height: calc(var(--c-time-picker-column-height) - var(--c-time-picker-cell-height) - var(--c-time-picker-cell-spacing) * 2);
+  content: '';
+}
+.c-timepicker-cell {
+  padding: var(--c-time-picker-cell-spacing) 0;
+  color: var(--c-time-picker-cell-text-color);
+  font-weight: var(--c-time-picker-cell-font-weight);
+  cursor: pointer;
+}
+.c-timepicker-cell-inner {
+  height: var(--c-time-picker-cell-height);
+  padding-left: var(--c-time-picker-cell-padding-left);
+  font-size: var(--c-time-picker-cell-font-size);
+  line-height: var(--c-time-picker-cell-height);
+}
+.c-timepicker-cell:not(.c-timepicker-cell-selected):not(.c-timepicker-cell-disabled):hover .c-timepicker-cell-inner {
+  background-color: var(--c-time-picker-cell-bg-hover);
+}
+.c-timepicker-cell-selected .c-timepicker-cell-inner {
+  font-weight: var(--c-time-picker-cell-font-weight-active);
+  background-color: var(--c-time-picker-cell-bg-active);
+}
+.c-timepicker-cell-disabled {
+  color: var(--c-time-picker-cell-text-color-disabled);
+  cursor: not-allowed;
+}
+.c-timepicker-footer-extra-wrapper {
+  padding: var(--c-time-picker-footer-padding);
+  color: var(--c-color-text-1);
+  font-size: var(--c-time-picker-footer-extra-font-size);
+  border-top: 1px solid var(--c-time-picker-border-color);
+}
+.c-timepicker-footer-btn-wrapper {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--c-time-picker-footer-padding);
+  border-top: 1px solid var(--c-time-picker-border-color);
+}
+.c-timepicker-footer-btn-wrapper :only-child {
+  margin-left: auto;
+}
+.c-timepicker-range {
+  display: flex;
+  flex-direction: column;
+}
+.c-timepicker-range-wrapper {
+  display: flex;
+  gap: var(--c-time-picker-range-gap);
+  align-items: center;
+  padding: var(--c-time-picker-range-wrapper-padding);
+}
+.c-timepicker-range-panel {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: var(--c-color-bg-popup);
+  border: 1px solid var(--c-time-picker-border-color);
+  border-radius: var(--c-time-picker-border-radius);
+}
+.c-timepicker-range-panel-active {
+  background-color: var(--c-color-fill-1);
+}
+.c-timepicker-range-panel-title {
+  display: flex;
+  gap: var(--c-time-picker-range-panel-title-gap);
+  align-items: center;
+  justify-content: center;
+  padding: var(--c-time-picker-range-panel-title-padding-vertical) var(--c-time-picker-range-panel-title-padding-horizontal);
+  color: var(--c-color-text-2);
+  font-size: var(--c-time-picker-footer-extra-font-size);
+  line-height: var(--c-time-picker-range-panel-title-line-height);
+  text-align: center;
+  border-bottom: 1px solid var(--c-time-picker-border-color);
+}
+.c-timepicker-range-next-day {
+  color: var(--c-color-text-3);
+  font-size: var(--c-time-picker-range-next-day-font-size);
+  line-height: 1;
+}
+.c-timepicker-range-panel-body {
+  display: flex;
+}
+.c-timepicker-range-separator {
+  flex-shrink: 0;
+  color: var(--c-color-text-3);
+  font-size: var(--c-time-picker-footer-extra-font-size);
+  line-height: var(--c-time-picker-range-panel-title-line-height);
+}

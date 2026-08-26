@@ -118,6 +118,9 @@ export default defineComponent({
     const itemElement = (
       <div
         ref="refItemElement"
+        role="menuitem"
+        tabindex={disabled ? -1 : 0}
+        aria-disabled={disabled}
         class={[
           `${prefixCls}-item`,
           {
@@ -128,6 +131,12 @@ export default defineComponent({
         ]}
         {...this.$attrs}
         onClick={onClick}
+        onKeydown={(event: KeyboardEvent) => {
+          if (!disabled && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault()
+            onClick(event as unknown as MouseEvent)
+          }
+        }}
       >
         {/* 内容 */}
         {content}
@@ -140,10 +149,12 @@ export default defineComponent({
       const tooltipClassNames = [`${prefixCls}-item-tooltip`, tooltipProps?.class]
       return (
         <Tooltip
-          trigger="hover"
-          position="right"
-          class={tooltipClassNames}
-          {...omit(tooltipProps || {}, ['class'])}
+          {...({
+            trigger: 'hover',
+            placement: 'right',
+            class: tooltipClassNames,
+            ...omit(tooltipProps || {}, ['class']),
+          } as any)}
           v-slots={{
             default: () => itemElement,
             content: () => children,

@@ -1,5 +1,5 @@
 import { Comment, Fragment, computed, defineComponent, toRefs, type VNode } from 'vue'
-import { isArray, isNumeric } from '@maplejs/maple-shared'
+import { isArray, isNumeric } from '@cedarjs/shared'
 import { padStartFlex, toSizeUnit } from '../_utils/maple/elements'
 import { unFragment } from '../_utils/vue-utils'
 import { spaceProps as props, type SpaceSize } from './props'

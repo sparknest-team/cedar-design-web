@@ -146,5 +146,5 @@ PC 端专用的导航菜单，收纳、排列并展示一系列选项的列表�
 组件导出以下类型定义
 
 ```ts
-import type { NavMenuProps } from '@cedar/ui'
+import type { NavMenuProps } from '@cedarjs/ui'
 ```

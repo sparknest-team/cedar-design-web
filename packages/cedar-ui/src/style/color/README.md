@@ -4,29 +4,21 @@ permalink: /components/color/
 
 ## 颜色 Color
 
-组件库的全局 Token，可以在此查看组件库内置的设计变量。 如果需要查看所有颜色，可以前往[ :link:`色板 Palette`](/components/palette/)
+语义色工具类带库前缀：Cedar `c-*`，Maple `mp-*`（变量 `--c-*` / `--mp-*`）。
+完整色阶与语义变量见 [色板 Palette](/components/palette/)。
 
-- 点击Class可快捷复制
+- 业务页用类名（`c-text-1`）；主题覆盖 / 组件 token 用变量（`--c-color-text-1`）
+- 点击 Class 可快捷复制
+- 不做无前缀别名、不做向后兼容
 
-### 主色 Primary
+### 类名规则
 
-<demo src="./__demos__/primary.vue"></demo>
-
-### 成功色 Success
-
-<demo src="./__demos__/success.vue"></demo>
-
-### 警示色 Warning
-
-<demo src="./__demos__/warning.vue"></demo>
-
-### 错误色 Danger
-
-<demo src="./__demos__/danger.vue"></demo>
-
-### 链接色 Link
-
-<demo src="./__demos__/link.vue"></demo>
+| 类名 | 变量 |
+|---|---|
+| `c-text-1` … `c-text-4` | `var(--c-color-text-1)` … `var(--c-color-text-4)` |
+| `c-fill-1` … `c-fill-4` | `var(--c-color-fill-1)` … `var(--c-color-fill-4)` |
+| `c-color-border-1` … `c-color-border-4` | `var(--c-color-border-1)` … `var(--c-color-border-4)` |
+| `c-bg-0` / `c-bg-1` / `c-bg-2` | `var(--c-color-bg-white)` / `var(--c-color-bg-1)` / `var(--c-color-bg-2)` |
 
 ### 边框颜色 Border
 
@@ -43,8 +35,3 @@ permalink: /components/color/
 ### 背景颜色 Background
 
 <demo src="./__demos__/background.vue"></demo>
-
-<!--
-### 黑白透明
-<demo src="./__demos__/bwt.vue"></demo>
--->

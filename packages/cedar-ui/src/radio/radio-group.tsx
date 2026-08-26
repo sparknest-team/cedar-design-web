@@ -1,81 +1,19 @@
-import type { PropType } from 'vue'
 import { defineComponent, provide, reactive, toRefs, ref, computed, watch } from 'vue'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
-import { Size, Direction } from '../_utils/constant'
-import { radioGroupKey, RadioType } from './context'
+import { radioGroupKey } from './context'
 import { isFunction, isNull, isNumber, isString, isUndefined } from '../_utils/is'
 import { useFormItem } from '../_hooks/use-form-item'
 import { RadioOption } from './types'
 import Radio from './radio'
 import { useSize } from '../_hooks/use-size'
+import { radioGroupProps } from './props'
 
 
 const { name } = createNamespace('radio-group')
 
 export default defineComponent({
   name,
-  props: {
-    /**
-     * @zh 绑定值
-     * @en Value
-     * @vModel
-     */
-    modelValue: {
-      type: [String, Number, Boolean] as PropType<string | number | boolean>,
-      default: undefined,
-    },
-    /**
-     * @zh 默认值（非受控状态）
-     * @en Default value (uncontrolled state)
-     */
-    defaultValue: {
-      type: [String, Number, Boolean] as PropType<string | number | boolean>,
-      default: '',
-    },
-    /**
-     * @zh 单选框组的类型
-     * @en Types of radio group
-     * @values 'radio', 'button'
-     */
-    type: {
-      type: String as PropType<RadioType>,
-      default: 'radio',
-    },
-    /**
-     * @zh 单选框组的尺寸
-     * @en The size of the radio group
-     * @values 'xs','sm','md','lg','xl'
-     * @defaultValue 'md'
-     */
-    size: {
-      type: String as PropType<Size>,
-    },
-    /**
-     * @zh 选项
-     * @en Options
-     * @version 2.27.0
-     */
-    options: {
-      type: Array as PropType<Array<string | number | RadioOption>>,
-    },
-    /**
-     * @zh 单选框组的方向
-     * @en The direction of the radio group
-     * @values 'horizontal', 'vertical'
-     */
-    direction: {
-      type: String as PropType<Direction>,
-      default: 'horizontal',
-    },
-    /**
-     * @zh 是否禁用
-     * @en Whether to disable
-     */
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-  },
+  props: radioGroupProps,
   emits: {
     'update:modelValue': (value: string | number | boolean) => true,
     /**
@@ -102,7 +40,7 @@ export default defineComponent({
    */
   setup(props, { emit, slots }) {
     const prefixCls = getPrefixCls('radio-group')
-    const { size, type, disabled, modelValue } = toRefs(props)
+    const { size, variant, disabled, modelValue } = toRefs(props)
     const {
       mergedDisabled,
       mergedSize: _mergedSize,
@@ -117,15 +55,15 @@ export default defineComponent({
 
     const computedValue = computed(() => props.modelValue ?? _value.value)
 
-    const options = computed(() => {
-      return (props.options ?? []).map((option) => {
+    const options = computed((): RadioOption[] => {
+      return (props.options ?? []).map((option): RadioOption => {
         if (isString(option) || isNumber(option)) {
           return {
             label: option,
             value: option,
           } as RadioOption
         }
-        return option
+        return option as RadioOption
       })
     })
 
@@ -139,10 +77,9 @@ export default defineComponent({
     provide(
       radioGroupKey,
       reactive({
-        name: 'CedarRadioGroup',
         value: computedValue,
         size: mergedSize,
-        type,
+        variant,
         disabled: mergedDisabled,
         slots,
         handleChange,
@@ -162,7 +99,7 @@ export default defineComponent({
     })
 
     const cls = computed(() => [
-      `${prefixCls}${props.type === 'button' ? '-button' : ''}`,
+      `${prefixCls}${props.variant === 'button' ? '-button' : ''}`,
       `${prefixCls}-size-${mergedSize.value}`,
       `${prefixCls}-direction-${props.direction}`,
       {

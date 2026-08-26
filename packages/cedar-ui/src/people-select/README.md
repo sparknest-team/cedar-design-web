@@ -43,5 +43,5 @@ permalink: /components/people-select/
 组件导出以下类型定义
 
 ```ts
-import type { PeopleSelectProps } from '@cedar/ui'
+import type { PeopleSelectProps } from '@cedarjs/ui'
 ```

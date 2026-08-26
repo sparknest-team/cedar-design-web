@@ -1,12 +1,12 @@
-import originDayjs, { Dayjs, OpUnitType, UnitType } from 'dayjs'
-import customParseFormat from 'dayjs/plugin/customParseFormat'
-import isBetween from 'dayjs/plugin/isBetween'
-import weekOfYear from 'dayjs/plugin/weekOfYear'
-import AdvancedFormat from 'dayjs/plugin/advancedFormat'
-import weekYear from 'dayjs/plugin/weekYear'
-import QuarterOfYear from 'dayjs/plugin/quarterOfYear'
+import originDayjs, { type Dayjs, type OpUnitType, type UnitType } from 'dayjs'
+import customParseFormat from 'dayjs/plugin/customParseFormat.js'
+import isBetween from 'dayjs/plugin/isBetween.js'
+import weekOfYear from 'dayjs/plugin/weekOfYear.js'
+import AdvancedFormat from 'dayjs/plugin/advancedFormat.js'
+import weekYear from 'dayjs/plugin/weekYear.js'
+import QuarterOfYear from 'dayjs/plugin/quarterOfYear.js'
 import { isDayjs, isArray, isQuarter } from './is'
-import 'dayjs/locale/zh-cn'
+import 'dayjs/locale/zh-cn.js'
 
 const overwriteIsDayjs = (_: any, Dayjs: any, dayjs: any) => {
   // eslint-disable-next-line func-names

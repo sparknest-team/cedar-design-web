@@ -1,24 +1,22 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Form from './form.vue'
 import _FormItem from './form-item.vue'
+import { formProps } from './props'
 
-const Form = Object.assign(_Form, {
+const Form = withInstall(_Form, Object.assign(_Form, {
   Item: _FormItem,
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _Form.name, _Form)
-    app.component(componentPrefix + _FormItem.name, _FormItem)
-  },
-})
+}), { components: [_Form, _FormItem] })
 
 export type FormInstance = InstanceType<typeof _Form>
 export type FormItemInstance = InstanceType<typeof _FormItem>
 export type { ValidateStatus, ValidateTrigger, ValidatedError, FieldRule, FormItemEventHandler } from './types'
 
 export { _FormItem as FormItem }
+
+export const _FormComponent = Form
+
+export { Form }
+
+export { formProps }
 
 export default Form

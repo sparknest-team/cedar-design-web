@@ -23,7 +23,7 @@
 
 <script lang="ts" setup>
 import { computed, CSSProperties, onUpdated, ref, useSlots } from 'vue'
-import { onSmartMounted } from '@maplejs/maple-use'
+import { onSmartMounted } from '@cedarjs/use'
 import { toSizeUnit } from '../_utils/maple/elements'
 import { createNamespace } from '../_utils/global-config'
 import { dividerProps } from './props'

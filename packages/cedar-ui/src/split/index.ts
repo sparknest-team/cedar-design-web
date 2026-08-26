@@ -1,17 +1,16 @@
-import { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Split from './split.vue'
+import { splitProps } from './props'
 
-const Split = Object.assign(_Split, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _Split.name, _Split)
-  },
-})
+const Split = withInstall(_Split, Object.assign(_Split, {
+}), { components: [_Split] })
 
 export type SplitInstance = InstanceType<typeof _Split>
+
+export const _SplitComponent = Split
+
+export { Split }
+
+export { splitProps }
 
 export default Split

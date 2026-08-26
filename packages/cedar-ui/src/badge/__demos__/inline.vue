@@ -8,14 +8,14 @@
     <br />
     内联类型，指定description
     <c-space>
-      <c-badge :content="1000" type="inline" description="描述文本" />
-      <c-badge :content="1000" type="inline" description="描述文本" dot />
+      <c-badge :content="1000" mode="inline" description="描述文本" />
+      <c-badge :content="1000" mode="inline" description="描述文本" dot />
     </c-space>
     <br />
     内联类型，指定description，inline-position="start"
     <c-space>
-      <c-badge :content="1000" type="inline" description="描述文本" inline-position="start" />
-      <c-badge :content="1000" type="inline" description="描述文本" dot inline-position="start" />
+      <c-badge :content="1000" mode="inline" description="描述文本" inline-position="start" />
+      <c-badge :content="1000" mode="inline" description="描述文本" dot inline-position="start" />
     </c-space>
   </c-space>
 </template>

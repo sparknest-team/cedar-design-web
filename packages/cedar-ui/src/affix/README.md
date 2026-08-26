@@ -74,5 +74,5 @@ permalink: /components/affix/
 组件导出以下类型定义
 
 ```ts
-import type { AffixInstance } from '@cedar/ui'
+import type { AffixInstance } from '@cedarjs/ui'
 ```

@@ -64,7 +64,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { TableColumnData } from "@cedar/ui";
+import type { TableColumnData } from "@cedarjs/ui";
 
 // 6 列混合配置：显式 width 定宽列 + 只设 minWidth 的弹性列 + 左右冻结
 const flatColumns: TableColumnData[] = [

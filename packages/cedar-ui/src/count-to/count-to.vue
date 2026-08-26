@@ -6,8 +6,8 @@
 
 <script lang="ts" setup>
 import { computed, onMounted, watch } from 'vue'
-import { call, floor, toNumber } from '@maplejs/maple-shared'
-import { useMotion } from '@maplejs/maple-use'
+import { floor, toNumber } from '@cedarjs/shared'
+import { useMotion } from '@cedarjs/use'
 import { createNamespace } from '../_utils/global-config'
 import { countToProps } from './props'
 
@@ -17,6 +17,7 @@ defineOptions({
 
 const { n } = createNamespace('count-to')
 const props = defineProps(countToProps)
+const emit = defineEmits<{ (event: 'end'): void }>()
 
 const {
   value: motionValue,
@@ -29,7 +30,7 @@ const {
   duration: () => toNumber(props.duration),
   timingFunction: props.timingFunction,
   onFinished() {
-    call(props.onEnd)
+    emit('end')
   },
 })
 

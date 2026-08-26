@@ -3,7 +3,6 @@
 
 .c-card {
   position: relative;
-  border-radius: var(~'--c-card-no-border');
   overflow: hidden;
   width: 100%;
   border-radius: var(~'--c-card-border-radius');
@@ -74,8 +73,8 @@
       color: var(~'--c-card-title-extra-color');
     }
 
-    &-sub-title {
-      color: var(~'--c-card-sub-title-color');
+    &-subtitle {
+      color: var(~'--c-card-subtitle-color');
     }
   }
 
@@ -86,7 +85,7 @@
   }
 
   &--hoverable:hover {
-    box-shadow: 0 4px 10px var(~'--c-card-box-shadow-color');
+    box-shadow: 0 var(~'--c-card-hover-shadow-y') var(~'--c-card-hover-shadow-blur') var(~'--c-card-box-shadow-color');
   }
 
   &__underlay {
@@ -130,10 +129,10 @@
         font-size: var(~'--c-card-size-@{size}-title-font-size');
       }
 
-      .c-card__sub-title {
-        margin: var(~'--c-card-size-@{size}-sub-title-margin');
-        padding: var(~'--c-card-size-@{size}-sub-title-padding');
-        font-size: var(~'--c-card-size-@{size}-sub-title-font-size');
+      .c-card__subtitle {
+        margin: var(~'--c-card-size-@{size}-subtitle-margin');
+        padding: var(~'--c-card-size-@{size}-subtitle-padding');
+        font-size: var(~'--c-card-size-@{size}-subtitle-font-size');
       }
 
       .c-card__divider {
@@ -166,6 +165,6 @@
 :root[cedar-theme='dark'] {
   .c-card__grid--hoverable:hover::before,
   .c-card--hoverable:hover {
-    box-shadow: 0 4px 10px var(~'--c-card-box-shadow-dark-color');
+    box-shadow: 0 var(~'--c-card-hover-shadow-y') var(~'--c-card-hover-shadow-blur') var(~'--c-card-box-shadow-dark-color');
   }
 }

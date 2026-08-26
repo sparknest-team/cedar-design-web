@@ -1,9 +1,18 @@
-export const SIZES = ['xs', 'sm', 'md', 'lg', 'xl'] as const
-export type Size = (typeof SIZES)[number]
+export const componentSizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const
+export type ComponentSize = (typeof componentSizes)[number]
 export const BORDER_SHAPES = ['square', 'round', 'circle'] as const
 export type BorderShape = (typeof BORDER_SHAPES)[number]
-export const STATUSES = ['primary', 'secondary', 'tertiary', 'info', 'success', 'warning', 'danger'] as const
-export type Status = (typeof STATUSES)[number]
+export const semanticStatuses = [
+  'default',
+  'primary',
+  'secondary',
+  'tertiary',
+  'info',
+  'success',
+  'warning',
+  'danger',
+] as const
+export type SemanticStatus = (typeof semanticStatuses)[number]
 export const MESSAGE_TYPES = ['info', 'success', 'warning', 'error'] as const
 export type MessageType = (typeof MESSAGE_TYPES)[number]
 export const TRIGGER_POSITIONS = [

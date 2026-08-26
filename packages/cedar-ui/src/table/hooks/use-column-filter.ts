@@ -18,7 +18,7 @@ export const useColumnFilter = ({
     return []
   })
 
-  const filterPopupVisible = ref(false)
+  const filterOpen = ref(false)
   const isFilterActive = computed(() => filterValue.value.length > 0)
   const isMultipleFilter = computed(() => Boolean(column.value.filterable?.multiple))
   const columnFilterValue = ref<string[]>(filterValue.value)
@@ -29,8 +29,8 @@ export const useColumnFilter = ({
     }
   })
 
-  const handleFilterPopupVisibleChange = (value: boolean) => {
-    filterPopupVisible.value = value
+  const handleFilterOpenChange = (value: boolean) => {
+    filterOpen.value = value
   }
 
   const setFilterValue = (filterValue: string[]) => {
@@ -49,7 +49,7 @@ export const useColumnFilter = ({
     if (column.value.dataIndex) {
       tableCtx.onFilterChange?.(column.value.dataIndex, columnFilterValue.value, ev)
     }
-    handleFilterPopupVisibleChange(false)
+    handleFilterOpenChange(false)
   }
 
   const handleFilterReset = (ev: Event) => {
@@ -57,15 +57,15 @@ export const useColumnFilter = ({
     if (column.value.dataIndex) {
       tableCtx.onFilterChange?.(column.value.dataIndex, columnFilterValue.value, ev)
     }
-    handleFilterPopupVisibleChange(false)
+    handleFilterOpenChange(false)
   }
 
   return {
-    filterPopupVisible,
+    filterOpen,
     isFilterActive,
     isMultipleFilter,
     columnFilterValue,
-    handleFilterPopupVisibleChange,
+    handleFilterOpenChange,
     setFilterValue,
     handleCheckboxFilterChange,
     handleRadioFilterChange,

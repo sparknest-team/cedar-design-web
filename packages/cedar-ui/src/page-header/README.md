@@ -6,7 +6,7 @@ permalink: /components/page-header/
 
 内容区顶部的页面标题结构，适合列表页、详情页等需要描述当前页面的场景。默认无底色。
 
-> 与 Maple 移动端 **AppBar** 不同：AppBar 是应用顶栏 chrome（固定导航条），PageHeader 是页内标题区。桌面端产品级顶栏请使用 `Layout.Header` / `SaasHeaderNav`。
+> 与 Maple 移动端 **AppBar** 不同：AppBar 是应用顶栏 chrome（固定导航条），PageHeader 是页内标题区。桌面端产品级顶栏请使用 `Layout.Header`。
 
 ## 案例
 
@@ -64,5 +64,5 @@ permalink: /components/page-header/
 ## 类型定义
 
 ```ts
-import type { PageHeaderProps } from '@cedar/ui'
+import type { PageHeaderProps } from '@cedarjs/ui'
 ```

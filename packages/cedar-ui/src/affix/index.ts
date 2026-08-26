@@ -1,17 +1,13 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Affix from './affix.vue'
+import { affixProps } from './props'
 
-const Affix = Object.assign(_Affix, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _Affix.name, _Affix)
-  },
-})
+const Affix = withInstall(_Affix, Object.assign(_Affix, {
+}), { components: [_Affix] })
 
 export type AffixInstance = InstanceType<typeof _Affix>
+export type { AffixProps, AffixTarget } from './props'
+export { Affix, affixProps }
+export const _AffixComponent = Affix
 
 export default Affix

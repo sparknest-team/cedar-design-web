@@ -4,19 +4,69 @@ export const zhSideBar: SidebarConfig = {
   "/": [
     {
       text: "开发指南",
-      link: "/guide/start/",
+      link: "/guide/quickstart/",
       children: [
         {
           text: "快速上手",
-          link: "/guide/start/",
+          link: "/guide/quickstart/",
         },
         {
           text: "国际化",
           link: "/guide/i18n/",
         },
         {
+          text: "Roadmap",
+          link: "/guide/roadmap/",
+        },
+        {
           text: "更新日志",
           link: "/changelog/",
+        },
+      ],
+    },
+    {
+      text: "样式",
+      link: "/themes/",
+      children: [
+        {
+          text: "主题定制",
+          link: "/themes/",
+        },
+        {
+          text: "StyleProvider",
+          link: "/components/style-provider/",
+        },
+        {
+          text: "色板 Palette",
+          link: "/components/palette/",
+        },
+        {
+          text: "颜色 Color",
+          link: "/components/color/",
+        },
+        {
+          text: "总览 Utilities",
+          link: "/components/style/utilities/",
+        },
+        {
+          text: "海拔 Elevation",
+          link: "/components/style/elevation/",
+        },
+        {
+          text: "字体排版 Typography",
+          link: "/components/style/typography/",
+        },
+        {
+          text: "原子化 CSS",
+          link: "/components/style/atomic-css/",
+        },
+        {
+          text: "常用写法",
+          link: "/components/style/atomic-usage/",
+        },
+        {
+          text: "Utility 规范",
+          link: "/practices/utility-spec/",
         },
       ],
     },
@@ -39,56 +89,6 @@ export const zhSideBar: SidebarConfig = {
         {
           text: "Description",
           link: "/practices/description/",
-        },
-      ],
-    },
-    {
-      text: "样式",
-      link: "/components/palette/",
-      children: [
-        {
-          text: "色板 Palette",
-          link: "/components/palette/",
-        },
-        {
-          text: "颜色 Color",
-          link: "/components/color/",
-        },
-        {
-          text: "圆角 Border radius",
-          link: "/components/style/border-radius/",
-        },
-        {
-          text: "阴影 Box shadow",
-          link: "/components/style/box-shadow/",
-        },
-        {
-          text: "显示类型 Display",
-          link: "/components/style/display/",
-        },
-        {
-          text: "弹性布局 Flex",
-          link: "/components/style/flex/",
-        },
-        {
-          text: "定位 Position",
-          link: "/components/style/position/",
-        },
-        {
-          text: "尺寸 Size",
-          link: "/components/style/size/",
-        },
-        {
-          text: "溢出 Overflow",
-          link: "/components/style/overflow/",
-        },
-        {
-          text: "字体排版 Typography",
-          link: "/components/style/typography/",
-        },
-        {
-          text: "边距 Spacing",
-          link: "/components/style/spacing/",
         },
       ],
     },
@@ -117,6 +117,10 @@ export const zhSideBar: SidebarConfig = {
     {
       text: "布局",
       children: [
+        {
+          text: "Row / Col 栅格",
+          link: "/components/row/",
+        },
         {
           text: "Grid 栅格",
           link: "/components/grid/",
@@ -151,6 +155,10 @@ export const zhSideBar: SidebarConfig = {
           link: "/components/menu/",
         },
         {
+          text: "SplitButton 分裂按钮",
+          link: "/components/split-button/",
+        },
+        {
           text: "PageHeader 页头",
           link: "/components/page-header/",
         },
@@ -170,10 +178,6 @@ export const zhSideBar: SidebarConfig = {
         {
           text: "Form 表单",
           link: "/components/form/",
-        },
-        {
-          text: "LayoutForm 布局表单",
-          link: "/components/layout-form/",
         },
         {
           text: "FilterForm 表单筛选器",
@@ -242,6 +246,10 @@ export const zhSideBar: SidebarConfig = {
         {
           text: "Radio 单选框",
           link: "/components/radio/",
+        },
+        {
+          text: "Segmented 分段控制器",
+          link: "/components/segmented/",
         },
         {
           text: "Switch 开关",

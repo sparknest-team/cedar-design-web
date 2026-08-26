@@ -5,11 +5,12 @@
 </template>
 
 <script>
+import { createNamespace } from '../_utils/global-config'
 import { defineComponent } from 'vue'
 import { getPrefixCls } from '../_utils/global-config'
 
 export default defineComponent({
-  name: 'LayoutContent',
+  name: createNamespace("layout-content").name,
   /**
    * @zh 内容
    * @en Content

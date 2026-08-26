@@ -1,69 +1,18 @@
-import type { PropType } from 'vue'
 import { computed, defineComponent, provide, reactive, ref, toRefs, watch } from 'vue'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
-import { Direction } from '../_utils/constant'
 import { checkboxGroupKey } from './context'
 import { useFormItem } from '../_hooks/use-form-item'
 import { CheckboxOption } from './types'
 import Checkbox from './checkbox'
 import { isFunction, isNumber, isString, isArray } from '../_utils/is'
+import { checkboxGroupProps } from './props'
 
 
 const { name } = createNamespace('checkbox-group')
 
 export default defineComponent({
   name,
-  props: {
-    /**
-     * @zh 绑定值
-     * @en Value
-     * @vModel
-     */
-    modelValue: {
-      type: Array as PropType<Array<string | number | boolean>>,
-      default: undefined,
-    },
-    /**
-     * @zh 默认值（非受控状态）
-     * @en Default value (uncontrolled state)
-     */
-    defaultValue: {
-      type: Array as PropType<Array<string | number | boolean>>,
-      default: () => [],
-    },
-    /**
-     * @zh 支持最多选中的数量
-     * @en Support the maximum number of selections
-     * @version 2.36.0
-     */
-    max: {
-      type: Number,
-    },
-    /**
-     * @zh 选项
-     * @en Options
-     * @version 2.27.0
-     */
-    options: {
-      type: Array as PropType<Array<string | number | CheckboxOption>>,
-    },
-    /**
-     * @zh 复选框的排列方向
-     * @en Arrangement direction of checkboxes
-     */
-    direction: {
-      type: String as PropType<Direction>,
-      default: 'horizontal',
-    },
-    /**
-     * @zh 是否禁用
-     * @en Whether to disable
-     */
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-  },
+  props: checkboxGroupProps,
   emits: {
     'update:modelValue': (value: (string | number | boolean)[]) => true,
     /**
@@ -100,19 +49,19 @@ export default defineComponent({
     const computedValue = computed(() => (isArray(props.modelValue) ? props.modelValue : _value.value))
     const isMaxed = computed(() => (props.max === undefined ? false : computedValue.value.length >= props.max))
 
-    const options = computed(() => {
-      return (props.options ?? []).map((option) => {
+    const options = computed((): CheckboxOption[] => {
+      return (props.options ?? []).map((option): CheckboxOption => {
         if (isString(option) || isNumber(option)) {
           return {
             label: option,
             value: option,
           } as CheckboxOption
         }
-        return option
+        return option as CheckboxOption
       })
     })
 
-    const handleChange = (value: Array<string | number>, e: Event) => {
+    const handleChange = (value: Array<string | number | boolean>, e: Event) => {
       _value.value = value
       emit('update:modelValue', value)
       emit('change', value, e)
@@ -122,7 +71,6 @@ export default defineComponent({
     provide(
       checkboxGroupKey,
       reactive({
-        name: 'CedarCheckboxGroup',
         computedValue,
         disabled: mergedDisabled,
         isMaxed,

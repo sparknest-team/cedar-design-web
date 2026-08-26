@@ -10,7 +10,7 @@
       be a design activity.
     </c-typography-paragraph>
     <c-typography-title :heading="5">Secondary</c-typography-title>
-    <c-typography-paragraph type="secondary">
+    <c-typography-paragraph status="secondary">
       A design is a plan or specification for the construction of an object or system or for the
       implementation of an activity or process, or the result of that plan or specification in the
       form of a prototype, product or process. The verb to design expresses the process of developing
@@ -28,7 +28,7 @@
       be a design activity.
     </c-typography-paragraph>
     <c-typography-title :heading="5">Spacing close</c-typography-title>
-    <c-typography-paragraph type="secondary" spacing="close">
+    <c-typography-paragraph status="secondary" spacing="close">
       A design is a plan or specification for the construction of an object or system or for the
       implementation of an activity or process, or the result of that plan or specification in the
       form of a prototype, product or process. The verb to design expresses the process of developing

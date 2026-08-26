@@ -37,14 +37,14 @@
           </span>
         </c-avatar>
       </c-badge>
-      <c-badge :content="100" type="inline" inline-position="start" :dot="dot" :offset-y="offsetY">
+      <c-badge :content="100" mode="inline" inline-position="start" :dot="dot" :offset-y="offsetY">
         <c-avatar shape="square">
           <span>
             <c-icon-user />
           </span>
         </c-avatar>
       </c-badge>
-      <c-badge :content="100" type="inline" inline-position="end" :dot="dot" :offset-y="offsetY">
+      <c-badge :content="100" mode="inline" inline-position="end" :dot="dot" :offset-y="offsetY">
         <c-avatar shape="square">
           <span>
             <c-icon-user />

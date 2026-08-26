@@ -25,6 +25,7 @@
 </template>
 
 <script lang="tsx">
+import { createNamespace } from '../../_utils/global-config'
 import { defineComponent, PropType, toRefs, reactive, nextTick, computed, ref, watch, Ref, onUnmounted } from 'vue'
 import { ItemSlot, ScrollOptions, VirtualListProps, VirtualItemKey } from './interface'
 import { isFunction, isString, isUndefined } from '../../_utils/is'
@@ -41,7 +42,7 @@ import { useScrollTo } from './hooks/use-scroll-to'
 import { getScrollPercentage, getValidScrollTop, getItemAbsoluteTop } from './utils'
 
 export default defineComponent({
-  name: 'VirtualList',
+  name: createNamespace("virtual-list").name,
   components: {
     ResizeObserver,
     Filler,

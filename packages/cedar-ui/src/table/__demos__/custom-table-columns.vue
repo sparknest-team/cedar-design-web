@@ -11,8 +11,8 @@
 
 <script lang="ts" setup>
 import { onMounted, ref, watch } from 'vue'
-import { useTableColumnManager } from '@cedar/ui'
-import type { ColumnDefinitions, ManagedTableColumn } from '@cedar/ui'
+import { useTableColumnManager } from '@cedarjs/ui'
+import type { ColumnDefinitions, ManagedTableColumn } from '@cedarjs/ui'
 
 const STORAGE_KEY = 'cedar-demo-table-columns'
 let storage: Storage | undefined

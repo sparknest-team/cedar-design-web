@@ -97,6 +97,7 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../_utils/global-config'
 import { computed, defineComponent, PropType, toRefs, VNode, reactive, ref } from 'vue'
 import { getPrefixCls } from '../_utils/global-config'
 import useTreeContext from './hooks/use-tree-context'
@@ -104,14 +105,15 @@ import NodeSwitcher from './node-switcher.vue'
 import useNodeKey from './hooks/use-node-key'
 import Checkbox from '../checkbox'
 import RenderFunction from '../_components/render-function'
+import type { RenderFunc } from '../_components/render-function'
 import { isFunction } from '../_utils/is'
 import { Node } from './types'
 import useDraggable from './hooks/use-draggable'
-import IconDragDotVertical from '../icon/icon-drag-dot-vertical'
+import { IconDragDotVertical } from '@cedarjs/icons-vue/icon-drag-dot-vertical'
 import { toArray } from '../_utils/to-array'
 
 export default defineComponent({
-  name: 'BaseTreeNode',
+  name: createNamespace("base-tree-node").name,
   components: {
     NodeSwitcher,
     Checkbox,
@@ -257,10 +259,14 @@ export default defineComponent({
     })
 
     const treeTitle = computed(() =>
-      treeContext.nodeTitle ? () => treeContext.nodeTitle?.(treeNodeData.value, nodeStatus) : undefined,
+      treeContext.nodeTitle
+        ? (((() => treeContext.nodeTitle?.(treeNodeData.value, nodeStatus) ?? null) as RenderFunc))
+        : undefined,
     )
     const extra = computed(() =>
-      treeContext.nodeExtra ? () => treeContext.nodeExtra?.(treeNodeData.value, nodeStatus) : undefined,
+      treeContext.nodeExtra
+        ? (((() => treeContext.nodeExtra?.(treeNodeData.value, nodeStatus) ?? null) as RenderFunc))
+        : undefined,
     )
 
     return {
@@ -280,11 +286,11 @@ export default defineComponent({
       treeNodeIcon,
       extra,
       nodeStatus,
-      onCheckboxChange(checked: boolean, e: Event) {
+      onCheckboxChange(checked: boolean | (string | number | boolean)[], e: Event) {
         if (disableCheckbox.value || disabled.value) {
           return
         }
-        treeContext.onCheck?.(checked, key.value, e)
+        treeContext.onCheck?.(Boolean(checked), key.value, e)
       },
       onTitleClick(e: Event) {
         if (actionOnNodeClick.value.includes('expand')) {

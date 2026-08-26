@@ -1,7 +1,7 @@
 <template>
   <c-button @click="handleClick">Open Dialog</c-button>
   <c-dialog
-    v-model:show="show"
+    v-model:open="show"
     @confirm="handleOk"
     @cancel="handleCancel"
     confirmButtonText="Confirm"

@@ -355,7 +355,7 @@ import {
   IconItalic,
   IconUnderline,
   IconStrikethrough,
-} from '@cedar/ui'
+} from '@cedarjs/icons-vue'
 
 // 加载状态控制
 const loading1 = ref(false)

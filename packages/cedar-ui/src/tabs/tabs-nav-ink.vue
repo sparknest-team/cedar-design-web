@@ -8,7 +8,7 @@ import { computed, defineComponent, nextTick, onMounted, onUpdated, ref, toRefs 
 import { createNamespace } from '../_utils/global-config'
 
 export default defineComponent({
-  name: 'CTabsNavInk',
+  name: createNamespace('tabs-nav-ink').name,
   props: {
     activeTabRef: {
       type: Object as PropType<HTMLElement>,

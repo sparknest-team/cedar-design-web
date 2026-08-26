@@ -1,17 +1,14 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Switch from './switch.vue'
+import { switchProps } from './props'
 
-const Switch = Object.assign(_Switch, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _Switch.name, _Switch)
-  },
-})
+const Switch = withInstall(_Switch, Object.assign(_Switch, {
+}), { components: [_Switch] })
 
 export type SwitchInstance = InstanceType<typeof _Switch>
+export { switchProps }
+export type { SwitchBeforeChange, SwitchProps, SwitchValue, SwitchVariant } from './props'
+export { Switch }
+export const _SwitchComponent = Switch
 
 export default Switch

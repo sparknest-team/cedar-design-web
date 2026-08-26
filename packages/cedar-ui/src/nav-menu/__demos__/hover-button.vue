@@ -1,10 +1,10 @@
 <template>
   <div class="menu-demo">
-    <div :class="`button-trigger ${popupVisible1 ? 'button-trigger-active' : ''}`">
-      <c-icon-close v-if="popupVisible1" />
+    <div :class="`button-trigger ${open1 ? 'button-trigger-active' : ''}`">
+      <c-icon-close v-if="open1" />
       <c-icon-message v-else />
     </div>
-    <c-nav-menu :style="{ marginBottom: '-4px' }" mode="popButton" :tooltipProps="{ position: 'left' }" showCollapseButton>
+    <c-nav-menu :style="{ marginBottom: '-4px' }" mode="popButton" :tooltipProps="{ placement: 'left' }" showCollapseButton>
       <c-nav-menu-item key="1">
         <template #icon><c-icon-bug></c-icon-bug></template>
         Bugs
@@ -20,7 +20,7 @@
 export default {
   setup() {
     return {
-      popupVisible1: true,
+      open1: true,
     }
   },
 }

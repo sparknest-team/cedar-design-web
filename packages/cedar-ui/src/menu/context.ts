@@ -1,10 +1,16 @@
-import type { InjectionKey, Ref } from "vue";
-import type { MenuValue } from "./types";
+import type { InjectionKey, Ref } from 'vue'
+import type { MenuValue } from './types'
 
-export interface MenuContext {
-  popupMaxHeight: boolean | number;
-  modelValue?: Ref<MenuValue>;
-  onOptionClick: (value: MenuValue, ev: Event) => void;
+export interface MenuOptionInfo {
+  value: MenuValue
+  label?: string | number
+  disabled?: boolean
 }
 
-export const menuInjectionKey: InjectionKey<MenuContext> = Symbol("CedarMenu");
+export interface MenuContext {
+  popupMaxHeight: Ref<boolean | number>
+  modelValue?: Ref<MenuValue>
+  onOptionClick: (value: MenuValue, option: MenuOptionInfo, ev: Event) => void
+}
+
+export const menuInjectionKey: InjectionKey<MenuContext> = Symbol('CedarMenu')

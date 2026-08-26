@@ -6,7 +6,7 @@
       :max="10"
       clearable
       placeholder="请输入"
-      control-type="split"
+      mode="button"
     ></c-input-number>
   </c-space>
 </template>

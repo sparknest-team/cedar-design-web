@@ -17,25 +17,21 @@
 </template>
 
 <script lang="ts">
-import { computed, CSSProperties, defineComponent, inject, PropType, ref } from 'vue'
+import { createNamespace } from '../_utils/global-config'
+import { computed, CSSProperties, defineComponent, inject, ref } from 'vue'
 import { getPrefixCls } from '../_utils/global-config'
 import Empty from '../empty'
-import { EmitType } from '../_utils/types'
 import { MenuContext, menuInjectionKey } from './context'
 import { isNumber } from '../_utils/is'
 import Scrollbar from '../scrollbar'
 
 export default defineComponent({
-  name: 'MenuPanel',
+  name: createNamespace("menu-panel").name,
   components: {
     Scrollbar,
     Empty,
   },
   props: {
-    loading: {
-      type: Boolean,
-      default: false,
-    },
     isEmpty: {
       type: Boolean,
       default: false,
@@ -43,12 +39,6 @@ export default defineComponent({
     bottomOffset: {
       type: Number,
       default: 0,
-    },
-    onScroll: {
-      type: [Function, Array] as PropType<EmitType<(ev: Event) => void>>,
-    },
-    onReachBottom: {
-      type: [Function, Array] as PropType<EmitType<(ev: Event) => void>>,
     },
   },
   emits: ['scroll', 'reachBottom'],
@@ -67,12 +57,13 @@ export default defineComponent({
     }
 
     const style = computed<CSSProperties | undefined>(() => {
-      if (isNumber(menuCtx.popupMaxHeight)) {
+      const popupMaxHeight = menuCtx.popupMaxHeight?.value ?? menuCtx.popupMaxHeight
+      if (isNumber(popupMaxHeight)) {
         return {
-          maxHeight: `${menuCtx.popupMaxHeight}px`,
+          maxHeight: `${popupMaxHeight}px`,
         }
       }
-      if (!menuCtx.popupMaxHeight) {
+      if (!popupMaxHeight) {
         return {
           maxHeight: 'none',
           overflowY: 'hidden',

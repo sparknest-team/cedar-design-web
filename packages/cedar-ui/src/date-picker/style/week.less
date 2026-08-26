@@ -8,7 +8,7 @@
   }
 
   &-inner {
-    width: @picker-panel-week-width;
+    width: var(~'--c-date-picker-panel-week-width');
   }
 
   &-inner .c-picker-body {
@@ -31,26 +31,26 @@
 
     &:nth-child(2) {
       .c-picker-date {
-        padding-left: 4px;
-        border-top-left-radius: @picker-panel-cell-boundary-border-radius;
-        border-bottom-left-radius: @picker-panel-cell-boundary-border-radius;
+        padding-left: var(~'--c-date-picker-panel-cell-padding-vertical');
+        border-top-left-radius: var(~'--c-date-picker-panel-cell-boundary-border-radius');
+        border-bottom-left-radius: var(~'--c-date-picker-panel-cell-boundary-border-radius');
 
         .c-picker-date-value {
-          border-top-left-radius: @picker-panel-cell-border-radius;
-          border-bottom-left-radius: @picker-panel-cell-border-radius;
+          border-top-left-radius: var(~'--c-date-picker-panel-cell-border-radius');
+          border-bottom-left-radius: var(~'--c-date-picker-panel-cell-border-radius');
         }
       }
     }
 
     &:nth-child(8) {
       .c-picker-date {
-        padding-right: 4px;
-        border-top-right-radius: @picker-panel-cell-boundary-border-radius;
-        border-bottom-right-radius: @picker-panel-cell-boundary-border-radius;
+        padding-right: var(~'--c-date-picker-panel-cell-padding-vertical');
+        border-top-right-radius: var(~'--c-date-picker-panel-cell-boundary-border-radius');
+        border-bottom-right-radius: var(~'--c-date-picker-panel-cell-boundary-border-radius');
 
         .c-picker-date-value {
-          border-top-right-radius: @picker-panel-cell-border-radius;
-          border-bottom-right-radius: @picker-panel-cell-border-radius;
+          border-top-right-radius: var(~'--c-date-picker-panel-cell-border-radius');
+          border-bottom-right-radius: var(~'--c-date-picker-panel-cell-border-radius');
         }
       }
     }
@@ -61,7 +61,7 @@
       .c-picker-cell-range-start
     ):not(.c-picker-cell-range-end) {
     .c-picker-date-value {
-      background-color: @picker-panel-color-bg-cell_hover;
+      background-color: var(~'--c-date-picker-panel-cell-bg-hover');
     }
   }
 }

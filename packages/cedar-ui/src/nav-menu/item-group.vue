@@ -9,13 +9,14 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../_utils/global-config'
 import { computed, defineComponent } from 'vue'
 import useMenuContext from './hooks/use-menu-context'
 import useLevel, { provideLevel } from './hooks/use-level'
 import MenuIndent from './indent.vue'
 
 export default defineComponent({
-  name: 'NavMenuItemGroup',
+  name: createNamespace("nav-menu-item-group").name,
   components: {
     MenuIndent,
   },

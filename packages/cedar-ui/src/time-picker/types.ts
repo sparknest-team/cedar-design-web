@@ -1,4 +1,4 @@
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 
 // 支持：Date ｜ 字符串 ｜ 时间戳
 export type TimeValue = Date | string | number
@@ -38,9 +38,9 @@ export interface TimePickerProps extends BasePanelProps {
   error: boolean
   format?: string
   size: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-  position: 'top' | 'tl' | 'tr' | 'bottom' | 'bl' | 'br'
-  popupVisible: boolean | undefined
-  defaultPopupVisible: boolean
+  placement: 'top' | 'tl' | 'tr' | 'bottom' | 'bl' | 'br'
+  open: boolean | undefined
+  defaultOpen: boolean
   triggerProps?: Record<string, unknown>
   unmountOnClose: boolean
 }

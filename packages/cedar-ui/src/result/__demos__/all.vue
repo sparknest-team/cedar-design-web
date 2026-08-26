@@ -1,5 +1,5 @@
 <template>
-  <c-result status="error" title="No internet ">
+  <c-result status="danger" title="No internet ">
     <template #icon>
       <c-icon-face-frown-fill />
     </template>

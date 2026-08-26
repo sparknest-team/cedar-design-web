@@ -5,93 +5,16 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, provide, reactive, ref, toRefs } from 'vue'
-import { getPrefixCls } from '../_utils/global-config'
+import { computed, defineComponent, provide, reactive, ref, shallowRef, toRefs } from 'vue'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import { isArray } from '../_utils/is'
 import { CollapseItemContext, collapseKey } from './context'
 import type { CollapseToggleAllOptions } from './types'
-
-const EXPAND_ICON_POSITIONS = ['left', 'right'] as const
-type ExpandIconPositions = (typeof EXPAND_ICON_POSITIONS)[number]
+import { collapseProps } from './props'
 
 export default defineComponent({
-  name: 'Collapse',
-  props: {
-    /**
-     * @zh 当前展开的面板的 `name`
-     * @en The `name` of the currently expanded panel
-     * @vModel
-     */
-    activeNames: {
-      type: Array as PropType<(string | number)[]>,
-      default: undefined,
-    },
-    /**
-     * @zh 默认展开的面板的 `name` （非受控模式）
-     * @en The `name` of the panel expanded by default (uncontrolled mode)
-     */
-    defaultActiveNames: {
-      type: Array as PropType<(string | number)[]>,
-      default: () => [],
-    },
-    /**
-     * @zh 是否开启手风琴模式
-     * @en Whether to enable accordion mode
-     */
-    accordion: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否显示展开图标
-     * @en Whether to show the expand icon
-     */
-    showExpandIcon: {
-      type: Boolean,
-      default: undefined,
-    },
-    /**
-     * @zh 展开图标显示的位置
-     * @en The location where the expand icon is displayed
-     * @values 'left', 'right'
-     */
-    expandIconPosition: {
-      type: String as PropType<ExpandIconPositions>,
-      default: 'left',
-    },
-    /**
-     * @zh 是否显示边框
-     * @en Whether to show the border
-     */
-    bordered: {
-      type: Boolean,
-      default: true,
-    },
-    /**
-     * @zh 是否显示面板分割线
-     * @en Whether to show the divider between panels
-     */
-    divider: {
-      type: Boolean,
-      default: true,
-    },
-    /**
-     * @zh 展开面板是否显示间距
-     * @en Whether to show spacing for expanded panels
-     */
-    offset: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否在隐藏时销毁内容
-     * @en Whether to destroy content when hidden
-     */
-    destroyOnHide: {
-      type: Boolean,
-      default: false,
-    },
-  },
+  name: createNamespace('collapse').name,
+  props: collapseProps,
   /**
    * @zh 展开图标
    * @en Expand icon
@@ -113,7 +36,7 @@ export default defineComponent({
   setup(props, { emit, slots, expose }) {
     const { expandIconPosition, destroyOnHide, showExpandIcon, divider, offset } = toRefs(props)
     const prefixCls = getPrefixCls('collapse')
-    const items = ref<CollapseItemContext[]>([])
+    const items = shallowRef<CollapseItemContext[]>([])
 
     const _activeNames = ref(props.defaultActiveNames)
     const computedActiveNames = computed(() => {

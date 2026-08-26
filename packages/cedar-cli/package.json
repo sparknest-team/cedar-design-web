@@ -1,0 +1,17 @@
+{
+  "name": "@cedarjs/cli",
+  "version": "1.0.0",
+  "description": "Cedar build and development CLI",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "cedar-cli": "./bin/cedar-cli.mjs"
+  },
+  "exports": {
+    ".": "./src/index.mjs"
+  },
+  "files": ["bin", "src"],
+  "dependencies": {
+    "@loca/ui-build": "link:../../../design-ui/packages/ui-build"
+  }
+}

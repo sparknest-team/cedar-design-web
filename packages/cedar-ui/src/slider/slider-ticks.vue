@@ -12,15 +12,15 @@
 <script lang="ts">
 import { computed, defineComponent, PropType } from 'vue'
 import NP from 'number-precision'
-import { getPrefixCls } from '../_utils/global-config'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import { getOffsetPercent, getPositionStyle } from './utils'
 import { Direction } from '../_utils/constant'
 
 export default defineComponent({
-  name: 'SliderTicks',
+  name: createNamespace('slider-ticks').name,
   props: {
     value: {
-      type: Array as PropType<[number, number]>,
+      type: Array as unknown as PropType<[number, number]>,
       required: true,
     },
     step: {

@@ -1,4 +1,4 @@
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 import { computed, toRefs } from 'vue'
 import { Cell, IsSameTime, Mode } from '../types'
 import { getNow, getSortedDayjsArray } from '../../_utils/date'

@@ -1,16 +1,16 @@
 import type { PropType } from 'vue'
 import { computed, defineComponent } from 'vue'
 import IconHover from '../_components/icon-hover.vue'
-import IconLeft from '../icon/icon-left'
-import IconRight from '../icon/icon-right'
-import IconUp from '../icon/icon-up'
-import IconDown from '../icon/icon-down'
+import { IconLeft } from '@cedarjs/icons-vue/icon-left'
+import { IconRight } from '@cedarjs/icons-vue/icon-right'
+import { IconUp } from '@cedarjs/icons-vue/icon-up'
+import { IconDown } from '@cedarjs/icons-vue/icon-down'
 import { createNamespace } from '../_utils/global-config'
 
 type ButtonTypes = 'previous' | 'next'
 
 export default defineComponent({
-  name: 'CTabsNavButton',
+  name: createNamespace('tabs-nav-button').name,
   props: {
     type: {
       type: String as PropType<ButtonTypes>,
@@ -63,9 +63,9 @@ export default defineComponent({
     )
 
     return () => (
-      <div class={cls.value} onClick={handleClick}>
+      <button type="button" class={cls.value} onClick={handleClick}>
         <IconHover disabled={props.disabled}>{renderIcon()}</IconHover>
-      </div>
+      </button>
     )
   },
 })

@@ -61,5 +61,5 @@ permalink: /components/resize-box/
 组件导出以下类型定义
 
 ```ts
-import type { ResizeBoxInstance } from '@cedar/ui'
+import type { ResizeBoxInstance } from '@cedarjs/ui'
 ```

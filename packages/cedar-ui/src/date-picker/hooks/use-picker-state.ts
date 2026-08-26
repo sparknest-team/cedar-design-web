@@ -1,4 +1,4 @@
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 import { computed, toRefs, watch } from 'vue'
 import { getDayjsValue } from '../../_utils/date'
 import { isUndefined } from '../../_utils/is'

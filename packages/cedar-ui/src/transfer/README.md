@@ -16,8 +16,7 @@ permalink: /components/transfer/
 
 ### 搜索
 
-通过 `source-filterable`、`target-filterable` 分别开启两侧搜索，通过 `filter` 自定义过滤逻辑。原有的
-`show-search` 和 `filter-option` 仍然兼容。
+通过 `source-filterable`、`target-filterable` 分别开启两侧搜索，通过 `filter` 自定义过滤逻辑；也可使用 `show-search` 同时开启两侧搜索。
 
 <demo src="./__demos__/search.vue"></demo>
 
@@ -79,17 +78,15 @@ const value = ref([
 | target-actions            | 追加到右侧菜单的自定义操作                  | `TransferTargetAction[]` |          `[]`          |
 | source-filterable         | 是否显示源列表搜索框                        | `boolean`                |        `false`         |
 | target-filterable         | 是否显示目标列表搜索框                      | `boolean`                |        `false`         |
-| filterable                | 是否同时显示两侧搜索框                      | `boolean`                |        `false`         |
+| show-search               | 是否同时显示两侧搜索框                      | `boolean`                |        `false`         |
 | filter                    | 自定义过滤函数                              | `TransferFilter`         |   标签忽略大小写匹配   |
 | source-filter-placeholder | 源列表搜索框占位文本                        | `string`                 |          `-`           |
 | target-filter-placeholder | 目标列表搜索框占位文本                      | `string`                 |          `-`           |
 | show-selected             | 是否在源列表保留已选项                      | `boolean`                |         `true`         |
 | source-title              | 源列表标题                                  | `string`                 |          `-`           |
 | target-title              | 目标列表标题                                | `string`                 |          `-`           |
-| show-search               | 兼容属性：同时显示两侧搜索框                | `boolean`                |        `false`         |
-| filter-option             | 兼容属性：自定义过滤函数，优先级高于 filter | `TransferFilter`         |          `-`           |
 | show-select-all           | 是否展示全选勾选框                          | `boolean`                |         `true`         |
-| title                     | 兼容属性：源列表和目标列表标题              | `string[]`               | `['Source', 'Target']` |
+| title                     | 源列表和目标列表标题                        | `string[]`               | `['Source', 'Target']` |
 | source-search-props       | Cedar Search 的源搜索框配置                 | `object`                 |          `-`           |
 | target-search-props       | Cedar Search 的目标搜索框配置               | `object`                 |          `-`           |
 
@@ -139,5 +136,5 @@ import type {
   TransferTargetItem,
   TransferTargetOperation,
   TransferValue,
-} from '@cedar/ui'
+} from '@cedarjs/ui'
 ```

@@ -35,11 +35,13 @@ export default defineComponent({
 
     return () => (
       <TransitionGroup
-        class={[prefixCls, `${prefixCls}-${kebabPosition}`]}
-        style={{ zIndex: zIndex.value }}
-        name={`slide-${isRight ? 'right' : 'left'}-notification`}
-        onAfterLeave={() => context.emit('afterClose')}
-        tag="ul"
+        {...({
+          class: [prefixCls, `${prefixCls}-${kebabPosition}`],
+          style: { zIndex: zIndex.value },
+          name: `slide-${isRight ? 'right' : 'left'}-notification`,
+          onAfterLeave: () => context.emit('afterClose'),
+          tag: 'ul',
+        } as any)}
       >
         {props.notifications.map((item) => {
           const slots = {

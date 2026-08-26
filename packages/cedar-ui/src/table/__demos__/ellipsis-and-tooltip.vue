@@ -26,7 +26,7 @@ const columns = [
     title: 'Email',
     dataIndex: 'email',
     ellipsis: true,
-    tooltip: { position: 'left' },
+    tooltip: { placement: 'left' },
     width: 200,
   },
 ]

@@ -153,5 +153,5 @@ permalink: /components/collapse/
 组件导出以下类型定义
 
 ```ts
-import type { CollapseInstance, CollapseToggleAllOptions } from '@cedar/ui'
+import type { CollapseInstance, CollapseToggleAllOptions } from '@cedarjs/ui'
 ```

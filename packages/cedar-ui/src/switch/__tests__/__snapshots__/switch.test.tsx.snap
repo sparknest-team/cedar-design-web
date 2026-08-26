@@ -1,7 +1,7 @@
 // Vitest Snapshot v1
 
 exports[`Switch > render 1`] = `
-"<button type=\\"button\\" role=\\"switch\\" aria-checked=\\"false\\" class=\\"arco-switch arco-switch-type-circle\\"><span class=\\"arco-switch-handle\\"><span class=\\"arco-switch-handle-icon\\"></span></span><!--  prettier-ignore  -->
+"<button type=\\"button\\" role=\\"switch\\" aria-checked=\\"false\\" class=\\"c-switch c-switch--variant-circle\\"><span class=\\"c-switch-handle\\"><span class=\\"c-switch-handle-icon\\"></span></span><!--  prettier-ignore  -->
   <!--v-if-->
 </button>"
 `;

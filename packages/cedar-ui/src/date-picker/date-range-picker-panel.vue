@@ -76,7 +76,7 @@
       >
         <template v-if="extra || $slots.extra" #extra>
           <slot v-if="$slots.extra" name="extra" />
-          <RenderFunction v-else :render-func="extra" />
+          <RenderFunction v-else :render-func="extra!" />
         </template>
         <template v-if="showShortcuts && shortcutsPosition === 'bottom'" #btn>
           <PanelShortcuts v-bind="shortcutsProps" />
@@ -87,8 +87,9 @@
   </div>
 </template>
 <script lang="ts">
+import { createNamespace } from '../_utils/global-config'
 import { computed, defineComponent, PropType, reactive, ref, toRefs, watch } from 'vue'
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 import { isArray, isFunction } from '../_utils/is'
 import { getDayjsValue } from '../_utils/date'
 import pick from '../_utils/pick'
@@ -113,7 +114,7 @@ import RenderFunction, { RenderFunc } from '../_components/render-function'
 import { normalizeRangeValue } from './utils'
 
 export default defineComponent({
-  name: 'DateRangePickerPanel',
+  name: createNamespace('date-range-picker-panel').name,
   components: {
     PanelShortcuts,
     PanelFooter,
@@ -188,7 +189,7 @@ export default defineComponent({
       default: () => ({}),
     },
     endHeaderProps: {
-      type: Object as PropType<Record<string, any>>,
+      type: Object as PropType<StartHeaderProps>,
       default: () => ({}),
     },
     confirmBtnDisabled: {
@@ -255,7 +256,7 @@ export default defineComponent({
       },
     ])
 
-    const currentDateView = ref('date')
+    const currentDateView = ref<'date' | 'time'>('date')
 
     watch(visible, (newVal, oldVal) => {
       if (newVal && !oldVal) {
@@ -324,18 +325,18 @@ export default defineComponent({
 
     function getDisabledTimeFunc(index: 0 | 1) {
       return isFunction(disabledTime?.value)
-        ? (current: Date) => disabledTime?.value?.(current, index === 0 ? 'start' : 'end') || false
+        ? (current: Date) => disabledTime.value!(current, index === 0 ? 'start' : 'end')
         : undefined
     }
 
-    function getDateRenderFunc(index: 0 | 1) {
+    function getDateRenderFunc(index: 0 | 1): RenderFunc | undefined {
       return isFunction(dateRender?.value)
-        ? (props: any) => {
+        ? (props: Record<string, unknown>) => {
             const mergeProps = {
               ...props,
               type: index === 0 ? 'start' : 'end',
             }
-            return dateRender?.value?.(mergeProps)
+            return dateRender.value!(mergeProps)
           }
         : undefined
     }

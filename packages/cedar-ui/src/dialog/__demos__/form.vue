@@ -1,6 +1,6 @@
 <template>
   <c-button @click="handleClick">Open Form Dialog</c-button>
-  <c-dialog v-model:show="visible" title="Dialog Form" @cancel="handleCancel" @before-close="handleBeforeClose">
+  <c-dialog v-model:open="visible" title="Dialog Form" @cancel="handleCancel" :before-close="handleBeforeClose">
     <c-form :model="form">
       <c-form-item field="name" label="Name">
         <c-input v-model="form.name" />

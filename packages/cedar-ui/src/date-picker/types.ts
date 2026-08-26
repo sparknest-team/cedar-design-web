@@ -1,5 +1,5 @@
 import { Slot, VNode } from 'vue'
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 import { TimePickerProps } from '../time-picker/types'
 
 export type CalendarValue = Date | string | number
@@ -89,9 +89,9 @@ export interface BasePickerProps {
   size: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
   shortcuts: ShortcutType[]
   shortcutsPosition: 'left' | 'bottom' | 'right'
-  position: 'top' | 'tl' | 'tr' | 'bottom' | 'bl' | 'br'
-  popupVisible: boolean | undefined
-  defaultPopupVisible: boolean
+  placement: 'top' | 'tl' | 'tr' | 'bottom' | 'bl' | 'br'
+  open: boolean | undefined
+  defaultOpen: boolean
   triggerProps?: Record<string, unknown>
   unmountOnClose: boolean
   valueFormat?: ValueFormat

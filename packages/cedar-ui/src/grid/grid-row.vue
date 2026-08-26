@@ -5,6 +5,7 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../_utils/global-config'
 import { computed, defineComponent, PropType, provide, reactive, toRefs } from 'vue'
 import { getPrefixCls } from '../_utils/global-config'
 import { RowContextInjectionKey } from './context'
@@ -12,7 +13,7 @@ import { useResponsiveState } from './hook/use-responsive-state'
 import { ResponsiveValue } from './types'
 
 export default defineComponent({
-  name: 'Row',
+  name: createNamespace("row").name,
   props: {
     /**
      * @zh 栅格间隔，单位是`px` 栅格间隔。可传入响应式对象写法 { xs: 4, sm: 6, md: 12}，传入数组 [ 水平间距， 垂直间距 ] 来设置两个方向。

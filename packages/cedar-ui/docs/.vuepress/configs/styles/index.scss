@@ -12,9 +12,9 @@
   box-sizing: border-box;
 }
 
+.vp-page .theme-hope-content:not(.custom),
 .vp-page .theme-default-content {
-  margin: 0 220px 0 0;
-  max-width: unset;
+  max-width: var(--content-width);
 }
 
 html.dark {
@@ -73,8 +73,9 @@ td {
 .page {
   .page-meta,
   .page-nav,
+  .theme-hope-content,
   .theme-default-content {
-    max-width: 100%;
+    max-width: var(--content-width);
   }
 }
 
@@ -84,7 +85,7 @@ body {
 
 .vp-page-nav,
 .vp-page-meta {
-  max-width: unset;
+  max-width: var(--content-width);
 }
 
 .theme-default-content > div > ul > li {

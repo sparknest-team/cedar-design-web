@@ -30,13 +30,14 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../_utils/global-config'
 import { computed, defineComponent, inject } from 'vue'
 import TabsNav from './tabs-nav'
 import { tabsNavInjectionKey } from './context'
 import type { TabsNavContext } from './context'
 
 export default defineComponent({
-  name: 'CTabsNavs',
+  name: createNamespace("tabs-navs").name,
   components: { TabsNav },
   setup() {
     const navCtx = inject<TabsNavContext>(tabsNavInjectionKey)!

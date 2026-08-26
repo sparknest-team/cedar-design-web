@@ -1,5 +1,5 @@
 <template>
-  <tooltip :popup-visible="popupVisible" :position="mergedTooltipPosition" :content="tooltipContent">
+  <tooltip :open="open" :placement="mergedTooltipPosition" :content="tooltipContent">
     <div
       v-bind="$attrs"
       tabindex="0"
@@ -20,13 +20,13 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType, ref } from 'vue'
-import { getPrefixCls } from '../_utils/global-config'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import Tooltip from '../tooltip'
 import { off, on } from '../_utils/dom'
 import { DIRECTIONS } from '../_utils/constant'
 
 export default defineComponent({
-  name: 'SliderButton',
+  name: createNamespace('slider-button').name,
   components: {
     Tooltip,
   },
@@ -52,7 +52,7 @@ export default defineComponent({
       type: Function,
     },
     value: [String, Number],
-    tooltipPosition: {
+    tooltipPlacement: {
       type: String,
     },
     showTooltip: {
@@ -104,19 +104,19 @@ export default defineComponent({
     const cls = computed(() => [prefixCls])
 
     const mergedTooltipPosition = computed(() =>
-      (props.tooltipPosition ?? props.direction === 'vertical') ? 'right' : 'top',
+      (props.tooltipPlacement ?? props.direction === 'vertical') ? 'right' : 'top',
     )
 
     const tooltipContent = computed(() => props.formatTooltip?.(props.value) ?? `${props.value}`)
 
-    const popupVisible = computed(() => (props.showTooltip ? (isDragging.value ? true : undefined) : false))
+    const open = computed(() => (props.showTooltip ? (isDragging.value ? true : undefined) : false))
 
     return {
       prefixCls,
       cls,
       tooltipContent,
       mergedTooltipPosition,
-      popupVisible,
+      open,
       handleMouseDown,
     }
   },

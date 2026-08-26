@@ -6,14 +6,14 @@ import TabsNavButton from './tabs-nav-button'
 import TabsNavInk from './tabs-nav-ink.vue'
 import type { TabData, TabVariant, ScrollPosition } from './types'
 import IconHover from '../_components/icon-hover.vue'
-import IconPlus from '../icon/icon-plus'
+import { IconPlus } from '@cedarjs/icons-vue/icon-plus'
 import ResizeObserver from '../_components/resize-observer'
 import { isUndefined, isNumber } from '../_utils/is'
 import { off, on } from '../_utils/dom'
 import { configProviderInjectionKey } from '../config-provider/context'
 
 export default defineComponent({
-  name: 'CTabsNav',
+  name: createNamespace('tabs-nav').name,
   props: {
     tabs: {
       type: Array as PropType<TabData[]>,
@@ -271,11 +271,11 @@ export default defineComponent({
         return null
       }
       return (
-        <div class={classes(n('add-btn'))} onClick={(ev: Event) => emit('add', ev)}>
+        <button type="button" class={classes(n('add-btn'))} aria-label="添加标签页" onClick={(ev: Event) => emit('add', ev)}>
           <IconHover>
             <IconPlus />
           </IconHover>
-        </div>
+        </button>
       )
     }
 

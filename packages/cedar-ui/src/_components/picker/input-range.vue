@@ -1,8 +1,16 @@
 <template>
-  <div :class="classNames">
-    <div v-if="$slots.prefix" :class="`${prefixCls}-prefix`">
+  <FieldDecorator
+    :class="classNames"
+    :size="mergedSize"
+    :disabled="disabled0 && disabled1"
+    :error="mergedError"
+    :focused="focused"
+    :variant="variant"
+  >
+    <template v-if="$slots.prefix" #prefix>
       <slot name="prefix" />
-    </div>
+    </template>
+
     <div :class="getInputWrapClassName(0)">
       <input
         ref="refInput0"
@@ -33,10 +41,11 @@
         @click="() => changeFocusedInput(1)"
       />
     </div>
-    <div :class="`${prefixCls}-suffix`">
+
+    <template #suffix>
       <IconHover
         v-if="clearable && !mergedDisabled && value.length === 2"
-        :prefix="prefixCls"
+        prefix="c-field-decorator"
         :class="`${prefixCls}-clear-icon`"
         @click="onClear"
       >
@@ -46,30 +55,41 @@
         <slot name="suffix-icon" />
       </span>
       <FeedbackIcon v-if="feedback" :type="feedback" />
-    </div>
-  </div>
+    </template>
+  </FieldDecorator>
 </template>
 <script lang="ts">
-import { Dayjs } from 'dayjs'
+import { createNamespace } from '../../_utils/global-config'
+import type { Dayjs } from 'dayjs'
 import { computed, defineComponent, PropType, ref, toRefs } from 'vue'
 import { getPrefixCls } from '../../_utils/global-config'
 import FeedbackIcon from '../feedback-icon.vue'
 import { isArray, isDayjs, isFunction, isNumber, isUndefined } from '../../_utils/is'
-import IconClose from '../../icon/icon-close'
+import { IconClose } from '@cedarjs/icons-vue/icon-close'
 import IconHover from '../icon-hover.vue'
 import { useFormItem } from '../../_hooks/use-form-item'
 import { useSize } from '../../_hooks/use-size'
+import FieldDecorator from '../../field-decorator'
+import type { FormControlVariant } from '../../_utils/form-control'
+import { formControlVariants } from '../../_utils/form-control'
 
 export default defineComponent({
-  name: 'DateInputRange',
+  name: createNamespace('date-input-range').name,
   components: {
     IconHover,
     IconClose,
     FeedbackIcon,
+    FieldDecorator,
   },
   props: {
     size: {
       type: String as PropType<'xs' | 'sm' | 'md' | 'lg' | 'xl'>,
+    },
+    variant: {
+      type: String as PropType<FormControlVariant>,
+      default: 'filled',
+      validator: (value: unknown): value is FormControlVariant =>
+        formControlVariants.includes(value as FormControlVariant),
     },
     focused: {
       type: Boolean,
@@ -114,7 +134,7 @@ export default defineComponent({
     },
   },
   emits: ['focused-index-change', 'update:focusedIndex', 'change', 'clear', 'press-enter'],
-  setup(props, { emit, slots }) {
+  setup(props, { emit }) {
     const { error, focused, disabled, size, value, format, focusedIndex, inputValue } = toRefs(props)
     const { mergedSize: _mergedSize, mergedDisabled, mergedError, feedback } = useFormItem({ size, error })
     const { mergedSize } = useSize(_mergedSize)
@@ -133,17 +153,7 @@ export default defineComponent({
 
     const prefixCls = getPrefixCls('picker')
 
-    const classNames = computed(() => [
-      prefixCls,
-      `${prefixCls}-range`,
-      `${prefixCls}-size-${mergedSize.value}`,
-      {
-        [`${prefixCls}-focused`]: focused.value,
-        [`${prefixCls}-disabled`]: disabled0.value && disabled1.value,
-        [`${prefixCls}-error`]: mergedError.value,
-        [`${prefixCls}-has-prefix`]: slots.prefix,
-      },
-    ])
+    const classNames = computed(() => [prefixCls, `${prefixCls}-range`])
 
     function getInputWrapClassName(index: number) {
       return [
@@ -198,6 +208,9 @@ export default defineComponent({
       disabled0,
       disabled1,
       mergedDisabled,
+      mergedError,
+      mergedSize,
+      focused,
       getDisabled,
       getInputWrapClassName,
       displayValue0,

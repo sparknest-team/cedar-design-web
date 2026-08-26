@@ -2,7 +2,7 @@
   <div
     role="progressbar"
     aria-valuemin="0"
-    aria-valuemax="100"
+    aria-valuemax="1"
     :aria-valuenow="percent"
     :class="classes(n('wrapper'))"
     :style="{ width: `${mergedWidth}px`, height: `${mergedWidth}px` }"
@@ -37,7 +37,7 @@
           :r="radius"
           :stroke-width="mergedStrokeWidth"
           :style="{
-            stroke: isLinearGradient ? `url(#${linearGradientId})` : color,
+            stroke: (isLinearGradient ? `url(#${linearGradientId})` : color) as any,
             strokeDasharray: perimeter,
             strokeDashoffset: (percent >= 1 ? 0 : 1 - percent) * perimeter,
           }"
@@ -61,9 +61,9 @@ import { computed, defineComponent, PropType } from 'vue'
 import NP from 'number-precision'
 import { createNamespace } from '../_utils/global-config'
 import { isObject } from '../_utils/is'
-import { SIZES } from '../_utils/constant'
-import IconExclamation from '../icon/icon-exclamation'
-import IconCheck from '../icon/icon-check'
+import { componentSizes } from '../_utils/constant'
+import { IconExclamation } from '@cedarjs/icons-vue/icon-exclamation'
+import { IconCheck } from '@cedarjs/icons-vue/icon-check'
 
 let __ARCO_PROGRESS_SEED = 0
 
@@ -97,7 +97,7 @@ export default defineComponent({
       type: String as PropType<'line' | 'circle'>,
     },
     size: {
-      type: String as PropType<(typeof SIZES)[number]>,
+      type: String as PropType<(typeof componentSizes)[number]>,
       default: 'md',
     },
     strokeWidth: {

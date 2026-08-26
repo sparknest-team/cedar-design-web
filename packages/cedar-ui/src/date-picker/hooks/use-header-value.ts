@@ -1,4 +1,4 @@
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 import { computed, reactive, ComputedRef, toRefs, watch, ref } from 'vue'
 import { getDayjsValue, getNow, methods } from '../../_utils/date'
 import { Mode, HeaderOperations, CalendarValue } from '../types'

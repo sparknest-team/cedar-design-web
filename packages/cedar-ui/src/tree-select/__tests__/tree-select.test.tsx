@@ -4,9 +4,19 @@ import { describe, test, expect } from 'vitest'
 import { TreeSelect } from '../index'
 
 describe('TreeSelect', () => {
-  test('render', async () => {
-    const wrapper = mount(TreeSelect)
+  test('uses the shared field decorator and renders the selected node', async () => {
+    const wrapper = mount(TreeSelect, {
+      props: {
+        data: [{ key: 'beijing', title: 'Beijing' }],
+        modelValue: 'beijing',
+      },
+    })
     await nextTick()
-    expect(wrapper.html()).toMatchSnapshot()
+
+    const field = wrapper.find('.c-field-decorator')
+    expect(field.exists()).toBe(true)
+    expect(field.classes()).toContain('c-field-decorator--variant-filled')
+    expect(wrapper.find('input').attributes('readonly')).toBeDefined()
+    expect(wrapper.text()).toContain('Beijing')
   })
 })

@@ -15,7 +15,7 @@ permalink: /components/input/
 ### 变体
 
 设置 `variant` 来调整不同风格的输入框。
-可选值为 `outline` 和 `default`。
+可选值为 `filled`、`outlined` 和 `standard`。
 
 <demo src="./__demos__/variant.vue"></demo>
 
@@ -63,8 +63,9 @@ permalink: /components/input/
 | ------------------------- | ------------------------------------ | --------------------------------------------------- | :-----: |
 | model-value **(v-model)** | 绑定值                               | `string`                                            |   `-`   |
 | default-value             | 默认值（非受控状态）                 | `string`                                            |  `''`   |
+| variant                   | 输入框变体                           | `'filled' \| 'outlined' \| 'standard'`               | `'filled'` |
 | size                      | 输入框大小                           | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`              | `'md'`  |
-| clearable                 | 是否允许清空输入框                   | `boolean`                                           | `false` |
+| clearable                 | 是否允许清空输入框                   | `boolean`                                           | `true`  |
 | disabled                  | 是否禁用                             | `boolean`                                           | `false` |
 | readonly                  | 是否为只读状态                       | `boolean`                                           | `false` |
 | error                     | 是否为错误状态                       | `boolean`                                           | `false` |
@@ -104,9 +105,8 @@ permalink: /components/input/
 
 | 参数名             | 描述                 | 类型      | 默认值 |
 | ------------------ | -------------------- | --------- | :----: |
-| invisible-button   | 是否显示可见按钮     | `boolean` | `true` |
-| default-visibility | 默认是否可见，非受控 | `boolean` | `true` |
-| invisible-button   | 是否显示可见按钮     | `boolean` | `true` |
+| visibility-toggle  | 是否显示密码可见性按钮 | `boolean` | `true` |
+| default-visibility | 默认是否可见，非受控 | `boolean` | `false` |
 
 ### `<InputPassword>` Events
 
@@ -119,5 +119,5 @@ permalink: /components/input/
 组件导出以下类型定义
 
 ```ts
-import type { InputProps } from '@cedar/ui'
+import type { InputProps } from '@cedarjs/ui'
 ```

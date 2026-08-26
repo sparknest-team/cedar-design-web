@@ -22,8 +22,8 @@ import type {
 } from '../interfaces'
 
 export interface UseUploaderOptions {
-  fileList?: () => UploadFileItem[] | undefined
-  defaultFileList?: () => UploadFileItem[] | undefined
+  modelValue?: () => UploadFileItem[] | undefined
+  defaultValue?: () => UploadFileItem[] | undefined
   accept?: () => string | undefined
   capture?: () => UploadCapture
   multiple?: () => boolean
@@ -50,7 +50,7 @@ export interface UseUploaderOptions {
   beforeUpload?: () => UploadBeforeUpload | undefined
   beforeRemove?: () => UploadBeforeRemove | undefined
   isSuccessResponse?: () => UploadIsSuccessResponse | undefined
-  onUpdateFileList?: (files: UploadFileItem[]) => void
+  onUpdateModelValue?: (files: UploadFileItem[]) => void
   onChange?: (files: UploadFileItem[], file: UploadFileItem) => void
   onRejected?: (files: UploadRejectedFile[]) => void
   onExceed?: (files: File[], fileList: UploadFileItem[]) => void
@@ -71,10 +71,10 @@ export function useUploader(options: UseUploaderOptions) {
 
   const disabled = computed(() => Boolean(options.disabled?.() || options.readonly?.()))
   const queue = useUploadQueue({
-    fileList: options.fileList,
-    defaultFileList: options.defaultFileList,
+    modelValue: options.modelValue,
+    defaultValue: options.defaultValue,
     onChange: options.onChange,
-    onUpdateFileList: options.onUpdateFileList,
+    onUpdateModelValue: options.onUpdateModelValue,
   })
 
   const picker = useFilePicker({
@@ -281,7 +281,10 @@ export function useUploader(options: UseUploaderOptions) {
       onError: handleError,
     }
 
-    const request = await (options.customRequest?.() ? options.customRequest?.()(requestOptions) : uploadRequest(requestOptions))
+    const customRequest = options.customRequest?.()
+    const request = await (customRequest
+      ? customRequest(requestOptions)
+      : uploadRequest(requestOptions))
     if (request) {
       requests.set(file.uid, request)
     }

@@ -65,7 +65,7 @@ permalink: /components/ellipsis/
 组件导出以下类型定义
 
 ```ts
-import type { EllipsisProps, EllipsisExpandTrigger } from '@cedar/ui'
+import type { EllipsisProps, EllipsisExpandTrigger } from '@cedarjs/ui'
 ```
 
 ## 样式变量

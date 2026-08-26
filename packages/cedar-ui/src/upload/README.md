@@ -54,6 +54,6 @@ permalink: /components/upload/
 
 ## API
 
-The component uses `v-model:file-list` with `UploadFileItem[]`. A file uses `url` for its final resource and optional `thumbnailUrl` for its display image. Status is one of `ready`, `reading`, `uploading`, `success`, `error`, `canceled`, or `removed`; progress is always `0-100`.
+The component uses `v-model` with `UploadFileItem[]`. A file uses `url` for its final resource and optional `thumbnailUrl` for its display image. Status is one of `ready`, `reading`, `uploading`, `success`, `error`, `canceled`, or `removed`; progress is always `0-100`.
 
 Core props are `action`, `method`, `headers`, `data`, `name`, `custom-request`, `auto-upload`, `max-files`, `max-file-size`, `max-total-size`, `list-type`, `image-fit`, `before-add`, `before-read`, `before-upload`, and `before-remove`.

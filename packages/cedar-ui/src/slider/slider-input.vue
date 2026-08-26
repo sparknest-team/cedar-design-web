@@ -6,8 +6,8 @@
         :max="max"
         :step="step"
         :disabled="disabled"
-        :model-value="modelValue[0]"
-        hide-button
+        :model-value="modelValue[0] as number"
+        mode="input"
         @change="(value) => $emit('startChange', value)"
       />
       <div :class="`${prefixCls}-input-hyphens`" />
@@ -17,20 +17,20 @@
       :max="max"
       :step="step"
       :disabled="disabled"
-      :model-value="modelValue[1]"
-      hide-button
+      :model-value="modelValue[1] as number"
+      mode="input"
       @change="(value) => $emit('endChange', value)"
     />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
-import InputNumber from '../input-number'
-import { getPrefixCls } from '../_utils/global-config'
+import { defineComponent, PropType } from "vue";
+import InputNumber from "../input-number";
+import { createNamespace, getPrefixCls } from "../_utils/global-config";
 
 export default defineComponent({
-  name: 'SliderInput',
+  name: createNamespace("slider-input").name,
   components: {
     InputNumber,
   },
@@ -55,13 +55,13 @@ export default defineComponent({
       type: Boolean,
     },
   },
-  emits: ['startChange', 'endChange'],
+  emits: ["startChange", "endChange"],
   setup(props, { emit }) {
-    const prefixCls = getPrefixCls('slider')
+    const prefixCls = getPrefixCls("slider");
 
     return {
       prefixCls,
-    }
+    };
   },
-})
+});
 </script>

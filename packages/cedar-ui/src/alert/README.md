@@ -118,7 +118,7 @@ import type {
   AlertProps,
   AlertType,
   AlertVariant,
-} from '@cedar/ui'
+} from '@cedarjs/ui'
 ```
 
 ### 样式变量

@@ -51,6 +51,7 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../_utils/global-config'
 import {
   computed,
   defineComponent,
@@ -79,7 +80,7 @@ import { getFinalValidateMessage, getFinalValidateStatus, getFormElementId } fro
 import { useI18n } from '../locale'
 
 export default defineComponent({
-  name: 'FormItem',
+  name: createNamespace("form-item").name,
   components: {
     Row,
     Col,

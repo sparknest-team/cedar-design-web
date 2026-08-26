@@ -17,7 +17,7 @@ describe("Menu", () => {
       defineComponent({
         setup() {
           provide(menuInjectionKey, {
-            popupMaxHeight: true,
+            popupMaxHeight: ref(true),
             modelValue: ref("Option 1"),
             onOptionClick,
           });

@@ -8,7 +8,7 @@
         <c-icon-close />
       </template>
     </c-switch>
-    <c-switch type="round">
+    <c-switch variant="round">
       <template #checked-icon>
         <c-icon-check />
       </template>
@@ -16,7 +16,7 @@
         <c-icon-close />
       </template>
     </c-switch>
-    <c-switch type="line">
+    <c-switch variant="line">
       <template #checked-icon>
         <c-icon-check />
       </template>

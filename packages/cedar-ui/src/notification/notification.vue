@@ -21,7 +21,7 @@
         <slot name="footer" />
       </div>
     </div>
-    <div v-if="closable" :class="`${prefixCls}-close-btn`" @click="handleClose">
+    <button v-if="closable" type="button" :aria-label="closeButtonAriaLabel" :class="`${prefixCls}-close-btn`" @click="handleClose">
       <slot name="closeIconElement">
         <a-icon-hover>
           <slot name="closeIcon">
@@ -29,24 +29,23 @@
           </slot>
         </a-icon-hover>
       </slot>
-    </div>
+    </button>
   </li>
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue'
 import { defineComponent, onMounted, onUnmounted, onUpdated } from 'vue'
-import { getPrefixCls } from '../_utils/global-config'
-import { MessageType } from '../_utils/constant'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import AIconHover from '../_components/icon-hover.vue'
-import IconClose from '../icon/icon-close'
-import IconInfoCircleFill from '../icon/icon-info-circle-fill'
-import IconCheckCircleFill from '../icon/icon-check-circle-fill'
-import IconExclamationCircleFill from '../icon/icon-exclamation-circle-fill'
-import IconCloseCircleFill from '../icon/icon-close-circle-fill'
+import { IconClose } from '@cedarjs/icons-vue/icon-close'
+import { IconInfoCircleFill } from '@cedarjs/icons-vue/icon-info-circle-fill'
+import { IconCheckCircleFill } from '@cedarjs/icons-vue/icon-check-circle-fill'
+import { IconExclamationCircleFill } from '@cedarjs/icons-vue/icon-exclamation-circle-fill'
+import { IconCloseCircleFill } from '@cedarjs/icons-vue/icon-close-circle-fill'
+import { notificationProps } from './props'
 
 export default defineComponent({
-  name: 'Notification',
+  name: createNamespace('notification').name,
   components: {
     AIconHover,
     IconInfoCircleFill,
@@ -55,28 +54,7 @@ export default defineComponent({
     IconCloseCircleFill,
     IconClose,
   },
-  props: {
-    type: {
-      type: String as PropType<MessageType>,
-      default: 'info',
-    },
-    showIcon: {
-      type: Boolean,
-      default: true,
-    },
-    closable: {
-      type: Boolean,
-      default: false,
-    },
-    duration: {
-      type: Number,
-      default: 3000,
-    },
-    resetOnUpdate: {
-      type: Boolean,
-      default: false,
-    },
-  },
+  props: notificationProps,
   emits: ['close'],
   setup(props, context) {
     const prefixCls = getPrefixCls('notification')

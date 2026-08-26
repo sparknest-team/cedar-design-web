@@ -1,16 +1,13 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Date from './date.vue'
+import { dateProps } from './props'
 
-const Date = Object.assign(_Date, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-    app.component(componentPrefix + _Date.name, _Date)
-  },
-})
+const Date = withInstall(_Date, Object.assign(_Date, {
+}), { components: [_Date] })
 
 export type DateInstance = InstanceType<typeof _Date>
+export type { DateProps } from './props'
+export { Date, dateProps }
+export const _DateComponent = Date
 
 export default Date

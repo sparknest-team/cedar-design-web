@@ -27,7 +27,7 @@
       >
         <VirtualListItem
           v-for="(item, index) of currentList"
-          :key="item[itemKey] ?? start + index"
+          :key="getItemKey(item, start + index)"
           :has-item-size="hasItemSize"
           :set-item-size="setItemSize"
         >
@@ -39,6 +39,7 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../../_utils/global-config'
 import { computed, defineComponent, nextTick, ref, toRefs, PropType } from 'vue'
 import { useSize } from './hooks/use-size'
 import VirtualListItem from './virtual-list-item'
@@ -47,7 +48,7 @@ import { ScrollOptions } from './interface'
 import { isNumber, isObject } from '../../_utils/is'
 
 export default defineComponent({
-  name: 'VirtualList',
+  name: createNamespace("virtual-list").name,
   components: { VirtualListItem },
   props: {
     height: {
@@ -55,7 +56,7 @@ export default defineComponent({
       default: 200,
     },
     data: {
-      type: Array as PropType<Record<string, any>[]>,
+      type: Array as PropType<any[]>,
       default: () => [],
     },
     threshold: {
@@ -63,7 +64,7 @@ export default defineComponent({
       default: 0,
     },
     itemKey: {
-      type: String,
+      type: [String, Function] as PropType<string | ((item: unknown) => string | number)>,
       default: 'key',
     },
     fixedSize: {
@@ -126,10 +127,13 @@ export default defineComponent({
       }
     })
 
+    const getItemKey = (item: any, index: number) => {
+      const key = typeof itemKey.value === 'function' ? itemKey.value(item) : item?.[itemKey.value]
+      return (key ?? index) as string | number
+    }
+
     const dataKeys = computed(() =>
-      data.value.map((item: any, index) => {
-        return (item[itemKey.value] ?? index) as string | number
-      }),
+      data.value.map((item: any, index) => getItemKey(item, index)),
     )
 
     const {
@@ -209,6 +213,7 @@ export default defineComponent({
       scrollTo,
       style,
       mergedComponent,
+      getItemKey,
     }
   },
 })

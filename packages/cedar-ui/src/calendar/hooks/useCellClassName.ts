@@ -1,4 +1,4 @@
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 import { isArray } from '../../_utils/is'
 import { getNow } from '../../_utils/date'
 
@@ -7,7 +7,7 @@ function getDateValue(date?: Dayjs[], index?: number) {
     return undefined
   }
   if (isArray(date)) {
-    return date[index]
+    return date[index ?? 0]
   }
   return undefined
 }

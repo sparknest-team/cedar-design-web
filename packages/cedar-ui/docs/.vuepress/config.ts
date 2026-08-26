@@ -5,11 +5,11 @@ import { viteBundler } from '@vuepress/bundler-vite'
 import hopeTheme from './theme'
 import { codeBlockPlugin } from './plugin-code-block/src/node'
 // import { prismjsPlugin } from '@vuepress/plugin-prismjs'
-import { shikiPlugin } from '@vuepress/plugin-shiki'
+import { slimsearchPlugin } from '@vuepress/plugin-slimsearch'
 import components from 'unplugin-vue-components/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import type { Plugin } from 'vite'
-import { CedarResolver, CedarImport } from '../../src/resolver'
+import { CedarResolver } from '@cedarjs/resolver'
 
 const projRoot = path.resolve(__dirname, '../../')
 
@@ -62,11 +62,8 @@ export default defineUserConfig({
   },
   plugins: [
     codeBlockPlugin,
-    shikiPlugin({
-      themes: {
-        light: 'min-light',
-        dark: 'nord',
-      },
+    slimsearchPlugin({
+      suggestion: false,
     }),
   ],
   bundler: viteBundler({
@@ -89,7 +86,7 @@ export default defineUserConfig({
         }),
         AutoImport({
           resolvers: [
-            CedarImport({
+            CedarResolver({
               importStyle: false
             })
           ],
@@ -109,10 +106,18 @@ export default defineUserConfig({
       resolve: {
         alias: [
           {
-            find: /^@cedar\/ui$/,
+            find: /^@cedarjs\/ui$/,
             replacement: path.resolve(projRoot, 'src/index.ts'),
-          }
+          },
         ],
+      },
+      optimizeDeps: {
+        exclude: ['@cedarjs/ui'],
+      },
+      server: {
+        watch: {
+          ignored: ['**/cedar-ui/es/**', '**/cedar-ui/lib/**', '**/cedar-ui/umd/**'],
+        },
       },
     },
   }),

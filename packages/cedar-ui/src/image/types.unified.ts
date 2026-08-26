@@ -3,37 +3,21 @@
 export type ImageFit = 'fill' | 'contain' | 'cover' | 'none' | 'scale-down'
 
 export interface ImagePreviewProps {
-  /** 预览是否可见（主命名） */
-  visible?: boolean
-  /** @alias visible */
-  show?: boolean
-  defaultVisible?: boolean
+  /** 预览是否打开 */
+  open?: boolean
+  defaultOpen?: boolean
   src?: string
   images?: string[]
-  /** @alias images */
-  srcList?: string[]
   current?: number
-  /** @alias current（预览初始索引） */
-  initialIndex?: number
   closable?: boolean
-  /** @alias closable */
-  closeable?: boolean
   maskClosable?: boolean
   loop?: boolean
-  /** @alias loop */
-  infinite?: boolean
   zoom?: number | string
   wheelZoom?: boolean
   keyboard?: boolean
-  actions?: string[]
-  /** @alias actions */
   actionsLayout?: string[]
-  teleport?: string | Element | false
-  /** @alias teleport */
   popupContainer?: string | HTMLElement
   lockScroll?: boolean
-  closeOnKeyEscape?: boolean
-  /** @alias closeOnKeyEscape */
   escToClose?: boolean
   imagePreventDefault?: boolean
   indicator?: boolean
@@ -45,7 +29,7 @@ export interface ImagePreviewProps {
   onChange?: (index: number) => void
   onClose?: () => void
   onLongPress?: (index: number) => void
-  onPreviewVisibleChange?: (visible: boolean) => void
+  onOpenChange?: (open: boolean) => void
 }
 
 export interface ImageProps {
@@ -66,8 +50,8 @@ export interface ImageProps {
   ripple?: boolean
   block?: boolean
   preview?: boolean
-  previewVisible?: boolean
-  defaultPreviewVisible?: boolean
+  previewOpen?: boolean
+  defaultPreviewOpen?: boolean
   previewProps?: Partial<ImagePreviewProps>
   hideFooter?: boolean | 'never'
   footerPosition?: 'inner' | 'outer'
@@ -77,11 +61,7 @@ export interface ImageProps {
 
 export interface ImagePreviewGroupProps extends Omit<ImagePreviewProps, 'src' | 'onClose'> {
   images?: string[]
-  /** @alias images */
-  srcList?: string[]
   defaultCurrent?: number
-  /** @alias defaultCurrent */
-  initialIndex?: number
   previewProps?: Partial<ImagePreviewProps>
 }
 

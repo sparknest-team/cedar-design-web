@@ -33,9 +33,22 @@ export default defineComponent({
     return () => (
       <div
         ref={blockRef}
+        role="application"
+        tabindex={0}
+        aria-label="Color saturation and brightness"
+        aria-valuetext={`Saturation ${Math.round(hsv.value.s * 100)}%, brightness ${Math.round(hsv.value.v * 100)}%`}
         class={`${prefixCls}-palette`}
         style={{ backgroundColor: hueColor.value }}
         onMousedown={onMouseDown}
+        onKeydown={(event: KeyboardEvent) => {
+          const step = event.shiftKey ? 0.1 : 0.01
+          const nextS = Math.min(1, Math.max(0, hsv.value.s + (event.key === 'ArrowRight' ? step : event.key === 'ArrowLeft' ? -step : 0)))
+          const nextV = Math.min(1, Math.max(0, hsv.value.v + (event.key === 'ArrowUp' ? step : event.key === 'ArrowDown' ? -step : 0)))
+          if (nextS !== hsv.value.s || nextV !== hsv.value.v) {
+            event.preventDefault()
+            props.onChange?.(nextS, nextV)
+          }
+        }}
       >
         <div
           ref={handlerRef}

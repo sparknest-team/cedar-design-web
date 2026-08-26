@@ -1,8 +1,7 @@
 <template>
   <DatePanel
-    v-bind="$attrs"
+    v-bind="$attrs as any"
     mode="week"
-    is-week
     :day-start-of-week="dayStartOfWeek"
     :is-same-time="isSameTime"
     @select="onSelect"
@@ -11,15 +10,16 @@
 </template>
 
 <script lang="ts">
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 import { defineComponent, PropType } from 'vue'
 import { methods } from '../../../_utils/date'
 import { IsSameTime, WeekStart } from '../../types'
 import DatePanel from '../date/index.vue'
 import { useI18n } from '../../../locale'
+import { createNamespace } from '../../../_utils/global-config'
 
 export default defineComponent({
-  name: 'WeekPanel',
+  name: createNamespace('date-picker-week-panel').name,
   components: {
     DatePanel,
   },

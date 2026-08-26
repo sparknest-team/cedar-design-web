@@ -1,12 +1,12 @@
-import type { App, AppContext } from 'vue'
+import type { AppContext } from 'vue'
 import { createVNode, nextTick, render } from 'vue'
 import { getOverlay } from '../_utils/dom'
-import { getComponentPrefix, setGlobalConfig } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import { isFunction } from '../_utils/is'
 import { omit } from '../_utils/omit'
-import { CedarOptions } from '../_utils/types'
 import { getSlotFunction } from '../_utils/vue-utils'
 import _Drawer from './drawer.vue'
+import { drawerProps } from './props'
 import type { DrawerConfig, DrawerMethod, DrawerUpdateConfig } from './types'
 
 const open = (config: DrawerConfig, appContext?: AppContext) => {
@@ -14,7 +14,7 @@ const open = (config: DrawerConfig, appContext?: AppContext) => {
 
   const handleOk = () => {
     if (vm.component) {
-      vm.component.props.visible = false
+      vm.component.props.open = false
     }
 
     if (isFunction(config.onOk)) {
@@ -24,7 +24,7 @@ const open = (config: DrawerConfig, appContext?: AppContext) => {
 
   const handleCancel = () => {
     if (vm.component) {
-      vm.component.props.visible = false
+      vm.component.props.open = false
     }
 
     if (isFunction(config.onCancel)) {
@@ -47,7 +47,7 @@ const open = (config: DrawerConfig, appContext?: AppContext) => {
 
   const handleReturnClose = () => {
     if (vm.component) {
-      vm.component.props.visible = false
+      vm.component.props.open = false
     }
   }
 
@@ -60,7 +60,7 @@ const open = (config: DrawerConfig, appContext?: AppContext) => {
   }
 
   const defaultConfig = {
-    visible: true,
+    open: true,
     renderToBody: false,
     unmountOnClose: true,
     onOk: handleOk,
@@ -73,10 +73,27 @@ const open = (config: DrawerConfig, appContext?: AppContext) => {
     _Drawer,
     {
       ...defaultConfig,
-      ...omit(config, ['content', 'title', 'footer', 'visible', 'unmountOnClose', 'onOk', 'onCancel', 'onClose']),
+      ...omit(config, [
+        'content',
+        'title',
+        'footer',
+        'open',
+        'unmountOnClose',
+        'onOk',
+        'onCancel',
+        'onClose',
+        'beforeOk',
+        'beforeCancel',
+        'beforeOpen',
+        'beforeClose',
+      ]),
       ...{
         header: typeof config.header === 'boolean' ? config.header : undefined,
         footer: typeof config.footer === 'boolean' ? config.footer : undefined,
+        beforeOk: config.beforeOk,
+        beforeCancel: config.beforeCancel,
+        onBeforeOpen: config.beforeOpen,
+        onBeforeClose: config.beforeClose,
       },
     },
     {
@@ -100,25 +117,23 @@ const open = (config: DrawerConfig, appContext?: AppContext) => {
   }
 }
 
-const Drawer = Object.assign(_Drawer, {
+const Drawer = withInstall(_Drawer, Object.assign(_Drawer, {
   open,
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _Drawer.name, _Drawer)
-
+  _context: null as AppContext | null,
+}), {
+  setup: (app) => {
     const drawerWithContext: DrawerMethod = {
       open: (config, appContext = app._context) => open(config, appContext),
     }
-
     app.config.globalProperties.$drawer = drawerWithContext
   },
-  _context: null as AppContext | null,
 })
 
 export type { DrawerMethod, DrawerConfig, DrawerReturn } from './types'
 
 export type DrawerInstance = InstanceType<typeof _Drawer>
+export type { DrawerPlacement, DrawerProps } from './props'
+export { Drawer, drawerProps }
+export const _DrawerComponent = Drawer
 
 export default Drawer

@@ -1,6 +1,7 @@
 <template>
   <c-space direction="column">
-    <c-input placeholder="请输入1" variant="outline" />
-    <c-input placeholder="请输入1" variant="default" />
+    <c-input placeholder="filled" variant="filled" />
+    <c-input placeholder="outlined" variant="outlined" />
+    <c-input placeholder="standard" variant="standard" />
   </c-space>
 </template>

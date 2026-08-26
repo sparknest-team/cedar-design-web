@@ -16,7 +16,7 @@ permalink: /components/tag/
 
 ### 可关闭标签
 
-通过 `closable` 属性控制标签是否可关闭。可关闭标签可通过 `close` 事件执行一些关闭后操作，也可通过 `visible` 属性控制标签的显示或隐藏。
+通过 `closable` 属性控制标签是否可关闭。可关闭标签可通过 `close` 事件执行一些关闭后操作，也可通过 `show` 属性控制标签的显示或隐藏。
 
 <demo src="./__demos__/closable.vue"></demo>
 
@@ -72,8 +72,8 @@ permalink: /components/tag/
 | status                | 标签状态色（与 Button 对齐，与 `color` 互斥，`color` 优先） | `'primary' \| 'secondary' \| 'tertiary' \| 'info' \| 'success' \| 'warning' \| 'danger'` | -       |
 | variant               | 标签变体（与 Button 对齐）           | `'default' \| 'outline'`                                                                                                                               | `'default'` |
 | size                  | 标签的大小                           | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`                                                                                                                 | `'md'`  |
-| visible **(v-model)** | 标签是否可见                         | `boolean`                                                                                                                                              | -       |
-| default-visible       | 标签默认是否可见                     | `boolean`                                                                                                                                              | `true`  |
+| show **(v-model)**    | 标签是否可见                         | `boolean`                                                                                                                                              | -       |
+| default-show          | 标签默认是否可见                     | `boolean`                                                                                                                                              | `true`  |
 | loading               | 标签是否为加载中状态                 | `boolean`                                                                                                                                              | `false` |
 | closable              | 标签是否可关闭                       | `boolean`                                                                                                                                              | `false` |
 | checkable             | 标签是否可选中                       | `boolean`                                                                                                                                              | `false` |
@@ -99,5 +99,5 @@ permalink: /components/tag/
 组件导出以下类型定义
 
 ```ts
-import type { TagProps } from '@cedar/ui'
+import type { TagProps } from '@cedarjs/ui'
 ```

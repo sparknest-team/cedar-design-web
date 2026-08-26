@@ -47,5 +47,5 @@ permalink: /components/scrollbar/
 组件导出以下类型定义
 
 ```ts
-import type { ScrollbarBoxInstance } from '@cedar/ui'
+import type { ScrollbarBoxInstance } from '@cedarjs/ui'
 ```

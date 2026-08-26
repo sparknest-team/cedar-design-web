@@ -24,9 +24,9 @@ import {
   isPlainObject,
   isString,
   normalizeToArray,
-} from '@maplejs/maple-shared'
-import { useEventListener } from '@maplejs/maple-use'
-import type { SafeParseReturnType, ZodType } from 'zod'
+} from '@cedarjs/shared'
+import { useEventListener } from '@cedarjs/use'
+import type { ZodSafeParseResult, ZodType } from 'zod'
 
 export type ListenerProp<F> = F | F[]
 
@@ -131,7 +131,7 @@ export function isZodRule(rule: unknown): rule is ZodType {
   return isPlainObject(rule) && isFunction(rule.safeParseAsync)
 }
 
-export function isZodResult(result: unknown): result is SafeParseReturnType<any, any> {
+export function isZodResult(result: unknown): result is ZodSafeParseResult<any> {
   return isPlainObject(result) && hasOwn(result, 'success')
 }
 

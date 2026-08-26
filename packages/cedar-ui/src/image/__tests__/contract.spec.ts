@@ -4,16 +4,15 @@ import { imagePlatformConfig } from '../platform.config'
 
 describe('image api contract', () => {
   it('normalizes string preview options', () => {
-    expect(normalizePreviewOptions('a.jpg')).toEqual({
+    expect(normalizePreviewOptions('a.jpg')).toEqual(expect.objectContaining({
       images: ['a.jpg'],
-    })
+    }))
   })
 
-  it('normalizes srcList alias', () => {
-    expect(normalizePreviewOptions({ srcList: ['a.jpg', 'b.jpg'] })).toEqual({
-      srcList: ['a.jpg', 'b.jpg'],
+  it('normalizes images option', () => {
+    expect(normalizePreviewOptions({ images: ['a.jpg', 'b.jpg'] })).toEqual(expect.objectContaining({
       images: ['a.jpg', 'b.jpg'],
-    })
+    }))
   })
 
   it('uses cedar platform defaults', () => {

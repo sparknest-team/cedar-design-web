@@ -1,3 +1,5 @@
+@import './token.less';
+
 .flexCenter() {
   display: flex;
   align-items: center;
@@ -5,13 +7,13 @@
 }
 
 .map-tips {
-  padding: 10px 0;
-  color: var(--text-tertiary);
+  padding: var(~'--c-map-tips-padding-y') 0;
+  color: var(~'--c-map-tips-color');
 }
 
 .map-select-model {
   .map-tips {
-    padding: 0 0 10px;
+    padding: 0 0 var(~'--c-map-tips-padding-y');
   }
 
   .c-dialog-body {
@@ -28,10 +30,10 @@
     top: 50%;
     left: 50%;
     z-index: 1;
-    width: 24px;
-    height: 24px;
-    margin-top: -24px;
-    margin-left: -12px;
+    width: var(~'--c-map-position-dot-size');
+    height: var(~'--c-map-position-dot-size');
+    margin-top: var(~'--c-map-position-dot-margin-top');
+    margin-left: var(~'--c-map-position-dot-margin-left');
     pointer-events: none;
   }
 
@@ -39,30 +41,30 @@
     .flexCenter();
 
     position: absolute;
-    bottom: 32px;
-    left: 12px;
+    bottom: var(~'--c-map-locate-me-bottom');
+    left: var(~'--c-map-locate-me-left');
     z-index: 999;
-    width: 24px;
-    height: 24px;
+    width: var(~'--c-map-locate-me-size');
+    height: var(~'--c-map-locate-me-size');
     cursor: pointer;
-    background: #fff;
+    background: var(~'--c-map-locate-me-bg');
     border-radius: 100%;
-    box-shadow: 0 0 4px #333;
+    box-shadow: 0 0 var(~'--c-map-locate-me-shadow-blur') var(~'--c-map-locate-me-shadow-color');
 
     img {
-      width: 18px;
-      height: 18px;
+      width: var(~'--c-map-locate-me-icon-size');
+      height: var(~'--c-map-locate-me-icon-size');
       pointer-events: none;
     }
   }
 
   .position-current {
     position: absolute;
-    top: 100px;
-    right: 40px;
+    top: var(~'--c-map-position-current-top');
+    right: var(~'--c-map-position-current-right');
     z-index: 1;
-    width: 24px;
-    height: 24px;
+    width: var(~'--c-map-position-current-size');
+    height: var(~'--c-map-position-current-size');
 
     img {
       width: 100%;
@@ -76,25 +78,25 @@
     left: 50%;
     z-index: 1;
     box-sizing: border-box;
-    padding: 10px 24px;
-    background-color: #273039;
-    border-radius: 100px;
-    transform: translate(-50%, -7px);
+    padding: var(~'--c-map-poi-padding-y') var(~'--c-map-poi-padding-x');
+    background-color: var(~'--c-map-poi-bg');
+    border-radius: var(~'--c-map-poi-border-radius');
+    transform: translate(-50%, var(~'--c-map-poi-translate-y'));
     transform-origin: 50% 100%;
 
     .poi-name {
-      font-size: 14px;
-      color: #f8f9fb;
+      font-size: var(~'--c-map-poi-name-font-size');
+      color: var(~'--c-map-poi-name-color');
     }
 
     .poi-address {
-      font-size: 12px;
-      color: #abb9c7;
+      font-size: var(~'--c-map-poi-address-font-size');
+      color: var(~'--c-map-poi-address-color');
 
       .edit-address-btn {
-        margin-left: 4px;
+        margin-left: var(~'--c-map-poi-edit-margin-left');
         cursor: pointer;
-        stroke: #abb9c7;
+        stroke: var(~'--c-map-poi-address-color');
       }
     }
   }
@@ -106,43 +108,43 @@
     z-index: 2;
     display: flex;
     flex-direction: column;
-    width: 230px;
+    width: var(~'--c-map-search-width');
     max-height: 80%;
-    margin: 24px;
+    margin: var(~'--c-map-search-margin');
     overflow: hidden;
   }
 
   .map-search-input {
     margin-bottom: 1px;
-    background-color: var(--color-bg-3);
+    background-color: var(~'--c-color-bg-3');
   }
 
   .map-search-box-empty {
     display: flex;
     justify-content: center;
-    padding: 20px;
-    background-color: var(--color-bg-3);
+    padding: var(~'--c-map-search-empty-padding');
+    background-color: var(~'--c-color-bg-3');
   }
 
   .map-search-box {
     flex: 1;
-    padding: 7px 12px;
+    padding: var(~'--c-map-search-box-padding-y') var(~'--c-map-search-box-padding-x');
     overflow: auto;
-    background-color: var(--color-bg-3);
+    background-color: var(~'--c-color-bg-3');
 
     &-item {
-      padding: 8px 12px;
+      padding: var(~'--c-map-search-item-padding-y') var(~'--c-map-search-item-padding-x');
 
       &.selected {
-        background-color: #f8f9fb;
+        background-color: var(~'--c-map-search-item-selected-bg');
       }
 
       &-name {
-        color: var(--text-primary);
+        color: var(~'--c-map-search-item-name-color');
       }
 
       &-address {
-        color: var(--text-tertiary);
+        color: var(~'--c-map-search-item-address-color');
       }
     }
   }

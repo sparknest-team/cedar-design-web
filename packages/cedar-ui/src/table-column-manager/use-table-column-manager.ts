@@ -1,3 +1,4 @@
+import { createNamespace } from '../_utils/global-config'
 import {
   type Ref,
   type ComputedRef,
@@ -19,7 +20,7 @@ import {
 } from 'vue'
 import type { TableColumnData } from '../table/types'
 import Menu, { MenuOption } from '../menu'
-import { IconMore } from '../icon'
+import { IconMore } from '@cedarjs/icons-vue'
 import { cloneDeep } from 'lodash-es'
 import type {
   ColumnCatalog,
@@ -183,7 +184,7 @@ export interface TableColumnManagerExposed {
 
 export type TableColumnManagerBindings = TableColumnManagerProps & {
   'onUpdate:modelValue': (value: ColumnManagerState['items']) => void
-  'onUpdate:visible': (value: boolean) => void
+  'onUpdate:open': (value: boolean) => void
   onConfirm: (result: ColumnManagerResult) => void
 }
 
@@ -220,7 +221,7 @@ const collectLeaves = (
 
 // ---- 表头操作按钮组件（内联定义，避免文件分离导致的解析问题） ----
 const TableColumnHeaderAction = defineComponent({
-  name: 'TableColumnHeaderAction',
+  name: createNamespace("table-column-header-action").name,
   props: {
     dataIndex: String,
     column: Object as PropType<TableColumnData>,
@@ -294,7 +295,7 @@ const TableColumnHeaderAction = defineComponent({
     return () =>
       h(
         Menu,
-        { trigger: 'click', position: 'br' },
+        { trigger: 'click', placement: 'br' },
         {
           default: () =>
             h(
@@ -404,8 +405,8 @@ export function useTableColumnManager(options: UseTableColumnManagerOptions): Us
           },
         }
       : {}),
-    visible: managerVisible.value,
-    'onUpdate:visible': (val: boolean) => {
+    open: managerVisible.value,
+    'onUpdate:open': (val: boolean) => {
       managerVisible.value = val
     },
     onConfirm: confirm,

@@ -5,7 +5,7 @@
 
   <c-table v-model:columns="columns" :data="data" :pagination="false" size="xs" />
 
-  <c-drawer v-model:visible="visible" title="列管理" :width="720" unmount-on-close @ok="handleOk">
+  <c-drawer v-model:open="visible" title="列管理" :width="720" unmount-on-close @ok="handleOk">
     <div style="height: calc(100vh - 120px)">
       <c-table-column-manager ref="mgrRef" v-model="items" :columns="columns" :load-options="loadOptions" />
     </div>
@@ -14,8 +14,8 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { stateFromColumns } from '@cedar/ui'
-import type { ColumnDefinitions, TableColumnData, TableColumnManagerInstance } from '@cedar/ui'
+import { stateFromColumns } from '@cedarjs/ui'
+import type { ColumnDefinitions, TableColumnData, TableColumnManagerInstance } from '@cedarjs/ui'
 
 const visible = ref(false)
 const mgrRef = ref<TableColumnManagerInstance>()

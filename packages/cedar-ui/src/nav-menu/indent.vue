@@ -4,12 +4,13 @@
   </span>
 </template>
 <script>
+import { createNamespace } from '../_utils/global-config'
 import { defineComponent, toRef } from 'vue'
 import useMenuContext from './hooks/use-menu-context'
 import { getPrefixCls } from '../_utils/global-config'
 
 export default defineComponent({
-  name: 'MenuIndent',
+  name: createNamespace("menu-indent").name,
   props: {
     level: {
       type: Number,

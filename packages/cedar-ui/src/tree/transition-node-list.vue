@@ -7,6 +7,7 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../_utils/global-config'
 import { computed, defineComponent, PropType, toRefs } from 'vue'
 import ExpandTransition from './expand-transition.vue'
 import { getPrefixCls } from '../_utils/global-config'
@@ -15,7 +16,7 @@ import BaseTreeNode from './base-node.vue'
 import { TreeNodeKey } from './types'
 
 export default defineComponent({
-  name: 'TransitionNodeList',
+  name: createNamespace("transition-node-list").name,
   components: {
     ExpandTransition,
     BaseTreeNode,

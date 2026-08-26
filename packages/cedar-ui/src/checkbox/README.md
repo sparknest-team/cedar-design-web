@@ -125,5 +125,5 @@ permalink: /components/checkbox/
 组件导出以下类型定义
 
 ```ts
-import type { CheckboxProps } from '@cedar/ui'
+import type { CheckboxProps } from '@cedarjs/ui'
 ```

@@ -1,0 +1,360 @@
+.c--box {
+  box-sizing: border-box;
+}
+.c--box * {
+  box-sizing: border-box;
+}
+.c--lock {
+  overflow: hidden !important;
+}
+.c--ellipsis {
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.c--inline-block {
+  display: inline-block;
+}
+.c--flex {
+  display: flex;
+}
+.c--inline-flex {
+  display: inline-flex;
+}
+/******** borderSize *******/
+/******** borderStyle *******/
+/******** radius *******/
+/******** shadow distance *******/
+/******** size *******/
+/******** spacing *******/
+/******** shadow *******/
+/******** opacity *******/
+/******** fontSize *******/
+/******** fontWeight ********/
+/******** Primary *******/
+/******** success *******/
+/******** info *******/
+/******** warning *******/
+/******** danger *******/
+/******** link *******/
+/******** radius *******/
+/******** motion *******/
+/******** z-index *******/
+/******** scale CSS var wrappers (public Less API) *******/
+/********* icon hover *********/
+:root {
+  --c-pagination-jumper-input-width: var(--c-size-10);
+  --c-pagination-item-border-radius: var(--c-border-radius-sm);
+  --c-pagination-item-spacing: var(--c-spacing-4);
+  --c-pagination-margin-total-spacing: var(--c-spacing-4);
+  --c-pagination-margin-option-left: var(--c-spacing-4);
+  --c-pagination-margin-jumper-left: var(--c-spacing-4);
+  --c-pagination-size-xs: var(--c-size-xs);
+  --c-pagination-size-sm: var(--c-size-sm);
+  --c-pagination-size-md: var(--c-size-md);
+  --c-pagination-size-lg: var(--c-size-lg);
+  --c-pagination-padding-horizontal: var(--c-spacing-4);
+  --c-pagination-size-xs-font-size: var(--c-font-size-body-1);
+  --c-pagination-size-sm-font-size: var(--c-font-size-body-3);
+  --c-pagination-size-md-font-size: var(--c-font-size-body-3);
+  --c-pagination-size-lg-font-size: var(--c-font-size-body-3);
+  --c-pagination-size-icon-arrow-xs: var(--c-size-3);
+  --c-pagination-size-icon-arrow-sm: var(--c-size-3);
+  --c-pagination-size-icon-arrow-md: var(--c-size-3);
+  --c-pagination-size-icon-arrow-lg: var(--c-size-3);
+  --c-pagination-size-icon-ellipsis: var(--c-size-4);
+  --c-pagination-border-width: var(--c-border-none);
+  --c-pagination-bg-item: transparent;
+  --c-pagination-bg-item-active: var(--c-color-primary-light-1);
+  --c-pagination-bg-item-hover: var(--c-color-fill-1);
+  --c-pagination-bg-item-disabled: transparent;
+  --c-pagination-bg-item-active-disabled: var(--c-color-fill-1);
+  --c-pagination-item-text-color: var(--c-color-text-2);
+  --c-pagination-item-text-color-hover: var(--c-color-text-2);
+  --c-pagination-item-text-color-active: rgb(var(--c-primary-6));
+  --c-pagination-item-text-color-disabled: var(--c-color-text-4);
+  --c-pagination-item-text-color-active-disabled: var(--c-color-primary-light-3);
+  --c-pagination-item-border-color: transparent;
+  --c-pagination-item-border-color-active: transparent;
+  --c-pagination-item-border-color-hover: transparent;
+  --c-pagination-item-border-color-disabled: transparent;
+  --c-pagination-item-border-color-active-disabled: transparent;
+  --c-pagination-icon-arrow-color: var(--c-color-text-2);
+  --c-pagination-icon-arrow-bg: transparent;
+  --c-pagination-icon-arrow-bg-hover: var(--c-color-fill-1);
+  --c-pagination-icon-arrow-bg-disabled: transparent;
+  --c-pagination-icon-arrow-text-color-hover: rgb(var(--c-primary-6));
+  --c-pagination-icon-arrow-text-color-disabled: var(--c-color-text-4);
+  --c-pagination-simple-input-width: var(--c-size-10);
+  --c-pagination-simple-icon-arrow-color: var(--c-color-text-2);
+  --c-pagination-simple-icon-arrow-bg: transparent;
+  --c-pagination-simple-icon-arrow-bg-hover: var(--c-color-fill-1);
+  --c-pagination-simple-icon-arrow-bg-disabled: transparent;
+  --c-pagination-simple-icon-arrow-text-color-hover: rgb(var(--c-primary-6));
+  --c-pagination-simple-icon-arrow-text-color-disabled: var(--c-color-text-4);
+  --c-pagination-simple-margin-prev-right: var(--c-spacing-2);
+  --c-pagination-simple-margin-next-left: var(--c-spacing-6);
+  --c-pagination-simple-margin-separator-left: var(--c-spacing-6);
+  --c-pagination-simple-margin-separator-right: var(--c-spacing-6);
+  --c-pagination-jumper-goto-color: var(--c-color-text-3);
+  --c-pagination-text-color-total: var(--c-color-text-1);
+  --c-pagination-jumper-input-padding-x: var(--c-spacing-1);
+  --c-pagination-options-view-value-padding-right: var(--c-spacing-3);
+}
+.c-pagination {
+  display: flex;
+  align-items: center;
+  font-size: var(--c-pagination-size-md-font-size);
+  /*** 快速跳转 ***/
+}
+.c-pagination-list {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+  list-style: none;
+}
+.c-pagination-item {
+  display: inline-block;
+  box-sizing: border-box;
+  padding: 0 var(--c-pagination-padding-horizontal);
+  color: var(--c-pagination-item-text-color);
+  text-align: center;
+  vertical-align: middle;
+  list-style: none;
+  background-color: var(--c-pagination-bg-item);
+  border: var(--c-pagination-border-width) solid var(--c-pagination-item-border-color);
+  border-radius: var(--c-pagination-item-border-radius);
+  outline: 0;
+  cursor: pointer;
+  user-select: none;
+  min-width: var(--c-pagination-size-md);
+  height: var(--c-pagination-size-md);
+  font-size: var(--c-pagination-size-md-font-size);
+  line-height: var(--c-pagination-size-md);
+}
+.c-pagination-item-previous,
+.c-pagination-item-next {
+  font-size: var(--c-pagination-size-icon-arrow-md);
+}
+.c-pagination-item:hover {
+  color: var(--c-pagination-item-text-color-hover);
+  background-color: var(--c-pagination-bg-item-hover);
+  border-color: var(--c-pagination-item-border-color-hover);
+}
+.c-pagination-item-active,
+.c-pagination-item-active:hover {
+  color: var(--c-pagination-item-text-color-active);
+  background-color: var(--c-pagination-bg-item-active);
+  border-color: var(--c-pagination-item-border-color-active);
+  transition: color var(--c-transition-duration-2) var(--c-transition-timing-function-linear), background-color var(--c-transition-duration-2) var(--c-transition-timing-function-linear);
+}
+.c-pagination-item-disabled,
+.c-pagination-item-disabled:hover {
+  color: var(--c-pagination-item-text-color-disabled);
+  background-color: var(--c-pagination-bg-item-disabled);
+  border-color: var(--c-pagination-item-border-color-disabled);
+  cursor: not-allowed;
+}
+.c-pagination-item:not(:last-child) {
+  margin-right: var(--c-pagination-item-spacing);
+}
+.c-pagination-item-previous,
+.c-pagination-item-next {
+  color: var(--c-pagination-icon-arrow-color);
+  font-size: var(--c-pagination-size-icon-arrow-md);
+  background-color: var(--c-pagination-icon-arrow-bg);
+}
+.c-pagination-item-previous:not(.c-pagination-item-disabled):hover,
+.c-pagination-item-next:not(.c-pagination-item-disabled):hover {
+  color: var(--c-pagination-icon-arrow-text-color-hover);
+  background-color: var(--c-pagination-icon-arrow-bg-hover);
+}
+.c-pagination-item-previous::after,
+.c-pagination-item-next::after {
+  display: inline-block;
+  font-size: 0;
+  vertical-align: middle;
+  content: '.';
+}
+.c-pagination .c-pagination-item-previous.c-pagination-item-disabled,
+.c-pagination .c-pagination-item-next.c-pagination-item-disabled {
+  color: var(--c-pagination-icon-arrow-text-color-disabled);
+  background-color: var(--c-pagination-icon-arrow-bg-disabled);
+}
+.c-pagination-item-jumper {
+  font-size: var(--c-pagination-size-icon-ellipsis);
+}
+.c-pagination-jumper {
+  display: flex;
+  align-items: center;
+  margin-left: var(--c-pagination-margin-jumper-left);
+}
+.c-pagination-jumper > span {
+  font-size: var(--c-pagination-size-md-font-size);
+}
+.c-pagination-jumper-text-goto,
+.c-pagination-jumper-prepend,
+.c-pagination-jumper-append {
+  color: var(--c-pagination-jumper-goto-color);
+  white-space: nowrap;
+}
+.c-pagination-jumper-prepend {
+  margin-right: var(--c-pagination-item-spacing);
+}
+.c-pagination-jumper-append {
+  margin-left: var(--c-pagination-item-spacing);
+}
+.c-pagination-jumper .c-pagination-jumper-input {
+  width: var(--c-pagination-jumper-input-width);
+  padding-right: var(--c-pagination-jumper-input-padding-x);
+  padding-left: var(--c-pagination-jumper-input-padding-x);
+}
+.c-pagination-jumper .c-pagination-jumper-input input {
+  text-align: center;
+}
+.c-pagination-options {
+  position: relative;
+  display: inline-block;
+  flex: 0 0 auto;
+  min-width: 0;
+  margin-left: var(--c-pagination-margin-option-left);
+  text-align: center;
+  vertical-align: middle;
+}
+.c-pagination-options .c-select {
+  width: auto;
+}
+.c-pagination-options .c-select-view-value {
+  padding-right: var(--c-pagination-options-view-value-padding-right);
+  overflow: inherit;
+}
+.c-pagination-total {
+  display: inline-block;
+  height: 100%;
+  margin-right: var(--c-pagination-margin-total-spacing);
+  color: var(--c-pagination-text-color-total);
+  font-size: var(--c-pagination-size-md-font-size);
+  line-height: var(--c-pagination-size-md);
+  white-space: nowrap;
+}
+.c-pagination-jumper {
+  flex: 0 0 auto;
+}
+.c-pagination-jumper-separator {
+  padding: 0 var(--c-pagination-simple-margin-separator-right) 0 var(--c-pagination-simple-margin-separator-left);
+}
+.c-pagination-jumper-total-page {
+  margin-right: calc(var(--c-pagination-simple-margin-next-left) - var(--c-pagination-simple-margin-prev-right));
+}
+.c-pagination-simple {
+  display: flex;
+  align-items: center;
+}
+.c-pagination-simple .c-pagination-item {
+  margin-right: 0;
+}
+.c-pagination-simple .c-pagination-jumper {
+  margin: 0 var(--c-pagination-simple-margin-prev-right);
+  color: var(--c-color-text-1);
+}
+.c-pagination-simple .c-pagination-jumper .c-pagination-jumper-input {
+  width: var(--c-pagination-simple-input-width);
+  margin-left: 0;
+}
+.c-pagination-simple .c-pagination-item-previous,
+.c-pagination-simple .c-pagination-item-next {
+  color: var(--c-pagination-simple-icon-arrow-color);
+  background-color: var(--c-pagination-simple-icon-arrow-bg);
+}
+.c-pagination-simple .c-pagination-item-previous:not(.c-pagination-item-disabled):hover,
+.c-pagination-simple .c-pagination-item-next:not(.c-pagination-item-disabled):hover {
+  color: var(--c-pagination-simple-icon-arrow-text-color-hover);
+  background-color: var(--c-pagination-simple-icon-arrow-bg-hover);
+}
+.c-pagination-simple .c-pagination-item-previous.c-pagination-item-disabled,
+.c-pagination-simple .c-pagination-item-next.c-pagination-item-disabled {
+  color: var(--c-pagination-simple-icon-arrow-text-color-disabled);
+  background-color: var(--c-pagination-simple-icon-arrow-bg-disabled);
+}
+.c-pagination-disabled {
+  cursor: not-allowed;
+}
+.c-pagination-disabled .c-pagination-item,
+.c-pagination-disabled .c-pagination-item:not(.c-pagination-item-disabled):not(.c-pagination-item-active):hover {
+  color: var(--c-pagination-item-text-color-disabled);
+  background-color: var(--c-pagination-bg-item-disabled);
+  border-color: var(--c-pagination-item-border-color-disabled);
+  cursor: not-allowed;
+}
+.c-pagination.c-pagination-disabled .c-pagination-item-active {
+  color: var(--c-pagination-item-text-color-active-disabled);
+  background-color: var(--c-pagination-bg-item-active-disabled);
+  border-color: var(--c-pagination-item-border-color-active-disabled);
+}
+.c-pagination-size-xs .c-pagination-item {
+  min-width: var(--c-pagination-size-xs);
+  height: var(--c-pagination-size-xs);
+  font-size: var(--c-pagination-size-xs-font-size);
+  line-height: var(--c-pagination-size-xs);
+}
+.c-pagination-size-xs .c-pagination-item-previous,
+.c-pagination-size-xs .c-pagination-item-next {
+  font-size: var(--c-pagination-size-icon-arrow-xs);
+}
+.c-pagination-size-xs .c-pagination-total {
+  font-size: var(--c-pagination-size-xs-font-size);
+  line-height: var(--c-pagination-size-xs);
+}
+.c-pagination-size-xs .c-pagination-option {
+  height: var(--c-pagination-size-xs);
+  font-size: var(--c-pagination-size-xs-font-size);
+  line-height: 0;
+}
+.c-pagination-size-xs .c-pagination-jumper > span {
+  font-size: var(--c-pagination-size-xs-font-size);
+}
+.c-pagination-size-sm .c-pagination-item {
+  min-width: var(--c-pagination-size-sm);
+  height: var(--c-pagination-size-sm);
+  font-size: var(--c-pagination-size-sm-font-size);
+  line-height: var(--c-pagination-size-sm);
+}
+.c-pagination-size-sm .c-pagination-item-previous,
+.c-pagination-size-sm .c-pagination-item-next {
+  font-size: var(--c-pagination-size-icon-arrow-sm);
+}
+.c-pagination-size-sm .c-pagination-total {
+  font-size: var(--c-pagination-size-sm-font-size);
+  line-height: var(--c-pagination-size-sm);
+}
+.c-pagination-size-sm .c-pagination-option {
+  height: var(--c-pagination-size-sm);
+  font-size: var(--c-pagination-size-sm-font-size);
+  line-height: 0;
+}
+.c-pagination-size-sm .c-pagination-jumper > span {
+  font-size: var(--c-pagination-size-sm-font-size);
+}
+.c-pagination-size-lg .c-pagination-item {
+  min-width: var(--c-pagination-size-lg);
+  height: var(--c-pagination-size-lg);
+  font-size: var(--c-pagination-size-lg-font-size);
+  line-height: var(--c-pagination-size-lg);
+}
+.c-pagination-size-lg .c-pagination-item-previous,
+.c-pagination-size-lg .c-pagination-item-next {
+  font-size: var(--c-pagination-size-icon-arrow-lg);
+}
+.c-pagination-size-lg .c-pagination-total {
+  font-size: var(--c-pagination-size-lg-font-size);
+  line-height: var(--c-pagination-size-lg);
+}
+.c-pagination-size-lg .c-pagination-option {
+  height: var(--c-pagination-size-lg);
+  font-size: var(--c-pagination-size-lg-font-size);
+  line-height: 0;
+}
+.c-pagination-size-lg .c-pagination-jumper > span {
+  font-size: var(--c-pagination-size-lg-font-size);
+}

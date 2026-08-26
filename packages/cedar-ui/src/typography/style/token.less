@@ -1,55 +1,55 @@
 @import '../../style/theme/index.less';
 
-@typography-font-size-h1: 36px;
-@typography-font-size-h2: 32px;
-@typography-font-size-h3: 28px;
-@typography-font-size-h4: 24px;
-@typography-font-size-h5: 20px;
-@typography-font-size-h6: 16px;
+:root {
+  --c-typography-edit-padding-x: var(~'--c-spacing-6');
+  --c-typography-edit-padding-y: var(~'--c-spacing-2');
+  --c-typography-edit-border-width: var(~'--c-border-width-1');
 
-@typography-heading-font-weight: @font-weight-500;
-
-@typography-color-text: var(~'--c-color-text-1');
-
-@typography-text-color-text-primary: @color-primary-6;
-@typography-text-color-text-secondary: var(~'--c-color-text-2');
-@typography-text-color-text-success: @color-success-6;
-@typography-text-color-text-warning: @color-warning-6;
-@typography-text-color-text-error: @color-danger-6;
-@typography-text-color-text_disabled: var(~'--c-color-text-4');
-
-@typography-text-color-bg-mark: rgb(var(~'--c-yellow-4'));
-@typography-text-font-weight-bold: @font-weight-500;
-
-@typography-text-color-code: var(~'--c-color-text-2');
-@typography-text-color-code-border: var(~'--c-color-neutral-3');
-@typography-text-color-code-bg: var(~'--c-color-neutral-2');
-@typography-text-padding-code-vertical: 2px;
-@typography-text-padding-code-horizontal: 8px;
-@typography-text-margin-code-horizontal: 2px;
-
-@typography-paragraph-line-height: var(~'--c-line-height');
-@typography-paragraph-line-height-close: 1.3;
-
-// Operations
-@typography-operation-margin-left: @spacing-1;
-@typography-color-icon-copy: var(~'--c-color-text-2');
-@typography-color-bg-icon-copy: @color-transparent;
-@typography-color-icon-copy_hover: var(~'--c-color-text-2');
-@typography-color-bg-icon-copy_hover: var(~'--c-color-fill-2');
-@typography-color-icon-copy_copied: @color-success-6;
-
-@typography-color-icon-edit: var(~'--c-color-text-2');
-@typography-color-bg-icon-edit: @color-transparent;
-@typography-color-icon-edit_hover: var(~'--c-color-text-2');
-@typography-color-bg-icon-edit_hover: var(~'--c-color-fill-2');
-
-@typography-color-expand-text: @color-primary-6;
-@typography-color-expand-text_hover: @color-primary-5;
-
-@typography-color-blockquote-border-width: 2px;
-@typography-color-blockquote-border-left: var(~'--c-color-neutral-6');
-@typography-color-blockquote-bg: var(~'--c-color-bg-2');
-
-@typography-heading-margin-top: 0;
-@typography-heading-margin-bottom: 0;
+  --c-typography-font-size-h1: var(~'--c-font-size-display-1');
+  --c-typography-font-size-h2: var(~'--c-size-8');
+  --c-typography-font-size-h3: var(~'--c-size-7');
+  --c-typography-font-size-h4: var(~'--c-font-size-title-3');
+  --c-typography-font-size-h5: var(~'--c-font-size-title-2');
+  --c-typography-font-size-h6: var(~'--c-font-size-title-1');
+  --c-typography-heading-font-weight: var(~'--c-font-weight-500');
+  --c-typography-text-color: var(~'--c-color-text-1');
+  --c-typography-text-color-primary: rgb(var(~'--c-primary-6'));
+  --c-typography-text-color-secondary: var(~'--c-color-text-2');
+  --c-typography-text-color-success: rgb(var(~'--c-success-6'));
+  --c-typography-text-color-warning: rgb(var(~'--c-warning-6'));
+  --c-typography-text-color-error: rgb(var(~'--c-danger-6'));
+  --c-typography-text-color-disabled: var(~'--c-color-text-4');
+  --c-typography-text-bg-mark: rgb(var(~'--c-yellow-4'));
+  --c-typography-text-font-weight-bold: var(~'--c-font-weight-500');
+  --c-typography-code-text-color: var(~'--c-color-text-2');
+  --c-typography-code-border-color: var(~'--c-color-neutral-3');
+  --c-typography-code-bg: var(~'--c-color-neutral-2');
+  --c-typography-text-padding-code-vertical: var(~'--c-spacing-1');
+  --c-typography-text-padding-code-horizontal: var(~'--c-spacing-4');
+  --c-typography-text-margin-code-horizontal: var(~'--c-spacing-1');
+  --c-typography-paragraph-line-height: var(~'--c-line-height');
+  --c-typography-paragraph-line-height-close: 1.3;
+  --c-typography-operation-margin-left: var(~'--c-spacing-1');
+  --c-typography-icon-copy-color: var(~'--c-color-text-2');
+  --c-typography-icon-copy-bg: transparent;
+  --c-typography-icon-copy-color-hover: var(~'--c-color-text-2');
+  --c-typography-icon-copy-bg-hover: var(~'--c-color-fill-2');
+  --c-typography-icon-copy-color-copied: rgb(var(~'--c-success-6'));
+  --c-typography-icon-edit-color: var(~'--c-color-text-2');
+  --c-typography-icon-edit-bg: transparent;
+  --c-typography-icon-edit-color-hover: var(~'--c-color-text-2');
+  --c-typography-icon-edit-bg-hover: var(~'--c-color-fill-2');
+  --c-typography-expand-text-color: rgb(var(~'--c-primary-6'));
+  --c-typography-expand-text-color-hover: rgb(var(~'--c-primary-5'));
+  --c-typography-blockquote-border-width: var(~'--c-border-width-2');
+  --c-typography-blockquote-border-left-color: var(~'--c-color-neutral-6');
+  --c-typography-blockquote-bg: var(~'--c-color-bg-2');
+  --c-typography-heading-margin-top: 0;
+  --c-typography-heading-margin-bottom: 0;
+  --c-typography-code-border-radius: var(~'--c-border-radius-sm');
+  --c-typography-blockquote-padding-left: var(~'--c-spacing-4');
+  --c-typography-list-item-margin-left: var(~'--c-spacing-8');
+  --c-typography-operation-padding: var(~'--c-spacing-1');
+  --c-typography-operation-border-radius: var(~'--c-border-radius-sm');
+  --c-typography-expand-margin-x: var(~'--c-spacing-2');
+}

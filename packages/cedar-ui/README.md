@@ -5,7 +5,7 @@ heroText: Cedar Design Web
 tagline: Vue 3 + Arco Design
 actions:
   - text: 快速上手
-    link: /guide/start/
+    link: /guide/quickstart/
     type: primary
 features:
   - title: Arco Design
@@ -17,5 +17,5 @@ features:
 ---
 
 ```shell
-yarn add @cedar/ui@1.x
+yarn add @cedarjs/ui@1.x
 ```

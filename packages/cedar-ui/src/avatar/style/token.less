@@ -1,29 +1,28 @@
 @import '../../style/theme/index.less';
 
-@avatar-size-default: @size-10;
-@avatar-font-size-text: 20px;
-@avatar-color-text: var(~'--c-color-white');
-@avatar-color-bg: var(~'--c-color-fill-4');
-@avatar-color-group-item-border: var(~'--c-color-bg-2');
-@avatar-group-item-border-width: 2px;
-@avatar-group-item-margin-left: -10px;
-@avatar-group-popover-item-spacing: @spacing-2;
-@avatar-font-weight-text: @font-weight-500;
-
-@avatar-circle-border-radius: @radius-circle;
-@avatar-square-border-radius: @radius-md;
-
-@avatar-size-trigger-button: @size-5;
-@avatar-color-trigger-button-bg: var(~'--c-color-neutral-2');
-@avatar-color-trigger-button-bg_hover: var(~'--c-color-neutral-3');
-@avatar-color-trigger-mask-icon: var(~'--c-color-white');
-@avatar-opacity-trigger-mask-bg: @opacity-6;
-@avatar-color-trigger-icon-button: var(~'--c-color-fill-4');
-@avatar-spacing-trigger-button-right: @spacing-2;
-@avatar-spacing-trigger-button-bottom: @spacing-2;
-@avatar-size-trigger-icon: @size-3;
-@avatar-border-trigger-button-radius: @radius-circle;
-
-
-@avatar-font-size-max-count: 20px;
-@avatar-color-max-count-text: var(~'--c-color-white');
+:root {
+  --c-avatar-size-default: var(~'--c-size-10');
+  --c-avatar-font-size-text: var(~'--c-font-size-title-2');
+  --c-avatar-text-color: var(~'--c-color-white');
+  --c-avatar-bg: var(~'--c-color-fill-4');
+  --c-avatar-group-item-border: var(~'--c-color-bg-2');
+  --c-avatar-group-item-border-width: var(~'--c-border-width-2');
+  --c-avatar-group-item-margin-left: calc(-1 * var(~'--c-spacing-5'));
+  --c-avatar-group-popover-item-spacing: var(~'--c-spacing-2');
+  --c-avatar-font-weight-text: var(~'--c-font-weight-500');
+  --c-avatar-circle-border-radius: var(~'--c-border-radius-circle');
+  --c-avatar-square-border-radius: var(~'--c-border-radius-md');
+  --c-avatar-size-trigger-button: var(~'--c-size-5');
+  --c-avatar-trigger-button-bg: var(~'--c-color-neutral-2');
+  --c-avatar-trigger-button-bg-hover: var(~'--c-color-neutral-3');
+  --c-avatar-trigger-mask-icon: var(~'--c-color-white');
+  --c-avatar-opacity-trigger-mask-bg: 0.6;
+  --c-avatar-trigger-icon-button: var(~'--c-color-fill-4');
+  --c-avatar-spacing-trigger-button-right: var(~'--c-spacing-2');
+  --c-avatar-spacing-trigger-button-bottom: var(~'--c-spacing-2');
+  --c-avatar-size-trigger-icon: var(~'--c-size-3');
+  --c-avatar-trigger-button-border-radius: var(~'--c-border-radius-circle');
+  --c-avatar-font-size-max-count: var(~'--c-font-size-title-2');
+  --c-avatar-max-count-text-color: var(~'--c-color-white');
+  --c-avatar-trigger-mask-font-size: var(~'--c-font-size-title-1');
+}

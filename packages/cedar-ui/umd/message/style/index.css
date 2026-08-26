@@ -1,0 +1,250 @@
+.c--box {
+  box-sizing: border-box;
+}
+.c--box * {
+  box-sizing: border-box;
+}
+.c--lock {
+  overflow: hidden !important;
+}
+.c--ellipsis {
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.c--inline-block {
+  display: inline-block;
+}
+.c--flex {
+  display: flex;
+}
+.c--inline-flex {
+  display: inline-flex;
+}
+/******** borderSize *******/
+/******** borderStyle *******/
+/******** radius *******/
+/******** shadow distance *******/
+/******** size *******/
+/******** spacing *******/
+/******** shadow *******/
+/******** opacity *******/
+/******** fontSize *******/
+/******** fontWeight ********/
+/******** Primary *******/
+/******** success *******/
+/******** info *******/
+/******** warning *******/
+/******** danger *******/
+/******** link *******/
+/******** radius *******/
+/******** motion *******/
+/******** z-index *******/
+/******** scale CSS var wrappers (public Less API) *******/
+/********* icon hover *********/
+/******** Message CSS Variables *******/
+:root {
+  --c-message-wrapper-margin-top: var(--c-spacing-12);
+  --c-message-wrapper-margin-bottom: var(--c-spacing-12);
+  --c-message-wrapper-padding-horizontal: var(--c-spacing-5);
+  --c-message-z-index: var(--c-z-index-message);
+  --c-message-padding-top: var(--c-spacing-5);
+  --c-message-padding-bottom: var(--c-spacing-5);
+  --c-message-padding-left: var(--c-spacing-7);
+  --c-message-padding-right: var(--c-spacing-7);
+  --c-message-margin-bottom: var(--c-spacing-7);
+  --c-message-border-radius: var(--c-border-radius-sm);
+  --c-message-icon-font-size: 20px;
+  --c-message-content-font-size: var(--c-font-size-body-3);
+  --c-message-icon-margin-right: var(--c-spacing-4);
+  --c-message-box-shadow: var(--c-shadow2-down);
+  --c-message-border-width: 1px;
+  --c-message-border-style: solid;
+  --c-message-close-icon-color: var(--c-color-text-1);
+  --c-message-close-icon-font-size: 12px;
+  --c-message-close-icon-top: 15px;
+  --c-message-close-icon-right: var(--c-spacing-7);
+  --c-message-close-btn-margin-left: var(--c-spacing-4);
+  --c-message-close-icon-hover-size: 20px;
+  --c-message-normal-bg: var(--c-color-bg-popup);
+  --c-message-normal-icon-color: var(--c-color-text-1);
+  --c-message-normal-content-color: var(--c-color-text-1);
+  --c-message-normal-border-color: var(--c-color-neutral-3);
+  --c-message-info-bg: var(--c-color-bg-popup);
+  --c-message-info-icon-color: rgb(var(--c-primary-6));
+  --c-message-info-content-color: var(--c-color-text-1);
+  --c-message-info-border-color: var(--c-color-neutral-3);
+  --c-message-success-bg: var(--c-color-bg-popup);
+  --c-message-success-icon-color: rgb(var(--c-success-6));
+  --c-message-success-content-color: var(--c-color-text-1);
+  --c-message-success-border-color: var(--c-color-neutral-3);
+  --c-message-warning-bg: var(--c-color-bg-popup);
+  --c-message-warning-icon-color: rgb(var(--c-warning-6));
+  --c-message-warning-content-color: var(--c-color-text-1);
+  --c-message-warning-border-color: var(--c-color-neutral-3);
+  --c-message-error-bg: var(--c-color-bg-popup);
+  --c-message-error-icon-color: rgb(var(--c-danger-6));
+  --c-message-error-content-color: var(--c-color-text-1);
+  --c-message-error-border-color: var(--c-color-neutral-3);
+  --c-message-loading-bg: var(--c-color-bg-popup);
+  --c-message-loading-icon-color: rgb(var(--c-primary-6));
+  --c-message-loading-content-color: var(--c-color-text-1);
+  --c-message-loading-border-color: var(--c-color-neutral-3);
+  --c-message-transition-duration: var(--c-transition-duration-1);
+  --c-message-transition-duration-icon: var(--c-transition-duration-4);
+  --c-message-transition-timing-function: var(--c-transition-timing-function-linear);
+  --c-message-transition-timing-function-icon: var(--c-transition-timing-function-overshoot);
+}
+.c-message-list {
+  position: fixed;
+  z-index: var(--c-message-z-index);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+  padding: 0 var(--c-message-wrapper-padding-horizontal);
+  text-align: center;
+  pointer-events: none;
+  left: 0;
+}
+.c-message-list-top {
+  top: var(--c-message-wrapper-margin-top);
+}
+.c-message-list-bottom {
+  bottom: var(--c-message-wrapper-margin-bottom);
+}
+.c-message {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: var(--c-message-margin-bottom);
+  padding: var(--c-message-padding-top) var(--c-message-padding-right) var(--c-message-padding-bottom) var(--c-message-padding-left);
+  overflow: hidden;
+  line-height: 1;
+  text-align: center;
+  list-style: none;
+  background-color: var(--c-message-normal-bg);
+  border: var(--c-message-border-width) var(--c-message-border-style) var(--c-message-normal-border-color);
+  border-radius: var(--c-message-border-radius);
+  box-shadow: var(--c-message-box-shadow);
+  transition: all var(--c-message-transition-duration) var(--c-message-transition-timing-function);
+  pointer-events: auto;
+}
+.c-message-icon {
+  display: inline-block;
+  margin-right: var(--c-message-icon-margin-right);
+  color: var(--c-message-normal-icon-color);
+  font-size: var(--c-message-icon-font-size);
+  vertical-align: middle;
+  animation: c-msg-fade var(--c-message-transition-duration) var(--c-message-transition-timing-function), c-msg-fade var(--c-message-transition-duration-icon) var(--c-message-transition-timing-function-icon);
+}
+.c-message-content {
+  font-size: var(--c-message-content-font-size);
+  color: var(--c-message-normal-content-color);
+  vertical-align: middle;
+}
+.c-message-info {
+  background-color: var(--c-message-info-bg);
+  border-color: var(--c-message-info-border-color);
+}
+.c-message-info .c-message-icon {
+  color: var(--c-message-info-icon-color);
+}
+.c-message-info .c-message-content {
+  color: var(--c-message-info-content-color);
+}
+.c-message-success {
+  background-color: var(--c-message-success-bg);
+  border-color: var(--c-message-success-border-color);
+}
+.c-message-success .c-message-icon {
+  color: var(--c-message-success-icon-color);
+}
+.c-message-success .c-message-content {
+  color: var(--c-message-success-content-color);
+}
+.c-message-warning {
+  background-color: var(--c-message-warning-bg);
+  border-color: var(--c-message-warning-border-color);
+}
+.c-message-warning .c-message-icon {
+  color: var(--c-message-warning-icon-color);
+}
+.c-message-warning .c-message-content {
+  color: var(--c-message-warning-content-color);
+}
+.c-message-error {
+  background-color: var(--c-message-error-bg);
+  border-color: var(--c-message-error-border-color);
+}
+.c-message-error .c-message-icon {
+  color: var(--c-message-error-icon-color);
+}
+.c-message-error .c-message-content {
+  color: var(--c-message-error-content-color);
+}
+.c-message-loading {
+  background-color: var(--c-message-loading-bg);
+  border-color: var(--c-message-loading-border-color);
+}
+.c-message-loading .c-message-icon {
+  color: var(--c-message-loading-icon-color);
+}
+.c-message-loading .c-message-content {
+  color: var(--c-message-loading-content-color);
+}
+.c-message-close-btn {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  margin-left: var(--c-message-close-btn-margin-left);
+  font: inherit;
+  color: var(--c-message-close-icon-color);
+  font-size: var(--c-message-close-icon-font-size);
+}
+.c-message .c-icon-hover.c-message-icon-hover::before {
+  width: var(--c-message-close-icon-hover-size);
+  height: var(--c-message-close-icon-hover-size);
+}
+.fade-message-enter-from,
+.fade-message-appear-from {
+  opacity: 0;
+}
+.fade-message-enter-to,
+.fade-message-appear-to {
+  opacity: 1;
+}
+.fade-message-enter-active,
+.fade-message-appear-active {
+  transition: opacity var(--c-message-transition-duration) var(--c-message-transition-timing-function);
+}
+.fade-message-leave-from {
+  opacity: 1;
+}
+.fade-message-leave-to {
+  opacity: 0;
+}
+.fade-message-leave-active {
+  position: absolute;
+}
+.flip-list-move {
+  transition: transform 0.8s ease;
+}
+@keyframes c-msg-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes c-msg-scale {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}

@@ -5,7 +5,6 @@ import { getAllElements } from '../_utils/vue-utils'
 import { breadcrumbProps } from './props'
 import type { BreadcrumbRoute } from './types'
 import BreadcrumbItem from './breadcrumb-item'
-import Affix from '../affix'
 
 
 const { name, n } = createNamespace('breadcrumb')
@@ -33,23 +32,29 @@ export default defineComponent({
 
     const maxCount = computed(() => props.maxCount)
     const separator = computed(() => props.separator)
-    const needHide = computed(() => maxCount.value > 0 && length.value > maxCount.value + 1)
+    const total = computed(() => props.routes?.length ?? length.value)
+    const needHide = computed(() => maxCount.value > 0 && total.value > maxCount.value + 1)
+    const moreSlotData = computed(() => {
+      const end = needHide.value ? total.value - maxCount.value : 0
+      return {
+        omittedItems: props.routes?.slice(1, end + 1) ?? [],
+        count: needHide.value ? end : 0,
+        start: needHide.value ? 1 : -1,
+        end: needHide.value ? end : -1,
+      }
+    })
 
     bindBreadcrumbItems({
-      length,
+      length: total,
       maxCount,
       separator,
       needHide,
+      moreSlotData,
       slots,
-    })
+    } as any)
 
-    const defaultItemRender = (route: BreadcrumbRoute, list: BreadcrumbRoute[], paths: string[]) => {
-      if (list.indexOf(route) === list.length - 1) {
-        return <span>{route.label}</span>
-      }
-      const href = props.customUrl?.(paths) ?? `#/${paths.join('/').replace(/^\//, '')}`
-
-      return <a href={href}>{route.label}</a>
+    const defaultItemRender = (route: BreadcrumbRoute, _list: BreadcrumbRoute[], _paths: string[]) => {
+      return route.label
     }
 
     const renderByRoutes = () => {
@@ -57,17 +62,21 @@ export default defineComponent({
 
       const paths: string[] = []
 
-      return props.routes.map((route, _idx, origin) => {
+      return props.routes.map((route, idx, origin) => {
         paths.push((route.path || '').replace(/^\//, ''))
         const currentPaths = [...paths]
         return (
-          <BreadcrumbItem key={route.path || route.label} droplist={route.children}>
-            {slots['item-render']?.({
-              route,
-              routes: origin,
-              paths: currentPaths,
-            }) ?? defaultItemRender(route, origin, currentPaths)}
-          </BreadcrumbItem>
+          <BreadcrumbItem
+            key={route.path || route.label}
+            index={idx}
+            droplist={route.children}
+            href={slots['item-render'] || idx === origin.length - 1 ? undefined : route.path}
+            v-slots={{
+              default: () =>
+                slots['item-render']?.({ route, routes: origin, paths: currentPaths }) ??
+                defaultItemRender(route, origin, currentPaths),
+            }}
+          />
         )
       })
     }
@@ -75,30 +84,17 @@ export default defineComponent({
     const renderByChildren = () => {
       const children = getAllElements(slots.default?.() ?? [])
 
-      return children.map((child) => {
-        child.props = mergeProps(child.props ?? {})
+      return children.map((child, index) => {
+        child.props = mergeProps(child.props ?? {}, { index })
         return child
       })
     }
 
     return () => {
-      const content = (
-        <div role="list" class={n()}>
-          {slots.default ? renderByChildren() : renderByRoutes()}
-        </div>
-      )
-
-      if (!props.sticky) return content
-
       return (
-        <Affix
-          target={props.target}
-          targetContainer={props.targetContainer}
-          offsetTop={props.offsetTop}
-          offsetBottom={props.offsetBottom}
-        >
-          {content}
-        </Affix>
+        <div role="navigation" aria-label="Breadcrumb" class={n()}>
+          {props.routes?.length ? renderByRoutes() : renderByChildren()}
+        </div>
       )
     }
   },

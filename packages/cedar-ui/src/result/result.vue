@@ -14,7 +14,7 @@
           <icon-info v-if="status === 'info'" />
           <icon-check v-else-if="status === 'success'" />
           <icon-exclamation v-else-if="status === 'warning'" />
-          <icon-close v-else-if="status === 'error'" />
+          <icon-close v-else-if="status === 'danger'" />
           <result-forbidden v-else-if="status === '403'" />
           <result-not-found v-else-if="status === '404'" />
           <result-server-error v-else-if="status === '500'" />
@@ -41,22 +41,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
-import { getPrefixCls } from '../_utils/global-config'
-import IconInfo from '../icon/icon-info'
-import IconCheck from '../icon/icon-check'
-import IconExclamation from '../icon/icon-exclamation'
-import IconClose from '../icon/icon-close'
+import { defineComponent } from 'vue'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
+import { IconInfo } from '@cedarjs/icons-vue/icon-info'
+import { IconCheck } from '@cedarjs/icons-vue/icon-check'
+import { IconExclamation } from '@cedarjs/icons-vue/icon-exclamation'
+import { IconClose } from '@cedarjs/icons-vue/icon-close'
 import ResultForbidden from './403'
 import ResultNotFound from './404'
 import ResultServerError from './500'
-
-const RESULT_STATUS = ['info', 'success', 'warning', 'error', '403', '404', '500', null] as const
-
-type ResultStatus = (typeof RESULT_STATUS)[number]
+import { resultProps } from './props'
 
 export default defineComponent({
-  name: 'Result',
+  name: createNamespace('result').name,
   components: {
     IconInfo,
     IconCheck,
@@ -66,30 +63,7 @@ export default defineComponent({
     ResultNotFound,
     ResultServerError,
   },
-  props: {
-    /**
-     * @zh 结果页显示的状态
-     * @en The status displayed on the result page
-     * @values 'info','success','warning','error','403','404','500', null
-     */
-    status: {
-      type: String as PropType<ResultStatus>,
-      default: 'info',
-      validator: (value: any) => {
-        return RESULT_STATUS.includes(value)
-      },
-    },
-    /**
-     * @zh 标题内容
-     * @en Title
-     */
-    title: String,
-    /**
-     * @zh 子标题内容
-     * @en Subtitle
-     */
-    subtitle: String,
-  },
+  props: resultProps,
   /**
    * @zh 图标
    * @en Icon

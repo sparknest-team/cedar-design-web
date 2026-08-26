@@ -72,16 +72,14 @@ const lang: CedarLang = {
     placeholderInput: 'Please input',
     placeholderStart: 'Start Time',
     placeholderEnd: 'End Time',
+    clear: 'Clear',
+    increase: 'Increase value',
+    decrease: 'Decrease value',
+    showPassword: 'Show password',
+    hidePassword: 'Hide password',
     dateFormat: {
       datetime: 'DD-MM-YYYY HH:mm:ss',
     },
-  },
-  layoutForm: {
-    collapseMore: 'collapse',
-    expandMore: 'expand',
-    lastWeek: 'Last Week',
-    lastMonth: 'Last Month',
-    lastThreeMonths: 'Last Three Months',
   },
   map: {
     searchPlaceholder: 'please search address',
@@ -89,8 +87,7 @@ const lang: CedarLang = {
     noData: 'No Data',
     dragAndSelectTips: 'Drag the map or search the address to determine your current location',
   },
-  formFilter: {
-    rememberMe: 'Remember Me',
+  filterForm: {
     expandMore: 'Expand',
     collapseMore: 'Collapse',
   },

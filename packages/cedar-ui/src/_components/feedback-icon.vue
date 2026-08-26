@@ -8,15 +8,16 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../_utils/global-config'
 import { computed, defineComponent } from 'vue'
-import IconLoading from '../icon/icon-loading'
-import IconCheckCircleFill from '../icon/icon-check-circle-fill'
-import IconExclamationCircleFill from '../icon/icon-exclamation-circle-fill'
-import IconCloseCircleFill from '../icon/icon-close-circle-fill'
+import { IconLoading } from '@cedarjs/icons-vue/icon-loading'
+import { IconCheckCircleFill } from '@cedarjs/icons-vue/icon-check-circle-fill'
+import { IconExclamationCircleFill } from '@cedarjs/icons-vue/icon-exclamation-circle-fill'
+import { IconCloseCircleFill } from '@cedarjs/icons-vue/icon-close-circle-fill'
 import { getPrefixCls } from '../_utils/global-config'
 
 export default defineComponent({
-  name: 'FeedbackIcon',
+  name: createNamespace("feedback-icon").name,
   components: {
     IconLoading,
     IconCheckCircleFill,

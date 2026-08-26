@@ -29,22 +29,7 @@ export default defineComponent({
     const token = ref<string>('')
     const fetch = ref<any>()
     onMounted(() => {
-      // eslint-disable-next-line
-      // @ts-ignore
-      // TODO: 脱敏迁移 - 暂时注释 @maplejs/mfe-vue3
-      // import('@maplejs/mfe-vue3').then(({ Fetch }) => {
-        fetch.value = Fetch.genFetch('powerpro-api-test.xxxx.com', {
-          headers: {
-            Authorization: 'Bearer ' + token.value,
-          },
-          needAuth: true,
-          openLoginInterceptor: false,
-          commonParams: {
-            appId: '100360',
-            appVer: '1.0.1',
-          },
-        })
-      })
+      // TODO: 脱敏迁移 - @maplejs/mfe-vue3 暂不可用，接入新的 Fetch 驱动后再恢复
     })
 
     function change(v: any) {

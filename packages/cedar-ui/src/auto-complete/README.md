@@ -79,5 +79,5 @@ permalink: /components/auto-complete/
 组件导出以下类型定义
 
 ```ts
-import type { AutoCompleteProps } from '@cedar/ui'
+import type { AutoCompleteProps } from '@cedarjs/ui'
 ```

@@ -71,16 +71,14 @@ const lang: CedarLang = {
     placeholderInput: '请输入',
     placeholderStart: '开始日期',
     placeholderEnd: '结束日期',
+    clear: '清空',
+    increase: '增加数值',
+    decrease: '减少数值',
+    showPassword: '显示密码',
+    hidePassword: '隐藏密码',
     dateFormat: {
       datetime: 'YYYY-MM-DD HH:mm:ss',
     },
-  },
-  layoutForm: {
-    collapseMore: '收起更多',
-    expandMore: '展开更多',
-    lastWeek: '最近一周',
-    lastMonth: '最近一个月',
-    lastThreeMonths: '最近三个月',
   },
   map: {
     searchPlaceholder: '搜索地址',
@@ -88,8 +86,7 @@ const lang: CedarLang = {
     noData: '暂无数据',
     dragAndSelectTips: '拖动地图或搜索地址，选择定位点位置',
   },
-  formFilter: {
-    rememberMe: '记住我的选择',
+  filterForm: {
     expandMore: '展开',
     collapseMore: '收起',
   },

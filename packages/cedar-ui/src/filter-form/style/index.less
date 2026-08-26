@@ -1,29 +1,34 @@
+@import './token.less';
+
 .c-filter-form {
-  border-radius: var(--border-radius-medium);
-  background-color: var(--fill-0);
+  border-radius: var(~'--c-filter-form-border-radius');
+  background-color: var(~'--c-filter-form-background-color');
 
   .c-form-item {
-    margin-bottom: 16px;
+    margin-bottom: var(~'--c-filter-form-item-margin-bottom');
   }
 
-  &-suffix {
-    justify-content: flex-end;
-
-    .collapsed-btn {
-      margin-right: 16px;
-      color: var(--color-text-secondary);
-      cursor: pointer;
-    }
-  }
-
+  // 折叠时 Select 动画会抖动，关掉输入框过渡
   .c-select-multiple,
   .c-select-single {
     .c-select-view-input {
       transition: none !important;
     }
   }
-}
 
-.c-filter-form-remember-selections {
-  margin-top: -4px;
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: var(~'--c-filter-form-actions-gap');
+  }
+
+  &__collapse {
+    display: inline-flex;
+    align-items: center;
+    gap: var(~'--c-filter-form-collapse-gap');
+    color: var(~'--c-filter-form-collapse-color');
+    cursor: pointer;
+    user-select: none;
+  }
 }

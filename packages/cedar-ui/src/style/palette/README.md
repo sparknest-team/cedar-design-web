@@ -2,31 +2,41 @@
 permalink: /components/palette/
 ---
 
-## 色板 Color Palette
+## 色板 Palette
 
-此处列出提供的全部颜色
+### 介绍
 
-- 请注意，不建议直接在项目中使用以下变量，请优先使用 [ :link:`颜色 Color`](/components/color/)中标明的语义化设计变量。
-  <br/>
-- 示例：背景色：`bg-brand-1` 或 文字颜色：`brand-1`、css变量`--brand-1`。
-  <br/>
-- 当色号为主色（6号）时，可以省略色号，如:`bg-brand` 或 `brand`。
+Cedar 色阶以 CSS 变量提供，前缀一律 `--c-*`（与 Maple 的 `--mp-*` 同构）。
+业务页优先用 [颜色 Color](/components/color/) 语义工具类（如 `c-text-1` / `c-fill-2`）；需要精细色阶或主题覆盖时再直接引用色阶变量。
 
-<demo src="./__demos__/colors.vue"></demo>
+完整色阶见 `style/color/css-variables.less`，语义见 `style/theme/css-variables.less`；暗色由 `:root[cedar-theme=dark]` 覆盖。
 
-### 变量 CSS Variables
+### 功能色阶（1–10）
 
-颜色变量定义规则：--${色系}-${色号}: ${r}, ${g}, ${b};
-<br/>如需定制颜色，可以在项目中覆盖这些变量。
+通道值为 `R, G, B`，使用时包一层 `rgb()` / `rgba()`：
 
 ```css
-:root body {
-  --primary-7: 1, 160, 156;
-  --primary-6: 0, 190, 190;
-  --primary-5: 110, 209, 210;
-  --primary-4: 170, 225, 228;
-  --primary-3: 200, 238, 238;
-  --primary-2: 232, 248, 248;
-  --primary-1: 244, 251, 251;
+color: rgb(var(--c-primary-6));
+background: rgba(var(--c-primary-6), 0.12);
+```
+
+```html
+<div style="background: rgb(var(--c-primary-6)); color: #fff">primary-6</div>
+<div style="background: rgb(var(--c-success-6)); color: #fff">success-6</div>
+```
+
+定制主色示例：
+
+```css
+:root {
+  --c-brand-6: 0, 190, 190;
+  --c-brand-5: 55, 209, 204;
+  --c-brand-7: 14, 153, 158;
 }
 ```
+
+`--c-primary-*` 映射到 `--c-brand-*`，覆盖 brand 色阶即可联动主色。更多见 [主题定制](/guide/theme/)。
+
+### 色阶预览
+
+<demo src="./__demos__/colors.vue"></demo>

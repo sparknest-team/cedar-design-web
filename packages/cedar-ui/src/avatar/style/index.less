@@ -5,36 +5,36 @@
   display: inline-flex;
   align-items: center;
   box-sizing: border-box;
-  width: @avatar-size-default;
-  height: @avatar-size-default;
-  color: @avatar-color-text;
-  font-size: @avatar-font-size-text;
+  width: var(~'--c-avatar-size-default');
+  height: var(~'--c-avatar-size-default');
+  color: var(~'--c-avatar-text-color');
+  font-size: var(~'--c-avatar-font-size-text');
   white-space: nowrap;
   vertical-align: middle;
-  background-color: @avatar-color-bg;
+  background-color: var(~'--c-avatar-bg');
 
   &-circle {
-    border-radius: @avatar-circle-border-radius;
+    border-radius: var(~'--c-avatar-circle-border-radius');
   }
 
   &-circle &-image {
     overflow: hidden;
-    border-radius: @avatar-circle-border-radius;
+    border-radius: var(~'--c-avatar-circle-border-radius');
   }
 
   &-square {
-    border-radius: @avatar-square-border-radius;
+    border-radius: var(~'--c-avatar-square-border-radius');
   }
 
   &-square &-image {
     overflow: hidden;
-    border-radius: @avatar-square-border-radius;
+    border-radius: var(~'--c-avatar-square-border-radius');
   }
 
   &-text {
     position: absolute;
     left: 50%;
-    font-weight: @avatar-font-weight-text;
+    font-weight: var(~'--c-avatar-font-weight-text');
     // 避免继承行高导致的文字不居中
     line-height: 1;
     transform: translateX(-50%);
@@ -63,19 +63,19 @@
 
   &-trigger-icon-button {
     position: absolute;
-    right: -@avatar-spacing-trigger-button-right;
-    bottom: -@avatar-spacing-trigger-button-bottom;
+    right: -var(~'--c-avatar-spacing-trigger-button-right');
+    bottom: -var(~'--c-avatar-spacing-trigger-button-bottom');
     z-index: 1;
-    width: @avatar-size-trigger-button;
-    height: @avatar-size-trigger-button;
-    color: @avatar-color-trigger-icon-button;
-    font-size: @avatar-size-trigger-icon;
-    line-height: @avatar-size-trigger-button;
+    width: var(~'--c-avatar-size-trigger-button');
+    height: var(~'--c-avatar-size-trigger-button');
+    color: var(~'--c-avatar-trigger-icon-button');
+    font-size: var(~'--c-avatar-size-trigger-icon');
+    line-height: var(~'--c-avatar-size-trigger-button');
     text-align: center;
-    background-color: @avatar-color-trigger-button-bg;
-    border-radius: @avatar-border-trigger-button-radius;
-    transition: background-color @transition-duration-1
-      @transition-timing-function-linear;
+    background-color: var(~'--c-avatar-trigger-button-bg');
+    border-radius: var(~'--c-avatar-trigger-button-border-radius');
+    transition: background-color var(~'--c-transition-duration-1')
+      var(~'--c-transition-timing-function-linear');
   }
 
   &-trigger-icon-mask {
@@ -88,16 +88,16 @@
     justify-content: center;
     width: 100%;
     height: 100%;
-    color: @avatar-color-trigger-mask-icon;
-    font-size: 16px;
-    background-color: fade(@gray-10, @avatar-opacity-trigger-mask-bg);
-    border-radius: @avatar-square-border-radius;
+    color: var(~'--c-avatar-trigger-mask-icon');
+    font-size: var(~'--c-avatar-trigger-mask-font-size');
+    background-color: fade(@gray-10, var(~'--c-avatar-opacity-trigger-mask-bg'));
+    border-radius: var(~'--c-avatar-square-border-radius');
     opacity: 0;
-    transition: all @transition-duration-1 @transition-timing-function-linear;
+    transition: all var(~'--c-transition-duration-1') var(~'--c-transition-timing-function-linear');
   }
 
   &-circle &-trigger-icon-mask {
-    border-radius: @avatar-circle-border-radius;
+    border-radius: var(~'--c-avatar-circle-border-radius');
   }
 
   &-with-trigger-icon {
@@ -110,7 +110,7 @@
   }
 
   &-with-trigger-icon:hover &-trigger-icon-button {
-    background-color: @avatar-color-trigger-button-bg_hover;
+    background-color: var(~'--c-avatar-trigger-button-bg-hover');
   }
 
   &-rtl {
@@ -119,7 +119,7 @@
 
   &-rtl &-trigger-icon-button {
     right: unset;
-    left: -@avatar-spacing-trigger-button-right;
+    left: -var(~'--c-avatar-spacing-trigger-button-right');
   }
 
   // Group
@@ -128,8 +128,8 @@
     line-height: 0;
 
     &-max-count-avatar {
-      color: @avatar-color-max-count-text;
-      font-size: @avatar-font-size-max-count;
+      color: var(~'--c-avatar-max-count-text-color');
+      font-size: var(~'--c-avatar-font-size-max-count');
       cursor: default;
     }
 
@@ -139,15 +139,15 @@
   }
 
   &-group & {
-    border: @avatar-group-item-border-width solid
-      @avatar-color-group-item-border;
+    border: var(~'--c-avatar-group-item-border-width') solid
+      var(~'--c-avatar-group-item-border');
   }
 
   &-group &:not(:first-child) {
-    margin-left: @avatar-group-item-margin-left;
+    margin-left: var(~'--c-avatar-group-item-margin-left');
   }
 
   &-group-popover &:not(:first-child) {
-    margin-left: @avatar-group-popover-item-spacing;
+    margin-left: var(~'--c-avatar-group-popover-item-spacing');
   }
 }

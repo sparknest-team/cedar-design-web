@@ -2,6 +2,9 @@
 @import '../color/css-variables.less';
 
 :root {
+  --c-color-scheme: light;
+  --c-color-body: var(--c-color-bg-1);
+  --c-color-text: var(--c-color-text-1);
   --c-font-size-xs: 10px;
   --c-font-size-sm: 12px;
   --c-font-size-md: 14px;
@@ -10,6 +13,22 @@
   --c-icon-size-sm: 18px;
   --c-icon-size-md: 20px;
   --c-icon-size-lg: 22px;
+  --c-line-height: 1.5715;
+  --c-bezier: cubic-bezier(0.4, 0, 0.2, 1);
+  --c-shadow-key-umbra-opacity: rgba(0, 0, 0, 0.2);
+  --c-shadow-key-penumbra-opacity: rgba(0, 0, 0, 0.14);
+  --c-shadow-key-ambient-opacity: rgba(0, 0, 0, 0.12);
+  --c-opacity-border: 0.12;
+  --c-opacity-high-emphasis: 0.87;
+  --c-opacity-medium-emphasis: 0.6;
+  --c-opacity-disabled: 0.38;
+  --c-opacity-idle: 0.04;
+  --c-opacity-hover: 0.04;
+  --c-opacity-focus: 0.12;
+  --c-opacity-selected: 0.08;
+  --c-opacity-activated: 0.12;
+  --c-opacity-pressed: 0.12;
+  --c-opacity-dragged: 0.08;
   --c-color-white: @color-white;
   --c-color-black: @color-black;
   --c-color-border: @color-border;
@@ -67,12 +86,200 @@
   --c-color-warning-light-3: @color-warning-light-3;
   --c-color-warning-light-4: @color-warning-light-4;
 
+  /* functional (preset / semantic shortcuts) */
+  --c-color-primary: rgb(var(~'--c-primary-6'));
+  --c-color-info: rgb(var(~'--c-blue-6'));
+  --c-color-success: rgb(var(~'--c-success-6'));
+  --c-color-warning: rgb(var(~'--c-warning-6'));
+  --c-color-danger: rgb(var(~'--c-danger-6'));
+  --c-color-disabled: rgb(var(~'--c-gray-3'));
+  --c-color-text-disabled: rgb(var(~'--c-gray-5'));
+
   // radius
   --c-border-radius-none: @border-radius-none;
   --c-border-radius-sm: @border-radius-sm;
   --c-border-radius-md: @border-radius-md;
   --c-border-radius-lg: @border-radius-lg;
   --c-border-radius-circle: @border-radius-circle;
+
+  // border width
+  --c-border-width-none: @border-width-none;
+  --c-border-width-1: @border-width-1;
+  --c-border-width-2: @border-width-2;
+  --c-border-width-3: @border-width-3;
+  --c-border-width-4: @border-width-4;
+  --c-border-width-5: @border-width-5;
+
+  // size scale
+  --c-size-none: @__size-none;
+  --c-size-1: @__size-1;
+  --c-size-2: @__size-2;
+  --c-size-3: @__size-3;
+  --c-size-4: @__size-4;
+  --c-size-5: @__size-5;
+  --c-size-6: @__size-6;
+  --c-size-7: @__size-7;
+  --c-size-8: @__size-8;
+  --c-size-9: @__size-9;
+  --c-size-10: @__size-10;
+  --c-size-11: @__size-11;
+  --c-size-12: @__size-12;
+  --c-size-13: @__size-13;
+  --c-size-14: @__size-14;
+  --c-size-15: @__size-15;
+  --c-size-16: @__size-16;
+  --c-size-17: @__size-17;
+  --c-size-18: @__size-18;
+  --c-size-19: @__size-19;
+  --c-size-20: @__size-20;
+  --c-size-21: @__size-21;
+  --c-size-22: @__size-22;
+  --c-size-23: @__size-23;
+  --c-size-24: @__size-24;
+  --c-size-25: @__size-25;
+  --c-size-26: @__size-26;
+  --c-size-27: @__size-27;
+  --c-size-28: @__size-28;
+  --c-size-29: @__size-29;
+  --c-size-30: @__size-30;
+  --c-size-31: @__size-31;
+  --c-size-32: @__size-32;
+  --c-size-33: @__size-33;
+  --c-size-34: @__size-34;
+  --c-size-35: @__size-35;
+  --c-size-36: @__size-36;
+  --c-size-37: @__size-37;
+  --c-size-38: @__size-38;
+  --c-size-39: @__size-39;
+  --c-size-40: @__size-40;
+  --c-size-41: @__size-41;
+  --c-size-42: @__size-42;
+  --c-size-43: @__size-43;
+  --c-size-44: @__size-44;
+  --c-size-45: @__size-45;
+  --c-size-46: @__size-46;
+  --c-size-47: @__size-47;
+  --c-size-48: @__size-48;
+  --c-size-49: @__size-49;
+  --c-size-50: @__size-50;
+  --c-size-xs: @__size-xs;
+  --c-size-sm: @__size-sm;
+  --c-size-md: @__size-md;
+  --c-size-lg: @__size-lg;
+  --c-size-xl: @__size-xl;
+  --c-size-2xl: @__size-2xl;
+  --c-size-3xl: @__size-3xl;
+
+  // typography size
+  --c-font-size-display-3: @__font-size-display-3;
+  --c-font-size-display-2: @__font-size-display-2;
+  --c-font-size-display-1: @__font-size-display-1;
+  --c-font-size-title-3: @__font-size-title-3;
+  --c-font-size-title-2: @__font-size-title-2;
+  --c-font-size-title-1: @__font-size-title-1;
+  --c-font-size-body-3: @__font-size-body-3;
+  --c-font-size-body-2: @__font-size-body-2;
+  --c-font-size-body-1: @__font-size-body-1;
+  --c-font-size-caption: @__font-size-caption;
+
+  // font weight
+  --c-font-weight-100: @__font-weight-100;
+  --c-font-weight-200: @__font-weight-200;
+  --c-font-weight-300: @__font-weight-300;
+  --c-font-weight-400: @__font-weight-400;
+  --c-font-weight-500: @__font-weight-500;
+  --c-font-weight-600: @__font-weight-600;
+  --c-font-weight-700: @__font-weight-700;
+  --c-font-weight-800: @__font-weight-800;
+  --c-font-weight-900: @__font-weight-900;
+
+  // spacing scale
+  --c-spacing-none: @__spacing-none;
+  --c-spacing-1: @__spacing-1;
+  --c-spacing-2: @__spacing-2;
+  --c-spacing-3: @__spacing-3;
+  --c-spacing-4: @__spacing-4;
+  --c-spacing-5: @__spacing-5;
+  --c-spacing-6: @__spacing-6;
+  --c-spacing-7: @__spacing-7;
+  --c-spacing-8: @__spacing-8;
+  --c-spacing-9: @__spacing-9;
+  --c-spacing-10: @__spacing-10;
+  --c-spacing-11: @__spacing-11;
+  --c-spacing-12: @__spacing-12;
+  --c-spacing-13: @__spacing-13;
+  --c-spacing-14: @__spacing-14;
+  --c-spacing-15: @__spacing-15;
+  --c-spacing-16: @__spacing-16;
+  --c-spacing-17: @__spacing-17;
+  --c-spacing-18: @__spacing-18;
+  --c-spacing-19: @__spacing-19;
+  --c-spacing-20: @__spacing-20;
+  --c-spacing-21: @__spacing-21;
+  --c-spacing-22: @__spacing-22;
+
+  // shadow distance
+  --c-shadow-distance-none: @shadow-distance-none;
+  --c-shadow-distance-1: @shadow-distance-1;
+  --c-shadow-distance-2: @shadow-distance-2;
+  --c-shadow-distance-3: @shadow-distance-3;
+  --c-shadow-distance-4: @shadow-distance-4;
+
+  // shadow
+  --c-shadow-none: @shadow-none;
+  --c-shadow-special: @shadow-special;
+  --c-shadow1-center: @shadow1-center;
+  --c-shadow1-up: @shadow1-up;
+  --c-shadow1-down: @shadow1-down;
+  --c-shadow1-left: @shadow1-left;
+  --c-shadow1-right: @shadow1-right;
+  --c-shadow1-left-up: @shadow1-left-up;
+  --c-shadow1-left-down: @shadow1-left-down;
+  --c-shadow1-right-up: @shadow1-right-up;
+  --c-shadow1-right-down: @shadow1-right-down;
+  --c-shadow2-center: @shadow2-center;
+  --c-shadow2-up: @shadow2-up;
+  --c-shadow2-down: @shadow2-down;
+  --c-shadow2-left: @shadow2-left;
+  --c-shadow2-right: @shadow2-right;
+  --c-shadow2-left-up: @shadow2-left-up;
+  --c-shadow2-left-down: @shadow2-left-down;
+  --c-shadow2-right-up: @shadow2-right-up;
+  --c-shadow2-right-down: @shadow2-right-down;
+  --c-shadow3-center: @shadow3-center;
+  --c-shadow3-up: @shadow3-up;
+  --c-shadow3-down: @shadow3-down;
+  --c-shadow3-left: @shadow3-left;
+  --c-shadow3-right: @shadow3-right;
+  --c-shadow3-left-up: @shadow3-left-up;
+  --c-shadow3-left-down: @shadow3-left-down;
+  --c-shadow3-right-up: @shadow3-right-up;
+  --c-shadow3-right-down: @shadow3-right-down;
+  --c-popup-box-shadow-base: @popup-box-shadow-base;
+
+  // z-index
+  --c-z-index-popup-base: @z-index-popup-base;
+  --c-z-index-affix: @z-index-affix;
+  --c-z-index-popup: @z-index-popup;
+  --c-z-index-drawer: @z-index-drawer;
+  --c-z-index-modal: @z-index-modal;
+  --c-z-index-message: @z-index-message;
+  --c-z-index-notification: @z-index-notification;
+  --c-z-index-image-preview: @z-index-image-preview;
+
+  // motion
+  --c-transition-duration-1: @__transition-duration-1;
+  --c-transition-duration-2: @__transition-duration-2;
+  --c-transition-duration-3: @__transition-duration-3;
+  --c-transition-duration-4: @__transition-duration-4;
+  --c-transition-duration-5: @__transition-duration-5;
+  --c-transition-duration-loading: @__transition-duration-loading;
+  --c-transition-timing-function-linear: @__transition-timing-function-linear;
+  --c-transition-timing-function-standard: @__transition-timing-function-standard;
+  --c-transition-timing-function-overshoot: @__transition-timing-function-overshoot;
+  --c-transition-timing-function-decelerate: @__transition-timing-function-decelerate;
+  --c-transition-timing-function-accelerate: @__transition-timing-function-accelerate;
+
   // component
   --c-color-tooltip-bg: @color-tooltip-bg;
   --c-color-spin-layer-bg: @color-spin-layer-bg;
@@ -83,6 +290,9 @@
 }
 
 :root[cedar-theme='dark'] {
+  --c-color-scheme: dark;
+  --c-color-body: var(--c-color-bg-1);
+  --c-color-text: var(--c-color-text-1);
   --c-font-size-xs: 10px;
   --c-font-size-sm: 12px;
   --c-font-size-md: 14px;
@@ -91,6 +301,17 @@
   --c-icon-size-sm: 18px;
   --c-icon-size-md: 20px;
   --c-icon-size-lg: 22px;
+  --c-opacity-border: 0.12;
+  --c-opacity-high-emphasis: 1;
+  --c-opacity-medium-emphasis: 0.7;
+  --c-opacity-disabled: 0.5;
+  --c-opacity-idle: 0.1;
+  --c-opacity-hover: 0.04;
+  --c-opacity-focus: 0.12;
+  --c-opacity-selected: 0.08;
+  --c-opacity-activated: 0.12;
+  --c-opacity-pressed: 0.16;
+  --c-opacity-dragged: 0.08;
   --c-color-white: @dark-color-white;
   --c-color-black: @dark-color-black;
   --c-color-border: @dark-color-border;
@@ -128,6 +349,13 @@
   --c-color-warning-light-2: @dark-color-warning-light-2;
   --c-color-warning-light-3: @dark-color-warning-light-3;
   --c-color-warning-light-4: @dark-color-warning-light-4;
+  --c-color-primary: rgb(var(~'--c-primary-6'));
+  --c-color-info: rgb(var(~'--c-blue-6'));
+  --c-color-success: rgb(var(~'--c-success-6'));
+  --c-color-warning: rgb(var(~'--c-warning-6'));
+  --c-color-danger: rgb(var(~'--c-danger-6'));
+  --c-color-disabled: rgba(255, 255, 255, 0.08);
+  --c-color-text-disabled: rgba(255, 255, 255, 0.3);
   --c-color-link-light-1: @dark-color-link-light-1;
   --c-color-link-light-2: @dark-color-link-light-2;
   --c-color-link-light-3: @dark-color-link-light-3;
@@ -136,7 +364,7 @@
   --c-color-tooltip-bg: @dark-color-tooltip-bg;
   --c-color-spin-layer-bg: @dark-color-spin-layer-bg;
   --c-color-menu-dark-bg: @color-menu-dark-bg;
-  --c-color-menu-light-bg: @color-menu-dark-bg;
+  --c-color-menu-light-bg: @color-menu-light-bg;
   --c-color-menu-dark-hover: @dark-color-menu-dark-hover;
   --c-color-mask-bg: @dark-mask-color-bg;
 }

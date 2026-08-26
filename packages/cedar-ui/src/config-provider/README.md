@@ -37,5 +37,5 @@ permalink: /components/config-provider/
 组件导出以下类型定义
 
 ```ts
-import type { ConfigProviderProps } from '@cedar/ui'
+import type { ConfigProviderProps } from '@cedarjs/ui'
 ```

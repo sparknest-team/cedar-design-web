@@ -5,6 +5,7 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../_utils/global-config'
 import { defineComponent, onUnmounted, ref, inject, watchEffect, computed, PropType, toRefs } from 'vue'
 import { useIndex } from '../_hooks/use-index'
 import { getPrefixCls } from '../_utils/global-config'
@@ -19,7 +20,7 @@ import { resolveItemData } from './utils'
  * @en Responsive configuration has been supported since `2.18.0`, the specific configuration [ResponsiveValue](#responsivevalue)
  */
 export default defineComponent({
-  name: 'GridItem',
+  name: createNamespace("grid-item").name,
   props: {
     /**
      * @zh 跨越的格数

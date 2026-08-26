@@ -1,17 +1,17 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _VerificationCode from './verification-code'
+import { verificationCodeProps } from './props'
 
-const VerificationCode = Object.assign(_VerificationCode, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _VerificationCode.name, _VerificationCode)
-  },
-})
+const VerificationCode = withInstall(_VerificationCode, Object.assign(_VerificationCode, {
+}), { components: [_VerificationCode] })
 
 export type VerificationCodeInstance = InstanceType<typeof _VerificationCode>
+export { VerificationCode, verificationCodeProps }
+export type {
+  VerificationCodeFormatter,
+  VerificationCodeProps,
+  VerificationCodeSeparator,
+} from './props'
+export const _VerificationCodeComponent = VerificationCode
 
 export default VerificationCode

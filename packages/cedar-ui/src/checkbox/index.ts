@@ -1,24 +1,19 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Checkbox from './checkbox'
 import _CheckboxGroup from './checkbox-group'
+import { checkboxGroupProps, checkboxProps } from './props'
 
-const Checkbox = Object.assign(_Checkbox, {
+const Checkbox = withInstall(_Checkbox, Object.assign(_Checkbox, {
   Group: _CheckboxGroup,
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _Checkbox.name, _Checkbox)
-    app.component(componentPrefix + _CheckboxGroup.name, _CheckboxGroup)
-  },
-})
+}), { components: [_Checkbox, _CheckboxGroup] })
 
 export type CheckboxInstance = InstanceType<typeof _Checkbox>
 export type CheckboxGroupInstance = InstanceType<typeof _CheckboxGroup>
+export { checkboxGroupProps, checkboxProps }
+export type { CheckboxGroupProps, CheckboxProps, CheckboxValue } from './props'
 export type { CheckboxOption } from './types'
 
-export { _CheckboxGroup as CheckboxGroup }
+export { Checkbox, _CheckboxGroup as CheckboxGroup }
+export const _CheckboxComponent = Checkbox
 
 export default Checkbox

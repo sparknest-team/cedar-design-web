@@ -30,22 +30,7 @@ export default defineComponent({
       ;(window as any)._AMapSecurityConfig = {
         securityJsCode: base64ToString('NDA1NTg5NTM3MTViZjA5ZDQ5ZGM2NTc2OWM0YjZjZTQ='),
       }
-      // eslint-disable-next-line
-      // @ts-ignore
-      // TODO: 脱敏迁移 - 暂时注释 @maplejs/mfe-vue3
-      // import('@maplejs/mfe-vue3').then(({ Fetch }) => {
-        fetch.value = Fetch.genFetch('powerpro-api-test.xxxx.com', {
-          headers: {
-            Authorization: 'Bearer ' + token.value,
-          },
-          openLoginInterceptor: false,
-          needAuth: true,
-          commonParams: {
-            appId: '100360',
-            appVer: '1.0.1',
-          },
-        })
-      })
+      // TODO: 脱敏迁移 - @maplejs/mfe-vue3 暂不可用，接入新的 Fetch 驱动后再恢复
     })
     let timer: any
     const geocoderHandler = async (lng: number, lat: number) => {

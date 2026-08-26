@@ -27,7 +27,7 @@
       style="width: 200px" 
       :tooltip="{
         content: '这是自定义的 tooltip 提示内容',
-        position: 'bottom',
+        placement: 'bottom',
         'background-color': '#722ED1'
       }"
     >

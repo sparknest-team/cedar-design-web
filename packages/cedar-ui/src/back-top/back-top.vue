@@ -1,6 +1,15 @@
 <template>
   <transition name="fade-in">
-    <div v-if="visible" :class="prefixCls" @click="scrollToTop">
+    <div
+      v-if="visible"
+      :class="prefixCls"
+      role="button"
+      tabindex="0"
+      :aria-label="ariaLabel"
+      @click="scrollToTop"
+      @keydown.enter.prevent="scrollToTop"
+      @keydown.space.prevent="scrollToTop"
+    >
       <slot>
         <button :class="`${prefixCls}-btn`">
           <icon-to-top />
@@ -11,54 +20,22 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue'
 import { defineComponent, onMounted, onUnmounted, ref } from 'vue'
 // @ts-ignore
 import BTween from 'b-tween'
-import { getPrefixCls } from '../_utils/global-config'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import { on, off } from '../_utils/dom'
 import { throttleByRaf } from '../_utils/throttle-by-raf'
-import IconToTop from '../icon/icon-to-top'
+import { IconToTop } from '@cedarjs/icons-vue/icon-to-top'
 import { isString } from '../_utils/is'
+import { backTopProps } from './props'
 
 export default defineComponent({
-  name: 'BackTop',
+  name: createNamespace('back-top').name,
   components: {
     IconToTop,
   },
-  props: {
-    /**
-     * @zh 显示回到顶部按钮的触发滚动高度
-     * @en Display the trigger scroll height of the back to top button
-     */
-    visibleHeight: {
-      type: Number as PropType<number>,
-      default: 200,
-    },
-    /**
-     * @zh 滚动事件的监听容器
-     * @en Scroll event listener container
-     */
-    targetContainer: {
-      type: [String, Object] as PropType<string | HTMLElement>,
-    },
-    /**
-     * @zh 滚动动画的缓动方式，可选值参考 [BTween](https://github.com/PengJiyuan/b-tween)
-     * @en Easing mode of scrolling animation, refer to [BTween](https://github.com/PengJiyuan/b-tween) for optional values
-     */
-    easing: {
-      type: String,
-      default: 'quartOut',
-    },
-    /**
-     * @zh 滚动动画的持续时间
-     * @en Duration of scroll animation
-     */
-    duration: {
-      type: Number,
-      default: 200,
-    },
-  },
+  props: backTopProps,
   setup(props) {
     const prefixCls = getPrefixCls('back-top')
     const visible = ref(false)

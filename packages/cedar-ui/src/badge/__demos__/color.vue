@@ -9,7 +9,7 @@
       :color="color"
       :description="color"
       :style="{ marginRight: '24px' }"
-      type="inline"
+      mode="inline"
       inline-position="end"
     />
   </c-space>
@@ -18,10 +18,10 @@
   <br />
   <br />
   <c-space wrap>
-    <c-badge status="default" description="Default" type="inline" />
-    <c-badge status="success" description="Success" type="inline" />
-    <c-badge status="warning" description="Warning" type="inline" />
-    <c-badge status="danger" description="Danger" type="inline" />
+    <c-badge status="default" description="Default" mode="inline" />
+    <c-badge status="success" description="Success" mode="inline" />
+    <c-badge status="warning" description="Warning" mode="inline" />
+    <c-badge status="danger" description="Danger" mode="inline" />
   </c-space>
   <br />
   <c-space wrap>

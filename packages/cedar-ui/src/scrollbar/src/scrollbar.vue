@@ -19,7 +19,7 @@
       v-if="!hide && hasVerticalScrollbar"
       ref="verticalThumbRef"
       :data="verticalData"
-      direction="column"
+      direction="vertical"
       :both="isBoth"
       @scroll="handleVerticalScroll"
     />
@@ -27,6 +27,7 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../../_utils/global-config'
 import { computed, type CSSProperties, defineComponent, onMounted, type PropType, ref, type StyleValue } from 'vue'
 import type { ThumbData } from './types'
 import ResizeObserver from '../../_components/resize-observer-v2'
@@ -38,7 +39,7 @@ const THUMB_MIN_SIZE = 20
 const TRACK_SIZE = 15
 
 export default defineComponent({
-  name: 'Scrollbar',
+  name: createNamespace("scrollbar").name,
   components: {
     ResizeObserver,
     Thumb,

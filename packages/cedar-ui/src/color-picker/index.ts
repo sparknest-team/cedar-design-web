@@ -1,18 +1,14 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _ColorPicker from './color-picker'
+import { colorPickerProps } from './props'
 
-const ColorPicker = Object.assign(_ColorPicker, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _ColorPicker.name, _ColorPicker)
-  },
-})
+const ColorPicker = withInstall(_ColorPicker, Object.assign(_ColorPicker, {
+}), { components: [_ColorPicker] })
 
 export type { RGB, HSV, Color } from './types'
 export type ColorPickerInstance = InstanceType<typeof _ColorPicker>
+export type { ColorPickerProps } from './props'
+export { ColorPicker, colorPickerProps }
+export const _ColorPickerComponent = ColorPicker
 
 export default ColorPicker

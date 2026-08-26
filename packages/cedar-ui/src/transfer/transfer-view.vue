@@ -126,11 +126,12 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../_utils/global-config'
 import { computed, defineComponent, inject, PropType, ref } from 'vue'
 import { getPrefixCls } from '../_utils/global-config'
 import Checkbox from '../checkbox'
 import IconHover from '../_components/icon-hover.vue'
-import IconDelete from '../icon/icon-delete'
+import { IconDelete } from '@cedarjs/icons-vue/icon-delete'
 import Search from '../search'
 import List from '../list'
 import TransferListItem from './transfer-list-item'
@@ -142,7 +143,7 @@ import VirtualList from '../_components/virtual-list-v2'
 import DragContainer from '../drag-container'
 
 export default defineComponent({
-  name: 'TransferView',
+  name: createNamespace("transfer-view").name,
   components: {
     Empty,
     Checkbox,
@@ -188,7 +189,7 @@ export default defineComponent({
     searchProps: {
       type: Object,
     },
-    filterOption: {
+    filter: {
       type: Function as PropType<TransferFilter>,
       required: true,
     },
@@ -203,7 +204,7 @@ export default defineComponent({
 
     const filteredData = computed(() =>
       props.dataInfo.data.filter(
-        (item) => !filter.value || props.filterOption(filter.value, item, props.type ?? 'source')
+        (item) => !filter.value || props.filter(filter.value, item, props.type ?? 'source')
       )
     )
     const filteredValidValues = computed(() =>
@@ -222,8 +223,9 @@ export default defineComponent({
         filteredSelectedValues.value.length < filteredValidValues.value.length
     )
 
-    const handleSelectAllChange = (checked: boolean) => {
-      if (checked) {
+    const handleSelectAllChange = (checked: boolean | (string | number | boolean)[]) => {
+      const isChecked = Array.isArray(checked) ? checked.length > 0 : checked
+      if (isChecked) {
         transferCtx?.onSelect([...new Set([...props.selected, ...filteredValidValues.value])])
       } else {
         transferCtx?.onSelect(props.selected.filter((value) => !filteredValidValues.value.includes(value)))

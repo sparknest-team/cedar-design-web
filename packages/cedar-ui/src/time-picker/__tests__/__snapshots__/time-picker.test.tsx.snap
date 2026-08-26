@@ -1,14 +1,475 @@
 // Vitest Snapshot v1
 
 exports[`TimePicker > render 1`] = `
-"<div class=\\"arco-picker arco-picker-size-medium\\" visible=\\"false\\" editable=\\"true\\">
-  <!--v-if-->
-  <div class=\\"arco-picker-input\\"><input placeholder=\\"请选择时间\\" class=\\"arco-picker-start-time\\"></div>
-  <div class=\\"arco-picker-suffix\\">
-    <!--v-if--><span class=\\"arco-picker-suffix-icon\\"><svg viewBox=\\"0 0 48 48\\" fill=\\"none\\" xmlns=\\"http://www.w3.org/2000/svg\\" stroke=\\"currentColor\\" class=\\"arco-icon arco-icon-clock-circle\\" stroke-width=\\"4\\" stroke-linecap=\\"butt\\" stroke-linejoin=\\"miter\\"><path d=\\"M24 14v10h9.5m8.5 0c0 9.941-8.059 18-18 18S6 33.941 6 24 14.059 6 24 6s18 8.059 18 18Z\\"></path></svg></span>
+"<div class=\\"c-timepicker-container\\">
+  <div class=\\"c-timepicker\\">
+    <div class=\\"c-timepicker-column\\">
+      <ul role=\\"listbox\\" aria-label=\\"Hours\\">
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">00</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">01</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">02</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">03</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">04</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">05</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">06</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">07</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">08</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">09</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">10</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">11</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">12</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">13</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">14</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">15</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">16</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">17</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">18</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">19</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">20</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">21</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">22</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">23</div>
+        </li>
+      </ul>
+    </div>
+    <div class=\\"c-timepicker-column\\">
+      <ul role=\\"listbox\\" aria-label=\\"Minutes\\">
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">00</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">01</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">02</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">03</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">04</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">05</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">06</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">07</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">08</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">09</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">10</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">11</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">12</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">13</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">14</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">15</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">16</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">17</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">18</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">19</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">20</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">21</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">22</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">23</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">24</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">25</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">26</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">27</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">28</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">29</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">30</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">31</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">32</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">33</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">34</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">35</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">36</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">37</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">38</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">39</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">40</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">41</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">42</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">43</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">44</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">45</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">46</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">47</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">48</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">49</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">50</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">51</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">52</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">53</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">54</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">55</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">56</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">57</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">58</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">59</div>
+        </li>
+      </ul>
+    </div>
+    <div class=\\"c-timepicker-column\\">
+      <ul role=\\"listbox\\" aria-label=\\"Seconds\\">
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">00</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">01</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">02</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">03</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">04</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">05</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">06</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">07</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">08</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">09</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">10</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">11</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">12</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">13</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">14</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">15</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">16</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">17</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">18</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">19</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">20</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">21</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">22</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">23</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">24</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">25</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">26</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">27</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">28</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">29</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">30</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">31</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">32</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">33</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">34</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">35</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">36</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">37</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">38</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">39</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">40</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">41</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">42</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">43</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">44</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">45</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">46</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">47</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">48</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">49</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">50</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">51</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">52</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">53</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">54</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">55</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">56</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">57</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">58</div>
+        </li>
+        <li class=\\"c-timepicker-cell\\" role=\\"option\\" aria-selected=\\"false\\" aria-disabled=\\"false\\" tabindex=\\"0\\">
+          <div class=\\"c-timepicker-cell-inner\\">59</div>
+        </li>
+      </ul>
+    </div>
     <!--v-if-->
   </div>
-</div>
-<!--teleport start-->
-<!--teleport end-->"
+  <!--v-if-->
+  <div class=\\"c-timepicker-footer-btn-wrapper\\"><button class=\\"c-button c--box c-button--size-xs c-button--status-default c-button--variant-default c--inline-flex\\" type=\\"button\\">
+      <!-- 加载中 loading -->
+      <!--v-if-->
+      <!-- icon图标 -->
+      <!--v-if-->
+      <!-- 内容 --><span class=\\"c-button__content\\">此刻</span><!-- 底色 -->
+      <div class=\\"c-button--underlay\\"></div><!-- 上色 -->
+      <div class=\\"c-button--overlay\\"></div><!-- 边框 -->
+      <div class=\\"c-button__border\\"></div>
+      <div class=\\"c-button__border-state\\"></div>
+    </button><button type=\\"submit\\" class=\\"c-button c--box c-button--size-xs c-button--status-default c-button--variant-default c--inline-flex c-button--disabled\\" disabled=\\"\\">
+      <!-- 加载中 loading -->
+      <!--v-if-->
+      <!-- icon图标 -->
+      <!--v-if-->
+      <!-- 内容 --><span class=\\"c-button__content\\">确定</span><!-- 底色 -->
+      <div class=\\"c-button--underlay\\"></div><!-- 上色 -->
+      <div class=\\"c-button--overlay\\"></div><!-- 边框 -->
+      <div class=\\"c-button__border\\"></div>
+      <div class=\\"c-button__border-state\\"></div>
+    </button></div>
+</div>"
 `;

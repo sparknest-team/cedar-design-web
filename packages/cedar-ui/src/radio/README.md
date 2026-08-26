@@ -40,7 +40,7 @@ permalink: /components/radio/
 
 ### 按钮类型的单选框组
 
-通过指定`type="button"`，可以显示按钮类型的单选框组。
+通过指定`variant="button"`，可以显示按钮类型的单选框组。
 
 <demo src="./__demos__/button-type.vue"></demo>
 
@@ -71,7 +71,7 @@ permalink: /components/radio/
 | model-value(v-model) | 绑定值                   | `string\|number \|boolean` | `-`       |
 | default-checked      | 默认是否选中(非受控状态) | `boolean`                  | `false`   |
 | value                | 选项的`value`            | `string\|number\|boolean`  | `true`    |
-| type                 | 单选的类型               | `'radio'\|'button'`        | `'radio'` |
+| variant                 | 单选的类型               | `'radio'\|'button'`        | `'radio'` |
 | disabled             | 是否禁用                 | `boolean`                  | `false`   |
 
 ### Radio Events
@@ -92,7 +92,7 @@ permalink: /components/radio/
 | -------------------- | ------------------ | --------------------------------------- | -------------- |
 | model-value(v-model) | 绑定值             | `string\|number \|boolean`              | `-`            |
 | default-value        | 默认值(非受控状态) | `string\|number\|boolean`               | `''`           |
-| type                 | 单选框组的类型     | `'radio'\|'button'`                     | `'radio'`      |
+| variant                 | 单选框组的类型     | `'radio'\|'button'`                     | `'radio'`      |
 | size                 | 单选框组的尺寸     | `'xs'\|'sm'\|'md'\|'lg'\|'xl'`          | `-`            |
 | options              | 选项               | `Array<string \| number\| RadioOption>` | `-`            |
 | direction            | 单选框组的方向     | `'horizontal'\|'vertical'`              | `'horizontal'` |
@@ -124,5 +124,5 @@ permalink: /components/radio/
 组件导出以下类型定义
 
 ```ts
-import type { RadioProps } from '@cedar/ui'
+import type { RadioProps } from '@cedarjs/ui'
 ```

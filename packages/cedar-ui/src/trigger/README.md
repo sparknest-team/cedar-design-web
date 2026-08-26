@@ -37,5 +37,5 @@ permalink: /components/trigger.html
 组件导出以下类型定义
 
 ```ts
-import type { TriggerProps } from '@cedar/ui'
+import type { TriggerProps } from '@cedarjs/ui'
 ```

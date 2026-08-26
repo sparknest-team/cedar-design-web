@@ -4,95 +4,119 @@ permalink: /components/filter-form/
 
 # FilterForm
 
-用于列表的筛选项。
+列表页筛选项。FilterForm **不内置**输入组件，通过 `field-map` 显式注册，避免无用依赖进包。
+
+持久化（记住筛选）由业务侧自行处理：组件只通过 `v-model` 同步值，不读写 storage。
 
 ## 基础用法
 
-基础用法。
+先注册字段组件，再配置 `fields` schema。宽屏会自动多列展示，超出时可展开/收起。
 
 <demo src="./__demos__/basic.vue"></demo>
 
-## 手动控制
+```ts
+import {
+  Input,
+  Select,
+  type FilterFormFieldMap,
+} from '@cedarjs/ui'
 
-如果需要点击搜索后再保存到表单里面，需要设置autoRemember为false。
-<demo src="./__demos__/manual-control.vue"></demo>
+const fieldMap: FilterFormFieldMap = {
+  select: {
+    component: Select,
+    optionsFromMap: true,
+  },
+  input: {
+    component: Input,
+    valueEvent: 'update:modelValue',
+  },
+}
+```
 
-## 组件配置
+## 异步 options
 
-FilterForm的其它属性和事件透传LayoutForm。
-FilterForm目前不支持children嵌套children。
+`optionsFromMap: true` 的字段从 `optionsMap[field]` 取 options，可异步更新。关闭折叠时适合筛选项较少的场景。
+
+<demo src="./__demos__/options-map.vue"></demo>
+
+## API
 
 ### FilterForm Props
 
-| 属性                   | 说明                                                                          | 类型                     | 默认值                                                      |
-| ---------------------- | ----------------------------------------------------------------------------- | ------------------------ | ----------------------------------------------------------- |
-| model **(v-model)**    | 表单的值，默认会同步更改。                                                    | any                      | -                                                           |
-| components             | 所有可以配置的组件                                                            | IComponent[]             | -                                                           |
-| collapsed              | 默认是否收起表单项                                                            | boolean                  | true                                                        |
-| cols                   | 响应式布局                                                                    | object                   | &lbrace; xs: 1, sm: 2, md: 3, lg: 3, xl: 4, xxl: 5 &rbrace; |
-| gridProps              | Grid组件的属性，优先级最高。                                                  | object                   | -                                                           |
-| store                  | `select`、`cascader`的options选项                                             | object                   | -                                                           |
-| defaultConfig          | 所有字段的全局配置                                                            | config                   | -                                                           |
-| fieldConfig            | 字段配置，单个字段的配置会覆盖全局配置                                        | <[prop: string]: config> | -                                                           |
-| showRememberSelections | 是否显示`记住我的选择`这个选项                                                | boolean                  | -                                                           |
-| rememberUserKey        | 全局缓存的key，需要确保全局唯一，如果showRememberSelections 为 true，则必传。 | string                   | -                                                           |
-| autoRemember           | 如果数据变化会自动触发缓存记忆，否则需要手动调用方法进行控制。                | boolean                  | true                                                        |
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| modelValue **(v-model)** | 表单值 | `Record<string, unknown>` | `{}` |
+| fields | 筛选项 schema | `FilterFormField[]` | `[]` |
+| fieldMap | 字段组件注册表 | `FilterFormFieldMap` | `{}` |
+| optionsMap | options 字典，供 `optionsFromMap` 使用 | `Record<string, unknown>` | `{}` |
+| rules | 透传 Form 校验规则 | object | - |
+| collapsed **(v-model)** | 是否折叠多余项 | boolean | `true` |
+| collapsible | 是否启用展开/收起 | boolean | `true` |
+| cols | 响应式列数 | number \| object | `{ xs:1, sm:2, md:3, lg:3, xl:4, xxl:5 }` |
+| gridProps | Grid 其余属性 | object | - |
+| changeDebounce | change 防抖毫秒 | number | `500` |
 
-#### IComponent Props
+### FilterFormField
 
-| 属性          | 说明                                                                                    | 类型                            | 默认值 |
-| ------------- | --------------------------------------------------------------------------------------- | ------------------------------- | ------ |
-| visible       | 是否可见                                                                                | boolean                         | true   |
-| name          | 组件名字`select`、`people-select`、`input`、`date`、`date-picker`、`date-range`、`date-range-picker`、`cascader`。 | string                          | -      |
-| props         | 组件属性。autoEmitChange仅在输入类组件生效。                                            | {autoEmitChange: boolean} & any | -      |
-| gridItemProps | GridItem组件的属性，优先级最高。                                                        | any                             | -      |
-| formItemProps | FormItem组件属性，优先级最高。                                                          | any                             | -      |
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| type | `fieldMap` 的 key，或 Vue 组件 | `string \| Component` | - |
+| field | 表单字段路径 | string | - |
+| label | 标签 | string | - |
+| visible | 是否渲染 | boolean | `true` |
+| autoEmitChange | 输入过程是否触发 change | boolean | `true` |
+| props | 透传给字段组件 | object | - |
+| gridItemProps | GridItem 属性 | object | - |
+| formItemProps | FormItem 属性 | object | - |
 
-#### config Props
+### FilterFormFieldRegistration
 
-| 属性                 | 说明                                                                       | 类型    | 默认值 |
-| -------------------- | -------------------------------------------------------------------------- | ------- | ------ |
-| remember             | 是否记忆                                                                   | boolean | true   |
-| removeIfNotInOptions | 仅针对select组件，如果在options可选项中不存在，则删除这个记忆的value。     | boolean | true   |
-| required             | 仅针对select组件，是否必选，如果是则会在options里面取第一个选项中的value。 | boolean | false  |
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| component | 字段组件 | Component | - |
+| valueEvent | 值同步事件 | `'change' \| 'update:modelValue'` | `change` |
+| optionsFromMap | 未传 options 时从 `optionsMap[field]` 取 | boolean | `false` |
+| defaultProps | 默认 props | object | - |
 
-#### fieldConfig Props
+### Events
 
-<[prop: string]: config>
+| 事件名 | 说明 | 参数 |
+| --- | --- | --- |
+| update:modelValue | v-model | `(value) => void` |
+| update:collapsed | 折叠状态变化 | `(collapsed) => void` |
+| change | 字段值变化（防抖） | `(value, field) => void` |
 
-| 属性 | 说明         | 类型   | 默认值 |
-| ---- | ------------ | ------ | ------ |
-| prop | 组件的属性名 | string | -      |
+### Slots
 
-### FilterForm Events
-
-| 事件名 | 说明       | 参数                                 |
-| ------ | ---------- | ------------------------------------ |
-| change | change事件 | `(value: any, prop: string) => void` |
-
-### FilterForm Slots
-
-| 插槽名 | 说明                                       |
-| ------ | ------------------------------------------ |
-| suffix | 表单最后一项的内容，一般放重置和搜索按钮。 |
+| 插槽名 | 说明 |
+| --- | --- |
+| actions | 操作区（搜索 / 重置等），与展开收起同一行 |
 
 ### Methods
 
-| 方法名          | 描述                                                                    | 参数 | 返回值 |
-| --------------- | ----------------------------------------------------------------------- | ---- | ------ |
-| saveStorageData | 手动存储当前表单值到storage，如果重置也需要记忆的时候需要手动调用一下。 | -    | -      |
-| loadStorageData | 加载storage的值到表单                                                   | -    | -      |
+| 方法名 | 说明 |
+| --- | --- |
+| formRef | 内部 Form 实例 |
 
-### Global Methods
+## 样式变量
 
-| 方法名         | 描述                                        | 参数                                 | 返回值                           |
-| -------------- | ------------------------------------------- | ------------------------------------ | -------------------------------- |
-| getStorageData | 获取storage的数据，根据自己的需求进行处理。 | (storageKey: string) 当前表单的key。 | 返回当前key所对应的storage的值。 |
+| 变量名 | 默认值 |
+| --- | --- |
+| `--c-filter-form-border-radius` | `@radius-md` |
+| `--c-filter-form-background-color` | `@color-fill-1` |
+| `--c-filter-form-item-margin-bottom` | `16px` |
+| `--c-filter-form-col-gap` | `16px` |
+| `--c-filter-form-actions-gap` | `16px` |
+| `--c-filter-form-collapse-gap` | `4px` |
+| `--c-filter-form-collapse-color` | `@color-text-2` |
 
-## 类型定义
-
-组件导出以下类型定义
+## 类型
 
 ```ts
-import type { FilterFormProps } from '@cedar/ui'
+import type {
+  FilterFormProps,
+  FilterFormField,
+  FilterFormFieldMap,
+  FilterFormFieldRegistration,
+} from '@cedarjs/ui'
 ```

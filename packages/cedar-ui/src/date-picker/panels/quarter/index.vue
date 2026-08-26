@@ -29,8 +29,9 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../../../_utils/global-config'
 import { computed, defineComponent, PropType, toRefs } from 'vue'
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 import { padStart } from '../../../_utils/pad'
 import { getPrefixCls } from '../../../_utils/global-config'
 import { dayjs } from '../../../_utils/date'
@@ -40,7 +41,7 @@ import PanelBody from '../body.vue'
 import { RenderFunc } from '../../../_components/render-function'
 
 export default defineComponent({
-  name: 'QuarterPanel',
+  name: createNamespace('date-picker-quarter-panel').name,
   components: {
     PanelHeader,
     PanelBody,

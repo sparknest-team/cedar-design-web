@@ -1,5 +1,14 @@
 <template>
-  <div v-bind="getWrapperAttrs($attrs)" :class="wrapperCls" @mousedown="handleMousedown">
+  <FieldDecorator
+    v-bind="getWrapperAttrs($attrs)"
+    :class="wrapperCls"
+    :variant="mergedVariant"
+    :size="mergedSize"
+    :disabled="mergedDisabled"
+    :error="mergedError"
+    :focused="focused"
+    @mousedown="handleMousedown"
+  >
     <div v-if="autoSize" ref="mirrorRef" :class="classes(n('mirror'))" :style="mirrorStyle">
       {{ `${computedValue}\n` }}
     </div>
@@ -8,6 +17,7 @@
         ref="textareaRef"
         v-bind="mergeTextareaAttrs"
         :disabled="mergedDisabled"
+        :readonly="readonly"
         :class="classes(n('inner'))"
         :style="textareaStyle"
         :value="computedValue"
@@ -24,130 +34,42 @@
     <div v-if="computedMaxLength && showWordLimit" :class="classes(n('word-limit'))">
       {{ valueLength }}/{{ computedMaxLength }}
     </div>
-    <div v-if="showClearBtn" :class="classes(n('clear-btn'))" @click="handleClear">
+    <button
+      v-if="showClearBtn"
+      type="button"
+      :class="classes(n('clear-btn'))"
+      :aria-label="t('common.clear')"
+      @click="handleClear"
+    >
       <icon-hover>
         <icon-close />
       </icon-hover>
-    </div>
-    <div :class="classes(n('border'))" />
-    <div :class="classes(n('border-state'))" />
-  </div>
+    </button>
+  </FieldDecorator>
 </template>
 
 <script lang="ts">
-import { computed, CSSProperties, defineComponent, nextTick, onMounted, PropType, ref, toRefs, watch } from 'vue'
+import { computed, CSSProperties, defineComponent, nextTick, onMounted, ref, toRefs, watch } from 'vue'
 import ResizeObserver from '../_components/resize-observer'
 import IconHover from '../_components/icon-hover.vue'
-import IconClose from '../icon/icon-close'
+import { IconClose } from '@cedarjs/icons-vue/icon-close'
+import FieldDecorator from '../field-decorator'
 import { createNamespace } from '../_utils/global-config'
 import { getSizeStyles } from './utils'
 import { isFunction, isNull, isObject, isUndefined } from '../_utils/is'
 import { omit } from '../_utils/omit'
-import { INPUT_EVENTS, Size } from '../_utils/constant'
+import { INPUT_EVENTS } from '../_utils/constant'
 import pick from '../_utils/pick'
 import { useFormItem } from '../_hooks/use-form-item'
 import { useCursor } from '../_hooks/use-cursor'
+import { textareaProps } from './props'
+import { useI18n } from '../locale'
 
 export default defineComponent({
-  name: 'CTextarea',
-  components: { ResizeObserver, IconHover, IconClose },
+  name: createNamespace('textarea').name,
+  components: { ResizeObserver, IconHover, IconClose, FieldDecorator },
   inheritAttrs: false,
-  props: {
-    /**
-     * @zh 绑定值
-     * @en Value
-     * @vModel
-     */
-    modelValue: String,
-    /**
-     * @zh 默认值（非受控状态）
-     * @en Default value (uncontrolled state)
-     */
-    defaultValue: {
-      type: String,
-      default: '',
-    },
-    /**
-     * @zh 提示文字
-     * @en Placeholder
-     */
-    placeholder: String,
-    /**
-     * @zh 是否禁用
-     * @en Whether to disable
-     */
-    disabled: {
-      type: Boolean,
-    },
-    variant: {
-      type: String as PropType<'outline' | 'default'>,
-    },
-    size: {
-      type: String as PropType<Size>,
-    },
-    /**
-     * @zh 是否为错误状态
-     * @en Whether it is an error state
-     */
-    error: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 输入值的最大长度，errorOnly 属性在 2.12.0 版本添加
-     * @en Maximum length of input value, the errorOnly attribute was added in version 2.12.0
-     */
-    maxLength: {
-      type: [Number, Object] as PropType<number | { length: number; errorOnly?: boolean }>,
-      default: 0,
-    },
-    /**
-     * @zh 是否显示字数统计
-     * @en Whether to display word count
-     */
-    showWordLimit: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否允许清空文本域
-     * @en Whether to allow clearing the text
-     */
-    clearable: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否让文本框自适应内容高度
-     * @en Whether to make the textarea adapt to the height of the content
-     */
-    autoSize: {
-      type: [Boolean, Object] as PropType<boolean | { minRows?: number; maxRows?: number }>,
-      default: false,
-    },
-    /**
-     * @zh 字符长度的计算方法
-     * @en Calculation method of word length
-     */
-    wordLength: {
-      type: Function as PropType<(value: string) => number>,
-    },
-    /**
-     * @zh 字符截取方法，同 wordLength 一起使用
-     * @en Character interception method, used together with wordLength
-     * @version 2.12.0
-     */
-    wordSlice: {
-      type: Function as PropType<(value: string, maxLength: number) => string>,
-    },
-    /**
-     * @zh 透传给 textarea 的属性
-     * @en Attributes passed to textarea
-     */
-    textareaAttrs: {
-      type: Object as PropType<Record<string, any>>,
-    },
-  },
+  props: textareaProps,
   emits: {
     'update:modelValue': (value: string) => true,
     /**
@@ -185,6 +107,7 @@ export default defineComponent({
   },
   setup(props, { emit, attrs }) {
     const { n, classes } = createNamespace('textarea')
+    const { t } = useI18n()
     const { size, variant, disabled, error, modelValue } = toRefs(props)
     const {
       mergedDisabled,
@@ -192,7 +115,7 @@ export default defineComponent({
       eventHandlers,
     } = useFormItem({ disabled: disabled ?? false, error: error ?? false })
     const mergedSize = computed(() => size.value ?? 'md')
-    const mergedVariant = computed(() => variant.value ?? 'default')
+    const mergedVariant = computed(() => variant.value ?? 'filled')
 
     const textareaRef = ref<HTMLInputElement>()
     const textareaStyle = ref<CSSProperties>()
@@ -237,7 +160,9 @@ export default defineComponent({
 
     // 状态相关
     const focused = ref(false)
-    const showClearBtn = computed(() => props.clearable && !mergedDisabled.value && computedValue.value)
+    const showClearBtn = computed(
+      () => props.clearable && !props.readonly && !mergedDisabled.value && Boolean(computedValue.value),
+    )
 
     // 输入法相关
     const isComposition = ref(false)
@@ -365,15 +290,7 @@ export default defineComponent({
     })
 
     const wrapperCls = computed(() =>
-      classes(
-        n(),
-        [mergedSize.value, n(`--size-${mergedSize.value}`)],
-        [mergedVariant.value, n(`--variant-${mergedVariant.value}`)],
-        [mergedDisabled.value, n('--disabled')],
-        [mergedError.value, n('--error')],
-        [isScroll.value, n('--scroll')],
-        [focused.value, n('--focus')],
-      ),
+      classes(n(), [isScroll.value, n('--scroll')]),
     )
 
     let styleDeclaration: CSSStyleDeclaration
@@ -470,6 +387,7 @@ export default defineComponent({
     return {
       n,
       classes,
+      t,
       mergedSize,
       mergedVariant,
       wrapperCls,
@@ -482,6 +400,8 @@ export default defineComponent({
       valueLength,
       computedMaxLength,
       mergedDisabled,
+      mergedError,
+      focused,
       mergeTextareaAttrs,
       getWrapperAttrs,
       getTextareaAttrs,

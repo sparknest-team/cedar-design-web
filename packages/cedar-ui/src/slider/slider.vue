@@ -48,22 +48,22 @@
 </template>
 
 <script lang="ts">
-import type { PropType, CSSProperties } from 'vue'
+import type { CSSProperties } from 'vue'
 import { computed, defineComponent, ref, toRef, toRefs, watch } from 'vue'
 import NP from 'number-precision'
-import { getPrefixCls } from '../_utils/global-config'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import SliderButton from './slider-button.vue'
 import SliderDots from './slider-dots.vue'
 import SliderMarks from './slider-marks.vue'
 import SliderTicks from './slider-ticks.vue'
 import SliderInput from './slider-input.vue'
 import { isArray, isUndefined } from '../_utils/is'
-import { Direction, DIRECTIONS } from '../_utils/constant'
 import { getOffsetPercent, getPositionStyle } from './utils'
 import { useFormItem } from '../_hooks/use-form-item'
+import { sliderProps } from './props'
 
 export default defineComponent({
-  name: 'Slider',
+  name: createNamespace('slider').name,
   components: {
     SliderButton,
     SliderDots,
@@ -71,108 +71,7 @@ export default defineComponent({
     SliderTicks,
     SliderInput,
   },
-  props: {
-    /**
-     * @zh 绑定值
-     * @en Value
-     * @vModel
-     */
-    modelValue: {
-      type: [Number, Array] as PropType<number | [number, number]>,
-      default: undefined,
-    },
-    /**
-     * @zh 默认值（非受控状态）
-     * @en Default value (uncontrolled state)
-     */
-    defaultValue: {
-      type: [Number, Array] as PropType<number | [number, number]>,
-      default: 0,
-    },
-    /**
-     * @zh 滑动的步长
-     * @en Sliding step
-     */
-    step: {
-      type: Number,
-      default: 1,
-    },
-    /**
-     * @zh 滑动范围的最小值
-     * @en Minimum sliding range
-     */
-    min: {
-      type: Number,
-      default: 0,
-    },
-    /**
-     * @zh 设置显示的标签
-     * @en Set the displayed label
-     */
-    marks: {
-      type: Object as PropType<Record<number, string>>,
-    },
-    /**
-     * @zh 滑动范围的最大值
-     * @en Maximum sliding range
-     */
-    max: {
-      type: Number,
-      default: 100,
-    },
-    /**
-     * @zh 滑动输入条的方向
-     * @en The direction of the slider
-     */
-    direction: {
-      type: String as PropType<Direction>,
-      default: 'horizontal',
-    },
-    /**
-     * @zh 是否禁用
-     * @en Whether to disable
-     */
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否显示刻度线
-     * @en Whether to show ticks
-     */
-    showTicks: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否显示输入框
-     * @en Whether to show the input
-     */
-    showInput: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否开启范围选择
-     * @en Whether to use range selection
-     */
-    range: {
-      type: Boolean,
-      default: false,
-    },
-    formatTooltip: {
-      type: Function,
-    },
-    /**
-     * @zh 是否显示tooltip
-     * @en Whether to show tooltip
-     * @version 2.42.0
-     */
-    showTooltip: {
-      type: Boolean,
-      default: true,
-    },
-  },
+  props: sliderProps,
   emits: {
     'update:modelValue': (value: number | [number, number]) => true,
     /**
@@ -251,7 +150,7 @@ export default defineComponent({
         const key = Number(index)
         return {
           key,
-          content: props.marks?.[key],
+          content: props.marks?.[key] ?? '',
           isActive: key >= computedValue.value[0] && key <= computedValue.value[1],
         }
       }),

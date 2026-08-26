@@ -1,14 +1,13 @@
 import type { InjectionKey, Slots } from 'vue'
-import type { Size } from '../_utils/constant'
+import type { ComponentSize } from '../_utils/constant'
 
-export const RADIO_TYPES = ['radio', 'button'] as const
-export type RadioType = (typeof RADIO_TYPES)[number]
+export const RADIO_VARIANTS = ['radio', 'button'] as const
+export type RadioVariant = (typeof RADIO_VARIANTS)[number]
 
 export interface RadioGroupContext {
-  name: 'CedarRadioGroup'
   value: string | number | boolean
-  size: Size
-  type: RadioType
+  size: ComponentSize
+  variant: RadioVariant
   disabled: boolean
   slots: Slots
   handleChange: (value: string | number | boolean, e: Event) => void

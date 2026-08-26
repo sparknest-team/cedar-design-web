@@ -1,24 +1,24 @@
 <template>
-  <div class="p-24 bg-1">
+  <div class="p-24 c-bg-1">
     <FilterForm
       ref="filterForm"
-      v-model:model="filter"
-      :components="components"
-      :field-config="fieldConfig"
-      :store="store"
+      v-model="filter"
+      :fields="filterFields"
+      :field-map="fieldMap"
+      :options-map="optionsMap"
       class="px-24 pt-24 pb-8 mb-16"
       @change="search"
     >
-      <template #suffix>
+      <template #actions>
         <Space>
           <Button @click="reset">重置</Button>
         </Space>
       </template>
     </FilterForm>
     <Card size="lg">
-      <div class="flex justify-space-between mb-16">
-        <Button type="primary" @click="createStation">
-          <IconPlus />
+      <div class="c-flex c-justify-between mb-16">
+        <Button status="primary" @click="createStation">
+          <Plus />
           新建
         </Button>
         <Search
@@ -43,14 +43,14 @@
         @page-size-change="onPageSizeChange"
       ></Table>
     </Card>
-    <Dialog v-model:show="visible" :body-style="{ height: '400px' }" @cancel="handleCancel" @confirm="handleOk">
+    <Dialog v-model:open="visible" :body-style="{ height: '400px' }" @cancel="handleCancel" @confirm="handleOk">
       <template #title>title2</template>
       <template #footer>
-        <div class="flex justify-space-between align-center">
+        <div class="c-flex c-justify-between c-items-center">
           <div>自定义内容</div>
           <Space>
             <Button @click="handleCancel">取消</Button>
-            <Button type="primary" @click="handleOk">确定</Button>
+            <Button status="primary" @click="handleOk">确定</Button>
           </Space>
         </div>
       </template>
@@ -110,7 +110,7 @@ import {
   Message,
   FilterForm,
   Button,
-  IconPlus,
+  Plus,
   Space,
   Dialog,
   Search,
@@ -119,8 +119,11 @@ import {
   GridItem,
   Input,
   FormItem,
-} from '@cedar/ui'
-import type { SearchField, SearchResult } from '@cedar/ui'
+  Select,
+  type FilterFormField,
+  type FilterFormFieldMap,
+} from '@cedarjs/ui'
+import type { SearchField, SearchResult } from '@cedarjs/ui'
 import { ListFilter, StationList, StationListItem } from './list.model'
 
 const visible = ref(false)
@@ -143,8 +146,6 @@ const filter = ref(
     pageSize: 10,
   }),
 )
-const fieldConfig = ref({})
-
 const searchForm = ref<any>({})
 const searchFormRef = ref<any>(null)
 
@@ -159,8 +160,14 @@ const pagination = reactive({
   pageSizeOptions: [10, 20, 30, 40, 50],
 })
 
-const store = ref<any>({})
+const optionsMap = ref<Record<string, unknown>>({})
 
+const fieldMap: FilterFormFieldMap = {
+  select: {
+    component: Select,
+    optionsFromMap: true,
+  },
+}
 const columns = ref([
   {
     title: '场站名称',
@@ -221,23 +228,18 @@ const columns = ref([
   },
 ])
 
-const components = ref([
+const filterFields: FilterFormField[] = [
   {
-    name: 'select',
+    type: 'select',
+    field: 'regionNameArray',
+    label: '城市公司',
     props: {
-      prop: 'regionNameArray',
-      label: '城市公司',
       placeholder: '全部',
       multiple: true,
       clearable: true,
-      onChange: (v: any) => {
-        filter.value.regionNames = v.join(',')
-        search()
-      },
     },
   },
-])
-
+]
 const fields: SearchField[] = [
   { label: '场站ID', value: 'station_id', placeholder: '请输入场站ID' },
   { label: '场站名称', value: 'station_name', placeholder: '请输入场站名称' },
@@ -288,9 +290,9 @@ const createStation = () => {
 }
 
 const handleSearchChange = (data: any) => {
-  const { searchField, searchText } = data
-  filter.value.conditionType = searchField
-  filter.value.fuzzyQuery = searchText
+  const { modelField, modelValue } = data
+  filter.value.conditionType = modelField
+  filter.value.fuzzyQuery = modelValue
 }
 
 onMounted(() => {

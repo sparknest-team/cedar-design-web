@@ -1,58 +1,72 @@
 @import '../../style/theme/index.less';
 
-@notification-wrapper-margin-top: @spacing-8;
-@notification-wrapper-margin-bottom: @spacing-8;
-@notification-wrapper-margin-left: @spacing-8;
-@notification-wrapper-margin-right: @spacing-8;
+/******** Notification CSS Variables *******/
+:root {
+  --c-notification-wrapper-margin-top: var(~'--c-spacing-8');
+  --c-notification-wrapper-margin-bottom: var(~'--c-spacing-8');
+  --c-notification-wrapper-margin-left: var(~'--c-spacing-8');
+  --c-notification-wrapper-margin-right: var(~'--c-spacing-8');
+  --c-notification-z-index: var(~'--c-z-index-notification');
 
-@notification-border-radius: @radius-md;
-@notification-margin-bottom: @spacing-8;
-@notification-width: 300px;
-@notification-padding-top: @spacing-8;
-@notification-padding-bottom: @spacing-8;
-@notification-padding-left: @spacing-8;
-@notification-padding-right: @spacing-8;
-@notification-font-size-icon: 24px;
-@notification-font-size-title: @font-size-title-1;
-@notification-font-size-content: @font-size-body-3;
-@notification-icon-margin-right: @spacing-7;
-@notification-title-margin-bottom: @spacing-2;
-@notification-btn-wrapper-margin-top: @spacing-7;
+  --c-notification-border-radius: var(~'--c-border-radius-md');
+  --c-notification-margin-bottom: var(~'--c-spacing-8');
+  --c-notification-width: 300px;
+  --c-notification-padding-top: var(~'--c-spacing-8');
+  --c-notification-padding-bottom: var(~'--c-spacing-8');
+  --c-notification-padding-left: var(~'--c-spacing-8');
+  --c-notification-padding-right: var(~'--c-spacing-8');
+  --c-notification-icon-font-size: 24px;
+  --c-notification-title-font-size: var(~'--c-font-size-title-1');
+  --c-notification-title-font-weight: var(~'--c-font-weight-500');
+  --c-notification-content-font-size: var(~'--c-font-size-body-3');
+  --c-notification-icon-margin-right: var(~'--c-spacing-7');
+  --c-notification-title-margin-bottom: var(~'--c-spacing-2');
+  --c-notification-footer-margin-top: var(~'--c-spacing-7');
+  --c-notification-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 
-@notification-border-width: 1px;
-@notification-border-style: solid;
+  --c-notification-border-width: 1px;
+  --c-notification-border-style: solid;
 
-@notification-color-close-icon: var(~'--c-color-text-1');
-@notification-close-icon-font-size: 12px;
-@notification-close-icon-top: @spacing-6;
-@notification-close-icon-right: @spacing-6;
+  --c-notification-close-icon-color: var(~'--c-color-text-1');
+  --c-notification-close-icon-font-size: 12px;
+  --c-notification-close-icon-top: var(~'--c-spacing-6');
+  --c-notification-close-icon-right: var(~'--c-spacing-6');
+  --c-notification-close-icon-hover-size: 20px;
 
-@notification-normal-color-bg: var(~'--c-color-bg-popup');
-@notification-normal-color-icon: var(~'--c-color-text-1');
-@notification-normal-color-text-title: var(~'--c-color-text-1');
-@notification-normal-color-text-content: var(~'--c-color-text-1');
-@notification-normal-color-border: var(~'--c-color-neutral-3');
+  --c-notification-normal-bg: var(~'--c-color-bg-popup');
+  --c-notification-normal-icon-color: var(~'--c-color-text-1');
+  --c-notification-normal-title-color: var(~'--c-color-text-1');
+  --c-notification-normal-content-color: var(~'--c-color-text-1');
+  --c-notification-normal-border-color: var(~'--c-color-neutral-3');
 
-@notification-info-color-bg: var(~'--c-color-bg-popup');
-@notification-info-color-icon: @color-primary-6;
-@notification-info-color-text-title: var(~'--c-color-text-1');
-@notification-info-color-text-content: var(~'--c-color-text-1');
-@notification-info-color-border: var(~'--c-color-neutral-3');
+  --c-notification-info-bg: var(~'--c-color-bg-popup');
+  --c-notification-info-icon-color: rgb(var(~'--c-primary-6'));
+  --c-notification-info-title-color: var(~'--c-color-text-1');
+  --c-notification-info-content-color: var(~'--c-color-text-1');
+  --c-notification-info-border-color: var(~'--c-color-neutral-3');
 
-@notification-success-color-bg: var(~'--c-color-bg-popup');
-@notification-success-color-icon: @color-success-6;
-@notification-success-color-text-title: var(~'--c-color-text-1');
-@notification-success-color-text-content: var(~'--c-color-text-1');
-@notification-success-color-border: var(~'--c-color-neutral-3');
+  --c-notification-success-bg: var(~'--c-color-bg-popup');
+  --c-notification-success-icon-color: rgb(var(~'--c-success-6'));
+  --c-notification-success-title-color: var(~'--c-color-text-1');
+  --c-notification-success-content-color: var(~'--c-color-text-1');
+  --c-notification-success-border-color: var(~'--c-color-neutral-3');
 
-@notification-warning-color-bg: var(~'--c-color-bg-popup');
-@notification-warning-color-icon: @color-warning-6;
-@notification-warning-color-text-title: var(~'--c-color-text-1');
-@notification-warning-color-text-content: var(~'--c-color-text-1');
-@notification-warning-color-border: var(~'--c-color-neutral-3');
+  --c-notification-warning-bg: var(~'--c-color-bg-popup');
+  --c-notification-warning-icon-color: rgb(var(~'--c-warning-6'));
+  --c-notification-warning-title-color: var(~'--c-color-text-1');
+  --c-notification-warning-content-color: var(~'--c-color-text-1');
+  --c-notification-warning-border-color: var(~'--c-color-neutral-3');
 
-@notification-error-color-bg: var(~'--c-color-bg-popup');
-@notification-error-color-icon: @color-danger-6;
-@notification-error-color-text-title: var(~'--c-color-text-1');
-@notification-error-color-text-content: var(~'--c-color-text-1');
-@notification-error-color-border: var(~'--c-color-neutral-3');
+  --c-notification-error-bg: var(~'--c-color-bg-popup');
+  --c-notification-error-icon-color: rgb(var(~'--c-danger-6'));
+  --c-notification-error-title-color: var(~'--c-color-text-1');
+  --c-notification-error-content-color: var(~'--c-color-text-1');
+  --c-notification-error-border-color: var(~'--c-color-neutral-3');
+
+  --c-notification-transition-duration: var(~'--c-transition-duration-2');
+  --c-notification-transition-duration-enter: var(~'--c-transition-duration-4');
+  --c-notification-transition-duration-leave: var(~'--c-transition-duration-3');
+  --c-notification-transition-timing-function: var(~'--c-transition-timing-function-linear');
+  --c-notification-transition-timing-function-enter: var(~'--c-transition-timing-function-overshoot');
+  --c-notification-transition-timing-function-leave: var(~'--c-transition-timing-function-standard');
+}

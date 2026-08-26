@@ -4,21 +4,21 @@
     <c-button @click="handleClickMedium">Medium Dialog</c-button>
     <c-button @click="handleClickLarge">Large Dialog</c-button>
   </c-space>
-  <c-dialog :width="400" v-model:show="visibleSmall" @confirm="handleOk" @cancel="handleCancel">
+  <c-dialog :width="400" v-model:open="visibleSmall" @confirm="handleOk" @cancel="handleCancel">
     <template #title>Small Dialog</template>
     <div>
       You can customize modal body text by the current situation. This modal will be closed immediately once you press
       the OK button.
     </div>
   </c-dialog>
-  <c-dialog v-model:show="visibleMedium" @confirm="handleOk" @cancel="handleCancel">
+  <c-dialog v-model:open="visibleMedium" @confirm="handleOk" @cancel="handleCancel">
     <template #title>Medium Dialog</template>
     <div>
       You can customize modal body text by the current situation. This modal will be closed immediately once you press
       the OK button.
     </div>
   </c-dialog>
-  <c-dialog :width="720" v-model:show="visibleLarge" @confirm="handleOk" @cancel="handleCancel">
+  <c-dialog :width="720" v-model:open="visibleLarge" @confirm="handleOk" @cancel="handleCancel">
     <template #title>Large Dialog</template>
     <div>
       You can customize modal body text by the current situation. This modal will be closed immediately once you press

@@ -30,6 +30,18 @@ export default defineComponent({
       onChange: (pos) => props.onChange?.(pos[0]),
     })
 
+    const handleKeydown = (event: KeyboardEvent) => {
+      const delta = event.key === 'ArrowRight' || event.key === 'ArrowUp'
+        ? 0.01
+        : event.key === 'ArrowLeft' || event.key === 'ArrowDown'
+          ? -0.01
+          : 0
+      if (delta) {
+        event.preventDefault()
+        props.onChange?.(Math.min(1, Math.max(0, props.x + delta)))
+      }
+    }
+
     const renderHandler = () => {
       return (
         <div
@@ -49,11 +61,18 @@ export default defineComponent({
           <div class={`${prefixCls}-control-bar-bg`}>
             <div
               ref={blockRef}
+              role="slider"
+              tabindex={0}
+              aria-label="Opacity"
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-valuenow={Math.round(props.x * 100)}
               class={[`${prefixCls}-control-bar`, `${prefixCls}-control-bar-alpha`]}
               style={{
                 background: `linear-gradient(to right, rgba(0, 0, 0, 0), rgb(${rgb.value.r}, ${rgb.value.g}, ${rgb.value.b}))`,
               }}
               onMousedown={onMouseDown}
+              onKeydown={(event: KeyboardEvent) => handleKeydown(event)}
             >
               {renderHandler()}
             </div>
@@ -63,8 +82,15 @@ export default defineComponent({
       return (
         <div
           ref={blockRef}
+          role="slider"
+          tabindex={0}
+          aria-label="Hue"
+          aria-valuemin={0}
+          aria-valuemax={360}
+          aria-valuenow={Math.round(props.x * 360)}
           class={[`${prefixCls}-control-bar`, `${prefixCls}-control-bar-hue`]}
           onMousedown={onMouseDown}
+          onKeydown={(event: KeyboardEvent) => handleKeydown(event)}
         >
           {renderHandler()}
         </div>

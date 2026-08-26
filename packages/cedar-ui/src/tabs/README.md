@@ -137,5 +137,5 @@ permalink: /components/tabs/
 组件导出以下类型定义
 
 ```ts
-import type { TabsProps } from '@cedar/ui'
+import type { TabsProps } from '@cedarjs/ui'
 ```

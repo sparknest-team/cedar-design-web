@@ -103,12 +103,12 @@ export interface DrawerConfig {
    * @zh 触发 ok 事件前的回调函数。如果返回 false 则不会触发后续事件，也可使用 done 进行异步关闭。
    * @en The callback function before the ok event is triggered. If false is returned, subsequent events will not be triggered, and done can also be used to close asynchronously.
    */
-  onBeforeOk?: (done: (closed: boolean) => void) => void | boolean | Promise<void | boolean>
+  beforeOk?: (done: (closed: boolean) => void) => void | boolean | Promise<void | boolean>
   /**
    * @zh 触发 cancel 事件前的回调函数。如果返回 false 则不会触发后续事件。
    * @en The callback function before the cancel event is triggered. If it returns false, no subsequent events will be triggered.
    */
-  onBeforeCancel?: () => boolean
+  beforeCancel?: () => boolean
   /**
    * @zh 抽屉打开后（动画结束）触发
    * @en Triggered after the drawer is opened (the animation ends)
@@ -124,13 +124,13 @@ export interface DrawerConfig {
    * @en Triggered before drawer is opened
    * @version 2.43.0
    */
-  onBeforeOpen?: () => void
+  beforeOpen?: () => void
   /**
    * @zh 抽屉关闭前触发
    * @en Triggered before drawer is closed
    * @version 2.43.0
    */
-  onBeforeClose?: () => void
+  beforeClose?: () => void
   /**
    * @zh 是否支持 ESC 键关闭抽屉
    * @en Whether to support the ESC key to close the drawer
@@ -167,12 +167,12 @@ export type DrawerUpdateConfig = Omit<
   | 'content'
   | 'onOk'
   | 'onCancel'
-  | 'onBeforeOk'
-  | 'onBeforeCancel'
+  | 'beforeOk'
+  | 'beforeCancel'
   | 'onOpen'
   | 'onClose'
-  | 'onBeforeOpen'
-  | 'onBeforeClose'
+  | 'beforeOpen'
+  | 'beforeClose'
   | 'header'
   | 'footer'
 >

@@ -1,21 +1,35 @@
-@import '../../style/theme/index.less';
+@import "../../style/theme/index.less";
 
 :root {
-  --c-input-number-border-radius: var(~'--c-border-radius-sm');
-  --c-input-number-step-layer-border-radius: 1px;
+  --c-field-number-border-radius: var(~"--c-border-radius-sm");
+  --c-field-number-step-layer-border-radius: var(~"--c-border-width-1");
 
-  --c-input-number-size-xs-step-button-width: var(~'--c-size-xs');
-  --c-input-number-size-sm-step-button-width: var(~'--c-size-sm');
-  --c-input-number-size-md-step-button-width: var(~'--c-size-md');
-  --c-input-number-size-lg-step-button-width: var(~'--c-size-lg');
+  // stacked / split step column width (per size)
+  --c-field-number-size-xs-step-button-width: var(~"--c-size-xs");
+  --c-field-number-size-sm-step-button-width: var(~"--c-size-sm");
+  --c-field-number-size-md-step-button-width: var(~"--c-size-md");
+  --c-field-number-size-lg-step-button-width: var(~"--c-size-lg");
 
-  --c-input-number-step-button-color: var(~'--c-color-text-2');
-  --c-input-number-step-button-color_disabled: var(~'--c-color-text-4');
-  --c-input-number-step-button-color-border: var(~'--c-color-neutral-3');
-  --c-input-number-step-button-color-bg_default: var(~'--c-color-fill-2');
-  --c-input-number-step-button-color-bg_default_hover: var(~'--c-color-fill-3');
-  --c-input-number-step-button-color-bg_default_active: var(~'--c-color-fill-4');
-  --c-input-number-step-button-color-bg_disabled: var(~'--c-color-fill-2');
-  --c-input-number-step-button-color-bg_disabled_hover: var(~'--c-color-fill-2');
-  --c-input-number-step-button-color-bg_disabled_active: var(~'--c-color-fill-2');
+  --c-field-number-step-button-font-size-stacked: var(~"--c-font-size-xs");
+  --c-field-number-step-button-font-size-split: var(~"--c-font-size-body-3");
+  --c-field-number-suffix-min-width: var(~"--c-spacing-3");
+  --c-field-number-suffix-feedback-min-width: var(~"--c-size-8");
+  --c-field-number-suffix-feedback-step-offset: 30px;
+  --c-field-number-suffix-hover-padding-left: var(~"--c-spacing-2");
+
+  --c-field-number-step-button-color: var(~"--c-color-text-2");
+  --c-field-number-step-button-color-disabled: var(~"--c-color-text-4");
+  --c-field-number-step-button-color-border: var(~"--c-color-neutral-3");
+  --c-field-number-step-button-color-bg-default: var(~"--c-color-fill-2");
+  --c-field-number-step-button-color-bg-default-hover: var(~"--c-color-fill-3");
+  --c-field-number-step-button-color-bg-default-active: var(
+    ~"--c-color-fill-4"
+  );
+  --c-field-number-step-button-color-bg-disabled: var(~"--c-color-fill-2");
+  --c-field-number-step-button-color-bg-disabled-hover: var(
+    ~"--c-color-fill-2"
+  );
+  --c-field-number-step-button-color-bg-disabled-active: var(
+    ~"--c-color-fill-2"
+  );
 }

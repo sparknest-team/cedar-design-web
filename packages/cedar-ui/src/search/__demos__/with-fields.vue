@@ -19,7 +19,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import type { SearchResult, SearchField } from '@cedar/ui'
+import type { SearchResult, SearchField } from '@cedarjs/ui'
 
 const inputStyle = { width: '420px' }
 const modelField = ref('name')

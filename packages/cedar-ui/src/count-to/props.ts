@@ -1,5 +1,4 @@
 import type { ExtractPropTypes, PropType } from 'vue'
-import { defineListenerProp } from '../_utils/components'
 
 export const countToProps = {
   from: {
@@ -25,7 +24,6 @@ export const countToProps = {
   timingFunction: {
     type: Function as PropType<(v: number) => number>,
   },
-  onEnd: defineListenerProp<() => void>(),
 }
 
 export type CountToProps = ExtractPropTypes<typeof countToProps>

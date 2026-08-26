@@ -14,23 +14,24 @@
 <script lang="ts">
 import { computed, defineComponent, PropType } from 'vue'
 import { useI18n } from '../locale'
-import { getPrefixCls } from '../_utils/global-config'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
+import type { ComponentSize } from '../_utils/constant'
 import Select from '../select'
 
 export default defineComponent({
-  name: 'PageOptions',
+  name: createNamespace('pagination-options').name,
   components: {
     Select,
   },
   props: {
     sizeOptions: {
-      type: Array,
+      type: Array as PropType<(string | number)[]>,
       required: true,
     },
     pageSize: Number,
     disabled: Boolean,
     size: {
-      type: String,
+      type: String as PropType<ComponentSize>,
     },
     onChange: {
       type: Function as PropType<(value: number) => void>,
@@ -50,7 +51,9 @@ export default defineComponent({
       })),
     )
 
-    const handleChange = (value: string) => {
+    const handleChange = (
+      value: string | number | boolean | Record<string, any> | (string | number | boolean | Record<string, any>)[],
+    ) => {
       emit('change', value)
     }
 

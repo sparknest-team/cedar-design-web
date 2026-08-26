@@ -1,19 +1,19 @@
 <template>
   <c-space direction="column">
     <c-space>
-      <c-badge dot :content="1" size="xs" type="inline" description="描述文本"></c-badge>
-      <c-badge dot :content="1" size="sm" type="inline" description="描述文本"></c-badge>
-      <c-badge dot :content="1" size="md" type="inline" description="描述文本"></c-badge>
-      <c-badge dot :content="1" size="lg" type="inline" description="描述文本"></c-badge>
-      <c-badge dot :content="1" size="xl" type="inline" description="描述文本"></c-badge>
+      <c-badge dot :content="1" size="xs" mode="inline" description="描述文本"></c-badge>
+      <c-badge dot :content="1" size="sm" mode="inline" description="描述文本"></c-badge>
+      <c-badge dot :content="1" size="md" mode="inline" description="描述文本"></c-badge>
+      <c-badge dot :content="1" size="lg" mode="inline" description="描述文本"></c-badge>
+      <c-badge dot :content="1" size="xl" mode="inline" description="描述文本"></c-badge>
     </c-space>
     <br />
     <c-space>
-      <c-badge :content="1" size="xs" type="inline" description="描述文本"></c-badge>
-      <c-badge :content="1" size="sm" type="inline" description="描述文本"></c-badge>
-      <c-badge :content="1" size="md" type="inline" description="描述文本"></c-badge>
-      <c-badge :content="1" size="lg" type="inline" description="描述文本"></c-badge>
-      <c-badge :content="1" size="xl" type="inline" description="描述文本"></c-badge>
+      <c-badge :content="1" size="xs" mode="inline" description="描述文本"></c-badge>
+      <c-badge :content="1" size="sm" mode="inline" description="描述文本"></c-badge>
+      <c-badge :content="1" size="md" mode="inline" description="描述文本"></c-badge>
+      <c-badge :content="1" size="lg" mode="inline" description="描述文本"></c-badge>
+      <c-badge :content="1" size="xl" mode="inline" description="描述文本"></c-badge>
     </c-space>
     <br />
     <c-space size="xl">

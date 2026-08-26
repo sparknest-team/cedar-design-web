@@ -1,5 +1,15 @@
 <template>
-  <span v-if="computedVisible" :class="cls" :style="style" @click="handleClick">
+  <span
+    v-if="computedShow"
+    :class="cls"
+    :style="style"
+    :role="checkable ? 'checkbox' : undefined"
+    :aria-checked="checkable ? computedChecked : undefined"
+    :tabindex="checkable ? 0 : undefined"
+    @click="handleClick"
+    @keydown.enter.prevent="handleKeyboardActivation"
+    @keydown.space.prevent="handleKeyboardActivation"
+  >
     <span v-if="$slots.icon" :class="classes(n('icon'))">
       <slot name="icon" />
     </span>
@@ -10,10 +20,13 @@
     <icon-hover
       v-if="closable"
       role="button"
-      aria-label="Close"
+      aria-label="IconClose"
+      tabindex="0"
       :prefix="n()"
       :class="classes(n('close-btn'))"
       @click.stop="handleClose"
+      @keydown.enter.prevent.stop="handleKeyboardActivation"
+      @keydown.space.prevent.stop="handleKeyboardActivation"
     >
       <slot name="close-icon">
         <icon-close />
@@ -26,127 +39,27 @@
 </template>
 
 <script lang="ts">
-import type { CSSProperties, PropType } from 'vue'
+import type { CSSProperties } from 'vue'
 import { computed, defineComponent, ref, toRefs, inject } from 'vue'
 import { createNamespace } from '../_utils/global-config'
 import IconHover from '../_components/icon-hover.vue'
-import IconClose from '../icon/icon-close'
-import IconLoading from '../icon/icon-loading'
-import { TAG_COLORS, TagColor, TagVariant } from './types'
-import { Status } from '../_utils/constant'
+import { IconClose } from '@cedarjs/icons-vue/icon-close'
+import { IconLoading } from '@cedarjs/icons-vue/icon-loading'
+import { TAG_COLORS } from './types'
 import { useSize } from '../_hooks/use-size'
 import { configProviderInjectionKey } from '../config-provider/context'
+import { tagProps } from './props'
 
 export default defineComponent({
-  name: 'CTag',
+  name: createNamespace('tag').name,
   components: {
     IconHover,
     IconClose,
     IconLoading,
   },
-  props: {
-    /**
-     * @zh 标签的颜色
-     * @en Label color
-     * @values 'red','orangered','orange','gold','lime','green','cyan','blue','brand','purple','pinkpurple','magenta','gray'
-     */
-    color: {
-      type: String as PropType<TagColor | string>,
-    },
-    /**
-     * @zh 标签的大小
-     * @en Label size
-     * @values 'xs','sm','md','lg','xl'
-     * @defaultValue 'md'
-     */
-    size: {
-      type: String as PropType<'xs' | 'sm' | 'md' | 'lg' | 'xl'>,
-    },
-    /**
-     * @zh 标签状态色（与 Button 的 status 对齐，与 `color` 互斥，`color` 优先）
-     * @en Tag status color (aligned with Button.status, mutually exclusive with `color`, `color` takes precedence)
-     */
-    status: {
-      type: String as PropType<Status>,
-    },
-    /**
-     * @zh 标签变体（与 Button 的 variant 对齐）：`default`（实心填充）/ `outline`（描边）
-     * @en Tag variant aligned with Button.variant: `default` (filled) / `outline` (bordered)
-     */
-    variant: {
-      type: String as PropType<TagVariant>,
-      default: 'default',
-    },
-    /**
-     * @zh 标签是否可见
-     * @en Whether the tag is visible
-     * @vModel
-     */
-    visible: {
-      type: Boolean,
-      default: undefined,
-    },
-    /**
-     * @zh 标签默认是否可见
-     * @en Whether the tag is visible by default
-     */
-    defaultVisible: {
-      type: Boolean,
-      default: true,
-    },
-    /**
-     * @zh 标签是否为加载中状态
-     * @en Whether the tag is loading state
-     */
-    loading: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 标签是否可关闭
-     * @en Whether the tag can be closed
-     */
-    closable: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 标签是否可选中
-     * @en Whether the tag can be checked
-     */
-    checkable: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 标签是否选中（标签可选中时可用）
-     * @en Whether the tag is checked (available when the tag is checkable)
-     * @vModel
-     */
-    checked: {
-      type: Boolean,
-      default: undefined,
-    },
-    /**
-     * @zh 标签默认选中状态（标签可选中时可用）
-     * @en Whether the tag is checked by default (available when the tag is checkable)
-     */
-    defaultChecked: {
-      type: Boolean,
-      default: true,
-    },
-    /**
-     * @zh 标签内容不换行
-     * @en Tag content does not wrap
-     * @version 2.56.1
-     */
-    nowrap: {
-      type: Boolean,
-      default: false,
-    },
-  },
+  props: tagProps,
   emits: {
-    'update:visible': (visible: boolean) => true,
+    'update:show': (show: boolean) => true,
     'update:checked': (checked: boolean) => true,
     /**
      * @zh 点击关闭按钮时触发
@@ -169,7 +82,7 @@ export default defineComponent({
    */
   /**
    * @zh 关闭按钮的图标
-   * @en Close button icon
+   * @en IconClose button icon
    * @slot close-icon
    */
   setup(props, { emit }) {
@@ -177,9 +90,9 @@ export default defineComponent({
     const { size } = toRefs(props)
     const isBuiltInColor = computed(() => props.color && TAG_COLORS.includes(props.color as any))
     const isCustomColor = computed(() => props.color && !TAG_COLORS.includes(props.color as any))
-    const _visible = ref(props.defaultVisible)
+    const _show = ref(props.defaultShow)
     const _checked = ref(props.defaultChecked)
-    const computedVisible = computed(() => props.visible ?? _visible.value)
+    const computedShow = computed(() => props.show ?? _show.value)
     const computedChecked = computed(() => (props.checkable ? (props.checked ?? _checked.value) : true))
     const { mergedSize: _mergedSize } = useSize(size)
     const mergedSize = computed(() => {
@@ -190,8 +103,8 @@ export default defineComponent({
     })
 
     const handleClose = (ev: MouseEvent) => {
-      _visible.value = false
-      emit('update:visible', false)
+      _show.value = false
+      emit('update:show', false)
       emit('close', ev)
     }
 
@@ -204,6 +117,10 @@ export default defineComponent({
       }
     }
 
+    const handleKeyboardActivation = (ev: KeyboardEvent) => {
+      ;(ev.currentTarget as HTMLElement).click()
+    }
+
     const configCtx = inject(configProviderInjectionKey, undefined)
     const rtl = computed(() => configCtx?.rtl ?? false)
     const cls = computed(() => {
@@ -213,7 +130,7 @@ export default defineComponent({
         n(`--variant-${props.variant}`),
         [props.status && !isBuiltInColor.value && !isCustomColor.value, n(`--status-${props.status}`)],
         [props.loading, n('--loading')],
-        [!computedVisible.value, n('--hide')],
+        [!computedShow.value, n('--hide')],
         [isBuiltInColor.value, n(`--${props.color}`)],
         [props.checkable, n('--checkable')],
         [computedChecked.value, n('--checked')],
@@ -234,12 +151,13 @@ export default defineComponent({
     return {
       cls,
       style,
-      computedVisible,
+      computedShow,
       computedChecked,
       n,
       classes,
       handleClick,
       handleClose,
+      handleKeyboardActivation,
     }
   },
 })

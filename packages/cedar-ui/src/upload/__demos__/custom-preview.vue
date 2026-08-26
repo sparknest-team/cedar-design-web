@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { UploadFileItem } from '@cedar/ui'
+import type { UploadFileItem } from '@cedarjs/ui'
 
 const files = ref<UploadFileItem[]>([
   { uid: 'preview-1', name: 'cat.jpg', url: '/upload-cat.jpg', status: 'success', percent: 100 },
@@ -12,4 +12,4 @@ const preview = (file: UploadFileItem, event: MouseEvent) => {
 }
 </script>
 
-<template><c-upload v-model:file-list="files" list-type="picture-card" @preview="preview" /></template>
+<template><c-upload v-model="files" list-type="picture-card" @preview="preview" /></template>

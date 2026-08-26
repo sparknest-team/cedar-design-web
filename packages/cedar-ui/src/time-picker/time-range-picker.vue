@@ -5,12 +5,13 @@
     :default-value="defaultValue"
     type="time-range"
     :format="format"
-    :popup-visible="popupVisible"
-    :default-popup-visible="defaultPopupVisible"
+    :open="open"
+    :default-open="defaultOpen"
     :clearable="clearable"
     :disabled="disabled"
     :readonly="readonly"
     :size="size"
+    :variant="variant"
     :placeholder="placeholder"
     :use12-hours="use12Hours"
     :step="step"
@@ -20,17 +21,17 @@
     :hide-disabled-options="hideDisabledOptions"
     :disable-confirm="disableConfirm"
     :error="error"
-    :position="position"
+    :placement="placement"
     :trigger-props="triggerProps"
     :unmount-on-close="unmountOnClose"
     :hide-trigger="hideTrigger"
     :show-next-day="showNextDay"
     @update:model-value="onUpdateModelValue"
-    @update:popup-visible="onUpdatePopupVisible"
+    @update:open="onUpdateOpen"
     @change="onChange"
     @select="onSelect"
     @clear="onClear"
-    @popup-visible-change="onPopupVisibleChange"
+    @open-change="onOpenChange"
   >
     <template v-for="(_, name) in $slots" #[name]="slotData">
       <slot :name="name" v-bind="slotData || {}" />
@@ -39,10 +40,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent } from 'vue'
 import TimePicker from './time-picker.vue'
 import { createNamespace } from '../_utils/global-config'
-import type { Size } from '../_utils/constant'
+import { timeRangePickerProps } from './props'
 
 const { name } = createNamespace('time-range-picker')
 
@@ -56,87 +57,36 @@ export default defineComponent({
     TimePicker,
   },
   inheritAttrs: false,
-  props: {
-    modelValue: {
-      type: Array as PropType<Array<string | number | Date>>,
-    },
-    defaultValue: {
-      type: Array as PropType<Array<string | number | Date>>,
-    },
-    popupVisible: {
-      type: Boolean as PropType<boolean | undefined>,
-      default: undefined,
-    },
-    defaultPopupVisible: Boolean,
-    clearable: {
-      type: Boolean,
-      default: true,
-    },
-    disabled: Boolean,
-    readonly: Boolean,
-    error: Boolean,
-    format: String,
-    size: {
-      type: String as PropType<Size>,
-    },
-    placeholder: {
-      type: [String, Array] as PropType<string | string[]>,
-    },
-    use12Hours: Boolean,
-    step: {
-      type: Object as PropType<{
-        hour?: number
-        minute?: number
-        second?: number
-      }>,
-    },
-    disabledHours: {
-      type: Function as PropType<() => number[]>,
-    },
-    disabledMinutes: {
-      type: Function as PropType<(selectedHour?: number) => number[]>,
-    },
-    disabledSeconds: {
-      type: Function as PropType<(selectedHour?: number, selectedMinute?: number) => number[]>,
-    },
-    hideDisabledOptions: Boolean,
-    disableConfirm: Boolean,
-    position: {
-      type: String as PropType<'top' | 'tl' | 'tr' | 'bottom' | 'bl' | 'br'>,
-    },
-    triggerProps: {
-      type: Object as PropType<Record<string, unknown>>,
-    },
-    unmountOnClose: Boolean,
-    hideTrigger: {
-      type: Boolean,
-      default: true,
-    },
-    showNextDay: Boolean,
-  },
+  props: timeRangePickerProps,
   emits: {
     'update:modelValue': (value: Array<string | undefined> | undefined) => true,
-    'update:popupVisible': (visible: boolean) => true,
+    'update:open': (visible: boolean) => true,
     change: (
       timeString: Array<string | undefined> | undefined,
       time: Array<Date | undefined> | undefined,
     ) => true,
     select: (timeString: Array<string | undefined>, time: Array<Date | undefined>) => true,
     clear: () => true,
-    'popup-visible-change': (visible: boolean) => true,
+    'open-change': (visible: boolean) => true,
   },
   setup(_, { emit }) {
     return {
-      onUpdateModelValue: (value: Array<string | undefined> | undefined) => emit('update:modelValue', value),
-      onUpdatePopupVisible: (visible: boolean) => emit('update:popupVisible', visible),
+      onUpdateModelValue: (value: string | (string | undefined)[] | undefined) =>
+        emit('update:modelValue', value as Array<string | undefined> | undefined),
+      onUpdateOpen: (visible: boolean) => emit('update:open', visible),
       onChange: (
-        timeString: Array<string | undefined> | undefined,
-        time: Array<Date | undefined> | undefined,
-      ) => emit('change', timeString, time),
-      onSelect: (timeString: Array<string | undefined>, time: Array<Date | undefined>) =>
-        emit('select', timeString, time),
+        timeString: string | (string | undefined)[] | undefined,
+        time: Date | (Date | undefined)[] | undefined,
+      ) =>
+        emit(
+          'change',
+          timeString as Array<string | undefined> | undefined,
+          time as Array<Date | undefined> | undefined,
+        ),
+      onSelect: (timeString: string | (string | undefined)[], time: Date | (Date | undefined)[]) =>
+        emit('select', timeString as Array<string | undefined>, time as Array<Date | undefined>),
       onClear: () => emit('clear'),
-      onPopupVisibleChange: (visible: boolean) => emit('popup-visible-change', visible),
+      onOpenChange: (visible: boolean) => emit('open-change', visible),
     }
   },
 })

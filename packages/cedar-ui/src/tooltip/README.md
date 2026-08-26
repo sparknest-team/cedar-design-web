@@ -29,7 +29,7 @@ permalink: /components/tooltip/
 
 文字气泡支持 12 个不同的方位。分别为：`上左`、`上`、`上右`、`下左`、`下`、`下右`、`左上`、`左`、`左下`、`右上`、`右`、`右下`。
 
-<demo src="./__demos__/position.vue"></demo>
+<demo src="./__demos__/placement.vue"></demo>
 
 ## 指令用法
 
@@ -47,10 +47,10 @@ permalink: /components/tooltip/
 
 | 属性                        | 说明                               | 类型                                                                                                     | 默认值  |
 | --------------------------- | ---------------------------------- | -------------------------------------------------------------------------------------------------------- | ------- |
-| popup-visible **(v-model)** | 文字气泡是否可见                   | `boolean`                                                                                                | `-`     |
-| default-popup-visible       | 文字气泡默认是否可见（非受控模式） | `boolean`                                                                                                | `false` |
+| open **(v-model)** | 文字气泡是否可见                   | `boolean`                                                                                                | `-`     |
+| default-open       | 文字气泡默认是否可见（非受控模式） | `boolean`                                                                                                | `false` |
 | content                     | 文字气泡内容                       | `string`                                                                                                 | `-`     |
-| position                    | 弹出位置                           | `'top' \| 'tl' \| 'tr' \| 'bottom' \| 'bl' \| 'br' \| 'left' \| 'lt' \| 'lb' \| 'right' \| 'rt' \| 'rb'` | `'top'` |
+| placement                    | 弹出位置                           | `'top' \| 'tl' \| 'tr' \| 'bottom' \| 'bl' \| 'br' \| 'left' \| 'lt' \| 'lb' \| 'right' \| 'rt' \| 'rb'` | `'top'` |
 | xs                          | 是否展示为迷你尺寸                 | `boolean`                                                                                                | `false` |
 | background-color            | 弹出框的背景颜色                   | `string`                                                                                                 | `-`     |
 | content-class               | 弹出框内容的类名                   | `ClassName`                                                                                              | `-`     |
@@ -63,7 +63,7 @@ permalink: /components/tooltip/
 
 | 事件名               | 说明                       | 参数               |
 | -------------------- | -------------------------- | ------------------ |
-| popup-visible-change | 文字气泡显示状态改变时触发 | visible: `boolean` |
+| open-change | 文字气泡显示状态改变时触发 | open: `boolean` |
 
 ### Tooltip Slots
 
@@ -76,5 +76,5 @@ permalink: /components/tooltip/
 组件导出以下类型定义
 
 ```ts
-import type { TooltipProps } from '@cedar/ui'
+import type { TooltipProps } from '@cedarjs/ui'
 ```

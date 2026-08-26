@@ -1,18 +1,14 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _InputTag from './input-tag'
+import { inputTagProps } from './props'
 
-const InputTag = Object.assign(_InputTag, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _InputTag.name, _InputTag)
-  },
-})
+const InputTag = withInstall(_InputTag, Object.assign(_InputTag, {
+}), { components: [_InputTag] })
 
 export type InputTagInstance = InstanceType<typeof _InputTag>
+export type { InputTagProps } from './props'
 export type { TagData, InputTagFieldNames } from './types'
+export { InputTag, inputTagProps }
+export const _InputTagComponent = InputTag
 
 export default InputTag

@@ -4,21 +4,21 @@
 .c-panel-quarter,
 .c-panel-year {
   box-sizing: border-box;
-  width: @picker-panel-month-width;
+  width: var(~'--c-date-picker-panel-month-width');
 
   .c-picker-date {
-    padding: 4px;
+    padding: var(~'--c-date-picker-panel-cell-padding-vertical');
   }
 
   .c-picker-date-value {
     width: 100%;
-    border-radius: @picker-panel-cell-boundary-border-radius;
+    border-radius: var(~'--c-date-picker-panel-cell-boundary-border-radius');
   }
 
   .c-picker-cell:not(.c-picker-cell-selected):not(.c-picker-cell-range-start):not(
       .c-picker-cell-range-end
     ):not(.c-picker-cell-disabled):not(.c-picker-cell-week)
     .c-picker-date-value:hover {
-    border-radius: @picker-panel-cell-boundary-border-radius;
+    border-radius: var(~'--c-date-picker-panel-cell-boundary-border-radius');
   }
 }

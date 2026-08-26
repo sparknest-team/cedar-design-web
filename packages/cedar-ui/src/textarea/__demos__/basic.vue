@@ -1,8 +1,9 @@
 <template>
   <c-space direction="column">
     <c-radio-group v-model="variant">
-      <c-radio value="default">default</c-radio>
-      <c-radio value="outline">outline</c-radio>
+      <c-radio value="filled">filled</c-radio>
+      <c-radio value="outlined">outlined</c-radio>
+      <c-radio value="standard">standard</c-radio>
     </c-radio-group>
     <c-radio-group v-model="size">
       <c-radio value="xs">xs</c-radio>
@@ -17,6 +18,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-const variant = ref('default')
+const variant = ref('filled')
 const size = ref('md')
 </script>

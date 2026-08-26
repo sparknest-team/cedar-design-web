@@ -18,6 +18,7 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../_utils/global-config'
 import { defineComponent, PropType } from "vue";
 import { TableColumnData, TableOperationColumn } from "./types";
 import { getPrefixCls } from "../_utils/global-config";
@@ -26,7 +27,7 @@ import { DEFAULT_OPERATION_WIDTH } from "./hooks/use-columns-layout";
 const prefixCls = getPrefixCls("table");
 
 export default defineComponent({
-  name: "ColGroup",
+  name: createNamespace("col-group").name,
   props: {
     dataColumns: {
       type: Array as PropType<TableColumnData[]>,

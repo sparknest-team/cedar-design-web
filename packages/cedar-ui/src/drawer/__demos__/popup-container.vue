@@ -5,7 +5,7 @@
       style="
         width: 100%;
         height: 300px;
-        background-color: var(--fill-0);
+        background-color: var(--c-color-bg-white);
         position: relative;
         overflow: hidden;
         line-height: 300px;
@@ -15,7 +15,7 @@
       <c-button type="primary" @click="handleClick">Open Drawer</c-button>
     </div>
   </div>
-  <c-drawer popup-container="#parentNode" :visible="visible" @ok="handleOk" @cancel="handleCancel">
+  <c-drawer popup-container="#parentNode" :open="visible" @ok="handleOk" @cancel="handleCancel">
     <template #title>Title</template>
     <div>
       You can customize modal body text by the current situation. This modal will be closed immediately once you press

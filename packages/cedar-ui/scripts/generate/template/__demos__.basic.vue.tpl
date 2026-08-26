@@ -2,5 +2,5 @@
   <<%= pascalCaseName %>></<%= pascalCaseName %>>
 </template>
 <script lang="ts" setup>
-import { <%= pascalCaseName %> } from '@cedar/ui'
+import { <%= pascalCaseName %> } from '@cedarjs/ui'
 </script>

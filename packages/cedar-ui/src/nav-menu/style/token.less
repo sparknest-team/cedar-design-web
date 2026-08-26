@@ -1,117 +1,121 @@
 @import '../../style/theme/index.less';
 
-@nav-menu-font-size: 14px;
-@nav-menu-line-height: var(~'--c-line-height');
-@nav-menu-border-radius: @radius-sm;
-@nav-menu-font-weight-item-selected: @font-weight-500;
-@nav-menu-color-label-item-selected: @color-primary-6;
-@nav-menu-height-label-item-selected: 3px;
-@nav-menu-margin-left-item-suffix-icon: @spacing-3;
-@nav-menu-margin-right-item-prefix-icon: @spacing-7;
-@nav-menu-horizontal-margin-right-item-prefix-icon: @spacing-7;
+:root {
+  --c-nav-menu-font-size: var(~'--c-font-size-body-3');
+  --c-nav-menu-line-height: var(~'--c-line-height');
+  --c-nav-menu-border-radius: var(~'--c-border-radius-sm');
+  --c-nav-menu-item-font-weight-selected: var(~'--c-font-weight-500');
+  --c-nav-menu-item-selected-label-color: rgb(var(~'--c-primary-6'));
+  --c-nav-menu-item-selected-label-height: var(~'--c-border-width-3');
+  --c-nav-menu-item-suffix-icon-margin-left: var(~'--c-spacing-3');
+  --c-nav-menu-item-prefix-icon-margin-right: var(~'--c-spacing-7');
+  --c-nav-menu-horizontal-item-prefix-icon-margin-right: var(~'--c-spacing-7');
 
-// vertical 模式下 item 之间的间隙
-@nav-menu-item-gap: @spacing-2;
-// vertical 下嵌套子菜单的层级缩进
-@nav-menu-item-indent-spacing: @spacing-8;
+  // vertical 模式下 item 之间的间隙
+  --c-nav-menu-item-gap: var(~'--c-spacing-2');
+  // vertical 下嵌套子菜单的层级缩进
+  --c-nav-menu-item-indent-spacing: var(~'--c-spacing-8');
 
-// 折叠按钮
-@nav-menu-width-collapse-button: @size-6;
-@nav-menu-height-collapse-button: @size-6;
-@nav-menu-border-radius-collapse-button: @radius-sm;
+  // 折叠按钮
+  --c-nav-menu-collapse-button-width: var(~'--c-size-6');
+  --c-nav-menu-collapse-button-height: var(~'--c-size-6');
+  --c-nav-menu-collapse-button-border-radius: var(~'--c-border-radius-sm');
 
-/**********************************************
- * theme: light / dark
- * status: default / disabled / selected / hover
- **********************************************/
-@nav-menu-light-color-bg: var(~'--c-color-menu-light-bg');
-@nav-menu-light-color-bg-item_default: @nav-menu-light-color-bg;
-@nav-menu-light-color-bg-item_hover: var(~'--c-color-fill-2');
-@nav-menu-light-color-bg-item_selected: var(~'--c-color-fill-2');
-@nav-menu-light-color-bg-item_disabled: @nav-menu-light-color-bg;
-@nav-menu-light-color-item_default: var(~'--c-color-text-2');
-@nav-menu-light-color-item_hover: var(~'--c-color-text-2');
-@nav-menu-light-color-item_selected: @color-primary-6;
-@nav-menu-light-color-submenu_selected: @color-primary-6;
-@nav-menu-light-color-bg-submenu_selected_hover: var(~'--c-color-fill-2');
-@nav-menu-light-color-item_disabled: var(~'--c-color-text-4');
-@nav-menu-light-color-icon_default: var(~'--c-color-text-3');
-@nav-menu-light-color-icon_hover: var(~'--c-color-text-3');
-@nav-menu-light-color-icon_selected: @color-primary-6;
-@nav-menu-light-color-icon_disabled: var(~'--c-color-text-4');
-@nav-menu-light-color-group-title: var(~'--c-color-text-3');
+  /**********************************************
+   * theme: light / dark
+   * status: default / disabled / selected / hover
+   **********************************************/
+  --c-nav-menu-light-bg: var(~'--c-color-menu-light-bg');
+  --c-nav-menu-light-item-bg: var(~'--c-nav-menu-light-bg');
+  --c-nav-menu-light-item-bg-hover: var(~'--c-color-fill-2');
+  --c-nav-menu-light-item-bg-selected: var(~'--c-color-fill-2');
+  --c-nav-menu-light-item-bg-disabled: var(~'--c-nav-menu-light-bg');
+  --c-nav-menu-light-item-text-color: var(~'--c-color-text-2');
+  --c-nav-menu-light-item-text-color-hover: var(~'--c-color-text-2');
+  --c-nav-menu-light-item-text-color-selected: rgb(var(~'--c-primary-6'));
+  --c-nav-menu-light-submenu-text-color-selected: rgb(var(~'--c-primary-6'));
+  --c-nav-menu-light-submenu-bg-selected-hover: var(~'--c-color-fill-2');
+  --c-nav-menu-light-item-text-color-disabled: var(~'--c-color-text-4');
+  --c-nav-menu-light-icon-color: var(~'--c-color-text-3');
+  --c-nav-menu-light-icon-color-hover: var(~'--c-color-text-3');
+  --c-nav-menu-light-icon-color-selected: rgb(var(~'--c-primary-6'));
+  --c-nav-menu-light-icon-color-disabled: var(~'--c-color-text-4');
+  --c-nav-menu-light-group-title-text-color: var(~'--c-color-text-3');
 
-@nav-menu-dark-color-bg: var(~'--c-color-menu-dark-bg');
-@nav-menu-dark-color-bg-item_default: @nav-menu-dark-color-bg;
-@nav-menu-dark-color-bg-item_hover: var(~'--c-color-menu-dark-hover');
-@nav-menu-dark-color-bg-item_selected: var(~'--c-color-menu-dark-hover');
-@nav-menu-dark-color-bg-item_disabled: @nav-menu-dark-color-bg;
-@nav-menu-dark-color-submenu_selected: @color-primary-6;
-@nav-menu-dark-color-bg-submenu_selected_hover: var(~'--c-color-menu-dark-hover');
-@nav-menu-dark-color-item_default: var(~'--c-color-text-4');
-@nav-menu-dark-color-item_hover: var(~'--c-color-text-4');
-@nav-menu-dark-color-item_selected: var(~'--c-color-white');
-@nav-menu-dark-color-item_disabled: var(~'--c-color-text-2');
-@nav-menu-dark-color-icon_default: var(~'--c-color-text-3');
-@nav-menu-dark-color-icon_hover: var(~'--c-color-text-3');
-@nav-menu-dark-color-icon_selected: var(~'--c-color-white');
-@nav-menu-dark-color-icon_disabled: var(~'--c-color-text-2');
-@nav-menu-dark-color-group-title: var(~'--c-color-text-3');
+  --c-nav-menu-dark-bg: var(~'--c-color-menu-dark-bg');
+  --c-nav-menu-dark-item-bg: var(~'--c-nav-menu-dark-bg');
+  --c-nav-menu-dark-item-bg-hover: var(~'--c-color-menu-dark-hover');
+  --c-nav-menu-dark-item-bg-selected: var(~'--c-color-menu-dark-hover');
+  --c-nav-menu-dark-item-bg-disabled: var(~'--c-nav-menu-dark-bg');
+  --c-nav-menu-dark-submenu-text-color-selected: rgb(var(~'--c-primary-6'));
+  --c-nav-menu-dark-submenu-bg-selected-hover: var(~'--c-color-menu-dark-hover');
+  --c-nav-menu-dark-item-text-color: var(~'--c-color-text-4');
+  --c-nav-menu-dark-item-text-color-hover: var(~'--c-color-text-4');
+  --c-nav-menu-dark-item-text-color-selected: var(~'--c-color-white');
+  --c-nav-menu-dark-item-text-color-disabled: var(~'--c-color-text-2');
+  --c-nav-menu-dark-icon-color: var(~'--c-color-text-3');
+  --c-nav-menu-dark-icon-color-hover: var(~'--c-color-text-3');
+  --c-nav-menu-dark-icon-color-selected: var(~'--c-color-white');
+  --c-nav-menu-dark-icon-color-disabled: var(~'--c-color-text-2');
+  --c-nav-menu-dark-group-title-text-color: var(~'--c-color-text-3');
 
-// popup sub-menu
-@nav-menu-color-border-popup: var(~'--c-color-neutral-3');
+  // popup sub-menu
+  --c-nav-menu-popup-border-color: var(~'--c-color-neutral-3');
 
-// collapse button style
-@nav-menu-light-color-bg-button: var(~'--c-color-fill-1');
-@nav-menu-light-color-bg-button_hover: var(~'--c-color-fill-3');
-@nav-menu-light-color-button: var(~'--c-color-text-3');
-@nav-menu-dark-color-bg-button: @color-primary-6;
-@nav-menu-dark-color-bg-button_hover: @color-primary-7;
-@nav-menu-dark-color-button: var(~'--c-color-white');
+  // collapse button style
+  --c-nav-menu-light-collapse-button-bg: var(~'--c-color-fill-1');
+  --c-nav-menu-light-collapse-button-bg-hover: var(~'--c-color-fill-3');
+  --c-nav-menu-light-collapse-button-text-color: var(~'--c-color-text-3');
+  --c-nav-menu-dark-collapse-button-bg: rgb(var(~'--c-primary-6'));
+  --c-nav-menu-dark-collapse-button-bg-hover: rgb(var(~'--c-primary-7'));
+  --c-nav-menu-dark-collapse-button-text-color: var(~'--c-color-white');
 
-/**********************************************
- * horizontal / vertical
- **********************************************/
-@nav-menu-horizontal-padding-vertical: 14px;
-@nav-menu-horizontal-padding-horizontal: @spacing-8;
-@nav-menu-horizontal-item-gap: @spacing-6;
-@nav-menu-horizontal-item-height: 30px;
-@nav-menu-horizontal-item-padding-horizontal: @spacing-6;
+  /**********************************************
+   * horizontal / vertical
+   **********************************************/
+  --c-nav-menu-horizontal-padding-vertical: 14px;
+  --c-nav-menu-horizontal-padding-horizontal: var(~'--c-spacing-8');
+  --c-nav-menu-horizontal-item-gap: var(~'--c-spacing-6');
+  --c-nav-menu-horizontal-item-height: 30px;
+  --c-nav-menu-horizontal-item-padding-horizontal: var(~'--c-spacing-6');
 
-@nav-menu-vertical-padding-vertical: @spacing-2;
-@nav-menu-vertical-padding-horizontal: @spacing-4;
-@nav-menu-vertical-item-height: 40px;
-@nav-menu-vertical-item-padding-horizontal: @spacing-6;
+  --c-nav-menu-vertical-padding-vertical: var(~'--c-spacing-2');
+  --c-nav-menu-vertical-padding-horizontal: var(~'--c-spacing-4');
+  --c-nav-menu-vertical-item-height: 40px;
+  --c-nav-menu-vertical-item-padding-horizontal: var(~'--c-spacing-6');
 
-/************************************************
- * collapse
- ***********************************************/
-@nav-menu-collapse-width: @size-12;
-@nav-menu-collapse-padding-vertical: @spacing-2;
-@nav-menu-collapse-padding-horizontal: @spacing-2;
+  /************************************************
+   * collapse
+   ***********************************************/
+  --c-nav-menu-collapse-width: var(~'--c-size-12');
+  --c-nav-menu-collapse-padding-vertical: var(~'--c-spacing-2');
+  --c-nav-menu-collapse-padding-horizontal: var(~'--c-spacing-2');
 
-/************************************************
- * popButton
- ***********************************************/
-@nav-menu-pop-button-size: @size-10;
-@nav-menu-pop-button-margin-bottom: @spacing-7;
-@nav-menu-pop-button-box-shadow: @shadow2-down;
-@nav-menu-pop-button-border-color: @color-transparent;
+  /************************************************
+   * popButton
+   ***********************************************/
+  --c-nav-menu-pop-button-size: var(~'--c-size-10');
+  --c-nav-menu-pop-button-margin-bottom: var(~'--c-spacing-7');
+  --c-nav-menu-pop-button-box-shadow: var(~'--c-shadow2-down');
+  --c-nav-menu-pop-button-border-color: transparent;
+  --c-nav-menu-focus-outline-width: var(~'--c-border-width-3');
+  --c-nav-menu-suffix-icon-extra: var(~'--c-size-4');
+  --c-nav-menu-collapse-button-inset: var(~'--c-spacing-6');
+  --c-nav-menu-trigger-icon-margin-right: var(~'--c-spacing-4');
 
-/**********************************************
- * Theme dark in menu
- **********************************************/
-@menu-dark-color-bg: var(~'--c-color-menu-dark-bg');
-@menu-dark-color-border: @menu-dark-color-bg;
-
-@menu-dark-option-color-bg_default: @color-transparent;
-@menu-dark-option-color-bg_hover: var(~'--c-color-menu-dark-hover');
-@menu-dark-option-color-bg_selected: @color-transparent;
-@menu-dark-option-color-bg_disabled: @color-transparent;
-
-@menu-dark-option-color-text_default: var(~'--c-color-text-4');
-@menu-dark-option-color-text_hover: var(~'--c-color-text-4');
-@menu-dark-option-color-text_selected: var(~'--c-color-white');
-@menu-dark-option-color-text_disabled: var(~'--c-color-text-2');
-
-@menu-dark-group-title-color-text: var(~'--c-color-text-3');
+  /**********************************************
+   * 暗色弹出层（仅 nav-menu 自己消费，不是 Menu 组件）
+   **********************************************/
+  --c-nav-menu-popup-group-title-padding-top: var(~'--c-spacing-4');
+  --c-nav-menu-popup-dark-bg: var(~'--c-color-menu-dark-bg');
+  --c-nav-menu-popup-dark-border-color: var(~'--c-nav-menu-popup-dark-bg');
+  --c-nav-menu-popup-dark-option-bg: transparent;
+  --c-nav-menu-popup-dark-option-bg-hover: var(~'--c-color-menu-dark-hover');
+  --c-nav-menu-popup-dark-option-bg-selected: transparent;
+  --c-nav-menu-popup-dark-option-bg-disabled: transparent;
+  --c-nav-menu-popup-dark-option-text-color: var(~'--c-color-text-4');
+  --c-nav-menu-popup-dark-option-text-color-hover: var(~'--c-color-text-4');
+  --c-nav-menu-popup-dark-option-text-color-selected: var(~'--c-color-white');
+  --c-nav-menu-popup-dark-option-text-color-disabled: var(~'--c-color-text-2');
+  --c-nav-menu-popup-dark-group-title-text-color: var(~'--c-color-text-3');
+}

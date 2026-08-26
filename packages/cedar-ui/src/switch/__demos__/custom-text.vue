@@ -4,7 +4,7 @@
       <template #checked> ON </template>
       <template #unchecked> OFF </template>
     </c-switch>
-    <c-switch type="round">
+    <c-switch variant="round">
       <template #checked> ON </template>
       <template #unchecked> OFF </template>
     </c-switch>

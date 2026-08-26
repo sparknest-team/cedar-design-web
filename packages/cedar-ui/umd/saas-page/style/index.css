@@ -1,0 +1,12 @@
+.c-saas-page-layout {
+  width: 100%;
+  min-width: 1270px;
+  padding: 0;
+}
+.c-saas-page-layout-content {
+  margin-bottom: 24px;
+  padding: 0 24px;
+}
+.c-saas-page-layout .c-affix .c-breadcrumb {
+  background-color: transparent;
+}

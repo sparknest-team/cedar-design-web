@@ -42,29 +42,11 @@ permalink: /components/carousel/
 
 <demo src="./__demos__/navigation.vue"></demo>
 
-### 滑动效果
-
-<demo src="./__demos__/effect-slide.vue"></demo>
-
-### 淡入淡出效果
-
-<demo src="./__demos__/effect-fade.vue"></demo>
-
-### 卡片效果
-
-<demo src="./__demos__/effect-card.vue"></demo>
-
 ### 多图同屏
 
 通过 `slides-per-view` 和 `space-between` 属性可以控制每屏显示的 slide 数量及间距。
 
 <demo src="./__demos__/multi-slides.vue"></demo>
-
-### 居中当前滑块
-
-通过 `centered-slides` 属性可以居中当前 slide。
-
-<demo src="./__demos__/centered-slides.vue"></demo>
 
 ### 指示器类型
 
@@ -119,8 +101,6 @@ permalink: /components/carousel/
 | loop                       | 是否循环轮播                                                                         | `boolean`                                         | `true`                             |
 | auto-play                  | 是否自动循环展示，或传入高级配置对象 `{ interval, hoverToPause }`                    | `boolean \| CarouselAutoPlayConfig`               | `false`                            |
 | move-speed                 | 幻灯片移动速率（毫秒）                                                               | `number`                                          | `500`                              |
-| animation-name             | 切换动画类型（slide / fade / card）                                                  | `string`                                          | `slide`                            |
-| effect                     | animation-name 的别名，两者效果一致                                                  | `string`                                          | `slide`                            |
 | trigger                    | 幻灯片切换触发方式（click / hover）                                                  | `string`                                          | `click`                            |
 | direction                  | 幻灯片移动方向（horizontal / vertical）                                              | `string`                                          | `horizontal`                       |
 | show-arrow                 | 切换箭头显示时机（always / hover / never）                                           | `string`                                          | `always`                           |
@@ -172,5 +152,5 @@ permalink: /components/carousel/
 组件导出以下类型定义
 
 ```ts
-import type { Carousel } from '@cedar/ui'
+import type { Carousel } from '@cedarjs/ui'
 ```

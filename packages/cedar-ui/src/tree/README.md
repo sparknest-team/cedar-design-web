@@ -227,5 +227,5 @@ permalink: /components/tree/
 组件导出以下类型定义
 
 ```ts
-import type { TreeInstance } from '@cedar/ui'
+import type { TreeInstance } from '@cedarjs/ui'
 ```

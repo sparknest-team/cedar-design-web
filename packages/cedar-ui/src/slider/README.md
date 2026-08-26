@@ -37,5 +37,5 @@ permalink: /components/slider/
 组件导出以下类型定义
 
 ```ts
-import type { SliderProps } from '@cedar/ui'
+import type { SliderProps } from '@cedarjs/ui'
 ```

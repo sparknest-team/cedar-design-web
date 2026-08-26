@@ -112,5 +112,5 @@ permalink: /components/pagination/
 组件导出以下类型定义
 
 ```ts
-import type { PaginationProps } from '@cedar/ui'
+import type { PaginationProps } from '@cedarjs/ui'
 ```

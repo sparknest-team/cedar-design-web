@@ -1,7 +1,7 @@
 import { InjectionKey } from 'vue'
 import { Data } from '../_utils/types'
 import { FieldData, FieldRule, FormItemEventHandler, ValidatedError, ValidateStatus } from './types'
-import { Size } from '../_utils/constant'
+import { ComponentSize } from '../_utils/constant'
 
 export interface FormContext {
   layout: string
@@ -12,7 +12,7 @@ export interface FormContext {
   labelColStyle?: any
   wrapperColStyle?: any
   model: Data
-  size: Size
+  size: ComponentSize
   rules?: Record<string, FieldRule | FieldRule[]>
   fields: FormItemInfo[]
   touchedFields: FormItemInfo[]
@@ -31,7 +31,7 @@ export interface FormContext {
 
 export interface FormItemContext {
   eventHandlers: FormItemEventHandler
-  size: Size | undefined
+  size: ComponentSize | undefined
   disabled: boolean
   error: boolean
   feedback: string | undefined

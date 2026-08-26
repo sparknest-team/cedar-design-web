@@ -42,7 +42,7 @@
         v-if="closable"
         tabindex="-1"
         role="button"
-        aria-label="Close"
+        aria-label="IconClose"
         :class="n('close-btn')"
         @click="handleClose"
       >
@@ -58,14 +58,13 @@
 
 <script lang="ts" setup>
 import { computed, ref, useSlots, type CSSProperties } from 'vue'
-import { call } from '@maplejs/maple-shared'
 import { createNamespace, formatElevation } from '../_utils/global-config'
 import IconHover from '../_components/icon-hover.vue'
-import IconClose from '../icon/icon-close'
-import IconInfoCircleFill from '../icon/icon-info-circle-fill'
-import IconCheckCircleFill from '../icon/icon-check-circle-fill'
-import IconExclamationCircleFill from '../icon/icon-exclamation-circle-fill'
-import IconCloseCircleFill from '../icon/icon-close-circle-fill'
+import { IconClose } from '@cedarjs/icons-vue/icon-close'
+import { IconInfoCircleFill } from '@cedarjs/icons-vue/icon-info-circle-fill'
+import { IconCheckCircleFill } from '@cedarjs/icons-vue/icon-check-circle-fill'
+import { IconExclamationCircleFill } from '@cedarjs/icons-vue/icon-exclamation-circle-fill'
+import { IconCloseCircleFill } from '@cedarjs/icons-vue/icon-close-circle-fill'
 import { alertProps } from './props'
 
 defineOptions({
@@ -74,6 +73,10 @@ defineOptions({
 
 const { n, classes } = createNamespace('alert')
 const props = defineProps(alertProps)
+const emit = defineEmits<{
+  (event: 'close', value: MouseEvent): void
+  (event: 'after-close'): void
+}>()
 const slots = useSlots()
 
 const visible = ref(true)
@@ -92,10 +95,10 @@ const rootStyle = computed<CSSProperties>(() => {
 
 function handleClose(e: MouseEvent) {
   visible.value = false
-  call(props.onClose, e)
+  emit('close', e)
 }
 
 function handleAfterLeave() {
-  call(props.onAfterClose)
+  emit('after-close')
 }
 </script>

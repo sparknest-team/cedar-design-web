@@ -1,23 +1,21 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Timeline from './timeline'
 import _TimelineItem from './item.vue'
+import { timelineProps } from './props'
 
-const Timeline = Object.assign(_Timeline, {
+const Timeline = withInstall(_Timeline, Object.assign(_Timeline, {
   Item: _TimelineItem,
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _Timeline.name, _Timeline)
-    app.component(componentPrefix + _TimelineItem.name, _TimelineItem)
-  },
-})
+}), { components: [_Timeline, _TimelineItem] })
 
 export type TimelineInstance = InstanceType<typeof _Timeline>
 export type TimelineItemInstance = InstanceType<typeof _TimelineItem>
 
 export { _TimelineItem as TimelineItem }
+
+export const _TimelineComponent = Timeline
+
+export { Timeline }
+
+export { timelineProps }
 
 export default Timeline

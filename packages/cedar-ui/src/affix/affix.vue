@@ -15,13 +15,14 @@
 </template>
 
 <script lang="ts">
-import type { CSSProperties, PropType, Ref } from 'vue'
+import type { CSSProperties, Ref } from 'vue'
 import { computed, defineComponent, onMounted, ref, toRefs, watchEffect } from 'vue'
 import ResizeObserver from '../_components/resize-observer'
-import { getPrefixCls } from '../_utils/global-config'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import { getElement, on, off } from '../_utils/dom'
 import { isUndefined, isWindow } from '../_utils/is'
 import { throttleByRaf } from '../_utils/throttle-by-raf'
+import { affixProps } from './props'
 
 function getTargetRect(target: HTMLElement | Window) {
   return isWindow(target)
@@ -33,65 +34,11 @@ function getTargetRect(target: HTMLElement | Window) {
 }
 
 export default defineComponent({
-  name: 'Affix',
+  name: createNamespace('affix').name,
   components: {
     ResizeObserver,
   },
-  props: {
-    /**
-     * @zh 距离窗口顶部达到指定偏移量后触发
-     * @en Triggered when the specified offset is reached from the top of the window
-     */
-    offsetTop: {
-      type: Number,
-      default: 0,
-    },
-    /**
-     * @zh 距离窗口底部达到指定偏移量后触发
-     * @en Triggered when the specified offset is reached from the bottom of the window
-     */
-    offsetBottom: {
-      type: Number,
-    },
-    /**
-     * @zh 滚动容器，默认是 `window`
-     * @en Scroll container, default is `window`
-     */
-    target: {
-      type: [String, Object, Function] as PropType<string | HTMLElement | Window>,
-    },
-    /**
-     * @zh `target`的外层滚动元素，默认是 `window`
-     * @en The outer scroll element of `target`, the default is `window`
-     */
-    targetContainer: {
-      type: [String, Object, Function] as PropType<string | HTMLElement | Window>,
-    },
-    /**
-     * @zh 固钉时的 z-index
-     * @en z-index when affixed
-     */
-    zIndex: {
-      type: Number,
-      default: 10,
-    },
-    /**
-     * @zh 是否禁用固钉
-     * @en Whether to disable affix
-     */
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否使用原生 `position: sticky`
-     * @en Whether to use native `position: sticky`
-     */
-    cssMode: {
-      type: Boolean,
-      default: false,
-    },
-  },
+  props: affixProps,
   emits: {
     /**
      * @zh 固定状态发生改变时触发

@@ -1,17 +1,14 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Empty from './empty'
+import { emptyProps } from './props'
 
-const Empty = Object.assign(_Empty, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _Empty.name, _Empty)
-  },
-})
+const Empty = withInstall(_Empty, Object.assign(_Empty, {
+}), { components: [_Empty] })
 
 export type EmptyInstance = InstanceType<typeof _Empty>
+export { emptyProps }
+export type { EmptyImageSize, EmptyProps } from './props'
+export { Empty }
+export const _EmptyComponent = Empty
 
 export default Empty

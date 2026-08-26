@@ -78,15 +78,15 @@ permalink: /components/switch/
 | default-checked          | 默认选中状态(非受控状态)                                               | `boolean`                                                                                 | `false`    |
 | disabled                 | 是否禁用                                                               | `boolean`                                                                                 | `false`    |
 | loading                  | 是否为加载中状态                                                       | `boolean`                                                                                 | `false`    |
-| type                     | 开关的类型                                                             | `'circle'\|'round'\|'line'`                                                               | `'circle'` |
+| variant                     | 开关的类型                                                             | `'circle'\|'round'\|'line'`                                                               | `'circle'` |
 | size                     | 开关的大小                                                             | `'sm'\|'md'\|'lg'`                                                                        | `'md'`     |
 | checked-value            | 选中时的值                                                             | `string\|number\|boolean`                                                                 | `true`     |
 | unchecked-value          | 为选中时的值                                                           | `string\|number\|boolean`                                                                 | `false`    |
 | checked-color            | 选中时的开关颜色                                                       | `string`                                                                                  | `-`        |
 | unchecked-color          | 未选中时的开关颜色                                                     | `string`                                                                                  | `-`        |
 | before-change            | switch状态改变前的钩子，返回false或者返回Promise且被reject则停止切换。 | `( newValue: string \| number \| boolean) => Promise<boolean \| void> \| boolean \| void` | `-`        |
-| checked-text             | 打开状态时的文案(`type='line'`和`size='sm'`时不生效)                   | `string`                                                                                  | `-`        |
-| unchecked-text           | 关闭状态时的文案(`type='line'`和`size='sm'`时不生效)                   | `string`                                                                                  | `-`        |
+| checked-text             | 打开状态时的文案(`variant='line'`和`size='sm'`时不生效)                   | `string`                                                                                  | `-`        |
+| unchecked-text           | 关闭状态时的文案(`variant='line'`和`size='sm'`时不生效)                   | `string`                                                                                  | `-`        |
 
 ### Switch Events
 
@@ -102,13 +102,13 @@ permalink: /components/switch/
 | -------------- | ---------------------------------------------------- |
 | checked-icon   | 打开状态时，按钮上的图标                             |
 | unchecked-icon | 关闭状态时，按钮上的图标                             |
-| checked        | 打开状态时的文案(`type='line'`和`size='sm'`时不生效) |
-| unchecked      | 关闭状态时的文案(`type='line'`和`size='sm'`时不生效) |
+| checked        | 打开状态时的文案(`variant='line'`和`size='sm'`时不生效) |
+| unchecked      | 关闭状态时的文案(`variant='line'`和`size='sm'`时不生效) |
 
 ## 类型定义
 
 组件导出以下类型定义
 
 ```ts
-import type { SwitchProps } from '@cedar/ui'
+import type { SwitchProps } from '@cedarjs/ui'
 ```

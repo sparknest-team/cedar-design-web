@@ -32,11 +32,10 @@ permalink: /components/search/
 | ------------------------------ | -------------------------------------- | -------------------------------------- | :---------: |
 | model-value **(v-model)**      | 绑定值                                 | `string`                               |     `-`     |
 | default-value                  | 默认值（非受控状态）                   | `string`                               |     `-`     |
-| search-text                    | 搜索关键词，兼容旧 Search API          | `string`                               |     `-`     |
 | search-button                  | 是否为后置按钮模式                     | `boolean`                              |   `false`   |
 | loading                        | 是否为加载中状态                       | `boolean`                              |   `false`   |
 | disabled                       | 是否禁用                               | `boolean`                              |   `false`   |
-| variant                        | 输入框风格                             | `'outline' \| 'default'`               | `'default'` |
+| variant                        | 输入框风格                             | `'filled' \| 'outlined' \| 'standard'`               | `'filled'` |
 | size                           | 输入框大小                             | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` |   `'md'`    |
 | button-text                    | 搜索按钮的文字，使用后会替换原本的图标 | `string`                               |     `-`     |
 | button-props                   | 搜索按钮的属性                         | `ButtonProps`                          |     `-`     |
@@ -44,7 +43,6 @@ permalink: /components/search/
 | fields                         | 搜索字段可选项                         | `SelectOptionData[]`                   |    `[]`     |
 | default-field                  | 默认搜索字段                           | `string`                               |     `-`     |
 | model-field **(v-model)**      | 搜索字段                               | `string`                               |     `-`     |
-| search-field **(v-model)**     | 搜索字段，兼容旧 Search API            | `string`                               |     `-`     |
 | model                          | 搜索对象模型                           | `Record<string, any>`                  |     `-`     |
 | select-style                   | 字段选择器样式                         | `StyleValue`                           |     `-`     |
 | max-search-history-count       | 最近搜索记录最大数量                   | `number`                               |     `5`     |
@@ -58,8 +56,6 @@ permalink: /components/search/
 | change              | 输入值变化或搜索字段变化时触发     | value: `string`<br>ev?: `Event`    |
 | update:model-value  | 绑定值更新时触发                   | value: `string`                    |
 | update:model-field  | 搜索字段更新时触发                 | value: `string`                    |
-| update:search-text  | 搜索关键词更新时触发               | value: `string`                    |
-| update:search-field | 搜索字段更新时触发                 | value: `string`                    |
 
 ### SearchResult
 
@@ -67,8 +63,6 @@ permalink: /components/search/
 | -------------- | ---------------------- | -------------------- | ------ |
 | modelField     | 搜索字段               | `string`             | -      |
 | modelValue     | 搜索关键词             | `string`             | -      |
-| searchField    | 搜索字段，兼容旧 API   | `string`             | -      |
-| searchText     | 搜索关键词，兼容旧 API | `string`             | -      |
 | model          | 表单对象               | `Record<string, any>` | -      |
 | recentSearches | 最近搜索记录           | `string[]`           | `[]`   |
 
@@ -77,5 +71,5 @@ permalink: /components/search/
 组件导出以下类型定义
 
 ```ts
-import type { SearchProps, SearchField, SearchResult } from '@cedar/ui'
+import type { SearchProps, SearchField, SearchResult } from '@cedarjs/ui'
 ```

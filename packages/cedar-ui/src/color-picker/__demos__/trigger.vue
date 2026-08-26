@@ -1,6 +1,6 @@
 <template>
   <c-space direction="column">
-    <c-switch v-model="triggerProps.popupVisible">
+    <c-switch v-model="triggerProps.open">
       <template #checked> ON</template>
       <template #unchecked>OFF</template>
     </c-switch>
@@ -12,9 +12,9 @@
 import { ref } from 'vue'
 
 const triggerProps = ref({
-  popupVisible: false,
+  open: false,
   unmountOnClose: true,
   renderToBody: false,
-  position: 'rt',
+  placement: 'rt',
 })
 </script>

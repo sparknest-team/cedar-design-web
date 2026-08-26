@@ -1,17 +1,9 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _DragContainer from './drag-container'
 import { dragContainerProps } from './props'
 
-const DragContainer = Object.assign(_DragContainer, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _DragContainer.name, _DragContainer)
-  },
-})
+const DragContainer = withInstall(_DragContainer, Object.assign(_DragContainer, {
+}), { components: [_DragContainer] })
 
 export type DragContainerInstance = InstanceType<typeof _DragContainer>
 export type { DragContainerProps, DragOptions } from './props'

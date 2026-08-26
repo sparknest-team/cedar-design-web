@@ -1,13 +1,13 @@
 import { computed, defineComponent } from 'vue'
 import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import { previewImage } from '../image'
-import IconCheckCircleFill from '../icon/icon-check-circle-fill'
-import IconClose from '../icon/icon-close'
-import IconCloseCircleFill from '../icon/icon-close-circle-fill'
-import IconDownload from '../icon/icon-download'
-import IconEye from '../icon/icon-eye'
-import IconFile from '../icon/icon-file'
-import IconRefresh from '../icon/icon-refresh'
+import { IconCheckCircleFill } from '@cedarjs/icons-vue/icon-check-circle-fill'
+import { IconClose } from '@cedarjs/icons-vue/icon-close'
+import { IconCloseCircleFill } from '@cedarjs/icons-vue/icon-close-circle-fill'
+import { IconDownload } from '@cedarjs/icons-vue/icon-download'
+import { IconEye } from '@cedarjs/icons-vue/icon-eye'
+import { IconFile } from '@cedarjs/icons-vue/icon-file'
+import { IconRefresh } from '@cedarjs/icons-vue/icon-refresh'
 import { uploadProps } from './props'
 import { useUploader } from './composables/use-uploader'
 import type { UploadFileItem, UploadItemSlotProps, UploadPublicMethods, UploadTriggerSlotProps } from './interfaces'
@@ -34,7 +34,7 @@ export default defineComponent({
   name,
   props: uploadProps,
   emits: [
-    'update:fileList',
+    'update:modelValue',
     'read',
     'change',
     'rejected',
@@ -48,8 +48,8 @@ export default defineComponent({
   setup(props, { emit, expose, slots }) {
     const prefixCls = getPrefixCls('upload')
     const uploader = useUploader({
-      fileList: () => props.fileList,
-      defaultFileList: () => props.defaultFileList,
+      modelValue: () => props.modelValue,
+      defaultValue: () => props.defaultValue,
       accept: () => props.accept,
       capture: () => props.capture,
       multiple: () => props.multiple,
@@ -76,12 +76,9 @@ export default defineComponent({
       beforeUpload: () => props.beforeUpload,
       beforeRemove: () => props.beforeRemove,
       isSuccessResponse: () => props.isSuccessResponse,
-      onUpdateFileList: (files) => emit('update:fileList', files),
+      onUpdateModelValue: (files) => emit('update:modelValue', files),
       onChange: (files, file) => emit('change', files, file),
-      onRejected: (files) => {
-        props.onRejected?.(files)
-        emit('rejected', files)
-      },
+      onRejected: (files) => emit('rejected', files),
       onExceed: (files, fileList) => emit('exceed', files, fileList),
       onProgress: (file, event) => emit('progress', file, event),
       onSuccess: (file) => emit('success', file),
@@ -149,6 +146,8 @@ export default defineComponent({
             },
           ]}
           tabindex={uploader.disabled.value ? undefined : 0}
+          role="button"
+          aria-disabled={uploader.disabled.value}
           onClick={uploader.chooseFile}
           onDragover={props.draggable ? uploader.handleDragOver : undefined}
           onDragleave={props.draggable ? uploader.handleDragLeave : undefined}
@@ -179,7 +178,7 @@ export default defineComponent({
             </button>
           )}
           {props.showDownloadButton && file.url && (
-            <a class={`${prefixCls}-action`} href={file.url} download={file.name} title="Download" aria-label="Download">
+            <a class={`${prefixCls}-action`} href={file.url} download={file.name} title="IconDownload" aria-label="IconDownload">
               <IconDownload />
             </a>
           )}

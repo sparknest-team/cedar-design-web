@@ -67,7 +67,7 @@ export default defineComponent({
     return () => {
       if (showTooltip.value) {
         return (
-          <Tooltip content={text.value} onResize={onResize} {...props.tooltipProps}>
+          <Tooltip content={text.value} {...props.tooltipProps}>
             {renderContent()}
           </Tooltip>
         )

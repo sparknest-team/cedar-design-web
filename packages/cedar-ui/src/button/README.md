@@ -118,5 +118,5 @@ permalink: /components/button/
 组件导出以下类型定义
 
 ```ts
-import type { ButtonProps, ButtonGroupProps } from '@cedar/ui'
+import type { ButtonProps, ButtonGroupProps } from '@cedarjs/ui'
 ```

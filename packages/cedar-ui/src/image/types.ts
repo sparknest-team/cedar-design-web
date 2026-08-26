@@ -12,19 +12,19 @@ export interface ImageProps {
   footerPosition: 'inner' | 'outer'
   showLoader: boolean
   preview: boolean
-  previewVisible?: boolean
-  defaultPreviewVisible: boolean
+  previewOpen?: boolean
+  defaultPreviewOpen: boolean
   previewProps?: Partial<ImagePreviewProps>
   extra?: Slot
   error?: Slot
   loader?: Slot
-  onPreviewVisibleChange?: (visible: boolean) => void
+  onPreviewOpenChange?: (open: boolean) => void
 }
 
 export interface ImagePreviewProps {
   src?: string
-  visible?: boolean
-  defaultVisible?: boolean
+  open?: boolean
+  defaultOpen?: boolean
   maskClosable?: boolean
   closable?: boolean
   actionsLayout?: string[]
@@ -39,10 +39,10 @@ export interface ImagePreviewProps {
 }
 
 export interface ImagePreviewGroupProps extends Omit<ImagePreviewProps, 'src' | 'onClose'> {
-  srcList?: string[]
+  images?: string[]
   current?: number
   defaultCurrent: number
-  infinite: boolean
+  loop: boolean
   onChange?: (index: number, preIndex: number) => void
-  onPreviewVisibleChange?: (visible: boolean) => void
+  onOpenChange?: (open: boolean) => void
 }

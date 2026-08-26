@@ -1,200 +1,101 @@
-@import '../../../input/style/input.less';
+@import '../../../field-decorator/style/index.less';
 @import './token.less';
 
+// Picker 触发器：壳由 FieldDecorator 负责，此处只保留内容区差异
 .c-picker {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  box-sizing: border-box;
-  padding: @picker-padding-horizontal 11px 4px 4px;
-  line-height: var(~'--c-line-height');
-  background-color: @picker-color-bg;
-  border: 1px solid @picker-color-border;
-  border-radius: @picker-input-border-radius;
-  transition: all @transition-duration-1 @transition-timing-function-linear;
-
-  &-input {
+  // FieldDecorator 已带 padding-x；range / 内容区微调
+  .c-picker-input {
     display: inline-flex;
     flex: 1;
     align-items: center;
+    min-width: 0;
   }
 
   input {
+    .field-decorator-native-style();
+
     width: 100%;
-    padding: 0;
-    padding-left: 8px;
-    color: @picker-color-text;
-    line-height: var(~'--c-line-height');
+    padding-left: 0;
+    color: var(~'--c-field-color-text');
     text-align: left;
-    background-color: @color-transparent;
-    border: none;
-    outline: none;
-    transition: all @transition-duration-1 @transition-timing-function-linear;
-
-    &::placeholder {
-      color: @picker-color-placeholder;
-    }
-
-    // fix color error under disabled status in safari
-    &[disabled] {
-      -webkit-text-fill-color: var(~'--c-input-color-text_disabled');
-    }
   }
 
-  &-has-prefix {
-    padding-left: var(~'--c-input-padding-x');
+  .c-picker-suffix-icon {
+    color: var(~'--c-field-color-suffix-text');
   }
 
-  &-prefix {
-    padding-right: var(~'--c-input-padding-x');
-    color: var(~'--c-input-color-prefix-text');
-    font-size: var(~'--c-input-size-default-icon-suffix-size');
-  }
-
-  &-suffix {
-    display: inline-flex;
-    align-items: center;
-    margin-left: 4px;
-
-    .input-suffix-feedback-icon-color();
-
-    .c-feedback-icon {
-      margin-left: 4px;
-    }
-  }
-
-  &-suffix-icon {
-    color: @picker-color-icon;
-  }
-
-  & &-clear-icon {
+  .c-picker-clear-icon {
     display: none;
-    color: var(~'--c-color-text-2');
-    font-size: 12px;
+    color: var(~'--c-field-color-icon-clear');
+    font-size: var(~'--c-field-size-icon-clear');
   }
 
-  &:hover {
-    background-color: @picker-color-bg_hover;
-    border-color: @picker-color-border_hover;
-  }
-
-  &:not(&-disabled):hover &-clear-icon {
+  &:not(.c-field-decorator--disabled):hover .c-picker-clear-icon {
     display: inline-block;
   }
 
-  &:not(&-disabled):hover &-suffix &-clear-icon + span {
+  &:not(.c-field-decorator--disabled):hover .c-field-decorator__suffix .c-picker-clear-icon + span {
     display: none;
   }
 
-  input[disabled] {
-    color: @picker-color-text_disabled;
-    cursor: not-allowed;
-
-    &::placeholder {
-      color: @picker-color-placeholder_disabled;
-    }
+  &.c-field-decorator--variant-filled.c-field-decorator--focus .c-picker-input-active input,
+  &.c-field-decorator--variant-filled.c-field-decorator--focus:hover .c-picker-input-active input {
+    background: var(~'--c-field-variant-filled-bg');
   }
 
-  &-error {
-    background-color: @picker-color-bg_error;
-    border-color: @picker-color-border_error;
-
-    &:hover {
-      background-color: @picker-color-bg_error_hover;
-      border-color: @picker-color-border_error_hover;
-    }
+  .c-picker-separator {
+    min-width: var(~'--c-picker-separator-min-width');
+    padding: 0 var(~'--c-picker-separator-padding-x');
+    color: var(~'--c-field-color-blur');
   }
 
-  &-focused {
-    box-shadow: 0 0 0 @picker-size-shadow_focus @picker-color-shadow_focus;
-  }
-
-  &-focused,
-  &-focused:hover {
-    background-color: @picker-color-bg_focus;
-    border-color: @picker-color-border_focus;
-  }
-
-  &-focused&-error {
-    border-color: @picker-color-border_error_focus;
-    box-shadow: 0 0 0 @picker-size-shadow_error_focus @picker-color-shadow_error_focus;
-  }
-
-  &-focused &-input-active input,
-  &-focused:hover &-input-active input {
-    background: @picker-range-color-bg-input_focus;
-  }
-
-  &-disabled,
-  &-disabled:hover {
-    color: @picker-color-text_disabled;
-    background-color: @picker-color-bg_disabled;
-    border-color: @picker-color-border_disabled;
-    cursor: not-allowed;
-
-    input[disabled] {
-      color: @picker-color-text_disabled;
-      cursor: not-allowed;
-
-      &::placeholder {
-        color: @picker-color-placeholder_disabled;
-      }
-    }
-  }
-
-  &-separator {
-    min-width: 10px;
-    padding: 0 8px;
-    color: @picker-color-separator;
-  }
-
-  &-next-day {
+  .c-picker-next-day {
     flex-shrink: 0;
-    margin-right: 4px;
-    color: var(~'--c-color-text-3');
-    font-size: 12px;
+    margin-right: var(~'--c-picker-next-day-margin-right');
+    color: var(~'--c-field-color-blur');
+    font-size: var(~'--c-picker-next-day-font-size');
     line-height: 1;
     white-space: nowrap;
   }
 
-  &-disabled &-separator {
-    color: @picker-color-separator_disabled;
+  &.c-field-decorator--disabled .c-picker-separator {
+    color: var(~'--c-field-color-text-disabled');
   }
 
-  &-disabled &-suffix-icon {
-    color: @picker-color-icon_disabled;
+  &.c-field-decorator--disabled .c-picker-suffix-icon {
+    color: var(~'--c-field-color-text-disabled');
   }
 
-  // Size
-  &-size-xs {
-    height: @picker-size-xs;
+  // Size：高度落在壳上，字号落在 input
+  &.c-field-decorator--size-xs {
+    min-height: var(~'--c-field-size-xs-height');
 
     input {
-      font-size: @picker-size-xs-font-size-text;
+      font-size: var(~'--c-field-size-xs-font-size');
     }
   }
 
-  &-size-sm {
-    height: @picker-size-sm;
+  &.c-field-decorator--size-sm {
+    min-height: var(~'--c-field-size-sm-height');
 
     input {
-      font-size: @picker-size-sm-font-size-text;
+      font-size: var(~'--c-field-size-sm-font-size');
     }
   }
 
-  &-size-md {
-    height: @picker-size-md;
+  &.c-field-decorator--size-md {
+    min-height: var(~'--c-field-size-md-height');
 
     input {
-      font-size: @picker-size-md-font-size-text;
+      font-size: var(~'--c-field-size-md-font-size');
     }
   }
 
-  &-size-lg {
-    height: @picker-size-lg;
+  &.c-field-decorator--size-lg {
+    min-height: var(~'--c-field-size-lg-height');
 
     input {
-      font-size: @picker-size-lg-font-size-text;
+      font-size: var(~'--c-field-size-lg-font-size');
     }
   }
 }

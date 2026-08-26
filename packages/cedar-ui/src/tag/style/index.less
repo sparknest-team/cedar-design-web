@@ -7,68 +7,68 @@
   display: inline-flex;
   align-items: center;
   box-sizing: border-box;
-  height: @tag-size-md;
-  padding: @tag-padding-vertical @tag-padding-horizontal;
-  color: @tag-default-color-text;
-  font-weight: @tag-text-font-weight;
-  font-size: @tag-size-md-font-size;
-  line-height: @tag-size-md - @tag-border-width * 2 - @tag-padding-vertical * 2;
+  height: var(~'--c-tag-size-md');
+  padding: var(~'--c-tag-padding-vertical') var(~'--c-tag-padding-horizontal');
+  color: var(~'--c-tag-default-text-color');
+  font-weight: var(~'--c-tag-text-font-weight');
+  font-size: var(~'--c-tag-size-md-font-size');
+  line-height: calc(var(~'--c-tag-size-md') - var(~'--c-tag-border-width') * 2 - var(~'--c-tag-padding-vertical') * 2);
   vertical-align: middle;
-  border: @tag-border-width @tag-border-type transparent;
-  border-radius: @tag-border-radius;
+  border: var(~'--c-tag-border-width') var(~'--c-tag-border-type') transparent;
+  border-radius: var(~'--c-tag-border-radius');
   .text-ellipsis();
 
-  .icon-hover(~'c-tag', 12px, 16px);
-  .icon-hover-bg(~'c-tag', @tag-default-color-bg_hover);
+  .icon-hover(~'c-tag', var(~'--c-tag-icon-hover-size'), var(~'--c-tag-icon-hover-bg-size'));
+  .icon-hover-bg(~'c-tag', var(~'--c-tag-default-bg-hover'));
 
   &--checkable {
     cursor: pointer;
-    transition: all @transition-duration-1 @transition-timing-function-linear;
+    transition: all var(~'--c-transition-duration-1') var(~'--c-transition-timing-function-linear');
   }
 
   &--checkable:hover {
-    background-color: @tag-color-bg-not-checked_hover;
+    background-color: var(~'--c-tag-bg-not-checked-hover');
   }
 
   &--checked {
-    background-color: @tag-default-color-bg;
-    border-color: @tag-default-color-border;
+    background-color: var(~'--c-tag-default-bg');
+    border-color: var(~'--c-tag-default-border-color');
   }
 
   &--checkable--checked:hover {
-    background-color: @tag-default-color-bg_hover;
-    border-color: @tag-default-color-border_hover;
+    background-color: var(~'--c-tag-default-bg-hover');
+    border-color: var(~'--c-tag-default-border-color-hover');
   }
 
   // Size
   &--size-xs {
-    height: @tag-size-xs;
-    font-size: @tag-size-xs-font-size;
-    line-height: @tag-size-xs - @tag-border-width * 2;
+    height: var(~'--c-tag-size-xs');
+    font-size: var(~'--c-tag-size-xs-font-size');
+    line-height: calc(var(~'--c-tag-size-xs') - var(~'--c-tag-border-width') * 2);
   }
 
   &--size-sm {
-    height: @tag-size-sm;
-    font-size: @tag-size-sm-font-size;
-    line-height: @tag-size-sm - @tag-border-width * 2;
+    height: var(~'--c-tag-size-sm');
+    font-size: var(~'--c-tag-size-sm-font-size');
+    line-height: calc(var(~'--c-tag-size-sm') - var(~'--c-tag-border-width') * 2);
   }
 
   &--size-md {
-    height: @tag-size-md;
-    font-size: @tag-size-md-font-size;
-    line-height: @tag-size-md - @tag-border-width * 2;
+    height: var(~'--c-tag-size-md');
+    font-size: var(~'--c-tag-size-md-font-size');
+    line-height: calc(var(~'--c-tag-size-md') - var(~'--c-tag-border-width') * 2);
   }
 
   &--size-lg {
-    height: @tag-size-lg;
-    font-size: @tag-size-lg-font-size;
-    line-height: @tag-size-lg - @tag-border-width * 2;
+    height: var(~'--c-tag-size-lg');
+    font-size: var(~'--c-tag-size-lg-font-size');
+    line-height: calc(var(~'--c-tag-size-lg') - var(~'--c-tag-border-width') * 2);
   }
 
   &--size-xl {
-    height: @tag-size-xl;
-    font-size: @tag-size-xl-font-size;
-    line-height: @tag-size-xl - @tag-border-width * 2;
+    height: var(~'--c-tag-size-xl');
+    font-size: var(~'--c-tag-size-xl-font-size');
+    line-height: calc(var(~'--c-tag-size-xl') - var(~'--c-tag-border-width') * 2);
   }
 
   &--hide {
@@ -81,8 +81,8 @@
   }
 
   &__icon {
-    margin-right: @tag-icon-margin-right;
-    color: @tag-default-color-icon;
+    margin-right: var(~'--c-tag-icon-margin-right');
+    color: var(~'--c-tag-default-icon-color');
   }
 
   &__text {
@@ -93,34 +93,34 @@
 
   each(@colors, {
     &&--checked&--@{value} {
-      color: ~'@{tag-@{value}-color-text}';
-      background-color: ~'@{tag-@{value}-color-bg}';
-      border: @tag-border-width @tag-border-type ~'@{tag-@{value}-color-border}';
+      color: var(~'--c-tag-@{value}-text-color');
+      background-color: var(~'--c-tag-@{value}-bg');
+      border: var(~'--c-tag-border-width') var(~'--c-tag-border-type') var(~'--c-tag-@{value}-border-color');
 
-      .icon-hover-bg(~'c-tag', ~'@{tag-@{value}-color-icon-bg_hover}');
+      .icon-hover-bg(~'c-tag', var(~'--c-tag-@{value}-icon-bg-hover'));
     }
 
     &&--checkable&--checked&--@{value}&:hover {
-      background-color: ~'@{tag-@{value}-color-bg_hover}';
-      border-color: ~'@{tag-@{value}-color-border_hover}';
+      background-color: var(~'--c-tag-@{value}-bg-hover');
+      border-color: var(~'--c-tag-@{value}-border-color-hover');
     }
 
     &&--checked&--@{value} &__icon,
     &&--checked&--@{value} &__close-btn,
     &&--checked&--@{value} &__loading-icon {
-      color: ~'@{tag-@{value}-color-icon}';
+      color: var(~'--c-tag-@{value}-icon-color');
     }
   });
 
   &&--custom-color {
-    color: @tag-custom-color-text;
+    color: var(~'--c-tag-custom-text-color');
 
-    .icon-hover-bg(~'c-tag', @tag-custom-color-icon-bg_hover);
+    .icon-hover-bg(~'c-tag', var(~'--c-tag-custom-icon-bg-hover'));
   }
 
   & &__close-btn {
-    margin-left: 4px;
-    font-size: 12px;
+    margin-left: var(~'--c-tag-close-margin-left');
+    font-size: var(~'--c-tag-close-font-size');
 
     > svg {
       position: relative;
@@ -128,8 +128,8 @@
   }
 
   & &__loading-icon {
-    margin-left: 4px;
-    font-size: 12px;
+    margin-left: var(~'--c-tag-close-margin-left');
+    font-size: var(~'--c-tag-close-font-size');
   }
 
   // === variant=default × status: filled ===
@@ -154,13 +154,13 @@
   &--variant-outline {
     background-color: transparent;
     color: var(~'--c-tag-variant-outline-default-color');
-    border: @tag-border-width @tag-border-type var(~'--c-tag-variant-outline-default-border-color');
+    border: var(~'--c-tag-border-width') var(~'--c-tag-border-type') var(~'--c-tag-variant-outline-default-border-color');
   }
   .tagOutlineStatus(@status, @colorVar) {
     &--variant-outline&--status-@{status} {
       color: var(~'--c-tag-variant-outline-status-@{status}-color');
       background-color: transparent;
-      border: @tag-border-width @tag-border-type var(~'--c-tag-variant-outline-status-@{status}-color');
+      border: var(~'--c-tag-border-width') var(~'--c-tag-border-type') var(~'--c-tag-variant-outline-status-@{status}-color');
 
       .icon-hover-bg(~'c-tag', ~'rgba(var(--c-@{colorVar}-6), 0.16)');
     }
@@ -198,12 +198,12 @@
   .c-tag {
     &__icon {
       margin-right: 0;
-      margin-left: @tag-icon-margin-right;
+      margin-left: var(~'--c-tag-icon-margin-right');
     }
 
     &__close-btn,
     &__loading-icon {
-      margin-right: 4px;
+      margin-right: var(~'--c-tag-close-margin-left');
       margin-left: 0;
     }
   }

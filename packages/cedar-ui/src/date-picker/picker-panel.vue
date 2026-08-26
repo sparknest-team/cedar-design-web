@@ -58,8 +58,9 @@
   </div>
 </template>
 <script lang="ts">
+import { createNamespace } from '../_utils/global-config'
 import { computed, defineComponent, PropType, reactive, toRefs, watch } from 'vue'
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 import { isFunction } from '../_utils/is'
 import { getDayjsValue, getNow } from '../_utils/date'
 import {
@@ -83,7 +84,7 @@ import RenderFunction, { RenderFunc } from '../_components/render-function'
 import useHeaderValue from './hooks/use-header-value'
 
 export default defineComponent({
-  name: 'DatePikerPanel',
+  name: createNamespace('date-picker-panel').name,
   components: {
     DatePanel,
     PanelShortcuts,

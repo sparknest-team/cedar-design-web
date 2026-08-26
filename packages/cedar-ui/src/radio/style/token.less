@@ -1,55 +1,90 @@
 @import '../../style/theme/index.less';
 
-@radio-color-border: var(~'--c-color-neutral-3');
-@radio-border-width: @border-2;
-@radio-layout-height: 14px;
-@radio-color-border_hover: var(~'--c-color-neutral-3');
-@radio-color-border_disabled: var(~'--c-color-neutral-3');
-@radio-color-bg: var(~'--c-color-bg-2');
-@radio-color-bg_checked: @color-primary-6;
-@radio-border-radius: @radius-circle;
-@radio-color-bg_disabled: var(~'--c-color-fill-2');
-@radio-color-bg_checked_disabled: var(~'--c-color-primary-light-3');
-@radio-color-dot-bg_checked_disabled: @radio-color-bg_disabled;
+:root {
+  --c-radio-border-color: var(~'--c-color-neutral-3');
+  --c-radio-border-width: var(~'--c-border-width-2');
+  --c-radio-layout-height: 14px;
+  --c-radio-border-color-hover: var(~'--c-color-neutral-3');
+  --c-radio-border-color-disabled: var(~'--c-color-neutral-3');
+  --c-radio-bg: var(~'--c-color-bg-2');
+  --c-radio-bg-checked: rgb(var(~'--c-primary-6'));
+  --c-radio-border-radius: var(~'--c-border-radius-circle');
+  --c-radio-bg-disabled: var(~'--c-color-fill-2');
+  --c-radio-bg-checked-disabled: var(~'--c-color-primary-light-3');
+  --c-radio-dot-bg-checked: var(~'--c-color-white');
+  --c-radio-dot-bg-checked-disabled: var(~'--c-radio-bg-disabled');
+  --c-radio-icon-inner-size: calc(
+    var(~'--c-radio-layout-height') - var(~'--c-radio-border-width') * 2
+  );
+  --c-radio-padding-left: calc(
+    (var(~'--c-radio-mask-height') / 2) - (var(~'--c-radio-layout-height') / 2)
+  );
 
-@radio-color-text: var(~'--c-color-text-1');
-@radio-color-text_disabled: var(~'--c-color-text-4');
-@radio-color-text_checked_disabled: var(~'--c-color-text-4');
-@radio-font-text-size: @font-size-body-3;
-@radio-font-text-size_lg: @font-size-body-3;
-@radio-font-text-size_xs: @font-size-body-1;
-@radio-font-text-size_sm: @font-size-body-3;
-@radio-margin-text-left: @spacing-4;
+  --c-radio-text-color: var(~'--c-color-text-1');
+  --c-radio-text-color-disabled: var(~'--c-color-text-4');
+  --c-radio-text-color-checked-disabled: var(~'--c-color-text-4');
+  --c-radio-text-font-size: var(~'--c-font-size-body-3');
+  --c-radio-text-font-size-lg: var(~'--c-font-size-body-3');
+  --c-radio-text-font-size-xs: var(~'--c-font-size-body-1');
+  --c-radio-text-font-size-sm: var(~'--c-font-size-body-3');
+  --c-radio-text-margin-left: var(~'--c-spacing-4');
 
-@radio-size-mask-height: @size-6;
-@radio-mask-bg-color-bg: @icon-hover-color-bg;
-@radio-group-margin-right: @spacing-8;
-@radio-group-button-color-bg: var(~'--c-color-fill-2');
-@radio-button-padding-horizontal: @spacing-6;
-@radio-button-spacing: 3px;
-@radio-button-color-bg_active: var(~'--c-color-bg-5');
-@radio-button-color-bg_hover: @radio-button-color-bg_active;
-@radio-button-color-text_active: @color-primary-6;
-@radio-button-font-text-weight_active: @font-weight-500;
-@radio-button-color-text_hover: @radio-color-text;
+  --c-radio-mask-height: var(~'--c-size-6');
+  --c-radio-mask-hover-bg: var(~'--c-color-fill-2');
+  --c-radio-group-margin-right: var(~'--c-spacing-8');
+  --c-radio-group-button-bg: var(~'--c-color-fill-2');
+  --c-radio-button-padding-horizontal: var(~'--c-spacing-6');
+  --c-radio-button-spacing: 3px;
+  --c-radio-button-bg-active: var(~'--c-color-bg-5');
+  --c-radio-button-bg-hover: var(~'--c-radio-button-bg-active');
+  --c-radio-button-text-color-active: rgb(var(~'--c-primary-6'));
+  --c-radio-button-font-weight-active: var(~'--c-font-weight-500');
+  --c-radio-button-text-color-hover: var(~'--c-radio-text-color');
 
-@radio-button-border-radius: @radius-sm;
-@radio-button-bg-border-radius: @radio-button-border-radius;
+  --c-radio-button-border-radius: var(~'--c-border-radius-sm');
 
-@radio-button-color-bg: @color-transparent;
-@radio-button-color-text: var(~'--c-color-text-2');
+  --c-radio-button-bg: transparent;
+  --c-radio-button-text-color: var(~'--c-color-text-2');
 
-@radio-button-color-bg_disabled: @color-transparent;
-@radio-button-color-text_disabled: var(~'--c-color-text-4');
-@radio-button-color-bg_checked_disabled: @radio-button-color-bg_active;
-@radio-button-color-text_checked_disabled: var(~'--c-color-primary-light-3');
+  --c-radio-button-bg-disabled: transparent;
+  --c-radio-button-text-color-disabled: var(~'--c-color-text-4');
+  --c-radio-button-bg-checked-disabled: var(~'--c-radio-button-bg-active');
+  --c-radio-button-text-color-checked-disabled: var(~'--c-color-primary-light-3');
 
-@radio-button-color-separator-bg: var(~'--c-color-neutral-3');
-@radio-button-size-separator-width: 1px;
-@radio-button-size-separator-height: 14px;
+  --c-radio-button-separator-bg: var(~'--c-color-neutral-3');
+  --c-radio-button-separator-width: 1px;
+  --c-radio-button-separator-height: 14px;
+  --c-radio-button-separator-left: calc(
+    -1 * ((var(~'--c-radio-button-spacing') - var(~'--c-radio-button-separator-width')) / 2) -
+      var(~'--c-radio-button-separator-width')
+  );
+  --c-radio-button-spacing-half: calc(var(~'--c-radio-button-spacing') / 2);
 
-@radio-size-md-height: @size-md;
-@radio-size-sm-height: @size-sm;
-@radio-size-xs-height: @size-xs;
-@radio-size-lg-height: @size-lg;
-@radio-group-size-line-height_vertical: @size-8;
+  --c-radio-size-md-height: var(~'--c-size-md');
+  --c-radio-size-sm-height: var(~'--c-size-sm');
+  --c-radio-size-xs-height: var(~'--c-size-xs');
+  --c-radio-size-lg-height: var(~'--c-size-lg');
+  --c-radio-group-vertical-line-height: var(~'--c-size-8');
+  --c-radio-button-line-height-md: calc(
+    var(~'--c-radio-size-md-height') - var(~'--c-radio-button-spacing') * 2
+  );
+  --c-radio-button-line-height-sm: calc(
+    var(~'--c-radio-size-sm-height') - var(~'--c-radio-button-spacing') * 2
+  );
+  --c-radio-button-line-height-lg: calc(
+    var(~'--c-radio-size-lg-height') - var(~'--c-radio-button-spacing') * 2
+  );
+  --c-radio-button-line-height-xs: calc(
+    var(~'--c-radio-size-xs-height') - var(~'--c-radio-button-spacing') * 2
+  );
+
+  --c-radio-transition-duration-1: var(~'--c-transition-duration-1');
+  --c-radio-transition-duration-3: var(~'--c-transition-duration-3');
+  --c-radio-transition-timing-function-linear: var(~'--c-transition-timing-function-linear');
+  --c-radio-transition-timing-function-overshoot: var(~'--c-transition-timing-function-overshoot');
+}
+
+:root[cedar-theme='dark'] {
+  --c-radio-button-bg-active: var(~'--c-color-fill-3');
+  --c-radio-button-bg-hover: var(~'--c-color-fill-3');
+}

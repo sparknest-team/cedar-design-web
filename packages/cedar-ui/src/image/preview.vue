@@ -26,6 +26,7 @@
             ref="refImage"
             :key="src"
             :src="src"
+            alt=""
             :class="[
               `${prefixCls}-img`,
               {
@@ -67,6 +68,7 @@
   </teleport>
 </template>
 <script lang="tsx">
+import { createNamespace } from '../_utils/global-config'
 import {
   computed,
   defineComponent,
@@ -89,16 +91,17 @@ import PreviewArrow from './preview-arrow.vue'
 import PreviewToolbar from './preview-toolbar.vue'
 import useImageLoadStatus from './hooks/use-image-load-status'
 import useImageDrag from './hooks/use-image-drag'
-import IconLoading from '../icon/icon-loading'
-import IconClose from '../icon/icon-close'
-import IconZoomOut from '../icon/icon-zoom-out'
-import IconZoomIn from '../icon/icon-zoom-in'
-import IconFullscreen from '../icon/icon-fullscreen'
-import IconRotateLeft from '../icon/icon-rotate-left'
-import IconRotateRight from '../icon/icon-rotate-right'
-import IconOriginalSize from '../icon/icon-original-size'
+import { IconLoading } from '@cedarjs/icons-vue/icon-loading'
+import { IconClose } from '@cedarjs/icons-vue/icon-close'
+import { IconZoomOut } from '@cedarjs/icons-vue/icon-zoom-out'
+import { IconZoomIn } from '@cedarjs/icons-vue/icon-zoom-in'
+import { IconFullscreen } from '@cedarjs/icons-vue/icon-fullscreen'
+import { IconRotateLeft } from '@cedarjs/icons-vue/icon-rotate-left'
+import { IconRotateRight } from '@cedarjs/icons-vue/icon-rotate-right'
+import { IconOriginalSize } from '@cedarjs/icons-vue/icon-original-size'
 import usePopupOverHidden from '../_hooks/use-popup-overflow-hidden'
 import usePopupContainer from '../_hooks/use-popup-container'
+import { isServerRendering } from '../_utils/dom'
 import usePopupManager from '../_hooks/use-popup-manager'
 import getScale, { getScaleByRate, minScale, maxScale } from './utils/get-scale'
 import { useI18n } from '../locale'
@@ -108,13 +111,13 @@ import {
   resolveClosable,
   resolveEscToClose,
   resolveMaskClosable,
-  resolveTeleport,
-} from './utils/resolvePreviewAliases'
+  resolvePopupContainer,
+} from './utils/resolvePreviewOptions'
 
 const ROTATE_STEP = 90
 
 export default defineComponent({
-  name: 'ImagePreview',
+  name: createNamespace("image-preview").name,
   components: {
     PreviewArrow,
     PreviewToolbar,
@@ -135,26 +138,18 @@ export default defineComponent({
     },
     /**
      * @zh 是否可见
-     * @en Whether is visible
+     * @en Whether the preview is open
      * @vModel
      */
-    visible: {
-      type: Boolean,
-      default: undefined,
-    },
-    /**
-     * @zh 是否可见（visible 的别名）
-     * @en Whether is visible (alias of visible)
-     */
-    show: {
+    open: {
       type: Boolean,
       default: undefined,
     },
     /**
      * @zh 默认是否可见，非受控
-     * @en Default visibility
+     * @en Default open state (uncontrolled)
      */
-    defaultVisible: {
+    defaultOpen: {
       type: Boolean,
       default: false,
     },
@@ -175,14 +170,6 @@ export default defineComponent({
       default: undefined,
     },
     /**
-     * @zh 是否显示关闭按钮（closable 的别名）
-     * @en Whether to show close button (alias of closable)
-     */
-    closeable: {
-      type: Boolean,
-      default: undefined,
-    },
-    /**
      * @zh 操作项的布局
      * @en Layout of action list
      */
@@ -191,25 +178,10 @@ export default defineComponent({
       default: undefined,
     },
     /**
-     * @zh 操作项的布局（actionsLayout 的别名）
-     * @en Layout of action list (alias of actionsLayout)
-     */
-    actions: {
-      type: Array as PropType<string[]>,
-      default: undefined,
-    },
-    /**
-     * @zh 设置弹出框的挂载点，同 `teleport` 的 `to`，缺省值是 document.body
-     * @en Set the mount point of the pop-up box, the same as the `to` of `teleport`, the default value is document.body
+     * @zh 设置弹出框的挂载点，缺省值是 document.body
+     * @en Set the mount point of the pop-up box, the default value is document.body
      */
     popupContainer: {
-      type: [Object, String] as PropType<HTMLElement | string>,
-    },
-    /**
-     * @zh 设置弹出框的挂载点（popupContainer 的别名）
-     * @en Mount point alias of popupContainer
-     */
-    teleport: {
       type: [Object, String] as PropType<HTMLElement | string>,
     },
     inGroup: {
@@ -225,14 +197,6 @@ export default defineComponent({
      * @en Whether to support the ESC key to close the preview
      */
     escToClose: {
-      type: Boolean,
-      default: undefined,
-    },
-    /**
-     * @zh 是否支持 ESC 键关闭预览（escToClose 的别名）
-     * @en Whether to support ESC key to close (alias of escToClose)
-     */
-    closeOnKeyEscape: {
       type: Boolean,
       default: undefined,
     },
@@ -268,14 +232,11 @@ export default defineComponent({
       type: Number,
       default: 1.1,
     },
-    onPreviewVisibleChange: {
-      type: Function as PropType<(visible: boolean) => void>,
-    },
-    onVisibleChange: {
-      type: Function as PropType<(visible: boolean) => void>,
+    onOpenChange: {
+      type: Function as PropType<(open: boolean) => void>,
     },
   },
-  emits: ['close', 'update:visible', 'update:show', 'visible-change', 'preview-visible-change'],
+  emits: ['close', 'update:open', 'openChange'],
   /**
    * @zh 自定义额外的操作项
    * @en Customize additional action items
@@ -284,20 +245,20 @@ export default defineComponent({
    */
   setup(props, { emit }) {
     const { t } = useI18n()
-    const { src, visible, show, defaultVisible, defaultScale, zoomRate, inGroup, groupArrowProps, renderToBody } =
+    const { src, open, defaultOpen, defaultScale, zoomRate, inGroup, groupArrowProps, renderToBody } =
       toRefs(props)
 
-    const controlledVisible = computed(() => visible.value ?? show.value)
+    const controlledOpen = computed(() => open.value)
     const maskClosable = computed(() => resolveMaskClosable(props, imagePlatformConfig.defaultMaskClosable))
     const closable = computed(() => resolveClosable(props, imagePlatformConfig.defaultClosable))
     const actionsLayout = computed(() => resolveActionsLayout(props, imagePlatformConfig.toolbarActions))
-    const popupContainer = computed(() => resolveTeleport(props) as HTMLElement | string | undefined)
+    const popupContainer = computed(() => resolvePopupContainer(props) as HTMLElement | string | undefined)
     const escToClose = computed(() => resolveEscToClose(props))
 
     const refWrapper = ref()
     const refImage = ref()
     const prefixCls = getPrefixCls('image-preview')
-    const [mergedVisible, setVisible] = useMergeState(defaultVisible.value, reactive({ value: controlledVisible }))
+    const [mergedVisible, setVisible] = useMergeState(defaultOpen.value, reactive({ value: controlledOpen }))
     const classNames = computed(() => [
       prefixCls,
       {
@@ -305,9 +266,10 @@ export default defineComponent({
       },
     ])
 
-    const container = usePopupContainer(document.body, reactive({ popupContainer }))
+    const defaultContainer = isServerRendering ? undefined : document.body
+    const container = usePopupContainer(defaultContainer, reactive({ popupContainer }))
 
-    const isFixed = computed(() => container.value === document.body)
+    const isFixed = computed(() => !isServerRendering && container.value === document.body)
     const { zIndex } = usePopupManager('dialog', { visible: mergedVisible })
 
     const wrapperStyles = computed<CSSProperties>(() => {
@@ -398,14 +360,14 @@ export default defineComponent({
       nextTick(() => {
         refWrapper?.value?.focus()
       })
-      if (props.keyboard && !globalKeyDownListener) {
+      if (props.keyboard && container.value && !globalKeyDownListener) {
         globalKeyDownListener = true
         on(container.value, 'keydown', handleKeyDown)
       }
     }
 
     const removeGlobalKeyDownListener = () => {
-      if (globalKeyDownListener) {
+      if (globalKeyDownListener && container.value) {
         globalKeyDownListener = false
         off(container.value, 'keydown', handleKeyDown)
       }
@@ -421,19 +383,16 @@ export default defineComponent({
       }
     })
 
-    function emitVisibleChange(value: boolean) {
-      emit('update:visible', value)
-      emit('update:show', value)
-      emit('visible-change', value)
-      emit('preview-visible-change', value)
-      props.onPreviewVisibleChange?.(value)
-      props.onVisibleChange?.(value)
+    function emitOpenChange(value: boolean) {
+      emit('update:open', value)
+      emit('openChange', value)
+      props.onOpenChange?.(value)
     }
 
     function close() {
       if (mergedVisible.value) {
         emit('close')
-        emitVisibleChange(false)
+        emitOpenChange(false)
         setVisible(false)
       }
     }

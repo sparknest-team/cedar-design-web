@@ -1,13 +1,12 @@
-import { defineComponent, PropType, toRefs } from 'vue'
-import { getPrefixCls, createNamespace } from '../_utils/global-config'
-import { Color, HSV, RGB } from './types'
-import { rgbToHsv } from '../_utils/color'
-import { InputGroup } from '../input'
-import InputNumber from '../input-number'
-import InputAlpha from './input-alpha'
+import { defineComponent, PropType, toRefs } from "vue";
+import { getPrefixCls, createNamespace } from "../_utils/global-config";
+import { Color, HSV, RGB } from "./types";
+import { rgbToHsv } from "../_utils/color";
+import { InputGroup } from "../input";
+import InputNumber from "../input-number";
+import InputAlpha from "./input-alpha";
 
-
-const { name } = createNamespace('input-rgb')
+const { name } = createNamespace("input-rgb");
 
 export default defineComponent({
   name,
@@ -26,18 +25,18 @@ export default defineComponent({
     onAlphaChange: Function as PropType<(value: number) => void>,
   },
   setup(props) {
-    const prefixCls = getPrefixCls('color-picker')
-    const { color } = toRefs(props)
+    const prefixCls = getPrefixCls("color-picker");
+    const { color } = toRefs(props);
 
     const handleChange = (value: Partial<RGB>) => {
-      const newRGB = { ...color.value.rgb, ...value }
-      const hsv = rgbToHsv(newRGB.r, newRGB.g, newRGB.b)
-      props.onHsvChange?.(hsv)
-    }
+      const newRGB = { ...color.value.rgb, ...value };
+      const hsv = rgbToHsv(newRGB.r, newRGB.g, newRGB.b);
+      props.onHsvChange?.(hsv);
+    };
 
     return () => (
       <InputGroup class={`${prefixCls}-input-group`}>
-        {(['r', 'g', 'b'] as Array<keyof RGB>).map((channel) => (
+        {(["r", "g", "b"] as Array<keyof RGB>).map((channel) => (
           <InputNumber
             key={channel}
             size="xs"
@@ -45,14 +44,18 @@ export default defineComponent({
             max={255}
             disabled={props.disabled}
             modelValue={color.value.rgb[channel]}
-            hideButton
+            mode="input"
             onChange={(val = 0) => handleChange({ [channel]: val })}
           />
         ))}
         {!props.disabledAlpha && (
-          <InputAlpha disabled={props.disabled} value={props.alpha} onChange={props.onAlphaChange} />
+          <InputAlpha
+            disabled={props.disabled}
+            value={props.alpha}
+            onChange={props.onAlphaChange}
+          />
         )}
       </InputGroup>
-    )
+    );
   },
-})
+});

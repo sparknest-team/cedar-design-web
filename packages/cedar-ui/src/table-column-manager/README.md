@@ -6,7 +6,7 @@ permalink: /components/table-column-manager/
 
 双栏列管理内容组件：左侧搜索勾选，右侧拖拽排序 / 冻结 / 删除。
 
-- 默认自带抽屉容器（`v-model:visible`），确认后通过 `confirm` 事件回写 `columns`。
+- 默认自带抽屉容器（`v-model:open`），确认后通过 `confirm` 事件回写 `columns`。
 - 传入 `inline` 可只渲染内联面板，用于放入自定义弹窗 / 容器。
 - 与 Table **解耦**：Table 只提供 `v-model:columns`、`extra-column`、`#header-cell-actions` 等扩展点；列管理 UI / 算法由外部组合。
 
@@ -149,7 +149,7 @@ const manager = useTableColumnManager({
 | remote-search | 远程搜索（有值时隐藏顶栏全选）     | `(keyword: string) => Promise<void>`                    | `-`        |
 | fallback-item | 值不在定义中时反显                 | `(dataIndex: string) => ColumnDefinition \| undefined` | `-`        |
 | insert-at     | 插入上下文，影响新增列落点         | `{ dataIndex: string; side: 'left' \| 'right' }`        | `-`        |
-| visible       | 抽屉是否可见（`v-model:visible`）  | `boolean`                                               | `-`        |
+| open          | 抽屉是否可见（`v-model:open`）     | `boolean`                                               | `-`        |
 | drawer-title  | 抽屉标题                           | `string`                                                | `自定义列` |
 | drawer-width  | 抽屉宽度                           | `number \| string`                                      | `720`      |
 | inline        | 是否只渲染内联面板（不渲染抽屉）   | `boolean`                                               | `false`    |
@@ -160,7 +160,7 @@ const manager = useTableColumnManager({
 | 事件名            | 描述                            | 参数                  |
 | ----------------- | ------------------------------- | --------------------- |
 | update:modelValue | 已选完整状态变更                | `ColumnManagerItem[]` |
-| update:visible    | 抽屉可见性变更                  | `boolean`             |
+| update:open       | 抽屉可见性变更                  | `boolean`             |
 | confirm           | 点击抽屉/弹窗确认后返回组装结果 | `ColumnManagerResult` |
 | change            | 选择、排序、冻结或标题变化      | `ColumnManagerItem[]` |
 

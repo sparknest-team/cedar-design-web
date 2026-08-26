@@ -6,10 +6,10 @@
   box-sizing: border-box;
   width: 100%;
   overflow-y: auto;
-  color: @list-color-text;
-  font-size: @list-font-size;
-  line-height: @list-line-height;
-  border-radius: @list-border-radius;
+  color: var(~'--c-list-text-color');
+  font-size: var(~'--c-list-font-size');
+  line-height: var(~'--c-list-line-height');
+  border-radius: var(~'--c-list-border-radius');
 
   &-wrapper {
     overflow: hidden;
@@ -27,13 +27,9 @@
 
   .size(@size) {
     &-@{size} {
-      @ref-padding-vertical-header: ~'list-size-@{size}-padding-vertical-header';
-      @ref-padding-horizontal-header: ~'list-size-@{size}-padding-horizontal-header';
-      @ref-padding-vertical-item: ~'list-size-@{size}-padding-vertical-item';
-      @ref-padding-horizontal-item: ~'list-size-@{size}-padding-horizontal-item';
-
       .c-list-content-wrapper .c-list-header {
-        padding: @@ref-padding-vertical-header @@ref-padding-horizontal-header;
+        padding: var(~'--c-list-size-@{size}-padding-vertical-header')
+          var(~'--c-list-size-@{size}-padding-horizontal-header');
       }
 
       // 在存在列表嵌套的时候，通过 > 限定 size 仅对其直接子元素生效，避免影响被嵌套的列表的样式
@@ -46,25 +42,26 @@
       .c-list-content-wrapper
         .c-list-content.c-list-virtual
         .c-list-item {
-        padding: @@ref-padding-vertical-item @@ref-padding-horizontal-item;
+        padding: var(~'--c-list-size-@{size}-padding-vertical-item')
+          var(~'--c-list-size-@{size}-padding-horizontal-item');
       }
     }
   }
 
   .border() {
     &-bordered {
-      border: @list-border-width solid @list-border-color;
+      border: var(~'--c-list-border-width') solid var(~'--c-list-border-color');
     }
   }
 
   .split() {
     &-split &-header,
     &-split &-item:not(:last-child) {
-      border-bottom: @list-border-width solid @list-border-color;
+      border-bottom: var(~'--c-list-border-width') solid var(~'--c-list-border-color');
     }
 
     &-split &-footer {
-      border-top: @list-border-width solid @list-border-color;
+      border-top: var(~'--c-list-border-width') solid var(~'--c-list-border-color');
     }
   }
 
@@ -75,10 +72,10 @@
   .split();
 
   &-header {
-    color: @list-color-text-header;
-    font-weight: @list-font-weight-header;
-    font-size: @list-font-size-header;
-    line-height: @list-line-height-header;
+    color: var(~'--c-list-text-color-header');
+    font-weight: var(~'--c-list-font-weight-header');
+    font-size: var(~'--c-list-font-size-header');
+    line-height: var(~'--c-list-line-height-header');
   }
 
   &-item {
@@ -92,34 +89,34 @@
       flex: 1;
 
       .c-list-item-action:not(:first-child) {
-        margin-top: @list-action-margin-top;
+        margin-top: var(~'--c-list-action-margin-top');
       }
     }
 
     &-meta {
       display: flex;
       align-items: center;
-      padding: @list-meta-padding-vertical @list-meta-padding-horizontal;
+      padding: var(~'--c-list-meta-padding-vertical') var(~'--c-list-meta-padding-horizontal');
 
       &-avatar {
         display: flex;
 
         &:not(:last-child) {
-          margin-right: @list-meta-margin-right-avatar;
+          margin-right: var(~'--c-list-meta-margin-right-avatar');
         }
       }
 
       &-title {
-        color: @list-meta-color-title;
-        font-weight: @list-meta-font-weight-title;
+        color: var(~'--c-list-meta-title-color');
+        font-weight: var(~'--c-list-meta-font-weight-title');
 
         &:not(:last-child) {
-          margin-bottom: @list-meta-margin-bottom-title;
+          margin-bottom: var(~'--c-list-meta-margin-bottom-title');
         }
       }
 
       &-description {
-        color: @list-mete-color-description;
+        color: var(~'--c-list-mete-color-description');
       }
     }
 
@@ -136,19 +133,19 @@
         cursor: pointer;
 
         &:not(:last-child) {
-          margin-right: @list-action-gap;
+          margin-right: var(~'--c-list-action-gap');
         }
       }
     }
   }
 
   &-hover &-item:hover {
-    background-color: @list-color-bg-item-hover;
+    background-color: var(~'--c-list-bg-item-hover');
   }
 
   &-pagination {
     float: right;
-    margin-top: @list-pagination-margin-top;
+    margin-top: var(~'--c-list-pagination-margin-top');
 
     &::after {
       display: block;

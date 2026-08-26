@@ -1,4 +1,4 @@
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 import { computed, toRefs, watch } from 'vue'
 import { normalizeRangeValue } from '../utils'
 import { getDayjsValue } from '../../_utils/date'

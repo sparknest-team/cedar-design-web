@@ -46,11 +46,12 @@ permalink: /components/date-range/
 | --- | --- | --- | --- |
 | `model-value` | 绑定值 | `(Date \| string \| number)[]` | `-` |
 | `type` | 选择类型 | `date \| week \| month \| year \| quarter` | `date` |
-| `popup-visible` | 弹层显隐 | `boolean` | `-` |
+| `open` | 弹层显隐 | `boolean` | `-` |
 | `clearable` | 可清除 | `boolean` | `false` |
 | `disabled` | 禁用 | `boolean \| boolean[]` | `-` |
 | `readonly` | 只读 | `boolean` | `false` |
 | `size` | 尺寸 | `xs \| sm \| md \| lg \| xl` | `-` |
+| `variant` | 输入框变体 | `filled \| outlined \| standard` | `filled` |
 | `separator` | 分隔符 | `string` | `-` |
 | `placeholder` | 占位 | `string[]` | `-` |
 | `disabled-date` | 禁用日期 | `Function` | `-` |

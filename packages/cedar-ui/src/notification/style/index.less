@@ -3,18 +3,18 @@
 
 .c-notification-list {
   position: fixed;
-  z-index: @z-index-notification;
+  z-index: var(~'--c-notification-z-index');
   margin: 0;
   padding-left: 0;
 
   &-top-left {
-    top: @notification-wrapper-margin-top;
-    left: @notification-wrapper-margin-left;
+    top: var(~'--c-notification-wrapper-margin-top');
+    left: var(~'--c-notification-wrapper-margin-left');
   }
 
   &-top-right {
-    top: @notification-wrapper-margin-top;
-    right: @notification-wrapper-margin-right;
+    top: var(~'--c-notification-wrapper-margin-top');
+    right: var(~'--c-notification-wrapper-margin-right');
 
     .c-notification {
       margin-left: auto;
@@ -22,13 +22,13 @@
   }
 
   &-bottom-left {
-    bottom: @notification-wrapper-margin-bottom;
-    left: @notification-wrapper-margin-left;
+    bottom: var(~'--c-notification-wrapper-margin-bottom');
+    left: var(~'--c-notification-wrapper-margin-left');
   }
 
   &-bottom-right {
-    right: @notification-wrapper-margin-right;
-    bottom: @notification-wrapper-margin-bottom;
+    right: var(~'--c-notification-wrapper-margin-right');
+    bottom: var(~'--c-notification-wrapper-margin-bottom');
 
     .c-notification {
       margin-left: auto;
@@ -40,64 +40,70 @@
   position: relative;
   display: flex;
   box-sizing: border-box;
-  width: @notification-width + @notification-padding-right + @notification-padding-left;
-  padding: @notification-padding-top @notification-padding-right @notification-padding-bottom @notification-padding-left;
+  width: calc(
+    var(~'--c-notification-width') + var(~'--c-notification-padding-right') +
+      var(~'--c-notification-padding-left')
+  );
+  padding: var(~'--c-notification-padding-top') var(~'--c-notification-padding-right')
+    var(~'--c-notification-padding-bottom') var(~'--c-notification-padding-left');
   overflow: hidden;
-  background-color: @notification-normal-color-bg;
-  border: @notification-border-width @notification-border-style @notification-normal-color-border;
-  border-radius: @notification-border-radius;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background-color: var(~'--c-notification-normal-bg');
+  border: var(~'--c-notification-border-width') var(~'--c-notification-border-style')
+    var(~'--c-notification-normal-border-color');
+  border-radius: var(~'--c-notification-border-radius');
+  box-shadow: var(~'--c-notification-box-shadow');
   opacity: 1;
-  transition: opacity @transition-duration-2 @transition-timing-function-linear;
+  transition: opacity var(~'--c-notification-transition-duration')
+    var(~'--c-notification-transition-timing-function');
 
   &:not(:last-child) {
-    margin-bottom: @notification-margin-bottom;
+    margin-bottom: var(~'--c-notification-margin-bottom');
   }
 
   &-icon {
     display: flex;
     align-items: center;
-    font-size: @notification-font-size-icon;
+    font-size: var(~'--c-notification-icon-font-size');
   }
 
   &-info {
-    background-color: @notification-info-color-bg;
-    border-color: @notification-info-color-border;
+    background-color: var(~'--c-notification-info-bg');
+    border-color: var(~'--c-notification-info-border-color');
   }
 
   &-info &-icon {
-    color: @notification-info-color-icon;
+    color: var(~'--c-notification-info-icon-color');
   }
 
   &-success {
-    background-color: @notification-success-color-bg;
-    border-color: @notification-success-color-border;
+    background-color: var(~'--c-notification-success-bg');
+    border-color: var(~'--c-notification-success-border-color');
   }
 
   &-success &-icon {
-    color: @notification-success-color-icon;
+    color: var(~'--c-notification-success-icon-color');
   }
 
   &-warning {
-    background-color: @notification-warning-color-bg;
-    border-color: @notification-warning-color-border;
+    background-color: var(~'--c-notification-warning-bg');
+    border-color: var(~'--c-notification-warning-border-color');
   }
 
   &-warning &-icon {
-    color: @notification-warning-color-icon;
+    color: var(~'--c-notification-warning-icon-color');
   }
 
   &-error {
-    background-color: @notification-error-color-bg;
-    border-color: @notification-error-color-border;
+    background-color: var(~'--c-notification-error-bg');
+    border-color: var(~'--c-notification-error-border-color');
   }
 
   &-error &-icon {
-    color: @notification-error-color-icon;
+    color: var(~'--c-notification-error-icon-color');
   }
 
   &-left {
-    padding-right: @notification-icon-margin-right;
+    padding-right: var(~'--c-notification-icon-margin-right');
   }
 
   &-right {
@@ -106,63 +112,66 @@
   }
 
   &-title {
-    color: @notification-normal-color-text-title;
-    font-weight: @font-weight-500;
-    font-size: @notification-font-size-title;
+    color: var(~'--c-notification-normal-title-color');
+    font-weight: var(~'--c-notification-title-font-weight');
+    font-size: var(~'--c-notification-title-font-size');
   }
 
   &-title + &-content {
-    margin-top: @notification-title-margin-bottom;
+    margin-top: var(~'--c-notification-title-margin-bottom');
   }
 
   &-content {
-    color: @notification-normal-color-text-content;
-    font-size: @notification-font-size-content;
+    color: var(~'--c-notification-normal-content-color');
+    font-size: var(~'--c-notification-content-font-size');
   }
 
   &-info &-title {
-    color: @notification-info-color-text-title;
+    color: var(~'--c-notification-info-title-color');
   }
 
   &-info &-content {
-    color: @notification-info-color-text-content;
+    color: var(~'--c-notification-info-content-color');
   }
 
   &-success &-title {
-    color: @notification-success-color-text-title;
+    color: var(~'--c-notification-success-title-color');
   }
 
   &-success &-content {
-    color: @notification-success-color-text-content;
+    color: var(~'--c-notification-success-content-color');
   }
 
   &-warning &-title {
-    color: @notification-warning-color-text-title;
+    color: var(~'--c-notification-warning-title-color');
   }
 
   &-warning &-content {
-    color: @notification-warning-color-text-content;
+    color: var(~'--c-notification-warning-content-color');
   }
 
   &-error &-title {
-    color: @notification-error-color-text-title;
+    color: var(~'--c-notification-error-title-color');
   }
 
   &-error &-content {
-    color: @notification-error-color-text-content;
+    color: var(~'--c-notification-error-content-color');
   }
 
   &-footer {
-    margin-top: @notification-btn-wrapper-margin-top;
+    margin-top: var(~'--c-notification-footer-margin-top');
     text-align: right;
   }
 
   &-close-btn {
+    padding: 0;
+    border: 0;
+    background: transparent;
     position: absolute;
-    top: @notification-close-icon-top;
-    right: @notification-close-icon-right;
-    color: @notification-color-close-icon;
-    font-size: @notification-close-icon-font-size;
+    top: var(~'--c-notification-close-icon-top');
+    right: var(~'--c-notification-close-icon-right');
+    color: var(~'--c-notification-close-icon-color');
+    font-size: var(~'--c-notification-close-icon-font-size');
     cursor: pointer;
 
     > svg {
@@ -171,9 +180,9 @@
   }
 
   .icon-hover(
-    'c-notification',
-    @notification-close-icon-font-size,
-    @notification-close-icon-font-size + 8px
+    ~'c-notification',
+    var(~'--c-notification-close-icon-font-size'),
+    var(~'--c-notification-close-icon-hover-size')
   );
 }
 
@@ -189,7 +198,8 @@
 
 .slide-left-notification-enter-active,
 .slide-left-notification-appear-active {
-  transition: transform @transition-duration-4 @transition-timing-function-overshoot;
+  transition: transform var(~'--c-notification-transition-duration-enter')
+    var(~'--c-notification-transition-timing-function-enter');
 }
 
 .slide-left-notification-leave-from {
@@ -206,7 +216,8 @@
 }
 
 .slide-left-notification-leave-active {
-  transition: all @transition-duration-3 @transition-timing-function-standard;
+  transition: all var(~'--c-notification-transition-duration-leave')
+    var(~'--c-notification-transition-timing-function-leave');
 }
 
 .slide-right-notification-enter-from,
@@ -221,7 +232,8 @@
 
 .slide-right-notification-enter-active,
 .slide-right-notification-appear-active {
-  transition: transform @transition-duration-4 @transition-timing-function-overshoot;
+  transition: transform var(~'--c-notification-transition-duration-enter')
+    var(~'--c-notification-transition-timing-function-enter');
 }
 
 .slide-right-notification-leave-from {
@@ -238,5 +250,6 @@
 }
 
 .slide-right-notification-leave-active {
-  transition: all @transition-duration-3 @transition-timing-function-standard;
+  transition: all var(~'--c-notification-transition-duration-leave')
+    var(~'--c-notification-transition-timing-function-leave');
 }

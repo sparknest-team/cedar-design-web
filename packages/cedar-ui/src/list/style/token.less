@@ -1,51 +1,37 @@
 @import '../../style/theme/index.less';
 
-@list-border-width: 1px;
-@list-border-color: var(~'--c-color-neutral-3');
-@list-border-radius: @radius-md;
-
-@list-color-text: var(~'--c-color-text-1');
-@list-font-size: @font-size-body-3;
-@list-line-height: var(~'--c-line-height');
-
-@list-color-text-header: var(~'--c-color-text-1');
-@list-color-bg-item-hover: var(~'--c-color-fill-1');
-@list-font-size-header: @font-size-title-1;
-@list-font-weight-header: @font-weight-500;
-@list-line-height-header: 1.5;
-
-/**********************************************
- * size:  sm / md / lg
- **********************************************/
-@list-size-sm-padding-vertical-header: @spacing-4;
-@list-size-sm-padding-horizontal-header: @spacing-8;
-@list-size-sm-padding-vertical-item: 9px;
-@list-size-sm-padding-horizontal-item: @spacing-8;
-
-@list-size-md-padding-vertical-header: @spacing-6;
-@list-size-md-padding-horizontal-header: @spacing-8;
-@list-size-md-padding-vertical-item: 13px;
-@list-size-md-padding-horizontal-item: @spacing-8;
-
-@list-size-lg-padding-vertical-header: @spacing-7;
-@list-size-lg-padding-horizontal-header: @spacing-8;
-@list-size-lg-padding-vertical-item: 17px;
-@list-size-lg-padding-horizontal-item: @spacing-8;
-
-// meta
-@list-meta-font-weight-title: @font-weight-500;
-@list-meta-color-title: var(~'--c-color-text-1');
-@list-mete-color-description: var(~'--c-color-text-2');
-@list-meta-margin-right-avatar: @spacing-7;
-@list-meta-margin-bottom-title: @spacing-1;
-@list-meta-padding-horizontal: @spacing-none;
-@list-meta-padding-vertical: @spacing-2;
-
-// actions
-@list-action-gap: @spacing-8;
-@list-action-margin-top: @spacing-2;
-
-// pagination
-@list-pagination-margin-top: @spacing-9;
-
-// vue覆盖token
+:root {
+  --c-list-border-width: 1px;
+  --c-list-border-color: var(~'--c-color-neutral-3');
+  --c-list-border-radius: var(~'--c-border-radius-md');
+  --c-list-text-color: var(~'--c-color-text-1');
+  --c-list-font-size: var(~'--c-font-size-body-3');
+  --c-list-line-height: var(~'--c-line-height');
+  --c-list-text-color-header: var(~'--c-color-text-1');
+  --c-list-bg-item-hover: var(~'--c-color-fill-1');
+  --c-list-font-size-header: var(~'--c-font-size-title-1');
+  --c-list-font-weight-header: var(~'--c-font-weight-500');
+  --c-list-line-height-header: 1.5;
+  --c-list-size-sm-padding-vertical-header: var(~'--c-spacing-4');
+  --c-list-size-sm-padding-horizontal-header: var(~'--c-spacing-8');
+  --c-list-size-sm-padding-vertical-item: 9px;
+  --c-list-size-sm-padding-horizontal-item: var(~'--c-spacing-8');
+  --c-list-size-md-padding-vertical-header: var(~'--c-spacing-6');
+  --c-list-size-md-padding-horizontal-header: var(~'--c-spacing-8');
+  --c-list-size-md-padding-vertical-item: 13px;
+  --c-list-size-md-padding-horizontal-item: var(~'--c-spacing-8');
+  --c-list-size-lg-padding-vertical-header: var(~'--c-spacing-7');
+  --c-list-size-lg-padding-horizontal-header: var(~'--c-spacing-8');
+  --c-list-size-lg-padding-vertical-item: 17px;
+  --c-list-size-lg-padding-horizontal-item: var(~'--c-spacing-8');
+  --c-list-meta-font-weight-title: var(~'--c-font-weight-500');
+  --c-list-meta-title-color: var(~'--c-color-text-1');
+  --c-list-mete-color-description: var(~'--c-color-text-2');
+  --c-list-meta-margin-right-avatar: var(~'--c-spacing-7');
+  --c-list-meta-margin-bottom-title: var(~'--c-spacing-1');
+  --c-list-meta-padding-horizontal: var(~'--c-spacing-none');
+  --c-list-meta-padding-vertical: var(~'--c-spacing-2');
+  --c-list-action-gap: var(~'--c-spacing-8');
+  --c-list-action-margin-top: var(~'--c-spacing-2');
+  --c-list-pagination-margin-top: var(~'--c-spacing-9');
+}

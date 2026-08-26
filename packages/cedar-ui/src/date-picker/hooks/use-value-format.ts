@@ -1,4 +1,4 @@
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 import { toRefs } from 'vue'
 import { CalendarValue, ValueFormat } from '../types'
 

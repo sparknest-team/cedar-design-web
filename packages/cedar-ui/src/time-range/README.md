@@ -49,11 +49,12 @@ permalink: /components/time-range/
 | 参数 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
 | `model-value` | 绑定值 | `(string \| number \| Date)[]` | `-` |
-| `popup-visible` | 弹层显隐 | `boolean` | `-` |
+| `open` | 弹层显隐 | `boolean` | `-` |
 | `clearable` | 可清除 | `boolean` | `true` |
 | `disabled` | 禁用 | `boolean` | `false` |
 | `readonly` | 只读 | `boolean` | `false` |
 | `size` | 尺寸 | `xs \| sm \| md \| lg \| xl` | `-` |
+| `variant` | 输入框变体 | `filled \| outlined \| standard` | `filled` |
 | `placeholder` | 占位 | `string \| string[]` | `-` |
 | `format` | 展示格式 | `string` | `-` |
 | `use12-hours` | 12 小时制 | `boolean` | `false` |

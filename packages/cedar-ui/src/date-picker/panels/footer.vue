@@ -29,9 +29,10 @@ import { defineComponent } from 'vue'
 import Link from '../../link'
 import Button from '../../button'
 import useInjectDatePickerTransform from '../hooks/use-inject-datepicker-transform'
+import { createNamespace } from '../../_utils/global-config'
 
 export default defineComponent({
-  name: 'PanelFooter',
+  name: createNamespace('date-picker-footer').name,
   components: {
     Link,
     Button,

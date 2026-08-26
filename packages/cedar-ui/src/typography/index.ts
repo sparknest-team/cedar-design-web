@@ -1,37 +1,45 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Typography from './typography.vue'
 import _TypographyParagraph from './paragraph'
 import _TypographyTitle from './title'
 import _TypographyText from './text'
+import {
+  typographyParagraphProps,
+  typographyProps,
+  typographyTextProps,
+  typographyTitleProps,
+} from './props'
 
 export type { EllipsisConfig } from './types'
 
-const Typography = Object.assign(_Typography, {
+const Typography = withInstall(_Typography, Object.assign(_Typography, {
   Paragraph: _TypographyParagraph,
   Title: _TypographyTitle,
   Text: _TypographyText,
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _Typography.name, _Typography)
-    app.component(componentPrefix + _TypographyParagraph.name, _TypographyParagraph)
-    app.component(componentPrefix + _TypographyTitle.name, _TypographyTitle)
-    app.component(componentPrefix + _TypographyText.name, _TypographyText)
-  },
-})
+}), { components: [_Typography, _TypographyParagraph, _TypographyTitle, _TypographyText] })
 
 export type TypographyInstance = InstanceType<typeof _Typography>
 export type TypographyParagraphInstance = InstanceType<typeof _TypographyParagraph>
 export type TypographyTitleInstance = InstanceType<typeof _TypographyTitle>
 export type TypographyTextInstance = InstanceType<typeof _TypographyText>
+export { typographyParagraphProps, typographyProps, typographyTextProps, typographyTitleProps }
+export type {
+  TypographyBaseProps,
+  TypographyHeadingLevel,
+  TypographyParagraphProps,
+  TypographyParagraphSpacing,
+  TypographyProps,
+  TypographyTextProps,
+  TypographyTitleProps,
+} from './props'
+export { Typography }
 
 export {
   _TypographyParagraph as TypographyParagraph,
   _TypographyTitle as TypographyTitle,
   _TypographyText as TypographyText,
 }
+
+export const _TypographyComponent = Typography
 
 export default Typography

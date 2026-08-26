@@ -1,13 +1,19 @@
 @import '../../style/theme/index.less';
 
-/**********************************************
- * status: disabled / readonly
- **********************************************/
-@rate-min-height: @size-md;
-@rate-gap-size: @spacing-4;
-@rate-font-size: @font-size-title-3;
-@rate-scale_active: 1.2;
+:root {
+  /**********************************************
+   * status: disabled / readonly
+   **********************************************/
+  --c-rate-min-height: var(~'--c-size-md');
+  --c-rate-gap-size: var(~'--c-spacing-4');
+  --c-rate-font-size: var(~'--c-font-size-title-3');
+  --c-rate-scale-active: 1.2;
 
-@rate-color-bg_active: rgb(var(~'--c-gold-6'));
-@rate-color-bg_default: var(~'--c-color-fill-3');
-@rate-color-bg_hover: rgb(var(~'--c-gold-5'));
+  --c-rate-bg-active: rgb(var(~'--c-gold-6'));
+  --c-rate-bg: var(~'--c-color-fill-3');
+  --c-rate-bg-hover: rgb(var(~'--c-gold-5'));
+
+  --c-rate-transition-duration: var(~'--c-transition-duration-2');
+  --c-rate-transition-duration-scale: var(~'--c-transition-duration-4');
+  --c-rate-transition-timing-function: var(~'--c-transition-timing-function-standard');
+}

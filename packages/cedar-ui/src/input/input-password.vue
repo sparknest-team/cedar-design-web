@@ -1,14 +1,20 @@
 <template>
   <div :class="classes(n())">
-    <Input ref="inputRef" :type="mergedVisible ? 'password' : 'text'" :disabled="disabled" v-bind="$attrs">
+    <Input ref="inputRef" :type="mergedVisible ? 'text' : 'password'" :disabled="disabled" v-bind="$attrs">
       <template v-if="$slots.prefix" #prefix>
         <slot name="prefix" />
       </template>
-      <template v-if="invisibleButton || $slots.suffix" #suffix>
+      <template v-if="visibilityToggle || $slots.suffix" #suffix>
         <icon-hover
-          v-if="invisibleButton"
+          v-if="visibilityToggle"
           :disabled="disabled"
+          role="button"
+          tabindex="0"
+          :aria-label="t(mergedVisible ? 'common.hidePassword' : 'common.showPassword')"
+          :aria-pressed="mergedVisible"
           @click="handleInvisible"
+          @keydown.enter.prevent="handleInvisible"
+          @keydown.space.prevent="handleInvisible"
           @mousedown.prevent
           @mouseup.prevent
         >
@@ -24,54 +30,23 @@
 <script lang="ts">
 import { defineComponent, reactive, ref, toRefs } from 'vue'
 import IconHover from '../_components/icon-hover.vue'
-import IconEye from '../icon/icon-eye'
-import IconEyeInvisible from '../icon/icon-eye-invisible'
+import { IconEye } from '@cedarjs/icons-vue/icon-eye'
+import { IconEyeInvisible } from '@cedarjs/icons-vue/icon-eye-invisible'
 import useMergeState from '../_hooks/use-merge-state'
 import Input from './input'
 import { createNamespace } from '../_utils/global-config'
+import { inputPasswordProps } from './props'
+import { useI18n } from '../locale'
 export default defineComponent({
-  name: 'CInputPassword',
+  name: createNamespace('input-password').name,
   components: {
     IconEye,
     IconEyeInvisible,
     IconHover,
     Input,
   },
-  props: {
-    /**
-     * @zh 是否禁用
-     * @en Whether to disable
-     */
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否可见，受控属性
-     * @en Whether is visible
-     * @vModel
-     */
-    visibility: {
-      type: Boolean,
-      default: undefined,
-    },
-    /**
-     * @zh 默认是否可见，非受控
-     * @en Default visibility
-     */
-    defaultVisibility: {
-      type: Boolean,
-      default: true,
-    },
-    /**
-     * @zh 是否显示可见按钮
-     * @en Whether to show visible buttons
-     */
-    invisibleButton: {
-      type: Boolean,
-      default: true,
-    },
-  },
+  props: inputPasswordProps,
+
   emits: [
     /**
      * @zh visibility 改变时触发
@@ -83,6 +58,7 @@ export default defineComponent({
   ],
   setup(props, { emit }) {
     const { classes, n } = createNamespace('input-password')
+    const { t } = useI18n()
 
     const { visibility, defaultVisibility } = toRefs(props)
     const inputRef = ref()
@@ -112,6 +88,7 @@ export default defineComponent({
       classes,
       n,
       handleInvisible,
+      t,
     }
   },
   methods: {

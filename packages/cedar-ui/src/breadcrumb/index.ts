@@ -1,24 +1,15 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Breadcrumb from './breadcrumb'
 import _BreadcrumbItem from './breadcrumb-item'
 import { breadcrumbProps, breadcrumbItemProps } from './props'
 
-const Breadcrumb = Object.assign(_Breadcrumb, {
+const Breadcrumb = withInstall(_Breadcrumb, Object.assign(_Breadcrumb, {
   Item: _BreadcrumbItem,
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _Breadcrumb.name, _Breadcrumb)
-    app.component(componentPrefix + _BreadcrumbItem.name, _BreadcrumbItem)
-  },
-})
+}), { components: [_Breadcrumb, _BreadcrumbItem] })
 
 export type BreadcrumbInstance = InstanceType<typeof _Breadcrumb>
 export type BreadcrumbItemInstance = InstanceType<typeof _BreadcrumbItem>
-export type { BreadcrumbRoute } from './types'
+export type { BreadcrumbRoute, BreadcrumbMoreIconSlotData } from './types'
 export type { BreadcrumbProps, BreadcrumbItemProps } from './props'
 
 export { breadcrumbProps, breadcrumbItemProps }

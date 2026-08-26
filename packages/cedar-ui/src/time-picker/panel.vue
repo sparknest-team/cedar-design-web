@@ -6,6 +6,7 @@
       :list="hours"
       :prefix-cls="prefixCls"
       :visible="visible"
+      aria-label="Hours"
       @select="
         (value) => {
           onSelect(value, 'hour')
@@ -18,6 +19,7 @@
       :list="minutes"
       :prefix-cls="prefixCls"
       :visible="visible"
+      aria-label="Minutes"
       @select="
         (value) => {
           onSelect(value, 'minute')
@@ -30,6 +32,7 @@
       :list="seconds"
       :prefix-cls="prefixCls"
       :visible="visible"
+      aria-label="Seconds"
       @select="
         (value) => {
           onSelect(value, 'second')
@@ -42,6 +45,7 @@
       :list="ampmList"
       :prefix-cls="prefixCls"
       :visible="visible"
+      aria-label="AM/PM"
       @select="
         (value) => {
           onSelect(value, 'ampm')
@@ -64,20 +68,20 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType, reactive, ref, toRefs, watch } from 'vue'
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 import TimeColumn from './time-column.vue'
 import Button from '../button'
 import type { PanelProps } from './types'
 import { isDayjs, isUndefined } from '../_utils/is'
 import { dayjs } from '../_utils/date'
-import { getPrefixCls } from '../_utils/global-config'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import useTimeList from './hooks/use-time-list'
 import useTimeFormat from './hooks/use-time-format'
 import useIsDisabledTime from './hooks/use-is-disabled-time'
 import { useI18n } from '../locale'
 
 export default defineComponent({
-  name: 'TimePickerPanel',
+  name: createNamespace('time-picker-panel').name,
   components: {
     TimeColumn,
     Button,

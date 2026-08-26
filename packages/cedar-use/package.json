@@ -1,0 +1,50 @@
+{
+  "name": "@cedarjs/use",
+  "version": "1.0.3",
+  "description": "composable utilities of Cedar",
+  "keywords": [
+    "composable",
+    "utils",
+    "cedar"
+  ],
+  "bugs": {
+    "url": "https://github.com/loca-spirit/cedar-design-web/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/loca-spirit/cedar-design-web"
+  },
+  "license": "MIT",
+  "author": "shuai.meng",
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "require": "./lib/index.cjs",
+      "types": "./lib/index.d.ts"
+    }
+  },
+  "main": "lib/index.cjs",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm,cjs --out-dir=lib --dts --clean",
+    "dev": "tsup src/index.ts --format esm --out-dir=lib --watch --dts"
+  },
+  "dependencies": {
+    "@cedarjs/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "tsup": "catalog:",
+    "typescript": "catalog:",
+    "vue": "catalog:"
+  },
+  "peerDependencies": {
+    "vue": "^3.2.0"
+  }
+}

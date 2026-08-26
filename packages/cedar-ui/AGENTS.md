@@ -51,18 +51,17 @@ src/<component>/
 
 ## 反模式速查
 
-- ❌ Options-style `defineComponent({ setup() {...} })`
 - ❌ 写死 `defineOptions({ name: 'CXxx' })`
 - ❌ camelCase demo 文件名
 - ❌ 主样式直接写颜色 / 间距常量
-- ❌ `props` 内重写联合字面量代替 `_utils/constant.ts` 的 `Status` / `Size` / `Direction`
+- ❌ `props` 内重写联合字面量代替 `_utils/constant.ts` 的 `SemanticStatus` / `ComponentSize` / `Direction`
 - ❌ 残留 `console.log`
 
 ## 历史教训（不要重蹈）
 
 ### Demo / 样例
 
-- demo 里的 icon 必须用 kebab + `c-` 前缀，如 `<c-icon-more />`，**禁止**裸 PascalCase `<IconMore />`——`CedarResolver` 只匹配 `^C[A-Z]`，不会解析裸 `Icon`。
+- demo 里的 icon 必须用 kebab + `c-` 前缀，如 `<c-icon-more />`，**禁止**裸 PascalCase `<More />`——`CedarResolver` 只匹配 `^C[A-Z]`，不会解析裸 `Icon`。
 - demo 文件名 kebab-case；`<demo src="./__demos__/xxx.vue">` 路径同名。
 
 ### 组件内部

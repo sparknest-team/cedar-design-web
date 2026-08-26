@@ -56,8 +56,8 @@ permalink: /components/drawer/
 
 | 属性                  | 说明                                                                                      | 类型                                                                                | 默认值    |
 | --------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | --------- |
-| visible **(v-model)** | 抽屉是否可见                                                                              | `boolean`                                                                           | `false`   |
-| default-visible       | 抽屉默认是否可见（非受控模式）                                                            | `boolean`                                                                           | `false`   |
+| open **(v-model)** | 抽屉是否可见                                                                              | `boolean`                                                                           | `false`   |
+| default-open       | 抽屉默认是否可见（非受控模式）                                                            | `boolean`                                                                           | `false`   |
 | placement             | 抽屉放置的位置                                                                            | `'top' \| 'right' \| 'bottom' \| 'left'`                                            | `'right'` |
 | title                 | 标题                                                                                      | `string`                                                                            | -         |
 | size                  | 尺寸                                                                                      | `'sm' \| 'md' \| 'lg' \| 'xl'`                                                      | `md`      |
@@ -74,8 +74,8 @@ permalink: /components/drawer/
 | height                | 抽屉的高度（仅在placement为top,bottom时可用）                                             | `number\|string`                                                                    | `250`     |
 | popup-container       | 弹出框的挂载容器                                                                          | `string \| HTMLElement`                                                             | `'body'`  |
 | drawer-style          | 抽屉的样式                                                                                | `CSSProperties`                                                                     | -         |
-| on-before-ok          | 触发 ok 事件前的回调函数。如果返回 false 则不会触发后续事件，也可使用 done 进行异步关闭。 | `( done: (closed: boolean) => void) => void \| boolean \| Promise<void \| boolean>` | -         |
-| on-before-cancel      | 触发 cancel 事件前的回调函数。如果返回 false 则不会触发后续事件。                         | `() => boolean`                                                                     | -         |
+| before-ok             | 触发 ok 事件前的回调函数。如果返回 false 则不会触发后续事件，也可使用 done 进行异步关闭。 | `( done: (closed: boolean) => void) => void \| boolean \| Promise<void \| boolean>` | -         |
+| before-cancel         | 触发 cancel 事件前的回调函数。如果返回 false 则不会触发后续事件。                         | `() => boolean`                                                                     | -         |
 | esc-to-close          | 是否支持 ESC 键关闭抽屉                                                                   | `boolean`                                                                           | `true`    |
 | render-to-body        | 抽屉是否挂载在 `body` 元素下                                                              | `boolean`                                                                           | `true`    |
 | header                | 是否展示头部内容                                                                          | `boolean`                                                                           | `true`    |
@@ -103,7 +103,9 @@ permalink: /components/drawer/
 
 ### `<Drawer>` 全局方法
 
-#### DrawerConfig
+#### DrawerConfig（命令式配置，≠ 组件 Props）
+
+命令式 `Drawer.open(config)` 的配置对象。拦截器与 Props 同名（`beforeOk` / `beforeCancel` / `beforeOpen` / `beforeClose`）；事件回调仍用 `onOk` / `onCancel` / `onOpen` / `onClose`。
 
 | 属性              | 说明                                                                                      | 类型                                                                                 | 默认值    |
 | ----------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | --------- |
@@ -124,12 +126,12 @@ permalink: /components/drawer/
 | drawerStyle       | 抽屉的样式                                                                                | `CSSProperties`                                                                      | -         |
 | onOk              | 点击确定按钮时触发                                                                        | `(event: MouseEvent) => void`                                                        | -         |
 | onCancel          | 点击取消、关闭按钮时触发                                                                  | `(event: MouseEvent) => void`                                                        | -         |
-| onBeforeOk        | 触发 ok 事件前的回调函数。如果返回 false 则不会触发后续事件，也可使用 done 进行异步关闭。 | `( done: (closed: boolean) => void ) => void \| boolean \| Promise<void \| boolean>` | -         |
-| onBeforeCancel    | 触发 cancel 事件前的回调函数。如果返回 false 则不会触发后续事件。                         | `() => boolean`                                                                      | -         |
+| beforeOk          | 触发 ok 事件前的回调函数。如果返回 false 则不会触发后续事件，也可使用 done 进行异步关闭。 | `( done: (closed: boolean) => void ) => void \| boolean \| Promise<void \| boolean>` | -         |
+| beforeCancel      | 触发 cancel 事件前的回调函数。如果返回 false 则不会触发后续事件。                         | `() => boolean`                                                                      | -         |
 | onOpen            | 抽屉打开后（动画结束）触发                                                                | `() => void`                                                                         | -         |
 | onClose           | 抽屉关闭后（动画结束）触发                                                                | `() => void`                                                                         | -         |
-| onBeforeOpen      | 抽屉打开前触发                                                                            | `() => void`                                                                         | -         |
-| onBeforeClose     | 抽屉关闭前触发                                                                            | `() => void`                                                                         | -         |
+| beforeOpen        | 抽屉打开前触发                                                                            | `() => void`                                                                         | -         |
+| beforeClose       | 抽屉关闭前触发（对应事件 `before-close`）                                                 | `() => void`                                                                         | -         |
 | escToClose        | 是否支持 ESC 键关闭抽屉                                                                   | `boolean`                                                                            | `true`    |
 | header            | 是否展示头部内容                                                                          | `boolean \| RenderContent`                                                           | `true`    |
 | footer            | 是否展示底部内容                                                                          | `boolean \| RenderContent`                                                           | `true`    |
@@ -153,5 +155,5 @@ permalink: /components/drawer/
 组件导出以下类型定义
 
 ```ts
-import type { DrawerProps } from '@cedar/ui'
+import type { DrawerProps } from '@cedarjs/ui'
 ```

@@ -13,8 +13,12 @@ export interface BreadcrumbRoute {
    * @zh 下拉菜单展示项
    * @en Dropdown menu items
    */
-  children?: {
-    label: string
-    path: string
-  }[]
+  children?: BreadcrumbRoute[]
+}
+
+export interface BreadcrumbMoreIconSlotData {
+  omittedItems: BreadcrumbRoute[]
+  count: number
+  start: number
+  end: number
 }

@@ -1,0 +1,44 @@
+// Vitest Snapshot v1
+
+exports[`Dialog > render 1`] = `
+"<!--teleport start-->
+<div class=\\"c-dialog-container\\" style=\\"z-index: 1001;\\">
+  <transition-stub name=\\"fade-modal\\" appear=\\"true\\" persisted=\\"false\\" css=\\"true\\">
+    <div class=\\"c-dialog-mask\\"></div>
+  </transition-stub>
+  <div class=\\"c-dialog-wrapper c-dialog-wrapper-align-center\\">
+    <transition-stub name=\\"zoom-modal\\" appear=\\"true\\" persisted=\\"true\\" css=\\"true\\">
+      <div role=\\"dialog\\" aria-modal=\\"true\\" aria-label=\\"Confirm deletion\\" class=\\"c-dialog\\">
+        <div class=\\"c-dialog-header\\">
+          <div class=\\"c-dialog-title c-dialog-title-align-center\\">
+            <!--v-if-->Confirm deletion
+          </div><button type=\\"button\\" aria-label=\\"Close dialog\\" class=\\"c-dialog-close-btn\\"><span class=\\"c-icon-hover\\"><svg xmlns=\\"http://www.w3.org/2000/svg\\" fill=\\"none\\" stroke=\\"currentColor\\" viewBox=\\"0 0 48 48\\" class=\\"c-icon c-icon-close\\" stroke-width=\\"4\\" stroke-linecap=\\"butt\\" stroke-linejoin=\\"miter\\"><path d=\\"M9.857 9.858 24 24m0 0 14.142 14.142M24 24 38.142 9.858M24 24 9.857 38.142\\"></path></svg></span></button>
+        </div>
+        <div class=\\"c-dialog-body\\"></div>
+        <div class=\\"c-dialog-footer\\"><button class=\\"c-button c--box c-button--size-md c-button--status-default c-button--variant-default c--inline-flex\\" type=\\"button\\">
+            <!-- 加载中 loading -->
+            <!--v-if-->
+            <!-- icon图标 -->
+            <!--v-if-->
+            <!-- 内容 --><span class=\\"c-button__content\\">取消</span><!-- 底色 -->
+            <div class=\\"c-button--underlay\\"></div><!-- 上色 -->
+            <div class=\\"c-button--overlay\\"></div><!-- 边框 -->
+            <div class=\\"c-button__border\\"></div>
+            <div class=\\"c-button__border-state\\"></div>
+          </button><button type=\\"submit\\" class=\\"c-button c--box c-button--size-md c-button--status-default c-button--variant-default c--inline-flex\\">
+            <!-- 加载中 loading -->
+            <!--v-if-->
+            <!-- icon图标 -->
+            <!--v-if-->
+            <!-- 内容 --><span class=\\"c-button__content\\">确定</span><!-- 底色 -->
+            <div class=\\"c-button--underlay\\"></div><!-- 上色 -->
+            <div class=\\"c-button--overlay\\"></div><!-- 边框 -->
+            <div class=\\"c-button__border\\"></div>
+            <div class=\\"c-button__border-state\\"></div>
+          </button></div>
+      </div>
+    </transition-stub>
+  </div>
+</div>
+<!--teleport end-->"
+`;

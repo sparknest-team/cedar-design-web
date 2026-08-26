@@ -1,10 +1,10 @@
 import { InjectionKey } from 'vue'
-import { Size } from '../_utils/constant'
+import { ComponentSize } from '../_utils/constant'
 
 export interface GroupFieldContext {
-  size: Size | undefined
+  size: ComponentSize | undefined
   disabled: boolean
-  variant: 'outline' | 'default' | undefined
+  variant: 'filled' | 'outlined' | 'standard' | undefined
 }
 
 export const fieldInjectionKey: InjectionKey<GroupFieldContext> = Symbol('CedarField')

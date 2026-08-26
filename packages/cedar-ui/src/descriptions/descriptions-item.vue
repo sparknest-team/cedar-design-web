@@ -4,27 +4,12 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { getPrefixCls } from '../_utils/global-config'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
+import { descriptionsItemProps } from './props'
 
 export default defineComponent({
-  name: 'DescriptionsItem',
-  props: {
-    /**
-     * @zh 所占列数
-     * @en number of columns
-     * @version 2.18.0
-     */
-    span: {
-      type: Number,
-      default: 1,
-    },
-    /**
-     * @zh 标签
-     * @en Label
-     * @version 2.18.0
-     */
-    label: String,
-  },
+  name: createNamespace('descriptions-item').name,
+  props: descriptionsItemProps,
   /**
    * @zh 标签
    * @en Label

@@ -2,23 +2,23 @@
 
 .c-tooltip {
   &-content {
-    max-width: 350px;
-    padding: @tooltip-padding-vertical @tooltip-padding-horizontal;
-    color: @tooltip-color-text;
-    font-size: @tooltip-font-size;
-    line-height: var(~'--c-line-height');
+    max-width: var(~'--c-tooltip-max-width');
+    padding: var(~'--c-tooltip-padding-vertical') var(~'--c-tooltip-padding-horizontal');
+    color: var(~'--c-tooltip-text-color');
+    font-size: var(~'--c-tooltip-font-size');
+    line-height: var(~'--c-tooltip-line-height');
     text-align: left;
     word-wrap: break-word;
-    background-color: @tooltip-color-bg;
-    border-radius: @tooltip-border-radius;
+    background-color: var(~'--c-tooltip-bg');
+    border-radius: var(~'--c-tooltip-border-radius');
   }
 
   &-xs {
-    padding: @tooltip-xs-padding-vertical @tooltip-xs-padding-horizontal;
-    font-size: @tooltip-xs-font-size;
+    padding: var(~'--c-tooltip-size-xs-padding-vertical') var(~'--c-tooltip-size-xs-padding-horizontal');
+    font-size: var(~'--c-tooltip-size-xs-font-size');
   }
 
   &-popup-arrow {
-    background-color: @tooltip-color-bg;
+    background-color: var(~'--c-tooltip-bg');
   }
 }

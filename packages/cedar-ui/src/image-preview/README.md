@@ -18,17 +18,17 @@ permalink: /components/image-preview/
 
 <demo src="../image/__demos__/preview-group.vue"></demo>
 
-### 多图预览（数据驱动 srcList）
+### 多图预览（数据驱动 images）
 
 <demo src="../image/__demos__/component-preview-group.vue"></demo>
 
-### 多图预览（images 别名）
+### 多图预览（命令式 / 受控）
 
 <demo src="./__demos__/images-alias-group.vue"></demo>
 
 ### 单独使用预览组件
 
-`image-preview` 可单独使用，需要手动控制 `visible`。
+`image-preview` 可单独使用，需要手动控制 `open`。
 
 <demo src="../image/__demos__/component-preview.vue"></demo>
 

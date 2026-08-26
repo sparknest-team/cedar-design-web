@@ -17,12 +17,13 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../_utils/global-config'
 import { computed, defineComponent, inject, ref } from "vue";
 import { getPrefixCls } from "../_utils/global-config";
 import { menuInjectionKey } from "./context";
 
 export default defineComponent({
-  name: "MenuOption",
+  name: createNamespace("menu-option").name,
   props: {
     /**
      * @zh 选项值
@@ -52,8 +53,8 @@ export default defineComponent({
   },
   emits: {
     /**
-     * @zh 点击按钮时触发
-     * @en Emitted when the button is clicked
+     * @zh 点击选项时触发
+     * @en Emitted when the option is clicked
      * @param {MouseEvent} ev
      */
     click: (ev: MouseEvent) => true,
@@ -62,6 +63,16 @@ export default defineComponent({
    * @zh 图标
    * @en Icon
    * @slot icon
+   */
+  /**
+   * @zh 选项内容
+   * @en Option content
+   * @slot default
+   */
+  /**
+   * @zh 后缀
+   * @en Suffix
+   * @slot suffix
    */
   setup(props, { emit }) {
     const prefixCls = getPrefixCls("menu-option");
@@ -77,20 +88,26 @@ export default defineComponent({
 
     const handleClick = (ev: MouseEvent) => {
       if (!props.disabled) {
-        emit("click", ev);
-        menuCtx?.onOptionClick(computedValue.value, ev);
+        emit('click', ev)
+        menuCtx?.onOptionClick(
+          computedValue.value,
+          {
+            value: computedValue.value,
+            label: props.label,
+            disabled: props.disabled,
+          },
+          ev,
+        )
       }
-    };
+    }
 
     const cls = computed(() => [
       prefixCls,
       {
         [`${prefixCls}-disabled`]: props.disabled,
         [`${prefixCls}-active`]: props.active,
-        [`${prefixCls}-selected`]: Object.is(
-          menuCtx?.modelValue?.value,
-          computedValue.value,
-        ),
+        [`${prefixCls}-selected`]:
+          menuCtx?.modelValue?.value === computedValue.value,
       },
     ]);
 

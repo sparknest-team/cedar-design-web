@@ -1,6 +1,6 @@
 import { Slot, VNode } from 'vue'
 import { VirtualListProps } from '../_components/virtual-list-v2/interface'
-import { Size } from '../_utils/constant'
+import { ComponentSize } from '../_utils/constant'
 
 export type TreeNodeKey = number | string
 
@@ -164,7 +164,7 @@ export type CheckableType =
 export type SelectableType = CheckableType
 
 export interface TreeProps {
-  size: Size
+  size: ComponentSize
   blockNode: boolean
   defaultExpandAll: boolean
   multiple: boolean
@@ -233,6 +233,7 @@ export interface TreeProps {
   onDragLeave?: (e: DragEvent, node: TreeNodeData) => void
   onDrop?: (event: { e: DragEvent; dragNode: TreeNodeData; dropNode: TreeNodeData; dropPosition: DropPosition }) => void
   filterTreeNode?: (node: TreeNodeData) => boolean
+  searchValue?: string
 }
 
 export type Key2TreeNode = Map<TreeNodeKey, Node>

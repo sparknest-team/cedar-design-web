@@ -7,7 +7,7 @@ type Position = 'top' | 'tl' | 'tr' | 'bottom' | 'bl' | 'br' | 'left' | 'lt' | '
 
 export interface TooltipOptions {
   content: string
-  position?: Position
+  placement?: Position
 
   [key: string]: any
 }
@@ -28,7 +28,7 @@ const TooltipComponent = defineComponent({
         Tooltip,
         {
           ...props.options,
-          popupVisible: true,
+          open: true,
         },
         () => h('div', { style: { width: '100%', height: '100%' } }, ''),
       )
@@ -47,7 +47,7 @@ const createTooltipInstance = (
     return
   }
   const content = (toolTipArg === 'ellipsis' ? el.textContent : binding.value) as string
-  const options: TooltipOptions = { content: content, position: toolTipPosition }
+  const options: TooltipOptions = { content: content, placement: toolTipPosition }
   const tooltipElement = document.createElement('div')
   const instance = createApp(TooltipComponent, { options })
 
@@ -88,8 +88,8 @@ const updateTooltipOptions = (el: ElementWithTooltip, newOptions: string | Toolt
 }
 
 export const vTooltip: Directive = {
-  mounted(el, binding?) {
-    if (binding.arg === 'ellipsis') {
+  mounted(el, binding) {
+    if (binding?.arg === 'ellipsis') {
       el.classList.add('text-ellipsis')
       el.classList.add('relative')
     }
@@ -122,5 +122,13 @@ export const vTooltip: Directive = {
       }
       el[TOOLTIP_KEY] = undefined
     }
+  },
+  getSSRProps(binding) {
+    if (binding?.arg === 'ellipsis') {
+      return {
+        class: 'text-ellipsis relative',
+      }
+    }
+    return {}
   },
 }

@@ -1,17 +1,14 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Textarea from './textarea.vue'
+import { textareaProps } from './props'
 
-const Textarea = Object.assign(_Textarea, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _Textarea.name, _Textarea)
-  },
-})
+const Textarea = withInstall(_Textarea, Object.assign(_Textarea, {
+}), { components: [_Textarea] })
 
 export type TextareaInstance = InstanceType<typeof _Textarea>
+export { textareaProps }
+export type { TextareaAutoSize, TextareaProps } from './props'
+export const _TextareaComponent = Textarea
+export { Textarea }
 
 export default Textarea

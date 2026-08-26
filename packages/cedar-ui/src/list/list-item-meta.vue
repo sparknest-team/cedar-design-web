@@ -15,11 +15,12 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../_utils/global-config'
 import { defineComponent } from 'vue'
 import { getPrefixCls } from '../_utils/global-config'
 
 export default defineComponent({
-  name: 'ListItemMeta',
+  name: createNamespace("list-item-meta").name,
   props: {
     /**
      * @zh 标题

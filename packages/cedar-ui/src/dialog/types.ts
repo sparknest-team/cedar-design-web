@@ -13,7 +13,7 @@ export interface DialogBeforeCloseRefs {
 }
 
 export interface DialogConfig {
-  show?: boolean
+  open?: boolean
   title?: RenderContent
   message?: RenderContent
   content?: RenderContent
@@ -31,31 +31,31 @@ export interface DialogConfig {
   cancelButtonLoading?: boolean
   confirmButtonDisabled?: boolean
   cancelButtonDisabled?: boolean
-  overlay?: boolean
-  overlayClass?: string
-  overlayStyle?: CSSProperties
+  mask?: boolean
+  maskClass?: string
+  maskStyle?: CSSProperties
   lockScroll?: boolean
-  closeOnClickOverlay?: boolean
-  closeOnKeyEscape?: boolean
-  teleport?: string | HTMLElement | false
+  maskClosable?: boolean
+  escToClose?: boolean
+  popupContainer?: string | HTMLElement | false
   alignCenter?: boolean
   draggable?: boolean
   fullscreen?: boolean
   onConfirm?: (e?: Event) => void
   onCancel?: (e?: Event) => void
-  onBeforeClose?: (action: DialogAction, done: () => void, refs: DialogBeforeCloseRefs) => void
+  beforeClose?: (action: DialogAction, done: () => void, refs: DialogBeforeCloseRefs) => void
   onOpen?: () => void
   onOpened?: () => void
   onClose?: () => void
   onClosed?: () => void
-  onClickOverlay?: () => void
+  onClickMask?: () => void
   onKeyEscape?: () => void
   width?: number | string
   top?: number | string
   titleAlign?: 'start' | 'center'
   dialogClass?: string | any[]
   dialogStyle?: CSSProperties
-  overlayAnimationName?: string
+  maskAnimationName?: string
   dialogAnimationName?: string
   hideTitle?: boolean
   bodyClass?: string | any[]
@@ -72,12 +72,12 @@ export type DialogUpdateConfig = Omit<
   | 'footer'
   | 'onConfirm'
   | 'onCancel'
-  | 'onBeforeClose'
+  | 'beforeClose'
   | 'onOpen'
   | 'onOpened'
   | 'onClose'
   | 'onClosed'
-  | 'onClickOverlay'
+  | 'onClickMask'
   | 'onKeyEscape'
 >
 

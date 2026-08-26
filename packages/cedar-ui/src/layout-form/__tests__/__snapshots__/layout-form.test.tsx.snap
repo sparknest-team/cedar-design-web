@@ -1,8 +1,0 @@
-// Vitest Snapshot v1
-
-exports[`LayoutForm > render 1`] = `
-"<div class=\\"c-layout-form\\">
-  <!--[object Object]-->
-  <!---->
-</div>"
-`;

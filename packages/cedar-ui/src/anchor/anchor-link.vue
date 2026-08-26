@@ -15,7 +15,7 @@ import { createNamespace } from '../_utils/global-config'
 import { anchorInjectionKey } from './context'
 
 export default defineComponent({
-  name: 'CAnchorLink',
+  name: createNamespace('anchor-link').name,
   props: {
     /**
      * @zh 锚点链接的文本内容

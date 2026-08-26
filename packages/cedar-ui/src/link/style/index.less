@@ -4,24 +4,24 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: @link-padding-vertical @link-padding-horizontal;
-  color: @link-color-text;
-  font-size: @link-font-size;
-  line-height: @link-line-height;
+  padding: var(~'--c-link-padding-vertical') var(~'--c-link-padding-horizontal');
+  color: var(~'--c-link-text-color');
+  font-size: var(~'--c-link-font-size');
+  line-height: var(~'--c-link-line-height');
   text-decoration: none;
   background-color: @color-transparent;
-  border-radius: @link-border-radius;
+  border-radius: var(~'--c-link-border-radius');
   cursor: pointer;
-  transition: all @transition-duration-1 @transition-timing-function-linear;
+  transition: all var(~'--c-transition-duration-1') var(~'--c-transition-timing-function-linear');
 
   &:hover {
-    color: @link-color-text_hover;
-    background-color: @link-color-bg_hover;
+    color: var(~'--c-link-text-color-hover');
+    background-color: var(~'--c-link-bg-hover');
   }
 
   &:active {
-    color: @link-color-text_active;
-    background-color: @link-color-bg_active;
+    color: var(~'--c-link-text-color-active');
+    background-color: var(~'--c-link-bg-active');
     transition: none;
   }
 
@@ -36,83 +36,131 @@
     }
   }
 
+  &&-underline-always {
+    text-decoration: underline;
+  }
+
+  &&-underline-hover:hover {
+    text-decoration: underline;
+  }
+
+  &-status-default {
+    color: var(~'--c-link-text-color-default');
+
+    &:hover,
+    &:active { color: var(~'--c-link-text-color-default'); }
+  }
+
+  &-status-primary {
+    color: var(~'--c-link-text-color-primary');
+
+    &:hover,
+    &:active { color: var(~'--c-link-text-color-primary'); }
+  }
+
+  &-status-secondary {
+    color: var(~'--c-link-text-color-secondary');
+
+    &:hover,
+    &:active { color: var(~'--c-link-text-color-secondary'); }
+  }
+
+  &-status-tertiary {
+    color: var(~'--c-link-text-color-tertiary');
+
+    &:hover,
+    &:active { color: var(~'--c-link-text-color-tertiary'); }
+  }
+
+  &-status-info {
+    color: var(~'--c-link-text-color-info');
+
+    &:hover,
+    &:active { color: var(~'--c-link-text-color-info'); }
+  }
+
   &&-disabled {
-    color: @link-color-text_disabled;
+    color: var(~'--c-link-text-color-disabled');
     background: none;
     cursor: not-allowed;
   }
 
   &&-loading {
-    color: @link-color-text_loading;
+    color: var(~'--c-link-text-color-loading');
     background: none;
     cursor: default;
   }
 
   // 不同状态
   &-status-success {
-    color: @link-color-text_success;
+    color: var(~'--c-link-text-color-success');
 
     &:hover {
-      color: @link-color-text_success_hover;
+      color: var(~'--c-link-text-color-success-hover');
     }
 
     &:active {
-      color: @link-color-text_success_active;
+      color: var(~'--c-link-text-color-success-active');
     }
   }
 
   &-status-success&-disabled {
-    color: @link-color-text_success_disabled;
+    color: var(~'--c-link-text-color-success-disabled');
   }
 
   &-status-success&-loading {
-    color: @link-color-text_success_loading;
+    color: var(~'--c-link-text-color-success-loading');
   }
 
   &-status-danger {
-    color: @link-color-text_error;
+    color: var(~'--c-link-text-color-error');
 
     &:hover {
-      color: @link-color-text_error_hover;
+      color: var(~'--c-link-text-color-error-hover');
     }
 
     &:active {
-      color: @link-color-text_error_active;
+      color: var(~'--c-link-text-color-error-active');
     }
   }
 
   &-status-danger&-disabled {
-    color: @link-color-text_error_disabled;
+    color: var(~'--c-link-text-color-error-disabled');
   }
 
   &-status-danger&-loading {
-    color: @link-color-text_error_loading;
+    color: var(~'--c-link-text-color-error-loading');
   }
 
   &-status-warning {
-    color: @link-color-text_warning;
+    color: var(~'--c-link-text-color-warning');
 
     &:hover {
-      color: @link-color-text_warning_hover;
+      color: var(~'--c-link-text-color-warning-hover');
     }
 
     &:active {
-      color: @link-color-text_warning_active;
+      color: var(~'--c-link-text-color-warning-active');
     }
   }
 
   &-status-warning&-disabled {
-    color: @link-color-text_warning_disabled;
+    color: var(~'--c-link-text-color-warning-disabled');
   }
 
   &-status-warning&-loading {
-    color: @link-color-text_warning_loading;
+    color: var(~'--c-link-text-color-warning-loading');
   }
 
   // 链接图标
   &-icon {
-    margin-right: @link-margin-icon-right;
-    font-size: @link-size-icon;
+    margin-right: var(~'--c-link-margin-icon-right');
+    font-size: var(~'--c-link-size-icon');
     vertical-align: middle;
+  }
+
+  &&-disabled,
+  &&-loading {
+    color: var(~'--c-link-text-color-disabled');
   }
 }

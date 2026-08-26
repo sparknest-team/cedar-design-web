@@ -1,0 +1,333 @@
+.c--box {
+  box-sizing: border-box;
+}
+.c--box * {
+  box-sizing: border-box;
+}
+.c--lock {
+  overflow: hidden !important;
+}
+.c--ellipsis {
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.c--inline-block {
+  display: inline-block;
+}
+.c--flex {
+  display: flex;
+}
+.c--inline-flex {
+  display: inline-flex;
+}
+/******** borderSize *******/
+/******** borderStyle *******/
+/******** radius *******/
+/******** shadow distance *******/
+/******** size *******/
+/******** spacing *******/
+/******** shadow *******/
+/******** opacity *******/
+/******** fontSize *******/
+/******** fontWeight ********/
+/******** Primary *******/
+/******** success *******/
+/******** info *******/
+/******** warning *******/
+/******** danger *******/
+/******** link *******/
+/******** radius *******/
+/******** motion *******/
+/******** z-index *******/
+/******** scale CSS var wrappers (public Less API) *******/
+/********* icon hover *********/
+:root {
+  --c-field-number-border-radius: var(--c-border-radius-sm);
+  --c-field-number-step-layer-border-radius: var(--c-border-1);
+  --c-field-number-size-xs-step-button-width: var(--c-size-xs);
+  --c-field-number-size-sm-step-button-width: var(--c-size-sm);
+  --c-field-number-size-md-step-button-width: var(--c-size-md);
+  --c-field-number-size-lg-step-button-width: var(--c-size-lg);
+  --c-field-number-step-button-font-size-stacked: var(--c-font-size-xs);
+  --c-field-number-step-button-font-size-split: var(--c-font-size-body-3);
+  --c-field-number-suffix-min-width: var(--c-spacing-3);
+  --c-field-number-suffix-feedback-min-width: var(--c-size-8);
+  --c-field-number-suffix-feedback-step-offset: 30px;
+  --c-field-number-suffix-hover-padding-left: var(--c-spacing-2);
+  --c-field-number-step-button-color: var(--c-color-text-2);
+  --c-field-number-step-button-color-disabled: var(--c-color-text-4);
+  --c-field-number-step-button-color-border: var(--c-color-neutral-3);
+  --c-field-number-step-button-color-bg-default: var(--c-color-fill-2);
+  --c-field-number-step-button-color-bg-default-hover: var(--c-color-fill-3);
+  --c-field-number-step-button-color-bg-default-active: var(--c-color-fill-4);
+  --c-field-number-step-button-color-bg-disabled: var(--c-color-fill-2);
+  --c-field-number-step-button-color-bg-disabled-hover: var(--c-color-fill-2);
+  --c-field-number-step-button-color-bg-disabled-active: var(--c-color-fill-2);
+}
+/******** Field / Input CSS Variables *******/
+:root {
+  --c-field-color-text: var(--c-color-text-1);
+  --c-field-color-placeholder-text: var(--c-color-text-3);
+  --c-field-color-text-disabled: var(--c-color-text-4);
+  --c-field-color-prefix-text: var(--c-color-text-2);
+  --c-field-color-suffix-text: var(--c-color-text-2);
+  --c-field-color-tip-text: var(--c-color-text-3);
+  --c-field-color-icon-clear: var(--c-color-text-2);
+  --c-field-color-icon-clear-bg-hover: var(--c-color-fill-4);
+  --c-field-color-focus: rgb(var(--c-primary-6));
+  --c-field-color-blur: var(--c-color-text-3);
+  --c-field-color-error: rgb(var(--c-danger-6));
+  --c-field-border-radius: var(--c-border-radius-md);
+  --c-field-border-width: 1px;
+  --c-field-padding-x: 12px;
+  --c-field-margin-left-clear-btn: 12px;
+  --c-field-spacing-clear-icon-right: 8px;
+  --c-field-padding-word-limit-left: 6px;
+  --c-field-font-tip-size: 12px;
+  --c-field-size-icon-clear: 12px;
+  --c-field-size-icon: 14px;
+  --c-field-size-xs-height: 24px;
+  --c-field-size-sm-height: 28px;
+  --c-field-size-md-height: 32px;
+  --c-field-size-lg-height: 36px;
+  --c-field-size-xs-font-size: 12px;
+  --c-field-size-sm-font-size: 14px;
+  --c-field-size-md-font-size: 14px;
+  --c-field-size-lg-font-size: 14px;
+  --c-field-size-xs-padding-y: 2px;
+  --c-field-size-sm-padding-y: 3px;
+  --c-field-size-md-padding-y: 5px;
+  --c-field-size-lg-padding-y: 9px;
+  --c-field-size-xs-line-height: 1.667;
+  --c-field-size-sm-line-height: 1.5715;
+  --c-field-size-md-line-height: 1.5715;
+  --c-field-size-lg-line-height: 1.5715;
+  --c-field-size-xs-icon-suffix-size: 12px;
+  --c-field-size-sm-icon-suffix-size: 14px;
+  --c-field-size-md-icon-suffix-size: 14px;
+  --c-field-size-lg-icon-suffix-size: 14px;
+  --c-field-size-xs-icon-addon-size: 12px;
+  --c-field-size-sm-icon-addon-size: 14px;
+  --c-field-size-md-icon-addon-size: 14px;
+  --c-field-size-lg-icon-addon-size: 14px;
+  --c-field-variant-filled-bg: var(--c-color-fill-2);
+  --c-field-variant-filled-bg-hover: var(--c-color-fill-3);
+  --c-field-variant-filled-bg-focus: var(--c-color-bg-2);
+  --c-field-variant-filled-bg-disabled: var(--c-color-fill-2);
+  --c-field-variant-filled-bg-error: var(--c-color-danger-light-1);
+  --c-field-variant-filled-bg-error-hover: var(--c-color-danger-light-2);
+  --c-field-variant-filled-bg-error-focus: var(--c-field-variant-filled-bg-focus);
+  --c-field-variant-filled-border-color: transparent;
+  --c-field-variant-filled-border-color-hover: transparent;
+  --c-field-variant-filled-border-color-focus: var(--c-color-border-3);
+  --c-field-variant-filled-border-color-disabled: transparent;
+  --c-field-variant-filled-border-color-error: transparent;
+  --c-field-variant-filled-border-color-error-hover: transparent;
+  --c-field-variant-filled-border-color-error-focus: rgb(var(--c-danger-6));
+  --c-field-variant-filled-color-shadow-focus: var(--c-color-primary-light-2);
+  --c-field-variant-filled-size-shadow-focus: 0;
+  --c-field-variant-filled-color-shadow-error-focus: var(--c-color-danger-light-2);
+  --c-field-variant-filled-size-shadow-error-focus: 0;
+  --c-field-variant-outlined-border-color: var(--c-color-border-2);
+  --c-field-variant-outlined-border-color-hover: var(--c-color-border-3);
+  --c-field-variant-outlined-border-color-focus: var(--c-color-border-3);
+  --c-field-variant-outlined-border-color-disabled: var(--c-color-border-2);
+  --c-field-variant-outlined-border-color-error: rgb(var(--c-danger-6));
+  --c-field-variant-standard-line-color: var(--c-field-color-blur);
+  --c-field-variant-standard-line-color-focus: var(--c-field-color-focus);
+  --c-field-variant-standard-line-color-error: var(--c-field-color-error);
+  --c-field-variant-standard-line-color-disabled: var(--c-field-color-text-disabled);
+  --c-field-variant-standard-line-size: 1px;
+  --c-field-variant-standard-line-size-focus: 2px;
+  --c-field-color-addon-bg: var(--c-field-variant-filled-bg);
+  --c-field-color-addon-border: var(--c-color-neutral-3);
+  --c-field-border-addon-separator-width: 1px;
+  --c-field-color-addon-border-default: transparent;
+  --c-field-group-border-separator-width: 1px;
+  --c-field-group-color-separator-border: var(--c-color-neutral-3);
+  --c-field-group-label-text-color: var(--c-color-text-2);
+  --c-field-feedback-icon-color-success: rgb(var(--c-success-6));
+  --c-field-feedback-icon-color-error: rgb(var(--c-danger-6));
+  --c-field-feedback-icon-color-warning: rgb(var(--c-warning-6));
+  --c-field-feedback-icon-color-validating: rgb(var(--c-primary-6));
+  --c-textarea-color-tip-text: var(--c-color-text-3);
+  --c-textarea-padding-x: var(--c-spacing-6);
+  --c-textarea-padding-y: var(--c-spacing-2);
+  --c-textarea-font-size: var(--c-font-size-body-3);
+  --c-textarea-font-tip-size: var(--c-font-size-body-1);
+  --c-textarea-layout-tip-right: var(--c-spacing-5);
+  --c-textarea-layout-tip-bottom: var(--c-spacing-3);
+  --c-textarea-size-min-height: var(--c-size-8);
+  --c-textarea-size-icon-clear: var(--c-size-3);
+  --c-textarea-layout-top-icon-clear: var(--c-spacing-5);
+  --c-textarea-layout-tip-scroll-offset: 15px;
+  --c-password-color-eye-icon: var(--c-color-text-2);
+  --c-password-size-eye-icon: 12px;
+  --c-search-color-icon: var(--c-color-text-2);
+  --c-search-size-icon: 14px;
+}
+.c-input-number {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  border-radius: var(--c-field-number-border-radius);
+}
+.c-input-number-step-button {
+  box-sizing: border-box;
+  color: var(--c-field-number-step-button-color);
+  background-color: var(--c-field-number-step-button-color-bg-default);
+  cursor: pointer;
+  user-select: none;
+  border: 0 none;
+  transition: all var(--c-transition-duration-1) var(--c-transition-timing-function-linear);
+}
+.c-input-number-step-button:hover {
+  background-color: var(--c-field-number-step-button-color-bg-default-hover);
+  border-color: var(--c-field-number-step-button-color-bg-default-hover);
+}
+.c-input-number-step-button:active {
+  background-color: var(--c-field-number-step-button-color-bg-default-active);
+  border-color: var(--c-field-number-step-button-color-bg-default-active);
+}
+.c-input-number-step-button:disabled {
+  color: var(--c-field-number-step-button-color-disabled);
+  background-color: var(--c-field-number-step-button-color-bg-disabled);
+  cursor: not-allowed;
+}
+.c-input-number-step-button:disabled:hover,
+.c-input-number-step-button:disabled:active {
+  background-color: var(--c-field-number-step-button-color-bg-disabled-hover);
+  border-color: var(--c-field-number-step-button-color-border);
+}
+.c-input-number .c-input-wrapper {
+  position: relative;
+}
+.c-input-number-prefix,
+.c-input-number-suffix {
+  transition: all var(--c-transition-duration-1) var(--c-transition-timing-function-linear);
+}
+.c-input-number--mode-embed .c-field-decorator--size-xs .c-input-number-step {
+  width: var(--c-field-number-size-xs-step-button-width);
+}
+.c-input-number--mode-embed .c-field-decorator--size-sm .c-input-number-step {
+  width: var(--c-field-number-size-sm-step-button-width);
+}
+.c-input-number--mode-embed .c-field-decorator--size-md .c-input-number-step {
+  width: var(--c-field-number-size-md-step-button-width);
+}
+.c-input-number--mode-embed .c-field-decorator--size-lg .c-input-number-step {
+  width: var(--c-field-number-size-lg-step-button-width);
+}
+.c-input-number--mode-embed .c-input-number-step {
+  position: relative;
+  height: 100%;
+  border-radius: var(--c-field-number-step-layer-border-radius);
+  opacity: 1;
+  margin-right: calc(-1 * var(--c-field-padding-x));
+  transition: all var(--c-transition-duration-1) var(--c-transition-timing-function-linear);
+}
+.c-input-number--mode-embed .c-input-number-step .c-input-number-step-divider-vertical {
+  margin: 0;
+  position: absolute;
+  top: 0;
+  left: -1px;
+  width: 100%;
+  height: 100%;
+}
+.c-input-number--mode-embed .c-input-number-step .c-input-number-step-divider-horizontal {
+  width: 100%;
+}
+.c-input-number--mode-embed .c-input-number-step .c-input-number-step-buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  overflow: hidden;
+}
+.c-input-number--mode-embed .c-input-number-step .c-input-number-step-button {
+  line-height: 1;
+  width: 100%;
+  height: calc(50% - 0.5px);
+  font-size: var(--c-field-number-step-button-font-size-stacked);
+  border: none;
+  border-color: var(--c-field-number-step-button-color-border);
+}
+.c-input-number--mode-embed .c-input-suffix {
+  justify-content: flex-end;
+  min-width: var(--c-field-number-suffix-min-width);
+}
+.c-input-number--mode-embed .c-input-suffix-has-feedback {
+  min-width: var(--c-field-number-suffix-feedback-min-width);
+}
+.c-input-number--mode-embed .c-input-suffix-has-feedback .c-input-number-step {
+  right: var(--c-field-number-suffix-feedback-step-offset);
+}
+.c-input-number--mode-embed:not(.c-input-disabled):hover .c-input-suffix:has(.c-input-number-suffix),
+.c-input-number--mode-embed:not(.c-input-disabled):focus-within .c-input-suffix:has(.c-input-number-suffix) {
+  padding-left: var(--c-field-number-suffix-hover-padding-left);
+}
+.c-input-number--mode-embed.c-input-wrapper:not(.c-input-focus) .c-input-number-step-button:not(
+          .c-input-number-step-button-disabled
+        ):hover {
+  background-color: var(--c-field-number-step-button-color-bg-default-active);
+}
+.c-input-number--mode-button .c-field-decorator--size-xs .c-input-number-step-button {
+  width: var(--c-field-number-size-xs-step-button-width);
+}
+.c-input-number--mode-button .c-field-decorator--size-sm .c-input-number-step-button {
+  width: var(--c-field-number-size-sm-step-button-width);
+}
+.c-input-number--mode-button .c-field-decorator--size-md .c-input-number-step-button {
+  width: var(--c-field-number-size-md-step-button-width);
+}
+.c-input-number--mode-button .c-field-decorator--size-lg .c-input-number-step-button {
+  width: var(--c-field-number-size-lg-step-button-width);
+}
+.c-input-number--mode-button.c-input__wrapper {
+  padding: 0;
+}
+.c-input-number--mode-button .c-input-number-step-button {
+  font-size: var(--c-field-number-step-button-font-size-split);
+  height: 100%;
+}
+.c-input-number--mode-button .c-input-number-suffix,
+.c-input-number--mode-button .c-input-number-prefix {
+  border: none;
+  position: relative;
+}
+.c-input-number--mode-button .c-field-decorator__suffix {
+  margin-right: calc(-1 * var(--c-field-padding-x));
+}
+.c-input-number--mode-button .c-field-decorator__suffix .c-input-number-step-button {
+  margin-right: 0;
+}
+.c-input-number--mode-button .c-field-decorator__prefix {
+  margin-left: calc(-1 * var(--c-field-padding-x));
+}
+.c-input-number--mode-button .c-field-decorator__prefix .c-input-number-step-button {
+  margin-left: 0;
+}
+.c-input-number--mode-button .c-input-number-step-button {
+  border-right: var(--c-field-border-addon-separator-width) solid transparent;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border: 0 none;
+}
+.c-input-number--mode-button .c-input-number-step-button:not(.c-input-number--mode-button .c-input-number-step-button:active) {
+  border-right-color: var(--c-field-number-step-button-color-border);
+}
+.c-input-number--mode-button .c-input-number-step-button {
+  border-left: var(--c-field-border-addon-separator-width) solid transparent;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border: 0 none;
+}
+.c-input-number--mode-button .c-input-number-step-button:not(.c-input-number--mode-button .c-input-number-step-button:active) {
+  border-left-color: var(--c-field-number-step-button-color-border);
+}
+.c-input-number-readonly .c-input-number-step-button {
+  color: var(--c-field-number-step-button-color-disabled);
+  pointer-events: none;
+}

@@ -16,7 +16,7 @@ permalink: /components/select/
 
 ### 变体
 
-设置`variant="outline"`开启变体模式，常用于沉浸式使用。
+设置`variant="outlined"`开启变体模式，常用于沉浸式使用。
 
 <demo src="./__demos__/variant.vue"></demo>
 
@@ -124,7 +124,7 @@ permalink: /components/select/
 | loading                     | 是否为加载中状态                                                                 | `boolean`                                                                                     |               `false`               |
 | disabled                    | 是否禁用                                                                         | `boolean`                                                                                     |               `false`               |
 | error                       | 是否为错误状态                                                                   | `boolean`                                                                                     |               `false`               |
-| variant                     | 选择框的变体                                                                     | `'outline' \| 'default'`                                                                      |             `'default'`             |
+| variant                     | 选择框的变体                                                                     | `'filled' \| 'outlined' \| 'standard'`                                                                      |             `'filled'`              |
 | clearable                   | 是否允许清空                                                                     | `boolean`                                                                                     |               `false`               |
 | filterable                | 是否允许搜索                                                                     | `boolean \| { retainInputValue?: boolean }`                                                   | `false (single) \| true (multiple)` |
 | creatable                   | 是否允许创建                                                                     | `boolean`                                                                                     |               `false`               |
@@ -132,8 +132,8 @@ permalink: /components/select/
 | popup-container             | 弹出框的挂载容器                                                                 | `string \| HTMLElement`                                                                       |                 `-`                 |
 | bordered                    | 是否显示输入框的边框                                                             | `boolean`                                                                                     |               `true`                |
 | default-active-first-option | 是否在无值时默认选择第一个选项                                                   | `boolean`                                                                                     |               `true`                |
-| popup-visible **(v-model)** | 是否显示下拉菜单                                                                 | `boolean`                                                                                     |                 `-`                 |
-| default-popup-visible       | 弹出框默认是否可见（非受控模式）                                                 | `boolean`                                                                                     |               `false`               |
+| open **(v-model)** | 是否显示下拉菜单                                                                 | `boolean`                                                                                     |                 `-`                 |
+| default-open       | 弹出框默认是否可见（非受控模式）                                                 | `boolean`                                                                                     |               `false`               |
 | unmount-on-close            | 是否在下拉菜单关闭时销毁元素                                                     | `boolean`                                                                                     |               `false`               |
 | filter-option               | 是否过滤选项                                                                     | `boolean \| ((inputValue: string, option: SelectOptionData) => boolean)`                      |               `true`                |
 | options                     | 选项数据                                                                         | `(string \| number \| SelectOptionData \| SelectOptionGroup)[]`                               |                `[]`                 |
@@ -142,10 +142,9 @@ permalink: /components/select/
 | format-label                | 格式化显示内容                                                                   | `(data: SelectOptionData) => string`                                                          |                 `-`                 |
 | fallback-option             | 自定义值中不存在的选项                                                           | `boolean\| ((    value: string \| number \| Record<string, unknown>  ) => SelectOptionData)`  |               `true`                |
 | show-extra-options          | 是否在下拉菜单中显示额外选项                                                     | `boolean`                                                                                     |               `true`                |
-| value-key                   | 用于确定选项键值的属性名                                                         | `string`                                                                                      |              `'value'`              |
 | search-delay                | 触发搜索事件的延迟时间                                                           | `number`                                                                                      |                `500`                |
 | limit                       | 多选时最多的选择个数                                                             | `number`                                                                                      |                 `0`                 |
-| field-names                 | 自定义 `SelectOptionData` 中的字段                                               | `SelectFieldNames`                                                                            |                 `-`                 |
+| field-names                 | 自定义 `SelectOptionData` 中的字段；当选项值为对象时，也用其中的 `value` 作为键属性 | `SelectFieldNames`                                                                            |                 `-`                 |
 | scrollbar                   | 是否开启虚拟滚动条                                                               | `boolean \| ScrollbarProps`                                                                   |               `true`                |
 | show-header-on-empty        | 空状态时是否显示header                                                           | `boolean`                                                                                     |               `false`               |
 | show-footer-on-empty        | 空状态时是否显示footer｜`boolean`                                                | `false`                                                                                       |
@@ -156,7 +155,7 @@ permalink: /components/select/
 | --------------------- | -------------------------- | ----------------------------------------------------------------------------------------------- | --- |
 | change                | 值发生改变时触发           | value: `string \| number \| Record<string, any> \| (string \| number \| Record<string, any>)[]` |     |
 | input-value-change    | 输入框的值发生改变时触发   | inputValue: `string`                                                                            |     |
-| popup-visible-change  | 下拉框的显示状态改变时触发 | visible: `boolean`                                                                              |     |
+| open-change  | 下拉框的显示状态改变时触发 | open: `boolean`                                                                              |     |
 | clear                 | 点击清除按钮时触发         | -                                                                                               |     |
 | remove                | 点击标签的删除按钮时触发   | removed: `string \| number \| Record<string, any> \| undefined`                                 |     |
 | search                | 用户搜索时触发             | inputValue: `string`                                                                            |     |

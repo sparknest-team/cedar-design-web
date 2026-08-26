@@ -42,7 +42,7 @@ export default function useTimeList(props: TimeListProps): {
   const hours = computed(() => {
     const { hour: hourStep = 1 } = step?.value || {}
     const disabledList = disabledHours?.value?.() || []
-    let list = []
+    let list: number[] = []
     for (let i = 0; i < (use12Hours.value ? 12 : 24); i += hourStep) {
       list.push(i)
     }
@@ -64,7 +64,7 @@ export default function useTimeList(props: TimeListProps): {
   const minutes = computed(() => {
     const { minute: minuteStep = 1 } = step?.value || {}
     const disabledList = disabledMinutes?.value?.(selectedHour.value) || []
-    let list = []
+    let list: number[] = []
     for (let i = 0; i < 60; i += minuteStep) {
       list.push(i)
     }
@@ -83,7 +83,7 @@ export default function useTimeList(props: TimeListProps): {
   const seconds = computed(() => {
     const { second: secondStep = 1 } = step?.value || {}
     const disabledList = disabledSeconds?.value?.(selectedHour.value, selectedMinute.value) || []
-    let list = []
+    let list: number[] = []
     for (let i = 0; i < 60; i += secondStep) {
       list.push(i)
     }

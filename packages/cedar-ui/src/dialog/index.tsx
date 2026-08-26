@@ -1,11 +1,12 @@
 import type { App, AppContext } from 'vue'
 import { nextTick, createVNode, render } from 'vue'
 import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { setGlobalConfig, getComponentName } from '../_utils/global-config'
 import { MESSAGE_TYPES } from '../_utils/constant'
 import { getOverlay } from '../_utils/dom'
 import { isFunction } from '../_utils/is'
 import _Dialog from './Dialog.vue'
+import { dialogProps } from './props'
 import type { DialogAction, DialogConfig, DialogMethod, DialogReturn, DialogUpdateConfig } from './types'
 import { omit } from '../_utils/omit'
 import { getSlotFunction } from '../_utils/vue-utils'
@@ -21,7 +22,7 @@ function createDialogMethod(defaultMethodConfig: Partial<DialogConfig> = {}) {
 
     const handleConfirm = () => {
       if (vm.component) {
-        vm.component.props.show = false
+        vm.component.props.open = false
       }
 
       if (isFunction(config.onConfirm)) {
@@ -33,7 +34,7 @@ function createDialogMethod(defaultMethodConfig: Partial<DialogConfig> = {}) {
 
     const handleCancel = () => {
       if (vm.component) {
-        vm.component.props.show = false
+        vm.component.props.open = false
       }
 
       if (isFunction(config.onCancel)) {
@@ -58,7 +59,7 @@ function createDialogMethod(defaultMethodConfig: Partial<DialogConfig> = {}) {
 
     const handleReturnClose = () => {
       if (vm.component) {
-        vm.component.props.show = false
+        vm.component.props.open = false
       }
       resolvePromise?.('close')
     }
@@ -76,8 +77,8 @@ function createDialogMethod(defaultMethodConfig: Partial<DialogConfig> = {}) {
         type: 'outline',
       },
       titleAlign: 'start' as const,
-      show: true,
-      teleport: false,
+      open: true,
+      popupContainer: false,
       unmountOnClose: true,
       onConfirm: handleConfirm,
       onCancel: handleCancel,
@@ -91,7 +92,7 @@ function createDialogMethod(defaultMethodConfig: Partial<DialogConfig> = {}) {
       {
         ...defaultConfig,
         ...defaultMethodConfig,
-        ...omit(config, ['content', 'message', 'title', 'footer', 'show', 'unmountOnClose', 'onConfirm', 'onCancel', 'onClosed']),
+        ...omit(config, ['content', 'message', 'title', 'footer', 'open', 'unmountOnClose', 'onConfirm', 'onCancel', 'onClosed']),
         ...{
           footer: typeof config.footer === 'boolean' ? config.footer : undefined,
         },
@@ -122,7 +123,7 @@ function createDialogMethod(defaultMethodConfig: Partial<DialogConfig> = {}) {
 const dialog: DialogMethod = {
   open: createDialogMethod(),
   confirm: createDialogMethod({ type: 'warning', simple: true }),
-  alert: createDialogMethod({ cancelButton: false, closeOnClickOverlay: false, closeOnKeyEscape: false, simple: true }),
+  alert: createDialogMethod({ cancelButton: false, maskClosable: false, escToClose: false, simple: true }),
   ...MESSAGE_TYPES.reduce(
     (pre, value) => {
       pre[value] = createDialogMethod({
@@ -143,9 +144,8 @@ const Dialog = Object.assign(_Dialog, {
   resetDefaultOptions: () => {},
   install: (app: App, options?: CedarOptions) => {
     setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
 
-    app.component(componentPrefix + _Dialog.name, _Dialog)
+    app.component(getComponentName(options, _Dialog.name), _Dialog)
 
     const dialogWithContext = {} as DialogMethod
 
@@ -159,5 +159,9 @@ const Dialog = Object.assign(_Dialog, {
 })
 
 export type { DialogMethod, DialogConfig, DialogReturn, DialogAction, DialogType, DialogBeforeCloseRefs } from './types'
+export type { DialogProps } from './props'
+export type DialogInstance = InstanceType<typeof _Dialog>
+export { Dialog, dialogProps }
+export const _DialogComponent = Dialog
 
 export default Dialog

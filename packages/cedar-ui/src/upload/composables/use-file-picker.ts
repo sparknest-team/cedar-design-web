@@ -12,7 +12,7 @@ export function useFilePicker(options: {
   const dragOver = ref(false)
 
   function chooseFile() {
-    if (!options.disabled()) {
+    if (!options.disabled?.()) {
       inputRef.value?.click()
     }
   }
@@ -22,7 +22,7 @@ export function useFilePicker(options: {
     const rejected: UploadRejectedFile[] = []
 
     files.forEach((file) => {
-      if (isAcceptedFile(file, options.accept())) {
+      if (isAcceptedFile(file, options.accept?.())) {
         accepted.push(file)
       } else {
         rejected.push({ file, reason: 'accept' })
@@ -41,7 +41,7 @@ export function useFilePicker(options: {
   }
 
   function handleDragOver(event: DragEvent) {
-    if (options.disabled()) {
+    if (options.disabled?.()) {
       return
     }
 
@@ -54,7 +54,7 @@ export function useFilePicker(options: {
   }
 
   function handleDrop(event: DragEvent) {
-    if (options.disabled()) {
+    if (options.disabled?.()) {
       return
     }
 

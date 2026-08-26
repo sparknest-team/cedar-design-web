@@ -1,7 +1,7 @@
 <template>
   <c-button @click="handleClick">Open Dialog</c-button>
 
-  <c-dialog v-model:show="visible" unmount-on-close @before-close="handleBeforeClose" @cancel="handleCancel">
+  <c-dialog v-model:open="visible" unmount-on-close :before-close="handleBeforeClose" @cancel="handleCancel">
     <template #title>Title</template>
     <div>You can customize dialog content. It will close after async confirm.</div>
   </c-dialog>

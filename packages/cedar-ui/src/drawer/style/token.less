@@ -1,16 +1,28 @@
 @import '../../style/theme/index.less';
 
-@drawer-size-header-height: @size-12;
-@drawer-margin-footer-button-left: @spacing-6;
-@drawer-font-header-size: @font-size-title-1;
-@drawer-padding-horizontal: @spacing-7;
-@drawer-padding-footer-vertical: @spacing-7;
-@drawer-padding-content-vertical: @spacing-6;
-@drawer-font-header-weight: @font-weight-500;
+/******** Drawer CSS Variables *******/
+:root {
+  --c-drawer-header-height: var(~'--c-size-12');
+  --c-drawer-footer-button-margin-left: var(~'--c-spacing-6');
+  --c-drawer-header-font-size: var(~'--c-font-size-title-1');
+  --c-drawer-padding-horizontal: var(~'--c-spacing-7');
+  --c-drawer-footer-padding-vertical: var(~'--c-spacing-7');
+  --c-drawer-content-padding-vertical: var(~'--c-spacing-6');
+  --c-drawer-header-font-weight: var(~'--c-font-weight-500');
 
-@drawer-color-border: var(~'--c-color-neutral-3');
-@drawer-color-header-text: var(~'--c-color-text-1');
-@drawer-color-content-text: var(~'--c-color-text-1');
+  --c-drawer-border-color: var(~'--c-color-neutral-3');
+  --c-drawer-border-width: var(~'--c-border-width-1');
+  --c-drawer-header-text-color: var(~'--c-color-text-1');
+  --c-drawer-content-text-color: var(~'--c-color-text-1');
+  --c-drawer-bg: var(~'--c-color-bg-3');
+  --c-drawer-mask-bg: var(~'--c-color-mask-bg');
+  --c-drawer-line-height: var(~'--c-line-height');
+  --c-drawer-z-index: var(~'--c-z-index-drawer');
 
-@drawer-position-close-icon-right: @spacing-7;
-@drawer-font-size-close-icon: @size-3;
+  --c-drawer-close-icon-right: var(~'--c-spacing-7');
+  --c-drawer-close-icon-font-size: var(~'--c-size-3');
+  --c-drawer-close-btn-margin-left: var(~'--c-spacing-4');
+
+  --c-drawer-transition-duration: var(~'--c-transition-duration-3');
+  --c-drawer-transition-timing-function: var(~'--c-transition-timing-function-standard');
+}

@@ -23,6 +23,10 @@
           <div
             :key="colIndex"
             :class="getCellClassName(cell)"
+            role="button"
+            :tabindex="isCellDisabled(cell) ? -1 : 0"
+            :aria-disabled="isCellDisabled(cell)"
+            :aria-selected="isCellSelected(cell)"
             @mouseenter="
               () => {
                 onCellMouseEnter(cell)
@@ -38,6 +42,8 @@
                 onCellClick(cell)
               }
             "
+            @keydown.enter.prevent="onCellClick(cell)"
+            @keydown.space.prevent="onCellClick(cell)"
           >
             <RenderFunction v-if="dateRender" :render-func="dateRender" :date="getDateValue(cell.value)" />
             <div v-else :class="`${prefixCls}-date`">
@@ -53,16 +59,17 @@
 </template>
 
 <script lang="ts">
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 import { computed, defineComponent, PropType, reactive, toRefs } from 'vue'
 import type { Cell, DisabledDate, IsSameTime, Mode } from '../types'
 import { isFunction } from '../../_utils/is'
 import useCellClassName from '../hooks/use-cell-class-name'
 import RenderFunction, { RenderFunc } from '../../_components/render-function'
 import { getDateValue } from '../../_utils/date'
+import { createNamespace } from '../../_utils/global-config'
 
 export default defineComponent({
-  name: 'PanelBody',
+  name: createNamespace('date-picker-body').name,
   components: {
     RenderFunction,
   },
@@ -118,6 +125,8 @@ export default defineComponent({
         const disabled = isCellDisabled(cellData)
         return getCellClassName(cellData, disabled)
       },
+      isCellDisabled,
+      isCellSelected: (cellData: Cell) => !!value?.value && isSameTime.value(cellData.value, value.value),
       onCellClick: (cellData: Cell) => {
         const disabled = isCellDisabled(cellData)
         if (disabled) return

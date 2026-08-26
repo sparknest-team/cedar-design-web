@@ -13,10 +13,11 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../../_utils/global-config'
 import { defineComponent, computed, toRefs, CSSProperties } from 'vue'
 
 export default defineComponent({
-  name: 'VirtualListFiller',
+  name: createNamespace("virtual-list-filler").name,
   props: {
     height: {
       type: Number,

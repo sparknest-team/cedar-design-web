@@ -1,44 +1,51 @@
-@import './token.less';
-@import '../../input/style/token.less';
+@import "./token.less";
+@import "../../input/style/token.less";
 
 .c-input-number {
   position: relative;
   box-sizing: border-box;
   width: 100%;
-  border-radius: var(~'--c-input-number-border-radius');
+  border-radius: var(~"--c-field-number-border-radius");
 
   .transition() {
-    transition: all @transition-duration-1 @transition-timing-function-linear;
+    transition: all var(~"--c-transition-duration-1")
+      var(~"--c-transition-timing-function-linear");
   }
 
   &-step-button {
     box-sizing: border-box;
-    color: var(~'--c-input-number-step-button-color');
-    background-color: var(~'--c-input-number-step-button-color-bg_default');
+    color: var(~"--c-field-number-step-button-color");
+    background-color: var(~"--c-field-number-step-button-color-bg-default");
     cursor: pointer;
     user-select: none;
     border: 0 none;
     .transition();
 
     &:hover {
-      background-color: var(~'--c-input-number-step-button-color-bg_default_hover');
+      background-color: var(
+        ~"--c-field-number-step-button-color-bg-default-hover"
+      );
       border-color: $background-color;
     }
 
     &:active {
-      background-color: var(~'--c-input-number-step-button-color-bg_default_active');
+      background-color: var(
+        ~"--c-field-number-step-button-color-bg-default-active"
+      );
       border-color: $background-color;
     }
 
     &:disabled {
-      color: var(~'--c-input-number-step-button-color_disabled');
-      background-color: var(~'--c-input-number-step-button-color-bg_disabled');
+      color: var(~"--c-field-number-step-button-color-disabled");
+      background-color: var(~"--c-field-number-step-button-color-bg-disabled");
       cursor: not-allowed;
 
       &:hover,
       &:active {
-        background-color: var(~'--c-input-number-step-button-color-bg_disabled_hover');
-        border-color: var(~'--c-input-number-step-button-color-border');
+        background-color: var(
+          ~"--c-field-number-step-button-color-bg-disabled-hover"
+        );
+        border-color: var(~"--c-field-number-step-button-color-border");
       }
     }
   }
@@ -53,14 +60,23 @@
   }
 
   // embed mode
-  &--control-type-stacked {
+  &--mode-embed {
+    .size(@size) {
+      .c-field-decorator--size-@{size} .c-input-number-step {
+        width: var(~"--c-field-number-size-@{size}-step-button-width");
+      }
+    }
+    .size(xs);
+    .size(sm);
+    .size(md);
+    .size(lg);
+
     .c-input-number-step {
       position: relative;
-      width: 28px;
       height: 100%;
-      border-radius: var(~'--c-input-number-step-layer-border-radius');
+      border-radius: var(~"--c-field-number-step-layer-border-radius");
       opacity: 1;
-      margin-right: calc(-1 * var(~'--c-input-padding-x'));
+      margin-right: calc(-1 * var(~"--c-field-padding-x"));
       .transition();
 
       .c-input-number-step-divider-vertical {
@@ -89,22 +105,22 @@
         line-height: 1;
         width: 100%;
         height: calc(50% - 0.5px);
-        font-size: 10px;
+        font-size: var(~"--c-field-number-step-button-font-size-stacked");
         border: none;
-        border-color: var(~'--c-input-number-step-button-color-border');
+        border-color: var(~"--c-field-number-step-button-color-border");
       }
     }
 
     .c-input-suffix {
       justify-content: flex-end;
-      min-width: 6px;
+      min-width: var(~"--c-field-number-suffix-min-width");
     }
 
     .c-input-suffix-has-feedback {
-      min-width: 32px;
+      min-width: var(~"--c-field-number-suffix-feedback-min-width");
 
       .c-input-number-step {
-        right: 30px;
+        right: var(~"--c-field-number-suffix-feedback-step-offset");
       }
     }
 
@@ -113,28 +129,41 @@
       &:focus-within {
         // 修正 hove 时存在 suffix 但隐藏了，视觉上 padding 过大问题
         .c-input-suffix:has(.c-input-number-suffix) {
-          padding-left: 4px;
+          padding-left: var(~"--c-field-number-suffix-hover-padding-left");
         }
       }
     }
 
     // 修正 InputNumber 未激活 hover 时 StepButton 的 hover 背景色
     &.c-input-wrapper:not(.c-input-focus) {
-      .c-input-number-step-button:not(.c-input-number-step-button-disabled):hover {
-        background-color: var(~'--c-input-number-step-button-color-bg_default_active');
+      .c-input-number-step-button:not(
+          .c-input-number-step-button-disabled
+        ):hover {
+        background-color: var(
+          ~"--c-field-number-step-button-color-bg-default-active"
+        );
       }
     }
   }
 
   // button mode
-  &--control-type-split {
+  &--mode-button {
+    .size(@size) {
+      .c-field-decorator--size-@{size} .c-input-number-step-button {
+        width: var(~"--c-field-number-size-@{size}-step-button-width");
+      }
+    }
+    .size(xs);
+    .size(sm);
+    .size(md);
+    .size(lg);
+
     &.c-input__wrapper {
       padding: 0;
     }
     .c-input-number-step-button {
-      font-size: 14px;
+      font-size: var(~"--c-field-number-step-button-font-size-split");
       height: 100%;
-      width: 28px;
     }
     .c-input-number-suffix,
     .c-input-number-prefix {
@@ -142,37 +171,39 @@
       position: relative;
     }
 
-    .c-input__suffix {
-      margin-right: calc(-1 * var(~'--c-input-padding-x'));
+    .c-field-decorator__suffix {
+      margin-right: calc(-1 * var(~"--c-field-padding-x"));
 
       .c-input-number-step-button {
         margin-right: 0;
       }
     }
-    .c-input__prefix {
-      margin-left: calc(-1 * var(~'--c-input-padding-x'));
+    .c-field-decorator__prefix {
+      margin-left: calc(-1 * var(~"--c-field-padding-x"));
 
       .c-input-number-step-button {
         margin-left: 0;
       }
     }
     .c-input-number-step-button {
-      border-right: var(~'--c-input-border-addon-separator-width') solid transparent;
+      border-right: var(~"--c-field-border-addon-separator-width") solid
+        transparent;
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
 
       &:not(&:active) {
-        border-right-color: var(~'--c-input-number-step-button-color-border');
+        border-right-color: var(~"--c-field-number-step-button-color-border");
       }
       border: 0 none;
     }
     .c-input-number-step-button {
-      border-left: var(~'--c-input-border-addon-separator-width') solid transparent;
+      border-left: var(~"--c-field-border-addon-separator-width") solid
+        transparent;
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
 
       &:not(&:active) {
-        border-left-color: var(~'--c-input-number-step-button-color-border');
+        border-left-color: var(~"--c-field-number-step-button-color-border");
       }
       border: 0 none;
     }
@@ -180,7 +211,7 @@
 
   &-readonly {
     .c-input-number-step-button {
-      color: var(~'--c-input-number-step-button-color_disabled');
+      color: var(~"--c-field-number-step-button-color-disabled");
       pointer-events: none;
     }
   }

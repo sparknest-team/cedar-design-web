@@ -1,24 +1,24 @@
 <template>
   <div class="p-24">
-    <Card :loading="loading" spinTip="加载中...">
-      <CardHeader description="ST2022010106536" title="销售项目名称">
-        <template #additional>
+    <Card :loading="loading" subtitle="ST2022010106536">
+      <template #title>
+        <Space :size="8" align="center">
+          <span>销售项目名称</span>
           <Tag color="#F0FCFC" style="color: #08bebe">立项中</Tag>
-        </template>
-        <template #extra>
-          <Button>操作</Button>
-        </template>
-      </CardHeader>
+        </Space>
+      </template>
+      <template #title-action>
+        <Button>操作</Button>
+      </template>
       <Descriptions :data="data" layout="inline-auto" />
       <Descriptions :data="data2" layout="inline-auto" />
     </Card>
   </div>
 </template>
 <script lang="ts" setup>
-import { reactive, ref } from 'vue'
-import { Descriptions, Card, Tag, CardHeader, Button } from '@cedar/ui'
+import { ref } from 'vue'
+import { Descriptions, Card, Tag, Button, Space } from '@cedarjs/ui'
 
-const state = reactive({})
 const loading = ref(true)
 setTimeout(() => (loading.value = false), 5000)
 

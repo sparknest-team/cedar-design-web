@@ -1,0 +1,23 @@
+.c-ellipsis[c-ellipsis-cover] {
+  width: 100%;
+  overflow: hidden;
+  vertical-align: bottom;
+  -webkit-tap-highlight-color: transparent;
+}
+.c-ellipsis--clamp[c-ellipsis-cover] {
+  display: -webkit-inline-box;
+  -webkit-box-orient: vertical;
+}
+.c-ellipsis--line[c-ellipsis-cover] {
+  display: inline-block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.c-ellipsis--cursor[c-ellipsis-cover] {
+  cursor: pointer;
+}
+.c-ellipsis--expand[c-ellipsis-cover] {
+  display: inline-block;
+  white-space: wrap;
+  overflow: visible;
+}

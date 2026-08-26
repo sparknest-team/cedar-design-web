@@ -1,5 +1,5 @@
 import { nextTick, type ComponentPublicInstance } from 'vue'
-import { getStyle, isPlainObject } from '@maplejs/maple-shared'
+import { getStyle, isPlainObject } from '@cedarjs/shared'
 import { config, type DOMWrapper, type VueWrapper } from '@vue/test-utils'
 
 export const delay = (time: number) =>

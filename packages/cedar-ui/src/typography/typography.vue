@@ -4,10 +4,12 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { getPrefixCls } from '../_utils/global-config'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
+import { typographyProps } from './props'
 
 export default defineComponent({
-  name: 'Typography',
+  name: createNamespace('typography').name,
+  props: typographyProps,
   setup() {
     const prefixCls = getPrefixCls('typography')
 

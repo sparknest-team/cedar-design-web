@@ -6,19 +6,20 @@
     class="input-demo"
     :min="10"
     :max="100"
-    model-event="input" />
+    model-event="input"
+  />
   <div>value: {{ value }}</div>
 </template>
 
 <script lang="ts">
-import { ref } from 'vue'
+import { ref } from "vue";
 
 export default {
   setup() {
-    const value = ref(15)
+    const value = ref(15);
     return {
       value,
-    }
+    };
   },
-}
+};
 </script>

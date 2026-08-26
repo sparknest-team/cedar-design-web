@@ -1,0 +1,70 @@
+import type { ExtractPropTypes, PropType } from 'vue'
+import { componentSizes, semanticStatuses } from '../_utils/constant'
+import type { ComponentSize, SemanticStatus } from '../_utils/constant'
+
+export const badgeModes = ['floating', 'inline'] as const
+export const badgePositions = [
+  'top-right',
+  'top-left',
+  'bottom-right',
+  'bottom-left',
+  'left',
+  'right',
+] as const
+export const badgeInlinePositions = ['start', 'end'] as const
+export const badgeVariants = ['default', 'outline'] as const
+
+export type BadgeMode = (typeof badgeModes)[number]
+export type BadgePosition = (typeof badgePositions)[number]
+export type BadgeInlinePosition = (typeof badgeInlinePositions)[number]
+export type BadgeVariant = (typeof badgeVariants)[number]
+
+export const badgeProps = {
+  description: String,
+  dot: Boolean,
+  max: { type: Number, default: 99 },
+  show: { type: Boolean, default: true },
+  showZero: { type: Boolean, default: false },
+  offsetX: { type: Number, default: 0 },
+  offsetY: { type: Number, default: 0 },
+  color: String,
+  content: [Number, String] as PropType<number | string>,
+  textColor: String,
+  mode: {
+    type: String as PropType<BadgeMode>,
+    default: 'floating',
+    validator: (value: unknown): value is BadgeMode => badgeModes.includes(value as BadgeMode),
+  },
+  position: {
+    type: String as PropType<BadgePosition>,
+    default: 'top-right',
+    validator: (value: unknown): value is BadgePosition =>
+      badgePositions.includes(value as BadgePosition),
+  },
+  inlinePosition: {
+    type: String as PropType<BadgeInlinePosition>,
+    default: 'end',
+    validator: (value: unknown): value is BadgeInlinePosition =>
+      badgeInlinePositions.includes(value as BadgeInlinePosition),
+  },
+  size: {
+    type: String as PropType<ComponentSize>,
+    default: 'md',
+    validator: (value: unknown): value is ComponentSize =>
+      componentSizes.includes(value as ComponentSize),
+  },
+  status: {
+    type: String as PropType<SemanticStatus>,
+    default: 'default',
+    validator: (value: unknown): value is SemanticStatus =>
+      semanticStatuses.includes(value as SemanticStatus),
+  },
+  variant: {
+    type: String as PropType<BadgeVariant>,
+    default: 'default',
+    validator: (value: unknown): value is BadgeVariant =>
+      badgeVariants.includes(value as BadgeVariant),
+  },
+} 
+
+export type BadgeProps = ExtractPropTypes<typeof badgeProps>

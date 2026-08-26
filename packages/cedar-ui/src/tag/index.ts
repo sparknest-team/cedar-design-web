@@ -1,18 +1,16 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Tag from './tag.vue'
+import { tagProps } from './props'
 
-const Tag = Object.assign(_Tag, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _Tag.name, _Tag)
-  },
-})
+const Tag = withInstall(_Tag, Object.assign(_Tag, {
+}), { components: [_Tag] })
 
 export type TagInstance = InstanceType<typeof _Tag>
-export type { TagProps, TagColor, TagVariant } from './types'
+export type { TagProps } from './props'
+export type { TagColor, TagVariant } from './types'
+
+export { tagProps }
+export { Tag }
+export const _TagComponent = Tag
 
 export default Tag

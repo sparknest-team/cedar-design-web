@@ -82,7 +82,7 @@ permalink: /components/count-to/
 组件导出以下类型定义
 
 ```ts
-import type { CountToProps, CountToInstance } from '@cedar/ui'
+import type { CountToProps, CountToInstance } from '@cedarjs/ui'
 ```
 
 ### 样式变量

@@ -4,7 +4,6 @@ import path from 'path'
 import fs from 'fs-extra'
 import { Command } from 'commander'
 import copyDist from './generate/copyDist'
-import icongen from './generate/icongen'
 import dtsgen from './generate/dtsgen'
 // import screentshotTest from './scripts/test/screentshot';
 
@@ -14,13 +13,6 @@ const packageContent = fs.readFileSync(path.resolve(__dirname, '../package.json'
 const packageData: any = JSON.parse(packageContent)
 
 program.version(packageData.version).name('cedar-vue-scripts').usage('command [options]')
-
-program
-  .command('icongen')
-  .description('generate icon components.')
-  .action(() => {
-    icongen()
-  })
 
 program
   .command('copy-dist')

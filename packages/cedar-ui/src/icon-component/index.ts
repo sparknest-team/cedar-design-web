@@ -1,20 +1,16 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Icon from './icon.vue'
-import { addFromIconFontCn } from './add-from-icon-font-cn'
+import { iconComponentProps } from './props'
 
-const Icon = Object.assign(_Icon, {
-  addFromIconFontCn,
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _Icon.name, _Icon)
-  },
-})
+const Icon = withInstall(_Icon)
 
 export type IconInstance = InstanceType<typeof _Icon>
 export type IconProps = IconInstance['$props']
+
+export const _IconComponentComponent = Icon
+
+export { Icon }
+
+export { iconComponentProps }
 
 export default Icon

@@ -1,5 +1,5 @@
 <template>
-  <c-image-preview-group infinite>
+  <c-image-preview-group loop>
     <c-space>
       <c-image
         src="https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/cd7a1aaea8e1c5e3d26fe2591e561798.png~tplv-uwbnlip3yd-webp.webp"

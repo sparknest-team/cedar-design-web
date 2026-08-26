@@ -1,0 +1,102 @@
+.c--box {
+  box-sizing: border-box;
+}
+.c--box * {
+  box-sizing: border-box;
+}
+.c--lock {
+  overflow: hidden !important;
+}
+.c--ellipsis {
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.c--inline-block {
+  display: inline-block;
+}
+.c--flex {
+  display: flex;
+}
+.c--inline-flex {
+  display: inline-flex;
+}
+/******** borderSize *******/
+/******** borderStyle *******/
+/******** radius *******/
+/******** shadow distance *******/
+/******** size *******/
+/******** spacing *******/
+/******** shadow *******/
+/******** opacity *******/
+/******** fontSize *******/
+/******** fontWeight ********/
+/******** Primary *******/
+/******** success *******/
+/******** info *******/
+/******** warning *******/
+/******** danger *******/
+/******** link *******/
+/******** radius *******/
+/******** motion *******/
+/******** z-index *******/
+/******** scale CSS var wrappers (public Less API) *******/
+/********* icon hover *********/
+:root {
+  --c-auto-complete-popup-max-height: var(--c-size-50);
+  --c-auto-complete-popup-border-radius: var(--c-border-radius-md);
+  --c-auto-complete-popup-padding-vertical: var(--c-spacing-2);
+  --c-auto-complete-popup-font-size: var(--c-font-size-body-3);
+  --c-auto-complete-popup-border-color: var(--c-color-fill-3);
+  --c-auto-complete-popup-box-shadow: var(--c-shadow2-down);
+  --c-auto-complete-option-height: var(--c-size-9);
+  --c-auto-complete-option-font-weight-selected: var(--c-font-weight-500);
+  --c-auto-complete-option-padding-horizontal: var(--c-spacing-6);
+  --c-auto-complete-option-bg-default: var(--c-color-bg-popup);
+  --c-auto-complete-option-bg-hover: var(--c-color-fill-2);
+  --c-auto-complete-option-bg-selected: var(--c-color-bg-popup);
+  --c-auto-complete-option-bg-disabled: var(--c-color-bg-popup);
+  --c-auto-complete-option-text-color-default: var(--c-color-text-1);
+  --c-auto-complete-option-text-color-hover: var(--c-color-text-1);
+  --c-auto-complete-option-text-color-selected: var(--c-color-text-1);
+  --c-auto-complete-option-text-color-disabled: var(--c-color-text-4);
+}
+.c-auto-complete {
+  position: relative;
+  display: inline-flex;
+  box-sizing: border-box;
+  width: 100%;
+}
+.c-auto-complete-popup .c-select-popup {
+  background-color: var(--c-color-bg-popup);
+  border: 1px solid var(--c-auto-complete-popup-border-color);
+  border-radius: var(--c-auto-complete-popup-border-radius);
+  box-shadow: var(--c-auto-complete-popup-box-shadow);
+}
+.c-auto-complete-popup .c-select-popup .c-select-popup-inner {
+  max-height: var(--c-auto-complete-popup-max-height);
+  padding: var(--c-auto-complete-popup-padding-vertical) 0;
+}
+.c-auto-complete-popup .c-select-popup .c-select-option {
+  height: var(--c-auto-complete-option-height);
+  padding: 0 var(--c-auto-complete-option-padding-horizontal);
+  font-size: var(--c-auto-complete-popup-font-size);
+  line-height: var(--c-auto-complete-option-height);
+  color: var(--c-auto-complete-option-text-color-default);
+  background-color: var(--c-auto-complete-option-bg-default);
+}
+.c-auto-complete-popup .c-select-popup .c-select-option-selected {
+  color: var(--c-auto-complete-option-text-color-selected);
+  background-color: var(--c-auto-complete-option-bg-selected);
+}
+.c-auto-complete-popup .c-select-popup .c-select-option-hover {
+  color: var(--c-auto-complete-option-text-color-hover);
+  background-color: var(--c-auto-complete-option-bg-hover);
+}
+.c-auto-complete-popup .c-select-popup .c-select-option-disabled {
+  color: var(--c-auto-complete-option-text-color-disabled);
+  background-color: var(--c-auto-complete-option-bg-disabled);
+}
+.c-auto-complete-popup .c-select-popup .c-select-option-selected {
+  font-weight: var(--c-auto-complete-option-font-weight-selected);
+}

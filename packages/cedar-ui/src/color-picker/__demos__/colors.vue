@@ -4,7 +4,7 @@
     :historyColors="history"
     showHistory
     showPreset
-    @popup-visible-change="addHistory" />
+    @open-change="addHistory" />
 </template>
 
 <script lang="ts" setup>

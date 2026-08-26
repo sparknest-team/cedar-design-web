@@ -7,31 +7,31 @@
   }
 
   &-mode-navigation &-item {
-    padding-left: @steps-navigation-padding-left;
-    padding-right: @steps-navigation-spacing-arrow-right;
-    margin-right: @steps-navigation-margin-right;
+    padding-left: var(~'--c-steps-navigation-padding-left');
+    padding-right: var(~'--c-steps-navigation-arrow-spacing-right');
+    margin-right: var(~'--c-steps-navigation-margin-right');
 
     &:last-child {
       flex: 1;
     }
 
     &-content {
-      margin-bottom: 20px;
+      margin-bottom: var(~'--c-steps-navigation-content-margin-bottom');
     }
 
     &-description {
-      padding-right: 20px;
+      padding-right: var(~'--c-steps-navigation-description-padding-right');
     }
 
     &-active::after {
       content: '';
       position: absolute;
       display: block;
-      height: 2px;
-      left: @steps-navigation-spacing-ink-left;
-      right: @steps-navigation-spacing-ink-right;
+      height: var(~'--c-steps-navigation-ink-height');
+      left: var(~'--c-steps-navigation-ink-spacing-left');
+      right: var(~'--c-steps-navigation-ink-spacing-right');
       bottom: 0;
-      background-color: @color-primary-6;
+      background-color: var(~'--c-steps-changeable-hover-text-color');
     }
 
     &-active:last-child::after {
@@ -41,13 +41,13 @@
 
   &-mode-navigation &-item:not(:last-child) &-item-content::after {
     position: absolute;
-    top: @steps-navigation-size-arrow-top;
-    right: 30px;
+    top: var(~'--c-steps-navigation-arrow-top');
+    right: var(~'--c-steps-navigation-arrow-right');
     display: inline-block;
-    width: @steps-navigation-size-arrow;
-    height: @steps-navigation-size-arrow;
+    width: var(~'--c-steps-navigation-arrow-size');
+    height: var(~'--c-steps-navigation-arrow-size');
     background-color: var(~'--c-color-bg-2');
-    border: @steps-navigation-size-arrow-line-width solid @steps-navigation-color-arrow;
+    border: var(~'--c-steps-navigation-arrow-line-width') solid var(~'--c-steps-navigation-arrow-color');
     border-bottom: none;
     border-left: none;
     -webkit-transform: rotate(45deg);

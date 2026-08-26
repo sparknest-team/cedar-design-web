@@ -1,17 +1,14 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Progress from './progress.vue'
+import { progressProps } from './props'
 
-const Progress = Object.assign(_Progress, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _Progress.name, _Progress)
-  },
-})
+const Progress = withInstall(_Progress, Object.assign(_Progress, {
+}), { components: [_Progress] })
 
 export type ProgressInstance = InstanceType<typeof _Progress>
+export { progressProps }
+export type { ProgressColor, ProgressMode, ProgressProps } from './props'
+export { Progress }
+export const _ProgressComponent = Progress
 
 export default Progress

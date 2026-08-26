@@ -24,6 +24,7 @@
 </template>
 
 <script lang="tsx">
+import { createNamespace } from '../_utils/global-config'
 import {
   computed,
   defineComponent,
@@ -37,8 +38,8 @@ import {
   ref,
   toRefs,
 } from 'vue'
-import IconRight from '../icon/icon-right'
-import IconLeft from '../icon/icon-left'
+import { IconRight } from '@cedarjs/icons-vue/icon-right'
+import { IconLeft } from '@cedarjs/icons-vue/icon-left'
 import { getPrefixCls } from '../_utils/global-config'
 import { isNumber } from '../_utils/is'
 import useMergeState from '../_hooks/use-merge-state'
@@ -55,7 +56,7 @@ const generateId = (() => {
 })()
 
 export default defineComponent({
-  name: 'LayoutSider',
+  name: createNamespace("layout-sider").name,
   components: {
     IconLeft,
     IconRight,

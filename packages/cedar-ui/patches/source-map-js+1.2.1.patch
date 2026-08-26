@@ -1,0 +1,15 @@
+diff --git a/node_modules/source-map-js/lib/quick-sort.js b/node_modules/source-map-js/lib/quick-sort.js
+index 9f4e16f..98bf53a 100644
+--- a/node_modules/source-map-js/lib/quick-sort.js
++++ b/node_modules/source-map-js/lib/quick-sort.js
+@@ -107,9 +107,7 @@ function SortTemplate(comparator) {
+ }
+ 
+ function cloneSort(comparator) {
+-  let template = SortTemplate.toString();
+-  let templateFn = new Function(`return ${template}`)();
+-  return templateFn(comparator);
++  return SortTemplate(comparator);
+ }
+ 
+ /**

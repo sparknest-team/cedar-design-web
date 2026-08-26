@@ -3,32 +3,13 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from 'vue'
-import { getPrefixCls } from '../_utils/global-config'
+import { computed, defineComponent } from 'vue'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
+import { skeletonShapeProps } from './props'
 
 export default defineComponent({
-  name: 'SkeletonShape',
-  props: {
-    /**
-     * @zh 图形骨架的形状
-     * @en The shape of the shape skeleton
-     * @values 'square', 'circle'
-     */
-    shape: {
-      type: String as PropType<'square' | 'circle'>,
-      default: 'square',
-    },
-    /**
-     * @zh 图形骨架的大小
-     * @en The size of the shape skeleton
-     * @values 'sm', 'md', 'lg'
-     * @defaultValue 'md'
-     */
-    size: {
-      type: String,
-      default: 'md',
-    },
-  },
+  name: createNamespace('skeleton-shape').name,
+  props: skeletonShapeProps,
   setup(props) {
     const prefixCls = getPrefixCls('skeleton-shape')
 

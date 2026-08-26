@@ -4,61 +4,64 @@
 .input-status(@status) {
   .c-input-wrapper:not(.c-input-disabled),
   .c-textarea-wrapper:not(.c-textarea-disabled) {
-    background-color: ~'@{form-color-bg_@{status}}';
-    border-color: ~'@{form-color-border_@{status}}';
+    background-color: var(~'--c-form-status-@{status}-bg');
+    border-color: var(~'--c-form-status-@{status}-border-color');
 
     &:hover {
-      background-color: ~'@{form-color-bg_@{status}_hover}';
-      border-color: ~'@{form-color-border_@{status}_hover}';
+      background-color: var(~'--c-form-status-@{status}-hover-bg');
+      border-color: var(~'--c-form-status-@{status}-hover-border-color');
     }
   }
 
   .c-input-wrapper:not(.c-input-disabled).c-input-focus,
   .c-textarea-wrapper:not(.c-textarea-disabled).c-textarea-focus {
-    background-color: ~'@{form-color-bg_@{status}_focus}';
-    border-color: ~'@{form-color-border_@{status}_focus}';
-    box-shadow: 0 0 0 ~'@{form-size-shadow_@{status}_focus}' ~'@{form-color-shadow_@{status}_focus}';
+    background-color: var(~'--c-form-status-@{status}-focus-bg');
+    border-color: var(~'--c-form-status-@{status}-focus-border-color');
+    box-shadow: 0 0 0 var(~'--c-form-status-@{status}-focus-shadow-size')
+      var(~'--c-form-status-@{status}-focus-shadow-color');
   }
 }
 
 .select-view-status(@status) {
   .c-select-view:not(.c-select-view-disabled),
   .c-input-tag:not(.c-input-tag-disabled) {
-    background-color: ~'@{form-color-bg_@{status}}';
-    border-color: ~'@{form-color-border_@{status}}';
+    background-color: var(~'--c-form-status-@{status}-bg');
+    border-color: var(~'--c-form-status-@{status}-border-color');
 
     &:hover {
-      background-color: ~'@{form-color-bg_@{status}_hover}';
-      border-color: ~'@{form-color-border_@{status}_hover}';
+      background-color: var(~'--c-form-status-@{status}-hover-bg');
+      border-color: var(~'--c-form-status-@{status}-hover-border-color');
     }
   }
 
   .c-select-view:not(.c-select-view-disabled).c-select-view-focus,
   .c-input-tag:not(.c-input-tag-disabled).c-input-tag-focus {
-    background-color: ~'@{form-color-bg_@{status}_focus}';
-    border-color: ~'@{form-color-border_@{status}_focus}';
-    box-shadow: 0 0 0 ~'@{form-size-shadow_@{status}_focus}' ~'@{form-color-shadow_@{status}_focus}';
+    background-color: var(~'--c-form-status-@{status}-focus-bg');
+    border-color: var(~'--c-form-status-@{status}-focus-border-color');
+    box-shadow: 0 0 0 var(~'--c-form-status-@{status}-focus-shadow-size')
+      var(~'--c-form-status-@{status}-focus-shadow-color');
   }
 }
 
 // datepicker
 .picker(@status) {
   .c-picker:not(.c-picker-disabled) {
-    border-color: ~'@{form-color-border_@{status}}';
-    background-color: ~'@{form-color-bg_@{status}}';
+    border-color: var(~'--c-form-status-@{status}-border-color');
+    background-color: var(~'--c-form-status-@{status}-bg');
 
     &:hover {
-      border-color: ~'@{form-color-border_@{status}_hover}';
-      background-color: ~'@{form-color-bg_@{status}_hover}';
+      border-color: var(~'--c-form-status-@{status}-hover-border-color');
+      background-color: var(~'--c-form-status-@{status}-hover-bg');
     }
   }
 
   .c-picker-focused:not(.c-picker-disabled) {
     &,
     &:hover {
-      border-color: ~'@{form-color-border_@{status}_focus}';
-      background-color: ~'@{form-color-bg_@{status}_focus}';
-      box-shadow: 0 0 0 ~'@{form-size-shadow_@{status}_focus}' ~'@{form-color-shadow_@{status}_focus}';
+      border-color: var(~'--c-form-status-@{status}-focus-border-color');
+      background-color: var(~'--c-form-status-@{status}-focus-bg');
+      box-shadow: 0 0 0 var(~'--c-form-status-@{status}-focus-shadow-size')
+        var(~'--c-form-status-@{status}-focus-shadow-color');
     }
   }
 }
@@ -72,11 +75,11 @@
 
   .c-form-item-status-@{status} {
     .c-form-item-message-help {
-      color: ~'@{form-color-tip-text_@{status}}';
+      color: var(~'--c-form-status-@{status}-tip-text-color');
     }
 
     .c-form-item-feedback {
-      color: ~'@{form-color-tip-icon-text_@{status}}';
+      color: var(~'--c-form-status-@{status}-tip-icon-color');
     }
   }
 }
@@ -96,12 +99,12 @@
 .c-form-item-feedback {
   position: absolute;
   top: 50%;
-  right: 9px;
-  font-size: 14px;
+  right: var(~'--c-form-feedback-icon-right');
+  font-size: var(~'--c-form-feedback-icon-font-size');
   transform: translateY(-50%);
 
   .c-icon-loading {
-    font-size: 12px;
+    font-size: var(~'--c-form-feedback-loading-font-size');
   }
 }
 
@@ -109,7 +112,7 @@
   .select-view(@prefix) {
     .c.c-multiple .c-view,
     .c.c-single .c-view {
-      padding-right: 28px;
+      padding-right: var(~'--c-form-has-feedback-control-padding-right');
     }
 
     .c.c-multiple .c-suffix {
@@ -120,11 +123,11 @@
   .c-input,
   .c-input-inner-wrapper,
   .c-textarea {
-    padding-right: 28px;
+    padding-right: var(~'--c-form-has-feedback-control-padding-right');
   }
 
   .c-input-number-mode-embed .c-input-number-step-layer {
-    right: 24px;
+    right: var(~'--c-form-has-feedback-input-number-step-right');
   }
 
   .select-view(~'c-select');
@@ -133,7 +136,7 @@
 
   // datepicker timepicker
   .c-picker {
-    padding-right: 28px;
+    padding-right: var(~'--c-form-has-feedback-control-padding-right');
   }
 
   .c-picker-suffix {

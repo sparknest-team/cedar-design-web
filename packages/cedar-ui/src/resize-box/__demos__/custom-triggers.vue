@@ -30,7 +30,7 @@
   justify-content: center;
   width: 100%;
   height: 100%;
-  background-color: var(--fill-0);
+  background-color: var(--c-color-bg-white);
 }
 
 .resizebox-demo::before,

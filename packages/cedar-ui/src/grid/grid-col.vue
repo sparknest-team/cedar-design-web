@@ -5,6 +5,7 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../_utils/global-config'
 import { computed, defineComponent, inject, PropType } from 'vue'
 import { isNumber, isObject, isString } from '../_utils/is'
 import { getPrefixCls } from '../_utils/global-config'
@@ -29,7 +30,7 @@ function getAllowableFlexValue(flexValue: FlexType | undefined) {
 }
 
 export default defineComponent({
-  name: 'Col',
+  name: createNamespace("col").name,
   props: {
     /**
      * @zh 栅格占位格数

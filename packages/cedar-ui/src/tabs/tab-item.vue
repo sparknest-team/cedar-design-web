@@ -16,7 +16,7 @@ import { tabsInjectionKey } from './context'
 import type { TabsContext } from './context'
 
 export default defineComponent({
-  name: 'CTabItem',
+  name: createNamespace('tab-item').name,
   props: {
     /**
      * @zh 是否在首次展示标签时挂载内容

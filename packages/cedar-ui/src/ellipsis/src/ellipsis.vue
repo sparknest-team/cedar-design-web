@@ -35,10 +35,10 @@ import { computed, ref, watch, type CSSProperties, type PropType } from 'vue'
 import Tooltip, { tooltipProps as _tooltipProps } from '../../tooltip'
 import { ellipsisProps } from './props'
 import { type ExtractPublicPropTypes } from '../../_utils/components'
-import { getPrefixCls } from '../../_utils/global-config'
+import { createNamespace, getPrefixCls } from '../../_utils/global-config'
 
 defineOptions({
-  name: 'Ellipsis',
+  name: createNamespace('ellipsis').name,
 })
 
 const prefixCls = getPrefixCls('ellipsis')
@@ -62,7 +62,7 @@ const rootStyles = computed<CSSProperties>(() => (props.lineClamp ? { '-webkit-l
 const tooltipProps = computed<ExtractPublicPropTypes<typeof _tooltipProps>>(() => {
   if (props.tooltip === false) {
     return {
-      popupVisible: false,
+      open: false,
     }
   }
   if (props.tooltip === true) {

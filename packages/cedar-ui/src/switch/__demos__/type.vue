@@ -1,8 +1,8 @@
 <template>
   <c-space size="lg">
     <c-switch  />
-    <c-switch type="round" />
-    <c-switch type="line" />
+    <c-switch variant="round" />
+    <c-switch variant="line" />
   </c-space>
 </template>
 

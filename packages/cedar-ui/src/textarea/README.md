@@ -42,6 +42,7 @@ permalink: /components/textarea/
 | default-value            | 默认值(非受控状态)                 | `string`                                    | `''`    |
 | placeholder              | 提示文字                           | `string`                                    | `-`     |
 | disabled                 | 是否禁用                           | `boolean`                                   | `false` |
+| readonly                 | 是否为只读状态                     | `boolean`                                   | `false` |
 | error                    | 是否为错误状态                     | `boolean`                                   | `false` |
 | max-length               | 输入的最大长度                     | `number\|{length:number,errorOnly?:boolean` | `0`     |
 | show-word-limit          | 是否显示字数统计                   | `boolean`                                   | `false` |
@@ -72,5 +73,5 @@ permalink: /components/textarea/
 组件导出以下类型定义
 
 ```ts
-import type { TextareaProps } from '@cedar/ui'
+import type { TextareaProps } from '@cedarjs/ui'
 ```

@@ -448,7 +448,7 @@ export function normalizeColumnManagerState(params: {
   const seen = new Set<string>()
   const items: ColumnManagerItem[] = []
 
-  input.items.forEach((raw) => {
+  input.items?.forEach((raw) => {
     if (!raw || typeof raw.dataIndex !== 'string' || !validKeys.has(raw.dataIndex) || seen.has(raw.dataIndex)) return
     seen.add(raw.dataIndex)
     const item: ColumnManagerItem = { dataIndex: raw.dataIndex }

@@ -34,15 +34,15 @@
     align-items: center;
     justify-content: center;
     height: 100%;
-    color: @resizeBox-trigger-color-icon;
-    font-size: @resizeBox-trigger-font-size-icon;
+    color: var(~'--c-resize-box-trigger-icon-color');
+    font-size: var(~'--c-resize-box-trigger-font-size-icon');
     line-height: 1;
-    background-color: @resizeBox-trigger-color-background;
+    background-color: var(~'--c-resize-box-trigger-bg');
   }
 
   &-icon {
     display: inline-block;
-    margin: -(@resizeBox-trigger-font-size-icon / 4);
+    margin: calc(var(~'--c-resize-box-trigger-font-size-icon') / -4);
   }
 
   &-vertical {

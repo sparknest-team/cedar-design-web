@@ -1,7 +1,7 @@
 import { ref, defineComponent, useAttrs, useSlots, onMounted, h, watch, getCurrentInstance, computed, toRaw } from 'vue'
 import { setValueWithAlias, dataToScope, realTransformAlias } from '../utils/useSetValueWithAlias'
 import { mapProps, type PoiKeys } from './props'
-import { IconLocation, IconLoading } from '../icon'
+import { IconLocation, IconLoading } from '@cedarjs/icons-vue'
 import Input from '../input'
 import Dialog from '../dialog'
 import Map from './map'
@@ -187,7 +187,8 @@ export default defineComponent({
           v-slots={{
             suffix: () => h(isLoading.value ? IconLoading : IconLocation),
           }}
-          onClick={() => {
+          {...({
+            onClick: () => {
             if (value.value) {
               setValueWithAlias({
                 target: value_,
@@ -199,7 +200,8 @@ export default defineComponent({
             if (!isLoading.value) {
               show.value = true
             }
-          }}
+          },
+          } as any)}
           onClear={(e: Event) => {
             e.stopPropagation()
             const data = {}
@@ -216,9 +218,9 @@ export default defineComponent({
           class="map-select-model"
           width="960px"
           title={t('map.title')}
-          show={show.value}
-          teleport={props.popupContainer}
-          onUpdate:show={(v: boolean) => {
+          open={show.value}
+          popupContainer={props.popupContainer}
+          onUpdate:open={(v: boolean) => {
             show.value = v
           }}
           onCancel={() => {

@@ -29,8 +29,9 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../../../_utils/global-config'
 import { computed, defineComponent, PropType, toRefs } from 'vue'
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 import { RenderFunc } from '../../../_components/render-function'
 import { getPrefixCls } from '../../../_utils/global-config'
 import { dayjs } from '../../../_utils/date'
@@ -59,7 +60,7 @@ const ROW_COUNT = 4
 const COL_COUNT = 3
 
 export default defineComponent({
-  name: 'MonthPanel',
+  name: createNamespace('date-picker-month-panel').name,
   components: {
     PanelHeader,
     PanelBody,

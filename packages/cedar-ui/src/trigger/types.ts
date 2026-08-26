@@ -4,10 +4,10 @@ import { TriggerEvent, TriggerPosition } from '../_utils/constant'
 export type TriggerPopupTranslate = [number, number] | { [key in TriggerPosition]?: [number, number] }
 
 export interface TriggerProps {
-  popupVisible?: boolean
-  defaultPopupVisible?: boolean
+  open?: boolean
+  defaultOpen?: boolean
   trigger?: TriggerEvent
-  position?: TriggerPosition
+  placement?: TriggerPosition
   disabled?: boolean
   popupOffset?: number
   popupTranslate?: TriggerPopupTranslate

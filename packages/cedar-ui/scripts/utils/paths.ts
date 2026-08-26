@@ -9,18 +9,8 @@ function resolvePath(...relativePath: any[]) {
 // components相关
 const components = resolvePath('./src')
 
-// icon相关
-const icon = resolvePath('./icon')
-const iconSvgs = resolvePath('./icon/_svgs')
-const iconComponents = resolvePath('./src/icon')
-const iconComponentsSource = resolvePath('./src/components/icon')
-
 export default {
   resolvePath,
   root,
-  icon,
-  iconSvgs,
-  iconComponents,
-  iconComponentsSource,
   components,
 }

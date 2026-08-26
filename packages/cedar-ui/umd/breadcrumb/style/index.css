@@ -1,0 +1,131 @@
+.c--box {
+  box-sizing: border-box;
+}
+.c--box * {
+  box-sizing: border-box;
+}
+.c--lock {
+  overflow: hidden !important;
+}
+.c--ellipsis {
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.c--inline-block {
+  display: inline-block;
+}
+.c--flex {
+  display: flex;
+}
+.c--inline-flex {
+  display: inline-flex;
+}
+/******** borderSize *******/
+/******** borderStyle *******/
+/******** radius *******/
+/******** shadow distance *******/
+/******** size *******/
+/******** spacing *******/
+/******** shadow *******/
+/******** opacity *******/
+/******** fontSize *******/
+/******** fontWeight ********/
+/******** Primary *******/
+/******** success *******/
+/******** info *******/
+/******** warning *******/
+/******** danger *******/
+/******** link *******/
+/******** radius *******/
+/******** motion *******/
+/******** z-index *******/
+/******** scale CSS var wrappers (public Less API) *******/
+/********* icon hover *********/
+:root {
+  --c-breadcrumb-text-color: var(--c-color-text-2);
+  --c-breadcrumb-text-color-active: var(--c-color-text-1);
+  --c-breadcrumb-link-text-color: var(--c-color-text-2);
+  --c-breadcrumb-separator-color: var(--c-color-text-4);
+  --c-breadcrumb-bg-hover: var(--c-color-fill-2);
+  --c-breadcrumb-bg: transparent;
+  --c-breadcrumb-margin-separator-horizontal: var(--c-spacing-2);
+  --c-breadcrumb-margin-dropdown-icon-left: var(--c-spacing-2);
+  --c-breadcrumb-padding-text-horizontal: var(--c-spacing-2);
+  --c-breadcrumb-text-border-radius-hover: var(--c-border-radius-sm);
+  --c-breadcrumb-size-text-height: var(--c-size-6);
+  --c-breadcrumb-size-separator-height: var(--c-size-3);
+  --c-breadcrumb-size-dropdown-icon: var(--c-size-3);
+  --c-breadcrumb-size-font-size: var(--c-font-size-body-3);
+  --c-breadcrumb-font-weight-active: var(--c-font-weight-500);
+  --c-breadcrumb-icon-color: var(--c-color-text-3);
+  --c-breadcrumb-link-text-color-hover: rgb(var(--c-link-6));
+  --c-breadcrumb-dropdown-icon: var(--c-color-text-2);
+}
+.c-breadcrumb {
+  display: inline-flex;
+  align-items: center;
+  color: var(--c-color-text-2);
+  font-size: var(--c-breadcrumb-size-font-size);
+  transition: background-color 0.5s ease;
+}
+.c-breadcrumb-icon {
+  color: var(--c-color-text-2);
+}
+.c-breadcrumb-item {
+  display: inline-block;
+  padding: 0 var(--c-breadcrumb-padding-text-horizontal);
+  color: var(--c-breadcrumb-text-color);
+  line-height: var(--c-breadcrumb-size-text-height);
+  vertical-align: middle;
+}
+.c-breadcrumb-item > .c-icon {
+  color: var(--c-breadcrumb-icon-color);
+}
+.c-breadcrumb-item a {
+  display: inline-block;
+  margin: calc(0 - var(--c-breadcrumb-padding-text-horizontal));
+  padding: 0 var(--c-breadcrumb-padding-text-horizontal);
+  color: var(--c-breadcrumb-link-text-color);
+  text-decoration: none;
+  border-radius: var(--c-breadcrumb-text-border-radius-hover);
+  background-color: var(--c-breadcrumb-bg);
+  cursor: pointer;
+}
+.c-breadcrumb-item a:hover {
+  color: var(--c-breadcrumb-link-text-color-hover);
+  background-color: var(--c-breadcrumb-bg-hover);
+}
+.c-breadcrumb-item:is(a) {
+  color: var(--c-breadcrumb-link-text-color);
+  text-decoration: none;
+  border-radius: var(--c-breadcrumb-text-border-radius-hover);
+  background-color: var(--c-breadcrumb-bg);
+  cursor: pointer;
+}
+.c-breadcrumb-item:is(a):hover {
+  color: var(--c-breadcrumb-link-text-color-hover);
+  background-color: var(--c-breadcrumb-bg-hover);
+}
+.c-breadcrumb-item:last-child {
+  color: var(--c-breadcrumb-text-color-active);
+  font-weight: var(--c-breadcrumb-font-weight-active);
+}
+.c-breadcrumb-item__separator {
+  display: inline-block;
+  margin: 0 var(--c-breadcrumb-margin-separator-horizontal);
+  color: var(--c-breadcrumb-separator-color);
+  line-height: var(--c-breadcrumb-size-text-height);
+  vertical-align: middle;
+}
+.c-breadcrumb-item--with-dropdown {
+  cursor: pointer;
+}
+.c-breadcrumb-item__dropdown-icon {
+  margin-left: var(--c-breadcrumb-margin-dropdown-icon-left);
+  color: var(--c-breadcrumb-dropdown-icon);
+  font-size: var(--c-breadcrumb-size-dropdown-icon);
+}
+.c-breadcrumb-item--dropdown-icon-active {
+  transform: rotate(180deg);
+}

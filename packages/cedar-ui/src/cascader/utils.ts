@@ -14,7 +14,6 @@ export const getOptionInfos = (
     checkStrictly,
     enabledLazyLoad,
     lazyLoadOptions,
-    valueKey,
     fieldNames,
   }: {
     optionMap: Map<string, CascaderOptionInfo>
@@ -25,7 +24,6 @@ export const getOptionInfos = (
     checkStrictly: Ref<boolean>
     enabledLazyLoad: boolean
     lazyLoadOptions: Record<string, CascaderOption[]>
-    valueKey: Ref<string>
     fieldNames: Required<CascaderFieldNames>
   },
 ) => {
@@ -51,7 +49,7 @@ export const getOptionInfos = (
         level: parentPath.length,
         index,
         key: '',
-        valueKey: String(isObject(value) ? value[valueKey.value] : value),
+        valueKey: String(isObject(value) ? value[fieldNames.value] : value),
         parent,
         path: [],
         pathValue: [],
@@ -175,17 +173,20 @@ export const getLeafOptionInfos = (option: CascaderOptionInfo) => {
 
 export const getValueKey = (
   value: UnionType | UnionType[],
-  { valueKey, leafOptionValueMap }: { valueKey: string; leafOptionValueMap: Map<BaseType, string> },
+  {
+    valueField,
+    leafOptionValueMap,
+  }: { valueField: string; leafOptionValueMap: Map<BaseType, string> },
 ): string => {
   if (isArray(value)) {
     return value
       .map((item) => {
-        if (isObject(item)) return item[valueKey]
+        if (isObject(item)) return item[valueField]
         return item
       })
       .join('-')
   }
-  const _value = isObject(value) ? value[valueKey] : value
+  const _value = isObject(value) ? value[valueField] : value
   return leafOptionValueMap.get(String(_value)) ?? String(_value)
 }
 

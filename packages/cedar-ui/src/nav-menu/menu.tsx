@@ -1,3 +1,4 @@
+import { navMenuProps } from './props'
 import { computed, defineComponent, inject, PropType, provide, toRefs } from 'vue'
 import { SiderInjectionKey } from '../layout/context'
 import { LevelInjectionKey, NavMenuInjectionKey } from './context'
@@ -14,16 +15,7 @@ export default defineComponent({
     BaseMenu,
   },
   inheritAttrs: false,
-  props: {
-    /** 菜单风格 */
-    theme: {
-      type: String as PropType<'light' | 'dark'>,
-    },
-    mode: {
-      type: String as PropType<'vertical' | 'horizontal' | 'pop' | 'popButton'>,
-      default: 'vertical',
-    },
-  },
+  props: navMenuProps,
   setup(props, { attrs, slots }) {
     const { theme: propTheme, mode } = toRefs(props)
 

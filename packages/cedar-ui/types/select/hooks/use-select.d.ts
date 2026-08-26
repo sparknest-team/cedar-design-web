@@ -1,0 +1,46 @@
+import type { ComponentPublicInstance, Ref } from 'vue';
+import { FilterOption, SelectOption, SelectFieldNames } from '../types';
+import { VirtualListRef } from '../../_components/virtual-list-v2/interface';
+export declare const useSelect: ({ multiple, options, extraOptions, inputValue, filterOption, showExtraOptions, component, fieldNames, loading, open, valueKeys, dropdownRef, optionRefs, virtualListRef, onSelect, onOpenChange, enterToOpen, defaultActiveFirstOption, }: {
+    multiple?: Ref<boolean>;
+    options?: Ref<SelectOption[]>;
+    extraOptions?: Ref<SelectOption[]>;
+    inputValue?: Ref<string>;
+    filterOption?: Ref<FilterOption>;
+    showExtraOptions?: Ref<boolean>;
+    component?: Ref<"li" | "div">;
+    fieldNames?: Ref<SelectFieldNames | undefined>;
+    loading?: Ref<boolean>;
+    open: Ref<boolean>;
+    valueKeys: Ref<string[]>;
+    dropdownRef?: Ref<ComponentPublicInstance | undefined>;
+    optionRefs?: Ref<Record<string | number, HTMLElement>>;
+    virtualListRef?: Ref<VirtualListRef>;
+    onSelect: (key: string, ev: Event) => void;
+    onOpenChange: (open: boolean) => void;
+    enterToOpen?: boolean;
+    defaultActiveFirstOption?: Ref<boolean>;
+}) => {
+    validOptions: import("vue").ComputedRef<(import("../types").SelectOptionInfo | import("../types").SelectOptionGroupInfo)[]>;
+    optionInfoMap: import("vue").Reactive<Map<string, import("../types").SelectOptionInfo>>;
+    validOptionInfos: import("vue").ComputedRef<{
+        [x: string]: any;
+        raw: Record<string, unknown>;
+        key: string;
+        index?: number | undefined;
+        origin: "slot" | "options" | "extraOptions";
+        value: import("../types").SelectOptionValue;
+        label: string;
+        disabled?: boolean | undefined;
+        tagProps?: any;
+        render?: import("vue").RenderFunction | undefined;
+    }[]>;
+    enabledOptionKeys: import("vue").ComputedRef<string[]>;
+    activeKey: Ref<string | undefined, string | undefined>;
+    setActiveKey: (key?: string) => void;
+    addSlotOptionInfo: (id: number, optionInfo: import("../types").SelectOptionInfo) => void;
+    removeSlotOptionInfo: (id: number) => void;
+    getNextActiveKey: (direction: "up" | "down") => string | undefined;
+    scrollIntoView: (key: string) => void;
+    handleKeyDown: (event: KeyboardEvent) => void;
+};

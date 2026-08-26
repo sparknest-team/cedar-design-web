@@ -1,4 +1,4 @@
-import { isString, removeItem } from '@maplejs/maple-shared'
+import { isString, removeItem } from '@cedarjs/shared'
 
 export interface CacheInstance<T> {
   cache: T[]

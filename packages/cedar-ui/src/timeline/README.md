@@ -108,5 +108,5 @@ permalink: /components/timeline/
 组件导出以下类型定义
 
 ```ts
-import type { MentionInstance } from '@cedar/ui'
+import type { MentionInstance } from '@cedarjs/ui'
 ```

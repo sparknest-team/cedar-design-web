@@ -1,61 +1,62 @@
 <template>
   <div :class="`${prefixCls}-header`">
-    <div :class="getIconClassName(showSuperPrev)" @click="onSuperPrev">
+    <button type="button" :class="getIconClassName(showSuperPrev)" :aria-label="previousYearLabel" @click="onSuperPrev">
       <template v-if="showSuperPrev">
         <RenderFunction v-if="icons && icons.prevDouble" :render-func="icons && icons.prevDouble" />
         <IconDoubleLeft v-else />
       </template>
-    </div>
-    <div :class="getIconClassName(showPrev)" @click="onPrev">
+    </button>
+    <button type="button" :class="getIconClassName(showPrev)" :aria-label="previousMonthLabel" @click="onPrev">
       <template v-if="showPrev">
         <RenderFunction v-if="icons && icons.prev" :render-func="icons && icons.prev" />
         <IconLeft v-else />
       </template>
-    </div>
+    </button>
     <div :class="`${prefixCls}-header-title`">
       <template v-if="onLabelClick && (year || month)">
-        <span v-if="year" :class="`${prefixCls}-header-label`" @click="() => onLabelClick && onLabelClick('year')">{{
+        <button v-if="year" type="button" :class="`${prefixCls}-header-label`" @click="() => onLabelClick && onLabelClick('year')">{{
           year
-        }}</span>
+        }}</button>
         <span v-if="year && month">-</span>
-        <span v-if="month" :class="`${prefixCls}-header-label`" @click="() => onLabelClick && onLabelClick('month')">{{
+        <button v-if="month" type="button" :class="`${prefixCls}-header-label`" @click="() => onLabelClick && onLabelClick('month')">{{
           month
-        }}</span>
+        }}</button>
       </template>
       <template v-else>{{ title }}</template>
     </div>
-    <div :class="getIconClassName(showNext)" @click="onNext">
+    <button type="button" :class="getIconClassName(showNext)" :aria-label="nextMonthLabel" @click="onNext">
       <template v-if="showNext">
         <RenderFunction v-if="icons && icons.next" :render-func="icons && icons.next" />
         <IconRight v-else />
       </template>
-    </div>
-    <div :class="getIconClassName(showSuperNext)" @click="onSuperNext">
+    </button>
+    <button type="button" :class="getIconClassName(showSuperNext)" :aria-label="nextYearLabel" @click="onSuperNext">
       <template v-if="showSuperNext">
         <RenderFunction v-if="icons && icons.nextDouble" :render-func="icons && icons.nextDouble" />
         <IconDoubleRight v-else />
       </template>
-    </div>
+    </button>
   </div>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, PropType } from 'vue'
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 import { isFunction } from '../../_utils/is'
-import IconLeft from '../../icon/icon-left'
-import IconRight from '../../icon/icon-right'
-import IconDoubleLeft from '../../icon/icon-double-left'
-import IconDoubleRight from '../../icon/icon-double-right'
+import { IconLeft } from '@cedarjs/icons-vue/icon-left'
+import { IconRight } from '@cedarjs/icons-vue/icon-right'
+import { IconDoubleLeft } from '@cedarjs/icons-vue/icon-double-left'
+import { IconDoubleRight } from '@cedarjs/icons-vue/icon-double-right'
 import { HeaderIcons, Mode } from '../types'
 import RenderFunction from '../../_components/render-function'
+import { createNamespace } from '../../_utils/global-config'
 
 type ClickCallbackFunc = (payload: MouseEvent) => void
 
 export type HeaderLabelClickFunc = (label: 'year' | 'month') => void
 
 export default defineComponent({
-  name: 'PanelHeader',
+  name: createNamespace('date-picker-header').name,
   components: {
     IconLeft,
     IconRight,
@@ -115,6 +116,10 @@ export default defineComponent({
           [`${props.prefixCls}-header-icon-hidden`]: !show,
         },
       ],
+      previousYearLabel: '上一年',
+      previousMonthLabel: '上一月',
+      nextMonthLabel: '下一月',
+      nextYearLabel: '下一年',
     }
   },
 })

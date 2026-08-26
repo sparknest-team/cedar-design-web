@@ -2,23 +2,23 @@
 
 .c-skeleton {
   &-shape {
-    width: @skeleton-size-image_md;
-    height: @skeleton-size-image_md;
-    background-color: @skeleton-color-bg-base;
-    border-radius: @skeleton-radius-image-border;
+    width: var(~'--c-skeleton-size-image-md');
+    height: var(~'--c-skeleton-size-image-md');
+    background-color: var(~'--c-skeleton-bg-base');
+    border-radius: var(~'--c-skeleton-image-border-radius');
 
     &-circle {
       border-radius: 50%;
     }
 
     &-sm {
-      width: @skeleton-size-image_sm;
-      height: @skeleton-size-image_sm;
+      width: var(~'--c-skeleton-size-image-sm');
+      height: var(~'--c-skeleton-size-image-sm');
     }
 
     &-lg {
-      width: @skeleton-size-image_lg;
-      height: @skeleton-size-image_lg;
+      width: var(~'--c-skeleton-size-image-lg');
+      height: var(~'--c-skeleton-size-image-lg');
     }
   }
 
@@ -28,12 +28,12 @@
     list-style: none;
 
     &-row {
-      height: @skeleton-size-row-height;
-      background-color: @skeleton-color-bg-base;
+      height: var(~'--c-skeleton-size-row-height');
+      background-color: var(~'--c-skeleton-bg-base');
     }
 
     &-row:not(:last-child) {
-      margin-bottom: @skeleton-spacing-last_row-margin-bottom;
+      margin-bottom: var(~'--c-skeleton-spacing-last-row-margin-bottom');
     }
   }
 
@@ -42,12 +42,12 @@
     .c-skeleton-line-row {
       background: linear-gradient(
         90deg,
-        @skeleton-color-bg-base 25%,
-        @skeleton-color-animate-bg 37%,
-        @skeleton-color-bg-base 63%
+        var(~'--c-skeleton-bg-base') 25%,
+        var(~'--c-skeleton-animate-bg') 37%,
+        var(~'--c-skeleton-bg-base') 63%
       );
       background-size: 400% 100%;
-      animation: ~'c-skeleton-circle' 1.5s @transition-timing-function-linear infinite;
+      animation: ~'c-skeleton-circle' 1.5s var(~'--c-transition-timing-function-linear') infinite;
     }
   }
 }

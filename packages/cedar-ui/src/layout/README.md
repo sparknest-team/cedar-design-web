@@ -79,5 +79,5 @@ permalink: /components/layout/
 组件导出以下类型定义
 
 ```ts
-import type { LayoutProps } from '@cedar/ui'
+import type { LayoutProps } from '@cedarjs/ui'
 ```

@@ -2,7 +2,7 @@
   <Trigger
     trigger="hover"
     :class="triggerClassNames"
-    :position="needPopOnBottom ? 'bl' : 'rt'"
+    :placement="needPopOnBottom ? 'bl' : 'rt'"
     show-arrow
     animation-class="fade-in"
     :mouse-enter-delay="50"
@@ -12,8 +12,8 @@
     :duration="100"
     v-bind="triggerProps"
     :unmount-on-close="false"
-    :popup-visible="popVisible"
-    @popupVisibleChange="onVisibleChange"
+    :open="popVisible"
+    @openChange="onVisibleChange"
   >
     <div
       :class="[
@@ -70,6 +70,7 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../_utils/global-config'
 import { computed, defineComponent, ref, toRefs } from 'vue'
 import Trigger from '../trigger'
 import { NavMenuSubMenuPopProps } from './types'
@@ -84,7 +85,7 @@ import RenderFunction from '../_components/render-function'
 import { isNumber } from '../_utils/is'
 
 export default defineComponent({
-  name: 'SubMenuPop',
+  name: createNamespace("sub-menu-pop").name,
   components: {
     Menu,
     Trigger,

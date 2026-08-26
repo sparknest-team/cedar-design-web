@@ -1,121 +1,165 @@
 @import '../../style/theme/index.less';
 
-@table-size-md-padding-horizontal: @spacing-7;
-@table-size-md-padding-vertical: 9px;
-@table-size-middle-padding-horizontal: @spacing-7;
-@table-size-middle-padding-vertical: 7px;
-@table-size-sm-padding-horizontal: @spacing-7;
-@table-size-sm-padding-vertical: 5px;
-@table-size-xs-padding-horizontal: @spacing-7;
-@table-size-xs-padding-vertical: 2px;
+/******** Table CSS Variables *******/
+:root {
+  // Size axis: xs | sm | md | lg | middle
+  --c-table-size-md-padding-horizontal: var(~'--c-spacing-7');
+  --c-table-size-md-padding-vertical: 9px;
+  --c-table-size-middle-padding-horizontal: var(~'--c-spacing-7');
+  --c-table-size-middle-padding-vertical: 7px;
+  --c-table-size-sm-padding-horizontal: var(~'--c-spacing-7');
+  --c-table-size-sm-padding-vertical: 5px;
+  --c-table-size-xs-padding-horizontal: var(~'--c-spacing-7');
+  --c-table-size-xs-padding-vertical: 2px;
+  --c-table-size-lg-padding-horizontal: var(~'--c-table-size-md-padding-horizontal');
+  --c-table-size-lg-padding-vertical: var(~'--c-table-size-md-padding-vertical');
 
-@table-size-md-font-size: @font-size-body-3;
-@table-size-middle-font-size: @font-size-body-3;
-@table-size-sm-font-size: @font-size-body-3;
-@table-size-xs-font-size: @font-size-body-1;
+  --c-table-size-md-font-size: var(~'--c-font-size-body-3');
+  --c-table-size-middle-font-size: var(~'--c-font-size-body-3');
+  --c-table-size-sm-font-size: var(~'--c-font-size-body-3');
+  --c-table-size-xs-font-size: var(~'--c-font-size-body-1');
+  --c-table-size-lg-font-size: var(~'--c-table-size-md-font-size');
 
-@table-size-md-font-header-size: @font-size-body-3;
-@table-size-middle-font-header-size: @font-size-body-3;
-@table-size-sm-font-header-size: @font-size-body-3;
-@table-size-xs-font-header-size: @font-size-body-1;
+  --c-table-size-md-header-font-size: var(~'--c-font-size-body-3');
+  --c-table-size-middle-header-font-size: var(~'--c-font-size-body-3');
+  --c-table-size-sm-header-font-size: var(~'--c-font-size-body-3');
+  --c-table-size-xs-header-font-size: var(~'--c-font-size-body-1');
+  --c-table-size-lg-header-font-size: var(~'--c-table-size-md-header-font-size');
 
-@table-border-width: @border-1;
-@table-border-style: solid;
+  --c-table-size-xs-extra-padding-horizontal: var(~'--c-spacing-1');
+  --c-table-size-sm-extra-padding-horizontal: var(~'--c-spacing-1');
+  --c-table-size-md-extra-padding-horizontal: var(~'--c-spacing-2');
+  --c-table-size-lg-extra-padding-horizontal: var(~'--c-spacing-2');
 
-@table-size-expand-button: 14px;
-@table-spacing-expand-button-margin-right: @spacing-2;
-@table-font-size-expand-button: 12px;
-@table-border-radius-expand-button: 2px;
+  --c-table-size-xs-extra-icon-font-size: 14px;
+  --c-table-size-sm-extra-icon-font-size: 14px;
+  --c-table-size-md-extra-icon-font-size: 16px;
+  --c-table-size-lg-extra-icon-font-size: 16px;
 
-@table-color-border: var(~'--c-color-neutral-3');
-@table-border-radius: @radius-md;
+  // Border / radius
+  --c-table-border-width: var(~'--c-border-width-1');
+  --c-table-border-style: solid;
+  --c-table-border-color: var(~'--c-color-neutral-3');
+  --c-table-border-radius: var(~'--c-border-radius-md');
+  --c-table-resizing-border-color: rgb(var(~'--c-primary-6'));
 
-@table-color-text-header-cell: rgb(var(~'--c-gray-10'));
-@table-color-bg-header-cell: var(~'--c-color-neutral-2');
-@table-color-bg-header-sorted-cell: var(~'--c-color-neutral-3');
-@table-color-bg-header-sorted-cell_hover: rgba(var(~'--c-gray-4'), 0.5);
-@table-color-header-filters-icon: var(~'--c-color-text-2');
-@table-color-header-filters-icon_active: @color-primary-6;
-@table-color-bg-header-filters-icon_hover: var(~'--c-color-neutral-4');
-@table-font-size-filters-icon: 16px;
-@table-size-filters-width: 24px;
-@table-font-weight-header-text: @font-weight-500;
+  // Expand button
+  --c-table-expand-button-size: 14px;
+  --c-table-expand-button-margin-right: var(~'--c-spacing-2');
+  --c-table-expand-button-font-size: 12px;
+  --c-table-expand-button-border-radius: 2px;
+  --c-table-expand-icon-color: var(~'--c-color-text-2');
+  --c-table-expand-icon-hover-color: var(~'--c-color-text-1');
+  --c-table-expand-icon-border-color: transparent;
+  --c-table-expand-icon-hover-border-color: transparent;
+  --c-table-expand-icon-bg: var(~'--c-color-neutral-3');
+  --c-table-expand-icon-hover-bg: var(~'--c-color-neutral-4');
+  --c-table-expand-icon-border-width: var(~'--c-border-width-1');
+  --c-table-expand-content-bg: var(~'--c-color-fill-1');
+  --c-table-expand-content-hover-bg: var(~'--c-color-fill-1');
+  --c-table-expand-loading-icon-color: rgb(var(~'--c-primary-6'));
 
-@table-color-text-body-cell: rgb(var(~'--c-gray-10'));
-@table-color-bg-body-cell: var(~'--c-color-bg-2');
-@table-color-bg-body-sorted-cell: var(~'--c-color-fill-1');
-@table-color-bg-body-stripe-row: var(~'--c-color-fill-1');
-@table-color-bg-body-row_hover: var(~'--c-color-fill-1');
-@table-color-bg-body-row_active: var(~'--c-color-fill-1');
-@table-color-bg-body-row_active_dark: var(~'--c-color-neutral-2');
+  // Header
+  --c-table-header-cell-text-color: rgb(var(~'--c-gray-10'));
+  --c-table-header-cell-bg: var(~'--c-color-neutral-2');
+  --c-table-header-sorted-cell-bg: var(~'--c-color-neutral-3');
+  --c-table-header-sorted-cell-hover-bg: rgba(var(~'--c-gray-4'), 0.5);
+  --c-table-header-text-font-weight: var(~'--c-font-weight-500');
+  --c-table-header-cell-action-color: var(~'--c-color-text-3');
+  --c-table-header-cell-action-hover-color: var(~'--c-color-text-1');
+  --c-table-header-cell-action-margin-left: 2px;
+  --c-table-th-actions-margin-left: 8px;
 
-@table-color-expand-icon: var(~'--c-color-text-2');
-@table-color-expand-icon-border: @color-transparent;
-@table-color-expand-icon-border_hover: @color-transparent;
-@table-color-expand-icon_hover: var(~'--c-color-text-1');
-@table-color-bg-expand-icon: var(~'--c-color-neutral-3');
-@table-color-bg-expand-icon_hover: var(~'--c-color-neutral-4');
-@table-color-bg-expand-content: var(~'--c-color-fill-1');
-@table-color-bg-expand-content_hover: var(~'--c-color-fill-1');
-@table-border-expand-icon-width: @border-1;
+  // Header filters
+  --c-table-header-filters-icon-color: var(~'--c-color-text-2');
+  --c-table-header-filters-icon-active-color: rgb(var(~'--c-primary-6'));
+  --c-table-header-filters-icon-hover-bg: var(~'--c-color-neutral-4');
+  --c-table-filters-icon-font-size: 16px;
+  --c-table-filters-width: 24px;
+  --c-table-filters-icon-hover-bg: var(~'--c-color-fill-4');
 
-@table-color-header-sorter-icon: var(~'--c-color-neutral-5');
-@table-color-header-sorter-icon_next: var(~'--c-color-neutral-6');
-@table-color-header-sorter-icon_active: @color-primary-6;
-@table-spacing-header-sorter-icon-margin-left: @spacing-4;
-@table-size-header-sorter-icon-height: 8px;
-@table-size-header-sorter-icon-width: 14px;
-@table-font-size-header-sorter-icon: 12px;
-@table-position-header-sorter-icon-up-top: -2px;
-@table-position-header-sorter-icon-down-top: -3px;
-@table-position-header-sorter-icon-left: 1px;
+  // Header sorter
+  --c-table-header-sorter-icon-color: var(~'--c-color-neutral-5');
+  --c-table-header-sorter-icon-next-color: var(~'--c-color-neutral-6');
+  --c-table-header-sorter-icon-active-color: rgb(var(~'--c-primary-6'));
+  --c-table-header-sorter-icon-margin-left: var(~'--c-spacing-4');
+  --c-table-header-sorter-icon-height: 8px;
+  --c-table-header-sorter-icon-width: 14px;
+  --c-table-header-sorter-icon-font-size: 12px;
+  --c-table-header-sorter-icon-up-top: -2px;
+  --c-table-header-sorter-icon-down-top: -3px;
+  --c-table-header-sorter-icon-left: 1px;
 
-// Popup
-@table-color-bg-filters-popup: var(~'--c-color-bg-5');
-@table-color-border-filters-popup: var(~'--c-color-neutral-3');
-@table-popup-min-width: 100px;
-@table-popup-max-height: 200px;
-@table-popup-border-radius: @radius-md;
+  // Body
+  --c-table-body-cell-text-color: rgb(var(~'--c-gray-10'));
+  --c-table-body-cell-bg: var(~'--c-color-bg-2');
+  --c-table-body-sorted-cell-bg: var(~'--c-color-fill-1');
+  --c-table-body-stripe-row-bg: var(~'--c-color-fill-1');
+  --c-table-body-row-hover-bg: var(~'--c-color-fill-1');
+  --c-table-body-row-active-bg: var(~'--c-color-fill-1');
+  --c-table-body-row-active-dark-bg: var(~'--c-color-neutral-2');
+  --c-table-body-bg: var(~'--c-color-bg-2');
+  --c-table-body-min-height: 40px;
+  --c-table-tfoot-bg: var(~'--c-color-neutral-2');
+  --c-table-editable-body-cell-border-color: var(~'--c-color-white');
 
-// box shadow
-@table-shadow-left: inset 6px 0 8px -3px rgba(0, 0, 0, 0.15);
-@table-shadow-right: inset -6px 0 8px -3px rgba(0, 0, 0, 0.15);
-@table-size-shadow-wrapper-width: 10px;
+  // Filters popup
+  --c-table-filters-popup-bg: var(~'--c-color-bg-5');
+  --c-table-filters-popup-border-color: var(~'--c-color-neutral-3');
+  --c-table-filters-popup-min-width: 100px;
+  --c-table-filters-popup-max-height: 200px;
+  --c-table-filters-popup-border-radius: var(~'--c-border-radius-md');
+  --c-table-filters-popup-box-shadow: var(~'--c-shadow1-down');
+  --c-table-filters-list-padding: 4px 0;
+  --c-table-filters-item-height: 32px;
+  --c-table-filters-item-padding: 0 12px;
+  --c-table-filters-item-font-size: 14px;
+  --c-table-filters-item-line-height: 32px;
+  --c-table-filters-text-max-width: 160px;
+  --c-table-filters-text-height: 34px;
+  --c-table-filters-text-padding-left: 10px;
+  --c-table-filters-text-line-height: 32px;
+  --c-table-filters-bottom-height: 38px;
+  --c-table-filters-bottom-padding: 0 12px;
+  --c-table-filters-bottom-line-height: 38px;
+  --c-table-filters-bottom-gap: 8px;
 
-// editable row
-@table-color-editable-body-cell-border: var(~'--c-color-white');
+  // Fixed column shadow
+  --c-table-shadow-left: inset 6px 0 8px -3px rgba(0, 0, 0, 0.15);
+  --c-table-shadow-right: inset -6px 0 8px -3px rgba(0, 0, 0, 0.15);
+  --c-table-shadow-wrapper-width: 10px;
 
-// pagination
-@table-spacing-pagination-margin: @spacing-6;
+  // Columns / selection
+  --c-table-selection-col-width: 40px;
+  --c-table-expand-icon-col-width: 40px;
+  --c-table-drag-handle-col-width: 40px;
+  --c-table-column-handle-width: 8px;
+  --c-table-column-handle-right: -4px;
 
-// selection
-@table-size-selection-col-width: 40px;
-@table-size-expand-icon-col-width: 40px;
-@table-size-drag-handle-col-width: 40px;
-@table-size-body-min-width: 40px;
-@table-color-body-background: var(~'--c-color-bg-2');
+  // Pagination
+  --c-table-pagination-margin: var(~'--c-spacing-6');
+  --c-table-pagination-sticky-padding: 12px 0;
+  --c-table-pagination-sticky-bg: var(~'--c-color-bg-1');
 
-// 末列扩展列（如设置按钮）
-@table-size-xs-extra-padding-horizontal: @spacing-1;
-@table-size-sm-extra-padding-horizontal: @spacing-1;
-@table-size-md-extra-padding-horizontal: @spacing-2;
-@table-size-lg-extra-padding-horizontal: @spacing-2;
-@table-font-size-xs-extra-icon: 14px;
-@table-font-size-sm-extra-icon: 14px;
-@table-font-size-md-extra-icon: 16px;
-@table-font-size-lg-extra-icon: 16px;
+  // Extra column icon
+  --c-table-extra-column-icon-color: var(~'--c-color-text-2');
+  --c-table-extra-column-icon-hover-color: var(~'--c-color-text-1');
 
-// vue overwrite token
-@table-size-lg-padding-horizontal: @table-size-md-padding-horizontal;
-@table-size-lg-padding-vertical: @table-size-md-padding-vertical;
-@table-size-lg-font-size: @table-size-md-font-size;
-@table-size-lg-font-header-size: @table-size-md-font-header-size;
+  // Column insert panel
+  --c-table-column-insert-max-height: calc(100vh - 160px);
+  --c-table-column-insert-padding: 16px 20px;
+  --c-table-column-insert-empty-text-color: var(~'--c-color-text-3');
+  --c-table-column-insert-empty-font-size: 14px;
+  --c-table-column-insert-empty-line-height: 22px;
+  --c-table-column-insert-group-margin-top: 16px;
+  --c-table-column-insert-group-title-margin-bottom: 8px;
+  --c-table-column-insert-group-title-text-color: var(~'--c-color-text-3');
+  --c-table-column-insert-group-title-font-size: 12px;
+  --c-table-column-insert-group-title-line-height: 20px;
+  --c-table-column-insert-item-min-height: 32px;
 
-
-@table-color-bg-tfoot: var(~'--c-color-neutral-2');
-
-// filter icon align left
-@table-filters-icon-bg_hover: var(~'--c-color-fill-4');
-
-// new
-@table-color-border_resizing: @color-primary-6;
+  // Shared
+  --c-table-line-height: var(~'--c-line-height');
+  --c-table-transition-duration: var(~'--c-transition-duration-1');
+  --c-table-transition-timing-function: var(~'--c-transition-timing-function-linear');
+}

@@ -23,6 +23,8 @@
   </component>
 </template>
 <script lang="ts">
+import { splitProps } from './props'
+import { createNamespace } from '../_utils/global-config'
 import { computed, defineComponent, PropType, reactive, ref, toRefs, onMounted, nextTick } from 'vue'
 import ResizeTrigger from '../_components/resize-trigger.vue'
 import useMergeState from '../_hooks/use-merge-state'
@@ -54,10 +56,10 @@ function getPxSize({
   containerSize,
 }: {
   size: number | string | undefined
-  defaultSize?: string
+  defaultSize?: string | number
   containerSize: number
 }) {
-  const config = getSizeConfig(size ?? defaultSize)
+  const config = getSizeConfig(size ?? defaultSize ?? 0)
   if (config.isPx) {
     return config.size
   }
@@ -69,67 +71,11 @@ function px2percent(numerator: number | string, denominator: number | string) {
 }
 
 export default defineComponent({
-  name: 'Split',
+  name: createNamespace("split").name,
   components: {
     ResizeTrigger,
   },
-  props: {
-    /**
-     * @zh 分割框的 html 标签
-     * @en The html tag of the split box
-     */
-    component: {
-      type: String,
-      default: 'div',
-    },
-    /**
-     * @zh 分割的方向
-     * @en Direction of division
-     */
-    direction: {
-      type: String as PropType<'horizontal' | 'vertical'>,
-      default: 'horizontal',
-    },
-    /**
-     * @zh 分割的大小，可以是 0~1 代表百分比，或具体数值的像素，如 300px
-     * @en The size of the segmentation, it can be 0~1 representing a percentage, or a specific number of pixels, such as 300px
-     * @vModel
-     */
-    size: {
-      type: [Number, String],
-      default: undefined,
-    },
-    /**
-     * @zh 默认分割的大小，可以是 0~1 代表百分比，或具体数值的像素，如 300px
-     * @en Default split size, it can be 0~1 representing a percentage, or a specific number of pixels, such as 300px
-     */
-    defaultSize: {
-      type: [Number, String],
-      default: 0.5,
-    },
-    /**
-     * @zh 最小阈值，可以是 0~1 代表百分比，或具体数值的像素，如 300px
-     * @en Minimum threshold, it can be 0~1 representing a percentage, or a specific number of pixels, such as 300px
-     */
-    min: {
-      type: [Number, String],
-    },
-    /**
-     * @zh 最大阈值，可以是 0~1 代表百分比，或具体数值的像素，如 300px
-     * @en Maximum threshold, it can be 0~1 representing a percentage, or a specific number of pixels, such as 300px
-     * */
-    max: {
-      type: [Number, String],
-    },
-    /**
-     * @zh 是否禁用
-     * @en Whether to disable
-     */
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-  },
+  props: splitProps,
   emits: {
     /**
      * @zh 开始拖拽之前触发
@@ -209,7 +155,7 @@ export default defineComponent({
 
     async function getContainerSize() {
       const getSize = () => {
-        return isHorizontal.value ? wrapperRef.value?.clientWidth : wrapperRef.value?.clientHeight || 0
+        return (isHorizontal.value ? wrapperRef.value?.clientWidth : wrapperRef.value?.clientHeight) || 0
       }
 
       if (!wrapperRef.value || getSize()) {
@@ -310,7 +256,7 @@ export default defineComponent({
       record.startPageX = e.pageX
       record.startPageY = e.pageY
       record.startContainerSize = await getContainerSize()
-      record.startSize = size.value
+      record.startSize = size.value ?? 0
 
       on(window, 'mousemove', onMoving)
       on(window, 'mouseup', onMovingEnd)
@@ -326,7 +272,7 @@ export default defineComponent({
 
     onMounted(async () => {
       const containerSize = await getContainerSize()
-      const fixedPxSize = getLegalPxSize(size.value, containerSize)
+      const fixedPxSize = getLegalPxSize(size.value ?? 0, containerSize)
       updateSize(fixedPxSize, containerSize)
     })
 

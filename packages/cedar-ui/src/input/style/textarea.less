@@ -1,22 +1,14 @@
-.c-textarea__wrapper {
+@import '../../field-decorator/style/index.less';
+
+.c-textarea {
   position: relative;
   display: inline-block;
   width: 100%;
-}
+  padding-right: 0;
+  padding-left: 0;
+  overflow: hidden;
 
-.c-textarea__clear-wrapper {
-  &:hover {
-    .c-textarea__clear-icon {
-      display: inline-block;
-    }
-  }
-  .c-textarea {
-    padding-right: @icon-hover-size-md-height;
-  }
-}
-
-.c-textarea {
-  &__word-limit {
+  .c-textarea__word-limit {
     position: absolute;
     right: var(~'--c-textarea-layout-tip-right');
     bottom: var(~'--c-textarea-layout-tip-bottom');
@@ -25,11 +17,62 @@
     user-select: none;
   }
 
-  &__clear-icon {
+  &.c-textarea--scroll .c-textarea__word-limit {
+    right: calc(var(~'--c-textarea-layout-tip-right') + var(~'--c-textarea-layout-tip-scroll-offset'));
+  }
+
+  .c-textarea__clear-btn {
+    appearance: none;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
     position: absolute;
-    top: var(~'--c-textarea-layout-top-icon-clear');
+    top: 50%;
     right: var(~'--c-textarea-layout-tip-right');
-    display: none;
-    font-size: var(~'--c-textarea-size-icon-clear');
+    transform: translateY(-50%);
+  }
+
+  &.c-textarea--scroll .c-textarea__clear-btn {
+    right: calc(var(~'--c-textarea-layout-tip-right') + var(~'--c-textarea-layout-tip-scroll-offset'));
+  }
+
+  &:hover {
+    .c-textarea__clear-btn {
+      display: block;
+    }
+  }
+
+  .c-textarea__mirror {
+    position: absolute;
+    visibility: hidden;
+  }
+
+  .c-textarea__inner {
+    .field-decorator-native-style();
+
+    display: block;
+    box-sizing: border-box;
+    height: 100%;
+    min-height: var(~'--c-textarea-size-min-height');
+    padding: var(~'--c-textarea-padding-y') var(~'--c-textarea-padding-x');
+    font-size: var(~'--c-textarea-font-size');
+    line-height: var(~'--c-line-height');
+    vertical-align: top;
+    resize: vertical;
+  }
+
+  &.c-field-decorator--size-xs .c-textarea__inner {
+    .field-decorator-native-size(xs);
+  }
+  &.c-field-decorator--size-sm .c-textarea__inner {
+    .field-decorator-native-size(sm);
+  }
+  &.c-field-decorator--size-md .c-textarea__inner {
+    .field-decorator-native-size(md);
+  }
+  &.c-field-decorator--size-lg .c-textarea__inner {
+    .field-decorator-native-size(lg);
   }
 }

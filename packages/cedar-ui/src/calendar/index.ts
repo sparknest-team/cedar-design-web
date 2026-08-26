@@ -1,17 +1,16 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Calendar from './calendar'
+import { calendarProps } from './props'
 
-const Calendar = Object.assign(_Calendar, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _Calendar.name, _Calendar)
-  },
-})
+const Calendar = withInstall(_Calendar, Object.assign(_Calendar, {
+}), { components: [_Calendar] })
 
 export type CalendarInstance = InstanceType<typeof _Calendar>
+
+export const _CalendarComponent = Calendar
+
+export { Calendar }
+
+export { calendarProps }
 
 export default Calendar

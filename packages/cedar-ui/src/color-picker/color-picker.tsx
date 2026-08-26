@@ -1,118 +1,18 @@
-import { defineComponent, PropType, computed, watch } from 'vue'
-import { Size } from '../_utils/constant'
+import { defineComponent, computed, watch } from 'vue'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
-import { colors } from './colors'
 import { HSV } from './types'
 import Panel from './panel'
-import Trigger, { TriggerProps } from '../trigger'
+import Trigger from '../trigger'
 import useState from '../_hooks/use-state'
 import { formatInputToHSVA, hsvToRgb, rgbaToHex, rgbToHex } from '../_utils/color'
+import { colorPickerProps } from './props'
 
 
 const { name } = createNamespace('color-picker')
 
 export default defineComponent({
   name,
-  props: {
-    /**
-     * @zh 绑定值
-     * @en Value
-     */
-    modelValue: String,
-    /**
-     * @zh 默认值（非受控状态）
-     * @en Default value (uncontrolled state)
-     */
-    defaultValue: {
-      type: String,
-    },
-    /**
-     * @zh 颜色值的格式
-     * @en Color value format
-     */
-    format: {
-      type: String as PropType<'hex' | 'rgb'>,
-    },
-    /**
-     * @zh 尺寸
-     * @en Size
-     * @values 'xs','sm','md','lg','xl'
-     */
-    size: {
-      type: String as PropType<Size>,
-      default: 'md',
-    },
-    /**
-     * @zh 显示颜色值
-     * @en Show color value
-     */
-    showText: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 显示历史颜色
-     * @en Show history colors
-     */
-    showHistory: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 显示预设颜色
-     * @en Show preset colors
-     */
-    showPreset: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 禁用
-     * @en disabled
-     */
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 禁用透明通道
-     * @en Disable transparency channel
-     */
-    disabledAlpha: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 没有触发元素，只显示颜色面板
-     * @en There is no trigger element, only the color panel is displayed
-     * */
-    hideTrigger: {
-      type: Boolean,
-      default: true,
-    },
-    /**
-     * @zh 接受所有 [Trigger](/vue/component/trigger) 组件的Props
-     * @en Can accept Props of all [Trigger](/vue/component/trigger) components
-     * */
-    triggerProps: {
-      type: Object as PropType<Partial<TriggerProps>>,
-    },
-    /**
-     * @zh 历史颜色的颜色数组
-     * @en Color array of historical colors
-     */
-    historyColors: {
-      type: Array as PropType<string[]>,
-    },
-    /**
-     * @zh 预设颜色的颜色数组
-     * @en Color array of preset colors
-     */
-    presetColors: {
-      type: Array as PropType<string[]>,
-      default: () => colors,
-    },
-  },
+  props: colorPickerProps,
   emits: {
     'update:modelValue': (value: string) => true,
     /**
@@ -127,7 +27,7 @@ export default defineComponent({
      * @param {boolean} visible
      * @param {string} value
      */
-    'popup-visible-change': (visible: boolean, value: string) => true,
+    'open-change': (visible: boolean, value: string) => true,
   },
   setup(props, { emit, slots }) {
     const prefixCls = getPrefixCls('color-picker')
@@ -198,8 +98,8 @@ export default defineComponent({
       !props.disabled && setAlpha(_value)
     }
 
-    const onPopupVisibleChange = (visible: boolean) => {
-      emit('popup-visible-change', visible, formatValue.value)
+    const handleOpenChange = (open: boolean) => {
+      emit('open-change', open, formatValue.value)
     }
 
     const renderInput = () => {
@@ -244,11 +144,12 @@ export default defineComponent({
         <Trigger
           v-slots={{ content: renderPanel }}
           trigger="click"
-          position="bl"
+          placement="bl"
           animationName="slide-dynamic-origin"
           popupOffset={4}
           disabled={props.disabled}
-          onPopupVisibleChange={onPopupVisibleChange}
+          onOpenChange={handleOpenChange}
+          onUpdate:open={handleOpenChange}
           {...props.triggerProps}
         >
           {slots.default ? slots.default() : renderInput()}

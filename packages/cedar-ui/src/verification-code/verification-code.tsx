@@ -1,83 +1,16 @@
-import { PropType, VNode, computed, defineComponent, ref, watch } from 'vue'
-import { Size } from '../_utils/constant'
+import { computed, defineComponent, nextTick, ref, watch } from 'vue'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
 import Input from '../input'
 import { isExist, isFunction, isString } from '../_utils/is'
 import { Backspace, ArrowLeft, ArrowRight } from '../_utils/keycode'
+import { verificationCodeProps } from './props'
 
 const { name } = createNamespace('verification-code')
+type InputInstance = InstanceType<typeof Input>
 
 export default defineComponent({
   name,
-  props: {
-    /**
-     * @zh 绑定值
-     * @en Value
-     */
-    modelValue: String,
-    /**
-     * @zh 默认值（非受控状态）
-     * @en Default value (uncontrolled state)
-     */
-    defaultValue: {
-      type: String,
-      default: '',
-    },
-    /**
-     * @zh 验证码的长度，根据长度渲染对应个数的输入框
-     * @en The length of the verification code, rendering the corresponding number of input boxes according to the length.
-     */
-    length: {
-      type: Number,
-      default: 6,
-    },
-    /**
-     * @zh 输入框大小
-     * @en Input size
-     * @values 'xs','sm','md','lg','xl'
-     * @defaultValue 'md'
-     */
-    size: {
-      type: String as PropType<Size>,
-    },
-    /**
-     * @zh 是否禁用
-     * @en Whether to disable
-     */
-    disabled: Boolean,
-    /**
-     * @zh 是否密码模式
-     * @en Password mode
-     */
-    masked: Boolean,
-    /**
-     * @zh 只读
-     * @en Readonly
-     */
-    readonly: Boolean,
-    /**
-     * @zh 是否为错误状态
-     * @en Whether it is an error state
-     */
-    error: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 分隔符。可在不同索引的输入框后自定义渲染分隔符
-     * @en Separator. Customizable rendering separators after input boxes with different indexes
-     */
-    separator: {
-      type: Function as PropType<(index: number, character: string) => VNode>,
-    },
-    /**
-     * @zh 格式化函数，当用户输入值改变时触发
-     * @en Formatter function, triggered when the user input value changes
-     */
-    formatter: {
-      type: Function as PropType<(inputValue: string, index: number, value: string) => string | boolean>,
-    },
-  },
+  props: verificationCodeProps,
   emits: {
     'update:modelValue': (value: string) => true,
     /**
@@ -104,14 +37,14 @@ export default defineComponent({
   setup(props, { emit }) {
     const prefixCls = getPrefixCls('verification-code')
     const prefixInputCls = getPrefixCls('input')
-    const inputRefList = ref([] as HTMLElement[])
+    const inputRefList = ref<InputInstance[]>([])
 
     const mergedValue = computed(() => props.modelValue ?? props.defaultValue)
     const type = computed(() => (props.masked ? 'password' : 'text'))
     const inputCls = computed(() => [
       prefixInputCls,
       {
-        [`${prefixInputCls}-size-${props.size}`]: props.size,
+        [`${prefixInputCls}--size-${props.size}`]: props.size,
       },
     ])
 
@@ -138,7 +71,15 @@ export default defineComponent({
       focusFirstEmptyInput()
     }
 
-    const handleFocus = (index: number) => inputRefList?.value[index].focus()
+    const handleFocus = (index: number, select = false) => {
+      inputRefList.value[index]?.focus()
+
+      if (select) {
+        nextTick(() => {
+          inputRefList.value[index]?.inputRef?.select()
+        })
+      }
+    }
     const focusFirstEmptyInput = (index?: number) => {
       if (isExist(index) && innerValue.value[index as number]) {
         return
@@ -210,7 +151,7 @@ export default defineComponent({
 
     return () => {
       return (
-        <div class={prefixCls}>
+        <div class={prefixCls} role="group" aria-label={props.ariaLabel}>
           {innerValue.value.map((c, i) => (
             <>
               <Input
@@ -223,7 +164,18 @@ export default defineComponent({
                 error={props.error}
                 disabled={props.disabled}
                 readonly={props.readonly}
-                onFocus={() => focusFirstEmptyInput(i)}
+                clearable={false}
+                inputAttrs={{
+                  'aria-label': props.ariaLabel ? `${props.ariaLabel} ${i + 1}/${props.length}` : undefined,
+                  autocomplete: i === 0 ? 'one-time-code' : 'off',
+                }}
+                onFocus={() => {
+                  focusFirstEmptyInput(i)
+
+                  if (innerValue.value[i]) {
+                    handleFocus(i, true)
+                  }
+                }}
                 onInput={(v, e) => handleInput(i, v, e)}
                 // @ts-ignore
                 onKeydown={(e) => handleKeydown(i, e)}

@@ -15,13 +15,14 @@
   </ResizeObserver>
 </template>
 <script lang="tsx">
+import { createNamespace } from '../_utils/global-config'
 import { computed, defineComponent, PropType, toRefs } from 'vue'
-import IconDragDot from '../icon/icon-drag-dot'
-import IconDragDotVertical from '../icon/icon-drag-dot-vertical'
+import { IconDragDot } from '@cedarjs/icons-vue/icon-drag-dot'
+import { IconDragDotVertical } from '@cedarjs/icons-vue/icon-drag-dot-vertical'
 import ResizeObserver from './resize-observer'
 
 export default defineComponent({
-  name: 'ResizeTrigger',
+  name: createNamespace("resize-trigger").name,
   components: {
     ResizeObserver,
     IconDragDot,

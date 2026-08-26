@@ -5,15 +5,15 @@
     animation-name="slide-dynamic-origin"
     auto-fit-transform-origin
     :click-to-close="false"
-    :position="position"
+    :placement="placement"
     :disabled="mergedDisabled || readonly"
     :popup-offset="4"
-    :popup-visible="panelVisible"
+    :open="panelVisible"
     :prevent-focus="true"
     :unmount-on-close="unmountOnClose"
     :popup-container="popupContainer"
     v-bind="{ ...triggerProps }"
-    @popupVisibleChange="onPanelVisibleChange"
+    @openChange="onPanelVisibleChange"
   >
     <component
       :is="isRange ? 'DateRangeInput' : 'DateInput'"
@@ -25,6 +25,7 @@
       :input-value="inputValue"
       :value="panelValue"
       :size="size"
+      :variant="variant"
       :focused="panelVisible"
       :format="computedFormat"
       :visible="panelVisible"
@@ -49,7 +50,7 @@
       <div :class="`${prefixCls}-container`" @click="onPanelClick">
         <component
           :is="isRange ? 'RangePanel' : 'Panel'"
-          v-bind="panelProps"
+          v-bind="{ ...panelProps, ...(isRange ? { showNextDay } : {}) }"
           :value="panelValue"
           :visible="panelVisible"
           :format="computedFormat"
@@ -60,7 +61,6 @@
           :disabled-seconds="disabledSeconds"
           :hide-disabled-options="hideDisabledOptions"
           :hide-footer="disableConfirm"
-          :show-next-day="showNextDay"
           @select="onPanelSelect"
           @confirm="onPanelConfirm"
         >
@@ -74,7 +74,7 @@
   <div v-else :class="`${prefixCls}-container`">
     <component
       :is="isRange ? 'RangePanel' : 'Panel'"
-      v-bind="{ ...$attrs, ...panelProps }"
+      v-bind="{ ...$attrs, ...panelProps, ...(isRange ? { showNextDay } : {}) }"
       :value="panelValue"
       :visible="true"
       :format="computedFormat"
@@ -85,7 +85,6 @@
       :disabled-seconds="disabledSeconds"
       :hide-disabled-options="hideDisabledOptions"
       :hide-footer="disableConfirm"
-      :show-next-day="showNextDay"
       @select="onPanelSelect"
       @confirm="onPanelConfirm"
     >
@@ -97,15 +96,15 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, nextTick, PropType, reactive, ref, toRefs, watch } from 'vue'
-import { Dayjs } from 'dayjs'
+import { computed, defineComponent, nextTick, reactive, ref, toRefs, watch } from 'vue'
+import type { Dayjs } from 'dayjs'
 import { dayjs, getSortedDayjsArray, isValueChange, getDateValue } from '../_utils/date'
 import { isArray, isUndefined } from '../_utils/is'
-import { getPrefixCls } from '../_utils/global-config'
-import Trigger, { TriggerProps } from '../trigger'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
+import Trigger from '../trigger'
 import DateInput from '../_components/picker/input.vue'
 import DateRangeInput from '../_components/picker/input-range.vue'
-import IconClockCircle from '../icon/icon-clock-circle'
+import { IconClockCircle } from '@cedarjs/icons-vue/icon-clock-circle'
 import useState from '../_hooks/use-state'
 import useTimeFormat from './hooks/use-time-format'
 import useTimeState from './hooks/use-time-state'
@@ -115,11 +114,11 @@ import RangePanel from './range-panel.vue'
 import useIsDisabledTime from './hooks/use-is-disabled-time'
 import useMergeState from '../_hooks/use-merge-state'
 import { useI18n } from '../locale'
-import { Size } from '../_utils/constant'
 import { useFormItem } from '../_hooks/use-form-item'
+import { timePickerProps } from './props'
 
 export default defineComponent({
-  name: 'TimePicker',
+  name: createNamespace('time-picker').name,
   components: {
     Trigger,
     DateInput,
@@ -129,197 +128,7 @@ export default defineComponent({
     IconClockCircle,
   },
   inheritAttrs: false,
-  props: {
-    /**
-     * @zh 选择器类型
-     * @en Selector type
-     */
-    type: {
-      type: String as PropType<'time' | 'time-range'>,
-      default: 'time',
-    },
-    /**
-     * @zh 绑定值
-     * @en Value
-     * */
-    modelValue: {
-      type: [String, Number, Date, Array] as PropType<string | number | Date | Array<string | number | Date>>,
-    },
-    /**
-     * @zh 默认值
-     * @en Default value
-     * */
-    defaultValue: {
-      type: [String, Number, Date, Array] as PropType<string | number | Date | Array<string | number | Date>>,
-    },
-    /**
-     * @zh 是否禁用
-     * @en Whether to disable
-     */
-    disabled: {
-      type: Boolean,
-    },
-    /**
-     * @zh 是否允许清除
-     * @en Whether to allow clear
-     * */
-    clearable: {
-      type: Boolean,
-      default: true,
-    },
-    /**
-     * @zh 是否为只读模式
-     * @en Whether it is read-only mode
-     * */
-    readonly: {
-      type: Boolean,
-    },
-    /**
-     * @zh 是否为错误状态
-     * @en Whether it is an error state
-     * */
-    error: {
-      type: Boolean,
-    },
-    /**
-     * @zh 展示日期的格式，参考[字符串解析格式](#字符串解析格式)
-     * @en Display the format of the date, refer to [String Parsing Format](#String Parsing Format)
-     * */
-    format: {
-      type: String,
-      default: 'HH:mm:ss',
-    },
-    /**
-     * @zh 提示文案
-     * @en Prompt copy
-     * */
-    placeholder: {
-      type: [String, Array] as PropType<string | string[]>,
-    },
-    /**
-     * @zh 输入框尺寸
-     * @en Input box size
-     * @values 'xs','sm','md','lg','xl'
-     * @defaultValue 'md'
-     * */
-    size: {
-      type: String as PropType<Size>,
-    },
-    /**
-     * @zh 弹出框的挂载容器
-     * @en Mount container for pop-up box
-     * */
-    popupContainer: {
-      type: [String, Object] as PropType<string | HTMLElement>,
-    },
-    /**
-     * @zh 12 小时制
-     * @en 12 hour clock
-     * */
-    use12Hours: {
-      type: Boolean,
-    },
-    /**
-     * @zh 设置 时 / 分 / 秒 的选择间隔
-     * @en Set the hour/minute/second selection interval
-     * */
-    step: {
-      type: Object as PropType<{
-        hour?: number
-        minute?: number
-        second?: number
-      }>,
-    },
-    /**
-     * @zh 禁用的部分小时选项
-     * @en Disabled partial hour options
-     * */
-    disabledHours: {
-      type: Function as PropType<() => number[]>,
-    },
-    /**
-     * @zh 禁用的部分分钟选项
-     * @en Disabled some minutes options
-     * */
-    disabledMinutes: {
-      type: Function as PropType<(selectedHour?: number) => number[]>,
-    },
-    /**
-     * @zh 禁用的部分秒数选项
-     * @en Disabled partial seconds option
-     * */
-    disabledSeconds: {
-      type: Function as PropType<(selectedHour?: number, selectedMinute?: number) => number[]>,
-    },
-    /**
-     * @zh 隐藏禁止选择的选项
-     * @en Hide prohibited options
-     * */
-    hideDisabledOptions: {
-      type: Boolean,
-    },
-    /**
-     * @zh 禁用确认步骤，开启后直接点选时间不需要点击确认按钮
-     * @en Disable the confirmation step, click the time directly after opening, without clicking the confirmation button
-     * */
-    disableConfirm: {
-      type: Boolean,
-    },
-    /**
-     * @zh 弹出的位置
-     * @en Pop-up position
-     * */
-    position: {
-      type: String as PropType<'top' | 'tl' | 'tr' | 'bottom' | 'bl' | 'br'>,
-      default: 'bl',
-    },
-    /**
-     * @zh 控制弹出框打开或者关闭
-     * @en Control the pop-up box to open or close
-     * @vModel
-     */
-    popupVisible: {
-      type: Boolean,
-      default: undefined,
-    },
-    /**
-     * @zh 弹出框默认打开或者关闭
-     * @en The pop-up box is opened or closed by default
-     * */
-    defaultPopupVisible: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 可以传入 `Trigger` 组件的参数
-     * @en You can pass in the parameters of the `Trigger` component
-     * */
-    triggerProps: {
-      type: Object as PropType<TriggerProps>,
-    },
-    /**
-     * @zh 是否在关闭后销毁 dom 结构
-     * @en Whether to destroy the dom structure after closing
-     * */
-    unmountOnClose: {
-      type: Boolean,
-    },
-    /**
-     * @zh 没有触发元素，只显示选择面板（默认 true）
-     * @en Panel only without trigger (default true)
-     */
-    hideTrigger: {
-      type: Boolean,
-      default: true,
-    },
-    /**
-     * @zh 结束时间早于开始时间时，在字段与面板结束侧显示「次日」，并关闭确认时的起止交换
-     * @en Show next-day marker when end is earlier than start, and skip range sort on confirm
-     */
-    showNextDay: {
-      type: Boolean,
-    },
-  },
+  props: timePickerProps,
   emits: {
     /**
      * @zh 组件值发生改变
@@ -349,8 +158,8 @@ export default defineComponent({
      * @en Pop-up box expand and collapse
      * @param {boolean} visible
      */
-    'popup-visible-change': (visible: boolean) => true,
-    'update:popupVisible': (visible: boolean) => true,
+    'open-change': (visible: boolean) => true,
+    'update:open': (visible: boolean) => true,
   },
   /**
    * @zh 输入框前缀
@@ -375,8 +184,8 @@ export default defineComponent({
       use12Hours,
       modelValue,
       defaultValue,
-      popupVisible,
-      defaultPopupVisible,
+      open,
+      defaultOpen,
       disabled,
       placeholder,
       disableConfirm,
@@ -409,12 +218,12 @@ export default defineComponent({
     )
 
     // 选择面板是否可见
-    const [panelVisible, setLocalVisible] = useMergeState(defaultPopupVisible.value, reactive({ value: popupVisible }))
+    const [panelVisible, setLocalVisible] = useMergeState(defaultOpen.value, reactive({ value: open }))
     const setPanelVisible = (newVisible: boolean) => {
       if (newVisible !== panelVisible.value) {
         setLocalVisible(newVisible)
-        emit('popup-visible-change', newVisible)
-        emit('update:popupVisible', newVisible)
+        emit('open-change', newVisible)
+        emit('update:open', newVisible)
       }
     }
     const { t } = useI18n()
@@ -449,8 +258,8 @@ export default defineComponent({
 
     function emitChange(value: Dayjs | Array<Dayjs | undefined> | undefined) {
       if (isValueChange(value, computedValue.value)) {
-        const formattedValue = getFormattedValue(value, computedFormat.value)
-        const dateValue = getDateValue(value)
+        const formattedValue = getFormattedValue(value as any, computedFormat.value)
+        const dateValue = getDateValue(value as any)
         emit('update:modelValue', formattedValue)
         emit('change', formattedValue, dateValue)
         eventHandlers.value?.onChange?.()
@@ -515,8 +324,8 @@ export default defineComponent({
 
     function onPanelSelect(value: Dayjs | Array<Dayjs | undefined>) {
       // 先触发 select 事件
-      const formattedValue = getFormattedValue(value, computedFormat.value)
-      const dateValue = getDateValue(value)
+      const formattedValue = getFormattedValue(value as any, computedFormat.value)
+      const dateValue = getDateValue(value as any)
       emit('select', formattedValue as any, dateValue)
 
       if (disableConfirm.value && (!isRange.value || isValidRangeValue(value))) {

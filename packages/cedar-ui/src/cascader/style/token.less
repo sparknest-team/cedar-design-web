@@ -1,24 +1,32 @@
 @import '../../style/theme/index.less';
 
-@cascader-size-item-height: @size-9;
-@cascader-font-item-size: @font-size-body-3;
-@cascader-margin-item-icon-left: @spacing-6;
+:root {
+  --c-cascader-popup-max-height: var(~'--c-size-50');
+  --c-cascader-popup-border-radius: var(~'--c-border-radius-md');
+  --c-cascader-popup-padding-vertical: var(~'--c-spacing-2');
+  --c-cascader-popup-color-border: var(~'--c-color-fill-3');
+  --c-cascader-popup-box-shadow: var(~'--c-shadow2-down');
 
-@cascader-color-item-text: var(~'--c-color-text-1');
-@cascader-color-item-icon: var(~'--c-color-text-2');
-@cascader-padding-item-left: @spacing-6;
-@cascader-padding-item-right: @spacing-5;
-@cascader-size-item-icon: @size-3;
-
-@cascader-color-item-text_hover: @cascader-color-item-text;
-@cascader-color-item-text_active: @cascader-color-item-text;
-@cascader-color-item-text_disabled: var(~'--c-color-text-4');
-@cascader-color-item-text_disabled_active: var(~'--c-color-text-4');
-
-@cascader-font-item-weight_active: @font-weight-500;
-@cascader-color-item-bg_active: var(~'--c-color-fill-2');
-@cascader-color-item-bg_hover: @cascader-color-item-bg_active;
-@cascader-color-item-bg_disabled: @color-transparent;
-@cascader-color-item-bg_disabled_active: var(~'--c-color-fill-2');
-@cascader-color-checkbox-bg_hover: var(~'--c-color-fill-3');
-@cascader-margin-checkbox-right: @spacing-4;
+  --c-cascader-size-item-height: var(~'--c-size-9');
+  --c-cascader-font-item-size: var(~'--c-font-size-body-3');
+  --c-cascader-margin-item-icon-left: var(~'--c-spacing-6');
+  --c-cascader-item-text-color: var(~'--c-color-text-1');
+  --c-cascader-item-icon-color: var(~'--c-color-text-2');
+  --c-cascader-padding-item-left: var(~'--c-spacing-6');
+  --c-cascader-padding-item-right: var(~'--c-spacing-5');
+  --c-cascader-size-item-icon: var(~'--c-size-3');
+  --c-cascader-item-text-color-hover: var(~'--c-cascader-item-text-color');
+  --c-cascader-item-text-color-active: var(~'--c-cascader-item-text-color');
+  --c-cascader-item-text-color-disabled: var(~'--c-color-text-4');
+  --c-cascader-item-text-color-disabled-active: var(~'--c-color-text-4');
+  --c-cascader-item-bg-active: var(~'--c-color-fill-2');
+  --c-cascader-item-bg-hover: var(~'--c-cascader-item-bg-active');
+  --c-cascader-item-bg-disabled: transparent;
+  --c-cascader-item-bg-disabled-active: var(~'--c-color-fill-2');
+  --c-cascader-checkbox-bg-hover: var(~'--c-color-fill-3');
+  --c-cascader-margin-checkbox-right: var(~'--c-spacing-4');
+  --c-cascader-panel-column-min-width: var(~'--c-size-30');
+  --c-cascader-panel-column-max-height: var(~'--c-size-50');
+  --c-cascader-option-min-width: var(~'--c-size-25');
+  --c-cascader-slide-margin: var(~'--c-size-30');
+}

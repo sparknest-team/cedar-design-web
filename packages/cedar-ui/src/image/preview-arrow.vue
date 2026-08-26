@@ -35,13 +35,14 @@
   </div>
 </template>
 <script lang="ts">
+import { createNamespace } from '../_utils/global-config'
 import { defineComponent } from 'vue'
 import { getPrefixCls } from '../_utils/global-config'
-import IconLeft from '../icon/icon-left'
-import IconRight from '../icon/icon-right'
+import { IconLeft } from '@cedarjs/icons-vue/icon-left'
+import { IconRight } from '@cedarjs/icons-vue/icon-right'
 
 export default defineComponent({
-  name: 'ImagePreviewArrow',
+  name: createNamespace("image-preview-arrow").name,
   components: {
     IconLeft,
     IconRight,

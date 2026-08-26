@@ -1,17 +1,27 @@
-// TODO: 脱敏迁移 - 暂时注释 @maplejs/map-core，后续替换为公有包
-// import { PoiInfo } from '@maplejs/map-core'
+// TODO: 脱敏迁移 - @maplejs/map-core 暂不可用，先用本地类型占位，接入公有地图包后再替换
+
+export interface PoiInfo {
+  type?: string
+  address?: string
+  countryCode?: string
+  adcode?: string
+  city?: string
+  name?: string
+  longitude?: number
+  latitude?: number
+}
 
 export const useSuggest = (fetch?: { get: any; post: any }, basePath?: string) => {
   const geoUrl = basePath + '/gis/v2/in/map/suggest'
-  const suggestSearch = async (params) => {
+  const suggestSearch = async (params: Record<string, unknown>) => {
     const res = await fetch?.get?.(geoUrl, {
       params,
     })
-    const data: any[] = res.data
+    const data: any[] = res?.data
     const result: PoiInfo[] = []
 
     data?.forEach((item) => {
-      const poiInfo = new PoiInfo()
+      const poiInfo: PoiInfo = {}
       if (item.type) poiInfo.type = item.type
       if (item.address) poiInfo.address = item.address
       if (item.countryCode) poiInfo.countryCode = item.countryCode

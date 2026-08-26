@@ -1,29 +1,15 @@
-import { computed, defineComponent, PropType, toRefs } from 'vue'
+import { computed, defineComponent, toRefs } from 'vue'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
 import Base from './base'
+import { typographyParagraphProps } from './props'
+import { omit } from '../_utils/omit'
 
 const { name } = createNamespace('typography-paragraph')
 
 export default defineComponent({
   name,
   inheritAttrs: false,
-  props: {
-    /**
-     * @zh 长引用
-     * @en Whether enable blockquote
-     */
-    blockquote: {
-      type: Boolean,
-    },
-    /**
-     * @zh 段落的的行高，长文本(大于5行)的时候推荐使用默认行高，短文本(小于等于3行)推荐使用 `close` 紧密的行高。
-     * @en The line height of the paragraph, the default line height is recommended for long text (more than 5 lines). `close` line height is recommended for short text (less than or equal to 3 lines).
-     */
-    spacing: {
-      type: String as PropType<'default' | 'close'>,
-      default: 'default',
-    },
-  },
+  props: typographyParagraphProps,
   setup(props) {
     const { blockquote, spacing } = toRefs(props)
     const prefixCls = getPrefixCls('typography')
@@ -41,6 +27,14 @@ export default defineComponent({
   },
   render() {
     const { component, classNames } = this
-    return <Base class={classNames} {...this.$attrs} component={component} v-slots={this.$slots} />
+    return (
+      <Base
+        class={classNames}
+        {...this.$attrs}
+        {...omit(this.$props, ['blockquote', 'spacing'])}
+        component={component}
+        v-slots={this.$slots}
+      />
+    )
   },
 })

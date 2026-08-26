@@ -1,6 +1,6 @@
 ## Context
 
-`Steps` 是两端都已存在的流程导航组件。PC（cedar，源自 Arco）能力更完整；移动（maple，源自 Varlet）API 更精简但命名/基数与本库已对齐的 `Pagination` 不一致。本次按 Alert 样板做 API 对齐 + 必要实现规范化。
+`Steps` 是两端都已存在的流程导航组件。PC（Cedar）能力更完整；移动（Maple）API 更精简，但命名和基数与已对齐的 `Pagination` 不一致。本次按 Alert 样板做 API 对齐和必要实现规范化。
 
 约束：
 - cedar 是 PC 端 source of truth；移动端跟随对齐。
@@ -13,7 +13,7 @@
 **Goals**
 - 两端共享同一份 `current`（1-based）/ `status` / `changeable` / Step 内容 API。
 - 命名与 `Pagination` 一致：`current` / `defaultCurrent`。
-- PC 补齐 `props.ts` 与类型导出；移动去掉 Varlet 风格三态 icon / 颜色 props。
+- PC 补齐 `props.ts` 与类型导出；移动去掉非统一的三态 icon / 颜色 props。
 
 **Non-Goals**
 - 不为旧 API 加 alias / 兼容期。

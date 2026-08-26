@@ -1,7 +1,7 @@
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 import { describe, test, expect } from 'vitest'
-import { Loading } from '../index'
+import Loading from '../loading.vue'
 
 describe('Loading', () => {
   test('render', async () => {

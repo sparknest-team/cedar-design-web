@@ -93,4 +93,7 @@ export const vLoading: Directive<ElementLoading, boolean | LoadingOptions> = {
     document.body.classList.remove('c-loading-parent--hidden')
     el[INSTANCE_KEY] = undefined
   },
+  getSSRProps() {
+    return {}
+  },
 }

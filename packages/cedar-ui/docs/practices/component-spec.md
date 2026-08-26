@@ -3,6 +3,9 @@
 > 适用范围：`src/<component>/` 下所有新增 / 重构组件。  
 > 本规范由 `button` 与 `divider` 两个组件提炼而来，作为后续组件实现的统一参考。  
 > **凡是新组件 PR，必须按本规范落实；若有偏离，需在 PR 描述中说明原因。**
+>
+> Cedar/Maple 共用的 API、Token、测试、可访问性、SSR 与版本规则以
+> `design-ui/standards/` 为准；本文只补充 Cedar 的目录和实现约定。
 
 ---
 
@@ -161,7 +164,8 @@ export type ButtonProps = ExtractPropTypes<typeof buttonProps>
 | ------------------- | ------------------------------------------------------------------------------------------------- |
 | 注释                | 每个 prop 上方写中文 JSDoc，说明用途                                                              |
 | 复用枚举            | `Status` / `Size` / `Direction` 等优先从 `_utils/constant.ts` 导入，**不要**在组件里再写一遍字面量 |
-| 事件回调 prop       | 用 `defineListenerProp<...>()` 暴露 `onClick` / `onChange` 形式，便于异步 autoLoading 等机制      |
+| 普通通知事件        | 在 `emits` 中声明并通过 `emit` 触发；不得再声明同名 `onXxx` Prop                                 |
+| 控制回调 Prop       | 仅返回值会控制后续流程时使用 `defineListenerProp<...>()`，统一命名 `beforeXxx` / `request`         |
 | 父子继承的布尔 prop | `default: undefined`（如 `disabled` / `stacked`），让子组件能识别"未显式传入"再回退到 group 配置  |
 | 普通布尔 prop       | `default: false`                                                                                  |
 | 颜色 / 文案类       | `String` 类型，默认值 `''` 或不写（保持 `undefined`，便于 `??` 回退）                               |
@@ -174,6 +178,7 @@ export type ButtonProps = ExtractPropTypes<typeof buttonProps>
 | ------------- | ------------------------------------- | ----------------------------------------------------------------------------------- |
 | `status`      | `Status`                              | 主题色（primary / secondary / info / success / warning / danger / tertiary）          |
 | `variant`     | 组件自有联合类型                      | 视觉变体（default / outline / text / link / tonal …）                                |
+| `mode`        | 组件自有联合类型                      | 布局/形态互斥（如 Badge `floating\|inline`、Progress `line\|circle`）；**勿用 `type` 表示布局** |
 | `size`        | `Size` (`'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`) | 尺寸，默认 `'md'`                                                          |
 | `disabled`    | `boolean`                             | 禁用，子组件 `default: undefined` 用于继承父级                                       |
 | `block`       | `boolean`                             | 是否撑满父容器宽度                                                                   |
@@ -185,6 +190,18 @@ export type ButtonProps = ExtractPropTypes<typeof buttonProps>
 | `elevation`   | `boolean \| number`                   | 阴影/海拔等级，`true` = 默认等级，`false` = 无阴影，`0~24` = 显式等级                |
 | `vertical`    | `boolean`                             | 是否垂直排列                                                                         |
 | `orientation` | `'horizontal' \| 'vertical'`          | 方向，默认 `'horizontal'`                                                            |
+| `open`        | `boolean`                             | 浮层/模态/下拉开合（受控）；非受控用 `defaultOpen`；v-model 事件 `update:open`。**不含** Tag/Badge 等内容显隐（那些用 `show`） |
+| `show`        | `boolean`                             | **内容**显隐（Tag、Badge 等）；非受控用 `defaultShow`；v-model 事件 `update:show`。**勿**用于浮层开合 |
+| `popupContainer` | `string \| HTMLElement \| …`       | Portal 挂载目标；**勿**用公开名 `teleport`                                           |
+| `mask` / `maskClosable` / `escToClose` | `boolean`            | 遮罩显示 / 点遮罩关闭 / ESC 关闭；配套 `maskClass`/`maskStyle`                        |
+| `modelValue`  | 组件自有                              | 表单主值（**含 Upload**）；配合 `update:modelValue` 与 `change`/`onChange`。Upload **勿**用 `fileList` 作 v-model |
+| `placement`   | 组件自有联合类型                      | 锚点浮层的首选方位，或 Drawer 的进入侧；通常参与 flip/shift 等定位算法                   |
+| `position`    | 组件自有                              | 自身布局上下文、屏幕区域或坐标位置；Badge、Notification、Timeline 可使用                |
+| `disabledDate`| `(date) => boolean`                   | 返回 `true` = **禁用**该日期；**勿**用 `allowedDates`（极性相反）                    |
+| `before*`     | `Function`                            | 拦截钩子（`beforeChange`/`beforeClose`/…）；**勿**用 `onBefore*` 作拦截器 prop 名   |
+| 多词属性      | camelCase                             | 如 `maxLength`、`autoPlay`；公开 API 不用 HTML 全小写                                |
+
+> 公共 API 与 Maple 对齐时以本仓库（PC）为准；破坏性重命名不保留 alias。详见 `openspec/changes/align-shared-prop-naming/`。
 
 ### 4.4 特殊 prop 语义说明
 
@@ -243,12 +260,12 @@ export default Comp
 
 ## 6. 父子组件通信
 
-需要父子配置继承时（如 `ButtonGroup` ↔ `Button`），统一使用 `@maplejs/maple-use` 的 `useChildren` / `useParent`：
+需要父子配置继承时（如 `ButtonGroup` ↔ `Button`），统一使用 `@cedarjs/use` 的 `useChildren` / `useParent`：
 
 ```ts
 // provide.ts
 import type { ComputedRef } from 'vue'
-import { useChildren, useParent } from '@maplejs/maple-use'
+import { useChildren, useParent } from '@cedarjs/use'
 
 export interface XxxGroupProvider {
   status: ComputedRef<Status>
@@ -328,7 +345,7 @@ permalink: /components/<component>/
 ## 类型定义
 组件导出以下类型定义
 ```ts
-import type { ComponentProps } from '@cedar/ui'
+import type { ComponentProps } from '@cedarjs/ui'
 ```
 
 ### 样式变量

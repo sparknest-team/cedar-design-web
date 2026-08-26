@@ -1,12 +1,11 @@
-import type { PropType } from 'vue'
 import { computed, defineComponent, reactive, ref, watch, onMounted, TransitionGroup, toRefs, nextTick } from 'vue'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
-import { INPUT_EVENTS, Size } from '../_utils/constant'
+import { INPUT_EVENTS } from '../_utils/constant'
 import { Backspace, Enter } from '../_utils/keycode'
 import { getValueData } from './utils'
 import Tag from '../tag'
 import IconHover from '../_components/icon-hover.vue'
-import IconClose from '../icon/icon-close'
+import { IconClose } from '@cedarjs/icons-vue/icon-close'
 import { InputTagFieldNames, TagData } from './types'
 import { omit } from '../_utils/omit'
 import pick from '../_utils/pick'
@@ -15,6 +14,10 @@ import FeedbackIcon from '../_components/feedback-icon.vue'
 import { useFormItem } from '../_hooks/use-form-item'
 import { useSize } from '../_hooks/use-size'
 import { isNull, isObject, isUndefined } from '../_utils/is'
+import { inputTagProps } from './props'
+import FieldDecorator from '../field-decorator'
+
+const { n: fieldN, classes: fieldClasses } = createNamespace('field-decorator')
 
 const DEFAULT_FIELD_NAMES = {
   value: 'value',
@@ -24,150 +27,9 @@ const DEFAULT_FIELD_NAMES = {
 }
 
 export default defineComponent({
-  name: 'CInputTag',
+  name: createNamespace('input-tag').name,
   inheritAttrs: false,
-  props: {
-    baseCls: String,
-    /**
-     * @zh 绑定值
-     * @en Value
-     * @vModel
-     */
-    modelValue: {
-      type: Array as PropType<(string | number | TagData)[]>,
-    },
-    /**
-     * @zh 默认值（非受控状态）
-     * @en Default value (uncontrolled state)
-     */
-    defaultValue: {
-      type: Array as PropType<(string | number | TagData)[]>,
-      default: () => [],
-    },
-    /**
-     * @zh 输入框的值
-     * @en The value of the input
-     * @vModel
-     */
-    inputValue: String,
-    /**
-     * @zh 输入框的默认值（非受控状态）
-     * @en The default value of the input (uncontrolled state)
-     */
-    defaultInputValue: {
-      type: String,
-      default: '',
-    },
-    /**
-     * @zh 占位符
-     * @en Placeholder
-     */
-    placeholder: String,
-    /**
-     * @zh 是否禁用
-     * @en Whether to disable
-     */
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否为错误状态
-     * @en Whether it is an error state
-     */
-    error: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否为只读模式
-     * @en Whether it is read-only mode
-     */
-    readonly: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否允许清空
-     * @en Whether to allow clear
-     */
-    clearable: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 输入框的大小
-     * @en The size of the input
-     * @values 'xs','sm','md','lg','xl'
-     * @defaultValue 'md'
-     */
-    size: {
-      type: String as PropType<Size>,
-    },
-    /**
-     * @zh 输入框的变体
-     * @en The variant of the input
-     * @values 'outline', 'default'
-     * @defaultValue 'default'
-     */
-    variant: {
-      type: String as PropType<'outline' | 'default'>,
-      default: 'default',
-    },
-    /**
-     * @zh 最多展示的标签个数，`0` 表示不限制
-     * @en The maximum number of tags displayed, `0` means unlimited
-     */
-    maxTagCount: {
-      type: Number,
-      default: 0,
-    },
-    /**
-     * @zh 是否保留输入框的内容
-     * @en Whether to keep the content of the input box
-     */
-    retainInputValue: {
-      type: [Boolean, Object] as PropType<boolean | { create?: boolean; blur?: boolean }>,
-      default: false,
-    },
-    /**
-     * @zh 格式化标签内容
-     * @en Format tag content
-     */
-    formatTag: {
-      type: Function as PropType<(data: TagData) => string>,
-    },
-    /**
-     * @zh 是否仅创建唯一的值
-     * @en Whether to create only unique values
-     * @version 2.15.0
-     */
-    uniqueValue: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 自定义 `TagData` 中的字段
-     * @en Customize fields in `TagData`
-     * @version 2.22.0
-     */
-    fieldNames: {
-      type: Object as PropType<InputTagFieldNames>,
-    },
-    /**
-     * @zh 标签内容不换行
-     * @en Tag content does not wrap
-     * @version 2.56.1
-     */
-    tagNowrap: {
-      type: Boolean,
-      default: false,
-    },
-    // private
-    focused: Boolean,
-    disabledInput: Boolean,
-    uninjectFormItemContext: Boolean,
-  },
+  props: inputTagProps,
   emits: {
     'update:modelValue': (value: (string | number | TagData)[]) => true,
     'update:inputValue': (inputValue: string) => true,
@@ -469,17 +331,12 @@ export default defineComponent({
     const cls = computed(() =>
       classes(
         n(),
-        n(`--size-${mergedSize.value}`),
-        [mergedDisabled.value, n('--disabled')],
         [props.disabledInput, n('--disabled-input')],
-        [mergedError.value, n('--error')],
-        [mergedFocused.value, n('--focus')],
         [props.readonly, n('--readonly')],
         [tags.value.length > 0, n('--has-tag')],
         [Boolean(slots.prefix), n('--has-prefix')],
         [Boolean(slots.suffix) || showClearBtn.value || feedback.value, n('--has-suffix')],
         [!computedValue.value.length, n('--has-placeholder')],
-        [variant.value, n(`--variant-${variant.value}`)],
       ),
     )
 
@@ -487,71 +344,90 @@ export default defineComponent({
     const inputAttrs = computed(() => pick(attrs, INPUT_EVENTS))
 
     const render = () => (
-      <div class={cls.value} onMousedown={handleMousedown} {...wrapperAttrs.value}>
-        <ResizeObserver onResize={handleResize}>
-          <span ref={mirrorRef} class={classes(n('mirror'))}>
-            {tags.value.length > 0
-              ? compositionValue.value || computedInputValue.value
-              : compositionValue.value || computedInputValue.value || props.placeholder}
-          </span>
-        </ResizeObserver>
-        {slots.prefix && <span class={classes(n('prefix'))}>{slots.prefix()}</span>}
-        <TransitionGroup
-          tag="span"
-          name={`${prefix}-zoom`}
-          // @ts-ignore
-          class={classes(n('inner'), [props.tagNowrap, n('--nowrap')])}
-        >
-          {tags.value.map((item, index) => (
-            <Tag
-              key={`tag-${item.value}`}
-              class={classes(n('tag'))}
-              closable={!mergedDisabled.value && !props.readonly && item.closable}
-              visible
-              nowrap={props.tagNowrap}
-              {...item.tagProps}
-              onClose={(ev: MouseEvent) => handleRemove(item.value, index, ev)}
-            >
-              {slots.tag?.({ data: item.raw }) ?? props.formatTag?.(item.raw) ?? item.label}
-            </Tag>
-          ))}
-          <input
-            {...inputAttrs.value}
-            ref={inputRef}
-            key={`${prefix}-input`}
-            class={classes(n('input'))}
-            style={inputStyle}
-            placeholder={tags.value.length === 0 ? props.placeholder : undefined}
-            disabled={mergedDisabled.value}
-            readonly={props.readonly || props.disabledInput}
-            onInput={handleInput}
-            onKeydown={handleKeyDown}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            onCompositionstart={handleComposition}
-            onCompositionupdate={handleComposition}
-            onCompositionend={handleComposition}
-          />
-        </TransitionGroup>
-        {showClearBtn.value && (
-          <IconHover
-            class={classes(n('clear-btn'))}
-            // @ts-ignore
-            onClick={handleClear}
-            onMousedown={(e: MouseEvent) => e.stopPropagation()}
-          >
-            <IconClose />
-          </IconHover>
-        )}
-        {(slots.suffix || Boolean(feedback.value)) && (
-          <span class={classes(n('suffix'))}>
-            {slots.suffix?.()}
-            {Boolean(feedback.value) && <FeedbackIcon type={feedback.value} />}
-          </span>
-        )}
-        <div class={classes(n('border'))}></div>
-        <div class={classes(n('border-state'))}></div>
-      </div>
+      <FieldDecorator
+        class={cls.value}
+        variant={variant.value}
+        size={mergedSize.value}
+        disabled={mergedDisabled.value}
+        error={mergedError.value}
+        focused={mergedFocused.value}
+        onMousedown={handleMousedown}
+        {...wrapperAttrs.value}
+        v-slots={{
+          prefix: slots.prefix,
+          suffix:
+            showClearBtn.value || slots.suffix || Boolean(feedback.value)
+              ? () => (
+                  <>
+                    {showClearBtn.value && (
+                      <IconHover
+                        class={fieldClasses(fieldN('clear-btn'))}
+                        // @ts-ignore
+                        onClick={handleClear}
+                        onMousedown={(e: MouseEvent) => e.stopPropagation()}
+                      >
+                        <IconClose />
+                      </IconHover>
+                    )}
+                    {(slots.suffix || Boolean(feedback.value)) && (
+                      <>
+                        {slots.suffix?.()}
+                        {Boolean(feedback.value) && <FeedbackIcon type={feedback.value} />}
+                      </>
+                    )}
+                  </>
+                )
+              : undefined,
+          default: () => (
+            <>
+              <ResizeObserver onResize={handleResize}>
+                <span ref={mirrorRef} class={classes(n('mirror'))}>
+                  {tags.value.length > 0
+                    ? compositionValue.value || computedInputValue.value
+                    : compositionValue.value || computedInputValue.value || props.placeholder}
+                </span>
+              </ResizeObserver>
+              <TransitionGroup
+                tag="span"
+                name={`${prefix}-zoom`}
+                // @ts-ignore
+                class={classes(n('inner'), [props.tagNowrap, n('--nowrap')])}
+              >
+                {tags.value.map((item, index) => (
+                  <Tag
+                    key={`tag-${item.value}`}
+                    class={classes(n('tag'))}
+                    closable={!mergedDisabled.value && !props.readonly && item.closable}
+                    show
+                    nowrap={props.tagNowrap}
+                    {...item.tagProps}
+                    onClose={(ev: MouseEvent) => handleRemove(item.value, index, ev)}
+                  >
+                    {slots.tag?.({ data: item.raw }) ?? props.formatTag?.(item.raw) ?? item.label}
+                  </Tag>
+                ))}
+                <input
+                  {...inputAttrs.value}
+                  ref={inputRef}
+                  key={`${prefix}-input`}
+                  class={classes(n('input'))}
+                  style={inputStyle}
+                  placeholder={tags.value.length === 0 ? props.placeholder : undefined}
+                  disabled={mergedDisabled.value}
+                  readonly={props.readonly || props.disabledInput}
+                  onInput={handleInput}
+                  onKeydown={handleKeyDown}
+                  onFocus={handleFocus}
+                  onBlur={handleBlur}
+                  onCompositionstart={handleComposition}
+                  onCompositionupdate={handleComposition}
+                  onCompositionend={handleComposition}
+                />
+              </TransitionGroup>
+            </>
+          ),
+        }}
+      />
     )
 
     return {

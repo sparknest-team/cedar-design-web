@@ -1,17 +1,28 @@
 @import '../../style/theme/index.less';
 
-@timepicker-wrapper-border-radius: @radius-md;
-
-@timepicker-column-width: 64px;
-@timepicker-column-height: 224px;
-@timepicker-cell-height: 24px;
-@timepicker-cell-spacing: 4px;
-
-@timepicker-color-border: var(~'--c-color-neutral-3');
-@timepicker-color-text-cell: var(~'--c-color-text-1');
-@timepicker-color-bg-cell_hover: var(~'--c-color-fill-2');
-@timepicker-color-bg-cell_active: var(~'--c-color-fill-2');
-@timepicker-color-text-cell_disabled: var(~'--c-color-text-4');
-
-@timepicker-font-weight-cell: @font-weight-500;
-@timepicker-font-weight-cell_active: @font-weight-500;
+:root {
+  --c-time-picker-border-radius: var(~'--c-border-radius-md');
+  --c-time-picker-column-width: var(~'--c-size-16');
+  --c-time-picker-column-height: 224px;
+  --c-time-picker-cell-height: var(~'--c-size-6');
+  --c-time-picker-cell-spacing: var(~'--c-spacing-2');
+  --c-time-picker-cell-padding-left: var(~'--c-spacing-9');
+  --c-time-picker-cell-font-size: var(~'--c-font-size-body-3');
+  --c-time-picker-border-color: var(~'--c-color-neutral-3');
+  --c-time-picker-cell-text-color: var(~'--c-color-text-1');
+  --c-time-picker-cell-bg-hover: var(~'--c-color-fill-2');
+  --c-time-picker-cell-bg-active: var(~'--c-color-fill-2');
+  --c-time-picker-cell-text-color-disabled: var(~'--c-color-text-4');
+  --c-time-picker-cell-font-weight: var(~'--c-font-weight-500');
+  --c-time-picker-cell-font-weight-active: var(~'--c-font-weight-500');
+  --c-time-picker-box-shadow: var(~'--c-shadow1-down');
+  --c-time-picker-footer-padding: var(~'--c-spacing-4');
+  --c-time-picker-footer-extra-font-size: var(~'--c-font-size-body-1');
+  --c-time-picker-range-gap: var(~'--c-spacing-6');
+  --c-time-picker-range-wrapper-padding: var(~'--c-spacing-4');
+  --c-time-picker-range-panel-title-gap: var(~'--c-spacing-3');
+  --c-time-picker-range-panel-title-padding-vertical: var(~'--c-spacing-3');
+  --c-time-picker-range-panel-title-padding-horizontal: var(~'--c-spacing-6');
+  --c-time-picker-range-panel-title-line-height: 22px;
+  --c-time-picker-range-next-day-font-size: var(~'--c-font-size-body-1');
+}

@@ -1,10 +1,10 @@
 import { defineComponent, computed, PropType } from 'vue'
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 import Select from '../select'
 import Button from '../button'
 import Radio from '../radio'
-import IconLeft from '../icon/icon-left'
-import IconRight from '../icon/icon-right'
+import { IconLeft } from '@cedarjs/icons-vue/icon-left'
+import { IconRight } from '@cedarjs/icons-vue/icon-right'
 import { getNow } from '../_utils/date'
 import { isArray } from '../_utils/is'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
@@ -160,7 +160,7 @@ export default defineComponent({
         <div class={`${prefixCls}-header-right`}>
           <Radio.Group
             size="sm"
-            type="button"
+            variant="button"
             options={modesOptions}
             onChange={props.onModeChange}
             modelValue={props.mode}

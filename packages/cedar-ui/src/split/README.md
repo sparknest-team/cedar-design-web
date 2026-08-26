@@ -56,5 +56,5 @@ permalink: /components/split/
 组件导出以下类型定义
 
 ```ts
-import type { SplitInstance } from '@cedar/ui'
+import type { SplitInstance } from '@cedarjs/ui'
 ```

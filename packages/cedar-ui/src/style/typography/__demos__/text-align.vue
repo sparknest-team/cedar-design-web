@@ -3,7 +3,7 @@
 </template>
 <script lang="ts" setup>
 import { h } from 'vue'
-import { Message } from '@cedar/ui'
+import { Message } from '@cedarjs/ui'
 
 const columns = [
   {
@@ -43,22 +43,22 @@ const columns = [
 ]
 const data = [
   {
-    class: 'text-left',
+    class: 'c-text-left',
     properties: 'text-align: left !important;',
     effective: 'text-align: left !important;',
   },
   {
-    class: 'text-center',
+    class: 'c-text-center',
     properties: 'text-align: center !important;',
     effective: 'text-align: center !important;',
   },
   {
-    class: 'text-right',
+    class: 'c-text-right',
     properties: 'text-align: right !important;',
     effective: 'text-align: right !important;',
   },
   {
-    class: 'text-justify',
+    class: 'c-text-justify',
     properties: 'text-align: justify !important;',
     effective: 'text-align: justify !important;',
   },

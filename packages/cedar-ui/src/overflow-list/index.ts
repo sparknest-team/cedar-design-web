@@ -1,17 +1,16 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _OverflowList from './overflow-list'
+import { overflowListProps } from './props'
 
-const OverflowList = Object.assign(_OverflowList, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _OverflowList.name, _OverflowList)
-  },
-})
+const OverflowList = withInstall(_OverflowList, Object.assign(_OverflowList, {
+}), { components: [_OverflowList] })
 
 export type OverflowListInstance = InstanceType<typeof _OverflowList>
+
+export const _OverflowListComponent = OverflowList
+
+export { OverflowList }
+
+export { overflowListProps }
 
 export default OverflowList

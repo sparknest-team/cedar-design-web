@@ -17,12 +17,12 @@ import type { PropType } from 'vue'
 import { computed, defineComponent, inject } from 'vue'
 import { createNamespace } from '../_utils/global-config'
 import IconHover from '../_components/icon-hover.vue'
-import IconClose from '../icon/icon-close'
+import { IconClose } from '@cedarjs/icons-vue/icon-close'
 import type { TabData } from './types'
 import { TabsContext, tabsInjectionKey } from './context'
 
 export default defineComponent({
-  name: 'CTabsTab',
+  name: createNamespace('tabs-tab').name,
   components: {
     IconHover,
     IconClose,

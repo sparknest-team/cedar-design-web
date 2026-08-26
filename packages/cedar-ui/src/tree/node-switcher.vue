@@ -1,16 +1,17 @@
 <script lang="tsx">
+import { createNamespace } from '../_utils/global-config'
 import { defineComponent, h, PropType, toRefs, VNode } from 'vue'
 import RenderFunction from '../_components/render-function'
-import IconLoading from '../icon/icon-loading'
+import { IconLoading } from '@cedarjs/icons-vue/icon-loading'
 import IconHover from '../_components/icon-hover.vue'
-import IconCaretDown from '../icon/icon-caret-down'
-import IconFile from '../icon/icon-file'
+import { IconCaretDown } from '@cedarjs/icons-vue/icon-caret-down'
+import { IconFile } from '@cedarjs/icons-vue/icon-file'
 import useTreeContext from './hooks/use-tree-context'
 import usePickSlots from '../_hooks/use-pick-slots'
 import { TreeNodeData } from './types'
 
 export default defineComponent({
-  name: 'TreeNodeSwitcher',
+  name: createNamespace("tree-node-switcher").name,
   components: {
     IconLoading,
     RenderFunction,
@@ -67,7 +68,7 @@ export default defineComponent({
       return getLoadingIcon() ?? h(IconLoading)
     }
 
-    let icon = null
+    let icon: any = null
     let needIconHover = false
 
     if (!isLeaf) {

@@ -1,11 +1,19 @@
 import type { ComponentPublicInstance, Ref } from 'vue'
-import { nextTick, provide, reactive, ref, watch } from 'vue'
+import { computed, nextTick, provide, reactive, ref, watch } from 'vue'
 import { FilterOption, SelectOption, SelectFieldNames } from '../types'
 import { VirtualListRef } from '../../_components/virtual-list-v2/interface'
 import { getRelativeRect } from '../../_utils/dom'
 import { useOptions } from './use-options'
 import { KEYBOARD_KEY, getKeyDownHandler } from '../../_utils/keyboard'
 import { selectInjectionKey } from '../context'
+
+const DEFAULT_FIELD_NAMES = {
+  value: 'value',
+  label: 'label',
+  disabled: 'disabled',
+  tagProps: 'tagProps',
+  render: 'render',
+}
 
 export const useSelect = ({
   multiple,
@@ -15,16 +23,15 @@ export const useSelect = ({
   filterOption,
   showExtraOptions,
   component,
-  valueKey,
   fieldNames,
   loading,
-  popupVisible,
+  open,
   valueKeys,
   dropdownRef,
   optionRefs,
   virtualListRef,
   onSelect,
-  onPopupVisibleChange,
+  onOpenChange,
   enterToOpen = true,
   defaultActiveFirstOption,
 }: {
@@ -35,19 +42,23 @@ export const useSelect = ({
   filterOption?: Ref<FilterOption>
   showExtraOptions?: Ref<boolean>
   component?: Ref<'li' | 'div'>
-  valueKey?: Ref<string>
   fieldNames?: Ref<SelectFieldNames | undefined>
   loading?: Ref<boolean>
-  popupVisible: Ref<boolean>
+  open: Ref<boolean>
   valueKeys: Ref<string[]>
   dropdownRef?: Ref<ComponentPublicInstance | undefined>
   optionRefs?: Ref<Record<string | number, HTMLElement>>
   virtualListRef?: Ref<VirtualListRef>
   onSelect: (key: string, ev: Event) => void
-  onPopupVisibleChange: (visible: boolean) => void
+  onOpenChange: (open: boolean) => void
   enterToOpen?: boolean
   defaultActiveFirstOption?: Ref<boolean>
 }) => {
+  const mergedFieldNames = computed(() => ({
+    ...DEFAULT_FIELD_NAMES,
+    ...fieldNames?.value,
+  }))
+
   const {
     validOptions,
     optionInfoMap,
@@ -62,7 +73,6 @@ export const useSelect = ({
     inputValue,
     filterOption,
     showExtraOptions,
-    valueKey,
     fieldNames,
   })
 
@@ -123,7 +133,7 @@ export const useSelect = ({
   }
 
   // Handling when the drop-down box is displayed/hide
-  watch(popupVisible, (visible) => {
+  watch(open, (visible) => {
     if (visible) {
       // get last value key
       const current = valueKeys.value[valueKeys.value.length - 1]
@@ -150,13 +160,13 @@ export const useSelect = ({
         (e: Event) => {
           // @ts-ignore
           if (!loading?.value && !e.isComposing) {
-            if (popupVisible.value) {
+            if (open.value) {
               if (activeKey.value) {
                 onSelect(activeKey.value, e)
                 e.preventDefault()
               }
             } else if (enterToOpen) {
-              onPopupVisibleChange(true)
+              onOpenChange(true)
               e.preventDefault()
             }
           }
@@ -165,8 +175,8 @@ export const useSelect = ({
       [
         KEYBOARD_KEY.ESC,
         (e: Event) => {
-          if (popupVisible.value) {
-            onPopupVisibleChange(false)
+          if (open.value) {
+            onOpenChange(false)
             e.preventDefault()
           }
         },
@@ -174,7 +184,7 @@ export const useSelect = ({
       [
         KEYBOARD_KEY.ARROW_DOWN,
         (e: Event) => {
-          if (popupVisible.value) {
+          if (open.value) {
             const next = getNextActiveKey('down')
             if (next) {
               activeKey.value = next
@@ -187,7 +197,7 @@ export const useSelect = ({
       [
         KEYBOARD_KEY.ARROW_UP,
         (e: Event) => {
-          if (popupVisible.value) {
+          if (open.value) {
             const next = getNextActiveKey('up')
             if (next) {
               activeKey.value = next
@@ -204,7 +214,7 @@ export const useSelect = ({
     selectInjectionKey,
     reactive({
       multiple,
-      valueKey,
+      fieldNames: mergedFieldNames,
       inputValue,
       filterOption,
       component,

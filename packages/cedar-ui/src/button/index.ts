@@ -1,29 +1,24 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
-import _Button from './button.vue'
-import _ButtonGroup from './button-group.vue'
-import { buttonProps, buttonGroupProps } from './props'
+import { withInstall } from "../_utils/global-config";
+import _Button from "./button.vue";
+import _ButtonGroup from "./button-group.vue";
+import { buttonProps, buttonGroupProps } from "./props";
 
-const Button = Object.assign(_Button, {
-  Group: _ButtonGroup,
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
+const Button = withInstall(
+  _Button,
+  Object.assign(_Button, {
+    Group: _ButtonGroup,
+  }),
+  { components: [_Button, _ButtonGroup] },
+);
 
-    app.component(componentPrefix + _Button.name, _Button)
-    app.component(componentPrefix + _ButtonGroup.name, _ButtonGroup)
-  },
-})
+export type ButtonInstance = InstanceType<typeof _Button>;
+export type ButtonGroupInstance = InstanceType<typeof _ButtonGroup>;
+export type { ButtonProps, ButtonGroupProps, ButtonVariant } from "./props";
 
-export type ButtonInstance = InstanceType<typeof _Button>
-export type ButtonGroupInstance = InstanceType<typeof _ButtonGroup>
-export type { ButtonProps, ButtonGroupProps, ButtonVariant } from './props'
+export { buttonProps, buttonGroupProps };
+export { Button };
+export { _ButtonGroup as ButtonGroup };
 
-export { buttonProps, buttonGroupProps }
-export { Button }
-export { _ButtonGroup as ButtonGroup }
+export const _ButtonComponent = Button;
 
-export const _ButtonComponent = Button
-
-export default Button
+export default Button;

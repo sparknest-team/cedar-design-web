@@ -6,27 +6,28 @@
     :default-value="12000"
     :min="0"
     :formatter="formatter"
-    :parser="parser" />
+    :parser="parser"
+  />
 </template>
 
 <script lang="ts">
 export default {
   setup() {
     const formatter = (value) => {
-      const values = value.split('.')
-      values[0] = values[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+      const values = value.split(".");
+      values[0] = values[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-      return values.join('.')
-    }
+      return values.join(".");
+    };
 
     const parser = (value) => {
-      return value.replace(/,/g, '')
-    }
+      return value.replace(/,/g, "");
+    };
 
     return {
       formatter,
       parser,
-    }
+    };
   },
-}
+};
 </script>

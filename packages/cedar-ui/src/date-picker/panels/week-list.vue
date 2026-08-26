@@ -9,9 +9,10 @@
 <script lang="ts">
 import { defineComponent, computed, PropType } from 'vue'
 import useInjectDatePickerTransform from '../hooks/use-inject-datepicker-transform'
+import { createNamespace } from '../../_utils/global-config'
 
 export default defineComponent({
-  name: 'PanelWeekList',
+  name: createNamespace('date-picker-week-list').name,
   props: {
     prefixCls: {
       type: String,

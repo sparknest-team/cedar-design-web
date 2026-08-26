@@ -1,5 +1,14 @@
 <template>
-  <a :href="disabled ? undefined : href" :class="cls" @click="handleClick">
+  <a
+    :href="disabled || loading ? undefined : href"
+    :target="disabled || loading ? undefined : target"
+    :rel="disabled || loading ? undefined : rel"
+    :class="cls"
+    :aria-disabled="disabled || loading || undefined"
+    :aria-busy="loading || undefined"
+    :tabindex="disabled || loading ? -1 : undefined"
+    @click="handleClick"
+  >
     <span v-if="loading || showIcon" :class="`${prefixCls}-icon`">
       <icon-loading v-if="loading" />
       <slot v-else name="icon">
@@ -11,60 +20,17 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue'
 import { computed, defineComponent } from 'vue'
-import { getPrefixCls } from '../_utils/global-config'
-import { Status } from '../_utils/constant'
-import IconLink from '../icon/icon-link'
-import IconLoading from '../icon/icon-loading'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
+import { IconLink } from '@cedarjs/icons-vue/icon-link'
+import { IconLoading } from '@cedarjs/icons-vue/icon-loading'
 import { hasPropOrSlot } from '../_utils/use-prop-or-slot'
+import { linkProps } from './props'
 
 export default defineComponent({
-  name: 'Link',
+  name: createNamespace('link').name,
   components: { IconLink, IconLoading },
-  props: {
-    /**
-     * @zh 链接地址
-     * @en Link address
-     */
-    href: String,
-    /**
-     * @zh 链接的状态
-     * @en Link status
-     * @values 'normal','warning','success','danger'
-     */
-    status: {
-      type: String as PropType<Status>,
-      default: 'normal',
-    },
-    /**
-     * @zh 鼠标悬浮时存在底色
-     * @en Whether to hide background when hover
-     * @defaultValue true
-     * @version 2.7.0
-     */
-    hoverable: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 图标
-     * @en icon
-     * @version 2.7.0
-     */
-    icon: Boolean,
-    /**
-     * @zh 链接是否为加载中状态
-     * @en Whether the link is in the loading state
-     * @version 2.37.0
-     */
-    loading: Boolean,
-    /**
-     * @zh 链接是否禁用
-     * @en Whether the link is disabled
-     */
-    disabled: Boolean,
-  },
+  props: linkProps,
   emits: {
     /**
      * @zh 点击时触发
@@ -92,6 +58,7 @@ export default defineComponent({
         [`${prefixCls}-disabled`]: props.disabled,
         [`${prefixCls}-loading`]: props.loading,
         [`${prefixCls}-hoverless`]: !props.hoverable,
+        [`${prefixCls}-underline-${props.underline}`]: true,
         [`${prefixCls}-with-icon`]: props.loading || showIcon.value,
       },
     ])

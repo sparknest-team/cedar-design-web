@@ -2,25 +2,25 @@
 
 .descriptions-size(@size) {
   &-size-@{size} &-title {
-    margin-bottom: ~'@{descriptions-size-@{size}-title-margin-bottom}';
+    margin-bottom: var(~'--c-descriptions-size-@{size}-title-margin-bottom');
   }
 
   &-size-@{size} &-item-label-block,
   &-size-@{size} &-item-value-block {
-    padding-right: ~'@{descriptions-border-item-size-@{size}-padding-horizontal}';
-    padding-bottom: ~'@{descriptions-item-size-@{size}-spacing-bottom}';
-    font-size: ~'@{descriptions-size-@{size}-font-size-text}';
+    padding-right: var(~'--c-descriptions-border-item-size-@{size}-padding-horizontal');
+    padding-bottom: var(~'--c-descriptions-item-size-@{size}-spacing-bottom');
+    font-size: var(~'--c-descriptions-size-@{size}-font-size-text');
   }
 
   &-size-@{size}&-border &-item-label-block,
   &-size-@{size}&-border &-item-value-block {
-    padding: ~'@{descriptions-border-item-size-@{size}-padding-vertical}' ~'@{descriptions-border-item-size-@{size}-padding-horizontal}';
+    padding: var(~'--c-descriptions-border-item-size-@{size}-padding-vertical')
+      var(~'--c-descriptions-border-item-size-@{size}-padding-horizontal');
   }
 
   &-size-@{size}&-border&-layout-inline-vertical &-item {
-    @_descriptions-padding-vertical: ~'descriptions-border-item-size-@{size}-padding-vertical';
-
-    padding: @@_descriptions-padding-vertical + 5px ~'@{descriptions-border-item-size-@{size}-padding-horizontal}';
+    padding: calc(var(~'--c-descriptions-border-item-size-@{size}-padding-vertical') + var(~'--c-descriptions-inline-vertical-padding-extra'))
+      var(~'--c-descriptions-border-item-size-@{size}-padding-horizontal');
   }
 }
 
@@ -35,10 +35,10 @@
   }
 
   &-title {
-    margin-bottom: @descriptions-size-md-title-margin-bottom;
-    color: @descriptions-color-title;
-    font-weight: @descriptions-font-weight-title;
-    font-size: @descriptions-font-size-title;
+    margin-bottom: var(~'--c-descriptions-size-md-title-margin-bottom');
+    color: var(~'--c-descriptions-title-color');
+    font-weight: var(~'--c-descriptions-font-weight-title');
+    font-size: var(~'--c-descriptions-font-size-title');
     line-height: var(~'--c-line-height');
   }
 
@@ -46,7 +46,7 @@
   &-item-label,
   &-item-value {
     box-sizing: border-box;
-    font-size: @descriptions-size-md-font-size-text;
+    font-size: var(~'--c-descriptions-size-md-font-size-text');
     line-height: var(~'--c-line-height');
     text-align: left;
   }
@@ -57,16 +57,16 @@
 
   &-item-label-block {
     width: 1px;
-    padding: 0 4px @descriptions-item-size-md-spacing-bottom 0;
-    color: @descriptions-color-text-label;
-    font-weight: @descriptions-font-weight-text-label;
+    padding: 0 var(~'--c-descriptions-item-label-padding-x') var(~'--c-descriptions-item-size-md-spacing-bottom') 0;
+    color: var(~'--c-descriptions-text-color-label');
+    font-weight: var(~'--c-descriptions-font-weight-text-label');
     white-space: nowrap;
   }
 
   &-item-value-block {
-    padding: 0 4px @descriptions-item-size-md-spacing-bottom 0;
-    color: @descriptions-color-text-value;
-    font-weight: @descriptions-font-weight-text-value;
+    padding: 0 var(~'--c-descriptions-item-label-padding-x') var(~'--c-descriptions-item-size-md-spacing-bottom') 0;
+    color: var(~'--c-descriptions-text-color-value');
+    font-weight: var(~'--c-descriptions-font-weight-text-value');
     white-space: pre-wrap;
     word-break: break-word;
   }
@@ -74,24 +74,24 @@
   &-item-label-inline,
   &-item-value-inline {
     box-sizing: border-box;
-    font-size: @descriptions-size-md-font-size-text;
+    font-size: var(~'--c-descriptions-size-md-font-size-text');
     line-height: var(~'--c-line-height');
     text-align: left;
   }
 
   &-item-label-inline {
-    margin-bottom: 2px;
-    color: @descriptions-color-text-label;
-    font-weight: @descriptions-font-weight-text-label;
+    margin-bottom: var(~'--c-descriptions-item-label-inline-margin-bottom');
+    color: var(~'--c-descriptions-text-color-label');
+    font-weight: var(~'--c-descriptions-font-weight-text-label');
   }
 
   &-item-value-inline {
-    color: @descriptions-color-text-value;
-    font-weight: @descriptions-font-weight-text-value;
+    color: var(~'--c-descriptions-text-color-value');
+    font-weight: var(~'--c-descriptions-font-weight-text-value');
   }
 
   &-layout-inline-horizontal &-item-label-inline {
-    margin-right: 4px;
+    margin-right: var(~'--c-descriptions-item-label-inline-margin-right');
   }
 
   &-layout-inline-horizontal &-item-label-inline,
@@ -101,30 +101,30 @@
   }
 
   &-border&-layout-inline-vertical &-item {
-    padding: @descriptions-border-item-size-md-padding-vertical + 5px
-      @descriptions-border-item-size-md-padding-horizontal;
+    padding: calc(var(~'--c-descriptions-border-item-size-md-padding-vertical') + var(~'--c-descriptions-inline-vertical-padding-extra'))
+      var(~'--c-descriptions-border-item-size-md-padding-horizontal');
   }
 
   &-border &-body {
     overflow: hidden;
-    border: @descriptions-border-width @descriptions-border-style @descriptions-color-border;
-    border-radius: @descriptions-border-radius;
+    border: var(~'--c-descriptions-border-width') var(~'--c-descriptions-border-style') var(~'--c-descriptions-border-color');
+    border-radius: var(~'--c-descriptions-border-radius');
   }
 
   &-border &-row:not(:last-child) {
-    border-bottom: @descriptions-border-width @descriptions-border-style @descriptions-color-border;
+    border-bottom: var(~'--c-descriptions-border-width') var(~'--c-descriptions-border-style') var(~'--c-descriptions-border-color');
   }
 
   &-border &-item,
   &-border &-item-label-block,
   &-border &-item-value-block {
-    padding: @descriptions-border-item-size-md-padding-vertical
-      @descriptions-border-item-size-md-padding-horizontal;
-    border-right: @descriptions-border-width @descriptions-border-style @descriptions-color-border;
+    padding: var(~'--c-descriptions-border-item-size-md-padding-vertical')
+      var(~'--c-descriptions-border-item-size-md-padding-horizontal');
+    border-right: var(~'--c-descriptions-border-width') var(~'--c-descriptions-border-style') var(~'--c-descriptions-border-color');
   }
 
   &-border &-item-label-block {
-    background-color: @descriptions-border-color-bg-label;
+    background-color: var(~'--c-descriptions-border-bg-label');
   }
 
   &-border &-item-value-block:last-child {

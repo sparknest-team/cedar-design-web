@@ -14,12 +14,12 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
-import { getPrefixCls } from '../_utils/global-config'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import { getOffsetPercent, getPositionStyle } from './utils'
 import { DIRECTIONS } from '../_utils/constant'
 
 export default defineComponent({
-  name: 'SliderMarks',
+  name: createNamespace('slider-marks').name,
   props: {
     data: {
       type: Array as PropType<Array<{ key: number; content: string }>>,

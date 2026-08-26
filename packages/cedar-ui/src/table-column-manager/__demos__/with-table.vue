@@ -15,7 +15,7 @@
     <!-- 抽屉模式：组件自带抽屉 -->
     <c-table-column-manager
       v-if="container === 'drawer'"
-      v-model:visible="visible"
+      v-model:open="visible"
       v-model="items"
       :columns="columns"
       :options="columnDefinitions"
@@ -24,11 +24,11 @@
     />
 
     <!-- 弹窗模式：inline 内联面板放入 c-dialog -->
-    <c-dialog v-else v-model:show="visible" title="列管理" :width="720" :body-padding="false" unmount-on-close>
+    <c-dialog v-else v-model:open="visible" title="列管理" :width="720" :body-padding="false" unmount-on-close>
       <div style="height: 480px">
         <c-table-column-manager
           inline
-          v-model:visible="visible"
+          v-model:open="visible"
           v-model="items"
           :columns="columns"
           :options="columnDefinitions"
@@ -41,8 +41,8 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { stateFromColumns } from '@cedar/ui'
-import type { ColumnDefinitions, ColumnManagerResult, TableColumnData } from '@cedar/ui'
+import { stateFromColumns } from '@cedarjs/ui'
+import type { ColumnDefinitions, ColumnManagerResult, TableColumnData } from '@cedarjs/ui'
 
 const visible = ref(false)
 const container = ref<'drawer' | 'dialog'>('drawer')

@@ -1,34 +1,31 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Input from './input'
 import _InputPassword from './input-password.vue'
 import _InputGroup from './input-group.vue'
 import _InputGroupLabel from './input-group-label.vue'
+import { inputProps } from './props'
 
-const Input = Object.assign(_Input, {
+const Input = withInstall(_Input, Object.assign(_Input, {
   Password: _InputPassword,
   Group: _InputGroup,
   GroupLabel: _InputGroupLabel,
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _Input.name, _Input)
-    app.component(componentPrefix + _InputGroup.name, _InputGroup)
-    app.component(componentPrefix + _InputPassword.name, _InputPassword)
-  },
-})
+}), { components: [_Input, _InputGroup, _InputPassword] })
 
 export type InputInstance = InstanceType<typeof _Input>
+export { inputProps }
+export { inputPasswordProps } from './props'
+export type { InputPasswordProps, InputProps, InputType } from './props'
 export type InputPasswordInstance = InstanceType<typeof _InputPassword>
 export type InputGroupInstance = InstanceType<typeof _InputGroup>
 export type InputGroupLabelInstance = InstanceType<typeof _InputGroupLabel>
 
 export {
+  Input,
   _InputPassword as InputPassword,
   _InputGroup as InputGroup,
   _InputGroupLabel as InputGroupLabel,
 }
+
+export const _InputComponent = Input
 
 export default Input

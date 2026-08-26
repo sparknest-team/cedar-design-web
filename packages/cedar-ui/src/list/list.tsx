@@ -1,4 +1,5 @@
-import { computed, defineComponent, inject, isVNode, onMounted, PropType, ref, toRefs } from 'vue'
+import { listProps } from './props'
+import { computed, defineComponent, inject, isVNode, onMounted, PropType, ref, toRefs, VNode } from 'vue'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
 import { configProviderInjectionKey } from '../config-provider/context'
 import Spin from '../spin'
@@ -20,101 +21,7 @@ const { name } = createNamespace('list')
 
 export default defineComponent({
   name,
-  props: {
-    /**
-     * @zh 列表数据，需要和 `item` 插槽同时使用
-     * @en List data, need to be used with `item` slot at the same time
-     */
-    data: {
-      type: Array as PropType<any[]>,
-    },
-    /**
-     * @zh 列表大小
-     * @en List size
-     */
-    size: {
-      type: String as PropType<'xs' | 'sm' | 'md' | 'lg' | 'xl'>,
-      default: 'md',
-    },
-    /**
-     * @zh 是否显示边框
-     * @en Whether to show the border
-     */
-    bordered: {
-      type: Boolean,
-      default: true,
-    },
-    /**
-     * @zh 是否显示分割线
-     * @en Whether to show the dividing line
-     */
-    split: {
-      type: Boolean,
-      default: true,
-    },
-    /**
-     * @zh 是否为加载中状态
-     * @en Whether it is loading state
-     */
-    loading: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否显示选中样式
-     * @en Whether to display the selected style
-     */
-    hoverable: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 列表分页配置
-     * @en List pagination configuration
-     */
-    paginationProps: {
-      type: Object as PropType<PaginationProps>,
-    },
-    /**
-     * @zh 列表栅格配置
-     * @en List grid configuration
-     */
-    gridProps: {
-      type: Object,
-    },
-    /**
-     * @zh 列表的最大高度
-     * @en Maximum height of the list
-     */
-    maxHeight: {
-      type: [String, Number] as PropType<string | number>,
-      default: 0,
-    },
-    /**
-     * @zh 触发到达底部的距离阈值
-     * @en Trigger the distance threshold to reach the bottom
-     */
-    bottomOffset: {
-      type: Number,
-      default: 0,
-    },
-    /**
-     * @zh 传递虚拟列表属性，传入此参数以开启虚拟滚动 [VirtualListProps](#VirtualListProps)
-     * @en Pass virtual list properties, pass in this parameter to turn on virtual scrolling [VirtualListProps](#VirtualListProps)
-     */
-    virtualListProps: {
-      type: Object as PropType<VirtualListProps>,
-    },
-    /**
-     * @zh 是否开启虚拟滚动条
-     * @en Whether to enable virtual scroll bar
-     * @version 2.38.0
-     */
-    scrollbar: {
-      type: [Object, Boolean] as PropType<boolean | ScrollbarProps>,
-      default: true,
-    },
-  },
+  props: listProps,
   emits: {
     /**
      * @zh 列表滚动时触发
@@ -215,7 +122,7 @@ export default defineComponent({
       const currentPageItems = getCurrentPageItems(data)
 
       if (props.gridProps.span) {
-        const items = []
+        const items: VNode[] = []
         const rowSize = 24 / props.gridProps.span
         for (let i = 0; i < currentPageItems.length; i += rowSize) {
           const nextIndex = i + rowSize
@@ -292,7 +199,7 @@ export default defineComponent({
     const contentStyle = computed(() => {
       if (props.maxHeight) {
         const maxHeight = isNumber(props.maxHeight) ? `${props.maxHeight}px` : props.maxHeight
-        return { maxHeight, overflowY: 'auto' }
+        return { maxHeight, overflowY: 'auto' as const }
       }
       return undefined
     })
@@ -315,8 +222,10 @@ export default defineComponent({
             item: ({ item, index }: { item: unknown; index: number }) => slots.item?.({ item, index }),
           }}
           class={contentCls.value}
-          data={currentPageItems}
-          {...props.virtualListProps}
+          {...(props.virtualListProps as Omit<VirtualListProps, 'itemKey' | 'data'> & {
+            itemKey?: string
+          })}
+          data={currentPageItems as Record<string, any>[]}
           onScroll={handleScroll}
         />
       ) : (

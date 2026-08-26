@@ -8,12 +8,12 @@ import {
 } from 'vue'
 import { createNamespace } from '../_utils/global-config'
 import IconHover from '../_components/icon-hover.vue'
-import IconSearch from '../icon/icon-search'
-import IconLoading from '../icon/icon-loading'
+import { IconSearch } from '@cedarjs/icons-vue/icon-search'
+import { IconLoading } from '@cedarjs/icons-vue/icon-loading'
 import Button, { ButtonProps } from '../button'
 import Input from '../input/input'
 import InputGroup from '../input/input-group.vue'
-import type { Size } from '../_utils/constant'
+import type { ComponentSize } from '../_utils/constant'
 import { useSize } from '../_hooks/use-size'
 import { SelectOptionData } from '../select'
 import Select from '../select'
@@ -49,11 +49,10 @@ function searchHistoryLocal(max: number) {
 }
 
 export default defineComponent({
-  name: 'Search',
+  name: createNamespace('search').name,
   props: {
     modelValue: String,
     defaultValue: String,
-    searchText: String,
     searchButton: {
       type: Boolean,
       default: false,
@@ -66,10 +65,10 @@ export default defineComponent({
       type: Boolean,
     },
     variant: {
-      type: String as PropType<'outline' | 'default'>,
+      type: String as PropType<'filled' | 'outlined' | 'standard'>,
     },
     size: {
-      type: String as PropType<Size>,
+      type: String as PropType<ComponentSize>,
     },
     buttonText: {
       type: String,
@@ -94,9 +93,6 @@ export default defineComponent({
     modelField: {
       type: String,
     },
-    searchField: {
-      type: String,
-    },
     model: {
       type: Object as PropType<Record<string, any>>,
     },
@@ -115,8 +111,6 @@ export default defineComponent({
     change: (value: string, ev?: Event) => true,
     'update:modelValue': (value: string) => true,
     'update:modelField': (value: string) => true,
-    'update:searchText': (value: string) => true,
-    'update:searchField': (value: string) => true,
   },
   setup(props, { emit, slots, attrs }) {
     const { classes, n } = createNamespace('search')
@@ -124,7 +118,7 @@ export default defineComponent({
     const { size, disabled, variant } = toRefs(props)
     const _size = computed(() => size.value ?? 'md')
     const mergedDisabled = computed(() => Boolean(disabled.value ?? false))
-    const mergedVariant = computed(() => variant.value ?? 'default')
+    const mergedVariant = computed(() => variant.value ?? 'filled')
     const { mergedSize } = useSize(_size)
     const { push } = searchHistoryLocal(props.maxSearchHistoryCount as number)
 
@@ -133,11 +127,11 @@ export default defineComponent({
     const historyVisible = ref(false)
     const _field = ref(props.defaultField || props.fields[0]?.value)
     const computedField = computed(() => {
-      return props.modelField ?? props.searchField ?? _field.value
+      return props.modelField ?? _field.value
     })
     const _value = ref(props.defaultValue)
     const computedValue = computed(() => {
-      return props.modelValue ?? props.searchText ?? _value.value
+      return props.modelValue ?? _value.value
     })
     const computedPlaceholder = computed(() => {
       const selected = props.fields.find(
@@ -149,8 +143,6 @@ export default defineComponent({
     const getSearchData = (recentSearches = props.recentSearches) => ({
       modelField: computedField.value as string,
       modelValue: computedValue.value as string,
-      searchField: computedField.value as string,
-      searchText: computedValue.value as string,
       model: props.model,
       recentSearches,
     })
@@ -243,7 +235,6 @@ export default defineComponent({
       _value.value = value
       updateModel(value)
       emit('update:modelValue', value as string)
-      emit('update:searchText', value as string)
       emit('change', value as string, ev)
     }
     const handleInput = (value: string, ev: Event) => {
@@ -278,27 +269,26 @@ export default defineComponent({
               }}
               {...restAttrs}
               options={props.fields}
-              onChange={(value: string, e: Event) => {
+              onChange={(value: any, e?: any) => {
                 inputRef.value?.focus()
                 _field.value = value
                 clearModel()
                 _value.value = ''
                 emit('update:modelField', value as string)
-                emit('update:searchField', value as string)
                 emit('update:modelValue', '' as unknown as string)
-                emit('update:searchText', '' as unknown as string)
                 emit('change', '' as string, e)
               }}
             />
           )}
           <Menu
-            popupVisible={historyVisible.value}
+            open={historyVisible.value}
             trigger='focus'
-            position='bl'
+            placement='bl'
             autoFitPopupWidth
             popupContainer={inputRef.value?.$el}
-            onPopupVisibleChange={handleHistoryVisibleChange}
-            onSelect={(value: string, ev: Event) => handleHistorySelect(value, ev)}
+            onOpenChange={handleHistoryVisibleChange}
+            onUpdate:open={handleHistoryVisibleChange}
+            onSelect={(value: any, ev: Event) => handleHistorySelect(String(value), ev)}
             v-slots={{
               content: () =>
                 props.recentSearches.map((item) => (

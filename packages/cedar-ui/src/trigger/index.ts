@@ -1,16 +1,9 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Trigger from './trigger'
+import { triggerProps } from './props'
 
-const Trigger = Object.assign(_Trigger, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _Trigger.name, _Trigger)
-  },
-})
+const Trigger = withInstall(_Trigger, Object.assign(_Trigger, {
+}), { components: [_Trigger] })
 
 export interface TriggerExposed {
   resize: () => void
@@ -20,5 +13,9 @@ export type TriggerInstance = InstanceType<typeof _Trigger> & TriggerExposed
 export type { TriggerEvent, TriggerPosition } from '../_utils/constant'
 export type { TriggerProps, TriggerPopupTranslate } from './types'
 export { Trigger }
+
+export const _TriggerComponent = Trigger
+
+export { triggerProps }
 
 export default Trigger

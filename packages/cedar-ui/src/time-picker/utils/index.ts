@@ -1,5 +1,5 @@
 import BTween from 'b-tween'
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 import { dayjs } from '../../_utils/date'
 import { isArray, isUndefined, isDayjs } from '../../_utils/is'
 import { TimePickerProps } from '../types'

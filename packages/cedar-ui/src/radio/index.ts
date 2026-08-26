@@ -1,23 +1,19 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Radio from './radio'
 import _RadioGroup from './radio-group'
+import { radioGroupProps, radioProps } from './props'
 
-const Radio = Object.assign(_Radio, {
+const Radio = withInstall(_Radio, Object.assign(_Radio, {
   Group: _RadioGroup,
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _Radio.name, _Radio)
-    app.component(componentPrefix + _RadioGroup.name, _RadioGroup)
-  },
-})
+}), { components: [_Radio, _RadioGroup] })
 
 export type RadioInstance = InstanceType<typeof _Radio>
 export type RadioGroupInstance = InstanceType<typeof _RadioGroup>
+export { radioGroupProps, radioProps }
+export type { RadioGroupProps, RadioProps, RadioValue } from './props'
+export type { RadioVariant } from './context'
 
-export { _RadioGroup as RadioGroup }
+export { Radio, _RadioGroup as RadioGroup }
+export const _RadioComponent = Radio
 
 export default Radio

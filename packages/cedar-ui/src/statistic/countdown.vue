@@ -14,13 +14,14 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../_utils/global-config'
 import { CSSProperties, defineComponent, onBeforeUnmount, onMounted, PropType, ref, toRefs, watch } from 'vue'
-import dayjs, { Dayjs } from 'dayjs'
+import dayjs, { type Dayjs } from 'dayjs'
 import { getPrefixCls } from '../_utils/global-config'
 import { getDateString } from './utils'
 
 export default defineComponent({
-  name: 'Countdown',
+  name: createNamespace("countdown").name,
   props: {
     /**
      * @zh 倒计时的标题

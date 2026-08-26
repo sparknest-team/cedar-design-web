@@ -1,3 +1,4 @@
+import { mentionProps } from './props'
 import {
   computed,
   defineComponent,
@@ -32,71 +33,7 @@ const { name } = createNamespace('mention')
 export default defineComponent({
   name,
   inheritAttrs: false,
-  props: {
-    /**
-     * @zh 绑定值
-     * @en Value
-     * @vModel
-     */
-    modelValue: String,
-    /**
-     * @zh 默认值（非受控状态）
-     * @en Default value (uncontrolled state)
-     */
-    defaultValue: {
-      type: String,
-      default: '',
-    },
-    /**
-     * @zh 用于自动补全的数据
-     * @en Data for automatic completion
-     */
-    data: {
-      type: Array as PropType<(string | number | SelectOptionData | SelectOptionGroup)[]>,
-      default: () => [],
-    },
-    /**
-     * @zh 触发自动补全的关键字
-     * @en Keywords that trigger auto-completion
-     */
-    prefix: {
-      type: [String, Array] as PropType<string | string[]>,
-      default: '@',
-    },
-    /**
-     * @zh 选中项的前后分隔符
-     * @en Before and after the selected item separator
-     */
-    split: {
-      type: String,
-      default: ' ',
-    },
-    /**
-     * @zh 输入框或文本域
-     * @en default input or textarea
-     */
-    type: {
-      type: String as PropType<'input' | 'textarea'>,
-      default: 'input',
-    },
-    /**
-     * @zh 是否禁用
-     * @en Whether to disable
-     */
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否允许清空输入框
-     * @en Whether to allow the input to be cleared
-     * @version 2.23.0
-     */
-    clearable: {
-      type: Boolean,
-      default: false,
-    },
-  },
+  props: mentionProps,
   emits: {
     'update:modelValue': (value: string) => true,
     /**
@@ -195,7 +132,7 @@ export default defineComponent({
       if (lastMeasure.location > -1) {
         const measureText = text.slice(lastMeasure.location + lastMeasure.prefix.length)
         if (isValidSearch(measureText, props.split)) {
-          _popupVisible.value = true
+          _open.value = true
           measureInfo.value = {
             measuring: true,
             text: measureText,
@@ -222,17 +159,17 @@ export default defineComponent({
       emit('clear', ev)
     }
 
-    const _popupVisible = ref(false)
-    const computedPopupVisible = computed(
-      () => _popupVisible.value && measureInfo.value.measuring && validOptionInfos.value.length > 0,
+    const _open = ref(false)
+    const computedOpen = computed(
+      () => _open.value && measureInfo.value.measuring && validOptionInfos.value.length > 0,
     )
 
     const handleResize = () => {
       mirrorStyle.value = getSizeStyles(styleDeclaration)
     }
 
-    const handlePopupVisibleChange = (popupVisible: boolean) => {
-      _popupVisible.value = popupVisible
+    const handleOpenChange = (open: boolean) => {
+      _open.value = open
     }
 
     const handleSelect = (key: string, e: Event) => {
@@ -260,12 +197,12 @@ export default defineComponent({
       options: data,
       inputValue: measureText,
       filterOption,
-      popupVisible: computedPopupVisible,
+      open: computedOpen,
       valueKeys: computedValueKeys,
       dropdownRef,
       optionRefs,
       onSelect: handleSelect,
-      onPopupVisibleChange: handlePopupVisibleChange,
+      onOpenChange: handleOpenChange,
       enterToOpen: false,
     })
 
@@ -317,7 +254,7 @@ export default defineComponent({
 
     const mirrorRef = ref<HTMLElement>()
 
-    watch(computedPopupVisible, (visible) => {
+    watch(computedOpen, (visible) => {
       if (props.type === 'textarea' && visible) {
         nextTick(() => {
           if (
@@ -365,12 +302,13 @@ export default defineComponent({
                 <Trigger
                   v-slots={{ content: renderDropdown }}
                   trigger="focus"
-                  position="bl"
+                  placement="bl"
                   popupOffset={4}
                   preventFocus={true}
-                  popupVisible={computedPopupVisible.value}
+                  open={computedOpen.value}
                   clickToClose={false}
-                  onPopupVisibleChange={handlePopupVisibleChange}
+                  onOpenChange={handleOpenChange}
+                  onUpdate:open={handleOpenChange}
                 >
                   <span>@</span>
                 </Trigger>
@@ -384,16 +322,17 @@ export default defineComponent({
         <Trigger
           v-slots={{ content: renderDropdown }}
           trigger="focus"
-          position="bl"
+          placement="bl"
           animationName="slide-dynamic-origin"
           popupOffset={4}
           preventFocus={true}
-          popupVisible={computedPopupVisible.value}
+          open={computedOpen.value}
           clickToClose={false}
           autoFitPopupWidth
           autoFitTransformOrigin
           disabled={mergedDisabled.value}
-          onPopupVisibleChange={handlePopupVisibleChange}
+          onOpenChange={handleOpenChange}
+          onUpdate:open={handleOpenChange}
         >
           <Input
             v-slots={slots}

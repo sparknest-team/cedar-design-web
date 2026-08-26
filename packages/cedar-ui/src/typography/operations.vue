@@ -1,9 +1,14 @@
 <template>
   <template v-if="editable">
     <Tooltip :content="t('typography.edit')" v-bind="editTooltipProps">
-      <span :class="`${prefixCls}-operation-edit`" @click.stop="onEditClick">
+      <button
+        type="button"
+        :class="`${prefixCls}-operation-edit`"
+        :aria-label="t('typography.edit')"
+        @click.stop="onEditClick"
+      >
         <IconEdit />
-      </span>
+      </button>
     </Tooltip>
   </template>
   <template v-if="copyable">
@@ -13,37 +18,45 @@
           {{ isCopied ? t('typography.copied') : t('typography.copy') }}
         </slot>
       </template>
-      <span
+      <button
+        type="button"
         :class="{
           [`${prefixCls}-operation-copied`]: isCopied,
           [`${prefixCls}-operation-copy`]: !isCopied,
         }"
+        :aria-label="isCopied ? t('typography.copied') : t('typography.copy')"
         @click.stop="onCopyClick"
       >
         <slot name="copy-icon" :copied="isCopied">
           <IconCheckCircleFill v-if="isCopied" />
           <IconCopy v-else />
         </slot>
-      </span>
+      </button>
     </Tooltip>
   </template>
-  <a v-if="showExpand" :class="`${prefixCls}-operation-expand`" @click.stop="onExpandClick">
+  <button
+    v-if="showExpand"
+    type="button"
+    :class="`${prefixCls}-operation-expand`"
+    :aria-expanded="expanded"
+    @click.stop="onExpandClick"
+  >
     <slot name="expand-node" :expanded="expanded">
       {{ expanded ? t('typography.collapse') : t('typography.expand') }}
     </slot>
-  </a>
+  </button>
 </template>
 <script>
 import { defineComponent, computed } from 'vue'
 import Tooltip from '../tooltip'
-import IconCheckCircleFill from '../icon/icon-check-circle-fill'
-import IconCopy from '../icon/icon-copy'
-import IconEdit from '../icon/icon-edit'
-import { getPrefixCls } from '../_utils/global-config'
+import { IconCheckCircleFill } from '@cedarjs/icons-vue/icon-check-circle-fill'
+import { IconCopy } from '@cedarjs/icons-vue/icon-copy'
+import { IconEdit } from '@cedarjs/icons-vue/icon-edit'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import { useI18n } from '../locale'
 
 export default defineComponent({
-  name: 'TypographyOperations',
+  name: createNamespace('typography-operations').name,
   components: {
     Tooltip,
     IconCheckCircleFill,

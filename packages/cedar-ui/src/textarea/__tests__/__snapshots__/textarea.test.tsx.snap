@@ -1,9 +1,13 @@
 // Vitest Snapshot v1
 
 exports[`Textarea > render 1`] = `
-"<div class=\\"arco-textarea-wrapper\\">
-  <!--v-if--><textarea class=\\"arco-textarea\\"></textarea>
+"<div class=\\"c-field-decorator c-field-decorator--size-md c-field-decorator--variant-filled c-textarea\\">
+  <!---->
+  <!--v-if--><textarea class=\\"c-textarea__inner\\" value=\\"\\"></textarea>
   <!--v-if-->
   <!--v-if-->
+  <!---->
+  <div class=\\"c-field-decorator__border\\"></div>
+  <div class=\\"c-field-decorator__border-state\\"></div>
 </div>"
 `;

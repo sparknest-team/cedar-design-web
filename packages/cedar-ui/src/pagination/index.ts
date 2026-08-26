@@ -1,18 +1,14 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Pagination from './pagination'
+import { paginationProps } from './props'
 
-const Pagination = Object.assign(_Pagination, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _Pagination.name, _Pagination)
-  },
-})
+const Pagination = withInstall(_Pagination, Object.assign(_Pagination, {
+}), { components: [_Pagination] })
 
 export type PaginationInstance = InstanceType<typeof _Pagination>
-export type { PaginationProps } from './types'
+export { paginationProps }
+export type { PaginationProps } from './props'
+export { Pagination }
+export const _PaginationComponent = Pagination
 
 export default Pagination

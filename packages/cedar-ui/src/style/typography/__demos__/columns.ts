@@ -1,5 +1,5 @@
 import { h } from 'vue'
-import { Message } from '@cedar/ui'
+import { Message } from '@cedarjs/ui'
 
 export const columns = [
   {

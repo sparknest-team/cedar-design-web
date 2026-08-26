@@ -11,7 +11,7 @@ import { createNamespace } from '../_utils/global-config'
 const { n, classes } = createNamespace('tabs')
 
 export default defineComponent({
-  name: 'CTabsItems',
+  name: createNamespace('tabs-items').name,
   setup() {
     return { classes, n }
   },

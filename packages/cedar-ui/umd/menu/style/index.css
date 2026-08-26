@@ -1,0 +1,175 @@
+.c--box {
+  box-sizing: border-box;
+}
+.c--box * {
+  box-sizing: border-box;
+}
+.c--lock {
+  overflow: hidden !important;
+}
+.c--ellipsis {
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.c--inline-block {
+  display: inline-block;
+}
+.c--flex {
+  display: flex;
+}
+.c--inline-flex {
+  display: inline-flex;
+}
+/******** borderSize *******/
+/******** borderStyle *******/
+/******** radius *******/
+/******** shadow distance *******/
+/******** size *******/
+/******** spacing *******/
+/******** shadow *******/
+/******** opacity *******/
+/******** fontSize *******/
+/******** fontWeight ********/
+/******** Primary *******/
+/******** success *******/
+/******** info *******/
+/******** warning *******/
+/******** danger *******/
+/******** link *******/
+/******** radius *******/
+/******** motion *******/
+/******** z-index *******/
+/******** scale CSS var wrappers (public Less API) *******/
+/********* icon hover *********/
+:root {
+  /**********************************************
+   * Popup Box
+   **********************************************/
+  --c-menu-max-height: var(--c-size-50);
+  --c-menu-border-radius: var(--c-border-radius-md);
+  --c-menu-padding-vertical: var(--c-spacing-2);
+  --c-menu-font-size: var(--c-font-size-body-3);
+  --c-menu-bg: var(--c-color-bg-popup);
+  --c-menu-border-color: var(--c-color-fill-3);
+  --c-menu-box-shadow: var(--c-shadow2-down);
+  /**********************************************
+   * Popup Options
+   * status: default / disabled / selected / hover
+   **********************************************/
+  --c-menu-option-height: var(--c-size-9);
+  --c-menu-option-padding-horizontal: var(--c-spacing-6);
+  --c-menu-option-font-weight-selected: var(--c-font-weight-500);
+  --c-menu-option-bg: transparent;
+  --c-menu-option-bg-hover: var(--c-color-fill-2);
+  --c-menu-option-bg-selected: var(--c-color-fill-2);
+  --c-menu-option-bg-disabled: transparent;
+  --c-menu-option-text-color: var(--c-color-text-2);
+  --c-menu-option-text-color-hover: var(--c-color-text-1);
+  --c-menu-option-text-color-selected: var(--c-color-text-1);
+  --c-menu-option-text-color-disabled: var(--c-color-text-4);
+  --c-menu-group-title-height: var(--c-size-5);
+  --c-menu-group-title-padding-horizontal: var(--c-spacing-6);
+  --c-menu-group-title-margin-top: var(--c-spacing-4);
+  --c-menu-group-title-font-size: var(--c-font-size-body-1);
+  --c-menu-group-title-text-color: var(--c-color-text-3);
+  --c-menu-option-suffix-icon-margin-left: var(--c-spacing-6);
+  --c-menu-option-icon-margin-right: var(--c-spacing-4);
+}
+.c-menu {
+  box-sizing: border-box;
+  padding: var(--c-menu-padding-vertical) 0;
+  background-color: var(--c-menu-bg);
+  border: 1px solid var(--c-menu-border-color);
+  border-radius: var(--c-menu-border-radius);
+  box-shadow: var(--c-menu-box-shadow);
+}
+.c-menu-list {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 0;
+  list-style: none;
+}
+.c-menu-list-wrapper {
+  max-height: var(--c-menu-max-height);
+  overflow-y: auto;
+}
+.c-menu-option {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0 var(--c-menu-option-padding-horizontal);
+  color: var(--c-menu-option-text-color);
+  font-size: var(--c-menu-font-size);
+  line-height: var(--c-menu-option-height);
+  text-align: left;
+  background-color: var(--c-menu-option-bg);
+  cursor: pointer;
+}
+.c-menu-option-content {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.c-menu-option-has-suffix {
+  justify-content: space-between;
+}
+.c-menu-option-selected {
+  color: var(--c-menu-option-text-color-selected);
+  font-weight: var(--c-menu-option-font-weight-selected);
+  background-color: var(--c-menu-option-bg-selected);
+}
+.c-menu-option-active,
+.c-menu-option:not(.c-menu-option-disabled):hover {
+  color: var(--c-menu-option-text-color-hover);
+  background-color: var(--c-menu-option-bg-hover);
+  transition: all var(--c-transition-duration-1) var(--c-transition-timing-function-linear);
+}
+.c-menu-option-disabled {
+  color: var(--c-menu-option-text-color-disabled);
+  background-color: var(--c-menu-option-bg-disabled);
+  cursor: not-allowed;
+}
+.c-menu-option-icon {
+  display: inline-flex;
+  margin-right: var(--c-menu-option-icon-margin-right);
+}
+.c-menu-option-suffix {
+  margin-left: var(--c-menu-option-suffix-icon-margin-left);
+}
+.c-menu-group:first-child .c-menu-group-title {
+  margin-top: var(--c-menu-group-title-margin-top);
+}
+.c-menu-group-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.c-menu-group-title {
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: var(--c-menu-group-title-margin-top);
+  padding: 0 var(--c-menu-group-title-padding-horizontal);
+  color: var(--c-menu-group-title-text-color);
+  font-size: var(--c-menu-group-title-font-size);
+  line-height: var(--c-menu-group-title-height);
+  cursor: default;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.c-menu-submenu {
+  margin-top: calc(0px - var(--c-menu-padding-vertical));
+}
+.c-menu-empty {
+  padding: var(--c-menu-padding-vertical) var(--c-menu-option-padding-horizontal);
+}
+.c-menu.c-menu-has-footer {
+  padding-bottom: 0;
+}
+.c-menu-footer {
+  border-top: 1px solid var(--c-menu-border-color);
+}

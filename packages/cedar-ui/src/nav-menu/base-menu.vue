@@ -12,10 +12,11 @@
   </div>
 </template>
 <script lang="ts">
+import { createNamespace } from '../_utils/global-config'
 import { computed, CSSProperties, defineComponent, PropType, provide, reactive, toRefs, StyleValue } from 'vue'
 import { getPrefixCls } from '../_utils/global-config'
-import IconMenuFold from '../icon/icon-menu-fold'
-import IconMenuUnfold from '../icon/icon-menu-unfold'
+import { IconMenuFold } from '@cedarjs/icons-vue/icon-menu-fold'
+import { IconMenuUnfold } from '@cedarjs/icons-vue/icon-menu-unfold'
 import useMergeState from '../_hooks/use-merge-state'
 import { provideLevel } from './hooks/use-level'
 import { NavMenuInjectionKey } from './context'
@@ -31,7 +32,7 @@ import { TriggerProps } from '../trigger'
  * @displayName NavMenu
  */
 export default defineComponent({
-  name: 'BaseMenu',
+  name: createNamespace("base-menu").name,
   components: {
     IconMenuFold,
     IconMenuUnfold,

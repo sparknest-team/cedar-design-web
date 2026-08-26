@@ -1,8 +1,8 @@
 <template>
   <c-space size="lg">
     <c-switch :beforeChange="handleChangeIntercept" />
-    <c-switch type="round" :beforeChange="handleChangeIntercept2" />
-    <c-switch type="line" :beforeChange="handleChangeIntercept3" />
+    <c-switch variant="round" :beforeChange="handleChangeIntercept2" />
+    <c-switch variant="line" :beforeChange="handleChangeIntercept3" />
   </c-space>
 </template>
 

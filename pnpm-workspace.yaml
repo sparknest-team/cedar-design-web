@@ -8,6 +8,8 @@ catalog:
   '@types/node': ^18.7.20
 
 overrides:
+  '@vueuse/core': 12.8.2
+  '@vueuse/shared': 12.8.2
   '@vuepress/helper': 2.0.0-rc.63
   '@vuepress/plugin-active-header-links': 2.0.0-rc.63
   '@vuepress/plugin-back-to-top': 2.0.0-rc.63

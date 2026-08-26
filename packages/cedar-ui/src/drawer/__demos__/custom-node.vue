@@ -8,7 +8,7 @@
     :header="!custom.includes('hide header')"
     :footer="!custom.includes('hide footer')"
     :hide-cancel="custom.includes('hide cancel')"
-    :visible="visible"
+    :open="visible"
     @ok="handleOk"
     @cancel="handleCancel"
     unmountOnClose

@@ -8,19 +8,19 @@ import { columns } from './columns'
 
 const data = reactive([
   {
-    properties: '--',
+    properties: 'var(--c-color-bg-white)',
     description: '顶层的白色背景',
-    class: 'bg-0',
+    class: 'c-bg-0',
   },
   {
-    properties: '--',
+    properties: 'var(--c-color-bg-1)',
     description: '一般/常规',
-    class: 'bg-1',
+    class: 'c-bg-1',
   },
   {
-    properties: '--',
+    properties: 'var(--c-color-bg-2)',
     description: '重/特殊场景',
-    class: 'bg-2',
+    class: 'c-bg-2',
   },
 ])
 </script>

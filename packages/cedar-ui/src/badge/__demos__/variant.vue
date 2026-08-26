@@ -45,20 +45,20 @@
       </c-badge>
     </c-space>
     <c-space>
-      <c-badge variant="outline" content="1" type="inline" description="描述文本" />
-      <c-badge variant="outline" content="1" status="success" type="inline" description="描述文本" />
-      <c-badge variant="outline" content="1" status="warning" type="inline" description="描述文本" />
-      <c-badge variant="outline" content="1" status="danger" type="inline" description="描述文本" />
-      <c-badge variant="outline" content="1" status="primary" type="inline" description="描述文本" />
-      <c-badge variant="outline" content="1" status="info" type="inline" description="描述文本" />
+      <c-badge variant="outline" content="1" mode="inline" description="描述文本" />
+      <c-badge variant="outline" content="1" status="success" mode="inline" description="描述文本" />
+      <c-badge variant="outline" content="1" status="warning" mode="inline" description="描述文本" />
+      <c-badge variant="outline" content="1" status="danger" mode="inline" description="描述文本" />
+      <c-badge variant="outline" content="1" status="primary" mode="inline" description="描述文本" />
+      <c-badge variant="outline" content="1" status="info" mode="inline" description="描述文本" />
     </c-space>
     <c-space>
-      <c-badge variant="outline" content="1" dot description="描述文本" type="inline" />
-      <c-badge variant="outline" content="1" status="success" dot description="描述文本" type="inline" />
-      <c-badge variant="outline" content="1" status="warning" dot description="描述文本" type="inline" />
-      <c-badge variant="outline" content="1" status="danger" dot description="描述文本" type="inline" />
-      <c-badge variant="outline" content="1" status="primary" dot description="描述文本" type="inline" />
-      <c-badge variant="outline" content="1" status="info" dot description="描述文本" type="inline" />
+      <c-badge variant="outline" content="1" dot description="描述文本" mode="inline" />
+      <c-badge variant="outline" content="1" status="success" dot description="描述文本" mode="inline" />
+      <c-badge variant="outline" content="1" status="warning" dot description="描述文本" mode="inline" />
+      <c-badge variant="outline" content="1" status="danger" dot description="描述文本" mode="inline" />
+      <c-badge variant="outline" content="1" status="primary" dot description="描述文本" mode="inline" />
+      <c-badge variant="outline" content="1" status="info" dot description="描述文本" mode="inline" />
     </c-space>
   </c-space>
 </template>

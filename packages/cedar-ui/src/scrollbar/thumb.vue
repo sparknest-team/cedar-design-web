@@ -13,6 +13,7 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../_utils/global-config'
 import { computed, defineComponent, PropType, ref, watch } from 'vue'
 import { off, on } from '../_utils/dom'
 import { ThumbData, ThumbMap } from './types'
@@ -20,7 +21,7 @@ import { getPrefixCls } from '../_utils/global-config'
 import { Direction } from '../_utils/constant'
 
 export default defineComponent({
-  name: 'Thumb',
+  name: createNamespace("thumb").name,
   props: {
     data: {
       type: Object as PropType<ThumbData>,

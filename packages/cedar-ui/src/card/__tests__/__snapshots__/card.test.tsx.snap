@@ -1,12 +1,19 @@
 // Vitest Snapshot v1
 
 exports[`Card > render 1`] = `
-"<div class=\\"arco-card arco-card-size-medium arco-card-bordered\\">
-  <!---->
-  <!---->
-  <div class=\\"arco-card-body\\">
+"<div class=\\"c-card c-card--size-md c-card--variant-default c-elevation--true\\">
+  <div class=\\"c-card__floater\\">
     <!---->
-    <!---->
+    <div class=\\"c-card__container\\">
+      <!---->
+      <!---->
+      <!---->
+      <!---->
+      <!---->
+      <!---->
+      <!---->
+    </div>
   </div>
+  <div class=\\"c-card__holder\\" style=\\"width: auto; height: auto;\\"></div><span class=\\"c-card__underlay\\"></span>
 </div>"
 `;

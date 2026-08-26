@@ -9,13 +9,13 @@
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
-import { getPrefixCls } from '../_utils/global-config'
-import IconLeft from '../icon/icon-left'
-import IconRight from '../icon/icon-right'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
+import { IconLeft } from '@cedarjs/icons-vue/icon-left'
+import { IconRight } from '@cedarjs/icons-vue/icon-right'
 import { getLegalPage } from './utils'
 
 export default defineComponent({
-  name: 'StepPager',
+  name: createNamespace('pagination-step').name,
   components: {
     IconLeft,
     IconRight,

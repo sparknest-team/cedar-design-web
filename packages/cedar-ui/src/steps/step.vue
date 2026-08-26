@@ -26,16 +26,17 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../_utils/global-config'
 import { computed, defineComponent, getCurrentInstance, inject, onBeforeUnmount, reactive, ref, toRefs } from 'vue'
 import { getPrefixCls } from '../_utils/global-config'
-import IconCheck from '../icon/icon-check'
-import IconClose from '../icon/icon-close'
+import { IconCheck } from '@cedarjs/icons-vue/icon-check'
+import { IconClose } from '@cedarjs/icons-vue/icon-close'
 import { stepsInjectionKey } from './context'
 import { useIndex } from '../_hooks/use-index'
 import { stepProps } from './props'
 
 export default defineComponent({
-  name: 'Step',
+  name: createNamespace("step").name,
   components: {
     IconCheck,
     IconClose,

@@ -1,8 +1,8 @@
-import { computed, defineComponent, ref, PropType, toRefs, ComponentPublicInstance, toRef, watch, inject, StyleValue } from 'vue'
+import { computed, defineComponent, ref, toRefs, ComponentPublicInstance, toRef, watch, inject, StyleValue } from 'vue'
 import Input from '../input'
-import Trigger, { TriggerProps } from '../trigger'
+import Trigger from '../trigger'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
-import { SelectOptionInfo, FilterOption, SelectOptionData, SelectOptionGroup } from '../select/types'
+import { SelectOptionInfo, SelectOptionData } from '../select/types'
 import { isFunction, isNull, isUndefined } from '../_utils/is'
 import SelectDropdown from '../select/select-dropdown.vue'
 import Option from '../select/option.vue'
@@ -10,104 +10,15 @@ import { useSelect } from '../select/hooks/use-select'
 import { getKeyFromValue } from '../select/utils'
 import { useFormItem } from '../_hooks/use-form-item'
 import VirtualList from '../_components/virtual-list-v2'
-import { VirtualListProps } from '../_components/virtual-list-v2/interface'
-import { Size } from '../_utils/constant'
 import { GroupFieldContext, fieldInjectionKey } from '../input/context'
+import { autoCompleteProps } from './props'
 
 const { name, n, classes } = createNamespace('auto-complete')
 
 export default defineComponent({
   name,
   inheritAttrs: false,
-  props: {
-    /**
-     * @zh 绑定值
-     * @en Value
-     * @vModel
-     */
-    modelValue: {
-      type: String,
-      default: undefined,
-    },
-    /**
-     * @zh 默认值（非受控模式）
-     * @en Default value (uncontrolled mode)
-     */
-    defaultValue: {
-      type: String,
-      default: '',
-    },
-    /**
-     * @zh 是否禁用
-     * @en Whether to disable
-     */
-    disabled: {
-      type: Boolean,
-    },
-    variant: {
-      type: String as PropType<'outline' | 'default'>,
-    },
-    size: {
-      type: String as PropType<Size>,
-    },
-    /**
-     * @zh 用于自动提示的数据
-     * @en Data used for auto-complete
-     */
-    options: {
-      type: Array as PropType<(string | number | SelectOptionData | SelectOptionGroup)[]>,
-      default: () => [],
-    },
-    /**
-     * @zh 弹出框的挂载容器
-     * @en Mount container for popup
-     */
-    popupContainer: {
-      type: [String, Object] as PropType<string | HTMLElement | null | undefined>,
-    },
-    /**
-     * @zh 是否为严格校验模式
-     * @en Whether it is strict verification mode
-     */
-    strict: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 自定义选项过滤方法
-     * @en Custom option filtering method
-     */
-    filterOption: {
-      type: [Boolean, Function] as PropType<FilterOption>,
-      default: true,
-    },
-    /**
-     * @zh trigger 组件属性
-     * @en trigger props
-     * @version 2.14.0
-     */
-    triggerProps: {
-      type: Object as PropType<TriggerProps>,
-    },
-    /**
-     * @zh 是否允许清空输入框
-     * @en Whether to allow the input to be cleared
-     * @version 2.23.0
-     */
-    clearable: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 传递虚拟列表属性，传入此参数以开启虚拟滚动 [VirtualListProps](#VirtualListProps)
-     * @en Pass the virtual list attribute, pass in this parameter to turn on virtual scrolling [VirtualListProps](#VirtualListProps)
-     * @type VirtualListProps
-     * @version 2.50.0
-     */
-    virtualListProps: {
-      type: Object as PropType<VirtualListProps>,
-    },
-  },
+  props: autoCompleteProps,
   emits: {
     'update:modelValue': (value: string) => true,
     /**
@@ -169,7 +80,7 @@ export default defineComponent({
     const groupContext = inject<GroupFieldContext>(fieldInjectionKey, {} as GroupFieldContext)
     const _size = computed(() => size.value ?? groupContext?.size ?? 'md')
     const _disabled = computed(() => Boolean(disabled.value ?? groupContext?.disabled ?? false))
-    const mergedVariant = computed(() => variant.value ?? groupContext?.variant ?? 'default')
+    const mergedVariant = computed(() => variant.value ?? groupContext?.variant ?? 'filled')
     const { mergedSize, mergedDisabled, mergedError, eventHandlers } = useFormItem({
       size: _size,
       disabled: _disabled,
@@ -190,15 +101,15 @@ export default defineComponent({
     const dropdownRef = ref()
     const optionRefs = ref<Record<string, HTMLElement>>({})
 
-    const _popupVisible = ref(false)
-    const computedPopupVisible = computed(() => _popupVisible.value && validOptionInfos.value.length > 0)
+    const _open = ref(false)
+    const computedOpen = computed(() => _open.value && validOptionInfos.value.length > 0)
 
     // VirtualList
     const virtualListRef = ref()
     const component = computed(() => (props.virtualListProps ? 'div' : 'li'))
 
-    const handlePopupVisibleChange = (popupVisible: boolean) => {
-      _popupVisible.value = popupVisible
+    const handleOpenChange = (open: boolean) => {
+      _open.value = open
     }
 
     const strictFilterOption = (inputValue: string, option: SelectOptionData) => {
@@ -256,13 +167,13 @@ export default defineComponent({
       options: options,
       inputValue: computedValue,
       filterOption: mergedFilterOption,
-      popupVisible: computedPopupVisible,
+      open: computedOpen,
       valueKeys: computedValueKeys,
       component,
       dropdownRef,
       optionRefs,
       onSelect: handleSelect,
-      onPopupVisibleChange: handlePopupVisibleChange,
+      onOpenChange: handleOpenChange,
     })
 
     const getOptionContentFunc = (item: SelectOptionInfo) => {
@@ -303,10 +214,8 @@ export default defineComponent({
           v-slots={{
             default: () => [...validOptions.value.map((info) => renderOption(info as SelectOptionInfo))],
             'virtual-list': () => (
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-expect-error
               <VirtualList
-                {...props.virtualListProps}
+                {...(props.virtualListProps as any)}
                 ref={virtualListRef}
                 data={validOptions.value}
                 v-slots={{
@@ -328,17 +237,18 @@ export default defineComponent({
       <Trigger
         v-slots={{ content: renderDropdown }}
         trigger="focus"
-        position="bl"
+        placement="bl"
         animationName="slide-dynamic-origin"
         autoFitTransformOrigin
-        popupVisible={computedPopupVisible.value}
+        open={computedOpen.value}
         clickToClose={false}
         preventFocus={true}
         popupOffset={4}
         disabled={mergedDisabled.value}
         autoFitPopupWidth
         {...props.triggerProps}
-        onPopupVisibleChange={handlePopupVisibleChange}
+        onOpenChange={handleOpenChange}
+        onUpdate:open={handleOpenChange}
       >
         <div class={[classes(n()), className]} style={style as StyleValue}>
           <Input

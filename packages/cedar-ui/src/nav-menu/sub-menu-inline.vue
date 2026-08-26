@@ -42,6 +42,7 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../_utils/global-config'
 import { computed, defineComponent } from 'vue'
 import useMenuContext from './hooks/use-menu-context'
 import useMenu from './hooks/use-menu'
@@ -50,7 +51,7 @@ import MenuIndent from './indent.vue'
 import ExpandTransition from '../_components/transition/expand-transition.vue'
 
 export default defineComponent({
-  name: 'SubMenuInline',
+  name: createNamespace("sub-menu-inline").name,
   components: {
     MenuIndent,
     ExpandTransition,

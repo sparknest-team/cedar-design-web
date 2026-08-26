@@ -18,11 +18,12 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../_utils/global-config'
 import { defineComponent, PropType } from 'vue'
 import { getPrefixCls } from '../_utils/global-config'
 
 export default defineComponent({
-  name: 'FormItemMessage',
+  name: createNamespace("form-item-message").name,
   props: {
     error: {
       type: Array as PropType<string[]>,

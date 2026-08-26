@@ -38,14 +38,12 @@ export const hasEmptyStringKey = (optionInfoMap: Map<string, SelectOptionInfo>) 
 }
 
 export const createOptionInfo = (
-  option: string | number | SelectOptionData,
+  option: string | number | boolean | SelectOptionData,
   {
-    valueKey,
     fieldNames,
     origin,
     index = -1,
   }: {
-    valueKey: string
     fieldNames: Required<SelectFieldNames>
     origin: 'slot' | 'options' | 'extraOptions'
     index?: number
@@ -57,10 +55,10 @@ export const createOptionInfo = (
     return {
       raw: option,
       index,
-      key: getKeyFromValue(value, valueKey),
+      key: getKeyFromValue(value, fieldNames.value),
       origin,
       value,
-      label: option[fieldNames.label] ?? getValueString(value, valueKey),
+      label: option[fieldNames.label] ?? getValueString(value, fieldNames.value),
       render: option[fieldNames.render],
       disabled: Boolean(option[fieldNames.disabled]),
       tagProps: option[fieldNames.tagProps],
@@ -75,7 +73,7 @@ export const createOptionInfo = (
   return {
     raw,
     index,
-    key: getKeyFromValue(option, valueKey),
+    key: getKeyFromValue(option, fieldNames.value),
     origin,
     ...raw,
   }
@@ -84,12 +82,10 @@ export const createOptionInfo = (
 export const getOptionInfos = (
   options: SelectOption[],
   {
-    valueKey,
     fieldNames,
     origin,
     optionInfoMap,
   }: {
-    valueKey: string
     fieldNames: Required<SelectFieldNames>
     origin: 'options' | 'extraOptions'
     optionInfoMap: Map<string, SelectOptionInfo>
@@ -100,7 +96,6 @@ export const getOptionInfos = (
   for (const item of options) {
     if (isGroupOption(item)) {
       const options = getOptionInfos(item.options ?? [], {
-        valueKey,
         fieldNames,
         origin,
         optionInfoMap,
@@ -114,7 +109,6 @@ export const getOptionInfos = (
       }
     } else {
       const optionInfo = createOptionInfo(item, {
-        valueKey,
         fieldNames,
         origin,
       })

@@ -7,14 +7,14 @@
 // --c-color-white or --color-white
 @css-prefix: if(@cedar-vars-prefix = ~'', -, ~'--@{cedar-vars-prefix}');
 
-/******** borderSize *******/
+/******** border width *******/
 
-@border-none: 0;
-@border-1: 1px;
-@border-2: 2px;
-@border-3: 3px;
-@border-4: 4px;
-@border-5: 5px;
+@border-width-none: 0;
+@border-width-1: 1px;
+@border-width-2: 2px;
+@border-width-3: 3px;
+@border-width-4: 4px;
+@border-width-5: 5px;
 
 /******** borderStyle *******/
 
@@ -40,91 +40,91 @@
 
 /******** size *******/
 
-@size-none: 0;
-@size-1: 4px;
-@size-2: 8px;
-@size-3: 12px;
-@size-4: 16px;
-@size-5: 20px;
-@size-6: 24px;
-@size-7: 28px;
-@size-8: 32px;
-@size-9: 36px;
-@size-10: 40px;
-@size-11: 44px;
-@size-12: 48px;
-@size-13: 52px;
-@size-14: 56px;
-@size-15: 60px;
-@size-16: 64px;
-@size-17: 68px;
-@size-18: 72px;
-@size-19: 76px;
-@size-20: 80px;
-@size-21: 84px;
-@size-22: 88px;
-@size-23: 92px;
-@size-24: 96px;
-@size-25: 100px;
-@size-26: 104px;
-@size-27: 108px;
-@size-28: 112px;
-@size-29: 116px;
-@size-30: 120px;
-@size-31: 124px;
-@size-32: 128px;
-@size-33: 132px;
-@size-34: 136px;
-@size-35: 140px;
-@size-36: 144px;
-@size-37: 148px;
-@size-38: 152px;
-@size-39: 156px;
-@size-40: 160px;
-@size-41: 164px;
-@size-42: 168px;
-@size-43: 172px;
-@size-44: 176px;
-@size-45: 180px;
-@size-46: 184px;
-@size-47: 188px;
-@size-48: 192px;
-@size-49: 196px;
-@size-50: 200px;
+@__size-none: 0;
+@__size-1: 4px;
+@__size-2: 8px;
+@__size-3: 12px;
+@__size-4: 16px;
+@__size-5: 20px;
+@__size-6: 24px;
+@__size-7: 28px;
+@__size-8: 32px;
+@__size-9: 36px;
+@__size-10: 40px;
+@__size-11: 44px;
+@__size-12: 48px;
+@__size-13: 52px;
+@__size-14: 56px;
+@__size-15: 60px;
+@__size-16: 64px;
+@__size-17: 68px;
+@__size-18: 72px;
+@__size-19: 76px;
+@__size-20: 80px;
+@__size-21: 84px;
+@__size-22: 88px;
+@__size-23: 92px;
+@__size-24: 96px;
+@__size-25: 100px;
+@__size-26: 104px;
+@__size-27: 108px;
+@__size-28: 112px;
+@__size-29: 116px;
+@__size-30: 120px;
+@__size-31: 124px;
+@__size-32: 128px;
+@__size-33: 132px;
+@__size-34: 136px;
+@__size-35: 140px;
+@__size-36: 144px;
+@__size-37: 148px;
+@__size-38: 152px;
+@__size-39: 156px;
+@__size-40: 160px;
+@__size-41: 164px;
+@__size-42: 168px;
+@__size-43: 172px;
+@__size-44: 176px;
+@__size-45: 180px;
+@__size-46: 184px;
+@__size-47: 188px;
+@__size-48: 192px;
+@__size-49: 196px;
+@__size-50: 200px;
 
-@size-xs: @size-6;
-@size-sm: @size-7;
-@size-md: @size-8;
-@size-lg: @size-9;
-@size-xl: @size-10;
-@size-2xl: @size-11;
-@size-3xl: @size-12;
+@__size-xs: @__size-6;
+@__size-sm: @__size-7;
+@__size-md: @__size-8;
+@__size-lg: @__size-9;
+@__size-xl: @__size-10;
+@__size-2xl: @__size-11;
+@__size-3xl: @__size-12;
 
 /******** spacing *******/
 
-@spacing-none: 0;
-@spacing-1: 2px;
-@spacing-2: 4px;
-@spacing-3: 6px;
-@spacing-4: 8px;
-@spacing-5: 10px;
-@spacing-6: 12px;
-@spacing-7: 16px;
-@spacing-8: 20px;
-@spacing-9: 24px;
-@spacing-10: 32px;
-@spacing-11: 36px;
-@spacing-12: 40px;
-@spacing-13: 48px;
-@spacing-14: 56px;
-@spacing-15: 60px;
-@spacing-16: 64px;
-@spacing-17: 72px;
-@spacing-18: 80px;
-@spacing-19: 84px;
-@spacing-20: 96px;
-@spacing-21: 100px;
-@spacing-22: 120px;
+@__spacing-none: 0;
+@__spacing-1: 2px;
+@__spacing-2: 4px;
+@__spacing-3: 6px;
+@__spacing-4: 8px;
+@__spacing-5: 10px;
+@__spacing-6: 12px;
+@__spacing-7: 16px;
+@__spacing-8: 20px;
+@__spacing-9: 24px;
+@__spacing-10: 32px;
+@__spacing-11: 36px;
+@__spacing-12: 40px;
+@__spacing-13: 48px;
+@__spacing-14: 56px;
+@__spacing-15: 60px;
+@__spacing-16: 64px;
+@__spacing-17: 72px;
+@__spacing-18: 80px;
+@__spacing-19: 84px;
+@__spacing-20: 96px;
+@__spacing-21: 100px;
+@__spacing-22: 120px;
 
 @color-transparent: transparent;
 
@@ -176,27 +176,27 @@
 
 /******** fontSize *******/
 
-@font-size-display-3: 56px;
-@font-size-display-2: 48px;
-@font-size-display-1: 36px;
-@font-size-title-3: 24px;
-@font-size-title-2: 20px;
-@font-size-title-1: 16px;
-@font-size-body-3: 14px;
-@font-size-body-2: 13px;
-@font-size-body-1: 12px;
-@font-size-caption: 12px;
+@__font-size-display-3: 56px;
+@__font-size-display-2: 48px;
+@__font-size-display-1: 36px;
+@__font-size-title-3: 24px;
+@__font-size-title-2: 20px;
+@__font-size-title-1: 16px;
+@__font-size-body-3: 14px;
+@__font-size-body-2: 13px;
+@__font-size-body-1: 12px;
+@__font-size-caption: 12px;
 
 /******** fontWeight ********/
-@font-weight-100: 100;
-@font-weight-200: 200;
-@font-weight-300: 300;
-@font-weight-400: 400;
-@font-weight-500: 500;
-@font-weight-600: 600;
-@font-weight-700: 700;
-@font-weight-800: 800;
-@font-weight-900: 900;
+@__font-weight-100: 100;
+@__font-weight-200: 200;
+@__font-weight-300: 300;
+@__font-weight-400: 400;
+@__font-weight-500: 500;
+@__font-weight-600: 600;
+@__font-weight-700: 700;
+@__font-weight-800: 800;
+@__font-weight-900: 900;
 
 /******** Primary *******/
 
@@ -282,6 +282,39 @@
 @radius-md: var(~'--c-border-radius-md');
 @radius-lg: var(~'--c-border-radius-lg');
 @radius-circle: var(~'--c-border-radius-circle');
+
+/******** motion *******/
+
+@__transition-duration-1: 0.1s;
+@__transition-duration-2: 0.2s;
+@__transition-duration-3: 0.3s;
+@__transition-duration-4: 0.4s;
+@__transition-duration-5: 0.5s;
+@__transition-duration-loading: 1s;
+
+// 线性
+@__transition-timing-function-linear: cubic-bezier(0, 0, 1, 1);
+// 标准
+@__transition-timing-function-standard: cubic-bezier(0.34, 0.69, 0.1, 1);
+// 过冲
+@__transition-timing-function-overshoot: cubic-bezier(0.3, 1.3, 0.3, 1);
+// 减速
+@__transition-timing-function-decelerate: cubic-bezier(0.4, 0.8, 0.74, 1);
+// 加速
+@__transition-timing-function-accelerate: cubic-bezier(0.26, 0, 0.6, 0.2);
+
+/******** z-index *******/
+
+@z-index-popup-base: 1000;
+@z-index-affix: @z-index-popup-base - 1; // 999
+@z-index-popup: @z-index-popup-base; // 1000
+@z-index-drawer: @z-index-popup-base + 1; // 1001
+@z-index-modal: @z-index-drawer; // 1001
+@z-index-message: @z-index-popup-base + 3; // 1003
+@z-index-notification: @z-index-popup-base + 3; // 1003
+@z-index-image-preview: @z-index-modal; // 1001
+
+@popup-box-shadow-base: @shadow1-down;
 
 // Other
 @color-white: #ffffff;
@@ -380,15 +413,128 @@
 @dark-color-danger-light-2: rgba(var(~'--c-danger-6'), 0.35);
 @dark-color-danger-light-3: rgba(var(~'--c-danger-6'), 0.5);
 @dark-color-danger-light-4: rgba(var(~'--c-danger-6'), 0.65);
-@dark-color-success-light-1: rgb(var(~'--c-success-6'), 0.2);
-@dark-color-success-light-2: rgb(var(~'--c-success-6'), 0.35);
-@dark-color-success-light-3: rgb(var(~'--c-success-6'), 0.5);
-@dark-color-success-light-4: rgb(var(~'--c-success-6'), 0.65);
-@dark-color-warning-light-1: rgb(var(~'--c-warning-6'), 0.2);
-@dark-color-warning-light-2: rgb(var(~'--c-warning-6'), 0.35);
-@dark-color-warning-light-3: rgb(var(~'--c-warning-6'), 0.5);
-@dark-color-warning-light-4: rgb(var(~'--c-warning-6'), 0.65);
-@dark-color-link-light-1: rgb(var(~'--c-link-6'), 0.2);
-@dark-color-link-light-2: rgb(var(~'--c-link-6'), 0.35);
-@dark-color-link-light-3: rgb(var(~'--c-link-6'), 0.5);
-@dark-color-link-light-4: rgb(var(~'--c-link-6'), 0.65);
+@dark-color-success-light-1: rgba(var(~'--c-success-6'), 0.2);
+@dark-color-success-light-2: rgba(var(~'--c-success-6'), 0.35);
+@dark-color-success-light-3: rgba(var(~'--c-success-6'), 0.5);
+@dark-color-success-light-4: rgba(var(~'--c-success-6'), 0.65);
+@dark-color-warning-light-1: rgba(var(~'--c-warning-6'), 0.2);
+@dark-color-warning-light-2: rgba(var(~'--c-warning-6'), 0.35);
+@dark-color-warning-light-3: rgba(var(~'--c-warning-6'), 0.5);
+@dark-color-warning-light-4: rgba(var(~'--c-warning-6'), 0.65);
+@dark-color-link-light-1: rgba(var(~'--c-link-6'), 0.2);
+@dark-color-link-light-2: rgba(var(~'--c-link-6'), 0.35);
+@dark-color-link-light-3: rgba(var(~'--c-link-6'), 0.5);
+@dark-color-link-light-4: rgba(var(~'--c-link-6'), 0.65);
+
+/******** scale CSS var wrappers (public Less API) *******/
+@size-none: var(~'--c-size-none');
+@size-1: var(~'--c-size-1');
+@size-2: var(~'--c-size-2');
+@size-3: var(~'--c-size-3');
+@size-4: var(~'--c-size-4');
+@size-5: var(~'--c-size-5');
+@size-6: var(~'--c-size-6');
+@size-7: var(~'--c-size-7');
+@size-8: var(~'--c-size-8');
+@size-9: var(~'--c-size-9');
+@size-10: var(~'--c-size-10');
+@size-11: var(~'--c-size-11');
+@size-12: var(~'--c-size-12');
+@size-13: var(~'--c-size-13');
+@size-14: var(~'--c-size-14');
+@size-15: var(~'--c-size-15');
+@size-16: var(~'--c-size-16');
+@size-17: var(~'--c-size-17');
+@size-18: var(~'--c-size-18');
+@size-19: var(~'--c-size-19');
+@size-20: var(~'--c-size-20');
+@size-21: var(~'--c-size-21');
+@size-22: var(~'--c-size-22');
+@size-23: var(~'--c-size-23');
+@size-24: var(~'--c-size-24');
+@size-25: var(~'--c-size-25');
+@size-26: var(~'--c-size-26');
+@size-27: var(~'--c-size-27');
+@size-28: var(~'--c-size-28');
+@size-29: var(~'--c-size-29');
+@size-30: var(~'--c-size-30');
+@size-31: var(~'--c-size-31');
+@size-32: var(~'--c-size-32');
+@size-33: var(~'--c-size-33');
+@size-34: var(~'--c-size-34');
+@size-35: var(~'--c-size-35');
+@size-36: var(~'--c-size-36');
+@size-37: var(~'--c-size-37');
+@size-38: var(~'--c-size-38');
+@size-39: var(~'--c-size-39');
+@size-40: var(~'--c-size-40');
+@size-41: var(~'--c-size-41');
+@size-42: var(~'--c-size-42');
+@size-43: var(~'--c-size-43');
+@size-44: var(~'--c-size-44');
+@size-45: var(~'--c-size-45');
+@size-46: var(~'--c-size-46');
+@size-47: var(~'--c-size-47');
+@size-48: var(~'--c-size-48');
+@size-49: var(~'--c-size-49');
+@size-50: var(~'--c-size-50');
+@size-xs: var(~'--c-size-xs');
+@size-sm: var(~'--c-size-sm');
+@size-md: var(~'--c-size-md');
+@size-lg: var(~'--c-size-lg');
+@size-xl: var(~'--c-size-xl');
+@size-2xl: var(~'--c-size-2xl');
+@size-3xl: var(~'--c-size-3xl');
+@spacing-none: var(~'--c-spacing-none');
+@spacing-1: var(~'--c-spacing-1');
+@spacing-2: var(~'--c-spacing-2');
+@spacing-3: var(~'--c-spacing-3');
+@spacing-4: var(~'--c-spacing-4');
+@spacing-5: var(~'--c-spacing-5');
+@spacing-6: var(~'--c-spacing-6');
+@spacing-7: var(~'--c-spacing-7');
+@spacing-8: var(~'--c-spacing-8');
+@spacing-9: var(~'--c-spacing-9');
+@spacing-10: var(~'--c-spacing-10');
+@spacing-11: var(~'--c-spacing-11');
+@spacing-12: var(~'--c-spacing-12');
+@spacing-13: var(~'--c-spacing-13');
+@spacing-14: var(~'--c-spacing-14');
+@spacing-15: var(~'--c-spacing-15');
+@spacing-16: var(~'--c-spacing-16');
+@spacing-17: var(~'--c-spacing-17');
+@spacing-18: var(~'--c-spacing-18');
+@spacing-19: var(~'--c-spacing-19');
+@spacing-20: var(~'--c-spacing-20');
+@spacing-21: var(~'--c-spacing-21');
+@spacing-22: var(~'--c-spacing-22');
+@font-size-display-3: var(~'--c-font-size-display-3');
+@font-size-display-2: var(~'--c-font-size-display-2');
+@font-size-display-1: var(~'--c-font-size-display-1');
+@font-size-title-3: var(~'--c-font-size-title-3');
+@font-size-title-2: var(~'--c-font-size-title-2');
+@font-size-title-1: var(~'--c-font-size-title-1');
+@font-size-body-3: var(~'--c-font-size-body-3');
+@font-size-body-2: var(~'--c-font-size-body-2');
+@font-size-body-1: var(~'--c-font-size-body-1');
+@font-size-caption: var(~'--c-font-size-caption');
+@font-weight-100: var(~'--c-font-weight-100');
+@font-weight-200: var(~'--c-font-weight-200');
+@font-weight-300: var(~'--c-font-weight-300');
+@font-weight-400: var(~'--c-font-weight-400');
+@font-weight-500: var(~'--c-font-weight-500');
+@font-weight-600: var(~'--c-font-weight-600');
+@font-weight-700: var(~'--c-font-weight-700');
+@font-weight-800: var(~'--c-font-weight-800');
+@font-weight-900: var(~'--c-font-weight-900');
+@transition-duration-1: var(~'--c-transition-duration-1');
+@transition-duration-2: var(~'--c-transition-duration-2');
+@transition-duration-3: var(~'--c-transition-duration-3');
+@transition-duration-4: var(~'--c-transition-duration-4');
+@transition-duration-5: var(~'--c-transition-duration-5');
+@transition-duration-loading: var(~'--c-transition-duration-loading');
+@transition-timing-function-linear: var(~'--c-transition-timing-function-linear');
+@transition-timing-function-standard: var(~'--c-transition-timing-function-standard');
+@transition-timing-function-overshoot: var(~'--c-transition-timing-function-overshoot');
+@transition-timing-function-decelerate: var(~'--c-transition-timing-function-decelerate');
+@transition-timing-function-accelerate: var(~'--c-transition-timing-function-accelerate');

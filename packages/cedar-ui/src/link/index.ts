@@ -1,17 +1,13 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Link from './link.vue'
+import { linkProps } from './props'
 
-const Link = Object.assign(_Link, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _Link.name, _Link)
-  },
-})
+const Link = withInstall(_Link)
 
 export type LinkInstance = InstanceType<typeof _Link>
+export { linkProps }
+export type { LinkProps, LinkUnderline } from './props'
+export { Link }
+export const _LinkComponent = Link
 
 export default Link

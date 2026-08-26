@@ -22,5 +22,5 @@ import {
   IconCopy,
   IconSync,
   IconReply,
-} from '@cedar/ui'
+} from '@cedarjs/icons-vue'
 </script>

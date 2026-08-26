@@ -1,5 +1,4 @@
 import type { ExtractPropTypes, PropType } from 'vue'
-import { defineListenerProp } from '../_utils/components'
 
 /**
  * Alert 类型（状态色系，与 `Status` 对齐；瞬时消息类用 `MessageType` 含 `error`）
@@ -76,14 +75,6 @@ export const alertProps = {
     type: [Boolean, String, Number] as PropType<boolean | string | number>,
     default: false,
   },
-  /**
-   * 关闭按钮点击事件
-   */
-  onClose: defineListenerProp<(e: MouseEvent) => void>(),
-  /**
-   * 关闭过渡结束事件
-   */
-  onAfterClose: defineListenerProp<() => void>(),
 }
 
 export type AlertProps = ExtractPropTypes<typeof alertProps>

@@ -1,5 +1,5 @@
 import { reactive, toRefs, computed, ComputedRef } from 'vue'
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 import { isArray } from '../../_utils/is'
 import { TimePickerProps } from '../../time-picker/types'
 import useTimePickerValue from './use-time-picker-value'

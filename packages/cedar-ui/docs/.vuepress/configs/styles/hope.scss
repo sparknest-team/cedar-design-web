@@ -4,6 +4,26 @@
   --vp-c-accent-hover: rgb(55, 209, 204);
   --c-brand: rgb(0 190 190);
   --c-brand-light: rgb(0 190 190);
+  // 与 styles/palette.scss 对齐；宽屏再抬高，避免中间内容锁死在固定宽度
+  --content-width: 960px;
+}
+
+@media (min-width: 1440px) {
+  :root {
+    --content-width: 1080px;
+  }
+}
+
+@media (min-width: 1680px) {
+  :root {
+    --content-width: 1200px;
+  }
+}
+
+@media (min-width: 1920px) {
+  :root {
+    --content-width: 1360px;
+  }
 }
 
 * {
@@ -13,6 +33,13 @@
 .vp-page {
   margin: 0;
   max-width: unset;
+}
+
+.theme-hope-content:not(.custom),
+.vp-page-nav,
+.vp-page-meta,
+.vp-toc-placeholder {
+  max-width: var(--content-width);
 }
 
 html.dark {
@@ -76,9 +103,8 @@ td {
 
 .page {
   .page-meta,
-  .page-nav,
-  .vp-page {
-    max-width: 100%;
+  .page-nav {
+    max-width: var(--content-width);
   }
 }
 
@@ -88,7 +114,7 @@ body {
 
 .vp-page-nav,
 .vp-page-meta {
-  max-width: unset;
+  max-width: var(--content-width);
 }
 
 .vp-page > div > ul > li {

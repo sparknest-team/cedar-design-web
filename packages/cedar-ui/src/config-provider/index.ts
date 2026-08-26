@@ -1,17 +1,13 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _ConfigProvider from './config-provider.vue'
+import { configProviderProps, cedarThemes } from './props'
 
-const ConfigProvider = Object.assign(_ConfigProvider, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _ConfigProvider.name, _ConfigProvider)
-  },
-})
+const ConfigProvider = withInstall(_ConfigProvider, Object.assign(_ConfigProvider, {
+}), { components: [_ConfigProvider] })
 
 export type ConfigProviderInstance = InstanceType<typeof _ConfigProvider>
+export type { ConfigProviderProps, CedarTheme } from './props'
+export { ConfigProvider, configProviderProps, cedarThemes }
+export const _ConfigProviderComponent = ConfigProvider
 
 export default ConfigProvider

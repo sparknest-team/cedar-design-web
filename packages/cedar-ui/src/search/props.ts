@@ -7,16 +7,14 @@ export interface SearchField {
 export interface SearchProps {
   modelValue?: string
   defaultValue?: string
-  searchField?: string
   modelField?: string
   defaultField?: string
-  searchText?: string
   model?: any
   selectStyle?: any
   searchButton?: boolean
   loading?: boolean
   disabled?: boolean
-  variant?: 'outline' | 'default'
+  variant?: 'filled' | 'outlined' | 'standard'
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
   buttonText?: string
   buttonProps?: any

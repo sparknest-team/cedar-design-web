@@ -1,17 +1,16 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Spin from './spin'
+import { spinProps } from './props'
 
-const Spin = Object.assign(_Spin, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _Spin.name, _Spin)
-  },
-})
+const Spin = withInstall(_Spin, Object.assign(_Spin, {
+}), { components: [_Spin] })
 
 export type SpinInstance = InstanceType<typeof _Spin>
+
+export const _SpinComponent = Spin
+
+export { Spin }
+
+export { spinProps }
 
 export default Spin

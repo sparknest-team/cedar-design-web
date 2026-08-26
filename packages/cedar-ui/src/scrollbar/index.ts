@@ -1,18 +1,17 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Scrollbar from './scrollbar.vue'
+import { scrollbarProps } from './props'
 
-const Scrollbar = Object.assign(_Scrollbar, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _Scrollbar.name, _Scrollbar)
-  },
-})
+const Scrollbar = withInstall(_Scrollbar, Object.assign(_Scrollbar, {
+}), { components: [_Scrollbar] })
 
 export type ScrollbarInstance = InstanceType<typeof _Scrollbar>
 export type { ScrollbarProps } from './types'
+
+export const _ScrollbarComponent = Scrollbar
+
+export { Scrollbar }
+
+export { scrollbarProps }
 
 export default Scrollbar

@@ -1,6 +1,6 @@
 <template>
   <c-button type="primary" @click="handleClick">Open Drawer</c-button>
-  <c-drawer :visible="visible" :width="500" @ok="handleOk" @cancel="handleCancel" unmountOnClose>
+  <c-drawer :open="visible" :width="500" @ok="handleOk" @cancel="handleCancel" unmountOnClose>
     <template #title>Title</template>
     <div :style="{ marginBottom: '20px' }">
       You can customize modal body text by the current situation. This modal will be closed immediately once you press
@@ -8,7 +8,7 @@
     </div>
     <c-button type="primary" @click="handleNestedClick">Open Nested Drawer</c-button>
   </c-drawer>
-  <c-drawer :visible="nestedVisible" @ok="handleNestedOk" @cancel="handleNestedCancel" unmountOnClose>
+  <c-drawer :open="nestedVisible" @ok="handleNestedOk" @cancel="handleNestedCancel" unmountOnClose>
     <template #title>Title</template>
     <div>
       You can customize modal body text by the current situation. This modal will be closed immediately once you press

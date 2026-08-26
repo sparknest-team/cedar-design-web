@@ -10,7 +10,7 @@
   &-changeable {
     .c-steps-item-title,
     .c-steps-item-description {
-      transition: all @transition-duration-1 @transition-timing-function-linear;
+      transition: all var(~'--c-steps-transition-duration-1') var(~'--c-steps-transition-timing-function-linear');
     }
   }
 
@@ -21,7 +21,7 @@
       .c-steps-item-content {
         .c-steps-item-title,
         .c-steps-item-description {
-          color: @color-primary-6;
+          color: var(~'--c-steps-changeable-hover-text-color');
         }
       }
     }
@@ -43,7 +43,7 @@
 
   &-vertical &-item {
     &:not(:last-child) {
-      min-height: 90px;
+      min-height: var(~'--c-steps-vertical-item-min-height');
     }
 
     &-title::after {
@@ -61,7 +61,7 @@
   &-label-vertical &-item {
     &-content {
       display: block;
-      width: @steps-label-vertical-content-width;
+      width: var(~'--c-steps-label-vertical-content-width');
       text-align: center;
     }
 

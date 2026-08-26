@@ -1,12 +1,12 @@
 import type { ComputedRef } from 'vue'
-import { useChildren, useParent } from '@maplejs/maple-use'
-import { Size, Status } from '../_utils/constant'
+import { useChildren, useParent } from '@cedarjs/use'
+import { ComponentSize, SemanticStatus } from '../_utils/constant'
 import { ButtonVariant } from './props'
 
 export interface ButtonGroupProvider {
-  status: ComputedRef<Status>
+  status: ComputedRef<SemanticStatus>
   variant: ComputedRef<ButtonVariant>
-  size: ComputedRef<Size>
+  size: ComputedRef<ComponentSize>
   color: ComputedRef<string | undefined>
   textColor: ComputedRef<string | undefined>
   stacked: ComputedRef<boolean>

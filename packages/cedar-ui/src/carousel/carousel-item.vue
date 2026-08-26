@@ -3,6 +3,9 @@
     :class="itemCls"
     :style="itemStyle"
     :aria-hidden="!isCurrent"
+    role="group"
+    aria-roledescription="slide"
+    :aria-label="`${index + 1} of ${context.items.value.length}`"
     tabindex="-1"
   >
     <slot />
@@ -11,11 +14,11 @@
 
 <script lang="ts">
 import { defineComponent, getCurrentInstance, inject, computed, ref, onMounted, onBeforeUnmount } from 'vue'
-import { getPrefixCls } from '../_utils/global-config'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import { carouselInjectionKey, CarouselContext } from './context'
 
 export default defineComponent({
-  name: 'CarouselItem',
+  name: createNamespace('carousel-item').name,
   setup() {
     const prefixCls = getPrefixCls('carousel-item')
     const instance = getCurrentInstance()
@@ -23,7 +26,7 @@ export default defineComponent({
     const index = computed(() => context.items.value?.indexOf(instance?.uid ?? -1) ?? -1)
     const translate = ref(0)
 
-    const isCurrent = computed(() => false)
+    const isCurrent = computed(() => index.value === context.current.value)
 
     const itemCls = computed(() => [prefixCls])
 
@@ -49,7 +52,7 @@ export default defineComponent({
       return base
     })
 
-    return { itemCls, itemStyle, isCurrent }
+    return { context, index, itemCls, itemStyle, isCurrent }
   },
 })
 </script>

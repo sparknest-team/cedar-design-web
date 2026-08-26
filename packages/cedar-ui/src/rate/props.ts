@@ -1,0 +1,21 @@
+import type { ExtractPropTypes, PropType } from 'vue'
+
+export type RateColor = string | Record<string, string>
+
+export const rateProps = {
+  count: {
+    type: Number,
+    default: 5,
+    validator: (value: unknown) => Number.isInteger(value) && Number(value) > 0,
+  },
+  modelValue: { type: Number, default: undefined },
+  defaultValue: { type: Number, default: 0 },
+  allowHalf: { type: Boolean, default: false },
+  clearable: { type: Boolean, default: false },
+  grading: { type: Boolean, default: false },
+  readonly: { type: Boolean, default: false },
+  disabled: { type: Boolean, default: false },
+  color: [String, Object] as PropType<RateColor>,
+} 
+
+export type RateProps = ExtractPropTypes<typeof rateProps>

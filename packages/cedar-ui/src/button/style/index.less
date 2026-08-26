@@ -42,18 +42,18 @@
       opacity: 0;
     }
     &@{interactive-selector}:hover > .c-button--overlay {
-      background-color: #fff;
+      background-color: var(~'--c-button-overlay-color-hover-light');
       opacity: 0.08;
     }
     &@{interactive-selector}:active > .c-button--overlay {
-      background-color: #000;
+      background-color: var(~'--c-button-overlay-color-active-dark');
       opacity: 0.12;
     }
     &.c-button--disabled {
       cursor: not-allowed;
     }
     &.c-button--disabled > .c-button--overlay {
-      background-color: #fff;
+      background-color: var(~'--c-button-overlay-color-disabled');
       opacity: 0.46;
     }
   }
@@ -78,11 +78,11 @@
     color: var(~"--c-button-variant-tonal-color");
 
     @{interactive-selector}:hover > .c-button--overlay {
-      background-color: #fff;
+      background-color: var(~'--c-button-overlay-color-hover-light');
       opacity: 0.08;
     }
     @{interactive-selector}:active > .c-button--overlay {
-      background-color: #000;
+      background-color: var(~'--c-button-overlay-color-active-dark');
       opacity: 0.12;
     }
 
@@ -102,11 +102,11 @@
     }
 
     &--variant-tonal@{interactive-selector}:hover > .c-button--overlay {
-      background-color: #fff;
+      background-color: var(~'--c-button-overlay-color-hover-light');
       opacity: 0.08;
     }
     &--variant-tonal@{interactive-selector}:active > .c-button--overlay {
-      background-color: #000;
+      background-color: var(~'--c-button-overlay-color-active-dark');
       opacity: 0.12;
     }
     &--variant-tonal.c-button--status-@{status} &--underlay {
@@ -146,7 +146,7 @@
     &@{interactive-selector}.c-button--focus {
       .c-button__border-state {
         opacity: 1;
-        border-color: var(~"--c-color-outline-strong");
+        border-color: var(~"--c-color-border-3");
       }
     }
 
@@ -216,11 +216,11 @@
     }
 
     &@{interactive-selector}:hover > .c-button--overlay {
-      background-color: #000;
+      background-color: var(~'--c-button-overlay-color-active-dark');
       opacity: 0.03;
     }
     &@{interactive-selector}:active > .c-button--overlay {
-      background-color: #000;
+      background-color: var(~'--c-button-overlay-color-active-dark');
       opacity: 0.05;
     }
     &.c-button--disabled {
@@ -240,11 +240,11 @@
       }
 
       &@{interactive-selector}:hover > .c-button--overlay {
-        background-color: #000;
+        background-color: var(~'--c-button-overlay-color-active-dark');
         opacity: 0.03;
       }
       &@{interactive-selector}:active > .c-button--overlay {
-        background-color: #000;
+        background-color: var(~'--c-button-overlay-color-active-dark');
         opacity: 0.05;
       }
     }
@@ -290,7 +290,7 @@
         color: color-mix(
           in srgb,
           var(~"--c-button-variant-link-status-@{status}-color")
-            var(~"--c-button-variant-link-status-@{status}-hover-opacity", 70%),
+            var(~"--c-button-variant-link-status-@{status}-hover-opacity"),
           transparent
         );
       }
@@ -298,10 +298,7 @@
         color: color-mix(
           in srgb,
           var(~"--c-button-variant-link-status-@{status}-color")
-            var(
-              ~"--c-button-variant-link-status-@{status}-active-opacity",
-              100%
-            ),
+            var(~"--c-button-variant-link-status-@{status}-active-opacity"),
           transparent
         );
       }
@@ -320,13 +317,13 @@
       height: var(~"--c-button-size-@{size}-height");
       padding: var(~"--c-button-size-@{size}-padding");
       font-size: var(~"--c-button-size-@{size}-font-size");
-      border-radius: var(~"--c-button-size-@{size}-radius");
+      border-radius: var(~"--c-button-size-@{size}-border-radius");
 
       &.c-button--stacked {
         height: var(~"--c-button-size-@{size}-stacked-height");
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: var(~'--c-spacing-1');
       }
     }
     &.c-button--variant-link&.c-button--size-@{size} {
@@ -340,7 +337,7 @@
   .size(lg);
 
   &&--round {
-    padding: var(--button-round-padding, 6px);
+    padding: var(~'--c-button-round-padding');
     border-radius: 50%;
     height: auto;
   }
@@ -358,7 +355,7 @@
 
   &__border-state {
     z-index: 1;
-    border: 1px solid var(~"--c-color-outline-medium");
+    border: 1px solid var(~"--c-color-border-2");
   }
 
   &__content {
@@ -370,7 +367,7 @@
     cursor: default;
 
     .c-button--overlay {
-      background-color: #fff;
+      background-color: var(~'--c-button-overlay-color-disabled');
       opacity: 0.4;
       transition: opacity var(~"--c-button-transition-duration-1")
         var(~"--c-button-transition-timing-function-linear");

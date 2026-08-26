@@ -1,24 +1,19 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Descriptions from './descriptions'
 import _DescriptionsItem from './descriptions-item.vue'
+import { descriptionsItemProps, descriptionsProps } from './props'
 
-const Descriptions = Object.assign(_Descriptions, {
+const Descriptions = withInstall(_Descriptions, Object.assign(_Descriptions, {
   DescriptionsItem: _DescriptionsItem,
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _Descriptions.name, _Descriptions)
-    app.component(componentPrefix + _DescriptionsItem.name, _DescriptionsItem)
-  },
-})
+}), { components: [_Descriptions, _DescriptionsItem] })
 
 export type DescriptionsInstance = InstanceType<typeof _Descriptions>
 export type DescriptionsItemInstance = InstanceType<typeof _DescriptionsItem>
+export type { DescriptionsAlign, DescriptionsItemProps, DescriptionsProps } from './props'
 
 export type { DescData } from './types'
+export { Descriptions, descriptionsItemProps, descriptionsProps }
+export const _DescriptionsComponent = Descriptions
 
 export { _DescriptionsItem as DescriptionsItem }
 

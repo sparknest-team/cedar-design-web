@@ -48,6 +48,7 @@ export default function useImageDrag(props: ImageDragProps) {
 
   // Grab the picture and start moving: record the initial data
   const onMoveStart = (e: MouseEvent) => {
+    if (typeof window === 'undefined') return
     if (e.target !== e.currentTarget) return
     e.preventDefault && e.preventDefault()
     moving.value = true
@@ -61,6 +62,7 @@ export default function useImageDrag(props: ImageDragProps) {
   }
 
   function offEvents() {
+    if (typeof window === 'undefined') return
     off(window, 'mousemove', onMoving as any, false)
     off(window, 'mouseup', onMoveEnd as any, false)
   }

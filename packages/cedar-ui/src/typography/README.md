@@ -52,7 +52,7 @@ permalink: /components/typography/
 
 | 属性名 | 描述 | 类型 | 默认值 |
 | --- | --- | --- | :---: |
-| type | 文本类型 | `'primary' \| 'secondary' \| 'success' \| 'danger' \| 'warning'` | `-` |
+| status | 文本语义状态 | `SemanticStatus` | `-` |
 | bold | 粗体 | `boolean` | `false` |
 | mark | 添加标记样式 | `boolean \| { color: string }` | `false` |
 | underline | 下划线样式 | `boolean` | `false` |
@@ -124,5 +124,5 @@ import type {
   TypographyTitleInstance,
   TypographyTextInstance,
   EllipsisConfig,
-} from '@cedar/ui'
+} from '@cedarjs/ui'
 ```

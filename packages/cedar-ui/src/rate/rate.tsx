@@ -1,93 +1,20 @@
-import { computed, defineComponent, PropType, ref, toRef, toRefs, watch } from 'vue'
+import { computed, defineComponent, ref, toRef, toRefs, watch } from 'vue'
 import NP from 'number-precision'
-import IconStarFill from '../icon/icon-star-fill'
-import IconFaceMehFill from '../icon/icon-face-meh-fill'
-import IconFaceSmileFill from '../icon/icon-face-smile-fill'
-import IconFaceFrownFill from '../icon/icon-face-frown-fill'
+import { IconStarFill } from '@cedarjs/icons-vue/icon-star-fill'
+import { IconFaceMehFill } from '@cedarjs/icons-vue/icon-face-meh-fill'
+import { IconFaceSmileFill } from '@cedarjs/icons-vue/icon-face-smile-fill'
+import { IconFaceFrownFill } from '@cedarjs/icons-vue/icon-face-frown-fill'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
 import { useFormItem } from '../_hooks/use-form-item'
 import { isNull, isObject, isString, isUndefined } from '../_utils/is'
+import { rateProps } from './props'
 
 
 const { name } = createNamespace('rate')
 
 export default defineComponent({
   name,
-  props: {
-    /**
-     * @zh 评分的总数
-     * @en Total number of rate
-     */
-    count: {
-      type: Number,
-      default: 5,
-    },
-    /**
-     * @zh 绑定值
-     * @en Value
-     * @vModel
-     */
-    modelValue: {
-      type: Number,
-      default: undefined,
-    },
-    /**
-     * @zh 默认值
-     * @en Default Value
-     */
-    defaultValue: {
-      type: Number,
-      default: 0,
-    },
-    /**
-     * @zh 是否允许半选
-     * @en Whether to allow half selection
-     */
-    allowHalf: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否允许清除
-     * @en Whether to allow clear
-     */
-    clearable: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否开启笑脸分级
-     * @en Whether to enable smile grading
-     */
-    grading: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否为只读状态
-     * @en Whether it is readonly
-     */
-    readonly: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否禁用
-     * @en Whether to disable
-     */
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 颜色
-     * @en Color
-     * @version 2.18.0
-     */
-    color: {
-      type: [String, Object] as PropType<string | Record<string, string>>,
-    },
-  },
+  props: rateProps,
   emits: {
     'update:modelValue': (value: number) => true,
     /**
@@ -211,15 +138,6 @@ export default defineComponent({
       return <IconFaceSmileFill />
     }
 
-    const getAriaProps = (index: number, isHalf = false) => {
-      return {
-        role: 'radio',
-        'aria-checked': index + (isHalf ? 0.5 : 1) <= computedValue.value,
-        'aria-setsize': indexArray.value.length,
-        'aria-posinset': index + (isHalf ? 0.5 : 1),
-      }
-    }
-
     const renderElement = (index: number) => {
       if (props.grading) {
         return renderGradingCharacter(index, displayIndex.value)
@@ -271,14 +189,12 @@ export default defineComponent({
         <div
           class={cls}
           style={style}
-          {...(!props.allowHalf ? getAriaProps(index) : undefined)}
           onAnimationend={() => handleAnimationEnd(index)}
         >
           <div
             class={`${prefixCls}-character-left`}
             style={leftStyle}
             {...leftProps}
-            {...(props.allowHalf ? getAriaProps(index, true) : undefined)}
           >
             {renderElement(index)}
           </div>
@@ -286,7 +202,6 @@ export default defineComponent({
             class={`${prefixCls}-character-right`}
             style={rightStyle}
             {...rightProps}
-            {...(props.allowHalf ? getAriaProps(index) : undefined)}
           >
             {renderElement(index)}
           </div>
@@ -302,8 +217,36 @@ export default defineComponent({
       },
     ])
 
+    const handleKeydown = (ev: KeyboardEvent) => {
+      if (mergedDisabled.value) return
+      const step = props.allowHalf ? 0.5 : 1
+      const max = props.grading ? 5 : props.count
+      let value = computedValue.value
+      if (ev.key === 'ArrowRight' || ev.key === 'ArrowUp') value = Math.min(max, value + step)
+      else if (ev.key === 'ArrowLeft' || ev.key === 'ArrowDown') value = Math.max(0, value - step)
+      else if (ev.key === 'Home') value = 0
+      else if (ev.key === 'End') value = max
+      else return
+
+      ev.preventDefault()
+      _value.value = value
+      emit('update:modelValue', value)
+      emit('change', value)
+      eventHandlers.value?.onChange?.(ev)
+    }
+
     return () => (
-      <div class={cls.value} onMouseleave={resetHoverIndex}>
+      <div
+        class={cls.value}
+        role="slider"
+        tabindex={mergedDisabled.value ? undefined : 0}
+        aria-valuemin={0}
+        aria-valuemax={props.grading ? 5 : props.count}
+        aria-valuenow={computedValue.value}
+        aria-disabled={mergedDisabled.value || undefined}
+        onKeydown={handleKeydown}
+        onMouseleave={resetHoverIndex}
+      >
         {indexArray.value.map((_, index) => renderCharacter(index))}
       </div>
     )

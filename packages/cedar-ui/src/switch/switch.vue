@@ -3,9 +3,10 @@
     type="button"
     role="switch"
     :aria-checked="computedCheck"
+    :aria-busy="computedLoading || undefined"
     :class="cls"
     :style="buttonStyle"
-    :disabled="mergedDisabled"
+    :disabled="mergedDisabled || computedLoading"
     @click="handleClick"
     @focus="handleFocus"
     @blur="handleBlur"
@@ -22,7 +23,7 @@
     <!--  prettier-ignore  -->
     <template
       v-if="
-        type !== 'line' &&
+        variant !== 'line' &&
         size !== 'sm' &&
         ($slots.checked || checkedText || $slots.unchecked || uncheckedText)
       "
@@ -40,129 +41,20 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue'
 import { computed, defineComponent, ref, toRefs, watch } from 'vue'
-import { getPrefixCls } from '../_utils/global-config'
-import IconLoading from '../icon/icon-loading'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
+import { IconLoading } from '@cedarjs/icons-vue/icon-loading'
 import { useFormItem } from '../_hooks/use-form-item'
 import { useSize } from '../_hooks/use-size'
 import { isFunction, isNull, isUndefined } from '../_utils/is'
+import { switchProps } from './props'
 
 export default defineComponent({
-  name: 'Switch',
+  name: createNamespace('switch').name,
   components: {
     IconLoading,
   },
-  props: {
-    /**
-     * @zh 绑定值
-     * @en Value
-     */
-    modelValue: {
-      type: [String, Number, Boolean],
-      default: undefined,
-    },
-    /**
-     * @zh 默认选中状态（非受控状态）
-     * @en Default selected state (uncontrolled state)
-     */
-    defaultChecked: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否禁用
-     * @en Whether to disable
-     */
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否为加载中状态
-     * @en Whether it is loading state
-     */
-    loading: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 开关的类型
-     * @en Type of switch
-     * @values 'circle', 'round', 'line'
-     */
-    type: {
-      type: String as PropType<'circle' | 'round' | 'line'>,
-      default: 'circle',
-    },
-    /**
-     * @zh 开关的大小
-     * @en Size of switch
-     * @values 'sm', 'md', 'lg'
-     * @defaultValue 'md'
-     */
-    size: {
-      type: String as PropType<'sm' | 'md' | 'lg'>,
-    },
-    /**
-     * @zh 选中时的值
-     * @en Value when checked
-     * @version 2.12.0
-     */
-    checkedValue: {
-      type: [String, Number, Boolean],
-      default: true,
-    },
-    /**
-     * @zh 未选中时的值
-     * @en Value when unchecked
-     * @version 2.12.0
-     */
-    uncheckedValue: {
-      type: [String, Number, Boolean],
-      default: false,
-    },
-    /**
-     * @zh 选中时的开关颜色
-     * @en The color of the switch when checked
-     * @version 2.12.0
-     */
-    checkedColor: {
-      type: String,
-    },
-    /**
-     * @zh 未选中时的开关颜色
-     * @en The color of the switch when unchecked
-     * @version 2.12.0
-     */
-    uncheckedColor: {
-      type: String,
-    },
-    /**
-     * @zh switch 状态改变前的钩子， 返回 false 或者返回 Promise 且被 reject 则停止切换。
-     * @en before-change hook before the switch state changes. If false is returned or a Promise is returned and then is rejected, will stop switching
-     * @version 2.37.0
-     */
-    beforeChange: {
-      type: Function as PropType<(newValue: string | number | boolean) => Promise<boolean | void> | boolean | void>,
-    },
-    /**
-     * @zh 打开状态时的文案（`type='line'`和`size='sm'`时不生效）
-     * @en Copywriting when opened (not effective when `type='line'` and `size='sm'`)
-     * @version 2.45.0
-     */
-    checkedText: {
-      type: String,
-    },
-    /**
-     * @zh 关闭状态时的文案（`type='line'`和`size='sm'`时不生效）
-     * @en Copywriting when closed (not effective when `type='line'` and `size='sm'`)
-     * @version 2.45.0
-     */
-    uncheckedText: {
-      type: String,
-    },
-  },
+  props: switchProps,
   emits: {
     'update:modelValue': (value: boolean | string | number) => true,
     /**
@@ -267,25 +159,25 @@ export default defineComponent({
 
     const cls = computed(() => [
       prefixCls,
-      `${prefixCls}-type-${props.type}`,
+      `${prefixCls}--variant-${props.variant}`,
       {
         [`${prefixCls}-sm`]: mergedSize.value === 'sm' || mergedSize.value === 'xs',
         [`${prefixCls}-checked`]: computedCheck.value,
         [`${prefixCls}-disabled`]: mergedDisabled.value,
         [`${prefixCls}-loading`]: computedLoading.value,
-        [`${prefixCls}-custom-color`]: props.type === 'line' && (props.checkedColor || props.uncheckedColor),
+        [`${prefixCls}-custom-color`]: props.variant === 'line' && (props.checkedColor || props.uncheckedColor),
       },
     ])
 
     const buttonStyle = computed(() => {
       if (computedCheck.value && props.checkedColor) {
-        return props.type === 'line'
-          ? { '--custom-color': props.checkedColor }
+        return props.variant === 'line'
+          ? { '--c-switch-custom-color': props.checkedColor }
           : { backgroundColor: props.checkedColor }
       }
       if (!computedCheck.value && props.uncheckedColor) {
-        return props.type === 'line'
-          ? { '--custom-color': props.uncheckedColor }
+        return props.variant === 'line'
+          ? { '--c-switch-custom-color': props.uncheckedColor }
           : { backgroundColor: props.uncheckedColor }
       }
       return undefined

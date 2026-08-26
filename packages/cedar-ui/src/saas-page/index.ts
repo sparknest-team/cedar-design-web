@@ -1,12 +1,11 @@
-import type { App } from 'vue'
 import _SaasPage from './saas-page.vue'
-import { getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
+import { saasPageProps } from './props'
 
-export const SaasPage = Object.assign(_SaasPage, {
-  install: (app: App, options?: any) => {
-    const componentPrefix = getComponentPrefix(options)
-    app.component(componentPrefix + SaasPage.name, SaasPage)
-  },
-})
-export type SaasPageInstance = InstanceType<typeof SaasPage>
+export const SaasPage = withInstall(_SaasPage)
+export type SaasPageInstance = InstanceType<typeof _SaasPage>
+export const _SaasPageComponent = SaasPage
+
+export { saasPageProps }
+
 export default SaasPage

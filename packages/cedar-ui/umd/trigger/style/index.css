@@ -1,0 +1,94 @@
+.c--box {
+  box-sizing: border-box;
+}
+.c--box * {
+  box-sizing: border-box;
+}
+.c--lock {
+  overflow: hidden !important;
+}
+.c--ellipsis {
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.c--inline-block {
+  display: inline-block;
+}
+.c--flex {
+  display: flex;
+}
+.c--inline-flex {
+  display: inline-flex;
+}
+/******** borderSize *******/
+/******** borderStyle *******/
+/******** radius *******/
+/******** shadow distance *******/
+/******** size *******/
+/******** spacing *******/
+/******** shadow *******/
+/******** opacity *******/
+/******** fontSize *******/
+/******** fontWeight ********/
+/******** Primary *******/
+/******** success *******/
+/******** info *******/
+/******** warning *******/
+/******** danger *******/
+/******** link *******/
+/******** radius *******/
+/******** motion *******/
+/******** z-index *******/
+/******** scale CSS var wrappers (public Less API) *******/
+/********* icon hover *********/
+:root {
+  --c-trigger-arrow-bg: var(--c-color-bg-5);
+  --c-trigger-size-arrow-width: var(--c-size-2);
+  --c-trigger-arrow-border-radius: var(--c-border-radius-sm);
+}
+.c-trigger-wrapper {
+  display: inline-block;
+}
+.c-trigger-popup {
+  position: absolute;
+  z-index: 1000;
+}
+.c-trigger-arrow {
+  position: absolute;
+  z-index: -1;
+  display: block;
+  box-sizing: border-box;
+  width: var(--c-trigger-size-arrow-width);
+  height: var(--c-trigger-size-arrow-width);
+  background-color: var(--c-trigger-arrow-bg);
+  content: '';
+}
+.c-trigger-popup[trigger-placement='top'] .c-trigger-arrow,
+.c-trigger-popup[trigger-placement='tl'] .c-trigger-arrow,
+.c-trigger-popup[trigger-placement='tr'] .c-trigger-arrow {
+  border-top: none;
+  border-left: none;
+  border-bottom-right-radius: var(--c-trigger-arrow-border-radius);
+}
+.c-trigger-popup[trigger-placement='bottom'] .c-trigger-arrow,
+.c-trigger-popup[trigger-placement='bl'] .c-trigger-arrow,
+.c-trigger-popup[trigger-placement='br'] .c-trigger-arrow {
+  border-right: none;
+  border-bottom: none;
+  border-top-left-radius: var(--c-trigger-arrow-border-radius);
+}
+.c-trigger-popup[trigger-placement='left'] .c-trigger-arrow,
+.c-trigger-popup[trigger-placement='lt'] .c-trigger-arrow,
+.c-trigger-popup[trigger-placement='lb'] .c-trigger-arrow {
+  border-bottom: none;
+  border-left: none;
+  border-top-right-radius: var(--c-trigger-arrow-border-radius);
+}
+.c-trigger-popup[trigger-placement='right'] .c-trigger-arrow,
+.c-trigger-popup[trigger-placement='rt'] .c-trigger-arrow,
+.c-trigger-popup[trigger-placement='rb'] .c-trigger-arrow {
+  border-top: none;
+  border-right: none;
+  border-bottom-left-radius: var(--c-trigger-arrow-border-radius);
+}

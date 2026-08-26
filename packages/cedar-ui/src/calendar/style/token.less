@@ -1,39 +1,90 @@
 @import '../../style/theme/index.less';
 
-@calendar-color-border: var(~'--c-color-neutral-3');
-
-@calendar-header-padding-horizontal: 24px;
-@calendar-header-padding-vertical: 24px;
-
-@calendar-panel-date-cell-padding-vertical: 4px;
-@calendar-panel-date-cell-circle-height: 24px;
-@calendar-panel-year-cell-padding-vertical: 4px;
-@calendar-panel-year-cell-circle-height: 24px;
-
-@calendar-color-switch-icon: var(~'--c-color-text-2');
-@calendar-color-bg-switch-icon: var(~'--c-color-bg-5');
-@calendar-color-bg-switch-icon_hover: var(~'--c-color-fill-3');
-
-@calendar-color-text-title: var(~'--c-color-text-1');
-@calendar-color-cell-text-in-view: var(~'--c-color-text-1');
-@calendar-color-cell-text-not-in-view: var(~'--c-color-text-4');
-@calendar-color-bg-circle_selected: @color-primary-6;
-@calendar-color-bg-cell-in-range: var(~'--c-color-primary-light-1');
-@calendar-color-bg-cell-disabled: var(~'--c-color-fill-1');
-@calendar-color-text-cell-range-boundary: var(~'--c-color-white');
-@calendar-color-bg-cell-range-boundary: @color-primary-6;
-@calendar-color-bg-cell-hover-in-range: var(~'--c-color-primary-light-1');
-@calendar-color-text-cell-hover-range-boundary: var(~'--c-color-text-1');
-@calendar-color-bg-cell-hover-range-boundary: var(~'--c-color-primary-light-2');
-
-@calendar-panel-color-text-cell_hover: @color-primary-6;
-@calendar-panel-color-bg-cell_hover: var(~'--c-color-primary-light-1');
-@calendar-panel-color-text-cell_selected: var(~'--c-color-white');
-@calendar-panel-color-bg-cell_selected: @color-primary-6;
-@calendar-panel-color-current-time-dot: @color-primary-6;
-
-// 不放到风格配置平台
-@calendar-panel-cell-boundary-border-radius: (
-  (@calendar-panel-date-cell-circle-height + @calendar-panel-date-cell-padding-vertical * 2) / 2
+:root {
+  --c-calendar-border-color: var(~'--c-color-neutral-3');
+  --c-calendar-header-padding-horizontal: var(~'--c-spacing-9');
+  --c-calendar-header-padding-vertical: var(~'--c-spacing-9');
+  --c-calendar-header-height: var(~'--c-size-7');
+  --c-calendar-header-value-font-size: var(~'--c-font-size-title-2');
+  --c-calendar-header-value-font-weight: var(~'--c-font-weight-500');
+  --c-calendar-header-icon-size: var(~'--c-size-7');
+  --c-calendar-header-icon-margin: var(~'--c-spacing-6');
+  --c-calendar-header-icon-font-size: var(~'--c-font-size-body-1');
+  --c-calendar-header-icon-border-radius: var(~'--c-border-radius-circle');
+  --c-calendar-header-icon-box-shadow: 0 0 0 var(~'--c-spacing-1') var(~'--c-calendar-box-shadow');
+  --c-calendar-header-value-year-width: var(~'--c-size-25');
+  --c-calendar-header-value-year-margin: var(~'--c-spacing-4');
+  --c-calendar-header-value-month-width: var(~'--c-size-19');
+  --c-calendar-header-value-month-margin: var(~'--c-spacing-10');
+  --c-calendar-month-row-height: var(~'--c-size-25');
+  --c-calendar-week-list-item-padding-vertical: var(~'--c-spacing-8');
+  --c-calendar-week-list-item-padding-horizontal: var(~'--c-spacing-7');
+  --c-calendar-week-list-text-color: #7d7d7f;
+  --c-calendar-date-padding: var(~'--c-spacing-5');
+  --c-calendar-date-circle-size: var(~'--c-size-7');
+  --c-calendar-date-circle-border-radius: var(~'--c-border-radius-circle');
+  --c-calendar-date-content-height: 70px;
+  --c-calendar-date-value-font-size: var(~'--c-font-size-title-1');
+  --c-calendar-date-value-font-weight: var(~'--c-font-weight-500');
+  --c-calendar-cell-today-border-color: rgb(var(~'--c-primary-6'));
+  --c-calendar-cell-text-selected: var(~'--c-color-white');
+  --c-calendar-mode-year-min-width: 820px;
+  --c-calendar-mode-year-body-padding: var(~'--c-spacing-6');
+  --c-calendar-year-cell-padding-vertical: var(~'--c-spacing-8');
+  --c-calendar-year-cell-padding-horizontal: var(~'--c-spacing-4');
+  --c-calendar-month-with-days-row-height: 26px;
+  --c-calendar-month-title-padding-vertical: var(~'--c-spacing-5');
+  --c-calendar-month-title-padding-horizontal: var(~'--c-spacing-3');
+  --c-calendar-month-title-font-size: var(~'--c-font-size-title-1');
+  --c-calendar-month-title-font-weight: var(~'--c-font-weight-500');
+  --c-calendar-month-cell-font-size: var(~'--c-font-size-body-1');
+  --c-calendar-month-cell-week-list-item-padding: var(~'--c-spacing-3');
+  --c-calendar-month-cell-date-padding: var(~'--c-spacing-1');
+  --c-calendar-month-cell-date-value-font-size: var(~'--c-font-size-body-3');
+  --c-calendar-month-cell-date-circle-size: 22px;
+  --c-calendar-panel-header-padding-vertical: var(~'--c-spacing-4');
+  --c-calendar-panel-header-padding-horizontal: var(~'--c-spacing-7');
+  --c-calendar-panel-header-value-font-size: var(~'--c-font-size-body-3');
+  --c-calendar-panel-header-value-line-height: var(~'--c-size-6');
+  --c-calendar-panel-header-icon-size: var(~'--c-size-6');
+  --c-calendar-panel-header-icon-margin: var(~'--c-spacing-1');
+  --c-calendar-panel-body-padding-vertical: 14px;
+  --c-calendar-panel-body-padding-horizontal: var(~'--c-spacing-7');
+  --c-calendar-panel-week-list-item-height: var(~'--c-size-8');
+  --c-calendar-panel-week-list-item-font-weight: var(~'--c-font-weight-400');
+  --c-calendar-panel-cell-padding-vertical: var(~'--c-spacing-1');
+  --c-calendar-panel-date-value-font-size: var(~'--c-font-size-body-3');
+  --c-calendar-panel-date-cell-padding-vertical: var(~'--c-spacing-2');
+  --c-calendar-panel-date-cell-circle-height: var(~'--c-size-6');
+  --c-calendar-panel-year-mode-cell-padding-vertical: var(~'--c-spacing-2');
+  --c-calendar-panel-year-cell-padding-vertical: var(~'--c-spacing-2');
+  --c-calendar-panel-year-cell-circle-height: var(~'--c-size-6');
+  --c-calendar-panel-year-date-value-border-radius: var(~'--c-spacing-6');
+  --c-calendar-panel-cell-selected-border-radius: var(~'--c-border-radius-circle');
+  --c-calendar-panel-today-dot-size: var(~'--c-spacing-2');
+  --c-calendar-panel-today-dot-offset: var(~'--c-spacing-1');
+  --c-calendar-panel-footer-height: 38px;
+  --c-calendar-switch-icon: var(~'--c-color-text-2');
+  --c-calendar-bg-switch-icon: var(~'--c-color-bg-5');
+  --c-calendar-bg-switch-icon-hover: var(~'--c-color-fill-3');
+  --c-calendar-text-title-color: var(~'--c-color-text-1');
+  --c-calendar-cell-text-in-view: var(~'--c-color-text-1');
+  --c-calendar-cell-text-not-in-view: var(~'--c-color-text-4');
+  --c-calendar-bg-circle-selected: rgb(var(~'--c-primary-6'));
+  --c-calendar-bg-cell-in-range: var(~'--c-color-primary-light-1');
+  --c-calendar-bg-cell-disabled: var(~'--c-color-fill-1');
+  --c-calendar-text-color-cell-range-boundary: var(~'--c-color-white');
+  --c-calendar-bg-cell-range-boundary: rgb(var(~'--c-primary-6'));
+  --c-calendar-bg-cell-hover-in-range: var(~'--c-color-primary-light-1');
+  --c-calendar-text-color-cell-hover-range-boundary: var(~'--c-color-text-1');
+  --c-calendar-bg-cell-hover-range-boundary: var(~'--c-color-primary-light-2');
+  --c-calendar-panel-text-color-cell-hover: rgb(var(~'--c-primary-6'));
+  --c-calendar-panel-bg-cell-hover: var(~'--c-color-primary-light-1');
+  --c-calendar-panel-text-color-cell-selected: var(~'--c-color-white');
+  --c-calendar-panel-bg-cell-selected: rgb(var(~'--c-primary-6'));
+  --c-calendar-panel-color-current-time-dot: rgb(var(~'--c-primary-6'));
+  --c-calendar-panel-cell-boundary-border-radius: (
+  (var(~'--c-calendar-panel-date-cell-circle-height') + var(~'--c-calendar-panel-date-cell-padding-vertical') * 2) / 2
 );
-@calendar-color-box-shadow: var(~'--c-color-primary-light-3');
+  --c-calendar-box-shadow: var(~'--c-color-primary-light-3');
+}

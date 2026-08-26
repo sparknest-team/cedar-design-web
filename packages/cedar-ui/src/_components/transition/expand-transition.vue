@@ -12,29 +12,30 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../../_utils/global-config'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'ExpandTransition',
+  name: createNamespace("expand-transition").name,
   setup() {
     return {
-      onBeforeEnter(el: HTMLDivElement) {
-        el.style.height = '0'
+      onBeforeEnter(el: Element) {
+        ;(el as HTMLElement).style.height = '0'
       },
-      onEnter(el: HTMLDivElement) {
-        el.style.height = `${el.scrollHeight}px`
+      onEnter(el: Element) {
+        ;(el as HTMLElement).style.height = `${el.scrollHeight}px`
       },
-      onAfterEnter(el: HTMLDivElement) {
-        el.style.height = ''
+      onAfterEnter(el: Element) {
+        ;(el as HTMLElement).style.height = ''
       },
-      onBeforeLeave(el: HTMLDivElement) {
-        el.style.height = `${el.scrollHeight}px`
+      onBeforeLeave(el: Element) {
+        ;(el as HTMLElement).style.height = `${el.scrollHeight}px`
       },
-      onLeave(el: HTMLDivElement) {
-        el.style.height = `0`
+      onLeave(el: Element) {
+        ;(el as HTMLElement).style.height = `0`
       },
-      onAfterLeave(el: HTMLElement) {
-        el.style.height = ``
+      onAfterLeave(el: Element) {
+        ;(el as HTMLElement).style.height = ``
       },
     }
   },

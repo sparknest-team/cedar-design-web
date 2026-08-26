@@ -15,7 +15,7 @@ export const useResizeObserver = ({
     if (!elementRef.value) return
     resizeObserver = new ResizeObserver((entries: ResizeObserverEntry[]) => {
       const entry = entries[0]
-      isFunction(onResize) && onResize(entry)
+      isFunction(onResize) && onResize()
     })
     resizeObserver.observe(elementRef.value)
   }

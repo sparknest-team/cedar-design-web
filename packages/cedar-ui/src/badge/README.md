@@ -16,7 +16,7 @@ permalink: /components/badge/
 
 ### 内联类型
 
-`default slot`和 `description` 同时为空时，会变为内联类型，也可以通过 `type` 属性指定为内联类型。
+`default slot`和 `description` 同时为空时，会变为内联类型，也可以通过 `mode` 属性指定为内联类型。
 同时可以通过 `description` 属性指定描述文本。
 
 <demo src="./__demos__/inline.vue"></demo>
@@ -78,15 +78,15 @@ permalink: /components/badge/
 | content         | 徽标显示的内容                                                                     | `number \| string`                                             |     `-`     |
 | max             | 徽标最大显示数值，如果content超过这个数值会显示为`${max}+`，content 为数字时有效。 | `number`                                                       |    `99`     |
 | dot             | 显示为小红点                                                                       | `boolean`                                                      |   `false`   |
-| offset-x        | 设置徽标位置的偏移X，type为inline时无效。                                          | `number`                                                       |     `0`     |
+| offset-x        | 设置徽标位置的偏移X，mode为inline时无效。                                          | `number`                                                       |     `0`     |
 | offset-y        | 设置徽标位置的偏移Y。                                                              | `number`                                                       |     `0`     |
 | color           | 徽标的背景色，也可以设置自定义色值                                                 | `string`                                                       |     `-`     |
 | text-color      | 徽标显示的内容颜色                                                                 | `string`                                                       |     `-`     |
-| type            | 徽标的类型                                                                         | `'floating' \| 'inline'`                                       | `floating`  |
-| position        | 徽标的位置，type 为 floating 时有效                                                | `'top-right' \| 'top-left' \| 'bottom-right' \| 'bottom-left'` | `top-right` |
-| inline-position | 徽标的位置，type 为 inline 时有效                                                  | `'start' \| 'end'`                                             |    `end`    |
+| mode            | 徽标的类型                                                                         | `'floating' \| 'inline'`                                       | `floating`  |
+| position        | 徽标的位置，mode 为 floating 时有效                                                | `'top-right' \| 'top-left' \| 'bottom-right' \| 'bottom-left'` | `top-right` |
+| inline-position | 徽标的位置，mode 为 inline 时有效                                                  | `'start' \| 'end'`                                             |    `end`    |
 | size            | 徽标的尺寸                                                                         | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`                         |    `md`     |
-| status          | 徽标的状态                                                                         | `'default' \| 'success' \| 'warning' \| 'danger'`              |  `danger`   |
+| status          | 徽标的状态                                                                         | `SemanticStatus`                                               |  `default`  |
 | show            | 是否显示徽标                                                                       | `boolean`                                                      |   `true`    |
 | show-zero       | 徽标为0时是否显示                                                                  | `boolean`                                                      |   `false`   |
 | variant         | 徽标的变体                                                                         | `'outline' \| 'default'`                                       |  `default`  |
@@ -110,7 +110,7 @@ permalink: /components/badge/
 | --c-badge-description-size-md-font-size             | 14px                      |
 | --c-badge-description-size-lg-font-size             | 16px                      |
 | --c-badge-description-size-xl-font-size             | 18px                      |
-| --c-badge-description-text-color                    | var(--c-color-text)       |
+| --c-badge-description-text-color                    | var(--c-color-text-1)     |
 | --c-badge-size-xs-font-size                         | 12px                      |
 | --c-badge-size-sm-font-size                         | 12px                      |
 | --c-badge-size-md-font-size                         | 14px                      |
@@ -150,35 +150,31 @@ permalink: /components/badge/
 | --c-badge-size-md-border-radius                     | 20px                      |
 | --c-badge-size-lg-border-radius                     | 20px                      |
 | --c-badge-size-xl-border-radius                     | 20px                      |
-| --c-badge-bg-color                                  | #ef4444                   |
-| --c-badge-status-info-bg-color                      | var(--c-color-info)       |
-| --c-badge-status-success-bg-color                   | var(--c-color-success)    |
-| --c-badge-status-warning-bg-color                   | var(--c-color-warning)    |
-| --c-badge-status-danger-bg-color                    | var(--c-color-danger)     |
-| --c-badge-status-primary-bg-color                   | var(--c-color-primary)    |
+| --c-badge-bg-color                                  | @color-danger-6           |
+| --c-badge-status-info-bg-color                      | @color-info-6             |
+| --c-badge-status-success-bg-color                   | @color-success-6          |
+| --c-badge-status-warning-bg-color                   | @color-warning-6          |
+| --c-badge-status-danger-bg-color                    | @color-danger-6           |
+| --c-badge-status-primary-bg-color                   | @color-primary-6          |
 | --c-badge-text-color                                | var(--c-color-white)      |
-| --c-badge-status-info-text-color                    | var(--c-color-on-info)    |
-| --c-badge-status-success-text-color                 | var(--c-color-on-success) |
-| --c-badge-status-warning-text-color                 | var(--c-color-on-warning) |
-| --c-badge-status-danger-text-color                  | var(--c-color-on-danger)  |
-| --c-badge-status-primary-text-color                 | var(--c-color-on-primary) |
+| --c-badge-status-info-text-color                    | var(--c-color-white)      |
+| --c-badge-status-success-text-color                 | var(--c-color-white)      |
+| --c-badge-status-warning-text-color                 | var(--c-color-white)      |
+| --c-badge-status-danger-text-color                  | var(--c-color-white)      |
+| --c-badge-status-primary-text-color                 | var(--c-color-white)      |
 | --c-badge-variant-outline-bg-color                  | transparent               |
-| --c-badge-variant-outline-status-info-bg-color      | var(--c-color-on-info)    |
-| --c-badge-variant-outline-status-success-bg-color   | var(--c-color-on-success) |
-| --c-badge-variant-outline-status-warning-bg-color   | var(--c-color-on-warning) |
-| --c-badge-variant-outline-status-danger-bg-color    | var(--c-color-on-danger)  |
-| --c-badge-variant-outline-status-primary-bg-color   | var(--c-color-on-primary) |
-| --c-badge-variant-outline-text-color                | #ef4444                   |
-| --c-badge-variant-outline-status-info-text-color    | var(--c-color-info)       |
-| --c-badge-variant-outline-status-success-text-color | var(--c-color-success)    |
-| --c-badge-variant-outline-status-warning-text-color | var(--c-color-warning)    |
-| --c-badge-variant-outline-status-danger-text-color  | var(--c-color-danger)     |
-| --c-badge-variant-outline-status-primary-text-color | var(--c-color-primary)    |
+| --c-badge-variant-outline-text-color                | @color-danger-6           |
+| --c-badge-variant-outline-status-info-text-color    | @color-info-6             |
+| --c-badge-variant-outline-status-success-text-color | @color-success-6          |
+| --c-badge-variant-outline-status-warning-text-color | @color-warning-6          |
+| --c-badge-variant-outline-status-danger-text-color  | @color-danger-6           |
+| --c-badge-variant-outline-status-primary-text-color | @color-primary-6          |
+| --c-badge-border-color                              | var(--c-color-bg-2)       |
 
 ### 类型定义
 
 组件导出以下类型定义
 
 ```ts
-import type { BadgeInstance } from '@cedar/ui'
+import type { BadgeInstance } from '@cedarjs/ui'
 ```

@@ -52,7 +52,7 @@ permalink: /components/card/
 
 ### 自定义插槽
 
-`cover` 、`title-action` 、`sub-title` 、`description` 、`action` 插槽可以用于自定义卡片内容。
+`cover`、`title-action`、`subtitle`、`description`、`action` 插槽可以用于自定义卡片内容。
 
 <demo src="./__demos__/slots.vue"></demo>
 
@@ -62,15 +62,16 @@ permalink: /components/card/
 
 | 属性         | 说明                                       | 类型                               | 默认值   |
 | ------------ | ------------------------------------------ | ---------------------------------- | -------- |
-| bordered     | 是否有边框                                 | `boolean`                          | `true`   |
+| variant      | 卡片外观                                   | `'default' \| 'outlined' \| 'tonal'` | `'default'` |
 | top-divider  | 是否有上分割线                             | `boolean`                          | `false`  |
 | loading      | 是否为加载中                               | `boolean`                          | `false`  |
 | hoverable    | 是否可悬浮                                 | `boolean`                          | `false`  |
-| size         | 卡片尺寸                                   | `lg \| md \| sm`                   | `md`     |
-| header-style | 自定义标题区域样式                         | `object`                           | -        |
-| body-style   | 内容区域自定义样式                         | `object`                           | -        |
+| size         | 卡片尺寸                                   | `'sm' \| 'md'`                    | `md`     |
+| title-style  | 自定义标题区域样式                         | `CSSProperties`                    | `{}`     |
 | title        | 卡片标题                                   | `string`                           | -        |
-| body-padding | content的边距                              | `boolean`                          | `true`   |
+| subtitle     | 卡片副标题                                 | `string`                           | -        |
+| description  | 卡片描述                                   | `string`                           | -        |
+| bottom-divider | 是否有下分割线                           | `boolean`                          | `false`  |
 | direction    | 卡片布局                                   | `row` \| `column` \| `row-reverse` | `column` |
 | elevation    | 卡片阴影，最大值为9，传入true时，阴影值为1 | `boolean` \| `number` \| `string`  | `1`      |
 
@@ -80,7 +81,7 @@ permalink: /components/card/
 | ------------ | -------------------- | ---- |
 | cover        | 卡片封面             | -    |
 | title-action | 卡片右上角的操作区域 | -    |
-| sub-title    | 卡片副标题           | -    |
+| subtitle     | 卡片副标题           | -    |
 | description  | 卡片描述             | -    |
 | action       | 卡片底部的操作组     | -    |
 
@@ -88,12 +89,12 @@ permalink: /components/card/
 
 | 变量名            | 默认值                   |
 | ----------------- | ------------------------ |
-| --c-card-bg-color | var(--c-color-container) |
+| --c-card-bg-color | var(--c-color-bg-2) |
 
 ### 类型定义
 
 组件导出以下类型定义
 
 ```ts
-import type { CardProps } from '@cedar/ui'
+import type { CardProps } from '@cedarjs/ui'
 ```

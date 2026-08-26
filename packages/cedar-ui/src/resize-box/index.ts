@@ -1,17 +1,16 @@
-import { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _ResizeBox from './resize-box.vue'
+import { resizeBoxProps } from './props'
 
-const ResizeBox = Object.assign(_ResizeBox, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _ResizeBox.name, _ResizeBox)
-  },
-})
+const ResizeBox = withInstall(_ResizeBox, Object.assign(_ResizeBox, {
+}), { components: [_ResizeBox] })
 
 export type ResizeBoxInstance = InstanceType<typeof _ResizeBox>
+
+export const _ResizeBoxComponent = ResizeBox
+
+export { ResizeBox }
+
+export { resizeBoxProps }
 
 export default ResizeBox

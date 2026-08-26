@@ -7,27 +7,27 @@
   width: 100%;
   &-popup .c-select-popup {
     background-color: var(~'--c-color-bg-popup');
-    border: 1px solid @auto-complete-popup-color-border;
-    border-radius: @auto-complete-popup-border-radius;
-    box-shadow: @auto-complete-popup-box-shadow;
+    border: 1px solid var(~'--c-auto-complete-popup-border-color');
+    border-radius: var(~'--c-auto-complete-popup-border-radius');
+    box-shadow: var(~'--c-auto-complete-popup-box-shadow');
 
     .c-select-popup-inner {
-      max-height: @auto-complete-popup-max-height;
-      padding: @auto-complete-popup-padding-vertical 0;
+      max-height: var(~'--c-auto-complete-popup-max-height');
+      padding: var(~'--c-auto-complete-popup-padding-vertical') 0;
     }
 
     .c-select-option {
-      height: @auto-complete-option-height;
-      padding: 0 @auto-complete-option-padding-horizontal;
-      font-size: @auto-complete-popup-font-size;
+      height: var(~'--c-auto-complete-option-height');
+      padding: 0 var(~'--c-auto-complete-option-padding-horizontal');
+      font-size: var(~'--c-auto-complete-popup-font-size');
       line-height: $height;
 
       .option-color(@status) {
         @class-suffix: if(@status = default, ~'', ~'-@{status}');
 
         &@{class-suffix} {
-          color: ~'@{auto-complete-option-color-text_@{status}}';
-          background-color: ~'@{auto-complete-option-color-bg_@{status}}';
+          color: var(~'--c-auto-complete-option-text-color-@{status}');
+          background-color: var(~'--c-auto-complete-option-bg-@{status}');
         }
       }
 
@@ -38,7 +38,7 @@
       .option-color(disabled);
 
       &-selected {
-        font-weight: @auto-complete-option-font-weight_selected;
+        font-weight: var(~'--c-auto-complete-option-font-weight-selected');
       }
     }
   }

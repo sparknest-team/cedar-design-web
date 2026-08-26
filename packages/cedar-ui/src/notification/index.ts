@@ -4,6 +4,8 @@ import { MESSAGE_TYPES, MessageType } from '../_utils/constant'
 import { getOverlay } from '../_utils/dom'
 import { isFunction, isString, isUndefined } from '../_utils/is'
 import NotificationList from './notification-list'
+import _Notification from './notification.vue'
+import { notificationProps } from './props'
 import { NotificationConfig, NotificationItem, NotificationMethod, NotificationPosition } from './types'
 
 type _NotificationConfig = NotificationConfig & {
@@ -158,5 +160,11 @@ const Notification = {
 }
 
 export type { NotificationMethod, NotificationConfig, NotificationReturn } from './types'
+export type { NotificationProps } from './props'
+export type NotificationInstance = InstanceType<typeof _Notification>
+export { notificationProps }
+export const _NotificationComponent = _Notification
+
+export { Notification }
 
 export default Notification

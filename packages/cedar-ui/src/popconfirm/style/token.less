@@ -1,20 +1,27 @@
 @import '../../style/theme/index.less';
 
-@popconfirm-padding-horizontal: @spacing-7;
-@popconfirm-padding-vertical: @spacing-7;
-@popconfirm-margin-title-bottom: @spacing-7;
-@popconfirm-size-title-icon: 18px;
-@popconfirm-margin-icon-right: @spacing-4;
-@popconfirm-margin-button-left: @spacing-4;
-@popconfirm-font-title-size: @font-size-body-3;
-@popconfirm-color-title-text: var(~'--c-color-text-1');
+/******** Popconfirm CSS Variables *******/
+:root {
+  --c-popconfirm-padding-horizontal: var(~'--c-spacing-7');
+  --c-popconfirm-padding-vertical: var(~'--c-spacing-7');
+  --c-popconfirm-title-margin-bottom: var(~'--c-spacing-7');
+  --c-popconfirm-title-icon-size: 18px;
+  --c-popconfirm-icon-margin-right: var(~'--c-spacing-4');
+  --c-popconfirm-button-margin-left: var(~'--c-spacing-4');
+  --c-popconfirm-title-font-size: var(~'--c-font-size-body-3');
+  --c-popconfirm-title-text-color: var(~'--c-color-text-1');
+  --c-popconfirm-content-text-color: var(~'--c-color-text-2');
+  --c-popconfirm-font-size: var(~'--c-font-size-body-3');
+  --c-popconfirm-line-height: var(~'--c-line-height');
 
-@popconfirm-color-content-bg: var(~'--c-color-bg-popup');
-@popconfirm-color-border: var(~'--c-color-neutral-3');
-@popconfirm-border-radius: @radius-md;
-@popconfirm-shadow: @shadow2-down;
-// type
-@popconfirm-color-title-icon: @color-warning-6;
-@popconfirm-color-title-icon_danger: @color-danger-6;
-@popconfirm-color-title-icon_success: @color-success-6;
-@popconfirm-color-title-icon_info: @color-primary-6;
+  --c-popconfirm-content-bg: var(~'--c-color-bg-popup');
+  --c-popconfirm-border-color: var(~'--c-color-neutral-3');
+  --c-popconfirm-border-width: var(~'--c-border-width-1');
+  --c-popconfirm-border-radius: var(~'--c-border-radius-md');
+  --c-popconfirm-box-shadow: var(~'--c-shadow2-down');
+
+  --c-popconfirm-title-icon-color: rgb(var(~'--c-warning-6'));
+  --c-popconfirm-status-danger-title-icon-color: rgb(var(~'--c-danger-6'));
+  --c-popconfirm-status-success-title-icon-color: rgb(var(~'--c-success-6'));
+  --c-popconfirm-status-info-title-icon-color: rgb(var(~'--c-primary-6'));
+}

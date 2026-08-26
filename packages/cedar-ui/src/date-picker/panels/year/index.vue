@@ -26,8 +26,9 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../../../_utils/global-config'
 import { computed, defineComponent, PropType, toRefs } from 'vue'
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 import { getPrefixCls } from '../../../_utils/global-config'
 import { dayjs } from '../../../_utils/date'
 import type { Cell, DisabledDate, HeaderIcons, HeaderOperations, IsSameTime } from '../../types'
@@ -42,7 +43,7 @@ const CELL_COUNT = ROW_COUNT * COL_COUNT
 const SPAN = 10
 
 export default defineComponent({
-  name: 'YearPanel',
+  name: createNamespace('date-picker-year-panel').name,
   components: {
     PanelHeader,
     PanelBody,

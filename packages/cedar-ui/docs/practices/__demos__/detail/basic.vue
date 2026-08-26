@@ -1,6 +1,6 @@
 <template>
   <Affix :offsetTop="genTabOffsetTop()">
-    <div class="px-16 py-12 bg-0">
+    <div class="px-16 py-12 c-bg-0">
       <Breadcrumb :routes="routes">
         <template #item-render="{ route }">
           <span v-if="!route.path">
@@ -13,34 +13,41 @@
       </Breadcrumb>
     </div>
   </Affix>
-  <div class="m-24 bg-0">
-    <Tabs :body-padding="false" default-active-key="3">
-      <TabPane key="1" title="基础信息">基础信息</TabPane>
-      <TabPane key="2" title="关键线索">关键线索</TabPane>
-      <TabPane key="3" title="商务信息">
-        <Space :size="24" class="p-24" direction="column" fill>
-          <!--card-->
-          <div>
-            <div class="mb-16">
-              <div class="text-subtitle-2-semibold">贷款信息</div>
+  <div class="m-24 c-bg-0">
+    <Tabs :body-padding="false" default-active="3">
+      <TabsNavs>
+        <TabNav key="1" title="基础信息" />
+        <TabNav key="2" title="关联线索" />
+        <TabNav key="3" title="商务信息" />
+      </TabsNavs>
+      <TabsItems>
+        <TabItem key="1">基础信息</TabItem>
+        <TabItem key="2">关联线索</TabItem>
+        <TabItem key="3">
+          <Space :size="24" class="p-24" direction="column" fill>
+            <!--card-->
+            <div>
+              <div class="mb-16">
+                <div class="c-text-subtitle-2-semibold">贷款信息</div>
+              </div>
+              <Descriptions :column="4" :data="descData" layout="vertical"></Descriptions>
             </div>
-            <Descriptions :column="4" :data="descData" layout="vertical"></Descriptions>
-          </div>
-          <!--card-->
-          <div>
-            <div class="mb-16">
-              <div class="text-subtitle-2-semibold">贷款信息</div>
+            <!--card-->
+            <div>
+              <div class="mb-16">
+                <div class="c-text-subtitle-2-semibold">贷款信息</div>
+              </div>
+              <Descriptions :column="4" :data="descData" layout="vertical"></Descriptions>
             </div>
-            <Descriptions :column="4" :data="descData" layout="vertical"></Descriptions>
-          </div>
-        </Space>
-      </TabPane>
+          </Space>
+        </TabItem>
+      </TabsItems>
     </Tabs>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { Space, Tabs, TabPane, Affix, Breadcrumb, Descriptions } from '@cedar/ui'
+import { Space, Tabs, TabNav, TabItem, TabsNavs, TabsItems, Affix, Breadcrumb, Descriptions } from '@cedarjs/ui'
 import { ref } from 'vue'
 
 const descData = ref([

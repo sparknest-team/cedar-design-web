@@ -1,252 +1,158 @@
 <template>
-  <c-button @click="init">加载表单值</c-button>
-  <c-button @click="setValue">setValue</c-button>
   <c-filter-form
-    ref="filterForm"
-    v-model:model="filter"
-    :components="components"
-    :field-config="fieldConfig"
+    v-model="filter"
+    v-model:collapsed="collapsed"
+    :fields="fields"
+    :field-map="fieldMap"
+    :options-map="optionsMap"
     :rules="rules"
-    :store="store"
-    remember-user-key="rememberUserKey1"
-    show-remember-selections
-    @change="search"
+    @change="onChange"
   >
-    <template #suffix>
+    <template #actions>
       <c-space>
-        <c-button @click="reset">reset</c-button>
-        <c-button @click="get">get</c-button>
+        <c-button @click="reset">重置</c-button>
+        <c-button status="primary" @click="search">搜索</c-button>
       </c-space>
     </template>
   </c-filter-form>
+  <pre class="demo-filter-json">{{ filter }}</pre>
 </template>
+
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
-const store = {
-  select1: [] as any[],
-  select2: [
-    {
-      label: 'text1',
-      value: 1,
+import { ref } from 'vue'
+import {
+  Cascader,
+  DateRange,
+  Input,
+  Select,
+  type FilterFormField,
+  type FilterFormFieldMap,
+} from '@cedarjs/ui'
+
+const collapsed = ref(true)
+const filter = ref<Record<string, unknown>>({
+  region: undefined,
+  status: undefined,
+  keyword: '',
+  timeRange: undefined,
+})
+
+const fieldMap: FilterFormFieldMap = {
+  cascader: {
+    component: Cascader,
+  },
+  select: {
+    component: Select,
+    optionsFromMap: true,
+  },
+  input: {
+    component: Input,
+    valueEvent: 'update:modelValue',
+  },
+  'date-range': {
+    component: DateRange,
+    defaultProps: {
+      valueFormat: 'timestamp',
     },
-    {
-      label: 'text2',
-      value: 2,
-    },
-    {
-      label: 'text3',
-      value: 3,
-    },
+  },
+}
+
+const optionsMap = {
+  status: [
+    { label: '待处理', value: 'pending' },
+    { label: '进行中', value: 'doing' },
+    { label: '已完成', value: 'done' },
+  ],
+  owner: [
+    { label: '张三', value: 'zhang' },
+    { label: '李四', value: 'li' },
   ],
 }
-const fetch = ref<any>()
 
-onMounted(() => {
-  // eslint-disable-next-line
-  // @ts-ignore
-  // TODO: 脱敏迁移 - 暂时注释 @maplejs/mfe-vue3
-  // import('@maplejs/mfe-vue3').then(({ Fetch }) => {
-    fetch.value = Fetch.genFetch('powerpro-api-dev.xxxx.com', {
-      needAuth: true,
-      openLoginInterceptor: false,
-      commonParams: {
-        appId: '100360',
-        appVer: '1.0.1',
-      },
-    })
-    console.log('fetch.value', fetch.value)
-  })
-})
-setTimeout(() => {
-  store.select2 = [
-    {
-      label: 'text1',
-      value: 1,
-    },
-    {
-      label: 'text2',
-      value: 2,
-    },
-  ]
-}, 1000)
 const rules = {
-  rating: [{ required: true, message: '必输项' }],
-}
-const filterForm = ref()
-
-class Filter {
-  a = 1
-  child = {}
+  keyword: [{ maxLength: 50, message: '最多 50 个字符' }],
 }
 
-const filter = ref<any>(new Filter())
-const fieldConfig = {
-  // select2: {
-  //   required: true,
-  // },
-  // select3: {
-  //   removeIfNotInOptions: false,
-  // },
-}
-const components = [
+const fields: FilterFormField[] = [
   {
-    name: 'cascader',
+    type: 'cascader',
+    field: 'region',
+    label: '地区',
     props: {
-      prop: 'child.cascader',
-      label: 'cascader',
-      required: true,
       clearable: true,
+      pathMode: true,
       options: [
         {
           value: 'beijing',
-          label: 'Beijing',
+          label: '北京',
           children: [
-            {
-              value: 'chaoyang',
-              label: 'ChaoYang',
-              children: [
-                {
-                  value: 'datunli',
-                  label: 'Datunli',
-                },
-              ],
-            },
-            {
-              value: 'haidian1',
-              label: 'Haidian',
-            },
-            {
-              value: 'dongcheng',
-              label: 'Dongcheng',
-            },
-            {
-              value: 'xicheng',
-              label: 'Xicheng',
-              children: [
-                {
-                  value: 'jinrongjie',
-                  label: 'Jinrongjie',
-                },
-                {
-                  value: 'tianqiao',
-                  label: 'Tianqiao',
-                },
-              ],
-            },
+            { value: 'chaoyang', label: '朝阳' },
+            { value: 'haidian', label: '海淀' },
           ],
         },
         {
           value: 'shanghai',
-          label: 'Shanghai',
-          children: [
-            {
-              value: 'huangpu',
-              label: 'Huangpu',
-            },
-          ],
+          label: '上海',
+          children: [{ value: 'huangpu', label: '黄浦' }],
         },
       ],
     },
   },
   {
-    name: 'select',
-    props: {
-      prop: 'select2',
-      label: 'select2',
-      clearable: true,
-      onChange: (v) => {
-        console.log('test', v)
-      },
-    },
+    type: 'select',
+    field: 'status',
+    label: '状态',
+    props: { clearable: true, placeholder: '全部' },
   },
   {
-    name: 'select',
-    props: {
-      prop: 'select3',
-      label: 'select3',
-      clearable: true,
-      options: [
-        { label: 'text1', value: 11 },
-        { label: 'text2', value: 2 },
-      ],
-    },
+    type: 'select',
+    field: 'owner',
+    label: '负责人',
+    props: { clearable: true, placeholder: '全部' },
   },
   {
-    name: 'select',
-    props: {
-      prop: 'select4',
-      label: 'select4',
-      clearable: true,
-      multiple: true,
-      placeholder: '全部',
-      options: [
-        { label: 'text1', value: 11 },
-        { label: 'text2', value: 2 },
-      ],
-    },
+    type: 'input',
+    field: 'keyword',
+    label: '关键词',
+    autoEmitChange: false,
+    props: { clearable: true, placeholder: '回车或失焦触发' },
   },
   {
-    name: 'input',
-    props: {
-      prop: 'rating',
-      label: '评分',
-      clearable: true,
-      autoEmitChange: false,
-    },
-  },
-  {
-    name: 'people-select',
-    props: {
-      prop: 'people',
-      label: 'people-select',
-      clearable: true,
-    },
-  },
-  {
-    name: 'select',
-    props: {
-      prop: 'select_t1',
-      label: 'select_t1',
-      clearable: true,
-    },
-  },
-  {
-    name: 'date-range-picker',
-    props: {
-      prop: 'startTimeArr',
-      clearable: true,
-      label: '执行时间',
-      align: 'right',
-      showTime: true,
-    },
+    type: 'date-range',
+    field: 'timeRange',
+    label: '时间范围',
+    gridItemProps: { span: 2 },
+    props: { clearable: true, showTime: true },
   },
 ]
 
+function onChange(_value: Record<string, unknown>, field: string) {
+  console.log('[FilterForm] change', field)
+}
+
 function search() {
-  console.log('search')
-  console.log(filter.value)
-}
-
-function save() {
-  filterForm.value.saveStorageData()
-}
-
-function init() {
-  filterForm.value.loadStorageData()
-}
-
-function setValue() {
-  filter.value.select3 = 11
-}
-
-function get() {
-  console.log(filter.value)
+  console.log('[FilterForm] search', filter.value)
 }
 
 function reset() {
   filter.value = {
-    child: {},
+    region: undefined,
+    status: undefined,
+    keyword: '',
+    timeRange: undefined,
   }
 }
 </script>
-<style lang="scss" scoped></style>
+
+<style scoped>
+.demo-filter-json {
+  margin-top: 16px;
+  padding: 12px 16px;
+  border-radius: 4px;
+  background: var(--color-fill-2, #f2f3f5);
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+</style>

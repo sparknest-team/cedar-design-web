@@ -1,0 +1,389 @@
+.c--box {
+  box-sizing: border-box;
+}
+.c--box * {
+  box-sizing: border-box;
+}
+.c--lock {
+  overflow: hidden !important;
+}
+.c--ellipsis {
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.c--inline-block {
+  display: inline-block;
+}
+.c--flex {
+  display: flex;
+}
+.c--inline-flex {
+  display: inline-flex;
+}
+/******** borderSize *******/
+/******** borderStyle *******/
+/******** radius *******/
+/******** shadow distance *******/
+/******** size *******/
+/******** spacing *******/
+/******** shadow *******/
+/******** opacity *******/
+/******** fontSize *******/
+/******** fontWeight ********/
+/******** Primary *******/
+/******** success *******/
+/******** info *******/
+/******** warning *******/
+/******** danger *******/
+/******** link *******/
+/******** radius *******/
+/******** motion *******/
+/******** z-index *******/
+/******** scale CSS var wrappers (public Less API) *******/
+/********* icon hover *********/
+:root {
+  --c-alert-padding-vertical: 8px;
+  --c-alert-padding-horizontal: 16px;
+  --c-alert-padding-vertical-with-title: 16px;
+  --c-alert-padding-horizontal-with-title: 16px;
+  --c-alert-border-radius: 4px;
+  --c-alert-border-width: 1px;
+  --c-alert-font-size-content: 14px;
+  --c-alert-font-size-title: 16px;
+  --c-alert-font-weight-title: 500;
+  --c-alert-line-height: 1.5715;
+  --c-alert-line-height-title: 1.5;
+  --c-alert-title-margin-bottom: 4px;
+  --c-alert-icon-size: 16px;
+  --c-alert-icon-margin-right: 8px;
+  --c-alert-action-margin-left: 12px;
+  --c-alert-close-margin-left: 8px;
+  --c-alert-standard-info-bg: rgb(var(--c-blue-1));
+  --c-alert-standard-info-border: rgb(var(--c-blue-3));
+  --c-alert-standard-info-title: rgb(var(--c-blue-7));
+  --c-alert-standard-info-content: rgb(var(--c-blue-7));
+  --c-alert-standard-info-icon: rgb(var(--c-blue-6));
+  --c-alert-standard-success-bg: rgb(var(--c-success-1));
+  --c-alert-standard-success-border: rgb(var(--c-success-3));
+  --c-alert-standard-success-title: rgb(var(--c-success-7));
+  --c-alert-standard-success-content: rgb(var(--c-success-7));
+  --c-alert-standard-success-icon: rgb(var(--c-success-6));
+  --c-alert-standard-warning-bg: rgb(var(--c-warning-1));
+  --c-alert-standard-warning-border: rgb(var(--c-warning-3));
+  --c-alert-standard-warning-title: rgb(var(--c-warning-7));
+  --c-alert-standard-warning-content: rgb(var(--c-warning-7));
+  --c-alert-standard-warning-icon: rgb(var(--c-warning-6));
+  --c-alert-standard-danger-bg: rgb(var(--c-danger-1));
+  --c-alert-standard-danger-border: rgb(var(--c-danger-3));
+  --c-alert-standard-danger-title: rgb(var(--c-danger-7));
+  --c-alert-standard-danger-content: rgb(var(--c-danger-7));
+  --c-alert-standard-danger-icon: rgb(var(--c-danger-6));
+  --c-alert-standard-default-bg: var(--c-color-fill-2);
+  --c-alert-standard-default-border: var(--c-color-border-2);
+  --c-alert-standard-default-title: var(--c-color-text-1);
+  --c-alert-standard-default-content: var(--c-color-text-2);
+  --c-alert-standard-default-icon: var(--c-color-text-2);
+  --c-alert-tonal-info-bg: rgb(var(--c-blue-1));
+  --c-alert-tonal-info-title: rgb(var(--c-blue-7));
+  --c-alert-tonal-info-content: rgb(var(--c-blue-7));
+  --c-alert-tonal-info-icon: rgb(var(--c-blue-6));
+  --c-alert-tonal-success-bg: rgb(var(--c-success-1));
+  --c-alert-tonal-success-title: rgb(var(--c-success-7));
+  --c-alert-tonal-success-content: rgb(var(--c-success-7));
+  --c-alert-tonal-success-icon: rgb(var(--c-success-6));
+  --c-alert-tonal-warning-bg: rgb(var(--c-warning-1));
+  --c-alert-tonal-warning-title: rgb(var(--c-warning-7));
+  --c-alert-tonal-warning-content: rgb(var(--c-warning-7));
+  --c-alert-tonal-warning-icon: rgb(var(--c-warning-6));
+  --c-alert-tonal-danger-bg: rgb(var(--c-danger-1));
+  --c-alert-tonal-danger-title: rgb(var(--c-danger-7));
+  --c-alert-tonal-danger-content: rgb(var(--c-danger-7));
+  --c-alert-tonal-danger-icon: rgb(var(--c-danger-6));
+  --c-alert-tonal-default-bg: var(--c-color-fill-2);
+  --c-alert-tonal-default-title: var(--c-color-text-1);
+  --c-alert-tonal-default-content: var(--c-color-text-2);
+  --c-alert-tonal-default-icon: var(--c-color-text-2);
+  --c-alert-outlined-info-border: rgb(var(--c-blue-6));
+  --c-alert-outlined-info-title: rgb(var(--c-blue-7));
+  --c-alert-outlined-info-content: rgb(var(--c-blue-7));
+  --c-alert-outlined-info-icon: rgb(var(--c-blue-6));
+  --c-alert-outlined-success-border: rgb(var(--c-success-6));
+  --c-alert-outlined-success-title: rgb(var(--c-success-7));
+  --c-alert-outlined-success-content: rgb(var(--c-success-7));
+  --c-alert-outlined-success-icon: rgb(var(--c-success-6));
+  --c-alert-outlined-warning-border: rgb(var(--c-warning-6));
+  --c-alert-outlined-warning-title: rgb(var(--c-warning-7));
+  --c-alert-outlined-warning-content: rgb(var(--c-warning-7));
+  --c-alert-outlined-warning-icon: rgb(var(--c-warning-6));
+  --c-alert-outlined-danger-border: rgb(var(--c-danger-6));
+  --c-alert-outlined-danger-title: rgb(var(--c-danger-7));
+  --c-alert-outlined-danger-content: rgb(var(--c-danger-7));
+  --c-alert-outlined-danger-icon: rgb(var(--c-danger-6));
+  --c-alert-outlined-default-border: var(--c-color-border-2);
+  --c-alert-outlined-default-title: var(--c-color-text-1);
+  --c-alert-outlined-default-content: var(--c-color-text-2);
+  --c-alert-outlined-default-icon: var(--c-color-text-2);
+}
+.c-alert {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  padding: var(--c-alert-padding-vertical) var(--c-alert-padding-horizontal);
+  overflow: hidden;
+  font-size: var(--c-alert-font-size-content);
+  line-height: var(--c-alert-line-height);
+  text-align: left;
+  border-radius: var(--c-alert-border-radius);
+  border: var(--c-alert-border-width) solid transparent;
+}
+.c-alert--with-title {
+  align-items: flex-start;
+  padding: var(--c-alert-padding-vertical-with-title) var(--c-alert-padding-horizontal-with-title);
+}
+.c-alert--center {
+  justify-content: center;
+}
+.c-alert--center .c-alert__body {
+  flex: initial;
+}
+.c-alert--banner {
+  border: none;
+  border-radius: 0;
+}
+.c-alert__icon {
+  display: inline-flex;
+  align-items: center;
+  margin-right: var(--c-alert-icon-margin-right);
+  font-size: var(--c-alert-icon-size);
+}
+.c-alert__body {
+  position: relative;
+  flex: 1;
+}
+.c-alert__title {
+  margin-bottom: var(--c-alert-title-margin-bottom);
+  font-weight: var(--c-alert-font-weight-title);
+  font-size: var(--c-alert-font-size-title);
+  line-height: var(--c-alert-line-height-title);
+}
+.c-alert__content {
+  word-break: break-word;
+}
+.c-alert__action {
+  flex-shrink: 0;
+  margin-left: var(--c-alert-action-margin-left);
+}
+.c-alert__close-btn {
+  flex-shrink: 0;
+  margin-left: var(--c-alert-close-margin-left);
+  cursor: pointer;
+}
+.c-alert--standard.c-alert--info {
+  background-color: var(--c-alert-standard-info-bg);
+  border-color: var(--c-alert-standard-info-border);
+}
+.c-alert--standard.c-alert--info .c-alert__icon {
+  color: var(--c-alert-standard-info-icon);
+}
+.c-alert--standard.c-alert--info .c-alert__title {
+  color: var(--c-alert-standard-info-title);
+}
+.c-alert--standard.c-alert--info .c-alert__content {
+  color: var(--c-alert-standard-info-content);
+}
+.c-alert--standard.c-alert--success {
+  background-color: var(--c-alert-standard-success-bg);
+  border-color: var(--c-alert-standard-success-border);
+}
+.c-alert--standard.c-alert--success .c-alert__icon {
+  color: var(--c-alert-standard-success-icon);
+}
+.c-alert--standard.c-alert--success .c-alert__title {
+  color: var(--c-alert-standard-success-title);
+}
+.c-alert--standard.c-alert--success .c-alert__content {
+  color: var(--c-alert-standard-success-content);
+}
+.c-alert--standard.c-alert--warning {
+  background-color: var(--c-alert-standard-warning-bg);
+  border-color: var(--c-alert-standard-warning-border);
+}
+.c-alert--standard.c-alert--warning .c-alert__icon {
+  color: var(--c-alert-standard-warning-icon);
+}
+.c-alert--standard.c-alert--warning .c-alert__title {
+  color: var(--c-alert-standard-warning-title);
+}
+.c-alert--standard.c-alert--warning .c-alert__content {
+  color: var(--c-alert-standard-warning-content);
+}
+.c-alert--standard.c-alert--danger {
+  background-color: var(--c-alert-standard-danger-bg);
+  border-color: var(--c-alert-standard-danger-border);
+}
+.c-alert--standard.c-alert--danger .c-alert__icon {
+  color: var(--c-alert-standard-danger-icon);
+}
+.c-alert--standard.c-alert--danger .c-alert__title {
+  color: var(--c-alert-standard-danger-title);
+}
+.c-alert--standard.c-alert--danger .c-alert__content {
+  color: var(--c-alert-standard-danger-content);
+}
+.c-alert--standard.c-alert--default {
+  background-color: var(--c-alert-standard-default-bg);
+  border-color: var(--c-alert-standard-default-border);
+}
+.c-alert--standard.c-alert--default .c-alert__icon {
+  color: var(--c-alert-standard-default-icon);
+}
+.c-alert--standard.c-alert--default .c-alert__title {
+  color: var(--c-alert-standard-default-title);
+}
+.c-alert--standard.c-alert--default .c-alert__content {
+  color: var(--c-alert-standard-default-content);
+}
+.c-alert--tonal.c-alert--info {
+  background-color: var(--c-alert-tonal-info-bg);
+  border-color: transparent;
+}
+.c-alert--tonal.c-alert--info .c-alert__icon {
+  color: var(--c-alert-tonal-info-icon);
+}
+.c-alert--tonal.c-alert--info .c-alert__title {
+  color: var(--c-alert-tonal-info-title);
+}
+.c-alert--tonal.c-alert--info .c-alert__content {
+  color: var(--c-alert-tonal-info-content);
+}
+.c-alert--tonal.c-alert--success {
+  background-color: var(--c-alert-tonal-success-bg);
+  border-color: transparent;
+}
+.c-alert--tonal.c-alert--success .c-alert__icon {
+  color: var(--c-alert-tonal-success-icon);
+}
+.c-alert--tonal.c-alert--success .c-alert__title {
+  color: var(--c-alert-tonal-success-title);
+}
+.c-alert--tonal.c-alert--success .c-alert__content {
+  color: var(--c-alert-tonal-success-content);
+}
+.c-alert--tonal.c-alert--warning {
+  background-color: var(--c-alert-tonal-warning-bg);
+  border-color: transparent;
+}
+.c-alert--tonal.c-alert--warning .c-alert__icon {
+  color: var(--c-alert-tonal-warning-icon);
+}
+.c-alert--tonal.c-alert--warning .c-alert__title {
+  color: var(--c-alert-tonal-warning-title);
+}
+.c-alert--tonal.c-alert--warning .c-alert__content {
+  color: var(--c-alert-tonal-warning-content);
+}
+.c-alert--tonal.c-alert--danger {
+  background-color: var(--c-alert-tonal-danger-bg);
+  border-color: transparent;
+}
+.c-alert--tonal.c-alert--danger .c-alert__icon {
+  color: var(--c-alert-tonal-danger-icon);
+}
+.c-alert--tonal.c-alert--danger .c-alert__title {
+  color: var(--c-alert-tonal-danger-title);
+}
+.c-alert--tonal.c-alert--danger .c-alert__content {
+  color: var(--c-alert-tonal-danger-content);
+}
+.c-alert--tonal.c-alert--default {
+  background-color: var(--c-alert-tonal-default-bg);
+  border-color: transparent;
+}
+.c-alert--tonal.c-alert--default .c-alert__icon {
+  color: var(--c-alert-tonal-default-icon);
+}
+.c-alert--tonal.c-alert--default .c-alert__title {
+  color: var(--c-alert-tonal-default-title);
+}
+.c-alert--tonal.c-alert--default .c-alert__content {
+  color: var(--c-alert-tonal-default-content);
+}
+.c-alert--outlined.c-alert--info {
+  background-color: transparent;
+  border-color: var(--c-alert-outlined-info-border);
+}
+.c-alert--outlined.c-alert--info .c-alert__icon {
+  color: var(--c-alert-outlined-info-icon);
+}
+.c-alert--outlined.c-alert--info .c-alert__title {
+  color: var(--c-alert-outlined-info-title);
+}
+.c-alert--outlined.c-alert--info .c-alert__content {
+  color: var(--c-alert-outlined-info-content);
+}
+.c-alert--outlined.c-alert--success {
+  background-color: transparent;
+  border-color: var(--c-alert-outlined-success-border);
+}
+.c-alert--outlined.c-alert--success .c-alert__icon {
+  color: var(--c-alert-outlined-success-icon);
+}
+.c-alert--outlined.c-alert--success .c-alert__title {
+  color: var(--c-alert-outlined-success-title);
+}
+.c-alert--outlined.c-alert--success .c-alert__content {
+  color: var(--c-alert-outlined-success-content);
+}
+.c-alert--outlined.c-alert--warning {
+  background-color: transparent;
+  border-color: var(--c-alert-outlined-warning-border);
+}
+.c-alert--outlined.c-alert--warning .c-alert__icon {
+  color: var(--c-alert-outlined-warning-icon);
+}
+.c-alert--outlined.c-alert--warning .c-alert__title {
+  color: var(--c-alert-outlined-warning-title);
+}
+.c-alert--outlined.c-alert--warning .c-alert__content {
+  color: var(--c-alert-outlined-warning-content);
+}
+.c-alert--outlined.c-alert--danger {
+  background-color: transparent;
+  border-color: var(--c-alert-outlined-danger-border);
+}
+.c-alert--outlined.c-alert--danger .c-alert__icon {
+  color: var(--c-alert-outlined-danger-icon);
+}
+.c-alert--outlined.c-alert--danger .c-alert__title {
+  color: var(--c-alert-outlined-danger-title);
+}
+.c-alert--outlined.c-alert--danger .c-alert__content {
+  color: var(--c-alert-outlined-danger-content);
+}
+.c-alert--outlined.c-alert--default {
+  background-color: transparent;
+  border-color: var(--c-alert-outlined-default-border);
+}
+.c-alert--outlined.c-alert--default .c-alert__icon {
+  color: var(--c-alert-outlined-default-icon);
+}
+.c-alert--outlined.c-alert--default .c-alert__title {
+  color: var(--c-alert-outlined-default-title);
+}
+.c-alert--outlined.c-alert--default .c-alert__content {
+  color: var(--c-alert-outlined-default-content);
+}
+.zoom-in-top-leave-active {
+  transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease, margin 0.3s ease;
+  overflow: hidden;
+}
+.zoom-in-top-leave-to {
+  max-height: 0 !important;
+  opacity: 0;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}

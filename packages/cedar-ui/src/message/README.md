@@ -111,5 +111,5 @@ permalink: /components/message/
 ### 类型定义
 
 ```ts
-import type { MessageMethod, MessageConfig, MessageReturn, MessagePosition } from '@cedar/ui'
+import type { MessageMethod, MessageConfig, MessageReturn, MessagePosition } from '@cedarjs/ui'
 ```

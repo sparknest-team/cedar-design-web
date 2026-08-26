@@ -1,7 +1,9 @@
 @import '../../style/theme/index.less';
-@import '../../_components/select-view/style/token.less';
 @import '../../select/style/token.less';
 
-@tree-select-padding-popup-left: @spacing-5;
-@tree-select-padding-popup-right: @spacing-2;
-@tree-select-padding-popup-vertical: @spacing-2;
+:root {
+  --c-tree-select-popup-padding-left: var(~'--c-spacing-5');
+  --c-tree-select-popup-padding-right: var(~'--c-spacing-2');
+  --c-tree-select-popup-padding-vertical: var(~'--c-spacing-2');
+  --c-tree-select-highlight-font-weight: var(~'--c-font-weight-500');
+}

@@ -14,7 +14,7 @@ permalink: /components/dialog/
 
 ### 异步关闭
 
-通过 `before-close` / `onBeforeClose` 实现异步关闭，可通过 `refs` 控制按钮 loading。
+通过 `before-close` / `beforeClose` 实现异步关闭，可通过 `refs` 控制按钮 loading。
 
 <demo src="./__demos__/async.vue"></demo>
 
@@ -74,8 +74,8 @@ permalink: /components/dialog/
 
 | 参数名 | 描述 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| `show` **(v-model)** | 是否显示 | `boolean` | `-` |
-| `default-show` | 非受控默认显示 | `boolean` | `false` |
+| `open` **(v-model)** | 是否显示 | `boolean` | `-` |
+| `default-open` | 非受控默认显示 | `boolean` | `false` |
 | `title` | 标题 | `string` | `-` |
 | `message` | 内容（也可用 default 插槽） | `string` | `-` |
 | `type` | 类型图标：`info` `success` `warning` `error` | `string` | `-` |
@@ -84,12 +84,12 @@ permalink: /components/dialog/
 | `top` | 距顶部高度（`align-center` 时无效） | `number \| string` | `-` |
 | `title-align` | 标题对齐 | `'start' \| 'center'` | `'center'` |
 | `align-center` | 垂直水平居中 | `boolean` | `true` |
-| `overlay` | 是否显示遮罩 | `boolean` | `true` |
-| `overlay-class` | 遮罩 class | `string` | `-` |
-| `overlay-style` | 遮罩 style | `CSSProperties` | `-` |
-| `close-on-click-overlay` | 点击遮罩关闭 | `boolean` | `true` |
-| `close-on-key-escape` | ESC 关闭 | `boolean` | `true` |
-| `teleport` | 挂载位置，`false` 禁用 teleport | `string \| HTMLElement \| false` | `'body'` |
+| `mask` | 是否显示遮罩 | `boolean` | `true` |
+| `mask-class` | 遮罩 class | `string` | `-` |
+| `mask-style` | 遮罩 style | `CSSProperties` | `-` |
+| `mask-closable` | 点击遮罩关闭 | `boolean` | `true` |
+| `esc-to-close` | ESC 关闭 | `boolean` | `true` |
+| `popup-container` | 挂载位置，`false` 禁用 teleport | `string \| HTMLElement \| false` | `'body'` |
 | `confirm-button` | 显示确认按钮 | `boolean` | `true` |
 | `cancel-button` | 显示取消按钮 | `boolean` | `true` |
 | `closable` | 显示右上角关闭按钮 | `boolean` | `true` |
@@ -110,14 +110,10 @@ permalink: /components/dialog/
 | `unmount-on-close` | 关闭后卸载 | `boolean` | `false` |
 | `draggable` | 可拖动 | `boolean` | `false` |
 | `fullscreen` | 全屏 | `boolean` | `false` |
-| `overlay-animation-name` | 遮罩动画 | `string` | `fade-modal` |
+| `mask-animation-name` | 遮罩动画 | `string` | `fade-modal` |
 | `dialog-animation-name` | 对话框动画 | `string` | `zoom-modal` |
 | `z-index` | 层级 | `number` | `-` |
-| `on-before-close` | 关闭前拦截 | `(action, done, refs) => void` | `-` |
-| `on-confirm` | 确认回调 | `(e?: Event) => void` | `-` |
-| `on-cancel` | 取消回调 | `(e?: Event) => void` | `-` |
-| `on-click-overlay` | 点击遮罩 | `() => void` | `-` |
-| `on-key-escape` | ESC | `() => void` | `-` |
+| `before-close` | 关闭前拦截 | `(action, done, refs) => void` | `-` |
 
 ### `<Dialog>` Events
 
@@ -129,7 +125,7 @@ permalink: /components/dialog/
 | `closed` | 关闭动画结束 | `-` |
 | `confirm` | 点击确认 | `Event` |
 | `cancel` | 点击取消/关闭 | `Event` |
-| `click-overlay` | 点击遮罩 | `-` |
+| `click-mask` | 点击遮罩 | `-` |
 | `key-escape` | ESC | `-` |
 
 ### `<Dialog>` Slots
@@ -150,6 +146,10 @@ permalink: /components/dialog/
 | --- | --- | --- |
 | `content` | 内容（同 `message`，优先级低于 `message`） | `RenderContent` |
 | `footer` | 是否展示 footer 或自定义 footer | `boolean \| RenderContent` |
+| `onConfirm` | 确认回调 | `(e?: Event) => void` |
+| `onCancel` | 取消回调 | `(e?: Event) => void` |
+| `onClickMask` | 点击遮罩回调 | `() => void` |
+| `onKeyEscape` | ESC 回调 | `() => void` |
 
 #### DialogMethod
 
@@ -175,5 +175,5 @@ permalink: /components/dialog/
 ### 类型定义
 
 ```ts
-import type { DialogConfig, DialogMethod, DialogReturn, DialogAction, DialogType, DialogBeforeCloseRefs } from '@cedar/ui'
+import type { DialogConfig, DialogMethod, DialogReturn, DialogAction, DialogType, DialogBeforeCloseRefs } from '@cedarjs/ui'
 ```

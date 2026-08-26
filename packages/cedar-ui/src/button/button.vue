@@ -21,8 +21,11 @@
       )
     "
     :style="computedStyle"
-    :type="htmlType"
-    :disabled="states.disabled"
+    :type="component === 'button' ? htmlType : undefined"
+    :disabled="component === 'button' ? blocked : undefined"
+    :aria-disabled="component === 'a' && blocked ? true : undefined"
+    :aria-busy="loading || pending || undefined"
+    :tabindex="component === 'a' && blocked ? -1 : undefined"
     :autofocus="autofocus"
     @click="handleClick"
     @focus="handleFocus"
@@ -63,13 +66,13 @@
 
 <script lang="ts" setup>
 import { computed, ref, type CSSProperties, useAttrs } from 'vue'
-import { call, normalizeToArray } from '@maplejs/maple-shared'
+import { call, normalizeToArray } from '@cedarjs/shared'
 import { buttonProps } from './props'
 import { formatElevation } from '../_utils/maple/components'
 import { useHoverOverlay } from '../hover-overlay'
 import vHover from '../hover'
 import vRipple from '../ripple'
-import IconLoading from '../icon/icon-loading'
+import { IconLoading } from '@cedarjs/icons-vue/icon-loading'
 import Progress from '../progress'
 import { createNamespace } from '../_utils/global-config'
 import { useButtonGroup } from './provide'
@@ -88,6 +91,7 @@ const attrs = useAttrs()
 const { buttonGroup } = useButtonGroup()
 const isFocusing = ref(false)
 const pending = ref(false)
+const blocked = computed(() => Boolean(props.loading || pending.value || states.value.disabled))
 
 const states = computed(() => {
   if (!buttonGroup) {
@@ -165,7 +169,11 @@ function attemptAutoLoading(result: any) {
 
 const handleClick = (e: MouseEvent) => {
   const { loading, disabled, onClick } = props
-  if (!onClick || loading || disabled || pending.value) {
+  if (loading || disabled || pending.value) {
+    e.preventDefault()
+    return
+  }
+  if (!onClick) {
     return
   }
 

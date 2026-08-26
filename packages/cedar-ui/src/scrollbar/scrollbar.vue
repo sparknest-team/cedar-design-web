@@ -19,7 +19,7 @@
       v-if="!hide && hasVerticalScrollbar"
       ref="verticalThumbRef"
       :data="verticalData"
-      direction="column"
+      direction="vertical"
       :both="isBoth"
       @scroll="handleVerticalScroll"
     />
@@ -27,6 +27,8 @@
 </template>
 
 <script lang="ts">
+import { scrollbarProps } from './props'
+import { createNamespace } from '../_utils/global-config'
 import { computed, CSSProperties, defineComponent, onMounted, PropType, ref, StyleValue } from 'vue'
 import { ThumbData } from './types'
 import ResizeObserver from '../_components/resize-observer-v2'
@@ -38,47 +40,13 @@ const THUMB_MIN_SIZE = 20
 const TRACK_SIZE = 15
 
 export default defineComponent({
-  name: 'Scrollbar',
+  name: createNamespace("scrollbar").name,
   components: {
     ResizeObserver,
     Thumb,
   },
   inheritAttrs: false,
-  props: {
-    /**
-     * @zh 类型
-     * @en Type
-     */
-    type: {
-      type: String as PropType<'track' | 'embed'>,
-      default: 'embed',
-    },
-    /**
-     * @zh 外层的类名
-     * @en Outer class
-     */
-    outerClass: [String, Object, Array],
-    /**
-     * @zh 外层的样式
-     * @en Outer style
-     */
-    outerStyle: {
-      type: [String, Object, Array] as PropType<StyleValue>,
-    },
-    // private
-    hide: {
-      type: Boolean,
-      default: false,
-    },
-    disableHorizontal: {
-      type: Boolean,
-      default: false,
-    },
-    disableVertical: {
-      type: Boolean,
-      default: false,
-    },
-  },
+  props: scrollbarProps,
   emits: {
     /**
      * @zh 滚动时触发

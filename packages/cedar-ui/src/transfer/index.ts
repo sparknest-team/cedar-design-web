@@ -1,16 +1,9 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Transfer from './transfer.vue'
+import { transferProps } from './props'
 
-const Transfer = Object.assign(_Transfer, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _Transfer.name, _Transfer)
-  },
-})
+const Transfer = withInstall(_Transfer, Object.assign(_Transfer, {
+}), { components: [_Transfer] })
 
 export type TransferInstance = InstanceType<typeof _Transfer>
 export type {
@@ -22,5 +15,11 @@ export type {
   TransferTargetOperation,
   TransferValue,
 } from './types'
+
+export const _TransferComponent = Transfer
+
+export { Transfer }
+
+export { transferProps }
 
 export default Transfer

@@ -116,16 +116,14 @@ export interface CedarLang {
     placeholderInput: string
     placeholderStart: string
     placeholderEnd: string
+    clear: string
+    increase: string
+    decrease: string
+    showPassword: string
+    hidePassword: string
     dateFormat: {
       datetime: string
     }
-  }
-  layoutForm: {
-    collapseMore: string
-    expandMore: string
-    lastWeek: string
-    lastMonth: string
-    lastThreeMonths: string
   }
   map: {
     searchPlaceholder: string
@@ -133,8 +131,7 @@ export interface CedarLang {
     noData: string
     dragAndSelectTips: string
   }
-  formFilter: {
-    rememberMe: string
+  filterForm: {
     expandMore: string
     collapseMore: string
   }

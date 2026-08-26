@@ -1,5 +1,5 @@
 import type { ComponentPublicInstance, VNodeNormalizedChildren } from 'vue'
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 import { VNode } from 'vue'
 
 const opt = Object.prototype.toString

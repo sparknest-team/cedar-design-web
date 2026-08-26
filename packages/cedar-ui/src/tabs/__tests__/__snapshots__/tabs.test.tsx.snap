@@ -1,26 +1,3 @@
 // Vitest Snapshot v1
 
-exports[`Tabs > render 1`] = `
-"<div class=\\"arco-tabs arco-tabs-horizontal arco-tabs-top arco-tabs-type-line arco-tabs-size-medium\\">
-  <!---->
-  <div class=\\"arco-tabs-nav arco-tabs-nav-horizontal arco-tabs-nav-top arco-tabs-nav-size-medium arco-tabs-nav-type-line\\">
-    <!---->
-    <div class=\\"arco-tabs-nav-tab\\">
-      <div class=\\"arco-tabs-nav-tab-list\\" style=\\"transform: translateX(0px);\\">
-        <!---->
-      </div>
-      <!---->
-    </div>
-    <!---->
-    <div class=\\"arco-tabs-nav-suffix\\">
-      <!---->
-      <!---->
-    </div>
-  </div>
-  <div class=\\"arco-tabs-content\\">
-    <div class=\\"arco-tabs-content-list\\" style=\\"margin-left: -0%;\\">
-      <!---->
-    </div>
-  </div>
-</div>"
-`;
+exports[`Tabs > render 1`] = `"<div class=\\"c-tabs c-tabs--indicator-normal c-tabs--variant-line c-tabs--size-md\\"></div>"`;

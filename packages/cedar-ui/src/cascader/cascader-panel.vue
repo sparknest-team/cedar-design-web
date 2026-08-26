@@ -15,9 +15,10 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../_utils/global-config'
 import { computed, defineComponent, PropType, provide, reactive, ref, toRefs, watch } from 'vue'
 import { BaseType, Data, UnionType } from '../_utils/types'
-import { CascaderFieldNames, CascaderOption, CascaderOptionInfo } from './types'
+import { CascaderBaseValue, CascaderFieldNames, CascaderOption, CascaderOptionInfo } from './types'
 import { isNull, isUndefined } from '../_utils/is'
 import BaseCascaderPanel from './base-cascader-panel'
 import {
@@ -33,7 +34,7 @@ import { cascaderInjectionKey } from './context'
 import { KEYBOARD_KEY, getKeyDownHandler } from '../_utils/keyboard'
 
 export default defineComponent({
-  name: 'CascaderPanel',
+  name: createNamespace("cascader-panel").name,
   components: {
     BaseCascaderPanel,
   },
@@ -95,7 +96,7 @@ export default defineComponent({
      * @en Expand the trigger method of the next level
      */
     expandTrigger: {
-      type: String,
+      type: String as PropType<'click' | 'hover'>,
       default: 'click',
     },
     /**
@@ -115,21 +116,12 @@ export default defineComponent({
       type: Function as PropType<(option: CascaderOption, done: (children?: CascaderOption[]) => void) => void>,
     },
     /**
-     * @zh 自定义 `CascaderOption` 中的字段
-     * @en Customize fields in `CascaderOption`
+     * @zh 自定义 `CascaderOption` 中的字段；当选项值为对象时，也用其中的 `value` 作为键属性
+     * @en Customize fields in `CascaderOption`; when option value is an object, `value` is also used as the key property
      * @version 2.22.0
      */
     fieldNames: {
       type: Object as PropType<CascaderFieldNames>,
-    },
-    /**
-     * @zh 用于确定选项键值的属性名
-     * @en Used to determine the option key value attribute name
-     * @version 2.29.0
-     */
-    valueKey: {
-      type: String,
-      default: 'value',
     },
     /**
      * @zh 是否展开子菜单
@@ -171,8 +163,8 @@ export default defineComponent({
    * @version 2.23.0
    */
   setup(props, { emit, slots }) {
-    const { options, checkStrictly, loadMore, modelValue, valueKey, expandChild, expandTrigger } = toRefs(props)
-    const _value = ref(props.defaultValue)
+    const { options, checkStrictly, loadMore, modelValue, expandChild, expandTrigger } = toRefs(props)
+    const _value = ref<CascaderBaseValue | undefined>(props.defaultValue)
 
     watch(modelValue, (value) => {
       if (isUndefined(value) || isNull(value)) {
@@ -227,7 +219,6 @@ export default defineComponent({
           totalLevel,
           checkStrictly,
           fieldNames: _fieldNames,
-          valueKey,
         })
       },
       {
@@ -241,9 +232,9 @@ export default defineComponent({
         pathMode: props.pathMode,
       })
       return new Map(
-        values.map((value) => [
+        values.map((value): [string, UnionType | UnionType[]] => [
           getValueKey(value, {
-            valueKey: props.valueKey,
+            valueField: mergedFieldNames.value.value,
             leafOptionValueMap,
           }),
           value,
@@ -282,7 +273,7 @@ export default defineComponent({
             .map((item) => {
               return props.pathMode ? item.pathValue : item.value
             }),
-        ])
+        ] as UnionType[] | UnionType[][])
       } else {
         const leafOptionKeys = props.checkStrictly ? [option.key] : getLeafOptionKeys(option)
         const values: any[] = []

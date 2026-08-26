@@ -12,7 +12,7 @@ import {
   isWindow,
   kebabCase,
   toNumber,
-} from '@maplejs/maple-shared'
+} from '@cedarjs/shared'
 export type StyleVars = Record<string, string>
 
 // import { type StyleVars } from '../style-provider'

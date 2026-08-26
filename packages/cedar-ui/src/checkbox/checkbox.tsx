@@ -1,11 +1,11 @@
-import type { PropType } from 'vue'
 import { computed, defineComponent, inject, nextTick, ref, toRefs, watch } from 'vue'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
 import IconHover from '../_components/icon-hover.vue'
-import IconCheck from './icon-check'
+import Check from './icon-check'
 import { isArray, isNull, isUndefined } from '../_utils/is'
 import { checkboxGroupKey } from './context'
 import { useFormItem } from '../_hooks/use-form-item'
+import { checkboxProps } from './props'
 
 
 const { name } = createNamespace('checkbox')
@@ -13,56 +13,10 @@ const { name } = createNamespace('checkbox')
 export default defineComponent({
   name,
   components: {
-    IconCheck,
+    Check,
     IconHover,
   },
-  props: {
-    /**
-     * @zh 绑定值
-     * @en Value
-     * @vModel
-     */
-    modelValue: {
-      type: [Boolean, Array] as PropType<boolean | Array<string | number | boolean>>,
-      default: undefined,
-    },
-    /**
-     * @zh 默认是否选中（非受控状态）
-     * @en Whether checked by default (uncontrolled state)
-     */
-    defaultChecked: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 选项的 `value`
-     * @en The `value` of the option
-     */
-    value: {
-      type: [String, Number, Boolean],
-    },
-    /**
-     * @zh 是否禁用
-     * @en Whether to disable
-     */
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否为半选状态
-     * @en Whether it is half-selected
-     */
-    indeterminate: {
-      type: Boolean,
-      default: false,
-    },
-    // private
-    uninjectGroupContext: {
-      type: Boolean,
-      default: false,
-    },
-  },
+  props: checkboxProps,
   emits: {
     'update:modelValue': (value: boolean | (string | number | boolean)[]) => true,
     /**
@@ -86,7 +40,7 @@ export default defineComponent({
     const prefixCls = getPrefixCls('checkbox')
     const checkboxRef = ref<HTMLInputElement>()
     const checkboxGroupCtx = !props.uninjectGroupContext ? inject(checkboxGroupKey, undefined) : undefined
-    const isGroup = checkboxGroupCtx?.name === 'CedarCheckboxGroup'
+    const isGroup = Boolean(checkboxGroupCtx)
     const { mergedDisabled: _mergedDisabled, eventHandlers } = useFormItem({
       disabled,
     })
@@ -96,7 +50,9 @@ export default defineComponent({
       isGroup ? checkboxGroupCtx?.computedValue : (props.modelValue ?? _checked.value),
     )
     const computedChecked = computed<boolean>(() => {
-      return isArray(computedValue.value) ? computedValue.value.includes(props.value ?? true) : computedValue.value
+      return isArray(computedValue.value)
+        ? computedValue.value.includes(props.value ?? true)
+        : Boolean(computedValue.value)
     })
     const mergedDisabled = computed(
       () =>
@@ -206,7 +162,7 @@ export default defineComponent({
         }) ?? (
           <IconHover class={`${prefixCls}-icon-hover`} disabled={mergedDisabled.value || computedChecked.value}>
             <div class={`${prefixCls}-icon`}>
-              {computedChecked.value && <IconCheck class={`${prefixCls}-icon-check`} />}
+              {computedChecked.value && <Check class={`${prefixCls}-icon-check`} />}
             </div>
           </IconHover>
         )}

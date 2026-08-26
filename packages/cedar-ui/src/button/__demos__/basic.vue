@@ -12,7 +12,6 @@
 
 <script setup lang="ts">
 const handleClick = () => {
-  console.log('click')
   Dialog.open({
     title: '标题',
     message: '内容',

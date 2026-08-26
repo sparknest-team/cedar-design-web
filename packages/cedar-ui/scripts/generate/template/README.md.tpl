@@ -37,7 +37,7 @@ permalink: /components/<%= name %>.html
 组件导出以下类型定义
 
 ```ts
-import type { <%= pascalCaseName %>Props } from '@cedar/ui'
+import type { <%= pascalCaseName %>Props } from '@cedarjs/ui'
 ```
 
 ## 样式变量

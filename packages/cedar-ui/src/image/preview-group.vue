@@ -1,10 +1,10 @@
 <template>
   <slot />
   <ImagePreview
-    v-bind="mergedPreviewProps"
+    v-bind="(mergedPreviewProps as any)"
     in-group
     :src="currentUrl"
-    :visible="mergedVisible"
+    :open="mergedOpen"
     :group-arrow-props="groupArrowProps"
     @close="onClose"
   >
@@ -14,6 +14,7 @@
   </ImagePreview>
 </template>
 <script lang="tsx">
+import { createNamespace } from '../_utils/global-config'
 import { defineComponent, PropType, reactive, toRefs, provide, computed, ref, watch } from 'vue'
 import useMergeState from '../_hooks/use-merge-state'
 import ImagePreview from './preview.vue'
@@ -28,11 +29,11 @@ import {
   resolveLoop,
   resolveMaskClosable,
   resolvePreviewImages,
-  resolveTeleport,
-} from './utils/resolvePreviewAliases'
+  resolvePopupContainer,
+} from './utils/resolvePreviewOptions'
 
 export default defineComponent({
-  name: 'ImagePreviewGroup',
+  name: createNamespace("image-preview-group").name,
   components: {
     ImagePreview,
   },
@@ -45,13 +46,6 @@ export default defineComponent({
     /**
      * @zh 图片列表（设置了本属性之后，将不再收集 a-image 子组件的图片信息）
      * @en Picture list (after setting this property, the picture information of a-image subcomponent will no longer be collected)
-     */
-    srcList: {
-      type: Array as PropType<string[]>,
-    },
-    /**
-     * @zh 图片列表（与 srcList 等价，统一 API 命名）
-     * @en Picture list (alias of srcList)
      */
     images: {
       type: Array as PropType<string[]>,
@@ -67,50 +61,33 @@ export default defineComponent({
     /**
      * @zh 第一张展示的图片的下标
      * @en The index of the first image shown
-     * @alias initialIndex
      */
     defaultCurrent: {
       type: Number,
       default: 0,
     },
     /**
-     * @zh 第一张展示的图片的下标（defaultCurrent 的别名）
-     * @en The index of the first image shown (alias of defaultCurrent)
-     */
-    initialIndex: {
-      type: Number,
-    },
-    /**
      * @zh 是否无限循环
      * @en Whether to loop infinitely
-     * @alias infinite
      */
     loop: {
       type: Boolean,
       default: undefined,
     },
     /**
-     * @zh 是否无限循环（loop 的别名）
-     * @en Whether to loop infinitely (alias of loop)
-     */
-    infinite: {
-      type: Boolean,
-      default: undefined,
-    },
-    /**
      * @zh 是否可见，受控属性
-     * @en Whether is visible
+     * @en Whether the preview is open
      * @vModel
      */
-    visible: {
+    open: {
       type: Boolean,
       default: undefined,
     },
     /**
      * @zh 默认是否可见，非受控
-     * @en Default visibility
+     * @en Default open state
      */
-    defaultVisible: {
+    defaultOpen: {
       type: Boolean,
       default: false,
     },
@@ -131,14 +108,6 @@ export default defineComponent({
       default: undefined,
     },
     /**
-     * @zh 是否显示关闭按钮（closable 的别名）
-     * @en Whether to show close button (alias of closable)
-     */
-    closeable: {
-      type: Boolean,
-      default: undefined,
-    },
-    /**
      * @zh 控制条的布局
      * @en Layout of action list
      */
@@ -147,23 +116,8 @@ export default defineComponent({
       default: undefined,
     },
     /**
-     * @zh 操作项的布局（actionsLayout 的别名）
-     * @en Layout of action list (alias of actionsLayout)
-     */
-    actions: {
-      type: Array as PropType<string[]>,
-      default: undefined,
-    },
-    /**
-     * @zh 设置弹出框的挂载点，同 `teleport` 的 `to`
-     * @en Set the mount point of the pop-up box
-     */
-    teleport: {
-      type: [String, Object] as PropType<string | HTMLElement>,
-    },
-    /**
-     * @zh 设置弹出框的挂载点，同 `teleport` 的 `to`，缺省值是 document.body
-     * @en Set the mount point of the pop-up box, the same as the `to` of `teleport`, the default value is document.body
+     * @zh 设置弹出框的挂载点，缺省值是 document.body
+     * @en Set the mount point of the pop-up box, the default value is document.body
      */
     popupContainer: {
       type: [String, Object] as PropType<string | HTMLElement>,
@@ -175,19 +129,15 @@ export default defineComponent({
     previewProps: {
       type: Object as PropType<Partial<ImagePreviewProps>>,
     },
-    onPreviewVisibleChange: {
-      type: Function as PropType<(visible: boolean) => void>,
-    },
-    onVisibleChange: {
-      type: Function as PropType<(visible: boolean) => void>,
+    onOpenChange: {
+      type: Function as PropType<(open: boolean) => void>,
     },
   },
   emits: [
     'change',
     'update:current',
-    'visible-change',
-    'preview-visible-change',
-    'update:visible',
+    'openChange',
+    'update:open',
   ],
   /**
    * @zh 自定义额外的操作项
@@ -197,20 +147,17 @@ export default defineComponent({
    */
   setup(props, { emit }) {
     const {
-      srcList,
       images,
-      visible,
-      defaultVisible,
+      open,
+      defaultOpen,
       current,
       defaultCurrent,
-      initialIndex,
       loop,
-      infinite,
       previewProps,
     } = toRefs(props)
 
-    const mergedImageList = computed(() => resolvePreviewImages({ images: images?.value, srcList: srcList?.value }))
-    const mergedLoop = computed(() => resolveLoop({ loop: loop?.value, infinite: infinite?.value }, imagePlatformConfig.defaultLoop))
+    const mergedImageList = computed(() => resolvePreviewImages({ images: images?.value }))
+    const mergedLoop = computed(() => resolveLoop({ loop: loop?.value }, imagePlatformConfig.defaultLoop))
 
     const mergedPreviewProps = computed(() =>
       mergePreviewProps(
@@ -218,27 +165,25 @@ export default defineComponent({
           maskClosable: resolveMaskClosable(props, imagePlatformConfig.defaultMaskClosable),
           closable: resolveClosable(props, imagePlatformConfig.defaultClosable),
           actionsLayout: resolveActionsLayout(props, imagePlatformConfig.toolbarActions),
-          popupContainer: resolveTeleport(props) as string | HTMLElement | undefined,
+          popupContainer: resolvePopupContainer(props) as string | HTMLElement | undefined,
           renderToBody: props.renderToBody,
         },
         previewProps?.value,
       ),
     )
 
-    const [mergedVisible, setLocalVisible] = useMergeState(
-      defaultVisible.value,
+    const [mergedOpen, setLocalOpen] = useMergeState(
+      defaultOpen.value,
       reactive({
-        value: visible,
+        value: open,
       }),
     )
-    const setVisible = (newVisible: boolean) => {
-      if (newVisible !== mergedVisible.value) {
-        emit('visible-change', newVisible)
-        emit('preview-visible-change', newVisible)
-        emit('update:visible', newVisible)
-        props.onPreviewVisibleChange?.(newVisible)
-        props.onVisibleChange?.(newVisible)
-        setLocalVisible(newVisible)
+    const setVisible = (newOpen: boolean) => {
+      if (newOpen !== mergedOpen.value) {
+        emit('openChange', newOpen)
+        emit('update:open', newOpen)
+        props.onOpenChange?.(newOpen)
+        setLocalOpen(newOpen)
       }
     }
 
@@ -276,7 +221,7 @@ export default defineComponent({
     })
 
     const [currentIndex, setLocalCurrentIndex] = useMergeState(
-      defaultCurrent.value ?? initialIndex?.value ?? 0,
+      defaultCurrent.value ?? 0,
       reactive({
         value: current,
       }),
@@ -357,7 +302,7 @@ export default defineComponent({
     )
 
     return {
-      mergedVisible,
+      mergedOpen,
       mergedPreviewProps,
       currentUrl,
       prevIndex,

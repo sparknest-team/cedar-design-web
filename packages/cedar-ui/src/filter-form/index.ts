@@ -1,14 +1,20 @@
-import type { App } from 'vue'
+import { withInstall } from '../_utils/global-config'
 import _FilterForm from './filter-form.vue'
-import { getComponentPrefix } from '../_utils/global-config'
+import { filterFormProps } from './props'
 
-export const FilterForm = Object.assign(_FilterForm, {
-  install: (app: App, options?: any) => {
-    const componentPrefix = getComponentPrefix(options)
-    app.component(componentPrefix + _FilterForm.name, _FilterForm)
-  },
-})
+const FilterForm = withInstall(_FilterForm, Object.assign(_FilterForm, {
+}), { components: [_FilterForm] })
 
 export type FilterFormInstance = InstanceType<typeof _FilterForm>
-export * from './filter-form-util'
+export type {
+  FilterFormProps,
+  FilterFormField,
+  FilterFormFieldMap,
+  FilterFormFieldRegistration,
+} from './props'
+
+export { filterFormProps }
+export { FilterForm }
+export const _FilterFormComponent = FilterForm
+
 export default FilterForm

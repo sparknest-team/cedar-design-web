@@ -1,16 +1,13 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Color from './color.vue'
+import { colorProps } from './props'
 
-const Color = Object.assign(_Color, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-    app.component(componentPrefix + _Color.name, _Color)
-  },
-})
+const Color = withInstall(_Color, Object.assign(_Color, {
+}), { components: [_Color] })
 
 export type ColorInstance = InstanceType<typeof _Color>
+export type { ColorProps } from './props'
+export { Color, colorProps }
+export const _ColorComponent = Color
 
 export default Color

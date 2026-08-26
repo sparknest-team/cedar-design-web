@@ -1,17 +1,14 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Card from './card'
+import { cardProps } from './props'
 
-const Card = Object.assign(_Card, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _Card.name, _Card)
-  },
-})
+const Card = withInstall(_Card, Object.assign(_Card, {
+}), { components: [_Card] })
 
 export type CardInstance = InstanceType<typeof _Card>
+export { cardProps }
+export type { CardDirection, CardFit, CardProps, CardSize, CardVariant } from './props'
+export { Card }
+export const _CardComponent = Card
 
 export default Card

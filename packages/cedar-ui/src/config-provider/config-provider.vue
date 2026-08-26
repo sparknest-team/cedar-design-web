@@ -3,86 +3,27 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue'
-import { defineComponent, provide, reactive, toRefs, getCurrentInstance } from 'vue'
+import { defineComponent, provide, reactive, toRefs, getCurrentInstance, watch } from 'vue'
 import { configProviderInjectionKey } from './context'
-import { CedarLang } from '../locale/types'
-import { Size } from '../_utils/constant'
 import { createNamespace } from '../_utils/global-config'
+import { configProviderProps } from './props'
 
-const { name, n, classes } = createNamespace('config-provider')
+const THEME_ATTR = 'cedar-theme'
+
+const applyDocumentTheme = (theme?: string) => {
+  if (typeof document === 'undefined') return
+  if (theme === 'dark') {
+    document.documentElement.setAttribute(THEME_ATTR, 'dark')
+  } else if (theme === 'light') {
+    document.documentElement.removeAttribute(THEME_ATTR)
+  }
+}
+
+const { name } = createNamespace('config-provider')
 
 export default defineComponent({
   name,
-  props: {
-    /**
-     * @zh 组件类名前缀
-     * @en Component classname prefix
-     */
-    prefixCls: {
-      type: String,
-      default: 'c',
-    },
-    /**
-     * @zh 配置语言包
-     * @en Configure language pack
-     */
-    locale: {
-      type: Object as PropType<CedarLang>,
-    },
-    /**
-     * @zh 大小
-     * @en Size
-     * @version 2.14.0
-     */
-    size: {
-      type: String as PropType<Size>,
-    },
-    /**
-     * @zh 是否全局生效
-     * @en Is global effect
-     * @version 2.25.0
-     */
-    global: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否在容器滚动时更新弹出框的位置
-     * @us Whether to update the position of the popup when the container is scrolled
-     * @version 2.25.0
-     */
-    updateAtScroll: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否在滚动时关闭弹出框
-     * @en Whether to close the popover when scrolling
-     * @version 2.46.0
-     */
-    scrollToClose: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否交换时间
-     * @en Whether to exchange time
-     * @version 2.48.0
-     */
-    exchangeTime: {
-      type: Boolean,
-      default: true,
-    },
-    /**
-     * @zh 视图的表现形式是从右开始向左结束
-     * @en View starts from the right and ends on the left
-     */
-    rtl: {
-      type: Boolean,
-      default: false,
-    },
-  },
+  props: configProviderProps,
   /**
    * @zh 自定义空状态元素
    * @en Custom empty element
@@ -97,7 +38,7 @@ export default defineComponent({
    * @version 2.28.0
    */
   setup(props, { slots }) {
-    const { prefixCls, locale, size, updateAtScroll, scrollToClose, exchangeTime, rtl } = toRefs(props)
+    const { prefixCls, locale, size, updateAtScroll, scrollToClose, exchangeTime, rtl, theme } = toRefs(props)
 
     const config = reactive({
       slots,
@@ -108,7 +49,16 @@ export default defineComponent({
       scrollToClose,
       exchangeTime,
       rtl,
+      theme,
     })
+
+    watch(
+      theme,
+      (value) => {
+        applyDocumentTheme(value)
+      },
+      { immediate: true },
+    )
 
     if (props.global) {
       const instance = getCurrentInstance()

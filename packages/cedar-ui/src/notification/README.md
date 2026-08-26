@@ -29,7 +29,7 @@ permalink: /components/notification/
 
 ```ts
 import { createApp } from 'vue'
-import { Notification } from '@cedar/ui'
+import { Notification } from '@cedarjs/ui'
 
 const app = createApp(App)
 Notification._context = app._context
@@ -76,5 +76,5 @@ Notification._context = app._context
 组件导出以下类型定义
 
 ```ts
-import type { BadgeInstance } from '@cedar/ui'
+import type { BadgeInstance } from '@cedarjs/ui'
 ```

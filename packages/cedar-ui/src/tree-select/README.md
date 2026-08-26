@@ -37,5 +37,5 @@ permalink: /components/tree-select/
 组件导出以下类型定义
 
 ```ts
-import type { TreeSelectProps } from '@cedar/ui'
+import type { TreeSelectProps } from '@cedarjs/ui'
 ```

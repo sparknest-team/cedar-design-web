@@ -16,21 +16,18 @@
 </template>
 
 <script lang="ts">
+import { saasPageProps } from './props'
+import { createNamespace } from '../_utils/global-config'
 import Layout, { LayoutHeader, LayoutContent } from '../layout'
 import Affix from '../affix'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'SaasPage',
+  name: createNamespace("saas-page").name,
 
   components: { Layout, LayoutHeader, LayoutContent, Affix },
 
-  props: {
-    offsetTop: {
-      type: Number,
-      default: 64,
-    },
-  },
+  props: saasPageProps,
 
   setup() {},
 })

@@ -4,7 +4,7 @@
       padding: '24px',
       backgroundColor: 'var(--c-color-neutral-1)',
     }"
-    class="flex justify-space-between"
+    class="c-flex c-justify-between"
   >
     <c-card :style="{ width: '270px' }">
       <template #title>

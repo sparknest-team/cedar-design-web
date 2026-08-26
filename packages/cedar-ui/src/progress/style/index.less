@@ -1,10 +1,9 @@
-@import '../../style/theme/index.less';
 @import './token.less';
 
 .c-progress {
   position: relative;
   line-height: 1;
-  font-size: @progress-line--md-font-size;
+  font-size: var(~'--c-progress-line-size-md-font-size');
 
   &--line,
   &--steps {
@@ -30,26 +29,26 @@
     }
 
     &__text {
-      font-size: @progress-line--md-font-size;
-      margin-left: @progress-line-margin-text-left;
-      color: @progress-line-color-text;
+      font-size: var(~'--c-progress-line-size-md-font-size');
+      margin-left: var(~'--c-progress-line-text-margin-left');
+      color: var(~'--c-progress-line-text-color');
       white-space: nowrap;
       text-align: right;
       flex-grow: 1;
       flex-shrink: 0;
-      min-width: @progress-line--text-width;
+      min-width: var(~'--c-progress-line-text-width');
 
       .c-icon {
-        font-size: @progress-line--md-icon-size;
-        margin-left: @progress-line-margin-icon-left;
+        font-size: var(~'--c-progress-line-size-md-icon-size');
+        margin-left: var(~'--c-progress-line-icon-margin-left');
       }
     }
   }
 
   // type = line
   &-line {
-    background-color: @progress-line-color-line-bg;
-    border-radius: 100px;
+    background-color: var(~'--c-progress-line-bg');
+    border-radius: var(~'--c-progress-line-border-radius');
     width: 100%;
     position: relative;
     display: inline-block;
@@ -57,23 +56,27 @@
 
     &__bar {
       height: 100%;
-      border-radius: 100px;
-      background-color: @progress-line-color-inner-bg;
+      border-radius: var(~'--c-progress-line-border-radius');
+      background-color: var(~'--c-progress-line-inner-bg');
       position: relative;
       transition:
-        width 0.6s @transition-timing-function-standard,
-        background 0.3s @transition-timing-function-standard;
+        width var(~'--c-progress-bar-transition-duration')
+          var(~'--c-progress-transition-timing-function-standard'),
+        background var(~'--c-progress-bar-bg-transition-duration')
+          var(~'--c-progress-transition-timing-function-standard');
       max-width: 100%;
 
       &-buffer {
         position: absolute;
-        background-color: @progress-line-color-buffer-bg;
+        background-color: var(~'--c-progress-line-buffer-bg');
         height: 100%;
         top: 0;
         left: 0;
-        border-radius: 0 100px 100px 0;
+        border-radius: 0 var(~'--c-progress-line-border-radius')
+          var(~'--c-progress-line-border-radius') 0;
         max-width: 100%;
-        transition: all 0.6s @transition-timing-function-standard;
+        transition: all var(~'--c-progress-bar-transition-duration')
+          var(~'--c-progress-transition-timing-function-standard');
       }
 
       &-animate::after {
@@ -86,7 +89,8 @@
         border-radius: inherit;
         background: linear-gradient(90deg, transparent 25%, rgba(255, 255, 255, 0.5) 50%, transparent 75%);
         background-size: 400% 100%;
-        animation: ~'c-progress-loading' 1.5s @transition-timing-function-standard infinite;
+        animation: ~'c-progress-loading' var(~'--c-progress-loading-animation-duration')
+          var(~'--c-progress-transition-timing-function-standard') infinite;
       }
     }
 
@@ -96,7 +100,7 @@
       &-long,
       &-short {
         background-color: currentColor;
-        animation-duration: 2.2s;
+        animation-duration: var(~'--c-progress-indeterminate-animation-duration');
         animation-iteration-count: infinite;
         height: inherit;
         inset: 0 auto 0 0;
@@ -106,12 +110,10 @@
 
       &-long {
         animation-name: indeterminate-ltr;
-        // animation-play-state: paused;
       }
 
       &-short {
         animation-name: indeterminate-short-ltr;
-        // animation-play-state: paused;
       }
 
       @keyframes indeterminate-ltr {
@@ -147,7 +149,7 @@
 
     &__text {
       .c-icon {
-        color: @progress-line-color-icon_md;
+        color: var(~'--c-progress-line-icon-color');
       }
     }
   }
@@ -159,12 +161,12 @@
     }
 
     &.c-progress--sm .c-progress-steps__item {
-      width: @progress-steps--sm-steps-item-width;
+      width: var(~'--c-progress-steps-size-sm-item-width');
       flex: unset;
-      border-radius: @progress-steps--sm-steps-item-width;
+      border-radius: var(~'--c-progress-steps-size-sm-item-width');
 
       &:not(:last-of-type) {
-        margin-right: @progress-steps-margin-steps-item-right_sm;
+        margin-right: var(~'--c-progress-steps-size-sm-item-margin-right');
       }
     }
   }
@@ -174,106 +176,106 @@
     width: 100%;
 
     &__text {
-      margin-left: @progress-steps-margin-text-left;
+      margin-left: var(~'--c-progress-steps-text-margin-left');
       min-width: unset;
 
       .c-icon {
-        color: @progress-line-color-icon_md;
+        color: var(~'--c-progress-line-icon-color');
       }
     }
 
     &__item {
       height: 100%;
       flex: 1;
-      background-color: @progress-steps-color-item-bg;
+      background-color: var(~'--c-progress-steps-item-bg');
       position: relative;
       display: inline-block;
 
       &:not(:last-of-type) {
-        margin-right: @progress-steps-margin-steps-item-right;
+        margin-right: var(~'--c-progress-steps-item-margin-right');
       }
 
       &:last-of-type {
-        border-top-right-radius: 100px;
-        border-bottom-right-radius: 100px;
+        border-top-right-radius: var(~'--c-progress-line-border-radius');
+        border-bottom-right-radius: var(~'--c-progress-line-border-radius');
       }
 
       &:first-of-type {
-        border-top-left-radius: 100px;
-        border-bottom-left-radius: 100px;
+        border-top-left-radius: var(~'--c-progress-line-border-radius');
+        border-bottom-left-radius: var(~'--c-progress-line-border-radius');
       }
 
       &--active {
-        background-color: @progress-steps-color-item-bg_md;
+        background-color: var(~'--c-progress-steps-item-bg-active');
       }
     }
   }
 
   &--warning {
     .c-progress-line__bar {
-      background-color: @progress-line-color-inner-bg_warning;
+      background-color: var(~'--c-progress-line-inner-bg-warning');
     }
 
     .c-progress-steps__item--active {
-      background-color: @progress-steps-color-item-bg_warning;
+      background-color: var(~'--c-progress-steps-item-bg-warning');
     }
 
     .c-progress-line__text .c-icon,
     .c-progress-steps__text .c-icon {
-      color: @progress-line-color-icon_warning;
+      color: var(~'--c-progress-line-icon-color-warning');
     }
   }
 
   &--success {
     .c-progress-line__bar {
-      background-color: @progress-line-color-inner-bg_success;
+      background-color: var(~'--c-progress-line-inner-bg-success');
     }
 
     .c-progress-steps__item--active {
-      background-color: @progress-steps-color-item-bg_success;
+      background-color: var(~'--c-progress-steps-item-bg-success');
     }
 
     .c-progress-line__text .c-icon,
     .c-progress-steps__text .c-icon {
-      color: @progress-line-color-icon_success;
+      color: var(~'--c-progress-line-icon-color-success');
     }
   }
 
   &--danger {
     .c-progress-line__bar {
-      background-color: @progress-line-color-inner-bg_error;
+      background-color: var(~'--c-progress-line-inner-bg-danger');
     }
 
     .c-progress-steps__item--active {
-      background-color: @progress-steps-color-item-bg_error;
+      background-color: var(~'--c-progress-steps-item-bg-danger');
     }
 
     .c-progress-line__text .c-icon,
     .c-progress-steps__text .c-icon {
-      color: @progress-line-color-icon_error;
+      color: var(~'--c-progress-line-icon-color-danger');
     }
   }
 
   // size
   &--sm {
     .c-progress-line__text {
-      font-size: @progress-line--sm-font-size;
-      margin-left: @progress-line--sm-margin-text-left;
+      font-size: var(~'--c-progress-line-size-sm-font-size');
+      margin-left: var(~'--c-progress-line-size-sm-text-margin-left');
     }
 
     .c-progress-line__text .c-icon {
-      font-size: @progress-line--sm-icon-size;
+      font-size: var(~'--c-progress-line-size-sm-icon-size');
     }
   }
 
   &--lg {
     .c-progress-line__text {
-      font-size: @progress-line--lg-font-size;
-      margin-left: @progress-line--lg-margin-text-left;
+      font-size: var(~'--c-progress-line-size-lg-font-size');
+      margin-left: var(~'--c-progress-line-size-lg-text-margin-left');
     }
 
     .c-progress-line__text .c-icon {
-      font-size: @progress-line--lg-icon-size;
+      font-size: var(~'--c-progress-line-size-lg-icon-size');
     }
   }
 }
@@ -301,52 +303,54 @@
       position: absolute;
       top: 50%;
       left: 50%;
-      color: @progress-circle-color-text;
+      color: var(~'--c-progress-circle-text-color');
       transform: translate(-50%, -50%);
-      font-size: @progress-circle--md-font-size;
+      font-size: var(~'--c-progress-circle-size-md-font-size');
 
       .c-icon {
-        font-size: @progress-circle--md-icon-size;
-        color: @progress-line-color-icon_md;
+        font-size: var(~'--c-progress-circle-size-md-icon-size');
+        color: var(~'--c-progress-line-icon-color');
       }
     }
 
     &__bg {
-      stroke: @progress-circle-color-mask-stroke;
+      stroke: var(~'--c-progress-circle-mask-stroke');
     }
 
     &__bar {
-      stroke: @progress-circle-color-path-stroke;
+      stroke: var(~'--c-progress-circle-path-stroke');
       transition:
-        stroke-dashoffset 0.6s @transition-timing-function-linear 0s,
-        stroke 0.6s @transition-timing-function-linear;
+        stroke-dashoffset var(~'--c-progress-bar-transition-duration')
+          var(~'--c-progress-transition-timing-function-linear') 0s,
+        stroke var(~'--c-progress-bar-transition-duration')
+          var(~'--c-progress-transition-timing-function-linear');
     }
   }
 
   &--xs {
     .c-progress-circle__bg {
-      stroke: @progress-circle--xs-color-mask-stroke;
+      stroke: var(~'--c-progress-circle-size-xs-mask-stroke');
     }
 
     .c-progress-circle__bar {
-      stroke: @progress-circle-color-path-stroke;
+      stroke: var(~'--c-progress-circle-path-stroke');
     }
 
     &.c-progress--warning {
       .c-progress-circle__bg {
-        stroke: @progress-circle--xs-color-mask-stroke_warning;
+        stroke: var(~'--c-progress-circle-size-xs-mask-stroke-warning');
       }
     }
 
     &.c-progress--danger {
       .c-progress-circle__bg {
-        stroke: @progress-circle--xs-color-mask-stroke_error;
+        stroke: var(~'--c-progress-circle-size-xs-mask-stroke-danger');
       }
     }
 
     &.c-progress--success {
       .c-progress-circle__bg {
-        stroke: @progress-circle--xs-color-mask-stroke_success;
+        stroke: var(~'--c-progress-circle-size-xs-mask-stroke-success');
       }
     }
 
@@ -367,51 +371,51 @@
 
   &--sm {
     .c-progress-circle__text {
-      font-size: @progress-circle--sm-font-size;
+      font-size: var(~'--c-progress-circle-size-sm-font-size');
 
       .c-icon {
-        font-size: @progress-circle--sm-icon-size;
+        font-size: var(~'--c-progress-circle-size-sm-icon-size');
       }
     }
   }
 
   &--lg {
     .c-progress-circle__text {
-      font-size: @progress-circle--lg-font-size;
+      font-size: var(~'--c-progress-circle-size-lg-font-size');
 
       .c-icon {
-        font-size: @progress-circle--lg-icon-size;
+        font-size: var(~'--c-progress-circle-size-lg-icon-size');
       }
     }
   }
 
   &--warning {
     .c-progress-circle__bar {
-      stroke: @progress-circle-color-path-stroke_warning;
+      stroke: var(~'--c-progress-circle-path-stroke-warning');
     }
 
     .c-icon {
-      color: @progress-circle-color-icon_warning;
+      color: var(~'--c-progress-circle-icon-color-warning');
     }
   }
 
   &--success {
     .c-progress-circle__bar {
-      stroke: @progress-circle-color-path-stroke_success;
+      stroke: var(~'--c-progress-circle-path-stroke-success');
     }
 
     .c-icon {
-      color: @progress-circle-color-icon_success;
+      color: var(~'--c-progress-circle-icon-color-success');
     }
   }
 
   &--danger {
     .c-progress-circle__bar {
-      stroke: @progress-circle-color-path-stroke_error;
+      stroke: var(~'--c-progress-circle-path-stroke-danger');
     }
 
     .c-icon {
-      color: @progress-circle-color-icon_error;
+      color: var(~'--c-progress-circle-icon-color-danger');
     }
   }
 }

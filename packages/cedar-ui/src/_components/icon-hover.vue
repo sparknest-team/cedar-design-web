@@ -11,7 +11,7 @@
 <script lang="ts">
 import type { PropType } from 'vue'
 import { defineComponent } from 'vue'
-import type { Size } from '../_utils/constant'
+import type { ComponentSize } from '../_utils/constant'
 import { createNamespace } from '../_utils/global-config'
 
 const { name, n, classes } = createNamespace('icon-hover')
@@ -23,7 +23,7 @@ export default defineComponent({
       type: String,
     },
     size: {
-      type: String as PropType<Size>,
+      type: String as PropType<ComponentSize>,
       default: 'md',
     },
     disabled: {

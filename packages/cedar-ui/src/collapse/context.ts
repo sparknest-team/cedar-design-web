@@ -13,7 +13,7 @@ export interface CollapseContext {
   destroyOnHide: boolean
   divider: boolean
   offset: boolean
-  handleClick: (name: string | number, e: MouseEvent) => void
+  handleClick: (name: string | number, e: Event) => void
   addItem: (item: CollapseItemContext) => void
   removeItem: (name: string | number) => void
 }

@@ -2,9 +2,9 @@
   <c-space direction="column" :style="{ width: '50%' }">
     <c-progress :percent="percent" />
     <br />
-    <c-progress type="warning" :percent="percent" />
+    <c-progress status="warning" :percent="percent" />
     <br />
-    <c-progress type="danger" :percent="percent" />
+    <c-progress status="danger" :percent="percent" />
     <br />
   </c-space>
   <div :style="{ marginTop: '20px' }">

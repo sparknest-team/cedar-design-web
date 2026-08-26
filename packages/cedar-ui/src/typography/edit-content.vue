@@ -6,11 +6,11 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue'
-import { getPrefixCls } from '../_utils/global-config'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import Input from '../input'
 
 export default defineComponent({
-  name: 'TypographyEditContent',
+  name: createNamespace('typography-edit-content').name,
   components: {
     Input,
   },

@@ -26,6 +26,7 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../_utils/global-config'
 import { defineComponent, getCurrentInstance, inject, computed, PropType } from 'vue'
 import { getPrefixCls } from '../_utils/global-config'
 import { TimelineContext, timelineInjectionKey } from './context'
@@ -43,7 +44,7 @@ const getDefaultPosition = (index: number, mode: ModeType, direction: Direction,
 }
 
 export default defineComponent({
-  name: 'TimelineItem',
+  name: createNamespace("timeline-item").name,
   props: {
     /**
      * @zh 节点颜色

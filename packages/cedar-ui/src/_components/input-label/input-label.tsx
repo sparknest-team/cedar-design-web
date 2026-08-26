@@ -1,15 +1,16 @@
 import { computed, defineComponent, PropType, toRefs } from 'vue'
 import { omit } from '../../_utils/omit'
-import { INPUT_EVENTS, Size } from '../../_utils/constant'
+import { INPUT_EVENTS, ComponentSize } from '../../_utils/constant'
 import pick from '../../_utils/pick'
 import { createNamespace } from '../../_utils/global-config'
 import { useInput } from '../../_hooks/use-input'
 import { SelectViewValue } from '../select-view/interface'
 import { useFormItem } from '../../_hooks/use-form-item'
 import { useSize } from '../../_hooks/use-size'
+import FieldDecorator from '../../field-decorator'
 
 export default defineComponent({
-  name: 'CInputLabel',
+  name: createNamespace('input-label').name,
   inheritAttrs: false,
   props: {
     modelValue: Object as PropType<SelectViewValue>,
@@ -23,10 +24,10 @@ export default defineComponent({
     retainInputValue: Boolean,
     disabled: Boolean,
     baseCls: String,
-    size: String as PropType<Size>,
+    size: String as PropType<ComponentSize>,
     variant: {
-      type: String as PropType<'outline' | 'default'>,
-      default: 'default',
+      type: String as PropType<'filled' | 'outlined' | 'standard'>,
+      default: 'filled',
     },
     error: Boolean,
     // used for outer focused
@@ -95,47 +96,49 @@ export default defineComponent({
     }
 
     const cls = computed(() =>
-      classes(
-        n(),
-        [mergedSize.value, n(`--size-${mergedSize.value}`)],
-        [props.enabledInput, n('--search')],
-        [mergedFocused.value, n('--focus')],
-        [mergedDisabled.value, n('--disabled')],
-        [mergedError.value, n('--error')],
-        [variant.value, n(`--variant-${variant.value}`)],
-      ),
+      classes(n(), [props.enabledInput, n('--search')]),
     )
 
     const wrapperAttrs = computed(() => omit(attrs, INPUT_EVENTS))
     const inputAttrs = computed(() => pick(attrs, INPUT_EVENTS))
 
     const render = () => (
-      <span {...wrapperAttrs.value} class={cls.value} title={formatLabel()} onMousedown={handleMousedown}>
-        {slots.prefix && <span class={classes(n('prefix'))}>{slots.prefix()}</span>}
-        <input
-          {...inputAttrs.value}
-          ref={inputRef}
-          class={classes(n('input'), [!showInput.value, n('input-hidden')])}
-          value={computedInputValue.value}
-          readonly={!props.enabledInput}
-          placeholder={mergedPlaceholder.value}
-          disabled={mergedDisabled.value}
-          onInput={handleInput}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          onCompositionstart={handleComposition}
-          onCompositionupdate={handleComposition}
-          onCompositionend={handleComposition}
-        />
-        <span
-          class={classes(n('value'), [showInput.value, n('value-hidden')])}
-        >
-          {renderLabel()}
-        </span>
-        {slots.suffix && <span class={classes(n('suffix'))}>{slots.suffix()}</span>}
-        <div class={classes(n('border'))}></div>
-        <div class={classes(n('border-state'))}></div>
-      </span>
+      <FieldDecorator
+        tag="span"
+        class={cls.value}
+        title={formatLabel()}
+        variant={variant.value}
+        size={mergedSize.value}
+        disabled={mergedDisabled.value}
+        error={mergedError.value}
+        focused={mergedFocused.value}
+        onMousedown={handleMousedown}
+        {...wrapperAttrs.value}
+        v-slots={{
+          prefix: slots.prefix,
+          suffix: slots.suffix,
+          default: () => (
+            <>
+              <input
+                {...inputAttrs.value}
+                ref={inputRef}
+                class={classes(n('input'), [!showInput.value, n('input-hidden')])}
+                value={computedInputValue.value}
+                readonly={!props.enabledInput}
+                placeholder={mergedPlaceholder.value}
+                disabled={mergedDisabled.value}
+                onInput={handleInput}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+                onCompositionstart={handleComposition}
+                onCompositionupdate={handleComposition}
+                onCompositionend={handleComposition}
+              />
+              <span class={classes(n('value'), [showInput.value, n('value-hidden')])}>{renderLabel()}</span>
+            </>
+          ),
+        }}
+      />
     )
 
     return {

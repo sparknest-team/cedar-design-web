@@ -69,5 +69,5 @@ permalink: /components/anchor/
 组件导出以下类型定义
 
 ```ts
-import type { AnchorInstance } from '@cedar/ui'
+import type { AnchorInstance } from '@cedarjs/ui'
 ```

@@ -1,6 +1,6 @@
 <template>
   <c-space direction="column">
-    <c-breadcrumb :routes="routes" />
+    <c-breadcrumb :routes="routes" @click.prevent />
     <c-breadcrumb>
       <c-breadcrumb-item>Home</c-breadcrumb-item>
       <c-breadcrumb-item :droplist="droplist"> Channel </c-breadcrumb-item>
@@ -44,6 +44,10 @@ export default {
       {
         path: '/channel',
         label: 'Channel',
+        children: [
+          { path: '/goods', label: 'Goods' },
+          { path: '/wallet', label: 'Wallet' },
+        ],
       },
       {
         path: '/news',

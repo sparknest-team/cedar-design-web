@@ -1,17 +1,9 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Space from './space'
 import { spaceProps } from './props'
 
-const Space = Object.assign(_Space, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _Space.name, _Space)
-  },
-})
+const Space = withInstall(_Space, Object.assign(_Space, {
+}), { components: [_Space] })
 
 export type SpaceInstance = InstanceType<typeof _Space>
 export type {

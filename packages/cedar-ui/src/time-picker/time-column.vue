@@ -1,6 +1,6 @@
 <template>
   <div ref="refWrapper" :class="`${prefixCls}-column`">
-    <ul>
+    <ul role="listbox" :aria-label="ariaLabel">
       <li
         v-for="item in list"
         :key="item.value"
@@ -16,11 +16,17 @@
             [`${prefixCls}-cell-selected`]: item.selected,
           },
         ]"
+        role="option"
+        :aria-selected="item.selected"
+        :aria-disabled="item.disabled"
+        :tabindex="item.disabled ? -1 : 0"
         @click="
           () => {
             onItemClick(item)
           }
         "
+        @keydown.enter.prevent="onItemClick(item)"
+        @keydown.space.prevent="onItemClick(item)"
       >
         <div :class="`${prefixCls}-cell-inner`">{{ item.label }}</div>
       </li>
@@ -32,9 +38,10 @@ import { defineComponent, nextTick, onMounted, PropType, ref, toRefs, watch } fr
 import { isUndefined } from '../_utils/is'
 import { TimeList, TimeListItem } from './types'
 import { scrollTo } from './utils'
+import { createNamespace } from '../_utils/global-config'
 
 export default defineComponent({
-  name: 'TimePickerColumn',
+  name: createNamespace('time-picker-column').name,
   props: {
     prefixCls: {
       type: String,
@@ -50,6 +57,7 @@ export default defineComponent({
     visible: {
       type: Boolean,
     },
+    ariaLabel: String,
   },
   emits: ['select'],
   setup(props, { emit }) {
@@ -86,8 +94,8 @@ export default defineComponent({
     return {
       refWrapper,
       refMap,
-      onItemRef(el: HTMLElement, item: TimeListItem) {
-        refMap.value.set(item.value, el)
+      onItemRef(el: any, item: TimeListItem) {
+        if (el) refMap.value.set(item.value, el as HTMLElement)
       },
       onItemClick(item: TimeListItem) {
         if (!item.disabled) {

@@ -11,16 +11,16 @@ function cloneFile(file: UploadFileItem): UploadFileItem {
 }
 
 export function useUploadQueue(options: {
-  fileList?: () => UploadFileItem[] | undefined
-  defaultFileList?: () => UploadFileItem[] | undefined
+  modelValue?: () => UploadFileItem[] | undefined
+  defaultValue?: () => UploadFileItem[] | undefined
   onChange?: (files: UploadFileItem[], file: UploadFileItem) => void
-  onUpdateFileList?: (files: UploadFileItem[]) => void
+  onUpdateModelValue?: (files: UploadFileItem[]) => void
 }) {
-  const innerFileList = ref<UploadFileItem[]>((options.defaultFileList?.() || []).map(cloneFile))
-  const mergedFileList = computed(() => options.fileList?.() || innerFileList.value)
+  const innerFileList = ref<UploadFileItem[]>((options.defaultValue?.() || []).map(cloneFile))
+  const mergedFileList = computed(() => options.modelValue?.() || innerFileList.value)
 
   watch(
-    () => options.fileList?.(),
+    () => options.modelValue?.(),
     (files) => {
       if (files) {
         innerFileList.value = files.map(cloneFile)
@@ -30,11 +30,11 @@ export function useUploadQueue(options: {
   )
 
   function commit(next: UploadFileItem[], changedFile: UploadFileItem) {
-    if (!options.fileList?.()) {
+    if (!options.modelValue?.()) {
       innerFileList.value = next
     }
 
-    options.onUpdateFileList?.(next)
+    options.onUpdateModelValue?.(next)
     options.onChange?.(next, changedFile)
   }
 
@@ -77,7 +77,7 @@ export function useUploadQueue(options: {
   function reset() {
     mergedFileList.value.forEach(revokeThumbnailUrl)
     innerFileList.value = []
-    options.onUpdateFileList?.([])
+    options.onUpdateModelValue?.([])
   }
 
   function getFiles(status?: UploadStatus) {

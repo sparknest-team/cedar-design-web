@@ -51,5 +51,5 @@ permalink: /components/drag-container/
 组件导出以下类型定义
 
 ```ts
-import type { DragContainerProps } from '@cedar/ui'
+import type { DragContainerProps } from '@cedarjs/ui'
 ```

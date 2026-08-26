@@ -1,5 +1,4 @@
 import type { ExtractPropTypes, PropType } from 'vue'
-import { defineListenerProp } from '../_utils/components'
 import type { Direction } from '../_utils/constant'
 import type { StepStatus, StepsType } from './types'
 
@@ -69,14 +68,6 @@ export const stepsProps = {
     type: Boolean,
     default: false,
   },
-  /**
-   * 步骤数发生改变时触发
-   */
-  onChange: defineListenerProp<(step: number, ev: Event) => void>(),
-  /**
-   * v-model:current
-   */
-  'onUpdate:current': defineListenerProp<(step: number) => void>(),
 }
 
 export const stepProps = {

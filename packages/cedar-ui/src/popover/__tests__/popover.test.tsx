@@ -11,7 +11,7 @@ describe('Popover', () => {
     expect(wrapper.html()).toMatchSnapshot()
   })
 
-  test('maps placement to trigger position', () => {
+  test('maps placement to trigger placement', () => {
     const wrapper = mount(Popover, {
       props: {
         placement: 'top-start',
@@ -22,7 +22,7 @@ describe('Popover', () => {
       },
     })
 
-    expect(wrapper.findComponent(Trigger).props('position')).toBe('tl')
+    expect(wrapper.findComponent(Trigger).props('placement')).toBe('tl')
     expect(wrapper.findComponent(Trigger).props('trigger')).toEqual([])
   })
 
@@ -36,7 +36,7 @@ describe('Popover', () => {
     wrapper.vm.open()
     await nextTick()
     expect(wrapper.emitted('open')).toBeUndefined()
-    expect(wrapper.emitted('update:popupVisible')).toBeUndefined()
+    expect(wrapper.emitted('update:open')).toBeUndefined()
   })
 
   test('exposes open and close with lifecycle events', async () => {
@@ -50,7 +50,7 @@ describe('Popover', () => {
     expect(typeof wrapper.vm.resize).toBe('function')
     wrapper.vm.open()
     await nextTick()
-    expect(wrapper.emitted('update:popupVisible')?.slice(-1)[0]).toEqual([true])
+    expect(wrapper.emitted('update:open')?.slice(-1)[0]).toEqual([true])
     expect(wrapper.emitted('open')).toHaveLength(1)
 
     trigger.vm.$emit('show')
@@ -59,7 +59,7 @@ describe('Popover', () => {
 
     wrapper.vm.close()
     await nextTick()
-    expect(wrapper.emitted('update:popupVisible')?.slice(-1)[0]).toEqual([false])
+    expect(wrapper.emitted('update:open')?.slice(-1)[0]).toEqual([false])
     expect(wrapper.emitted('close')).toHaveLength(1)
 
     trigger.vm.$emit('hide')
@@ -80,6 +80,6 @@ describe('Popover', () => {
     await nextTick()
 
     expect(wrapper.emitted('close')).toHaveLength(1)
-    expect(wrapper.emitted('update:popupVisible')?.slice(-1)[0]).toEqual([false])
+    expect(wrapper.emitted('update:open')?.slice(-1)[0]).toEqual([false])
   })
 })

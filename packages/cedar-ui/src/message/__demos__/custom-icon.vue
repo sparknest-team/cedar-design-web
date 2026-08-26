@@ -4,7 +4,8 @@
 
 <script lang="ts">
 import { defineComponent, h } from 'vue'
-import { Message, IconFaceSmileFill } from '@cedar/ui'
+import { Message } from '@cedarjs/ui'
+import { IconFaceSmileFill } from '@cedarjs/icons-vue'
 
 export default defineComponent({
   setup() {

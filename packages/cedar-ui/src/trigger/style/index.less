@@ -15,9 +15,9 @@
     z-index: -1;
     display: block;
     box-sizing: border-box;
-    width: @trigger-size-arrow-width;
-    height: @trigger-size-arrow-width;
-    background-color: @trigger-color-arrow-bg;
+    width: var(~'--c-trigger-size-arrow-width');
+    height: var(~'--c-trigger-size-arrow-width');
+    background-color: var(~'--c-trigger-arrow-bg');
     content: '';
   }
 
@@ -26,7 +26,7 @@
   &-popup[trigger-placement='tr'] &-arrow {
     border-top: none;
     border-left: none;
-    border-bottom-right-radius: @trigger-border-arrow-radius;
+    border-bottom-right-radius: var(~'--c-trigger-arrow-border-radius');
   }
 
   &-popup[trigger-placement='bottom'] &-arrow,
@@ -34,7 +34,7 @@
   &-popup[trigger-placement='br'] &-arrow {
     border-right: none;
     border-bottom: none;
-    border-top-left-radius: @trigger-border-arrow-radius;
+    border-top-left-radius: var(~'--c-trigger-arrow-border-radius');
   }
 
   &-popup[trigger-placement='left'] &-arrow,
@@ -42,7 +42,7 @@
   &-popup[trigger-placement='lb'] &-arrow {
     border-bottom: none;
     border-left: none;
-    border-top-right-radius: @trigger-border-arrow-radius;
+    border-top-right-radius: var(~'--c-trigger-arrow-border-radius');
   }
 
   &-popup[trigger-placement='right'] &-arrow,
@@ -50,6 +50,6 @@
   &-popup[trigger-placement='rb'] &-arrow {
     border-top: none;
     border-right: none;
-    border-bottom-left-radius: @trigger-border-arrow-radius;
+    border-bottom-left-radius: var(~'--c-trigger-arrow-border-radius');
   }
 }

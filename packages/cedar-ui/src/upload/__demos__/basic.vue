@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { UploadFileItem } from '@cedar/ui'
+import type { UploadFileItem } from '@cedarjs/ui'
 
 const files = ref<UploadFileItem[]>([
   { uid: 'basic-1', name: 'product-specification.pdf', url: '/product-specification.pdf', status: 'success', percent: 100 },
@@ -9,5 +9,5 @@ const files = ref<UploadFileItem[]>([
 </script>
 
 <template>
-  <c-upload v-model:file-list="files" multiple :max-files="5" />
+  <c-upload v-model="files" multiple :max-files="5" />
 </template>

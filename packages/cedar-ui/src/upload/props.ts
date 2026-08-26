@@ -12,13 +12,12 @@ import type {
   UploadImageFit,
   UploadIsSuccessResponse,
   UploadListType,
-  UploadRejectedFile,
   UploadResolveType,
 } from './interfaces'
 
 export const uploadProps = {
-  fileList: Array as PropType<UploadFileItem[]>,
-  defaultFileList: {
+  modelValue: Array as PropType<UploadFileItem[]>,
+  defaultValue: {
     type: Array as PropType<UploadFileItem[]>,
     default: () => [],
   },
@@ -96,7 +95,6 @@ export const uploadProps = {
   beforeUpload: Function as PropType<UploadBeforeUpload>,
   beforeRemove: Function as PropType<UploadBeforeRemove>,
   isSuccessResponse: Function as PropType<UploadIsSuccessResponse>,
-  onRejected: Function as PropType<(files: UploadRejectedFile[]) => void>,
 }
 
 export type UploadProps = typeof uploadProps

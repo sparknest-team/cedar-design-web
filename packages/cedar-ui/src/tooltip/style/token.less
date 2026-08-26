@@ -1,14 +1,19 @@
 @import '../../style/theme/index.less';
 
-@tooltip-padding-horizontal: @spacing-6;
-@tooltip-padding-vertical: @spacing-4;
+/******** Tooltip CSS Variables *******/
+:root {
+  --c-tooltip-padding-horizontal: var(~'--c-spacing-6');
+  --c-tooltip-padding-vertical: var(~'--c-spacing-4');
 
-@tooltip-xs-padding-horizontal: @spacing-6;
-@tooltip-xs-padding-vertical: @spacing-2;
-@tooltip-xs-font-size: @font-size-body-3;
+  --c-tooltip-size-xs-padding-horizontal: var(~'--c-spacing-6');
+  --c-tooltip-size-xs-padding-vertical: var(~'--c-spacing-2');
+  --c-tooltip-size-xs-font-size: var(~'--c-font-size-body-3');
 
-@tooltip-font-size: @font-size-body-3;
-@tooltip-border-radius: @radius-sm;
+  --c-tooltip-font-size: var(~'--c-font-size-body-3');
+  --c-tooltip-border-radius: var(~'--c-border-radius-sm');
+  --c-tooltip-line-height: var(~'--c-line-height');
+  --c-tooltip-max-width: 350px;
 
-@tooltip-color-text: #fff;
-@tooltip-color-bg: var(~'--c-color-tooltip-bg');
+  --c-tooltip-text-color: var(~'--c-color-white');
+  --c-tooltip-bg: var(~'--c-color-tooltip-bg');
+}

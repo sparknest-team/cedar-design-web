@@ -34,7 +34,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Message } from '@cedar/ui'
+import { Message } from '@cedarjs/ui'
 
 const onBack = () => {
   Message.info('点击返回')

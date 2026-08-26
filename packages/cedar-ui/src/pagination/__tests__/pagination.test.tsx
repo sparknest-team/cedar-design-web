@@ -5,7 +5,7 @@ import { Pagination } from '../index'
 
 describe('Pagination', () => {
   test('render', async () => {
-    const wrapper = mount(Pagination)
+    const wrapper = mount(Pagination, { props: { total: 0 } })
     await nextTick()
     expect(wrapper.html()).toMatchSnapshot()
   })

@@ -1,17 +1,10 @@
-import type { App } from 'vue'
 import { ref } from 'vue'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
-import type { CedarOptions } from '../_utils/types'
+import { withInstall } from '../_utils/global-config'
 import _HoverOverlay from './HoverOverlay.vue'
 import { hoverOverlayProps } from './props'
 
-const HoverOverlay = Object.assign(_HoverOverlay, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-    app.component(componentPrefix + _HoverOverlay.name, _HoverOverlay)
-  },
-})
+const HoverOverlay = withInstall(_HoverOverlay, Object.assign(_HoverOverlay, {
+}), { components: [_HoverOverlay] })
 
 export function useHoverOverlay() {
   const hovering = ref(false)

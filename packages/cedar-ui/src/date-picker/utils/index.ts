@@ -1,4 +1,4 @@
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 import { dayjs } from '../../_utils/date'
 import { isArray, isDayjs, isUndefined } from '../../_utils/is'
 import { CalendarValue } from '../types'

@@ -8,13 +8,13 @@
   left: 0;
 }
 
-.c-dialog-overlay {
+.c-dialog-mask {
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  background-color: var(~'--c-color-mask-bg');
+  background-color: var(~'--c-dialog-mask-bg');
 }
 
 .c-dialog-wrapper {
@@ -55,15 +55,15 @@
 
 .c-dialog {
   position: relative;
-  top: @dialog-margin-top;
+  top: var(~'--c-dialog-margin-top');
   display: inline-block;
-  width: @dialog-default-size-width;
+  width: var(~'--c-dialog-width');
   margin: 0 auto;
-  line-height: var(~'--c-line-height');
+  line-height: var(~'--c-dialog-line-height');
   white-space: initial;
   text-align: left;
-  background-color: var(~'--c-color-bg-3');
-  border-radius: @dialog-border-radius;
+  background-color: var(~'--c-dialog-bg');
+  border-radius: var(~'--c-dialog-border-radius');
 
   &-draggable {
     .c-dialog-header {
@@ -77,19 +77,15 @@
     align-items: center;
     box-sizing: border-box;
     width: 100%;
-    height: @dialog-default-size-header-height;
-    padding: 0 @dialog-default-padding-horizontal;
-    border-bottom: @border-1 solid @dialog-color-border;
+    height: var(~'--c-dialog-header-height');
+    padding: 0 var(~'--c-dialog-padding-horizontal');
+    border-bottom: var(~'--c-dialog-border-width') solid var(~'--c-dialog-border-color');
 
     .c-dialog-title {
       display: flex;
       flex: 1;
       align-items: center;
-      justify-content: if(
-        (@dialog-default-align-header = left),
-        flex-start,
-        (if((@dialog-default-align-header = right), flex-end, center))
-      );
+      justify-content: var(~'--c-dialog-header-justify');
 
       &-align-start {
         justify-content: flex-start;
@@ -103,56 +99,56 @@
 
   &-body {
     position: relative;
-    padding: @dialog-default-padding-content-vertical @dialog-default-padding-horizontal;
+    padding: var(~'--c-dialog-content-padding-vertical') var(~'--c-dialog-padding-horizontal');
     overflow: auto;
-    color: @dialog-color-content-text;
-    font-size: @dialog-font-content-size;
+    color: var(~'--c-dialog-content-text-color');
+    font-size: var(~'--c-dialog-content-font-size');
   }
 
   &-footer {
     flex-shrink: 0;
     box-sizing: border-box;
     width: 100%;
-    padding: @dialog-default-padding-footer-vertical @dialog-default-padding-horizontal;
+    padding: var(~'--c-dialog-footer-padding-vertical') var(~'--c-dialog-padding-horizontal');
     text-align: right;
-    border-top: @border-1 solid @dialog-color-border;
+    border-top: var(~'--c-dialog-border-width') solid var(~'--c-dialog-border-color');
 
     > .c-button:not(:nth-child(1)) {
-      margin-left: @dialog-margin-footer-button-left;
+      margin-left: var(~'--c-dialog-footer-button-margin-left');
     }
   }
 
   &-close-btn {
-    margin-left: -@dialog-font-size-close-icon;
-    color: @dialog-color-header-text;
-    font-size: @dialog-font-size-close-icon;
+    margin-left: calc(var(~'--c-dialog-close-icon-font-size') * -1);
+    color: var(~'--c-dialog-header-text-color');
+    font-size: var(~'--c-dialog-close-icon-font-size');
     cursor: pointer;
   }
 
   &-title {
-    color: @dialog-color-header-text;
-    font-weight: @font-weight-500;
-    font-size: @dialog-font-header-size;
+    color: var(~'--c-dialog-header-text-color');
+    font-weight: var(~'--c-dialog-title-font-weight');
+    font-size: var(~'--c-dialog-header-font-size');
 
     &-icon {
-      margin-right: @dialog-margin-tip-icon-right;
-      font-size: @dialog-size-tip-icon;
+      margin-right: var(~'--c-dialog-tip-icon-margin-right');
+      font-size: var(~'--c-dialog-tip-icon-size');
       vertical-align: -0.15em;
 
       .c-icon-info-circle-fill {
-        color: @color-primary-6;
+        color: var(~'--c-dialog-status-info-icon-color');
       }
 
       .c-icon-check-circle-fill {
-        color: @color-success-6;
+        color: var(~'--c-dialog-status-success-icon-color');
       }
 
       .c-icon-exclamation-circle-fill {
-        color: @color-warning-6;
+        color: var(~'--c-dialog-status-warning-icon-color');
       }
 
       .c-icon-close-circle-fill {
-        color: @color-danger-6;
+        color: var(~'--c-dialog-status-danger-icon-color');
       }
     }
   }
@@ -160,8 +156,9 @@
 
 // 简洁模式
 .c-dialog-simple {
-  width: @dialog-simple-size-width;
-  padding: @dialog-simple-padding-top @dialog-simple-padding-horizontal @dialog-simple-padding-bottom;
+  width: var(~'--c-dialog-simple-width');
+  padding: var(~'--c-dialog-simple-padding-top') var(~'--c-dialog-simple-padding-horizontal')
+    var(~'--c-dialog-simple-padding-bottom');
 
   .c-dialog-header,
   .c-dialog-footer {
@@ -171,15 +168,11 @@
   }
 
   .c-dialog-header {
-    margin-bottom: @dialog-simple-margin-content-top;
+    margin-bottom: var(~'--c-dialog-simple-content-margin-top');
   }
 
   .c-dialog-title {
-    justify-content: if(
-      (@dialog-default-align-header = left),
-      flex-start,
-      (if((@dialog-default-align-header = right), flex-end, center))
-    );
+    justify-content: var(~'--c-dialog-simple-header-justify');
 
     &-align-start {
       justify-content: flex-start;
@@ -191,7 +184,7 @@
   }
 
   .c-dialog-footer {
-    margin-top: @dialog-simple-margin-footer-top;
+    margin-top: var(~'--c-dialog-simple-footer-margin-top');
     text-align: center;
   }
 
@@ -228,8 +221,8 @@
 .zoom-modal-enter-active,
 .zoom-modal-appear-active {
   transition:
-    opacity @transition-duration-4 @transition-timing-function-overshoot,
-    transform @transition-duration-4 @transition-timing-function-overshoot;
+    opacity var(~'--c-dialog-transition-duration') var(~'--c-dialog-transition-timing-function'),
+    transform var(~'--c-dialog-transition-duration') var(~'--c-dialog-transition-timing-function');
 }
 
 .zoom-modal-leave-from {
@@ -244,8 +237,8 @@
 
 .zoom-modal-leave-active {
   transition:
-    opacity @transition-duration-4 @transition-timing-function-overshoot,
-    transform @transition-duration-4 @transition-timing-function-overshoot;
+    opacity var(~'--c-dialog-transition-duration') var(~'--c-dialog-transition-timing-function'),
+    transform var(~'--c-dialog-transition-duration') var(~'--c-dialog-transition-timing-function');
 }
 
 .fade-modal-enter-from,
@@ -260,7 +253,7 @@
 
 .fade-modal-enter-active,
 .fade-modal-appear-active {
-  transition: opacity @transition-duration-4 @transition-timing-function-overshoot;
+  transition: opacity var(~'--c-dialog-transition-duration') var(~'--c-dialog-transition-timing-function');
 }
 
 .fade-modal-leave-from {
@@ -272,5 +265,5 @@
 }
 
 .fade-modal-leave-active {
-  transition: opacity @transition-duration-4 @transition-timing-function-overshoot;
+  transition: opacity var(~'--c-dialog-transition-duration') var(~'--c-dialog-transition-timing-function');
 }

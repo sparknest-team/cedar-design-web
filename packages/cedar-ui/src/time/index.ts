@@ -1,16 +1,13 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Time from './time.vue'
+import { timeProps } from './props'
 
-const Time = Object.assign(_Time, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-    app.component(componentPrefix + _Time.name, _Time)
-  },
-})
+const Time = withInstall(_Time, Object.assign(_Time, {
+}), { components: [_Time] })
 
 export type TimeInstance = InstanceType<typeof _Time>
+export type { TimeProps } from './props'
+export { Time, timeProps }
+export const _TimeComponent = Time
 
 export default Time

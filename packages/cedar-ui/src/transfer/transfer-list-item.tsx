@@ -2,12 +2,12 @@ import { computed, defineComponent, inject, PropType } from 'vue'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
 import IconHover from '../_components/icon-hover.vue'
 import Checkbox from '../checkbox'
-import IconDragDotVertical from '../icon/icon-drag-dot-vertical'
-import IconInfoCircle from '../icon/icon-info-circle'
+import { IconDragDotVertical } from '@cedarjs/icons-vue/icon-drag-dot-vertical'
+import { IconInfoCircle } from '@cedarjs/icons-vue/icon-info-circle'
 import Tooltip from '../tooltip'
 import Popover from '../popover'
-import IconMore from '../icon/icon-more'
-import IconClose from '../icon/icon-close'
+import { IconMore } from '@cedarjs/icons-vue/icon-more'
+import { IconClose } from '@cedarjs/icons-vue/icon-close'
 import type { TransferTargetAction } from './types'
 import type { TransferItem, TransferValue } from './types'
 import { transferInjectionKey } from './context'
@@ -43,7 +43,7 @@ export default defineComponent({
     const prefixCls = getPrefixCls('transfer-list-item')
     const transferCtx = inject(transferInjectionKey, undefined)
 
-    const handleClick = () => {
+    const handleClick = (_ev?: Event) => {
       if (props.simple && !props.disabled) {
         transferCtx?.moveTo([props.data.value], props.type === 'target' ? 'source' : 'target')
       }
@@ -111,7 +111,19 @@ export default defineComponent({
     )
 
     return () => (
-      <div class={cls.value} onClick={handleClick}>
+      <div
+        class={cls.value}
+        role="button"
+        tabindex={props.data.disabled ? -1 : 0}
+        aria-disabled={props.data.disabled}
+        onClick={handleClick}
+        onKeydown={(event: KeyboardEvent) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault()
+            handleClick(event as unknown as MouseEvent)
+          }
+        }}
+      >
         {props.draggable && <IconDragDotVertical class={`${prefixCls}-drag-handle`} />}
         <div class={`${prefixCls}-details`}>
           {props.clearable || props.simple ? (
@@ -139,7 +151,11 @@ export default defineComponent({
             </Checkbox>
           )}
           {props.data.tip && (
-            <Tooltip content={props.data.tip}>
+            <Tooltip
+              v-slots={{
+                content: () => (typeof props.data.tip === 'function' ? props.data.tip() : props.data.tip),
+              }}
+            >
               <span class={`${prefixCls}-tip`}>
                 <IconInfoCircle />
               </span>
@@ -147,9 +163,11 @@ export default defineComponent({
           )}
         </div>
         {props.clearable && !props.disabled && props.operationMode === 'remove' && (
-          <IconHover class={`${prefixCls}-remove-btn`} onClick={handleRemove}>
-            <IconClose />
-          </IconHover>
+          <span onClick={handleRemove}>
+            <IconHover class={`${prefixCls}-remove-btn`}>
+              <IconClose />
+            </IconHover>
+          </span>
         )}
         {props.clearable && !props.disabled && props.operationMode === 'menu' && (
           <Popover trigger="click" placement="bottom-start" v-slots={{ content: operationMenu }}>

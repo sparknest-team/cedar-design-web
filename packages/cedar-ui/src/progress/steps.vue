@@ -1,12 +1,12 @@
 <template>
-  <div role="progressbar" aria-valuemin="0" aria-valuemax="100" :aria-valuenow="percent" :class="classes(n('wrapper'))">
+  <div role="progressbar" aria-valuemin="0" aria-valuemax="1" :aria-valuenow="percent" :class="classes(n('wrapper'))">
     <div :class="classes(n())" :style="{ height: `${mergedStrokeWidth}px` }">
       <div
         v-for="(active, index) of stepList"
         :key="index"
         :class="classes(n('item'), [active, n('item--active')])"
         :style="{
-          backgroundColor: active ? color : trackColor,
+          backgroundColor: (active ? color : trackColor) as any,
         }"
       />
     </div>
@@ -23,7 +23,7 @@
 import { computed, defineComponent, PropType } from 'vue'
 import NP from 'number-precision'
 import { createNamespace } from '../_utils/global-config'
-import IconExclamationCircleFill from '../icon/icon-exclamation-circle-fill'
+import { IconExclamationCircleFill } from '@cedarjs/icons-vue/icon-exclamation-circle-fill'
 
 const { name, n, classes } = createNamespace('progress-steps')
 

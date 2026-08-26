@@ -11,9 +11,9 @@ import Checkbox from "../checkbox";
 import Radio from "../radio";
 import Button from "../button";
 import Trigger from "../trigger";
-import IconCaretDown from "../icon/icon-caret-down";
-import IconCaretUp from "../icon/icon-caret-up";
-import IconFilter from "../icon/icon-filter";
+import { IconCaretDown } from '@cedarjs/icons-vue/icon-caret-down'
+import { IconCaretUp } from '@cedarjs/icons-vue/icon-caret-up'
+import { IconFilter } from '@cedarjs/icons-vue/icon-filter'
 import { TableColumnData, TableOperationColumn } from "./types";
 import { useColumnSorter } from "./hooks/use-column-sorter";
 import { useColumnFilter } from "./hooks/use-column-filter";
@@ -21,7 +21,9 @@ import { getFixedCls, getStyle } from "./utils";
 import { isBoolean, isFunction, isObject } from "../_utils/is";
 import { TableContext, tableInjectionKey } from "./context";
 import AutoTooltip from "../_components/auto-tooltip/auto-tooltip";
+import IconHover from "../_components/icon-hover.vue";
 import { TABLE_EXTRA_COLUMN_KEY } from "./extra-column";
+import { useI18n } from "../locale";
 
 const { name } = createNamespace("th");
 
@@ -45,6 +47,7 @@ export default defineComponent({
   setup(props, { slots }) {
     const { column } = toRefs(props);
     const prefixCls = getPrefixCls("table");
+    const { t } = useI18n();
 
     const tableCtx = inject<Partial<TableContext>>(tableInjectionKey, {});
 
@@ -85,11 +88,11 @@ export default defineComponent({
     });
 
     const {
-      filterPopupVisible,
+      filterOpen,
       isFilterActive,
       isMultipleFilter,
       columnFilterValue,
-      handleFilterPopupVisibleChange,
+      handleFilterOpenChange,
       setFilterValue,
       handleCheckboxFilterChange,
       handleRadioFilterChange,
@@ -165,7 +168,7 @@ export default defineComponent({
             <Button size="xs" onClick={handleFilterReset}>
               {t("table.resetText")}
             </Button>
-            <Button type="primary" size="xs" onClick={handleFilterConfirm}>
+            <Button status="primary" size="xs" onClick={handleFilterConfirm}>
               {t("table.okText")}
             </Button>
           </div>
@@ -183,11 +186,12 @@ export default defineComponent({
       return (
         <Trigger
           v-slots={{ content: renderFilterContent }}
-          popupVisible={filterPopupVisible.value}
+          open={filterOpen.value}
           trigger="click"
           autoFitPosition
           popupOffset={inlineFilter.value ? 4 : 0}
-          onPopupVisibleChange={handleFilterPopupVisibleChange}
+          onOpenChange={handleFilterOpenChange}
+          onUpdate:open={handleFilterOpenChange}
           {...filterable.triggerProps}
         >
           <IconHover
@@ -195,7 +199,7 @@ export default defineComponent({
               `${prefixCls}-filters`,
               {
                 [`${prefixCls}-filters-active`]: isFilterActive.value,
-                [`${prefixCls}-filters-open`]: filterPopupVisible.value,
+                [`${prefixCls}-filters-open`]: filterOpen.value,
                 [`${prefixCls}-filters-align-left`]: inlineFilter.value,
               },
             ]}
@@ -367,7 +371,19 @@ export default defineComponent({
       return (
         <span
           class={cellCls.value}
+          role={hasSorter.value ? 'button' : undefined}
+          tabindex={hasSorter.value ? 0 : undefined}
           onClick={hasSorter.value ? handleClickSorter : undefined}
+          onKeydown={
+            hasSorter.value
+              ? (event: KeyboardEvent) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault()
+                    handleClickSorter(event as unknown as MouseEvent)
+                  }
+                }
+              : undefined
+          }
         >
           <span class={`${prefixCls}-th-main`}>
             {renderTitleNode()}
@@ -377,6 +393,7 @@ export default defineComponent({
           {showHeaderActions.value && (
             <span
               class={`${prefixCls}-th-actions`}
+              role="presentation"
               // @ts-ignore
               onClick={(ev: Event) => ev.stopPropagation()}
             >

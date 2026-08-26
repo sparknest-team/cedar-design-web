@@ -9,7 +9,7 @@
       :disabled="mergedDisabled"
       :selected="computedSelected"
       :show-search="sourceShowSearch"
-      :filter-option="mergedFilter"
+      :filter="mergedFilter"
       :show-select-all="showSelectAll"
       :simple="false"
       :search-props="mergedSourceSearchProps"
@@ -34,7 +34,7 @@
       :selected="computedSelected"
       clearable
       :show-search="targetShowSearch"
-      :filter-option="mergedFilter"
+      :filter="mergedFilter"
       :show-select-all="showSelectAll"
       :simple="false"
       :search-props="mergedTargetSearchProps"
@@ -54,11 +54,11 @@
     </transfer-view>
   </div>
   <Dialog
-    :show="renameVisible"
+    :open="renameVisible"
     title="重命名"
     :width="420"
     unmount-on-close
-    @update:show="renameVisible = $event"
+    @update:open="renameVisible = $event"
     @confirm="commitRename"
   >
     <Input v-model="renameDraft" placeholder="请输入名称" @press-enter="commitRename" />
@@ -66,6 +66,8 @@
 </template>
 
 <script lang="ts">
+import { transferProps } from './props'
+import { createNamespace } from '../_utils/global-config'
 import { computed, defineComponent, PropType, provide, reactive, ref, toRef } from 'vue'
 import { getPrefixCls } from '../_utils/global-config'
 import TransferView from './transfer-view.vue'
@@ -77,130 +79,14 @@ import Input from '../input'
 import type { TransferFixed, TransferTargetAction } from './types'
 
 export default defineComponent({
-  name: 'Transfer',
+  name: createNamespace("transfer").name,
   inheritAttrs: false,
   components: {
     TransferView,
     Dialog,
     Input,
   },
-  props: {
-    /**
-     * @zh 穿梭框的数据
-     * @en Data of the transfer
-     */
-    data: {
-      type: Array as PropType<TransferItem[]>,
-      default: () => [],
-    },
-    /**
-     * @zh 目标选择框中的值
-     * @en Value in the target selection box
-     * @vModel
-     */
-    modelValue: {
-      type: Array as PropType<TransferTargetItem[]>,
-      default: undefined,
-    },
-    /**
-     * @zh 目标选择框中默认的值（非受控状态）
-     * @en The default value in the target selection box (uncontrolled state)
-     */
-    defaultValue: {
-      type: Array as PropType<TransferTargetItem[]>,
-      default: () => [],
-    },
-    /**
-     * @zh 是否禁用
-     * @en Whether to disable
-     */
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    /** 是否启用虚拟滚动，适用于大数据。 */
-    virtualScroll: Boolean,
-    /** 是否允许拖拽调整右侧已选项顺序。 */
-    targetDraggable: Boolean,
-    /** 右侧操作方式：删除图标或完整操作菜单。 */
-    targetOperation: {
-      type: String as PropType<'remove' | 'menu'>,
-      default: 'remove',
-    },
-    clearText: String,
-    targetActions: {
-      type: Array as PropType<TransferTargetAction[]>,
-      default: () => [],
-    },
-    /**
-     * @zh 是否显示搜索框
-     * @en Whether to show the search input
-     */
-    showSearch: {
-      type: Boolean,
-      default: false,
-    },
-    /** 同时开启左右两侧搜索，兼容 Naive UI 的旧属性。 */
-    filterable: {
-      type: Boolean,
-      default: undefined,
-    },
-    /** 是否开启源列表搜索。 */
-    sourceFilterable: Boolean,
-    /** 是否开启目标列表搜索。 */
-    targetFilterable: Boolean,
-    /** Naive UI 风格的搜索过滤函数。 */
-    filter: {
-      type: Function as PropType<TransferFilter>,
-      default: (value: string, item: TransferItem) => item.label.toLowerCase().includes(value.toLowerCase()),
-    },
-    /** Cedar 旧版搜索过滤函数，优先级高于 filter。 */
-    filterOption: {
-      type: Function as PropType<TransferFilter>,
-    },
-    sourceFilterPlaceholder: String,
-    targetFilterPlaceholder: String,
-    /** 是否在源列表中保留已经选中的选项。 */
-    showSelected: {
-      type: Boolean,
-      default: true,
-    },
-    sourceTitle: String,
-    targetTitle: String,
-    /**
-     * @zh 是否展示全选勾选框
-     * @en Whether show select all checkbox on the header
-     * @version 2.39.0
-     */
-    showSelectAll: {
-      type: Boolean,
-      default: true,
-    },
-    /**
-     * @zh 源选择框和目标选择框的标题
-     * @en The title of the source and target selection boxes
-     */
-    title: {
-      type: Array as PropType<string[]>,
-      default: () => ['全选', '已选'],
-    },
-    /**
-     * @zh 源选择框的搜索框配置
-     * @en Search box configuration for source selection box
-     * @version 2.51.1
-     */
-    sourceSearchProps: {
-      type: Object,
-    },
-    /**
-     * @zh 目标选择框的搜索框配置
-     * @en Search box configuration for target selection box
-     * @version 2.51.1
-     */
-    targetSearchProps: {
-      type: Object,
-    },
-  },
+  props: transferProps,
   emits: {
     'update:modelValue': (value: TransferTargetItem[]) => true,
     /**
@@ -296,9 +182,9 @@ export default defineComponent({
     const computedTargetValues = computed(() => computedTarget.value.map((item) => item.value))
     const sourceTitle = computed(() => props.sourceTitle ?? props.title?.[0])
     const targetTitle = computed(() => props.targetTitle ?? props.title?.[1])
-    const sourceShowSearch = computed(() => props.showSearch || props.filterable === true || props.sourceFilterable)
-    const targetShowSearch = computed(() => props.showSearch || props.filterable === true || props.targetFilterable)
-    const mergedFilter = computed(() => props.filterOption ?? props.filter)
+    const sourceShowSearch = computed(() => props.showSearch || props.sourceFilterable)
+    const targetShowSearch = computed(() => props.showSearch || props.targetFilterable)
+    const mergedFilter = computed(() => props.filter)
     const mergedSourceSearchProps = computed(() => ({
       ...props.sourceSearchProps,
       placeholder: props.sourceFilterPlaceholder ?? props.sourceSearchProps?.placeholder,

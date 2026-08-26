@@ -1,8 +1,7 @@
 import { type App, type Directive, type DirectiveBinding, type Plugin } from 'vue'
-import { getRect, getStyle, supportTouch } from '@maplejs/maple-shared'
+import { getRect, getStyle, supportTouch } from '@cedarjs/shared'
 import context from '../context/index'
 import { createNamespace } from '../_utils/global-config'
-import './style/index.less'
 
 const { n } = createNamespace('ripple')
 
@@ -65,7 +64,6 @@ function computeRippleStyles(element: RippleHTMLElement, event: TouchEvent | Key
 }
 
 function createRipple(this: RippleHTMLElement, event: TouchEvent | KeyboardEvent) {
-    console.log('createRipple', event)
   const _ripple = this._ripple as RippleOptions
   _ripple.removeRipple()
 
@@ -128,7 +126,6 @@ function removeRipple(this: RippleHTMLElement) {
 }
 
 function forbidRippleTask(this: RippleHTMLElement) {
-    console.log('forbidRippleTask', supportTouch())
   if (!supportTouch() || !context.enableRipple) {
     return
   }
@@ -161,15 +158,12 @@ function removeKeyboardRipple(this: RippleHTMLElement) {
 }
 
 function mounted(el: RippleHTMLElement, binding: DirectiveBinding<RippleOptions>) {
-    console.log('mounted', el, binding)
   el._ripple = {
     tasker: null,
     ...(binding.value ?? {}),
     removeRipple: removeRipple.bind(el),
   }
 
-  console.log('supportTouch', supportTouch())
-  console.log('context.enableRipple', context.enableRipple)
 
   el.addEventListener('touchstart', createRipple, { passive: true })
   el.addEventListener('touchmove', forbidRippleTask, { passive: true })
@@ -225,5 +219,7 @@ const Ripple: Directive & Plugin = {
 }
 
 export const _RippleComponent = Ripple
+
+export { Ripple }
 
 export default Ripple

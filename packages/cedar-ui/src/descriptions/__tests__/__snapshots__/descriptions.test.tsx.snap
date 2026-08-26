@@ -1,11 +1,16 @@
 // Vitest Snapshot v1
 
 exports[`Descriptions > render 1`] = `
-"<div class=\\"arco-descriptions arco-descriptions-layout-horizontal arco-descriptions-size-medium c-descriptions\\">
-  <!---->
-  <div class=\\"arco-descriptions-body\\">
-    <table class=\\"arco-descriptions-table\\">
-      <tbody></tbody>
+"<div class=\\"c-descriptions c-descriptions-layout-horizontal c-descriptions-size-md\\">
+  <div class=\\"c-descriptions-title\\">Account details</div>
+  <div class=\\"c-descriptions-body\\">
+    <table class=\\"c-descriptions-table\\" aria-label=\\"Account details\\">
+      <tbody>
+        <tr class=\\"c-descriptions-row\\">
+          <th scope=\\"row\\" class=\\"c-descriptions-item-label c-descriptions-item-label-block\\" style=\\"text-align: left;\\">Owner</th>
+          <td class=\\"c-descriptions-item-value c-descriptions-item-value-block\\" style=\\"text-align: left;\\" colspan=\\"5\\">Ada</td>
+        </tr>
+      </tbody>
     </table>
   </div>
 </div>"

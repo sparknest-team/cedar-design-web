@@ -63,7 +63,6 @@ describe('Search', () => {
     expect((input.element as HTMLInputElement).value).toBe('设备 A')
     expect(wrapper.emitted('search')?.[0]?.[0]).toMatchObject({
       modelValue: '设备 A',
-      searchText: '设备 A',
     })
   })
 })

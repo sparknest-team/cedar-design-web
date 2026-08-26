@@ -94,9 +94,9 @@ modelValue 使用路径作为值。
 | clearable                   | 是否允许清除                                 | `boolean`                                                                                                                                                          |               `false`               |
 | input-value **(v-model)**   | 输入框的值                                   | `string`                                                                                                                                                           |                 `-`                 |
 | default-input-value         | 输入框的默认值（非受控状态）                 | `string`                                                                                                                                                           |                `''`                 |
-| popup-visible **(v-model)** | 是否显示下拉框                               | `boolean`                                                                                                                                                          |                 `-`                 |
+| open **(v-model)** | 是否显示下拉框                               | `boolean`                                                                                                                                                          |                 `-`                 |
 | expand-trigger              | 展开下一级的触发方式                         | `'click' \| 'hover'`                                                                                                                                               |              `'click'`              |
-| default-popup-visible       | 是否默认显示下拉框（非受控状态）             | `boolean`                                                                                                                                                          |               `false`               |
+| default-open       | 是否默认显示下拉框（非受控状态）             | `boolean`                                                                                                                                                          |               `false`               |
 | placeholder                 | 占位符                                       | `string`                                                                                                                                                           |                 `-`                 |
 | filter-option               | 自定义选项过滤方法                           | `(inputValue: string, option: CascaderOption) => boolean`                                                                                                          |                 `-`                 |
 | popup-container             | 弹出框的挂载容器                             | `string \| HTMLElement \| null \| undefined`                                                                                                                       |                 `-`                 |
@@ -108,8 +108,7 @@ modelValue 使用路径作为值。
 | loading                     | 是否为加载中状态                             | `boolean`                                                                                                                                                          |               `false`               |
 | search-option-only-label    | 搜索下拉菜单中的选项是否仅展示标签           | `boolean`                                                                                                                                                          |               `false`               |
 | search-delay                | 触发搜索事件的延迟时间                       | `number`                                                                                                                                                           |                `500`                |
-| field-names                 | 自定义 `CascaderOption` 中的字段             | `CascaderFieldNames`                                                                                                                                               |                 `-`                 |
-| value-key                   | 用于确定选项键值的属性名                     | `string`                                                                                                                                                           |              `'value'`              |
+| field-names                 | 自定义 `CascaderOption` 中的字段；当选项值为对象时，也用其中的 `value` 作为键属性 | `CascaderFieldNames`                                                                                                                                               |                 `-`                 |
 | fallback                    | 自定义不存在选项的值的展示                   | `boolean\| ((    value:      \| string      \| number      \| Record<string, unknown>      \| (string \| number \| Record<string, unknown>)[]  ) => string)`       |               `true`                |
 | expand-child                | 是否展开子菜单                               | `boolean`                                                                                                                                                          |               `false`               |
 | virtual-list-props          | 传递虚拟列表属性，传入此参数以开启虚拟滚动   | `VirtualListProps`                                                                                                                                                 |                `'-'`                |
@@ -122,7 +121,7 @@ modelValue 使用路径作为值。
 | input-value-change   | 输入值改变时触发           | value: `string`                                                                        |
 | clear                | 点击清除按钮时触发         | -                                                                                      |
 | search               | 用户搜索时触发             | value: `string`                                                                        |
-| popup-visible-change | 下拉框的显示状态改变时触发 | visible: `boolean`                                                                     |
+| open-change | 下拉框的显示状态改变时触发 | open: `boolean`                                                                     |
 | focus                | 获得焦点时触发             | ev: `FocusEvent`                                                                       |
 | blur                 | 失去焦点时触发             | ev: `FocusEvent`                                                                       |
 
@@ -150,8 +149,7 @@ modelValue 使用路径作为值。
 | expand-trigger            | 展开下一级的触发方式                   | `string`                                                                                                                                                           |        `'click'`        |
 | check-strictly            | 是否开启严格选择模式                   | `boolean`                                                                                                                                                          |         `false`         |
 | load-more                 | 数据懒加载函数，传入时开启懒加载功能   | `(  option: CascaderOption,  done: (children?: CascaderOption[]) => void) => void`                                                                                 |           `-`           |
-| field-names               | 自定义 `CascaderOption` 中的字段       | `CascaderFieldNames`                                                                                                                                               |           `-`           |
-| value-key                 | 用于确定选项键值的属性名               | `string`                                                                                                                                                           |        `'value'`        |
+| field-names               | 自定义 `CascaderOption` 中的字段；当选项值为对象时，也用其中的 `value` 作为键属性 | `CascaderFieldNames`                                                                                                                                               |           `-`           |
 | expand-child              | 是否展开子菜单                         | `boolean`                                                                                                                                                          |         `false`         |
 
 ### `<CascaderPanel>` Events
@@ -183,5 +181,5 @@ modelValue 使用路径作为值。
 组件导出以下类型定义
 
 ```ts
-import type { CascaderProps } from '@cedar/ui'
+import type { CascaderProps } from '@cedarjs/ui'
 ```

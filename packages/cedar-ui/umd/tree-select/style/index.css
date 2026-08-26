@@ -1,0 +1,121 @@
+.c--box {
+  box-sizing: border-box;
+}
+.c--box * {
+  box-sizing: border-box;
+}
+.c--lock {
+  overflow: hidden !important;
+}
+.c--ellipsis {
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.c--inline-block {
+  display: inline-block;
+}
+.c--flex {
+  display: flex;
+}
+.c--inline-flex {
+  display: inline-flex;
+}
+/******** borderSize *******/
+/******** borderStyle *******/
+/******** radius *******/
+/******** shadow distance *******/
+/******** size *******/
+/******** spacing *******/
+/******** shadow *******/
+/******** opacity *******/
+/******** fontSize *******/
+/******** fontWeight ********/
+/******** Primary *******/
+/******** success *******/
+/******** info *******/
+/******** warning *******/
+/******** danger *******/
+/******** link *******/
+/******** radius *******/
+/******** motion *******/
+/******** z-index *******/
+/******** scale CSS var wrappers (public Less API) *******/
+/********* icon hover *********/
+:root {
+  /**********************************************
+   * Popup Box
+   **********************************************/
+  --c-select-popup-max-height: var(--c-size-50);
+  --c-select-popup-border-radius: var(--c-border-radius-md);
+  --c-select-popup-padding-vertical: var(--c-spacing-2);
+  --c-select-popup-font-size: var(--c-font-size-body-3);
+  --c-select-popup-bg: var(--c-color-bg-popup);
+  --c-select-popup-border-color: var(--c-color-fill-3);
+  --c-select-popup-box-shadow: var(--c-shadow2-down);
+  /**********************************************
+   * Popup Options
+   * status: default / disabled / selected / hover
+   **********************************************/
+  --c-select-popup-option-height: var(--c-size-9);
+  --c-select-popup-option-font-weight-selected: var(--c-font-weight-500);
+  --c-select-popup-option-padding-horizontal: var(--c-spacing-6);
+  --c-select-multi-popup-option-padding-horizontal: var(--c-spacing-2);
+  --c-select-popup-option-bg: var(--c-color-bg-popup);
+  --c-select-popup-option-bg-hover: var(--c-color-fill-2);
+  --c-select-popup-option-bg-selected: var(--c-color-bg-popup);
+  --c-select-popup-option-bg-disabled: var(--c-color-bg-popup);
+  --c-select-popup-option-text-color: var(--c-color-text-1);
+  --c-select-popup-option-text-color-hover: var(--c-color-text-1);
+  --c-select-popup-option-text-color-selected: var(--c-color-text-1);
+  --c-select-popup-option-text-color-disabled: var(--c-color-text-4);
+  --c-select-popup-option-highlight-text-color: var(--c-color-text-1);
+  --c-select-popup-option-highlight-font-weight: var(--c-font-weight-500);
+  --c-select-popup-group-title-height: var(--c-size-5);
+  --c-select-popup-group-title-padding-horizontal: var(--c-spacing-6);
+  --c-select-popup-group-title-padding-top: var(--c-spacing-4);
+  --c-select-popup-group-title-font-size: var(--c-font-size-body-1);
+  --c-select-popup-group-title-text-color: var(--c-color-text-3);
+  --c-select-popup-option-suffix-icon-margin-left: var(--c-spacing-6);
+  --c-select-popup-loading-min-height: 50px;
+  --c-select-popup-option-icon-margin-right: var(--c-spacing-4);
+}
+:root {
+  --c-tree-select-popup-padding-left: var(--c-spacing-5);
+  --c-tree-select-popup-padding-right: var(--c-spacing-2);
+  --c-tree-select-popup-padding-vertical: var(--c-spacing-2);
+  --c-tree-select-highlight-font-weight: var(--c-font-weight-500);
+}
+.c-tree-select-popup {
+  box-sizing: border-box;
+  padding: var(--c-tree-select-popup-padding-vertical) 0;
+  background-color: var(--c-color-bg-popup);
+  border: 1px solid var(--c-select-popup-border-color);
+  border-radius: var(--c-select-popup-border-radius);
+  box-shadow: var(--c-select-popup-box-shadow);
+}
+.c-tree-select-popup .c-tree-select-tree-wrapper {
+  height: 100%;
+  max-height: var(--c-select-popup-max-height);
+  padding-right: var(--c-tree-select-popup-padding-right);
+  padding-left: var(--c-tree-select-popup-padding-left);
+  overflow: auto;
+}
+.c-tree-select-popup .c-tree-node {
+  padding-left: 0;
+}
+.c-tree-select-highlight {
+  font-weight: var(--c-tree-select-highlight-font-weight);
+}
+.c-tree-select-has-header {
+  padding-top: 0;
+}
+.c-tree-select-header {
+  border-bottom: 1px solid var(--c-select-popup-border-color);
+}
+.c-tree-select-has-footer {
+  padding-bottom: 0;
+}
+.c-tree-select-footer {
+  border-top: 1px solid var(--c-select-popup-border-color);
+}

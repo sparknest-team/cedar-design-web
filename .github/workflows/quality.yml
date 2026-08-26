@@ -1,0 +1,35 @@
+name: Quality
+
+on:
+  pull_request:
+  push:
+    branches: [main, master]
+
+concurrency:
+  group: cedar-quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: loca-spirit/design-ui
+          path: .design-ui
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.6.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm spec:check
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build:lib
+      - run: pnpm package:check
+      - run: pnpm build:doc

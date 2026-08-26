@@ -1,4 +1,4 @@
-import type { ComponentPublicInstance, PropType } from 'vue'
+import type { ComponentPublicInstance } from 'vue'
 import { computed, defineComponent, inject, nextTick, ref, toRefs, watch, watchEffect } from 'vue'
 import {
   isArray,
@@ -12,10 +12,8 @@ import {
   isUndefined,
 } from '../_utils/is'
 import { getKeyFromValue, isGroupOptionInfo, isValidOption, hasEmptyStringKey } from './utils'
-import Trigger, { TriggerProps } from '../trigger'
+import Trigger from '../trigger'
 import SelectView from '../_components/select-view/select-view'
-import { Size } from '../_utils/constant'
-import { Data } from '../_utils/types'
 import SelectDropdown from './select-dropdown.vue'
 import Option from './option.vue'
 import OptGroup from './optgroup.vue'
@@ -28,16 +26,15 @@ import {
   SelectOptionInfo,
 } from './types'
 import VirtualList from '../_components/virtual-list-v2'
-import { VirtualListProps } from '../_components/virtual-list-v2/interface'
 import { useSelect } from './hooks/use-select'
 import { TagData } from '../input-tag'
 import { useTrigger } from '../_hooks/use-trigger'
 import { useFormItem } from '../_hooks/use-form-item'
 import { debounce } from '../_utils/debounce'
 import { SelectViewValue } from '../_components/select-view/interface'
-import { ScrollbarProps } from '../scrollbar'
 import { createNamespace } from '../_utils/global-config'
 import { GroupFieldContext, fieldInjectionKey } from '../input/context'
+import { selectProps } from './props'
 
 const DEFAULT_FIELD_NAMES = {
   value: 'value',
@@ -48,313 +45,19 @@ const DEFAULT_FIELD_NAMES = {
 }
 
 export default defineComponent({
-  name: 'CSelect',
+  name: createNamespace('select').name,
   components: {
     Trigger,
     SelectView,
   },
   inheritAttrs: false,
-  props: {
-    /**
-     * @zh 是否开启多选模式（多选模式默认开启搜索）
-     * @en Whether to open multi-select mode (The search is turned on by default in the multi-select mode)
-     */
-    multiple: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 绑定值
-     * @en Value
-     */
-    modelValue: {
-      type: [String, Number, Boolean, Object, Array] as PropType<
-        string | number | boolean | Record<string, any> | (string | number | boolean | Record<string, any>)[]
-      >,
-      default: undefined,
-    },
-    /**
-     * @zh 默认值（非受控模式）
-     * @en Default value (uncontrolled mode)
-     * @defaultValue '' \| []
-     */
-    defaultValue: {
-      type: [String, Number, Boolean, Object, Array] as PropType<
-        string | number | boolean | Record<string, unknown> | (string | number | boolean | Record<string, unknown>)[]
-      >,
-      default: (props: Data) => (isUndefined(props.multiple) ? '' : []),
-    },
-    /**
-     * @zh 输入框的值
-     * @en The value of the input
-     * @vModel
-     */
-    inputValue: {
-      type: String,
-    },
-    /**
-     * @zh 输入框的默认值（非受控模式）
-     * @en The default value of the input (uncontrolled mode)
-     */
-    defaultInputValue: {
-      type: String,
-      default: '',
-    },
-    /**
-     * @zh 选择框的大小
-     * @en The size of the select
-     * @values 'xs','sm','md','lg','xl'
-     * @defaultValue 'md'
-     */
-    size: {
-      type: String as PropType<Size>,
-    },
-    /**
-     * @zh 选择框的变体
-     * @en The variant of the select
-     * @values 'outline', 'default'
-     * @defaultValue 'default'
-     */
-    variant: {
-      type: String as PropType<'outline' | 'default'>,
-    },
-    /**
-     * @zh 占位符
-     * @en Placeholder
-     */
-    placeholder: String,
-    /**
-     * @zh 是否为加载中状态
-     * @en Whether it is loading state
-     */
-    loading: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否禁用
-     * @en Whether to disable
-     */
-    disabled: {
-      type: Boolean,
-    },
-    /**
-     * @zh 是否为错误状态
-     * @en Whether it is an error state
-     */
-    error: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否允许清空
-     * @en Whether to allow clear
-     */
-    clearable: {
-      type: Boolean,
-      default: true,
-    },
-    /**
-     * @zh 是否允许搜索
-     * @en Whether to allow searching
-     * @defaultValue false (single) \| true (multiple)
-     */
-    filterable: {
-      type: [Boolean, Object] as PropType<boolean | { retainInputValue?: boolean }>,
-      default: (props: Data) => Boolean(props.multiple),
-    },
-    /**
-     * @zh 是否允许创建
-     * @en Whether to allow creation
-     */
-    creatable: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 多选模式下，最多显示的标签数量。0 表示不限制
-     * @en In multi-select mode, the maximum number of labels displayed. 0 means unlimited
-     */
-    maxTagCount: {
-      type: Number,
-      default: 0,
-    },
-    /**
-     * @zh 弹出框的挂载容器
-     * @en Mount container for popup
-     */
-    popupContainer: {
-      type: [String, Object] as PropType<string | HTMLElement>,
-    },
-    /**
-     * @zh 是否在无值时默认选择第一个选项
-     * @en Whether to select the first option by default when there is no value
-     * @version 2.43.0
-     */
-    defaultActiveFirstOption: {
-      type: Boolean,
-      default: true,
-    },
-    /**
-     * @zh 是否显示下拉菜单
-     * @en Whether to show the dropdown
-     * @vModel
-     */
-    popupVisible: {
-      type: Boolean,
-      default: undefined,
-    },
-    /**
-     * @zh 弹出框默认是否可见（非受控模式）
-     * @en Whether the popup is visible by default (uncontrolled mode)
-     */
-    defaultPopupVisible: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否在下拉菜单关闭时销毁元素
-     * @en Whether to destroy the element when the dropdown is closed
-     */
-    unmountOnClose: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否过滤选项
-     * @en Whether to filter options
-     */
-    filterOption: {
-      type: [Boolean, Function] as PropType<boolean | ((inputValue: string, option: SelectOptionData) => boolean)>,
-      default: true,
-    },
-    /**
-     * @zh 选项数据
-     * @en Option data
-     */
-    options: {
-      type: Array as PropType<(string | number | boolean | SelectOptionData | SelectOptionGroup)[]>,
-      default: () => [],
-    },
-    /**
-     * @zh 传递虚拟列表属性，传入此参数以开启虚拟滚动 [VirtualListProps](#VirtualListProps)
-     * @en Pass the virtual list attribute, pass in this parameter to turn on virtual scrolling [VirtualListProps](#VirtualListProps)
-     * @type VirtualListProps
-     */
-    virtualListProps: {
-      type: Object as PropType<VirtualListProps>,
-    },
-    /**
-     * @zh 下拉菜单的触发器属性
-     * @en Trigger props of the drop-down menu
-     * @type TriggerProps
-     */
-    triggerProps: {
-      type: Object as PropType<TriggerProps>,
-    },
-    /**
-     * @zh 格式化显示内容
-     * @en Format display content
-     */
-    formatLabel: {
-      type: Function as PropType<(data: SelectOptionData) => string>,
-    },
-    /**
-     * @zh 自定义值中不存在的选项
-     * @en Options that do not exist in custom values
-     * @version 2.10.0
-     */
-    fallbackOption: {
-      type: [Boolean, Function] as PropType<
-        boolean | ((value: string | number | boolean | Record<string, unknown>) => SelectOptionData)
-      >,
-      default: true,
-    },
-    /**
-     * @zh 是否在下拉菜单中显示额外选项
-     * @en Options that do not exist in custom values
-     * @version 2.10.0
-     */
-    showExtraOptions: {
-      type: Boolean,
-      default: true,
-    },
-    /**
-     * @zh 用于确定选项键值的属性名
-     * @en Used to determine the option key value attribute name
-     * @version 2.18.0
-     */
-    valueKey: {
-      type: String,
-      default: 'value',
-    },
-    /**
-     * @zh 触发搜索事件的延迟时间
-     * @en Delay time to trigger search event
-     * @version 2.18.0
-     */
-    searchDelay: {
-      type: Number,
-      default: 500,
-    },
-    /**
-     * @zh 多选时最多的选择个数
-     * @en Maximum number of choices in multiple choice
-     * @version 2.18.0
-     */
-    limit: {
-      type: Number,
-      default: 0,
-    },
-    /**
-     * @zh 自定义 `SelectOptionData` 中的字段
-     * @en Customize fields in `SelectOptionData`
-     * @version 2.22.0
-     */
-    fieldNames: {
-      type: Object as PropType<SelectFieldNames>,
-    },
-    /**
-     * @zh 是否开启虚拟滚动条
-     * @en Whether to enable virtual scroll bar
-     * @version 2.38.0
-     */
-    scrollbar: {
-      type: [Boolean, Object] as PropType<boolean | ScrollbarProps>,
-      default: true,
-    },
-    /**
-     * @zh 空状态时是否显示header
-     * @en Whether to display the header in the empty state
-     */
-    showHeaderOnEmpty: {
-      type: Boolean as PropType<boolean>,
-      default: false,
-    },
-    /**
-     * @zh 空状态时是否显示footer
-     * @en Whether to display the footer in the empty state
-     */
-    showFooterOnEmpty: {
-      type: Boolean as PropType<boolean>,
-      default: false,
-    },
-    /**
-     * @zh 标签内容不换行
-     * @en Tag content does not wrap
-     * @version 2.56.1
-     */
-    tagNowrap: {
-      type: Boolean,
-      default: false,
-    },
-  },
+  props: selectProps,
   emits: {
     'update:modelValue': (
       value: string | number | boolean | Record<string, any> | (string | number | boolean | Record<string, any>)[],
     ) => true,
     'update:inputValue': (inputValue: string) => true,
-    'update:popupVisible': (visible: boolean) => true,
+    'update:open': (visible: boolean) => true,
     /**
      * @zh 值发生改变时触发
      * @en Triggered when the value changes
@@ -374,7 +77,7 @@ export default defineComponent({
      * @en Triggered when the display state of the drop-down box changes
      * @param {boolean} visible
      */
-    popupVisibleChange: (visible: boolean) => true,
+    openChange: (visible: boolean) => true,
     /**
      * @zh 点击清除按钮时触发
      * @en Triggered when the clear button is clicked
@@ -480,10 +183,9 @@ export default defineComponent({
       error,
       options,
       filterOption,
-      valueKey,
       multiple,
-      popupVisible,
-      defaultPopupVisible,
+      open,
+      defaultOpen,
       showExtraOptions,
       modelValue,
       fieldNames,
@@ -493,7 +195,7 @@ export default defineComponent({
     const groupContext = inject<GroupFieldContext>(fieldInjectionKey, {} as GroupFieldContext)
     const _size = computed(() => size.value ?? groupContext?.size ?? 'md')
     const _disabled = computed(() => Boolean(disabled.value ?? groupContext?.disabled ?? false))
-    const mergedVariant = computed(() => variant.value ?? groupContext?.variant ?? 'default')
+    const mergedVariant = computed(() => variant.value ?? groupContext?.variant ?? 'filled')
     const { mergedSize, mergedDisabled, mergedError, eventHandlers } = useFormItem({
       size: _size,
       disabled: _disabled,
@@ -518,14 +220,20 @@ export default defineComponent({
     const virtualListRef = ref()
 
     // trigger
-    const { computedPopupVisible, handlePopupVisibleChange } = useTrigger({
-      popupVisible,
-      defaultPopupVisible,
+    const { computedOpen, handleOpenChange } = useTrigger({
+      open,
+      defaultOpen,
       emit,
     })
 
     // value and key
     const _value = ref(props.defaultValue)
+
+    const mergedFieldNames = computed(() => ({
+      ...DEFAULT_FIELD_NAMES,
+      ...fieldNames?.value,
+    }))
+
     const computedValueObjects = computed<OptionValueWithKey[]>(() => {
       const mergedValue = props.modelValue ?? _value.value
       const valueArray = isArray(mergedValue)
@@ -535,7 +243,7 @@ export default defineComponent({
           : []
       return valueArray.map((value) => ({
         value,
-        key: getKeyFromValue(value, props.valueKey),
+        key: getKeyFromValue(value, mergedFieldNames.value.value),
       }))
     })
     watch(modelValue, (value) => {
@@ -545,11 +253,6 @@ export default defineComponent({
     })
 
     const computedValueKeys = computed(() => computedValueObjects.value.map((obj) => obj.key))
-
-    const mergedFieldNames = computed(() => ({
-      ...DEFAULT_FIELD_NAMES,
-      ...fieldNames?.value,
-    }))
 
     // selected option
     const _selectedOption = ref()
@@ -574,7 +277,7 @@ export default defineComponent({
       }
       return {
         [mergedFieldNames.value.value]: value,
-        [mergedFieldNames.value.label]: String(isObject(value) ? value[valueKey?.value] : value),
+        [mergedFieldNames.value.label]: String(isObject(value) ? value[mergedFieldNames.value.value] : value),
       }
     }
 
@@ -642,7 +345,7 @@ export default defineComponent({
     const computedInputValue = computed(() => props.inputValue ?? _inputValue.value)
 
     // clear input value when close dropdown
-    watch(computedPopupVisible, (visible) => {
+    watch(computedOpen, (visible) => {
       if (!visible && !retainInputValue.value && computedInputValue.value) {
         updateInputValue('')
       }
@@ -706,7 +409,7 @@ export default defineComponent({
           }
         }
 
-        handlePopupVisibleChange(false)
+        handleOpenChange(false)
       }
     }
 
@@ -716,8 +419,8 @@ export default defineComponent({
 
     const handleInputValueChange = (inputValue: string) => {
       if (inputValue !== computedInputValue.value) {
-        if (!computedPopupVisible.value) {
-          handlePopupVisibleChange(true)
+        if (!computedOpen.value) {
+          handleOpenChange(true)
         }
 
         updateInputValue(inputValue)
@@ -759,17 +462,16 @@ export default defineComponent({
       filterOption,
       showExtraOptions,
       component,
-      valueKey,
       fieldNames,
       loading,
-      popupVisible: computedPopupVisible,
+      open: computedOpen,
       valueKeys: computedValueKeys,
       dropdownRef,
       optionRefs,
       virtualListRef,
       defaultActiveFirstOption,
       onSelect: handleSelect,
-      onPopupVisibleChange: handlePopupVisibleChange,
+      onOpenChange: handleOpenChange,
     })
 
     const selectViewValue = computed(() => {
@@ -780,7 +482,9 @@ export default defineComponent({
           result.push({
             ...optionInfo,
             value: item.key,
-            label: optionInfo?.label ?? String(isObject(item.value) ? item.value[valueKey?.value] : item.value),
+            label:
+              optionInfo?.label ??
+              String(isObject(item.value) ? item.value[mergedFieldNames.value.value] : item.value),
             closable: !optionInfo?.disabled,
             tagProps: optionInfo?.tagProps,
           })
@@ -887,7 +591,7 @@ export default defineComponent({
         <Trigger
           v-slots={{ content: renderDropDown }}
           trigger="click"
-          position="bl"
+          placement="bl"
           popupOffset={4}
           animationName="slide-dynamic-origin"
           hideEmpty
@@ -895,11 +599,12 @@ export default defineComponent({
           autoFitPopupWidth
           autoFitTransformOrigin
           disabled={mergedDisabled.value}
-          popupVisible={computedPopupVisible.value}
+          open={computedOpen.value}
           unmountOnClose={props.unmountOnClose}
           clickToClose={!(props.filterable || props.creatable)}
           popupContainer={props.popupContainer}
-          onPopupVisibleChange={handlePopupVisibleChange}
+          onOpenChange={handleOpenChange}
+          onUpdate:open={handleOpenChange}
           {...props.triggerProps}
         >
           {slots.trigger?.() ?? (
@@ -921,7 +626,7 @@ export default defineComponent({
                 clearable={props.clearable}
                 creatable={props.creatable}
                 filterable={Boolean(props.filterable)}
-                opened={computedPopupVisible.value}
+                opened={computedOpen.value}
                 maxTagCount={props.maxTagCount}
                 placeholder={props.placeholder}
                 size={mergedSize.value}

@@ -25,16 +25,17 @@
 </template>
 
 <script lang="ts">
+import { createNamespace } from '../_utils/global-config'
 import { defineComponent, getCurrentInstance, inject, onBeforeUnmount, onMounted, ref } from 'vue'
 import { getPrefixCls } from '../_utils/global-config'
 import ResizeObserver from '../_components/resize-observer-v2'
 import { formInjectionKey } from './context'
 import { isNumber } from '../_utils/is'
 import Tooltip from '../tooltip'
-import IconQuestionCircle from '../icon/icon-question-circle'
+import { IconQuestionCircle } from '@cedarjs/icons-vue/icon-question-circle'
 
 export default defineComponent({
-  name: 'FormItemLabel',
+  name: createNamespace("form-item-label").name,
   components: {
     ResizeObserver,
     Tooltip,

@@ -1,32 +1,32 @@
 @import './token.less';
 
 .page-item(@size) {
-  min-width: ~'@{pagination-size-@{size}}';
-  height: ~'@{pagination-size-@{size}}';
-  font-size: ~'@{pagination-size-@{size}-font-size}';
-  line-height: ~'@{pagination-size-@{size}}';
+  min-width: var(~'--c-pagination-size-@{size}');
+  height: var(~'--c-pagination-size-@{size}');
+  font-size: var(~'--c-pagination-size-@{size}-font-size');
+  line-height: var(~'--c-pagination-size-@{size}');
 
   &-previous,
   &-next {
-    font-size: ~'@{pagination-size-icon-arrow_@{size}}';
+    font-size: var(~'--c-pagination-size-icon-arrow-@{size}');
   }
 }
 
 .option(@size) {
-  height: ~'@{pagination-size-@{size}}';
-  font-size: ~'@{pagination-size-@{size}-font-size}';
+  height: var(~'--c-pagination-size-@{size}');
+  font-size: var(~'--c-pagination-size-@{size}-font-size');
   line-height: 0;
 }
 
 .total(@size) {
-  font-size: ~'@{pagination-size-@{size}-font-size}';
-  line-height: ~'@{pagination-size-@{size}}';
+  font-size: var(~'--c-pagination-size-@{size}-font-size');
+  line-height: var(~'--c-pagination-size-@{size}');
 }
 
 .c-pagination {
   display: flex;
   align-items: center;
-  font-size: @pagination-size-md-font-size;
+  font-size: var(~'--c-pagination-size-md-font-size');
 
   &-list {
     display: inline-block;
@@ -39,14 +39,14 @@
   &-item {
     display: inline-block;
     box-sizing: border-box;
-    padding: 0 @pagination-padding-horizontal;
-    color: @pagination-color-item-text;
+    padding: 0 var(~'--c-pagination-padding-horizontal');
+    color: var(~'--c-pagination-item-text-color');
     text-align: center;
     vertical-align: middle;
     list-style: none;
-    background-color: @pagination-color-bg-item;
-    border: @pagination-border-width solid @pagination-color-item-border;
-    border-radius: @pagination-item-border-radius;
+    background-color: var(~'--c-pagination-bg-item');
+    border: var(~'--c-pagination-border-width') solid var(~'--c-pagination-item-border-color');
+    border-radius: var(~'--c-pagination-item-border-radius');
     outline: 0;
     cursor: pointer;
     user-select: none;
@@ -54,43 +54,43 @@
     .page-item(md);
 
     &:hover {
-      color: @pagination-color-item-text_hover;
-      background-color: @pagination-color-bg-item_hover;
-      border-color: @pagination-color-item-border_hover;
+      color: var(~'--c-pagination-item-text-color-hover');
+      background-color: var(~'--c-pagination-bg-item-hover');
+      border-color: var(~'--c-pagination-item-border-color-hover');
     }
 
     &-active,
     &-active:hover {
-      color: @pagination-color-item-text_active;
-      background-color: @pagination-color-bg-item_active;
-      border-color: @pagination-color-item-border_active;
+      color: var(~'--c-pagination-item-text-color-active');
+      background-color: var(~'--c-pagination-bg-item-active');
+      border-color: var(~'--c-pagination-item-border-color-active');
       transition:
-        color @transition-duration-2 @transition-timing-function-linear,
-        background-color @transition-duration-2 @transition-timing-function-linear;
+        color var(~'--c-transition-duration-2') var(~'--c-transition-timing-function-linear'),
+        background-color var(~'--c-transition-duration-2') var(~'--c-transition-timing-function-linear');
     }
 
     &-disabled,
     &-disabled:hover {
-      color: @pagination-color-item-text_disabled;
-      background-color: @pagination-color-bg-item_disabled;
-      border-color: @pagination-color-item-border_disabled;
+      color: var(~'--c-pagination-item-text-color-disabled');
+      background-color: var(~'--c-pagination-bg-item-disabled');
+      border-color: var(~'--c-pagination-item-border-color-disabled');
       cursor: not-allowed;
     }
 
     &:not(:last-child) {
-      margin-right: @pagination-item-spacing;
+      margin-right: var(~'--c-pagination-item-spacing');
     }
   }
 
   &-item-previous,
   &-item-next {
-    color: @pagination-color-icon-arrow;
-    font-size: @pagination-size-icon-arrow_md;
-    background-color: @pagination-color-icon-arrow-bg;
+    color: var(~'--c-pagination-icon-arrow-color');
+    font-size: var(~'--c-pagination-size-icon-arrow-md');
+    background-color: var(~'--c-pagination-icon-arrow-bg');
 
     &:not(.c-pagination-item-disabled):hover {
-      color: @pagination-color-icon-arrow-text_hover;
-      background-color: @pagination-color-icon-arrow-bg_hover;
+      color: var(~'--c-pagination-icon-arrow-text-color-hover');
+      background-color: var(~'--c-pagination-icon-arrow-bg-hover');
     }
 
     // 解决少数情况下出现的图标不垂直水平剧中的 bug
@@ -104,43 +104,43 @@
 
   & &-item-previous&-item-disabled,
   & &-item-next&-item-disabled {
-    color: @pagination-color-icon-arrow-text_disabled;
-    background-color: @pagination-color-icon-arrow-bg_disabled;
+    color: var(~'--c-pagination-icon-arrow-text-color-disabled');
+    background-color: var(~'--c-pagination-icon-arrow-bg-disabled');
   }
 
   &-item-jumper {
-    font-size: @pagination-size-icon-ellipsis;
+    font-size: var(~'--c-pagination-size-icon-ellipsis');
   }
 
   /*** 快速跳转 ***/
   &-jumper {
     display: flex;
     align-items: center;
-    margin-left: @pagination-margin-jumper-left;
+    margin-left: var(~'--c-pagination-margin-jumper-left');
 
     > span {
-      font-size: @pagination-size-md-font-size;
+      font-size: var(~'--c-pagination-size-md-font-size');
     }
 
     &-text-goto,
     &-prepend,
     &-append {
-      color: @pagination-color-jumper-goto;
+      color: var(~'--c-pagination-jumper-goto-color');
       white-space: nowrap;
     }
 
     &-prepend {
-      margin-right: @pagination-item-spacing;
+      margin-right: var(~'--c-pagination-item-spacing');
     }
 
     &-append {
-      margin-left: @pagination-item-spacing;
+      margin-left: var(~'--c-pagination-item-spacing');
     }
 
     & &-input {
-      width: @patination-jumper-input-width;
-      padding-right: 2px;
-      padding-left: 2px;
+      width: var(~'--c-pagination-jumper-input-width');
+      padding-right: var(~'--c-pagination-jumper-input-padding-x');
+      padding-left: var(~'--c-pagination-jumper-input-padding-x');
 
       input {
         text-align: center;
@@ -153,7 +153,7 @@
     display: inline-block;
     flex: 0 0 auto;
     min-width: 0;
-    margin-left: @pagination-margin-option-left;
+    margin-left: var(~'--c-pagination-margin-option-left');
     text-align: center;
     vertical-align: middle;
 
@@ -161,7 +161,7 @@
       width: auto;
 
       &-view-value {
-        padding-right: 6px;
+        padding-right: var(~'--c-pagination-options-view-value-padding-right');
         overflow: inherit;
       }
     }
@@ -170,9 +170,9 @@
   &-total {
     display: inline-block;
     height: 100%;
-    margin-right: @pagination-margin-total-spacing;
-    color: @pagination-color-text-total;
-    font-size: @pagination-size-md-font-size;
+    margin-right: var(~'--c-pagination-margin-total-spacing');
+    color: var(~'--c-pagination-text-color-total');
+    font-size: var(~'--c-pagination-size-md-font-size');
     .total(md);
 
     white-space: nowrap;
@@ -183,11 +183,11 @@
     flex: 0 0 auto;
 
     &-separator {
-      padding: 0 @pagination-simple-margin-separator-right 0 @pagination-simple-margin-separator-left;
+      padding: 0 var(~'--c-pagination-simple-margin-separator-right') 0 var(~'--c-pagination-simple-margin-separator-left');
     }
 
     &-total-page {
-      margin-right: @pagination-simple-margin-next-left - @pagination-simple-margin-prev-right;
+      margin-right: calc(var(~'--c-pagination-simple-margin-next-left') - var(~'--c-pagination-simple-margin-prev-right'));
     }
   }
 
@@ -201,30 +201,30 @@
   }
 
   &-simple &-jumper {
-    margin: 0 @pagination-simple-margin-prev-right;
+    margin: 0 var(~'--c-pagination-simple-margin-prev-right');
     color: var(~'--c-color-text-1');
   }
 
   &-simple &-jumper &-jumper-input {
-    width: @pagination-simple-input-width;
+    width: var(~'--c-pagination-simple-input-width');
     margin-left: 0;
   }
 
   &-simple &-item-previous,
   &-simple &-item-next {
-    color: @pagination-simple-color-icon-arrow;
-    background-color: @pagination-simple-color-icon-arrow-bg;
+    color: var(~'--c-pagination-simple-icon-arrow-color');
+    background-color: var(~'--c-pagination-simple-icon-arrow-bg');
 
     &:not(.c-pagination-item-disabled):hover {
-      color: @pagination-simple-color-icon-arrow-text_hover;
-      background-color: @pagination-simple-color-icon-arrow-bg_hover;
+      color: var(~'--c-pagination-simple-icon-arrow-text-color-hover');
+      background-color: var(~'--c-pagination-simple-icon-arrow-bg-hover');
     }
   }
 
   &-simple &-item-previous&-item-disabled,
   &-simple &-item-next&-item-disabled {
-    color: @pagination-simple-color-icon-arrow-text_disabled;
-    background-color: @pagination-simple-color-icon-arrow-bg_disabled;
+    color: var(~'--c-pagination-simple-icon-arrow-text-color-disabled');
+    background-color: var(~'--c-pagination-simple-icon-arrow-bg-disabled');
   }
 
   // Disabled
@@ -234,16 +234,16 @@
 
   &-disabled &-item,
   &-disabled &-item:not(&-item-disabled):not(&-item-active):hover {
-    color: @pagination-color-item-text_disabled;
-    background-color: @pagination-color-bg-item_disabled;
-    border-color: @pagination-color-item-border_disabled;
+    color: var(~'--c-pagination-item-text-color-disabled');
+    background-color: var(~'--c-pagination-bg-item-disabled');
+    border-color: var(~'--c-pagination-item-border-color-disabled');
     cursor: not-allowed;
   }
 
   &&-disabled &-item-active {
-    color: @pagination-color-item-text_active_disabled;
-    background-color: @pagination-color-bg-item_active_disabled;
-    border-color: @pagination-color-item-border_active_disabled;
+    color: var(~'--c-pagination-item-text-color-active-disabled');
+    background-color: var(~'--c-pagination-bg-item-active-disabled');
+    border-color: var(~'--c-pagination-item-border-color-active-disabled');
   }
 
   // size
@@ -260,7 +260,7 @@
   }
 
   &-size-xs &-jumper > span {
-    font-size: @pagination-size-xs-font-size;
+    font-size: var(~'--c-pagination-size-xs-font-size');
   }
 
   &-size-sm &-item {
@@ -276,7 +276,7 @@
   }
 
   &-size-sm &-jumper > span {
-    font-size: @pagination-size-sm-font-size;
+    font-size: var(~'--c-pagination-size-sm-font-size');
   }
 
   &-size-lg &-item {
@@ -292,6 +292,6 @@
   }
 
   &-size-lg &-jumper > span {
-    font-size: @pagination-size-lg-font-size;
+    font-size: var(~'--c-pagination-size-lg-font-size');
   }
 }

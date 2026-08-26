@@ -9,11 +9,11 @@
 
 .c-timeline-item-dot-line-is-horizontal {
   top: 50%;
-  right: @timeline-horizontal-margin-line-right;
-  left: @timeline-dot-size-width + @timeline-horizontal-margin-line-left;
+  right: var(~'--c-timeline-horizontal-margin-line-right');
+  left: calc(var(~'--c-timeline-dot-size-width') + var(~'--c-timeline-horizontal-margin-line-left'));
   width: unset;
-  height: @timeline-size-line-width;
-  border-top-width: @timeline-size-line-width;
+  height: var(~'--c-timeline-size-line-width');
+  border-top-width: var(~'--c-timeline-size-line-width');
   border-left: none;
   transform: translateY(-50%);
 }
@@ -36,14 +36,14 @@
     }
 
     .c-timeline-item-dot-content {
-      height: 6px;
-      line-height: 6px;
+      height: var(~'--c-timeline-horizontal-dot-content-height');
+      line-height: var(~'--c-timeline-horizontal-dot-content-height');
     }
   }
 }
 
 .c-timeline-item-horizontal-top {
-  padding-top: @timeline-dot-size-width;
+  padding-top: var(~'--c-timeline-dot-size-width');
 
   > .c-timeline-item-dot-wrapper {
     top: 0;
@@ -51,13 +51,13 @@
   }
 
   > .c-timeline-item-content-wrapper {
-    margin-top: @timeline-horizontal-margin-content-spacing;
+    margin-top: var(~'--c-timeline-horizontal-margin-content-spacing');
     margin-left: 0;
   }
 }
 
 .c-timeline-item-horizontal-bottom {
-  padding-bottom: @timeline-dot-size-width;
+  padding-bottom: var(~'--c-timeline-dot-size-width');
 
   > .c-timeline-item-dot-wrapper {
     top: unset;
@@ -65,23 +65,23 @@
   }
 
   > .c-timeline-item-content-wrapper {
-    margin-bottom: @timeline-horizontal-margin-content-spacing;
+    margin-bottom: var(~'--c-timeline-horizontal-margin-content-spacing');
     margin-left: 0;
   }
 }
 
 .c-timeline-alternate.c-timeline-direction-horizontal {
   align-items: center;
-  min-height: 200px;
+  min-height: var(~'--c-timeline-alternate-horizontal-min-height');
   overflow: visible;
 
   .c-timeline-item-horizontal-bottom {
-    margin-top: @timeline-dot-size-width;
+    margin-top: var(~'--c-timeline-dot-size-width');
     transform: translateY(-50%);
   }
 
   .c-timeline-item-horizontal-top {
-    margin-top: -@timeline-dot-size-width;
+    margin-top: calc(-1 * var(~'--c-timeline-dot-size-width'));
     transform: translateY(50%);
   }
 }

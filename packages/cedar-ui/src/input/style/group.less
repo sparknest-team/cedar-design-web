@@ -1,4 +1,4 @@
-@import './token.less';
+@import '../../field-decorator/style/token.less';
 
 .c-input-group {
   display: inline-flex;
@@ -7,16 +7,16 @@
   width: 100%;
 
   .c-input-group-label {
-    border-radius: var(~'--c-input-border-radius');
+    border-radius: var(~'--c-field-border-radius');
     position: relative;
     user-select: none;
     -webkit-user-select: none;
     box-sizing: border-box;
-    padding: 0 var(~'--c-input-padding-x');
+    padding: 0 var(~'--c-field-padding-x');
     display: inline-block;
-    background-color: var(--c-input-color-bg);
-    color: var(--c-input-group-label-text-color);
-    font-size: var(~'--c-input-font-size');
+    background-color: var(~'--c-field-variant-filled-bg');
+    color: var(~'--c-field-group-label-text-color');
+    font-size: var(~'--c-field-size-md-font-size');
     flex-shrink: 0;
     white-space: nowrap;
     .c-input-group-label__border {
@@ -26,17 +26,15 @@
       top: 0;
       bottom: 0;
       border-radius: inherit;
-      border: 1px solid var(~'--c-color-outline');
+      border: 1px solid var(~'--c-color-border-2');
       transition: border-color 0s ease 0s;
       opacity: 0;
     }
   }
 
-  // 定义可组合的输入类组件选择器
-  @input-components: ~'.c-input, .c-input-tag, .c-select-single, .c-select-multiple';
-  @input-components-border: ~'.c-input__border, .c-input-tag__border, .c-select-single__border, .c-select-multiple__border';
+  @field-decorator: ~'.c-field-decorator';
+  @field-decorator-border: ~'.c-field-decorator__border';
 
-  // 非首个元素：移除左侧圆角，添加负边距以重叠边框
   & > *:not(:first-child) {
     position: relative;
     box-sizing: border-box;
@@ -46,36 +44,35 @@
   }
   & > *:not(:first-child) {
     &,
-    @{input-components} {
+    @{field-decorator} {
       border-top-left-radius: 0 !important;
       border-bottom-left-radius: 0 !important;
     }
   }
 
-  // 非末尾元素：移除右侧圆角
   & > *:not(:last-child) {
     &,
-    @{input-components} {
+    @{field-decorator} {
       border-top-right-radius: 0 !important;
       border-bottom-right-radius: 0 !important;
     }
   }
 
-  &--variant-default {
+  &--variant-filled {
     .c-input-group-label {
-      background-color: var(~'--c-input-color-bg');
-      color: var(~'--c-input-group-label-text-color');
-      font-size: var(~'--c-input-font-size');
+      background-color: var(~'--c-field-variant-filled-bg');
+      color: var(~'--c-field-group-label-text-color');
+      font-size: var(~'--c-field-size-md-font-size');
     }
     & > *:not(:first-child) {
-      @{input-components-border} {
+      @{field-decorator-border} {
         opacity: 1;
         border-width: 0;
         border-inline-start-width: 1px;
       }
     }
   }
-  &--variant-outline {
+  &--variant-outlined {
     .c-input-group-label .c-input-group-label__border {
       opacity: 1;
     }
@@ -87,8 +84,8 @@
 
   .size(@size) {
     &--size-@{size} .c-input-group-label {
-      height: var(~'--c-input-size-@{size}-height');
-      line-height: var(~'--c-input-size-@{size}-height');
+      height: var(~'--c-field-size-@{size}-height');
+      line-height: var(~'--c-field-size-@{size}-height');
     }
   }
 

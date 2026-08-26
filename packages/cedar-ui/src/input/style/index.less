@@ -1,31 +1,31 @@
 @import '../../style/mixins/index.less';
-@import './input.less';
-@import './token.less';
-
+@import '../../field-decorator/style/index.less';
 
 .c-input {
-  position: relative;
-  .field-wrapper-style(~'c-input');
+  box-sizing: border-box;
+  width: 100%;
 
   .c-input__inner {
-    .input-style();
+    .field-decorator-native-style();
   }
-  .size(@size) {
-    &--size-@{size} {
-      .c-input__inner {
-        .input-size(@size);
-      }
-    }
+
+  .c-field-decorator--size-xs .c-input__inner {
+    .field-decorator-native-size(xs);
   }
-  .size(xs);
-  .size(sm);
-  .size(md);
-  .size(lg);
+  .c-field-decorator--size-sm .c-input__inner {
+    .field-decorator-native-size(sm);
+  }
+  .c-field-decorator--size-md .c-input__inner {
+    .field-decorator-native-size(md);
+  }
+  .c-field-decorator--size-lg .c-input__inner {
+    .field-decorator-native-size(lg);
+  }
 
   .c-input__word-limit {
-    color: var(~'--c-input-color-tip-text');
-    font-size: var(~'--c-input-font-tip-size');
-    margin-left: var(~'--c-input-padding-word-limit-left');
+    color: var(~'--c-field-color-tip-text');
+    font-size: var(~'--c-field-font-tip-size');
+    margin-left: var(~'--c-field-padding-word-limit-left');
   }
 }
 

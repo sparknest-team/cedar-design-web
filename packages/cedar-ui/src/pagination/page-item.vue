@@ -9,10 +9,10 @@
 <script lang="ts">
 import type { PropType, CSSProperties } from 'vue'
 import { computed, defineComponent } from 'vue'
-import { getPrefixCls } from '../_utils/global-config'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
 
 export default defineComponent({
-  name: 'Pager',
+  name: createNamespace('pagination-item').name,
   props: {
     pageNumber: {
       type: Number,

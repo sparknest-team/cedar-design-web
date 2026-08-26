@@ -1,11 +1,10 @@
-import type { PropType } from 'vue'
 import { computed, defineComponent, ref, inject, watch, nextTick, toRef, toRefs } from 'vue'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
 import IconHover from '../_components/icon-hover.vue'
-import type { RadioType } from './context'
 import { radioGroupKey } from './context'
 import { isNull, isUndefined } from '../_utils/is'
 import { useFormItem } from '../_hooks/use-form-item'
+import { radioProps } from './props'
 
 
 const { name } = createNamespace('radio')
@@ -15,55 +14,7 @@ export default defineComponent({
   components: {
     IconHover,
   },
-  props: {
-    /**
-     * @zh 绑定值
-     * @en Value
-     * @vModel
-     */
-    modelValue: {
-      type: [String, Number, Boolean] as PropType<string | number | boolean>,
-      default: undefined,
-    },
-    /**
-     * @zh 默认是否选中（非受控状态）
-     * @en Whether checked by default (uncontrolled state)
-     */
-    defaultChecked: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 选项的 `value`
-     * @en The `value` of the option
-     */
-    value: {
-      type: [String, Number, Boolean] as PropType<string | number | boolean>,
-      default: true,
-    },
-    /**
-     * @zh 单选的类型
-     * @en Radio type
-     * @values 'radio', 'button'
-     */
-    type: {
-      type: String as PropType<RadioType>,
-      default: 'radio',
-    },
-    /**
-     * @zh 是否禁用
-     * @en Whether to disable
-     */
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    // private
-    uninjectGroupContext: {
-      type: Boolean,
-      default: false,
-    },
-  },
+  props: radioProps,
   emits: {
     'update:modelValue': (value: string | number | boolean) => true,
     /**
@@ -93,8 +44,8 @@ export default defineComponent({
     const inputRef = ref<HTMLInputElement | null>(null)
     const _checked = ref(props.defaultChecked)
 
-    const isGroup = computed(() => radioGroupCtx?.name === 'CedarRadioGroup')
-    const mergedType = computed(() => radioGroupCtx?.type ?? props.type)
+    const isGroup = computed(() => Boolean(radioGroupCtx))
+    const mergedVariant = computed(() => radioGroupCtx?.variant ?? props.variant)
     const mergedDisabled = computed(() => radioGroupCtx?.disabled || _mergedDisabled.value)
 
     const computedChecked = computed(() => {
@@ -160,7 +111,7 @@ export default defineComponent({
     }
 
     const cls = computed(() => [
-      `${mergedType.value === 'button' ? `${prefixCls}-button` : prefixCls}`,
+      `${mergedVariant.value === 'button' ? `${prefixCls}-button` : prefixCls}`,
       {
         [`${prefixCls}-checked`]: computedChecked.value,
         [`${prefixCls}-disabled`]: mergedDisabled.value,
@@ -190,7 +141,7 @@ export default defineComponent({
           onFocus={handleFocus}
           onBlur={handleBlur}
         />
-        {mergedType.value === 'radio' ? (
+        {mergedVariant.value === 'radio' ? (
           ((slots.radio ?? radioGroupCtx?.slots?.radio)?.({
             checked: computedChecked.value,
             disabled: mergedDisabled.value,

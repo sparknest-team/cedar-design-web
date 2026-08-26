@@ -16,7 +16,7 @@ import {
 } from "./types";
 import { getFixedCls, getStyle } from "./utils";
 import { getValueByPath } from "../_utils/get-value-by-path";
-import IconLoading from "../icon/icon-loading";
+import { IconLoading } from '@cedarjs/icons-vue/icon-loading'
 import { isFunction, isObject } from "../_utils/is";
 import { TableContext, tableInjectionKey } from "./context";
 import AutoTooltip from "../_components/auto-tooltip/auto-tooltip";
@@ -238,7 +238,19 @@ export default defineComponent({
             />
           )}
           {props.showExpandBtn && (
-            <span class={`${prefixCls}-cell-inline-icon`} onClick={handleClick}>
+            <span
+              class={`${prefixCls}-cell-inline-icon`}
+              role="button"
+              tabindex={0}
+              aria-label="切换展开状态"
+              onClick={handleClick}
+              onKeydown={(event: KeyboardEvent) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault()
+                  handleClick(event as unknown as MouseEvent)
+                }
+              }}
+            >
               {isLoading.value ? (
                 <IconLoading />
               ) : (

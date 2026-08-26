@@ -1,25 +1,33 @@
 <template>
   <client-only>
-    <teleport :to="teleportTarget" :disabled="teleportDisabled">
+    <teleport :to="popupContainerTarget" :disabled="popupContainerDisabled">
       <div
-        v-if="!unmountOnClose || computedShow || mounted"
-        v-show="computedShow || mounted"
+        v-if="!unmountOnClose || computedOpen || mounted"
+        v-show="computedOpen || mounted"
         :class="`${prefixCls}-container`"
         :style="{ zIndex }"
         v-bind="$attrs"
       >
-        <transition :name="overlayAnimationName" appear>
+        <transition :name="maskAnimationName" appear>
           <div
-            v-if="overlay"
-            v-show="computedShow"
-            ref="overlayRef"
-            :class="`${prefixCls}-overlay`"
-            :style="overlayStyle"
+            v-if="mask"
+            v-show="computedOpen"
+            ref="maskRef"
+            :class="`${prefixCls}-mask`"
+            :style="maskStyle"
           />
         </transition>
-        <div ref="wrapperRef" :class="wrapperCls" @click.self="handleOverlayClick" @mousedown.self="handleOverlayMouseDown">
+        <div ref="wrapperRef" :class="wrapperCls" @click.self="handleMaskClick" @mousedown.self="handleMaskMouseDown">
           <transition :name="dialogAnimationName" appear @after-enter="handleOpened" @after-leave="handleClosed">
-            <div v-show="computedShow" ref="dialogRef" :class="dialogCls" :style="mergedDialogStyle">
+            <div
+              v-show="computedOpen"
+              ref="dialogRef"
+              role="dialog"
+              aria-modal="true"
+              :aria-label="ariaLabel || (!$slots.title ? title : undefined)"
+              :class="dialogCls"
+              :style="mergedDialogStyle"
+            >
               <div
                 v-if="!hideTitle && ($slots.title || title || closable)"
                 :class="`${prefixCls}-header`"
@@ -37,18 +45,17 @@
                   </div>
                   <slot name="title">{{ title }}</slot>
                 </div>
-                <div
+                <button
                   v-if="closable"
-                  tabindex="-1"
-                  role="button"
-                  aria-label="Close"
+                  type="button"
+                  :aria-label="closeButtonAriaLabel"
                   :class="`${prefixCls}-close-btn`"
                   @click="handleCancel"
                 >
                   <icon-hover>
                     <icon-close />
                   </icon-hover>
-                </div>
+                </button>
               </div>
               <div :class="[`${prefixCls}-body`, bodyClass]" :style="bodyStyle">
                 <slot>{{ message }}</slot>
@@ -84,17 +91,17 @@
 </template>
 
 <script lang="tsx">
-import type { CSSProperties, PropType, StyleValue } from 'vue'
+import type { CSSProperties } from 'vue'
 import { defineComponent, computed, ref, watch, onMounted, onBeforeUnmount, toRefs } from 'vue'
-import { getPrefixCls } from '../_utils/global-config'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import ClientOnly from '../_components/client-only'
 import IconHover from '../_components/icon-hover.vue'
-import Button, { ButtonProps } from '../button'
-import IconClose from '../icon/icon-close'
-import IconInfoCircleFill from '../icon/icon-info-circle-fill'
-import IconCheckCircleFill from '../icon/icon-check-circle-fill'
-import IconExclamationCircleFill from '../icon/icon-exclamation-circle-fill'
-import IconCloseCircleFill from '../icon/icon-close-circle-fill'
+import Button from '../button'
+import { IconClose } from '@cedarjs/icons-vue/icon-close'
+import { IconInfoCircleFill } from '@cedarjs/icons-vue/icon-info-circle-fill'
+import { IconCheckCircleFill } from '@cedarjs/icons-vue/icon-check-circle-fill'
+import { IconExclamationCircleFill } from '@cedarjs/icons-vue/icon-exclamation-circle-fill'
+import { IconCloseCircleFill } from '@cedarjs/icons-vue/icon-close-circle-fill'
 import { useI18n } from '../locale'
 import { useOverflow } from '../_hooks/use-overflow'
 import { getElement, off, on, contains } from '../_utils/dom'
@@ -103,9 +110,10 @@ import { isFunction, isNumber } from '../_utils/is'
 import { KEYBOARD_KEY } from '../_utils/keyboard'
 import { useDraggable } from './hooks/use-draggable'
 import type { DialogAction, DialogBeforeCloseRefs, DialogType } from './types'
+import { dialogProps } from './props'
 
 export default defineComponent({
-  name: 'Dialog',
+  name: createNamespace('dialog').name,
   components: {
     ClientOnly,
     Button,
@@ -117,167 +125,16 @@ export default defineComponent({
     IconCloseCircleFill,
   },
   inheritAttrs: false,
-  props: {
-    show: {
-      type: Boolean,
-      default: undefined,
-    },
-    defaultShow: {
-      type: Boolean,
-      default: false,
-    },
-    width: {
-      type: [Number, String],
-    },
-    top: {
-      type: [Number, String],
-    },
-    overlay: {
-      type: Boolean,
-      default: true,
-    },
-    overlayClass: String,
-    overlayStyle: {
-      type: Object as PropType<CSSProperties>,
-    },
-    title: String,
-    message: String,
-    type: {
-      type: String as PropType<DialogType>,
-    },
-    simple: {
-      type: Boolean,
-      default: false,
-    },
-    titleAlign: {
-      type: String as PropType<'start' | 'center'>,
-      default: 'center',
-    },
-    alignCenter: {
-      type: Boolean,
-      default: true,
-    },
-    unmountOnClose: Boolean,
-    closeOnClickOverlay: {
-      type: Boolean,
-      default: true,
-    },
-    closeOnKeyEscape: {
-      type: Boolean,
-      default: true,
-    },
-    confirmButton: {
-      type: Boolean,
-      default: true,
-    },
-    cancelButton: {
-      type: Boolean,
-      default: true,
-    },
-    closable: {
-      type: Boolean,
-      default: true,
-    },
-    confirmButtonText: String,
-    cancelButtonText: String,
-    confirmButtonLoading: {
-      type: Boolean,
-      default: false,
-    },
-    cancelButtonLoading: {
-      type: Boolean,
-      default: false,
-    },
-    confirmButtonDisabled: {
-      type: Boolean,
-      default: false,
-    },
-    cancelButtonDisabled: {
-      type: Boolean,
-      default: false,
-    },
-    confirmButtonProps: {
-      type: Object as PropType<ButtonProps>,
-    },
-    cancelButtonProps: {
-      type: Object as PropType<ButtonProps>,
-    },
-    footer: {
-      type: Boolean,
-      default: true,
-    },
-    teleport: {
-      type: [String, Object, Boolean] as PropType<string | HTMLElement | false>,
-      default: 'body',
-    },
-    dialogClass: {
-      type: [String, Array] as PropType<string | any[]>,
-    },
-    dialogStyle: {
-      type: Object as PropType<CSSProperties>,
-    },
-    onBeforeClose: {
-      type: Function as PropType<(action: DialogAction, done: () => void, refs: DialogBeforeCloseRefs) => void>,
-    },
-    onConfirm: {
-      type: Function as PropType<(e?: Event) => void>,
-    },
-    onCancel: {
-      type: Function as PropType<(e?: Event) => void>,
-    },
-    onClickOverlay: {
-      type: Function as PropType<() => void>,
-    },
-    onKeyEscape: {
-      type: Function as PropType<() => void>,
-    },
-    draggable: {
-      type: Boolean,
-      default: false,
-    },
-    fullscreen: {
-      type: Boolean,
-      default: false,
-    },
-    overlayAnimationName: {
-      type: String,
-      default: (props: Record<string, any>) => {
-        if (props.fullscreen) {
-          return 'fade-in-standard'
-        }
-        return 'fade-modal'
-      },
-    },
-    dialogAnimationName: {
-      type: String,
-      default: (props: Record<string, any>) => {
-        if (props.fullscreen) {
-          return 'zoom-in'
-        }
-        return 'zoom-modal'
-      },
-    },
-    bodyClass: {
-      type: [String, Array] as PropType<string | any[]>,
-    },
-    bodyStyle: {
-      type: [String, Object, Array] as PropType<StyleValue>,
-    },
-    hideTitle: {
-      type: Boolean,
-      default: false,
-    },
-    zIndex: Number,
-  },
+  props: dialogProps,
   emits: {
-    'update:show': (show: boolean) => true,
+    'update:open': (show: boolean) => true,
     confirm: (e: Event) => true,
     cancel: (e: Event) => true,
     open: () => true,
     opened: () => true,
     close: () => true,
     closed: () => true,
-    'click-overlay': () => true,
+    'click-mask': () => true,
     'key-escape': () => true,
   },
   setup(props, { emit, slots }) {
@@ -287,8 +144,8 @@ export default defineComponent({
     const wrapperRef = ref<HTMLElement>()
     const dialogRef = ref<HTMLElement>()
 
-    const _show = ref(props.defaultShow)
-    const computedShow = computed(() => props.show ?? _show.value)
+    const _open = ref(props.defaultOpen)
+    const computedOpen = computed(() => props.open ?? _open.value)
     const _confirmButtonLoading = ref(false)
     const _cancelButtonLoading = ref(false)
     const _confirmButtonDisabled = ref(false)
@@ -306,11 +163,11 @@ export default defineComponent({
       cancelButtonDisabled: _cancelButtonDisabled,
     }
 
-    const teleportDisabled = computed(() => props.teleport === false)
-    const teleportTarget = computed(() => (props.teleport === false ? 'body' : props.teleport || 'body'))
+    const popupContainerDisabled = computed(() => props.popupContainer === false)
+    const popupContainerTarget = computed(() => (props.popupContainer === false ? 'body' : props.popupContainer || 'body'))
 
     const containerRef = ref<HTMLElement>()
-    const mounted = ref(computedShow.value)
+    const mounted = ref(computedOpen.value)
 
     const confirmDisplayText = computed(() => props.confirmButtonText || t('dialog.confirmButtonText'))
     const cancelDisplayText = computed(() => props.cancelButtonText || t('dialog.cancelButtonText'))
@@ -324,19 +181,19 @@ export default defineComponent({
     })
 
     const { zIndex, isLastDialog } = usePopupManager('dialog', {
-      visible: computedShow,
+      visible: computedOpen,
     })
 
     let globalKeyDownListener = false
 
     const handleGlobalKeyDown = (ev: KeyboardEvent) => {
-      if (props.closeOnKeyEscape && ev.key === KEYBOARD_KEY.ESC && isLastDialog()) {
+      if (props.escToClose && ev.key === KEYBOARD_KEY.ESC && isLastDialog()) {
         handleKeyEscape(ev)
       }
     }
 
     const addGlobalKeyDownListener = () => {
-      if (props.closeOnKeyEscape && !globalKeyDownListener) {
+      if (props.escToClose && !globalKeyDownListener) {
         globalKeyDownListener = true
         on(document.documentElement, 'keydown', handleGlobalKeyDown)
       }
@@ -367,8 +224,8 @@ export default defineComponent({
       if (_cancelButtonDisabled.value) {
         _cancelButtonDisabled.value = false
       }
-      _show.value = false
-      emit('update:show', false)
+      _open.value = false
+      emit('update:open', false)
     }
 
     const done = () => {
@@ -376,8 +233,8 @@ export default defineComponent({
     }
 
     const runBeforeClose = (action: DialogAction, e?: Event) => {
-      if (isFunction(props.onBeforeClose)) {
-        props.onBeforeClose(action, done, beforeCloseRefs)
+      if (isFunction(props.beforeClose)) {
+        props.beforeClose(action, done, beforeCloseRefs)
         return true
       }
 
@@ -405,25 +262,25 @@ export default defineComponent({
     const handleKeyEscape = (e: Event) => {
       emit('key-escape')
 
-      if (!props.closeOnKeyEscape) {
+      if (!props.escToClose) {
         return
       }
 
       handleCancel(e)
     }
 
-    const currentIsOverlay = ref(false)
+    const currentIsMask = ref(false)
 
-    const handleOverlayMouseDown = (ev: Event) => {
+    const handleMaskMouseDown = (ev: Event) => {
       if (ev.target === wrapperRef.value) {
-        currentIsOverlay.value = true
+        currentIsMask.value = true
       }
     }
 
-    const handleOverlayClick = (e: Event) => {
-      emit('click-overlay')
+    const handleMaskClick = (e: Event) => {
+      emit('click-mask')
 
-      if (props.overlay && props.closeOnClickOverlay && currentIsOverlay.value) {
+      if (props.mask && props.maskClosable && currentIsMask.value) {
         if (runBeforeClose('close', e)) {
           return
         }
@@ -434,7 +291,7 @@ export default defineComponent({
     }
 
     const handleOpened = () => {
-      if (computedShow.value) {
+      if (computedOpen.value) {
         if (!contains(wrapperRef.value, document.activeElement) && document.activeElement instanceof HTMLElement) {
           document.activeElement.blur()
         }
@@ -443,7 +300,7 @@ export default defineComponent({
     }
 
     const handleClosed = () => {
-      if (!computedShow.value) {
+      if (!computedOpen.value) {
         if (mergedDraggable.value) {
           position.value = undefined
         }
@@ -457,10 +314,10 @@ export default defineComponent({
     const { setOverflowHidden, resetOverflow } = useOverflow(containerRef)
 
     onMounted(() => {
-      containerRef.value = getElement(teleportTarget.value)
-      if (computedShow.value) {
+      containerRef.value = getElement(popupContainerTarget.value)
+      if (computedOpen.value) {
         setOverflowHidden()
-        if (props.closeOnKeyEscape) {
+        if (props.escToClose) {
           addGlobalKeyDownListener()
         }
       }
@@ -471,14 +328,14 @@ export default defineComponent({
       removeGlobalKeyDownListener()
     })
 
-    watch(computedShow, (value: boolean) => {
-      if (_show.value !== value) {
-        _show.value = value
+    watch(computedOpen, (value: boolean) => {
+      if (_open.value !== value) {
+        _open.value = value
       }
       if (value) {
         emit('open')
         mounted.value = true
-        currentIsOverlay.value = false
+        currentIsMask.value = false
         setOverflowHidden()
         addGlobalKeyDownListener()
       } else {
@@ -504,7 +361,7 @@ export default defineComponent({
     const dialogCls = computed(() => [
       `${prefixCls}`,
       props.dialogClass,
-      props.overlayClass,
+      props.maskClass,
       {
         [`${prefixCls}-simple`]: props.simple,
         [`${prefixCls}-draggable`]: mergedDraggable.value,
@@ -532,7 +389,7 @@ export default defineComponent({
     return {
       prefixCls,
       mounted,
-      computedShow,
+      computedOpen,
       containerRef,
       wrapperRef,
       mergedDialogStyle,
@@ -541,8 +398,8 @@ export default defineComponent({
       zIndex,
       handleConfirm,
       handleCancel,
-      handleOverlayClick,
-      handleOverlayMouseDown,
+      handleMaskClick,
+      handleMaskMouseDown,
       handleOpened,
       handleClosed,
       mergedConfirmButtonLoading,
@@ -552,8 +409,8 @@ export default defineComponent({
       dialogRef,
       wrapperCls,
       dialogCls,
-      teleportTarget,
-      teleportDisabled,
+      popupContainerTarget,
+      popupContainerDisabled,
       handleMoveDown,
       showFooter,
     }

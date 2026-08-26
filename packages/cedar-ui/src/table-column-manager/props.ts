@@ -22,10 +22,14 @@ export interface TableColumnManagerProps {
   fallbackItem?: (dataIndex: string) => ColumnCatalogItem | undefined
   /** 向左/向右插入时的上下文，影响 getResult 中新增列的落点 */
   insertAt?: ColumnManagerInsertAt
-  /** 列管理抽屉是否可见（v-model:visible） */
-  visible?: boolean
+  /** 列管理抽屉是否可见（v-model:open） */
+  open?: boolean
   /** 抽屉标题 */
   drawerTitle?: string
   /** 抽屉宽度 */
   drawerWidth?: number | string
+}
+
+export interface TableColumnManagerDrawerProps extends TableColumnManagerProps {
+  inline?: boolean
 }

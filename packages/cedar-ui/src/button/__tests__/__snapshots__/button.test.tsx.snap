@@ -1,7 +1,7 @@
 // Vitest Snapshot v1
 
 exports[`Button > render 1`] = `
-"<button class=\\"c-button c--box c-button--size-md c-button--status-default c-button--variant-default c--inline-flex\\" type=\\"button\\" disabled=\\"false\\" autofocus=\\"false\\">
+"<button class=\\"c-button c--box c-button--size-md c-button--status-default c-button--variant-default c--inline-flex\\" type=\\"button\\">
   <!-- 加载中 loading -->
   <!--v-if-->
   <!-- icon图标 -->

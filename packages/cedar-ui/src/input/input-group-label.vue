@@ -10,7 +10,7 @@ import { defineComponent } from 'vue'
 import { createNamespace } from '../_utils/global-config'
 
 export default defineComponent({
-  name: 'CInputGroupLabel',
+  name: createNamespace('input-group-label').name,
   setup() {
     const { n, classes } = createNamespace('input-group-label')
     return {

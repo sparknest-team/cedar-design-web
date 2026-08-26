@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts">
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 import { computed, defineComponent, PropType, ref, toRefs, watch } from 'vue'
 import { isUndefined } from '../_utils/is'
 import type { RangePanelProps } from './types'

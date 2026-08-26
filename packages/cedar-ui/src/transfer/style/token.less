@@ -1,48 +1,64 @@
 @import '../../style/theme/index.less';
 
-@transfer-width: 200px;
-@transfer-height: 400px;
-@transfer-height-title: @size-10;
-@transfer-height-footer: @size-10;
-@transfer-padding-horizontal-footer: @spacing-4;
-@transfer-border-color: var(~'--c-color-neutral-3');
-@transfer-border-width: @border-1;
-@transfer-border-radius: @radius-sm;
+:root {
+  --c-transfer-width: 200px;
+  --c-transfer-height: 400px;
+  --c-transfer-title-height: var(~'--c-size-10');
+  --c-transfer-footer-height: var(~'--c-size-10');
+  --c-transfer-footer-padding-horizontal: var(~'--c-spacing-4');
+  --c-transfer-border-color: var(~'--c-color-neutral-3');
+  --c-transfer-border-width: var(~'--c-border-width-1');
+  --c-transfer-border-radius: var(~'--c-border-radius-sm');
+  --c-transfer-header-font-size: var(~'--c-font-size-body-3');
+  --c-transfer-header-unit-font-size: var(~'--c-font-size-body-1');
+  --c-transfer-icon-font-size: var(~'--c-font-size-body-1');
+  --c-transfer-header-font-weight: var(~'--c-font-weight-500');
+  --c-transfer-header-text-color: var(~'--c-color-text-1');
+  --c-transfer-header-unit-text-color: var(~'--c-color-text-3');
+  --c-transfer-icon-color: var(~'--c-color-text-2');
+  --c-transfer-icon-bg: var(~'--c-color-fill-3');
+  --c-transfer-header-bg: var(~'--c-color-fill-1');
+  --c-transfer-search-padding-left: var(~'--c-spacing-6');
+  --c-transfer-search-padding-right: var(~'--c-spacing-6');
+  --c-transfer-search-padding-top: var(~'--c-spacing-4');
+  --c-transfer-search-padding-bottom: var(~'--c-spacing-2');
+  --c-transfer-item-bg: transparent;
+  --c-transfer-item-bg-hover: var(~'--c-color-fill-2');
+  --c-transfer-item-bg-disabled: transparent;
+  --c-transfer-item-text-color: var(~'--c-color-text-1');
+  --c-transfer-item-text-color-hover: var(~'--c-color-text-1');
+  --c-transfer-item-text-color-disabled: var(~'--c-color-text-4');
+  --c-transfer-item-height: var(~'--c-size-9');
+  --c-transfer-item-padding-horizontal: var(~'--c-spacing-5');
+  --c-transfer-item-font-size: var(~'--c-font-size-body-3');
+  --c-transfer-item-draggable-gap-height: var(~'--c-spacing-1');
+  --c-transfer-item-draggable-gap-bg: rgb(var(~'--c-primary-6'));
+  --c-transfer-item-draggable-bg-dragging: var(~'--c-color-fill-1');
+  --c-transfer-item-draggable-text-color-dragging: var(~'--c-color-text-4');
+  --c-transfer-item-draggable-bg-blink: var(~'--c-color-primary-light-1');
+  --c-transfer-pagination-input-width: var(~'--c-size-6');
+  --c-transfer-pagination-separator-gap: var(~'--c-spacing-4');
+  --c-transfer-operation-padding-horizontal: var(~'--c-spacing-8');
+  --c-transfer-operation-buttons-gap: var(~'--c-spacing-6');
+  --c-transfer-clear-text-color: rgb(var(~'--c-primary-6'));
+  --c-transfer-group-title-font-weight: var(~'--c-font-weight-500');
+  --c-transfer-transition-timing-function-linear: var(~'--c-transition-timing-function-linear');
 
-@transfer-font-size-header: @font-size-body-3;
-@transfer-font-size-header-unit: @font-size-body-1;
-@transfer-font-size-icon: @font-size-body-1;
-@transfer-font-weight-header: @font-weight-500;
-
-@transfer-color-text-header: var(~'--c-color-text-1');
-@transfer-color-text-header-unit: var(~'--c-color-text-3');
-@transfer-color-icon: var(~'--c-color-text-2');
-@transfer-color-bg-icon: var(~'--c-color-fill-3');
-@transfer-color-bg-header: var(~'--c-color-fill-1');
-
-@transfer-search-padding-left: 12px;
-@transfer-search-padding-right: 12px;
-@transfer-search-padding-top: 8px;
-@transfer-search-padding-bottom: 4px;
-
-@transfer-item-color-bg_default: @color-transparent;
-@transfer-item-color-bg_hover: var(~'--c-color-fill-2');
-@transfer-item-color-bg_disabled: @color-transparent;
-@transfer-item-color_default: var(~'--c-color-text-1');
-@transfer-item-color_hover: var(~'--c-color-text-1');
-@transfer-item-color_disabled: var(~'--c-color-text-4');
-@transfer-item-height: @size-9;
-@transfer-item-padding-horizontal: @spacing-5;
-@transfer-item-font-size: @font-size-body-3;
-
-@transfer-item-draggable-height-gap: 2px;
-@transfer-item-draggable-color-bg-gap: @color-primary-6;
-@transfer-item-draggable-color-bg_dragging: var(~'--c-color-fill-1');
-@transfer-item-draggable-color_dragging: var(~'--c-color-text-4');
-@transfer-item-draggable-color_blink: var(~'--c-color-primary-light-1');
-
-@transfer-pagination-width-input: @size-6;
-@transfer-pagination-gap-separator: @spacing-4;
-
-@transfer-operation-padding-horizontal: @spacing-8;
-@transfer-operation-gap-buttons: @spacing-6;
+  --c-transfer-header-flex-basis: var(~'--c-size-11');
+  --c-transfer-header-title-margin-right: var(~'--c-spacing-4');
+  --c-transfer-header-selected-count-margin-left: var(~'--c-spacing-4');
+  --c-transfer-header-count-margin-right: var(~'--c-spacing-1');
+  --c-transfer-group-title-height: var(~'--c-size-9');
+  --c-transfer-group-title-padding-top: var(~'--c-spacing-4');
+  --c-transfer-group-title-line-height: var(~'--c-size-7');
+  --c-transfer-draggable-list-padding-y: var(~'--c-spacing-4');
+  --c-transfer-checkbox-padding-left: var(~'--c-spacing-3');
+  --c-transfer-item-drag-handle-margin-right: var(~'--c-spacing-4');
+  --c-transfer-item-tip-margin-left: var(~'--c-spacing-4');
+  --c-transfer-operation-menu-min-width: 140px;
+  --c-transfer-operation-menu-padding: var(~'--c-spacing-2');
+  --c-transfer-operation-menu-button-padding-y: 7px;
+  --c-transfer-operation-menu-button-padding-x: var(~'--c-spacing-6');
+  --c-transfer-operation-menu-button-border-radius: var(~'--c-border-radius-md');
+  --c-transfer-operation-words-button-padding-x: var(~'--c-spacing-6');
+}

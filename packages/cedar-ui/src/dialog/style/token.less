@@ -1,30 +1,46 @@
 @import '../../style/theme/index.less';
 
-@dialog-border-radius: @radius-md;
-@dialog-size-tip-icon: 18px;
-@dialog-margin-top: 100px;
-@dialog-margin-tip-icon-right: @spacing-5;
-@dialog-margin-footer-button-left: @spacing-6;
-@dialog-color-border: var(~'--c-color-neutral-3');
-@dialog-color-header-text: var(~'--c-color-text-1');
-@dialog-color-content-text: var(~'--c-color-text-1');
-@dialog-font-header-size: @font-size-title-1;
+/******** Dialog CSS Variables *******/
+:root {
+  --c-dialog-border-radius: var(~'--c-border-radius-md');
+  --c-dialog-tip-icon-size: 18px;
+  --c-dialog-margin-top: 100px;
+  --c-dialog-tip-icon-margin-right: var(~'--c-spacing-5');
+  --c-dialog-footer-button-margin-left: var(~'--c-spacing-6');
+  --c-dialog-border-color: var(~'--c-color-neutral-3');
+  --c-dialog-border-width: var(~'--c-border-width-1');
+  --c-dialog-header-text-color: var(~'--c-color-text-1');
+  --c-dialog-content-text-color: var(~'--c-color-text-1');
+  --c-dialog-header-font-size: var(~'--c-font-size-title-1');
+  --c-dialog-title-font-weight: var(~'--c-font-weight-500');
+  --c-dialog-bg: var(~'--c-color-bg-3');
+  --c-dialog-mask-bg: var(~'--c-color-mask-bg');
+  --c-dialog-line-height: var(~'--c-line-height');
 
-@dialog-default-padding-horizontal: @spacing-8;
-@dialog-default-size-header-height: @size-12;
-@dialog-default-padding-content-vertical: @spacing-9;
-@dialog-default-padding-footer-vertical: @spacing-7;
-@dialog-default-size-width: 520px;
-@dialog-font-content-size: @font-size-body-3;
-@dialog-default-align-header: center;
-@dialog-simple-align-header: center;
+  --c-dialog-padding-horizontal: var(~'--c-spacing-8');
+  --c-dialog-header-height: var(~'--c-size-12');
+  --c-dialog-content-padding-vertical: var(~'--c-spacing-9');
+  --c-dialog-footer-padding-vertical: var(~'--c-spacing-7');
+  --c-dialog-width: 520px;
+  --c-dialog-content-font-size: var(~'--c-font-size-body-3');
+  --c-dialog-header-justify: center;
 
-@dialog-simple-size-width: 400px;
-@dialog-simple-padding-horizontal: @spacing-10;
-@dialog-simple-padding-top: @spacing-9;
-@dialog-simple-padding-bottom: @spacing-10;
-@dialog-simple-margin-footer-top: @spacing-10;
-@dialog-simple-margin-content-top: @spacing-9;
+  --c-dialog-simple-width: 400px;
+  --c-dialog-simple-padding-horizontal: var(~'--c-spacing-10');
+  --c-dialog-simple-padding-top: var(~'--c-spacing-9');
+  --c-dialog-simple-padding-bottom: var(~'--c-spacing-10');
+  --c-dialog-simple-footer-margin-top: var(~'--c-spacing-10');
+  --c-dialog-simple-content-margin-top: var(~'--c-spacing-9');
+  --c-dialog-simple-header-justify: center;
 
-@dialog-position-close-icon-right: 16px;
-@dialog-font-size-close-icon: 12px;
+  --c-dialog-close-icon-right: 16px;
+  --c-dialog-close-icon-font-size: 12px;
+
+  --c-dialog-status-info-icon-color: rgb(var(~'--c-primary-6'));
+  --c-dialog-status-success-icon-color: rgb(var(~'--c-success-6'));
+  --c-dialog-status-warning-icon-color: rgb(var(~'--c-warning-6'));
+  --c-dialog-status-danger-icon-color: rgb(var(~'--c-danger-6'));
+
+  --c-dialog-transition-duration: var(~'--c-transition-duration-4');
+  --c-dialog-transition-timing-function: var(~'--c-transition-timing-function-overshoot');
+}

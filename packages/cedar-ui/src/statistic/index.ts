@@ -1,23 +1,21 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Statistic from './statistic.vue'
 import _Countdown from './countdown.vue'
+import { statisticProps } from './props'
 
-const Statistic = Object.assign(_Statistic, {
+const Statistic = withInstall(_Statistic, Object.assign(_Statistic, {
   Countdown: _Countdown,
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _Statistic.name, _Statistic)
-    app.component(componentPrefix + _Countdown.name, _Countdown)
-  },
-})
+}), { components: [_Statistic, _Countdown] })
 
 export type StatisticInstance = InstanceType<typeof _Statistic>
 export type CountdownInstance = InstanceType<typeof _Countdown>
 
 export { _Countdown as Countdown }
+
+export const _StatisticComponent = Statistic
+
+export { Statistic }
+
+export { statisticProps }
 
 export default Statistic

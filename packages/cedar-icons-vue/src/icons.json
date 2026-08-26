@@ -1,0 +1,1457 @@
+[
+  {
+    "name": "icon-empty-default",
+    "componentName": "EmptyDefault",
+    "category": "custom"
+  },
+  {
+    "name": "icon-error-network",
+    "componentName": "ErrorNetwork",
+    "category": "custom"
+  },
+  {
+    "name": "icon-error-unknown",
+    "componentName": "ErrorUnknown",
+    "category": "custom"
+  },
+  {
+    "name": "icon-success-submitted",
+    "componentName": "SuccessSubmitted",
+    "category": "custom"
+  },
+  {
+    "name": "icon-arrow-down",
+    "componentName": "ArrowDown",
+    "category": "direction"
+  },
+  {
+    "name": "icon-arrow-fall",
+    "componentName": "ArrowFall",
+    "category": "direction"
+  },
+  {
+    "name": "icon-arrow-left",
+    "componentName": "ArrowLeft",
+    "category": "direction"
+  },
+  {
+    "name": "icon-arrow-right",
+    "componentName": "ArrowRight",
+    "category": "direction"
+  },
+  {
+    "name": "icon-arrow-rise",
+    "componentName": "ArrowRise",
+    "category": "direction"
+  },
+  {
+    "name": "icon-arrow-up",
+    "componentName": "ArrowUp",
+    "category": "direction"
+  },
+  {
+    "name": "icon-caret-down",
+    "componentName": "CaretDown",
+    "category": "direction"
+  },
+  {
+    "name": "icon-caret-left",
+    "componentName": "CaretLeft",
+    "category": "direction"
+  },
+  {
+    "name": "icon-caret-right",
+    "componentName": "CaretRight",
+    "category": "direction"
+  },
+  {
+    "name": "icon-caret-up",
+    "componentName": "CaretUp",
+    "category": "direction"
+  },
+  {
+    "name": "icon-double-down",
+    "componentName": "DoubleDown",
+    "category": "direction"
+  },
+  {
+    "name": "icon-double-left",
+    "componentName": "DoubleLeft",
+    "category": "direction"
+  },
+  {
+    "name": "icon-double-right",
+    "componentName": "DoubleRight",
+    "category": "direction"
+  },
+  {
+    "name": "icon-double-up",
+    "componentName": "DoubleUp",
+    "category": "direction"
+  },
+  {
+    "name": "icon-down-circle",
+    "componentName": "DownCircle",
+    "category": "direction"
+  },
+  {
+    "name": "icon-down",
+    "componentName": "Down",
+    "category": "direction"
+  },
+  {
+    "name": "icon-drag-arrow",
+    "componentName": "DragArrow",
+    "category": "direction"
+  },
+  {
+    "name": "icon-expand",
+    "componentName": "Expand",
+    "category": "direction"
+  },
+  {
+    "name": "icon-left-circle",
+    "componentName": "LeftCircle",
+    "category": "direction"
+  },
+  {
+    "name": "icon-left",
+    "componentName": "Left",
+    "category": "direction"
+  },
+  {
+    "name": "icon-menu-fold",
+    "componentName": "MenuFold",
+    "category": "direction"
+  },
+  {
+    "name": "icon-menu-unfold",
+    "componentName": "MenuUnfold",
+    "category": "direction"
+  },
+  {
+    "name": "icon-right-circle",
+    "componentName": "RightCircle",
+    "category": "direction"
+  },
+  {
+    "name": "icon-right",
+    "componentName": "Right",
+    "category": "direction"
+  },
+  {
+    "name": "icon-rotate-left",
+    "componentName": "RotateLeft",
+    "category": "direction"
+  },
+  {
+    "name": "icon-rotate-right",
+    "componentName": "RotateRight",
+    "category": "direction"
+  },
+  {
+    "name": "icon-shrink",
+    "componentName": "Shrink",
+    "category": "direction"
+  },
+  {
+    "name": "icon-swap",
+    "componentName": "Swap",
+    "category": "direction"
+  },
+  {
+    "name": "icon-to-bottom",
+    "componentName": "ToBottom",
+    "category": "direction"
+  },
+  {
+    "name": "icon-to-left",
+    "componentName": "ToLeft",
+    "category": "direction"
+  },
+  {
+    "name": "icon-to-right",
+    "componentName": "ToRight",
+    "category": "direction"
+  },
+  {
+    "name": "icon-to-top",
+    "componentName": "ToTop",
+    "category": "direction"
+  },
+  {
+    "name": "icon-up-circle",
+    "componentName": "UpCircle",
+    "category": "direction"
+  },
+  {
+    "name": "icon-up",
+    "componentName": "Up",
+    "category": "direction"
+  },
+  {
+    "name": "icon-align-center",
+    "componentName": "AlignCenter",
+    "category": "edit"
+  },
+  {
+    "name": "icon-align-left",
+    "componentName": "AlignLeft",
+    "category": "edit"
+  },
+  {
+    "name": "icon-align-right",
+    "componentName": "AlignRight",
+    "category": "edit"
+  },
+  {
+    "name": "icon-attachment",
+    "componentName": "Attachment",
+    "category": "edit"
+  },
+  {
+    "name": "icon-bg-colors",
+    "componentName": "BgColors",
+    "category": "edit"
+  },
+  {
+    "name": "icon-bold",
+    "componentName": "Bold",
+    "category": "edit"
+  },
+  {
+    "name": "icon-brush",
+    "componentName": "Brush",
+    "category": "edit"
+  },
+  {
+    "name": "icon-copy",
+    "componentName": "Copy",
+    "category": "edit"
+  },
+  {
+    "name": "icon-delete",
+    "componentName": "Delete",
+    "category": "edit"
+  },
+  {
+    "name": "icon-edit",
+    "componentName": "Edit",
+    "category": "edit"
+  },
+  {
+    "name": "icon-eraser",
+    "componentName": "Eraser",
+    "category": "edit"
+  },
+  {
+    "name": "icon-filter",
+    "componentName": "Filter",
+    "category": "edit"
+  },
+  {
+    "name": "icon-find-replace",
+    "componentName": "FindReplace",
+    "category": "edit"
+  },
+  {
+    "name": "icon-font-colors",
+    "componentName": "FontColors",
+    "category": "edit"
+  },
+  {
+    "name": "icon-formula",
+    "componentName": "Formula",
+    "category": "edit"
+  },
+  {
+    "name": "icon-h1",
+    "componentName": "H1",
+    "category": "edit"
+  },
+  {
+    "name": "icon-h2",
+    "componentName": "H2",
+    "category": "edit"
+  },
+  {
+    "name": "icon-h3",
+    "componentName": "H3",
+    "category": "edit"
+  },
+  {
+    "name": "icon-h4",
+    "componentName": "H4",
+    "category": "edit"
+  },
+  {
+    "name": "icon-h5",
+    "componentName": "H5",
+    "category": "edit"
+  },
+  {
+    "name": "icon-h6",
+    "componentName": "H6",
+    "category": "edit"
+  },
+  {
+    "name": "icon-h7",
+    "componentName": "H7",
+    "category": "edit"
+  },
+  {
+    "name": "icon-highlight",
+    "componentName": "Highlight",
+    "category": "edit"
+  },
+  {
+    "name": "icon-italic",
+    "componentName": "Italic",
+    "category": "edit"
+  },
+  {
+    "name": "icon-line-height",
+    "componentName": "LineHeight",
+    "category": "edit"
+  },
+  {
+    "name": "icon-link",
+    "componentName": "Link",
+    "category": "edit"
+  },
+  {
+    "name": "icon-oblique-line",
+    "componentName": "ObliqueLine",
+    "category": "edit"
+  },
+  {
+    "name": "icon-ordered-list",
+    "componentName": "OrderedList",
+    "category": "edit"
+  },
+  {
+    "name": "icon-original-size",
+    "componentName": "OriginalSize",
+    "category": "edit"
+  },
+  {
+    "name": "icon-paste",
+    "componentName": "Paste",
+    "category": "edit"
+  },
+  {
+    "name": "icon-quote",
+    "componentName": "Quote",
+    "category": "edit"
+  },
+  {
+    "name": "icon-redo",
+    "componentName": "Redo",
+    "category": "edit"
+  },
+  {
+    "name": "icon-scissor",
+    "componentName": "Scissor",
+    "category": "edit"
+  },
+  {
+    "name": "icon-sort-ascending",
+    "componentName": "SortAscending",
+    "category": "edit"
+  },
+  {
+    "name": "icon-sort-descending",
+    "componentName": "SortDescending",
+    "category": "edit"
+  },
+  {
+    "name": "icon-sort",
+    "componentName": "Sort",
+    "category": "edit"
+  },
+  {
+    "name": "icon-strikethrough",
+    "componentName": "Strikethrough",
+    "category": "edit"
+  },
+  {
+    "name": "icon-underline",
+    "componentName": "Underline",
+    "category": "edit"
+  },
+  {
+    "name": "icon-undo",
+    "componentName": "Undo",
+    "category": "edit"
+  },
+  {
+    "name": "icon-unordered-list",
+    "componentName": "UnorderedList",
+    "category": "edit"
+  },
+  {
+    "name": "icon-zoom-in",
+    "componentName": "ZoomIn",
+    "category": "edit"
+  },
+  {
+    "name": "icon-zoom-out",
+    "componentName": "ZoomOut",
+    "category": "edit"
+  },
+  {
+    "name": "icon-chinese-fill",
+    "componentName": "ChineseFill",
+    "category": "general"
+  },
+  {
+    "name": "icon-english-fill",
+    "componentName": "EnglishFill",
+    "category": "general"
+  },
+  {
+    "name": "icon-face-frown-fill",
+    "componentName": "FaceFrownFill",
+    "category": "general"
+  },
+  {
+    "name": "icon-face-meh-fill",
+    "componentName": "FaceMehFill",
+    "category": "general"
+  },
+  {
+    "name": "icon-face-smile-fill",
+    "componentName": "FaceSmileFill",
+    "category": "general"
+  },
+  {
+    "name": "icon-moon-fill",
+    "componentName": "MoonFill",
+    "category": "general"
+  },
+  {
+    "name": "icon-pen-fill",
+    "componentName": "PenFill",
+    "category": "general"
+  },
+  {
+    "name": "icon-sun-fill",
+    "componentName": "SunFill",
+    "category": "general"
+  },
+  {
+    "name": "icon-apps",
+    "componentName": "Apps",
+    "category": "general"
+  },
+  {
+    "name": "icon-archive",
+    "componentName": "Archive",
+    "category": "general"
+  },
+  {
+    "name": "icon-bar-chart",
+    "componentName": "BarChart",
+    "category": "general"
+  },
+  {
+    "name": "icon-book",
+    "componentName": "Book",
+    "category": "general"
+  },
+  {
+    "name": "icon-bookmark",
+    "componentName": "Bookmark",
+    "category": "general"
+  },
+  {
+    "name": "icon-branch",
+    "componentName": "Branch",
+    "category": "general"
+  },
+  {
+    "name": "icon-bug",
+    "componentName": "Bug",
+    "category": "general"
+  },
+  {
+    "name": "icon-bulb",
+    "componentName": "Bulb",
+    "category": "general"
+  },
+  {
+    "name": "icon-calendar-clock",
+    "componentName": "CalendarClock",
+    "category": "general"
+  },
+  {
+    "name": "icon-calendar",
+    "componentName": "Calendar",
+    "category": "general"
+  },
+  {
+    "name": "icon-camera",
+    "componentName": "Camera",
+    "category": "general"
+  },
+  {
+    "name": "icon-cloud",
+    "componentName": "Cloud",
+    "category": "general"
+  },
+  {
+    "name": "icon-command",
+    "componentName": "Command",
+    "category": "general"
+  },
+  {
+    "name": "icon-common",
+    "componentName": "Common",
+    "category": "general"
+  },
+  {
+    "name": "icon-compass",
+    "componentName": "Compass",
+    "category": "general"
+  },
+  {
+    "name": "icon-computer",
+    "componentName": "Computer",
+    "category": "general"
+  },
+  {
+    "name": "icon-copyright",
+    "componentName": "Copyright",
+    "category": "general"
+  },
+  {
+    "name": "icon-dashboard",
+    "componentName": "Dashboard",
+    "category": "general"
+  },
+  {
+    "name": "icon-desktop",
+    "componentName": "Desktop",
+    "category": "general"
+  },
+  {
+    "name": "icon-dice",
+    "componentName": "Dice",
+    "category": "general"
+  },
+  {
+    "name": "icon-drag-dot-vertical",
+    "componentName": "DragDotVertical",
+    "category": "general"
+  },
+  {
+    "name": "icon-drag-dot",
+    "componentName": "DragDot",
+    "category": "general"
+  },
+  {
+    "name": "icon-drive-file",
+    "componentName": "DriveFile",
+    "category": "general"
+  },
+  {
+    "name": "icon-ear",
+    "componentName": "Ear",
+    "category": "general"
+  },
+  {
+    "name": "icon-email",
+    "componentName": "Email",
+    "category": "general"
+  },
+  {
+    "name": "icon-empty",
+    "componentName": "Empty",
+    "category": "general"
+  },
+  {
+    "name": "icon-experiment",
+    "componentName": "Experiment",
+    "category": "general"
+  },
+  {
+    "name": "icon-file-audio",
+    "componentName": "FileAudio",
+    "category": "general"
+  },
+  {
+    "name": "icon-file-image",
+    "componentName": "FileImage",
+    "category": "general"
+  },
+  {
+    "name": "icon-file-pdf",
+    "componentName": "FilePdf",
+    "category": "general"
+  },
+  {
+    "name": "icon-file-video",
+    "componentName": "FileVideo",
+    "category": "general"
+  },
+  {
+    "name": "icon-file",
+    "componentName": "File",
+    "category": "general"
+  },
+  {
+    "name": "icon-fire",
+    "componentName": "Fire",
+    "category": "general"
+  },
+  {
+    "name": "icon-folder-add",
+    "componentName": "FolderAdd",
+    "category": "general"
+  },
+  {
+    "name": "icon-folder-delete",
+    "componentName": "FolderDelete",
+    "category": "general"
+  },
+  {
+    "name": "icon-folder",
+    "componentName": "Folder",
+    "category": "general"
+  },
+  {
+    "name": "icon-gift",
+    "componentName": "Gift",
+    "category": "general"
+  },
+  {
+    "name": "icon-idcard",
+    "componentName": "Idcard",
+    "category": "general"
+  },
+  {
+    "name": "icon-image-close",
+    "componentName": "ImageClose",
+    "category": "general"
+  },
+  {
+    "name": "icon-image",
+    "componentName": "Image",
+    "category": "general"
+  },
+  {
+    "name": "icon-interaction",
+    "componentName": "Interaction",
+    "category": "general"
+  },
+  {
+    "name": "icon-language",
+    "componentName": "Language",
+    "category": "general"
+  },
+  {
+    "name": "icon-layers",
+    "componentName": "Layers",
+    "category": "general"
+  },
+  {
+    "name": "icon-layout",
+    "componentName": "Layout",
+    "category": "general"
+  },
+  {
+    "name": "icon-loading",
+    "componentName": "Loading",
+    "category": "general"
+  },
+  {
+    "name": "icon-location",
+    "componentName": "Location",
+    "category": "general"
+  },
+  {
+    "name": "icon-lock",
+    "componentName": "Lock",
+    "category": "general"
+  },
+  {
+    "name": "icon-loop",
+    "componentName": "Loop",
+    "category": "general"
+  },
+  {
+    "name": "icon-man",
+    "componentName": "Man",
+    "category": "general"
+  },
+  {
+    "name": "icon-menu",
+    "componentName": "Menu",
+    "category": "general"
+  },
+  {
+    "name": "icon-mind-mapping",
+    "componentName": "MindMapping",
+    "category": "general"
+  },
+  {
+    "name": "icon-mobile",
+    "componentName": "Mobile",
+    "category": "general"
+  },
+  {
+    "name": "icon-moon",
+    "componentName": "Moon",
+    "category": "general"
+  },
+  {
+    "name": "icon-mosaic",
+    "componentName": "Mosaic",
+    "category": "general"
+  },
+  {
+    "name": "icon-nav",
+    "componentName": "Nav",
+    "category": "general"
+  },
+  {
+    "name": "icon-notification-close",
+    "componentName": "NotificationClose",
+    "category": "general"
+  },
+  {
+    "name": "icon-notification",
+    "componentName": "Notification",
+    "category": "general"
+  },
+  {
+    "name": "icon-palette",
+    "componentName": "Palette",
+    "category": "general"
+  },
+  {
+    "name": "icon-pen",
+    "componentName": "Pen",
+    "category": "general"
+  },
+  {
+    "name": "icon-phone",
+    "componentName": "Phone",
+    "category": "general"
+  },
+  {
+    "name": "icon-printer",
+    "componentName": "Printer",
+    "category": "general"
+  },
+  {
+    "name": "icon-public",
+    "componentName": "Public",
+    "category": "general"
+  },
+  {
+    "name": "icon-pushpin",
+    "componentName": "Pushpin",
+    "category": "general"
+  },
+  {
+    "name": "icon-qrcode",
+    "componentName": "Qrcode",
+    "category": "general"
+  },
+  {
+    "name": "icon-relation",
+    "componentName": "Relation",
+    "category": "general"
+  },
+  {
+    "name": "icon-robot-add",
+    "componentName": "RobotAdd",
+    "category": "general"
+  },
+  {
+    "name": "icon-robot",
+    "componentName": "Robot",
+    "category": "general"
+  },
+  {
+    "name": "icon-safe",
+    "componentName": "Safe",
+    "category": "general"
+  },
+  {
+    "name": "icon-schedule",
+    "componentName": "Schedule",
+    "category": "general"
+  },
+  {
+    "name": "icon-shake",
+    "componentName": "Shake",
+    "category": "general"
+  },
+  {
+    "name": "icon-skin",
+    "componentName": "Skin",
+    "category": "general"
+  },
+  {
+    "name": "icon-stamp",
+    "componentName": "Stamp",
+    "category": "general"
+  },
+  {
+    "name": "icon-storage",
+    "componentName": "Storage",
+    "category": "general"
+  },
+  {
+    "name": "icon-subscribe-add",
+    "componentName": "SubscribeAdd",
+    "category": "general"
+  },
+  {
+    "name": "icon-subscribe",
+    "componentName": "Subscribe",
+    "category": "general"
+  },
+  {
+    "name": "icon-subscribed",
+    "componentName": "Subscribed",
+    "category": "general"
+  },
+  {
+    "name": "icon-sun",
+    "componentName": "Sun",
+    "category": "general"
+  },
+  {
+    "name": "icon-tag",
+    "componentName": "Tag",
+    "category": "general"
+  },
+  {
+    "name": "icon-tags",
+    "componentName": "Tags",
+    "category": "general"
+  },
+  {
+    "name": "icon-thunderbolt",
+    "componentName": "Thunderbolt",
+    "category": "general"
+  },
+  {
+    "name": "icon-tool",
+    "componentName": "Tool",
+    "category": "general"
+  },
+  {
+    "name": "icon-trophy",
+    "componentName": "Trophy",
+    "category": "general"
+  },
+  {
+    "name": "icon-unlock",
+    "componentName": "Unlock",
+    "category": "general"
+  },
+  {
+    "name": "icon-user-add",
+    "componentName": "UserAdd",
+    "category": "general"
+  },
+  {
+    "name": "icon-user-group",
+    "componentName": "UserGroup",
+    "category": "general"
+  },
+  {
+    "name": "icon-user",
+    "componentName": "User",
+    "category": "general"
+  },
+  {
+    "name": "icon-video-camera",
+    "componentName": "VideoCamera",
+    "category": "general"
+  },
+  {
+    "name": "icon-wifi",
+    "componentName": "Wifi",
+    "category": "general"
+  },
+  {
+    "name": "icon-woman",
+    "componentName": "Woman",
+    "category": "general"
+  },
+  {
+    "name": "icon-heart-fill",
+    "componentName": "HeartFill",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-star-fill",
+    "componentName": "StarFill",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-thumb-down-fill",
+    "componentName": "ThumbDownFill",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-thumb-up-fill",
+    "componentName": "ThumbUpFill",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-at",
+    "componentName": "At",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-cloud-download",
+    "componentName": "CloudDownload",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-code-block",
+    "componentName": "CodeBlock",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-code-square",
+    "componentName": "CodeSquare",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-code",
+    "componentName": "Code",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-customer-service",
+    "componentName": "CustomerService",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-download",
+    "componentName": "Download",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-export",
+    "componentName": "Export",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-eye-invisible",
+    "componentName": "EyeInvisible",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-eye",
+    "componentName": "Eye",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-heart",
+    "componentName": "Heart",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-history",
+    "componentName": "History",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-home",
+    "componentName": "Home",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-import",
+    "componentName": "Import",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-launch",
+    "componentName": "Launch",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-list",
+    "componentName": "List",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-message-banned",
+    "componentName": "MessageBanned",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-message",
+    "componentName": "Message",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-more-vertical",
+    "componentName": "MoreVertical",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-more",
+    "componentName": "More",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-poweroff",
+    "componentName": "Poweroff",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-refresh",
+    "componentName": "Refresh",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-reply",
+    "componentName": "Reply",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-save",
+    "componentName": "Save",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-scan",
+    "componentName": "Scan",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-search",
+    "componentName": "Search",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-select-all",
+    "componentName": "SelectAll",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-send",
+    "componentName": "Send",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-settings",
+    "componentName": "Settings",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-share-alt",
+    "componentName": "ShareAlt",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-share-external",
+    "componentName": "ShareExternal",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-share-internal",
+    "componentName": "ShareInternal",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-star",
+    "componentName": "Star",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-sync",
+    "componentName": "Sync",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-thumb-down",
+    "componentName": "ThumbDown",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-thumb-up",
+    "componentName": "ThumbUp",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-translate",
+    "componentName": "Translate",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-upload",
+    "componentName": "Upload",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-voice",
+    "componentName": "Voice",
+    "category": "interactive-button"
+  },
+  {
+    "name": "icon-bytedance-color",
+    "componentName": "BytedanceColor",
+    "category": "logo"
+  },
+  {
+    "name": "icon-lark-color",
+    "componentName": "LarkColor",
+    "category": "logo"
+  },
+  {
+    "name": "icon-tiktok-color",
+    "componentName": "TiktokColor",
+    "category": "logo"
+  },
+  {
+    "name": "icon-xigua-color",
+    "componentName": "XiguaColor",
+    "category": "logo"
+  },
+  {
+    "name": "icon-face-book-circle-fill",
+    "componentName": "FaceBookCircleFill",
+    "category": "logo"
+  },
+  {
+    "name": "icon-facebook-square-fill",
+    "componentName": "FacebookSquareFill",
+    "category": "logo"
+  },
+  {
+    "name": "icon-google-circle-fill",
+    "componentName": "GoogleCircleFill",
+    "category": "logo"
+  },
+  {
+    "name": "icon-qq-circle-fill",
+    "componentName": "QqCircleFill",
+    "category": "logo"
+  },
+  {
+    "name": "icon-twitter-circle-fill",
+    "componentName": "TwitterCircleFill",
+    "category": "logo"
+  },
+  {
+    "name": "icon-weibo-circle-fill",
+    "componentName": "WeiboCircleFill",
+    "category": "logo"
+  },
+  {
+    "name": "icon-alipay-circle",
+    "componentName": "AlipayCircle",
+    "category": "logo"
+  },
+  {
+    "name": "icon-code-sandbox",
+    "componentName": "CodeSandbox",
+    "category": "logo"
+  },
+  {
+    "name": "icon-codepen",
+    "componentName": "Codepen",
+    "category": "logo"
+  },
+  {
+    "name": "icon-facebook",
+    "componentName": "Facebook",
+    "category": "logo"
+  },
+  {
+    "name": "icon-github",
+    "componentName": "Github",
+    "category": "logo"
+  },
+  {
+    "name": "icon-gitlab",
+    "componentName": "Gitlab",
+    "category": "logo"
+  },
+  {
+    "name": "icon-google",
+    "componentName": "Google",
+    "category": "logo"
+  },
+  {
+    "name": "icon-qq-zone",
+    "componentName": "QqZone",
+    "category": "logo"
+  },
+  {
+    "name": "icon-qq",
+    "componentName": "Qq",
+    "category": "logo"
+  },
+  {
+    "name": "icon-twitter",
+    "componentName": "Twitter",
+    "category": "logo"
+  },
+  {
+    "name": "icon-wechat",
+    "componentName": "Wechat",
+    "category": "logo"
+  },
+  {
+    "name": "icon-wechatpay",
+    "componentName": "Wechatpay",
+    "category": "logo"
+  },
+  {
+    "name": "icon-weibo",
+    "componentName": "Weibo",
+    "category": "logo"
+  },
+  {
+    "name": "icon-mute-fill",
+    "componentName": "MuteFill",
+    "category": "media"
+  },
+  {
+    "name": "icon-pause-circle-fill",
+    "componentName": "PauseCircleFill",
+    "category": "media"
+  },
+  {
+    "name": "icon-play-arrow-fill",
+    "componentName": "PlayArrowFill",
+    "category": "media"
+  },
+  {
+    "name": "icon-play-circle-fill",
+    "componentName": "PlayCircleFill",
+    "category": "media"
+  },
+  {
+    "name": "icon-skip-next-fill",
+    "componentName": "SkipNextFill",
+    "category": "media"
+  },
+  {
+    "name": "icon-skip-previous-fill",
+    "componentName": "SkipPreviousFill",
+    "category": "media"
+  },
+  {
+    "name": "icon-sound-fill",
+    "componentName": "SoundFill",
+    "category": "media"
+  },
+  {
+    "name": "icon-backward",
+    "componentName": "Backward",
+    "category": "media"
+  },
+  {
+    "name": "icon-forward",
+    "componentName": "Forward",
+    "category": "media"
+  },
+  {
+    "name": "icon-fullscreen-exit",
+    "componentName": "FullscreenExit",
+    "category": "media"
+  },
+  {
+    "name": "icon-fullscreen",
+    "componentName": "Fullscreen",
+    "category": "media"
+  },
+  {
+    "name": "icon-live-broadcast",
+    "componentName": "LiveBroadcast",
+    "category": "media"
+  },
+  {
+    "name": "icon-music",
+    "componentName": "Music",
+    "category": "media"
+  },
+  {
+    "name": "icon-mute",
+    "componentName": "Mute",
+    "category": "media"
+  },
+  {
+    "name": "icon-pause-circle",
+    "componentName": "PauseCircle",
+    "category": "media"
+  },
+  {
+    "name": "icon-pause",
+    "componentName": "Pause",
+    "category": "media"
+  },
+  {
+    "name": "icon-play-arrow",
+    "componentName": "PlayArrow",
+    "category": "media"
+  },
+  {
+    "name": "icon-play-circle",
+    "componentName": "PlayCircle",
+    "category": "media"
+  },
+  {
+    "name": "icon-record-stop",
+    "componentName": "RecordStop",
+    "category": "media"
+  },
+  {
+    "name": "icon-record",
+    "componentName": "Record",
+    "category": "media"
+  },
+  {
+    "name": "icon-skip-next",
+    "componentName": "SkipNext",
+    "category": "media"
+  },
+  {
+    "name": "icon-skip-previous",
+    "componentName": "SkipPrevious",
+    "category": "media"
+  },
+  {
+    "name": "icon-sound",
+    "componentName": "Sound",
+    "category": "media"
+  },
+  {
+    "name": "icon-check-circle-fill",
+    "componentName": "CheckCircleFill",
+    "category": "tips"
+  },
+  {
+    "name": "icon-close-circle-fill",
+    "componentName": "CloseCircleFill",
+    "category": "tips"
+  },
+  {
+    "name": "icon-exclamation-circle-fill",
+    "componentName": "ExclamationCircleFill",
+    "category": "tips"
+  },
+  {
+    "name": "icon-exclamation-polygon-fill",
+    "componentName": "ExclamationPolygonFill",
+    "category": "tips"
+  },
+  {
+    "name": "icon-info-circle-fill",
+    "componentName": "InfoCircleFill",
+    "category": "tips"
+  },
+  {
+    "name": "icon-minus-circle-fill",
+    "componentName": "MinusCircleFill",
+    "category": "tips"
+  },
+  {
+    "name": "icon-plus-circle-fill",
+    "componentName": "PlusCircleFill",
+    "category": "tips"
+  },
+  {
+    "name": "icon-question-circle-fill",
+    "componentName": "QuestionCircleFill",
+    "category": "tips"
+  },
+  {
+    "name": "icon-check-circle",
+    "componentName": "CheckCircle",
+    "category": "tips"
+  },
+  {
+    "name": "icon-check-square",
+    "componentName": "CheckSquare",
+    "category": "tips"
+  },
+  {
+    "name": "icon-check",
+    "componentName": "Check",
+    "category": "tips"
+  },
+  {
+    "name": "icon-clock-circle",
+    "componentName": "ClockCircle",
+    "category": "tips"
+  },
+  {
+    "name": "icon-close-circle",
+    "componentName": "CloseCircle",
+    "category": "tips"
+  },
+  {
+    "name": "icon-close",
+    "componentName": "Close",
+    "category": "tips"
+  },
+  {
+    "name": "icon-exclamation-circle",
+    "componentName": "ExclamationCircle",
+    "category": "tips"
+  },
+  {
+    "name": "icon-exclamation",
+    "componentName": "Exclamation",
+    "category": "tips"
+  },
+  {
+    "name": "icon-info-circle",
+    "componentName": "InfoCircle",
+    "category": "tips"
+  },
+  {
+    "name": "icon-info",
+    "componentName": "Info",
+    "category": "tips"
+  },
+  {
+    "name": "icon-minus-circle",
+    "componentName": "MinusCircle",
+    "category": "tips"
+  },
+  {
+    "name": "icon-minus",
+    "componentName": "Minus",
+    "category": "tips"
+  },
+  {
+    "name": "icon-plus-circle",
+    "componentName": "PlusCircle",
+    "category": "tips"
+  },
+  {
+    "name": "icon-plus",
+    "componentName": "Plus",
+    "category": "tips"
+  },
+  {
+    "name": "icon-question-circle",
+    "componentName": "QuestionCircle",
+    "category": "tips"
+  },
+  {
+    "name": "icon-question",
+    "componentName": "Question",
+    "category": "tips"
+  },
+  {
+    "name": "icon-stop",
+    "componentName": "Stop",
+    "category": "tips"
+  }
+]

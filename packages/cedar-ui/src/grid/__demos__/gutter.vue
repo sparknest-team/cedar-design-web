@@ -58,23 +58,25 @@
 </script>
 
 <style scoped>
-.grid-demo .c-col {
+:deep(.grid-demo .c-col) {
   height: 48px;
-  color: var(--color-white);
+  color: var(--c-color-text-1);
+  border: 1px solid var(--c-color-border-2);
+  box-sizing: border-box;
 }
 
-.grid-demo .c-col > div {
+:deep(.grid-demo .c-col > div) {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100%;
 }
 
-.grid-demo .c-col:nth-child(2n) > div {
-  background-color: rgba(var(--brand-6), 0.9);
+:deep(.grid-demo .c-col:nth-child(2n) > div) {
+  background-color: var(--c-color-fill-3);
 }
 
-.grid-demo .c-col:nth-child(2n + 1) > div {
-  background-color: var(--color-primary-light-4);
+:deep(.grid-demo .c-col:nth-child(2n + 1) > div) {
+  background-color: var(--c-color-fill-2);
 }
 </style>

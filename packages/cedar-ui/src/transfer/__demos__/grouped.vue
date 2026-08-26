@@ -11,7 +11,7 @@
       @target-action="handleTargetAction"
     />
   </div>
-  <c-dialog v-model:show="customVisible" title="自定义操作" :width="420"> 当前操作项：{{ activeLabel }} </c-dialog>
+  <c-dialog v-model:open="customVisible" title="自定义操作" :width="420"> 当前操作项：{{ activeLabel }} </c-dialog>
 </template>
 
 <script lang="ts" setup>

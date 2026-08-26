@@ -18,7 +18,6 @@ export const useOptions = ({
   inputValue,
   filterOption,
   showExtraOptions,
-  valueKey,
   fieldNames,
 }: {
   options?: Ref<SelectOption[]>
@@ -26,7 +25,6 @@ export const useOptions = ({
   inputValue?: Ref<string>
   filterOption?: Ref<FilterOption>
   showExtraOptions?: Ref<boolean>
-  valueKey?: Ref<string>
   fieldNames?: Ref<SelectFieldNames | undefined>
 }) => {
   const mergedFieldNames = computed(() => ({
@@ -47,7 +45,6 @@ export const useOptions = ({
   const propOptionData = computed(() => {
     const optionInfoMap = new Map<string, SelectOptionInfo>()
     const optionInfos = getOptionInfos(options?.value ?? [], {
-      valueKey: valueKey?.value ?? 'value',
       fieldNames: mergedFieldNames.value,
       origin: 'options',
       optionInfoMap,
@@ -63,7 +60,6 @@ export const useOptions = ({
     const optionInfoMap = new Map<string, SelectOptionInfo>()
 
     const optionInfos = getOptionInfos(extraOptions?.value ?? [], {
-      valueKey: valueKey?.value ?? 'value',
       fieldNames: mergedFieldNames.value,
       origin: 'extraOptions',
       optionInfoMap,
@@ -77,7 +73,7 @@ export const useOptions = ({
   const optionInfoMap = reactive(new Map<string, SelectOptionInfo>())
 
   watch(
-    [sortedSlotOptionInfos, options ?? ref([]), extraOptions ?? ref([]), valueKey ?? ref('value')],
+    [sortedSlotOptionInfos, options ?? ref([]), extraOptions ?? ref([]), mergedFieldNames],
     () => {
       optionInfoMap.clear()
 

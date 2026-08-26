@@ -1,17 +1,16 @@
-import { App } from 'vue'
-import { CedarOptions } from '../_utils/types'
-import { getComponentPrefix, setGlobalConfig } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _TreeSelect from './tree-select.vue'
+import { treeSelectProps } from './props'
 
-const TreeSelect = Object.assign(_TreeSelect, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _TreeSelect.name, _TreeSelect)
-  },
-})
+const TreeSelect = withInstall(_TreeSelect, Object.assign(_TreeSelect, {
+}), { components: [_TreeSelect] })
 
 export type TreeSelectInstance = InstanceType<typeof _TreeSelect>
+
+export const _TreeSelectComponent = TreeSelect
+
+export { TreeSelect }
+
+export { treeSelectProps }
 
 export default TreeSelect

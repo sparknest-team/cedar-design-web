@@ -1,8 +1,9 @@
 <template>
   <c-space direction="column">
     <c-radio-group v-model="variant">
-      <c-radio value="default">default</c-radio>
-      <c-radio value="outline">outline</c-radio>
+      <c-radio value="filled">filled</c-radio>
+      <c-radio value="outlined">outlined</c-radio>
+      <c-radio value="standard">standard</c-radio>
     </c-radio-group>
     <c-search
       v-model="keyword"
@@ -35,13 +36,13 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import type { SearchResult } from '@cedar/ui'
+import type { SearchResult } from '@cedarjs/ui'
 
 const inputStyle = { width: '360px' }
 const keyword = ref('')
 const buttonKeyword = ref('')
 const textButtonKeyword = ref('')
-const variant = ref('default')
+const variant = ref('filled')
 const recentSearches = ref<string[]>(['设备 A', '设备 B', '设备 C'])
 
 function handleSearch(data: SearchResult) {

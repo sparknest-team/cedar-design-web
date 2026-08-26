@@ -2,22 +2,22 @@ import type { ComponentPublicInstance, PropType } from 'vue'
 import { computed, defineComponent, ref, toRefs, watch } from 'vue'
 import type { Data } from '../../_utils/types'
 import { getPrefixCls, createNamespace } from '../../_utils/global-config'
-import { Size } from '../../_utils/constant'
+import { ComponentSize } from '../../_utils/constant'
 import { isArray } from '../../_utils/is'
 import FeedbackIcon from '../feedback-icon.vue'
 import InputLabel from '../input-label/input-label'
 import InputTag from '../../input-tag'
 import IconHover from '../icon-hover.vue'
-import IconDown from '../../icon/icon-down'
-import IconLoading from '../../icon/icon-loading'
-import IconClose from '../../icon/icon-close'
-import IconSearch from '../../icon/icon-search'
+import { IconDown } from '@cedarjs/icons-vue/icon-down'
+import { IconLoading } from '@cedarjs/icons-vue/icon-loading'
+import { IconClose } from '@cedarjs/icons-vue/icon-close'
+import { IconSearch } from '@cedarjs/icons-vue/icon-search'
 import { useFormItem } from '../../_hooks/use-form-item'
 import { useSize } from '../../_hooks/use-size'
 import { SelectViewValue } from './interface'
 
 export default defineComponent({
-  name: 'CSelectView',
+  name: createNamespace('select-view').name,
   props: {
     modelValue: {
       type: Array as PropType<SelectViewValue[]>,
@@ -26,8 +26,8 @@ export default defineComponent({
     inputValue: String,
     placeholder: String,
     variant: {
-      type: String as PropType<'outline' | 'default'>,
-      default: 'default',
+      type: String as PropType<'filled' | 'outlined' | 'standard'>,
+      default: 'filled',
     },
     disabled: {
       type: Boolean,
@@ -46,7 +46,7 @@ export default defineComponent({
       default: false,
     },
     size: {
-      type: String as PropType<Size>,
+      type: String as PropType<ComponentSize>,
     },
     bordered: {
       type: Boolean,
@@ -122,7 +122,7 @@ export default defineComponent({
       eventHandlers.value?.onBlur?.(ev)
     }
 
-    const handleRemove = (tag: string) => {
+    const handleRemove = (tag: string | number) => {
       emit('remove', tag)
     }
 
@@ -147,9 +147,11 @@ export default defineComponent({
       <>
         {showClearBtn.value && (
           <IconHover
-            class={classes(n('clear-btn'))}
-            onClick={handleClear}
-            onMousedown={(ev: MouseEvent) => ev.stopPropagation()}
+            {...({
+              class: classes(n('clear-btn')),
+              onClick: handleClear,
+              onMousedown: (ev: MouseEvent) => ev.stopPropagation(),
+            } as any)}
           >
             <IconClose />
           </IconHover>

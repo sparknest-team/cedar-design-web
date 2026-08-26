@@ -1,11 +1,13 @@
 import type { ComputedRef, Slots } from 'vue'
-import { useChildren, useParent } from '@maplejs/maple-use'
+import { useChildren, useParent } from '@cedarjs/use'
+import type { BreadcrumbMoreIconSlotData } from './types'
 
 export interface BreadcrumbProvider {
   length: ComputedRef<number>
   maxCount: ComputedRef<number>
   separator: ComputedRef<string | number | undefined>
   needHide: ComputedRef<boolean>
+  moreSlotData: ComputedRef<BreadcrumbMoreIconSlotData>
   slots: Slots
 }
 

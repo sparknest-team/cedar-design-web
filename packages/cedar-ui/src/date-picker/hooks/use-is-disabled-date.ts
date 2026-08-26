@@ -1,5 +1,5 @@
 import { computed, toRefs } from 'vue'
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 import { DisabledDate, DisabledTime, RangeDisabledDate, RangeDisabledTime } from '../types'
 import { getDateValue } from '../../_utils/date'
 

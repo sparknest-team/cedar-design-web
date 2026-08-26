@@ -3,7 +3,7 @@
     <c-button @click="handleClick">Open Dialog</c-button>
   </Space>
 
-  <c-dialog v-model:show="show" @confirm="handleOk" @cancel="handleCancel">
+  <c-dialog v-model:open="show" @confirm="handleOk" @cancel="handleCancel">
     <template #title>title2</template>
     <c-date-picker></c-date-picker>
     <div>

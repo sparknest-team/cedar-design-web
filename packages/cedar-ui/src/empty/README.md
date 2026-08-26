@@ -39,7 +39,8 @@ permalink: /components/empty/
 | 属性               | 说明                         | 类型                                   | 默认值  |
 | ------------------ | ---------------------------- | -------------------------------------- | ------- |
 | description        | 描述内容                     | `string`                               | -       |
-| img-src            | 自定义图片的地址             | `string`                               | -       |
+| image-url          | 自定义图片的地址             | `string`                               | -       |
+| alt                | 图片替代文本                 | `string`                               | `''`    |
 | icon               | 自定义图标名                 | `string`                               | -       |
 | image-size         | 图片/图标尺寸                | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| number` | `'md'`  |
 | in-config-provider | 是否在 ConfigProvider 中使用 | `boolean`                              | `false` |
@@ -57,5 +58,5 @@ permalink: /components/empty/
 组件导出以下类型定义
 
 ```ts
-import type { EmptyProps } from '@cedar/ui'
+import type { EmptyProps } from '@cedarjs/ui'
 ```

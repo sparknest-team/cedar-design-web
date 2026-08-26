@@ -1,19 +1,14 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _Popover from './popover.vue'
+import { popoverProps } from './props'
 
-const Popover = Object.assign(_Popover, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-
-    app.component(componentPrefix + _Popover.name, _Popover)
-  },
-})
+const Popover = withInstall(_Popover, Object.assign(_Popover, {
+}), { components: [_Popover] })
 
 export type PopoverInstance = InstanceType<typeof _Popover>
-export type { PopoverPlacement, PopoverProps, PopoverTrigger } from './types'
-export { Popover }
+export type { PopoverProps } from './props'
+export type { PopoverPlacement, PopoverTrigger } from './types'
+export { Popover, popoverProps }
+export const _PopoverComponent = Popover
 
 export default Popover

@@ -1,0 +1,267 @@
+.c--box {
+  box-sizing: border-box;
+}
+.c--box * {
+  box-sizing: border-box;
+}
+.c--lock {
+  overflow: hidden !important;
+}
+.c--ellipsis {
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.c--inline-block {
+  display: inline-block;
+}
+.c--flex {
+  display: flex;
+}
+.c--inline-flex {
+  display: inline-flex;
+}
+/******** borderSize *******/
+/******** borderStyle *******/
+/******** radius *******/
+/******** shadow distance *******/
+/******** size *******/
+/******** spacing *******/
+/******** shadow *******/
+/******** opacity *******/
+/******** fontSize *******/
+/******** fontWeight ********/
+/******** Primary *******/
+/******** success *******/
+/******** info *******/
+/******** warning *******/
+/******** danger *******/
+/******** link *******/
+/******** radius *******/
+/******** motion *******/
+/******** z-index *******/
+/******** scale CSS var wrappers (public Less API) *******/
+/********* icon hover *********/
+:root {
+  --c-typography-edit-padding-x: var(--c-spacing-6);
+  --c-typography-edit-padding-y: var(--c-spacing-2);
+  --c-typography-edit-border-width: var(--c-border-1);
+  --c-typography-font-size-h1: var(--c-font-size-display-1);
+  --c-typography-font-size-h2: var(--c-size-8);
+  --c-typography-font-size-h3: var(--c-size-7);
+  --c-typography-font-size-h4: var(--c-font-size-title-3);
+  --c-typography-font-size-h5: var(--c-font-size-title-2);
+  --c-typography-font-size-h6: var(--c-font-size-title-1);
+  --c-typography-heading-font-weight: var(--c-font-weight-500);
+  --c-typography-text-color: var(--c-color-text-1);
+  --c-typography-text-color-primary: rgb(var(--c-primary-6));
+  --c-typography-text-color-secondary: var(--c-color-text-2);
+  --c-typography-text-color-success: rgb(var(--c-success-6));
+  --c-typography-text-color-warning: rgb(var(--c-warning-6));
+  --c-typography-text-color-error: rgb(var(--c-danger-6));
+  --c-typography-text-color-disabled: var(--c-color-text-4);
+  --c-typography-text-bg-mark: rgb(var(--c-yellow-4));
+  --c-typography-text-font-weight-bold: var(--c-font-weight-500);
+  --c-typography-code-text-color: var(--c-color-text-2);
+  --c-typography-code-border-color: var(--c-color-neutral-3);
+  --c-typography-code-bg: var(--c-color-neutral-2);
+  --c-typography-text-padding-code-vertical: var(--c-spacing-1);
+  --c-typography-text-padding-code-horizontal: var(--c-spacing-4);
+  --c-typography-text-margin-code-horizontal: var(--c-spacing-1);
+  --c-typography-paragraph-line-height: var(--c-line-height);
+  --c-typography-paragraph-line-height-close: 1.3;
+  --c-typography-operation-margin-left: var(--c-spacing-1);
+  --c-typography-icon-copy-color: var(--c-color-text-2);
+  --c-typography-icon-copy-bg: transparent;
+  --c-typography-icon-copy-color-hover: var(--c-color-text-2);
+  --c-typography-icon-copy-bg-hover: var(--c-color-fill-2);
+  --c-typography-icon-copy-color-copied: rgb(var(--c-success-6));
+  --c-typography-icon-edit-color: var(--c-color-text-2);
+  --c-typography-icon-edit-bg: transparent;
+  --c-typography-icon-edit-color-hover: var(--c-color-text-2);
+  --c-typography-icon-edit-bg-hover: var(--c-color-fill-2);
+  --c-typography-expand-text-color: rgb(var(--c-primary-6));
+  --c-typography-expand-text-color-hover: rgb(var(--c-primary-5));
+  --c-typography-blockquote-border-width: var(--c-border-2);
+  --c-typography-blockquote-border-left-color: var(--c-color-neutral-6);
+  --c-typography-blockquote-bg: var(--c-color-bg-2);
+  --c-typography-heading-margin-top: 0;
+  --c-typography-heading-margin-bottom: 0;
+  --c-typography-code-border-radius: var(--c-border-radius-sm);
+  --c-typography-blockquote-padding-left: var(--c-spacing-4);
+  --c-typography-list-item-margin-left: var(--c-spacing-8);
+  --c-typography-operation-padding: var(--c-spacing-1);
+  --c-typography-operation-border-radius: var(--c-border-radius-sm);
+  --c-typography-expand-margin-x: var(--c-spacing-2);
+}
+.c-typography {
+  color: var(--c-typography-text-color);
+  line-height: var(--c-typography-paragraph-line-height);
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.c-typography--break-word {
+  word-break: break-all;
+}
+h1.c-typography,
+h2.c-typography,
+h3.c-typography,
+h4.c-typography,
+h5.c-typography,
+h6.c-typography {
+  margin-top: var(--c-typography-heading-margin-top);
+  margin-bottom: var(--c-typography-heading-margin-bottom);
+  font-weight: var(--c-typography-heading-font-weight);
+}
+h1.c-typography {
+  font-size: var(--c-typography-font-size-h1);
+  line-height: 1.23;
+}
+h2.c-typography {
+  font-size: var(--c-typography-font-size-h2);
+  line-height: 1.25;
+}
+h3.c-typography {
+  font-size: var(--c-typography-font-size-h3);
+  line-height: 1.29;
+}
+h4.c-typography {
+  font-size: var(--c-typography-font-size-h4);
+  line-height: 1.33;
+}
+h5.c-typography {
+  font-size: var(--c-typography-font-size-h5);
+  line-height: 1.4;
+}
+h6.c-typography {
+  font-size: var(--c-typography-font-size-h6);
+  line-height: 1.5;
+}
+div.c-typography,
+p.c-typography {
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+.c-typography-primary {
+  color: var(--c-typography-text-color-primary);
+}
+.c-typography-secondary {
+  color: var(--c-typography-text-color-secondary);
+}
+.c-typography-success {
+  color: var(--c-typography-text-color-success);
+}
+.c-typography-warning {
+  color: var(--c-typography-text-color-warning);
+}
+.c-typography-danger {
+  color: var(--c-typography-text-color-error);
+}
+.c-typography-disabled {
+  color: var(--c-typography-text-color-disabled);
+  cursor: not-allowed;
+}
+.c-typography mark {
+  background-color: var(--c-typography-text-bg-mark);
+}
+.c-typography u {
+  text-decoration: underline;
+}
+.c-typography del {
+  text-decoration: line-through;
+}
+.c-typography b {
+  font-weight: var(--c-typography-text-font-weight-bold);
+}
+.c-typography code {
+  margin: 0 var(--c-typography-text-margin-code-horizontal);
+  padding: var(--c-typography-text-padding-code-vertical) var(--c-typography-text-padding-code-horizontal);
+  color: var(--c-typography-code-text-color);
+  font-size: 85%;
+  background-color: var(--c-typography-code-bg);
+  border: 1px solid var(--c-typography-code-border-color);
+  border-radius: var(--c-typography-code-border-radius);
+}
+.c-typography blockquote {
+  margin: 0;
+  margin-bottom: 1em;
+  padding-left: var(--c-typography-blockquote-padding-left);
+  background-color: var(--c-typography-blockquote-bg);
+  border-left: var(--c-typography-blockquote-border-width) solid var(--c-typography-blockquote-border-left-color);
+}
+.c-typography ol,
+.c-typography ul {
+  margin: 0;
+  padding: 0;
+}
+.c-typography ul li,
+.c-typography ol li {
+  margin-left: var(--c-typography-list-item-margin-left);
+}
+.c-typography ul {
+  list-style: circle;
+}
+.c-typography-spacing-close {
+  line-height: var(--c-typography-paragraph-line-height-close);
+}
+.c-typography-operation-edit,
+.c-typography-operation-copy,
+.c-typography-operation-copied,
+.c-typography-operation-expand {
+  appearance: none;
+  border: 0;
+  font: inherit;
+  line-height: inherit;
+}
+.c-typography-operation-copy,
+.c-typography-operation-copied {
+  margin-left: var(--c-typography-operation-margin-left);
+  padding: var(--c-typography-operation-padding);
+}
+.c-typography-operation-copy {
+  color: var(--c-typography-icon-copy-color);
+  background-color: var(--c-typography-icon-copy-bg);
+  border-radius: var(--c-typography-operation-border-radius);
+  cursor: pointer;
+  transition: background-color var(--c-transition-duration-1) var(--c-transition-timing-function-linear);
+}
+.c-typography-operation-copy:hover {
+  color: var(--c-typography-icon-copy-color-hover);
+  background-color: var(--c-typography-icon-copy-bg-hover);
+}
+.c-typography-operation-copied {
+  color: var(--c-typography-icon-copy-color-copied);
+}
+.c-typography-operation-edit {
+  margin-left: var(--c-typography-operation-margin-left);
+  padding: var(--c-typography-operation-padding);
+  color: var(--c-typography-icon-edit-color);
+  background-color: var(--c-typography-icon-edit-bg);
+  border-radius: var(--c-typography-operation-border-radius);
+  cursor: pointer;
+  transition: background-color var(--c-transition-duration-1) var(--c-transition-timing-function-linear);
+}
+.c-typography-operation-edit:hover {
+  color: var(--c-typography-icon-edit-color-hover);
+  background-color: var(--c-typography-icon-edit-bg-hover);
+}
+.c-typography-operation-expand {
+  margin: 0 var(--c-typography-expand-margin-x);
+  color: var(--c-typography-expand-text-color);
+  cursor: pointer;
+}
+.c-typography-operation-expand:hover {
+  color: var(--c-typography-expand-text-color-hover);
+}
+.c-typography-edit-content {
+  position: relative;
+  left: calc(0px - var(--c-typography-edit-padding-x) + var(--c-typography-edit-border-width));
+  margin-top: calc(0px - var(--c-typography-edit-padding-y) + var(--c-typography-edit-border-width));
+  margin-right: calc(0px - var(--c-typography-edit-padding-x) + var(--c-typography-edit-border-width));
+  margin-bottom: calc(1em - var(--c-typography-edit-padding-y) - var(--c-typography-edit-border-width));
+}
+.c-typography-css-operation {
+  margin-top: -1em;
+  margin-bottom: 1em;
+  text-align: right;
+}

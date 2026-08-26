@@ -70,14 +70,17 @@ export default defineComponent({
 
     const renderColorBlock = (color: string) => {
       return (
-        <div
+        <button
+          type="button"
+          aria-label={`Select color ${color}`}
+          disabled={props.disabled}
           key={color}
           class={`${prefixCls}-color-block`}
           style={{ backgroundColor: color }}
           onClick={() => onHexInputChange(color)}
         >
           <div class={`${prefixCls}-block`} style={{ backgroundColor: color }} />
-        </div>
+        </button>
       )
     }
 

@@ -1,9 +1,10 @@
+import { createNamespace } from '../_utils/global-config'
 import { defineComponent, PropType, VNodeTypes } from 'vue'
 
 export type RenderFunc = (props: Record<string, unknown>) => VNodeTypes
 
 export default defineComponent({
-  name: 'RenderFunction',
+  name: createNamespace("render-function").name,
   props: {
     renderFunc: {
       type: Function as PropType<RenderFunc>,

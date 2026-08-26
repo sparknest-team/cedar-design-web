@@ -60,7 +60,7 @@ permalink: /components/divider/
 组件导出以下类型定义
 
 ```ts
-import type { DividerProps } from '@cedar/ui'
+import type { DividerProps } from '@cedarjs/ui'
 ```
 
 ### 样式变量

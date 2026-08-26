@@ -1,32 +1,29 @@
 @import '../../style/theme/index.less';
 
-@result-padding-top: @spacing-9;
-@result-padding-top_icon: @spacing-10;
-@result-padding-bottom: @spacing-9;
-@result-padding-horizontal: @spacing-10;
-
-@result-margin-icon-bottom: @spacing-7;
-@result-margin-extra-top: @spacing-8;
-@result-margin-content-top: @spacing-8;
-@result-font-title-size: @font-size-body-3;
-@result-font-title-weight: @font-weight-500;
-@result-font-subtitle-size: @font-size-body-3;
-
-@result-color-title-text: var(~'--c-color-text-1');
-@result-color-subtitle-text: var(~'--c-color-text-2');
-@result-size-icon: @size-5;
-@result-size-icon-wrapper: 45px;
-@result-size-image-width: @size-23;
-
-@result-color-icon_success: @color-success-6;
-@result-color-icon-bg_success: var(~'--c-color-success-light-1');
-@result-color-icon_error: @color-danger-6;
-@result-color-icon-bg_error: var(~'--c-color-danger-light-1');
-@result-color-icon_warning: @color-warning-6;
-@result-color-icon-bg_warning: var(~'--c-color-warning-light-1');
-@result-color-icon_info: @color-primary-6;
-@result-color-icon-bg_info: var(~'--c-color-primary-light-1');
-
-@result-size-icon_custom: 45px;
-
-@result-color-icon_default: inherit;
+:root {
+  --c-result-padding-top: var(~'--c-spacing-9');
+  --c-result-padding-top-icon: var(~'--c-spacing-10');
+  --c-result-padding-bottom: var(~'--c-spacing-9');
+  --c-result-padding-horizontal: var(~'--c-spacing-10');
+  --c-result-margin-icon-bottom: var(~'--c-spacing-7');
+  --c-result-margin-extra-top: var(~'--c-spacing-8');
+  --c-result-margin-content-top: var(~'--c-spacing-8');
+  --c-result-font-title-size: var(~'--c-font-size-body-3');
+  --c-result-font-title-weight: var(~'--c-font-weight-500');
+  --c-result-font-subtitle-size: var(~'--c-font-size-body-3');
+  --c-result-title-color-text: var(~'--c-color-text-1');
+  --c-result-subtitle-color-text: var(~'--c-color-text-2');
+  --c-result-size-icon: var(~'--c-size-5');
+  --c-result-size-icon-wrapper: 45px;
+  --c-result-size-image-width: var(~'--c-size-23');
+  --c-result-icon-color-success: rgb(var(~'--c-success-6'));
+  --c-result-icon-bg-success: var(~'--c-color-success-light-1');
+  --c-result-icon-color-error: rgb(var(~'--c-danger-6'));
+  --c-result-icon-bg-error: var(~'--c-color-danger-light-1');
+  --c-result-icon-color-warning: rgb(var(~'--c-warning-6'));
+  --c-result-icon-bg-warning: var(~'--c-color-warning-light-1');
+  --c-result-icon-color-info: rgb(var(~'--c-primary-6'));
+  --c-result-icon-bg-info: var(~'--c-color-primary-light-1');
+  --c-result-size-icon-custom: 45px;
+  --c-result-icon-color-default: inherit;
+}

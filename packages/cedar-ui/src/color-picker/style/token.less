@@ -2,61 +2,76 @@
 @import '../../input/style/token.less';
 
 :root {
-  --c-color-preview-size-xs: var(~'--c-size-4');
-  --c-color-preview-size-sm: 22px;
-  --c-color-preview-size-md: var(~'--c-size-6');
-  --c-color-preview-size-lg: 26px;
+  --c-color-picker-preview-size-xs: var(~'--c-size-4');
+  --c-color-picker-preview-size-sm: 22px;
+  --c-color-picker-preview-size-md: var(~'--c-size-6');
+  --c-color-picker-preview-size-lg: 26px;
 
-  --c-color-input-size-xs-padding: calc(
-      (var(~'--c-input-size-xs-height') - var(~'--c-color-preview-size-xs')) / 2
+  --c-color-picker-preview-border-size: var(~'--c-border-width-1');
+  --c-color-picker-preview-border-color: var(~'--c-color-border-2');
+
+  --c-color-picker-input-border-radius: var(~'--c-border-radius-sm');
+  --c-color-picker-input-size-xs-padding: calc(
+      (var(~'--c-field-size-xs-height') - var(~'--c-color-picker-preview-size-xs')) / 2
     )
-    4px;
-  --c-color-input-size-sm-padding: calc(
-      (var(~'--c-input-size-sm-height') - var(~'--c-color-preview-size-sm')) / 2
+    var(~'--c-spacing-2');
+  --c-color-picker-input-size-sm-padding: calc(
+      (var(~'--c-field-size-sm-height') - var(~'--c-color-picker-preview-size-sm')) / 2
     )
-    4px;
-  --c-color-input-size-md-padding: calc(
-      (var(~'--c-input-size-md-height') - var(~'--c-color-preview-size-md')) / 2
+    var(~'--c-spacing-2');
+  --c-color-picker-input-size-md-padding: calc(
+      (var(~'--c-field-size-md-height') - var(~'--c-color-picker-preview-size-md')) / 2
     )
-    4px;
-  --c-color-input-size-lg-padding: calc(
-      (var(~'--c-input-size-lg-height') - var(~'--c-color-preview-size-lg')) / 2
+    var(~'--c-spacing-2');
+  --c-color-picker-input-size-lg-padding: calc(
+      (var(~'--c-field-size-lg-height') - var(~'--c-color-picker-preview-size-lg')) / 2
     )
-    5px;
+    var(~'--c-spacing-3');
 
-  --c-color-input-bg-color: var(~'--c-color-fill-2');
-  --c-color-value-margin-left: 4px;
-  --c-color-value-font-color: var(~'--c-color-text-1');
-  --c-color-value-font-color_disabled: var(~'--c-color-text-4');
+  --c-color-picker-input-bg-color: var(~'--c-color-fill-2');
+  --c-color-picker-value-margin-left: var(~'--c-spacing-2');
+  --c-color-picker-value-font-color: var(~'--c-color-text-1');
+  --c-color-picker-value-font-color-disabled: var(~'--c-color-text-4');
+  --c-color-picker-value-font-size: var(~'--c-field-size-md-font-size');
 
-  --c-color-panel-width: 260px;
-  --c-color-panel-padding: 24px;
-  --c-color-panel-border-radius: var(~'--c-border-radius-small');
-  --c-color-panel-bg-color: var(~'--c-color-bg-1');
-  --c-color-panel-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 10%);
+  --c-color-picker-panel-width: 260px;
+  --c-color-picker-panel-padding: var(~'--c-spacing-9');
+  --c-color-picker-panel-border-radius: var(~'--c-border-radius-sm');
+  --c-color-picker-panel-bg-color: var(~'--c-color-bg-1');
+  --c-color-picker-panel-box-shadow: var(~'--c-shadow2-down');
 
-  --c-color-palette-height: 178px;
-  --c-color-palette-handle-size: var(~'--c-size-4');
-  --c-color-palette-handle-border-size: var(~'--c-border-2');
+  --c-color-picker-palette-height: 178px;
+  --c-color-picker-palette-handle-size: var(~'--c-size-4');
+  --c-color-picker-palette-handle-border-size: var(~'--c-border-width-2');
 
-  --c-color-control-bar-width: 182px;
-  --c-color-control-bar-height: 14px;
-  --c-color-control-bar-handle-size: var(~'--c-size-4');
-  --c-color-control-bar-alpha-margin-top: 24px;
-  --c-color-control-bar-border-radius: 10px;
+  --c-color-picker-control-bar-width: 182px;
+  --c-color-picker-control-bar-height: 14px;
+  --c-color-picker-control-bar-handle-size: var(~'--c-size-4');
+  --c-color-picker-control-bar-handle-inner-offset: var(~'--c-spacing-4');
+  --c-color-picker-control-bar-alpha-margin-top: var(~'--c-spacing-9');
+  --c-color-picker-control-bar-border-radius: 10px;
 
-  --c-color-panel-input-margin-top: 24px;
-  --c-color-panel-input-group-margin-left: 24px;
-  --c-color-panel-preview-size: 40px;
-  --c-color-panel-format-select-width: 58px;
-  --c-color-panel-alpha-input-width: 52px;
+  --c-color-picker-panel-input-margin-top: var(~'--c-spacing-9');
+  --c-color-picker-panel-input-group-margin-left: var(~'--c-spacing-9');
+  --c-color-picker-panel-input-padding-x: var(~'--c-spacing-6');
+  --c-color-picker-panel-affix-font-size: var(~'--c-font-size-body-1');
+  --c-color-picker-panel-preview-size: var(~'--c-size-10');
+  --c-color-picker-panel-format-select-width: 58px;
+  --c-color-picker-panel-alpha-input-width: 52px;
 
-  --c-color-panel-section-title-font-size: var(~'--c-font-size-caption');
-  --c-color-panel-empty-font-size: var(~'--c-font-size-body-1');
+  --c-color-picker-panel-section-title-font-size: var(~'--c-font-size-body-1');
+  --c-color-picker-panel-section-title-font-weight: var(~'--c-font-weight-400');
+  --c-color-picker-panel-empty-font-size: var(~'--c-font-size-body-3');
+  --c-color-picker-panel-colors-section-margin-top: var(~'--c-spacing-9');
+  --c-color-picker-panel-colors-empty-margin-y: var(~'--c-spacing-9');
+  --c-color-picker-panel-colors-wrapper-margin-top: var(~'--c-spacing-7');
+  --c-color-picker-panel-colors-list-margin: calc(-1 * var(~'--c-spacing-4')) calc(-1 * var(~'--c-spacing-2')) 0;
+  --c-color-picker-panel-checker-size: var(~'--c-spacing-4');
+  --c-color-picker-panel-format-padding-left: var(~'--c-spacing-4');
 
-  --c-color-panel-block-size: var(~'--c-size-4');
-  --c-color-panel-block-margin: 12px;
-  --c-color-panel-block-border-radius: var(~'--c-border-2');
+  --c-color-picker-panel-block-size: var(~'--c-size-4');
+  --c-color-picker-panel-block-margin: var(~'--c-spacing-6');
+  --c-color-picker-panel-block-border-radius: var(~'--c-border-radius-sm');
 
-  --c-color-panel-border-color: var(~'--c-color-border-2');
+  --c-color-picker-panel-border-color: var(~'--c-color-border-2');
 }

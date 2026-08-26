@@ -1,5 +1,17 @@
-@carousel-indicator-dot-size: 6px;
-@carousel-indicator-position: 12px;
-@carousel-indicator-gap: 8px;
-@carousel-indicator-color-default: rgba(255, 255, 255, 0.3);
-@carousel-indicator-color-active: #fff;
+@import '../../style/theme/index.less';
+
+:root {
+  --c-carousel-indicator-dot-size: var(~'--c-spacing-3');
+  --c-carousel-indicator-position: var(~'--c-spacing-6');
+  --c-carousel-indicator-gap: var(~'--c-spacing-4');
+  --c-carousel-indicator-color-default: rgba(255, 255, 255, 0.3);
+  --c-carousel-indicator-color-active: var(~'--c-color-white');
+  --c-carousel-indicator-outer-margin-bottom: 30px;
+  --c-carousel-indicator-line-width: var(~'--c-spacing-6');
+  --c-carousel-indicator-line-height: var(~'--c-border-width-3');
+  --c-carousel-indicator-line-border-radius: var(~'--c-border-radius-sm');
+  --c-carousel-arrow-size: var(~'--c-size-7');
+  --c-carousel-arrow-font-size: var(~'--c-font-size-title-1');
+  --c-carousel-arrow-margin: var(~'--c-spacing-4');
+  --c-carousel-arrow-color: var(~'--c-color-white');
+}

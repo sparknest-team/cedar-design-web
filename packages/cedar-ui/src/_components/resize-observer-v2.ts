@@ -1,9 +1,10 @@
+import { createNamespace } from '../_utils/global-config'
 import { defineComponent, onBeforeUnmount, watch } from 'vue'
 import ResizeObserver from 'resize-observer-polyfill'
 import { useFirstElement } from '../_hooks/use-first-element'
 
 export default defineComponent({
-  name: 'ResizeObserver',
+  name: createNamespace("resize-observer").name,
   props: {
     watchOnUpdated: Boolean,
   },

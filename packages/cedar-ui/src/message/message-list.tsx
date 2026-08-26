@@ -28,11 +28,13 @@ export default defineComponent({
 
     return () => (
       <TransitionGroup
-        class={[prefixCls, `${prefixCls}-${props.position}`]}
-        name="fade-message"
-        tag="ul"
-        style={{ zIndex: zIndex.value }}
-        onAfterLeave={() => context.emit('afterClose')}
+        {...({
+          class: [prefixCls, `${prefixCls}-${props.position}`],
+          name: 'fade-message',
+          tag: 'ul',
+          style: { zIndex: zIndex.value },
+          onAfterLeave: () => context.emit('afterClose'),
+        } as any)}
       >
         {props.messages.map((item) => {
           const slots = {

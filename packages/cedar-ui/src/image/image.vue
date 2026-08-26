@@ -50,7 +50,7 @@
       v-if="isLoaded && mergePreview"
       :src="src"
       v-bind="previewProps"
-      :visible="mergedPreviewVisible"
+      :open="mergedPreviewOpen"
       :render-to-body="renderToBody"
       @close="onPreviewClose"
     >
@@ -61,6 +61,8 @@
   </div>
 </template>
 <script lang="ts">
+import { imageProps } from './props'
+import { createNamespace } from '../_utils/global-config'
 import {
   defineComponent,
   PropType,
@@ -74,8 +76,8 @@ import {
   CSSProperties,
 } from 'vue'
 import type { ImagePreviewProps } from './types'
-import IconImageClose from '../icon/icon-image-close'
-import IconLoading from '../icon/icon-loading'
+import { IconImageClose } from '@cedarjs/icons-vue/icon-image-close'
+import { IconLoading } from '@cedarjs/icons-vue/icon-loading'
 import ImageFooter from './image-footer.vue'
 import ImagePreview from './preview.vue'
 import { getPrefixCls } from '../_utils/global-config'
@@ -91,7 +93,7 @@ import { isBoolean } from '../_utils/is'
 let uuid = 0
 
 export default defineComponent({
-  name: 'Image',
+  name: createNamespace("image").name,
   components: {
     IconImageClose,
     IconLoading,
@@ -99,133 +101,15 @@ export default defineComponent({
     ImagePreview,
   },
   inheritAttrs: false,
-  props: {
-    renderToBody: {
-      type: Boolean,
-      default: true,
-    },
-    /**
-     * @zh 图片获取地址
-     * @en Image src
-     */
-    src: {
-      type: String,
-    },
-    /**
-     * @zh 图片显示宽度
-     * @en Image width
-     */
-    width: {
-      type: [String, Number] as PropType<string | number>,
-    },
-    /**
-     * @zh 图片显示高度
-     * @en Image height
-     */
-    height: {
-      type: [String, Number] as PropType<string | number>,
-    },
-    /**
-     * @zh 标题
-     * @en Title
-     */
-    title: {
-      type: String,
-    },
-    /**
-     * @zh 描述，将显示在底部，如果 alt 没有值，则会将其设置给 alt
-     * @en Description, will be displayed at the bottom. if alt has no value, it will be set to alt
-     */
-    description: {
-      type: String,
-    },
-    /**
-     * @zh 确定图片如何适应容器框
-     * @en indicate how the image should be resized to fit its container
-     */
-    fit: {
-      type: String as PropType<'contain' | 'cover' | 'fill' | 'none' | 'scale-down'>,
-    },
-    /**
-     * @zh 图片的文字描述
-     * @en Text description of the image
-     */
-    alt: {
-      type: String,
-    },
-    /**
-     * @zh 是否隐藏 footer（2.36.0 版本支持 'never' 参数，支持在加载错误时显示底部内容）
-     * @en Whether to hide footer (Version 2.36.0 supports the 'never' parameter, which supports displaying bottom content when loading errors)
-     */
-    hideFooter: {
-      type: [Boolean, String] as PropType<boolean | 'never'>,
-      default: false,
-    },
-    /**
-     * @zh 底部显示的位置
-     * @en The position shown at the bottom
-     */
-    footerPosition: {
-      type: String as PropType<'inner' | 'outer'>,
-      default: 'inner',
-    },
-    /**
-     * @zh 是否显示加载中效果
-     * @en Whether to show the loading effect
-     */
-    showLoader: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否开启预览
-     * @en Whether to enable preview
-     */
-    preview: {
-      type: Boolean,
-      default: true,
-    },
-    /**
-     * @zh 控制预览的打开状态，可与 previewVisibleChange 配合使用
-     * @en Control the open state of the preview, can be used in conjunction with previewVisibleChange
-     * @vModel
-     */
-    previewVisible: {
-      type: Boolean,
-      default: undefined,
-    },
-    /**
-     * @zh 预览的默认打开状态
-     * @en The default open state of the preview
-     */
-    defaultPreviewVisible: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 预览的配置项（所有选项都是可选的） [ImagePreviewProps](#image-preview%20Props)
-     * @en Preview configuration items (all options are optional) [ImagePreviewProps](#image-preview%20Props)
-     */
-    previewProps: {
-      type: Object as PropType<ImagePreviewProps>,
-    },
-    /**
-     * @zh 底部显示区域的类名
-     * @en The class name of the bottom display area
-     * @version 2.23.0
-     */
-    footerClass: {
-      type: [String, Array, Object],
-    },
-  },
+  props: imageProps,
   emits: [
     /**
      * @zh 预览的打开和关闭事件
      * @en Preview opening and closing events
-     * @param {boolean} visible
+     * @param {boolean} open
      */
-    'preview-visible-change',
-    'update:previewVisible',
+    'previewOpenChange',
+    'update:previewOpen',
   ],
   /**
    * @zh 自定义错误状态的图标
@@ -257,8 +141,8 @@ export default defineComponent({
       description,
       src,
       footerPosition,
-      defaultPreviewVisible,
-      previewVisible,
+      defaultPreviewOpen,
+      previewOpen,
       preview,
       previewProps,
     } = toRefs(props)
@@ -306,10 +190,10 @@ export default defineComponent({
 
     const imgProps = computed(() => omit(attrs, ['class', 'style']))
 
-    const [mergedPreviewVisible, setPreviewVisible] = useMergeState(
-      defaultPreviewVisible.value,
+    const [mergedPreviewOpen, setPreviewOpen] = useMergeState(
+      defaultPreviewOpen.value,
       reactive({
-        value: previewVisible,
+        value: previewOpen,
       }),
     )
 
@@ -346,14 +230,16 @@ export default defineComponent({
       if (groupContext?.preview) {
         groupContext.preview(imageId)
       } else {
-        emit('preview-visible-change', true)
-        setPreviewVisible(true)
+        emit('previewOpenChange', true)
+        emit('update:previewOpen', true)
+        setPreviewOpen(true)
       }
     }
 
     function onPreviewClose() {
-      emit('preview-visible-change', false)
-      setPreviewVisible(false)
+      emit('previewOpenChange', false)
+      emit('update:previewOpen', false)
+      setPreviewOpen(false)
     }
 
     return {
@@ -368,7 +254,7 @@ export default defineComponent({
       isLoaded,
       isError,
       isLoading,
-      mergedPreviewVisible,
+      mergedPreviewOpen,
       mergePreview,
       onImgLoaded,
       onImgLoadError,

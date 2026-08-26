@@ -20,7 +20,7 @@
     "emitDecoratorMetadata": true,
     "allowSyntheticDefaultImports": true,
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "useDefineForClassFields": true,
     // Required in Vue projects
@@ -40,11 +40,11 @@
     // See <https://github.com/vuejs/vue-cli/pull/5688>
     "skipLibCheck": true,
     // Contains the specified types
-    "types": ["unplugin-vue-define-options"],
+    "types": ["node", "vite/client"],
     "baseUrl": ".",
     "paths": {
-      "@cedar/ui": ["src/index.ts"]
+      "@cedarjs/ui": ["src/index.ts"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "vite.config.ts", "docs/**/*.ts", "docs/**/*.d.ts", "docs/.vuepress/auto-imports.d.ts"]
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "vitest.config.ts", "docs/**/*.ts", "docs/**/*.d.ts", "docs/.vuepress/auto-imports.d.ts"]
 }

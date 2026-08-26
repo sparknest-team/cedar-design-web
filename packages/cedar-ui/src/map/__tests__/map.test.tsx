@@ -5,7 +5,7 @@ import { Map } from '../index'
 
 describe('Map', () => {
   test('render', async () => {
-    const wrapper = mount(Map)
+    const wrapper = mount(Map, { props: { modelValue: {} } })
     await nextTick()
     expect(wrapper.html()).toMatchSnapshot()
   })

@@ -1,16 +1,13 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
+import { withInstall } from '../_utils/global-config'
 import _DateRange from './date-range.vue'
+import { dateRangeProps } from './props'
 
-const DateRange = Object.assign(_DateRange, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-    app.component(componentPrefix + _DateRange.name, _DateRange)
-  },
-})
+const DateRange = withInstall(_DateRange, Object.assign(_DateRange, {
+}), { components: [_DateRange] })
 
 export type DateRangeInstance = InstanceType<typeof _DateRange>
+export type { DateRangeProps } from './props'
+export { DateRange, dateRangeProps }
+export const _DateRangeComponent = DateRange
 
 export default DateRange

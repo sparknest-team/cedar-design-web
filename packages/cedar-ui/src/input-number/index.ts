@@ -1,17 +1,20 @@
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
-import _InputNumber from './input-number'
+import { withInstall } from "../_utils/global-config";
+import _InputNumber from "./input-number";
+import { inputNumberProps } from "./props";
 
-const InputNumber = Object.assign(_InputNumber, {
-  install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
+const InputNumber = withInstall(_InputNumber, Object.assign(_InputNumber, {}), {
+  components: [_InputNumber],
+});
 
-    app.component(componentPrefix + _InputNumber.name, _InputNumber)
-  },
-})
+export type InputNumberInstance = InstanceType<typeof _InputNumber>;
+export { InputNumber, inputNumberProps };
+export type {
+  InputNumberMode,
+  InputNumberFormatter,
+  InputNumberModelEvent,
+  InputNumberParser,
+  InputNumberProps,
+} from "./props";
+export const _InputNumberComponent = InputNumber;
 
-export type InputNumberInstance = InstanceType<typeof _InputNumber>
-
-export default InputNumber
+export default InputNumber;

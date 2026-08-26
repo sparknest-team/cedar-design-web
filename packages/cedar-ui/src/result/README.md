@@ -68,7 +68,7 @@ permalink: /components/result/
 
 | 参数名   | 描述             | 类型                                                                             |  默认值  |
 | -------- | ---------------- | -------------------------------------------------------------------------------- | :------: |
-| status   | 结果页显示的状态 | `'info' \| 'success' \| 'warning' \| 'error' \| '403' \| '404' \| '500' \| null` | `'info'` |
+| status   | 结果页显示的状态 | `'info' \| 'success' \| 'warning' \| 'danger' \| '403' \| '404' \| '500'` | `'info'` |
 | title    | 标题内容         | `string`                                                                         |   `-`    |
 | subtitle | 子标题内容       | `string`                                                                         |   `-`    |
 
@@ -87,5 +87,5 @@ permalink: /components/result/
 组件导出以下类型定义
 
 ```ts
-import type { ResultInstance } from '@cedar/ui'
+import type { ResultInstance } from '@cedarjs/ui'
 ```

@@ -1,13 +1,11 @@
-@import '../../time-picker/style/token.less';
-
-@datepicker-timepicker-height: 276px;
+@import './token.less';
 
 .c-panel-date {
   display: flex;
   box-sizing: border-box;
 
   &-inner {
-    width: @picker-panel-date-width;
+    width: var(~'--c-date-picker-panel-date-width');
   }
 
   &-inner .c-picker-body {
@@ -17,29 +15,29 @@
   &-timepicker {
     display: flex;
     flex-direction: column;
-    border-left: 1px solid @picker-panel-color-border;
+    border-left: 1px solid var(~'--c-date-picker-panel-border-color');
 
     &-title {
       width: 100%;
-      height: 40px;
+      height: var(~'--c-date-picker-timepicker-title-height');
       color: var(~'--c-color-text-1');
       font-weight: 400;
-      font-size: 14px;
-      line-height: 40px;
+      font-size: var(~'--c-date-picker-timepicker-title-font-size');
+      line-height: var(~'--c-date-picker-timepicker-title-height');
       text-align: center;
-      border-bottom: 1px solid @picker-panel-color-border;
+      border-bottom: 1px solid var(~'--c-date-picker-panel-border-color');
     }
 
     .c-timepicker {
-      height: @datepicker-timepicker-height;
-      padding: 0 6px;
+      height: var(~'--c-date-picker-timepicker-height');
+      padding: 0 var(~'--c-date-picker-panel-time-padding');
       overflow: hidden;
 
       &-column {
         box-sizing: border-box;
         width: auto;
         height: 100%;
-        padding: 0 4px;
+        padding: 0 var(~'--c-date-picker-panel-time-cell-spacing-horizontal');
 
         &::-webkit-scrollbar {
           width: 0;
@@ -51,26 +49,26 @@
       }
 
       ul::after {
-        height: @datepicker-timepicker-height - @timepicker-cell-height - @timepicker-cell-spacing * 2;
+        height: calc(var(~'--c-date-picker-timepicker-height') - var(~'--c-time-picker-cell-height') - var(~'--c-time-picker-cell-spacing') * 2);
       }
 
       &-cell {
-        width: 36px;
+        width: var(~'--c-date-picker-panel-time-cell-width');
 
         &-inner {
-          padding-left: 10px;
+          padding-left: var(~'--c-date-picker-panel-time-padding-horizontal');
         }
       }
     }
   }
 
   &-footer {
-    border-right: 1px solid @picker-panel-color-border;
+    border-right: 1px solid var(~'--c-date-picker-panel-border-color');
   }
 
   &-with-view-tabs {
     flex-direction: column;
-    min-width: 265px;
+    min-width: var(~'--c-date-picker-panel-date-width');
 
     .c-panel-date-timepicker {
       .c-timepicker {
@@ -96,17 +94,17 @@
 
   &-view-tabs {
     display: flex;
-    border-top: 1px solid @picker-panel-color-border;
+    border-top: 1px solid var(~'--c-date-picker-panel-border-color');
   }
 
   &-view-tab-pane {
     flex: 1;
-    height: @datepicker-view-tabs-height;
-    color: @datepicker-view-tab-pane-color-text_unactive;
-    font-size: @datepicker-view-tab-pane-font-size;
-    line-height: @datepicker-view-tabs-height;
+    height: var(~'--c-date-picker-view-tabs-height');
+    color: var(~'--c-date-picker-view-tab-pane-text-color-inactive');
+    font-size: var(~'--c-date-picker-view-tab-pane-font-size');
+    line-height: var(~'--c-date-picker-view-tabs-height');
     text-align: center;
-    border-right: 1px solid @picker-panel-color-border;
+    border-right: 1px solid var(~'--c-date-picker-panel-border-color');
     cursor: pointer;
 
     &:last-child {
@@ -114,11 +112,11 @@
     }
 
     &-text {
-      margin-left: @datepicker-view-tab-pane-spacing-text-icon;
+      margin-left: var(~'--c-date-picker-view-tab-pane-text-icon-spacing');
     }
 
     &-active {
-      color: @datepicker-view-tab-pane-color-text_active;
+      color: var(~'--c-date-picker-view-tab-pane-text-color-active');
     }
   }
 }

@@ -5,7 +5,7 @@
   </c-space>
 
   <c-table-column-manager
-    v-model:visible="openDrawer"
+    v-model:open="openDrawer"
     v-model="items"
     :columns="columns"
     :options="columnDefinitions"
@@ -24,11 +24,11 @@
     </template>
   </c-table-column-manager>
 
-  <c-dialog v-model:show="openDialog" title="列管理" :width="720" :body-padding="false" unmount-on-close>
+  <c-dialog v-model:open="openDialog" title="列管理" :width="720" :body-padding="false" unmount-on-close>
     <div style="height: 480px">
       <c-table-column-manager
         inline
-        v-model:visible="openDialog"
+        v-model:open="openDialog"
         v-model="items"
         :columns="columns"
         :options="columnDefinitions"
@@ -51,7 +51,7 @@ import type {
   ColumnManagerItem,
   ColumnManagerResult,
   TableColumnData,
-} from '@cedar/ui'
+} from '@cedarjs/ui'
 
 const openDrawer = ref(false)
 const openDialog = ref(false)

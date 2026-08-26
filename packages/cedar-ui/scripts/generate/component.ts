@@ -53,6 +53,10 @@ const getCreatedFiles = (name: string, type?: string) => {
       template: 'style.index.ts.tpl',
     },
     {
+      file: 'style/css.ts',
+      template: 'style.css.ts.tpl',
+    },
+    {
       file: '__demos__/basic.vue',
       template: '__demos__.basic.vue.tpl',
     },

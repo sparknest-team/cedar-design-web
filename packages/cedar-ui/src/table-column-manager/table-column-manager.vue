@@ -22,7 +22,7 @@
 
   <c-dialog
     v-if="ctx"
-    v-model:show="insertVisible"
+    v-model:open="insertVisible"
     :title="insertSide === 'left' ? '向左插入列' : '向右插入列'"
     :width="480"
     unmount-on-close
@@ -36,7 +36,7 @@
     </c-checkbox-group>
   </c-dialog>
 
-  <c-dialog v-if="ctx" v-model:show="editVisible" title="编辑列" :width="480" unmount-on-close @confirm="handleEditOk">
+  <c-dialog v-if="ctx" v-model:open="editVisible" title="编辑列" :width="480" unmount-on-close @confirm="handleEditOk">
     <div style="display: flex; flex-direction: column; gap: 16px">
       <div>
         <div style="margin-bottom: 8px">一级分组标题</div>
@@ -58,18 +58,14 @@ import { computed, inject, ref, watch } from 'vue'
 import { cloneDeep } from 'lodash-es'
 import Drawer from '../drawer'
 import Transfer from '../transfer'
-import type { TransferItem, TransferTargetItem } from '../transfer'
+import type { TransferItem, TransferTargetItem, TransferValue } from '../transfer'
 import { getPrefixCls } from '../_utils/global-config'
-import type { TableColumnManagerProps } from './props'
+import type { TableColumnManagerDrawerProps } from './props'
 import type { ColumnCatalog, ColumnManagerItem, ColumnManagerResult } from './types'
 import { buildColumnsResult, isColumnCatalogGroup } from './utils'
 import { TableColumnManagerContextKey } from './use-table-column-manager'
 
 defineOptions({ name: 'TableColumnManager' })
-
-interface TableColumnManagerDrawerProps extends TableColumnManagerProps {
-  inline?: boolean
-}
 
 const props = withDefaults(defineProps<TableColumnManagerDrawerProps>(), {
   options: () => [],
@@ -81,7 +77,7 @@ const props = withDefaults(defineProps<TableColumnManagerDrawerProps>(), {
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: ColumnManagerItem[]): void
-  (e: 'update:visible', value: boolean): void
+  (e: 'update:open', value: boolean): void
   (e: 'confirm', result: ColumnManagerResult): void
   (e: 'change', value: ColumnManagerItem[]): void
 }>()
@@ -126,7 +122,6 @@ const transferData = computed<TransferItem[]>(() => {
         group: entry.title,
         disabled: item.disabled,
         required: item.required,
-        fixed: item.fixed,
         tip: item.tip,
       }))
     }
@@ -136,12 +131,11 @@ const transferData = computed<TransferItem[]>(() => {
         label: entry.title,
         disabled: entry.disabled,
         required: entry.required,
-        fixed: entry.fixed,
         tip: entry.tip,
       },
     ]
   })
-  const known = new Set(catalogItems.map((item) => item.value))
+  const known = new Set<TransferValue>(catalogItems.map((item) => item.value))
   const fallbackItems = targetItems.value.flatMap((target) => {
     if (known.has(target.value)) return []
     const fallback = props.fallbackItem?.(String(target.value))
@@ -151,7 +145,6 @@ const transferData = computed<TransferItem[]>(() => {
         label: target.label ?? fallback?.title ?? String(target.value),
         disabled: fallback?.disabled,
         required: fallback?.required,
-        fixed: fallback?.fixed,
         tip: fallback?.tip,
       },
     ]
@@ -181,12 +174,12 @@ const getResult = (): ColumnManagerResult =>
 
 const handleDrawerOk = () => {
   emit('confirm', getResult())
-  emit('update:visible', false)
+  emit('update:open', false)
 }
 
 const drawerProps = computed(() => ({
-  visible: props.visible ?? false,
-  'onUpdate:visible': (value: boolean) => emit('update:visible', value),
+  open: props.open ?? false,
+  'onUpdate:open': (value: boolean) => emit('update:open', value),
   title: props.drawerTitle,
   width: props.drawerWidth,
   unmountOnClose: false,

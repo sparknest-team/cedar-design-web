@@ -12,7 +12,7 @@
         <c-icon-home />
       </c-breadcrumb-item>
       <c-breadcrumb-item>
-        <c-icon-at />
+        <c-icon-link />
         Channel
       </c-breadcrumb-item>
       <c-breadcrumb-item>News</c-breadcrumb-item>

@@ -1,7 +1,6 @@
 import {
   defineComponent,
   VNode,
-  PropType,
   toRefs,
   computed,
   ref,
@@ -14,7 +13,7 @@ import {
 } from 'vue'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
 import { isObject } from '../_utils/is'
-import { BaseProps, EllipsisConfig, EllipsisInternalConfig } from './types'
+import type { EllipsisConfig, EllipsisInternalConfig } from './types'
 import EditContent from './edit-content.vue'
 import Operations from './operations.vue'
 import ResizeObserver from '../_components/resize-observer'
@@ -26,14 +25,16 @@ import getInnerText from './utils/getInnerText'
 import { caf, raf } from '../_utils/raf'
 import Tooltip from '../tooltip'
 import Popover from '../popover'
+import { typographyBaseInternalProps } from './props'
+import type { TypographyBaseProps } from './props'
 
-interface BaseInternalProps extends BaseProps {
-  component: keyof HTMLElementTagNameMap
+interface BaseInternalProps extends TypographyBaseProps {
+  component?: keyof HTMLElementTagNameMap
 }
 
-function getComponentTags<K extends keyof HTMLElementTagNameMap>(props: BaseInternalProps): K[] {
+function getComponentTags(props: BaseInternalProps): (keyof HTMLElementTagNameMap)[] {
   const { bold, mark, underline, delete: propDelete, code } = props
-  const componentTags = []
+  const componentTags: (keyof HTMLElementTagNameMap)[] = []
 
   if (bold) {
     componentTags.push('b')
@@ -51,7 +52,7 @@ function getComponentTags<K extends keyof HTMLElementTagNameMap>(props: BaseInte
     componentTags.push('mark')
   }
 
-  return componentTags as K[]
+  return componentTags
 }
 
 function Wrap(props: BaseInternalProps, children: VNodeTypes) {
@@ -93,140 +94,8 @@ const { name } = createNamespace('typography-base')
 export default defineComponent({
   name,
   inheritAttrs: false,
-  props: {
-    component: {
-      type: String as PropType<BaseInternalProps['component']>,
-      required: true,
-    },
-    /**
-     * @zh 文本类型
-     * @en Text type
-     */
-    type: {
-      type: String as PropType<'primary' | 'secondary' | 'success' | 'danger' | 'warning'>,
-    },
-    /**
-     * @zh 粗体
-     * @en Whether enable bold style
-     */
-    bold: {
-      type: Boolean,
-    },
-    /**
-     * @zh 添加标记样式
-     * @en Mark style
-     */
-    mark: {
-      type: [Boolean, Object] as PropType<boolean | { color: string }>,
-      default: false,
-    },
-    /**
-     * @zh 下划线样式
-     * @en Whether enable underline style
-     */
-    underline: {
-      type: Boolean,
-    },
-    /**
-     * @zh 删除线样式
-     * @en Whether enable delete style
-     */
-    delete: {
-      type: Boolean,
-    },
-    /**
-     * @zh 代码块样式
-     * @en Whether enable code style
-     */
-    code: {
-      type: Boolean,
-    },
-    /**
-     * @zh 禁用状态
-     * @en Whether disabled
-     */
-    disabled: {
-      type: Boolean,
-    },
-    /**
-     * @zh 开启可编辑功能
-     * @en Whether it's editable
-     */
-    editable: {
-      type: Boolean,
-    },
-    /**
-     * @zh 是否在编辑状态
-     * @en Whether it's editing
-     * @vModel
-     */
-    editing: {
-      type: Boolean,
-      default: undefined,
-    },
-    /**
-     * @zh 默认的编辑状态
-     * @en Default editing state
-     */
-    defaultEditing: {
-      type: Boolean,
-    },
-    /**
-     * @zh 编辑的文字
-     * @en Edit text
-     * @vModel
-     */
-    editText: {
-      type: String,
-    },
-    /**
-     * @zh 开启复制功能
-     * @en Whether turn on copy functionality
-     */
-    copyable: {
-      type: Boolean,
-    },
-    /**
-     * @zh 复制的文字
-     * @en Copied text
-     */
-    copyText: {
-      type: String,
-    },
-    /**
-     * @zh 复制成功后，复制按钮恢复到可点击状态的延迟时间，单位是毫秒
-     * @en After the copy is successful, the delay time for the copy button to return to the clickable state, in milliseconds
-     * @version 2.16.0
-     */
-    copyDelay: {
-      type: Number,
-      default: 3000,
-    },
-    /**
-     * @zh 自动溢出省略，具体参数配置看 [EllipsisConfig](#EllipsisConfig)
-     * @en Automatic overflow omission, refer to [EllipsisConfig](#EllipsisConfig) for more information.
-     */
-    ellipsis: {
-      type: [Boolean, Object] as PropType<boolean | EllipsisConfig>,
-      default: false,
-    },
-    /**
-     * @zh 编辑按钮问题提示配置
-     * @en Edit button question prompt configuration
-     * @version 2.32.0
-     */
-    editTooltipProps: {
-      type: Object,
-    },
-    /**
-     * @zh 拷贝按钮问题提示配置
-     * @en Copy button question prompt configuration
-     * @version 2.32.0
-     */
-    copyTooltipProps: {
-      type: Object,
-    },
-  },
+  props: typographyBaseInternalProps,
+
   emits: {
     /**
      * @zh 开始编辑
@@ -300,7 +169,7 @@ export default defineComponent({
     const classNames = computed(() => [
       prefixCls,
       {
-        [`${prefixCls}-${props.type}`]: props.type,
+        [`${prefixCls}-${props.status}`]: props.status,
         [`${prefixCls}-disabled`]: props.disabled,
       },
     ])
@@ -539,10 +408,10 @@ export default defineComponent({
       const showEllipsis = isEllipsis.value && !expanded.value
 
       const titleAttrs = showEllipsis && !showTooltip ? { title: fullText.value } : {}
-      const Component = component.value
+      const Component = component.value as keyof HTMLElementTagNameMap
 
       if (ellipsisConfig.value.css) {
-        const Content = Wrap(props, children)
+        const Content = Wrap(props as BaseInternalProps, children)
         const Outer = (
           <Component class={classNames.value} ref={wrapperRef} style={ellipsisStyle.value} {...titleAttrs} {...attrs}>
             <span ref={contentRef}>{Content}</span>
@@ -574,7 +443,7 @@ export default defineComponent({
         )
       }
 
-      const Content = Wrap(props, showEllipsis ? ellipsisText.value : children)
+      const Content = Wrap(props as BaseInternalProps, showEllipsis ? ellipsisText.value : children)
 
       return (
         <ResizeObserver onResize={() => resizeOnNextFrame()}>

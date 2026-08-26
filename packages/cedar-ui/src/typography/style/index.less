@@ -1,9 +1,8 @@
 @import './token.less';
-@import '../../input/style/token.less';
 
 .c-typography {
-  color: @typography-color-text;
-  line-height: @typography-paragraph-line-height;
+  color: var(~'--c-typography-text-color');
+  line-height: var(~'--c-typography-paragraph-line-height');
   white-space: normal;
   overflow-wrap: anywhere;
 
@@ -18,38 +17,38 @@
   h4&,
   h5&,
   h6& {
-    margin-top: @typography-heading-margin-top;
-    margin-bottom: @typography-heading-margin-bottom;
-    font-weight: @typography-heading-font-weight;
+    margin-top: var(~'--c-typography-heading-margin-top');
+    margin-bottom: var(~'--c-typography-heading-margin-bottom');
+    font-weight: var(~'--c-typography-heading-font-weight');
   }
 
   h1& {
-    font-size: @typography-font-size-h1;
+    font-size: var(~'--c-typography-font-size-h1');
     line-height: 1.23;
   }
 
   h2& {
-    font-size: @typography-font-size-h2;
+    font-size: var(~'--c-typography-font-size-h2');
     line-height: 1.25;
   }
 
   h3& {
-    font-size: @typography-font-size-h3;
+    font-size: var(~'--c-typography-font-size-h3');
     line-height: 1.29;
   }
 
   h4& {
-    font-size: @typography-font-size-h4;
+    font-size: var(~'--c-typography-font-size-h4');
     line-height: 1.33;
   }
 
   h5& {
-    font-size: @typography-font-size-h5;
+    font-size: var(~'--c-typography-font-size-h5');
     line-height: 1.4;
   }
 
   h6& {
-    font-size: @typography-font-size-h6;
+    font-size: var(~'--c-typography-font-size-h6');
     line-height: 1.5;
   }
 
@@ -61,32 +60,32 @@
 
   // Text
   &-primary {
-    color: @typography-text-color-text-primary;
+    color: var(~'--c-typography-text-color-primary');
   }
 
   &-secondary {
-    color: @typography-text-color-text-secondary;
+    color: var(~'--c-typography-text-color-secondary');
   }
 
   &-success {
-    color: @typography-text-color-text-success;
+    color: var(~'--c-typography-text-color-success');
   }
 
   &-warning {
-    color: @typography-text-color-text-warning;
+    color: var(~'--c-typography-text-color-warning');
   }
 
   &-danger {
-    color: @typography-text-color-text-error;
+    color: var(~'--c-typography-text-color-error');
   }
 
   &-disabled {
-    color: @typography-text-color-text_disabled;
+    color: var(~'--c-typography-text-color-disabled');
     cursor: not-allowed;
   }
 
   & mark {
-    background-color: @typography-text-color-bg-mark;
+    background-color: var(~'--c-typography-text-bg-mark');
   }
 
   & u {
@@ -98,25 +97,25 @@
   }
 
   & b {
-    font-weight: @typography-text-font-weight-bold;
+    font-weight: var(~'--c-typography-text-font-weight-bold');
   }
 
   & code {
-    margin: 0 @typography-text-margin-code-horizontal;
-    padding: @typography-text-padding-code-vertical @typography-text-padding-code-horizontal;
-    color: @typography-text-color-code;
+    margin: 0 var(~'--c-typography-text-margin-code-horizontal');
+    padding: var(~'--c-typography-text-padding-code-vertical') var(~'--c-typography-text-padding-code-horizontal');
+    color: var(~'--c-typography-code-text-color');
     font-size: 85%;
-    background-color: @typography-text-color-code-bg;
-    border: 1px solid @typography-text-color-code-border;
-    border-radius: 2px;
+    background-color: var(~'--c-typography-code-bg');
+    border: 1px solid var(~'--c-typography-code-border-color');
+    border-radius: var(~'--c-typography-code-border-radius');
   }
 
   & blockquote {
     margin: 0;
     margin-bottom: 1em;
-    padding-left: 8px;
-    background-color: @typography-color-blockquote-bg;
-    border-left: @typography-color-blockquote-border-width solid @typography-color-blockquote-border-left;
+    padding-left: var(~'--c-typography-blockquote-padding-left');
+    background-color: var(~'--c-typography-blockquote-bg');
+    border-left: var(~'--c-typography-blockquote-border-width') solid var(~'--c-typography-blockquote-border-left-color');
   }
 
   & ol,
@@ -127,7 +126,7 @@
 
   & ul li,
   & ol li {
-    margin-left: 20px;
+    margin-left: var(~'--c-typography-list-item-margin-left');
   }
 
   & ul {
@@ -135,65 +134,75 @@
   }
 
   &-spacing-close {
-    line-height: @typography-paragraph-line-height-close;
+    line-height: var(~'--c-typography-paragraph-line-height-close');
   }
 
   // Operations
+  &-operation-edit,
+  &-operation-copy,
+  &-operation-copied,
+  &-operation-expand {
+    appearance: none;
+    border: 0;
+    font: inherit;
+    line-height: inherit;
+  }
+
   &-operation-copy,
   &-operation-copied {
-    margin-left: @typography-operation-margin-left;
-    padding: 2px;
+    margin-left: var(~'--c-typography-operation-margin-left');
+    padding: var(~'--c-typography-operation-padding');
   }
 
   &-operation-copy {
-    color: @typography-color-icon-copy;
-    background-color: @typography-color-bg-icon-copy;
-    border-radius: 2px;
+    color: var(~'--c-typography-icon-copy-color');
+    background-color: var(~'--c-typography-icon-copy-bg');
+    border-radius: var(~'--c-typography-operation-border-radius');
     cursor: pointer;
-    transition: background-color @transition-duration-1 @transition-timing-function-linear;
+    transition: background-color var(~'--c-transition-duration-1') var(~'--c-transition-timing-function-linear');
 
     &:hover {
-      color: @typography-color-icon-copy_hover;
-      background-color: @typography-color-bg-icon-copy_hover;
+      color: var(~'--c-typography-icon-copy-color-hover');
+      background-color: var(~'--c-typography-icon-copy-bg-hover');
     }
   }
 
   &-operation-copied {
-    color: @typography-color-icon-copy_copied;
+    color: var(~'--c-typography-icon-copy-color-copied');
   }
 
   &-operation-edit {
-    margin-left: @typography-operation-margin-left;
-    padding: 2px;
-    color: @typography-color-icon-edit;
-    background-color: @typography-color-bg-icon-edit;
-    border-radius: 2px;
+    margin-left: var(~'--c-typography-operation-margin-left');
+    padding: var(~'--c-typography-operation-padding');
+    color: var(~'--c-typography-icon-edit-color');
+    background-color: var(~'--c-typography-icon-edit-bg');
+    border-radius: var(~'--c-typography-operation-border-radius');
     cursor: pointer;
-    transition: background-color @transition-duration-1 @transition-timing-function-linear;
+    transition: background-color var(~'--c-transition-duration-1') var(~'--c-transition-timing-function-linear');
 
     &:hover {
-      color: @typography-color-icon-edit_hover;
-      background-color: @typography-color-bg-icon-edit_hover;
+      color: var(~'--c-typography-icon-edit-color-hover');
+      background-color: var(~'--c-typography-icon-edit-bg-hover');
     }
   }
 
   &-operation-expand {
-    margin: 0 4px;
-    color: @typography-color-expand-text;
+    margin: 0 var(~'--c-typography-expand-margin-x');
+    color: var(~'--c-typography-expand-text-color');
     cursor: pointer;
 
     &:hover {
-      color: @typography-color-expand-text_hover;
+      color: var(~'--c-typography-expand-text-color-hover');
     }
   }
 
   // edit content
   &-edit-content {
     position: relative;
-    left: calc(-var(~'--c-textarea-padding-x') + var(~'--c-input-border-width'));
-    margin-top: calc(-var(~'--c-textarea-padding-y') + var(~'--c-input-border-width'));
-    margin-right: calc(-var(~'--c-textarea-padding-x') + var(~'--c-input-border-width'));
-    margin-bottom: calc(1em - var(~'--c-textarea-padding-y') - var(~'--c-input-border-width'));
+    left: calc(0px - var(~'--c-typography-edit-padding-x') + var(~'--c-typography-edit-border-width'));
+    margin-top: calc(0px - var(~'--c-typography-edit-padding-y') + var(~'--c-typography-edit-border-width'));
+    margin-right: calc(0px - var(~'--c-typography-edit-padding-x') + var(~'--c-typography-edit-border-width'));
+    margin-bottom: calc(1em - var(~'--c-typography-edit-padding-y') - var(~'--c-typography-edit-border-width'));
   }
 
   // css
