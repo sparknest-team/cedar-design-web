@@ -14,7 +14,7 @@
 
 常见 category：`size`、`spacing`、`border-width`、`border-radius`、`font-size`、`font-weight`、`transition-*`、`z-index`、`shadow`，以及色板/语义色 `color` / `c-text-1` 等。
 
-Less 侧：`@size-*`、`@spacing-*` 等是对这些 CSS 变量的包装（`@size-1: var(~'--c-size-1')`）；原始数值在 `@__size-*`、`@__spacing-*` 等。组件迁移路径应消费 `--c-*`，不要新增依赖裸数值 Less 变量的写法。
+Less 仅负责组织和编译样式，不再维护 `@__size-*` 原始值或 `@size-*` 映射层。组件应直接消费 `--c-*`，默认值只在 `css-variables.less` 中声明一次。
 
 ### 2. 组件 token
 
@@ -43,10 +43,10 @@ component → variant/status/size → interaction state → property
 
 ### 4. 属性与状态用词
 
-| 偏好 | 避免（新 token） |
-| --- | --- |
-| `border-radius` | 裸 `radius` |
-| `bg`（背景色简写） | 与 `background-color` 混用 |
+| 偏好                                           | 避免（新 token）                |
+| ---------------------------------------------- | ------------------------------- |
+| `border-radius`                                | 裸 `radius`                     |
+| `bg`（背景色简写）                             | 与 `background-color` 混用      |
 | `-hover-` / `-disabled-` / `-focus-`（连字符） | `_hover`、`_disabled`、`_focus` |
 
 ### 5. ColorPicker 前缀
@@ -60,10 +60,10 @@ component → variant/status/size → interaction state → property
 `style/index.less` 只通过组件 `--c-*` 消费：
 
 ```less
-color: var(~'--c-button-status-primary-bg');
+color: var(~"--c-button-status-primary-bg");
 ```
 
-- 一律使用 Less 引号形式 `var(~'--c-…')`。
+- 静态变量优先使用标准 CSS 形式 `var(--c-…)`；只有 Less 插值生成变量名时使用 `var(~'--c-…')`。
 - 已迁移组件禁止新增 `@comp-*` 类 Less token。
 - 禁止为颜色、尺寸、间距、圆角、阴影、时长写魔法数字；结构性零值、百分比与布局算法值可直接写。
 
@@ -77,9 +77,9 @@ Token 重命名必须同步：**源码 + 文档 + 测试**。同一语义只留�
 
 ## Token 层级（摘要）
 
-| 层级 | 形态 | 落点 |
-| --- | --- | --- |
+| 层级                    | 形态                    | 落点                                                               |
+| ----------------------- | ----------------------- | ------------------------------------------------------------------ |
 | 全局 primitive / 语义色 | `--c-<category>-<name>` | `style/theme/css-variables.less`、`style/color/css-variables.less` |
-| 组件 token | `--c-<component>-…` | 各组件 `style/token.less` |
+| 组件 token              | `--c-<component>-…`     | 各组件 `style/token.less`                                          |
 
 新增组件不得创建无 `--c-` 前缀的 token。

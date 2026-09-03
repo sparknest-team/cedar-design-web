@@ -43,14 +43,14 @@
         @page-size-change="onPageSizeChange"
       ></Table>
     </Card>
-    <Dialog v-model:open="visible" :body-style="{ height: '400px' }" @cancel="handleCancel" @confirm="handleOk">
+    <Dialog v-model:open="visible" :body-style="{ height: '400px' }" @cancel="handleCancel" @confirm="handleConfirm">
       <template #title>title2</template>
       <template #footer>
         <div class="c-flex c-justify-between c-items-center">
           <div>自定义内容</div>
           <Space>
             <Button @click="handleCancel">取消</Button>
-            <Button status="primary" @click="handleOk">确定</Button>
+            <Button status="primary" @click="handleConfirm">确定</Button>
           </Space>
         </div>
       </template>
@@ -131,7 +131,7 @@ const visible = ref(false)
 const handleClick = () => {
   visible.value = true
 }
-const handleOk = () => {
+const handleConfirm = () => {
   visible.value = false
 }
 const handleCancel = () => {

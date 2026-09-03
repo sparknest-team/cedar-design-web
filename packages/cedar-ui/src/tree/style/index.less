@@ -1,12 +1,11 @@
-@import './token.less';
-@import '../../style/mixins/index.less';
+@import "./token.less";
+@import "../../_components/icon-hover/style/mixins.less";
 
 /******* icon ******/
 
 .icon-hover(
-  ~'c-tree-node',
-  var(~'--c-tree-size-md-icon-size'),
-  var(~'--c-tree-size-expand-icon-bg-hover')
+  ~"c-tree-node",
+  var(~"--c-tree-size-expand-icon-bg-hover")
 );
 
 .c-tree-node {
@@ -15,11 +14,11 @@
     display: flex;
     flex-shrink: 0;
     align-items: center;
-    width: var(~'--c-tree-size-md-icon-size');
-    height: var(~'--c-tree-size-md-line-height');
-    margin-right: var(~'--c-tree-switcher-icon-margin-right');
-    color: var(~'--c-tree-switcher-icon-color');
-    font-size: var(~'--c-tree-size-md-icon-size');
+    width: var(~"--c-tree-size-md-icon-size");
+    height: var(~"--c-tree-size-md-line-height");
+    margin-right: var(~"--c-tree-switcher-icon-margin-right");
+    color: var(~"--c-tree-switcher-icon-color");
+    font-size: var(~"--c-tree-size-md-icon-size");
     cursor: pointer;
     user-select: none;
 
@@ -30,8 +29,8 @@
       svg {
         position: relative;
         transform: rotate(-90deg);
-        transition: transform var(~'--c-transition-duration-2')
-          var(~'--c-transition-timing-function-standard');
+        transition: transform var(~"--c-transition-duration-2")
+          var(~"--c-transition-timing-function-standard");
       }
     }
   }
@@ -42,14 +41,14 @@
   }
 
   &-drag-icon {
-    margin-left: var(~'--c-tree-drag-icon-spacing-text');
-    color: var(~'--c-tree-drag-icon-color');
+    margin-left: var(~"--c-tree-drag-icon-spacing-text");
+    color: var(~"--c-tree-drag-icon-color");
     opacity: 0;
   }
 
   // 自定义icon
   &-custom-icon {
-    margin-right: var(~'--c-tree-custom-icon-margin-right');
+    margin-right: var(~"--c-tree-custom-icon-margin-right");
     font-size: inherit;
     line-height: 1;
     cursor: pointer;
@@ -57,17 +56,17 @@
   }
 
   .c-icon-loading {
-    color: var(~'--c-tree-loading-icon-color');
+    color: var(~"--c-tree-loading-icon-color");
   }
 
   &-minus-icon,
   &-plus-icon {
     position: relative;
     display: block;
-    width: var(~'--c-tree-showline-switcher-icon-size');
-    height: var(~'--c-tree-showline-switcher-icon-size');
-    background: var(~'--c-tree-showline-plus-icon-bg');
-    border-radius: var(~'--c-tree-showline-plus-icon-border-radius');
+    width: var(~"--c-tree-showline-switcher-icon-size");
+    height: var(~"--c-tree-showline-switcher-icon-size");
+    background: var(~"--c-tree-showline-plus-icon-bg");
+    border-radius: var(~"--c-tree-showline-plus-icon-border-radius");
     cursor: pointer;
 
     &::after {
@@ -75,14 +74,14 @@
       top: 50%;
       left: 50%;
       display: block;
-      width: var(~'--c-tree-showline-plus-icon-width');
-      height: var(~'--c-tree-showline-plus-icon-stroke');
-      margin-top: calc(var(~'--c-tree-showline-plus-icon-stroke') / -2);
-      margin-left: calc(var(~'--c-tree-showline-plus-icon-width') / -2);
-      color: var(~'--c-tree-switcher-icon-color');
-      background-color: var(~'--c-tree-switcher-icon-color');
+      width: var(~"--c-tree-showline-plus-icon-width");
+      height: var(~"--c-tree-showline-plus-icon-stroke");
+      margin-top: calc(var(~"--c-tree-showline-plus-icon-stroke") / -2);
+      margin-left: calc(var(~"--c-tree-showline-plus-icon-width") / -2);
+      color: var(~"--c-tree-switcher-icon-color");
+      background-color: var(~"--c-tree-switcher-icon-color");
       border-radius: 0.5px;
-      content: '';
+      content: "";
     }
   }
 
@@ -91,25 +90,25 @@
     top: 50%;
     left: 50%;
     display: block;
-    width: var(~'--c-tree-showline-plus-icon-stroke');
-    height: var(~'--c-tree-showline-plus-icon-width');
-    margin-top: calc(var(~'--c-tree-showline-plus-icon-width') / -2);
-    margin-left: calc(var(~'--c-tree-showline-plus-icon-stroke') / -2);
-    color: var(~'--c-tree-switcher-icon-color');
-    background-color: var(~'--c-tree-switcher-icon-color');
+    width: var(~"--c-tree-showline-plus-icon-stroke");
+    height: var(~"--c-tree-showline-plus-icon-width");
+    margin-top: calc(var(~"--c-tree-showline-plus-icon-width") / -2);
+    margin-left: calc(var(~"--c-tree-showline-plus-icon-stroke") / -2);
+    color: var(~"--c-tree-switcher-icon-color");
+    background-color: var(~"--c-tree-switcher-icon-color");
     border-radius: 0.5px;
-    content: '';
+    content: "";
   }
 }
 
 /******* tree ***********/
 .c-tree {
-  color: var(~'--c-tree-title-text-color');
+  color: var(~"--c-tree-title-text-color");
 
   .c-checkbox {
-    margin-right: var(~'--c-tree-checkbox-margin-right');
+    margin-right: var(~"--c-tree-checkbox-margin-right");
     padding-left: 0;
-    line-height: var(~'--c-tree-size-md-line-height');
+    line-height: var(~"--c-tree-size-md-line-height");
   }
 
   &-node {
@@ -118,31 +117,35 @@
     flex-wrap: nowrap;
     align-items: center;
     padding-left: calc(
-      (var(~'--c-tree-size-expand-icon-bg-hover') - var(~'--c-tree-size-md-icon-size')) / 2
+      (
+          var(~"--c-tree-size-expand-icon-bg-hover") -
+            var(~"--c-tree-size-md-icon-size")
+        ) /
+        2
     );
-    color: var(~'--c-tree-title-text-color');
-    line-height: var(~'--c-line-height');
+    color: var(~"--c-tree-title-text-color");
+    line-height: var(~"--c-line-height");
     cursor: pointer;
 
     &-selected &-title,
     &-selected &-title:hover {
-      color: var(~'--c-tree-title-text-color-active');
-      transition: color var(~'--c-transition-duration-2')
-        var(~'--c-transition-timing-function-linear');
+      color: var(~"--c-tree-title-text-color-active");
+      transition: color var(~"--c-transition-duration-2")
+        var(~"--c-transition-timing-function-linear");
     }
 
     &-disabled-selectable,
     &-disabled {
       .c-tree-node-title,
       .c-tree-node-title:hover {
-        color: var(~'--c-tree-title-text-color-disabled');
+        color: var(~"--c-tree-title-text-color-disabled");
         background: none;
         cursor: not-allowed;
       }
     }
 
     &-disabled&-selected &-title {
-      color: var(~'--c-tree-title-text-color-active-disabled');
+      color: var(~"--c-tree-title-text-color-active-disabled");
     }
   }
 
@@ -152,7 +155,7 @@
 
     .c-tree-node-drag-icon {
       position: absolute;
-      right: var(~'--c-tree-drag-icon-spacing-right');
+      right: var(~"--c-tree-drag-icon-spacing-right");
     }
   }
 
@@ -165,30 +168,30 @@
   &-node-indent-block {
     position: relative;
     display: inline-block;
-    width: var(~'--c-tree-size-md-icon-size');
+    width: var(~"--c-tree-size-md-icon-size");
     height: 100%;
-    margin-right: var(~'--c-tree-switcher-icon-margin-right');
+    margin-right: var(~"--c-tree-switcher-icon-margin-right");
     vertical-align: top;
   }
 
   &-node-draggable {
-    margin-top: var(~'--c-tree-draggable-gap-height');
+    margin-top: var(~"--c-tree-draggable-gap-height");
   }
 
   &-node-title {
     position: relative;
     display: flex;
     align-items: center;
-    margin-left: calc(var(~'--c-tree-title-padding-horizontal') * -1);
-    padding: var(~'--c-tree-size-md-title-padding-vertical') 0;
-    padding-right: var(~'--c-tree-title-padding-horizontal');
-    padding-left: var(~'--c-tree-title-padding-horizontal');
-    font-size: var(~'--c-tree-size-md-font-size');
-    border-radius: var(~'--c-tree-node-border-radius');
+    margin-left: calc(var(~"--c-tree-title-padding-horizontal") * -1);
+    padding: var(~"--c-tree-size-md-title-padding-vertical") 0;
+    padding-right: var(~"--c-tree-title-padding-horizontal");
+    padding-left: var(~"--c-tree-title-padding-horizontal");
+    font-size: var(~"--c-tree-size-md-font-size");
+    border-radius: var(~"--c-tree-node-border-radius");
 
     &:hover {
-      color: var(~'--c-tree-title-text-color-hover');
-      background-color: var(~'--c-tree-title-bg-hover');
+      color: var(~"--c-tree-title-text-color-hover");
+      background-color: var(~"--c-tree-title-bg-hover");
 
       .c-tree-node-drag-icon {
         opacity: 1;
@@ -197,45 +200,49 @@
 
     &-draggable::before {
       position: absolute;
-      top: calc(var(~'--c-tree-draggable-gap-height') * -1);
+      top: calc(var(~"--c-tree-draggable-gap-height") * -1);
       right: 0;
       left: 0;
       display: block;
-      height: var(~'--c-tree-draggable-gap-height');
-      border-radius: calc(var(~'--c-tree-draggable-gap-height') / 2);
-      content: '';
+      height: var(~"--c-tree-draggable-gap-height");
+      border-radius: calc(var(~"--c-tree-draggable-gap-height") / 2);
+      content: "";
     }
 
     &-gap-bottom::before {
       top: unset;
-      bottom: calc(var(~'--c-tree-draggable-gap-height') * -1);
-      background-color: var(~'--c-tree-draggable-gap-bg');
+      bottom: calc(var(~"--c-tree-draggable-gap-height") * -1);
+      background-color: var(~"--c-tree-draggable-gap-bg");
     }
 
     &-gap-top::before {
-      background-color: var(~'--c-tree-draggable-gap-bg');
+      background-color: var(~"--c-tree-draggable-gap-bg");
     }
 
     &-highlight {
-      color: var(~'--c-tree-title-text-color-highlight');
-      background-color: var(~'--c-tree-title-bg-highlight');
+      color: var(~"--c-tree-title-text-color-highlight");
+      background-color: var(~"--c-tree-title-bg-highlight");
     }
 
     &-dragging,
     &-dragging:hover {
-      color: var(~'--c-tree-title-text-color-dragging');
-      background-color: var(~'--c-tree-title-bg-dragging');
+      color: var(~"--c-tree-title-text-color-dragging");
+      background-color: var(~"--c-tree-title-bg-dragging");
     }
   }
 
   // show line
   &-show-line {
     padding-left: calc(
-      (var(~'--c-tree-size-expand-icon-bg-hover') - var(~'--c-tree-showline-switcher-icon-size')) / 2
+      (
+          var(~"--c-tree-size-expand-icon-bg-hover") -
+            var(~"--c-tree-showline-switcher-icon-size")
+        ) /
+        2
     );
 
     .c-tree-node-switcher {
-      width: var(~'--c-tree-showline-switcher-icon-size');
+      width: var(~"--c-tree-showline-switcher-icon-size");
       text-align: center;
 
       .c-tree-node-icon-hover {
@@ -244,60 +251,63 @@
     }
 
     .c-tree-node-indent-block {
-      width: var(~'--c-tree-showline-switcher-icon-size');
+      width: var(~"--c-tree-showline-switcher-icon-size");
     }
 
     .c-tree-node-indent-block::before {
       position: absolute;
       top: calc(
-        var(~'--c-tree-showline-line-spacing-vertical') -
+        var(~"--c-tree-showline-line-spacing-vertical") -
           (
-            var(~'--c-tree-size-md-line-height') / 2 - var(~'--c-tree-showline-switcher-icon-size') /
-              2
+            var(~"--c-tree-size-md-line-height") / 2 -
+              var(~"--c-tree-showline-switcher-icon-size") / 2
           )
       );
       bottom: min(
         calc(
           0px -
             (
-              var(~'--c-tree-size-md-line-height') / 2 - var(~'--c-tree-showline-switcher-icon-size') /
-                2 - var(~'--c-tree-showline-line-spacing-vertical')
+              var(~"--c-tree-size-md-line-height") / 2 -
+                var(~"--c-tree-showline-switcher-icon-size") / 2 -
+                var(~"--c-tree-showline-line-spacing-vertical")
             )
         ),
         0px
       );
       left: 50%;
       box-sizing: border-box;
-      width: var(~'--c-tree-showline-line-width');
-      border-left: var(~'--c-tree-showline-line-width') var(~'--c-tree-showline-line-style')
-        var(~'--c-tree-showline-line-bg');
+      width: var(~"--c-tree-showline-line-width");
+      border-left: var(~"--c-tree-showline-line-width")
+        var(~"--c-tree-showline-line-style") var(~"--c-tree-showline-line-bg");
       transform: translateX(-50%);
-      content: '';
+      content: "";
     }
 
     .c-tree-node-is-leaf:not(.c-tree-node-is-tail) .c-tree-node-indent::after {
       position: absolute;
       top: calc(
-        var(~'--c-tree-size-md-line-height') / 2 + var(~'--c-tree-showline-switcher-icon-size') / 2 +
-          var(~'--c-tree-showline-line-spacing-vertical')
+        var(~"--c-tree-size-md-line-height") / 2 +
+          var(~"--c-tree-showline-switcher-icon-size") / 2 +
+          var(~"--c-tree-showline-line-spacing-vertical")
       );
-      right: calc(var(~'--c-tree-showline-switcher-icon-size') / -2);
+      right: calc(var(~"--c-tree-showline-switcher-icon-size") / -2);
       bottom: min(
         calc(
           0px -
             (
-              var(~'--c-tree-size-md-line-height') / 2 - var(~'--c-tree-showline-switcher-icon-size') /
-                2 - var(~'--c-tree-showline-line-spacing-vertical')
+              var(~"--c-tree-size-md-line-height") / 2 -
+                var(~"--c-tree-showline-switcher-icon-size") / 2 -
+                var(~"--c-tree-showline-line-spacing-vertical")
             )
         ),
         0px
       );
       box-sizing: border-box;
-      width: var(~'--c-tree-showline-line-width');
-      border-left: var(~'--c-tree-showline-line-width') var(~'--c-tree-showline-line-style')
-        var(~'--c-tree-showline-line-bg');
+      width: var(~"--c-tree-showline-line-width");
+      border-left: var(~"--c-tree-showline-line-width")
+        var(~"--c-tree-showline-line-style") var(~"--c-tree-showline-line-bg");
       transform: translateX(50%);
-      content: '';
+      content: "";
     }
 
     .c-tree-node-indent-block-lineless:before {
@@ -310,17 +320,17 @@
 
 .c-tree-size-xs {
   .c-tree-node-switcher {
-    height: var(~'--c-tree-size-xs-line-height');
+    height: var(~"--c-tree-size-xs-line-height");
   }
 
   .c-checkbox {
-    line-height: var(~'--c-tree-size-xs-line-height');
+    line-height: var(~"--c-tree-size-xs-line-height");
   }
 
   .c-tree-node-title {
-    padding-top: var(~'--c-tree-size-xs-title-padding-vertical');
-    padding-bottom: var(~'--c-tree-size-xs-title-padding-vertical');
-    font-size: var(~'--c-tree-size-xs-font-size');
+    padding-top: var(~"--c-tree-size-xs-title-padding-vertical");
+    padding-bottom: var(~"--c-tree-size-xs-title-padding-vertical");
+    font-size: var(~"--c-tree-size-xs-font-size");
     line-height: 1.667;
   }
 
@@ -328,18 +338,19 @@
   .c-tree-show-line {
     .c-tree-node-indent-block::before {
       top: calc(
-        var(~'--c-tree-showline-line-spacing-vertical') -
+        var(~"--c-tree-showline-line-spacing-vertical") -
           (
-            var(~'--c-tree-size-xs-line-height') / 2 - var(~'--c-tree-showline-switcher-icon-size') /
-              2
+            var(~"--c-tree-size-xs-line-height") / 2 -
+              var(~"--c-tree-showline-switcher-icon-size") / 2
           )
       );
       bottom: min(
         calc(
           0px -
             (
-              var(~'--c-tree-size-xs-line-height') / 2 - var(~'--c-tree-showline-switcher-icon-size') /
-                2 - var(~'--c-tree-showline-line-spacing-vertical')
+              var(~"--c-tree-size-xs-line-height") / 2 -
+                var(~"--c-tree-showline-switcher-icon-size") / 2 -
+                var(~"--c-tree-showline-line-spacing-vertical")
             )
         ),
         0px
@@ -348,15 +359,17 @@
 
     .c-tree-node-is-leaf:not(.c-tree-node-is-tail) .c-tree-node-indent::after {
       top: calc(
-        var(~'--c-tree-size-xs-line-height') / 2 + var(~'--c-tree-showline-switcher-icon-size') / 2 +
-          var(~'--c-tree-showline-line-spacing-vertical')
+        var(~"--c-tree-size-xs-line-height") / 2 +
+          var(~"--c-tree-showline-switcher-icon-size") / 2 +
+          var(~"--c-tree-showline-line-spacing-vertical")
       );
       bottom: min(
         calc(
           0px -
             (
-              var(~'--c-tree-size-xs-line-height') / 2 - var(~'--c-tree-showline-switcher-icon-size') /
-                2 - var(~'--c-tree-showline-line-spacing-vertical')
+              var(~"--c-tree-size-xs-line-height") / 2 -
+                var(~"--c-tree-showline-switcher-icon-size") / 2 -
+                var(~"--c-tree-showline-line-spacing-vertical")
             )
         ),
         0px
@@ -367,35 +380,36 @@
 
 .c-tree-size-sm {
   .c-tree-node-switcher {
-    height: var(~'--c-tree-size-sm-line-height');
+    height: var(~"--c-tree-size-sm-line-height");
   }
 
   .c-checkbox {
-    line-height: var(~'--c-tree-size-sm-line-height');
+    line-height: var(~"--c-tree-size-sm-line-height");
   }
 
   .c-tree-node-title {
-    padding-top: var(~'--c-tree-size-sm-title-padding-vertical');
-    padding-bottom: var(~'--c-tree-size-sm-title-padding-vertical');
-    font-size: var(~'--c-tree-size-sm-font-size');
+    padding-top: var(~"--c-tree-size-sm-title-padding-vertical");
+    padding-bottom: var(~"--c-tree-size-sm-title-padding-vertical");
+    font-size: var(~"--c-tree-size-sm-font-size");
   }
 
   &.c-tree-show-line,
   .c-tree-show-line {
     .c-tree-node-indent-block::before {
       top: calc(
-        var(~'--c-tree-showline-line-spacing-vertical') -
+        var(~"--c-tree-showline-line-spacing-vertical") -
           (
-            var(~'--c-tree-size-sm-line-height') / 2 - var(~'--c-tree-showline-switcher-icon-size') /
-              2
+            var(~"--c-tree-size-sm-line-height") / 2 -
+              var(~"--c-tree-showline-switcher-icon-size") / 2
           )
       );
       bottom: min(
         calc(
           0px -
             (
-              var(~'--c-tree-size-sm-line-height') / 2 - var(~'--c-tree-showline-switcher-icon-size') /
-                2 - var(~'--c-tree-showline-line-spacing-vertical')
+              var(~"--c-tree-size-sm-line-height") / 2 -
+                var(~"--c-tree-showline-switcher-icon-size") / 2 -
+                var(~"--c-tree-showline-line-spacing-vertical")
             )
         ),
         0px
@@ -404,15 +418,17 @@
 
     .c-tree-node-is-leaf:not(.c-tree-node-is-tail) .c-tree-node-indent::after {
       top: calc(
-        var(~'--c-tree-size-sm-line-height') / 2 + var(~'--c-tree-showline-switcher-icon-size') / 2 +
-          var(~'--c-tree-showline-line-spacing-vertical')
+        var(~"--c-tree-size-sm-line-height") / 2 +
+          var(~"--c-tree-showline-switcher-icon-size") / 2 +
+          var(~"--c-tree-showline-line-spacing-vertical")
       );
       bottom: min(
         calc(
           0px -
             (
-              var(~'--c-tree-size-sm-line-height') / 2 - var(~'--c-tree-showline-switcher-icon-size') /
-                2 - var(~'--c-tree-showline-line-spacing-vertical')
+              var(~"--c-tree-size-sm-line-height") / 2 -
+                var(~"--c-tree-showline-switcher-icon-size") / 2 -
+                var(~"--c-tree-showline-line-spacing-vertical")
             )
         ),
         0px
@@ -423,35 +439,36 @@
 
 .c-tree-size-lg {
   .c-tree-node-switcher {
-    height: var(~'--c-tree-size-lg-line-height');
+    height: var(~"--c-tree-size-lg-line-height");
   }
 
   .c-checkbox {
-    line-height: var(~'--c-tree-size-lg-line-height');
+    line-height: var(~"--c-tree-size-lg-line-height");
   }
 
   .c-tree-node-title {
-    padding-top: var(~'--c-tree-size-lg-title-padding-vertical');
-    padding-bottom: var(~'--c-tree-size-lg-title-padding-vertical');
-    font-size: var(~'--c-tree-size-lg-font-size');
+    padding-top: var(~"--c-tree-size-lg-title-padding-vertical");
+    padding-bottom: var(~"--c-tree-size-lg-title-padding-vertical");
+    font-size: var(~"--c-tree-size-lg-font-size");
   }
 
   &.c-tree-show-line,
   .c-tree-show-line {
     .c-tree-node-indent-block::before {
       top: calc(
-        var(~'--c-tree-showline-line-spacing-vertical') -
+        var(~"--c-tree-showline-line-spacing-vertical") -
           (
-            var(~'--c-tree-size-lg-line-height') / 2 - var(~'--c-tree-showline-switcher-icon-size') /
-              2
+            var(~"--c-tree-size-lg-line-height") / 2 -
+              var(~"--c-tree-showline-switcher-icon-size") / 2
           )
       );
       bottom: min(
         calc(
           0px -
             (
-              var(~'--c-tree-size-lg-line-height') / 2 - var(~'--c-tree-showline-switcher-icon-size') /
-                2 - var(~'--c-tree-showline-line-spacing-vertical')
+              var(~"--c-tree-size-lg-line-height") / 2 -
+                var(~"--c-tree-showline-switcher-icon-size") / 2 -
+                var(~"--c-tree-showline-line-spacing-vertical")
             )
         ),
         0px
@@ -460,15 +477,17 @@
 
     .c-tree-node-is-leaf:not(.c-tree-node-is-tail) .c-tree-node-indent::after {
       top: calc(
-        var(~'--c-tree-size-lg-line-height') / 2 + var(~'--c-tree-showline-switcher-icon-size') / 2 +
-          var(~'--c-tree-showline-line-spacing-vertical')
+        var(~"--c-tree-size-lg-line-height") / 2 +
+          var(~"--c-tree-showline-switcher-icon-size") / 2 +
+          var(~"--c-tree-showline-line-spacing-vertical")
       );
       bottom: min(
         calc(
           0px -
             (
-              var(~'--c-tree-size-lg-line-height') / 2 - var(~'--c-tree-showline-switcher-icon-size') /
-                2 - var(~'--c-tree-showline-line-spacing-vertical')
+              var(~"--c-tree-size-lg-line-height") / 2 -
+                var(~"--c-tree-showline-switcher-icon-size") / 2 -
+                var(~"--c-tree-showline-line-spacing-vertical")
             )
         ),
         0px
@@ -479,6 +498,6 @@
 
 .c-tree-node-list {
   overflow: hidden;
-  transition: height var(~'--c-transition-duration-2')
-    var(~'--c-transition-timing-function-standard');
+  transition: height var(~"--c-transition-duration-2")
+    var(~"--c-transition-timing-function-standard");
 }

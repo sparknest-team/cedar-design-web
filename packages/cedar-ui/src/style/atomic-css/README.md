@@ -8,7 +8,7 @@ Cedar 提供两套能力：
 
 | 能力             | 包 / 入口                                                | 何时用                           |
 | ---------------- | -------------------------------------------------------- | -------------------------------- |
-| 固定工具类 `c-*` | `@cedarjs/ui` 的 `style/tools.less`                      | 不接 Uno/TW 时使用               |
+| 固定工具类 `c-*` | `@cedarjs/ui` 的 `style/utilities/index.less`            | 不接 Uno/TW 时使用               |
 | Uno / TW preset  | `@cedarjs/preset-unocss` / `@cedarjs/preset-tailwindcss` | 使用带 `c-` 前缀的完整原子化体系 |
 
 Preset **不是组件**，是构建期配置：装好后即可写 `c-flex`、`c-p-16`、`c-bg-primary`、`c-text-md` 等。主题切换（暗色 / StyleProvider）只改 CSS 变量，类名不变。日常分类速查见 [常用写法](/components/style/atomic-usage/)。
@@ -23,16 +23,22 @@ UnoCSS 和 Tailwind **二选一配置**，但组件里的类名完全相同。�
 
 ```vue
 <template>
-  <div class="c-flex c-max-w-md c-flex-col c-gap-12 c-rounded-lg c-border c-border-solid c-border-gray-200 c-bg-body c-p-16">
+  <div
+    class="c-flex c-max-w-md c-flex-col c-gap-12 c-rounded-lg c-border c-border-solid c-border-gray-200 c-bg-body c-p-16"
+  >
     <h3 class="c-m-0 c-text-lg c-text-primary">第一张原子化卡片</h3>
     <p class="c-m-0 c-text-sm">组合小类完成布局，不需要另外写组件样式。</p>
 
-    <div class="c-flex c-items-center c-justify-between c-gap-8 c-rounded-md c-bg-gray-100 c-p-12">
+    <div
+      class="c-flex c-items-center c-justify-between c-gap-8 c-rounded-md c-bg-gray-100 c-p-12"
+    >
       <code>c-flex c-items-center c-gap-8</code>
       <span class="c-text-success">Success</span>
     </div>
 
-    <button class="c-rounded-md c-border-0 c-bg-primary c-px-16 c-py-8 c-text-white hover:c-opacity-80">
+    <button
+      class="c-rounded-md c-border-0 c-bg-primary c-px-16 c-py-8 c-text-white hover:c-opacity-80"
+    >
       保存
     </button>
   </div>
@@ -127,15 +133,15 @@ export default {
 
 主题色 key 使用无前缀语义名，最终生成的 utility 统一带 `c-` 前缀。
 
-| Theme key  | CSS 变量             | 背景               | 文字                 | 边框颜色                   |
-| ---------- | -------------------- | ------------------ | -------------------- | -------------------------- |
-| `body`     | `--c-color-body`     | `c-bg-body`        | —                    | —                          |
-| `primary`  | `--c-color-primary`  | `c-bg-primary`     | `c-text-primary`     | `c-border-primary`         |
-| `info`     | `--c-color-info`     | `c-bg-info`        | `c-text-info`        | `c-border-info`            |
-| `success`  | `--c-color-success`  | `c-bg-success`     | `c-text-success`     | `c-border-success`         |
-| `warning`  | `--c-color-warning`  | `c-bg-warning`     | `c-text-warning`     | `c-border-warning`         |
-| `danger`   | `--c-color-danger`   | `c-bg-danger`      | `c-text-danger`      | `c-border-danger`          |
-| `disabled` | `--c-color-disabled` | `c-bg-disabled`    | `c-text-disabled`    | —                          |
+| Theme key  | CSS 变量             | 背景            | 文字              | 边框颜色           |
+| ---------- | -------------------- | --------------- | ----------------- | ------------------ |
+| `body`     | `--c-color-body`     | `c-bg-body`     | —                 | —                  |
+| `primary`  | `--c-color-primary`  | `c-bg-primary`  | `c-text-primary`  | `c-border-primary` |
+| `info`     | `--c-color-info`     | `c-bg-info`     | `c-text-info`     | `c-border-info`    |
+| `success`  | `--c-color-success`  | `c-bg-success`  | `c-text-success`  | `c-border-success` |
+| `warning`  | `--c-color-warning`  | `c-bg-warning`  | `c-text-warning`  | `c-border-warning` |
+| `danger`   | `--c-color-danger`   | `c-bg-danger`   | `c-text-danger`   | `c-border-danger`  |
+| `disabled` | `--c-color-disabled` | `c-bg-disabled` | `c-text-disabled` | —                  |
 
 颜色类只设置对应的颜色属性。比如 `c-border-primary` 只设置 `border-color`，需要和边框宽度类一起使用：
 
@@ -151,14 +157,10 @@ export default {
 <div class="c-bg-body c-text-primary">primary</div>
 
 <!-- 状态变体 -->
-<button class="c-border c-border-primary hover:c-bg-primary">
-  hover
-</button>
+<button class="c-border c-border-primary hover:c-bg-primary">hover</button>
 
 <!-- 响应式变体；断点本身不加 c- 前缀 -->
-<div class="c-bg-primary sm:c-bg-info md:c-bg-warning">
-  responsive
-</div>
+<div class="c-bg-primary sm:c-bg-info md:c-bg-warning">responsive</div>
 ```
 
 UnoCSS / Tailwind 只扫描源码中完整出现的类名。不要用 `c-bg-${status}` 动态拼接；必须动态选择时，使用完整类名映射或生成器的 safelist。
@@ -183,12 +185,12 @@ UnoCSS / Tailwind 只扫描源码中完整出现的类名。不要用 `c-bg-${st
 间距与宽高数值直接对应像素：`1 = 1px`。例如 `c-p-8` 为 8px、`c-mt-16` 为 16px、`c-h-10` 为 10px；
 百分比用 `c-w-full` / `c-h-full` 或 `c-w-1/2`。方向写法与 Uno / Tailwind 一致。
 
-| 类型          | 示例                                            |
-| ------------- | ----------------------------------------------- |
-| margin        | `c-m-16` `c-mt-16` `c-mx-8` `c-my-24`           |
-| padding       | `c-p-16` `c-pt-16` `c-px-8` `c-py-24`           |
-| gap           | `c-gap-8` `c-gap-x-16` `c-gap-y-24`             |
-| auto          | `c-m-auto` `c-ml-auto`                          |
+| 类型           | 示例                                              |
+| -------------- | ------------------------------------------------- |
+| margin         | `c-m-16` `c-mt-16` `c-mx-8` `c-my-24`             |
+| padding        | `c-p-16` `c-pt-16` `c-px-8` `c-py-24`             |
+| gap            | `c-gap-8` `c-gap-x-16` `c-gap-y-24`               |
+| auto           | `c-m-auto` `c-ml-auto`                            |
 | width / height | `c-w-10` `c-h-10` `c-w-full` `c-h-auto` `c-w-1/2` |
 
 <demo src="./__demos__/spacing.vue"></demo>

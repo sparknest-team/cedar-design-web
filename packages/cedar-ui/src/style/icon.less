@@ -1,4 +1,17 @@
-@import './theme/index.less';
+// IconHover is an internal icon primitive; keep its tokens with its styles
+// instead of leaking component-specific variables through the theme entry.
+@icon-hover-border-radius: var(~"--c-border-radius-circle");
+@icon-hover-color-bg: var(~"--c-color-fill-2");
+@icon-hover-size-md-height: var(~"--c-size-5");
+@icon-hover-size-sm-height: var(~"--c-size-5");
+@icon-hover-size-xs-height: var(~"--c-size-5");
+@icon-hover-size-lg-height: var(~"--c-size-6");
+@icon-hover-size-xl-height: var(~"--c-size-6");
+@icon-hover-size-sm-icon: var(~"--c-size-3");
+@icon-hover-size-xs-icon: var(~"--c-size-3");
+@icon-hover-size-md-icon: var(~"--c-size-3");
+@icon-hover-size-lg-icon: var(~"--c-size-3");
+@icon-hover-size-xl-icon: var(~"--c-size-3");
 
 .c-icon {
   display: inline-block;
@@ -13,7 +26,8 @@
 
 .c-icon-loading,
 .c-icon-spin {
-  animation: ~'c-loading-circle' @transition-duration-loading infinite @transition-timing-function-linear;
+  animation: ~"c-loading-circle" var(~"--c-transition-duration-loading")
+    infinite var(~"--c-transition-timing-function-linear");
 }
 
 @keyframes ~'c-loading-circle' {
@@ -39,10 +53,11 @@
     position: absolute;
     display: block;
     box-sizing: border-box;
-    background-color: @color-transparent;
+    background-color: transparent;
     border-radius: @icon-hover-border-radius;
-    transition: background-color @transition-duration-1 @transition-timing-function-linear;
-    content: '';
+    transition: background-color var(~"--c-transition-duration-1")
+      var(~"--c-transition-timing-function-linear");
+    content: "";
   }
 
   &:hover::before {

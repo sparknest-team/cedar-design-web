@@ -1,10 +1,9 @@
-@import '../../style/mixins/index.less';
-@import './token.less';
+@import "./token.less";
 
 .c-ripple {
   position: absolute;
   transition:
-    transform 0.2s var(~'--c-ripple-cubic-bezier'),
+    transform 0.2s var(~"--c-ripple-cubic-bezier"),
     opacity 0.14s linear;
   top: 0;
   left: 0;
@@ -12,6 +11,6 @@
   opacity: 0;
   will-change: transform, opacity;
   pointer-events: none;
-  z-index: 100;
-  background-color: var(~'--c-ripple-color');
+  z-index: var(--c-z-index-local-sticky);
+  background-color: var(~"--c-ripple-color");
 }

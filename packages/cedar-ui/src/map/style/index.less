@@ -29,7 +29,7 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    z-index: 1;
+    z-index: var(--c-z-index-local-raised);
     width: var(~'--c-map-position-dot-size');
     height: var(~'--c-map-position-dot-size');
     margin-top: var(~'--c-map-position-dot-margin-top');
@@ -62,7 +62,7 @@
     position: absolute;
     top: var(~'--c-map-position-current-top');
     right: var(~'--c-map-position-current-right');
-    z-index: 1;
+    z-index: var(--c-z-index-local-raised);
     width: var(~'--c-map-position-current-size');
     height: var(~'--c-map-position-current-size');
 
@@ -76,7 +76,7 @@
     position: absolute;
     bottom: 50%;
     left: 50%;
-    z-index: 1;
+    z-index: var(--c-z-index-local-raised);
     box-sizing: border-box;
     padding: var(~'--c-map-poi-padding-y') var(~'--c-map-poi-padding-x');
     background-color: var(~'--c-map-poi-bg');
@@ -105,7 +105,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 2;
+    z-index: var(--c-z-index-local-overlay);
     display: flex;
     flex-direction: column;
     width: var(~'--c-map-search-width');

@@ -1,5 +1,5 @@
-const Color = require('color');
-const { getColorString } = require('./utils');
+const Color = require("color");
+const { getColorString } = require("./utils");
 
 // 色板
 
@@ -36,7 +36,8 @@ function colorPalette(originColor, i, format) {
     let newSaturation;
 
     if (isLight) {
-      newSaturation = s <= minSaturationStep ? s : s - ((s - minSaturationStep) / 5) * i;
+      newSaturation =
+        s <= minSaturationStep ? s : s - ((s - minSaturationStep) / 5) * i;
     } else {
       newSaturation = s + ((maxSaturationStep - s) / 4) * i;
     }
@@ -44,20 +45,25 @@ function colorPalette(originColor, i, format) {
   }
 
   function getNewValue(isLight, i) {
-    return isLight ? v + ((maxValue - v) / 5) * i : (v <= minValue ? v : v - ((v - minValue) / 4) * i);
+    return isLight
+      ? v + ((maxValue - v) / 5) * i
+      : v <= minValue
+        ? v
+        : v - ((v - minValue) / 4) * i;
   }
 
   const isLight = i < 6;
   const index = isLight ? 6 - i : i - 6;
 
-  const retColor = i === 6
-    ? color
-    : Color({
-        h: getNewHue(isLight, index),
-        s: getNewSaturation(isLight, index),
-        v: getNewValue(isLight, index),
-      });
-  
+  const retColor =
+    i === 6
+      ? color
+      : Color({
+          h: getNewHue(isLight, index),
+          s: getNewSaturation(isLight, index),
+          v: getNewValue(isLight, index),
+        });
+
   return getColorString(retColor, format);
 }
 

@@ -1,166 +1,151 @@
+<!-- @sync-with: maple-ui/src/statistic/Statistic.vue -->
 <template>
-  <div :class="prefixCls">
-    <div v-if="title || $slots.title" :class="`${prefixCls}-title`">
-      <slot name="title">
-        {{ title }}
-      </slot>
+  <div :class="classes(n())">
+    <div v-if="title || $slots.title" :class="n('title')">
+      <slot name="title">{{ title }}</slot>
     </div>
-    <div :class="`${prefixCls}-content`">
-      <div :class="`${prefixCls}-value`" :style="valueStyle">
+    <div :class="n('content')">
+      <div :class="valueClass" :style="valueStyle">
         <span v-if="showPlaceholder">{{ placeholder }}</span>
         <template v-else>
-          <span v-if="$slots.prefix" :class="`${prefixCls}-prefix`">
-            <slot name="prefix" />
+          <span v-if="prefix || $slots.prefix" :class="n('prefix')">
+            <slot name="prefix">{{ prefix }}</slot>
           </span>
-          <template v-if="formatValue.isNumber">
-            <span :class="`${prefixCls}-value-integer`">
-              {{ formatValue.integer }}
-            </span>
-            <span v-if="formatValue.decimal" :class="`${prefixCls}-value-decimal`"> .{{ formatValue.decimal }} </span>
+          <slot v-if="renderDefaultSlot" />
+          <template v-else-if="formatValue.isNumber">
+            <span :class="n('value-integer')">{{ formatValue.integer }}</span>
+            <span v-if="formatValue.decimal" :class="n('value-decimal')">.{{ formatValue.decimal }}</span>
           </template>
           <template v-else>
             {{ formatValue.value }}
           </template>
-          <span v-if="$slots.suffix" :class="`${prefixCls}-suffix`">
-            <slot name="suffix" />
+          <span v-if="suffix || $slots.suffix" :class="n('suffix')">
+            <slot name="suffix">{{ suffix }}</slot>
           </span>
         </template>
       </div>
-      <div v-if="extra || $slots.extra" :class="`${prefixCls}-extra`">
-        <slot name="extra">
-          {{ extra }}
-        </slot>
+      <div v-if="extra || $slots.extra" :class="n('extra')">
+        <slot name="extra">{{ extra }}</slot>
       </div>
     </div>
   </div>
 </template>
 
-<script lang="ts">
-import { statisticProps } from './props'
-import { createNamespace } from '../_utils/global-config'
-import { computed, CSSProperties, defineComponent, onMounted, PropType, ref, toRefs, watch } from 'vue'
+<script lang="ts" setup>
+import { computed, onMounted, useSlots, watch } from 'vue'
 import dayjs from 'dayjs'
-// @ts-ignore
-import BTween from 'b-tween'
-import NP from 'number-precision'
-import { getPrefixCls } from '../_utils/global-config'
-import { isNumber, isUndefined } from '../_utils/is'
-import { Data } from '../_utils/types'
+import { useMotion } from '@cedarjs/use'
+import { createNamespace } from '../_utils/global-config'
+import { statisticProps } from './props'
 
-export default defineComponent({
-  name: createNamespace("statistic").name,
-  props: statisticProps,
-  /**
-   * @zh 标题
-   * @en Title
-   * @slot title
-   */
-  /**
-   * @zh 额外内容
-   * @en Extra content
-   * @slot extra
-   */
-  /**
-   * @zh 前缀
-   * @en Prefix
-   * @slot prefix
-   */
-  /**
-   * @zh 后缀
-   * @en Suffix
-   * @slot suffix
-   */
-  setup(props) {
-    const prefixCls = getPrefixCls('statistic')
-    const numberValue = computed(() => {
-      if (isNumber(props.value)) {
-        return props.value
-      }
-      return 0
-    })
-    const innerValue = ref(props.valueFrom ?? props.value)
-    const tween = ref(null)
-    const { value } = toRefs(props)
+defineOptions({
+  name: createNamespace('statistic').name,
+})
 
-    const showPlaceholder = computed(() => isUndefined(props.value))
+const { n, classes } = createNamespace('statistic')
+const props = defineProps(statisticProps)
+const slots = useSlots()
 
-    const animation = (from: number = props.valueFrom ?? 0, to: number = numberValue.value) => {
-      if (from !== to) {
-        tween.value = new BTween({
-          from: {
-            value: from,
-          },
-          to: {
-            value: to,
-          },
-          duration: props.animationDuration,
-          easing: 'quartOut',
-          onUpdate: (keys: Data) => {
-            innerValue.value = keys.value
-          },
-          onFinish: () => {
-            innerValue.value = to
-          },
-        })
-        ;(tween.value as any)?.start()
-      }
-    }
+function isNumber(value: unknown): value is number {
+  return typeof value === 'number' && !Number.isNaN(value)
+}
 
-    const formatValue = computed(() => {
-      let _value: string | number | Date | undefined = innerValue.value
-      if (isNumber(_value)) {
-        if (isNumber(props.precision)) {
-          _value = NP.round(_value, props.precision).toFixed(props.precision)
-        }
-        const splitValue = String(_value).split('.')
-        const integer = props.showGroupSeparator ? Number(splitValue[0]).toLocaleString('en-US') : splitValue[0]
-        const decimal = splitValue[1]
-        return {
-          isNumber: true,
-          integer,
-          decimal,
-        }
-      }
-      if (props.format) {
-        _value = dayjs(_value).format(props.format)
-      }
-      return {
-        isNumber: false,
-        value: _value,
-      }
-    })
+function isDate(value: unknown): value is Date {
+  return value instanceof Date && !Number.isNaN(value.getTime())
+}
 
-    onMounted(() => {
-      if (props.animation && props.start) {
-        animation()
-      }
-    })
+function roundTo(value: number, precision: number) {
+  const factor = 10 ** precision
+  return (Math.round(value * factor) / factor).toFixed(precision)
+}
 
-    watch(
-      () => props.start,
-      (value) => {
-        if (value && props.animation && !tween.value) {
-          animation()
-        }
-      },
-    )
+const {
+  value: motionValue,
+  reset: resetMotion,
+  start: startMotion,
+  pause: pauseMotion,
+} = useMotion({
+  from: () => props.valueFrom ?? 0,
+  to: () => (isNumber(props.value) ? props.value : 0),
+  duration: () => props.animationDuration,
+})
 
-    watch(value, (value) => {
-      if (tween.value) {
-        ;(tween.value as any)?.stop()
-        tween.value = null
-      }
-      innerValue.value = value
-      if (props.animation && props.start) {
-        animation()
-      }
-    })
+const showPlaceholder = computed(() => props.value === undefined && !slots.default)
+const renderDefaultSlot = computed(() => props.value === undefined && Boolean(slots.default))
+const valueClass = computed(() => classes(n('value'), [props.tabularNums, n('value--tabular-nums')]))
 
+const innerValue = computed(() => {
+  if (props.animation && isNumber(props.value)) {
+    return motionValue.value
+  }
+  return props.value
+})
+
+function formatInteger(value: string) {
+  if (!props.showGroupSeparator) {
+    return value
+  }
+  const grouped = Number(value).toLocaleString('en-US')
+  if (props.separator && props.separator !== ',') {
+    return grouped.replace(/,/g, props.separator)
+  }
+  return grouped
+}
+
+const formatValue = computed(() => {
+  const current = innerValue.value
+  if (isNumber(current)) {
+    const formatted = isNumber(props.precision) ? roundTo(current, props.precision) : String(current)
+    const [integer, decimal] = formatted.split('.')
     return {
-      prefixCls,
-      showPlaceholder,
-      formatValue,
+      isNumber: true as const,
+      integer: formatInteger(integer),
+      decimal,
+    }
+  }
+  if (isDate(current)) {
+    return {
+      isNumber: false as const,
+      value: dayjs(current).format(props.format),
+    }
+  }
+  return {
+    isNumber: false as const,
+    value: current,
+  }
+})
+
+function play() {
+  if (!props.animation || !isNumber(props.value)) {
+    return
+  }
+  resetMotion()
+  startMotion()
+}
+
+onMounted(() => {
+  if (props.start) {
+    play()
+  }
+})
+
+watch(
+  () => props.start,
+  (started) => {
+    if (started) {
+      play()
+      return
+    }
+    pauseMotion()
+  },
+)
+
+watch(
+  () => props.value,
+  () => {
+    if (props.animation && props.start) {
+      play()
     }
   },
-})
+)
 </script>

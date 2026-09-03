@@ -4,21 +4,21 @@
     <c-button type="primary" @click="handleClickMedium">md Drawer</c-button>
     <c-button type="primary" @click="handleClickLarge">lg Drawer</c-button>
   </c-space>
-  <c-drawer size="sm" :open="visibleSmall" @ok="handleOk" @cancel="handleCancel" unmountOnClose>
+  <c-drawer size="sm" :open="visibleSmall" @confirm="handleConfirm" @cancel="handleCancel" unmountOnClose>
     <template #title>Title</template>
     <div>
       You can customize modal body text by the current situation. This modal will be closed immediately once you press
       the OK button.
     </div>
   </c-drawer>
-  <c-drawer size="md" :open="visibleMedium" @ok="handleOk" @cancel="handleCancel" unmountOnClose>
+  <c-drawer size="md" :open="visibleMedium" @confirm="handleConfirm" @cancel="handleCancel" unmountOnClose>
     <template #title>Title</template>
     <div>
       You can customize modal body text by the current situation. This modal will be closed immediately once you press
       the OK button.
     </div>
   </c-drawer>
-  <c-drawer size="lg" :open="visibleLarge" @ok="handleOk" @cancel="handleCancel" unmountOnClose>
+  <c-drawer size="lg" :open="visibleLarge" @confirm="handleConfirm" @cancel="handleCancel" unmountOnClose>
     <template #title>Title</template>
     <div>
       You can customize modal body text by the current situation. This modal will be closed immediately once you press
@@ -42,7 +42,7 @@ const handleClickMedium = () => {
 const handleClickLarge = () => {
   visibleLarge.value = true
 }
-const handleOk = () => {
+const handleConfirm = () => {
   visibleSmall.value = false
   visibleMedium.value = false
   visibleLarge.value = false

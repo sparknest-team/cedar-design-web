@@ -26,7 +26,7 @@
     :title="insertSide === 'left' ? '向左插入列' : '向右插入列'"
     :width="480"
     unmount-on-close
-    @confirm="handleInsertOk"
+    @confirm="handleInsertConfirm"
   >
     <div v-if="!insertableItems.length" style="color: var(--c-color-text-3)">没有可插入的列</div>
     <c-checkbox-group v-else v-model="insertSelected" direction="vertical">
@@ -36,7 +36,7 @@
     </c-checkbox-group>
   </c-dialog>
 
-  <c-dialog v-if="ctx" v-model:open="editVisible" title="编辑列" :width="480" unmount-on-close @confirm="handleEditOk">
+  <c-dialog v-if="ctx" v-model:open="editVisible" title="编辑列" :width="480" unmount-on-close @confirm="handleEditConfirm">
     <div style="display: flex; flex-direction: column; gap: 16px">
       <div>
         <div style="margin-bottom: 8px">一级分组标题</div>
@@ -172,7 +172,7 @@ const getResult = (): ColumnManagerResult =>
     prevKeys: initialKeys.value,
   })
 
-const handleDrawerOk = () => {
+const handleDrawerConfirm = () => {
   emit('confirm', getResult())
   emit('update:open', false)
 }
@@ -183,7 +183,7 @@ const drawerProps = computed(() => ({
   title: props.drawerTitle,
   width: props.drawerWidth,
   unmountOnClose: false,
-  onOk: handleDrawerOk,
+  onConfirm: handleDrawerConfirm,
 }))
 
 const loadCatalog = async () => {
@@ -240,8 +240,8 @@ const editColumnTitle = computed({
     if (ctx) ctx.editColumnTitle.value = value
   },
 })
-const handleInsertOk = () => ctx?.handleInsertOk()
-const handleEditOk = () => ctx?.handleEditOk()
+const handleInsertConfirm = () => ctx?.handleInsertConfirm()
+const handleEditConfirm = () => ctx?.handleEditConfirm()
 
 watch(
   () => props.options,

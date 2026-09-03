@@ -5,7 +5,7 @@ import type { ResponsiveValue } from '../grid'
 import type { DescData, DescLayout } from './types'
 
 export type DescriptionsAlign = TextAlign | { label?: TextAlign; value?: TextAlign }
-const layouts: DescLayout[] = ['horizontal', 'vertical', 'inline-horizontal', 'inline-vertical']
+const layouts: DescLayout[] = ['horizontal', 'vertical', 'inline-horizontal', 'inline-vertical', 'inline-auto']
 
 export const descriptionsProps = {
   data: { type: Array as PropType<DescData[]>, default: () => [] },

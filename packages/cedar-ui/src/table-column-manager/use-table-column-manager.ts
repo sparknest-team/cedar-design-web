@@ -70,11 +70,11 @@ export interface TableColumnManagerContext {
   insertSide: Ref<'left' | 'right'>
   insertableItems: Ref<{ dataIndex: string; title: string }[]>
   insertSelected: Ref<string[]>
-  handleInsertOk: () => void
+  handleInsertConfirm: () => void
   editVisible: Ref<boolean>
   editGroupTitle: Ref<string>
   editColumnTitle: Ref<string>
-  handleEditOk: () => void
+  handleEditConfirm: () => void
 }
 
 export const TableColumnManagerContextKey: InjectionKey<TableColumnManagerContext> = Symbol('tableColumnManager')
@@ -168,12 +168,12 @@ export interface UseTableColumnManagerReturn {
   insertSide: Ref<'left' | 'right'>
   insertableItems: Ref<{ dataIndex: string; title: string }[]>
   insertSelected: Ref<string[]>
-  handleInsertOk: () => void
+  handleInsertConfirm: () => void
   // 编辑弹窗状态
   editVisible: Ref<boolean>
   editGroupTitle: Ref<string>
   editColumnTitle: Ref<string>
-  handleEditOk: () => void
+  handleEditConfirm: () => void
 }
 
 export interface TableColumnManagerExposed {
@@ -582,7 +582,7 @@ export function useTableColumnManager(options: UseTableColumnManagerOptions): Us
     insertVisible.value = true
   }
 
-  const handleInsertOk = () => {
+  const handleInsertConfirm = () => {
     if (!insertSelected.value.length) {
       insertVisible.value = false
       return
@@ -625,7 +625,7 @@ export function useTableColumnManager(options: UseTableColumnManagerOptions): Us
     editVisible.value = true
   }
 
-  const handleEditOk = () => {
+  const handleEditConfirm = () => {
     const result = applyColumnEdit({
       columns: columns.value,
       catalog: catalog.value,
@@ -668,11 +668,11 @@ export function useTableColumnManager(options: UseTableColumnManagerOptions): Us
     insertSide,
     insertableItems,
     insertSelected,
-    handleInsertOk,
+    handleInsertConfirm,
     editVisible,
     editGroupTitle,
     editColumnTitle,
-    handleEditOk,
+    handleEditConfirm,
   })
 
   return {
@@ -704,11 +704,11 @@ export function useTableColumnManager(options: UseTableColumnManagerOptions): Us
     insertSide,
     insertableItems,
     insertSelected,
-    handleInsertOk,
+    handleInsertConfirm,
     // 编辑弹窗状态
     editVisible,
     editGroupTitle,
     editColumnTitle,
-    handleEditOk,
+    handleEditConfirm,
   }
 }

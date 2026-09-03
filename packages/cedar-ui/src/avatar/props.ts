@@ -25,10 +25,18 @@ export const avatarProps = {
   triggerIconStyle: Object as PropType<CSSProperties>,
   objectFit: {
     type: String as PropType<ObjectFit>,
+    default: 'cover',
     validator: (value: unknown): value is ObjectFit =>
       avatarObjectFits.includes(value as ObjectFit),
   },
-} 
+  color: String,
+  bordered: Boolean,
+  borderColor: String,
+  loading: String,
+  error: String,
+  lazy: Boolean,
+  hoverable: Boolean,
+}
 
 export const avatarGroupProps = {
   shape: avatarProps.shape,
@@ -38,7 +46,9 @@ export const avatarGroupProps = {
   zIndexAscend: { type: Boolean, default: false },
   maxStyle: Object as PropType<CSSProperties>,
   maxPopoverProps: Object as PropType<PopoverProps>,
-} 
+  offset: [Number, String] as PropType<number | string>,
+  vertical: Boolean,
+}
 
 export type AvatarProps = ExtractPropTypes<typeof avatarProps>
 export type AvatarGroupProps = ExtractPropTypes<typeof avatarGroupProps>

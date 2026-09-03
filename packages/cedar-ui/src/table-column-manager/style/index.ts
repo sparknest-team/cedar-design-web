@@ -1,1 +1,6 @@
+import '../../transfer/style'
+import '../../drawer/style'
+import '../../dialog/style'
+import '../../checkbox/style'
+import '../../input/style'
 import './index.less'

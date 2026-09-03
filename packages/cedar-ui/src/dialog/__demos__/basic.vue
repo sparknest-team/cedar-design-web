@@ -3,7 +3,7 @@
     <c-button @click="handleClick">Open Dialog</c-button>
   </Space>
 
-  <c-dialog v-model:open="show" @confirm="handleOk" @cancel="handleCancel">
+  <c-dialog v-model:open="show" @confirm="handleConfirm" @cancel="handleCancel">
     <template #title>title2</template>
     <c-date-picker></c-date-picker>
     <div>
@@ -22,7 +22,7 @@ export default defineComponent({
     const handleClick = () => {
       show.value = true
     }
-    const handleOk = () => {
+    const handleConfirm = () => {
       show.value = false
     }
     const handleCancel = () => {
@@ -32,7 +32,7 @@ export default defineComponent({
     return {
       show,
       handleClick,
-      handleOk,
+      handleConfirm,
       handleCancel,
     }
   },

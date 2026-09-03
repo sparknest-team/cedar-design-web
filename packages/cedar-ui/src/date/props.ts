@@ -3,7 +3,7 @@ import type { ComponentSize } from '../_utils/constant'
 import { componentSizes } from '../_utils/constant'
 import type { FormControlVariant } from '../_utils/form-control'
 import { formControlVariants } from '../_utils/form-control'
-import type { CalendarValue, Mode } from '../date-picker/types'
+import type { CalendarValue, Mode } from './picker/types'
 
 const dateModes: Mode[] = ['date', 'year', 'quarter', 'month', 'week']
 

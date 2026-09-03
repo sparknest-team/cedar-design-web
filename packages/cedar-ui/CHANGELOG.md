@@ -14,6 +14,10 @@ permalink: /changelog/
 
 #### Breaking Change
 
+- **List / InfiniteScroll** 与移动端 (`maple-design-mobile`) 完成分层：
+  - `List` 收口为纯展示组件，移除 `bottomOffset`、`reach-bottom` 与 `scroll-loading`
+  - `size` 仅保留 `sm | md | lg`
+  - 无限加载改用独立 `InfiniteScroll`，以 `v-model:status` 管理 `idle | loading | error | finished`
 - **Steps** 与移动端 (`maple-design-mobile`) 完成 API 对齐：
   - 事件改为 listener prop：`onChange` / `onUpdate:current`（模板 `@change` / `v-model:current` 仍可用）
   - 抽出 `props.ts`，补齐 `StepsProps` / `StepProps` / `StepStatus` / `StepsType` 等类型导出
@@ -25,6 +29,7 @@ permalink: /changelog/
 
 #### Feature
 
+- 新增 **InfiniteScroll**：支持 `bottomOffset`、`immediate`、`disabled`、`target`、`load` / `retry`、`check()` / `retry()` 与同步防重。
 - **Steps** 修 `vertical` demo（`direction="vertical"`）、`changeable` demo（`setCurrent` 参数遮蔽）
 - **Alert** 新增 `variant`（`standard` / `tonal` / `outlined`）、`color`、`elevation` 属性；新增 `default` 类型；新增 `after-close` 事件。
 - **Alert** 样式重构为完全 CSS 变量驱动（`style/token.less`），覆盖 5 类型 × 3 变体颜色矩阵。

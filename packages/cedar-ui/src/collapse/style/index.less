@@ -1,32 +1,33 @@
-@import '../../style/mixins/index.less';
-@import './token.less';
+@import "../../_components/icon-hover/style/mixins.less";
+@import "./token.less";
 
 .icon-hover(
-  ~'c-collapse-item',
-  var(~'--c-collapse-expand-icon-size'),
-  var(~'--c-collapse-expand-icon-size-bg')
+  ~"c-collapse-item",
+  var(~"--c-collapse-expand-icon-size-bg")
 );
 
-.icon-hover-bg(~'c-collapse-item', var(~'--c-collapse-expand-icon-bg'));
+.icon-hover-bg(~"c-collapse-item", var(~"--c-collapse-expand-icon-bg"));
 
 .c-collapse {
   overflow: hidden;
-  line-height: var(~'--c-collapse-line-height');
-  border: var(~'--c-collapse-border-width') solid var(~'--c-collapse-border-color');
-  border-radius: var(~'--c-collapse-border-radius');
+  line-height: var(~"--c-collapse-line-height");
+  border: var(~"--c-collapse-border-width") solid
+    var(~"--c-collapse-border-color");
+  border-radius: var(~"--c-collapse-border-radius");
 
   &-item {
     box-sizing: border-box;
-    border-bottom: var(~'--c-collapse-title-border-width') solid var(~'--c-collapse-item-border-color');
+    border-bottom: var(~"--c-collapse-title-border-width") solid
+      var(~"--c-collapse-item-border-color");
 
     &-active {
       > .c-collapse-item-header {
-        background-color: var(~'--c-collapse-title-bg-active');
-        border-color: var(~'--c-collapse-title-border-color');
+        background-color: var(~"--c-collapse-title-bg-active");
+        border-color: var(~"--c-collapse-title-border-color");
         transition: border-color 0s ease 0s;
 
         .c-collapse-item-header-title {
-          font-weight: var(~'--c-collapse-title-font-weight-active');
+          font-weight: var(~"--c-collapse-title-font-weight-active");
         }
 
         .c-collapse-item-expand-icon {
@@ -45,45 +46,47 @@
       align-items: center;
       justify-content: space-between;
       box-sizing: border-box;
-      padding-top: var(~'--c-collapse-title-padding-vertical');
+      padding-top: var(~"--c-collapse-title-padding-vertical");
       padding-bottom: $padding-top;
       overflow: hidden;
-      color: var(~'--c-collapse-title-text-color');
-      font-size: var(~'--c-collapse-title-font-size');
-      line-height: var(~'--c-collapse-title-line-height');
-      background-color: var(~'--c-collapse-title-bg');
+      color: var(~"--c-collapse-title-text-color");
+      font-size: var(~"--c-collapse-title-font-size");
+      line-height: var(~"--c-collapse-title-line-height");
+      background-color: var(~"--c-collapse-title-bg");
       border-bottom: 1px solid transparent;
       cursor: pointer;
       // Ensure that the border is hidden when the collapse animation is complete
       transition: border-color 0s ease 0.19s;
 
       &-left {
-        padding-right: var(~'--c-collapse-title-padding-horizontal');
+        padding-right: var(~"--c-collapse-title-padding-horizontal");
         padding-left: calc(
-          var(~'--c-collapse-title-padding-horizontal') + var(~'--c-collapse-expand-icon-size-bg') +
-            var(~'--c-collapse-expand-icon-spacing-text')
+          var(~"--c-collapse-title-padding-horizontal") +
+            var(~"--c-collapse-expand-icon-size-bg") +
+            var(~"--c-collapse-expand-icon-spacing-text")
         );
       }
 
       &-right {
         padding-right: calc(
-          var(~'--c-collapse-title-padding-horizontal') + var(~'--c-collapse-expand-icon-size-bg') +
-            var(~'--c-collapse-expand-icon-spacing-text')
+          var(~"--c-collapse-title-padding-horizontal") +
+            var(~"--c-collapse-expand-icon-size-bg") +
+            var(~"--c-collapse-expand-icon-spacing-text")
         );
-        padding-left: var(~'--c-collapse-title-padding-horizontal');
+        padding-left: var(~"--c-collapse-title-padding-horizontal");
 
         + .c-collapse-item-content {
-          padding-left: var(~'--c-collapse-title-padding-horizontal');
+          padding-left: var(~"--c-collapse-title-padding-horizontal");
         }
       }
 
       &-disabled {
-        color: var(~'--c-collapse-title-text-color-disabled');
-        background-color: var(~'--c-collapse-title-bg-disabled');
+        color: var(~"--c-collapse-title-text-color-disabled");
+        background-color: var(~"--c-collapse-title-bg-disabled");
         cursor: not-allowed;
 
         .c-collapse-item-header-icon {
-          color: var(~'--c-collapse-title-text-color-disabled');
+          color: var(~"--c-collapse-title-text-color-disabled");
         }
       }
 
@@ -100,13 +103,13 @@
     & &-icon-hover {
       position: absolute;
       top: 50%;
-      left: var(~'--c-collapse-title-padding-horizontal');
+      left: var(~"--c-collapse-title-padding-horizontal");
       text-align: center;
       transform: translateY(-50%);
     }
 
     & &-icon-right {
-      right: var(~'--c-collapse-title-padding-horizontal');
+      right: var(~"--c-collapse-title-padding-horizontal");
       left: unset;
 
       > .c-collapse-item-header-icon-down {
@@ -117,23 +120,25 @@
     & &-expand-icon {
       position: relative;
       display: block;
-      color: var(~'--c-collapse-expand-icon');
-      font-size: var(~'--c-collapse-expand-icon-size');
+      color: var(~"--c-collapse-expand-icon");
+      font-size: var(~"--c-collapse-expand-icon-size");
       vertical-align: middle;
-      transition: transform var(~'--c-transition-duration-2') var(~'--c-transition-timing-function-standard');
+      transition: transform var(~"--c-transition-duration-2")
+        var(~"--c-transition-timing-function-standard");
     }
 
     &-content {
       position: relative;
-      padding-right: var(~'--c-collapse-title-padding-horizontal');
+      padding-right: var(~"--c-collapse-title-padding-horizontal");
       padding-left: calc(
-        var(~'--c-collapse-title-padding-horizontal') + var(~'--c-collapse-expand-icon-size-bg') +
-          var(~'--c-collapse-expand-icon-spacing-text')
+        var(~"--c-collapse-title-padding-horizontal") +
+          var(~"--c-collapse-expand-icon-size-bg") +
+          var(~"--c-collapse-expand-icon-spacing-text")
       );
       overflow: hidden;
-      color: var(~'--c-collapse-content-text-color');
-      font-size: var(~'--c-collapse-content-font-size');
-      background-color: var(~'--c-collapse-content-bg');
+      color: var(~"--c-collapse-content-text-color");
+      font-size: var(~"--c-collapse-content-font-size");
+      background-color: var(~"--c-collapse-content-bg");
 
       &-expanded {
         display: block;
@@ -141,17 +146,17 @@
       }
 
       &-box {
-        padding: var(~'--c-collapse-content-padding-vertical') 0;
+        padding: var(~"--c-collapse-content-padding-vertical") 0;
       }
     }
 
     &&-disabled > &-content {
-      color: var(~'--c-collapse-content-text-color-disabled');
+      color: var(~"--c-collapse-content-text-color-disabled");
     }
 
     &-no-icon > &-header {
-      padding-right: var(~'--c-collapse-title-padding-horizontal');
-      padding-left: var(~'--c-collapse-title-padding-horizontal');
+      padding-right: var(~"--c-collapse-title-padding-horizontal");
+      padding-left: var(~"--c-collapse-title-padding-horizontal");
     }
 
     &:last-of-type {
@@ -181,14 +186,14 @@
 
     > .c-collapse-item-active + .c-collapse-item,
     > .c-collapse-item-active:not(:first-child) {
-      margin-top: var(~'--c-collapse-item-margin-top');
+      margin-top: var(~"--c-collapse-item-margin-top");
     }
   }
 
   &::after {
     display: table;
     clear: both;
-    content: '';
+    content: "";
   }
 }
 
@@ -199,5 +204,6 @@
 
 .collapse-slider-enter-active,
 .collapse-slider-leave-active {
-  transition: height var(~'--c-transition-duration-2') var(~'--c-transition-timing-function-standard');
+  transition: height var(~"--c-transition-duration-2")
+    var(~"--c-transition-timing-function-standard");
 }

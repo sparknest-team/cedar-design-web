@@ -42,7 +42,7 @@ export interface DrawerConfig {
    * @zh 确认按钮的内容
    * @en The content of the ok button
    */
-  okText?: string
+  confirmButtonText?: string
   /**
    * @zh 取消按钮的内容
    * @en The content of the cancel button
@@ -53,13 +53,13 @@ export interface DrawerConfig {
    * @en Whether the ok button is in the loading state
    * @defaultValue false
    */
-  okLoading?: boolean
+  confirmButtonLoading?: boolean
   /**
    * @zh 确认按钮的Props
    * @en Props of confirm button
    * @version 2.9.0
    */
-  okButtonProps?: ButtonProps
+  confirmButtonProps?: ButtonProps
   /**
    * @zh 取消按钮的Props
    * @en Props of cancel button
@@ -93,7 +93,7 @@ export interface DrawerConfig {
    * @zh 点击确定按钮时触发
    * @en Triggered when the OK button is clicked
    */
-  onOk?: (e?: Event) => void
+  onConfirm?: (e?: Event) => void
   /**
    * @zh 点击取消、关闭按钮时触发
    * @en Triggered when the cancel or close button is clicked
@@ -103,7 +103,7 @@ export interface DrawerConfig {
    * @zh 触发 ok 事件前的回调函数。如果返回 false 则不会触发后续事件，也可使用 done 进行异步关闭。
    * @en The callback function before the ok event is triggered. If false is returned, subsequent events will not be triggered, and done can also be used to close asynchronously.
    */
-  beforeOk?: (done: (closed: boolean) => void) => void | boolean | Promise<void | boolean>
+  beforeConfirm?: (done: (closed: boolean) => void) => void | boolean | Promise<void | boolean>
   /**
    * @zh 触发 cancel 事件前的回调函数。如果返回 false 则不会触发后续事件。
    * @en The callback function before the cancel event is triggered. If it returns false, no subsequent events will be triggered.
@@ -153,21 +153,20 @@ export interface DrawerConfig {
    */
   footer?: boolean | RenderContent
   /**
-   * @zh 是否隐藏取消按钮
-   * @en Whether to hide the cancel button
-   * @version 2.19.0
-   * @defaultValue false
+   * @zh 是否显示取消按钮
+   * @en Whether to show the cancel button
+   * @defaultValue true
    */
-  hideCancel?: boolean
+  cancelButton?: boolean
 }
 
 export type DrawerUpdateConfig = Omit<
   DrawerConfig,
   | 'title'
   | 'content'
-  | 'onOk'
+  | 'onConfirm'
   | 'onCancel'
-  | 'beforeOk'
+  | 'beforeConfirm'
   | 'beforeCancel'
   | 'onOpen'
   | 'onClose'

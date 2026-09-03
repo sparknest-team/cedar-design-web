@@ -7,9 +7,9 @@
     :width="340"
     :header="!custom.includes('hide header')"
     :footer="!custom.includes('hide footer')"
-    :hide-cancel="custom.includes('hide cancel')"
+    :cancel-button="!custom.includes('hide cancel')"
     :open="visible"
-    @ok="handleOk"
+    @confirm="handleConfirm"
     @cancel="handleCancel"
     unmountOnClose
   >
@@ -31,7 +31,7 @@ const custom = ref([])
 const handleClick = () => {
   visible.value = true
 }
-const handleOk = () => {
+const handleConfirm = () => {
   visible.value = false
 }
 const handleCancel = () => {

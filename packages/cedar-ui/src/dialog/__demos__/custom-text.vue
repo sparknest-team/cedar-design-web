@@ -2,7 +2,7 @@
   <c-button @click="handleClick">Open Dialog</c-button>
   <c-dialog
     v-model:open="show"
-    @confirm="handleOk"
+    @confirm="handleConfirm"
     @cancel="handleCancel"
     confirmButtonText="Confirm"
     cancelButtonText="Exit"
@@ -25,7 +25,7 @@ export default defineComponent({
     const handleClick = () => {
       show.value = true
     }
-    const handleOk = () => {
+    const handleConfirm = () => {
       show.value = false
     }
     const handleCancel = () => {
@@ -35,7 +35,7 @@ export default defineComponent({
     return {
       show,
       handleClick,
-      handleOk,
+      handleConfirm,
       handleCancel,
     }
   },

@@ -1,5 +1,7 @@
-import { type App, type Directive, type DirectiveBinding, type Plugin } from 'vue'
+import { ref, type App, type Directive, type DirectiveBinding, type Plugin } from 'vue'
 import { camelize, inMobile, isFunction } from '@cedarjs/shared'
+import HoverOverlay from './HoverOverlay.vue'
+import { hoverOverlayProps } from './overlay-props'
 
 export type HoverValue = Record<string, any> | ((isHovering: boolean) => void)
 
@@ -167,7 +169,7 @@ function updated(element: HoverHTMLElement, binding: DirectiveBinding<HoverValue
   }
 }
 
-const Hover: Directive & Plugin = {
+const HoverDirective: Directive & Plugin = {
   mounted,
   unmounted,
   beforeUpdate,
@@ -177,7 +179,36 @@ const Hover: Directive & Plugin = {
   },
 }
 
+const Hover = Object.assign(HoverDirective, {
+  Overlay: HoverOverlay,
+  install(app: App) {
+    app.directive('hover', HoverDirective)
+    if (HoverOverlay.name) {
+      app.component(HoverOverlay.name, HoverOverlay)
+    }
+  },
+})
+
+export function useHoverOverlay() {
+  const hovering = ref(false)
+
+  const handleHovering = (value: boolean) => {
+    hovering.value = value
+  }
+
+  return {
+    hovering,
+    handleHovering,
+  }
+}
+
+export type HoverOverlayInstance = InstanceType<typeof HoverOverlay>
+export type { HoverOverlayProps } from './overlay-props'
+
+export { hoverOverlayProps, HoverOverlay }
+
 export const _HoverComponent = Hover
+export const _HoverOverlayComponent = HoverOverlay
 
 export { Hover }
 

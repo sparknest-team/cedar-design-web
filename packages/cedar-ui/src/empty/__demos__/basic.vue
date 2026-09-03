@@ -1,5 +1,3 @@
 <template>
-  <c-empty description="暂无数据"></c-empty>
+  <c-empty description="暂无数据" />
 </template>
-<script lang="ts">
-</script>

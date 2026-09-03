@@ -1,5 +1,3 @@
-@import '../theme/index.less';
-
 // used by cascader select treeselect ... like picker
 .slide-dynamic-origin-enter-from,
 .slide-dynamic-origin-appear-from {
@@ -18,8 +16,10 @@
 .slide-dynamic-origin-enter-active,
 .slide-dynamic-origin-appear-active {
   transition:
-    transform @transition-duration-2 @transition-timing-function-standard,
-    opacity @transition-duration-2 @transition-timing-function-standard;
+    transform var(~"--c-transition-duration-2")
+      var(~"--c-transition-timing-function-standard"),
+    opacity var(~"--c-transition-duration-2")
+      var(~"--c-transition-timing-function-standard");
 }
 
 .slide-dynamic-origin-leave-from {
@@ -36,8 +36,10 @@
 
 .slide-dynamic-origin-leave-active {
   transition:
-    transform @transition-duration-2 @transition-timing-function-standard,
-    opacity @transition-duration-2 @transition-timing-function-standard;
+    transform var(~"--c-transition-duration-2")
+      var(~"--c-transition-timing-function-standard"),
+    opacity var(~"--c-transition-duration-2")
+      var(~"--c-transition-timing-function-standard");
 }
 
 // used by drawer
@@ -53,7 +55,8 @@
 
 .slide-left-enter-active,
 .slide-left-appear-active {
-  transition: transform @transition-duration-3 @transition-timing-function-standard;
+  transition: transform var(~"--c-transition-duration-3")
+    var(~"--c-transition-timing-function-standard");
 }
 
 .slide-left-leave-from {
@@ -65,7 +68,8 @@
 }
 
 .slide-left-leave-active {
-  transition: transform @transition-duration-3 @transition-timing-function-standard;
+  transition: transform var(~"--c-transition-duration-3")
+    var(~"--c-transition-timing-function-standard");
 }
 
 .slide-right-enter-from,
@@ -80,7 +84,8 @@
 
 .slide-right-enter-active,
 .slide-right-appear-active {
-  transition: transform @transition-duration-3 @transition-timing-function-standard;
+  transition: transform var(~"--c-transition-duration-3")
+    var(~"--c-transition-timing-function-standard");
 }
 
 .slide-right-leave-from {
@@ -92,7 +97,8 @@
 }
 
 .slide-right-leave-active {
-  transition: transform @transition-duration-3 @transition-timing-function-standard;
+  transition: transform var(~"--c-transition-duration-3")
+    var(~"--c-transition-timing-function-standard");
 }
 
 .slide-top-enter-from,
@@ -107,7 +113,8 @@
 
 .slide-top-enter-active,
 .slide-top-appear-active {
-  transition: transform @transition-duration-3 @transition-timing-function-standard;
+  transition: transform var(~"--c-transition-duration-3")
+    var(~"--c-transition-timing-function-standard");
 }
 
 .slide-top-leave-from {
@@ -119,7 +126,8 @@
 }
 
 .slide-top-leave-active {
-  transition: transform @transition-duration-3 @transition-timing-function-standard;
+  transition: transform var(~"--c-transition-duration-3")
+    var(~"--c-transition-timing-function-standard");
 }
 
 .slide-bottom-enter-from,
@@ -134,7 +142,8 @@
 
 .slide-bottom-enter-active,
 .slide-bottom-appear-active {
-  transition: transform @transition-duration-3 @transition-timing-function-standard;
+  transition: transform var(~"--c-transition-duration-3")
+    var(~"--c-transition-timing-function-standard");
 }
 
 .slide-bottom-leave-from {
@@ -146,5 +155,6 @@
 }
 
 .slide-bottom-leave-active {
-  transition: transform @transition-duration-3 @transition-timing-function-standard;
+  transition: transform var(~"--c-transition-duration-3")
+    var(~"--c-transition-timing-function-standard");
 }

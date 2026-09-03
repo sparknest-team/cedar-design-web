@@ -3,7 +3,7 @@ import {
 } from 'vue'
 import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import { carouselInjectionKey } from './context'
-import { isObject } from '../_utils/is'
+import { isNumber, isObject } from '../_utils/is'
 import { useChildrenComponents } from '../_hooks/use-children-components'
 import { useResizeObserver } from '../_hooks/use-resize-observer'
 import { IconLeft } from '@cedarjs/icons-vue/icon-left'
@@ -171,6 +171,9 @@ export default defineComponent({
           interval: Number(props.autoPlay.interval) || 3000,
           hoverToPause: props.autoPlay.hoverToPause ?? true,
         }
+      }
+      if (isNumber(props.autoPlay) && props.autoPlay > 0) {
+        return { interval: props.autoPlay, hoverToPause: false }
       }
       return { interval: 3000, hoverToPause: true }
     })
@@ -420,8 +423,7 @@ export default defineComponent({
       hovering: hovering.value,
     }))
 
-    const hasIndicator = computed(() =>
-      props.indicator && props.indicatorType !== 'never' && length.value > 1)
+    const hasIndicator = computed(() => props.indicator && length.value > 1)
 
     return () => {
       children.value = slots.default?.()

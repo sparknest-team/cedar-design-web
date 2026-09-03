@@ -51,6 +51,10 @@ export const dialogProps = {
       type: Boolean,
       default: true,
     },
+    lockScroll: {
+      type: Boolean,
+      default: true,
+    },
     confirmButton: {
       type: Boolean,
       default: true,

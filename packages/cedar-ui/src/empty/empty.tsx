@@ -6,13 +6,20 @@ import { configProviderInjectionKey } from '../config-provider/context'
 import { componentSizes } from '../_utils/constant'
 import { emptyProps } from './props'
 
-
 const { name } = createNamespace('empty')
 
 export default defineComponent({
   name,
   inheritAttrs: false,
   props: emptyProps,
+  emits: {
+    /**
+     * @zh 点击回调
+     * @en Callback when clicked
+     * @param {MouseEvent} ev
+     */
+    click: (ev: MouseEvent) => true,
+  },
   /**
    * @zh 图片/图标
    * @en Image/Icon
@@ -23,7 +30,7 @@ export default defineComponent({
    * @en Extra actions
    * @slot extra
    */
-  setup(props, { slots, attrs }) {
+  setup(props, { slots, attrs, emit }) {
     const prefixCls = getPrefixCls('empty')
     const { t } = useI18n()
     const configCtx = inject(configProviderInjectionKey, undefined)
@@ -45,26 +52,34 @@ export default defineComponent({
       return { width: size, height: size, fontSize: size }
     })
 
+    const onClick = (ev: MouseEvent) => {
+      emit('click', ev)
+    }
+
     return () => {
       if (!props.inConfigProvider && configCtx?.slots.empty && !(slots.image || props.imageUrl || props.description)) {
         return configCtx.slots.empty({ component: 'empty' })
       }
 
       return (
-        <div class={prefixCls} {...attrs}>
-          <div class={[`${prefixCls}-image`, imageSizeClass.value]} style={imageStyle.value}>
-            {slots.image?.() ??
-              (props.imageUrl ? (
-                <img src={props.imageUrl} alt={props.alt} />
-              ) : props.icon ? (
-                <span class={`${prefixCls}-icon`}>{props.icon}</span>
-              ) : (
-                <IconEmpty />
-              ))}
-          </div>
-          <div class={`${prefixCls}-description`}>
-            {slots.default?.() ?? (props.description || t('empty.description'))}
-          </div>
+        <div class={prefixCls} {...attrs} onClick={onClick}>
+          {props.showIcon && (
+            <div class={[`${prefixCls}-image`, imageSizeClass.value]} style={imageStyle.value}>
+              {slots.image?.() ??
+                (props.imageUrl ? (
+                  <img src={props.imageUrl} alt={props.alt} />
+                ) : props.icon ? (
+                  <span class={`${prefixCls}-icon`}>{props.icon}</span>
+                ) : (
+                  <IconEmpty />
+                ))}
+            </div>
+          )}
+          {props.showDescription && (
+            <div class={`${prefixCls}-description`}>
+              {slots.default?.() ?? (props.description || t('empty.description'))}
+            </div>
+          )}
           {slots.extra?.() && <div class={`${prefixCls}-extra`}>{slots.extra()}</div>}
         </div>
       )

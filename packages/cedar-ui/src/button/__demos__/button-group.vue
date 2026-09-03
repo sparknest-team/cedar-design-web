@@ -52,7 +52,10 @@
     <!-- 不同状态 -->
     <div class="demo-section">
       <h3>不同状态</h3>
-      <p>通过 status 属性设置按钮组的主题色，可选值：default、primary、info、success、warning、danger。</p>
+      <p>
+        通过 status
+        属性设置按钮组的主题色，可选值：default、primary、info、success、warning、danger。
+      </p>
       <c-space wrap>
         <c-space wrap>
           <c-button-group status="default">
@@ -102,7 +105,10 @@
     <!-- 不同变体 -->
     <div class="demo-section">
       <h3>不同变体</h3>
-      <p>通过 variant 属性设置按钮组的变体样式，可选值：default、tonal、outline、text、link。</p>
+      <p>
+        通过 variant
+        属性设置按钮组的变体样式，可选值：default、tonal、outline、text。
+      </p>
       <c-space wrap>
         <c-space wrap>
           <c-button-group variant="default" status="primary">
@@ -312,13 +318,13 @@
       <c-space wrap>
         <c-button-group status="primary">
           <c-button :loading="loading1" @click="handleLoading1">
-            {{ loading1 ? '加载中' : '点击加载' }}
+            {{ loading1 ? "加载中" : "点击加载" }}
           </c-button>
           <c-button :loading="loading2" @click="handleLoading2">
-            {{ loading2 ? '加载中' : '点击加载' }}
+            {{ loading2 ? "加载中" : "点击加载" }}
           </c-button>
           <c-button :loading="loading3" @click="handleLoading3">
-            {{ loading3 ? '加载中' : '点击加载' }}
+            {{ loading3 ? "加载中" : "点击加载" }}
           </c-button>
         </c-button-group>
       </c-space>
@@ -341,7 +347,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from "vue";
 import {
   IconPlus,
   IconEdit,
@@ -355,33 +361,33 @@ import {
   IconItalic,
   IconUnderline,
   IconStrikethrough,
-} from '@cedarjs/icons-vue'
+} from "@cedarjs/icons-vue";
 
 // 加载状态控制
-const loading1 = ref(false)
-const loading2 = ref(false)
-const loading3 = ref(false)
+const loading1 = ref(false);
+const loading2 = ref(false);
+const loading3 = ref(false);
 
 const handleLoading1 = () => {
-  loading1.value = true
+  loading1.value = true;
   setTimeout(() => {
-    loading1.value = false
-  }, 2000)
-}
+    loading1.value = false;
+  }, 2000);
+};
 
 const handleLoading2 = () => {
-  loading2.value = true
+  loading2.value = true;
   setTimeout(() => {
-    loading2.value = false
-  }, 2000)
-}
+    loading2.value = false;
+  }, 2000);
+};
 
 const handleLoading3 = () => {
-  loading3.value = true
+  loading3.value = true;
   setTimeout(() => {
-    loading3.value = false
-  }, 2000)
-}
+    loading3.value = false;
+  }, 2000);
+};
 </script>
 
 <style scoped>

@@ -111,7 +111,7 @@
     position: absolute;
     top: 0;
     right: var(~'--c-table-column-handle-right');
-    z-index: 1;
+    z-index: var(--c-z-index-local-raised);
     width: var(~'--c-table-column-handle-width');
     height: 100%;
     cursor: col-resize;
@@ -186,7 +186,7 @@
 
   // ???
   > .c-spin > .c-spin-children::after {
-    z-index: 2;
+    z-index: var(--c-z-index-local-overlay);
   }
 
   // footer
@@ -314,7 +314,7 @@
   &-col-fixed-left,
   &-col-fixed-right {
     position: sticky;
-    z-index: 10;
+    z-index: var(--c-z-index-local-navigation);
   }
 
   &-col-fixed-left-last::after,
@@ -624,7 +624,7 @@
     &::before,
     &::after {
       position: absolute;
-      z-index: 1;
+      z-index: var(--c-z-index-local-raised);
       width: var(~'--c-table-shadow-wrapper-width');
       height: 100%;
       box-shadow: none;
@@ -676,7 +676,7 @@
   &-header-sticky {
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: var(--c-z-index-local-sticky);
     background-color: var(~'--c-table-header-cell-bg');
   }
 
@@ -803,7 +803,7 @@
           position: absolute;
           top: 0;
           left: 0;
-          z-index: -1;
+          z-index: var(--c-z-index-local-behind);
           width: 100%;
           height: 100%;
           background-color: var(~'--c-table-body-stripe-row-bg');
@@ -831,7 +831,7 @@
           position: absolute;
           top: 0;
           left: 0;
-          z-index: -1;
+          z-index: var(--c-z-index-local-behind);
           width: 100%;
           height: 100%;
           background-color: var(~'--c-table-body-row-hover-bg');
@@ -865,7 +865,7 @@
 
   &-tfoot {
     position: relative;
-    z-index: 1;
+    z-index: var(--c-z-index-local-raised);
     flex-shrink: 0;
     width: 100%;
     max-width: 100%;
@@ -943,7 +943,7 @@
   &-sticky {
     position: sticky;
     bottom: 0;
-    z-index: 100;
+    z-index: var(--c-z-index-local-sticky);
     box-sizing: border-box;
     padding: var(~'--c-table-pagination-sticky-padding');
     background-color: var(~'--c-table-pagination-sticky-bg');

@@ -40,18 +40,19 @@ permalink: /components/descriptions/
 
 ### `<Descriptions>` Props
 
-| 属性         | 说明                                                               |                                   类型                                   | 默认值         |
-| ------------ | ------------------------------------------------------------------ | :----------------------------------------------------------------------: | :------------- | --- |
-| data         | 描述列表的数据                                                     |                               `DescData[]`                               | `[]`           |     |
-| column       | 每行放置的数据个数。2.20.0 版本支持响应式配置，配置可参考 Grid     |                       `number \| ResponsiveValue`                        | `3`            |     |
-| title        | 描述列表的标题                                                     |                                 `string`                                 | `-`            |     |
-| layout       | 描述列表的排列方式                                                 | `'horizontal' \| 'vertical' \| 'inline-horizontal' \| 'inline-vertical'` | `'horizontal'` |     |
-| align        | 文字的对齐位置                                                     |         `TextAlign \| { label?: TextAlign; value?: TextAlign }`          | `'left'`       |     |
-| size         | 描述列表的大小                                                     |                  `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`                  | `-`            |     |
-| bordered     | 是否显示边框                                                       |                                `boolean`                                 | `false`        |     |
-| label-style  | 数据标签的样式                                                     |                             `CSSProperties`                              | `-`            |     |
-| value-style  | 数据内容的样式                                                     |                             `CSSProperties`                              | `-`            |     |
-| table-layout | 描述中表格样式的 `layout-fixed`，当设置成 `fixed` 时，宽度会均分。 |                           `'auto' \| 'fixed'`                            | `'auto'`       |
+| 属性         | 说明                                                               |                                           类型                                            | 默认值         |
+| ------------ | ------------------------------------------------------------------ | :---------------------------------------------------------------------------------------: | :------------- |
+| data         | 描述列表的数据                                                     |                                       `DescData[]`                                        | `[]`           |
+| column       | 每行放置的数据个数。2.20.0 版本支持响应式配置，配置可参考 Grid     |                                `number \| ResponsiveValue`                                | `3`            |
+| title        | 描述列表的标题                                                     |                                         `string`                                          | `-`            |
+| layout       | 描述列表的排列方式                                                 | `'horizontal' \| 'vertical' \| 'inline-horizontal' \| 'inline-vertical' \| 'inline-auto'` | `'horizontal'` |
+| align        | 文字的对齐位置                                                     |                  `TextAlign \| { label?: TextAlign; value?: TextAlign }`                  | `'left'`       |
+| size         | 描述列表的大小                                                     |                          `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`                           | `-`            |
+| bordered     | 是否显示边框                                                       |                                         `boolean`                                         | `false`        |
+| label-style  | 数据标签的样式                                                     |                                      `CSSProperties`                                      | `-`            |
+| value-style  | 数据内容的样式                                                     |                                      `CSSProperties`                                      | `-`            |
+| table-layout | 描述中表格样式的 `layout-fixed`，当设置成 `fixed` 时，宽度会均分。 |                                    `'auto' \| 'fixed'`                                    | `'auto'`       |
+| aria-label   | 描述列表的无障碍标签                                               |                                         `string`                                          | `-`            |
 
 ### `<Descriptions>` Slots
 
@@ -64,15 +65,16 @@ permalink: /components/descriptions/
 ### `<DescriptionsItem>` Props
 
 | 属性  | 说明     |   类型   | 默认值 |
-| ----- | -------- | :------: | :----- | --- |
-| span  | 所占列数 | `number` | `1`    |     |
-| label | 标签     | `string` | -      |     |
+| ----- | -------- | :------: | :----- |
+| span  | 所占列数 | `number` | `1`    |
+| label | 标签     | `string` | `-`    |
 
 ### `<DescriptionsItem>` Slots
 
-| 插槽名 | 说明 | 参数 |
-| ------ | :--: | ---- |
-| label  | 标签 | -    |
+| 插槽名  | 说明 | 参数 |
+| ------- | :--: | ---- |
+| default | 内容 | -    |
+| label   | 标签 | -    |
 
 ### DescData
 
@@ -87,5 +89,5 @@ permalink: /components/descriptions/
 组件导出以下类型定义
 
 ```ts
-import type { DescriptionsProps } from '@cedarjs/ui'
+import type { DescriptionsProps } from "@cedarjs/ui";
 ```

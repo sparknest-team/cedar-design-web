@@ -95,11 +95,11 @@ const lang: CedarLang = {
     description: 'No Data',
   },
   drawer: {
-    okText: 'Ok',
+    confirmButtonText: 'Ok',
     cancelText: 'Cancel',
   },
   popconfirm: {
-    okText: 'Ok',
+    confirmButtonText: 'Ok',
     cancelText: 'Cancel',
   },
   dialog: {
@@ -113,7 +113,7 @@ const lang: CedarLang = {
     total: 'Total: {0}',
   },
   table: {
-    okText: 'Ok',
+    confirmButtonText: 'Ok',
     resetText: 'Reset',
     customColumnsConfig: 'Column Manager',
     selectAll: 'Select All',
@@ -178,7 +178,7 @@ const lang: CedarLang = {
     selectTime: 'Select time',
     today: 'Today',
     now: 'Now',
-    ok: 'Ok',
+    confirmButtonText: 'Ok',
     startTime: 'Start time',
     endTime: 'End time',
     rangeSeparator: 'to',

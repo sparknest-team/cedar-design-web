@@ -15,7 +15,7 @@
       <c-button type="primary" @click="handleClick">Open Drawer</c-button>
     </div>
   </div>
-  <c-drawer popup-container="#parentNode" :open="visible" @ok="handleOk" @cancel="handleCancel">
+  <c-drawer popup-container="#parentNode" :open="visible" @confirm="handleConfirm" @cancel="handleCancel">
     <template #title>Title</template>
     <div>
       You can customize modal body text by the current situation. This modal will be closed immediately once you press
@@ -31,7 +31,7 @@ const visible = ref(false)
 const handleClick = () => {
   visible.value = true
 }
-const handleOk = () => {
+const handleConfirm = () => {
   visible.value = false
 }
 const handleCancel = () => {

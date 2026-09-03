@@ -60,17 +60,18 @@ export default defineComponent({
 
 ```vue
 <script lang="ts" setup>
-import { createNamespace } from '../_utils/global-config'
+import { createNamespace } from "../_utils/global-config";
 
 defineOptions({
-  name: createNamespace('button').name, // 内联调用，避免引用局部变量
-})
+  name: createNamespace("button").name, // 内联调用，避免引用局部变量
+});
 
-const { n, classes } = createNamespace('button')
+const { n, classes } = createNamespace("button");
 </script>
 ```
 
 **不要**：
+
 - ❌ `defineOptions({ name: 'CButton' })`：写死字符串会随重命名漂移；且若有人误写成 `'Button'`（无 `C` 前缀）会触发上述 `<component :is>` 自递归。
 - ❌ `defineOptions({ name: 'Button' })` / 任何与 HTML 标签同名（裸 PascalCase）的写法。
 - ❌ 在 `<script setup>` 顶部 `const { name } = createNamespace(...); defineOptions({ name })` —— 编译报 `defineOptions() cannot reference locally declared variables`。
@@ -78,20 +79,19 @@ const { n, classes } = createNamespace('button')
 install 时统一拼前缀（`getComponentPrefix(options)` 默认 `'C'`）：
 
 ```ts
-app.component(componentPrefix + _Button.name, _Button)
+app.component(componentPrefix + _Button.name, _Button);
 ```
 
 ### 2.2 命名空间与样式前缀
 
-| 项目         | 规则                                                    |
-| ------------ | ------------------------------------------------------- |
-| 组件注册名   | `C<PascalName>`，由 install 时 `prefix + name` 拼接     |
-| CSS 类前缀   | `c-` （default `CLASS_PREFIX = 'c'`）                   |
-| Block        | `.c-<component>`                                        |
-| Element      | `.c-<component>__<el>`，由 `n('xxx')` 生成              |
-| Modifier     | `.c-<component>--<mod>`，由 `n('--xxx')` 生成           |
-| 全局共享类   | `n('$--box')` → `.c--box`（`$` 表示去掉组件段，挂全局）  |
-| CSS 变量前缀 | `--c-<component>-...`                                   |
+| 项目         | 规则                                                |
+| ------------ | --------------------------------------------------- |
+| 组件注册名   | `C<PascalName>`，由 install 时 `prefix + name` 拼接 |
+| CSS 类前缀   | `c-` （default `CLASS_PREFIX = 'c'`）               |
+| Block        | `.c-<component>`                                    |
+| Element      | `.c-<component>__<el>`，由 `n('xxx')` 生成          |
+| Modifier     | `.c-<component>--<mod>`，由 `n('--xxx')` 生成       |
+| CSS 变量前缀 | `--c-<component>-...`                               |
 
 ### 2.3 类型 / 文件命名
 
@@ -107,27 +107,27 @@ app.component(componentPrefix + _Button.name, _Button)
 
 ```vue
 <template>
-  <div :class="classes(n(), n('$--box'), [variant, n(`--variant-${variant}`)])">
+  <div :class="classes(n(), [variant, n(`--variant-${variant}`)])">
     <slot />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
-import { createNamespace } from '../_utils/global-config'
-import { componentProps } from './props'
+import { computed } from "vue";
+import { createNamespace } from "../_utils/global-config";
+import { componentProps } from "./props";
 
 defineOptions({
-  name: createNamespace('component-name').name,
-})
+  name: createNamespace("component-name").name,
+});
 
-const { n, classes } = createNamespace('component-name')
+const { n, classes } = createNamespace("component-name");
 
-const props = defineProps(componentProps)
+const props = defineProps(componentProps);
 </script>
 ```
 
-模板根元素 class 一律通过 `classes(n(), n('$--box'), [cond, n('--xxx')], …)` 组装，**禁止**手写字符串拼接 class。
+模板根元素 class 一律通过 `classes(n(), [cond, n('--xxx')], …)` 组装，**禁止**手写字符串拼接 class。组件必需的布局与 `box-sizing` 写在组件自身样式中，不依赖全局工具类或可选的原子化 preset。
 
 ---
 
@@ -138,11 +138,11 @@ const props = defineProps(componentProps)
 `props.ts`：
 
 ```ts
-import type { ExtractPropTypes, PropType } from 'vue'
-import { Status, Size } from '../_utils/constant'
-import { defineListenerProp } from '../_utils/components'
+import type { ExtractPropTypes, PropType } from "vue";
+import { Status, Size } from "../_utils/constant";
+import { defineListenerProp } from "../_utils/components";
 
-export type ButtonVariant = 'default' | 'text' | 'outline' | 'link' | 'tonal'
+export type ButtonVariant = "default" | "text" | "outline" | "tonal";
 
 export const buttonProps = {
   /**
@@ -153,53 +153,53 @@ export const buttonProps = {
   },
   // ...
   onClick: defineListenerProp<(e: Event) => void | Promise<any>>(),
-}
+};
 
-export type ButtonProps = ExtractPropTypes<typeof buttonProps>
+export type ButtonProps = ExtractPropTypes<typeof buttonProps>;
 ```
 
 ### 4.2 通用约定
 
-| 项目                | 规则                                                                                              |
-| ------------------- | ------------------------------------------------------------------------------------------------- |
-| 注释                | 每个 prop 上方写中文 JSDoc，说明用途                                                              |
+| 项目                | 规则                                                                                               |
+| ------------------- | -------------------------------------------------------------------------------------------------- |
+| 注释                | 每个 prop 上方写中文 JSDoc，说明用途                                                               |
 | 复用枚举            | `Status` / `Size` / `Direction` 等优先从 `_utils/constant.ts` 导入，**不要**在组件里再写一遍字面量 |
-| 普通通知事件        | 在 `emits` 中声明并通过 `emit` 触发；不得再声明同名 `onXxx` Prop                                 |
+| 普通通知事件        | 在 `emits` 中声明并通过 `emit` 触发；不得再声明同名 `onXxx` Prop                                   |
 | 控制回调 Prop       | 仅返回值会控制后续流程时使用 `defineListenerProp<...>()`，统一命名 `beforeXxx` / `request`         |
-| 父子继承的布尔 prop | `default: undefined`（如 `disabled` / `stacked`），让子组件能识别"未显式传入"再回退到 group 配置  |
-| 普通布尔 prop       | `default: false`                                                                                  |
-| 颜色 / 文案类       | `String` 类型，默认值 `''` 或不写（保持 `undefined`，便于 `??` 回退）                               |
+| 父子继承的布尔 prop | `default: undefined`（如 `disabled` / `stacked`），让子组件能识别"未显式传入"再回退到 group 配置   |
+| 普通布尔 prop       | `default: false`                                                                                   |
+| 颜色 / 文案类       | `String` 类型，默认值 `''` 或不写（保持 `undefined`，便于 `??` 回退）                              |
 
 ### 4.3 通用 prop 语义（必须遵守）
 
 某些 prop 在多个组件中反复出现，**必须保持一致语义**，组件不得自行赋予不同含义：
 
-| Prop          | 类型                                  | 含义                                                                                |
-| ------------- | ------------------------------------- | ----------------------------------------------------------------------------------- |
-| `status`      | `Status`                              | 主题色（primary / secondary / info / success / warning / danger / tertiary）          |
-| `variant`     | 组件自有联合类型                      | 视觉变体（default / outline / text / link / tonal …）                                |
-| `mode`        | 组件自有联合类型                      | 布局/形态互斥（如 Badge `floating\|inline`、Progress `line\|circle`）；**勿用 `type` 表示布局** |
-| `size`        | `Size` (`'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`) | 尺寸，默认 `'md'`                                                          |
-| `disabled`    | `boolean`                             | 禁用，子组件 `default: undefined` 用于继承父级                                       |
-| `block`       | `boolean`                             | 是否撑满父容器宽度                                                                   |
-| `loading`     | `boolean`                             | 加载中态，禁止触发 click                                                             |
-| `autoLoading` | `boolean`                             | onClick 返回 Promise 时自动接管 loading 态                                           |
-| `round`       | `boolean`                             | 圆形                                                                                 |
-| `color`       | `string`                              | 自定义背景色（透传到 CSS 变量或 inline style）                                      |
-| `textColor`   | `string`                              | 自定义文字色                                                                         |
-| `elevation`   | `boolean \| number`                   | 阴影/海拔等级，`true` = 默认等级，`false` = 无阴影，`0~24` = 显式等级                |
-| `vertical`    | `boolean`                             | 是否垂直排列                                                                         |
-| `orientation` | `'horizontal' \| 'vertical'`          | 方向，默认 `'horizontal'`                                                            |
-| `open`        | `boolean`                             | 浮层/模态/下拉开合（受控）；非受控用 `defaultOpen`；v-model 事件 `update:open`。**不含** Tag/Badge 等内容显隐（那些用 `show`） |
-| `show`        | `boolean`                             | **内容**显隐（Tag、Badge 等）；非受控用 `defaultShow`；v-model 事件 `update:show`。**勿**用于浮层开合 |
-| `popupContainer` | `string \| HTMLElement \| …`       | Portal 挂载目标；**勿**用公开名 `teleport`                                           |
-| `mask` / `maskClosable` / `escToClose` | `boolean`            | 遮罩显示 / 点遮罩关闭 / ESC 关闭；配套 `maskClass`/`maskStyle`                        |
-| `modelValue`  | 组件自有                              | 表单主值（**含 Upload**）；配合 `update:modelValue` 与 `change`/`onChange`。Upload **勿**用 `fileList` 作 v-model |
-| `placement`   | 组件自有联合类型                      | 锚点浮层的首选方位，或 Drawer 的进入侧；通常参与 flip/shift 等定位算法                   |
-| `position`    | 组件自有                              | 自身布局上下文、屏幕区域或坐标位置；Badge、Notification、Timeline 可使用                |
-| `disabledDate`| `(date) => boolean`                   | 返回 `true` = **禁用**该日期；**勿**用 `allowedDates`（极性相反）                    |
-| `before*`     | `Function`                            | 拦截钩子（`beforeChange`/`beforeClose`/…）；**勿**用 `onBefore*` 作拦截器 prop 名   |
-| 多词属性      | camelCase                             | 如 `maxLength`、`autoPlay`；公开 API 不用 HTML 全小写                                |
+| Prop                                   | 类型                                            | 含义                                                                                                                           |
+| -------------------------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `status`                               | `Status`                                        | 主题色（primary / secondary / info / success / warning / danger / tertiary）                                                   |
+| `variant`                              | 组件自有联合类型                                | 视觉变体（default / outline / text / tonal …）                                                                                 |
+| `mode`                                 | 组件自有联合类型                                | 布局/形态互斥（如 Badge `floating\|inline`、Progress `line\|circle`）；**勿用 `type` 表示布局**                                |
+| `size`                                 | `Size` (`'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`) | 尺寸，默认 `'md'`                                                                                                              |
+| `disabled`                             | `boolean`                                       | 禁用，子组件 `default: undefined` 用于继承父级                                                                                 |
+| `block`                                | `boolean`                                       | 是否撑满父容器宽度                                                                                                             |
+| `loading`                              | `boolean`                                       | 加载中态，禁止触发 click                                                                                                       |
+| `autoLoading`                          | `boolean`                                       | onClick 返回 Promise 时自动接管 loading 态                                                                                     |
+| `round`                                | `boolean`                                       | 圆形                                                                                                                           |
+| `color`                                | `string`                                        | 自定义背景色（透传到 CSS 变量或 inline style）                                                                                 |
+| `textColor`                            | `string`                                        | 自定义文字色                                                                                                                   |
+| `elevation`                            | `boolean \| number`                             | 阴影/海拔等级，`true` = 默认等级，`false` = 无阴影，`0~24` = 显式等级                                                          |
+| `vertical`                             | `boolean`                                       | 是否垂直排列                                                                                                                   |
+| `orientation`                          | `'horizontal' \| 'vertical'`                    | 方向，默认 `'horizontal'`                                                                                                      |
+| `open`                                 | `boolean`                                       | 浮层/模态/下拉开合（受控）；非受控用 `defaultOpen`；v-model 事件 `update:open`。**不含** Tag/Badge 等内容显隐（那些用 `show`） |
+| `show`                                 | `boolean`                                       | **内容**显隐（Tag、Badge 等）；非受控用 `defaultShow`；v-model 事件 `update:show`。**勿**用于浮层开合                          |
+| `popupContainer`                       | `string \| HTMLElement \| …`                    | Portal 挂载目标；**勿**用公开名 `teleport`                                                                                     |
+| `mask` / `maskClosable` / `escToClose` | `boolean`                                       | 遮罩显示 / 点遮罩关闭 / ESC 关闭；配套 `maskClass`/`maskStyle`                                                                 |
+| `modelValue`                           | 组件自有                                        | 表单主值（**含 Upload**）；配合 `update:modelValue` 与 `change`/`onChange`。Upload **勿**用 `fileList` 作 v-model              |
+| `placement`                            | 组件自有联合类型                                | 锚点浮层的首选方位，或 Drawer 的进入侧；通常参与 flip/shift 等定位算法                                                         |
+| `position`                             | 组件自有                                        | 自身布局上下文、屏幕区域或坐标位置；Badge、Notification、Timeline 可使用                                                       |
+| `disabledDate`                         | `(date) => boolean`                             | 返回 `true` = **禁用**该日期；**勿**用 `allowedDates`（极性相反）                                                              |
+| `before*`                              | `Function`                                      | 拦截钩子（`beforeChange`/`beforeClose`/…）；**勿**用 `onBefore*` 作拦截器 prop 名                                              |
+| 多词属性                               | camelCase                                       | 如 `maxLength`、`autoPlay`；公开 API 不用 HTML 全小写                                                                          |
 
 > 公共 API 与 Maple 对齐时以本仓库（PC）为准；破坏性重命名不保留 alias。详见 `openspec/changes/align-shared-prop-naming/`。
 
@@ -220,38 +220,38 @@ export type ButtonProps = ExtractPropTypes<typeof buttonProps>
 `index.ts` 必须按以下模板编写，所有列出的导出都需保留：
 
 ```ts
-import type { App } from 'vue'
-import type { CedarOptions } from '../_utils/types'
-import { setGlobalConfig, getComponentPrefix } from '../_utils/global-config'
-import _Comp from './comp.vue'
-import _CompSub from './comp-sub.vue' // 可选
-import { compProps, compSubProps } from './props'
+import type { App } from "vue";
+import type { CedarOptions } from "../_utils/types";
+import { setGlobalConfig, getComponentPrefix } from "../_utils/global-config";
+import _Comp from "./comp.vue";
+import _CompSub from "./comp-sub.vue"; // 可选
+import { compProps, compSubProps } from "./props";
 
 const Comp = Object.assign(_Comp, {
   Sub: _CompSub, // 可选：把子组件挂为静态成员
   install: (app: App, options?: CedarOptions) => {
-    setGlobalConfig(app, options)
-    const componentPrefix = getComponentPrefix(options)
-    app.component(componentPrefix + _Comp.name, _Comp)
-    app.component(componentPrefix + _CompSub.name, _CompSub)
+    setGlobalConfig(app, options);
+    const componentPrefix = getComponentPrefix(options);
+    app.component(componentPrefix + _Comp.name, _Comp);
+    app.component(componentPrefix + _CompSub.name, _CompSub);
   },
-})
+});
 
 // 实例类型
-export type CompInstance = InstanceType<typeof _Comp>
-export type CompSubInstance = InstanceType<typeof _CompSub>
+export type CompInstance = InstanceType<typeof _Comp>;
+export type CompSubInstance = InstanceType<typeof _CompSub>;
 
 // props 类型与公共类型
-export type { CompProps, CompSubProps, CompVariant } from './props'
+export type { CompProps, CompSubProps, CompVariant } from "./props";
 
 // 运行时 props 与子组件命名导出
-export { compProps, compSubProps }
-export { _CompSub as CompSub }
+export { compProps, compSubProps };
+export { _CompSub as CompSub };
 
 // 内部组件别名（resolver / 内部引用使用）
-export const _CompComponent = Comp
+export const _CompComponent = Comp;
 
-export default Comp
+export default Comp;
 ```
 
 > `_CompComponent` 与 `compProps` 等命名导出是 resolver / 内部组件互相引用时的入口，**必须导出**。
@@ -264,27 +264,31 @@ export default Comp
 
 ```ts
 // provide.ts
-import type { ComputedRef } from 'vue'
-import { useChildren, useParent } from '@cedarjs/use'
+import type { ComputedRef } from "vue";
+import { useChildren, useParent } from "@cedarjs/use";
 
 export interface XxxGroupProvider {
-  status: ComputedRef<Status>
-  variant: ComputedRef<XxxVariant>
+  status: ComputedRef<Status>;
+  variant: ComputedRef<XxxVariant>;
   // ...
 }
 
-export const XXX_GROUP_BIND_KEY = Symbol('XXX_GROUP_BIND_KEY')
+export const XXX_GROUP_BIND_KEY = Symbol("XXX_GROUP_BIND_KEY");
 
 export function useXxxs() {
-  const { bindChildren, childProviders, length } =
-    useChildren<XxxGroupProvider, null>(XXX_GROUP_BIND_KEY)
-  return { length, items: childProviders, bindItems: bindChildren }
+  const { bindChildren, childProviders, length } = useChildren<
+    XxxGroupProvider,
+    null
+  >(XXX_GROUP_BIND_KEY);
+  return { length, items: childProviders, bindItems: bindChildren };
 }
 
 export function useXxxGroup() {
-  const { bindParent, parentProvider, index } =
-    useParent<XxxGroupProvider, null>(XXX_GROUP_BIND_KEY)
-  return { index, group: parentProvider, bindGroup: bindParent }
+  const { bindParent, parentProvider, index } = useParent<
+    XxxGroupProvider,
+    null
+  >(XXX_GROUP_BIND_KEY);
+  return { index, group: parentProvider, bindGroup: bindParent };
 }
 ```
 
@@ -298,8 +302,8 @@ export function useXxxGroup() {
 
 - `style/index.ts` **只做引入**，不要写逻辑：
   ```ts
-  import '../../style/index.less'
-  import './index.less'
+  import "../../style/index.less";
+  import "./index.less";
   ```
 - `style/index.less` 顺序：`@import './token.less'` → 主体样式 → 末尾可 `@import './子模块.less'`。
 - `style/token.less` 顶部 `@import '../../style/theme/index.less'`，在 `:root` 下声明所有 `--c-<component>-*` 变量。
@@ -311,7 +315,7 @@ export function useXxxGroup() {
 - 重复的 status / size / variant 组合用 Less mixin 批量生成（参考 button 的 `.status() / .size()`、divider 的 `.generate-size-styles()`）。
 - 交互态选择器抽出可读 alias，例如：
   ```less
-  @interactive-selector: ~':not(.c-button--disabled):not(.c-button--loading)';
+  @interactive-selector: ~":not(.c-button--disabled):not(.c-button--loading)";
   ```
 - BEM 写法严格按 `&--modifier` / `&__element`，不要写 `.c-button.c-button--xxx` 之类的全名嵌套。
 
@@ -321,7 +325,7 @@ export function useXxxGroup() {
 
 固定段落顺序：
 
-```markdown
+````markdown
 ---
 permalink: /components/<component>/
 ---
@@ -331,26 +335,38 @@ permalink: /components/<component>/
 一句话简介。
 
 ## 案例
+
 ### 基础用法
+
 <demo src="./__demos__/basic.vue"></demo>
 ... 其他案例
 
 ## API
+
 ### `<Component>` Props
+
 | 属性 | 说明 | 类型 | 默认值 |
+
 ### `<Component>` Events
+
 ### `<Component>` Slots
-### `<ComponentGroup>` Props  // 如有
+
+### `<ComponentGroup>` Props // 如有
 
 ## 类型定义
+
 组件导出以下类型定义
+
 ```ts
-import type { ComponentProps } from '@cedarjs/ui'
+import type { ComponentProps } from "@cedarjs/ui";
 ```
+````
 
 ### 样式变量
+
 | 变量名 | 默认值 |
-```
+
+````
 
 要求：
 
@@ -378,7 +394,7 @@ describe('Component', () => {
     expect(wrapper.html()).toMatchSnapshot()
   })
 })
-```
+````
 
 - 文件后缀统一 `.test.tsx`。
 - 基础渲染快照必须有；后续可以追加交互 / props 切换测试。
@@ -404,6 +420,7 @@ describe('Component', () => {
 Alert 是首个走完 OpenSpec 流程完成 PC ↔ Mobile API 对齐的组件，可作为后续组件双端对齐的参考样本。
 
 **核心约定**：
+
 - 类型枚举与 `Status` 对齐：`info | success | warning | danger | default`（不再用 `error`，状态色统一使用 `danger`；`Message` 的 `type` 才使用 `error`）。
 - 视觉变体三档：`standard`（浅色填充 + 描边）、`tonal`（浅色填充无描边）、`outlined`（透明 + 描边）。
 - 通用属性：`color` / `elevation` / `closable`（注意拼写）/ `showIcon` / `banner` / `center` / `title` / `message`。
@@ -419,6 +436,7 @@ OpenSpec change：`openspec/changes/align-alert-spec/`。
 Steps 按 Pagination 语义完成 PC ↔ Mobile API 对齐（进度序号，不是 Tabs 的 key 选中）。
 
 **核心约定**：
+
 - 进度 prop：`current` / `defaultCurrent`（**1-based**）；不用 `active`。
 - 状态：`status: wait | process | finish | error`；子项可覆盖；推导规则 `step < current → finish`。
 - 点击：`changeable` 门控 + `onChange(step, ev)` / `v-model:current`。

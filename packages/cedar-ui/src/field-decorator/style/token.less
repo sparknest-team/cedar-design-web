@@ -1,22 +1,22 @@
-@import '../../style/theme/index.less';
+@import "../../style/theme/index.less";
 
 /******** Field / Input CSS Variables *******/
 :root {
   // Shared text / icon
-  --c-field-color-text: var(~'--c-color-text-1');
-  --c-field-color-placeholder-text: var(~'--c-color-text-3');
-  --c-field-color-text-disabled: var(~'--c-color-text-4');
-  --c-field-color-prefix-text: var(~'--c-color-text-2');
-  --c-field-color-suffix-text: var(~'--c-color-text-2');
-  --c-field-color-tip-text: var(~'--c-color-text-3');
-  --c-field-color-icon-clear: var(~'--c-color-text-2');
-  --c-field-color-icon-clear-bg-hover: var(~'--c-color-fill-4');
-  --c-field-color-focus: rgb(var(~'--c-primary-6'));
-  --c-field-color-blur: var(~'--c-color-text-3');
-  --c-field-color-error: rgb(var(~'--c-danger-6'));
+  --c-field-color-text: var(~"--c-color-text-1");
+  --c-field-color-placeholder-text: var(~"--c-color-text-3");
+  --c-field-color-text-disabled: var(~"--c-color-text-4");
+  --c-field-color-prefix-text: var(~"--c-color-text-2");
+  --c-field-color-suffix-text: var(~"--c-color-text-2");
+  --c-field-color-tip-text: var(~"--c-color-text-3");
+  --c-field-color-icon-clear: var(~"--c-color-text-2");
+  --c-field-color-icon-clear-bg-hover: var(~"--c-color-fill-4");
+  --c-field-color-focus: rgb(var(~"--c-primary-6"));
+  --c-field-color-blur: var(~"--c-color-text-3");
+  --c-field-color-error: rgb(var(~"--c-danger-6"));
 
   // Shared geometry
-  --c-field-border-radius: var(~'--c-border-radius-md');
+  --c-field-border-radius: var(~"--c-border-radius-md");
   --c-field-border-width: 1px;
   --c-field-padding-x: 12px;
   --c-field-margin-left-clear-btn: 12px;
@@ -58,73 +58,81 @@
   --c-field-size-lg-icon-addon-size: 14px;
 
   // variant: filled
-  --c-field-variant-filled-bg: var(~'--c-color-fill-2');
-  --c-field-variant-filled-bg-hover: var(~'--c-color-fill-3');
-  --c-field-variant-filled-bg-focus: var(~'--c-color-bg-2');
-  --c-field-variant-filled-bg-disabled: var(~'--c-color-fill-2');
-  --c-field-variant-filled-bg-error: var(~'--c-color-danger-light-1');
-  --c-field-variant-filled-bg-error-hover: var(~'--c-color-danger-light-2');
-  --c-field-variant-filled-bg-error-focus: var(~'--c-field-variant-filled-bg-focus');
+  --c-field-variant-filled-bg: var(~"--c-color-fill-2");
+  --c-field-variant-filled-bg-hover: var(~"--c-color-fill-3");
+  --c-field-variant-filled-bg-focus: var(~"--c-color-bg-2");
+  --c-field-variant-filled-bg-disabled: var(~"--c-color-fill-2");
+  --c-field-variant-filled-bg-error: var(~"--c-color-danger-light-1");
+  --c-field-variant-filled-bg-error-hover: var(~"--c-color-danger-light-2");
+  --c-field-variant-filled-bg-error-focus: var(
+    ~"--c-field-variant-filled-bg-focus"
+  );
   --c-field-variant-filled-border-color: transparent;
   --c-field-variant-filled-border-color-hover: transparent;
-  --c-field-variant-filled-border-color-focus: var(~'--c-color-border-3');
+  --c-field-variant-filled-border-color-focus: var(~"--c-color-border-3");
   --c-field-variant-filled-border-color-disabled: transparent;
   --c-field-variant-filled-border-color-error: transparent;
   --c-field-variant-filled-border-color-error-hover: transparent;
-  --c-field-variant-filled-border-color-error-focus: rgb(var(~'--c-danger-6'));
-  --c-field-variant-filled-color-shadow-focus: var(~'--c-color-primary-light-2');
+  --c-field-variant-filled-border-color-error-focus: rgb(var(~"--c-danger-6"));
+  --c-field-variant-filled-color-shadow-focus: var(
+    ~"--c-color-primary-light-2"
+  );
   --c-field-variant-filled-size-shadow-focus: 0;
-  --c-field-variant-filled-color-shadow-error-focus: var(~'--c-color-danger-light-2');
+  --c-field-variant-filled-color-shadow-error-focus: var(
+    ~"--c-color-danger-light-2"
+  );
   --c-field-variant-filled-size-shadow-error-focus: 0;
 
   // variant: outlined
-  --c-field-variant-outlined-border-color: var(~'--c-color-border-2');
-  --c-field-variant-outlined-border-color-hover: var(~'--c-color-border-3');
-  --c-field-variant-outlined-border-color-focus: var(~'--c-color-border-3');
-  --c-field-variant-outlined-border-color-disabled: var(~'--c-color-border-2');
-  --c-field-variant-outlined-border-color-error: rgb(var(~'--c-danger-6'));
+  --c-field-variant-outlined-border-color: var(~"--c-color-border-2");
+  --c-field-variant-outlined-border-color-hover: var(~"--c-color-border-3");
+  --c-field-variant-outlined-border-color-focus: var(~"--c-color-border-3");
+  --c-field-variant-outlined-border-color-disabled: var(~"--c-color-border-2");
+  --c-field-variant-outlined-border-color-error: rgb(var(~"--c-danger-6"));
 
   // variant: standard (underline)
-  --c-field-variant-standard-line-color: var(~'--c-field-color-blur');
-  --c-field-variant-standard-line-color-focus: var(~'--c-field-color-focus');
-  --c-field-variant-standard-line-color-error: var(~'--c-field-color-error');
-  --c-field-variant-standard-line-color-disabled: var(~'--c-field-color-text-disabled');
+  --c-field-variant-standard-line-color: var(~"--c-field-color-blur");
+  --c-field-variant-standard-line-color-focus: var(~"--c-field-color-focus");
+  --c-field-variant-standard-line-color-error: var(~"--c-field-color-error");
+  --c-field-variant-standard-line-color-disabled: var(
+    ~"--c-field-color-text-disabled"
+  );
   --c-field-variant-standard-line-size: 1px;
   --c-field-variant-standard-line-size-focus: 2px;
 
   // Addon / group
-  --c-field-color-addon-bg: var(~'--c-field-variant-filled-bg');
-  --c-field-color-addon-border: var(~'--c-color-neutral-3');
+  --c-field-color-addon-bg: var(~"--c-field-variant-filled-bg");
+  --c-field-color-addon-border: var(~"--c-color-neutral-3");
   --c-field-border-addon-separator-width: 1px;
   --c-field-color-addon-border-default: transparent;
   --c-field-group-border-separator-width: 1px;
-  --c-field-group-color-separator-border: var(~'--c-color-neutral-3');
-  --c-field-group-label-text-color: var(~'--c-color-text-2');
+  --c-field-group-color-separator-border: var(~"--c-color-neutral-3");
+  --c-field-group-label-text-color: var(~"--c-color-text-2");
 
   // Feedback icons
-  --c-field-feedback-icon-color-success: rgb(var(~'--c-success-6'));
-  --c-field-feedback-icon-color-error: rgb(var(~'--c-danger-6'));
-  --c-field-feedback-icon-color-warning: rgb(var(~'--c-warning-6'));
-  --c-field-feedback-icon-color-validating: rgb(var(~'--c-primary-6'));
+  --c-field-feedback-icon-color-success: rgb(var(~"--c-success-6"));
+  --c-field-feedback-icon-color-error: rgb(var(~"--c-danger-6"));
+  --c-field-feedback-icon-color-warning: rgb(var(~"--c-warning-6"));
+  --c-field-feedback-icon-color-validating: rgb(var(~"--c-primary-6"));
 
   // textarea
-  --c-textarea-color-tip-text: var(~'--c-color-text-3');
-  --c-textarea-padding-x: var(~'--c-spacing-6');
-  --c-textarea-padding-y: var(~'--c-spacing-2');
-  --c-textarea-font-size: var(~'--c-font-size-body-3');
-  --c-textarea-font-tip-size: var(~'--c-font-size-body-1');
-  --c-textarea-layout-tip-right: var(~'--c-spacing-5');
-  --c-textarea-layout-tip-bottom: var(~'--c-spacing-3');
-  --c-textarea-size-min-height: var(~'--c-size-8');
-  --c-textarea-size-icon-clear: var(~'--c-size-3');
-  --c-textarea-layout-top-icon-clear: var(~'--c-spacing-5');
+  --c-textarea-color-tip-text: var(~"--c-color-text-3");
+  --c-textarea-padding-x: var(~"--c-spacing-6");
+  --c-textarea-padding-y: var(~"--c-spacing-2");
+  --c-textarea-font-size: var(~"--c-font-size-body-3");
+  --c-textarea-font-tip-size: var(~"--c-font-size-body-1");
+  --c-textarea-layout-tip-right: var(~"--c-spacing-5");
+  --c-textarea-layout-tip-bottom: var(~"--c-spacing-3");
+  --c-textarea-size-min-height: var(~"--c-size-8");
+  --c-textarea-size-icon-clear: var(~"--c-size-3");
+  --c-textarea-layout-top-icon-clear: var(~"--c-spacing-5");
   --c-textarea-layout-tip-scroll-offset: 15px;
 
   // password
-  --c-password-color-eye-icon: var(~'--c-color-text-2');
+  --c-password-color-eye-icon: var(~"--c-color-text-2");
   --c-password-size-eye-icon: 12px;
 
   // search
-  --c-search-color-icon: var(~'--c-color-text-2');
+  --c-search-color-icon: var(~"--c-color-text-2");
   --c-search-size-icon: 14px;
 }

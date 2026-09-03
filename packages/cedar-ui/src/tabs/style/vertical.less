@@ -16,12 +16,12 @@
         bottom: 0;
         left: initial;
         clear: both;
-        width: var(~'--c-tabs-line-size-header-border');
+        width: var(~"--c-tabs-line-size-header-border");
         height: 100%;
       }
     }
     .c-tabs-nav__button-wrapper {
-      padding-block: var(~'--c-tabs-vertical-tab-padding-block');
+      padding-block: var(~"--c-tabs-vertical-tab-padding-block");
       flex-direction: column;
       align-items: center;
     }
@@ -39,10 +39,12 @@
       position: absolute;
       top: initial;
       bottom: initial;
-      width: var(~'--c-tabs-line-size-ink-stroke');
+      width: var(~"--c-tabs-line-size-ink-stroke");
       transition:
-        top var(~'--c-transition-duration-2') var(~'--c-transition-timing-function-standard'),
-        height var(~'--c-transition-duration-2') var(~'--c-transition-timing-function-standard');
+        top var(~"--c-transition-duration-2")
+          var(~"--c-transition-timing-function-standard"),
+        height var(~"--c-transition-duration-2")
+          var(~"--c-transition-timing-function-standard");
     }
     .c-tabs-nav__tab-list {
       display: flex;
@@ -66,7 +68,7 @@
       }
     }
     .c-tabs-nav__button-wrapper {
-      padding-inline: var(~'--c-tabs-vertical-tab-padding-inline');
+      padding-inline: var(~"--c-tabs-vertical-tab-padding-inline");
       flex-direction: row;
       align-items: center;
     }
@@ -79,10 +81,12 @@
       position: absolute;
       right: initial;
       left: initial;
-      width: var(~'--c-tabs-line-size-ink-stroke');
+      width: var(~"--c-tabs-line-size-ink-stroke");
       transition:
-        left var(~'--c-transition-duration-2') var(~'--c-transition-timing-function-standard'),
-        width var(~'--c-transition-duration-2') var(~'--c-transition-timing-function-standard');
+        left var(~"--c-transition-duration-2")
+          var(~"--c-transition-timing-function-standard"),
+        width var(~"--c-transition-duration-2")
+          var(~"--c-transition-timing-function-standard");
     }
     .c-tabs-nav__tab-list {
       flex-direction: row;
@@ -139,54 +143,56 @@
   height: auto;
 
   &-overflow-scroll {
-    padding: var(~'--c-tabs-padding-header-wrapper-vertical') 0;
+    padding: var(~"--c-tabs-padding-header-wrapper-vertical") 0;
   }
 }
 
 /* Vertical + variant styles */
 .c-tabs--vertical {
   &.c-tabs--variant-line .c-tabs-tab {
-    padding: 0 var(~'--c-tabs-line-padding-title-horizontal-vertical');
+    padding: 0 var(~"--c-tabs-line-padding-title-horizontal-vertical");
   }
 
   &.c-tabs--variant-card .c-tabs-tab {
     position: relative;
     margin: 0;
-    border: var(~'--c-tabs-outline-border-width') solid var(~'--c-tabs-outline-title-color-border');
+    border: var(~"--c-tabs-outline-border-width") solid
+      var(~"--c-tabs-outline-title-color-border");
     border-right-color: transparent;
 
     &:first-child {
-      border-top-left-radius: var(~'--c-tabs-outline-border-radius');
+      border-top-left-radius: var(~"--c-tabs-outline-border-radius");
     }
 
     &.c-tabs-tab--active,
     &.c-tabs-tab--active:hover {
-      border-right-color: var(~'--c-color-bg-2');
+      border-right-color: var(~"--c-color-bg-2");
     }
 
     &:last-child {
-      border-right: var(~'--c-tabs-outline-border-width') solid var(~'--c-tabs-outline-title-color-border');
-      border-bottom-left-radius: var(~'--c-tabs-outline-border-radius');
+      border-right: var(~"--c-tabs-outline-border-width") solid
+        var(~"--c-tabs-outline-title-color-border");
+      border-bottom-left-radius: var(~"--c-tabs-outline-border-radius");
     }
   }
 
   &.c-tabs--variant-outline .c-tabs-tab {
     position: relative;
     margin: 0;
-    border: var(~'--c-tabs-outline-border-width') solid transparent;
+    border: var(~"--c-tabs-outline-border-width") solid transparent;
 
     &:first-child {
-      border-top-left-radius: var(~'--c-tabs-outline-border-radius');
+      border-top-left-radius: var(~"--c-tabs-outline-border-radius");
     }
 
     &.c-tabs-tab--active,
     &.c-tabs-tab--active:hover {
-      border-color: var(~'--c-tabs-outline-title-color-border');
-      border-right-color: var(~'--c-color-bg-2');
+      border-color: var(~"--c-tabs-outline-title-color-border");
+      border-right-color: var(~"--c-color-bg-2");
     }
 
     &:last-child {
-      border-bottom-left-radius: var(~'--c-tabs-outline-border-radius');
+      border-bottom-left-radius: var(~"--c-tabs-outline-border-radius");
     }
   }
 

@@ -26,13 +26,17 @@
     "watch": "pnpm --filter @cedarjs/ui watch",
     "clean-cache": "pnpm --filter @cedarjs/ui clean-cache",
     "preview": "pnpm --filter @cedarjs/ui preview",
+    "release": "node scripts/release.mjs",
     "prepare": "husky install packages/cedar-ui/.husky",
     "postinstall": "patch-package --patch-dir packages/cedar-ui/patches"
   },
   "packageManager": "pnpm@9.6.0",
   "devDependencies": {
+    "@cedarjs/cli": "workspace:*",
     "@changesets/changelog-github": "^0.5.1",
-    "@changesets/cli": "^2.29.7"
+    "@changesets/cli": "^2.29.7",
+    "nanospinner": "^1.2.2",
+    "tinyexec": "npm:tinyexec@^0.3.0"
   },
   "engines": {
     "pnpm": ">=9.6.0"

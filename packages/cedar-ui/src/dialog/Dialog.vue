@@ -72,13 +72,14 @@
                     {{ cancelDisplayText }}
                   </Button>
                   <Button
+                    v-if="confirmButton"
                     type="primary"
                     v-bind="confirmButtonProps"
                     :loading="mergedConfirmButtonLoading"
                     :disabled="mergedConfirmButtonDisabled"
                     @click="handleConfirm"
                   >
-                    {{ confirmDisplayText }}
+                    {{ confirmButtonDisplayText }}
                   </Button>
                 </slot>
               </div>
@@ -169,7 +170,7 @@ export default defineComponent({
     const containerRef = ref<HTMLElement>()
     const mounted = ref(computedOpen.value)
 
-    const confirmDisplayText = computed(() => props.confirmButtonText || t('dialog.confirmButtonText'))
+    const confirmButtonDisplayText = computed(() => props.confirmButtonText || t('dialog.confirmButtonText'))
     const cancelDisplayText = computed(() => props.cancelButtonText || t('dialog.cancelButtonText'))
 
     const showFooter = computed(() => {
@@ -316,7 +317,9 @@ export default defineComponent({
     onMounted(() => {
       containerRef.value = getElement(popupContainerTarget.value)
       if (computedOpen.value) {
-        setOverflowHidden()
+        if (props.lockScroll) {
+          setOverflowHidden()
+        }
         if (props.escToClose) {
           addGlobalKeyDownListener()
         }
@@ -336,7 +339,9 @@ export default defineComponent({
         emit('open')
         mounted.value = true
         currentIsMask.value = false
-        setOverflowHidden()
+        if (props.lockScroll) {
+          setOverflowHidden()
+        }
         addGlobalKeyDownListener()
       } else {
         emit('close')
@@ -393,7 +398,7 @@ export default defineComponent({
       containerRef,
       wrapperRef,
       mergedDialogStyle,
-      confirmDisplayText,
+      confirmButtonDisplayText,
       cancelDisplayText,
       zIndex,
       handleConfirm,

@@ -1,6 +1,11 @@
 <template>
   <c-space direction="column" fill size="md">
-    <div v-for="item in items" :key="item.className" class="line" :style="{ fontSize: item.size }">
+    <div
+      v-for="item in items"
+      :key="item.className"
+      class="line"
+      :style="{ fontSize: item.size }"
+    >
       <code class="tag">{{ item.className }}</code>
       <span>Cedar Design — {{ item.label }}</span>
     </div>
@@ -9,11 +14,11 @@
 
 <script lang="ts" setup>
 const items = [
-  { label: 'xs / 10px', className: 'c-text-xs', size: 'var(--c-font-size-xs)' },
-  { label: 'sm / 12px', className: 'c-text-sm', size: 'var(--c-font-size-sm)' },
-  { label: 'md / 14px', className: 'c-text-md', size: 'var(--c-font-size-md)' },
-  { label: 'lg / 16px', className: 'c-text-lg', size: 'var(--c-font-size-lg)' },
-]
+  { label: "xs / 10px", className: "c-text-xs", size: "var(--c-font-size-xs)" },
+  { label: "sm / 12px", className: "c-text-sm", size: "var(--c-font-size-sm)" },
+  { label: "md / 14px", className: "c-text-md", size: "var(--c-font-size-md)" },
+  { label: "lg / 16px", className: "c-text-lg", size: "var(--c-font-size-lg)" },
+];
 </script>
 
 <style scoped lang="scss">

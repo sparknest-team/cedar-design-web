@@ -2,9 +2,7 @@
   <c-space direction="column" size="lg">
     <c-descriptions :data="data" align="right" title="User Info" />
     <c-descriptions :align="{ label: 'right' }" :data="data" title="User Info" />
-    <c-descriptions :data="data" layout="inline-vertical" title="User Info " />
-    <c-descriptions :data="data" layout="inline-vertical" title="User Info " />
-    <c-descriptions :data="data" layout="inline-vertical" title="User Info " />
+    <c-descriptions :data="data" layout="inline-vertical" title="User Info" />
   </c-space>
 </template>
 
@@ -16,7 +14,7 @@ const data = [
   },
   {
     label: 'Mobile',
-    value: '123-1234-123-1234-1234',
+    value: '123-1234-1234',
   },
   {
     label: 'Residence',

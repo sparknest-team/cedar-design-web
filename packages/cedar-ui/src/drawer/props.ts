@@ -65,7 +65,7 @@ export const drawerProps = {
      * @zh 确认按钮的内容
      * @en The content of the ok button
      */
-    okText: String,
+    confirmButtonText: String,
     /**
      * @zh 取消按钮的内容
      * @en The content of the cancel button
@@ -75,7 +75,7 @@ export const drawerProps = {
      * @zh 确认按钮是否为加载中状态
      * @en Whether the ok button is in the loading state
      */
-    okLoading: {
+    confirmButtonLoading: {
       type: Boolean,
       default: false,
     },
@@ -84,7 +84,7 @@ export const drawerProps = {
      * @en Props of confirm button
      * @version 2.9.0
      */
-    okButtonProps: {
+    confirmButtonProps: {
       type: Object as PropType<ButtonProps>,
     },
     /**
@@ -152,7 +152,7 @@ export const drawerProps = {
      * @zh 触发 ok 事件前的回调函数。如果返回 false 则不会触发后续事件，也可使用 done 进行异步关闭。
      * @en The callback function before the ok event is triggered. If false is returned, subsequent events will not be triggered, and done can also be used to close asynchronously.
      */
-    beforeOk: {
+    beforeConfirm: {
       type: Function as PropType<(done: (closed: boolean) => void) => void | boolean | Promise<void | boolean>>,
     },
     /**
@@ -198,13 +198,12 @@ export const drawerProps = {
       default: true,
     },
     /**
-     * @zh 是否隐藏取消按钮
-     * @en Whether to hide the cancel button
-     * @version 2.19.0
+     * @zh 是否显示取消按钮
+     * @en Whether to show the cancel button
      */
-    hideCancel: {
+    cancelButton: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     ariaLabel: String,
     closeButtonAriaLabel: {

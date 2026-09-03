@@ -8,10 +8,18 @@
     "cedar-cli": "./bin/cedar-cli.mjs"
   },
   "exports": {
-    ".": "./src/index.mjs"
+    ".": "./src/index.mjs",
+    "./generate-library-entry": "./src/generateLibraryEntry.mjs"
   },
   "files": ["bin", "src"],
   "dependencies": {
-    "@loca/ui-build": "link:../../../design-ui/packages/ui-build"
+    "@inquirer/prompts": "^6.0.1",
+    "@loca/ui-build": "link:../../../design-ui/packages/ui-build",
+    "conventional-changelog": "^5.1.0",
+    "fs-extra": "^11.2.0",
+    "nanospinner": "^1.2.2",
+    "picocolors": "^1.1.1",
+    "semver": "^7.7.2",
+    "tinyexec": "npm:tinyexec@^0.3.0"
   }
 }

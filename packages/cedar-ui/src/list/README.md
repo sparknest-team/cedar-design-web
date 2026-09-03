@@ -20,41 +20,19 @@ permalink: /components/list/
 
 <demo src="./__demos__/size.vue"></demo>
 
-### 列表元素
+### 前缀与后缀
 
-使用 `list-item-meta` 组件可快速指定头像、标题、文字。
+`list-item` 只提供 `prefix` / 默认内容 / `suffix` 三列布局。头像、标题、操作都由业务自己组合。
 
-<demo src="./__demos__/meta.vue"></demo>
+<demo src="./__demos__/prefix-suffix.vue"></demo>
 
-### 增加操作项
+### 自定义内容
 
-通过 `actions` 来为列表添加操作项。
-
-<demo src="./__demos__/actions.vue"></demo>
-
-### 竖排列表样式
-
-这是一个包括分页、右侧内容、下方列表操作的示例。
+主体和两侧插槽都可以放任意内容。分页、栅格请自行组合 `Pagination` / `Grid`。
 
 <demo src="./__demos__/actions-layout.vue"></demo>
 
-### 栅格列表
-
-通过 `grid` 属性来配置格栅列表。
-
-<demo src="./__demos__/grid.vue"></demo>
-
-### 响应式栅格列表
-
-通过 `grid.sm` 等响应式参数动态设置每个单项横跨的列数，注意此时不要设置 `grid.span`。
-
-<demo src="./__demos__/responsive-grid.vue"></demo>
-
-### 滚动加载
-
-通过设置 `max-height` 属性限制列表的最大高度。通过 `reach-bottom` 事件可以监听列表触底的事件。
-
-<demo src="./__demos__/scroll.vue"></demo>
+同时提供默认插槽与 `data` 时，默认插槽优先，`item` 插槽不会被调用。`loading` 仅表示整张列表首次加载或刷新；需要滚动分页时请使用 [InfiniteScroll](/components/infinite-scroll/) 组合。
 
 ### 无限长列表
 
@@ -70,27 +48,20 @@ permalink: /components/list/
 
 | 参数名             | 描述                                                                             | 类型                        | 默认值  | 版本   |
 | ------------------ | -------------------------------------------------------------------------------- | --------------------------- | :-----: | :----- |
-| data               | 列表数据，需要和 `item` 插槽同时使用                                             | `any[]`                     |   `-`   |        |
+| data               | 列表数据，需要和 `item` 插槽同时使用                                             | `unknown[]`                 |   `-`   |        |
 | size               | 列表大小                                                                         | `'sm' \| 'md' \| 'lg'`      | `'md'`  |        |
 | bordered           | 是否显示边框                                                                     | `boolean`                   | `true`  |        |
 | split              | 是否显示分割线                                                                   | `boolean`                   | `true`  |        |
 | loading            | 是否为加载中状态                                                                 | `boolean`                   | `false` |        |
-| hoverable          | 是否显示选中样式                                                                 | `boolean`                   | `false` |        |
-| pagination-props   | 列表分页配置                                                                     | `PaginationProps`           |   `-`   |        |
-| grid-props         | 列表栅格配置                                                                     | `object`                    |   `-`   |        |
 | max-height         | 列表的最大高度                                                                   | `string \| number`          |   `0`   |        |
-| bottom-offset      | 触发到达底部的距离阈值                                                           | `number`                    |   `0`   |        |
 | virtual-list-props | 传递虚拟列表属性，传入此参数以开启虚拟滚动 [VirtualListProps](#VirtualListProps) | `VirtualListProps`          |   `-`   |        |
 | scrollbar          | 是否开启虚拟滚动条                                                               | `boolean \| ScrollbarProps` | `true`  | 2.38.0 |
 
 ### `<list>` Events
 
-| 事件名           | 描述                           | 参数               |
-| ---------------- | ------------------------------ | ------------------ |
-| scroll           | 列表滚动时触发                 | -                  |
-| reach-bottom     | 当列表到达底部时触发           | -                  |
-| page-change      | 表格分页发生改变时触发         | page: `number`     |
-| page-size-change | 表格每页数据数量发生改变时触发 | pageSize: `number` |
+| 事件名 | 描述           | 参数    |
+| ------ | -------------- | ------- |
+| scroll | 列表滚动时触发 | `Event` |
 
 ### `<list>` Methods
 
@@ -100,42 +71,21 @@ permalink: /components/list/
 
 ### `<list>` Slots
 
-| 插槽名         |               描述               | 参数                           | 版本   |
-| -------------- | :------------------------------: | ------------------------------ | :----- |
-| scroll-loading | 滚动加载状态时，滚动到底部的提示 | -                              | 2.20.0 |
-| item           |              列表项              | index: `number`<br>item: `any` |        |
-| empty          |             空白展示             | -                              |        |
-| footer         |             底部信息             | -                              |        |
-| header         |             头部信息             | -                              |        |
-
-### `<list-item>` Props
-
-| 参数名        | 描述           | 类型        |     默认值     |
-| ------------- | -------------- | ----------- | :------------: |
-| action-layout | 操作组排列方向 | `Direction` | `'horizontal'` |
+| 插槽名  | 描述                                       | 参数                           |
+| ------- | ------------------------------------------ | ------------------------------ |
+| default | 自定义列表内容；提供时优先于 `data`        | -                              |
+| item    | `data` 驱动的列表项                        | index: `number`<br>item: `any` |
+| empty   | 非加载状态且无默认内容、无数据时的空白展示 | -                              |
+| footer  | 底部信息                                   | -                              |
+| header  | 头部信息                                   | -                              |
 
 ### `<list-item>` Slots
 
-| 插槽名  |   描述   | 参数 |
-| ------- | :------: | ---- |
-| meta    | meta信息 | -    |
-| extra   | 额外内容 | -    |
-| actions |  操作组  | -    |
-
-### `<list-item-meta>` Props
-
-| 参数名      | 描述     | 类型     | 默认值 |
-| ----------- | -------- | -------- | :----: |
-| title       | 标题     | `string` |  `-`   |
-| description | 描述内容 | `string` |  `-`   |
-
-### `<list-item-meta>` Slots
-
-| 插槽名      |   描述   | 参数 |
-| ----------- | :------: | ---- |
-| avatar      |   头像   | -    |
-| title       |   标题   | -    |
-| description | 描述内容 | -    |
+| 插槽名  |    描述    | 参数 |
+| ------- | :--------: | ---- |
+| default | 列表项主体 | -    |
+| prefix  | 列表项前缀 | -    |
+| suffix  | 列表项后缀 | -    |
 
 ### VirtualListProps
 
@@ -153,5 +103,5 @@ permalink: /components/list/
 组件导出以下类型定义
 
 ```ts
-import type { ListInstance } from '@cedarjs/ui'
+import type { ListInstance, ListProps } from "@cedarjs/ui";
 ```

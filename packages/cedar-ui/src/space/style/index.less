@@ -1,8 +1,15 @@
-@import '../../style/theme/index.less';
-@import './token.less';
+@import "../../style/theme/index.less";
+@import "./token.less";
 
 .c-space {
+  box-sizing: border-box;
   display: inline-flex;
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: inherit;
+  }
 
   &--block {
     display: flex;

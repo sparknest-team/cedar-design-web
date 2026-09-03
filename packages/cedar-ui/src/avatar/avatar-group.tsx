@@ -17,6 +17,14 @@ const AvatarGroup = defineComponent({
     const prefixCls = getPrefixCls('avatar-group')
     const configCtx = inject(configProviderInjectionKey, undefined)
     const rtl = computed(() => configCtx?.rtl ?? false)
+    const groupStyle = computed(() =>
+      props.offset == null
+        ? undefined
+        : {
+            '--c-avatar-group-offset':
+              typeof props.offset === 'number' ? `${props.offset}px` : props.offset,
+          },
+    )
 
     const total = ref(0)
 
@@ -42,7 +50,16 @@ const AvatarGroup = defineComponent({
       }
 
       return (
-        <div class={`${prefixCls} ${rtl.value ? `${prefixCls}-rtl` : ''}`}>
+        <div
+          class={[
+            prefixCls,
+            {
+              [`${prefixCls}-vertical`]: props.vertical,
+              [`${prefixCls}-rtl`]: rtl.value,
+            },
+          ]}
+          style={groupStyle.value}
+        >
           {avatarsToRender}
           {avatarsInPopover.length > 0 && (
             <Popover

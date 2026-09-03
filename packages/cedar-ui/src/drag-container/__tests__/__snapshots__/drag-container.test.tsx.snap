@@ -1,7 +1,0 @@
-// Vitest Snapshot v1
-
-exports[`DragContainer > render 1`] = `
-"<div class=\\"c-drag-container\\">
-  <!---->
-</div>"
-`;

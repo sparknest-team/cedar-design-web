@@ -72,6 +72,7 @@
   }
 
   &-header {
+    position: relative;
     display: flex;
     flex-shrink: 0;
     align-items: center;
@@ -119,10 +120,26 @@
   }
 
   &-close-btn {
-    margin-left: calc(var(~'--c-dialog-close-icon-font-size') * -1);
+    position: absolute;
+    top: 50%;
+    right: var(~'--c-dialog-close-icon-right');
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
     color: var(~'--c-dialog-header-text-color');
     font-size: var(~'--c-dialog-close-icon-font-size');
+    line-height: 1;
+    background: transparent;
+    border: none;
     cursor: pointer;
+    appearance: none;
+    transform: translateY(-50%);
+
+    .c-icon {
+      display: block;
+    }
   }
 
   &-title {

@@ -27,7 +27,7 @@
   width: 100%;
   font-size: var(~'--c-nav-menu-font-size');
   line-height: var(~'--c-nav-menu-line-height');
-  transition: width @transition-duration-2 @transition-timing-function-standard;
+  transition: width var(~"--c-transition-duration-2") var(~"--c-transition-timing-function-standard");
 
   &:focus-visible {
     outline: var(~'--c-nav-menu-focus-outline-width') solid var(~'--c-color-primary-light-2');
@@ -40,7 +40,7 @@
   }
 
   .text-color-transition() {
-    transition: color @transition-duration-2 @transition-timing-function-linear;
+    transition: color var(~"--c-transition-duration-2") var(~"--c-transition-timing-function-linear");
   }
 
   // menu-item 一些与 theme 和 mode 无关的样式
@@ -345,8 +345,8 @@
     left: var(~'--c-nav-menu-horizontal-item-padding-horizontal');
     height: var(~'--c-nav-menu-item-selected-label-height');
     background-color: var(~'--c-nav-menu-item-selected-label-color');
-    animation: ~'c-nav-menu-selected-item-label-enter' @transition-duration-2
-      @transition-timing-function-linear;
+    animation: ~'c-nav-menu-selected-item-label-enter' var(~"--c-transition-duration-2")
+      var(~"--c-transition-timing-function-linear");
   }
 
   &-pop-button {
@@ -418,7 +418,7 @@
   &-inline-content {
     height: auto;
     overflow: hidden;
-    transition: height @transition-duration-2 @transition-timing-function-standard;
+    transition: height var(~"--c-transition-duration-2") var(~"--c-transition-timing-function-standard");
 
     &-hide {
       height: 0;
@@ -443,7 +443,7 @@
       transform: translateY(var(~'--c-nav-menu-horizontal-padding-vertical'));
 
       .c-trigger-arrow {
-        z-index: 0;
+        z-index: var(--c-z-index-local-base);
         border-top: 1px solid var(~'--c-nav-menu-popup-border-color');
         border-left: 1px solid var(~'--c-nav-menu-popup-border-color');
       }
@@ -453,7 +453,7 @@
       transform: translateX(var(~'--c-nav-menu-vertical-padding-horizontal'));
 
       .c-trigger-arrow {
-        z-index: 0;
+        z-index: var(--c-z-index-local-base);
         border-bottom: 1px solid var(~'--c-nav-menu-popup-border-color');
         border-left: 1px solid var(~'--c-nav-menu-popup-border-color');
       }
@@ -488,7 +488,7 @@
   &-pop-header {
     position: relative;
     // 避免 Trigger 的小箭头位于其上方
-    z-index: 1;
+    z-index: var(--c-z-index-local-raised);
     box-sizing: border-box;
     width: 100%;
     height: var(~'--c-menu-option-height');
@@ -508,7 +508,7 @@
       color: var(~'--c-menu-option-text-color-selected');
       font-weight: var(~'--c-menu-option-font-weight-selected');
       background-color: var(~'--c-menu-option-bg-selected');
-      transition: all @transition-duration-1 @transition-timing-function-linear;
+      transition: all var(~"--c-transition-duration-1") var(~"--c-transition-timing-function-linear");
     }
 
     // hover

@@ -55,7 +55,14 @@ export default defineComponent({
       ...props.valueStyle,
     }))
 
+    const getItemSpan = (item: DescData | VNode) =>
+      Math.min((isVNode(item) ? item.props?.span : item.span) ?? 1, computedColumn.value)
+
     const getGroupedData = (data: (DescData | VNode)[]) => {
+      if (props.layout === 'inline-auto') {
+        return [data.map((item) => ({ data: item, span: getItemSpan(item) }))]
+      }
+
       const groupedData: RenderData[][] = []
       let currentRow: RenderData[] = []
       let currentSpan = 0
@@ -70,7 +77,7 @@ export default defineComponent({
       }
 
       data.forEach((item) => {
-        const itemSpan = Math.min((isVNode(item) ? item.props?.span : item.span) ?? 1, computedColumn.value)
+        const itemSpan = getItemSpan(item)
 
         // add item to new row
         if (currentSpan + itemSpan > computedColumn.value) {
@@ -177,7 +184,7 @@ export default defineComponent({
     )
 
     const renderItems = (data: RenderData[], index: number) => {
-      if (['inline-horizontal', 'inline-vertical'].includes(props.layout)) {
+      if (['inline-horizontal', 'inline-vertical', 'inline-auto'].includes(props.layout)) {
         return renderInlineItems(data, index)
       }
       if (props.layout === 'vertical') {

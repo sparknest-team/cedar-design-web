@@ -1,5 +1,5 @@
 <template>
-  <h3 :style="{ color: 'var(--color-text-2)' }">10000 items</h3>
+  <h3 :style="{ color: 'var(--c-color-text-2)' }">10000 items</h3>
   <c-list
     :style="{ width: `600px` }"
     :virtualListProps="{
@@ -9,11 +9,11 @@
   >
     <template #item="{ item, index }">
       <c-list-item :key="index">
-        <c-list-item-meta :title="item.title" :description="item.description">
-          <template #avatar>
-            <c-avatar shape="square"> A </c-avatar>
-          </template>
-        </c-list-item-meta>
+        <template #prefix>
+          <c-avatar shape="square">A</c-avatar>
+        </template>
+        <div>{{ item.title }}</div>
+        <div class="list-item-description">{{ item.description }}</div>
       </c-list-item>
     </template>
   </c-list>
@@ -34,3 +34,10 @@ const list = reactive(
     }),
 )
 </script>
+
+<style scoped>
+.list-item-description {
+  margin-top: 4px;
+  color: var(--c-color-text-2);
+}
+</style>

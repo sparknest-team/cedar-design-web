@@ -11,7 +11,10 @@ export const collapseProps = {
     default: () => [],
   },
   accordion: Boolean,
-  showExpandIcon: Boolean,
+  showExpandIcon: {
+    type: Boolean,
+    default: undefined,
+  },
   expandIconPosition: {
     type: String as PropType<ExpandIconPosition>,
     default: 'left',

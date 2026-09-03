@@ -272,7 +272,7 @@ export default defineComponent({
       }
       return (
         <button type="button" class={classes(n('add-btn'))} aria-label="添加标签页" onClick={(ev: Event) => emit('add', ev)}>
-          <IconHover>
+          <IconHover prefix="c-tabs">
             <IconPlus />
           </IconHover>
         </button>

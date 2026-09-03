@@ -3,7 +3,7 @@
 
 .generate-levels(@prefix, @prop, @index) when (@index > 0) {
   .@{util-prefix}-@{prefix}-@{index} {
-    @{prop}: var(~'--c-color-@{prefix}-@{index}') !important;
+    @{prop}: var(~"--c-color-@{prefix}-@{index}") !important;
   }
 
   .generate-levels(@prefix, @prop, @index - 1);
@@ -15,7 +15,7 @@
 // 边框色与变量对齐为 c-color-border-*，避免和原子化边框宽度 c-border-* 撞名
 .generate-color-border(@index) when (@index > 0) {
   .@{util-prefix}-color-border-@{index} {
-    border-color: var(~'--c-color-border-@{index}') !important;
+    border-color: var(~"--c-color-border-@{index}") !important;
   }
 
   .generate-color-border(@index - 1);
@@ -24,13 +24,13 @@
 .generate-color-border(4);
 
 .@{util-prefix}-bg-0 {
-  background-color: var(~'--c-color-bg-white') !important;
+  background-color: var(~"--c-color-bg-white") !important;
 }
 
 .@{util-prefix}-bg-1 {
-  background-color: var(~'--c-color-bg-1') !important;
+  background-color: var(~"--c-color-bg-1") !important;
 }
 
 .@{util-prefix}-bg-2 {
-  background-color: var(~'--c-color-bg-2') !important;
+  background-color: var(~"--c-color-bg-2") !important;
 }

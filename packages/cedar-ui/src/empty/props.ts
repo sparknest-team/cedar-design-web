@@ -13,6 +13,8 @@ export const emptyProps = {
     default: 'md',
   },
   inConfigProvider: { type: Boolean, default: false },
-} 
+  showIcon: { type: Boolean, default: true },
+  showDescription: { type: Boolean, default: true },
+}
 
 export type EmptyProps = ExtractPropTypes<typeof emptyProps>

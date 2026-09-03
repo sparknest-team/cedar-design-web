@@ -18,5 +18,5 @@
     "themes",
     "utils"
   ],
-  "subcomponents": ["field-decorator", "hover", "hover-overlay", "ripple"]
+  "subcomponents": ["field-decorator", "hover", "ripple"]
 }

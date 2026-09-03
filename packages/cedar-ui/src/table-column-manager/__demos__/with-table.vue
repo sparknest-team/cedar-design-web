@@ -20,7 +20,7 @@
       :columns="columns"
       :options="columnDefinitions"
       drawer-title="列管理"
-      @confirm="handleOk"
+      @confirm="handleConfirm"
     />
 
     <!-- 弹窗模式：inline 内联面板放入 c-dialog -->
@@ -32,7 +32,7 @@
           v-model="items"
           :columns="columns"
           :options="columnDefinitions"
-          @confirm="handleOk"
+          @confirm="handleConfirm"
         />
       </div>
     </c-dialog>
@@ -92,7 +92,7 @@ const openAs = (type: 'drawer' | 'dialog') => {
   visible.value = true
 }
 
-const handleOk = (result: ColumnManagerResult) => {
+const handleConfirm = (result: ColumnManagerResult) => {
   columns.value = result.columns
 }
 </script>

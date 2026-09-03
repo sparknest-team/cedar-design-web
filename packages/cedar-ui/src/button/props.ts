@@ -1,13 +1,12 @@
-import type { ExtractPropTypes, PropType } from 'vue'
-import { SemanticStatus, ComponentSize } from '../_utils/constant'
-import { defineListenerProp } from '../_utils/components'
-import { componentSizes, semanticStatuses } from '../_utils/constant'
+import type { ExtractPropTypes, PropType } from "vue";
+import { SemanticStatus, ComponentSize } from "../_utils/constant";
+import { defineListenerProp } from "../_utils/components";
+import { componentSizes, semanticStatuses } from "../_utils/constant";
 
-
-export type ButtonVariant = 'default' | 'text' | 'outline' | 'link' | 'tonal'
-export const buttonVariants = ['default', 'text', 'outline', 'link', 'tonal'] as const
-export const buttonHtmlTypes = ['button', 'submit', 'reset'] as const
-export const buttonComponents = ['button', 'a'] as const
+export type ButtonVariant = "default" | "text" | "outline" | "tonal";
+export const buttonVariants = ["default", "text", "outline", "tonal"] as const;
+export const buttonHtmlTypes = ["button", "submit", "reset"] as const;
+export const buttonComponents = ["button", "a"] as const;
 
 export const buttonProps = {
   /**
@@ -15,14 +14,16 @@ export const buttonProps = {
    */
   status: {
     type: String as PropType<SemanticStatus>,
-    validator: (value: unknown): value is SemanticStatus => semanticStatuses.includes(value as SemanticStatus),
+    validator: (value: unknown): value is SemanticStatus =>
+      semanticStatuses.includes(value as SemanticStatus),
   },
   /**
    * 变体
    */
   variant: {
     type: String as PropType<ButtonVariant>,
-    validator: (value: unknown): value is ButtonVariant => buttonVariants.includes(value as ButtonVariant),
+    validator: (value: unknown): value is ButtonVariant =>
+      buttonVariants.includes(value as ButtonVariant),
   },
   /**
    * 是否为圆形按钮
@@ -35,16 +36,16 @@ export const buttonProps = {
    * 原生按钮类型： button | submit | reset
    */
   htmlType: {
-    type: String as PropType<'button' | 'submit' | 'reset'>,
-    default: 'button',
+    type: String as PropType<"button" | "submit" | "reset">,
+    default: "button",
     validator: (value: unknown) => buttonHtmlTypes.includes(value as any),
   },
   /**
    * 组件标签
    */
   component: {
-    type: String as PropType<'button' | 'a'>,
-    default: 'button',
+    type: String as PropType<"button" | "a">,
+    default: "button",
     validator: (value: unknown) => buttonComponents.includes(value as any),
   },
   /**
@@ -59,7 +60,8 @@ export const buttonProps = {
    */
   size: {
     type: String as PropType<ComponentSize>,
-    validator: (value: unknown): value is ComponentSize => componentSizes.includes(value as ComponentSize),
+    validator: (value: unknown): value is ComponentSize =>
+      componentSizes.includes(value as ComponentSize),
   },
   /**
    * 是否为加载中状态
@@ -72,8 +74,8 @@ export const buttonProps = {
    * 加载类型
    */
   loadingType: {
-    type: String as PropType<'default' | 'fill' | 'line'>,
-    default: 'default',
+    type: String as PropType<"default" | "fill" | "line">,
+    default: "default",
   },
   /**
    * 是否自动loading，方便处理异步任务
@@ -94,7 +96,7 @@ export const buttonProps = {
    */
   disabled: {
     type: Boolean,
-    default: undefined
+    default: undefined,
   },
   /**
    * 是否使用水波纹
@@ -121,13 +123,13 @@ export const buttonProps = {
    * 文字颜色
    */
   textColor: {
-    type: String
+    type: String,
   },
   /**
    * 背景颜色
    */
   color: {
-    type: String
+    type: String,
   },
   /**
    * 海拔高度可选值为 true、false 和 0-24 的等级
@@ -145,8 +147,8 @@ export const buttonProps = {
   },
   onClick: defineListenerProp<(e: Event) => void | Promise<any>>(),
   onTouchstart: defineListenerProp<(e: Event) => void | Promise<any>>(),
-}
-export type ButtonProps = ExtractPropTypes<typeof buttonProps>
+};
+export type ButtonProps = ExtractPropTypes<typeof buttonProps>;
 
 export const buttonGroupProps = {
   /**
@@ -154,35 +156,35 @@ export const buttonGroupProps = {
    */
   size: {
     type: String as PropType<ComponentSize>,
-    default: 'md',
+    default: "md",
   },
   /**
    * 按钮组主题色
    */
   status: {
     type: String as PropType<SemanticStatus>,
-    default: 'default',
+    default: "default",
   },
   /**
    * 按钮组变体
    */
   variant: {
     type: String as PropType<ButtonVariant>,
-    default: 'default',
+    default: "default",
   },
   /**
    * 按钮组背景色
    */
   color: {
     type: String,
-    default: '',
+    default: "",
   },
   /**
    * 按钮组文字颜色
    */
   textColor: {
     type: String,
-    default: '',
+    default: "",
   },
   /**
    * 是否为堆叠状态
@@ -206,12 +208,12 @@ export const buttonGroupProps = {
     default: false,
   },
   /**
- * 海拔高度可选值为 true、false 和 0-24 的等级
- */
+   * 海拔高度可选值为 true、false 和 0-24 的等级
+   */
   elevation: {
     type: [Boolean, Number] as PropType<boolean | number>,
     default: true,
   },
-}
+};
 
-export type ButtonGroupProps = ExtractPropTypes<typeof buttonGroupProps>
+export type ButtonGroupProps = ExtractPropTypes<typeof buttonGroupProps>;

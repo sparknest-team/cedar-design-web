@@ -45,33 +45,32 @@
 </template>
 
 <script lang="ts" setup>
-const steps = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+const steps = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 const functionalHues = [
-  { name: 'primary', label: 'Primary（主色）' },
-  { name: 'success', label: 'Success' },
-  { name: 'warning', label: 'Warning' },
-  { name: 'danger', label: 'Danger' },
-  { name: 'link', label: 'Link' },
-  { name: 'gray', label: 'Gray' },
-]
+  { name: "primary", label: "Primary（主色）" },
+  { name: "success", label: "Success" },
+  { name: "warning", label: "Warning" },
+  { name: "danger", label: "Danger" },
+  { name: "link", label: "Link" },
+  { name: "gray", label: "Gray" },
+];
 
 const chromaticHues = [
-  { name: 'brand', label: 'Brand' },
-  { name: 'red', label: 'Red' },
-  { name: 'orangered', label: 'Orangered' },
-  { name: 'orange', label: 'Orange' },
-  { name: 'gold', label: 'Gold' },
-  { name: 'yellow', label: 'Yellow' },
-  { name: 'lime', label: 'Lime' },
-  { name: 'green', label: 'Green' },
-  { name: 'cyan', label: 'Cyan' },
-  { name: 'blue', label: 'Blue' },
-  { name: 'purple', label: 'Purple' },
-  { name: 'pinkpurple', label: 'Pinkpurple' },
-  { name: 'magenta', label: 'Magenta' },
-]
-
+  { name: "brand", label: "Brand" },
+  { name: "red", label: "Red" },
+  { name: "orangered", label: "Orangered" },
+  { name: "orange", label: "Orange" },
+  { name: "gold", label: "Gold" },
+  { name: "yellow", label: "Yellow" },
+  { name: "lime", label: "Lime" },
+  { name: "green", label: "Green" },
+  { name: "cyan", label: "Cyan" },
+  { name: "blue", label: "Blue" },
+  { name: "purple", label: "Purple" },
+  { name: "pinkpurple", label: "Pinkpurple" },
+  { name: "magenta", label: "Magenta" },
+];
 </script>
 
 <style lang="less" scoped>

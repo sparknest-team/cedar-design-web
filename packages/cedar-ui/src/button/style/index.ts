@@ -1,1 +1,3 @@
-import './index.less'
+import "../../hover/style";
+import "../../progress/style";
+import "./index.less";

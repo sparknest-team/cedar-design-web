@@ -69,7 +69,7 @@ export default defineComponent({
     const valueKeyScope = (() => {
       return ['longitude', 'latitude', 'address', 'name', 'adcode', 'countryCode', 'city', 'country'] as PoiKeys[]
     })()
-    const okLoading = ref(false)
+    const confirmButtonLoading = ref(false)
     const address = ref('')
     const isLoading = ref(false)
 
@@ -129,7 +129,7 @@ export default defineComponent({
       updateModelValue()
     }
 
-    const handleOk = () => {
+    const handleConfirm = () => {
       show.value = false
       updateModelValue()
       return true
@@ -226,8 +226,8 @@ export default defineComponent({
           onCancel={() => {
             show.value = false
           }}
-          onConfirm={handleOk}
-          confirmButtonLoading={okLoading.value}
+          onConfirm={handleConfirm}
+          confirmButtonLoading={confirmButtonLoading.value}
         >
           {show.value ? (
             <Map
@@ -242,9 +242,9 @@ export default defineComponent({
                 })
               }}
               onLoading:address={() => {
-                okLoading.value = true
+                confirmButtonLoading.value = true
               }}
-              onLoaded:address={() => (okLoading.value = false)}
+              onLoaded:address={() => (confirmButtonLoading.value = false)}
               onInit={initHandler}
               style={props.mapStyle}
               valueKeyScope={valueKeyScope}

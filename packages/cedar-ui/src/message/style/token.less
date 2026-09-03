@@ -1,65 +1,69 @@
-@import '../../style/theme/index.less';
+@import "../../style/theme/index.less";
 
 /******** Message CSS Variables *******/
 :root {
-  --c-message-wrapper-margin-top: var(~'--c-spacing-12');
-  --c-message-wrapper-margin-bottom: var(~'--c-spacing-12');
-  --c-message-wrapper-padding-horizontal: var(~'--c-spacing-5');
-  --c-message-z-index: var(~'--c-z-index-message');
+  --c-message-wrapper-margin-top: var(~"--c-spacing-12");
+  --c-message-wrapper-margin-bottom: var(~"--c-spacing-12");
+  --c-message-wrapper-padding-horizontal: var(~"--c-spacing-5");
+  --c-message-z-index: var(~"--c-z-index-message");
 
-  --c-message-padding-top: var(~'--c-spacing-5');
-  --c-message-padding-bottom: var(~'--c-spacing-5');
-  --c-message-padding-left: var(~'--c-spacing-7');
-  --c-message-padding-right: var(~'--c-spacing-7');
-  --c-message-margin-bottom: var(~'--c-spacing-7');
-  --c-message-border-radius: var(~'--c-border-radius-sm');
+  --c-message-padding-top: var(~"--c-spacing-5");
+  --c-message-padding-bottom: var(~"--c-spacing-5");
+  --c-message-padding-left: var(~"--c-spacing-7");
+  --c-message-padding-right: var(~"--c-spacing-7");
+  --c-message-margin-bottom: var(~"--c-spacing-7");
+  --c-message-border-radius: var(~"--c-border-radius-sm");
   --c-message-icon-font-size: 20px;
-  --c-message-content-font-size: var(~'--c-font-size-body-3');
-  --c-message-icon-margin-right: var(~'--c-spacing-4');
-  --c-message-box-shadow: var(~'--c-shadow2-down');
+  --c-message-content-font-size: var(~"--c-font-size-body-3");
+  --c-message-icon-margin-right: var(~"--c-spacing-4");
+  --c-message-box-shadow: var(~"--c-shadow2-down");
 
   --c-message-border-width: 1px;
   --c-message-border-style: solid;
 
-  --c-message-close-icon-color: var(~'--c-color-text-1');
+  --c-message-close-icon-color: var(~"--c-color-text-1");
   --c-message-close-icon-font-size: 12px;
   --c-message-close-icon-top: 15px;
-  --c-message-close-icon-right: var(~'--c-spacing-7');
-  --c-message-close-btn-margin-left: var(~'--c-spacing-4');
+  --c-message-close-icon-right: var(~"--c-spacing-7");
+  --c-message-close-btn-margin-left: var(~"--c-spacing-4");
   --c-message-close-icon-hover-size: 20px;
 
-  --c-message-normal-bg: var(~'--c-color-bg-popup');
-  --c-message-normal-icon-color: var(~'--c-color-text-1');
-  --c-message-normal-content-color: var(~'--c-color-text-1');
-  --c-message-normal-border-color: var(~'--c-color-neutral-3');
+  --c-message-normal-bg: var(~"--c-color-bg-popup");
+  --c-message-normal-icon-color: var(~"--c-color-text-1");
+  --c-message-normal-content-color: var(~"--c-color-text-1");
+  --c-message-normal-border-color: var(~"--c-color-neutral-3");
 
-  --c-message-info-bg: var(~'--c-color-bg-popup');
-  --c-message-info-icon-color: rgb(var(~'--c-primary-6'));
-  --c-message-info-content-color: var(~'--c-color-text-1');
-  --c-message-info-border-color: var(~'--c-color-neutral-3');
+  --c-message-info-bg: var(~"--c-color-bg-popup");
+  --c-message-info-icon-color: rgb(var(~"--c-primary-6"));
+  --c-message-info-content-color: var(~"--c-color-text-1");
+  --c-message-info-border-color: var(~"--c-color-neutral-3");
 
-  --c-message-success-bg: var(~'--c-color-bg-popup');
-  --c-message-success-icon-color: rgb(var(~'--c-success-6'));
-  --c-message-success-content-color: var(~'--c-color-text-1');
-  --c-message-success-border-color: var(~'--c-color-neutral-3');
+  --c-message-success-bg: var(~"--c-color-bg-popup");
+  --c-message-success-icon-color: rgb(var(~"--c-success-6"));
+  --c-message-success-content-color: var(~"--c-color-text-1");
+  --c-message-success-border-color: var(~"--c-color-neutral-3");
 
-  --c-message-warning-bg: var(~'--c-color-bg-popup');
-  --c-message-warning-icon-color: rgb(var(~'--c-warning-6'));
-  --c-message-warning-content-color: var(~'--c-color-text-1');
-  --c-message-warning-border-color: var(~'--c-color-neutral-3');
+  --c-message-warning-bg: var(~"--c-color-bg-popup");
+  --c-message-warning-icon-color: rgb(var(~"--c-warning-6"));
+  --c-message-warning-content-color: var(~"--c-color-text-1");
+  --c-message-warning-border-color: var(~"--c-color-neutral-3");
 
-  --c-message-error-bg: var(~'--c-color-bg-popup');
-  --c-message-error-icon-color: rgb(var(~'--c-danger-6'));
-  --c-message-error-content-color: var(~'--c-color-text-1');
-  --c-message-error-border-color: var(~'--c-color-neutral-3');
+  --c-message-error-bg: var(~"--c-color-bg-popup");
+  --c-message-error-icon-color: rgb(var(~"--c-danger-6"));
+  --c-message-error-content-color: var(~"--c-color-text-1");
+  --c-message-error-border-color: var(~"--c-color-neutral-3");
 
-  --c-message-loading-bg: var(~'--c-color-bg-popup');
-  --c-message-loading-icon-color: rgb(var(~'--c-primary-6'));
-  --c-message-loading-content-color: var(~'--c-color-text-1');
-  --c-message-loading-border-color: var(~'--c-color-neutral-3');
+  --c-message-loading-bg: var(~"--c-color-bg-popup");
+  --c-message-loading-icon-color: rgb(var(~"--c-primary-6"));
+  --c-message-loading-content-color: var(~"--c-color-text-1");
+  --c-message-loading-border-color: var(~"--c-color-neutral-3");
 
-  --c-message-transition-duration: var(~'--c-transition-duration-1');
-  --c-message-transition-duration-icon: var(~'--c-transition-duration-4');
-  --c-message-transition-timing-function: var(~'--c-transition-timing-function-linear');
-  --c-message-transition-timing-function-icon: var(~'--c-transition-timing-function-overshoot');
+  --c-message-transition-duration: var(~"--c-transition-duration-1");
+  --c-message-transition-duration-icon: var(~"--c-transition-duration-4");
+  --c-message-transition-timing-function: var(
+    ~"--c-transition-timing-function-linear"
+  );
+  --c-message-transition-timing-function-icon: var(
+    ~"--c-transition-timing-function-overshoot"
+  );
 }

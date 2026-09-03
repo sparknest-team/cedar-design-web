@@ -110,7 +110,7 @@ export default defineComponent({
         open={dropdownVisible.value}
         onOpenChange={handleVisibleChange}
         onUpdate:open={handleVisibleChange}
-        onSelect={(value: unknown, event: Event) => {
+        onSelect={(value: unknown, _option: Record<string, any>, event: Event) => {
           const route = props.droplist?.find((item) => item.path === value)
           if (route) emit('select', route, event)
         }}

@@ -500,7 +500,7 @@ export default defineComponent({
                         ),
                         icon: () => <div style="display: none"></div>,
                       }}
-                      onOk={() => {
+                      onConfirm={() => {
                         value_.value[valueKeyAlias.address] = newAddress.value
                         updateModelValue()
                       }}

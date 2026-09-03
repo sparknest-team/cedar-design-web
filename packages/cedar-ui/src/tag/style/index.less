@@ -1,74 +1,94 @@
-@import '../../style/mixins/index.less';
-@import './token.less';
+@import "../../style/mixins/index.less";
+@import "../../_components/icon-hover/style/mixins.less";
+@import "./token.less";
 
-@colors: red, orangered, orange, gold, lime, green, cyan, blue, brand, purple, pinkpurple, magenta, gray;
+@colors: red, orangered, orange, gold, lime, green, cyan, blue, brand, purple,
+  pinkpurple, magenta, gray;
 
 .c-tag {
   display: inline-flex;
   align-items: center;
   box-sizing: border-box;
-  height: var(~'--c-tag-size-md');
-  padding: var(~'--c-tag-padding-vertical') var(~'--c-tag-padding-horizontal');
-  color: var(~'--c-tag-default-text-color');
-  font-weight: var(~'--c-tag-text-font-weight');
-  font-size: var(~'--c-tag-size-md-font-size');
-  line-height: calc(var(~'--c-tag-size-md') - var(~'--c-tag-border-width') * 2 - var(~'--c-tag-padding-vertical') * 2);
+  height: var(~"--c-tag-size-md");
+  padding: var(~"--c-tag-padding-vertical") var(~"--c-tag-padding-horizontal");
+  color: var(~"--c-tag-default-text-color");
+  font-weight: var(~"--c-tag-text-font-weight");
+  font-size: var(~"--c-tag-size-md-font-size");
+  line-height: calc(
+    var(~"--c-tag-size-md") - var(~"--c-tag-border-width") * 2 -
+      var(~"--c-tag-padding-vertical") * 2
+  );
   vertical-align: middle;
-  border: var(~'--c-tag-border-width') var(~'--c-tag-border-type') transparent;
-  border-radius: var(~'--c-tag-border-radius');
+  border: var(~"--c-tag-border-width") var(~"--c-tag-border-type") transparent;
+  border-radius: var(~"--c-tag-border-radius");
   .text-ellipsis();
 
-  .icon-hover(~'c-tag', var(~'--c-tag-icon-hover-size'), var(~'--c-tag-icon-hover-bg-size'));
-  .icon-hover-bg(~'c-tag', var(~'--c-tag-default-bg-hover'));
+  &--round {
+    border-radius: var(~"--c-tag-round-radius");
+  }
+
+  .icon-hover(~"c-tag", var(~"--c-tag-icon-hover-bg-size"));
+  .icon-hover-bg(~"c-tag", var(~"--c-tag-default-bg-hover"));
 
   &--checkable {
     cursor: pointer;
-    transition: all var(~'--c-transition-duration-1') var(~'--c-transition-timing-function-linear');
+    transition: all var(~"--c-transition-duration-1")
+      var(~"--c-transition-timing-function-linear");
   }
 
   &--checkable:hover {
-    background-color: var(~'--c-tag-bg-not-checked-hover');
+    background-color: var(~"--c-tag-bg-not-checked-hover");
   }
 
   &--checked {
-    background-color: var(~'--c-tag-default-bg');
-    border-color: var(~'--c-tag-default-border-color');
+    background-color: var(~"--c-tag-default-bg");
+    border-color: var(~"--c-tag-default-border-color");
   }
 
   &--checkable--checked:hover {
-    background-color: var(~'--c-tag-default-bg-hover');
-    border-color: var(~'--c-tag-default-border-color-hover');
+    background-color: var(~"--c-tag-default-bg-hover");
+    border-color: var(~"--c-tag-default-border-color-hover");
   }
 
   // Size
   &--size-xs {
-    height: var(~'--c-tag-size-xs');
-    font-size: var(~'--c-tag-size-xs-font-size');
-    line-height: calc(var(~'--c-tag-size-xs') - var(~'--c-tag-border-width') * 2);
+    height: var(~"--c-tag-size-xs");
+    font-size: var(~"--c-tag-size-xs-font-size");
+    line-height: calc(
+      var(~"--c-tag-size-xs") - var(~"--c-tag-border-width") * 2
+    );
   }
 
   &--size-sm {
-    height: var(~'--c-tag-size-sm');
-    font-size: var(~'--c-tag-size-sm-font-size');
-    line-height: calc(var(~'--c-tag-size-sm') - var(~'--c-tag-border-width') * 2);
+    height: var(~"--c-tag-size-sm");
+    font-size: var(~"--c-tag-size-sm-font-size");
+    line-height: calc(
+      var(~"--c-tag-size-sm") - var(~"--c-tag-border-width") * 2
+    );
   }
 
   &--size-md {
-    height: var(~'--c-tag-size-md');
-    font-size: var(~'--c-tag-size-md-font-size');
-    line-height: calc(var(~'--c-tag-size-md') - var(~'--c-tag-border-width') * 2);
+    height: var(~"--c-tag-size-md");
+    font-size: var(~"--c-tag-size-md-font-size");
+    line-height: calc(
+      var(~"--c-tag-size-md") - var(~"--c-tag-border-width") * 2
+    );
   }
 
   &--size-lg {
-    height: var(~'--c-tag-size-lg');
-    font-size: var(~'--c-tag-size-lg-font-size');
-    line-height: calc(var(~'--c-tag-size-lg') - var(~'--c-tag-border-width') * 2);
+    height: var(~"--c-tag-size-lg");
+    font-size: var(~"--c-tag-size-lg-font-size");
+    line-height: calc(
+      var(~"--c-tag-size-lg") - var(~"--c-tag-border-width") * 2
+    );
   }
 
   &--size-xl {
-    height: var(~'--c-tag-size-xl');
-    font-size: var(~'--c-tag-size-xl-font-size');
-    line-height: calc(var(~'--c-tag-size-xl') - var(~'--c-tag-border-width') * 2);
+    height: var(~"--c-tag-size-xl");
+    font-size: var(~"--c-tag-size-xl-font-size");
+    line-height: calc(
+      var(~"--c-tag-size-xl") - var(~"--c-tag-border-width") * 2
+    );
   }
 
   &--hide {
@@ -81,12 +101,13 @@
   }
 
   &__icon {
-    margin-right: var(~'--c-tag-icon-margin-right');
-    color: var(~'--c-tag-default-icon-color');
+    margin-right: var(~"--c-tag-icon-margin-right");
+    color: var(~"--c-tag-default-icon-color");
   }
 
   &__text {
     overflow: hidden;
+    min-width: 0;
     white-space: nowrap;
     text-overflow: ellipsis;
   }
@@ -113,14 +134,14 @@
   });
 
   &&--custom-color {
-    color: var(~'--c-tag-custom-text-color');
+    color: var(~"--c-tag-custom-text-color");
 
-    .icon-hover-bg(~'c-tag', var(~'--c-tag-custom-icon-bg-hover'));
+    .icon-hover-bg(~"c-tag", var(~"--c-tag-custom-icon-bg-hover"));
   }
 
   & &__close-btn {
-    margin-left: var(~'--c-tag-close-margin-left');
-    font-size: var(~'--c-tag-close-font-size');
+    margin-left: var(~"--c-tag-close-margin-left");
+    font-size: var(~"--c-tag-close-font-size");
 
     > svg {
       position: relative;
@@ -128,18 +149,18 @@
   }
 
   & &__loading-icon {
-    margin-left: var(~'--c-tag-close-margin-left');
-    font-size: var(~'--c-tag-close-font-size');
+    margin-left: var(~"--c-tag-close-margin-left");
+    font-size: var(~"--c-tag-close-font-size");
   }
 
   // === variant=default × status: filled ===
   .tagFilledStatus(@status, @colorVar) {
     &--variant-default&--status-@{status} {
-      color: var(~'--c-tag-status-@{status}-text-color');
-      background-color: var(~'--c-tag-status-@{status}-bg-color');
+      color: var(~"--c-tag-status-@{status}-text-color");
+      background-color: var(~"--c-tag-status-@{status}-bg-color");
       border-color: transparent;
 
-      .icon-hover-bg(~'c-tag', ~'rgba(var(--c-@{colorVar}-6), 0.16)');
+      .icon-hover-bg(~"c-tag", ~"rgba(var(--c-@{colorVar}-6), 0.16)");
     }
   }
   .tagFilledStatus(primary, primary);
@@ -153,16 +174,18 @@
   // === variant=outline ===
   &--variant-outline {
     background-color: transparent;
-    color: var(~'--c-tag-variant-outline-default-color');
-    border: var(~'--c-tag-border-width') var(~'--c-tag-border-type') var(~'--c-tag-variant-outline-default-border-color');
+    color: var(~"--c-tag-variant-outline-default-color");
+    border: var(~"--c-tag-border-width") var(~"--c-tag-border-type")
+      var(~"--c-tag-variant-outline-default-border-color");
   }
   .tagOutlineStatus(@status, @colorVar) {
     &--variant-outline&--status-@{status} {
-      color: var(~'--c-tag-variant-outline-status-@{status}-color');
+      color: var(~"--c-tag-variant-outline-status-@{status}-color");
       background-color: transparent;
-      border: var(~'--c-tag-border-width') var(~'--c-tag-border-type') var(~'--c-tag-variant-outline-status-@{status}-color');
+      border: var(~"--c-tag-border-width") var(~"--c-tag-border-type")
+        var(~"--c-tag-variant-outline-status-@{status}-color");
 
-      .icon-hover-bg(~'c-tag', ~'rgba(var(--c-@{colorVar}-6), 0.16)');
+      .icon-hover-bg(~"c-tag", ~"rgba(var(--c-@{colorVar}-6), 0.16)");
     }
   }
   .tagOutlineStatus(primary, primary);
@@ -174,7 +197,7 @@
   .tagOutlineStatus(danger, red);
 }
 
-:root[cedar-theme='dark'] {
+:root[cedar-theme="dark"] {
   .c-tag--checked {
     color: rgba(255, 255, 255, 0.9);
   }
@@ -198,12 +221,12 @@
   .c-tag {
     &__icon {
       margin-right: 0;
-      margin-left: var(~'--c-tag-icon-margin-right');
+      margin-left: var(~"--c-tag-icon-margin-right");
     }
 
     &__close-btn,
     &__loading-icon {
-      margin-right: var(~'--c-tag-close-margin-left');
+      margin-right: var(~"--c-tag-close-margin-left");
       margin-left: 0;
     }
   }

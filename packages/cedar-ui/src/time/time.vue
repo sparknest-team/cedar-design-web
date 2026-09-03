@@ -36,7 +36,7 @@
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
-import TimePicker from '../time-picker'
+import TimePicker from './picker/time-picker.vue'
 import { createNamespace } from '../_utils/global-config'
 import { timeProps } from './props'
 

@@ -4,13 +4,13 @@
     <c-button @click="handleClick2">Open Dialog 1500px</c-button>
   </c-space>
 
-  <c-dialog v-model:open="visible1" @confirm="handleOk" @cancel="handleCancel" title="height-100vh">
+  <c-dialog v-model:open="visible1" @confirm="handleConfirm" @cancel="handleCancel" title="height-100vh">
     <div style="height: 100vh">
       You can customize modal body text by the current situation. This modal will be closed immediately once you press
       the OK button.
     </div>
   </c-dialog>
-  <c-dialog v-model:open="visible2" @confirm="handleOk" @cancel="handleCancel" title="height-1500px">
+  <c-dialog v-model:open="visible2" @confirm="handleConfirm" @cancel="handleCancel" title="height-1500px">
     <div style="height: 1500px">
       You can customize modal body text by the current situation. This modal will be closed immediately once you press
       the OK button.
@@ -31,7 +31,7 @@ export default defineComponent({
     const handleClick2 = () => {
       visible2.value = true
     }
-    const handleOk = () => {
+    const handleConfirm = () => {
       visible1.value = false
       visible2.value = false
     }
@@ -45,7 +45,7 @@ export default defineComponent({
       visible2,
       handleClick1,
       handleClick2,
-      handleOk,
+      handleConfirm,
       handleCancel,
     }
   },

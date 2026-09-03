@@ -1,13 +1,3 @@
-@import './common.less';
-@import './global.less';
-@import './component.less';
-
-@prefix: c;
-
-@font-family: Inter, '-apple-system', BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'noto sans',
-  'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-
-@code-family: Consolas, Menlo;
-
-// global font size
-@font-size-body: 14px;
+// Token-only compatibility entry. Component styles consume --c-* variables;
+// runtime defaults are emitted once by css-variables.less.
+@import "../color/colors.less";

@@ -1,3 +1,4 @@
+<!-- @sync-with: maple-ui/src/count-to/CountTo.vue -->
 <template>
   <div :class="n()">
     <slot :value="displayValue">{{ displayValue }}</slot>

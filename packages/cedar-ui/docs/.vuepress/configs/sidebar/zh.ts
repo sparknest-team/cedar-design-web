@@ -309,6 +309,10 @@ export const zhSideBar: SidebarConfig = {
       text: "数据展示",
       children: [
         {
+          text: "Avatar 头像",
+          link: "/components/avatar/",
+        },
+        {
           text: "Badge 徽标数",
           link: "/components/badge/",
         },
@@ -343,6 +347,10 @@ export const zhSideBar: SidebarConfig = {
         {
           text: "List 列表",
           link: "/components/list/",
+        },
+        {
+          text: "InfiniteScroll 无限滚动",
+          link: "/components/infinite-scroll/",
         },
         {
           text: "Carousel 图片轮播",
@@ -381,16 +389,16 @@ export const zhSideBar: SidebarConfig = {
           link: "/components/count-to/",
         },
         {
+          text: "Countdown 倒计时",
+          link: "/components/countdown/",
+        },
+        {
           text: "Popover 气泡卡片",
           link: "/components/popover/",
         },
         {
           text: "Tooltip 文字气泡",
           link: "/components/tooltip/",
-        },
-        {
-          text: "DragContainer 拖拽容器",
-          link: "/components/drag-container/",
         },
       ],
     },
@@ -446,10 +454,6 @@ export const zhSideBar: SidebarConfig = {
     {
       text: "业务组件",
       children: [
-        {
-          text: "SaasHeaderNav 头部导航",
-          link: "/components/saas-header-nav/",
-        },
         {
           text: "SaasPage 页面布局",
           link: "/components/saas-page/",

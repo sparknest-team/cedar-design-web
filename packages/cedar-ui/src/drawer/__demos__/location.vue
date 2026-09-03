@@ -13,7 +13,7 @@
     :height="340"
     :open="visible"
     :placement="position"
-    @ok="handleOk"
+    @confirm="handleConfirm"
     @cancel="handleCancel"
     unmountOnClose
   >
@@ -33,7 +33,7 @@ const position = ref('right')
 const handleClick = () => {
   visible.value = true
 }
-const handleOk = () => {
+const handleConfirm = () => {
   visible.value = false
 }
 const handleCancel = () => {

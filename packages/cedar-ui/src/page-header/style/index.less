@@ -1,25 +1,26 @@
-@import '../../style/mixins/index.less';
-@import './token.less';
+@import "../../style/mixins/index.less";
+@import "../../_components/icon-hover/style/mixins.less";
+@import "./token.less";
 
-@page-header-prefix-cls: ~'@{prefix}-page-header';
+@page-header-prefix-cls: c-page-header;
 
 .@{page-header-prefix-cls} {
-  padding: var(~'--c-page-header-padding-vertical') 0;
+  padding: var(~"--c-page-header-padding-vertical") 0;
 
   &-breadcrumb + &-header {
-    margin-top: var(~'--c-page-header-margin-breadcrumb-bottom');
+    margin-top: var(~"--c-page-header-margin-breadcrumb-bottom");
   }
 
   &-wrapper {
-    padding-right: var(~'--c-page-header-padding-right');
-    padding-left: var(~'--c-page-header-padding-left');
+    padding-right: var(~"--c-page-header-padding-right");
+    padding-left: var(~"--c-page-header-padding-left");
   }
 
   &-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    line-height: var(~'--c-page-header-line-height');
+    line-height: var(~"--c-page-header-line-height");
   }
 
   &-main {
@@ -28,28 +29,34 @@
     flex: 1;
     min-width: 0;
     // 最小高度避免按钮 hover 下背景被裁切
-    min-height: var(~'--c-page-header-size-back-icon-bg-hover');
+    min-height: var(~"--c-page-header-size-back-icon-bg-hover");
 
     // 带有返回按钮时，避免 overflow:hidden 导致返回按钮 hover 背景显示不全
     &-with-back {
-      margin-left: calc(var(~'--c-page-header-size-back-icon') / 2 - var(~'--c-page-header-size-back-icon-bg-hover') / 2);
-      padding-left: calc(var(~'--c-page-header-size-back-icon-bg-hover') / 2 - var(~'--c-page-header-size-back-icon') / 2);
+      margin-left: calc(
+        var(~"--c-page-header-size-back-icon") / 2 -
+          var(~"--c-page-header-size-back-icon-bg-hover") / 2
+      );
+      padding-left: calc(
+        var(~"--c-page-header-size-back-icon-bg-hover") / 2 -
+          var(~"--c-page-header-size-back-icon") / 2
+      );
     }
   }
 
   &-extra {
-    padding-left: var(~'--c-page-header-extra-padding-left');
+    padding-left: var(~"--c-page-header-extra-padding-left");
     overflow: hidden;
     white-space: nowrap;
   }
 
-  .icon-hover(@page-header-prefix-cls, var(~'--c-page-header-size-back-icon'), var(~'--c-page-header-size-back-icon-bg-hover'));
-  .icon-hover-bg(@page-header-prefix-cls, var(~'--c-page-header-back-icon-bg-hover'));
+  .icon-hover(@page-header-prefix-cls, var(~"--c-page-header-size-back-icon-bg-hover"));
+  .icon-hover-bg(@page-header-prefix-cls, var(~"--c-page-header-back-icon-bg-hover"));
 
   &-back-btn {
-    margin-right: var(~'--c-page-header-margin-back-icon-right');
-    color: var(~'--c-page-header-back-icon');
-    font-size: var(~'--c-page-header-size-back-icon');
+    margin-right: var(~"--c-page-header-margin-back-icon-right");
+    color: var(~"--c-page-header-back-icon");
+    font-size: var(~"--c-page-header-size-back-icon");
     cursor: pointer;
   }
 
@@ -57,39 +64,41 @@
     .text-ellipsis();
 
     &-text {
-      color: var(~'--c-page-header-title-color-text');
-      font-weight: var(~'--c-page-header-weight-title-text');
-      font-size: var(~'--c-page-header-size-title-text');
+      color: var(~"--c-page-header-title-color-text");
+      font-weight: var(~"--c-page-header-weight-title-text");
+      font-size: var(~"--c-page-header-size-title-text");
     }
   }
 
   &-divider {
     flex-shrink: 0;
-    width: var(~'--c-page-header-size-divider-width');
-    height: var(~'--c-page-header-size-divider-height');
-    margin-right: var(~'--c-page-header-margin-divider-right');
-    margin-left: var(~'--c-page-header-margin-divider-left');
-    background-color: var(~'--c-page-header-divider-bg');
+    width: var(~"--c-page-header-size-divider-width");
+    height: var(~"--c-page-header-size-divider-height");
+    margin-right: var(~"--c-page-header-margin-divider-right");
+    margin-left: var(~"--c-page-header-margin-divider-left");
+    background-color: var(~"--c-page-header-divider-bg");
   }
 
   &-subtitle {
     .text-ellipsis();
 
-    color: var(~'--c-page-header-sub-title-text-color');
-    font-size: var(~'--c-page-header-size-sub-title-text');
+    color: var(~"--c-page-header-sub-title-text-color");
+    font-size: var(~"--c-page-header-size-sub-title-text");
   }
 
   &-content {
-    padding: var(~'--c-page-header-padding-content-vertical') var(~'--c-page-header-padding-content-horizontal');
-    border-top: var(~'--c-page-header-border-header-width') var(~'--c-page-header-border-header-style')
-      var(~'--c-page-header-header-border');
+    padding: var(~"--c-page-header-padding-content-vertical")
+      var(~"--c-page-header-padding-content-horizontal");
+    border-top: var(~"--c-page-header-border-header-width")
+      var(~"--c-page-header-border-header-style")
+      var(~"--c-page-header-header-border");
   }
 
   &-with-breadcrumb {
-    padding: var(~'--c-page-header-padding-vertical-breadcrumb') 0;
+    padding: var(~"--c-page-header-padding-vertical-breadcrumb") 0;
   }
 
   &-with-content &-wrapper {
-    padding-bottom: var(~'--c-page-header-padding-vertical-breadcrumb');
+    padding-bottom: var(~"--c-page-header-padding-vertical-breadcrumb");
   }
 }

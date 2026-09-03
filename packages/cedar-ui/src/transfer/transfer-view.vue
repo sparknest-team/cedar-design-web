@@ -12,7 +12,10 @@
         :on-clear="handleClear"
       >
         <span :class="`${prefixCls}-header-title`">
-          <span v-if="clearable || simple || !showSelectAll" :class="`${prefixCls}-header-title-simple`">
+          <span
+            v-if="clearable || simple || !showSelectAll"
+            :class="`${prefixCls}-header-title-simple`"
+          >
             {{ title }}
           </span>
           <checkbox
@@ -52,7 +55,12 @@
       </slot>
     </div>
     <div v-if="showSearch" :class="`${prefixCls}-search`">
-      <Search v-model="filter" :disabled="disabled" v-bind="searchProps" @change="handleSearch" />
+      <Search
+        v-model="filter"
+        :disabled="disabled"
+        v-bind="searchProps"
+        @change="handleSearch"
+      />
     </div>
     <div :class="`${prefixCls}-body`">
       <template v-if="filteredData.length > 0">
@@ -71,7 +79,10 @@
           :estimated-size="36"
         >
           <template #item="{ item }">
-            <div v-if="showGroupTitle(item)" :class="`${prefixCls}-group-title`">
+            <div
+              v-if="showGroupTitle(item)"
+              :class="`${prefixCls}-group-title`"
+            >
               {{ item.group }}
             </div>
             <transfer-list-item
@@ -80,17 +91,19 @@
               :simple="simple"
               :clearable="clearable"
               :operation-mode="targetOperation"
-              :disabled="disabled || item.disabled || (type === 'source' && item.required)"
+              :disabled="
+                disabled ||
+                item.disabled ||
+                (type === 'source' && item.required)
+              "
             />
           </template>
         </VirtualList>
         <Scrollbar v-else>
-          <DragContainer
+          <div
             v-if="targetDraggable && type === 'target'"
-            :model-value="filteredData"
-            :drag-options="{ handle: `.${prefixCls}-drag-handle` }"
+            ref="dragContainerRef"
             :class="`${prefixCls}-draggable-list`"
-            @change="handleTargetOrder"
           >
             <transfer-list-item
               v-for="item of filteredData"
@@ -102,10 +115,18 @@
               :operation-mode="targetOperation"
               :disabled="disabled || item.disabled"
             />
-          </DragContainer>
-          <list v-else :class="`${prefixCls}-list`" :bordered="false" :scrollbar="false">
+          </div>
+          <list
+            v-else
+            :class="`${prefixCls}-list`"
+            :bordered="false"
+            :scrollbar="false"
+          >
             <template v-for="(item, index) of filteredData" :key="item.value">
-              <div v-if="showGroupTitle(item, index)" :class="`${prefixCls}-group-title`">
+              <div
+                v-if="showGroupTitle(item, index)"
+                :class="`${prefixCls}-group-title`"
+              >
                 {{ item.group }}
               </div>
               <transfer-list-item
@@ -114,7 +135,11 @@
                 :simple="simple"
                 :clearable="clearable"
                 :operation-mode="targetOperation"
-                :disabled="disabled || item.disabled || (type === 'source' && item.required)"
+                :disabled="
+                  disabled ||
+                  item.disabled ||
+                  (type === 'source' && item.required)
+                "
               />
             </template>
           </list>
@@ -126,21 +151,36 @@
 </template>
 
 <script lang="ts">
-import { createNamespace } from '../_utils/global-config'
-import { computed, defineComponent, inject, PropType, ref } from 'vue'
-import { getPrefixCls } from '../_utils/global-config'
-import Checkbox from '../checkbox'
-import IconHover from '../_components/icon-hover.vue'
-import { IconDelete } from '@cedarjs/icons-vue/icon-delete'
-import Search from '../search'
-import List from '../list'
-import TransferListItem from './transfer-list-item'
-import type { DataInfo, TransferFilter, TransferItem, TransferValue } from './types'
-import { transferInjectionKey } from './context'
-import Scrollbar from '../scrollbar'
-import Empty from '../empty/empty'
-import VirtualList from '../_components/virtual-list-v2'
-import DragContainer from '../drag-container'
+import { createNamespace } from "../_utils/global-config";
+import {
+  computed,
+  defineComponent,
+  inject,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  PropType,
+  ref,
+  watch,
+} from "vue";
+import Sortable from "sortablejs";
+import { getPrefixCls } from "../_utils/global-config";
+import Checkbox from "../checkbox";
+import IconHover from "../_components/icon-hover.vue";
+import { IconDelete } from "@cedarjs/icons-vue/icon-delete";
+import Search from "../search";
+import List from "../list";
+import TransferListItem from "./transfer-list-item";
+import type {
+  DataInfo,
+  TransferFilter,
+  TransferItem,
+  TransferValue,
+} from "./types";
+import { transferInjectionKey } from "./context";
+import Scrollbar from "../scrollbar";
+import Empty from "../empty/empty";
+import VirtualList from "../_components/virtual-list-v2";
 
 export default defineComponent({
   name: createNamespace("transfer-view").name,
@@ -154,11 +194,10 @@ export default defineComponent({
     TransferListItem,
     Scrollbar,
     VirtualList,
-    DragContainer,
   },
   props: {
     type: {
-      type: String as PropType<'source' | 'target'>,
+      type: String as PropType<"source" | "target">,
     },
     dataInfo: {
       type: Object as PropType<DataInfo>,
@@ -180,8 +219,8 @@ export default defineComponent({
     virtualScroll: Boolean,
     targetDraggable: Boolean,
     targetOperation: {
-      type: String as PropType<'remove' | 'menu'>,
-      default: 'remove',
+      type: String as PropType<"remove" | "menu">,
+      default: "remove",
     },
     total: Number,
     clearText: String,
@@ -194,60 +233,113 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ['search'],
+  emits: ["search"],
   setup(props, { emit }) {
-    const prefixCls = getPrefixCls('transfer-view')
-    const filter = ref('')
-    const transferCtx = inject(transferInjectionKey, undefined)
-    const countSelected = computed(() => props.dataInfo.selected.length)
-    const countRendered = computed(() => props.dataInfo.data.length)
+    const prefixCls = getPrefixCls("transfer-view");
+    const filter = ref("");
+    const transferCtx = inject(transferInjectionKey, undefined);
+    const dragContainerRef = ref<HTMLElement>();
+    let sortable: Sortable | undefined;
+    const countSelected = computed(() => props.dataInfo.selected.length);
+    const countRendered = computed(() => props.dataInfo.data.length);
 
     const filteredData = computed(() =>
       props.dataInfo.data.filter(
-        (item) => !filter.value || props.filter(filter.value, item, props.type ?? 'source')
-      )
-    )
+        (item) =>
+          !filter.value ||
+          props.filter(filter.value, item, props.type ?? "source"),
+      ),
+    );
     const filteredValidValues = computed(() =>
-      filteredData.value.filter((item) => !item.disabled).map((item) => item.value)
-    )
+      filteredData.value
+        .filter((item) => !item.disabled)
+        .map((item) => item.value),
+    );
     const filteredSelectedValues = computed(() =>
-      filteredValidValues.value.filter((value) => props.selected.includes(value))
-    )
+      filteredValidValues.value.filter((value) =>
+        props.selected.includes(value),
+      ),
+    );
     const checked = computed(
       () =>
-        filteredValidValues.value.length > 0 && filteredSelectedValues.value.length === filteredValidValues.value.length
-    )
+        filteredValidValues.value.length > 0 &&
+        filteredSelectedValues.value.length ===
+          filteredValidValues.value.length,
+    );
     const indeterminate = computed(
       () =>
         filteredSelectedValues.value.length > 0 &&
-        filteredSelectedValues.value.length < filteredValidValues.value.length
-    )
+        filteredSelectedValues.value.length < filteredValidValues.value.length,
+    );
 
-    const handleSelectAllChange = (checked: boolean | (string | number | boolean)[]) => {
-      const isChecked = Array.isArray(checked) ? checked.length > 0 : checked
+    const handleSelectAllChange = (
+      checked: boolean | (string | number | boolean)[],
+    ) => {
+      const isChecked = Array.isArray(checked) ? checked.length > 0 : checked;
       if (isChecked) {
-        transferCtx?.onSelect([...new Set([...props.selected, ...filteredValidValues.value])])
+        transferCtx?.onSelect([
+          ...new Set([...props.selected, ...filteredValidValues.value]),
+        ]);
       } else {
-        transferCtx?.onSelect(props.selected.filter((value) => !filteredValidValues.value.includes(value)))
+        transferCtx?.onSelect(
+          props.selected.filter(
+            (value) => !filteredValidValues.value.includes(value),
+          ),
+        );
       }
-    }
+    };
 
     const handleSearch = (value: string) => {
-      emit('search', value, props.type)
-    }
+      emit("search", value, props.type);
+    };
 
     const handleClear = () => {
-      transferCtx?.moveTo(props.dataInfo.allValidValues, 'source')
-    }
+      transferCtx?.moveTo(props.dataInfo.allValidValues, "source");
+    };
 
     const showGroupTitle = (item: TransferItem, index?: number) => {
-      if (props.type !== 'source' || !item.group) return false
-      const itemIndex = index ?? filteredData.value.indexOf(item)
-      return itemIndex === 0 || filteredData.value[itemIndex - 1]?.group !== item.group
-    }
+      if (props.type !== "source" || !item.group) return false;
+      const itemIndex = index ?? filteredData.value.indexOf(item);
+      return (
+        itemIndex === 0 ||
+        filteredData.value[itemIndex - 1]?.group !== item.group
+      );
+    };
 
-    const handleTargetOrder = (items: TransferItem[], detail: { oldValue?: TransferItem; newValue?: TransferItem }) =>
-      transferCtx?.onReorder(items, detail)
+    const handleTargetOrder = (
+      items: TransferItem[],
+      detail: { oldValue?: TransferItem; newValue?: TransferItem },
+    ) => transferCtx?.onReorder(items, detail);
+
+    const destroySortable = () => {
+      sortable?.destroy();
+      sortable = undefined;
+    };
+
+    const initSortable = async () => {
+      destroySortable();
+      if (!props.targetDraggable || props.type !== "target") return;
+      await nextTick();
+      if (!dragContainerRef.value) return;
+      sortable = Sortable.create(dragContainerRef.value, {
+        animation: 150,
+        handle: `.${prefixCls}-drag-handle`,
+        onEnd: ({ oldIndex, newIndex }) => {
+          if (oldIndex == null || newIndex == null || oldIndex === newIndex)
+            return;
+          const items = [...filteredData.value];
+          const oldValue = items[oldIndex];
+          const newValue = items[newIndex];
+          const [item] = items.splice(oldIndex, 1);
+          items.splice(newIndex, 0, item);
+          handleTargetOrder(items, { oldValue, newValue });
+        },
+      });
+    };
+
+    onMounted(initSortable);
+    watch(() => [props.targetDraggable, props.type], initSortable);
+    onBeforeUnmount(destroySortable);
 
     return {
       prefixCls,
@@ -262,8 +354,9 @@ export default defineComponent({
       handleClear,
       showGroupTitle,
       handleTargetOrder,
+      dragContainerRef,
       transferCtx,
-    }
+    };
   },
-})
+});
 </script>

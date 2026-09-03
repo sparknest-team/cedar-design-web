@@ -140,11 +140,11 @@ export interface CedarLang {
   }
   calendar: CedarCalendarLang
   drawer: {
-    okText: string
+    confirmButtonText: string
     cancelText: string
   }
   popconfirm: {
-    okText: string
+    confirmButtonText: string
     cancelText: string
   }
   dialog: {
@@ -158,7 +158,7 @@ export interface CedarLang {
     total: string
   }
   table: {
-    okText: string
+    confirmButtonText: string
     resetText: string
     customColumnsConfig: string
     selectAll: string
@@ -222,7 +222,7 @@ export interface CedarLang {
     selectTime: string
     today: string
     now: string
-    ok: string
+    confirmButtonText: string
     startTime: string
     endTime: string
     rangeSeparator: string

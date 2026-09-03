@@ -2,7 +2,7 @@
 permalink: /components/statistic/
 ---
 
-# Statistic
+# Statistic 统计数值
 
 突出展示某个或某组数字、带描述的统计类数据。
 
@@ -10,61 +10,78 @@ permalink: /components/statistic/
 
 ### 基础用法
 
-当需要突出某个或某组数字或展示带描述的统计类数据时使用。
+通过 `title` 展示描述，通过 `value` 展示数值。`value` 支持数字或字符串。
 
 <demo src="./__demos__/basic.vue"></demo>
+
+### 前缀 / 后缀
+
+通过 `prefix` / `suffix` 或同名插槽为数值添加单位、货币符号或趋势图标。
+
+<demo src="./__demos__/prefix-suffix.vue"></demo>
+
+### 等宽数字
+
+开启 `tabular-nums` 后数字使用等宽字形，数值变化时宽度更稳定，适合并排对比。
+
+<demo src="./__demos__/tabular-nums.vue"></demo>
+
+### 额外信息
+
+通过 `extra` 或 `extra` 插槽在数值下方展示补充说明。
+
+<demo src="./__demos__/extra.vue"></demo>
+
+### 数值动画
+
+通过 `animation` 开启数值滚动动画，可用 `start` 控制播放时机。
+
+<demo src="./__demos__/animation.vue"></demo>
+
+### 自定义数值
+
+未传入 `value` 时，可用默认插槽自定义数值内容。例如嵌入 `CountTo` 实现滚动数字。
+
+<demo src="./__demos__/count-to.vue"></demo>
+
+### 倒计时
+
+`Countdown` 是独立组件，模板中使用 `<c-countdown>`。完整用法见 [Countdown 倒计时](/components/countdown/)。
+
+<demo src="../countdown/__demos__/statistic.vue"></demo>
 
 ## API
 
 ### `<Statistic>` Props
 
-| 属性                   | 说明                                         | 类型             | 默认值       |
-| ---------------------- | -------------------------------------------- | ---------------- | ------------ |
-| `title`                | 数值展示的标题                               | `string`         | -            |
-| `value`                | 数值展示的值                                 | `number \| Date` | -            |
-| `format`               | 数值展示的格式（日期模式使用）               | `string`         | `'HH:mm:ss'` |
-| `extra`                | 额外的显示内容                               | `string`         | -            |
-| `start`                | 是否开始动画                                 | `boolean`        | `true`       |
-| `precision`            | 小数保留位数（数字模式使用）                 | `number`         | `0`          |
-| `separator`            | 进位分隔符（数字模式使用）                   | `string`         | -            |
-| `show-group-separator` | 是否展示进位分隔符（数字模式使用）           | `boolean`        | `false`      |
-| `animation`            | 是否开启动画                                 | `boolean`        | `false`      |
-| `animation-duration`   | 动画的过渡时间                               | `number`         | `2000`       |
-| `value-from`           | 动画的起始值                                 | `number`         | -            |
-| `placeholder`          | 提示文字（当 `value` 为 `undefined` 时显示） | `string`         | -            |
-| `value-style`          | 自定义显示值的样式                           | `CSSProperties`  | -            |
+| 属性                   | 说明                                                           | 类型                      | 默认值       |
+| ---------------------- | -------------------------------------------------------------- | ------------------------- | ------------ |
+| `title`                | 数值展示的标题                                                 | `string`                  | -            |
+| `value`                | 数值展示的值                                                   | `number \| string \| Date` | -            |
+| `prefix`               | 数值前缀                                                       | `string`                  | -            |
+| `suffix`               | 数值后缀                                                       | `string`                  | -            |
+| `format`               | 数值展示的格式（日期模式使用）                                 | `string`                  | `'HH:mm:ss'` |
+| `extra`                | 额外的显示内容                                                 | `string`                  | -            |
+| `start`                | 是否开始动画                                                   | `boolean`                 | `true`       |
+| `precision`            | 小数保留位数（数字模式使用）                                   | `number`                  | `0`          |
+| `separator`            | 进位分隔符（数字模式使用）                                     | `string`                  | -            |
+| `show-group-separator` | 是否展示进位分隔符（数字模式使用）                             | `boolean`                 | `false`      |
+| `tabular-nums`         | 是否使用等宽数字，避免数值变化时宽度跳动                       | `boolean`                 | `false`      |
+| `animation`            | 是否开启动画                                                   | `boolean`                 | `false`      |
+| `animation-duration`   | 动画的过渡时间                                                 | `number`                  | `2000`       |
+| `value-from`           | 动画的起始值                                                   | `number`                  | -            |
+| `placeholder`          | 提示文字（当 `value` 为 `undefined` 且未使用默认插槽时显示）   | `string`                  | -            |
+| `value-style`          | 自定义显示值的样式                                             | `CSSProperties`           | -            |
 
 ### `<Statistic>` Slots
 
-| 插槽名   | 说明     | 参数     |
-| -------- | -------- | -------- |
-| `title`  | 标题     | `string` |
-| `prefix` | 前缀     | `string` |
-| `suffix` | 后缀     | `string` |
-| `extra`  | 额外内容 | `string` |
-
-### `<Countdown>` Props
-
-| 属性          | 说明                             | 类型            | 默认值                      |
-| ------------- | -------------------------------- | --------------- | --------------------------- |
-| `title`       | 倒计时的标题                     | `string`        | -                           |
-| `value`       | 倒计时的值                       | `number`        | `() => Date.now() + 300000` |
-| `now`         | 用于修正初始化时间显示不正确     | `number`        | `() => Date.now()`          |
-| `format`      | 倒计时的展示格式（使用 `dayjs`） | `string`        | `'HH:mm:ss'`                |
-| `start`       | 是否开始倒计时                   | `boolean`       | `true`                      |
-| `value-style` | 自定义显示值的样式               | `CSSProperties` | -                           |
-
-### `<Countdown>` Events
-
-| 事件名   | 描述                   | 参数 |
-| -------- | ---------------------- | ---- |
-| `finish` | 倒计时完成后触发的回调 | `-`  |
-
-### `<Countdown>` Slots
-
-| 插槽名  | 描述 | 参数 |
-| ------- | ---- | ---- |
-| `title` | 标题 | `-`  |
+| 插槽名    | 说明                                     | 参数 |
+| --------- | ---------------------------------------- | ---- |
+| `default` | 自定义数值内容，未传入 `value` 时生效    | `-`  |
+| `title`   | 标题                                     | `-`  |
+| `prefix`  | 前缀                                     | `-`  |
+| `suffix`  | 后缀                                     | `-`  |
+| `extra`   | 额外内容                                 | `-`  |
 
 ### 类型定义
 
@@ -73,3 +90,24 @@ permalink: /components/statistic/
 ```ts
 import type { StatisticProps } from '@cedarjs/ui'
 ```
+
+### 样式变量
+
+| 变量名 | 默认值 |
+| --- | --- |
+| `--c-statistic-title-color` | `var(--c-color-text-2)` |
+| `--c-statistic-title-font-size` | `var(--c-font-size-body-3)` |
+| `--c-statistic-title-margin-bottom` | `var(--c-spacing-4)` |
+| `--c-statistic-value-color` | `var(--c-color-text-1)` |
+| `--c-statistic-value-font-size` | `26px` |
+| `--c-statistic-value-font-weight` | `var(--c-font-weight-500)` |
+| `--c-statistic-decimal-font-size` | `inherit` |
+| `--c-statistic-prefix-color` | `var(--c-color-text-2)` |
+| `--c-statistic-prefix-font-size` | `14px` |
+| `--c-statistic-prefix-spacing` | `var(--c-spacing-1)` |
+| `--c-statistic-suffix-color` | `var(--c-color-text-2)` |
+| `--c-statistic-suffix-font-size` | `14px` |
+| `--c-statistic-suffix-spacing` | `var(--c-spacing-1)` |
+| `--c-statistic-extra-color` | `var(--c-color-text-2)` |
+| `--c-statistic-extra-font-size` | `var(--c-font-size-body-3)` |
+| `--c-statistic-extra-margin-top` | `var(--c-spacing-4)` |

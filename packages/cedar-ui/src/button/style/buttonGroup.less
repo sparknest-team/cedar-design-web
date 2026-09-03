@@ -1,8 +1,15 @@
 .c-button-group {
+  box-sizing: border-box;
   display: inline-flex;
-  border-radius: var(~'--c-button-size-md-border-radius');
+  border-radius: var(~"--c-button-size-md-border-radius");
   max-width: 100%;
   overflow: auto;
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: inherit;
+  }
 
   .c-button {
     &:active {

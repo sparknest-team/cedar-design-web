@@ -6,8 +6,8 @@ export const tagVariants = ['default', 'outline'] as const
 
 export const tagProps = {
   color: String as PropType<TagColor | string>,
-  size: String as PropType<ComponentSize>,
-  status: String as PropType<SemanticStatus>,
+  size: { type: String as PropType<ComponentSize>, default: 'md' },
+  status: { type: String as PropType<SemanticStatus>, default: 'default' },
   variant: {
     type: String as PropType<TagVariant>,
     default: 'default',
@@ -21,6 +21,8 @@ export const tagProps = {
   checked: { type: Boolean, default: undefined },
   defaultChecked: { type: Boolean, default: true },
   nowrap: { type: Boolean, default: false },
+  round: { type: Boolean, default: false },
+  textColor: String,
 } 
 
 export type TagProps = ExtractPropTypes<typeof tagProps>

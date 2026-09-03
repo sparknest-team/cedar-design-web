@@ -94,11 +94,11 @@ const lang: CedarLang = {
     description: '暂无数据',
   },
   drawer: {
-    okText: '确定',
+    confirmButtonText: '确定',
     cancelText: '取消',
   },
   popconfirm: {
-    okText: '确定',
+    confirmButtonText: '确定',
     cancelText: '取消',
   },
   dialog: {
@@ -112,7 +112,7 @@ const lang: CedarLang = {
     total: '共 {0} 条',
   },
   table: {
-    okText: '确定',
+    confirmButtonText: '确定',
     resetText: '重置',
     customColumnsConfig: '列管理',
     selectAll: '全选',
@@ -177,7 +177,7 @@ const lang: CedarLang = {
     selectTime: '选择时间',
     today: '今天',
     now: '此刻',
-    ok: '确定',
+    confirmButtonText: '确定',
     startTime: '开始时间',
     endTime: '结束时间',
     rangeSeparator: '至',

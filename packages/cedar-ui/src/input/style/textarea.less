@@ -1,4 +1,4 @@
-@import '../../field-decorator/style/index.less';
+@import "../../field-decorator/style/index.less";
 
 .c-textarea {
   position: relative;
@@ -10,15 +10,18 @@
 
   .c-textarea__word-limit {
     position: absolute;
-    right: var(~'--c-textarea-layout-tip-right');
-    bottom: var(~'--c-textarea-layout-tip-bottom');
-    color: var(~'--c-textarea-color-tip-text');
-    font-size: var(~'--c-textarea-font-tip-size');
+    right: var(~"--c-textarea-layout-tip-right");
+    bottom: var(~"--c-textarea-layout-tip-bottom");
+    color: var(~"--c-textarea-color-tip-text");
+    font-size: var(~"--c-textarea-font-tip-size");
     user-select: none;
   }
 
   &.c-textarea--scroll .c-textarea__word-limit {
-    right: calc(var(~'--c-textarea-layout-tip-right') + var(~'--c-textarea-layout-tip-scroll-offset'));
+    right: calc(
+      var(~"--c-textarea-layout-tip-right") +
+        var(~"--c-textarea-layout-tip-scroll-offset")
+    );
   }
 
   .c-textarea__clear-btn {
@@ -30,12 +33,15 @@
     font: inherit;
     position: absolute;
     top: 50%;
-    right: var(~'--c-textarea-layout-tip-right');
+    right: var(~"--c-textarea-layout-tip-right");
     transform: translateY(-50%);
   }
 
   &.c-textarea--scroll .c-textarea__clear-btn {
-    right: calc(var(~'--c-textarea-layout-tip-right') + var(~'--c-textarea-layout-tip-scroll-offset'));
+    right: calc(
+      var(~"--c-textarea-layout-tip-right") +
+        var(~"--c-textarea-layout-tip-scroll-offset")
+    );
   }
 
   &:hover {
@@ -55,10 +61,10 @@
     display: block;
     box-sizing: border-box;
     height: 100%;
-    min-height: var(~'--c-textarea-size-min-height');
-    padding: var(~'--c-textarea-padding-y') var(~'--c-textarea-padding-x');
-    font-size: var(~'--c-textarea-font-size');
-    line-height: var(~'--c-line-height');
+    min-height: var(~"--c-textarea-size-min-height");
+    padding: var(~"--c-textarea-padding-y") var(~"--c-textarea-padding-x");
+    font-size: var(~"--c-textarea-font-size");
+    line-height: var(~"--c-line-height");
     vertical-align: top;
     resize: vertical;
   }

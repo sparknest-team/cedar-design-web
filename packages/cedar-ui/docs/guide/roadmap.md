@@ -8,27 +8,26 @@ permalink: /guide/roadmap/
 
 ## 当前阶段：P0（立刻）
 
-| 项 | 状态 | 说明 |
-| --- | --- | --- |
-| 公开 Roadmap | ✅ | 本文档 |
-| 一等 Dark Theme | ✅ | `Themes` + `StyleProvider` / `ConfigProvider` + [主题定制](/themes/) |
-| 样式按需引入 | ✅ | Resolver 默认引入 CSS；组件样式与基础主题拆分 |
-| Segmented | ✅ | [Segmented](/components/segmented/) |
-| Dropdown | ✅ | 已由 [Menu 下拉菜单](/components/menu/) 覆盖（Trigger + Option）；不另建别名组件 |
-| Tour | 待开始 | 新手引导 |
-| VirtualList / Table 虚拟化 | 待开始 | 公开虚拟列表能力 |
-| a11y 落地 | 待开始 | 组件文档可访问性章节 + 键盘/ARIA 测试 |
+| 项                         | 状态   | 说明                                                                             |
+| -------------------------- | ------ | -------------------------------------------------------------------------------- |
+| 公开 Roadmap               | ✅     | 本文档                                                                           |
+| 一等 Dark Theme            | ✅     | `Themes` + `StyleProvider` / `ConfigProvider` + [主题定制](/themes/)             |
+| 样式按需引入               | ✅     | Resolver 默认引入 CSS；组件样式与基础主题拆分                                    |
+| Segmented                  | ✅     | [Segmented](/components/segmented/)                                              |
+| Dropdown                   | ✅     | 已由 [Menu 下拉菜单](/components/menu/) 覆盖（Trigger + Option）；不另建别名组件 |
+| Tour                       | 待开始 | 新手引导                                                                         |
+| VirtualList / Table 虚拟化 | 待开始 | 公开虚拟列表能力                                                                 |
+| a11y 落地                  | 待开始 | 组件文档可访问性章节 + 键盘/ARIA 测试                                            |
 
 ## 下一波：P1
 
 - QRCode、FloatButton、Comment（验证码输入已由 VerificationCode 覆盖，不另建 InputOTP）
-- AvatarGroup 文档与侧栏补齐（组件已存在）
 - SSR 使用文档、VSCode / web-types
 - Playground
 
 ## 可择机：P2
 
-- CheckTag、DynamicTags、InfiniteScroll
+- CheckTag、DynamicTags
 - 更多 i18n 语言包
 - Theme Editor、截图视觉回归
 

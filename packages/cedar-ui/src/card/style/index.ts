@@ -1,5 +1,5 @@
-import '../../spin/style'
-import '../../divider/style'
-import '../../button/style'
-import '../../style/box-shadow/elevation.less'
-import './index.less'
+import "../../spin/style";
+import "../../divider/style";
+import "../../button/style";
+import "../../style/elevation/index.less";
+import "./index.less";

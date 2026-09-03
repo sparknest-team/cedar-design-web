@@ -68,8 +68,9 @@ permalink: /components/tag/
 
 | 属性                  | 说明                                 | 类型                                                                                                                                                   | 默认值  |
 | --------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------- |
-| color                 | 标签的颜色                           | `'red' \| 'orangered' \| 'orange' \| 'gold' \| 'lime' \| 'green' \| 'cyan' \| 'blue' \| 'brand' \| 'purple' \| 'pinkpurple' \| 'magenta' \| 'gray'` | -       |
-| status                | 标签状态色（与 Button 对齐，与 `color` 互斥，`color` 优先） | `'primary' \| 'secondary' \| 'tertiary' \| 'info' \| 'success' \| 'warning' \| 'danger'` | -       |
+| color                 | 自定义背景色（outline 时为边框色）   | `string`                                                                                                                                               | -       |
+| text-color            | 自定义文字色                         | `string`                                                                                                                                               | -       |
+| status                | 标签状态色（与 `color` 互斥，`color` 优先） | `'default' \| 'primary' \| 'secondary' \| 'tertiary' \| 'info' \| 'success' \| 'warning' \| 'danger'` | `'default'` |
 | variant               | 标签变体（与 Button 对齐）           | `'default' \| 'outline'`                                                                                                                               | `'default'` |
 | size                  | 标签的大小                           | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`                                                                                                                 | `'md'`  |
 | show **(v-model)**    | 标签是否可见                         | `boolean`                                                                                                                                              | -       |
@@ -79,6 +80,8 @@ permalink: /components/tag/
 | checkable             | 标签是否可选中                       | `boolean`                                                                                                                                              | `false` |
 | checked **(v-model)** | 标签是否选中（标签可选中时可用）     | `boolean`                                                                                                                                              | -       |
 | default-checked       | 标签默认选中状态（标签可选中时可用） | `boolean`                                                                                                                                              | `true`  |
+| nowrap                | 内容是否不换行（超出省略）           | `boolean`                                                                                                                                              | `false` |
+| round                 | 是否为圆角胶囊形                     | `boolean`                                                                                                                                              | `false` |
 
 ### `<Tag>` Events
 
@@ -86,11 +89,14 @@ permalink: /components/tag/
 | ------ | -------------------------------------- | --------------------------------------------- |
 | close  | 点击关闭按钮时触发                     | `(event: MouseEvent) => void`                 |
 | check  | 用户选中时触发（仅在可选中模式下触发） | `(check: boolean, event: MouseEvent) => void` |
+| update:show | 可见状态变化                       | `(show: boolean) => void`                     |
+| update:checked | 选中状态变化                     | `(checked: boolean) => void`                  |
 
 ### `<Tag>` Slots
 
 | 插槽名     | 说明           | 参数 |
 | ---------- | -------------- | ---- |
+| default    | 标签内容       | -    |
 | icon       | 图标           | -    |
 | close-icon | 关闭按钮的图标 | -    |
 

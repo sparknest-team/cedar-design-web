@@ -11,6 +11,8 @@ node_modules
 dist
 es
 lib
+types
+umd
 dist-ssr
 *.local
 src/icon/*

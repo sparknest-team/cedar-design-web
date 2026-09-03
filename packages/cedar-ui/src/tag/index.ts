@@ -1,6 +1,6 @@
 import { withInstall } from '../_utils/global-config'
 import _Tag from './tag.vue'
-import { tagProps } from './props'
+import { tagProps, tagVariants } from './props'
 
 const Tag = withInstall(_Tag, Object.assign(_Tag, {
 }), { components: [_Tag] })
@@ -8,8 +8,9 @@ const Tag = withInstall(_Tag, Object.assign(_Tag, {
 export type TagInstance = InstanceType<typeof _Tag>
 export type { TagProps } from './props'
 export type { TagColor, TagVariant } from './types'
+export { TAG_COLORS } from './types'
 
-export { tagProps }
+export { tagProps, tagVariants }
 export { Tag }
 export const _TagComponent = Tag
 

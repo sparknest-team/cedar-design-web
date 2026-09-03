@@ -34,8 +34,8 @@
         <Button size="xs" v-bind="cancelButtonProps" @click="handleCancel">
           {{ cancelText || t('popconfirm.cancelText') }}
         </Button>
-        <Button type="primary" size="xs" v-bind="okButtonProps" :loading="mergedOkLoading" @click="handleOk">
-          {{ okText || t('popconfirm.okText') }}
+        <Button type="primary" size="xs" v-bind="confirmButtonProps" :loading="mergedConfirmButtonLoading" @click="handleConfirm">
+          {{ confirmButtonText || t('popconfirm.confirmButtonText') }}
         </Button>
       </div>
     </template>
@@ -78,7 +78,7 @@ export default defineComponent({
      * @zh 点击确认按钮时触发
      * @en Triggered when the confirm button is clicked
      */
-    ok: () => true,
+    confirm: () => true,
     /**
      * @zh 点击取消按钮时触发
      * @en Triggered when the cancel button is clicked
@@ -101,16 +101,16 @@ export default defineComponent({
 
     const _open = ref(props.defaultOpen)
     const computedOpen = computed(() => props.open ?? _open.value)
-    const _okLoading = ref(false)
-    const mergedOkLoading = computed(() => props.okLoading || _okLoading.value)
+    const _confirmButtonLoading = ref(false)
+    const mergedConfirmButtonLoading = computed(() => props.confirmButtonLoading || _confirmButtonLoading.value)
 
     // Used to ignore closed Promises
     let promiseNumber = 0
 
     const close = () => {
       promiseNumber++
-      if (_okLoading.value) {
-        _okLoading.value = false
+      if (_confirmButtonLoading.value) {
+        _confirmButtonLoading.value = false
       }
       _open.value = false
       emit('update:open', false)
@@ -127,19 +127,19 @@ export default defineComponent({
       }
     }
 
-    const handleOk = async () => {
+    const handleConfirm = async () => {
       const currentPromiseNumber = promiseNumber
       const closed = await new Promise<boolean>(
         // eslint-disable-next-line no-async-promise-executor
         async (resolve) => {
-          if (isFunction(props.beforeOk)) {
-            let result = props.beforeOk((closed = true) => resolve(closed))
+          if (isFunction(props.beforeConfirm)) {
+            let result = props.beforeConfirm((closed = true) => resolve(closed))
             if (isPromise(result) || !isBoolean(result)) {
-              _okLoading.value = true
+              _confirmButtonLoading.value = true
             }
             if (isPromise(result)) {
               try {
-                // if beforeOk is Promise<void> ,set Defaults true
+                // if beforeConfirm is Promise<void> ,set Defaults true
                 result = (await result) ?? true
               } catch (error) {
                 result = false
@@ -157,10 +157,10 @@ export default defineComponent({
 
       if (currentPromiseNumber === promiseNumber) {
         if (closed) {
-          emit('ok')
+          emit('confirm')
           close()
-        } else if (_okLoading.value) {
-          _okLoading.value = false
+        } else if (_confirmButtonLoading.value) {
+          _confirmButtonLoading.value = false
         }
       }
     }
@@ -185,9 +185,9 @@ export default defineComponent({
       contentCls,
       arrowCls,
       computedOpen,
-      mergedOkLoading,
+      mergedConfirmButtonLoading,
       handleOpenChange,
-      handleOk,
+      handleConfirm,
       handleCancel,
       t,
     }

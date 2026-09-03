@@ -20,7 +20,7 @@ permalink: /components/carousel/
 
 ### 自动播放
 
-通过 `auto-play` 属性可以开启自动播放。
+通过 `auto-play` 开启自动播放。传入 `true` 使用默认间隔 3000ms；传入数字则作为间隔（毫秒）。
 
 <demo src="./__demos__/autoplay.vue"></demo>
 
@@ -38,7 +38,7 @@ permalink: /components/carousel/
 
 ### 切换箭头
 
-通过 `show-arrow` 属性可以控制切换箭头的显示时机，支持 `always`、`hover`、`never`。
+通过 `show-arrow` 控制切换箭头的显示时机，支持 `always`、`hover`、`never`。PC 端默认 `always`。
 
 <demo src="./__demos__/navigation.vue"></demo>
 
@@ -50,7 +50,7 @@ permalink: /components/carousel/
 
 ### 指示器类型
 
-通过 `indicator-type` 属性可以设置指示器类型，支持 `dot`、`line`、`slider`。
+通过 `indicator-type` 设置指示器类型，支持 `dot`、`line`、`slider`。隐藏指示器请使用 `indicator`。
 
 <demo src="./__demos__/indicator-type.vue"></demo>
 
@@ -99,15 +99,15 @@ permalink: /components/carousel/
 | current(`v-model`)         | 当前展示索引（0-based）                                                               | `number`                                          | -                                  |
 | default-current            | 当前展示索引默认值（0-based）                                                         | `number`                                          | `0`                                |
 | loop                       | 是否循环轮播                                                                         | `boolean`                                         | `true`                             |
-| auto-play                  | 是否自动循环展示，或传入高级配置对象 `{ interval, hoverToPause }`                    | `boolean \| CarouselAutoPlayConfig`               | `false`                            |
+| auto-play                  | 是否自动播放；`true` 为 3000ms，数字为间隔毫秒，或 `{ interval, hoverToPause }`       | `boolean \| number \| CarouselAutoPlayConfig`     | `false`                            |
 | move-speed                 | 幻灯片移动速率（毫秒）                                                               | `number`                                          | `500`                              |
-| trigger                    | 幻灯片切换触发方式（click / hover）                                                  | `string`                                          | `click`                            |
-| direction                  | 幻灯片移动方向（horizontal / vertical）                                              | `string`                                          | `horizontal`                       |
-| show-arrow                 | 切换箭头显示时机（always / hover / never）                                           | `string`                                          | `always`                           |
+| trigger                    | 指示器切换触发方式                                                                   | `CarouselTriggerEvent`                            | `click`                            |
+| direction                  | 幻灯片移动方向                                                                       | `'horizontal' \| 'vertical'`                      | `horizontal`                       |
+| show-arrow                 | 切换箭头显示时机                                                                     | `CarouselArrowType`                               | `always`                           |
 | arrow-class                | 切换箭头样式                                                                         | `string`                                          | `-`                                |
-| indicator                  | 是否显示指示器（覆盖 `indicator-type` 的 never 设置）                                | `boolean`                                         | `true`                             |
-| indicator-type             | 指示器类型（line / dot / slider / never）                                            | `string`                                          | `dot`                              |
-| indicator-position         | 指示器位置（bottom / top / left / right / outer）                                    | `string`                                          | `bottom`                           |
+| indicator                  | 是否显示指示器                                                                       | `boolean`                                         | `true`                             |
+| indicator-type             | 指示器类型                                                                           | `CarouselIndicatorType`                           | `dot`                              |
+| indicator-position         | 指示器位置                                                                           | `CarouselIndicatorPosition`                       | `bottom`                           |
 | indicator-class            | 指示器的样式                                                                         | `string`                                          | `-`                                |
 | indicator-color            | 指示器颜色                                                                           | `string`                                          | `-`                                |
 | height                     | 轮播容器高度                                                                         | `string`                                          | `-`                                |
@@ -116,6 +116,12 @@ permalink: /components/carousel/
 | draggable                  | 是否允许鼠标拖拽切换                                                                 | `boolean`                                         | `false`                            |
 | mousewheel                 | 是否允许鼠标滚轮切换                                                                 | `boolean`                                         | `false`                            |
 | keyboard                   | 是否允许键盘方向键切换                                                               | `boolean`                                         | `false`                            |
+| slides-per-view            | 每屏显示的 slide 数量，`'auto'` 时由 slide 自身宽度决定                               | `number \| 'auto'`                                | `1`                                |
+| space-between              | slide 之间的间距                                                                     | `string \| number`                                | `0`                                |
+| aria-label                 | 轮播区域无障碍标签                                                                   | `string`                                          | `Carousel`                         |
+| previous-button-aria-label | 上一页按钮无障碍标签                                                                 | `string`                                          | `Previous slide`                   |
+| next-button-aria-label     | 下一页按钮无障碍标签                                                                 | `string`                                          | `Next slide`                       |
+
 ### `<Carousel>` Events
 
 | 事件名 | 描述                       | 参数                                                            |
@@ -132,7 +138,7 @@ permalink: /components/carousel/
 | `next` | 切换到下一页 | `-` |
 | `prev` | 切换到上一页 | `-` |
 | `to` | 跳转到指定索引 | `index: number` |
-| `resize` | 保留方法（当前基于 CSS 过渡，无需手动计算尺寸。后续扩展 `slides-per-view` 时会实现） | `-` |
+| `resize` | 重新计算轮播尺寸 | `-` |
 
 ### `<Carousel>` Slots
 
@@ -149,8 +155,13 @@ permalink: /components/carousel/
 
 ### 类型定义
 
-组件导出以下类型定义
-
 ```ts
-import type { Carousel } from '@cedarjs/ui'
+type CarouselTriggerEvent = 'click' | 'hover'
+type CarouselArrowType = 'always' | 'hover' | 'never'
+type CarouselIndicatorType = 'dot' | 'line' | 'slider'
+type CarouselIndicatorPosition = 'bottom' | 'top' | 'left' | 'right' | 'outer'
+type CarouselAutoPlayConfig = {
+  interval?: number
+  hoverToPause?: boolean
+}
 ```

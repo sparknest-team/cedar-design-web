@@ -178,7 +178,11 @@ export default defineComponent({
           >
             {expandIconRender()}
             <div class={`${prefixCls}-header-title`}>{slots.title?.() ?? props.title}</div>
-            {slots.extra && <div class={`${prefixCls}-header-extra`}>{slots.extra?.()}</div>}
+            {slots.extra && (
+              <div class={`${prefixCls}-header-extra`} onClick={(event: MouseEvent) => event.stopPropagation()}>
+                {slots.extra?.()}
+              </div>
+            )}
           </div>
           <Transition name="collapse-slider" {...transitionEvents}>
             <div

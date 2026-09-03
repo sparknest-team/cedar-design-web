@@ -2,44 +2,68 @@
 
 .c-statistic {
   display: inline-block;
-  color: var(~'--c-statistic-text-color');
   line-height: var(~'--c-line-height');
 
-  &-title {
-    margin-bottom: var(~'--c-statistic-margin-title-bottom');
-    color: var(~'--c-statistic-title-color-text');
-    font-size: var(~'--c-statistic-font-title-size');
+  &__title {
+    margin-bottom: var(~'--c-statistic-title-margin-bottom');
+    color: var(~'--c-statistic-title-color');
+    font-size: var(~'--c-statistic-title-font-size');
   }
 
-  &-content {
-    .c-statistic-value {
-      color: var(~'--c-statistic-value-text-color');
-      font-weight: var(~'--c-statistic-font-value-weight');
-      font-size: var(~'--c-statistic-font-int-size');
-      white-space: nowrap;
+  &__value {
+    display: inline-flex;
+    align-items: baseline;
+    color: var(~'--c-statistic-value-color');
+    font-weight: var(~'--c-statistic-value-font-weight');
+    font-size: var(~'--c-statistic-value-font-size');
+    white-space: nowrap;
 
-      &-integer {
-        font-size: inherit;
-        white-space: nowrap;
-      }
+    &--tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
 
-      &-decimal {
-        display: inline-block;
-        font-size: var(~'--c-statistic-font-decimal-size');
-      }
+    .c-count-to {
+      display: inline;
+      color: inherit;
+      font-weight: inherit;
+      font-size: inherit;
+      line-height: inherit;
     }
   }
 
-  &-prefix {
-    font-size: var(~'--c-statistic-size-value-icon');
+  &__value-integer {
+    font-size: inherit;
+    white-space: nowrap;
   }
 
-  &-suffix {
-    font-size: var(~'--c-statistic-font-suffix-size');
+  &__value-decimal {
+    display: inline-block;
+    font-size: var(~'--c-statistic-decimal-font-size');
   }
 
-  &-extra {
-    margin-top: var(~'--c-statistic-margin-extra-top');
-    color: var(~'--c-statistic-extra-text-color');
+  &__prefix {
+    margin-right: var(~'--c-statistic-prefix-spacing);
+    color: var(~'--c-statistic-prefix-color');
+    font-size: var(~'--c-statistic-prefix-font-size');
+
+    .c-icon {
+      vertical-align: -0.125em;
+    }
+  }
+
+  &__suffix {
+    margin-left: var(~'--c-statistic-suffix-spacing);
+    color: var(~'--c-statistic-suffix-color');
+    font-size: var(~'--c-statistic-suffix-font-size');
+
+    .c-icon {
+      vertical-align: -0.125em;
+    }
+  }
+
+  &__extra {
+    margin-top: var(~'--c-statistic-extra-margin-top');
+    color: var(~'--c-statistic-extra-color');
+    font-size: var(~'--c-statistic-extra-font-size');
   }
 }

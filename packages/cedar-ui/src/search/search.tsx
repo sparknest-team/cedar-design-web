@@ -288,7 +288,7 @@ export default defineComponent({
             popupContainer={inputRef.value?.$el}
             onOpenChange={handleHistoryVisibleChange}
             onUpdate:open={handleHistoryVisibleChange}
-            onSelect={(value: any, ev: Event) => handleHistorySelect(String(value), ev)}
+            onSelect={(value: any, _option: Record<string, any>, ev: Event) => handleHistorySelect(String(value), ev)}
             v-slots={{
               content: () =>
                 props.recentSearches.map((item) => (

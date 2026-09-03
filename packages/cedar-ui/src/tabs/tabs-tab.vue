@@ -6,7 +6,12 @@
     <span :class="classes(n('title'))">
       <slot />
     </span>
-    <icon-hover v-if="editable && tab.closable" :class="classes(n('close-btn'))" @click.stop="handleDelete">
+    <icon-hover
+      v-if="editable && tab.closable"
+      prefix="c-tabs"
+      :class="classes(n('close-btn'))"
+      @click.stop="handleDelete"
+    >
       <icon-close />
     </icon-hover>
   </div>

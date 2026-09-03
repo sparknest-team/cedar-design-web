@@ -89,6 +89,7 @@ permalink: /components/dialog/
 | `mask-style` | 遮罩 style | `CSSProperties` | `-` |
 | `mask-closable` | 点击遮罩关闭 | `boolean` | `true` |
 | `esc-to-close` | ESC 关闭 | `boolean` | `true` |
+| `lock-scroll` | 打开时锁定背景滚动 | `boolean` | `true` |
 | `popup-container` | 挂载位置，`false` 禁用 teleport | `string \| HTMLElement \| false` | `'body'` |
 | `confirm-button` | 显示确认按钮 | `boolean` | `true` |
 | `cancel-button` | 显示取消按钮 | `boolean` | `true` |

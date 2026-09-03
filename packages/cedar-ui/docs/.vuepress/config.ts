@@ -13,6 +13,7 @@ import { CedarResolver } from '@cedarjs/resolver'
 
 const projRoot = path.resolve(__dirname, '../../')
 
+
 function uploadMockPlugin(): Plugin {
   return {
     name: 'cedar-upload-mock',
@@ -79,16 +80,12 @@ export default defineUserConfig({
         vueJsx(),
         components({
           resolvers: [
-            CedarResolver({
-              importStyle: false,
-            })
+            CedarResolver(),
           ],
         }),
         AutoImport({
           resolvers: [
-            CedarResolver({
-              importStyle: false
-            })
+            CedarResolver(),
           ],
           eslintrc: {
             enabled: true,
@@ -101,6 +98,9 @@ export default defineUserConfig({
           scss: {
             silenceDeprecations: ['legacy-js-api', 'if-function'],
           },
+          less: {
+            javascriptEnabled: true,
+          },
         },
       },
       resolve: {
@@ -108,6 +108,10 @@ export default defineUserConfig({
           {
             find: /^@cedarjs\/ui$/,
             replacement: path.resolve(projRoot, 'src/index.ts'),
+          },
+          {
+            find: /^@cedarjs\/ui\/(.+)\/style$/,
+            replacement: path.resolve(projRoot, 'src/$1/style'),
           },
         ],
       },

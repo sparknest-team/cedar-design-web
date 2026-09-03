@@ -1,13 +1,28 @@
 import { withInstall } from '../_utils/global-config'
 import _Date from './date.vue'
+import _DatePicker from './picker/pickers/date-picker'
 import { dateProps } from './props'
+import { datePickerProps } from './picker/props'
 
-const Date = withInstall(_Date, Object.assign(_Date, {
-}), { components: [_Date] })
+export type { ShortcutType } from './picker/types'
+export type { DatePickerProps } from './picker/props'
+export type { DateProps } from './props'
+
+const DatePicker = withInstall(_DatePicker)
+
+const Date = withInstall(
+  _Date,
+  Object.assign(_Date, {
+    Picker: DatePicker,
+  }),
+  { components: [_Date, DatePicker] },
+)
 
 export type DateInstance = InstanceType<typeof _Date>
-export type { DateProps } from './props'
-export { Date, dateProps }
+export type DatePickerInstance = InstanceType<typeof _DatePicker>
+
+export { Date, DatePicker, dateProps, datePickerProps }
 export const _DateComponent = Date
+export const _DatePickerComponent = DatePicker
 
 export default Date

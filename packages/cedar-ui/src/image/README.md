@@ -4,7 +4,7 @@ permalink: /components/image/
 
 # Image
 
-展示图片。预览相关能力见 [ImagePreview](/components/image-preview/)。
+展示图片。预览相关能力见下方 ImagePreview API。
 
 ## 案例
 

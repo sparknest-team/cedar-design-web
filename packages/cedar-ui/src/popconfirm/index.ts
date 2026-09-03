@@ -6,7 +6,7 @@ const Popconfirm = withInstall(_Popconfirm, Object.assign(_Popconfirm, {
 }), { components: [_Popconfirm] })
 
 export type PopconfirmInstance = InstanceType<typeof _Popconfirm>
-export type { PopconfirmBeforeOk, PopconfirmProps } from './props'
+export type { PopconfirmBeforeConfirm, PopconfirmProps } from './props'
 export { Popconfirm, popconfirmProps }
 export const _PopconfirmComponent = Popconfirm
 

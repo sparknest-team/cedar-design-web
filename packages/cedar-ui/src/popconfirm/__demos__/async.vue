@@ -1,5 +1,5 @@
 <template>
-  <c-popconfirm :before-ok="handleBeforeOk">
+  <c-popconfirm :before-confirm="handleBeforeConfirm">
     <c-button>Click To Show</c-button>
     <template #content>
       <Form>
@@ -23,7 +23,7 @@ const handleClick = () => {
   visible.value = true
 }
 
-const handleBeforeOk = (done) => {
+const handleBeforeConfirm = (done) => {
   window.setTimeout(() => {
     done()
   }, 3000)

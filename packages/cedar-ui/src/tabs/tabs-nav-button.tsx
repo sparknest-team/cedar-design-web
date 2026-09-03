@@ -64,7 +64,9 @@ export default defineComponent({
 
     return () => (
       <button type="button" class={cls.value} onClick={handleClick}>
-        <IconHover disabled={props.disabled}>{renderIcon()}</IconHover>
+        <IconHover prefix="c-tabs" disabled={props.disabled}>
+          {renderIcon()}
+        </IconHover>
       </button>
     )
   },

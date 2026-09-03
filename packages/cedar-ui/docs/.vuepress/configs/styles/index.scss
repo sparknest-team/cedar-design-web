@@ -54,7 +54,7 @@ td {
     background-color: unset;
   }
 
-  table {
+  table:not(.c-descriptions-table) {
     display: table;
     width: 100%;
 
@@ -63,7 +63,7 @@ td {
     }
   }
 
-  th:not(.c-table-th),
+  th:not(.c-table-th, .c-descriptions-item-label),
   td:not(.c-table-td, .c-descriptions-item, .c-descriptions-item-label, .c-descriptions-item-value) {
     padding: 0.6em 1em;
     border: 1px solid var(--c-border-dark);

@@ -9,7 +9,7 @@
     </c-collapse-item>
     <c-collapse-item title="Beijing Toutiao Technology Co., Ltd." :name="2">
       <template #extra>
-        <c-button type="primary" size="xs" @click.stop="sayHello">hello</c-button>
+        <c-button status="primary" size="xs" @click="sayHello">hello</c-button>
       </template>
       <div>Beijing Toutiao Technology Co., Ltd.</div>
       <div>Beijing Toutiao Technology Co., Ltd.</div>
@@ -25,6 +25,8 @@
 </template>
 
 <script lang="ts" setup>
+import { Message } from '@cedarjs/ui'
+
 const sayHello = () => {
   Message.info('hello')
 }

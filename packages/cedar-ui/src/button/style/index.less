@@ -1,6 +1,5 @@
-@import "../../style/mixins/index.less";
+@import "../../style/mixins/border.less";
 @import "./token.less";
-@import "../../style/utils.less";
 
 // 定义可交互状态的选择器前缀（排除 disabled 和 loading 状态）
 @interactive-selector: ~":not(.c-button--disabled):not(.c-button--loading)";
@@ -42,18 +41,18 @@
       opacity: 0;
     }
     &@{interactive-selector}:hover > .c-button--overlay {
-      background-color: var(~'--c-button-overlay-color-hover-light');
+      background-color: var(~"--c-button-overlay-color-hover-light");
       opacity: 0.08;
     }
     &@{interactive-selector}:active > .c-button--overlay {
-      background-color: var(~'--c-button-overlay-color-active-dark');
+      background-color: var(~"--c-button-overlay-color-active-dark");
       opacity: 0.12;
     }
     &.c-button--disabled {
       cursor: not-allowed;
     }
     &.c-button--disabled > .c-button--overlay {
-      background-color: var(~'--c-button-overlay-color-disabled');
+      background-color: var(~"--c-button-overlay-color-disabled");
       opacity: 0.46;
     }
   }
@@ -78,11 +77,11 @@
     color: var(~"--c-button-variant-tonal-color");
 
     @{interactive-selector}:hover > .c-button--overlay {
-      background-color: var(~'--c-button-overlay-color-hover-light');
+      background-color: var(~"--c-button-overlay-color-hover-light");
       opacity: 0.08;
     }
     @{interactive-selector}:active > .c-button--overlay {
-      background-color: var(~'--c-button-overlay-color-active-dark');
+      background-color: var(~"--c-button-overlay-color-active-dark");
       opacity: 0.12;
     }
 
@@ -102,11 +101,11 @@
     }
 
     &--variant-tonal@{interactive-selector}:hover > .c-button--overlay {
-      background-color: var(~'--c-button-overlay-color-hover-light');
+      background-color: var(~"--c-button-overlay-color-hover-light");
       opacity: 0.08;
     }
     &--variant-tonal@{interactive-selector}:active > .c-button--overlay {
-      background-color: var(~'--c-button-overlay-color-active-dark');
+      background-color: var(~"--c-button-overlay-color-active-dark");
       opacity: 0.12;
     }
     &--variant-tonal.c-button--status-@{status} &--underlay {
@@ -131,16 +130,6 @@
         ~"--c-button-variant-outline-border-color",
         currentColor
       );
-    }
-
-    &@{interactive-selector}:hover {
-      .c-button__border-state {
-        opacity: 1;
-        border-color: var(
-          ~"--c-button-variant-outline-border-color",
-          currentColor
-        );
-      }
     }
 
     &@{interactive-selector}.c-button--focus {
@@ -175,26 +164,6 @@
       background-color: currentColor;
       opacity: 0.12;
     }
-
-    &--variant-outline@{interactive-selector}:hover {
-      .c-button__border-state {
-        opacity: 1;
-        border-color: var(
-          ~"--c-button-variant-outline-status-@{status}-border-color",
-          currentColor
-        );
-      }
-    }
-
-    &--variant-outline@{interactive-selector}:active {
-      .c-button__border-state {
-        opacity: 1;
-        border-color: var(
-          ~"--c-button-variant-outline-status-@{status}-border-color",
-          currentColor
-        );
-      }
-    }
   }
   .outlineStatus(contrast);
   .outlineStatus(secondary);
@@ -216,11 +185,11 @@
     }
 
     &@{interactive-selector}:hover > .c-button--overlay {
-      background-color: var(~'--c-button-overlay-color-active-dark');
+      background-color: var(~"--c-button-overlay-color-active-dark");
       opacity: 0.03;
     }
     &@{interactive-selector}:active > .c-button--overlay {
-      background-color: var(~'--c-button-overlay-color-active-dark');
+      background-color: var(~"--c-button-overlay-color-active-dark");
       opacity: 0.05;
     }
     &.c-button--disabled {
@@ -240,11 +209,11 @@
       }
 
       &@{interactive-selector}:hover > .c-button--overlay {
-        background-color: var(~'--c-button-overlay-color-active-dark');
+        background-color: var(~"--c-button-overlay-color-active-dark");
         opacity: 0.03;
       }
       &@{interactive-selector}:active > .c-button--overlay {
-        background-color: var(~'--c-button-overlay-color-active-dark');
+        background-color: var(~"--c-button-overlay-color-active-dark");
         opacity: 0.05;
       }
     }
@@ -257,61 +226,6 @@
   .textStatus(warning);
   .textStatus(danger);
 
-  &--variant-link {
-    .c-button--overlay {
-      background-color: transparent;
-    }
-    color: var(~"--c-button-variant-link-color");
-    padding: 0;
-    &@{interactive-selector}:hover {
-      color: color-mix(
-        in srgb,
-        var(~"--c-button-variant-link-color") 70%,
-        transparent
-      );
-    }
-    &@{interactive-selector}:active {
-      color: color-mix(
-        in srgb,
-        var(~"--c-button-variant-link-color") 100%,
-        transparent
-      );
-    }
-    &.c-button--disabled {
-      cursor: not-allowed;
-      opacity: 0.4;
-    }
-  }
-  .linkStatus(@status) {
-    &--variant-link&.c-button--status-@{status} {
-      color: var(~"--c-button-variant-link-status-@{status}-color");
-
-      &@{interactive-selector}:hover {
-        color: color-mix(
-          in srgb,
-          var(~"--c-button-variant-link-status-@{status}-color")
-            var(~"--c-button-variant-link-status-@{status}-hover-opacity"),
-          transparent
-        );
-      }
-      &@{interactive-selector}:active {
-        color: color-mix(
-          in srgb,
-          var(~"--c-button-variant-link-status-@{status}-color")
-            var(~"--c-button-variant-link-status-@{status}-active-opacity"),
-          transparent
-        );
-      }
-    }
-  }
-  .linkStatus(contrast);
-  .linkStatus(secondary);
-  .linkStatus(primary);
-  .linkStatus(info);
-  .linkStatus(success);
-  .linkStatus(warning);
-  .linkStatus(danger);
-
   .size(@size) {
     &.c-button--size-@{size} {
       height: var(~"--c-button-size-@{size}-height");
@@ -323,12 +237,8 @@
         height: var(~"--c-button-size-@{size}-stacked-height");
         display: flex;
         flex-direction: column;
-        gap: var(~'--c-spacing-1');
+        gap: var(~"--c-spacing-1");
       }
-    }
-    &.c-button--variant-link&.c-button--size-@{size} {
-      padding: 0;
-      height: unset;
     }
   }
   .size(xs);
@@ -337,7 +247,7 @@
   .size(lg);
 
   &&--round {
-    padding: var(~'--c-button-round-padding');
+    padding: var(~"--c-button-round-padding");
     border-radius: 50%;
     height: auto;
   }
@@ -354,7 +264,7 @@
   }
 
   &__border-state {
-    z-index: 1;
+    z-index: var(--c-z-index-local-raised);
     border: 1px solid var(~"--c-color-border-2");
   }
 
@@ -367,7 +277,7 @@
     cursor: default;
 
     .c-button--overlay {
-      background-color: var(~'--c-button-overlay-color-disabled');
+      background-color: var(~"--c-button-overlay-color-disabled");
       opacity: 0.4;
       transition: opacity var(~"--c-button-transition-duration-1")
         var(~"--c-button-transition-timing-function-linear");

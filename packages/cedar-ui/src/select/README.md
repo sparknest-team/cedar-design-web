@@ -26,6 +26,12 @@ permalink: /components/select/
 
 <demo src="./__demos__/multiple.vue"></demo>
 
+### 已选 Tag 样式
+
+多选时，已选项在选择框中以 Tag 展示。通过选项上的 `tagProps`（或 `<c-option>` 的 `tag-props`）可以把属性透传给 [Tag](/components/tag/)，用来改颜色、状态、变体等。Tag 没有单独的最大宽度属性，需要截断长文本时传入 `nowrap: true`，并用 `style.maxWidth` 限制宽度。
+
+<demo src="./__demos__/tag-props.vue"></demo>
+
 ### 选择框大小
 
 选择框分为 mini、small、medium、large 四种尺寸。
@@ -147,44 +153,44 @@ permalink: /components/select/
 | field-names                 | 自定义 `SelectOptionData` 中的字段；当选项值为对象时，也用其中的 `value` 作为键属性 | `SelectFieldNames`                                                                            |                 `-`                 |
 | scrollbar                   | 是否开启虚拟滚动条                                                               | `boolean \| ScrollbarProps`                                                                   |               `true`                |
 | show-header-on-empty        | 空状态时是否显示header                                                           | `boolean`                                                                                     |               `false`               |
-| show-footer-on-empty        | 空状态时是否显示footer｜`boolean`                                                | `false`                                                                                       |
+| show-footer-on-empty        | 空状态时是否显示footer                                                           | `boolean`                                                                                     |               `false`               |
 
 ### Select Events
 
 | 事件名                | 说明                       | 参数                                                                                            |
-| --------------------- | -------------------------- | ----------------------------------------------------------------------------------------------- | --- |
-| change                | 值发生改变时触发           | value: `string \| number \| Record<string, any> \| (string \| number \| Record<string, any>)[]` |     |
-| input-value-change    | 输入框的值发生改变时触发   | inputValue: `string`                                                                            |     |
-| open-change  | 下拉框的显示状态改变时触发 | open: `boolean`                                                                              |     |
-| clear                 | 点击清除按钮时触发         | -                                                                                               |     |
-| remove                | 点击标签的删除按钮时触发   | removed: `string \| number \| Record<string, any> \| undefined`                                 |     |
-| search                | 用户搜索时触发             | inputValue: `string`                                                                            |     |
-| dropdown-scroll       | 下拉菜单发生滚动时触发     | -                                                                                               |     |
-| dropdown-reach-bottom | 下拉菜单滚动到底部时触发   | -                                                                                               |     |
+| --------------------- | -------------------------- | ----------------------------------------------------------------------------------------------- |
+| change                | 值发生改变时触发           | value: `string \| number \| Record<string, any> \| (string \| number \| Record<string, any>)[]` |
+| input-value-change    | 输入框的值发生改变时触发   | inputValue: `string`                                                                            |
+| open-change           | 下拉框的显示状态改变时触发 | open: `boolean`                                                                                 |
+| clear                 | 点击清除按钮时触发         | -                                                                                               |
+| remove                | 点击标签的删除按钮时触发   | removed: `string \| number \| Record<string, any> \| undefined`                                 |
+| search                | 用户搜索时触发             | inputValue: `string`                                                                            |
+| dropdown-scroll       | 下拉菜单发生滚动时触发     | -                                                                                               |
+| dropdown-reach-bottom | 下拉菜单滚动到底部时触发   | -                                                                                               |
 | exceed-limit          | 多选超出限制时触发         | value: `string \| number \| Record<string, any> \| undefined`<br>ev: `Event`                    |
 
 ### Select Slots
 
-| 插槽名       |         描述         | 参数                     |
-| ------------ | :------------------: | ------------------------ | --- |
-| trigger      |    自定义触发元素    | -                        |
-| prefix       |       前缀元素       | -                        |
-| search-icon  |   选择框的搜索图标   | -                        |
-| loading-icon |  选择框的加载中图标  | -                        |
-| arrow-icon   |   选择框的箭头图标   | -                        |
-| footer       |     下拉框的页脚     | -                        |     |
-| header       |     下拉框的页头     | -                        |
-| label        |   选择框的显示内容   | data: `SelectOptionData` |     |
-| option       |       选项内容       | data: `SelectOptionData` |     |
-| empty        | 选项为空时的显示内容 | -                        |     |
+| 插槽名       | 描述                     | 参数                     |
+| ------------ | ------------------------ | ------------------------ |
+| trigger      | 自定义触发元素           | -                        |
+| prefix       | 前缀元素                 | -                        |
+| search-icon  | 选择框的搜索图标         | -                        |
+| loading-icon | 选择框的加载中图标       | -                        |
+| arrow-icon   | 选择框的箭头图标         | -                        |
+| footer       | 下拉框的页脚             | -                        |
+| header       | 下拉框的页头             | -                        |
+| label        | 选择框的显示内容         | data: `SelectOptionData` |
+| option       | 选项内容                 | data: `SelectOptionData` |
+| empty        | 选项为空时的显示内容     | -                        |
 
 ### `<option>` Props
 
 | 参数名    | 描述                                            | 类型                     | 默认值  |
-| --------- | ----------------------------------------------- | ------------------------ | :-----: | --- |
-| value     | 选项值（如不填，会从内容中获取）                | `string\|number\|object` |   `-`   |     |
-| label     | 选项标签（如不填，会从内容中获取）              | `string`                 |   `-`   |     |
-| disabled  | 是否禁用                                        | `boolean`                | `false` |     |
+| --------- | ----------------------------------------------- | ------------------------ | :-----: |
+| value     | 选项值（如不填，会从内容中获取）                | `string\|number\|object` |   `-`   |
+| label     | 选项标签（如不填，会从内容中获取）              | `string`                 |   `-`   |
+| disabled  | 是否禁用                                        | `boolean`                | `false` |
 | tag-props | 展示的标签属性                                  | `TagProps`               |   `-`   |
 | extra     | 额外数据。废弃，可使用对象形式的 value 扩展数据 | `object`                 |   `-`   |
 | index     | 用于手动指定选项的 index                        | `number`                 |   `-`   |
@@ -224,7 +230,7 @@ type FilterOption = boolean | ((inputValue: string, option: SelectOptionData) =>
 | value    | 选项值                   | `string \| number \| Record<string, unknown>` |   `-`   |
 | label    | 选项内容                 | `string`                                      |   `-`   |
 | disabled | 是否禁用                 | `boolean`                                     | `false` |
-| tagProps | 选项对应的多选标签的属性 | `any`                                         |   `-`   |
+| tagProps | 选项对应的多选标签的属性，透传给 [Tag](/components/tag/) | `TagProps`                                    |   `-`   |
 | render   | 自定义渲染               | `RenderFunction`                              |   `-`   |
 
 ### SelectOptionGroup
@@ -238,10 +244,10 @@ type FilterOption = boolean | ((inputValue: string, option: SelectOptionData) =>
 ### VirtualListProps
 
 | 参数名             | 描述                                                               | 类型               | 默认值  |
-| ------------------ | ------------------------------------------------------------------ | ------------------ | :-----: | --- |
-| height             | 可视区域高度                                                       | `number \| string` |   `-`   |     |
-| threshold          | 开启虚拟滚动的元素数量阈值，当数据数量小于阈值时不会开启虚拟滚动。 | `number`           |   `-`   |     |
-| isStaticItemHeight | （已废除）元素高度是否是固定的。废除，请使用 `fixedSize`           | `boolean`          | `false` |     |
+| ------------------ | ------------------------------------------------------------------ | ------------------ | :-----: |
+| height             | 可视区域高度                                                       | `number \| string` |   `-`   |
+| threshold          | 开启虚拟滚动的元素数量阈值，当数据数量小于阈值时不会开启虚拟滚动。 | `number`           |   `-`   |
+| isStaticItemHeight | （已废除）元素高度是否是固定的。废除，请使用 `fixedSize`           | `boolean`          | `false` |
 | fixedSize          | 元素高度是否是固定的。                                             | `boolean`          | `false` |
 | estimatedSize      | 元素高度不固定时的预估高度。                                       | `number`           |   `-`   |
 | buffer             | 视口边界外提前挂载的元素数量。                                     | `number`           |  `10`   |

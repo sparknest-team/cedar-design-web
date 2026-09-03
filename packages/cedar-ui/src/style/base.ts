@@ -1,2 +1,2 @@
-/** Shared base styles for on-demand import (normalize + theme tokens + tools). */
-import './index.less'
+/** Shared base styles for on-demand import (normalize + theme tokens + utilities). */
+import "./index.less";

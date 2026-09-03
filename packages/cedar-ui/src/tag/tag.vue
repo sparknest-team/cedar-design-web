@@ -18,7 +18,7 @@
     </span>
     <slot v-else />
     <icon-hover
-      v-if="closable"
+      v-if="closable && !loading"
       role="button"
       aria-label="IconClose"
       tabindex="0"
@@ -95,21 +95,17 @@ export default defineComponent({
     const computedShow = computed(() => props.show ?? _show.value)
     const computedChecked = computed(() => (props.checkable ? (props.checked ?? _checked.value) : true))
     const { mergedSize: _mergedSize } = useSize(size)
-    const mergedSize = computed(() => {
-      if (_mergedSize.value === 'xs') {
-        return 'sm'
-      }
-      return _mergedSize.value
-    })
+    const mergedSize = _mergedSize
 
     const handleClose = (ev: MouseEvent) => {
+      if (props.loading) return
       _show.value = false
       emit('update:show', false)
       emit('close', ev)
     }
 
     const handleClick = (ev: MouseEvent) => {
-      if (props.checkable) {
+      if (props.checkable && !props.loading) {
         const newChecked = !computedChecked.value
         _checked.value = newChecked
         emit('update:checked', newChecked)
@@ -134,15 +130,26 @@ export default defineComponent({
         [isBuiltInColor.value, n(`--${props.color}`)],
         [props.checkable, n('--checkable')],
         [computedChecked.value, n('--checked')],
+        [props.nowrap, n('--nowrap')],
+        [props.round, n('--round')],
         [isCustomColor.value, n('--custom-color')],
         [rtl.value, n('--rtl')],
       )
     })
 
     const style = computed(() => {
-      if (isCustomColor.value) {
+      if (isCustomColor.value || props.textColor) {
+        if (props.variant === 'outline') {
+          return {
+            color: props.textColor || props.color,
+            borderColor: props.color,
+            backgroundColor: 'transparent',
+          } as CSSProperties
+        }
         return {
-          backgroundColor: props.color,
+          background: props.color,
+          color: props.textColor,
+          borderColor: props.color,
         } as CSSProperties
       }
       return undefined

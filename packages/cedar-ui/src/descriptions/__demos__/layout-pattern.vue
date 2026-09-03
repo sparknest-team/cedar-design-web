@@ -1,11 +1,11 @@
 <template>
-  <Radio-group type="button" v-model="size">
+  <c-radio-group v-model="size" variant="button">
     <c-radio value="xs">xs</c-radio>
     <c-radio value="sm">sm</c-radio>
     <c-radio value="md">md</c-radio>
     <c-radio value="lg">lg</c-radio>
     <c-radio value="xl">xl</c-radio>
-  </Radio-group>
+  </c-radio-group>
   <div style="margin-top: 20px">
     <c-descriptions :data="data" :size="size" title="User Info (horizontal)" bordered />
     <c-descriptions :data="data" :size="size" title="User Info (inline-horizontal)" layout="inline-horizontal" bordered />

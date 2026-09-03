@@ -43,11 +43,11 @@
             </div>
             <div v-if="footer" :class="`${prefixCls}-footer`">
               <slot name="footer">
-                <Button v-if="!hideCancel" v-bind="cancelButtonProps" @click="handleCancel">
+                <Button v-if="cancelButton" v-bind="cancelButtonProps" @click="handleCancel">
                   {{ cancelText || t('drawer.cancelText') }}
                 </Button>
-                <Button type="primary" :loading="mergedOkLoading" v-bind="okButtonProps" @click="handleOk">
-                  {{ okText || t('drawer.okText') }}
+                <Button type="primary" :loading="mergedConfirmButtonLoading" v-bind="confirmButtonProps" @click="handleConfirm">
+                  {{ confirmButtonText || t('drawer.confirmButtonText') }}
                 </Button>
               </slot>
             </div>
@@ -92,7 +92,7 @@ export default defineComponent({
      * @en Triggered when the OK button is clicked
      * @property {MouseEvent} ev
      */
-    ok: (e: Event) => true,
+    confirm: (e: Event) => true,
     /**
      * @zh 点击取消、关闭按钮时触发
      * @en Triggered when the cancel or close button is clicked
@@ -145,8 +145,8 @@ export default defineComponent({
 
     const _open = ref(props.defaultOpen)
     const computedOpen = computed(() => props.open ?? _open.value)
-    const _okLoading = ref(false)
-    const mergedOkLoading = computed(() => props.okLoading || _okLoading.value)
+    const _confirmButtonLoading = ref(false)
+    const mergedConfirmButtonLoading = computed(() => props.confirmButtonLoading || _confirmButtonLoading.value)
 
     const { teleportContainer, containerRef } = useTeleportContainer({
       popupContainer,
@@ -189,26 +189,26 @@ export default defineComponent({
 
     const close = () => {
       promiseNumber++
-      if (_okLoading.value) {
-        _okLoading.value = false
+      if (_confirmButtonLoading.value) {
+        _confirmButtonLoading.value = false
       }
       _open.value = false
       emit('update:open', false)
     }
 
-    const handleOk = async (e: Event) => {
+    const handleConfirm = async (e: Event) => {
       const currentPromiseNumber = promiseNumber
       const closed = await new Promise<boolean>(
         // eslint-disable-next-line no-async-promise-executor
         async (resolve) => {
-          if (isFunction(props.beforeOk)) {
-            let result = props.beforeOk((closed = true) => resolve(closed))
+          if (isFunction(props.beforeConfirm)) {
+            let result = props.beforeConfirm((closed = true) => resolve(closed))
             if (isPromise(result) || !isBoolean(result)) {
-              _okLoading.value = true
+              _confirmButtonLoading.value = true
             }
             if (isPromise(result)) {
               try {
-                // if beforeOk is Promise<void> ,set Defaults true
+                // if beforeConfirm is Promise<void> ,set Defaults true
                 result = (await result) ?? true
               } catch (error) {
                 result = false
@@ -226,10 +226,10 @@ export default defineComponent({
 
       if (currentPromiseNumber === promiseNumber) {
         if (closed) {
-          emit('ok', e)
+          emit('confirm', e)
           close()
-        } else if (_okLoading.value) {
-          _okLoading.value = false
+        } else if (_confirmButtonLoading.value) {
+          _confirmButtonLoading.value = false
         }
       }
     }
@@ -314,9 +314,9 @@ export default defineComponent({
       t,
       mounted,
       computedOpen,
-      mergedOkLoading,
+      mergedConfirmButtonLoading,
       zIndex,
-      handleOk,
+      handleConfirm,
       handleCancel,
       handleOpen,
       handleClose,

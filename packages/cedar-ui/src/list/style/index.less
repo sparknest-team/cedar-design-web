@@ -1,4 +1,4 @@
-@import './token.less';
+@import "./token.less";
 
 .c-list {
   display: flex;
@@ -6,10 +6,10 @@
   box-sizing: border-box;
   width: 100%;
   overflow-y: auto;
-  color: var(~'--c-list-text-color');
-  font-size: var(~'--c-list-font-size');
-  line-height: var(~'--c-list-line-height');
-  border-radius: var(~'--c-list-border-radius');
+  color: var(~"--c-list-text-color");
+  font-size: var(~"--c-list-font-size");
+  line-height: var(~"--c-list-line-height");
+  border-radius: var(~"--c-list-border-radius");
 
   &-wrapper {
     overflow: hidden;
@@ -28,40 +28,36 @@
   .size(@size) {
     &-@{size} {
       .c-list-content-wrapper .c-list-header {
-        padding: var(~'--c-list-size-@{size}-padding-vertical-header')
-          var(~'--c-list-size-@{size}-padding-horizontal-header');
+        padding: var(~"--c-list-size-@{size}-padding-vertical-header")
+          var(~"--c-list-size-@{size}-padding-horizontal-header");
       }
 
       // 在存在列表嵌套的时候，通过 > 限定 size 仅对其直接子元素生效，避免影响被嵌套的列表的样式
       .c-list-content-wrapper .c-list-footer,
       .c-list-content-wrapper .c-list-content > .c-list-item,
-      .c-list-content-wrapper
-        .c-list-content
-        .c-list-col
-        > .c-list-item,
-      .c-list-content-wrapper
-        .c-list-content.c-list-virtual
-        .c-list-item {
-        padding: var(~'--c-list-size-@{size}-padding-vertical-item')
-          var(~'--c-list-size-@{size}-padding-horizontal-item');
+      .c-list-content-wrapper .c-list-content.c-list-virtual .c-list-item {
+        padding: var(~"--c-list-size-@{size}-padding-vertical-item")
+          var(~"--c-list-size-@{size}-padding-horizontal-item");
       }
     }
   }
 
   .border() {
     &-bordered {
-      border: var(~'--c-list-border-width') solid var(~'--c-list-border-color');
+      border: var(~"--c-list-border-width") solid var(~"--c-list-border-color");
     }
   }
 
   .split() {
     &-split &-header,
     &-split &-item:not(:last-child) {
-      border-bottom: var(~'--c-list-border-width') solid var(~'--c-list-border-color');
+      border-bottom: var(~"--c-list-border-width") solid
+        var(~"--c-list-border-color");
     }
 
     &-split &-footer {
-      border-top: var(~'--c-list-border-width') solid var(~'--c-list-border-color');
+      border-top: var(~"--c-list-border-width") solid
+        var(~"--c-list-border-color");
     }
   }
 
@@ -72,95 +68,34 @@
   .split();
 
   &-header {
-    color: var(~'--c-list-text-color-header');
-    font-weight: var(~'--c-list-font-weight-header');
-    font-size: var(~'--c-list-font-size-header');
-    line-height: var(~'--c-list-line-height-header');
+    color: var(~"--c-list-text-color-header");
+    font-weight: var(~"--c-list-font-weight-header");
+    font-size: var(~"--c-list-font-size-header");
+    line-height: var(~"--c-list-line-height-header");
   }
 
   &-item {
     display: flex;
-    justify-content: space-between;
+    flex-wrap: nowrap;
+    align-items: center;
     box-sizing: border-box;
     width: 100%;
     overflow: hidden;
 
-    &-main {
+    &__prefix {
+      flex: none;
+      margin-right: var(~"--c-list-item-prefix-margin-right");
+    }
+
+    &__main {
       flex: 1;
-
-      .c-list-item-action:not(:first-child) {
-        margin-top: var(~'--c-list-action-margin-top');
-      }
+      min-width: 0;
     }
 
-    &-meta {
-      display: flex;
-      align-items: center;
-      padding: var(~'--c-list-meta-padding-vertical') var(~'--c-list-meta-padding-horizontal');
-
-      &-avatar {
-        display: flex;
-
-        &:not(:last-child) {
-          margin-right: var(~'--c-list-meta-margin-right-avatar');
-        }
-      }
-
-      &-title {
-        color: var(~'--c-list-meta-title-color');
-        font-weight: var(~'--c-list-meta-font-weight-title');
-
-        &:not(:last-child) {
-          margin-bottom: var(~'--c-list-meta-margin-bottom-title');
-        }
-      }
-
-      &-description {
-        color: var(~'--c-list-mete-color-description');
-      }
+    &__suffix {
+      flex: none;
+      margin-left: var(~"--c-list-item-suffix-margin-left");
     }
-
-    &-action {
-      display: flex;
-      flex-wrap: nowrap;
-      align-self: center;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-
-      > li {
-        display: inline-block;
-        cursor: pointer;
-
-        &:not(:last-child) {
-          margin-right: var(~'--c-list-action-gap');
-        }
-      }
-    }
-  }
-
-  &-hover &-item:hover {
-    background-color: var(~'--c-list-bg-item-hover');
-  }
-
-  &-pagination {
-    float: right;
-    margin-top: var(~'--c-list-pagination-margin-top');
-
-    &::after {
-      display: block;
-      clear: both;
-      height: 0;
-      overflow: hidden;
-      visibility: hidden;
-      content: '';
-    }
-  }
-
-  &-scroll-loading {
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
 
   &-content {

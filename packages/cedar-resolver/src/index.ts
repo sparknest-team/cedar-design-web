@@ -15,8 +15,80 @@ const cedarDirectives: Record<string, string> = {
   Tooltip: 'vTooltip',
 }
 
+/** Component name → style directory under `@cedarjs/ui` (when not kebabCase(name)). */
+const styleDirAliases: Record<string, string> = {
+  AnchorLink: 'anchor',
+  ButtonGroup: 'button',
+  CollapseItem: 'collapse',
+  Row: 'grid',
+  Col: 'grid',
+  GridItem: 'grid',
+  AvatarGroup: 'avatar',
+  BreadcrumbItem: 'breadcrumb',
+  CarouselItem: 'carousel',
+  CheckboxGroup: 'checkbox',
+  RadioGroup: 'radio',
+  FormItem: 'form',
+  ListItem: 'list',
+  TimelineItem: 'timeline',
+  DescriptionsItem: 'descriptions',
+  TabNav: 'tabs',
+  TabItem: 'tabs',
+  TabsNavs: 'tabs',
+  TabsItems: 'tabs',
+  NavMenuItem: 'nav-menu',
+  NavMenuItemGroup: 'nav-menu',
+  NavMenuSubMenu: 'nav-menu',
+  MapSelect: 'map',
+  HoverOverlay: 'hover',
+  Date: 'date/picker',
+  DatePicker: 'date/picker',
+  DateRange: 'date/picker',
+  DateRangePicker: 'date/picker',
+  Time: 'time/picker',
+  TimePicker: 'time/picker',
+  TimeRange: 'time/picker',
+  TimeRangePicker: 'time/picker',
+  CascaderPanel: 'cascader',
+  ImagePreview: 'image',
+  ImagePreviewAction: 'image',
+  ImagePreviewFn: 'image',
+  ImagePreviewGroup: 'image',
+  InputGroup: 'input',
+  InputGroupLabel: 'input',
+  InputPassword: 'input',
+  LayoutContent: 'layout',
+  LayoutFooter: 'layout',
+  LayoutHeader: 'layout',
+  LayoutSider: 'layout',
+  MenuGroup: 'menu',
+  MenuOption: 'menu',
+  MenuSubmenu: 'menu',
+  Optgroup: 'select',
+  Option: 'select',
+  SkeletonLine: 'skeleton',
+  SkeletonShape: 'skeleton',
+  Step: 'steps',
+  TableColumn: 'table',
+  Tbody: 'table',
+  Td: 'table',
+  Th: 'table',
+  Thead: 'table',
+  Tr: 'table',
+  TypographyParagraph: 'typography',
+  TypographyText: 'typography',
+  TypographyTitle: 'typography',
+}
+
+/** Components without a style directory; resolve without style side effects. */
+const noStyleComponents = new Set(['Color', 'SplitButton', 'StyleProvider'])
+
 function getStyleSideEffects(name: string, importStyle = true) {
-  return importStyle ? [`@cedarjs/ui/${kebabCase(name)}/style`] : undefined
+  if (!importStyle || noStyleComponents.has(name)) {
+    return undefined
+  }
+  const dir = styleDirAliases[name] ?? kebabCase(name)
+  return [`@cedarjs/ui/${dir}/style`]
 }
 
 export function resolveCedarComponent(name: string, options: CedarResolverOptions = {}) {

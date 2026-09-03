@@ -11,14 +11,14 @@
 
   .c-tabs {
     &__close-icon {
-      margin-right: var(~'--c-tabs-margin-close-icon-left');
+      margin-right: var(~"--c-tabs-margin-close-icon-left");
       margin-left: 0;
     }
 
     &__left-icon,
     &__right-icon {
-      margin-right: var(~'--c-tabs-padding-header-wrapper-horizontal');
-      margin-left: var(~'--c-tabs-spacing-nav-icon-header');
+      margin-right: var(~"--c-tabs-padding-header-wrapper-horizontal");
+      margin-left: var(~"--c-tabs-spacing-nav-icon-header");
     }
   }
 
@@ -50,29 +50,31 @@
   .c-tabs-nav--type-card,
   .c-tabs-nav--type-outline {
     .c-tabs__header-title-editable {
-      padding-right: var(~'--c-tabs-outline-padding-title-horizontal');
-      padding-left: var(~'--c-tabs-outline-padding-title-right-editable');
+      padding-right: var(~"--c-tabs-outline-padding-title-horizontal");
+      padding-left: var(~"--c-tabs-outline-padding-title-right-editable");
     }
   }
 
   .c-tabs-nav--type-outline .c-tabs__header-title {
-    border-right: var(~'--c-tabs-outline-border-width') solid var(~'--c-tabs-outline-title-color-border');
+    border-right: var(~"--c-tabs-outline-border-width") solid
+      var(~"--c-tabs-outline-title-color-border");
     border-left: none;
 
     &:last-child {
-      border-left: var(~'--c-tabs-outline-border-width') solid var(~'--c-tabs-outline-title-color-border');
-      border-top-left-radius: var(~'--c-tabs-outline-border-radius');
+      border-left: var(~"--c-tabs-outline-border-width") solid
+        var(~"--c-tabs-outline-title-color-border");
+      border-top-left-radius: var(~"--c-tabs-outline-border-radius");
       border-top-right-radius: 0;
     }
 
     &:first-child {
       border-top-left-radius: 0;
-      border-top-right-radius: var(~'--c-tabs-outline-border-radius');
+      border-top-right-radius: var(~"--c-tabs-outline-border-radius");
     }
   }
 
   .c-tabs-nav--type-card .c-tabs__header-title {
-    margin-right: var(~'--c-tabs-card-spacing-horizontal');
+    margin-right: var(~"--c-tabs-card-spacing-horizontal");
 
     &:first-child {
       margin-right: 0;

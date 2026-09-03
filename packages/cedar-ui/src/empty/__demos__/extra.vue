@@ -1,7 +1,7 @@
 <template>
   <c-empty description="No data, please reload">
     <template #extra>
-      <c-button type="primary" @click="handleReload">Reload</c-button>
+      <c-button status="primary" @click="handleReload">Reload</c-button>
     </template>
   </c-empty>
 </template>

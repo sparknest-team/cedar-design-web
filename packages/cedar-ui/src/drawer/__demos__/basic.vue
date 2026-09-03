@@ -1,6 +1,6 @@
 <template>
   <c-button type="primary" @click="handleClick">Open Drawer</c-button>
-  <c-drawer :width="340" :open="visible" @ok="handleOk" @cancel="handleCancel" unmountOnClose>
+  <c-drawer :width="340" :open="visible" @confirm="handleConfirm" @cancel="handleCancel" unmountOnClose>
     <template #title>Title</template>
     <div>
       You can customize modal body text by the current situation. This modal will be closed immediately once you press
@@ -16,7 +16,7 @@ const visible = ref(false)
 const handleClick = () => {
   visible.value = true
 }
-const handleOk = () => {
+const handleConfirm = () => {
   visible.value = false
 }
 const handleCancel = () => {

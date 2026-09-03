@@ -1,7 +1,7 @@
-@import '../../style/mixins/index.less';
-@import '../../field-decorator/style/index.less';
-@import '../../tag/style/index.less';
-@import './token.less';
+@import "../../_components/icon-hover/style/mixins.less";
+@import "../../field-decorator/style/index.less";
+@import "../../tag/style/index.less";
+@import "./token.less";
 
 // 壳层由 FieldDecorator（.c-field-decorator）提供；此处只写 InputTag 内容态
 .input-tag-style(@cls) {
@@ -16,7 +16,8 @@
   }
 
   .@{cls}-zoom-enter-active {
-    transition: all var(~'--c-transition-duration-3') var(~'--c-transition-timing-function-standard');
+    transition: all var(~"--c-transition-duration-3")
+      var(~"--c-transition-timing-function-standard");
   }
 
   .@{cls}-zoom-leave-from {
@@ -31,24 +32,26 @@
 
   .@{cls}-zoom-leave-active {
     position: absolute;
-    transition: all var(~'--c-transition-duration-3') var(~'--c-transition-timing-function-overshoot');
+    transition: all var(~"--c-transition-duration-3")
+      var(~"--c-transition-timing-function-overshoot");
   }
 
   .@{cls}-zoom-move {
-    transition: all var(~'--c-transition-duration-3') var(~'--c-transition-timing-function-overshoot');
+    transition: all var(~"--c-transition-duration-3")
+      var(~"--c-transition-timing-function-overshoot");
   }
 
   &.@{cls}--has-tag {
-    padding-right: var(~'--c-input-tag-padding-x');
-    padding-left: var(~'--c-input-tag-padding-x');
+    padding-right: var(~"--c-input-tag-padding-x");
+    padding-left: var(~"--c-input-tag-padding-x");
   }
 
   &.@{cls}--has-prefix {
-    padding-left: var(~'--c-field-padding-x');
+    padding-left: var(~"--c-field-padding-x");
   }
 
   &.@{cls}--has-suffix {
-    padding-right: var(~'--c-field-padding-x');
+    padding-right: var(~"--c-field-padding-x");
   }
 
   .@{cls}__inner {
@@ -64,22 +67,31 @@
     .@{cls}__tag {
       display: inline-flex;
       align-items: center;
-      margin-right: var(~'--c-input-tag-tag-margin-right');
-      color: var(~'--c-input-tag-color-text-default');
-      font-size: var(~'--c-input-tag-tag-font-size');
+      margin-right: var(~"--c-input-tag-tag-margin-right");
+      font-size: var(~"--c-input-tag-tag-font-size");
       white-space: pre-wrap;
       word-break: break-word;
-      background-color: var(~'--c-input-tag-tag-color-bg');
-      border-color: var(~'--c-input-tag-tag-color-border');
 
-      .c-icon-hover:hover::before {
-        background-color: var(~'--c-input-tag-tag-remove-icon-color-bg');
+      // 仅未通过 tagProps 指定颜色/状态/变体时，使用输入框内 Tag 的默认皮肤
+      &.c-tag--status-default.c-tag--variant-default:not(.c-tag--custom-color) {
+        color: var(~"--c-input-tag-color-text-default");
+        background-color: var(~"--c-input-tag-tag-color-bg");
+        border-color: var(~"--c-input-tag-tag-color-border");
+
+        .c-icon-hover:hover::before {
+          background-color: var(~"--c-input-tag-tag-remove-icon-color-bg");
+        }
+      }
+
+      &.c-tag--nowrap {
+        min-width: 0;
+        overflow: hidden;
       }
 
       &.c-tag--custom-color {
-        color: var(~'--c-tag-custom-text-color');
+        color: var(~"--c-tag-custom-text-color");
 
-        .icon-hover-bg(~'c-tag', var(~'--c-tag-custom-icon-bg-hover'));
+        .icon-hover-bg(~"c-tag", var(~"--c-tag-custom-icon-bg-hover"));
       }
     }
 
@@ -100,21 +112,23 @@
   }
 
   &.@{cls}--focus {
-    .@{cls}__tag {
-      background-color: var(~'--c-input-tag-tag-color-bg-focus');
-      border-color: var(~'--c-input-tag-tag-color-border-focus');
+    .@{cls}__tag.c-tag--status-default.c-tag--variant-default:not(
+        .c-tag--custom-color
+      ) {
+      background-color: var(~"--c-input-tag-tag-color-bg-focus");
+      border-color: var(~"--c-input-tag-tag-color-border-focus");
 
       .c-icon-hover:hover::before {
-        background-color: var(~'--c-input-tag-tag-remove-icon-color-bg-focus');
+        background-color: var(~"--c-input-tag-tag-remove-icon-color-bg-focus");
       }
     }
   }
 
   &.@{cls}--disabled {
     .@{cls}__tag {
-      color: var(~'--c-input-tag-color-text-disabled');
-      background-color: var(~'--c-input-tag-tag-color-bg-disabled');
-      border-color: var(~'--c-input-tag-tag-color-border-disabled');
+      color: var(~"--c-input-tag-color-text-disabled");
+      background-color: var(~"--c-input-tag-tag-color-bg-disabled");
+      border-color: var(~"--c-input-tag-tag-color-border-disabled");
     }
   }
 
@@ -125,17 +139,17 @@
 
   .size(@size) {
     &.@{cls}--size-@{size} {
-      @font-size: var(~'--c-input-tag-size-@{size}-font-size');
-      @height: var(~'--c-input-tag-size-@{size}-height');
-      @tag-height: var(~'--c-input-tag-size-@{size}-tag-height');
-      @border-width: var(~'--c-input-tag-border-width');
-      @margin-vertical: var(~'--c-input-tag-tag-margin-y');
+      @font-size: var(~"--c-input-tag-size-@{size}-font-size");
+      @height: var(~"--c-input-tag-size-@{size}-height");
+      @tag-height: var(~"--c-input-tag-size-@{size}-tag-height");
+      @border-width: var(~"--c-input-tag-border-width");
+      @margin-vertical: var(~"--c-input-tag-tag-margin-y");
 
       font-size: @font-size;
 
       .@{cls}__inner {
-        padding-top: var(~'--c-input-tag-size-@{size}-padding-y');
-        padding-bottom: var(~'--c-input-tag-size-@{size}-padding-y');
+        padding-top: var(~"--c-input-tag-size-@{size}-padding-y");
+        padding-bottom: var(~"--c-input-tag-size-@{size}-padding-y");
       }
 
       .@{cls}__tag,

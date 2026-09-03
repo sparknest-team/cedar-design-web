@@ -1,64 +1,31 @@
-import { defineComponent, PropType } from 'vue'
-import { getPrefixCls, createNamespace } from '../_utils/global-config'
-import type { Direction } from '../_utils/constant'
+import { defineComponent } from 'vue'
+import { createNamespace } from '../_utils/global-config'
 
-
-const { name } = createNamespace('list-item')
+const { name, n } = createNamespace('list-item')
 
 export default defineComponent({
   name,
-  props: {
-    /**
-     * @zh 操作组排列方向
-     * @en Operation group arrangement direction
-     */
-    actionLayout: {
-      type: String as PropType<Direction>,
-      default: 'horizontal',
-    },
-  },
   /**
-   * @zh 操作组
-   * @en Actions
-   * @slot actions
+   * @zh 列表项主体
+   * @en List item body
+   * @slot default
    */
   /**
-   * @zh 额外内容
-   * @en Extra content
-   * @slot extra
+   * @zh 列表项前缀
+   * @en List item prefix
+   * @slot prefix
    */
   /**
-   * @zh meta信息
-   * @en Meta data
-   * @slot meta
+   * @zh 列表项后缀
+   * @en List item suffix
+   * @slot suffix
    */
-  setup(props, { slots }) {
-    const prefixCls = getPrefixCls('list-item')
-
-    const renderAction = () => {
-      const actions = slots.actions?.()
-      if (!actions || !actions.length) {
-        return null
-      }
-
-      return (
-        <ul class={`${prefixCls}-action`}>
-          {actions.map((item, index) => (
-            <li key={`${prefixCls}-action-${index}`}>{item}</li>
-          ))}
-        </ul>
-      )
-    }
-
+  setup(_, { slots }) {
     return () => (
-      <div role="listitem" class={prefixCls}>
-        <div class={`${prefixCls}-main`}>
-          {slots.meta?.()}
-          <div class={`${prefixCls}-content`}>{slots.default?.()}</div>
-          {props.actionLayout === 'vertical' && renderAction()}
-        </div>
-        {props.actionLayout === 'horizontal' && renderAction()}
-        {slots.extra && <div class={`${prefixCls}-extra`}>{slots.extra()}</div>}
+      <div role="listitem" class={n()}>
+        {slots.prefix ? <div class={n('prefix')}>{slots.prefix()}</div> : null}
+        {slots.default ? <div class={n('main')}>{slots.default()}</div> : null}
+        {slots.suffix ? <div class={n('suffix')}>{slots.suffix()}</div> : null}
       </div>
     )
   },

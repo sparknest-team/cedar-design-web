@@ -13,44 +13,44 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from "vue";
 
-const width = ref(typeof window !== 'undefined' ? window.innerWidth : 0)
+const width = ref(typeof window !== "undefined" ? window.innerWidth : 0);
 
 const onResize = () => {
-  width.value = window.innerWidth
-}
+  width.value = window.innerWidth;
+};
 
 onMounted(() => {
-  width.value = window.innerWidth
-  window.addEventListener('resize', onResize)
-})
+  width.value = window.innerWidth;
+  window.addEventListener("resize", onResize);
+});
 
 onUnmounted(() => {
-  window.removeEventListener('resize', onResize)
-})
+  window.removeEventListener("resize", onResize);
+});
 
 const active = computed(() => {
-  const w = width.value
-  if (w >= 1920) return 'xl (1920px)'
-  if (w >= 1200) return 'lg (1200px)'
-  if (w >= 992) return 'md (992px)'
-  if (w >= 768) return 'sm (768px)'
-  return 'base (< sm)'
-})
+  const w = width.value;
+  if (w >= 1920) return "xl (1920px)";
+  if (w >= 1200) return "lg (1200px)";
+  if (w >= 992) return "md (992px)";
+  if (w >= 768) return "sm (768px)";
+  return "base (< sm)";
+});
 
 const columns = [
-  { title: '前缀', dataIndex: 'prefix' },
-  { title: '最小宽度', dataIndex: 'min' },
-  { title: '示例类', dataIndex: 'cls' },
-]
+  { title: "前缀", dataIndex: "prefix" },
+  { title: "最小宽度", dataIndex: "min" },
+  { title: "示例类", dataIndex: "cls" },
+];
 
 const rows = [
-  { prefix: 'sm:', min: '768px', cls: 'sm:c-bg-info' },
-  { prefix: 'md:', min: '992px', cls: 'md:c-bg-warning' },
-  { prefix: 'lg:', min: '1200px', cls: 'lg:c-bg-danger' },
-  { prefix: 'xl:', min: '1920px', cls: 'xl:c-bg-success' },
-]
+  { prefix: "sm:", min: "768px", cls: "sm:c-bg-info" },
+  { prefix: "md:", min: "992px", cls: "md:c-bg-warning" },
+  { prefix: "lg:", min: "1200px", cls: "lg:c-bg-danger" },
+  { prefix: "xl:", min: "1920px", cls: "xl:c-bg-success" },
+];
 </script>
 
 <style scoped lang="scss">

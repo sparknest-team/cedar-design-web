@@ -10,19 +10,19 @@ permalink: /components/empty/
 
 ### 基础用法
 
-空状态组件的基本用法。
+空状态组件的基本用法。不传 `description` 时使用国际化文案。
 
 <demo src="./__demos__/basic.vue"></demo>
 
 ### 自定义图片和文案
 
-通过 `image` 插槽自定义图标、图片，或通过内容修改文案。
+通过 `image` 插槽自定义图标、图片，或通过默认插槽修改文案。
 
 <demo src="./__demos__/user-define.vue"></demo>
 
 ### 图片尺寸
 
-通过 `image-size` 属性控制图标尺寸，可选值为 `xs` `sm` `md` `lg` `xl`。
+通过 `image-size` 属性控制图标尺寸，可选值为 `xs` `sm` `md` `lg` `xl`，也可传入数值。
 
 <demo src="./__demos__/size.vue"></demo>
 
@@ -32,18 +32,32 @@ permalink: /components/empty/
 
 <demo src="./__demos__/extra.vue"></demo>
 
+### 显示与隐藏
+
+通过 `show-icon`、`show-description` 控制图标和描述是否显示。
+
+<demo src="./__demos__/show.vue"></demo>
+
 ## API
 
 ### `<Empty>` Props
 
-| 属性               | 说明                         | 类型                                   | 默认值  |
-| ------------------ | ---------------------------- | -------------------------------------- | ------- |
-| description        | 描述内容                     | `string`                               | -       |
-| image-url          | 自定义图片的地址             | `string`                               | -       |
-| alt                | 图片替代文本                 | `string`                               | `''`    |
-| icon               | 自定义图标名                 | `string`                               | -       |
-| image-size         | 图片/图标尺寸                | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| number` | `'md'`  |
-| in-config-provider | 是否在 ConfigProvider 中使用 | `boolean`                              | `false` |
+| 属性               | 说明                         | 类型                                                     | 默认值  |
+| ------------------ | ---------------------------- | -------------------------------------------------------- | ------- |
+| description        | 描述内容                     | `string`                                                 | -       |
+| image-url          | 自定义图片的地址             | `string`                                                 | -       |
+| alt                | 图片替代文本                 | `string`                                                 | `''`    |
+| icon               | 自定义图标名（渲染为文本）   | `string`                                                 | -       |
+| image-size         | 图片/图标尺寸                | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| number \| string` | `'md'`  |
+| show-icon          | 是否显示图标                 | `boolean`                                                | `true`  |
+| show-description   | 是否显示描述                 | `boolean`                                                | `true`  |
+| in-config-provider | 是否在 ConfigProvider 中使用 | `boolean`                                                | `false` |
+
+### `<Empty>` Events
+
+| 事件名 | 说明     | 参数                  |
+| ------ | -------- | --------------------- |
+| click  | 点击回调 | `(ev: MouseEvent)`    |
 
 ### `<Empty>` Slots
 

@@ -5,7 +5,7 @@
 
   <c-table v-model:columns="columns" :data="data" :pagination="false" size="xs" />
 
-  <c-drawer v-model:open="visible" title="列管理" :width="720" unmount-on-close @ok="handleOk">
+  <c-drawer v-model:open="visible" title="列管理" :width="720" unmount-on-close @confirm="handleConfirm">
     <div style="height: calc(100vh - 120px)">
       <c-table-column-manager ref="mgrRef" v-model="items" :columns="columns" :options="columnDefinitions" />
     </div>
@@ -46,7 +46,7 @@ watch(visible, (val) => {
   items.value = state.items
 })
 
-const handleOk = () => {
+const handleConfirm = () => {
   const result = mgrRef.value?.getResult?.()
   if (result) columns.value = result.columns
   visible.value = false

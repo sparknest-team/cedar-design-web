@@ -1,12 +1,7 @@
 <template>
   <c-space direction="column" fill size="lg">
-    <c-descriptions :data="data" layout="inline-horizontal" title="User Info" style="width: auto" />
-    <c-descriptions :column="{ xs: 1, md: 3, lg: 4 }">
-      <template #title>
-        <c-page-header title="列表页标题132列表页标题132列表页标题132列表页标题132" subtitle="subtitle描述信息">
-          <template #extra> xs </template>
-        </c-page-header>
-      </template>
+    <c-descriptions :data="data" title="User Info" />
+    <c-descriptions :column="{ xs: 1, md: 3, lg: 4 }" title="User Info">
       <c-descriptions-item v-for="item of data" :key="item.label" :label="item.label" :span="item.span ?? 1">
         <c-tag>{{ item.value }}</c-tag>
       </c-descriptions-item>
@@ -27,6 +22,14 @@ const data = [
   {
     label: 'Residence',
     value: 'Beijing',
+  },
+  {
+    label: 'Hometown',
+    value: 'Beijing',
+  },
+  {
+    label: 'Address',
+    value: 'Yingdu Building, Zhichun Road, Beijing',
   },
 ]
 </script>

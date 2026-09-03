@@ -47,10 +47,24 @@
     }
 
     .c-drawer-close-btn {
+      display: inline-flex;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
       margin-left: var(~'--c-drawer-close-btn-margin-left');
+      padding: 0;
       color: var(~'--c-drawer-header-text-color');
       font-size: var(~'--c-drawer-close-icon-font-size');
+      line-height: 1;
+      background: transparent;
+      border: none;
       cursor: pointer;
+      appearance: none;
+
+      .c-icon {
+        display: block;
+      }
     }
   }
 

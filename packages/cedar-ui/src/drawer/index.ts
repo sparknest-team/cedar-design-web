@@ -12,13 +12,13 @@ import type { DrawerConfig, DrawerMethod, DrawerUpdateConfig } from './types'
 const open = (config: DrawerConfig, appContext?: AppContext) => {
   let container: HTMLElement | null = getOverlay('drawer')
 
-  const handleOk = () => {
+  const handleConfirm = () => {
     if (vm.component) {
       vm.component.props.open = false
     }
 
-    if (isFunction(config.onOk)) {
-      config.onOk()
+    if (isFunction(config.onConfirm)) {
+      config.onConfirm()
     }
   }
 
@@ -63,7 +63,7 @@ const open = (config: DrawerConfig, appContext?: AppContext) => {
     open: true,
     renderToBody: false,
     unmountOnClose: true,
-    onOk: handleOk,
+    onConfirm: handleConfirm,
     onCancel: handleCancel,
     onClose: handleClose,
   }
@@ -79,10 +79,10 @@ const open = (config: DrawerConfig, appContext?: AppContext) => {
         'footer',
         'open',
         'unmountOnClose',
-        'onOk',
+        'onConfirm',
         'onCancel',
         'onClose',
-        'beforeOk',
+        'beforeConfirm',
         'beforeCancel',
         'beforeOpen',
         'beforeClose',
@@ -90,7 +90,7 @@ const open = (config: DrawerConfig, appContext?: AppContext) => {
       ...{
         header: typeof config.header === 'boolean' ? config.header : undefined,
         footer: typeof config.footer === 'boolean' ? config.footer : undefined,
-        beforeOk: config.beforeOk,
+        beforeConfirm: config.beforeConfirm,
         beforeCancel: config.beforeCancel,
         onBeforeOpen: config.beforeOpen,
         onBeforeClose: config.beforeClose,

@@ -43,17 +43,17 @@ permalink: /components/popconfirm/
 | open **(v-model)** | 气泡确认框是否可见                                                                        | `boolean`                                                                                                |   `-`    |
 | default-open       | 气泡确认框默认是否可见（非受控模式）                                                      | `boolean`                                                                                                | `false`  |
 | type                        | 气泡确认框的类型                                                                          | `'info' \| 'success' \| 'warning' \| 'error'`                                                            | `'info'` |
-| ok-text                     | 确认按钮的内容                                                                            | `string`                                                                                                 |   `-`    |
+| confirm-button-text                     | 确认按钮的内容                                                                            | `string`                                                                                                 |   `-`    |
 | cancel-text                 | 取消按钮的内容                                                                            | `string`                                                                                                 |   `-`    |
-| ok-loading                  | 确认按钮是否为加载中状态                                                                  | `boolean`                                                                                                | `false`  |
-| ok-button-props             | 确认按钮的Props                                                                           | `ButtonProps`                                                                                            |   `-`    |
+| confirm-button-loading                  | 确认按钮是否为加载中状态                                                                  | `boolean`                                                                                                | `false`  |
+| confirm-button-props             | 确认按钮的Props                                                                           | `ButtonProps`                                                                                            |   `-`    |
 | cancel-button-props         | 取消按钮的Props                                                                           | `ButtonProps`                                                                                            |   `-`    |
 | content-class               | 弹出框内容的类名                                                                          | `ClassName`                                                                                              |   `-`    |
 | content-style               | 弹出框内容的样式                                                                          | `CSSProperties`                                                                                          |   `-`    |
 | arrow-class                 | 弹出框箭头的类名                                                                          | `ClassName`                                                                                              |   `-`    |
 | arrow-style                 | 弹出框箭头的样式                                                                          | `CSSProperties`                                                                                          |   `-`    |
 | popup-container             | 弹出框的挂载点                                                                            | `string \| HTMLElement`                                                                                  |   `-`    |
-| before-ok                   | 触发 ok 事件前的回调函数。如果返回 false 则不会触发后续事件，也可使用 done 进行异步关闭。 | `(  done: (closed: boolean) => void) => void \| boolean \| Promise<void \| boolean>`                     |   `-`    |
+| before-confirm                   | 触发 confirm 事件前的回调函数。如果返回 false 则不会触发后续事件，也可使用 done 进行异步关闭。 | `(  done: (closed: boolean) => void) => void \| boolean \| Promise<void \| boolean>`                     |   `-`    |
 | before-cancel               | 触发 cancel 事件前的回调函数。如果返回 false 则不会触发后续事件。                         | `() => boolean`                                                                                          |   `-`    |
 
 ### `<popconfirm>` Events
@@ -61,7 +61,7 @@ permalink: /components/popconfirm/
 | 事件名               | 描述                           | 参数               |
 | -------------------- | ------------------------------ | ------------------ |
 | open-change | 气泡确认框的显隐状态改变时触发 | open: `boolean` |
-| ok                   | 点击确认按钮时触发             | -                  |
+| confirm              | 点击确认按钮时触发             | -                  |
 | cancel               | 点击取消按钮时触发             | -                  |
 
 ### `<popconfirm>` Slots

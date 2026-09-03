@@ -53,7 +53,7 @@ permalink: /components/collapse/
 
 ### 额外节点
 
-通过 `extra` 可以设置额外节点。`extra` 单击可以以设置 `stop` 修饰符，以阻止当前项目展开。
+通过 `extra` 可以设置额外节点。点击 `extra` 区域不会触发展开。
 
 <demo src="./__demos__/extra.vue"></demo>
 
@@ -150,7 +150,7 @@ permalink: /components/collapse/
 
 ### 类型定义
 
-组件导出以下类型定义
+组件导出以下类型定义。`Collapse.Item` 与 `CollapseItem` 为同一组件。
 
 ```ts
 import type { CollapseInstance, CollapseToggleAllOptions } from '@cedarjs/ui'

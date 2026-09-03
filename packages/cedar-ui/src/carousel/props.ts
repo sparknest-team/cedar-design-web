@@ -5,14 +5,14 @@ import type { CarouselArrowType, CarouselAutoPlayConfig, CarouselIndicatorPositi
 
 const triggers = ['click', 'hover'] as const
 const arrowTypes = ['always', 'hover', 'never'] as const
-const indicatorTypes = ['line', 'dot', 'slider', 'never'] as const
+const indicatorTypes = ['dot', 'line', 'slider'] as const
 const indicatorPositions = ['bottom', 'top', 'left', 'right', 'outer'] as const
 
 export const carouselProps = {
   current: Number,
   defaultCurrent: { type: Number, default: 0 },
   loop: { type: Boolean, default: true },
-  autoPlay: { type: [Boolean, Object] as PropType<boolean | CarouselAutoPlayConfig>, default: false },
+  autoPlay: { type: [Boolean, Number, Object] as PropType<boolean | number | CarouselAutoPlayConfig>, default: false },
   moveSpeed: { type: Number, default: 500, validator: (value: number) => value >= 0 },
   trigger: { type: String as PropType<CarouselTriggerEvent>, default: 'click', validator: (value: CarouselTriggerEvent) => triggers.includes(value) },
   direction: { type: String as PropType<Direction>, default: 'horizontal', validator: (value: Direction) => DIRECTIONS.includes(value) },

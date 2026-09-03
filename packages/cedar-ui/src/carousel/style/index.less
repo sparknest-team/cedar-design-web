@@ -13,7 +13,7 @@
   overscroll-behavior: contain;
 
   &-indicator-position-outer {
-    margin-bottom: var(~'--c-carousel-indicator-outer-margin-bottom');
+    padding-bottom: var(~'--c-carousel-indicator-outer-margin-bottom');
   }
 
   &-track {
@@ -33,7 +33,8 @@
     display: flex;
     align-items: center;
     gap: var(~'--c-carousel-indicator-gap');
-    z-index: 10;
+    z-index: var(--c-z-index-local-navigation);
+    pointer-events: auto;
 
     &-dot,
     &-line,
@@ -88,7 +89,7 @@
 
   &-indicator-wrapper {
     position: absolute;
-    z-index: 10;
+    z-index: var(--c-z-index-local-navigation);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -121,7 +122,7 @@
     }
 
     &-outer {
-      bottom: -var(~'--c-carousel-indicator-position');
+      bottom: var(~'--c-carousel-indicator-position');
       left: 0;
       right: 0;
     }
@@ -140,7 +141,7 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
-    z-index: 10;
+    z-index: var(--c-z-index-local-navigation);
     pointer-events: none;
 
     &-left,
@@ -150,6 +151,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 0;
+      border: none;
+      appearance: none;
       width: var(~'--c-carousel-arrow-size');
       height: var(~'--c-carousel-arrow-size');
       border-radius: 50%;
@@ -165,9 +169,5 @@
 
     &-left { margin-left: var(~'--c-carousel-arrow-margin'); }
     &-right { margin-right: var(~'--c-carousel-arrow-margin'); }
-  }
-
-  &-indicator-position-outer {
-    margin-bottom: var(~'--c-carousel-indicator-outer-margin-bottom');
   }
 }

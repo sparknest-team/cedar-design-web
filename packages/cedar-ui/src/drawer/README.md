@@ -64,29 +64,29 @@ permalink: /components/drawer/
 | mask                  | 是否显示遮罩层                                                                            | `boolean`                                                                           | `true`    |
 | mask-closable         | 点击遮罩层是否可以关闭                                                                    | `boolean`                                                                           | `true`    |
 | closable              | 是否展示关闭按钮                                                                          | `boolean`                                                                           | `true`    |
-| ok-text               | 确认按钮的内容                                                                            | `string`                                                                            | -         |
+| confirm-button-text               | 确认按钮的内容                                                                            | `string`                                                                            | -         |
 | cancel-text           | 取消按钮的内容                                                                            | `string`                                                                            | -         |
-| ok-loading            | 确认按钮是否为加载中状态                                                                  | `boolean`                                                                           | `false`   |
-| ok-button-props       | 确认按钮的Props                                                                           | `ButtonProps`                                                                       | -         |
+| confirm-button-loading            | 确认按钮是否为加载中状态                                                                  | `boolean`                                                                           | `false`   |
+| confirm-button-props       | 确认按钮的Props                                                                           | `ButtonProps`                                                                       | -         |
 | cancel-button-props   | 取消按钮的Props                                                                           | `ButtonProps`                                                                       | -         |
 | unmount-on-close      | 关闭时是否卸载节点                                                                        | `boolean`                                                                           | `false`   |
 | width                 | 抽屉的宽度（仅在placement为right,left时可用）                                             | `number\|string`                                                                    | `250`     |
 | height                | 抽屉的高度（仅在placement为top,bottom时可用）                                             | `number\|string`                                                                    | `250`     |
 | popup-container       | 弹出框的挂载容器                                                                          | `string \| HTMLElement`                                                             | `'body'`  |
 | drawer-style          | 抽屉的样式                                                                                | `CSSProperties`                                                                     | -         |
-| before-ok             | 触发 ok 事件前的回调函数。如果返回 false 则不会触发后续事件，也可使用 done 进行异步关闭。 | `( done: (closed: boolean) => void) => void \| boolean \| Promise<void \| boolean>` | -         |
+| before-confirm             | 触发 confirm 事件前的回调函数。如果返回 false 则不会触发后续事件，也可使用 done 进行异步关闭。 | `( done: (closed: boolean) => void) => void \| boolean \| Promise<void \| boolean>` | -         |
 | before-cancel         | 触发 cancel 事件前的回调函数。如果返回 false 则不会触发后续事件。                         | `() => boolean`                                                                     | -         |
 | esc-to-close          | 是否支持 ESC 键关闭抽屉                                                                   | `boolean`                                                                           | `true`    |
 | render-to-body        | 抽屉是否挂载在 `body` 元素下                                                              | `boolean`                                                                           | `true`    |
 | header                | 是否展示头部内容                                                                          | `boolean`                                                                           | `true`    |
 | footer                | 是否展示底部内容                                                                          | `boolean`                                                                           | `true`    |
-| hide-cancel           | 是否隐藏取消按钮                                                                          | `boolean`                                                                           | `false`   |
+| cancel-button         | 是否显示取消按钮                                                                          | `boolean`                                                                           | `true`    |
 
 ### `<Drawer>` Events
 
 | 事件名       | 说明                       | 参数                                           |
 | ------------ | -------------------------- | ---------------------------------------------- |
-| ok           | 点击确定按钮时触发         | `(event: MouseEvent) => void`                  |
+| confirm      | 点击确定按钮时触发         | `(event: MouseEvent) => void`                  |
 | cancel       | 点击取消、关闭按钮时触发   | `(event: MouseEvent \| KeyboardEvent) => void` |
 | open         | 抽屉打开后（动画结束）触发 | -                                              |
 | close        | 抽屉关闭后（动画结束）触发 | -                                              |
@@ -105,7 +105,7 @@ permalink: /components/drawer/
 
 #### DrawerConfig（命令式配置，≠ 组件 Props）
 
-命令式 `Drawer.open(config)` 的配置对象。拦截器与 Props 同名（`beforeOk` / `beforeCancel` / `beforeOpen` / `beforeClose`）；事件回调仍用 `onOk` / `onCancel` / `onOpen` / `onClose`。
+命令式 `Drawer.open(config)` 的配置对象。拦截器与 Props 同名（`beforeConfirm` / `beforeCancel` / `beforeOpen` / `beforeClose`）；事件回调仍用 `onConfirm` / `onCancel` / `onOpen` / `onClose`。
 
 | 属性              | 说明                                                                                      | 类型                                                                                 | 默认值    |
 | ----------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | --------- |
@@ -115,18 +115,18 @@ permalink: /components/drawer/
 | mask              | 是否显示遮罩层                                                                            | `boolean`                                                                            | `true`    |
 | maskClosable      | 点击遮罩层是否可以关闭                                                                    | `boolean`                                                                            | `true`    |
 | closable          | 是否展示关闭按钮                                                                          | `boolean`                                                                            | `true`    |
-| okText            | 确认按钮的内容                                                                            | `string`                                                                             | -         |
+| confirmButtonText            | 确认按钮的内容                                                                            | `string`                                                                             | -         |
 | cancelText        | 取消按钮的内容                                                                            | `string`                                                                             | -         |
-| okLoading         | 确认按钮是否为加载中状态                                                                  | `boolean`                                                                            | `false`   |
-| okButtonProps     | 确认按钮的Props                                                                           | `ButtonProps`                                                                        | -         |
+| confirmButtonLoading         | 确认按钮是否为加载中状态                                                                  | `boolean`                                                                            | `false`   |
+| confirmButtonProps     | 确认按钮的Props                                                                           | `ButtonProps`                                                                        | -         |
 | cancelButtonProps | 取消按钮的Props                                                                           | `ButtonProps`                                                                        | -         |
 | width             | 抽屉的宽度（仅在placement为right,left时可用）                                             | `number \| string`                                                                   | `250`     |
 | height            | 抽屉的高度（仅在placement为top,bottom时可用）                                             | `number` \| `string`                                                                 | `250`     |
 | popupContainer    | 弹出框的挂载容器                                                                          | `string \| HTMLElement`                                                              | `'body'`  |
 | drawerStyle       | 抽屉的样式                                                                                | `CSSProperties`                                                                      | -         |
-| onOk              | 点击确定按钮时触发                                                                        | `(event: MouseEvent) => void`                                                        | -         |
+| onConfirm              | 点击确定按钮时触发                                                                        | `(event: MouseEvent) => void`                                                        | -         |
 | onCancel          | 点击取消、关闭按钮时触发                                                                  | `(event: MouseEvent) => void`                                                        | -         |
-| beforeOk          | 触发 ok 事件前的回调函数。如果返回 false 则不会触发后续事件，也可使用 done 进行异步关闭。 | `( done: (closed: boolean) => void ) => void \| boolean \| Promise<void \| boolean>` | -         |
+| beforeConfirm          | 触发 confirm 事件前的回调函数。如果返回 false 则不会触发后续事件，也可使用 done 进行异步关闭。 | `( done: (closed: boolean) => void ) => void \| boolean \| Promise<void \| boolean>` | -         |
 | beforeCancel      | 触发 cancel 事件前的回调函数。如果返回 false 则不会触发后续事件。                         | `() => boolean`                                                                      | -         |
 | onOpen            | 抽屉打开后（动画结束）触发                                                                | `() => void`                                                                         | -         |
 | onClose           | 抽屉关闭后（动画结束）触发                                                                | `() => void`                                                                         | -         |
@@ -135,7 +135,7 @@ permalink: /components/drawer/
 | escToClose        | 是否支持 ESC 键关闭抽屉                                                                   | `boolean`                                                                            | `true`    |
 | header            | 是否展示头部内容                                                                          | `boolean \| RenderContent`                                                           | `true`    |
 | footer            | 是否展示底部内容                                                                          | `boolean \| RenderContent`                                                           | `true`    |
-| hideCancel        | 是否隐藏取消按钮                                                                          | `boolean`                                                                            | `false`   |
+| cancelButton      | 是否显示取消按钮                                                                          | `boolean`                                                                            | `true`    |
 
 #### DrawerReturn
 

@@ -1,7 +1,9 @@
 <template>
   <div class="starter-card">
     <div class="starter-title">第一张原子化卡片</div>
-    <div class="starter-description">组合小类完成布局，不需要另外写组件样式。</div>
+    <div class="starter-description">
+      组合小类完成布局，不需要另外写组件样式。
+    </div>
 
     <div class="starter-row">
       <span class="starter-tag">c-flex c-items-center c-gap-8</span>

@@ -32,9 +32,9 @@
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
-import { DateRangePicker } from '../date-picker'
+import DateRangePicker from '../date/picker/date-range-picker.vue'
 import { createNamespace } from '../_utils/global-config'
-import type { CalendarValue } from '../date-picker/types'
+import type { CalendarValue } from '../date/picker/types'
 import { dateRangeProps } from './props'
 
 const { name } = createNamespace('date-range')

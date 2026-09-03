@@ -1,6 +1,6 @@
-const Color = require('color');
-const colorPalette = require('./palette');
-const { getColorString } = require('./utils');
+const Color = require("color");
+const colorPalette = require("./palette");
+const { getColorString } = require("./utils");
 
 // 暗色色板
 

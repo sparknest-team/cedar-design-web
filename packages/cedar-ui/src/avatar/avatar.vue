@@ -5,8 +5,9 @@
     :class="[
       cls,
       {
+        [`${prefixCls}-bordered`]: bordered,
+        [`${prefixCls}-hoverable`]: hoverable,
         [`${prefixCls}-with-trigger-icon`]: Boolean($slots['trigger-icon']),
-        // 添加根据 rtl 变量生成的类名
         [`${prefixCls}-rtl`]: rtl,
       },
     ]"
@@ -16,20 +17,19 @@
       <span ref="wrapperRef" :class="wrapperCls">
         <template v-if="imageUrl">
           <slot v-if="hasError" name="error">
-            <div :class="`${prefixCls}-image-icon`"><IconImageClose /></div>
+            <img v-if="error" :src="error" :alt="alt" :style="imageStyle" />
+            <div v-else :class="`${prefixCls}-image-icon`"><IconImageClose /></div>
           </slot>
           <slot v-if="!(hasError || !shouldLoad) && !isLoaded">
-            <div :class="`${prefixCls}-image-icon`"><IconLoading /></div>
+            <img v-if="loading" :src="loading" :alt="alt" :style="imageStyle" />
+            <div v-else :class="`${prefixCls}-image-icon`"><IconLoading /></div>
           </slot>
           <img
             v-if="!(hasError || !shouldLoad)"
             :src="imageUrl"
-            :style="{
-              width: size + 'px',
-              height: size + 'px',
-              objectFit: objectFit,
-            }"
             :alt="alt"
+            :loading="lazy ? 'lazy' : undefined"
+            :style="imageStyle"
             @load="handleImgLoad"
             @error="handleImgError"
           />
@@ -55,6 +55,7 @@ import {
   watch,
   ref,
   onMounted,
+  onUpdated,
   nextTick,
   CSSProperties,
   inject,
@@ -138,14 +139,27 @@ export default defineComponent({
             fontSize: `${mergedSize.value / 2}px`,
           }
         : {};
+      if (props.color) {
+        style.backgroundColor = props.color;
+      }
+      if (props.borderColor) {
+        style.borderColor = props.borderColor;
+      }
       if (groupCtx) {
         style.zIndex = groupCtx.zIndexAscend
           ? index.value + 1
           : groupCtx.total - index.value;
-        style.marginLeft =
-          index.value !== 0 ? `-${(mergedSize.value ?? 40) / 4}px` : '0';
       }
 
+      return style;
+    });
+
+    const imageStyle = computed<CSSProperties>(() => {
+      const style: CSSProperties = { objectFit: props.objectFit };
+      if (isNumber(mergedSize.value)) {
+        style.width = `${mergedSize.value}px`;
+        style.height = `${mergedSize.value}px`;
+      }
       return style;
     });
 
@@ -167,6 +181,8 @@ export default defineComponent({
           const scale = avatarWidth / (textWidth + 8);
           if (avatarWidth && scale < 1) {
             wrapperRef.value.style.transform = `scale(${scale}) translateX(-50%)`;
+          } else {
+            wrapperRef.value.style.transform = '';
           }
           shouldLoad.value = true;
         });
@@ -186,6 +202,12 @@ export default defineComponent({
     });
 
     watch(size, () => {
+      if (mergedAutoFixFontSize.value) {
+        autoFixFontSizeHandler();
+      }
+    });
+
+    onUpdated(() => {
       if (mergedAutoFixFontSize.value) {
         autoFixFontSizeHandler();
       }
@@ -229,6 +251,7 @@ export default defineComponent({
       wrapperRef,
       wrapperCls,
       computedTriggerIconStyle,
+      imageStyle,
       isImage,
       shouldLoad,
       isLoaded,

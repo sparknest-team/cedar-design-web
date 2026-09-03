@@ -1,11 +1,34 @@
-@import './normalize.less';
-@import './icon.less';
-@import './animation/index.less';
-@import './theme/index.less';
-@import './theme/css-variables.less';
-@import './tools.less';
+// Foundation
+@import "./normalize.less";
+@import "./theme/css-variables.less";
+
+// Shared primitives and utilities
+@import "./icon.less";
+@import "./animation/index.less";
+@import "./utilities/index.less";
 
 body {
-  font-size: @font-size-body;
-  font-family: @font-family;
+  font-size: 14px;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "PingFang SC",
+    "Hiragino Sans GB",
+    "Noto Sans",
+    "Microsoft YaHei",
+    "Helvetica Neue",
+    Helvetica,
+    Arial,
+    sans-serif;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [class^="c-"],
+  [class*=" c-"] {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

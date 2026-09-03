@@ -1,25 +1,26 @@
-import { withInstall } from '../_utils/global-config'
-import _List from './list'
-import _ListItem from './list-item'
-import _ListItemMeta from './list-item-meta.vue'
-import { listProps } from './props'
+import { withInstall } from "../_utils/global-config";
+import _List from "./list";
+import _ListItem from "./list-item";
+import { listProps } from "./props";
 
-const List = withInstall(_List, Object.assign(_List, {
-  Item: Object.assign(_ListItem, {
-    Meta: _ListItemMeta,
+const List = withInstall(
+  _List,
+  Object.assign(_List, {
+    Item: _ListItem,
   }),
-}), { components: [_List, _ListItem, _ListItemMeta] })
+  { components: [_List, _ListItem] },
+);
 
-export type ListInstance = InstanceType<typeof _List>
-export type ListItemInstance = InstanceType<typeof _ListItem>
-export type ListItemMetaInstance = InstanceType<typeof _ListItemMeta>
+export type ListInstance = InstanceType<typeof _List>;
+export type ListItemInstance = InstanceType<typeof _ListItem>;
+export type { ListProps } from "./props";
 
-export { _ListItem as ListItem, _ListItemMeta as ListItemMeta }
+export { _ListItem as ListItem };
 
-export const _ListComponent = List
+export const _ListComponent = List;
 
-export { List }
+export { List };
 
-export { listProps }
+export { listProps };
 
-export default List
+export default List;

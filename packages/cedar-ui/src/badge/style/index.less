@@ -11,7 +11,7 @@
 
   &--mode-floating &__content-wrapper {
     position: absolute;
-    z-index: 2;
+    z-index: var(--c-z-index-local-overlay);
     box-sizing: border-box;
     overflow: hidden;
     text-align: center;
@@ -89,7 +89,7 @@
 
   &__dot-content {
     background-color: var(~'--c-badge-bg-color');
-    border-radius: @radius-circle;
+    border-radius: var(~"--c-border-radius-circle");
     box-shadow: 0 0 0 var(~'--c-badge-ring-width') var(~'--c-badge-border-color');
   }
 
@@ -165,7 +165,7 @@
         line-height: calc(var(~'--c-badge-size-@{size}-height') - var(~'--c-badge-ring-width'));
       }
       &.c-badge--dot .c-badge__content-wrapper {
-        border-radius: @radius-circle;
+        border-radius: var(~"--c-border-radius-circle");
       }
       &.c-badge--dot .c-badge__dot-content {
         width: var(~'--c-badge-size-@{size}-dot-width');

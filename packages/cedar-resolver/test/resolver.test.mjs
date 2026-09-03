@@ -16,6 +16,56 @@ test('resolves UI components with their styles', () => {
     name: 'Icon',
     sideEffects: ['@cedarjs/ui/icon/style'],
   })
+
+  assert.deepEqual(components.resolve('CDatePicker'), {
+    from: '@cedarjs/ui',
+    name: 'DatePicker',
+    sideEffects: ['@cedarjs/ui/date/picker/style'],
+  })
+
+  assert.deepEqual(components.resolve('CButtonGroup'), {
+    from: '@cedarjs/ui',
+    name: 'ButtonGroup',
+    sideEffects: ['@cedarjs/ui/button/style'],
+  })
+
+  assert.deepEqual(components.resolve('CCountdown'), {
+    from: '@cedarjs/ui',
+    name: 'Countdown',
+    sideEffects: ['@cedarjs/ui/countdown/style'],
+  })
+})
+
+test('maps sub-components to their parent style directory', () => {
+  for (const [name, dir] of [
+    ['COption', 'select'],
+    ['CMenuOption', 'menu'],
+    ['CTypographyText', 'typography'],
+    ['CStep', 'steps'],
+    ['CAnchorLink', 'anchor'],
+    ['CTableColumn', 'table'],
+    ['CLayoutHeader', 'layout'],
+    ['CInputGroup', 'input'],
+    ['CSkeletonLine', 'skeleton'],
+    ['CImagePreview', 'image'],
+    ['CCascaderPanel', 'cascader'],
+  ]) {
+    assert.deepEqual(components.resolve(name), {
+      from: '@cedarjs/ui',
+      name: name.slice(1),
+      sideEffects: [`@cedarjs/ui/${dir}/style`],
+    })
+  }
+})
+
+test('resolves components without styles with no side effects', () => {
+  for (const name of ['CColor', 'CSplitButton', 'CStyleProvider']) {
+    assert.deepEqual(components.resolve(name), {
+      from: '@cedarjs/ui',
+      name: name.slice(1),
+      sideEffects: undefined,
+    })
+  }
 })
 
 test('resolves SVG icons from the standalone icon package', () => {

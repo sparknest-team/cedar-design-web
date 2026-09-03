@@ -13,12 +13,12 @@ permalink: /components/color/
 
 ### 类名规则
 
-| 类名 | 变量 |
-|---|---|
-| `c-text-1` … `c-text-4` | `var(--c-color-text-1)` … `var(--c-color-text-4)` |
-| `c-fill-1` … `c-fill-4` | `var(--c-color-fill-1)` … `var(--c-color-fill-4)` |
-| `c-color-border-1` … `c-color-border-4` | `var(--c-color-border-1)` … `var(--c-color-border-4)` |
-| `c-bg-0` / `c-bg-1` / `c-bg-2` | `var(--c-color-bg-white)` / `var(--c-color-bg-1)` / `var(--c-color-bg-2)` |
+| 类名                                    | 变量                                                                      |
+| --------------------------------------- | ------------------------------------------------------------------------- |
+| `c-text-1` … `c-text-4`                 | `var(--c-color-text-1)` … `var(--c-color-text-4)`                         |
+| `c-fill-1` … `c-fill-4`                 | `var(--c-color-fill-1)` … `var(--c-color-fill-4)`                         |
+| `c-color-border-1` … `c-color-border-4` | `var(--c-color-border-1)` … `var(--c-color-border-4)`                     |
+| `c-bg-0` / `c-bg-1` / `c-bg-2`          | `var(--c-color-bg-white)` / `var(--c-color-bg-1)` / `var(--c-color-bg-2)` |
 
 ### 边框颜色 Border
 

@@ -169,7 +169,7 @@ export default defineComponent({
               {t("table.resetText")}
             </Button>
             <Button status="primary" size="xs" onClick={handleFilterConfirm}>
-              {t("table.okText")}
+              {t("table.confirmButtonText")}
             </Button>
           </div>
         </div>

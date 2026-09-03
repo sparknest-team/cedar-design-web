@@ -1,4 +1,4 @@
-@import '../../field-decorator/style/token.less';
+@import "../../field-decorator/style/token.less";
 
 .c-input-group {
   display: inline-flex;
@@ -7,16 +7,16 @@
   width: 100%;
 
   .c-input-group-label {
-    border-radius: var(~'--c-field-border-radius');
+    border-radius: var(~"--c-field-border-radius");
     position: relative;
     user-select: none;
     -webkit-user-select: none;
     box-sizing: border-box;
-    padding: 0 var(~'--c-field-padding-x');
+    padding: 0 var(~"--c-field-padding-x");
     display: inline-block;
-    background-color: var(~'--c-field-variant-filled-bg');
-    color: var(~'--c-field-group-label-text-color');
-    font-size: var(~'--c-field-size-md-font-size');
+    background-color: var(~"--c-field-variant-filled-bg");
+    color: var(~"--c-field-group-label-text-color");
+    font-size: var(~"--c-field-size-md-font-size");
     flex-shrink: 0;
     white-space: nowrap;
     .c-input-group-label__border {
@@ -26,14 +26,14 @@
       top: 0;
       bottom: 0;
       border-radius: inherit;
-      border: 1px solid var(~'--c-color-border-2');
+      border: 1px solid var(~"--c-color-border-2");
       transition: border-color 0s ease 0s;
       opacity: 0;
     }
   }
 
-  @field-decorator: ~'.c-field-decorator';
-  @field-decorator-border: ~'.c-field-decorator__border';
+  @field-decorator: ~".c-field-decorator";
+  @field-decorator-border: ~".c-field-decorator__border";
 
   & > *:not(:first-child) {
     position: relative;
@@ -60,9 +60,9 @@
 
   &--variant-filled {
     .c-input-group-label {
-      background-color: var(~'--c-field-variant-filled-bg');
-      color: var(~'--c-field-group-label-text-color');
-      font-size: var(~'--c-field-size-md-font-size');
+      background-color: var(~"--c-field-variant-filled-bg");
+      color: var(~"--c-field-group-label-text-color");
+      font-size: var(~"--c-field-size-md-font-size");
     }
     & > *:not(:first-child) {
       @{field-decorator-border} {
@@ -84,8 +84,8 @@
 
   .size(@size) {
     &--size-@{size} .c-input-group-label {
-      height: var(~'--c-field-size-@{size}-height');
-      line-height: var(~'--c-field-size-@{size}-height');
+      height: var(~"--c-field-size-@{size}-height");
+      line-height: var(~"--c-field-size-@{size}-height");
     }
   }
 

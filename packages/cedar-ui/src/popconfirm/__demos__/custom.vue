@@ -1,5 +1,5 @@
 <template>
-  <c-popconfirm content="Do you want to discard the draft?" okText="Discard" cancelText="No">
+  <c-popconfirm content="Do you want to discard the draft?" confirmButtonText="Discard" cancelText="No">
     <c-button>Discard</c-button>
   </c-popconfirm>
 </template>

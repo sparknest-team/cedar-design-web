@@ -7,12 +7,12 @@
 
   &-popup {
     position: absolute;
-    z-index: @z-index-popup;
+    z-index: var(~"--c-z-index-popup");
   }
 
   &-arrow {
     position: absolute;
-    z-index: -1;
+    z-index: var(--c-z-index-local-behind);
     display: block;
     box-sizing: border-box;
     width: var(~'--c-trigger-size-arrow-width');
