@@ -5,13 +5,25 @@
         v-if="!unmountOnClose || computedOpen || mounted"
         v-show="computedOpen || mounted"
         :class="`${prefixCls}-container`"
-        :style="isFixed ? { zIndex } : { zIndex: 'inherit', position: 'absolute' }"
+        :style="
+          isFixed ? { zIndex } : { zIndex: 'inherit', position: 'absolute' }
+        "
         v-bind="$attrs"
       >
         <transition name="fade-drawer" appear>
-          <div v-if="mask" v-show="computedOpen" :class="`${prefixCls}-mask`" @click="handleMask" />
+          <div
+            v-if="mask"
+            v-show="computedOpen"
+            :class="`${prefixCls}-mask`"
+            @click="handleMask"
+          />
         </transition>
-        <transition :name="`slide-${placement}-drawer`" appear @after-enter="handleOpen" @after-leave="handleClose">
+        <transition
+          :name="`slide-${placement}-drawer`"
+          appear
+          @after-enter="handleOpen"
+          @after-leave="handleClose"
+        >
           <div
             v-show="computedOpen"
             role="dialog"
@@ -43,11 +55,20 @@
             </div>
             <div v-if="footer" :class="`${prefixCls}-footer`">
               <slot name="footer">
-                <Button v-if="cancelButton" v-bind="cancelButtonProps" @click="handleCancel">
-                  {{ cancelText || t('drawer.cancelText') }}
+                <Button
+                  v-if="cancelButton"
+                  v-bind="cancelButtonProps"
+                  @click="handleCancel"
+                >
+                  {{ cancelText || t("drawer.cancelText") }}
                 </Button>
-                <Button type="primary" :loading="mergedConfirmButtonLoading" v-bind="confirmButtonProps" @click="handleConfirm">
-                  {{ confirmButtonText || t('drawer.confirmButtonText') }}
+                <Button
+                  variant="text"
+                  :loading="mergedConfirmButtonLoading"
+                  v-bind="confirmButtonProps"
+                  @click="handleConfirm"
+                >
+                  {{ confirmButtonText || t("drawer.confirmButtonText") }}
                 </Button>
               </slot>
             </div>
@@ -59,24 +80,32 @@
 </template>
 
 <script lang="ts">
-import type { CSSProperties } from 'vue'
-import { computed, defineComponent, onBeforeUnmount, onMounted, ref, toRefs, watch } from 'vue'
-import { createNamespace, getPrefixCls } from '../_utils/global-config'
-import ClientOnly from '../_components/client-only'
-import Button from '../button'
-import IconHover from '../_components/icon-hover.vue'
-import { IconClose } from '@cedarjs/icons-vue/icon-close'
-import { useI18n } from '../locale'
-import { useOverflow } from '../_hooks/use-overflow'
-import { off, on } from '../_utils/dom'
-import usePopupManager from '../_hooks/use-popup-manager'
-import { isBoolean, isFunction, isNumber, isPromise } from '../_utils/is'
-import { KEYBOARD_KEY } from '../_utils/keyboard'
-import { useTeleportContainer } from '../_hooks/use-teleport-container'
-import { drawerProps } from './props'
+import type { CSSProperties } from "vue";
+import {
+  computed,
+  defineComponent,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  toRefs,
+  watch,
+} from "vue";
+import { createNamespace, getPrefixCls } from "../_utils/global-config";
+import ClientOnly from "../_components/client-only";
+import Button from "../button";
+import IconHover from "../_components/icon-hover.vue";
+import { IconClose } from "@cedarjs/icons-vue/icon-close";
+import { useI18n } from "../locale";
+import { useOverflow } from "../_hooks/use-overflow";
+import { off, on } from "../_utils/dom";
+import usePopupManager from "../_hooks/use-popup-manager";
+import { isBoolean, isFunction, isNumber, isPromise } from "../_utils/is";
+import { KEYBOARD_KEY } from "../_utils/keyboard";
+import { useTeleportContainer } from "../_hooks/use-teleport-container";
+import { drawerProps } from "./props";
 
 export default defineComponent({
-  name: createNamespace('drawer').name,
+  name: createNamespace("drawer").name,
   components: {
     ClientOnly,
     Button,
@@ -86,7 +115,7 @@ export default defineComponent({
   inheritAttrs: false,
   props: drawerProps,
   emits: {
-    'update:open': (visible: boolean) => true,
+    "update:open": (visible: boolean) => true,
     /**
      * @zh 点击确定按钮时触发
      * @en Triggered when the OK button is clicked
@@ -139,174 +168,180 @@ export default defineComponent({
    * @version 2.33.0
    */
   setup(props, { emit }) {
-    const { popupContainer } = toRefs(props)
-    const prefixCls = getPrefixCls('drawer')
-    const { t } = useI18n()
+    const { popupContainer } = toRefs(props);
+    const prefixCls = getPrefixCls("drawer");
+    const { t } = useI18n();
 
-    const _open = ref(props.defaultOpen)
-    const computedOpen = computed(() => props.open ?? _open.value)
-    const _confirmButtonLoading = ref(false)
-    const mergedConfirmButtonLoading = computed(() => props.confirmButtonLoading || _confirmButtonLoading.value)
+    const _open = ref(props.defaultOpen);
+    const computedOpen = computed(() => props.open ?? _open.value);
+    const _confirmButtonLoading = ref(false);
+    const mergedConfirmButtonLoading = computed(
+      () => props.confirmButtonLoading || _confirmButtonLoading.value,
+    );
 
     const { teleportContainer, containerRef } = useTeleportContainer({
       popupContainer,
       visible: computedOpen,
-    })
+    });
 
-    const mounted = ref(computedOpen.value)
+    const mounted = ref(computedOpen.value);
 
-    let globalKeyDownListener = false
+    let globalKeyDownListener = false;
 
     const handleGlobalKeyDown = (ev: KeyboardEvent) => {
       if (props.escToClose && ev.key === KEYBOARD_KEY.ESC && isLastDialog()) {
-        handleCancel(ev)
+        handleCancel(ev);
       }
-    }
+    };
 
     const addGlobalKeyDownListener = () => {
       if (props.escToClose && !globalKeyDownListener) {
-        globalKeyDownListener = true
-        on(document.documentElement, 'keydown', handleGlobalKeyDown)
+        globalKeyDownListener = true;
+        on(document.documentElement, "keydown", handleGlobalKeyDown);
       }
-    }
+    };
 
     const removeGlobalKeyDownListener = () => {
       if (globalKeyDownListener) {
-        globalKeyDownListener = false
-        off(document.documentElement, 'keydown', handleGlobalKeyDown)
+        globalKeyDownListener = false;
+        off(document.documentElement, "keydown", handleGlobalKeyDown);
       }
-    }
+    };
 
-    const { zIndex, isLastDialog } = usePopupManager('dialog', {
+    const { zIndex, isLastDialog } = usePopupManager("dialog", {
       visible: computedOpen,
-    })
+    });
     const isFixed = computed(() => {
-      return containerRef?.value === document.body
-    })
+      return containerRef?.value === document.body;
+    });
 
     // Used to ignore closed Promises
-    let promiseNumber = 0
+    let promiseNumber = 0;
 
     const close = () => {
-      promiseNumber++
+      promiseNumber++;
       if (_confirmButtonLoading.value) {
-        _confirmButtonLoading.value = false
+        _confirmButtonLoading.value = false;
       }
-      _open.value = false
-      emit('update:open', false)
-    }
+      _open.value = false;
+      emit("update:open", false);
+    };
 
     const handleConfirm = async (e: Event) => {
-      const currentPromiseNumber = promiseNumber
+      const currentPromiseNumber = promiseNumber;
       const closed = await new Promise<boolean>(
         // eslint-disable-next-line no-async-promise-executor
         async (resolve) => {
           if (isFunction(props.beforeConfirm)) {
-            let result = props.beforeConfirm((closed = true) => resolve(closed))
+            let result = props.beforeConfirm((closed = true) =>
+              resolve(closed),
+            );
             if (isPromise(result) || !isBoolean(result)) {
-              _confirmButtonLoading.value = true
+              _confirmButtonLoading.value = true;
             }
             if (isPromise(result)) {
               try {
                 // if beforeConfirm is Promise<void> ,set Defaults true
-                result = (await result) ?? true
+                result = (await result) ?? true;
               } catch (error) {
-                result = false
-                throw error
+                result = false;
+                throw error;
               }
             }
             if (isBoolean(result)) {
-              resolve(result)
+              resolve(result);
             }
           } else {
-            resolve(true)
+            resolve(true);
           }
         },
-      )
+      );
 
       if (currentPromiseNumber === promiseNumber) {
         if (closed) {
-          emit('confirm', e)
-          close()
+          emit("confirm", e);
+          close();
         } else if (_confirmButtonLoading.value) {
-          _confirmButtonLoading.value = false
+          _confirmButtonLoading.value = false;
         }
       }
-    }
+    };
 
     const handleCancel = (e: Event) => {
-      let result = true
+      let result = true;
       if (isFunction(props.beforeCancel)) {
-        result = props.beforeCancel() ?? false
+        result = props.beforeCancel() ?? false;
       }
       if (result) {
-        emit('cancel', e)
-        close()
+        emit("cancel", e);
+        close();
       }
-    }
+    };
 
     const handleMask = (e: Event) => {
       if (props.maskClosable) {
-        handleCancel(e)
+        handleCancel(e);
       }
-    }
+    };
 
     const handleOpen = () => {
       if (computedOpen.value) {
-        emit('open')
+        emit("open");
       }
-    }
+    };
 
     const handleClose = () => {
       if (!computedOpen.value) {
-        mounted.value = false
-        resetOverflow()
-        emit('close')
+        mounted.value = false;
+        resetOverflow();
+        emit("close");
       }
-    }
+    };
 
-    const { setOverflowHidden, resetOverflow } = useOverflow(containerRef)
+    const { setOverflowHidden, resetOverflow } = useOverflow(containerRef);
 
     onMounted(() => {
       if (computedOpen.value) {
-        mounted.value = true
-        setOverflowHidden()
-        addGlobalKeyDownListener()
+        mounted.value = true;
+        setOverflowHidden();
+        addGlobalKeyDownListener();
       }
-    })
+    });
 
     onBeforeUnmount(() => {
-      resetOverflow()
-      removeGlobalKeyDownListener()
-    })
+      resetOverflow();
+      removeGlobalKeyDownListener();
+    });
 
     watch(computedOpen, (visible) => {
       if (_open.value !== visible) {
-        _open.value = visible
+        _open.value = visible;
       }
       if (visible) {
-        emit('beforeOpen')
-        mounted.value = true
-        setOverflowHidden()
-        addGlobalKeyDownListener()
+        emit("beforeOpen");
+        mounted.value = true;
+        setOverflowHidden();
+        addGlobalKeyDownListener();
       } else {
-        emit('beforeClose')
-        removeGlobalKeyDownListener()
+        emit("beforeClose");
+        removeGlobalKeyDownListener();
       }
-    })
+    });
 
     const style = computed(() => {
       const style: CSSProperties = {
         [props.placement]: 0,
         ...(props.drawerStyle ?? {}),
-      }
-      if (['right', 'left'].includes(props.placement)) {
-        style.width = isNumber(props.width) ? `${props.width}px` : props.width
+      };
+      if (["right", "left"].includes(props.placement)) {
+        style.width = isNumber(props.width) ? `${props.width}px` : props.width;
       } else {
-        style.height = isNumber(props.height) ? `${props.height}px` : props.height
+        style.height = isNumber(props.height)
+          ? `${props.height}px`
+          : props.height;
       }
-      return style
-    })
+      return style;
+    });
 
     return {
       prefixCls,
@@ -323,7 +358,7 @@ export default defineComponent({
       handleMask,
       isFixed,
       teleportContainer,
-    }
+    };
   },
-})
+});
 </script>

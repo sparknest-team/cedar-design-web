@@ -4,25 +4,27 @@
   --vp-c-accent-hover: rgb(55, 209, 204);
   --c-brand: rgb(0 190 190);
   --c-brand-light: rgb(0 190 190);
-  // 与 styles/palette.scss 对齐；宽屏再抬高，避免中间内容锁死在固定宽度
-  --content-width: 960px;
+  // 小屏仅受视口约束，避免固定内容宽度撑出页面
+  --content-width: min(960px, calc(100vw - 4rem));
 }
 
+// 侧栏常驻后，为侧栏和页面留白预留空间
+@media (min-width: 720px) {
+  :root {
+    --content-width: min(
+      960px,
+      calc(100vw - var(--sidebar-width) - 4rem)
+    );
+  }
+}
+
+// PC 端右侧 TOC 变为绝对定位，需要额外为它预留 18rem
 @media (min-width: 1440px) {
   :root {
-    --content-width: 1080px;
-  }
-}
-
-@media (min-width: 1680px) {
-  :root {
-    --content-width: 1200px;
-  }
-}
-
-@media (min-width: 1920px) {
-  :root {
-    --content-width: 1360px;
+    --content-width: min(
+      1360px,
+      calc(100vw - var(--sidebar-width) - 22rem)
+    );
   }
 }
 

@@ -4,9 +4,7 @@ permalink: /components/page-header/
 
 # PageHeader 页头
 
-内容区顶部的页面标题结构，适合列表页、详情页等需要描述当前页面的场景。默认无底色。
-
-> 与 Maple 移动端 **AppBar** 不同：AppBar 是应用顶栏 chrome（固定导航条），PageHeader 是页内标题区。桌面端产品级顶栏请使用 `Layout.Header`。
+展示当前页面的标题、上下文和相关操作。API 参照 Naive UI；组件不负责固定定位、背景等业务布局与皮肤能力，可通过 `class` / `style` 实现。
 
 ## 案例
 
@@ -16,15 +14,15 @@ permalink: /components/page-header/
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### 带有面包屑
+### 页头上方内容
 
-通过 `breadcrumb` 插槽展示面包屑；可关闭返回按钮。
+通过 `header` 插槽展示面包屑等页头上方内容。
 
 <demo src="./__demos__/breadcrumb.vue"></demo>
 
-### 组合示例
+### 完整结构
 
-面包屑 + 返回 + 自定义副标题/操作 + 下方内容区。
+包含 `header`、`avatar`、正文和 `footer`。
 
 <demo src="./__demos__/content.vue"></demo>
 
@@ -38,11 +36,11 @@ permalink: /components/page-header/
 
 ### PageHeader Props
 
-| 属性      | 说明             | 类型      | 默认值 |
-| --------- | ---------------- | --------- | ------ |
-| title     | 页头的主标题     | `string`  | `-`    |
-| subtitle  | 页头的次标题     | `string`  | `-`    |
-| show-back | 是否显示返回按钮 | `boolean` | `false` |
+| 属性     | 说明         | 类型     | 默认值 |
+| -------- | ------------ | -------- | ------ |
+| title    | 页头的主标题 | `string` | `-`    |
+| subtitle | 页头的次标题 | `string` | `-`    |
+| extra    | 右侧附加内容 | `string` | `-`    |
 
 ### PageHeader Events
 
@@ -52,14 +50,16 @@ permalink: /components/page-header/
 
 ### PageHeader Slots
 
-| 插槽名     | 说明           | 参数 |
-| ---------- | -------------- | ---- |
-| breadcrumb | 面包屑         | -    |
-| back-icon  | 自定义返回图标 | -    |
-| title      | 主标题         | -    |
-| subtitle   | 次标题         | -    |
-| extra      | 右侧额外内容   | -    |
-| default    | 页头下方内容区 | -    |
+| 插槽名   | 说明           | 参数 |
+| -------- | -------------- | ---- |
+| header   | 页头上方内容   | -    |
+| back     | 自定义返回图标 | -    |
+| avatar   | 头像           | -    |
+| title    | 主标题         | -    |
+| subtitle | 次标题         | -    |
+| extra    | 右侧额外内容   | -    |
+| default  | 页头正文内容   | -    |
+| footer   | 页头底部内容   | -    |
 
 ## 类型定义
 

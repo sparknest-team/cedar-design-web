@@ -17,9 +17,9 @@
       :preview-props="{
         popupContainer: '#image-demo-preview-popup-container',
         closable: false,
-      }" />
+      }"
+    />
   </div>
 </template>
 
-<script lang="ts" setup>
-</script>
+<script lang="ts" setup></script>

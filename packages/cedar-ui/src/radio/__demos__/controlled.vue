@@ -7,7 +7,7 @@
   </c-space>
   <div :style="{ marginTop: '20px' }">
     <c-space size="lg">
-      <c-button type="primary" @click="handleSetCheck"> {{ checked2 ? 'uncheck' : 'check' }} value2 </c-button>
+      <c-button status="primary" @click="handleSetCheck"> {{ checked2 ? 'uncheck' : 'check' }} value2 </c-button>
       <c-button @click="handleReset"> reset all</c-button>
     </c-space>
   </div>

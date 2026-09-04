@@ -4,7 +4,11 @@
       <div v-if="title" :class="`${prefixCls}-caption-title`" :title="title">
         {{ title }}
       </div>
-      <div v-if="description" :class="`${prefixCls}-caption-description`" :title="description">
+      <div
+        v-if="description"
+        :class="`${prefixCls}-caption-description`"
+        :title="description"
+      >
         {{ description }}
       </div>
     </div>
@@ -19,7 +23,7 @@ import { defineComponent } from 'vue'
 import { getPrefixCls } from '../_utils/global-config'
 
 export default defineComponent({
-  name: createNamespace("image-footer").name,
+  name: createNamespace('image-footer').name,
   props: {
     title: {
       type: String,

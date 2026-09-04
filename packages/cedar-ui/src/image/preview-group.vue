@@ -1,320 +1,362 @@
 <template>
   <slot />
   <ImagePreview
-    v-bind="(mergedPreviewProps as any)"
-    in-group
+    v-if="previewImages.length"
+    ref="previewRef"
+    v-bind="previewBindings"
+    v-model:open="mergedOpen"
     :src="currentUrl"
-    :open="mergedOpen"
-    :group-arrow-props="groupArrowProps"
-    @close="onClose"
+    @prev="prev"
+    @next="next"
+    @open="$emit('open')"
+    @opened="$emit('opened')"
+    @close="$emit('close')"
+    @closed="$emit('closed')"
+    @key-escape="$emit('keyEscape')"
+    @long-press="$emit('longPress', mergedCurrent)"
   >
-    <template v-if="$slots.actions" #actions>
-      <slot name="actions" :url="currentUrl" />
+    <template
+      #image="{
+        scale,
+        rotate,
+        translateX,
+        translateY,
+        moving,
+        previewedImgProps,
+      }"
+    >
+      <div
+        class="c-image-preview-track"
+        :class="{
+          'c-image-preview-track-moving': moving && scale <= 1,
+          'c-image-preview-track-instant': trackInstant,
+        }"
+        :style="trackStyle(translateX, scale)"
+        @transitionend="handleTrackTransitionEnd"
+      >
+        <div
+          v-for="(image, index) in trackImages"
+          :key="`${index}-${image}`"
+          class="c-image-preview-slide"
+        >
+          <img
+            v-bind="previewedImgProps"
+            data-image-preview-image
+            :src="image"
+            :alt="previewedImgProps?.alt || image"
+            :class="[previewedImgProps?.class, 'c-image-preview-img']"
+            :style="[
+              previewedImgProps?.style,
+              slideImageStyle(index, scale, rotate, translateX, translateY),
+            ]"
+            :draggable="false"
+            @dragstart.prevent
+          />
+        </div>
+      </div>
     </template>
+    <template v-if="$slots['close-icon']" #close-icon
+      ><slot name="close-icon"
+    /></template>
+    <template #overlay>
+      <button
+        v-if="previewImages.length > 1"
+        type="button"
+        class="c-image-preview-arrow-left"
+        data-image-preview-interactive
+        :disabled="!loop && mergedCurrent === 0"
+        aria-label="Previous image"
+        @click="prev"
+      >
+        ‹
+      </button>
+      <button
+        v-if="previewImages.length > 1"
+        type="button"
+        class="c-image-preview-arrow-right"
+        data-image-preview-interactive
+        :disabled="!loop && mergedCurrent === previewImages.length - 1"
+        aria-label="Next image"
+        @click="next"
+      >
+        ›
+      </button>
+      <slot
+        name="indicator"
+        :index="mergedCurrent"
+        :length="previewImages.length"
+      >
+        <div v-if="previewImages.length > 1" class="c-image-preview-indicator">
+          {{ mergedCurrent + 1 }} / {{ previewImages.length }}
+        </div>
+      </slot>
+    </template>
+    <template v-if="$slots.extra" #extra
+      ><slot name="extra" :url="currentUrl"
+    /></template>
+    <template v-if="$slots.actions" #actions
+      ><slot name="actions" :url="currentUrl"
+    /></template>
   </ImagePreview>
 </template>
-<script lang="tsx">
-import { createNamespace } from '../_utils/global-config'
-import { defineComponent, PropType, reactive, toRefs, provide, computed, ref, watch } from 'vue'
-import useMergeState from '../_hooks/use-merge-state'
-import ImagePreview from './preview.vue'
-import { PreviewGroupContext, PreviewGroupInjectionKey } from './context'
-import { imagePlatformConfig } from './platform.config'
-import { isArray, isUndefined } from '../_utils/is'
-import type { ImagePreviewProps } from './types.unified'
+
+<script lang="ts">
 import {
-  mergePreviewProps,
-  resolveActionsLayout,
-  resolveClosable,
-  resolveLoop,
-  resolveMaskClosable,
-  resolvePreviewImages,
-  resolvePopupContainer,
-} from './utils/resolvePreviewOptions'
+  computed,
+  defineComponent,
+  nextTick,
+  onBeforeUnmount,
+  provide,
+  ref,
+  toRef,
+  watch,
+} from "vue";
+import { createNamespace } from "../_utils/global-config";
+import type { ImagePreviewInstance } from "./api";
+import { useImagePreviewGroupState } from "./composables/useImagePreviewGroup";
+import { PreviewGroupInjectionKey } from "./context";
+import { imagePreviewGroupProps } from "./groupProps";
+import ImagePreview from "./preview.vue";
 
 export default defineComponent({
   name: createNamespace("image-preview-group").name,
-  components: {
-    ImagePreview,
-  },
+  components: { ImagePreview },
   inheritAttrs: false,
-  props: {
-    renderToBody: {
-      type: Boolean,
-      default: true,
-    },
-    /**
-     * @zh 图片列表（设置了本属性之后，将不再收集 a-image 子组件的图片信息）
-     * @en Picture list (after setting this property, the picture information of a-image subcomponent will no longer be collected)
-     */
-    images: {
-      type: Array as PropType<string[]>,
-    },
-    /**
-     * @zh 当前展示的图片的下标
-     * @en The index of the currently displayed image
-     * @vModel
-     */
-    current: {
-      type: Number,
-    },
-    /**
-     * @zh 第一张展示的图片的下标
-     * @en The index of the first image shown
-     */
-    defaultCurrent: {
-      type: Number,
-      default: 0,
-    },
-    /**
-     * @zh 是否无限循环
-     * @en Whether to loop infinitely
-     */
-    loop: {
-      type: Boolean,
-      default: undefined,
-    },
-    /**
-     * @zh 是否可见，受控属性
-     * @en Whether the preview is open
-     * @vModel
-     */
-    open: {
-      type: Boolean,
-      default: undefined,
-    },
-    /**
-     * @zh 默认是否可见，非受控
-     * @en Default open state
-     */
-    defaultOpen: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 点击 mask 是否触发关闭
-     * @en Whether to close the modal when mask is clicked
-     */
-    maskClosable: {
-      type: Boolean,
-      default: undefined,
-    },
-    /**
-     * @zh 是否显示关闭按钮
-     * @en Whether to show close button
-     */
-    closable: {
-      type: Boolean,
-      default: undefined,
-    },
-    /**
-     * @zh 控制条的布局
-     * @en Layout of action list
-     */
-    actionsLayout: {
-      type: Array as PropType<string[]>,
-      default: undefined,
-    },
-    /**
-     * @zh 设置弹出框的挂载点，缺省值是 document.body
-     * @en Set the mount point of the pop-up box, the default value is document.body
-     */
-    popupContainer: {
-      type: [String, Object] as PropType<string | HTMLElement>,
-    },
-    /**
-     * @zh 透传给 ImagePreview 的预览配置
-     * @en Preview props passed to ImagePreview
-     */
-    previewProps: {
-      type: Object as PropType<Partial<ImagePreviewProps>>,
-    },
-    onOpenChange: {
-      type: Function as PropType<(open: boolean) => void>,
-    },
-  },
+  props: imagePreviewGroupProps,
   emits: [
-    'change',
-    'update:current',
-    'openChange',
-    'update:open',
+    "update:open",
+    "update:current",
+    "change",
+    "openChange",
+    "open",
+    "opened",
+    "close",
+    "closed",
+    "keyEscape",
+    "longPress",
   ],
-  /**
-   * @zh 自定义额外的操作项
-   * @en Customize additional action items
-   * @slot actions
-   * @version 2.46.0
-   */
   setup(props, { emit }) {
-    const {
-      images,
-      open,
-      defaultOpen,
-      current,
-      defaultCurrent,
-      loop,
-      previewProps,
-    } = toRefs(props)
+    const previousIndex = ref(props.defaultCurrent);
+    const group = useImagePreviewGroupState({
+      images: toRef(props, "images"),
+      open: toRef(props, "open"),
+      defaultOpen: props.defaultOpen,
+      current: toRef(props, "current"),
+      defaultCurrent: props.defaultCurrent,
+      onOpenChange: (open) => {
+        emit("update:open", open);
+        emit("openChange", open);
+        props.onOpenChange?.(open);
+      },
+      onCurrentChange: (index) => {
+        const previous = previousIndex.value;
+        previousIndex.value = index;
+        emit("update:current", index);
+        emit("change", index, previous);
+      },
+    });
+    const previewRef = ref<ImagePreviewInstance>();
+    const currentUrl = computed(
+      () => group.previewImages.value[group.mergedCurrent.value],
+    );
+    const visualCurrent = ref(0);
+    const trackInstant = ref(false);
+    const trackImages = computed(() =>
+      props.loop && group.previewImages.value.length > 1
+        ? [
+            ...group.previewImages.value,
+            ...group.previewImages.value,
+            ...group.previewImages.value,
+          ]
+        : group.previewImages.value,
+    );
+    let recenterTimer: ReturnType<typeof setTimeout> | undefined;
+    let releaseFrame: number | undefined;
+    let paintFrame: number | undefined;
+    const previewBindings = computed(() => {
+      const {
+        images,
+        current,
+        defaultCurrent,
+        loop,
+        open,
+        defaultOpen,
+        ...shared
+      } = props;
+      return shared;
+    });
 
-    const mergedImageList = computed(() => resolvePreviewImages({ images: images?.value }))
-    const mergedLoop = computed(() => resolveLoop({ loop: loop?.value }, imagePlatformConfig.defaultLoop))
+    provide(PreviewGroupInjectionKey, {
+      registerImageUrl: group.registerImageUrl,
+      preview: group.previewByImageId,
+    });
 
-    const mergedPreviewProps = computed(() =>
-      mergePreviewProps(
-        {
-          maskClosable: resolveMaskClosable(props, imagePlatformConfig.defaultMaskClosable),
-          closable: resolveClosable(props, imagePlatformConfig.defaultClosable),
-          actionsLayout: resolveActionsLayout(props, imagePlatformConfig.toolbarActions),
-          popupContainer: resolvePopupContainer(props) as string | HTMLElement | undefined,
-          renderToBody: props.renderToBody,
-        },
-        previewProps?.value,
-      ),
-    )
-
-    const [mergedOpen, setLocalOpen] = useMergeState(
-      defaultOpen.value,
-      reactive({
-        value: open,
-      }),
-    )
-    const setVisible = (newOpen: boolean) => {
-      if (newOpen !== mergedOpen.value) {
-        emit('openChange', newOpen)
-        emit('update:open', newOpen)
-        props.onOpenChange?.(newOpen)
-        setLocalOpen(newOpen)
-      }
+    function canonicalVisual(index = group.mergedCurrent.value) {
+      const length = group.previewImages.value.length;
+      return props.loop && length > 1 ? length + index : index;
     }
-
-    const propImageUrlMap = computed(
-      () =>
-        new Map(
-          isArray(mergedImageList.value)
-            ? mergedImageList.value.map((url, index) => [index, { url, canPreview: true }])
-            : [],
-        ),
-    )
-
-    const imageUrlMap = ref(new Map(propImageUrlMap.value || []))
-
-    const imageIdList = computed(() => Array.from(imageUrlMap.value.keys()))
-
-    const imageCount = computed(() => imageIdList.value.length)
-
-    function registerImageUrl(id: number, url: string, canPreview: boolean) {
-      if (!propImageUrlMap.value.has(id))
-        imageUrlMap.value.set(id, {
-          url,
-          canPreview,
-        })
-
-      return function unRegisterPreviewUrl() {
-        if (!propImageUrlMap.value.has(id)) {
-          imageUrlMap.value.delete(id)
+    function setVisualInstant(index = group.mergedCurrent.value) {
+      if (releaseFrame !== undefined) cancelAnimationFrame(releaseFrame);
+      if (paintFrame !== undefined) cancelAnimationFrame(paintFrame);
+      trackInstant.value = true;
+      visualCurrent.value = canonicalVisual(index);
+      nextTick(() => {
+        if (typeof requestAnimationFrame !== "function") {
+          trackInstant.value = false;
+          return;
         }
-      }
+        releaseFrame = requestAnimationFrame(() => {
+          paintFrame = requestAnimationFrame(() => {
+            trackInstant.value = false;
+            releaseFrame = undefined;
+            paintFrame = undefined;
+          });
+        });
+      });
+    }
+    function needsRecenter() {
+      const length = group.previewImages.value.length;
+      return (
+        props.loop &&
+        length > 1 &&
+        (visualCurrent.value < length || visualCurrent.value >= length * 2)
+      );
+    }
+    function recenterIfNeeded() {
+      if (!needsRecenter()) return;
+      if (recenterTimer) clearTimeout(recenterTimer);
+      recenterTimer = undefined;
+      setVisualInstant();
+    }
+    function scheduleRecenter() {
+      if (recenterTimer) clearTimeout(recenterTimer);
+      if (!needsRecenter()) return;
+      recenterTimer = setTimeout(recenterIfNeeded, 400);
+    }
+    function handleTrackTransitionEnd(event: TransitionEvent) {
+      if (
+        event.target !== event.currentTarget ||
+        event.propertyName !== "transform"
+      )
+        return;
+      recenterIfNeeded();
     }
 
-    watch(propImageUrlMap, () => {
-      imageUrlMap.value = new Map(propImageUrlMap.value || [])
-    })
+    watch(
+      () => group.previewImages.value.length,
+      () => setVisualInstant(),
+      { immediate: true },
+    );
+    watch(group.mergedCurrent, (index) => {
+      const length = group.previewImages.value.length;
+      const represented = length
+        ? ((visualCurrent.value % length) + length) % length
+        : 0;
+      if (represented !== index) setVisualInstant(index);
+    });
+    onBeforeUnmount(() => {
+      if (recenterTimer) clearTimeout(recenterTimer);
+      if (releaseFrame !== undefined) cancelAnimationFrame(releaseFrame);
+      if (paintFrame !== undefined) cancelAnimationFrame(paintFrame);
+    });
 
-    const [currentIndex, setLocalCurrentIndex] = useMergeState(
-      defaultCurrent.value ?? 0,
-      reactive({
-        value: current,
-      }),
-    )
-    const setCurrentIndex = (index: number) => {
-      if (index !== currentIndex.value) {
-        emit('change', index)
-        emit('update:current', index)
-        setLocalCurrentIndex(index)
-      }
+    function trackStyle(translateX: number, scale: number) {
+      const offset = scale <= 1 ? translateX : 0;
+      return {
+        transform: `translate3d(calc(${-visualCurrent.value * 100}% + ${offset}px), 0, 0)`,
+      };
+    }
+    function slideImageStyle(
+      index: number,
+      scale: number,
+      rotate: number,
+      x: number,
+      y: number,
+    ) {
+      const isCurrent = index === visualCurrent.value;
+      const panX = isCurrent && scale > 1 ? x : 0;
+      const panY = isCurrent && scale > 1 ? y : 0;
+      return {
+        transform: `translate(${panX}px, ${panY}px) rotate(${rotate}deg) scale(${scale})`,
+      };
     }
 
-    const currentId = computed(() => imageIdList.value[currentIndex.value])
-    const setCurrentId = (nextId: number) => {
-      const nextIndex = imageIdList.value.indexOf(nextId)
-      if (nextIndex !== currentIndex.value) {
-        setCurrentIndex(nextIndex)
+    function to(index: number, direction?: "prev" | "next") {
+      const length = group.previewImages.value.length;
+      if (!Number.isInteger(index) || index < 0 || index >= length) return;
+      if (index === group.mergedCurrent.value) return;
+      if (props.loop && group.previewImages.value.length > 1 && direction) {
+        visualCurrent.value += direction === "next" ? 1 : -1;
+      } else {
+        visualCurrent.value = index;
       }
+      group.mergedCurrent.value = index;
+      previewRef.value?.reset();
+      scheduleRecenter();
     }
-
-    const currentUrl = computed(() => imageUrlMap.value.get(currentId.value)?.url)
-
-    provide<PreviewGroupContext>(
-      PreviewGroupInjectionKey,
-      reactive({
-        registerImageUrl,
-        preview: (imageId: number) => {
-          setVisible(true)
-          setCurrentId(imageId)
-        },
-      }),
-    )
-
-    const nextIndex = computed(() => {
-      const findNext = (start: number, end: number) => {
-        for (let i = start; i <= end; i++) {
-          const id = imageIdList.value[i]
-          if (imageUrlMap.value.get(id)?.canPreview) {
-            return i
-          }
-        }
-        return undefined
-      }
-
-      const next = findNext(currentIndex.value + 1, imageCount.value - 1)
-      return isUndefined(next) && mergedLoop.value ? findNext(0, currentIndex.value - 1) : next
-    })
-
-    const prevIndex = computed(() => {
-      const findPrev = (start: number, end: number) => {
-        for (let i = start; i >= end; i--) {
-          const id = imageIdList.value[i]
-          if (imageUrlMap.value.get(id)?.canPreview) {
-            return i
-          }
-        }
-        return undefined
-      }
-
-      const prev = findPrev(currentIndex.value - 1, 0)
-      return isUndefined(prev) && mergedLoop.value ? findPrev(imageCount.value - 1, currentIndex.value + 1) : prev
-    })
-
-    const onPrev = computed(() =>
-      !isUndefined(prevIndex.value)
-        ? () => {
-            !isUndefined(prevIndex.value) && setCurrentIndex(prevIndex.value)
-          }
-        : undefined,
-    )
-
-    const onNext = computed(() =>
-      !isUndefined(nextIndex.value)
-        ? () => {
-            !isUndefined(nextIndex.value) && setCurrentIndex(nextIndex.value)
-          }
-        : undefined,
-    )
+    function open(index = 0) {
+      to(index);
+      group.open(index);
+    }
+    function close() {
+      group.close();
+    }
+    function prev() {
+      const index = group.mergedCurrent.value - 1;
+      if (index >= 0) to(index, "prev");
+      else if (props.loop && group.previewImages.value.length)
+        to(group.previewImages.value.length - 1, "prev");
+    }
+    function next() {
+      const index = group.mergedCurrent.value + 1;
+      if (index < group.previewImages.value.length) to(index, "next");
+      else if (props.loop && group.previewImages.value.length) to(0, "next");
+    }
+    function reset() {
+      previewRef.value?.reset();
+    }
+    function zoomTo(scale: number) {
+      previewRef.value?.zoomTo(scale);
+    }
+    function zoomIn() {
+      previewRef.value?.zoomIn();
+    }
+    function zoomOut() {
+      previewRef.value?.zoomOut();
+    }
+    function rotateLeft() {
+      previewRef.value?.rotateLeft();
+    }
+    function rotateRight() {
+      previewRef.value?.rotateRight();
+    }
+    function toggleFullscreen() {
+      previewRef.value?.toggleFullscreen();
+    }
 
     return {
-      mergedOpen,
-      mergedPreviewProps,
+      ...group,
+      previewRef,
       currentUrl,
-      prevIndex,
-      nextIndex,
-      onClose() {
-        setVisible(false)
-      },
-      groupArrowProps: reactive({
-        onPrev,
-        onNext,
-      }),
-    }
+      trackImages,
+      trackInstant,
+      trackStyle,
+      slideImageStyle,
+      handleTrackTransitionEnd,
+      previewBindings,
+      open,
+      close,
+      prev,
+      next,
+      to,
+      reset,
+      zoomTo,
+      zoomIn,
+      zoomOut,
+      rotateLeft,
+      rotateRight,
+      toggleFullscreen,
+    };
   },
-})
+});
 </script>

@@ -11,13 +11,7 @@
       target-operation="menu"
       clear-text="清空"
       @search="handleSearch"
-      @target-action="handleTargetAction"
-    >
-      <template v-if="$slots.tooltip" #item="slotProps">
-        <slot name="tooltip" v-bind="slotProps" />
-        <span>{{ slotProps.label }}</span>
-      </template>
-    </Transfer>
+    />
   </component>
 
   <c-dialog
@@ -59,13 +53,13 @@ import { cloneDeep } from 'lodash-es'
 import Drawer from '../drawer'
 import Transfer from '../transfer'
 import type { TransferItem, TransferTargetItem, TransferValue } from '../transfer'
-import { getPrefixCls } from '../_utils/global-config'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import type { TableColumnManagerDrawerProps } from './props'
 import type { ColumnCatalog, ColumnManagerItem, ColumnManagerResult } from './types'
 import { buildColumnsResult, isColumnCatalogGroup } from './utils'
 import { TableColumnManagerContextKey } from './use-table-column-manager'
 
-defineOptions({ name: 'TableColumnManager' })
+defineOptions({ name: createNamespace('table-column-manager').name })
 
 const props = withDefaults(defineProps<TableColumnManagerDrawerProps>(), {
   options: () => [],
@@ -205,8 +199,6 @@ const handleSearch = async (value: string, type: 'source' | 'target') => {
     loading.value = false
   }
 }
-
-const handleTargetAction = (_key: string) => undefined
 
 const insertVisible = computed({
   get: () => ctx?.insertVisible.value ?? false,

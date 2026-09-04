@@ -6,8 +6,7 @@
         height: '30px',
         lineHeight: '30px',
         marginBottom: '4px',
-      }"
-      type="primary"
+      }" status="primary"
       @click="toggleCollapse"
     >
       <c-icon-menu-unfold v-if="collapsed" />

@@ -28,7 +28,7 @@ export default defineComponent({
     const hasPending = computed(() => {
       return props.pending || slots.pending
     })
-    const { children, components } = useChildrenComponents('TimelineItem')
+    const { children, components } = useChildrenComponents(Item.name!)
     const {
       reverse: reverseRef,
       direction: directionRef,

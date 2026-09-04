@@ -13,6 +13,7 @@ export type { CascaderOption, CascaderFieldNames } from './types'
 
 export { _CascaderPanel as CascaderPanel }
 export const _CascaderComponent = Cascader
+export const _CascaderPanelComponent = _CascaderPanel
 
 export { Cascader }
 

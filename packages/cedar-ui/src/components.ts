@@ -2,7 +2,7 @@
 // @ts-nocheck
 import { MessageMethod } from './message'
 import { NotificationMethod } from './notification'
-import { DialogMethod } from './dialog'
+import { DialogService } from './dialog'
 import { DrawerMethod } from './drawer'
 
 declare module 'vue' {
@@ -86,6 +86,7 @@ declare module 'vue' {
     CPopconfirm: (typeof import('@cedarjs/ui/web-vue'))['Popconfirm']
     CPopover: (typeof import('@cedarjs/ui/web-vue'))['Popover']
     CProgress: (typeof import('@cedarjs/ui/web-vue'))['Progress']
+    CProgressGroup: (typeof import('@cedarjs/ui/web-vue'))['ProgressGroup']
     CRadio: (typeof import('@cedarjs/ui/web-vue'))['Radio']
     CRadioGroup: (typeof import('@cedarjs/ui/web-vue'))['RadioGroup']
     CRate: (typeof import('@cedarjs/ui/web-vue'))['Rate']
@@ -146,7 +147,7 @@ declare module 'vue' {
   export interface ComponentCustomProperties {
     $message: MessageMethod
     $notification: NotificationMethod
-    $dialog: DialogMethod
+    $dialog: DialogService
     $drawer: DrawerMethod
   }
 }

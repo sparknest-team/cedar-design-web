@@ -1,6 +1,7 @@
 import '../../style/index.less'
-import '../../_components/select-view/style/index.less'
+import '../../_components/select-view/style'
 import '../../empty/style'
+import '../../scrollbar/style'
 import '../../trigger/style'
 import '../../tree/style'
 import '../../spin/style'

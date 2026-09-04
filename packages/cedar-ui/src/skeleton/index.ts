@@ -24,5 +24,7 @@ export { Skeleton }
 export { _SkeletonLine as SkeletonLine, _SkeletonShape as SkeletonShape }
 
 export const _SkeletonComponent = Skeleton
+export const _SkeletonLineComponent = _SkeletonLine
+export const _SkeletonShapeComponent = _SkeletonShape
 
 export default Skeleton

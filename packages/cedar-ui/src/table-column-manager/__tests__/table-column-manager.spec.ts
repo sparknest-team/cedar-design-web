@@ -51,4 +51,23 @@ describe('TableColumnManager', () => {
     expect(result).not.toHaveProperty('fixedMap')
     expect(result).not.toHaveProperty('titleMap')
   })
+
+  it('renders a single neutral tip icon for a long column name', () => {
+    const wrapper = mount(TableColumnManager, {
+      props: {
+        inline: true,
+        options: [
+          {
+            dataIndex: 'areaCompany',
+            title: '区域公司区域公司区域公司区域公司区域公司区域公司',
+            tip: '区域公司说明',
+          },
+        ],
+      },
+    })
+
+    const item = wrapper.find('.c-transfer-view-source .c-transfer-list-item')
+    expect(item.findAll('.c-transfer-list-item-tip')).toHaveLength(1)
+    expect(item.find('.c-transfer-list-item-tip').classes()).not.toContain('text-red')
+  })
 })

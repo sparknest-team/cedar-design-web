@@ -12,7 +12,7 @@ exports[`Drawer > render 1`] = `
         <div class=\\"c-drawer-title\\">Settings</div><button type=\\"button\\" aria-label=\\"Close drawer\\" class=\\"c-drawer-close-btn\\"><span class=\\"c-icon-hover\\"><svg xmlns=\\"http://www.w3.org/2000/svg\\" fill=\\"none\\" stroke=\\"currentColor\\" viewBox=\\"0 0 48 48\\" class=\\"c-icon c-icon-close\\" stroke-width=\\"4\\" stroke-linecap=\\"butt\\" stroke-linejoin=\\"miter\\"><path d=\\"M9.857 9.858 24 24m0 0 14.142 14.142M24 24 38.142 9.858M24 24 9.857 38.142\\"></path></svg></span></button>
       </div>
       <div class=\\"c-drawer-body\\"></div>
-      <div class=\\"c-drawer-footer\\"><button class=\\"c-button c--box c-button--size-md c-button--status-default c-button--variant-default c--inline-flex\\" type=\\"button\\">
+      <div class=\\"c-drawer-footer\\"><button class=\\"c-button c-button--size-md c-button--status-default c-button--variant-default\\" type=\\"button\\">
           <!-- 加载中 loading -->
           <!--v-if-->
           <!-- icon图标 -->
@@ -22,7 +22,7 @@ exports[`Drawer > render 1`] = `
           <div class=\\"c-button--overlay\\"></div><!-- 边框 -->
           <div class=\\"c-button__border\\"></div>
           <div class=\\"c-button__border-state\\"></div>
-        </button><button type=\\"submit\\" class=\\"c-button c--box c-button--size-md c-button--status-default c-button--variant-default c--inline-flex\\">
+        </button><button class=\\"c-button c-button--size-md c-button--status-default c-button--variant-text\\" type=\\"button\\">
           <!-- 加载中 loading -->
           <!--v-if-->
           <!-- icon图标 -->

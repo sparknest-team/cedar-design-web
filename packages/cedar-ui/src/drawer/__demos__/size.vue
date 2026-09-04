@@ -1,8 +1,8 @@
 <template>
   <c-space>
-    <c-button type="primary" @click="handleClickSmall">sm Drawer</c-button>
-    <c-button type="primary" @click="handleClickMedium">md Drawer</c-button>
-    <c-button type="primary" @click="handleClickLarge">lg Drawer</c-button>
+    <c-button status="primary" @click="handleClickSmall">sm Drawer</c-button>
+    <c-button status="primary" @click="handleClickMedium">md Drawer</c-button>
+    <c-button status="primary" @click="handleClickLarge">lg Drawer</c-button>
   </c-space>
   <c-drawer size="sm" :open="visibleSmall" @confirm="handleConfirm" @cancel="handleCancel" unmountOnClose>
     <template #title>Title</template>

@@ -1,1 +1,6 @@
+import '../../dialog/style'
+import '../../input/style'
+import '../../popconfirm/style'
+import '../../spin/style'
+import '../../textarea/style'
 import './index.less'

@@ -11,28 +11,15 @@
     :options="columnDefinitions"
     :fallback-item="fallbackItem"
     @confirm="applyResult"
-  >
-    <template #tooltip="{ item }">
-      <c-tooltip v-if="item.value === 'areaCompany'" background-color="#fff" :content-style="{ color: 'red' }">
-        <div style="margin-left: 4px">
-          <c-icon-info-circle />
-        </div>
-        <template #content>
-          <div>{{ item.tip ?? 'tooltip' }}</div>
-        </template>
-      </c-tooltip>
-    </template>
-  </c-table-column-manager>
+  />
 
   <c-dialog v-model:open="openDialog" title="列管理" :width="720" :body-padding="false" unmount-on-close>
     <div style="height: 480px">
       <c-table-column-manager
         inline
-        v-model:open="openDialog"
         v-model="items"
         :columns="columns"
         :options="columnDefinitions"
-        @confirm="applyResult"
       />
     </div>
   </c-dialog>
@@ -104,7 +91,7 @@ const columnDefinitions = ref<ColumnDefinitions>([
 ])
 
 const fallbackItem = (dataIndex: string): ColumnDefinition => {
-  return { dataIndex, title: `${dataIndex}` }
+  return { dataIndex, title: dataIndex }
 }
 
 const applyResult = (result: ColumnManagerResult) => {

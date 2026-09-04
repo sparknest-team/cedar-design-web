@@ -23,6 +23,7 @@ import Countdown from './countdown'
 import Date, { DatePicker } from './date'
 import DateRange, { DateRangePicker } from './date-range'
 import Descriptions, { DescriptionsItem } from './descriptions'
+import Dialog from './dialog'
 import Divider from './divider'
 import Drawer from './drawer'
 import Empty from './empty'
@@ -42,7 +43,9 @@ import List, { ListItem } from './list'
 import Map, { MapSelect } from './map'
 import Mention from './mention'
 import Menu, { MenuGroup, MenuOption, MenuSubmenu } from './menu'
+import Message from './message'
 import NavMenu, { NavMenuItem, NavMenuItemGroup, NavMenuSubMenu } from './nav-menu'
+import Notification from './notification'
 import OverflowList from './overflow-list'
 import PageHeader from './page-header'
 import Pagination from './pagination'
@@ -50,12 +53,12 @@ import PeopleSelect from './people-select'
 import Popconfirm from './popconfirm'
 import Popover from './popover'
 import Progress from './progress'
+import ProgressGroup from './progress-group'
 import Radio, { RadioGroup } from './radio'
 import Rate from './rate'
 import ResizeBox from './resize-box'
 import Result from './result'
 import Ripple from './ripple'
-import SaasPage from './saas-page'
 import Scrollbar from './scrollbar'
 import Search from './search'
 import Segmented from './segmented'
@@ -114,6 +117,7 @@ const components: Record<string, Plugin> = {
   Date: Date as Plugin,
   DateRange: DateRange as Plugin,
   Descriptions: Descriptions as Plugin,
+  Dialog: Dialog as Plugin,
   Divider: Divider as Plugin,
   Drawer: Drawer as Plugin,
   Empty: Empty as Plugin,
@@ -133,7 +137,9 @@ const components: Record<string, Plugin> = {
   Map: Map as Plugin,
   Mention: Mention as Plugin,
   Menu: Menu as Plugin,
+  Message: Message as Plugin,
   NavMenu: NavMenu as Plugin,
+  Notification: Notification as Plugin,
   OverflowList: OverflowList as Plugin,
   PageHeader: PageHeader as Plugin,
   Pagination: Pagination as Plugin,
@@ -141,12 +147,12 @@ const components: Record<string, Plugin> = {
   Popconfirm: Popconfirm as Plugin,
   Popover: Popover as Plugin,
   Progress: Progress as Plugin,
+  ProgressGroup: ProgressGroup as Plugin,
   Radio: Radio as Plugin,
   Rate: Rate as Plugin,
   ResizeBox: ResizeBox as Plugin,
   Result: Result as Plugin,
   Ripple: Ripple as Plugin,
-  SaasPage: SaasPage as Plugin,
   Scrollbar: Scrollbar as Plugin,
   Search: Search as Plugin,
   Segmented: Segmented as Plugin,

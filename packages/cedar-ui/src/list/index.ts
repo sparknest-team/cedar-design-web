@@ -18,6 +18,7 @@ export type { ListProps } from "./props";
 export { _ListItem as ListItem };
 
 export const _ListComponent = List;
+export const _ListItemComponent = _ListItem;
 
 export { List };
 

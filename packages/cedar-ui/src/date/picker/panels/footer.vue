@@ -5,34 +5,37 @@
     </div>
     <div v-if="showTodayBtn" :class="`${prefixCls}-footer-now-wrapper`">
       <Link @click="onTodayClick">
-        {{ datePickerT('datePicker.today') }}
+        {{ datePickerT("datePicker.today") }}
       </Link>
     </div>
-    <div v-if="$slots.btn || showConfirmBtn" :class="`${prefixCls}-footer-btn-wrapper`">
+    <div
+      v-if="$slots.btn || showConfirmBtn"
+      :class="`${prefixCls}-footer-btn-wrapper`"
+    >
       <slot name="btn" />
       <Button
         v-if="showConfirmBtn"
         :class="`${prefixCls}-btn-confirm`"
-        type="primary"
+        variant="text"
         size="xs"
         :disabled="confirmBtnDisabled"
         @click="onConfirmBtnClick"
       >
-        {{ datePickerT('datePicker.ok') }}
+        {{ datePickerT("datePicker.ok") }}
       </Button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import Link from '../../../link'
-import Button from '../../../button'
-import useInjectDatePickerTransform from '../hooks/use-inject-datepicker-transform'
-import { createNamespace } from '../../../_utils/global-config'
+import { defineComponent } from "vue";
+import Link from "../../../link";
+import Button from "../../../button";
+import useInjectDatePickerTransform from "../hooks/use-inject-datepicker-transform";
+import { createNamespace } from "../../../_utils/global-config";
 
 export default defineComponent({
-  name: createNamespace('date-picker-footer').name,
+  name: createNamespace("date-picker-footer").name,
   components: {
     Link,
     Button,
@@ -52,18 +55,18 @@ export default defineComponent({
       type: Boolean,
     },
   },
-  emits: ['today-btn-click', 'confirm-btn-click'],
+  emits: ["today-btn-click", "confirm-btn-click"],
   setup(_, { emit }) {
-    const datePickerT = useInjectDatePickerTransform()
+    const datePickerT = useInjectDatePickerTransform();
     return {
       datePickerT,
       onTodayClick: () => {
-        emit('today-btn-click')
+        emit("today-btn-click");
       },
       onConfirmBtnClick: () => {
-        emit('confirm-btn-click')
+        emit("confirm-btn-click");
       },
-    }
+    };
   },
-})
+});
 </script>

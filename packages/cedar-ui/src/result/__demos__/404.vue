@@ -2,7 +2,7 @@
   <c-result status="404" subtitle="Whoops, that page is gone.">
     <template #extra>
       <c-space>
-        <c-button type="primary">Back</c-button>
+        <c-button status="primary">Back</c-button>
       </c-space>
     </template>
   </c-result>

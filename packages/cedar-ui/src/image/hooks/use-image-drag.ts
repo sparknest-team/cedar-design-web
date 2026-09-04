@@ -24,7 +24,13 @@ export default function useImageDrag(props: ImageDragProps) {
     if (!wrapperEl.value || !imageEl.value) return
     const wrapperRect = wrapperEl.value.getBoundingClientRect()
     const imgRect = imageEl.value.getBoundingClientRect()
-    const [x, y] = getFixTranslate(wrapperRect, imgRect, translate.value[0], translate.value[1], scale.value)
+    const [x, y] = getFixTranslate(
+      wrapperRect,
+      imgRect,
+      translate.value[0],
+      translate.value[1],
+      scale.value,
+    )
     if (x !== translate.value[0] || y !== translate.value[1]) {
       translate.value = [x, y]
     }

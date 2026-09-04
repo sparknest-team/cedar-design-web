@@ -1,5 +1,5 @@
 <template>
-  <c-button type="primary" @click="handleClick">Open Drawer</c-button>
+  <c-button status="primary" @click="handleClick">Open Drawer</c-button>
 </template>
 
 <script lang="ts" setup>

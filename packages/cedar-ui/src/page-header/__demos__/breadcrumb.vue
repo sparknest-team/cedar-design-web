@@ -1,11 +1,7 @@
 <template>
   <div :style="{ background: 'var(--color-fill-2)', padding: '28px' }">
-    <c-page-header
-      :style="{ background: 'var(--color-bg-2)' }"
-      title="Cedar Design"
-      subtitle="带面包屑的页头"
-    >
-      <template #breadcrumb>
+    <c-page-header :style="{ background: 'var(--color-bg-2)' }" title="Cedar Design" subtitle="带面包屑的页头">
+      <template #header>
         <c-breadcrumb>
           <c-breadcrumb-item>Home</c-breadcrumb-item>
           <c-breadcrumb-item>Channel</c-breadcrumb-item>

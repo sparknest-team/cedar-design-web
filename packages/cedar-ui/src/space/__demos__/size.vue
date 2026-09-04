@@ -10,9 +10,9 @@
       </c-radio-group>
     </div>
     <c-space :size="size">
-      <c-button type="primary">Item1</c-button>
-      <c-button type="primary">Item2</c-button>
-      <c-button type="primary">Item3</c-button>
+      <c-button status="primary">Item1</c-button>
+      <c-button status="primary">Item2</c-button>
+      <c-button status="primary">Item3</c-button>
     </c-space>
   </div>
 </template>

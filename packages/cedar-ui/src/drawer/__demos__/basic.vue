@@ -1,5 +1,5 @@
 <template>
-  <c-button type="primary" @click="handleClick">Open Drawer</c-button>
+  <c-button status="primary" @click="handleClick">Open Drawer</c-button>
   <c-drawer :width="340" :open="visible" @confirm="handleConfirm" @cancel="handleCancel" unmountOnClose>
     <template #title>Title</template>
     <div>

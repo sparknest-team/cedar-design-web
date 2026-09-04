@@ -1,6 +1,9 @@
 <template>
   <div>
-    <c-steps changeable :current="current" @change="setCurrent">
+    <c-radio-group v-model="currentStatus" variant="button" style="margin-bottom: 16px">
+      <c-radio v-for="status in statuses" :key="status" :value="status">{{ status }}</c-radio>
+    </c-radio-group>
+    <c-steps changeable :current="current" :status="currentStatus" @change="setCurrent">
       <c-step description="This is a description">Succeeded</c-step>
       <c-step description="This is a description">Processing</c-step>
       <c-step description="This is a description">Pending</c-step>
@@ -16,11 +19,11 @@
     >
       <div style="line-height: 160px">Step{{ current }} Content</div>
       <c-space size="lg">
-        <c-button type="secondary" :disabled="current <= 1" @click="onPrev">
+        <c-button status="secondary" :disabled="current <= 1" @click="onPrev">
           <c-icon-left />
           Back
         </c-button>
-        <c-button type="primary" :disabled="current >= 3" @click="onNext">
+        <c-button status="primary" :disabled="current >= 3" @click="onNext">
           Next
           <c-icon-right />
         </c-button>
@@ -34,6 +37,8 @@ import { ref } from 'vue'
 export default {
   setup() {
     const current = ref(1)
+    const statuses = ['wait', 'process', 'finish', 'error'] as const
+    const currentStatus = ref<(typeof statuses)[number]>('process')
     const onPrev = () => {
       current.value = Math.max(1, current.value - 1)
     }
@@ -47,6 +52,8 @@ export default {
 
     return {
       current,
+      statuses,
+      currentStatus,
       onPrev,
       onNext,
       setCurrent,

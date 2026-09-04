@@ -6,7 +6,7 @@
     <template #subtitle> DNS_PROBE_FINISHED_NO_INTERNET</template>
 
     <template #extra>
-      <c-button type="primary">Refresh</c-button>
+      <c-button status="primary">Refresh</c-button>
     </template>
     <c-typography style="background: var(--color-fill-2); padding: 24px">
       <c-typography-paragraph>Try:</c-typography-paragraph>

@@ -15,5 +15,6 @@ export type { CheckboxOption } from './types'
 
 export { Checkbox, _CheckboxGroup as CheckboxGroup }
 export const _CheckboxComponent = Checkbox
+export const _CheckboxGroupComponent = _CheckboxGroup
 
 export default Checkbox

@@ -1,521 +1,278 @@
 <template>
-  <teleport :to="container" :disabled="!renderToBody">
-    <div :class="classNames" :style="wrapperStyles">
-      <transition
-        name="image-fade"
-        @before-enter="(el) => el.parentElement && (el.parentElement.style.display = 'block')"
-        @after-leave="(el) => el.parentElement && (el.parentElement.style.display = '')"
-      >
-        <div v-show="mergedVisible" :class="`${prefixCls}-mask`" />
-      </transition>
+  <teleport :to="container" :disabled="popupContainer === false">
+    <div v-show="mergedOpen" :class="prefixCls" :style="wrapperStyles">
+      <div :class="`${prefixCls}-mask`" @click="maskClosable && close()" />
       <div
-        v-if="mergedVisible"
         ref="refWrapper"
-        tabindex="0"
         :class="`${prefixCls}-wrapper`"
-        @click="onMaskClick"
-        @wheel.prevent.stop="onWheel"
+        data-image-preview-stage
+        @click.self="maskClosable && close()"
+        @wheel="onWheel"
+        @pointerdown="onPointerDown"
+        @pointermove="onPointerMove"
+        @pointerup="onPointerUp"
+        @pointercancel="onPointerUp"
+        @dblclick="onDoubleClick"
       >
-        <!-- img -->
         <div
           :class="`${prefixCls}-img-container`"
-          :style="{ transform: `scale(${scale}, ${scale})` }"
-          @click="onMaskClick"
+          @click.self="maskClosable && close()"
         >
-          <img
-            ref="refImage"
-            :key="src"
-            :src="src"
-            alt=""
-            :class="[
-              `${prefixCls}-img`,
-              {
-                [`${prefixCls}-img-moving`]: moving,
-              },
-            ]"
-            :style="{
-              transform: `translate(${translate[0]}px, ${translate[1]}px) rotate(${rotate}deg)`,
+          <slot
+            name="image"
+            v-bind="{
+              src,
+              scale,
+              rotate,
+              translateX,
+              translateY,
+              moving,
+              previewedImgProps,
             }"
-            @load="onImgLoad"
-            @error="onImgError"
-          />
+          >
+            <div :class="`${prefixCls}-img-frame`">
+              <img
+                v-bind="previewedImgProps"
+                data-image-preview-image
+                ref="refImage"
+                :src="src"
+                :alt="previewedImgProps?.alt || src"
+                :draggable="false"
+                :class="[
+                  previewedImgProps?.class,
+                  `${prefixCls}-img`,
+                  { [`${prefixCls}-img-moving`]: moving },
+                ]"
+                :style="[
+                  previewedImgProps?.style,
+                  {
+                    transform: `translate(${translateX}px, ${translateY}px) rotate(${rotate}deg) scale(${scale})`,
+                  },
+                ]"
+                @load="setLoadStatus('loaded')"
+                @error="setLoadStatus('error')"
+                @dragstart.prevent
+                @contextmenu="imagePreventDefault && $event.preventDefault()"
+              />
+            </div>
+          </slot>
         </div>
-
-        <!-- loading -->
         <div v-if="isLoading" :class="`${prefixCls}-loading`">
           <IconLoading />
         </div>
-
-        <!-- scale value -->
-        <transition name="image-fade">
-          <div v-if="scaleValueVisible" :class="`${prefixCls}-scale-value`">{{ (scale * 100).toFixed(0) }}%</div>
-        </transition>
-
-        <!-- toolbar -->
-        <PreviewToolbar v-if="isLoaded && actionsLayout.length" :actions="actions" :actions-layout="actionsLayout">
+        <PreviewToolbar
+          v-if="showToolbar && mergedActions.length"
+          data-image-preview-toolbar
+          :actions="actions"
+          :actions-layout="mergedActions"
+        >
           <slot name="actions" />
         </PreviewToolbar>
-
-        <!-- close btn -->
-        <div v-if="closable" :class="`${prefixCls}-close-btn`" @click="onCloseClick">
-          <IconClose />
+        <div
+          v-if="closable"
+          :class="`${prefixCls}-close-btn`"
+          data-image-preview-interactive
+          @click="close"
+        >
+          <slot name="close-icon"><IconClose /></slot>
         </div>
-
-        <!-- group arrow -->
-        <PreviewArrow v-if="inGroup" v-bind="groupArrowProps" />
+        <slot name="overlay" />
+        <slot name="extra" />
       </div>
     </div>
   </teleport>
 </template>
+
 <script lang="tsx">
-import { createNamespace } from '../_utils/global-config'
 import {
   computed,
   defineComponent,
-  PropType,
-  reactive,
-  watch,
-  toRefs,
-  ref,
   h,
-  CSSProperties,
-  onBeforeUnmount,
   nextTick,
-} from 'vue'
-import useMergeState from '../_hooks/use-merge-state'
-import { getPrefixCls } from '../_utils/global-config'
-import { throttleByRaf } from '../_utils/throttle-by-raf'
-import { KEYBOARD_KEY } from '../_utils/keyboard'
-import { off, on } from '../_utils/dom'
-import PreviewArrow from './preview-arrow.vue'
-import PreviewToolbar from './preview-toolbar.vue'
-import useImageLoadStatus from './hooks/use-image-load-status'
-import useImageDrag from './hooks/use-image-drag'
-import { IconLoading } from '@cedarjs/icons-vue/icon-loading'
-import { IconClose } from '@cedarjs/icons-vue/icon-close'
-import { IconZoomOut } from '@cedarjs/icons-vue/icon-zoom-out'
-import { IconZoomIn } from '@cedarjs/icons-vue/icon-zoom-in'
-import { IconFullscreen } from '@cedarjs/icons-vue/icon-fullscreen'
-import { IconRotateLeft } from '@cedarjs/icons-vue/icon-rotate-left'
-import { IconRotateRight } from '@cedarjs/icons-vue/icon-rotate-right'
-import { IconOriginalSize } from '@cedarjs/icons-vue/icon-original-size'
-import usePopupOverHidden from '../_hooks/use-popup-overflow-hidden'
-import usePopupContainer from '../_hooks/use-popup-container'
-import { isServerRendering } from '../_utils/dom'
-import usePopupManager from '../_hooks/use-popup-manager'
-import getScale, { getScaleByRate, minScale, maxScale } from './utils/get-scale'
-import { useI18n } from '../locale'
-import { imagePlatformConfig } from './platform.config'
-import {
-  resolveActionsLayout,
-  resolveClosable,
-  resolveEscToClose,
-  resolveMaskClosable,
-  resolvePopupContainer,
-} from './utils/resolvePreviewOptions'
-
-const ROTATE_STEP = 90
+  ref,
+  toRefs,
+  watch,
+  type CSSProperties,
+} from "vue";
+import { IconClose } from "@cedarjs/icons-vue/icon-close";
+import { IconFullscreen } from "@cedarjs/icons-vue/icon-fullscreen";
+import { IconLoading } from "@cedarjs/icons-vue/icon-loading";
+import { IconOriginalSize } from "@cedarjs/icons-vue/icon-original-size";
+import { IconRotateLeft } from "@cedarjs/icons-vue/icon-rotate-left";
+import { IconRotateRight } from "@cedarjs/icons-vue/icon-rotate-right";
+import { IconZoomIn } from "@cedarjs/icons-vue/icon-zoom-in";
+import { IconZoomOut } from "@cedarjs/icons-vue/icon-zoom-out";
+import usePopupManager from "../_hooks/use-popup-manager";
+import usePopupContainer from "../_hooks/use-popup-container";
+import usePopupOverHidden from "../_hooks/use-popup-overflow-hidden";
+import { isServerRendering } from "../_utils/dom";
+import { createNamespace, getPrefixCls } from "../_utils/global-config";
+import type { ImagePreviewActionName } from "./api";
+import { usePreviewController } from "./composables/usePreviewController";
+import useImageLoadStatus from "./hooks/use-image-load-status";
+import { imagePreviewProps } from "./previewProps";
+import PreviewToolbar, { type ActionType } from "./preview-toolbar.vue";
 
 export default defineComponent({
   name: createNamespace("image-preview").name,
-  components: {
-    PreviewArrow,
-    PreviewToolbar,
-    IconLoading,
-    IconClose,
-  },
-  props: {
-    renderToBody: {
-      type: Boolean,
-      default: true,
-    },
-    /**
-     * @zh 图片获取地址
-     * @en Image src
-     */
-    src: {
-      type: String,
-    },
-    /**
-     * @zh 是否可见
-     * @en Whether the preview is open
-     * @vModel
-     */
-    open: {
-      type: Boolean,
-      default: undefined,
-    },
-    /**
-     * @zh 默认是否可见，非受控
-     * @en Default open state (uncontrolled)
-     */
-    defaultOpen: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 点击 mask 是否触发关闭
-     * @en Whether to close the modal when mask is clicked
-     */
-    maskClosable: {
-      type: Boolean,
-      default: undefined,
-    },
-    /**
-     * @zh 是否显示关闭按钮
-     * @en Whether to show close button
-     */
-    closable: {
-      type: Boolean,
-      default: undefined,
-    },
-    /**
-     * @zh 操作项的布局
-     * @en Layout of action list
-     */
-    actionsLayout: {
-      type: Array as PropType<string[]>,
-      default: undefined,
-    },
-    /**
-     * @zh 设置弹出框的挂载点，缺省值是 document.body
-     * @en Set the mount point of the pop-up box, the default value is document.body
-     */
-    popupContainer: {
-      type: [Object, String] as PropType<HTMLElement | string>,
-    },
-    inGroup: {
-      type: Boolean,
-      default: false,
-    },
-    groupArrowProps: {
-      type: Object,
-      default: () => ({}),
-    },
-    /**
-     * @zh 是否支持 ESC 键关闭预览
-     * @en Whether to support the ESC key to close the preview
-     */
-    escToClose: {
-      type: Boolean,
-      default: undefined,
-    },
-    /**
-     * @zh 是否开启滚轮缩放
-     * @en Whether to enable wheel zoom
-     */
-    wheelZoom: {
-      type: Boolean,
-      default: true,
-    },
-    /**
-     * @zh 是否开启键盘控制
-     * @en Whether to enable keyboard shortcuts
-     */
-    keyboard: {
-      type: Boolean,
-      default: true,
-    },
-    /**
-     * @zh 默认缩放比
-     * @en Default scale
-     */
-    defaultScale: {
-      type: Number,
-      default: 1,
-    },
-    /**
-     * @zh 缩放速率，仅对滚动缩放生效
-     * @en Zoom rate, only for scroll zoom
-     */
-    zoomRate: {
-      type: Number,
-      default: 1.1,
-    },
-    onOpenChange: {
-      type: Function as PropType<(open: boolean) => void>,
-    },
-  },
-  emits: ['close', 'update:open', 'openChange'],
-  /**
-   * @zh 自定义额外的操作项
-   * @en Customize additional action items
-   * @slot actions
-   * @version 2.17.0
-   */
+  components: { IconClose, IconLoading, PreviewToolbar },
+  props: imagePreviewProps,
+  emits: [
+    "update:open",
+    "openChange",
+    "open",
+    "opened",
+    "close",
+    "closed",
+    "keyEscape",
+    "longPress",
+    "prev",
+    "next",
+  ],
   setup(props, { emit }) {
-    const { t } = useI18n()
-    const { src, open, defaultOpen, defaultScale, zoomRate, inGroup, groupArrowProps, renderToBody } =
-      toRefs(props)
-
-    const controlledOpen = computed(() => open.value)
-    const maskClosable = computed(() => resolveMaskClosable(props, imagePlatformConfig.defaultMaskClosable))
-    const closable = computed(() => resolveClosable(props, imagePlatformConfig.defaultClosable))
-    const actionsLayout = computed(() => resolveActionsLayout(props, imagePlatformConfig.toolbarActions))
-    const popupContainer = computed(() => resolvePopupContainer(props) as HTMLElement | string | undefined)
-    const escToClose = computed(() => resolveEscToClose(props))
-
-    const refWrapper = ref()
-    const refImage = ref()
-    const prefixCls = getPrefixCls('image-preview')
-    const [mergedVisible, setVisible] = useMergeState(defaultOpen.value, reactive({ value: controlledOpen }))
-    const classNames = computed(() => [
-      prefixCls,
-      {
-        [`${prefixCls}-hide`]: !mergedVisible.value,
+    const refs = toRefs(props);
+    const controller = usePreviewController({
+      open: refs.open,
+      defaultOpen: props.defaultOpen,
+      src: refs.src,
+      interaction: refs.interaction,
+      defaultScale: refs.defaultScale,
+      minScale: refs.minScale,
+      maxScale: refs.maxScale,
+      scaleStep: refs.scaleStep,
+      wheelZoom: refs.wheelZoom,
+      keyboard: refs.keyboard,
+      draggable: refs.draggable,
+      keepDragOffset: refs.keepDragOffset,
+      closeOnImageTap: refs.closeOnImageTap,
+      onOpenChange: (open) => {
+        emit("update:open", open);
+        emit("openChange", open);
+        props.onOpenChange?.(open);
       },
-    ])
+      onKeyEscape: () => emit("keyEscape"),
+      onLongPress: () => emit("longPress"),
+      onPrev: () => emit("prev"),
+      onNext: () => emit("next"),
+    });
+    const prefixCls = getPrefixCls("image-preview");
+    const refWrapper = ref<HTMLElement>();
+    const refImage = ref<HTMLImageElement>();
+    const defaultContainer = isServerRendering ? undefined : document.body;
+    const popupTarget = computed(() =>
+      props.popupContainer === false ? undefined : props.popupContainer,
+    );
+    const container = usePopupContainer(defaultContainer, {
+      popupContainer: popupTarget,
+    } as any);
+    const { zIndex } = usePopupManager("dialog", {
+      visible: controller.mergedOpen,
+    });
+    const wrapperStyles = computed<CSSProperties>(() => ({
+      zIndex: zIndex.value,
+      position: container.value === document.body ? "fixed" : "absolute",
+    }));
+    usePopupOverHidden({ container, hidden: controller.mergedOpen } as any);
+    const { isLoading, setLoadStatus } = useImageLoadStatus();
 
-    const defaultContainer = isServerRendering ? undefined : document.body
-    const container = usePopupContainer(defaultContainer, reactive({ popupContainer }))
+    const desktopActions: ImagePreviewActionName[] = [
+      "fullScreen",
+      "rotateRight",
+      "rotateLeft",
+      "zoomIn",
+      "zoomOut",
+      "originalSize",
+      "download",
+    ];
+    const mergedActions = computed(
+      () =>
+        props.actionsLayout ??
+        (controller.isDesktop.value ? desktopActions : []),
+    );
+    const toggleFullscreen = () =>
+      document.fullscreenElement
+        ? document.exitFullscreen()
+        : refWrapper.value?.requestFullscreen();
+    const download = () => {
+      if (!props.src) return;
+      const anchor = document.createElement("a");
+      anchor.href = props.src;
+      anchor.download = "";
+      anchor.click();
+    };
+    const emitPrev = () => emit("prev");
+    const emitNext = () => emit("next");
+    const actions = computed<ActionType[]>(() => [
+      { key: "prev", name: "Previous", content: () => "‹", onClick: emitPrev },
+      { key: "next", name: "Next", content: () => "›", onClick: emitNext },
+      {
+        key: "fullScreen",
+        name: "Fullscreen",
+        content: () => h(IconFullscreen),
+        onClick: toggleFullscreen,
+      },
+      {
+        key: "rotateLeft",
+        name: "Rotate left",
+        content: () => h(IconRotateLeft),
+        onClick: controller.rotateLeft,
+      },
+      {
+        key: "rotateRight",
+        name: "Rotate right",
+        content: () => h(IconRotateRight),
+        onClick: controller.rotateRight,
+      },
+      {
+        key: "originalSize",
+        name: "Original size",
+        content: () => h(IconOriginalSize),
+        onClick: controller.reset,
+      },
+      {
+        key: "zoomOut",
+        name: "Zoom out",
+        content: () => h(IconZoomOut),
+        onClick: controller.zoomOut,
+      },
+      {
+        key: "zoomIn",
+        name: "Zoom in",
+        content: () => h(IconZoomIn),
+        onClick: controller.zoomIn,
+      },
+      {
+        key: "download",
+        name: "Download",
+        content: () => "↓",
+        onClick: download,
+      },
+    ]);
 
-    const isFixed = computed(() => !isServerRendering && container.value === document.body)
-    const { zIndex } = usePopupManager('dialog', { visible: mergedVisible })
-
-    const wrapperStyles = computed<CSSProperties>(() => {
-      const positionStyles: CSSProperties = isFixed.value
-        ? { zIndex: zIndex.value, position: 'fixed' }
-        : { zIndex: 'inherit', position: 'absolute' }
-
-      return { ...positionStyles }
-    })
-
-    const { isLoading, isLoaded, setLoadStatus } = useImageLoadStatus()
-
-    const rotate = ref(0)
-    const scale = ref(defaultScale.value)
-
-    const { translate, moving, resetTranslate } = useImageDrag(
-      reactive({
-        wrapperEl: refWrapper,
-        imageEl: refImage,
-        visible: mergedVisible,
-        scale,
-      }),
-    )
-
-    const scaleValueVisible = ref(false)
-    let hideScaleTimer: any = null
-    const showScaleValue = () => {
-      !scaleValueVisible.value && (scaleValueVisible.value = true)
-      hideScaleTimer && clearTimeout(hideScaleTimer)
-      hideScaleTimer = setTimeout(() => {
-        scaleValueVisible.value = false
-      }, 1000)
-    }
-
-    usePopupOverHidden(reactive({ container, hidden: mergedVisible }))
-
-    function reset() {
-      rotate.value = 0
-      scale.value = defaultScale.value
-      resetTranslate()
-    }
-
-    const isIncludes = (action: string) => actionsLayout.value.includes(action)
-
-    const handleKeyDown = (ev: KeyboardEvent) => {
-      ev.stopPropagation()
-      ev.preventDefault()
-
-      switch (ev.key) {
-        case KEYBOARD_KEY.ESC:
-          escToClose.value && close()
-          break
-        case KEYBOARD_KEY.ARROW_LEFT:
-          props.groupArrowProps.onPrev && props.groupArrowProps.onPrev()
-          break
-        case KEYBOARD_KEY.ARROW_RIGHT:
-          props.groupArrowProps.onNext && props.groupArrowProps.onNext()
-          break
-        case KEYBOARD_KEY.ARROW_UP:
-          isIncludes('zoomIn') && handleScale('zoomIn')
-          break
-        case KEYBOARD_KEY.ARROW_DOWN:
-          isIncludes('zoomOut') && handleScale('zoomOut')
-          break
-        case KEYBOARD_KEY.SPACE:
-          isIncludes('originalSize') && changeScale(1)
-          break
-        default:
-          break
+    watch(controller.mergedOpen, (open, previous) => {
+      if (open && !previous) {
+        emit("open");
+        nextTick(() => emit("opened"));
       }
-    }
-
-    const onWheel = throttleByRaf((e: WheelEvent) => {
-      e.preventDefault()
-      e.stopPropagation()
-
-      if (!props.wheelZoom) return
-
-      const delta = e.deltaY || e.deltaX
-      const action = delta > 0 ? 'zoomOut' : 'zoomIn'
-      const newScale = getScaleByRate(scale.value, zoomRate.value, action)
-      changeScale(newScale)
-    })
-
-    let globalKeyDownListener = false
-
-    const addGlobalKeyDownListener = () => {
-      nextTick(() => {
-        refWrapper?.value?.focus()
-      })
-      if (props.keyboard && container.value && !globalKeyDownListener) {
-        globalKeyDownListener = true
-        on(container.value, 'keydown', handleKeyDown)
+      if (!open && previous) {
+        emit("close");
+        nextTick(() => emit("closed"));
       }
-    }
-
-    const removeGlobalKeyDownListener = () => {
-      if (globalKeyDownListener && container.value) {
-        globalKeyDownListener = false
-        off(container.value, 'keydown', handleKeyDown)
-      }
-    }
-
-    watch([src, mergedVisible], () => {
-      if (mergedVisible.value) {
-        reset()
-        setLoadStatus('loading')
-        addGlobalKeyDownListener()
-      } else {
-        removeGlobalKeyDownListener()
-      }
-    })
-
-    function emitOpenChange(value: boolean) {
-      emit('update:open', value)
-      emit('openChange', value)
-      props.onOpenChange?.(value)
-    }
-
-    function close() {
-      if (mergedVisible.value) {
-        emit('close')
-        emitOpenChange(false)
-        setVisible(false)
-      }
-    }
-
-    function onMaskClick(e: MouseEvent) {
-      refWrapper?.value?.focus()
-      if (maskClosable.value && e.target === e.currentTarget) {
-        close()
-      }
-    }
-
-    function changeScale(newScale: number) {
-      if (scale.value !== newScale) {
-        scale.value = newScale
-        showScaleValue()
-      }
-    }
-
-    function fullScreen() {
-      const wrapperRect = refWrapper.value.getBoundingClientRect()
-      const imgRect = refImage.value.getBoundingClientRect()
-      const newHeightScale = wrapperRect.height / (imgRect.height / scale.value)
-      const newWidthScale = wrapperRect.width / (imgRect.width / scale.value)
-      const newScale = Math.max(newHeightScale, newWidthScale)
-      changeScale(newScale)
-    }
-
-    function handleRotate(direction: 'clockwise' | 'counterclockwise') {
-      const isClockwise = direction === 'clockwise'
-      const newRotate = isClockwise
-        ? (rotate.value + ROTATE_STEP) % 360
-        : rotate.value === 0
-          ? 360 - ROTATE_STEP
-          : rotate.value - ROTATE_STEP
-      rotate.value = newRotate
-    }
-
-    function handleScale(action: 'zoomIn' | 'zoomOut') {
-      const newScale = getScale(scale.value, action)
-      changeScale(newScale)
-    }
-
-    onBeforeUnmount(() => {
-      removeGlobalKeyDownListener()
-    })
+    });
 
     return {
+      ...controller,
       prefixCls,
-      classNames,
-      container,
-      wrapperStyles,
-      scale,
-      translate,
-      rotate,
-      moving,
-      mergedVisible,
-      isLoading,
-      isLoaded,
-      scaleValueVisible,
       refWrapper,
       refImage,
-      closable,
-      maskClosable,
-      actionsLayout,
-      inGroup,
-      groupArrowProps,
-      renderToBody,
-      onWheel,
-      onMaskClick,
-      onCloseClick: close,
-      onImgLoad() {
-        setLoadStatus('loaded')
-      },
-      onImgError() {
-        setLoadStatus('error')
-      },
-      actions: computed(() => [
-        /** 满屏 */
-        {
-          key: 'fullScreen',
-          name: t('imagePreview.fullScreen'),
-          content: () => h(IconFullscreen),
-          onClick: () => fullScreen(),
-        },
-        /** 顺时针旋转 */
-        {
-          key: 'rotateRight',
-          name: t('imagePreview.rotateRight'),
-          content: () => h(IconRotateRight),
-          onClick: () => handleRotate('clockwise'),
-        },
-        /** 逆时针旋转 */
-        {
-          key: 'rotateLeft',
-          name: t('imagePreview.rotateLeft'),
-          content: () => h(IconRotateLeft),
-          onClick: () => handleRotate('counterclockwise'),
-        },
-        /** 放大 */
-        {
-          key: 'zoomIn',
-          name: t('imagePreview.zoomIn'),
-          content: () => h(IconZoomIn),
-          onClick: () => handleScale('zoomIn'),
-          disabled: scale.value === maxScale,
-        },
-        /** 缩小 */
-        {
-          key: 'zoomOut',
-          name: t('imagePreview.zoomOut'),
-          content: () => h(IconZoomOut),
-          onClick: () => handleScale('zoomOut'),
-          disabled: scale.value === minScale,
-        },
-        /** 缩放到100% */
-        {
-          key: 'originalSize',
-          name: t('imagePreview.originalSize'),
-          content: () => h(IconOriginalSize),
-          onClick: () => changeScale(1),
-        },
-      ]),
-    }
+      container,
+      wrapperStyles,
+      isLoading,
+      setLoadStatus,
+      mergedActions,
+      actions,
+      toggleFullscreen,
+    };
   },
-})
+});
 </script>

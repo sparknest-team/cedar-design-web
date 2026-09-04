@@ -13,6 +13,7 @@ export type { CollapseToggleAllOptions } from './types'
 export type { CollapseItemProps, CollapseName, CollapseProps, ExpandIconPosition } from './props'
 export { Collapse, collapseItemProps, collapseProps }
 export const _CollapseComponent = Collapse
+export const _CollapseItemComponent = _CollapseItem
 
 export { _CollapseItem as CollapseItem }
 

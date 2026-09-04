@@ -25,7 +25,6 @@
 </template>
 
 <script lang="ts" setup>
-import { Message } from '@cedarjs/ui'
 
 const sayHello = () => {
   Message.info('hello')

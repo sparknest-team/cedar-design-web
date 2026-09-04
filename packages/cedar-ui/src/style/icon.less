@@ -14,12 +14,17 @@
 @icon-hover-size-xl-icon: var(~"--c-size-3");
 
 .c-icon {
-  display: inline-block;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
   width: 1em;
   height: 1em;
+  line-height: 1;
   color: inherit;
   font-style: normal;
-  vertical-align: -2px;
+  vertical-align: middle;
   outline: none;
   stroke: currentColor;
 }

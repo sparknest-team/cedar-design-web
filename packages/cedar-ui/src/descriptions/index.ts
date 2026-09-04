@@ -14,6 +14,7 @@ export type { DescriptionsAlign, DescriptionsItemProps, DescriptionsProps } from
 export type { DescData } from './types'
 export { Descriptions, descriptionsItemProps, descriptionsProps }
 export const _DescriptionsComponent = Descriptions
+export const _DescriptionsItemComponent = _DescriptionsItem
 
 export { _DescriptionsItem as DescriptionsItem }
 

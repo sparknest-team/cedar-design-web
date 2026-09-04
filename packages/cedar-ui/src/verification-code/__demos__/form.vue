@@ -12,7 +12,7 @@
       <c-verification-code v-model="form.code" style="width: 300px" @finish="onFinish" />
     </c-form-item>
     <c-form-item>
-      <c-button style="width: 60px" type="primary" size="lg" htmlType="submit">Submit</c-button>
+      <c-button style="width: 60px" status="primary" size="lg" htmlType="submit">Submit</c-button>
     </c-form-item>
   </c-form>
 </template>

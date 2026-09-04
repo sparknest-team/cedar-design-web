@@ -11,8 +11,12 @@ export function usePlatform() {
       return
     }
 
-    isTouchPrimary.value = window.matchMedia('(hover: none) and (pointer: coarse)').matches
-    isFinePointer.value = window.matchMedia('(hover: hover) and (pointer: fine)').matches
+    isTouchPrimary.value = window.matchMedia(
+      '(hover: none) and (pointer: coarse)',
+    ).matches
+    isFinePointer.value = window.matchMedia(
+      '(hover: hover) and (pointer: fine)',
+    ).matches
   }
 
   onMounted(() => {

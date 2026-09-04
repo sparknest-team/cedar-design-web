@@ -1,17 +1,17 @@
 <template>
   <c-space direction="column" fill>
     <c-space wrap>
-      <c-button type="primary" @click="apply(null)">亮色</c-button>
-      <c-button type="primary" @click="apply(Themes.dark)">暗色</c-button>
-      <c-button type="primary" @click="apply(Themes.md3Light)">MD3 亮色</c-button>
-      <c-button type="primary" @click="apply(Themes.md3Dark)">MD3 暗色</c-button>
+      <c-button status="primary" @click="apply(null)">亮色</c-button>
+      <c-button status="primary" @click="apply(Themes.dark)">暗色</c-button>
+      <c-button status="primary" @click="apply(Themes.md3Light)">MD3 亮色</c-button>
+      <c-button status="primary" @click="apply(Themes.md3Dark)">MD3 暗色</c-button>
     </c-space>
 
     <div class="preview c-rounded-md c-p-16">
       <div class="c-text-1 c-mb-8">主题预览</div>
       <div class="c-text-3 c-mb-16">主色按钮与语义文字会随 StyleProvider / cedar-theme 变化。</div>
       <c-space>
-        <c-button type="primary">Primary</c-button>
+        <c-button status="primary">Primary</c-button>
         <c-button>Default</c-button>
         <span class="semantic-primary">primary</span>
         <span class="semantic-success">success</span>
@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts" setup>
-import { StyleProvider, Themes, type StyleVars } from '@cedarjs/ui'
+import { Themes, type StyleVars } from '@cedarjs/ui'
 
 function apply(theme: StyleVars | null) {
   StyleProvider(theme)

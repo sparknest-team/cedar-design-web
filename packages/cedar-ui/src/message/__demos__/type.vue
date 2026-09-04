@@ -27,7 +27,6 @@
 
 <script lang="ts">
 import { defineComponent, h } from 'vue'
-import { Message } from '@cedarjs/ui'
 import { IconExclamationCircleFill } from '@cedarjs/icons-vue'
 
 export default defineComponent({

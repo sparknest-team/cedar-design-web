@@ -9,6 +9,6 @@ const files = ref<UploadFileItem[]>([])
 <template>
   <c-space>
     <c-upload ref="uploadRef" v-model="files" multiple :auto-upload="false" />
-    <c-button type="primary" @click="uploadRef?.submit()">Upload</c-button>
+    <c-button status="primary" @click="uploadRef?.submit()">Upload</c-button>
   </c-space>
 </template>

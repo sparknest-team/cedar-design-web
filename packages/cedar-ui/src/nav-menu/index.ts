@@ -20,6 +20,9 @@ export type { NavMenuProps } from './types'
 export { _NavMenuItem as NavMenuItem, _NavMenuItemGroup as NavMenuItemGroup, _NavMenuSubMenu as NavMenuSubMenu }
 
 export const _NavMenuComponent = NavMenu
+export const _NavMenuItemComponent = _NavMenuItem
+export const _NavMenuItemGroupComponent = _NavMenuItemGroup
+export const _NavMenuSubMenuComponent = _NavMenuSubMenu
 
 export { NavMenu }
 

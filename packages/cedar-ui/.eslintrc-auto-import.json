@@ -1,7 +1,5 @@
 {
   "globals": {
-    "Dialog": true,
-    "Message": true,
-    "Notification": true
+    "ImagePreviewFn": true
   }
 }

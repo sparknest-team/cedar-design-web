@@ -15,5 +15,6 @@ export type { RadioVariant } from './context'
 
 export { Radio, _RadioGroup as RadioGroup }
 export const _RadioComponent = Radio
+export const _RadioGroupComponent = _RadioGroup
 
 export default Radio

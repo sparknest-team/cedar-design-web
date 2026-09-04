@@ -118,7 +118,11 @@ function hasDefaultExport(source) {
 }
 
 function isInstallablePlugin(source) {
-  return /withInstall\s*\(/.test(source) || /\binstall\s*\(\s*app\b/.test(source)
+  return (
+    /withInstall\s*\(/.test(source) ||
+    /\binstall\s*\(\s*app\b/.test(source) ||
+    /\binstall\s*:\s*\(\s*app\b/.test(source)
+  )
 }
 
 async function getInstallDirs(srcDir, publicDirs) {

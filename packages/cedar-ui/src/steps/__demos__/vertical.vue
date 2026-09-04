@@ -1,8 +1,11 @@
 <template>
   <div class="frame-bg">
+    <c-radio-group v-model="currentStatus" variant="button" style="margin-bottom: 16px">
+      <c-radio v-for="status in statuses" :key="status" :value="status">{{ status }}</c-radio>
+    </c-radio-group>
     <div class="frame-body">
       <div class="frame-aside">
-        <c-steps :current="current" direction="vertical">
+        <c-steps :current="current" :status="currentStatus" direction="vertical">
           <c-step>Succeeded</c-step>
           <c-step>Processing</c-step>
           <c-step>Pending</c-step>
@@ -30,6 +33,8 @@ import { ref } from 'vue'
 export default {
   setup() {
     const current = ref(1)
+    const statuses = ['wait', 'process', 'finish', 'error'] as const
+    const currentStatus = ref<(typeof statuses)[number]>('process')
 
     const onPrev = () => {
       current.value = Math.max(1, current.value - 1)
@@ -41,6 +46,8 @@ export default {
 
     return {
       current,
+      statuses,
+      currentStatus,
       onPrev,
       onNext,
     }

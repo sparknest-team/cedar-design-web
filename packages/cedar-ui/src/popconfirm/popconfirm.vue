@@ -32,10 +32,16 @@
       </div>
       <div :class="`${prefixCls}-footer`">
         <Button size="xs" v-bind="cancelButtonProps" @click="handleCancel">
-          {{ cancelText || t('popconfirm.cancelText') }}
+          {{ cancelText || t("popconfirm.cancelText") }}
         </Button>
-        <Button type="primary" size="xs" v-bind="confirmButtonProps" :loading="mergedConfirmButtonLoading" @click="handleConfirm">
-          {{ confirmButtonText || t('popconfirm.confirmButtonText') }}
+        <Button
+          variant="text"
+          size="xs"
+          v-bind="confirmButtonProps"
+          :loading="mergedConfirmButtonLoading"
+          @click="handleConfirm"
+        >
+          {{ confirmButtonText || t("popconfirm.confirmButtonText") }}
         </Button>
       </div>
     </template>
@@ -43,20 +49,20 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue'
-import { createNamespace, getPrefixCls } from '../_utils/global-config'
-import { IconInfoCircleFill } from '@cedarjs/icons-vue/icon-info-circle-fill'
-import { IconCheckCircleFill } from '@cedarjs/icons-vue/icon-check-circle-fill'
-import { IconExclamationCircleFill } from '@cedarjs/icons-vue/icon-exclamation-circle-fill'
-import { IconCloseCircleFill } from '@cedarjs/icons-vue/icon-close-circle-fill'
-import Button from '../button'
-import Trigger from '../trigger'
-import { useI18n } from '../locale'
-import { isBoolean, isFunction, isPromise } from '../_utils/is'
-import { popconfirmProps } from './props'
+import { computed, defineComponent, ref } from "vue";
+import { createNamespace, getPrefixCls } from "../_utils/global-config";
+import { IconInfoCircleFill } from "@cedarjs/icons-vue/icon-info-circle-fill";
+import { IconCheckCircleFill } from "@cedarjs/icons-vue/icon-check-circle-fill";
+import { IconExclamationCircleFill } from "@cedarjs/icons-vue/icon-exclamation-circle-fill";
+import { IconCloseCircleFill } from "@cedarjs/icons-vue/icon-close-circle-fill";
+import Button from "../button";
+import Trigger from "../trigger";
+import { useI18n } from "../locale";
+import { isBoolean, isFunction, isPromise } from "../_utils/is";
+import { popconfirmProps } from "./props";
 
 export default defineComponent({
-  name: createNamespace('popconfirm').name,
+  name: createNamespace("popconfirm").name,
   components: {
     Button,
     Trigger,
@@ -67,7 +73,7 @@ export default defineComponent({
   },
   props: popconfirmProps,
   emits: {
-    'update:open': (visible: boolean) => true,
+    "update:open": (visible: boolean) => true,
     /**
      * @zh 气泡确认框的显隐状态改变时触发
      * @en Triggered when the visible or hidden state of the bubble confirmation box changes
@@ -96,89 +102,99 @@ export default defineComponent({
    * @slot icon
    */
   setup(props, { emit }) {
-    const prefixCls = getPrefixCls('popconfirm')
-    const { t } = useI18n()
+    const prefixCls = getPrefixCls("popconfirm");
+    const { t } = useI18n();
 
-    const _open = ref(props.defaultOpen)
-    const computedOpen = computed(() => props.open ?? _open.value)
-    const _confirmButtonLoading = ref(false)
-    const mergedConfirmButtonLoading = computed(() => props.confirmButtonLoading || _confirmButtonLoading.value)
+    const _open = ref(props.defaultOpen);
+    const computedOpen = computed(() => props.open ?? _open.value);
+    const _confirmButtonLoading = ref(false);
+    const mergedConfirmButtonLoading = computed(
+      () => props.confirmButtonLoading || _confirmButtonLoading.value,
+    );
 
     // Used to ignore closed Promises
-    let promiseNumber = 0
+    let promiseNumber = 0;
 
     const close = () => {
-      promiseNumber++
+      promiseNumber++;
       if (_confirmButtonLoading.value) {
-        _confirmButtonLoading.value = false
+        _confirmButtonLoading.value = false;
       }
-      _open.value = false
-      emit('update:open', false)
-      emit('openChange', false)
-    }
+      _open.value = false;
+      emit("update:open", false);
+      emit("openChange", false);
+    };
 
     const handleOpenChange = (visible: boolean) => {
       if (!visible) {
-        close()
+        close();
       } else {
-        _open.value = visible
-        emit('update:open', visible)
-        emit('openChange', visible)
+        _open.value = visible;
+        emit("update:open", visible);
+        emit("openChange", visible);
       }
-    }
+    };
 
     const handleConfirm = async () => {
-      const currentPromiseNumber = promiseNumber
+      const currentPromiseNumber = promiseNumber;
       const closed = await new Promise<boolean>(
         // eslint-disable-next-line no-async-promise-executor
         async (resolve) => {
           if (isFunction(props.beforeConfirm)) {
-            let result = props.beforeConfirm((closed = true) => resolve(closed))
+            let result = props.beforeConfirm((closed = true) =>
+              resolve(closed),
+            );
             if (isPromise(result) || !isBoolean(result)) {
-              _confirmButtonLoading.value = true
+              _confirmButtonLoading.value = true;
             }
             if (isPromise(result)) {
               try {
                 // if beforeConfirm is Promise<void> ,set Defaults true
-                result = (await result) ?? true
+                result = (await result) ?? true;
               } catch (error) {
-                result = false
-                throw error
+                result = false;
+                throw error;
               }
             }
             if (isBoolean(result)) {
-              resolve(result)
+              resolve(result);
             }
           } else {
-            resolve(true)
+            resolve(true);
           }
         },
-      )
+      );
 
       if (currentPromiseNumber === promiseNumber) {
         if (closed) {
-          emit('confirm')
-          close()
+          emit("confirm");
+          close();
         } else if (_confirmButtonLoading.value) {
-          _confirmButtonLoading.value = false
+          _confirmButtonLoading.value = false;
         }
       }
-    }
+    };
 
     const handleCancel = () => {
-      let result = true
+      let result = true;
       if (isFunction(props.beforeCancel)) {
-        result = props.beforeCancel() ?? false
+        result = props.beforeCancel() ?? false;
       }
       if (result) {
-        emit('cancel')
-        close()
+        emit("cancel");
+        close();
       }
-    }
+    };
 
-    const contentCls = computed(() => [`${prefixCls}-popup-content`, props.contentClass])
+    const contentCls = computed(() => [
+      `${prefixCls}-popup-content`,
+      props.contentClass,
+    ]);
 
-    const arrowCls = computed(() => [`${prefixCls}-popup-arrow`, props.arrowClass])
+    const arrowCls = computed(() => [
+      `${prefixCls}-popup-arrow`,
+      props.arrowClass,
+    ]);
 
     return {
       prefixCls,
@@ -190,7 +206,7 @@ export default defineComponent({
       handleConfirm,
       handleCancel,
       t,
-    }
+    };
   },
-})
+});
 </script>

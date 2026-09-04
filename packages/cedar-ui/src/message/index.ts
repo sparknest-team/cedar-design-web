@@ -40,8 +40,8 @@ class MessageManger {
     if (appContext ?? Message._context) {
       vm.appContext = appContext ?? Message._context
     }
-    render(vm, this.container)
     document.body.appendChild(this.container)
+    render(vm, this.container)
   }
 
   add = (config: _MessageConfig) => {
@@ -137,6 +137,7 @@ message.clear = (position?: MessagePosition) => {
 const Message = {
   ...message,
   install: (app: App): void => {
+    Message._context = app._context
     const _message = {
       clear: message.clear,
     } as MessageMethod

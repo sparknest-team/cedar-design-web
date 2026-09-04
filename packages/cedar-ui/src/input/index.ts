@@ -27,5 +27,8 @@ export {
 }
 
 export const _InputComponent = Input
+export const _InputPasswordComponent = _InputPassword
+export const _InputGroupComponent = _InputGroup
+export const _InputGroupLabelComponent = _InputGroupLabel
 
 export default Input

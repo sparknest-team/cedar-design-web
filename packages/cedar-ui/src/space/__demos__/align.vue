@@ -15,7 +15,7 @@
     </c-space>
     <c-space :align="align" :direction="direction" style="padding: 10px; background-color: var(--color-fill-2)">
       <div>Space:</div>
-      <c-button type="primary">Item2</c-button>
+      <c-button status="primary">Item2</c-button>
       <c-card title="Card"> Card content </c-card>
     </c-space>
   </c-space>

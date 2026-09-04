@@ -9,7 +9,7 @@
     </c-alert>
 
     <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center">
-      <c-button type="secondary" size="sm" @click="open">列管理</c-button>
+      <c-button status="secondary" size="sm" @click="open">列管理</c-button>
       <c-link @click="resetToDefault">重置</c-link>
       <c-switch v-model="fit" checked-text="fit" unchecked-text="fit" size="sm" />
       <c-switch v-model="isFixedLayout" checked-text="fixed" unchecked-text="auto" size="sm" />

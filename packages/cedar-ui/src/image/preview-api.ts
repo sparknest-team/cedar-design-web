@@ -1,142 +1,116 @@
-import { createApp, h, nextTick, reactive, type App } from 'vue'
-import ImagePreview from './preview.vue'
-import ImagePreviewGroup from './preview-group.vue'
-import { imagePlatformConfig } from './platform.config'
-import type { ImagePreviewOptions, UserImagePreviewOptions } from './types.unified'
-import { normalizePreviewOptions } from './utils/normalizePreviewOptions'
-import { resolveLoop, resolvePopupContainer } from './utils/resolvePreviewOptions'
+import { createApp, h, nextTick, reactive, ref, type App } from "vue";
+import type {
+  ImagePreviewHandle,
+  ImagePreviewOptions,
+  UserImagePreviewOptions,
+} from "./api";
+import ImagePreviewGroup from "./preview-group.vue";
+import ImagePreview from "./preview.vue";
+import { normalizePreviewOptions } from "./utils/normalizePreviewOptions";
 
-let singletonApp: App | null = null
-let singletonHost: HTMLElement | null = null
-let singletonOptions: ImagePreviewOptions | null = null
-let defaultOptions: ImagePreviewOptions = {}
+let singletonApp: App | null = null;
+let singletonHost: HTMLElement | null = null;
+let singletonOptions: ImagePreviewOptions | null = null;
+let singletonHandle: ImagePreviewHandle | null = null;
+let defaultOptions: ImagePreviewOptions = {};
 
-function unmountSingleton() {
-  if (singletonApp && singletonHost) {
-    singletonApp.unmount()
-    singletonHost.parentNode?.removeChild(singletonHost)
-  }
-
-  singletonApp = null
-  singletonHost = null
-  singletonOptions = null
+function unmount() {
+  singletonApp?.unmount();
+  singletonHost?.parentNode?.removeChild(singletonHost);
+  singletonApp = null;
+  singletonHost = null;
+  singletonOptions = null;
+  singletonHandle = null;
 }
 
-function previewImage(options: UserImagePreviewOptions) {
-  if (typeof window === 'undefined') {
-    return
-  }
+function previewImage(
+  options: UserImagePreviewOptions,
+): ImagePreviewHandle | undefined {
+  if (typeof window === "undefined") return;
+  previewImage.close();
 
-  previewImage.close()
-
-  const imagePreviewOptions = normalizePreviewOptions(options, defaultOptions)
+  const normalized = normalizePreviewOptions(
+    options,
+    defaultOptions,
+  ) as ImagePreviewOptions;
+  const images = normalized.images?.length
+    ? normalized.images
+    : normalized.src
+      ? [normalized.src]
+      : [];
   const reactiveOptions = reactive({
-    ...imagePreviewOptions,
+    ...normalized,
+    images,
+    src: images[0],
     open: true,
-    closable: imagePreviewOptions.closable ?? imagePlatformConfig.defaultClosable,
-    maskClosable: imagePreviewOptions.maskClosable ?? imagePlatformConfig.defaultMaskClosable,
-    actionsLayout: imagePreviewOptions.actionsLayout ?? imagePlatformConfig.toolbarActions,
-  })
+  });
+  singletonOptions = reactiveOptions as unknown as ImagePreviewOptions;
+  const componentRef = ref<any>();
+  const component = images.length > 1 ? ImagePreviewGroup : ImagePreview;
 
-  singletonOptions = reactiveOptions
-
-  const images = reactiveOptions.images ?? []
-  const useGroup = images.length > 1
-  const loop = resolveLoop(reactiveOptions, imagePlatformConfig.defaultLoop)
-  const popupContainer = resolvePopupContainer(reactiveOptions) as string | HTMLElement | undefined
-
-  singletonHost = document.createElement('div')
-  document.body.appendChild(singletonHost)
-
+  singletonHost = document.createElement("div");
+  document.body.appendChild(singletonHost);
   singletonApp = createApp({
-    setup() {
-      return () => {
-        if (useGroup) {
-          return h(ImagePreviewGroup, {
-            images,
-            open: reactiveOptions.open,
-            current: reactiveOptions.current ?? 0,
-            loop,
-            closable: reactiveOptions.closable,
-            maskClosable: reactiveOptions.maskClosable,
-            actionsLayout: reactiveOptions.actionsLayout,
-            popupContainer,
-            previewProps: reactiveOptions,
-            'onUpdate:open': (value: boolean) => {
-              reactiveOptions.open = value
-              if (!value) {
-                callClose()
-              }
-            },
-            onOpenChange: (value: boolean) => {
-              reactiveOptions.onOpenChange?.(value)
-              if (!value) {
-                callClose()
-              }
-            },
-            onChange: (index: number) => {
-              reactiveOptions.current = index
-              reactiveOptions.onChange?.(index)
-            },
-          })
-        }
+    setup: () => () =>
+      h(component as any, {
+        ...reactiveOptions,
+        ref: componentRef,
+        "onUpdate:open": (open: boolean) => {
+          reactiveOptions.open = open;
+          normalized["onUpdate:open"]?.(open);
+        },
+        "onUpdate:current": (current: number) => {
+          reactiveOptions.current = current;
+          normalized["onUpdate:current"]?.(current);
+        },
+        onOpenChange: (open: boolean) => normalized.onOpenChange?.(open),
+        onClosed: () => {
+          normalized.onClosed?.();
+          unmount();
+        },
+      }),
+  });
+  singletonApp.mount(singletonHost);
 
-        return h(ImagePreview, {
-          src: images[0] ?? reactiveOptions.src,
-          open: reactiveOptions.open,
-          closable: reactiveOptions.closable,
-          maskClosable: reactiveOptions.maskClosable,
-          actionsLayout: reactiveOptions.actionsLayout,
-          popupContainer,
-          wheelZoom: reactiveOptions.wheelZoom ?? true,
-          keyboard: reactiveOptions.keyboard ?? true,
-          escToClose: reactiveOptions.escToClose,
-          onClose: () => {
-            reactiveOptions.onClose?.()
-            callClose()
-          },
-          onOpenChange: (value: boolean) => {
-            reactiveOptions.onOpenChange?.(value)
-          },
-        })
-      }
-    },
-  })
-
-  singletonApp.mount(singletonHost)
-
-  function callClose() {
-    reactiveOptions.onClosed?.()
-    unmountSingleton()
-  }
+  const call = (method: string, ...args: unknown[]) =>
+    componentRef.value?.[method]?.(...args);
+  const handle: ImagePreviewHandle = {
+    open: (index) => call("open", index),
+    close: () => call("close"),
+    reset: () => call("reset"),
+    prev: () => call("prev"),
+    next: () => call("next"),
+    to: (index) => call("to", index),
+    zoomTo: (scale) => call("zoomTo", scale),
+    zoomIn: () => call("zoomIn"),
+    zoomOut: () => call("zoomOut"),
+    rotateLeft: () => call("rotateLeft"),
+    rotateRight: () => call("rotateRight"),
+    toggleFullscreen: () => call("toggleFullscreen"),
+  };
+  singletonHandle = handle;
+  return handle;
 }
 
 previewImage.close = () => {
-  if (singletonOptions != null) {
-    const prevOptions = singletonOptions
-    singletonOptions = null
-
-    nextTick().then(() => {
-      prevOptions.open = false
-      unmountSingleton()
-    })
-  }
-}
-
+  const handle = singletonHandle;
+  const options = singletonOptions;
+  singletonHandle = null;
+  singletonOptions = null;
+  nextTick(() => {
+    if (handle) handle.close();
+    else if (options) options.open = false;
+  });
+};
 previewImage.setDefaultOptions = (options: ImagePreviewOptions) => {
-  defaultOptions = options
-}
-
+  defaultOptions = options;
+};
 previewImage.resetDefaultOptions = () => {
-  defaultOptions = {}
-}
+  defaultOptions = {};
+};
 
-previewImage.Component = ImagePreview
-previewImage.Group = ImagePreviewGroup
-
-export { previewImage, ImagePreview, ImagePreviewGroup }
-export type { ImagePreviewOptions, UserImagePreviewOptions }
-
-export default previewImage
-
-export { previewImage as ImagePreviewFn }
+export { previewImage, ImagePreview, ImagePreviewGroup };
+export { previewImage as imagePreview };
+export type { ImagePreviewOptions, UserImagePreviewOptions };
+export default previewImage;
+export { previewImage as ImagePreviewFn };

@@ -43,6 +43,12 @@ export { TABLE_EXTRA_COLUMN_KEY, resolveExtraColumnConfig, getExtraColumnWidth, 
 export { _Thead as Thead, _Tbody as Tbody, _Tr as Tr, _Th as Th, _Td as Td, _Column as TableColumn }
 
 export const _TableComponent = Table
+export const _TheadComponent = _Thead
+export const _TbodyComponent = _Tbody
+export const _TrComponent = _Tr
+export const _ThComponent = _Th
+export const _TdComponent = _Td
+export const _TableColumnComponent = _Column
 
 export { Table }
 

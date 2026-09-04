@@ -6,7 +6,7 @@
     <c-radio value="left">Left</c-radio>
   </c-radio-group>
   <div :style="{ marginTop: '20px' }">
-    <c-button type="primary" @click="handleClick">Open Drawer</c-button>
+    <c-button status="primary" @click="handleClick">Open Drawer</c-button>
   </div>
   <c-drawer
     :width="340"

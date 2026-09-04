@@ -1,12 +1,18 @@
 <template>
-  <div :class="wrapperClassNames" :style="wrapperStyles">
+  <div
+    v-ripple="{ disabled: !ripple }"
+    :class="wrapperClassNames"
+    :style="wrapperStyles"
+  >
     <img
       ref="refImg"
       :class="`${prefixCls}-img`"
-      v-bind="imgProps"
-      :style="{ ...imgStyle, ...fitStyle }"
+      v-bind="mergedImgProps"
+      :src="src"
+      :loading="lazy ? 'lazy' : undefined"
+      :style="[imgStyle, mergedImgProps?.style, fitStyle]"
       :title="title"
-      :alt="alt"
+      :alt="alt || description || loadDescription"
       @load="onImgLoaded"
       @error="onImgLoadError"
       @click="onImgClick"
@@ -24,12 +30,16 @@
           </div>
         </div>
       </slot>
-      <slot v-if="isLoading && (showLoader || $slots.loader)" name="loader">
+      <slot v-if="isLoading && $slots.placeholder" name="placeholder" />
+      <slot
+        v-else-if="isLoading && (showLoader || $slots.loader)"
+        name="loader"
+      >
         <div :class="[`${prefixCls}-loader`]">
           <div :class="`${prefixCls}-loader-spin`">
             <IconLoading />
             <div :class="`${prefixCls}-loader-spin-text`">
-              {{ t('image.loading') }}
+              {{ t("image.loading") }}
             </div>
           </div>
         </div>
@@ -47,12 +57,12 @@
       </template>
     </ImageFooter>
     <ImagePreview
-      v-if="isLoaded && mergePreview"
-      :src="src"
+      v-if="mergePreview"
+      :src="previewSrc || src"
       v-bind="previewProps"
-      :open="mergedPreviewOpen"
-      :render-to-body="renderToBody"
-      @close="onPreviewClose"
+      :previewed-img-props="previewedImgProps"
+      v-model:open="mergedPreviewOpen"
+      :popup-container="popupContainer"
     >
       <template #actions>
         <slot name="preview-actions" />
@@ -61,36 +71,33 @@
   </div>
 </template>
 <script lang="ts">
-import { imageProps } from './props'
-import { createNamespace } from '../_utils/global-config'
+import { imageProps } from "./props";
+import { createNamespace } from "../_utils/global-config";
 import {
   defineComponent,
   PropType,
   toRefs,
   computed,
+  watch,
   watchEffect,
   ref,
-  reactive,
   inject,
   StyleValue,
   CSSProperties,
-} from 'vue'
-import type { ImagePreviewProps } from './types'
-import { IconImageClose } from '@cedarjs/icons-vue/icon-image-close'
-import { IconLoading } from '@cedarjs/icons-vue/icon-loading'
-import ImageFooter from './image-footer.vue'
-import ImagePreview from './preview.vue'
-import { getPrefixCls } from '../_utils/global-config'
-import useImageLoadState from './hooks/use-image-load-status'
-import { isServerRendering } from '../_utils/dom'
-import { normalizeImageSizeProp } from './utils'
-import { omit } from '../_utils/omit'
-import useMergeState from '../_hooks/use-merge-state'
-import { PreviewGroupInjectionKey } from './context'
-import { useI18n } from '../locale'
-import { isBoolean } from '../_utils/is'
+} from "vue";
+import { IconImageClose } from "@cedarjs/icons-vue/icon-image-close";
+import { IconLoading } from "@cedarjs/icons-vue/icon-loading";
+import ImageFooter from "./image-footer.vue";
+import ImagePreview from "./preview.vue";
+import { getPrefixCls } from "../_utils/global-config";
+import useImageLoadState from "./hooks/use-image-load-status";
+import { normalizeImageSizeProp } from "./utils";
+import { omit } from "../_utils/omit";
+import { PreviewGroupInjectionKey } from "./context";
+import { useI18n } from "../locale";
+import { isBoolean } from "../_utils/is";
 
-let uuid = 0
+let uuid = 0;
 
 export default defineComponent({
   name: createNamespace("image").name,
@@ -108,8 +115,11 @@ export default defineComponent({
      * @en Preview opening and closing events
      * @param {boolean} open
      */
-    'previewOpenChange',
-    'update:previewOpen',
+    "previewOpenChange",
+    "update:previewOpen",
+    "click",
+    "load",
+    "error",
   ],
   /**
    * @zh 自定义错误状态的图标
@@ -132,7 +142,7 @@ export default defineComponent({
    * @slot extra
    */
   setup(props, { attrs, slots, emit }) {
-    const { t } = useI18n()
+    const { t } = useI18n();
     const {
       height,
       width,
@@ -143,103 +153,127 @@ export default defineComponent({
       footerPosition,
       defaultPreviewOpen,
       previewOpen,
-      preview,
       previewProps,
-    } = toRefs(props)
+    } = toRefs(props);
 
-    const groupContext = inject(PreviewGroupInjectionKey, undefined)
+    const groupContext = inject(PreviewGroupInjectionKey, undefined);
 
-    const prefixCls = getPrefixCls('image')
+    const prefixCls = getPrefixCls("image");
 
-    const refImg = ref()
+    const refImg = ref();
 
-    const { isLoaded, isError, isLoading, setLoadStatus } = useImageLoadState()
+    const { isLoaded, isError, isLoading, setLoadStatus } = useImageLoadState();
 
     const sizeStyle = computed(() => ({
       width: normalizeImageSizeProp(width?.value),
       height: normalizeImageSizeProp(height?.value),
-    }))
+    }));
 
     const fitStyle = computed<CSSProperties>(() => {
-      if (props.fit) {
-        return { objectFit: props.fit }
-      }
-      return {}
-    })
+      return {
+        objectFit: props.objectFit,
+        objectPosition: props.objectPosition,
+        borderRadius: normalizeImageSizeProp(props.radius),
+      };
+    });
 
     const wrapperClassNames = computed(() => [
       `${prefixCls}`,
       {
+        [`${prefixCls}-inline`]: !props.block,
         [`${prefixCls}-loading`]: isLoading.value,
         [`${prefixCls}-loading-error`]: isError.value,
-        [`${prefixCls}-with-footer-inner`]: isLoaded && showFooter && footerPosition.value === 'inner',
-        [`${prefixCls}-with-footer-outer`]: isLoaded && showFooter && footerPosition.value === 'outer',
+        [`${prefixCls}-with-footer-inner`]:
+          isLoaded && showFooter && footerPosition.value === "inner",
+        [`${prefixCls}-with-footer-outer`]:
+          isLoaded && showFooter && footerPosition.value === "outer",
       },
       attrs.class,
-    ])
+    ]);
 
-    const wrapperStyles = computed<StyleValue[]>(() => [sizeStyle.value, attrs.style as StyleValue])
+    const wrapperStyles = computed<StyleValue[]>(() => [
+      sizeStyle.value,
+      attrs.style as StyleValue,
+    ]);
 
     const showFooter = computed(() => {
       if (!(title?.value || description?.value || slots.extra)) {
-        return false
+        return false;
       }
-      if (isBoolean(hideFooter.value)) return !hideFooter.value && isLoaded.value
-      return hideFooter.value === 'never'
-    })
+      if (isBoolean(hideFooter.value))
+        return !hideFooter.value && isLoaded.value;
+      return hideFooter.value === "never";
+    });
 
-    const imgProps = computed(() => omit(attrs, ['class', 'style']))
+    const mergedImgProps = computed(() => ({
+      ...omit(attrs, ["class", "style"]),
+      ...props.imgProps,
+    }));
 
-    const [mergedPreviewOpen, setPreviewOpen] = useMergeState(
-      defaultPreviewOpen.value,
-      reactive({
-        value: previewOpen,
-      }),
-    )
+    const localPreviewOpen = ref(defaultPreviewOpen.value);
+    const mergedPreviewOpen = computed({
+      get: () => previewOpen.value ?? localPreviewOpen.value,
+      set: (open: boolean) => {
+        if (previewOpen.value === undefined) localPreviewOpen.value = open;
+        emit("previewOpenChange", open);
+        emit("update:previewOpen", open);
+      },
+    });
 
-    const mergePreview = computed(() => !groupContext?.preview && preview.value)
+    const previewEnabled = computed(() => !props.previewDisabled);
+    const mergePreview = computed(
+      () => !groupContext?.preview && previewEnabled.value,
+    );
 
-    watchEffect(() => {
-      if (isServerRendering || !refImg.value) return
-      refImg.value.src = src?.value
-      setLoadStatus('loading')
-    })
+    watch(
+      src,
+      () => {
+        setLoadStatus("loading");
+      },
+      { immediate: true },
+    );
 
-    const imageId = uuid++
+    const imageId = uuid++;
     watchEffect((onInvalidate) => {
       const unRegister = groupContext?.registerImageUrl?.(
         imageId,
-        (previewProps?.value?.src ?? src?.value) || '',
-        preview.value,
-      )
+        (props.previewSrc ?? previewProps?.value?.src ?? src?.value) || "",
+        previewEnabled.value,
+      );
       onInvalidate(() => {
-        unRegister?.()
-      })
-    })
+        unRegister?.();
+      });
+    });
 
-    function onImgLoaded() {
-      setLoadStatus('loaded')
+    function onImgLoaded(event: Event) {
+      setLoadStatus("loaded");
+      emit("load", event);
     }
 
-    function onImgLoadError() {
-      setLoadStatus('error')
+    function onImgLoadError(event: Event) {
+      if (
+        props.fallbackSrc &&
+        refImg.value?.getAttribute("src") !== props.fallbackSrc
+      ) {
+        refImg.value.src = props.fallbackSrc;
+        return;
+      }
+      setLoadStatus("error");
+      emit("error", event);
     }
 
-    function onImgClick() {
-      if (!preview.value) return
+    function onImgClick(event?: Event) {
+      if (event) emit("click", event);
+      if (!previewEnabled.value || isError.value) return;
       if (groupContext?.preview) {
-        groupContext.preview(imageId)
+        groupContext.preview(imageId);
       } else {
-        emit('previewOpenChange', true)
-        emit('update:previewOpen', true)
-        setPreviewOpen(true)
+        mergedPreviewOpen.value = true;
       }
     }
 
-    function onPreviewClose() {
-      emit('previewOpenChange', false)
-      emit('update:previewOpen', false)
-      setPreviewOpen(false)
+    function showPreview() {
+      onImgClick();
     }
 
     return {
@@ -249,7 +283,7 @@ export default defineComponent({
       wrapperClassNames,
       wrapperStyles,
       showFooter,
-      imgProps,
+      mergedImgProps,
       imgStyle: sizeStyle,
       isLoaded,
       isError,
@@ -259,9 +293,10 @@ export default defineComponent({
       onImgLoaded,
       onImgLoadError,
       onImgClick,
-      onPreviewClose,
       fitStyle,
-    }
+      showPreview,
+      click: showPreview,
+    };
   },
-})
+});
 </script>

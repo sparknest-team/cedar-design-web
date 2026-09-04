@@ -12,6 +12,9 @@
     "./generate-library-entry": "./src/generateLibraryEntry.mjs"
   },
   "files": ["bin", "src"],
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
   "dependencies": {
     "@inquirer/prompts": "^6.0.1",
     "@loca/ui-build": "link:../../../design-ui/packages/ui-build",

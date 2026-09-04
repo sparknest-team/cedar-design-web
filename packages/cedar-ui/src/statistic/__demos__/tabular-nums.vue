@@ -1,14 +1,19 @@
 <template>
   <c-space size="xl" wrap>
-    <c-statistic title="未开启等宽" :value="count" show-group-separator />
-    <c-statistic title="等宽数字" :value="count" show-group-separator tabular-nums />
+    <c-statistic
+      title="比例数字（右侧标记会跳动）"
+      :value="count"
+      suffix="|"
+      :value-style="{ fontVariantNumeric: 'proportional-nums' }"
+    />
+    <c-statistic title="等宽数字（右侧标记保持稳定）" :value="count" suffix="|" tabular-nums />
   </c-space>
 </template>
 
 <script lang="ts" setup>
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 
-const values = [8, 88, 888, 1888, 12880]
+const values = [1111, 8888, 1010, 9090]
 const index = ref(0)
 const count = ref(values[0])
 let timer = 0

@@ -30,7 +30,7 @@
 
 // Line Less
 .c-steps {
-  &-show-line:not(&-mode-arrow):not(&-mode-navigation) &-item-title::after {
+  &-show-line:not(&-vertical):not(&-mode-arrow):not(&-mode-navigation) &-item-title::after {
     display: flex !important;
   }
 }
@@ -59,9 +59,13 @@
 // Label vertical
 .c-steps {
   &-label-vertical &-item {
+    &:last-child {
+      flex: 1;
+    }
+
     &-content {
       display: block;
-      width: var(~'--c-steps-label-vertical-content-width');
+      width: 100%;
       text-align: center;
     }
 

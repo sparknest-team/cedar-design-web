@@ -1,10 +1,9 @@
 <template>
   <div>
-    <c-button
-      type="primary"
+    <c-button status="primary"
       @click="
         () => {
-          timestamp = String(Date.now())
+          timestamp = String(Date.now());
         }
       "
       style="margin-bottom: 20px"
@@ -28,6 +27,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
-const timestamp = ref('')
+import { ref } from "vue";
+const timestamp = ref("");
 </script>

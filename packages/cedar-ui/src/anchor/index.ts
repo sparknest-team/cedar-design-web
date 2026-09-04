@@ -13,6 +13,7 @@ export type AnchorLinkInstance = InstanceType<typeof _AnchorLink>
 export { _AnchorLink as AnchorLink }
 
 export const _AnchorComponent = Anchor
+export const _AnchorLinkComponent = _AnchorLink
 
 export { Anchor }
 

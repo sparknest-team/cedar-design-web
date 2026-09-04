@@ -20,5 +20,6 @@ export { Button };
 export { _ButtonGroup as ButtonGroup };
 
 export const _ButtonComponent = Button;
+export const _ButtonGroupComponent = _ButtonGroup;
 
 export default Button;

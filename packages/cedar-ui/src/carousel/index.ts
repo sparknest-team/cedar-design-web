@@ -19,6 +19,7 @@ export type {
 } from './types'
 export { Carousel, carouselProps }
 export const _CarouselComponent = Carousel
+export const _CarouselItemComponent = _CarouselItem
 
 export { _CarouselItem as CarouselItem }
 

@@ -1,7 +1,7 @@
 <template>
   <c-checkbox-group v-model="custom" :options="['hide header', 'hide footer', 'hide cancel']" />
   <div :style="{ marginTop: '20px' }">
-    <c-button type="primary" @click="handleClick">Open Drawer</c-button>
+    <c-button status="primary" @click="handleClick">Open Drawer</c-button>
   </div>
   <c-drawer
     :width="340"

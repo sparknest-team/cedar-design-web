@@ -41,5 +41,8 @@ export {
 }
 
 export const _TypographyComponent = Typography
+export const _TypographyParagraphComponent = _TypographyParagraph
+export const _TypographyTitleComponent = _TypographyTitle
+export const _TypographyTextComponent = _TypographyText
 
 export default Typography

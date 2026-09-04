@@ -16,6 +16,6 @@
 
 <script lang="ts" setup>
 const download = () => {
-  console.log('点击下载图片')
-}
+  console.log("点击下载图片");
+};
 </script>

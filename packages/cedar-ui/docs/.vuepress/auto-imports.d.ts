@@ -7,6 +7,10 @@
 export {}
 declare global {
   const Dialog: typeof import('@cedarjs/ui').Dialog
+  const Drawer: typeof import('@cedarjs/ui').Drawer
+  const ImagePreviewFn: typeof import('@cedarjs/ui').ImagePreviewFn
   const Message: typeof import('@cedarjs/ui').Message
   const Notification: typeof import('@cedarjs/ui').Notification
+  const StyleProvider: typeof import('@cedarjs/ui').StyleProvider
+  const previewImage: typeof import('@cedarjs/ui').previewImage
 }

@@ -1,24 +1,24 @@
-import type { ImagePreviewProps } from '../types.unified'
+import type { ImagePreviewActionName, ImagePreviewProps } from "../api";
 
-type TeleportTarget = string | Element | false | HTMLElement | undefined
+type TeleportTarget = string | false | HTMLElement | undefined;
 
 function toNumber(value: number | string): number {
-  return typeof value === 'number' ? value : Number(value)
+  return typeof value === "number" ? value : Number(value);
 }
 
 export function resolvePreviewImages(source: {
-  images?: string[]
-  src?: string
+  images?: string[];
+  src?: string;
 }): string[] {
   if (source.images?.length) {
-    return source.images
+    return source.images;
   }
 
   if (source.src) {
-    return [source.src]
+    return [source.src];
   }
 
-  return []
+  return [];
 }
 
 export function resolvePreviewOpen(
@@ -26,10 +26,10 @@ export function resolvePreviewOpen(
   localOpen?: boolean,
 ): boolean {
   if (source.open !== undefined) {
-    return source.open
+    return source.open;
   }
 
-  return localOpen ?? source.defaultOpen ?? false
+  return localOpen ?? source.defaultOpen ?? false;
 }
 
 export function resolvePreviewCurrent(
@@ -37,49 +37,55 @@ export function resolvePreviewCurrent(
   localCurrent?: number,
 ): number {
   if (source.current !== undefined) {
-    return toNumber(source.current)
+    return toNumber(source.current);
   }
 
   if (localCurrent !== undefined) {
-    return localCurrent
+    return localCurrent;
   }
 
-  return source.defaultCurrent ?? 0
+  return source.defaultCurrent ?? 0;
 }
 
-export function resolveClosable(source: { closable?: boolean }, fallback: boolean): boolean {
-  return source.closable ?? fallback
+export function resolveClosable(
+  source: { closable?: boolean },
+  fallback: boolean,
+): boolean {
+  return source.closable ?? fallback;
 }
 
 export function resolveMaskClosable(
   source: { maskClosable?: boolean },
   fallback: boolean,
 ): boolean {
-  return source.maskClosable ?? fallback
+  return source.maskClosable ?? fallback;
 }
 
 export function resolveLoop(
   source: { loop?: boolean },
   fallback: boolean,
 ): boolean {
-  return source.loop ?? fallback
+  return source.loop ?? fallback;
 }
 
 export function resolvePopupContainer(source: {
-  popupContainer?: TeleportTarget
+  popupContainer?: TeleportTarget;
 }): TeleportTarget {
-  return source.popupContainer
+  return source.popupContainer;
 }
 
-export function resolveEscToClose(source: { escToClose?: boolean }, fallback = true): boolean {
-  return source.escToClose ?? fallback
+export function resolveEscToClose(
+  source: { escToClose?: boolean },
+  fallback = true,
+): boolean {
+  return source.escToClose ?? fallback;
 }
 
 export function resolveActionsLayout(
-  source: { actionsLayout?: string[] },
-  fallback: string[] = [],
-): string[] {
-  return source.actionsLayout ?? fallback
+  source: { actionsLayout?: ImagePreviewActionName[] },
+  fallback: ImagePreviewActionName[] = [],
+): ImagePreviewActionName[] {
+  return source.actionsLayout ?? fallback;
 }
 
 export function mergePreviewProps<T extends Partial<ImagePreviewProps>>(
@@ -91,5 +97,5 @@ export function mergePreviewProps<T extends Partial<ImagePreviewProps>>(
     ...platformDefaults,
     ...previewProps,
     ...directProps,
-  } as T
+  } as T;
 }

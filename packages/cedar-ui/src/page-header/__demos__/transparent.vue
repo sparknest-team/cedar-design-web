@@ -7,7 +7,7 @@
     }"
   >
     <c-page-header title="Cedar Design" subtitle="默认无底色，可通过 style 自定义">
-      <template #breadcrumb>
+      <template #header>
         <c-breadcrumb>
           <c-breadcrumb-item>Home</c-breadcrumb-item>
           <c-breadcrumb-item>Channel</c-breadcrumb-item>

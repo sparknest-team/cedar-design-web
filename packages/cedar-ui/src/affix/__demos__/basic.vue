@@ -1,6 +1,6 @@
 <template>
   <c-affix>
-    <c-button type="primary">Affix Top</c-button>
+    <c-button status="primary">Affix Top</c-button>
   </c-affix>
 </template>
 

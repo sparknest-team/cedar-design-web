@@ -1,19 +1,18 @@
-import { InjectionKey } from 'vue'
-import { StepData, StepStatus, StepsType } from './types'
-import { Direction } from '../_utils/constant'
+import type { ComputedRef, InjectionKey, Slots } from 'vue'
+import type { Direction } from '../_utils/constant'
+import type { StepStatus, StepsContentPlacement, StepsSize, StepsType } from './props'
 
 export interface StepsContext {
-  current: number
-  direction: Direction
-  labelPlacement: Direction
-  showLine: boolean
-  type: StepsType
-  errorSteps: number[]
-  addItem: (step: number, data: StepData) => void
-  removeItem: (step: number) => void
-  getStatus: (step: number) => StepStatus
-  onClick: (step: number, ev: Event) => void
-  parentCls: string
+  current: ComputedRef<number>
+  direction: ComputedRef<Direction>
+  contentPlacement: ComputedRef<StepsContentPlacement>
+  size: ComputedRef<StepsSize>
+  type: ComputedRef<StepsType>
+  showLine: ComputedRef<boolean>
+  changeable: ComputedRef<boolean>
+  slots: Slots
+  getStatus: (index: number, status?: StepStatus) => StepStatus
+  select: (index: number, event: Event) => void
 }
 
-export const stepsInjectionKey: InjectionKey<StepsContext> = Symbol('CedarSteps')
+export const stepsInjectionKey: InjectionKey<StepsContext> = Symbol('Steps')

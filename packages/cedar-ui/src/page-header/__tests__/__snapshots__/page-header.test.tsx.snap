@@ -1,13 +1,18 @@
 // Vitest Snapshot v1
 
 exports[`PageHeader > render 1`] = `
-"<div class=\\"c-page-header\\">
-  <div class=\\"c-page-header-wrapper\\">
-    <!--v-if-->
-    <div class=\\"c-page-header-header\\"><span class=\\"c-page-header-main\\"><!--v-if--><span class=\\"c-page-header-title\\"><h4 class=\\"c-typography c-typography-title--break-word c-page-header-title-text\\" style=\\"overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 1;\\"><span>Title</span></h4></span><span class=\\"c-page-header-divider\\"></span><span class=\\"c-page-header-subtitle\\">Subtitle</span></span>
+"<div class=\\"c-page-header-wrapper\\">
+  <!--v-if-->
+  <header class=\\"c-page-header\\">
+    <div class=\\"c-page-header-main\\">
       <!--v-if-->
+      <!--v-if-->
+      <div class=\\"c-page-header-title\\">Title</div>
+      <div class=\\"c-page-header-subtitle\\">Subtitle</div>
     </div>
-  </div>
+    <!--v-if-->
+  </header>
+  <!--v-if-->
   <!--v-if-->
 </div>"
 `;

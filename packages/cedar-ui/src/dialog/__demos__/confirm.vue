@@ -1,46 +1,38 @@
 <template>
   <c-space>
-    <c-button @click="handleClickConfirm">Confirm</c-button>
-    <c-button status="danger" @click="handleClickDanger">Delete</c-button>
-    <c-button @click="handleClickConfirmNullContent">Confirm Null Content</c-button>
+    <c-button @click="openConfirm">Confirm</c-button>
+    <c-button status="danger" @click="openDangerConfirm">Delete</c-button>
+    <c-button @click="componentOpen = true">Component Confirm</c-button>
   </c-space>
+
+  <c-dialog
+    v-model:open="componentOpen"
+    type="warning"
+    title="Confirm Action"
+    message="Are you sure you want to continue?"
+  />
 </template>
 
-<script lang="ts">
-export default {
-  setup() {
-    const handleClickConfirm = () => {
-      Dialog.warning({
-        title: 'Confirm Notification',
-        message: 'This is an confirm description.',
-        confirmButtonText: 'Confirm',
-        cancelButton: true,
-      })
-    }
-    const handleClickDanger = () => {
-      Dialog.warning({
-        title: 'Danger Notification',
-        message: 'This is an danger description.',
-        confirmButtonText: 'Delete',
-        cancelButton: true,
-        confirmButtonProps: {
-          type: 'primary',
-          status: 'danger',
-        },
-      })
-    }
+<script setup lang="ts">
+import { ref } from "vue";
 
-    const handleClickConfirmNullContent = () => {
-      Dialog.warning({
-        title: 'Confirm Notification',
-      })
-    }
+const componentOpen = ref(false);
 
-    return {
-      handleClickConfirm,
-      handleClickDanger,
-      handleClickConfirmNullContent,
-    }
-  },
+async function openConfirm() {
+  const action = await Dialog.confirm({
+    title: "Confirm Action",
+    message: "Are you sure you want to continue?",
+  });
+  if (action) Message.info(`Dialog action: ${action}`);
+}
+
+async function openDangerConfirm() {
+  const action = await Dialog.confirm({
+    title: "Dangerous Action",
+    message: "This action cannot be undone. Continue?",
+    confirmButtonText: "Delete",
+    confirmButtonProps: { variant: "default", status: "danger" },
+  });
+  if (action) Message.info(`Dialog action: ${action}`);
 }
 </script>

@@ -1,53 +1,20 @@
 <template>
-  <c-space>
-    <c-button @click="handleClick1">Open Dialog 100vh</c-button>
-    <c-button @click="handleClick2">Open Dialog 1500px</c-button>
-  </c-space>
+  <c-button @click="open = true">Open Long Content Dialog</c-button>
 
-  <c-dialog v-model:open="visible1" @confirm="handleConfirm" @cancel="handleCancel" title="height-100vh">
-    <div style="height: 100vh">
-      You can customize modal body text by the current situation. This modal will be closed immediately once you press
-      the OK button.
-    </div>
-  </c-dialog>
-  <c-dialog v-model:open="visible2" @confirm="handleConfirm" @cancel="handleCancel" title="height-1500px">
-    <div style="height: 1500px">
-      You can customize modal body text by the current situation. This modal will be closed immediately once you press
-      the OK button.
-    </div>
+  <c-dialog
+    v-model:open="open"
+    title="Long Content"
+    :body-style="{ maxHeight: '50vh', overflowY: 'auto' }"
+  >
+    <p v-for="item in 12" :key="item">
+      {{ item }}. Long dialog content remains scrollable while the title and
+      actions stay visible.
+    </p>
   </c-dialog>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
-export default defineComponent({
-  setup() {
-    const visible1 = ref(false)
-    const visible2 = ref(false)
+<script setup lang="ts">
+import { ref } from "vue";
 
-    const handleClick1 = () => {
-      visible1.value = true
-    }
-    const handleClick2 = () => {
-      visible2.value = true
-    }
-    const handleConfirm = () => {
-      visible1.value = false
-      visible2.value = false
-    }
-    const handleCancel = () => {
-      visible1.value = false
-      visible2.value = false
-    }
-
-    return {
-      visible1,
-      visible2,
-      handleClick1,
-      handleClick2,
-      handleConfirm,
-      handleCancel,
-    }
-  },
-})
+const open = ref(false);
 </script>

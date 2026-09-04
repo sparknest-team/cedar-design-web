@@ -16,5 +16,6 @@ export { Avatar }
 export { _AvatarGroup as AvatarGroup }
 
 export const _AvatarComponent = Avatar
+export const _AvatarGroupComponent = _AvatarGroup
 
 export default Avatar

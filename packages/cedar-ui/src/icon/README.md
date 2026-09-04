@@ -6,58 +6,6 @@ permalink: /components/icon/
 
 图标以独立 SVG Vue 组件的形式由 `@cedarjs/icons-vue` 提供，支持按需导入和 Tree Shaking。
 
-## 案例
-
-### 基础用法
-
-<demo src="./__demos__/basic-usage.vue"></demo>
-
-### 图标尺寸
-
-<demo src="./__demos__/size.vue"></demo>
-
-### 图标颜色
-
-<demo src="./__demos__/color.vue"></demo>
-
-### 点击事件
-
-<demo src="./__demos__/click.vue"></demo>
-
-### 自定义图标
-
-<demo src="./__demos__/custom.vue"></demo>
-
-### 方向指示类图标
-
-<demo src="./__demos__/direction.vue"></demo>
-
-### 编辑类图标
-
-<demo src="./__demos__/edit.vue"></demo>
-
-### 通用类图标
-
-<demo src="./__demos__/general.vue"></demo>
-
-### 交互按钮类图标
-
-<demo src="./__demos__/interactive-button.vue"></demo>
-
-### 商标类图标
-
-<demo src="./__demos__/logo.vue"></demo>
-
-### 影音类图标
-
-<demo src="./__demos__/media.vue"></demo>
-
-### 提示建议类图标
-
-<demo src="./__demos__/tips.vue"></demo>
-
-## API
-
 配置 `CedarResolver()` 后，推荐使用模板标签自动按需导入。`c-icon-*` 是
 Resolver 的图标命名空间，实际仍只会加载对应的单个图标：
 
@@ -110,6 +58,58 @@ for (const [name, component] of Object.entries(CedarIconsVue)) {
   if (name !== "iconNames") app.component(name, component);
 }
 ```
+
+## 案例
+
+### 基础用法
+
+<demo src="./__demos__/basic-usage.vue"></demo>
+
+### 图标尺寸
+
+<demo src="./__demos__/size.vue"></demo>
+
+### 图标颜色
+
+<demo src="./__demos__/color.vue"></demo>
+
+### 点击事件
+
+<demo src="./__demos__/click.vue"></demo>
+
+### 自定义图标
+
+<demo src="./__demos__/custom.vue"></demo>
+
+### 方向指示类图标
+
+<demo src="./__demos__/direction.vue"></demo>
+
+### 编辑类图标
+
+<demo src="./__demos__/edit.vue"></demo>
+
+### 通用类图标
+
+<demo src="./__demos__/general.vue"></demo>
+
+### 交互按钮类图标
+
+<demo src="./__demos__/interactive-button.vue"></demo>
+
+### 商标类图标
+
+<demo src="./__demos__/logo.vue"></demo>
+
+### 影音类图标
+
+<demo src="./__demos__/media.vue"></demo>
+
+### 提示建议类图标
+
+<demo src="./__demos__/tips.vue"></demo>
+
+## API
 
 ### Icon Props
 

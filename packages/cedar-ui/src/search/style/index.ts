@@ -1,1 +1,5 @@
+import '../../button/style'
+import '../../input/style'
+import '../../menu/style'
+import '../../select/style'
 import './index.less'

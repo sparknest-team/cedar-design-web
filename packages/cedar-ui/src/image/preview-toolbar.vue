@@ -28,7 +28,7 @@ export interface ActionType {
 }
 
 export default defineComponent({
-  name: createNamespace("image-preview-toolbar").name,
+  name: createNamespace('image-preview-toolbar').name,
   components: {
     RenderFunction,
     PreviewAction,
@@ -52,7 +52,8 @@ export default defineComponent({
     const resultActions = computed(() => {
       // 根据 layout 过滤
       const actionsLayoutSet = new Set(actionsLayout.value)
-      const filterWithLayout = (item: ActionType) => actionsLayoutSet.has(item.key)
+      const filterWithLayout = (item: ActionType) =>
+        actionsLayoutSet.has(item.key)
       const filteredActions = actions.value.filter(filterWithLayout)
 
       // 根据 layout 排序

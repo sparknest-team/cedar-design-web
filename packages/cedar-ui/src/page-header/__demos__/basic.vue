@@ -4,7 +4,6 @@
       :style="{ background: 'var(--color-bg-2)' }"
       title="Cedar Design"
       subtitle="页面级标题区"
-      show-back
       @back="onBack"
     >
       <template #extra>
@@ -19,8 +18,6 @@
 </template>
 
 <script lang="ts" setup>
-import { Message } from '@cedarjs/ui'
-
 const onBack = () => {
   Message.info('点击返回')
 }

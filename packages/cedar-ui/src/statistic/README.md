@@ -22,7 +22,7 @@ permalink: /components/statistic/
 
 ### 等宽数字
 
-开启 `tabular-nums` 后数字使用等宽字形，数值变化时宽度更稳定，适合并排对比。
+开启 `tabular-nums` 后，每个数字字符占用相同宽度，适合数值频繁变化或纵向对齐的场景。下面的数值始终保持四位，请观察右侧竖线：比例数字切换时竖线会左右跳动，等宽数字的竖线则保持稳定。
 
 <demo src="./__demos__/tabular-nums.vue"></demo>
 

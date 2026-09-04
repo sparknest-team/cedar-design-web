@@ -1,6 +1,6 @@
 <template>
   <c-affix :offsetBottom="120">
-    <c-button type="primary">120px to affix bottom</c-button>
+    <c-button status="primary">120px to affix bottom</c-button>
   </c-affix>
 </template>
 

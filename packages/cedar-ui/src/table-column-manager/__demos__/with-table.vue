@@ -6,8 +6,8 @@
     </c-alert>
 
     <div style="display: flex; justify-content: flex-end; gap: 8px">
-      <c-button type="outline" @click="openAs('drawer')">抽屉管理列</c-button>
-      <c-button type="outline" @click="openAs('dialog')">弹窗管理列</c-button>
+      <c-button variant="outline" @click="openAs('drawer')">抽屉管理列</c-button>
+      <c-button variant="outline" @click="openAs('dialog')">弹窗管理列</c-button>
     </div>
 
     <c-table v-model:columns="columns" :data="data" :pagination="false" size="xs" />

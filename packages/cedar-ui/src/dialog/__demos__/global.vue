@@ -1,21 +1,51 @@
 <template>
-  <c-button @click="globalOpen">Global Open</c-button>
+  <c-space>
+    <c-button @click="openBasic">Basic</c-button>
+    <c-button @click="openDialog">Open</c-button>
+    <c-button @click="openAndUpdate">Open and Update</c-button>
+    <c-button @click="awaitAction">Await Action</c-button>
+    <c-button @click="hideButtons">Hide Footer Buttons</c-button>
+  </c-space>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-export default defineComponent({
-  setup() {
-    const globalOpen = () => {
-      Dialog.warning({
-        title: '全局方法',
-        message: '内容',
-      })
-    }
+<script setup lang="ts">
+function openBasic() {
+  Dialog.open("This dialog was opened from a string message.");
+}
 
-    return {
-      globalOpen,
-    }
-  },
-})
+function openDialog() {
+  Dialog.open({
+    title: "Global Method",
+    message: "This dialog was opened programmatically.",
+  });
+}
+
+function openAndUpdate() {
+  const instance = Dialog.open({
+    title: "Submitting",
+    message: "Processing the request…",
+  });
+  window.setTimeout(
+    () =>
+      instance.update({
+        title: "Completed",
+        message: "The request succeeded.",
+      }),
+    800,
+  );
+}
+
+async function awaitAction() {
+  const action = await Dialog.open("Choose an action to close this dialog.");
+  if (action) Message.info(`Dialog action: ${action}`);
+}
+
+function hideButtons() {
+  Dialog.open({
+    title: "No Footer Buttons",
+    message: "Click the mask or press Esc to dismiss this dialog.",
+    confirmButton: false,
+    cancelButton: false,
+  });
+}
 </script>

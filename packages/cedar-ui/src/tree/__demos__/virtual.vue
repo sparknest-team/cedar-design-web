@@ -1,5 +1,5 @@
 <template>
-  <c-button type="primary" :style="{ marginBottom: '20px' }" @click="scrollIntoView">
+  <c-button status="primary" :style="{ marginBottom: '20px' }" @click="scrollIntoView">
     Scroll to 0-0-2-2, i.e. the 26th.
   </c-button>
   <c-tree

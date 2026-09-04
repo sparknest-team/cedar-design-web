@@ -5,7 +5,7 @@
     </c-alert>
 
     <div class="demo-toolbar">
-      <c-button type="secondary" size="sm" @click="open">管理列</c-button>
+      <c-button status="secondary" size="sm" @click="open">管理列</c-button>
       <c-link @click="resetToDefault">恢复默认</c-link>
       <span class="demo-summary">已展示 {{ leafColumns.length }} / {{ columnDefinitions.length }} 列</span>
     </div>

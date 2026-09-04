@@ -18,7 +18,7 @@
         <c-link>More</c-link>
       </template>
       <template #action>
-        <c-space><c-button>取消</c-button><c-button type="primary">确定</c-button></c-space>
+        <c-space><c-button>取消</c-button><c-button status="primary">确定</c-button></c-space>
       </template>
     </c-card>
     <br />
@@ -34,7 +34,7 @@
       </template>
       <c-descriptions :data="data" layout="inline-vertical" title="User Info" />
       <template #action>
-        <c-space><c-button>取消</c-button><c-button type="primary">确定</c-button></c-space>
+        <c-space><c-button>取消</c-button><c-button status="primary">确定</c-button></c-space>
       </template>
     </c-card>
   </div>

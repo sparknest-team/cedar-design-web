@@ -1,116 +1,88 @@
 <template>
-  <div ref="itemRef" :class="cls" @click="handleClick">
+  <div role="listitem" :class="cls" @click="handleClick">
     <div v-if="showTail" :class="`${prefixCls}-tail`" />
     <div v-if="type !== 'arrow'" :class="`${prefixCls}-node`">
-      <slot name="node" :step="stepNumber" :status="computedStatus">
+      <slot name="node" v-bind="slotScope">
         <div v-if="type !== 'dot'" :class="iconCls">
-          <slot name="icon" :step="stepNumber" :status="computedStatus">
-            <icon-check v-if="computedStatus === 'finish'" />
+          <slot name="icon" v-bind="slotScope">
+            <component :is="finishIcon" v-if="computedStatus === 'finish' && finishIcon" />
+            <icon-check v-else-if="computedStatus === 'finish'" />
+            <component :is="errorIcon" v-else-if="computedStatus === 'error' && errorIcon" />
             <icon-close v-else-if="computedStatus === 'error'" />
-            <template v-else>{{ stepNumber }}</template>
+            <template v-else>{{ internalIndex }}</template>
           </slot>
         </div>
       </slot>
     </div>
     <div :class="`${prefixCls}-content`">
-      <div :class="`${prefixCls}-title`">
-        <slot>{{ title }}</slot>
+      <div v-if="title || $slots.title || $slots.default" :class="`${prefixCls}-title`">
+        <slot name="title" v-bind="slotScope">
+          <slot v-bind="slotScope">{{ title }}</slot>
+        </slot>
       </div>
       <div v-if="description || $slots.description" :class="`${prefixCls}-description`">
-        <slot name="description">
-          {{ description }}
-        </slot>
+        <slot name="description" v-bind="slotScope">{{ description }}</slot>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { createNamespace } from '../_utils/global-config'
-import { computed, defineComponent, getCurrentInstance, inject, onBeforeUnmount, reactive, ref, toRefs } from 'vue'
-import { getPrefixCls } from '../_utils/global-config'
+import { computed, defineComponent, inject } from 'vue'
 import { IconCheck } from '@cedarjs/icons-vue/icon-check'
 import { IconClose } from '@cedarjs/icons-vue/icon-close'
+import { createNamespace } from '../_utils/global-config'
 import { stepsInjectionKey } from './context'
-import { useIndex } from '../_hooks/use-index'
 import { stepProps } from './props'
 
+const { name } = createNamespace('step')
+const stepsNamespace = createNamespace('steps')
+
 export default defineComponent({
-  name: createNamespace("step").name,
-  components: {
-    IconCheck,
-    IconClose,
-  },
+  name,
+  components: { IconCheck, IconClose },
   props: stepProps,
   setup(props) {
-    const { title, description } = toRefs(props)
-    const prefixCls = getPrefixCls('steps-item')
-    const instance = getCurrentInstance()
-    const iconCls = getPrefixCls('steps-icon')
-
-    const stepsCtx = inject(stepsInjectionKey, undefined)
-
-    const type = computed(() => stepsCtx?.type ?? 'default')
-
-    const itemRef = ref<HTMLElement>()
-    const { computedIndex } = useIndex({
-      itemRef,
-      selector: `.${prefixCls}`,
-      parentClassName: stepsCtx?.parentCls,
-    })
-    const stepNumber = computed(() => computedIndex.value + 1)
-
-    const computedStatus = computed(() => props.status ?? stepsCtx?.getStatus(stepNumber.value) ?? 'process')
-
-    const nextStepError = computed(() => stepsCtx?.errorSteps.includes(stepNumber.value + 1) ?? false)
-
-    if (instance) {
-      stepsCtx?.addItem(
-        instance.uid,
-        reactive({
-          step: stepNumber,
-          status: computedStatus,
-        }),
-      )
-    }
-
-    onBeforeUnmount(() => {
-      if (instance) {
-        stepsCtx?.removeItem(instance.uid)
-      }
-    })
-
+    const steps = inject(stepsInjectionKey)
+    const prefixCls = `${stepsNamespace.n()}-item`
+    const iconCls = `${stepsNamespace.n()}-icon`
+    const computedStatus = computed(() => steps?.getStatus(props.internalIndex, props.status) ?? props.status ?? 'process')
+    const active = computed(() => props.internalIndex === steps?.current.value)
     const showTail = computed(
-      () => stepsCtx?.showLine && (stepsCtx?.labelPlacement === 'vertical' || stepsCtx?.direction === 'vertical'),
+      () => Boolean(steps?.showLine.value && (steps.contentPlacement.value === 'bottom' || steps.direction.value === 'vertical')),
     )
-
-    const handleClick = (ev: Event) => {
-      if (!props.disabled) {
-        stepsCtx?.onClick(stepNumber.value, ev)
-      }
-    }
-
+    const slotScope = computed(() => ({
+      index: props.internalIndex,
+      status: computedStatus.value,
+      active: active.value,
+      disabled: props.disabled,
+    }))
     const cls = computed(() => [
       prefixCls,
       `${prefixCls}-${computedStatus.value}`,
       {
-        [`${prefixCls}-active`]: stepNumber.value === stepsCtx?.current,
-        [`${prefixCls}-next-error`]: nextStepError.value,
+        [`${prefixCls}-active`]: active.value,
+        [`${prefixCls}-next-error`]: props.internalNextStatus === 'error',
         [`${prefixCls}-disabled`]: props.disabled,
       },
     ])
+    const handleClick = (event: Event) => {
+      if (!props.disabled) steps?.select(props.internalIndex, event)
+    }
 
     return {
       prefixCls,
       iconCls,
       cls,
-      itemRef,
-      showTail,
-      stepNumber,
       computedStatus,
-      type,
-      title,
-      description,
+      internalIndex: computed(() => props.internalIndex),
+      title: computed(() => props.title),
+      description: computed(() => props.description),
+      type: computed(() => steps?.type.value ?? 'default'),
+      showTail,
+      slotScope,
+      finishIcon: steps?.slots['finish-icon'],
+      errorIcon: steps?.slots['error-icon'],
       handleClick,
     }
   },

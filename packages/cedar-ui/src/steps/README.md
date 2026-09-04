@@ -20,12 +20,11 @@ permalink: /components/steps/
 
 <demo src="./__demos__/description.vue"></demo>
 
-### 标签放置位置
+### 内容放置位置
 
-通过设置`label-placement`可以改变标签描述文字放置的位置。放置位置分为`horizontal`-**放置在图标右侧**(**默认
-**)、`vertical`-**放置在图标下方**两种。
+通过设置 `content-placement` 可以改变内容相对节点的位置，可选 `right`（默认）和 `bottom`。
 
-<demo src="./__demos__/label-placement.vue"></demo>
+<demo src="./__demos__/content-placement.vue"></demo>
 
 ### 步骤错误
 
@@ -83,20 +82,28 @@ permalink: /components/steps/
 | -------------------- | ------------------------ | ----------------------------------------------------- | -------------- |
 | type                 | 步骤条的类型             | `'default'` \| `'arrow'` \| `'dot'` \| `'navigation'` | `'default'`    |
 | direction            | 步骤条的方向             | `'horizontal'` \| `'vertical'`                        | `'horizontal'` |
-| label-placement      | 描述标签放置位置         | `'horizontal'` \| `'vertical'`                        | `'horizontal'` |
+| content-placement    | 内容相对节点的位置       | `'right'` \| `'bottom'`                               | `'right'`      |
 | current(**v-model**) | 当前步骤数               | `number`                                              | `-`            |
 | default-current      | 默认的步骤数(非受控状态) | `number`                                              | `1`            |
 | status               | 当前步骤状态             | `'wait'` \| `'process'` \| `'finish'` \| `'error'`    | `'process'`    |
 | show-line            | 是否显示连接线           | `boolean`                                             | `true`         |
-| small                | 是否使用小型连接线       | `boolean`                                             | `false`        |
+| size                 | 步骤条尺寸               | `'sm'` \| `'md'`                                     | `'md'`         |
 | changeable           | 是否可以点击切换步骤     | `boolean`                                             | `false`        |
 
 ### Steps Events
 
 | 事件名              | 说明                           | 参数                         |
 | ------------------- | ------------------------------ | ---------------------------- |
-| change              | 步骤数发生改变时触发（需开启 `changeable`） | step:`number`<br/>ev:`Event` |
+| change              | 步骤数发生改变时触发（需开启 `changeable`） | current:`number`<br/>previous:`number`<br/>ev:`Event` |
 | update:current      | `v-model:current` 同步         | step:`number`                |
+
+### Steps Slots
+
+| 插槽名      | 说明         |
+| ----------- | ------------ |
+| default     | 步骤内容     |
+| finish-icon | 完成状态图标 |
+| error-icon  | 错误状态图标 |
 
 ### Step Props
 
@@ -111,9 +118,11 @@ permalink: /components/steps/
 
 | 插槽名      | 说明 | 参数                              |
 | ----------- | ---- | --------------------------------- |
-| node        | 节点 | step:`number`<br/>status:`string` |
-| icon        | 图标 | step:`number`<br/>status:`string` |
-| description | 描述 | `-`                               |
+| default     | 标题 | `index`、`status`、`active`、`disabled` |
+| title       | 标题 | `index`、`status`、`active`、`disabled` |
+| node        | 节点 | `index`、`status`、`active`、`disabled` |
+| icon        | 图标 | `index`、`status`、`active`、`disabled` |
+| description | 描述 | `index`、`status`、`active`、`disabled` |
 
 ## 类型定义
 
@@ -125,6 +134,8 @@ import type {
   StepProps,
   StepsType,
   StepStatus,
+  StepsSize,
+  StepsContentPlacement,
   StepsInstance,
   StepsStepInstance,
 } from '@cedarjs/ui'

@@ -3,13 +3,13 @@
     <c-alert closable>
       This is an info alert.
       <template #action>
-        <c-button size="sm" type="primary">Detail</c-button>
+        <c-button size="sm" status="primary">Detail</c-button>
       </template>
     </c-alert>
     <c-alert title="Example" closable>
       This is an info alert.
       <template #action>
-        <c-button size="sm" type="primary">Detail</c-button>
+        <c-button size="sm" status="primary">Detail</c-button>
       </template>
     </c-alert>
   </c-space>

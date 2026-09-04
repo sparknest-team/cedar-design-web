@@ -13,6 +13,7 @@ export type TimelineItemInstance = InstanceType<typeof _TimelineItem>
 export { _TimelineItem as TimelineItem }
 
 export const _TimelineComponent = Timeline
+export const _TimelineItemComponent = _TimelineItem
 
 export { Timeline }
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { resolve } from 'node:path'
-import { buildLibrary } from '@loca/ui-build'
+import { buildLibrary } from '../src/index.mjs'
 import { generateLibraryEntry } from '../src/generateLibraryEntry.mjs'
 
 const [command, configPath = 'ui-build.config.mjs'] = process.argv.slice(2)

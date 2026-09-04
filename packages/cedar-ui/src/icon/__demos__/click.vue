@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Message } from '@cedarjs/ui'
 </script>
 
 <template>

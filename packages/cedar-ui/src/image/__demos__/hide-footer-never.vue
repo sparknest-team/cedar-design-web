@@ -5,9 +5,8 @@
     description="Present by Cedar Design"
     :hide-footer="'never'"
     src="invalid-image-url"
-    :preview="false"
+    preview-disabled
   />
 </template>
 
-<script lang="ts" setup>
-</script>
+<script lang="ts" setup></script>

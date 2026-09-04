@@ -1,9 +1,9 @@
 <template>
   <c-button-group style="margin-bottom: 20px">
-    <c-button type="primary" @click="toggleChecked">
+    <c-button status="primary" @click="toggleChecked">
       {{ checkedKeys?.length ? 'deselect all' : 'select all' }}
     </c-button>
-    <c-button type="primary" @click="toggleExpanded">
+    <c-button status="primary" @click="toggleExpanded">
       {{ expandedKeys?.length ? 'fold' : 'unfold' }}
     </c-button>
   </c-button-group>

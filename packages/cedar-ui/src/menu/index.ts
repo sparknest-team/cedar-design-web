@@ -26,6 +26,9 @@ export {
 }
 
 export const _MenuComponent = Menu
+export const _MenuOptionComponent = _MenuOption
+export const _MenuGroupComponent = _MenuGroup
+export const _MenuSubmenuComponent = _MenuSubmenu
 
 export { menuProps }
 

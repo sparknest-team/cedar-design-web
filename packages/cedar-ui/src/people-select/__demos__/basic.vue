@@ -1,7 +1,7 @@
 <template>
   <c-space>
     <c-input v-model="token" style="width: 200px" placeholder="请设置最新的token" />
-    <Button type="primary" @click="setToken">更新token</Button>
+    <Button status="primary" @click="setToken">更新token</Button>
   </c-space>
   <c-space v-if="fetch" direction="column" fill>
     <c-people-select

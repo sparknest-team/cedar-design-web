@@ -17,7 +17,7 @@
     <p>如果token过期，请把test环境自己的token粘贴到输入框，点击更新token并刷新页面即可。</p>
     <Space>
       <c-input v-model="token" style="width: 200px" placeholder="请设置最新的token" />
-      <c-button type="primary" @click="setToken">更新token</c-button>
+      <c-button status="primary" @click="setToken">更新token</c-button>
     </Space>
   </div>
 </template>

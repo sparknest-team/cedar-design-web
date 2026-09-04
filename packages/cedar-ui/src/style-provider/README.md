@@ -17,7 +17,7 @@ permalink: /components/style-provider/
 ```vue
 <template>
   <c-style-provider :style-vars="styleVars">
-    <c-button type="primary" @click="toggle">切换主色</c-button>
+    <c-button status="primary" @click="toggle">切换主色</c-button>
   </c-style-provider>
 </template>
 

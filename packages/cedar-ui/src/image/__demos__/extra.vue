@@ -8,7 +8,7 @@
     :preview-open="open1"
     @preview-open-change="
       () => {
-        open1 = false
+        open1 = false;
       }
     "
   >
@@ -18,7 +18,7 @@
           class="action"
           @click="
             () => {
-              open1 = true
+              open1 = true;
             }
           "
           ><c-icon-eye
@@ -39,7 +39,7 @@
     :preview-open="open2"
     @preview-open-change="
       () => {
-        open2 = false
+        open2 = false;
       }
     "
   >
@@ -49,7 +49,7 @@
           class="action"
           @click="
             () => {
-              open2 = true
+              open2 = true;
             }
           "
           ><c-icon-eye
@@ -64,14 +64,14 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref } from "vue";
 
-const open1 = ref(false)
-const open2 = ref(false)
+const open1 = ref(false);
+const open2 = ref(false);
 
 const onDownLoad = () => {
-  console.log('download')
-}
+  console.log("download");
+};
 </script>
 
 <style scoped>

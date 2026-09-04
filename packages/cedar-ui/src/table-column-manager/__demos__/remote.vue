@@ -6,7 +6,7 @@
     </c-alert>
 
     <div class="demo-toolbar">
-      <c-button type="secondary" size="sm" @click="open">远程管理列</c-button>
+      <c-button status="secondary" size="sm" @click="open">远程管理列</c-button>
       <c-link @click="resetToDefault">恢复本地默认列</c-link>
     </div>
 

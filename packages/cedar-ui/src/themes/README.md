@@ -31,10 +31,10 @@ Cedar 色板与 Maple 结构对齐：**RGB 通道色阶** + **语义色** + **�
 ```vue
 <template>
   <c-space>
-    <c-button type="primary" @click="StyleProvider(null)">亮色</c-button>
-    <c-button type="primary" @click="StyleProvider(Themes.dark)">暗色</c-button>
-    <c-button type="primary" @click="StyleProvider(Themes.md3Light)">MD3 亮色</c-button>
-    <c-button type="primary" @click="StyleProvider(Themes.md3Dark)">MD3 暗色</c-button>
+    <c-button status="primary" @click="StyleProvider(null)">亮色</c-button>
+    <c-button status="primary" @click="StyleProvider(Themes.dark)">暗色</c-button>
+    <c-button status="primary" @click="StyleProvider(Themes.md3Light)">MD3 亮色</c-button>
+    <c-button status="primary" @click="StyleProvider(Themes.md3Dark)">MD3 暗色</c-button>
   </c-space>
 </template>
 

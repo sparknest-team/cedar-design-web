@@ -53,6 +53,43 @@ describe('Steps', () => {
     await wrapper.findAll('.c-steps-item')[1].trigger('click')
     expect(onChange).toHaveBeenCalled()
     expect(onChange.mock.calls[0][0]).toBe(2)
+    expect(onChange.mock.calls[0][1]).toBe(1)
+  })
+
+  test('uses the shared size and content placement API', async () => {
+    const wrapper = mount(Steps, {
+      props: { size: 'sm', contentPlacement: 'bottom' },
+      slots: { default: () => [h(Step, null, () => 'A')] },
+    })
+
+    expect(wrapper.classes()).toContain('c-steps-size-sm')
+    expect(wrapper.classes()).toContain('c-steps-label-vertical')
+    expect(wrapper.find('.c-steps-item-tail').exists()).toBe(true)
+  })
+
+  test('supports shared status icon slots', () => {
+    const wrapper = mount(Steps, {
+      props: { current: 2 },
+      slots: {
+        default: () => [h(Step, null, () => 'A'), h(Step, null, () => 'B')],
+        'finish-icon': () => h('span', { class: 'finish-icon' }),
+      },
+    })
+
+    expect(wrapper.find('.finish-icon').exists()).toBe(true)
+  })
+
+  test('does not select a disabled step', async () => {
+    const onChange = vi.fn()
+    const wrapper = mount(Steps, {
+      props: { current: 1, changeable: true, onChange },
+      slots: {
+        default: () => [h(Step, null, () => 'A'), h(Step, { disabled: true }, () => 'B')],
+      },
+    })
+
+    await wrapper.findAll('.c-steps-item')[1].trigger('click')
+    expect(onChange).not.toHaveBeenCalled()
   })
 
   test('status error on current step', async () => {

@@ -14,6 +14,7 @@ export type { ValidateStatus, ValidateTrigger, ValidatedError, FieldRule, FormIt
 export { _FormItem as FormItem }
 
 export const _FormComponent = Form
+export const _FormItemComponent = _FormItem
 
 export { Form }
 

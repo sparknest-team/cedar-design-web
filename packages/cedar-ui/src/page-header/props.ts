@@ -1,4 +1,4 @@
-import type { ExtractPropTypes, PropType } from 'vue'
+import type { ExtractPropTypes, VNode } from 'vue'
 
 export const pageHeaderProps = {
   /**
@@ -12,13 +12,21 @@ export const pageHeaderProps = {
    */
   subtitle: String,
   /**
-   * @zh 是否显示返回按钮
-   * @en Whether to show the back button
+   * @zh 右侧附加内容
+   * @en Extra content on the right
    */
-  showBack: {
-    type: Boolean as PropType<boolean>,
-    default: false,
-  },
+  extra: String,
 }
 
 export type PageHeaderProps = ExtractPropTypes<typeof pageHeaderProps>
+
+export interface PageHeaderSlots {
+  header?: () => VNode[]
+  back?: () => VNode[]
+  avatar?: () => VNode[]
+  title?: () => VNode[]
+  subtitle?: () => VNode[]
+  extra?: () => VNode[]
+  default?: () => VNode[]
+  footer?: () => VNode[]
+}

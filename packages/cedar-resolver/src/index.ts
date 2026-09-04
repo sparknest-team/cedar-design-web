@@ -9,7 +9,15 @@ export interface CedarResolverOptions {
   autoImport?: boolean
 }
 
-const cedarFunctions = ['Dialog', 'Message', 'Notification']
+const cedarFunctions = [
+  'Dialog',
+  'Drawer',
+  'ImagePreviewFn',
+  'Message',
+  'Notification',
+  'StyleProvider',
+  'previewImage',
+]
 const cedarDirectives: Record<string, string> = {
   Loading: 'vLoading',
   Tooltip: 'vTooltip',
@@ -53,6 +61,7 @@ const styleDirAliases: Record<string, string> = {
   ImagePreview: 'image',
   ImagePreviewAction: 'image',
   ImagePreviewFn: 'image',
+  previewImage: 'image',
   ImagePreviewGroup: 'image',
   InputGroup: 'input',
   InputGroupLabel: 'input',
@@ -81,7 +90,7 @@ const styleDirAliases: Record<string, string> = {
 }
 
 /** Components without a style directory; resolve without style side effects. */
-const noStyleComponents = new Set(['Color', 'SplitButton', 'StyleProvider'])
+const noStyleComponents = new Set(['Color', 'Context', 'SplitButton', 'StyleProvider'])
 
 function getStyleSideEffects(name: string, importStyle = true) {
   if (!importStyle || noStyleComponents.has(name)) {
@@ -91,10 +100,10 @@ function getStyleSideEffects(name: string, importStyle = true) {
   return [`@cedarjs/ui/${dir}/style`]
 }
 
-export function resolveCedarComponent(name: string, options: CedarResolverOptions = {}) {
+export function resolveCedarComponent(name: string, options: CedarResolverOptions = {}, programmatic = false) {
   return {
     from: '@cedarjs/ui',
-    name,
+    name: programmatic ? name : `_${name}Component`,
     sideEffects: getStyleSideEffects(name, options.importStyle),
   }
 }
@@ -125,7 +134,7 @@ export function CedarResolver(options: CedarResolverOptions = {}) {
         }
 
         if (options.autoImport !== false && cedarFunctions.includes(name)) {
-          return resolveCedarComponent(name, options)
+          return resolveCedarComponent(name, options, true)
         }
       },
     },

@@ -20,6 +20,9 @@ export type { ResponsiveValue, RowProps, ColProps, GridProps, GridItemProps } fr
 
 export { _GridRow as Row, _GridCol as Col, _GridItem as GridItem }
 export const _GridComponent = Grid
+export const _RowComponent = _GridRow
+export const _ColComponent = _GridCol
+export const _GridItemComponent = _GridItem
 
 export { Grid }
 

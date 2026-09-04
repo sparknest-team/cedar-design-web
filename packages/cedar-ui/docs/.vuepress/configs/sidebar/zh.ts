@@ -333,10 +333,6 @@ export const zhSideBar: SidebarConfig = {
           link: "/components/image/",
         },
         {
-          text: "ImagePreview 图片预览",
-          link: "/components/image-preview/",
-        },
-        {
           text: "Tabs 标签页",
           link: "/components/tabs/",
         },
@@ -446,17 +442,12 @@ export const zhSideBar: SidebarConfig = {
           link: "/components/progress/",
         },
         {
+          text: "ProgressGroup 分段进度条",
+          link: "/components/progress-group/",
+        },
+        {
           text: "Result 结果",
           link: "/components/result/",
-        },
-      ],
-    },
-    {
-      text: "业务组件",
-      children: [
-        {
-          text: "SaasPage 页面布局",
-          link: "/components/saas-page/",
         },
       ],
     },

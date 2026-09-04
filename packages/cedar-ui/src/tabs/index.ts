@@ -20,6 +20,10 @@ export type TabItemInstance = InstanceType<typeof _TabItem>
 export { _TabNav as TabNav, _TabItem as TabItem, _TabsNavs as TabsNavs, _TabsItems as TabsItems }
 
 export const _TabsComponent = Tabs
+export const _TabNavComponent = _TabNav
+export const _TabItemComponent = _TabItem
+export const _TabsNavsComponent = _TabsNavs
+export const _TabsItemsComponent = _TabsItems
 
 export { Tabs }
 

@@ -29,6 +29,10 @@ export {
 }
 
 export const _LayoutComponent = Layout
+export const _LayoutHeaderComponent = _LayoutHeader
+export const _LayoutContentComponent = _LayoutContent
+export const _LayoutFooterComponent = _LayoutFooter
+export const _LayoutSiderComponent = _LayoutSider
 
 export { Layout }
 

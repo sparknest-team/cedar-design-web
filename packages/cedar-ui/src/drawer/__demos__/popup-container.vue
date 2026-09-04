@@ -12,7 +12,7 @@
         text-align: center;
       "
     >
-      <c-button type="primary" @click="handleClick">Open Drawer</c-button>
+      <c-button status="primary" @click="handleClick">Open Drawer</c-button>
     </div>
   </div>
   <c-drawer popup-container="#parentNode" :open="visible" @confirm="handleConfirm" @cancel="handleCancel">

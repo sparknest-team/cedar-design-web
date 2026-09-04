@@ -24,5 +24,7 @@ export type { SelectProps } from './props'
 
 export { Select, _Option as Option, _Optgroup as Optgroup }
 export const _SelectComponent = Select
+export const _OptionComponent = _Option
+export const _OptgroupComponent = _Optgroup
 
 export default Select
