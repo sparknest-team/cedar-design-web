@@ -19,6 +19,7 @@ export type {
   SkeletonShapeProps,
   SkeletonShapeSize,
   SkeletonShapeType,
+  SkeletonSize,
 } from './props'
 export { Skeleton }
 export { _SkeletonLine as SkeletonLine, _SkeletonShape as SkeletonShape }

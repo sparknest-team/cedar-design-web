@@ -1,63 +1,116 @@
-@import './token.less';
+@import "./token.less";
 
-.c-skeleton {
-  &-shape {
-    width: var(~'--c-skeleton-size-image-md');
-    height: var(~'--c-skeleton-size-image-md');
-    background-color: var(~'--c-skeleton-bg-base');
-    border-radius: var(~'--c-skeleton-image-border-radius');
-
-    &-circle {
-      border-radius: 50%;
-    }
-
-    &-sm {
-      width: var(~'--c-skeleton-size-image-sm');
-      height: var(~'--c-skeleton-size-image-sm');
-    }
-
-    &-lg {
-      width: var(~'--c-skeleton-size-image-lg');
-      height: var(~'--c-skeleton-size-image-lg');
-    }
+@keyframes c-skeleton-animation {
+  from {
+    transform: translateX(-100%);
   }
-
-  &-line {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-
-    &-row {
-      height: var(~'--c-skeleton-size-row-height');
-      background-color: var(~'--c-skeleton-bg-base');
-    }
-
-    &-row:not(:last-child) {
-      margin-bottom: var(~'--c-skeleton-spacing-last-row-margin-bottom');
-    }
-  }
-
-  &-animation {
-    .c-skeleton-shape,
-    .c-skeleton-line-row {
-      background: linear-gradient(
-        90deg,
-        var(~'--c-skeleton-bg-base') 25%,
-        var(~'--c-skeleton-animate-bg') 37%,
-        var(~'--c-skeleton-bg-base') 63%
-      );
-      background-size: 400% 100%;
-      animation: ~'c-skeleton-circle' 1.5s var(~'--c-transition-timing-function-linear') infinite;
-    }
+  to {
+    transform: translateX(100%);
   }
 }
 
-@keyframes ~'c-skeleton-circle' {
-  0% {
-    background-position: 100% 50%;
-  }
+.c-skeleton {
+  width: 100%;
 
-  100% {
-    background-position: 0 50%;
+  &__content {
+    padding: var(--c-skeleton-content-padding);
+  }
+  &__card {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: var(--c-skeleton-card-height);
+    background-color: var(--c-skeleton-card-background-color);
+    margin-bottom: var(--c-skeleton-card-margin-bottom);
+    border-radius: var(--c-skeleton-card-border-radius);
+    transition: background-color 0.25s;
+  }
+  &__article {
+    display: flex;
+    width: 100%;
+  }
+  &__avatar {
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+    width: var(--c-skeleton-avatar-size);
+    height: var(--c-skeleton-avatar-size);
+    border-radius: var(--c-skeleton-avatar-border-radius);
+    background-color: var(--c-skeleton-avatar-background-color);
+    margin-right: var(--c-skeleton-avatar-margin-right);
+    transition: 0.25s background-color;
+  }
+  &__section {
+    width: 100%;
+    padding-top: 8px;
+  }
+  &__title {
+    position: relative;
+    overflow: hidden;
+    width: var(--c-skeleton-title-width);
+    height: var(--c-skeleton-row-height);
+    background-color: var(--c-skeleton-title-background-color);
+    border-radius: var(--c-skeleton-title-border-radius);
+    transition: 0.25s background-color;
+  }
+  &__row {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: var(--c-skeleton-row-height);
+    background-color: var(--c-skeleton-title-background-color);
+    margin-top: var(--c-skeleton-row-margin-top);
+    border-radius: var(--c-skeleton-row-border-radius);
+    transition: 0.25s background-color;
+  }
+  &__fullscreen {
+    position: fixed;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: var(--c-skeleton-title-background-color);
+    transition: 0.25s background-color;
+  }
+  &__shimmer {
+    position: absolute;
+    inset: 0;
+  }
+  &--animation &__shimmer {
+    z-index: 1;
+    animation: c-skeleton-animation 1s infinite;
+    background: var(--c-skeleton-animation-background);
+  }
+}
+
+.c-skeleton-line {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  &__row {
+    width: 100%;
+    background-color: var(--c-skeleton-title-background-color);
+    border-radius: var(--c-skeleton-row-border-radius);
+  }
+}
+
+.c-skeleton-shape {
+  width: var(--c-skeleton-shape-size-md);
+  height: var(--c-skeleton-shape-size-md);
+  background-color: var(--c-skeleton-title-background-color);
+  border-radius: var(--c-skeleton-shape-border-radius);
+  &--circle {
+    border-radius: 50%;
+  }
+  &--sm {
+    width: var(--c-skeleton-shape-size-sm);
+    height: var(--c-skeleton-shape-size-sm);
+  }
+  &--lg {
+    width: var(--c-skeleton-shape-size-lg);
+    height: var(--c-skeleton-shape-size-lg);
   }
 }

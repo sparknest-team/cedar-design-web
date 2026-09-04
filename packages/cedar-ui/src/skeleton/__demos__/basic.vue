@@ -1,11 +1,9 @@
-<template>
-  <c-skeleton>
-    <c-space direction="column" :style="{ width: '100%' }" size="lg">
-      <c-skeleton-line :rows="3" />
-      <c-skeleton-shape  />
-    </c-space>
-  </c-skeleton>
-</template>
-
-<script lang="ts" setup>
+<script setup lang="ts">
+import { ref } from "vue";
+const loading = ref(true);
 </script>
+
+<template>
+  <c-switch v-model="loading" />
+  <c-skeleton :loading="loading">加载的数据</c-skeleton>
+</template>

@@ -1,41 +1,29 @@
 <template>
-  <ul v-for="(style, index) of lines" :key="index" :class="prefixCls">
-    <li :class="`${prefixCls}-row`" :style="style" />
+  <ul :class="n()">
+    <li
+      v-for="(style, index) in lines"
+      :key="index"
+      :class="n('row')"
+      :style="style"
+    />
   </ul>
 </template>
 
-<script lang="ts">
-import type { CSSProperties } from 'vue'
-import { defineComponent } from 'vue'
-import { createNamespace, getPrefixCls } from '../_utils/global-config'
-import { isNumber, isString } from '../_utils/is'
-import { skeletonLineProps } from './props'
+<script lang="ts" setup>
+import type { CSSProperties } from "vue";
+import { computed } from "vue";
+import { createNamespace } from "../_utils/global-config";
+import { toSizeUnit } from "../_utils/maple/elements";
+import { skeletonLineProps } from "./props";
 
-export default defineComponent({
-  name: createNamespace('skeleton-line').name,
-  props: skeletonLineProps,
-  setup(props) {
-    const prefixCls = getPrefixCls('skeleton-line')
-
-    const lines: CSSProperties[] = []
-    for (let i = 0; i < props.rows; i++) {
-      const style: CSSProperties = {}
-      if (isNumber(props.widths[i])) {
-        style.width = `${props.widths[i]}px`
-      } else if (isString(props.widths[i])) {
-        style.width = String(props.widths[i])
-      }
-      style.height = `${props.lineHeight}px`
-      if (i > 0) {
-        style.marginTop = `${props.lineSpacing}px`
-      }
-      lines.push(style)
-    }
-
-    return {
-      prefixCls,
-      lines,
-    }
-  },
-})
+defineOptions({ name: createNamespace("skeleton-line").name });
+const { n } = createNamespace("skeleton-line");
+const props = defineProps(skeletonLineProps);
+const lines = computed<CSSProperties[]>(() =>
+  Array.from({ length: Math.max(0, props.rows) }, (_, index) => ({
+    width: toSizeUnit(props.widths[index]),
+    height: toSizeUnit(props.lineHeight),
+    marginTop: index > 0 ? toSizeUnit(props.lineSpacing) : undefined,
+  })),
+);
 </script>

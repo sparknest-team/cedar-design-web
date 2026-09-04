@@ -10,30 +10,55 @@ permalink: /components/skeleton/
 
 ### 基础用法
 
-骨架屏组件提供 `<a-skeleton-line>` 和 `<a-skeleton-shape>` 两种组件，用户可根据需要组合使用。
-
 <demo src="./__demos__/basic.vue"></demo>
 
-### 图形骨架屏
+### 标题与段落
 
-图形骨架屏分为 `square` - **正方形（默认）**、 `circle` - **圆形**两种形状，并提供 `sm`、`md`、`lg` 三种尺寸。
+<demo src="./__demos__/title-and-rows.vue"></demo>
 
-<demo src="./__demos__/type.vue"></demo>
+### 头像与卡片
+
+<demo src="./__demos__/avatar-and-card.vue"></demo>
+
+### 自定义模板
+
+通过 `template` 插槽组合 `SkeletonLine` 和 `SkeletonShape`。
+
+<demo src="./__demos__/custom-template.vue"></demo>
 
 ### 动画
 
-通过设置 `animation` 属性，让骨架屏显示动画效果。
-
 <demo src="./__demos__/animation.vue"></demo>
+
+### 全屏模式
+
+<demo src="./__demos__/fullscreen.vue"></demo>
 
 ## API
 
 ### `<skeleton>` Props
 
-| 参数名    | 描述                         | 类型      | 默认值  |
-| --------- | ---------------------------- | --------- | :-----: |
-| loading   | 是否展示骨架屏（加载中状态） | `boolean` | `true`  |
-| animation | 是否开启骨架屏动画           | `boolean` | `false` |
+| 参数名             | 描述                         | 类型                      | 默认值  |
+| ------------------ | ---------------------------- | ------------------------- | :-----: |
+| loading            | 是否展示骨架屏（加载中状态） | `boolean`                 | `true`  |
+| animation          | 是否开启骨架屏动画           | `boolean`                 | `true`  |
+| title              | 是否显示标题占位             | `boolean`                 | `false` |
+| avatar             | 是否显示头像占位             | `boolean`                 | `false` |
+| card               | 是否显示卡片占位             | `boolean`                 | `false` |
+| rows               | 段落行数                     | `number \| string`        |   `3`   |
+| rows-width         | 每行宽度                     | `Array<number \| string>` |  `[]`   |
+| title-width        | 标题宽度                     | `number \| string`        |   `-`   |
+| avatar-size        | 头像尺寸                     | `number \| string`        |   `-`   |
+| card-height        | 卡片高度                     | `number \| string`        |   `-`   |
+| fullscreen         | 是否使用全屏占位             | `boolean`                 | `false` |
+| fullscreen-z-index | 全屏占位层级                 | `number \| string`        |  `100`  |
+
+### `<skeleton>` Slots
+
+| 插槽名   | 描述                 |
+| -------- | -------------------- |
+| default  | 加载完成后的真实内容 |
+| template | 自定义加载占位模板   |
 
 ### `<skeleton-line>` Props
 
@@ -56,5 +81,9 @@ permalink: /components/skeleton/
 组件导出以下类型定义
 
 ```ts
-import type { SkeletonInstance } from '@cedarjs/ui'
+import type {
+  SkeletonInstance,
+  SkeletonLineProps,
+  SkeletonShapeProps,
+} from "@cedarjs/ui";
 ```

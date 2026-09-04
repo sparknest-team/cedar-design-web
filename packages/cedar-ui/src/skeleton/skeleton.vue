@@ -1,32 +1,75 @@
 <template>
-  <div :class="cls">
-    <slot v-if="loading" />
-    <slot v-else name="content" />
+  <div
+    :class="classes(n(), [animation, n('--animation')])"
+    :aria-busy="loading"
+  >
+    <template v-if="loading">
+      <div
+        v-if="fullscreen"
+        :class="n('fullscreen')"
+        :style="{ zIndex: toNumber(fullscreenZIndex) }"
+      >
+        <span :class="n('shimmer')" />
+      </div>
+      <slot v-else name="template">
+        <div :class="n('content')">
+          <div
+            v-if="card"
+            :class="n('card')"
+            :style="{ height: toSizeUnit(cardHeight) }"
+          >
+            <span :class="n('shimmer')" />
+          </div>
+          <div v-if="avatar || title || rowCount > 0" :class="n('article')">
+            <div
+              v-if="avatar"
+              :class="n('avatar')"
+              :style="{
+                width: toSizeUnit(avatarSize),
+                height: toSizeUnit(avatarSize),
+              }"
+            >
+              <span :class="n('shimmer')" />
+            </div>
+            <div v-if="title || rowCount > 0" :class="n('section')">
+              <div
+                v-if="title"
+                :class="n('title')"
+                :style="{ width: toSizeUnit(titleWidth) }"
+              >
+                <span :class="n('shimmer')" />
+              </div>
+              <div
+                v-for="(_, index) in rowCount"
+                :key="index"
+                :class="n('row')"
+                :style="{ width: toSizeUnit(rowsWidth[index]) }"
+              >
+                <span :class="n('shimmer')" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </slot>
+    </template>
+    <slot v-else />
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from 'vue'
-import { createNamespace, getPrefixCls } from '../_utils/global-config'
-import { skeletonProps } from './props'
+<script lang="ts" setup>
+import { computed } from "vue";
+import { createNamespace } from "../_utils/global-config";
+import { toSizeUnit } from "../_utils/maple/elements";
+import { skeletonProps } from "./props";
 
-export default defineComponent({
-  name: createNamespace('skeleton').name,
-  props: skeletonProps,
-  setup(props) {
-    const prefixCls = getPrefixCls('skeleton')
+defineOptions({ name: createNamespace("skeleton").name });
 
-    const cls = computed(() => [
-      prefixCls,
-      {
-        [`${prefixCls}-animation`]: props.animation,
-      },
-    ])
+const { n, classes } = createNamespace("skeleton");
+const props = defineProps(skeletonProps);
+const rowCount = computed(() => Math.max(0, Math.floor(toNumber(props.rows))));
 
-    return {
-      prefixCls,
-      cls,
-    }
-  },
-})
+function toNumber(value: number | string | undefined) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
 </script>
