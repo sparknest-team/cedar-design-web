@@ -57,11 +57,14 @@
         ]"
         :style="computedDropdownStyle"
       >
-        <div v-if="$slots.header && (!isEmpty || showHeaderOnEmpty)" :class="`${prefixCls}-header`">
+        <div
+          v-if="$slots.header && (!isEmpty || showHeaderOnEmpty)"
+          :class="`${prefixCls}-header`"
+        >
           <slot name="header" />
         </div>
         <slot v-if="loading" name="loader">
-          <Spin />
+          <Loading />
         </slot>
         <slot v-else-if="isEmpty" name="empty">
           <component :is="TreeSelectEmpty ? TreeSelectEmpty : 'Empty'" />
@@ -90,7 +93,10 @@
           :tree-slots="pickSubCompSlots($slots, 'tree')"
           @change="onSelectChange"
         />
-        <div v-if="$slots.footer && (!isEmpty || showFooterOnEmpty)" :class="`${prefixCls}-footer`">
+        <div
+          v-if="$slots.footer && (!isEmpty || showFooterOnEmpty)"
+          :class="`${prefixCls}-footer`"
+        >
           <slot name="footer" />
         </div>
       </div>
@@ -98,8 +104,8 @@
   </Trigger>
 </template>
 <script lang="ts">
-import { treeSelectProps } from './props'
-import { createNamespace } from '../_utils/global-config'
+import { treeSelectProps } from "./props";
+import { createNamespace } from "../_utils/global-config";
 import {
   computed,
   CSSProperties,
@@ -111,29 +117,38 @@ import {
   toRefs,
   StyleValue,
   inject,
-} from 'vue'
-import useMergeState from '../_hooks/use-merge-state'
-import { LabelValue } from './types'
-import Trigger, { TriggerProps } from '../trigger'
-import SelectView from '../_components/select-view/select-view'
-import Panel from './panel'
-import { getPrefixCls } from '../_utils/global-config'
-import { configProviderInjectionKey } from '../config-provider/context'
-import useSelectedState from './hooks/use-selected-state'
-import useTreeData from '../tree/hooks/use-tree-data'
-import { TreeFieldNames, TreeNodeData, TreeProps, TreeNodeKey, Node } from '../tree/types'
-import { isUndefined, isFunction, isObject } from '../_utils/is'
-import Empty from '../empty'
-import useFilterTreeNode from './hooks/use-filter-tree-node'
-import Spin from '../spin'
-import pickSubCompSlots from '../_utils/pick-sub-comp-slots'
-import { ComponentSize } from '../_utils/constant'
-import { useFormItem } from '../_hooks/use-form-item'
-import { getCheckedStateByCheck, isNodeCheckable } from '../tree/utils/check-utils'
-import { isNodeSelectable } from '../tree/utils'
-import { Data } from '../_utils/types'
-import { ScrollbarProps } from '../scrollbar'
-import { SelectViewValue } from '../_components/select-view/interface'
+} from "vue";
+import useMergeState from "../_hooks/use-merge-state";
+import { LabelValue } from "./types";
+import Trigger, { TriggerProps } from "../trigger";
+import SelectView from "../_components/select-view/select-view";
+import Panel from "./panel";
+import { getPrefixCls } from "../_utils/global-config";
+import { configProviderInjectionKey } from "../config-provider/context";
+import useSelectedState from "./hooks/use-selected-state";
+import useTreeData from "../tree/hooks/use-tree-data";
+import {
+  TreeFieldNames,
+  TreeNodeData,
+  TreeProps,
+  TreeNodeKey,
+  Node,
+} from "../tree/types";
+import { isUndefined, isFunction, isObject } from "../_utils/is";
+import Empty from "../empty";
+import useFilterTreeNode from "./hooks/use-filter-tree-node";
+import Loading from "../loading";
+import pickSubCompSlots from "../_utils/pick-sub-comp-slots";
+import { ComponentSize } from "../_utils/constant";
+import { useFormItem } from "../_hooks/use-form-item";
+import {
+  getCheckedStateByCheck,
+  isNodeCheckable,
+} from "../tree/utils/check-utils";
+import { isNodeSelectable } from "../tree/utils";
+import { Data } from "../_utils/types";
+import { ScrollbarProps } from "../scrollbar";
+import { SelectViewValue } from "../_components/select-view/interface";
 
 export default defineComponent({
   name: createNamespace("tree-select").name,
@@ -142,7 +157,7 @@ export default defineComponent({
     SelectView,
     Panel,
     Empty,
-    Spin,
+    Loading,
   },
   inheritAttrs: false,
   props: treeSelectProps,
@@ -152,17 +167,32 @@ export default defineComponent({
      * @en Trigger when the value changes
      * @param {string | number | LabelValue | Array<string | number> | LabelValue[] | undefined} value
      */
-    change: (value: string | number | LabelValue | Array<string | number> | LabelValue[] | undefined) => true,
-    'update:modelValue': (value: string | number | LabelValue | Array<string | number> | LabelValue[] | undefined) =>
-      true,
-    'update:inputValue': (inputValue: string) => true,
+    change: (
+      value:
+        | string
+        | number
+        | LabelValue
+        | Array<string | number>
+        | LabelValue[]
+        | undefined,
+    ) => true,
+    "update:modelValue": (
+      value:
+        | string
+        | number
+        | LabelValue
+        | Array<string | number>
+        | LabelValue[]
+        | undefined,
+    ) => true,
+    "update:inputValue": (inputValue: string) => true,
     /**
      * @zh 下拉框显示状态改变时触发
      * @en Triggered when the status of the drop-down box changes
      * @param {boolean} visible
      */
-    'open-change': (visible: boolean) => true,
-    'update:open': (visible: boolean) => true,
+    "open-change": (visible: boolean) => true,
+    "update:open": (visible: boolean) => true,
     /**
      * @zh 搜索值变化时触发
      * @en Triggered when the search value changes
@@ -262,23 +292,32 @@ export default defineComponent({
       fallbackOption,
       selectable,
       dropdownClassName,
-    } = toRefs(props)
+    } = toRefs(props);
     const { mergedDisabled, eventHandlers } = useFormItem({
       disabled,
-    })
-    const prefixCls = getPrefixCls('tree-select')
-    const configCtx = inject(configProviderInjectionKey, undefined)
+    });
+    const prefixCls = getPrefixCls("tree-select");
+    const configCtx = inject(configProviderInjectionKey, undefined);
     const TreeSelectEmpty = configCtx?.slots.empty?.({
-      component: 'tree-select',
-    })?.[0]
-    const isMultiple = computed(() => multiple.value || treeCheckable.value)
-    const isSelectable = (node: TreeNodeData, info: { level: number; isLeaf: boolean }) => {
-      if (selectable.value === 'leaf') return info.isLeaf
-      if (isFunction(selectable.value)) return selectable.value(node, info)
-      return selectable.value ?? false
-    }
-    const isCheckable = computed(() => (treeCheckable.value ? isSelectable : false))
-    const retainInputValue = computed(() => isObject(props.allowSearch) && Boolean(props.allowSearch.retainInputValue))
+      component: "tree-select",
+    })?.[0];
+    const isMultiple = computed(() => multiple.value || treeCheckable.value);
+    const isSelectable = (
+      node: TreeNodeData,
+      info: { level: number; isLeaf: boolean },
+    ) => {
+      if (selectable.value === "leaf") return info.isLeaf;
+      if (isFunction(selectable.value)) return selectable.value(node, info);
+      return selectable.value ?? false;
+    };
+    const isCheckable = computed(() =>
+      treeCheckable.value ? isSelectable : false,
+    );
+    const retainInputValue = computed(
+      () =>
+        isObject(props.allowSearch) &&
+        Boolean(props.allowSearch.retainInputValue),
+    );
     const { flattenTreeData, key2TreeNode } = useTreeData(
       reactive({
         treeData: data,
@@ -286,117 +325,134 @@ export default defineComponent({
         selectable: isSelectable,
         checkable: isCheckable,
       }),
-    )
+    );
 
-    const { selectedKeys, selectedValue, setLocalSelectedKeys, localSelectedKeys, localSelectedValue } =
-      useSelectedState(
-        reactive({
-          defaultValue,
-          modelValue,
-          key2TreeNode,
-          multiple,
-          treeCheckable,
-          treeCheckStrictly,
-          fallbackOption,
-          fieldNames,
-        }),
-      )
+    const {
+      selectedKeys,
+      selectedValue,
+      setLocalSelectedKeys,
+      localSelectedKeys,
+      localSelectedValue,
+    } = useSelectedState(
+      reactive({
+        defaultValue,
+        modelValue,
+        key2TreeNode,
+        multiple,
+        treeCheckable,
+        treeCheckStrictly,
+        fallbackOption,
+        fieldNames,
+      }),
+    );
 
     function isNodeClosable(node: Node) {
-      return treeCheckable.value ? isNodeCheckable(node) : isNodeSelectable(node)
+      return treeCheckable.value
+        ? isNodeCheckable(node)
+        : isNodeSelectable(node);
     }
 
     const selectViewValue = computed(() => {
       if (isUndefined(selectedValue.value)) {
-        return []
+        return [];
       }
       if (isMultiple.value && !mergedDisabled.value) {
         return selectedValue.value.map((i) => {
-          const node = key2TreeNode.value.get(i.value)
+          const node = key2TreeNode.value.get(i.value);
           return {
             ...i,
             closable: !node || isNodeClosable(node),
-          }
-        }) as SelectViewValue[]
+          };
+        }) as SelectViewValue[];
       }
-      return selectedValue.value as SelectViewValue[]
-    })
+      return selectedValue.value as SelectViewValue[];
+    });
 
     const setSelectedKeys = (newVal: TreeNodeKey[]) => {
-      setLocalSelectedKeys(newVal)
+      setLocalSelectedKeys(newVal);
 
       nextTick(() => {
-        const forEmitValue = (labelInValue.value ? localSelectedValue.value : localSelectedKeys.value) || []
+        const forEmitValue =
+          (labelInValue.value
+            ? localSelectedValue.value
+            : localSelectedKeys.value) || [];
 
-        const emitValue = isMultiple.value ? forEmitValue : forEmitValue[0]
+        const emitValue = isMultiple.value ? forEmitValue : forEmitValue[0];
 
-        emit('update:modelValue', emitValue)
-        emit('change', emitValue)
-        eventHandlers.value?.onChange?.()
-      })
-    }
+        emit("update:modelValue", emitValue);
+        emit("change", emitValue);
+        eventHandlers.value?.onChange?.();
+      });
+    };
 
-    const _inputValue = ref(props.defaultInputValue)
-    const computedInputValue = computed(() => props.inputValue ?? _inputValue.value)
+    const _inputValue = ref(props.defaultInputValue);
+    const computedInputValue = computed(
+      () => props.inputValue ?? _inputValue.value,
+    );
 
     const updateInputValue = (inputValue: string) => {
-      _inputValue.value = inputValue
-      emit('update:inputValue', inputValue)
-      emit('inputValueChange', inputValue)
-    }
+      _inputValue.value = inputValue;
+      emit("update:inputValue", inputValue);
+      emit("inputValueChange", inputValue);
+    };
 
     const handleInputValueChange = (inputValue: string) => {
       if (inputValue !== computedInputValue.value) {
-        setPanelVisible(true)
-        updateInputValue(inputValue)
+        setPanelVisible(true);
+        updateInputValue(inputValue);
         if (props.allowSearch) {
-          emit('search', inputValue)
+          emit("search", inputValue);
         }
       }
-    }
+    };
 
     const [panelVisible, setLocalPanelVisible] = useMergeState(
       defaultOpen.value,
       reactive({
         value: open,
       }),
-    )
+    );
     const setPanelVisible = (visible: boolean) => {
       if (visible !== panelVisible.value) {
-        setLocalPanelVisible(visible)
-        emit('open-change', visible)
-        emit('update:open', visible)
+        setLocalPanelVisible(visible);
+        emit("open-change", visible);
+        emit("update:open", visible);
       }
 
       if (!visible) {
-        refSelectView.value && refSelectView.value.blur && refSelectView.value.blur()
+        refSelectView.value &&
+          refSelectView.value.blur &&
+          refSelectView.value.blur();
       }
-    }
+    };
 
-    const { isEmptyFilterResult, filterTreeNode: computedFilterTreeNode } = useFilterTreeNode(
-      reactive({
-        searchValue: computedInputValue,
-        flattenTreeData,
-        filterMethod: filterTreeNode,
-        disableFilter,
-        fieldNames,
-      }),
-    )
+    const { isEmptyFilterResult, filterTreeNode: computedFilterTreeNode } =
+      useFilterTreeNode(
+        reactive({
+          searchValue: computedInputValue,
+          flattenTreeData,
+          filterMethod: filterTreeNode,
+          disableFilter,
+          fieldNames,
+        }),
+      );
 
-    const isEmpty = computed(() => !flattenTreeData.value.length || isEmptyFilterResult.value)
+    const isEmpty = computed(
+      () => !flattenTreeData.value.length || isEmptyFilterResult.value,
+    );
 
-    const refSelectView = ref()
+    const refSelectView = ref();
 
     const computedDropdownStyle = computed<StyleValue[]>(() => [
       dropdownStyle?.value || {},
-      treeProps?.value?.virtualListProps ? { 'max-height': 'unset' } : {},
-    ])
+      treeProps?.value?.virtualListProps ? { "max-height": "unset" } : {},
+    ]);
 
     const onBlur = () => {
       if (!retainInputValue.value && computedInputValue.value) {
-        updateInputValue('')
+        updateInputValue("");
       }
-    }
+    };
 
     return {
       refSelectView,
@@ -414,27 +470,27 @@ export default defineComponent({
       computedDropdownStyle,
       onSearchValueChange: handleInputValueChange,
       onSelectChange(newVal: string[]) {
-        setSelectedKeys(newVal)
+        setSelectedKeys(newVal);
         if (!retainInputValue.value && computedInputValue.value) {
-          updateInputValue('')
+          updateInputValue("");
         }
 
         if (!isMultiple.value) {
-          setPanelVisible(false)
+          setPanelVisible(false);
         }
       },
       onVisibleChange: setPanelVisible,
       onInnerClear() {
-        setSelectedKeys([])
-        emit('clear')
+        setSelectedKeys([]);
+        emit("clear");
       },
       pickSubCompSlots,
       isSelectable,
       isCheckable,
       onBlur,
       onItemRemove(id: string) {
-        if (mergedDisabled.value) return
-        const node = key2TreeNode.value.get(id)
+        if (mergedDisabled.value) return;
+        const node = key2TreeNode.value.get(id);
         if (treeCheckable.value && node) {
           if (isNodeClosable(node)) {
             const [newVal] = getCheckedStateByCheck({
@@ -443,15 +499,15 @@ export default defineComponent({
               checkedKeys: selectedKeys.value,
               indeterminateKeys: [],
               checkStrictly: treeCheckStrictly.value,
-            })
-            setSelectedKeys(newVal)
+            });
+            setSelectedKeys(newVal);
           }
         } else {
-          const newVal = selectedKeys.value.filter((i) => i !== id)
-          setSelectedKeys(newVal)
+          const newVal = selectedKeys.value.filter((i) => i !== id);
+          setSelectedKeys(newVal);
         }
       },
-    }
+    };
   },
-})
+});
 </script>

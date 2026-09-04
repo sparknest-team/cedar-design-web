@@ -38,18 +38,30 @@ export const drawerProps = {
      */
     title: String,
     /**
-     * @zh 是否显示遮罩层
-     * @en Whether to show the mask
+     * @zh 是否显示背景层
+     * @en Whether to show the overlay
      */
-    mask: {
+    overlay: {
       type: Boolean,
       default: true,
     },
     /**
-     * @zh 点击遮罩层是否可以关闭
-     * @en Click on the mask layer to be able to close
+     * @zh 背景层的类名
+     * @en Class name of the overlay
      */
-    maskClosable: {
+    overlayClass: String,
+    /**
+     * @zh 背景层的样式
+     * @en Style of the overlay
+     */
+    overlayStyle: {
+      type: Object as PropType<CSSProperties>,
+    },
+    /**
+     * @zh 点击背景层是否可以关闭
+     * @en Click on the overlay layer to be able to close
+     */
+    overlayClosable: {
       type: Boolean,
       default: true,
     },
@@ -170,6 +182,14 @@ export const drawerProps = {
     escToClose: {
       type: Boolean,
       default: true,
+    },
+    /**
+     * @zh 背景层动画名称
+     * @en Transition name of the overlay
+     */
+    overlayAnimationName: {
+      type: String,
+      default: 'fade-drawer',
     },
     /**
      * @zh 抽屉是否挂载在 `body` 元素下

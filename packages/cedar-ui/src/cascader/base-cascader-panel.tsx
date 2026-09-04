@@ -1,14 +1,13 @@
-import { defineComponent, inject, PropType, TransitionGroup } from 'vue'
-import { configProviderInjectionKey } from '../config-provider/context'
-import { CascaderOptionInfo } from './types'
-import { getPrefixCls, createNamespace } from '../_utils/global-config'
-import Empty from '../empty'
-import Spin from '../spin'
-import { VirtualListProps } from '../_components/virtual-list-v2/interface'
-import CascaderColumn from './cascader-column'
+import { defineComponent, inject, PropType, TransitionGroup } from "vue";
+import { configProviderInjectionKey } from "../config-provider/context";
+import { CascaderOptionInfo } from "./types";
+import { getPrefixCls, createNamespace } from "../_utils/global-config";
+import Empty from "../empty";
+import Loading from "../loading";
+import { VirtualListProps } from "../_components/virtual-list-v2/interface";
+import CascaderColumn from "./cascader-column";
 
-
-const { name } = createNamespace('base-cascader-panel')
+const { name } = createNamespace("base-cascader-panel");
 
 export default defineComponent({
   name,
@@ -35,27 +34,36 @@ export default defineComponent({
     },
   },
   setup(props, { slots }) {
-    const prefixCls = getPrefixCls('cascader')
-    const configCtx = inject(configProviderInjectionKey, undefined)
+    const prefixCls = getPrefixCls("cascader");
+    const configCtx = inject(configProviderInjectionKey, undefined);
 
     const renderEmpty = () => {
-      return slots.empty?.() ?? configCtx?.slots.empty?.({ component: 'cascader' }) ?? <Empty />
-    }
+      return (
+        slots.empty?.() ??
+        configCtx?.slots.empty?.({ component: "cascader" }) ?? <Empty />
+      );
+    };
 
     const renderContent = () => {
       if (props.loading) {
         return (
-          <div key="panel-column-loading" class={[`${prefixCls}-panel-column`, `${prefixCls}-panel-column-loading`]}>
-            <Spin />
+          <div
+            key="panel-column-loading"
+            class={[
+              `${prefixCls}-panel-column`,
+              `${prefixCls}-panel-column-loading`,
+            ]}
+          >
+            <Loading />
           </div>
-        )
+        );
       }
       if (props.displayColumns.length === 0) {
         return (
           <div key="panel-column-empty" class={`${prefixCls}-panel-column`}>
             <div class={`${prefixCls}-list-empty`}>{renderEmpty()}</div>
           </div>
-        )
+        );
       }
       return props.displayColumns.map((column, index) => (
         <CascaderColumn
@@ -72,8 +80,8 @@ export default defineComponent({
             empty: slots.empty,
           }}
         />
-      ))
-    }
+      ));
+    };
 
     return () => (
       <TransitionGroup
@@ -89,6 +97,6 @@ export default defineComponent({
       >
         {renderContent()}
       </TransitionGroup>
-    )
+    );
   },
-})
+});

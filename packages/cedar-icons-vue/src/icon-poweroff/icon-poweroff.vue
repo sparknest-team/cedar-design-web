@@ -1,5 +1,5 @@
 <template>
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 48 48" :class="cls" :style="innerStyle" :stroke-width="props.strokeWidth" :stroke-linecap="props.strokeLinecap" :stroke-linejoin="props.strokeLinejoin" @click="emit('click', $event)"><path d="M15.5 9.274C10.419 12.214 7 17.708 7 24c0 9.389 7.611 17 17 17s17-7.611 17-17c0-6.292-3.419-11.786-8.5-14.726M24 5v22"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 48 48" width="1em" height="1em" :class="cls" :style="innerStyle" :stroke-width="props.strokeWidth" :stroke-linecap="props.strokeLinecap" :stroke-linejoin="props.strokeLinejoin" :aria-hidden="!props.title" role="img" @click="emit('click', $event)"><title v-if="props.title">{{ props.title }}</title><path d="M15.5 9.274C10.419 12.214 7 17.708 7 24c0 9.389 7.611 17 17 17s17-7.611 17-17c0-6.292-3.419-11.786-8.5-14.726M24 5v22"/></svg>
 </template>
 
 <script setup lang="ts">
@@ -11,6 +11,8 @@ defineOptions({ name: 'CIconPoweroff' })
 
 const props = withDefaults(defineProps<{
   size?: string | number
+  color?: string
+  title?: string
   strokeWidth?: number
   strokeLinecap?: 'butt' | 'round' | 'square'
   strokeLinejoin?: 'bevel' | 'inherit' | 'miter' | 'round'
@@ -24,9 +26,11 @@ const props = withDefaults(defineProps<{
 
 const emit = defineEmits<{ click: [event: MouseEvent] }>()
 const prefixCls = getPrefixCls('icon')
+const numericSizeRE = /^-?(?:\d+|\d*\.\d+)$/
 const cls = computed(() => [prefixCls, `${prefixCls}-poweroff`, { [`${prefixCls}-spin`]: props.spin }])
 const innerStyle = computed<CSSProperties>(() => ({
-  ...(props.size ? { fontSize: isNumber(props.size) ? `${props.size}px` : props.size } : {}),
+  color: props.color,
+  fontSize: isNumber(props.size) || numericSizeRE.test(props.size?.trim() ?? '') ? `${props.size}px` : props.size,
   ...(props.rotate ? { transform: `rotate(${props.rotate}deg)` } : {}),
 }))
 </script>

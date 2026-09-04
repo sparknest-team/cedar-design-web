@@ -1,3 +1,3 @@
-import '../../style/index.less'
-import '../../spin/style'
-import './index.less'
+import "../../style/index.less";
+import "../../loading/style";
+import "./index.less";

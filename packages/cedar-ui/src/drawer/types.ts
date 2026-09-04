@@ -21,17 +21,29 @@ export interface DrawerConfig {
    */
   content: RenderContent
   /**
-   * @zh 是否显示遮罩层
-   * @en Whether to show the mask
+   * @zh 是否显示背景层
+   * @en Whether to show the overlay
    * @defaultValue true
    */
-  mask?: boolean
+  overlay?: boolean
   /**
-   * @zh 点击遮罩层是否可以关闭
-   * @en Click on the mask layer to be able to close
+   * @zh 背景层类名
+   * @en Class name of the overlay
+   */
+  overlayClass?: string
+  /**
+   * @zh 背景层样式
+   * @en Style of the overlay
+   */
+  overlayStyle?: CSSProperties
+  /**
+   * @zh 点击背景层是否可以关闭
+   * @en Click on the overlay layer to be able to close
    * @defaultValue true
    */
-  maskClosable?: boolean
+  overlayClosable?: boolean
+  /** 背景层动画名称 */
+  overlayAnimationName?: string
   /**
    * @zh 是否展示关闭按钮
    * @en Whether to show the close button
@@ -99,6 +111,8 @@ export interface DrawerConfig {
    * @en Triggered when the cancel or close button is clicked
    */
   onCancel?: (e?: Event) => void
+  /** 点击背景层时触发 */
+  onClickOverlay?: (e?: Event) => void
   /**
    * @zh 触发 ok 事件前的回调函数。如果返回 false 则不会触发后续事件，也可使用 done 进行异步关闭。
    * @en The callback function before the ok event is triggered. If false is returned, subsequent events will not be triggered, and done can also be used to close asynchronously.

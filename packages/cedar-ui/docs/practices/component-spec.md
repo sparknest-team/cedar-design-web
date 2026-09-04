@@ -193,15 +193,17 @@ export type ButtonProps = ExtractPropTypes<typeof buttonProps>;
 | `open`                                 | `boolean`                                       | 浮层/模态/下拉开合（受控）；非受控用 `defaultOpen`；v-model 事件 `update:open`。**不含** Tag/Badge 等内容显隐（那些用 `show`） |
 | `show`                                 | `boolean`                                       | **内容**显隐（Tag、Badge 等）；非受控用 `defaultShow`；v-model 事件 `update:show`。**勿**用于浮层开合                          |
 | `popupContainer`                       | `string \| HTMLElement \| …`                    | Portal 挂载目标；**勿**用公开名 `teleport`                                                                                     |
-| `mask` / `maskClosable` / `escToClose` | `boolean`                                       | 遮罩显示 / 点遮罩关闭 / ESC 关闭；配套 `maskClass`/`maskStyle`                                                                 |
+| `overlay` / `overlayClosable` / `escToClose` | `boolean`                                  | 模态背景层显示 / 点背景层关闭 / ESC 关闭；配套 `overlayClass`/`overlayStyle`。真正的字符或裁剪掩码仍使用 `mask`                  |
 | `modelValue`                           | 组件自有                                        | 表单主值（**含 Upload**）；配合 `update:modelValue` 与 `change`/`onChange`。Upload **勿**用 `fileList` 作 v-model              |
 | `placement`                            | 组件自有联合类型                                | 锚点浮层的首选方位，或 Drawer 的进入侧；通常参与 flip/shift 等定位算法                                                         |
 | `position`                             | 组件自有                                        | 自身布局上下文、屏幕区域或坐标位置；Badge、Notification、Timeline 可使用                                                       |
 | `disabledDate`                         | `(date) => boolean`                             | 返回 `true` = **禁用**该日期；**勿**用 `allowedDates`（极性相反）                                                              |
 | `before*`                              | `Function`                                      | 拦截钩子（`beforeChange`/`beforeClose`/…）；**勿**用 `onBefore*` 作拦截器 prop 名                                              |
-| 多词属性                               | camelCase                                       | 如 `maxLength`、`autoPlay`；公开 API 不用 HTML 全小写                                                                          |
+| 多词属性                               | 定义使用 camelCase，模板与 Props 表展示使用 kebab-case | TypeScript 中写 `maxLength`、`autoPlay`；模板与文档 Props 表写 `max-length`、`auto-play`                                      |
 
 > 公共 API 与 Maple 对齐时以本仓库（PC）为准；破坏性重命名不保留 alias。详见 `openspec/changes/align-shared-prop-naming/`。
+
+文档中的组件 Props 与 Events 表描述的是 Vue 模板 API，属性名和事件名必须展示为 kebab-case。命令式配置对象、类型字段和 JavaScript/TypeScript 示例仍使用 camelCase。
 
 ### 4.4 特殊 prop 语义说明
 

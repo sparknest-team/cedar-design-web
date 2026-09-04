@@ -1,4 +1,4 @@
-import { tableProps } from './props'
+import { tableProps } from "./props";
 import type {
   ComponentPublicInstance,
   CSSProperties,
@@ -53,9 +53,9 @@ import { useRowSelection } from "./hooks/use-row-selection";
 import { useExpand } from "./hooks/use-expand";
 import { usePagination } from "./hooks/use-pagination";
 import { updateColumnsWidth } from "./hooks/use-columns-layout";
-import { IconPlus } from '@cedarjs/icons-vue/icon-plus'
-import { IconMinus } from '@cedarjs/icons-vue/icon-minus'
-import Spin from "../spin";
+import { IconPlus } from "@cedarjs/icons-vue/icon-plus";
+import { IconMinus } from "@cedarjs/icons-vue/icon-minus";
+import Loading from "../loading";
 import Pagination, { PaginationProps } from "../pagination";
 import Empty from "../empty";
 import ColGroup from "./table-col-group.vue";
@@ -1467,7 +1467,7 @@ export default defineComponent({
       getThWidth();
     });
 
-    const spinProps = computed(() =>
+    const loadingProps = computed(() =>
       isObject(props.loading) ? props.loading : { loading: props.loading },
     );
 
@@ -2264,7 +2264,7 @@ export default defineComponent({
         <ResizeObserver onResize={handleTableResize}>
           <div class={cls.value} style={style.value}>
             {children.value}
-            <Spin {...spinProps.value}>
+            <Loading {...loadingProps.value}>
               {props.pagination !== false &&
                 (flattenData.value.length > 0 || sortedData.value.length > 0) &&
                 isPaginationTop.value &&
@@ -2274,7 +2274,7 @@ export default defineComponent({
                 (flattenData.value.length > 0 || sortedData.value.length > 0) &&
                 !isPaginationTop.value &&
                 renderPagination()}
-            </Spin>
+            </Loading>
           </div>
         </ResizeObserver>
       );

@@ -1,5 +1,5 @@
 <template>
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 48 48" :class="cls" :style="innerStyle" :stroke-width="props.strokeWidth" :stroke-linecap="props.strokeLinecap" :stroke-linejoin="props.strokeLinejoin" @click="emit('click', $event)"><circle cx="24" cy="19" r="5"/><path d="M39 20.405C39 28.914 24 43 24 43S9 28.914 9 20.405 15.716 5 24 5s15 6.897 15 15.405Z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 48 48" width="1em" height="1em" :class="cls" :style="innerStyle" :stroke-width="props.strokeWidth" :stroke-linecap="props.strokeLinecap" :stroke-linejoin="props.strokeLinejoin" :aria-hidden="!props.title" role="img" @click="emit('click', $event)"><title v-if="props.title">{{ props.title }}</title><circle cx="24" cy="19" r="5"/><path d="M39 20.405C39 28.914 24 43 24 43S9 28.914 9 20.405 15.716 5 24 5s15 6.897 15 15.405Z"/></svg>
 </template>
 
 <script setup lang="ts">
@@ -11,6 +11,8 @@ defineOptions({ name: 'CIconLocation' })
 
 const props = withDefaults(defineProps<{
   size?: string | number
+  color?: string
+  title?: string
   strokeWidth?: number
   strokeLinecap?: 'butt' | 'round' | 'square'
   strokeLinejoin?: 'bevel' | 'inherit' | 'miter' | 'round'
@@ -24,9 +26,11 @@ const props = withDefaults(defineProps<{
 
 const emit = defineEmits<{ click: [event: MouseEvent] }>()
 const prefixCls = getPrefixCls('icon')
+const numericSizeRE = /^-?(?:\d+|\d*\.\d+)$/
 const cls = computed(() => [prefixCls, `${prefixCls}-location`, { [`${prefixCls}-spin`]: props.spin }])
 const innerStyle = computed<CSSProperties>(() => ({
-  ...(props.size ? { fontSize: isNumber(props.size) ? `${props.size}px` : props.size } : {}),
+  color: props.color,
+  fontSize: isNumber(props.size) || numericSizeRE.test(props.size?.trim() ?? '') ? `${props.size}px` : props.size,
   ...(props.rotate ? { transform: `rotate(${props.rotate}deg)` } : {}),
 }))
 </script>

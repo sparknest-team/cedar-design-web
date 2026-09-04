@@ -1,9 +1,12 @@
 <template>
   <div :class="cls">
-    <div v-if="$slots.header && (!empty || showHeaderOnEmpty)" :class="`${prefixCls}-header`">
+    <div
+      v-if="$slots.header && (!empty || showHeaderOnEmpty)"
+      :class="`${prefixCls}-header`"
+    >
       <slot name="header" />
     </div>
-    <spin v-if="loading" :class="`${prefixCls}-loading`" />
+    <loading v-if="loading" :class="`${prefixCls}-loading`" />
     <div v-else-if="empty" :class="`${prefixCls}-empty`">
       <slot name="empty">
         <component :is="SelectEmpty ? SelectEmpty : 'Empty'" />
@@ -23,33 +26,36 @@
         <slot />
       </ul>
     </component>
-    <div v-if="$slots.footer && (!empty || showFooterOnEmpty)" :class="`${prefixCls}-footer`">
+    <div
+      v-if="$slots.footer && (!empty || showFooterOnEmpty)"
+      :class="`${prefixCls}-footer`"
+    >
       <slot name="footer" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue'
-import { computed, defineComponent, toRefs, inject } from 'vue'
-import type { EmitType } from '../_utils/types'
-import { configProviderInjectionKey } from '../config-provider/context'
-import { getPrefixCls } from '../_utils/global-config'
-import Empty from '../empty'
-import Spin from '../spin'
-import Scrollbar, { ScrollbarProps } from '../scrollbar'
-import { useComponentRef } from '../_hooks/use-component-ref'
-import { useScrollbar } from '../_hooks/use-scrollbar'
-import { createNamespace } from '../_utils/global-config'
+import type { PropType } from "vue";
+import { computed, defineComponent, toRefs, inject } from "vue";
+import type { EmitType } from "../_utils/types";
+import { configProviderInjectionKey } from "../config-provider/context";
+import { getPrefixCls } from "../_utils/global-config";
+import Empty from "../empty";
+import Loading from "../loading";
+import Scrollbar, { ScrollbarProps } from "../scrollbar";
+import { useComponentRef } from "../_hooks/use-component-ref";
+import { useScrollbar } from "../_hooks/use-scrollbar";
+import { createNamespace } from "../_utils/global-config";
 
-const { name, n, classes } = createNamespace('select-dropdown')
+const { name, n, classes } = createNamespace("select-dropdown");
 
 export default defineComponent({
   name,
   components: {
     ScrollbarComponent: Scrollbar,
     Empty,
-    Spin,
+    Loading,
   },
   props: {
     loading: Boolean,
@@ -78,24 +84,25 @@ export default defineComponent({
       default: false,
     },
   },
-  emits: ['scroll', 'reachBottom'],
+  emits: ["scroll", "reachBottom"],
   setup(props, { emit, slots }) {
-    const { scrollbar } = toRefs(props)
-    const prefixCls = getPrefixCls('select-dropdown')
-    const configCtx = inject(configProviderInjectionKey, undefined)
-    const SelectEmpty = configCtx?.slots.empty?.({ component: 'select' })?.[0]
+    const { scrollbar } = toRefs(props);
+    const prefixCls = getPrefixCls("select-dropdown");
+    const configCtx = inject(configProviderInjectionKey, undefined);
+    const SelectEmpty = configCtx?.slots.empty?.({ component: "select" })?.[0];
 
-    const { componentRef: wrapperComRef, elementRef: wrapperRef } = useComponentRef('containerRef')
-    const { displayScrollbar, scrollbarProps } = useScrollbar(scrollbar)
+    const { componentRef: wrapperComRef, elementRef: wrapperRef } =
+      useComponentRef("containerRef");
+    const { displayScrollbar, scrollbarProps } = useScrollbar(scrollbar);
 
     const handleScroll = (e: Event) => {
-      const { scrollTop, scrollHeight, offsetHeight } = e.target as HTMLElement
-      const bottom = scrollHeight - (scrollTop + offsetHeight)
+      const { scrollTop, scrollHeight, offsetHeight } = e.target as HTMLElement;
+      const bottom = scrollHeight - (scrollTop + offsetHeight);
       if (bottom <= props.bottomOffset) {
-        emit('reachBottom', e)
+        emit("reachBottom", e);
       }
-      emit('scroll', e)
-    }
+      emit("scroll", e);
+    };
 
     const cls = computed(() => [
       prefixCls,
@@ -103,7 +110,7 @@ export default defineComponent({
         [`${prefixCls}-has-header`]: Boolean(slots.header),
         [`${prefixCls}-has-footer`]: Boolean(slots.footer),
       },
-    ])
+    ]);
 
     return {
       prefixCls,
@@ -114,7 +121,7 @@ export default defineComponent({
       handleScroll,
       displayScrollbar,
       scrollbarProps,
-    }
+    };
   },
-})
+});
 </script>

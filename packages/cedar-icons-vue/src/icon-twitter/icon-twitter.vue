@@ -1,5 +1,5 @@
 <template>
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 48 48" :class="cls" :style="innerStyle" :stroke-width="props.strokeWidth" :stroke-linecap="props.strokeLinecap" :stroke-linejoin="props.strokeLinejoin" @click="emit('click', $event)"><path fill="currentColor" stroke="none" d="M43.277 13.575c0 16.613-10.912 28.575-26.962 29.1-6.788.525-11.438-1.537-15.6-4.65 4.65.525 10.912-1.012 13.987-4.163-4.65 0-7.275-2.625-8.812-6.187h4.162C5.89 26.1 2.74 22.988 2.74 17.813c1.012.524 2.062 1.012 4.162 1.012-3.637-2.062-5.7-8.812-3.112-12.975 4.65 5.175 10.35 9.863 19.762 10.35C20.927 5.85 34.465.6 40.165 7.388c2.625-.525 4.162-1.538 6.187-2.625-.525 2.625-2.062 4.162-4.162 5.175 2.062 0 3.637-.525 5.175-1.538-.488 2.063-2.55 4.163-4.088 5.175"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 48 48" width="1em" height="1em" :class="cls" :style="innerStyle" :stroke-width="props.strokeWidth" :stroke-linecap="props.strokeLinecap" :stroke-linejoin="props.strokeLinejoin" :aria-hidden="!props.title" role="img" @click="emit('click', $event)"><title v-if="props.title">{{ props.title }}</title><path fill="currentColor" stroke="none" d="M43.277 13.575c0 16.613-10.912 28.575-26.962 29.1-6.788.525-11.438-1.537-15.6-4.65 4.65.525 10.912-1.012 13.987-4.163-4.65 0-7.275-2.625-8.812-6.187h4.162C5.89 26.1 2.74 22.988 2.74 17.813c1.012.524 2.062 1.012 4.162 1.012-3.637-2.062-5.7-8.812-3.112-12.975 4.65 5.175 10.35 9.863 19.762 10.35C20.927 5.85 34.465.6 40.165 7.388c2.625-.525 4.162-1.538 6.187-2.625-.525 2.625-2.062 4.162-4.162 5.175 2.062 0 3.637-.525 5.175-1.538-.488 2.063-2.55 4.163-4.088 5.175"/></svg>
 </template>
 
 <script setup lang="ts">
@@ -11,6 +11,8 @@ defineOptions({ name: 'CIconTwitter' })
 
 const props = withDefaults(defineProps<{
   size?: string | number
+  color?: string
+  title?: string
   strokeWidth?: number
   strokeLinecap?: 'butt' | 'round' | 'square'
   strokeLinejoin?: 'bevel' | 'inherit' | 'miter' | 'round'
@@ -24,9 +26,11 @@ const props = withDefaults(defineProps<{
 
 const emit = defineEmits<{ click: [event: MouseEvent] }>()
 const prefixCls = getPrefixCls('icon')
+const numericSizeRE = /^-?(?:\d+|\d*\.\d+)$/
 const cls = computed(() => [prefixCls, `${prefixCls}-twitter`, { [`${prefixCls}-spin`]: props.spin }])
 const innerStyle = computed<CSSProperties>(() => ({
-  ...(props.size ? { fontSize: isNumber(props.size) ? `${props.size}px` : props.size } : {}),
+  color: props.color,
+  fontSize: isNumber(props.size) || numericSizeRE.test(props.size?.trim() ?? '') ? `${props.size}px` : props.size,
   ...(props.rotate ? { transform: `rotate(${props.rotate}deg)` } : {}),
 }))
 </script>

@@ -552,7 +552,7 @@
         "path": "/Users/shuaimeng/github_web/cedar-design-web/packages/cedar-ui/icon/_svgs/edit/outline/attachment.svg"
       },
       {
-        "name": "icon-bg-colors",
+        "name": "icon-background-color",
         "componentName": "BgColors",
         "path": "/Users/shuaimeng/github_web/cedar-design-web/packages/cedar-ui/icon/_svgs/edit/outline/bg-colors.svg"
       },
@@ -597,7 +597,7 @@
         "path": "/Users/shuaimeng/github_web/cedar-design-web/packages/cedar-ui/icon/_svgs/edit/outline/find-replace.svg"
       },
       {
-        "name": "icon-font-colors",
+        "name": "icon-font-color",
         "componentName": "FontColors",
         "path": "/Users/shuaimeng/github_web/cedar-design-web/packages/cedar-ui/icon/_svgs/edit/outline/font-colors.svg"
       },
@@ -889,7 +889,7 @@
         "path": "/Users/shuaimeng/github_web/cedar-design-web/packages/cedar-ui/icon/_svgs/logo/color/xigua-color.svg"
       },
       {
-        "name": "icon-faceBook-circle-fill",
+        "name": "icon-facebook-circle-fill",
         "componentName": "FaceBookCircleFill",
         "path": "/Users/shuaimeng/github_web/cedar-design-web/packages/cedar-ui/icon/_svgs/logo/fill/faceBook-circle-fill.svg"
       },
@@ -974,7 +974,7 @@
         "path": "/Users/shuaimeng/github_web/cedar-design-web/packages/cedar-ui/icon/_svgs/logo/outline/wechat.svg"
       },
       {
-        "name": "icon-wechatpay",
+        "name": "icon-wechat-pay",
         "componentName": "Wechatpay",
         "path": "/Users/shuaimeng/github_web/cedar-design-web/packages/cedar-ui/icon/_svgs/logo/outline/wechatpay.svg"
       },
@@ -1215,7 +1215,7 @@
         "path": "/Users/shuaimeng/github_web/cedar-design-web/packages/cedar-ui/icon/_svgs/general/outline/gift.svg"
       },
       {
-        "name": "icon-idcard",
+        "name": "icon-id-card",
         "componentName": "Idcard",
         "path": "/Users/shuaimeng/github_web/cedar-design-web/packages/cedar-ui/icon/_svgs/general/outline/idcard.svg"
       },
@@ -1345,7 +1345,7 @@
         "path": "/Users/shuaimeng/github_web/cedar-design-web/packages/cedar-ui/icon/_svgs/general/outline/pushpin.svg"
       },
       {
-        "name": "icon-qrcode",
+        "name": "icon-qr-code",
         "componentName": "Qrcode",
         "path": "/Users/shuaimeng/github_web/cedar-design-web/packages/cedar-ui/icon/_svgs/general/outline/qrcode.svg"
       },

@@ -1,5 +1,5 @@
 <template>
-  <c-page-header title="Cedar Design" subtitle="组件库概览" @back="onBack">
+  <c-page-header show-back title="Cedar Design" subtitle="组件库概览" @back="onBack">
     <template #header>
       <c-breadcrumb>
         <c-breadcrumb-item>Home</c-breadcrumb-item>
@@ -14,5 +14,7 @@
 </template>
 
 <script lang="ts" setup>
+import { Message } from '@cedarjs/ui'
+
 const onBack = () => Message.info('点击返回')
 </script>

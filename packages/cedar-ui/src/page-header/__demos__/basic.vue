@@ -2,6 +2,7 @@
   <div :style="{ background: 'var(--color-fill-2)', padding: '28px' }">
     <c-page-header
       :style="{ background: 'var(--color-bg-2)' }"
+      show-back
       title="Cedar Design"
       subtitle="页面级标题区"
       @back="onBack"
@@ -18,6 +19,7 @@
 </template>
 
 <script lang="ts" setup>
+import { Message } from '@cedarjs/ui'
 const onBack = () => {
   Message.info('点击返回')
 }

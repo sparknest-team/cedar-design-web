@@ -210,8 +210,8 @@
     "category": "edit"
   },
   {
-    "name": "icon-bg-colors",
-    "componentName": "BgColors",
+    "name": "icon-background-color",
+    "componentName": "BackgroundColor",
     "category": "edit"
   },
   {
@@ -255,8 +255,8 @@
     "category": "edit"
   },
   {
-    "name": "icon-font-colors",
-    "componentName": "FontColors",
+    "name": "icon-font-color",
+    "componentName": "FontColor",
     "category": "edit"
   },
   {
@@ -625,8 +625,8 @@
     "category": "general"
   },
   {
-    "name": "icon-idcard",
-    "componentName": "Idcard",
+    "name": "icon-id-card",
+    "componentName": "IdCard",
     "category": "general"
   },
   {
@@ -755,8 +755,8 @@
     "category": "general"
   },
   {
-    "name": "icon-qrcode",
-    "componentName": "Qrcode",
+    "name": "icon-qr-code",
+    "componentName": "QrCode",
     "category": "general"
   },
   {
@@ -1120,8 +1120,8 @@
     "category": "logo"
   },
   {
-    "name": "icon-face-book-circle-fill",
-    "componentName": "FaceBookCircleFill",
+    "name": "icon-facebook-circle-fill",
+    "componentName": "FacebookCircleFill",
     "category": "logo"
   },
   {
@@ -1200,13 +1200,13 @@
     "category": "logo"
   },
   {
-    "name": "icon-wechat",
-    "componentName": "Wechat",
+    "name": "icon-wechat-pay",
+    "componentName": "WechatPay",
     "category": "logo"
   },
   {
-    "name": "icon-wechatpay",
-    "componentName": "Wechatpay",
+    "name": "icon-wechat",
+    "componentName": "Wechat",
     "category": "logo"
   },
   {
@@ -1328,6 +1328,436 @@
     "name": "icon-sound",
     "componentName": "Sound",
     "category": "media"
+  },
+  {
+    "name": "icon-alert-circle",
+    "componentName": "AlertCircle",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-alert",
+    "componentName": "Alert",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-arrow-up-bold-box-fill",
+    "componentName": "ArrowUpBoldBoxFill",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-arrow-up-bold-box",
+    "componentName": "ArrowUpBoldBox",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-barcode-scan",
+    "componentName": "BarcodeScan",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-bell-fill",
+    "componentName": "BellFill",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-bell",
+    "componentName": "Bell",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-bookmark-fill",
+    "componentName": "BookmarkFill",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-cake-variant",
+    "componentName": "CakeVariant",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-calendar-month-fill",
+    "componentName": "CalendarMonthFill",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-calendar-month",
+    "componentName": "CalendarMonth",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-camera-fill",
+    "componentName": "CameraFill",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-card-account-details-fill",
+    "componentName": "CardAccountDetailsFill",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-card-account-details",
+    "componentName": "CardAccountDetails",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-cart-fill",
+    "componentName": "CartFill",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-cart",
+    "componentName": "Cart",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-chat-processing-fill",
+    "componentName": "ChatProcessingFill",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-chat-processing",
+    "componentName": "ChatProcessing",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-checkbox-blank",
+    "componentName": "CheckboxBlank",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-checkbox-marked-circle-fill",
+    "componentName": "CheckboxMarkedCircleFill",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-checkbox-marked-circle",
+    "componentName": "CheckboxMarkedCircle",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-checkbox-marked-fill",
+    "componentName": "CheckboxMarkedFill",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-checkbox-marked",
+    "componentName": "CheckboxMarked",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-chevron-down",
+    "componentName": "ChevronDown",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-chevron-left",
+    "componentName": "ChevronLeft",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-chevron-right",
+    "componentName": "ChevronRight",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-chevron-up",
+    "componentName": "ChevronUp",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-close-box-fill",
+    "componentName": "CloseBoxFill",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-close-box",
+    "componentName": "CloseBox",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-code-json",
+    "componentName": "CodeJson",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-download-fill",
+    "componentName": "DownloadFill",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-email-fill",
+    "componentName": "EmailFill",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-error",
+    "componentName": "Error",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-eye-fill",
+    "componentName": "EyeFill",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-file-document",
+    "componentName": "FileDocument",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-format-list-checkbox",
+    "componentName": "FormatListCheckbox",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-heart-half-full",
+    "componentName": "HeartHalfFull",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-home-fill",
+    "componentName": "HomeFill",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-image-fill",
+    "componentName": "ImageFill",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-location-fill",
+    "componentName": "LocationFill",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-location-radius-fill",
+    "componentName": "LocationRadiusFill",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-location-radius",
+    "componentName": "LocationRadius",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-lock-fill",
+    "componentName": "LockFill",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-menu-down",
+    "componentName": "MenuDown",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-menu-left",
+    "componentName": "MenuLeft",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-menu-open",
+    "componentName": "MenuOpen",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-menu-right",
+    "componentName": "MenuRight",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-menu-up",
+    "componentName": "MenuUp",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-message-processing",
+    "componentName": "MessageProcessing",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-message-text",
+    "componentName": "MessageText",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-minus-box-fill",
+    "componentName": "MinusBoxFill",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-minus-box",
+    "componentName": "MinusBox",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-notebook",
+    "componentName": "Notebook",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-palette-fill",
+    "componentName": "PaletteFill",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-phone-fill",
+    "componentName": "PhoneFill",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-pin-fill",
+    "componentName": "PinFill",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-pin-off-fill",
+    "componentName": "PinOffFill",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-pin-off",
+    "componentName": "PinOff",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-pin",
+    "componentName": "Pin",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-power",
+    "componentName": "Power",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-qr-code-scan",
+    "componentName": "QrCodeScan",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-radio-blank",
+    "componentName": "RadioBlank",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-radio-marked",
+    "componentName": "RadioMarked",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-settings-fill",
+    "componentName": "SettingsFill",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-share-fill",
+    "componentName": "ShareFill",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-share",
+    "componentName": "Share",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-shopping-fill",
+    "componentName": "ShoppingFill",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-shopping",
+    "componentName": "Shopping",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-star-half-full",
+    "componentName": "StarHalfFull",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-tag-fill",
+    "componentName": "TagFill",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-trash-can-fill",
+    "componentName": "TrashCanFill",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-trash-can",
+    "componentName": "TrashCan",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-upload-fill",
+    "componentName": "UploadFill",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-user-circle-fill",
+    "componentName": "UserCircleFill",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-user-circle",
+    "componentName": "UserCircle",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-warning",
+    "componentName": "Warning",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-weather-cloudy",
+    "componentName": "WeatherCloudy",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-weather-lightning",
+    "componentName": "WeatherLightning",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-weather-night",
+    "componentName": "WeatherNight",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-weather-pouring",
+    "componentName": "WeatherPouring",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-weather-rainy",
+    "componentName": "WeatherRainy",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-weather-snowy",
+    "componentName": "WeatherSnowy",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-white-balance-sunny",
+    "componentName": "WhiteBalanceSunny",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-xml",
+    "componentName": "Xml",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-zoom-in-fill",
+    "componentName": "ZoomInFill",
+    "category": "supplemental"
+  },
+  {
+    "name": "icon-zoom-out-fill",
+    "componentName": "ZoomOutFill",
+    "category": "supplemental"
   },
   {
     "name": "icon-check-circle-fill",

@@ -1,2 +1,2 @@
-import '../../spin/style'
-import './index.less'
+import "../../style/index.less";
+import "./index.less";

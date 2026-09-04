@@ -12,8 +12,7 @@ export const imagePlatformConfig = {
     'zoomOut',
     'originalSize',
   ],
-  closeOnImageTap: false,
   defaultClosable: true,
-  defaultMaskClosable: true,
+  defaultOverlayClosable: true,
   defaultLoop: false,
 }

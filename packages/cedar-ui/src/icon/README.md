@@ -73,6 +73,12 @@ for (const [name, component] of Object.entries(CedarIconsVue)) {
 
 <demo src="./__demos__/color.vue"></demo>
 
+### 旋转与持续旋转
+
+`rotate` 设置静态角度，`spin` 开启持续旋转动画，两者可以组合使用。
+
+<demo src="./__demos__/rotate-spin.vue"></demo>
+
 ### 点击事件
 
 <demo src="./__demos__/click.vue"></demo>
@@ -81,56 +87,38 @@ for (const [name, component] of Object.entries(CedarIconsVue)) {
 
 <demo src="./__demos__/custom.vue"></demo>
 
-### 方向指示类图标
+### 全部图标
 
-<demo src="./__demos__/direction.vue"></demo>
+PC 与移动端使用同一套规范名称。点击图标即可复制对应的按需导入标签。
 
-### 编辑类图标
-
-<demo src="./__demos__/edit.vue"></demo>
-
-### 通用类图标
-
-<demo src="./__demos__/general.vue"></demo>
-
-### 交互按钮类图标
-
-<demo src="./__demos__/interactive-button.vue"></demo>
-
-### 商标类图标
-
-<demo src="./__demos__/logo.vue"></demo>
-
-### 影音类图标
-
-<demo src="./__demos__/media.vue"></demo>
-
-### 提示建议类图标
-
-<demo src="./__demos__/tips.vue"></demo>
+<demo src="./__demos__/catalog.vue"></demo>
 
 ## API
 
 ### Icon Props
 
-| 属性   | 说明                 | 类型             | 默认值 |
-| ------ | -------------------- | ---------------- | ------ |
-| type   | 图标类型             | string           | -      |
-| name   | 已显式注册的图标名称 | string           | -      |
-| size   | 大小                 | number \| string | -      |
-| rotate | 旋转角度             | number           | -      |
-| spin   | 是否旋转             | boolean          | false  |
+| 属性            | 说明                   | 类型             | 默认值 |
+| --------------- | ---------------------- | ---------------- | ------ |
+| name            | 已显式注册的图标名称   | string           | -      |
+| size            | 大小                   | number \| string | -      |
+| color           | 图标颜色               | string           | -      |
+| rotate          | 旋转角度               | number           | -      |
+| spin            | 是否持续旋转           | boolean          | false  |
+| transition      | 名称切换动画时长（ms） | number \| string | 0      |
+| animation-class | 自定义切换动画类名     | string           | -      |
 
 ### Icon-xxx Props
 
-| 属性           | 说明     | 类型                                                    | 默认值  |
-| -------------- | -------- | ------------------------------------------------------- | ------- |
-| strokeWidth    | 线宽     | number                                                  | 4       |
-| strokeLinecap  | 端点类型 | 'butt' \| 'round' \| 'square'                           | 'butt'  |
-| strokeLinejoin | 拐角类型 | 'arcs' \| 'bevel' \| 'miter' \| 'miter-clip' \| 'round' | 'miter' |
-| size           | 大小     | number \| string                                        | -       |
-| rotate         | 旋转角度 | number                                                  | -       |
-| spin           | 是否旋转 | boolean                                                 | false   |
+| 属性            | 说明       | 类型                                       | 默认值  |
+| --------------- | ---------- | ------------------------------------------ | ------- |
+| size            | 大小       | number \| string                            | -       |
+| color           | 图标颜色   | string                                     | -       |
+| rotate          | 旋转角度   | number                                     | -       |
+| spin            | 是否旋转   | boolean                                    | false   |
+| title           | 无障碍标题 | string                                     | -       |
+| stroke-width    | 线宽       | number                                     | 4       |
+| stroke-linecap  | 端点类型   | 'butt' \| 'round' \| 'square'              | 'butt'  |
+| stroke-linejoin | 拐角类型   | 'bevel' \| 'inherit' \| 'miter' \| 'round' | 'miter' |
 
 ### Icon Events
 

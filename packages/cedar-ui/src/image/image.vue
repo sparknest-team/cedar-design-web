@@ -96,6 +96,7 @@ import { omit } from "../_utils/omit";
 import { PreviewGroupInjectionKey } from "./context";
 import { useI18n } from "../locale";
 import { isBoolean } from "../_utils/is";
+import Ripple from "../ripple";
 
 let uuid = 0;
 
@@ -106,6 +107,9 @@ export default defineComponent({
     IconLoading,
     ImageFooter,
     ImagePreview,
+  },
+  directives: {
+    Ripple,
   },
   inheritAttrs: false,
   props: imageProps,

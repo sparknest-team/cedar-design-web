@@ -182,8 +182,8 @@
         <span class="icon-name">icon-gift</span>
       </div>
       <div class="icon-item">
-        <c-icon-idcard :size="32" />
-        <span class="icon-name">icon-idcard</span>
+        <c-icon-id-card :size="32" />
+        <span class="icon-name">icon-id-card</span>
       </div>
       <div class="icon-item">
         <c-icon-image-close :size="32" />
@@ -286,8 +286,8 @@
         <span class="icon-name">icon-pushpin</span>
       </div>
       <div class="icon-item">
-        <c-icon-qrcode :size="32" />
-        <span class="icon-name">icon-qrcode</span>
+        <c-icon-qr-code :size="32" />
+        <span class="icon-name">icon-qr-code</span>
       </div>
       <div class="icon-item">
         <c-icon-relation :size="32" />

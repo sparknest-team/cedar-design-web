@@ -47,6 +47,7 @@ import Message from './message'
 import NavMenu, { NavMenuItem, NavMenuItemGroup, NavMenuSubMenu } from './nav-menu'
 import Notification from './notification'
 import OverflowList from './overflow-list'
+import Overlay from './overlay'
 import PageHeader from './page-header'
 import Pagination from './pagination'
 import PeopleSelect from './people-select'
@@ -66,7 +67,6 @@ import Select, { Optgroup, Option } from './select'
 import Skeleton, { SkeletonLine, SkeletonShape } from './skeleton'
 import Slider from './slider'
 import Space from './space'
-import Spin from './spin'
 import Split from './split'
 import SplitButton from './split-button'
 import Statistic from './statistic'
@@ -141,6 +141,7 @@ const components: Record<string, Plugin> = {
   NavMenu: NavMenu as Plugin,
   Notification: Notification as Plugin,
   OverflowList: OverflowList as Plugin,
+  Overlay: Overlay as Plugin,
   PageHeader: PageHeader as Plugin,
   Pagination: Pagination as Plugin,
   PeopleSelect: PeopleSelect as Plugin,
@@ -160,7 +161,6 @@ const components: Record<string, Plugin> = {
   Skeleton: Skeleton as Plugin,
   Slider: Slider as Plugin,
   Space: Space as Plugin,
-  Spin: Spin as Plugin,
   Split: Split as Plugin,
   SplitButton: SplitButton as Plugin,
   Statistic: Statistic as Plugin,

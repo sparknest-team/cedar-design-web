@@ -159,7 +159,7 @@ const manager = useTableColumnManager({
 
 | 事件名            | 描述                            | 参数                  |
 | ----------------- | ------------------------------- | --------------------- |
-| update:modelValue | 已选完整状态变更                | `ColumnManagerItem[]` |
+| update:model-value | 已选完整状态变更                | `ColumnManagerItem[]` |
 | update:open       | 抽屉可见性变更                  | `boolean`             |
 | confirm           | 点击抽屉/弹窗确认后返回组装结果 | `ColumnManagerResult` |
 | change            | 选择、排序、冻结或标题变化      | `ColumnManagerItem[]` |

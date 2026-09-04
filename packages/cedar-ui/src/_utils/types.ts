@@ -6,10 +6,6 @@ export interface CedarOptions {
   componentPrefix?: string
 }
 
-export interface CedarIconOptions {
-  iconPrefix?: string
-}
-
 export interface CedarGlobalConfig {
   classPrefix?: string
 }

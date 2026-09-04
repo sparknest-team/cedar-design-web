@@ -8,7 +8,7 @@ import {
   type CSSProperties,
 } from "vue";
 import { createNamespace, getPrefixCls } from "../_utils/global-config";
-import Spin from "../spin";
+import Loading from "../loading";
 import { infiniteScrollProps } from "./props";
 import type { InfiniteScrollStatus } from "./props";
 
@@ -279,7 +279,7 @@ export default defineComponent({
       if (effectiveStatus.value === "loading") {
         return (
           <div class={[`${prefixCls}-status`, `${prefixCls}-loading`]}>
-            {slots.loading?.() ?? <Spin tip="加载中" />}
+            {slots.loading?.() ?? <Loading tip="加载中" />}
           </div>
         );
       }

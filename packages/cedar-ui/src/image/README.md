@@ -64,6 +64,12 @@ permalink: /components/image/
 
 <demo src="./__demos__/preview-entry.vue"></demo>
 
+### 点击背景层关闭
+
+通过 `preview-props.overlayClosable` 控制点击图片外的背景层是否关闭预览。左图开启，右图关闭；点击图片本身均不会关闭预览。
+
+<demo src="./__demos__/overlay-closable.vue"></demo>
+
 ### 图片预览组
 
 PreviewGroup 可以收集子 Image，也可以直接接收 `images`。集合状态只由 Group 管理。
@@ -142,7 +148,7 @@ ImagePreview 只接收单个 `src`，负责缩放、旋转、拖拽和全屏等�
 | src                | 图片获取地址                                                      | `string`                |                                            `-`                                             |
 | open **(v-model)** | 是否打开                                                          | `boolean`               |                                            `-`                                             |
 | default-open       | 默认是否打开，非受控                                              | `boolean`               |                                          `false`                                           |
-| mask-closable      | 点击 mask 是否触发关闭                                            | `boolean`               |                                           `true`                                           |
+| overlay-closable   | 点击图片外的 overlay 是否触发关闭，点击图片不会关闭               | `boolean`               |                                           `true`                                           |
 | closable           | 是否显示关闭按钮                                                  | `boolean`               |                                           `true`                                           |
 | actions-layout     | 操作项的布局                                                      | `string[]`              | `[  'fullScreen',  'rotateRight',  'rotateLeft',  'zoomIn',  'zoomOut',  'originalSize',]` |
 | popup-container    | 设置弹出框的挂载点，同 `teleport` 的 `to`，缺省值是 document.body | `HTMLElement \| string` |                                            `-`                                             |
@@ -175,7 +181,7 @@ ImagePreview 只接收单个 `src`，负责缩放、旋转、拖拽和全屏等�
 | loop                  | 是否无限循环                                                      | `boolean`               |                                          `false`                                           |
 | open **(v-model)**    | 是否打开，受控属性                                                | `boolean`               |                                            `-`                                             |
 | default-open          | 默认是否打开，非受控                                              | `boolean`               |                                          `false`                                           |
-| mask-closable         | 点击 mask 是否触发关闭                                            | `boolean`               |                                           `true`                                           |
+| overlay-closable      | 点击图片外的 overlay 是否触发关闭，点击图片不会关闭               | `boolean`               |                                           `true`                                           |
 | closable              | 是否显示关闭按钮                                                  | `boolean`               |                                           `true`                                           |
 | actions-layout        | 控制条的布局                                                      | `string[]`              | `[  'fullScreen',  'rotateRight',  'rotateLeft',  'zoomIn',  'zoomOut',  'originalSize',]` |
 | popup-container       | 设置弹出框的挂载点，同 `teleport` 的 `to`，缺省值是 document.body | `string \| HTMLElement` |                                            `-`                                             |

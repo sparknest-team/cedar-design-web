@@ -40,8 +40,8 @@ permalink: /components/segmented/
 
 | 参数 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| modelValue / v-model | 当前值 | `string \| number` | — |
-| defaultValue | 非受控默认值 | `string \| number` | — |
+| model-value / v-model | 当前值 | `string \| number` | — |
+| default-value | 非受控默认值 | `string \| number` | — |
 | options | 选项列表 | `(string \| number \| SegmentedOption)[]` | `[]` |
 | size | 尺寸 | `xs \| sm \| md \| lg \| xl` | `md` |
 | disabled | 禁用 | `boolean` | `false` |
@@ -62,7 +62,7 @@ permalink: /components/segmented/
 | 事件名 | 说明 | 参数 |
 | --- | --- | --- |
 | change | 值变化 | `(value, event)` |
-| update:modelValue | v-model | `(value)` |
+| update:model-value | v-model | `(value)` |
 
 ### Segmented Slots
 

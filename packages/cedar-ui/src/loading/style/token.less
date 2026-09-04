@@ -1,0 +1,23 @@
+@import "../../style/theme/index.less";
+
+:root {
+  --c-loading-color: rgb(var(~"--c-primary-6"));
+  --c-loading-opacity: 0.38;
+  --c-loading-indicator-size: 20px;
+  --c-loading-tip-font-weight: var(~"--c-font-weight-500");
+  --c-loading-tip-margin: var(~"--c-spacing-3") 0 0;
+  --c-loading-tip-color: rgb(var(~"--c-primary-6"));
+  --c-loading-dot-color-primary: rgb(var(~"--c-primary-6"));
+  --c-loading-dot-color-secondary: rgb(var(~"--c-primary-5"));
+  --c-loading-dot-color-tertiary: rgb(var(~"--c-primary-4"));
+  --c-loading-dot-color-quaternary: rgb(var(~"--c-primary-4"));
+  --c-loading-dot-color-last: rgb(var(~"--c-primary-2"));
+  --c-loading-dot-size: var(~"--c-size-2");
+  --c-loading-dot-perspective: var(~"--c-size-50");
+  --c-loading-mask-background: color-mix(
+    in srgb,
+    var(~"--c-color-bg-white") 62%,
+    transparent
+  );
+  --c-loading-directive-z-index: 2000;
+}

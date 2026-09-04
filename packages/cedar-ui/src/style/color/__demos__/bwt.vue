@@ -4,6 +4,7 @@
 
 <script lang="ts" setup>
 import { h, reactive } from "vue";
+import { Message } from "@cedarjs/ui";
 const columns = [
   {
     title: "Class",

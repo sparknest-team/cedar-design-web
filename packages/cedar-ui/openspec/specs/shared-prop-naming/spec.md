@@ -1,8 +1,11 @@
 # shared-prop-naming Specification
 
 ## Purpose
+
 TBD - created by archiving change align-shared-prop-naming. Update Purpose after archive.
+
 ## Requirements
+
 ### Requirement: Overlay open state uses `open`
 
 浮层、下拉、模态、抽屉的受控开合 MUST 使用 `open`；非受控默认 MUST 使用 `defaultOpen`；v-model 事件 MUST 为 `update:open`。
@@ -27,16 +30,16 @@ MUST NOT 使用公开 prop 名 `teleport`。
 - **WHEN** 传入 `popupContainer="#app"` 或 DOM 节点
 - **THEN** 浮层内容挂载到该容器
 
-### Requirement: Mask naming
+### Requirement: Overlay naming
 
-遮罩相关公开 API MUST 使用：`mask`、`maskClass`（或与实现一致的 class 命名）、`maskStyle`、`maskClosable`、`escToClose`。
+背景覆盖层相关公开 API MUST 使用 `overlay` 术语。模态组件 MUST 使用：`overlay`、`overlayClass`、`overlayStyle`、`overlayClosable`、`escToClose`；Avatar 的悬浮覆盖入口 MUST 使用 `triggerType="overlay"`。
 
-MUST NOT 使用 `overlay`、`closeOnClickOverlay`、`closeOnKeyEscape` 作为公开遮罩 API。
+MUST NOT 使用 `mask`、`maskClass`、`maskStyle`、`maskClosable`、`click-mask` 或 `triggerType="mask"` 表示背景覆盖层。验证码字符隐藏、裁剪和渐隐等真正的掩码语义不受本要求影响。
 
-#### Scenario: Dialog mask closable
+#### Scenario: Dialog overlay closable
 
-- **WHEN** 传入 `mask-closable` / `maskClosable`
-- **THEN** 点击遮罩可关闭，且公开 API 不再出现 `closeOnClickOverlay`
+- **WHEN** 传入 `overlay-closable` / `overlayClosable`
+- **THEN** 点击背景层可关闭，且公开 API 不再出现 `maskClosable`
 
 ### Requirement: Form values use `modelValue`
 
@@ -79,4 +82,3 @@ MUST NOT 使用 `onBeforeChange` 等 `onBefore*` 作为拦截器 prop 名（`on*
 
 - **WHEN** 旧名（如 `show`、`teleport`、`fileList`）被新名替换
 - **THEN** 旧名不再出现在公开 props / 事件 / 导出中，也不提供 alias
-

@@ -29,12 +29,12 @@ function kebabCase(value) {
 }
 
 function iconVue(name, componentName, svg) {
-  return `<template>\n  ${svg}\n</template>\n\n<script setup lang="ts">\nimport { computed, type CSSProperties } from 'vue'\nimport { getPrefixCls } from '../_utils/global-config'\nimport { isNumber } from '../_utils/is'\n\ndefineOptions({ name: '${componentName}' })\n\nconst props = withDefaults(defineProps<{\n  size?: string | number\n  strokeWidth?: number\n  strokeLinecap?: 'butt' | 'round' | 'square'\n  strokeLinejoin?: 'bevel' | 'inherit' | 'miter' | 'round'\n  rotate?: number\n  spin?: boolean\n}>(), {\n  strokeWidth: 4,\n  strokeLinecap: 'butt',\n  strokeLinejoin: 'miter',\n})\n\nconst emit = defineEmits<{ click: [event: MouseEvent] }>()\nconst prefixCls = getPrefixCls('icon')\nconst cls = computed(() => [prefixCls, \`\${prefixCls}-${name.slice(5)}\`, { [\`\${prefixCls}-spin\`]: props.spin }])\nconst innerStyle = computed<CSSProperties>(() => ({\n  ...(props.size ? { fontSize: isNumber(props.size) ? \`\${props.size}px\` : props.size } : {}),\n  ...(props.rotate ? { transform: \`rotate(\${props.rotate}deg)\` } : {}),\n}))\n</script>\n`
+  return `<template>\n  ${svg}\n</template>\n\n<script setup lang="ts">\nimport { computed, type CSSProperties } from 'vue'\nimport { getPrefixCls } from '../_utils/global-config'\nimport { isNumber } from '../_utils/is'\n\ndefineOptions({ name: '${componentName}' })\n\nconst props = withDefaults(defineProps<{\n  size?: string | number\n  color?: string\n  title?: string\n  strokeWidth?: number\n  strokeLinecap?: 'butt' | 'round' | 'square'\n  strokeLinejoin?: 'bevel' | 'inherit' | 'miter' | 'round'\n  rotate?: number\n  spin?: boolean\n}>(), {\n  strokeWidth: 4,\n  strokeLinecap: 'butt',\n  strokeLinejoin: 'miter',\n})\n\nconst emit = defineEmits<{ click: [event: MouseEvent] }>()\nconst prefixCls = getPrefixCls('icon')\nconst numericSizeRE = /^-?(?:\\d+|\\d*\\.\\d+)$/\nconst cls = computed(() => [prefixCls, \`\${prefixCls}-${name.slice(5)}\`, { [\`\${prefixCls}-spin\`]: props.spin }])\nconst innerStyle = computed<CSSProperties>(() => ({\n  color: props.color,\n  fontSize: isNumber(props.size) || numericSizeRE.test(props.size?.trim() ?? '') ? \`\${props.size}px\` : props.size,\n  ...(props.rotate ? { transform: \`rotate(\${props.rotate}deg)\` } : {}),\n}))\n</script>\n`
 }
 
 function componentIndex(name, componentName) {
   const exportName = `Icon${componentName}`
-  return `import type { App } from 'vue'\nimport type { CedarIconOptions } from '../_utils/types'\nimport _${exportName} from './${name}.vue'\n\nexport const ${exportName} = Object.assign(_${exportName}, {\n  install(app: App, options?: CedarIconOptions) {\n    app.component(options?.iconPrefix ? options.iconPrefix + '${exportName}' : _${exportName}.name, _${exportName})\n  },\n})\n`
+  return `import type { App } from 'vue'\nimport _${exportName} from './${name}.vue'\n\nexport const ${exportName} = Object.assign(_${exportName}, {\n  install(app: App) { app.component(_${exportName}.name, _${exportName}) },\n})\n`
 }
 
 async function expectedFiles() {
@@ -52,6 +52,7 @@ async function expectedFiles() {
     seen.set(name, path)
     const componentName = pascalCase(name.slice('icon-'.length))
     const source = await readFile(path, 'utf8')
+    const forceFillRendering = !/<svg\b[^>]*\bstroke=["']/i.test(source) && !name.endsWith('-color')
     const result = optimize(source, {
       path,
       plugins: [
@@ -61,23 +62,28 @@ async function expectedFiles() {
         'removeDimensions',
         { name: 'removeAttrs', params: { attrs: ['class', 'style', 'stroke-width', 'stroke-linecap', 'stroke-linejoin'] } },
         { name: 'addAttributesToSVGElement', params: { attributes: [
+          { width: '1em' }, { height: '1em' },
+          ...(forceFillRendering ? [{ style: 'fill:currentColor;stroke:none' }] : []),
           { ':class': 'cls' }, { ':style': 'innerStyle' }, { ':stroke-width': 'props.strokeWidth' },
           { ':stroke-linecap': 'props.strokeLinecap' }, { ':stroke-linejoin': 'props.strokeLinejoin' },
-          { '@click': 'emit(\'click\', $event)' },
+          { ':aria-hidden': '!props.title' }, { role: 'img' }, { '@click': 'emit(\'click\', $event)' },
         ] } },
       ],
     })
+    const accessibleSvg = result.data.replace(/<svg([^>]*)>/, `<svg$1><title v-if="props.title">{{ props.title }}</title>`)
     icons.push({ name, componentName, category: relative(svgRoot, path).split(sep)[0] })
-    files.set(`${name}/${name}.vue`, iconVue(name, `CIcon${componentName}`, result.data))
+    files.set(`${name}/${name}.vue`, iconVue(name, `CIcon${componentName}`, accessibleSvg))
     files.set(`${name}/index.ts`, componentIndex(name, componentName))
   }
 
   const imports = icons.map(({ name, componentName }) => `import { Icon${componentName} } from './${name}'`).join('\n')
   const members = icons.map(({ componentName }) => `  Icon${componentName},`).join('\n')
   const exports = icons.map(({ name, componentName }) => `export { Icon${componentName} } from './${name}'`).join('\n')
-  files.set('cedar-vue-icon.ts', `import type { App } from 'vue'\nimport type { CedarIconOptions } from './_utils/types'\n${imports}\n\nconst icons = {\n${members}\n}\n\nexport default {\n  ...icons,\n  install(app: App, options?: CedarIconOptions) {\n    Object.values(icons).forEach((icon) => app.use(icon, options))\n  },\n}\n`)
-  files.set('index.ts', `export { default } from './cedar-vue-icon'\n${exports}\n`)
+  files.set('cedar-vue-icon.ts', `import type { App } from 'vue'\n${imports}\n\nconst icons = {\n${members}\n}\n\nexport default {\n  ...icons,\n  install(app: App) {\n    Object.values(icons).forEach((icon) => app.use(icon))\n  },\n}\n`)
+  const iconNames = icons.map(({ name }) => name.slice('icon-'.length))
+  files.set('index.ts', `export { default } from './cedar-vue-icon'\nexport const iconNames = ${JSON.stringify(iconNames)} as const\n${exports}\n`)
   files.set('icons.json', `${JSON.stringify(icons, null, 2)}\n`)
+  files.set('icon-components.ts', `// @ts-nocheck\n\ndeclare module 'vue' {\n  export interface GlobalComponents {\n${icons.map(({ componentName }) => `    Icon${componentName}: typeof import('./index')['Icon${componentName}'];`).join('\n')}\n  }\n}\n\nexport {}\n`)
   return files
 }
 

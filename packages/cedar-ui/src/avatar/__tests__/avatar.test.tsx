@@ -2,6 +2,7 @@ import { h } from 'vue'
 import { mount } from '@vue/test-utils'
 import { describe, expect, test } from 'vitest'
 import { Avatar, AvatarGroup, avatarGroupProps, avatarProps } from '../index'
+import { avatarTriggerTypes } from '../props'
 
 const avatarPropNames = [
   'shape',
@@ -62,6 +63,16 @@ describe('Avatar', () => {
       src: '/avatar.png',
       alt: 'Ada Lovelace',
     })
+  })
+
+  test('uses overlay terminology for the hover trigger', () => {
+    expect(avatarTriggerTypes).toEqual(['button', 'overlay'])
+    const wrapper = mount(Avatar, {
+      props: { triggerType: 'overlay' },
+      slots: { 'trigger-icon': 'edit' },
+    })
+
+    expect(wrapper.find('.c-avatar-trigger-icon-overlay').exists()).toBe(true)
   })
 
   test('applies color, bordered and lazy', () => {

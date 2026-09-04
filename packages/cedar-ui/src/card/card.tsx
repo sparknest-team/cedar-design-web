@@ -1,16 +1,16 @@
-import { defineComponent, computed, toRefs } from 'vue'
-import { createNamespace, formatElevation } from '../_utils/global-config'
-import Spin from '../spin'
-import { useSize } from '../_hooks/use-size'
-import Divider from '../divider'
-import { cardProps } from './props'
+import { defineComponent, computed, toRefs } from "vue";
+import { createNamespace, formatElevation } from "../_utils/global-config";
+import Loading from "../loading";
+import { useSize } from "../_hooks/use-size";
+import Divider from "../divider";
+import { cardProps } from "./props";
 
-const { name } = createNamespace('card')
+const { name } = createNamespace("card");
 
 export default defineComponent({
   name,
   components: {
-    Spin,
+    Loading,
   },
   props: cardProps,
   /**
@@ -49,64 +49,85 @@ export default defineComponent({
    * @slot default
    */
   setup(props, { slots }) {
-    const { n, classes } = createNamespace('card')
-    const { size } = toRefs(props)
-    const { mergedSize: _mergedSize } = useSize(size)
+    const { n, classes } = createNamespace("card");
+    const { size } = toRefs(props);
+    const { mergedSize: _mergedSize } = useSize(size);
     const mergedSize = computed(() => {
-      if (_mergedSize.value === 'sm' || _mergedSize.value === 'xs') {
-        return 'sm'
+      if (_mergedSize.value === "sm" || _mergedSize.value === "xs") {
+        return "sm";
       }
-      return 'md'
-    })
+      return "md";
+    });
 
     return () => {
-      const hasTitle = Boolean(slots.title ?? props.title)
-      const hasSubtitle = Boolean(props.subtitle ?? slots.subtitle)
-      const hasDescription = Boolean(props.description ?? slots.description)
-      const hasContent = Boolean(slots.default?.())
-      const hasTitleAction = Boolean(slots['title-action'])
+      const hasTitle = Boolean(slots.title ?? props.title);
+      const hasSubtitle = Boolean(props.subtitle ?? slots.subtitle);
+      const hasDescription = Boolean(props.description ?? slots.description);
+      const hasContent = Boolean(slots.default?.());
+      const hasTitleAction = Boolean(slots["title-action"]);
       return (
         <div
           class={classes(
             n(),
             n(`--size-${mergedSize.value}`),
             n(`--variant-${props.variant}`),
-            [props.variant === 'default', formatElevation(props.elevation, 0)],
-            [props.loading, n('--loading')],
-            [props.hoverable, n('--hoverable')],
-            [props.direction === 'row' || props.direction === 'row-reverse', n('--direction-row')],
-            [props.direction === 'row-reverse', n('--direction-row-reverse')],
+            [props.variant === "default", formatElevation(props.elevation, 0)],
+            [props.loading, n("--loading")],
+            [props.hoverable, n("--hoverable")],
+            [
+              props.direction === "row" || props.direction === "row-reverse",
+              n("--direction-row"),
+            ],
+            [props.direction === "row-reverse", n("--direction-row-reverse")],
           )}
         >
-          <div class={classes(n('floater'))}>
-            {slots.cover && <div class={classes(n('cover'))}>{slots.cover?.()}</div>}
-            <div class={classes(n('container'))}>
+          <div class={classes(n("floater"))}>
+            {slots.cover && (
+              <div class={classes(n("cover"))}>{slots.cover?.()}</div>
+            )}
+            <div class={classes(n("container"))}>
               {(hasTitle || hasTitleAction) && (
-                <div class={classes(n('title'))} style={props.titleStyle}>
+                <div class={classes(n("title"))} style={props.titleStyle}>
                   {slots.title?.() ?? props.title}
-                  {hasTitleAction && <div class={classes(n('title-action'))}>{slots['title-action']?.()}</div>}
+                  {hasTitleAction && (
+                    <div class={classes(n("title-action"))}>
+                      {slots["title-action"]?.()}
+                    </div>
+                  )}
                 </div>
               )}
-              {hasSubtitle && <div class={classes(n('subtitle'))}>{slots.subtitle?.() ?? props.subtitle}</div>}
-              {props.topDivider && <Divider class={classes(n('divider'))} />}
-              {hasContent && <div class={classes(n('content'))}>{props.loading ? <Spin /> : slots.default?.()}</div>}
-              {hasDescription && (
-                <div class={classes(n('description'))}>{slots.description?.() ?? props.description}</div>
+              {hasSubtitle && (
+                <div class={classes(n("subtitle"))}>
+                  {slots.subtitle?.() ?? props.subtitle}
+                </div>
               )}
-              {props.bottomDivider && <Divider class={classes(n('divider'))} />}
-              {slots.action && <div class={classes(n('action'))}> {slots.action?.()} </div>}
+              {props.topDivider && <Divider class={classes(n("divider"))} />}
+              {hasContent && (
+                <div class={classes(n("content"))}>
+                  {props.loading ? <Loading /> : slots.default?.()}
+                </div>
+              )}
+              {hasDescription && (
+                <div class={classes(n("description"))}>
+                  {slots.description?.() ?? props.description}
+                </div>
+              )}
+              {props.bottomDivider && <Divider class={classes(n("divider"))} />}
+              {slots.action && (
+                <div class={classes(n("action"))}> {slots.action?.()} </div>
+              )}
             </div>
           </div>
           <div
-            class={classes(n('holder'))}
+            class={classes(n("holder"))}
             style={{
-              width: 'auto',
-              height: 'auto',
+              width: "auto",
+              height: "auto",
             }}
           />
-          <span class={classes(n('underlay'))}></span>
+          <span class={classes(n("underlay"))}></span>
         </div>
-      )
-    }
+      );
+    };
   },
-})
+});

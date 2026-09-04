@@ -1,8 +1,8 @@
-import '../../style/index.less'
-import '../../_components/select-view/style'
-import '../../empty/style'
-import '../../scrollbar/style'
-import '../../trigger/style'
-import '../../tree/style'
-import '../../spin/style'
-import './index.less'
+import "../../style/index.less";
+import "../../_components/select-view/style";
+import "../../empty/style";
+import "../../scrollbar/style";
+import "../../trigger/style";
+import "../../tree/style";
+import "../../loading/style";
+import "./index.less";

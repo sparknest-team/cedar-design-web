@@ -18,8 +18,8 @@
         <span class="icon-name">icon-attachment</span>
       </div>
       <div class="icon-item">
-        <c-icon-bg-colors :size="32" />
-        <span class="icon-name">icon-bg-colors</span>
+        <c-icon-background-color :size="32" />
+        <span class="icon-name">icon-background-color</span>
       </div>
       <div class="icon-item">
         <c-icon-bold :size="32" />
@@ -54,8 +54,8 @@
         <span class="icon-name">icon-find-replace</span>
       </div>
       <div class="icon-item">
-        <c-icon-font-colors :size="32" />
-        <span class="icon-name">icon-font-colors</span>
+        <c-icon-font-color :size="32" />
+        <span class="icon-name">icon-font-color</span>
       </div>
       <div class="icon-item">
         <c-icon-formula :size="32" />

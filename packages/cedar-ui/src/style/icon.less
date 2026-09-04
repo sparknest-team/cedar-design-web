@@ -26,13 +26,17 @@
   font-style: normal;
   vertical-align: middle;
   outline: none;
-  stroke: currentColor;
 }
 
 .c-icon-loading,
 .c-icon-spin {
   animation: ~"c-loading-circle" var(~"--c-transition-duration-loading")
     infinite var(~"--c-transition-timing-function-linear");
+}
+
+.c-icon--shrinking {
+  transform: scale(0);
+  transition-property: transform;
 }
 
 @keyframes ~'c-loading-circle' {

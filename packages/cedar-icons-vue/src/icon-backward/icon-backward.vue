@@ -1,5 +1,5 @@
 <template>
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 48 48" :class="cls" :style="innerStyle" :stroke-width="props.strokeWidth" :stroke-linecap="props.strokeLinecap" :stroke-linejoin="props.strokeLinejoin" @click="emit('click', $event)"><path d="M38.293 36.293 26.707 24.707a1 1 0 0 1 0-1.414l11.586-11.586c.63-.63 1.707-.184 1.707.707v23.172c0 .89-1.077 1.337-1.707.707ZM21 12.414v23.172c0 .89-1.077 1.337-1.707.707L7.707 24.707a1 1 0 0 1 0-1.414l11.586-11.586c.63-.63 1.707-.184 1.707.707Z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 48 48" width="1em" height="1em" :class="cls" :style="innerStyle" :stroke-width="props.strokeWidth" :stroke-linecap="props.strokeLinecap" :stroke-linejoin="props.strokeLinejoin" :aria-hidden="!props.title" role="img" @click="emit('click', $event)"><title v-if="props.title">{{ props.title }}</title><path d="M38.293 36.293 26.707 24.707a1 1 0 0 1 0-1.414l11.586-11.586c.63-.63 1.707-.184 1.707.707v23.172c0 .89-1.077 1.337-1.707.707ZM21 12.414v23.172c0 .89-1.077 1.337-1.707.707L7.707 24.707a1 1 0 0 1 0-1.414l11.586-11.586c.63-.63 1.707-.184 1.707.707Z"/></svg>
 </template>
 
 <script setup lang="ts">
@@ -11,6 +11,8 @@ defineOptions({ name: 'CIconBackward' })
 
 const props = withDefaults(defineProps<{
   size?: string | number
+  color?: string
+  title?: string
   strokeWidth?: number
   strokeLinecap?: 'butt' | 'round' | 'square'
   strokeLinejoin?: 'bevel' | 'inherit' | 'miter' | 'round'
@@ -24,9 +26,11 @@ const props = withDefaults(defineProps<{
 
 const emit = defineEmits<{ click: [event: MouseEvent] }>()
 const prefixCls = getPrefixCls('icon')
+const numericSizeRE = /^-?(?:\d+|\d*\.\d+)$/
 const cls = computed(() => [prefixCls, `${prefixCls}-backward`, { [`${prefixCls}-spin`]: props.spin }])
 const innerStyle = computed<CSSProperties>(() => ({
-  ...(props.size ? { fontSize: isNumber(props.size) ? `${props.size}px` : props.size } : {}),
+  color: props.color,
+  fontSize: isNumber(props.size) || numericSizeRE.test(props.size?.trim() ?? '') ? `${props.size}px` : props.size,
   ...(props.rotate ? { transform: `rotate(${props.rotate}deg)` } : {}),
 }))
 </script>

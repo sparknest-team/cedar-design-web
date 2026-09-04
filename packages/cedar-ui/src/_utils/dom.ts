@@ -100,7 +100,7 @@ export const OVERLAY_TYPES = ['dialog', 'message', 'notification', 'drawer'] as 
 
 export const getOverlay = (type: (typeof OVERLAY_TYPES)[number]) => {
   const popper = document.createElement('div')
-  popper.setAttribute('class', `c-overlay c-overlay-${type}`)
+  popper.setAttribute('class', `c-overlay-host c-overlay-host-${type}`)
   return popper
 }
 

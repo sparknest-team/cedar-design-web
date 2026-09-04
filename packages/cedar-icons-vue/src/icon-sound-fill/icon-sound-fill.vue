@@ -1,5 +1,5 @@
 <template>
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 48 48" :class="cls" :style="innerStyle" :stroke-width="props.strokeWidth" :stroke-linecap="props.strokeLinecap" :stroke-linejoin="props.strokeLinejoin" @click="emit('click', $event)"><path fill="currentColor" stroke="none" d="m14 15 10-7v32l-10-7H6V15z"/><path fill="currentColor" stroke="none" d="M24.924 6.226A2 2 0 0 1 26 8v32a2 2 0 0 1-3.147 1.639L13.37 35H6a2 2 0 0 1-2-2V15a2 2 0 0 1 2-2h7.37l9.483-6.638a2 2 0 0 1 2.07-.136M35.314 35.042c6.248-6.249 6.248-16.38 0-22.628l2.828-2.828c7.81 7.81 7.81 20.474 0 28.284z"/><path fill="currentColor" stroke="none" d="M29.657 29.728a8 8 0 0 0 0-11.314l2.828-2.828c4.687 4.686 4.687 12.284 0 16.97z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 48 48" width="1em" height="1em" :class="cls" :style="innerStyle" :stroke-width="props.strokeWidth" :stroke-linecap="props.strokeLinecap" :stroke-linejoin="props.strokeLinejoin" :aria-hidden="!props.title" role="img" @click="emit('click', $event)"><title v-if="props.title">{{ props.title }}</title><path fill="currentColor" stroke="none" d="m14 15 10-7v32l-10-7H6V15z"/><path fill="currentColor" stroke="none" d="M24.924 6.226A2 2 0 0 1 26 8v32a2 2 0 0 1-3.147 1.639L13.37 35H6a2 2 0 0 1-2-2V15a2 2 0 0 1 2-2h7.37l9.483-6.638a2 2 0 0 1 2.07-.136M35.314 35.042c6.248-6.249 6.248-16.38 0-22.628l2.828-2.828c7.81 7.81 7.81 20.474 0 28.284z"/><path fill="currentColor" stroke="none" d="M29.657 29.728a8 8 0 0 0 0-11.314l2.828-2.828c4.687 4.686 4.687 12.284 0 16.97z"/></svg>
 </template>
 
 <script setup lang="ts">
@@ -11,6 +11,8 @@ defineOptions({ name: 'CIconSoundFill' })
 
 const props = withDefaults(defineProps<{
   size?: string | number
+  color?: string
+  title?: string
   strokeWidth?: number
   strokeLinecap?: 'butt' | 'round' | 'square'
   strokeLinejoin?: 'bevel' | 'inherit' | 'miter' | 'round'
@@ -24,9 +26,11 @@ const props = withDefaults(defineProps<{
 
 const emit = defineEmits<{ click: [event: MouseEvent] }>()
 const prefixCls = getPrefixCls('icon')
+const numericSizeRE = /^-?(?:\d+|\d*\.\d+)$/
 const cls = computed(() => [prefixCls, `${prefixCls}-sound-fill`, { [`${prefixCls}-spin`]: props.spin }])
 const innerStyle = computed<CSSProperties>(() => ({
-  ...(props.size ? { fontSize: isNumber(props.size) ? `${props.size}px` : props.size } : {}),
+  color: props.color,
+  fontSize: isNumber(props.size) || numericSizeRE.test(props.size?.trim() ?? '') ? `${props.size}px` : props.size,
   ...(props.rotate ? { transform: `rotate(${props.rotate}deg)` } : {}),
 }))
 </script>

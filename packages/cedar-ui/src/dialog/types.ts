@@ -43,11 +43,11 @@ export interface DialogConfig {
   cancelButtonLoading?: boolean;
   confirmButtonDisabled?: boolean;
   cancelButtonDisabled?: boolean;
-  mask?: boolean;
-  maskClass?: string;
-  maskStyle?: CSSProperties;
+  overlay?: boolean;
+  overlayClass?: string;
+  overlayStyle?: CSSProperties;
   lockScroll?: boolean;
-  maskClosable?: boolean;
+  overlayClosable?: boolean;
   escToClose?: boolean;
   popupContainer?: string | HTMLElement | false;
   alignCenter?: boolean;
@@ -64,14 +64,14 @@ export interface DialogConfig {
   onOpened?: () => void;
   onClose?: () => void;
   onClosed?: () => void;
-  onClickMask?: (event?: Event) => void;
+  onClickOverlay?: (event?: Event) => void;
   onKeyEscape?: (event?: KeyboardEvent) => void;
   width?: number | string;
   top?: number | string;
   titleAlign?: DialogTitleAlign;
   dialogClass?: string | any[];
   dialogStyle?: CSSProperties;
-  maskAnimationName?: string;
+  overlayAnimationName?: string;
   dialogAnimationName?: string;
   hideTitle?: boolean;
   bodyClass?: string | any[];
@@ -94,7 +94,7 @@ export type DialogUpdateConfig = Omit<
   | "onOpened"
   | "onClose"
   | "onClosed"
-  | "onClickMask"
+  | "onClickOverlay"
   | "onKeyEscape"
 > & { title?: string; message?: string };
 

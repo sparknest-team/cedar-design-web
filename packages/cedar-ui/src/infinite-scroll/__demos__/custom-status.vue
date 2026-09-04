@@ -14,7 +14,7 @@
 
       <template #loading>
         <c-space align="center">
-          <c-spin />
+          <c-loading />
           正在加载下一页
         </c-space>
       </template>

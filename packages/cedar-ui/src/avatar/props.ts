@@ -3,7 +3,7 @@ import type { PopoverProps } from '../popover'
 import type { AvatarShape, AvatarTriggerType, ObjectFit } from './types'
 
 export const avatarShapes = ['circle', 'square'] as const
-export const avatarTriggerTypes = ['button', 'mask'] as const
+export const avatarTriggerTypes = ['button', 'overlay'] as const
 export const avatarObjectFits = ['fill', 'contain', 'cover', 'none', 'scale-down'] as const
 
 export const avatarProps = {

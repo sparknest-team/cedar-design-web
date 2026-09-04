@@ -35,6 +35,10 @@ describe("Dialog component contract", () => {
   });
 
   test("renders shared props and accessibility attributes", async () => {
+    expect(dialogProps).toHaveProperty("overlay");
+    expect(dialogProps).toHaveProperty("overlayClosable");
+    expect(dialogProps).not.toHaveProperty("mask");
+    expect(dialogProps).not.toHaveProperty("maskClosable");
     const wrapper = mountDialog({
       title: "Confirm deletion",
       message: "This cannot be undone.",
@@ -57,7 +61,7 @@ describe("Dialog component contract", () => {
     );
   });
 
-  test("uses close semantics for close button and mask", async () => {
+  test("uses close semantics for close button and overlay", async () => {
     const beforeClose = vi.fn((_action, done) => done());
     const wrapper = mountDialog({ beforeClose });
     await nextTick();
@@ -69,13 +73,15 @@ describe("Dialog component contract", () => {
     );
     expect(wrapper.emitted("cancel")).toBeUndefined();
 
-    const maskWrapper = mountDialog({ beforeClose });
+    const overlayWrapper = mountDialog({ beforeClose });
     await nextTick();
-    const wrapperElement = maskWrapper.get(".c-dialog-wrapper");
+    const wrapperElement = overlayWrapper.get(".c-dialog-wrapper");
     await wrapperElement.trigger("mousedown");
     await wrapperElement.trigger("click");
-    expect(maskWrapper.emitted("click-mask")?.[0]?.[0]).toBeInstanceOf(Event);
-    expect(maskWrapper.emitted("cancel")).toBeUndefined();
+    expect(overlayWrapper.emitted("click-overlay")?.[0]?.[0]).toBeInstanceOf(
+      Event,
+    );
+    expect(overlayWrapper.emitted("cancel")).toBeUndefined();
   });
 
   test("uses text buttons by default and supports Button prop overrides", async () => {

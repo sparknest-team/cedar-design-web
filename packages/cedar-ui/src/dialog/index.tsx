@@ -183,7 +183,7 @@ const dialog: DialogMethod = {
   confirm: createDialogMethod({ type: "warning" }),
   alert: createDialogMethod({
     cancelButton: false,
-    maskClosable: false,
+    overlayClosable: false,
     escToClose: false,
   }),
   ...MESSAGE_TYPES.reduce(

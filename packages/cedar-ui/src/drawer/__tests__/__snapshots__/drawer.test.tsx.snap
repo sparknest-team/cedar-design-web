@@ -4,7 +4,7 @@ exports[`Drawer > render 1`] = `
 "<!--teleport start-->
 <div class=\\"c-drawer-container\\" style=\\"z-index: 1001;\\">
   <transition-stub name=\\"fade-drawer\\" appear=\\"true\\" persisted=\\"false\\" css=\\"true\\">
-    <div class=\\"c-drawer-mask\\"></div>
+    <div class=\\"c-drawer-overlay\\"></div>
   </transition-stub>
   <transition-stub name=\\"slide-right-drawer\\" appear=\\"true\\" persisted=\\"true\\" css=\\"true\\">
     <div role=\\"dialog\\" aria-modal=\\"true\\" aria-label=\\"Settings\\" class=\\"c-drawer\\" style=\\"right: 0px; width: 250px;\\">

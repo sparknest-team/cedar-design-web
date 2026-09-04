@@ -6,7 +6,7 @@
 
     <header v-if="showHeading()" :class="prefixCls">
       <div :class="`${prefixCls}-main`">
-        <icon-hover v-if="hasBackHandler()" :class="`${prefixCls}-back`" :prefix="prefixCls" @click="handleBack">
+        <icon-hover v-if="showBack" :class="`${prefixCls}-back`" :prefix="prefixCls" @click="handleBack">
           <slot name="back"><icon-left /></slot>
         </icon-hover>
         <div v-if="$slots.avatar" :class="`${prefixCls}-avatar`"><slot name="avatar" /></div>
@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import { createNamespace, getPrefixCls } from '../_utils/global-config'
-import { defineComponent, getCurrentInstance } from 'vue'
+import { defineComponent } from 'vue'
 import IconHover from '../_components/icon-hover.vue'
 import { IconLeft } from '@cedarjs/icons-vue/icon-left'
 import { pageHeaderProps } from './props'
@@ -43,16 +43,14 @@ export default defineComponent({
   },
   setup(props, { emit, slots }) {
     const prefixCls = getPrefixCls('page-header')
-    const instance = getCurrentInstance()
-    const hasBackHandler = () => Boolean(instance?.vnode.props?.onBack)
     const showHeading = () =>
-      hasBackHandler() ||
+      props.showBack ||
       Boolean(
         slots.avatar || slots.title || props.title || slots.subtitle || props.subtitle || slots.extra || props.extra,
       )
     const handleBack = (event: MouseEvent) => emit('back', event)
 
-    return { prefixCls, hasBackHandler, showHeading, handleBack }
+    return { prefixCls, showHeading, handleBack }
   },
 })
 </script>

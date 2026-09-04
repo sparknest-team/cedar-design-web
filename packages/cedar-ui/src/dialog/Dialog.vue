@@ -8,20 +8,20 @@
         :style="{ zIndex: mergedZIndex }"
         v-bind="$attrs"
       >
-        <transition :name="maskAnimationName" appear>
+        <transition :name="overlayAnimationName" appear>
           <div
-            v-if="mask"
+            v-if="overlay"
             v-show="computedOpen"
-            ref="maskRef"
-            :class="[`${prefixCls}-mask`, maskClass]"
-            :style="maskStyle"
+            ref="overlayRef"
+            :class="[`${prefixCls}-overlay`, overlayClass]"
+            :style="overlayStyle"
           />
         </transition>
         <div
           ref="wrapperRef"
           :class="wrapperCls"
-          @click.self="handleMaskClick"
-          @mousedown.self="handleMaskMouseDown"
+          @click.self="handleOverlayClick"
+          @mousedown.self="handleOverlayMouseDown"
         >
           <transition
             :name="dialogAnimationName"
@@ -168,7 +168,7 @@ export default defineComponent({
     opened: () => true,
     close: () => true,
     closed: () => true,
-    "click-mask": (e: Event) => true,
+    "click-overlay": (e: Event) => true,
     "key-escape": (e: KeyboardEvent) => true,
   },
   setup(props, { emit, slots, expose }) {
@@ -331,18 +331,18 @@ export default defineComponent({
       handleClose(e);
     };
 
-    const currentIsMask = ref(false);
+    const currentIsOverlay = ref(false);
 
-    const handleMaskMouseDown = (ev: Event) => {
+    const handleOverlayMouseDown = (ev: Event) => {
       if (ev.target === wrapperRef.value) {
-        currentIsMask.value = true;
+        currentIsOverlay.value = true;
       }
     };
 
-    const handleMaskClick = (e: Event) => {
-      emit("click-mask", e);
+    const handleOverlayClick = (e: Event) => {
+      emit("click-overlay", e);
 
-      if (props.mask && props.maskClosable && currentIsMask.value) {
+      if (props.overlay && props.overlayClosable && currentIsOverlay.value) {
         handleClose(e);
       }
     };
@@ -433,7 +433,7 @@ export default defineComponent({
             : null;
         emit("open");
         mounted.value = true;
-        currentIsMask.value = false;
+        currentIsOverlay.value = false;
         if (props.lockScroll) {
           setOverflowHidden();
         }
@@ -501,8 +501,8 @@ export default defineComponent({
       handleConfirm,
       handleCancel,
       handleClose,
-      handleMaskClick,
-      handleMaskMouseDown,
+      handleOverlayClick,
+      handleOverlayMouseDown,
       handleOpened,
       handleClosed,
       handleFocusTrap,

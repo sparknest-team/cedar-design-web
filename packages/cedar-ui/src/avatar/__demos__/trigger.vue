@@ -8,7 +8,7 @@
       image-url="/cat2.jpg"
       alt="更换头像"
       :size="56"
-      trigger-type="mask"
+      trigger-type="overlay"
     >
       <template #trigger-icon><c-icon-camera /></template>
     </c-avatar>

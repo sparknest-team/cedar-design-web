@@ -22,9 +22,8 @@ export interface PreviewControllerOptions {
   keyboard: Ref<boolean | undefined>;
   draggable: Ref<boolean>;
   keepDragOffset: Ref<boolean>;
-  closeOnImageTap: Ref<boolean | undefined>;
+  overlayClosable: Ref<boolean>;
   onOpenChange: (open: boolean) => void;
-  onKeyEscape?: () => void;
   onLongPress?: () => void;
   onPrev?: () => void;
   onNext?: () => void;
@@ -52,9 +51,6 @@ export function usePreviewController(options: PreviewControllerOptions) {
   );
   const mergedKeyboard = computed(
     () => options.keyboard.value ?? isDesktop.value,
-  );
-  const mergedCloseOnImageTap = computed(
-    () => options.closeOnImageTap.value ?? isTouch.value,
   );
 
   const clampScale = (value: number) =>
@@ -97,14 +93,16 @@ export function usePreviewController(options: PreviewControllerOptions) {
   let originX = 0;
   let originY = 0;
   let moved = false;
-  let lastTapAt = 0;
+  let pointerStartedOnImage = false;
+  let lastTap:
+    { at: number; src: string | undefined; x: number; y: number } | undefined;
   let tapCloseTimer: ReturnType<typeof setTimeout> | undefined;
   let longPressTimer: ReturnType<typeof setTimeout> | undefined;
 
   function cancelPendingTap() {
     if (tapCloseTimer) clearTimeout(tapCloseTimer);
     tapCloseTimer = undefined;
-    lastTapAt = 0;
+    lastTap = undefined;
   }
 
   function isInteractiveTarget(target: EventTarget | null) {
@@ -117,6 +115,7 @@ export function usePreviewController(options: PreviewControllerOptions) {
   }
 
   function onPointerDown(event: PointerEvent) {
+    pointerStartedOnImage = false;
     if (isInteractiveTarget(event.target)) {
       cancelPendingTap();
       return;
@@ -128,6 +127,11 @@ export function usePreviewController(options: PreviewControllerOptions) {
     originX = translateX.value;
     originY = translateY.value;
     moved = false;
+    pointerStartedOnImage = Boolean(
+      (event.target as HTMLElement | null)?.closest?.(
+        "[data-image-preview-image]",
+      ),
+    );
     moving.value = true;
     (event.currentTarget as HTMLElement).setPointerCapture?.(event.pointerId);
     if (event.pointerType === "touch") {
@@ -149,44 +153,69 @@ export function usePreviewController(options: PreviewControllerOptions) {
     }
   }
 
+  function releasePointer(event: PointerEvent) {
+    const target = event.currentTarget as HTMLElement;
+    if (target.hasPointerCapture?.(event.pointerId)) {
+      target.releasePointerCapture?.(event.pointerId);
+    }
+  }
+
   function onPointerUp(event: PointerEvent) {
     if (pointerId !== event.pointerId) return;
     if (longPressTimer) clearTimeout(longPressTimer);
+    releasePointer(event);
     const dx = event.clientX - startX;
     moving.value = false;
     pointerId = undefined;
     if (scale.value <= 1 && Math.abs(dx) > 48) {
+      cancelPendingTap();
       dx > 0 ? options.onPrev?.() : options.onNext?.();
       resetOffset();
       return;
     }
     if (scale.value <= 1) resetOffset();
-    if (!moved && event.pointerType === "touch") {
+    if (!moved && pointerStartedOnImage && event.pointerType === "touch") {
       const now = Date.now();
-      if (now - lastTapAt < 320) {
+      const isDoubleTap =
+        lastTap !== undefined &&
+        now - lastTap.at < 320 &&
+        lastTap.src === options.src.value &&
+        Math.hypot(event.clientX - lastTap.x, event.clientY - lastTap.y) <= 24;
+      if (isDoubleTap) {
         if (tapCloseTimer) clearTimeout(tapCloseTimer);
         tapCloseTimer = undefined;
         scale.value > 1 ? zoomTo(1) : zoomIn();
-        lastTapAt = 0;
+        lastTap = undefined;
       } else {
-        lastTapAt = now;
-        if (
-          options.closeOnImageTap.value ??
-          (isTouch.value || event.pointerType === "touch")
-        ) {
-          const tapAt = now;
-          tapCloseTimer = setTimeout(() => {
-            tapCloseTimer = undefined;
-            if (lastTapAt === tapAt) {
-              lastTapAt = 0;
-              close();
-            }
-          }, 320);
-        }
+        lastTap = {
+          at: now,
+          src: options.src.value,
+          x: event.clientX,
+          y: event.clientY,
+        };
+        const tap = lastTap;
+        tapCloseTimer = setTimeout(() => {
+          tapCloseTimer = undefined;
+          if (lastTap === tap) {
+            lastTap = undefined;
+          }
+        }, 320);
       }
-    } else if (!moved && mergedCloseOnImageTap.value) {
-      close();
     }
+  }
+
+  function onPointerCancel(event: PointerEvent) {
+    if (pointerId !== event.pointerId) return;
+    if (longPressTimer) clearTimeout(longPressTimer);
+    releasePointer(event);
+    longPressTimer = undefined;
+    moving.value = false;
+    pointerId = undefined;
+    moved = false;
+    pointerStartedOnImage = false;
+    translateX.value = originX;
+    translateY.value = originY;
+    cancelPendingTap();
   }
 
   function onWheel(event: WheelEvent) {
@@ -195,15 +224,39 @@ export function usePreviewController(options: PreviewControllerOptions) {
     event.deltaY < 0 ? zoomIn() : zoomOut();
   }
 
-  function onDoubleClick() {
+  function onDoubleClick(event: MouseEvent) {
+    const element = event.target as HTMLElement | null;
+    if (
+      isInteractiveTarget(event.target) ||
+      !element?.closest?.("[data-image-preview-image]")
+    ) {
+      cancelPendingTap();
+      return;
+    }
     scale.value > 1 ? zoomTo(1) : zoomIn();
   }
+
+  function onOverlayClick(event: MouseEvent) {
+    const startedOnImage = pointerStartedOnImage;
+    pointerStartedOnImage = false;
+    if (!options.overlayClosable.value) return;
+    const element = event.target as HTMLElement | null;
+    if (
+      startedOnImage ||
+      isInteractiveTarget(event.target) ||
+      element?.closest?.("[data-image-preview-image]")
+    )
+      return;
+    if (moved) {
+      moved = false;
+      return;
+    }
+    close();
+  }
+
   function onKeydown(event: KeyboardEvent) {
     if (!mergedOpen.value || !mergedKeyboard.value) return;
-    if (event.key === "Escape") {
-      options.onKeyEscape?.();
-      close();
-    } else if (event.key === "ArrowLeft") options.onPrev?.();
+    if (event.key === "ArrowLeft") options.onPrev?.();
     else if (event.key === "ArrowRight") options.onNext?.();
     else if (event.key === "ArrowUp") {
       event.preventDefault();
@@ -242,7 +295,6 @@ export function usePreviewController(options: PreviewControllerOptions) {
     isTouch,
     mergedWheelZoom,
     mergedKeyboard,
-    mergedCloseOnImageTap,
     open,
     close,
     reset,
@@ -254,7 +306,9 @@ export function usePreviewController(options: PreviewControllerOptions) {
     onPointerDown,
     onPointerMove,
     onPointerUp,
+    onPointerCancel,
     onWheel,
     onDoubleClick,
+    onOverlayClick,
   };
 }

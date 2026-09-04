@@ -17,6 +17,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
+import { Message } from '@cedarjs/ui'
 import type { CountdownInstance } from '../index'
 
 const countdownRef = ref<CountdownInstance>()

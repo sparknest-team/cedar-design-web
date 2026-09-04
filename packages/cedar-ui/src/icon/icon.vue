@@ -1,5 +1,5 @@
 <template>
-  <span :class="cls" :style="innerStyle">
+  <span :class="cls" :style="innerStyle" @click="emit('click', $event)">
     <slot v-if="$slots.default" />
     <component v-else-if="iconComponent" :is="iconComponent" />
   </span>
@@ -7,9 +7,9 @@
 
 <script setup lang="ts">
 import type { CSSProperties } from 'vue'
-import { computed, getCurrentInstance } from 'vue'
+import { computed, getCurrentInstance, nextTick, ref, watch } from 'vue'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
-import { isNumber } from '../_utils/is'
+import { toSizeUnit } from '../_utils/maple/elements'
 import { iconProps } from './props'
 
 defineOptions({
@@ -17,38 +17,56 @@ defineOptions({
 })
 
 const props = defineProps(iconProps)
+const emit = defineEmits<{ click: [event: MouseEvent] }>()
 const instance = getCurrentInstance()
 const prefixCls = getPrefixCls('icon')
+const nextName = ref<string>()
+const animateInProgress = ref(false)
 
 const iconComponent = computed(() => {
-  if (!props.name) return undefined
-  const componentName = `Icon${props.name
+  if (!nextName.value) return undefined
+  const componentName = `Icon${nextName.value
     .split('-')
     .filter(Boolean)
     .map((part) => `${part.charAt(0).toUpperCase()}${part.slice(1)}`)
     .join('')}`
-  return instance?.appContext.components[componentName]
+  const components = instance?.appContext.components
+  return components?.[componentName] ?? components?.[`C${componentName}`]
 })
 
 const innerStyle = computed(() => {
   const styles: CSSProperties = {}
-  if (props.size) {
-    styles.fontSize = isNumber(props.size) ? `${props.size}px` : props.size
+  if (props.size != null) {
+    styles.fontSize = toSizeUnit(props.size)
   }
   if (props.rotate) {
-    styles.transform = `rotate(${props.rotate}deg)`
+    styles.rotate = `${props.rotate}deg`
   }
   if (props.color) {
     styles.color = props.color
   }
+  styles.transitionDuration = `${Number(props.transition) || 0}ms`
   return styles
 })
 
 const cls = computed(() => [
   prefixCls,
   {
-    [`${prefixCls}-loading`]: props.spin,
+    [`${prefixCls}-spin`]: props.spin,
+    [props.animationClass ?? `${prefixCls}--shrinking`]: animateInProgress.value,
   },
-  props.type,
 ])
+
+watch(() => props.name, async (newName, oldName) => {
+  if (oldName == null || (Number(props.transition) || 0) === 0) {
+    nextName.value = newName
+    return
+  }
+  animateInProgress.value = true
+  await nextTick()
+  setTimeout(() => {
+    nextName.value = newName
+    animateInProgress.value = false
+  }, Number(props.transition) || 0)
+}, { immediate: true })
 </script>

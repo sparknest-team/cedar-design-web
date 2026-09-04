@@ -3,6 +3,8 @@
 </template>
 
 <script lang="ts" setup>
+import { Drawer } from '@cedarjs/ui'
+
 const handleClick = () => {
   Drawer.open({
     title: 'Info Title',

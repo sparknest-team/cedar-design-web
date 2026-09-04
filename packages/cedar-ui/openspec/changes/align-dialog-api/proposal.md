@@ -4,7 +4,7 @@ Cedar 与 Maple 的 Dialog 在 Props、事件名、函数式方法、关闭 acti
 
 ## What Changes
 
-- **BREAKING**：统一事件为 `click-mask`，Maple 删除 `click-overlay`。
+- **BREAKING**：统一事件为 `click-overlay`，两端删除 `click-mask`。
 - **BREAKING**：Maple 删除可调用的 `Dialog(...)` 以及四个按钮颜色快捷 Props。
 - 两端统一 Props、Slots、实例方法和函数式方法。
 - Cedar 实现现有占位的 `close/setDefaultOptions/resetDefaultOptions`；Maple 补齐桌面端已有能力。

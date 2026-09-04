@@ -10,12 +10,13 @@
         "
         v-bind="$attrs"
       >
-        <transition name="fade-drawer" appear>
+        <transition :name="overlayAnimationName" appear>
           <div
-            v-if="mask"
+            v-if="overlay"
             v-show="computedOpen"
-            :class="`${prefixCls}-mask`"
-            @click="handleMask"
+            :class="[`${prefixCls}-overlay`, overlayClass]"
+            :style="overlayStyle"
+            @click="handleOverlay"
           />
         </transition>
         <transition
@@ -150,6 +151,7 @@ export default defineComponent({
      * @version 2.43.0
      */
     beforeClose: () => true,
+    "click-overlay": (e: Event) => true,
   },
   /**
    * @zh 标题
@@ -278,8 +280,9 @@ export default defineComponent({
       }
     };
 
-    const handleMask = (e: Event) => {
-      if (props.maskClosable) {
+    const handleOverlay = (e: Event) => {
+      emit("click-overlay", e);
+      if (props.overlayClosable) {
         handleCancel(e);
       }
     };
@@ -355,7 +358,7 @@ export default defineComponent({
       handleCancel,
       handleOpen,
       handleClose,
-      handleMask,
+      handleOverlay,
       isFixed,
       teleportContainer,
     };

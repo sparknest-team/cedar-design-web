@@ -9,6 +9,8 @@
 </template>
 
 <script setup lang="ts">
+import { Dialog, Message } from "@cedarjs/ui";
+
 function openBasic() {
   Dialog.open("This dialog was opened from a string message.");
 }
@@ -43,7 +45,7 @@ async function awaitAction() {
 function hideButtons() {
   Dialog.open({
     title: "No Footer Buttons",
-    message: "Click the mask or press Esc to dismiss this dialog.",
+    message: "Click the overlay or press Esc to dismiss this dialog.",
     confirmButton: false,
     cancelButton: false,
   });

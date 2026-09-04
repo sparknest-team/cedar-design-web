@@ -76,7 +76,7 @@ permalink: /components/avatar/
 
 ### 交互图标
 
-使用 `trigger-icon` 插槽添加交互入口，`triggerType` 支持独立按钮和悬浮遮罩两种形式。
+使用 `trigger-icon` 插槽添加交互入口，`triggerType` 支持独立按钮和悬浮背景层两种形式。
 
 <demo src="./__demos__/trigger.vue"></demo>
 
@@ -87,16 +87,16 @@ permalink: /components/avatar/
 | 属性             | 说明                       | 类型                                                       | 默认值     |
 | ---------------- | -------------------------- | ---------------------------------------------------------- | ---------- |
 | shape            | 头像形状                   | `'circle' \| 'square'`                                     | `'circle'` |
-| imageUrl         | 图片地址                   | `string`                                                   | -          |
+| image-url         | 图片地址                   | `string`                                                   | -          |
 | alt              | 图片替代文本               | `string`                                                   | `''`       |
 | size             | 头像宽高，单位为 px        | `number`                                                   | `40`       |
-| autoFixFontSize  | 是否自动缩放过长的文字内容 | `boolean`                                                  | `true`     |
-| triggerType      | 交互图标展示方式           | `'button' \| 'mask'`                                       | `'button'` |
-| triggerIconStyle | 交互图标的自定义样式       | `CSSProperties`                                            | -          |
-| objectFit        | 图片填充方式               | `'fill' \| 'contain' \| 'cover' \| 'none' \| 'scale-down'` | `'cover'`  |
+| auto-fix-font-size  | 是否自动缩放过长的文字内容 | `boolean`                                                  | `true`     |
+| trigger-type      | 交互图标展示方式           | `'button' \| 'overlay'`                                       | `'button'` |
+| trigger-icon-style | 交互图标的自定义样式       | `CSSProperties`                                            | -          |
+| object-fit        | 图片填充方式               | `'fill' \| 'contain' \| 'cover' \| 'none' \| 'scale-down'` | `'cover'`  |
 | color            | 头像背景色                 | `string`                                                   | -          |
 | bordered         | 是否显示描边               | `boolean`                                                  | `false`    |
-| borderColor      | 描边颜色                   | `string`                                                   | -          |
+| border-color      | 描边颜色                   | `string`                                                   | -          |
 | loading          | 图片加载中的占位图地址     | `string`                                                   | -          |
 | error            | 图片加载失败的占位图地址   | `string`                                                   | -          |
 | lazy             | 是否懒加载图片             | `boolean`                                                  | `false`    |
@@ -124,11 +124,11 @@ permalink: /components/avatar/
 | --------------- | ---------------------------------- | ---------------------- | ---------- |
 | shape           | 子头像形状                         | `'circle' \| 'square'` | `'circle'` |
 | size            | 子头像宽高，单位为 px              | `number`               | `40`       |
-| autoFixFontSize | 是否自动缩放子头像中的文字         | `boolean`              | `true`     |
-| maxCount        | 最多直接展示的头像数，`0` 表示不限 | `number`               | `0`        |
-| zIndexAscend    | 头像层级是否按顺序递增             | `boolean`              | `false`    |
-| maxStyle        | 数量汇总头像的自定义样式           | `CSSProperties`        | -          |
-| maxPopoverProps | 汇总 Popover 的属性                | `PopoverProps`         | -          |
+| auto-fix-font-size | 是否自动缩放子头像中的文字         | `boolean`              | `true`     |
+| max-count        | 最多直接展示的头像数，`0` 表示不限 | `number`               | `0`        |
+| z-index-ascend    | 头像层级是否按顺序递增             | `boolean`              | `false`    |
+| max-style        | 数量汇总头像的自定义样式           | `CSSProperties`        | -          |
+| max-popover-props | 汇总 Popover 的属性                | `PopoverProps`         | -          |
 | offset          | 组内头像的重叠偏移量               | `number \| string`     | -          |
 | vertical        | 是否纵向堆叠                       | `boolean`              | `false`    |
 

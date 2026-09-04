@@ -43,8 +43,8 @@ permalink: /components/ellipsis/
 | 属性 | 说明 | 类型 | 默认值 |
 | ---- | ---- | ---- | ------ |
 | expand | 是否展开 | `boolean` | `false` |
-| expandTrigger | 展开触发方式 | `'click'` | `-` |
-| lineClamp | 多行省略的行数 | `number \| string` | `-` |
+| expand-trigger | 展开触发方式 | `'click'` | `-` |
+| line-clamp | 多行省略的行数 | `number \| string` | `-` |
 | tooltip | tooltip 配置，`false` 表示禁用 | `object \| boolean` | `true` |
 
 ### Ellipsis Events

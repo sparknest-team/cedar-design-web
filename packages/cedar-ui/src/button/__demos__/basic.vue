@@ -11,6 +11,8 @@
 </template>
 
 <script setup lang="ts">
+import { Dialog } from '@cedarjs/ui'
+
 const handleClick = () => {
   Dialog.open({
     title: '标题',

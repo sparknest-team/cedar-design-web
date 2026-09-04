@@ -22,12 +22,12 @@ export const dialogProps = {
   top: {
     type: [Number, String],
   },
-  mask: {
+  overlay: {
     type: Boolean,
     default: true,
   },
-  maskClass: String,
-  maskStyle: {
+  overlayClass: String,
+  overlayStyle: {
     type: Object as PropType<CSSProperties>,
   },
   title: String,
@@ -52,7 +52,7 @@ export const dialogProps = {
     default: true,
   },
   unmountOnClose: Boolean,
-  maskClosable: {
+  overlayClosable: {
     type: Boolean,
     default: true,
   },
@@ -131,7 +131,7 @@ export const dialogProps = {
     type: Boolean,
     default: false,
   },
-  maskAnimationName: {
+  overlayAnimationName: {
     type: String,
     default: (props: Record<string, any>) => {
       if (props.fullscreen) {

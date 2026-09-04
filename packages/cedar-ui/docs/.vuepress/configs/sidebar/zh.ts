@@ -414,6 +414,10 @@ export const zhSideBar: SidebarConfig = {
           link: "/components/notification/",
         },
         {
+          text: "Overlay 背景层",
+          link: "/components/overlay/",
+        },
+        {
           text: "Dialog 对话框",
           link: "/components/dialog/",
         },
@@ -426,11 +430,7 @@ export const zhSideBar: SidebarConfig = {
           link: "/components/popconfirm/",
         },
         {
-          text: "Spin 加载中",
-          link: "/components/spin/",
-        },
-        {
-          text: "Loading 指令",
+          text: "Loading 加载",
           link: "/components/loading/",
         },
         {

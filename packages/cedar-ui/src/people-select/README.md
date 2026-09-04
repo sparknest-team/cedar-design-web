@@ -21,7 +21,7 @@ permalink: /components/people-select/
 | 属性       | 说明                                   | 类型    | 默认值 |
 | ---------- | -------------------------------------- | ------- | ------ |
 | fetch      | 需要主动传入发请求的fetch              | any     | -      |
-| modelValue | 绑定值                                 | string  | -      |
+| model-value | 绑定值                                 | string  | -      |
 | is-label   | 是否是阅读模式                         | boolean | -      |
 | url-type   | 选人地址的url类型，默认有三种oss、ares | string  | ares   |
 

@@ -43,6 +43,8 @@
   </div>
 </template>
 <script lang="ts">
+import { Message } from '@cedarjs/ui'
+
 export default {
   setup() {
     return {

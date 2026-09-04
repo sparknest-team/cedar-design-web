@@ -103,10 +103,10 @@ permalink: /components/dialog/
 | `top`                     | 距顶部高度（`align-center` 时无效）          | `number \| string`               | `-`          |
 | `title-align`             | 标题对齐                                     | `'start' \| 'center'`            | `'center'`   |
 | `align-center`            | 垂直水平居中                                 | `boolean`                        | `true`       |
-| `mask`                    | 是否显示遮罩                                 | `boolean`                        | `true`       |
-| `mask-class`              | 遮罩 class                                   | `string`                         | `-`          |
-| `mask-style`              | 遮罩 style                                   | `CSSProperties`                  | `-`          |
-| `mask-closable`           | 点击遮罩关闭                                 | `boolean`                        | `true`       |
+| `overlay`                    | 是否显示背景层                                 | `boolean`                        | `true`       |
+| `overlay-class`              | 背景层 class                                   | `string`                         | `-`          |
+| `overlay-style`              | 背景层 style                                   | `CSSProperties`                  | `-`          |
+| `overlay-closable`           | 点击背景层关闭                                 | `boolean`                        | `true`       |
 | `esc-to-close`            | ESC 关闭                                     | `boolean`                        | `true`       |
 | `lock-scroll`             | 打开时锁定背景滚动                           | `boolean`                        | `true`       |
 | `popup-container`         | 挂载位置，`false` 禁用 teleport              | `string \| HTMLElement \| false` | `'body'`     |
@@ -130,7 +130,7 @@ permalink: /components/dialog/
 | `unmount-on-close`        | 关闭后卸载                                   | `boolean`                        | `false`      |
 | `draggable`               | 可拖动                                       | `boolean`                        | `false`      |
 | `fullscreen`              | 全屏                                         | `boolean`                        | `false`      |
-| `mask-animation-name`     | 遮罩动画                                     | `string`                         | `fade-modal` |
+| `overlay-animation-name`     | 背景层动画                                     | `string`                         | `fade-modal` |
 | `dialog-animation-name`   | 对话框动画                                   | `string`                         | `zoom-modal` |
 | `z-index`                 | 层级                                         | `number`                         | `-`          |
 | `before-close`            | 关闭前拦截                                   | `(action, done, refs) => void`   | `-`          |
@@ -145,10 +145,10 @@ permalink: /components/dialog/
 | `closed`     | 关闭动画结束  | `-`             |
 | `confirm`    | 点击确认      | `Event`         |
 | `cancel`     | 点击取消/关闭 | `Event`         |
-| `click-mask` | 点击遮罩      | `MouseEvent`    |
+| `click-overlay` | 点击背景层      | `MouseEvent`    |
 | `key-escape` | ESC           | `KeyboardEvent` |
 
-关闭按钮、遮罩、ESC 和 `close()` 使用 `close` 语义，不会额外触发 `cancel`。
+关闭按钮、背景层、ESC 和 `close()` 使用 `close` 语义，不会额外触发 `cancel`。
 
 ### `<Dialog>` Slots
 
@@ -174,7 +174,7 @@ permalink: /components/dialog/
 | `footer`      | 是否展示 footer 或自定义 footer    | `boolean \| RenderContent` |
 | `onConfirm`   | 确认回调                           | `(e?: Event) => void`      |
 | `onCancel`    | 取消回调                           | `(e?: Event) => void`      |
-| `onClickMask` | 点击遮罩回调                       | `() => void`               |
+| `onClickOverlay` | 点击背景层回调                       | `() => void`               |
 | `onKeyEscape` | ESC 回调                           | `() => void`               |
 
 #### DialogMethod

@@ -54,11 +54,11 @@ export function resolveClosable(
   return source.closable ?? fallback;
 }
 
-export function resolveMaskClosable(
-  source: { maskClosable?: boolean },
+export function resolveOverlayClosable(
+  source: { overlayClosable?: boolean },
   fallback: boolean,
 ): boolean {
-  return source.maskClosable ?? fallback;
+  return source.overlayClosable ?? fallback;
 }
 
 export function resolveLoop(

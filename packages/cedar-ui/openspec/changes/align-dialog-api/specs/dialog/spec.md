@@ -4,10 +4,10 @@
 
 Cedar 与 Maple Dialog SHALL 暴露 `design-ui/standards/dialog.md` 定义的相同 Props、Events、Slots、实例方法及函数式方法。
 
-#### Scenario: 遮罩事件统一
+#### Scenario: 背景层事件统一
 
-- **WHEN** 用户点击 Dialog 遮罩
-- **THEN** 两端都发出 `click-mask` 并携带原始事件
+- **WHEN** 用户点击 Dialog 背景层
+- **THEN** 两端都发出 `click-overlay` 并携带原始事件
 - **AND** 不存在 `click-overlay` 公共事件
 
 #### Scenario: 异步关闭提交 action

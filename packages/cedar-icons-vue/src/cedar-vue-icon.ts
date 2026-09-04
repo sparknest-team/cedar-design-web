@@ -1,5 +1,4 @@
 import type { App } from 'vue'
-import type { CedarIconOptions } from './_utils/types'
 import { IconEmptyDefault } from './icon-empty-default'
 import { IconErrorNetwork } from './icon-error-network'
 import { IconErrorUnknown } from './icon-error-unknown'
@@ -42,7 +41,7 @@ import { IconAlignCenter } from './icon-align-center'
 import { IconAlignLeft } from './icon-align-left'
 import { IconAlignRight } from './icon-align-right'
 import { IconAttachment } from './icon-attachment'
-import { IconBgColors } from './icon-bg-colors'
+import { IconBackgroundColor } from './icon-background-color'
 import { IconBold } from './icon-bold'
 import { IconBrush } from './icon-brush'
 import { IconCopy } from './icon-copy'
@@ -51,7 +50,7 @@ import { IconEdit } from './icon-edit'
 import { IconEraser } from './icon-eraser'
 import { IconFilter } from './icon-filter'
 import { IconFindReplace } from './icon-find-replace'
-import { IconFontColors } from './icon-font-colors'
+import { IconFontColor } from './icon-font-color'
 import { IconFormula } from './icon-formula'
 import { IconH1 } from './icon-h1'
 import { IconH2 } from './icon-h2'
@@ -125,7 +124,7 @@ import { IconFolderAdd } from './icon-folder-add'
 import { IconFolderDelete } from './icon-folder-delete'
 import { IconFolder } from './icon-folder'
 import { IconGift } from './icon-gift'
-import { IconIdcard } from './icon-idcard'
+import { IconIdCard } from './icon-id-card'
 import { IconImageClose } from './icon-image-close'
 import { IconImage } from './icon-image'
 import { IconInteraction } from './icon-interaction'
@@ -151,7 +150,7 @@ import { IconPhone } from './icon-phone'
 import { IconPrinter } from './icon-printer'
 import { IconPublic } from './icon-public'
 import { IconPushpin } from './icon-pushpin'
-import { IconQrcode } from './icon-qrcode'
+import { IconQrCode } from './icon-qr-code'
 import { IconRelation } from './icon-relation'
 import { IconRobotAdd } from './icon-robot-add'
 import { IconRobot } from './icon-robot'
@@ -224,7 +223,7 @@ import { IconBytedanceColor } from './icon-bytedance-color'
 import { IconLarkColor } from './icon-lark-color'
 import { IconTiktokColor } from './icon-tiktok-color'
 import { IconXiguaColor } from './icon-xigua-color'
-import { IconFaceBookCircleFill } from './icon-face-book-circle-fill'
+import { IconFacebookCircleFill } from './icon-facebook-circle-fill'
 import { IconFacebookSquareFill } from './icon-facebook-square-fill'
 import { IconGoogleCircleFill } from './icon-google-circle-fill'
 import { IconQqCircleFill } from './icon-qq-circle-fill'
@@ -240,8 +239,8 @@ import { IconGoogle } from './icon-google'
 import { IconQqZone } from './icon-qq-zone'
 import { IconQq } from './icon-qq'
 import { IconTwitter } from './icon-twitter'
+import { IconWechatPay } from './icon-wechat-pay'
 import { IconWechat } from './icon-wechat'
-import { IconWechatpay } from './icon-wechatpay'
 import { IconWeibo } from './icon-weibo'
 import { IconMuteFill } from './icon-mute-fill'
 import { IconPauseCircleFill } from './icon-pause-circle-fill'
@@ -266,6 +265,92 @@ import { IconRecord } from './icon-record'
 import { IconSkipNext } from './icon-skip-next'
 import { IconSkipPrevious } from './icon-skip-previous'
 import { IconSound } from './icon-sound'
+import { IconAlertCircle } from './icon-alert-circle'
+import { IconAlert } from './icon-alert'
+import { IconArrowUpBoldBoxFill } from './icon-arrow-up-bold-box-fill'
+import { IconArrowUpBoldBox } from './icon-arrow-up-bold-box'
+import { IconBarcodeScan } from './icon-barcode-scan'
+import { IconBellFill } from './icon-bell-fill'
+import { IconBell } from './icon-bell'
+import { IconBookmarkFill } from './icon-bookmark-fill'
+import { IconCakeVariant } from './icon-cake-variant'
+import { IconCalendarMonthFill } from './icon-calendar-month-fill'
+import { IconCalendarMonth } from './icon-calendar-month'
+import { IconCameraFill } from './icon-camera-fill'
+import { IconCardAccountDetailsFill } from './icon-card-account-details-fill'
+import { IconCardAccountDetails } from './icon-card-account-details'
+import { IconCartFill } from './icon-cart-fill'
+import { IconCart } from './icon-cart'
+import { IconChatProcessingFill } from './icon-chat-processing-fill'
+import { IconChatProcessing } from './icon-chat-processing'
+import { IconCheckboxBlank } from './icon-checkbox-blank'
+import { IconCheckboxMarkedCircleFill } from './icon-checkbox-marked-circle-fill'
+import { IconCheckboxMarkedCircle } from './icon-checkbox-marked-circle'
+import { IconCheckboxMarkedFill } from './icon-checkbox-marked-fill'
+import { IconCheckboxMarked } from './icon-checkbox-marked'
+import { IconChevronDown } from './icon-chevron-down'
+import { IconChevronLeft } from './icon-chevron-left'
+import { IconChevronRight } from './icon-chevron-right'
+import { IconChevronUp } from './icon-chevron-up'
+import { IconCloseBoxFill } from './icon-close-box-fill'
+import { IconCloseBox } from './icon-close-box'
+import { IconCodeJson } from './icon-code-json'
+import { IconDownloadFill } from './icon-download-fill'
+import { IconEmailFill } from './icon-email-fill'
+import { IconError } from './icon-error'
+import { IconEyeFill } from './icon-eye-fill'
+import { IconFileDocument } from './icon-file-document'
+import { IconFormatListCheckbox } from './icon-format-list-checkbox'
+import { IconHeartHalfFull } from './icon-heart-half-full'
+import { IconHomeFill } from './icon-home-fill'
+import { IconImageFill } from './icon-image-fill'
+import { IconLocationFill } from './icon-location-fill'
+import { IconLocationRadiusFill } from './icon-location-radius-fill'
+import { IconLocationRadius } from './icon-location-radius'
+import { IconLockFill } from './icon-lock-fill'
+import { IconMenuDown } from './icon-menu-down'
+import { IconMenuLeft } from './icon-menu-left'
+import { IconMenuOpen } from './icon-menu-open'
+import { IconMenuRight } from './icon-menu-right'
+import { IconMenuUp } from './icon-menu-up'
+import { IconMessageProcessing } from './icon-message-processing'
+import { IconMessageText } from './icon-message-text'
+import { IconMinusBoxFill } from './icon-minus-box-fill'
+import { IconMinusBox } from './icon-minus-box'
+import { IconNotebook } from './icon-notebook'
+import { IconPaletteFill } from './icon-palette-fill'
+import { IconPhoneFill } from './icon-phone-fill'
+import { IconPinFill } from './icon-pin-fill'
+import { IconPinOffFill } from './icon-pin-off-fill'
+import { IconPinOff } from './icon-pin-off'
+import { IconPin } from './icon-pin'
+import { IconPower } from './icon-power'
+import { IconQrCodeScan } from './icon-qr-code-scan'
+import { IconRadioBlank } from './icon-radio-blank'
+import { IconRadioMarked } from './icon-radio-marked'
+import { IconSettingsFill } from './icon-settings-fill'
+import { IconShareFill } from './icon-share-fill'
+import { IconShare } from './icon-share'
+import { IconShoppingFill } from './icon-shopping-fill'
+import { IconShopping } from './icon-shopping'
+import { IconStarHalfFull } from './icon-star-half-full'
+import { IconTagFill } from './icon-tag-fill'
+import { IconTrashCanFill } from './icon-trash-can-fill'
+import { IconTrashCan } from './icon-trash-can'
+import { IconUploadFill } from './icon-upload-fill'
+import { IconUserCircleFill } from './icon-user-circle-fill'
+import { IconUserCircle } from './icon-user-circle'
+import { IconWarning } from './icon-warning'
+import { IconWeatherCloudy } from './icon-weather-cloudy'
+import { IconWeatherLightning } from './icon-weather-lightning'
+import { IconWeatherNight } from './icon-weather-night'
+import { IconWeatherPouring } from './icon-weather-pouring'
+import { IconWeatherRainy } from './icon-weather-rainy'
+import { IconWeatherSnowy } from './icon-weather-snowy'
+import { IconWhiteBalanceSunny } from './icon-white-balance-sunny'
+import { IconXml } from './icon-xml'
+import { IconZoomInFill } from './icon-zoom-in-fill'
+import { IconZoomOutFill } from './icon-zoom-out-fill'
 import { IconCheckCircleFill } from './icon-check-circle-fill'
 import { IconCloseCircleFill } from './icon-close-circle-fill'
 import { IconExclamationCircleFill } from './icon-exclamation-circle-fill'
@@ -335,7 +420,7 @@ const icons = {
   IconAlignLeft,
   IconAlignRight,
   IconAttachment,
-  IconBgColors,
+  IconBackgroundColor,
   IconBold,
   IconBrush,
   IconCopy,
@@ -344,7 +429,7 @@ const icons = {
   IconEraser,
   IconFilter,
   IconFindReplace,
-  IconFontColors,
+  IconFontColor,
   IconFormula,
   IconH1,
   IconH2,
@@ -418,7 +503,7 @@ const icons = {
   IconFolderDelete,
   IconFolder,
   IconGift,
-  IconIdcard,
+  IconIdCard,
   IconImageClose,
   IconImage,
   IconInteraction,
@@ -444,7 +529,7 @@ const icons = {
   IconPrinter,
   IconPublic,
   IconPushpin,
-  IconQrcode,
+  IconQrCode,
   IconRelation,
   IconRobotAdd,
   IconRobot,
@@ -517,7 +602,7 @@ const icons = {
   IconLarkColor,
   IconTiktokColor,
   IconXiguaColor,
-  IconFaceBookCircleFill,
+  IconFacebookCircleFill,
   IconFacebookSquareFill,
   IconGoogleCircleFill,
   IconQqCircleFill,
@@ -533,8 +618,8 @@ const icons = {
   IconQqZone,
   IconQq,
   IconTwitter,
+  IconWechatPay,
   IconWechat,
-  IconWechatpay,
   IconWeibo,
   IconMuteFill,
   IconPauseCircleFill,
@@ -559,6 +644,92 @@ const icons = {
   IconSkipNext,
   IconSkipPrevious,
   IconSound,
+  IconAlertCircle,
+  IconAlert,
+  IconArrowUpBoldBoxFill,
+  IconArrowUpBoldBox,
+  IconBarcodeScan,
+  IconBellFill,
+  IconBell,
+  IconBookmarkFill,
+  IconCakeVariant,
+  IconCalendarMonthFill,
+  IconCalendarMonth,
+  IconCameraFill,
+  IconCardAccountDetailsFill,
+  IconCardAccountDetails,
+  IconCartFill,
+  IconCart,
+  IconChatProcessingFill,
+  IconChatProcessing,
+  IconCheckboxBlank,
+  IconCheckboxMarkedCircleFill,
+  IconCheckboxMarkedCircle,
+  IconCheckboxMarkedFill,
+  IconCheckboxMarked,
+  IconChevronDown,
+  IconChevronLeft,
+  IconChevronRight,
+  IconChevronUp,
+  IconCloseBoxFill,
+  IconCloseBox,
+  IconCodeJson,
+  IconDownloadFill,
+  IconEmailFill,
+  IconError,
+  IconEyeFill,
+  IconFileDocument,
+  IconFormatListCheckbox,
+  IconHeartHalfFull,
+  IconHomeFill,
+  IconImageFill,
+  IconLocationFill,
+  IconLocationRadiusFill,
+  IconLocationRadius,
+  IconLockFill,
+  IconMenuDown,
+  IconMenuLeft,
+  IconMenuOpen,
+  IconMenuRight,
+  IconMenuUp,
+  IconMessageProcessing,
+  IconMessageText,
+  IconMinusBoxFill,
+  IconMinusBox,
+  IconNotebook,
+  IconPaletteFill,
+  IconPhoneFill,
+  IconPinFill,
+  IconPinOffFill,
+  IconPinOff,
+  IconPin,
+  IconPower,
+  IconQrCodeScan,
+  IconRadioBlank,
+  IconRadioMarked,
+  IconSettingsFill,
+  IconShareFill,
+  IconShare,
+  IconShoppingFill,
+  IconShopping,
+  IconStarHalfFull,
+  IconTagFill,
+  IconTrashCanFill,
+  IconTrashCan,
+  IconUploadFill,
+  IconUserCircleFill,
+  IconUserCircle,
+  IconWarning,
+  IconWeatherCloudy,
+  IconWeatherLightning,
+  IconWeatherNight,
+  IconWeatherPouring,
+  IconWeatherRainy,
+  IconWeatherSnowy,
+  IconWhiteBalanceSunny,
+  IconXml,
+  IconZoomInFill,
+  IconZoomOutFill,
   IconCheckCircleFill,
   IconCloseCircleFill,
   IconExclamationCircleFill,
@@ -588,7 +759,7 @@ const icons = {
 
 export default {
   ...icons,
-  install(app: App, options?: CedarIconOptions) {
-    Object.values(icons).forEach((icon) => app.use(icon, options))
+  install(app: App) {
+    Object.values(icons).forEach((icon) => app.use(icon))
   },
 }

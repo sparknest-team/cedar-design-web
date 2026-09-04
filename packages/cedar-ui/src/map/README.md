@@ -32,26 +32,26 @@ google地图
 
 | 属性                    | 说明                                         | 类型                                         | 默认值           |
 | ----------------------- | -------------------------------------------- | -------------------------------------------- | ---------------- |
-| modelValue(**v-model**) | 地图的初始值，表示所选位置的信息。           | `Object`                                     | -                |
-| defaultValue            | 用来设置默认地图中心点                       | `{ [key in valueKeyAlias[keys]]: any }`      | -                |
+| model-value(**v-model**) | 地图的初始值，表示所选位置的信息。           | `Object`                                     | -                |
+| default-value            | 用来设置默认地图中心点                       | `{ [key in valueKeyAlias[keys]]: any }`      | -                |
 | driver                  | `Fetch.genDriiver`的返回值                   | `Driver`                                     | `-`              |
 | fetch                   | `Fetch.genFetch`的返回值                     | `CoreService`                                | `-`              |
-| geocoderUrl             | geocoderUrl接口路径                          | `string`                                     | `-`              |
-| geocoderHandler         | 用于处理地图编码服务的响应。                 | `(longitude: number, latitude: number)=>{})` | -                |
-| basePath                | 地图的基础路径，配置获取地图数据的基础 URL。 | `String`                                     | `'/pe/powerpro'` |
-| isInternational         | 指示地图是否为谷歌地图。                     | `Boolean`                                    | -                |
-| showName                | 是否展示悬浮框名称                           | `boolean`                                    | `false`          |
-| showLocateMeButton      | 是否展示定位到当前位置按钮                   | `boolean`                                    | `false`          |
-| showEditAddressButton   | 是否展示修改地点悬浮按钮                     | `boolean`                                    | `false`          |
-| showMapTips             | 是否展示地图上方tips                         | `boolean`                                    | `false`          |
-| mapType                 | 要显示的地图类型。                           | `'qqmaps'\|'bmapGL'\|'amaps'`                | `'amaps'`        |
-| enableGisSearch         | 是否启用gis搜索(**开启时`fetch`为必传**)     | `boolean`                                    | `false`          |
-| valueKeyScope           | 一个字符串数组，表示要在地图上显示的值列表。 | `Array`                                      | `valueKeyScope`  |
-| valueKeyAlias           | 一个对象，表示地图键到值的映射关系。         | `Object`                                     | `valueKeyAlias`  |
+| geocoder-url             | geocoderUrl接口路径                          | `string`                                     | `-`              |
+| geocoder-handler         | 用于处理地图编码服务的响应。                 | `(longitude: number, latitude: number)=>{})` | -                |
+| base-path                | 地图的基础路径，配置获取地图数据的基础 URL。 | `String`                                     | `'/pe/powerpro'` |
+| is-international         | 指示地图是否为谷歌地图。                     | `Boolean`                                    | -                |
+| show-name                | 是否展示悬浮框名称                           | `boolean`                                    | `false`          |
+| show-locate-me-button      | 是否展示定位到当前位置按钮                   | `boolean`                                    | `false`          |
+| show-edit-address-button   | 是否展示修改地点悬浮按钮                     | `boolean`                                    | `false`          |
+| show-map-tips             | 是否展示地图上方tips                         | `boolean`                                    | `false`          |
+| map-type                 | 要显示的地图类型。                           | `'qqmaps'\|'bmapGL'\|'amaps'`                | `'amaps'`        |
+| enable-gis-search         | 是否启用gis搜索(**开启时`fetch`为必传**)     | `boolean`                                    | `false`          |
+| value-key-scope           | 一个字符串数组，表示要在地图上显示的值列表。 | `Array`                                      | `valueKeyScope`  |
+| value-key-alias           | 一个对象，表示地图键到值的映射关系。         | `Object`                                     | `valueKeyAlias`  |
 
 ### MapSelect Props
 
-| mapStyle | 直接设置到地图上面的style，可以设置地图的高度。 | `object` | `{ height: '300px'}` |
+| map-style | 直接设置到地图上面的style，可以设置地图的高度。 | `object` | `{ height: '300px'}` |
 
 ### Map Events
 

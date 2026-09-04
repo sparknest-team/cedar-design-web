@@ -3,6 +3,8 @@
 </template>
 
 <script lang="ts">
+import { Dialog } from '@cedarjs/ui'
+
 export default {
   setup() {
     const handleClick = () => {

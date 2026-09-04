@@ -36,11 +36,12 @@ permalink: /components/page-header/
 
 ### PageHeader Props
 
-| 属性     | 说明         | 类型     | 默认值 |
-| -------- | ------------ | -------- | ------ |
-| title    | 页头的主标题 | `string` | `-`    |
-| subtitle | 页头的次标题 | `string` | `-`    |
-| extra    | 右侧附加内容 | `string` | `-`    |
+| 属性     | 说明             | 类型      | 默认值  |
+| -------- | ---------------- | --------- | ------- |
+| show-back | 是否显示返回按钮 | `boolean` | `false` |
+| title    | 页头的主标题     | `string`  | `-`     |
+| subtitle | 页头的次标题     | `string`  | `-`     |
+| extra    | 右侧附加内容     | `string`  | `-`     |
 
 ### PageHeader Events
 

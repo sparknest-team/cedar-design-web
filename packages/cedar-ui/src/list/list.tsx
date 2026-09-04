@@ -1,7 +1,7 @@
 import { computed, defineComponent, inject, ref, toRefs } from "vue";
 import { getPrefixCls, createNamespace } from "../_utils/global-config";
 import { configProviderInjectionKey } from "../config-provider/context";
-import Spin from "../spin";
+import Loading from "../loading";
 import Empty from "../empty";
 import VirtualList from "../_components/virtual-list-v2";
 import type {
@@ -142,7 +142,7 @@ export default defineComponent({
 
       return (
         <div class={`${prefixCls}-wrapper`}>
-          <Spin class={`${prefixCls}-spin`} loading={props.loading}>
+          <Loading class={`${prefixCls}-loading`} loading={props.loading}>
             <Component
               ref={componentRef}
               class={cls.value}
@@ -166,7 +166,7 @@ export default defineComponent({
                 )}
               </div>
             </Component>
-          </Spin>
+          </Loading>
         </div>
       );
     };

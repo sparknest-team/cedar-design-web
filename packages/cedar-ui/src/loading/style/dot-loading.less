@@ -1,0 +1,54 @@
+.c-dot-loading {
+  position: relative;
+  display: inline-block;
+  width: calc(var(~"--c-loading-dot-size") * 7);
+  height: var(~"--c-loading-dot-size");
+  transform-style: preserve-3d;
+  perspective: var(~"--c-loading-dot-perspective");
+
+  &__item {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: var(~"--c-loading-dot-size");
+    height: var(~"--c-loading-dot-size");
+    background-color: var(~"--c-loading-dot-color-primary");
+    border-radius: var(~"--c-border-radius-circle");
+    transform: translateX(-50%) scale(0);
+    animation: c-dot-loading 2s var(~"--c-transition-timing-function-linear")
+      infinite forwards;
+
+    &:nth-child(2) {
+      background-color: var(~"--c-loading-dot-color-secondary");
+      animation-delay: 400ms;
+    }
+    &:nth-child(3) {
+      background-color: var(~"--c-loading-dot-color-tertiary");
+      animation-delay: 800ms;
+    }
+    &:nth-child(4) {
+      background-color: var(~"--c-loading-dot-color-quaternary");
+      animation-delay: 1200ms;
+    }
+    &:nth-child(5) {
+      background-color: var(~"--c-loading-dot-color-last");
+      animation-delay: 1600ms;
+    }
+  }
+}
+
+/* prettier-ignore */
+@keyframes c-dot-loading {
+/* prettier-ignore */
+each(range(36), {
+  @percent: round(percentage(((@value - 1) / 36)), 3);
+  @radius: 280%;
+  @xOffset: round(sin((pi() / 180 * @value * 10)) * @radius, 3) * -1;
+  @zOffset: round(cos((pi() / 180) * @value * 10), 3) * -1px;
+  @scaleOffset: round((1 - cos((pi() / 180) * @value * 10)) * 0.75 + 0.5, 3);
+
+  @{percent} {
+    transform: ~'translate3D(@{xOffset}, 0, @{zOffset}) scale(@{scaleOffset})'
+  }
+});
+}

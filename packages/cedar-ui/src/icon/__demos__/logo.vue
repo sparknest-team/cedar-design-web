@@ -18,8 +18,8 @@
         <span class="icon-name">icon-xigua-color</span>
       </div>
       <div class="icon-item">
-        <c-icon-face-book-circle-fill :size="32" />
-        <span class="icon-name">icon-face-book-circle-fill</span>
+        <c-icon-facebook-circle-fill :size="32" />
+        <span class="icon-name">icon-facebook-circle-fill</span>
       </div>
       <div class="icon-item">
         <c-icon-facebook-square-fill :size="32" />
@@ -86,8 +86,8 @@
         <span class="icon-name">icon-wechat</span>
       </div>
       <div class="icon-item">
-        <c-icon-wechatpay :size="32" />
-        <span class="icon-name">icon-wechatpay</span>
+        <c-icon-wechat-pay :size="32" />
+        <span class="icon-name">icon-wechat-pay</span>
       </div>
       <div class="icon-item">
         <c-icon-weibo :size="32" />

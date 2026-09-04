@@ -1,5 +1,5 @@
 <template>
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 48 48" :class="cls" :style="innerStyle" :stroke-width="props.strokeWidth" :stroke-linecap="props.strokeLinecap" :stroke-linejoin="props.strokeLinejoin" @click="emit('click', $event)"><path fill="currentColor" stroke="none" d="M18.08 33.093a6 6 0 0 1-12 0c-.212-3.593 2.686-6 6-6a6 6 0 0 1 6 6M39.08 33.093a6 6 0 0 1-12 0c-.212-3.593 2.686-6 6-6a6 6 0 0 1 6 6"/><path d="M6.08 33.093a6 6 0 1 0 6-6c-3.314 0-6.212 2.407-6 6Zm0 0c-.5-8.5 1-25.5 15-24m6 24a6 6 0 1 0 6-6c-3.314 0-6.212 2.407-6 6Zm0 0c-.5-8.5 1-25.5 15-24"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 48 48" width="1em" height="1em" :class="cls" :style="innerStyle" :stroke-width="props.strokeWidth" :stroke-linecap="props.strokeLinecap" :stroke-linejoin="props.strokeLinejoin" :aria-hidden="!props.title" role="img" @click="emit('click', $event)"><title v-if="props.title">{{ props.title }}</title><path fill="currentColor" stroke="none" d="M18.08 33.093a6 6 0 0 1-12 0c-.212-3.593 2.686-6 6-6a6 6 0 0 1 6 6M39.08 33.093a6 6 0 0 1-12 0c-.212-3.593 2.686-6 6-6a6 6 0 0 1 6 6"/><path d="M6.08 33.093a6 6 0 1 0 6-6c-3.314 0-6.212 2.407-6 6Zm0 0c-.5-8.5 1-25.5 15-24m6 24a6 6 0 1 0 6-6c-3.314 0-6.212 2.407-6 6Zm0 0c-.5-8.5 1-25.5 15-24"/></svg>
 </template>
 
 <script setup lang="ts">
@@ -11,6 +11,8 @@ defineOptions({ name: 'CIconQuote' })
 
 const props = withDefaults(defineProps<{
   size?: string | number
+  color?: string
+  title?: string
   strokeWidth?: number
   strokeLinecap?: 'butt' | 'round' | 'square'
   strokeLinejoin?: 'bevel' | 'inherit' | 'miter' | 'round'
@@ -24,9 +26,11 @@ const props = withDefaults(defineProps<{
 
 const emit = defineEmits<{ click: [event: MouseEvent] }>()
 const prefixCls = getPrefixCls('icon')
+const numericSizeRE = /^-?(?:\d+|\d*\.\d+)$/
 const cls = computed(() => [prefixCls, `${prefixCls}-quote`, { [`${prefixCls}-spin`]: props.spin }])
 const innerStyle = computed<CSSProperties>(() => ({
-  ...(props.size ? { fontSize: isNumber(props.size) ? `${props.size}px` : props.size } : {}),
+  color: props.color,
+  fontSize: isNumber(props.size) || numericSizeRE.test(props.size?.trim() ?? '') ? `${props.size}px` : props.size,
   ...(props.rotate ? { transform: `rotate(${props.rotate}deg)` } : {}),
 }))
 </script>

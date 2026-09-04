@@ -99,7 +99,12 @@ for (const [name, component] of Object.entries(CedarIconsVue)) {
 
 ```vue
 <script setup lang="ts">
-import { IconDelete, IconEdit, IconSearch, IconShareExternal } from "@cedarjs/icons-vue";
+import {
+  IconDelete,
+  IconEdit,
+  IconSearch,
+  IconShareExternal,
+} from "@cedarjs/icons-vue";
 </script>
 
 <template>
@@ -126,7 +131,7 @@ Message.success("保存成功");
 
 ### 自动引入指令
 
-同一个 `CedarResolver()` 支持 `v-loading` 和 `v-tooltip`，无需配置第二个 Resolver。可通过 `CedarResolver({ directives: false })` 关闭。
+同一个 `CedarResolver()` 支持 `v-c-loading` 和 `v-tooltip`，无需配置第二个 Resolver。加载指令使用 `c-` 前缀，避免与其他组件库的同名指令冲突。可通过 `CedarResolver({ directives: false })` 关闭。
 
 ## 手动按需引入
 

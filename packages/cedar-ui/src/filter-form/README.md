@@ -45,16 +45,16 @@ const fieldMap: FilterFormFieldMap = {
 
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| modelValue **(v-model)** | 表单值 | `Record<string, unknown>` | `{}` |
+| model-value **(v-model)** | 表单值 | `Record<string, unknown>` | `{}` |
 | fields | 筛选项 schema | `FilterFormField[]` | `[]` |
-| fieldMap | 字段组件注册表 | `FilterFormFieldMap` | `{}` |
-| optionsMap | options 字典，供 `optionsFromMap` 使用 | `Record<string, unknown>` | `{}` |
+| field-map | 字段组件注册表 | `FilterFormFieldMap` | `{}` |
+| options-map | options 字典，供 `optionsFromMap` 使用 | `Record<string, unknown>` | `{}` |
 | rules | 透传 Form 校验规则 | object | - |
 | collapsed **(v-model)** | 是否折叠多余项 | boolean | `true` |
 | collapsible | 是否启用展开/收起 | boolean | `true` |
 | cols | 响应式列数 | number \| object | `{ xs:1, sm:2, md:3, lg:3, xl:4, xxl:5 }` |
-| gridProps | Grid 其余属性 | object | - |
-| changeDebounce | change 防抖毫秒 | number | `500` |
+| grid-props | Grid 其余属性 | object | - |
+| change-debounce | change 防抖毫秒 | number | `500` |
 
 ### FilterFormField
 
@@ -82,7 +82,7 @@ const fieldMap: FilterFormFieldMap = {
 
 | 事件名 | 说明 | 参数 |
 | --- | --- | --- |
-| update:modelValue | v-model | `(value) => void` |
+| update:model-value | v-model | `(value) => void` |
 | update:collapsed | 折叠状态变化 | `(collapsed) => void` |
 | change | 字段值变化（防抖） | `(value, field) => void` |
 

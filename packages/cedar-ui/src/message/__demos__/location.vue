@@ -8,6 +8,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { Message } from '@cedarjs/ui'
 
 export default defineComponent({
   setup() {

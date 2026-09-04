@@ -93,7 +93,9 @@ describe("list public contract", () => {
     const wrapper = mount(List, { props: { loading: true }, slots: { empty } });
     expect(empty).not.toHaveBeenCalled();
     expect(wrapper.text()).not.toContain("empty");
-    expect(wrapper.find(".c-list-spin").classes()).toContain("c-spin-loading");
+    expect(wrapper.find(".c-list-loading").classes()).toContain(
+      "c-loading--loading",
+    );
   });
 
   it("renders empty only when content and data are absent", () => {

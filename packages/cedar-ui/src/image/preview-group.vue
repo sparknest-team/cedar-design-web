@@ -50,7 +50,9 @@
               slideImageStyle(index, scale, rotate, translateX, translateY),
             ]"
             :draggable="false"
+            @click.stop
             @dragstart.prevent
+            @contextmenu="imagePreventDefault && $event.preventDefault()"
           />
         </div>
       </div>

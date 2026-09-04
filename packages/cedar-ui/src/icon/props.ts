@@ -6,10 +6,6 @@ export const iconProps = {
    */
   name: String,
   /**
-   * 自定义类型类名
-   */
-  type: String,
-  /**
    * 图标尺寸
    */
   size: [Number, String],
@@ -25,6 +21,17 @@ export const iconProps = {
    * 是否持续旋转
    */
   spin: Boolean,
+  /**
+   * 动态名称切换动画时长
+   */
+  transition: {
+    type: [Number, String],
+    default: 0,
+  },
+  /**
+   * 自定义动态切换动画类名
+   */
+  animationClass: String,
 }
 
 export type ComponentProps = ExtractPropTypes<typeof iconProps>
