@@ -2,15 +2,13 @@ import type { ExtractPropTypes, PropType } from 'vue'
 import { componentSizes } from '../_utils/constant'
 import type { ComponentSize } from '../_utils/constant'
 import { formControlVariants } from '../_utils/form-control'
-import type {
-  FormControlMaxLength,
-  FormControlVariant,
-  WordLength,
-  WordSlice,
-} from '../_utils/form-control'
+import type { FormControlMaxLength, FormControlVariant, WordLength, WordSlice } from '../_utils/form-control'
 
-export const inputTypes = ['text', 'password'] as const
+export type { WordLength, WordSlice } from '../_utils/form-control'
+
+export const inputTypes = ['text', 'password', 'number', 'tel', 'email'] as const
 export type InputType = (typeof inputTypes)[number]
+export type InputMaxLength = FormControlMaxLength
 
 export const inputProps = {
   variant: {
@@ -22,11 +20,10 @@ export const inputProps = {
   defaultValue: { type: String, default: '' },
   size: {
     type: String as PropType<ComponentSize>,
-    validator: (value: unknown): value is ComponentSize =>
-      componentSizes.includes(value as ComponentSize),
+    validator: (value: unknown): value is ComponentSize => componentSizes.includes(value as ComponentSize),
   },
-  clearable: { type: Boolean, default: true },
-  disabled: Boolean,
+  clearable: { type: Boolean, default: false },
+  disabled: { type: Boolean, default: undefined },
   readonly: { type: Boolean, default: false },
   error: { type: Boolean, default: false },
   placeholder: String,
@@ -43,7 +40,7 @@ export const inputProps = {
     default: 'text',
     validator: (value: unknown): value is InputType => inputTypes.includes(value as InputType),
   },
-} 
+}
 
 export type InputProps = ExtractPropTypes<typeof inputProps>
 
@@ -52,6 +49,6 @@ export const inputPasswordProps = {
   visibility: { type: Boolean, default: undefined },
   defaultVisibility: { type: Boolean, default: false },
   visibilityToggle: { type: Boolean, default: true },
-} 
+}
 
 export type InputPasswordProps = ExtractPropTypes<typeof inputPasswordProps>

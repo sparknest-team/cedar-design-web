@@ -12,7 +12,7 @@ import { useFormItem } from '../_hooks/use-form-item'
 import { useSize } from '../_hooks/use-size'
 import { useCursor } from '../_hooks/use-cursor'
 import { GroupFieldContext, fieldInjectionKey } from './context'
-import { inputProps } from './props'
+import { inputProps, type InputType } from './props'
 import { useI18n } from '../locale'
 import FieldDecorator from '../field-decorator'
 
@@ -45,11 +45,17 @@ export default defineComponent({
      */
     pressEnter: (ev: KeyboardEvent) => true,
     /**
+     * @zh 输入框按键时触发
+     * @en Triggered when a key is pressed in the input
+     * @param {KeyboardEvent} ev
+     */
+    keydown: (ev: KeyboardEvent) => true,
+    /**
      * @zh 用户点击清除按钮时触发
      * @en Triggered when the user clicks the clear button
-     * @param {MouseEvent} ev
+     * @param {Event} ev
      */
-    clear: (ev: MouseEvent) => true,
+    clear: (ev: Event) => true,
     /**
      * @zh 输入框获取焦点时触发
      * @en Triggered when the input box gets focus
@@ -82,7 +88,7 @@ export default defineComponent({
     const groupContext = inject<GroupFieldContext>(fieldInjectionKey, {} as GroupFieldContext)
     const _size = computed(() => size.value ?? groupContext?.size ?? 'md')
     const _disabled = computed(() => Boolean(disabled.value ?? groupContext?.disabled ?? false))
-    const mergedVariant = computed(() => variant.value ?? groupContext?.variant ?? 'filled')
+    const mergedVariant = computed(() => variant.value ?? groupContext?.variant ?? 'outlined')
     const {
       mergedSize: _mergedSize,
       mergedDisabled,
@@ -97,6 +103,7 @@ export default defineComponent({
     const _value = ref(props.defaultValue)
     const computedValue = computed(() => props.modelValue ?? _value.value)
     let preValue = computedValue.value
+    const focused = ref(false)
 
     watch(modelValue, (value) => {
       if (isUndefined(value) || isNull(value)) {
@@ -105,14 +112,15 @@ export default defineComponent({
     })
 
     watch(computedValue, (value, oldValue) => {
-      preValue = oldValue
+      preValue = focused.value ? oldValue : value
     })
 
     // 状态相关
-    const focused = ref(false)
     const showClearBtn = computed(
-      () => props.clearable && !props.readonly && !mergedDisabled.value && Boolean(computedValue.value),
+      () => props.clearable && !props.readonly && !mergedDisabled.value && Boolean(computedValue.value)
     )
+
+    const normalizedType = computed<InputType>(() => (props.type === 'number' ? 'text' : props.type))
 
     // 输入法相关
     const isComposition = ref(false)
@@ -130,7 +138,7 @@ export default defineComponent({
     const mergedError = computed(
       () =>
         _mergedError.value ||
-        Boolean(isObject(props.maxLength) && props.maxLength.errorOnly && valueLength.value > maxLength.value),
+        Boolean(isObject(props.maxLength) && props.maxLength.errorOnly && valueLength.value > maxLength.value)
     )
 
     const maxLengthErrorOnly = computed(() => isObject(props.maxLength) && Boolean(props.maxLength.errorOnly))
@@ -148,12 +156,17 @@ export default defineComponent({
     })
 
     const updateValue = (value: string) => {
+      if (props.type === 'number') {
+        value = formatNumber(value)
+      }
+
       if (maxLength.value && !maxLengthErrorOnly.value && getValueLength(value) > maxLength.value) {
         value = props.wordSlice?.(value, maxLength.value) ?? value.slice(0, defaultMaxLength.value)
       }
 
       _value.value = value
       emit('update:modelValue', value)
+      return value
     }
 
     const handleMousedown = (e: MouseEvent) => {
@@ -202,8 +215,8 @@ export default defineComponent({
           return
         }
 
-        updateValue(value)
-        emit('input', value, e)
+        const nextValue = updateValue(value)
+        emit('input', nextValue, e)
         eventHandlers.value?.onInput?.(e)
 
         keepControl()
@@ -238,17 +251,16 @@ export default defineComponent({
           return
         }
 
-        updateValue(value)
-        emit('input', value, e)
+        const nextValue = updateValue(value)
+        emit('input', nextValue, e)
         eventHandlers.value?.onInput?.(e)
 
         keepControl()
       }
     }
 
-    const handleClear = (ev: MouseEvent) => {
+    const handleClear = (ev: Event = new Event('clear')) => {
       updateValue('')
-      emitChange('', ev)
       emit('clear', ev)
     }
 
@@ -260,11 +272,27 @@ export default defineComponent({
     }
 
     const handleKeyDown = (e: KeyboardEvent) => {
+      emit('keydown', e)
       const keyCode = e.key || e.code
       if (!isComposition.value && keyCode === Enter.key) {
         emitChange(computedValue.value, e)
         emit('pressEnter', e)
       }
+    }
+
+    const formatNumber = (value: string) => {
+      const minusIndex = value.indexOf('-')
+      const dotIndex = value.indexOf('.')
+
+      if (minusIndex > -1) {
+        value = minusIndex === 0 ? '-' + value.replace(/-/g, '') : value.replace(/-/g, '')
+      }
+
+      if (dotIndex > -1) {
+        value = value.slice(0, dotIndex + 1) + value.slice(dotIndex).replace(/\./g, '')
+      }
+
+      return value.replace(/[^-0-9.]/g, '')
     }
 
     const cls = computed(() => classes(n('inner')))
@@ -287,7 +315,7 @@ export default defineComponent({
         Boolean(slots.suffix) ||
         (Boolean(props.maxLength) && props.showWordLimit) ||
         Boolean(feedback.value) ||
-        showClearBtn.value,
+        showClearBtn.value
     )
 
     const render = () => (
@@ -303,21 +331,24 @@ export default defineComponent({
             suffix: hasSuffix.value
               ? () => (
                   <>
-                    {showClearBtn.value && (
-                      <IconHover
-                        {...({
-                          prefix: 'c-field-decorator',
-                          class: fieldClasses(fieldN('clear-btn')),
-                          role: 'button',
-                          tabindex: 0,
-                          'aria-label': t('common.clear'),
-                          onClick: handleClear,
-                          onKeydown: handleClearKeydown,
-                        } as any)}
-                      >
-                        <IconClose />
-                      </IconHover>
-                    )}
+                    {showClearBtn.value &&
+                      (slots['clear-icon'] ? (
+                        slots['clear-icon']({ clear: handleClear })
+                      ) : (
+                        <IconHover
+                          {...({
+                            prefix: 'c-field-decorator',
+                            class: fieldClasses(fieldN('clear-btn')),
+                            role: 'button',
+                            tabindex: 0,
+                            'aria-label': t('common.clear'),
+                            onClick: handleClear,
+                            onKeydown: handleClearKeydown,
+                          } as any)}
+                        >
+                          <IconClose />
+                        </IconHover>
+                      ))}
                     {Boolean(props.maxLength) && props.showWordLimit && (
                       <span class={classes(n('word-limit'))}>
                         {valueLength.value}/{maxLength.value}
@@ -330,13 +361,16 @@ export default defineComponent({
               : undefined,
             default: () => (
               <input
+                {...mergeInputAttrs.value}
                 ref={inputRef}
                 class={cls.value}
                 value={computedValue.value}
-                type={props.type}
+                type={normalizedType.value}
+                maxlength={undefined}
                 placeholder={props.placeholder}
                 readonly={props.readonly}
                 disabled={mergedDisabled.value}
+                inputmode={props.type === 'number' ? 'decimal' : undefined}
                 onInput={handleInput}
                 onKeydown={handleKeyDown}
                 onFocus={handleFocus}
@@ -344,7 +378,6 @@ export default defineComponent({
                 onCompositionstart={handleComposition}
                 onCompositionupdate={handleComposition}
                 onCompositionend={handleComposition}
-                {...mergeInputAttrs.value}
               />
             ),
           }}

@@ -262,8 +262,6 @@ export default defineComponent({
             modelValue={computedValue.value}
             onInput={handleInputValueChange}
             onClear={handleClear}
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
             onKeydown={handleKeyDown}
           />
         </div>

@@ -1,11 +1,4 @@
-import {
-  computed,
-  defineComponent,
-  PropType,
-  ref,
-  toRefs,
-  StyleValue,
-} from 'vue'
+import { computed, defineComponent, PropType, ref, toRefs, StyleValue } from 'vue'
 import { createNamespace } from '../_utils/global-config'
 import IconHover from '../_components/icon-hover.vue'
 import { IconSearch } from '@cedarjs/icons-vue/icon-search'
@@ -106,8 +99,7 @@ export default defineComponent({
     },
   },
   emits: {
-    search: (data: SearchResult, ev: MouseEvent | KeyboardEvent | Event) =>
-      true,
+    search: (data: SearchResult, ev: MouseEvent | KeyboardEvent | Event) => true,
     change: (value: string, ev?: Event) => true,
     'update:modelValue': (value: string) => true,
     'update:modelField': (value: string) => true,
@@ -134,9 +126,7 @@ export default defineComponent({
       return props.modelValue ?? _value.value
     })
     const computedPlaceholder = computed(() => {
-      const selected = props.fields.find(
-        (item) => item.value === computedField.value,
-      )
+      const selected = props.fields.find((item) => item.value === computedField.value)
       return selected?.placeholder
     })
 
@@ -185,9 +175,7 @@ export default defineComponent({
       let _slots = {}
       if (props.buttonText || slots['button-default'] || slots['button-icon']) {
         _slots = {
-          default:
-            slots['button-default'] ??
-            (props.buttonText ? () => props.buttonText : undefined),
+          default: slots['button-default'] ?? (props.buttonText ? () => props.buttonText : undefined),
           icon: slots['button-icon'],
         }
       } else {
@@ -199,7 +187,7 @@ export default defineComponent({
       return (
         <Button
           v-slots={_slots}
-          status='primary'
+          status="primary"
           class={classes(n('btn'))}
           disabled={props.disabled}
           size={mergedSize.value}
@@ -253,11 +241,7 @@ export default defineComponent({
 
     const render = () => (
       <div class={[classes(n()), className]} style={style as StyleValue}>
-        <InputGroup
-          size={mergedSize.value}
-          disabled={mergedDisabled.value}
-          variant={mergedVariant.value}
-        >
+        <InputGroup size={mergedSize.value} disabled={mergedDisabled.value} variant={mergedVariant.value}>
           {props.fields.length > 0 && (
             <Select
               modelValue={computedField.value}
@@ -282,18 +266,15 @@ export default defineComponent({
           )}
           <Menu
             open={historyVisible.value}
-            trigger='focus'
-            placement='bl'
+            trigger="focus"
+            placement="bl"
             autoFitPopupWidth
             popupContainer={inputRef.value?.$el}
             onOpenChange={handleHistoryVisibleChange}
             onUpdate:open={handleHistoryVisibleChange}
             onSelect={(value: any, _option: Record<string, any>, ev: Event) => handleHistorySelect(String(value), ev)}
             v-slots={{
-              content: () =>
-                props.recentSearches.map((item) => (
-                  <MenuOption value={item} label={item} />
-                )),
+              content: () => props.recentSearches.map((item) => <MenuOption value={item} label={item} />),
             }}
           >
             <Input
@@ -310,7 +291,7 @@ export default defineComponent({
               variant={mergedVariant.value}
               clearable={props.clearable}
               onInput={handleInput}
-              onClear={(ev: MouseEvent) => handleValueChange('', ev)}
+              onClear={(ev: Event) => handleValueChange('', ev)}
               onPressEnter={handleClick}
             />
           </Menu>
@@ -326,10 +307,10 @@ export default defineComponent({
   },
   methods: {
     focus() {
-      (this.inputRef as HTMLInputElement)?.focus()
+      ;(this.inputRef as HTMLInputElement)?.focus()
     },
     blur() {
-      (this.inputRef as HTMLInputElement)?.blur()
+      ;(this.inputRef as HTMLInputElement)?.blur()
     },
   },
   render() {

@@ -19,7 +19,7 @@ export default defineComponent({
     },
     variant: {
       type: String as PropType<'filled' | 'outlined' | 'standard'>,
-      default: 'filled',
+      default: 'outlined',
     },
     disabled: {
       type: Boolean,
@@ -34,8 +34,8 @@ export default defineComponent({
       reactive({
         size,
         disabled,
-        variant,  
-      }),
+        variant,
+      })
     )
 
     return {
