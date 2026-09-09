@@ -46,7 +46,7 @@ export const watermarkProps = {
     /**
      * @zh 距离容器左上角的偏移量，默认为水印间距的一半
      * @en The offset from the upper left corner of the container, the default is half the watermark spacing
-     * @defaultValue [gap[0]/2, gap[1]/2]
+     * @default-value [gap[0]/2, gap[1]/2]
      */
     offset: {
       type: Array as unknown as PropType<[number, number]>,

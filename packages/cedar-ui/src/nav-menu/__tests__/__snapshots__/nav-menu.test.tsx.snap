@@ -1,8 +1,10 @@
 // Vitest Snapshot v1
 
-exports[`NavMenu > render 1`] = `
-"<div class=\\"c-nav-menu c-nav-menu-light c-nav-menu-vertical\\">
-  <div class=\\"c-nav-menu-inner\\"></div>
-  <!--v-if-->
-</div>"
+exports[`NavMenu options API > render 1`] = `
+"<nav class=\\"c-nav-menu c-nav-menu--vertical c-nav-menu--md c-nav-menu--light\\" style=\\"--c-nav-menu-icon-size: 20px;\\">
+  <ul role=\\"menu\\" class=\\"c-nav-menu__list\\">
+    <!---->
+  </ul>
+  <!---->
+</nav>"
 `;

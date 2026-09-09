@@ -1,6 +1,6 @@
 <template>
   <div class="p-24">
-    <Card :loading="loading" subtitle="ST2022010106536">
+    <Card v-loading="loading" :aria-busy="loading || undefined" subtitle="ST2022010106536">
       <template #title>
         <Space :size="8" align="center">
           <span>销售项目名称</span>
@@ -8,7 +8,7 @@
         </Space>
       </template>
       <template #title-action>
-        <Button>操作</Button>
+        <Button :disabled="loading">操作</Button>
       </template>
       <Descriptions :data="data" layout="inline-auto" />
       <Descriptions :data="data2" layout="inline-auto" />
@@ -16,11 +16,15 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { vLoading } from '../../../../src/loading'
+import '../../../../src/loading/style'
 import { Descriptions, Card, Tag, Button, Space } from '@cedarjs/ui'
 
 const loading = ref(true)
-setTimeout(() => (loading.value = false), 5000)
+let timer: ReturnType<typeof setTimeout> | undefined
+onMounted(() => { timer = setTimeout(() => (loading.value = false), 5000) })
+onBeforeUnmount(() => clearTimeout(timer))
 
 const data = ref([
   {

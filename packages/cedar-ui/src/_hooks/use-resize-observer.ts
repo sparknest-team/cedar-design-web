@@ -1,34 +1,15 @@
-import { Ref } from 'vue'
+import { ref, type Ref } from 'vue'
 import ResizeObserver from 'resize-observer-polyfill'
-import { isFunction } from '../_utils/is'
+import { useElementResize } from '../_utils/resize-observer'
 
-export const useResizeObserver = ({
-  elementRef,
-  onResize,
-}: {
+export const useResizeObserver = ({ elementRef, onResize }: {
   elementRef: Ref<HTMLElement | undefined>
   onResize: () => void
 }) => {
-  let resizeObserver: ResizeObserver | null
-
-  const createResizeObserver = () => {
-    if (!elementRef.value) return
-    resizeObserver = new ResizeObserver((entries: ResizeObserverEntry[]) => {
-      const entry = entries[0]
-      isFunction(onResize) && onResize()
-    })
-    resizeObserver.observe(elementRef.value)
-  }
-
-  const destroyResizeObserver = () => {
-    if (resizeObserver) {
-      resizeObserver.disconnect()
-      resizeObserver = null
-    }
-  }
-
+  const enabled = ref(false)
+  useElementResize(() => [elementRef.value], () => enabled.value, onResize, ResizeObserver, false)
   return {
-    createResizeObserver,
-    destroyResizeObserver,
+    createResizeObserver: () => { enabled.value = true },
+    destroyResizeObserver: () => { enabled.value = false },
   }
 }

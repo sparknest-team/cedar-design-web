@@ -1,7 +1,7 @@
 <template>
   <c-space direction="column">
     <c-radio-group v-model="variant">
-      <c-radio value="outlined">Outlined</c-radio>
+      <c-radio value="outline">Outlined</c-radio>
       <c-radio value="standard">Standard</c-radio>
       <c-radio value="filled">Filled</c-radio>
     </c-radio-group>

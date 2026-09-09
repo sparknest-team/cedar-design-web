@@ -1,10 +1,10 @@
 import type { ComputedRef, InjectionKey, Slots } from 'vue'
-import type { Direction } from '../_utils/constant'
+import type { Orientation } from './platform'
 import type { StepStatus, StepsContentPlacement, StepsSize, StepsType } from './props'
 
 export interface StepsContext {
   current: ComputedRef<number>
-  direction: ComputedRef<Direction>
+  orientation: ComputedRef<Orientation>
   contentPlacement: ComputedRef<StepsContentPlacement>
   size: ComputedRef<StepsSize>
   type: ComputedRef<StepsType>

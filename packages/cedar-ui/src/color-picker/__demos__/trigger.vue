@@ -14,7 +14,7 @@ import { ref } from 'vue'
 const triggerProps = ref({
   open: false,
   unmountOnClose: true,
-  renderToBody: false,
-  placement: 'rt',
+  popupContainer: false,
+  placement: 'right-start',
 })
 </script>

@@ -1,0 +1,57 @@
+import assert from 'node:assert/strict'
+import test from 'node:test'
+import { createRequire } from 'node:module'
+import { CedarStyleImports } from '../lib/index.js'
+
+const cliRequire = createRequire(new URL('../../cedar-ui/package.json', import.meta.url))
+const viteRequire = createRequire(cliRequire.resolve('vite'))
+const { parseAst } = await import(viteRequire.resolve('rollup/parseAst'))
+const transform = (source, options, id = '/src/demo.js') => CedarStyleImports(options).transform.call({ parse: parseAst }, source, id)
+
+test('explicit functions and aliases add the original export styles', () => {
+  const source = "import { Message as notify, Dialog } from '@cedarjs/ui'; notify('hello')"
+  const result = transform(source)
+  assert(result.code.includes('import "@cedarjs/ui/message/style";'))
+  assert(result.code.includes('import "@cedarjs/ui/dialog/style";'))
+  assert(result.code.startsWith(source))
+})
+test('components and internal resolver imports share the same style mapping', () => {
+  const result = transform("import { Button, _ButtonComponent, Row, GridItem, ImagePreviewFn } from '@cedarjs/ui'")
+  assert.equal(result.code.split('import "@cedarjs/ui/button/style";').length - 1, 1)
+  for (const name of ['row', 'grid', 'image']) assert(result.code.includes('@cedarjs/ui/' + name + '/style'))
+})
+test('is idempotent and does not duplicate existing side-effect imports', () => {
+  const result = transform("import { Message } from '@cedarjs/ui'")
+  assert.equal(transform(result.code), undefined)
+  assert.equal(transform("import { Message } from '@cedarjs/ui'; import '@cedarjs/ui/message/style'"), undefined)
+})
+test('ignores other packages, namespace imports, comments, strings and styleless exports', () => {
+  for (const source of [
+    "import { Message } from 'another-library'",
+    "import * as Cedar from '@cedarjs/ui'",
+    "// import { Message } from '@cedarjs/ui'",
+    `const text = "import { Message } from '@cedarjs/ui'"`,
+    "import { Context, StyleProvider, messageProps } from '@cedarjs/ui'",
+  ]) assert.equal(transform(source), undefined)
+})
+test('supports disabling styles and skips non-script requests', () => {
+  const source = "import { Message } from '@cedarjs/ui'"
+  assert.equal(transform(source, { importStyle: false }), undefined)
+  assert.equal(transform(source, {}, '/src/demo.vue?vue&type=style&index=0'), undefined)
+  assert.equal(transform(source, {}, '/src/demo.css'), undefined)
+})
+test('runs after TypeScript erasure without generating styles for type-only imports', async () => {
+  const vite = await import(cliRequire.resolve('vite'))
+  const { transformWithEsbuild } = vite.default ?? vite
+  const { code } = await transformWithEsbuild("import type { MessageOptions } from '@cedarjs/ui'; import { Message as notify } from '@cedarjs/ui'; notify('hello')", '/src/demo.ts', { loader: 'ts' })
+  const result = transform(code, {}, '/src/demo.ts')
+  assert(result.code.includes('@cedarjs/ui/message/style'))
+  assert(!result.code.includes('message-options/style'))
+})
+
+test('covers every documented Cedar programmatic API and preview alias', () => {
+  for (const [name, style] of [['Message', 'message'], ['Notification', 'notification'], ['Dialog', 'dialog'], ['Drawer', 'drawer'], ['ImagePreviewFn', 'image'], ['previewImage', 'image'], ['imagePreview', 'image']]) {
+    const result = transform("import { " + name + " as invoke } from '@cedarjs/ui'; invoke({})")
+    assert(result.code.includes('@cedarjs/ui/' + style + '/style'), name)
+  }
+})

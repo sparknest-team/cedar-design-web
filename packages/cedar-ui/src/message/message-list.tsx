@@ -21,7 +21,7 @@ export default defineComponent({
       default: 'top',
     },
   },
-  emits: ['close', 'afterClose'],
+  emits: ['close', 'closed'],
   setup(props, context) {
     const prefixCls = getPrefixCls('message-list')
     const { zIndex } = usePopupManager('message', { runOnMounted: true })
@@ -33,7 +33,7 @@ export default defineComponent({
           name: 'fade-message',
           tag: 'ul',
           style: { zIndex: zIndex.value },
-          onAfterLeave: () => context.emit('afterClose'),
+          onAfterLeave: () => context.emit('closed'),
         } as any)}
       >
         {props.messages.map((item) => {
@@ -44,7 +44,7 @@ export default defineComponent({
           return (
             <Message
               key={item.id}
-              type={item.type}
+              status={item.status}
               duration={item.duration}
               closable={item.closable}
               showIcon={item.showIcon}

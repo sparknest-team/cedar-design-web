@@ -50,5 +50,5 @@ export const radioGroupProps = {
   disabled: { type: Boolean, default: false },
 } 
 
-export type RadioProps = ExtractPropTypes<typeof radioProps>
-export type RadioGroupProps = ExtractPropTypes<typeof radioGroupProps>
+export type RadioProps = import("vue").ExtractPublicPropTypes<typeof radioProps>
+export type RadioGroupProps = import("vue").ExtractPublicPropTypes<typeof radioGroupProps>

@@ -25,7 +25,7 @@ export default defineComponent({
      * @en Triggered when the user clicks on the tab
      * @property { string | number } key
      */
-    tabClick: (key: string | number, ev: Event) => true,
+    "tab-click": (key: string | number, ev: Event) => true,
     /**
      * @zh 用户点击增加按钮时触发
      * @en Triggered when the user clicks the add button
@@ -50,7 +50,8 @@ export default defineComponent({
    */
 
   setup(props, { emit, slots }) {
-    const { size, lazyLoad, destroyOnHide, trigger, indicatorPosition, vertical } = toRefs(props)
+    const { size, lazyLoad, destroyOnHide, trigger, indicatorPosition } = toRefs(props)
+    const vertical = computed(() => props.orientation === 'vertical')
     const { classes, n } = createNamespace('tabs')
     const { mergedSize } = useSize(size)
 
@@ -131,7 +132,7 @@ export default defineComponent({
 
     const handleClick = (key: string | number, e: Event) => {
       handleChange(key)
-      emit('tabClick', key, e)
+      emit('tab-click', key, e)
     }
 
     const handleAdd = (ev: Event) => {

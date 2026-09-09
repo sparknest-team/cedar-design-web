@@ -43,7 +43,7 @@ export default defineComponent({
      * @en Triggered when the user presses enter
      * @param {KeyboardEvent} ev
      */
-    pressEnter: (ev: KeyboardEvent) => true,
+    "press-enter": (ev: KeyboardEvent) => true,
     /**
      * @zh 用户点击清除按钮时触发
      * @en Triggered when the user clicks the clear button
@@ -263,7 +263,7 @@ export default defineComponent({
       const keyCode = e.key || e.code
       if (!isComposition.value && keyCode === Enter.key) {
         emitChange(computedValue.value, e)
-        emit('pressEnter', e)
+        emit('press-enter', e)
       }
     }
 

@@ -67,4 +67,4 @@ export const listProps = {
   },
 };
 
-export type ListProps = Partial<ExtractPropTypes<typeof listProps>>;
+export type ListProps = import("vue").ExtractPublicPropTypes<typeof listProps>;

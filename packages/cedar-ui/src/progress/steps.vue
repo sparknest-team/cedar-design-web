@@ -1,6 +1,6 @@
 <template>
-  <div role="progressbar" aria-valuemin="0" aria-valuemax="1" :aria-valuenow="percent" :class="classes(n('wrapper'))">
-    <div :class="classes(n())" :style="{ height: `${mergedStrokeWidth}px` }">
+  <div role="progressbar" aria-valuemin="0" aria-valuemax="100" :aria-valuenow="percent" :class="classes(n('wrapper'))">
+    <div :class="classes(n())" :style="{ height: typeof mergedStrokeWidth === 'number' ? `${mergedStrokeWidth}px` : mergedStrokeWidth }">
       <div
         v-for="(active, index) of stepList"
         :key="index"
@@ -50,7 +50,7 @@ export default defineComponent({
     },
     trackColor: String,
     strokeWidth: {
-      type: Number,
+      type: [Number, String],
     },
     type: {
       type: String,
@@ -62,15 +62,15 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const mergedStrokeWidth = computed(() => ((props.strokeWidth ?? props.size === 'sm') ? 8 : 4))
+    const mergedStrokeWidth = computed(() => (props.strokeWidth ?? (props.size === 'sm' ? 3 : 4)))
 
     const stepList = computed(() =>
       [...Array(props.steps)].map((_, index) => {
-        return props.percent > 0 && props.percent > (1 / props.steps) * index
+        return props.percent > 0 && props.percent > (100 / props.steps) * index
       }),
     )
 
-    const text = computed(() => `${NP.times(props.percent, 100)}%`)
+    const text = computed(() => `${props.percent}%`)
 
     return {
       classes,

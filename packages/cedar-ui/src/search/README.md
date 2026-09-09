@@ -35,7 +35,7 @@ permalink: /components/search/
 | search-button                  | 是否为后置按钮模式                     | `boolean`                              |   `false`   |
 | loading                        | 是否为加载中状态                       | `boolean`                              |   `false`   |
 | disabled                       | 是否禁用                               | `boolean`                              |   `false`   |
-| variant                        | 输入框风格                             | `'filled' \| 'outlined' \| 'standard'`               | `'filled'` |
+| variant                        | 输入框风格                             | `'filled' \| 'outline' \| 'standard'`               | `'filled'` |
 | size                           | 输入框大小                             | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` |   `'md'`    |
 | button-text                    | 搜索按钮的文字，使用后会替换原本的图标 | `string`                               |     `-`     |
 | button-props                   | 搜索按钮的属性                         | `ButtonProps`                          |     `-`     |

@@ -8,7 +8,7 @@
         :disabled="disabled"
         :model-value="modelValue[0] as number"
         mode="input"
-        @change="(value) => $emit('startChange', value)"
+        @change="(value) => $emit('start-change', value)"
       />
       <div :class="`${prefixCls}-input-hyphens`" />
     </template>
@@ -19,7 +19,7 @@
       :disabled="disabled"
       :model-value="modelValue[1] as number"
       mode="input"
-      @change="(value) => $emit('endChange', value)"
+      @change="(value) => $emit('end-change', value)"
     />
   </div>
 </template>
@@ -55,7 +55,7 @@ export default defineComponent({
       type: Boolean,
     },
   },
-  emits: ["startChange", "endChange"],
+  emits: ["start-change", "end-change"],
   setup(props, { emit }) {
     const prefixCls = getPrefixCls("slider");
 

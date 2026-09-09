@@ -1,6 +1,13 @@
-<template>
-  <c-switch checked-color="#F53F3F" unchecked-color="#14C9C9" />
-</template>
-
-<script lang="ts">
+<script setup lang="ts">
+import { ref } from 'vue'
+const enabled = ref(false)
 </script>
+
+<template>
+  <c-switch
+    v-model="enabled"
+    checked-color="#005f73"
+    unchecked-color="#9b2226"
+    aria-label="Custom color switch"
+  />
+</template>

@@ -16,7 +16,7 @@ permalink: /components/select/
 
 ### 变体
 
-设置`variant="outlined"`开启变体模式，常用于沉浸式使用。
+设置`variant="outline"`开启变体模式，常用于沉浸式使用。
 
 <demo src="./__demos__/variant.vue"></demo>
 
@@ -130,12 +130,12 @@ permalink: /components/select/
 | loading                     | 是否为加载中状态                                                                 | `boolean`                                                                                     |               `false`               |
 | disabled                    | 是否禁用                                                                         | `boolean`                                                                                     |               `false`               |
 | error                       | 是否为错误状态                                                                   | `boolean`                                                                                     |               `false`               |
-| variant                     | 选择框的变体                                                                     | `'filled' \| 'outlined' \| 'standard'`                                                                      |             `'filled'`              |
+| variant                     | 选择框的变体                                                                     | `'filled' \| 'outline' \| 'standard'`                                                                      |             `'filled'`              |
 | clearable                   | 是否允许清空                                                                     | `boolean`                                                                                     |               `false`               |
 | filterable                | 是否允许搜索                                                                     | `boolean \| { retainInputValue?: boolean }`                                                   | `false (single) \| true (multiple)` |
 | creatable                   | 是否允许创建                                                                     | `boolean`                                                                                     |               `false`               |
 | max-tag-count               | 多选模式下，最多显示的标签数量。0 表示不限制                                     | `number`                                                                                      |                 `0`                 |
-| popup-container             | 弹出框的挂载容器                                                                 | `string \| HTMLElement`                                                                       |                 `-`                 |
+| popup-container             | 弹出框的挂载容器                                                                 | `string \| HTMLElement \| false`                                                                       |                 `-`                 |
 | bordered                    | 是否显示输入框的边框                                                             | `boolean`                                                                                     |               `true`                |
 | default-active-first-option | 是否在无值时默认选择第一个选项                                                   | `boolean`                                                                                     |               `true`                |
 | open **(v-model)** | 是否显示下拉菜单                                                                 | `boolean`                                                                                     |                 `-`                 |
@@ -144,6 +144,7 @@ permalink: /components/select/
 | filter-option               | 是否过滤选项                                                                     | `boolean \| ((inputValue: string, option: SelectOptionData) => boolean)`                      |               `true`                |
 | options                     | 选项数据                                                                         | `(string \| number \| SelectOptionData \| SelectOptionGroup)[]`                               |                `[]`                 |
 | virtual-list-props          | 传递虚拟列表属性，传入此参数以开启虚拟滚动 [VirtualListProps](#VirtualListProps) | `VirtualListProps`                                                                            |                 `-`                 |
+| auto-fit-popup-width | 菜单是否与触发框等宽；false 时按内容自适应（菜单展示模式）。 | `boolean` | `true` |
 | trigger-props               | 下拉菜单的触发器属性                                                             | `TriggerProps`                                                                                |                 `-`                 |
 | format-label                | 格式化显示内容                                                                   | `(data: SelectOptionData) => string`                                                          |                 `-`                 |
 | fallback-option             | 自定义值中不存在的选项                                                           | `boolean\| ((    value: string \| number \| Record<string, unknown>  ) => SelectOptionData)`  |               `true`                |

@@ -1,4 +1,5 @@
-import { type ExtractPropTypes, type PropType } from 'vue'
+import type { ExtractPublicPropTypes, PropType } from 'vue'
+import type { ComponentSize } from '../_utils/constant'
 
 export type SpaceAlign = 'flex-start' | 'flex-end' | 'center' | 'baseline' | 'stretch'
 
@@ -6,7 +7,7 @@ export type SpaceDirection = 'row' | 'column'
 
 export type SpaceJustify = 'flex-start' | 'flex-end' | 'center' | 'space-around' | 'space-between' | 'space-evenly'
 
-export type SpaceInternalSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+export type SpaceInternalSize = ComponentSize
 
 export type SpaceSize = SpaceInternalSize | number | string | [number | string, number | string]
 
@@ -23,6 +24,7 @@ export const spaceProps = {
    */
   wrap: {
     type: Boolean,
+    default: false,
   },
   /**
    * 布局方向，可选值为 `row` `column`
@@ -53,4 +55,6 @@ export const spaceProps = {
   },
 }
 
-export type SpaceProps = ExtractPropTypes<typeof spaceProps>
+export type SpaceProps = ExtractPublicPropTypes<typeof spaceProps>
+
+export const props = spaceProps

@@ -1,4 +1,5 @@
+import '../../style/index.less'
+import '../../style/elevation/index.less'
 import '../../input/style'
-import '../../input-number/style'
 import '../../select/style'
 import './index.less'

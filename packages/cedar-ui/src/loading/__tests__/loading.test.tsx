@@ -16,13 +16,13 @@ describe("Loading", () => {
     expect(wrapper.html()).toMatchSnapshot();
   });
 
-  test("renders a loading mask around content", () => {
+  test("renders a loading overlay around content", () => {
     const wrapper = mount(Loading, {
       props: { loading: true, tip: "Loading" },
       slots: { default: "<div>content</div>" },
     });
     expect(wrapper.find(".c-loading__content--active").exists()).toBe(true);
-    expect(wrapper.find(".c-loading__content-mask").exists()).toBe(true);
+    expect(wrapper.find(".c-loading__content-overlay").exists()).toBe(true);
     expect(wrapper.text()).toContain("Loading");
   });
 
@@ -112,3 +112,20 @@ describe("Loading", () => {
     expect(wrapper.find(".c-loading-directive").exists()).toBe(false);
   });
 });
+
+
+test('directive updates and clears the overlay background token', async () => {
+  const Host = defineComponent({
+    directives: { 'c-loading': vLoading },
+    data: () => ({ options: { loading: true, background: 'blue' } }),
+    template: '<div v-c-loading="options">content</div>',
+  })
+  const wrapper = mount(Host)
+  const overlay = wrapper.find('.c-loading-directive').element
+  expect(overlay.style.getPropertyValue('--c-loading-overlay-background')).toBe('blue')
+  await wrapper.setData({ options: { loading: true, background: 'red' } })
+  expect(overlay.style.getPropertyValue('--c-loading-overlay-background')).toBe('red')
+  await wrapper.setData({ options: { loading: true, background: '' } })
+  expect(overlay.style.getPropertyValue('--c-loading-overlay-background')).toBe('')
+  wrapper.unmount()
+})

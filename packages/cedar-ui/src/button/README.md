@@ -4,33 +4,31 @@ permalink: /components/button/
 
 # Button
 
-按钮是一种命令组件，可发起一个即时操作。
+两端使用同一份实现和示例，组件前缀、主题基础变量与注册入口各自保留。
 
 ## 案例
 
-### 基础用法
+### 八种主题色
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### 变体
+### 四种变体
 
 <demo src="./__demos__/variants.vue"></demo>
 
-### 禁用状态
+### 五档尺寸
+
+<demo src="./__demos__/size.vue"></demo>
+
+### 禁用与链接拦截
 
 <demo src="./__demos__/disabled.vue"></demo>
 
-### 变体
-
-<demo src="./__demos__/button-variants.vue"></demo>
-
-### 加载中状态
-
-通过设置 loading 可以让按钮处于加载中状态。处于加载中状态的按钮不会触发点击事件。
+### 加载布局与动画
 
 <demo src="./__demos__/loading.vue"></demo>
 
-### 自动加载
+### 同步、异步与失败恢复
 
 <demo src="./__demos__/auto-loading.vue"></demo>
 
@@ -38,84 +36,86 @@ permalink: /components/button/
 
 <demo src="./__demos__/block.vue"></demo>
 
-### 自定义颜色
+### 颜色、水波与阴影
 
 <demo src="./__demos__/custom-color.vue"></demo>
 
-### 圆形按钮
+### 图标插槽与圆形按钮
 
 <demo src="./__demos__/round.vue"></demo>
 
-### 堆叠状态
+### 图标文字堆叠
 
 <demo src="./__demos__/stacked.vue"></demo>
 
-### 组合按钮
+### 按钮组继承与覆盖
 
 <demo src="./__demos__/button-group.vue"></demo>
 
+### 原生表单、焦点与触摸事件
+
+<demo src="./__demos__/native-events.vue"></demo>
+
 ## API
 
-### `<Button>` Props
+<!-- same-source-api:start -->
+### Props
 
-| 属性          | 说明                                                                                                                      | 类型                                                                                     | 默认值      |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ----------- |
-| status        | 按钮主题色                                                                                                                | `'primary' \| 'secondary' \| 'tertiary' \| 'info' \| 'success' \| 'warning' \| 'danger'` | -           |
-| variant       | 按钮变体样式                                                                                                              | `'default' \| 'text' \| 'outline' \| 'tonal'`                                            | `'default'` |
-| size          | 按钮尺寸                                                                                                                  | `'xs' \| 'sm' \| 'md' \| 'lg'`                                                           | `'md'`      |
-| round         | 是否为圆形按钮                                                                                                            | `boolean`                                                                                | `false`     |
-| block         | 是否为块级元素（宽度占满容器）                                                                                            | `boolean`                                                                                | `false`     |
-| loading       | 是否为加载中状态                                                                                                          | `boolean`                                                                                | `false`     |
-| loading-type   | 加载类型                                                                                                                  | `'default' \| 'fill' \| 'line'`                                                          | `'default'` |
-| auto-loading   | 是否自动loading，方便处理异步任务                                                                                         | `boolean`                                                                                | `false`     |
-| disabled      | 是否为禁用状态                                                                                                            | `boolean`                                                                                | -           |
-| stacked       | 是否为堆叠状态（图标和文字垂直排列）                                                                                      | `boolean`                                                                                | -           |
-| icon-container | 是否为图标容器                                                                                                            | `boolean`                                                                                | `false`     |
-| ripple        | 是否使用水波纹效果                                                                                                        | `boolean`                                                                                | `false`     |
-| focusable     | 是否可以被聚焦                                                                                                            | `boolean`                                                                                | `false`     |
-| autofocus     | 是否自动聚焦                                                                                                              | `boolean`                                                                                | `false`     |
-| html-type      | 原生按钮类型，可选值参考 [HTML 标准](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#attr-type "_blank") | `'button' \| 'submit' \| 'reset'`                                                        | `'button'`  |
-| component     | 组件标签，设置为 `'a'` 时渲染为链接                                                                                       | `'button' \| 'a'`                                                                        | `'button'`  |
-| color         | 自定义背景颜色                                                                                                            | `string`                                                                                 | -           |
-| text-color     | 自定义文字颜色                                                                                                            | `string`                                                                                 | -           |
-| elevation     | 海拔高度，可选值为 `true`、`false` 和 `0-24` 的等级（仅 `variant='default'` 时生效）                                      | `boolean \| number`                                                                      | `true`      |
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| status | 主题色；省略时继承按钮组，否则 default | `SemanticStatus` | `undefined` |
+| variant | 外观；省略时继承按钮组，否则 default | `default / text / outline / tonal` | `undefined` |
+| size | 尺寸；省略时继承按钮组，否则 md | `xs / sm / md / lg / xl` | `undefined` |
+| html-type | 原生按钮类型 | `button / submit / reset` | `button` |
+| component | 根标签，链接属性通过 attrs 传入 | `button / a` | `button` |
+| round | 圆形按钮 | `boolean` | `false` |
+| block | 占满可用宽度 | `boolean` | `false` |
+| loading | 加载状态，禁止点击和链接跳转 | `boolean` | `false` |
+| loading-type | 加载动画；与 Loading 的 type 相同 | `circle / wave / cube / rect / disappear` | `circle` |
+| loading-mode | 行内、覆盖或底部进度线 | `default / fill / line` | `default` |
+| loading-size | 加载动画尺寸；省略时使用按钮尺寸，行内图标替换使用 xs | `ComponentSize / number` | `undefined` |
+| loading-color | 加载指示器颜色 | `string` | `currentColor` |
+| loading-radius | circle 动画半径 | `string / number` | `undefined` |
+| auto-loading | 等待 click/touchstart 返回的 Promise；同步回调不闪 loading | `boolean` | `false` |
+| icon-container | 图标容器外观 | `boolean` | `false` |
+| disabled | 禁用；省略时继承按钮组，显式 false 可覆盖 | `boolean` | `undefined` |
+| ripple | 点击水波 | `boolean` | `true` |
+| focusable | 允许 Tab 顺序聚焦；不影响通过代码聚焦 | `boolean` | `true` |
+| autofocus | 原生自动聚焦 | `boolean` | `false` |
+| text-color | 自定义文字色 | `string` | `undefined` |
+| color | 自定义背景／变体基色 | `string` | `undefined` |
+| elevation | default 变体阴影；true 为 2，false 关闭，数字四舍五入并限制 0～24；组内由组控制 | `boolean / number` | `true` |
+| stacked | 图标文字纵向排列；省略时继承按钮组 | `boolean` | `undefined` |
 
-**注意：** 当按钮位于 `ButtonGroup` 内时，`status`、`variant`、`size`、`color`、`textColor`、`stacked`、`disabled` 属性会继承按钮组的设置，但可以通过在按钮上单独设置来覆盖。
+### Events
 
-### `<Button>` Events
+| 事件 | 参数与行为 |
+| --- | --- |
+| click | `(event: Event) => void / Promise<unknown>` |
+| touchstart | `(event: Event) => void / Promise<unknown>` |
 
-| 事件名     | 说明           | 参数                          |
-| ---------- | -------------- | ----------------------------- |
-| click      | 点击触发的事件 | `(event: MouseEvent) => void` |
-| touchstart | 触摸开始事件   | `(event: TouchEvent) => void` |
+事件处理函数可返回 Promise，也支持多个监听器。auto-loading 会等待全部监听器完成，即使某个提前拒绝也不会提前解除禁用。卸载或 KeepAlive 停用会使旧异步结果失效。内部直接读取监听器返回值，不再二次 emit。原生 focus/blur 等事件透传。禁用／加载中的 click 会阻止跳转与冒泡。
 
-### `<Button>` Slots
+### Slots
 
-| 插槽名  | 说明     | 参数 |
-| ------- | -------- | ---- |
-| default | 按钮内容 | -    |
-| icon    | 图标插槽 | -    |
+| 插槽 | 说明 | 参数 |
+| --- | --- | --- |
+| default | 按钮内容；加载时保留 | — |
+| icon | 前置图标；stacked 时位于文字上方 | — |
 
-### `<ButtonGroup>` Props
+### Methods
 
-| 属性      | 说明                                                                                 | 类型                                                                                     | 默认值      |
-| --------- | ------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- | ----------- |
-| size      | 按钮组尺寸，子按钮会继承此设置                                                       | `'xs' \| 'sm' \| 'md' \| 'lg'`                                                           | `'md'`      |
-| status    | 按钮组主题色，子按钮会继承此设置                                                     | `'primary' \| 'secondary' \| 'tertiary' \| 'info' \| 'success' \| 'warning' \| 'danger'` | `'default'` |
-| variant   | 按钮组变体样式，子按钮会继承此设置                                                   | `'default' \| 'text' \| 'outline' \| 'tonal'`                                            | `'default'` |
-| color     | 按钮组背景颜色，子按钮会继承此设置                                                   | `string`                                                                                 | `''`        |
-| text-color | 按钮组文字颜色，子按钮会继承此设置                                                   | `string`                                                                                 | `''`        |
-| stacked   | 是否为堆叠状态（图标和文字垂直排列），子按钮会继承此设置                             | `boolean`                                                                                | `false`     |
-| disabled  | 是否禁用所有子按钮                                                                   | `boolean`                                                                                | `false`     |
-| vertical  | 是否为垂直排列                                                                       | `boolean`                                                                                | `false`     |
-| elevation | 海拔高度，可选值为 `true`、`false` 和 `0-24` 的等级（仅 `variant='default'` 时生效） | `boolean \| number`                                                                      | `true`      |
+无自定义公开方法。
+<!-- same-source-api:end -->
 
-**注意：** 按钮组内的子按钮会自动继承按钮组的 `status`、`variant`、`size`、`color`、`textColor`、`stacked`、`disabled` 属性，但子按钮可以通过单独设置这些属性来覆盖继承的值。
+## ButtonGroup
 
-### 类型定义
+属性：size=md、status=default、variant=default、color/text-color=undefined、disabled/stacked/vertical=false、elevation=true。使用 default 插槽，公开 buttonGroupProvider（响应式组配置），没有自定义事件。子按钮按字段覆盖组配置；阴影由组整体控制。
 
-组件导出以下类型定义
+## 迁移
 
-```ts
-import type { ButtonProps, ButtonGroupProps } from "@cedarjs/ui";
-```
+Cedar 原 loading-type=default/fill/line 改为 loading-mode=default/fill/line；loading-type 现在选择加载动画。Maple 如需原覆盖式布局，设置 loading-mode=fill。两端 ripple、focusable 默认均为 true。样式变量采用统一 Button token 名称（--c-/--mp- 前缀），完整变量见 style/token.less。
+
+## 类型
+
+ButtonProps、ButtonVariant、ButtonLoadingMode、ButtonHandler、ButtonInstance、ButtonGroupProps、ButtonGroupInstance。

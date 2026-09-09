@@ -30,4 +30,4 @@ export const progressGroupProps = {
   },
 }
 
-export type ProgressGroupProps = ExtractPropTypes<typeof progressGroupProps>
+export type ProgressGroupProps = import("vue").ExtractPublicPropTypes<typeof progressGroupProps>

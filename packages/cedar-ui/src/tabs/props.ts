@@ -12,7 +12,7 @@ export const tabsProps = {
     /**
      * @zh 当前选中的标签的 `key`
      * @en The `key` of the currently selected label
-     * @vModel
+     * @v-model
      */
     active: {
       type: [String, Number],
@@ -39,7 +39,7 @@ export const tabsProps = {
      * @zh 选项卡的大小
      * @en The size of the tab
      * @values 'xs', 'sm', 'md', 'lg', 'xl'
-     * @defaultValue 'md'
+     * @default-value 'md'
      */
     size: {
       type: String as PropType<ComponentSize>,
@@ -57,9 +57,9 @@ export const tabsProps = {
      * @zh 是否垂直展示
      * @en Whether to display vertically
      */
-    vertical: {
-      type: Boolean,
-      default: false,
+    orientation: {
+      type: String as PropType<'horizontal' | 'vertical'>,
+      default: 'horizontal',
     },
     /**
      * @zh 是否开启可编辑模式

@@ -1,5 +1,5 @@
 <template>
-  <div role="progressbar" aria-valuemin="0" aria-valuemax="1" :aria-valuenow="percent" :class="classes(n('wrapper'))">
+  <div role="progressbar" aria-valuemin="0" aria-valuemax="100" :aria-valuenow="percent" :class="classes(n('wrapper'))">
     <div :class="classes(n())" :style="style">
       <div :class="classes(n('bar-buffer'))" />
       <div v-if="indeterminate" :class="classes(n('indeterminate'))" >
@@ -70,7 +70,7 @@ export default defineComponent({
       default: 'md',
     },
     strokeWidth: {
-      type: Number,
+      type: [Number, String],
       default: 4,
     },
     width: {
@@ -103,11 +103,11 @@ export default defineComponent({
       return DEFAULT_STROKE_WIDTH[props.size]
     })
 
-    const text = computed(() => `${NP.times(props.percent, 100)}%`)
+    const text = computed(() => `${props.percent}%`)
 
     const style = computed(() => ({
       width: props.width,
-      height: `${strokeWidth.value}px`,
+      height: typeof props.strokeWidth === 'string' ? props.strokeWidth : `${strokeWidth.value}px`,
       backgroundColor: props.trackColor,
     }))
 
@@ -119,7 +119,7 @@ export default defineComponent({
     // });
 
     const barStyle = computed(() => ({
-      width: `${props.percent * 100}%`,
+      width: `${props.percent}%`,
       ...getBackground(props.color),
     }))
 

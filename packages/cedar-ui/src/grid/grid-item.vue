@@ -1,130 +1,29 @@
-<template>
-  <div ref="domRef" :class="classNames" :style="style">
-    <slot :overflow="overflow" />
-  </div>
-</template>
-
-<script lang="ts">
+<script setup lang="ts">
+import { computed, inject, onBeforeUnmount, onUpdated, ref } from 'vue'
 import { createNamespace } from '../_utils/global-config'
-import { defineComponent, onUnmounted, ref, inject, watchEffect, computed, PropType, toRefs } from 'vue'
-import { useIndex } from '../_hooks/use-index'
-import { getPrefixCls } from '../_utils/global-config'
-import { GridContextInjectionKey, GridDataCollectorInjectionKey } from './context'
+import { GRID_CONTEXT_KEY } from './context'
+import { gridItemProps } from './item-props'
 import { useResponsiveState } from './hook/use-responsive-state'
-import { ResponsiveValue } from './types'
 import { resolveItemData } from './utils'
-
-/**
- * @version 2.15.0
- * @zh 响应式配置从 `2.18.0` 开始支持，具体配置 [ResponsiveValue](#responsivevalue)
- * @en Responsive configuration has been supported since `2.18.0`, the specific configuration [ResponsiveValue](#responsivevalue)
- */
-export default defineComponent({
-  name: createNamespace("grid-item").name,
-  props: {
-    /**
-     * @zh 跨越的格数
-     * @en Number of grids spanned
-     */
-    span: {
-      type: [Number, Object] as PropType<number | ResponsiveValue>,
-      default: 1,
-    },
-    /**
-     * @zh 左侧的间隔格数
-     * @en Number of grids on the left
-     */
-    offset: {
-      type: [Number, Object] as PropType<number | ResponsiveValue>,
-      default: 0,
-    },
-    /**
-     * @zh 是否是后缀元素
-     * @en Is it a suffix element
-     */
-    suffix: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  setup(props) {
-    const prefixCls = getPrefixCls('grid-item')
-    const domRef = ref<HTMLDivElement>()
-    const { computedIndex } = useIndex({
-      itemRef: domRef,
-      selector: `.${prefixCls}`,
-    })
-    const gridContext = inject(GridContextInjectionKey, {
-      overflow: false,
-      displayIndexList: [],
-      cols: 24,
-      colGap: 0,
-    })
-    const gridDataCollector = inject(GridDataCollectorInjectionKey)
-    const visible = computed(() => gridContext?.displayIndexList?.includes(computedIndex.value))
-    const { span: propSpan, offset: propOffset } = toRefs(props)
-    const rSpan = useResponsiveState(propSpan, 1)
-    const rOffset = useResponsiveState(propOffset, 0)
-    const itemData = computed(() =>
-      resolveItemData(gridContext.cols, {
-        ...props,
-        span: rSpan.value,
-        offset: rOffset.value,
-      }),
-    )
-
-    const classNames = computed(() => [prefixCls])
-    const offsetStyle = computed(() => {
-      const { offset, span } = itemData.value
-      const { colGap } = gridContext
-      if (offset > 0) {
-        const oneSpan = `(100% - ${colGap * (span - 1)}px) / ${span}`
-        return {
-          'margin-left': `calc((${oneSpan} * ${offset}) + ${colGap * offset}px)`,
-        }
-      }
-      return {}
-    })
-    const columnStart = computed(() => {
-      const { suffix, span } = itemData.value
-      const { cols } = gridContext
-      if (suffix) {
-        return `${cols - span + 1}`
-      }
-      return `span ${span}`
-    })
-    const style = computed(() => {
-      const { span } = itemData.value
-      if (domRef.value) {
-        return [
-          {
-            'grid-column': `${columnStart.value} / span ${span}`,
-          },
-          offsetStyle.value,
-          !visible.value || span === 0 ? { display: 'none' } : {},
-        ]
-      }
-      return []
-    })
-
-    watchEffect(() => {
-      if (computedIndex.value !== -1) {
-        gridDataCollector?.collectItemData(computedIndex.value, itemData.value)
-      }
-    })
-
-    onUnmounted(() => {
-      if (computedIndex.value !== -1) {
-        gridDataCollector?.removeItemData(computedIndex.value)
-      }
-    })
-
-    return {
-      classNames,
-      style,
-      domRef,
-      overflow: computed(() => gridContext.overflow),
-    }
-  },
+defineOptions({ name: createNamespace('grid-item').name })
+const props = defineProps(gridItemProps)
+const { n } = createNamespace('grid-item')
+const grid = inject(GRID_CONTEXT_KEY, undefined)
+const element = ref<HTMLElement>()
+const id = Symbol('grid-item')
+const span = useResponsiveState(computed(() => props.span), 1)
+const offset = useResponsiveState(computed(() => props.offset), 0)
+const data = computed(() => resolveItemData(grid?.cols.value ?? 24, { span: span.value, offset: offset.value, suffix: props.suffix }))
+grid?.register({ id, data, element })
+onBeforeUnmount(() => grid?.remove(id))
+onUpdated(() => grid?.reorder())
+const overflow = computed(() => grid?.overflow.value ?? false)
+const style = computed(() => {
+  const { span, offset, suffix } = data.value
+  const cols = grid?.cols.value ?? 24, gap = grid?.colGap.value ?? 0
+  return { gridColumn: span === 0 ? undefined : `${suffix ? cols - span + 1 : `span ${span}`} / span ${span}`,
+    marginLeft: offset && span ? `calc(((100% - ${gap * (span - 1)}px) / ${span} * ${offset}) + ${gap * offset}px)` : undefined,
+    display: span === 0 || (grid && !grid.visible(id)) ? 'none' : undefined }
 })
 </script>
+<template><div ref="element" :class="n()" :style="style"><slot :overflow="overflow" /></div></template>

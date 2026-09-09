@@ -1,6 +1,6 @@
 <template>
   <c-row align="center" :style="{ marginBottom: '24px' }">
-    <c-checkbox :checked="!!pendingProps.direction" @change="(v) => onChange({ direction: v ? 'horizontal' : '' })">
+    <c-checkbox :checked="!!pendingProps.orientation" @change="(v) => onChange({ orientation: v ? 'horizontal' : '' })">
       horizontal &nbsp; &nbsp;
     </c-checkbox>
     <c-checkbox :checked="!!pendingProps.reverse" @change="(v) => onChange({ reverse: v })">

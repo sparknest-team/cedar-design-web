@@ -1,7 +1,7 @@
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 import { describe, test, expect } from 'vitest'
-import { TimePicker } from '../index'
+import TimePicker from '../time-picker.vue'
 
 describe('TimePicker', () => {
   test('render', async () => {

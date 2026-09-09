@@ -3,7 +3,7 @@ import Tooltip from './tooltip.vue'
 import { isPureTextElement, isTextOverflow } from './utils'
 
 const TOOLTIP_KEY = Symbol('CedarTooltip')
-type Position = 'top' | 'tl' | 'tr' | 'bottom' | 'bl' | 'br' | 'left' | 'lt' | 'lb' | 'right' | 'rt' | 'rb' | 'ellipsis'
+type Position = 'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'left-start' | 'left-end' | 'right' | 'right-start' | 'right-end' | 'ellipsis'
 
 export interface TooltipOptions {
   content: string

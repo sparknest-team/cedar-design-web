@@ -4,7 +4,7 @@ import type { ModeType, LabelPositionType } from './types'
 
 export interface TimelineContext {
   items: number[]
-  direction: Direction
+  orientation: Direction
   reverse: boolean
   labelPosition: LabelPositionType
   mode: ModeType

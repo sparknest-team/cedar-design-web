@@ -1,10 +1,10 @@
-<template>
-  <c-space size="lg">
-    <c-switch  />
-    <c-switch variant="round" />
-    <c-switch variant="line" />
-  </c-space>
-</template>
-
-<script lang="ts">
+<script setup lang="ts">
+const variants = ['circle', 'round', 'line', 'md3'] as const
 </script>
+
+<template>
+  <c-space wrap
+    ><label v-for="variant in variants" :key="variant"
+      >{{ variant }} <c-switch :variant="variant" :aria-label="variant" /></label
+  ></c-space>
+</template>

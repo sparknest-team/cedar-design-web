@@ -30,3 +30,4 @@ export { Tabs }
 export { tabsProps }
 
 export default Tabs
+export type TabsProps = import('vue').ExtractPublicPropTypes<typeof import('./props').tabsProps>

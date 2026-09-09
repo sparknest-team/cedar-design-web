@@ -16,3 +16,4 @@ export { Tree }
 export { treeProps }
 
 export default Tree
+export type TreeProps = import('vue').ExtractPublicPropTypes<typeof import('./props').treeProps>

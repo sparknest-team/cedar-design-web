@@ -5,6 +5,7 @@ import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
   plugins: [vue(), jsx()],
+  server: { host: '127.0.0.1' },
   css: {
     preprocessorOptions: {
       scss: {

@@ -35,7 +35,7 @@ export const collapseProps = {
 export const collapseItemProps = {
   name: {
     type: [String, Number] as PropType<CollapseName>,
-    required: true,
+    required: true as const,
   },
   title: String,
   disabled: Boolean,
@@ -46,5 +46,5 @@ export const collapseItemProps = {
   destroyOnHide: Boolean,
 } 
 
-export type CollapseProps = Partial<ExtractPropTypes<typeof collapseProps>>
-export type CollapseItemProps = Partial<ExtractPropTypes<typeof collapseItemProps>> & { name: CollapseName }
+export type CollapseProps = import("vue").ExtractPublicPropTypes<typeof collapseProps>
+export type CollapseItemProps = import("vue").ExtractPublicPropTypes<typeof collapseItemProps> & { name: CollapseName }

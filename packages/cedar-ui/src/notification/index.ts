@@ -34,7 +34,7 @@ class NotificationManger {
       notifications: this.notifications.value,
       position,
       onClose: this.remove,
-      onAfterClose: this.destroy,
+      onClosed: this.destroy,
     })
 
     if (appContext ?? Notification._context) {

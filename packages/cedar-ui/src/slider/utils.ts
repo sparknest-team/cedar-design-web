@@ -7,6 +7,6 @@ export const getOffsetPercent = (value: number, [min, max]: [number, number]): s
   return `${NP.round(percent * 100, 2)}%`
 }
 
-export const getPositionStyle = (offset: string, direction: Direction): CSSProperties => {
-  return direction === 'vertical' ? { bottom: offset } : { left: offset }
+export const getPositionStyle = (offset: string, orientation: Direction): CSSProperties => {
+  return orientation === 'vertical' ? { bottom: offset } : { left: offset }
 }

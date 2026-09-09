@@ -1,0 +1,8 @@
+- [x] Record partial-directory, query, hydration and resource-neutral contracts.
+- [x] Remove full-directory validation and isolate relevant disabled-state validation from pagination/labels.
+- [x] Implement instance-local hydration cache, ID fallback, error retry and request cleanup.
+- [x] Implement remote candidate search, cursor paging, selected label retention and stale-response protection.
+- [x] Add resource-free, equipment/work-order and asynchronous people/equipment demos.
+- [x] Update exported types, generic resource wording and API documentation.
+- [x] Run Scheduler regression tests (55 passed) and inspect source type diagnostics (no Scheduler errors; full repository has unrelated errors).
+- [x] Browser verified: off-page ID label, remote search, retained selection, added device and asynchronous save closing the editor.

@@ -39,7 +39,7 @@ export const typographyBaseInternalProps = {
   ...typographyBaseProps,
   component: {
     type: String as PropType<keyof HTMLElementTagNameMap>,
-    required: true,
+    required: true as const,
   },
 } 
 
@@ -72,8 +72,8 @@ export const typographyParagraphProps = {
   },
 } 
 
-export type TypographyProps = ExtractPropTypes<typeof typographyProps>
-export type TypographyBaseProps = ExtractPropTypes<typeof typographyBaseProps>
-export type TypographyTitleProps = ExtractPropTypes<typeof typographyTitleProps>
-export type TypographyTextProps = ExtractPropTypes<typeof typographyTextProps>
-export type TypographyParagraphProps = ExtractPropTypes<typeof typographyParagraphProps>
+export type TypographyProps = import("vue").ExtractPublicPropTypes<typeof typographyProps>
+export type TypographyBaseProps = import("vue").ExtractPublicPropTypes<typeof typographyBaseProps>
+export type TypographyTitleProps = import("vue").ExtractPublicPropTypes<typeof typographyTitleProps>
+export type TypographyTextProps = import("vue").ExtractPublicPropTypes<typeof typographyTextProps>
+export type TypographyParagraphProps = import("vue").ExtractPublicPropTypes<typeof typographyParagraphProps>

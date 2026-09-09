@@ -21,3 +21,4 @@ export { Form }
 export { formProps }
 
 export default Form
+export type FormProps = import('vue').ExtractPublicPropTypes<typeof import('./props').formProps>

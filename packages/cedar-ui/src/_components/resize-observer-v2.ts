@@ -1,5 +1,6 @@
+import { useElementResize } from '../_utils/resize-observer'
 import { createNamespace } from '../_utils/global-config'
-import { defineComponent, onBeforeUnmount, watch } from 'vue'
+import { defineComponent } from 'vue'
 import ResizeObserver from 'resize-observer-polyfill'
 import { useFirstElement } from '../_hooks/use-first-element'
 
@@ -17,34 +18,10 @@ export default defineComponent({
   ],
   setup(props, { emit, slots }) {
     const { children, firstElement } = useFirstElement()
-    let resizeObserver: ResizeObserver | null
-
-    const createResizeObserver = (target: HTMLElement) => {
-      if (!target) return
-      resizeObserver = new ResizeObserver((entries: ResizeObserverEntry[]) => {
-        const entry = entries[0]
-        emit('resize', entry)
-      })
-      resizeObserver.observe(target)
-    }
-
-    const destroyResizeObserver = () => {
-      if (resizeObserver) {
-        resizeObserver.disconnect()
-        resizeObserver = null
-      }
-    }
-
-    watch(firstElement, (element) => {
-      if (resizeObserver) destroyResizeObserver()
-      if (element) {
-        createResizeObserver(element)
-      }
-    })
-
-    onBeforeUnmount(() => {
-      if (resizeObserver) destroyResizeObserver()
-    })
+    useElementResize(() => [firstElement.value], () => true, entries => {
+      const entry = entries.find(entry => entry.target === firstElement.value)
+      if (entry) emit('resize', entry)
+    }, ResizeObserver, false)
 
     return () => {
       children.value = slots.default?.()

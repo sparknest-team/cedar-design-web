@@ -14,3 +14,4 @@ export { Calendar }
 export { calendarProps }
 
 export default Calendar
+export type CalendarProps = import('vue').ExtractPublicPropTypes<typeof import('./props').calendarProps>

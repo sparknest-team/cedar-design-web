@@ -1,3 +1,4 @@
+import { popupContainerProp } from '../_utils/popup-container'
 import { createNamespace } from '../_utils/global-config'
 import { computed, defineComponent, PropType, provide, reactive, ref, toRefs, watch } from 'vue'
 import Trigger, { TriggerProps } from '../trigger'
@@ -48,7 +49,7 @@ export const cascaderProps = {
     /**
      * @zh 默认值（非受控状态）
      * @en Default value (uncontrolled state)
-     * @defaultValue '' \| undefined \| []
+     * @default-value '' \| undefined \| []
      */
     defaultValue: {
       type: [String, Number, Object, Array] as PropType<
@@ -88,7 +89,7 @@ export const cascaderProps = {
      * @zh 选择框的大小
      * @en The size of the select
      * @values 'xs', 'sm', 'md', 'lg', 'xl'
-     * @defaultValue 'md'
+     * @default-value 'md'
      */
     size: {
       type: String as PropType<ComponentSize>,
@@ -96,7 +97,7 @@ export const cascaderProps = {
     /**
      * @zh 是否允许搜索
      * @en Whether to allow searching
-     * @defaultValue false (single) \| true (multiple)
+     * @default-value false (single) \| true (multiple)
      */
     filterable: {
       type: Boolean,
@@ -113,7 +114,7 @@ export const cascaderProps = {
     /**
      * @zh 输入框的值
      * @en The value of the input
-     * @vModel
+     * @v-model
      */
     inputValue: {
       type: String,
@@ -130,7 +131,7 @@ export const cascaderProps = {
     /**
      * @zh 是否显示下拉框
      * @en Whether to show the dropdown
-     * @vModel
+     * @v-model
      */
     open: {
       type: Boolean,
@@ -168,9 +169,7 @@ export const cascaderProps = {
      * @zh 弹出框的挂载容器
      * @en Mount container for popup
      */
-    popupContainer: {
-      type: [String, Object] as PropType<string | HTMLElement>,
-    },
+    popupContainer: popupContainerProp,
     /**
      * @zh 多选模式下，最多显示的标签数量。0 表示不限制
      * @en In multi-select mode, the maximum number of labels displayed. 0 means unlimited
@@ -284,4 +283,4 @@ export const cascaderProps = {
       type: Boolean,
       default: false,
     },
-  } 
+  }

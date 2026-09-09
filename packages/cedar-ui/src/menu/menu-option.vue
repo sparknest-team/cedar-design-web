@@ -1,122 +1,69 @@
 <template>
-  <li
-    ref="liRef"
-    :class="[cls, { [`${prefixCls}-has-suffix`]: Boolean($slots.suffix) }]"
-    @click="handleClick"
-  >
-    <span v-if="$slots.icon" :class="`${prefixCls}-icon`">
-      <slot name="icon" />
-    </span>
-    <span :class="`${prefixCls}-content`">
-      <slot>{{ label }}</slot>
-    </span>
-    <span v-if="$slots.suffix" :class="`${prefixCls}-suffix`">
-      <slot name="suffix" />
-    </span>
-  </li>
+  <MenuView :options="viewOptions">
+    <template v-for="(_, slotName) in $slots" #[slotName]="slotProps">
+      <slot :name="slotName" v-bind="slotProps || {}" />
+    </template>
+  </MenuView>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import { computed, inject, onBeforeUnmount, ref, useSlots } from 'vue'
+import { useEventListener } from '@cedarjs/use'
 import { createNamespace } from '../_utils/global-config'
-import { computed, defineComponent, inject, ref } from "vue";
-import { getPrefixCls } from "../_utils/global-config";
-import { menuInjectionKey } from "./context";
-
-export default defineComponent({
-  name: createNamespace("menu-option").name,
-  props: {
-    /**
-     * @zh 选项值
-     * @en Value
-     */
-    value: {
-      type: [String, Number, Object],
-    },
-    /**
-     * @zh 选项显示内容，不传 value 时也作为选项值
-     * @en Option label. Used as option value when value is not provided
-     */
-    label: {
-      type: [String, Number],
-    },
-    /**
-     * @zh 是否禁用
-     * @en Whether to disable
-     */
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    // private
-    active: Boolean,
-    uninjectContext: Boolean,
-  },
-  emits: {
-    /**
-     * @zh 点击选项时触发
-     * @en Emitted when the option is clicked
-     * @param {MouseEvent} ev
-     */
-    click: (ev: MouseEvent) => true,
-  },
-  /**
-   * @zh 图标
-   * @en Icon
-   * @slot icon
-   */
-  /**
-   * @zh 选项内容
-   * @en Option content
-   * @slot default
-   */
-  /**
-   * @zh 后缀
-   * @en Suffix
-   * @slot suffix
-   */
-  setup(props, { emit }) {
-    const prefixCls = getPrefixCls("menu-option");
-    const liRef = ref<HTMLElement>();
-
-    const computedValue = computed(
-      () => props.value ?? props.label ?? liRef.value?.textContent ?? undefined,
-    );
-
-    const menuCtx = !props.uninjectContext
-      ? inject(menuInjectionKey, undefined)
-      : undefined;
-
-    const handleClick = (ev: MouseEvent) => {
-      if (!props.disabled) {
-        emit('click', ev)
-        menuCtx?.onOptionClick(
-          computedValue.value,
-          {
-            value: computedValue.value,
-            label: props.label,
-            disabled: props.disabled,
-          },
-          ev,
-        )
-      }
-    }
-
-    const cls = computed(() => [
-      prefixCls,
-      {
-        [`${prefixCls}-disabled`]: props.disabled,
-        [`${prefixCls}-active`]: props.active,
-        [`${prefixCls}-selected`]:
-          menuCtx?.modelValue?.value === computedValue.value,
-      },
-    ]);
-
-    return {
-      prefixCls,
-      cls,
-      liRef,
-      handleClick,
-    };
-  },
-});
+import MenuView from './render'
+import { props as optionProps } from './option-props'
+import { menuSelectionKey } from './selection'
+import { menuInjectionKey, menuLevelKey } from './context'
+import { useOptionAppearance, checkboxActivation } from './platform'
+defineOptions({ name: createNamespace('menu-option').name })
+const props = defineProps(optionProps)
+const emit = defineEmits(['click', 'key-arrow-x'])
+const slots = useSlots()
+const root = ref<HTMLElement>()
+const checkbox = ref<{ isFocusing?: boolean }>()
+const isFocusing = ref(false)
+const selection = props.uninjectContext ? undefined : inject(menuSelectionKey, undefined)
+const level = inject(menuLevelKey, undefined)
+const context = props.uninjectContext ? undefined : inject(menuInjectionKey, undefined)
+const value = computed(() => props.value !== undefined ? props.value : typeof props.label === 'function' ? undefined : props.label ?? root.value?.textContent ?? undefined)
+const optionSelected = computed(() => selection?.isSelected(value.value) ?? (value.value !== undefined && context?.modelValue?.value === value.value))
+const optionIndeterminate = computed(() => selection?.isIndeterminate(value.value) ?? false)
+const disabled = computed(() => props.disabled || !!selection?.disabled.value)
+const multiple = computed(() => selection?.multiple.value ?? false)
+const size = computed(() => selection?.size.value ?? 'md')
+const unregister = selection?.register(() => value.value)
+onBeforeUnmount(() => unregister?.())
+const labelVNode = computed(() => typeof props.label === 'function' ? props.label(props.option ?? { label: props.label, value: props.value, disabled: props.disabled, ripple: props.ripple }, optionSelected.value) : props.label)
+function handleSelect(event: Event) {
+  if (disabled.value || (!multiple.value && props.childrenTrigger)) return
+  const option = props.option ?? { value: value.value, label: props.label, disabled: disabled.value, ripple: props.ripple }
+  if (selection) selection.select(value.value, option, event)
+  else context?.onOptionClick(value.value, option, event)
+}
+function handleClick(event: MouseEvent) { if (!disabled.value) { emit('click', event); handleSelect(event) } }
+// Local row handlers also support standalone options. The panel handles navigation.
+function handleKeydown(event: KeyboardEvent) {
+  if (event.defaultPrevented || disabled.value || (!isFocusing.value && !checkbox.value?.isFocusing)) return
+  if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+    // A submenu's panel owns ArrowLeft; only references consume ArrowRight.
+    if (event.key === 'ArrowLeft' && level?.leave) { event.preventDefault(); level.leave() }
+    if (event.key === 'ArrowRight' && props.childrenTrigger) { event.preventDefault(); emit('key-arrow-x', event.key) }
+    return
+  }
+  if (!isFocusing.value) return
+  if (event.key === ' ' || event.key === 'Enter') event.preventDefault()
+  if (event.key === 'Enter') root.value?.click()
+}
+function handleKeyup(event: KeyboardEvent) { if (!event.defaultPrevented && !disabled.value && isFocusing.value && event.key === ' ') { event.preventDefault(); root.value?.click() } }
+useEventListener(() => root.value?.ownerDocument.defaultView, 'keydown', handleKeydown)
+useEventListener(() => root.value?.ownerDocument.defaultView, 'keyup', handleKeyup)
+const appearance = useOptionAppearance(props, { optionSelected, optionIndeterminate, disabled, multiple, size, isFocusing, labelVNode }, slots)
+const viewOptions = computed(() => ({ kind: 'option', ...appearance.value, rootRef: root, checkboxRef: checkbox,
+  multiple: multiple.value, selected: optionSelected.value, indeterminate: optionIndeterminate.value, disabled: disabled.value,
+  checkboxProps: { ...appearance.value.checkboxProps, modelValue: optionSelected.value, indeterminate: optionIndeterminate.value, disabled: disabled.value,
+    onClick: (event: Event) => { event.stopPropagation(); if (checkboxActivation === 'click') handleSelect(event) },
+    onChange: (_value: unknown, event: Event) => { if (checkboxActivation === 'change') handleSelect(event) } },
+  onClick: handleClick, onFocus: () => { isFocusing.value = true }, onBlur: () => { isFocusing.value = false },
+}))
+defineExpose({ root, checkbox, isFocusing, optionSelected, optionIndeterminate, handleClick, handleSelect })
 </script>

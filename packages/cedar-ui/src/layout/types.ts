@@ -2,6 +2,7 @@
  * @title Layout
  */
 export interface LayoutProps {
+  scrollable?: boolean;
   /**
    * @zh
    * 表示子元素里有 Sider，一般不用指定。可用于服务端渲染时避免样式闪动
@@ -9,56 +10,59 @@ export interface LayoutProps {
    * Indicates that there is a `Sider` in the children. Generally no need to specify.
    * It's used to avoid flicker during server-side rendering
    */
-  hasSider?: boolean
+  hasSider?: boolean;
 }
 
 /**
  * @title Layout.Sider
  */
 export interface SiderProps {
+  bordered?: boolean;
+  placement?: "left" | "right";
+  collapseMode?: "width" | "transform";
   /**
    * @zh 主题颜色
    * @en Theme of layout
-   * @defaultValue light
+   * @default-value light
    */
-  theme?: 'dark' | 'light'
+  theme?: "dark" | "light";
   /**
    * @zh 当前收起状态
    * @en Whether sider is collapsed
    */
-  collapsed?: boolean
+  collapsed?: boolean;
   /**
    * @zh 是否默认收起
    * @en Whether sider is collapsed by default
    */
-  defaultCollapsed?: boolean
+  defaultCollapsed?: boolean;
   /**
    * @zh 是否可收起
    * @en Whether sider can be collapsed
    */
-  collapsible?: boolean
+  collapsible?: boolean;
   /**
    * @zh 宽度
    * @en Width of sider
-   * @defaultValue 200
+   * @default-value 200
    */
-  width?: number | string
+  width?: number | string;
   /**
    * @zh 收缩宽度，设置为 0 会出现特殊 trigger
    * @en Width of collapsed sider
-   * @defaultValue 48
+   * @default-value 48
    */
-  collapsedWidth?: number
+  collapsedWidth?: number;
   /**
    * @zh 翻转折叠提示箭头的方向，当 Sider 在右边时可以使用
    * @en Reverse the direction of the fold arrow, can be used when sider is on the right
    */
-  reverseArrow?: boolean
+  reverseArrow?: boolean;
   /**
    * @zh 触发响应式布局的断点, 详见[响应式栅格](/vue/components/Grid)
    * @en Breakpoint in responsive layout. See details [Grid](/vue/components/Grid)
    */
-  breakpoint?: 'xxl' | 'xl' | 'lg' | 'md' | 'sm' | 'xs'
+  breakpoint?: "xxl" | "xl" | "lg" | "md" | "sm" | "xs";
   /**
    * @zh
    * 可以用 ResizeBox 替换原生的 `aside` 标签，这个参数即 ResizeBox的 `directions` 参数。
@@ -67,10 +71,20 @@ export interface SiderProps {
    * You can replace the native `aside` tag with `ResizeBox`, under which case this param will be the `directions` property of `ResizeBox`.
    * See details [ResizeBox](/vue/components/resize-box).
    */
-  resizeDirections?: string[]
+  resizeDirections?: string[];
   /**
    * @zh 隐藏底部折叠触发器
    * @en Hide the trigger element to collapse sider at bottom.
    */
-  hideTrigger?: boolean
+  hideTrigger?: boolean;
+}
+
+export interface LayoutContentProps {
+  scrollable?: boolean;
+}
+export interface LayoutHeaderProps {
+  bordered?: boolean;
+}
+export interface LayoutFooterProps {
+  bordered?: boolean;
 }

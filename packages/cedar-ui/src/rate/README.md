@@ -92,3 +92,9 @@ permalink: /components/rate/
 ```ts
 import type { RateInstance } from '@cedarjs/ui'
 ```
+
+### size
+
+`size?: number | string` 设置评分图标尺寸；数字/数字字符串按 px，带单位字符串按 CSS 长度。省略、非法及非正数保留样式默认尺寸，不支持 xs/md 等档位。
+
+尺寸与跨端迁移约定见仓库根目录 `API-MIGRATION.md`。只支持文档列出的档位，不代表支持全部 ComponentSize。

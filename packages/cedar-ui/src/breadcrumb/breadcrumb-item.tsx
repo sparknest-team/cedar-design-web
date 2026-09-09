@@ -1,8 +1,6 @@
 import { computed, defineComponent, ref } from 'vue'
 import { createNamespace } from '../_utils/global-config'
-import { IconMore } from '@cedarjs/icons-vue/icon-more'
-import { IconDown } from '@cedarjs/icons-vue/icon-down'
-import { IconObliqueLine } from '@cedarjs/icons-vue/icon-oblique-line'
+import { IconMore, IconDown } from './platform'
 import { useBreadcrumb } from './provide'
 import { breadcrumbItemProps } from './props'
 import type { BreadcrumbRoute } from './types'
@@ -16,7 +14,7 @@ export default defineComponent({
   inheritAttrs: false,
   props: breadcrumbItemProps,
   emits: {
-    click: (event: MouseEvent) => true,
+    click: (_event: MouseEvent) => true,
     select: (_route: BreadcrumbRoute, _event?: Event) => true,
   },
   /**
@@ -48,7 +46,8 @@ export default defineComponent({
     })
 
     const displayMore = computed(() => (needHide.value ? itemIndex.value === 1 : false))
-    const isLast = computed(() => itemIndex.value === total.value - 1)
+    const isLast = computed(() => Boolean(breadcrumb) && itemIndex.value === total.value - 1)
+    const hasDropdown = computed(() => !displayMore.value && Boolean(props.droplist?.length || slots.droplist))
 
     const showSeparator = computed(() => (breadcrumb ? itemIndex.value < total.value - 1 : true))
 
@@ -62,7 +61,7 @@ export default defineComponent({
         slots.separator?.() ??
         props.separator ??
         breadcrumb?.slots?.separator?.() ??
-        breadcrumb?.separator?.value ?? <IconObliqueLine />
+        breadcrumb?.separator?.value ?? '/'
       return (
         <div aria-hidden="true" class={n('separator')}>
           {separatorElement}
@@ -77,26 +76,23 @@ export default defineComponent({
     const renderItem = () => {
       const Tag = props.href && !displayMore.value ? 'a' : 'div'
       return (
-      <Tag
-        role="listitem"
-        class={classes(n(), [props.droplist || slots.droplist, n('--with-dropdown')])}
-        href={Tag === 'a' ? props.href : undefined}
-        onClick={handleClick}
-        {...(displayMore.value ? { 'aria-label': 'ellipses of breadcrumb items' } : undefined)}
-        {...attrs}
-      >
-        {displayMore.value
-          ? (breadcrumb?.slots?.['more-icon']?.(breadcrumb.moreSlotData.value) ?? <IconMore />)
-          : slots.default?.()}
-        {(props.droplist || slots.droplist) && (
-          <span
-            aria-hidden
-            class={classes(n('dropdown-icon'), [dropdownVisible.value, n('--dropdown-icon-active')])}
+        <div class={classes(n(), [hasDropdown.value, n('--with-dropdown')])}>
+          <Tag
+            class={n('content')}
+            href={Tag === 'a' ? props.href : undefined}
+            aria-current={isLast.value ? 'page' : undefined}
+            onClick={handleClick}
+            {...(displayMore.value ? { 'aria-label': 'ellipses of breadcrumb items' } : undefined)}
+            {...attrs}
           >
-            <IconDown />
-          </span>
-        )}
-      </Tag>
+            {displayMore.value
+              ? (breadcrumb?.slots?.['more-icon']?.(breadcrumb.moreSlotData.value) ?? <IconMore />)
+              : slots.default?.()}
+            {hasDropdown.value && (
+              <IconDown aria-hidden="true" class={classes(n('dropdown-icon'), [dropdownVisible.value, n('--dropdown-icon-active')])} />
+            )}
+          </Tag>
+        </div>
       )
     }
 
@@ -108,7 +104,6 @@ export default defineComponent({
         {...props.dropdownProps}
         v-slots={{ content: renderDropdownContent }}
         open={dropdownVisible.value}
-        onOpenChange={handleVisibleChange}
         onUpdate:open={handleVisibleChange}
         onSelect={(value: unknown, _option: Record<string, any>, event: Event) => {
           const route = props.droplist?.find((item) => item.path === value)
@@ -123,7 +118,7 @@ export default defineComponent({
       if (!shouldRender.value) return null
       return (
         <>
-          {slots.droplist || props.droplist ? renderDropdown() : renderItem()}
+          {hasDropdown.value ? renderDropdown() : renderItem()}
           {renderSeparator()}
         </>
       )

@@ -123,11 +123,14 @@ import {
   ref,
   watch,
   onMounted,
+  onActivated,
+  onDeactivated,
   onBeforeUnmount,
   toRefs,
   nextTick,
 } from "vue";
 import { createNamespace, getPrefixCls } from "../_utils/global-config";
+import { usePopupContainer } from '../_utils/popup-container'
 import ClientOnly from "../_components/client-only";
 import IconHover from "../_components/icon-hover.vue";
 import Button from "../button";
@@ -139,6 +142,7 @@ import { IconCloseCircleFill } from "@cedarjs/icons-vue/icon-close-circle-fill";
 import { useI18n } from "../locale";
 import { useOverflow } from "../_hooks/use-overflow";
 import { getElement, off, on } from "../_utils/dom";
+import { useModalFocus } from "../_utils/modal-focus";
 import usePopupManager from "../_hooks/use-popup-manager";
 import { isFunction, isNumber } from "../_utils/is";
 import { KEYBOARD_KEY } from "../_utils/keyboard";
@@ -177,7 +181,7 @@ export default defineComponent({
     const { t } = useI18n();
     const wrapperRef = ref<HTMLElement>();
     const dialogRef = ref<HTMLElement>();
-    let previouslyFocused: HTMLElement | null = null;
+
 
     const _open = ref(props.defaultOpen);
     const computedOpen = computed(() => props.open ?? _open.value);
@@ -211,9 +215,7 @@ export default defineComponent({
     const popupContainerDisabled = computed(
       () => props.popupContainer === false,
     );
-    const popupContainerTarget = computed(() =>
-      props.popupContainer === false ? "body" : props.popupContainer || "body",
-    );
+    const popupContainerTarget = usePopupContainer(() => props.popupContainer);
 
     const containerRef = ref<HTMLElement>();
     const mounted = ref(computedOpen.value);
@@ -235,13 +237,14 @@ export default defineComponent({
 
     const { zIndex: managedZIndex, isLastDialog } = usePopupManager("dialog", {
       visible: computedOpen,
+  zIndex: computed(() => props.zIndex),
     });
     const mergedZIndex = computed(() => props.zIndex ?? managedZIndex.value);
 
     let globalKeyDownListener = false;
 
     const handleGlobalKeyDown = (ev: KeyboardEvent) => {
-      if (ev.key === KEYBOARD_KEY.ESC && isLastDialog()) {
+      if (ev.key === KEYBOARD_KEY.ESC && isLastDialog(ev)) {
         handleKeyEscape(ev);
       }
     };
@@ -340,6 +343,7 @@ export default defineComponent({
     };
 
     const handleOverlayClick = (e: Event) => {
+      if (!isLastDialog(e)) return;
       emit("click-overlay", e);
 
       if (props.overlay && props.overlayClosable && currentIsOverlay.value) {
@@ -349,41 +353,14 @@ export default defineComponent({
 
     const handleOpened = () => {
       if (computedOpen.value) {
-        dialogRef.value?.focus();
+        focusDialog();
         emit("opened");
       }
     };
 
-    const restoreFocus = () => {
-      previouslyFocused?.focus();
-      previouslyFocused = null;
-    };
-
-    const handleFocusTrap = (e: KeyboardEvent) => {
-      if (e.key !== KEYBOARD_KEY.TAB || !dialogRef.value) return;
-
-      const focusable = Array.from(
-        dialogRef.value.querySelectorAll<HTMLElement>(
-          'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
-        ),
-      ).filter((element) => !element.hidden);
-
-      if (!focusable.length) {
-        e.preventDefault();
-        dialogRef.value.focus();
-        return;
-      }
-
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    };
+    const { focus: focusDialog, restore: restoreFocus, trap: handleFocusTrap } = useModalFocus(
+      () => dialogRef.value, () => computedOpen.value, isLastDialog, () => props.lockScroll,
+    );
 
     const handleClosed = () => {
       if (!computedOpen.value) {
@@ -399,20 +376,21 @@ export default defineComponent({
     };
 
     const { setOverflowHidden, resetOverflow } = useOverflow(containerRef);
+    onDeactivated(() => { resetOverflow(); removeGlobalKeyDownListener(); });
+    onActivated(() => {
+      if (computedOpen.value) { if (props.lockScroll) setOverflowHidden(); addGlobalKeyDownListener(); }
+      else { mounted.value = false; resetOverflow(); }
+    });
 
     onMounted(() => {
       containerRef.value = getElement(popupContainerTarget.value);
       if (computedOpen.value) {
-        previouslyFocused =
-          document.activeElement instanceof HTMLElement
-            ? document.activeElement
-            : null;
         emit("open");
         if (props.lockScroll) {
           setOverflowHidden();
         }
         addGlobalKeyDownListener();
-        nextTick(() => dialogRef.value?.focus());
+        nextTick(focusDialog);
       }
     });
 
@@ -427,10 +405,6 @@ export default defineComponent({
         _open.value = value;
       }
       if (value) {
-        previouslyFocused =
-          document.activeElement instanceof HTMLElement
-            ? document.activeElement
-            : null;
         emit("open");
         mounted.value = true;
         currentIsOverlay.value = false;

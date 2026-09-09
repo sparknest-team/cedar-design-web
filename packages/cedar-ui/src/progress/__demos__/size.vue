@@ -5,13 +5,13 @@
       <c-radio value="md">md</c-radio>
       <c-radio value="lg">lg</c-radio>
     </c-radio-group>
-    <c-progress :size="size" :percent="0.2" />
-    <c-progress status="warning" :size="size" :percent="0.2" />
-    <c-progress status="danger" :size="size" :percent="0.2" />
+    <c-progress :size="size" :percent="20" />
+    <c-progress status="warning" :size="size" :percent="20" />
+    <c-progress status="danger" :size="size" :percent="20" />
     <c-space>
-      <c-progress mode="circle" :size="size" :percent="0.2" />
-      <c-progress mode="circle" status="warning" :size="size" :percent="0.2" />
-      <c-progress mode="circle" status="danger" :size="size" :percent="0.2" />
+      <c-progress mode="circle" :size="size" :percent="20" />
+      <c-progress mode="circle" status="warning" :size="size" :percent="20" />
+      <c-progress mode="circle" status="danger" :size="size" :percent="20" />
     </c-space>
   </c-space>
 </template>

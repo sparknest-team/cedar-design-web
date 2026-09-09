@@ -35,7 +35,7 @@ export default defineComponent({
       type: Number,
       required: true,
     },
-    direction: {
+    orientation: {
       type: String as PropType<Direction>,
       default: 'horizontal',
     },
@@ -59,7 +59,7 @@ export default defineComponent({
     })
 
     const getStyle = (value: number) =>
-      getPositionStyle(getOffsetPercent(value, [props.min, props.max]), props.direction)
+      getPositionStyle(getOffsetPercent(value, [props.min, props.max]), props.orientation)
 
     return {
       prefixCls,

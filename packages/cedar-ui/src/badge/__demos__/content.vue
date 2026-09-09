@@ -1,32 +1,17 @@
 <template>
-  <c-space :size="40">
-    <c-badge content="NEW">
-      <c-avatar shape="square">
-        <span>
-          <c-icon-user />
-        </span>
-      </c-avatar>
-    </c-badge>
-    <c-badge content="HOT">
-      <c-avatar shape="square">
-        <span>
-          <c-icon-user />
-        </span>
-      </c-avatar>
-    </c-badge>
-    <c-badge content="NEW" mode="inline">
-      <c-avatar shape="square">
-        <span>
-          <c-icon-user />
-        </span>
-      </c-avatar>
-    </c-badge>
-    <c-badge content="HOT" mode="inline" inline-position="end">
-      <c-avatar shape="square">
-        <span>
-          <c-icon-user />
-        </span>
-      </c-avatar>
-    </c-badge>
-  </c-space>
+  <c-space wrap :size="24"
+    ><c-badge content="NEW"
+      ><span style="display: inline-block; padding: 12px; border: 1px solid currentColor; border-radius: 4px"
+        >Inbox</span
+      ></c-badge
+    ><c-badge content="HOT" mode="inline" inline-position="start"
+      ><span style="display: inline-block; padding: 12px; border: 1px solid currentColor; border-radius: 4px"
+        >Inbox</span
+      ></c-badge
+    ><c-badge content="HOT" mode="inline" inline-position="end"
+      ><span style="display: inline-block; padding: 12px; border: 1px solid currentColor; border-radius: 4px"
+        >Inbox</span
+      ></c-badge
+    ></c-space
+  >
 </template>

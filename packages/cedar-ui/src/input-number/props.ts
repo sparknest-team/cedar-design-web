@@ -52,4 +52,4 @@ export const inputNumberProps = {
   inputAttrs: Object as PropType<Record<string, unknown>>,
 };
 
-export type InputNumberProps = ExtractPropTypes<typeof inputNumberProps>;
+export type InputNumberProps = import("vue").ExtractPublicPropTypes<typeof inputNumberProps>;

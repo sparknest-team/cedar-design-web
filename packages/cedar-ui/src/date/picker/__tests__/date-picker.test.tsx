@@ -1,7 +1,7 @@
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 import { afterEach, describe, test, expect, vi } from 'vitest'
-import { DatePicker } from '../index'
+import DatePicker from '../picker.vue'
 
 describe('DatePicker', () => {
   afterEach(() => {
@@ -11,7 +11,7 @@ describe('DatePicker', () => {
   test('marks today deterministically and exposes keyboard-selectable cells', async () => {
     vi.useFakeTimers()
     vi.setSystemTime(new Date(2025, 0, 15, 12))
-    const wrapper = mount(DatePicker)
+    const wrapper = mount(DatePicker, { props: { hideTrigger: true } })
     await nextTick()
 
     const today = wrapper.find('.c-picker-cell-today')

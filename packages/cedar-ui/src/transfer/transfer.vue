@@ -103,7 +103,7 @@ export default defineComponent({
      */
     search: (value: string, type: 'target' | 'source') => true,
     rename: (value: TransferValue, label: string) => true,
-    targetAction: (key: string, item: TransferItem) => true,
+    "target-action": (key: string, item: TransferItem) => true,
   },
   /**
    * @zh 选项
@@ -357,7 +357,7 @@ export default defineComponent({
     }
 
     const handleTargetAction = (action: TransferTargetAction, item: TransferItem) => {
-      emit('targetAction', action.key, item)
+      emit('target-action', action.key, item)
     }
 
     provide(

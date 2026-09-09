@@ -27,6 +27,11 @@
       "types": "./types/*/index.d.ts",
       "import": "./es/*/index.mjs",
       "require": "./lib/*/index.js"
+    },
+    "./scheduler/core": {
+      "types": "./types/scheduler/core/index.d.ts",
+      "import": "./es/scheduler/core/index.mjs",
+      "require": "./lib/scheduler/core/index.js"
     }
   },
   "files": [
@@ -36,8 +41,10 @@
     "umd"
   ],
   "sideEffects": [
+    "src/**/style/*",
     "es/**/style/*",
     "lib/**/style/*",
+    "*.css",
     "*.less"
   ],
   "scripts": {
@@ -58,7 +65,8 @@
     "prepublishOnly": "pnpm build:lib",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 2",
     "preview": "histoire preview",
-    "typecheck": "vue-tsc -p tsconfig.declaration.json --noEmit"
+    "typecheck": "vue-tsc -p tsconfig.declaration.json --noEmit",
+    "typecheck:contracts": "tsc -p tsconfig.contracts.json"
   },
   "dependencies": {
     "@cedarjs/icons-vue": "workspace:*",

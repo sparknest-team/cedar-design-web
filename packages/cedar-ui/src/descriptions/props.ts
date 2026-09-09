@@ -30,5 +30,5 @@ export const descriptionsItemProps = {
   label: String,
 } 
 
-export type DescriptionsProps = Partial<ExtractPropTypes<typeof descriptionsProps>>
-export type DescriptionsItemProps = Partial<ExtractPropTypes<typeof descriptionsItemProps>>
+export type DescriptionsProps = import("vue").ExtractPublicPropTypes<typeof descriptionsProps>
+export type DescriptionsItemProps = import("vue").ExtractPublicPropTypes<typeof descriptionsItemProps>

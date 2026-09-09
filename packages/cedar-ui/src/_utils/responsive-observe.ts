@@ -1,8 +1,23 @@
-// https://github.com/ant-design/ant-design/blob/master/components/_util/responsiveObserve.ts
-
+// Based on ant-design responsiveObserve; each library owns its subscriptions.
 export type Breakpoint = 'xxl' | 'xl' | 'lg' | 'md' | 'sm' | 'xs'
 export type BreakpointMap = Partial<Record<Breakpoint, string>>
 export type ScreenMap = Partial<Record<Breakpoint, boolean>>
+
+/** 断点响应式数值配置，与 Cedar PC 对齐 */
+export interface ResponsiveValue {
+  /** >= 1600px */
+  xxl?: number
+  /** >= 1200px */
+  xl?: number
+  /** >= 992px */
+  lg?: number
+  /** >= 768px */
+  md?: number
+  /** >= 576px */
+  sm?: number
+  /** < 576px */
+  xs?: number
+}
 
 export const responsiveArray: Breakpoint[] = ['xxl', 'xl', 'lg', 'md', 'sm', 'xs']
 
@@ -26,7 +41,7 @@ let subscribers: Array<{
   func: SubscribeFunc
 }> = []
 let subUid = -1
-let screens = {}
+let screens: ScreenMap = {}
 
 const responsiveObserve: {
   matchHandlers: {
@@ -75,21 +90,32 @@ const responsiveObserve: {
   unregister() {
     ;(Object.keys(responsiveMap) as Breakpoint[]).forEach((screen: Breakpoint) => {
       const matchMediaQuery = responsiveMap[screen]
-      if (!matchMediaQuery) return
+      if (!matchMediaQuery) {
+        return
+      }
       const handler = this.matchHandlers[matchMediaQuery]
       if (handler && handler.mql && handler.listener) {
         if (handler.mql.removeEventListener) {
           handler.mql.removeEventListener('change', handler.listener)
         } else {
-          handler.mql.removeListener(handler.listener)
+          ;(handler.mql as MediaQueryList & { removeListener: (listener: MediaQueryListener) => void }).removeListener(
+            handler.listener,
+          )
         }
       }
     })
+    this.matchHandlers = {}
+    screens = {}
   },
   register() {
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+      return
+    }
     ;(Object.keys(responsiveMap) as Breakpoint[]).forEach((screen: Breakpoint) => {
       const matchMediaQuery = responsiveMap[screen]
-      if (!matchMediaQuery) return
+      if (!matchMediaQuery) {
+        return
+      }
       const listener = ({ matches }: MediaQueryResult) => {
         this.dispatch(
           {
@@ -99,11 +125,12 @@ const responsiveObserve: {
           screen,
         )
       }
+      if (this.matchHandlers[matchMediaQuery]) return
       const mql = window.matchMedia(matchMediaQuery)
       if (mql.addEventListener) {
         mql.addEventListener('change', listener)
       } else {
-        mql.addListener(listener)
+        ;(mql as MediaQueryList & { addListener: (listener: MediaQueryListener) => void }).addListener(listener)
       }
 
       this.matchHandlers[matchMediaQuery] = {

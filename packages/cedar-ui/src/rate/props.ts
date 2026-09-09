@@ -3,6 +3,8 @@ import type { ExtractPropTypes, PropType } from 'vue'
 export type RateColor = string | Record<string, string>
 
 export const rateProps = {
+  /** 单个图标尺寸；number / 数值字符串按 px，字符串支持 CSS 长度 */
+  size: [Number, String],
   count: {
     type: Number,
     default: 5,
@@ -18,4 +20,4 @@ export const rateProps = {
   color: [String, Object] as PropType<RateColor>,
 } 
 
-export type RateProps = ExtractPropTypes<typeof rateProps>
+export type RateProps = import("vue").ExtractPublicPropTypes<typeof rateProps>

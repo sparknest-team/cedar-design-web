@@ -1,14 +1,14 @@
 // Vitest Snapshot v1
 
 exports[`PageHeader > render 1`] = `
-"<div class=\\"c-page-header-wrapper\\">
+"<div class=\\"c-page-header__wrapper\\">
   <!--v-if-->
   <header class=\\"c-page-header\\">
-    <div class=\\"c-page-header-main\\">
+    <div class=\\"c-page-header__main\\">
       <!--v-if-->
       <!--v-if-->
-      <div class=\\"c-page-header-title\\">Title</div>
-      <div class=\\"c-page-header-subtitle\\">Subtitle</div>
+      <div class=\\"c-page-header__title\\">Title</div>
+      <div class=\\"c-page-header__subtitle\\">Subtitle</div>
     </div>
     <!--v-if-->
   </header>

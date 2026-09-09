@@ -1,9 +1,11 @@
-@import './token.less';
+@import "./token.less";
 
 .c-layout {
   display: flex;
   flex: 1;
   flex-direction: column;
+  min-width: 0;
+  min-height: 0;
   margin: 0;
   padding: 0;
 
@@ -13,8 +15,10 @@
     width: auto;
     margin: 0;
     padding: 0;
-    background: var(~'--c-layout-sider-background');
-    transition: width var(~'--c-transition-duration-2') var(~'--c-transition-timing-function-standard');
+    color: var(~"--c-layout-font-color-dark");
+    background: var(~"--c-layout-sider-background");
+    transition: width var(~"--c-transition-duration-2")
+      var(~"--c-transition-timing-function-standard");
 
     &-children {
       height: 100%;
@@ -45,33 +49,38 @@
 
     &-has-trigger {
       box-sizing: border-box;
-      padding-bottom: var(~'--c-layout-trigger-height');
+      padding-bottom: var(~"--c-layout-trigger-height");
     }
 
     &-trigger {
+      position: absolute;
+      bottom: 0;
+      left: 0;
       z-index: var(--c-z-index-local-raised);
       display: flex;
       align-items: center;
       justify-content: center;
       box-sizing: border-box;
       width: 100%;
-      height: var(~'--c-layout-trigger-height');
-      color: var(~'--c-color-white');
-      background: var(~'--c-layout-trigger-dark-color');
+      height: var(~"--c-layout-trigger-height");
+      color: var(~"--c-color-white");
+      background: var(~"--c-layout-trigger-dark-color");
       cursor: pointer;
-      transition: width var(~'--c-transition-duration-2') var(~'--c-transition-timing-function-standard');
+      transition: width var(~"--c-transition-duration-2")
+        var(~"--c-transition-timing-function-standard");
 
       &-light {
-        color: var(~'--c-layout-font-color');
-        background: var(~'--c-layout-sider-background-light');
-        border-top: 1px solid var(~'--c-layout-trigger-light-border-color');
+        color: var(~"--c-layout-font-color");
+        background: var(~"--c-layout-sider-background-light");
+        border-top: 1px solid var(~"--c-layout-trigger-light-border-color");
       }
     }
   }
 
   &-sider-light {
-    background: var(~'--c-layout-sider-background-light');
-    box-shadow: var(~'--c-layout-sider-light-box-shadow');
+    color: var(~"--c-layout-font-color");
+    background: var(~"--c-layout-sider-background-light");
+    box-shadow: var(~"--c-layout-sider-light-box-shadow");
   }
 
   &-header {
@@ -82,6 +91,8 @@
 
   &-content {
     flex: 1;
+    min-width: 0;
+    min-height: 0;
   }
 
   &-footer {
@@ -96,5 +107,61 @@
   > .c-layout,
   > .c-layout-content {
     overflow-x: hidden;
+  }
+}
+
+.c-layout--scrollable {
+  overflow: auto;
+}
+.c-layout-header--bordered {
+  border-bottom: 1px solid var(--c-layout-border-color);
+}
+.c-layout-footer--bordered {
+  border-top: 1px solid var(--c-layout-border-color);
+}
+.c-layout-sider {
+  &__viewport {
+    height: 100%;
+    overflow: hidden;
+  }
+  &-children {
+    box-sizing: border-box;
+    transition: transform var(--c-transition-duration-2)
+      var(--c-transition-timing-function-standard);
+  }
+  &--right {
+    order: 1;
+  }
+  &--bordered {
+    border-right: 1px solid var(--c-layout-border-color);
+  }
+  &--right&--bordered {
+    border-right: 0;
+    border-left: 1px solid var(--c-layout-border-color);
+  }
+  &-trigger {
+    padding: 0;
+    border: 0;
+    font: inherit;
+  }
+  &-trigger-light {
+    border-top: 1px solid var(--c-layout-trigger-light-border-color);
+  }
+  &-trigger:focus-visible {
+    outline: 2px solid var(--c-layout-focus-color);
+    outline-offset: -2px;
+  }
+  &--zero,
+  &--zero&--bordered {
+    border: 0;
+    overflow: visible;
+  }
+  &--zero &-trigger {
+    left: 100%;
+    width: var(--c-layout-trigger-height);
+  }
+  &--zero&--right &-trigger {
+    left: auto;
+    right: 100%;
   }
 }

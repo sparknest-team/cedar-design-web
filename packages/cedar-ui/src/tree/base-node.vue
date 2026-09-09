@@ -305,7 +305,7 @@ export default defineComponent({
 
         e.stopPropagation()
 
-        setDragStatus('dragStart', e)
+        setDragStatus('drag-start', e)
 
         try {
           // ie throw error
@@ -320,7 +320,7 @@ export default defineComponent({
 
         e.stopPropagation()
 
-        setDragStatus('dragEnd', e)
+        setDragStatus('drag-end', e)
       },
       onDragOver(e: DragEvent) {
         if (!draggable) return
@@ -328,14 +328,14 @@ export default defineComponent({
         e.stopPropagation()
         e.preventDefault()
 
-        setDragStatus('dragOver', e)
+        setDragStatus('drag-over', e)
       },
       onDragLeave(e: DragEvent) {
         if (!draggable.value) return
 
         e.stopPropagation()
 
-        setDragStatus('dragLeave', e)
+        setDragStatus('drag-leave', e)
       },
       onDrop(e: DragEvent) {
         if (!draggable.value || !isAllowDrop.value) return

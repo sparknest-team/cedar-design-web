@@ -47,7 +47,7 @@ permalink: /components/date/
 | `disabled` | 禁用 | `boolean` | `false` |
 | `readonly` | 只读 | `boolean` | `false` |
 | `size` | 尺寸 | `xs \| sm \| md \| lg \| xl` | `-` |
-| `variant` | 输入框变体 | `filled \| outlined \| standard` | `filled` |
+| `variant` | 输入框变体 | `filled \| outline \| standard` | `filled` |
 | `placeholder` | 占位 | `string` | `-` |
 | `disabled-date` | 禁用日期 | `Function` | `-` |
 | `format` | 展示格式 | `string \| Function` | 随 `type` |

@@ -22,7 +22,7 @@ permalink: /components/alert/
 
 ### 视觉变体
 
-`variant` 支持 `standard`（默认，浅色填充 + 描边）、`tonal`（浅色填充无描边）、`outlined`（透明背景 + 描边）。
+`variant` 支持 `standard`（默认，浅色填充 + 描边）、`tonal`（浅色填充无描边）、`outline`（透明背景 + 描边）。
 
 <demo src="./__demos__/variant.vue"></demo>
 
@@ -80,8 +80,8 @@ permalink: /components/alert/
 
 | 属性      | 说明                                                                  | 类型                                                | 默认值       |
 | --------- | --------------------------------------------------------------------- | --------------------------------------------------- | ------------ |
-| type      | 警告提示的类型                                                        | `'info' \| 'success' \| 'warning' \| 'danger' \| 'default'` | `'info'`     |
-| variant   | 视觉变体                                                              | `'standard' \| 'tonal' \| 'outlined'`               | `'standard'` |
+| status | 警告提示的类型                                                        | `'info' \| 'success' \| 'warning' \| 'danger' \| 'default'` | `'info'`     |
+| variant   | 视觉变体                                                              | `'standard' \| 'tonal' \| 'outline'`               | `'standard'` |
 | color     | 自定义背景色（覆盖 type 派生背景）                                    | `string`                                            | -            |
 | title     | 警告提示的标题                                                        | `string`                                            | -            |
 | message   | 内容文本（亦可使用默认插槽）                                          | `string`                                            | -            |
@@ -89,14 +89,14 @@ permalink: /components/alert/
 | closable  | 是否展示关闭按钮                                                      | `boolean`                                           | `false`      |
 | banner    | 是否作为顶部公告使用（去除边框和圆角）                                | `boolean`                                           | `false`      |
 | center    | 内容是否居中显示                                                      | `boolean`                                           | `false`      |
-| elevation | 阴影层级，可选 `true` / `false` 或 `0-24`                             | `boolean \| string \| number`                       | `false`      |
+| elevation | 阴影层级，可选 `true` / `false` 或 `0-24`                             | `boolean \| number`                       | `false`      |
 
 ### `<Alert>` Events
 
 | 事件名      | 说明               | 参数                          |
 | ----------- | ------------------ | ----------------------------- |
 | close       | 点击关闭按钮时触发 | `(event: MouseEvent) => void` |
-| after-close | 关闭动画结束后触发 | -                             |
+| closed | 关闭动画结束后触发 | -                             |
 
 ### `<Alert>` Slots
 
@@ -116,7 +116,7 @@ permalink: /components/alert/
 import type {
   AlertInstance,
   AlertProps,
-  AlertType,
+  AlertStatus,
   AlertVariant,
 } from '@cedarjs/ui'
 ```
@@ -141,6 +141,12 @@ import type {
 | `closeable` | `closable` |
 | `#close-element` slot | `#close-icon` slot |
 
-新增能力：`variant` / `color` / `elevation` / `default` 类型 / `after-close` 事件。
+新增能力：`variant` / `color` / `elevation` / `default` 类型 / `closed` 事件。
 
 `type="default"` 不渲染内置图标；需要图标时用 `#icon`。
+
+## 同源实现与平台边界
+
+两端各自保存完整源码，不引用公共核心，不共享组件实例或响应式状态；修改时同步维护两份实现。主体、Props、关键样式及配对测试纳入只读源码一致性检查，主题 token 和安装入口各自维护。
+
+关闭按钮支持键盘操作，close 只触发一次，closed 在离场动画完成后触发。Maple 内部关闭类由 __close-icon 调整为 __close-btn；默认图标资源由各库本地适配。

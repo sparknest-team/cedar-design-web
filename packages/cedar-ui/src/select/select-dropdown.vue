@@ -84,7 +84,7 @@ export default defineComponent({
       default: false,
     },
   },
-  emits: ["scroll", "reachBottom"],
+  emits: ["scroll", "reach-bottom"],
   setup(props, { emit, slots }) {
     const { scrollbar } = toRefs(props);
     const prefixCls = getPrefixCls("select-dropdown");
@@ -99,7 +99,7 @@ export default defineComponent({
       const { scrollTop, scrollHeight, offsetHeight } = e.target as HTMLElement;
       const bottom = scrollHeight - (scrollTop + offsetHeight);
       if (bottom <= props.bottomOffset) {
-        emit("reachBottom", e);
+        emit("reach-bottom", e);
       }
       emit("scroll", e);
     };

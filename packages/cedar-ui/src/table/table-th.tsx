@@ -190,7 +190,6 @@ export default defineComponent({
           trigger="click"
           autoFitPosition
           popupOffset={inlineFilter.value ? 4 : 0}
-          onOpenChange={handleFilterOpenChange}
           onUpdate:open={handleFilterOpenChange}
           {...filterable.triggerProps}
         >

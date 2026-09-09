@@ -29,8 +29,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, inject } from 'vue'
-import { IconCheck } from '@cedarjs/icons-vue/icon-check'
-import { IconClose } from '@cedarjs/icons-vue/icon-close'
+import { IconCheck, IconClose } from './platform'
 import { createNamespace } from '../_utils/global-config'
 import { stepsInjectionKey } from './context'
 import { stepProps } from './props'
@@ -49,7 +48,7 @@ export default defineComponent({
     const computedStatus = computed(() => steps?.getStatus(props.internalIndex, props.status) ?? props.status ?? 'process')
     const active = computed(() => props.internalIndex === steps?.current.value)
     const showTail = computed(
-      () => Boolean(steps?.showLine.value && (steps.contentPlacement.value === 'bottom' || steps.direction.value === 'vertical')),
+      () => Boolean(steps?.showLine.value && (steps.contentPlacement.value === 'bottom' || steps.orientation.value === 'vertical')),
     )
     const slotScope = computed(() => ({
       index: props.internalIndex,

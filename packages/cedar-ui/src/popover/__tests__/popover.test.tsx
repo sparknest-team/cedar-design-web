@@ -22,8 +22,8 @@ describe('Popover', () => {
       },
     })
 
-    expect(wrapper.findComponent(Trigger).props('placement')).toBe('tl')
-    expect(wrapper.findComponent(Trigger).props('trigger')).toEqual([])
+    expect(wrapper.findComponent(Trigger).props('placement')).toBe('top-start')
+    expect(wrapper.findComponent(Trigger).props('trigger')).toEqual('manual')
   })
 
   test('does not open when disabled', async () => {
@@ -53,7 +53,7 @@ describe('Popover', () => {
     expect(wrapper.emitted('update:open')?.slice(-1)[0]).toEqual([true])
     expect(wrapper.emitted('open')).toHaveLength(1)
 
-    trigger.vm.$emit('show')
+    trigger.vm.$emit('opened')
     await nextTick()
     expect(wrapper.emitted('opened')).toHaveLength(1)
 
@@ -62,13 +62,13 @@ describe('Popover', () => {
     expect(wrapper.emitted('update:open')?.slice(-1)[0]).toEqual([false])
     expect(wrapper.emitted('close')).toHaveLength(1)
 
-    trigger.vm.$emit('hide')
+    trigger.vm.$emit('closed')
     await nextTick()
     expect(wrapper.emitted('closed')).toHaveLength(1)
 
     const outsideEvent = new MouseEvent('mousedown')
-    trigger.vm.$emit('clickOutside', outsideEvent)
-    expect(wrapper.emitted('clickOutside')).toEqual([[outsideEvent]])
+    trigger.vm.$emit('click-outside', outsideEvent)
+    expect(wrapper.emitted('click-outside')).toEqual([[outsideEvent]])
   })
 
   test('closes on Escape', async () => {

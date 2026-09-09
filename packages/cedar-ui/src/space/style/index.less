@@ -1,32 +1,3 @@
-@import "../../style/theme/index.less";
-@import "./token.less";
-
-.c-space {
-  box-sizing: border-box;
-  display: inline-flex;
-
-  *,
-  *::before,
-  *::after {
-    box-sizing: inherit;
-  }
-
-  &--block {
-    display: flex;
-  }
-
-  &--auto {
-    width: auto;
-  }
-
-  &__item {
-    display: inline-flex;
-    align-items: center;
-  }
-
-  &__item-split {
-    align-self: stretch;
-    display: inline-flex;
-    align-items: center;
-  }
-}
+@import '../../style/theme/index.less';
+@import './token.less';
+@import './implementation.less';

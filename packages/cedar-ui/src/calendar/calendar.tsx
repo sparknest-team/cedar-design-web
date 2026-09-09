@@ -39,7 +39,7 @@ export default defineComponent({
      * @en Emitted when the button is clicked
      * @property {Date} date
      */
-    panelChange: (date: Date) => true,
+    "panel-change": (date: Date) => true,
   },
   /**
    * @zh 自定义单元格内容
@@ -91,7 +91,7 @@ export default defineComponent({
 
     function onChangePageDate(time: Dayjs) {
       pageShowDate.value = time
-      emit('panelChange', time.toDate())
+      emit('panel-change', time.toDate())
     }
 
     // value / pageShowDate / pageData
@@ -122,19 +122,19 @@ export default defineComponent({
       if (type === 'next') {
         pageShowDate.value = methods.add(pageShowDate.value, 1, unit)
       }
-      emit('panelChange', pageShowDate.value.toDate())
+      emit('panel-change', pageShowDate.value.toDate())
     }
 
     function onChangeYear(year: number) {
       const newValue = methods.set(pageShowDate.value, 'year', year)
       pageShowDate.value = newValue
-      emit('panelChange', newValue.toDate())
+      emit('panel-change', newValue.toDate())
     }
 
     function onChangeMonth(month: number) {
       const newValue = methods.set(pageShowDate.value, 'month', month - 1)
       pageShowDate.value = newValue
-      emit('panelChange', newValue.toDate())
+      emit('panel-change', newValue.toDate())
     }
 
     function changeMode(mode: 'month' | 'year') {

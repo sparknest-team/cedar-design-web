@@ -10,7 +10,7 @@ export const resizeBoxProps = {
     /**
      * @zh 宽度
      * @en Width
-     * @vModel
+     * @v-model
      */
     width: {
       type: Number,
@@ -18,7 +18,7 @@ export const resizeBoxProps = {
     /**
      * @zh 高度
      * @en Height
-     * @vModel
+     * @v-model
      */
     height: {
       type: Number,

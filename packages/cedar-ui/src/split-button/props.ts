@@ -1,4 +1,5 @@
-import type { ExtractPropTypes, PropType } from 'vue'
+import { popupContainerProp } from '../_utils/popup-container'
+import type { ExtractPublicPropTypes, PropType } from 'vue'
 import { buttonGroupProps, buttonProps, type ButtonProps } from '../button'
 import { menuProps } from '../menu'
 
@@ -27,16 +28,24 @@ export const splitButtonProps = {
   elevation: buttonGroupProps.elevation,
   /** 主按钮是否自动进入加载状态 */
   autoLoading: buttonProps.autoLoading,
+  /** 主按钮点击回调，Promise 返回值用于 autoLoading */
+  onClick: buttonProps.onClick,
   /** 菜单触发方式 */
   trigger: menuProps.trigger,
   /** 菜单弹出位置 */
   placement: menuProps.placement,
   /** 菜单挂载容器 */
-  popupContainer: menuProps.popupContainer,
+  popupContainer: popupContainerProp,
   /** 菜单最大高度 */
   popupMaxHeight: menuProps.popupMaxHeight,
+  /** 菜单浮层类名 */
+  popupClass: menuProps.popupClass,
+  /** 屏幕水平方向偏移 */
+  offsetX: menuProps.offsetX,
+  /** 屏幕垂直方向偏移 */
+  offsetY: menuProps.offsetY,
   /** 选择菜单项后是否关闭菜单 */
   hideOnSelect: menuProps.hideOnSelect,
 }
 
-export type SplitButtonProps = ExtractPropTypes<typeof splitButtonProps>
+export type SplitButtonProps = ExtractPublicPropTypes<typeof splitButtonProps>

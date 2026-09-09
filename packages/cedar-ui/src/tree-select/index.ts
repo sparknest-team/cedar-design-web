@@ -14,3 +14,4 @@ export { TreeSelect }
 export { treeSelectProps }
 
 export default TreeSelect
+export type TreeSelectProps = import('vue').ExtractPublicPropTypes<typeof import('./props').treeSelectProps>

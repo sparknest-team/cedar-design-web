@@ -20,7 +20,9 @@ declare module "vue" {
     CBreadcrumbItem: (typeof import("@cedarjs/ui/web-vue"))["BreadcrumbItem"];
     CButton: (typeof import("@cedarjs/ui/web-vue"))["Button"];
     CButtonGroup: (typeof import("@cedarjs/ui/web-vue"))["ButtonGroup"];
+    CScheduler: (typeof import("@cedarjs/ui"))["Scheduler"];
     CCalendar: (typeof import("@cedarjs/ui/web-vue"))["Calendar"];
+    CPaper: (typeof import("@cedarjs/ui"))["Paper"];
     CCard: (typeof import("@cedarjs/ui/web-vue"))["Card"];
     CCardMeta: (typeof import("@cedarjs/ui/web-vue"))["CardMeta"];
     CCardGrid: (typeof import("@cedarjs/ui/web-vue"))["CardGrid"];
@@ -78,8 +80,6 @@ declare module "vue" {
     CMenuSubmenu: (typeof import("@cedarjs/ui/web-vue"))["MenuSubmenu"];
     CNavMenu: (typeof import("@cedarjs/ui/web-vue"))["NavMenu"];
     CNavMenuItem: (typeof import("@cedarjs/ui/web-vue"))["NavMenuItem"];
-    CNavMenuItemGroup: (typeof import("@cedarjs/ui/web-vue"))["NavMenuItemGroup"];
-    CNavMenuSubMenu: (typeof import("@cedarjs/ui/web-vue"))["NavMenuSubMenu"];
     CDialog: (typeof import("@cedarjs/ui/web-vue"))["Dialog"];
     COverlay: (typeof import("@cedarjs/ui/web-vue"))["Overlay"];
     CPageHeader: (typeof import("@cedarjs/ui/web-vue"))["PageHeader"];

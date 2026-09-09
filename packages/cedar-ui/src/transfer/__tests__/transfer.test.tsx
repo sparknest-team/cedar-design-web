@@ -143,7 +143,7 @@ describe('Transfer', () => {
     ])
 
     buttons[4].props?.onClick()
-    expect(wrapper.emitted('targetAction')?.at(-1)).toEqual(['preview', expect.objectContaining({ value: 'c' })])
+    expect(wrapper.emitted('target-action')?.at(-1)).toEqual(['preview', expect.objectContaining({ value: 'c' })])
 
     buttons[0].props?.onClick()
     await nextTick()

@@ -1,24 +1,18 @@
-<template>
-  <c-space>
-    主动控制
-    <c-switch v-model="show" />
-    <c-input-number v-model="content" />
-  </c-space>
-  <c-divider />
-  <c-space direction="column">
-    <c-badge :content="0" :show-zero="true" :show="show" description="show-zero true" />
-    <c-badge :content="0" :show-zero="false" :show="show" description="show-zero false" />
-  </c-space>
-  <c-divider />
-  <c-space>
-    <c-badge :content="content" :show="show" description="Description" />
-    <c-badge :content="content" :show="show" description="Description" />
-    <c-badge :content="content" :show="show" description="Description" dot />
-  </c-space>
-</template>
-<script lang="ts" setup>
+<script setup lang="ts">
 import { ref } from 'vue'
-
 const show = ref(true)
 const content = ref(1)
 </script>
+
+<template>
+  <c-space direction="column">
+    <c-space wrap
+      ><c-switch v-model="show" aria-label="Show badge" /><c-button @click="content++">Add</c-button
+      ><c-button @click="content = Math.max(0, content - 1)">Subtract</c-button></c-space
+    >
+    <c-badge :content="0" :show="show" show-zero description="show-zero true" />
+    <c-badge :content="0" :show="show" :show-zero="false" description="show-zero false" />
+    <c-badge :content="content" :show="show" description="Messages" />
+    <c-badge :content="content" :show="show" dot description="Activity" />
+  </c-space>
+</template>

@@ -1,4 +1,4 @@
-export const formControlVariants = ['filled', 'outlined', 'standard'] as const
+export const formControlVariants = ['filled', 'outline', 'standard'] as const
 
 export type FormControlVariant = (typeof formControlVariants)[number]
 export type FormControlMaxLength = number | { length: number; errorOnly?: boolean }

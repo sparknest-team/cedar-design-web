@@ -82,4 +82,4 @@ export const filterFormProps = {
   },
 }
 
-export type FilterFormProps = ExtractPropTypes<typeof filterFormProps>
+export type FilterFormProps = import("vue").ExtractPublicPropTypes<typeof filterFormProps>

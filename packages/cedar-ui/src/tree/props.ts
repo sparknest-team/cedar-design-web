@@ -96,7 +96,7 @@ export const treeProps = {
     /**
      * @zh 选中的树节点
      * @en Selected tree node
-     * @vModel
+     * @v-model
      */
     selectedKeys: {
       type: Array as PropType<Array<string | number>>,
@@ -111,7 +111,7 @@ export const treeProps = {
     /**
      * @zh 选中复选框的树节点
      * @en Tree node with check box selected
-     * @vModel
+     * @v-model
      */
     checkedKeys: {
       type: Array as PropType<Array<string | number>>,
@@ -126,7 +126,7 @@ export const treeProps = {
     /**
      * @zh 展开的节点
      * @en Expanded node
-     * @vModel
+     * @v-model
      */
     expandedKeys: {
       type: Array as PropType<Array<string | number>>,
@@ -217,7 +217,7 @@ export const treeProps = {
      * @zh 半选状态的节点.仅在 checkable 且 checkStrictly 时生效
      * @en The keys of half checked. Only valid when checkable and checkStrictly
      * @version 2.19.0
-     * @vModel
+     * @v-model
      */
     halfCheckedKeys: {
       type: Array as PropType<Array<string | number>>,

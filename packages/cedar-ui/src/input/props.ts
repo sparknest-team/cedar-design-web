@@ -9,7 +9,7 @@ import type {
   WordSlice,
 } from '../_utils/form-control'
 
-export const inputTypes = ['text', 'password'] as const
+export const inputTypes = ['text', 'password', 'number', 'tel', 'email'] as const
 export type InputType = (typeof inputTypes)[number]
 
 export const inputProps = {
@@ -45,7 +45,7 @@ export const inputProps = {
   },
 } 
 
-export type InputProps = ExtractPropTypes<typeof inputProps>
+export type InputProps = import("vue").ExtractPublicPropTypes<typeof inputProps>
 
 export const inputPasswordProps = {
   disabled: { type: Boolean, default: false },
@@ -54,4 +54,4 @@ export const inputPasswordProps = {
   visibilityToggle: { type: Boolean, default: true },
 } 
 
-export type InputPasswordProps = ExtractPropTypes<typeof inputPasswordProps>
+export type InputPasswordProps = import("vue").ExtractPublicPropTypes<typeof inputPasswordProps>

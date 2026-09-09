@@ -5,7 +5,7 @@ export const mentionProps = {
   /**
    * @zh 绑定值
    * @en Value
-   * @vModel
+   * @v-model
    */
   modelValue: String,
   /**

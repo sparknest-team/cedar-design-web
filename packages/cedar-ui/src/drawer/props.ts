@@ -1,3 +1,4 @@
+import { popupContainerProp } from '../_utils/popup-container'
 import type { CSSProperties, ExtractPropTypes, PropType, StyleValue } from 'vue'
 import type { ButtonProps } from '../button'
 
@@ -8,7 +9,7 @@ export const drawerProps = {
     /**
      * @zh 抽屉是否可见
      * @en Whether the drawer is visible
-     * @vModel
+     * @v-model
      */
     open: {
       type: Boolean,
@@ -133,10 +134,7 @@ export const drawerProps = {
      * @zh 弹出框的挂载容器
      * @en Mount container for popup
      */
-    popupContainer: {
-      type: [String, Object] as PropType<string | HTMLElement>,
-      default: 'body',
-    },
+    popupContainer: popupContainerProp,
     /**
      * @zh 抽屉的样式
      * @en Drawer style
@@ -192,14 +190,6 @@ export const drawerProps = {
       default: 'fade-drawer',
     },
     /**
-     * @zh 抽屉是否挂载在 `body` 元素下
-     * @en Whether the drawer is mounted under the `body` element
-     */
-    renderToBody: {
-      type: Boolean,
-      default: true,
-    },
-    /**
      * @zh 是否展示头部内容
      * @en Whether to display high-quality content
      * @version 2.33.0
@@ -232,4 +222,4 @@ export const drawerProps = {
     },
 } 
 
-export type DrawerProps = Partial<ExtractPropTypes<typeof drawerProps>>
+export type DrawerProps = import("vue").ExtractPublicPropTypes<typeof drawerProps>

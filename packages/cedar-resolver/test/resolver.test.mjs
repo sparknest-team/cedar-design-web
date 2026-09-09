@@ -1,9 +1,58 @@
 import assert from "node:assert/strict";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import test from "node:test";
-import { CedarResolver } from "../lib/index.js";
+import { createRequire } from "node:module";
+import { fileURLToPath, pathToFileURL } from "node:url";
+import ts from "typescript";
+import { CedarResolver, resolveCedarComponent } from "../lib/index.js";
 
 const [components, directives] = CedarResolver();
+
+test("ignores browser globals and unknown C-prefixed components", () => {
+  for (const name of ["CSS", "CSSStyleSheet", "CSSStyleDeclaration", "CustomEvent", "Cache", "Crypto", "CompressionStream", "CNotARealComponent", "CButtonUnknown"]) {
+    assert.equal(components.resolve(name), undefined, name);
+  }
+  assert.equal(resolveCedarComponent("SS"), undefined);
+  assert.equal(resolveCedarComponent("NotARealComponent"), undefined);
+  assert.equal(resolveCedarComponent("NotARealFunction", {}, true), undefined);
+});
+
+test("the shipped component registry matches actual UI root exports", () => {
+  const entry = fileURLToPath(new URL("../../cedar-ui/src/index.ts", import.meta.url));
+  const program = ts.createProgram([entry], {
+    module: ts.ModuleKind.ESNext,
+    moduleResolution: ts.ModuleResolutionKind.NodeJs,
+    jsx: ts.JsxEmit.Preserve,
+    skipLibCheck: true,
+  });
+  const checker = program.getTypeChecker();
+  const root = checker.getSymbolAtLocation(program.getSourceFile(entry));
+  const names = checker.getExportsOfModule(root).map(symbol => symbol.name)
+    .filter(name => /^_[A-Z].*Component$/.test(name))
+    .map(name => name.slice(1, -9)).sort();
+  const registry = JSON.parse(readFileSync(new URL("../src/component-names.json", import.meta.url), "utf8"));
+  assert.deepEqual(registry, names, "Update component-names.json when public components change");
+});
+
+test("the docs auto-import transform leaves CSS globals untouched", async () => {
+  // Use the exact plugin installed by the docs workspace, not a resolver-only mock.
+  const requireFromUI = createRequire(new URL("../../cedar-ui/package.json", import.meta.url));
+  const { default: AutoImport } = await import(pathToFileURL(requireFromUI.resolve("unplugin-auto-import/vite")).href);
+  const plugin = AutoImport({ resolvers: [CedarResolver()], dts: false, eslintrc: { enabled: false } });
+  const transform = typeof plugin.transform === "function" ? plugin.transform : plugin.transform.handler;
+  const helper = new URL("../../cedar-ui/src/_utils/size-length.ts", import.meta.url);
+  const source = readFileSync(helper, "utf8");
+  const result = await transform.call({}, source, fileURLToPath(helper));
+  assert.equal(result?.code ?? source, source);
+
+  const mixed = "export const check = () => [CSS.supports('width', '1px'), new CSSStyleSheet(), CButton, Message];";
+  const transformed = await transform.call({}, mixed, "/src/resolver-regression.ts");
+  assert.ok(transformed?.code, "Known components and function APIs must still auto-import");
+  assert.match(transformed.code, /_ButtonComponent/);
+  assert.match(transformed.code, /@cedarjs\/ui\/button\/style/);
+  assert.match(transformed.code, /@cedarjs\/ui\/message\/style/);
+  assert.doesNotMatch(transformed.code, /_SS(?:StyleSheet)?Component|\/s-s(?:\/|-style-sheet)/);
+});
 
 test("resolves UI components with their styles", () => {
   assert.deepEqual(components.resolve("CProgressGroup"), {
@@ -139,7 +188,7 @@ test("every component exposed by CedarVue has a resolver alias", () => {
 });
 
 test("resolves components without styles with no side effects", () => {
-  for (const name of ["CColor", "CContext", "CSplitButton", "CStyleProvider"]) {
+  for (const name of ["CColor", "CContext", "CStyleProvider"]) {
     assert.deepEqual(components.resolve(name), {
       from: "@cedarjs/ui",
       name: `_${name.slice(1)}Component`,
@@ -202,3 +251,12 @@ test("can disable programmatic API resolution", () => {
   const [components] = CedarResolver({ autoImport: false });
   assert.equal(components.resolve("Message"), undefined);
 });
+
+
+test('Row and Col resolve independent styles', () => {
+  for (const name of ['Row', 'Col']) {
+    const resolved = components.resolve('C' + name)
+    assert.equal(resolved.name, '_' + name + 'Component')
+    assert.deepEqual(resolved.sideEffects, ['@cedarjs/ui/' + name.toLowerCase() + '/style'])
+  }
+})

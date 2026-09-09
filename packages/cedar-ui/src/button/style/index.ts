@@ -1,3 +1,6 @@
-import "../../hover/style";
-import "../../progress/style";
-import "./index.less";
+import '../../style/index.less'
+import '../../hover/style'
+import '../../loading/style'
+import '../../ripple/style'
+import '../../style/elevation/index.less'
+import './index.less'

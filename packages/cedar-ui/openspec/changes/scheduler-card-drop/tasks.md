@@ -1,0 +1,6 @@
+- [x] Specify Cedar-only sidebar template drag and confirmation semantics.
+- [x] Implement detached template drafts and preserve existing move/resize behavior.
+- [x] Export template type and document slot, target semantics and desktop limitation.
+- [x] Add reusable custom-card demo and regression tests for targets, cancellation, permissions and save rejection.
+- [x] Run final regression suite: 47 tests pass.
+- [x] Attempt full source type checking: blocked by repository-wide demo/test and Vite type errors; inspect Scheduler diagnostics separately.

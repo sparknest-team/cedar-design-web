@@ -14,3 +14,4 @@ export { Mention }
 export { mentionProps }
 
 export default Mention
+export type MentionProps = import('vue').ExtractPublicPropTypes<typeof import('./props').mentionProps>

@@ -5,7 +5,7 @@
       :class="classes(n('content'), [loading, n('content--active')])"
     >
       <slot />
-      <div v-if="loading" :class="n('content-mask')" />
+      <div v-if="loading" :class="n('content-overlay')" />
     </div>
 
     <div
@@ -114,5 +114,5 @@ const sizeStyle = computed(() => {
   return { width: value, height: value };
 });
 const sizeClass = (element: string) =>
-  typeof props.size === "string" ? n(`${element}--${props.size}`) : undefined;
+  n(`${element}--${typeof props.size === "number" ? "numeric" : props.size}`);
 </script>

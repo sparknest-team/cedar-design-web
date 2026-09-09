@@ -14,6 +14,7 @@ import Card from './card'
 import Carousel, { CarouselItem } from './carousel'
 import Cascader, { CascaderPanel } from './cascader'
 import Checkbox, { CheckboxGroup } from './checkbox'
+import Col from './col'
 import Collapse, { CollapseItem } from './collapse'
 import Color from './color'
 import ColorPicker from './color-picker'
@@ -29,7 +30,7 @@ import Drawer from './drawer'
 import Empty from './empty'
 import FilterForm from './filter-form'
 import Form, { FormItem } from './form'
-import Grid, { Col, GridItem, Row } from './grid'
+import Grid, { GridItem } from './grid'
 import Hover, { HoverOverlay } from './hover'
 import Icon from './icon'
 import Image, { ImagePreview, ImagePreviewAction, ImagePreviewFn, ImagePreviewGroup } from './image'
@@ -44,12 +45,13 @@ import Map, { MapSelect } from './map'
 import Mention from './mention'
 import Menu, { MenuGroup, MenuOption, MenuSubmenu } from './menu'
 import Message from './message'
-import NavMenu, { NavMenuItem, NavMenuItemGroup, NavMenuSubMenu } from './nav-menu'
+import NavMenu, { NavMenuItem } from './nav-menu'
 import Notification from './notification'
 import OverflowList from './overflow-list'
 import Overlay from './overlay'
 import PageHeader from './page-header'
 import Pagination from './pagination'
+import Paper from './paper'
 import PeopleSelect from './people-select'
 import Popconfirm from './popconfirm'
 import Popover from './popover'
@@ -60,6 +62,8 @@ import Rate from './rate'
 import ResizeBox from './resize-box'
 import Result from './result'
 import Ripple from './ripple'
+import Row from './row'
+import Scheduler from './scheduler'
 import Scrollbar from './scrollbar'
 import Search from './search'
 import Segmented from './segmented'
@@ -108,6 +112,7 @@ const components: Record<string, Plugin> = {
   Carousel: Carousel as Plugin,
   Cascader: Cascader as Plugin,
   Checkbox: Checkbox as Plugin,
+  Col: Col as Plugin,
   Collapse: Collapse as Plugin,
   Color: Color as Plugin,
   ColorPicker: ColorPicker as Plugin,
@@ -144,6 +149,7 @@ const components: Record<string, Plugin> = {
   Overlay: Overlay as Plugin,
   PageHeader: PageHeader as Plugin,
   Pagination: Pagination as Plugin,
+  Paper: Paper as Plugin,
   PeopleSelect: PeopleSelect as Plugin,
   Popconfirm: Popconfirm as Plugin,
   Popover: Popover as Plugin,
@@ -154,6 +160,8 @@ const components: Record<string, Plugin> = {
   ResizeBox: ResizeBox as Plugin,
   Result: Result as Plugin,
   Ripple: Ripple as Plugin,
+  Row: Row as Plugin,
+  Scheduler: Scheduler as Plugin,
   Scrollbar: Scrollbar as Plugin,
   Search: Search as Plugin,
   Segmented: Segmented as Plugin,
@@ -201,7 +209,6 @@ const CedarVue: Record<string, any> = {
   CarouselItem,
   CascaderPanel,
   CheckboxGroup,
-  Col,
   CollapseItem,
   DatePicker,
   DateRangePicker,
@@ -226,12 +233,9 @@ const CedarVue: Record<string, any> = {
   MenuOption,
   MenuSubmenu,
   NavMenuItem,
-  NavMenuItemGroup,
-  NavMenuSubMenu,
   Optgroup,
   Option,
   RadioGroup,
-  Row,
   SkeletonLine,
   SkeletonShape,
   Step,

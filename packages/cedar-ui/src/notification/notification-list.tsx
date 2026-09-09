@@ -25,7 +25,7 @@ export default defineComponent({
       },
     },
   },
-  emits: ['close', 'afterClose'],
+  emits: ['close', 'closed'],
   setup(props, context) {
     const prefixCls = getPrefixCls('notification-list')
     const kebabPosition = toKebabCase(props.position)
@@ -39,7 +39,7 @@ export default defineComponent({
           class: [prefixCls, `${prefixCls}-${kebabPosition}`],
           style: { zIndex: zIndex.value },
           name: `slide-${isRight ? 'right' : 'left'}-notification`,
-          onAfterLeave: () => context.emit('afterClose'),
+          onAfterLeave: () => context.emit('closed'),
           tag: 'ul',
         } as any)}
       >

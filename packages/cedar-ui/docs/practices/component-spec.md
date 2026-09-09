@@ -172,6 +172,8 @@ export type ButtonProps = ExtractPropTypes<typeof buttonProps>;
 
 ### 4.3 通用 prop 语义（必须遵守）
 
+Button 和 SplitButton 的 `onClick` 是消费 Promise 返回值以驱动 `autoLoading` 的控制回调例外，保留 `@click` 用法，不同时 emit click；SplitButton 直接透传两组点击回调给 Button。
+
 某些 prop 在多个组件中反复出现，**必须保持一致语义**，组件不得自行赋予不同含义：
 
 | Prop                                   | 类型                                            | 含义                                                                                                                           |
@@ -311,6 +313,8 @@ export function useXxxGroup() {
 - `style/token.less` 顶部 `@import '../../style/theme/index.less'`，在 `:root` 下声明所有 `--c-<component>-*` 变量。
 
 ### 7.2 写法约定
+
+- 公共基础与依赖组件只在 `style/index.ts` 中 import，不在 Less 再次内嵌相同 CSS。Less 只聚合自身规则及纯变量 / mixin；复用 mixin 单独拆文件。开发与发布保持相同依赖图，详见 `design-ui/standards/styling-and-bem.md`。
 
 - 主体样式**只读 CSS 变量，不写常量值**；颜色 / 间距常量必须落到 `token.less` 的 CSS 变量上。
 - 主题色 / 暗色用 `@color-primary-6` 等 less 变量 + CSS 变量双层落地，方便主题切换。

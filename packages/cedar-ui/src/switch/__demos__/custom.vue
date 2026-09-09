@@ -1,14 +1,7 @@
 <template>
-  <c-space size="lg">
-    <c-switch>
-      <template #checked> ON </template>
-      <template #unchecked> OFF</template>
-    </c-switch>
-    <c-switch variant="round">
-      <template #checked> ON </template>
-      <template #unchecked> OFF </template>
-    </c-switch>
-  </c-space>
+  <c-space wrap
+    ><c-switch :ripple="false" :handle-elevation="false" aria-label="No ripple or shadow" /><c-switch
+      :handle-elevation="4"
+      aria-label="Elevated handle"
+  /></c-space>
 </template>
-<script lang="ts">
-</script>

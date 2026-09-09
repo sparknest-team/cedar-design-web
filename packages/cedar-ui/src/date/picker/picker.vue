@@ -4,7 +4,7 @@
     trigger="click"
     animation-name="slide-dynamic-origin"
     auto-fit-transform-origin
-    :click-to-close="false"
+    :close-on-click-reference="false"
     :popup-offset="4"
     v-bind="triggerProps"
     :placement="placement"
@@ -12,8 +12,8 @@
     :prevent-focus="true"
     :open="panelVisible"
     :unmount-on-close="unmountOnClose"
-    :popup-container="popupContainer"
-    @openChange="onPanelVisibleChange"
+    :popup-container="popupContainer !== undefined ? popupContainer : triggerProps?.popupContainer"
+    @open-change="onPanelVisibleChange"
   >
     <slot>
       <DateInput
@@ -33,7 +33,7 @@
         :format="inputFormat"
         @clear="onInputClear"
         @change="onInputChange"
-        @pressEnter="onInputPressEnter"
+        @press-enter="onInputPressEnter"
         @blur="onInputBlur"
       >
         <template v-if="$slots.prefix" #prefix>
@@ -82,8 +82,8 @@ import { useI18n } from '../../locale'
 import { pickerProps } from './props'
 
 /**
- * @displayName Common
- * @noBrackets
+ * @display-name Common
+ * @no-brackets
  */
 export default defineComponent({
   name: createNamespace('date-picker-base').name,

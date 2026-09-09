@@ -1,308 +1,85 @@
 @import './token.less';
 
-.switch-slide-text-enter-from {
-  left: -100% !important;
-}
-
-.switch-slide-text-enter-to {
-  left: var(~'--c-switch-text-padding-inline') !important;
-}
-
-.switch-slide-text-enter-active {
-  transition: left var(~'--c-switch-transition-duration') var(~'--c-switch-transition-timing-function');
-}
-
-.switch-slide-text-leave-from {
-  left: 100% !important;
-}
-
-.switch-slide-text-leave-to {
-  left: var(~'--c-switch-text-offset') !important;
-}
-
-.switch-slide-text-leave-active {
-  transition: left var(~'--c-switch-transition-duration') var(~'--c-switch-transition-timing-function');
-}
-
 .c-switch {
+  --c-switch-scale: 1;
+  --c-switch-local-width: var(--c-switch-width);
+  --c-switch-local-height: var(--c-switch-height);
+  --c-switch-local-handle: var(--c-switch-handle-size);
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
   box-sizing: border-box;
-  min-width: var(~'--c-switch-circle-width-default');
-  height: var(~'--c-switch-size-default');
+  min-width: calc(var(--c-switch-local-width) * var(--c-switch-scale));
+  height: calc(var(--c-switch-local-height) * var(--c-switch-scale));
   padding: 0;
-  overflow: hidden;
-  line-height: var(~'--c-switch-size-default');
+  border: 0;
+  border-radius: var(--c-switch-radius);
+  background: transparent;
   vertical-align: middle;
-  background-color: var(~'--c-switch-bg-off');
-  border: none;
-  border-radius: var(~'--c-switch-border-radius-default');
-  outline: none;
   cursor: pointer;
-  transition: background-color var(~'--c-switch-transition-duration')
-    var(~'--c-switch-transition-timing-function');
-
-  &-handle {
+  isolation: isolate;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  &::before {
+    content: '';
     position: absolute;
-    top: var(~'--c-switch-gap-default');
-    left: var(~'--c-switch-gap-default');
+    inset: calc(-1 * var(--c-switch-hit-area));
+  }
+  &:focus-visible { outline: var(--c-switch-focus-width) solid var(--c-switch-track-active-background); outline-offset: var(--c-switch-focus-width); }
+  &--size-sm { --c-switch-scale: var(--c-switch-size-sm-scale); }
+  &--size-lg { --c-switch-scale: var(--c-switch-size-lg-scale); }
+  &--disabled, &--loading { opacity: var(--c-switch-disabled-opacity); cursor: not-allowed; }
+  &__track {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--c-switch-current-track, var(--c-switch-track-background));
+    transition: background var(--c-switch-duration);
+    pointer-events: none;
+  }
+  &--checked &__track { background: var(--c-switch-current-track, var(--c-switch-track-active-background)); }
+  &--error &__track { background: var(--c-switch-track-error-background); }
+  &__handle {
+    position: absolute;
+    inset-inline-start: calc(var(--c-switch-gap) * var(--c-switch-scale));
+    top: 50%;
+    transform: translateY(-50%);
     display: flex;
     align-items: center;
     justify-content: center;
-    width: var(~'--c-switch-dot-size-default');
-    height: var(~'--c-switch-dot-size-default');
-    color: var(~'--c-switch-dot-icon-color-off');
-    font-size: var(~'--c-switch-handle-font-size');
-    background-color: var(~'--c-switch-dot-bg');
-    border-radius: 50%;
-    transition: all var(~'--c-switch-transition-duration') var(~'--c-switch-transition-timing-function');
+    width: calc(var(--c-switch-local-handle) * var(--c-switch-scale));
+    height: calc(var(--c-switch-local-handle) * var(--c-switch-scale));
+    border-radius: var(--c-switch-radius);
+    background: var(--c-switch-handle-background);
+    color: var(--c-switch-handle-color);
+    transition: inset-inline-start var(--c-switch-duration), background var(--c-switch-duration);
+    pointer-events: none;
   }
-
-  &-checked {
-    background-color: var(~'--c-switch-bg-on');
+  &--checked &__handle { inset-inline-start: calc(100% - (var(--c-switch-local-handle) + var(--c-switch-gap)) * var(--c-switch-scale)); }
+  &__text {
+    position: relative;
+    color: var(--c-switch-text-color);
+    font-size: calc(var(--c-switch-font-size) * var(--c-switch-scale));
+    padding-inline: calc((var(--c-switch-local-handle) + 2 * var(--c-switch-gap)) * var(--c-switch-scale)) calc(2 * var(--c-switch-gap) * var(--c-switch-scale));
   }
-
-  &-checked &-handle {
-    left: var(~'--c-switch-handle-checked-left');
-    color: var(~'--c-switch-dot-icon-color-on');
+  &--checked &__text { padding-inline: calc(2 * var(--c-switch-gap) * var(--c-switch-scale)) calc((var(--c-switch-local-handle) + 2 * var(--c-switch-gap)) * var(--c-switch-scale)); }
+  &__loading { width: 80%; height: 80%; color: var(--c-switch-loading-color, currentColor); animation: c-switch-spin 1s linear infinite; }
+  &__ripple { position: absolute; inset: 0; border-radius: inherit; background: currentColor; opacity: 0; animation: c-switch-ripple var(--c-switch-ripple-duration) ease-out; }
+  &--variant-round, &--variant-round &__handle { border-radius: var(--c-switch-round-radius); }
+  &--variant-line { --c-switch-local-handle: var(--c-switch-line-handle-size); }
+  &--variant-line &__track { top: 50%; bottom: auto; height: calc(var(--c-switch-line-height) * var(--c-switch-scale)); transform: translateY(-50%); }
+  &--variant-md3 {
+    --c-switch-local-width: var(--c-switch-md3-width);
+    --c-switch-local-height: var(--c-switch-md3-height);
+    --c-switch-local-handle: var(--c-switch-md3-handle-size);
   }
-
-  &[disabled] &-handle {
-    color: var(~'--c-switch-dot-icon-color-off-disabled');
-  }
-
-  &[disabled]&-checked &-handle {
-    color: var(~'--c-switch-dot-icon-color-on-disabled');
-  }
-
-  &-text-holder {
-    margin: 0 var(~'--c-switch-text-padding-inline') 0 var(~'--c-switch-text-offset');
-    font-size: var(~'--c-switch-font-size-text');
-    opacity: 0;
-  }
-
-  &-text {
-    position: absolute;
-    top: 0;
-    left: var(~'--c-switch-text-offset');
-    color: var(~'--c-switch-text-color-off');
-    font-size: var(~'--c-switch-font-size-text');
-  }
-
-  &-checked &-text-holder {
-    margin: 0 var(~'--c-switch-text-offset') 0 var(~'--c-switch-text-padding-inline');
-  }
-
-  &-checked &-text {
-    left: var(~'--c-switch-text-padding-inline');
-    color: var(~'--c-switch-text-color-on');
-  }
-
-  // Disabled
-  &[disabled] {
-    background-color: var(~'--c-switch-bg-off-disabled');
-    cursor: not-allowed;
-  }
-
-  &[disabled] &-text {
-    color: var(~'--c-switch-text-color-off-disabled');
-  }
-
-  &[disabled]&-checked {
-    background-color: var(~'--c-switch-bg-on-disabled');
-  }
-
-  &[disabled]&-checked &-text {
-    color: var(~'--c-switch-text-color-on-disabled');
-  }
-
-  // Loading
-  &-loading {
-    background-color: var(~'--c-switch-bg-off-loading');
-  }
-
-  &-loading &-handle {
-    color: var(~'--c-switch-dot-icon-color-off-loading');
-  }
-
-  &-loading &-text {
-    color: var(~'--c-switch-text-color-off-loading');
-  }
-
-  &-loading&-checked {
-    background-color: var(~'--c-switch-bg-on-loading');
-  }
-
-  &-loading&-checked &-handle {
-    color: var(~'--c-switch-dot-icon-color-on-loading');
-  }
-
-  &-loading&-checked &-text {
-    color: var(~'--c-switch-text-color-on-loading');
-  }
-
-  &-small {
-    min-width: var(~'--c-switch-circle-width-small');
-    height: var(~'--c-switch-size-small');
-    line-height: var(~'--c-switch-size-small');
-  }
-
-  &-small&-checked {
-    padding-left: var(~'--c-switch-gap-small-neg');
-  }
-
-  &-small &-handle {
-    top: var(~'--c-switch-gap-small');
-    left: var(~'--c-switch-gap-small');
-    width: var(~'--c-switch-dot-size-small');
-    height: var(~'--c-switch-dot-size-small');
-    border-radius: var(~'--c-switch-border-radius-small');
-
-    &-icon {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0.66667);
-    }
-  }
-
-  &-small&-checked &-handle {
-    left: var(~'--c-switch-handle-checked-left-small');
-  }
+  &--variant-md3:not(.c-switch--checked) &__track { background: var(--c-switch-current-track, var(--c-switch-md3-track-background)); border: var(--c-switch-md3-border-width) solid var(--c-switch-md3-border-color); box-sizing: border-box; }
+  &--variant-md3:not(.c-switch--checked) &__handle { background: var(--c-switch-md3-border-color); }
 }
-
-// Round
-.c-switch {
-  &--variant-round {
-    min-width: var(~'--c-switch-round-width-default');
-    border-radius: var(~'--c-switch-round-border-radius');
-  }
-
-  &--variant-round &-handle {
-    border-radius: var(~'--c-switch-round-handle-border-radius');
-  }
-
-  &--variant-round&-small {
-    min-width: var(~'--c-switch-round-width-small');
-    height: var(~'--c-switch-size-small');
-    line-height: var(~'--c-switch-size-small');
-    border-radius: var(~'--c-switch-round-small-border-radius');
-  }
-
-  &--variant-round&-small &-handle {
-    border-radius: var(~'--c-switch-round-small-handle-border-radius');
-  }
-}
-
-// Line
-.c-switch {
-  &--variant-line {
-    min-width: var(~'--c-switch-line-width-default');
-    overflow: unset;
-    background-color: transparent;
-
-    &::after {
-      display: block;
-      width: 100%;
-      height: var(~'--c-switch-line-bg-height');
-      background-color: var(~'--c-switch-bg-off');
-      border-radius: var(~'--c-switch-line-bg-border-radius');
-      transition: background-color var(~'--c-switch-transition-duration')
-        var(~'--c-switch-transition-timing-function');
-      content: '';
-    }
-  }
-
-  &--variant-line &-handle {
-    top: var(~'--c-switch-line-gap-default');
-    left: 0;
-    width: var(~'--c-switch-line-dot-size-default');
-    height: var(~'--c-switch-line-dot-size-default');
-    background-color: var(~'--c-switch-dot-bg');
-    border-radius: var(~'--c-switch-line-handle-border-radius-default');
-    box-shadow: var(~'--c-switch-line-dot-box-shadow');
-  }
-
-  &--variant-line&-checked {
-    background-color: transparent;
-
-    &::after {
-      background-color: var(~'--c-switch-bg-on');
-    }
-  }
-
-  &--variant-line&-custom-color {
-    --c-switch-custom-color: var(~'--c-switch-bg-off');
-
-    &::after {
-      background-color: var(~'--c-switch-custom-color');
-    }
-  }
-
-  &--variant-line&-custom-color&-checked {
-    --c-switch-custom-color: var(~'--c-switch-bg-on');
-  }
-
-  &--variant-line&-checked &-handle {
-    left: var(~'--c-switch-line-handle-checked-left');
-  }
-
-  // Disabled
-  &--variant-line[disabled] {
-    background-color: transparent;
-    cursor: not-allowed;
-
-    &::after {
-      background-color: var(~'--c-switch-bg-off-disabled');
-    }
-  }
-
-  &--variant-line[disabled]&-checked {
-    background-color: transparent;
-
-    &::after {
-      background-color: var(~'--c-switch-bg-on-disabled');
-    }
-  }
-
-  // Loading
-  &--variant-line&-loading {
-    background-color: transparent;
-
-    &::after {
-      background-color: var(~'--c-switch-bg-off-loading');
-    }
-  }
-
-  &--variant-line&-loading&-checked {
-    background-color: transparent;
-
-    &::after {
-      background-color: var(~'--c-switch-bg-on-loading');
-    }
-  }
-
-  &--variant-line&-small {
-    min-width: var(~'--c-switch-line-width-small');
-    height: var(~'--c-switch-size-small');
-    line-height: var(~'--c-switch-size-small');
-  }
-
-  &--variant-line&-small&-checked {
-    padding-left: var(~'--c-switch-line-gap-small-neg');
-  }
-
-  &--variant-line&-small &-handle {
-    top: var(~'--c-switch-line-gap-small');
-    width: var(~'--c-switch-line-dot-size-small');
-    height: var(~'--c-switch-line-dot-size-small');
-    border-radius: var(~'--c-switch-border-radius-small');
-
-    &-icon {
-      transform: translate(-50%, -50%) scale(1);
-    }
-  }
-
-  &--variant-line&-small&-checked &-handle {
-    left: var(~'--c-switch-line-handle-checked-left-small');
-  }
+@keyframes c-switch-spin { to { transform: rotate(360deg); } }
+@keyframes c-switch-ripple { from { opacity: .25; transform: scale(1); } to { opacity: 0; transform: scale(var(--c-switch-ripple-scale)); } }
+@media (prefers-reduced-motion: reduce) {
+  .c-switch__handle, .c-switch__track { transition: none; }
+  .c-switch__ripple { animation: none; }
 }

@@ -16,7 +16,7 @@ export type MenuOptionInstance = InstanceType<typeof _MenuOption>
 export type MenuGroupInstance = InstanceType<typeof _MenuGroup>
 export type MenuSubmenuInstance = InstanceType<typeof _MenuSubmenu>
 
-export type { MenuProps, MenuPosition, MenuValue } from './types'
+export type { MenuProps, MenuPosition, MenuValue, MenuOptionData, MenuFieldNames } from './types'
 
 export {
   Menu,
@@ -33,3 +33,10 @@ export const _MenuSubmenuComponent = _MenuSubmenu
 export { menuProps }
 
 export default Menu
+
+export { menuOptionProps } from './option-props'
+export { menuGroupProps } from './group-props'
+export { menuSubmenuProps } from './submenu-props'
+export type { MenuOptionProps } from './option-props'
+export type { MenuGroupProps } from './group-props'
+export type { MenuSubmenuProps } from './submenu-props'

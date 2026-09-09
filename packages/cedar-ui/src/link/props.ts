@@ -1,4 +1,4 @@
-import type { ExtractPropTypes, PropType } from 'vue'
+import type { ExtractPublicPropTypes, PropType } from 'vue'
 import { semanticStatuses } from '../_utils/constant'
 import type { SemanticStatus } from '../_utils/constant'
 
@@ -20,10 +20,11 @@ export const linkProps = {
     default: 'none',
     validator: (value: unknown): value is LinkUnderline => linkUnderlines.includes(value as LinkUnderline),
   },
+  /** Show padded hover/active backgrounds; does not control underline or keyboard focus. */
   hoverable: { type: Boolean, default: false },
   icon: Boolean,
   loading: Boolean,
   disabled: Boolean,
-} 
+}
 
-export type LinkProps = ExtractPropTypes<typeof linkProps>
+export type LinkProps = ExtractPublicPropTypes<typeof linkProps>

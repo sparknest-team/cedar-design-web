@@ -50,5 +50,5 @@ export const avatarGroupProps = {
   vertical: Boolean,
 }
 
-export type AvatarProps = ExtractPropTypes<typeof avatarProps>
-export type AvatarGroupProps = ExtractPropTypes<typeof avatarGroupProps>
+export type AvatarProps = import("vue").ExtractPublicPropTypes<typeof avatarProps>
+export type AvatarGroupProps = import("vue").ExtractPublicPropTypes<typeof avatarGroupProps>

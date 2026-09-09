@@ -604,7 +604,7 @@ export default defineComponent({
                         value_.value[valueKeyAlias.address] = newAddress.value;
                         updateModelValue();
                       }}
-                      onOpenChange={() =>
+                      onOpen-change={() =>
                         (newAddress.value = value_.value[valueKeyAlias.address])
                       }
                       onUpdate:open={() =>

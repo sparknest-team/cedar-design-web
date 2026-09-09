@@ -1,0 +1,5 @@
+- [x] Implement native scrolling, scrollTo and scroll events.
+- [x] Add bordered regions, sider placement and collapse modes.
+- [x] Keep zero-width trigger accessible and hidden content inert.
+- [x] Add fixed header/footer and interactive sider demos, document API.
+- [x] Validate six regression tests, scoped TypeScript, Less compilation and browser interactions.

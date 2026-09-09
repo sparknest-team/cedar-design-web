@@ -36,4 +36,4 @@ export const carouselProps = {
   nextButtonAriaLabel: { type: String, default: 'Next slide' },
 } 
 
-export type CarouselProps = Partial<ExtractPropTypes<typeof carouselProps>>
+export type CarouselProps = import("vue").ExtractPublicPropTypes<typeof carouselProps>

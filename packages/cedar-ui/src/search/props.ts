@@ -14,7 +14,7 @@ export interface SearchProps {
   searchButton?: boolean
   loading?: boolean
   disabled?: boolean
-  variant?: 'filled' | 'outlined' | 'standard'
+  variant?: 'filled' | 'outline' | 'standard'
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
   buttonText?: string
   buttonProps?: any

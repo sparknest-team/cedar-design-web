@@ -13,12 +13,12 @@ export const usePagination = (props: TableProps, emit: any) => {
 
   const handlePageChange = (page: number) => {
     _page.value = page
-    emit('pageChange', page)
+    emit('page-change', page)
   }
 
   const handlePageSizeChange = (pageSize: number) => {
     _pageSize.value = pageSize
-    emit('pageSizeChange', pageSize)
+    emit('page-size-change', pageSize)
   }
 
   return {

@@ -15,7 +15,7 @@ permalink: /components/input/
 ### 变体
 
 设置 `variant` 来调整不同风格的输入框。
-可选值为 `filled`、`outlined` 和 `standard`。
+可选值为 `filled`、`outline` 和 `standard`。
 
 <demo src="./__demos__/variant.vue"></demo>
 
@@ -63,7 +63,7 @@ permalink: /components/input/
 | ------------------------- | ------------------------------------ | --------------------------------------------------- | :-----: |
 | model-value **(v-model)** | 绑定值                               | `string`                                            |   `-`   |
 | default-value             | 默认值（非受控状态）                 | `string`                                            |  `''`   |
-| variant                   | 输入框变体                           | `'filled' \| 'outlined' \| 'standard'`               | `'filled'` |
+| variant                   | 输入框变体                           | `'filled' \| 'outline' \| 'standard'`               | `'filled'` |
 | size                      | 输入框大小                           | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`              | `'md'`  |
 | clearable                 | 是否允许清空输入框                   | `boolean`                                           | `true`  |
 | disabled                  | 是否禁用                             | `boolean`                                           | `false` |

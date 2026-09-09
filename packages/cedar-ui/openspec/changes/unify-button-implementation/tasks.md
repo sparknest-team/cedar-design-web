@@ -1,0 +1,5 @@
+- [x] Inspect both implementations and define common acceptance tests
+- [x] Implement matching functional candidates
+- [x] Run parity tests and compare candidates
+- [x] Copy winning implementation, align demos/docs and add drift guards
+- [x] Validate tests, styles and documentation

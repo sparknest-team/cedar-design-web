@@ -1,0 +1,1 @@
+Remove the redundant Card state branch rather than introduce a deprecated alias. Keep the content wrapper conditional on the default slot only. Loading may still be a transitive dependency of Button; remove only Card's direct imports. Preserve directives and Loading components. No automatic aria-busy or disabled behavior is implied by the directive migration.

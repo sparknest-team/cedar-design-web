@@ -1,66 +1,38 @@
+<script setup lang="ts">
+const variants = ['default', 'outline'] as const
+const statuses = ['default', 'success', 'warning', 'danger', 'primary', 'info'] as const
+</script>
+
 <template>
-  <c-space direction="column">
-    <c-space>
-      <c-badge variant="outline" content="1">
-        <c-avatar shape="square">
-          <span>
-            <c-icon-user />
-          </span>
-        </c-avatar>
-      </c-badge>
-      <c-badge variant="outline" content="1" status="success">
-        <c-avatar shape="square">
-          <span>
-            <c-icon-user />
-          </span>
-        </c-avatar>
-      </c-badge>
-      <c-badge variant="outline" content="1" status="warning">
-        <c-avatar shape="square">
-          <span>
-            <c-icon-user />
-          </span>
-        </c-avatar>
-      </c-badge>
-      <c-badge variant="outline" content="1" status="danger">
-        <c-avatar shape="square">
-          <span>
-            <c-icon-user />
-          </span>
-        </c-avatar>
-      </c-badge>
-      <c-badge variant="outline" content="1" status="primary">
-        <c-avatar shape="square">
-          <span>
-            <c-icon-user />
-          </span>
-        </c-avatar>
-      </c-badge>
-      <c-badge variant="outline" content="1" status="info">
-        <c-avatar shape="square">
-          <span>
-            <c-icon-user />
-          </span>
-        </c-avatar>
-      </c-badge>
+  <c-space direction="column" :size="24">
+    <c-space v-for="variant in variants" :key="variant" wrap :size="24">
+      <c-badge v-for="status in statuses" :key="status" :variant="variant" :status="status" :content="1"
+        ><span
+          style="display: inline-block; padding: 12px; border: 1px solid currentColor; border-radius: 4px"
+          >Inbox</span
+        ></c-badge
+      >
     </c-space>
-    <c-space>
-      <c-badge variant="outline" content="1" mode="inline" description="描述文本" />
-      <c-badge variant="outline" content="1" status="success" mode="inline" description="描述文本" />
-      <c-badge variant="outline" content="1" status="warning" mode="inline" description="描述文本" />
-      <c-badge variant="outline" content="1" status="danger" mode="inline" description="描述文本" />
-      <c-badge variant="outline" content="1" status="primary" mode="inline" description="描述文本" />
-      <c-badge variant="outline" content="1" status="info" mode="inline" description="描述文本" />
-    </c-space>
-    <c-space>
-      <c-badge variant="outline" content="1" dot description="描述文本" mode="inline" />
-      <c-badge variant="outline" content="1" status="success" dot description="描述文本" mode="inline" />
-      <c-badge variant="outline" content="1" status="warning" dot description="描述文本" mode="inline" />
-      <c-badge variant="outline" content="1" status="danger" dot description="描述文本" mode="inline" />
-      <c-badge variant="outline" content="1" status="primary" dot description="描述文本" mode="inline" />
-      <c-badge variant="outline" content="1" status="info" dot description="描述文本" mode="inline" />
-    </c-space>
+    <c-space wrap
+      ><c-badge
+        v-for="status in statuses"
+        :key="status"
+        :status="status"
+        variant="outline"
+        mode="inline"
+        :content="1"
+        :description="status"
+    /></c-space>
+    <c-space wrap
+      ><c-badge
+        v-for="status in statuses"
+        :key="status"
+        :status="status"
+        variant="outline"
+        mode="inline"
+        dot
+        :content="1"
+        :description="status"
+    /></c-space>
   </c-space>
 </template>
-
-<script lang="ts" setup></script>

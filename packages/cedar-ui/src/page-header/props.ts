@@ -23,7 +23,7 @@ export const pageHeaderProps = {
   extra: String,
 }
 
-export type PageHeaderProps = ExtractPropTypes<typeof pageHeaderProps>
+export type PageHeaderProps = import("vue").ExtractPublicPropTypes<typeof pageHeaderProps>
 
 export interface PageHeaderSlots {
   header?: () => VNode[]

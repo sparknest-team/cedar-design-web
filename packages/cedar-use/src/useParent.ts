@@ -5,6 +5,8 @@ import {
   nextTick,
   onBeforeUnmount,
   onMounted,
+  onActivated,
+  onDeactivated,
   type ComponentInternalInstance,
   type ComputedRef,
 } from 'vue'
@@ -31,16 +33,22 @@ export function useParent<P, C>(key: symbol | string) {
   const index: ComputedRef<number> = computed(() => childInstances.indexOf(childInstance))
 
   const bindParent = (childProvider: C) => {
-    onMounted(() => {
-      nextTick().then(() => {
-        collect(childInstance, childProvider)
+    let active = false
+    let registered = false
+    const add = () => {
+      active = true
+      nextTick(() => {
+        if (active && !registered) { collect(childInstance, childProvider); registered = true }
       })
-    })
-    onBeforeUnmount(() => {
-      nextTick().then(() => {
-        clear(childInstance, childProvider)
-      })
-    })
+    }
+    const remove = () => {
+      active = false
+      if (registered) { clear(childInstance, childProvider); registered = false }
+    }
+    onMounted(add)
+    onActivated(add)
+    onDeactivated(remove)
+    onBeforeUnmount(remove)
   }
 
   return {

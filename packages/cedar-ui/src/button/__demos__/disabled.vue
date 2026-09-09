@@ -1,8 +1,12 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+const clicks = ref(0)
+</script>
 <template>
-  <c-space wrap>
-    <c-button status="primary" disabled>默认按钮</c-button>
-    <c-button variant="tonal" status="primary" disabled>tonal按钮</c-button>
-    <c-button variant="outline" status="primary" disabled>外边框按钮</c-button>
-    <c-button variant="text" status="primary" disabled>文本按钮</c-button>
-  </c-space>
+  <div style="display: flex; flex-wrap: wrap; gap: 12px">
+    <c-button disabled @click="clicks++">Disabled button</c-button>
+    <c-button component="a" href="#blocked-button-link" disabled @click="clicks++">Disabled link</c-button>
+    <c-button component="a" href="#blocked-button-link" loading @click="clicks++">Loading link</c-button>
+  </div>
+  <p aria-live="polite">Blocked clicks: {{ clicks }}</p>
 </template>

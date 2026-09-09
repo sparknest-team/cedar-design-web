@@ -8,7 +8,7 @@ export const inputTagProps = {
     /**
      * @zh 绑定值
      * @en Value
-     * @vModel
+     * @v-model
      */
     modelValue: {
       type: Array as PropType<(string | number | TagData)[]>,
@@ -24,7 +24,7 @@ export const inputTagProps = {
     /**
      * @zh 输入框的值
      * @en The value of the input
-     * @vModel
+     * @v-model
      */
     inputValue: String,
     /**
@@ -76,7 +76,7 @@ export const inputTagProps = {
      * @zh 输入框的大小
      * @en The size of the input
      * @values 'xs','sm','md','lg','xl'
-     * @defaultValue 'md'
+     * @default-value 'md'
      */
     size: {
       type: String as PropType<ComponentSize>,
@@ -85,13 +85,13 @@ export const inputTagProps = {
     /**
      * @zh 输入框的变体
      * @en The variant of the input
-     * @values 'filled', 'outlined', 'standard'
-     * @defaultValue 'filled'
+     * @values 'filled', 'outline', 'standard'
+     * @default-value 'filled'
      */
     variant: {
-      type: String as PropType<'filled' | 'outlined' | 'standard'>,
+      type: String as PropType<'filled' | 'outline' | 'standard'>,
       default: 'filled',
-      validator: (value: string) => ['filled', 'outlined', 'standard'].includes(value),
+      validator: (value: string) => ['filled', 'outline', 'standard'].includes(value),
     },
     /**
      * @zh 最多展示的标签个数，`0` 表示不限制

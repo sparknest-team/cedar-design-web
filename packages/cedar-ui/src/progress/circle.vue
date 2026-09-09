@@ -1,11 +1,12 @@
 <template>
   <div
+    ref="circleEl"
     role="progressbar"
     aria-valuemin="0"
-    aria-valuemax="1"
+    aria-valuemax="100"
     :aria-valuenow="percent"
     :class="classes(n('wrapper'))"
-    :style="{ width: `${mergedWidth}px`, height: `${mergedWidth}px` }"
+    :style="{ width: cssWidth, aspectRatio: '1' }"
   >
     <div :class="classes(n())">
       <icon-check
@@ -39,7 +40,7 @@
           :style="{
             stroke: (isLinearGradient ? `url(#${linearGradientId})` : color) as any,
             strokeDasharray: perimeter,
-            strokeDashoffset: (percent >= 1 ? 0 : 1 - percent) * perimeter,
+            strokeDashoffset: (percent >= 100 ? 0 : 1 - percent / 100) * perimeter,
           }"
         />
       </svg>
@@ -57,7 +58,9 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from 'vue'
+import { computed, defineComponent, PropType, ref } from 'vue'
+import { useCircleSize } from './use-circle-size'
+import { positiveLength } from './size'
 import NP from 'number-precision'
 import { createNamespace } from '../_utils/global-config'
 import { isObject } from '../_utils/is'
@@ -72,13 +75,15 @@ const DEFAULT_WIDTH = {
   sm: 48,
   md: 64,
   lg: 80,
+  xl: 96,
 }
 
 const DEFAULT_STROKE_WIDTH = {
   xs: 4,
   sm: 3,
   md: 4,
-  lg: 4,
+  lg: 6,
+  xl: 8,
 }
 
 const { name, n, classes } = createNamespace('progress-circle')
@@ -101,10 +106,10 @@ export default defineComponent({
       default: 'md',
     },
     strokeWidth: {
-      type: Number,
+      type: [Number, String],
     },
     width: {
-      type: Number,
+      type: [Number, String],
       default: undefined,
     },
     color: {
@@ -121,25 +126,16 @@ export default defineComponent({
       default: true,
     },
     pathStrokeWidth: {
-      type: Number,
+      type: [Number, String],
     },
   },
   setup(props) {
     const isLinearGradient = isObject(props.color)
 
-    const mergedWidth = computed(() => {
-      return props.width ?? DEFAULT_WIDTH[props.size]
-    })
-
-    const mergedStrokeWidth = computed(
-      () => props.strokeWidth ?? (props.size === 'xs' ? mergedWidth.value / 2 : DEFAULT_STROKE_WIDTH[props.size]),
-    )
-
-    const mergedPathStrokeWidth = computed(
-      () =>
-        props.pathStrokeWidth ??
-        (props.size === 'xs' ? mergedStrokeWidth.value : Math.max(2, mergedStrokeWidth.value - 2)),
-    )
+    const circleEl = ref<HTMLElement>()
+    const cssWidth = computed(() => positiveLength(props.width, `${DEFAULT_WIDTH[props.size]}px`))
+    const { diameter: mergedWidth, strokeWidth: mergedStrokeWidth } = useCircleSize(circleEl, () => cssWidth.value, () => props.strokeWidth ?? DEFAULT_STROKE_WIDTH[props.size])
+    const mergedPathStrokeWidth = mergedStrokeWidth
 
     const radius = computed(() => (mergedWidth.value - mergedStrokeWidth.value) / 2)
     const perimeter = computed(() => Math.PI * 2 * radius.value)
@@ -150,10 +146,12 @@ export default defineComponent({
       return `${n('linear-gradient')}-${__ARCO_PROGRESS_SEED}`
     })
 
-    const text = computed(() => `${NP.times(props.percent, 100)}%`)
+    const text = computed(() => `${props.percent}%`)
 
     return {
       classes,
+      circleEl,
+      cssWidth,
       n,
       isLinearGradient,
       radius,

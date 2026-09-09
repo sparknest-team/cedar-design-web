@@ -7,7 +7,7 @@ export interface DrawerConfig {
    * @zh 抽屉放置的位置
    * @en Where the drawer is placed
    * @values 'top','right','bottom','left'
-   * @defaultValue 'right'
+   * @default-value 'right'
    */
   placement?: 'top' | 'right' | 'bottom' | 'left'
   /**
@@ -23,7 +23,7 @@ export interface DrawerConfig {
   /**
    * @zh 是否显示背景层
    * @en Whether to show the overlay
-   * @defaultValue true
+   * @default-value true
    */
   overlay?: boolean
   /**
@@ -39,7 +39,7 @@ export interface DrawerConfig {
   /**
    * @zh 点击背景层是否可以关闭
    * @en Click on the overlay layer to be able to close
-   * @defaultValue true
+   * @default-value true
    */
   overlayClosable?: boolean
   /** 背景层动画名称 */
@@ -47,7 +47,7 @@ export interface DrawerConfig {
   /**
    * @zh 是否展示关闭按钮
    * @en Whether to show the close button
-   * @defaultValue true
+   * @default-value true
    */
   closable?: boolean
   /**
@@ -63,7 +63,7 @@ export interface DrawerConfig {
   /**
    * @zh 确认按钮是否为加载中状态
    * @en Whether the ok button is in the loading state
-   * @defaultValue false
+   * @default-value false
    */
   confirmButtonLoading?: boolean
   /**
@@ -81,19 +81,19 @@ export interface DrawerConfig {
   /**
    * @zh 抽屉的宽度（仅在placement为right,left时可用）
    * @en The width of the drawer (only available when placement is right, left)
-   * @defaultValue 250
+   * @default-value 250
    */
   width?: number | string
   /**
    * @zh 抽屉的高度（仅在placement为top,bottom时可用）
    * @en The height of the drawer (only available when placement is top, bottom)
-   * @defaultValue 250
+   * @default-value 250
    */
   height?: number | string
   /**
    * @zh 弹出框的挂载容器
    * @en Mount container for popup
-   * @defaultValue 'body'
+   * @default-value 'body'
    */
   popupContainer?: string | HTMLElement
   /**
@@ -138,38 +138,38 @@ export interface DrawerConfig {
    * @en Triggered before drawer is opened
    * @version 2.43.0
    */
-  beforeOpen?: () => void
+  onOpened?: () => void
   /**
    * @zh 抽屉关闭前触发
    * @en Triggered before drawer is closed
    * @version 2.43.0
    */
-  beforeClose?: () => void
+  onClosed?: () => void
   /**
    * @zh 是否支持 ESC 键关闭抽屉
    * @en Whether to support the ESC key to close the drawer
    * @version 2.15.0
-   * @defaultValue true
+   * @default-value true
    */
   escToClose?: boolean
   /**
    * @zh 是否展示头部内容
    * @en Whether to display high-quality content
    * @version 2.33.0
-   * @defaultValue true
+   * @default-value true
    */
   header?: boolean | RenderContent
   /**
    * @zh 是否展示底部内容
    * @en Whether to display the bottom content
    * @version 2.11.0
-   * @defaultValue true
+   * @default-value true
    */
   footer?: boolean | RenderContent
   /**
    * @zh 是否显示取消按钮
    * @en Whether to show the cancel button
-   * @defaultValue true
+   * @default-value true
    */
   cancelButton?: boolean
 }
@@ -184,8 +184,8 @@ export type DrawerUpdateConfig = Omit<
   | 'beforeCancel'
   | 'onOpen'
   | 'onClose'
-  | 'beforeOpen'
-  | 'beforeClose'
+  | 'onOpened'
+  | 'onClosed'
   | 'header'
   | 'footer'
 >

@@ -1,0 +1,5 @@
+- [x] Compare source implementations and define aligned API.
+- [x] Share state, templates, page actions and layout.
+- [x] Adapt locale, Input and Select explicitly.
+- [x] Pair twelve demos and bilingual API documentation.
+- [x] Verify behavior, SSR, bundles and browser layout; Cedar types pass. Maple dependency type errors and unrelated Breadcrumb gate drift are recorded in design-ui/audits/pagination-same-source.md.

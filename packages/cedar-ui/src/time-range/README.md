@@ -54,7 +54,7 @@ permalink: /components/time-range/
 | `disabled` | 禁用 | `boolean` | `false` |
 | `readonly` | 只读 | `boolean` | `false` |
 | `size` | 尺寸 | `xs \| sm \| md \| lg \| xl` | `-` |
-| `variant` | 输入框变体 | `filled \| outlined \| standard` | `filled` |
+| `variant` | 输入框变体 | `filled \| outline \| standard` | `filled` |
 | `placeholder` | 占位 | `string \| string[]` | `-` |
 | `format` | 展示格式 | `string` | `-` |
 | `use12-hours` | 12 小时制 | `boolean` | `false` |

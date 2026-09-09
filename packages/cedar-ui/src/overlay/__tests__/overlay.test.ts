@@ -1,4 +1,12 @@
-import { mount } from "@vue/test-utils";
+import { afterEach as unmountAfterEach } from 'vitest'
+const mountedWrappers: any[] = []
+unmountAfterEach(() => { for (const wrapper of mountedWrappers.splice(0)) wrapper.unmount() })
+const mount = (...args: any[]) => {
+  const wrapper = mountComponent(args[0], args[1])
+  mountedWrappers.push(wrapper)
+  return wrapper
+}
+import { mount as mountComponent } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
 import Overlay from "../overlay.vue";
 import { overlayProps } from "../props";

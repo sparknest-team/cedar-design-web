@@ -151,7 +151,7 @@ ImagePreview 只接收单个 `src`，负责缩放、旋转、拖拽和全屏等�
 | overlay-closable   | 点击图片外的 overlay 是否触发关闭，点击图片不会关闭               | `boolean`               |                                           `true`                                           |
 | closable           | 是否显示关闭按钮                                                  | `boolean`               |                                           `true`                                           |
 | actions-layout     | 操作项的布局                                                      | `string[]`              | `[  'fullScreen',  'rotateRight',  'rotateLeft',  'zoomIn',  'zoomOut',  'originalSize',]` |
-| popup-container    | 设置弹出框的挂载点，同 `teleport` 的 `to`，缺省值是 document.body | `HTMLElement \| string` |                                            `-`                                             |
+| popup-container    | 设置弹出框的挂载点，同 `teleport` 的 `to`，缺省值是 document.body | `HTMLElement \| string \| false` |                                            `-`                                             |
 | esc-to-close       | 是否支持 ESC 键关闭预览                                           | `boolean`               |                                           `true`                                           |
 | wheel-zoom         | 是否开启滚轮缩放                                                  | `boolean`               |                                           `true`                                           |
 | keyboard           | 是否开启键盘控制                                                  | `boolean`               |                                           `true`                                           |
@@ -184,7 +184,7 @@ ImagePreview 只接收单个 `src`，负责缩放、旋转、拖拽和全屏等�
 | overlay-closable      | 点击图片外的 overlay 是否触发关闭，点击图片不会关闭               | `boolean`               |                                           `true`                                           |
 | closable              | 是否显示关闭按钮                                                  | `boolean`               |                                           `true`                                           |
 | actions-layout        | 控制条的布局                                                      | `string[]`              | `[  'fullScreen',  'rotateRight',  'rotateLeft',  'zoomIn',  'zoomOut',  'originalSize',]` |
-| popup-container       | 设置弹出框的挂载点，同 `teleport` 的 `to`，缺省值是 document.body | `string \| HTMLElement` |                                            `-`                                             |
+| popup-container       | 设置弹出框的挂载点，同 `teleport` 的 `to`，缺省值是 document.body | `string \| HTMLElement \| false` |                                            `-`                                             |
 
 ### `<image-preview-group>` Events
 

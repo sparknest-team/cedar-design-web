@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _Card from './card'
+import _Card from './card.vue'
 import { cardProps } from './props'
 
 const Card = withInstall(_Card, Object.assign(_Card, {

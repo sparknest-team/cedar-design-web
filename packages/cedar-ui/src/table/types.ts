@@ -339,7 +339,7 @@ export interface TableRowSelection {
   /**
    * @zh 是否开启严格选择模式
    * @en Whether to enable strict selection mode
-   * @defaultValue true
+   * @default-value true
    * @version 2.29.0
    */
   checkStrictly?: boolean

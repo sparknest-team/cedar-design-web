@@ -34,4 +34,6 @@ export const iconProps = {
   animationClass: String,
 }
 
-export type ComponentProps = ExtractPropTypes<typeof iconProps>
+export type ComponentProps = import("vue").ExtractPublicPropTypes<typeof iconProps>
+
+export const props = iconProps

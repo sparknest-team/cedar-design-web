@@ -1,6 +1,6 @@
 <template>
   <c-space>
-    <c-menu placement="bl">
+    <c-menu placement="bottom-start">
       <c-button>Bottom Left</c-button>
       <template #content>
         <c-menu-option>Option 1</c-menu-option>
@@ -18,7 +18,7 @@
       </template>
     </c-menu>
 
-    <c-menu placement="br">
+    <c-menu placement="bottom-end">
       <c-button>Bottom Right</c-button>
       <template #content>
         <c-menu-option>Option 1</c-menu-option>
@@ -27,7 +27,7 @@
       </template>
     </c-menu>
 
-    <c-menu placement="tl">
+    <c-menu placement="top-start">
       <c-button>Top Left</c-button>
       <template #content>
         <c-menu-option>Option 1</c-menu-option>
@@ -45,7 +45,7 @@
       </template>
     </c-menu>
 
-    <c-menu placement="tr">
+    <c-menu placement="top-end">
       <c-button>Top Right</c-button>
       <template #content>
         <c-menu-option>Option 1</c-menu-option>

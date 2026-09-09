@@ -85,4 +85,4 @@ export const configProviderProps = {
     },
 } 
 
-export type ConfigProviderProps = Partial<ExtractPropTypes<typeof configProviderProps>>
+export type ConfigProviderProps = import("vue").ExtractPublicPropTypes<typeof configProviderProps>

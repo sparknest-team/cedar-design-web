@@ -1,15 +1,9 @@
 <template>
-  <Sapce size="lg">
-    <c-switch>
-      <template #checked> ON </template>
-      <template #unchecked> OFF </template>
-    </c-switch>
-    <c-switch variant="round">
-      <template #checked> ON </template>
-      <template #unchecked> OFF </template>
-    </c-switch>
-  </Sapce>
+  <c-space wrap
+    ><c-switch checked-text="ON" unchecked-text="OFF" aria-label="Text props" /><c-switch
+      variant="round"
+      aria-label="Text slots"
+      ><template #checked>ON</template><template #unchecked>OFF</template></c-switch
+    ></c-space
+  >
 </template>
-
-<script lang="ts">
-</script>

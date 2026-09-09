@@ -1,5 +1,5 @@
-import "../../style/index.less";
-import "../../loading/style";
-import "../../empty/style";
-import "../../scrollbar/style";
-import "./index.less";
+import '../../style/index.less'
+import '../../loading/style'
+import '../../empty/style'
+import '../../scrollbar/style'
+import './index.less'

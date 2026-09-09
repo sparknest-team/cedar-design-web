@@ -1,46 +1,21 @@
-import { InjectionKey, VNodeTypes } from 'vue'
-import { InternalNavMenuProps, NavMenuData } from './types'
-
-export const NavMenuInjectionKey: InjectionKey<NavMenuContext> = Symbol('NavMenuInjectionKey')
-
-export type NavMenuContext = Readonly<
-  Pick<
-    InternalNavMenuProps,
-    | 'mode'
-    | 'theme'
-    | 'levelIndent'
-    | 'autoScrollIntoView'
-    | 'scrollConfig'
-    | 'inTrigger'
-    | 'triggerProps'
-    | 'tooltipProps'
-    | 'popupMaxHeight'
-  > & {
-    selectedKeys: string[]
-    openKeys: string[]
-    prefixCls: string
-    collapsed: boolean
-    expandIconDown?: () => VNodeTypes
-    expandIconRight?: () => VNodeTypes
-    onSubMenuClick?: (key: string, level: number) => void
-    onMenuItemClick?: (key: string) => void
-  }
->
-
-export const LevelInjectionKey: InjectionKey<LevelContext> = Symbol('LevelInjectionKey')
-
-export type LevelContext = Readonly<{
-  level: number
-}>
-
-export type NavMenuMapType = Map<string, string[]>
-
-export const DataCollectorInjectionKey: InjectionKey<DataCollectorContext> = Symbol('DataCollectorInjectionKey')
-
-export type DataCollectorContext = Readonly<{
-  collectSubMenu: (key: string, children: NavMenuData, isReport?: boolean) => void
-  removeSubMenu: (key: string) => void
-  collectMenuItem: (key: string) => void
-  removeMenuItem: (keys: string) => void
-  reportMenuData: (data: NavMenuData) => void
-}>
+import type { ComputedRef, InjectionKey, Ref, Slots } from 'vue'
+import type { NavMenuKey, NavMenuNode, NavMenuProps, NavMenuRenderContext } from './types'
+export interface NavMenuContext {
+  props: NavMenuProps
+  selected: ComputedRef<NavMenuKey | null>
+  expanded: ComputedRef<NavMenuKey[]>
+  collapsed: ComputedRef<boolean>
+  theme: ComputedRef<string>
+  activePath: ComputedRef<Set<NavMenuKey>>
+  focusKey: Ref<NavMenuKey | undefined>
+  slots: Slots
+  context(node: NavMenuNode): NavMenuRenderContext
+  select(node: NavMenuNode, event: Event): void
+  expand(node: NavMenuNode, open: boolean): void
+  register(node: NavMenuNode, element: HTMLElement | null): void
+  focus(key: NavMenuKey): void
+  registerItem(id: symbol, close: () => void): () => void
+  activateItem(id?: symbol): void
+  labelField: ComputedRef<string>
+}
+export const navMenuKey: InjectionKey<NavMenuContext> = Symbol('NavMenu')

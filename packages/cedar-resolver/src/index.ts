@@ -1,4 +1,9 @@
 import { kebabCase } from "@cedarjs/shared";
+import componentNames from "./component-names.json";
+
+// Public _XxxComponent aliases only. Keep this shipped registry independent of
+// the UI runtime; the resolver tests check it against the UI's root exports.
+const cedarComponents = new Set<string>(componentNames);
 
 export interface CedarResolverOptions {
   /** Automatically import component styles. @default true */
@@ -13,6 +18,7 @@ const cedarFunctions = [
   "Dialog",
   "Drawer",
   "ImagePreviewFn",
+  "imagePreview",
   "Message",
   "Notification",
   "StyleProvider",
@@ -25,11 +31,12 @@ const cedarDirectives: Record<string, string> = {
 
 /** Component name → style directory under `@cedarjs/ui` (when not kebabCase(name)). */
 const styleDirAliases: Record<string, string> = {
+  NavMenuItem: "nav-menu",
   AnchorLink: "anchor",
   ButtonGroup: "button",
   CollapseItem: "collapse",
-  Row: "grid",
-  Col: "grid",
+  Row: "row",
+  Col: "col",
   GridItem: "grid",
   AvatarGroup: "avatar",
   BreadcrumbItem: "breadcrumb",
@@ -44,9 +51,6 @@ const styleDirAliases: Record<string, string> = {
   TabItem: "tabs",
   TabsNavs: "tabs",
   TabsItems: "tabs",
-  NavMenuItem: "nav-menu",
-  NavMenuItemGroup: "nav-menu",
-  NavMenuSubMenu: "nav-menu",
   MapSelect: "map",
   HoverOverlay: "hover",
   Date: "date/picker",
@@ -61,6 +65,7 @@ const styleDirAliases: Record<string, string> = {
   ImagePreview: "image",
   ImagePreviewAction: "image",
   ImagePreviewFn: "image",
+  imagePreview: "image",
   previewImage: "image",
   ImagePreviewGroup: "image",
   InputGroup: "input",
@@ -93,7 +98,6 @@ const styleDirAliases: Record<string, string> = {
 const noStyleComponents = new Set([
   "Color",
   "Context",
-  "SplitButton",
   "StyleProvider",
 ]);
 
@@ -110,6 +114,9 @@ export function resolveCedarComponent(
   options: CedarResolverOptions = {},
   programmatic = false,
 ) {
+  if (programmatic ? !cedarFunctions.includes(name) : !cedarComponents.has(name)) {
+    return undefined;
+  }
   return {
     from: "@cedarjs/ui",
     name: programmatic ? name : `_${name}Component`,
@@ -161,4 +168,43 @@ export function CedarResolver(options: CedarResolverOptions = {}) {
       },
     },
   ];
+}
+
+
+/**
+ * Add styles for explicit named imports after Vue/TypeScript compilation.
+ * Component/auto-import resolvers alone only handle imports they generate.
+ */
+export function CedarStyleImports(options: Pick<CedarResolverOptions, 'importStyle'> = {}) {
+  return {
+    name: 'cedar:explicit-import-styles',
+    enforce: 'post' as const,
+    transform(this: { parse: (code: string) => unknown }, code: string, id: string) {
+      if (options.importStyle === false ||
+        !/\.(?:[cm]?[jt]sx?|vue|md)(?:\?|$)/.test(id) ||
+        /[?&](?:type=style|raw(?:&|$)|url(?:&|$))/.test(id) ||
+        !code.includes('@cedarjs/ui')) return
+      const ast = this.parse(code) as {
+        body: Array<{ type: string; source?: { value: string }; specifiers?: Array<{
+          type: string; imported?: { name?: string; value?: string }
+        }> }>
+      }
+      const existing = new Set(ast.body.filter(node => node.type === 'ImportDeclaration').map(node => node.source?.value))
+      const styles = new Set<string>()
+      for (const node of ast.body) {
+        if (node.type !== 'ImportDeclaration' || node.source?.value !== '@cedarjs/ui') continue
+        for (const specifier of node.specifiers ?? []) {
+          if (specifier.type !== 'ImportSpecifier') continue
+          const imported = specifier.imported?.name ?? specifier.imported?.value ?? ''
+          const name = imported.replace(/^_(.+)Component$/, '$1')
+          if (!cedarComponents.has(name) && !cedarFunctions.includes(name)) continue
+          for (const style of getStyleSideEffects(name, true) ?? []) {
+            if (!existing.has(style)) styles.add(style)
+          }
+        }
+      }
+      if (!styles.size) return
+      return { code: code + '\n' + [...styles].map(style => 'import ' + JSON.stringify(style) + ';').join('\n'), map: null }
+    },
+  }
 }

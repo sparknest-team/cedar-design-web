@@ -25,7 +25,7 @@ export const sliderProps = {
     type: Number,
     default: 100,
   },
-  direction: {
+  orientation: {
     type: String as PropType<Direction>,
     default: 'horizontal',
     validator: (value: Direction) => DIRECTIONS.includes(value),
@@ -41,4 +41,4 @@ export const sliderProps = {
   },
 } 
 
-export type SliderProps = Partial<ExtractPropTypes<typeof sliderProps>>
+export type SliderProps = import("vue").ExtractPublicPropTypes<typeof sliderProps>

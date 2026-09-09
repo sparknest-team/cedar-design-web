@@ -1,20 +1,23 @@
-import { computed, nextTick, ref, watch, type Ref, type WritableComputedRef } from 'vue'
+import { computed, nextTick, ref, watch, type Ref } from 'vue'
 import { call } from '@cedarjs/shared'
 
-export interface UseVModelOptions<P, K extends keyof P> {
+// Deferred inference also supports the TypeScript 5.3 package build.
+type ModelEvent<T> = [T][T extends any ? 0 : never]
+
+export interface UseVModelOptions<P, K extends keyof P, E extends string = `update:${K & (string | number)}`> {
   passive?: boolean
-  eventName?: string
+  eventName?: E
   defaultValue?: P[K]
-  emit?: (event: string, value: P[K]) => void
+  emit?: (event: ModelEvent<E>, value: P[K]) => void
 }
 
-export function useVModel<P extends Record<string, any>, K extends keyof P>(
+export function useVModel<P extends Record<string, any>, K extends keyof P, E extends string = `update:${K & (string | number)}`>(
   props: P,
   key: K,
-  options: UseVModelOptions<P, K> = {},
-): WritableComputedRef<P[K]> | Ref<P[K]> {
+  options: UseVModelOptions<P, K, E> = {},
+): Ref<P[K]> {
   const { passive = true, eventName, defaultValue, emit } = options
-  const event = eventName ?? `onUpdate:${key.toString()}`
+  const event = (eventName ?? `${emit ? 'update' : 'onUpdate'}:${key.toString()}`) as E
 
   const getValue = () => (props[key] ?? defaultValue)!
 
@@ -26,10 +29,12 @@ export function useVModel<P extends Record<string, any>, K extends keyof P>(
       set(value) {
         emit ? emit(event, value) : call(props[event], value)
       },
-    })
+    }) as Ref<P[K]>
   }
 
-  const proxy = ref<P[K]>(getValue())
+  // Vue's ref() unwraps generic values, which makes assignments to P[K]
+  // incorrectly resolve to the internal UnwrapRefSimple generic `S`.
+  const proxy = ref(getValue()) as Ref<P[K]>
   let shouldEmit = true
 
   watch(

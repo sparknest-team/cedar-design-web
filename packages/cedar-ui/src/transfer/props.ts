@@ -21,7 +21,7 @@ export const transferProps = {
     /**
      * @zh 目标选择框中的值
      * @en Value in the target selection box
-     * @vModel
+     * @v-model
      */
     modelValue: {
       type: Array as PropType<TransferTargetItem[]>,

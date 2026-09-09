@@ -12,10 +12,11 @@ import scrollIntoView, { Options as ScrollIntoViewOptions } from 'scroll-into-vi
 import { FormItemInfo, formInjectionKey, FormContext } from './context'
 import { getPrefixCls } from '../_utils/global-config'
 import { ComponentSize } from '../_utils/constant'
-import { isArray, isFunction, isBoolean } from '../_utils/is'
+import { isArray, isFunction } from '../_utils/is'
 import { FieldData, FieldRule, ValidatedError } from './types'
 import { useSize } from '../_hooks/use-size'
 import { getFormElementId } from './utils'
+import { toPxNum } from '../_utils/maple/elements'
 
 const FORM_LAYOUTS = ['horizontal', 'vertical', 'inline'] as const
 type FormLayout = (typeof FORM_LAYOUTS)[number]
@@ -45,14 +46,14 @@ export default defineComponent({
      * @param {Record<string, any>} values
      * @param {Event} ev
      */
-    submitSuccess: (values: Record<string, any>, ev: Event) => true,
+    "submit-success": (values: Record<string, any>, ev: Event) => true,
     /**
      * @zh 验证失败时触发
      * @en Triggered when verification failed
      * @param {{values: Record<string, any>; errors: Record<string, ValidatedError>}} data
      * @param {Event} ev
      */
-    submitFailed: (
+    "submit-failed": (
       data: {
         values: Record<string, any>
         errors: Record<string, ValidatedError>
@@ -138,7 +139,8 @@ export default defineComponent({
 
     const scrollToField = (field: string, options?: ScrollIntoViewOptions) => {
       const node = formRef.value || document.body
-      const fieldNode = node.querySelector(`#${getFormElementId(props.id, field as string)}`)
+      const fieldNode = Array.from(node.querySelectorAll('[id]'))
+        .find((element) => element.id === getFormElementId(props.id, field))
 
       if (fieldNode) {
         scrollIntoView(fieldNode as HTMLDivElement, {
@@ -150,9 +152,23 @@ export default defineComponent({
       }
     }
 
-    const scrollToFirstError = (field: string) => {
-      const options = !isBoolean(props.scrollToFirstError) ? props.scrollToFirstError : undefined
-      scrollToField(field, options)
+    const scrollToError = (errors: Record<string, ValidatedError>) => {
+      if (!props.scrollToError || !formRef.value) return
+      // Use rendered order, not object-key/registration order (numeric fields can reorder).
+      const fieldById = new Map(Object.keys(errors).map((field) => [getFormElementId(props.id, field), field]))
+      const nodes = Array.from(formRef.value.querySelectorAll('[id]'))
+        .filter((element) => fieldById.has(element.id))
+      const node = props.scrollToError === 'end' ? nodes[nodes.length - 1] : nodes[0]
+      if (node) {
+        const parsedOffset = toPxNum(props.scrollToErrorOffsetY)
+        const offset = Number.isFinite(parsedOffset) ? parsedOffset : 0
+        scrollToField(fieldById.get(node.id)!, offset ? {
+          block: 'start',
+          behavior: (actions) => {
+            actions.forEach(({ el, top, left }) => el.scrollTo({ top: top - offset, left, behavior: 'smooth' }))
+          },
+        } : undefined)
+      }
     }
 
     const validate = (
@@ -174,8 +190,8 @@ export default defineComponent({
           }
         })
 
-        if (hasError && props.scrollToFirstError) {
-          scrollToFirstError(Object.keys(errors)[0])
+        if (hasError) {
+          scrollToError(errors)
         }
 
         if (isFunction(callback)) {
@@ -208,8 +224,8 @@ export default defineComponent({
           }
         })
 
-        if (hasError && props.scrollToFirstError) {
-          scrollToFirstError(Object.keys(errors)[0])
+        if (hasError) {
+          scrollToError(errors)
         }
 
         if (isFunction(callback)) {
@@ -236,10 +252,10 @@ export default defineComponent({
           }
         })
         if (hasError) {
-          props.scrollToFirstError && scrollToFirstError(Object.keys(errors)[0])
-          emit('submitFailed', { values: model.value ?? {}, errors }, e)
+          scrollToError(errors)
+          emit('submit-failed', { values: model.value ?? {}, errors }, e)
         } else {
-          emit('submitSuccess', model.value ?? {}, e)
+          emit('submit-success', model.value ?? {}, e)
         }
         emit('submit', { values: model.value ?? {}, errors: hasError ? errors : undefined }, e)
       })

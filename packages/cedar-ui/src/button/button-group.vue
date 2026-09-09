@@ -3,7 +3,8 @@
     :class="
       classes(
         n(),
-        [variant, `${n(`--variant-${variant}`)}`],
+        n('$--box'),
+        n(`--variant-${variant}`),
         [vertical, n('--vertical'), n('--horizontal')],
         [variant === 'default', formatElevation(elevation, 2)],
       )
@@ -14,35 +15,36 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue";
-import { createNamespace, formatElevation } from "../_utils/global-config";
-import { buttonGroupProps } from "./props";
-import { useButtons, type ButtonGroupProvider } from "./provide";
+import { computed } from 'vue'
+import { createNamespace, formatElevation } from '../_utils/global-config'
+import { buttonGroupProps } from './group-props'
+import { useButtons, type ButtonGroupProvider } from './group-provide'
 
 defineOptions({
-  name: createNamespace("button-group").name,
-});
+  name: createNamespace('button-group').name,
+})
 
-const { n, classes } = createNamespace("button-group");
+const { n, classes } = createNamespace('button-group')
 
-const props = defineProps(buttonGroupProps);
+const props = defineProps(buttonGroupProps)
 
-const { bindButtons } = useButtons();
+const { bindButtons } = useButtons()
 
 const buttonGroupProvider: ButtonGroupProvider = {
+  elevation: computed(() => props.elevation as boolean | number | string),
   status: computed(() => props.status),
-  variant: computed(() => props.variant),
   size: computed(() => props.size),
+  variant: computed(() => props.variant),
   color: computed(() => props.color),
   textColor: computed(() => props.textColor),
-  stacked: computed(() => props.stacked),
   disabled: computed(() => props.disabled),
+  stacked: computed(() => props.stacked),
   vertical: computed(() => props.vertical),
-};
+}
 
-bindButtons(buttonGroupProvider);
+bindButtons(buttonGroupProvider)
 
 defineExpose({
   buttonGroupProvider,
-});
+})
 </script>

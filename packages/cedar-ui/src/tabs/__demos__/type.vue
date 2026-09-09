@@ -23,7 +23,7 @@
   <c-tabs
     :variant="variant"
     :size="size"
-    :vertical="isVertical === 'vertical'"
+    :orientation="isVertical"
     :editable="true"
     @add="handleAdd"
     @delete="handleDelete"

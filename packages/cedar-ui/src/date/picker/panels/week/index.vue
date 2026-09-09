@@ -5,7 +5,7 @@
     :day-start-of-week="dayStartOfWeek"
     :is-same-time="isSameTime"
     @select="onSelect"
-    @cellMouseEnter="onCellMouseEnter"
+    @cell-mouse-enter="onCellMouseEnter"
   />
 </template>
 

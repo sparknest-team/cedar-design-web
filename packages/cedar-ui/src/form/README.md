@@ -102,7 +102,7 @@ permalink: /components/form/
 | rules                 | 表单项校验规则                                            | `Record<string, FieldRule \| FieldRule[]>` |          `-`          |
 | auto-label-width      | 是否开启自动标签宽度，仅在 `layout="horizontal"` 下生效。 | `boolean`                                  |        `false`        |
 | id                    | 表单控件`id`的前缀                                        | `string`                                   |          `-`          |
-| scroll-to-first-error | 验证失败后滚动到第一个错误字段                            | `boolean`                                  |        `false`        |
+| scroll-to-error | 验证失败后滚动到页面顺序的第一个（start）或最后一个（end）错误字段；不是视口对齐方式 | `'start' \| 'end'` | 不滚动 |
 
 ### `<Form>` Events
 

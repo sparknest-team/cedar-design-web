@@ -1,11 +1,19 @@
+import { afterEach as unmountAfterEach } from 'vitest'
+const mountedWrappers: any[] = []
+unmountAfterEach(() => { for (const wrapper of mountedWrappers.splice(0)) wrapper.unmount() })
+const mount = (...args: any[]) => {
+  const wrapper = mountComponent(args[0], args[1])
+  mountedWrappers.push(wrapper)
+  return wrapper
+}
 import { nextTick } from 'vue'
-import { mount } from '@vue/test-utils'
+import { mount as mountComponent } from '@vue/test-utils'
 import { describe, test, expect } from 'vitest'
 import { Drawer, drawerProps } from '../index'
 
 describe('Drawer', () => {
   test('render', async () => {
-    const wrapper = mount(Drawer, { props: { open: true, renderToBody: false, title: 'Settings' } })
+    const wrapper = mount(Drawer, { props: { open: true, popupContainer: false, title: 'Settings' } })
     await nextTick()
     const dialog = wrapper.get('[role="dialog"]')
     expect(Drawer.name).toBe('CDrawer')

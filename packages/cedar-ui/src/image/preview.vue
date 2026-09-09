@@ -12,7 +12,7 @@
     @opened="$emit('opened')"
     @close="$emit('close')"
     @closed="$emit('closed')"
-    @key-escape="$emit('keyEscape')"
+    @key-escape="$emit('key-escape')"
   >
     <div
       ref="refWrapper"
@@ -110,8 +110,7 @@ import { IconRotateLeft } from "@cedarjs/icons-vue/icon-rotate-left";
 import { IconRotateRight } from "@cedarjs/icons-vue/icon-rotate-right";
 import { IconZoomIn } from "@cedarjs/icons-vue/icon-zoom-in";
 import { IconZoomOut } from "@cedarjs/icons-vue/icon-zoom-out";
-import usePopupContainer from "../_hooks/use-popup-container";
-import { isServerRendering } from "../_utils/dom";
+import { usePopupContainer } from "../_utils/popup-container";
 import { createNamespace, getPrefixCls } from "../_utils/global-config";
 import Overlay from "../overlay";
 import type { ImagePreviewActionName } from "./api";
@@ -126,13 +125,13 @@ export default defineComponent({
   props: imagePreviewProps,
   emits: [
     "update:open",
-    "openChange",
+    "open-change",
     "open",
     "opened",
     "close",
     "closed",
-    "keyEscape",
-    "longPress",
+    "key-escape",
+    "long-press",
     "prev",
     "next",
   ],
@@ -154,25 +153,19 @@ export default defineComponent({
       overlayClosable: refs.overlayClosable,
       onOpenChange: (open) => {
         emit("update:open", open);
-        emit("openChange", open);
+        emit("open-change", open);
         props.onOpenChange?.(open);
       },
-      onLongPress: () => emit("longPress"),
+      onLongPress: () => emit("long-press"),
       onPrev: () => emit("prev"),
       onNext: () => emit("next"),
     });
     const prefixCls = getPrefixCls("image-preview");
     const refWrapper = ref<HTMLElement>();
     const refImage = ref<HTMLImageElement>();
-    const defaultContainer = isServerRendering ? undefined : document.body;
-    const popupTarget = computed(() =>
-      props.popupContainer === false ? undefined : props.popupContainer,
-    );
-    const container = usePopupContainer(defaultContainer, {
-      popupContainer: popupTarget,
-    } as any);
+    const popupTarget = usePopupContainer(() => props.popupContainer);
     const wrapperStyles = computed<CSSProperties>(() => ({
-      position: container.value === document.body ? "fixed" : "absolute",
+      position: props.popupContainer === false ? "absolute" : popupTarget.value === 'body' || (typeof document !== 'undefined' && popupTarget.value === document.body) ? "fixed" : "absolute",
     }));
     const { isLoading, setLoadStatus } = useImageLoadStatus();
 

@@ -85,8 +85,8 @@ function normalizeEllipsisConfig(config: EllipsisConfig): EllipsisInternalConfig
 }
 
 /**
- * @displayName Common
- * @noBrackets
+ * @display-name Common
+ * @no-brackets
  */
 
 const { name } = createNamespace('typography-base')
@@ -101,7 +101,7 @@ export default defineComponent({
      * @zh 开始编辑
      * @en Edit start
      */
-    editStart: () => true,
+    "edit-start": () => true,
     /**
      * @zh 编辑内容变化
      * @en Edit content change
@@ -113,7 +113,7 @@ export default defineComponent({
      * @zh 编辑结束
      * @en Edit end
      */
-    editEnd: () => true,
+    "edit-end": () => true,
     'update:editing': (editing: boolean) => true,
     /**
      * @zh 复制
@@ -188,7 +188,7 @@ export default defineComponent({
 
     function onEditStart() {
       emit('update:editing', true)
-      emit('editStart')
+      emit('edit-start')
       setEditing(true)
     }
 
@@ -200,7 +200,7 @@ export default defineComponent({
     function onEditEnd() {
       if (!editing.value) return
       emit('update:editing', false)
-      emit('editEnd')
+      emit('edit-end')
       setEditing(false)
     }
 

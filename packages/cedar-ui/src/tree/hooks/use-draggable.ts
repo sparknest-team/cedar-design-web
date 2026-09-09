@@ -30,26 +30,26 @@ export default function useDraggable(props: { key: TreeNodeKey; refTitle: HTMLEl
     isDragging,
     isAllowDrop,
     dropPosition,
-    setDragStatus(status: 'dragStart' | 'dragOver' | 'dragLeave' | 'dragEnd' | 'drop', e: DragEvent) {
+    setDragStatus(status: 'drag-start' | 'drag-over' | 'drag-leave' | 'drag-end' | 'drop', e: DragEvent) {
       switch (status) {
-        case 'dragStart':
+        case 'drag-start':
           isDragging.value = true
           dropPosition.value = 0
           treeContext.onDragStart && treeContext.onDragStart(key.value, e)
           break
-        case 'dragEnd':
+        case 'drag-end':
           isDragging.value = false
           isDragOver.value = false
           dropPosition.value = 0
           updateDropPosition.cancel()
           treeContext.onDragEnd && treeContext.onDragEnd(key.value, e)
           break
-        case 'dragOver':
+        case 'drag-over':
           isDragOver.value = true
           updateDropPosition(e)
           treeContext.onDragOver && treeContext.onDragOver(key.value, e)
           break
-        case 'dragLeave':
+        case 'drag-leave':
           isDragOver.value = false
           dropPosition.value = 0
           updateDropPosition.cancel()

@@ -107,6 +107,10 @@ const lang: CedarLang = {
     cancelButtonText: 'Cancel',
   },
   pagination: {
+    navigation: 'Pagination',
+    previous: 'Previous page',
+    next: 'Next page',
+
     goto: 'Goto',
     page: 'Page',
     countPerPage: ' / Page',

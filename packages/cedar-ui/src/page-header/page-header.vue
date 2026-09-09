@@ -1,56 +1,46 @@
 <template>
-  <div :class="`${prefixCls}-wrapper`">
-    <div v-if="$slots.header" :class="`${prefixCls}-header`">
+  <div :class="n('wrapper')" v-bind="$attrs">
+    <div v-if="$slots.header" :class="n('header')">
       <slot name="header" />
     </div>
 
-    <header v-if="showHeading()" :class="prefixCls">
-      <div :class="`${prefixCls}-main`">
-        <icon-hover v-if="showBack" :class="`${prefixCls}-back`" :prefix="prefixCls" @click="handleBack">
-          <slot name="back"><icon-left /></slot>
-        </icon-hover>
-        <div v-if="$slots.avatar" :class="`${prefixCls}-avatar`"><slot name="avatar" /></div>
-        <div v-if="$slots.title || title" :class="`${prefixCls}-title`">
+    <header v-if="showHeading()" :class="n()">
+      <div :class="n('main')">
+        <button v-if="showBack" type="button" :class="n('back')" aria-label="Back" @click="handleBack">
+          <slot name="back"><BackIcon /></slot>
+        </button>
+        <div v-if="$slots.avatar" :class="n('avatar')">
+          <slot name="avatar" />
+        </div>
+        <div v-if="$slots.title || title" :class="n('title')">
           <slot name="title">{{ title }}</slot>
         </div>
-        <div v-if="$slots.subtitle || subtitle" :class="`${prefixCls}-subtitle`">
+        <div v-if="$slots.subtitle || subtitle" :class="n('subtitle')">
           <slot name="subtitle">{{ subtitle }}</slot>
         </div>
       </div>
-      <div v-if="$slots.extra || extra" :class="`${prefixCls}-extra`">
+      <div v-if="$slots.extra || extra" :class="n('extra')">
         <slot name="extra">{{ extra }}</slot>
       </div>
     </header>
 
-    <div v-if="$slots.default" :class="`${prefixCls}-content`"><slot /></div>
-    <div v-if="$slots.footer" :class="`${prefixCls}-footer`"><slot name="footer" /></div>
+    <div v-if="$slots.default" :class="n('content')"><slot /></div>
+    <div v-if="$slots.footer" :class="n('footer')"><slot name="footer" /></div>
   </div>
 </template>
 
-<script lang="ts">
-import { createNamespace, getPrefixCls } from '../_utils/global-config'
-import { defineComponent } from 'vue'
-import IconHover from '../_components/icon-hover.vue'
-import { IconLeft } from '@cedarjs/icons-vue/icon-left'
+<script setup lang="ts">
+import { useSlots } from 'vue'
+import { BackIcon } from './platform'
+import { createNamespace } from '../_utils/global-config'
 import { pageHeaderProps } from './props'
-
-export default defineComponent({
-  name: createNamespace('page-header').name,
-  components: { IconHover, IconLeft },
-  props: pageHeaderProps,
-  emits: {
-    back: (_event: MouseEvent) => true,
-  },
-  setup(props, { emit, slots }) {
-    const prefixCls = getPrefixCls('page-header')
-    const showHeading = () =>
-      props.showBack ||
-      Boolean(
-        slots.avatar || slots.title || props.title || slots.subtitle || props.subtitle || slots.extra || props.extra,
-      )
-    const handleBack = (event: MouseEvent) => emit('back', event)
-
-    return { prefixCls, showHeading, handleBack }
-  },
-})
+defineOptions({ name: createNamespace('page-header').name, inheritAttrs: false })
+const { n } = createNamespace('page-header')
+const props = defineProps(pageHeaderProps)
+const slots = useSlots()
+const emit = defineEmits<{ back: [event: MouseEvent] }>()
+const showHeading = () => props.showBack || Boolean(
+  slots.avatar || slots.title || props.title || slots.subtitle || props.subtitle || slots.extra || props.extra,
+)
+const handleBack = (event: MouseEvent) => emit('back', event)
 </script>

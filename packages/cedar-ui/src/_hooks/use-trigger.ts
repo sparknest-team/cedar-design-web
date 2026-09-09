@@ -11,7 +11,7 @@ export const useTrigger = ({
   defaultOpen?: Ref<boolean>
   emit: EmitFn2<{
     'update:open': (visible: boolean) => true
-    openChange: (visible: boolean) => true
+    "open-change": (visible: boolean) => true
   }>
 }) => {
   const _open = ref(defaultOpen?.value ?? false)
@@ -21,7 +21,7 @@ export const useTrigger = ({
     if (visible !== computedOpen.value) {
       _open.value = visible
       emit('update:open', visible)
-      emit('openChange', visible)
+      emit('open-change', visible)
     }
   }
 

@@ -21,8 +21,8 @@
         :disabled-date="disabledDate"
         :is-same-time="isSameTime"
         :date-render="dateRender"
-        @cellClick="onCellClick"
-        @cellMouseEnter="onCellMouseEnter"
+        @cell-click="onCellClick"
+        @cell-mouse-enter="onCellMouseEnter"
       />
     </div>
   </div>

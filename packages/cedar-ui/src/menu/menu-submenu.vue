@@ -1,148 +1,62 @@
 <template>
-  <Trigger
-    :open="computedOpen"
-    :trigger="trigger"
-    :placement="placement"
-    :disabled="disabled"
-    :popup-offset="4"
-    @open-change="handleOpenChange"
-  >
-    <menu-option v-bind="optionProps" :active="computedOpen" uninject-context>
-      <slot />
-      <template v-if="$slots.icon" #icon>
-        <slot name="icon" />
-      </template>
-      <template #suffix>
-        <slot name="suffix">
-          <IconRight />
-        </slot>
-      </template>
-    </menu-option>
-    <template #content>
-      <menu-panel :class="`${prefixCls}-submenu`">
-        <slot name="content" />
-        <template v-if="$slots.footer" #footer>
-          <slot name="footer" />
-        </template>
-      </menu-panel>
+  <MenuView :options="viewOptions">
+    <template v-for="(_, slotName) in $slots" #[slotName]="slotProps">
+      <slot :name="slotName" v-bind="slotProps || {}" />
     </template>
-  </Trigger>
+  </MenuView>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import { computed, h, inject, nextTick, ref, watch } from 'vue'
 import { createNamespace } from '../_utils/global-config'
-import { defineComponent, PropType, toRefs } from 'vue'
-import Trigger from '../trigger'
+import MenuView from './render'
+import type { TriggerInstance } from '../trigger'
+import { menuSubmenuProps } from './submenu-props'
+import { Trigger, submenuTriggerAppearance } from './platform'
 import MenuPanel from './menu-panel.vue'
 import MenuOption from './menu-option.vue'
-import { IconRight } from '@cedarjs/icons-vue/icon-right'
-import { getPrefixCls } from '../_utils/global-config'
-import { useTrigger } from '../_hooks/use-trigger'
-
-export default defineComponent({
-  name: createNamespace("menu-submenu").name,
-  components: {
-    Trigger,
-    MenuPanel,
-    MenuOption,
-    IconRight,
-  },
-  props: {
-    /**
-     * @zh 是否禁用
-     * @en Whether to disable
-     */
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 触发方式
-     * @en Trigger method
-     * @values 'hover','click'
-     * @version 2.10.0
-     */
-    trigger: {
-      type: [String, Array] as PropType<'hover' | 'click' | ('hover' | 'click')[]>,
-      default: 'click',
-    },
-    /**
-     * @zh 弹出位置
-     * @en Popup placement
-     * @values 'rt','lt'
-     * @version 2.10.0
-     */
-    placement: {
-      type: String as PropType<'rt' | 'lt'>,
-      default: 'rt',
-    },
-    /**
-     * @zh 弹出框是否可见
-     * @en Whether the popup is visible
-     * @vModel
-     */
-    open: {
-      type: Boolean,
-      default: undefined,
-    },
-    /**
-     * @zh 弹出框默认是否可见（非受控模式）
-     * @en Whether the popup is visible by default (uncontrolled mode)
-     */
-    defaultOpen: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 自定义选项属性
-     * @en Custom option properties
-     * @version 2.29.0
-     */
-    optionProps: {
-      type: Object,
-    },
-  },
-  emits: {
-    'update:open': (visible: boolean) => true,
-    /**
-     * @zh 下拉框显示状态发生改变时触发
-     * @en Triggered when the display status of the drop-down box changes
-     * @property {boolean} visible
-     */
-    openChange: (visible: boolean) => true,
-  },
-  /**
-   * @zh 子菜单内容
-   * @en Submenu content
-   * @slot content
-   */
-  /**
-   * @zh 页脚
-   * @en Footer
-   * @slot footer
-   * @version 2.10.0
-   */
-  /**
-   * @zh 图标
-   * @en Icon
-   * @slot icon
-   * @version 2.29.0
-   */
-  setup(props, { emit }) {
-    const { defaultOpen, open } = toRefs(props)
-    const prefixCls = getPrefixCls('menu')
-
-    const { computedOpen, handleOpenChange } = useTrigger({
-      defaultOpen,
-      open,
-      emit,
-    })
-
-    return {
-      prefixCls,
-      computedOpen,
-      handleOpenChange,
-    }
-  },
+import MenuOptions from './options'
+import { useTriggerState } from '../trigger/state'
+import { useMenuKeyboard } from './keyboard'
+import { useMenuLevel } from './level'
+import { menuSelectionKey, createMenuTree } from './selection'
+defineOptions({ name: createNamespace('menu-submenu').name })
+const props = defineProps(menuSubmenuProps)
+const emit = defineEmits(['update:open', 'open-change', 'key-arrow-x', 'key-arrow-right-open', 'mouseenter'])
+const state = useTriggerState(props, emit)
+const computedOpen = state.visible
+const menu = ref<TriggerInstance>()
+const panel = ref<InstanceType<typeof MenuPanel>>()
+const selection = inject(menuSelectionKey, undefined)
+const disabled = computed(() => props.disabled || !!selection?.disabled.value)
+function close() { state.request(false) }
+function allowClose() { menu.value?.allowClose?.() }
+const branch = { close, allowClose, focus: () => menu.value?.focusReference?.() }
+const { activate } = useMenuLevel(computedOpen, branch)
+function open() { if (!disabled.value) { activate(); state.request(true) } }
+const keyboard = useMenuKeyboard({ reference: () => menu.value?.getReference?.(), panel: () => panel.value?.panel,
+  visible: () => computedOpen.value, disabled: () => disabled.value, isTopLayer: event => menu.value?.isTopLayer?.(event) ?? false,
+  restoreFocus: () => menu.value?.focusReference?.(), openKey: 'ArrowRight', open, close })
+watch(() => props.parentShow, value => { if (value === false) close() })
+async function handleArrow(key: 'ArrowLeft' | 'ArrowRight') {
+  emit('key-arrow-x', key)
+  if (key === 'ArrowRight') { emit('key-arrow-right-open'); open(); await nextTick(); if (computedOpen.value) keyboard.focus('ArrowDown') }
+}
+function handleMouseenter() { activate(); emit('mouseenter') }
+const viewOptions = computed(() => {
+  const names = createMenuTree([], props.fieldNames).names
+  const raw = props.option
+  const value = raw?.[names.value] !== undefined ? raw[names.value] : raw?.[names.label]
+  const highlight = selection?.ancestors(selection.tree.value.flat.find(node => selection.isSelected(node.value))?.value).includes(raw!) ?? false
+  return { kind: 'submenu', triggerComponent: Trigger, triggerRef: menu,
+    triggerProps: { ...submenuTriggerAppearance(), open: computedOpen.value, trigger: props.trigger, placement: props.placement, unmountOnClose: props.unmountOnClose, disabled: disabled.value, escToClose: false,
+      onOpenChange: (value: boolean) => { if (value) activate(); state.request(value) } },
+    reference: (slots: any) => h(MenuOption, { ...props.optionProps, ...(raw ? { label: raw[names.label], value, option: raw, ripple: raw.ripple } : {}),
+      active: computedOpen.value, highlight, childrenTrigger: true, uninjectContext: !raw && !props.selectable,
+      disabled: disabled.value, 'onKey-arrow-x': handleArrow, onMouseenter: handleMouseenter }, slots),
+    panelComponent: MenuPanel, panelProps: { ref: panel, submenu: true },
+    items: () => h(MenuOptions, { options: props.options, fieldNames: props.fieldNames }),
+  }
 })
+defineExpose({ open, close, allowClose, menu, panel, computedOpen })
 </script>

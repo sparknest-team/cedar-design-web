@@ -1,15 +1,28 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+const containerRef = ref<HTMLElement>()
+</script>
+
 <template>
-  <div ref="containerRef" style="height: 200px; overflow: auto">
-    <div style="height: 400px; background: #cccccc; overflow: hidden">
-      <c-affix :offsetTop="20" :target="containerRef" style="margin: 40px">
-        <c-button status="primary">Affix in scrolling container</c-button>
-      </c-affix>
+  <p>Scroll inside the bordered area.</p>
+  <div ref="containerRef" class="scroller">
+    <div class="scroll-content">
+      <div style="height: 40px"></div>
+      <c-affix :target="containerRef" :offset-top="20"
+        ><c-button status="primary">Scroll container</c-button></c-affix
+      >
     </div>
   </div>
 </template>
 
-<script lang="ts" setup>
-import { ref } from 'vue'
-
-const containerRef = ref()
-</script>
+<style scoped>
+.scroller {
+  height: 200px;
+  overflow: auto;
+  border: 1px solid currentColor;
+}
+.scroll-content {
+  min-height: 600px;
+  padding: 16px;
+}
+</style>

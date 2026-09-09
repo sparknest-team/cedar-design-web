@@ -1,3 +1,4 @@
+import { popupContainerProp } from '../../_utils/popup-container'
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { TriggerProps } from '../../trigger'
 import type { ComponentSize } from '../../_utils/constant'
@@ -76,7 +77,7 @@ export const timePickerProps = {
      * @zh 输入框尺寸
      * @en Input box size
      * @values 'xs','sm','md','lg','xl'
-     * @defaultValue 'md'
+     * @default-value 'md'
      * */
     size: {
       type: String as PropType<ComponentSize>,
@@ -85,8 +86,8 @@ export const timePickerProps = {
     /**
      * @zh 输入框变体
      * @en Input variant
-     * @values 'filled','outlined','standard'
-     * @defaultValue 'filled'
+     * @values 'filled','outline','standard'
+     * @default-value 'filled'
      */
     variant: {
       type: String as PropType<FormControlVariant>,
@@ -97,9 +98,7 @@ export const timePickerProps = {
      * @zh 弹出框的挂载容器
      * @en Mount container for pop-up box
      * */
-    popupContainer: {
-      type: [String, Object] as PropType<string | HTMLElement>,
-    },
+    popupContainer: popupContainerProp,
     /**
      * @zh 12 小时制
      * @en 12 hour clock
@@ -158,13 +157,13 @@ export const timePickerProps = {
      * @en Pop-up placement
      * */
     placement: {
-      type: String as PropType<'top' | 'tl' | 'tr' | 'bottom' | 'bl' | 'br'>,
-      default: 'bl',
+      type: String as PropType<'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end'>,
+      default: 'bottom-start',
     },
     /**
      * @zh 控制弹出框打开或者关闭
      * @en Control the pop-up box to open or close
-     * @vModel
+     * @v-model
      */
     open: {
       type: Boolean,
@@ -210,6 +209,7 @@ export const timePickerProps = {
 } 
 
 export const timeRangePickerProps = {
+    popupContainer: popupContainerProp,
     modelValue: {
       type: Array as PropType<Array<string | number | Date>>,
     },
@@ -261,7 +261,7 @@ export const timeRangePickerProps = {
     hideDisabledOptions: Boolean,
     disableConfirm: Boolean,
     placement: {
-      type: String as PropType<'top' | 'tl' | 'tr' | 'bottom' | 'bl' | 'br'>,
+      type: String as PropType<'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end'>,
     },
     triggerProps: {
       type: Object as PropType<Record<string, unknown>>,
@@ -274,6 +274,5 @@ export const timeRangePickerProps = {
     showNextDay: Boolean,
 } 
 
-export type TimePickerProps = Partial<ExtractPropTypes<typeof timePickerProps>>
-export type TimeRangePickerProps = Partial<ExtractPropTypes<typeof timeRangePickerProps>>
-
+export type TimePickerProps = import("vue").ExtractPublicPropTypes<typeof timePickerProps>
+export type TimeRangePickerProps = import("vue").ExtractPublicPropTypes<typeof timeRangePickerProps>

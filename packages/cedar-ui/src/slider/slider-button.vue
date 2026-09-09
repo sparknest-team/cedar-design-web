@@ -32,7 +32,7 @@ export default defineComponent({
   },
   inheritAttrs: false,
   props: {
-    direction: {
+    orientation: {
       type: String as PropType<(typeof DIRECTIONS)[number]>,
       default: 'horizontal',
     },
@@ -104,7 +104,7 @@ export default defineComponent({
     const cls = computed(() => [prefixCls])
 
     const mergedTooltipPosition = computed(() =>
-      (props.tooltipPlacement ?? props.direction === 'vertical') ? 'right' : 'top',
+      (props.tooltipPlacement ?? props.orientation === 'vertical') ? 'right' : 'top',
     )
 
     const tooltipContent = computed(() => props.formatTooltip?.(props.value) ?? `${props.value}`)

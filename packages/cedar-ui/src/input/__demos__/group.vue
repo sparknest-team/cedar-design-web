@@ -2,7 +2,7 @@
   <c-space direction="column">
     <c-radio-group v-model="variant">
       <c-radio value="filled">filled</c-radio>
-      <c-radio value="outlined">outlined</c-radio>
+      <c-radio value="outline">outline</c-radio>
       <c-radio value="standard">standard</c-radio>
     </c-radio-group>
     <c-input-group :variant="variant">

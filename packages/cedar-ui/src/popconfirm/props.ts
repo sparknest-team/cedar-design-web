@@ -1,3 +1,4 @@
+import { popupContainerProp } from '../_utils/popup-container'
 import type { CSSProperties, ExtractPropTypes, PropType } from 'vue'
 import type { ButtonProps } from '../button'
 import type { MessageType, TriggerPosition } from '../_utils/constant'
@@ -21,9 +22,9 @@ export const popconfirmProps = {
   contentStyle: Object as PropType<CSSProperties>,
   arrowClass: [String, Array, Object] as PropType<ClassName>,
   arrowStyle: Object as PropType<CSSProperties>,
-  popupContainer: [String, Object] as PropType<string | HTMLElement>,
+  popupContainer: popupContainerProp,
   beforeConfirm: Function as PropType<PopconfirmBeforeConfirm>,
   beforeCancel: Function as PropType<() => boolean>,
 } 
 
-export type PopconfirmProps = Partial<ExtractPropTypes<typeof popconfirmProps>>
+export type PopconfirmProps = import("vue").ExtractPublicPropTypes<typeof popconfirmProps>

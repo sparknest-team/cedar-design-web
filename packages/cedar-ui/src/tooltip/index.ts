@@ -17,3 +17,4 @@ export { Tooltip, tooltipProps, vTooltip }
 export const _TooltipComponent = Tooltip
 
 export default Tooltip
+export type { TooltipStatus } from './props'

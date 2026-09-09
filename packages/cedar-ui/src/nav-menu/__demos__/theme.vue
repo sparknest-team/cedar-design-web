@@ -1,30 +1,10 @@
 <template>
-  <div class="menu-demo">
-    <c-nav-menu mode="horizontal" theme="dark" :default-selected-keys="['1']">
-      <c-nav-menu-item key="0" :style="{ padding: 0, marginRight: '38px' }" disabled>
-        <div
-          :style="{
-            width: '80px',
-            height: '30px',
-            background: 'var(--color-fill-3)',
-            cursor: 'text',
-          }"
-        />
-      </c-nav-menu-item>
-      <c-nav-menu-item key="1">Home</c-nav-menu-item>
-      <c-nav-menu-item key="2">Solution</c-nav-menu-item>
-      <c-nav-menu-item key="3">Cloud Service</c-nav-menu-item>
-      <c-nav-menu-item key="4">Cooperation</c-nav-menu-item>
-    </c-nav-menu>
-  </div>
+  <p>浅色主题（light）</p>
+  <c-nav-menu :options="options" theme="light" mode="horizontal" />
+  <p>深色主题（dark）</p>
+  <c-nav-menu :options="options" theme="dark" mode="horizontal" />
 </template>
-<script lang="ts">
+<script setup lang="ts">
+import { options } from './data'
+
 </script>
-<style scoped>
-.menu-demo {
-  box-sizing: border-box;
-  width: 100%;
-  padding: 40px;
-  background-color: var(--color-neutral-2);
-}
-</style>

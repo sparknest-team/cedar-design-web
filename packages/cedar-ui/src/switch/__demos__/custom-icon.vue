@@ -1,31 +1,11 @@
-<template>
-  <c-space size="lg">
-    <c-switch>
-      <template #checked-icon>
-        <c-icon-check />
-      </template>
-      <template #unchecked-icon>
-        <c-icon-close />
-      </template>
-    </c-switch>
-    <c-switch variant="round">
-      <template #checked-icon>
-        <c-icon-check />
-      </template>
-      <template #unchecked-icon>
-        <c-icon-close />
-      </template>
-    </c-switch>
-    <c-switch variant="line">
-      <template #checked-icon>
-        <c-icon-check />
-      </template>
-      <template #unchecked-icon>
-        <c-icon-close />
-      </template>
-    </c-switch>
-  </c-space>
-</template>
-
-<script lang="ts">
+<script setup lang="ts">
+const variants = ['circle', 'round', 'line', 'md3'] as const
 </script>
+
+<template>
+  <c-space wrap
+    ><c-switch v-for="variant in variants" :key="variant" :variant="variant" :aria-label="variant"
+      ><template #checked-icon>✓</template><template #unchecked-icon>×</template></c-switch
+    ></c-space
+  >
+</template>

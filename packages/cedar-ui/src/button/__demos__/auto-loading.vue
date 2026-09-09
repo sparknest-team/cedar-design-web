@@ -1,21 +1,19 @@
-<template>
-  <c-space wrap>
-    <!-- 无需导入、注册组件 -->
-    <c-button status="primary" autoLoading @click="handleClick">自动加载</c-button>
-    <c-button status="primary" autoLoading loadingType="fill" @click="handleClick">自动加载 Fill</c-button>
-    <c-button status="primary" autoLoading loadingType="line" @click="handleClick">自动加载 Line</c-button>
-  </c-space>
-</template>
-
 <script setup lang="ts">
-const handleClick = async () => {
-  await new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(true)
-    }, 3000)
-  })
-}
-
-const handleClick2 = async () => {
+import { ref } from 'vue'
+const message = ref('Ready')
+function sync() { message.value = 'Synchronous: no loading' }
+async function run(fail = false) {
+  message.value = 'Pending: duplicate clicks are blocked'
+  await new Promise(resolve => setTimeout(resolve, 800))
+  message.value = fail ? 'Rejected: loading released' : 'Resolved: loading released'
+  if (fail) throw new Error('Demo rejection')
 }
 </script>
+<template>
+  <div style="display: flex; flex-wrap: wrap; gap: 12px">
+    <c-button auto-loading @click="sync">Sync</c-button>
+    <c-button auto-loading @click="() => run()">Resolve</c-button>
+    <c-button auto-loading @click="() => run(true)">Reject</c-button>
+  </div>
+  <p aria-live="polite">{{ message }}</p>
+</template>

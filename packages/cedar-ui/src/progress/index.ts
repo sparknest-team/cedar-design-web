@@ -12,3 +12,4 @@ export { Progress }
 export const _ProgressComponent = Progress
 
 export default Progress
+export type { ProgressSize } from './size'

@@ -1,4 +1,4 @@
-import type { ExtractPropTypes, PropType } from 'vue'
+import type { PropType } from 'vue'
 import type { BreadcrumbRoute } from './types'
 import type { MenuProps } from '../menu'
 
@@ -26,7 +26,7 @@ export const breadcrumbProps = {
   },
 }
 
-export type BreadcrumbProps = ExtractPropTypes<typeof breadcrumbProps>
+export type BreadcrumbProps = import("vue").ExtractPublicPropTypes<typeof breadcrumbProps>
 
 
 export const breadcrumbItemProps = {
@@ -56,4 +56,7 @@ export const breadcrumbItemProps = {
   href: String,
 }
 
-export type BreadcrumbItemProps = ExtractPropTypes<typeof breadcrumbItemProps>
+export type BreadcrumbItemProps = import("vue").ExtractPublicPropTypes<typeof breadcrumbItemProps>
+
+export { breadcrumbProps as props }
+export type { BreadcrumbRoute, BreadcrumbMoreIconSlotData } from './types'

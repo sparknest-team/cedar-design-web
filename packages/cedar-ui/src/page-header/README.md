@@ -67,3 +67,9 @@ permalink: /components/page-header/
 ```ts
 import type { PageHeaderProps } from '@cedarjs/ui'
 ```
+
+## 同源实现与平台边界
+
+两端各自保存完整源码，不引用公共核心，不共享组件实例或响应式状态；修改时同步维护两份实现。主体、Props、关键样式及配对测试纳入只读源码一致性检查，主题 token 和安装入口各自维护。
+
+返回按钮统一使用原生 button，支持键盘触发并派发 back(MouseEvent)。Cedar 内部类名由 c-page-header-xxx 调整为 c-page-header__xxx；图标资源仍由本库提供。

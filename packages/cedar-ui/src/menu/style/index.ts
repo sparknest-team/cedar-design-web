@@ -1,4 +1,6 @@
+import '../../style/index.less'
 import '../../trigger/style'
 import '../../scrollbar/style'
 import '../../empty/style'
+import '../../checkbox/style'
 import './index.less'

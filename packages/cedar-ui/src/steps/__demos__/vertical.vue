@@ -5,7 +5,7 @@
     </c-radio-group>
     <div class="frame-body">
       <div class="frame-aside">
-        <c-steps :current="current" :status="currentStatus" direction="vertical">
+        <c-steps :current="current" :status="currentStatus" orientation="vertical">
           <c-step>Succeeded</c-step>
           <c-step>Processing</c-step>
           <c-step>Pending</c-step>

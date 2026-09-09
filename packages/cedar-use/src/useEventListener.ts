@@ -2,7 +2,7 @@ import { isRef, onBeforeUnmount, onDeactivated, unref, watch, type Ref, type Wat
 import { inBrowser, isFunction } from '@cedarjs/shared'
 import { onSmartMounted } from './onSmartMounted.js'
 
-export type UseEventListenerTarget = EventTarget | Ref<EventTarget | undefined | null> | (() => EventTarget)
+export type UseEventListenerTarget = EventTarget | Ref<EventTarget | undefined | null> | (() => EventTarget | undefined | null)
 
 export interface UseEventListenerOptions {
   capture?: boolean
@@ -28,80 +28,45 @@ export function useEventListener(
   type: string,
   listener: EventListener,
   options: UseEventListenerOptions = {},
-) {
-  if (!inBrowser()) {
-    return
-  }
+): () => void {
+  if (!inBrowser()) return () => {}
 
   const { passive = false, capture = false } = options
-  let listening = false
+  let boundTarget: EventTarget | undefined
+  let active = false
   let cleaned = false
+  let stop: WatchStopHandle | undefined
+  const resolveTarget = () => (isFunction(target) ? target() : unref(target)) ?? undefined
 
-  const getElement = (target: UseEventListenerTarget | null | undefined) =>
-    isFunction(target) ? target() : unref(target)
-
-  const add = (target?: UseEventListenerTarget | null) => {
-    if (listening || cleaned) {
-      return
-    }
-
-    const element = getElement(target)
-
-    if (element) {
-      element.addEventListener(type, listener, {
-        passive,
-        capture,
-      })
-
-      listening = true
-    }
+  const detach = () => {
+    boundTarget?.removeEventListener(type, listener, { capture })
+    boundTarget = undefined
   }
-
-  const remove = (target?: UseEventListenerTarget | null) => {
-    if (!listening || cleaned) {
-      return
-    }
-
-    const element = getElement(target)
-
-    if (element) {
-      element.removeEventListener(type, listener, {
-        capture,
-      })
-
-      listening = false
-    }
+  const bind = () => {
+    if (!active || cleaned) return
+    const next = resolveTarget()
+    if (next === boundTarget) return
+    detach()
+    next?.addEventListener(type, listener, { passive, capture })
+    boundTarget = next
   }
-
-  let watchStopHandle: WatchStopHandle
-
-  if (isRef(target)) {
-    watchStopHandle = watch(
-      () => target.value,
-      (newValue, oldValue) => {
-        remove(oldValue)
-        add(newValue)
-      },
-    )
-  }
-
   const cleanup = () => {
-    watchStopHandle?.()
-    remove(target)
+    if (cleaned) return
     cleaned = true
+    active = false
+    stop?.()
+    detach()
   }
 
+  if (isRef(target) || isFunction(target)) stop = watch(resolveTarget, bind)
   onSmartMounted(() => {
-    add(target)
+    active = true
+    bind()
   })
-
-  onBeforeUnmount(() => {
-    remove(target)
-  })
-
   onDeactivated(() => {
-    remove(target)
+    active = false
+    detach()
   })
-
+  onBeforeUnmount(cleanup)
   return cleanup
 }

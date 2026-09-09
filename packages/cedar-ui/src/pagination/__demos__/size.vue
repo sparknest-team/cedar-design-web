@@ -1,31 +1,16 @@
-<template>
-  <c-space direction="column" size="lg">
-    <c-radio-group type="button" v-model="size">
-      <c-radio value="xs">xs</c-radio>
-      <c-radio value="sm">sm</c-radio>
-      <c-radio value="md">md</c-radio>
-      <c-radio value="lg">lg</c-radio>
-      <c-radio value="xl">xl</c-radio>
-    </c-radio-group>
-    <c-pagination
-      :total="50"
-      :size="size"
-      show-total
-      show-jumper
-      show-page-size
-    />
-  </c-space>
-</template>
-<script lang="ts">
-import { ref } from "vue";
-
-export default {
-  setup() {
-    const size = ref("md");
-
-    return {
-      size,
-    };
-  },
-};
+<script setup lang="ts">
+import { ref } from 'vue'
+const size = ref<'xs' | 'sm' | 'md' | 'lg' | 'xl'>('md')
+const elevation = ref(false)
 </script>
+<template>
+  <div class="pagination-demo">
+    <c-radio-group v-model="size"><c-radio v-for="value in ['xs', 'sm', 'md', 'lg', 'xl']" :key="value" :value="value">{{ value }}</c-radio></c-radio-group>
+    <div class="pagination-demo-controls"><c-switch v-model="elevation" /> Elevation</div>
+    <c-pagination :size="size" :elevation="elevation" :total="50" show-page-size show-jumper />
+  </div>
+</template>
+<style scoped>
+.pagination-demo { display: grid; gap: 16px; min-width: 0; }
+.pagination-demo-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+</style>

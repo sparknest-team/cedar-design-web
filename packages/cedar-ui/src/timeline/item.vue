@@ -33,9 +33,9 @@ import { TimelineContext, timelineInjectionKey } from './context'
 import { DotType, LineType, PositionType, ModeType } from './types'
 import { Direction } from '../_utils/constant'
 
-const getDefaultPosition = (index: number, mode: ModeType, direction: Direction, position?: string) => {
+const getDefaultPosition = (index: number, mode: ModeType, orientation: Direction, position?: string) => {
   let map = ['left', 'right']
-  if (direction === 'horizontal') {
+  if (orientation === 'horizontal') {
     map = ['top', 'bottom']
   }
   const res = mode === 'alternate' ? position || map[index % 2] : mode
@@ -112,7 +112,7 @@ export default defineComponent({
     const index = computed(() => context.items?.indexOf(instance?.uid ?? -1) ?? -1)
 
     const contextDirection = computed(() => {
-      return context?.direction ?? 'vertical'
+      return context?.orientation ?? 'vertical'
     })
 
     const contextLabelPosition = computed(() => {
@@ -121,12 +121,12 @@ export default defineComponent({
 
     const cls = computed(() => {
       const { items = [], reverse, labelPosition, mode = 'left' } = context
-      const direction = contextDirection.value
-      const computedPosition = getDefaultPosition(index.value, mode, direction, props.position)
+      const orientation = contextDirection.value
+      const computedPosition = getDefaultPosition(index.value, mode, orientation, props.position)
       return [
         prefixCls,
         {
-          [`${prefixCls}-${direction}-${computedPosition}`]: direction,
+          [`${prefixCls}-${orientation}-${computedPosition}`]: orientation,
           [`${prefixCls}-label-${labelPosition}`]: labelPosition,
           [`${prefixCls}-last`]: index.value === (reverse === true ? 0 : items.length - 1),
         },
@@ -138,9 +138,9 @@ export default defineComponent({
     })
 
     const computedDotLineStyle = computed(() => {
-      const { direction } = context! || {}
+      const { orientation } = context! || {}
       return {
-        [direction === 'horizontal' ? 'borderTopStyle' : 'borderLeftStyle']: props.lineType,
+        [orientation === 'horizontal' ? 'borderTopStyle' : 'borderLeftStyle']: props.lineType,
         ...(props.lineColor ? { borderColor: props.lineColor } : {}),
       }
     })

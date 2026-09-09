@@ -1,8 +1,3 @@
 <template>
-    <c-space direction="column" fill>
-      <c-button status="primary" block>主要按钮</c-button>
-      <c-button status="primary" block>主要按钮</c-button>
-      <c-button status="primary" block>主要按钮</c-button>
-    </c-space>
-  </template>
-  
+  <c-button block status="primary">Full width</c-button>
+</template>

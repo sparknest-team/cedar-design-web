@@ -1,5 +1,16 @@
-<template>
-  <c-pagination :total="50" show-total show-jumper show-page-size />
-</template>
-<script lang="ts">
+<script setup lang="ts">
+import { ref } from 'vue'
+const total = ref(true)
+const jumper = ref(true)
+const pageSize = ref(true)
 </script>
+<template>
+  <div class="pagination-demo">
+    <div class="pagination-demo-controls"><c-switch v-model="total" /> Total<c-switch v-model="jumper" /> Jumper<c-switch v-model="pageSize" /> Page size</div>
+    <c-pagination :total="125" :show-total="total" :show-jumper="jumper" :show-page-size="pageSize" />
+  </div>
+</template>
+<style scoped>
+.pagination-demo { display: grid; gap: 16px; min-width: 0; }
+.pagination-demo-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+</style>

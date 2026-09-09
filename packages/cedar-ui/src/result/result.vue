@@ -15,6 +15,8 @@
           <icon-check v-else-if="status === 'success'" />
           <icon-exclamation v-else-if="status === 'warning'" />
           <icon-close v-else-if="status === 'danger'" />
+          <result-question v-else-if="status === 'question'" />
+          <result-empty v-else-if="status === 'empty'" />
           <result-forbidden v-else-if="status === '403'" />
           <result-not-found v-else-if="status === '404'" />
           <result-server-error v-else-if="status === '500'" />
@@ -50,6 +52,8 @@ import { IconClose } from '@cedarjs/icons-vue/icon-close'
 import ResultForbidden from './403'
 import ResultNotFound from './404'
 import ResultServerError from './500'
+import ResultQuestion from './Question.vue'
+import ResultEmpty from './Empty.vue'
 import { resultProps } from './props'
 
 export default defineComponent({
@@ -62,6 +66,8 @@ export default defineComponent({
     ResultForbidden,
     ResultNotFound,
     ResultServerError,
+    ResultQuestion,
+    ResultEmpty,
   },
   props: resultProps,
   /**

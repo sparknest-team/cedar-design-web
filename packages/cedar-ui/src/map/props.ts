@@ -1,3 +1,4 @@
+import { popupContainerProp } from '../_utils/popup-container'
 import type { ExtractPropTypes, PropType } from 'vue'
 
 export type PoiKeys = 'longitude' | 'latitude' | 'address' | 'name' | 'adcode' | 'countryCode' | 'city' | 'country'
@@ -7,7 +8,7 @@ export const mapProps = {
   isInternational: Boolean,
   driver: Object,
   fetch: Object as PropType<{ get: any; post: any }>,
-  popupContainer: String,
+  popupContainer: popupContainerProp,
   showName: {
     type: Boolean,
     default: false,
@@ -26,7 +27,7 @@ export const mapProps = {
   },
   modelValue: {
     type: Object,
-    required: true,
+    required: true as const,
   },
   mapType: {
     type: String as PropType<'amaps' | 'google' | 'qqmaps'>,
@@ -66,7 +67,7 @@ export const mapProps = {
   },
 }
 
-export type MapProps = ExtractPropTypes<typeof mapProps>
+export type MapProps = import("vue").ExtractPublicPropTypes<typeof mapProps>
 
 export interface ModelValueType {
   adcode?: string

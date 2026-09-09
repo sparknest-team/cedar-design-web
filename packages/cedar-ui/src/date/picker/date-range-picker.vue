@@ -4,15 +4,15 @@
     trigger="click"
     animation-name="slide-dynamic-origin"
     auto-fit-transform-origin
-    :click-to-close="false"
+    :close-on-click-reference="false"
     :popup-offset="4"
     v-bind="triggerProps"
     :unmount-on-close="unmountOnClose"
     :placement="placement"
     :disabled="triggerDisabled || readonly"
     :open="panelVisible"
-    :popup-container="popupContainer"
-    @openChange="onPanelVisibleChange"
+    :popup-container="popupContainer !== undefined ? popupContainer : triggerProps?.popupContainer"
+    @open-change="onPanelVisibleChange"
   >
     <slot>
       <DateRangeInput
@@ -33,7 +33,7 @@
         :format="computedFormat"
         @clear="onInputClear"
         @change="onInputChange"
-        @pressEnter="onInputPressEnter"
+        @press-enter="onInputPressEnter"
       >
         <template v-if="$slots.prefix" #prefix>
           <slot name="prefix" />

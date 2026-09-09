@@ -450,26 +450,14 @@ exports[`TimePicker > render 1`] = `
     <!--v-if-->
   </div>
   <!--v-if-->
-  <div class=\\"c-timepicker-footer-btn-wrapper\\"><button class=\\"c-button c--box c-button--size-xs c-button--status-default c-button--variant-default c--inline-flex\\" type=\\"button\\">
-      <!-- 加载中 loading -->
+  <div class=\\"c-timepicker-footer-btn-wrapper\\"><button class=\\"c-button c-button--size-xs c-button--status-default c-button--variant-default c-elevation--2\\" type=\\"button\\">
       <!--v-if-->
-      <!-- icon图标 -->
+      <!--v-if--><span class=\\"c-button__content\\">此刻</span>
+      <div class=\\"c-hover-overlay\\"></div>
+    </button><button class=\\"c-button c-button--size-xs c-button--status-default c-button--variant-text c-button--disabled\\" type=\\"button\\" disabled=\\"\\">
       <!--v-if-->
-      <!-- 内容 --><span class=\\"c-button__content\\">此刻</span><!-- 底色 -->
-      <div class=\\"c-button--underlay\\"></div><!-- 上色 -->
-      <div class=\\"c-button--overlay\\"></div><!-- 边框 -->
-      <div class=\\"c-button__border\\"></div>
-      <div class=\\"c-button__border-state\\"></div>
-    </button><button type=\\"submit\\" class=\\"c-button c--box c-button--size-xs c-button--status-default c-button--variant-default c--inline-flex c-button--disabled\\" disabled=\\"\\">
-      <!-- 加载中 loading -->
-      <!--v-if-->
-      <!-- icon图标 -->
-      <!--v-if-->
-      <!-- 内容 --><span class=\\"c-button__content\\">确定</span><!-- 底色 -->
-      <div class=\\"c-button--underlay\\"></div><!-- 上色 -->
-      <div class=\\"c-button--overlay\\"></div><!-- 边框 -->
-      <div class=\\"c-button__border\\"></div>
-      <div class=\\"c-button__border-state\\"></div>
+      <!--v-if--><span class=\\"c-button__content\\">确定</span>
+      <div class=\\"c-hover-overlay\\"></div>
     </button></div>
 </div>"
 `;

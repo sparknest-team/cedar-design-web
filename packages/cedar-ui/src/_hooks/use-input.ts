@@ -1,3 +1,4 @@
+import { useInputComposition } from '../_utils/input-composition'
 import { computed, nextTick, Ref, ref, watch } from 'vue'
 import { Enter } from '../_utils/keycode'
 import { EmitFn } from '../_utils/types'
@@ -23,7 +24,8 @@ export const useInput = ({
   const _value = ref(defaultValue?.value ?? '')
   const _focused = ref(false)
 
-  const isComposition = ref(false)
+  const composition = useInputComposition()
+  const isComposition = composition.isComposing
   const compositionValue = ref('')
 
   let initialValue: string
@@ -39,7 +41,7 @@ export const useInput = ({
   const handleInput = (ev: Event) => {
     const { value } = ev.target as HTMLInputElement
 
-    if (!isComposition.value) {
+    if (composition.accepts(ev)) {
       updateValue(value, ev)
 
       nextTick(() => {
@@ -61,7 +63,7 @@ export const useInput = ({
     const { value } = ev.target as HTMLInputElement
 
     if (ev.type === 'compositionend') {
-      isComposition.value = false
+      if (!composition.end(ev)) return
       compositionValue.value = ''
       updateValue(value, ev)
 
@@ -71,7 +73,7 @@ export const useInput = ({
         }
       })
     } else {
-      isComposition.value = true
+      composition.start()
       compositionValue.value = computedValue.value + (ev.data ?? '')
     }
   }
@@ -93,7 +95,7 @@ export const useInput = ({
   const handleKeyDown = (ev: KeyboardEvent) => {
     const keyCode = ev.key || ev.code
     if (!isComposition.value && keyCode === Enter.key) {
-      emit('pressEnter', ev)
+      emit('press-enter', ev)
       handleChange(ev)
     }
   }

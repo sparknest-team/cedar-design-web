@@ -4,55 +4,74 @@ permalink: /components/grid/
 
 # Grid
 
-基于 CSS Grid 的布局组件，支持折叠，并且可以设置后缀节点（后缀节点会显示在一行的结尾）。
+CSS Grid 布局：列数、跨列、间距、折叠与后缀。24 栏 Flex 布局使用 Row / Col。
 
-> 24 栏 Flex 栅格见 [Row / Col](/components/row/)。
+> **布局怎么选**
+>
+> - Grid + GridItem：适合表单分栏、卡片网格，需要统一列宽、跨列、响应式列数或折叠行与后缀时使用。
+> - Row + Col：适合 24 栏 Flex 布局，需要水平/垂直对齐、控制换行、固定宽度与自适应宽度组合，或响应式排序时使用。Row 控制整行，Col 控制列宽、偏移和排序。
+> - Space：适合按钮、标签、文字等简单排列，只需要间距、方向和对齐时使用；更自由的宽度分配可使用原生 Flex。
 
-## Grid 布局
+## 案例
 
-基于 CSS 的 Grid 布局实现的布局组件，支持折叠，并且可以设置后缀节点，后缀节点会显示在一行的结尾。
+### 列数、跨列与偏移
 
-<demo src="./__demos__/grid.vue"></demo>
+<demo src="./__demos__/basic.vue"></demo>
 
-## 响应式的 Grid 布局
+### 折叠行数与后缀插槽
 
-Grid 组件的响应式配置格式为 `{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5, xxl: 6 }`。
+<demo src="./__demos__/collapse.vue"></demo>
 
-<demo src="./__demos__/grid-responsive.vue"></demo>
+### 响应式列数、间距与跨列
 
-## 组件配置
+<demo src="./__demos__/responsive.vue"></demo>
 
-### Grid Props
+### 动态插入、删除与排序
 
-| 参数名         | 描述             | 类型                        | 默认值  |
-| -------------- | ---------------- | --------------------------- | :-----: |
-| cols           | 每一行展示的列数 | `number \| ResponsiveValue` |  `24`   |
-| row-gap        | 行与行之间的间距 | `number \| ResponsiveValue` |   `0`   |
-| col-gap        | 列与列之间的间距 | `number \| ResponsiveValue` |   `0`   |
-| collapsed      | 是否折叠         | `boolean`                   | `false` |
-| collapsed-rows | 折叠时显示的行数 | `number`                    |   `1`   |
+<demo src="./__demos__/dynamic.vue"></demo>
 
-### GridItem Props
+<!-- same-source-api:start -->
+### Props
 
-| 参数名 | 描述           | 类型                        | 默认值  |
-| ------ | -------------- | --------------------------- | :-----: |
-| span   | 跨越的格数     | `number \| ResponsiveValue` |   `1`   |
-| offset | 左侧的间隔格数 | `number \| ResponsiveValue` |   `0`   |
-| suffix | 是否是后缀元素 | `boolean`                   | `false` |
+| 属性 | 说明 | Type | Default |
+| --- | --- | --- | --- |
+| cols | 每行列数，最少为 1 | `number / ResponsiveValue` | `24` |
+| row-gap | 行间距（px） | `number / ResponsiveValue` | `0` |
+| col-gap | 列间距（px） | `number / ResponsiveValue` | `0` |
+| collapsed | 折叠超出的行 | `boolean` | `false` |
+| collapsed-rows | 折叠时保留行数，最少为 1 | `number` | `1` |
 
-## 类型定义
+### Events
 
-### ResponsiveValue
+| Event | Description |
+| --- | --- |
 
-| 参数名 | 描述                 | 类型     | 默认值 |
-| ------ | -------------------- | -------- | :----: |
-| xxl    | >= 1600px 响应式配置 | `number` |  `-`   |
-| xl     | >= 1200px 响应式配置 | `number` |  `-`   |
-| lg     | >= 992px 响应式配置  | `number` |  `-`   |
-| md     | >= 768px 响应式配置  | `number` |  `-`   |
-| sm     | >= 576px 响应式配置  | `number` |  `-`   |
-| xs     | < 576px 响应式配置   | `number` |  `-`   |
+### Slots
 
-```ts
-import type { GridProps } from '@cedarjs/ui'
-```
+| Slot | Description |
+| --- | --- |
+| default | 布局内容 |
+
+### Methods
+
+| Method | Description |
+| --- | --- |
+<!-- same-source-api:end -->
+
+## 响应式与可访问性
+
+断点基于浏览器视口：xs 为基础值，sm ≥576、md ≥768、lg ≥992、xl ≥1200、xxl ≥1600px；从最大匹配断点向下取已配置值。SSR 首屏使用 xs，挂载后响应视口；Grid 折叠和动态排序在挂载后计算。组件为布局容器，不增加键盘快捷键；内容语义及可聚焦元素由调用者提供。没有公开方法和专用主题 Token。
+
+## GridItem
+
+| Prop | Description | Type | Default |
+| --- | --- | --- | --- |
+| span | 跨越格数 | number / ResponsiveValue | 1 |
+| offset | 左侧留空格数 | number / ResponsiveValue | 0 |
+| suffix | 行末后缀 | boolean | false |
+
+默认插槽参数 `{ overflow: boolean }` 表示折叠是否隐藏了内容；没有自定义事件或公开方法。
+
+## 导入
+
+Grid 仅包含 Grid.Item；Row、Col 是独立组件，拥有独立源码、样式、菜单、文档和 Demo。已移除 Grid.Row/Grid.Col、Grid 入口的 Row/Col 转导出以及 GridRowInstance/GridColInstance。请从库根入口或独立 row/col 入口导入；安装 Grid 不再自动注册 Row/Col。

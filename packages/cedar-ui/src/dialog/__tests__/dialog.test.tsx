@@ -1,6 +1,14 @@
+import { afterEach as unmountAfterEach } from 'vitest'
+const mountedWrappers: any[] = []
+unmountAfterEach(() => { for (const wrapper of mountedWrappers.splice(0)) wrapper.unmount() })
+const mount = (...args: any[]) => {
+  const wrapper = mountComponent(args[0], args[1])
+  mountedWrappers.push(wrapper)
+  return wrapper
+}
 import { createApp, createSSRApp, h, nextTick } from "vue";
 import { renderToString } from "@vue/server-renderer";
-import { mount } from "@vue/test-utils";
+import { mount as mountComponent } from "@vue/test-utils";
 import { afterEach, describe, expect, test, vi } from "vitest";
 import {
   Dialog,

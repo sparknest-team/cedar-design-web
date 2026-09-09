@@ -1,5 +1,6 @@
 <template>
   <ButtonGroup
+    :class="n()"
     :status="status"
     :size="size"
     :variant="variant"
@@ -8,29 +9,34 @@
     :disabled="disabled"
     :elevation="elevation"
   >
-    <Button v-bind="buttonProps" :auto-loading="autoLoading" @click="handleClick">
+    <Button v-bind="{ ...buttonProps, onClick: clickHandlers }" :auto-loading="autoLoading" :disabled="disabled || buttonProps?.disabled">
       <slot />
     </Button>
 
     <Menu
+      ref="menuRef"
       v-model:open="computedOpen"
       :disabled="disabled"
       :trigger="trigger"
       :placement="placement"
       :popup-container="popupContainer"
       :popup-max-height="popupMaxHeight"
+      :popup-class="popupClass"
+      :offset-x="offsetX"
+      :offset-y="offsetY"
       :hide-on-select="hideOnSelect"
       @select="handleSelect"
     >
       <Button
         v-bind="triggerButtonProps"
+        :disabled="disabled || triggerButtonProps?.disabled"
         icon-container
         :aria-expanded="computedOpen"
         aria-haspopup="menu"
       >
         <template #icon>
           <slot name="icon" :open="computedOpen">
-            <IconMore />
+            <IconMenuDown />
           </slot>
         </template>
       </Button>
@@ -44,9 +50,9 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import { IconMore } from '@cedarjs/icons-vue/icon-more'
-import Button, { ButtonGroup } from '../button'
-import Menu from '../menu'
+import { IconMenuDown } from '@cedarjs/icons-vue'
+import Button, { ButtonGroup, type ButtonHandler } from '../button'
+import Menu, { type MenuInstance } from '../menu'
 import { createNamespace } from '../_utils/global-config'
 import { splitButtonProps } from './props'
 
@@ -55,7 +61,11 @@ defineOptions({
 })
 
 const props = defineProps(splitButtonProps)
-const emit = defineEmits(['update:open', 'openChange', 'click', 'select'])
+const emit = defineEmits(['update:open', 'open-change', 'select'])
+
+const { n } = createNamespace('split-button')
+const menuRef = ref<MenuInstance>()
+const clickHandlers = computed(() => [props.buttonProps?.onClick, props.onClick].flat().filter((handler): handler is ButtonHandler => typeof handler === 'function'))
 
 const uncontrolledOpen = ref(props.defaultOpen)
 const computedOpen = computed({
@@ -63,14 +73,18 @@ const computedOpen = computed({
   set: (open: boolean) => {
     uncontrolledOpen.value = open
     emit('update:open', open)
-    emit('openChange', open)
+    emit('open-change', open)
   },
 })
 
-const handleClick = (event: Event) => emit('click', event)
 const handleSelect = (
   value: unknown,
   option: Record<string, unknown>,
   event: Event,
 ) => emit('select', value, option, event)
+
+const open = () => { if (!props.disabled) menuRef.value?.open() }
+const close = () => menuRef.value?.close()
+const resize = () => menuRef.value?.resize()
+defineExpose({ open, close, resize })
 </script>

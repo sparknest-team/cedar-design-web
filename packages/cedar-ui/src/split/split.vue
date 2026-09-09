@@ -81,7 +81,7 @@ export default defineComponent({
      * @zh 开始拖拽之前触发
      * @en Triggered before dragging
      * */
-    moveStart: (ev: MouseEvent) => true,
+    "move-start": (ev: MouseEvent) => true,
     /**
      * @zh 拖拽时触发
      * @en Triggered when dragging
@@ -91,7 +91,7 @@ export default defineComponent({
      * @zh 拖拽结束之后触发
      * @en Triggered after dragging ends
      */
-    moveEnd: (ev: MouseEvent) => true,
+    "move-end": (ev: MouseEvent) => true,
     'update:size': (size: number | string) => true,
   },
   /**
@@ -115,7 +115,7 @@ export default defineComponent({
    * @slot resize-trigger-icon
    */
   setup(props: SplitProps, { emit }) {
-    const { direction, size: propSize, defaultSize, min, max } = toRefs(props)
+    const { orientation, size: propSize, defaultSize, min, max } = toRefs(props)
     const triggerSize = ref(0)
     const wrapperRef = ref<HTMLDivElement>()
     const prefixCls = getPrefixCls('split')
@@ -126,7 +126,7 @@ export default defineComponent({
       }),
     )
     const sizeConfig = computed(() => getSizeConfig(size.value))
-    const isHorizontal = computed(() => direction.value === 'horizontal')
+    const isHorizontal = computed(() => orientation.value === 'horizontal')
     const classNames = computed(() => [
       prefixCls,
       {
@@ -246,12 +246,12 @@ export default defineComponent({
       off(window, 'contextmenu', onMovingEnd)
 
       document.body.style.cursor = 'default'
-      emit('moveEnd', e)
+      emit('move-end', e)
     }
 
     // 移动开始，记录初始值，绑定移动事件
     async function onMoveStart(e: MouseEvent) {
-      emit('moveStart', e)
+      emit('move-start', e)
 
       record.startPageX = e.pageX
       record.startPageY = e.pageY

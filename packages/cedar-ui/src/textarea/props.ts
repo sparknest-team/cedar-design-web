@@ -46,4 +46,4 @@ export const textareaProps = {
   textareaAttrs: Object as PropType<Record<string, unknown>>,
 } 
 
-export type TextareaProps = ExtractPropTypes<typeof textareaProps>
+export type TextareaProps = import("vue").ExtractPublicPropTypes<typeof textareaProps>

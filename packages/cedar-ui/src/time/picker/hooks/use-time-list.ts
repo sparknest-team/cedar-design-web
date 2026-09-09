@@ -1,3 +1,4 @@
+import { unitSequence } from '../../../_utils/picker-data'
 // 生成时分秒的列数据，用于展示选项
 
 import { toRefs, computed, ComputedRef } from 'vue'
@@ -42,10 +43,7 @@ export default function useTimeList(props: TimeListProps): {
   const hours = computed(() => {
     const { hour: hourStep = 1 } = step?.value || {}
     const disabledList = disabledHours?.value?.() || []
-    let list: number[] = []
-    for (let i = 0; i < (use12Hours.value ? 12 : 24); i += hourStep) {
-      list.push(i)
-    }
+    let list = unitSequence(use12Hours.value ? 12 : 24, hourStep)
     if (use12Hours.value) {
       list[0] = 12
     }
@@ -64,10 +62,7 @@ export default function useTimeList(props: TimeListProps): {
   const minutes = computed(() => {
     const { minute: minuteStep = 1 } = step?.value || {}
     const disabledList = disabledMinutes?.value?.(selectedHour.value) || []
-    let list: number[] = []
-    for (let i = 0; i < 60; i += minuteStep) {
-      list.push(i)
-    }
+    let list = unitSequence(60, minuteStep)
     if (hideDisabledOptions.value && disabledList.length) {
       list = list.filter((m) => disabledList.indexOf(m) < 0)
     }
@@ -83,10 +78,7 @@ export default function useTimeList(props: TimeListProps): {
   const seconds = computed(() => {
     const { second: secondStep = 1 } = step?.value || {}
     const disabledList = disabledSeconds?.value?.(selectedHour.value, selectedMinute.value) || []
-    let list: number[] = []
-    for (let i = 0; i < 60; i += secondStep) {
-      list.push(i)
-    }
+    let list = unitSequence(60, secondStep)
     if (hideDisabledOptions.value && disabledList.length) {
       list = list.filter((s) => disabledList.indexOf(s) < 0)
     }

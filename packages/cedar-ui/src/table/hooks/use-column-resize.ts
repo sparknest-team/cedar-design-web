@@ -4,7 +4,7 @@ import { EmitFn2 } from '../../_utils/types'
 
 export const useColumnResize = (
   thRefs: Ref<Record<string, HTMLElement>>,
-  emit: EmitFn2<{ columnResize: (dataIndex: string, width: number) => true }>,
+  emit: EmitFn2<{ "column-resize": (dataIndex: string, width: number) => true }>,
 ) => {
   const resizingColumn = ref('')
   const columnWidth = reactive<Record<string, number>>({})
@@ -35,7 +35,7 @@ export const useColumnResize = (
         width = 40
       }
       columnWidth[resizingColumn.value] = width
-      emit('columnResize', resizingColumn.value, width)
+      emit('column-resize', resizingColumn.value, width)
     }
   }
 

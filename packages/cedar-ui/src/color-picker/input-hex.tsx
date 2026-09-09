@@ -71,7 +71,7 @@ export default defineComponent({
           onInput={setHex}
           onChange={onInputChange}
           onBlur={() => handlerChange}
-          onPressEnter={() => handlerChange}
+          onPress-enter={() => handlerChange}
           // @ts-ignore
           onPaste={onPaste}
         />

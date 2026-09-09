@@ -18,7 +18,7 @@ export const useExpand = ({
   emit: EmitFn2<{
     'update:expandedKeys': (rowKeys: BaseType[]) => true
     expand: (rowKey: BaseType, record: TableData) => true
-    expandedChange: (rowKeys: BaseType[]) => true
+    "expanded-change": (rowKeys: BaseType[]) => true
   }>
 }) => {
   const getDefaultExpandedRowKeys = (): BaseType[] => {
@@ -47,7 +47,7 @@ export const useExpand = ({
       : expandedRowKeys.value.concat(rowKey)
     _expandedRowKeys.value = newExpandedRowKeys
     emit('expand', rowKey, record)
-    emit('expandedChange', newExpandedRowKeys)
+    emit('expanded-change', newExpandedRowKeys)
     emit('update:expandedKeys', newExpandedRowKeys)
   }
 
@@ -57,14 +57,14 @@ export const useExpand = ({
       ? expandedRowKeys.value.concat(_rowKeys)
       : expandedRowKeys.value.filter((key) => !_rowKeys.includes(key))
     _expandedRowKeys.value = newExpandedRowKeys
-    emit('expandedChange', newExpandedRowKeys)
+    emit('expanded-change', newExpandedRowKeys)
     emit('update:expandedKeys', newExpandedRowKeys)
   }
 
   const expandAll = (expanded = true) => {
     const newExpandedRowKeys = expanded ? [...allRowKeys.value] : []
     _expandedRowKeys.value = newExpandedRowKeys
-    emit('expandedChange', newExpandedRowKeys)
+    emit('expanded-change', newExpandedRowKeys)
     emit('update:expandedKeys', newExpandedRowKeys)
   }
 

@@ -1,0 +1,21 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+import type { NavMenuOption } from '../types'
+const disabled = ref(false)
+const fieldNames = { key: 'id', label: 'name', children: 'items', disabled: 'unavailable' }
+const options: NavMenuOption[] = [
+  { type: 'group', name: '工作空间', items: [
+    { id: 0, name: '概览' },
+    { id: 'projects', name: '项目', items: [{ id: 'active', name: '进行中' }, { id: 'archived', name: '已归档', unavailable: true }] },
+  ] },
+  { type: 'divider' },
+  { id: 'settings', name: '设置' },
+  { id: 'hidden', name: '隐藏入口', show: false },
+]
+</script>
+<template>
+  <div>
+    <c-button @click="disabled = !disabled">{{ disabled ? '启用菜单' : '禁用整个菜单' }}</c-button>
+    <c-nav-menu :options="options" :field-names="fieldNames" :disabled="disabled" :default-value="0" default-expand-all />
+  </div>
+</template>

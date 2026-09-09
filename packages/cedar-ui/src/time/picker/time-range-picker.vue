@@ -1,6 +1,7 @@
 <template>
   <TimePicker
     v-bind="{ ...$attrs }"
+    :popup-container="popupContainer"
     :model-value="modelValue"
     :default-value="defaultValue"
     type="time-range"

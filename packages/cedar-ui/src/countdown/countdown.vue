@@ -1,4 +1,3 @@
-<!-- @sync-with: maple-ui/src/countdown/Countdown.vue -->
 <template>
   <div :class="n()">
     <slot v-bind="timeData">{{ showTime }}</slot>

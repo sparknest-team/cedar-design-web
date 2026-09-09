@@ -295,7 +295,7 @@ const TableColumnHeaderAction = defineComponent({
     return () =>
       h(
         Menu,
-        { trigger: 'click', placement: 'br' },
+        { trigger: 'click', placement: 'bottom-end' },
         {
           default: () =>
             h(

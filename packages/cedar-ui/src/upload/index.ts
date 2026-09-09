@@ -31,3 +31,4 @@ export const _UploadComponent = Upload
 export { Upload }
 
 export default Upload
+export type UploadProps = import('vue').ExtractPublicPropTypes<typeof import('./props').uploadProps>

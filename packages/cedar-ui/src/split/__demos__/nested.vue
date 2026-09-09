@@ -13,7 +13,7 @@
       </template>
       <template #second>
         <div>
-          <c-split direction="column" :style="{ height: '200px' }">
+          <c-split orientation="vertical" :style="{ height: '200px' }">
             <template #first>
               <c-typography-paragraph>Top</c-typography-paragraph>
             </template>

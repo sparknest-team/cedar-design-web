@@ -89,7 +89,7 @@ export interface BasePickerProps {
   size: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
   shortcuts: ShortcutType[]
   shortcutsPosition: 'left' | 'bottom' | 'right'
-  placement: 'top' | 'tl' | 'tr' | 'bottom' | 'bl' | 'br'
+  placement: 'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end'
   open: boolean | undefined
   defaultOpen: boolean
   triggerProps?: Record<string, unknown>

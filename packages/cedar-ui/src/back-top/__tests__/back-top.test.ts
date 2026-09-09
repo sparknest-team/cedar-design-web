@@ -6,11 +6,13 @@ import { BackTop, backTopProps } from '../index'
 describe('BackTop', () => {
   test('renders an accessible keyboard target', async () => {
     const wrapper = mount(BackTop, {
-      props: { visibleHeight: 0, ariaLabel: '返回顶部' },
+      props: { visibleHeight: 0, ariaLabel: '返回顶部', popupContainer: false },
       attachTo: document.body,
     })
     window.dispatchEvent(new Event('scroll'))
-    await new Promise((resolve) => setTimeout(resolve, 20))
+    for (let i = 0; i < 20 && !wrapper.find('[role="button"]').exists(); i++) {
+      await new Promise((resolve) => setTimeout(resolve, 20))
+    }
     await nextTick()
 
     const trigger = wrapper.get('[role="button"]')

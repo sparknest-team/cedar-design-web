@@ -20,3 +20,4 @@ export { Anchor }
 export { anchorProps }
 
 export default Anchor
+export type AnchorProps = import('vue').ExtractPublicPropTypes<typeof import('./props').anchorProps>

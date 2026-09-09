@@ -6,14 +6,14 @@ import {
   toRefs,
   type VNode,
 } from "vue";
-import { isArray, isNumeric } from "@cedarjs/shared";
+import { componentSizes } from "../_utils/constant";
 import { padStartFlex, toSizeUnit } from "../_utils/maple/elements";
-import { unFragment } from "../_utils/vue-utils";
+import { flatChildren } from "./children";
 import { spaceProps as props, type SpaceSize } from "./props";
 import { createNamespace } from "../_utils/global-config";
 
-const isInternalSize = (size: any) =>
-  ["xs", "sm", "md", "lg", "xl"].includes(size);
+const isInternalSize = (size: SpaceSize) =>
+  componentSizes.some(value => value === size);
 
 const { name, n, classes } = createNamespace("space");
 
@@ -23,14 +23,9 @@ function getSize(size: SpaceSize, isInternalSize: boolean): string[] {
         `var(--c-space-size-${size}-row-gap)`,
         `var(--c-space-size-${size}-column-gap)`,
       ]
-    : isArray(size)
+    : Array.isArray(size)
       ? (size.map(toSizeUnit) as string[])
-      : isNumeric(size)
-        ? [toSizeUnit(size) as string, toSizeUnit(size) as string]
-        : [
-            `var(--c-space-size-${size}-row-gap)`,
-            `var(--c-space-size-${size}-column-gap)`,
-          ];
+      : [toSizeUnit(size) as string, toSizeUnit(size) as string];
 }
 
 export default defineComponent({
@@ -50,7 +45,7 @@ export default defineComponent({
 
     return () => {
       const rawChildren = (slots.default?.() ?? []) as VNode[];
-      const children = (unFragment(rawChildren) as any[]).filter(
+      const children = (flatChildren(rawChildren) as any[]).filter(
         (node) =>
           !(
             node &&

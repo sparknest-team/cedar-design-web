@@ -65,7 +65,7 @@ export default defineComponent({
       type: Boolean,
     },
     variant: {
-      type: String as PropType<'filled' | 'outlined' | 'standard'>,
+      type: String as PropType<'filled' | 'outline' | 'standard'>,
     },
     size: {
       type: String as PropType<ComponentSize>,
@@ -283,10 +283,9 @@ export default defineComponent({
           <Menu
             open={historyVisible.value}
             trigger='focus'
-            placement='bl'
+            placement='bottom-start'
             autoFitPopupWidth
             popupContainer={inputRef.value?.$el}
-            onOpenChange={handleHistoryVisibleChange}
             onUpdate:open={handleHistoryVisibleChange}
             onSelect={(value: any, _option: Record<string, any>, ev: Event) => handleHistorySelect(String(value), ev)}
             v-slots={{
@@ -311,7 +310,7 @@ export default defineComponent({
               clearable={props.clearable}
               onInput={handleInput}
               onClear={(ev: MouseEvent) => handleValueChange('', ev)}
-              onPressEnter={handleClick}
+              onPress-enter={handleClick}
             />
           </Menu>
           {props.searchButton && renderButton()}

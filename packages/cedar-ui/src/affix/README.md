@@ -4,70 +4,73 @@ permalink: /components/affix/
 
 # Affix
 
-向用户显示警告的信息时，通过警告提示，展现需要关注的信息。
+与 Maple 使用相同场景、参数和交互顺序；示例源码仅替换组件前缀，主题与站点外壳各自保留。
 
 ## 案例
 
 ### 基础用法
 
-基本用法，不设置固定位置时，当页面滚动元素不可见时，元素固定在页面最顶部。
-
 <demo src="./__demos__/basic.vue"></demo>
 
-### 底部固定
-
-当页面滚动或浏览器窗口改变时，元素向下滚动到距底部一定距离时固定。
-
-<demo src="./__demos__/bottom.vue"></demo>
-
-### 滚动容器
-
-用 `target` 设置需要监听其滚动事件的元素，默认为 window。
-
-`target` 指定为非 window 容器时，可能会出现 `target`
-外层元素滚动，固钉元素跑出滚动容器的问题。这个时候可以通过传入`targetContainer`传入`target`外层的滚动元素。`Affix`
-会监听该元素的滚动事件来实时更新滚钉元素的位置。 当然您也可以在业务代码中自己监听target外层滚动元素的 `scroll`
-事件，并调用 `updatePosition` 去更新固钉的位置。
-
-<demo src="./__demos__/container.vue"></demo>
-
-### 固定状态改变回调
-
-当固定状态发生改变时，会触发事件。
-
-<demo src="./__demos__/fix-change.vue"></demo>
-
-### 顶部固定
-
-当页面滚动或浏览器窗口改变时，元素向上滚动到距顶部一定距离时固定。
+### 顶部偏移
 
 <demo src="./__demos__/top.vue"></demo>
 
+### 底部偏移
+
+<demo src="./__demos__/bottom.vue"></demo>
+
+### 指定滚动容器
+
+<demo src="./__demos__/container.vue"></demo>
+
+### 吸附状态变化
+
+<demo src="./__demos__/fix-change.vue"></demo>
+
+上述示例通过 `target` 指定独立滚动容器，便于在 PC 页面和移动模拟器中复现；省略 `target` 时寻找最近滚动父元素，找不到则监听窗口。`offset-top` / `offset-bottom` 也接受 CSS 长度。
+
+### 禁用、CSS 模式与手动更新
+
+<demo src="./__demos__/controls.vue"></demo>
+
 ## API
 
-### `<affix>` Props
+<!-- same-source-api:start -->
+### Props
 
-| 参数名           | 描述                                                                                                                                                                                                | 类型                              | 默认值 |
-| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- | :----: |
-| offset-top       | 距离窗口顶部达到指定偏移量后触发                                                                                                                                                                    | `number`                          |  `0`   |
-| offset-bottom    | 距离窗口底部达到指定偏移量后触发                                                                                                                                                                    | `number`                          |  `-`   |
-| target           | 滚动容器，默认是 `window`                                                                                                                                                                           | `string \| HTMLElement \| Window` |  `-`   |
-| target-container | `target`的外层滚动元素，默认是 `window`。`Affix `将会监听该元素的滚动事件，并实时更新固钉的位置。主要是为了解决 `target` 属性指定为非 `window` 元素时，如果外层元素滚动，可能会导致固钉跑出容器问题 | `string \| HTMLElement \| Window` |  `-`   |
-| z-index          | 固钉时的层级                                                                                                                                                                                        | `number`                          | `10`   |
-| disabled         | 是否禁用固钉                                                                                                                                                                                        | `boolean`                         | `false` |
-| css-mode         | 是否使用原生 `position: sticky`                                                                                                                                                                     | `boolean`                         | `false` |
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| offset-top | 相对滚动容器顶部的吸附距离，支持 CSS 长度 | `number / string` | `0` |
+| offset-bottom | 相对滚动容器底部的吸附距离；设置后优先于 offset-top，0 也有效 | `number / string` | `undefined` |
+| target | 滚动容器或选择器；省略时寻找最近滚动父元素，找不到则使用 window | `string / HTMLElement / Window` | `undefined` |
+| target-container | 额外监听的外层滚动容器或选择器；不传则不额外监听，也不作为裁剪边界 | `string / HTMLElement / Window` | `undefined` |
+| z-index | 固钉层级 | `number / string` | `10` |
+| disabled | 禁用吸附 | `boolean` | `false` |
+| css-mode | 使用原生 position: sticky，受祖先 overflow 和容器边界影响 | `boolean` | `false` |
 
-### `<affix>` Events
+### Events
 
-| 事件名 | 描述                   | 参数             |
-| ------ | ---------------------- | ---------------- |
-| change | 固定状态发生改变时触发 | fixed: `boolean` |
+| 事件 | 参数与时机 |
+| --- | --- |
+| change | `(fixed: boolean, offset: number)`，固定状态变化时触发；固定时 offset 为吸附阈值，未固定时为距离对应容器边缘的距离，禁用解除固定时为 0 |
 
-### `<affix>` Methods
+### Slots
 
-| 方法名         | 描述     | 参数 | 返回值 |
-| -------------- | -------- | ---- | ------ |
-| updatePosition | 更新位置 | -    | -      |
+| 插槽 | 说明 | 参数 |
+| --- | --- | --- |
+| default | 需要吸附的内容 | — |
+
+### Methods
+
+| 方法 | 说明 | 参数 | 返回值 |
+| --- | --- | --- | --- |
+| updatePosition | 下一动画帧重新绑定滚动容器并计算位置 | — | `Promise<void>` |
+
+### 跨端说明
+
+属性、事件参数、插槽与公开方法一致。CSS 模式遵循浏览器 sticky 规则；示例统一使用独立滚动容器。
+<!-- same-source-api:end -->
 
 ### 类型定义
 

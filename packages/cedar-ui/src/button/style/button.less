@@ -1,0 +1,347 @@
+.c-button {
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  outline: none;
+  border: none;
+  border-radius: var(--c-button-border-radius);
+  user-select: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition:
+    box-shadow 0.2s,
+    background-color 0.25s,
+    border-radius 0.2s;
+  will-change: box-shadow;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+
+  &__content {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  // === variant=default × status: filled ===
+  &--variant-default {
+    &.c-button--status-default {
+      color: var(--c-button-default-text-color);
+      background-color: var(--c-button-default-color);
+    }
+
+    &.c-button--status-primary {
+      color: var(--c-button-primary-text-color);
+      background-color: var(--c-button-primary-color);
+    }
+
+    &.c-button--status-info {
+      color: var(--c-button-info-text-color);
+      background-color: var(--c-button-info-color);
+    }
+
+    &.c-button--status-success {
+      color: var(--c-button-success-text-color);
+      background-color: var(--c-button-success-color);
+    }
+
+    &.c-button--status-warning {
+      color: var(--c-button-warning-text-color);
+      background-color: var(--c-button-warning-color);
+    }
+
+    &.c-button--status-danger {
+      color: var(--c-button-danger-text-color);
+      background-color: var(--c-button-danger-color);
+    }
+
+    &.c-button--status-secondary {
+      color: var(--c-button-secondary-text-color);
+      background-color: var(--c-button-secondary-color);
+    }
+
+    &.c-button--status-tertiary {
+      color: var(--c-button-tertiary-text-color);
+      background-color: var(--c-button-tertiary-color);
+    }
+  }
+
+  // === variant=text: 透明背景 + status 取色 ===
+  &--variant-text {
+    background-color: transparent;
+
+    &:active {
+      box-shadow: none;
+    }
+
+    &.c-button--status-default {
+      color: inherit;
+    }
+    &.c-button--status-primary {
+      color: var(--c-button-primary-color);
+    }
+    &.c-button--status-info {
+      color: var(--c-button-info-color);
+    }
+    &.c-button--status-success {
+      color: var(--c-button-success-color);
+    }
+    &.c-button--status-warning {
+      color: var(--c-button-warning-color);
+    }
+    &.c-button--status-danger {
+      color: var(--c-button-danger-color);
+    }
+    &.c-button--status-secondary {
+      color: var(--c-button-secondary-color);
+    }
+    &.c-button--status-tertiary {
+      color: var(--c-button-tertiary-color);
+    }
+  }
+
+  // === variant=outline: 描边 + status 取色 ===
+  &--variant-outline {
+    background-color: transparent;
+    border: thin solid currentColor;
+
+    &.c-button--status-default {
+      color: inherit;
+    }
+    &.c-button--status-primary {
+      color: var(--c-button-primary-color);
+    }
+    &.c-button--status-info {
+      color: var(--c-button-info-color);
+    }
+    &.c-button--status-success {
+      color: var(--c-button-success-color);
+    }
+    &.c-button--status-warning {
+      color: var(--c-button-warning-color);
+    }
+    &.c-button--status-danger {
+      color: var(--c-button-danger-color);
+    }
+    &.c-button--status-secondary {
+      color: var(--c-button-secondary-color);
+    }
+    &.c-button--status-tertiary {
+      color: var(--c-button-tertiary-color);
+    }
+  }
+
+  // === variant=tonal: 浅色填充 ===
+  &--variant-tonal {
+    &.c-button--status-default {
+      color: var(--c-button-default-text-color);
+      background-color: var(--c-button-default-icon-container-color);
+    }
+    &.c-button--status-primary {
+      color: var(--c-button-primary-icon-color);
+      background-color: var(--c-button-primary-icon-container-color);
+    }
+    &.c-button--status-info {
+      color: var(--c-button-info-icon-color);
+      background-color: var(--c-button-info-icon-container-color);
+    }
+    &.c-button--status-success {
+      color: var(--c-button-success-icon-color);
+      background-color: var(--c-button-success-icon-container-color);
+    }
+    &.c-button--status-warning {
+      color: var(--c-button-warning-icon-color);
+      background-color: var(--c-button-warning-icon-container-color);
+    }
+    &.c-button--status-danger {
+      color: var(--c-button-danger-icon-color);
+      background-color: var(--c-button-danger-icon-container-color);
+    }
+    &.c-button--status-secondary {
+      color: var(--c-button-secondary-color);
+      background-color: color-mix(in srgb, var(--c-button-secondary-color) 16%, transparent);
+    }
+    &.c-button--status-tertiary {
+      color: var(--c-button-tertiary-color);
+      background-color: color-mix(in srgb, var(--c-button-tertiary-color) 16%, transparent);
+    }
+  }
+
+  // === icon-container 单色块按钮 ===
+  &--icon-container-default {
+    color: var(--c-button-default-icon-color);
+    background-color: var(--c-button-default-icon-container-color);
+  }
+  &--icon-container-primary {
+    color: var(--c-button-primary-icon-color);
+    background-color: var(--c-button-primary-icon-container-color);
+  }
+  &--icon-container-info {
+    color: var(--c-button-info-icon-color);
+    background-color: var(--c-button-info-icon-container-color);
+  }
+  &--icon-container-success {
+    color: var(--c-button-success-icon-color);
+    background-color: var(--c-button-success-icon-container-color);
+  }
+  &--icon-container-warning {
+    color: var(--c-button-warning-icon-color);
+    background-color: var(--c-button-warning-icon-container-color);
+  }
+  &--icon-container-danger {
+    color: var(--c-button-danger-icon-color);
+    background-color: var(--c-button-danger-icon-container-color);
+  }
+
+  // === sizes ===
+  &--size-md {
+    height: var(--c-button-normal-height);
+    padding: var(--c-button-normal-padding);
+    font-size: var(--c-button-normal-font-size);
+  }
+  &--size-lg {
+    height: var(--c-button-large-height);
+    padding: var(--c-button-large-padding);
+    font-size: var(--c-button-large-font-size);
+  }
+  &--size-sm {
+    height: var(--c-button-small-height);
+    padding: var(--c-button-small-padding);
+    font-size: var(--c-button-small-font-size);
+  }
+  &--size-xs {
+    height: var(--c-button-mini-height);
+    padding: var(--c-button-mini-padding);
+    font-size: var(--c-button-mini-font-size);
+  }
+  &--size-xl {
+    height: var(--c-button-xl-height);
+    padding: var(--c-button-xl-padding);
+    font-size: var(--c-button-xl-font-size);
+  }
+
+  &--round {
+    padding: var(--c-button-round-padding);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  &--block {
+    width: 100%;
+  }
+
+  &--loading {
+    cursor: default;
+  }
+
+  &--hidden {
+    opacity: 0;
+  }
+
+  &--disabled {
+    background-color: var(--c-button-disabled-color);
+    color: var(--c-button-disabled-text-color);
+    cursor: not-allowed;
+    box-shadow: none !important;
+  }
+}
+
+// Interaction, layout and loading contract shared by both libraries.
+.c-button {
+  display: inline-flex;
+  box-sizing: border-box;
+  text-decoration: none;
+  gap: var(--c-button-content-gap);
+  line-height: var(--c-button-line-height);
+  &--stacked {
+    flex-direction: column;
+    gap: var(--c-button-stacked-gap);
+    border-radius: var(--c-button-stacked-border-radius);
+    padding-block: var(--c-button-stacked-padding);
+  }
+  &--focus:focus-visible {
+    outline: var(--c-button-focus-width) solid var(--c-button-focus-color);
+    outline-offset: var(--c-button-focus-offset);
+  }
+  &--icon {
+    position: relative;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+  }
+  &--icon-container {
+    padding: var(--c-button-icon-container-padding);
+  }
+  &--icon-container-secondary {
+    color: var(--c-button-secondary-icon-color);
+    background: var(--c-button-secondary-icon-container-color);
+  }
+  &--icon-container-tertiary {
+    color: var(--c-button-tertiary-icon-color);
+    background: var(--c-button-tertiary-icon-container-color);
+  }
+  &__loading {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+  &--loading-fill > &__loading {
+    position: absolute;
+    inset: 0;
+  }
+  &--loading-line > &__loading {
+    position: absolute;
+    inset: auto 0 0;
+    height: var(--c-button-loading-line-height);
+    overflow: hidden;
+    border-radius: inherit;
+  }
+  &__loading-line {
+    width: var(--c-button-loading-line-width);
+    height: 100%;
+    background: currentColor;
+    animation: c-button-loading-line var(--c-button-loading-duration) linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    &__loading-line {
+      animation: none;
+      width: 100%;
+      opacity: var(--c-button-loading-static-opacity);
+    }
+  }
+}
+@keyframes c-button-loading-line {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(300%);
+  }
+}
+
+// Shape dimensions follow the selected size; empty text must not stretch icons.
+.c-button {
+  .shape-size(@size, @name) {
+    &--size-@{size}&--round {
+      width: var(~"--c-button-@{name}-height");
+      height: var(~"--c-button-@{name}-height");
+      min-width: var(~"--c-button-@{name}-height");
+      padding: 0;
+    }
+    &--size-@{size}&--stacked:not(&--round) {
+      height: var(~"--c-button-@{name}-stacked-height");
+      min-width: var(~"--c-button-@{name}-stacked-height");
+    }
+  }
+  .shape-size(xs, mini);
+  .shape-size(sm, small);
+  .shape-size(md, normal);
+  .shape-size(lg, large);
+  .shape-size(xl, xl);
+  &--icon > &__loading {
+    position: absolute;
+    inset: 0;
+  }
+  &--loading-default > &--icon > :not(&__loading) { visibility: hidden; }
+  &__content { line-height: 1; }
+}

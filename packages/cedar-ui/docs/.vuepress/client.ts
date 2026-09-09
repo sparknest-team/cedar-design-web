@@ -1,3 +1,4 @@
+import { connectComponentLanguage } from './i18n/client'
 import { defineClientConfig } from '@vuepress/client'
 import './configs/styles/index.scss'
 import 'prismjs/themes/prism.css'
@@ -10,7 +11,8 @@ import '../../src/tooltip/style'
 import { onMounted } from 'vue'
 
 export default defineClientConfig({
-  async enhance({ app }) {
+  async enhance({ app, router }) {
+    connectComponentLanguage(router)
     app.directive('loading', vLoading)
     app.directive('tooltip', vTooltip)
   },

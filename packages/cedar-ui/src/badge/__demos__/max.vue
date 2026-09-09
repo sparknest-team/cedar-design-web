@@ -1,32 +1,25 @@
 <template>
-  <c-space :size="40">
-    <c-badge :max="10" :content="0">
-      <c-avatar shape="square">
-        <span>
-          <c-icon-user />
-        </span>
-      </c-avatar>
-    </c-badge>
-    <c-badge :max="10" :content="100">
-      <c-avatar shape="square">
-        <span>
-          <c-icon-user />
-        </span>
-      </c-avatar>
-    </c-badge>
-    <c-badge :content="100">
-      <c-avatar shape="square">
-        <span>
-          <c-icon-user />
-        </span>
-      </c-avatar>
-    </c-badge>
-    <c-badge :max="999" :content="1000">
-      <c-avatar shape="square">
-        <span>
-          <c-icon-user />
-        </span>
-      </c-avatar>
-    </c-badge>
-  </c-space>
+  <c-space wrap :size="24"
+    ><c-badge :content="0"
+      ><span style="display: inline-block; padding: 12px; border: 1px solid currentColor; border-radius: 4px"
+        >Inbox</span
+      ></c-badge
+    ><c-badge :content="0" show-zero
+      ><span style="display: inline-block; padding: 12px; border: 1px solid currentColor; border-radius: 4px"
+        >Inbox</span
+      ></c-badge
+    ><c-badge :content="100" :max="10"
+      ><span style="display: inline-block; padding: 12px; border: 1px solid currentColor; border-radius: 4px"
+        >Inbox</span
+      ></c-badge
+    ><c-badge :content="100"
+      ><span style="display: inline-block; padding: 12px; border: 1px solid currentColor; border-radius: 4px"
+        >Inbox</span
+      ></c-badge
+    ><c-badge :content="1000" :max="999"
+      ><span style="display: inline-block; padding: 12px; border: 1px solid currentColor; border-radius: 4px"
+        >Inbox</span
+      ></c-badge
+    ></c-space
+  >
 </template>

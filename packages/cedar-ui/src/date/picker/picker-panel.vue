@@ -35,15 +35,15 @@
           :footer-value="footerValue"
           :time-picker-value="timePickerValue"
           :disabled-time="disabledTime"
-          @timePickerSelect="onTimePickerSelect"
+          @time-picker-select="onTimePickerSelect"
         />
         <PanelFooter
           :prefix-cls="prefixCls"
           :show-today-btn="showNowBtn && !(showConfirmBtn || showShortcutsInBottom)"
           :show-confirm-btn="showConfirmBtn"
           :confirm-btn-disabled="confirmBtnDisabled"
-          @todayBtnClick="onTodayBtnClick"
-          @confirmBtnClick="onConfirmBtnClick"
+          @today-btn-click="onTodayBtnClick"
+          @confirm-btn-click="onConfirmBtnClick"
         >
           <template v-if="extra" #extra>
             <RenderFunction v-if="extra" :render-func="extra" />

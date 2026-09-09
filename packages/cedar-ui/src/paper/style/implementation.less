@@ -1,0 +1,18 @@
+.c-paper {
+  box-sizing: border-box;
+  background: var(--c-paper-background);
+  border-radius: var(--c-paper-border-radius);
+  transition: background-color var(--c-paper-transition-duration);
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+
+  &--bordered {
+    border: var(--c-paper-border-width) solid var(--c-paper-border-color);
+  }
+  &--round { border-radius: 50%; }
+  &--inline { display: inline-flex; }
+  &--interactive { cursor: pointer; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .c-paper { transition: none; }
+}

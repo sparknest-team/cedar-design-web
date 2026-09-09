@@ -79,19 +79,19 @@ export interface NotificationConfig {
   /**
    * @zh 是否显示图标
    * @en Whether to show icon
-   * @defaultValue true
+   * @default-value true
    */
   showIcon?: boolean
   /**
    * @zh 是否可关闭
    * @en Whether it can be closed
-   * @defaultValue false
+   * @default-value false
    */
   closable?: boolean
   /**
    * @zh 显示的持续时间，单位为 `ms`
    * @en Display duration, the unit is `ms`
-   * @defaultValue 3000
+   * @default-value 3000
    */
   duration?: number
   /**

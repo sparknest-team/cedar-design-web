@@ -107,28 +107,28 @@ export default defineComponent({
      * @param {DragEvent} ev
      * @param {TreeNodeData} node
      */
-    dragStart: (ev: DragEvent, node: TreeNodeData) => true,
+    "drag-start": (ev: DragEvent, node: TreeNodeData) => true,
     /**
      * @zh 节点结束拖拽
      * @en Node end drag
      * @param {DragEvent} ev
      * @param {TreeNodeData} node
      */
-    dragEnd: (ev: DragEvent, node: TreeNodeData) => true,
+    "drag-end": (ev: DragEvent, node: TreeNodeData) => true,
     /**
      * @zh 节点被拖拽至可释放目标
      * @en The node is dragged to the releasable target
      * @param {DragEvent} ev
      * @param {TreeNodeData} node
      */
-    dragOver: (ev: DragEvent, node: TreeNodeData) => true,
+    "drag-over": (ev: DragEvent, node: TreeNodeData) => true,
     /**
      * @zh 节点离开可释放目标
      * @en Node leaves to release the target
      * @param {DragEvent} ev
      * @param {TreeNodeData} node
      */
-    dragLeave: (ev: DragEvent, node: TreeNodeData) => true,
+    "drag-leave": (ev: DragEvent, node: TreeNodeData) => true,
     /**
      * @zh 节点在可释放目标上释放
      * @en The node is released on a releasable target
@@ -622,26 +622,26 @@ export default defineComponent({
         const node = key2TreeNode.value.get(key)
         dragNode.value = node
         if (node) {
-          emit('dragStart', e, node.treeNodeData)
+          emit('drag-start', e, node.treeNodeData)
         }
       },
       onDragEnd(key: TreeNodeKey, e: DragEvent) {
         const node = key2TreeNode.value.get(key)
         dragNode.value = undefined
         if (node) {
-          emit('dragEnd', e, node.treeNodeData)
+          emit('drag-end', e, node.treeNodeData)
         }
       },
       onDragOver(key: TreeNodeKey, e: DragEvent) {
         const node = key2TreeNode.value.get(key)
         if (node) {
-          emit('dragOver', e, node.treeNodeData)
+          emit('drag-over', e, node.treeNodeData)
         }
       },
       onDragLeave(key: TreeNodeKey, e: DragEvent) {
         const node = key2TreeNode.value.get(key)
         if (node) {
-          emit('dragLeave', e, node.treeNodeData)
+          emit('drag-leave', e, node.treeNodeData)
         }
       },
       onDrop(key: TreeNodeKey, dropPosition: number, e: DragEvent) {

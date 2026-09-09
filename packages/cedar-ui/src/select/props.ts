@@ -1,3 +1,4 @@
+import { popupContainerProp } from '../_utils/popup-container'
 import type { ExtractPropTypes, PropType } from 'vue'
 import { componentSizes } from '../_utils/constant'
 import type { ComponentSize } from '../_utils/constant'
@@ -9,6 +10,8 @@ import type { ScrollbarProps } from '../scrollbar'
 import type { SelectFieldNames, SelectOptionData, SelectOptionGroup } from './types'
 
 export const selectProps = {
+  /** 下拉菜单是否与触发框等宽；false 时按内容自适应。 */
+  autoFitPopupWidth: { type: Boolean, default: true },
     /**
      * @zh 是否开启多选模式（多选模式默认开启搜索）
      * @en Whether to open multi-select mode (The search is turned on by default in the multi-select mode)
@@ -30,7 +33,7 @@ export const selectProps = {
     /**
      * @zh 默认值（非受控模式）
      * @en Default value (uncontrolled mode)
-     * @defaultValue '' \| []
+     * @default-value '' \| []
      */
     defaultValue: {
       type: [String, Number, Boolean, Object, Array] as PropType<
@@ -41,7 +44,7 @@ export const selectProps = {
     /**
      * @zh 输入框的值
      * @en The value of the input
-     * @vModel
+     * @v-model
      */
     inputValue: {
       type: String,
@@ -58,7 +61,7 @@ export const selectProps = {
      * @zh 选择框的大小
      * @en The size of the select
      * @values 'xs','sm','md','lg','xl'
-     * @defaultValue 'md'
+     * @default-value 'md'
      */
     size: {
       type: String as PropType<ComponentSize>,
@@ -68,8 +71,8 @@ export const selectProps = {
     /**
      * @zh 选择框的变体
      * @en The variant of the select
-     * @values 'filled', 'outlined', 'standard'
-     * @defaultValue 'filled'
+     * @values 'filled', 'outline', 'standard'
+     * @default-value 'filled'
      */
     variant: {
       type: String as PropType<FormControlVariant>,
@@ -115,7 +118,7 @@ export const selectProps = {
     /**
      * @zh 是否允许搜索
      * @en Whether to allow searching
-     * @defaultValue false (single) \| true (multiple)
+     * @default-value false (single) \| true (multiple)
      */
     filterable: {
       type: [Boolean, Object] as PropType<boolean | { retainInputValue?: boolean }>,
@@ -141,9 +144,7 @@ export const selectProps = {
      * @zh 弹出框的挂载容器
      * @en Mount container for popup
      */
-    popupContainer: {
-      type: [String, Object] as PropType<string | HTMLElement>,
-    },
+    popupContainer: popupContainerProp,
     /**
      * @zh 是否在无值时默认选择第一个选项
      * @en Whether to select the first option by default when there is no value
@@ -156,7 +157,7 @@ export const selectProps = {
     /**
      * @zh 是否显示下拉菜单
      * @en Whether to show the dropdown
-     * @vModel
+     * @v-model
      */
     open: {
       type: Boolean,
@@ -300,4 +301,4 @@ export const selectProps = {
 } 
 
 
-export type SelectProps = ExtractPropTypes<typeof selectProps>
+export type SelectProps = import("vue").ExtractPublicPropTypes<typeof selectProps>

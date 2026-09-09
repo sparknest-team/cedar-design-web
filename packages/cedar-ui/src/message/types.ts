@@ -1,6 +1,7 @@
 import { AppContext, RenderFunction } from 'vue'
 import { RenderContent } from '../_utils/types'
 import { MessageType } from '../_utils/constant'
+import type { MessageStatus } from './props'
 
 export const MESSAGE_POSITION = ['top', 'bottom'] as const
 
@@ -46,6 +47,7 @@ export interface MessageMethod {
 }
 
 export interface MessageConfig {
+  status?: MessageStatus
   /**
    * @zh 内容
    * @en Content
@@ -107,7 +109,7 @@ export interface MessageReturn {
 export interface MessageItem {
   id: number | string
   content: RenderContent
-  type?: MessageType | 'loading' | 'normal'
+  status?: MessageStatus
   icon?: RenderFunction
   showIcon?: boolean
   closable?: boolean

@@ -1,11 +1,30 @@
-import type { SidebarConfig } from "@vuepress/theme-default";
+import type { SidebarArrayOptions, SidebarOptions } from "vuepress-theme-hope";
+import componentReuse from "./component-reuse.json";
 
-export const zhSideBar: SidebarConfig = {
-  "/": [
+const reuseLabels: Record<string, { label: string }> = componentReuse;
+function markReuse(items: SidebarArrayOptions): SidebarArrayOptions {
+  return items.map((item) => {
+    if (typeof item === "string") return item;
+    const name = ("link" in item ? item.link : undefined)?.match(/^\/components\/([^/]+)\/$/)?.[1];
+    const reuse = name ? reuseLabels[name] : undefined;
+    return {
+      ...item,
+      ...(reuse && item.text ? { text: `${item.text} [${reuse.label}]` } : {}),
+      ...("children" in item && Array.isArray(item.children) ? { children: markReuse(item.children) } : {}),
+    };
+  });
+}
+
+export const zhSideBar: SidebarOptions = {
+  "/": markReuse([
     {
       text: "开发指南",
       link: "/guide/quickstart/",
       children: [
+        {
+          text: "跨端复用标记说明",
+          link: "/guide/component-reuse/",
+        },
         {
           text: "快速上手",
           link: "/guide/quickstart/",
@@ -118,8 +137,12 @@ export const zhSideBar: SidebarConfig = {
       text: "布局",
       children: [
         {
-          text: "Row / Col 栅格",
+          text: "Row 行",
           link: "/components/row/",
+        },
+        {
+          text: "Col 列",
+          link: "/components/col/",
         },
         {
           text: "Grid 栅格",
@@ -256,6 +279,10 @@ export const zhSideBar: SidebarConfig = {
           link: "/components/switch/",
         },
         {
+          text: "Slider 滑块",
+          link: "/components/slider/",
+        },
+        {
           text: "Rate 评分",
           link: "/components/rate/",
         },
@@ -353,12 +380,20 @@ export const zhSideBar: SidebarConfig = {
           link: "/components/carousel/",
         },
         {
+          text: "Paper 基础表面",
+          link: "/components/paper/",
+        },
+        {
           text: "Card 卡片",
           link: "/components/card/",
         },
         {
           text: "Calendar 日历",
           link: "/components/calendar/",
+        },
+        {
+          text: "Scheduler 日程调度",
+          link: "/components/scheduler/",
         },
         {
           text: "Descriptions 描述列表",
@@ -488,5 +523,5 @@ export const zhSideBar: SidebarConfig = {
         },
       ],
     },
-  ],
+  ]),
 };

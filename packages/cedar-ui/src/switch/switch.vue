@@ -2,198 +2,103 @@
   <button
     type="button"
     role="switch"
-    :aria-checked="computedCheck"
-    :aria-busy="computedLoading || undefined"
-    :class="cls"
-    :style="buttonStyle"
-    :disabled="mergedDisabled || computedLoading"
-    @click="handleClick"
-    @focus="handleFocus"
-    @blur="handleBlur"
+    :class="classes(n(), n('--variant-' + variant), n('--size-' + platform.size.value), [checked, n('--checked')], [busy, n('--loading')], [platform.disabled.value, n('--disabled')], [platform.error.value, n('--error')])"
+    :style="style"
+    :aria-checked="checked"
+    :aria-busy="busy || undefined"
+    :aria-readonly="platform.readonly.value || undefined"
+    :aria-disabled="platform.disabled.value || undefined"
+    :disabled="platform.disabled.value || busy"
+    @click="toggle"
+    @keydown.enter.prevent="keyboardToggle"
+    @keydown.space.prevent="keyboardToggle"
+    @focus="focus"
+    @blur="blur"
   >
-    <span :class="`${prefixCls}-handle`">
-      <span :class="`${prefixCls}-handle-icon`">
-        <icon-loading v-if="computedLoading" />
-        <template v-else>
-          <slot v-if="computedCheck" name="checked-icon" />
-          <slot v-else name="unchecked-icon" />
-        </template>
-      </span>
+    <span :class="n('track')" aria-hidden="true"></span>
+    <span v-if="variant !== 'line' && platform.size.value !== 'sm'" :class="n('text')">
+      <slot v-if="checked" name="checked">{{ checkedText }}</slot>
+      <slot v-else name="unchecked">{{ uncheckedText }}</slot>
     </span>
-    <!--  prettier-ignore  -->
-    <template
-      v-if="
-        variant !== 'line' &&
-        size !== 'sm' &&
-        ($slots.checked || checkedText || $slots.unchecked || uncheckedText)
-      "
-    >
-      <span :class="`${prefixCls}-text-holder`">
-        <slot v-if="computedCheck" name="checked">{{ checkedText }}</slot>
-        <slot v-else name="unchecked">{{ uncheckedText }}</slot>
-      </span>
-      <span :class="`${prefixCls}-text`">
-        <slot v-if="computedCheck" name="checked">{{ checkedText }}</slot>
-        <slot v-else name="unchecked">{{ uncheckedText }}</slot>
-      </span>
-    </template>
+    <span :class="n('handle')" :style="handleStyle">
+      <span v-if="ripple && rippleKey" :key="rippleKey" :class="n('ripple')" aria-hidden="true"></span>
+      <svg v-if="busy" :class="n('loading')" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="42 15" />
+      </svg>
+      <slot v-else-if="checked" name="checked-icon" />
+      <slot v-else name="unchecked-icon" />
+    </span>
   </button>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, ref, toRefs, watch } from 'vue'
-import { createNamespace, getPrefixCls } from '../_utils/global-config'
-import { IconLoading } from '@cedarjs/icons-vue/icon-loading'
-import { useFormItem } from '../_hooks/use-form-item'
-import { useSize } from '../_hooks/use-size'
-import { isFunction, isNull, isUndefined } from '../_utils/is'
-import { switchProps } from './props'
+<script setup lang="ts">
+import { computed, onActivated, onBeforeUnmount, onDeactivated, ref, watch, type CSSProperties } from 'vue'
+import { createNamespace } from '../_utils/global-config'
+import { switchProps, type SwitchValue } from './props'
+import { useSwitchPlatform } from './platform'
 
-export default defineComponent({
-  name: createNamespace('switch').name,
-  components: {
-    IconLoading,
-  },
-  props: switchProps,
-  emits: {
-    'update:modelValue': (value: boolean | string | number) => true,
-    /**
-     * @zh 值改变时触发
-     * @en Trigger when the value changes
-     * @param { boolean | string | number } value
-     * @param {Event} ev
-     */
-    change: (value: boolean | string | number, ev: Event) => true,
-    /**
-     * @zh 组件获得焦点时触发
-     * @en Triggered when the component gets focus
-     * @property {FocusEvent} ev
-     */
-    focus: (ev: FocusEvent) => true,
-    /**
-     * @zh 组件失去焦点时触发
-     * @en Fired when the component loses focus
-     * @property {FocusEvent} ev
-     */
-    blur: (ev: FocusEvent) => true,
-  },
-  /**
-   * @zh 打开状态时的文案（`type='line'`和`size='sm'`时不生效）
-   * @en Copywriting when opened (not effective when `type='line'` and `size='sm'`)
-   * @slot checked
-   */
-  /**
-   * @zh 关闭状态时的文案（`type='line'`和`size='sm'`时不生效）
-   * @en Copywriting when closed (not effective when `type='line'` and `size='sm'`)
-   * @slot unchecked
-   */
-  /**
-   * @zh 打开状态时，按钮上的图标
-   * @en The icon on the button when opened
-   * @slot checked-icon
-   */
-  /**
-   * @zh 关闭状态时，按钮上的图标
-   * @en The icon on the button when closed
-   * @slot unchecked-icon
-   */
-  setup(props, { emit }) {
-    const { disabled, size, modelValue } = toRefs(props)
-    const prefixCls = getPrefixCls('switch')
-    const { mergedSize: configSize } = useSize(size)
-    const { mergedDisabled, mergedSize, eventHandlers } = useFormItem({
-      disabled,
-      size: configSize,
-    })
+defineOptions({ name: createNamespace('switch').name })
+const props = defineProps(switchProps)
+const emit = defineEmits<{
+  (event: 'update:modelValue', value: SwitchValue): void
+  (event: 'change', value: SwitchValue, originalEvent: Event): void
+  (event: 'click', originalEvent: Event): void
+  (event: 'focus' | 'blur', originalEvent: FocusEvent): void
+}>()
+const { n, classes } = createNamespace('switch')
+const platform = useSwitchPlatform(props)
+const internal = ref<SwitchValue>(props.defaultChecked ? props.checkedValue : props.uncheckedValue)
+const current = computed(() => props.modelValue === undefined ? internal.value : props.modelValue)
+const checked = computed(() => current.value === props.checkedValue)
+const pending = ref(false)
+const busy = computed(() => props.loading || pending.value)
+const rippleKey = ref(0)
+let active = true
+let generation = 0
+function cancelPending() { generation++; pending.value = false }
+onBeforeUnmount(() => { active = false; cancelPending() })
+onDeactivated(() => { active = false; cancelPending() })
+onActivated(() => { active = true })
+watch(() => [props.modelValue, props.checkedValue, props.uncheckedValue, props.loading, platform.disabled.value, platform.readonly.value], cancelPending, { flush: 'sync' })
 
-    const _checked = ref(props.defaultChecked ? props.checkedValue : props.uncheckedValue)
-    const computedCheck = computed<boolean>(() => (props.modelValue ?? _checked.value) === props.checkedValue)
-    const _loading = ref(false)
-    const computedLoading = computed(() => _loading.value || props.loading)
-
-    const handleChange = (checked: boolean, ev: Event) => {
-      _checked.value = checked ? props.checkedValue : props.uncheckedValue
-      emit('update:modelValue', _checked.value)
-      emit('change', _checked.value, ev)
-      eventHandlers.value?.onChange?.(ev)
+async function toggle(event: Event) {
+  if (!active || busy.value || platform.disabled.value) return
+  emit('click', event)
+  if (platform.readonly.value) return
+  if (props.ripple) rippleKey.value++
+  const next = checked.value ? props.uncheckedValue : props.checkedValue
+  const version = ++generation
+  try {
+    if (props.beforeChange) {
+      const result = props.beforeChange(next)
+      let permitted: boolean | void
+      if (result && typeof (result as Promise<unknown>).then === 'function') {
+        pending.value = true
+        permitted = await result
+      } else permitted = result as boolean | void
+      if (permitted === false) return
     }
-
-    const handleClick = async (ev: Event) => {
-      if (computedLoading.value || mergedDisabled.value) {
-        return
-      }
-      const checked = !computedCheck.value
-      const checkedValue = checked ? props.checkedValue : props.uncheckedValue
-      const shouldChange = props.beforeChange
-
-      if (isFunction(shouldChange)) {
-        _loading.value = true
-        try {
-          const result = await shouldChange(checkedValue)
-          if (result ?? true) {
-            handleChange(checked, ev)
-          }
-        } finally {
-          _loading.value = false
-        }
-      } else {
-        handleChange(checked, ev)
-      }
-    }
-
-    const handleFocus = (ev: FocusEvent) => {
-      emit('focus', ev)
-      eventHandlers.value?.onFocus?.(ev)
-    }
-
-    const handleBlur = (ev: FocusEvent) => {
-      emit('blur', ev)
-      eventHandlers.value?.onBlur?.(ev)
-    }
-
-    watch(modelValue, (value) => {
-      if (isUndefined(value) || isNull(value)) {
-        _checked.value = props.uncheckedValue
-      }
-    })
-
-    const cls = computed(() => [
-      prefixCls,
-      `${prefixCls}--variant-${props.variant}`,
-      {
-        [`${prefixCls}-sm`]: mergedSize.value === 'sm' || mergedSize.value === 'xs',
-        [`${prefixCls}-checked`]: computedCheck.value,
-        [`${prefixCls}-disabled`]: mergedDisabled.value,
-        [`${prefixCls}-loading`]: computedLoading.value,
-        [`${prefixCls}-custom-color`]: props.variant === 'line' && (props.checkedColor || props.uncheckedColor),
-      },
-    ])
-
-    const buttonStyle = computed(() => {
-      if (computedCheck.value && props.checkedColor) {
-        return props.variant === 'line'
-          ? { '--c-switch-custom-color': props.checkedColor }
-          : { backgroundColor: props.checkedColor }
-      }
-      if (!computedCheck.value && props.uncheckedColor) {
-        return props.variant === 'line'
-          ? { '--c-switch-custom-color': props.uncheckedColor }
-          : { backgroundColor: props.uncheckedColor }
-      }
-      return undefined
-    })
-
-    return {
-      prefixCls,
-      cls,
-      mergedDisabled,
-      buttonStyle,
-      computedCheck,
-      computedLoading,
-      handleClick,
-      handleFocus,
-      handleBlur,
-    }
-  },
+    if (!active || version !== generation || props.loading || platform.disabled.value || platform.readonly.value) return
+    if (props.modelValue === undefined) internal.value = next
+    emit('update:modelValue', next)
+    emit('change', next, event)
+    platform.notify('onChange', event)
+  } catch {
+    // Throwing/rejected interceptors cancel the transition, without leaking an unhandled rejection.
+  } finally {
+    if (version === generation) pending.value = false
+  }
+}
+function keyboardToggle(event: KeyboardEvent) { if (!event.repeat) void toggle(event) }
+function focus(event: FocusEvent) { emit('focus', event); platform.notify('onFocus', event) }
+function blur(event: FocusEvent) { emit('blur', event); platform.notify('onBlur', event) }
+const style = computed<CSSProperties>(() => ({
+  '--c-switch-current-track': checked.value ? props.checkedColor : props.uncheckedColor,
+  '--c-switch-loading-color': props.loadingColor,
+}))
+const handleStyle = computed<CSSProperties>(() => {
+  const value = props.handleElevation
+  const level = value === true ? 2 : typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.min(24, Math.trunc(value))) : 0
+  return { boxShadow: level ? '0 ' + level / 2 + 'px ' + (level + 1) + 'px var(--c-switch-shadow-color)' : 'none' }
 })
 </script>

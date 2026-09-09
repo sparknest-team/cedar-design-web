@@ -2,14 +2,14 @@
   <div :class="cls">
     <div ref="trackRef" :class="trackCls" @click="handleClick">
       <div :class="`${prefixCls}-bar`" :style="getBarStyle(computedValue)" />
-      <slider-ticks v-if="showTicks" :value="computedValue" :step="step" :min="min" :max="max" :direction="direction" />
-      <slider-dots v-if="marks" :data="markList" :min="min" :max="max" :direction="direction" />
-      <slider-marks v-if="marks" :data="markList" :min="min" :max="max" :direction="direction" />
+      <slider-ticks v-if="showTicks" :value="computedValue" :step="step" :min="min" :max="max" :orientation="orientation" />
+      <slider-dots v-if="marks" :data="markList" :min="min" :max="max" :orientation="orientation" />
+      <slider-marks v-if="marks" :data="markList" :min="min" :max="max" :orientation="orientation" />
       <slider-button
         v-if="range"
         :style="getBtnStyle(computedValue[0])"
         :value="computedValue[0]"
-        :direction="direction"
+        :orientation="orientation"
         :disabled="mergedDisabled"
         :min="min"
         :max="max"
@@ -22,7 +22,7 @@
       <slider-button
         :style="getBtnStyle(computedValue[1])"
         :value="computedValue[1]"
-        :direction="direction"
+        :orientation="orientation"
         :disabled="mergedDisabled"
         :min="min"
         :max="max"
@@ -80,6 +80,8 @@ export default defineComponent({
      * @param {number | [number, number]} value
      */
     change: (value: number | [number, number]) => true,
+    start: () => true,
+    end: (value: number | [number, number]) => true,
   },
   setup(props, { emit }) {
     const { modelValue } = toRefs(props)
@@ -157,12 +159,14 @@ export default defineComponent({
     )
 
     const getBtnStyle = (value: number) =>
-      getPositionStyle(getOffsetPercent(value, [props.min, props.max]), props.direction)
+      getPositionStyle(getOffsetPercent(value, [props.min, props.max]), props.orientation)
 
     const isDragging = ref(false)
 
     const handleMoveStart = () => {
+      if (mergedDisabled.value || isDragging.value) return
       isDragging.value = true
+      emit('start')
       if (trackRef.value) {
         trackRect.value = trackRef.value.getBoundingClientRect()
       }
@@ -174,9 +178,9 @@ export default defineComponent({
         return 0
       }
       const { left, top, width, height } = trackRect.value
-      const trackLength = props.direction === 'horizontal' ? width : height
+      const trackLength = props.orientation === 'horizontal' ? width : height
       const stepLength = (trackLength * props.step) / (props.max - props.min)
-      let diff = props.direction === 'horizontal' ? x - left : top + height - y
+      let diff = props.orientation === 'horizontal' ? x - left : top + height - y
       if (diff < 0) diff = 0
       if (diff > trackLength) diff = trackLength
 
@@ -210,7 +214,7 @@ export default defineComponent({
       if (start > end) {
         ;[start, end] = [end, start]
       }
-      return props.direction === 'vertical'
+      return props.orientation === 'vertical'
         ? {
             bottom: getOffsetPercent(start, [props.min, props.max]),
             top: getOffsetPercent(props.max + props.min - end, [props.min, props.max]),
@@ -227,13 +231,15 @@ export default defineComponent({
     }
 
     const handleMoveEnd = () => {
+      if (!isDragging.value) return
       isDragging.value = false
+      emit('end', props.range ? [startValue.value, endValue.value] : endValue.value)
     }
 
     const cls = computed(() => [
       prefixCls,
       {
-        [`${prefixCls}-vertical`]: props.direction === 'vertical',
+        [`${prefixCls}-vertical`]: props.orientation === 'vertical',
         [`${prefixCls}-with-marks`]: Boolean(props.marks),
       },
     ])
@@ -242,7 +248,7 @@ export default defineComponent({
       `${prefixCls}-track`,
       {
         [`${prefixCls}-track-disabled`]: mergedDisabled.value,
-        [`${prefixCls}-track-vertical`]: props.direction === 'vertical',
+        [`${prefixCls}-track-vertical`]: props.orientation === 'vertical',
       },
     ])
 

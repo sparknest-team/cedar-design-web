@@ -28,7 +28,7 @@ export default defineComponent({
      * @en Triggered when the mouse moves over the value
      * @property {number} value
      */
-    hoverChange: (value: number) => true,
+    "hover-change": (value: number) => true,
   },
   /**
    * @zh 符号
@@ -90,7 +90,7 @@ export default defineComponent({
     const resetHoverIndex = () => {
       if (hoverIndex.value) {
         hoverIndex.value = 0
-        emit('hoverChange', 0)
+        emit('hover-change', 0)
       }
     }
 
@@ -98,7 +98,7 @@ export default defineComponent({
       const newHoverIndex = isHalf && props.allowHalf ? index + 0.5 : index + 1
       if (newHoverIndex !== hoverIndex.value) {
         hoverIndex.value = newHoverIndex
-        emit('hoverChange', newHoverIndex)
+        emit('hover-change', newHoverIndex)
       }
     }
 
@@ -238,6 +238,7 @@ export default defineComponent({
     return () => (
       <div
         class={cls.value}
+        style={{ fontSize: positiveLength(props.size, '') }}
         role="slider"
         tabindex={mergedDisabled.value ? undefined : 0}
         aria-valuemin={0}
@@ -252,3 +253,4 @@ export default defineComponent({
     )
   },
 })
+import { positiveLength } from '../_utils/size-length'

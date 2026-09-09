@@ -1,168 +1,125 @@
-import { computed, defineComponent, ref, watch, onMounted, onUnmounted } from 'vue'
-import scrollIntoView from 'scroll-into-view-if-needed'
-import Tooltip from '../tooltip'
-import useMenu from './hooks/use-menu'
-import useLevel from './hooks/use-level'
-import { omit } from '../_utils/omit'
-import MenuIndent from './indent.vue'
-import useMenuContext from './hooks/use-menu-context'
-import { useMenuDataCollectorContext } from './hooks/use-menu-data-collector'
+import { computed, defineComponent, h, inject, mergeProps, nextTick, onBeforeUnmount, onDeactivated, ref, watch } from 'vue'
 import { createNamespace } from '../_utils/global-config'
-
-
+import Trigger from '../trigger'
+import { useElementResize } from '../_utils/resize-observer'
+import NavMenu from './menu'
+import NavMenuArrow from './arrow'
+import { navMenuKey } from './context'
+import { createNavMenuTree } from './tree'
+import { navMenuItemProps, type NavMenuItemSlotContext } from './item-props'
+import type { NavMenuKey, NavMenuOption, NavMenuContent } from './types'
 const { name } = createNamespace('nav-menu-item')
-
+const { n } = createNamespace('nav-menu')
 export default defineComponent({
-  name,
-  inheritAttrs: false,
-  props: {
-    /**
-     * @zh 是否禁用
-     * @en Whether to disable
-     */
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
+  name, inheritAttrs: false, props: navMenuItemProps,
+  emits: {
+    'update:modelValue': (_key: NavMenuKey | null) => true,
+    'update:open': (_open: boolean) => true,
+    select: (_key: NavMenuKey | null, _option: NavMenuOption | undefined, _event?: Event) => true,
+    click: (_event: MouseEvent) => true,
   },
-  emits: ['click'],
-  /**
-   * @zh 菜单的图标
-   * @en the icon of menu item
-   * @slot icon
-   * @version 2.11.0
-   */
-  setup(props, { emit }) {
-    const { key } = useMenu()
-    const { level } = useLevel()
-    const menuContext = useMenuContext()
-    const refItemElement = ref<HTMLDivElement>()
-    const isSelected = computed(() => (menuContext.selectedKeys || []).indexOf(key.value) > -1)
-
-    const menuDataCollector = useMenuDataCollectorContext()
-
-    onMounted(() => {
-      menuDataCollector?.collectMenuItem(key.value)
-    })
-
-    onUnmounted(() => {
-      menuDataCollector?.removeMenuItem(key.value)
-    })
-
-    function scrollTo() {
-      if (menuContext.autoScrollIntoView && refItemElement.value && isSelected.value) {
-        scrollIntoView(refItemElement.value as HTMLDivElement, {
-          behavior: 'smooth',
-          block: 'nearest',
-          scrollMode: 'if-needed',
-          boundary: document.documentElement,
-          ...(menuContext.scrollConfig || {}),
-        })
+  setup(props, { slots, emit, attrs, expose }) {
+    const parent = inject(navMenuKey, undefined)
+    const itemId = Symbol('NavMenuItem')
+    const localValue = ref(props.defaultValue), localOpen = ref(props.defaultOpen)
+    const panel = ref<HTMLElement>()
+    const reference = ref<HTMLElement>()
+    const value = computed(() => props.modelValue !== undefined ? props.modelValue : localValue.value)
+    const disabled = computed(() => props.disabled || !!parent?.props.disabled)
+    const open = computed(() => !disabled.value && (props.open ?? localOpen.value))
+    const active = computed(() => props.active ?? value.value != null)
+    const tree = computed(() => createNavMenuTree(props.options, props.fieldNames))
+    const selected = computed(() => value.value == null ? undefined : tree.value.byKey.get(value.value))
+    const hasPopup = () => !!slots.content || props.options.length > 0
+    const top = ref(0)
+    const edges = ref({ left: 0, right: 0, viewportWidth: 0 })
+    function measure() {
+      const element = reference.value
+      const rect = element?.getBoundingClientRect()
+      if (!rect) return
+      top.value = Math.max(0, rect.bottom)
+      edges.value = { left: rect.left, right: rect.right, viewportWidth: element?.ownerDocument.defaultView?.innerWidth ?? 0 }
+    }
+    useElementResize(() => [reference.value], () => open.value, measure)
+    const fullHeightPosition = computed(() => {
+      if (props.placement.startsWith('right')) {
+        const left = Math.max(0, Math.min(edges.value.right, edges.value.viewportWidth))
+        return { left: `${left}px`, right: 'auto', minWidth: 0, maxWidth: `calc(100vw - ${left}px)` }
       }
+      if (props.placement.startsWith('left')) {
+        const right = Math.max(0, edges.value.viewportWidth - edges.value.left)
+        return { left: 'auto', right: `${right}px`, minWidth: 0, maxWidth: `calc(100vw - ${right}px)` }
+      }
+      return { right: 0 }
+    })
+    let detach: (() => void) | undefined
+    watch([open, reference], ([opened]) => {
+      detach?.(); detach = undefined
+      const win = reference.value?.ownerDocument.defaultView
+      if (opened && win) {
+        measure(); win.addEventListener('resize', measure); win.addEventListener('scroll', measure, true)
+        detach = () => { win.removeEventListener('resize', measure); win.removeEventListener('scroll', measure, true) }
+      }
+    }, { flush: 'post', immediate: true })
+    onBeforeUnmount(() => detach?.())
+    const unregister = parent?.registerItem(itemId, () => setOpen(false))
+    onBeforeUnmount(() => unregister?.())
+    function activate() { parent?.activateItem(itemId) }
+    watch(open, value => { if (value) activate() }, { immediate: true, flush: 'sync' })
+    function setOpen(next: boolean) {
+      if (next && (disabled.value || !hasPopup())) return
+      if (next) activate()
+      if (next === open.value) return
+      if (props.open === undefined) localOpen.value = next
+      emit('update:open', next)
     }
-
-    let timer: NodeJS.Timeout
-    onMounted(() => {
-      timer = setTimeout(() => {
-        scrollTo()
-      }, 500)
-    })
-    onUnmounted(() => {
-      clearTimeout(timer)
-    })
-    watch([isSelected], () => {
-      scrollTo()
-    })
-
-    return {
-      menuContext,
-      level,
-      isSelected,
-      refItemElement,
-      onClick(e: MouseEvent) {
-        if (props.disabled) return
-        menuContext.onMenuItemClick && menuContext.onMenuItemClick(key.value)
-        emit('click', e)
+    function focusPanel() { nextTick(() => { if (open.value) panel.value?.querySelector<HTMLElement>('[data-nav-item]:not([aria-disabled="true"]),button:not(:disabled),input:not(:disabled),[tabindex="0"]')?.focus() }) }
+    function close() { setOpen(false); nextTick(() => { if (!open.value) reference.value?.focus() }) }
+    onDeactivated(() => setOpen(false))
+    function select(key: NavMenuKey | null, event?: Event) {
+      const node = key == null ? undefined : tree.value.byKey.get(key)
+      if (disabled.value || node?.disabled || (node && (node.type !== 'item' || node.children.length))) return
+      if (props.modelValue === undefined) localValue.value = key
+      emit('update:modelValue', key); emit('select', key, node?.option, event)
+      if (props.hideOnSelect) close()
+    }
+    const context = (): NavMenuItemSlotContext => ({ modelValue: value.value, selectedOption: selected.value?.option, active: active.value, open: open.value, select, close })
+    function renderLabel() {
+      const node = selected.value
+      const content = (node ? node.option[tree.value.names.label] : props.label) as NavMenuContent
+      return typeof content === 'function' ? content({ option: node?.option ?? {}, selected: !!node, active: active.value, expanded: open.value, level: 0 }) : content
+    }
+    expose({ close, select, setOpen })
+    return () => h('li', { class: n('node'), role: 'none' }, [h(Trigger, {
+      trigger: props.trigger ?? 'click', open: open.value, disabled: disabled.value || !hasPopup(), unmountOnClose: true,
+      placement: props.placement, popupContainer: props.popupContainer ?? parent?.props.popupContainer,
+      popupClass: props.popupClass ?? parent?.props.popupClass, popupOffset: 4,
+      animationName: props.popupLayout === 'dropdown' ? 'fade-in' : '',
+      onOpenChange: setOpen,
+    }, { default: () => h('div', mergeProps(attrs, {
+      ref: reference, role: 'menuitem', tabindex: disabled.value ? -1 : 0, 'data-nav-item': '',
+      'aria-disabled': disabled.value || undefined, 'aria-expanded': hasPopup() ? open.value : undefined,
+      'aria-haspopup': hasPopup() ? (slots.content ? 'dialog' : 'menu') : undefined,
+      class: [n('item'), { [n('--active')]: active.value, [n('--disabled')]: disabled.value }],
+      onClick: (event: MouseEvent) => { if (disabled.value) { event.preventDefault(); return } activate(); emit('click', event) },
+      onKeydown: (event: KeyboardEvent) => {
+        if (event.target !== event.currentTarget || disabled.value) return
+        if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); event.stopPropagation(); if (hasPopup()) setOpen(!open.value); else reference.value?.click() }
+        if (event.key === 'ArrowDown' && hasPopup()) { event.preventDefault(); event.stopPropagation(); setOpen(true); focusPanel() }
       },
-    }
-  },
-  render() {
-    const { level, menuContext, disabled, isSelected, onClick } = this
-    const { prefixCls, collapsed, inTrigger, mode, tooltipProps } = menuContext
-
-    const needTooltip = collapsed && !inTrigger && level === 1
-    const needTextIndent = mode === 'vertical' && level > 1
-    const children = this.$slots.default?.() || []
-    const showIndent = needTextIndent && !inTrigger && !collapsed
-    const iconElement = this.$slots.icon && this.$slots.icon()
-
-    const content = [
-      showIndent && <MenuIndent level={level} />,
-      iconElement && <span class={`${prefixCls}-icon`}>{iconElement}</span>,
-      showIndent || iconElement ? (
-        <span
-          class={[
-            `${prefixCls}-item-inner`,
-            {
-              [`${prefixCls}-title`]: iconElement,
-            },
-          ]}
-        >
-          {children}
-        </span>
-      ) : (
-        children
-      ),
-    ].filter(Boolean)
-
-    const itemElement = (
-      <div
-        ref="refItemElement"
-        role="menuitem"
-        tabindex={disabled ? -1 : 0}
-        aria-disabled={disabled}
-        class={[
-          `${prefixCls}-item`,
-          {
-            [`${prefixCls}-disabled`]: disabled,
-            [`${prefixCls}-selected`]: isSelected,
-            [`${prefixCls}-has-icon`]: iconElement,
-          },
-        ]}
-        {...this.$attrs}
-        onClick={onClick}
-        onKeydown={(event: KeyboardEvent) => {
-          if (!disabled && (event.key === 'Enter' || event.key === ' ')) {
-            event.preventDefault()
-            onClick(event as unknown as MouseEvent)
-          }
-        }}
-      >
-        {/* 内容 */}
-        {content}
-        {/* 选中的下横线 */}
-        {isSelected && mode === 'horizontal' && <div class={`${prefixCls}-selected-label`} />}
-      </div>
-    )
-
-    if (needTooltip) {
-      const tooltipClassNames = [`${prefixCls}-item-tooltip`, tooltipProps?.class]
-      return (
-        <Tooltip
-          {...({
-            trigger: 'hover',
-            placement: 'right',
-            class: tooltipClassNames,
-            ...omit(tooltipProps || {}, ['class']),
-          } as any)}
-          v-slots={{
-            default: () => itemElement,
-            content: () => children,
-          }}
-        />
-      )
-    }
-
-    return itemElement
+    }), slots.default?.(context()) ?? [slots.icon?.(context()), h('span', { class: n('label') }, [slots.label?.(context()) ?? renderLabel()]), hasPopup() ? h(NavMenuArrow, { placement: props.placement, open: open.value }) : null]),
+    content: () => h('div', {
+      ref: panel,
+      role: slots.content ? 'dialog' : undefined, 'aria-label': typeof props.label === 'string' ? props.label : undefined,
+      class: [n('popup'), n(`--${parent?.theme.value ?? 'light'}`), n(`--${parent?.props.size ?? 'md'}`), n(`panel--${props.popupLayout}`)],
+      style: [props.popupLayout === 'full-width' ? { position: 'fixed', left: 0, right: 0, top: `${top.value}px`, maxHeight: `calc(100dvh - ${top.value}px)` } : props.popupLayout === 'full-height' ? { position: 'fixed', top: 0, bottom: 0, maxHeight: '100dvh', width: 'var(--c-nav-menu-panel-width)', ...fullHeightPosition.value } : {}, props.popupStyle],
+      onKeydown: (event: KeyboardEvent) => { if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); close() } },
+    }, slots.content?.(context()) ?? [h(NavMenu, {
+      options: props.options, fieldNames: props.fieldNames, modelValue: value.value, mode: props.optionsMode,
+      theme: parent?.theme.value as 'light' | 'dark' | undefined, size: parent?.props.size,
+      popupContainer: props.popupContainer ?? parent?.props.popupContainer,
+      onSelect: (key: NavMenuKey, _option: NavMenuOption, event: Event) => select(key, event),
+    }, { label: slots['option-label'], icon: slots['option-icon'], extra: slots['option-extra'] })]),
+    })])
   },
 })

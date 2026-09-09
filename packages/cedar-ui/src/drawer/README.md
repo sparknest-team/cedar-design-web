@@ -74,7 +74,7 @@ permalink: /components/drawer/
 | unmount-on-close      | 关闭时是否卸载节点                                                                        | `boolean`                                                                           | `false`   |
 | width                 | 抽屉的宽度（仅在placement为right,left时可用）                                             | `number\|string`                                                                    | `250`     |
 | height                | 抽屉的高度（仅在placement为top,bottom时可用）                                             | `number\|string`                                                                    | `250`     |
-| popup-container       | 弹出框的挂载容器                                                                          | `string \| HTMLElement`                                                             | `'body'`  |
+| popup-container       | 弹出框的挂载容器                                                                          | `string \| HTMLElement \| false`                                                             | `'body'`  |
 | drawer-style          | 抽屉的样式                                                                                | `CSSProperties`                                                                     | -         |
 | before-confirm             | 触发 confirm 事件前的回调函数。如果返回 false 则不会触发后续事件，也可使用 done 进行异步关闭。 | `( done: (closed: boolean) => void) => void \| boolean \| Promise<void \| boolean>` | -         |
 | before-cancel         | 触发 cancel 事件前的回调函数。如果返回 false 则不会触发后续事件。                         | `() => boolean`                                                                     | -         |
@@ -109,7 +109,7 @@ permalink: /components/drawer/
 
 #### DrawerConfig（命令式配置，≠ 组件 Props）
 
-命令式 `Drawer.open(config)` 的配置对象。拦截器与 Props 同名（`beforeConfirm` / `beforeCancel` / `beforeOpen` / `beforeClose`）；事件回调仍用 `onConfirm` / `onCancel` / `onOpen` / `onClose`。
+命令式 `Drawer.open(config)` 的配置对象。拦截器与 Props 同名（`beforeConfirm` / `beforeCancel`）；事件回调仍用 `onConfirm` / `onCancel` / `onOpen` / `onOpened` / `onClose` / `onClosed`。
 
 | 属性              | 说明                                                                                      | 类型                                                                                 | 默认值    |
 | ----------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | --------- |
@@ -129,17 +129,17 @@ permalink: /components/drawer/
 | cancelButtonProps | 取消按钮的Props                                                                           | `ButtonProps`                                                                        | -         |
 | width             | 抽屉的宽度（仅在placement为right,left时可用）                                             | `number \| string`                                                                   | `250`     |
 | height            | 抽屉的高度（仅在placement为top,bottom时可用）                                             | `number` \| `string`                                                                 | `250`     |
-| popupContainer    | 弹出框的挂载容器                                                                          | `string \| HTMLElement`                                                              | `'body'`  |
+| popupContainer    | 弹出框的挂载容器                                                                          | `string \| HTMLElement \| false`                                                              | `'body'`  |
 | drawerStyle       | 抽屉的样式                                                                                | `CSSProperties`                                                                      | -         |
 | onConfirm              | 点击确定按钮时触发                                                                        | `(event: MouseEvent) => void`                                                        | -         |
 | onCancel          | 点击取消、关闭按钮时触发                                                                  | `(event: MouseEvent) => void`                                                        | -         |
 | onClickOverlay    | 点击背景层时触发                                                                          | `(event: MouseEvent) => void`                                                        | -         |
 | beforeConfirm          | 触发 confirm 事件前的回调函数。如果返回 false 则不会触发后续事件，也可使用 done 进行异步关闭。 | `( done: (closed: boolean) => void ) => void \| boolean \| Promise<void \| boolean>` | -         |
 | beforeCancel      | 触发 cancel 事件前的回调函数。如果返回 false 则不会触发后续事件。                         | `() => boolean`                                                                      | -         |
-| onOpen            | 抽屉打开后（动画结束）触发                                                                | `() => void`                                                                         | -         |
-| onClose           | 抽屉关闭后（动画结束）触发                                                                | `() => void`                                                                         | -         |
-| beforeOpen        | 抽屉打开前触发                                                                            | `() => void`                                                                         | -         |
-| beforeClose       | 抽屉关闭前触发（对应事件 `before-close`）                                                 | `() => void`                                                                         | -         |
+| onOpen | 开始打开时触发 | `() => void` | - |
+| onClose | 开始关闭时触发 | `() => void` | - |
+| onOpened | 打开动画结束时触发 | `() => void` | - |
+| onClosed | 关闭动画结束时触发 | `() => void` | - |
 | escToClose        | 是否支持 ESC 键关闭抽屉                                                                   | `boolean`                                                                            | `true`    |
 | header            | 是否展示头部内容                                                                          | `boolean \| RenderContent`                                                           | `true`    |
 | footer            | 是否展示底部内容                                                                          | `boolean \| RenderContent`                                                           | `true`    |
@@ -165,3 +165,7 @@ permalink: /components/drawer/
 ```ts
 import type { DrawerProps } from '@cedarjs/ui'
 ```
+
+## 生命周期迁移
+
+open / close 表示开始打开 / 开始关闭，opened / closed 表示动画结束。原 beforeOpen/beforeClose 通知改为 open/close；原 open/close 动画结束通知改为 opened/closed。命令式配置使用 onOpen/onOpened/onClose/onClosed；只有 beforeConfirm/beforeCancel 是拦截钩子。节点在 closed 后销毁。

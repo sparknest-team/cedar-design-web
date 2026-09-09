@@ -6,7 +6,7 @@ const Alert = withInstall(_Alert, Object.assign(_Alert, {
 }), { components: [_Alert] })
 
 export type AlertInstance = InstanceType<typeof _Alert>
-export type { AlertProps, AlertType, AlertVariant } from './props'
+export type { AlertProps, AlertStatus, AlertVariant } from './props'
 
 export { alertProps }
 export { Alert }

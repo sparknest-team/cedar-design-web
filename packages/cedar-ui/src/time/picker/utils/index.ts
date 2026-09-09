@@ -1,3 +1,4 @@
+import { clockSeconds, isOvernight } from '../../../_utils/picker-data'
 import BTween from 'b-tween'
 import type { Dayjs } from 'dayjs'
 import { dayjs } from '../../../_utils/date'
@@ -84,9 +85,7 @@ export function isTimeRangeNextDay(start?: Dayjs, end?: Dayjs): boolean {
   if (!start || !end || !isDayjs(start) || !isDayjs(end)) {
     return false
   }
-  const startSeconds = start.hour() * 3600 + start.minute() * 60 + start.second()
-  const endSeconds = end.hour() * 3600 + end.minute() * 60 + end.second()
-  return endSeconds < startSeconds
+  return isOvernight(clockSeconds(start.hour(), start.minute(), start.second()), clockSeconds(end.hour(), end.minute(), end.second()))
 }
 
 export function isValidInputValue(time: string, format: string): boolean {

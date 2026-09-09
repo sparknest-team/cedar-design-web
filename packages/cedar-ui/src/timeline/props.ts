@@ -23,10 +23,10 @@ export const timelineProps = {
   },
   /**
    * @zh 时间轴方向
-   * @en Timeline direction
+   * @en Timeline orientation
    * @values 'horizontal', 'vertical'
    */
-  direction: {
+  orientation: {
     type: String as PropType<Direction>,
     default: "vertical",
   },

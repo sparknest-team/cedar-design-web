@@ -45,4 +45,4 @@ export const loadingProps = {
   hideIcon: Boolean,
 };
 
-export type LoadingProps = ExtractPropTypes<typeof loadingProps>;
+export type LoadingProps = import("vue").ExtractPublicPropTypes<typeof loadingProps>;

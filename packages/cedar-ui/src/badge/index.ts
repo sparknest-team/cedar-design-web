@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _Badge from './badge'
+import _Badge from './badge.vue'
 import { badgeProps } from './props'
 
 const Badge = withInstall(_Badge, Object.assign(_Badge, {

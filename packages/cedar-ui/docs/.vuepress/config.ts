@@ -3,13 +3,14 @@ import path from 'path'
 import { defineUserConfig } from 'vuepress'
 import { viteBundler } from '@vuepress/bundler-vite'
 import hopeTheme from './theme'
+import { localizedPages } from './i18n/pages'
 import { codeBlockPlugin } from './plugin-code-block/src/node'
 // import { prismjsPlugin } from '@vuepress/plugin-prismjs'
 import { slimsearchPlugin } from '@vuepress/plugin-slimsearch'
 import components from 'unplugin-vue-components/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import type { Plugin } from 'vite'
-import { CedarResolver } from '@cedarjs/resolver'
+import { CedarResolver, CedarStyleImports } from '@cedarjs/resolver'
 
 const projRoot = path.resolve(__dirname, '../../')
 
@@ -60,8 +61,10 @@ export default defineUserConfig({
     '/': {
       lang: 'zh-CN',
     },
+    '/en/': { lang: 'en-US', title: 'Cedar Design Web', description: 'Vue component library' },
   },
   plugins: [
+    localizedPages(),
     codeBlockPlugin,
     slimsearchPlugin({
       suggestion: false,
@@ -76,6 +79,7 @@ export default defineUserConfig({
       },
       plugins: [
         uploadMockPlugin(),
+        CedarStyleImports(),
         // @ts-ignore
         vueJsx(),
         components({

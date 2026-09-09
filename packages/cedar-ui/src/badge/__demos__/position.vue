@@ -1,81 +1,42 @@
-<template>
-  <c-config-provider :rtl="rtl">
-    <c-space>
-      <c-button @click="toggleRtl">Toggle RTL</c-button>
-      <c-button @click="toggleDot">Toggle Dot</c-button>
-      <c-button @click="plusOffset">Plus Offset</c-button>
-      <c-button @click="minusOffset">Minus Offset</c-button>
-      <c-button @click="resetOffset">Reset Offset</c-button>
-    </c-space>
-    <c-divider />
-    <c-space direction="column" size="lg">
-      <c-badge :content="100" position="top-right" :dot="dot" :offset-x="offsetX" :offset-y="offsetY">
-        <c-avatar shape="square">
-          <span>
-            <c-icon-user />
-          </span>
-        </c-avatar>
-      </c-badge>
-      <c-badge :content="100" position="top-left" :dot="dot" :offset-x="offsetX" :offset-y="offsetY">
-        <c-avatar shape="square">
-          <span>
-            <c-icon-user />
-          </span>
-        </c-avatar>
-      </c-badge>
-      <c-badge :content="100" position="bottom-right" :dot="dot" :offset-x="offsetX" :offset-y="offsetY">
-        <c-avatar shape="square">
-          <span>
-            <c-icon-user />
-          </span>
-        </c-avatar>
-      </c-badge>
-      <c-badge :content="100" position="bottom-left" :dot="dot" :offset-x="offsetX" :offset-y="offsetY">
-        <c-avatar shape="square">
-          <span>
-            <c-icon-user />
-          </span>
-        </c-avatar>
-      </c-badge>
-      <c-badge :content="100" mode="inline" inline-position="start" :dot="dot" :offset-y="offsetY">
-        <c-avatar shape="square">
-          <span>
-            <c-icon-user />
-          </span>
-        </c-avatar>
-      </c-badge>
-      <c-badge :content="100" mode="inline" inline-position="end" :dot="dot" :offset-y="offsetY">
-        <c-avatar shape="square">
-          <span>
-            <c-icon-user />
-          </span>
-        </c-avatar>
-      </c-badge>
-    </c-space>
-  </c-config-provider>
-</template>
-<script lang="ts" setup>
+<script setup lang="ts">
 import { ref } from 'vue'
-const rtl = ref(false)
-const toggleRtl = () => {
-  rtl.value = !rtl.value
-}
+const offset = ref(0)
 const dot = ref(false)
-const toggleDot = () => {
-  dot.value = !dot.value
-}
-const offsetX = ref(0)
-const offsetY = ref(0)
-const plusOffset = () => {
-  offsetX.value += 1
-  offsetY.value += 1
-}
-const minusOffset = () => {
-  offsetX.value -= 1
-  offsetY.value -= 1
-}
-const resetOffset = () => {
-  offsetX.value = 0
-  offsetY.value = 0
-}
+const positions = ['top-right', 'top-left', 'bottom-right', 'bottom-left', 'left', 'right'] as const
+const inlinePositions = ['start', 'end'] as const
 </script>
+
+<template>
+  <c-space direction="column" :size="24">
+    <c-space wrap
+      ><c-button @click="offset++">Offset +1</c-button><c-button @click="offset--">Offset -1</c-button
+      ><c-button @click="offset = 0">Reset</c-button><c-switch v-model="dot" aria-label="Toggle dot"
+    /></c-space>
+    <output aria-live="polite">Offset: {{ offset }}px</output>
+    <c-space wrap :size="32"
+      ><c-badge
+        v-for="position in positions"
+        :key="position"
+        :position="position"
+        :content="100"
+        :dot="dot"
+        :offset-x="offset"
+        :offset-y="offset"
+        ><span style="display: inline-block; padding: 12px; border: 1px solid currentColor">{{
+          position
+        }}</span></c-badge
+      ></c-space
+    >
+    <c-space wrap :size="24"
+      ><c-badge
+        v-for="position in inlinePositions"
+        :key="position"
+        mode="inline"
+        :inline-position="position"
+        :content="9"
+        :dot="dot"
+        :offset-y="offset"
+        :description="position"
+    /></c-space>
+  </c-space>
+</template>

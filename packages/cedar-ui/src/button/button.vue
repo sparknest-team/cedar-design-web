@@ -1,202 +1,74 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+import vHover, { HoverOverlay as BaseHoverOverlay, useHoverOverlay } from '../hover'
+import BaseLoading from '../loading'
+import vRipple from '../ripple'
+import { createNamespace } from '../_utils/global-config'
+import { buttonProps } from './props'
+import { useButton } from './use-button'
+
+defineOptions({ name: createNamespace('button').name })
+const props = defineProps(buttonProps)
+const { n, classes } = createNamespace('button')
+const { states, busy, blocked, computedStyle, handleClick, handleTouchstart } = useButton(props)
+const { hovering, handleHovering } = useHoverOverlay()
+const focusing = ref(false)
+</script>
+
 <template>
   <component
     :is="component"
-    v-ripple="ripple"
+    v-ripple="{ disabled: blocked || !ripple }"
     v-hover:desktop="handleHovering"
-    v-bind="attrs"
     :class="
       classes(
         n(),
         n(`--size-${states.size}`),
-        [states.stacked, n('--stacked')],
         n(`--status-${states.status}`),
         n(`--variant-${states.variant}`),
-        [states.block, n('--block')],
+        [block, n('--block')],
         [round, n('--round')],
-        [loading || pending, n('--loading')],
+        [states.stacked, n('--stacked')],
+        [states.iconContainer, n('--icon-container')],
+        [states.iconContainer && states.variant === 'default', n(`--icon-container-${states.status}`)],
+        [states.variant === 'default' && !states.iconContainer, states.elevation],
+        [busy, n('--loading')],
+        [busy, n(`--loading-${loadingMode}`)],
         [states.disabled, n('--disabled')],
-        [hovering, n('--hovering')],
-        [isFocusing, n('--focus')],
+        [!blocked && focusing && focusable, n('--focus')],
+        [!blocked && hovering, n('--hovering')],
       )
     "
     :style="computedStyle"
     :type="component === 'button' ? htmlType : undefined"
     :disabled="component === 'button' ? blocked : undefined"
     :aria-disabled="component === 'a' && blocked ? true : undefined"
-    :aria-busy="loading || pending || undefined"
-    :tabindex="component === 'a' && blocked ? -1 : undefined"
+    :aria-busy="busy || undefined"
+    :tabindex="!focusable || (component === 'a' && blocked) ? -1 : undefined"
     :autofocus="autofocus"
     @click="handleClick"
-    @focus="handleFocus"
-    @blur="isFocusing = false"
+    @touchstart="handleTouchstart"
+    @focus="focusing = true"
+    @blur="focusing = false"
   >
-    <!-- 加载中 loading -->
-    <div
-      v-if="loading || pending"
-      :class="classes(n(`--loading-${loadingType}`))"
-    >
-      <icon-loading v-if="loadingType === 'default'" :spin="true" />
-      <div v-else-if="loadingType === 'fill'">
-        <icon-loading :size="24" :spin="true" />
-      </div>
-      <div v-else-if="loadingType === 'line'">
-        <Progress indeterminate :showText="false" :strokeWidth="3" />
-      </div>
-    </div>
-
-    <!-- icon图标 -->
-    <span v-if="$slots.icon" :class="classes(n('--icon'))">
+    <span v-if="busy && !(loadingMode === 'default' && $slots.icon)" :class="n('loading')" aria-hidden="true" :style="{ color: loadingColor }">
+      <span v-if="loadingMode === 'line'" :class="n('loading-line')" />
+      <BaseLoading
+        v-else
+        :type="loadingType"
+        :size="loadingSize ?? states.size"
+        :color="loadingColor"
+        :radius="loadingRadius"
+      />
+    </span>
+    <span v-if="$slots.icon" :class="classes(n('--icon'), [busy && loadingMode === 'fill', n('--hidden')])"
+      >
       <slot name="icon" />
+      <span v-if="busy && loadingMode === 'default'" :class="n('loading')" aria-hidden="true" :style="{ color: loadingColor }">
+        <BaseLoading :type="loadingType" :size="loadingSize ?? 'xs'" :color="loadingColor" :radius="loadingRadius" />
+      </span>
     </span>
-
-    <!-- 内容 -->
-    <span
-      :class="
-        classes(n('content'), [
-          (loading || pending) && loadingType === 'fill',
-          n('--hidden'),
-        ])
-      "
-    >
-      <slot />
-    </span>
-
-    <!-- 底色 -->
-    <div :class="`${n('--underlay')}`" :style="computedUnderlayStyle"></div>
-
-    <!-- 上色 -->
-    <div :class="`${n('--overlay')}`"></div>
-
-    <!-- 边框 -->
-    <div :class="classes(n('border'))" :style="computedBorderStyle"></div>
-    <div :class="classes(n('border-state'))" :style="computedBorderStyle"></div>
+    <span v-if="$slots.default" :class="classes(n('content'), [busy && loadingMode === 'fill', n('--hidden')])"><slot /></span>
+    <BaseHoverOverlay :hovering="!blocked && hovering" />
   </component>
 </template>
-
-<script lang="ts" setup>
-import { computed, ref, type CSSProperties, useAttrs } from "vue";
-import { call, normalizeToArray } from "@cedarjs/shared";
-import { buttonProps } from "./props";
-import { formatElevation } from "../_utils/maple/components";
-import { useHoverOverlay } from "../hover";
-import vHover from "../hover";
-import vRipple from "../ripple";
-import { IconLoading } from "@cedarjs/icons-vue/icon-loading";
-import Progress from "../progress";
-import { createNamespace } from "../_utils/global-config";
-import { useButtonGroup } from "./provide";
-
-defineOptions({
-  name: createNamespace("button").name,
-});
-
-const { n, classes } = createNamespace("button");
-const props = defineProps(buttonProps);
-
-const emit = defineEmits(["click", "touchstart"]);
-
-const attrs = useAttrs();
-
-const { buttonGroup } = useButtonGroup();
-const isFocusing = ref(false);
-const pending = ref(false);
-const blocked = computed(() =>
-  Boolean(props.loading || pending.value || states.value.disabled),
-);
-
-const states = computed(() => {
-  if (!buttonGroup) {
-    return {
-      status: props.status ?? "default",
-      variant: props.variant ?? "default",
-      size: props.size ?? "md",
-      elevation: formatElevation(props.elevation, 2),
-      color: props.color,
-      iconContainer: props.iconContainer,
-      textColor: props.textColor,
-      stacked: props.stacked ?? false,
-      disabled: props.disabled ?? false,
-      block: props.block,
-    };
-  }
-
-  const { status, size, color, textColor, variant, stacked, disabled } =
-    buttonGroup ?? {};
-
-  return {
-    variant: props.variant ?? variant.value,
-    status: props.status ?? status.value,
-    size: props.size ?? size.value,
-    color: props.color ?? color.value,
-    textColor: props.textColor ?? textColor.value,
-    stacked: props.stacked ?? stacked.value,
-    disabled: props.disabled ?? disabled.value,
-    elevation: "",
-  };
-});
-const { hovering, handleHovering } = useHoverOverlay();
-
-const computedUnderlayStyle = computed(() => {
-  const { color } = states.value;
-  if (color && states.value.variant !== "default") {
-    return { background: color };
-  }
-  return {};
-});
-
-const computedStyle = computed(() => {
-  const { textColor, color } = states.value;
-  const styleObj: CSSProperties = {};
-  if (textColor) {
-    styleObj.color = textColor;
-  }
-  if (color && states.value.variant === "default") {
-    styleObj.background = color;
-  }
-  return styleObj;
-});
-
-const computedBorderStyle = computed(() => {
-  const { textColor } = states.value;
-  const styleObj: CSSProperties = {};
-  if (textColor && states.value.variant === "outline") {
-    styleObj.borderColor = textColor;
-  }
-  return styleObj;
-});
-
-function attemptAutoLoading(result: any) {
-  if (props.autoLoading) {
-    pending.value = true;
-
-    Promise.all(normalizeToArray(result))
-      .then(() => {
-        pending.value = false;
-      })
-      .catch(() => {
-        pending.value = false;
-      });
-  }
-}
-
-const handleClick = (e: MouseEvent) => {
-  const { loading, disabled, onClick } = props;
-  if (loading || disabled || pending.value) {
-    e.preventDefault();
-    return;
-  }
-  if (!onClick) {
-    return;
-  }
-
-  attemptAutoLoading(call(onClick, e));
-};
-
-function handleFocus() {
-  if (!props.focusable) {
-    return;
-  }
-
-  isFocusing.value = true;
-}
-</script>

@@ -1,3 +1,4 @@
+import { popupContainerProp } from '../_utils/popup-container'
 import type { ExtractPropTypes, PropType } from "vue";
 
 export const overlayProps = {
@@ -14,12 +15,9 @@ export const overlayProps = {
   /** 是否支持 Escape 键关闭 */
   escToClose: { type: Boolean, default: true },
   /** Portal 挂载位置，false 表示不使用 Teleport */
-  popupContainer: {
-    type: [String, Object, Boolean] as PropType<string | HTMLElement | false>,
-    default: "body",
-  },
+  popupContainer: popupContainerProp,
   /** 自定义层级 */
   zIndex: Number,
 };
 
-export type OverlayProps = Partial<ExtractPropTypes<typeof overlayProps>>;
+export type OverlayProps = import("vue").ExtractPublicPropTypes<typeof overlayProps>;

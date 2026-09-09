@@ -1,6 +1,8 @@
 import type { ExtractPropTypes, PropType } from 'vue'
+import { popupContainerProp } from '../_utils/popup-container'
 
 export const backTopProps = {
+  popupContainer: popupContainerProp,
   visibleHeight: {
     type: Number,
     default: 200,
@@ -22,4 +24,4 @@ export const backTopProps = {
   },
 } 
 
-export type BackTopProps = Partial<ExtractPropTypes<typeof backTopProps>>
+export type BackTopProps = import("vue").ExtractPublicPropTypes<typeof backTopProps>

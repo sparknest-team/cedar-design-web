@@ -1,13 +1,14 @@
-<template>
-  <c-space size="lg">
-    <c-switch disabled />
-    <c-switch :default-checked="true" disabled />
-    <c-switch variant="round" disabled />
-    <c-switch :default-checked="true" variant="round" disabled />
-    <c-switch variant="line" disabled />
-    <c-switch :default-checked="true" variant="line" disabled />
-  </c-space>
-</template>
-
-<script lang="ts">
+<script setup lang="ts">
+const variants = ['circle', 'round', 'line', 'md3'] as const
 </script>
+
+<template>
+  <c-space wrap
+    ><template v-for="variant in variants" :key="variant"
+      ><c-switch :variant="variant" disabled :aria-label="variant + ' off'" /><c-switch
+        :variant="variant"
+        default-checked
+        disabled
+        :aria-label="variant + ' on'" /></template
+  ></c-space>
+</template>

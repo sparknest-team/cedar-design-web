@@ -46,7 +46,7 @@
                 :time-picker-props="timePickerProps"
                 :disabled-time="getDisabledTimeFunc(0)"
                 :disabled="disabled[0]"
-                @timePickerSelect="onStartTimePickerSelect"
+                @time-picker-select="onStartTimePickerSelect"
               />
               <DatePanel
                 v-model:currentView="currentDateView"
@@ -60,7 +60,7 @@
                 :time-picker-props="timePickerProps"
                 :disabled-time="getDisabledTimeFunc(1)"
                 :disabled="disabled[1]"
-                @timePickerSelect="onEndTimePickerSelect"
+                @time-picker-select="onEndTimePickerSelect"
               />
             </template>
           </template>
@@ -72,7 +72,7 @@
         :show-today-btn="false"
         :show-confirm-btn="showConfirmBtn"
         :confirm-btn-disabled="confirmBtnDisabled"
-        @confirmBtnClick="onConfirmBtnClick"
+        @confirm-btn-click="onConfirmBtnClick"
       >
         <template v-if="extra || $slots.extra" #extra>
           <slot v-if="$slots.extra" name="extra" />

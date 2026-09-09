@@ -1,7 +1,7 @@
 // Vitest Snapshot v1
 
 exports[`Divider > render 1`] = `
-"<div class=\\"c-divider c-divider--orientation-horizontal c-divider--text-align-center c-divider--size-y-md c-divider--type-solid\\" style=\\"max-width: calc(100% - undefined - undefined);\\" role=\\"separator\\">
+"<div class=\\"c-divider c-divider--orientation-horizontal c-divider--text-align-center c-divider--type-solid c-divider--size-y-md\\" role=\\"separator\\" aria-orientation=\\"horizontal\\">
   <!--v-if-->
 </div>"
 `;

@@ -3,22 +3,22 @@ import type { ExtractPropTypes, PropType } from 'vue'
 /**
  * Alert 类型（状态色系，与 `Status` 对齐；瞬时消息类用 `MessageType` 含 `error`）
  */
-export type AlertType = 'info' | 'success' | 'warning' | 'danger' | 'default'
+export type AlertStatus = 'info' | 'success' | 'warning' | 'danger' | 'default'
 
 /**
  * Alert 视觉变体
  * - tonal：浅色填充
- * - outlined：透明描边
+ * - outline：透明描边
  * - standard：浅色填充 + 描边（默认）
  */
-export type AlertVariant = 'tonal' | 'outlined' | 'standard'
+export type AlertVariant = 'tonal' | 'outline' | 'standard'
 
 export const alertProps = {
   /**
    * 警告提示的类型
    */
-  type: {
-    type: String as PropType<AlertType>,
+  status: {
+    type: String as PropType<AlertStatus>,
     default: 'info',
   },
   /**
@@ -72,9 +72,9 @@ export const alertProps = {
    * 投影层级
    */
   elevation: {
-    type: [Boolean, String, Number] as PropType<boolean | string | number>,
+    type: [Boolean, Number] as PropType<boolean | string | number>,
     default: false,
   },
 }
 
-export type AlertProps = ExtractPropTypes<typeof alertProps>
+export type AlertProps = import("vue").ExtractPublicPropTypes<typeof alertProps>

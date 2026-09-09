@@ -1,3 +1,4 @@
+import { matchesOptionText } from '../_utils/option-data'
 import { isBoolean, isFunction, isNumber, isObject, isString } from '../_utils/is'
 import type {
   FilterOption,
@@ -183,7 +184,7 @@ export const isValidOption = (
   }
 
   if (filterOption) {
-    return optionInfo.label.toLowerCase().includes((inputValue ?? '').toLowerCase())
+    return matchesOptionText(optionInfo.label, inputValue ?? '')
   }
 
   return true

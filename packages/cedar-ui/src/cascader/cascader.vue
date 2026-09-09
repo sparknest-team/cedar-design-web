@@ -5,13 +5,13 @@
     animation-name="slide-dynamic-origin"
     auto-fit-transform-origin
     :open="computedOpen"
-    placement="bl"
+    placement="bottom-start"
     :disabled="mergedDisabled"
     :popup-offset="4"
     :auto-fit-popup-width="showSearchPanel"
-    :popup-container="popupContainer"
+    :popup-container="popupContainer !== undefined ? popupContainer : triggerProps?.popupContainer"
     :prevent-focus="true"
-    :click-to-close="!filterable"
+    :close-on-click-reference="!filterable"
     @open-change="handleOpenChange"
   >
     <select-view
@@ -152,7 +152,7 @@ export default defineComponent({
      * @en Triggered when the input value changes
      * @property {string} value
      */
-    inputValueChange: (value: string) => true,
+    "input-value-change": (value: string) => true,
     /**
      * @zh 点击清除按钮时触发
      * @en Triggered when the clear button is clicked
@@ -169,7 +169,7 @@ export default defineComponent({
      * @en Triggered when the display state of the dropdown changes
      * @property {boolean} visible
      */
-    openChange: (visible: boolean) => true,
+    "open-change": (visible: boolean) => true,
     /**
      * @zh 获得焦点时触发
      * @en Triggered when focus
@@ -374,7 +374,7 @@ export default defineComponent({
       if (computedOpen.value !== visible) {
         _open.value = visible
         emit('update:open', visible)
-        emit('openChange', visible)
+        emit('open-change', visible)
       }
     }
 
@@ -443,11 +443,11 @@ export default defineComponent({
         if (reason === 'manual' && !computedOpen.value) {
           _open.value = true
           emit('update:open', true)
-          emit('openChange', true)
+          emit('open-change', true)
         }
 
         _inputValue.value = value
-        emit('inputValueChange', value)
+        emit('input-value-change', value)
 
         if (props.filterable) {
           handleSearch(value)

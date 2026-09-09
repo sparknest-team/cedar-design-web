@@ -1,3 +1,4 @@
+import { popupContainerProp } from '../_utils/popup-container'
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ComponentSize } from '../_utils/constant'
 import { componentSizes } from '../_utils/constant'
@@ -8,6 +9,7 @@ import type { CalendarValue, Mode } from './picker/types'
 const dateModes: Mode[] = ['date', 'year', 'quarter', 'month', 'week']
 
 export const dateProps = {
+  popupContainer: popupContainerProp,
     /**
      * @zh 绑定值
      * @en Value
@@ -70,8 +72,8 @@ export const dateProps = {
     /**
      * @zh 输入框变体
      * @en Input variant
-     * @values 'filled','outlined','standard'
-     * @defaultValue 'filled'
+     * @values 'filled','outline','standard'
+     * @default-value 'filled'
      */
     variant: {
       type: String as PropType<FormControlVariant>,
@@ -117,4 +119,4 @@ export const dateProps = {
     },
 } 
 
-export type DateProps = Partial<ExtractPropTypes<typeof dateProps>>
+export type DateProps = import("vue").ExtractPublicPropTypes<typeof dateProps>

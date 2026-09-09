@@ -2,120 +2,36 @@
 
 :root {
   --c-nav-menu-font-size: var(~'--c-font-size-body-3');
-  --c-nav-menu-line-height: var(~'--c-line-height');
   --c-nav-menu-border-radius: var(~'--c-border-radius-sm');
-  --c-nav-menu-item-font-weight-selected: var(~'--c-font-weight-500');
-  --c-nav-menu-item-selected-label-color: rgb(var(~'--c-primary-6'));
-  --c-nav-menu-item-selected-label-height: var(~'--c-border-width-3');
-  --c-nav-menu-item-suffix-icon-margin-left: var(~'--c-spacing-3');
-  --c-nav-menu-item-prefix-icon-margin-right: var(~'--c-spacing-7');
-  --c-nav-menu-horizontal-item-prefix-icon-margin-right: var(~'--c-spacing-7');
-
-  // vertical 模式下 item 之间的间隙
-  --c-nav-menu-item-gap: var(~'--c-spacing-2');
-  // vertical 下嵌套子菜单的层级缩进
-  --c-nav-menu-item-indent-spacing: var(~'--c-spacing-8');
-
-  // 折叠按钮
-  --c-nav-menu-collapse-button-width: var(~'--c-size-6');
-  --c-nav-menu-collapse-button-height: var(~'--c-size-6');
-  --c-nav-menu-collapse-button-border-radius: var(~'--c-border-radius-sm');
-
-  /**********************************************
-   * theme: light / dark
-   * status: default / disabled / selected / hover
-   **********************************************/
   --c-nav-menu-light-bg: var(~'--c-color-menu-light-bg');
-  --c-nav-menu-light-item-bg: var(~'--c-nav-menu-light-bg');
   --c-nav-menu-light-item-bg-hover: var(~'--c-color-fill-2');
   --c-nav-menu-light-item-bg-selected: var(~'--c-color-fill-2');
-  --c-nav-menu-light-item-bg-disabled: var(~'--c-nav-menu-light-bg');
   --c-nav-menu-light-item-text-color: var(~'--c-color-text-2');
-  --c-nav-menu-light-item-text-color-hover: var(~'--c-color-text-2');
   --c-nav-menu-light-item-text-color-selected: rgb(var(~'--c-primary-6'));
-  --c-nav-menu-light-submenu-text-color-selected: rgb(var(~'--c-primary-6'));
-  --c-nav-menu-light-submenu-bg-selected-hover: var(~'--c-color-fill-2');
   --c-nav-menu-light-item-text-color-disabled: var(~'--c-color-text-4');
-  --c-nav-menu-light-icon-color: var(~'--c-color-text-3');
-  --c-nav-menu-light-icon-color-hover: var(~'--c-color-text-3');
-  --c-nav-menu-light-icon-color-selected: rgb(var(~'--c-primary-6'));
-  --c-nav-menu-light-icon-color-disabled: var(~'--c-color-text-4');
-  --c-nav-menu-light-group-title-text-color: var(~'--c-color-text-3');
-
   --c-nav-menu-dark-bg: var(~'--c-color-menu-dark-bg');
-  --c-nav-menu-dark-item-bg: var(~'--c-nav-menu-dark-bg');
   --c-nav-menu-dark-item-bg-hover: var(~'--c-color-menu-dark-hover');
   --c-nav-menu-dark-item-bg-selected: var(~'--c-color-menu-dark-hover');
-  --c-nav-menu-dark-item-bg-disabled: var(~'--c-nav-menu-dark-bg');
-  --c-nav-menu-dark-submenu-text-color-selected: rgb(var(~'--c-primary-6'));
-  --c-nav-menu-dark-submenu-bg-selected-hover: var(~'--c-color-menu-dark-hover');
   --c-nav-menu-dark-item-text-color: var(~'--c-color-text-4');
-  --c-nav-menu-dark-item-text-color-hover: var(~'--c-color-text-4');
   --c-nav-menu-dark-item-text-color-selected: var(~'--c-color-white');
   --c-nav-menu-dark-item-text-color-disabled: var(~'--c-color-text-2');
-  --c-nav-menu-dark-icon-color: var(~'--c-color-text-3');
-  --c-nav-menu-dark-icon-color-hover: var(~'--c-color-text-3');
-  --c-nav-menu-dark-icon-color-selected: var(~'--c-color-white');
-  --c-nav-menu-dark-icon-color-disabled: var(~'--c-color-text-2');
-  --c-nav-menu-dark-group-title-text-color: var(~'--c-color-text-3');
-
-  // popup sub-menu
-  --c-nav-menu-popup-border-color: var(~'--c-color-neutral-3');
-
-  // collapse button style
-  --c-nav-menu-light-collapse-button-bg: var(~'--c-color-fill-1');
-  --c-nav-menu-light-collapse-button-bg-hover: var(~'--c-color-fill-3');
-  --c-nav-menu-light-collapse-button-text-color: var(~'--c-color-text-3');
-  --c-nav-menu-dark-collapse-button-bg: rgb(var(~'--c-primary-6'));
-  --c-nav-menu-dark-collapse-button-bg-hover: rgb(var(~'--c-primary-7'));
-  --c-nav-menu-dark-collapse-button-text-color: var(~'--c-color-white');
-
-  /**********************************************
-   * horizontal / vertical
-   **********************************************/
-  --c-nav-menu-horizontal-padding-vertical: 14px;
-  --c-nav-menu-horizontal-padding-horizontal: var(~'--c-spacing-8');
-  --c-nav-menu-horizontal-item-gap: var(~'--c-spacing-6');
-  --c-nav-menu-horizontal-item-height: 30px;
-  --c-nav-menu-horizontal-item-padding-horizontal: var(~'--c-spacing-6');
-
-  --c-nav-menu-vertical-padding-vertical: var(~'--c-spacing-2');
-  --c-nav-menu-vertical-padding-horizontal: var(~'--c-spacing-4');
-  --c-nav-menu-vertical-item-height: 40px;
-  --c-nav-menu-vertical-item-padding-horizontal: var(~'--c-spacing-6');
-
-  /************************************************
-   * collapse
-   ***********************************************/
-  --c-nav-menu-collapse-width: var(~'--c-size-12');
-  --c-nav-menu-collapse-padding-vertical: var(~'--c-spacing-2');
-  --c-nav-menu-collapse-padding-horizontal: var(~'--c-spacing-2');
-
-  /************************************************
-   * popButton
-   ***********************************************/
-  --c-nav-menu-pop-button-size: var(~'--c-size-10');
-  --c-nav-menu-pop-button-margin-bottom: var(~'--c-spacing-7');
-  --c-nav-menu-pop-button-box-shadow: var(~'--c-shadow2-down');
-  --c-nav-menu-pop-button-border-color: transparent;
-  --c-nav-menu-focus-outline-width: var(~'--c-border-width-3');
-  --c-nav-menu-suffix-icon-extra: var(~'--c-size-4');
-  --c-nav-menu-collapse-button-inset: var(~'--c-spacing-6');
-  --c-nav-menu-trigger-icon-margin-right: var(~'--c-spacing-4');
-
-  /**********************************************
-   * 暗色弹出层（仅 nav-menu 自己消费，不是 Menu 组件）
-   **********************************************/
-  --c-nav-menu-popup-group-title-padding-top: var(~'--c-spacing-4');
-  --c-nav-menu-popup-dark-bg: var(~'--c-color-menu-dark-bg');
-  --c-nav-menu-popup-dark-border-color: var(~'--c-nav-menu-popup-dark-bg');
-  --c-nav-menu-popup-dark-option-bg: transparent;
-  --c-nav-menu-popup-dark-option-bg-hover: var(~'--c-color-menu-dark-hover');
-  --c-nav-menu-popup-dark-option-bg-selected: transparent;
-  --c-nav-menu-popup-dark-option-bg-disabled: transparent;
-  --c-nav-menu-popup-dark-option-text-color: var(~'--c-color-text-4');
-  --c-nav-menu-popup-dark-option-text-color-hover: var(~'--c-color-text-4');
-  --c-nav-menu-popup-dark-option-text-color-selected: var(~'--c-color-white');
-  --c-nav-menu-popup-dark-option-text-color-disabled: var(~'--c-color-text-2');
-  --c-nav-menu-popup-dark-group-title-text-color: var(~'--c-color-text-3');
+  --c-nav-menu-row-height: 40px;
+  --c-nav-menu-row-height-xs: 28px;
+  --c-nav-menu-row-height-sm: 32px;
+  --c-nav-menu-row-height-lg: 48px;
+  --c-nav-menu-row-height-xl: 56px;
+  --c-nav-menu-content-gap: 8px;
+  --c-nav-menu-content-padding: 12px;
+  --c-nav-menu-icon-size: 20px;
+  --c-nav-menu-arrow-size: 12px;
+  --c-nav-menu-focus-width: 2px;
+  --c-nav-menu-focus-offset: -2px;
+  --c-nav-menu-divider-width: 1px;
+  --c-nav-menu-divider-color: var(--c-color-border-2);
+  --c-nav-menu-popup-min-width: 180px;
+  --c-nav-menu-popup-max-height: 320px;
+  --c-nav-menu-popup-shadow: 0 6px 24px rgb(0 0 0 / 12%);
+  --c-nav-menu-motion-duration: 150ms;
 }
+
+:root { --c-nav-menu-panel-width: min(400px, 100vw); }

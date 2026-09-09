@@ -1,6 +1,7 @@
 <template>
   <DatePicker
     v-bind="{ ...$attrs, ...pickerProps }"
+    :popup-container="popupContainer !== undefined ? popupContainer : pickerProps.popupContainer"
     :model-value="modelValue"
     :default-value="defaultValue"
     :mode="type"

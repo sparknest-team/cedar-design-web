@@ -152,6 +152,9 @@ export interface CedarLang {
     cancelButtonText: string
   }
   pagination: {
+    navigation?: string
+    previous?: string
+    next?: string
     goto: string
     page: string
     countPerPage: string

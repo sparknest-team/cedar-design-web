@@ -1,3 +1,4 @@
+import { collectTreeLeaves } from '../_utils/tree-data'
 import { Ref } from 'vue'
 import { CascaderOption, CascaderOptionInfo, CascaderFieldNames } from './types'
 import { isArray, isNull, isNumber, isObject, isString, isUndefined } from '../_utils/is'
@@ -123,13 +124,8 @@ export const getCheckedStatus = (option: CascaderOptionInfo, valueMap?: Map<stri
       checked = true
     }
   } else {
-    const reg = new RegExp(`^${option.key}(-|$)`)
-    const checkedLeafOptionNumber = Array.from(valueMap?.keys() ?? []).reduce((pre, key) => {
-      if (reg.test(key)) {
-        return pre + 1
-      }
-      return pre
-    }, 0)
+    const checkedLeafOptionNumber = collectTreeLeaves([option], node => node.children,
+      node => node.disabled || node.selectionDisabled, node => !!node.isLeaf).filter(node => valueMap?.has(node.key)).length
     if (checkedLeafOptionNumber > 0 && checkedLeafOptionNumber >= (option.totalLeafOptions ?? 1)) {
       checked = true
     } else if (checkedLeafOptionNumber > 0) {
@@ -143,33 +139,11 @@ export const getCheckedStatus = (option: CascaderOptionInfo, valueMap?: Map<stri
   }
 }
 
-export const getLeafOptionKeys = (option: CascaderOptionInfo) => {
-  const keys: string[] = []
-  if (option.isLeaf) {
-    keys.push(option.key)
-  } else if (option.children) {
-    for (const item of option.children) {
-      keys.push(...getLeafOptionKeys(item))
-    }
-  }
-  return keys
-}
+export const getLeafOptionKeys = (option: CascaderOptionInfo) =>
+  collectTreeLeaves([option], node => node.children, () => false, node => !!node.isLeaf).map(node => node.key)
 
-export const getLeafOptionInfos = (option: CascaderOptionInfo) => {
-  const infos: CascaderOptionInfo[] = []
-  if (option.disabled || option.selectionDisabled) {
-    return infos
-  }
-
-  if (option.isLeaf) {
-    infos.push(option)
-  } else if (option.children) {
-    for (const item of option.children) {
-      infos.push(...getLeafOptionInfos(item))
-    }
-  }
-  return infos
-}
+export const getLeafOptionInfos = (option: CascaderOptionInfo) =>
+  collectTreeLeaves([option], node => node.children, node => node.disabled || node.selectionDisabled, node => !!node.isLeaf)
 
 export const getValueKey = (
   value: UnionType | UnionType[],

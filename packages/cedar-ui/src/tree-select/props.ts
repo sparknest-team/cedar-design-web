@@ -1,3 +1,4 @@
+import { popupContainerProp } from '../_utils/popup-container'
 import type { CSSProperties, PropType } from 'vue'
 import type { LabelValue } from './types'
 import type { TriggerProps } from '../trigger'
@@ -33,7 +34,7 @@ export const treeSelectProps = {
      * @zh 选择框的大小
      * @en The size of the selection box.
      * @values 'xs','sm','md','lg','xl'
-     * @defaultValue 'md'
+     * @default-value 'md'
      * */
     size: {
       type: String as PropType<ComponentSize>,
@@ -49,7 +50,7 @@ export const treeSelectProps = {
     /**
      * @zh 是否允许搜索
      * @en Whether to allow searching
-     * @defaultValue false (single) \| true (multiple)
+     * @default-value false (single) \| true (multiple)
      * */
     allowSearch: {
       type: [Boolean, Object] as PropType<boolean | { retainInputValue?: boolean }>,
@@ -163,7 +164,7 @@ export const treeSelectProps = {
     /**
      * @zh 弹出框是否可见
      * @en Whether the pop-up box is visible
-     * @vModel
+     * @v-model
      */
     open: {
       type: Boolean,
@@ -215,9 +216,7 @@ export const treeSelectProps = {
      * @zh 弹出框的挂载容器
      * @en Mount container for pop-up box
      */
-    popupContainer: {
-      type: [String, Object] as PropType<string | HTMLElement>,
-    },
+    popupContainer: popupContainerProp,
     /**
      * @zh 为 value 中找不到匹配项的 key 定义节点数据
      * @en Customize node data for keys that do not match options
@@ -266,7 +265,7 @@ export const treeSelectProps = {
     /**
      * @zh 输入框的值
      * @en The value of the input
-     * @vModel
+     * @v-model
      * @version 2.55.0
      */
     inputValue: {
@@ -281,4 +280,4 @@ export const treeSelectProps = {
       type: String,
       default: '',
     },
-  } 
+  }

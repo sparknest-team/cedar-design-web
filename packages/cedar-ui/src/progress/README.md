@@ -50,8 +50,8 @@ permalink: /components/progress/
 | ------- | -------- | ------ | ------ |
 | mode    | 展示模式 | `'line' \| 'circle'` | `'line'` |
 | status  | 状态     | `SemanticStatus` | `'default'` |
-| size    | 大小     | string | -      |
-| percent | 进度数值 | number | -      |
+| size | circle 外径 / line 轨道厚度；数字按 px，字符串可用 CSS 长度 | `ComponentSize \| number \| string` | `md` |
+| percent | Percentage, 0–100; numeric strings accepted; decimal precision retained | number / string | 0 |
 
 ### Progress Events
 
@@ -72,3 +72,13 @@ permalink: /components/progress/
 ```ts
 import type { ProgressProps } from '@cedarjs/ui'
 ```
+
+尺寸与跨端迁移约定见仓库根目录 `API-MIGRATION.md`。只支持文档列出的档位，不代表支持全部 ComponentSize。
+
+## Percent contract / 百分比契约
+
+percent 使用 0～100，12.5 表示 12.5%；数字字符串可用，不接受百分号、CSS 单位或十六进制字符串。超范围截断，NaN/Infinity/非法值回退 0。
+Cedar 旧值需要乘以 100（0.5 → 50）；不会自动猜测比例。文案插槽和 aria 值均为 0～100，Maple 圆环不再先取整计算。
+
+percent uses 0–100, including decimal numeric strings. CSS units and percent signs are invalid. Finite out-of-range values are clamped; invalid/non-finite values become 0.
+Migrate Cedar ratios by multiplying by 100; there is no automatic ratio detection. Slot and accessible values use percentages; Maple circle geometry no longer rounds first.

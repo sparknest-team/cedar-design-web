@@ -24,7 +24,7 @@ describe('PageHeader', () => {
         onBack,
       },
     })
-    await wrapper.find('.c-page-header-back').trigger('click')
+    await wrapper.find('.c-page-header__back').trigger('click')
     expect(onBack).toHaveBeenCalled()
   })
 
@@ -34,12 +34,12 @@ describe('PageHeader', () => {
         title: 'Title',
       },
     })
-    expect(wrapper.find('.c-page-header-back').exists()).toBe(false)
+    expect(wrapper.find('.c-page-header__back').exists()).toBe(false)
   })
 
   test('show back without a listener', () => {
     const wrapper = mount(PageHeader, { props: { showBack: true } })
-    expect(wrapper.find('.c-page-header-back').exists()).toBe(true)
+    expect(wrapper.find('.c-page-header__back').exists()).toBe(true)
   })
 
   test('header, avatar, content, extra and footer slots', async () => {

@@ -71,7 +71,7 @@ export default defineComponent({
     /**
      * @zh 默认值（非受控状态）
      * @en Default value (uncontrolled state)
-     * @defaultValue '' \| undefined \| []
+     * @default-value '' \| undefined \| []
      */
     defaultValue: {
       type: [String, Number, Array] as PropType<

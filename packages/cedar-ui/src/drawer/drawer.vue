@@ -1,6 +1,6 @@
 <template>
   <client-only>
-    <teleport :to="teleportContainer" :disabled="!renderToBody">
+    <teleport :to="teleportContainer" :disabled="popupContainer === false">
       <div
         v-if="!unmountOnClose || computedOpen || mounted"
         v-show="computedOpen || mounted"
@@ -27,6 +27,8 @@
         >
           <div
             v-show="computedOpen"
+            ref="drawerRef"
+            tabindex="-1"
             role="dialog"
             aria-modal="true"
             :aria-label="ariaLabel || (!$slots.title ? title : undefined)"
@@ -87,6 +89,8 @@ import {
   defineComponent,
   onBeforeUnmount,
   onMounted,
+  onActivated,
+  onDeactivated,
   ref,
   toRefs,
   watch,
@@ -99,6 +103,7 @@ import { IconClose } from "@cedarjs/icons-vue/icon-close";
 import { useI18n } from "../locale";
 import { useOverflow } from "../_hooks/use-overflow";
 import { off, on } from "../_utils/dom";
+import { useModalFocus } from "../_utils/modal-focus";
 import usePopupManager from "../_hooks/use-popup-manager";
 import { isBoolean, isFunction, isNumber, isPromise } from "../_utils/is";
 import { KEYBOARD_KEY } from "../_utils/keyboard";
@@ -144,13 +149,13 @@ export default defineComponent({
      * @en Triggered before drawer is opened
      * @version 2.43.0
      */
-    beforeOpen: () => true,
+    opened: () => true,
     /**
      * @zh 对话框关闭前触发
      * @en Triggered before drawer is closed
      * @version 2.43.0
      */
-    beforeClose: () => true,
+    closed: () => true,
     "click-overlay": (e: Event) => true,
   },
   /**
@@ -191,7 +196,7 @@ export default defineComponent({
     let globalKeyDownListener = false;
 
     const handleGlobalKeyDown = (ev: KeyboardEvent) => {
-      if (props.escToClose && ev.key === KEYBOARD_KEY.ESC && isLastDialog()) {
+      if (props.escToClose && ev.key === KEYBOARD_KEY.ESC && isLastDialog(ev)) {
         handleCancel(ev);
       }
     };
@@ -213,6 +218,10 @@ export default defineComponent({
     const { zIndex, isLastDialog } = usePopupManager("dialog", {
       visible: computedOpen,
     });
+    const drawerRef = ref<HTMLElement>();
+    const { focus: focusDrawer, restore: restoreFocus } = useModalFocus(
+      () => drawerRef.value, () => computedOpen.value, isLastDialog,
+    );
     const isFixed = computed(() => {
       return containerRef?.value === document.body;
     });
@@ -281,6 +290,7 @@ export default defineComponent({
     };
 
     const handleOverlay = (e: Event) => {
+      if (!isLastDialog(e)) return;
       emit("click-overlay", e);
       if (props.overlayClosable) {
         handleCancel(e);
@@ -289,7 +299,8 @@ export default defineComponent({
 
     const handleOpen = () => {
       if (computedOpen.value) {
-        emit("open");
+        focusDrawer();
+        emit("opened");
       }
     };
 
@@ -297,14 +308,21 @@ export default defineComponent({
       if (!computedOpen.value) {
         mounted.value = false;
         resetOverflow();
-        emit("close");
+        restoreFocus();
+        emit("closed");
       }
     };
 
     const { setOverflowHidden, resetOverflow } = useOverflow(containerRef);
+    onDeactivated(() => { resetOverflow(); removeGlobalKeyDownListener(); });
+    onActivated(() => {
+      if (computedOpen.value) { setOverflowHidden(); addGlobalKeyDownListener(); }
+      else { mounted.value = false; resetOverflow(); }
+    });
 
     onMounted(() => {
       if (computedOpen.value) {
+        emit("open");
         mounted.value = true;
         setOverflowHidden();
         addGlobalKeyDownListener();
@@ -321,12 +339,12 @@ export default defineComponent({
         _open.value = visible;
       }
       if (visible) {
-        emit("beforeOpen");
+        emit("open");
         mounted.value = true;
         setOverflowHidden();
         addGlobalKeyDownListener();
       } else {
-        emit("beforeClose");
+        emit("close");
         removeGlobalKeyDownListener();
       }
     });
@@ -347,6 +365,7 @@ export default defineComponent({
     });
 
     return {
+      drawerRef,
       prefixCls,
       style,
       t,

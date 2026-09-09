@@ -4,92 +4,162 @@ permalink: /components/card/
 
 # Card
 
-将信息分类后分标题、详情等区域聚合展现，一般作为简洁介绍或者信息的大盘和入口。
+与 Maple 使用相同场景、参数和交互顺序；示例源码仅替换组件前缀，主题与站点外壳各自保留。
 
 ## 案例
 
-### 基础用法
-
-常规的内容容器，可承载文字、列表、图片、段落，常用于模块划分和内容概览。
+### 基础用法与副标题
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### 自定义标题
-
-通过`PageHeader`组件自定义标题。
+### 自定义标题区域
 
 <demo src="./__demos__/no-padding.vue"></demo>
 
-### 鼠标悬浮样式
-
-指定`hoverable`来为卡片添加鼠标悬浮样式，同时你可以通过样式覆盖来自定义悬浮样式。
+### 悬浮样式
 
 <demo src="./__demos__/hoverable.vue"></demo>
 
-### variant
-
-设置 `variant` 来调整不同风格的卡片。
+### 变体与阴影
 
 <demo src="./__demos__/variant.vue"></demo>
 
-### 图片卡片和布局
-
-使用 `cover` 插槽展示图片，通过设置 `direction` 来调整图片卡片的布局。
+### 图片与三种布局
 
 <demo src="./__demos__/image.vue"></demo>
 
 ### 尺寸
 
-通过设置卡片的size来调整卡片的间距。
-
 <demo src="./__demos__/size.vue"></demo>
 
-### 文本省略和提示
+### 长标题与提示
 
-开启 `ellipsis` 属性可以显示省略号，如果同时开启 `tooltip` 会在显示省略号时使用文本提示。
-可将属性值设置为`false`手动关闭。
 <demo src="./__demos__/tooltip.vue"></demo>
 
-### 自定义插槽
-
-`cover`、`title-action`、`subtitle`、`description`、`action` 插槽可以用于自定义卡片内容。
+### 内容插槽
 
 <demo src="./__demos__/slots.vue"></demo>
 
+
+### 水波与点击事件
+
+<demo src="./__demos__/ripple.vue"></demo>
+
+### 全屏展开与关闭
+
+<demo src="./__demos__/floating.vue"></demo>
+
+长标题示例通过插槽内的 CSS 和原生 `title` 提供提示；Card 本身没有 `ellipsis` / `tooltip` 属性。
+
 ## API
 
-### `<Card>` Props
+<!-- same-source-api:start -->
+### Props
 
-| 属性         | 说明                                       | 类型                               | 默认值   |
-| ------------ | ------------------------------------------ | ---------------------------------- | -------- |
-| variant      | 卡片外观                                   | `'default' \| 'outlined' \| 'tonal'` | `'default'` |
-| top-divider  | 是否有上分割线                             | `boolean`                          | `false`  |
-| loading      | 是否为加载中                               | `boolean`                          | `false`  |
-| hoverable    | 是否可悬浮                                 | `boolean`                          | `false`  |
-| size         | 卡片尺寸                                   | `'sm' \| 'md'`                    | `md`     |
-| title-style  | 自定义标题区域样式                         | `CSSProperties`                    | `{}`     |
-| title        | 卡片标题                                   | `string`                           | -        |
-| subtitle     | 卡片副标题                                 | `string`                           | -        |
-| description  | 卡片描述                                   | `string`                           | -        |
-| bottom-divider | 是否有下分割线                           | `boolean`                          | `false`  |
-| direction    | 卡片布局                                   | `row` \| `column` \| `row-reverse` | `column` |
-| elevation    | 卡片阴影，最大值为9，传入true时，阴影值为1 | `boolean` \| `number` \| `string`  | `1`      |
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| variant | 卡片外观 | `default / outline / tonal` | `default` |
+| size | 内容密度；省略时按平台规则回退，见下方说明 | `sm / md` | `undefined` |
+| direction | 封面与正文排列 | `row / column / row-reverse` | `column` |
+| hoverable | 悬浮样式 | `boolean` | `false` |
+| title-style | 标题行样式 | `CSSProperties` | `undefined` |
+| title | 标题 | `string` | `undefined` |
+| subtitle | 副标题 | `string` | `undefined` |
+| description | 描述 | `string` | `undefined` |
+| top-divider | 上分割线 | `boolean` | `false` |
+| bottom-divider | 下分割线 | `boolean` | `false` |
+| src | 封面图片地址；cover 插槽优先 | `string` | `undefined` |
+| fit | 封面图片填充方式 | `fill / contain / cover / none / scale-down` | `cover` |
+| image-height | 封面图片高度，数字单位为 px | `string / number` | `undefined` |
+| image-width | 封面图片宽度，数字单位为 px | `string / number` | `undefined` |
+| alt | 封面图片替代文本 | `string` | `undefined` |
+| elevation | default 变体阴影；true 为等级 1，false 为无阴影，数字范围 0～24 | `boolean / number` | `true` |
+| ripple | 点击水波 | `boolean` | `false` |
+| floating | 全屏展开状态，支持 v-model:floating | `boolean` | `false` |
+| floating-duration | 全屏展开与关闭动画时长，单位 ms | `number` | `250` |
 
-### `<Card>` Slots
+### Events
 
-| 插槽名       | 说明                 | 参数 |
-| ------------ | -------------------- | ---- |
-| cover        | 卡片封面             | -    |
-| title-action | 卡片右上角的操作区域 | -    |
-| subtitle     | 卡片副标题           | -    |
-| description  | 卡片描述             | -    |
-| action       | 卡片底部的操作组     | -    |
+| 事件 | 参数与时机 |
+| --- | --- |
+| click | `(event: Event)`，点击卡片时触发 |
+| update:floating | `(value: boolean)`，内置关闭按钮请求关闭时发送 false；展开由父级设置 |
+
+### Slots
+
+| 插槽 | 说明 | 参数 |
+| --- | --- | --- |
+| default | 正文 | — |
+| cover | 封面，覆盖 src 图片 | — |
+| header | 整个标题区域，覆盖 title、title-action 和 subtitle | — |
+| title | 标题 | `{ slotClass: string }` |
+| title-action | 标题右侧操作 | — |
+| subtitle | 副标题 | `{ slotClass: string }` |
+| description | 描述 | `{ slotClass: string }` |
+| footer | 底部操作 | — |
+| floating-content | 全屏扩展内容，仅 column 布局渲染 | — |
+| close-button | 自定义关闭按钮；需自行更新 floating | — |
+
+### Methods
+
+无公开方法。
+
+### 跨端说明
+
+属性、事件参数及插槽契约一致。Cedar 省略 size 时继承全局尺寸（xs/sm 映射 sm，其余映射 md）；Maple 回退 md。需要一致密度时显式传入 size。主题和 CSS 前缀分别使用各端配置。
+Card 不再提供 loading 属性；加载遮罩使用 Loading 指令组合。
+<!-- same-source-api:end -->
 
 ### `<Card>` CSS 变量
 
-| 变量名            | 默认值                   |
-| ----------------- | ------------------------ |
-| --c-card-bg-color | var(--c-color-bg-2) |
+| 变量名 | 默认值 |
+| --- | --- |
+| `--c-card-hover-shadow` | `0 4px 12px rgb(0 0 0 / 12%)` |
+| `--c-card-size-sm-title-font-size` | `16px` |
+| `--c-card-size-sm-section-margin` | `8px 0 0` |
+| `--c-card-size-sm-section-padding` | `0 12px` |
+| `--c-card-padding` | `0 0 15px 0` |
+| `--c-card-background` | `var(--c-color-bg-2)` |
+| `--c-card-filled-background` | `hsla(0, 0%, 93%, 1)` |
+| `--c-card-outline-color` | `var(--c-color-border-2)` |
+| `--c-card-border-radius` | `4px` |
+| `--c-card-image-width` | `100%` |
+| `--c-card-row-image-width` | `140px` |
+| `--c-card-image-height` | `200px` |
+| `--c-card-row-height` | `140px` |
+| `--c-card-title-color` | `#333` |
+| `--c-card-title-font-size` | `20px` |
+| `--c-card-title-padding` | `0 12px` |
+| `--c-card-title-margin` | `15px 0 0 0` |
+| `--c-card-title-row-margin` | `12px 0` |
+| `--c-card-content-padding` | `0 16px` |
+| `--c-card-content-margin` | `16px 0 0 0` |
+| `--c-card-content-color` | `var(--c-color-text-3)` |
+| `--c-card-content-font-size` | `14px` |
+| `--c-card-content-row-margin` | `16px 0 0 0` |
+| `--c-card-subtitle-color` | `rgba(0, 0, 0, 0.6)` |
+| `--c-card-subtitle-font-size` | `14px` |
+| `--c-card-subtitle-padding` | `0 12px` |
+| `--c-card-subtitle-margin` | `10px 0 0 0` |
+| `--c-card-subtitle-row-margin` | `-8px 0 0 0` |
+| `--c-card-description-color` | `rgba(0, 0, 0, 0.6)` |
+| `--c-card-description-font-size` | `14px` |
+| `--c-card-description-margin` | `20px 0 0 0` |
+| `--c-card-description-padding` | `0 13px` |
+| `--c-card-footer-padding` | `0 12px` |
+| `--c-card-footer-right` | `13px` |
+| `--c-card-footer-bottom` | `9px` |
+| `--c-card-footer-margin` | `30px 0 0 0` |
+| `--c-card-line-height` | `22px` |
+| `--c-card-row-line-height` | `1.5` |
+| `--c-card-floating-buttons-bottom` | `16px` |
+| `--c-card-floating-buttons-right` | `16px` |
+| `--c-card-floating-buttons-color` | `#fff` |
+| `--c-card-close-button-icon-size` | `24px` |
+| `--c-card-close-button-size` | `56px` |
+| `--c-card-close-button-primary-color` | `#212121` |
+| `--c-card-close-button-text-color` | `#fff` |
+| `--c-card-close-button-border-radius` | `50%` |
 
 ### 类型定义
 
@@ -98,3 +168,5 @@ permalink: /components/card/
 ```ts
 import type { CardProps } from '@cedarjs/ui'
 ```
+
+尺寸与跨端迁移约定见仓库根目录 `API-MIGRATION.md`。只支持文档列出的档位，不代表支持全部 ComponentSize。

@@ -2,107 +2,71 @@
 permalink: /components/row/
 ---
 
-# Row / Col
+# Row
 
-24 栏 Flex 栅格，可有效保证页面一致性与协作统一。
+24 栏 Flex 栅格。Row 管理间距与对齐，Col 管理列宽、偏移、排序与响应式配置。需要 CSS Grid 折叠与后缀时使用 Grid。
 
-> CSS Grid 布局见 [Grid 栅格](/components/grid/)。
+> **布局怎么选**
+>
+> - Grid + GridItem：适合表单分栏、卡片网格，需要统一列宽、跨列、响应式列数或折叠行与后缀时使用。
+> - Row + Col：适合 24 栏 Flex 布局，需要水平/垂直对齐、控制换行、固定宽度与自适应宽度组合，或响应式排序时使用。Row 控制整行，Col 控制列宽、偏移和排序。
+> - Space：适合按钮、标签、文字等简单排列，只需要间距、方向和对齐时使用；更自由的宽度分配可使用原生 Flex。
 
-## 基础用法
+## 案例
 
-基础用法。
+### 24 栏基础布局
 
-<demo src="../grid/__demos__/basic.vue"></demo>
+<demo src="./__demos__/basic.vue"></demo>
 
-## 栅格偏移
+### 双向间距与响应式间距
 
-指定 `offset` 可以对栅格进行平移操作。
+<demo src="./__demos__/gutter.vue"></demo>
 
-<demo src="../grid/__demos__/offset.vue"></demo>
+### 水平与垂直对齐
 
-## 区块间隔
+<demo src="./__demos__/alignment.vue"></demo>
 
-通过在 `Row` 上指定 `gutter` 可以增加栅格的区域间隔。
+### 换行与普通容器模式
 
-<demo src="../grid/__demos__/gutter.vue"></demo>
+<demo src="./__demos__/wrap.vue"></demo>
 
-## 水平布局
+### 嵌套与间距隔离
 
-通过 `justify` 来进行水平布局。
+<demo src="./__demos__/nested.vue"></demo>
 
-<demo src="../grid/__demos__/flex-justify.vue"></demo>
+<!-- same-source-api:start -->
+### Props
 
-## 垂直布局
+| 属性 | 说明 | Type | Default |
+| --- | --- | --- | --- |
+| gutter | 间距：数值、响应式对象或 [水平, 垂直] | `RowGutter` | `0` |
+| justify | 水平对齐 | `start / center / end / space-around / space-between` | `start` |
+| align | 垂直对齐 | `start / center / end / stretch` | `start` |
+| wrap | 是否换行 | `boolean` | `true` |
+| div | Row 与 Col 均作为普通容器，移除全部布局样式 | `boolean` | `false` |
 
-通过 `align` 来进行垂直布局。
+### Events
 
-<demo src="../grid/__demos__/flex-align.vue"></demo>
+| Event | Description |
+| --- | --- |
+| click | 原生 MouseEvent，每次点击一次 |
 
-## 排序
+### Slots
 
-通过 `order` 来进行元素排序。
+| Slot | Description |
+| --- | --- |
+| default | 布局内容 |
 
-<demo src="../grid/__demos__/order.vue"></demo>
+### Methods
 
-## 响应式布局
+| Method | Description |
+| --- | --- |
+<!-- same-source-api:end -->
 
-预置六种响应尺寸, 分别为 `xs`, `sm`, `md`, `lg`, `xl`, `xxl`。
+## 响应式与可访问性
 
-<demo src="../grid/__demos__/adaptation.vue"></demo>
+断点基于浏览器视口：xs 为基础值，sm ≥576、md ≥768、lg ≥992、xl ≥1200、xxl ≥1600px；从最大匹配断点向下取已配置值。SSR 首屏使用 xs，挂载后响应视口；Grid 折叠和动态排序在挂载后计算。组件为布局容器，不增加键盘快捷键；内容语义及可聚焦元素由调用者提供。没有公开方法和专用主题 Token。
 
-## 其他属性的响应式
+## 导入
 
-`span`, `offset`, `order` 属性可以内嵌到 `xs`, `sm`, `md`, `lg`, `xl`, `xxl` 对象中使用。
-比如 `:xs="8"` 相当于 `:xs="{ span: 8 }"`。
-
-<demo src="../grid/__demos__/adaptation-object.vue"></demo>
-
-## Flex 用法
-
-通过设置 `Col` 组件的 `flex` 属性，可以任意配置 flex 布局。
-
-<demo src="../grid/__demos__/flex.vue"></demo>
-
-## 组件配置
-
-### Row Props
-
-| 参数名  | 描述                                                                                                                           | 类型                                                                                |  默认值   |
-| ------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------- | :-------: |
-| gutter  | 栅格间隔，单位是`px` 栅格间隔。可传入响应式对象写法 { xs: 4, sm: 6, md: 12}，传入数组 [ 水平间距， 垂直间距 ] 来设置两个方向。 | `number\| ResponsiveValue\| [number \| ResponsiveValue, number \| ResponsiveValue]` |    `0`    |
-| justify | 水平对齐方式 (`justify-content`)                                                                                               | `'start' \| 'center' \| 'end' \| 'space-around' \| 'space-between'`                 | `'start'` |
-| align   | 竖直对齐方式 ( `align-items` )                                                                                                 | `'start' \| 'center' \| 'end' \| 'stretch'`                                         | `'start'` |
-| div     | 开启这个选项`Row`和`Col`都会被当作div而不会附带任何Grid相关的类和样式                                                          | `boolean`                                                                           |  `false`  |
-| wrap    | `Col` 是否支持换行                                                                                                             | `boolean`                                                                           |  `true`   |
-
-### Col Props
-
-| 参数名 | 描述                                   | 类型                                                | 默认值 |
-| ------ | -------------------------------------- | --------------------------------------------------- | :----: |
-| span   | 栅格占位格数                           | `number`                                            |  `24`  |
-| offset | 栅格左侧的间隔格数，间隔内不可以有栅格 | `number`                                            |  `-`   |
-| order  | 对元素进行排序                         | `number`                                            |  `-`   |
-| xs     | < 576px 响应式栅格                     | `number \| { [key: string]: any }`                  |  `-`   |
-| sm     | >= 576px 响应式栅格                    | `number \| { [key: string]: any }`                  |  `-`   |
-| md     | >= 768px 响应式栅格                    | `number \| { [key: string]: any }`                  |  `-`   |
-| lg     | >= 992px 响应式栅格                    | `number \| { [key: string]: any }`                  |  `-`   |
-| xl     | >= 1200px 响应式栅格                   | `number \| { [key: string]: any }`                  |  `-`   |
-| xxl    | >= 1600px 响应式栅格                   | `number \| { [key: string]: any }`                  |  `-`   |
-| flex   | 设置 flex 布局属性                     | `number \| string \| 'initial' \| 'auto' \| 'none'` |  `-`   |
-
-## 类型定义
-
-### ResponsiveValue
-
-| 参数名 | 描述                 | 类型     | 默认值 |
-| ------ | -------------------- | -------- | :----: |
-| xxl    | >= 1600px 响应式配置 | `number` |  `-`   |
-| xl     | >= 1200px 响应式配置 | `number` |  `-`   |
-| lg     | >= 992px 响应式配置  | `number` |  `-`   |
-| md     | >= 768px 响应式配置  | `number` |  `-`   |
-| sm     | >= 576px 响应式配置  | `number` |  `-`   |
-| xs     | < 576px 响应式配置   | `number` |  `-`   |
-
-```ts
-import type { RowProps, ColProps } from '@cedarjs/ui'
-```
+Grid 仅包含 Grid.Item；Row、Col 是独立组件，拥有独立源码、样式、菜单、文档和 Demo。已移除 Grid.Row/Grid.Col、Grid 入口的 Row/Col 转导出以及 GridRowInstance/GridColInstance。请从库根入口或独立 row/col 入口导入；安装 Grid 不再自动注册 Row/Col。

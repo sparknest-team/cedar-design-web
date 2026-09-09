@@ -4,73 +4,54 @@ permalink: /components/badge/
 
 # Badge
 
-一般出现在图标或文字的右上角。提供及时、重要的信息提示。
+与 Maple 使用相同场景、参数和交互顺序；示例源码仅替换组件前缀，主题与站点外壳各自保留。
 
 ## 案例
 
 ### 基础用法
 
-基本用法。只需指定 `content`或者 `content slot`，即可显示徽标。
-
 <demo src="./__demos__/basic.vue"></demo>
 
-### 内联类型
-
-`default slot`和 `description` 同时为空时，会变为内联类型，也可以通过 `mode` 属性指定为内联类型。
-同时可以通过 `description` 属性指定描述文本。
+### 内联与独立展示
 
 <demo src="./__demos__/inline.vue"></demo>
 
-### 小红点
-
-设置 `dot`，即可只显示小红点而不显示数字。`count > 0` 时才显示。
+### 小圆点
 
 <demo src="./__demos__/dot.vue"></demo>
 
 ### 自定义内容
 
-设置 `content`，可设置徽标显示的内容。
-
 <demo src="./__demos__/content.vue"></demo>
 
-### 最大值
-
-设置 `max`，可以限制最大显示的徽标数值，超过将会加 `+` 后缀。`max` 默认为 `99`。
+### 最大值与零值
 
 <demo src="./__demos__/max.vue"></demo>
 
 ### 状态和颜色
 
-我们提供`status`和`color`字段来设置徽标的状态和颜色。
-
 <demo src="./__demos__/color.vue"></demo>
 
-### 尺寸
-
-我们提供四种尺寸（`xs`,`sm`, `md`, `lg`,`xl`）。
+### 五种尺寸
 
 <demo src="./__demos__/size.vue"></demo>
 
-### 位置
-
-我们提供六种位置（`top-right`, `top-left`, `bottom-right`, `bottom-left`, `start`, `end`）。
+### 位置与偏移
 
 <demo src="./__demos__/position.vue"></demo>
 
 ### 显示与隐藏
 
-我们提供 `show` 和 `showZero` 属性来控制徽标的显示与隐藏。
-通过 `show` 属性可以控制徽标是否显示，通过 `showZero` 属性可以控制徽标为0时是否显示。
 <demo src="./__demos__/show.vue"></demo>
 
-### 变体
+### 实心与描边
 
-我们提供两种变体（`outline`、`default`）。
 <demo src="./__demos__/variant.vue"></demo>
 
 ## API
 
-### `<Badge>` Props
+<!-- same-source-api:start -->
+### Props
 
 | 参数名          | 描述                                                                               | 类型                                                           |   默认值    |
 | --------------- | ---------------------------------------------------------------------------------- | -------------------------------------------------------------- | :---------: |
@@ -83,20 +64,33 @@ permalink: /components/badge/
 | color           | 徽标的背景色，也可以设置自定义色值                                                 | `string`                                                       |     `-`     |
 | text-color      | 徽标显示的内容颜色                                                                 | `string`                                                       |     `-`     |
 | mode            | 徽标的类型                                                                         | `'floating' \| 'inline'`                                       | `floating`  |
-| position        | 徽标的位置，mode 为 floating 时有效                                                | `'top-right' \| 'top-left' \| 'bottom-right' \| 'bottom-left'` | `top-right` |
+| position        | 徽标物理位置（RTL 下不翻转），mode 为 floating 时有效                               | `'top-right' \| 'top-left' \| 'bottom-right' \| 'bottom-left' \| 'left' \| 'right'` | `top-right` |
 | inline-position | 徽标的位置，mode 为 inline 时有效                                                  | `'start' \| 'end'`                                             |    `end`    |
 | size            | 徽标的尺寸                                                                         | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`                         |    `md`     |
-| status          | 徽标的状态                                                                         | `SemanticStatus`                                               |  `default`  |
+| status          | 徽标的状态                                                                         | `SemanticStatus`                                               |  `danger`   |
 | show            | 是否显示徽标                                                                       | `boolean`                                                      |   `true`    |
 | show-zero       | 徽标为0时是否显示                                                                  | `boolean`                                                      |   `false`   |
 | variant         | 徽标的变体                                                                         | `'outline' \| 'default'`                                       |  `default`  |
 
-### `<Badge>` Slots
+### Events
+
+无组件自定义事件。
+
+### Slots
 
 | 插槽名  | 说明             | 参数 |
 | ------- | ---------------- | ---- |
 | default | 徽标的描述文本   | -    |
 | content | 徽标中显示的内容 | -    |
+
+### Methods
+
+无公开方法。
+
+### 跨端说明
+
+属性和插槽契约一致。没有 default 插槽且 description 为空时自动独立内联展示；未提供 content 时显示圆点。两端分别通过各自配置读取文字方向，主题颜色和 CSS 前缀由各端提供。
+<!-- same-source-api:end -->
 
 ### 样式变量
 

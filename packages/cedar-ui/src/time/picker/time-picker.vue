@@ -4,16 +4,16 @@
     trigger="click"
     animation-name="slide-dynamic-origin"
     auto-fit-transform-origin
-    :click-to-close="false"
+    :close-on-click-reference="false"
     :placement="placement"
     :disabled="mergedDisabled || readonly"
     :popup-offset="4"
     :open="panelVisible"
     :prevent-focus="true"
     :unmount-on-close="unmountOnClose"
-    :popup-container="popupContainer"
     v-bind="{ ...triggerProps }"
-    @openChange="onPanelVisibleChange"
+    :popup-container="popupContainer !== undefined ? popupContainer : triggerProps?.popupContainer"
+    @open-change="onPanelVisibleChange"
   >
     <component
       :is="isRange ? 'DateRangeInput' : 'DateInput'"

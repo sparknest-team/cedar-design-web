@@ -2,9 +2,9 @@
 
 exports[`FilterForm > render 1`] = `
 "<form class=\\"c-form c-form-layout-vertical c-form-size-md c-filter-form\\">
-  <div class=\\"c-grid\\" style=\\"gap: 0px 16px; grid-template-columns: repeat(24, minmax(0px, 1fr));\\">
-    <div class=\\"c-grid-item\\" style=\\"grid-column: 24 / span 1;\\">
-      <div class=\\"c-row-align-start c-row-justify-start c-form-item c-form-item-layout-vertical\\">
+  <div class=\\"c-grid\\" style=\\"gap: 0px 16px; grid-template-columns: repeat(1, minmax(0px, 1fr));\\">
+    <div class=\\"c-grid-item\\" style=\\"grid-column: 1 / span 1;\\">
+      <div class=\\"c-form-item c-form-item-layout-vertical\\">
         <!--v-if-->
         <div class=\\"c-form-item-wrapper-col\\">
           <div class=\\"c-form-item-content-wrapper\\">

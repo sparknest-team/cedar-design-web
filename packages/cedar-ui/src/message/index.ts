@@ -6,10 +6,11 @@ import { isFunction, isString, isUndefined } from '../_utils/is'
 import MessageList from './message-list'
 import _Message from './message.vue'
 import { messageProps } from './props'
+import type { MessageStatus } from './props'
 import { MessageConfig, MessageItem, MessageMethod, MessagePosition } from './types'
 
 type _MessageConfig = MessageConfig & {
-  type: MessageType | 'loading' | 'normal'
+  status: MessageStatus
 }
 
 class MessageManger {
@@ -34,7 +35,7 @@ class MessageManger {
       messages: this.messages.value,
       position,
       onClose: this.remove,
-      onAfterClose: this.destroy,
+      onClosed: this.destroy,
     })
 
     if (appContext ?? Message._context) {
@@ -113,7 +114,7 @@ const message = types.reduce((pre, value) => {
       config = { content: config }
     }
     const _config: _MessageConfig = {
-      type: value,
+      status: value === 'error' ? 'danger' : value === 'normal' ? 'default' : value,
       ...(value === 'loading' && config.duration == null ? { duration: 0 } : {}),
       ...config,
     }

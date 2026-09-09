@@ -1,30 +1,68 @@
-import type { ExtractPropTypes, PropType } from 'vue'
+import { type ExtractPropTypes, type PropType } from 'vue'
+
+export type DividerOrientation = 'horizontal' | 'vertical'
+export type DividerTextAlign = 'start' | 'center' | 'end'
+export type DividerType = 'dashed' | 'dotted' | 'solid' | 'double'
+export type DividerSizePreset = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
+export type DividerSize = number | string | Array<number | string>
 
 export const dividerProps = {
+  /**
+   * 沿 x 轴方向的间距（水平分割线时为左右 inset；竖直分割线时为上下 margin）
+   */
   sizeX: {
-    type: [Number, String, Array] as PropType<number | string | Array<number | string>>,
+    type: [Number, String, Array] as PropType<DividerSize>,
   },
+  /**
+   * 沿 y 轴方向的间距（水平分割线时为上下 margin；竖直分割线时为左右 inset）
+   */
   sizeY: {
-    type: [Number, String, Array] as PropType<number | string | Array<number | string>>,
-    default: () => 'md',
+    type: [Number, String, Array] as PropType<DividerSize>,
+    default: 'md',
   },
+  /**
+   * 分割线方向
+   */
   orientation: {
-    type: String as PropType<'horizontal' | 'vertical'>,
-    default: () => 'horizontal',
+    type: String as PropType<DividerOrientation>,
+    default: 'horizontal',
   },
+  /**
+   * 文字位置（有描述内容时生效）
+   */
   textAlign: {
-    type: String as PropType<'start' | 'center' | 'end'>,
+    type: String as PropType<DividerTextAlign>,
     default: 'center',
   },
+  /**
+   * 文字描述（无 default slot 时生效）
+   */
   description: String,
+  /**
+   * 线型
+   */
   type: {
-    type: String as PropType<'dashed' | 'dotted' | 'solid' | 'double'>,
-    default: () => 'solid',
+    type: String as PropType<DividerType>,
+    default: 'solid',
   },
+  /**
+   * 是否为 0.5px 线
+   */
   hairline: Boolean,
+  /**
+   * 线宽（与 hairline 互斥，hairline 优先）
+   */
   thickness: Number,
+  /**
+   * 分割线颜色
+   */
   color: String,
+  /**
+   * 分割线不透明度
+   */
   opacity: Number,
 }
 
-export type DividerProps = ExtractPropTypes<typeof dividerProps>
+export const props = dividerProps
+
+export type DividerProps = import("vue").ExtractPublicPropTypes<typeof dividerProps>

@@ -1,8 +1,10 @@
 import { defineComponent, nextTick, provide, ref } from "vue";
-import { mount } from "@vue/test-utils";
-import { describe, test, expect, vi } from "vitest";
+import { mount, enableAutoUnmount } from "@vue/test-utils";
+import { describe, test, expect, vi, afterEach } from "vitest";
 import { Menu, MenuOption } from "../index";
 import { menuInjectionKey } from "../context";
+
+enableAutoUnmount(afterEach);
 
 describe("Menu", () => {
   test("render", async () => {

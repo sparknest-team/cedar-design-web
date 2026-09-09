@@ -1,0 +1,43 @@
+// 原生 input / textarea 内容区共用
+.field-decorator-native-style() {
+  width: 100%;
+  padding-right: 0;
+  padding-left: 0;
+  color: inherit;
+  line-height: var(~"--c-line-height");
+  background: none;
+  border: none;
+  border-radius: 0;
+  outline: none;
+  cursor: inherit;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+
+  &::placeholder {
+    color: var(~"--c-field-color-placeholder-text");
+  }
+
+  &[disabled]::placeholder {
+    color: var(~"--c-field-color-text-disabled");
+  }
+
+  &[disabled] {
+    -webkit-text-fill-color: var(~"--c-field-color-text-disabled");
+  }
+}
+
+.field-decorator-native-size(@size) {
+  padding-top: var(~"--c-field-size-@{size}-padding-y");
+  padding-bottom: var(~"--c-field-size-@{size}-padding-y");
+  font-size: var(~"--c-field-size-@{size}-font-size");
+  line-height: var(~"--c-field-size-@{size}-line-height");
+}
+
+// 兼容旧 mixin 名（逐步删除调用方后可移除）
+.input-style() {
+  .field-decorator-native-style();
+}
+
+.input-size(@size) {
+  .field-decorator-native-size(@size);
+}

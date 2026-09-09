@@ -14,4 +14,4 @@ export const ellipsisProps = {
   },
 }
 
-export type EllipsisProps = ExtractPropTypes<typeof ellipsisProps>
+export type EllipsisProps = import("vue").ExtractPublicPropTypes<typeof ellipsisProps>

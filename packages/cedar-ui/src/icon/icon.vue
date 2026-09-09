@@ -7,10 +7,11 @@
 
 <script setup lang="ts">
 import type { CSSProperties } from 'vue'
-import { computed, getCurrentInstance, nextTick, ref, watch } from 'vue'
-import { getPrefixCls, createNamespace } from '../_utils/global-config'
+import { computed, getCurrentInstance, ref, watch } from 'vue'
+import { createNamespace } from '../_utils/global-config'
 import { toSizeUnit } from '../_utils/maple/elements'
 import { iconProps } from './props'
+import { registeredPrefix, spinClass } from './platform'
 
 defineOptions({
   name: createNamespace('icon').name,
@@ -19,7 +20,7 @@ defineOptions({
 const props = defineProps(iconProps)
 const emit = defineEmits<{ click: [event: MouseEvent] }>()
 const instance = getCurrentInstance()
-const prefixCls = getPrefixCls('icon')
+const prefixCls = createNamespace('icon').n()
 const nextName = ref<string>()
 const animateInProgress = ref(false)
 
@@ -31,7 +32,7 @@ const iconComponent = computed(() => {
     .map((part) => `${part.charAt(0).toUpperCase()}${part.slice(1)}`)
     .join('')}`
   const components = instance?.appContext.components
-  return components?.[componentName] ?? components?.[`C${componentName}`]
+  return components?.[componentName] ?? components?.[`${registeredPrefix}${componentName}`]
 })
 
 const innerStyle = computed(() => {
@@ -52,21 +53,23 @@ const innerStyle = computed(() => {
 const cls = computed(() => [
   prefixCls,
   {
-    [`${prefixCls}-spin`]: props.spin,
+    [spinClass]: props.spin,
     [props.animationClass ?? `${prefixCls}--shrinking`]: animateInProgress.value,
   },
 ])
 
-watch(() => props.name, async (newName, oldName) => {
-  if (oldName == null || (Number(props.transition) || 0) === 0) {
+watch(() => props.name, (newName, oldName, onCleanup) => {
+  animateInProgress.value = false
+  const duration = Math.max(0, Number(props.transition) || 0)
+  if (oldName == null || !Number.isFinite(duration) || duration === 0) {
     nextName.value = newName
     return
   }
   animateInProgress.value = true
-  await nextTick()
-  setTimeout(() => {
+  const timer = setTimeout(() => {
     nextName.value = newName
     animateInProgress.value = false
-  }, Number(props.transition) || 0)
+  }, duration)
+  onCleanup(() => clearTimeout(timer))
 }, { immediate: true })
 </script>

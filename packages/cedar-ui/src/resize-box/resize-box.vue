@@ -72,7 +72,7 @@ export default defineComponent({
      * @en Triggered when dragging starts
      * @param {MouseEvent} ev
      */
-    movingStart: (ev: MouseEvent) => true,
+    "moving-start": (ev: MouseEvent) => true,
     /**
      * @zh 拖拽时触发
      * @en Triggered when dragging
@@ -85,7 +85,7 @@ export default defineComponent({
      * @en Triggered when the drag ends
      * @param {MouseEvent} ev
      */
-    movingEnd: (ev: MouseEvent) => true,
+    "moving-end": (ev: MouseEvent) => true,
   },
   /**
    * @zh 伸缩杆的内容
@@ -202,11 +202,11 @@ export default defineComponent({
 
       document.body.style.cursor = 'default'
 
-      emit('movingEnd', e)
+      emit('moving-end', e)
     }
 
     function onMoveStart(direction: DirectionType, e: MouseEvent) {
-      emit('movingStart', e)
+      emit('moving-start', e)
 
       record.moving = true
       record.startPageX = e.pageX

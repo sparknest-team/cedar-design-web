@@ -4,16 +4,16 @@
       <c-alert closable>This is an info alert.</c-alert>
     </c-col>
     <c-col :span="12">
-      <c-alert type="success" closable>This is an success alert.</c-alert>
+      <c-alert status="success" closable>This is an success alert.</c-alert>
     </c-col>
     <c-col :span="12">
-      <c-alert type="warning" closable>
+      <c-alert status="warning" closable>
         <template #title> Warning </template>
         This is an warning alert.
       </c-alert>
     </c-col>
     <c-col :span="12">
-      <c-alert type="danger" closable>
+      <c-alert status="danger" closable>
         <template #title> Error </template>
         This is a danger alert.
       </c-alert>

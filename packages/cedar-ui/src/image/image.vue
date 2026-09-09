@@ -119,7 +119,7 @@ export default defineComponent({
      * @en Preview opening and closing events
      * @param {boolean} open
      */
-    "previewOpenChange",
+    "preview-open-change",
     "update:previewOpen",
     "click",
     "load",
@@ -219,7 +219,7 @@ export default defineComponent({
       get: () => previewOpen.value ?? localPreviewOpen.value,
       set: (open: boolean) => {
         if (previewOpen.value === undefined) localPreviewOpen.value = open;
-        emit("previewOpenChange", open);
+        emit("preview-open-change", open);
         emit("update:previewOpen", open);
       },
     });

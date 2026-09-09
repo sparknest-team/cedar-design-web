@@ -41,13 +41,16 @@ permalink: /components/auto-complete/
 | model-value **(v-model)** | 绑定值                                     | `string`                                                        |   `-`   |
 | default-value             | 默认值（非受控模式）                       | `string`                                                        |  `''`   |
 | disabled                  | 是否禁用                                   | `boolean`                                                       | `false` |
-| data                      | 用于自动提示的数据                         | `(string \| number \| SelectOptionData \| SelectOptionGroup)[]` |  `[]`   |
-| popup-container           | 弹出框的挂载容器                           | `string \| HTMLElement \| null \| undefined`                    |   `-`   |
+| options                   | 用于自动提示的数据                         | `(string \| number \| SelectOptionData \| SelectOptionGroup)[]` |  `[]`   |
+| popup-container           | 弹出框的挂载容器                           | `string \| HTMLElement \| false`                    |   `-`   |
 | strict                    | 是否为严格校验模式                         | `boolean`                                                       | `false` |
 | filter-option             | 自定义选项过滤方法                         | `FilterOption`                                                  | `true`  |
+| should-open               | 是否允许展开；不负责逐项过滤               | `(inputValue: string) => boolean`                                | 输入非空 |
 | trigger-props             | trigger 组件属性                           | `TriggerProps`                                                  |   `-`   |
 | clearable               | 是否允许清空输入框                         | `boolean`                                                       | `false` |
 | virtual-list-props        | 传递虚拟列表属性，传入此参数以开启虚拟滚动 | `VirtualListProps`                                              |  `'-'`  |
+
+展开条件与过滤条件相互独立：`filter-option=true` 按标签（缺省时按 value）忽略大小写匹配，`strict=true` 时区分大小写；传入函数可自定义过滤，输入为空时保留全部候选。`filter-option=false` 适合服务端筛选。没有候选或禁用时不会展开，`triggerProps.open` 不得绕过这些条件。若需要输入为空时也展示候选，设置 `:should-open="() => true"`。
 
 ### `<AutoComplete>` Events
 

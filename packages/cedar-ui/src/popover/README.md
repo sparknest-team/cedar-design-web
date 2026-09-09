@@ -29,7 +29,7 @@ permalink: /components/popover/
 | content-style | 弹出内容样式 | `CSSProperties` | `-` |
 | arrow-class | 箭头类名 | `ClassName` | `-` |
 | arrow-style | 箭头样式 | `CSSProperties` | `-` |
-| popup-container | 弹出框挂载容器 | `string \| HTMLElement` | `-` |
+| popup-container | 弹出框挂载容器 | `string \| HTMLElement \| false` | `-` |
 | esc-to-close | 是否支持按 ESC 键关闭 | `boolean` | `true` |
 
 ### Popover Events
@@ -66,3 +66,15 @@ permalink: /components/popover/
 ```ts
 import type { PopoverInstance, PopoverPlacement, PopoverProps, PopoverTrigger } from '@cedarjs/ui'
 ```
+
+## 共同组件主体与 Trigger 契约
+
+两端使用独立复制的组件主体；所有开关状态和生命周期由底层 Trigger 管理。`open` 是受控值，`defaultOpen` 初始化非受控状态；请求只派发一次 `update:open` 和 `open-change`，实际变化才产生 open/close，过渡完成才产生 opened/closed。默认打开也会产生首次 open。
+
+明确支持 Trigger 的交互与渲染字段，包括 trigger（单值/数组）、disabled、mouseEnterDelay、mouseLeaveDelay、focusDelay、popupHoverStay、blurToClose、clickOutsideToClose、escToClose、restoreFocus、unmountOnClose、duration、showArrow、popupClass/popupStyle、contentClass/contentStyle、arrowClass/arrowStyle。各端定位扩展继续使用该端 Trigger 字段。
+
+公开方法：open、close、resize、allowClose、getReference、setReference、focusReference。setReference() 无参数时恢复默认插槽引用，HTML/SVG 引用均受支持；focusReference 不会导致 focus 触发器再次打开。
+
+默认值保留：Cedar Tooltip/Popover 为 hover、top、100 ms 延迟、有箭头、关闭后卸载；Maple Tooltip 为 hover，Popover 为 click，二者 bottom、零延迟、默认无箭头、关闭后保留内容。需要一致行为时显式传这些属性。
+
+Popover 两端均支持 title/content 属性和同名插槽，插槽优先。Maple 内容新增 title/body 子层，原 popoverClass、defaultStyle、elevation 继续作用于外部内容面板；依赖直接子元素的 CSS 请改为针对 body 内的目标节点。

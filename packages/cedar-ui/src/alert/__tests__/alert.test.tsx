@@ -11,34 +11,34 @@ describe('Alert', () => {
   })
 
   test('type modifier classes', async () => {
-    for (const type of ['info', 'success', 'warning', 'danger', 'default'] as const) {
-      const wrapper = mount(Alert, { props: { type } })
-      expect(wrapper.find('.c-alert').classes()).toContain(`c-alert--${type}`)
+    for (const status of ['info', 'success', 'warning', 'danger', 'default'] as const) {
+      const wrapper = mount(Alert, { props: { status } })
+      expect(wrapper.find('.c-alert').classes()).toContain(`c-alert--${status}`)
     }
   })
 
   test('variant modifier classes', async () => {
-    for (const variant of ['standard', 'tonal', 'outlined'] as const) {
+    for (const variant of ['standard', 'tonal', 'outline'] as const) {
       const wrapper = mount(Alert, { props: { variant } })
       expect(wrapper.find('.c-alert').classes()).toContain(`c-alert--${variant}`)
     }
   })
 
   test('default type hides built-in icon', async () => {
-    const wrapper = mount(Alert, { props: { type: 'default' } })
+    const wrapper = mount(Alert, { props: { status: 'default' } })
     expect(wrapper.find('.c-alert__icon').exists()).toBe(false)
   })
 
   test('default type shows custom icon slot', async () => {
     const wrapper = mount(Alert, {
-      props: { type: 'default' },
+      props: { status: 'default' },
       slots: { icon: () => <i class="custom-icon" /> },
     })
     expect(wrapper.find('.c-alert__icon .custom-icon').exists()).toBe(true)
   })
 
   test('showIcon=false hides icon', async () => {
-    const wrapper = mount(Alert, { props: { type: 'info', showIcon: false } })
+    const wrapper = mount(Alert, { props: { status: 'info', showIcon: false } })
     expect(wrapper.find('.c-alert__icon').exists()).toBe(false)
   })
 

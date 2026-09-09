@@ -6,7 +6,7 @@
       </template>
       This is an alert with a custom icon.
     </c-alert>
-    <c-alert type="default">
+    <c-alert status="default">
       <template #icon>
         <c-icon-exclamation-circle-fill />
       </template>

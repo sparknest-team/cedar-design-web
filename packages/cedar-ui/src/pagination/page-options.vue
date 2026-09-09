@@ -1,67 +1,46 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+import type { PropType } from 'vue'
+import type { ComponentSize } from '../_utils/constant'
+import { createNamespace } from '../_utils/global-config'
+import type { PaginationPageSizeProps } from './types'
+import PaginationSelect from './page-select.vue'
+import { usePaginationLocale } from './platform'
+defineOptions({ name: createNamespace('pagination-options').name })
+const props = defineProps({
+  pageSize: Number,
+  sizeOptions: { type: Array as PropType<number[]>, required: true },
+  size: String as PropType<ComponentSize>,
+  disabled: Boolean,
+  selectProps: Object as PropType<PaginationPageSizeProps>,
+})
+const emit = defineEmits<{ (event: 'change', value: number): void }>()
+const { n } = createNamespace('pagination')
+const text = usePaginationLocale()
+const options = computed(() =>
+  props.sizeOptions
+    .filter((value) => Number.isInteger(value) && value > 0)
+    .map((value) => ({ value, label: text.value.count(value) })),
+)
+function change(value: unknown) {
+  if (
+    !props.disabled &&
+    !props.selectProps?.disabled &&
+    typeof value === 'number' &&
+    options.value.some((option) => option.value === value)
+  )
+    emit('change', value)
+}
+</script>
 <template>
-  <span :class="prefixCls">
-    <Select
+  <span :class="n('options')"
+    ><PaginationSelect
+      :config="selectProps"
       :model-value="pageSize"
       :options="options"
       :size="size"
-      :disabled="disabled"
-      v-bind="selectProps"
-      @change="handleChange"
-    />
-  </span>
+      :disabled="disabled || selectProps?.disabled"
+      :label="text.perPage"
+      @update:model-value="change"
+  /></span>
 </template>
-
-<script lang="ts">
-import { computed, defineComponent, PropType } from 'vue'
-import { useI18n } from '../locale'
-import { createNamespace, getPrefixCls } from '../_utils/global-config'
-import type { ComponentSize } from '../_utils/constant'
-import Select from '../select'
-
-export default defineComponent({
-  name: createNamespace('pagination-options').name,
-  components: {
-    Select,
-  },
-  props: {
-    sizeOptions: {
-      type: Array as PropType<(string | number)[]>,
-      required: true,
-    },
-    pageSize: Number,
-    disabled: Boolean,
-    size: {
-      type: String as PropType<ComponentSize>,
-    },
-    onChange: {
-      type: Function as PropType<(value: number) => void>,
-    },
-    selectProps: {
-      type: Object,
-    },
-  },
-  emits: ['change'],
-  setup(props, { emit }) {
-    const prefixCls = getPrefixCls('pagination-options')
-    const { t } = useI18n()
-    const options = computed(() =>
-      props.sizeOptions.map((value) => ({
-        value,
-        label: `${value} ${t('pagination.countPerPage')}`,
-      })),
-    )
-
-    const handleChange = (
-      value: string | number | boolean | Record<string, any> | (string | number | boolean | Record<string, any>)[],
-    ) => {
-      emit('change', value)
-    }
-
-    return {
-      prefixCls,
-      options,
-      handleChange,
-    }
-  },
-})
-</script>

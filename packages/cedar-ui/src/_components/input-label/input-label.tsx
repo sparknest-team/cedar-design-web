@@ -26,7 +26,7 @@ export default defineComponent({
     baseCls: String,
     size: String as PropType<ComponentSize>,
     variant: {
-      type: String as PropType<'filled' | 'outlined' | 'standard'>,
+      type: String as PropType<'filled' | 'outline' | 'standard'>,
       default: 'filled',
     },
     error: Boolean,
@@ -34,7 +34,7 @@ export default defineComponent({
     focused: Boolean,
     uninjectFormItemContext: Boolean,
   },
-  emits: ['update:inputValue', 'inputValueChange', 'focus', 'blur'],
+  emits: ['update:inputValue', 'input-value-change', 'focus', 'blur'],
   setup(props, { attrs, emit, slots }) {
     const { n, classes } = createNamespace(props.baseCls ?? 'input-label')
 
@@ -64,7 +64,7 @@ export default defineComponent({
     } = useInput({
       modelValue: inputValue,
       emit,
-      eventName: 'inputValueChange',
+      eventName: 'input-value-change',
       updateEventName: 'update:inputValue',
       eventHandlers,
     })

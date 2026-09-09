@@ -83,7 +83,7 @@ permalink: /components/breadcrumb/
 | 事件名 | 说明     | 参数           |
 | ------ | -------- | -------------- |
 | click  | 点击事件（省略项不触发） | `event: MouseEvent` |
-| select | 选择内置下拉项时触发 | `route: BreadcrumbRoute` |
+| select | 选择内置下拉项时触发 | `route: BreadcrumbRoute, event?: Event` |
 
 ### BreadcrumbItem Slots
 
@@ -107,3 +107,13 @@ permalink: /components/breadcrumb/
 ```ts
 import type { BreadcrumbProps, BreadcrumbItemProps, BreadcrumbRoute } from '@cedarjs/ui'
 ```
+
+## 同源实现与平台边界
+
+Breadcrumb 与 BreadcrumbItem 在 Cedar / Maple 中独立复制维护，主体、Props、上下文、类型、关键样式及配对测试纳入 `design-ui/bin/copied-components-check.mjs`。图标、安装入口、菜单实现和主题 token 由各库本地提供。
+
+- 非空 `routes` 优先于默认插槽；空数组回退到插槽。默认路由渲染仅前面的项目带链接，最后一项标记 `aria-current="page"`；`item-render` 自行控制链接。
+- 分隔符优先级：子项插槽 → 子项属性 → 父级插槽 → 父级属性；支持 `0` 和空字符串。
+- `max-count` 沿用现有边界：总数大于 `max-count + 1` 才折叠；保留首项和尾部项目，省略位置不触发原项的点击、链接或下拉菜单。
+- 内置下拉选择派发 `select(route, event)`。动态增删、重排及 SSR 会同步计算索引和分隔符。
+- Cedar 项内容新增 `__content` 包装，属性透传到该内容节点；Maple 原有主题变量继续通过 token 映射生效。

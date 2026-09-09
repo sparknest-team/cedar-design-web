@@ -40,8 +40,8 @@ const open = (config: DrawerConfig, appContext?: AppContext) => {
     }
     container = null
 
-    if (isFunction(config.onClose)) {
-      config.onClose()
+    if (isFunction(config.onClosed)) {
+      config.onClosed()
     }
   }
 
@@ -61,11 +61,11 @@ const open = (config: DrawerConfig, appContext?: AppContext) => {
 
   const defaultConfig = {
     open: true,
-    renderToBody: false,
+    popupContainer: false,
     unmountOnClose: true,
     onConfirm: handleConfirm,
     onCancel: handleCancel,
-    onClose: handleClose,
+    onClosed: handleClose,
   }
 
   // @ts-ignore
@@ -81,19 +81,15 @@ const open = (config: DrawerConfig, appContext?: AppContext) => {
         'unmountOnClose',
         'onConfirm',
         'onCancel',
-        'onClose',
+        'onClosed',
         'beforeConfirm',
         'beforeCancel',
-        'beforeOpen',
-        'beforeClose',
       ]),
       ...{
         header: typeof config.header === 'boolean' ? config.header : undefined,
         footer: typeof config.footer === 'boolean' ? config.footer : undefined,
         beforeConfirm: config.beforeConfirm,
         beforeCancel: config.beforeCancel,
-        onBeforeOpen: config.beforeOpen,
-        onBeforeClose: config.beforeClose,
       },
     },
     {

@@ -3,7 +3,7 @@
     :class="`${prefixCls}-trigger`"
     auto-fit-popup-min-width
     trigger="click"
-    placement="bl"
+    placement="bottom-start"
     :popup-offset="4"
     animation-name="slide-dynamic-origin"
     :prevent-focus="true"
@@ -11,9 +11,9 @@
     :disabled="mergedDisabled"
     :open="panelVisible"
     :popup-container="popupContainer"
-    :click-to-close="!allowSearch"
+    :close-on-click-reference="!allowSearch"
     auto-fit-transform-origin
-    @openChange="onVisibleChange"
+    @open-change="onVisibleChange"
   >
     <slot name="trigger">
       <SelectView
@@ -32,7 +32,7 @@
         :placeholder="placeholder"
         :multiple="isMultiple"
         v-bind="$attrs"
-        @inputValueChange="onSearchValueChange"
+        @input-value-change="onSearchValueChange"
         @clear="onInnerClear"
         @remove="onItemRemove"
         @blur="onBlur"
@@ -210,7 +210,7 @@ export default defineComponent({
      * @param {string} inputValue
      * @version 2.55.0
      */
-    inputValueChange: (inputValue: string) => true,
+    "input-value-change": (inputValue: string) => true,
   },
   /**
    * @zh 自定义触发元素
@@ -393,7 +393,7 @@ export default defineComponent({
     const updateInputValue = (inputValue: string) => {
       _inputValue.value = inputValue;
       emit("update:inputValue", inputValue);
-      emit("inputValueChange", inputValue);
+      emit("input-value-change", inputValue);
     };
 
     const handleInputValueChange = (inputValue: string) => {

@@ -67,10 +67,12 @@ import {
   toRefs,
 } from 'vue'
 // @ts-ignore
+import { createRequestGuard } from '../_utils/async-request'
 import { Schema } from 'b-validate'
 import { FormContext, formInjectionKey, FormItemInfo, formItemInjectionKey } from './context'
 import { FieldData, FieldRule, ValidateStatus, ValidateTrigger, FormItemEventHandler } from './types'
-import { Row, Col } from '../grid'
+import Row from '../row'
+import Col from '../col'
 import FormItemLabel from './form-item-label.vue'
 import FormItemMessage from './form-item-message.vue'
 import { getPrefixCls } from '../_utils/global-config'
@@ -386,7 +388,9 @@ export default defineComponent({
       props.feedback && computedValidateStatus.value ? computedValidateStatus.value : undefined,
     )
 
+    const validation = createRequestGuard()
     const validateField = (): Promise<any> => {
+      const isCurrent = validation.begin()
       if (validateDisabled.value) {
         return Promise.resolve()
       }
@@ -424,7 +428,7 @@ export default defineComponent({
       return new Promise((resolve) => {
         schema.validate({ [_field]: _value }, (err: Data) => {
           const isError = Boolean(err?.[_field])
-          updateValidateState(_field, {
+          if (isCurrent()) updateValidateState(_field, {
             status: isError ? 'error' : '',
             message: err?.[_field].message ?? '',
           })
@@ -491,6 +495,7 @@ export default defineComponent({
     )
 
     const clearValidate = () => {
+      validation.invalidate()
       if (field.value) {
         updateValidateState(field.value, {
           status: '',
@@ -500,6 +505,7 @@ export default defineComponent({
     }
 
     const setField = (data: FieldData) => {
+      validation.invalidate()
       if (field.value) {
         validateDisabled.value = true
         if ('value' in data && formCtx?.model && field.value) {
@@ -548,6 +554,7 @@ export default defineComponent({
     })
 
     onBeforeUnmount(() => {
+      validation.invalidate()
       if (formItemInfo.field) {
         formCtx.removeField?.(formItemInfo)
       }

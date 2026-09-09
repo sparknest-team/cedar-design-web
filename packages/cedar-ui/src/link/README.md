@@ -50,11 +50,15 @@ permalink: /components/link/
 
 <demo src="./__demos__/link-loading.vue"></demo>
 
-### 悬浮态底色（Cedar 扩展）
+### 悬浮态底色
 
-桌面端可以通过 `hoverable` 设置悬浮态底色。该能力属于 Cedar 的平台扩展，不属于两端公共 Demo。
+两端均支持 `hoverable`（默认 `false`）：开启后增加内边距与悬浮/按下底色，不影响下划线策略。键盘聚焦使用 `:focus-visible` 显示焦点轮廓，无需开启 hoverable。
 
 <demo src="./__demos__/hoverable.vue"></demo>
+
+两端 Link 主体、Props、主样式和测试采用独立同源复制；仅组件前缀、本地图标与主题 token 适配不同，不共享核心或实例。
+
+禁用或加载时移除 href/target/rel，禁止导航和 click，并退出 Tab 顺序（即使传入 tabindex）。普通状态原样透传原生属性。加载图标优先于 icon 插槽；动态图标插槽会随渲染更新。
 
 ## API
 
@@ -78,10 +82,21 @@ permalink: /components/link/
 | ------ | -------------- | ----------------------------- |
 | click  | 点击触发的事件 | `(event: MouseEvent) => void` |
 
+### Slots
+
+| 插槽 | 说明 |
+| --- | --- |
+| default | 链接内容 |
+| icon | 自定义图标，loading 时被加载图标替代 |
+
 ### 类型定义
 
 组件导出以下类型定义
 
 ```ts
-import type { LinkProps } from '@cedarjs/ui'
+import type { LinkProps, LinkUnderline, LinkInstance } from '@cedarjs/ui'
 ```
+
+### 样式迁移
+
+内部类名统一为 `c-link--status-*`、`c-link--underline-*`、`c-link--disabled`、`c-link--loading` 和 `c-link__icon`。请迁移旧的单连字符选择器，优先通过 `--c-link-*` CSS 变量定制。焦点支持 `--c-link-focus-width`（2px）、`--c-link-focus-offset`（2px）、`--c-link-focus-color`（currentColor）、`--c-link-focus-opacity`（0.8）。减少动态效果偏好下关闭加载旋转和过渡。

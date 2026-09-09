@@ -62,7 +62,7 @@ export const tableProps = {
      * @zh 表格的大小
      * @en The size of the table
      * @values 'xs','sm','md','lg','xl'
-     * @defaultValue 'md'
+     * @default-value 'md'
      */
     size: {
       type: String as PropType<ComponentSize>,

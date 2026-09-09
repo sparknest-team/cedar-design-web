@@ -18,7 +18,7 @@ export default defineComponent({
       default: 'md',
     },
     variant: {
-      type: String as PropType<'filled' | 'outlined' | 'standard'>,
+      type: String as PropType<'filled' | 'outline' | 'standard'>,
       default: 'filled',
     },
     disabled: {

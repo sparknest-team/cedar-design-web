@@ -51,7 +51,7 @@ permalink: /components/date-range/
 | `disabled` | 禁用 | `boolean \| boolean[]` | `-` |
 | `readonly` | 只读 | `boolean` | `false` |
 | `size` | 尺寸 | `xs \| sm \| md \| lg \| xl` | `-` |
-| `variant` | 输入框变体 | `filled \| outlined \| standard` | `filled` |
+| `variant` | 输入框变体 | `filled \| outline \| standard` | `filled` |
 | `separator` | 分隔符 | `string` | `-` |
 | `placeholder` | 占位 | `string[]` | `-` |
 | `disabled-date` | 禁用日期 | `Function` | `-` |

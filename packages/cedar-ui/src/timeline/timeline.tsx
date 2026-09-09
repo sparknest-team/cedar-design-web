@@ -37,14 +37,14 @@ export default defineComponent({
     const { children, components } = useChildrenComponents(Item.name!);
     const {
       reverse: reverseRef,
-      direction: directionRef,
+      orientation: directionRef,
       labelPosition: labelPositionRef,
       mode: modeRef,
     } = toRefs(props);
 
     const timelineContext = reactive({
       items: components,
-      direction: directionRef,
+      orientation: directionRef,
       reverse: reverseRef,
       labelPosition: labelPositionRef,
       mode: modeRef,
@@ -55,7 +55,7 @@ export default defineComponent({
       return [
         prefixCls,
         `${prefixCls}-${props.mode}`,
-        `${prefixCls}-direction-${props.direction}`,
+        `${prefixCls}-direction-${props.orientation}`,
         {
           [`${prefixCls}-is-reverse`]: props.reverse,
         },

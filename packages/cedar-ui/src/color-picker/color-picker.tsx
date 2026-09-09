@@ -144,11 +144,10 @@ export default defineComponent({
         <Trigger
           v-slots={{ content: renderPanel }}
           trigger="click"
-          placement="bl"
+          placement="bottom-start"
           animationName="slide-dynamic-origin"
           popupOffset={4}
           disabled={props.disabled}
-          onOpenChange={handleOpenChange}
           onUpdate:open={handleOpenChange}
           {...props.triggerProps}
         >

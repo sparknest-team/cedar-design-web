@@ -1,40 +1,18 @@
 <template>
-  <li :class="prefixCls">
-    <div :class="`${prefixCls}-title`">
-      <slot name="title">
-        {{ title }}
-      </slot>
-    </div>
-    <ul :class="`${prefixCls}-list`">
-      <slot />
-    </ul>
-  </li>
+  <MenuView :options="viewOptions">
+    <template v-for="(_, slotName) in $slots" #[slotName]="slotProps">
+      <slot :name="slotName" v-bind="slotProps || {}" />
+    </template>
+  </MenuView>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { createNamespace, getPrefixCls } from '../_utils/global-config'
-
-export default defineComponent({
-  name: createNamespace('menu-group').name,
-  props: {
-    /**
-     * @zh 分组标题
-     * @en Group title
-     */
-    title: String,
-  },
-  /**
-   * @zh 分组标题
-   * @en Group title
-   * @slot title
-   */
-  setup() {
-    const prefixCls = getPrefixCls('menu-group')
-
-    return {
-      prefixCls,
-    }
-  },
-})
+<script setup lang="ts">
+import { computed } from 'vue'
+import { createNamespace } from '../_utils/global-config'
+import MenuView from './render'
+import { props as groupProps } from './group-props'
+import { groupAppearance } from './platform'
+defineOptions({ name: createNamespace('menu-group').name })
+const props = defineProps(groupProps)
+const viewOptions = computed(() => ({ kind: 'group', ...groupAppearance(), title: props.title }))
 </script>

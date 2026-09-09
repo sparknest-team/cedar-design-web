@@ -1,0 +1,5 @@
+- [x] Record native Vue architecture and Cedar API contract.
+- [x] Implement pure scheduling core and edge-case tests.
+- [x] Implement native views, Cedar editor, resource filtering and mutation flow.
+- [x] Register public exports, documentation and interactive examples.
+- [x] Run behavior tests, type checks, style/build checks and visual verification.

@@ -96,7 +96,7 @@ export default defineComponent({
   },
   emits: {
     scroll: (ev: Event) => true,
-    reachBottom: (ev: Event) => true,
+    "reach-bottom": (ev: Event) => true,
   },
   setup(props, { emit }) {
     const { data, itemKey, fixedSize, estimatedSize, buffer, height } = toRefs(props)
@@ -174,7 +174,7 @@ export default defineComponent({
       emit('scroll', ev)
       const bottom = Math.floor(scrollHeight - (scrollTop + offsetHeight))
       if (bottom <= 0) {
-        emit('reachBottom', ev)
+        emit('reach-bottom', ev)
       }
     }
 

@@ -1,95 +1,32 @@
-@import '../../style/theme/index.less';
-
 :root {
-  // Global
-  --c-switch-size-default: var(~'--c-size-6');
-  --c-switch-size-small: var(~'--c-size-4');
-  --c-switch-font-size-text: var(~'--c-font-size-caption');
-
-  // circle and round
-  --c-switch-dot-size-default: var(~'--c-size-4');
-  --c-switch-dot-size-small: var(~'--c-size-3');
-
-  // line
-  --c-switch-line-dot-size-default: var(~'--c-size-5');
-  --c-switch-line-dot-size-small: var(~'--c-size-4');
-
-  // Circle
-  --c-switch-circle-width-default: var(~'--c-size-10');
-  --c-switch-circle-width-small: var(~'--c-size-7');
-
-  // Round
-  --c-switch-round-width-default: var(~'--c-size-10');
-  --c-switch-round-width-small: var(~'--c-size-7');
-  --c-switch-round-border-radius: var(~'--c-border-radius-sm');
-  --c-switch-round-handle-border-radius: var(~'--c-border-radius-sm');
-  --c-switch-round-small-border-radius: var(~'--c-border-radius-sm');
-  --c-switch-round-small-handle-border-radius: 1px;
-
-  // Line
-  --c-switch-line-width-default: var(~'--c-size-9');
-  --c-switch-line-width-small: var(~'--c-size-7');
-  --c-switch-line-bg-height: var(~'--c-spacing-3');
-  --c-switch-line-dot-shadow-color: var(~'--c-color-neutral-6');
-
-  // derived gaps / radii
-  --c-switch-gap-default: calc(
-    (var(~'--c-switch-size-default') - var(~'--c-switch-dot-size-default')) / 2
-  );
-  --c-switch-gap-small: calc(
-    (var(~'--c-switch-size-small') - var(~'--c-switch-dot-size-small')) / 2
-  );
-  --c-switch-line-gap-default: calc(
-    (var(~'--c-switch-size-default') - var(~'--c-switch-line-dot-size-default')) / 2
-  );
-  --c-switch-line-gap-small: calc(
-    (var(~'--c-switch-size-small') - var(~'--c-switch-line-dot-size-small')) / 2
-  );
-  --c-switch-border-radius-default: calc(var(~'--c-switch-size-default') / 2);
-  --c-switch-border-radius-small: calc(var(~'--c-switch-size-small') / 2);
-  --c-switch-line-bg-border-radius: calc(var(~'--c-switch-line-bg-height') / 2);
-  --c-switch-line-handle-border-radius-default: calc(var(~'--c-switch-line-dot-size-default') / 2);
-  --c-switch-text-offset: calc(
-    var(~'--c-switch-dot-size-default') + var(~'--c-switch-gap-default') + var(~'--c-spacing-3')
-  );
-  --c-switch-text-padding-inline: var(~'--c-spacing-4');
-  --c-switch-handle-font-size: var(~'--c-font-size-body-1');
-  --c-switch-handle-checked-left: calc(
-    100% - var(~'--c-switch-dot-size-default') - var(~'--c-switch-gap-default')
-  );
-  --c-switch-handle-checked-left-small: calc(
-    100% - var(~'--c-switch-dot-size-small') - var(~'--c-switch-gap-small')
-  );
-  --c-switch-line-handle-checked-left: calc(100% - var(~'--c-switch-line-dot-size-default'));
-  --c-switch-line-handle-checked-left-small: calc(
-    100% - var(~'--c-switch-line-dot-size-small') - var(~'--c-switch-line-gap-small')
-  );
-  --c-switch-gap-small-neg: calc(var(~'--c-switch-gap-small') * -1);
-  --c-switch-line-gap-small-neg: calc(var(~'--c-switch-line-gap-small') * -1);
-
-  --c-switch-bg-on: rgb(var(~'--c-primary-6'));
-  --c-switch-bg-off: var(~'--c-color-fill-4');
-  --c-switch-bg-on-disabled: var(~'--c-color-primary-light-3');
-  --c-switch-bg-off-disabled: var(~'--c-color-fill-2');
-  --c-switch-bg-on-loading: var(~'--c-color-primary-light-3');
-  --c-switch-bg-off-loading: var(~'--c-color-fill-2');
-  --c-switch-dot-bg: var(~'--c-color-bg-white');
-  --c-switch-text-color-on: var(~'--c-color-white');
-  --c-switch-text-color-off: var(~'--c-color-white');
-  --c-switch-text-color-on-disabled: var(~'--c-color-white');
-  --c-switch-text-color-off-disabled: var(~'--c-color-white');
-  --c-switch-text-color-on-loading: var(~'--c-color-primary-light-1');
-  --c-switch-text-color-off-loading: var(~'--c-color-white');
-  --c-switch-dot-icon-color-on: rgb(var(~'--c-primary-6'));
-  --c-switch-dot-icon-color-off: var(~'--c-color-neutral-3');
-  --c-switch-dot-icon-color-on-disabled: var(~'--c-color-primary-light-3');
-  --c-switch-dot-icon-color-off-disabled: var(~'--c-color-fill-2');
-  --c-switch-dot-icon-color-on-loading: var(~'--c-color-primary-light-3');
-  --c-switch-dot-icon-color-off-loading: var(~'--c-color-neutral-3');
-
-  --c-switch-custom-color: var(~'--c-switch-bg-off');
-
-  --c-switch-transition-duration: var(~'--c-transition-duration-2');
-  --c-switch-transition-timing-function: var(~'--c-transition-timing-function-standard');
-  --c-switch-line-dot-box-shadow: 0 1px 3px var(~'--c-switch-line-dot-shadow-color');
+  --c-switch-width: 40px;
+  --c-switch-height: 24px;
+  --c-switch-handle-size: 16px;
+  --c-switch-gap: 4px;
+  --c-switch-size-sm-scale: .8;
+  --c-switch-size-lg-scale: 1.2;
+  --c-switch-hit-area: 0px;
+  --c-switch-track-background: var(--c-color-fill-4, #bfbfbf);
+  --c-switch-track-active-background: var(--c-color-primary, #1677ff);
+  --c-switch-track-error-background: var(--c-color-danger, #f53f3f);
+  --c-switch-handle-background: var(--c-color-white, #fff);
+  --c-switch-handle-color: var(--c-color-primary, #1677ff);
+  --c-switch-text-color: var(--c-color-white, #fff);
+  --c-switch-disabled-opacity: .5;
+  --c-switch-duration: 180ms;
+  --c-switch-font-size: 12px;
+  --c-switch-radius: 999px;
+  --c-switch-round-radius: 4px;
+  --c-switch-line-height: 12px;
+  --c-switch-line-handle-size: 20px;
+  --c-switch-md3-width: 52px;
+  --c-switch-md3-height: 32px;
+  --c-switch-md3-handle-size: 24px;
+  --c-switch-md3-border-width: 2px;
+  --c-switch-md3-border-color: var(--c-color-text-3, #79747e);
+  --c-switch-md3-track-background: var(--c-color-fill-2, #e7e0ec);
+  --c-switch-shadow-color: #0003;
+  --c-switch-focus-width: 2px;
+  --c-switch-ripple-scale: 2.4;
+  --c-switch-ripple-duration: 400ms;
 }

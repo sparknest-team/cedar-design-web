@@ -20,14 +20,14 @@ export const splitProps = {
      * @zh 分割的方向
      * @en Direction of division
      */
-    direction: {
+    orientation: {
       type: String as PropType<'horizontal' | 'vertical'>,
       default: 'horizontal',
     },
     /**
      * @zh 分割的大小，可以是 0~1 代表百分比，或具体数值的像素，如 300px
      * @en The size of the segmentation, it can be 0~1 representing a percentage, or a specific number of pixels, such as 300px
-     * @vModel
+     * @v-model
      */
     size: {
       type: [Number, String],

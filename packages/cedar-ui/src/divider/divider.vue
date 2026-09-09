@@ -3,81 +3,61 @@
     :class="
       classes(
         n(),
-        [orientation, n(`--orientation-${orientation}`)],
-        [textAlign, n(`--text-align-${textAlign}`)],
-        [withText, n('--with-text')],
+        n(`--orientation-${orientation}`),
+        n(`--text-align-${textAlign}`),
+        n(`--type-${type}`),
+        [withText(), n('--with-text')],
         [withPresetSizeX, n(`--size-x-${sizeX}`)],
         [withPresetSizeY, n(`--size-y-${sizeY}`)],
         [hairline, n('--hairline')],
-        [type, n(`--type-${type}`)],
       )
     "
-    :style="style"
+    :style="rootStyle"
     role="separator"
+    :aria-orientation="orientation"
   >
     <slot>
-      <span :class="n('text')" v-if="description">{{ description }}</span>
+      <span v-if="description" :class="n('text')">{{ description }}</span>
     </slot>
   </div>
 </template>
 
-<script lang="ts" setup>
-import { computed, CSSProperties, onUpdated, ref, useSlots } from 'vue'
-import { onSmartMounted } from '@cedarjs/use'
-import { toSizeUnit } from '../_utils/maple/elements'
+<script setup lang="ts">
+import { computed, useSlots, type CSSProperties } from 'vue'
 import { createNamespace } from '../_utils/global-config'
+import { toSizeUnit } from '../_utils/maple/elements'
 import { dividerProps } from './props'
 
-defineOptions({
-  name: createNamespace('divider').name,
-})
-
+defineOptions({ name: createNamespace('divider').name })
 const { n, classes } = createNamespace('divider')
-
 const props = defineProps(dividerProps)
 const slots = useSlots()
+const SIZE_PRESETS = ['xs', 'sm', 'md', 'lg', 'xl', 'xxl'] as const
 
-const withText = ref(false)
-const withPresetSizeX = computed(() => {
-  const { sizeX } = props
-  return ['xs', 'sm', 'md', 'lg', 'xl', 'xxl'].includes(sizeX as string)
-})
-const withPresetSizeY = computed(() => {
-  const { sizeY } = props
-  return ['xs', 'sm', 'md', 'lg', 'xl', 'xxl'].includes(sizeY as string)
-})
-const style = computed(() => {
+const withText = () => Boolean(slots.default || props.description)
+
+const withPresetSizeX = computed(() => SIZE_PRESETS.includes(props.sizeX as (typeof SIZE_PRESETS)[number]))
+const withPresetSizeY = computed(() => SIZE_PRESETS.includes(props.sizeY as (typeof SIZE_PRESETS)[number]))
+
+const rootStyle = computed(() => {
   const { sizeX, sizeY, orientation, hairline } = props
-  const styles: CSSProperties = {}
-  // hairline 和 thickness 不能同时设置
+  const styles: CSSProperties & Record<string, string | number | undefined> = {}
+
   if (props.thickness && !hairline) {
     styles['--c-divider-border-width'] = toSizeUnit(props.thickness)
   }
   if (props.color) {
     styles['--c-divider-color'] = props.color
   }
-  if (props.opacity) {
-    styles['--c-divider-opacity'] = props.opacity
+  if (props.opacity != null) {
+    styles['--c-divider-opacity'] = String(props.opacity)
+    styles.opacity = props.opacity
   }
-  if (!withPresetSizeX.value) {
-    let start: number | string | undefined
-    let end: number | string | undefined
-    if (Array.isArray(sizeX)) {
-      // 数组情况：[left, right] 或 [left] (right = left)
-      const startValue = sizeX[0]
-      const endValue = sizeX.length > 1 ? sizeX[1] : sizeX[0]
 
-      start = toSizeUnit(startValue)
-      end = toSizeUnit(endValue)
-    } else {
-      // 数字或字符串情况：left 和 right 相同
-      const value = toSizeUnit(sizeX)
-      start = value
-      end = value
-    }
-    const width = `calc(100% - ${start} - ${end})`
+  if (!withPresetSizeX.value && sizeX != null) {
+    const [start, end] = resolveSizePair(sizeX)
     if (orientation === 'horizontal') {
-      styles.maxWidth = width
+      styles.maxWidth = `calc(100% - ${start} - ${end})`
       styles.marginInlineStart = start
       styles.marginInlineEnd = end
     } else {
@@ -85,39 +65,31 @@ const style = computed(() => {
       styles.marginBlockEnd = end
     }
   }
-  if (!withPresetSizeY.value) {
-    let start: number | string | undefined
-    let end: number | string | undefined
-    if (Array.isArray(sizeY)) {
-      const startValue = sizeY[0]
-      const endValue = sizeY.length > 1 ? sizeY[1] : sizeY[0]
 
-      start = toSizeUnit(startValue)
-      end = toSizeUnit(endValue)
-    } else {
-      const value = toSizeUnit(sizeY)
-      start = value
-      end = value
-    }
-    const height = `calc(100% - ${start} - ${end})`
+  if (!withPresetSizeY.value && sizeY != null) {
+    const [start, end] = resolveSizePair(sizeY)
     if (orientation === 'horizontal') {
       styles.marginBlockStart = start
       styles.marginBlockEnd = end
     } else {
-      styles.maxHeight = height
+      styles.maxHeight = `calc(100% - ${start} - ${end})`
       styles.marginInlineStart = start
       styles.marginInlineEnd = end
     }
   }
+
   return styles
 })
 
-function checkHasText() {
-  // the default slot or description is only effective in horizontal mode
-  const { description } = props
-  withText.value = !!slots.default || !!description
+function resolveSizePair(size: number | string | Array<number | string>) {
+  if (Array.isArray(size)) {
+    const start = toSizeUnit(size[0]) as string
+    const end = toSizeUnit(size.length > 1 ? size[1] : size[0]) as string
+    return [start, end] as const
+  }
+  const value = toSizeUnit(size) as string
+  return [value, value] as const
 }
 
-onSmartMounted(checkHasText)
-onUpdated(checkHasText)
+
 </script>

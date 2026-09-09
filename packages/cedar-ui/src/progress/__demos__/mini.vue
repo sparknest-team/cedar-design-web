@@ -12,10 +12,10 @@
     <c-progress mode="circle" size="xs" status="success" :percent="percent" />
   </c-space>
   <div :style="{ marginTop: '20px' }">
-    <c-slider v-model="percent" :max="1" :step="0.1" :style="{ width: '150px' }" />
+    <c-slider v-model="percent" :max="100" :step="10" :style="{ width: '150px' }" />
   </div>
 </template>
 <script lang="ts" setup>
 import { ref } from 'vue'
-const percent = ref(0.2)
+const percent = ref(20)
 </script>

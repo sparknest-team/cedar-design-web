@@ -1,0 +1,7 @@
+- [x] Specify typed slot errors/actions and unified external editor requests.
+- [x] Enable external toolbar/cell/template/event requests without opening or saving internally.
+- [x] Preserve custom draft dates, enforce draft IDs and prevent deleting new drafts.
+- [x] Add custom content and external Dialog demos with cancellation/error/version handling.
+- [x] Update docs and public type exports.
+- [x] Run regression tests and check Scheduler type diagnostics.
+- [x] Browser verified external toolbar creation/save and custom slot editing/validation feedback. Preserve draft during closing animation and cover the real demo in tests.

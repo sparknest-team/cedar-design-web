@@ -20,3 +20,4 @@ export { Cascader }
 export { cascaderProps }
 
 export default Cascader
+export type CascaderProps = import('vue').ExtractPublicPropTypes<typeof import('./props').cascaderProps>

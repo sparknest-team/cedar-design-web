@@ -14,7 +14,7 @@ export const formProps = {
      */
     model: {
       type: Object,
-      required: true,
+      required: true as const,
     },
     /**
      * @zh 表单的布局方式，包括水平、垂直、多列
@@ -29,7 +29,7 @@ export const formProps = {
      * @zh 表单控件的尺寸
      * @en The size of the form
      * @values 'xs','sm','md','lg','xl'
-     * @defaultValue 'md'
+     * @default-value 'md'
      */
     size: {
       type: String as PropType<ComponentSize>,
@@ -93,12 +93,13 @@ export const formProps = {
       type: String,
     },
     /**
-     * @zh 验证失败后滚动到第一个错误字段
-     * @en Scroll to the first error field after verification fails
+     * @zh 验证失败后滚动到第一个（start）或最后一个（end）错误字段；不传则不滚动
+     * @en Scroll to the first (start) or last (end) invalid field; omitted disables scrolling
      * @version 2.51.0
      */
-    scrollToFirstError: {
-      type: Boolean,
-      default: false,
+    scrollToError: {
+      type: String as PropType<'start' | 'end'>,
     },
+    /** 错误滚动的顶部偏移，数字按 px；支持 px/rem/vw/vh */
+    scrollToErrorOffsetY: { type: [Number, String], default: 0 },
   } 

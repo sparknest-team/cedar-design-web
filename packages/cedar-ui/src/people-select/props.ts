@@ -45,4 +45,4 @@ export const peopleSelectProps = {
   },
 }
 
-export type PeopleSelectProps = ExtractPropTypes<typeof peopleSelectProps>
+export type PeopleSelectProps = import("vue").ExtractPublicPropTypes<typeof peopleSelectProps>

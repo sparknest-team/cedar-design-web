@@ -17,4 +17,4 @@ export const emptyProps = {
   showDescription: { type: Boolean, default: true },
 }
 
-export type EmptyProps = ExtractPropTypes<typeof emptyProps>
+export type EmptyProps = import("vue").ExtractPublicPropTypes<typeof emptyProps>

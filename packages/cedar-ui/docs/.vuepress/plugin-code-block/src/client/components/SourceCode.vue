@@ -3,7 +3,7 @@
     <div class="vmi-previewer-actions-left">
       <span
         v-if="!hideActions.includes('EXTERNAL')"
-        title="Open demo in new tab"
+        :title="label('在新标签页打开示例', 'Open demo in new tab')"
         class="vmi-previewer-actions-button"
         @click="openIframe"
       >
@@ -11,7 +11,7 @@
       </span>
       <span
         v-if="props.iframe"
-        title="Reload demo iframe page"
+        :title="label('重新加载示例', 'Reload demo iframe page')"
         class="vmi-previewer-actions-button"
         @click="refreshIframe"
       >
@@ -19,7 +19,7 @@
       </span>
       <span
         v-if="props.filePath"
-        title="Open demo file in editor"
+        :title="label('在编辑器中打开示例', 'Open demo file in editor')"
         class="vmi-previewer-actions-button"
         @click="openEditor"
       >
@@ -27,11 +27,11 @@
       </span>
     </div>
     <div class="vmi-previewer-actions-right">
-      <span class="vmi-previewer-actions-button" title="Copy source code" @click="handleCopy">
+      <span class="vmi-previewer-actions-button" :title="label('复制源码', 'Copy source code')" @click="handleCopy">
         <Copy v-show="!state.isCopy" />
         <CopySuccess v-show="state.isCopy" />
       </span>
-      <span class="vmi-previewer-actions-button" title="Toggle source code panel" @click="handleExpand">
+      <span class="vmi-previewer-actions-button" :title="label('展开或收起源码', 'Toggle source code panel')" @click="handleExpand">
         <Expand v-show="!state.isExpand" />
         <UnExpand v-show="state.isExpand" />
       </span>
@@ -55,7 +55,12 @@
 </template>
 
 <script lang="ts" setup>
-import { useSlots, ref, reactive } from 'vue'
+import { useSlots, ref, reactive, computed } from 'vue'
+import { useRoute } from 'vue-router'
+const route = useRoute()
+const english = computed(() => route.path.startsWith('/en/') || route.query.language === 'en-US')
+const label = (zh: string, en: string) => english.value ? en : zh
+const localizedIframeSrc = computed(() => props.iframeSrc.includes('-iframe.html') ? `${props.iframeSrc}${props.iframeSrc.includes('?') ? '&' : '?'}language=${english.value ? 'en-US' : 'zh-CN'}` : props.iframeSrc)
 import { useClipboard } from '@vueuse/core'
 import Expand from '../icons/Expand.vue'
 import UnExpand from '../icons/UnExpand.vue'
@@ -151,7 +156,7 @@ const handleCopy = async () => {
  * Extended functions
  */
 const openIframe = () => {
-  window.open(props.iframeSrc)
+  window.open(localizedIframeSrc.value)
 }
 
 const refreshIframe = (e: MouseEvent) => {

@@ -7,7 +7,7 @@ const Switch = withInstall(_Switch, Object.assign(_Switch, {
 
 export type SwitchInstance = InstanceType<typeof _Switch>
 export { switchProps }
-export type { SwitchBeforeChange, SwitchProps, SwitchValue, SwitchVariant } from './props'
+export type { SwitchBeforeChange, SwitchProps, SwitchValue, SwitchVariant, SwitchSize } from './props'
 export { Switch }
 export const _SwitchComponent = Switch
 

@@ -1,102 +1,45 @@
 <template>
   <Trigger
-    :class="prefixCls"
-    trigger="hover"
-    :placement="placement"
-    :open="computedOpen"
-    :popup-offset="10"
-    show-arrow
-    :content-class="contentCls"
-    :content-style="computedContentStyle"
-    :arrow-class="arrowCls"
-    :arrow-style="computedArrowStyle"
-    :popup-container="popupContainer"
-    animation-name="zoom-in-fade-out"
-    auto-fit-transform-origin
-    role="tooltip"
-    @open-change="handleOpenChange"
+    ref="triggerRef"
+    v-bind="triggerBindings"
+    :trigger="trigger"
+    :unmount-on-close="unmountOnClose"
+    @update:open="$emit('update:open', $event)"
+    @open-change="$emit('open-change', $event)"
+    @open="$emit('open')"
+    @opened="$emit('opened')"
+    @close="$emit('close')"
+    @closed="$emit('closed')"
+    @click-outside="$emit('click-outside', $event)"
   >
     <slot />
     <template #content>
-      <slot name="content">{{ content }}</slot>
+      <div v-bind="contentBindings" role="tooltip">
+        <slot name="content">{{ content }}</slot>
+      </div>
     </template>
   </Trigger>
 </template>
 
 <script lang="ts">
-import { computed, CSSProperties, defineComponent, ref } from 'vue'
-import { createNamespace, getPrefixCls } from '../_utils/global-config'
+import { defineComponent } from 'vue'
 import Trigger from '../trigger'
+import { useTriggerWrapper } from '../trigger/wrapper'
+import { createNamespace } from '../_utils/global-config'
 import { tooltipProps } from './props'
+import { useAppearance } from './platform'
 
 export default defineComponent({
   name: createNamespace('tooltip').name,
-  components: {
-    Trigger,
-  },
+  inheritAttrs: false,
+  components: { Trigger },
   props: tooltipProps,
-  emits: {
-    'update:open': (visible: boolean) => true,
-    /**
-     * @zh 文字气泡显示状态改变时触发
-     * @en Emitted when the tooltip display status changes
-     * @param {boolean} visible
-     */
-    openChange: (visible: boolean) => true,
-  },
-  /**
-   * @zh 内容
-   * @en Content
-   * @slot content
-   */
-  setup(props, { emit }) {
-    const prefixCls = getPrefixCls('tooltip')
-
-    const _open = ref(props.defaultOpen)
-    const computedOpen = computed(() => props.open ?? _open.value)
-
-    const handleOpenChange = (visible: boolean) => {
-      _open.value = visible
-      emit('update:open', visible)
-      emit('openChange', visible)
-    }
-
-    const contentCls = computed(() => [
-      `${prefixCls}-content`,
-      props.contentClass,
-      { [`${prefixCls}-xs`]: props.xs },
-    ])
-
-    const computedContentStyle = computed<CSSProperties | undefined>(() => {
-      if (props.backgroundColor || props.contentStyle) {
-        return {
-          backgroundColor: props.backgroundColor,
-          ...props.contentStyle,
-        }
-      }
-      return undefined
-    })
-
-    const arrowCls = computed(() => [`${prefixCls}-popup-arrow`, props.arrowClass])
-
-    const computedArrowStyle = computed<CSSProperties | undefined>(() => {
-      if (props.backgroundColor || props.arrowStyle) {
-        return {
-          backgroundColor: props.backgroundColor,
-          ...props.arrowStyle,
-        }
-      }
-      return undefined
-    })
-
+  emits: ['update:open', 'open-change', 'open', 'opened', 'close', 'closed', 'click-outside'],
+  setup(props, { attrs }) {
+    const appearance = useAppearance(props)
     return {
-      prefixCls,
-      computedOpen,
-      contentCls,
-      computedContentStyle,
-      arrowCls,
-      computedArrowStyle,
-      handleOpenChange,
+      ...appearance,
+      ...useTriggerWrapper(props, attrs, () => appearance.triggerBindings.value),
     }
   },
 })

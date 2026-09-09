@@ -1,33 +1,24 @@
+<script setup lang="ts">
+const title = 'Project overview with a long title that does not fit on one line'
+</script>
+
 <template>
-  <div
-    :style="{
-      padding: '24px',
-      backgroundColor: 'var(--c-color-neutral-1)',
-    }"
-    class="c-flex c-justify-between"
-  >
-    <c-card :style="{ width: '270px' }">
-      <template #title>
-        <c-typography-text :ellipsis="{ rows: 2, showTooltip: true }">
-          title title title title title title title
-        </c-typography-text>
-      </template>
-      Card content
-    </c-card>
-    <c-card :style="{ width: '270px' }">
-      <template #title>
-        <c-typography-text :ellipsis="{ rows: 2, showTooltip: true }">
-          title title title title title title title
-        </c-typography-text>
-      </template>
-      <template #description>
-        <c-typography-text :ellipsis="{ rows: 2, showTooltip: true }">
-          description description description description
-        </c-typography-text>
-      </template>
-      Card content
-    </c-card>
-  </div>
+  <c-card style="width: 100%; max-width: 280px">
+    <template #title
+      ><span class="long-title" :title="title">{{ title }}</span></template
+    >
+    <template #description
+      ><span class="long-title" :title="title">{{ title }}</span></template
+    >
+    Native title tooltip on pointer devices; the full text remains in the DOM.
+  </c-card>
 </template>
 
-<script lang="ts" setup></script>
+<style scoped>
+.long-title {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+</style>

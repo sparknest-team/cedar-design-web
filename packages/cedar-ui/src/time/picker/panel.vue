@@ -69,7 +69,7 @@
       :disabled="confirmBtnDisabled || !selectedValue"
       @click="onConfirm"
     >
-      {{ t("datePicker.ok") }}
+      {{ t("datePicker.confirmButtonText") }}
     </Button>
   </div>
 </template>

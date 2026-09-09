@@ -1,3 +1,4 @@
+import { popupContainerProp } from '../../_utils/popup-container'
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { TriggerProps } from '../../trigger'
 import type { TimePickerProps } from '../../time/picker/types'
@@ -48,7 +49,7 @@ export const pickerProps = {
      * @zh 日期选择器的尺寸
      * @en The size of the date picker
      * @values 'xs','sm','md','lg','xl'
-     * @defaultValue 'md'
+     * @default-value 'md'
      * */
     size: {
       type: String as PropType<ComponentSize>,
@@ -57,8 +58,8 @@ export const pickerProps = {
     /**
      * @zh 输入框变体
      * @en Input variant
-     * @values 'filled','outlined','standard'
-     * @defaultValue 'filled'
+     * @values 'filled','outline','standard'
+     * @default-value 'filled'
      */
     variant: {
       type: String as PropType<FormControlVariant>,
@@ -86,8 +87,8 @@ export const pickerProps = {
      * @en The placement of the pop-up box
      */
     placement: {
-      type: String as PropType<'top' | 'tl' | 'tr' | 'bottom' | 'bl' | 'br'>,
-      default: 'bl',
+      type: String as PropType<'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end'>,
+      default: 'bottom-start',
     },
     /**
      * @zh 控制弹出框的打开或者关闭状态
@@ -150,7 +151,7 @@ export const pickerProps = {
     /**
      * @zh 面板显示的日期
      * @en Date displayed on the panel
-     * @vModel
+     * @v-model
      */
     pickerValue: {
       type: [Object, String, Number] as PropType<Date | string | number>,
@@ -166,9 +167,7 @@ export const pickerProps = {
      * @zh 弹出框的挂载容器
      * @en Mount container for pop-up box
      */
-    popupContainer: {
-      type: [String, Object] as PropType<string | HTMLElement>,
-    },
+    popupContainer: popupContainerProp,
     mode: {
       type: String as PropType<'date' | 'year' | 'quarter' | 'month' | 'week'>,
       default: 'date',
@@ -366,9 +365,7 @@ export const dateRangePickerProps = {
       type: Boolean,
       default: true,
     },
-    popupContainer: {
-      type: [String, Object] as PropType<string | HTMLElement>,
-    },
+    popupContainer: popupContainerProp,
     locale: {
       type: Object as PropType<Record<string, any>>,
     },
@@ -393,8 +390,8 @@ export const dateRangePickerProps = {
     /**
      * @zh 输入框变体
      * @en Input variant
-     * @values 'filled','outlined','standard'
-     * @defaultValue 'filled'
+     * @values 'filled','outline','standard'
+     * @default-value 'filled'
      */
     variant: {
       type: String as PropType<FormControlVariant>,
@@ -410,8 +407,8 @@ export const dateRangePickerProps = {
       default: 'bottom',
     },
     placement: {
-      type: String as PropType<'top' | 'tl' | 'tr' | 'bottom' | 'bl' | 'br'>,
-      default: 'bl',
+      type: String as PropType<'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end'>,
+      default: 'bottom-start',
     },
     open: {
       type: Boolean,
@@ -546,6 +543,6 @@ export const datePickerProps = {
     },
 } 
 
-export type DatePickerProps = Partial<ExtractPropTypes<typeof datePickerProps>>
-export type PickerProps = Partial<ExtractPropTypes<typeof pickerProps>>
-export type DateRangePickerProps = Partial<ExtractPropTypes<typeof dateRangePickerProps>>
+export type DatePickerProps = import("vue").ExtractPublicPropTypes<typeof datePickerProps>
+export type PickerProps = import("vue").ExtractPublicPropTypes<typeof pickerProps>
+export type DateRangePickerProps = import("vue").ExtractPublicPropTypes<typeof dateRangePickerProps>

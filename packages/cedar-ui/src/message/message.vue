@@ -1,17 +1,17 @@
 <template>
   <li
     role="alert"
-    :class="[prefixCls, `${prefixCls}-${type}`, { [`${prefixCls}-closable`]: closable }]"
+    :class="[prefixCls, `${prefixCls}-${status}`, { [`${prefixCls}-closable`]: closable }]"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
   >
-    <span v-if="showIcon && !(type === 'normal' && !$slots.icon)" :class="`${prefixCls}-icon`">
+    <span v-if="showIcon && !(status === 'default' && !$slots.icon)" :class="`${prefixCls}-icon`">
       <slot name="icon">
-        <icon-info-circle-fill v-if="type === 'info'" />
-        <icon-check-circle-fill v-else-if="type === 'success'" />
-        <icon-exclamation-circle-fill v-else-if="type === 'warning'" />
-        <icon-close-circle-fill v-else-if="type === 'error'" />
-        <icon-loading v-else-if="type === 'loading'" />
+        <icon-info-circle-fill v-if="status === 'info'" />
+        <icon-check-circle-fill v-else-if="status === 'success'" />
+        <icon-exclamation-circle-fill v-else-if="status === 'warning'" />
+        <icon-close-circle-fill v-else-if="status === 'danger'" />
+        <icon-loading v-else-if="status === 'loading'" />
       </slot>
     </span>
     <span :class="`${prefixCls}-content`">

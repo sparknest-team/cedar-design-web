@@ -12,5 +12,6 @@ declare global {
   const Message: typeof import('@cedarjs/ui').Message
   const Notification: typeof import('@cedarjs/ui').Notification
   const StyleProvider: typeof import('@cedarjs/ui').StyleProvider
+  const imagePreview: typeof import('@cedarjs/ui').imagePreview
   const previewImage: typeof import('@cedarjs/ui').previewImage
 }

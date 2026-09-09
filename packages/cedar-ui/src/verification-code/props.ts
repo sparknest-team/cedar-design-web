@@ -27,4 +27,4 @@ export const verificationCodeProps = {
   ariaLabel: String,
 }
 
-export type VerificationCodeProps = ExtractPropTypes<typeof verificationCodeProps>
+export type VerificationCodeProps = import("vue").ExtractPublicPropTypes<typeof verificationCodeProps>

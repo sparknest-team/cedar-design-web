@@ -131,13 +131,12 @@ export const createNamespace = (componentName: string) => {
   }
 }
 
-export function formatElevation(elevation: number | boolean | string, defaultLevel?: number) {
-  if (elevation === false) {
+export function formatElevation(elevation: number | boolean | string | undefined, defaultLevel?: number) {
+  if (elevation === false || elevation == null) {
     return null
   }
 
-  if (elevation === true && defaultLevel) {
-    elevation = defaultLevel
-  }
-  return `${resolveClassPrefix()}-elevation--${elevation}`
+  const level = elevation === true ? (defaultLevel ?? 0) : Number(elevation)
+  const normalized = Number.isFinite(level) ? Math.min(24, Math.max(0, Math.round(level))) : (defaultLevel ?? 0)
+  return `${resolveClassPrefix()}-elevation--${normalized}`
 }

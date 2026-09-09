@@ -22,8 +22,8 @@
         :disabled-date="disabledDate"
         :is-same-time="mergedIsSameTime"
         :date-render="dateRender"
-        @cellClick="onCellClick"
-        @cellMouseEnter="onCellMouseEnter"
+        @cell-click="onCellClick"
+        @cell-mouse-enter="onCellMouseEnter"
       />
     </div>
     <div v-if="showTimeView" :class="`${prefixCls}-timepicker`">
@@ -65,6 +65,7 @@
 </template>
 
 <script lang="ts">
+import { calendarMonthDays } from "../../../../_utils/picker-data"
 import { createNamespace } from '../../../../_utils/global-config'
 import { computed, defineComponent, PropType, reactive, toRefs } from 'vue'
 import type { Dayjs } from 'dayjs'
@@ -220,7 +221,7 @@ export default defineComponent({
     const rows = computed(() => {
       const startDate = methods.startOf(headerValue.value, 'month')
       const startDay = startDate.day()
-      const days = startDate.daysInMonth()
+      const days = calendarMonthDays(startDate.year(), startDate.month() + 1)
       const startIndex = weekList.value.indexOf(startDay)
       const flatData = newArray<Cell>(CELL_COUNT)
 

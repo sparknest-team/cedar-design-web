@@ -6,7 +6,7 @@ const Divider = withInstall(_Divider, Object.assign(_Divider, {
 }), { components: [_Divider] })
 
 export type DividerInstance = InstanceType<typeof _Divider>
-export type { DividerProps } from './props'
+export type { DividerProps, DividerOrientation, DividerTextAlign, DividerType, DividerSize, DividerSizePreset } from './props'
 
 export { dividerProps }
 export { Divider }

@@ -106,5 +106,5 @@ export const colorPickerProps = {
     },
 } 
 
-export type ColorPickerProps = Partial<ExtractPropTypes<typeof colorPickerProps>>
+export type ColorPickerProps = import("vue").ExtractPublicPropTypes<typeof colorPickerProps>
 

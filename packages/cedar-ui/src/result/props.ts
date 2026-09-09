@@ -1,6 +1,6 @@
 import type { ExtractPropTypes, PropType } from 'vue'
 
-export const resultStatuses = ['info', 'success', 'warning', 'danger', '403', '404', '500'] as const
+export const resultStatuses = ['info', 'success', 'warning', 'danger', 'question', 'empty', '403', '404', '500'] as const
 
 export type ResultStatus = (typeof resultStatuses)[number]
 
@@ -18,4 +18,4 @@ export const resultProps = {
   subtitle: String,
 } 
 
-export type ResultProps = ExtractPropTypes<typeof resultProps>
+export type ResultProps = import("vue").ExtractPublicPropTypes<typeof resultProps>

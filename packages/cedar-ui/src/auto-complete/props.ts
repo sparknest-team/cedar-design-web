@@ -1,3 +1,4 @@
+import { popupContainerProp } from '../_utils/popup-container'
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { TriggerProps } from '../trigger'
 import type { FilterOption, SelectOptionData, SelectOptionGroup } from '../select/types'
@@ -9,7 +10,7 @@ export const autoCompleteProps = {
     /**
      * @zh 绑定值
      * @en Value
-     * @vModel
+     * @v-model
      */
     modelValue: {
       type: String,
@@ -31,8 +32,8 @@ export const autoCompleteProps = {
       type: Boolean,
     },
     variant: {
-      type: String as PropType<'filled' | 'outlined' | 'standard'>,
-      validator: (value: string) => ['filled', 'outlined', 'standard'].includes(value),
+      type: String as PropType<'filled' | 'outline' | 'standard'>,
+      validator: (value: string) => ['filled', 'outline', 'standard'].includes(value),
     },
     size: {
       type: String as PropType<ComponentSize>,
@@ -50,9 +51,7 @@ export const autoCompleteProps = {
      * @zh 弹出框的挂载容器
      * @en Mount container for popup
      */
-    popupContainer: {
-      type: [String, Object] as PropType<string | HTMLElement | null | undefined>,
-    },
+    popupContainer: popupContainerProp,
     /**
      * @zh 是否为严格校验模式
      * @en Whether it is strict verification mode
@@ -68,6 +67,11 @@ export const autoCompleteProps = {
     filterOption: {
       type: [Boolean, Function] as PropType<FilterOption>,
       default: true,
+    },
+    /** Whether the current input permits opening; does not filter options. */
+    shouldOpen: {
+      type: Function as PropType<(inputValue: string) => boolean>,
+      default: (inputValue: string) => inputValue.length > 0,
     },
     /**
      * @zh trigger 组件属性
@@ -97,4 +101,4 @@ export const autoCompleteProps = {
     },
 } 
 
-export type AutoCompleteProps = Partial<ExtractPropTypes<typeof autoCompleteProps>>
+export type AutoCompleteProps = import("vue").ExtractPublicPropTypes<typeof autoCompleteProps>

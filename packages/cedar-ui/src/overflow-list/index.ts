@@ -14,3 +14,4 @@ export { OverflowList }
 export { overflowListProps }
 
 export default OverflowList
+export type OverflowListProps = import('vue').ExtractPublicPropTypes<typeof import('./props').overflowListProps>

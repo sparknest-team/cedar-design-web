@@ -302,12 +302,11 @@ export default defineComponent({
                 <Trigger
                   v-slots={{ content: renderDropdown }}
                   trigger="focus"
-                  placement="bl"
+                  placement="bottom-start"
                   popupOffset={4}
                   preventFocus={true}
                   open={computedOpen.value}
-                  clickToClose={false}
-                  onOpenChange={handleOpenChange}
+                  closeOnClickReference={false}
                   onUpdate:open={handleOpenChange}
                 >
                   <span>@</span>
@@ -322,16 +321,15 @@ export default defineComponent({
         <Trigger
           v-slots={{ content: renderDropdown }}
           trigger="focus"
-          placement="bl"
+          placement="bottom-start"
           animationName="slide-dynamic-origin"
           popupOffset={4}
           preventFocus={true}
           open={computedOpen.value}
-          clickToClose={false}
+          closeOnClickReference={false}
           autoFitPopupWidth
           autoFitTransformOrigin
           disabled={mergedDisabled.value}
-          onOpenChange={handleOpenChange}
           onUpdate:open={handleOpenChange}
         >
           <Input

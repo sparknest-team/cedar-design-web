@@ -14,3 +14,4 @@ export { Watermark }
 export { watermarkProps }
 
 export default Watermark
+export type WatermarkProps = import('vue').ExtractPublicPropTypes<typeof import('./props').watermarkProps>

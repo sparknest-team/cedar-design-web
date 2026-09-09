@@ -21,7 +21,7 @@
         :disabled="confirmBtnDisabled"
         @click="onConfirmBtnClick"
       >
-        {{ datePickerT("datePicker.ok") }}
+        {{ datePickerT("datePicker.confirmButtonText") }}
       </Button>
     </div>
   </div>

@@ -1,3 +1,4 @@
+import '../../style/index.less'
 import '../../transfer/style'
 import '../../drawer/style'
 import '../../dialog/style'

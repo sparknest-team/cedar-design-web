@@ -2,11 +2,11 @@
   <div :class="cls">
     <progress-steps
       v-if="steps > 0"
-      :stroke-width="strokeWidth"
-      :percent="percent"
+      :stroke-width="resolvedStroke"
+      :percent="normalizedPercent"
       :color="color"
       :track-color="trackColor"
-      :width="width"
+
       :steps="steps"
       :size="mergedSize"
       :show-text="showText"
@@ -17,15 +17,15 @@
       </template>
     </progress-steps>
     <progress-line
-      v-else-if="mode === 'line' && mergedSize !== 'xs'"
-      :stroke-width="strokeWidth"
+      v-else-if="mode === 'line'"
+      :stroke-width="resolvedStroke"
       :animation="animation"
-      :percent="percent"
+      :percent="normalizedPercent"
       :color="color"
       :track-color="trackColor"
       :size="(mergedSize === 'xl' ? 'lg' : mergedSize) as 'sm' | 'md' | 'lg'"
       :buffer-color="bufferColor"
-      :width="width"
+
       :show-text="showText"
       :type="computedStatus"
       :indeterminate="indeterminate"
@@ -37,10 +37,10 @@
     <progress-circle
       v-else
       :mode="mode"
-      :stroke-width="mode === 'line' ? Number(strokeWidth) || 4 : (strokeWidth as number | undefined)"
-      :path-stroke-width="mode === 'line' ? Number(strokeWidth) || 4 : (strokeWidth as number | undefined)"
-      :width="(width as number | undefined)"
-      :percent="percent"
+      :stroke-width="resolvedStroke"
+      :path-stroke-width="resolvedStroke"
+      :width="dimensions.diameter"
+      :percent="normalizedPercent"
       :color="color"
       :track-color="trackColor"
       :size="mergedSize"
@@ -61,6 +61,9 @@ import ProgressCircle from './circle.vue'
 import ProgressSteps from './steps.vue'
 import { createNamespace } from '../_utils/global-config'
 import { useSize } from '../_hooks/use-size'
+import { resolveProgressSize, positiveLength, progressSizeMap } from './size'
+import type { ComponentSize } from '../_utils/constant'
+import { normalizePercent } from './percent'
 import { progressProps } from './props'
 
 const { name, n, classes } = createNamespace('progress')
@@ -74,12 +77,16 @@ export default defineComponent({
   },
   props: progressProps,
   setup(props) {
-    const { size } = toRefs(props)
+    const normalizedPercent = computed(() => normalizePercent(props.percent))
+    const size = computed(() => typeof props.size === 'string' && props.size in progressSizeMap ? props.size as ComponentSize : undefined)
     const displayMode = computed(() => (props.steps > 0 ? 'steps' : props.mode))
     const computedStatus = computed(() => {
-      return props.status === 'default' && props.percent >= 1 ? 'success' : props.status
+      return props.status === 'default' && normalizedPercent.value >= 100 ? 'success' : props.status
     })
-    const { mergedSize } = useSize(size)
+    const { mergedSize: configSize } = useSize(size)
+    const dimensions = computed(() => resolveProgressSize(props.size ?? configSize.value, props.mode))
+    const mergedSize = computed(() => dimensions.value.preset)
+    const resolvedStroke = computed(() => positiveLength(props.strokeWidth, dimensions.value.stroke))
 
     const cls = computed(() =>
       classes(n(), n(`--${displayMode.value}`), n(`--${mergedSize.value}`), n(`--${computedStatus.value}`)),
@@ -87,6 +94,9 @@ export default defineComponent({
 
     return {
       cls,
+      normalizedPercent,
+      dimensions,
+      resolvedStroke,
       computedStatus,
       mergedSize,
     }

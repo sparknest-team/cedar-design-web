@@ -5,4 +5,4 @@ export const hoverOverlayProps = {
   focusing: Boolean,
 }
 
-export type HoverOverlayProps = ExtractPropTypes<typeof hoverOverlayProps>
+export type HoverOverlayProps = import("vue").ExtractPublicPropTypes<typeof hoverOverlayProps>

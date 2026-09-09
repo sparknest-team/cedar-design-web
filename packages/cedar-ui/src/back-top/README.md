@@ -31,6 +31,8 @@ permalink: /components/back-top/
 | easing           | 滚动动画的缓动方式，可选值参考 [BTween](https://github.com/PengJiyuan/b-tween) | `string`                | `'quartOut'` |
 | duration         | 滚动动画的持续时间                                                             | `number`                |    `200`     |
 
+`popup-container` 支持 string / HTMLElement / false，省略挂载到 body；false 原地渲染。
+
 ### 类型定义
 
 组件导出以下类型定义

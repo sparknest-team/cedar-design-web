@@ -1,7 +1,7 @@
-import { computed, defineComponent, mergeProps } from 'vue'
+import { computed, defineComponent, cloneVNode, shallowRef } from 'vue'
 import { createNamespace } from '../_utils/global-config'
 import { useBreadcrumbItems } from './provide'
-import { getAllElements } from '../_utils/vue-utils'
+import { flatChildren } from './children'
 import { breadcrumbProps } from './props'
 import type { BreadcrumbRoute } from './types'
 import BreadcrumbItem from './breadcrumb-item'
@@ -32,7 +32,8 @@ export default defineComponent({
 
     const maxCount = computed(() => props.maxCount)
     const separator = computed(() => props.separator)
-    const total = computed(() => props.routes?.length ?? length.value)
+    const renderedLength = shallowRef(0)
+    const total = computed(() => renderedLength.value || length.value)
     const needHide = computed(() => maxCount.value > 0 && total.value > maxCount.value + 1)
     const moreSlotData = computed(() => {
       const end = needHide.value ? total.value - maxCount.value : 0
@@ -51,7 +52,7 @@ export default defineComponent({
       needHide,
       moreSlotData,
       slots,
-    } as any)
+    })
 
     const defaultItemRender = (route: BreadcrumbRoute, _list: BreadcrumbRoute[], _paths: string[]) => {
       return route.label
@@ -67,7 +68,7 @@ export default defineComponent({
         const currentPaths = [...paths]
         return (
           <BreadcrumbItem
-            key={route.path || route.label}
+            key={`${route.path}-${idx}`}
             index={idx}
             droplist={route.children}
             href={slots['item-render'] || idx === origin.length - 1 ? undefined : route.path}
@@ -81,19 +82,12 @@ export default defineComponent({
       })
     }
 
-    const renderByChildren = () => {
-      const children = getAllElements(slots.default?.() ?? [])
-
-      return children.map((child, index) => {
-        child.props = mergeProps(child.props ?? {}, { index })
-        return child
-      })
-    }
-
     return () => {
+      const children = flatChildren(slots.default?.() ?? [])
+      renderedLength.value = props.routes?.length || children.length
       return (
         <div role="navigation" aria-label="Breadcrumb" class={n()}>
-          {props.routes?.length ? renderByRoutes() : renderByChildren()}
+          {props.routes?.length ? renderByRoutes() : children.map((child, index) => cloneVNode(child, { index }))}
         </div>
       )
     }

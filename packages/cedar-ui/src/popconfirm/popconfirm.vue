@@ -79,7 +79,7 @@ export default defineComponent({
      * @en Triggered when the visible or hidden state of the bubble confirmation box changes
      * @param {boolean} visible
      */
-    openChange: (visible: boolean) => true,
+    "open-change": (visible: boolean) => true,
     /**
      * @zh 点击确认按钮时触发
      * @en Triggered when the confirm button is clicked
@@ -122,7 +122,7 @@ export default defineComponent({
       }
       _open.value = false;
       emit("update:open", false);
-      emit("openChange", false);
+      emit("open-change", false);
     };
 
     const handleOpenChange = (visible: boolean) => {
@@ -131,7 +131,7 @@ export default defineComponent({
       } else {
         _open.value = visible;
         emit("update:open", visible);
-        emit("openChange", visible);
+        emit("open-change", visible);
       }
     };
 

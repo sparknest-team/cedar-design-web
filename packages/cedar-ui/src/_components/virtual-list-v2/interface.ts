@@ -47,7 +47,7 @@ export interface VirtualListProps {
   /**
    * @zh 视口边界外提前挂载的元素数量。
    * @en The number of elements mounted in advance outside the boundary of the viewport.
-   * @defaultValue 10
+   * @default-value 10
    * @version 2.34.1
    */
   buffer?: number

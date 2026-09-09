@@ -1,6 +1,8 @@
 import type { ExtractPropTypes, PropType } from 'vue'
 import { semanticStatuses } from '../_utils/constant'
 import type { ComponentSize, SemanticStatus } from '../_utils/constant'
+import type { ProgressSize } from './size'
+export type { ProgressSize } from './size'
 
 export const progressModes = ['line', 'circle'] as const
 
@@ -14,12 +16,11 @@ export const progressProps = {
     validator: (value: unknown): value is ProgressMode =>
       progressModes.includes(value as ProgressMode),
   },
-  size: String as PropType<ComponentSize>,
-  percent: { type: Number, default: 0 },
+  size: [Number, String] as PropType<ProgressSize>,
+  percent: { type: [Number, String], default: 0 },
   steps: { type: Number, default: 0 },
   animation: { type: Boolean, default: false },
-  strokeWidth: Number,
-  width: [Number, String],
+  strokeWidth: [Number, String],
   color: [String, Object] as PropType<ProgressColor>,
   trackColor: String,
   bufferColor: [String, Object] as PropType<ProgressColor>,
@@ -33,4 +34,4 @@ export const progressProps = {
   indeterminate: { type: Boolean, default: false },
 } 
 
-export type ProgressProps = ExtractPropTypes<typeof progressProps>
+export type ProgressProps = import("vue").ExtractPublicPropTypes<typeof progressProps>

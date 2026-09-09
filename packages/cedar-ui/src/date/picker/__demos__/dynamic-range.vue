@@ -1,7 +1,7 @@
 <template>
   <c-date-range-picker
     @select="onSelect"
-    @openChange="onOpenChange"
+    @open-change="onOpenChange"
     :disabledDate="disabledDate" />
 </template>
 

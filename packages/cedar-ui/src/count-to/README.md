@@ -91,3 +91,9 @@ import type { CountToProps, CountToInstance } from '@cedarjs/ui'
 | ----------------------------- | -------------------------- |
 | `--c-count-to-text-color`     | `var(--c-color-text-1)`    |
 | `--c-count-to-text-font-size` | `var(--c-font-size-lg)`    |
+
+## 同源实现与平台边界
+
+两端各自保存完整源码，不引用公共核心，不共享组件实例或响应式状态；修改时同步维护两份实现。主体、Props、关键样式及配对测试纳入只读源码一致性检查，主题 token 和安装入口各自维护。
+
+动画在卸载及 KeepAlive 停用时暂停，重新激活后恢复；各实例的数值和动画状态独立。

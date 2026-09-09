@@ -81,4 +81,4 @@ export const colorProps = {
     },
 } 
 
-export type ColorProps = Partial<ExtractPropTypes<typeof colorProps>>
+export type ColorProps = import("vue").ExtractPublicPropTypes<typeof colorProps>

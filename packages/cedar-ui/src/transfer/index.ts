@@ -23,3 +23,4 @@ export { Transfer }
 export { transferProps }
 
 export default Transfer
+export type TransferProps = import('vue').ExtractPublicPropTypes<typeof import('./props').transferProps>

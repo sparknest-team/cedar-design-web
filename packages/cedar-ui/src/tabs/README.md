@@ -73,7 +73,7 @@ permalink: /components/tabs/
 | indicator-position        | 指示器位置                                                                | `'normal' \| 'reverse'`                                                 | `'normal'`     |
 | size                      | 选项卡的大小                                                              | `'xs' \| 'sm' \| 'md' \| 'lg'`                                          | `'md'`         |
 | type                      | 选项卡的类型                                                              | `'line' \| 'card' \| 'outline' \| 'plain' \| 'capsule' \| 'enclosed'`   | `'line'`       |
-| vertical                  | 是否垂直展示（选项卡在左侧）                                              | `boolean`                                                               | `false`        |
+| orientation | 组件整体朝向 | `horizontal \| vertical` | `horizontal` |
 | editable                  | 是否开启可编辑模式                                                        | `boolean`                                                               | `false`        |
 | show-add-button           | 是否显示增加按钮（仅在可编辑模式可用）                                    | `boolean`                                                               | `false`        |
 | destroy-on-hide           | 是否在不显示标签时销毁内容                                                | `boolean`                                                               | `false`        |

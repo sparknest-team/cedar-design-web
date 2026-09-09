@@ -52,14 +52,14 @@ export default defineComponent({
      * @param {Event} ev
      * @version 2.52.0
      */
-    dropdownScroll: (ev: Event) => true,
+    "dropdown-scroll": (ev: Event) => true,
     /**
      * @zh 下拉菜单滚动到底部时触发
      * @en Triggered when the drop-down menu is scrolled to the bottom
      * @param {Event} ev
      * @version 2.52.0
      */
-    dropdownReachBottom: (ev: Event) => true,
+    "dropdown-reach-bottom": (ev: Event) => true,
   },
   /**
    * @zh 弹出框的页脚
@@ -102,7 +102,8 @@ export default defineComponent({
     const optionRefs = ref<Record<string, HTMLElement>>({})
 
     const _open = ref(false)
-    const computedOpen = computed(() => _open.value && validOptionInfos.value.length > 0)
+    const computedOpen = computed(() => _open.value && !mergedDisabled.value &&
+      validOptionInfos.value.length > 0 && props.shouldOpen(computedValue.value))
 
     // VirtualList
     const virtualListRef = ref()
@@ -113,7 +114,7 @@ export default defineComponent({
     }
 
     const strictFilterOption = (inputValue: string, option: SelectOptionData) => {
-      return Boolean(option.label?.includes(inputValue))
+      return String(option.label ?? option.value ?? '').includes(inputValue)
     }
 
     const mergedFilterOption = computed(() => {
@@ -156,11 +157,11 @@ export default defineComponent({
     }
 
     const handleDropdownScroll = (e: Event) => {
-      emit('dropdownScroll', e)
+      emit('dropdown-scroll', e)
     }
 
     const handleDropdownReachBottom = (e: Event) => {
-      emit('dropdownReachBottom', e)
+      emit('dropdown-reach-bottom', e)
     }
 
     const { validOptions, optionInfoMap, validOptionInfos, handleKeyDown } = useSelect({
@@ -227,7 +228,7 @@ export default defineComponent({
           }}
           virtualList={Boolean(props.virtualListProps)}
           onScroll={handleDropdownScroll}
-          onReachBottom={handleDropdownReachBottom}
+          onReach-bottom={handleDropdownReachBottom}
         />
       )
     }
@@ -237,17 +238,17 @@ export default defineComponent({
       <Trigger
         v-slots={{ content: renderDropdown }}
         trigger="focus"
-        placement="bl"
+        placement="bottom-start"
         animationName="slide-dynamic-origin"
         autoFitTransformOrigin
-        open={computedOpen.value}
-        clickToClose={false}
+        closeOnClickReference={false}
         preventFocus={true}
         popupOffset={4}
-        disabled={mergedDisabled.value}
         autoFitPopupWidth
         {...props.triggerProps}
-        onOpenChange={handleOpenChange}
+        popupContainer={props.popupContainer !== undefined ? props.popupContainer : props.triggerProps?.popupContainer}
+        open={computedOpen.value}
+        disabled={mergedDisabled.value}
         onUpdate:open={handleOpenChange}
       >
         <div class={[classes(n()), className]} style={style as StyleValue}>

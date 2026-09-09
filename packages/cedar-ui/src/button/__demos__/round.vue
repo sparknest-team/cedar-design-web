@@ -1,26 +1,12 @@
-<template>
-  <c-space wrap>
-    <!-- 无需导入、注册组件 -->
-    <c-button round><c-icon-plus /></c-button>
-    <c-button status="primary" round><c-icon-reply /></c-button>
-    <c-button status="info" round><c-icon-info-circle /></c-button>
-    <c-button status="success" round><c-icon-refresh /></c-button>
-    <c-button status="warning" round><c-icon-delete /></c-button>
-    <c-button status="danger" round><c-icon-cloud-download /></c-button>
-  </c-space>
-</template>
-
 <script setup lang="ts">
-import {
-  IconPlus,
-  IconInfoCircle,
-  IconRefresh,
-  IconDelete,
-  IconCloudDownload,
-  IconEdit,
-  IconSearch,
-  IconCopy,
-  IconSync,
-  IconReply,
-} from '@cedarjs/icons-vue'
+import { ref } from 'vue'
+const sizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const
+const size = ref<typeof sizes[number]>('md')
+const items = [{'status': 'default', 'path': 'M12 5v14M5 12h14', 'label': 'Add'}, {'status': 'primary', 'path': 'm4 12 7-7v4h9v6h-9v4z', 'label': 'Reply'}, {'status': 'info', 'path': 'M12 11v6M12 7v1', 'label': 'Info'}, {'status': 'success', 'path': 'm5 12 4 4L19 6', 'label': 'Confirm'}, {'status': 'warning', 'path': 'M5 7h14M9 7V4h6v3M7 7l1 13h8l1-13', 'label': 'Delete'}, {'status': 'danger', 'path': 'M6 6l12 12M6 18 18 6', 'label': 'Close'}] as const
 </script>
+<template>
+  <div style="display: grid; gap: 8px; margin-bottom: 20px"><span style="font-size: 13px; opacity: .7">Size</span><c-radio-group v-model="size"><c-radio v-for="value in sizes" :key="value" :value="value">{{ value }}</c-radio></c-radio-group></div>
+  <div style="display: flex; flex-wrap: wrap; gap: 12px">
+    <c-button v-for="item in items" :key="item.label" :status="item.status" :size="size" round icon-container :aria-label="item.label"><template #icon><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path :d="item.path" /></svg></template></c-button>
+  </div>
+</template>

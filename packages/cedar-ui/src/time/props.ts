@@ -1,3 +1,4 @@
+import { popupContainerProp, type PopupContainer } from '../_utils/popup-container'
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ComponentSize } from '../_utils/constant'
 import { componentSizes } from '../_utils/constant'
@@ -5,6 +6,7 @@ import type { FormControlVariant } from '../_utils/form-control'
 import { formControlVariants } from '../_utils/form-control'
 
 export const timeProps = {
+  popupContainer: popupContainerProp,
     modelValue: {
       type: [String, Number, Date] as PropType<string | number | Date>,
     },
@@ -29,8 +31,8 @@ export const timeProps = {
     /**
      * @zh 输入框变体
      * @en Input variant
-     * @values 'filled','outlined','standard'
-     * @defaultValue 'filled'
+     * @values 'filled','outline','standard'
+     * @default-value 'filled'
      */
     variant: {
       type: String as PropType<FormControlVariant>,
@@ -59,10 +61,9 @@ export const timeProps = {
     disableConfirm: Boolean,
     error: Boolean,
     timePickerProps: {
-      type: Object as PropType<Record<string, unknown>>,
+      type: Object as PropType<Record<string, unknown> & { popupContainer?: PopupContainer }>,
       default: () => ({}),
     },
 } 
 
-export type TimeProps = Partial<ExtractPropTypes<typeof timeProps>>
-
+export type TimeProps = import("vue").ExtractPublicPropTypes<typeof timeProps>

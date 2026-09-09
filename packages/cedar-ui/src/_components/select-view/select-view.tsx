@@ -26,7 +26,7 @@ export default defineComponent({
     inputValue: String,
     placeholder: String,
     variant: {
-      type: String as PropType<'filled' | 'outlined' | 'standard'>,
+      type: String as PropType<'filled' | 'outline' | 'standard'>,
       default: 'filled',
     },
     disabled: {
@@ -81,7 +81,7 @@ export default defineComponent({
       default: false,
     },
   },
-  emits: ['remove', 'clear', 'focus', 'blur'],
+  emits: ['remove', 'clear', 'focus', 'blur', 'keydown'],
   setup(props, { emit, slots }) {
     const baseCls = 'select' + (props.multiple ? '-multiple' : '-single')
     const { n, classes } = createNamespace(baseCls)
@@ -173,6 +173,7 @@ export default defineComponent({
       if (props.multiple) {
         return (
           <InputTag
+            {...{ onKeydown: (event: KeyboardEvent) => emit('keydown', event) }}
             ref={componentRef}
             v-slots={{
               prefix: slots.prefix,
@@ -202,6 +203,7 @@ export default defineComponent({
       }
       return (
         <InputLabel
+          {...{ onKeydown: (event: KeyboardEvent) => emit('keydown', event) }}
           ref={componentRef}
           v-slots={{
             default: slots.label,

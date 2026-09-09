@@ -48,7 +48,7 @@ permalink: /components/input-tag/
 | readonly                  | 是否为只读模式                     | `boolean`                                         |   `false`   |
 | clearable                 | 是否允许清空                       | `boolean`                                         |   `true`    |
 | size                      | 输入框的大小                       | `'xs' \| 'sm' \| 'md' \| 'lg'`                    |   `'md'`    |
-| variant                   | 输入框的变体                       | `'filled' \| 'outlined' \| 'standard'`                          | `'filled'` |
+| variant                   | 输入框的变体                       | `'filled' \| 'outline' \| 'standard'`                          | `'filled'` |
 | max-tag-count             | 最多展示的标签个数，`0` 表示不限制 | `number`                                          |     `0`     |
 | retain-input-value        | 是否保留输入框的内容               | `boolean \| { create?: boolean; blur?: boolean }` |   `false`   |
 | format-tag                | 格式化标签内容                     | `(data: TagData) => string`                       |     `-`     |

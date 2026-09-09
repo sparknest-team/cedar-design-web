@@ -10,6 +10,8 @@ test('includes plugins declared with an install arrow property', async () => {
 
   try {
     await mkdir(join(root, 'src', 'message'), { recursive: true })
+    await mkdir(join(root, 'src', 'color-picker'), { recursive: true })
+    await writeFile(join(root, 'src', 'color-picker', 'index.ts'), 'export const _ColorPickerComponent = {}')
     await writeFile(join(root, 'package.json'), '{"version":"1.0.0"}')
     await writeFile(
       join(root, 'src', 'message', 'index.ts'),
@@ -26,6 +28,9 @@ test('includes plugins declared with an install arrow property', async () => {
     const entry = await readFile(join(root, 'src', 'cedar-vue.ts'), 'utf8')
     assert.match(entry, /import Message from '.\/message'/)
     assert.match(entry, /Message: Message as Plugin/)
+    const publicEntry = await readFile(join(root, 'src', 'index.ts'), 'utf8')
+    assert.match(publicEntry, /export type \{ PopupContainer \} from '\.\/_utils\/popup-container'/)
+    assert.match(publicEntry, /export \{ default as ColorPicker, colorPickerProps, _ColorPickerComponent \} from '\.\/color-picker'/)
   } finally {
     await rm(root, { recursive: true, force: true })
   }

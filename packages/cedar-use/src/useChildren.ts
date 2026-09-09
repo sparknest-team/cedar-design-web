@@ -3,6 +3,7 @@ import {
   getCurrentInstance,
   isVNode,
   provide,
+  onUpdated,
   reactive,
   type ComponentInternalInstance,
   type ComputedRef,
@@ -52,10 +53,17 @@ export function useChildren<P, C>(key: symbol | string) {
   const sortInstances = () => {
     const vNodes: any[] = flatVNodes(parentInstance.subTree)
 
-    childInstances.sort((a, b) => vNodes.indexOf(a.vnode) - vNodes.indexOf(b.vnode))
+    const sorted = [...childInstances].sort((a, b) => vNodes.indexOf(a.vnode) - vNodes.indexOf(b.vnode))
+    if (sorted.every((instance, index) => instance === childInstances[index])) return
+    const providers = sorted.map(instance => childProviders[childInstances.indexOf(instance)])
+    childInstances.splice(0, childInstances.length, ...sorted)
+    childProviders.splice(0, childProviders.length, ...providers)
   }
 
+  onUpdated(sortInstances)
+
   const collect = (childInstance: ComponentInternalInstance, childProvider: C) => {
+    if (childInstances.includes(childInstance)) return
     childInstances.push(childInstance)
     childProviders.push(childProvider)
     sortInstances()

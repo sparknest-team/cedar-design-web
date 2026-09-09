@@ -1,4 +1,3 @@
-// @sync-with: maple-ui/src/countdown/use-countdown.ts
 import { onActivated, onDeactivated, onMounted, onUnmounted, ref, watch, type Ref } from 'vue'
 import type { TimeData } from './props'
 
@@ -58,117 +57,62 @@ export function splitTime(durationTime: number): TimeData {
 export function useCountdown(
   props: { time: string | number; format: string; autoStart: boolean },
   emit: CountdownEmits,
-): {
-  showTime: Ref<string>
-  timeData: Ref<TimeData>
-  start: (resume?: boolean) => void
-  pause: () => void
-  reset: () => void
-} {
-  const showTime = ref('')
-  const timeData = ref<TimeData>({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-    milliseconds: 0,
-  })
+) {
+  const duration = () => Math.max(0, toNumber(props.time))
+  const timeData = ref<TimeData>(splitTime(duration()))
+  const showTime = ref(parseFormat(props.format, timeData.value))
+  let remaining = duration()
+  let deadline = 0
+  let running = false
+  let ended = false
+  let mounted = false
+  let resumeOnActivate = false
+  let handle: number | undefined
 
-  let endTime = 0
-  let isStart = false
-  let handle = 0
-  let remainingTime = 0
-  let cacheIsStart: boolean | undefined
-
-  function displayTime(durationTime: number) {
-    const time = splitTime(durationTime)
-    timeData.value = time
+  function display() {
+    timeData.value = splitTime(remaining)
+    showTime.value = parseFormat(props.format, timeData.value)
     emit('change', timeData.value)
-    showTime.value = parseFormat(props.format, time)
   }
-
-  function countdown() {
-    const now = performance.now()
-
-    if (!endTime) {
-      endTime = now + toNumber(props.time)
-    }
-
-    remainingTime = endTime - now
-    if (remainingTime < 0) {
-      remainingTime = 0
-    }
-
-    displayTime(remainingTime)
-
-    if (remainingTime === 0) {
-      emit('end')
-      return
-    }
-
-    if (isStart) {
-      handle = requestAnimationFrame(countdown)
+  function cancel() {
+    if (handle !== undefined) cancelAnimationFrame(handle)
+    handle = undefined
+  }
+  function tick() {
+    handle = undefined
+    if (!running) return
+    remaining = Math.max(0, deadline - performance.now())
+    display()
+    if (remaining === 0) {
+      running = false
+      if (!ended) { ended = true; emit('end') }
+    } else if (running) {
+      handle = requestAnimationFrame(tick)
     }
   }
-
-  function start(resume = false) {
-    if (isStart && !resume) {
-      return
-    }
-
-    isStart = true
-    endTime = performance.now() + (remainingTime || toNumber(props.time))
-    countdown()
+  function start() {
+    if (!mounted || running || ended) return
+    running = true
+    deadline = performance.now() + remaining
+    tick()
   }
-
   function pause() {
-    isStart = false
-    cancelAnimationFrame(handle)
+    if (running) remaining = Math.max(0, deadline - performance.now())
+    running = false
+    cancel()
   }
-
   function reset() {
-    endTime = 0
-    isStart = false
-    cancelAnimationFrame(handle)
-    countdown()
-    if (props.autoStart) {
-      start()
-    }
-  }
-
-  watch(
-    () => props.time,
-    () => {
-      reset()
-    },
-  )
-
-  onMounted(reset)
-
-  onActivated(() => {
-    if (cacheIsStart == null) {
-      return
-    }
-
-    isStart = cacheIsStart
-
-    if (isStart === true) {
-      start(true)
-    }
-  })
-
-  onDeactivated(() => {
-    cacheIsStart = isStart
     pause()
-  })
-
-  onUnmounted(pause)
-
-  return {
-    showTime,
-    timeData,
-    start,
-    pause,
-    reset,
+    remaining = duration()
+    ended = false
+    display()
+    if (props.autoStart) start()
   }
+  watch(() => props.time, reset)
+  watch(() => props.format, () => { showTime.value = parseFormat(props.format, timeData.value) })
+  onMounted(() => { mounted = true; reset() })
+  onDeactivated(() => { resumeOnActivate = running; pause() })
+  onActivated(() => { if (resumeOnActivate) { resumeOnActivate = false; start() } })
+  onUnmounted(() => { mounted = false; pause() })
+  return { showTime, timeData, start, pause, reset }
 }

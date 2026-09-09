@@ -1,6 +1,6 @@
 import type { VNode } from 'vue'
 import { cloneVNode, Comment, computed, defineComponent, h, isVNode, provide, ref } from 'vue'
-import { unFragment as flatFragment } from '../_utils/vue-utils'
+import { flatChildren as flatFragment } from './children'
 import { createNamespace } from '../_utils/global-config'
 import { stepsInjectionKey } from './context'
 import { stepsProps, type StepStatus } from './props'
@@ -17,9 +17,9 @@ export default defineComponent({
   setup(props, { emit, slots }) {
     const uncontrolledCurrent = ref(props.defaultCurrent)
     const current = computed(() => props.current ?? uncontrolledCurrent.value)
-    const direction = computed(() => (['arrow', 'navigation'].includes(props.type) ? 'horizontal' : props.direction))
+    const orientation = computed(() => (['arrow', 'navigation'].includes(props.type) ? 'horizontal' : props.orientation))
     const contentPlacement = computed(() => {
-      if (props.type === 'dot') return direction.value === 'vertical' ? 'right' : 'bottom'
+      if (props.type === 'dot') return orientation.value === 'vertical' ? 'right' : 'bottom'
       if (props.type === 'navigation') return 'right'
       return props.contentPlacement
     })
@@ -45,7 +45,7 @@ export default defineComponent({
 
     provide(stepsInjectionKey, {
       current,
-      direction,
+      orientation,
       contentPlacement,
       size,
       type,
@@ -77,7 +77,7 @@ export default defineComponent({
           role: 'list',
           class: [
             n(),
-            `${n()}-${direction.value}`,
+            `${n()}-${orientation.value}`,
             `${n()}-label-${labelPlacement}`,
             `${n()}-mode-${type.value}`,
             `${n()}-size-${size.value}`,

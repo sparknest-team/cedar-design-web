@@ -33,19 +33,15 @@
     <c-layout-footer class="layout-footer">Footer</c-layout-footer>
   </c-layout>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue'
-export default defineComponent({
-  })
-</script>
-<style>
+
+<style scoped lang="less">
 .layout-header {
   height: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgb(var(--brand-3));
-  color: #fff;
+  background-color: var(--c-color-primary-light-3);
+  color: var(--c-color-text-1);
 }
 
 .layout-content {
@@ -53,19 +49,19 @@ export default defineComponent({
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgb(var(--brand-4));
-  color: #fff;
+  background-color: var(--c-color-primary-light-4);
+  color: var(--c-color-text-1);
 }
 
 .layout-sider {
-  height: 100px;
-  background-color: rgb(var(--brand-5));
+  min-height: 100px;
+  background-color: var(--c-color-primary);
 
-  .c-layout-sider-children {
+  :deep(.c-layout-sider-children) {
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #fff;
+    color: var(--c-color-text-1);
   }
 }
 
@@ -74,7 +70,7 @@ export default defineComponent({
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgb(var(--brand-6));
-  color: #fff;
+  background-color: var(--c-color-primary);
+  color: var(--c-color-text-1);
 }
 </style>

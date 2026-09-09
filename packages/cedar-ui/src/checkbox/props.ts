@@ -34,5 +34,5 @@ export const checkboxGroupProps = {
   disabled: { type: Boolean, default: false },
 } 
 
-export type CheckboxProps = ExtractPropTypes<typeof checkboxProps>
-export type CheckboxGroupProps = ExtractPropTypes<typeof checkboxGroupProps>
+export type CheckboxProps = import("vue").ExtractPublicPropTypes<typeof checkboxProps>
+export type CheckboxGroupProps = import("vue").ExtractPublicPropTypes<typeof checkboxGroupProps>

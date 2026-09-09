@@ -1,4 +1,5 @@
-import { onMounted, onBeforeUnmount, readonly, Ref, ref, watch } from 'vue'
+import { computed, onMounted, onBeforeUnmount, onDeactivated, onActivated, readonly, type Ref, ref, watch } from 'vue'
+import { usePopupLayer } from '../_utils/popup-layer'
 
 export type PopupType = 'popup' | 'dialog' | 'message'
 
@@ -37,12 +38,7 @@ class PopupManager {
     }
   }
 
-  public isLastDialog = (zIndex: number) => {
-    if (this.popupStack.dialog.size > 1) {
-      return zIndex === Array.from(this.popupStack.dialog).pop()
-    }
-    return true
-  }
+
 }
 
 const popupManager = new PopupManager()
@@ -52,27 +48,30 @@ export default function usePopupManager(
   {
     visible,
     runOnMounted,
+    zIndex: explicitZIndex,
   }: {
     visible?: Ref<boolean>
     runOnMounted?: boolean
+    zIndex?: Readonly<Ref<number | undefined>>
   } = {},
 ) {
   const zIndex = ref(0)
+  const active = ref(false)
+  const { onStackTop } = usePopupLayer(() => active.value && type !== 'message', computed(() => explicitZIndex?.value ?? zIndex.value))
 
   const open = () => {
+    if (active.value) return
     zIndex.value = popupManager.add(type)
+    active.value = true
   }
 
   const close = () => {
+    if (!active.value) return
+    active.value = false
     popupManager.delete(zIndex.value, type)
   }
 
-  const isLastDialog = () => {
-    if (type === 'dialog') {
-      return popupManager.isLastDialog(zIndex.value)
-    }
-    return false
-  }
+  const isLastDialog = (event?: Event) => type === 'dialog' && onStackTop(event)
 
   watch(
     () => visible?.value,
@@ -93,12 +92,14 @@ export default function usePopupManager(
       open()
     })
 
-    onBeforeUnmount(() => {
-      close()
-    })
   }
 
+  onBeforeUnmount(close)
+  onDeactivated(close)
+  onActivated(() => { if (visible?.value || runOnMounted) open() })
+
   return {
+    onStackTop,
     zIndex: readonly(zIndex),
     open,
     close,

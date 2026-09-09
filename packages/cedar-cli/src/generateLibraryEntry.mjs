@@ -28,7 +28,7 @@ const EXPLICIT_INDEX_EXPORTS = new Map([
   [
     'color-picker',
     [
-      "export { default as ColorPicker, colorPickerProps } from './color-picker'",
+      "export { default as ColorPicker, colorPickerProps, _ColorPickerComponent } from './color-picker'",
       "export type { ColorPickerInstance, ColorPickerProps, RGB, HSV } from './color-picker'",
     ],
   ],
@@ -235,6 +235,7 @@ export default CedarVue
 export { addI18nMessages, useLocale, getLocale } from './locale'
 export { useFormItem } from './_hooks/use-form-item'
 export { componentSizes, semanticStatuses } from './_utils/constant'
+export type { PopupContainer } from './_utils/popup-container'
 export type {
   ComponentSize,
   SemanticStatus,

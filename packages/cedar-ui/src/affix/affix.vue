@@ -1,196 +1,180 @@
 <template>
-  <ResizeObserver v-if="!cssMode" @resize="updatePositionThrottle">
-    <div ref="wrapperRef">
-      <div v-if="isFixed && !disabled" :style="placeholderStyles" />
-      <div :class="classNames" :style="contentStyles">
-        <ResizeObserver @resize="updatePositionThrottle">
-          <slot />
-        </ResizeObserver>
-      </div>
+  <div
+    ref="affixEl"
+    :class="classes(n(), [enableCSSMode, n('--css-mode')])"
+    :style="{
+      zIndex: toNumber(zIndex),
+      top: enableCSSMode && offsetBottom == null ? `${offsetTop}px` : undefined,
+      bottom: enableCSSMode && offsetBottom != null ? `${offsetBottom}px` : undefined,
+      width: enableFixedMode ? fixedWidth : undefined,
+      height: enableFixedMode ? fixedHeight : undefined,
+    }"
+  >
+    <div
+      ref="wrapperEl"
+      :class="n('wrapper')"
+      :style="{
+        zIndex: toNumber(zIndex),
+        position: enableFixedMode ? 'fixed' : undefined,
+        width: enableFixedMode ? fixedWrapperWidth : undefined,
+        height: enableFixedMode ? fixedWrapperHeight : undefined,
+        left: enableFixedMode ? fixedLeft : undefined,
+        top: enableFixedMode ? fixedTop : undefined,
+      }"
+    >
+      <slot />
     </div>
-  </ResizeObserver>
-  <div v-else ref="wrapperRef" :class="classNames" :style="stickyStyles">
-    <slot />
   </div>
 </template>
 
-<script lang="ts">
-import type { CSSProperties, Ref } from 'vue'
-import { computed, defineComponent, onMounted, ref, toRefs, watchEffect } from 'vue'
-import ResizeObserver from '../_components/resize-observer'
-import { createNamespace, getPrefixCls } from '../_utils/global-config'
-import { getElement, on, off } from '../_utils/dom'
-import { isUndefined, isWindow } from '../_utils/is'
-import { throttleByRaf } from '../_utils/throttle-by-raf'
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue'
+import { doubleRaf, getRect, raf, toNumber } from '@cedarjs/shared'
+import { onSmartMounted, onSmartUnmounted, onWindowResize, useEventListener } from '@cedarjs/use'
+import { createNamespace } from '../_utils/global-config'
+import { getParentScroller, getTarget, toPxNum } from '../_utils/maple/elements'
 import { affixProps } from './props'
 
-function getTargetRect(target: HTMLElement | Window) {
-  return isWindow(target)
-    ? {
-        top: 0,
-        bottom: window.innerHeight,
-      }
-    : target.getBoundingClientRect()
-}
-
-export default defineComponent({
-  name: createNamespace('affix').name,
-  components: {
-    ResizeObserver,
-  },
-  props: affixProps,
-  emits: {
-    /**
-     * @zh 固定状态发生改变时触发
-     * @en Triggered when the fixed state changes
-     * @param {boolean} fixed
-     */
-    change: (fixed: boolean) => true,
-  },
-  setup(props, { emit, expose }) {
-    const prefixCls = getPrefixCls('affix')
-    const { target, targetContainer, cssMode, disabled, zIndex } = toRefs(props)
-    const wrapperRef = ref<HTMLElement>()
-    const targetRef = ref<HTMLElement | Window>()
+defineOptions({ name: createNamespace('affix').name })
+const { n, classes } = createNamespace('affix')
+const props = defineProps(affixProps)
+const emit = defineEmits<{ change: [fixed: boolean, offset: number] }>()
+    const affixEl = ref<HTMLElement | null>(null)
+    const wrapperEl = ref<HTMLElement | null>(null)
     const isFixed = ref(false)
-    const placeholderStyles: Ref<CSSProperties> = ref({})
-    const fixedStyles: Ref<CSSProperties> = ref({})
-    const classNames = computed(() => ({
-      [prefixCls]: isFixed.value,
-      [`${prefixCls}-css-mode`]: cssMode.value,
-    }))
+    const fixedTop = ref('0px')
+    const fixedLeft = ref('0px')
+    const fixedWidth = ref('auto')
+    const fixedHeight = ref('auto')
+    const fixedWrapperWidth = ref('auto')
+    const fixedWrapperHeight = ref('auto')
+    const enableCSSMode = computed(() => !props.disabled && props.cssMode)
+    const enableFixedMode = computed(() => !props.disabled && !props.cssMode && isFixed.value)
+    const offsetTop = computed(() => toPxNum(props.offsetTop))
 
-    const stickyStyles = computed<CSSProperties>(() => ({
-      position: 'sticky',
-      top: `${props.offsetTop}px`,
-      zIndex: zIndex.value,
-    }))
+    const offsetBottom = computed(() => props.offsetBottom == null ? undefined : toPxNum(props.offsetBottom))
+    let active = true
+    let observer: ResizeObserver | undefined
+    let container: HTMLElement | Window | undefined
+    let scroller: HTMLElement | Window
+    let lastFixed = false
 
-    const contentStyles = computed(() => {
-      if (cssMode.value) {
-        return stickyStyles.value
+    watch(() => [props.disabled, props.cssMode, props.target, props.targetContainer, props.offsetTop, props.offsetBottom], resize)
+
+    onSmartMounted(async () => {
+      active = true
+      await doubleRaf()
+      if (!active) return
+      setupScroller()
+      handleScroll()
+      if (typeof ResizeObserver !== 'undefined') {
+        observer = new ResizeObserver(handleScroll)
+        if (affixEl.value) observer.observe(affixEl.value)
+        if (wrapperEl.value) observer.observe(wrapperEl.value)
       }
-
-      return fixedStyles.value
     })
 
-    const updatePositionThrottle = throttleByRaf(() => {
-      if (cssMode.value || disabled.value || !wrapperRef.value || !targetRef.value) {
-        if (isFixed.value) {
-          isFixed.value = false
-          emit('change', false)
-        }
-        placeholderStyles.value = {}
-        fixedStyles.value = {}
+    onSmartUnmounted(() => { active = false; observer?.disconnect(); removeScrollListener() })
+
+    onWindowResize(resize)
+
+    useEventListener(() => window, 'scroll', handleScroll)
+
+    function emitChange(fixed: boolean, currentOffsetTop: number) {
+      if (fixed === lastFixed) {
         return
       }
 
-      const { offsetTop, offsetBottom } = props
-      const offsetType = isUndefined(offsetBottom) ? 'top' : 'bottom'
-      const wrapperRect = wrapperRef.value.getBoundingClientRect()
-      const targetRect = getTargetRect(targetRef.value)
-      let newIsFixed = false
-      let newFixedStyles: CSSProperties = {}
-      const newPlaceholderStyles: CSSProperties = {
-        width: `${wrapperRef.value.offsetWidth}px`,
-        height: `${wrapperRef.value.offsetHeight}px`,
-      }
-
-      if (offsetType === 'top') {
-        newIsFixed = wrapperRect.top - targetRect.top < (offsetTop || 0)
-        newFixedStyles = newIsFixed
-          ? {
-              position: 'fixed',
-              top: `${targetRect.top + (offsetTop || 0)}px`,
-              zIndex: zIndex.value,
-            }
-          : {}
-      } else {
-        newIsFixed = targetRect.bottom - wrapperRect.bottom < (offsetBottom || 0)
-        newFixedStyles = newIsFixed
-          ? {
-              position: 'fixed',
-              bottom: `${window.innerHeight - targetRect.bottom + (offsetBottom || 0)}px`,
-              zIndex: zIndex.value,
-            }
-          : {}
-      }
-
-      if (newIsFixed !== isFixed.value) {
-        isFixed.value = newIsFixed
-        emit('change', newIsFixed)
-      }
-
-      placeholderStyles.value = newPlaceholderStyles
-      fixedStyles.value = {
-        ...newFixedStyles,
-        ...(newIsFixed ? newPlaceholderStyles : {}),
-      }
-    })
-
-    onMounted(() => {
-      if (cssMode.value) {
-        return
-      }
-
-      watchEffect((onInvalidate) => {
-        const element =
-          (target.value &&
-            target.value !== window &&
-            getElement(target.value as string | HTMLElement)) ||
-          window
-
-        targetRef.value = element
-
-        if (element) {
-          on(element, 'scroll', updatePositionThrottle)
-          on(element, 'resize', updatePositionThrottle)
-
-          onInvalidate(() => {
-            off(element, 'scroll', updatePositionThrottle)
-            off(element, 'resize', updatePositionThrottle)
-          })
-        }
-      })
-
-      watchEffect((onInvalidate) => {
-        if (!targetRef.value) return
-
-        const container =
-          (targetContainer.value &&
-            targetContainer.value !== window &&
-            getElement(targetContainer.value as string | HTMLElement)) ||
-          window
-
-        if (container) {
-          on(container, 'scroll', updatePositionThrottle)
-          on(container, 'resize', updatePositionThrottle)
-
-          onInvalidate(() => {
-            off(container, 'scroll', updatePositionThrottle)
-            off(container, 'resize', updatePositionThrottle)
-          })
-        }
-      })
-    })
-
-    expose({
-      updatePosition: () => {
-        updatePositionThrottle()
-      },
-    })
-
-    return {
-      wrapperRef,
-      isFixed,
-      disabled,
-      cssMode,
-      classNames,
-      placeholderStyles,
-      contentStyles,
-      stickyStyles,
-      updatePositionThrottle,
+      lastFixed = fixed
+      emit('change', fixed, currentOffsetTop)
     }
-  },
-})
+
+    function computeFixedParams() {
+      const { cssMode, disabled } = props
+
+      if (disabled) {
+        isFixed.value = false
+        emitChange(false, 0)
+        return
+      }
+
+      if (!active || !affixEl.value || !wrapperEl.value) {
+        return
+      }
+
+      let scrollerTop = 0
+      let scrollerBottom = window.innerHeight
+
+      if (scroller && scroller !== window) {
+        const rect = getRect(scroller as HTMLElement)
+        scrollerTop = rect.top
+        scrollerBottom = rect.bottom
+      }
+
+      const wrapper = wrapperEl.value as HTMLElement
+      const sticky = affixEl.value as HTMLElement
+      const { top: stickyTop, left: stickyLeft, bottom: stickyBottom } = getRect(sticky)
+      const currentOffsetTop = offsetBottom.value == null ? stickyTop - scrollerTop : scrollerBottom - stickyBottom
+      const threshold = offsetBottom.value ?? offsetTop.value
+
+      if (currentOffsetTop <= threshold) {
+        if (!cssMode) {
+          fixedWidth.value = `${sticky.offsetWidth}px`
+          fixedHeight.value = `${sticky.offsetHeight}px`
+          fixedTop.value = `${offsetBottom.value == null ? scrollerTop + offsetTop.value : scrollerBottom - offsetBottom.value - wrapper.offsetHeight}px`
+          fixedLeft.value = `${stickyLeft}px`
+          fixedWrapperWidth.value = `${wrapper.offsetWidth}px`
+          fixedWrapperHeight.value = `${wrapper.offsetHeight}px`
+          isFixed.value = true
+        }
+
+        emitChange(true, threshold)
+        return
+      }
+
+      isFixed.value = false
+      emitChange(false, currentOffsetTop)
+    }
+
+    function setupScroller() {
+      removeScrollListener()
+
+      if (props.target) {
+        scroller =
+          props.target === window ? window : (getTarget(props.target as string | HTMLElement, 'Affix') ?? window)
+      } else {
+        scroller = getParentScroller(affixEl.value as HTMLElement)
+      }
+
+      if (scroller !== window) scroller.addEventListener('scroll', handleScroll)
+      container = props.targetContainer === window ? window : props.targetContainer ? getTarget(props.targetContainer as string | HTMLElement, 'Affix') ?? undefined : undefined
+      if (container && container !== window && container !== scroller) container.addEventListener('scroll', handleScroll)
+    }
+
+    function handleScroll() {
+      computeFixedParams()
+    }
+
+    function removeScrollListener() {
+      if (container && container !== window && container !== scroller) container.removeEventListener('scroll', handleScroll)
+      if (!scroller || scroller === window) {
+        return
+      }
+
+      scroller.removeEventListener('scroll', handleScroll)
+    }
+
+    async function resize() {
+      isFixed.value = false
+      lastFixed = false
+      await raf()
+      if (!affixEl.value || !wrapperEl.value) {
+        return
+      }
+      setupScroller()
+      computeFixedParams()
+    }
+
+
+defineExpose({ updatePosition: resize })
 </script>

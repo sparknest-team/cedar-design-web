@@ -23,6 +23,9 @@ export const tagProps = {
   nowrap: { type: Boolean, default: false },
   round: { type: Boolean, default: false },
   textColor: String,
-} 
+}
 
-export type TagProps = ExtractPropTypes<typeof tagProps>
+export type TagProps = import("vue").ExtractPublicPropTypes<typeof tagProps>
+
+export { TAG_COLORS } from './types'
+export type { TagColor, TagVariant } from './types'

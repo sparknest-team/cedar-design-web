@@ -1,3 +1,4 @@
+import { translateNavigation } from './i18n/navigation'
 import { hopeTheme } from 'vuepress-theme-hope'
 
 import { zhNavBar } from './configs/navbar/index'
@@ -22,7 +23,14 @@ export default hopeTheme(
     // docsDir: 'demo/theme-docs/src',
 
     locales: {
+      '/en/': {
+        selectLanguageName: 'English',
+        navbar: translateNavigation(zhNavBar),
+        sidebar: { '/en/': translateNavigation((zhSideBar as any)['/']) },
+        prevLink: false, nextLink: false,
+      },
       '/': {
+        selectLanguageName: '简体中文',
         // Navbar
         navbar: zhNavBar,
 
@@ -35,6 +43,7 @@ export default hopeTheme(
     },
 
     plugins: {
+      redirect: { switchLocale: false },
       photoSwipe: false,
       components: {
         components: ['Badge', 'VPCard'],

@@ -8,7 +8,7 @@
         <c-radio value="alternate">alternate</c-radio>
       </c-radio-group>
     </c-row>
-    <c-timeline direction="horizontal" pending :mode="mode">
+    <c-timeline orientation="horizontal" pending :mode="mode">
       <c-timeline-item label="2012-08">
         <c-row :style="{ display: 'inline-flex', alignItems: 'center' }">
           <img

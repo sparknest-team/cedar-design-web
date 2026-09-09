@@ -1,3 +1,4 @@
+import { popupContainerProp } from '../_utils/popup-container'
 import type {
   CSSProperties,
   ExtractPropTypes,
@@ -104,10 +105,7 @@ export const dialogProps = {
     type: Boolean,
     default: true,
   },
-  popupContainer: {
-    type: [String, Object, Boolean] as PropType<string | HTMLElement | false>,
-    default: "body",
-  },
+  popupContainer: popupContainerProp,
   dialogClass: {
     type: [String, Array] as PropType<string | any[]>,
   },
@@ -167,4 +165,4 @@ export const dialogProps = {
   zIndex: Number,
 };
 
-export type DialogProps = Partial<ExtractPropTypes<typeof dialogProps>>;
+export type DialogProps = import("vue").ExtractPublicPropTypes<typeof dialogProps>;

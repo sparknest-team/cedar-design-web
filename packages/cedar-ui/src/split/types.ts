@@ -1,6 +1,6 @@
 export interface SplitProps {
   component: string
-  direction: 'horizontal' | 'vertical'
+  orientation: 'horizontal' | 'vertical'
   size: number | string | undefined
   defaultSize: number | string
   min: number | string | undefined

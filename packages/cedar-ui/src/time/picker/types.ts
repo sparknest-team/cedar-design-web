@@ -38,7 +38,7 @@ export interface TimePickerProps extends BasePanelProps {
   error: boolean
   format?: string
   size: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-  placement: 'top' | 'tl' | 'tr' | 'bottom' | 'bl' | 'br'
+  placement: 'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end'
   open: boolean | undefined
   defaultOpen: boolean
   triggerProps?: Record<string, unknown>

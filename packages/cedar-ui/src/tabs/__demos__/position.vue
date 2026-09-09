@@ -8,7 +8,7 @@
       <c-radio value="horizontal">Horizontal</c-radio>
       <c-radio value="vertical">Vertical</c-radio>
     </c-radio-group>
-    <c-tabs :indicator-position="indicatorPosition" :vertical="vertical === 'vertical'">
+    <c-tabs :indicator-position="indicatorPosition" :orientation="vertical">
       <c-tabs-navs>
         <c-tab-nav key="1" title="Tab 1" />
         <c-tab-nav key="2" title="Tab 2" />

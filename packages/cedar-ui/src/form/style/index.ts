@@ -1,3 +1,5 @@
-import '../../grid/style'
+import '../../style/index.less'
+import '../../row/style'
+import '../../col/style'
 import '../../tooltip/style'
 import './index.less'

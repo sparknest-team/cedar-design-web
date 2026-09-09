@@ -46,14 +46,14 @@ export default defineComponent({
      * @param {string} inputValue
      * @param {Event} ev
      */
-    inputValueChange: (inputValue: string, ev: Event) => true,
+    "input-value-change": (inputValue: string, ev: Event) => true,
     /**
      * @zh 按下回车键时触发
      * @en Triggered when the enter key is pressed
      * @param {string} inputValue
      * @param {KeyboardEvent} ev
      */
-    pressEnter: (inputValue: string, ev: KeyboardEvent) => true,
+    "press-enter": (inputValue: string, ev: KeyboardEvent) => true,
     /**
      * @zh 点击标签的删除按钮时触发
      * @en Triggered when the delete button of the label is clicked
@@ -149,7 +149,7 @@ export default defineComponent({
     const updateInputValue = (value: string, ev: Event) => {
       _inputValue.value = value
       emit('update:inputValue', value)
-      emit('inputValueChange', value, ev)
+      emit('input-value-change', value, ev)
     }
 
     const handleComposition = (ev: CompositionEvent) => {
@@ -250,12 +250,12 @@ export default defineComponent({
       if (computedInputValue.value) {
         e.preventDefault()
         if (props.uniqueValue && computedValue.value?.includes(computedInputValue.value)) {
-          emit('pressEnter', computedInputValue.value, e)
+          emit('press-enter', computedInputValue.value, e)
           return
         }
         const newValue = computedValue.value.concat(computedInputValue.value)
         updateValue(newValue, e)
-        emit('pressEnter', computedInputValue.value, e)
+        emit('press-enter', computedInputValue.value, e)
         if (!retainInputValue.value.create) {
           updateInputValue('', e)
         }

@@ -27,7 +27,7 @@ export default defineComponent({
       type: Number,
       required: true,
     },
-    direction: {
+    orientation: {
       type: String as PropType<(typeof DIRECTIONS)[number]>,
       default: 'horizontal',
     },
@@ -36,7 +36,7 @@ export default defineComponent({
     const prefixCls = getPrefixCls('slider')
 
     const getStyle = (value: number) =>
-      getPositionStyle(getOffsetPercent(value, [props.min, props.max]), props.direction)
+      getPositionStyle(getOffsetPercent(value, [props.min, props.max]), props.orientation)
 
     return {
       prefixCls,

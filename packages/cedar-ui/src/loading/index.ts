@@ -63,6 +63,11 @@ const createInstance = (
 ) => {
   const options = reactive<LoadingRenderOptions>(getOptions(binding.value));
   const container = document.createElement("div");
+  // The overlay is inside the host: consume clicks before they reach Card/ancestors.
+  container.addEventListener("click", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+  }, true);
   const fullscreen = options.fullscreen === true;
   const restorePosition =
     !fullscreen && getComputedStyle(el).position === "static";
@@ -71,7 +76,7 @@ const createInstance = (
     : "c-loading-directive";
   if (options.background)
     container.style.setProperty(
-      "--c-loading-mask-background",
+      "--c-loading-overlay-background",
       options.background,
     );
 
@@ -144,12 +149,12 @@ export const vLoading: Directive<ElementLoading, boolean | LoadingOptions> = {
       updateOptions(el, getOptions(binding.value));
       if (binding.value.background) {
         el[INSTANCE_KEY].container.style.setProperty(
-          "--c-loading-mask-background",
+          "--c-loading-overlay-background",
           binding.value.background,
         );
       } else {
         el[INSTANCE_KEY].container.style.removeProperty(
-          "--c-loading-mask-background",
+          "--c-loading-overlay-background",
         );
       }
     }

@@ -71,13 +71,13 @@ export default defineComponent({
      * @en Triggered when the value of the input changes
      * @param {string} inputValue
      */
-    inputValueChange: (inputValue: string) => true,
+    "input-value-change": (inputValue: string) => true,
     /**
      * @zh 下拉框的显示状态改变时触发
      * @en Triggered when the display state of the drop-down box changes
      * @param {boolean} visible
      */
-    openChange: (visible: boolean) => true,
+    "open-change": (visible: boolean) => true,
     /**
      * @zh 点击清除按钮时触发
      * @en Triggered when the clear button is clicked
@@ -99,12 +99,12 @@ export default defineComponent({
      * @zh 下拉菜单发生滚动时触发
      * @en Triggered when the drop-down scrolls
      */
-    dropdownScroll: (ev: Event) => true,
+    "dropdown-scroll": (ev: Event) => true,
     /**
      * @zh 下拉菜单滚动到底部时触发
      * @en Triggered when the drop-down menu is scrolled to the bottom
      */
-    dropdownReachBottom: (ev: Event) => true,
+    "dropdown-reach-bottom": (ev: Event) => true,
     /**
      * @zh 多选超出限制时触发
      * @en Triggered when multiple selection exceeds the limit
@@ -112,7 +112,7 @@ export default defineComponent({
      * @param {Event} ev
      * @version 2.18.0
      */
-    exceedLimit: (value: string | number | boolean | Record<string, any> | undefined, ev: Event) => true,
+    "exceed-limit": (value: string | number | boolean | Record<string, any> | undefined, ev: Event) => true,
   },
   /**
    * @zh 选项为空时的显示内容
@@ -374,7 +374,7 @@ export default defineComponent({
     const updateInputValue = (inputValue: string) => {
       _inputValue.value = inputValue
       emit('update:inputValue', inputValue)
-      emit('inputValueChange', inputValue)
+      emit('input-value-change', inputValue)
     }
 
     // events
@@ -384,7 +384,7 @@ export default defineComponent({
           if (enabledOptionKeys.value.includes(key)) {
             if (props.limit > 0 && computedValueKeys.value.length >= props.limit) {
               const info = optionInfoMap.get(key)
-              emit('exceedLimit', info?.value, ev)
+              emit('exceed-limit', info?.value, ev)
             } else {
               const valueKeys = computedValueKeys.value.concat(key)
               updateValue(valueKeys)
@@ -447,11 +447,11 @@ export default defineComponent({
     }
 
     const handleDropdownScroll = (e: Event) => {
-      emit('dropdownScroll', e)
+      emit('dropdown-scroll', e)
     }
 
     const handleDropdownReachBottom = (e: Event) => {
-      emit('dropdownReachBottom', e)
+      emit('dropdown-reach-bottom', e)
     }
 
     const { validOptions, optionInfoMap, validOptionInfos, enabledOptionKeys, handleKeyDown } = useSelect({
@@ -569,7 +569,7 @@ export default defineComponent({
           showHeaderOnEmpty={props.showHeaderOnEmpty}
           showFooterOnEmpty={props.showFooterOnEmpty}
           onScroll={handleDropdownScroll}
-          onReachBottom={handleDropdownReachBottom}
+          onReach-bottom={handleDropdownReachBottom}
         />
       )
     }
@@ -591,21 +591,20 @@ export default defineComponent({
         <Trigger
           v-slots={{ content: renderDropDown }}
           trigger="click"
-          placement="bl"
+          placement="bottom-start"
           popupOffset={4}
           animationName="slide-dynamic-origin"
           hideEmpty
           preventFocus
-          autoFitPopupWidth
+          autoFitPopupWidth={props.autoFitPopupWidth}
           autoFitTransformOrigin
           disabled={mergedDisabled.value}
           open={computedOpen.value}
           unmountOnClose={props.unmountOnClose}
-          clickToClose={!(props.filterable || props.creatable)}
-          popupContainer={props.popupContainer}
-          onOpenChange={handleOpenChange}
+          closeOnClickReference={!(props.filterable || props.creatable)}
           onUpdate:open={handleOpenChange}
           {...props.triggerProps}
+          popupContainer={props.popupContainer !== undefined ? props.popupContainer : props.triggerProps?.popupContainer}
         >
           {slots.trigger?.() ?? (
             <div class={[classes(n()), className]} style={style}>
@@ -633,7 +632,7 @@ export default defineComponent({
                 tagNowrap={props.tagNowrap}
                 variant={mergedVariant.value}
                 // @ts-ignore
-                onInputValueChange={handleInputValueChange}
+                onInput-value-change={handleInputValueChange}
                 onRemove={handleRemove}
                 onClear={handleClear}
                 onKeydown={handleKeyDown}

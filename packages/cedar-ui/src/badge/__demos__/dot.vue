@@ -1,12 +1,11 @@
 <template>
-  <c-space :size="40">
-    <c-badge :content="9" dot :offset="[6, -2]">
-      <a href="#">Link</a>
-    </c-badge>
-    <c-badge :content="9" dot :offset="[2, -2]">
-      <c-icon-notification :style="{ color: '#888', fontSize: '18px', verticalAlign: '-3px' }" />
-    </c-badge>
-  </c-space>
+  <c-space wrap :size="24"
+    ><c-badge dot :content="1"
+      ><span style="display: inline-block; padding: 12px; border: 1px solid currentColor; border-radius: 4px"
+        >Inbox</span
+      ></c-badge
+    ><c-badge dot :content="1" :offset-x="6" :offset-y="-2"
+      ><a href="#" @click.prevent>Messages</a></c-badge
+    ></c-space
+  >
 </template>
-<script lang="ts" setup>
-</script>

@@ -1,4 +1,5 @@
 <template>
+  <teleport :to="popupTarget" :disabled="popupContainer === false">
   <transition name="fade-in">
     <div
       v-if="visible"
@@ -17,6 +18,7 @@
       </slot>
     </div>
   </transition>
+  </teleport>
 </template>
 
 <script lang="ts">
@@ -29,6 +31,7 @@ import { throttleByRaf } from '../_utils/throttle-by-raf'
 import { IconToTop } from '@cedarjs/icons-vue/icon-to-top'
 import { isString } from '../_utils/is'
 import { backTopProps } from './props'
+import { usePopupContainer } from '../_utils/popup-container'
 
 export default defineComponent({
   name: createNamespace('back-top').name,
@@ -37,6 +40,7 @@ export default defineComponent({
   },
   props: backTopProps,
   setup(props) {
+    const popupTarget = usePopupContainer(() => props.popupContainer)
     const prefixCls = getPrefixCls('back-top')
     const visible = ref(false)
     const target = ref<HTMLElement>()
@@ -92,6 +96,7 @@ export default defineComponent({
     }
 
     return {
+      popupTarget,
       prefixCls,
       visible,
       scrollToTop,

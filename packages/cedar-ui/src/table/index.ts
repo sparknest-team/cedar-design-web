@@ -55,3 +55,4 @@ export { Table }
 export { tableProps }
 
 export default Table
+export type TableProps = import('vue').ExtractPublicPropTypes<typeof import('./props').tableProps>

@@ -1,13 +1,19 @@
 <template>
-  <main :class="classNames">
+  <main
+    ref="scrollRef"
+    :tabindex="scrollable ? 0 : undefined"
+    :class="[classNames, { 'c-layout--scrollable': scrollable }]"
+    @scroll="$emit('scroll', $event)"
+  >
     <slot />
   </main>
 </template>
 
-<script>
-import { createNamespace } from '../_utils/global-config'
-import { defineComponent } from 'vue'
-import { getPrefixCls } from '../_utils/global-config'
+<script lang="ts">
+import { useLayoutScroll } from "./use-scroll";
+import { createNamespace } from "../_utils/global-config";
+import { defineComponent } from "vue";
+import { getPrefixCls } from "../_utils/global-config";
 
 export default defineComponent({
   name: createNamespace("layout-content").name,
@@ -16,13 +22,19 @@ export default defineComponent({
    * @en Content
    * @slot default
    */
-  setup() {
-    const prefixCls = getPrefixCls('layout-content')
-    const classNames = [prefixCls]
+  props: { scrollable: Boolean },
+  emits: { scroll: (event: Event) => true },
+  setup(_, { expose }) {
+    const { scrollRef, scrollTo } = useLayoutScroll();
+    expose({ scrollTo });
+    const prefixCls = getPrefixCls("layout-content");
+    const classNames = [prefixCls];
 
     return {
       classNames,
-    }
+      scrollRef,
+      scrollTo,
+    };
   },
-})
+});
 </script>

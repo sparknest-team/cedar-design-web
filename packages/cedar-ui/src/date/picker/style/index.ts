@@ -1,4 +1,5 @@
 import '../../../style/index.less'
+import '../../../field-decorator/style'
 import '../../../time/picker/style'
 import '../../../trigger/style'
 import '../../../button/style'

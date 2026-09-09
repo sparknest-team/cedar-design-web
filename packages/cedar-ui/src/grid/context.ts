@@ -1,25 +1,11 @@
-import { InjectionKey } from 'vue'
-import { GridItemData } from './types'
-
-export type RowContextContext = Readonly<{
-  gutter?: [number, number]
-  div?: boolean
-}>
-
-export const RowContextInjectionKey: InjectionKey<RowContextContext> = Symbol('RowContextInjectionKey')
-
-export type GridContext = Readonly<{
-  overflow: boolean
-  displayIndexList: number[]
-  cols: number
-  colGap: number
-}>
-
-export const GridContextInjectionKey: InjectionKey<GridContext> = Symbol('GridContextInjectionKey')
-
-export type GridDataCollector = Readonly<{
-  collectItemData: (index: number, itemData: GridItemData) => void
-  removeItemData: (index: number) => void
-}>
-
-export const GridDataCollectorInjectionKey: InjectionKey<GridDataCollector> = Symbol('GridDataCollectorInjectionKey')
+import type { ComputedRef, InjectionKey, Ref } from 'vue'
+import type { GridItemData } from './types'
+export interface GridRecord { id: symbol; data: ComputedRef<GridItemData>; element: Ref<HTMLElement | undefined> }
+export interface GridContext {
+  cols: ComputedRef<number>; colGap: ComputedRef<number>; overflow: ComputedRef<boolean>
+  visible: (id: symbol) => boolean
+  register: (record: GridRecord) => void
+  remove: (id: symbol) => void
+  reorder: () => void
+}
+export const GRID_CONTEXT_KEY: InjectionKey<GridContext> = Symbol('GRID_CONTEXT_KEY')

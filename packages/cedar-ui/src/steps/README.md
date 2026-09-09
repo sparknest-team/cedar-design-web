@@ -81,7 +81,7 @@ permalink: /components/steps/
 | 属性                 | 说明                     | 类型                                                  | 默认值         |
 | -------------------- | ------------------------ | ----------------------------------------------------- | -------------- |
 | type                 | 步骤条的类型             | `'default'` \| `'arrow'` \| `'dot'` \| `'navigation'` | `'default'`    |
-| direction            | 步骤条的方向             | `'horizontal'` \| `'vertical'`                        | `'horizontal'` |
+| orientation            | 步骤条的方向             | `'horizontal'` \| `'vertical'`                        | `'horizontal'` |
 | content-placement    | 内容相对节点的位置       | `'right'` \| `'bottom'`                               | `'right'`      |
 | current(**v-model**) | 当前步骤数               | `number`                                              | `-`            |
 | default-current      | 默认的步骤数(非受控状态) | `number`                                              | `1`            |
@@ -140,3 +140,9 @@ import type {
   StepsStepInstance,
 } from '@cedarjs/ui'
 ```
+
+## 同源实现与平台边界
+
+两端各自保存完整源码，不引用公共核心，不共享组件实例或响应式状态；修改时同步维护两份实现。主体、Props、关键样式及配对测试纳入只读源码一致性检查，主题 token 和安装入口各自维护。
+
+Steps 和 Step 的主体、Props、上下文协议与样式同源复制；注入 Symbol 分别定义在各库，不跨库共享。保留四种 type 和原有状态/事件契约。

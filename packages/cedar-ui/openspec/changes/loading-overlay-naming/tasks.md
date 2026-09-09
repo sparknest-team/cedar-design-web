@@ -1,0 +1,6 @@
+- [x] Rename Loading covering element and background token in both libraries, including directive set/update/remove paths.
+- [x] Update related List selector, Card test terminology, Hover example, English/Chinese docs and migration notes.
+- [x] Align checked-in Playground JS/CSS class names; preserve unrelated character/gradient/indicator masks.
+- [x] 33 Loading/Card tests pass, including custom background update/clear and overlay click interception.
+- [x] Both Loading Less styles compile with the new class/token; no old Loading identifiers remain in source or Playground runtime assets.
+- [x] Existing independent-source consistency checks pass.

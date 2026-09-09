@@ -8,7 +8,7 @@
     ref="formRef"
     style="width: 500px; height: 300px; margin-top: 20px; padding-right: 16px; overflow: auto"
     :model="form"
-    :scrollToFirstError="true"
+    scroll-to-error="start"
   >
     <template v-for="(fieldName, index) in fieldNames" :key="index">
       <c-form-item :field="fieldName" :label="'user' + index" :rules="[{ required: true, message: 'Name is required' }]">

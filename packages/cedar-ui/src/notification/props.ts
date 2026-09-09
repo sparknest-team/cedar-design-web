@@ -11,4 +11,4 @@ export const notificationProps = {
   closeButtonAriaLabel: { type: String, default: 'Close notification' },
 } 
 
-export type NotificationProps = Partial<ExtractPropTypes<typeof notificationProps>>
+export type NotificationProps = import("vue").ExtractPublicPropTypes<typeof notificationProps>

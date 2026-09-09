@@ -1,107 +1,60 @@
 <template>
-  <Trigger
-    :open="computedOpen"
-    animation-name="slide-dynamic-origin"
-    auto-fit-transform-origin
-    :trigger="trigger"
-    :placement="placement"
-    :popup-offset="4"
-    :popup-container="popupContainer"
-    :auto-fit-popup-width="autoFitPopupWidth"
-    :disabled="disabled"
-    :align-point="alignPoint"
-    :opened-class="`${prefixCls}-open`"
-    @open-change="handleOpenChange"
-  >
-    <slot />
-    <template #content>
-      <MenuPanel>
-        <slot name="content" />
-        <template v-if="$slots.footer" #footer>
-          <slot name="footer" />
-        </template>
-      </MenuPanel>
+  <MenuView :options="viewOptions">
+    <template v-for="(_, slotName) in $slots" #[slotName]="slotProps">
+      <slot :name="slotName" v-bind="slotProps || {}" />
     </template>
-  </Trigger>
+  </MenuView>
 </template>
 
-<script lang="ts">
-import { defineComponent, provide, toRefs } from 'vue'
-import { createNamespace, getPrefixCls } from '../_utils/global-config'
-import Trigger from '../trigger'
-import MenuPanel from './menu-panel.vue'
-import { useTrigger } from '../_hooks/use-trigger'
-import { menuInjectionKey } from './context'
+<script setup lang="ts">
+import { computed, h, nextTick, provide, ref, watch } from 'vue'
+import { createNamespace } from '../_utils/global-config'
+import MenuView from './render'
+import type { TriggerInstance } from '../trigger'
 import { menuProps } from './props'
-import { MenuValue } from './types'
-
-export default defineComponent({
-  name: createNamespace('menu').name,
-  components: {
-    Trigger,
-    MenuPanel,
-  },
-  props: menuProps,
-  emits: {
-    'update:modelValue': (value: MenuValue) => true,
-    'update:open': (visible: boolean) => true,
-    /**
-     * @zh 下拉框显示状态发生改变时触发
-     * @en Triggered when the display status of the drop-down box changes
-     * @param {boolean} visible
-     */
-    openChange: (visible: boolean) => true,
-    /**
-     * @zh 用户选择菜单项时触发；受控模式下是否产生选中态取决于 modelValue 是否更新
-     * @en Triggered when the user selects a menu item. In controlled mode, whether the selected state changes depends on whether modelValue is updated.
-     * @param {string | number | Record<string, any> | undefined } value
-     * @param {{ value: any, label?: string | number, disabled?: boolean }} option
-     * @param {Event} ev
-     */
-    select: (value: MenuValue, option: Record<string, any>, ev: Event) => true,
-  },
-  /**
-   * @zh 触发元素
-   * @en Trigger
-   * @slot default
-   */
-  /**
-   * @zh 内容
-   * @en Content
-   * @slot content
-   */
-  /**
-   * @zh 页脚
-   * @en Footer
-   * @slot footer
-   */
-  setup(props, { emit }) {
-    const { modelValue, defaultOpen, open, popupMaxHeight } = toRefs(props)
-    const prefixCls = getPrefixCls('menu')
-
-    const { computedOpen, handleOpenChange } = useTrigger({
-      defaultOpen,
-      open,
-      emit,
-    })
-
-    const handleOptionClick = (value: MenuValue, option: Record<string, any>, ev: Event) => {
-      emit('update:modelValue', value)
-      emit('select', value, option, ev)
-      props.hideOnSelect && handleOpenChange(false)
-    }
-
-    provide(menuInjectionKey, {
-      popupMaxHeight,
-      modelValue,
-      onOptionClick: handleOptionClick,
-    })
-
-    return {
-      prefixCls,
-      computedOpen,
-      handleOpenChange,
-    }
-  },
+import { Trigger, rootTriggerAppearance, type MenuReference } from './platform'
+import MenuPanel from './menu-panel.vue'
+import MenuOptions from './options'
+import { useTriggerState } from '../trigger/state'
+import { menuSelectionKey, useMenuSelection } from './selection'
+import { useMenuKeyboard } from './keyboard'
+import { menuInjectionKey } from './context'
+import { useMenuLevel } from './level'
+defineOptions({ name: createNamespace('menu').name })
+const props = defineProps(menuProps)
+const emit = defineEmits(['open-change', 'select', 'update:open', 'update:modelValue', 'key-escape', 'open', 'opened', 'close', 'closed', 'click-outside'])
+const state = useTriggerState(props, emit)
+const computedOpen = state.visible
+const menu = ref<TriggerInstance>()
+const panel = ref<InstanceType<typeof MenuPanel>>()
+const { level } = useMenuLevel(computedOpen)
+function open() { if (!props.disabled) state.request(true) }
+function close() { state.request(false) }
+function resize() { menu.value?.resize?.() }
+function setReference(reference?: MenuReference) { menu.value?.setReference?.(reference as any) }
+const selection = useMenuSelection(props, (value, option, event, selectedValue) => {
+  emit('update:modelValue', value)
+  emit('select', selectedValue, option, event)
+  if (!props.multiple && props.hideOnSelect) {
+    close()
+    nextTick(() => { if (!computedOpen.value) menu.value?.focusReference?.() })
+  }
 })
+provide(menuSelectionKey, selection)
+provide(menuInjectionKey, { popupMaxHeight: computed(() => props.popupMaxHeight), modelValue: computed(() => props.modelValue), onOptionClick: selection.select })
+useMenuKeyboard({
+  reference: () => menu.value?.getReference?.(), panel: () => panel.value?.panel,
+  visible: () => computedOpen.value, disabled: () => props.disabled,
+  isTopLayer: event => menu.value?.isTopLayer?.(event) ?? false,
+  restoreFocus: () => menu.value?.focusReference?.(), open, close, escape: () => emit('key-escape'),
+})
+watch(() => [props.offsetX, props.offsetY], () => nextTick(() => { if (computedOpen.value) resize() }))
+const viewOptions = computed(() => ({
+  kind: 'root', triggerComponent: Trigger, triggerRef: menu,
+  triggerProps: { ...rootTriggerAppearance(props), open: computedOpen.value, trigger: props.trigger, unmountOnClose: props.unmountOnClose, escToClose: false,
+    onOpenChange: state.request, onOpen: () => emit('open'), onOpened: () => emit('opened'), onClose: () => emit('close'), onClosed: () => emit('closed'), onClickOutside: (event: Event) => emit('click-outside', event) },
+  panelComponent: MenuPanel, panelProps: { ref: panel, elevation: props.elevation },
+  items: () => h(MenuOptions, { options: props.options, fieldNames: props.fieldNames }),
+}))
+defineExpose({ open, close, resize, setReference, menu, panel, computedOpen })
 </script>

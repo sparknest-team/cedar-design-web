@@ -1,9 +1,8 @@
 import { withInstall } from '../_utils/global-config'
-import _Pagination from './pagination'
+import _Pagination from './pagination.vue'
 import { paginationProps } from './props'
 
-const Pagination = withInstall(_Pagination, Object.assign(_Pagination, {
-}), { components: [_Pagination] })
+const Pagination = withInstall(_Pagination, Object.assign(_Pagination, {}), { components: [_Pagination] })
 
 export type PaginationInstance = InstanceType<typeof _Pagination>
 export { paginationProps }
@@ -12,3 +11,5 @@ export { Pagination }
 export const _PaginationComponent = Pagination
 
 export default Pagination
+
+export type { PaginationPageSizeProps } from './types'

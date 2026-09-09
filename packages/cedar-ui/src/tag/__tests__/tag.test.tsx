@@ -16,9 +16,9 @@ describe('Tag', () => {
       slots: { default: 'Filter' },
     })
 
-    expect(wrapper.attributes()).toMatchObject({ role: 'checkbox', 'aria-checked': 'false', tabindex: '0' })
-    await wrapper.trigger('keydown', { key: ' ' })
-    expect(wrapper.attributes('aria-checked')).toBe('true')
+    expect(wrapper.find('.c-tag').attributes()).toMatchObject({ role: 'checkbox', 'aria-checked': 'false', tabindex: '0' })
+    await wrapper.find('.c-tag').trigger('keydown', { key: ' ' })
+    expect(wrapper.find('.c-tag').attributes('aria-checked')).toBe('true')
     expect(wrapper.emitted('update:checked')?.[0]).toEqual([true])
   })
 
@@ -28,14 +28,14 @@ describe('Tag', () => {
     })
 
     expect(wrapper.find('.c-tag__close-btn').exists()).toBe(false)
-    await wrapper.trigger('click')
+    await wrapper.find('.c-tag').trigger('click')
     expect(wrapper.emitted('update:checked')).toBeUndefined()
   })
 
   test('supports round and custom text color', () => {
     const wrapper = mount(Tag, { props: { round: true, color: '#f00', textColor: '#fff' } })
 
-    expect(wrapper.classes()).toContain('c-tag--round')
-    expect((wrapper.element as HTMLElement).style.color).toBe('rgb(255, 255, 255)')
+    expect(wrapper.find('.c-tag').classes()).toContain('c-tag--round')
+    expect((wrapper.find('.c-tag').element as HTMLElement).style.color).toBe('rgb(255, 255, 255)')
   })
 })
