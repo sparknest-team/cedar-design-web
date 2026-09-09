@@ -1,23 +1,15 @@
 <template>
-  <c-space direction="column">
-    <c-radio-group v-model="variant">
-      <c-radio value="filled">filled</c-radio>
-      <c-radio value="outlined">outlined</c-radio>
-      <c-radio value="standard">standard</c-radio>
-    </c-radio-group>
-    <c-radio-group v-model="size">
-      <c-radio value="xs">xs</c-radio>
-      <c-radio value="sm">sm</c-radio>
-      <c-radio value="md">md</c-radio>
-      <c-radio value="lg">lg</c-radio>
-    </c-radio-group>
-    <c-textarea placeholder="请输入" clearable :variant="variant" :size="size" />
+  <c-space direction="column" size="lg" fill>
+    <c-textarea v-model="value" placeholder="受控文本域" clearable />
+    <c-textarea default-value="非受控初始内容" placeholder="非受控文本域" />
+    <c-textarea v-model.trim="trimValue" placeholder="失焦时去除首尾空白" />
+    <span>当前值：{{ value || "-" }}</span>
   </c-space>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref } from "vue";
 
-const variant = ref('filled')
-const size = ref('md')
+const value = ref("");
+const trimValue = ref("");
 </script>

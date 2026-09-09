@@ -59,7 +59,7 @@
         v-model="filter"
         :disabled="disabled"
         v-bind="searchProps"
-        @change="handleSearch"
+        @input="handleSearch"
       />
     </div>
     <div :class="`${prefixCls}-body`">

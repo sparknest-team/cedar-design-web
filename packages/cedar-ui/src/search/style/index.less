@@ -1,4 +1,4 @@
-@import '../../input/style/token.less';
+@import "../../input/style/token.less";
 
 .c-search {
   position: relative;
@@ -7,8 +7,24 @@
   width: 100%;
 
   .c-input__suffix {
-    color: var(~'--c-search-color-icon');
-    font-size: var(~'--c-search-size-icon');
+    color: var(~"--c-search-color-icon");
+    font-size: var(~"--c-search-size-icon");
+  }
+
+  &__icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+
+    &:disabled {
+      cursor: not-allowed;
+    }
   }
 
   .c-input__search-btn {

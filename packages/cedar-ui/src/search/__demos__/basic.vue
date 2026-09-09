@@ -14,6 +14,7 @@
       clearable
       @search="handleSearch"
     />
+    <pre v-if="latestResult">{{ JSON.stringify(latestResult, null, 2) }}</pre>
     <c-search
       v-model="buttonKeyword"
       :style="inputStyle"
@@ -35,18 +36,19 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
-import type { SearchResult } from '@cedarjs/ui'
+import { ref } from "vue";
+import type { SearchResult } from "@cedarjs/ui";
 
-const inputStyle = { width: '360px' }
-const keyword = ref('')
-const buttonKeyword = ref('')
-const textButtonKeyword = ref('')
-const variant = ref('filled')
-const recentSearches = ref<string[]>(['设备 A', '设备 B', '设备 C'])
+const inputStyle = { width: "360px" };
+const keyword = ref("");
+const buttonKeyword = ref("");
+const textButtonKeyword = ref("");
+const variant = ref("outlined");
+const recentSearches = ref<string[]>(["设备 A", "设备 B", "设备 C"]);
+const latestResult = ref<SearchResult>();
 
 function handleSearch(data: SearchResult) {
-  recentSearches.value = data.recentSearches
-  console.log('search', data)
+  recentSearches.value = data.recentSearches;
+  latestResult.value = data;
 }
 </script>

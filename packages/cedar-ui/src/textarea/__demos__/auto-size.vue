@@ -1,18 +1,18 @@
 <template>
-  <c-textarea
-    default-value="This is the contents of the textarea. This is the contents of the textarea. This is the contents of the textarea."
-    auto-size />
-  <c-textarea
-    default-value="This is the contents of the textarea. This is the contents of the textarea. This is the contents of the textarea."
-    :auto-size="{
-      minRows: 2,
-      maxRows: 5,
-    }"
-    style="margin-top: 20px" />
+  <c-space direction="column" size="lg" fill>
+    <c-textarea default-value="原生三行，可纵向拖动" :rows="3" />
+    <c-textarea v-model="content" auto-size placeholder="随内容自动增高" />
+    <c-textarea
+      v-model="boundedContent"
+      :auto-size="{ minRows: 2, maxRows: 5 }"
+      placeholder="自动高度限制在 2 到 5 行"
+    />
+  </c-space>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
-export default defineComponent({
-  })
+<script lang="ts" setup>
+import { ref } from "vue";
+
+const content = ref("第一行");
+const boundedContent = ref("第一行\n第二行");
 </script>

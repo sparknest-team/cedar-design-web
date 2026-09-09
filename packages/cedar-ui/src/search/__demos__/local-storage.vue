@@ -12,33 +12,33 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
-import type { SearchResult } from '@cedarjs/ui'
+import { ref } from "vue";
+import type { SearchResult } from "@cedarjs/ui";
 
-const inputStyle = { width: '360px' }
-const storageKey = '__cedar_search_history__'
+const inputStyle = { width: "360px" };
+const storageKey = "__cedar_search_history__";
 
-const keyword = ref('')
-const recentSearches = ref<string[]>(loadRecentSearches())
+const keyword = ref("");
+const recentSearches = ref<string[]>(loadRecentSearches());
 
 function loadRecentSearches() {
   try {
-    return JSON.parse(localStorage.getItem(storageKey) || '[]')
+    return JSON.parse(localStorage.getItem(storageKey) || "[]");
   } catch {
-    return []
+    return [];
   }
 }
 
 function saveRecentSearches(list: string[]) {
-  localStorage.setItem(storageKey, JSON.stringify(list))
-  recentSearches.value = list
+  localStorage.setItem(storageKey, JSON.stringify(list));
+  recentSearches.value = list;
 }
 
 function handleSearch(data: SearchResult) {
-  saveRecentSearches(data.recentSearches)
+  saveRecentSearches(data.recentSearches);
 }
 
 function clearRecentSearches() {
-  saveRecentSearches([])
+  saveRecentSearches([]);
 }
 </script>
