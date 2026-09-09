@@ -28,9 +28,10 @@
       :pending="pending"
     >
       <CForm :model="draft" layout="vertical" @submit="save()">
-        <CFormItem :label="messages.titleLabel" required>
+        <CFormItem :label="messages.titleLabel">
           <CInput
             v-model="draft.title"
+            :placeholder="messages.untitled"
             :input-attrs="{ 'aria-label': messages.titleLabel }"
             :aria-label="messages.titleLabel"
             :disabled="readonly || pending"
@@ -220,6 +221,7 @@ function save(customEvent?: SchedulerEvent) {
   if (props.readonly || props.pending) return;
   try {
     const event = cloneSchedulerEvent(customEvent ?? draft.value);
+    event.title = event.title.trim() || props.messages.untitled;
     if (event.id !== props.event.id) throw new Error("Draft ID cannot change");
     if (!customEvent && !slots.default) {
       event.title = event.title.trim();

@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "pnpm --filter @cedarjs/ui build",
+    "build": "pnpm build:lib && pnpm build:doc",
     "build:lib": "pnpm --filter @cedarjs/shared build && pnpm --filter @cedarjs/use build && pnpm --filter @cedarjs/icons-vue build && pnpm --filter @cedarjs/resolver build && pnpm --filter @cedarjs/ui build:lib",
     "build:doc": "pnpm --filter @cedarjs/ui build:doc",
     "build:presets": "pnpm --filter @cedarjs/preset-unocss build && pnpm --filter @cedarjs/preset-tailwindcss build",
@@ -16,7 +16,7 @@
     "typecheck": "pnpm --filter @cedarjs/ui typecheck",
     "spec:check": "node scripts/quality/spec-check.mjs",
     "package:check": "node scripts/quality/package-check.mjs",
-    "quality": "pnpm spec:check && pnpm typecheck && pnpm test && pnpm build:lib && pnpm package:check",
+    "quality": "pnpm spec:check && pnpm typecheck && pnpm test && pnpm build && pnpm package:check",
     "format": "pnpm --filter @cedarjs/ui format",
     "lint": "pnpm --filter @cedarjs/ui lint",
     "icons:build": "pnpm --filter @cedarjs/icons-vue build",

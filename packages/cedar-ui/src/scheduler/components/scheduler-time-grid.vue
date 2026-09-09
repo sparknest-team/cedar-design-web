@@ -46,11 +46,23 @@
           "
           @drag-end="emit('drag-end')"
           @pointer-drop="(x, y) => emit('pointer-drop', x, y)"
+          @pointer-move="(x, y) => emit('pointer-move', x, y)"
         >
           <template #default="slotProps"
             ><slot name="event" v-bind="slotProps"
           /></template>
         </SchedulerEventCard>
+        <div
+          v-if="previewEvent?.allDay && previewBelongs(column)"
+          :class="[n('event'), n('drag-preview')]"
+          aria-hidden="true"
+          inert
+        >
+          <slot name="event" :event="previewEvent">{{
+            previewEvent.title
+          }}</slot>
+          <span :class="n('preview-time')">{{ messages.allDay }}</span>
+        </div>
         <CButton
           variant="text"
           size="xs"
@@ -118,6 +130,7 @@
               :disabled="disabled"
               :resizable="!locked"
               :resize-label="messages.resize"
+              :resize-start-label="messages.resizeStart"
               @select="emit('select', item.event)"
               @drag-start="
                 (event, resize) =>
@@ -125,6 +138,7 @@
               "
               @drag-end="emit('drag-end')"
               @pointer-drop="(x, y) => emit('pointer-drop', x, y)"
+              @pointer-move="(x, y) => emit('pointer-move', x, y)"
             >
               <template #default="slotProps"
                 ><slot name="event" v-bind="slotProps"
@@ -134,6 +148,29 @@
                 ></template
               >
             </SchedulerEventCard>
+          </div>
+          <div
+            v-for="item in previewItems(column)"
+            :key="`preview-${item.event.id}`"
+            :class="[n('positioned-event'), n('drag-preview')]"
+            :style="position(item)"
+            aria-hidden="true"
+            inert
+          >
+            <div
+              :class="n('event')"
+              :style="{ '--c-scheduler-event-color': item.event.color }"
+            >
+              <div :class="n('event-button')">
+                <slot name="event" :event="item.event">{{
+                  item.event.title
+                }}</slot>
+                <div :class="n('preview-time')">
+                  {{ formatTime(item.event) }} –
+                  {{ formatTime({ ...item.event, start: item.event.end }) }}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -158,6 +195,7 @@ import type {
   SchedulerLayoutItem,
 } from "../core";
 import type { SchedulerMessages } from "../locale";
+import type { SchedulerResize } from "../drag";
 
 defineOptions({ name: createNamespace("scheduler-time-grid").name });
 const { n } = createNamespace("scheduler");
@@ -169,6 +207,7 @@ const props = defineProps<{
     resource?: SchedulerResource;
   }[];
   events: SchedulerEvent[];
+  previewEvent?: SchedulerEvent;
   startHour: number;
   endHour: number;
   step: number;
@@ -183,11 +222,12 @@ const emit = defineEmits<{
   drop: [date: Date, resourceId: string | undefined, allDay: boolean];
   "drag-start": [
     event: SchedulerEvent,
-    resize: boolean,
+    resize: SchedulerResize,
     resourceId: string | undefined,
   ];
   "drag-end": [];
   "pointer-drop": [x: number, y: number];
+  "pointer-move": [x: number, y: number];
 }>();
 defineSlots<{
   event(props: { event: SchedulerEvent }): unknown;
@@ -234,6 +274,27 @@ function positioned(column: (typeof props.columns)[number]) {
     props.startHour,
     props.endHour,
   );
+}
+function previewBelongs(column: (typeof props.columns)[number]) {
+  const event = props.previewEvent;
+  return (
+    event &&
+    (!column.resource || event.resourceIds?.includes(column.resource.id)) &&
+    isSchedulerEventInRange(event, {
+      start: column.date,
+      end: addSchedulerDays(column.date, 1),
+    })
+  );
+}
+function previewItems(column: (typeof props.columns)[number]) {
+  const preview = props.previewEvent;
+  if (!preview || preview.allDay || !previewBelongs(column)) return [];
+  return layoutSchedulerEvents(
+    [...eventsFor(column).filter((event) => event.id !== preview.id), preview],
+    column.date,
+    props.startHour,
+    props.endHour,
+  ).filter((item) => item.event.id === preview.id);
 }
 function position(item: SchedulerLayoutItem) {
   const duration = (props.endHour - props.startHour) * 60;

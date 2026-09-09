@@ -44,6 +44,7 @@ export function useScheduler(
   emit: Emit,
   getResource: (id: string) => SchedulerResource | undefined = (id) =>
     props.resources.find((item) => item.id === id),
+  getUntitled: () => string = () => "无主题",
 ) {
   const localValue = ref(props.defaultValue.map(cloneSchedulerEvent));
   const localMode = ref<SchedulerMode>(props.defaultMode);
@@ -83,6 +84,8 @@ export function useScheduler(
     const overlapSnapshot = props.allowOverlap;
     try {
       const event = cloneSchedulerEvent(change.event);
+      if (change.type !== "remove")
+        event.title = event.title.trim() || getUntitled();
       const previous = value.value.find((item) => item.id === event.id);
       const request = {
         ...change,

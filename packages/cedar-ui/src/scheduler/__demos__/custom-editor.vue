@@ -22,7 +22,7 @@
       <h3>{{ action === "create" ? "新增工作计划" : "修改工作计划" }}</h3>
       <c-alert v-if="errorMessage" status="danger">{{ errorMessage }}</c-alert>
       <c-form :model="event" layout="vertical" @submit="save(event)">
-        <c-form-item label="计划标题" required>
+        <c-form-item label="计划标题">
           <c-input v-model="event.title" :disabled="readonly || pending" />
         </c-form-item>
         <c-form-item label="开始时间">

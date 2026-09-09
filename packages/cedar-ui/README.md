@@ -19,3 +19,7 @@ features:
 ```shell
 yarn add @cedarjs/ui@1.x
 ```
+
+## 本地构建
+
+在仓库根目录执行 `pnpm build:lib` 构建 npm 包，`pnpm build:doc` 构建文档，`pnpm build` 依次构建两者，与 Maple 保持一致。

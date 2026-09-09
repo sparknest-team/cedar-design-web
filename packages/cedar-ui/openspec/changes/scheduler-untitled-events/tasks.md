@@ -1,0 +1,5 @@
+- [x] Disable ordinary and dragging time-cell hover overlays while retaining focus indicators.
+- [x] Normalize blank titles in built-in/custom editor saves and component commands before validation and hooks.
+- [x] Remove title-required markers from built-in and example forms; document default labels.
+- [x] Verify Scheduler suite: 71 tests pass, including whitespace and English-label cases.
+- [x] Compile Scheduler Less and verify the unconditional time-cell hover override.

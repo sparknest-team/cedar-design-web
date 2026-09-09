@@ -127,6 +127,9 @@
     border-bottom: var(--c-scheduler-border-width) solid
       var(--c-scheduler-border-color);
   }
+  &__time-cell {
+    --c-hover-overlay-opacity: 0;
+  }
   &__event-layer {
     position: absolute;
     inset: 0;
@@ -146,6 +149,7 @@
   }
   &__event {
     touch-action: none;
+    user-select: none;
     position: relative;
     border-left: var(--c-scheduler-event-accent-width) solid
       var(--c-scheduler-event-color);
@@ -180,6 +184,48 @@
     right: 0;
     height: var(--c-scheduler-resize-height);
     cursor: ns-resize;
+    &--start {
+      top: 0;
+      bottom: auto;
+    }
+  }
+  &__drag-ghost {
+    box-sizing: border-box;
+    position: fixed;
+    z-index: var(--c-scheduler-ghost-z-index);
+    opacity: var(--c-scheduler-ghost-opacity);
+    background: var(
+      --c-scheduler-event-background,
+      var(--c-scheduler-background)
+    );
+    color: var(--c-scheduler-color);
+    line-height: var(--c-scheduler-line-height);
+    box-shadow: var(--c-scheduler-preview-shadow);
+    pointer-events: none;
+    margin: 0;
+    & * {
+      box-sizing: border-box;
+      pointer-events: none !important;
+    }
+  }
+  &__drag-preview {
+    z-index: var(--c-scheduler-preview-z-index);
+    opacity: var(--c-scheduler-preview-opacity);
+    pointer-events: none !important;
+    transition:
+      top var(--c-scheduler-preview-duration) ease-out,
+      height var(--c-scheduler-preview-duration) ease-out,
+      left var(--c-scheduler-preview-duration) ease-out,
+      width var(--c-scheduler-preview-duration) ease-out;
+    & * {
+      pointer-events: none !important;
+    }
+  }
+  &__preview-time {
+    display: block;
+    font-size: var(--c-scheduler-event-font-size);
+    font-weight: bold;
+    color: var(--c-scheduler-color);
   }
   &__month {
     display: grid;
@@ -278,6 +324,11 @@
   &__event-button:focus-visible {
     outline: var(--c-scheduler-focus-width) solid var(--c-scheduler-focus-color);
     outline-offset: calc(-1 * var(--c-scheduler-focus-width));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .c-scheduler__drag-preview {
+    transition: none;
   }
 }
 .c-scheduler__editor-actions {

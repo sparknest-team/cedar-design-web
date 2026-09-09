@@ -14,33 +14,33 @@ permalink: /components/time-range-picker/
 
 ### 基本用法
 
-<demo src="./__demos__/basic.vue"></demo>
+<demo src="./__demos__/picker/basic.vue"></demo>
 
 ### 定制格式
 
-<demo src="./__demos__/format.vue"></demo>
+<demo src="./__demos__/picker/format.vue"></demo>
 
 ### 定制步长
 
-<demo src="./__demos__/step.vue"></demo>
+<demo src="./__demos__/picker/step.vue"></demo>
 
 ### 十二小时制
 
-<demo src="./__demos__/use12Hours.vue"></demo>
+<demo src="./__demos__/picker/use12Hours.vue"></demo>
 
 ### 跳过确认
 
-<demo src="./__demos__/no-confirm.vue"></demo>
+<demo src="./__demos__/picker/no-confirm.vue"></demo>
 
 ### 禁用部分时间
 
-<demo src="./__demos__/disabled-parts.vue"></demo>
+<demo src="./__demos__/picker/disabled-parts.vue"></demo>
 
 ### 次日标记
 
 结束早于开始时显示「次日」，并关闭确认时的起止交换。
 
-<demo src="./__demos__/show-next-day.vue"></demo>
+<demo src="./__demos__/picker/show-next-day.vue"></demo>
 
 ## API
 

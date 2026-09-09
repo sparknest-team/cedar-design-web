@@ -48,10 +48,10 @@
     "*.less"
   ],
   "scripts": {
+    "build": "pnpm build:lib && pnpm build:doc",
     "dev": "vuepress dev docs",
     "ui:gen": "tsx scripts/generate/component.ts",
     "build:lib": "cedar-cli compile ui-build.config.mjs",
-    "compile:next": "cedar-cli compile ui-build.config.mjs",
     "build:doc": "vuepress build docs --dest dist",
     "dtsgen": "tsx scripts dtsgen 'components/**/*.{ts,tsx,vue}'",
     "watch": "vite build --watch",

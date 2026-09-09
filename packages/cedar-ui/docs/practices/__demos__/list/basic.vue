@@ -18,7 +18,7 @@
     <Card size="lg">
       <div class="c-flex c-justify-between mb-16">
         <Button status="primary" @click="createStation">
-          <Plus />
+          <c-icon-plus />
           新建
         </Button>
         <Search
@@ -110,7 +110,6 @@ import {
   Message,
   FilterForm,
   Button,
-  Plus,
   Space,
   Dialog,
   Search,

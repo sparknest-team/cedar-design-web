@@ -1,9 +1,11 @@
 <template>
   <section
     ref="root"
-    :class="classes(n(), [disabled, n('--disabled')])"
+    :class="classes(n(), [disabled, n('--disabled')], [dragActive, n('--dragging')])"
     :aria-label="messages.title"
     :aria-busy="loading || pending"
+    @dragover="previewPoint($event.clientX, $event.clientY)"
+    @dragleave="leavePreview"
   >
     <header :class="n('toolbar')">
       <div :class="n('navigation')">
@@ -98,6 +100,7 @@
           @drag-start="startDrag"
           @drag-end="clearDrag"
           @pointer-drop="dropPoint"
+          @pointer-move="previewPoint"
         >
           <template #default="slotProps"
             ><slot name="event" v-bind="slotProps">{{
@@ -118,6 +121,7 @@
             v-if="timeMode && columns.length"
             :columns="columns"
             :events="visibleEvents"
+            :preview-event="dragPreview"
             :start-hour="safeStart"
             :end-hour="safeEnd"
             :step="safeStep"
@@ -131,6 +135,7 @@
             @drag-start="startDrag"
             @drag-end="clearDrag"
             @pointer-drop="dropPoint"
+            @pointer-move="previewPoint"
           >
             <template #event="slotProps"
               ><slot name="event" v-bind="slotProps"
@@ -189,6 +194,7 @@
                 @drag-start="startDrag"
                 @drag-end="clearDrag"
                 @pointer-drop="dropPoint"
+                @pointer-move="previewPoint"
               >
                 <template #default="slotProps"
                   ><slot name="event" v-bind="slotProps"
@@ -196,6 +202,17 @@
                   ></template
                 >
               </SchedulerEventCard>
+              <div
+                v-if="previewOn(day)"
+                :class="[n('event'), n('drag-preview')]"
+                aria-hidden="true"
+                inert
+              >
+                <slot name="event" :event="dragPreview!">{{
+                  dragPreview!.title
+                }}</slot>
+                <div :class="n('preview-time')">{{ previewTime }}</div>
+              </div>
             </div>
           </div>
           <div
@@ -268,6 +285,7 @@
                     "
                     @drag-end="clearDrag"
                     @pointer-drop="dropPoint"
+                    @pointer-move="previewPoint"
                   >
                     <template #default="slotProps"
                       ><slot name="event" v-bind="slotProps">{{
@@ -275,6 +293,23 @@
                       }}</slot></template
                     >
                   </SchedulerEventCard>
+                </div>
+                <div
+                  v-for="item in timelinePreview(resource.id)"
+                  :key="`preview-${item.event.id}`"
+                  :class="[n('timeline-event'), n('drag-preview'), n('event')]"
+                  :style="{
+                    left: `${item.start * 100}%`,
+                    width: `${(item.end - item.start) * 100}%`,
+                    '--c-scheduler-lane': item.column,
+                  }"
+                  aria-hidden="true"
+                  inert
+                >
+                  <slot name="event" :event="item.event">{{
+                    item.event.title
+                  }}</slot>
+                  <span :class="n('preview-time')">{{ previewTime }}</span>
                 </div>
               </div>
             </div>
@@ -293,6 +328,7 @@
                   @drag-start="startDrag"
                   @drag-end="clearDrag"
                   @pointer-drop="dropPoint"
+                  @pointer-move="previewPoint"
                 >
                   <template #default="slotProps"
                     ><slot name="event" v-bind="slotProps"
@@ -346,6 +382,8 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
+import { projectSchedulerDrag } from "./drag";
+import type { SchedulerResize } from "./drag";
 import CButton from "../button";
 import CSelect from "../select";
 import CInput from "../input";
@@ -375,7 +413,6 @@ import {
   navigateSchedulerDate,
   isSchedulerEventInRange,
   addSchedulerDays,
-  moveSchedulerEvent,
   cloneSchedulerEvent,
   layoutSchedulerTimeline,
   SchedulerError,
@@ -416,7 +453,7 @@ const resourceStore = useSchedulerResources(
   resourceError,
 );
 const { value, mode, date, pending, error, locked, setMode, setDate, commit } =
-  useScheduler(props, emit, resourceStore.get);
+  useScheduler(props, emit, resourceStore.get, () => messages.value.untitled);
 const associatedResourceIds = computed(() => [
   ...new Set(value.value.flatMap((event) => event.resourceIds ?? [])),
 ]);
@@ -717,8 +754,50 @@ async function removeEditor(event: SchedulerEvent) {
   }
 }
 let drag:
-  | { id: string; resize: boolean; resourceId?: string; snapshot: string }
+  | {
+      id: string;
+      resize: SchedulerResize;
+      resourceId?: string;
+      snapshot: string;
+    }
   | undefined;
+const dragPreview = ref<SchedulerEvent>();
+const dragActive = ref(false);
+const previewTime = computed(() => {
+  const event = dragPreview.value;
+  if (event?.start == null || event.end == null) return "";
+  if (event.allDay) return messages.value.allDay;
+  const format = (value: NonNullable<SchedulerEvent["start"]>) =>
+    schedulerDate(value).toLocaleTimeString(locale.value, {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+  return `${format(event.start)} – ${format(event.end)}`;
+});
+function previewOn(day: Date) {
+  return (
+    dragPreview.value &&
+    isSchedulerEventInRange(dragPreview.value, {
+      start: day,
+      end: addSchedulerDays(day, 1),
+    })
+  );
+}
+function timelinePreview(id: string) {
+  const preview = dragPreview.value;
+  if (!preview?.resourceIds?.includes(id)) return [];
+  return layoutSchedulerTimeline(
+    [
+      ...visibleEvents.value.filter(
+        (event) => event.id !== preview.id && event.resourceIds?.includes(id),
+      ),
+      preview,
+    ],
+    range.value,
+    "day",
+  ).filter((item) => item.event.id === preview.id);
+}
 let dragTemplate: SchedulerEventTemplate | undefined;
 function startTemplateDrag(template: SchedulerEventTemplate, event: DragEvent) {
   clearDrag();
@@ -736,26 +815,81 @@ function startTemplateDrag(template: SchedulerEventTemplate, event: DragEvent) {
     ...template,
     resourceIds: template.resourceIds && [...template.resourceIds],
   };
+  dragActive.value = true;
   if (event.dataTransfer) {
     event.dataTransfer.effectAllowed = "copy";
     event.dataTransfer.setData("text/plain", template.title);
   }
 }
-function startDrag(event: SchedulerEvent, resize = false, resourceId?: string) {
+function startDrag(
+  event: SchedulerEvent,
+  resize: SchedulerResize = false,
+  resourceId?: string,
+) {
   clearDrag();
-  if (!locked.value && !event.readonly)
+  if (!locked.value && !event.readonly) {
     drag = {
       id: event.id,
       resize,
       resourceId,
       snapshot: JSON.stringify(event),
     };
+    dragActive.value = true;
+  }
 }
-function dropPoint(x: number, y: number) {
-  const target = document
+function pointTarget(x: number, y: number) {
+  return document
     .elementsFromPoint(x, y)
     .map((element) => element.closest<HTMLElement>("[data-scheduler-date]"))
     .find((element) => element && root.value?.contains(element));
+}
+function previewPoint(x: number, y: number) {
+  if (!drag || locked.value) {
+    dragPreview.value = undefined;
+    return;
+  }
+  const target = pointTarget(x, y);
+  if (!target) {
+    dragPreview.value = undefined;
+    return;
+  }
+  const allDay = target.dataset.schedulerAllDay;
+  dragPreview.value = projection(
+    new Date(target.dataset.schedulerDate!),
+    target.dataset.schedulerResource,
+    allDay === undefined ? undefined : allDay === "true",
+  );
+}
+function leavePreview(event: DragEvent) {
+  if (
+    !(event.relatedTarget instanceof Node) ||
+    !root.value?.contains(event.relatedTarget)
+  )
+    dragPreview.value = undefined;
+}
+function projection(at: Date, resourceId?: string, allDay?: boolean) {
+  if (
+    !drag ||
+    locked.value ||
+    props.resources.find((resource) => resource.id === resourceId)?.disabled
+  )
+    return;
+  const event = value.value.find((event) => event.id === drag!.id);
+  if (!event || event.readonly || JSON.stringify(event) !== drag.snapshot)
+    return;
+  return projectSchedulerDrag(
+    event,
+    at,
+    drag.resize,
+    safeStep.value,
+    safeStart.value,
+    drag.resourceId,
+    resourceId,
+    allDay,
+  );
+}
+function dropPoint(x: number, y: number) {
+  const target = pointTarget(x, y);
   if (!target) {
     clearDrag();
     return;
@@ -768,12 +902,15 @@ function dropPoint(x: number, y: number) {
   );
 }
 function clearDrag() {
+  dragActive.value = false;
   drag = undefined;
   dragTemplate = undefined;
+  dragPreview.value = undefined;
 }
 async function dropEvent(at: Date, resourceId?: string, allDay?: boolean) {
   const template = dragTemplate;
   const operation = drag;
+  const next = projection(at, resourceId, allDay);
   clearDrag();
   if (template) {
     if (locked.value || editorOpen.value) return;
@@ -797,36 +934,7 @@ async function dropEvent(at: Date, resourceId?: string, allDay?: boolean) {
     props.resources.find((resource) => resource.id === resourceId)?.disabled
   )
     return;
-  const event = value.value.find((event) => event.id === operation.id);
-  if (!event || JSON.stringify(event) !== operation.snapshot) return;
-  const start = new Date(at);
-  if (allDay === undefined && !event.allDay) {
-    const oldStart =
-      event.start == null ? undefined : schedulerDate(event.start);
-    start.setHours(
-      oldStart?.getHours() ?? safeStart.value,
-      oldStart?.getMinutes() ?? 0,
-    );
-  }
-  let next: SchedulerEvent;
-  if (operation.resize) {
-    next = {
-      ...cloneSchedulerEvent(event),
-      end: new Date(+start + safeStep.value * 60000).toISOString(),
-    };
-  } else {
-    next = moveSchedulerEvent(event, start, operation.resourceId, resourceId);
-    if (allDay === true && !next.allDay) {
-      next.allDay = true;
-      next.start = schedulerDateKey(start);
-      next.end = schedulerDateKey(addSchedulerDays(start, 1));
-    }
-    if (allDay === false && next.allDay) {
-      next.allDay = false;
-      next.start = start.toISOString();
-      next.end = new Date(+start + safeStep.value * 60000).toISOString();
-    }
-  }
+  if (!next) return;
   if (await commit({ type: operation.resize ? "resize" : "move", event: next }))
     announcement.value = messages.value.saved;
 }

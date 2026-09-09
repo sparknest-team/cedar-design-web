@@ -36,7 +36,7 @@
       <p>请求来源：{{ request?.source }}；业务页面也可接收相同请求。</p>
       <c-alert v-if="errorMessage" status="danger">{{ errorMessage }}</c-alert>
       <c-form :model="draft" layout="vertical" @submit="submit()">
-        <c-form-item label="任务名称" required
+        <c-form-item label="任务名称"
           ><c-input
             v-model="draft.title"
             :disabled="request?.readonly || saving"

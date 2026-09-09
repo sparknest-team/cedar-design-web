@@ -14,6 +14,22 @@ permalink: /components/scheduler/
 
 <demo src="./__demos__/basic.vue"></demo>
 
+### 拖拽虚影与实时拉伸
+
+拖拽与拉伸预览不显示额外的虚线框，保留日程自身的主题样式、半透明反馈和动态尺寸变化。
+
+时间格在普通悬停、拖拽及拉伸期间均不显示悬停背景，键盘焦点提示不受影响。
+
+标题可留空：内置编辑器、自定义编辑器的 `save` 和实例 `change` 在保存时会将空标题或纯空格标题补为“无主题”（英文环境为 `Untitled`），然后再进行校验和调用 `before-change`。独立核心函数仍要求传入有效标题。
+
+移动日程时显示保留标题、自定义插槽内容和主题色的半透明虚影，目标位置显示吸附预览及预计起止时间。日/周/资源日程视图的定时日程支持上边缘调整开始、下边缘调整结束；按 `step` 吸附，最短时长为一个步长。预览不改变原数据，松手后仍经过校验和 `before-change`，失败保留原值。
+
+按 Escape、取消指针、窗口失焦或交互被禁用会撤销预览；动画遵循系统减少动态效果设置。月、全天行和资源时间线支持移动预览，精确起止拉伸仅在定时时间网格提供。
+
+开始新的指针手势会取消残留的旧手势；自定义卡片内部阻止松手事件冒泡也不会导致其他日程跟随拉伸。拖拽只提交当前日程的数据，多资源列中的同一日程（相同 `id`）会同步显示；保存后若产生时间重叠，卡片会按重叠布局重新分列。
+
+<demo src="./__demos__/drag-feedback.vue"></demo>
+
 ### 不关联资源的计划
 
 只管理日期与时间，不需要准备人员列表；没有资源、查询回调或关联 ID 时，侧栏和编辑器自动隐藏资源选择。
@@ -305,3 +321,7 @@ import {
 | --c-scheduler-event-color      | rgb(var(--c-primary-6))        |
 | --c-scheduler-event-background | var(--c-color-primary-light-1) |
 | --c-scheduler-lane-height      | 38px                           |
+| --c-scheduler-ghost-opacity    | 0.75                           |
+| --c-scheduler-preview-opacity  | 0.85                           |
+| --c-scheduler-preview-duration | 100ms                          |
+| --c-scheduler-ghost-z-index    | 2000                           |

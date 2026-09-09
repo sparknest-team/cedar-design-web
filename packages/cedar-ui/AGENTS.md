@@ -42,7 +42,9 @@ src/<component>/
 | 跑单测 | `yarn vitest run` |
 | 跑指定组件 | `yarn vitest run src/<component>` |
 | 启动文档 | `yarn dev` |
-| 构建 | `yarn build` |
+| 构建 npm 包（根目录含依赖包） | `pnpm build:lib` |
+| 构建文档 | `pnpm build:doc` |
+| 构建 npm 包及文档 | `pnpm build` |
 
 ## 与移动端（Maple Design Mobile）的关系
 

@@ -39,6 +39,17 @@ afterEach(() => {
 });
 
 describe("Scheduler", () => {
+  test("imperative saves normalize whitespace titles before hooks without mutating input", async () => {
+    const beforeChange = vi.fn((_context: { event: SchedulerEvent }) => true);
+    const wrapper = setup({ beforeChange });
+    const event = { ...events[0], title: "   " };
+    expect(await wrapper.vm.change({ type: "update", event })).toBe(true);
+    expect(beforeChange.mock.calls[0][0].event.title).toBe("无主题");
+    expect(wrapper.emitted("update:modelValue")?.[0][0]).toMatchObject([
+      { title: "无主题" },
+    ]);
+    expect(event.title).toBe("   ");
+  });
   test.each(["day", "month", "resource-timeline", "resource-day"])(
     "template drop creates a detached draft in %s",
     async (mode) => {

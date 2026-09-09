@@ -37,6 +37,22 @@ afterEach(() => {
   document.body.innerHTML = "";
 });
 describe("Scheduler editor", () => {
+  test("custom saves normalize whitespace titles with the active language", async () => {
+    let actions: any;
+    const wrapper = await setup(
+      { messages: schedulerMessages["en-US"] },
+      {
+        default: (value: any) => {
+          actions = value;
+          return "Custom";
+        },
+      },
+    );
+    actions.save({ ...actions.event, title: "  " });
+    expect(wrapper.emitted("save")?.[0][0]).toMatchObject({
+      title: "Untitled",
+    });
+  });
   test("custom slot exposes create action and validation feedback without deleting drafts", async () => {
     let actions: any;
     const wrapper = await setup(
@@ -51,7 +67,7 @@ describe("Scheduler editor", () => {
     expect(actions.action).toBe("create");
     actions.remove();
     expect(wrapper.emitted("remove")).toBeUndefined();
-    actions.save({ ...actions.event, title: "" });
+    actions.save({ ...actions.event, end: actions.event.start });
     await wrapper.vm.$nextTick();
     expect(actions.error.code).toBe("invalid-event");
     expect(actions.errorMessage).toBeTruthy();
@@ -101,13 +117,13 @@ describe("Scheduler editor", () => {
     expect(wrapper.emitted("save")?.[0][0]).toMatchObject({ title: "Changed" });
     expect(wrapper.props("event").title).toBe("Original");
   });
-  test("invalid dates and empty titles show validation", async () => {
+  test("empty titles save as untitled", async () => {
     const wrapper = await setup();
     wrapper.findComponent(CInput).vm.$emit("update:modelValue", "");
     wrapper.findComponent(CForm).vm.$emit("submit");
     await wrapper.vm.$nextTick();
-    expect(wrapper.emitted("save")).toBeUndefined();
-    expect(wrapper.findComponent(CAlert).exists()).toBe(true);
+    expect(wrapper.emitted("save")?.[0][0]).toMatchObject({ title: "无主题" });
+    expect(wrapper.findComponent(CAlert).exists()).toBe(false);
   });
   test("unscheduling removes both dates", async () => {
     const wrapper = await setup();

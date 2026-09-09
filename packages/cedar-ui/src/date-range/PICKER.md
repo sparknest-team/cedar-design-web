@@ -14,21 +14,21 @@ permalink: /components/date-range-picker/
 
 ### 基本用法
 
-<demo src="./__demos__/basic.vue"></demo>
+<demo src="./__demos__/picker/basic.vue"></demo>
 
 ### 选择类型
 
 通过 `mode` 切换日 / 周 / 月 / 年 / 季度范围。
 
-<demo src="./__demos__/mode.vue"></demo>
+<demo src="./__demos__/picker/mode.vue"></demo>
 
 ### 带时间
 
-<demo src="./__demos__/show-time.vue"></demo>
+<demo src="./__demos__/picker/show-time.vue"></demo>
 
 ### 禁用部分日期
 
-<demo src="./__demos__/disabled-parts.vue"></demo>
+<demo src="./__demos__/picker/disabled-parts.vue"></demo>
 
 ## API
 

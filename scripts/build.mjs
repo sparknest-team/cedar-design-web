@@ -5,7 +5,7 @@ import { x } from 'tinyexec'
 const CWD = process.cwd()
 
 export function createTask(cwd, command = 'build') {
-  return () => x('pnpm', [command], { nodeOptions: { cwd } })
+  return () => x('pnpm', [command], { nodeOptions: { cwd }, throwOnError: true })
 }
 
 export async function runTask(taskName, task) {
@@ -17,6 +17,7 @@ export async function runTask(taskName, task) {
   } catch (e) {
     s.error({ text: `Build ${taskName} failed!` })
     console.error(e.toString())
+    throw e
   }
 }
 
