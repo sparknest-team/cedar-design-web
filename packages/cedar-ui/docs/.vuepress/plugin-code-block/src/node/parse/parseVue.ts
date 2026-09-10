@@ -4,6 +4,7 @@ import type { PageCodeDep } from '../utils/index.js'
 import { slugify } from '@mdit-vue/shared'
 import { readSource } from './readSource.js'
 import { markdownText } from '../utils/highlight.js'
+import { registerSource } from '../utils/source-assets'
 
 export const parseVue = (app: App, node: Node, dep: PageCodeDep): Node => {
   if (typeof node !== 'object') {
@@ -82,13 +83,12 @@ export const parseVue = (app: App, node: Node, dep: PageCodeDep): Node => {
             filePath: app.env.isDev ? dep.compPath : '',
             hideAllActions: dep.compAttrs.hideAllActions as unknown as boolean,
           },
-          content: sources.map((source) => {
+          content: sources.map((source, index) => {
             return {
               tag: 'VmiSourceCodeItem',
               attrs: {
                 name: source.name,
-                rawCode: encodeURIComponent(source.rawCode),
-                highlightCode: encodeURIComponent(source.highlightCode),
+                sourceUrl: registerSource(app, `${dep.compPath}:${index}`, source),
               },
             }
           }),

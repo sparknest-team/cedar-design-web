@@ -37,7 +37,8 @@
       </span>
     </div>
   </div>
-  <div v-show="state.isExpand" class="vmi-previewer-sources">
+  <span v-if="copyError" role="alert">{{ label('源码加载或复制失败，请重试', 'Could not load or copy source. Please retry.') }}</span>
+  <div v-if="state.isExpand" class="vmi-previewer-sources">
     <div v-if="$slots.default?.().length > 1" class="vmi-previewer-tabs">
       <div
         v-for="(component, index) of $slots.default?.()"
@@ -56,6 +57,7 @@
 
 <script lang="ts" setup>
 import { useSlots, ref, reactive, computed } from 'vue'
+import { loadSource } from '../source-data'
 import { useRoute } from 'vue-router'
 const route = useRoute()
 const english = computed(() => route.path.startsWith('/en/') || route.query.language === 'en-US')
@@ -138,12 +140,21 @@ const handleTabClick = (index) => {
  * Copy raw code
  */
 const rawCode = ref('')
+const copyError = ref(false)
 const { copy } = useClipboard({ source: rawCode })
 const handleCopy = async () => {
-  const components = slots.default()
-  rawCode.value = decodeURIComponent(components[state.active].props.rawCode)
-
-  await copy()
+  copyError.value = false
+  try {
+    const source = slots.default?.()[state.active]?.props
+    if (!source) return
+    rawCode.value = source.sourceUrl
+      ? (await loadSource(source.sourceUrl)).rawCode
+      : decodeURIComponent(source.rawCode || '')
+    await copy()
+  } catch {
+    copyError.value = true
+    return
+  }
 
   state.isCopy = true
 

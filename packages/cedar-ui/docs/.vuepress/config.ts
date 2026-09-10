@@ -13,6 +13,7 @@ import type { Plugin } from 'vite'
 import { CedarResolver, CedarStyleImports } from '@cedarjs/resolver'
 
 const projRoot = path.resolve(__dirname, '../../')
+const docsTemp = path.resolve(__dirname, process.env.NODE_ENV === 'production' ? '.temp-build' : '.temp')
 
 
 function uploadMockPlugin(): Plugin {
@@ -53,9 +54,10 @@ export default defineUserConfig({
   description: 'Cedar Design Web',
   base: (process.env.FX_BASE || '/') as any,
   port: 9991,
+  temp: docsTemp,
   // debug: true,
   theme: hopeTheme,
-  pagePatterns: ['../*.md', '**/*.md', '!.vuepress', '!node_modules', '../src/**/*.md'],
+  pagePatterns: ['../README.md', '../CHANGELOG.md', '**/*.md', '!.vuepress', '!node_modules', '../src/**/*.md'],
   markdown: {},
   locales: {
     '/': {
@@ -72,7 +74,7 @@ export default defineUserConfig({
   ],
   bundler: viteBundler({
     viteOptions: {
-      root: path.resolve(projRoot, 'docs/.vuepress/.temp/vite-root'),
+      root: path.resolve(docsTemp, 'vite-root'),
       configFile: false,
       esbuild: {
         jsx: 'preserve',
@@ -83,6 +85,7 @@ export default defineUserConfig({
         // @ts-ignore
         vueJsx(),
         components({
+          dts: process.env.CEDAR_DOCS_GENERATE_TYPES === '1',
           resolvers: [
             CedarResolver(),
           ],
@@ -92,9 +95,9 @@ export default defineUserConfig({
             CedarResolver(),
           ],
           eslintrc: {
-            enabled: true,
+            enabled: process.env.CEDAR_DOCS_GENERATE_TYPES === '1',
           },
-          dts: '../../auto-imports.d.ts',
+          dts: process.env.CEDAR_DOCS_GENERATE_TYPES === '1' ? '../../auto-imports.d.ts' : false,
         })
       ],
       css: {

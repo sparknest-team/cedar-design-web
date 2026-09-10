@@ -1,6 +1,6 @@
 import type { App } from '@vuepress/core'
 import type { PageCodeDep, PageCodeDepsHelper } from '../utils/index.js'
-import { setCache, isCacheChange } from '../utils/index.js'
+const generatedContent = new WeakMap<App, string>()
 
 /**
  * Generate component path to components map temp file
@@ -30,8 +30,8 @@ ${[...map.values()]
 `
 
   const writeTempPath = 'internal/pagesVmiComponents.js'
-  if (isCacheChange(writeTempPath, content)) {
-    setCache(writeTempPath, content)
+  if (generatedContent.get(app) !== content) {
     await app.writeTemp(writeTempPath, content)
+    generatedContent.set(app, content)
   }
 }

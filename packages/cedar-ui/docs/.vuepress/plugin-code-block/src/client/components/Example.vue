@@ -1,12 +1,13 @@
 <template>
   <div class="vmi-previewer-example" :style="[props.transform ? 'transform: translate(0px, 0px);' : '']">
     <iframe v-if="props.iframe" width="100%" :height="height" :src="localizedIframeSrc" frameborder="0"></iframe>
-    <slot v-else></slot>
+    <ClientOnly v-else><slot /></ClientOnly>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { computed } from 'vue'
+import { ClientOnly } from '@vuepress/client'
 import { useRoute } from 'vue-router'
 
 const props = defineProps({
@@ -35,4 +36,3 @@ const height = computed(() => {
   return typeof props.iframe === 'boolean' ? '150' : props.iframe
 })
 </script>
-

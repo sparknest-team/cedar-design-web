@@ -35,6 +35,7 @@ export interface PageCodeDepsHelper {
    * Get all code's that depend on the `pagePath`
    */
   get: (path: string) => PageCodeDep[]
+  clear: (path: string) => void
 
   /**
    * Handle deps when adding a code
@@ -54,6 +55,9 @@ export const createPageCodeDepsHelper = (): PageCodeDepsHelper => {
   const store = new Map<string, Map<string, PageCodeDep>>()
 
   return {
+    clear(path) {
+      store.delete(path)
+    },
     get(path) {
       return [...(store.get(path)?.values() || [])]
     },

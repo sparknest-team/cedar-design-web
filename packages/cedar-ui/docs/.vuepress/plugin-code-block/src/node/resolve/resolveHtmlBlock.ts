@@ -10,6 +10,9 @@ export const resolveHtmlBlock = (
   store: PageCodeDepsHelper,
   options: CodeBlockPluginOptions,
 ) => {
+  md.core.ruler.before('block', 'cedar-demo-dependencies', (state) => {
+    if (state.env.filePath) store.clear(state.env.filePath)
+  })
   const rawRule = md.renderer.rules.html_inline!
 
   md.renderer.rules.html_inline = function (tokens, idx, opts, env: MarkdownEnv, self) {

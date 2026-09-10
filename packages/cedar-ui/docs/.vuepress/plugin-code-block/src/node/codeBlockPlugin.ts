@@ -5,6 +5,7 @@ import { createPageCodeDepsHelper } from './utils/index.js'
 import { prepareClientIframe, prepareVmiComponents } from './prepare/index.js'
 import { vitePageHMR, vitePageProxy, vitePageIframe } from './plugins/index.js'
 import { resolveOptions, resolveHtmlBlock, resolveScriptSetup, resolvePageHeaders } from './resolve/index.js'
+import { sourceAssetsPlugin } from './utils/source-assets'
 
 const __dirname = getDirname(import.meta.url)
 
@@ -20,6 +21,7 @@ export interface CodeBlockPluginOptions {
 
 export const codeBlockPlugin = (config: Partial<CodeBlockPluginOptions> = {}): Plugin => {
   const store = createPageCodeDepsHelper()
+  let initialized = false
 
   const options = resolveOptions(config)
 
@@ -35,19 +37,20 @@ export const codeBlockPlugin = (config: Partial<CodeBlockPluginOptions> = {}): P
     async extendsPage(page, app) {
       resolveScriptSetup(page, store)
       resolvePageHeaders(page, store, options.headers)
-      app.pages && (await prepareVmiComponents(app, store))
+      if (initialized && app.env.isDev) await prepareVmiComponents(app, store)
     },
 
     async onInitialized(app) {
       await prepareClientIframe(app)
       await prepareVmiComponents(app, store)
+      initialized = true
     },
 
     extendsBundlerOptions(bundlerOptions, app) {
       if (app.options.bundler.name === '@vuepress/bundler-vite') {
         bundlerOptions.viteOptions ??= {}
         bundlerOptions.viteOptions.plugins ??= []
-        bundlerOptions.viteOptions.plugins.push(vitePageHMR(app), vitePageProxy(app), vitePageIframe(app))
+        bundlerOptions.viteOptions.plugins.push(vitePageHMR(app), vitePageProxy(app), vitePageIframe(app), sourceAssetsPlugin(app))
       }
     },
   }

@@ -7,33 +7,22 @@ export const vitePageHMR = (app: App): Plugin => {
   return {
     name: '@bfehub/vuepress-plugin-code-block:hmr',
     enforce: 'post',
+    apply: 'serve',
     async handleHotUpdate(ctx: HmrContext) {
+      const paths = new Set<string>()
       for (const module of ctx.modules) {
         for (const importer of module.importers) {
           const tempPath = importer.file
-          if (tempPath.endsWith('.html.vue')) {
-            await handlePageChange(app, tempPath)
+          if (tempPath?.endsWith('.html.vue')) {
+            paths.add(tempPath)
           }
         }
       }
+      const files = new Set(app.pages
+        .filter(page => paths.has(page.componentFilePath) && !(page as any)._PageMapPluginOptions)
+        .map(page => page.filePath)
+        .filter((file): file is string => !!file))
+      for (const file of files) await handleVuePressPageChange(app, file)
     },
-  }
-}
-
-async function handlePageChange(app: App, tempPath: string) {
-  for (const page of app.pages) {
-    if (page.componentFilePath === tempPath) {
-      // _PageMapPluginOptions from plugin-page-map/src/node/utils/createPage.ts
-      if ((page as any)._PageMapPluginOptions) {
-        // await handlePageMapPageChange(
-        //   app,
-        //   (page as any)._PageMapPluginOptions,
-        //   page.filePath
-        // )
-      } else {
-        // @ts-ignore
-        await handleVuePressPageChange(app, page.filePath)
-      }
-    }
   }
 }

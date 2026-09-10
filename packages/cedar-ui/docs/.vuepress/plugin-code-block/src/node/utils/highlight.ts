@@ -1,4 +1,5 @@
 import { createMarkdown } from '@vuepress/markdown'
+import { createHighlightCache } from './highlight-cache'
 import { createHighlighterCoreSync } from 'shiki/core'
 import { createJavaScriptRegexEngine } from 'shiki/engine/javascript'
 import js from 'shiki/langs/javascript.mjs'
@@ -15,10 +16,13 @@ const shiki = createHighlighterCoreSync({
   engine: createJavaScriptRegexEngine(),
 })
 
-export const highlight = (code: string, lang = 'text', noLineNumbers = true) => {
-  return shiki.codeToHtml(code, { lang: lang, themes: { light: 'material-theme-lighter', dark: 'catppuccin-mocha' } })
-}
+const cachedHighlight = createHighlightCache()
+const markdown = createMarkdown()
+export const highlight = (code: string, lang = 'text', noLineNumbers = true) =>
+  cachedHighlight(code, lang, () => shiki.codeToHtml(code, {
+    lang, themes: { light: 'material-theme-lighter', dark: 'catppuccin-mocha' },
+  }))
 
 export const markdownText = (text: string) => {
-  return createMarkdown().render(text)
+  return markdown.render(text)
 }
