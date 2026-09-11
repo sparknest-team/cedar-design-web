@@ -3,6 +3,7 @@ import { getCurrentInstance, inject } from 'vue'
 import { configProviderInjectionKey } from '../config-provider/context'
 import type { CedarOptions } from './types'
 import { createNamespaceFn } from '@cedarjs/shared'
+import { withPropsDefaultsSetter } from './maple/components'
 
 const COMPONENT_PREFIX = 'C'
 const CLASS_PREFIX = 'c'
@@ -41,7 +42,10 @@ export const setGlobalConfig = (app: App, options?: CedarOptions): void => {
   }
 }
 
-export type CedarComponentWithInstall<T> = T & Plugin
+export type CedarComponentWithInstall<T> = T &
+  Plugin & {
+    setPropsDefaults: (defaults: Record<string, any>) => void
+  }
 
 export interface WithInstallOptions<InstallOptions = CedarOptions> {
   components?: Component[]
@@ -66,13 +70,21 @@ export function withInstall<T = Component>(
   config: WithInstallOptions<CedarOptions> = {},
 ): CedarComponentWithInstall<T> {
   const componentWithInstall = target ?? component
+  const components = config.components ?? [component]
+
+  withPropsDefaultsSetter(componentWithInstall, (component as any).props ?? {})
+  for (const item of components) {
+    if (item !== componentWithInstall) {
+      withPropsDefaultsSetter(item, (item as any).props ?? {})
+    }
+  }
 
   ;(componentWithInstall as CedarComponentWithInstall<T>).install = (
     app: App,
     options?: CedarOptions,
   ) => {
     setGlobalConfig(app, options)
-    for (const item of config.components ?? [component]) {
+    for (const item of components) {
       const name = config.resolveName?.(item, options) ?? getComponentName(options, item.name)
       if (name) {
         app.component(name, item)

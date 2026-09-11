@@ -3,6 +3,7 @@ import type { NavMenuKey, NavMenuNode, NavMenuProps, NavMenuRenderContext } from
 export interface NavMenuContext {
   props: NavMenuProps
   selected: ComputedRef<NavMenuKey | null>
+  activeItem: ComputedRef<NavMenuKey | null>
   expanded: ComputedRef<NavMenuKey[]>
   collapsed: ComputedRef<boolean>
   theme: ComputedRef<string>
@@ -14,8 +15,9 @@ export interface NavMenuContext {
   expand(node: NavMenuNode, open: boolean): void
   register(node: NavMenuNode, element: HTMLElement | null): void
   focus(key: NavMenuKey): void
-  registerItem(id: symbol, close: () => void): () => void
+  registerItem(id: symbol, close: () => void, name?: NavMenuKey): () => void
   activateItem(id?: symbol): void
+  selectItem(name: NavMenuKey): void
   labelField: ComputedRef<string>
 }
 export const navMenuKey: InjectionKey<NavMenuContext> = Symbol('NavMenu')

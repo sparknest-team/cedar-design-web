@@ -25,4 +25,5 @@ export interface NavMenuExposed {
   scrollTo(key?: NavMenuKey | null): Promise<void>
   resize(): void
   setCollapsed(value: boolean): void
+  setActiveItem(value: NavMenuKey | null): void
 }

@@ -1,17 +1,17 @@
 <template>
   <c-space>
-    <c-menu :popup-max-height="120">
+    <c-dropdown-menu :popup-max-height="120">
       <c-button>限制为 120px</c-button>
       <template #content>
         <c-menu-option v-for="item in options" :key="item" :label="item" />
       </template>
-    </c-menu>
-    <c-menu :popup-max-height="false">
+    </c-dropdown-menu>
+    <c-dropdown-menu :popup-max-height="false">
       <c-button>不限制高度</c-button>
       <template #content>
         <c-menu-option v-for="item in options" :key="item" :label="item" />
       </template>
-    </c-menu>
+    </c-dropdown-menu>
   </c-space>
 </template>
 

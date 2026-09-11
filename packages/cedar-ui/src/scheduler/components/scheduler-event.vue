@@ -5,12 +5,16 @@
       classes(
         n('event'),
         [compact, n('event--compact')],
+        [selected && selectionMode, n('event--selected')],
         [dragging, n('event--dragging')],
+        [!canModify, n('event--static')],
+        [
+          !!event.backgroundPattern && event.backgroundPattern !== 'solid',
+          n(`event--pattern-${event.backgroundPattern}`),
+        ],
       )
     "
-    :style="
-      event.color ? { '--c-scheduler-event-color': event.color } : undefined
-    "
+    :style="eventTheme"
     :draggable="false"
     @pointerdown="pointerDown($event, false)"
     @click.capture="captureClick"
@@ -25,15 +29,17 @@
       :ripple="false"
       :disabled="disabled"
       :aria-label="label"
+      :aria-pressed="selectionMode ? !!selected : undefined"
       @click="emit('select', event)"
     >
+      <span v-if="event.milestone" aria-hidden="true">◆ </span>
       <slot :event="event">
         <span v-if="time" :class="n('event-time')">{{ time }}</span>
         <span :class="n('event-title')">{{ event.title }}</span>
       </slot>
     </CButton>
     <span
-      v-if="resizable && !disabled && !event.readonly"
+      v-if="resizable && !event.milestone && !disabled && !event.readonly"
       :class="n('resize')"
       :draggable="false"
       @pointerdown.stop="pointerDown($event, true)"
@@ -43,7 +49,7 @@
       @dragstart.stop="resizeDrag"
     />
     <span
-      v-if="resizable && !disabled && !event.readonly"
+      v-if="resizable && !event.milestone && !disabled && !event.readonly"
       :class="[n('resize'), n('resize--start')]"
       :draggable="false"
       @pointerdown.stop="pointerDown($event, 'start')"
@@ -76,7 +82,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, ref, watch } from "vue";
+import { computed, onBeforeUnmount, ref, watch } from "vue";
 import CButton from "../../button";
 import { createNamespace } from "../../_utils/global-config";
 import type { SchedulerEvent } from "../core";
@@ -87,10 +93,13 @@ const { n, classes } = createNamespace("scheduler");
 const props = withDefaults(
   defineProps<{
     event: SchedulerEvent;
+    selected?: boolean;
+    selectionMode?: boolean;
     time?: string;
     label?: string;
     disabled?: boolean;
     movable?: boolean;
+    managedPointer?: boolean;
     compact?: boolean;
     resizable?: boolean;
     resizeLabel?: string;
@@ -102,10 +111,37 @@ const emit = defineEmits<{
   select: [event: SchedulerEvent];
   "drag-start": [event: SchedulerEvent, resize: SchedulerResize];
   "drag-end": [];
+  "pointer-start": [
+    pointer: PointerEvent,
+    resize: SchedulerResize,
+    finished: (moved: boolean) => void,
+  ];
   "pointer-drop": [x: number, y: number];
   "pointer-move": [x: number, y: number];
 }>();
 defineSlots<{ default(props: { event: SchedulerEvent }): unknown }>();
+const canModify = computed(
+  () => props.movable !== false && !props.disabled && !props.event.readonly,
+);
+const eventTheme = computed(() => ({
+  ...(props.event.color
+    ? { "--c-scheduler-event-color": props.event.color }
+    : {}),
+  ...(props.event.accentColor
+    ? { "--c-scheduler-event-accent-color": props.event.accentColor }
+    : {}),
+  ...(props.event.backgroundColor
+    ? {
+        "--c-scheduler-event-background": props.event.backgroundColor,
+        ...(props.event.backgroundPattern &&
+        props.event.backgroundPattern !== "solid"
+          ? {}
+          : {
+              "--c-scheduler-event-background-image": `linear-gradient(${props.event.backgroundColor}, ${props.event.backgroundColor})`,
+            }),
+      }
+    : {}),
+}));
 function begin(event: DragEvent, resize: SchedulerResize) {
   if (props.movable === false || props.disabled || props.event.readonly) {
     event.preventDefault();
@@ -150,11 +186,58 @@ function pointerDown(event: PointerEvent, resize: SchedulerResize) {
     props.event.readonly
   )
     return;
+  if (props.managedPointer) {
+    const start = () =>
+      emit("pointer-start", event, resize, (moved) => {
+        suppressClick = moved;
+        clearTimeout(resetClick);
+        resetClick = setTimeout(() => {
+          suppressClick = false;
+        }, 0);
+      });
+    if (event.pointerType !== "touch") {
+      start();
+      return;
+    }
+    const pointerId = event.pointerId;
+    const x = event.clientX;
+    const y = event.clientY;
+    const timer = setTimeout(() => {
+      cleanup();
+      start();
+    }, 350);
+    const move = (next: PointerEvent) => {
+      if (
+        next.pointerId === pointerId &&
+        Math.hypot(next.clientX - x, next.clientY - y) >= 8
+      )
+        cleanup();
+    };
+    const end = (next: PointerEvent) => {
+      if (next.pointerId === pointerId) cleanup();
+    };
+    const cleanup = () => {
+      clearTimeout(timer);
+      document.removeEventListener("pointermove", move, true);
+      document.removeEventListener("pointerup", end, true);
+      document.removeEventListener("pointercancel", end, true);
+      cancelGesture = () => {};
+    };
+    cancelGesture();
+    cancelGesture = cleanup;
+    document.addEventListener("pointermove", move, true);
+    document.addEventListener("pointerup", end, true);
+    document.addEventListener("pointercancel", end, true);
+    return;
+  }
   detach();
   clearTimeout(resetClick);
   suppressClick = false;
   const x = event.clientX;
   const y = event.clientY;
+  const touch = event.pointerType === "touch";
+  let armed = !touch;
+  let holdTimer: ReturnType<typeof setTimeout> | undefined;
   const pointerId = event.pointerId;
   const rect = root.value!.getBoundingClientRect();
   const styles = window.getComputedStyle(root.value!);
@@ -166,11 +249,17 @@ function pointerDown(event: PointerEvent, resize: SchedulerResize) {
   }
   // Teleport must retain per-instance theme overrides instead of using body defaults.
   theme["--c-scheduler-event-background"] = styles.backgroundColor;
-  theme["--c-scheduler-event-color"] = styles.borderLeftColor;
+  theme["--c-scheduler-event-background-image"] = styles.backgroundImage;
+  theme["--c-scheduler-event-accent-color"] = styles.borderLeftColor;
   theme["--c-scheduler-color"] = styles.color;
   ghostTheme.value = theme;
   const move = (next: PointerEvent) => {
     if (next.pointerId !== pointerId) return;
+    if (!armed && Math.hypot(next.clientX - x, next.clientY - y) >= 8) {
+      cancel();
+      return;
+    }
+    if (!armed) return;
     if (!dragging.value && Math.hypot(next.clientX - x, next.clientY - y) < 5)
       return;
     if (!dragging.value) {
@@ -189,6 +278,7 @@ function pointerDown(event: PointerEvent, resize: SchedulerResize) {
     emit("pointer-move", next.clientX, next.clientY);
   };
   const cancel = () => {
+    clearTimeout(holdTimer);
     detach();
     dragging.value = false;
     ghost.value = undefined;
@@ -210,6 +300,10 @@ function pointerDown(event: PointerEvent, resize: SchedulerResize) {
   };
   // A fresh press invalidates a gesture whose release was lost outside the page.
   const restart = () => cancel();
+  if (touch)
+    holdTimer = setTimeout(() => {
+      armed = true;
+    }, 350);
   cancelGesture = cancel;
   document.addEventListener("pointerdown", restart, true);
   document.addEventListener("pointermove", move, {

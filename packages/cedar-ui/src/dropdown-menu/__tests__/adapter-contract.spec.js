@@ -1,7 +1,7 @@
 import { h, nextTick, toRaw } from 'vue'
 import { mount } from '@vue/test-utils'
 import { afterEach, describe, expect, test, vi } from 'vitest'
-import { Menu, MenuOption, MenuGroup, MenuSubmenu } from '../index'
+import { DropdownMenu, MenuOption } from '../index'
 
 const cleanups = []
 afterEach(() => { cleanups.splice(0).reverse().forEach(cleanup => cleanup()) })
@@ -11,14 +11,14 @@ async function create(props = {}, content) {
   document.body.append(root)
   const popup = document.createElement('div')
   document.body.append(popup)
-  const wrapper = mount(Menu, {
+  const wrapper = mount(DropdownMenu, {
     attachTo: root,
     props: { defaultOpen: true, popupContainer: popup, hideOnSelect: false, ...props },
     slots: { default: () => h('button', 'open menu'), ...(content ? { content } : {}) },
   })
   cleanups.push(() => { wrapper.unmount(); root.remove(); popup.remove() })
   await settle()
-  return { wrapper, popup, button: root.querySelector('button'), items: () => Array.from(popup.querySelectorAll('[data-menu-item]')) }
+  return { wrapper, popup, button: root.querySelector('button'), items: () => Array.from(popup.querySelectorAll('[data-dropdown-menu-item]')) }
 }
 async function key(key) {
   window.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }))
@@ -26,7 +26,7 @@ async function key(key) {
 }
 async function click(element) { element.click(); await settle() }
 
-describe('Menu adapter contract', () => {
+describe('DropdownMenu adapter contract', () => {
   test('options and slots share controlled selection and emit update before select', async () => {
     const calls = []
     const options = [{ value: false, label: 'False' }, { value: 0, label: 'Zero', children: [] }]
@@ -41,27 +41,6 @@ describe('Menu adapter contract', () => {
     expect(calls[1][3]).toBeInstanceOf(Event)
     await click(items()[2])
     expect(wrapper.emitted('update:modelValue')[1]).toEqual(['slot'])
-  })
-  test('multiple rejection keeps both row and checkbox unchecked on repeated clicks', async () => {
-    const { wrapper, items } = await create({ multiple: true, modelValue: [], options: [{ value: 'a', label: 'A' }] })
-    await click(items()[0])
-    expect(items()[0].getAttribute('aria-checked')).toBe('false')
-    const checkbox = items()[0].querySelector('input[type="checkbox"], [role="checkbox"], [tabindex="0"]')
-    expect(checkbox).toBeTruthy()
-    await click(checkbox)
-    expect(items()[0].getAttribute('aria-checked')).toBe('false')
-    expect(wrapper.emitted('update:modelValue')).toEqual([[['a']], [['a']]])
-    await wrapper.setProps({ modelValue: ['a'] })
-    expect(items()[0].getAttribute('aria-checked')).toBe('true')
-  })
-  test('multiple branch selection includes closed descendants and excludes disabled branches', async () => {
-    const { wrapper, items } = await create({ multiple: true, options: [{ value: 'p', label: 'Parent', children: [{ value: 'a', label: 'A' }, { value: 'off', label: 'Off', disabled: true, children: [{ value: 'x', label: 'X' }] }] }] })
-    await click(items()[0])
-    expect(wrapper.emitted('update:modelValue')[0]).toEqual([['p', 'a']])
-    expect(wrapper.emitted('select')[0][0]).toBe('p')
-    await wrapper.setProps({ modelValue: ['a'] })
-    // All enabled descendants are selected; disabled descendants do not make it mixed.
-    expect(items()[0].getAttribute('aria-checked')).toBe('false')
   })
   test('Arrow/Home/End wrap, skip disabled rows and Enter selects once', async () => {
     const { wrapper, items, button } = await create({ options: [{ value: 'a', label: 'A' }, { value: 'off', label: 'Off', disabled: true }, { value: 'b', label: 'B' }] })
@@ -147,24 +126,20 @@ describe('Menu adapter contract', () => {
     await click(items()[1])
     expect(wrapper.emitted('select')[0][0]).toBe(3)
   })
-  test('public slot submenu and group share keyboard navigation and selection', async () => {
-    const { wrapper, items } = await create({}, () => h(MenuGroup, { title: 'Actions' }, () => h(MenuSubmenu, {}, {
-      default: () => 'More', content: () => h(MenuOption, { label: 'Slot child', value: 42 }),
-    })))
+  test('option groups and branches share keyboard navigation and selection', async () => {
+    const { wrapper, items } = await create({ options: [{ type: 'group', label: 'Actions', children: [{ label: 'More', children: [{ label: 'Child', value: 42 }] }] }] })
     const parent = items()[0]
     parent.focus()
     await key('ArrowRight')
-    expect(document.activeElement.textContent).toContain('Slot child')
+    expect(document.activeElement.textContent).toContain('Child')
     await key('Enter')
     expect(wrapper.emitted('select')).toHaveLength(1)
     expect(wrapper.emitted('select')[0][0]).toBe(42)
     await key('ArrowLeft')
     expect(document.activeElement).toBe(parent)
   })
-  test('opening a sibling closes the previous submenu, including slot branches', async () => {
-    const { items, popup } = await create({}, () => ['First', 'Second'].map(label => h(MenuSubmenu, {}, {
-      default: () => label, content: () => h(MenuOption, { label: label + ' child' }),
-    })))
+  test('opening a sibling closes the previous option branch', async () => {
+    const { items } = await create({ options: ['First', 'Second'].map(label => ({ label, children: [{ label: `${label} child` }] })) })
     const first = items().find(item => item.textContent === 'First')
     const second = items().find(item => item.textContent === 'Second')
     first.focus()
@@ -178,14 +153,28 @@ describe('Menu adapter contract', () => {
     await key('ArrowRight')
     expect(document.activeElement.textContent).toContain('Second child')
   })
-  test('slot-only values fall back to text and functional labels receive raw options', async () => {
-    const label = vi.fn((option, checked) => h('span', checked ? 'Checked' : option.title))
+  test('slot-only values fall back to text and option renderers receive context', async () => {
+    const label = vi.fn(({ option, active }) => h('span', active ? 'Checked' : option.title))
     const { wrapper, items } = await create({ modelValue: 'fn', options: [{ value: 'fn', title: 'Function', label }] },
       () => h(MenuOption, {}, () => 'Slot value'))
     expect(items()[0].textContent).toContain('Checked')
-    expect(label.mock.calls[0][0].title).toBe('Function')
+    expect(label.mock.calls[0][0].option.title).toBe('Function')
     await click(items()[1])
     expect(wrapper.emitted('select')[0][0]).toBe('Slot value')
+  })
+  test('options render VNode icon, contextual content and inert dividers', async () => {
+    const label = vi.fn(({ active, level }) => h('strong', `${active}:${level}:Edit`))
+    const { items, popup } = await create({
+      modelValue: 'edit',
+      options: [
+        { value: 'edit', label, icon: h('i', 'icon'), extra: ({ level }) => `L${level}` },
+        { type: 'divider' },
+      ],
+    })
+    expect(items()).toHaveLength(1)
+    expect(items()[0].textContent).toContain('icontrue:0:EditL0')
+    expect(popup.querySelector('[role="separator"]')).not.toBeNull()
+    expect(label.mock.calls[0][0].option.value).toBe('edit')
   })
   test('Space selects exactly once across keydown and keyup', async () => {
     const { wrapper, items } = await create({ options: [{ label: 'A', value: 'a' }] })

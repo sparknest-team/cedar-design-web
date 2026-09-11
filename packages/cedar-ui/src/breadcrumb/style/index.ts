@@ -1,3 +1,3 @@
 import '../../style/index.less'
-import '../../menu/style'
+import '../../dropdown-menu/style'
 import './index.less'

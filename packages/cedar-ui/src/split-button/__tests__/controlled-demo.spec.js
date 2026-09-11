@@ -5,7 +5,7 @@ import Controlled from '../__demos__/controlled.vue'
 import SplitButton from '..'
 import Button from '../../button'
 import Space from '../../space'
-import { MenuOption } from '../../menu'
+import { MenuOption } from '../../dropdown-menu'
 
 vi.mock('@cedarjs/ui', () => ({ Message: { info: vi.fn() } }))
 vi.mock('../__demos__/locale', () => ({ t: key => key }))
@@ -22,7 +22,7 @@ test('controlled demo stays open after the external click, then closes on select
     await settle()
     expect(wrapper.text()).toContain('opened')
     expect(wrapper.find('[aria-haspopup="menu"]').attributes('aria-expanded')).toBe('true')
-    document.querySelector('[data-menu-item]').click()
+    document.querySelector('[data-dropdown-menu-item]').click()
     await settle()
     expect(wrapper.find('[aria-haspopup="menu"]').attributes('aria-expanded')).toBe('false')
     button('openMenu').element.click()

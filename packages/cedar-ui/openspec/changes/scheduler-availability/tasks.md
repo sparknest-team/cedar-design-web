@@ -1,0 +1,6 @@
+- [x] Specify working-hour and disabled-range semantics.
+- [x] Implement pure availability validation and public types.
+- [x] Enforce rules in shared commit flow and reject stale async proposals.
+- [x] Shade unavailable time-grid and hourly timeline cells.
+- [x] Add meeting-room and maintenance demos with API documentation.
+- [x] Verify tests, declarations, build, package exports and browser behavior.

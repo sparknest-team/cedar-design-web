@@ -1,0 +1,7 @@
+- [x] Define compatible scale and grouping APIs.
+- [x] Add pure time-axis and resource grouping helpers.
+- [x] Integrate hour/day timelines, scale-aware navigation and grouping.
+- [x] Add initial work-hour scrolling and fixed resource labels.
+- [x] Add controlled-state, DST coordinate, midnight and navigation tests.
+- [x] Enrich the documentation with a grouped timeline example.
+- [x] Finish final build and browser verification.

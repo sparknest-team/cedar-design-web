@@ -45,7 +45,7 @@ describe('Search', () => {
     await nextTick()
 
     expect(wrapper.find('.c-auto-complete').exists()).toBe(false)
-    expect(wrapper.findAll('.c-menu-option')).toHaveLength(3)
+    expect(wrapper.findAll('.c-dropdown-menu-option')).toHaveLength(3)
   })
 
   test('select history triggers search immediately', async () => {
@@ -57,7 +57,7 @@ describe('Search', () => {
 
     const input = wrapper.find('input.c-input__inner')
     await input.setValue('任意内容')
-    await wrapper.find('.c-menu-option').trigger('click')
+    await wrapper.find('.c-dropdown-menu-option').trigger('click')
     await nextTick()
 
     expect((input.element as HTMLInputElement).value).toBe('设备 A')

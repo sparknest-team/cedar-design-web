@@ -1,18 +1,18 @@
 <template>
-  <MenuView :options="viewOptions">
+  <DropdownMenuView :options="viewOptions">
     <template v-for="(_, slotName) in $slots" #[slotName]="slotProps">
       <slot :name="slotName" v-bind="slotProps || {}" />
     </template>
-  </MenuView>
+  </DropdownMenuView>
 </template>
 
 <script setup lang="ts">
 import { computed, inject, ref, unref, useSlots } from 'vue'
 import { createNamespace } from '../_utils/global-config'
-import MenuView from './render'
+import DropdownMenuView from './view'
 import { menuInjectionKey } from './context'
 import { panelAppearance } from './platform'
-defineOptions({ name: createNamespace('menu-panel').name })
+defineOptions({ name: createNamespace('dropdown-menu-panel').name })
 const props = defineProps({ isEmpty: Boolean, bottomOffset: { type: Number, default: 0 }, elevation: { type: [Boolean, Number], default: true }, submenu: Boolean })
 const emit = defineEmits(['scroll', 'reach-bottom'])
 const slots = useSlots()

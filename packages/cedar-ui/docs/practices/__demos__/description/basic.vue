@@ -1,25 +1,22 @@
 <template>
   <div class="p-24">
-    <Card v-loading="loading" :aria-busy="loading || undefined" subtitle="ST2022010106536">
+    <c-card v-c-loading="loading" :aria-busy="loading || undefined" subtitle="ST2022010106536">
       <template #title>
-        <Space :size="8" align="center">
+        <c-space :size="8" align="center">
           <span>销售项目名称</span>
-          <Tag color="#F0FCFC" style="color: #08bebe">立项中</Tag>
-        </Space>
+          <c-tag color="#F0FCFC" style="color: #08bebe">立项中</c-tag>
+        </c-space>
       </template>
       <template #title-action>
-        <Button :disabled="loading">操作</Button>
+        <c-button :disabled="loading">操作</c-button>
       </template>
-      <Descriptions :data="data" layout="inline-auto" />
-      <Descriptions :data="data2" layout="inline-auto" />
-    </Card>
+      <c-descriptions :data="data" layout="inline-auto" />
+      <c-descriptions :data="data2" layout="inline-auto" />
+    </c-card>
   </div>
 </template>
 <script lang="ts" setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { vLoading } from '../../../../src/loading'
-import '../../../../src/loading/style'
-import { Descriptions, Card, Tag, Button, Space } from '@cedarjs/ui'
 
 const loading = ref(true)
 let timer: ReturnType<typeof setTimeout> | undefined
@@ -52,5 +49,3 @@ const data2 = ref([
   },
 ])
 </script>
-
-<style lang="scss" scoped></style>

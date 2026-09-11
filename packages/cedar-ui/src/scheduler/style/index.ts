@@ -10,4 +10,5 @@ import "../../form/style";
 import "../../tag/style";
 import "../../empty/style";
 import "../../alert/style";
+import "../../popover/style";
 import "./index.less";

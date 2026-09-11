@@ -26,15 +26,15 @@ Cedar 色板与 Maple 结构对齐：**RGB 通道色阶** + **语义色** + **�
 
 ### StyleProvider 切换
 
-`StyleProvider(Themes.dark)` 会同步设置 `html[cedar-theme=dark]`；`StyleProvider(null)` 移除属性并恢复默认。与 Maple 一致。
+`StyleProvider.setStyleVars(Themes.dark)` 会同步设置 `html[cedar-theme=dark]`；`StyleProvider.setStyleVars(null)` 移除属性并恢复默认。与 Maple 一致。
 
 ```vue
 <template>
   <c-space>
-    <c-button status="primary" @click="StyleProvider(null)">亮色</c-button>
-    <c-button status="primary" @click="StyleProvider(Themes.dark)">暗色</c-button>
-    <c-button status="primary" @click="StyleProvider(Themes.md3Light)">MD3 亮色</c-button>
-    <c-button status="primary" @click="StyleProvider(Themes.md3Dark)">MD3 暗色</c-button>
+    <c-button status="primary" @click="StyleProvider.setStyleVars(null)">亮色</c-button>
+    <c-button status="primary" @click="StyleProvider.setStyleVars(Themes.dark)">暗色</c-button>
+    <c-button status="primary" @click="StyleProvider.setStyleVars(Themes.md3Light)">MD3 亮色</c-button>
+    <c-button status="primary" @click="StyleProvider.setStyleVars(Themes.md3Dark)">MD3 暗色</c-button>
   </c-space>
 </template>
 
@@ -91,7 +91,7 @@ const customTheme = {
   '--c-brand-6': '255, 0, 0',
 }
 
-StyleProvider(customTheme)
+StyleProvider.setStyleVars(customTheme)
 ```
 
 ### 与文档站同步

@@ -18,7 +18,7 @@ import { useSize } from '../_hooks/use-size'
 import { SelectOptionData } from '../select'
 import Select from '../select'
 import type { SearchResult } from './result'
-import Menu, { MenuOption } from '../menu'
+import DropdownMenu, { MenuOption } from '../dropdown-menu'
 
 function searchHistoryLocal(max: number) {
   const maxLength = max
@@ -280,7 +280,7 @@ export default defineComponent({
               }}
             />
           )}
-          <Menu
+          <DropdownMenu
             open={historyVisible.value}
             trigger='focus'
             placement='bottom-start'
@@ -312,7 +312,7 @@ export default defineComponent({
               onClear={(ev: MouseEvent) => handleValueChange('', ev)}
               onPress-enter={handleClick}
             />
-          </Menu>
+          </DropdownMenu>
           {props.searchButton && renderButton()}
         </InputGroup>
       </div>

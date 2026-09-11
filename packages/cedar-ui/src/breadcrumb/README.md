@@ -76,7 +76,7 @@ permalink: /components/breadcrumb/
 | separator      | 分隔符文字   | `string \| number`            | `-`    |
 | href           | 跳转链接     | `string`                      | `-`    |
 | droplist       | 下拉菜单内容 | `BreadcrumbRoute['children']` | `-`    |
-| dropdown-props | 下拉菜单属性 | `MenuProps`                   | `-`    |
+| dropdown-props | 下拉菜单属性 | `DropdownMenuProps`           | `-`    |
 
 ### BreadcrumbItem Events
 

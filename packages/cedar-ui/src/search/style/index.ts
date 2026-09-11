@@ -1,6 +1,6 @@
 import '../../style/index.less'
 import '../../button/style'
 import '../../input/style'
-import '../../menu/style'
+import '../../dropdown-menu/style'
 import '../../select/style'
 import './index.less'

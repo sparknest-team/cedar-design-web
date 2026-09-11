@@ -1,0 +1,5 @@
+- [x] Add strict business-calendar date lookup and availability adapter.
+- [x] Integrate calendar candidate selection and split cloning.
+- [x] Add shared settlement/booking demo with simulated holidays and makeup days.
+- [x] Cover calendar, recurrence, split and out-of-view booking regression tests.
+- [x] Complete type, package, build and browser checks.

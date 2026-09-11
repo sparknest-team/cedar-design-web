@@ -81,7 +81,7 @@ permalink: /components/split-button/
 | trigger-button-props | 菜单触发按钮属性                          | `Partial<ButtonProps>`                           |    `-`    |
 | auto-loading         | 主按钮异步点击时是否自动加载              | `boolean`                                        |  `false`  |
 | trigger              | 菜单触发方式                              | `'hover' \| 'click' \| 'focus' \| 'contextMenu'` |  `click`  |
-| placement            | 菜单弹出位置                              | `MenuPosition`（标准十二方位）                   | `bottom`  |
+| placement            | 菜单弹出位置                              | `DropdownMenuPosition`（标准十二方位）           | `bottom`  |
 | popup-container      | 菜单挂载容器                              | `PopupContainer`                                 |    `-`    |
 | popup-max-height     | 菜单最大高度                              | `boolean \| number`                              |  `true`   |
 | popup-class          | 菜单浮层类名                              | `string \| array \| object`                      |    `-`    |
@@ -118,7 +118,7 @@ permalink: /components/split-button/
 
 `click` 与 Button 一样是消费 Promise 返回值的 `onClick` 控制回调 Prop，支持 `@click`，不再通过 `emit` 重复分发。与 `button-props.onClick` 同时设置时，各执行一次。
 
-两端主体、Props、样式依赖入口及契约测试独立同源复制；菜单定位由各端 Menu 适配，不共享实例或运行时。
+两端主体、Props、样式依赖入口及契约测试独立同源复制；Cedar 菜单定位由 DropdownMenu 适配，不共享实例或运行时。
 
 ## 类型定义
 

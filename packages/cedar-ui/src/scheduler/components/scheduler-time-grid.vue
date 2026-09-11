@@ -1,5 +1,7 @@
 <template>
   <div
+    ref="root"
+    @click.capture="suppressRangeClick"
     :class="n('time-grid')"
     :style="{ '--c-scheduler-columns': columns.length }"
   >
@@ -35,7 +37,9 @@
           v-for="event in allDayEvents(column)"
           :key="event.id"
           :event="event"
-          :movable="!locked"
+          :selected="selectedKeys?.includes(event.id)"
+          :selection-mode="selectionMode"
+          :movable="!locked && !selectionMode"
           :disabled="disabled"
           :label="event.title"
           compact
@@ -91,9 +95,30 @@
           variant="text"
           :elevation="false"
           :ripple="false"
-          :class="n('time-cell')"
+          :class="[
+            n('time-cell'),
+            {
+              [n('cell--unavailable')]: isUnavailable?.(
+                atMinute(column.date, minute),
+                atMinute(column.date, Math.min(minute + step, endHour * 60)),
+                column.resource?.id,
+              ),
+            },
+          ]"
+          :title="
+            isUnavailable?.(
+              atMinute(column.date, minute),
+              atMinute(column.date, Math.min(minute + step, endHour * 60)),
+              column.resource?.id,
+            )
+              ? messages.unavailable
+              : undefined
+          "
           :data-scheduler-date="atMinute(column.date, minute).toISOString()"
           :data-scheduler-resource="column.resource?.id"
+          :data-scheduler-duration="step"
+          :data-scheduler-column="column.key"
+          @pointerdown="beginRange($event, column)"
           data-scheduler-all-day="false"
           :disabled="locked || column.resource?.disabled"
           :aria-label="`${messages.add}: ${column.label} ${formatMinute(minute)}`"
@@ -115,20 +140,60 @@
             )
           "
         />
+        <div
+          v-if="selection?.key === column.key"
+          :class="[n('drag-preview'), n('range-selection')]"
+          :style="selectionStyle"
+          aria-hidden="true"
+          inert
+        >
+          {{
+            formatMinute(
+              selection!.range.start.getHours() * 60 +
+                selection!.range.start.getMinutes(),
+            )
+          }}
+          –
+          {{
+            formatMinute(
+              selection!.range.end.getHours() * 60 +
+                selection!.range.end.getMinutes(),
+            )
+          }}
+        </div>
+        <div
+          v-if="
+            now &&
+            getSchedulerNowPosition(now, column.date, startHour, endHour) !==
+              undefined
+          "
+          :class="n('now-indicator')"
+          :style="{
+            top: `${getSchedulerNowPosition(now!, column.date, startHour, endHour)}%`,
+          }"
+          role="img"
+          :aria-label="`${messages.currentTime}: ${now.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit', hour12: false })}`"
+        />
         <div :class="n('event-layer')">
           <div
-            v-for="item in positioned(column)"
+            v-for="item in visiblePositioned(column)"
             :key="item.event.id"
-            :class="n('positioned-event')"
+            :class="[
+              n('positioned-event'),
+              stacked(item) && n('positioned-event--stack'),
+            ]"
+            @click.capture="stackClick($event, item)"
             :style="position(item)"
           >
             <SchedulerEventCard
               :event="item.event"
-              :movable="!locked"
+              :selected="selectedKeys?.includes(item.event.id)"
+              :selection-mode="selectionMode"
+              :movable="!locked && !selectionMode"
               :time="formatTime(item.event)"
               :label="`${item.event.title} ${formatTime(item.event)}`"
               :disabled="disabled"
-              :resizable="!locked"
+              :resizable="!locked && !selectionMode"
               :resize-label="messages.resize"
               :resize-start-label="messages.resizeStart"
               @select="emit('select', item.event)"
@@ -149,11 +214,49 @@
               >
             </SchedulerEventCard>
           </div>
+          <CPopover
+            v-for="group in overflowGroups(column)"
+            :key="group.key"
+            trigger="click"
+            :open="openOverlap === group.key"
+            :title="moreLabel(group.hidden.length)"
+            :content-class="n('overlap-more-content')"
+            @update:open="setOpenOverlap(group.key, $event)"
+          >
+            <div
+              :class="n('overlap-more-position')"
+              :style="overflowPosition(group)"
+            >
+              <CButton
+                variant="text"
+                size="xs"
+                block
+                :disabled="disabled"
+                :class="n('overlap-more')"
+                >{{ moreLabel(group.hidden.length) }}</CButton
+              >
+            </div>
+            <template #content>
+              <CButton
+                v-for="item in group.items"
+                :key="item.event.id"
+                variant="text"
+                block
+                :disabled="disabled"
+                :class="n('month-more-event')"
+                @click="selectFromOverlap(item.event)"
+                >{{ formatTime(item.event) }} {{ item.event.title }}</CButton
+              >
+            </template>
+          </CPopover>
           <div
             v-for="item in previewItems(column)"
             :key="`preview-${item.event.id}`"
             :class="[n('positioned-event'), n('drag-preview')]"
-            :style="position(item)"
+            :style="{
+              ...position(item),
+              ...(stacked(item) ? { zIndex: item.columns + 1 } : {}),
+            }"
             aria-hidden="true"
             inert
           >
@@ -179,12 +282,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref, onBeforeUnmount, watch } from "vue";
 import CButton from "../../button";
+import CPopover from "../../popover";
 import { createNamespace } from "../../_utils/global-config";
 import SchedulerEventCard from "./scheduler-event.vue";
 import {
   layoutSchedulerEvents,
+  getSchedulerNowPosition,
   isSchedulerEventInRange,
   addSchedulerDays,
   schedulerDate,
@@ -195,6 +300,10 @@ import type {
   SchedulerLayoutItem,
 } from "../core";
 import type { SchedulerMessages } from "../locale";
+import {
+  getSchedulerCellDate,
+  getSchedulerSelectionRange,
+} from "../core/interaction";
 import type { SchedulerResize } from "../drag";
 
 defineOptions({ name: createNamespace("scheduler-time-grid").name });
@@ -206,11 +315,19 @@ const props = defineProps<{
     label: string;
     resource?: SchedulerResource;
   }[];
+  isUnavailable?: (start: Date, end: Date, resourceId?: string) => boolean;
   events: SchedulerEvent[];
+  eventLayout?: "stack" | "columns";
+  overlapEventLimit?: number;
+  now?: Date;
+  selectedKeys?: string[];
+  selectionMode?: boolean;
   previewEvent?: SchedulerEvent;
   startHour: number;
   endHour: number;
   step: number;
+  snapDuration?: number;
+  dragToCreate?: boolean;
   disabled: boolean;
   locked: boolean;
   messages: SchedulerMessages;
@@ -218,6 +335,7 @@ const props = defineProps<{
 }>();
 const emit = defineEmits<{
   select: [event: SchedulerEvent];
+  "create-range": [start: Date, end: Date, resourceId?: string];
   create: [date: Date, resourceId: string | undefined, allDay: boolean];
   drop: [date: Date, resourceId: string | undefined, allDay: boolean];
   "drag-start": [
@@ -236,6 +354,145 @@ defineSlots<{
     date: Date;
   }): unknown;
 }>();
+const root = ref<HTMLElement>();
+const openOverlap = ref("");
+const selection = ref<{ key: string; range: { start: Date; end: Date } }>();
+const selectionStyle = computed(() => {
+  if (!selection.value) return {};
+  const { start, end } = selection.value.range;
+  const minute = start.getHours() * 60 + start.getMinutes();
+  const length = (props.endHour - props.startHour) * 60;
+  return {
+    top: `${((minute - props.startHour * 60) / length) * 100}%`,
+    height: `${((+end - +start) / 60000 / length) * 100}%`,
+  };
+});
+let cancelRange = () => {};
+let ignoreClick = false;
+let clickTimer: ReturnType<typeof setTimeout> | undefined;
+function suppressRangeClick(event: MouseEvent) {
+  if (ignoreClick) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  }
+}
+function beginRange(
+  pointer: PointerEvent,
+  column: (typeof props.columns)[number],
+) {
+  if (
+    !props.dragToCreate ||
+    props.locked ||
+    column.resource?.disabled ||
+    pointer.button !== 0
+  )
+    return;
+  cancelRange();
+  const snap = props.snapDuration ?? props.step;
+  const origin = pointer.currentTarget as HTMLElement;
+  const resolve = (element: HTMLElement, y: number) => {
+    const rect = element.getBoundingClientRect();
+    return getSchedulerCellDate(
+      element.dataset.schedulerDate!,
+      props.step,
+      rect.height > 0 ? (y - rect.top) / rect.height : 0,
+      snap,
+    );
+  };
+  const start = resolve(origin, pointer.clientY);
+  let end = start,
+    moved = false;
+  const touch = pointer.pointerType === "touch";
+  let armed = !touch;
+  let holdTimer: ReturnType<typeof setTimeout> | undefined;
+  const move = (event: PointerEvent) => {
+    if (event.pointerId !== pointer.pointerId) return;
+    if (
+      !armed &&
+      Math.hypot(
+        event.clientX - pointer.clientX,
+        event.clientY - pointer.clientY,
+      ) >= 8
+    ) {
+      cancelRange();
+      return;
+    }
+    if (!armed) return;
+    if (
+      !moved &&
+      Math.hypot(
+        event.clientX - pointer.clientX,
+        event.clientY - pointer.clientY,
+      ) < 5
+    )
+      return;
+    const target = document
+      .elementsFromPoint(event.clientX, event.clientY)
+      .map((el) => el.closest<HTMLElement>("[data-scheduler-column]"))
+      .find(
+        (el) =>
+          el &&
+          root.value?.contains(el) &&
+          el.dataset.schedulerColumn === column.key,
+      );
+    if (!target) return;
+    moved = true;
+    event.preventDefault();
+    end = resolve(target, event.clientY);
+    const range = getSchedulerSelectionRange(start, end, snap);
+    const boundary = new Date(column.date);
+    boundary.setHours(props.endHour, 0, 0, 0);
+    if (+range.end > +boundary) range.end = boundary;
+    selection.value = { key: column.key, range };
+  };
+  const up = (event: PointerEvent) => {
+    if (event.pointerId !== pointer.pointerId) return;
+    const range = selection.value?.range;
+    cancelRange();
+    if (moved && range && !props.locked) {
+      ignoreClick = true;
+      clickTimer = setTimeout(() => {
+        ignoreClick = false;
+      }, 0);
+      emit("create-range", range.start, range.end, column.resource?.id);
+    }
+  };
+  const key = (event: KeyboardEvent) => {
+    if (event.key === "Escape") cancelRange();
+  };
+  const cancel = () => cancelRange();
+  cancelRange = () => {
+    clearTimeout(holdTimer);
+    document.removeEventListener("pointermove", move, true);
+    document.removeEventListener("pointerup", up, true);
+    document.removeEventListener("pointercancel", cancel, true);
+    document.removeEventListener("keydown", key);
+    window.removeEventListener("blur", cancel);
+    selection.value = undefined;
+    cancelRange = () => {};
+  };
+  if (touch)
+    holdTimer = setTimeout(() => {
+      armed = true;
+    }, 350);
+  document.addEventListener("pointermove", move, {
+    capture: true,
+    passive: false,
+  });
+  document.addEventListener("pointerup", up, true);
+  document.addEventListener("pointercancel", cancel, true);
+  document.addEventListener("keydown", key);
+  window.addEventListener("blur", cancel);
+}
+watch(
+  () => [props.locked, props.columns, props.dragToCreate],
+  () => cancelRange(),
+  { deep: true },
+);
+onBeforeUnmount(() => {
+  cancelRange();
+  clearTimeout(clickTimer);
+});
 const minutes = computed(() =>
   Array.from(
     {
@@ -275,6 +532,72 @@ function positioned(column: (typeof props.columns)[number]) {
     props.endHour,
   );
 }
+type OverlapGroup = {
+  key: string;
+  items: SchedulerLayoutItem[];
+  hidden: SchedulerLayoutItem[];
+  start: number;
+  end: number;
+  columns: number;
+};
+function grouped(column: (typeof props.columns)[number]) {
+  const groups: SchedulerLayoutItem[][] = [];
+  for (const item of positioned(column).sort((a, b) => a.start - b.start)) {
+    const current = groups.at(-1);
+    if (!current || item.start >= Math.max(...current.map((i) => i.end)))
+      groups.push([item]);
+    else current.push(item);
+  }
+  return groups;
+}
+function overflowGroups(
+  column: (typeof props.columns)[number],
+): OverlapGroup[] {
+  const limit = props.overlapEventLimit;
+  if (!limit) return [];
+  return grouped(column).flatMap((items, index) => {
+    const columns = Math.max(...items.map((item) => item.columns));
+    const hidden = items.filter((item) => item.column >= limit);
+    if (columns <= limit || !hidden.length) return [];
+    return [
+      {
+        key: `${column.key}-${index}-${items.map((item) => item.event.id).join("-")}`,
+        items,
+        hidden,
+        start: Math.min(...items.map((item) => item.start)),
+        end: Math.max(...items.map((item) => item.end)),
+        columns,
+      },
+    ];
+  });
+}
+function visiblePositioned(column: (typeof props.columns)[number]) {
+  const limit = props.overlapEventLimit;
+  return limit
+    ? positioned(column).filter(
+        (item) => item.columns <= limit || item.column < limit,
+      )
+    : positioned(column);
+}
+function overflowPosition(group: OverlapGroup) {
+  const duration = (props.endHour - props.startHour) * 60;
+  const limit = props.overlapEventLimit ?? group.columns;
+  return {
+    top: `${((group.start - props.startHour * 60) / duration) * 100}%`,
+    height: `${((group.end - group.start) / duration) * 100}%`,
+    left: `${(limit / group.columns) * 100}%`,
+    width: `${100 - (limit / group.columns) * 100}%`,
+  };
+}
+const moreLabel = (count: number) =>
+  props.messages.moreEvents.replace("{count}", String(count));
+function setOpenOverlap(key: string, open: boolean) {
+  openOverlap.value = open ? key : "";
+}
+function selectFromOverlap(event: SchedulerEvent) {
+  openOverlap.value = "";
+  emit("select", event);
+}
 function previewBelongs(column: (typeof props.columns)[number]) {
   const event = props.previewEvent;
   return (
@@ -296,13 +619,36 @@ function previewItems(column: (typeof props.columns)[number]) {
     props.endHour,
   ).filter((item) => item.event.id === preview.id);
 }
+function stacked(item: SchedulerLayoutItem) {
+  return props.eventLayout === "stack" && item.columns > 1;
+}
+function stackClick(event: MouseEvent, item: SchedulerLayoutItem) {
+  if (
+    !stacked(item) ||
+    props.selectionMode ||
+    event.detail === 0 ||
+    props.disabled
+  )
+    return;
+  (event.currentTarget as HTMLElement)
+    .querySelector<HTMLButtonElement>("button:not(:disabled)")
+    ?.focus();
+}
 function position(item: SchedulerLayoutItem) {
   const duration = (props.endHour - props.startHour) * 60;
   return {
     top: `${((item.start - props.startHour * 60) / duration) * 100}%`,
     height: `${((item.end - item.start) / duration) * 100}%`,
     left: `${(item.column / item.columns) * 100}%`,
-    width: `${100 / item.columns}%`,
+    width: stacked(item)
+      ? `${100 - (item.column / item.columns) * 100}%`
+      : `${100 / item.columns}%`,
+    ...(stacked(item)
+      ? {
+          "--c-scheduler-stack-order": item.column,
+          "--c-scheduler-stack-count": item.columns,
+        }
+      : {}),
   };
 }
 function formatTime(event: SchedulerEvent) {

@@ -1,0 +1,5 @@
+- [x] Define split proposal, termination and exception-policy contracts.
+- [x] Implement boundary validation, immutable prefix/tail split and cancellation.
+- [x] Add scope selection, protected exceptions and failure demo.
+- [x] Cover split boundaries, counts, moved exceptions, readonly/invalid input and data isolation.
+- [x] Verify integration tests, type contracts, build, package and browser behavior.

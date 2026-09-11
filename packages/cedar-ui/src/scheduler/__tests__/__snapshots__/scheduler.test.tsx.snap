@@ -1,7 +1,7 @@
 // Vitest Snapshot v1
 
 exports[`Scheduler > public registration, props and empty rendering 1`] = `
-"<section class=\\"c-scheduler\\" aria-label=\\"任务日程\\" aria-busy=\\"false\\">
+"<section class=\\"c-scheduler\\" aria-label=\\"任务日程\\" aria-busy=\\"false\\" tabindex=\\"-1\\">
   <header class=\\"c-scheduler__toolbar\\">
     <div class=\\"c-scheduler__navigation\\"><button class=\\"c-button c-button--size-md c-button--status-default c-button--variant-default c-elevation--2\\" type=\\"button\\" aria-label=\\"上一页\\">
         <!--v-if-->
@@ -22,13 +22,17 @@ exports[`Scheduler > public registration, props and empty rendering 1`] = `
         <div class=\\"c-field-decorator__border\\"></div>
         <div class=\\"c-field-decorator__border-state\\"></div></span>
       </div>
-      <!----><button class=\\"c-button c-button--size-md c-button--status-primary c-button--variant-default c-elevation--2\\" type=\\"button\\">
+      <!---->
+      <!--v-if-->
+      <!--v-if-->
+      <!--v-if--><button class=\\"c-button c-button--size-md c-button--status-primary c-button--variant-default c-elevation--2\\" type=\\"button\\">
         <!--v-if-->
         <!--v-if--><span class=\\"c-button__content\\">新建日程</span>
         <div class=\\"c-hover-overlay\\"></div>
       </button>
     </div>
   </header>
+  <!--v-if-->
   <!--v-if-->
   <!--v-if-->
   <div class=\\"c-scheduler__workspace\\">
@@ -51,9 +55,12 @@ exports[`Scheduler > public registration, props and empty rendering 1`] = `
           <!---->
         </div>
       </div>
+      <!--v-if-->
     </main>
   </div>
   <div class=\\"c-scheduler__live\\" role=\\"status\\" aria-live=\\"polite\\"></div>
   <!--v-if-->
+  <!--teleport start-->
+  <!--teleport end-->
 </section>"
 `;

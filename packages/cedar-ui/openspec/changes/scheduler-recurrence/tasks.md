@@ -1,0 +1,5 @@
+- [x] Define recurrence/exception types and local-calendar semantics.
+- [x] Implement daily/weekly expansion, limits and exception replacement.
+- [x] Integrate single-occurrence editing, deletion, standalone creation and restore in demo.
+- [x] Test intervals/count/until, multi-day bounds, identity, moved/cancelled exceptions and demo behavior.
+- [x] Verify types, build, package contracts, timezone behavior and browser interactions.

@@ -1,57 +1,57 @@
 <template>
   <c-space>
-    <c-menu placement="bottom-start">
+    <c-dropdown-menu placement="bottom-start">
       <c-button>Bottom Left</c-button>
       <template #content>
         <c-menu-option>Option 1</c-menu-option>
         <c-menu-option>Option 2</c-menu-option>
         <c-menu-option>Option 3</c-menu-option>
       </template>
-    </c-menu>
+    </c-dropdown-menu>
 
-    <c-menu placement="bottom">
+    <c-dropdown-menu placement="bottom">
       <c-button>Bottom</c-button>
       <template #content>
         <c-menu-option>Option 1</c-menu-option>
         <c-menu-option>Option 2</c-menu-option>
         <c-menu-option>Option 3</c-menu-option>
       </template>
-    </c-menu>
+    </c-dropdown-menu>
 
-    <c-menu placement="bottom-end">
+    <c-dropdown-menu placement="bottom-end">
       <c-button>Bottom Right</c-button>
       <template #content>
         <c-menu-option>Option 1</c-menu-option>
         <c-menu-option>Option 2</c-menu-option>
         <c-menu-option>Option 3</c-menu-option>
       </template>
-    </c-menu>
+    </c-dropdown-menu>
 
-    <c-menu placement="top-start">
+    <c-dropdown-menu placement="top-start">
       <c-button>Top Left</c-button>
       <template #content>
         <c-menu-option>Option 1</c-menu-option>
         <c-menu-option>Option 2</c-menu-option>
         <c-menu-option>Option 3</c-menu-option>
       </template>
-    </c-menu>
+    </c-dropdown-menu>
 
-    <c-menu placement="top">
+    <c-dropdown-menu placement="top">
       <c-button>Top</c-button>
       <template #content>
         <c-menu-option>Option 1</c-menu-option>
         <c-menu-option>Option 2</c-menu-option>
         <c-menu-option>Option 3</c-menu-option>
       </template>
-    </c-menu>
+    </c-dropdown-menu>
 
-    <c-menu placement="top-end">
+    <c-dropdown-menu placement="top-end">
       <c-button>Top Right</c-button>
       <template #content>
         <c-menu-option>Option 1</c-menu-option>
         <c-menu-option>Option 2</c-menu-option>
         <c-menu-option>Option 3</c-menu-option>
       </template>
-    </c-menu>
+    </c-dropdown-menu>
   </c-space>
 </template>

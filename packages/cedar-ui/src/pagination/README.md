@@ -130,7 +130,7 @@ permalink: /components/pagination/
 
 两端支持相同配置：`disabled?: boolean`、`placement?: 'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end'`、`popupContainer?: string | HTMLElement | false`、`class?: string`、`style?: CSSProperties`。外层 disabled 优先。默认 placement 为 bottom-start。
 
-此配置不再透传任意 SelectProps/MenuProps。分页值、选项和尺寸分别使用 page-size、page-size-options、size。
+此配置不再透传任意 SelectProps/DropdownMenuProps。分页值、选项和尺寸分别使用 page-size、page-size-options、size。
 
 ## 类型定义
 

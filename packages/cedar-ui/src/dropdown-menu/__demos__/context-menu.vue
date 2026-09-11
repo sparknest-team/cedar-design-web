@@ -1,5 +1,5 @@
 <template>
-  <c-menu trigger="contextMenu" alignPoint :style="{ display: 'block' }">
+  <c-dropdown-menu trigger="contextMenu" alignPoint :style="{ display: 'block' }">
     <div
       :style="{
         display: 'flex',
@@ -16,7 +16,7 @@
       <c-menu-option>Option 2</c-menu-option>
       <c-menu-option>Option 3</c-menu-option>
     </template>
-  </c-menu>
+  </c-dropdown-menu>
 </template>
 
 <script lang="ts" setup>

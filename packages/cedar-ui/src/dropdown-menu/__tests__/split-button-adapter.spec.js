@@ -1,11 +1,11 @@
 import { mount } from '@vue/test-utils'
 import { nextTick } from 'vue'
 import { expect, test, vi } from 'vitest'
-import Menu from '..'
+import DropdownMenu from '..'
 import Trigger from '../../trigger'
 
 test('screen offsets and popup class reach Trigger; resize and disabled methods are respected', async () => {
-  const wrapper = mount(Menu, {
+  const wrapper = mount(DropdownMenu, {
     props: { popupClass: ['custom'], offsetX: '12px', offsetY: -4, popupContainer: false },
     slots: { default: '<button>Open</button>' },
   })

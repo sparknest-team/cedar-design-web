@@ -1,5 +1,9 @@
 @import "../../style/theme/index.less";
 :root {
+  --c-scheduler-stack-focus-step: 1;
+  --c-scheduler-dependency-width: 2px;
+  --c-scheduler-virtual-height: 480px;
+  --c-scheduler-unavailable-background: var(--c-color-fill-2);
   --c-scheduler-dragging-opacity: 0.55;
   --c-scheduler-ghost-opacity: 0.75;
   --c-scheduler-ghost-z-index: 2000;
@@ -23,12 +27,18 @@
   --c-scheduler-gutter-width: 64px;
   --c-scheduler-column-min-width: 120px;
   --c-scheduler-slot-height: 36px;
+  --c-scheduler-weekday-count: 7;
   --c-scheduler-month-cell-height: 124px;
   --c-scheduler-heading-height: 44px;
   --c-scheduler-subtle-background: var(--c-color-fill-1);
   --c-scheduler-selected-background: var(--c-color-primary-light-1);
   --c-scheduler-event-color: rgb(var(--c-primary-6));
+  --c-scheduler-event-accent-color: var(--c-scheduler-event-color);
   --c-scheduler-event-background: var(--c-color-primary-light-1);
+  --c-scheduler-event-background-image: linear-gradient(
+    var(--c-scheduler-event-background),
+    var(--c-scheduler-event-background)
+  );
   --c-scheduler-event-radius: 4px;
   --c-scheduler-event-gap: 2px;
   --c-scheduler-event-padding: 4px;
@@ -36,11 +46,16 @@
   --c-scheduler-event-font-size: 12px;
   --c-scheduler-event-min-height: 20px;
   --c-scheduler-resize-height: 6px;
+  --c-scheduler-resource-z-index: 2;
+  --c-scheduler-axis-cell-width: 96px;
   --c-scheduler-timeline-min-width: 1000px;
   --c-scheduler-resource-width: 150px;
   --c-scheduler-lane-height: 38px;
   --c-scheduler-font-size: 14px;
   --c-scheduler-line-height: 1.5;
   --c-scheduler-focus-color: rgb(var(--c-primary-6));
+  --c-scheduler-now-color: rgb(var(--c-danger-6));
+  --c-scheduler-now-width: 2px;
+  --c-scheduler-now-z-index: 3;
   --c-scheduler-focus-width: 2px;
 }

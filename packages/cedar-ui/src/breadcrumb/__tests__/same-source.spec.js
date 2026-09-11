@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils'
 import { renderToString } from '@vue/server-renderer'
 import { describe, expect, test, vi } from 'vitest'
 import { Breadcrumb, BreadcrumbItem } from '../index'
-import Menu from '../../menu'
+import DropdownMenu from '../../dropdown-menu'
 
 const routes = ['Home', 'A', 'B', 'C', 'End'].map((label, index) => ({ label, path: `/${index}` }))
 const item = (label, props = {}, slots = {}) => h(BreadcrumbItem, { key: label, ...props }, { default: () => label, ...slots })
@@ -62,7 +62,7 @@ describe('Breadcrumb same source', () => {
 
   test('dropdown emits the selected route and original event', () => {
     const wrapper = mount(BreadcrumbItem, { props: { droplist: routes } })
-    const menu = wrapper.findComponent(Menu)
+    const menu = wrapper.findComponent(DropdownMenu)
     const event = new MouseEvent('click')
     menu.vm.$emit('select', '/1', {}, event)
     expect(wrapper.emitted('select')).toEqual([[routes[1], event]])

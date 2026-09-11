@@ -46,7 +46,7 @@ describe('Avatar', () => {
       slots: { default: 'CD' },
     })
 
-    expect(wrapper.classes()).toContain('c-avatar-square')
+    expect(wrapper.classes()).toContain('c-avatar--square')
     expect(wrapper.attributes('style')).toContain('width: 48px')
     expect(wrapper.text()).toContain('CD')
 
@@ -54,7 +54,7 @@ describe('Avatar', () => {
     expect(wrapper.emitted('click')).toHaveLength(1)
   })
 
-  test('renders an accessible image', () => {
+  test('renders an accessible image and emits image events', async () => {
     const wrapper = mount(Avatar, {
       props: { imageUrl: '/avatar.png', alt: 'Ada Lovelace' },
     })
@@ -63,6 +63,10 @@ describe('Avatar', () => {
       src: '/avatar.png',
       alt: 'Ada Lovelace',
     })
+    await wrapper.get('img').trigger('load')
+    await wrapper.get('img').trigger('error')
+    expect(wrapper.emitted('load')).toHaveLength(1)
+    expect(wrapper.emitted('error')).toHaveLength(1)
   })
 
   test('uses overlay terminology for the hover trigger', () => {
@@ -72,10 +76,11 @@ describe('Avatar', () => {
       slots: { 'trigger-icon': 'edit' },
     })
 
-    expect(wrapper.find('.c-avatar-trigger-icon-overlay').exists()).toBe(true)
+    expect(wrapper.find('.c-avatar__trigger-icon-overlay').exists()).toBe(true)
+    expect(wrapper.classes()).toContain('c-avatar--with-trigger')
   })
 
-  test('applies color, bordered and lazy', () => {
+  test('applies color, bordered, css size and lazy', () => {
     const wrapper = mount(Avatar, {
       props: {
         color: '#00bebe',
@@ -84,18 +89,31 @@ describe('Avatar', () => {
         imageUrl: '/avatar.png',
         lazy: true,
         hoverable: true,
+        size: '3rem',
       },
     })
 
-    expect(wrapper.classes()).toContain('c-avatar-bordered')
-    expect(wrapper.classes()).toContain('c-avatar-hoverable')
+    expect(wrapper.classes()).toContain('c-avatar--bordered')
+    expect(wrapper.classes()).toContain('c-avatar--hoverable')
     expect(wrapper.attributes('style')).toContain('background-color')
     expect(wrapper.attributes('style')).toContain('border-color')
+    expect(wrapper.attributes('style')).toContain('width: 3rem')
     expect(wrapper.get('img').attributes('loading')).toBe('lazy')
   })
 })
 
 describe('AvatarGroup', () => {
+  test('renders children and applies group size', () => {
+    const wrapper = mount(AvatarGroup, {
+      props: { size: 48 },
+      slots: {
+        default: () => [h(Avatar), h(Avatar), h(Avatar), h(Avatar)],
+      },
+    })
+    expect(wrapper.findAll('.c-avatar')).toHaveLength(4)
+    expect(wrapper.find('.c-avatar').attributes('style')).toContain('width: 48px')
+  })
+
   test('stacks vertically and applies offset', () => {
     const wrapper = mount(AvatarGroup, {
       props: { vertical: true, offset: -12 },
@@ -107,7 +125,19 @@ describe('AvatarGroup', () => {
       },
     })
 
-    expect(wrapper.classes()).toContain('c-avatar-group-vertical')
+    expect(wrapper.classes()).toContain('c-avatar-group--vertical')
     expect(wrapper.attributes('style')).toContain('--c-avatar-group-offset: -12px')
+  })
+
+  test('collapses avatars over maxCount', () => {
+    const wrapper = mount(AvatarGroup, {
+      props: { maxCount: 2, size: 48 },
+      slots: {
+        default: () => [h(Avatar), h(Avatar), h(Avatar), h(Avatar)],
+      },
+      global: { stubs: { CPopover: { template: '<div class="c-popover"><slot /></div>' } } },
+    })
+    expect(wrapper.text()).toContain('+2')
+    expect(wrapper.findAll('.c-avatar')).toHaveLength(3)
   })
 })

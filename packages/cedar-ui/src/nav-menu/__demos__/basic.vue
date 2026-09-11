@@ -1,8 +1,20 @@
 <template>
-  <c-nav-menu :options="options" v-model="selected" />
+  <div class="nav-menu-demo">
+    <c-nav-menu v-model="selected" :options="options" />
+    <p>当前页面：{{ selected }}</p>
+  </div>
 </template>
+
 <script setup lang="ts">
-import { options } from './data'
-import { ref } from 'vue'
-const selected = ref<string | number | null>(0)
+import { ref } from "vue";
+import { options } from "./data";
+
+const selected = ref<string | number | null>(0);
 </script>
+
+<style scoped>
+.nav-menu-demo {
+  width: 240px;
+  max-width: 100%;
+}
+</style>

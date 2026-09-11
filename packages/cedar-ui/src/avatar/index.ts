@@ -1,17 +1,20 @@
 import { withInstall } from '../_utils/global-config'
 import _Avatar from './avatar.vue'
-import _AvatarGroup from './avatar-group'
+import _AvatarGroup from './avatar-group.vue'
 import { avatarGroupProps, avatarProps } from './props'
 
-const Avatar = withInstall(_Avatar, Object.assign(_Avatar, {
-  Group: _AvatarGroup,
-}), { components: [_Avatar, _AvatarGroup] })
+const Avatar = withInstall(
+  _Avatar,
+  Object.assign(_Avatar, {
+    Group: _AvatarGroup,
+  }),
+  { components: [_Avatar, _AvatarGroup] },
+)
 
 export type AvatarInstance = InstanceType<typeof _Avatar>
 export type AvatarGroupInstance = InstanceType<typeof _AvatarGroup>
 export { avatarGroupProps, avatarProps }
-export type { AvatarGroupProps, AvatarProps } from './props'
-export type { AvatarShape, AvatarTriggerType, ObjectFit } from './types'
+export type { AvatarGroupProps, AvatarObjectFit, AvatarProps, AvatarShape, AvatarTriggerType } from './props'
 export { Avatar }
 export { _AvatarGroup as AvatarGroup }
 

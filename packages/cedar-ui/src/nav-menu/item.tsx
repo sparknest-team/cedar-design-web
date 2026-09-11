@@ -27,7 +27,7 @@ export default defineComponent({
     const value = computed(() => props.modelValue !== undefined ? props.modelValue : localValue.value)
     const disabled = computed(() => props.disabled || !!parent?.props.disabled)
     const open = computed(() => !disabled.value && (props.open ?? localOpen.value))
-    const active = computed(() => props.active ?? value.value != null)
+    const active = computed(() => props.name !== undefined && parent ? parent.activeItem.value === props.name : props.active ?? value.value != null)
     const tree = computed(() => createNavMenuTree(props.options, props.fieldNames))
     const selected = computed(() => value.value == null ? undefined : tree.value.byKey.get(value.value))
     const hasPopup = () => !!slots.content || props.options.length > 0
@@ -62,7 +62,7 @@ export default defineComponent({
       }
     }, { flush: 'post', immediate: true })
     onBeforeUnmount(() => detach?.())
-    const unregister = parent?.registerItem(itemId, () => setOpen(false))
+    const unregister = parent?.registerItem(itemId, () => setOpen(false), props.name)
     onBeforeUnmount(() => unregister?.())
     function activate() { parent?.activateItem(itemId) }
     watch(open, value => { if (value) activate() }, { immediate: true, flush: 'sync' })
@@ -80,6 +80,7 @@ export default defineComponent({
       const node = key == null ? undefined : tree.value.byKey.get(key)
       if (disabled.value || node?.disabled || (node && (node.type !== 'item' || node.children.length))) return
       if (props.modelValue === undefined) localValue.value = key
+      if (props.name !== undefined) parent?.selectItem(props.name)
       emit('update:modelValue', key); emit('select', key, node?.option, event)
       if (props.hideOnSelect) close()
     }
@@ -101,7 +102,14 @@ export default defineComponent({
       'aria-disabled': disabled.value || undefined, 'aria-expanded': hasPopup() ? open.value : undefined,
       'aria-haspopup': hasPopup() ? (slots.content ? 'dialog' : 'menu') : undefined,
       class: [n('item'), { [n('--active')]: active.value, [n('--disabled')]: disabled.value }],
-      onClick: (event: MouseEvent) => { if (disabled.value) { event.preventDefault(); return } activate(); emit('click', event) },
+      onClick: (event: MouseEvent) => {
+        if (disabled.value) { event.preventDefault(); return }
+        activate()
+        // Opening a panel does not mean that it has produced a valid selection.
+        // An entry without a panel is itself a leaf, so clicking it can activate it directly.
+        if (props.name !== undefined && !hasPopup()) parent?.selectItem(props.name)
+        emit('click', event)
+      },
       onKeydown: (event: KeyboardEvent) => {
         if (event.target !== event.currentTarget || disabled.value) return
         if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); event.stopPropagation(); if (hasPopup()) setOpen(!open.value); else reference.value?.click() }

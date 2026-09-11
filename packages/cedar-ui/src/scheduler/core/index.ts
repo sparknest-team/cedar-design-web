@@ -88,9 +88,30 @@ export function cloneSchedulerEvent(event: SchedulerEvent): SchedulerEvent {
     start: event.start instanceof Date ? new Date(event.start) : event.start,
     end: event.end instanceof Date ? new Date(event.end) : event.end,
     resourceIds: [...(event.resourceIds ?? [])],
+    ...(event.metadata ? { metadata: { ...event.metadata } } : {}),
+    ...(event.resourceDetails
+      ? {
+          resourceDetails: Object.fromEntries(
+            Object.entries(event.resourceDetails).map(([id, detail]) => [
+              id,
+              { ...detail },
+            ]),
+          ),
+        }
+      : {}),
   };
 }
 export function validateSchedulerEvent(event: SchedulerEvent): void {
+  for (const detail of Object.values(event.resourceDetails ?? {})) {
+    if (
+      !detail ||
+      (detail.units !== undefined &&
+        (!Number.isFinite(detail.units) || detail.units < 0)) ||
+      (detail.role !== undefined && typeof detail.role !== "string")
+    )
+      throw new SchedulerError("invalid-event", "Invalid assignment details");
+  }
+
   if (!event.id || !event.title.trim())
     throw new SchedulerError("invalid-event", "An id and title are required");
   if ((event.start == null) !== (event.end == null))
@@ -98,10 +119,19 @@ export function validateSchedulerEvent(event: SchedulerEvent): void {
       "invalid-event",
       "Start and end must both be provided",
     );
+  if (event.milestone && (event.start == null || event.allDay))
+    throw new SchedulerError(
+      "invalid-event",
+      "Milestones require a timed instant",
+    );
   if (event.start == null) return;
   const start = schedulerDate(event.start);
   const end = schedulerDate(event.end!);
-  if (!Number.isFinite(+start) || !Number.isFinite(+end) || end <= start)
+  if (
+    !Number.isFinite(+start) ||
+    !Number.isFinite(+end) ||
+    (event.milestone ? +end !== +start : end <= start)
+  )
     throw new SchedulerError("invalid-event", "End must be after start");
   if (
     event.allDay &&
@@ -119,6 +149,12 @@ export function isSchedulerEventInRange(
   event: SchedulerEvent,
   range: SchedulerRange,
 ): boolean {
+  if (event.milestone && event.start != null)
+    return (
+      schedulerDate(event.start) >= range.start &&
+      schedulerDate(event.start) < range.end
+    );
+
   return (
     event.start != null &&
     event.end != null &&
@@ -130,12 +166,13 @@ export function getSchedulerConflicts(
   event: SchedulerEvent,
   events: readonly SchedulerEvent[],
 ): SchedulerConflict[] {
-  if (event.start == null || event.end == null) return [];
+  if (event.milestone || event.start == null || event.end == null) return [];
   return events.flatMap((other) => {
     const resourceIds = [...new Set(event.resourceIds ?? [])].filter((id) =>
       other.resourceIds?.includes(id),
     );
-    return other.id !== event.id &&
+    return !other.milestone &&
+      other.id !== event.id &&
       resourceIds.length &&
       isSchedulerEventInRange(other, {
         start: schedulerDate(event.start!),
@@ -180,6 +217,19 @@ export function moveSchedulerEvent(
       ]),
     ];
   next.resourceIds = resourceIds;
+  if (
+    fromResourceId &&
+    toResourceId &&
+    fromResourceId !== toResourceId &&
+    next.resourceDetails?.[fromResourceId]
+  ) {
+    if (!event.resourceIds?.includes(toResourceId))
+      next.resourceDetails[toResourceId] = {
+        ...next.resourceDetails[fromResourceId],
+      };
+    delete next.resourceDetails[fromResourceId];
+  }
+
   if (event.allDay) {
     const oldStart =
       event.start == null ? schedulerDay(start) : schedulerDay(event.start);
@@ -228,7 +278,10 @@ export function layoutSchedulerEvents(
     .map((event) => ({
       event,
       start: Math.max(startHour * 60, minute(schedulerDate(event.start!))),
-      end: Math.min(endHour * 60, minute(schedulerDate(event.end!))),
+      end: Math.min(
+        endHour * 60,
+        minute(schedulerDate(event.end!)) + (event.milestone ? 1 : 0),
+      ),
       column: 0,
       columns: 1,
     }))
@@ -271,6 +324,8 @@ export function layoutSchedulerTimeline(
     const date = schedulerDate(value);
     if (date <= range.start) return 0;
     if (date >= range.end) return 1;
+    if (granularity === "time")
+      return (+date - +range.start) / (+range.end - +range.start);
     const index = days.findIndex(
       (day) => schedulerDateKey(day) === schedulerDateKey(date),
     );
@@ -312,3 +367,37 @@ export function layoutSchedulerTimeline(
   });
   return items;
 }
+
+export * from "./time-axis";
+
+export * from "./availability";
+
+export * from "./transaction";
+
+export * from "./recurrence";
+
+export * from "./recurrence-split";
+
+export {
+  isSchedulerWorkingDate,
+  getSchedulerCalendarDisabledRanges,
+} from "./business-calendar";
+export type {
+  SchedulerBusinessCalendar,
+  SchedulerCalendarOverride,
+} from "./business-calendar";
+
+export * from "./capacity";
+
+export * from "./duplicate";
+
+export * from "./now-indicator";
+
+export { getSchedulerVisibleDays } from "./visible-days";
+
+export * from "./resource-dimensions";
+
+export * from "./interaction";
+
+export * from "./dependencies";
+export * from "./task-assignments";

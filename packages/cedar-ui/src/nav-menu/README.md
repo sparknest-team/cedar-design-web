@@ -8,91 +8,107 @@ permalink: /components/nav-menu/
 
 ## 案例
 
-独立一级入口与 options 导航树均支持横向和纵向布局。先看自定义 Item 的用法，再看数据驱动导航及状态控制。
+NavMenu 有两种清晰的使用方式：导航树使用 `options`，业务筛选等独立入口使用 `NavMenu.Item`。下面先介绍常用导航，再逐步进入层级、响应式和高级定制。
 
-### 横向独立入口
+### 基础导航
 
-一级入口横向排列。分类使用普通下拉，地区使用横向通栏选项；高级筛选自定义通栏内容并保持固定标题。
+#### 纵向导航
 
-<demo src="./__demos__/items-horizontal.vue" title="横向独立入口示例" desc="一级入口横向排列。分类使用普通下拉，地区使用横向通栏选项；高级筛选自定义通栏内容并保持固定标题。"></demo>
+最常见的侧边导航。通过 `options` 和 `children` 声明层级，使用 `v-model` 获取当前页面。
 
-### 纵向独立入口
+<demo src="./__demos__/basic.vue" title="基础纵向导航" desc="使用 options 声明导航树，通过 v-model 管理当前选中项。"></demo>
 
-一级入口纵向排列。页面入口互斥高亮，项目选项紧邻菜单向右展开；高级筛选使用 popup-layout=full-height 和 placement=right-start，紧贴菜单右边缘展示全高面板，切换入口时关闭其他面板。
+#### 横向导航
 
-<demo src="./__demos__/items-vertical.vue" title="纵向独立入口示例" desc="一级入口纵向排列。页面入口互斥高亮，项目选项紧邻菜单向右展开；高级筛选使用 popup-layout=full-height 和 placement=right-start，紧贴菜单右边缘展示全高面板，切换入口时关闭其他面板。"></demo>
+用于页面顶部导航。一级菜单横向排列，含有 `children` 的入口通过浮层展示下级菜单。
 
-### 自动标题与手动标题
+<demo src="./__demos__/horizontal-sub-menu.vue" title="基础横向导航" desc="切换为 horizontal 模式，二级及更深层级在浮层中展开。"></demo>
 
-`v-model` 更新后，入口自动显示对应选项的 label，无需额外开关；清空为 null 后恢复 label 属性。受控值未被接受时，标题也不会变化。固定标题或手动更新显示内容使用 `#label` 插槽，自定义内容里也可以通过 `select(key)` 更新 v-model。
+### 层级与响应式
 
-<demo src="./__demos__/item-label.vue" title="自动标题与手动标题示例" desc="对比自动跟随选择、始终固定标题，以及选择后手动应用标题三种方式。"></demo>
+#### 多级菜单与手风琴
 
-### 自定义面板与标题策略
+`accordion` 让同一层级只展开一个分支；初始选中深层页面时，菜单会自动展开其祖先路径。
 
-对比普通下拉、通栏与全高面板，以及选中后更新标题和保留固定标题两种策略。
+<demo src="./__demos__/sub-menu.vue" title="多级菜单与手风琴" desc="展示深层选中、祖先自动展开和同层手风琴行为。"></demo>
 
-<demo src="./__demos__/custom-items.vue" title="自定义面板与标题策略示例" desc="对比普通下拉、通栏与全高面板，以及选中后更新标题和保留固定标题两种策略。"></demo>
+#### 折叠菜单
 
-### 基础纵向导航
+适合空间有限的侧边栏。折叠后保留图标，分支改由浮层展开。
 
-通过 options 和 children 定义导航树，使用 v-model 控制当前选中项。
+<demo src="./__demos__/collapsed.vue" title="侧边栏折叠" desc="通过外部按钮控制 collapsed；折叠后的分支使用浮层，叶项提供名称提示。"></demo>
 
-<demo src="./__demos__/basic.vue" title="基础纵向导航示例" desc="通过 options 和 children 定义导航树，使用 v-model 控制当前选中项。"></demo>
+#### 横向溢出收纳
 
-### 横向多级导航
+横向空间不足时，末尾菜单自动收入“更多”。可拖动示例容器右下角观察变化。
 
-mode="horizontal" 将一级导航横向排列，分支通过浮层展开。
+<demo src="./__demos__/breakpoint.vue" title="横向溢出收纳" desc="缩窄容器观察更多菜单；收纳后的选项仍支持选择和键盘导航。"></demo>
 
-<demo src="./__demos__/horizontal-sub-menu.vue" title="横向多级导航示例" desc="mode='horizontal' 将一级导航横向排列，分支通过浮层展开。"></demo>
+### 独立入口与业务面板
 
-### 横向溢出收纳
+`NavMenu.Item` 适合分类、地区和高级筛选等独立入口。它有自己的值和展开状态，不参与导航树的互斥选择。
 
-拖动容器右下角缩窄宽度，观察选项自动收入“更多”；展开更多后仍可选择和使用键盘导航。
+#### 横向筛选栏
 
-<demo src="./__demos__/breakpoint.vue" title="横向溢出收纳示例" desc="拖动容器右下角缩窄宽度，观察选项自动收入“更多”；展开更多后仍可选择和使用键盘导航。"></demo>
+同时展示普通下拉、横向通栏选项和自定义筛选面板，是顶部业务导航的完整示例。
 
-### 多级与手风琴
+<demo src="./__demos__/items-horizontal.vue" title="横向筛选栏" desc="分类使用普通下拉，地区使用通栏选项，高级筛选使用自定义内容。"></demo>
 
-accordion 使同层只展开一个分支；默认选中深层选项时自动展开其祖先路径。
+#### 纵向工作台
 
-<demo src="./__demos__/sub-menu.vue" title="多级与手风琴示例" desc="accordion 使同层只展开一个分支；默认选中深层选项时自动展开其祖先路径。"></demo>
+页面入口负责互斥高亮，项目选择和高级筛选独立管理；全高面板从菜单右侧展开。
 
-### 受控选择与展开
+<demo src="./__demos__/items-vertical.vue" title="纵向工作台" desc="组合页面入口、项目下拉和右侧全高筛选面板。"></demo>
 
-切换是否接受更新请求，观察受控选中值和展开状态只有在业务接受后才改变。
+#### 标题更新策略
 
-<demo src="./__demos__/controlled.vue" title="受控选择与展开示例" desc="切换是否接受更新请求，观察受控选中值和展开状态只有在业务接受后才改变。"></demo>
+Item 的标题默认跟随选中项，也可以通过 `#label` 保持固定标题，或把选中值与显示标题分开管理。高亮状态可以由根菜单统一管理，也可以由每个 Item 独立管理。
 
-### 字段映射与禁用
+##### 统一激活
 
-映射业务数据字段，展示分组、分隔线、单项禁用、隐藏项和整菜单禁用。
+为 Item 设置唯一 `name`，再通过根菜单的 `v-model:active-item` 统一保持单选高亮。打开一级入口只展开面板，不会提前激活；选择叶子节点后才更新当前高亮项，每个面板的内部值仍独立保留。确实需要初始高亮时，可以显式设置 `active-item` 或 `default-active-item`。
 
-<demo src="./__demos__/field-names.vue" title="字段映射与禁用示例" desc="映射业务数据字段，展示分组、分隔线、单项禁用、隐藏项和整菜单禁用。"></demo>
+<demo src="./__demos__/item-label.vue" title="统一激活的标题策略" desc="初始无高亮；选择任一面板的叶子节点后，具名 Item 统一保持单选高亮，各面板内部值独立保存。"></demo>
 
-### 折叠导航
+##### 独立激活
 
-通过外部按钮控制折叠，折叠后分支弹出子菜单，叶项使用 Tooltip 提示名称。
+不设置 `name` 时，每个 Item 根据自己的值独立高亮，适合多个筛选条件同时生效。下例初始同时选中了分类和地区，因此两个入口都会高亮；清空其中一项不会影响另一项。
 
-<demo src="./__demos__/collapsed.vue" title="折叠导航示例" desc="通过外部按钮控制折叠，折叠后分支弹出子菜单，叶项使用 Tooltip 提示名称。"></demo>
+<demo src="./__demos__/item-label-independent.vue" title="独立激活的筛选入口" desc="未具名 Item 各自维护标题和值，可以同时高亮；同一时间仍只展开一个面板。"></demo>
 
-### 插槽与 VNode
+### 数据与状态控制
 
-通过 label、extra 插槽和 option 的 VNode 图标定制节点内容，层级仍由 options 定义。
+#### 受控选择与展开
 
-<demo src="./__demos__/custom-content.vue" title="插槽与 VNode示例" desc="通过 label、extra 插槽和 option 的 VNode 图标定制节点内容，层级仍由 options 定义。"></demo>
+受控属性始终以父级传入值为准。示例可切换是否接受更新请求，以观察选择与展开状态的区别。
 
-### 五种尺寸
+<demo src="./__demos__/controlled.vue" title="受控选择与展开" desc="更新事件只表达请求；只有父级接受后，受控状态才发生改变。"></demo>
 
-分别展示 xs、sm、md、lg、xl，每一行标注对应尺寸。
+#### 业务字段映射
 
-<demo src="./__demos__/size.vue" title="五种尺寸示例" desc="分别展示 xs、sm、md、lg、xl，每一行标注对应尺寸。"></demo>
+使用 `field-names` 接入不同字段结构，同时展示分组、分隔线、禁用、隐藏和整菜单禁用。
 
-### 明暗主题
+<demo src="./__demos__/field-names.vue" title="字段映射与禁用" desc="将 id、name、items 和 unavailable 映射为菜单标准字段。"></demo>
 
-分别展示 light 和 dark 主题。
+#### 节点内容定制
 
-<demo src="./__demos__/theme.vue" title="明暗主题示例" desc="分别展示 light 和 dark 主题。"></demo>
+作用域插槽负责统一定制节点内容，选项本身也可以提供 VNode 或渲染函数。
+
+<demo src="./__demos__/custom-content.vue" title="插槽与 VNode" desc="通过 label、extra 插槽和 option 图标定制节点，导航层级仍由 options 管理。"></demo>
+
+### 外观
+
+#### 尺寸
+
+NavMenu 支持 `xs`、`sm`、`md`、`lg` 和 `xl` 五档组件尺寸。
+
+<demo src="./__demos__/size.vue" title="五种尺寸" desc="并排比较五档菜单高度和文字尺寸。"></demo>
+
+#### 主题
+
+`light` 适合普通内容区域，`dark` 适合深色侧边栏或顶部栏。
+
+<demo src="./__demos__/theme.vue" title="明暗主题" desc="比较 light 与 dark 两种菜单主题。"></demo>
 
 ## NavMenu API
 
@@ -101,6 +117,8 @@ accordion 使同层只展开一个分支；默认选中深层选项时自动展�
 | options | 导航结构 | NavMenuOption[] | [] |
 | model-value | 当前选中 key，支持 v-model；null 表示无选中 | string / number / null | undefined |
 | default-value | 非受控初始选中值 | string / number / null | null |
+| active-item | 受控的具名 NavMenu.Item 激活项，支持 v-model:active-item | string / number / null | undefined |
+| default-active-item | 非受控的具名 NavMenu.Item 初始激活项 | string / number / null | null |
 | expanded-keys | 受控展开分支 | (string / number)[] | undefined |
 | default-expanded-keys | 非受控初始展开分支 | (string / number)[] | [] |
 | default-expand-all | 初始展开所有分支 | boolean | false |
@@ -148,6 +166,7 @@ interface NavMenuOption {
 | 事件 | 参数 |
 | --- | --- |
 | update:model-value | key / null |
+| update:active-item | name / null |
 | update:expanded-keys | keys |
 | update:collapsed | collapsed |
 | select | key, 原始 option, 原始 Event |
@@ -166,6 +185,7 @@ label/icon/extra 均接收 `{ option, selected, expanded, active, level }`；act
 | scrollTo(key?) | 先展开，再滚动到该项；受控展开需父级接受 |
 | resize() | 手动重新计算横向溢出 |
 | setCollapsed(value) | 更新非受控折叠或发出受控更新请求 |
+| setActiveItem(value) | 更新具名 Item 的非受控激活项或发出受控更新请求 |
 
 ### 箭头方向
 
@@ -180,12 +200,13 @@ label/icon/extra 均接收 `{ option, selected, expanded, active, level }`；act
 
 标题默认跟随匹配的选中选项。`label` 插槽优先级最高：固定标题可写 `<template #label>高级筛选</template>`；手动标题可绑定独立的响应式变量。原 `update-label` 已移除。
 
-`CNavMenuItem`（也可写 `NavMenu.Item`）是独立入口，不参与根菜单 `modelValue` 的互斥选中。每个入口通过自己的 `options` 定义菜单，或通过 `content` 插槽完全替换面板。默认插槽自定义入口本身，`label`、`icon` 插槽局部自定义入口，`option-label`、`option-icon`、`option-extra` 自定义选项。
+`CNavMenuItem`（也可写 `NavMenu.Item`）是自定义一级入口，不参与根菜单普通导航树的 `modelValue`。未提供 `name` 时，Item 根据自己的值独立高亮，适合分类、地区等多个筛选条件同时生效；提供唯一 `name` 后，由根菜单的 `activeItem/defaultActiveItem` 统一保持单选高亮。两种模式都只允许同一时间展开一个 Item 面板，且不会清空其他面板的内部值。普通一级导航仍使用根 NavMenu 的 `options + v-model`。每个入口通过自己的 `options` 定义菜单，或通过 `content` 插槽完全替换面板。默认插槽自定义入口本身，`label`、`icon` 插槽局部自定义入口，`option-label`、`option-icon`、`option-extra` 自定义选项。
 
 有默认插槽时，横向菜单使用滚动而不收入“更多”，避免复制包含表单的入口。纯 `options` 菜单继续支持自动溢出收纳。新 Item 不兼容旧的子组件收集协议。同一 NavMenu 下的 Item 面板互斥，点击其他入口会请求关闭已打开的面板；受控 open 需要业务接受 update:open。
 
 | Item 属性 | 说明 | 默认 |
 | --- | --- | --- |
+| name | 稳定且唯一的入口标识；提供后由根菜单 activeItem 互斥高亮，并优先于 active | — |
 | label | 未选中或选中值未匹配 options 时的入口标题，支持 VNode / 渲染函数 | — |
 | options / fieldNames | 与 NavMenu 相同的选项和字段映射 | `[]` |
 | modelValue / defaultValue | 独立受控值 / 初始值，支持字符串、数字和 null | `undefined` / `null` |
@@ -232,7 +253,7 @@ Item 还发出 `update:open`、入口 `click`，暴露 `select`、`close`、`set
 | --- | --- |
 | --c-nav-menu-font-size | `var(~'--c-font-size-body-3')` |
 | --c-nav-menu-border-radius | `var(~'--c-border-radius-sm')` |
-| --c-nav-menu-light-bg | `var(~'--c-color-menu-light-bg')` |
+| --c-nav-menu-light-bg | `var(~'--c-color-bg-2')` |
 | --c-nav-menu-light-item-bg-hover | `var(~'--c-color-fill-2')` |
 | --c-nav-menu-light-item-bg-selected | `var(~'--c-color-fill-2')` |
 | --c-nav-menu-light-item-text-color | `var(~'--c-color-text-2')` |

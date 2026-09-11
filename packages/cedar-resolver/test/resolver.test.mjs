@@ -95,7 +95,7 @@ test("resolves UI components with their styles", () => {
 test("maps sub-components to their parent style directory", () => {
   for (const [name, dir] of [
     ["COption", "select"],
-    ["CMenuOption", "menu"],
+    ["CMenuOption", "dropdown-menu"],
     ["CTypographyText", "typography"],
     ["CStep", "steps"],
     ["CAnchorLink", "anchor"],

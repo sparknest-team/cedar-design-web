@@ -131,7 +131,7 @@ The page-size menu fits its option content independently of the compact trigger 
 
 Shared fields: disabled?: boolean; placement?: top / top-start / top-end / bottom / bottom-start / bottom-end; popupContainer?: string | HTMLElement | false; class?: string; style?: CSSProperties. Parent disabled takes priority. Placement defaults to bottom-start.
 
-Arbitrary SelectProps/MenuProps are no longer forwarded. Use page-size, page-size-options and size for pagination-owned fields.
+Arbitrary SelectProps/DropdownMenuProps are no longer forwarded. Use page-size, page-size-options and size for pagination-owned fields.
 
 ## Types
 

@@ -1,6 +1,6 @@
 <template>
   <div class="p-24 c-bg-1">
-    <FilterForm
+    <c-filter-form
       ref="filterForm"
       v-model="filter"
       :fields="filterFields"
@@ -10,119 +10,101 @@
       @change="search"
     >
       <template #actions>
-        <Space>
-          <Button @click="reset">重置</Button>
-        </Space>
+        <c-space>
+          <c-button @click="reset">重置</c-button>
+        </c-space>
       </template>
-    </FilterForm>
-    <Card size="lg">
+    </c-filter-form>
+    <c-card size="lg">
       <div class="c-flex c-justify-between mb-16">
-        <Button status="primary" @click="createStation">
+        <c-button status="primary" @click="createStation">
           <c-icon-plus />
           新建
-        </Button>
-        <Search
+        </c-button>
+        <c-search
           ref="searchFormRef"
           v-model:model="searchForm"
           :fields="fields"
-          :selectStyle="{ minWidth: '120px' }"
-          defaultField="station_id"
+          :select-style="{ minWidth: '120px' }"
+          default-field="station_id"
           placeholder="请输入"
-          searchHistoryKey="__eco_energy-station-list_search__"
+          search-history-key="__eco_energy-station-list_search__"
           @change="handleSearchChange"
           @search="search"
         >
-        </Search>
+        </c-search>
       </div>
-      <Table
+      <c-table
         :columns="columns"
         :data="stationList.resultList"
         :pagination="pagination"
         pagination-sticky
         @page-change="onPageChange"
         @page-size-change="onPageSizeChange"
-      ></Table>
-    </Card>
-    <Dialog v-model:open="visible" :body-style="{ height: '400px' }" @cancel="handleCancel" @confirm="handleConfirm">
+      ></c-table>
+    </c-card>
+    <c-dialog v-model:open="visible" :body-style="{ height: '400px' }" @cancel="handleCancel" @confirm="handleConfirm">
       <template #title>title2</template>
       <template #footer>
         <div class="c-flex c-justify-between c-items-center">
           <div>自定义内容</div>
-          <Space>
-            <Button @click="handleCancel">取消</Button>
-            <Button status="primary" @click="handleConfirm">确定</Button>
-          </Space>
+          <c-space>
+            <c-button @click="handleCancel">取消</c-button>
+            <c-button status="primary" @click="handleConfirm">确定</c-button>
+          </c-space>
         </div>
       </template>
-      <Form layout="vertical">
-        <Grid :colGap="16" :cols="2" :rowGap="0">
-          <GridItem>
-            <FormItem field="name" label="Postname" required>
-              <Input placeholder="请输入" type="text" />
-            </FormItem>
-          </GridItem>
-          <GridItem>
-            <FormItem field="name" label="Postname" required>
-              <Input placeholder="请输入" type="text" />
-            </FormItem>
-          </GridItem>
-          <GridItem>
-            <FormItem field="name" label="Postname" required>
-              <Input placeholder="请输入" type="text" />
-            </FormItem>
-          </GridItem>
-          <GridItem>
-            <FormItem field="name" label="Postname" required>
-              <Input placeholder="请输入" type="text" />
-            </FormItem>
-          </GridItem>
-          <GridItem>
-            <FormItem field="name" label="Postname" required>
-              <Input placeholder="请输入" type="text" />
-            </FormItem>
-          </GridItem>
-          <GridItem :span="2">
-            <FormItem field="name" label="Postname" required>
-              <Input placeholder="请输入" type="text" />
-            </FormItem>
-          </GridItem>
-          <GridItem>
-            <FormItem field="name" label="Postname" required>
-              <Input placeholder="请输入" type="text" />
-            </FormItem>
-          </GridItem>
-          <GridItem>
-            <FormItem field="name" label="Postname" required>
-              <Input placeholder="请输入" type="text" />
-            </FormItem>
-          </GridItem>
-        </Grid>
-      </Form>
-    </Dialog>
+      <c-form layout="vertical">
+        <c-grid :col-gap="16" :cols="2" :row-gap="0">
+          <c-grid-item>
+            <c-form-item field="name" label="Postname" required>
+              <c-input placeholder="请输入" type="text" />
+            </c-form-item>
+          </c-grid-item>
+          <c-grid-item>
+            <c-form-item field="name" label="Postname" required>
+              <c-input placeholder="请输入" type="text" />
+            </c-form-item>
+          </c-grid-item>
+          <c-grid-item>
+            <c-form-item field="name" label="Postname" required>
+              <c-input placeholder="请输入" type="text" />
+            </c-form-item>
+          </c-grid-item>
+          <c-grid-item>
+            <c-form-item field="name" label="Postname" required>
+              <c-input placeholder="请输入" type="text" />
+            </c-form-item>
+          </c-grid-item>
+          <c-grid-item>
+            <c-form-item field="name" label="Postname" required>
+              <c-input placeholder="请输入" type="text" />
+            </c-form-item>
+          </c-grid-item>
+          <c-grid-item :span="2">
+            <c-form-item field="name" label="Postname" required>
+              <c-input placeholder="请输入" type="text" />
+            </c-form-item>
+          </c-grid-item>
+          <c-grid-item>
+            <c-form-item field="name" label="Postname" required>
+              <c-input placeholder="请输入" type="text" />
+            </c-form-item>
+          </c-grid-item>
+          <c-grid-item>
+            <c-form-item field="name" label="Postname" required>
+              <c-input placeholder="请输入" type="text" />
+            </c-form-item>
+          </c-grid-item>
+        </c-grid>
+      </c-form>
+    </c-dialog>
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, reactive, onMounted, defineComponent, h, provide } from 'vue'
+import { ref, reactive, onMounted, defineComponent, h } from 'vue'
 import { useRouter } from 'vue-router'
-import {
-  Card,
-  Table,
-  Message,
-  FilterForm,
-  Button,
-  Space,
-  Dialog,
-  Search,
-  Form,
-  Grid,
-  GridItem,
-  Input,
-  FormItem,
-  Select,
-  type FilterFormField,
-  type FilterFormFieldMap,
-} from '@cedarjs/ui'
-import type { SearchField, SearchResult } from '@cedarjs/ui'
+import { Select, type FilterFormField, type FilterFormFieldMap, type SearchField } from '@cedarjs/ui'
 import { ListFilter, StationList, StationListItem } from './list.model'
 
 const visible = ref(false)
@@ -214,9 +196,6 @@ const columns = ref([
             <div class='btn' @click="toDetail">详情</div>
             <div class='btn' @click="toDelete">删除</div>
             </div>`,
-          components: {
-            Button,
-          },
           methods: {
             toDetail() {},
             toDelete() {},

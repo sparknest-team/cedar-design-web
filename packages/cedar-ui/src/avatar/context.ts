@@ -1,12 +1,10 @@
-import { InjectionKey } from 'vue'
-import { AvatarShape } from './types'
+import type { ComputedRef, InjectionKey } from 'vue'
+import type { AvatarShape } from './props'
 
 export interface AvatarGroupContext {
-  size: number | undefined
-  shape: AvatarShape
-  autoFixFontSize: boolean
-  zIndexAscend: boolean
-  total: number
+  shape: ComputedRef<AvatarShape>
+  size: ComputedRef<number | string | undefined>
+  autoFixFontSize: ComputedRef<boolean>
 }
 
-export const avatarGroupInjectionKey: InjectionKey<AvatarGroupContext> = Symbol('CedarAvatarGroup')
+export const avatarGroupInjectionKey: InjectionKey<AvatarGroupContext> = Symbol('AvatarGroup')

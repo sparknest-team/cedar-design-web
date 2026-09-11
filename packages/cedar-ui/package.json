@@ -72,6 +72,7 @@
     "@cedarjs/icons-vue": "workspace:*",
     "@cedarjs/shared": "workspace:*",
     "@cedarjs/use": "workspace:*",
+    "@js-temporal/polyfill": "^0.5.1",
     "b-tween": "^0.3.3",
     "b-validate": "^1.5.3",
     "compute-scroll-into-view": "^3.1.1",
@@ -82,6 +83,7 @@
     "number-precision": "^1.6.0",
     "patch-package": "^6.4.7",
     "resize-observer-polyfill": "^1.5.1",
+    "rrule": "^2.8.1",
     "scroll-into-view-if-needed": "^3.1.0",
     "sortablejs": "^1.15.3",
     "zod": "^4.1.12"
@@ -96,8 +98,8 @@
     ]
   },
   "devDependencies": {
-    "@cedarjs/resolver": "workspace:*",
     "@cedarjs/cli": "workspace:*",
+    "@cedarjs/resolver": "workspace:*",
     "@cedarjs/ui": "workspace:*",
     "@changesets/changelog-github": "^0.4.8",
     "@changesets/cli": "^2.26.1",

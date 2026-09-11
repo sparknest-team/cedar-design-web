@@ -13,7 +13,7 @@
       <slot />
     </Button>
 
-    <Menu
+    <DropdownMenu
       ref="menuRef"
       v-model:open="computedOpen"
       :disabled="disabled"
@@ -44,7 +44,7 @@
       <template #content>
         <slot name="content" />
       </template>
-    </Menu>
+    </DropdownMenu>
   </ButtonGroup>
 </template>
 
@@ -52,7 +52,7 @@
 import { computed, ref } from 'vue'
 import { IconMenuDown } from '@cedarjs/icons-vue'
 import Button, { ButtonGroup, type ButtonHandler } from '../button'
-import Menu, { type MenuInstance } from '../menu'
+import DropdownMenu, { type DropdownMenuInstance } from '../dropdown-menu'
 import { createNamespace } from '../_utils/global-config'
 import { splitButtonProps } from './props'
 
@@ -64,7 +64,7 @@ const props = defineProps(splitButtonProps)
 const emit = defineEmits(['update:open', 'open-change', 'select'])
 
 const { n } = createNamespace('split-button')
-const menuRef = ref<MenuInstance>()
+const menuRef = ref<DropdownMenuInstance>()
 const clickHandlers = computed(() => [props.buttonProps?.onClick, props.onClick].flat().filter((handler): handler is ButtonHandler => typeof handler === 'function'))
 
 const uncontrolledOpen = ref(props.defaultOpen)

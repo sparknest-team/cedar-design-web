@@ -1,0 +1,7 @@
+# Availability contracts
+
+- `workingHours` is optional. Omission means unrestricted; an empty array closes all timed scheduling. Entries contain daysOfWeek (0–6), startMinute/endMinute (integer minutes in [0,1440], positive range), and optional resourceIds. Global windows apply unless resource-specific windows exist, in which case the resource-specific weekly schedule overrides the global schedule. Each assigned resource must allow the entire event. Unassigned events use global windows; resources with neither applicable global nor specific windows remain unrestricted.
+- `disabledRanges` contains id, start, end, optional resourceIds and label. Ranges are half-open and block overlapping timed and all-day events. Empty/missing resourceIds means global. Invalid configurations fail closed with an invalid-config issue.
+- Working-hour constraints apply to timed events, not all-day annotations. Disabled ranges apply to both. Unscheduled events and deletion remain allowed. Existing events remain visible even if rules change; subsequent updates must pass the current rules.
+- All create/update/move/resize commands share validation before beforeChange. Rules changed during an asynchronous hook cause stale rejection. Configuration changes are not authorization for a stale proposal.
+- Time-grid and hourly timeline cells are shaded if any portion is unavailable; cells remain editable so users can correct durations in the editor. Daily/monthly summaries do not imply whole-day availability. Backend validation is still authoritative.

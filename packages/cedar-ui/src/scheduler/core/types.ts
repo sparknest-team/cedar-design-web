@@ -9,13 +9,28 @@ export const schedulerModes = [
   "resource-timeline",
 ] as const;
 export type SchedulerMode = (typeof schedulerModes)[number];
+export type SchedulerEventBackgroundPattern =
+  "solid" | "diagonal-stripes" | "dots" | "crosshatch";
 
 export interface SchedulerResource {
   id: string;
+  /** Resource IDs remain globally unique across dimensions. */
+  dimensionId?: string;
   label: string;
   color?: string;
   disabled?: boolean;
+  /** Maximum simultaneous events; omitted means unlimited, zero closes assignments. */
+  capacity?: number;
 }
+
+export interface SchedulerAssignmentDetails {
+  /** Capacity units consumed by this event; defaults to 1. */
+  units?: number;
+  role?: string;
+}
+export type SchedulerRulePolicy = Partial<
+  Record<"capacity" | "unavailable" | "conflict", "allow" | "warn" | "block">
+>;
 
 /** One time block; taskId can associate multiple independently scheduled blocks. */
 export interface SchedulerEvent {
@@ -24,10 +39,23 @@ export interface SchedulerEvent {
   start?: SchedulerDate;
   end?: SchedulerDate;
   allDay?: boolean;
+  /** A timed, zero-duration checkpoint; consumes no capacity. */
+  milestone?: boolean;
   resourceIds?: string[];
+  /** Optional metadata, keyed by the same globally unique resource IDs. */
+  resourceDetails?: Record<string, SchedulerAssignmentDetails>;
   taskId?: string;
   description?: string;
+  /** Text/foreground and pattern color. */
   color?: string;
+  /** Operation accent shown at the leading edge; defaults to color. */
+  accentColor?: string;
+  /** Card fill color; defaults to the Scheduler theme. */
+  backgroundColor?: string;
+  /** Optional semantic background pattern for event categories. */
+  backgroundPattern?: SchedulerEventBackgroundPattern;
+  /** Application-owned metadata. Scheduler preserves it without interpreting it. */
+  metadata?: Record<string, unknown>;
   readonly?: boolean;
 }
 
@@ -36,6 +64,8 @@ export interface SchedulerRange {
   end: Date;
 }
 export interface SchedulerCell {
+  /** Real resource IDs for a cross-group timeline cell. */
+  resourceIds?: string[];
   date: Date;
   resourceId?: string;
 }
@@ -55,10 +85,14 @@ export interface SchedulerChangeContext extends SchedulerChange {
   conflicts: SchedulerConflict[];
 }
 export type SchedulerErrorCode =
+  | "dependency"
   | "invalid-event"
   | "duplicate-id"
   | "missing-event"
   | "readonly"
+  | "transaction-hook-required"
+  | "unavailable"
+  | "capacity"
   | "conflict"
   | "stale"
   | "rejected";
@@ -66,6 +100,8 @@ export class SchedulerError extends Error {
   constructor(
     public code: SchedulerErrorCode,
     message: string,
+    public issues?: import("./availability").SchedulerAvailabilityIssue[],
+    public capacityIssues?: import("./capacity").SchedulerCapacityIssue[],
   ) {
     super(message);
     this.name = "SchedulerError";

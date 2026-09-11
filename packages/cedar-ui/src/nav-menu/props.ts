@@ -9,6 +9,10 @@ export const navMenuProps = {
   modelValue: { type: [String, Number] as PropType<NavMenuKey | null>, default: undefined },
   /** 非受控初始选中 key。 */
   defaultValue: { type: [String, Number] as PropType<NavMenuKey | null>, default: null },
+  /** 受控的具名 NavMenu.Item 激活项。 */
+  activeItem: { type: [String, Number] as PropType<NavMenuKey | null>, default: undefined },
+  /** 非受控的具名 NavMenu.Item 初始激活项。 */
+  defaultActiveItem: { type: [String, Number] as PropType<NavMenuKey | null>, default: null },
   /** 展开分支 key。 */
   expandedKeys: { type: Array as PropType<NavMenuKey[]>, default: undefined },
   /** 非受控初始展开分支。 */

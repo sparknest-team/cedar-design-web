@@ -1,42 +1,27 @@
 import { withInstall } from '../_utils/global-config'
-import _Menu from './menu.vue'
+import _DropdownMenu from './dropdown-menu.vue'
 import _MenuOption from './menu-option.vue'
-import _MenuGroup from './menu-group.vue'
-import _MenuSubmenu from './menu-submenu.vue'
-import { menuProps } from './props'
+import { dropdownMenuProps } from './props'
 
-const Menu = withInstall(_Menu, Object.assign(_Menu, {
+const DropdownMenu = withInstall(_DropdownMenu, Object.assign(_DropdownMenu, {
   Option: _MenuOption,
-  Group: _MenuGroup,
-  Submenu: _MenuSubmenu,
-}), { components: [_Menu, _MenuOption, _MenuGroup, _MenuSubmenu] })
+}), { components: [_DropdownMenu, _MenuOption] })
 
-export type MenuInstance = InstanceType<typeof _Menu>
+export type DropdownMenuInstance = InstanceType<typeof _DropdownMenu>
 export type MenuOptionInstance = InstanceType<typeof _MenuOption>
-export type MenuGroupInstance = InstanceType<typeof _MenuGroup>
-export type MenuSubmenuInstance = InstanceType<typeof _MenuSubmenu>
-
-export type { MenuProps, MenuPosition, MenuValue, MenuOptionData, MenuFieldNames } from './types'
+export type { DropdownMenuProps, DropdownMenuPosition, MenuValue, DropdownMenuOption, DropdownMenuFieldNames, DropdownMenuContent, DropdownMenuRenderContext, MenuOptionLabel, MenuOptionLabelRender } from './types'
 
 export {
-  Menu,
+  DropdownMenu,
   _MenuOption as MenuOption,
-  _MenuGroup as MenuGroup,
-  _MenuSubmenu as MenuSubmenu,
 }
 
-export const _MenuComponent = Menu
+export const _DropdownMenuComponent = DropdownMenu
 export const _MenuOptionComponent = _MenuOption
-export const _MenuGroupComponent = _MenuGroup
-export const _MenuSubmenuComponent = _MenuSubmenu
 
-export { menuProps }
+export { dropdownMenuProps }
 
-export default Menu
+export default DropdownMenu
 
 export { menuOptionProps } from './option-props'
-export { menuGroupProps } from './group-props'
-export { menuSubmenuProps } from './submenu-props'
 export type { MenuOptionProps } from './option-props'
-export type { MenuGroupProps } from './group-props'
-export type { MenuSubmenuProps } from './submenu-props'

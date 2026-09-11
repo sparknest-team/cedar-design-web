@@ -1,0 +1,5 @@
+- [x] Extend rule contracts and shared validation/matching.
+- [x] Preserve original calendar defaults across series splits.
+- [x] Add monthly/yearly preset demo with preview navigation.
+- [x] Add calendar arithmetic and compatibility regressions.
+- [x] Verify demo, types, build, package and browser behavior.

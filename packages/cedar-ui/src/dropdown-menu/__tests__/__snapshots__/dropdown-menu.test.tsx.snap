@@ -1,6 +1,6 @@
 // Vitest Snapshot v1
 
-exports[`Menu > render 1`] = `
+exports[`DropdownMenu > render 1`] = `
 "<!--teleport start-->
 <!--teleport end-->"
 `;

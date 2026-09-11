@@ -1,0 +1,7 @@
+- [x] Define transaction, selection and history API contracts.
+- [x] Implement pure transaction proposal and compensating-diff helpers.
+- [x] Share final-state validation and atomic persistence flow across commands.
+- [x] Add controlled acceptance tracking, bounded undo/redo and invalidation.
+- [x] Add selectable cards and bulk toolbar with Cedar controls.
+- [x] Add batch/history and atomic-swap demos and documentation.
+- [x] Verify compatibility tests, build, types, package and browser behavior.

@@ -2,6 +2,8 @@ import type { CSSProperties, PropType } from 'vue'
 import { navMenuProps } from './props'
 import { triggerProps } from '../trigger/props'
 export const navMenuItemProps = {
+  /** 参与根菜单互斥激活的入口标识；省略时保持独立激活。 */
+  name: { type: [String, Number] as PropType<import('./types').NavMenuKey> },
   label: { type: [String, Number, Object, Array, Function] as PropType<import('./types').NavMenuContent> },
   options: navMenuProps.options,
   modelValue: navMenuProps.modelValue,

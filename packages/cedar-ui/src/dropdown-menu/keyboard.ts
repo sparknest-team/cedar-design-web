@@ -18,8 +18,8 @@ export function useMenuKeyboard(options: MenuKeyboardOptions) {
   let disposed = false
   function items() {
     const panel = options.panel()
-    return Array.from(panel?.querySelectorAll<HTMLElement>('[data-menu-item]') ?? [])
-      .filter(item => item.closest('[data-menu-panel]') === panel && item.getAttribute('aria-disabled') !== 'true')
+    return Array.from(panel?.querySelectorAll<HTMLElement>('[data-dropdown-menu-item]') ?? [])
+      .filter(item => item.closest('[data-dropdown-menu-panel]') === panel && item.getAttribute('aria-disabled') !== 'true')
   }
   function focus(key: string) {
     const list = items()

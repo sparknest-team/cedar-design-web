@@ -4,7 +4,7 @@ import { IconMore, IconDown } from './platform'
 import { useBreadcrumb } from './provide'
 import { breadcrumbItemProps } from './props'
 import type { BreadcrumbRoute } from './types'
-import Menu, { MenuOption } from '../menu'
+import DropdownMenu, { MenuOption } from '../dropdown-menu'
 
 
 const { name, n, classes } = createNamespace('breadcrumb-item')
@@ -100,7 +100,7 @@ export default defineComponent({
       slots.droplist?.() ?? props.droplist?.map((item) => <MenuOption value={item.path}>{item.label}</MenuOption>)
 
     const renderDropdown = () => (
-      <Menu
+      <DropdownMenu
         {...props.dropdownProps}
         v-slots={{ content: renderDropdownContent }}
         open={dropdownVisible.value}
@@ -111,7 +111,7 @@ export default defineComponent({
         }}
       >
         {renderItem()}
-      </Menu>
+      </DropdownMenu>
     )
 
     return () => {

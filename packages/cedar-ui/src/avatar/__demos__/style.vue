@@ -1,8 +1,6 @@
 <template>
-  <c-space align="center" :size="16">
-    <c-avatar color="var(--c-color-warning)">
-      <c-icon-fire />
-    </c-avatar>
+  <c-space align="center" :size="16" wrap>
+    <c-avatar color="var(--c-color-warning)">火</c-avatar>
     <c-avatar color="var(--c-color-danger)">Cedar</c-avatar>
     <c-avatar color="#00bebe">CD</c-avatar>
     <c-avatar color="#7b61ff" shape="square">A</c-avatar>

@@ -1,8 +1,19 @@
 <template>
-  <c-nav-menu mode="horizontal" :options="options" v-model="selected" />
+  <div class="nav-menu-demo">
+    <c-nav-menu v-model="selected" mode="horizontal" :options="options" />
+    <p>当前页面：{{ selected }}</p>
+  </div>
 </template>
+
 <script setup lang="ts">
-import { options } from './data'
-import { ref } from 'vue'
-const selected = ref<string | number | null>('cloud')
+import { ref } from "vue";
+import { options } from "./data";
+
+const selected = ref<string | number | null>("cloud");
 </script>
+
+<style scoped>
+.nav-menu-demo {
+  min-height: 180px;
+}
+</style>

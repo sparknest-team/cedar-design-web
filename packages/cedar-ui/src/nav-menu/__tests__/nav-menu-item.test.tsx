@@ -50,6 +50,61 @@ describe('independent NavMenuItem', () => {
     wrappers.push(w); await settle(); expect(w.text()).toContain('全部'); expect(w.find('.c-nav-menu__measure').exists()).toBe(false)
     expect(w.emitted('update:modelValue')).toBeUndefined()
   })
+  test('named entries share one uncontrolled active item without clearing panel values', async () => {
+    const w = mount(NavMenu, {
+      props: { mode: 'horizontal', defaultActiveItem: 'first', popupContainer: false },
+      slots: { default: () => [
+        h(NavMenuItem, { name: 'first', label: 'First', options, defaultValue: 0 }),
+        h(NavMenuItem, { name: 'second', label: 'Second', options, defaultValue: 'a', active: true }),
+      ] },
+    })
+    wrappers.push(w); await settle()
+    const items = w.findAllComponents(NavMenuItem)
+    expect(items[0].find('[data-nav-item]').classes()).toContain('c-nav-menu--active')
+    expect(items[1].find('[data-nav-item]').classes()).not.toContain('c-nav-menu--active')
+    await items[1].find('[data-nav-item]').trigger('click'); await settle()
+    expect(items[0].find('[data-nav-item]').classes()).toContain('c-nav-menu--active')
+    expect(items[1].find('[data-nav-item]').classes()).not.toContain('c-nav-menu--active')
+    expect(w.emitted('update:activeItem')).toBeUndefined()
+    await items[1].find('[data-nav-key="a"]').trigger('click'); await settle()
+    expect(items[0].find('[data-nav-item]').classes()).not.toContain('c-nav-menu--active')
+    expect(items[1].find('[data-nav-item]').classes()).toContain('c-nav-menu--active')
+    expect(items[0].find('[data-nav-item] > .c-nav-menu__label').text()).toBe('全部')
+    expect(items[1].find('[data-nav-item] > .c-nav-menu__label').text()).toBe('分类 A')
+    expect(w.emitted('update:activeItem')).toEqual([['second']])
+  })
+  test('named popup entry activates only after selecting a leaf', async () => {
+    const w = mount(NavMenu, {
+      props: { mode: 'horizontal', popupContainer: false },
+      slots: { default: () => h(NavMenuItem, { name: 'filter', label: 'Filter', options }) },
+    })
+    wrappers.push(w); await settle()
+    const item = w.findComponent(NavMenuItem)
+    await item.find('[data-nav-item]').trigger('click'); await settle()
+    expect(item.find('[data-nav-item]').classes()).not.toContain('c-nav-menu--active')
+    expect(w.emitted('update:activeItem')).toBeUndefined()
+    await item.find('[data-nav-key="a"]').trigger('click'); await settle()
+    expect(item.find('[data-nav-item]').classes()).toContain('c-nav-menu--active')
+    expect(w.emitted('update:activeItem')).toEqual([['filter']])
+  })
+  test('controlled active item changes only after the parent accepts the request', async () => {
+    const w = mount(NavMenu, {
+      props: { mode: 'horizontal', activeItem: 'first' },
+      slots: { default: () => [
+        h(NavMenuItem, { name: 'first', label: 'First' }),
+        h(NavMenuItem, { name: 'second', label: 'Second' }),
+      ] },
+    })
+    wrappers.push(w); await settle()
+    const items = w.findAllComponents(NavMenuItem)
+    await items[1].find('[data-nav-item]').trigger('click')
+    expect(w.emitted('update:activeItem')).toEqual([['second']])
+    expect(items[0].find('[data-nav-item]').classes()).toContain('c-nav-menu--active')
+    expect(items[1].find('[data-nav-item]').classes()).not.toContain('c-nav-menu--active')
+    await w.setProps({ activeItem: 'second' })
+    expect(items[0].find('[data-nav-item]').classes()).not.toContain('c-nav-menu--active')
+    expect(items[1].find('[data-nav-item]').classes()).toContain('c-nav-menu--active')
+  })
   test('viewport layouts and custom dimensions apply to panel', async () => {
     const w = await create({ defaultOpen: true, popupLayout: 'full-width' })
     expect(w.find('.c-nav-menu__panel--full-width').attributes('style')).toContain('position: fixed')

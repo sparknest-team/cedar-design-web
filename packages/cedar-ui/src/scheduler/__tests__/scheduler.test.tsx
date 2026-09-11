@@ -56,6 +56,8 @@ describe("Scheduler", () => {
       const template = {
         title: "Template",
         description: "Details",
+        accentColor: "#f53f3f",
+        metadata: { orderId: "order-1" },
         duration: 60,
         resourceIds: ["b"],
       };
@@ -90,8 +92,14 @@ describe("Scheduler", () => {
       const draft = editor.props("event");
       expect(editor.props("open")).toBe(true);
       expect(editor.props("existing")).toBe(false);
+      expect(wrapper.get(".c-scheduler__drag-preview").text()).toContain(
+        template.title,
+      );
       expect(draft.title).toBe(template.title);
       expect(draft.description).toBe(template.description);
+      expect(draft.accentColor).toBe(template.accentColor);
+      expect(draft.metadata).toEqual(template.metadata);
+      expect(draft.metadata).not.toBe(template.metadata);
       expect(draft.resourceIds).toEqual(
         mode.startsWith("resource") ? ["a"] : ["b"],
       );
@@ -106,6 +114,7 @@ describe("Scheduler", () => {
       expect(wrapper.emitted("change")).toBeUndefined();
       editor.vm.$emit("update:open", false);
       await nextTick();
+      expect(wrapper.find(".c-scheduler__drag-preview").exists()).toBe(false);
       expect(wrapper.emitted("change")).toBeUndefined();
       await wrapper.get("[data-template]").trigger("dragstart");
       await target.trigger("drop");
@@ -119,6 +128,8 @@ describe("Scheduler", () => {
       expect(template).toEqual({
         title: "Template",
         description: "Details",
+        accentColor: "#f53f3f",
+        metadata: { orderId: "order-1" },
         duration: 60,
         resourceIds: ["b"],
       });
@@ -147,6 +158,59 @@ describe("Scheduler", () => {
       expect(wrapper.emitted("change")).toBeUndefined();
     },
   );
+  test("full sidebar slot replaces defaults and keeps the template drag API", async () => {
+    const wrapper = setup(
+      { defaultMode: "day", defaultValue: [] },
+      {
+        slots: {
+          sidebar: ({ startDrag, cancelDrag, unscheduled }: any) =>
+            h(
+              "button",
+              {
+                "data-custom-sidebar": "",
+                draggable: true,
+                onDragstart: (event: DragEvent) =>
+                  startDrag(
+                    {
+                      title: "Custom task",
+                      metadata: { source: "custom-sidebar" },
+                    },
+                    event,
+                  ),
+                onDragend: cancelDrag,
+              },
+              `Custom ${unscheduled.length}`,
+            ),
+        },
+      },
+    );
+    expect(wrapper.find("[aria-label='搜索资源']").exists()).toBe(false);
+    await wrapper.get("[data-custom-sidebar]").trigger("dragstart");
+    await wrapper.get(".c-scheduler__time-cell").trigger("drop");
+    expect(wrapper.getComponent(SchedulerEditor).props("event")).toMatchObject({
+      title: "Custom task",
+      metadata: { source: "custom-sidebar" },
+    });
+  });
+  test("editing preserves an independent metadata object through save", async () => {
+    const source = {
+      ...events[0],
+      metadata: { orderId: "order-1", status: "planned" },
+    };
+    const wrapper = setup({ defaultValue: [source] });
+    await wrapper.get(".c-scheduler__event-button").trigger("click");
+    const editor = wrapper.getComponent(SchedulerEditor);
+    const draft = editor.props("event") as SchedulerEvent;
+    expect(draft.metadata).toEqual(source.metadata);
+    expect(draft.metadata).not.toBe(source.metadata);
+    draft.metadata!.status = "active";
+    editor.vm.$emit("save", draft);
+    await flushPromises();
+    expect(source.metadata.status).toBe("planned");
+    expect(wrapper.emitted("update:modelValue")?.at(-1)?.[0]).toMatchObject([
+      { metadata: { orderId: "order-1", status: "active" } },
+    ]);
+  });
   test("cancelled drags and disabled resources do not open drafts; save hooks can reject", async () => {
     const wrapper = setup(
       {
@@ -197,6 +261,22 @@ describe("Scheduler", () => {
     expect(
       setup({ defaultValue: [], showSidebar: false }).html(),
     ).toMatchSnapshot();
+  });
+  test("initial scroll minute applies once and navigation preserves user scroll", async () => {
+    const wrapper = setup({
+      defaultMode: "day",
+      startHour: 0,
+      endHour: 24,
+      initialScrollMinute: 420,
+      showSidebar: false,
+    });
+    await flushPromises();
+    const viewport = wrapper.get(".c-scheduler__main").element as HTMLElement;
+    expect(viewport.scrollTop).toBeGreaterThan(0);
+    viewport.scrollTop = 123;
+    await wrapper.get("[aria-label='下一页']").trigger("click");
+    await flushPromises();
+    expect(viewport.scrollTop).toBe(123);
   });
   test("renders all six native modes", async () => {
     const wrapper = setup();
@@ -363,6 +443,77 @@ describe("Scheduler", () => {
     await wrapper.get(".c-scheduler__time-cell").trigger("click");
     expect(wrapper.emitted("cell-click")).toHaveLength(1);
     expect(wrapper.findComponent(SchedulerEditor).exists()).toBe(false);
+  });
+  test("arrow keys move focus between visible calendar controls", async () => {
+    const wrapper = setup(
+      {
+        defaultMode: "day",
+        showSidebar: false,
+        defaultValue: [
+          events[0],
+          {
+            ...events[0],
+            id: "later",
+            title: "Later review",
+            start: "2026-09-09T11:00:00",
+            end: "2026-09-09T12:00:00",
+          },
+        ],
+      },
+      { attachTo: document.body },
+    );
+    const buttons = wrapper.findAll<HTMLElement>(".c-scheduler__event-button");
+    expect(buttons).toHaveLength(2);
+    buttons.forEach((button, index) => {
+      button.element.getBoundingClientRect = () =>
+        ({
+          left: 100,
+          right: 200,
+          top: 100 + index * 100,
+          bottom: 140 + index * 100,
+          width: 100,
+          height: 40,
+          x: 100,
+          y: 100 + index * 100,
+          toJSON: () => ({}),
+        }) as DOMRect;
+    });
+    buttons[0].element.focus();
+    await buttons[0].trigger("keydown", { key: "ArrowDown" });
+    expect(document.activeElement).toBe(buttons[1].element);
+    await buttons[1].trigger("keydown", { key: "ArrowUp" });
+    expect(document.activeElement).toBe(buttons[0].element);
+  });
+  test("closing the editor restores focus to its calendar trigger", async () => {
+    const wrapper = setup(
+      { defaultMode: "day", showSidebar: false },
+      { attachTo: document.body },
+    );
+    const trigger = wrapper.get<HTMLElement>(
+      ".c-scheduler__event-button",
+    ).element;
+    trigger.focus();
+    await wrapper.get(".c-scheduler__event-button").trigger("click");
+    wrapper.findComponent(SchedulerEditor).vm.$emit("update:open", false);
+    await nextTick();
+    expect(document.activeElement).toBe(trigger);
+  });
+  test("deleting the editor trigger restores focus inside the calendar", async () => {
+    const wrapper = setup(
+      { defaultMode: "day", showSidebar: false },
+      { attachTo: document.body },
+    );
+    const trigger = wrapper.get<HTMLElement>(
+      ".c-scheduler__event-button",
+    ).element;
+    trigger.getBoundingClientRect = () =>
+      ({ left: 100, top: 100, width: 100, height: 40 }) as DOMRect;
+    trigger.focus();
+    await wrapper.get(".c-scheduler__event-button").trigger("click");
+    wrapper.findComponent(SchedulerEditor).vm.$emit("remove", events[0]);
+    await flushPromises();
+    expect(trigger.isConnected).toBe(false);
+    expect(wrapper.element.contains(document.activeElement)).toBe(true);
   });
   test("async work after unmount does not publish updates", async () => {
     let resolve!: () => void;

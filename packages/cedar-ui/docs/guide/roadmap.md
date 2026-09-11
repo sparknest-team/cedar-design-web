@@ -14,7 +14,7 @@ permalink: /guide/roadmap/
 | 一等 Dark Theme            | ✅     | `Themes` + `StyleProvider` / `ConfigProvider` + [主题定制](/themes/)             |
 | 样式按需引入               | ✅     | Resolver 默认引入 CSS；组件样式与基础主题拆分                                    |
 | Segmented                  | ✅     | [Segmented](/components/segmented/)                                              |
-| Dropdown                   | ✅     | 已由 [Menu 下拉菜单](/components/menu/) 覆盖（Trigger + Option）；不另建别名组件 |
+| DropdownMenu               | ✅     | [DropdownMenu 下拉命令菜单](/components/dropdown-menu/)（Trigger + MenuOption） |
 | Tour                       | 待开始 | 新手引导                                                                         |
 | VirtualList / Table 虚拟化 | 待开始 | 公开虚拟列表能力                                                                 |
 | a11y 落地                  | 待开始 | 组件文档可访问性章节 + 键盘/ARIA 测试                                            |

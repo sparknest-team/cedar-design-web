@@ -16,18 +16,21 @@ void renderProps
 const invalidDuration: TriggerProps = { duration: 'fast' }
 void invalidDuration
 
-import type { MenuProps, MenuOptionData, MenuFieldNames } from '@cedarjs/ui/menu'
+import type { DropdownMenuProps, DropdownMenuOption, DropdownMenuFieldNames } from '@cedarjs/ui/dropdown-menu'
 import type { TriggerInstance } from '@cedarjs/ui/trigger'
-const fields: MenuFieldNames = { label: 'text', value: 'id', children: 'items' }
-const menuOptions: MenuOptionData[] = [{ text: 'Branch', id: 'p', items: [{ text: 'Leaf', id: false }] }]
-const menuSelection: MenuProps = { multiple: true, modelValue: [], options: menuOptions, fieldNames: fields, popupContainer: false }
+const fields: DropdownMenuFieldNames = { label: 'text', value: 'id', children: 'items' }
+const menuOptions: DropdownMenuOption[] = [{ text: 'Branch', id: 'p', items: [{ text: 'Leaf', id: false }] }]
+const menuSelection: DropdownMenuProps = { modelValue: 'leaf', options: menuOptions, fieldNames: fields, popupContainer: false }
 void menuSelection
+// @ts-expect-error DropdownMenu is a single-value command menu
+const invalidMultipleMenu: DropdownMenuProps = { multiple: true }
 // @ts-expect-error options must be an array
-const invalidMenuOptions: MenuProps = { options: { value: 1 } }
+const invalidMenuOptions: DropdownMenuProps = { options: { value: 1 } }
 // @ts-expect-error field mapping names must be strings
-const invalidMenuFields: MenuProps = { fieldNames: { value: 42 } }
+const invalidMenuFields: DropdownMenuProps = { fieldNames: { value: 42 } }
 void invalidMenuOptions
 void invalidMenuFields
+void invalidMultipleMenu
 const restoreMenuReference = (trigger: TriggerInstance) => trigger.focusReference()
 void restoreMenuReference
 
@@ -46,13 +49,14 @@ const invalidTooltipDuration: TooltipProps = { duration: 'quick' }
 const invalidPopoverTrigger: PopoverProps = { trigger: 'longpress' }
 void invalidTooltipDuration; void invalidPopoverTrigger
 
-// Menu root and slot submenus expose the same public controls.
-import type { MenuInstance, MenuSubmenuInstance, MenuSubmenuProps, MenuOptionProps, MenuGroupProps } from '@cedarjs/ui/menu'
-const submenuProps: MenuSubmenuProps = { trigger: 'hover', open: true, unmountOnClose: false }
+// DropdownMenu uses a data-first command tree and keeps MenuOption for composition.
+import type { DropdownMenuInstance, MenuOptionProps } from '@cedarjs/ui/dropdown-menu'
 const optionProps: MenuOptionProps = { label: () => 'rendered', value: false }
-const groupProps: MenuGroupProps = { title: 'Actions' }
-const menuMethods = (menu: MenuInstance, submenu: MenuSubmenuInstance) => {
+const dropdownOptions: DropdownMenuOption[] = [
+  { type: 'group', label: 'Actions', children: [{ label: ({ active }) => active ? 'Active' : 'Edit', value: 'edit' }] },
+  { type: 'divider' },
+]
+const menuMethods = (menu: DropdownMenuInstance) => {
   menu.open(); menu.close(); menu.resize(); menu.setReference()
-  submenu.open(); submenu.close(); submenu.allowClose()
 }
-void submenuProps; void optionProps; void groupProps; void menuMethods
+void optionProps; void dropdownOptions; void menuMethods

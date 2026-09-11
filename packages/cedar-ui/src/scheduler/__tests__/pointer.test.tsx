@@ -147,6 +147,37 @@ describe("Scheduler pointer interaction", () => {
     pointer("pointerup", 50, 50);
     expect(wrapper.emitted("pointer-drop")).toHaveLength(1);
   });
+  test("touch requires a long press and early movement cancels dragging", async () => {
+    vi.useFakeTimers();
+    try {
+      const wrapper = mount(Card, { props: { event } });
+      wrappers.push(wrapper);
+      await wrapper.trigger("pointerdown", {
+        button: 0,
+        pointerType: "touch",
+        clientX: 0,
+        clientY: 0,
+      });
+      pointer("pointermove", 10, 10);
+      vi.advanceTimersByTime(400);
+      pointer("pointermove", 20, 20);
+      expect(wrapper.emitted("drag-start")).toBeUndefined();
+
+      await wrapper.trigger("pointerdown", {
+        button: 0,
+        pointerType: "touch",
+        clientX: 0,
+        clientY: 0,
+      });
+      vi.advanceTimersByTime(350);
+      pointer("pointermove", 10, 10);
+      expect(wrapper.emitted("drag-start")?.[0][1]).toBe(false);
+      pointer("pointerup", 20, 20);
+      expect(wrapper.emitted("pointer-drop")?.[0]).toEqual([20, 20]);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
   test("Escape cancels, readonly ignores pointer, unmount cleans listeners", async () => {
     const wrapper = mount(Card, { props: { event } });
     wrappers.push(wrapper);
@@ -172,6 +203,38 @@ describe("Scheduler pointer interaction", () => {
       expect(cleanup.mock.calls.some((call) => call[0] === name)).toBe(true);
     }
     cleanup.mockRestore();
+  });
+  test("static events hide the edit accent and event themes expose fill patterns", async () => {
+    const wrapper = mount(Card, {
+      props: {
+        event: {
+          ...event,
+          readonly: true,
+          color: "#00a854",
+          accentColor: "#f53f3f",
+          backgroundColor: "#f0fff4",
+          backgroundPattern: "diagonal-stripes" as const,
+        },
+      },
+    });
+    wrappers.push(wrapper);
+    expect(wrapper.classes()).toContain("c-scheduler__event--static");
+    expect(wrapper.classes()).toContain(
+      "c-scheduler__event--pattern-diagonal-stripes",
+    );
+    expect(wrapper.attributes("style")).toContain(
+      "--c-scheduler-event-background: #f0fff4",
+    );
+    expect(wrapper.attributes("style")).toContain(
+      "--c-scheduler-event-accent-color: #f53f3f",
+    );
+    await wrapper.setProps({
+      event: { ...event, readonly: false },
+      movable: false,
+    });
+    expect(wrapper.classes()).toContain("c-scheduler__event--static");
+    await wrapper.setProps({ movable: true });
+    expect(wrapper.classes()).not.toContain("c-scheduler__event--static");
   });
   test("resize handle emits resize gesture", async () => {
     const wrapper = mount(Card, { props: { event, resizable: true } });

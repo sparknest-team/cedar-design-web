@@ -18,7 +18,7 @@
 - Tabs：`tablist`/`tab`/`tabpanel`、选中状态、方向键和 Home/End。
 - Checkbox/Radio/Switch：键盘切换、checked/indeterminate 状态。
 - Input/Form：label、description、error 与控件关联，错误时使用 `aria-invalid`。
-- Select/Menu/Tree：符合对应 APG 模式的焦点管理和键盘导航。
+- Select/DropdownMenu/Tree：符合对应 APG 模式的焦点管理和键盘导航。
 - Progress/Loading：提供角色、当前值或可读的未知进度状态。
 
 每个交互组件必须包含键盘与关键 ARIA 自动化测试，并在 README 增加“可访问性”说明。

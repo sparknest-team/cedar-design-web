@@ -1,7 +1,7 @@
 <template>
-  <Affix :offsetTop="genTabOffsetTop()">
+  <c-affix :offset-top="genTabOffsetTop()">
     <div class="px-16 py-12 c-bg-0">
-      <Breadcrumb :routes="routes">
+      <c-breadcrumb :routes="routes">
         <template #item-render="{ route }">
           <span v-if="!route.path">
             {{ route.label }}
@@ -10,44 +10,43 @@
             {{ route.label }}
           </a>
         </template>
-      </Breadcrumb>
+      </c-breadcrumb>
     </div>
-  </Affix>
+  </c-affix>
   <div class="m-24 c-bg-0">
-    <Tabs :body-padding="false" default-active="3">
-      <TabsNavs>
-        <TabNav key="1" title="基础信息" />
-        <TabNav key="2" title="关联线索" />
-        <TabNav key="3" title="商务信息" />
-      </TabsNavs>
-      <TabsItems>
-        <TabItem key="1">基础信息</TabItem>
-        <TabItem key="2">关联线索</TabItem>
-        <TabItem key="3">
-          <Space :size="24" class="p-24" direction="column" fill>
+    <c-tabs :body-padding="false" default-active="3">
+      <c-tabs-navs>
+        <c-tab-nav key="1" title="基础信息" />
+        <c-tab-nav key="2" title="关联线索" />
+        <c-tab-nav key="3" title="商务信息" />
+      </c-tabs-navs>
+      <c-tabs-items>
+        <c-tab-item key="1">基础信息</c-tab-item>
+        <c-tab-item key="2">关联线索</c-tab-item>
+        <c-tab-item key="3">
+          <c-space :size="24" class="p-24" direction="column" fill>
             <!--card-->
             <div>
               <div class="mb-16">
                 <div class="c-text-subtitle-2-semibold">贷款信息</div>
               </div>
-              <Descriptions :column="4" :data="descData" layout="vertical"></Descriptions>
+              <c-descriptions :column="4" :data="descData" layout="vertical"></c-descriptions>
             </div>
             <!--card-->
             <div>
               <div class="mb-16">
                 <div class="c-text-subtitle-2-semibold">贷款信息</div>
               </div>
-              <Descriptions :column="4" :data="descData" layout="vertical"></Descriptions>
+              <c-descriptions :column="4" :data="descData" layout="vertical"></c-descriptions>
             </div>
-          </Space>
-        </TabItem>
-      </TabsItems>
-    </Tabs>
+          </c-space>
+        </c-tab-item>
+      </c-tabs-items>
+    </c-tabs>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { Space, Tabs, TabNav, TabItem, TabsNavs, TabsItems, Affix, Breadcrumb, Descriptions } from '@cedarjs/ui'
 import { ref } from 'vue'
 
 const descData = ref([

@@ -15,6 +15,7 @@ export default defineComponent({
   props: navMenuProps,
   emits: {
     'update:modelValue': (_key: NavMenuKey | null) => true,
+    'update:activeItem': (_key: NavMenuKey | null) => true,
     'update:expandedKeys': (_keys: NavMenuKey[]) => true,
     'update:collapsed': (_value: boolean) => true,
     select: (_key: NavMenuKey, _option: import('./types').NavMenuOption, _event: Event) => true,
@@ -24,15 +25,23 @@ export default defineComponent({
     const root = ref<HTMLElement>()
     const measure = ref<HTMLElement>()
     const localValue = ref(props.defaultValue)
+    const localActiveItem = ref(props.defaultActiveItem)
     const localExpanded = ref<NavMenuKey[]>([...props.defaultExpandedKeys])
     const localCollapsed = ref(props.defaultCollapsed)
     const selected = computed(() => props.modelValue !== undefined ? props.modelValue : localValue.value)
+    const activeItem = computed(() => props.activeItem !== undefined ? props.activeItem : localActiveItem.value)
     const expanded = computed(() => props.expandedKeys !== undefined ? props.expandedKeys : localExpanded.value)
     const collapsed = computed(() => props.mode !== 'horizontal' && (props.collapsed ?? sider?.collapsed ?? localCollapsed.value))
     const theme = computed(() => props.theme ?? sider?.theme ?? 'light')
     const tree = computed(() => createNavMenuTree(props.options, props.fieldNames))
     const itemClosers = new Map<symbol, () => void>()
+    const itemNames = new Map<NavMenuKey, symbol>()
     function activateItem(id?: symbol) { itemClosers.forEach((close, key) => { if (key !== id) close() }) }
+    function setActiveItem(value: NavMenuKey | null) {
+      if (value === activeItem.value) return
+      if (props.activeItem === undefined) localActiveItem.value = value
+      emit('update:activeItem', value)
+    }
     const elements = new Map<NavMenuKey, HTMLElement>()
     const focusKey = ref<NavMenuKey>()
     const visibleCount = ref(Infinity)
@@ -89,9 +98,15 @@ export default defineComponent({
       if (key != null) elements.get(key)?.scrollIntoView?.({ block: 'nearest', inline: 'nearest' })
     }
     const api: NavMenuContext = {
-      registerItem(id, close) { itemClosers.set(id, close); return () => { itemClosers.delete(id) } },
+      registerItem(id, close, name) {
+        if (name !== undefined && itemNames.has(name)) throw new Error(`NavMenu.Item duplicate name: ${name}`)
+        itemClosers.set(id, close)
+        if (name !== undefined) itemNames.set(name, id)
+        return () => { itemClosers.delete(id); if (name !== undefined && itemNames.get(name) === id) itemNames.delete(name) }
+      },
       activateItem,
-      props, selected, expanded, collapsed, theme, activePath, focusKey, slots, labelField: computed(() => tree.value.names.label),
+      selectItem: setActiveItem,
+      props, selected, activeItem, expanded, collapsed, theme, activePath, focusKey, slots, labelField: computed(() => tree.value.names.label),
       context(node) { return { option: node.option, selected: selected.value === node.key, expanded: expanded.value.includes(node.key), active: activePath.value.has(node.key), level: node.level } },
       select(node, event) {
         if (props.disabled || node.disabled || node.type !== 'item' || node.children.length) return
@@ -173,7 +188,7 @@ export default defineComponent({
       }
     }
     function setCollapsed(value: boolean) { if (props.collapsed === undefined && !sider) localCollapsed.value = value; emit('update:collapsed', value) }
-    expose({ showOption, scrollTo, resize, setCollapsed })
+    expose({ showOption, scrollTo, resize, setCollapsed, setActiveItem })
     const measureContent = (node: NavMenuNode): VNodeChild => {
       const context = api.context(node)
       const render = (kind: 'label' | 'icon' | 'extra') => { const value = node.option[kind === 'label' ? tree.value.names.label : kind] as NavMenuContent; return slots[kind]?.(context) ?? (typeof value === 'function' ? value(context) : value) }

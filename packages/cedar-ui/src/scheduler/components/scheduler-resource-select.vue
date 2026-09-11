@@ -49,6 +49,8 @@ import type { SchedulerMessages } from "../locale";
 defineOptions({ name: createNamespace("scheduler-resource-select").name });
 const props = defineProps<{
   modelValue?: string[];
+  dimensionId?: string;
+  excludeDimensions?: string[];
   resources: SchedulerResource[];
   store: SchedulerResourceStore;
   request?: SchedulerRequestResources;
@@ -71,10 +73,14 @@ let sequence = 0;
 let disposed = false;
 const options = computed(() => {
   const items = new Map(
-    (props.request ? results.value : props.resources).map((item) => [
-      item.id,
-      item,
-    ]),
+    (props.request ? results.value : props.resources)
+      .filter(
+        (item) =>
+          (props.dimensionId === undefined ||
+            item.dimensionId === props.dimensionId) &&
+          !props.excludeDimensions?.includes(item.dimensionId ?? ""),
+      )
+      .map((item) => [item.id, item]),
   );
   for (const id of props.modelValue ?? [])
     items.set(id, props.store.get(id) ?? { id, label: id });
@@ -104,7 +110,11 @@ function cancel() {
   loading.value = false;
 }
 watch(
-  () => props.request,
+  [
+    () => props.request,
+    () => props.dimensionId,
+    () => props.excludeDimensions?.join("\0"),
+  ],
   () => {
     cancel();
     results.value = [];
@@ -128,7 +138,14 @@ async function load(cursor?: string) {
   failed.value = false;
   const searchQuery = query;
   try {
-    const page = await props.request({ query: searchQuery, cursor, signal });
+    const page = await props.request({
+      query: searchQuery,
+      cursor,
+      signal,
+      ...(props.dimensionId === undefined
+        ? {}
+        : { dimensionId: props.dimensionId }),
+    });
     if (disposed || current !== sequence || signal.aborted) return;
     const merged = new Map(
       (cursor === undefined ? [] : results.value).map((item) => [
@@ -144,7 +161,14 @@ async function load(cursor?: string) {
     if (!disposed && current === sequence && !signal.aborted) {
       failed.value = true;
       failedCursor.value = cursor;
-      emit("error", cause, { type: "search", query: searchQuery, cursor });
+      emit("error", cause, {
+        type: "search",
+        query: searchQuery,
+        cursor,
+        ...(props.dimensionId === undefined
+          ? {}
+          : { dimensionId: props.dimensionId }),
+      });
     }
   } finally {
     if (current === sequence) loading.value = false;

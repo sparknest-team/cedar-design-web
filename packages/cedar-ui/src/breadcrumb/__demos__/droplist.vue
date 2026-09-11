@@ -11,19 +11,7 @@
       <c-breadcrumb-item>
         <template #droplist>
           <c-menu-option>Option 1</c-menu-option>
-          <c-menu-submenu value="option-1">
-            <template #default>Option 2</template>
-            <template #content>
-              <c-menu-option>Option 2-1</c-menu-option>
-              <c-menu-option>Option 2-2</c-menu-option>
-              <c-menu-option>Option 2-3</c-menu-option>
-            </template>
-            <template #footer>
-              <div style="padding: 6px; text-align: center">
-                <c-button>Click</c-button>
-              </div>
-            </template>
-          </c-menu-submenu>
+          <c-menu-option>Option 2</c-menu-option>
           <c-menu-option>Option 3</c-menu-option>
         </template>
         Channel

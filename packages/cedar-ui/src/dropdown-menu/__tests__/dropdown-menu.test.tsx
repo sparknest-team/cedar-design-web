@@ -1,14 +1,14 @@
 import { defineComponent, nextTick, provide, ref } from "vue";
 import { mount, enableAutoUnmount } from "@vue/test-utils";
 import { describe, test, expect, vi, afterEach } from "vitest";
-import { Menu, MenuOption } from "../index";
+import { DropdownMenu, MenuOption } from "../index";
 import { menuInjectionKey } from "../context";
 
 enableAutoUnmount(afterEach);
 
-describe("Menu", () => {
+describe("DropdownMenu", () => {
   test("render", async () => {
-    const wrapper = mount(Menu);
+    const wrapper = mount(DropdownMenu);
     await nextTick();
     expect(wrapper.html()).toMatchSnapshot();
   });
@@ -21,6 +21,7 @@ describe("Menu", () => {
           provide(menuInjectionKey, {
             popupMaxHeight: ref(true),
             modelValue: ref("Option 1"),
+            submenuTrigger: ref("hover" as const),
             onOptionClick,
           });
 
@@ -35,14 +36,14 @@ describe("Menu", () => {
     );
 
     await nextTick();
-    expect(wrapper.find(".c-menu-option-selected").text()).toBe("Option 1");
+    expect(wrapper.find(".c-dropdown-menu-option-selected").text()).toBe("Option 1");
 
-    await wrapper.findAll(".c-menu-option")[1].trigger("click");
+    await wrapper.findAll(".c-dropdown-menu-option")[1].trigger("click");
     expect(onOptionClick.mock.calls[0][0]).toBe("Option 2");
   });
 
   test("provide selected value to options when using v-model", async () => {
-    const wrapper = mount(Menu, {
+    const wrapper = mount(DropdownMenu, {
       props: {
         modelValue: "Option 1",
       },
@@ -62,6 +63,6 @@ describe("Menu", () => {
     });
 
     await nextTick();
-    expect(wrapper.find(".c-menu-option-selected").text()).toBe("Option 1");
+    expect(wrapper.find(".c-dropdown-menu-option-selected").text()).toBe("Option 1");
   });
 });

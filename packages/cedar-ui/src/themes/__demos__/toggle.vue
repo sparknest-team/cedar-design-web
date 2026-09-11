@@ -25,7 +25,7 @@
 import { StyleProvider, Themes, type StyleVars } from '@cedarjs/ui'
 
 function apply(theme: StyleVars | null) {
-  StyleProvider(theme)
+  StyleProvider.setStyleVars(theme)
 }
 </script>
 

@@ -73,11 +73,9 @@ declare module "vue" {
     CListItem: (typeof import("@cedarjs/ui/web-vue"))["ListItem"];
     CListItemMeta: (typeof import("@cedarjs/ui/web-vue"))["ListItemMeta"];
     CMention: (typeof import("@cedarjs/ui/web-vue"))["Mention"];
-    CMenu: (typeof import("@cedarjs/ui/web-vue"))["Menu"];
+    CDropdownMenu: (typeof import("@cedarjs/ui/web-vue"))["DropdownMenu"];
     CSplitButton: (typeof import("@cedarjs/ui/web-vue"))["SplitButton"];
-    CMenuGroup: (typeof import("@cedarjs/ui/web-vue"))["MenuGroup"];
     CMenuOption: (typeof import("@cedarjs/ui/web-vue"))["MenuOption"];
-    CMenuSubmenu: (typeof import("@cedarjs/ui/web-vue"))["MenuSubmenu"];
     CNavMenu: (typeof import("@cedarjs/ui/web-vue"))["NavMenu"];
     CNavMenuItem: (typeof import("@cedarjs/ui/web-vue"))["NavMenuItem"];
     CDialog: (typeof import("@cedarjs/ui/web-vue"))["Dialog"];

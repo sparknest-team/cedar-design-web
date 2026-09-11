@@ -1,0 +1,6 @@
+- [x] Define independent loader API and document complete-window response contract.
+- [x] Implement cancellation, generation protection, validation and bounded cache.
+- [x] Invalidate cached windows after local edits and source changes.
+- [x] Add interactive remote loading, retry, cache, race and persistence demo.
+- [x] Add race, lifecycle, cache, invalid-response and mutation regression tests.
+- [x] Verify public types, package build and documentation interactions.

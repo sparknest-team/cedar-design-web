@@ -114,8 +114,11 @@ describe("scheduler-core", () => {
   });
   test("moving one assignment preserves the others and deduplicates", () => {
     const original = event("a", undefined, undefined, ["a", "b"]);
+    original.metadata = { orderId: "order-1" };
     const moved = moveSchedulerEvent(original, "2026-09-10T11:00:00", "a", "c");
     expect(moved.resourceIds).toEqual(["b", "c"]);
+    expect(moved.metadata).toEqual({ orderId: "order-1" });
+    expect(moved.metadata).not.toBe(original.metadata);
     expect(original.resourceIds).toEqual(["a", "b"]);
     expect(+schedulerDate(moved.end!) - +schedulerDate(moved.start!)).toBe(
       3600000,

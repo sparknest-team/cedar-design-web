@@ -26,8 +26,16 @@ describe('getComponentName', () => {
 
 describe('withInstall', () => {
   test('registers root and child components with Cedar options and runs setup', () => {
-    const Root = defineComponent({ name: 'CRoot', render: () => null })
-    const Child = defineComponent({ name: 'CChild', render: () => null })
+    const Root = defineComponent({
+      name: 'CRoot',
+      props: { size: { type: String, default: 'md' } },
+      render: () => null,
+    })
+    const Child = defineComponent({
+      name: 'CChild',
+      props: { disabled: { type: Boolean, default: false } },
+      render: () => null,
+    })
     let setupCalled = false
     const plugin = withInstall(Root, undefined, {
       components: [Root, Child],
@@ -40,6 +48,11 @@ describe('withInstall', () => {
     expect(app.component('AcmeRoot')).toBe(Root)
     expect(app.component('AcmeChild')).toBe(Child)
     expect(setupCalled).toBe(true)
+
+    plugin.setPropsDefaults({ size: 'lg' })
+    ;(Child as any).setPropsDefaults({ disabled: true })
+    expect((Root.props as any).size.default).toBe('lg')
+    expect((Child.props as any).disabled.default).toBe(true)
   })
 })
 

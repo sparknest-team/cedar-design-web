@@ -1,20 +1,357 @@
 <template>
+  <c-alert>
+    这里的工作、会议、休息和不可用时段都是 Demo 自己定义的业务类型，并非
+    Scheduler
+    内置枚举。新增时可选择类型，由业务配置映射标题建议、外观和默认权限。
+  </c-alert>
+  <c-space>
+    <c-checkbox v-model="rejectSave">模拟后端保存失败</c-checkbox>
+    <span>{{ requestStatus }}</span>
+  </c-space>
   <c-scheduler
-    :default-value="events"
+    v-model="events"
     default-date="2026-09-09"
-    default-mode="agenda"
+    default-mode="week"
     :resources="resources"
-    readonly
+    :loading="loading"
+    :before-change="saveToMockServer"
   >
     <template #event="{ event }">
       <span>{{ event.title }}</span>
-      <c-tag size="sm" status="info"
-        >{{ event.resourceIds?.length ?? 0 }} 人</c-tag
+      <c-tag size="sm" :status="event.readonly ? 'neutral' : 'info'">
+        {{ typeOf(event).label }} · {{ event.readonly ? "只读" : "可编辑" }}
+      </c-tag>
+    </template>
+
+    <template
+      #editor="{
+        action,
+        event,
+        save,
+        remove,
+        close,
+        readonly,
+        pending,
+        errorMessage,
+      }"
+    >
+      <h3>{{ action === "create" ? "新增日程" : "编辑日程" }}</h3>
+      <c-alert v-if="errorMessage" status="danger">
+        {{ errorMessage }}
+      </c-alert>
+      <c-form
+        :model="event"
+        layout="vertical"
+        @submit="prepareAndSave(event, save)"
       >
+        <c-form-item label="日程类型">
+          <c-select
+            :model-value="typeOf(event).id"
+            :disabled="readonly || pending"
+            @update:model-value="applyType(event, $event)"
+          >
+            <c-option
+              v-for="type in eventTypes"
+              :key="type.id"
+              :value="type.id"
+            >
+              {{ type.label }} · {{ type.readonly ? "默认只读" : "默认可编辑" }}
+            </c-option>
+          </c-select>
+        </c-form-item>
+
+        <div class="scheduler-type-preview" :style="previewStyle(event)">
+          <strong>{{ typeOf(event).label }}</strong>
+          <span>{{ typeOf(event).description }}</span>
+        </div>
+
+        <c-form-item label="标题">
+          <c-input
+            v-model="event.title"
+            :disabled="readonly || pending"
+            placeholder="请输入日程标题"
+          />
+        </c-form-item>
+        <c-form-item label="开始时间">
+          <c-date
+            :model-value="
+              event.start == null ? undefined : schedulerDate(event.start)
+            "
+            :disabled="readonly || pending"
+            show-time
+            value-format="Date"
+            @update:model-value="event.start = $event"
+          />
+        </c-form-item>
+        <c-form-item label="结束时间">
+          <c-date
+            :model-value="
+              event.end == null ? undefined : schedulerDate(event.end)
+            "
+            :disabled="readonly || pending"
+            show-time
+            value-format="Date"
+            @update:model-value="event.end = $event"
+          />
+        </c-form-item>
+        <c-form-item>
+          <c-checkbox
+            :model-value="!event.readonly"
+            :disabled="readonly || pending"
+            @update:model-value="event.readonly = !$event"
+          >
+            创建后允许修改和拖拽
+          </c-checkbox>
+        </c-form-item>
+        <c-space>
+          <c-button :disabled="pending" @click="close">取消</c-button>
+          <c-button
+            v-if="action === 'edit' && !readonly"
+            status="danger"
+            :disabled="pending"
+            @click="remove"
+            >删除</c-button
+          >
+          <c-button
+            v-if="!readonly"
+            html-type="submit"
+            status="primary"
+            :loading="pending"
+            >保存日程</c-button
+          >
+        </c-space>
+      </c-form>
     </template>
   </c-scheduler>
+  <details class="scheduler-mock-log">
+    <summary>查看最近一次 Mock API 请求</summary>
+    <pre>{{ lastRequest || "尚未提交" }}</pre>
+  </details>
 </template>
+
 <script setup lang="ts">
-import { createEvents, resources } from "./data";
-const events = createEvents();
+import { onMounted, ref } from "vue";
+import { resources } from "./data";
+import { cloneSchedulerEvent, schedulerDate } from "../core";
+import type {
+  SchedulerBeforeChange,
+  SchedulerEvent,
+  SchedulerEventBackgroundPattern,
+} from "../index";
+
+type EventType = {
+  id: string;
+  label: string;
+  description: string;
+  title: string;
+  color: string;
+  backgroundColor: string;
+  backgroundPattern: SchedulerEventBackgroundPattern;
+  readonly: boolean;
+};
+
+const eventTypes: EventType[] = [
+  {
+    id: "work",
+    label: "工作安排",
+    description: "普通任务，可继续编辑和拖拽调整时间。",
+    title: "工作安排",
+    color: "#1677ff",
+    backgroundColor: "#e6f4ff",
+    backgroundPattern: "solid",
+    readonly: false,
+  },
+  {
+    id: "meeting",
+    label: "会议",
+    description: "用圆点背景区分协作和沟通类日程。",
+    title: "会议",
+    color: "#d48806",
+    backgroundColor: "#fffbe6",
+    backgroundPattern: "dots",
+    readonly: false,
+  },
+  {
+    id: "rest",
+    label: "休息",
+    description: "休息时段默认锁定，保存后不允许修改或拖拽。",
+    title: "休息",
+    color: "#00a854",
+    backgroundColor: "#f0fff4",
+    backgroundPattern: "diagonal-stripes",
+    readonly: true,
+  },
+  {
+    id: "blocked",
+    label: "不可用时段",
+    description: "用于停机、封场等占用，默认只读。",
+    title: "不可用时段",
+    color: "#722ed1",
+    backgroundColor: "#f9f0ff",
+    backgroundPattern: "crosshatch",
+    readonly: true,
+  },
+];
+
+const seedEvents: SchedulerEvent[] = [
+  createEvent("work", "work-1", "需求评审", "09:00", "10:30"),
+  createEvent("meeting", "meeting-1", "项目周会", "10:00", "11:30"),
+  createEvent("rest", "rest-1", "张志强 休息", "13:00", "15:00"),
+  createEvent("blocked", "blocked-1", "会议室维护", "15:30", "17:30"),
+];
+const events = ref<SchedulerEvent[]>([]);
+const loading = ref(true);
+const rejectSave = ref(false);
+const requestStatus = ref("正在从 Mock API 加载…");
+const lastRequest = ref("");
+let mockDatabase = seedEvents.map(cloneSchedulerEvent);
+
+const wait = (milliseconds: number) =>
+  new Promise((resolve) => setTimeout(resolve, milliseconds));
+const mockApi = {
+  async list() {
+    await wait(300);
+    return mockDatabase.map(cloneSchedulerEvent);
+  },
+  async save(next: SchedulerEvent[]) {
+    await wait(500);
+    if (rejectSave.value) throw new Error("Mock API：保存被拒绝");
+    mockDatabase = next.map(cloneSchedulerEvent);
+    return {
+      revision: Date.now(),
+      events: mockDatabase.map(cloneSchedulerEvent),
+    };
+  },
+};
+
+onMounted(async () => {
+  events.value = await mockApi.list();
+  loading.value = false;
+  requestStatus.value = `已加载 ${events.value.length} 条日程`;
+});
+
+const saveToMockServer: SchedulerBeforeChange = async (context) => {
+  lastRequest.value = JSON.stringify(
+    {
+      method: "PUT",
+      url: "/api/scheduler/events",
+      change: context.type,
+      event: context.event,
+      events: context.value,
+    },
+    null,
+    2,
+  );
+  requestStatus.value = "正在提交 metadata 和日程数据…";
+  try {
+    const response = await mockApi.save(context.value);
+    requestStatus.value = `保存成功 · revision ${response.revision}`;
+    return true;
+  } catch (error) {
+    requestStatus.value = error instanceof Error ? error.message : "保存失败";
+    throw error;
+  }
+};
+
+function createEvent(
+  typeId: string,
+  id: string,
+  title: string,
+  start: string,
+  end: string,
+): SchedulerEvent {
+  const event: SchedulerEvent = {
+    id,
+    title,
+    start: `2026-09-09T${start}:00`,
+    end: `2026-09-09T${end}:00`,
+    resourceIds: [],
+  };
+  applyType(event, typeId, false);
+  return event;
+}
+
+function typeOf(event: SchedulerEvent): EventType {
+  return (
+    eventTypes.find((type) => type.id === event.metadata?.typeId) ??
+    eventTypes[0]
+  );
+}
+
+function applyType(event: SchedulerEvent, value: unknown, suggestTitle = true) {
+  const previous = typeOf(event);
+  const type = eventTypes.find((item) => item.id === value) ?? eventTypes[0];
+  const replaceTitle =
+    suggestTitle && (!event.title.trim() || event.title === previous.title);
+  event.color = type.color;
+  event.backgroundColor = type.backgroundColor;
+  event.backgroundPattern = type.backgroundPattern;
+  event.metadata = { ...event.metadata, typeId: type.id };
+  event.readonly = type.readonly;
+  if (replaceTitle) event.title = type.title;
+}
+
+function prepareAndSave(
+  event: SchedulerEvent,
+  save: (event?: SchedulerEvent) => void,
+) {
+  const type = typeOf(event);
+  event.color ??= type.color;
+  event.backgroundColor ??= type.backgroundColor;
+  event.backgroundPattern ??= type.backgroundPattern;
+  event.metadata = {
+    ...event.metadata,
+    typeId: type.id,
+    clientRequestId: `demo-${Date.now()}`,
+  };
+  save(event);
+}
+
+function previewStyle(event: SchedulerEvent) {
+  const color = event.color ?? "#1677ff";
+  const background = event.backgroundColor ?? "#e6f4ff";
+  const pattern = event.backgroundPattern;
+  const images: Record<SchedulerEventBackgroundPattern, string> = {
+    solid: `linear-gradient(${background}, ${background})`,
+    "diagonal-stripes": `repeating-linear-gradient(135deg, transparent 0 8px, color-mix(in srgb, ${color} 18%, transparent) 8px 16px)`,
+    dots: `radial-gradient(circle, color-mix(in srgb, ${color} 28%, transparent) 1.5px, transparent 1.5px)`,
+    crosshatch: `repeating-linear-gradient(45deg, transparent 0 9px, color-mix(in srgb, ${color} 14%, transparent) 9px 11px), repeating-linear-gradient(-45deg, transparent 0 9px, color-mix(in srgb, ${color} 14%, transparent) 9px 11px)`,
+  };
+  return {
+    color,
+    backgroundColor: background,
+    backgroundImage: images[pattern ?? "solid"],
+    backgroundSize: pattern === "dots" ? "10px 10px" : undefined,
+    borderColor: color,
+  };
+}
 </script>
+
+<style scoped>
+.scheduler-type-preview {
+  display: grid;
+  gap: 4px;
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border: 1px solid;
+  border-radius: 8px;
+}
+
+.scheduler-type-preview span {
+  font-size: 12px;
+  opacity: 0.75;
+}
+
+.scheduler-mock-log {
+  margin-top: 12px;
+}
+
+.scheduler-mock-log pre {
+  max-height: 260px;
+  overflow: auto;
+  padding: 12px;
+  border-radius: 8px;
+  background: var(--c-color-fill-1);
+  font-size: 12px;
+}
+</style>

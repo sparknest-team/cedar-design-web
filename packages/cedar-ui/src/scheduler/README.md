@@ -42,6 +42,235 @@ permalink: /components/scheduler/
 
 <demo src="./__demos__/equipment.vue"></demo>
 
+### 重复日程与本次例外
+
+<demo src="./__demos__/recurring-events.vue"></demo>
+
+系列与例外由业务保存，`expandSchedulerRecurrences` 按可见范围生成普通日程，传给现有 `v-model`。本例将编辑、拖动、拉伸和删除映射为“仅本次”的例外，新建仍是独立日程。“恢复全部例外”会撤销本例中的本次修改与取消；调整规则会清除本例的例外，不代表库替业务迁移系列。
+
+```ts
+import {
+  expandSchedulerRecurrences,
+  setSchedulerRecurrenceException,
+} from "@cedarjs/ui/scheduler/core";
+import type {
+  SchedulerRecurringEvent,
+  SchedulerRecurrenceException,
+} from "@cedarjs/ui/scheduler/core";
+
+const series: SchedulerRecurringEvent[] = [
+  {
+    event: {
+      id: "sync",
+      title: "项目同步",
+      start: "2026-09-07T09:00:00",
+      end: "2026-09-07T10:00:00",
+    },
+    rule: {
+      frequency: "weekly",
+      interval: 1,
+      daysOfWeek: [1, 3, 5],
+      count: 12,
+    },
+  },
+];
+let exceptions: SchedulerRecurrenceException[] = [];
+const occurrences = expandSchedulerRecurrences(
+  series,
+  {
+    start: new Date("2026-09-07T00:00:00"),
+    end: new Date("2026-09-14T00:00:00"),
+  },
+  { exceptions },
+);
+// 保存完整的替换日程；省略第三个参数表示取消本次。
+exceptions = setSchedulerRecurrenceException(exceptions, occurrences[0], {
+  ...occurrences[0],
+  title: "仅修改本次标题",
+});
+```
+
+| 类型 / 方法                                                           | 说明                                                                                                                            |
+| --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| SchedulerRecurringEvent                                               | `{ event, rule }`；event 为已排期的系列起点，id 是系列唯一标识                                                                  |
+| SchedulerRecurrenceRule                                               | frequency 为 daily / weekly / monthly / yearly；interval 默认 1；weekly 的 daysOfWeek 默认起点星期，0 表示周日；一周从周一开始  |
+| count / until                                                         | count 为原规则总发生次数（取消仍占次数）；until 为包含的最晚开始时间；同时配置则先到者结束                                      |
+| SchedulerOccurrence                                                   | 普通日程加 seriesId、originalStart（全天为日期字符串，定时为 ISO 时间点字符串）；生成的 id 是不透明实例标识，不应解析或自行拼接 |
+| SchedulerRecurrenceException                                          | `{ seriesId, originalStart, event? }`；event 省略表示取消；提供时必须保持排期                                                   |
+| expandSchedulerRecurrences(series, range, options?)                   | 返回与范围相交的完整实例，按开始时间排序；options 可传 exceptions、maxOccurrences（默认 10000）、maxIterations（默认 100000）   |
+| setSchedulerRecurrenceException(exceptions, occurrence, replacement?) | 不修改输入，返回替换该实例例外后的新数组                                                                                        |
+
+开始日期只作为下界：每周所选星期不含起点星期时，第一次是之后的第一个匹配日。count 不会因为翻页或取消重新计数。until 表示时间点；日期字符串代表当地零点，定时会议若要包含当天需传入相应开始时刻。
+
+全天系列保留日期字符串与日历天数；定时系列在运行环境本地日历上重复，保持原始时分及实际经过时长。夏令时不存在的时刻遵循 JavaScript Date 的归一化，随后日期恢复起点时分。本轮不支持任意 IANA 时区或完整 RRULE；前后端须统一时区，不能依赖实例 ID 跨时区不变。
+
+例外始终引用原始发生时间，移动后仍可继续修改同一次。移出当前窗口的实例不再显示，移入窗口的例外正常出现。孤立例外或已不属于当前规则的发生时间不会生成实例；修改系列规则时，业务须明确保留、迁移或清理策略。
+
+展开函数遇到非法规则、重复标识或计算/数量上限会抛错，不返回截断数据。上限针对一次展开调用的全部系列；长期系列会从起点扫描，较大数据建议由服务端按范围展开，并配合上方远程加载器处理错误。
+
+本例不启用本地撤销历史；恢复例外是系列层操作。接入后端时由 `before-transaction` 原子保存系列/例外变更，再接受 `v-model` 提案。“本次及以后”拆分见下方示例；全系列冲突检查、专用整系列编辑尚未提供，当前窗口的冲突检查不能代替全系列校验。
+
+### 每月、每年重复
+
+<demo src="./__demos__/calendar-recurrence.vue"></demo>
+
+月/年规则继续使用 `SchedulerRecurrenceRule`，共享单次例外、次数、截止时间及“本次及以后”拆分。
+
+| 字段        | 说明                                                                                             |
+| ----------- | ------------------------------------------------------------------------------------------------ |
+| frequency   | monthly / yearly；interval 分别按起点月份 / 年份计数                                             |
+| dayOfMonth  | 1–31，或 -1 表示最后一天；默认起点日期                                                           |
+| weekOfMonth | 1–5 或 -1（最后一个）；从当月符合 daysOfWeek 的日期集合中选择第几个匹配日                        |
+| daysOfWeek  | 月/年规则须搭配 weekOfMonth；默认起点星期；0 周日到 6 周六                                       |
+| monthOfYear | 仅 yearly，1–12；默认起点月份                                                                    |
+| overflow    | skip（默认）跳过不存在的日期，last-day 落到月底；只用于数字日期规则，不能与 weekOfMonth 同时使用 |
+
+```ts
+import type { SchedulerRecurrenceRule } from "@cedarjs/ui/scheduler/core";
+
+const rules = [
+  { frequency: "monthly", dayOfMonth: 31, overflow: "skip" },
+  { frequency: "monthly", dayOfMonth: -1 },
+  { frequency: "monthly", weekOfMonth: -1, daysOfWeek: [1, 2, 3, 4, 5] },
+  { frequency: "monthly", weekOfMonth: 2, daysOfWeek: [1] },
+  { frequency: "yearly", monthOfYear: 2, dayOfMonth: 29, overflow: "last-day" },
+] satisfies SchedulerRecurrenceRule[];
+```
+
+每月 31 日默认跳过二月、四月等月份；落到月底时，之后有 31 日的月份会恢复到 31 日。每年 2 月 29 日同理，遵循公历闰年规则。第五个星期一不存在时直接跳过；被跳过的日期不消耗 count，取消例外仍消耗原次数。
+
+`weekOfMonth` 选择的是整个星期集合中的第 N 个匹配日：`daysOfWeek: [1]` 配合 2 是第二个星期一；`[1,2,3,4,5]` 配合 -1 是最后一个周一至周五日期。后者不包含法定节假日、调休或企业工作日历。数字日期和星期顺序规则不能混用。
+
+展开只从系列起点开始，不补出起点之前的匹配日。分拆继承规则时会固化原始月日/星期默认值，避免从二月 28 日拆分后把“31 日落到月底”改成“每月 28 日”。仍使用运行环境本地时区与计算上限，不承诺完整 RRULE 或任意 IANA 时区。
+
+### 企业休假与补班日历
+
+<demo src="./__demos__/business-calendar.vue"></demo>
+
+`SchedulerBusinessCalendar` 共用“常规工作星期 + 指定日期覆盖”的数据模型；不内置官方节假日。上方纯星期示例继续保持原语义，需要企业日历时显式传入 businessCalendar。
+
+```ts
+import {
+  isSchedulerWorkingDate,
+  getSchedulerCalendarDisabledRanges,
+} from "@cedarjs/ui/scheduler/core";
+import type {
+  SchedulerBusinessCalendar,
+  SchedulerRecurrenceRule,
+} from "@cedarjs/ui/scheduler/core";
+
+const businessCalendar: SchedulerBusinessCalendar = {
+  workingDays: [1, 2, 3, 4, 5],
+  overrides: [
+    { date: "2026-02-27", working: false, label: "模拟企业休假" },
+    { date: "2026-02-28", working: true, label: "模拟补班" },
+  ],
+};
+const rule: SchedulerRecurrenceRule = {
+  frequency: "monthly",
+  weekOfMonth: -1,
+  businessCalendar,
+};
+isSchedulerWorkingDate("2026-02-28", businessCalendar); // true
+```
+
+| API / 字段                                                    | 说明                                                                                                   |
+| ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| workingDays                                                   | 0 周日至 6 周六，默认周一至周五；空数组表示没有常规工作日                                              |
+| overrides                                                     | `{ date: 'YYYY-MM-DD', working: boolean, label?: string }[]`；指定日期优先于星期，重复或非法日期会抛错 |
+| rule.businessCalendar                                         | 仅 monthly / yearly 搭配 weekOfMonth；按实际工作日选择第 N 个或最后一个，不能同时传 daysOfWeek         |
+| isSchedulerWorkingDate(date, calendar)                        | 查询指定本地日期是否工作                                                                               |
+| getSchedulerCalendarDisabledRanges(calendar, range, maxDays?) | 把范围内的非工作日期转换为现有 disabledRanges；默认最多扫描 3660 天，超出抛错                          |
+
+日期范围遵循 `[start, end)`，输出是相交的完整非工作日区间，不裁剪日期两端。将结果绑定 `disabled-ranges` 后，原有拖动、编辑、批量操作会复用可用时间校验。多日任务中的任意休息日也会被拦截。
+
+工作日期和每日小时分别约束：补班日不会自动覆盖 `working-hours` 中禁止周末的配置。本例把每日 09:00–18:00 应用到全部星期，再由工作日历决定哪些日期开放。额外的维护禁用区间仍然有效，补班不解除维护。现有预约不会因切换日历而自动移动或删除，再次编辑时重新校验。
+
+可见范围生成的禁用区间只保证该范围；demo 还在 `before-transaction` 中为提案完整时间段生成区间，避免编辑至视图外漏校验。生产接口仍需按完整资源、时区、权限和版本做服务端校验。日历没有配置的日期继续按 workingDays 判断，因此业务需提供所需年份的休假/补班数据。
+
+修改工作日历可能改变“最后工作日”的原始发生时间，已有例外不能自动迁移；请沿用系列规则变更的显式清理或迁移策略。本轮不包含地区节假日下载、调休规则推算、按资源选择多个企业日历或工作小时的日期级覆盖。
+
+### 修改本次及以后
+
+<demo src="./__demos__/recurrence-following.vue"></demo>
+
+`splitSchedulerRecurrence` 生成系列层提案，不直接修改日历或调用服务端。示例使用外部 Cedar Dialog 选择“仅本次 / 本次及以后”，将系列与例外一起保存成功后再发布到日历。模拟保存失败会保留原数据与表单。
+
+```ts
+import { splitSchedulerRecurrence } from "@cedarjs/ui/scheduler/core";
+
+const proposal = splitSchedulerRecurrence(
+  series,
+  exceptions,
+  selectedOccurrence,
+  {
+    nextEvent: { ...editedOccurrence, id: "new-series-id" },
+    exceptionPolicy: "discard", // 明确清除本次及以后的例外；默认 reject
+  },
+);
+// 先原子保存 proposal.series / proposal.exceptions，再更新业务状态。
+// proposal.removedExceptions 可用于展示清除内容或审计。
+```
+
+| 选项 / 返回值       | 说明                                                                                                       |
+| ------------------- | ---------------------------------------------------------------------------------------------------------- |
+| nextEvent           | 新系列的完整已排期起点，id 必须与全部已有系列不同；省略表示取消本次及以后                                  |
+| rule                | 可选完整新规则；省略继承原频率、间隔、星期、截止时间，并扣除之前已发生的次数；传入时完整替换，包括终止条件 |
+| exceptionPolicy     | reject（默认）保护后续例外，discard 明确清除；不会自动把旧例外映射到新系列                                 |
+| maxIterations       | 校验扫描上限，默认 100000；超出抛错，不返回部分提案                                                        |
+| series / exceptions | 可一起原子保存的新系列与保留例外，不修改输入                                                               |
+| removedExceptions   | 本次及以后被清除的例外副本                                                                                 |
+
+切分点用 `originalStart`，即使某次会议已经被移到其他日期，也不会改变它在系列里的位置。之前的系列和实例 ID 保持不变；后续实例获得新系列 ID。此前发生但移动到未来的例外继续保留，未来发生但移动到过去的例外仍属于后续范围。
+
+从第一次拆分会直接替换原系列；取消第一次及以后会删除整个系列。默认继承规则时，取消记录仍占原始次数；until 保持原截止时间。如果更改起点日期，新起点必须匹配继承或显式传入的新规则。需要改变星期、次数或截止时间时，请传完整 rule；不传 count / until 的新规则会持续重复。
+
+本例默认保护已有例外，选择“清除后续例外”后才允许删除它们。该选择同样适用于取消后续安排。完整 RRULE、自动迁移后续例外、跨时区系列和多人并发版本合并不包含在此 API 中。服务端仍需检查版本、权限与所有后续冲突，并原子保存整个提案；仅检查当前可见窗口不足以确认系列有效。
+
+### 按范围远程加载
+
+<demo src="./__demos__/remote-events.vue"></demo>
+
+`useSchedulerDataSource` 独立负责加载，不改变 Scheduler 的 `v-model` 数据所有权。将 `range-change` 写入范围 ref，将返回的 `events`、`loading` 绑定到组件。失败时可绑定 `readonly`，避免在未加载完整的数据上编辑。
+
+```ts
+import { ref } from "vue";
+import { useSchedulerDataSource } from "@cedarjs/ui";
+import type { SchedulerRange } from "@cedarjs/ui";
+
+const range = ref<SchedulerRange>();
+const { events, loading, error, refresh } = useSchedulerDataSource({
+  range,
+  requestEvents: async ({ start, end, resourceIds, signal }) => {
+    const params = new URLSearchParams({
+      start: start.toISOString(),
+      end: end.toISOString(),
+      resourceIds: resourceIds.join(","),
+    });
+    const response = await fetch(`/api/events?${params}`, { signal });
+    if (!response.ok) throw new Error("加载失败");
+    return response.json();
+  },
+});
+```
+
+| 选项            | 说明                                                                                                  |
+| --------------- | ----------------------------------------------------------------------------------------------------- |
+| requestEvents   | 查询函数或其 ref，接收 start、end、resourceIds、AbortSignal，返回日程数组或 Promise；切换函数清空缓存 |
+| range           | 范围、ref 或 getter；undefined 暂停并清空当前数据                                                     |
+| resourceIds     | 可选数组、ref 或 getter；去重排序后作为查询条件，空数组表示不限资源                                   |
+| enabled         | 可选 boolean、ref 或 getter，默认 true；false 取消加载并清空当前数据                                  |
+| cacheTime       | 缓存有效毫秒数，默认 30000，0 禁用                                                                    |
+| maxCacheEntries | LRU 缓存条数上限，默认 20，0 禁用                                                                     |
+
+返回 `events`（可写 ref）、`loading`、`error`、`loadedRange`（最后成功发布的范围）、`refresh()`（绕过当前缓存并返回成功与否）、`cancel()`（保留已发布数据，终止当前请求）、`invalidate()`（仅清空全部缓存）。在组件 setup 或 effectScope 中调用；SSR 不自动请求。
+
+范围为 `[start, end)`：接口应返回与范围相交的完整日程，不截断跨日事件，不返回仅第一页。资源筛选条件由业务同步传入；组件内部资源筛选不会自动改变加载器条件。未排期任务可由业务接口额外包含在返回数组中。
+
+切换范围会清空旧窗口并取消旧请求，即使接口忽略 AbortSignal，过期响应也不会覆盖最新结果。失败通过 `error` 暴露，点击刷新重试。查询结果会整体校验，重复 ID 或无效日程不会部分发布。缓存以精确范围和资源条件区分；通过 `v-model` 替换或响应式原位编辑会取消在途加载并清空缓存。Date 的原生 set 方法不会触发 Vue 响应式，请替换日期值。
+
+加载器不执行保存。继续使用 `before-transaction` 向服务端提交 `context.changes`；不要将当前窗口的 `context.value` 当作全库替换。全局冲突、权限及原子保存由服务端校验。切换窗口属于外部数据更新，会使组件本地撤销历史失效。
+
 ### 异步目录、分页与 ID 回显
 
 示例可切换设备接口和人员接口。仅提供当前 4 条可见资源，而已有日程关联第 12 条，通过 `resolve-resources` 单独回显。打开资源下拉框后远程搜索、滚动或点击加载更多；搜索结果不会添加资源视图的行/列。可模拟搜索与回显失败，查看 ID 保留及重试。
@@ -50,38 +279,52 @@ permalink: /components/scheduler/
 
 日程只保存 `resourceIds`；`id` 是稳定标识，`label` 是显示名称。业务层把 `userId/displayName`、`deviceId/deviceName` 等接口字段映射为 `{ id, label }`。不要把名称当 ID，也不要为了回显把全量目录放进 `resources`。
 
-| 数据入口 | 职责 |
-| --- | --- |
-| resources | 当前资源视图的行/列及本地候选项，可以是部分目录；同 ID 时优先于缓存 |
-| request-resources | 远程搜索与游标分页，返回候选项，不修改可见行/列 |
-| resolve-resources | 根据已有 ID 批量加载名称，不依赖当前搜索页 |
-| before-change | 对接服务端有效性、权限、全量冲突与保存校验 |
+| 数据入口          | 职责                                                                |
+| ----------------- | ------------------------------------------------------------------- |
+| resources         | 当前资源视图的行/列及本地候选项，可以是部分目录；同 ID 时优先于缓存 |
+| request-resources | 远程搜索与游标分页，返回候选项，不修改可见行/列                     |
+| resolve-resources | 根据已有 ID 批量加载名称，不依赖当前搜索页                          |
+| before-change     | 对接服务端有效性、权限、全量冲突与保存校验                          |
 
 ```ts
-import type { SchedulerRequestResources, SchedulerResolveResources } from '@cedarjs/ui'
+import type {
+  SchedulerRequestResources,
+  SchedulerResolveResources,
+} from "@cedarjs/ui";
 
-const requestResources: SchedulerRequestResources = async ({ query, cursor, signal }) => {
-  const params = new URLSearchParams({ query })
-  if (cursor !== undefined) params.set('cursor', cursor)
-  const response = await fetch(`/api/devices?${params}`, { signal })
-  if (!response.ok) throw new Error('设备查询失败')
-  const page = await response.json()
+const requestResources: SchedulerRequestResources = async ({
+  query,
+  cursor,
+  signal,
+}) => {
+  const params = new URLSearchParams({ query });
+  if (cursor !== undefined) params.set("cursor", cursor);
+  const response = await fetch(`/api/devices?${params}`, { signal });
+  if (!response.ok) throw new Error("设备查询失败");
+  const page = await response.json();
   return {
-    items: page.items.map((item) => ({ id: String(item.deviceId), label: item.deviceName })),
+    items: page.items.map((item) => ({
+      id: String(item.deviceId),
+      label: item.deviceName,
+    })),
     nextCursor: page.nextCursor, // 没有下一页时省略；游标使用非空字符串
-  }
-}
+  };
+};
 
 const resolveResources: SchedulerResolveResources = async (ids, { signal }) => {
-  const response = await fetch('/api/devices/by-ids', {
-    method: 'POST', signal,
-    headers: { 'Content-Type': 'application/json' },
+  const response = await fetch("/api/devices/by-ids", {
+    method: "POST",
+    signal,
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ ids }),
-  })
-  if (!response.ok) throw new Error('设备回显失败')
-  const items = await response.json()
-  return items.map((item) => ({ id: String(item.deviceId), label: item.deviceName }))
-}
+  });
+  if (!response.ok) throw new Error("设备回显失败");
+  const items = await response.json();
+  return items.map((item) => ({
+    id: String(item.deviceId),
+    label: item.deviceName,
+  }));
+};
 ```
 
 同一实例缓存回显结果，并合并请求中的重复 ID；不在实例之间共用数据。搜索更换关键词会取消旧请求，即使接口未响应取消信号也忽略过期结果。切换 `resolve-resources` 回调会清空回显缓存；切换租户/目录建议给 Scheduler 设置不同 `key`，隔离搜索结果、缓存和编辑草稿。
@@ -127,7 +370,7 @@ before-change 返回 false 取消，抛错或拒绝 Promise 会触发 change-err
 
 `editor` 插槽替换内置 Drawer 的内容，`action` 区分 `create` / `edit`。`event` 是隔离草稿，可修改其字段；`save(event)` 提交完整日程，`save()` 提交当前自定义草稿。不得修改草稿 ID。二者都保留校验和 `before-change`，成功才自动关闭；取消不会写入数据。
 
-`error` 是结构化 SchedulerError，`errorMessage` 是当前语言的显示文案，包含内置字段校验或保存失败。自定义内容负责显示错误并根据 `readonly` / `pending` 禁用控件。`save` 是触发提交的动作，不返回成功 Promise；需要等待结果请使用实例 `change()`。`remove()` 在新建模式下无效。
+`error` 是结构化 SchedulerError，`errorMessage` 是当前语言的显示文案，包含内置字段校验或保存失败。自定义内容负责显示错误并根据 `readonly` / `pending` 禁用控件。`save` 是触发提交的动作，不返回成功 Promise；需要等待结果请使用实例 `change()`。`remove()` 和 `duplicate()` 在新建模式下无效。
 
 <demo src="./__demos__/custom-editor.vue"></demo>
 
@@ -143,34 +386,374 @@ before-change 返回 false 取消，抛错或拒绝 Promise 会触发 change-err
 
 外部页面自己管理取消、重复打开、提交中禁止关闭、卸载后的响应和编辑快照/版本。示例拒绝覆盖已打开的窗口，并在提交前比对打开时的数据；Scheduler 的 `change()` 只检查提交过程中的并发变化，不代替业务页面打开期间的版本校验。真正跨路由的表单还需自行持久化草稿并对接服务端，不能在 Scheduler 卸载后继续调用旧实例。
 
+## 时间线缩放与资源分组
+
+小时刻度显示定位日，天刻度显示一周。切换刻度保留定位日期，上一页/下一页跟随刻度按日或按周导航。资源分组仅影响时间线展示，不修改日程分配。
+
+<demo src="./__demos__/timeline-groups.vue"></demo>
+
+| 属性                                  | 说明                                                      | 默认值   |
+| ------------------------------------- | --------------------------------------------------------- | -------- |
+| scale / default-scale                 | `hour` 或 `day`，支持 `v-model:scale`                     | `day`    |
+| virtual-list-props                    | 资源时间线虚拟列表配置 `SchedulerVirtualListProps`        | —        |
+| resource-group-dimensions             | 交叉分组维度顺序，资源时间线有效                          | []       |
+| resource-group-by                     | `(resource: SchedulerResource) => string`，返回稳定分组键 | —        |
+| expanded-keys / default-expanded-keys | 展开的分组键，支持 `v-model:expanded-keys`                | 全部展开 |
+
+资源较多时可先折叠不关注的分组。小时刻度按真实经过小时构建，夏令时切换日可能有 23 或 25 个小时；表头带时区缩写用于辨别重复小时。当前运行环境时区仍决定显示日期。
+
+## 工作时间与维护时段
+
+<demo src="./__demos__/working-hours.vue"></demo>
+
+### 重叠日程错位叠放
+
+<demo src="./__demos__/stacked-events.vue"></demo>
+
+周视图默认使用 `event-layout="stack"`：重叠组按并发列数等分卡片起点，每张卡片延伸到该日期列的最右侧。例如 3 张同时重叠的日程，起点分别为 0%、33.33%、66.67%，宽度分别为 100%、66.67%、33.33%。单击前置并直接打开详情，Tab 聚焦同样前置，Enter 打开详情；焦点离开卡片后恢复原层级。非重叠日程仍单击打开，多选模式仍单击选择。
+
+可通过 `event-layout="columns"` 恢复旧并排布局。日与资源日程默认并排，也可显式启用 stack；全天、月历、时间线布局不受影响。设置 `overlap-event-limit` 后，一个相连重叠组超过该数量时隐藏后续列并显示“还有 N 项”，点击 Popover 查看该组全部日程；省略时不收敛。选择 Popover 项继续触发正常详情，筛选、数据和冲突校验不受影响。
+
+前置仅改变焦点层级，不修改数组、选中模型或事件时间。只读允许查看，disabled 阻止查看操作。布局方式与 `allow-overlap` 的业务冲突校验相互独立。
+
+### 单击日程直接弹窗
+
+<demo src="./__demos__/event-dialog.vue"></demo>
+
+通过 `editable=false` 与 `editor-request` 接入内部 Dialog，单击堆叠卡片即可编辑；新建也使用同一窗口。取消不提交，保存调用 Scheduler 的 `change`，复用只读、冲突与保存钩子校验。
+
+### Popover 摘要与高级编辑
+
+<demo src="./__demos__/event-popover.vue"></demo>
+
+通过 `event` 插槽放置受控 Popover，以日程卡片为锚点；`editor-request` 打开对应摘要。同一 Popover 模式也处理点击空白单元格新增：锚定该单元格，填写名称后可直接创建；“高级编辑”携带当前草稿打开完整 Dialog。工具栏“新建日程”等非单元格入口仍直接打开窗口，拖入和复制也不按单元格点击处理。只读时提供“查看完整详情”；点击外部、Escape、切换日期或开始指针操作关闭摘要。示例站点与负责人为演示字段，可替换为业务资源数据。
+
+摘要锚定整张日程卡片：依次尝试右侧顶部、左侧顶部、右侧底部、左侧底部对齐；两侧够宽但上下都放不下时，尽量保留侧边并贴视口边界。两侧太窄则尝试卡片上方或下方，最终位置限制在视口内，保留 8px 边距。弹层默认宽 360px，超宽自动收窄，超高内部滚动；跟随页面/容器滚动、窗口和可视视口尺寸变化重新定位。
+
+两个示例共享编辑实现，包含日期、标题、说明、删除、取消和失败重试。无需新增 Scheduler 公共 API，也可按相同方式接入业务弹窗。
+
+日程的 `color` 用作文字、前景和图案颜色；`accentColor` 单独设置可操作日程左侧的强调线，省略时跟随 `color`；`backgroundColor` 设置卡片底色，`backgroundPattern` 可选 `solid`、`diagonal-stripes`、`dots`、`crosshatch`。全局只读、禁用、日程只读或当前不可拖拽时，卡片不显示左侧操作强调线。图案使用语义枚举，便于不同业务类型保持一致。
+
+业务类型不是 Scheduler 的内置枚举。应用可把 `typeId` 等信息放入 `metadata`，再在自定义编辑器中映射为标题建议、外观和权限；Scheduler 不读取这些内容，只在新建、编辑、拖动和复制过程中保留一层独立副本。
+
+### 任务日历组合工作台
+
+<demo src="./__demos__/task-calendar-workbench.vue"></demo>
+
+示例用完整 `sidebar` 插槽组合资源来源树与待排任务池。自己、最近使用、我的站和收藏中的重复条目映射到同一个全局资源 ID；页面负责筛选与待排来源，任务通过 `startDrag` 生成通用日程草稿。切换人员/设备维度时，卡片插槽显示另一侧资源，Scheduler 不识别站点、人员、工单或技能等业务概念。
+
+待排任务既可直接拖到空白时段，也可先勾选再打开已有日程加入。Demo 自定义编辑器根据任务标准工时重算结束时间，并在 `before-change` 中校验执行人技能、模拟异步保存与失败；重叠沿用 Scheduler 的 warning。最后一项任务移出时删除整个通用 Event。保存失败保留编辑草稿和勾选，成功后页面根据已分配任务重新聚合待排池。
+
+权限和并发同样由页面与服务端决定。示例把查看者映射到 Scheduler 的全局 `readonly`，调度员才可提交；`metadata.version` 只携带后端版本号，`before-change` 比较客户端与模拟服务端版本，成功后递增，过期则保留草稿并提示重新加载。真实接口还应根据登录人、资源范围和变更类型再次鉴权，不能信任前端只读状态。
+
+### 出勤详情、打卡与关单
+
+<demo src="./__demos__/task-calendar-details.vue"></demo>
+
+点击日程先打开 Popover 摘要，再通过“高级详情”查看工单、任务技能、人员、设备、标准工时、来源和打卡记录。页面用 `metadata.attendanceOrderId` 查询完整业务对象；关单后保留业务对象中的计划时间，只把 Scheduler Event 映射为实际打卡时间和只读外观。完成、休息和来源都是 Demo 业务配置。
+
+### 拖选、吸附间隔与月历更多日程
+
+<demo src="./__demos__/interaction-completion.vue"></demo>
+
+`drag-to-create` 在日、周、资源日程的空白时段启用指针拖选，支持同一列内向前或向后选择。释放后打开创建表单；Escape、失焦或禁用取消。单击和键盘激活仍可创建日程。
+
+触屏拖动日程、调整起止时间或拖选空白时段需要长按 350ms。长按生效前移动超过 8px 会取消排期手势，把操作留给页面滚动；鼠标仍保持 5px 移动阈值，无需等待。粗指针设备上的上下缩放热区扩大到至少 14px，视觉线条尺寸不变。
+
+焦点位于日程、时间单元格、月视图日期或“还有 N 项”入口时，方向键会按屏幕中的上下左右位置移动到最近的可用日历控件。Enter/Space 沿用 Cedar Button 的原生激活行为；禁用项和不可见项会被跳过。导航只在日历内容区生效，不接管工具栏、编辑器及表单输入。关闭内置编辑器后焦点返回原触发控件；若该日程已删除或视图已变化，则定位到原位置附近的可用日历控件，最终回退到 Scheduler 容器。
+
+`slot-duration` 控制网格分钟数，`snap-duration` 控制指针吸附，`default-duration` 控制单击新建时长，均省略时回退旧 `step`。例如 60 / 15 / 45 表示一小时格、15 分钟吸附、45 分钟默认任务。拖选使用选择区间；外部模板的 duration 优先。指针拖动时间线也按吸附间隔定位；吸附以当前单元格真实开始时间为锚点。
+
+月视图默认每天直接显示 3 条日程，固定单元格高度；超出时显示“还有 N 项”。点击后使用 Cedar Popover 展示当天全部日程，选择其中一项可进入详情。`month-event-limit` 可调整直接展示数量；隐藏周末仍沿用真实日期。
+
+### 独立分配、占用量与负载
+
+<demo src="./__demos__/independent-assignments.vue"></demo>
+
+`createSchedulerTaskEvents(task, assignments)` 将独立的站/人分配转换为共享 `taskId` 的不同日程块，各块可有不同时间、资源及占用量。分配 ID 在一个任务内唯一，生成事件 ID 为 `JSON.stringify([task.id, assignment.id])`。多个资源共享同一时间块时仍使用单个 Event；两种语义由业务明确选择，不自动拆分共享事件。
+
+<demo src="./__demos__/assignment-load.vue"></demo>
+
+Event 新增 `resourceDetails?: Record<string, { units?: number; role?: string }>`，以 `resourceIds` 为唯一资源关联来源；详情仅补充已关联资源的占用量和角色。units 是有限非负数，省略为 1，支持 0.5；0 表示不占容量。未关联 ID 的详情不参与负载。复制深拷贝详情，同维度拖动携带来源详情，目标已关联时保留目标原详情。
+
+`show-assignment-details` 在内置编辑器显示占用量和角色，`show-resource-load` 在资源时间线表头显示当前日期范围的峰值负载/容量、峰值占用条和范围利用率。利用率分母为完整可见范围的经过分钟数 × 容量，不仅限于工作时间；容量为零或未配置时不计算百分比。`getSchedulerResourceSummary` 同时返回 peakLoad、unitMinutes 与 utilization。峰值包含筛选隐藏的已加载日程，超载标红；服务端仍需检查未加载数据。
+
+`rule-policy` 可分别配置 capacity、unavailable、conflict 为 `allow | warn | block`，默认 block。warn 在成功提交后显示警告并触发 `rule-warning`（SchedulerError[]）；allow 忽略该类规则。conflict 仍以 `allow-overlap=false` 为启用前提。无效配置、无效事件、只读、禁用资源和过期版本不能降级为提醒；保存钩子仍可否决。灰色背景始终表示可用时间约束，即使其提交策略为提醒。
+
+### 依赖、里程碑与时间线缩放
+
+<demo src="./__demos__/advanced-planning.vue"></demo>
+
+`dependencies` 为 `{id, fromId, toId, type?, lag?}[]`，支持 finish-to-start（默认）、start-to-start、finish-to-finish、start-to-finish，lag 为实际经过分钟数，可为负。纯函数 `getSchedulerDependencyIssues` 返回无效配置、缺失端点、循环和时间顺序问题；提交使用最终事务状态校验，失败返回 dependency 错误。尚未排期的端点不检查时间顺序。删除事件前需先移除相关依赖。
+
+资源时间线为当前已挂载的两端绘制依赖连线；虚拟列表中一端不在视口时不绘制。此功能不会自动重排其他任务。`milestone: true` 表示定时零时长里程碑，必须 start=end，不支持全天或未排期；以 ◆ 显示，不占容量，可移动而不能拉伸。
+
+`zoom/default-zoom/update:zoom` 控制 0.5–4 倍时间线缩放，工具栏提供放大缩小；以当前视口中心的时间为锚调整横向位置。`show-date-header` 默认开启日期分组表头。资源名称在横向滚动时固定。
+
+### RRULE、时区与夏令时
+
+<demo src="./__demos__/zoned-recurrence.vue"></demo>
+
+高级引擎从 `@cedarjs/ui/scheduler/adapters` 导入，使用 [rrule](https://github.com/jkbrzt/rrule) 解析 RFC RRULE 字段、使用 [Temporal polyfill](https://github.com/js-temporal/temporal-polyfill) 转换 IANA 时区，未替换轻量 core 重复规则。
+
+`expandSchedulerRRule({event, rule, timeZone?}, range, options?)` 接受定时种子和单个 RRULE 值（可带 RRULE: 前缀），DTSTART 由 event.start 唯一决定，不能在 rule 中再次指定。支持 BYDAY、BYSETPOS 等规则；options 提供 excludeDates/includeDates（真实时间点）、maxOccurrences、maxIterations。超出预算抛错，不静默截断。生成稳定的 seriesId/originalStart，供业务保存例外。
+
+`schedulerZonedDate(localDateTime, timeZone, disambiguation?)` 将当地时间转换为 Date；不存在或重复时间默认 reject，可明确选择 earlier、later、compatible。`formatSchedulerZonedDate` 格式化真实时间点。RRULE 保持指定地区当地时刻、持续时间保持实际毫秒数。当前组件网格仍采用运行环境本地时间；时区 demo 通过卡片格式化展示指定时区，不将本地网格宣称为完整的多时区编辑器。
+
+### 外部日历、模拟协同、ICS 与打印
+
+<demo src="./__demos__/calendar-integration.vue"></demo>
+
+`SchedulerCalendarProvider` 定义 load(range, signal)、commit(changes, expectedRevision, origin?) 与可选 subscribe。`createSchedulerMemoryProvider` 为离线示例实现：校验递增版本、发布分离快照、可注销订阅。真实服务需实现认证、持久化、权限与完整业务校验。示例用 origin 忽略自己的回声，外部更新仍触发 Scheduler 的过期保护；内部事务用本地单调版本检测等待期间数据变化。
+
+`exportSchedulerICalendar(events, {stamp, name?})` 导出 UTC 定时事件和 DATE 全天事件，正确转义文本并按 UTF-8 75 字节折行；未排期事件明确拒绝。`importSchedulerICalendar(text, {timeZone?, disambiguation?})` 返回普通 events 与 RRULE 种子 series；要求 UID/DTSTART/DTEND。支持 UTC/IANA TZID/指定时区的浮动时间。全天 RRULE、自定义 VTIMEZONE、RECURRENCE-ID、RDATE/EXDATE/EXRULE、DURATION 及重复 UID 会明确拒绝，交由专用提供方适配，避免导入后语义丢失。
+
+`createSchedulerPrintHtml(events, options?)` 返回独立可打印 HTML，含完整转义、重复表头及跨页设置。调用方决定打开、保存或打印；示例的打印按钮只打印此文档。
+
+### 大量资源与虚拟滚动
+
+<demo src="./__demos__/virtual-resources.vue"></demo>
+
+设置 `:virtual-list-props="{ height: 480, estimatedSize: 80, buffer: 10 }"` 开启资源时间线虚拟滚动，配置命名与 Table、Select 一致。普通资源行和交叉分组均可使用；未配置时保持完整渲染。分组标题与资源行一起进入滚动窗口，顶部时间刻度跟随横向滚动。
+
+| 配置          | 说明                                                       | 默认值                                       |
+| ------------- | ---------------------------------------------------------- | -------------------------------------------- |
+| height        | 视口高度，数字为 px，也支持 CSS 高度字符串                 | `var(--c-scheduler-virtual-height)`（480px） |
+| estimatedSize | 未测量行的预估高度，正数 px；实际高度按内容测量            | 80                                           |
+| buffer        | 预渲染窗口参数，正整数；内部列表最多挂载约 `buffer × 3` 项 | 10                                           |
+
+行布局按需计算并缓存；滚动不改变事件数据或真实资源 ID。筛选、分组展开、日程内容或刻度变化后重置测量缓存，按原可见行键恢复行内偏移与横向位置；原行消失时回退到邻近有效行。更高的视口或更紧凑的行高应增大 `buffer`，确保窗口能够覆盖视口。
+
+资源时间线指针手势由 Scheduler 持有，源卡片卸载后仍可继续；靠近容器边缘会自动滚动并重新计算目标。Escape、失焦、取消和卸载清理手势。虚拟滚动减少 DOM 和布局计算，组合资源目录仍在内存中生成；极大规模的笛卡尔积仍需先筛选或在业务侧限制目录范围。
+
+### 交叉分组：站下展开人员
+
+<demo src="./__demos__/resource-cross-groups.vue"></demo>
+
+资源时间线设置 `:resource-group-dimensions="['station', 'person']"`，按站分组并在每站下面展示人员行；顺序反转后按人分组。支持两个以上维度，最后一个维度作为行，前面的资源路径作为分组。此设置优先于 `resource-group-by` 和 `resource-dimension`，其他视图继续使用原有单维度轴。
+
+- 行是筛选后各维度资源的笛卡尔积，包含空排期组合，便于直接新建任务。缺少任一维度资源时没有组合行；不满足完整组合的任务可在日程列表或单维度视图中查看。
+- 点击组合行自动填入各维度真实资源 ID。`cell-click` 提供 `resourceIds`，组合行的 `resourceId` 为 undefined；展示行键不会进入日程数据。
+- 一个任务关联多人或多站时显示在全部匹配组合中，底层仍只有一条任务。拖动修改整条任务的时间，并将来源行的资源替换为目标行资源，其他参与者保留；调整时长不改变资源。它不表示把共享任务拆成独立分配关系。
+- 所有资源的容量、工作时间和禁用状态共同约束操作，筛选隐藏的任务仍参与保存校验。空白格可用时间提示同时考虑各维度；容量在提交时校验。
+- 复用 `expanded-keys` 控制折叠。分组键为父资源 ID 数组的 `JSON.stringify`，例如 `'["station:north"]'`，不依赖显示名称。`resource-header` 插槽的 `resource` 是末级真实资源，`resources` 为完整资源路径。
+- 空数组默认关闭；重复、少于两个或未声明的维度配置回退到普通资源行。纯函数 `createSchedulerResourceRows(resources, dimensionIds)` 对少于两个、重复或空维度 ID 抛出 RangeError，并返回 `SchedulerResourceRow[]`；`moveSchedulerResourceRow(ids, from, to)` 只计算资源替换，可独立于 Vue 使用。
+
+组合行可通过 `virtual-list-props` 开启虚拟滚动，不自动截断组合目录；极大目录应先通过维度筛选缩小范围。资源目录以传入的 `resources` 为准；远程选择结果需由业务合并到资源目录后才生成新行。
+
+### 多资源维度：站与人
+
+<demo src="./__demos__/resource-dimensions.vue"></demo>
+
+通过 `resource-dimensions` 定义资源维度，例如 `[{ id: 'station', label: '站' }, { id: 'person', label: '人' }]`，每个资源使用 `dimensionId` 归属一个维度。维度 ID 应非空且唯一；资源 ID 必须在全部维度之间唯一，可使用 `station:north`、`person:lin` 这样的业务前缀。同一日程继续使用一份 `resourceIds`，可同时关联多个站、多个人，所有关联资源共同参与可用时间、容量和冲突校验。
+
+```ts
+const resources = [
+  { id: "station:north", label: "北站", dimensionId: "station", capacity: 2 },
+  { id: "person:lin", label: "小林", dimensionId: "person", capacity: 1 },
+];
+const event = {
+  id: "inspection",
+  title: "北站巡检",
+  start: "2026-09-22T09:00:00",
+  end: "2026-09-22T10:00:00",
+  resourceIds: ["station:north", "person:lin"],
+};
+const resourceFilters = { station: ["station:north"], person: ["person:lin"] };
+```
+
+- **同维度“或”、跨维度“且”**：选多个站和多个人时，日程需匹配任一所选站，并匹配任一所选人。空数组或缺省维度不限制该维度；共享日程按 ID 保持一份数据。
+- `v-model:resource-filters` 控制筛选，`default-resource-filters` 提供非受控初值；侧栏每个维度独立多选，更新一个维度保留其他维度。
+- `v-model:resource-dimension` 决定资源日程/时间线的列或行，`default-resource-dimension` 提供初值，默认空字符串显示所有维度资源。切换展示维度不修改日程和其他筛选。
+- 编辑器按维度选择。更新“人”保留原“站”及尚未解析的资源 ID；未归入已配置维度的现有关联显示在“其他资源”。筛选不会自动成为新日程的默认分配；从资源格新建只预填该格资源。
+- 拖动到同维度另一资源，只替换对应资源，其他维度关联保持；跨维度资源间拖动被阻止。过滤不会减少事务校验数据：被筛掉的日程仍可导致人员冲突或容量不足。
+
+纯核心工具：`filterSchedulerEventsByResources(events, resources, filters)` 返回匹配事件数组（事件对象保留原引用，不修改输入）；`setSchedulerResourceDimension(resourceIds, dimensionId, selectedIds, resources)` 返回替换一个维度后的独立 ID 数组，其他维度和未知 ID 保留，新选择的 ID 必须存在且归属该维度。
+
+远程查询 `requestResources` 新增可选 `dimensionId`，每个维度独立查询/分页/取消；服务端应按维度查询并在返回资源上提供 `dimensionId`。客户端还会过滤不属于该维度的候选。`resolveResources` 仍按全局 ID 回显，返回维度后自动参与分组。未知资源在解析完成前不能满足维度筛选，不会被猜测归类；筛选键不会因暂时缺少目录记录而被隐式忽略。
+
+未配置 `resource-dimensions` 时原有单组资源筛选和编辑继续工作。完整日程范围仍由原来的加载接口提供；这些筛选是本地展示条件，服务端保存仍应校验全部相关数据。
+
+### 隐藏周末与指定星期
+
+<demo src="./__demos__/hidden-days.vue"></demo>
+
+`hidden-days` 接受星期数组，`0` 表示周日，`6` 表示周六；默认 `[]`，例如 `[0, 6]` 显示工作周。作用于周、月和议程视图，月表头与列数同步缩减，`first-day-of-week` 决定星期顺序。重复星期只计算一次。非法星期或隐藏全部七天会触发 Vue prop 校验警告，组件回退显示全部日期。
+
+这是展示过滤：不会修改日程、重复规则、排期权限或完整的 `range-change` 查询范围；导航仍按原周/月跨度。跨隐藏日期的任务在可见日期上显示，持续时长不压缩；拖动使用目标格子的实际日期。更改隐藏配置会取消当前拖动预览。隐藏日期仍参与容量/冲突校验，表单和外部命令仍可排期；需要禁止预约请使用工作时间或禁用时段。
+
+单日、资源日程和资源时间线目前保留原来的完整日期/时间轴。纯核心 `getSchedulerVisibleDays(range, hiddenDays)` 返回独立的可见日期数组，非法隐藏配置或范围会抛出 `RangeError`。
+
+### 现在时间线
+
+<demo src="./__demos__/now-indicator.vue"></demo>
+
+设置 `show-now-indicator` 在日、周和资源日程中显示当前本地时间标线，默认关闭。只在当天列且当前时间位于 `[start-hour, end-hour)` 内显示；资源日程中的当天资源列各显示一条。月、议程和资源时间线暂不显示。
+
+标线每 30 秒刷新，浏览器标签页隐藏时暂停计时，返回时立即刷新；关闭功能、切换不支持的视图或卸载后停止计时。服务端渲染不读取实时钟、不启动计时器，客户端挂载后显示。标线不会拦截鼠标或触摸操作，提供“当前时间”的可访问名称，但不会持续播报。
+
+纯核心 `getSchedulerNowPosition(now, day, startHour = 0, endHour = 24)` 返回本地时间在网格中的百分比；不在当天/时间范围或输入无效时返回 `undefined`。该函数不读取系统时间，与现有本地时间布局保持一致；不代表已实现任意 IANA 显示时区。
+
+可通过 `--c-scheduler-now-color`、`--c-scheduler-now-width`、`--c-scheduler-now-z-index` 调整标线样式。
+
+### 复制日程
+
+<demo src="./__demos__/duplicate-events.vue"></demo>
+
+详情中的“复制日程”使用当前已保存日程创建新草稿，未保存的表单修改不会带入。副本保持标题、日期、时长、全天状态、资源、描述、颜色、`metadata` 和 `taskId`，生成新 ID；取消不创建数据。定时、全天、未排期均支持。保存仍经过工作时间、维护、容量、冲突和保存钩子，成功后可以撤销重做。
+
+实例方法 `duplicateEvent(id): boolean` 用于打开复制草稿；返回 `true` 只表示草稿已打开或编辑请求已发出，**不表示已保存**。日程不存在、只读或组件正在加载/保存、禁用时返回 `false`。`editable=false` 时发送 `editor-request`，其 `action='create'`、`source='duplicate'`。自定义 `editor` 插槽可调用 `duplicate()`；新建模式下该动作无效。
+
+纯核心 `duplicateSchedulerEvent(event, newId)` 从 `@cedarjs/ui/scheduler/core` 导出，返回脱离原数据的标准 `SchedulerEvent`，不修改源数据，也不执行保存。调用者负责 ID 在数据集中的唯一性；空 ID、与源相同 ID、非法或只读源日程会抛错。复制重复实例不会保留 `seriesId/originalStart`，会成为独立普通日程。标准 `metadata` 会浅复制；未声明的对象扩展字段不会自动复制，需要应用在提交前按自身规则添加。
+
+### 资源并发容量
+
+<demo src="./__demos__/resource-capacity.vue"></demo>
+
+资源可设置 `capacity`，表示非负安全整数的并发日程上限；省略表示不限制，`0` 表示不能安排定时或全天日程。每条已排期日程对每个关联资源默认占用 1 份，可通过 resourceDetails.units 调整，重复的资源 ID 只计一次；未排期任务不占容量。相邻的 `[start, end)` 日程不重叠。多人任务需同时满足所有关联资源的容量。
+
+默认允许重叠时，显式容量仍生效；`allow-overlap="false"` 更严格，继续禁止任何资源冲突。维护和工作时间校验也继续生效。新建、编辑、拖动、批量事务、撤销重做均校验最终排期；超额返回 `SchedulerError.code === 'capacity'`，`capacityIssues` 提供 `resourceId/start/end/load/capacity/eventIds/exceeded`。纯删除允许释放容量，外部降低容量不会自动修改已有日程。
+
+- `getSchedulerResourceLoad(events, resource, range?)` 返回有占用的分段负载，`range` 可裁剪统计范围；同一时段事件集合变化时分段，未配置容量的资源也可统计。
+- `getSchedulerCapacityIssues(event, events, resources)` 按 ID 替换候选日程，只检查候选时间和关联资源，返回超额时段。两项工具均可从 `@cedarjs/ui/scheduler/core` 导入，无 Vue/DOM 依赖。
+
+容量使用已知资源目录（包括远程回显）和当前已加载日程。未知资源无法推断容量，未加载日程也不会被计入；服务端应在保存事务中校验完整数据和并发版本。`resourceDetails` 补充占用量，`resourceIds` 仍是唯一分配来源。网格的灰色时段仍表示工作时间/维护，负载由纯工具输出，可通过资源表头插槽和 Cedar 组件展示。
+
+### 指定日期工作时间
+
+<demo src="./__demos__/date-working-hours.vue"></demo>
+
+`date-working-hours` 接受 `SchedulerDateWorkingHours[]`，每项包含本地日期 `date: "YYYY-MM-DD"`、`intervals: { startMinute, endMinute }[]` 和可选 `resourceIds`。分钟范围为 0–1440，结束必须晚于开始；可配置多个时段，空 `intervals` 关闭当天。
+
+优先级为：资源指定日期 > 公共指定日期 > 资源每周规则 > 公共每周规则。指定日期替换当天的周规则，可开放原本关闭的补班日；未匹配的日期沿用每周规则。相同日期不能重复配置公共规则或同一资源，可将分段时段合并到一条规则。非法日期、分钟或重复作用域会使校验返回 `invalid-config`。
+
+全天日程跳过小时限制；维护和企业日历产生的 `disabled-ranges` 始终有效。多人日程必须满足每个人的规则。规则切换不会自动修改已有任务，保存、拖动和跨日期编辑均按完整日程校验；异步保存期间规则变化会拒绝旧结果。
+
+纯逻辑调用：`getSchedulerAvailabilityIssues(event, { workingHours, dateWorkingHours, disabledRanges })`，无需 Vue 或 DOM。
+
+<demo src="./__demos__/maintenance.vue"></demo>
+
+| 属性               | 类型                          | 说明                                                   |
+| ------------------ | ----------------------------- | ------------------------------------------------------ |
+| date-working-hours | `SchedulerDateWorkingHours[]` | 指定日期时段覆盖，默认 `[]`；详见上文优先级            |
+| working-hours      | `SchedulerWorkingHours[]`     | 未传不限制，空数组禁止定时日程；按运行环境本地周历解释 |
+| disabled-ranges    | `SchedulerDisabledRange[]`    | 维护、停用等绝对时间区间，默认空数组                   |
+
+```ts
+import type {
+  SchedulerWorkingHours,
+  SchedulerDisabledRange,
+} from "@cedarjs/ui";
+const workingHours: SchedulerWorkingHours[] = [
+  { daysOfWeek: [1, 2, 3, 4, 5], startMinute: 540, endMinute: 720 },
+  { daysOfWeek: [1, 2, 3, 4, 5], startMinute: 780, endMinute: 1080 },
+];
+const disabledRanges: SchedulerDisabledRange[] = [
+  {
+    id: "maintenance",
+    start: "2026-09-09T10:00:00",
+    end: "2026-09-09T12:00:00",
+    resourceIds: ["equipment-a"],
+    label: "定期维护",
+  },
+];
+```
+
+工作时间的起止分钟为当天 0–1440，结束必须晚于开始；跨午夜请拆成两天配置。多个窗口取并集，可以表达午休。存在某资源专用工作窗口时，该资源使用专用周计划覆盖全局周计划；没有适用规则的资源不受限制。多人共享日程必须同时满足每个资源的规则。
+
+禁用区间采用 `[start, end)`，首尾相接不冲突。未指定或空 `resourceIds` 表示全局。全天日程作为日期事项不校验工作小时，但仍校验维护区间。未排期任务和删除不受可用时间规则限制。现有数据仍正常展示，更新时重新校验。
+
+日/周时间网格及小时资源时间线以灰色标记含不可用部分的单元格，可悬停查看提示。格子仍能打开编辑器以调整时间；日/月汇总格不表达整天可用性。规则失败触发 `change-error`，错误码为 `unavailable`；错误的 `issues` 给出资源 ID、维护区间 ID、标签或 `invalid-config`。校验先于 `before-change`，失败不会调用保存钩子。异步等待期间规则变化会以 `stale` 拒绝旧提案。
+
+纯核心入口导出 `getSchedulerAvailabilityIssues(event, options)`，应用可在预检查或服务端复用。时区采用当前运行环境，前后端必须统一日期语义；数据库仍应原子校验实际资源占用。
+
+## 多选、批量操作与撤销重做
+
+<demo src="./__demos__/batch-history.vue"></demo>
+
+<demo src="./__demos__/atomic-swap.vue"></demo>
+
+| 属性                                  | 说明                                                        | 默认值 |
+| ------------------------------------- | ----------------------------------------------------------- | ------ |
+| selectable                            | 展示多选模式开关；开启模式后点击卡片切换选中，暂停卡片拖拽  | false  |
+| selected-keys / default-selected-keys | 选中日程 ID，支持 `v-model:selected-keys`；共享日程只计一次 | 空数组 |
+| history                               | 开启本地撤销/重做，展示工具栏                               | false  |
+| history-limit                         | 最多保留历史条数，正整数                                    | 20     |
+| before-transaction                    | 一次性校验或保存整笔事务；返回 false 取消，异常保留数据     | —      |
+
+| 实例方法                                 | 说明                                                                |
+| ---------------------------------------- | ------------------------------------------------------------------- |
+| `transaction(changes): Promise<boolean>` | 原子提交多条 create/update/remove/move/resize；每个 ID 只能出现一次 |
+| `undo(): Promise<boolean>`               | 撤销最近一次已接受变更，重新经过规则与保存钩子                      |
+| `redo(): Promise<boolean>`               | 重做最近一次撤销                                                    |
+| `canUndo` / `canRedo`                    | 当前是否允许撤销/重做                                               |
+
+新增 `transaction(value, context)` 与 `transaction-error(error, context)` 事件；context 包含 `action`（change/undo/redo）、`changes`、`previousValue` 和 `value`。原单条 `change` / `change-error` 事件仅在事务含一条变更时触发，多条变更不会逐条触发这些事件。
+
+**保存钩子约定：**设置 `before-transaction` 后，它统一接管单条、批量、撤销和重做，替代 `before-change`，避免同一操作保存两次。只有 `before-change` 的旧应用保持单条行为；执行多条事务会明确返回 `transaction-hook-required`，请迁移到一次性的原子保存接口。前端原子提交不能替代后端数据库事务。
+
+```ts
+import type { SchedulerBeforeTransaction } from "@cedarjs/ui";
+const beforeTransaction: SchedulerBeforeTransaction = async (context) => {
+  // 在这里向业务后端提交整个 context.changes；失败抛错或返回 false。
+  // 后端应对整批变更校验版本、权限和最终资源占用，再原子保存。
+};
+```
+
+批量后移保留本地时分；包含未排期任务时整批拒绝，避免静默遗漏。添加资源为追加去重，不替换其他参与人。只读成员、禁用资源、工作时间和维护冲突均会阻止整批操作。
+
+受控模式中，父组件接受对应 `update:model-value` 后才记录历史；若父组件不接受，撤销不可用。父组件接受的数据若与提案不同（例如服务端重写字段），视为外部更新并清空本地历史。其他外部数据更新也会清空历史，避免覆盖别人或后端的修改。规则变更不会清空历史，但撤销必须通过当前规则。关闭 history 清空历史，新的成功变更清空重做分支。历史只属于当前组件实例，不是多人协作版本历史。
+
 ## API
 
 ### `<c-scheduler>` Props
 
-| 属性              | 说明                                    | 类型                                            | 默认值   |
-| ----------------- | --------------------------------------- | ----------------------------------------------- | -------- |
-| model-value       | 日程数据，支持 v-model；传入时受控      | SchedulerEvent[]                                | —        |
-| default-value     | 非受控初始数据                          | SchedulerEvent[]                                | []       |
-| mode              | 当前视图，支持 v-model:mode             | SchedulerMode                                   | —        |
-| default-mode      | 非受控默认视图                          | SchedulerMode                                   | week     |
-| date              | 定位日期，支持 v-model:date             | Date / string / number                          | —        |
-| default-date      | 初始定位日期                            | Date / string / number                          | 当前日期 |
-| resources         | 当前可见资源行/列及本地选项，不要求全量目录 | SchedulerResource[]                          | []       |
-| resource-label    | 资源字段名称，如设备、会议室             | string                                          | 语言包“资源” |
-| request-resources | 按关键词和游标查询候选资源               | SchedulerRequestResources                       | —        |
-| resolve-resources | 按 ID 批量补全名称                       | SchedulerResolveResources                       | —        |
-| modes             | 允许切换的视图                          | SchedulerMode[]                                 | 全部六种 |
-| first-day-of-week | 周起始，0 周日至 6 周六                 | number                                          | 1        |
-| start-hour        | 时间网格起始小时，0–23                  | number                                          | 8        |
-| end-hour          | 时间网格结束小时，必须大于起始，最多 24 | number                                          | 20       |
-| step              | 时间格及吸附分钟，正整数且整除 60       | number                                          | 30       |
-| readonly          | 可查看和导航，不能修改                  | boolean                                         | false    |
-| disabled          | 禁用交互                                | boolean                                         | false    |
-| loading           | 数据加载中，禁止修改                    | boolean                                         | false    |
-| show-sidebar      | 显示筛选和未排期列表                    | boolean                                         | true     |
-| allow-overlap     | 允许同资源时间重叠                      | boolean                                         | true     |
-| editable          | 启用内置编辑器；false 通过 editor-request 接管 | boolean                                  | true     |
-| before-change     | 返回 false 取消；异步拦截、保存接口     | SchedulerBeforeChange / SchedulerBeforeChange[] | —        |
+| 属性                       | 说明                                                             | 类型                                            | 默认值       |
+| -------------------------- | ---------------------------------------------------------------- | ----------------------------------------------- | ------------ |
+| model-value                | 日程数据，支持 v-model；传入时受控                               | SchedulerEvent[]                                | —            |
+| preview-event              | 尚未保存的新增日程占位，只参与视觉展示                           | SchedulerEvent                                  | —            |
+| default-value              | 非受控初始数据                                                   | SchedulerEvent[]                                | []           |
+| mode                       | 当前视图，支持 v-model:mode                                      | SchedulerMode                                   | —            |
+| default-mode               | 非受控默认视图                                                   | SchedulerMode                                   | week         |
+| date                       | 定位日期，支持 v-model:date                                      | Date / string / number                          | —            |
+| default-date               | 初始定位日期                                                     | Date / string / number                          | 当前日期     |
+| resource-dimensions        | 维度定义 `{ id, label }[]`                                       | SchedulerResourceDimension[]                    | []           |
+| resource-filters           | 跨维度组合筛选，支持 v-model:resource-filters                    | SchedulerResourceFilters                        | —            |
+| default-resource-filters   | 非受控筛选初值                                                   | SchedulerResourceFilters                        | {}           |
+| resource-dimension         | 资源行/列展示维度，空字符串显示全部                              | string                                          | —            |
+| default-resource-dimension | 非受控展示维度初值                                               | string                                          | ''           |
+| resources                  | 当前可见资源行/列及本地选项，不要求全量目录                      | SchedulerResource[]                             | []           |
+| resource-label             | 资源字段名称，如设备、会议室                                     | string                                          | 语言包“资源” |
+| request-resources          | 按关键词和游标查询候选资源                                       | SchedulerRequestResources                       | —            |
+| resolve-resources          | 按 ID 批量补全名称                                               | SchedulerResolveResources                       | —            |
+| modes                      | 允许切换的视图                                                   | SchedulerMode[]                                 | 全部六种     |
+| first-day-of-week          | 周起始，0 周日至 6 周六                                          | number                                          | 1            |
+| start-hour                 | 时间网格起始小时，0–23                                           | number                                          | 8            |
+| end-hour                   | 时间网格结束小时，必须大于起始，最多 24                          | number                                          | 20           |
+| initial-scroll-minute      | 时间网格首次显示时定位的当天分钟数，后续保留用户滚动位置         | number                                          | —            |
+| step                       | 时间格及吸附分钟，正整数且整除 60                                | number                                          | 30           |
+| slot-duration              | 网格分钟数，正整数                                               | number                                          | step         |
+| snap-duration              | 指针吸附分钟数，正整数                                           | number                                          | step         |
+| default-duration           | 单击新建默认分钟数，正整数                                       | number                                          | step         |
+| drag-to-create             | 日/周/资源日程空白时段拖选                                       | boolean                                         | false        |
+| month-event-limit          | 月视图每日直接展示上限，超出通过 Popover 查看                    | number                                          | 3            |
+| overlap-event-limit        | 时间网格重叠组直接展示上限，超出通过 Popover 查看                | number                                          | —            |
+| zoom / default-zoom        | 时间线缩放，0.5–4                                                | number                                          | 1            |
+| show-date-header           | 时间线日期分层表头                                               | boolean                                         | true         |
+| show-assignment-details    | 编辑资源占用量与角色                                             | boolean                                         | false        |
+| show-resource-load         | 资源峰值、容量及范围利用率                                       | boolean                                         | false        |
+| rule-policy                | capacity/unavailable/conflict 的 allow/warn/block 策略           | SchedulerRulePolicy                             | {}（block）  |
+| dependencies               | 任务依赖关系                                                     | SchedulerDependency[]                           | []           |
+| event-layout               | 时间网格重叠布局 stack / columns；默认周视图 stack、其他 columns | string                                          | 按视图       |
+| readonly                   | 可查看和导航，不能修改                                           | boolean                                         | false        |
+| disabled                   | 禁用交互                                                         | boolean                                         | false        |
+| loading                    | 数据加载中，禁止修改                                             | boolean                                         | false        |
+| hidden-days                | 周、月、议程隐藏指定星期，0–6，不可全部隐藏                      | number[]                                        | []           |
+| show-now-indicator         | 日、周、资源日程显示当前本地时间标线                             | boolean                                         | false        |
+| show-sidebar               | 显示筛选和未排期列表                                             | boolean                                         | true         |
+| allow-overlap              | 允许同资源时间重叠                                               | boolean                                         | true         |
+| editable                   | 启用内置编辑器；false 通过 editor-request 接管                   | boolean                                         | true         |
+| before-change              | 返回 false 取消；异步拦截、保存接口                              | SchedulerBeforeChange / SchedulerBeforeChange[] | —            |
 
 mode 为 `day | week | month | agenda | resource-day | resource-timeline`。agenda 与资源时间线按周导航。超出时间网格小时范围的日程仍可在月/议程/时间线查看。
 
@@ -178,37 +761,43 @@ model-value 受控时，组件只提出新值，由父组件接受后更新界�
 
 ### `<c-scheduler>` Events
 
-| 事件               | 说明                                     | 参数                          |
-| ------------------ | ---------------------------------------- | ----------------------------- |
-| update:model-value | 提出新主值                               | SchedulerEvent[]              |
-| update:mode        | 视图切换                                 | SchedulerMode                 |
-| update:date        | 定位日期变更                             | Date                          |
-| change             | 校验和钩子完成；受控时表示已提出通过的值 | value, SchedulerChangeContext |
-| change-error       | 校验、冲突、保存或过期提案错误           | error, SchedulerChange        |
-| event-click        | 点击日程（传出副本）                     | SchedulerEvent                |
-| cell-click         | 点击空白时段                             | SchedulerCell                 |
-| range-change       | 首次与实际可见日期范围变化               | SchedulerRange                |
-| resource-error     | 资源搜索或回显失败，不修改日程数据       | error, SchedulerResourceErrorContext |
-| editor-request     | 仅 editable=false：请求外部新建或查看/编辑 | SchedulerEditorRequest |
+| 事件                     | 说明                                                             | 参数                                 |
+| ------------------------ | ---------------------------------------------------------------- | ------------------------------------ |
+| update:model-value       | 提出新主值                                                       | SchedulerEvent[]                     |
+| update:resourceFilters   | 维度组合筛选变更，受控时等待父组件接受                           | SchedulerResourceFilters             |
+| update:resourceDimension | 资源行/列展示维度变更                                            | string                               |
+| update:mode              | 视图切换                                                         | SchedulerMode                        |
+| update:zoom              | 时间线缩放值变化                                                 | number                               |
+| rule-warning             | 提案通过时的提醒型规则问题                                       | SchedulerError[]                     |
+| update:date              | 定位日期变更                                                     | Date                                 |
+| change                   | 校验和钩子完成；受控时表示已提出通过的值                         | value, SchedulerChangeContext        |
+| change-error             | 校验、冲突、保存或过期提案错误                                   | error, SchedulerChange               |
+| event-click              | 激活日程（传出副本）；叠放重叠项同样通过单击或 Enter，多选不触发 | SchedulerEvent                       |
+| cell-click               | 点击空白时段                                                     | SchedulerCell                        |
+| range-change             | 首次与实际可见日期范围变化                                       | SchedulerRange                       |
+| resource-error           | 资源搜索或回显失败，不修改日程数据                               | error, SchedulerResourceErrorContext |
+| editor-request           | 仅 editable=false：请求外部新建或查看/编辑                       | SchedulerEditorRequest               |
 
 ### `<c-scheduler>` Slots
 
-| 插槽            | 参数                                              | 说明                                                                                          |
-| --------------- | ------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| event           | { event }                                         | 日程按钮内容                                                                                  |
-| sidebar-extra   | { startDrag, cancelDrag, disabled }                | 左侧顶部自定义内容；startDrag(template: SchedulerEventTemplate, event: DragEvent)，show-sidebar=false 时不显示 |
-| resource-header | { resource?, date }                               | 资源标题或日期标题                                                                            |
-| toolbar-extra   | { date, mode }                                    | 工具栏扩展                                                                                    |
-| editor          | SchedulerEditorSlotProps | 自定义抽屉内容：action、event、error、errorMessage、save、remove、close、readonly、pending |
-| empty           | —                                                 | 空状态                                                                                        |
-| loading         | —                                                 | 加载状态                                                                                      |
+| 插槽            | 参数                                             | 说明                                                                                                               |
+| --------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| event           | { event }                                        | 日程按钮内容                                                                                                       |
+| sidebar         | { startDrag, cancelDrag, disabled, unscheduled } | 替换整个侧栏；适合业务资源树与待排任务池，show-sidebar=false 时不显示                                              |
+| sidebar-extra   | { startDrag, cancelDrag, disabled }              | 默认侧栏顶部自定义内容；startDrag(template: SchedulerEventTemplate, event: DragEvent)，show-sidebar=false 时不显示 |
+| resource-header | { resource?, resources?, date }                  | 资源标题或日期标题                                                                                                 |
+| toolbar-extra   | { date, mode }                                   | 工具栏扩展                                                                                                         |
+| editor          | SchedulerEditorSlotProps                         | 自定义抽屉内容：action、event、error、errorMessage、save、remove、close、readonly、pending                         |
+| empty           | —                                                | 空状态                                                                                                             |
+| loading         | —                                                | 加载状态                                                                                                           |
 
 ### 实例方法
 
-| 方法                             | 说明                                                      |
-| -------------------------------- | --------------------------------------------------------- |
-| `change(change): Promise<boolean>` | 执行 create/update/remove/move/resize，复用全部校验与钩子 |
-| goToDate(date: Date)             | 定位日期；遵循受控模型                                    |
+| 方法                               | 说明                                                           |
+| ---------------------------------- | -------------------------------------------------------------- |
+| `change(change): Promise<boolean>` | 执行 create/update/remove/move/resize，复用全部校验与钩子      |
+| duplicateEvent(id: string)         | 打开独立复制草稿或发出自定义创建请求，返回 boolean，不自动保存 |
+| goToDate(date: Date)               | 定位日期；遵循受控模型                                         |
 
 ## 类型定义
 
@@ -240,21 +829,41 @@ interface SchedulerEvent {
   end?: Date | string | number;
   allDay?: boolean;
   resourceIds?: string[];
+  resourceDetails?: Record<string, { units?: number; role?: string }>;
+  milestone?: boolean;
   taskId?: string;
   description?: string;
   color?: string;
+  accentColor?: string;
+  backgroundColor?: string;
+  backgroundPattern?: "solid" | "diagonal-stripes" | "dots" | "crosshatch";
+  metadata?: Record<string, unknown>;
   readonly?: boolean;
 }
-type SchedulerEventTemplate = Pick<SchedulerEvent, "title" | "description" | "color" | "taskId" | "resourceIds"> & {
-  duration?: number; // 正数分钟，默认 step
+type SchedulerEventTemplate = Pick<
+  SchedulerEvent,
+  | "title"
+  | "description"
+  | "color"
+  | "accentColor"
+  | "backgroundColor"
+  | "backgroundPattern"
+  | "metadata"
+  | "taskId"
+  | "resourceIds"
+> & {
+  duration?: number; // 正数分钟，默认 default-duration 或 step
 };
 interface SchedulerResource {
   id: string;
+  dimensionId?: string;
   label: string;
   color?: string;
   disabled?: boolean;
+  capacity?: number; // 非负安全整数，省略不限制并发日程数
 }
 interface SchedulerResourceQuery {
+  dimensionId?: string;
   query: string;
   cursor?: string;
   signal: AbortSignal;
@@ -263,16 +872,21 @@ interface SchedulerResourcePage {
   items: SchedulerResource[];
   nextCursor?: string;
 }
-type SchedulerRequestResources = (query: SchedulerResourceQuery) => SchedulerResourcePage | Promise<SchedulerResourcePage>;
-type SchedulerResolveResources = (ids: string[], context: { signal: AbortSignal }) => SchedulerResource[] | Promise<SchedulerResource[]>;
+type SchedulerRequestResources = (
+  query: SchedulerResourceQuery,
+) => SchedulerResourcePage | Promise<SchedulerResourcePage>;
+type SchedulerResolveResources = (
+  ids: string[],
+  context: { signal: AbortSignal },
+) => SchedulerResource[] | Promise<SchedulerResource[]>;
 type SchedulerResourceErrorContext =
-  | { type: 'search'; query: string; cursor?: string }
-  | { type: 'resolve'; ids: string[] };
+  | { type: "search"; query: string; cursor?: string }
+  | { type: "resolve"; ids: string[] };
 
-type SchedulerEditorAction = 'create' | 'edit';
+type SchedulerEditorAction = "create" | "edit";
 type SchedulerEditorRequest = { event: SchedulerEvent; readonly: boolean } & (
-  | { action: 'create'; source: 'toolbar' | 'cell' | 'drop' }
-  | { action: 'edit'; source: 'event' }
+  | { action: "create"; source: "toolbar" | "cell" | "drop" }
+  | { action: "edit"; source: "event" }
 );
 interface SchedulerEditorSlotProps {
   action: SchedulerEditorAction;
@@ -287,9 +901,9 @@ interface SchedulerEditorSlotProps {
 }
 ```
 
-每条日程 id 必须唯一。start/end 同时省略表示未排期；否则 end 必须晚于 start。所有区间为 `[start, end)`，前后相邻不冲突。allDay 为 true 时使用 `YYYY-MM-DD` 字符串，end 是不包含的结束日期（一天事项如 9 月 9 日至 9 月 10 日）。
+每条日程 id 必须唯一。start/end 同时省略表示未排期；否则 end 必须晚于 start；定时 milestone 例外，要求 start=end。所有区间为 `[start, end)`，前后相邻不冲突。allDay 为 true 时使用 `YYYY-MM-DD` 字符串，end 是不包含的结束日期（一天事项如 9 月 9 日至 9 月 10 日）。
 
-当前按运行环境本地时区显示，定时日程建议传 ISO 时间点；没有任意 IANA 显示时区的承诺。跨时区重复规则、虚拟资源行、实时协作、历史撤销与外部同步尚不在本次公共 API 中。指针拖拽支持移动与拉伸，Escape 取消；键盘与触屏也可通过编辑表单完成排期/分配修改。资源选项的 disabled 禁止新增分配与拖入，已存在的关联可保留或移除。
+当前按运行环境本地时区显示，定时日程建议传 ISO 时间点；没有任意 IANA 显示时区的承诺。跨时区 RRULE、ICS 与版本同步从独立 adapters 入口提供，真实外部账号连接需业务实现；虚拟资源行通过 virtual-list-props 配置。本地历史撤销与按范围远程加载见上方示例。指针拖拽支持移动与拉伸，Escape 取消；键盘与触屏也可通过编辑表单完成排期/分配修改。资源选项的 disabled 禁止新增分配与拖入，已存在的关联可保留或移除。
 
 ## 独立核心
 
@@ -309,19 +923,20 @@ import {
 
 所有变量集中于 `style/token.less`，支持亮暗主题覆盖。
 
-| 变量名                         | 默认值                         |
-| ------------------------------ | ------------------------------ |
-| --c-scheduler-background       | var(--c-color-bg-2)            |
-| --c-scheduler-color            | var(--c-color-text-1)          |
-| --c-scheduler-border-color     | var(--c-color-border)          |
-| --c-scheduler-sidebar-width    | 220px                          |
-| --c-scheduler-slot-height      | 36px                           |
-| --c-scheduler-column-min-width | 120px                          |
-| --c-scheduler-max-height       | 720px                          |
-| --c-scheduler-event-color      | rgb(var(--c-primary-6))        |
-| --c-scheduler-event-background | var(--c-color-primary-light-1) |
-| --c-scheduler-lane-height      | 38px                           |
-| --c-scheduler-ghost-opacity    | 0.75                           |
-| --c-scheduler-preview-opacity  | 0.85                           |
-| --c-scheduler-preview-duration | 100ms                          |
-| --c-scheduler-ghost-z-index    | 2000                           |
+| 变量名                           | 默认值                         |
+| -------------------------------- | ------------------------------ |
+| --c-scheduler-background         | var(--c-color-bg-2)            |
+| --c-scheduler-color              | var(--c-color-text-1)          |
+| --c-scheduler-border-color       | var(--c-color-border)          |
+| --c-scheduler-sidebar-width      | 220px                          |
+| --c-scheduler-slot-height        | 36px                           |
+| --c-scheduler-column-min-width   | 120px                          |
+| --c-scheduler-max-height         | 720px                          |
+| --c-scheduler-event-color        | rgb(var(--c-primary-6))        |
+| --c-scheduler-event-accent-color | var(--c-scheduler-event-color) |
+| --c-scheduler-event-background   | var(--c-color-primary-light-1) |
+| --c-scheduler-lane-height        | 38px                           |
+| --c-scheduler-ghost-opacity      | 0.75                           |
+| --c-scheduler-preview-opacity    | 0.85                           |
+| --c-scheduler-preview-duration   | 100ms                          |
+| --c-scheduler-ghost-z-index      | 2000                           |

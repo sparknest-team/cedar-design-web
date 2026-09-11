@@ -1,22 +1,16 @@
 <template>
-  <c-menu>
+  <c-dropdown-menu :options="options">
     <c-button>多级菜单</c-button>
-    <template #content>
-      <c-menu-option label="首页" />
-      <c-menu-submenu>
-        <template #default>产品</template>
-        <template #content>
-          <c-menu-option label="产品概览" />
-          <c-menu-submenu trigger="hover">
-            <template #default>解决方案</template>
-            <template #content>
-              <c-menu-option label="企业版" />
-              <c-menu-option label="团队版" />
-            </template>
-          </c-menu-submenu>
-        </template>
-      </c-menu-submenu>
-      <c-menu-option label="关于我们" />
-    </template>
-  </c-menu>
+  </c-dropdown-menu>
 </template>
+
+<script setup lang="ts">
+const options = [
+  { label: '首页', value: 'home' },
+  { label: '产品', children: [
+    { label: '产品概览', value: 'overview' },
+    { label: '解决方案', children: [{ label: '企业版', value: 'enterprise' }, { label: '团队版', value: 'team' }] },
+  ] },
+  { label: '关于我们', value: 'about' },
+]
+</script>

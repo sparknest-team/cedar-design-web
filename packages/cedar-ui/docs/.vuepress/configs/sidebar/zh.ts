@@ -174,8 +174,8 @@ export const zhSideBar: SidebarOptions = {
           link: "/components/nav-menu/",
         },
         {
-          text: "Menu 下拉菜单",
-          link: "/components/menu/",
+          text: "DropdownMenu 下拉命令菜单",
+          link: "/components/dropdown-menu/",
         },
         {
           text: "SplitButton 分裂按钮",
