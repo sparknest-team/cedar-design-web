@@ -1,7 +1,7 @@
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 import { afterEach, describe, test, expect, vi } from 'vitest'
-import DatePicker from '../picker.vue'
+import DatePicker from '../Picker.vue'
 
 describe('DatePicker', () => {
   afterEach(() => {

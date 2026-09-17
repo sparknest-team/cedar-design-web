@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test, vi } from "vitest";
 import { h, nextTick, ref } from "vue";
 import { flushPromises, mount } from "@vue/test-utils";
-import Scheduler from "../scheduler.vue";
-import Editor from "../components/scheduler-editor.vue";
-import ResourceSelect from "../components/scheduler-resource-select.vue";
+import Scheduler from "../Scheduler.vue";
+import Editor from "../components/SchedulerEditor.vue";
+import ResourceSelect from "../components/SchedulerResourceSelect.vue";
 import CSelect from "../../select";
 import { useSchedulerResources } from "../use-resources";
 import { schedulerMessages } from "../locale";

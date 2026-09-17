@@ -2,7 +2,7 @@ import { test, expect } from "vitest";
 import { mount, flushPromises } from "@vue/test-utils";
 import Demo from "../__demos__/duplicate-events.vue";
 import Scheduler from "../index";
-import Editor from "../components/scheduler-editor.vue";
+import Editor from "../components/SchedulerEditor.vue";
 import Button from "../../button";
 import Space from "../../space";
 import Alert from "../../alert";

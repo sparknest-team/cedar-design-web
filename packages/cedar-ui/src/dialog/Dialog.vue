@@ -132,7 +132,7 @@ import {
 import { createNamespace, getPrefixCls } from "../_utils/global-config";
 import { usePopupContainer } from '../_utils/popup-container'
 import ClientOnly from "../_components/client-only";
-import IconHover from "../_components/icon-hover.vue";
+import IconHover from "../_components/IconHover.vue";
 import Button from "../button";
 import { IconClose } from "@cedarjs/icons-vue/icon-close";
 import { IconInfoCircleFill } from "@cedarjs/icons-vue/icon-info-circle-fill";

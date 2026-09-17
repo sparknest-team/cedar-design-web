@@ -3,7 +3,7 @@ import { createApp, nextTick, h } from "vue";
 import { mount, flushPromises } from "@vue/test-utils";
 import Scheduler, { schedulerProps } from "../index";
 import type { SchedulerEvent } from "../core";
-import SchedulerEditor from "../components/scheduler-editor.vue";
+import SchedulerEditor from "../components/SchedulerEditor.vue";
 
 const wrappers: ReturnType<typeof mount>[] = [];
 const events: SchedulerEvent[] = [
@@ -443,6 +443,42 @@ describe("Scheduler", () => {
     await wrapper.get(".c-scheduler__time-cell").trigger("click");
     expect(wrapper.emitted("cell-click")).toHaveLength(1);
     expect(wrapper.findComponent(SchedulerEditor).exists()).toBe(false);
+  });
+  test("empty month and all-day areas create once while existing events keep their action", async () => {
+    const month = setup({ defaultMode: "month", editable: false });
+    const day = month.get(".c-scheduler__month-cell");
+    await day.trigger("click");
+    expect(month.emitted("editor-request")?.[0][0]).toMatchObject({
+      action: "create",
+      source: "cell",
+      event: { allDay: true },
+    });
+    await day.get("button").trigger("click");
+    expect(month.emitted("editor-request")).toHaveLength(2);
+    await month
+      .get(".c-scheduler__month-cell .c-scheduler__event-button")
+      .trigger("click");
+    expect(month.emitted("editor-request")).toHaveLength(3);
+    expect(month.emitted("editor-request")?.[2][0]).toMatchObject({
+      action: "edit",
+    });
+
+    const week = setup({ defaultMode: "week", editable: false });
+    const allDay = week.get(".c-scheduler__all-day");
+    await allDay.trigger("click");
+    expect(week.emitted("editor-request")?.[0][0]).toMatchObject({
+      action: "create",
+      source: "cell",
+      event: { allDay: true },
+    });
+    expect(allDay.findAll(".c-button")).toHaveLength(0);
+    await allDay.trigger("keydown", { key: "Enter" });
+    expect(week.emitted("editor-request")).toHaveLength(2);
+    await allDay.trigger("keydown", { key: " " });
+    expect(week.emitted("editor-request")).toHaveLength(3);
+    await week.setProps({ readonly: true });
+    await allDay.trigger("keydown", { key: "Enter" });
+    expect(week.emitted("editor-request")).toHaveLength(3);
   });
   test("arrow keys move focus between visible calendar controls", async () => {
     const wrapper = setup(

@@ -14,7 +14,7 @@ import type { Dayjs } from 'dayjs'
 import { defineComponent, PropType } from 'vue'
 import { methods } from '../../../../_utils/date'
 import { IsSameTime, WeekStart } from '../../types'
-import DatePanel from '../date/index.vue'
+import DatePanel from '../date/Index.vue'
 import { useI18n } from '../../../../locale'
 import { createNamespace } from '../../../../_utils/global-config'
 

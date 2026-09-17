@@ -2,7 +2,7 @@ import { test, expect } from "vitest";
 import { mount, flushPromises } from "@vue/test-utils";
 import Demo from "../__demos__/recurrence-following.vue";
 import Scheduler from "../index";
-import EventCard from "../components/scheduler-event.vue";
+import EventCard from "../components/SchedulerEvent.vue";
 import { schedulerDate } from "../core";
 import Button from "../../button";
 import Select from "../../select";

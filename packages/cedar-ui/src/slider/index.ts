@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _Slider from './slider.vue'
+import _Slider from './Slider.vue'
 import { sliderProps } from './props'
 
 const Slider = withInstall(_Slider, Object.assign(_Slider, {

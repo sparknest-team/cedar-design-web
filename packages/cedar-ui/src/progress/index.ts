@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _Progress from './progress.vue'
+import _Progress from './Progress.vue'
 import { progressProps } from './props'
 
 const Progress = withInstall(_Progress, Object.assign(_Progress, {

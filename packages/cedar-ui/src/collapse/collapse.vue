@@ -4,141 +4,105 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, provide, reactive, ref, shallowRef, toRefs } from 'vue'
-import { createNamespace, getPrefixCls } from '../_utils/global-config'
-import { isArray } from '../_utils/is'
-import { CollapseItemContext, collapseKey } from './context'
-import type { CollapseToggleAllOptions } from './types'
-import { collapseProps } from './props'
+<script lang="ts" setup>
+import { computed, provide, reactive, ref, shallowRef, toRefs, useSlots } from 'vue'
+import { createNamespace } from '../_utils/global-config'
+import { collapseKey, type CollapseItemContext } from './context'
+import { collapseProps, type CollapseName, type CollapseToggleAllOptions } from './props'
 
-export default defineComponent({
-  name: createNamespace('collapse').name,
-  props: collapseProps,
-  /**
-   * @zh 展开图标
-   * @en Expand icon
-   * @slot expand-icon
-   * @binding {boolean} active
-   * @binding {boolean} disabled
-   * @binding {'left' | 'right'} position
-   */
-  emits: {
-    'update:activeNames': (activeNames: (string | number)[]) => true,
-    /**
-     * @zh 展开的面板发生改变时触发
-     * @en Emitted when the expanded panel changes
-     * @param {(string | number)[]} activeNames
-     * @param {Event} ev
-     */
-    change: (activeNames: (string | number)[], ev: Event) => true,
-  },
-  setup(props, { emit, slots, expose }) {
-    const { expandIconPosition, destroyOnHide, showExpandIcon, divider, offset } = toRefs(props)
-    const prefixCls = getPrefixCls('collapse')
-    const items = shallowRef<CollapseItemContext[]>([])
+defineOptions({ name: createNamespace('collapse').name })
 
-    const _activeNames = ref(props.defaultActiveNames)
-    const computedActiveNames = computed(() => {
-      const activeNames = props.activeNames ?? _activeNames.value
-      if (!isArray(activeNames)) {
-        return [activeNames]
+const props = defineProps(collapseProps)
+const emit = defineEmits<{
+  'update:activeNames': [activeNames: CollapseName[]]
+  change: [activeNames: CollapseName[], ev: Event]
+}>()
+const slots = useSlots()
+const { n, classes } = createNamespace('collapse')
+const { expandIconPosition, destroyOnHide, showExpandIcon, divider, offset } = toRefs(props)
+const items = shallowRef<CollapseItemContext[]>([])
+const innerActiveNames = ref<CollapseName[]>([...(props.defaultActiveNames ?? [])])
+const computedActiveNames = computed(() => {
+  const activeNames = props.activeNames ?? innerActiveNames.value
+  return Array.isArray(activeNames) ? activeNames : [activeNames]
+})
+
+function updateActiveNames(newActiveNames: CollapseName[], e?: Event) {
+  innerActiveNames.value = newActiveNames
+  emit('update:activeNames', newActiveNames)
+  emit('change', newActiveNames, e ?? new Event('change'))
+}
+
+function handleClick(itemName: CollapseName, e: Event) {
+  let newActiveNames: CollapseName[] = []
+  if (props.accordion) {
+    if (!computedActiveNames.value.includes(itemName)) {
+      newActiveNames = [itemName]
+    }
+  } else {
+    newActiveNames = [...computedActiveNames.value]
+    const index = newActiveNames.indexOf(itemName)
+    if (index > -1) {
+      newActiveNames.splice(index, 1)
+    } else {
+      newActiveNames.push(itemName)
+    }
+  }
+  updateActiveNames(newActiveNames, e)
+}
+
+function addItem(item: CollapseItemContext) {
+  if (!items.value.find((current) => current.name === item.name)) {
+    items.value.push(item)
+  }
+}
+
+function removeItem(itemName: CollapseName) {
+  items.value = items.value.filter((item) => item.name !== itemName)
+}
+
+function toggleAll(options: CollapseToggleAllOptions) {
+  if (props.accordion) {
+    return
+  }
+
+  const nextNames = items.value
+    .filter((item) => {
+      const expanded = computedActiveNames.value.includes(item.name)
+      if (options.skipDisabled && item.disabled.value) {
+        return expanded
       }
-      return activeNames
+      if (options.expand === 'inverse') {
+        return !expanded
+      }
+      return options.expand
     })
+    .map((item) => item.name)
 
-    const updateActiveNames = (newActiveNames: (string | number)[], e?: Event) => {
-      _activeNames.value = newActiveNames
-      emit('update:activeNames', newActiveNames)
-      if (e) {
-        emit('change', newActiveNames, e)
-      } else {
-        emit('change', newActiveNames, new Event('change'))
-      }
-    }
+  updateActiveNames(nextNames)
+}
 
-    const handleClick = (name: string | number, e: Event) => {
-      let newActiveNames: (string | number)[] = []
-      if (props.accordion) {
-        if (!computedActiveNames.value.includes(name)) {
-          newActiveNames = [name]
-        }
-      } else {
-        newActiveNames = [...computedActiveNames.value]
-        const _index = newActiveNames.indexOf(name)
-        if (_index > -1) {
-          newActiveNames.splice(_index, 1)
-        } else {
-          newActiveNames.push(name)
-        }
-      }
-      updateActiveNames(newActiveNames, e)
-    }
+provide(
+  collapseKey,
+  reactive({
+    activeNames: computedActiveNames,
+    slots,
+    showExpandIcon,
+    expandIconPosition,
+    destroyOnHide,
+    divider,
+    offset,
+    handleClick,
+    addItem,
+    removeItem,
+  }),
+)
 
-    const addItem = (item: CollapseItemContext) => {
-      if (!items.value.find((i) => i.name === item.name)) {
-        items.value.push(item)
-      }
-    }
+const cls = computed(() =>
+  classes(n(), [!props.bordered, n('--borderless')], [!props.divider, n('--no-divider')], [props.offset, n('--offset')]),
+)
 
-    const removeItem = (name: string | number) => {
-      items.value = items.value.filter((item) => item.name !== name)
-    }
-
-    const toggleAll = (options: CollapseToggleAllOptions) => {
-      if (props.accordion) {
-        return
-      }
-
-      const nextNames = items.value
-        .filter((item) => {
-          const expanded = computedActiveNames.value.includes(item.name)
-          if (options.skipDisabled && item.disabled.value) {
-            return expanded
-          }
-          if (options.expand === 'inverse') {
-            return !expanded
-          }
-          return options.expand
-        })
-        .map((item) => item.name)
-
-      updateActiveNames(nextNames)
-    }
-
-    provide(
-      collapseKey,
-      reactive({
-        activeNames: computedActiveNames,
-        slots,
-        showExpandIcon,
-        expandIconPosition,
-        destroyOnHide,
-        divider,
-        offset,
-        handleClick,
-        addItem,
-        removeItem,
-      }),
-    )
-
-    const cls = computed(() => [
-      prefixCls,
-      {
-        [`${prefixCls}-borderless`]: !props.bordered,
-        [`${prefixCls}-no-divider`]: !props.divider,
-        [`${prefixCls}-offset`]: props.offset,
-      },
-    ])
-
-    expose({
-      toggleAll,
-    })
-
-    return {
-      prefixCls,
-      cls,
-    }
-  },
+defineExpose({
+  toggleAll,
 })
 </script>

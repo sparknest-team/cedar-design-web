@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { describe, expect, test } from 'vitest'
-import Affix from '../affix.vue'
+import Affix from '../Affix.vue'
 describe('Affix shared contract', () => {
   test('bottom has priority and disabled turns off CSS mode', async () => {
     const wrapper = mount(Affix, { props: { cssMode: true, offsetTop: 12, offsetBottom: 0 } })

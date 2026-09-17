@@ -1,0 +1,64 @@
+// Stable semantic contract shared with Maple. Component tokens should prefer
+// these roles over palette values or one-off literals.
+:root {
+  // Color roles
+  --c-sys-color-surface-page: var(--c-color-bg-1);
+  --c-sys-color-surface-default: var(--c-color-bg-2);
+  --c-sys-color-surface-raised: var(--c-color-bg-3);
+  --c-sys-color-surface-overlay: var(--c-color-bg-5);
+  --c-sys-color-surface-muted: var(--c-color-fill-1);
+  --c-sys-color-content-primary: var(--c-color-text-1);
+  --c-sys-color-content-secondary: var(--c-color-text-2);
+  --c-sys-color-content-tertiary: var(--c-color-text-3);
+  --c-sys-color-content-disabled: var(--c-color-text-disabled);
+  --c-sys-color-border-subtle: var(--c-color-border-1);
+  --c-sys-color-border-default: var(--c-color-border-2);
+  --c-sys-color-border-strong: var(--c-color-border-4);
+  --c-sys-color-action-primary: var(--c-color-primary);
+  --c-sys-color-status-info: var(--c-color-info);
+  --c-sys-color-status-success: var(--c-color-success);
+  --c-sys-color-status-warning: var(--c-color-warning);
+  --c-sys-color-status-danger: var(--c-color-danger);
+  --c-sys-color-state-hover: var(--c-color-fill-2);
+  --c-sys-color-state-selected: var(--c-color-primary-light-1);
+
+  // Spacing scale
+  --c-sys-space-1: 2px;
+  --c-sys-space-2: 4px;
+  --c-sys-space-3: 6px;
+  --c-sys-space-4: 8px;
+  --c-sys-space-5: 12px;
+  --c-sys-space-6: 16px;
+  --c-sys-space-7: 20px;
+  --c-sys-space-8: 24px;
+
+  // Shape roles
+  --c-sys-radius-sm: 2px;
+  --c-sys-radius-md: 4px;
+  --c-sys-radius-lg: 8px;
+  --c-sys-radius-pill: 999px;
+
+  // Typography roles
+  --c-sys-font-size-xs: 12px;
+  --c-sys-font-size-sm: 13px;
+  --c-sys-font-size-md: 14px;
+  --c-sys-font-size-lg: 16px;
+  --c-sys-font-size-xl: 18px;
+  --c-sys-font-weight-regular: 400;
+  --c-sys-font-weight-medium: 500;
+  --c-sys-font-weight-semibold: 600;
+
+  // Motion roles
+  --c-sys-motion-duration-fast: 120ms;
+  --c-sys-motion-duration-standard: 180ms;
+  --c-sys-motion-duration-slow: 240ms;
+  --c-sys-motion-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+
+  // Desktop control density
+  --c-sys-control-height-xs: 28px;
+  --c-sys-control-height-sm: 32px;
+  --c-sys-control-height-md: 36px;
+  --c-sys-control-height-lg: 40px;
+  --c-sys-control-height-xl: 44px;
+  --c-sys-control-touch-target: 44px;
+}

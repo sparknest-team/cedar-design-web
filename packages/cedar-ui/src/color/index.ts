@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _Color from './color.vue'
+import _Color from './Color.vue'
 import { colorProps } from './props'
 
 const Color = withInstall(_Color, Object.assign(_Color, {

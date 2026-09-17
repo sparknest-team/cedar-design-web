@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 import { describe, test, expect } from "vitest";
-import ColGroup from "../table-col-group.vue";
+import ColGroup from "../TableColGroup.vue";
 import type { TableColumnData } from "../types";
 
 describe("table-col-group", () => {

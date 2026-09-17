@@ -1,32 +1,29 @@
-import { InjectionKey } from 'vue'
-import type { TabData, TabTriggerEvent, TabVariant, ScrollPosition } from './types'
+import { isVNode, type ComputedRef, type InjectionKey, type VNode } from 'vue'
+import type { TabsKey, TabsProps } from './props'
 
+export interface TabEntry {
+  key: TabsKey
+  disabled: boolean
+  hasPanel: boolean
+}
 export interface TabsContext {
-  lazyLoad: boolean
-  destroyOnHide: boolean
-  activeKey: string | number
-  addItem: (id: number, data: TabData) => void
-  removeItem: (id: number) => void
-  trigger: TabTriggerEvent
+  props: Readonly<TabsProps>
+  entries: ComputedRef<TabEntry[]>
+  active: ComputedRef<TabsKey | undefined>
+  focused: { value: TabsKey | undefined }
+  rtl: ComputedRef<boolean>
+  id: (key: TabsKey, part: 'tab' | 'panel') => string
+  select: (key: TabsKey) => void
+  click: (key: TabsKey, event: Event) => void
+  add: (event: Event) => void
+  remove: (key: TabsKey, event: Event) => void
 }
+export const tabsInjectionKey: InjectionKey<TabsContext> = Symbol('Tabs')
 
-export interface TabsNavContext {
-  tabs: TabData[]
-  activeKey: string | number
-  activeIndex: number
-  vertical: boolean
-  indicatorPosition: 'normal' | 'reverse'
-  size: string
-  variant: TabVariant
-  editable: boolean
-  animation: boolean
-  showAddButton: boolean
-  headerPadding: boolean
-  scrollPosition: ScrollPosition
-  onTabClick: (key: string | number, e: Event) => void
-  onAdd: (ev: Event) => void
-  onDelete: (key: string | number, ev: Event) => void
+export function flatten(nodes: VNode[] | VNode): VNode[] {
+  return (Array.isArray(nodes) ? nodes : [nodes])
+    .filter(isVNode)
+    .flatMap((node) =>
+      Array.isArray(node.children) && typeof node.type === 'symbol' ? flatten(node.children as VNode[]) : [node],
+    )
 }
-
-export const tabsInjectionKey: InjectionKey<TabsContext> = Symbol('CedarTabs')
-export const tabsNavInjectionKey: InjectionKey<TabsNavContext> = Symbol('CedarTabsNav')

@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _Textarea from './textarea.vue'
+import _Textarea from './Textarea.vue'
 import { textareaProps } from './props'
 
 const Textarea = withInstall(_Textarea, Object.assign(_Textarea, {

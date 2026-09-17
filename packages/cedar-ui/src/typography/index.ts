@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _Typography from './typography.vue'
+import _Typography from './Typography.vue'
 import _TypographyParagraph from './paragraph'
 import _TypographyTitle from './title'
 import _TypographyText from './text'

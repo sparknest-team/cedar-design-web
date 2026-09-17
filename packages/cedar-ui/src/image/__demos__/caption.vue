@@ -1,18 +1,6 @@
 <template>
-  <c-image width="200px" :src="src" :title="title" :description="description" />
-  <c-image
-    width="200px"
-    :src="src"
-    :title="title"
-    :description="description"
-    footerPosition="outer"
-    style="margin-left: 67px; vertical-align: top"
-  />
+  <c-space :size="24" wrap>
+    <c-image width="200" src="/cat.jpg" title="一只猫" description="页脚在图片内侧" />
+    <c-image width="200" src="/cat2.jpg" title="一只猫" description="页脚在图片外侧" footer-position="outer" />
+  </c-space>
 </template>
-
-<script lang="ts" setup>
-const src =
-  "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a8c8cdb109cb051163646151a4a5083b.png~tplv-uwbnlip3yd-webp.webp";
-const title = "A user’s avatar";
-const description = "Present by Cedar Design";
-</script>

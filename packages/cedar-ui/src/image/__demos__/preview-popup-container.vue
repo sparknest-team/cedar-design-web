@@ -1,19 +1,8 @@
 <template>
-  <div
-    id="image-demo-preview-popup-container"
-    :style="{
-      width: '100%',
-      height: '400px',
-      backgroundColor: 'var(--color-fill-2)',
-      position: 'relative',
-      overflow: 'hidden',
-      lineHeight: '400px',
-      textAlign: 'center',
-    }"
-  >
+  <div id="image-demo-preview-popup-container" class="popup-container">
     <c-image
-      width="200"
-      src="https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a8c8cdb109cb051163646151a4a5083b.png~tplv-uwbnlip3yd-webp.webp"
+      width="160"
+      src="/cat.jpg"
       :preview-props="{
         popupContainer: '#image-demo-preview-popup-container',
         closable: false,
@@ -22,4 +11,12 @@
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<style scoped>
+.popup-container {
+  position: relative;
+  height: 220px;
+  padding: 16px;
+  overflow: hidden;
+  background: var(--c-color-fill-2);
+}
+</style>

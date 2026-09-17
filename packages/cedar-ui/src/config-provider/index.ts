@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _ConfigProvider from './config-provider.vue'
+import _ConfigProvider from './ConfigProvider.vue'
 import { configProviderProps, cedarThemes } from './props'
 
 const ConfigProvider = withInstall(_ConfigProvider, Object.assign(_ConfigProvider, {

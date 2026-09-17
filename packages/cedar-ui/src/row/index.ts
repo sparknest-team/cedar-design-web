@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import Component from './row.vue'
+import Component from './Row.vue'
 import { rowProps } from './props'
 const Row = withInstall(Component)
 export { Row, rowProps }

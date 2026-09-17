@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { describe, expect, test } from 'vitest'
-import Badge from '../badge.vue'
+import Badge from '../Badge.vue'
 
 describe('Badge aligned contract', () => {
   test('defaults to danger and isolates instances', async () => {

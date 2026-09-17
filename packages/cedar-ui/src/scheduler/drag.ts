@@ -29,7 +29,7 @@ export function projectSchedulerDrag(
       oldStart?.getMinutes() ?? 0,
     );
   }
-  if (resize && event.milestone) return;
+  if (resize && (event.milestone || event.resizable === false)) return;
   if (resize) {
     if (
       allDay !== false ||

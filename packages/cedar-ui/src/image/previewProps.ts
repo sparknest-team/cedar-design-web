@@ -1,14 +1,12 @@
-import type { ImgHTMLAttributes, PropType } from "vue";
-import type { ImageInteraction, ImagePreviewActionName } from "./api";
+import type { ImgHTMLAttributes, PropType } from 'vue'
+import type { ImageInteraction, ImagePreviewActionName } from './api'
 
 export const imagePreviewProps = {
   src: String,
   open: { type: Boolean, default: undefined },
   defaultOpen: { type: Boolean, default: false },
-  interaction: { type: String as PropType<ImageInteraction>, default: "auto" },
-  popupContainer: [String, Object, Boolean] as PropType<
-    string | HTMLElement | false
-  >,
+  interaction: { type: String as PropType<ImageInteraction>, default: 'auto' },
+  popupContainer: [String, Object, Boolean] as PropType<string | HTMLElement | false>,
   lockScroll: { type: Boolean, default: true },
   closable: { type: Boolean, default: true },
   overlayClosable: { type: Boolean, default: true },
@@ -26,6 +24,6 @@ export const imagePreviewProps = {
   actionsLayout: Array as PropType<ImagePreviewActionName[]>,
   previewedImgProps: Object as PropType<ImgHTMLAttributes>,
   onOpenChange: Function as PropType<(open: boolean) => void>,
-};
+}
 
-export const props = imagePreviewProps;
+export const props = imagePreviewProps

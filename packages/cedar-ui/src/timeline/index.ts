@@ -1,6 +1,6 @@
 import { withInstall } from '../_utils/global-config'
 import _Timeline from './timeline'
-import _TimelineItem from './item.vue'
+import _TimelineItem from './Item.vue'
 import { timelineProps } from './props'
 
 const Timeline = withInstall(_Timeline, Object.assign(_Timeline, {

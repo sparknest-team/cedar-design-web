@@ -1,6 +1,6 @@
 import { withInstall } from '../_utils/global-config'
-import Component from './grid.vue'
-import ItemComponent from './grid-item.vue'
+import Component from './Grid.vue'
+import ItemComponent from './GridItem.vue'
 import { gridProps } from './props'
 import { gridItemProps } from './item-props'
 const GridItem = withInstall(ItemComponent)

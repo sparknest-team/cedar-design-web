@@ -1,6 +1,6 @@
 import { createNamespace } from '../_utils/global-config'
 import { computed, defineComponent, PropType, reactive, ref, toRefs, onMounted, nextTick } from 'vue'
-import ResizeTrigger from '../_components/resize-trigger.vue'
+import ResizeTrigger from '../_components/ResizeTrigger.vue'
 import useMergeState from '../_hooks/use-merge-state'
 import { getPrefixCls } from '../_utils/global-config'
 import { off, on } from '../_utils/dom'

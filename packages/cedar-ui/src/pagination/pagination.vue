@@ -5,11 +5,11 @@ import { paginationProps } from './props'
 import { usePagination } from './use-pagination'
 import { useCompact } from './use-compact'
 import { usePaginationLocale } from './platform'
-import PageItem from './page-item.vue'
-import PageItemStep from './page-item-step.vue'
-import PageItemEllipsis from './page-item-ellipsis.vue'
-import PageJumper from './page-jumper.vue'
-import PageOptions from './page-options.vue'
+import PageItem from './PageItem.vue'
+import PageItemStep from './PageItemStep.vue'
+import PageItemEllipsis from './PageItemEllipsis.vue'
+import PageJumper from './PageJumper.vue'
+import PageOptions from './PageOptions.vue'
 
 defineOptions({ name: createNamespace('pagination').name })
 const props = defineProps(paginationProps)

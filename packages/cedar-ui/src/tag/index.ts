@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _Tag from './tag.vue'
+import _Tag from './Tag.vue'
 import { tagProps, tagVariants } from './props'
 
 const Tag = withInstall(_Tag, Object.assign(_Tag, {

@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _Switch from './switch.vue'
+import _Switch from './Switch.vue'
 import { switchProps } from './props'
 
 const Switch = withInstall(_Switch, Object.assign(_Switch, {

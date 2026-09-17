@@ -1,6 +1,6 @@
 import { withInstall } from '../_utils/global-config'
-import _Time from './time.vue'
-import _TimePicker from './picker/time-picker.vue'
+import _Time from './Time.vue'
+import _TimePicker from './picker/TimePicker.vue'
 import { timeProps } from './props'
 import { timePickerProps } from './picker/props'
 

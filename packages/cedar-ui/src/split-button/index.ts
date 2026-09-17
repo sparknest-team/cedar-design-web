@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _SplitButton from './split-button.vue'
+import _SplitButton from './SplitButton.vue'
 import { splitButtonProps } from './props'
 
 const SplitButton = withInstall(_SplitButton)

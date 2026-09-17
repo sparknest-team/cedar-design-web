@@ -28,7 +28,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, onUnmounted, onUpdated } from 'vue'
 import { createNamespace, getPrefixCls } from '../_utils/global-config'
-import AIconHover from '../_components/icon-hover.vue'
+import AIconHover from '../_components/IconHover.vue'
 import { IconClose } from '@cedarjs/icons-vue/icon-close'
 import { IconInfoCircleFill } from '@cedarjs/icons-vue/icon-info-circle-fill'
 import { IconCheckCircleFill } from '@cedarjs/icons-vue/icon-check-circle-fill'

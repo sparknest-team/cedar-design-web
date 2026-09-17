@@ -1,8 +1,8 @@
 import { test, expect } from "vitest";
 import { mount, flushPromises } from "@vue/test-utils";
-import Scheduler from "../scheduler.vue";
+import Scheduler from "../Scheduler.vue";
 import VirtualList from "../../_components/virtual-list-v2";
-import Card from "../components/scheduler-event.vue";
+import Card from "../components/SchedulerEvent.vue";
 const resources = Array.from({ length: 1000 }, (_, i) => ({
   id: `r${i}`,
   label: `Resource ${i}`,

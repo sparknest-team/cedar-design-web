@@ -58,7 +58,7 @@ import { IconMinus } from "@cedarjs/icons-vue/icon-minus";
 import Loading from "../loading";
 import Pagination, { PaginationProps } from "../pagination";
 import Empty from "../empty";
-import ColGroup from "./table-col-group.vue";
+import ColGroup from "./TableColGroup.vue";
 import Thead from "./table-thead";
 import Tbody from "./table-tbody";
 import Tr from "./table-tr";

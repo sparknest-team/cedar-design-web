@@ -1,5 +1,5 @@
 <template>
-  <c-space :size="16">
+  <c-space :size="16" wrap>
     <c-image
       width="120"
       height="120"
@@ -16,5 +16,3 @@
     />
   </c-space>
 </template>
-
-<script setup lang="ts"></script>

@@ -1,6 +1,6 @@
 import { withInstall } from '../_utils/global-config'
-import _Avatar from './avatar.vue'
-import _AvatarGroup from './avatar-group.vue'
+import _Avatar from './Avatar.vue'
+import _AvatarGroup from './AvatarGroup.vue'
 import { avatarGroupProps, avatarProps } from './props'
 
 const Avatar = withInstall(

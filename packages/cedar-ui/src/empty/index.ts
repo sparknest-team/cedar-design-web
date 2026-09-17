@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _Empty from './empty'
+import _Empty from './Empty.vue'
 import { emptyProps } from './props'
 
 const Empty = withInstall(_Empty, Object.assign(_Empty, {

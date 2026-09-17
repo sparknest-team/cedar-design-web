@@ -1,8 +1,8 @@
 import { test, expect, vi } from "vitest";
 import { mount, flushPromises } from "@vue/test-utils";
-import Scheduler from "../scheduler.vue";
-import Card from "../components/scheduler-event.vue";
-import Grid from "../components/scheduler-time-grid.vue";
+import Scheduler from "../Scheduler.vue";
+import Card from "../components/SchedulerEvent.vue";
+import Grid from "../components/SchedulerTimeGrid.vue";
 import {
   getSchedulerVisibleDays,
   getSchedulerRange,

@@ -2,7 +2,7 @@ import { test, expect } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
 import Demo from '../__demos__/custom-editor.vue';
 import Scheduler from '../index';
-import Editor from '../components/scheduler-editor.vue';
+import Editor from '../components/SchedulerEditor.vue';
 import Input from '../../input';
 import DatePicker from '../../date';
 import Textarea from '../../textarea';

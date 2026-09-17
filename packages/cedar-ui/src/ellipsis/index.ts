@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _Ellipsis from './src/ellipsis.vue'
+import _Ellipsis from './src/Ellipsis.vue'
 import { ellipsisProps } from './src/props'
 
 const Ellipsis = withInstall(_Ellipsis, Object.assign(_Ellipsis, {

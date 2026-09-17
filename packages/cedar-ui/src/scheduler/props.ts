@@ -9,6 +9,7 @@ import { isValidSchedulerHiddenDays } from "./core/visible-days";
 import { schedulerModes } from "./core";
 import type {
   SchedulerEvent,
+  SchedulerEventLayout,
   SchedulerResource,
   SchedulerMode,
   SchedulerDate,
@@ -69,7 +70,6 @@ export type SchedulerEventTemplate = Pick<
   | "backgroundColor"
   | "backgroundPattern"
   | "metadata"
-  | "taskId"
   | "resourceIds"
 > & { duration?: number };
 export type SchedulerBeforeTransaction = (
@@ -272,7 +272,7 @@ export const schedulerProps = {
   },
   /** 时间网格重叠布局；省略时周视图叠放，其余视图并排。 */
   eventLayout: {
-    type: String as PropType<"stack" | "columns">,
+    type: [String, Function] as PropType<SchedulerEventLayout>,
     default: undefined,
   },
   /** 只读，允许查看和导航，禁止修改日程。 */

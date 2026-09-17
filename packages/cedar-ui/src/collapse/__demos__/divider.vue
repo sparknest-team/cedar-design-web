@@ -1,7 +1,7 @@
 <template>
   <c-space direction="column" :style="{ width: '100%' }">
     <c-button @click="divider = !divider">
-      {{ divider ? '隐藏分割线' : '显示分割线' }}
+      {{ divider ? 'Hide divider' : 'Show divider' }}
     </c-button>
     <c-collapse :default-active-names="[]" :divider="divider">
       <c-collapse-item title="Beijing Toutiao Technology Co., Ltd." name="1">
@@ -16,7 +16,6 @@
     </c-collapse>
   </c-space>
 </template>
-
 <script lang="ts" setup>
 import { ref } from 'vue'
 

@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Message } from '@cedarjs/ui'
-import { t } from './locale'
 
 const completed = ref(0)
 const publish = async () => {
   await new Promise<void>((resolve) => setTimeout(resolve, 800))
   completed.value += 1
-  Message.info(t('published'))
+  Message.info('发布成功')
 }
 const handleSelect = (_value: unknown, option: { label?: unknown }) => {
   Message.info(String(option.label))
@@ -17,14 +16,14 @@ const handleSelect = (_value: unknown, option: { label?: unknown }) => {
 <template>
   <c-space direction="column" align="flex-start">
     <c-split-button status="primary" auto-loading @click="publish" @select="handleSelect">
-      {{ t('publish') }}
+      发布
 
       <template #content>
-        <c-menu-option :label="t('saveNow')" value="draft" />
-        <c-menu-option :label="t('saveAndPublish')" value="publish" />
-        <c-menu-option :label="t('unavailable')" value="restricted" disabled />
+        <c-menu-option label="保存草稿" value="draft" />
+        <c-menu-option label="保存并发布" value="publish" />
+        <c-menu-option label="暂无权限" value="restricted" disabled />
       </template>
     </c-split-button>
-    <span aria-live="polite">{{ t('completed') }}: {{ completed }}</span>
+    <span aria-live="polite">完成次数: {{ completed }}</span>
   </c-space>
 </template>

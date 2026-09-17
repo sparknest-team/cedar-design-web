@@ -1,6 +1,6 @@
 import { withInstall } from '../_utils/global-config'
-import _Anchor from './anchor.vue'
-import _AnchorLink from './anchor-link.vue'
+import _Anchor from './Anchor.vue'
+import _AnchorLink from './AnchorLink.vue'
 import { anchorProps } from './props'
 
 const Anchor = withInstall(_Anchor, Object.assign(_Anchor, {

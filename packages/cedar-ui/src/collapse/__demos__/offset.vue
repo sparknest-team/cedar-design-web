@@ -1,7 +1,7 @@
 <template>
   <c-space direction="column" :style="{ width: '100%' }">
     <c-button @click="offset = !offset">
-      {{ offset ? '隐藏间距' : '显示间距' }}
+      {{ offset ? 'Hide offset' : 'Show offset' }}
     </c-button>
     <c-collapse v-model:active-names="activeNames" :offset="offset">
       <c-collapse-item title="Beijing Toutiao Technology Co., Ltd." name="1">
@@ -16,7 +16,6 @@
     </c-collapse>
   </c-space>
 </template>
-
 <script lang="ts" setup>
 import { ref } from 'vue'
 

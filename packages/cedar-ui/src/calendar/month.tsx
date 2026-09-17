@@ -147,19 +147,16 @@ export default defineComponent({
 
           return (
             <div key={index} class={getCellClassName.value(col, false)} {...tdProps}>
-              {slots.default ? (
-                slots.default?.({
+              <div class={`${prefixCls}-date`} {...tdDivProps}>
+                <div class={`${prefixCls}-date-value`}>
+                  {props.panel ? col.date : <div class={`${prefixCls}-date-circle`}>{col.date}</div>}
+                </div>
+                {slots.default?.({
                   year: col.year,
                   month: col.month,
                   date: col.date,
-                })
-              ) : (
-                <div class={`${prefixCls}-date`} {...tdDivProps}>
-                  <div class={`${prefixCls}-date-value`}>
-                    {props.panel ? col.date : <div class={`${prefixCls}-date-circle`}>{col.date}</div>}
-                  </div>
-                </div>
-              )}
+                })}
+              </div>
             </div>
           )
         }

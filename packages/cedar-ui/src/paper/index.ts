@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _Paper from './paper.vue'
+import _Paper from './Paper.vue'
 
 const Paper = withInstall(_Paper)
 export { Paper }

@@ -1,9 +1,9 @@
 import { withInstall } from "../_utils/global-config";
-import _Layout from "./layout.vue";
-import _LayoutHeader from "./header.vue";
-import _LayoutContent from "./content.vue";
-import _LayoutFooter from "./footer.vue";
-import _LayoutSider from "./sider.vue";
+import _Layout from "./Layout.vue";
+import _LayoutHeader from "./Header.vue";
+import _LayoutContent from "./Content.vue";
+import _LayoutFooter from "./Footer.vue";
+import _LayoutSider from "./Sider.vue";
 import { layoutProps } from "./props";
 
 const Layout = withInstall(

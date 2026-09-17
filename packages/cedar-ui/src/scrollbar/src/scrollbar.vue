@@ -31,7 +31,7 @@ import { createNamespace } from '../../_utils/global-config'
 import { computed, type CSSProperties, defineComponent, onMounted, type PropType, ref, type StyleValue } from 'vue'
 import type { ThumbData } from './types'
 import ResizeObserver from '../../_components/resize-observer-v2'
-import Thumb from './thumb.vue'
+import Thumb from './Thumb.vue'
 import { getPrefixCls } from '../../_utils/global-config'
 import { isNumber, isObject } from '../../_utils/is'
 

@@ -79,7 +79,7 @@ import StyleProvider from './style-provider'
 import Switch from './switch'
 import Table, { TableColumn, Tbody, Td, Th, Thead, Tr } from './table'
 import TableColumnManager from './table-column-manager'
-import Tabs, { TabItem, TabNav, TabsItems, TabsNavs } from './tabs'
+import Tabs, { TabItem, TabNav, TabPane, TabsItems, TabsNavs } from './tabs'
 import Tag from './tag'
 import Textarea from './textarea'
 import Time, { TimePicker } from './time'
@@ -239,6 +239,7 @@ const CedarVue: Record<string, any> = {
   Step,
   TabItem,
   TabNav,
+  TabPane,
   TableColumn,
   TabsItems,
   TabsNavs,

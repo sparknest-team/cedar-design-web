@@ -1,7 +1,7 @@
 import { test, expect } from "vitest";
 import { mount, flushPromises } from "@vue/test-utils";
-import Scheduler from "../scheduler.vue";
-import Card from "../components/scheduler-event.vue";
+import Scheduler from "../Scheduler.vue";
+import Card from "../components/SchedulerEvent.vue";
 import { createSchedulerResourceRows, moveSchedulerResourceRow } from "../core";
 const resources = [
   { id: "s1", label: "北站", dimensionId: "station" },

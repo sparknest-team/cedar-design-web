@@ -48,6 +48,7 @@ const styleDirAliases: Record<string, string> = {
   TimelineItem: "timeline",
   DescriptionsItem: "descriptions",
   TabNav: "tabs",
+  TabPane: "tabs",
   TabItem: "tabs",
   TabsNavs: "tabs",
   TabsItems: "tabs",

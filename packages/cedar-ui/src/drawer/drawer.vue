@@ -98,7 +98,7 @@ import {
 import { createNamespace, getPrefixCls } from "../_utils/global-config";
 import ClientOnly from "../_components/client-only";
 import Button from "../button";
-import IconHover from "../_components/icon-hover.vue";
+import IconHover from "../_components/IconHover.vue";
 import { IconClose } from "@cedarjs/icons-vue/icon-close";
 import { useI18n } from "../locale";
 import { useOverflow } from "../_hooks/use-overflow";

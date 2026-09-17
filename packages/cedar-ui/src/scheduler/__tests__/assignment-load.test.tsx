@@ -1,18 +1,18 @@
 import { test, expect } from "vitest";
 import { mount, flushPromises } from "@vue/test-utils";
-import Scheduler from "../scheduler.vue";
-import Editor from "../components/scheduler-editor.vue";
-import Card from "../components/scheduler-event.vue";
+import Scheduler from "../Scheduler.vue";
+import Editor from "../components/SchedulerEditor.vue";
+import Card from "../components/SchedulerEvent.vue";
 import InputNumber from "../../input-number";
 import Form from "../../form";
 import {
   getSchedulerResourceLoad,
   getSchedulerResourceSummary,
-  createSchedulerTaskEvents,
   cloneSchedulerEvent,
   moveSchedulerEvent,
   validateSchedulerEvent,
 } from "../core";
+import { createSchedulerTaskEvents } from "../__demos__/task-assignments";
 const resource = { id: "r", label: "R", capacity: 1 };
 const event = {
   id: "a",
@@ -113,7 +113,7 @@ test("independent task blocks retain identity and summarize weighted time", () =
     assignments,
   );
   expect(new Set(events.map((e) => e.id)).size).toBe(2);
-  expect(events.every((e) => e.taskId === "task")).toBe(true);
+  expect(events.every((e) => e.metadata?.taskId === "task")).toBe(true);
   events[0].resourceDetails!.r.units = 1;
   expect(assignments[0].resourceDetails.r.units).toBe(0.5);
   expect(

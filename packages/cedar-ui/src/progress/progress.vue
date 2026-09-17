@@ -56,9 +56,9 @@
 
 <script lang="ts">
 import { computed, defineComponent, toRefs } from 'vue'
-import ProgressLine from './line.vue'
-import ProgressCircle from './circle.vue'
-import ProgressSteps from './steps.vue'
+import ProgressLine from './Line.vue'
+import ProgressCircle from './Circle.vue'
+import ProgressSteps from './Steps.vue'
 import { createNamespace } from '../_utils/global-config'
 import { useSize } from '../_hooks/use-size'
 import { resolveProgressSize, positiveLength, progressSizeMap } from './size'

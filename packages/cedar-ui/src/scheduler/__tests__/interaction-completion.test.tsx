@@ -1,7 +1,7 @@
 import { test, expect } from "vitest";
 import { mount, flushPromises } from "@vue/test-utils";
-import Scheduler from "../scheduler.vue";
-import Grid from "../components/scheduler-time-grid.vue";
+import Scheduler from "../Scheduler.vue";
+import Grid from "../components/SchedulerTimeGrid.vue";
 import Popover from "../../popover";
 import { getSchedulerCellDate, getSchedulerSelectionRange } from "../core";
 test("cell snapping and backward selection preserve half-open ranges", () => {

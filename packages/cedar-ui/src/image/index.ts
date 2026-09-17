@@ -1,49 +1,50 @@
-import { withInstall } from "../_utils/global-config";
-import _Image from "./image.vue";
-import _ImagePreview from "./preview.vue";
-import _ImagePreviewGroup from "./preview-group.vue";
-import _ImagePreviewAction from "./preview-action";
-import previewImage from "./preview-api";
-import { imagePreviewGroupProps } from "./groupProps";
-import { imagePreviewProps } from "./previewProps";
-import { imageProps } from "./props";
+import { withInstall } from '../_utils/global-config'
+import { withPropsDefaultsSetter } from '../_utils/maple/components'
+import _Image from './Image.vue'
+import _ImagePreview from './Preview.vue'
+import _ImagePreviewGroup from './PreviewGroup.vue'
+import _ImagePreviewAction from './PreviewAction.vue'
+import previewImage from './preview-api'
+import { imagePreviewGroupProps } from './groupProps'
+import { imagePreviewProps } from './previewProps'
+import { imageProps } from './props'
+
+const ImagePreview = withInstall(_ImagePreview)
+const ImagePreviewGroup = withInstall(_ImagePreviewGroup)
 
 const Image = withInstall(
   _Image,
   Object.assign(_Image, {
-    Preview: _ImagePreview,
-    PreviewGroup: _ImagePreviewGroup,
+    Preview: ImagePreview,
+    PreviewGroup: ImagePreviewGroup,
     preview: previewImage,
   }),
   {
-    components: [
-      _Image,
-      _ImagePreview,
-      _ImagePreviewGroup,
-      _ImagePreviewAction,
-    ],
+    components: [_Image, ImagePreview, ImagePreviewGroup, _ImagePreviewAction],
   },
-);
+)
 
-export type ImagePreviewActionInstance = InstanceType<
-  typeof _ImagePreviewAction
->;
+withPropsDefaultsSetter(Image, imageProps)
+withPropsDefaultsSetter(ImagePreview, imagePreviewProps)
+withPropsDefaultsSetter(ImagePreviewGroup, imagePreviewGroupProps)
+
+export type ImagePreviewActionInstance = InstanceType<typeof _ImagePreviewAction>
 
 export {
-  _ImagePreview as ImagePreview,
-  _ImagePreviewGroup as ImagePreviewGroup,
+  ImagePreview,
+  ImagePreviewGroup,
   _ImagePreviewAction as ImagePreviewAction,
   previewImage,
   previewImage as imagePreview,
   previewImage as ImagePreviewFn,
-};
+}
 
-export const _ImageComponent = Image;
-export const _ImagePreviewComponent = _ImagePreview;
-export const _ImagePreviewGroupComponent = _ImagePreviewGroup;
-export const _ImagePreviewActionComponent = _ImagePreviewAction;
+export const _ImageComponent = Image
+export const _ImagePreviewComponent = ImagePreview
+export const _ImagePreviewGroupComponent = ImagePreviewGroup
+export const _ImagePreviewActionComponent = _ImagePreviewAction
 
-export { Image };
+export { Image }
 
 export type {
   ImageFit,
@@ -58,8 +59,8 @@ export type {
   ImagePreviewOptions,
   ImagePreviewHandle,
   UserImagePreviewOptions,
-} from "./api";
+} from './api'
 
-export { imageProps, imagePreviewProps, imagePreviewGroupProps };
+export { imageProps, imagePreviewProps, imagePreviewGroupProps }
 
-export default Image;
+export default Image

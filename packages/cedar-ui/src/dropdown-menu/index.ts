@@ -1,6 +1,6 @@
 import { withInstall } from '../_utils/global-config'
-import _DropdownMenu from './dropdown-menu.vue'
-import _MenuOption from './menu-option.vue'
+import _DropdownMenu from './DropdownMenu.vue'
+import _MenuOption from './MenuOption.vue'
 import { dropdownMenuProps } from './props'
 
 const DropdownMenu = withInstall(_DropdownMenu, Object.assign(_DropdownMenu, {

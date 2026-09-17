@@ -6,7 +6,7 @@ import Button from "../../button";
 import Space from "../../space";
 import Alert from "../../alert";
 import Tag from "../../tag";
-import Picker from "../components/scheduler-resource-select.vue";
+import Picker from "../components/SchedulerResourceSelect.vue";
 test("cross grouping demo switches order and filters without duplicating event data", async () => {
   const w = mount(Demo, {
     global: {

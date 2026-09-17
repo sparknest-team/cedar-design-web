@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _Tooltip from './tooltip.vue'
+import _Tooltip from './Tooltip.vue'
 import { tooltipProps } from './props'
 import { vTooltip } from './tooltip.directive'
 

@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _Transfer from './transfer.vue'
+import _Transfer from './Transfer.vue'
 import { transferProps } from './props'
 
 const Transfer = withInstall(_Transfer, Object.assign(_Transfer, {

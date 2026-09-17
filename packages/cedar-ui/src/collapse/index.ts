@@ -1,6 +1,6 @@
 import { withInstall } from '../_utils/global-config'
-import _Collapse from './collapse.vue'
-import _CollapseItem from './collapse-item'
+import _Collapse from './Collapse.vue'
+import _CollapseItem from './CollapseItem.vue'
 import { collapseItemProps, collapseProps } from './props'
 
 const Collapse = withInstall(_Collapse, Object.assign(_Collapse, {
@@ -9,8 +9,14 @@ const Collapse = withInstall(_Collapse, Object.assign(_Collapse, {
 
 export type CollapseInstance = InstanceType<typeof _Collapse>
 export type CollapseItemInstance = InstanceType<typeof _CollapseItem>
-export type { CollapseToggleAllOptions } from './types'
-export type { CollapseItemProps, CollapseName, CollapseProps, ExpandIconPosition } from './props'
+export type {
+  CollapseActiveNames,
+  CollapseItemProps,
+  CollapseName,
+  CollapseProps,
+  CollapseToggleAllOptions,
+  ExpandIconPosition,
+} from './props'
 export { Collapse, collapseItemProps, collapseProps }
 export const _CollapseComponent = Collapse
 export const _CollapseItemComponent = _CollapseItem

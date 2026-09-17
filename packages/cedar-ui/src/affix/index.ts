@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _Affix from './affix.vue'
+import _Affix from './Affix.vue'
 import { affixProps } from './props'
 
 const Affix = withInstall(_Affix, Object.assign(_Affix, {

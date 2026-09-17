@@ -1,6 +1,6 @@
 import { withInstall } from "../_utils/global-config";
-import _Button from "./button.vue";
-import _ButtonGroup from "./button-group.vue";
+import _Button from "./Button.vue";
+import _ButtonGroup from "./ButtonGroup.vue";
 import { buttonProps, buttonGroupProps } from "./props";
 
 const Button = withInstall(

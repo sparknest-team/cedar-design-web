@@ -1,6 +1,6 @@
 <template>
-  <c-tabs :body-padding="false" :header-padding="false" default-active="2">
-    <c-tabs-navs>
+  <c-tabs :item-style="{ padding: 0 }" default-active="2">
+    <c-tabs-navs :style="{ paddingInline: 0 }">
       <c-tab-nav key="1" title="Tab 1" />
       <c-tab-nav key="2" title="Tab 2" />
       <c-tab-nav key="3">
@@ -9,7 +9,7 @@
     </c-tabs-navs>
     <c-tabs-items>
       <c-tab-item key="1">
-        <div class="p-24">利用class的p-24实现自定义边距，并且去掉了最左侧header的padding</div>
+        <div class="p-24">通过 item-style 设置内容间距，并通过 TabsNavs 的 style 去掉导航两端内边距</div>
       </c-tab-item>
       <c-tab-item key="2"> Content of Tab Panel 2</c-tab-item>
       <c-tab-item key="3">Content of Tab Panel 3</c-tab-item>

@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _Popconfirm from './popconfirm.vue'
+import _Popconfirm from './Popconfirm.vue'
 import { popconfirmProps } from './props'
 
 const Popconfirm = withInstall(_Popconfirm, Object.assign(_Popconfirm, {

@@ -1,6 +1,6 @@
 import { computed, defineComponent, ref, inject, watch, nextTick, toRef, toRefs } from 'vue'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
-import IconHover from '../_components/icon-hover.vue'
+import IconHover from '../_components/IconHover.vue'
 import { radioGroupKey } from './context'
 import { isNull, isUndefined } from '../_utils/is'
 import { useFormItem } from '../_hooks/use-form-item'

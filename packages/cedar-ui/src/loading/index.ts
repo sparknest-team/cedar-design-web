@@ -8,7 +8,7 @@ import {
   type DirectiveBinding,
 } from "vue";
 import { withInstall } from "../_utils/global-config";
-import _Loading from "./loading.vue";
+import _Loading from "./Loading.vue";
 import { loadingProps } from "./props";
 import type { LoadingSize, LoadingType } from "./props";
 

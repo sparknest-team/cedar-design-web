@@ -1,5 +1,5 @@
 import { type Directive, type DirectiveBinding, createVNode, defineComponent, h, createApp } from 'vue'
-import Tooltip from './tooltip.vue'
+import Tooltip from './Tooltip.vue'
 import { isPureTextElement, isTextOverflow } from './utils'
 
 const TOOLTIP_KEY = Symbol('CedarTooltip')

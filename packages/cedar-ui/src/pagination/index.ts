@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _Pagination from './pagination.vue'
+import _Pagination from './Pagination.vue'
 import { paginationProps } from './props'
 
 const Pagination = withInstall(_Pagination, Object.assign(_Pagination, {}), { components: [_Pagination] })

@@ -13,87 +13,100 @@
     @dragleave="leavePreview"
   >
     <header :class="n('toolbar')">
-      <div :class="n('navigation')">
-        <CButton
-          :disabled="disabled"
-          :aria-label="messages.previous"
-          @click="navigate(-1)"
-          >‹</CButton
-        >
-        <CButton :disabled="disabled" @click="setDate(new Date())">{{
-          messages.today
-        }}</CButton>
-        <CButton
-          :disabled="disabled"
-          :aria-label="messages.next"
-          @click="navigate(1)"
-          >›</CButton
-        >
-        <strong :class="n('range-title')">{{ rangeTitle }}</strong>
-      </div>
-      <div :class="n('navigation')">
-        <CSelect
-          :model-value="mode"
-          :options="modeOptions"
-          :disabled="disabled"
-          :class="n('mode-select')"
-          :aria-label="messages.title"
-          @update:model-value="changeMode"
-        />
-        <CSelect
-          v-if="mode === 'resource-timeline'"
-          :model-value="scale"
-          :options="[
-            { value: 'hour', label: messages.hourScale },
-            { value: 'day', label: messages.dayScale },
-          ]"
-          :disabled="disabled"
-          :aria-label="messages.scale"
-          :class="n('mode-select')"
-          @update:model-value="changeScale"
-        />
-        <template v-if="mode === 'resource-timeline'">
+      <slot
+        name="toolbar"
+        :date="date"
+        :mode="mode"
+        :navigate="navigate"
+        :create="
+          () => createEvent(date, undefined, false, undefined, 'toolbar')
+        "
+      >
+        <div :class="n('navigation')">
           <CButton
-            variant="text"
-            :aria-label="messages.zoomOut"
-            :disabled="disabled || zoom <= 0.5"
-            @click="setZoom(zoom / 2)"
-            >−</CButton
+            :disabled="disabled"
+            :aria-label="messages.previous"
+            @click="navigate(-1)"
+            >‹</CButton
           >
-          <span>{{ Math.round(zoom * 100) }}%</span>
+          <CButton :disabled="disabled" @click="setDate(new Date())">{{
+            messages.today
+          }}</CButton>
           <CButton
-            variant="text"
-            :aria-label="messages.zoomIn"
-            :disabled="disabled || zoom >= 4"
-            @click="setZoom(zoom * 2)"
-            >+</CButton
+            :disabled="disabled"
+            :aria-label="messages.next"
+            @click="navigate(1)"
+            >›</CButton
           >
-        </template>
-        <CSelect
-          v-if="
-            resourceDimensions.length &&
-            !crossGrouping &&
-            ['resource-day', 'resource-timeline'].includes(mode)
-          "
-          :model-value="axisDimension"
-          :options="[
-            { value: '', label: messages.allResources },
-            ...resourceDimensions.map((d) => ({ value: d.id, label: d.label })),
-          ]"
-          :disabled="disabled"
-          :aria-label="messages.resourceDimension"
-          :class="n('mode-select')"
-          @update:model-value="setAxisDimension"
-        />
-        <slot name="toolbar-extra" :date="date" :mode="mode" />
-        <CButton
-          v-if="!readonly"
-          status="primary"
-          :disabled="locked"
-          @click="createEvent(date, undefined, false, undefined, 'toolbar')"
-          >{{ messages.create }}</CButton
-        >
-      </div>
+          <strong :class="n('range-title')">{{ rangeTitle }}</strong>
+        </div>
+        <div :class="n('navigation')">
+          <CSelect
+            :model-value="mode"
+            :options="modeOptions"
+            :disabled="disabled"
+            :class="n('mode-select')"
+            :aria-label="messages.title"
+            @update:model-value="changeMode"
+          />
+          <CSelect
+            v-if="mode === 'resource-timeline'"
+            :model-value="scale"
+            :options="[
+              { value: 'hour', label: messages.hourScale },
+              { value: 'day', label: messages.dayScale },
+            ]"
+            :disabled="disabled"
+            :aria-label="messages.scale"
+            :class="n('mode-select')"
+            @update:model-value="changeScale"
+          />
+          <template v-if="mode === 'resource-timeline'">
+            <CButton
+              variant="text"
+              :aria-label="messages.zoomOut"
+              :disabled="disabled || zoom <= 0.5"
+              @click="setZoom(zoom / 2)"
+              >−</CButton
+            >
+            <span>{{ Math.round(zoom * 100) }}%</span>
+            <CButton
+              variant="text"
+              :aria-label="messages.zoomIn"
+              :disabled="disabled || zoom >= 4"
+              @click="setZoom(zoom * 2)"
+              >+</CButton
+            >
+          </template>
+          <CSelect
+            v-if="
+              resourceDimensions.length &&
+              !crossGrouping &&
+              ['resource-day', 'resource-timeline'].includes(mode)
+            "
+            :model-value="axisDimension"
+            :options="[
+              { value: '', label: messages.allResources },
+              ...resourceDimensions.map((d) => ({
+                value: d.id,
+                label: d.label,
+              })),
+            ]"
+            :disabled="disabled"
+            :aria-label="messages.resourceDimension"
+            :class="n('mode-select')"
+            @update:model-value="setAxisDimension"
+          />
+          <slot name="toolbar-extra" :date="date" :mode="mode" />
+          <CButton
+            v-if="!readonly"
+            status="primary"
+            :disabled="locked"
+            @click="createEvent(date, undefined, false, undefined, 'toolbar')"
+            >{{ messages.create }}</CButton
+          >
+        </div>
+      </slot>
     </header>
     <div v-if="selectable || history" :class="n('batch-toolbar')">
       <CCheckbox
@@ -270,7 +283,8 @@
             :selection-mode="selectable && selectionMode"
             :events="visibleEvents"
             :preview-event="visualPreview"
-            :now="now"
+            :now="showNowIndicator ? now : undefined"
+            :today="now"
             :start-hour="safeStart"
             :end-hour="safeEnd"
             :step="slotMinutes"
@@ -297,6 +311,9 @@
                 ></slot
               ></template
             >
+            <template #column-background="slotProps"
+              ><slot name="column-background" v-bind="slotProps"
+            /></template>
             <template #resource-header="slotProps"
               ><slot name="resource-header" v-bind="slotProps"
                 ><span>{{
@@ -688,7 +705,7 @@ import { projectSchedulerDrag } from "./drag";
 import type { SchedulerResize } from "./drag";
 import CProgress from "../progress";
 import { getSchedulerVisibleDays } from "./core/visible-days";
-import SchedulerMonthView from "./components/scheduler-month-view.vue";
+import SchedulerMonthView from "./components/SchedulerMonthView.vue";
 import CButton from "../button";
 import CCheckbox from "../checkbox";
 import CSelect from "../select";
@@ -706,12 +723,12 @@ import { useSchedulerResources } from "./use-resources";
 import type { SchedulerResourceErrorContext } from "./props";
 import type { SchedulerEmits } from "./use-scheduler";
 import { schedulerMessages } from "./locale";
-import SchedulerEventCard from "./components/scheduler-event.vue";
-import SchedulerDependencies from "./components/scheduler-dependencies.vue";
-import SchedulerTimelineRows from "./components/scheduler-timeline-rows.vue";
-import SchedulerTimeGrid from "./components/scheduler-time-grid.vue";
-import SchedulerEditor from "./components/scheduler-editor.vue";
-import SchedulerResourceSelect from "./components/scheduler-resource-select.vue";
+import SchedulerEventCard from "./components/SchedulerEvent.vue";
+import SchedulerDependencies from "./components/SchedulerDependencies.vue";
+import SchedulerTimelineRows from "./components/SchedulerTimelineRows.vue";
+import SchedulerTimeGrid from "./components/SchedulerTimeGrid.vue";
+import SchedulerEditor from "./components/SchedulerEditor.vue";
+import SchedulerResourceSelect from "./components/SchedulerResourceSelect.vue";
 import {
   createSchedulerResourceRows,
   moveSchedulerResourceRow,
@@ -746,6 +763,16 @@ const { n, classes } = createNamespace("scheduler");
 const props = defineProps(schedulerProps);
 const emit = defineEmits<SchedulerEmits>();
 defineSlots<{
+  toolbar(props: {
+    date: Date;
+    mode: SchedulerMode;
+    navigate: (direction: number) => void;
+    create: () => void;
+  }): unknown;
+  "column-background"(props: {
+    date: Date;
+    resource?: SchedulerResource;
+  }): unknown;
   sidebar(props: {
     startDrag: (template: SchedulerEventTemplate, event: DragEvent) => void;
     cancelDrag: () => void;
@@ -1133,7 +1160,12 @@ async function focusInitialTime() {
     Math.min(props.initialScrollMinute, lastMinute),
   );
   container.scrollTop =
-    body.offsetTop + ((minute - firstMinute) / slotMinutes.value) * rowHeight;
+    body.getBoundingClientRect().top -
+    container.getBoundingClientRect().top +
+    container.scrollTop -
+    (container.querySelector<HTMLElement>(".c-scheduler__time-header")
+      ?.offsetHeight ?? 0) +
+    ((minute - firstMinute) / slotMinutes.value) * rowHeight;
   initialTimeFocused = true;
 }
 async function focusTimeline() {
@@ -1163,7 +1195,7 @@ const keyboardTargets = [
   ".c-scheduler__month-more",
   ".c-scheduler__overlap-more",
   ".c-scheduler__month-cell > .c-button",
-  ".c-scheduler__all-day > .c-button",
+  ".c-scheduler__all-day[tabindex='0']",
   "button[data-scheduler-date]",
 ].join(",");
 let editorTrigger: HTMLElement | undefined;
@@ -1474,10 +1506,8 @@ function navigate(direction: number) {
   );
 }
 
-const now = useSchedulerNow(
-  () =>
-    props.showNowIndicator &&
-    ["day", "week", "resource-day"].includes(mode.value),
+const now = useSchedulerNow(() =>
+  ["day", "week", "resource-day"].includes(mode.value),
 );
 
 const editorOpen = ref(false);
@@ -1584,7 +1614,6 @@ function createEvent(
     backgroundColor: template?.backgroundColor,
     backgroundPattern: template?.backgroundPattern,
     metadata: template?.metadata ? { ...template.metadata } : undefined,
-    taskId: template?.taskId,
     start: allDay ? schedulerDateKey(start) : start.toISOString(),
     end: allDay
       ? schedulerDateKey(addSchedulerDays(start, 1))

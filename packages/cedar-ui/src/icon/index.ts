@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _Icon from './icon.vue'
+import _Icon from './Icon.vue'
 import { iconProps } from './props'
 
 const Icon = withInstall(_Icon)

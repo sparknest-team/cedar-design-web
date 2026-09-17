@@ -1,159 +1,100 @@
-import type { PropType } from 'vue'
-import { computed, defineComponent, nextTick, provide, reactive, ref, toRefs, inject, toRef } from 'vue'
-import type { ComponentSize } from '../_utils/constant'
-import type { TabVariant, TabData, TabTriggerEvent, ScrollPosition } from './types'
-import { createNamespace } from '../_utils/global-config'
-import { tabsInjectionKey, tabsNavInjectionKey } from './context'
-import { isUndefined } from '../_utils/is'
-import { useSize } from '../_hooks/use-size'
-import { configProviderInjectionKey } from '../config-provider/context'
+import type { ExtractPublicPropTypes, HTMLAttributes, PropType, StyleValue } from 'vue'
+import type { ComponentSize, Orientation } from './platform'
+
+export type TabsKey = string | number
+export type TabsVariant = 'line' | 'card' | 'outline' | 'plain' | 'capsule' | 'enclosed'
+export type TabsTrigger = 'click' | 'hover'
+export type TabsIndicatorPosition = 'normal' | 'reverse'
+export type TabsScrollPosition = 'start' | 'end' | 'center' | 'auto' | number
+export type TabsActivationMode = 'automatic' | 'manual'
 
 export const tabsProps = {
-    /**
-     * @zh 当前选中的标签的 `key`
-     * @en The `key` of the currently selected label
-     * @v-model
-     */
-    active: {
-      type: [String, Number],
-      default: undefined,
-    },
-    /**
-     * @zh 默认选中的标签的`key`（非受控状态，为空时选中第一个标签页）
-     * @en The `key` of the tab selected by default (uncontrolled state, select the first tab page when it is empty)
-     */
-    defaultActive: {
-      type: [String, Number],
-      default: undefined,
-    },
-    /**
-     * @zh 指示器位置
-     * @en Indicator position
-     * @values 'normal', 'reverse'
-     */
-    indicatorPosition: {
-      type: String as PropType<'normal' | 'reverse'>,
-      default: 'normal',
-    },
-    /**
-     * @zh 选项卡的大小
-     * @en The size of the tab
-     * @values 'xs', 'sm', 'md', 'lg', 'xl'
-     * @default-value 'md'
-     */
-    size: {
-      type: String as PropType<ComponentSize>,
-    },
-    /**
-     * @zh 选项卡的变体
-     * @en The variant of tab
-     * @values 'line', 'card', 'outline', 'plain', 'capsule', 'enclosed'
-     */
-    variant: {
-      type: String as PropType<TabVariant>,
-      default: 'line',
-    },
-    /**
-     * @zh 是否垂直展示
-     * @en Whether to display vertically
-     */
-    orientation: {
-      type: String as PropType<'horizontal' | 'vertical'>,
-      default: 'horizontal',
-    },
-    /**
-     * @zh 是否开启可编辑模式
-     * @en Whether to enable editable mode
-     */
-    editable: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否显示增加按钮（仅在可编辑模式可用）
-     * @en Whether to display the add button (only available in editable mode)
-     */
-    showAddButton: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否在不显示标签时销毁内容
-     * @en Whether to destroy the content when the label is not displayed
-     * @version 2.27.0
-     */
-    destroyOnHide: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否在首次展示标签时挂载内容
-     * @en Whether to mount the content when the label is first displayed
-     */
-    lazyLoad: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 高度撑满容器，只在水平模式下生效。
-     * @en The height of the container is fully supported, and it only takes effect in horizontal mode.
-     */
-    justify: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否开启选项内容过渡动画
-     * @en Whether to enable option content transition animation
-     */
-    animation: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 选项卡头部是否存在水平边距。仅对 `type` 等于 `line`、`text` 类型的选项卡生效
-     * @en Whether there is a horizontal margin on the header of the tab. Only valid for tabs with `type` equal to `line` and `text` type
-     * @version 2.10.0
-     */
-    headerPadding: {
-      type: Boolean,
-      default: true,
-    },
-    /**
-     * @zh 创建标签后是否切换到新标签（最后一个）
-     * @en Whether to switch to a new tab after creating a tab (the last one)
-     * @version 2.18.0
-     */
-    autoSwitch: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 是否隐藏内容
-     * @en Whether to hide content
-     * @version 2.25.0
-     */
-    hideContent: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 触发方式
-     * @en Trigger method
-     * @values 'hover','click'
-     * @version 2.34.0
-     */
-    trigger: {
-      type: String as PropType<TabTriggerEvent>,
-      default: 'click',
-    },
-    /**
-     * @zh 被选中 tab 的滚动位置，默认 auto 即会将 activeTab 滚动到可见区域，但不会特意做位置调整
-     * @en The scroll position of the selected tab, the default auto will scroll the activeTab to the visible area, but will not adjust the position intentionally
-     * @values 'start', 'end', 'center', 'auto', number
-     */
-    scrollPosition: {
-      type: [String, Number] as PropType<ScrollPosition>,
-      default: 'auto',
-    },
-  } 
+  /** 当前选中 key，受控状态。 */
+  active: { type: [String, Number] as PropType<TabsKey>, default: undefined },
+  /** 非受控初始 key；省略时选择首个可用标签。 */
+  defaultActive: { type: [String, Number] as PropType<TabsKey>, default: undefined },
+  /** 视觉变体。 */
+  variant: { type: String as PropType<TabsVariant>, default: 'line' },
+  /** 组件尺寸，省略时继承全局设置。 */
+  size: { type: String as PropType<ComponentSize>, default: undefined },
+  /** 导航方向。 */
+  orientation: { type: String as PropType<Orientation>, default: 'horizontal' },
+  /** 指示器位于内容侧或相反侧。 */
+  indicatorPosition: { type: String as PropType<TabsIndicatorPosition>, default: 'normal' },
+  /** 显示可关闭标签。 */
+  editable: Boolean,
+  /** 编辑模式下显示新增按钮。 */
+  showAddButton: Boolean,
+  /** 新增后切换至最后一个可用标签。 */
+  autoSwitch: Boolean,
+  /** 首次激活才挂载内容。 */
+  lazyLoad: Boolean,
+  /** 隐藏时卸载内容。 */
+  destroyOnHide: Boolean,
+  /** 水平方向撑满容器高度。 */
+  justify: Boolean,
+  /** 内容切换动画。 */
+  animation: Boolean,
+  /** 每页内容内层的自定义类名。 */
+  itemClass: [String, Array, Object] as PropType<HTMLAttributes['class']>,
+  /** 每页内容内层的自定义样式。 */
+  itemStyle: [String, Array, Object] as PropType<StyleValue>,
+  /** 每页内容外层容器的自定义类名。 */
+  itemWrapperClass: [String, Array, Object] as PropType<HTMLAttributes['class']>,
+  /** 每页内容外层容器的自定义样式。 */
+  itemWrapperStyle: [String, Array, Object] as PropType<StyleValue>,
+  /** 导航标签外层（包含标题与关闭按钮）的自定义类名。 */
+  tabClass: [String, Array, Object] as PropType<HTMLAttributes['class']>,
+  /** 导航标签外层（包含标题与关闭按钮）的自定义样式。 */
+  tabStyle: [String, Array, Object] as PropType<StyleValue>,
+  /** 隐藏整个内容区域。 */
+  hideContent: Boolean,
+  /** 鼠标触发方式；触摸始终支持点击。 */
+  trigger: { type: String as PropType<TabsTrigger>, default: 'click' },
+  /** 选中标签在导航滚动区域中的位置；数字为起点偏移。 */
+  scrollPosition: { type: [String, Number] as PropType<TabsScrollPosition>, default: 'auto' },
+  /** 溢出时显示滚动按钮；auto 在精细指针上显示，触摸端隐藏。 */
+  scrollButtons: { type: [Boolean, String] as PropType<boolean | 'auto'>, default: 'auto' },
+  /** 方向键聚焦时自动激活，或等待 Enter/Space。 */
+  activationMode: { type: String as PropType<TabsActivationMode>, default: 'automatic' },
+  /** 内容支持横向触摸滑动切换，默认关闭。 */
+  swipeable: Boolean,
+}
+export const tabNavProps = {
+  /** 标签标题，title 插槽优先。 */
+  title: String,
+  /** 禁止选择与关闭。 */
+  disabled: Boolean,
+  /** editable 模式下允许关闭。 */
+  closable: { type: Boolean, default: true },
+  /** 图标与文字垂直排列。 */
+  itemVertical: Boolean,
+}
+export const tabItemProps = {
+  /** 覆盖父级首次挂载策略。 */
+  lazyLoad: { type: Boolean, default: undefined },
+  /** 覆盖父级隐藏销毁策略。 */
+  destroyOnHide: { type: Boolean, default: undefined },
+}
+export const tabPaneProps = {
+  /** 导航标签标题。 */
+  title: String,
+  /** 禁止选择与关闭。 */
+  disabled: Boolean,
+  /** editable 模式下允许关闭。 */
+  closable: { type: Boolean, default: true },
+  /** 图标与文字垂直排列。 */
+  itemVertical: Boolean,
+  /** 覆盖父级首次挂载策略。 */
+  lazyLoad: { type: Boolean, default: undefined },
+  /** 覆盖父级隐藏销毁策略。 */
+  destroyOnHide: { type: Boolean, default: undefined },
+}
+export const tabsNavsProps = {}
+export const tabsItemsProps = {}
+export type TabsProps = ExtractPublicPropTypes<typeof tabsProps>
+export type TabNavProps = ExtractPublicPropTypes<typeof tabNavProps>
+export type TabItemProps = ExtractPublicPropTypes<typeof tabItemProps>
+export type TabPaneProps = ExtractPublicPropTypes<typeof tabPaneProps>
+export type TabsNavsProps = ExtractPublicPropTypes<typeof tabsNavsProps>
+export type TabsItemsProps = ExtractPublicPropTypes<typeof tabsItemsProps>

@@ -1,13 +1,22 @@
 <template>
-  <c-space :size="20">
-    <c-image width="400" height="300" src="some-error.png" />
-    <c-image
-      width="400"
-      height="300"
-      src="some-error.png"
-      alt="This is a picture of humans eating ice cream. The humans on the screen are very happy just now. The ice cream is green, it seems to be flavored with matcha. The gender of the human is unknown. It has very long hair and the human hair is brown."
-    />
+  <c-space :size="16" wrap>
+    <c-image width="160" height="120" src="invalid-image.jpg" />
+    <c-image width="160" height="120" src="invalid-image.jpg" alt="自定义错误内容">
+      <template #error>
+        <div class="error-slot">加载失败</div>
+      </template>
+    </c-image>
   </c-space>
 </template>
 
-<script lang="ts" setup></script>
+<style scoped>
+.error-slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: var(--c-color-text-3);
+  font-size: 12px;
+}
+</style>

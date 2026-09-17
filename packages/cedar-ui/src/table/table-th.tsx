@@ -21,7 +21,7 @@ import { getFixedCls, getStyle } from "./utils";
 import { isBoolean, isFunction, isObject } from "../_utils/is";
 import { TableContext, tableInjectionKey } from "./context";
 import AutoTooltip from "../_components/auto-tooltip/auto-tooltip";
-import IconHover from "../_components/icon-hover.vue";
+import IconHover from "../_components/IconHover.vue";
 import { TABLE_EXTRA_COLUMN_KEY } from "./extra-column";
 import { useI18n } from "../locale";
 

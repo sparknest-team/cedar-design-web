@@ -1,3 +1,3 @@
-import VirtualList from './virtual-list.vue'
+import VirtualList from './VirtualList.vue'
 
 export default VirtualList

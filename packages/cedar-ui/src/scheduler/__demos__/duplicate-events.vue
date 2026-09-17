@@ -45,7 +45,7 @@ const events = ref<SchedulerEvent[]>([
     end: "2026-09-16T11:00:00",
     resourceIds: ["room"],
     description: "讨论方案与任务分配",
-    taskId: "design",
+    metadata: { taskId: "design" },
   },
   {
     id: "all-day",

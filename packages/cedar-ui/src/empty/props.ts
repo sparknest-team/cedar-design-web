@@ -1,20 +1,22 @@
-import type { ExtractPropTypes, PropType } from 'vue'
-import type { ComponentSize } from '../_utils/constant'
+import type { PropType } from 'vue'
+import { componentSizes, type ComponentSize } from '../_utils/constant'
 
 export type EmptyImageSize = ComponentSize | number | string
+
+export function isEmptyNamedSize(value: unknown): value is ComponentSize {
+  return typeof value === 'string' && componentSizes.includes(value as ComponentSize)
+}
 
 export const emptyProps = {
   description: String,
   imageUrl: String,
   alt: { type: String, default: '' },
-  icon: String,
   imageSize: {
     type: [String, Number] as PropType<EmptyImageSize>,
     default: 'md',
   },
-  inConfigProvider: { type: Boolean, default: false },
   showIcon: { type: Boolean, default: true },
   showDescription: { type: Boolean, default: true },
 }
 
-export type EmptyProps = import("vue").ExtractPublicPropTypes<typeof emptyProps>
+export type EmptyProps = import('vue').ExtractPublicPropTypes<typeof emptyProps>

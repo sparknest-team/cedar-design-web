@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { Message } from '@cedarjs/ui'
-import { t } from './locale'
 
 const publish = () => {
-  Message.info(t('published'))
+  Message.info('发布成功')
 }
 const handleSelect = (_value: unknown, option: { label?: unknown }) => {
   Message.info(String(option.label))
@@ -20,21 +19,21 @@ const handleSelect = (_value: unknown, option: { label?: unknown }) => {
       @click="publish"
       @select="handleSelect"
     >
-      {{ t('allDisabled') }}
+      整体禁用
 
       <template #content>
-        <c-menu-option :label="t('saveNow')" value="draft" />
-        <c-menu-option :label="t('saveAndPublish')" value="publish" />
-        <c-menu-option :label="t('unavailable')" value="restricted" disabled />
+        <c-menu-option label="保存草稿" value="draft" />
+        <c-menu-option label="保存并发布" value="publish" />
+        <c-menu-option label="暂无权限" value="restricted" disabled />
       </template>
     </c-split-button>
     <c-split-button status="primary" :button-props="{ disabled: true }" @click="publish" @select="handleSelect">
-      {{ t('mainDisabled') }}
+      仅禁用主按钮
 
       <template #content>
-        <c-menu-option :label="t('saveNow')" value="draft" />
-        <c-menu-option :label="t('saveAndPublish')" value="publish" />
-        <c-menu-option :label="t('unavailable')" value="restricted" disabled />
+        <c-menu-option label="保存草稿" value="draft" />
+        <c-menu-option label="保存并发布" value="publish" />
+        <c-menu-option label="暂无权限" value="restricted" disabled />
       </template>
     </c-split-button>
     <c-split-button
@@ -43,12 +42,12 @@ const handleSelect = (_value: unknown, option: { label?: unknown }) => {
       @click="publish"
       @select="handleSelect"
     >
-      {{ t('triggerDisabled') }}
+      仅禁用菜单按钮
 
       <template #content>
-        <c-menu-option :label="t('saveNow')" value="draft" />
-        <c-menu-option :label="t('saveAndPublish')" value="publish" />
-        <c-menu-option :label="t('unavailable')" value="restricted" disabled />
+        <c-menu-option label="保存草稿" value="draft" />
+        <c-menu-option label="保存并发布" value="publish" />
+        <c-menu-option label="暂无权限" value="restricted" disabled />
       </template>
     </c-split-button>
   </c-space>

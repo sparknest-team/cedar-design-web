@@ -1,6 +1,6 @@
 import { describe, test, expect, vi } from "vitest";
 import { mount } from "@vue/test-utils";
-import Scheduler from "../scheduler.vue";
+import Scheduler from "../Scheduler.vue";
 import { getSchedulerAvailabilityIssues } from "../core";
 import type {
   SchedulerEvent,

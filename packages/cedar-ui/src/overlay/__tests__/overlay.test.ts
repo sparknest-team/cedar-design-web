@@ -8,7 +8,7 @@ const mount = (...args: any[]) => {
 }
 import { mount as mountComponent } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
-import Overlay from "../overlay.vue";
+import Overlay from "../Overlay.vue";
 import { overlayProps } from "../props";
 
 describe("Overlay", () => {

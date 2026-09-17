@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _TreeSelect from './tree-select.vue'
+import _TreeSelect from './TreeSelect.vue'
 import { treeSelectProps } from './props'
 
 const TreeSelect = withInstall(_TreeSelect, Object.assign(_TreeSelect, {

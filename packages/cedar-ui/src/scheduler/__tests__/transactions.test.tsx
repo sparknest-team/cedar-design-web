@@ -1,6 +1,6 @@
 import { describe, test, expect, vi, afterEach } from "vitest";
 import { mount, flushPromises } from "@vue/test-utils";
-import Scheduler from "../scheduler.vue";
+import Scheduler from "../Scheduler.vue";
 import { applySchedulerTransaction } from "../core";
 import type {
   SchedulerEvent,

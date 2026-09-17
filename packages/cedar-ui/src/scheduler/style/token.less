@@ -1,15 +1,19 @@
 @import "../../style/theme/index.less";
 :root {
   --c-scheduler-stack-focus-step: 1;
+  --c-scheduler-header-z-index: 4;
+  --c-scheduler-today-color: rgb(var(--c-primary-6));
+  --c-scheduler-today-background: var(--c-color-primary-light-1);
   --c-scheduler-dependency-width: 2px;
   --c-scheduler-virtual-height: 480px;
   --c-scheduler-unavailable-background: var(--c-color-fill-2);
-  --c-scheduler-dragging-opacity: 0.55;
-  --c-scheduler-ghost-opacity: 0.75;
+  --c-scheduler-dragging-opacity: 0.3;
+  --c-scheduler-ghost-opacity: 0.96;
   --c-scheduler-ghost-z-index: 2000;
+  --c-scheduler-ghost-padding: 8px 12px;
   --c-scheduler-preview-z-index: 3;
-  --c-scheduler-preview-opacity: 0.85;
-  --c-scheduler-preview-duration: 100ms;
+  --c-scheduler-preview-opacity: 0.65;
+  --c-scheduler-preview-duration: 0ms;
   --c-scheduler-preview-shadow: 0 4px 16px rgb(0 0 0 / 15%);
   --c-scheduler-editor-width: 440px;
   --c-scheduler-background: var(--c-color-bg-2);

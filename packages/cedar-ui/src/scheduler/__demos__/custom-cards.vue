@@ -32,19 +32,19 @@ const cards: SchedulerEventTemplate[] = [
     title: "需求评审",
     description: "确认目标和验收标准",
     duration: 60,
-    taskId: "review",
+    metadata: { taskId: "review" },
   },
   {
     title: "客户沟通",
     description: "记录反馈与后续安排",
     duration: 30,
-    taskId: "call",
+    metadata: { taskId: "call" },
   },
   {
     title: "专注工作",
     description: "预留不被打扰的时段",
     duration: 90,
-    taskId: "focus",
+    metadata: { taskId: "focus" },
   },
 ];
 </script>

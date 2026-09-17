@@ -79,7 +79,7 @@ import { configProviderInjectionKey } from "../config-provider/context";
 import { createNamespace } from "../_utils/global-config";
 import { multiplySizeUnit, toSizeUnit } from "../_utils/maple/elements";
 import { loadingProps } from "./props";
-import DotLoading from "./dot-loading.vue";
+import DotLoading from "./DotLoading.vue";
 
 defineOptions({
   name: createNamespace("loading").name,

@@ -2,140 +2,229 @@
 permalink: /components/tabs/
 ---
 
-# Tabs
+# Tabs 标签页
 
-将内容组织同一视图中，一次可查看一个视图内容，查看其他内容可切换选项卡查看。
+导航与内容使用同一套 API，PC 和移动端通过主题变量保留视觉密度差异。
 
 ## 案例
 
-### 基础用法
+### 最简单用法
 
-标签页的基本使用方法。
+最简单的写法只需要在 `Tabs` 中声明带 `title` 的 `TabPane`，导航与内容会自动生成。
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### 带图标的页签
+### 仅导航
 
-带有图标的标签页。
+只需要标签导航时，无需编写内容组件；直接在 `TabsNavs` 中声明 `TabNav` 即可。
 
-<demo src="./__demos__/icon-tabs.vue"></demo>
+<demo src="./__demos__/nav-content.vue"></demo>
 
-### 位置
+### 完整组合
 
-通过 `indicator-position` 属性可以自定义指示器位置，通过 `vertical` 可以切换为纵向布局。
+需要分别控制导航和内容时，可以组合使用 `TabsNavs`、`TabNav`、`TabsItems` 和 `TabItem`。
 
-<demo src="./__demos__/position.vue"></demo>
+<demo src="./__demos__/same-source.vue"></demo>
 
-### 不同类型
+### 外观变体与尺寸
 
-通过 `type` 可以设置标签的类型。
+通过 `variant`、`size` 和 `orientation` 切换标签页的外观、尺寸与排列方向。
 
 <demo src="./__demos__/type.vue"></demo>
 
-### 懒加载
+### 方向与指示器位置
 
-通过设置 lazy-load 属性，可以让面板在首次激活时渲染。
+通过 `orientation` 设置横向或纵向布局，使用 `indicator-position` 调整指示器所在方向；还可以交换
+`TabsNavs` 与 `TabsItems` 的声明顺序，将导航放在内容的另一侧。
 
-<demo src="./__demos__/lazy-load.vue"></demo>
+<demo src="./__demos__/position.vue"></demo>
 
-### 附加内容
+### 动态增删标签
 
-通过 `suffix` 插槽可以自定义额外显示内容。
-
-<demo src="./__demos__/suffix.vue"></demo>
-
-### 动态增减标签页
-
-通过设置 `:editable="true"` 可以开启动态增减标签页。仅在 `line` | `card` | `card-gutter` 生效
+编辑模式支持增加和关闭标签，标签数据仍由使用者维护。
 
 <demo src="./__demos__/editable.vue"></demo>
 
-### 触发方式
+### 图标标签
 
-通过 `trigger` 指定触发方式。
+通过 `icon` 插槽为标签添加图标，配合 `item-vertical` 可以让图标与文字纵向排列。
+
+<demo src="./__demos__/icon-tabs.vue"></demo>
+
+### 按需挂载内容
+
+开启 `lazy-load` 后，面板会在第一次激活时挂载，适合初始化成本较高的内容。
+
+<demo src="./__demos__/lazy-load.vue"></demo>
+
+### 导航附加内容
+
+使用 `TabsNavs` 的 `prefix`、`suffix` 和 `add-icon` 插槽扩展导航区域。
+
+<demo src="./__demos__/suffix.vue"></demo>
+
+### 切换触发方式
+
+`trigger` 支持点击或悬浮切换；触摸设备始终使用点击操作。
 
 <demo src="./__demos__/trigger.vue"></demo>
 
-### 去除content上边距
+### 自定义内容间距
 
-通过`header-padding`和`body-padding`属性可以去除header最左侧边距以及body的所有边距。
+通过 `item-style` 调整面板内容间距，也可以直接为 `TabsNavs` 设置导航区域样式。
 
 <demo src="./__demos__/no-padding.vue"></demo>
 
 ## API
 
-### `<Tabs>` Props
+### Tabs Props
 
-| 属性                      | 说明                                                                      | 类型                                                                    | 默认值         |
-| ------------------------- | ------------------------------------------------------------------------- | ----------------------------------------------------------------------- | -------------- |
-| active-key **(v-model)**  | 当前选中的标签的 `key`                                                    | `string \| number`                                                      | -              |
-| default-active-key        | 默认选中的标签的`key`（非受控状态，为空时选中第一个标签页）               | `string \| number`                                                      | -              |
-| indicator-position        | 指示器位置                                                                | `'normal' \| 'reverse'`                                                 | `'normal'`     |
-| size                      | 选项卡的大小                                                              | `'xs' \| 'sm' \| 'md' \| 'lg'`                                          | `'md'`         |
-| type                      | 选项卡的类型                                                              | `'line' \| 'card' \| 'outline' \| 'plain' \| 'capsule' \| 'enclosed'`   | `'line'`       |
-| orientation | 组件整体朝向 | `horizontal \| vertical` | `horizontal` |
-| editable                  | 是否开启可编辑模式                                                        | `boolean`                                                               | `false`        |
-| show-add-button           | 是否显示增加按钮（仅在可编辑模式可用）                                    | `boolean`                                                               | `false`        |
-| destroy-on-hide           | 是否在不显示标签时销毁内容                                                | `boolean`                                                               | `false`        |
-| lazy-load                 | 是否在首次展示标签时挂载内容                                              | `boolean`                                                               | `false`        |
-| justify                   | 高度撑满容器，只在水平模式下生效。                                        | `boolean`                                                               | `false`        |
-| animation                 | 是否开启选项内容过渡动画                                                  | `boolean`                                                               | `false`        |
-| header-padding            | 选项卡头部是否存在水平边距。仅对`type` 等于`line`、`text`类型的选项卡生效 | `boolean`                                                               | `true`         |
-| body-padding              | content的边距                                                             | `boolean`                                                               | `true`         |
-| auto-switch               | 创建标签后是否切换到新标签（最后一个）                                    | `boolean`                                                               | `false`        |
-| hide-content             | 是否隐藏内容                                                              | `boolean`                                                               | `false`        |
-| trigger                  | 触发方式                                                                  | `'hover' \| 'click'`                                                    | `'click'`      |
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| active | `string / number` | `undefined` | 当前选中 key；提供时受控 |
+| default-active | `string / number` | `undefined` | 非受控初值，省略选首个可用项 |
+| variant | `line / card / outline / plain / capsule / enclosed` | `line` | 视觉变体 |
+| size | `xs / sm / md / lg / xl` | `全局值或 md` | 尺寸 |
+| orientation | `horizontal / vertical` | `horizontal` | 导航方向 |
+| indicator-position | `normal / reverse` | `normal` | 指示器在内容侧或相反侧 |
+| editable | `boolean` | `false` | 允许关闭标签 |
+| show-add-button | `boolean` | `false` | 编辑模式显示新增按钮 |
+| auto-switch | `boolean` | `false` | 新增后切换最后一个可用标签 |
+| lazy-load | `boolean` | `false` | 首次激活挂载 |
+| destroy-on-hide | `boolean` | `false` | 隐藏即卸载内容 |
+| justify | `boolean` | `false` | 水平方向撑满容器高度 |
+| animation | `boolean` | `false` | 内容淡入动画 |
+| item-class | `string / object / array` | `undefined` | 每页内容内层类名，合并内置类名 |
+| item-style | `StyleValue` | `undefined` | 每页内容内层样式，支持字符串、对象和数组 |
+| item-wrapper-class | `string / object / array` | `undefined` | 每页内容外层容器类名，合并内置类名 |
+| item-wrapper-style | `StyleValue` | `undefined` | 每页内容外层容器样式，支持字符串、对象和数组 |
+| tab-class | `string / object / array` | `undefined` | 导航标签外层（含标题与关闭按钮）类名，合并内置类名 |
+| tab-style | `StyleValue` | `undefined` | 导航标签外层（含标题与关闭按钮）样式，支持字符串、对象和数组 |
+| hide-content | `boolean` | `false` | 隐藏内容区域 |
+| trigger | `click / hover` | `click` | 鼠标触发方式，触摸始终点击 |
+| scroll-position | `start / end / center / auto / number` | `auto` | 选中标签滚动位置，数字为起点偏移 |
+| scroll-buttons | `boolean / auto` | `auto` | 溢出时显示箭头，auto 在触摸设备隐藏 |
+| activation-mode | `automatic / manual` | `automatic` | 方向键是否立即选中 |
+| swipeable | `boolean` | `false` | 内容横向触摸切换；不循环 |
 
-### `<Tabs>` Events
+### Tabs Events
 
-| 事件名    | 说明                   | 参数                    |
-| --------- | ---------------------- | ----------------------- |
-| change    | 当前标签值改变时触发   | key: `string \| number` |
-| tab-click | 用户点击标签时触发     | key: `string \| number` |
-| add       | 用户点击增加按钮时触发 | -                       |
-| delete    | 用户点击删除按钮时触发 | key: `string \| number` |
+| 事件 | 参数 | 说明 |
+| --- | --- | --- |
+| update:active | key: string / number | 请求更新选中值 |
+| change | key: string / number | 选择不同可用项时通知；受控模式仍由父级更新 active |
+| tab-click | key, event: Event | 点击可用项，重复点击仍触发；hover/方向键/滑动不触发 |
+| add | event: Event | 请求增加标签；由使用者修改数据 |
+| delete | key, event: Event | 请求删除标签；由使用者修改数据 |
 
-### `<Tabs>` Slots
+### TabPane Props
 
-| 插槽名   | 说明           | 参数 |
-| -------- | -------------- | ---- |
-| prefix   | 选项卡前缀内容 | -    |
-| suffix   | 选项卡后缀内容 | -    |
-| default  | 默认插槽，包含 `c-tabs-navs` 和 `c-tabs-items` | -    |
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| title | string | undefined | 导航标题 |
+| disabled | boolean | false | 禁止选择和关闭 |
+| closable | boolean | true | editable 模式显示关闭按钮 |
+| item-vertical | boolean | false | 图标文字垂直布局 |
+| lazy-load | boolean | undefined | 继承 Tabs，显式 false 可覆盖 |
+| destroy-on-hide | boolean | undefined | 继承 Tabs，显式 false 可覆盖 |
 
-### `<TabsNavs>` Props
+### TabNav Props
 
-无。用于包裹 `c-tab-nav` 组件，控制其在布局中的位置。
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| title | string | undefined | 标题 |
+| disabled | boolean | false | 禁止选择和关闭 |
+| closable | boolean | true | editable 模式显示关闭按钮 |
+| item-vertical | boolean | false | 图标文字垂直布局 |
 
-### `<TabsItems>` Props
+TabNav 与 TabItem 使用同一个 Vue `key`，必须为字符串或数字，在同组内唯一。不要省略 key；不要混用 `1` 与 `'1'`。
 
-无。用于包裹 `c-tab-item` 组件，控制其在布局中的位置。
+### TabItem Props
 
-### `<TabNav>` Props
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| lazy-load | boolean | undefined | 继承 Tabs，显式 false 可覆盖 |
+| destroy-on-hide | boolean | undefined | 继承 Tabs，显式 false 可覆盖 |
 
-| 属性     | 说明                                       | 类型      | 默认值  |
-| -------- | ------------------------------------------ | --------- | ------- |
-| title    | 选项卡的标题                               | `string`  | -       |
-| disabled | 是否禁用                                   | `boolean` | `false` |
-| closable | 是否允许关闭此选项卡（仅在可编辑模式生效） | `boolean` | `true`  |
+未激活的 panel 始终带 hidden，内部状态是否保留由上述属性决定。destroy-on-hide 优先于 lazy-load；active 内容始终挂载。TabsNavs 和 TabsItems 没有业务 Props。
 
-### `<TabNav>` Slots
+### Slots
 
-| 插槽名 | 说明       | 参数 |
-| ------ | ---------- | ---- |
-| title  | 选项卡标题 | -    |
+| 组件 | 插槽 | 说明 |
+| --- | --- | --- |
+| Tabs | default | TabPane 列表；或高级组合所需的 TabsNavs 与 TabsItems |
+| TabPane | default / title | 面板内容 / 自定义导航标题 |
+| TabsNavs | default | TabNav 列表 |
+| TabsNavs | prefix / suffix / add-icon | 导航前后附加区、新增图标 |
+| TabNav | title / default / icon | title 插槽或默认插槽为自定义标题；icon 为图标 |
+| TabsItems | default | TabItem 列表 |
+| TabItem | default | 面板内容 |
 
-### `<TabItem>` Props
+### Expose
 
-| 属性            | 说明                                       | 类型      | 默认值  |
-| --------------- | ------------------------------------------ | --------- | ------- |
-| destroy-on-hide | 是否在不显示标签时销毁内容                 | `boolean` | `false` |
-| lazy-load       | 是否在首次展示标签时挂载内容               | `boolean` | `false` |
+`TabsNavs.resize(): void` 重新测量溢出并将选中标签滚入可见区域。尺寸变化有 ResizeObserver 自动监听。
 
-### 类型定义
+### 键盘与方向
 
-组件导出以下类型定义
+方向键跳过禁用项并循环；Home/End 到首尾；可编辑标签按 Delete 请求关闭。horizontal 使用左右键，vertical 使用上下键。manual 模式只移动焦点，Enter/Space 通过原生 button 激活。使用 `dir="rtl"` 支持从右向左布局。TabsNavs 可传 `aria-label` 为导航命名。
 
-```ts
-import type { TabsProps } from '@cedarjs/ui'
-```
+### 类型
+
+导出 TabsKey、TabsVariant、TabsTrigger、TabsIndicatorPosition、TabsScrollPosition、TabsActivationMode，以及六组件对应的 Props / Instance / 运行时 props / `_XxxComponent`。同一 props 定义用于两端。
+
+## 自定义内部样式
+
+<demo src="./__demos__/custom-style.vue"></demo>
+
+六个样式属性统一配置在 Tabs 上，对所有对应项生效。自定义类名与内置类名合并；内联样式可覆盖默认间距。`item-wrapper-*` 对应 role="tabpanel" 外层，`item-*` 对应实际内容内层，`tab-*` 对应导航标签外层。
+
+内容间距使用 `item-style`，导航整体间距可通过 TabsNavs 的 `style` 或 CSS token 调整。
+
+## 样式变量
+
+相同 token 后缀在两端意义一致，只有默认值不同。完整对比见 Cedar Tabs comparison.md。
+
+| 变量 | 默认值 |
+| --- | --- |
+| `--c-tabs-background` | `var(--c-color-bg-2)` |
+| `--c-tabs-title-text-color` | `var(--c-color-text-2)` |
+| `--c-tabs-title-text-color-active` | `rgb(var(--c-primary-6))` |
+| `--c-tabs-title-text-color-disabled` | `var(--c-color-text-4)` |
+| `--c-tabs-muted-background` | `var(--c-color-fill-1)` |
+| `--c-tabs-border-color` | `var(--c-color-border-2)` |
+| `--c-tabs-hover-background` | `var(--c-color-fill-2)` |
+| `--c-tabs-nav-gap` | `4px` |
+| `--c-tabs-tab-gap` | `4px` |
+| `--c-tabs-header-padding` | `12px` |
+| `--c-tabs-control-height` | `28px` |
+| `--c-tabs-touch-target` | `44px` |
+| `--c-tabs-border-width` | `1px` |
+| `--c-tabs-focus-width` | `2px` |
+| `--c-tabs-focus-offset` | `-3px` |
+| `--c-tabs-radius` | `4px` |
+| `--c-tabs-icon-gap` | `6px` |
+| `--c-tabs-content-padding` | `16px` |
+| `--c-tabs-indicator-size` | `2px` |
+| `--c-tabs-indicator-radius` | `1px` |
+| `--c-tabs-animation-duration` | `180ms` |
+| `--c-tabs-active-font-weight` | `600` |
+| `--c-tabs-group-padding` | `4px` |
+| `--c-tabs-capsule-radius` | `999px` |
+| `--c-tabs-active-shadow` | `0 1px 3px rgb(0 0 0 / 12%)` |
+| `--c-tabs-size-xs-tab-height` | `28px` |
+| `--c-tabs-size-xs-tab-padding` | `4px 8px` |
+| `--c-tabs-size-xs-tab-font-size` | `12px` |
+| `--c-tabs-size-sm-tab-height` | `32px` |
+| `--c-tabs-size-sm-tab-padding` | `6px 12px` |
+| `--c-tabs-size-sm-tab-font-size` | `13px` |
+| `--c-tabs-size-md-tab-height` | `36px` |
+| `--c-tabs-size-md-tab-padding` | `8px 16px` |
+| `--c-tabs-size-md-tab-font-size` | `14px` |
+| `--c-tabs-size-lg-tab-height` | `40px` |
+| `--c-tabs-size-lg-tab-padding` | `10px 20px` |
+| `--c-tabs-size-lg-tab-font-size` | `16px` |
+| `--c-tabs-size-xl-tab-height` | `44px` |
+| `--c-tabs-size-xl-tab-padding` | `12px 24px` |
+| `--c-tabs-size-xl-tab-font-size` | `18px` |
+
+[全面对比与设计依据](./comparison.md)

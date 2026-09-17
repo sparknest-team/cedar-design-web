@@ -14,9 +14,9 @@ import {
 import { getKeyFromValue, isGroupOptionInfo, isValidOption, hasEmptyStringKey } from './utils'
 import Trigger from '../trigger'
 import SelectView from '../_components/select-view/select-view'
-import SelectDropdown from './select-dropdown.vue'
-import Option from './option.vue'
-import OptGroup from './optgroup.vue'
+import SelectDropdown from './SelectDropdown.vue'
+import Option from './Option.vue'
+import OptGroup from './Optgroup.vue'
 import {
   OptionValueWithKey,
   SelectFieldNames,

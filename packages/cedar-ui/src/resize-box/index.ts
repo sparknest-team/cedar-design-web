@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _ResizeBox from './resize-box.vue'
+import _ResizeBox from './ResizeBox.vue'
 import { resizeBoxProps } from './props'
 
 const ResizeBox = withInstall(_ResizeBox, Object.assign(_ResizeBox, {

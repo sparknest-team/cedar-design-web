@@ -1,6 +1,6 @@
 import { withInstall } from '../_utils/global-config'
 import _Steps from './Steps'
-import _StepsStep from './step.vue'
+import _StepsStep from './Step.vue'
 import { stepsProps, stepProps } from './props'
 
 const Steps = withInstall(_Steps, Object.assign(_Steps, {

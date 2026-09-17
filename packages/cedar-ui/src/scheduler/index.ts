@@ -1,5 +1,5 @@
 import { withInstall } from "../_utils/global-config";
-import _Scheduler from "./scheduler.vue";
+import _Scheduler from "./Scheduler.vue";
 
 const Scheduler = withInstall(_Scheduler);
 export { Scheduler };

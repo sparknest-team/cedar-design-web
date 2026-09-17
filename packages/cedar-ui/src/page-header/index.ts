@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _PageHeader from './page-header.vue'
+import _PageHeader from './PageHeader.vue'
 
 const PageHeader = withInstall(_PageHeader, Object.assign(_PageHeader, {}), { components: [_PageHeader] })
 

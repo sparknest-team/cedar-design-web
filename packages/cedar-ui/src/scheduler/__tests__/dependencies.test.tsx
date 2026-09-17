@@ -1,6 +1,6 @@
 import { test, expect } from "vitest";
 import { mount } from "@vue/test-utils";
-import Scheduler from "../scheduler.vue";
+import Scheduler from "../Scheduler.vue";
 import {
   getSchedulerDependencyIssues,
   validateSchedulerEvent,

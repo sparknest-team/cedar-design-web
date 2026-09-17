@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _Split from './split.vue'
+import _Split from './Split.vue'
 import { splitProps } from './props'
 
 const Split = withInstall(_Split, Object.assign(_Split, {

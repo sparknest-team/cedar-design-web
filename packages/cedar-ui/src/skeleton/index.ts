@@ -1,7 +1,7 @@
 import { withInstall } from '../_utils/global-config'
-import _Skeleton from './skeleton.vue'
-import _SkeletonLine from './line.vue'
-import _SkeletonShape from './shape.vue'
+import _Skeleton from './Skeleton.vue'
+import _SkeletonLine from './Line.vue'
+import _SkeletonShape from './Shape.vue'
 import { skeletonLineProps, skeletonProps, skeletonShapeProps } from './props'
 
 const Skeleton = withInstall(_Skeleton, Object.assign(_Skeleton, {

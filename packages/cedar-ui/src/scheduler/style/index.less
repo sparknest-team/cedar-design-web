@@ -79,6 +79,36 @@
     border-bottom: var(--c-scheduler-border-width) solid
       var(--c-scheduler-border-color);
   }
+  &__time-header {
+    position: sticky;
+    top: 0;
+    z-index: var(--c-scheduler-header-z-index);
+    background: var(--c-scheduler-background);
+  }
+  &__column-heading--today {
+    color: var(--c-scheduler-today-color);
+    background: var(--c-scheduler-today-background);
+  }
+  &__time-labels {
+    position: relative;
+  }
+  &__now-label {
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    inset-inline-end: 0;
+    transform: translateY(-50%);
+    color: var(--c-scheduler-now-color);
+    background: var(--c-scheduler-background);
+    font-size: var(--c-scheduler-event-font-size);
+    z-index: var(--c-scheduler-now-z-index);
+    pointer-events: none;
+  }
+  &__column-background {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
   &__column-heading,
   &__time-gutter {
     padding: var(--c-scheduler-gap);
@@ -98,6 +128,8 @@
       var(--c-scheduler-border-color);
   }
   &__time-body {
+    position: relative;
+    z-index: 0;
     display: grid;
     grid-template-columns: var(--c-scheduler-gutter-width) repeat(
         var(--c-scheduler-columns),
@@ -127,8 +159,11 @@
     border-bottom: var(--c-scheduler-border-width) solid
       var(--c-scheduler-border-color);
   }
-  &__time-cell {
-    --c-hover-overlay-opacity: 0;
+  &__time-cell > .c-hover-overlay,
+  &__timeline-cells > .c-button > .c-hover-overlay,
+  &__all-day-cell > .c-hover-overlay,
+  &__month-cell > .c-hover-overlay {
+    opacity: 0;
   }
   &__now-indicator {
     position: absolute;
@@ -138,6 +173,7 @@
     pointer-events: none;
   }
   &__event-layer {
+    z-index: 0;
     position: absolute;
     inset: 0;
     pointer-events: none;
@@ -150,7 +186,8 @@
   }
   &__positioned-event--stack {
     z-index: var(--c-scheduler-stack-order);
-    &:focus-within {
+    &:focus-within,
+    &.c-scheduler__positioned-event--group-focused {
       z-index: calc(
         var(--c-scheduler-stack-count) + var(--c-scheduler-stack-focus-step)
       );
@@ -272,7 +309,8 @@
       --c-scheduler-event-background,
       var(--c-scheduler-background)
     );
-    color: var(--c-scheduler-color);
+    color: var(--c-scheduler-event-color);
+    border-radius: var(--c-scheduler-radius);
     line-height: var(--c-scheduler-line-height);
     box-shadow: var(--c-scheduler-preview-shadow);
     pointer-events: none;
@@ -280,6 +318,19 @@
     & * {
       box-sizing: border-box;
       pointer-events: none !important;
+    }
+  }
+  &__drag-summary {
+    display: flex;
+    flex-direction: column;
+    gap: var(--c-scheduler-event-gap);
+    padding: var(--c-scheduler-ghost-padding);
+    overflow: hidden;
+    font-size: var(--c-scheduler-event-font-size);
+    & > * {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
   &__drag-preview {
@@ -311,6 +362,9 @@
   &__month-heading {
     text-align: center;
     padding: var(--c-scheduler-gap);
+  }
+  &__month-date > .c-hover-overlay {
+    opacity: 0;
   }
   &__month-cell {
     height: var(--c-scheduler-month-cell-height);
@@ -422,6 +476,7 @@
     clip-path: inset(50%);
   }
   &__time-cell:focus-visible,
+  &__all-day:focus-visible,
   &__event-button:focus-visible {
     outline: var(--c-scheduler-focus-width) solid var(--c-scheduler-focus-color);
     outline-offset: calc(-1 * var(--c-scheduler-focus-width));

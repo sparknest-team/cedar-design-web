@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _Divider from './divider.vue'
+import _Divider from './Divider.vue'
 import { dividerProps } from './props'
 
 const Divider = withInstall(_Divider, Object.assign(_Divider, {

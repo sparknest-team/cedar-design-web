@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 import { mount } from "@vue/test-utils";
-import Scheduler from "../scheduler.vue";
+import Scheduler from "../Scheduler.vue";
 import CSelect from "../../select";
 import { createSchedulerTimeAxis, groupSchedulerResources } from "../core";
 

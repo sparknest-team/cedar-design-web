@@ -1,7 +1,7 @@
 import { withInstall } from '../_utils/global-config'
 import _Select from './select'
-import _Option from './option.vue'
-import _Optgroup from './optgroup.vue'
+import _Option from './Option.vue'
+import _Optgroup from './Optgroup.vue'
 import { selectProps } from './props'
 
 const Select = withInstall(_Select, Object.assign(_Select, {

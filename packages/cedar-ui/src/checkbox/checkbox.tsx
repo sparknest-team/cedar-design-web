@@ -1,6 +1,6 @@
 import { computed, defineComponent, inject, nextTick, ref, toRefs, watch } from 'vue'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
-import IconHover from '../_components/icon-hover.vue'
+import IconHover from '../_components/IconHover.vue'
 import Check from './icon-check'
 import { isArray, isNull, isUndefined } from '../_utils/is'
 import { checkboxGroupKey } from './context'

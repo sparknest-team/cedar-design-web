@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, test, vi } from "vitest";
 import { mount, flushPromises } from "@vue/test-utils";
 import { h } from "vue";
-import Card from "../components/scheduler-event.vue";
+import Card from "../components/SchedulerEvent.vue";
 import Scheduler from "../index";
 const wrappers: ReturnType<typeof mount>[] = [];
 const elementsFromPoint = document.elementsFromPoint;
@@ -58,7 +58,10 @@ describe("Scheduler pointer interaction", () => {
     pointer("pointermove", 30, 40);
     await flushPromises();
     const ghost = document.querySelector(".c-scheduler__drag-ghost")!;
-    expect(ghost.textContent).toContain("Custom Review");
+    expect(ghost.textContent).toContain("Review");
+    expect(ghost.textContent).not.toContain("Custom Review");
+    expect((ghost as HTMLElement).style.height).toBe("");
+    expect(ghost.querySelector(".c-scheduler__drag-summary")).not.toBeNull();
     expect(wrapper.classes()).toContain("c-scheduler--dragging");
     expect(ghost.getAttribute("aria-hidden")).toBe("true");
     expect(ghost.hasAttribute("inert")).toBe(true);

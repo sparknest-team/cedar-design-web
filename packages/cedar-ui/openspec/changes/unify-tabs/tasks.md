@@ -1,0 +1,4 @@
+- [x] Implement shared components and platform adapters
+- [x] Migrate exports, resolver, examples and dependent InfiniteScroll integration
+- [x] Document comparison, complete API and breaking migration
+- [x] Verify behavior, source parity, styles, types and lint; record full-workspace limitations in verification.md

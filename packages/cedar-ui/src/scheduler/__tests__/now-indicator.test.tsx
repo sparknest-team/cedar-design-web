@@ -2,7 +2,7 @@ import { afterEach, test, expect, vi } from "vitest";
 import { mount } from "@vue/test-utils";
 import { defineComponent, nextTick, createSSRApp } from "vue";
 import { renderToString } from "@vue/server-renderer";
-import Scheduler from "../scheduler.vue";
+import Scheduler from "../Scheduler.vue";
 import { getSchedulerNowPosition } from "../core";
 import { useSchedulerNow } from "../use-now";
 afterEach(() => {

@@ -5,7 +5,7 @@ import { withInstall } from '../_utils/global-config'
 import { isFunction } from '../_utils/is'
 import { omit } from '../_utils/omit'
 import { getSlotFunction } from '../_utils/vue-utils'
-import _Drawer from './drawer.vue'
+import _Drawer from './Drawer.vue'
 import { drawerProps } from './props'
 import type { DrawerConfig, DrawerMethod, DrawerUpdateConfig } from './types'
 

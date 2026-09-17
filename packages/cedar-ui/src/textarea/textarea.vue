@@ -51,7 +51,7 @@
 <script lang="ts">
 import { computed, CSSProperties, defineComponent, nextTick, onMounted, ref, toRefs, watch } from 'vue'
 import ResizeObserver from '../_components/resize-observer'
-import IconHover from '../_components/icon-hover.vue'
+import IconHover from '../_components/IconHover.vue'
 import { IconClose } from '@cedarjs/icons-vue/icon-close'
 import FieldDecorator from '../field-decorator'
 import { createNamespace } from '../_utils/global-config'

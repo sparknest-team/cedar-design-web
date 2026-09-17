@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import Component from './col.vue'
+import Component from './Col.vue'
 import { colProps } from './props'
 const Col = withInstall(Component)
 export { Col, colProps }

@@ -2,7 +2,7 @@ import { withInstall } from '../_utils/maple/components'
 import { formatStyleVars } from '../_utils/maple/elements'
 import { styleProviderProps } from './props'
 import type { StyleVars } from './props'
-import _StyleProvider from './style-provider.vue'
+import _StyleProvider from './StyleProvider.vue'
 
 const styleId = 'cedar-style-vars'
 const themeAttr = 'cedar-theme'

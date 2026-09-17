@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Message } from '@cedarjs/ui'
-import { t } from './locale'
 
 const lastAction = ref('')
 const handleSelect = (value: unknown, option: { label?: unknown }) => {
@@ -21,14 +20,14 @@ const handleSelect = (value: unknown, option: { label?: unknown }) => {
       @click="lastAction = 'publish'"
       @select="handleSelect"
     >
-      {{ t('choose') }}
+      选择操作
       <template #content>
-        <c-menu-option :label="t('saveNow')" value="draft" />
-        <c-menu-option :label="t('saveAndPublish')" value="publish" />
-        <c-menu-option :label="t('unavailable')" value="restricted" disabled />
+        <c-menu-option label="保存草稿" value="draft" />
+        <c-menu-option label="保存并发布" value="publish" />
+        <c-menu-option label="暂无权限" value="restricted" disabled />
       </template>
     </c-split-button>
-    <span aria-live="polite">{{ t('lastAction') }}: {{ lastAction || t('none') }}</span>
-    <span>{{ t('popupHint') }}</span>
+    <span aria-live="polite">最近操作: {{ lastAction || '暂无操作' }}</span>
+    <span>选择后菜单保持展开，可连续选择；点击外部关闭。</span>
   </c-space>
 </template>

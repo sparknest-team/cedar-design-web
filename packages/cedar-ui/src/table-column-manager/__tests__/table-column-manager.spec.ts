@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
-import TableColumnManager from '../table-column-manager.vue'
+import TableColumnManager from '../TableColumnManager.vue'
 import Transfer from '../../transfer'
 
 describe('TableColumnManager', () => {

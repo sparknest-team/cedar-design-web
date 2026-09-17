@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _Link from './link.vue'
+import _Link from './Link.vue'
 import { linkProps } from './props'
 
 const Link = withInstall(_Link)

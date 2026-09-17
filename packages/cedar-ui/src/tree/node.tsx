@@ -1,8 +1,8 @@
 import { defineComponent } from 'vue'
 import { TreeNodeProps } from './types'
-import BaseTreeNode from './base-node.vue'
+import BaseTreeNode from './BaseNode.vue'
 import useNodeKey from './hooks/use-node-key'
-import TransitionNodeList from './transition-node-list.vue'
+import TransitionNodeList from './TransitionNodeList.vue'
 import { createNamespace } from '../_utils/global-config'
 
 

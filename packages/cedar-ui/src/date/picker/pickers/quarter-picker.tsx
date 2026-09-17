@@ -1,5 +1,5 @@
 import { defineComponent, PropType } from 'vue'
-import Picker from '../picker.vue'
+import Picker from '../Picker.vue'
 import { createNamespace } from '../../../_utils/global-config'
 
 

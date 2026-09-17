@@ -6,7 +6,7 @@ import Button from "../../button";
 import Space from "../../space";
 import Alert from "../../alert";
 import Tag from "../../tag";
-import Picker from "../components/scheduler-resource-select.vue";
+import Picker from "../components/SchedulerResourceSelect.vue";
 test("station and person demo combines filters and changes display dimension independently", async () => {
   const w = mount(Demo, {
     global: {

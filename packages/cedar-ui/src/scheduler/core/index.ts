@@ -1,3 +1,4 @@
+import { packSchedulerLayout } from "./layout";
 export * from "./types";
 import { SchedulerError } from "./types";
 import type {
@@ -292,25 +293,7 @@ export function layoutSchedulerEvents(
         b.end - a.end ||
         a.event.id.localeCompare(b.event.id),
     );
-  let group: SchedulerLayoutItem[] = [];
-  let ends: number[] = [];
-  const flush = () => {
-    group.forEach((item) => {
-      item.columns = ends.length;
-    });
-    group = [];
-    ends = [];
-  };
-  for (const item of items) {
-    if (ends.length && ends.every((end) => end <= item.start)) flush();
-    let column = ends.findIndex((end) => end <= item.start);
-    if (column < 0) column = ends.length;
-    ends[column] = item.end;
-    item.column = column;
-    group.push(item);
-  }
-  flush();
-  return items;
+  return packSchedulerLayout(items);
 }
 
 /** Timeline positions are fractions of the visible calendar-day range. */
@@ -400,4 +383,3 @@ export * from "./resource-dimensions";
 export * from "./interaction";
 
 export * from "./dependencies";
-export * from "./task-assignments";

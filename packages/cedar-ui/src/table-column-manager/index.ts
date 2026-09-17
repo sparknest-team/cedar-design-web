@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _TableColumnManager from './table-column-manager.vue'
+import _TableColumnManager from './TableColumnManager.vue'
 
 const TableColumnManager = withInstall(_TableColumnManager)
 

@@ -3,7 +3,7 @@ import { h, nextTick, ref, withDirectives } from 'vue'
 import { vLoading } from '../../loading'
 import { describe, expect, test, vi } from 'vitest'
 import { cardProps } from '../props'
-import Card from '../card.vue'
+import Card from '../Card.vue'
 describe('Card shared contract', () => {
   test('independent instances and supported presets', async () => {
     const a = mount(Card, { props: { title: 'first', size: 'sm', variant: 'outline', direction: 'row' } })

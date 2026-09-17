@@ -2,7 +2,7 @@ import { test, expect, vi } from "vitest";
 import { mount, flushPromises } from "@vue/test-utils";
 import { defineComponent, h, nextTick } from "vue";
 import { useTimelinePointer } from "../use-timeline-pointer";
-import Scheduler from "../scheduler.vue";
+import Scheduler from "../Scheduler.vue";
 import VirtualList from "../../_components/virtual-list-v2";
 const event = {
   id: "a",

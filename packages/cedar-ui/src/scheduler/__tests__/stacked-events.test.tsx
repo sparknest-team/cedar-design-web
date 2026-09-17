@@ -6,8 +6,8 @@ import Alert from "../../alert";
 import Checkbox from "../../checkbox";
 import Popover from "../../popover";
 import { mount } from "@vue/test-utils";
-import Scheduler from "../scheduler.vue";
-import Grid from "../components/scheduler-time-grid.vue";
+import Scheduler from "../Scheduler.vue";
+import Grid from "../components/SchedulerTimeGrid.vue";
 import Demo from "../__demos__/stacked-events.vue";
 async function mouse(
   wrapper: { element: Element },

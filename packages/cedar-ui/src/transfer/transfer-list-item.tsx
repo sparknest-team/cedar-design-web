@@ -1,6 +1,6 @@
 import { computed, defineComponent, inject, PropType } from 'vue'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
-import IconHover from '../_components/icon-hover.vue'
+import IconHover from '../_components/IconHover.vue'
 import Checkbox from '../checkbox'
 import { IconDragDotVertical } from '@cedarjs/icons-vue/icon-drag-dot-vertical'
 import { IconInfoCircle } from '@cedarjs/icons-vue/icon-info-circle'

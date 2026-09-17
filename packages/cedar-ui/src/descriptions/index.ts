@@ -1,6 +1,6 @@
 import { withInstall } from '../_utils/global-config'
 import _Descriptions from './descriptions'
-import _DescriptionsItem from './descriptions-item.vue'
+import _DescriptionsItem from './DescriptionsItem.vue'
 import { descriptionsItemProps, descriptionsProps } from './props'
 
 const Descriptions = withInstall(_Descriptions, Object.assign(_Descriptions, {

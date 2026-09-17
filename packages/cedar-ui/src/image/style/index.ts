@@ -1,5 +1,4 @@
 import '../../style/index.less'
 import '../../ripple/style'
-import '../../tooltip/style'
 import '../../overlay/style'
 import './index.less'

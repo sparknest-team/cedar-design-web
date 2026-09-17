@@ -1,8 +1,8 @@
 import { test, expect, vi } from "vitest";
 import { mount, flushPromises } from "@vue/test-utils";
-import Scheduler from "../scheduler.vue";
+import Scheduler from "../Scheduler.vue";
 import Input from "../../input";
-import Editor from "../components/scheduler-editor.vue";
+import Editor from "../components/SchedulerEditor.vue";
 import { duplicateSchedulerEvent, SchedulerError } from "../core";
 import type { SchedulerEvent } from "../core";
 const event: SchedulerEvent = {
@@ -11,13 +11,12 @@ const event: SchedulerEvent = {
   start: new Date(2026, 8, 16, 10),
   end: new Date(2026, 8, 16, 11),
   resourceIds: ["r"],
-  taskId: "task",
   description: "Details",
   color: "red",
   accentColor: "orange",
   backgroundColor: "#fffbe6",
   backgroundPattern: "dots",
-  metadata: { typeId: "meeting" },
+  metadata: { typeId: "meeting", taskId: "task" },
 };
 test("copy detaches standard fields and removes recurrence identity and unknown extensions", () => {
   const source = {
@@ -29,14 +28,13 @@ test("copy detaches standard fields and removes recurrence identity and unknown 
   const copy = duplicateSchedulerEvent(source, "b");
   expect(copy).toMatchObject({
     id: "b",
-    taskId: "task",
     title: "Original",
     description: "Details",
     color: "red",
     accentColor: "orange",
     backgroundColor: "#fffbe6",
     backgroundPattern: "dots",
-    metadata: { typeId: "meeting" },
+    metadata: { typeId: "meeting", taskId: "task" },
   });
   expect(copy).not.toHaveProperty("seriesId");
   expect(copy).not.toHaveProperty("originalStart");
@@ -45,7 +43,7 @@ test("copy detaches standard fields and removes recurrence identity and unknown 
   copy.metadata!.typeId = "rest";
   (copy.start as Date).setFullYear(2000);
   expect(event.resourceIds).toEqual(["r"]);
-  expect(event.metadata).toEqual({ typeId: "meeting" });
+  expect(event.metadata).toEqual({ typeId: "meeting", taskId: "task" });
   expect((event.start as Date).getFullYear()).toBe(2026);
 });
 test("preserves all-day and unscheduled forms and requires writable source and fresh id", () => {

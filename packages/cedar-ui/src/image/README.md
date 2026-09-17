@@ -4,7 +4,7 @@ permalink: /components/image/
 
 # Image
 
-展示图片。预览相关能力见下方 ImagePreview API。
+展示图片，支持说明、加载回退与预览。两端示例分组一致。
 
 ## 案例
 
@@ -14,13 +14,25 @@ permalink: /components/image/
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### 显示 Caption
+### 填充模式
 
-通过 `title`、`description` 和 `footerPosition` 控制图片说明的展示位置。
+通过 `object-fit` 控制图片如何适应容器。
+
+<demo src="./__demos__/fit-mode.vue"></demo>
+
+### 尺寸、圆角与位置
+
+`width` / `height`、`radius` 和 `object-position` 控制几何与裁切位置。
+
+<demo src="./__demos__/presentation.vue"></demo>
+
+### 标题与描述
+
+通过 `title`、`description` 和 `footer-position` 控制说明文案的展示位置。
 
 <demo src="./__demos__/caption.vue"></demo>
 
-### 额外操作
+### 底部额外内容
 
 通过 `extra` 插槽在页脚定制额外内容。
 
@@ -28,29 +40,9 @@ permalink: /components/image/
 
 ### 错误状态
 
-图片加载失败时的展示内容。
+图片加载失败时展示默认错误态，也可用 `error` 插槽自定义。
 
 <demo src="./__demos__/error.vue"></demo>
-
-### 加载状态
-
-通过 `showLoader` 显示默认加载效果，或通过 `loader` 插槽自定义。
-
-<demo src="./__demos__/loader.vue"></demo>
-
-### 渐进加载
-
-通过 `loader` 插槽传入小图，模拟渐进加载。
-
-<demo src="./__demos__/progressive-loader.vue"></demo>
-
-### 填充模式
-
-<demo src="./__demos__/fit-mode.vue"></demo>
-
-### 禁用预览
-
-<demo src="./__demos__/disable-preview.vue"></demo>
 
 ### 错误时仍显示 Footer
 
@@ -58,7 +50,29 @@ permalink: /components/image/
 
 <demo src="./__demos__/hide-footer-never.vue"></demo>
 
-### 预览入口与受控状态
+### 加载状态
+
+通过 `showLoader` 显示默认加载效果，或通过 `loader` 插槽自定义、模拟渐进加载。
+
+<demo src="./__demos__/loader.vue"></demo>
+
+### 懒加载与回退
+
+`lazy` 使用原生 `loading="lazy"`；失败时可用 `fallback-src` 回退。
+
+<demo src="./__demos__/lazy.vue"></demo>
+
+### 水波与行内
+
+`ripple` 开启点击水波；`block` 设为 `false` 时作为行内元素排列。
+
+<demo src="./__demos__/ripple.vue"></demo>
+
+### 禁用预览
+
+<demo src="./__demos__/disable-preview.vue"></demo>
+
+### 预览入口与受控
 
 通过 `preview-src`、`v-model:preview-open` 和 `preview-props` 配置 Image 内嵌预览。
 
@@ -70,17 +84,25 @@ permalink: /components/image/
 
 <demo src="./__demos__/overlay-closable.vue"></demo>
 
+### 指定挂载容器
+
+<demo src="./__demos__/preview-popup-container.vue"></demo>
+
 ### 图片预览组
 
-PreviewGroup 可以收集子 Image，也可以直接接收 `images`。集合状态只由 Group 管理。
+`ImagePreviewGroup` 可以收集子 Image，集合状态只由 Group 管理。
 
 <demo src="./__demos__/preview-group.vue"></demo>
+
+### 数据驱动预览组
+
+也可以直接传入 `images`，用按钮打开预览。
 
 <demo src="./__demos__/component-preview-group.vue"></demo>
 
 ### 单图 Preview
 
-ImagePreview 只接收单个 `src`，负责缩放、旋转、拖拽和全屏等变换。
+`ImagePreview` 只接收单个 `src`，负责缩放、旋转、拖拽和全屏等变换。
 
 <demo src="./__demos__/component-preview.vue"></demo>
 
@@ -89,12 +111,6 @@ ImagePreview 只接收单个 `src`，负责缩放、旋转、拖拽和全屏等�
 关闭图标、指示器与操作区均可自定义。
 
 <demo src="./__demos__/preview-features.vue"></demo>
-
-<demo src="./__demos__/custom-preview-actions.vue"></demo>
-
-### 指定挂载容器
-
-<demo src="./__demos__/preview-popup-container.vue"></demo>
 
 ### 命令式预览
 

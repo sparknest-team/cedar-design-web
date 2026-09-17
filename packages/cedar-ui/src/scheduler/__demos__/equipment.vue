@@ -14,7 +14,7 @@
       <strong>待安排工单</strong>
       <c-button
         v-for="task in tasks"
-        :key="task.taskId"
+        :key="String(task.metadata?.taskId)"
         :draggable="!disabled"
         :disabled="disabled"
         @dragstart="startDrag(task, $event)"
@@ -31,7 +31,9 @@
     </template>
     <template #event="{ event }">
       <strong>{{ event.title }}</strong
-      ><span v-if="event.taskId"> · {{ event.taskId }}</span>
+      ><span v-if="event.metadata?.taskId">
+        · {{ event.metadata?.taskId }}</span
+      >
     </template>
   </c-scheduler>
 </template>
@@ -51,13 +53,13 @@ const tasks: SchedulerEventTemplate[] = [
   {
     title: "样件加工",
     duration: 90,
-    taskId: "JOB-201",
+    metadata: { taskId: "JOB-201" },
     description: "安排加工设备并确认材料",
   },
   {
     title: "设备校准",
     duration: 30,
-    taskId: "JOB-202",
+    metadata: { taskId: "JOB-202" },
     description: "校准完成后记录结果",
   },
 ];
@@ -68,7 +70,7 @@ const events = ref<SchedulerEvent[]>([
     start: "2026-09-09T09:00:00",
     end: "2026-09-09T11:00:00",
     resourceIds: ["laser-01"],
-    taskId: "JOB-100",
+    metadata: { taskId: "JOB-100" },
   },
   {
     id: "run-2",
@@ -76,7 +78,7 @@ const events = ref<SchedulerEvent[]>([
     start: "2026-09-09T14:00:00",
     end: "2026-09-09T15:00:00",
     resourceIds: ["laser-01", "printer-02"],
-    taskId: "JOB-101",
+    metadata: { taskId: "JOB-101" },
   },
   {
     id: "maintenance",

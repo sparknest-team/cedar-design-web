@@ -1,12 +1,10 @@
 <template>
   <c-image
-    width="260"
-    title="A user's avatar"
-    description="Present by Cedar Design"
-    :hide-footer="'never'"
-    src="invalid-image-url"
+    width="200"
+    src="invalid-image.jpg"
+    title="一只猫"
+    description="错误时仍显示底部信息"
+    hide-footer="never"
     preview-disabled
   />
 </template>
-
-<script lang="ts" setup></script>

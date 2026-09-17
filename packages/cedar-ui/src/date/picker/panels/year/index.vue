@@ -33,8 +33,8 @@ import { getPrefixCls } from '../../../../_utils/global-config'
 import { dayjs } from '../../../../_utils/date'
 import type { Cell, DisabledDate, HeaderIcons, HeaderOperations, IsSameTime } from '../../types'
 import { newArray } from '../../utils'
-import PanelHeader from '../header.vue'
-import PanelBody from '../body.vue'
+import PanelHeader from '../Header.vue'
+import PanelBody from '../Body.vue'
 import { RenderFunc } from '../../../../_components/render-function'
 
 const ROW_COUNT = 4

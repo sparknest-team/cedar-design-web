@@ -85,7 +85,7 @@ import {
   watch,
 } from "vue";
 import type { Dayjs } from "dayjs";
-import TimeColumn from "./time-column.vue";
+import TimeColumn from "./TimeColumn.vue";
 import Button from "../../button";
 import type { PanelProps } from "./types";
 import { isDayjs, isUndefined } from "../../_utils/is";

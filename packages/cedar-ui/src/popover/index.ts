@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _Popover from './popover.vue'
+import _Popover from './Popover.vue'
 import { popoverProps } from './props'
 
 const Popover = withInstall(_Popover, Object.assign(_Popover, {

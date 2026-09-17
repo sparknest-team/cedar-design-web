@@ -1,7 +1,6 @@
-import type { InjectionKey } from "vue";
-import type { PreviewGroupContext } from "./api";
+import type { InjectionKey } from 'vue'
+import type { PreviewGroupContext } from './api'
 
-export type { PreviewGroupContext };
+export type { PreviewGroupContext }
 
-export const PreviewGroupInjectionKey: InjectionKey<PreviewGroupContext> =
-  Symbol("PreviewGroupInjectionKey");
+export const PreviewGroupInjectionKey: InjectionKey<PreviewGroupContext> = Symbol('PreviewGroupInjectionKey')

@@ -59,7 +59,7 @@ permalink: /components/collapse/
 
 ### 展开图标
 
-为展开项自定义展开图标
+为展开项自定义展开图标。父级 `expand-icon` 插槽会下发给未自定义图标的子项。
 
 <demo src="./__demos__/expand-icon.vue"></demo>
 
@@ -89,69 +89,74 @@ permalink: /components/collapse/
 
 ## API
 
-### `<collapse>` Props
+<!-- same-source-api:start -->
+### Props
 
-| 参数名                     | 描述                                    | 类型                   |  默认值  |
-| -------------------------- | --------------------------------------- | ---------------------- | :------: |
-| active-names **(v-model)** | 当前展开的面板的 `name`                 | `(string \| number)[]` |   `-`    |
-| default-active-names       | 默认展开的面板的 `name` （非受控模式）  | `(string \| number)[]` |   `[]`   |
-| accordion                  | 是否开启手风琴模式                      | `boolean`              | `false`  |
-| show-expand-icon           | 是否显示展开图标                        | `boolean`              |   `-`    |
-| expand-icon-position       | 展开图标显示的位置                      | `'left' \| 'right'`    | `'left'` |
-| bordered                   | 是否显示边框                            | `boolean`              |  `true`  |
-| divider                    | 是否显示面板分割线                      | `boolean`              |  `true`  |
-| offset                     | 展开面板是否显示间距                    | `boolean`              | `false`  |
-| destroy-on-hide            | 是否在隐藏时销毁内容                    | `boolean`              | `false`  |
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| active-names | 当前展开面板的 name，支持 v-model:active-names | `(string \| number)[]` | `—` |
+| default-active-names | 非受控初始展开面板 | `(string \| number)[]` | `[]` |
+| accordion | 手风琴模式，同时最多展开一项 | `boolean` | `false` |
+| show-expand-icon | 是否显示展开图标；未设置时由子项决定 | `boolean` | `—` |
+| expand-icon-position | 展开图标位置 | `'left' \| 'right'` | `'left'` |
+| bordered | 是否显示边框 | `boolean` | `true` |
+| divider | 是否显示面板分割线 | `boolean` | `true` |
+| offset | 展开面板是否显示间距 | `boolean` | `false` |
+| destroy-on-hide | 是否在隐藏时销毁内容 | `boolean` | `false` |
 
-### `<collapse>` Events
+### Events
 
-| 事件名 | 描述                     | 参数                                                 |
-| ------ | ------------------------ | ---------------------------------------------------- |
-| change | 展开的面板发生改变时触发 | activeNames: `(string \| number)[]`<br>ev: `Event` |
+| Event | Description | Arguments |
+| --- | --- | --- |
+| update:active-names | 请求更新展开面板 | `(string \| number)[]` |
+| change | 展开面板变化时触发 | `(string \| number)[]`, `Event` |
 
-### `<collapse>` Methods
+### Slots
 
-| 方法名      | 描述                                   | 参数                                | 返回值 |
-| ----------- | -------------------------------------- | ----------------------------------- | ------ |
-| `toggleAll` | 开启或关闭所有面板（手风琴模式下无效） | `options: CollapseToggleAllOptions` | `-`    |
+| Slot | Description | Scope |
+| --- | --- | --- |
+| default | 面板列表 | `—` |
+
+### Methods
+
+| Method | Description |
+| --- | --- |
+| toggleAll | 开启或关闭所有面板（手风琴模式下无效） |
+
+<!-- same-source-api:end -->
+
+父级可通过 `expand-icon` 插槽下发默认展开图标，作用域为 `active`、`disabled`、`position`。该插槽由子项读取，不在根节点渲染。
 
 #### CollapseToggleAllOptions
 
-| 参数           | 描述                                                     | 类型                   | 默认值  |
-| -------------- | -------------------------------------------------------- | ---------------------- | ------- |
-| `expand`       | `'inverse'` 切换全部；`boolean` 控制全部展开或收起       | `'inverse' \| boolean` | `-`     |
-| `skipDisabled` | 是否跳过禁用面板                                         | `boolean`              | `false` |
-
-### `<collapse>` Slots
-
-| 插槽名      |   描述   | 参数                                                                      |
-| ----------- | :------: | ------------------------------------------------------------------------- |
-| expand-icon | 展开图标 | active: `boolean`<br>disabled: `boolean`<br>position: `'left' \| 'right'` |
-| default     | 面板内容 | -                                                                         |
+| 参数 | 描述 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| expand | `'inverse'` 切换全部；`boolean` 控制全部展开或收起 | `'inverse' \| boolean` | `—` |
+| skipDisabled | 是否跳过禁用面板 | `boolean` | `false` |
 
 ### `<collapse-item>` Props
 
-| 参数名           | 描述                                   | 类型                 | 默认值  |
-| ---------------- | -------------------------------------- | -------------------- | :-----: |
-| name **(必填)**  | 面板唯一标识，对应 `activeNames` 中的值 | `string \| number`  |   `-`   |
-| title            | 面板的标题                             | `string`             |   `-`   |
-| disabled         | 是否禁用                               | `boolean`            | `false` |
-| show-expand-icon | 是否显示展开图标                       | `boolean`            | `true`  |
-| destroy-on-hide  | 是否在隐藏时销毁内容                   | `boolean`            | `false` |
+| 参数名 | 描述 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| name **(必填)** | 面板唯一标识，对应 `activeNames` 中的值 | `string \| number` | `—` |
+| title | 面板的标题 | `string` | `—` |
+| disabled | 是否禁用 | `boolean` | `false` |
+| show-expand-icon | 是否显示展开图标 | `boolean` | `true` |
+| destroy-on-hide | 是否在隐藏时销毁内容 | `boolean` | `false` |
 
 ### `<collapse-item>` Slots
 
-| 插槽名      |    描述    | 参数                                                                      |
-| ----------- | :--------: | ------------------------------------------------------------------------- |
-| title       | 面板的标题 | -                                                                         |
-| extra       |  额外内容  | -                                                                         |
-| expand-icon |  展开图标  | active: `boolean`<br>disabled: `boolean`<br>position: `'left' \| 'right'` |
-| default     | 面板内容   | -                                                                         |
+| 插槽名 | 描述 | 参数 |
+| --- | --- | --- |
+| title | 面板的标题 | `—` |
+| extra | 额外内容 | `—` |
+| expand-icon | 展开图标 | active: `boolean`<br>disabled: `boolean`<br>position: `'left' \| 'right'` |
+| default | 面板内容 | `—` |
 
 ### 类型定义
 
 组件导出以下类型定义。`Collapse.Item` 与 `CollapseItem` 为同一组件。
 
 ```ts
-import type { CollapseInstance, CollapseToggleAllOptions } from '@cedarjs/ui'
+import type { CollapseInstance, CollapseToggleAllOptions, ExpandIconPosition } from '@cedarjs/ui'
 ```

@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _FilterForm from './filter-form.vue'
+import _FilterForm from './FilterForm.vue'
 import { filterFormProps } from './props'
 
 const FilterForm = withInstall(_FilterForm, Object.assign(_FilterForm, {

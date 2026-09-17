@@ -1,7 +1,7 @@
 import { createNamespace } from '../_utils/global-config'
 import { computed, defineComponent, PropType, provide, reactive, ref, toRef } from 'vue'
 import { getPrefixCls } from '../_utils/global-config'
-import TransferView from './transfer-view.vue'
+import TransferView from './TransferView.vue'
 import type { DataInfo, TransferFilter, TransferItem, TransferTargetItem, TransferValue } from './types'
 import { transferInjectionKey } from './context'
 import { useFormItem } from '../_hooks/use-form-item'

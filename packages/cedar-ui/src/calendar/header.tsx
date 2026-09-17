@@ -138,8 +138,8 @@ export default defineComponent({
               <div class={`${prefixCls}-header-value`}>
                 {slots.default
                   ? slots.default({
-                      year: pageShowDateYear,
-                      month: pageShowDateMonth,
+                      year: pageShowDateYear.value,
+                      month: pageShowDateMonth.value,
                     })
                   : props.pageShowData.format(props.headerValueFormat)}
               </div>

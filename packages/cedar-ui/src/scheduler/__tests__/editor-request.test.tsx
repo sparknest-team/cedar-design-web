@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, test } from "vitest";
 import { h } from "vue";
 import { mount, flushPromises } from "@vue/test-utils";
-import Scheduler from "../scheduler.vue";
-import Editor from "../components/scheduler-editor.vue";
+import Scheduler from "../Scheduler.vue";
+import Editor from "../components/SchedulerEditor.vue";
 import type { SchedulerEditorRequest } from "../props";
 const wrappers: ReturnType<typeof mount>[] = [];
 const original = {

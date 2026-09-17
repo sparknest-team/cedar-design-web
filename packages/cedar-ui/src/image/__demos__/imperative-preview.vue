@@ -1,24 +1,29 @@
-<template>
-  <c-space direction="vertical">
-    <c-button status="primary" @click="previewSingle">命令式预览单图</c-button>
-    <c-button status="primary" @click="previewMultiple">命令式预览多图</c-button>
-  </c-space>
-</template>
-
-<script lang="ts" setup>
-const images = [
-  "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/cd7a1aaea8e1c5e3d26fe2591e561798.png~tplv-uwbnlip3yd-webp.webp",
-  "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/6480dbc69be1b5de95010289787d64f1.png~tplv-uwbnlip3yd-webp.webp",
-];
+<script setup lang="ts">
+const images = ['/cat.jpg', '/cat2.jpg']
+let handle: { next: () => void; close: () => void } | undefined
 
 function previewSingle() {
-  imagePreview(images[0]);
+  imagePreview(images[0])
 }
 
 function previewMultiple() {
-  imagePreview({
-    images,
-    current: 1,
-  });
+  handle = imagePreview({ images, current: 0 })
+}
+
+function next() {
+  handle?.next()
+}
+
+function close() {
+  handle?.close()
 }
 </script>
+
+<template>
+  <c-space :size="12" wrap>
+    <c-button status="primary" size="sm" @click="previewSingle">预览单图</c-button>
+    <c-button status="primary" size="sm" @click="previewMultiple">预览多图</c-button>
+    <c-button size="sm" @click="next">下一张</c-button>
+    <c-button size="sm" @click="close">关闭</c-button>
+  </c-space>
+</template>

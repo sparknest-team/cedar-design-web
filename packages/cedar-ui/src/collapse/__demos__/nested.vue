@@ -18,6 +18,5 @@
     </c-collapse-item>
   </c-collapse>
 </template>
-
 <script lang="ts" setup>
 </script>

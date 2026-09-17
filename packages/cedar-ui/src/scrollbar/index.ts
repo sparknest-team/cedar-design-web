@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _Scrollbar from './scrollbar.vue'
+import _Scrollbar from './Scrollbar.vue'
 import { scrollbarProps } from './props'
 
 const Scrollbar = withInstall(_Scrollbar, Object.assign(_Scrollbar, {

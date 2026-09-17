@@ -36,8 +36,8 @@ import { padStart } from '../../../../_utils/pad'
 import { getPrefixCls } from '../../../../_utils/global-config'
 import { dayjs } from '../../../../_utils/date'
 import type { Cell, DisabledDate, HeaderIcons, HeaderOperations, IsSameTime } from '../../types'
-import PanelHeader, { HeaderLabelClickFunc } from '../header.vue'
-import PanelBody from '../body.vue'
+import PanelHeader, { HeaderLabelClickFunc } from '../Header.vue'
+import PanelBody from '../Body.vue'
 import { RenderFunc } from '../../../../_components/render-function'
 
 export default defineComponent({

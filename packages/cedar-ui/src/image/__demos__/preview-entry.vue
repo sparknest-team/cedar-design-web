@@ -1,17 +1,20 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const previewOpen = ref(false)
+</script>
+
 <template>
-  <c-space direction="vertical">
-    <c-image width="200" :src="src" :preview-src="previewSrc" />
-    <c-button status="primary" @click="previewOpen = true">受控打开预览</c-button>
-    <c-image width="200" :src="src" v-model:preview-open="previewOpen" />
+  <c-space direction="column" :size="16">
+    <c-image width="160" height="120" object-fit="cover" src="/cat.jpg" preview-src="/cat2.jpg" />
+    <c-button status="primary" size="sm" @click="previewOpen = true">打开预览</c-button>
+    <c-image
+      v-model:preview-open="previewOpen"
+      width="160"
+      height="120"
+      object-fit="cover"
+      src="/cat.jpg"
+      :preview-props="{ scaleStep: 1 }"
+    />
   </c-space>
 </template>
-
-<script lang="ts" setup>
-import { ref } from "vue";
-
-const previewOpen = ref(false);
-const src =
-  "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a8c8cdb109cb051163646151a4a5083b.png~tplv-uwbnlip3yd-webp.webp";
-const previewSrc =
-  "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/cd7a1aaea8e1c5e3d26fe2591e561798.png~tplv-uwbnlip3yd-webp.webp";
-</script>

@@ -117,6 +117,7 @@ declare module "vue" {
     CTbody: (typeof import("@cedarjs/ui/web-vue"))["Tbody"];
     CTableColumn: (typeof import("@cedarjs/ui/web-vue"))["TableColumn"];
     CTabs: (typeof import("@cedarjs/ui/web-vue"))["Tabs"];
+    CTabPane: (typeof import("@cedarjs/ui/web-vue"))["TabPane"];
     CTabNav: (typeof import("@cedarjs/ui/web-vue"))["TabNav"];
     CTabItem: (typeof import("@cedarjs/ui/web-vue"))["TabItem"];
     CTabsNavs: (typeof import("@cedarjs/ui/web-vue"))["TabsNavs"];

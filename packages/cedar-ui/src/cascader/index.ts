@@ -1,6 +1,6 @@
 import { withInstall } from '../_utils/global-config'
-import _Cascader from './cascader.vue'
-import _CascaderPanel from './cascader-panel.vue'
+import _Cascader from './Cascader.vue'
+import _CascaderPanel from './CascaderPanel.vue'
 import { cascaderProps } from './props'
 
 const Cascader = withInstall(_Cascader, Object.assign(_Cascader, {

@@ -1,12 +1,12 @@
 <template>
   <c-space direction="column" :style="{ width: '100%' }">
     <c-space wrap>
-      <c-button @click="toggleAll({ expand: 'inverse' })">切换全部</c-button>
-      <c-button @click="toggleAll({ expand: 'inverse', skipDisabled: true })">切换全部（跳过禁用）</c-button>
-      <c-button @click="toggleAll({ expand: true })">展开全部</c-button>
-      <c-button @click="toggleAll({ expand: true, skipDisabled: true })">展开全部（跳过禁用）</c-button>
-      <c-button @click="toggleAll({ expand: false })">收起全部</c-button>
-      <c-button @click="toggleAll({ expand: false, skipDisabled: true })">收起全部（跳过禁用）</c-button>
+      <c-button @click="toggleAll({ expand: 'inverse' })">Toggle all</c-button>
+      <c-button @click="toggleAll({ expand: 'inverse', skipDisabled: true })">Toggle all (skip disabled)</c-button>
+      <c-button @click="toggleAll({ expand: true })">Expand all</c-button>
+      <c-button @click="toggleAll({ expand: true, skipDisabled: true })">Expand all (skip disabled)</c-button>
+      <c-button @click="toggleAll({ expand: false })">Collapse all</c-button>
+      <c-button @click="toggleAll({ expand: false, skipDisabled: true })">Collapse all (skip disabled)</c-button>
     </c-space>
     <c-collapse ref="collapseRef" v-model:active-names="activeNames">
       <c-collapse-item title="Panel 1" name="1">
@@ -24,7 +24,6 @@
     </c-collapse>
   </c-space>
 </template>
-
 <script lang="ts" setup>
 import { ref } from 'vue'
 

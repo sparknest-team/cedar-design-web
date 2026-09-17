@@ -1,6 +1,6 @@
 import { withInstall } from '../_utils/global-config'
-import _Form from './form.vue'
-import _FormItem from './form-item.vue'
+import _Form from './Form.vue'
+import _FormItem from './FormItem.vue'
 import { formProps } from './props'
 
 const Form = withInstall(_Form, Object.assign(_Form, {

@@ -115,6 +115,7 @@
   "Switch",
   "TabItem",
   "TabNav",
+  "TabPane",
   "Table",
   "TableColumn",
   "TableColumnManager",

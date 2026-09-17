@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _Countdown from './countdown.vue'
+import _Countdown from './Countdown.vue'
 import { countdownProps } from './props'
 
 const Countdown = withInstall(_Countdown)

@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "vitest";
 import { mount, flushPromises } from "@vue/test-utils";
-import Editor from "../components/scheduler-editor.vue";
+import Editor from "../components/SchedulerEditor.vue";
 import CInput from "../../input";
 import CCheckbox from "../../checkbox";
 import CForm from "../../form";

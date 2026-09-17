@@ -1,6 +1,6 @@
+import type { ImgHTMLAttributes, PropType } from 'vue'
 import { popupContainerProp } from '../_utils/popup-container'
-import type { ImgHTMLAttributes, PropType } from "vue";
-import type { ImageFit, ImagePreviewProps } from "./api";
+import type { ImageFit, ImagePreviewProps } from './api'
 
 export const imageProps = {
   src: String,
@@ -8,21 +8,15 @@ export const imageProps = {
   fallbackSrc: String,
   width: [String, Number] as PropType<string | number>,
   height: [String, Number] as PropType<string | number>,
-  objectFit: { type: String as PropType<ImageFit>, default: "fill" },
-  objectPosition: { type: String, default: "50% 50%" },
+  objectFit: { type: String as PropType<ImageFit>, default: 'fill' },
+  objectPosition: { type: String, default: '50% 50%' },
   radius: { type: [String, Number] as PropType<string | number>, default: 0 },
   alt: String,
   title: String,
   description: String,
   loadDescription: String,
-  hideFooter: {
-    type: [Boolean, String] as PropType<boolean | "never">,
-    default: false,
-  },
-  footerPosition: {
-    type: String as PropType<"inner" | "outer">,
-    default: "inner",
-  },
+  hideFooter: { type: [Boolean, String] as PropType<boolean | 'never'>, default: false },
+  footerPosition: { type: String as PropType<'inner' | 'outer'>, default: 'inner' },
   footerClass: [String, Array, Object],
   lazy: Boolean,
   imgProps: Object as PropType<ImgHTMLAttributes>,
@@ -35,6 +29,6 @@ export const imageProps = {
   defaultPreviewOpen: { type: Boolean, default: false },
   previewProps: Object as PropType<Partial<ImagePreviewProps>>,
   popupContainer: popupContainerProp,
-};
+}
 
-export const props = imageProps;
+export const props = imageProps

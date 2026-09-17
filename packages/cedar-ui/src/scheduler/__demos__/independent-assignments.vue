@@ -3,7 +3,7 @@
     <c-alert
       >同一业务任务有两个独立分配：北站小林 09:00–10:00、南站小陈
       13:00–15:00。它们共用
-      taskId，各自拥有时间与占用量；修改一个分配不会移动另一个。</c-alert
+      metadata.taskId，各自拥有时间与占用量；修改一个分配不会移动另一个。</c-alert
     >
     <c-scheduler
       v-model="events"
@@ -20,7 +20,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { createSchedulerTaskEvents } from "../core";
+import { createSchedulerTaskEvents } from "./task-assignments";
 const dimensions = [
   { id: "station", label: "站" },
   { id: "person", label: "人" },

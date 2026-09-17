@@ -1,5 +1,5 @@
 <template>
-  <c-tabs type="card-gutter" :editable="true" @add="handleAdd" @delete="handleDelete" show-add-button auto-switch>
+  <c-tabs variant="card" :editable="true" @add="handleAdd" @delete="handleDelete" show-add-button auto-switch>
     <c-tabs-navs>
       <template #suffix>
         <c-button>Action</c-button>
@@ -47,7 +47,7 @@ const handleAdd = () => {
     content: `Content of New Tab Panel ${number}`,
   })
 }
-const handleDelete = (key) => {
+const handleDelete = (key: string | number) => {
   data.value = data.value.filter((item) => item.key !== key)
 }
 </script>

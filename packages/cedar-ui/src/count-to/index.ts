@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _CountTo from './count-to.vue'
+import _CountTo from './CountTo.vue'
 import { countToProps } from './props'
 
 const CountTo = withInstall(_CountTo, Object.assign(_CountTo, {

@@ -1,8 +1,8 @@
 import { withInstall } from '../_utils/global-config'
 import _Input from './input'
-import _InputPassword from './input-password.vue'
-import _InputGroup from './input-group.vue'
-import _InputGroupLabel from './input-group-label.vue'
+import _InputPassword from './InputPassword.vue'
+import _InputGroup from './InputGroup.vue'
+import _InputGroupLabel from './InputGroupLabel.vue'
 import { inputProps } from './props'
 
 const Input = withInstall(_Input, Object.assign(_Input, {

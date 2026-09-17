@@ -32,7 +32,7 @@ export type SchedulerRulePolicy = Partial<
   Record<"capacity" | "unavailable" | "conflict", "allow" | "warn" | "block">
 >;
 
-/** One time block; taskId can associate multiple independently scheduled blocks. */
+/** One time block. Application relationships belong in metadata. */
 export interface SchedulerEvent {
   id: string;
   title: string;
@@ -44,7 +44,8 @@ export interface SchedulerEvent {
   resourceIds?: string[];
   /** Optional metadata, keyed by the same globally unique resource IDs. */
   resourceDetails?: Record<string, SchedulerAssignmentDetails>;
-  taskId?: string;
+  /** Adjacent/overlapping blocks with this ID share a time-grid layout lane. */
+  layoutGroupId?: string;
   description?: string;
   /** Text/foreground and pattern color. */
   color?: string;
@@ -57,6 +58,8 @@ export interface SchedulerEvent {
   /** Application-owned metadata. Scheduler preserves it without interpreting it. */
   metadata?: Record<string, unknown>;
   readonly?: boolean;
+  /** Disable duration changes while retaining moving and viewing. */
+  resizable?: boolean;
 }
 
 export interface SchedulerRange {
@@ -113,4 +116,16 @@ export interface SchedulerLayoutItem {
   end: number;
   column: number;
   columns: number;
+  /** Identity of a continuous layout unit within the rendered day. */
+  layoutUnitId?: string;
 }
+
+/** Horizontal geometry in fractions of the time column (0–1). */
+export interface SchedulerEventPosition {
+  left: number;
+  width: number;
+}
+export type SchedulerEventLayout =
+  | "stack"
+  | "columns"
+  | ((item: Readonly<SchedulerLayoutItem>) => SchedulerEventPosition);

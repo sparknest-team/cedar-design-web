@@ -1,6 +1,6 @@
 import { withInstall } from '../_utils/global-config'
 import _Carousel from './carousel'
-import _CarouselItem from './carousel-item.vue'
+import _CarouselItem from './CarouselItem.vue'
 import { carouselProps } from './props'
 
 const Carousel = withInstall(_Carousel, Object.assign(_Carousel, {

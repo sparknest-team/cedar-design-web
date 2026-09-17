@@ -4,7 +4,7 @@ import { MESSAGE_TYPES, MessageType } from '../_utils/constant'
 import { getOverlay } from '../_utils/dom'
 import { isFunction, isString, isUndefined } from '../_utils/is'
 import NotificationList from './notification-list'
-import _Notification from './notification.vue'
+import _Notification from './Notification.vue'
 import { notificationProps } from './props'
 import { NotificationConfig, NotificationItem, NotificationMethod, NotificationPosition } from './types'
 

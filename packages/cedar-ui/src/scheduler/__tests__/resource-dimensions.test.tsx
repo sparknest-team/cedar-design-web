@@ -1,10 +1,10 @@
 import { test, expect, vi } from "vitest";
 import { mount, flushPromises } from "@vue/test-utils";
-import Scheduler from "../scheduler.vue";
-import Editor from "../components/scheduler-editor.vue";
-import Picker from "../components/scheduler-resource-select.vue";
-import Card from "../components/scheduler-event.vue";
-import Grid from "../components/scheduler-time-grid.vue";
+import Scheduler from "../Scheduler.vue";
+import Editor from "../components/SchedulerEditor.vue";
+import Picker from "../components/SchedulerResourceSelect.vue";
+import Card from "../components/SchedulerEvent.vue";
+import Grid from "../components/SchedulerTimeGrid.vue";
 import Select from "../../select";
 import Form from "../../form";
 import {

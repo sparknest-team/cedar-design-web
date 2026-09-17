@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _Tree from './tree.vue'
+import _Tree from './Tree.vue'
 import { treeProps } from './props'
 
 export type { TreeNodeData, TreeFieldNames } from './types'

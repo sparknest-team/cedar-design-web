@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _Date from './date.vue'
+import _Date from './Date.vue'
 import _DatePicker from './picker/pickers/date-picker'
 import { dateProps } from './props'
 import { datePickerProps } from './picker/props'

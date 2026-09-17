@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _Statistic from './statistic.vue'
+import _Statistic from './Statistic.vue'
 import { statisticProps } from './props'
 
 const Statistic = withInstall(_Statistic)

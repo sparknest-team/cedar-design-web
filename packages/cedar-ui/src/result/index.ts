@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _Result from './result.vue'
+import _Result from './Result.vue'
 import { resultProps } from './props'
 
 const Result = withInstall(_Result, Object.assign(_Result, {

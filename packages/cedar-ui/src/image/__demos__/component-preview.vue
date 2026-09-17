@@ -1,16 +1,12 @@
-<template>
-  <c-button status="primary" @click="onClick">Click me to preview image</c-button>
-  <c-image-preview
-    src="https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a8c8cdb109cb051163646151a4a5083b.png~tplv-uwbnlip3yd-webp.webp"
-    v-model:open="open"
-  />
-</template>
+<script setup lang="ts">
+import { ref } from 'vue'
 
-<script lang="ts" setup>
-import { ref } from "vue";
-
-const open = ref(false);
-const onClick = () => {
-  open.value = true;
-};
+const open = ref(false)
 </script>
+
+<template>
+  <c-space direction="column" :size="16">
+    <c-button status="primary" size="sm" @click="open = true">打开单图预览</c-button>
+    <c-image-preview v-model:open="open" src="/cat.jpg" />
+  </c-space>
+</template>

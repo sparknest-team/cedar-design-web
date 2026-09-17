@@ -9,7 +9,7 @@ import {
 import { getPrefixCls, createNamespace } from "../_utils/global-config";
 import type { ModeType, LabelPositionType } from "./types";
 import { timelineInjectionKey } from "./context";
-import Item from "./item.vue";
+import Item from "./Item.vue";
 import { Direction } from "../_utils/constant";
 import { useChildrenComponents } from "../_hooks/use-children-components";
 

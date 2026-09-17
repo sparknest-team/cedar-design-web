@@ -44,14 +44,12 @@ permalink: /components/empty/
 
 | 属性               | 说明                         | 类型                                                     | 默认值  |
 | ------------------ | ---------------------------- | -------------------------------------------------------- | ------- |
-| description        | 描述内容                     | `string`                                                 | -       |
-| image-url          | 自定义图片的地址             | `string`                                                 | -       |
-| alt                | 图片替代文本                 | `string`                                                 | `''`    |
-| icon               | 自定义图标名（渲染为文本）   | `string`                                                 | -       |
-| image-size         | 图片/图标尺寸                | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| number \| string` | `'md'`  |
-| show-icon          | 是否显示图标                 | `boolean`                                                | `true`  |
-| show-description   | 是否显示描述                 | `boolean`                                                | `true`  |
-| in-config-provider | 是否在 ConfigProvider 中使用 | `boolean`                                                | `false` |
+| description      | 描述内容，缺省时使用国际化文案 | `string`                                                   | -      |
+| image-url        | 自定义图片的地址               | `string`                                                   | -      |
+| alt              | 图片替代文本                   | `string`                                                   | `''`   |
+| image-size       | 图片/图标尺寸                  | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| number \| string` | `'md'` |
+| show-icon        | 是否显示图标                   | `boolean`                                                  | `true` |
+| show-description | 是否显示描述                   | `boolean`                                                  | `true` |
 
 ### `<Empty>` Events
 
@@ -72,5 +70,7 @@ permalink: /components/empty/
 组件导出以下类型定义
 
 ```ts
-import type { EmptyProps } from '@cedarjs/ui'
+import type { EmptyImageSize, EmptyProps } from '@cedarjs/ui'
 ```
+
+ConfigProvider 的 `empty` 插槽可以替换未自定义内容的 Empty，不作为 Empty 的公开 Prop。
