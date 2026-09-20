@@ -106,188 +106,225 @@ export default defineComponent({
     },
   },
   emits: {
-    search: (data: SearchResult, ev: MouseEvent | KeyboardEvent | Event) =>
-      true,
-    change: (value: string, ev?: Event) => true,
-    'update:modelValue': (value: string) => true,
-    'update:modelField': (value: string) => true,
+    "update:modelValue": (value: string) => true,
+    "update:modelField": (value: string) => true,
+    "update:model": (value: Record<string, unknown>) => true,
+    input: (value: string, ev: Event) => true,
+    change: (value: string, ev: Event) => true,
+    clear: (ev: Event) => true,
+    search: (data: SearchResult, ev: Event) => true,
+    focus: (ev: FocusEvent) => true,
+    blur: (ev: FocusEvent) => true,
   },
   setup(props, { emit, slots, attrs }) {
-    const { classes, n } = createNamespace('search')
+    const { classes, n } = createNamespace("search");
+    const { mergedSize } = useSize(computed(() => props.size));
 
-    const { size, disabled, variant } = toRefs(props)
-    const _size = computed(() => size.value ?? 'md')
-    const mergedDisabled = computed(() => Boolean(disabled.value ?? false))
-    const mergedVariant = computed(() => variant.value ?? 'filled')
-    const { mergedSize } = useSize(_size)
-    const { push } = searchHistoryLocal(props.maxSearchHistoryCount as number)
+    const inputRef = ref<InstanceType<typeof Input>>();
+    const selectRef = ref<InstanceType<typeof Select>>();
+    const historyVisible = ref(false);
+    const value = ref(props.defaultValue);
+    const field = ref(props.defaultField ?? props.fields[0]?.value);
 
-    const inputRef = ref()
-    const selectRef = ref()
-    const historyVisible = ref(false)
-    const _field = ref(props.defaultField || props.fields[0]?.value)
-    const computedField = computed(() => {
-      return props.modelField ?? _field.value
-    })
-    const _value = ref(props.defaultValue)
-    const computedValue = computed(() => {
-      return props.modelValue ?? _value.value
-    })
+    const computedValue = computed(() => props.modelValue ?? value.value);
+    const computedField = computed(() => props.modelField ?? field.value);
     const computedPlaceholder = computed(() => {
       const selected = props.fields.find(
         (item) => item.value === computedField.value,
-      )
-      return selected?.placeholder
-    })
+      );
+      return selected?.placeholder ?? props.placeholder;
+    });
+    const searchDisabled = computed(() =>
+      Boolean(props.disabled || props.readonly || props.loading),
+    );
 
-    const getSearchData = (recentSearches = props.recentSearches) => ({
-      modelField: computedField.value as string,
-      modelValue: computedValue.value as string,
+    const clearModel = () => {
+      if (!props.model || !props.fields.length) return false;
+
+      props.fields.forEach((item: SearchField) => {
+        props.model![item.value] = undefined;
+      });
+      return true;
+    };
+
+    const updateModel = (nextValue: string) => {
+      if (!clearModel()) return;
+
+      if (computedField.value) {
+        props.model![computedField.value] = nextValue;
+      }
+      emit("update:model", props.model!);
+    };
+
+    const updateValue = (nextValue: string) => {
+      value.value = nextValue;
+      emit("update:modelValue", nextValue);
+      updateModel(nextValue);
+    };
+
+    const getRecentSearches = (nextValue: string) => {
+      const keyword = nextValue.trim();
+      const searches = props.recentSearches.filter((item) => item !== keyword);
+
+      if (keyword) searches.unshift(keyword);
+      return searches.slice(0, Math.max(0, props.maxSearchHistoryCount));
+    };
+
+    const getResult = (nextValue = computedValue.value): SearchResult => ({
+      modelField: computedField.value,
+      modelValue: nextValue,
       model: props.model,
-      recentSearches,
-    })
+      recentSearches: getRecentSearches(nextValue),
+    });
 
-    const emitSearch = (e: MouseEvent | KeyboardEvent | Event) => {
-      const list = push(computedValue.value, props.recentSearches)
-      emit('search', getSearchData(list), e)
-    }
+    const closeHistory = () => {
+      historyVisible.value = false;
+    };
 
-    const handleClick = (e: MouseEvent | KeyboardEvent | Event) => {
-      e.stopPropagation()
-      e.preventDefault()
-      emitSearch(e)
-      historyVisible.value = false
-    }
+    const openHistory = () => {
+      if (
+        !props.disabled &&
+        !props.readonly &&
+        !props.loading &&
+        props.recentSearches.length
+      ) {
+        historyVisible.value = true;
+      }
+    };
 
-    const renderSuffix = () => {
-      return (
-        <>
-          {props.loading ? (
-            <IconLoading />
-          ) : (
-            <IconHover
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-expect-error
-              onMousedown={(e: MouseEvent) => {
-                inputRef.value?.blur()
-                handleClick(e)
-              }}
-            >
-              <IconSearch />
-            </IconHover>
-          )}
-          {slots.suffix?.()}
-        </>
-      )
-    }
+    const handleInput = (nextValue: string, ev: Event) => {
+      updateValue(nextValue);
+      emit("input", nextValue, ev);
+      openHistory();
+    };
+
+    const handleChange = (nextValue: string, ev: Event) => {
+      emit("change", nextValue, ev);
+    };
+
+    const handleClear = (ev: Event) => {
+      updateValue("");
+      emit("clear", ev);
+      openHistory();
+    };
+
+    const handleSearch = (ev: Event) => {
+      if (searchDisabled.value) return;
+
+      closeHistory();
+      emit("search", getResult(), ev);
+    };
+
+    const handleFieldChange = (nextField: unknown, ev?: Event) => {
+      const normalizedField = String(nextField);
+      field.value = normalizedField;
+      emit("update:modelField", normalizedField);
+      updateValue("");
+      emit("change", "", ev ?? new Event("change"));
+      nextTick(() => inputRef.value?.focus());
+    };
+
+    const handleHistoryVisibleChange = (open: boolean) => {
+      historyVisible.value =
+        open &&
+        !props.disabled &&
+        !props.readonly &&
+        !props.loading &&
+        props.recentSearches.length > 0;
+    };
+
+    const handleHistorySelect = (
+      nextValue: unknown,
+      _option: Record<string, unknown>,
+      ev: Event,
+    ) => {
+      const normalizedValue = String(nextValue);
+      updateValue(normalizedValue);
+      closeHistory();
+      emit("search", getResult(normalizedValue), ev);
+    };
+
+    const handleFocus = (ev: FocusEvent) => {
+      openHistory();
+      emit("focus", ev);
+    };
+
+    const handleBlur = (ev: FocusEvent) => {
+      emit("blur", ev);
+    };
+
+    const renderSuffix = () => (
+      <>
+        <button
+          type="button"
+          class={classes(n("icon-button"))}
+          disabled={searchDisabled.value}
+          aria-label={props.buttonText ?? "Search"}
+          onClick={handleSearch}
+        >
+          {props.loading ? <IconLoading /> : <IconSearch />}
+        </button>
+        {slots.suffix?.()}
+      </>
+    );
 
     const renderButton = () => {
-      let _slots = {}
-      if (props.buttonText || slots['button-default'] || slots['button-icon']) {
-        _slots = {
-          default:
-            slots['button-default'] ??
-            (props.buttonText ? () => props.buttonText : undefined),
-          icon: slots['button-icon'],
-        }
-      } else {
-        _slots = {
-          icon: () => <IconSearch />,
-        }
-      }
+      const buttonSlots =
+        props.buttonText || slots["button-default"] || slots["button-icon"]
+          ? {
+              default:
+                slots["button-default"] ??
+                (props.buttonText ? () => props.buttonText : undefined),
+              icon: slots["button-icon"],
+            }
+          : { icon: () => <IconSearch /> };
 
       return (
         <Button
-          v-slots={_slots}
-          status='primary'
-          class={classes(n('btn'))}
-          disabled={props.disabled}
+          {...props.buttonProps}
+          v-slots={buttonSlots}
+          status="primary"
+          class={classes(n("btn"))}
+          disabled={Boolean(props.disabled || props.readonly)}
           size={mergedSize.value}
           loading={props.loading}
-          {...props.buttonProps}
-          onClick={handleClick}
+          aria-label={props.buttonText ?? "Search"}
+          onClick={handleSearch}
         />
-      )
-    }
-    const clearModel = () => {
-      if (!props.model) return
-      if (props.fields.length > 0) {
-        props.fields?.forEach((item: SelectOptionData) => {
-          const field = item.value as string
-          ;(props.model as Record<string, any>)[field] = undefined
-        })
-      }
-    }
-    const updateModel = (value: string) => {
-      const field = computedField.value as string | undefined
-      if (field) {
-        if (props.model) {
-          clearModel()
-          _value.value = value
-          ;(props.model as Record<string, any>)[field] = value
-        }
-      }
-    }
-    const { class: className, style, ...restAttrs } = attrs
-    const { placeholder, ...inputAttrs } = restAttrs
+      );
+    };
 
-    const handleValueChange = (value: string, ev?: Event) => {
-      _value.value = value
-      updateModel(value)
-      emit('update:modelValue', value as string)
-      emit('change', value as string, ev)
-    }
-    const handleInput = (value: string, ev: Event) => {
-      handleValueChange(value, ev)
-      historyVisible.value = props.recentSearches.length > 0
-    }
-    const handleHistoryVisibleChange = (visible: boolean) => {
-      historyVisible.value = visible && props.recentSearches.length > 0
-    }
-    const handleHistorySelect = (value: string, ev: Event) => {
-      handleValueChange(value, ev)
-      historyVisible.value = false
-      inputRef.value?.blur()
-      emitSearch(ev)
-    }
+    const { class: className, style, ...inputAttrs } = attrs;
 
     const render = () => (
       <div class={[classes(n()), className]} style={style as StyleValue}>
         <InputGroup
           size={mergedSize.value}
-          disabled={mergedDisabled.value}
-          variant={mergedVariant.value}
+          disabled={Boolean(props.disabled)}
+          variant={props.variant}
         >
           {props.fields.length > 0 && (
             <Select
-              modelValue={computedField.value}
               ref={selectRef}
+              modelValue={computedField.value}
+              options={props.fields}
               style={props.selectStyle}
+              disabled={Boolean(props.disabled || props.readonly)}
               v-slots={{
                 prefix: slots.prefix,
                 suffix: props.searchButton ? slots.suffix : renderSuffix,
               }}
-              {...restAttrs}
-              options={props.fields}
-              onChange={(value: any, e?: any) => {
-                inputRef.value?.focus()
-                _field.value = value
-                clearModel()
-                _value.value = ''
-                emit('update:modelField', value as string)
-                emit('update:modelValue', '' as unknown as string)
-                emit('change', '' as string, e)
-              }}
+              onChange={handleFieldChange}
             />
           )}
           <DropdownMenu
             open={historyVisible.value}
-            trigger='focus'
-            placement='bottom-start'
+            trigger="focus"
+            placement="bottom-start"
             autoFitPopupWidth
             popupContainer={inputRef.value?.$el}
             onUpdate:open={handleHistoryVisibleChange}
-            onSelect={(value: any, _option: Record<string, any>, ev: Event) => handleHistorySelect(String(value), ev)}
+            onSelect={handleHistorySelect}
             v-slots={{
               content: () =>
                 props.recentSearches.map((item) => (
@@ -296,42 +333,44 @@ export default defineComponent({
             }}
           >
             <Input
-              modelValue={computedValue.value}
+              {...inputAttrs}
               ref={inputRef}
+              modelValue={computedValue.value}
+              placeholder={computedPlaceholder.value}
+              size={mergedSize.value}
+              disabled={props.disabled}
+              readonly={props.readonly}
+              variant={props.variant}
+              clearable={props.clearable}
               v-slots={{
                 prefix: slots.prefix,
                 suffix: props.searchButton ? slots.suffix : renderSuffix,
+                "clear-icon": slots["clear-icon"],
               }}
-              {...inputAttrs}
-              placeholder={computedPlaceholder.value ?? placeholder}
-              size={mergedSize.value}
-              disabled={mergedDisabled.value}
-              variant={mergedVariant.value}
-              clearable={props.clearable}
               onInput={handleInput}
-              onClear={(ev: MouseEvent) => handleValueChange('', ev)}
-              onPress-enter={handleClick}
+              onChange={handleChange}
+              onClear={handleClear}
+              onPress-enter={handleSearch}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
             />
           </DropdownMenu>
           {props.searchButton && renderButton()}
         </InputGroup>
       </div>
-    )
+    );
 
-    return {
-      inputRef,
-      render,
-    }
+    return { inputRef, render };
   },
   methods: {
     focus() {
-      (this.inputRef as HTMLInputElement)?.focus()
+      this.inputRef?.focus();
     },
     blur() {
-      (this.inputRef as HTMLInputElement)?.blur()
+      this.inputRef?.blur();
     },
   },
   render() {
-    return this.render()
+    return this.render();
   },
-})
+});

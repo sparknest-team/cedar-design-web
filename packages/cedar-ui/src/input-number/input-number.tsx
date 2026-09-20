@@ -130,22 +130,34 @@ export default defineComponent({
         return "";
       }
 
-      const numString = mergedPrecision.value
+      const numString = isNumber(mergedPrecision.value)
         ? number.toFixed(mergedPrecision.value)
         : String(number);
       return props.formatter?.(numString) ?? numString;
     };
 
+    const isIntermediateValue = (value: string) =>
+      value === "" ||
+      value === "-" ||
+      value === "." ||
+      value === "-." ||
+      /^-?\d+\.$/.test(value);
+
+    const getValueNumber = (value: string) => {
+      const parsedValue = props.parser?.(value) ?? value;
+      if (isIntermediateValue(parsedValue)) {
+        return undefined;
+      }
+
+      const number = Number(parsedValue);
+      return Number.isFinite(number) ? number : undefined;
+    };
+
     // inner input value to display
     const _value = ref(getStringValue(props.modelValue ?? props.defaultValue));
 
-    const valueNumber = computed(() => {
-      if (!_value.value) {
-        return undefined;
-      }
-      const number = Number(props.parser?.(_value.value) ?? _value.value);
-      return Number.isNaN(number) ? undefined : number;
-    });
+    const valueNumber = computed(() => getValueNumber(_value.value));
+    let lastCommittedValue = valueNumber.value;
 
     const isMin = ref(
       isNumber(valueNumber.value) && valueNumber.value <= props.min,
@@ -201,13 +213,29 @@ export default defineComponent({
       }
     };
 
-    const handleExceedRange = () => {
+    const commitValue = (ev: Event, emitChange = true) => {
       const finalValue = getLegalValue(valueNumber.value);
       const stringValue = getStringValue(finalValue);
-      if (finalValue !== valueNumber.value || _value.value !== stringValue) {
+      const valueChanged = !Object.is(finalValue, lastCommittedValue);
+
+      if (
+        valueChanged ||
+        !Object.is(finalValue, valueNumber.value) ||
+        _value.value !== stringValue
+      ) {
         _value.value = stringValue;
+        emit("update:modelValue", finalValue);
       }
-      emit("update:modelValue", finalValue);
+      updateNumberStatus(finalValue);
+      lastCommittedValue = finalValue;
+
+      if (emitChange && valueChanged) {
+        emit("change", finalValue, ev);
+      }
+    };
+
+    const handleExceedRange = () => {
+      commitValue(new Event("range"), false);
     };
 
     watch(
@@ -234,10 +262,14 @@ export default defineComponent({
         nextValue = props.min === -Infinity ? 0 : props.min;
       }
 
+      const valueChanged = !Object.is(nextValue, lastCommittedValue);
       _value.value = getStringValue(nextValue);
       updateNumberStatus(nextValue);
-      emit("update:modelValue", nextValue);
-      emit("change", nextValue, event);
+      if (valueChanged) {
+        lastCommittedValue = nextValue;
+        emit("update:modelValue", nextValue);
+        emit("change", nextValue, event);
+      }
     };
 
     const handleStepButton = (
@@ -265,15 +297,16 @@ export default defineComponent({
     const handleInput = (value: string, ev: Event) => {
       value = value.trim().replace(/。/g, ".");
       value = props.parser?.(value) ?? value;
+      const intermediate = isIntermediateValue(value);
+      const number = getValueNumber(value);
 
-      if (isNumber(Number(value)) || /^(\.|-)$/.test(value)) {
+      if (intermediate || isNumber(number)) {
         _value.value = props.formatter?.(value) ?? value;
         updateNumberStatus(valueNumber.value);
 
         emit("input", valueNumber.value, _value.value, ev);
-        if (props.modelEvent === "input") {
-          emit("update:modelValue", valueNumber.value);
-          emit("change", valueNumber.value, ev);
+        if (props.modelEvent === "input" && (value === "" || !intermediate)) {
+          emit("update:modelValue", number);
         }
       }
     };
@@ -282,13 +315,8 @@ export default defineComponent({
       emit("focus", ev);
     };
 
-    const handleChange = (value: string, ev: Event) => {
-      if (ev instanceof MouseEvent && !value) {
-        return;
-      }
-
-      handleExceedRange();
-      emit("change", valueNumber.value, ev);
+    const handleChange = (_value: string, ev: Event) => {
+      commitValue(ev);
     };
 
     const handleBlur = (ev: FocusEvent) => {
@@ -297,8 +325,9 @@ export default defineComponent({
 
     const handleClear = (ev: Event) => {
       _value.value = "";
+      updateNumberStatus(undefined);
+      lastCommittedValue = undefined;
       emit("update:modelValue", undefined);
-      emit("change", undefined, ev);
       eventHandlers.value?.onChange?.(ev);
       emit("clear", ev);
     };
@@ -336,6 +365,7 @@ export default defineComponent({
           // TODO: verify number
           _value.value = getStringValue(value);
           updateNumberStatus(value);
+          lastCommittedValue = value;
         }
       },
     );
@@ -471,9 +501,14 @@ export default defineComponent({
 
       return (
         <div class={cls.value}>
+          {slots.prepend && (
+            <div class={`${prefixCls}-addon ${prefixCls}-prepend`}>
+              {slots.prepend()}
+            </div>
+          )}
           <CedarInput
             key={`__cedar__${props.mode}`}
-            v-slots={_slots}
+            v-slots={{ ..._slots, "clear-icon": slots["clear-icon"] }}
             ref={inputRef}
             type="text"
             clearable={props.clearable}
@@ -485,9 +520,15 @@ export default defineComponent({
             error={props.error}
             inputAttrs={{
               role: "spinbutton",
-              "aria-valuemax": props.max,
-              "aria-valuemin": props.min,
-              "aria-valuenow": _value.value,
+              ...(Number.isFinite(props.max)
+                ? { "aria-valuemax": props.max }
+                : {}),
+              ...(Number.isFinite(props.min)
+                ? { "aria-valuemin": props.min }
+                : {}),
+              ...(isNumber(valueNumber.value)
+                ? { "aria-valuenow": valueNumber.value }
+                : {}),
               ...props.inputAttrs,
             }}
             onInput={handleInput}
@@ -495,10 +536,13 @@ export default defineComponent({
             onBlur={handleBlur}
             onClear={handleClear}
             onChange={handleChange}
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
             onKeydown={onKeyDown}
           />
+          {slots.append && (
+            <div class={`${prefixCls}-addon ${prefixCls}-append`}>
+              {slots.append()}
+            </div>
+          )}
         </div>
       );
     };

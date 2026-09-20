@@ -34,8 +34,8 @@ export default defineComponent({
       reactive({
         size,
         disabled,
-        variant,  
-      }),
+        variant,
+      })
     )
 
     return {

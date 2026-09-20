@@ -168,6 +168,7 @@ export default defineComponent({
                 inputAttrs={{
                   'aria-label': props.ariaLabel ? `${props.ariaLabel} ${i + 1}/${props.length}` : undefined,
                   autocomplete: i === 0 ? 'one-time-code' : 'off',
+                  onPaste: (e: ClipboardEvent) => handlePaste(e, i),
                 }}
                 onFocus={() => {
                   focusFirstEmptyInput(i)
@@ -179,7 +180,6 @@ export default defineComponent({
                 onInput={(v, e) => handleInput(i, v, e)}
                 // @ts-ignore
                 onKeydown={(e) => handleKeydown(i, e)}
-                onPaste={(e: ClipboardEvent) => handlePaste(e, i)}
               />
               {props.separator?.(i, c)}
             </>

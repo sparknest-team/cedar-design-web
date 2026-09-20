@@ -1,6 +1,6 @@
 <template>
   <FieldDecorator
-    v-bind="getWrapperAttrs($attrs)"
+    v-bind="wrapperAttrs"
     :class="wrapperCls"
     :variant="mergedVariant"
     :size="mergedSize"
@@ -9,42 +9,64 @@
     :focused="focused"
     @mousedown="handleMousedown"
   >
-    <div v-if="autoSize" ref="mirrorRef" :class="classes(n('mirror'))" :style="mirrorStyle">
+    <template v-if="$slots.prefix" #prefix>
+      <slot name="prefix" />
+    </template>
+
+    <div
+      v-if="autoSize"
+      ref="mirrorRef"
+      :class="classes(n('mirror'))"
+      :style="mirrorStyle"
+    >
       {{ `${computedValue}\n` }}
     </div>
     <resize-observer @resize="handleResize">
       <textarea
         ref="textareaRef"
-        v-bind="mergeTextareaAttrs"
-        :disabled="mergedDisabled"
-        :readonly="readonly"
+        v-bind="mergedTextareaAttrs"
         :class="classes(n('inner'))"
         :style="textareaStyle"
         :value="computedValue"
+        :disabled="mergedDisabled"
+        :readonly="readonly"
+        :rows="rows"
+        :maxlength="undefined"
         :placeholder="placeholder"
+        :aria-label="ariaLabel"
+        :aria-invalid="mergedError || undefined"
+        :autofocus="autofocus"
+        :enterkeyhint="enterkeyhint"
         @input="handleInput"
         @focus="handleFocus"
         @blur="handleBlur"
-        @compositionstart="handleComposition"
-        @compositionupdate="handleComposition"
-        @compositionend="handleComposition"
+        @keydown="handleKeydown"
+        @compositionstart="handleCompositionStart"
+        @compositionend="handleCompositionEnd"
       />
     </resize-observer>
-    <slot name="suffix" />
-    <div v-if="computedMaxLength && showWordLimit" :class="classes(n('word-limit'))">
-      {{ valueLength }}/{{ computedMaxLength }}
-    </div>
-    <button
-      v-if="showClearBtn"
-      type="button"
-      :class="classes(n('clear-btn'))"
-      :aria-label="t('common.clear')"
-      @click="handleClear"
-    >
-      <icon-hover>
-        <icon-close />
-      </icon-hover>
-    </button>
+
+    <template v-if="hasSuffix" #suffix>
+      <slot v-if="showClearBtn" name="clear-icon" :clear="handleClear">
+        <button
+          type="button"
+          :class="classes(n('clear-btn'))"
+          :aria-label="t('common.clear')"
+          @click="handleClear"
+        >
+          <icon-hover>
+            <icon-close aria-hidden="true" />
+          </icon-hover>
+        </button>
+      </slot>
+      <span
+        v-if="computedMaxLength && showWordLimit"
+        :class="classes(n('word-limit'))"
+      >
+        {{ valueLength }}/{{ computedMaxLength }}
+      </span>
+      <slot name="suffix" />
+    </template>
   </FieldDecorator>
 </template>
 
@@ -55,7 +77,7 @@ import IconHover from '../_components/IconHover.vue'
 import { IconClose } from '@cedarjs/icons-vue/icon-close'
 import FieldDecorator from '../field-decorator'
 import { createNamespace } from '../_utils/global-config'
-import { getSizeStyles } from './utils'
+import { getNativeTextareaAttrs, getSizeStyles } from './utils'
 import { isFunction, isNull, isObject, isUndefined } from '../_utils/is'
 import { omit } from '../_utils/omit'
 import { INPUT_EVENTS } from '../_utils/constant'
@@ -66,373 +88,327 @@ import { textareaProps } from './props'
 import { useI18n } from '../locale'
 
 export default defineComponent({
-  name: createNamespace('textarea').name,
+  name: createNamespace("textarea").name,
   components: { ResizeObserver, IconHover, IconClose, FieldDecorator },
   inheritAttrs: false,
   props: textareaProps,
   emits: {
-    'update:modelValue': (value: string) => true,
-    /**
-     * @zh 用户输入时触发
-     * @en Emitted when the user enters
-     * @param {string} value
-     * @param {Event} ev
-     */
+    "update:modelValue": (value: string) => true,
     input: (value: string, ev: Event) => true,
-    /**
-     * @zh 仅在文本框失焦时触发
-     * @en Only emitted when the textarea is out of focus
-     * @param {string} value
-     * @param {Event} ev
-     */
     change: (value: string, ev: Event) => true,
-    /**
-     * @zh 点击清除按钮时触发
-     * @en Emitted when the clear button is clicked
-     * @param {MouseEvent} ev
-     */
-    clear: (ev: MouseEvent) => true,
-    /**
-     * @zh 文本框获取焦点时触发
-     * @en Emitted when the textarea gets focus
-     * @param {FocusEvent} ev
-     */
+    keydown: (ev: KeyboardEvent) => true,
+    clear: (ev: Event) => true,
     focus: (ev: FocusEvent) => true,
-    /**
-     * @zh 文本框失去焦点时触发
-     * @en Emitted when the textarea loses focus
-     * @param {FocusEvent} ev
-     */
     blur: (ev: FocusEvent) => true,
   },
-  setup(props, { emit, attrs }) {
-    const { n, classes } = createNamespace('textarea')
-    const { t } = useI18n()
-    const { size, variant, disabled, error, modelValue } = toRefs(props)
-    const {
-      mergedDisabled,
-      mergedError: _mergedError,
-      eventHandlers,
-    } = useFormItem({ disabled: disabled ?? false, error: error ?? false })
-    const mergedSize = computed(() => size.value ?? 'md')
-    const mergedVariant = computed(() => variant.value ?? 'filled')
+  setup(props, { emit, attrs, slots }) {
+    const { n, classes } = createNamespace("textarea");
+    const { t } = useI18n();
+    const { size, variant, disabled, modelValue } = toRefs(props);
+    const { formItemCtx, eventHandlers } = useFormItem();
+    const mergedDisabled = computed(() =>
+      Boolean(disabled.value ?? formItemCtx.disabled),
+    );
+    const mergedSize = computed(() => size.value ?? "md");
+    const mergedVariant = computed(() => variant.value ?? "outlined");
 
-    const textareaRef = ref<HTMLInputElement>()
-    const textareaStyle = ref<CSSProperties>()
-    const mirrorRef = ref<HTMLInputElement>()
-    const mirrorStyle = ref<CSSProperties>()
+    const textareaRef = ref<HTMLTextAreaElement>();
+    const mirrorRef = ref<HTMLElement>();
+    const mirrorStyle = ref<CSSProperties>();
+    const autoSizeStyle = ref<CSSProperties>();
+    const [recordCursor, setCursor] = useCursor(textareaRef);
 
-    const _value = ref(props.defaultValue)
-    const computedValue = computed(() => modelValue.value ?? _value.value)
-    const [recordCursor, setCursor] = useCursor(textareaRef)
+    const _value = ref(props.defaultValue);
+    const computedValue = computed(() => modelValue.value ?? _value.value);
+    const focused = ref(false);
+    let preValue = computedValue.value;
 
     watch(modelValue, (value) => {
       if (isUndefined(value) || isNull(value)) {
-        _value.value = ''
+        _value.value = "";
       }
-    })
+    });
 
-    const maxLengthErrorOnly = computed(() => isObject(props.maxLength) && Boolean(props.maxLength.errorOnly))
-
-    const computedMaxLength = computed(() => {
-      if (isObject(props.maxLength)) {
-        return props.maxLength.length
-      }
-      return props.maxLength
-    })
-
-    const getValueLength = (value: string) => {
-      if (isFunction(props.wordLength)) {
-        return props.wordLength(value)
-      }
-      return value.length ?? 0
-    }
-
-    const valueLength = computed(() => getValueLength(computedValue.value))
-
+    const computedMaxLength = computed(() =>
+      isObject(props.maxLength) ? props.maxLength.length : props.maxLength,
+    );
+    const maxLengthErrorOnly = computed(
+      () => isObject(props.maxLength) && Boolean(props.maxLength.errorOnly),
+    );
+    const getValueLength = (value: string) =>
+      isFunction(props.wordLength) ? props.wordLength(value) : value.length;
+    const valueLength = computed(() => getValueLength(computedValue.value));
     const mergedError = computed(
       () =>
-        _mergedError.value ||
-        Boolean(computedMaxLength.value && maxLengthErrorOnly.value && valueLength.value > computedMaxLength.value),
-    )
+        Boolean(formItemCtx.error) ||
+        props.error ||
+        Boolean(
+          computedMaxLength.value &&
+          maxLengthErrorOnly.value &&
+          valueLength.value > computedMaxLength.value,
+        ),
+    );
 
-    const isScroll = ref(false)
-
-    // 状态相关
-    const focused = ref(false)
     const showClearBtn = computed(
-      () => props.clearable && !props.readonly && !mergedDisabled.value && Boolean(computedValue.value),
-    )
+      () =>
+        props.clearable &&
+        !props.readonly &&
+        !mergedDisabled.value &&
+        Boolean(computedValue.value),
+    );
+    const hasSuffix = computed(
+      () =>
+        showClearBtn.value ||
+        Boolean(computedMaxLength.value && props.showWordLimit) ||
+        Boolean(slots.suffix),
+    );
 
-    // 输入法相关
-    const isComposition = ref(false)
-    const compositionValue = ref('')
+    const isComposition = ref(false);
 
     const keepControl = () => {
-      recordCursor()
+      recordCursor();
       nextTick(() => {
-        if (textareaRef.value && computedValue.value !== textareaRef.value.value) {
-          textareaRef.value.value = computedValue.value
-          setCursor()
+        if (
+          textareaRef.value &&
+          computedValue.value !== textareaRef.value.value
+        ) {
+          textareaRef.value.value = computedValue.value;
+          setCursor();
         }
-      })
-    }
+      });
+    };
 
-    const updateValue = (value: string, inner = true) => {
-      if (computedMaxLength.value && !maxLengthErrorOnly.value && getValueLength(value) > computedMaxLength.value) {
-        value = props.wordSlice?.(value, computedMaxLength.value) ?? value.slice(0, computedMaxLength.value)
+    const sliceValue = (value: string) =>
+      props.wordSlice?.(value, computedMaxLength.value) ??
+      value.slice(0, computedMaxLength.value);
+
+    const normalizeValue = (value: string) => {
+      if (
+        computedMaxLength.value &&
+        !maxLengthErrorOnly.value &&
+        getValueLength(value) > computedMaxLength.value
+      ) {
+        return sliceValue(value);
       }
+      return value;
+    };
 
-      _value.value = value
-      if (inner) {
-        emit('update:modelValue', value)
-      }
+    const updateValue = (value: string) => {
+      const nextValue = normalizeValue(value);
+      _value.value = nextValue;
+      emit("update:modelValue", nextValue);
+      keepControl();
+      return nextValue;
+    };
 
-      keepControl()
-    }
-
-    let preValue = computedValue.value
     const emitChange = (value: string, ev: Event) => {
       if (value !== preValue) {
-        preValue = value
-        emit('change', value, ev)
-        eventHandlers.value?.onChange?.(ev)
+        preValue = value;
+        emit("change", value, ev);
+        eventHandlers.value?.onChange?.(ev);
       }
-    }
+    };
+
+    const withTrim = (value: string) =>
+      props.modelModifiers.trim ? value.trim() : value;
+
+    const commitValue = (ev: Event) => {
+      const value = withTrim(computedValue.value);
+      if (value !== computedValue.value) {
+        _value.value = value;
+        emit("update:modelValue", value);
+        keepControl();
+      }
+      emitChange(value, ev);
+    };
 
     const handleFocus = (ev: FocusEvent) => {
-      focused.value = true
-      preValue = computedValue.value
-      emit('focus', ev)
-      eventHandlers.value?.onFocus?.(ev)
-    }
+      focused.value = true;
+      preValue = computedValue.value;
+      emit("focus", ev);
+      eventHandlers.value?.onFocus?.(ev);
+    };
 
     const handleBlur = (ev: FocusEvent) => {
-      focused.value = false
-      emit('blur', ev)
-      eventHandlers.value?.onBlur?.(ev)
-      emitChange(computedValue.value, ev)
-    }
+      focused.value = false;
+      commitValue(ev);
+      emit("blur", ev);
+      eventHandlers.value?.onBlur?.(ev);
+    };
 
-    const handleComposition = (e: CompositionEvent) => {
-      const { value } = e.target as HTMLInputElement
+    const processInput = (ev: Event) => {
+      const nextValue = updateValue((ev.target as HTMLTextAreaElement).value);
+      emit("input", nextValue, ev);
+      eventHandlers.value?.onInput?.(ev);
+    };
 
-      if (e.type === 'compositionend') {
-        isComposition.value = false
-        compositionValue.value = ''
+    const handleCompositionStart = () => {
+      isComposition.value = true;
+    };
 
-        if (
-          computedMaxLength.value &&
-          !maxLengthErrorOnly.value &&
-          computedValue.value.length >= computedMaxLength.value &&
-          getValueLength(value) > computedMaxLength.value
-        ) {
-          keepControl()
-          return
-        }
+    const handleCompositionEnd = (ev: CompositionEvent) => {
+      if (!isComposition.value) return;
+      isComposition.value = false;
+      processInput(ev);
+    };
 
-        emit('input', value, e)
-        updateValue(value)
-        eventHandlers.value?.onInput?.(e)
-      } else {
-        isComposition.value = true
-      }
-    }
+    const handleInput = (ev: Event) => {
+      if (!isComposition.value) processInput(ev);
+    };
 
-    const handleInput = (e: InputEvent) => {
-      const { value } = e.target as HTMLInputElement
+    const handleKeydown = (ev: KeyboardEvent) => {
+      emit("keydown", ev);
+    };
 
-      if (!isComposition.value) {
-        if (
-          computedMaxLength.value &&
-          !maxLengthErrorOnly.value &&
-          computedValue.value.length >= computedMaxLength.value &&
-          getValueLength(value) > computedMaxLength.value &&
-          e.inputType === 'insertText'
-        ) {
-          keepControl()
-          return
-        }
+    const handleClear = (ev: Event = new Event("clear")) => {
+      if (!showClearBtn.value) return;
+      const value = updateValue("");
+      preValue = value;
+      emit("clear", ev);
+      nextTick(() => textareaRef.value?.focus());
+    };
 
-        emit('input', value, e)
-        updateValue(value)
-        eventHandlers.value?.onInput?.(e)
-      } else {
-        compositionValue.value = value
-      }
-    }
+    const wrapperAttrs = computed(() => omit(attrs, INPUT_EVENTS));
+    const rootTextareaAttrs = computed(() => pick(attrs, INPUT_EVENTS));
+    const mergedTextareaAttrs = computed(() => ({
+      ...getNativeTextareaAttrs(rootTextareaAttrs.value),
+      ...getNativeTextareaAttrs(props.textareaAttrs),
+    }));
 
-    const handleClear = (ev: MouseEvent) => {
-      updateValue('')
-      emitChange('', ev)
-      emit('clear', ev)
-    }
-
-    // modelValue发生改变时，更新内部值
-    watch(modelValue, (value: string | undefined) => {
-      if (value !== computedValue.value) {
-        updateValue(value ?? '', false)
-      }
-    })
-
-    const getWrapperAttrs = (attr: Record<string, any>) => omit(attrs, INPUT_EVENTS)
-    const getTextareaAttrs = (attr: Record<string, any>) => pick(attrs, INPUT_EVENTS)
-    const textareaAttrs = getTextareaAttrs(attrs)
-    const mergeTextareaAttrs = computed(() => {
-      const attrs = {
-        ...textareaAttrs,
-        ...props.textareaAttrs,
-      }
-      if (mergedError.value) {
-        attrs['aria-invalid'] = true
-      }
-      return attrs
-    })
-
+    const isScroll = ref(false);
     const wrapperCls = computed(() =>
-      classes(n(), [isScroll.value, n('--scroll')]),
-    )
-
-    let styleDeclaration: CSSStyleDeclaration
-
-    const lineHeight = ref<number>(0)
-    const outerHeight = ref<number>(0)
-    const minHeight = computed(() => {
-      if (!isObject(props.autoSize) || !props.autoSize.minRows) {
-        return 0
-      }
-      return props.autoSize.minRows * lineHeight.value + outerHeight.value
-    })
-    const maxHeight = computed(() => {
-      if (!isObject(props.autoSize) || !props.autoSize.maxRows) {
-        return 0
-      }
-      return props.autoSize.maxRows * lineHeight.value + outerHeight.value
-    })
-
-    const getMirrorStyle = () => {
-      const styles = getSizeStyles(styleDeclaration)
-
-      lineHeight.value = Number.parseInt(styles['line-height'] || 0, 10)
-      outerHeight.value =
-        Number.parseInt(styles['border-width'] || 0, 10) * 2 +
-        Number.parseInt(styles['padding-top'] || 0, 10) +
-        Number.parseInt(styles['padding-bottom'] || 0, 10)
-
-      mirrorStyle.value = styles
-
-      nextTick(() => {
-        const mirrorHeight = mirrorRef.value?.offsetHeight
-
-        let height = mirrorHeight ?? 0
-        let overflow = 'hidden'
-
-        if (minHeight.value && height < minHeight.value) {
-          height = minHeight.value
-        }
-        if (maxHeight.value && height > maxHeight.value) {
-          height = maxHeight.value
-          overflow = 'auto'
-        }
-
-        textareaStyle.value = {
-          height: `${height}px`,
-          resize: 'none',
-          overflow,
-        }
-      })
-    }
-
-    onMounted(() => {
-      if (textareaRef.value) {
-        styleDeclaration = window.getComputedStyle(textareaRef.value)
-        if (props.autoSize) {
-          getMirrorStyle()
-        }
-      }
-      computeIsScroll()
-    })
-
-    const handleResize = () => {
-      if (props.autoSize && mirrorRef.value) {
-        getMirrorStyle()
-      }
-      computeIsScroll()
-    }
-
-    const handleMousedown = (e: MouseEvent) => {
-      if (textareaRef.value && e.target !== textareaRef.value) {
-        e.preventDefault()
-        textareaRef.value.focus()
-      }
-    }
+      classes(n(), [isScroll.value, n("--scroll")]),
+    );
+    const textareaStyle = computed<CSSProperties>(() => ({
+      resize: props.autoSize ? "none" : props.resize ? "vertical" : "none",
+      ...autoSizeStyle.value,
+    }));
 
     const computeIsScroll = () => {
       if (textareaRef.value) {
-        if (textareaRef.value.scrollHeight > textareaRef.value.offsetHeight) {
-          if (!isScroll.value) isScroll.value = true
-        } else if (isScroll.value) {
-          isScroll.value = false
-        }
+        isScroll.value =
+          textareaRef.value.scrollHeight > textareaRef.value.offsetHeight;
       }
-    }
+    };
 
-    watch(computedValue, () => {
-      if (props.autoSize && mirrorRef.value) {
-        getMirrorStyle()
+    const syncAutoSize = () => {
+      if (!props.autoSize) {
+        autoSizeStyle.value = undefined;
+        nextTick(computeIsScroll);
+        return;
       }
-      computeIsScroll()
-    })
+      if (
+        !textareaRef.value ||
+        !mirrorRef.value ||
+        typeof window === "undefined"
+      )
+        return;
+
+      const styles = getSizeStyles(window.getComputedStyle(textareaRef.value));
+      const fontSize = Number.parseFloat(styles["font-size"]) || 0;
+      const lineHeight =
+        Number.parseFloat(styles["line-height"]) || fontSize * 1.5;
+      const outerHeight =
+        (Number.parseFloat(styles["border-width"]) || 0) * 2 +
+        (Number.parseFloat(styles["padding-top"]) || 0) +
+        (Number.parseFloat(styles["padding-bottom"]) || 0);
+      mirrorStyle.value = styles;
+
+      nextTick(() => {
+        const options = isObject(props.autoSize) ? props.autoSize : undefined;
+        const minHeight = options?.minRows
+          ? options.minRows * lineHeight + outerHeight
+          : 0;
+        const maxHeight = options?.maxRows
+          ? options.maxRows * lineHeight + outerHeight
+          : 0;
+        let height = mirrorRef.value?.offsetHeight ?? 0;
+        let overflow: CSSProperties["overflow"] = "hidden";
+
+        if (minHeight && height < minHeight) height = minHeight;
+        if (maxHeight && height > maxHeight) {
+          height = maxHeight;
+          overflow = "auto";
+        }
+
+        autoSizeStyle.value = { height: `${height}px`, overflow };
+        nextTick(computeIsScroll);
+      });
+    };
+
+    const handleResize = () => {
+      syncAutoSize();
+      computeIsScroll();
+    };
+
+    const handleMousedown = (ev: MouseEvent) => {
+      if (
+        mergedDisabled.value ||
+        !textareaRef.value ||
+        ev.target === textareaRef.value
+      )
+        return;
+      ev.preventDefault();
+      textareaRef.value.focus();
+    };
+
+    watch(computedValue, (value) => {
+      if (!focused.value) {
+        preValue = value;
+      }
+      nextTick(syncAutoSize);
+      nextTick(computeIsScroll);
+    });
+    watch(
+      () => props.autoSize,
+      () => nextTick(syncAutoSize),
+      { deep: true },
+    );
+
+    onMounted(() => {
+      syncAutoSize();
+      computeIsScroll();
+    });
 
     return {
       n,
       classes,
       t,
-      mergedSize,
-      mergedVariant,
-      wrapperCls,
       textareaRef,
-      textareaStyle,
       mirrorRef,
       mirrorStyle,
+      textareaStyle,
       computedValue,
-      showClearBtn,
-      valueLength,
       computedMaxLength,
+      valueLength,
       mergedDisabled,
       mergedError,
+      mergedSize,
+      mergedVariant,
       focused,
-      mergeTextareaAttrs,
-      getWrapperAttrs,
-      getTextareaAttrs,
+      showClearBtn,
+      hasSuffix,
+      wrapperAttrs,
+      wrapperCls,
+      mergedTextareaAttrs,
       handleInput,
       handleFocus,
       handleBlur,
-      handleComposition,
+      handleKeydown,
+      handleCompositionStart,
+      handleCompositionEnd,
       handleClear,
       handleResize,
       handleMousedown,
-    }
+    };
   },
   methods: {
-    /**
-     * @zh 使输入框获取焦点
-     * @en Make the input box focus
-     * @public
-     * @version 2.24.0
-     */
     focus() {
-      ;(this.$refs.textareaRef as HTMLInputElement)?.focus()
+      (this.textareaRef as HTMLTextAreaElement)?.focus();
     },
-    /**
-     * @zh 使输入框失去焦点
-     * @en Make the input box lose focus
-     * @public
-     * @version 2.24.0
-     */
     blur() {
-      ;(this.$refs.textareaRef as HTMLInputElement)?.blur()
+      (this.textareaRef as HTMLTextAreaElement)?.blur();
     },
   },
-})
+});
 </script>

@@ -2,9 +2,39 @@
 
 .c-input-number {
   position: relative;
+  display: flex;
+  align-items: stretch;
   box-sizing: border-box;
   width: 100%;
   border-radius: var(~"--c-field-number-border-radius");
+
+  &-addon {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    padding: 0 var(~"--c-field-padding-x");
+    color: var(~"--c-field-color-text");
+    background-color: var(~"--c-field-color-addon-bg");
+    border: var(~"--c-field-border-width") solid
+      var(~"--c-field-color-addon-border");
+  }
+
+  &-prepend {
+    border-right: 0;
+    border-radius: var(~"--c-field-border-radius") 0 0
+      var(~"--c-field-border-radius");
+  }
+
+  &-append {
+    border-left: 0;
+    border-radius: 0 var(~"--c-field-border-radius")
+      var(~"--c-field-border-radius") 0;
+  }
+
+  > .c-input {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
 
   .transition() {
     transition: all var(~"--c-transition-duration-1")

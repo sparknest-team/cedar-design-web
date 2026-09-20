@@ -1,302 +1,357 @@
-import { computed, defineComponent, ref, toRefs, ComponentPublicInstance, toRef, watch, inject, StyleValue } from 'vue'
-import Input from '../input'
-import Trigger from '../trigger'
-import { getPrefixCls, createNamespace } from '../_utils/global-config'
-import { SelectOptionInfo, SelectOptionData } from '../select/types'
-import { isFunction, isNull, isUndefined } from '../_utils/is'
-import SelectDropdown from '../select/SelectDropdown.vue'
-import Option from '../select/Option.vue'
-import { useSelect } from '../select/hooks/use-select'
-import { getKeyFromValue } from '../select/utils'
-import { useFormItem } from '../_hooks/use-form-item'
-import VirtualList from '../_components/virtual-list-v2'
-import { GroupFieldContext, fieldInjectionKey } from '../input/context'
-import { autoCompleteProps } from './props'
+import type { StyleValue } from "vue";
+import { computed, defineComponent, inject, ref, toRefs, watch } from "vue";
+import Input from "../input";
+import Trigger from "../trigger";
+import { createNamespace, getPrefixCls } from "../_utils/global-config";
+import type {
+  FilterOption,
+  SelectOptionData,
+  SelectOptionInfo,
+} from "../select/types";
+import { isFunction, isNull, isUndefined } from "../_utils/is";
+import SelectDropdown from "../select/SelectDropdown.vue";
+import Option from "../select/Option.vue";
+import { useSelect } from "../select/hooks/use-select";
+import { getKeyFromValue } from "../select/utils";
+import { useFormItem } from "../_hooks/use-form-item";
+import VirtualList from "../_components/virtual-list-v2";
+import type { GroupFieldContext } from "../input/context";
+import { fieldInjectionKey } from "../input/context";
+import { autoCompleteProps } from "./props";
+import type { AutoCompleteOptionData, AutoCompleteOptionInfo } from "./props";
 
-const { name, n, classes } = createNamespace('auto-complete')
+const { name, n, classes } = createNamespace("auto-complete");
+let autoCompleteId = 0;
 
 export default defineComponent({
   name,
   inheritAttrs: false,
   props: autoCompleteProps,
   emits: {
-    'update:modelValue': (value: string) => true,
-    /**
-     * @zh 绑定值发生改变时触发
-     * @en Emitted when the value changes
-     * @property {string} value
-     */
-    change: (value: string) => true,
-    /**
-     * @zh 用户搜索时触发
-     * @en Emitted when the user searches
-     * @property {string} value
-     */
-    search: (value: string) => true,
-    /**
-     * @zh 选择选项时触发
-     * @en Emitted when an option is selected
-     * @property {string} value
-     */
-    select: (value: string, ev: Event) => true,
-    /**
-     * @zh 用户点击清除按钮时触发
-     * @en Triggered when the user clicks the clear button
-     * @param {Event} ev
-     * @version 2.23.0
-     */
+    "update:modelValue": (value: string) => true,
+    input: (value: string, ev: Event) => true,
+    search: (value: string, ev: Event) => true,
+    change: (value: string, ev: Event) => true,
+    select: (value: string, option: AutoCompleteOptionInfo, ev: Event) => true,
     clear: (ev: Event) => true,
-    /**
-     * @zh 下拉菜单发生滚动时触发
-     * @en Triggered when the drop-down scrolls
-     * @param {Event} ev
-     * @version 2.52.0
-     */
+    focus: (ev: FocusEvent) => true,
+    blur: (ev: FocusEvent) => true,
     "dropdown-scroll": (ev: Event) => true,
-    /**
-     * @zh 下拉菜单滚动到底部时触发
-     * @en Triggered when the drop-down menu is scrolled to the bottom
-     * @param {Event} ev
-     * @version 2.52.0
-     */
     "dropdown-reach-bottom": (ev: Event) => true,
   },
-  /**
-   * @zh 弹出框的页脚
-   * @en The footer of the popup menu box
-   * @slot footer
-   */
-  /**
-   * @zh 选项内容
-   * @en Display content of options
-   * @slot option
-   * @binding {OptionInfo} data
-   * @version 2.13.0
-   */
-  setup(props, { emit, attrs, slots }) {
-    const { modelValue } = toRefs(props)
-    const prefixCls = getPrefixCls('auto-complete')
-    const { size, disabled, variant } = toRefs(props)
-    const groupContext = inject<GroupFieldContext>(fieldInjectionKey, {} as GroupFieldContext)
-    const _size = computed(() => size.value ?? groupContext?.size ?? 'md')
-    const _disabled = computed(() => Boolean(disabled.value ?? groupContext?.disabled ?? false))
-    const mergedVariant = computed(() => variant.value ?? groupContext?.variant ?? 'filled')
-    const { mergedSize, mergedDisabled, mergedError, eventHandlers } = useFormItem({
-      size: _size,
-      disabled: _disabled,
-    })
+  setup(props, { emit, attrs, slots, expose }) {
+    const prefixCls = getPrefixCls("auto-complete");
+    const groupContext = inject<GroupFieldContext>(
+      fieldInjectionKey,
+      {} as GroupFieldContext,
+    );
+    const { size, disabled, variant, modelValue, options, fieldNames } =
+      toRefs(props);
+    const mergedSizeProp = computed(
+      () => size.value ?? groupContext?.size ?? "md",
+    );
+    const mergedDisabledProp = computed(() =>
+      Boolean(disabled.value ?? groupContext?.disabled ?? false),
+    );
+    const mergedVariant = computed(
+      () => variant.value ?? groupContext?.variant ?? "outlined",
+    );
+    const { mergedSize, mergedDisabled, eventHandlers } = useFormItem({
+      size: mergedSizeProp,
+      disabled: mergedDisabledProp,
+    });
 
-    const _value = ref(props.defaultValue)
-    const inputRef = ref<HTMLInputElement>()
-    const computedValue = computed(() => props.modelValue ?? _value.value)
+    const inputRef = ref<InstanceType<typeof Input>>();
+    const dropdownRef = ref();
+    const virtualListRef = ref();
+    const optionRefs = ref<Record<string, HTMLElement>>({});
+    const focused = ref(false);
+    const open = ref(false);
+    const innerValue = ref(props.defaultValue);
+    const computedValue = computed(() => props.modelValue ?? innerValue.value);
+    let committedValue = computedValue.value;
 
     watch(modelValue, (value) => {
-      if (isUndefined(value) || isNull(value)) {
-        _value.value = ''
+      if (isUndefined(value) || isNull(value)) innerValue.value = "";
+    });
+
+    watch(computedValue, (value) => {
+      if (!focused.value) committedValue = value;
+    });
+
+    const computedValueKeys = computed(() =>
+      computedValue.value ? [getKeyFromValue(computedValue.value)] : [],
+    );
+    const component = computed(() => (props.virtualListProps ? "div" : "li"));
+
+    const strictFilterOption = (inputValue: string, option: SelectOptionData) =>
+      String(option.label ?? option.value ?? "").includes(inputValue);
+
+    const mergedFilterOption = computed<FilterOption>(() => {
+      const filterOption = props.filterOption;
+      if (isFunction(filterOption)) {
+        return (inputValue: string, option: SelectOptionData) =>
+          filterOption(inputValue, option as AutoCompleteOptionData);
       }
-    })
+      if (filterOption === false) return false;
+      if (props.strict) return strictFilterOption;
+      return true;
+    });
 
-    const computedValueKeys = computed(() => (computedValue.value ? [getKeyFromValue(computedValue.value)] : []))
-    const { options } = toRefs(props)
-    const dropdownRef = ref()
-    const optionRefs = ref<Record<string, HTMLElement>>({})
+    const editable = computed(() => !mergedDisabled.value && !props.readonly);
+    const computedOpen = computed(
+      () =>
+        editable.value &&
+        open.value &&
+        validOptionInfos.value.length > 0 &&
+        props.shouldOpen(computedValue.value),
+    );
+    const listboxId = `${prefixCls}-listbox-${++autoCompleteId}`;
+    const getOptionId = (key: string) =>
+      `${listboxId}-option-${encodeURIComponent(key)}`;
 
-    const _open = ref(false)
-    const computedOpen = computed(() => _open.value && !mergedDisabled.value &&
-      validOptionInfos.value.length > 0 && props.shouldOpen(computedValue.value))
+    const handleOpenChange = (nextOpen: boolean) => {
+      open.value = nextOpen && editable.value;
+    };
 
-    // VirtualList
-    const virtualListRef = ref()
-    const component = computed(() => (props.virtualListProps ? 'div' : 'li'))
+    const closeDropdown = () => {
+      open.value = false;
+    };
 
-    const handleOpenChange = (open: boolean) => {
-      _open.value = open
-    }
+    const openDropdown = () => {
+      if (editable.value) open.value = true;
+    };
 
-    const strictFilterOption = (inputValue: string, option: SelectOptionData) => {
-      return String(option.label ?? option.value ?? '').includes(inputValue)
-    }
+    const updateValue = (value: string) => {
+      const changed = value !== computedValue.value;
+      innerValue.value = value;
+      if (changed) emit("update:modelValue", value);
+      return changed;
+    };
 
-    const mergedFilterOption = computed(() => {
-      if (isFunction(props.filterOption)) {
-        return props.filterOption
-      }
-      if (props.filterOption && props.strict) {
-        return strictFilterOption
-      }
-      return props.filterOption
-    })
+    const emitChange = (value: string, ev: Event, notifyForm = false) => {
+      if (value === committedValue) return false;
+      committedValue = value;
+      emit("change", value, ev);
+      if (notifyForm) eventHandlers.value?.onChange?.(ev);
+      return true;
+    };
 
-    const handleChange = (value: string) => {
-      _value.value = value
-      emit('update:modelValue', value)
-      emit('change', value)
-      eventHandlers.value?.onChange?.()
-    }
+    const getOptionInfo = (item: SelectOptionInfo): AutoCompleteOptionInfo => ({
+      value: String(item.value),
+      label: String(item.label),
+      disabled: Boolean(item.disabled),
+      raw: item.raw as AutoCompleteOptionData,
+    });
+
+    const handleSelect = (key: string, ev: Event) => {
+      const item = optionInfoMap.get(key);
+      if (!item || item.disabled || !editable.value) return;
+
+      const option = getOptionInfo(item);
+      const changed = updateValue(option.value);
+      emit("select", option.value, option, ev);
+      if (changed) emitChange(option.value, ev, true);
+      closeDropdown();
+    };
+
+    const handleInput = (value: string, ev: Event) => {
+      if (!editable.value) return;
+      emit("input", value, ev);
+      emit("search", value, ev);
+      openDropdown();
+    };
+
+    const handleChange = (value: string, ev: Event) => {
+      if (ev.defaultPrevented) return;
+      emitChange(value, ev);
+    };
 
     const handleClear = (ev: Event) => {
-      _value.value = ''
-      emit('update:modelValue', '')
-      emit('change', '')
-      eventHandlers.value?.onChange?.()
-      emit('clear', ev)
-    }
+      committedValue = "";
+      closeDropdown();
+      emit("clear", ev);
+    };
 
-    // Dropdown事件
-    const handleSelect = (key: string, ev: Event) => {
-      const value = optionInfoMap.get(key)?.value as string
-      emit('select', value, ev)
-      handleChange(value)
-      inputRef.value?.blur()
-    }
+    const handleFocus = (ev: FocusEvent) => {
+      focused.value = true;
+      openDropdown();
+      emit("focus", ev);
+    };
 
-    // Input事件
-    const handleInputValueChange = (value: string) => {
-      emit('search', value)
-      handleChange(value)
-    }
+    const handleBlur = (ev: FocusEvent) => {
+      focused.value = false;
+      closeDropdown();
+      emit("blur", ev);
+    };
 
-    const handleDropdownScroll = (e: Event) => {
-      emit('dropdown-scroll', e)
-    }
+    const handleDropdownScroll = (ev: Event) => emit("dropdown-scroll", ev);
+    const handleDropdownReachBottom = (ev: Event) =>
+      emit("dropdown-reach-bottom", ev);
 
-    const handleDropdownReachBottom = (e: Event) => {
-      emit('dropdown-reach-bottom', e)
-    }
-
-    const { validOptions, optionInfoMap, validOptionInfos, handleKeyDown } = useSelect({
-      options: options,
+    const {
+      validOptions,
+      optionInfoMap,
+      validOptionInfos,
+      activeKey,
+      handleKeyDown,
+    } = useSelect({
+      options,
       inputValue: computedValue,
       filterOption: mergedFilterOption,
+      fieldNames,
       open: computedOpen,
       valueKeys: computedValueKeys,
       component,
       dropdownRef,
       optionRefs,
+      virtualListRef,
       onSelect: handleSelect,
       onOpenChange: handleOpenChange,
-    })
+      enterToOpen: false,
+    });
 
-    const getOptionContentFunc = (item: SelectOptionInfo) => {
-      if (isFunction(slots.option) && item.value) {
-        const optionInfo = optionInfoMap.get(item.key)
-        const optionSlot = slots.option
-        return () => optionSlot({ data: optionInfo })
+    const handleInputKeydown = (ev: KeyboardEvent) => {
+      if (ev.key === "Tab") {
+        closeDropdown();
+        return;
       }
-      return () => item.label
-    }
+      handleKeyDown(ev);
+    };
 
-    const renderOption = (item: SelectOptionInfo) => {
-      return (
-        <Option
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-expect-error
-          ref={(ref: ComponentPublicInstance) => {
-            if (ref?.$el) {
-              optionRefs.value[item.key] = ref.$el
-            }
-          }}
-          v-slots={{
-            default: getOptionContentFunc(item),
-          }}
-          key={item.key}
-          value={item.value}
-          disabled={item.disabled}
-          internal
-        />
-      )
-    }
+    const getOptionContent = (item: SelectOptionInfo) => {
+      if (isFunction(slots.option)) {
+        const data = getOptionInfo(item);
+        return () => slots.option?.({ data });
+      }
+      return () => item.label;
+    };
 
-    const renderDropdown = () => {
-      return (
-        <SelectDropdown
-          ref={dropdownRef}
-          class={classes(`${prefixCls}-dropdown`)}
-          v-slots={{
-            default: () => [...validOptions.value.map((info) => renderOption(info as SelectOptionInfo))],
-            'virtual-list': () => (
-              <VirtualList
-                {...(props.virtualListProps as any)}
-                ref={virtualListRef}
-                data={validOptions.value}
-                v-slots={{
-                  item: ({ item }: { item: SelectOptionInfo }) => renderOption(item),
-                }}
-              />
+    const renderOption = (item: SelectOptionInfo) => (
+      <Option
+        ref={(instance: any) => {
+          if (instance?.$el) optionRefs.value[item.key] = instance.$el;
+        }}
+        key={item.key}
+        {...({
+          id: getOptionId(item.key),
+          role: "option",
+          "aria-selected": activeKey.value === item.key,
+          "aria-disabled": Boolean(item.disabled),
+          onMousedown: (ev: MouseEvent) => ev.preventDefault(),
+        } as any)}
+        value={item.value}
+        disabled={item.disabled}
+        internal
+        v-slots={{ default: getOptionContent(item) }}
+      />
+    );
+
+    const renderDropdown = () => (
+      <SelectDropdown
+        ref={dropdownRef}
+        {...({ id: listboxId, role: "listbox" } as any)}
+        class={classes(`${prefixCls}-dropdown`)}
+        virtualList={Boolean(props.virtualListProps)}
+        onScroll={handleDropdownScroll}
+        onReachBottom={handleDropdownReachBottom}
+        v-slots={{
+          default: () =>
+            validOptions.value.map((item) =>
+              renderOption(item as SelectOptionInfo),
             ),
-            footer: slots.footer,
-          }}
-          virtualList={Boolean(props.virtualListProps)}
-          onScroll={handleDropdownScroll}
-          onReach-bottom={handleDropdownReachBottom}
-        />
-      )
-    }
-    const { class: className, style, ...restAttrs } = attrs
+          "virtual-list": () => (
+            <VirtualList
+              {...(props.virtualListProps as any)}
+              ref={virtualListRef}
+              data={validOptions.value}
+              v-slots={{
+                item: ({ item }: { item: SelectOptionInfo }) =>
+                  renderOption(item),
+              }}
+            />
+          ),
+          footer: slots.footer,
+        }}
+      />
+    );
+
+    const { class: className, style, ...restAttrs } = attrs;
+    const mergedInputAttrs = computed(() => ({
+      ...props.inputAttrs,
+      role: "combobox",
+      "aria-autocomplete": "list",
+      "aria-expanded": computedOpen.value,
+      "aria-controls": listboxId,
+      "aria-activedescendant":
+        computedOpen.value && activeKey.value
+          ? getOptionId(activeKey.value)
+          : undefined,
+      autocomplete: "off",
+    }));
 
     const render = () => (
       <Trigger
-        v-slots={{ content: renderDropdown }}
         trigger="focus"
         placement="bottom-start"
         animationName="slide-dynamic-origin"
         autoFitTransformOrigin
-        closeOnClickReference={false}
-        preventFocus={true}
-        popupOffset={4}
-        autoFitPopupWidth
-        {...props.triggerProps}
-        popupContainer={props.popupContainer !== undefined ? props.popupContainer : props.triggerProps?.popupContainer}
         open={computedOpen.value}
-        disabled={mergedDisabled.value}
+        closeOnClickReference={false}
+        preventFocus
+        popupOffset={4}
+        disabled={!editable.value}
+        autoFitPopupWidth
+        popupContainer={
+          props.popupContainer !== undefined
+            ? props.popupContainer
+            : props.triggerProps?.popupContainer
+        }
+        {...props.triggerProps}
+        onOpenChange={handleOpenChange}
         onUpdate:open={handleOpenChange}
+        v-slots={{ content: renderDropdown }}
       >
         <div class={[classes(n()), className]} style={style as StyleValue}>
           <Input
-            v-slots={slots}
-            ref={inputRef}
             {...restAttrs}
+            ref={inputRef}
+            modelValue={computedValue.value}
+            defaultValue={props.defaultValue}
             size={mergedSize.value}
             variant={mergedVariant.value}
             disabled={mergedDisabled.value}
+            readonly={props.readonly}
+            error={props.error}
             clearable={props.clearable}
-            modelValue={computedValue.value}
-            onInput={handleInputValueChange}
+            placeholder={props.placeholder}
+            maxLength={props.maxLength}
+            showWordLimit={props.showWordLimit}
+            wordLength={props.wordLength}
+            wordSlice={props.wordSlice}
+            inputAttrs={mergedInputAttrs.value}
+            v-slots={{
+              prefix: slots.prefix,
+              suffix: slots.suffix,
+              "clear-icon": slots["clear-icon"],
+            }}
+            onUpdate:modelValue={updateValue}
+            onInput={handleInput}
+            onChange={handleChange}
             onClear={handleClear}
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            onKeydown={handleKeyDown}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            onKeydown={handleInputKeydown}
           />
         </div>
       </Trigger>
-    )
+    );
 
-    return {
-      inputRef,
-      render,
-    }
+    expose({
+      focus: () => inputRef.value?.focus(),
+      blur: () => inputRef.value?.blur(),
+    });
+
+    return render;
   },
-  methods: {
-    /**
-     * @zh 使输入框获取焦点
-     * @en Make the input box focus
-     * @public
-     * @version 2.40.0
-     */
-    focus() {
-      ;(this.inputRef as HTMLInputElement)?.focus()
-    },
-    /**
-     * @zh 使输入框失去焦点
-     * @en Make the input box lose focus
-     * @public
-     * @version 2.40.0
-     */
-    blur() {
-      ;(this.inputRef as HTMLInputElement)?.blur()
-    },
-  },
-  render() {
-    return this.render()
-  },
-})
+});

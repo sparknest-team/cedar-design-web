@@ -1,104 +1,65 @@
 import { popupContainerProp } from '../_utils/popup-container'
 import type { ExtractPropTypes, PropType } from 'vue'
+import type { SelectFieldNames, SelectOptionGroup } from '../select/types'
 import type { TriggerProps } from '../trigger'
-import type { FilterOption, SelectOptionData, SelectOptionGroup } from '../select/types'
 import type { VirtualListProps } from '../_components/virtual-list-v2/interface'
-import type { ComponentSize } from '../_utils/constant'
-import { componentSizes } from '../_utils/constant'
+import { inputProps } from '../input/props'
+
+export interface AutoCompleteOptionData {
+  value: string | number
+  label?: string
+  disabled?: boolean
+  [key: string]: unknown
+}
+
+export type AutoCompleteOption = string | number | AutoCompleteOptionData
+
+export interface AutoCompleteOptionInfo {
+  value: string
+  label: string
+  disabled: boolean
+  raw: AutoCompleteOptionData
+}
+
+export type AutoCompleteFieldNames = SelectFieldNames
+
+export type AutoCompleteFilterOption =
+  | boolean
+  | ((inputValue: string, option: AutoCompleteOptionData) => boolean)
 
 export const autoCompleteProps = {
-    /**
-     * @zh 绑定值
-     * @en Value
-     * @v-model
-     */
-    modelValue: {
-      type: String,
-      default: undefined,
-    },
-    /**
-     * @zh 默认值（非受控模式）
-     * @en Default value (uncontrolled mode)
-     */
-    defaultValue: {
-      type: String,
-      default: '',
-    },
-    /**
-     * @zh 是否禁用
-     * @en Whether to disable
-     */
-    disabled: {
-      type: Boolean,
-    },
-    variant: {
-      type: String as PropType<'filled' | 'outline' | 'standard'>,
-      validator: (value: string) => ['filled', 'outline', 'standard'].includes(value),
-    },
-    size: {
-      type: String as PropType<ComponentSize>,
-      validator: (value: ComponentSize) => componentSizes.includes(value),
-    },
-    /**
-     * @zh 用于自动提示的数据
-     * @en Data used for auto-complete
-     */
-    options: {
-      type: Array as PropType<(string | number | SelectOptionData | SelectOptionGroup)[]>,
-      default: () => [],
-    },
-    /**
-     * @zh 弹出框的挂载容器
-     * @en Mount container for popup
-     */
-    popupContainer: popupContainerProp,
-    /**
-     * @zh 是否为严格校验模式
-     * @en Whether it is strict verification mode
-     */
-    strict: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 自定义选项过滤方法
-     * @en Custom option filtering method
-     */
-    filterOption: {
-      type: [Boolean, Function] as PropType<FilterOption>,
-      default: true,
-    },
-    /** Whether the current input permits opening; does not filter options. */
-    shouldOpen: {
-      type: Function as PropType<(inputValue: string) => boolean>,
-      default: (inputValue: string) => inputValue.length > 0,
-    },
-    /**
-     * @zh trigger 组件属性
-     * @en trigger props
-     * @version 2.14.0
-     */
-    triggerProps: {
-      type: Object as PropType<TriggerProps>,
-    },
-    /**
-     * @zh 是否允许清空输入框
-     * @en Whether to allow the input to be cleared
-     * @version 2.23.0
-     */
-    clearable: {
-      type: Boolean,
-      default: false,
-    },
-    /**
-     * @zh 传递虚拟列表属性，传入此参数以开启虚拟滚动 [VirtualListProps](#VirtualListProps)
-     * @en Pass the virtual list attribute, pass in this parameter to turn on virtual scrolling [VirtualListProps](#VirtualListProps)
-     * @type VirtualListProps
-     * @version 2.50.0
-     */
-    virtualListProps: {
-      type: Object as PropType<VirtualListProps>,
-    },
-} 
+  modelValue: String,
+  defaultValue: { type: String, default: '' },
+  options: {
+    type: Array as PropType<(AutoCompleteOption | SelectOptionGroup)[]>,
+    default: () => [],
+  },
+  fieldNames: Object as PropType<AutoCompleteFieldNames>,
+  filterOption: {
+    type: [Boolean, Function] as PropType<AutoCompleteFilterOption>,
+    default: true,
+  },
+  strict: { type: Boolean, default: false },
+  popupContainer: popupContainerProp,
+  /** Whether the current input permits opening; does not filter options. */
+  shouldOpen: {
+    type: Function as PropType<(inputValue: string) => boolean>,
+    default: (inputValue: string) => inputValue.length > 0,
+  },
+  triggerProps: Object as PropType<TriggerProps>,
+  virtualListProps: Object as PropType<VirtualListProps>,
+  variant: { ...inputProps.variant, default: 'outline' },
+  size: { ...inputProps.size, default: 'md' },
+  clearable: inputProps.clearable,
+  disabled: inputProps.disabled,
+  readonly: inputProps.readonly,
+  error: inputProps.error,
+  placeholder: inputProps.placeholder,
+  maxLength: inputProps.maxLength,
+  showWordLimit: inputProps.showWordLimit,
+  wordLength: inputProps.wordLength,
+  wordSlice: inputProps.wordSlice,
+  inputAttrs: inputProps.inputAttrs,
+}
 
-export type AutoCompleteProps = import("vue").ExtractPublicPropTypes<typeof autoCompleteProps>
+export type AutoCompleteProps = import('vue').ExtractPublicPropTypes<typeof autoCompleteProps>

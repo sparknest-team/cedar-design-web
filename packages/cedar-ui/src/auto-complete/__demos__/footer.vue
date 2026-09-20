@@ -1,24 +1,25 @@
 <template>
-  <c-auto-complete :options="options" placeholder="请输入" @search="handleSearch">
+  <c-auto-complete
+    v-model="value"
+    :options="options"
+    :field-names="{ value: 'code', label: 'name', disabled: 'unavailable' }"
+    placeholder="输入城市"
+    style="width: 320px"
+  >
+    <template #option="{ data }">{{ data.label }} · {{ data.raw.country }}</template>
     <template #footer>
-      <div style="padding: 6px 0; text-align: center">
-        <c-button>Click Me</c-button>
-      </div>
+      <div style="padding: 6px 12px; color: var(--c-color-text-3)">选择候选或继续自由输入</div>
     </template>
   </c-auto-complete>
 </template>
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const options = ref<any>(['Beijing', 'Shanghai', 'Chengdu', 'WuHan'])
-    return {
-      options,
-      handleSearch(value: string) {
-        console.log('handleSearch---value', value)
-      },
-    }
-  },
-})
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const value = ref('')
+const options = [
+  { code: 'PEK', name: 'Beijing', country: 'CN' },
+  { code: 'SHA', name: 'Shanghai', country: 'CN' },
+  { code: 'NRT', name: 'Tokyo', country: 'JP', unavailable: true },
+]
 </script>
