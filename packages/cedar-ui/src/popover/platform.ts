@@ -1,17 +1,24 @@
-import type { TriggerWrapperAppearance } from '../trigger/wrapper'
 import { computed } from 'vue'
-import { getPrefixCls } from '../_utils/global-config'
+import { createNamespace } from '../_utils/global-config'
+import type { TriggerWrapperAppearance } from '../trigger/wrapper'
 import type { PopoverProps } from './props'
 
 export function useAppearance(props: PopoverProps): TriggerWrapperAppearance {
-  const prefix = getPrefixCls('popover')
+  const { n } = createNamespace('popover')
   return {
     triggerBindings: computed(() => ({
-      class: prefix,
-      contentClass: [`${prefix}-popup-content`, props.contentClass],
-      arrowClass: [`${prefix}-popup-arrow`, props.arrowClass],
+      popupClass: [n(), props.popupClass],
+      contentClass: undefined,
+      contentStyle: undefined,
+      animationName: props.animationName ?? n(),
+      arrowClass: [n('arrow'), props.arrowClass],
+      arrowStyle: props.arrowStyle,
     })),
-    titleClass: `${prefix}-title`,
-    bodyClass: `${prefix}-content`,
+    contentBindings: computed(() => ({
+      class: [n('content'), props.contentClass],
+      style: props.contentStyle,
+    })),
+    titleClass: n('title'),
+    bodyClass: n('body'),
   }
 }

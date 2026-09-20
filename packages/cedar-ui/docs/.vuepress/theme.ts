@@ -20,6 +20,12 @@ export default hopeTheme(
 
     repo: 'https://xxx/pe.frontend/cedar/cedar-design-web',
 
+    navbarLayout: {
+      start: ['Brand'],
+      center: ['Links'],
+      end: ['Language', 'Repo', 'Search'],
+    },
+
     // docsDir: 'demo/theme-docs/src',
 
     locales: {

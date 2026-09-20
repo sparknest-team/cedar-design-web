@@ -9,7 +9,7 @@ permalink: /guide/theme/
 Cedar 与 Maple 对齐：
 
 - `import { StyleProvider, Themes } from '@cedarjs/ui'`
-- `StyleProvider.setStyleVars(Themes.dark)` 同步 `html[cedar-theme=dark]`
-- `StyleProvider.setStyleVars(null)` 恢复亮色
-- 另有 `Themes.md3Light` / `Themes.md3Dark` 品牌覆盖包
+- `StyleProvider.setStyleVars(Themes.default.dark)` 使用默认青绿色暗色主题
+- `StyleProvider.setStyleVars(Themes.maple.light)` 使用枫叶亮色主题
+- 两套主题都提供 `light` / `dark`
 - 亦可用 `ConfigProvider` 的 `theme` 或直接改 DOM 属性

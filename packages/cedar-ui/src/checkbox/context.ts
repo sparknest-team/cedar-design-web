@@ -1,11 +1,13 @@
-import type { InjectionKey, Slots } from 'vue'
+import type { InjectionKey, Slots } from "vue";
 
 export interface CheckboxGroupContext {
-  computedValue: Array<string | number | boolean>
-  disabled: boolean
-  isMaxed: boolean
-  slots: Slots
-  handleChange: (value: Array<string | number | boolean>, e: Event) => void
+  computedValue: Array<string | number | boolean>;
+  disabled: boolean;
+  error: boolean;
+  isMaxed: boolean;
+  slots: Slots;
+  handleChange: (value: Array<string | number | boolean>, e: Event) => void;
 }
 
-export const checkboxGroupKey: InjectionKey<CheckboxGroupContext> = Symbol('CedarCheckboxGroup')
+export const checkboxGroupKey: InjectionKey<CheckboxGroupContext> =
+  Symbol("CedarCheckboxGroup");

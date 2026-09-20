@@ -1,4 +1,4 @@
-import type { ExtractPropTypes, PropType } from "vue";
+import type { PropType } from "vue";
 import type { ComponentSize } from "../_utils/constant";
 
 export type LoadingType = "circle" | "wave" | "cube" | "rect" | "disappear";
@@ -32,10 +32,6 @@ export const loadingProps = {
    */
   loading: Boolean,
   /**
-   * 是否使用点状加载动画
-   */
-  dot: Boolean,
-  /**
    * 提示文案
    */
   tip: String,
@@ -45,4 +41,6 @@ export const loadingProps = {
   hideIcon: Boolean,
 };
 
-export type LoadingProps = import("vue").ExtractPublicPropTypes<typeof loadingProps>;
+export type LoadingProps = import("vue").ExtractPublicPropTypes<
+  typeof loadingProps
+>;

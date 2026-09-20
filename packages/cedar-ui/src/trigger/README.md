@@ -1,65 +1,104 @@
+---
+permalink: /components/trigger/
+---
+
 # Trigger
 
-无视觉样式的锚点浮层基础组件，负责触发、定位、挂载和打开状态。默认插槽是触发元素，content 插槽是浮层内容。
+无视觉样式的锚点浮层基础组件，统一负责触发、定位、挂载、层级和打开状态。业务提示优先使用 Tooltip，结构化内容使用 Popover，命令选择使用 DropdownMenu；只有构建新的浮层组件时才直接使用 Trigger。
 
-## 共同契约
+## 案例
 
-| Prop | 含义 | 类型 / 值 |
+### 基础用法
+
+<demo src="./__demos__/basic.vue"></demo>
+
+### 方位与箭头
+
+<demo src="./__demos__/placement.vue"></demo>
+
+### 受控状态与偏移
+
+`popup-offset` 是沿 placement 主轴向外的距离；`popup-translate` 是屏幕 x/y 轴上的附加平移。
+
+<demo src="./__demos__/controlled.vue"></demo>
+
+## API
+
+### `<Trigger>` Props
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| open | 受控打开状态 | `boolean` | `-` |
+| default-open | 非受控初始状态 | `boolean` | `false` |
+| trigger | 触发方式，可组合 | `hover \| click \| focus \| contextMenu \| manual \| TriggerEvent[]` | `hover` |
+| disabled | 禁止打开 | `boolean` | `false` |
+| reference | 外部参考元素；不传时使用默认插槽首个真实元素 | `string \| HTMLElement \| SVGElement` | `-` |
+| placement | 首选方位，支持四个方向及 `-start/-end` | `TriggerPlacement` | `bottom` |
+| strategy | 定位策略 | `absolute \| fixed` | `absolute` |
+| cover | 沿主轴覆盖参考元素 | `boolean` | `false` |
+| popup-offset | 沿 placement 主轴向外的距离 | `number` | `0` |
+| popup-translate | 屏幕轴平移，或按 placement 配置平移 | `[number, number] \| Partial<Record<TriggerPlacement, [number, number]>>` | `-` |
+| align-point | 以鼠标坐标作为虚拟参考点 | `boolean` | `false` |
+| popup-container | 挂载容器；`false` 表示原地渲染 | `string \| HTMLElement \| false` | `body` |
+| auto-fit-position | 空间不足时翻转并限制到可视区域 | `boolean` | `true` |
+| auto-fit-popup-width | 浮层宽度等于参考元素宽度 | `boolean` | `false` |
+| auto-fit-popup-min-width | 浮层最小宽度等于参考元素宽度 | `boolean` | `false` |
+| auto-fix-position | 尺寸变化时自动重新定位 | `boolean` | `true` |
+| update-at-scroll | 滚动时重新定位 | `boolean` | `false` |
+| scroll-to-close | 滚动超过阈值时关闭 | `boolean` | `false` |
+| scroll-to-close-distance | 滚动关闭阈值 | `number` | `0` |
+| show-arrow | 渲染装饰箭头 | `boolean` | `false` |
+| hide-empty | content 为空时不渲染浮层 | `boolean` | `false` |
+| prevent-focus | 阻止定位层 mousedown 抢占焦点 | `boolean` | `false` |
+| unmount-on-close | 离场结束后卸载内容 | `boolean` | `true` |
+| animation-name | Vue Transition 名称 | `string` | `trigger-fade` |
+| duration | 过渡时长 | `number \| { enter: number; leave: number }` | `-` |
+| auto-fit-transform-origin | 根据最终方位设置动画原点 | `boolean` | `false` |
+| opened-class | 打开时附加给首个参考节点的类名 | `ClassName` | `-` |
+| popup-class / popup-style | 定位层类名和样式 | `ClassName / CSSProperties` | `-` |
+| content-class / content-style | 内容层类名和样式 | `ClassName / CSSProperties` | `-` |
+| arrow-class / arrow-style | 箭头类名和样式 | `ClassName / CSSProperties` | `-` |
+| mouse-enter-delay / mouse-leave-delay | hover 打开和关闭延迟，毫秒 | `number` | `100 / 100` |
+| focus-delay | focus 打开延迟，毫秒 | `number` | `0` |
+| popup-hover-stay | 指针进入浮层后保持打开 | `boolean` | `true` |
+| blur-to-close | 失焦时关闭 | `boolean` | `true` |
+| close-on-click-reference | 再次点击参考元素时关闭 | `boolean` | `true` |
+| click-outside-to-close | 点击外部关闭 | `boolean` | `true` |
+| esc-to-close | Escape 关闭 | `boolean` | `true` |
+| restore-focus | 关闭被接受后恢复参考元素焦点 | `boolean` | `true` |
+
+### Events
+
+| 事件 | 说明 | 参数 |
 | --- | --- | --- |
-| open | 打开状态；update:open 请求更新 | boolean |
-| popupContainer | undefined 默认 body；false 原地渲染；selector 找不到时提示并回退 body | string / HTMLElement / false |
-| placement | top / bottom / left / right，各自支持 -start / -end | 十二方位 |
-| cover | 覆盖触发元素，不增加另一套 placement 枚举 | boolean，默认 false |
-| autoFitPopupWidth | 浮层宽度跟随触发元素宽度 | boolean |
-| closeOnClickReference | 再次点击触发元素时关闭 | boolean |
-| popupStyle | 定位容器样式，不等同于内容面板样式 | CSSProperties |
+| update:open | 用户交互发出的受控更新请求 | `open: boolean` |
+| open-change | 用户交互请求通知 | `open: boolean` |
+| open / close | 实际开始进入 / 离开 | `-` |
+| opened / closed | 动画进入 / 离开完成 | `-` |
+| click-outside | 最上层浮层收到外部点击 | `event: Event` |
+| resize | 参考元素尺寸变化 | `-` |
 
-普通通知为 open、opened、close、closed、click-outside。open/close 表示开始，opened/closed 表示动画结束。
-外部 open 变化也触发实际生命周期；update:open 仅用于请求更新。open-change 保留为内部交互请求的 boolean 通知，不代替生命周期。
+### Slots
 
-## 定位迁移
+| 插槽 | 说明 |
+| --- | --- |
+| default | 参考节点 |
+| content | 浮层内容 |
 
-Cedar：tl/tr/bl/br/lt/lb/rt/rb 分别改为 top-start/top-end/bottom-start/bottom-end/left-start/left-end/right-start/right-end。
+### Expose
 
-Maple：cover-top → bottom + cover，cover-bottom → top + cover，cover-left → right + cover，cover-right → left + cover；-start/-end 后缀保留。覆盖模式是向触发元素内部退回一个触发元素的主轴尺寸，不是普通外侧定位。
+`open()`、`close()`、`resize()`、`allowClose()`、`getReference()`、`setReference(reference?)`、`focusReference()`、`isTopLayer(event?)`。
 
-偏移保留真实语义：Cedar popupOffset 是向外的主轴距离，popupTranslate 是平面平移；
-Maple offsetX/offsetY 是屏幕水平/垂直偏移。二者不能仅换名字。
+## 键盘与可访问性
 
-高层组件挂载优先级：显式顶层 popupContainer（包括 false）→ 嵌套 triggerProps/popupProps/pickerProps → body。
-容器应在客户端挂载时存在；异步创建容器后请更新绑定值。SSR 不依赖 document/HTMLElement，客户端挂载后解析 selector。
+`trigger="focus"` 支持键盘聚焦；`esc-to-close` 只让最上层浮层响应 Escape。Trigger 不自行设置 `role`、`aria-describedby` 或业务标签，Tooltip、Popover、Menu 等上层组件必须根据语义补充。
 
-## 双端边界
+## 样式变量
 
-两端均支持 trigger 数组、focus、延迟与独立 reference；Cedar 保留自动最小宽度等扩展，Maple 保留 Popper strategy。
-这些扩展不通过空实现扩大另一端的类型。Popover、Menu 支持 cover 透传。
-
-## 基础契约对齐（2026-09-08）
-
-`open` 是受控状态；没有传入时使用组件内部状态。`default-open` 仅设置非受控初始状态。用户操作派发 `update:open`，由调用者更新受控值；外部更新不重复派发更新请求。SVG 图标和 Fragment 组件根节点可直接作为触发元素。
-
-计划及迁移范围见 `design-ui/refactors/foundation-alignment/plan.md` 和 `migration.md`。当前状态、触发目标、交互与弹层层级独立同源复制；定位引擎仍分端适配，渲染结构及主要渲染 API 已对齐。
-
-## Trigger 交互基础对齐（2026-09-08）
-
-两端共同支持 trigger 的 hover/click/focus/contextMenu/manual 与数组组合，默认 hover；mouseenter/mouseleave 延迟均为 100 ms，focusDelay 为 0。popupHoverStay、blurToClose、closeOnClickReference、clickOutsideToClose、escToClose、restoreFocus 均默认 true。
-
-reference 接受选择器或 HTML/SVG 元素，不传时使用默认插槽的首个实际元素。公开方法包含 open、close、resize、getReference、setReference、allowClose、isTopLayer；setReference(undefined) 恢复 prop/插槽目标。
-
-外部点击统一使用 click；同一次 Escape/外部点击只由最上层弹层响应。嵌套 Teleport 内容按内部点击处理。受控 open 未被父级接受时，不实际关闭或恢复焦点。
-
-Maple Menu/Popover 保留 click 和零悬停延迟，Tooltip 保留零悬停延迟；Select/Cascader 显式 click。直接使用 Maple Trigger 的调用者如需旧默认，应显式设置 trigger="click"、closeOnClickReference=false。
-
-共同源码覆盖状态、触发目标、交互事件、弹层层级；定位引擎仍分端适配；渲染结构已独立复制。
-
-## 渲染与过渡契约
-
-Trigger 使用共同的定位层 → 动画层 → 内容层结构。`popupClass/popupStyle` 控制定位层，`contentClass/contentStyle` 控制内容层；动画作用于独立包装层，不会覆盖定位引擎的位移。`showArrow` 默认 false，`arrowClass/arrowStyle` 设置装饰箭头，箭头不参与辅助技术朗读。
-
-`unmountOnClose` 默认 **true**：初始关闭不创建内容，关闭时保留到离场动画完成，再卸载。设置 false 可保留输入状态。`duration` 接受毫秒数或 `{ enter, leave }`；`opened/closed` 只在对应过渡完成时各触发一次，过渡取消不派发完成事件。默认打开也会执行入场并触发 opened。
-
-直接使用 Maple Trigger 且依赖隐藏内容常驻的代码应设置 `:unmount-on-close="false"`。Maple Menu/MenuChildren/Select/Cascader 已显式保留该行为；Tooltip/Popover 默认 false，支持通过同名 prop 调整。Maple Popover 的默认外观和 popoverClass 位于内容层，popupClass 仍用于定位层。
-
-Maple 独立使用 Trigger 箭头时需引入 `@maplejs/maple-ui/trigger/style`；Menu/Tooltip/Popover/Select/Cascader 的样式入口已包含依赖。箭头 token 为 `--mp-trigger-arrow-bg`、`--mp-trigger-size-arrow-width`、`--mp-trigger-arrow-border-radius`；Cedar 使用对应 c 前缀 token。
-
-`focusReference()` 将焦点恢复到触发元素，并抑制此次焦点事件再次打开 focus 触发器。Menu 在关闭被接受后通过该方法恢复焦点；受控关闭被拒绝时保留当前焦点。
+| 变量 | 默认值 |
+| --- | --- |
+| `--c-trigger-arrow-background` | `var(--c-sys-color-surface-overlay)` |
+| `--c-trigger-arrow-size` | `var(--c-sys-space-4)` |
+| `--c-trigger-arrow-radius` | `var(--c-sys-radius-sm)` |
+| `--c-trigger-transition-duration` | `var(--c-sys-motion-duration-fast)` |
+| `--c-trigger-transition-easing` | `var(--c-sys-motion-easing-standard)` |

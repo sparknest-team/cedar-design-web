@@ -1,1 +1,18 @@
 @import '../../field-decorator/style/mixins.less';
+
+:root {
+  --c-input-control-height: auto;
+  --c-input-control-font-size: var(--c-sys-font-size-md);
+  --c-input-control-line-height: var(--c-line-height);
+  --c-input-control-padding-horizontal: 0;
+  --c-input-counter-color: var(--c-sys-color-content-tertiary);
+  --c-input-counter-font-size: var(--c-sys-font-size-xs);
+  --c-input-counter-margin-top: var(--c-sys-space-2);
+}
+
+.c-input__inner {
+  height: var(--c-input-control-height);
+  padding-inline: var(--c-input-control-padding-horizontal);
+  font-size: var(--c-input-control-font-size);
+  line-height: var(--c-input-control-line-height);
+}

@@ -6,8 +6,8 @@
 
 | 文件 | 自动加载者 | 定位 |
 | --- | --- | --- |
-| [`AGENTS.md`](../../AGENTS.md)（仓库根） | Claude Code / Cursor / Codex / 新版 Copilot Chat 等通用约定 | **统一入口**，简短，列必读清单 + 高频踩坑 + 历史教训 |
-| [`.github/copilot-instructions.md`](../../.github/copilot-instructions.md) | VS Code GitHub Copilot Chat（每次对话强制加载） | Copilot 专用版，含完整规范摘要 |
+| `AGENTS.md`（包根目录） | Claude Code / Cursor / Codex / 新版 Copilot Chat 等通用约定 | **统一入口**，简短，列必读清单 + 高频踩坑 + 历史教训 |
+| `.github/copilot-instructions.md`（仓库配置） | VS Code GitHub Copilot Chat（每次对话强制加载） | Copilot 专用版，含完整规范摘要 |
 | [`docs/practices/component-spec.md`](./component-spec.md) | 人类 + 被 AI 按需 `read_file` | 详细组件规范（**真实的 source of truth**） |
 | [`openspec/`](../../openspec/) | 人类 + AI 走 OpenSpec skill 流程 | 规范变更工作流（新增 / 修改组件 API） |
 | [`docs/practices/ai-collaboration.md`](./ai-collaboration.md) | 人类阅读，AI 按需查 | 本文，解释入口机制本身 |

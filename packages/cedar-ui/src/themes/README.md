@@ -19,22 +19,20 @@ Cedar 色板与 Maple 结构对齐：**RGB 通道色阶** + **语义色** + **�
 
 | 主题名称 | 主题包 | 说明 |
 | --- | --- | --- |
-| 默认亮色 | CSS `:root` | 色阶 + 语义 |
-| 暗色 | `Themes.dark` 或 DOM / ConfigProvider | 与 `:root[cedar-theme=dark]` 对齐 |
-| MD3 亮色 | `Themes.md3Light` | StyleProvider 注入品牌色覆盖 |
-| MD3 暗色 | `Themes.md3Dark` | StyleProvider 注入 + DOM dark |
+| 默认 | `Themes.default.light` / `Themes.default.dark` | 青绿色品牌色阶，提供亮暗模式 |
+| 枫叶 | `Themes.maple.light` / `Themes.maple.dark` | 枫叶红橙品牌色阶，提供亮暗模式 |
 
 ### StyleProvider 切换
 
-`StyleProvider.setStyleVars(Themes.dark)` 会同步设置 `html[cedar-theme=dark]`；`StyleProvider.setStyleVars(null)` 移除属性并恢复默认。与 Maple 一致。
+亮色对象会移除 `html[cedar-theme=dark]`，暗色对象会设置该属性。Cedar 与 Maple 使用相同的主题分组、颜色和值域。
 
 ```vue
 <template>
   <c-space>
-    <c-button status="primary" @click="StyleProvider.setStyleVars(null)">亮色</c-button>
-    <c-button status="primary" @click="StyleProvider.setStyleVars(Themes.dark)">暗色</c-button>
-    <c-button status="primary" @click="StyleProvider.setStyleVars(Themes.md3Light)">MD3 亮色</c-button>
-    <c-button status="primary" @click="StyleProvider.setStyleVars(Themes.md3Dark)">MD3 暗色</c-button>
+    <c-button status="primary" @click="StyleProvider.setStyleVars(Themes.default.light)">默认亮色</c-button>
+    <c-button status="primary" @click="StyleProvider.setStyleVars(Themes.default.dark)">默认暗色</c-button>
+    <c-button status="primary" @click="StyleProvider.setStyleVars(Themes.maple.light)">枫叶亮色</c-button>
+    <c-button status="primary" @click="StyleProvider.setStyleVars(Themes.maple.dark)">枫叶暗色</c-button>
   </c-space>
 </template>
 
@@ -87,7 +85,7 @@ body {
 import { StyleProvider, Themes } from '@cedarjs/ui'
 
 const customTheme = {
-  ...Themes.md3Light,
+  ...Themes.maple.light,
   '--c-brand-6': '255, 0, 0',
 }
 

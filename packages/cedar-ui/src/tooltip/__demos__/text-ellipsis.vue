@@ -7,13 +7,7 @@
     <div v-tooltip:ellipsis class="text-container">没溢出</div>
   </c-space>
 </template>
-<script lang="ts" setup>
-import { reactive, ref } from 'vue'
-
-const state = reactive({})
-</script>
-
-<style lang="scss" scoped>
+<style scoped>
 .text-container {
   width: 100px;
 }

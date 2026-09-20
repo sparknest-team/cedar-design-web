@@ -6,8 +6,7 @@ const Popover = withInstall(_Popover, Object.assign(_Popover, {
 }), { components: [_Popover] })
 
 export type PopoverInstance = InstanceType<typeof _Popover>
-export type { PopoverProps } from './props'
-export type { PopoverPlacement, PopoverTrigger } from './types'
+export type { PopoverPlacement, PopoverProps, PopoverTrigger } from './props'
 export { Popover, popoverProps }
 export const _PopoverComponent = Popover
 

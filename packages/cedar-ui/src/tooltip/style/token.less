@@ -1,19 +1,25 @@
-@import '../../style/theme/index.less';
-
-/******** Tooltip CSS Variables *******/
 :root {
-  --c-tooltip-padding-horizontal: var(~'--c-spacing-6');
-  --c-tooltip-padding-vertical: var(~'--c-spacing-4');
-
-  --c-tooltip-size-xs-padding-horizontal: var(~'--c-spacing-6');
-  --c-tooltip-size-xs-padding-vertical: var(~'--c-spacing-2');
-  --c-tooltip-size-xs-font-size: var(~'--c-font-size-body-3');
-
-  --c-tooltip-font-size: var(~'--c-font-size-body-3');
-  --c-tooltip-border-radius: var(~'--c-border-radius-sm');
-  --c-tooltip-line-height: var(~'--c-line-height');
+  --c-tooltip-background: var(--c-color-tooltip-bg);
+  --c-tooltip-text-color: var(--c-color-white);
+  --c-tooltip-status-primary-background: var(--c-sys-color-action-primary);
+  --c-tooltip-status-info-background: var(--c-sys-color-status-info);
+  --c-tooltip-status-success-background: var(--c-sys-color-status-success);
+  --c-tooltip-status-warning-background: var(--c-sys-color-status-warning);
+  --c-tooltip-status-danger-background: var(--c-sys-color-status-danger);
+  --c-tooltip-status-primary-text-color: var(--c-color-white);
+  --c-tooltip-status-info-text-color: var(--c-color-white);
+  --c-tooltip-status-success-text-color: var(--c-color-white);
+  --c-tooltip-status-warning-text-color: var(--c-color-white);
+  --c-tooltip-status-danger-text-color: var(--c-color-white);
+  --c-tooltip-padding-horizontal: var(--c-sys-space-6);
+  --c-tooltip-padding-vertical: var(--c-sys-space-4);
+  --c-tooltip-font-size: var(--c-sys-font-size-md);
+  --c-tooltip-line-height: var(--c-line-height);
+  --c-tooltip-border-radius: var(--c-sys-radius-md);
   --c-tooltip-max-width: 350px;
-
-  --c-tooltip-text-color: var(~'--c-color-white');
-  --c-tooltip-bg: var(~'--c-color-tooltip-bg');
+  --c-tooltip-opacity: 1;
+  --c-tooltip-size-xs-padding-horizontal: var(--c-sys-space-4);
+  --c-tooltip-size-xs-padding-vertical: var(--c-sys-space-2);
+  --c-tooltip-size-xs-font-size: var(--c-sys-font-size-xs);
+  --c-tooltip-animation-duration: var(--c-sys-motion-duration-standard);
 }

@@ -26,9 +26,30 @@ describe("Loading", () => {
     expect(wrapper.text()).toContain("Loading");
   });
 
-  test("renders the dot indicator", () => {
-    const wrapper = mount(Loading, { props: { dot: true } });
-    expect(wrapper.findAll(".c-dot-loading__item")).toHaveLength(5);
+  test("supports a custom icon and hidden-icon text state", async () => {
+    const wrapper = mount(Loading, {
+      props: { tip: "Loading" },
+      slots: { icon: "Custom indicator" },
+    });
+    expect(wrapper.get(".c-loading__indicator").text()).toBe(
+      "Custom indicator",
+    );
+
+    await wrapper.setProps({ hideIcon: true });
+    expect(wrapper.find(".c-loading__indicator").exists()).toBe(false);
+    expect(wrapper.get(".c-loading__tip").text()).toBe("Loading");
+  });
+
+  test("exposes loading accessibility state", () => {
+    const standalone = mount(Loading);
+    expect(standalone.attributes("role")).toBe("status");
+    expect(standalone.attributes("aria-live")).toBe("polite");
+
+    const wrapped = mount(Loading, {
+      props: { loading: true },
+      slots: { default: "Content" },
+    });
+    expect(wrapped.attributes("aria-busy")).toBe("true");
   });
 
   test("v-c-loading renders the built-in component in the target", async () => {
@@ -111,21 +132,47 @@ describe("Loading", () => {
     await nextTick();
     expect(wrapper.find(".c-loading-directive").exists()).toBe(false);
   });
+
+  test("v-c-loading mounts fullscreen and cleans document state", () => {
+    const Host = defineComponent({
+      directives: { "c-loading": vLoading },
+      template: '<div v-c-loading="{ loading: true, fullscreen: true }" />',
+    });
+    const wrapper = mount(Host, { attachTo: document.body });
+    expect(
+      document.body.querySelector(".c-loading-directive--fullscreen"),
+    ).not.toBeNull();
+    expect(document.body.classList.contains("c-loading-parent--hidden")).toBe(
+      true,
+    );
+    wrapper.unmount();
+    expect(
+      document.body.querySelector(".c-loading-directive--fullscreen"),
+    ).toBeNull();
+    expect(document.body.classList.contains("c-loading-parent--hidden")).toBe(
+      false,
+    );
+  });
 });
 
-
-test('directive updates and clears the overlay background token', async () => {
+test("directive updates and clears the overlay background token", async () => {
   const Host = defineComponent({
-    directives: { 'c-loading': vLoading },
-    data: () => ({ options: { loading: true, background: 'blue' } }),
+    directives: { "c-loading": vLoading },
+    data: () => ({ options: { loading: true, background: "blue" } }),
     template: '<div v-c-loading="options">content</div>',
-  })
-  const wrapper = mount(Host)
-  const overlay = wrapper.find('.c-loading-directive').element
-  expect(overlay.style.getPropertyValue('--c-loading-overlay-background')).toBe('blue')
-  await wrapper.setData({ options: { loading: true, background: 'red' } })
-  expect(overlay.style.getPropertyValue('--c-loading-overlay-background')).toBe('red')
-  await wrapper.setData({ options: { loading: true, background: '' } })
-  expect(overlay.style.getPropertyValue('--c-loading-overlay-background')).toBe('')
-  wrapper.unmount()
-})
+  });
+  const wrapper = mount(Host);
+  const overlay = wrapper.find(".c-loading-directive").element;
+  expect(overlay.style.getPropertyValue("--c-loading-overlay-background")).toBe(
+    "blue",
+  );
+  await wrapper.setData({ options: { loading: true, background: "red" } });
+  expect(overlay.style.getPropertyValue("--c-loading-overlay-background")).toBe(
+    "red",
+  );
+  await wrapper.setData({ options: { loading: true, background: "" } });
+  expect(overlay.style.getPropertyValue("--c-loading-overlay-background")).toBe(
+    "",
+  );
+  wrapper.unmount();
+});

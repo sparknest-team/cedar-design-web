@@ -2,6 +2,7 @@ import { type App, type Directive, type DirectiveBinding, type Plugin } from 'vu
 import { getRect, getStyle, supportTouch } from '@cedarjs/shared'
 import context from '../context/index'
 import { createNamespace } from '../_utils/global-config'
+import './style'
 
 const { n } = createNamespace('ripple')
 
@@ -32,12 +33,8 @@ function setStyles(element: RippleHTMLElement) {
   element.style.overflow = 'hidden'
   element.style.overflowX = 'hidden'
   element.style.overflowY = 'hidden'
-  if (position === 'static') {
-    element.style.position = 'relative'
-  }
-  if (zIndex === 'auto') {
-    element.style.zIndex = '1'
-  }
+  position === 'static' && (element.style.position = 'relative')
+  zIndex === 'auto' && (element.style.zIndex = '1')
 }
 
 function isTouchEvent(event: Event): event is TouchEvent {
@@ -77,13 +74,11 @@ function createRipple(this: RippleHTMLElement, event: TouchEvent | KeyboardEvent
     const { x, y, centerX, centerY, size }: RippleStyles = computeRippleStyles(this, event)
     const ripple: RippleHTMLElement = document.createElement('div')
     ripple.classList.add(n())
-    ripple.style.opacity = '0'
+    ripple.style.opacity = `0`
     ripple.style.transform = `translate(${x}px, ${y}px) scale3d(.3, .3, .3)`
     ripple.style.width = `${size}px`
     ripple.style.height = `${size}px`
-    if (_ripple.color) {
-      ripple.style.backgroundColor = _ripple.color
-    }
+    _ripple.color && (ripple.style.backgroundColor = _ripple.color)
     ripple.dataset.createdAt = String(performance.now())
 
     setStyles(this)
@@ -92,7 +87,7 @@ function createRipple(this: RippleHTMLElement, event: TouchEvent | KeyboardEvent
 
     window.setTimeout(() => {
       ripple.style.transform = `translate(${centerX}px, ${centerY}px) scale3d(1, 1, 1)`
-      ripple.style.opacity = '0.25'
+      ripple.style.opacity = `.25`
     }, 20)
   }
 
@@ -112,17 +107,13 @@ function removeRipple(this: RippleHTMLElement) {
     const delay: number = ANIMATION_DURATION - performance.now() + Number(lastRipple.dataset.createdAt)
 
     window.setTimeout(() => {
-      lastRipple.style.opacity = '0'
+      lastRipple.style.opacity = `0`
 
       window.setTimeout(() => lastRipple.parentNode?.removeChild(lastRipple), ANIMATION_DURATION)
     }, delay)
   }
 
-  if (_ripple.tasker) {
-    window.setTimeout(task, 30)
-  } else {
-    task()
-  }
+  _ripple.tasker ? window.setTimeout(task, 30) : task()
 }
 
 function forbidRippleTask(this: RippleHTMLElement) {
@@ -131,9 +122,7 @@ function forbidRippleTask(this: RippleHTMLElement) {
   }
 
   const _ripple = this._ripple as RippleOptions
-  if (_ripple.tasker) {
-    window.clearTimeout(_ripple.tasker)
-  }
+  _ripple.tasker && window.clearTimeout(_ripple.tasker)
   _ripple.tasker = null
 }
 
@@ -163,7 +152,6 @@ function mounted(el: RippleHTMLElement, binding: DirectiveBinding<RippleOptions>
     ...(binding.value ?? {}),
     removeRipple: removeRipple.bind(el),
   }
-
 
   el.addEventListener('touchstart', createRipple, { passive: true })
   el.addEventListener('touchmove', forbidRippleTask, { passive: true })
@@ -218,8 +206,8 @@ const Ripple: Directive & Plugin = {
   },
 }
 
-export const _RippleComponent = Ripple
-
+export type RippleInstance = typeof Ripple
+export const _RippleComponent: typeof Ripple = Ripple
 export { Ripple }
 
 export default Ripple

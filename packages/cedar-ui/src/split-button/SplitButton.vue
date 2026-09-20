@@ -9,7 +9,11 @@
     :disabled="disabled"
     :elevation="elevation"
   >
-    <Button v-bind="{ ...buttonProps, onClick: clickHandlers }" :auto-loading="autoLoading" :disabled="disabled || buttonProps?.disabled">
+    <Button
+      v-bind="{ ...buttonProps, onClick: clickHandlers }"
+      :auto-loading="autoLoading"
+      :disabled="disabled || buttonProps?.disabled"
+    >
       <slot />
     </Button>
 
@@ -51,9 +55,9 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import { IconMenuDown } from '@cedarjs/icons-vue'
+import { createNamespace } from '../_utils/global-config'
 import Button, { ButtonGroup, type ButtonHandler } from '../button'
 import DropdownMenu, { type DropdownMenuInstance } from '../dropdown-menu'
-import { createNamespace } from '../_utils/global-config'
 import { splitButtonProps } from './props'
 
 defineOptions({
@@ -65,7 +69,11 @@ const emit = defineEmits(['update:open', 'open-change', 'select'])
 
 const { n } = createNamespace('split-button')
 const menuRef = ref<DropdownMenuInstance>()
-const clickHandlers = computed(() => [props.buttonProps?.onClick, props.onClick].flat().filter((handler): handler is ButtonHandler => typeof handler === 'function'))
+const clickHandlers = computed(() =>
+  [props.buttonProps?.onClick, props.onClick]
+    .flat()
+    .filter((handler): handler is ButtonHandler => typeof handler === 'function'),
+)
 
 const uncontrolledOpen = ref(props.defaultOpen)
 const computedOpen = computed({
@@ -77,13 +85,12 @@ const computedOpen = computed({
   },
 })
 
-const handleSelect = (
-  value: unknown,
-  option: Record<string, unknown>,
-  event: Event,
-) => emit('select', value, option, event)
+const handleSelect = (value: unknown, option: Record<string, unknown>, event: Event) =>
+  emit('select', value, option, event)
 
-const open = () => { if (!props.disabled) menuRef.value?.open() }
+const open = () => {
+  if (!props.disabled) menuRef.value?.open()
+}
 const close = () => menuRef.value?.close()
 const resize = () => menuRef.value?.resize()
 defineExpose({ open, close, resize })

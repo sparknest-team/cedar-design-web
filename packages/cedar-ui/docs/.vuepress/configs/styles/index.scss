@@ -1,11 +1,11 @@
 @use './hope.scss';
 
 :root {
-  --vp-c-accent: rgb(0 190 190);
-  --vp-c-accent-bg: rgb(0 190 190);
-  --vp-c-accent-hover: rgb(55, 209, 204);
-  --c-brand: rgb(0 190 190);
-  --c-brand-light: rgb(0 190 190);
+  --vp-c-accent: var(--c-color-primary);
+  --vp-c-accent-bg: var(--c-color-primary);
+  --vp-c-accent-hover: rgb(var(--c-primary-5));
+  --c-brand: var(--c-color-primary);
+  --c-brand-light: rgb(var(--c-primary-5));
 }
 
 * {
@@ -18,8 +18,8 @@
 }
 
 html.dark {
-  --c-brand: rgb(0 190 190);
-  --c-brand-light: rgb(0 190 190);
+  --c-brand: var(--c-color-primary);
+  --c-brand-light: rgb(var(--c-primary-5));
 }
 
 h2 {

@@ -9,7 +9,7 @@ export interface MenuContext {
   submenuTrigger: Ref<DropdownMenuSubmenuTrigger>
   onOptionClick: (value: MenuValue, option: MenuOptionInfo, ev: Event) => void
 }
-export const menuInjectionKey: InjectionKey<MenuContext> = Symbol('Menu')
+export const menuInjectionKey: InjectionKey<MenuContext> = Symbol('DropdownMenu')
 export interface MenuBranch { close(): void; allowClose(): void; focus?(): void }
 export interface MenuLevel { visible: Ref<boolean>; register(branch: MenuBranch): () => void; activate(branch?: MenuBranch): void; leave?: () => void }
-export const menuLevelKey: InjectionKey<MenuLevel> = Symbol('MenuLevel')
+export const menuLevelKey: InjectionKey<MenuLevel> = Symbol('DropdownMenuLevel')

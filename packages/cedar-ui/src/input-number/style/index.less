@@ -75,7 +75,7 @@
       height: 100%;
       border-radius: var(~"--c-field-number-step-layer-border-radius");
       opacity: 1;
-      margin-right: calc(-1 * var(~"--c-field-padding-x"));
+      margin-right: calc(-1 * var(~"--c-field-padding-horizontal"));
       .transition();
 
       .c-input-number-step-divider-vertical {
@@ -171,21 +171,21 @@
     }
 
     .c-field-decorator__suffix {
-      margin-right: calc(-1 * var(~"--c-field-padding-x"));
+      margin-right: calc(-1 * var(~"--c-field-padding-horizontal"));
 
       .c-input-number-step-button {
         margin-right: 0;
       }
     }
     .c-field-decorator__prefix {
-      margin-left: calc(-1 * var(~"--c-field-padding-x"));
+      margin-left: calc(-1 * var(~"--c-field-padding-horizontal"));
 
       .c-input-number-step-button {
         margin-left: 0;
       }
     }
     .c-input-number-step-button {
-      border-right: var(~"--c-field-border-addon-separator-width") solid
+      border-right: var(~"--c-internal-field-border-addon-separator-width") solid
         transparent;
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
@@ -196,7 +196,7 @@
       border: 0 none;
     }
     .c-input-number-step-button {
-      border-left: var(~"--c-field-border-addon-separator-width") solid
+      border-left: var(~"--c-internal-field-border-addon-separator-width") solid
         transparent;
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;

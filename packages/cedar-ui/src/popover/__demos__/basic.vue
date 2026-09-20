@@ -1,11 +1,9 @@
 <template>
-  <c-popover title="Title">
-    <c-button>Hover</c-button>
+  <c-popover title="设备状态">
+    <c-button>点击查看</c-button>
     <template #content>
-      <p>Here is the text content</p>
-      <p>Here is the text content</p>
+      <p>设备：生产线 A-03</p>
+      <p>状态：运行中</p>
     </template>
   </c-popover>
 </template>
-<script lang="ts" setup>
-</script>

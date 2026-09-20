@@ -39,11 +39,10 @@ permalink: /components/loading/
 | radius    | `circle` 类型的半径                    | `string \| number`                            | -        |
 | color     | 加载指示器和提示文案的颜色             | `string`                                      | -        |
 | loading   | 是否为加载中状态（仅在包裹内容时生效） | `boolean`                                     | `false`  |
-| dot       | 是否使用点状加载动画                   | `boolean`                                     | `false`  |
 | tip       | 提示文案                               | `string`                                      | -        |
 | hide-icon | 是否隐藏加载指示器                     | `boolean`                                     | `false`  |
 
-`v-c-loading` 支持布尔值简写，也支持 `{ loading, tip, type, size, radius, dot, color, fullscreen, background }` 配置对象。对象形式中的 `loading` 控制加载状态，`tip` 与 `Loading` 组件属性保持一致。
+`v-c-loading` 支持布尔值简写，也支持 `{ loading, tip, type, size, radius, color, hideIcon, fullscreen, background }` 配置对象。对象形式中的 `loading` 控制加载状态，其余组件属性与 `Loading` 保持一致。
 
 #### 注册方式
 
@@ -78,8 +77,7 @@ app.directive("c-loading", vLoading);
 | ------- | ---------------------- |
 | default | 需要展示加载遮罩的内容 |
 | tip     | 自定义提示内容         |
-| element | 自定义加载元素         |
-| icon    | 自定义并自动旋转的图标 |
+| icon    | 自定义加载指示器     |
 
 ## 类型定义
 

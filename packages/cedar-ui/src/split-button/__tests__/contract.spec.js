@@ -1,10 +1,10 @@
 import { createSSRApp, h, nextTick } from 'vue'
 import { renderToString } from '@vue/server-renderer'
-import { mount, flushPromises } from '@vue/test-utils'
+import { flushPromises, mount } from '@vue/test-utils'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 import SplitButton from '..'
-import DropdownMenu, { MenuOption } from '../../dropdown-menu'
 import Button from '../../button'
+import DropdownMenu, { MenuOption } from '../../dropdown-menu'
 
 const wrappers = []
 function render(props = {}, slots = {}) {
@@ -18,24 +18,32 @@ function render(props = {}, slots = {}) {
   wrappers.push({ wrapper, host })
   return wrapper
 }
-afterEach(() => { wrappers.splice(0).forEach(({ wrapper, host }) => { wrapper.unmount(); host.remove() }) })
+afterEach(() => {
+  wrappers.splice(0).forEach(({ wrapper, host }) => {
+    wrapper.unmount()
+    host.remove()
+  })
+})
 
 describe('SplitButton copied contract', () => {
   test.each(['outline', 'text', 'tonal'])('arrow preserves the %s variant without default icon fill', (variant) => {
     const wrapper = render({ variant, status: 'primary' })
     const arrow = wrapper.findAll('button')[1]
-    expect(arrow.classes().some(name => name.endsWith('--variant-' + variant))).toBe(true)
-    expect(arrow.classes().some(name => name.endsWith('--icon-container'))).toBe(true)
-    expect(arrow.classes().some(name => name.endsWith('--icon-container-primary'))).toBe(false)
+    expect(arrow.classes().some((name) => name.endsWith('--variant-' + variant))).toBe(true)
+    expect(arrow.classes().some((name) => name.endsWith('--icon-container'))).toBe(true)
+    expect(arrow.classes().some((name) => name.endsWith('--icon-container-primary'))).toBe(false)
   })
 
   test('keep-open selection still emits feedback', async () => {
     const onSelect = vi.fn()
-    const wrapper = render({ hideOnSelect: false, onSelect }, {
-      content: () => h(MenuOption, { value: 'save', label: 'Save' }),
-    })
+    const wrapper = render(
+      { hideOnSelect: false, onSelect },
+      {
+        content: () => h(MenuOption, { value: 'save', label: 'Save' }),
+      },
+    )
     await wrapper.findAll('button')[1].trigger('click')
-    await new Promise(resolve => setTimeout(resolve, 40))
+    await new Promise((resolve) => setTimeout(resolve, 40))
     document.querySelector('[data-dropdown-menu-item]').click()
     await nextTick()
     expect(onSelect).toHaveBeenCalledTimes(1)
@@ -43,7 +51,9 @@ describe('SplitButton copied contract', () => {
   })
 
   test('primary action forwards each handler once, bubbles and does not open menu', async () => {
-    const onClick = vi.fn(), nestedClick = vi.fn(), bubble = vi.fn()
+    const onClick = vi.fn(),
+      nestedClick = vi.fn(),
+      bubble = vi.fn()
     const wrapper = render({ onClick, buttonProps: { onClick: nestedClick } })
     wrapper.element.addEventListener('click', bubble)
     await wrapper.find('button').trigger('click')
@@ -55,9 +65,23 @@ describe('SplitButton copied contract', () => {
 
   test('awaits both async callbacks and blocks repeat clicks until all settle', async () => {
     let resolveMain, resolveNested
-    const onClick = vi.fn(() => new Promise(resolve => { resolveMain = resolve }))
-    const nestedClick = vi.fn(() => new Promise(resolve => { resolveNested = resolve }))
-    const wrapper = render({ autoLoading: true, onClick, buttonProps: { onClick: nestedClick } })
+    const onClick = vi.fn(
+      () =>
+        new Promise((resolve) => {
+          resolveMain = resolve
+        }),
+    )
+    const nestedClick = vi.fn(
+      () =>
+        new Promise((resolve) => {
+          resolveNested = resolve
+        }),
+    )
+    const wrapper = render({
+      autoLoading: true,
+      onClick,
+      buttonProps: { onClick: nestedClick },
+    })
     await wrapper.find('button').trigger('click')
     expect(wrapper.find('button').attributes('aria-busy')).toBe('true')
     await wrapper.find('button').trigger('click')
@@ -72,16 +96,19 @@ describe('SplitButton copied contract', () => {
 
   test('trigger opens, icon receives state and menu selection is forwarded', async () => {
     const onSelect = vi.fn()
-    const wrapper = render({ onSelect }, {
-      icon: ({ open }) => `open:${open}`,
-      content: () => h(MenuOption, { value: 'save', label: 'Save' }),
-    })
+    const wrapper = render(
+      { onSelect },
+      {
+        icon: ({ open }) => `open:${open}`,
+        content: () => h(MenuOption, { value: 'save', label: 'Save' }),
+      },
+    )
     expect(wrapper.text()).toContain('open:false')
     await wrapper.findAll('button')[1].trigger('click')
     await nextTick()
     expect(wrapper.emitted('update:open')[0]).toEqual([true])
     expect(wrapper.text()).toContain('open:true')
-    await new Promise(resolve => setTimeout(resolve, 40))
+    await new Promise((resolve) => setTimeout(resolve, 40))
     await nextTick()
     const option = document.querySelector('[data-dropdown-menu-item]')
     expect(option).toBeTruthy()
@@ -93,7 +120,9 @@ describe('SplitButton copied contract', () => {
   })
 
   test('controlled open only requests updates; methods and instances are independent', async () => {
-    const controlled = render({ open: false }), first = render(), second = render()
+    const controlled = render({ open: false }),
+      first = render(),
+      second = render()
     controlled.vm.open()
     first.vm.open()
     await nextTick()
@@ -110,7 +139,13 @@ describe('SplitButton copied contract', () => {
   })
 
   test('disabled blocks primary action and programmatic opening', async () => {
-    const onClick = vi.fn(), wrapper = render({ disabled: true, onClick, buttonProps: { disabled: false }, triggerButtonProps: { disabled: false } })
+    const onClick = vi.fn(),
+      wrapper = render({
+        disabled: true,
+        onClick,
+        buttonProps: { disabled: false },
+        triggerButtonProps: { disabled: false },
+      })
     await wrapper.find('button').trigger('click')
     wrapper.vm.open()
     await nextTick()
@@ -119,14 +154,28 @@ describe('SplitButton copied contract', () => {
   })
 
   test('renders the two buttons during SSR', async () => {
-    const html = await renderToString(createSSRApp({ render: () => h(SplitButton, {}, { default: () => 'Publish' }) }))
+    const html = await renderToString(
+      createSSRApp({
+        render: () => h(SplitButton, {}, { default: () => 'Publish' }),
+      }),
+    )
     expect(html).toContain('Publish')
     expect(html.match(/<button\b/g)).toHaveLength(2)
   })
 
   test('forwards floating props and puts the default arrow in the icon slot', () => {
-    const wrapper = render({ popupClass: 'custom-menu', offsetX: '12px', offsetY: -4, hideOnSelect: false })
-    expect(wrapper.findComponent(DropdownMenu).props()).toMatchObject({ popupClass: 'custom-menu', offsetX: '12px', offsetY: -4, hideOnSelect: false })
+    const wrapper = render({
+      popupClass: 'custom-menu',
+      offsetX: '12px',
+      offsetY: -4,
+      hideOnSelect: false,
+    })
+    expect(wrapper.findComponent(DropdownMenu).props()).toMatchObject({
+      popupClass: 'custom-menu',
+      offsetX: '12px',
+      offsetY: -4,
+      hideOnSelect: false,
+    })
     expect(wrapper.findAllComponents(Button)[1].vm.$slots.icon).toBeTruthy()
   })
 })

@@ -1,108 +1,50 @@
 <template>
-  <div :class="prefixCls">
-    <div
-      :class="[
-        `${prefixCls}-icon`,
-        {
-          [`${prefixCls}-icon-${status}`]: status,
-          [`${prefixCls}-icon-custom`]: status === null,
-        },
-      ]"
-    >
-      <div :class="`${prefixCls}-icon-tip`">
-        <slot name="icon">
-          <icon-info v-if="status === 'info'" />
-          <icon-check v-else-if="status === 'success'" />
-          <icon-exclamation v-else-if="status === 'warning'" />
-          <icon-close v-else-if="status === 'danger'" />
-          <result-question v-else-if="status === 'question'" />
-          <result-empty v-else-if="status === 'empty'" />
-          <result-forbidden v-else-if="status === '403'" />
-          <result-not-found v-else-if="status === '404'" />
-          <result-server-error v-else-if="status === '500'" />
-        </slot>
+  <div :class="classes(n(), n('$--box'))">
+    <div v-if="$slots.icon" :class="n('image-container')">
+      <slot name="icon" :size="normalizedImageSize" />
+    </div>
+    <div v-else :class="n('image-container')" aria-hidden="true">
+      <div
+        :class="classes(n('image'), n(status), [animation, n('--animated')])"
+        :style="imageStyle"
+      >
+        <component :is="statusComponent" />
       </div>
     </div>
-    <div v-if="title || $slots.title" :class="`${prefixCls}-title`">
-      <slot name="title">
-        {{ title }}
-      </slot>
+
+    <div v-if="title || $slots.title" :class="n('title')">
+      <slot name="title">{{ title }}</slot>
     </div>
-    <div v-if="subtitle || $slots.subtitle" :class="`${prefixCls}-subtitle`">
-      <slot name="subtitle">
-        {{ subtitle }}
-      </slot>
+    <div v-if="subtitle || $slots.subtitle" :class="n('subtitle')">
+      <slot name="subtitle">{{ subtitle }}</slot>
     </div>
-    <div v-if="$slots.extra" :class="`${prefixCls}-extra`">
-      <slot name="extra"></slot>
+    <div v-if="$slots.extra" :class="n('extra')">
+      <slot name="extra" />
     </div>
-    <div v-if="$slots.default" :class="`${prefixCls}-content`">
-      <slot></slot>
+    <div v-if="$slots.default" :class="n('content')">
+      <slot />
     </div>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { createNamespace, getPrefixCls } from '../_utils/global-config'
-import { IconInfo } from '@cedarjs/icons-vue/icon-info'
-import { IconCheck } from '@cedarjs/icons-vue/icon-check'
-import { IconExclamation } from '@cedarjs/icons-vue/icon-exclamation'
-import { IconClose } from '@cedarjs/icons-vue/icon-close'
-import ResultForbidden from './403'
-import ResultNotFound from './404'
-import ResultServerError from './500'
-import ResultQuestion from './Question.vue'
-import ResultEmpty from './Empty.vue'
-import { resultProps } from './props'
+<script lang="ts" setup>
+import { computed } from "vue";
+import { createNamespace } from "../_utils/global-config";
+import { toSizeUnit } from "../_utils/maple/elements";
+import { resultStatusComponents } from "./platform";
+import { resultProps } from "./props";
 
-export default defineComponent({
-  name: createNamespace('result').name,
-  components: {
-    IconInfo,
-    IconCheck,
-    IconExclamation,
-    IconClose,
-    ResultForbidden,
-    ResultNotFound,
-    ResultServerError,
-    ResultQuestion,
-    ResultEmpty,
-  },
-  props: resultProps,
-  /**
-   * @zh 图标
-   * @en Icon
-   * @slot icon
-   */
-  /**
-   * @zh 标题
-   * @en Title
-   * @slot title
-   */
-  /**
-   * @zh 副标题
-   * @en Subtitle
-   * @slot subtitle
-   */
-  /**
-   * @zh 操作区
-   * @en Extra
-   * @slot extra
-   * @version 2.8.0
-   */
-  /**
-   * @zh 默认插槽
-   * @en Default
-   * @slot default
-   * @version 2.8.0
-   */
-  setup() {
-    const prefixCls = getPrefixCls('result')
+defineOptions({
+  name: createNamespace("result").name,
+});
 
-    return {
-      prefixCls,
-    }
-  },
-})
+const props = defineProps(resultProps);
+const { n, classes } = createNamespace("result");
+const statusComponent = computed(() => resultStatusComponents[props.status]);
+const normalizedImageSize = computed(() =>
+  props.imageSize == null ? undefined : toSizeUnit(props.imageSize),
+);
+const imageStyle = computed(() => ({
+  "--c-result-image-size": normalizedImageSize.value,
+}));
 </script>

@@ -1,103 +1,123 @@
 @import "../../style/theme/index.less";
 
 :root {
-  --c-radio-border-color: var(~"--c-color-neutral-3");
-  --c-radio-border-width: var(~"--c-border-width-2");
-  --c-radio-layout-height: 14px;
-  --c-radio-border-color-hover: var(~"--c-color-neutral-3");
-  --c-radio-border-color-disabled: var(~"--c-color-neutral-3");
-  --c-radio-bg: var(~"--c-color-bg-2");
-  --c-radio-bg-checked: rgb(var(~"--c-primary-6"));
-  --c-radio-border-radius: var(~"--c-border-radius-circle");
-  --c-radio-bg-disabled: var(~"--c-color-fill-2");
-  --c-radio-bg-checked-disabled: var(~"--c-color-primary-light-3");
-  --c-radio-dot-bg-checked: var(~"--c-color-white");
-  --c-radio-dot-bg-checked-disabled: var(~"--c-radio-bg-disabled");
-  --c-radio-icon-inner-size: calc(
-    var(~"--c-radio-layout-height") - var(~"--c-radio-border-width") * 2
+  --c-radio-control-color: var(~"--c-color-neutral-3");
+  --c-internal-radio-border-width: var(~"--c-border-width-2");
+  --c-radio-control-size: 14px;
+  --c-internal-radio-control-color-hover: var(~"--c-color-neutral-3");
+  --c-radio-control-color-disabled: var(~"--c-color-neutral-3");
+  --c-radio-control-color-error: var(--c-sys-color-status-danger);
+  --c-internal-radio-bg: var(~"--c-color-bg-2");
+  --c-radio-control-color-checked: rgb(var(~"--c-primary-6"));
+  --c-internal-radio-border-radius: var(~"--c-border-radius-circle");
+  --c-internal-radio-bg-disabled: var(~"--c-color-fill-2");
+  --c-internal-radio-control-color-checked-disabled: var(
+    ~"--c-color-primary-light-3"
   );
-  --c-radio-padding-left: calc(
-    (var(~"--c-radio-mask-height") / 2) - (var(~"--c-radio-layout-height") / 2)
+  --c-internal-radio-dot-bg-checked: var(~"--c-color-white");
+  --c-internal-radio-dot-bg-checked-disabled: var(
+    ~"--c-internal-radio-bg-disabled"
+  );
+  --c-internal-radio-icon-inner-size: calc(
+    var(~"--c-radio-control-size") - var(~"--c-internal-radio-border-width") * 2
+  );
+  --c-radio-action-padding: calc(
+    (var(~"--c-internal-radio-mask-height") / 2) -
+      (var(~"--c-radio-control-size") / 2)
   );
 
-  --c-radio-text-color: var(~"--c-color-text-1");
-  --c-radio-text-color-disabled: var(~"--c-color-text-4");
-  --c-radio-text-color-checked-disabled: var(~"--c-color-text-4");
-  --c-radio-text-font-size: var(~"--c-font-size-body-3");
-  --c-radio-text-font-size-lg: var(~"--c-font-size-body-3");
-  --c-radio-text-font-size-xs: var(~"--c-font-size-body-1");
-  --c-radio-text-font-size-sm: var(~"--c-font-size-body-3");
-  --c-radio-text-margin-left: var(~"--c-spacing-4");
+  --c-radio-label-text-color: var(~"--c-color-text-1");
+  --c-radio-label-text-color-disabled: var(~"--c-color-text-4");
+  --c-internal-radio-label-text-color-checked-disabled: var(
+    ~"--c-color-text-4"
+  );
+  --c-radio-label-font-size: var(~"--c-font-size-body-3");
+  --c-internal-radio-label-font-size-lg: var(~"--c-font-size-body-3");
+  --c-internal-radio-label-font-size-xs: var(~"--c-font-size-body-1");
+  --c-internal-radio-label-font-size-sm: var(~"--c-font-size-body-3");
+  --c-radio-label-gap: var(~"--c-spacing-4");
 
-  --c-radio-mask-height: var(~"--c-size-6");
-  --c-radio-mask-hover-bg: var(~"--c-color-fill-2");
-  --c-radio-group-margin-right: var(~"--c-spacing-8");
-  --c-radio-group-button-bg: var(~"--c-color-fill-2");
-  --c-radio-button-padding-horizontal: var(~"--c-spacing-6");
-  --c-radio-button-spacing: 3px;
-  --c-radio-button-bg-active: var(~"--c-color-bg-5");
-  --c-radio-button-bg-hover: var(~"--c-radio-button-bg-active");
-  --c-radio-button-text-color-active: rgb(var(~"--c-primary-6"));
-  --c-radio-button-font-weight-active: var(~"--c-font-weight-500");
-  --c-radio-button-text-color-hover: var(~"--c-radio-text-color");
+  --c-internal-radio-mask-height: var(~"--c-size-6");
+  --c-internal-radio-mask-hover-bg: var(~"--c-color-fill-2");
+  --c-radio-group-gap: var(~"--c-spacing-8");
+  --c-internal-radio-group-button-bg: var(~"--c-color-fill-2");
+  --c-internal-radio-button-padding-horizontal: var(~"--c-spacing-6");
+  --c-internal-radio-button-spacing: 3px;
+  --c-internal-radio-button-bg-active: var(~"--c-color-bg-5");
+  --c-internal-radio-button-bg-hover: var(
+    ~"--c-internal-radio-button-bg-active"
+  );
+  --c-internal-radio-button-text-color-active: rgb(var(~"--c-primary-6"));
+  --c-internal-radio-button-font-weight-active: var(~"--c-font-weight-500");
+  --c-internal-radio-button-text-color-hover: var(
+    ~"--c-radio-label-text-color"
+  );
 
-  --c-radio-button-border-radius: var(~"--c-border-radius-sm");
+  --c-internal-radio-button-border-radius: var(~"--c-border-radius-sm");
 
-  --c-radio-button-bg: transparent;
-  --c-radio-button-text-color: var(~"--c-color-text-2");
+  --c-internal-radio-button-bg: transparent;
+  --c-internal-radio-button-text-color: var(~"--c-color-text-2");
 
-  --c-radio-button-bg-disabled: transparent;
-  --c-radio-button-text-color-disabled: var(~"--c-color-text-4");
-  --c-radio-button-bg-checked-disabled: var(~"--c-radio-button-bg-active");
-  --c-radio-button-text-color-checked-disabled: var(
+  --c-internal-radio-button-bg-disabled: transparent;
+  --c-internal-radio-button-text-color-disabled: var(~"--c-color-text-4");
+  --c-internal-radio-button-bg-checked-disabled: var(
+    ~"--c-internal-radio-button-bg-active"
+  );
+  --c-internal-radio-button-text-color-checked-disabled: var(
     ~"--c-color-primary-light-3"
   );
 
-  --c-radio-button-separator-bg: var(~"--c-color-neutral-3");
-  --c-radio-button-separator-width: 1px;
-  --c-radio-button-separator-height: 14px;
-  --c-radio-button-separator-left: calc(
+  --c-internal-radio-button-separator-bg: var(~"--c-color-neutral-3");
+  --c-internal-radio-button-separator-width: 1px;
+  --c-internal-radio-button-separator-height: 14px;
+  --c-internal-radio-button-separator-left: calc(
     -1 *
       (
         (
-            var(~"--c-radio-button-spacing") -
-              var(~"--c-radio-button-separator-width")
+            var(~"--c-internal-radio-button-spacing") -
+              var(~"--c-internal-radio-button-separator-width")
           ) /
           2
       ) -
-      var(~"--c-radio-button-separator-width")
+      var(~"--c-internal-radio-button-separator-width")
   );
-  --c-radio-button-spacing-half: calc(var(~"--c-radio-button-spacing") / 2);
-
-  --c-radio-size-md-height: var(~"--c-size-md");
-  --c-radio-size-sm-height: var(~"--c-size-sm");
-  --c-radio-size-xs-height: var(~"--c-size-xs");
-  --c-radio-size-lg-height: var(~"--c-size-lg");
-  --c-radio-group-vertical-line-height: var(~"--c-size-8");
-  --c-radio-button-line-height-md: calc(
-    var(~"--c-radio-size-md-height") - var(~"--c-radio-button-spacing") * 2
-  );
-  --c-radio-button-line-height-sm: calc(
-    var(~"--c-radio-size-sm-height") - var(~"--c-radio-button-spacing") * 2
-  );
-  --c-radio-button-line-height-lg: calc(
-    var(~"--c-radio-size-lg-height") - var(~"--c-radio-button-spacing") * 2
-  );
-  --c-radio-button-line-height-xs: calc(
-    var(~"--c-radio-size-xs-height") - var(~"--c-radio-button-spacing") * 2
+  --c-internal-radio-button-spacing-half: calc(
+    var(~"--c-internal-radio-button-spacing") / 2
   );
 
-  --c-radio-transition-duration-1: var(~"--c-transition-duration-1");
-  --c-radio-transition-duration-3: var(~"--c-transition-duration-3");
-  --c-radio-transition-timing-function-linear: var(
+  --c-internal-radio-size-md-height: var(~"--c-size-md");
+  --c-internal-radio-size-sm-height: var(~"--c-size-sm");
+  --c-internal-radio-size-xs-height: var(~"--c-size-xs");
+  --c-internal-radio-size-lg-height: var(~"--c-size-lg");
+  --c-internal-radio-group-vertical-line-height: var(~"--c-size-8");
+  --c-internal-radio-button-line-height-md: calc(
+    var(~"--c-internal-radio-size-md-height") -
+      var(~"--c-internal-radio-button-spacing") * 2
+  );
+  --c-internal-radio-button-line-height-sm: calc(
+    var(~"--c-internal-radio-size-sm-height") -
+      var(~"--c-internal-radio-button-spacing") * 2
+  );
+  --c-internal-radio-button-line-height-lg: calc(
+    var(~"--c-internal-radio-size-lg-height") -
+      var(~"--c-internal-radio-button-spacing") * 2
+  );
+  --c-internal-radio-button-line-height-xs: calc(
+    var(~"--c-internal-radio-size-xs-height") -
+      var(~"--c-internal-radio-button-spacing") * 2
+  );
+
+  --c-internal-radio-transition-duration-1: var(~"--c-transition-duration-1");
+  --c-radio-animation-duration: var(~"--c-transition-duration-3");
+  --c-internal-radio-transition-timing-function-linear: var(
     ~"--c-transition-timing-function-linear"
   );
-  --c-radio-transition-timing-function-overshoot: var(
+  --c-internal-radio-transition-timing-function-overshoot: var(
     ~"--c-transition-timing-function-overshoot"
   );
 }
 
 :root[cedar-theme="dark"] {
-  --c-radio-button-bg-active: var(~"--c-color-fill-3");
-  --c-radio-button-bg-hover: var(~"--c-color-fill-3");
+  --c-internal-radio-button-bg-active: var(~"--c-color-fill-3");
+  --c-internal-radio-button-bg-hover: var(~"--c-color-fill-3");
 }

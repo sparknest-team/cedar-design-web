@@ -20,7 +20,7 @@ export interface LoadingOptions {
   type?: LoadingType;
   size?: LoadingSize | number;
   radius?: string | number;
-  dot?: boolean;
+  hideIcon?: boolean;
   color?: string;
   fullscreen?: boolean;
   background?: string;
@@ -64,10 +64,14 @@ const createInstance = (
   const options = reactive<LoadingRenderOptions>(getOptions(binding.value));
   const container = document.createElement("div");
   // The overlay is inside the host: consume clicks before they reach Card/ancestors.
-  container.addEventListener("click", (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-  }, true);
+  container.addEventListener(
+    "click",
+    (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+    },
+    true,
+  );
   const fullscreen = options.fullscreen === true;
   const restorePosition =
     !fullscreen && getComputedStyle(el).position === "static";

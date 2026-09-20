@@ -17,8 +17,8 @@ permalink: /components/style-provider/
 ```ts
 import { StyleProvider, Themes } from '@cedarjs/ui'
 
-StyleProvider.setStyleVars(Themes.dark)
-StyleProvider.setStyleVars({ '--c-color-scheme': 'light' })
+StyleProvider.setStyleVars(Themes.default.dark)
+StyleProvider.setStyleVars(Themes.maple.light)
 StyleProvider.setStyleVars(null)
 ```
 

@@ -8,11 +8,11 @@
   line-height: 1;
   user-select: none;
 
-  &-disabled {
+  &--disabled {
     cursor: not-allowed;
   }
 
-  &-character {
+  &__content {
     position: relative;
     color: var(~'--c-rate-bg');
     transition: transform var(~'--c-rate-transition-duration')
@@ -61,7 +61,7 @@
     }
   }
 
-  &:not(&-readonly):not(&-disabled) &-character {
+  &:not(&--readonly):not(&--disabled) &__content {
     cursor: pointer;
 
     &:hover,

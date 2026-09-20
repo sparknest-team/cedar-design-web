@@ -1,55 +1,26 @@
 @import './token.less';
 
 .c-trigger {
-  &-wrapper {
-    display: inline-block;
-  }
-
-  &-popup {
-    position: absolute;
-    z-index: var(~"--c-z-index-popup");
-  }
-
-  &-arrow {
-    position: absolute;
-    z-index: var(--c-z-index-local-behind);
+  &__arrow {
+    z-index: var(--c-sys-layer-behind);
     display: block;
     box-sizing: border-box;
-    width: var(~'--c-trigger-size-arrow-width');
-    height: var(~'--c-trigger-size-arrow-width');
-    background-color: var(~'--c-trigger-arrow-bg');
-    content: '';
+    width: var(--c-trigger-arrow-size);
+    height: var(--c-trigger-arrow-size);
+    background-color: var(--c-trigger-arrow-background);
+    border-radius: var(--c-trigger-arrow-radius);
+    pointer-events: none;
   }
+}
 
-  &-popup[trigger-placement='top'] &-arrow,
-  &-popup[trigger-placement='top-start'] &-arrow,
-  &-popup[trigger-placement='top-end'] &-arrow {
-    border-top: none;
-    border-left: none;
-    border-bottom-right-radius: var(~'--c-trigger-arrow-border-radius');
-  }
+.trigger-fade-enter-active,
+.trigger-fade-leave-active,
+.trigger-fade-appear-active {
+  transition: opacity var(--c-trigger-transition-duration) var(--c-trigger-transition-easing);
+}
 
-  &-popup[trigger-placement='bottom'] &-arrow,
-  &-popup[trigger-placement='bottom-start'] &-arrow,
-  &-popup[trigger-placement='bottom-end'] &-arrow {
-    border-right: none;
-    border-bottom: none;
-    border-top-left-radius: var(~'--c-trigger-arrow-border-radius');
-  }
-
-  &-popup[trigger-placement='left'] &-arrow,
-  &-popup[trigger-placement='left-start'] &-arrow,
-  &-popup[trigger-placement='left-end'] &-arrow {
-    border-bottom: none;
-    border-left: none;
-    border-top-right-radius: var(~'--c-trigger-arrow-border-radius');
-  }
-
-  &-popup[trigger-placement='right'] &-arrow,
-  &-popup[trigger-placement='right-start'] &-arrow,
-  &-popup[trigger-placement='right-end'] &-arrow {
-    border-top: none;
-    border-right: none;
-    border-bottom-left-radius: var(~'--c-trigger-arrow-border-radius');
-  }
+.trigger-fade-enter-from,
+.trigger-fade-leave-to,
+.trigger-fade-appear-from {
+  opacity: 0;
 }

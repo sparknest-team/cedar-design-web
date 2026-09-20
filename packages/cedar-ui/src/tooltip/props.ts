@@ -1,31 +1,42 @@
+import type { PropType } from 'vue'
+import type { ComponentSize, SemanticStatus } from '../_utils/constant'
+import type { TriggerEvent, TriggerPlacement } from '../trigger'
 import { triggerProps } from '../trigger/props'
-import { popupContainerProp } from '../_utils/popup-container'
-import type { CSSProperties, ExtractPropTypes, PropType } from 'vue'
-import type { TriggerPosition } from '../_utils/constant'
-import { TRIGGER_POSITIONS } from '../_utils/constant'
-import type { ClassName } from '../_utils/types'
+
+export type TooltipStatus = Extract<SemanticStatus, 'default' | 'primary' | 'info' | 'success' | 'warning' | 'danger'>
+export type TooltipSize = Extract<ComponentSize, 'xs' | 'md'>
 
 export const tooltipProps = {
   ...triggerProps,
-  showArrow: { type: Boolean, default: true },
-  popupOffset: { type: Number, default: 10 },
-  animationName: { type: String, default: 'zoom-in-fade-out' },
-  autoFitTransformOrigin: { type: Boolean, default: true },
-  status: { type: String as PropType<TooltipStatus>, default: 'default' },
-  open: { type: Boolean, default: undefined },
-  defaultOpen: Boolean,
+  /** 提示内容。 */
   content: String,
-  placement: { type: String as PropType<TriggerPosition>, default: 'top', validator: (value: TriggerPosition) => TRIGGER_POSITIONS.includes(value) },
-  xs: Boolean,
-  backgroundColor: String,
+  /** 面板主题状态。 */
+  status: { type: String as PropType<TooltipStatus>, default: 'default' },
+  /** 提示尺寸；当前实现 xs 和 md。 */
+  size: { type: String as PropType<TooltipSize>, default: 'md' },
+  /** 自定义背景色。 */
   color: String,
+  /** 自定义文字色。 */
   textColor: String,
-  contentClass: [String, Array, Object] as PropType<ClassName>,
-  contentStyle: Object as PropType<CSSProperties>,
-  arrowClass: [String, Array, Object] as PropType<ClassName>,
-  arrowStyle: Object as PropType<CSSProperties>,
-  popupContainer: popupContainerProp,
-} 
+  /** 默认同时支持鼠标悬停和键盘聚焦。 */
+  trigger: {
+    type: [String, Array] as PropType<TriggerEvent | TriggerEvent[]>,
+    default: () => ['hover', 'focus'],
+  },
+  /** 首选弹出位置。 */
+  placement: { type: String as PropType<TriggerPlacement>, default: 'top' },
+  /** 默认显示箭头。 */
+  showArrow: { type: Boolean, default: true },
+  /** 浮层与触发元素的默认距离。 */
+  popupOffset: { type: Number, default: 10 },
+  /** 动画名省略时使用 Tooltip 自身动画。 */
+  animationName: { type: String, default: undefined },
+  /** 根据最终方位设置动画原点。 */
+  autoFitTransformOrigin: { type: Boolean, default: true },
+  /** 关闭后卸载轻量提示内容。 */
+  unmountOnClose: { type: Boolean, default: true },
+  /** 无内容时不创建提示浮层。 */
+  hideEmpty: { type: Boolean, default: true },
+}
 
-export type TooltipProps = import("vue").ExtractPublicPropTypes<typeof tooltipProps>
-export type TooltipStatus = 'default' | 'primary' | 'info' | 'success' | 'warning' | 'danger'
+export type TooltipProps = import('vue').ExtractPublicPropTypes<typeof tooltipProps>

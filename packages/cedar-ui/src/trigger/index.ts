@@ -17,10 +17,10 @@ export interface TriggerExposed {
 }
 
 export type TriggerInstance = InstanceType<typeof _Trigger> & TriggerExposed
-export type { TriggerPosition } from '../_utils/constant'
 export type { TriggerEvent, TriggerPlacement } from './contract'
 export type { Reference } from './reference'
-export type { TriggerProps, TriggerPopupTranslate } from './types'
+export type { TriggerProps, TriggerReferenceAttrs } from './props'
+export type { TriggerPopupTranslate, TriggerStrategy } from './types'
 export { Trigger }
 
 export const _TriggerComponent = Trigger

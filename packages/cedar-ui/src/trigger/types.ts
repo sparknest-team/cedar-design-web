@@ -1,5 +1,6 @@
-import { TriggerPosition } from '../_utils/constant'
+import type { TriggerPlacement } from './contract'
 
-export type TriggerPopupTranslate = [number, number] | { [key in TriggerPosition]?: [number, number] }
-
-export type TriggerProps = import('vue').ExtractPublicPropTypes<typeof import('./props').triggerProps>
+export type TriggerStrategy = 'absolute' | 'fixed'
+export type TriggerPopupTranslate =
+  | readonly [number, number]
+  | Partial<Record<TriggerPlacement, readonly [number, number]>>

@@ -1,46 +1,40 @@
-@import '../../style/theme/index.less';
-
-/******** Dialog CSS Variables *******/
 :root {
-  --c-dialog-border-radius: var(~'--c-border-radius-md');
-  --c-dialog-tip-icon-size: 18px;
-  --c-dialog-margin-top: 100px;
-  --c-dialog-tip-icon-margin-right: var(~'--c-spacing-5');
-  --c-dialog-footer-button-margin-left: var(~'--c-spacing-6');
-  --c-dialog-border-color: var(~'--c-color-neutral-3');
-  --c-dialog-border-width: var(~'--c-border-width-1');
-  --c-dialog-header-text-color: var(~'--c-color-text-1');
-  --c-dialog-content-text-color: var(~'--c-color-text-1');
-  --c-dialog-header-font-size: var(~'--c-font-size-title-1');
-  --c-dialog-title-font-weight: var(~'--c-font-weight-500');
-  --c-dialog-bg: var(~'--c-color-bg-3');
-  --c-dialog-overlay-bg: var(~'--c-color-overlay-bg');
-  --c-dialog-line-height: var(~'--c-line-height');
-
-  --c-dialog-padding-horizontal: var(~'--c-spacing-8');
-  --c-dialog-header-height: var(~'--c-size-12');
-  --c-dialog-content-padding-vertical: var(~'--c-spacing-9');
-  --c-dialog-footer-padding-vertical: var(~'--c-spacing-7');
+  --c-dialog-background: var(--c-sys-color-surface-raised);
+  --c-dialog-overlay-background: var(--c-color-overlay-bg);
+  --c-dialog-border-color: var(--c-sys-color-border-default);
+  --c-dialog-border-width: 1px;
+  --c-dialog-border-radius: var(--c-sys-radius-md);
   --c-dialog-width: 520px;
-  --c-dialog-content-font-size: var(~'--c-font-size-body-3');
-  --c-dialog-header-justify: center;
-
+  --c-dialog-margin-top: 100px;
+  --c-dialog-title-text-color: var(--c-sys-color-content-primary);
+  --c-dialog-title-font-size: var(--c-sys-font-size-lg);
+  --c-dialog-title-font-weight: var(--c-sys-font-weight-medium);
+  --c-dialog-title-padding: 0 var(--c-sys-space-8);
+  --c-dialog-title-min-height: 48px;
+  --c-dialog-title-justify: center;
+  --c-dialog-content-text-color: var(--c-sys-color-content-primary);
+  --c-dialog-content-font-size: var(--c-sys-font-size-md);
+  --c-dialog-content-line-height: var(--c-line-height);
+  --c-dialog-content-padding: 28px var(--c-sys-space-8);
+  --c-dialog-actions-padding: var(--c-sys-space-7) var(--c-sys-space-8);
+  --c-dialog-actions-button-gap: var(--c-sys-space-6);
+  --c-dialog-close-button-size: 32px;
+  --c-dialog-close-button-color: var(--c-sys-color-content-primary);
+  --c-dialog-close-button-font-size: var(--c-sys-font-size-lg);
+  --c-dialog-close-button-inset-inline-end: var(--c-sys-space-7);
+  --c-dialog-status-icon-size: 18px;
+  --c-dialog-status-icon-gap: var(--c-sys-space-5);
+  --c-dialog-status-info-color: var(--c-sys-color-status-info);
+  --c-dialog-status-success-color: var(--c-sys-color-status-success);
+  --c-dialog-status-warning-color: var(--c-sys-color-status-warning);
+  --c-dialog-status-danger-color: var(--c-sys-color-status-danger);
   --c-dialog-simple-width: 400px;
-  --c-dialog-simple-padding-horizontal: var(~'--c-spacing-10');
-  --c-dialog-simple-padding-top: var(~'--c-spacing-9');
-  --c-dialog-simple-padding-bottom: var(~'--c-spacing-10');
-  --c-dialog-simple-footer-margin-top: var(~'--c-spacing-10');
-  --c-dialog-simple-content-margin-top: var(~'--c-spacing-9');
-  --c-dialog-simple-header-justify: center;
-
-  --c-dialog-close-icon-right: var(~'--c-spacing-7');
-  --c-dialog-close-icon-font-size: var(~'--c-size-3');
-
-  --c-dialog-status-info-icon-color: rgb(var(~'--c-primary-6'));
-  --c-dialog-status-success-icon-color: rgb(var(~'--c-success-6'));
-  --c-dialog-status-warning-icon-color: rgb(var(~'--c-warning-6'));
-  --c-dialog-status-danger-icon-color: rgb(var(~'--c-danger-6'));
-
-  --c-dialog-transition-duration: var(~'--c-transition-duration-4');
-  --c-dialog-transition-timing-function: var(~'--c-transition-timing-function-overshoot');
+  --c-dialog-simple-border-radius: var(--c-sys-radius-md);
+  --c-dialog-simple-padding: 28px 32px 32px;
+  --c-dialog-simple-content-gap: 28px;
+  --c-dialog-simple-actions-gap: 32px;
+  --c-dialog-fullscreen-width: 100vw;
+  --c-dialog-fullscreen-height: 100vh;
+  --c-dialog-animation-duration: var(--c-sys-motion-duration-slow);
+  --c-dialog-animation-easing: var(--c-sys-motion-easing-standard);
 }

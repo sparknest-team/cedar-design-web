@@ -1,5 +1,5 @@
 <template>
-  <c-result :status="null" title="This is title content" subtitle="This is subtitle content">
+  <c-result title="This is title content" subtitle="This is subtitle content">
     <template #icon>
       <c-icon-face-smile-fill />
     </template>

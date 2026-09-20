@@ -1124,22 +1124,22 @@ watch(query, () => {
   display: flex;
 }
 .source-scroll :deep(.c-tree-node:has([data-owner="me"])) {
-  --c-checkbox-mask-bg-checked: #466caa;
+  --c-checkbox-control-color-checked: #466caa;
 }
 .source-scroll :deep(.c-tree-node:has([data-owner="li"])) {
-  --c-checkbox-mask-bg-checked: #ad813c;
+  --c-checkbox-control-color-checked: #ad813c;
 }
 .source-scroll :deep(.c-tree-node:has([data-owner="zhang"])) {
-  --c-checkbox-mask-bg-checked: #4b8d70;
+  --c-checkbox-control-color-checked: #4b8d70;
 }
 .source-scroll :deep(.c-tree-node:has([data-owner="station-a"])) {
-  --c-checkbox-mask-bg-checked: #8670ac;
+  --c-checkbox-control-color-checked: #8670ac;
 }
 .source-scroll :deep(.c-tree-node:has([data-owner="station-b"])) {
-  --c-checkbox-mask-bg-checked: #a1657e;
+  --c-checkbox-control-color-checked: #a1657e;
 }
 .source-scroll :deep(.c-tree-node:has([data-owner="station-c"])) {
-  --c-checkbox-mask-bg-checked: #458c98;
+  --c-checkbox-control-color-checked: #458c98;
 }
 .pending-task {
   color: var(--c-color-text-2);

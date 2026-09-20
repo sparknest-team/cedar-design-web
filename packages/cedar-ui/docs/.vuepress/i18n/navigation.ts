@@ -7,7 +7,6 @@ const labels: Record<string, string> = {
   '数据输入': 'Data entry', '数据展示': 'Data display', '反馈': 'Feedback',
   '指令': 'Directives', '其他': 'Other', '指令与其它': 'Directives and utilities',
   '色板 Palette': 'Palette', '颜色 Color': 'Color', '组件': 'Components',
-  '设计规范': 'Design guidelines', '话题群': 'Community',
 }
 export function translateNavigation(items: any): any {
   if (Array.isArray(items)) return items.map(translateNavigation)

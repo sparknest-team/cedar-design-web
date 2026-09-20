@@ -68,15 +68,17 @@ permalink: /components/result/
 
 | 参数名   | 描述             | 类型                                                                             |  默认值  |
 | -------- | ---------------- | -------------------------------------------------------------------------------- | :------: |
-| status   | 结果页显示的状态 | `'info' \| 'success' \| 'warning' \| 'danger' \| '403' \| '404' \| '500'` | `'info'` |
+| status   | 结果页显示的状态 | `'info' \| 'success' \| 'warning' \| 'danger' \| 'question' \| 'empty' \| '403' \| '404' \| '500'` | `'info'` |
 | title    | 标题内容         | `string`                                                                         |   `-`    |
 | subtitle | 子标题内容       | `string`                                                                         |   `-`    |
+| image-size | 状态图形尺寸，数字表示 px | `string \| number` | `-` |
+| animation | 是否启用状态图形动画 | `boolean` | `true` |
 
 ### `<result>` Slots
 
 | 插槽名   |   描述   | 参数 | 版本  |
 | -------- | :------: | ---- | :---- |
-| icon     |   图标   | -    |       |
+| icon     |   自定义状态图形   | `{ size?: string }` |       |
 | title    |   标题   | -    |       |
 | subtitle |  副标题  | -    |       |
 | extra    |  操作区  | -    | 2.8.0 |

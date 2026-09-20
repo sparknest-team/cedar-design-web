@@ -1,22 +1,23 @@
-import type { TriggerWrapperAppearance } from '../trigger/wrapper'
 import { computed } from 'vue'
-import { getPrefixCls } from '../_utils/global-config'
+import { createNamespace } from '../_utils/global-config'
+import type { TriggerWrapperAppearance } from '../trigger/wrapper'
 import type { TooltipProps } from './props'
 
 export function useAppearance(props: TooltipProps): TriggerWrapperAppearance {
-  const prefix = getPrefixCls('tooltip')
-  const background = computed(() => props.backgroundColor || props.color || (props.status === 'default' ? undefined : `var(--c-color-${props.status})`))
+  const { n } = createNamespace('tooltip')
+  const statusClass = computed(() => props.status === 'default' ? undefined : n(`--status-${props.status}`))
   return {
     triggerBindings: computed(() => ({
-      class: prefix,
+      popupClass: [n(), props.popupClass],
       contentClass: undefined,
       contentStyle: undefined,
-      arrowClass: [`${prefix}-popup-arrow`, props.arrowClass],
-      arrowStyle: { backgroundColor: background.value, ...props.arrowStyle },
+      animationName: props.animationName ?? n(),
+      arrowClass: [n('arrow'), statusClass.value, props.arrowClass],
+      arrowStyle: { backgroundColor: props.color, ...props.arrowStyle },
     })),
     contentBindings: computed(() => ({
-      class: [`${prefix}-content`, props.contentClass, { [`${prefix}-xs`]: props.xs }],
-      style: { backgroundColor: background.value, color: props.textColor || (props.status === 'default' ? undefined : `var(--c-color-on-${props.status}, #fff)`), ...props.contentStyle },
+      class: [n('content'), statusClass.value, n(`--size-${props.size}`), props.contentClass],
+      style: { backgroundColor: props.color, color: props.textColor, ...props.contentStyle },
     })),
   }
 }

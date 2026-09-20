@@ -32,6 +32,9 @@ importers:
       '@changesets/cli':
         specifier: ^2.29.7
         version: 2.31.0(@types/node@24.13.2)
+      '@ui-foundation/theme-contract':
+        specifier: link:../design-ui/packages/theme-contract
+        version: link:../design-ui/packages/theme-contract
       nanospinner:
         specifier: ^1.2.2
         version: 1.2.2
@@ -44,7 +47,7 @@ importers:
       '@inquirer/prompts':
         specifier: ^6.0.1
         version: 6.0.1
-      '@loca/ui-build':
+      '@ui-foundation/ui-build':
         specifier: link:../../../design-ui/packages/ui-build
         version: link:../../../design-ui/packages/ui-build
       conventional-changelog:

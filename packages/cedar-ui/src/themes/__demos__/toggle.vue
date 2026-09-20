@@ -1,10 +1,10 @@
 <template>
   <c-space direction="column" fill>
     <c-space wrap>
-      <c-button status="primary" @click="apply(null)">亮色</c-button>
-      <c-button status="primary" @click="apply(Themes.dark)">暗色</c-button>
-      <c-button status="primary" @click="apply(Themes.md3Light)">MD3 亮色</c-button>
-      <c-button status="primary" @click="apply(Themes.md3Dark)">MD3 暗色</c-button>
+      <c-button status="primary" @click="apply(Themes.default.light)">默认亮色</c-button>
+      <c-button status="primary" @click="apply(Themes.default.dark)">默认暗色</c-button>
+      <c-button status="primary" @click="apply(Themes.maple.light)">枫叶亮色</c-button>
+      <c-button status="primary" @click="apply(Themes.maple.dark)">枫叶暗色</c-button>
     </c-space>
 
     <div class="preview c-rounded-md c-p-16">

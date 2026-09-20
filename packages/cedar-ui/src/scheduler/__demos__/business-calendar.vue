@@ -29,13 +29,13 @@
 import { computed, ref } from "vue";
 import {
   expandSchedulerRecurrences,
-  getSchedulerCalendarDisabledRanges,
   getSchedulerAvailabilityIssues,
   getSchedulerRange,
   schedulerDate,
   schedulerDateKey,
   SchedulerError,
 } from "../core";
+import { getSchedulerCalendarDisabledRanges } from "../core/business-calendar";
 import type { SchedulerBusinessCalendar, SchedulerEvent } from "../core";
 import type { SchedulerBeforeTransaction } from "../props";
 const enabled = ref(true);

@@ -1,5 +1,5 @@
-import { popupContainerProp } from '../_utils/popup-container'
 import type { ExtractPublicPropTypes, PropType } from 'vue'
+import { popupContainerProp } from '../_utils/popup-container'
 import { buttonGroupProps, buttonProps, type ButtonProps } from '../button'
 import { dropdownMenuProps } from '../dropdown-menu'
 

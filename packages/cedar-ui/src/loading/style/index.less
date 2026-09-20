@@ -1,5 +1,4 @@
 @import "./token.less";
-@import "./dot-loading.less";
 
 .c-loading-directive {
   position: absolute;
@@ -326,6 +325,13 @@
       width: 6px;
       height: 6px;
     }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c-loading [class*="c-loading__"] {
+    animation: none !important;
+    transition: none !important;
   }
 }
 

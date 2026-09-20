@@ -1,5 +1,4 @@
-import * as rrule from "rrule";
-const { RRule } = "default" in rrule ? (rrule.default as typeof rrule) : rrule;
+import { RRule } from "rrule";
 import { Temporal } from "@js-temporal/polyfill";
 import {
   cloneSchedulerEvent,

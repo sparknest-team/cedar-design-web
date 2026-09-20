@@ -1,0 +1,43 @@
+.c-popover {
+  &__content {
+    box-sizing: border-box;
+    padding: var(--c-popover-padding-vertical) var(--c-popover-padding-horizontal);
+    color: var(--c-popover-text-color);
+    font-size: var(--c-popover-font-size);
+    line-height: var(--c-popover-line-height);
+    background-color: var(--c-popover-background);
+    border: var(--c-popover-border-width) solid var(--c-popover-border-color);
+    border-radius: var(--c-popover-border-radius);
+    box-shadow: var(--c-popover-box-shadow);
+  }
+
+  &__title {
+    color: var(--c-popover-title-text-color);
+    font-weight: var(--c-popover-title-font-weight);
+    font-size: var(--c-popover-title-font-size);
+  }
+
+  &__body {
+    text-align: left;
+    overflow-wrap: anywhere;
+  }
+
+  &__title + &__body { margin-top: var(--c-popover-title-content-gap); }
+
+  &__arrow {
+    z-index: var(--c-popover-arrow-z-index);
+    background-color: var(--c-popover-background);
+    border: var(--c-popover-border-width) solid var(--c-popover-border-color);
+  }
+
+  &-enter-from,
+  &-leave-to { opacity: 0; transform: scale(0.92); }
+
+  &-enter-active,
+  &-leave-active { transition: opacity var(--c-popover-animation-duration), transform var(--c-popover-animation-duration); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c-popover-enter-active,
+  .c-popover-leave-active { transition-duration: 0ms; }
+}

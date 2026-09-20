@@ -9,5 +9,7 @@ test('Tabs active color is exposed through the shared system role', () => {
   expect(tokens).toContain(
     '--c-tabs-title-text-color-active: var(--c-sys-color-action-primary);',
   )
-  expect(styles).toContain('&--tab-active { color: var(--c-tabs-title-text-color-active); }')
+  expect(styles).toMatch(
+    /&--tab-active\s*\{\s*color:\s*var\(--c-tabs-title-text-color-active\);\s*\}/,
+  )
 })

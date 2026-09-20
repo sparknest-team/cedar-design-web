@@ -71,6 +71,9 @@ permalink: /components/rate/
 | readonly                  | 是否为只读状态   | `boolean`                          | `false` |        |
 | disabled                  | 是否禁用         | `boolean`                          | `false` |        |
 | color                     | 颜色             | `string \| Record<string, string>` |   `-`   | 2.18.0 |
+| icon                      | 选中图标         | `string \| Component`              | 星形    |        |
+| empty-icon                | 未选中图标       | `string \| Component`              | 星形    |        |
+| half-icon                 | 半选图标         | `string \| Component`              | 半星    |        |
 
 ### `<rate>` Events
 
@@ -84,6 +87,8 @@ permalink: /components/rate/
 | 插槽名    | 描述 | 参数            |
 | --------- | :--: | --------------- |
 | character | 符号 | index: `number` |
+
+渲染优先级为：`grading` > `character` 插槽 > `icon` / `half-icon` / `empty-icon` > 平台默认图标。
 
 ### 类型定义
 

@@ -1,4 +1,5 @@
 import { isVNode, onActivated, onBeforeUnmount, onDeactivated, onMounted, onUpdated, shallowRef, watch, type Ref, type VNode } from 'vue'
+import type { TriggerReferenceAttrs } from './props'
 
 export type TriggerElement = HTMLElement | SVGElement
 
@@ -43,6 +44,39 @@ export function bindTriggerEvents(element: TriggerElement | undefined, handlers:
 }
 
 export type Reference = string | TriggerElement
+
+/** Keep semantic attributes on the actual reference, including external references. */
+export function useTriggerReferenceAttrs(
+  element: Readonly<Ref<TriggerElement | undefined>>,
+  attrs: Readonly<Ref<TriggerReferenceAttrs>>,
+) {
+  let appliedElement: TriggerElement | undefined
+  let originals = new Map<string, string | null>()
+
+  const restore = () => {
+    if (!appliedElement) return
+    for (const [name, value] of originals) {
+      if (value === null) appliedElement.removeAttribute(name)
+      else appliedElement.setAttribute(name, value)
+    }
+    appliedElement = undefined
+    originals = new Map()
+  }
+
+  watch([element, attrs], ([nextElement, nextAttrs]) => {
+    restore()
+    if (!nextElement) return
+    appliedElement = nextElement
+    for (const [name, value] of Object.entries(nextAttrs)) {
+      if (value == null) continue
+      originals.set(name, nextElement.getAttribute(name))
+      nextElement.setAttribute(name, String(value))
+    }
+  }, { immediate: true, flush: 'post' })
+
+  onBeforeUnmount(restore)
+  onDeactivated(restore)
+}
 
 /** Resolve both slot roots and external references with one lifecycle contract. */
 export function useTriggerTarget(slotElement: Readonly<Ref<TriggerElement | undefined>>, reference: () => Reference | undefined) {

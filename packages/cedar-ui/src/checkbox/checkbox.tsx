@@ -1,14 +1,21 @@
-import { computed, defineComponent, inject, nextTick, ref, toRefs, watch } from 'vue'
-import { getPrefixCls, createNamespace } from '../_utils/global-config'
-import IconHover from '../_components/IconHover.vue'
-import Check from './icon-check'
-import { isArray, isNull, isUndefined } from '../_utils/is'
-import { checkboxGroupKey } from './context'
-import { useFormItem } from '../_hooks/use-form-item'
-import { checkboxProps } from './props'
+import {
+  computed,
+  defineComponent,
+  inject,
+  nextTick,
+  ref,
+  toRefs,
+  watch,
+} from "vue";
+import { getPrefixCls, createNamespace } from "../_utils/global-config";
+import IconHover from "../_components/IconHover.vue";
+import Check from "./icon-check";
+import { isArray, isNull, isUndefined } from "../_utils/is";
+import { checkboxGroupKey } from "./context";
+import { useFormItem } from "../_hooks/use-form-item";
+import { checkboxProps } from "./props";
 
-
-const { name } = createNamespace('checkbox')
+const { name } = createNamespace("checkbox");
 
 export default defineComponent({
   name,
@@ -18,7 +25,8 @@ export default defineComponent({
   },
   props: checkboxProps,
   emits: {
-    'update:modelValue': (value: boolean | (string | number | boolean)[]) => true,
+    "update:modelValue": (value: boolean | (string | number | boolean)[]) =>
+      true,
     /**
      * @zh 值改变时触发
      * @en Trigger when the value changes
@@ -36,62 +44,79 @@ export default defineComponent({
    * @version 2.18.0
    */
   setup(props, { emit, slots }) {
-    const { disabled, modelValue } = toRefs(props)
-    const prefixCls = getPrefixCls('checkbox')
-    const checkboxRef = ref<HTMLInputElement>()
-    const checkboxGroupCtx = !props.uninjectGroupContext ? inject(checkboxGroupKey, undefined) : undefined
-    const isGroup = Boolean(checkboxGroupCtx)
-    const { mergedDisabled: _mergedDisabled, eventHandlers } = useFormItem({
+    const { disabled, error, modelValue } = toRefs(props);
+    const prefixCls = getPrefixCls("checkbox");
+    const checkboxRef = ref<HTMLInputElement>();
+    const checkboxGroupCtx = !props.uninjectGroupContext
+      ? inject(checkboxGroupKey, undefined)
+      : undefined;
+    const isGroup = Boolean(checkboxGroupCtx);
+    const {
+      mergedDisabled: _mergedDisabled,
+      mergedError: _mergedError,
+      eventHandlers,
+    } = useFormItem({
       disabled,
-    })
+      error,
+    });
 
-    const _checked = ref(props.defaultChecked)
+    const _checked = ref(props.defaultChecked);
     const computedValue = computed(() =>
-      isGroup ? checkboxGroupCtx?.computedValue : (props.modelValue ?? _checked.value),
-    )
+      isGroup
+        ? checkboxGroupCtx?.computedValue
+        : (props.modelValue ?? _checked.value),
+    );
     const computedChecked = computed<boolean>(() => {
       return isArray(computedValue.value)
         ? computedValue.value.includes(props.value ?? true)
-        : Boolean(computedValue.value)
-    })
+        : Boolean(computedValue.value);
+    });
     const mergedDisabled = computed(
       () =>
-        checkboxGroupCtx?.disabled || _mergedDisabled?.value || (!computedChecked.value && checkboxGroupCtx?.isMaxed),
-    )
+        checkboxGroupCtx?.disabled ||
+        _mergedDisabled?.value ||
+        (!computedChecked.value && checkboxGroupCtx?.isMaxed),
+    );
+    const mergedError = computed(
+      () => checkboxGroupCtx?.error || _mergedError.value,
+    );
 
     const handleClick = (ev: Event) => {
-      ev.stopPropagation()
-    }
+      ev.stopPropagation();
+    };
 
     const handleChange = (e: Event) => {
-      const { checked } = e.target as HTMLInputElement
+      const { checked } = e.target as HTMLInputElement;
 
-      let newValue: boolean | Array<string | number | boolean> = checked
+      let newValue: boolean | Array<string | number | boolean> = checked;
       if (isArray(computedValue.value)) {
-        const set = new Set(computedValue.value)
+        const set = new Set(computedValue.value);
         if (checked) {
-          set.add(props.value ?? true)
+          set.add(props.value ?? true);
         } else {
-          set.delete(props.value ?? true)
+          set.delete(props.value ?? true);
         }
-        newValue = Array.from(set)
+        newValue = Array.from(set);
       }
 
-      _checked.value = checked
+      _checked.value = checked;
       if (isGroup && isArray(newValue)) {
-        checkboxGroupCtx?.handleChange(newValue, e)
+        checkboxGroupCtx?.handleChange(newValue, e);
       } else {
-        emit('update:modelValue', newValue)
-        emit('change', newValue, e)
-        eventHandlers.value?.onChange?.(e)
+        emit("update:modelValue", newValue);
+        emit("change", newValue, e);
+        eventHandlers.value?.onChange?.(e);
       }
 
       nextTick(() => {
-        if (checkboxRef.value && checkboxRef.value.checked !== computedChecked.value) {
-          checkboxRef.value.checked = computedChecked.value
+        if (
+          checkboxRef.value &&
+          checkboxRef.value.checked !== computedChecked.value
+        ) {
+          checkboxRef.value.checked = computedChecked.value;
         }
-      })
-    }
+      });
+    };
 
     const cls = computed(() => [
       prefixCls,
@@ -99,8 +124,9 @@ export default defineComponent({
         [`${prefixCls}-checked`]: computedChecked.value,
         [`${prefixCls}-indeterminate`]: props.indeterminate,
         [`${prefixCls}-disabled`]: mergedDisabled.value,
+        [`${prefixCls}-error`]: mergedError.value,
       },
-    ])
+    ]);
 
     // const handleClick = (ev: MouseEvent) => {
     //   if (
@@ -114,33 +140,33 @@ export default defineComponent({
     // };
 
     const handleFocus = (ev: FocusEvent) => {
-      eventHandlers.value?.onFocus?.(ev)
-    }
+      eventHandlers.value?.onFocus?.(ev);
+    };
 
     const handleBlur = (ev: FocusEvent) => {
-      eventHandlers.value?.onBlur?.(ev)
-    }
+      eventHandlers.value?.onBlur?.(ev);
+    };
 
     watch(modelValue, (value) => {
       if (isUndefined(value) || isNull(value)) {
-        _checked.value = false
+        _checked.value = false;
       }
-    })
+    });
 
     watch(computedValue, (value) => {
-      let checked
+      let checked;
       if (isArray(value)) {
-        checked = value.includes(props.value ?? true)
+        checked = value.includes(props.value ?? true);
       } else {
-        checked = value
+        checked = value;
       }
       if (_checked.value !== checked) {
-        _checked.value = checked
+        _checked.value = checked;
       }
       if (checkboxRef.value && checkboxRef.value.checked !== checked) {
-        checkboxRef.value.checked = checked
+        checkboxRef.value.checked = checked;
       }
-    })
+    });
 
     return () => (
       <label aria-disabled={mergedDisabled.value} class={cls.value}>
@@ -160,14 +186,21 @@ export default defineComponent({
           checked: computedChecked.value,
           disabled: mergedDisabled.value,
         }) ?? (
-          <IconHover class={`${prefixCls}-icon-hover`} disabled={mergedDisabled.value || computedChecked.value}>
+          <IconHover
+            class={`${prefixCls}-icon-hover`}
+            disabled={mergedDisabled.value || computedChecked.value}
+          >
             <div class={`${prefixCls}-icon`}>
-              {computedChecked.value && <Check class={`${prefixCls}-icon-check`} />}
+              {computedChecked.value && (
+                <Check class={`${prefixCls}-icon-check`} />
+              )}
             </div>
           </IconHover>
         )}
-        {slots.default && <span class={`${prefixCls}-label`}>{slots.default()}</span>}
+        {slots.default && (
+          <span class={`${prefixCls}-label`}>{slots.default()}</span>
+        )}
       </label>
-    )
+    );
   },
-})
+});

@@ -1,12 +1,12 @@
 <template>
   <c-space>
-    <c-tooltip content="This is tooltip content" background-color="#3491FA">
+    <c-tooltip content="This is tooltip content" color="#3491FA">
       <c-button>#3491FA</c-button>
     </c-tooltip>
-    <c-tooltip content="This is tooltip content" background-color="#165DFF">
+    <c-tooltip content="This is tooltip content" color="#165DFF">
       <c-button>#165DFF</c-button>
     </c-tooltip>
-    <c-tooltip content="This is tooltip content" background-color="#722ED1">
+    <c-tooltip content="This is tooltip content" color="#722ED1">
       <c-button>#722ED1</c-button>
     </c-tooltip>
   </c-space>

@@ -8,19 +8,23 @@ import { themeConfig } from './theme-config'
 import '../../src/style/index.less'
 import '../../src/loading/style'
 import '../../src/tooltip/style'
-import { onMounted } from 'vue'
+import { onBeforeUnmount, onMounted } from 'vue'
+import CedarThemeMenu from './components/CedarThemeMenu.vue'
 
 export default defineClientConfig({
+  rootComponents: [CedarThemeMenu],
   async enhance({ app, router }) {
     connectComponentLanguage(router)
     app.directive('loading', vLoading)
     app.directive('tooltip', vTooltip)
   },
   setup() {
+    let stopThemeSync: (() => void) | undefined
     onMounted(() => {
       // Polyfill global
       window.global = window
-      themeConfig()
+      stopThemeSync = themeConfig()
     })
+    onBeforeUnmount(() => stopThemeSync?.())
   },
 })

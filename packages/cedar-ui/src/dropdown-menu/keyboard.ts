@@ -34,7 +34,8 @@ export function useMenuKeyboard(options: MenuKeyboardOptions) {
     const reference = options.reference()
     const active = reference?.ownerDocument.activeElement
     if (!options.visible()) {
-      if (options.open && (options.openKey ? key === options.openKey : key === 'ArrowDown' || key === 'ArrowUp') && (active === reference || !!reference?.contains(active ?? null))) {
+      const openKeyPressed = options.openKey ? key === options.openKey : key === 'ArrowDown' || key === 'ArrowUp'
+      if (options.open && openKeyPressed && (active === reference || !!reference?.contains(active ?? null))) {
         event.preventDefault()
         options.open()
         await nextTick()

@@ -1,44 +1,55 @@
-export function themeConfig() {
-  // 目标元素：<html> 标签
-  const targetNode = document.documentElement // 或者使用 document.getElementById('myHtml');
+import { StyleProvider, Themes } from '@cedarjs/ui'
 
-  // 定义回调函数，当 data-theme 属性变化时执行
-  const onThemeChange = (newTheme) => {
-    console.log(`Theme changed to: ${newTheme}`)
-    // 在这里执行你需要的逻辑，例如更新样式
-    if (newTheme === 'dark') {
-      // 设置为暗黑主题
-      document.documentElement.setAttribute('cedar-theme', 'dark')
-    } else {
-      // 恢复亮色主题
-      document.documentElement.removeAttribute('cedar-theme')
-    }
+export type CedarDocsTheme = 'lightTheme' | 'darkTheme'
+
+const STORAGE_KEY = 'CEDAR_DOCS_THEME'
+const THEME_NAMES: readonly CedarDocsTheme[] = [
+  'lightTheme',
+  'darkTheme',
+]
+
+const themeMap = {
+  lightTheme: Themes.default.light,
+  darkTheme: Themes.default.dark,
+} satisfies Record<CedarDocsTheme, typeof Themes.default.light>
+
+function isDocsTheme(value: string | null): value is CedarDocsTheme {
+  return value !== null && THEME_NAMES.includes(value as CedarDocsTheme)
+}
+
+function isDark(theme: CedarDocsTheme) {
+  return theme === 'darkTheme'
+}
+
+export function getDocsTheme(): CedarDocsTheme {
+  const stored = window.localStorage.getItem(STORAGE_KEY)
+  if (isDocsTheme(stored)) return stored
+  return document.documentElement.dataset.theme === 'dark' ? 'darkTheme' : 'lightTheme'
+}
+
+export function setDocsTheme(theme: CedarDocsTheme, syncColorMode = true) {
+  StyleProvider.setStyleVars(themeMap[theme])
+  window.localStorage.setItem(STORAGE_KEY, theme)
+  document.documentElement.dataset.cedarDocsTheme = theme
+
+  if (syncColorMode) {
+    document.documentElement.dataset.theme = isDark(theme) ? 'dark' : 'light'
   }
 
-  // 创建一个 MutationObserver 实例，并定义回调
-  const observer = new MutationObserver((mutationsList) => {
-    for (let mutation of mutationsList) {
-      if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
-        const newTheme = targetNode.getAttribute('data-theme')
-        onThemeChange(newTheme)
-      }
-    }
+  window.dispatchEvent(new CustomEvent<CedarDocsTheme>('cedar-docs-theme-change', { detail: theme }))
+}
+
+export function themeConfig() {
+  setDocsTheme(getDocsTheme())
+
+  const root = document.documentElement
+  const observer = new MutationObserver(() => {
+    const current = getDocsTheme()
+    const wantsDark = root.dataset.theme === 'dark'
+    const next: CedarDocsTheme = wantsDark ? 'darkTheme' : 'lightTheme'
+
+    if (next !== current) setDocsTheme(next, false)
   })
-
-  // 配置观察选项：只观察属性变化，并且具体到 'data-theme'
-  const config = { attributes: true, attributeFilter: ['data-theme'] }
-
-  // 启动观察
-  observer.observe(targetNode, config)
-
-  // 示例：通过按钮切换主题
-  const toggleButton = document.getElementById('toggleTheme')
-  toggleButton?.addEventListener('click', () => {
-    const currentTheme = targetNode.getAttribute('data-theme')
-    const newTheme = currentTheme === 'light' ? 'dark' : 'light'
-    targetNode.setAttribute('data-theme', newTheme)
-  })
-
-  // 初始化主题
-  onThemeChange(targetNode.getAttribute('data-theme'))
+  observer.observe(root, { attributes: true, attributeFilter: ['data-theme'] })
+  return () => observer.disconnect()
 }

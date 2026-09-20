@@ -30,11 +30,15 @@
     "prepare": "husky install packages/cedar-ui/.husky",
     "postinstall": "patch-package --patch-dir packages/cedar-ui/patches",
     "check:tabs": "node checks/tabs-same-source.mjs",
+    "check:rate": "node checks/rate-same-source.mjs",
+    "check:ripple": "node checks/ripple-same-source.mjs",
+    "check:lightweight-feedback": "node checks/lightweight-feedback-same-source.mjs",
     "check:style-vars": "node checks/style-vars-contract.mjs"
   },
   "packageManager": "pnpm@9.6.0",
   "devDependencies": {
     "@cedarjs/cli": "workspace:*",
+    "@ui-foundation/theme-contract": "link:../design-ui/packages/theme-contract",
     "@changesets/changelog-github": "^0.5.1",
     "@changesets/cli": "^2.29.7",
     "nanospinner": "^1.2.2",

@@ -7,19 +7,19 @@
     display: inline-flex;
 
     &-status-validating {
-      color: var(~"--c-field-feedback-icon-color-validating");
+      color: var(~"--c-internal-field-feedback-icon-color-validating");
     }
 
     &-status-success {
-      color: var(~"--c-field-feedback-icon-color-success");
+      color: var(~"--c-internal-field-feedback-icon-color-success");
     }
 
     &-status-warning {
-      color: var(~"--c-field-feedback-icon-color-warning");
+      color: var(~"--c-internal-field-feedback-icon-color-warning");
     }
 
     &-status-error {
-      color: var(~"--c-field-feedback-icon-color-error");
+      color: var(~"--c-internal-field-feedback-icon-color-error");
     }
   }
 }
@@ -30,10 +30,10 @@
   display: inline-flex;
   box-sizing: border-box;
   width: 100%;
-  padding-right: var(~"--c-field-padding-x");
-  padding-left: var(~"--c-field-padding-x");
-  color: var(~"--c-field-color-text");
-  font-size: var(~"--c-field-size-md-font-size");
+  padding-right: var(~"--c-field-padding-horizontal");
+  padding-left: var(~"--c-field-padding-horizontal");
+  color: var(~"--c-field-control-text-color");
+  font-size: var(~"--c-internal-field-size-md-font-size");
   border: 0 none;
   border-radius: var(~"--c-field-border-radius");
   cursor: text;
@@ -46,29 +46,29 @@
     align-items: center;
     white-space: nowrap;
     user-select: none;
-    gap: var(~"--c-field-padding-x");
+    gap: var(~"--c-field-padding-horizontal");
 
     > svg {
-      font-size: var(~"--c-field-size-md-icon-suffix-size");
+      font-size: var(~"--c-internal-field-size-md-icon-suffix-size");
     }
   }
 
   &__prefix {
-    padding-right: var(~"--c-field-padding-x");
-    color: var(~"--c-field-color-prefix-text");
+    padding-right: var(~"--c-field-padding-horizontal");
+    color: var(~"--c-field-prefix-text-color");
   }
 
   &__suffix {
-    padding-left: var(~"--c-field-padding-x");
-    color: var(~"--c-field-color-suffix-text");
+    padding-left: var(~"--c-field-padding-horizontal");
+    color: var(~"--c-field-suffix-text-color");
 
     .input-suffix-feedback-icon-color();
   }
 
   &__clear-btn {
     align-self: center;
-    color: var(~"--c-field-color-icon-clear");
-    font-size: var(~"--c-field-size-icon-clear");
+    color: var(~"--c-field-clear-icon-color");
+    font-size: var(~"--c-field-clear-icon-size");
     visibility: hidden;
     cursor: pointer;
 
@@ -84,13 +84,13 @@
   }
 
   &:not(.c-field-decorator--focus) .c-icon-hover:hover::before {
-    background-color: var(~"--c-field-color-icon-clear-bg-hover");
+    background-color: var(~"--c-internal-field-clear-icon-background-hover");
   }
 
   .border(~"c-field-decorator");
 
   &--variant-filled {
-    background-color: var(~"--c-field-variant-filled-bg");
+    background-color: var(~"--c-field-variant-filled-background");
     transition:
       color var(~"--c-transition-duration-1")
         var(~"--c-transition-timing-function-linear"),
@@ -100,32 +100,32 @@
         var(~"--c-transition-timing-function-linear");
 
     &:hover {
-      background-color: var(~"--c-field-variant-filled-bg-hover");
+      background-color: var(~"--c-field-variant-filled-background-hover");
     }
 
     &:focus-within:not(.c-field-decorator--disabled),
     &.c-field-decorator--focus:not(.c-field-decorator--disabled) {
       z-index: var(--c-z-index-local-raised);
-      background-color: var(~"--c-field-variant-filled-bg-focus");
-      box-shadow: 0 0 0 var(~"--c-field-variant-filled-size-shadow-focus")
-        var(~"--c-field-variant-filled-color-shadow-focus");
+      background-color: var(~"--c-field-variant-filled-background-focus");
+      box-shadow: 0 0 0 var(~"--c-internal-field-variant-filled-size-shadow-focus")
+        var(~"--c-internal-field-variant-filled-color-shadow-focus");
 
       .c-field-decorator__border-state {
         opacity: 1;
-        border-color: var(~"--c-field-variant-filled-border-color-focus");
+        border-color: var(~"--c-internal-field-variant-filled-border-color-focus");
       }
     }
 
     &.c-field-decorator--disabled {
-      color: var(~"--c-field-color-text-disabled");
-      background-color: var(~"--c-field-variant-filled-bg-disabled");
-      border-color: var(~"--c-field-variant-filled-border-color-disabled");
+      color: var(~"--c-field-control-text-color-disabled");
+      background-color: var(~"--c-field-variant-filled-background-disabled");
+      border-color: var(~"--c-internal-field-variant-filled-border-color-disabled");
       cursor: not-allowed;
 
       &:hover {
-        color: var(~"--c-field-color-text-disabled");
-        background-color: var(~"--c-field-variant-filled-bg-disabled");
-        border-color: var(~"--c-field-variant-filled-border-color-disabled");
+        color: var(~"--c-field-control-text-color-disabled");
+        background-color: var(~"--c-field-variant-filled-background-disabled");
+        border-color: var(~"--c-internal-field-variant-filled-border-color-disabled");
       }
 
       .c-field-decorator__prefix,
@@ -135,22 +135,22 @@
     }
 
     &.c-field-decorator--error {
-      background-color: var(~"--c-field-variant-filled-bg-error");
-      border-color: var(~"--c-field-variant-filled-border-color-error");
+      background-color: var(~"--c-field-variant-filled-background-error");
+      border-color: var(~"--c-internal-field-variant-filled-border-color-error");
 
       &:hover {
-        background-color: var(~"--c-field-variant-filled-bg-error-hover");
-        border-color: var(~"--c-field-variant-filled-border-color-error-hover");
+        background-color: var(~"--c-internal-field-variant-filled-background-error-hover");
+        border-color: var(~"--c-internal-field-variant-filled-border-color-error-hover");
       }
     }
 
     &.c-field-decorator--error:focus-within,
     &.c-field-decorator--error.c-field-decorator--focus {
       z-index: var(--c-z-index-local-raised);
-      background-color: var(~"--c-field-variant-filled-bg-error-focus");
-      border-color: var(~"--c-field-variant-filled-border-color-error-focus");
-      box-shadow: 0 0 0 var(~"--c-field-variant-filled-size-shadow-error-focus")
-        var(~"--c-field-variant-filled-color-shadow-error-focus");
+      background-color: var(~"--c-internal-field-variant-filled-background-error-focus");
+      border-color: var(~"--c-internal-field-variant-filled-border-color-error-focus");
+      box-shadow: 0 0 0 var(~"--c-internal-field-variant-filled-size-shadow-error-focus")
+        var(~"--c-internal-field-variant-filled-color-shadow-error-focus");
     }
   }
 
@@ -214,7 +214,7 @@
     }
 
     &.c-field-decorator--disabled {
-      color: var(~"--c-field-color-text-disabled");
+      color: var(~"--c-field-control-text-color-disabled");
       cursor: not-allowed;
 
       .c-field-decorator__border,

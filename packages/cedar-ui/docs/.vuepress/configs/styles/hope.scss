@@ -1,9 +1,9 @@
 :root {
-  --vp-c-accent: rgb(0 190 190);
-  --vp-c-accent-bg: rgb(0 190 190);
-  --vp-c-accent-hover: rgb(55, 209, 204);
-  --c-brand: rgb(0 190 190);
-  --c-brand-light: rgb(0 190 190);
+  --vp-c-accent: var(--c-color-primary);
+  --vp-c-accent-bg: var(--c-color-primary);
+  --vp-c-accent-hover: rgb(var(--c-primary-5));
+  --c-brand: var(--c-color-primary);
+  --c-brand-light: rgb(var(--c-primary-5));
   // 小屏仅受视口约束，避免固定内容宽度撑出页面
   --content-width: min(960px, calc(100vw - 4rem));
 }
@@ -45,13 +45,13 @@
 }
 
 html.dark {
-  --c-brand: rgb(0 190 190);
-  --c-brand-light: rgb(0 190 190);
+  --c-brand: var(--c-color-primary);
+  --c-brand-light: rgb(var(--c-primary-5));
 }
 
 :not(pre) > code {
   background: transparent;
-  color: #006bd6;
+  color: var(--c-color-primary);
 }
 
 h2 {
@@ -147,6 +147,11 @@ body {
 
 .vp-hero-action.primary {
   color: var(--vp-c-white) !important;
+}
+
+// Cedar 的四态主题菜单同时负责品牌与明暗模式，避免与 Hope 的三态按钮竞争状态。
+.vp-color-mode-switch {
+  display: none !important;
 }
 
 tbody tr:nth-child(odd) {

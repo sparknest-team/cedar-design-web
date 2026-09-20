@@ -59,4 +59,4 @@ export function useMenuSelection(options: MenuSelectionOptions, emit: (value: an
 }
 
 export type MenuSelection = ReturnType<typeof useMenuSelection>
-export const menuSelectionKey: InjectionKey<MenuSelection> = Symbol('MenuSelection')
+export const menuSelectionKey: InjectionKey<MenuSelection> = Symbol('DropdownMenuSelection')

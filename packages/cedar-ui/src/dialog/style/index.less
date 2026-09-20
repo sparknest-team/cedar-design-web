@@ -14,7 +14,7 @@
   right: 0;
   bottom: 0;
   left: 0;
-  background-color: var(~'--c-dialog-overlay-bg');
+  background-color: var(--c-dialog-overlay-background);
 }
 
 .c-dialog-wrapper {
@@ -59,10 +59,10 @@
   display: inline-block;
   width: var(~'--c-dialog-width');
   margin: 0 auto;
-  line-height: var(~'--c-dialog-line-height');
+  line-height: var(--c-dialog-content-line-height);
   white-space: initial;
   text-align: left;
-  background-color: var(~'--c-dialog-bg');
+  background-color: var(--c-dialog-background);
   border-radius: var(~'--c-dialog-border-radius');
 
   &-draggable {
@@ -78,15 +78,15 @@
     align-items: center;
     box-sizing: border-box;
     width: 100%;
-    height: var(~'--c-dialog-header-height');
-    padding: 0 var(~'--c-dialog-padding-horizontal');
+    min-height: var(--c-dialog-title-min-height);
+    padding: var(--c-dialog-title-padding);
     border-bottom: var(~'--c-dialog-border-width') solid var(~'--c-dialog-border-color');
 
     .c-dialog-title {
       display: flex;
       flex: 1;
       align-items: center;
-      justify-content: var(~'--c-dialog-header-justify');
+      justify-content: var(--c-dialog-title-justify);
 
       &-align-start {
         justify-content: flex-start;
@@ -100,7 +100,7 @@
 
   &-body {
     position: relative;
-    padding: var(~'--c-dialog-content-padding-vertical') var(~'--c-dialog-padding-horizontal');
+    padding: var(--c-dialog-content-padding);
     overflow: auto;
     color: var(~'--c-dialog-content-text-color');
     font-size: var(~'--c-dialog-content-font-size');
@@ -110,26 +110,28 @@
     flex-shrink: 0;
     box-sizing: border-box;
     width: 100%;
-    padding: var(~'--c-dialog-footer-padding-vertical') var(~'--c-dialog-padding-horizontal');
+    padding: var(--c-dialog-actions-padding);
     text-align: right;
     border-top: var(~'--c-dialog-border-width') solid var(~'--c-dialog-border-color');
 
     > .c-button:not(:nth-child(1)) {
-      margin-left: var(~'--c-dialog-footer-button-margin-left');
+      margin-left: var(--c-dialog-actions-button-gap);
     }
   }
 
   &-close-btn {
     position: absolute;
     top: 50%;
-    right: var(~'--c-dialog-close-icon-right');
+    right: var(--c-dialog-close-button-inset-inline-end);
     display: inline-flex;
     align-items: center;
     justify-content: center;
     margin: 0;
     padding: 0;
-    color: var(~'--c-dialog-header-text-color');
-    font-size: var(~'--c-dialog-close-icon-font-size');
+    width: var(--c-dialog-close-button-size);
+    height: var(--c-dialog-close-button-size);
+    color: var(--c-dialog-close-button-color);
+    font-size: var(--c-dialog-close-button-font-size);
     line-height: 1;
     background: transparent;
     border: none;
@@ -143,29 +145,29 @@
   }
 
   &-title {
-    color: var(~'--c-dialog-header-text-color');
-    font-weight: var(~'--c-dialog-title-font-weight');
-    font-size: var(~'--c-dialog-header-font-size');
+    color: var(--c-dialog-title-text-color);
+    font-weight: var(--c-dialog-title-font-weight);
+    font-size: var(--c-dialog-title-font-size);
 
     &-icon {
-      margin-right: var(~'--c-dialog-tip-icon-margin-right');
-      font-size: var(~'--c-dialog-tip-icon-size');
+      margin-right: var(--c-dialog-status-icon-gap);
+      font-size: var(--c-dialog-status-icon-size);
       vertical-align: -0.15em;
 
       .c-icon-info-circle-fill {
-        color: var(~'--c-dialog-status-info-icon-color');
+        color: var(--c-dialog-status-info-color);
       }
 
       .c-icon-check-circle-fill {
-        color: var(~'--c-dialog-status-success-icon-color');
+        color: var(--c-dialog-status-success-color);
       }
 
       .c-icon-exclamation-circle-fill {
-        color: var(~'--c-dialog-status-warning-icon-color');
+        color: var(--c-dialog-status-warning-color);
       }
 
       .c-icon-close-circle-fill {
-        color: var(~'--c-dialog-status-danger-icon-color');
+        color: var(--c-dialog-status-danger-color);
       }
     }
   }
@@ -174,8 +176,7 @@
 // 简洁模式
 .c-dialog-simple {
   width: var(~'--c-dialog-simple-width');
-  padding: var(~'--c-dialog-simple-padding-top') var(~'--c-dialog-simple-padding-horizontal')
-    var(~'--c-dialog-simple-padding-bottom');
+  padding: var(--c-dialog-simple-padding);
 
   .c-dialog-header,
   .c-dialog-footer {
@@ -185,11 +186,11 @@
   }
 
   .c-dialog-header {
-    margin-bottom: var(~'--c-dialog-simple-content-margin-top');
+    margin-bottom: var(--c-dialog-simple-content-gap);
   }
 
   .c-dialog-title {
-    justify-content: var(~'--c-dialog-simple-header-justify');
+    justify-content: var(--c-dialog-title-justify);
 
     &-align-start {
       justify-content: flex-start;
@@ -201,7 +202,7 @@
   }
 
   .c-dialog-footer {
-    margin-top: var(~'--c-dialog-simple-footer-margin-top');
+    margin-top: var(--c-dialog-simple-actions-gap);
     text-align: center;
   }
 
@@ -215,8 +216,8 @@
   display: inline-flex;
   flex-direction: column;
   box-sizing: border-box;
-  width: 100%;
-  height: 100%;
+  width: var(--c-dialog-fullscreen-width);
+  height: var(--c-dialog-fullscreen-height);
 
   .c-dialog-footer {
     margin-top: auto;
@@ -238,8 +239,8 @@
 .zoom-modal-enter-active,
 .zoom-modal-appear-active {
   transition:
-    opacity var(~'--c-dialog-transition-duration') var(~'--c-dialog-transition-timing-function'),
-    transform var(~'--c-dialog-transition-duration') var(~'--c-dialog-transition-timing-function');
+    opacity var(--c-dialog-animation-duration) var(--c-dialog-animation-easing),
+    transform var(--c-dialog-animation-duration) var(--c-dialog-animation-easing);
 }
 
 .zoom-modal-leave-from {
@@ -254,8 +255,8 @@
 
 .zoom-modal-leave-active {
   transition:
-    opacity var(~'--c-dialog-transition-duration') var(~'--c-dialog-transition-timing-function'),
-    transform var(~'--c-dialog-transition-duration') var(~'--c-dialog-transition-timing-function');
+    opacity var(--c-dialog-animation-duration) var(--c-dialog-animation-easing),
+    transform var(--c-dialog-animation-duration) var(--c-dialog-animation-easing);
 }
 
 .fade-modal-enter-from,
@@ -270,7 +271,7 @@
 
 .fade-modal-enter-active,
 .fade-modal-appear-active {
-  transition: opacity var(~'--c-dialog-transition-duration') var(~'--c-dialog-transition-timing-function');
+  transition: opacity var(--c-dialog-animation-duration) var(--c-dialog-animation-easing);
 }
 
 .fade-modal-leave-from {
@@ -282,5 +283,5 @@
 }
 
 .fade-modal-leave-active {
-  transition: opacity var(~'--c-dialog-transition-duration') var(~'--c-dialog-transition-timing-function');
+  transition: opacity var(--c-dialog-animation-duration) var(--c-dialog-animation-easing);
 }

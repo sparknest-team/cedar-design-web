@@ -1,6 +1,6 @@
 <template>
   <div :style="{ position: 'relative', width: '440px', height: '280px' }">
-    <c-button v-tooltip:tl="'This is a Tooltip'" :style="{ position: 'absolute', top: '0', left: '70px' }" class="button"
+    <c-button v-tooltip:top-start="'This is a Tooltip'" :style="{ position: 'absolute', top: '0', left: '70px' }" class="button"
       >TL
     </c-button>
     <c-button
@@ -9,11 +9,11 @@
       class="button"
       >TOP
     </c-button>
-    <c-button v-tooltip:tr="'This is a Tooltip'" :style="{ position: 'absolute', top: '0', left: '290px' }" class="button"
+    <c-button v-tooltip:top-end="'This is a Tooltip'" :style="{ position: 'absolute', top: '0', left: '290px' }" class="button"
       >TR
     </c-button>
     <c-button
-      v-tooltip:bl="'This is a Tooltip'"
+      v-tooltip:bottom-start="'This is a Tooltip'"
       :style="{ position: 'absolute', top: '240px', left: '70px' }"
       class="button"
       >BL
@@ -25,13 +25,13 @@
       >BOTTOM
     </c-button>
     <c-button
-      v-tooltip:br="'This is a Tooltip'"
+      v-tooltip:bottom-end="'This is a Tooltip'"
       :style="{ position: 'absolute', top: '240px', left: '290px' }"
       class="button"
       >BR
     </c-button>
     <c-button
-      v-tooltip:lt="'This is a Tooltip'"
+      v-tooltip:left-start="'This is a Tooltip'"
       :style="{ position: 'absolute', top: '60px', left: '10px' }"
       class="button"
       >LT
@@ -43,13 +43,13 @@
       >LEFT
     </c-button>
     <c-button
-      v-tooltip:lb="'This is a Tooltip'"
+      v-tooltip:left-end="'This is a Tooltip'"
       :style="{ position: 'absolute', top: '180px', left: '10px' }"
       class="button"
       >LB
     </c-button>
     <c-button
-      v-tooltip:rt="'This is a Tooltip'"
+      v-tooltip:right-start="'This is a Tooltip'"
       :style="{ position: 'absolute', top: '60px', left: '350px' }"
       class="button"
       >RT
@@ -61,7 +61,7 @@
       >RIGHT
     </c-button>
     <c-button
-      v-tooltip:rb="'This is a Tooltip'"
+      v-tooltip:right-end="'This is a Tooltip'"
       :style="{ position: 'absolute', top: '180px', left: '350px' }"
       class="button"
       >RB

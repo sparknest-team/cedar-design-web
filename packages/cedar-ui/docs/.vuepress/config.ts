@@ -79,6 +79,9 @@ export default defineUserConfig({
       esbuild: {
         jsx: 'preserve',
       },
+      ssr: {
+        noExternal: ['rrule'],
+      },
       plugins: [
         uploadMockPlugin(),
         CedarStyleImports(),
