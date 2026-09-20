@@ -1,4 +1,4 @@
-@import './token.less';
+@import "./token.less";
 
 .c-auto-complete {
   position: relative;
@@ -6,28 +6,28 @@
   box-sizing: border-box;
   width: 100%;
   &-popup .c-select-popup {
-    background-color: var(~'--c-color-bg-popup');
-    border: 1px solid var(~'--c-auto-complete-popup-border-color');
-    border-radius: var(~'--c-auto-complete-popup-border-radius');
-    box-shadow: var(~'--c-auto-complete-popup-box-shadow');
+    background-color: var(~"--c-color-bg-popup");
+    border: 1px solid var(~"--c-auto-complete-popup-border-color");
+    border-radius: var(~"--c-auto-complete-popup-border-radius");
+    box-shadow: var(~"--c-auto-complete-popup-box-shadow");
 
     .c-select-popup-inner {
-      max-height: var(~'--c-auto-complete-popup-max-height');
-      padding: var(~'--c-auto-complete-popup-padding-vertical') 0;
+      max-height: var(~"--c-auto-complete-popup-max-height");
+      padding: var(~"--c-auto-complete-popup-padding-vertical") 0;
     }
 
     .c-select-option {
-      height: var(~'--c-auto-complete-option-height');
-      padding: 0 var(~'--c-auto-complete-option-padding-horizontal');
-      font-size: var(~'--c-auto-complete-popup-font-size');
+      height: var(~"--c-auto-complete-option-height");
+      padding: 0 var(~"--c-auto-complete-option-padding-horizontal");
+      font-size: var(~"--c-auto-complete-popup-font-size");
       line-height: $height;
 
       .option-color(@status) {
-        @class-suffix: if(@status = default, ~'', ~'-@{status}');
+        @class-suffix: if(@status = default, ~"", ~"-@{status}");
 
         &@{class-suffix} {
-          color: var(~'--c-auto-complete-option-text-color-@{status}');
-          background-color: var(~'--c-auto-complete-option-bg-@{status}');
+          color: var(~"--c-auto-complete-option-text-color-@{status}");
+          background-color: var(~"--c-auto-complete-option-bg-@{status}");
         }
       }
 
@@ -38,7 +38,7 @@
       .option-color(disabled);
 
       &-selected {
-        font-weight: var(~'--c-auto-complete-option-font-weight-selected');
+        font-weight: var(~"--c-auto-complete-option-font-weight-selected");
       }
     }
   }

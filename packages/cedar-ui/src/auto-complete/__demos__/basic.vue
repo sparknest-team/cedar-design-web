@@ -1,23 +1,22 @@
 <template>
-  <c-auto-complete :options="options" placeholder="请输入" @search="handleSearch" />
+  <c-auto-complete
+    v-model="value"
+    :options="options"
+    placeholder="输入或选择城市"
+    clearable
+    style="width: 320px"
+  />
+  <p>当前值：{{ value || '-' }}</p>
 </template>
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const options = ref<any>([])
-    return {
-      options,
-      handleSearch(value: string) {
-        if (value) {
-          options.value = [...Array(5)].map((_, index) => `${value}-${index}`)
-          console.log(options)
-        } else {
-          options.value = []
-        }
-      },
-    }
-  },
-})
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const value = ref('')
+const options = [
+  'Beijing',
+  { value: 310000, label: 'Shanghai' },
+  { value: 'chengdu', label: 'Chengdu' },
+  { value: 'wuhan', label: 'Wuhan', disabled: true },
+]
 </script>
