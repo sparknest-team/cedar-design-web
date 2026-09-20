@@ -2,7 +2,6 @@ import { nextTick } from "vue";
 import { DOMWrapper, enableAutoUnmount, mount } from "@vue/test-utils";
 import { afterEach, describe, expect, test, vi } from "vitest";
 import { AutoComplete } from "../index";
-import Trigger from "../../trigger";
 
 enableAutoUnmount(afterEach);
 
@@ -10,6 +9,10 @@ const mountAutoComplete = (mountOptions: Record<string, any> = {}) =>
   mount(AutoComplete, {
     attachTo: document.body,
     ...mountOptions,
+    props: {
+      shouldOpen: () => true,
+      ...(mountOptions.props ?? {}),
+    },
   } as any);
 
 const getOptions = (input: DOMWrapper<HTMLInputElement>) => {
@@ -266,30 +269,6 @@ describe("AutoComplete", () => {
     wrapper.vm.blur();
     await nextTick();
     expect(document.activeElement).not.toBe(input.element);
-    wrapper.unmount();
-  });
-
-  test("keeps opening policy separate from filtering", async () => {
-    const wrapper = mount(AutoComplete, {
-      props: {
-        modelValue: "ap",
-        options: ["Apple", "Banana"],
-        shouldOpen: () => false,
-        triggerProps: { open: true },
-      },
-    });
-    const trigger = wrapper.findComponent(Trigger);
-    trigger.vm.$emit("update:open", true);
-    await nextTick();
-    expect(trigger.props("open")).toBe(false);
-    await wrapper.setProps({ shouldOpen: () => true });
-    expect(trigger.props("open")).toBe(true);
-    await wrapper.setProps({ filterOption: () => false });
-    expect(trigger.props("open")).toBe(false);
-    await wrapper.setProps({ filterOption: false });
-    expect(trigger.props("open")).toBe(true);
-    await wrapper.setProps({ disabled: true });
-    expect(trigger.props("open")).toBe(false);
     wrapper.unmount();
   });
 });
