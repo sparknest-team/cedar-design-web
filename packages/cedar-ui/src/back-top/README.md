@@ -2,41 +2,77 @@
 permalink: /components/back-top/
 ---
 
-# BackTop
+# BackTop 回到顶部
 
-可一键返回顶部的按钮。
+滚动页面或指定容器的回顶按钮，支持原生键盘操作。
 
 ## 案例
 
 ### 基础用法
 
-当容器滚动到一定高度的时候，在右下角会出现一个返回顶部的按钮。
-
 <demo src="./__demos__/basic.vue"></demo>
 
-### 自定义按钮
+### 切换滚动容器
 
-可以自定义返回按钮。
+<demo src="./__demos__/container.vue"></demo>
+
+### 自定义位置
+
+<demo src="./__demos__/custom-position.vue"></demo>
+
+### 自定义内容与事件
 
 <demo src="./__demos__/custom.vue"></demo>
 
+示例使用独立局部容器，避免多个卡片争用页面回顶按钮。不传 `target-container` 时监听页面，不自动查找滚动祖先。无效或未匹配的选择器会隐藏按钮；异步容器使用返回元素的响应式 getter。`popup-container` 只控制按钮挂载位置，不改变滚动目标。
+
 ## API
 
-### `<back-top>` Props
+### Props
 
-| 参数名           | 描述                                                                           | 类型                    |    默认值    |
-| ---------------- | ------------------------------------------------------------------------------ | ----------------------- | :----------: |
-| visible-height   | 显示回到顶部按钮的触发滚动高度                                                 | `number`                |    `200`     |
-| target-container | 滚动事件的监听容器                                                             | `string \| HTMLElement` |     `-`      |
-| easing           | 滚动动画的缓动方式，可选值参考 [BTween](https://github.com/PengJiyuan/b-tween) | `string`                | `'quartOut'` |
-| duration         | 滚动动画的持续时间                                                             | `number`                |    `200`     |
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| `target-container` | 滚动容器；省略时为页面 | `string \| HTMLElement \| (() => HTMLElement \| null \| undefined)` | `—` |
+| `popup-container` | 挂载容器；false 原地渲染 | `string \| HTMLElement \| false` | `body` |
+| `visible-height` | 显示阈值（含边界）；数字字符串按 px，不支持 CSS 单位 | `number \| string` | `200` |
+| `duration` | 回顶动画毫秒数，0 立即回顶 | `number` | `200` |
+| `easing` | 内置曲线或输入/输出 0–1 的自定义缓动函数 | `'linear' \| 'quartOut' \| 'easeInOutCubic' \| ((progress: number) => number)` | `'quartOut'` |
+| `right` | 右侧偏移；数字按 px，字符串支持 CSS 长度 | `number \| string` | `—` |
+| `bottom` | 底部偏移；数字按 px，字符串支持 CSS 长度 | `number \| string` | `—` |
+| `elevation` | 阴影等级；true 为 2，false 关闭 | `boolean \| number` | `true` |
+| `aria-label` | 无障碍名称 | `string` | `'Back to top'` |
 
-`popup-container` 支持 string / HTMLElement / false，省略挂载到 body；false 原地渲染。
+`popup-container=false` 时按钮绝对定位，父级需 `position: relative`。重复点击替换前次动画；切换目标、KeepAlive 停用和卸载都会清理监听与动画。系统开启减少动态效果时立即回顶，不改变横向滚动位置。
 
-### 类型定义
+### 事件 / 插槽 / 方法
 
-组件导出以下类型定义
+- `click(event: MouseEvent)`：每次激活通知一次。
+- 默认插槽：文字、图标等非交互内容；根节点已是原生 button，不再嵌套 Button 或链接。
+- `scrollToTop()`：滚动当前目标，不额外触发 click。
+- 键盘：Tab 聚焦可见按钮，Enter / Space 激活；隐藏时不可聚焦。
+
+### 类型
 
 ```ts
-import type { BackTopInstance } from '@cedarjs/ui'
+import type { BackTopProps, BackTopInstance, BackTopTarget, BackTopEasing } from '@cedarjs/ui'
 ```
+
+### 样式变量
+
+| Token | 默认值 |
+| --- | --- |
+| `--c-back-top-right` | `40px` |
+| `--c-back-top-bottom` | `40px` |
+| `--c-back-top-button-size` | `var(--c-sys-control-touch-target)` |
+| `--c-back-top-button-border-radius` | `50%` |
+| `--c-back-top-font-size` | `var(--c-sys-font-size-md)` |
+| `--c-back-top-icon-size` | `20px` |
+| `--c-back-top-background` | `var(--c-sys-color-surface-raised)` |
+| `--c-back-top-text-color` | `var(--c-sys-color-content-brand)` |
+| `--c-back-top-hover-background` | `var(--c-sys-color-state-hover)` |
+| `--c-back-top-focus-color` | `var(--c-sys-color-content-brand)` |
+| `--c-back-top-focus-width` | `2px` |
+| `--c-back-top-focus-offset` | `2px` |
+| `--c-back-top-z-index` | `var(--c-z-index-local-sticky)` |
+
+预发布迁移：Cedar 的 `margin-right/bottom` → `right/bottom`、`button-size-width` → `button-size`、`button-size-font/icon` → `font-size/icon-size`、`button-bg/bg-hover/text-color` → `background/hover-background/text-color`（均带组件前缀）。Maple 默认动画改为 200ms，默认目标为页面。旧 BTween 任意曲线字符串改用上述枚举或函数；不保留兼容别名。

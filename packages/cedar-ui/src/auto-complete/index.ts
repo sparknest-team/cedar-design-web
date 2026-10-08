@@ -1,21 +1,17 @@
-import { withInstall } from "../_utils/global-config";
-import _AutoComplete from "./auto-complete";
-import { autoCompleteProps } from "./props";
+import { withInstall } from '../_utils/global-config'
+import _AutoComplete from './auto-complete'
+import { autoCompleteProps } from './props'
 
-const AutoComplete = withInstall(
-  _AutoComplete,
-  Object.assign(_AutoComplete, {}),
-  {
-    components: [_AutoComplete],
-  },
-);
+const AutoComplete = withInstall(_AutoComplete, Object.assign(_AutoComplete, {}), {
+  components: [_AutoComplete],
+})
 
-export * from "./props";
+export * from './props'
 
-export type AutoCompleteInstance = InstanceType<typeof _AutoComplete>;
+export type AutoCompleteInstance = InstanceType<typeof _AutoComplete> & { focus: () => void; blur: () => void }
 
-export { AutoComplete, autoCompleteProps };
+export { AutoComplete, autoCompleteProps }
 
-export const _AutoCompleteComponent = AutoComplete;
+export const _AutoCompleteComponent = AutoComplete
 
-export default AutoComplete;
+export default AutoComplete

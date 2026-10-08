@@ -37,6 +37,7 @@
 }
 
 .c-notification {
+  color: var(--c-notification-normal-content-color);
   position: relative;
   display: flex;
   box-sizing: border-box;
@@ -64,12 +65,14 @@
   }
 
   &-icon {
+    color: var(--c-notification-normal-icon-color);
     display: flex;
     align-items: center;
     font-size: var(~"--c-notification-icon-font-size");
   }
 
   &-info {
+    color: var(--c-notification-info-content-color);
     background-color: var(~"--c-notification-info-bg");
     border-color: var(~"--c-notification-info-border-color");
   }
@@ -79,6 +82,7 @@
   }
 
   &-success {
+    color: var(--c-notification-success-content-color);
     background-color: var(~"--c-notification-success-bg");
     border-color: var(~"--c-notification-success-border-color");
   }
@@ -88,6 +92,7 @@
   }
 
   &-warning {
+    color: var(--c-notification-warning-content-color);
     background-color: var(~"--c-notification-warning-bg");
     border-color: var(~"--c-notification-warning-border-color");
   }
@@ -97,6 +102,7 @@
   }
 
   &-error {
+    color: var(--c-notification-error-content-color);
     background-color: var(~"--c-notification-error-bg");
     border-color: var(~"--c-notification-error-border-color");
   }

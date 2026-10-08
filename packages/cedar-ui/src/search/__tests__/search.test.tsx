@@ -24,11 +24,14 @@ describe('Search', () => {
     })
 
     const input = wrapper.find('input.c-input__inner')
+    await input.trigger('focus')
     await input.setValue('设备 A')
 
     expect((input.element as HTMLInputElement).value).toBe('设备 A')
     expect(model.name).toBe('设备 A')
     expect(wrapper.emitted('update:modelValue')?.[0]).toEqual(['设备 A'])
+    expect(wrapper.emitted('change')).toBeUndefined()
+    await input.trigger('blur')
     expect(wrapper.emitted('change')?.[0]?.[0]).toBe('设备 A')
   })
 

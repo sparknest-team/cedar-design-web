@@ -1,9 +1,7 @@
 // Vitest Snapshot v1
 
 exports[`Ellipsis > render 1`] = `
-"<div>
-  <div class=\\"c-ellipsis c-ellipsis--line\\" c-ellipsis-cover=\\"\\"><span></span></div>
-  <!--teleport start-->
-  <!--teleport end-->
-</div>"
+"<div class=\\"c-ellipsis c-ellipsis--line\\" tabindex=\\"0\\"><span></span></div>
+<!--teleport start-->
+<!--teleport end-->"
 `;

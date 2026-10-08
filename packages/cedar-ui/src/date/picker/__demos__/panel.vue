@@ -1,10 +1,10 @@
 <template>
   <div>
-    <c-date-picker default-value="2019-06-03" v-model:pickerValue="pickerValue" hide-trigger />
+    <c-date-picker default-value="2019-06-03" v-model:pickerValue="pickerValue" />
     <c-date-range-picker
       :default-value="['2019-08-01', '2020-06-01']"
       v-model:pickerValue="rangePickerValue"
-      hide-trigger style="margin-top: 20px"
+      style="margin-top: 20px"
     />
   </div>
 </template>

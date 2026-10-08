@@ -4,8 +4,9 @@ import { ComponentSize } from '../_utils/constant'
 export const VALIDATE_STATUSES = ['success', 'warning', 'error', 'validating'] as const
 export type ValidateStatus = (typeof VALIDATE_STATUSES)[number]
 
-export const VALIDATE_TRIGGERS = ['change', 'input', 'focus', 'blur'] as const
-export type ValidateTrigger = (typeof VALIDATE_TRIGGERS)[number]
+export { VALIDATE_TRIGGERS } from './validate-trigger'
+export type { ValidateTrigger } from './validate-trigger'
+import type { ValidateTrigger } from './validate-trigger'
 
 export interface FieldRule<FieldValue = any> {
   /**
@@ -190,4 +191,6 @@ export interface FormItemEventHandler {
    * @en onBlur
    */
   onBlur?: (ev?: Event) => void
+  /** @zh 清空时触发校验；仅在 validateTrigger 包含 clear 时调用。 */
+  onClear?: (ev?: Event) => void
 }

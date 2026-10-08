@@ -6,6 +6,7 @@ import { ComponentSize } from '../_utils/constant'
 export interface FormContext {
   layout: string
   disabled?: boolean
+  readonly?: boolean
   labelAlign: string
   labelColProps?: any
   wrapperColProps?: any
@@ -33,8 +34,10 @@ export interface FormItemContext {
   eventHandlers: FormItemEventHandler
   size: ComponentSize | undefined
   disabled: boolean
+  readonly: boolean
   error: boolean
   feedback: string | undefined
+  hasOuterLabel?: boolean
   updateValidateState: (field: string, { status, message }: { status: ValidateStatus | ''; message: string }) => void
 }
 

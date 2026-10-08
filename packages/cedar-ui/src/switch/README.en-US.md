@@ -72,7 +72,7 @@ The same scenarios, parameters and interactions as Cedar. Only component prefixe
 | default-checked | Initial uncontrolled checked state; initialization only | boolean | false |
 | checked-value | Checked value | string / number / boolean | true |
 | unchecked-value | Unchecked value | string / number / boolean | false |
-| variant | Appearance | circle / round / line / md3 | circle |
+| variant | Appearance | circle / round / line / tonal | circle |
 | size | Size; omitted value follows platform rules below | sm / md / lg | undefined |
 | disabled | Disable interaction, including inherited form disabled state | boolean | false |
 | readonly | Read only; focus and click remain available without toggling | boolean | false |
@@ -119,7 +119,7 @@ before-change returning false, throwing or rejecting cancels the toggle; other s
 ## Types and styling
 
 Root and component entries export SwitchProps, SwitchVariant, SwitchSize, SwitchValue, SwitchBeforeChange and SwitchInstance.
-Tokens use --c-switch-* (Cedar: --c-switch-*). width/height/handle-size default to 40/24/16px; md3-width/md3-height/md3-handle-size to 52/32/24px.
+Tokens use --c-switch-* (Cedar: --c-switch-*). width/height/handle-size default to 40/24/16px; tonal-width/tonal-height/tonal-handle-size to 52/32/24px.
 size-sm-scale=.8, size-lg-scale=1.2; hit-area=0px expands the click target without altering layout. Full tokens are in style/token.less.
 
 ## Migration

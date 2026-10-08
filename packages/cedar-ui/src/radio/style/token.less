@@ -1,20 +1,16 @@
-@import "../../style/theme/index.less";
-
 :root {
-  --c-radio-control-color: var(~"--c-color-neutral-3");
+  --c-radio-control-color: var(--c-sys-color-content-secondary);
   --c-internal-radio-border-width: var(~"--c-border-width-2");
   --c-radio-control-size: 14px;
-  --c-internal-radio-control-color-hover: var(~"--c-color-neutral-3");
-  --c-radio-control-color-disabled: var(~"--c-color-neutral-3");
-  --c-radio-control-color-error: var(--c-sys-color-status-danger);
-  --c-internal-radio-bg: var(~"--c-color-bg-2");
-  --c-radio-control-color-checked: rgb(var(~"--c-primary-6"));
+  --c-internal-radio-control-color-hover: var(--c-radio-control-color);
+  --c-radio-control-color-disabled: var(--c-sys-color-content-disabled);
+  --c-radio-control-color-error: var(--c-sys-color-content-danger);
+  --c-internal-radio-bg: var(--c-sys-color-surface-default);
+  --c-radio-control-color-checked: var(--c-sys-color-content-brand);
   --c-internal-radio-border-radius: var(~"--c-border-radius-circle");
-  --c-internal-radio-bg-disabled: var(~"--c-color-fill-2");
-  --c-internal-radio-control-color-checked-disabled: var(
-    ~"--c-color-primary-light-3"
-  );
-  --c-internal-radio-dot-bg-checked: var(~"--c-color-white");
+  --c-internal-radio-bg-disabled: var(--c-sys-color-surface-muted);
+  --c-internal-radio-control-color-checked-disabled: var(--c-radio-control-color-disabled);
+  --c-internal-radio-dot-bg-checked: var(--c-sys-color-surface-default);
   --c-internal-radio-dot-bg-checked-disabled: var(
     ~"--c-internal-radio-bg-disabled"
   );
@@ -26,98 +22,21 @@
       (var(~"--c-radio-control-size") / 2)
   );
 
-  --c-radio-label-text-color: var(~"--c-color-text-1");
-  --c-radio-label-text-color-disabled: var(~"--c-color-text-4");
-  --c-internal-radio-label-text-color-checked-disabled: var(
-    ~"--c-color-text-4"
-  );
+  --c-radio-label-text-color: var(--c-sys-color-content-primary);
+  --c-radio-label-text-color-disabled: var(--c-sys-color-content-disabled);
+  --c-internal-radio-label-text-color-checked-disabled: var(--c-radio-label-text-color-disabled);
   --c-radio-label-font-size: var(~"--c-font-size-body-3");
-  --c-internal-radio-label-font-size-lg: var(~"--c-font-size-body-3");
-  --c-internal-radio-label-font-size-xs: var(~"--c-font-size-body-1");
-  --c-internal-radio-label-font-size-sm: var(~"--c-font-size-body-3");
   --c-radio-label-gap: var(~"--c-spacing-4");
 
   --c-internal-radio-mask-height: var(~"--c-size-6");
-  --c-internal-radio-mask-hover-bg: var(~"--c-color-fill-2");
+  --c-internal-radio-mask-hover-bg: var(--c-sys-color-state-hover);
   --c-radio-group-gap: var(~"--c-spacing-8");
-  --c-internal-radio-group-button-bg: var(~"--c-color-fill-2");
-  --c-internal-radio-button-padding-horizontal: var(~"--c-spacing-6");
-  --c-internal-radio-button-spacing: 3px;
-  --c-internal-radio-button-bg-active: var(~"--c-color-bg-5");
-  --c-internal-radio-button-bg-hover: var(
-    ~"--c-internal-radio-button-bg-active"
-  );
-  --c-internal-radio-button-text-color-active: rgb(var(~"--c-primary-6"));
-  --c-internal-radio-button-font-weight-active: var(~"--c-font-weight-500");
-  --c-internal-radio-button-text-color-hover: var(
-    ~"--c-radio-label-text-color"
-  );
-
-  --c-internal-radio-button-border-radius: var(~"--c-border-radius-sm");
-
-  --c-internal-radio-button-bg: transparent;
-  --c-internal-radio-button-text-color: var(~"--c-color-text-2");
-
-  --c-internal-radio-button-bg-disabled: transparent;
-  --c-internal-radio-button-text-color-disabled: var(~"--c-color-text-4");
-  --c-internal-radio-button-bg-checked-disabled: var(
-    ~"--c-internal-radio-button-bg-active"
-  );
-  --c-internal-radio-button-text-color-checked-disabled: var(
-    ~"--c-color-primary-light-3"
-  );
-
-  --c-internal-radio-button-separator-bg: var(~"--c-color-neutral-3");
-  --c-internal-radio-button-separator-width: 1px;
-  --c-internal-radio-button-separator-height: 14px;
-  --c-internal-radio-button-separator-left: calc(
-    -1 *
-      (
-        (
-            var(~"--c-internal-radio-button-spacing") -
-              var(~"--c-internal-radio-button-separator-width")
-          ) /
-          2
-      ) -
-      var(~"--c-internal-radio-button-separator-width")
-  );
-  --c-internal-radio-button-spacing-half: calc(
-    var(~"--c-internal-radio-button-spacing") / 2
-  );
-
-  --c-internal-radio-size-md-height: var(~"--c-size-md");
-  --c-internal-radio-size-sm-height: var(~"--c-size-sm");
-  --c-internal-radio-size-xs-height: var(~"--c-size-xs");
-  --c-internal-radio-size-lg-height: var(~"--c-size-lg");
   --c-internal-radio-group-vertical-line-height: var(~"--c-size-8");
-  --c-internal-radio-button-line-height-md: calc(
-    var(~"--c-internal-radio-size-md-height") -
-      var(~"--c-internal-radio-button-spacing") * 2
-  );
-  --c-internal-radio-button-line-height-sm: calc(
-    var(~"--c-internal-radio-size-sm-height") -
-      var(~"--c-internal-radio-button-spacing") * 2
-  );
-  --c-internal-radio-button-line-height-lg: calc(
-    var(~"--c-internal-radio-size-lg-height") -
-      var(~"--c-internal-radio-button-spacing") * 2
-  );
-  --c-internal-radio-button-line-height-xs: calc(
-    var(~"--c-internal-radio-size-xs-height") -
-      var(~"--c-internal-radio-button-spacing") * 2
-  );
 
-  --c-internal-radio-transition-duration-1: var(~"--c-transition-duration-1");
   --c-radio-animation-duration: var(~"--c-transition-duration-3");
-  --c-internal-radio-transition-timing-function-linear: var(
-    ~"--c-transition-timing-function-linear"
-  );
   --c-internal-radio-transition-timing-function-overshoot: var(
     ~"--c-transition-timing-function-overshoot"
   );
 }
 
-:root[cedar-theme="dark"] {
-  --c-internal-radio-button-bg-active: var(~"--c-color-fill-3");
-  --c-internal-radio-button-bg-hover: var(~"--c-color-fill-3");
-}
+@import './radio-button-token.less';

@@ -109,6 +109,7 @@ permalink: /components/dialog/
 | `overlay-closable`           | 点击背景层关闭                                 | `boolean`                        | `true`       |
 | `esc-to-close`            | ESC 关闭                                     | `boolean`                        | `true`       |
 | `lock-scroll`             | 打开时锁定背景滚动                           | `boolean`                        | `true`       |
+| `close-on-route-change`   | 浏览器历史或 hash 变化时关闭                 | `boolean`                        | `false`      |
 | `popup-container`         | 挂载位置，`false` 禁用 teleport              | `string \| HTMLElement \| false` | `'body'`     |
 | `confirm-button`          | 显示确认按钮                                 | `boolean`                        | `true`       |
 | `cancel-button`           | 显示取消按钮                                 | `boolean`                        | `true`       |
@@ -214,3 +215,54 @@ import type {
   DialogType,
 } from "@cedarjs/ui";
 ```
+
+### 样式变量
+
+Dialog 的公开颜色变量与 Maple 同义：`--c-dialog-background` 表示浮层背景（`surface-raised`），`--c-dialog-overlay-background` 表示遮罩，`--c-dialog-title-text-color` 和 `--c-dialog-content-text-color` 表示主要内容，`--c-dialog-close-button-color` 表示次要操作；`--c-dialog-status-{info|success|warning|danger}-color` 对应可读状态内容色（content-info/success/warning/danger），不是状态填充色。业务主题优先覆盖这些组件变量，跨组件主题则覆盖相应的 system 变量。边框、宽度、间距和布局仍遵循桌面端规格。
+
+#### 完整变量默认值
+
+遮罩通过 Dialog 组件变量消费 `sys-color-scrim`；Maple 不再借用 Popup 的遮罩颜色。实例遮罩变量可放在 `overlay-style` 上；放在面板 `dialog-style` 上的变量不会继承给兄弟遮罩节点。显式 `overlay-style.backgroundColor` 优先。Teleport 场景需要在实际 DOM 祖先作用域设置变量。暗色主题继承同一套颜色语义；几何保留平台差异。状态图标改用可读的 content 状态色。
+
+变量按用途分组：background／overlay-background 是面板与遮罩；border-* 是面板或分隔线边框；title-* 是标题排版；content-* 是正文排版；actions-* 是操作区；close-button-* 是关闭按钮；status-* 是语义图标；simple-*／fullscreen-* 是对应模式的尺寸；animation-* 是入退场动效。width／margin-top 控制常规面板布局。内部拖动与定位变量不构成公开定制入口。
+
+| 变量 | 默认值 |
+| --- | --- |
+| `--c-dialog-background` | `var(--c-sys-color-surface-raised)` |
+| `--c-dialog-overlay-background` | `var(--c-sys-color-scrim)` |
+| `--c-dialog-border-color` | `var(--c-sys-color-border-default)` |
+| `--c-dialog-border-width` | `1px` |
+| `--c-dialog-border-radius` | `var(--c-sys-radius-md)` |
+| `--c-dialog-width` | `520px` |
+| `--c-dialog-margin-top` | `100px` |
+| `--c-dialog-title-text-color` | `var(--c-sys-color-content-primary)` |
+| `--c-dialog-title-font-size` | `var(--c-sys-font-size-lg)` |
+| `--c-dialog-title-font-weight` | `var(--c-sys-font-weight-medium)` |
+| `--c-dialog-title-padding` | `0 var(--c-sys-space-8)` |
+| `--c-dialog-title-min-height` | `48px` |
+| `--c-dialog-title-justify` | `center` |
+| `--c-dialog-content-text-color` | `var(--c-sys-color-content-primary)` |
+| `--c-dialog-content-font-size` | `var(--c-sys-font-size-md)` |
+| `--c-dialog-content-line-height` | `var(--c-line-height)` |
+| `--c-dialog-content-padding` | `28px var(--c-sys-space-8)` |
+| `--c-dialog-actions-padding` | `var(--c-sys-space-7) var(--c-sys-space-8)` |
+| `--c-dialog-actions-button-gap` | `var(--c-sys-space-6)` |
+| `--c-dialog-close-button-size` | `32px` |
+| `--c-dialog-close-button-color` | `var(--c-sys-color-content-secondary)` |
+| `--c-dialog-close-button-font-size` | `var(--c-sys-font-size-lg)` |
+| `--c-dialog-close-button-inset-inline-end` | `var(--c-sys-space-7)` |
+| `--c-dialog-status-icon-size` | `18px` |
+| `--c-dialog-status-icon-gap` | `var(--c-sys-space-5)` |
+| `--c-dialog-status-info-color` | `var(--c-sys-color-content-info)` |
+| `--c-dialog-status-success-color` | `var(--c-sys-color-content-success)` |
+| `--c-dialog-status-warning-color` | `var(--c-sys-color-content-warning)` |
+| `--c-dialog-status-danger-color` | `var(--c-sys-color-content-danger)` |
+| `--c-dialog-simple-width` | `400px` |
+| `--c-dialog-simple-border-radius` | `var(--c-sys-radius-md)` |
+| `--c-dialog-simple-padding` | `28px 32px 32px` |
+| `--c-dialog-simple-content-gap` | `28px` |
+| `--c-dialog-simple-actions-gap` | `32px` |
+| `--c-dialog-fullscreen-width` | `100vw` |
+| `--c-dialog-fullscreen-height` | `100vh` |
+| `--c-dialog-animation-duration` | `var(--c-sys-motion-duration-slow)` |
+| `--c-dialog-animation-easing` | `var(--c-sys-motion-easing-standard)` |

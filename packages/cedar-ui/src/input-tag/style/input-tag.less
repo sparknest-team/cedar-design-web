@@ -1,4 +1,3 @@
-@import "../../_components/icon-hover/style/mixins.less";
 @import "./token.less";
 
 // 壳层由 FieldDecorator（.c-field-decorator）提供；此处只写 InputTag 内容态
@@ -75,21 +74,11 @@
         color: var(~"--c-input-tag-color-text-default");
         background-color: var(~"--c-input-tag-tag-color-bg");
         border-color: var(~"--c-input-tag-tag-color-border");
-
-        .c-icon-hover:hover::before {
-          background-color: var(~"--c-input-tag-tag-remove-icon-color-bg");
-        }
       }
 
       &.c-tag--nowrap {
         min-width: 0;
         overflow: hidden;
-      }
-
-      &.c-tag--custom-color {
-        color: var(~"--c-tag-custom-text-color");
-
-        .icon-hover-bg(~"c-tag", var(~"--c-tag-custom-icon-bg-hover"));
       }
     }
 
@@ -109,21 +98,17 @@
     pointer-events: none;
   }
 
-  &.@{cls}--focus {
+  &.c-field-decorator--focus:not(.c-field-decorator--disabled) {
     .@{cls}__tag.c-tag--status-default.c-tag--variant-default:not(
         .c-tag--custom-color
       ) {
       background-color: var(~"--c-input-tag-tag-color-bg-focus");
       border-color: var(~"--c-input-tag-tag-color-border-focus");
-
-      .c-icon-hover:hover::before {
-        background-color: var(~"--c-input-tag-tag-remove-icon-color-bg-focus");
-      }
     }
   }
 
-  &.@{cls}--disabled {
-    .@{cls}__tag {
+  &.c-field-decorator--disabled {
+    .@{cls}__tag.c-tag--status-default.c-tag--variant-default:not(.c-tag--custom-color) {
       color: var(~"--c-input-tag-color-text-disabled");
       background-color: var(~"--c-input-tag-tag-color-bg-disabled");
       border-color: var(~"--c-input-tag-tag-color-border-disabled");
@@ -136,11 +121,9 @@
   }
 
   .size(@size) {
-    &.@{cls}--size-@{size} {
+    &.c-field-decorator--size-@{size} {
       @font-size: var(~"--c-input-tag-size-@{size}-font-size");
-      @height: var(~"--c-input-tag-size-@{size}-height");
       @tag-height: var(~"--c-input-tag-size-@{size}-tag-height");
-      @border-width: var(~"--c-input-tag-border-width");
       @margin-vertical: var(~"--c-input-tag-tag-margin-y");
 
       font-size: @font-size;
@@ -170,5 +153,6 @@
   .size(sm);
   .size(md);
   .size(lg);
+  .size(xl);
 }
 @import '../../field-decorator/style/mixins.less';

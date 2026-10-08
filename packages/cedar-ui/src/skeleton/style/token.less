@@ -1,29 +1,24 @@
-@import "../../style/theme/index.less";
-
 :root {
-  --c-skeleton-content-padding: 16px;
+  --c-skeleton-content-padding: var(--c-sys-space-6);
   --c-skeleton-card-height: 160px;
-  --c-skeleton-card-border-radius: 4px;
-  --c-skeleton-card-margin-bottom: 16px;
-  --c-skeleton-card-background-color: rgba(0, 0, 0, 0.12);
-  --c-skeleton-animation-background: linear-gradient(
-    90deg,
-    hsla(0, 0%, 100%, 0),
-    hsla(0, 0%, 100%, 0.3),
-    hsla(0, 0%, 100%, 0)
-  );
+  --c-skeleton-card-border-radius: var(--c-sys-radius-md);
+  --c-skeleton-card-margin-bottom: var(--c-sys-space-6);
+  --c-skeleton-card-background-color: var(--c-sys-color-state-hover);
+  --c-skeleton-animation-background: linear-gradient(90deg, transparent, var(--c-sys-color-surface-default), transparent);
   --c-skeleton-avatar-size: 34px;
   --c-skeleton-avatar-border-radius: 50%;
-  --c-skeleton-avatar-margin-right: 16px;
-  --c-skeleton-avatar-background-color: rgba(0, 0, 0, 0.12);
+  --c-skeleton-avatar-margin-right: var(--c-sys-space-6);
+  --c-skeleton-avatar-background-color: var(--c-sys-color-state-hover);
   --c-skeleton-title-width: 50%;
   --c-skeleton-title-border-radius: 10px;
-  --c-skeleton-title-background-color: rgba(0, 0, 0, 0.12);
+  --c-skeleton-title-background-color: var(--c-sys-color-state-hover);
   --c-skeleton-row-height: 12px;
   --c-skeleton-row-border-radius: 10px;
   --c-skeleton-row-margin-top: 10px;
   --c-skeleton-shape-size-sm: 36px;
   --c-skeleton-shape-size-md: 48px;
   --c-skeleton-shape-size-lg: 60px;
-  --c-skeleton-shape-border-radius: 4px;
+  --c-skeleton-shape-border-radius: var(--c-sys-radius-md);
+  --c-skeleton-animation-duration: 1s;
+  --c-skeleton-transition-duration: var(--c-sys-motion-duration-slow);
 }

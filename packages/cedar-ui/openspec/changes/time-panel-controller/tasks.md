@@ -1,0 +1,6 @@
+- [x] Implement and independently copy the panel controller.
+- [x] Extract desktop list boundary and mobile wheel/clock interactions.
+- [x] Remove obsolete Cedar pure-panel input state.
+- [x] Add paired controller tests, guard entries and reactive demos.
+- [x] Verify final affected tests (Cedar 90 / Maple 172), types, scoped lint, 847 demo SFCs and guards (15 time / 21 field pairs). Full lint was interrupted; production builds and browser visual QA were not run.
+- [ ] Follow-up: consolidate field popup composition and audit remaining Props/Slots.

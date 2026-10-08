@@ -1,6 +1,6 @@
 <template>
   <c-button status="primary" @click="handleClick">Open Drawer</c-button>
-  <c-drawer :width="340" :open="visible" @confirm="handleConfirm" @cancel="handleCancel" unmountOnClose>
+  <c-drawer v-model:open="visible" :width="340" @confirm="handleConfirm" @cancel="handleCancel" unmount-on-close>
     <template #title>Title</template>
     <div>
       You can customize modal body text by the current situation. This modal will be closed immediately once you press

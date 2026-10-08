@@ -96,74 +96,90 @@ permalink: /components/badge/
 
 以下为组件使用的 css 变量，可以使用 [StyleProvider 组件](#/zh-CN/style-provider) 进行样式定制。
 
-| 变量名                                              | 默认值                    |
-| --------------------------------------------------- | ------------------------- |
-| --c-badge-font-weight                               | 500                       |
-| --c-badge-description-size-xs-font-size             | 12px                      |
-| --c-badge-description-size-sm-font-size             | 12px                      |
-| --c-badge-description-size-md-font-size             | 14px                      |
-| --c-badge-description-size-lg-font-size             | 16px                      |
-| --c-badge-description-size-xl-font-size             | 18px                      |
-| --c-badge-description-text-color                    | var(--c-color-text-1)     |
-| --c-badge-size-xs-font-size                         | 12px                      |
-| --c-badge-size-sm-font-size                         | 12px                      |
-| --c-badge-size-md-font-size                         | 14px                      |
-| --c-badge-size-lg-font-size                         | 16px                      |
-| --c-badge-size-xl-font-size                         | 18px                      |
-| --c-badge-size-xs-scale                             | 0.6667                    |
-| --c-badge-size-sm-scale                             | 0.8333                    |
-| --c-badge-size-md-scale                             | 1                         |
-| --c-badge-size-lg-scale                             | 1                         |
-| --c-badge-size-xl-scale                             | 1                         |
-| --c-badge-size-xs-dot-width                         | 4px                       |
-| --c-badge-size-sm-dot-width                         | 5px                       |
-| --c-badge-size-md-dot-width                         | 6px                       |
-| --c-badge-size-lg-dot-width                         | 7px                       |
-| --c-badge-size-xl-dot-width                         | 8px                       |
-| --c-badge-size-xs-dot-height                        | 4px                       |
-| --c-badge-size-sm-dot-height                        | 5px                       |
-| --c-badge-size-md-dot-height                        | 6px                       |
-| --c-badge-size-lg-dot-height                        | 7px                       |
-| --c-badge-size-xl-dot-height                        | 8px                       |
-| --c-badge-size-xs-space                             | 0px                       |
-| --c-badge-size-sm-space                             | 2px                       |
-| --c-badge-size-md-space                             | 6px                       |
-| --c-badge-size-lg-space                             | 6px                       |
-| --c-badge-size-xs-padding                           | 0 6px                     |
-| --c-badge-size-sm-padding                           | 0 6px                     |
-| --c-badge-size-md-padding                           | 0 8px                     |
-| --c-badge-size-lg-padding                           | 0 8px                     |
-| --c-badge-size-xl-padding                           | 0 10px                    |
-| --c-badge-size-xs-height                            | 16px                      |
-| --c-badge-size-sm-height                            | 16px                      |
-| --c-badge-size-md-height                            | 20px                      |
-| --c-badge-size-lg-height                            | 20px                      |
-| --c-badge-size-xl-height                            | 20px                      |
-| --c-badge-size-xs-border-radius                     | 16px                      |
-| --c-badge-size-sm-border-radius                     | 16px                      |
-| --c-badge-size-md-border-radius                     | 20px                      |
-| --c-badge-size-lg-border-radius                     | 20px                      |
-| --c-badge-size-xl-border-radius                     | 20px                      |
-| --c-badge-bg-color                                  | @color-danger-6           |
-| --c-badge-status-info-bg-color                      | @color-info-6             |
-| --c-badge-status-success-bg-color                   | @color-success-6          |
-| --c-badge-status-warning-bg-color                   | @color-warning-6          |
-| --c-badge-status-danger-bg-color                    | @color-danger-6           |
-| --c-badge-status-primary-bg-color                   | @color-primary-6          |
-| --c-badge-text-color                                | var(--c-color-white)      |
-| --c-badge-status-info-text-color                    | var(--c-color-white)      |
-| --c-badge-status-success-text-color                 | var(--c-color-white)      |
-| --c-badge-status-warning-text-color                 | var(--c-color-white)      |
-| --c-badge-status-danger-text-color                  | var(--c-color-white)      |
-| --c-badge-status-primary-text-color                 | var(--c-color-white)      |
-| --c-badge-variant-outline-bg-color                  | transparent               |
-| --c-badge-variant-outline-text-color                | @color-danger-6           |
-| --c-badge-variant-outline-status-info-text-color    | @color-info-6             |
-| --c-badge-variant-outline-status-success-text-color | @color-success-6          |
-| --c-badge-variant-outline-status-warning-text-color | @color-warning-6          |
-| --c-badge-variant-outline-status-danger-text-color  | @color-danger-6           |
-| --c-badge-variant-outline-status-primary-text-color | @color-primary-6          |
-| --c-badge-border-color                              | var(--c-color-bg-2)       |
+| 变量 | 默认值 |
+| --- | --- |
+| `--c-badge-font-weight` | `var(--c-sys-font-weight-medium)` |
+| `--c-badge-description-size-xs-font-size` | `var(--c-sys-font-size-xs)` |
+| `--c-badge-description-size-sm-font-size` | `var(--c-sys-font-size-xs)` |
+| `--c-badge-description-size-md-font-size` | `var(--c-sys-font-size-md)` |
+| `--c-badge-description-size-lg-font-size` | `var(--c-sys-font-size-lg)` |
+| `--c-badge-description-size-xl-font-size` | `var(--c-sys-font-size-xl)` |
+| `--c-badge-description-text-color` | `var(--c-sys-color-content-primary)` |
+| `--c-badge-size-xs-font-size` | `var(--c-sys-font-size-xs)` |
+| `--c-badge-size-sm-font-size` | `var(--c-sys-font-size-xs)` |
+| `--c-badge-size-md-font-size` | `var(--c-sys-font-size-xs)` |
+| `--c-badge-size-lg-font-size` | `var(--c-sys-font-size-md)` |
+| `--c-badge-size-xl-font-size` | `var(--c-sys-font-size-lg)` |
+| `--c-badge-size-xs-scale` | `0.6667` |
+| `--c-badge-size-sm-scale` | `0.8333` |
+| `--c-badge-size-md-scale` | `1` |
+| `--c-badge-size-lg-scale` | `1` |
+| `--c-badge-size-xl-scale` | `1` |
+| `--c-badge-size-xs-dot-width` | `4px` |
+| `--c-badge-size-sm-dot-width` | `5px` |
+| `--c-badge-size-md-dot-width` | `6px` |
+| `--c-badge-size-lg-dot-width` | `7px` |
+| `--c-badge-size-xl-dot-width` | `8px` |
+| `--c-badge-size-xs-dot-height` | `4px` |
+| `--c-badge-size-sm-dot-height` | `5px` |
+| `--c-badge-size-md-dot-height` | `6px` |
+| `--c-badge-size-lg-dot-height` | `7px` |
+| `--c-badge-size-xl-dot-height` | `8px` |
+| `--c-badge-size-xs-space` | `0px` |
+| `--c-badge-size-sm-space` | `var(--c-sys-space-1)` |
+| `--c-badge-size-md-space` | `var(--c-sys-space-3)` |
+| `--c-badge-size-lg-space` | `var(--c-sys-space-3)` |
+| `--c-badge-size-xl-space` | `var(--c-sys-space-4)` |
+| `--c-badge-size-xs-padding` | `0 var(--c-sys-space-3)` |
+| `--c-badge-size-sm-padding` | `0 var(--c-sys-space-3)` |
+| `--c-badge-size-md-padding` | `0 var(--c-sys-space-4)` |
+| `--c-badge-size-lg-padding` | `0 var(--c-sys-space-4)` |
+| `--c-badge-size-xl-padding` | `0 10px` |
+| `--c-badge-size-xs-height` | `20px` |
+| `--c-badge-size-sm-height` | `20px` |
+| `--c-badge-size-md-height` | `24px` |
+| `--c-badge-size-lg-height` | `28px` |
+| `--c-badge-size-xl-height` | `32px` |
+| `--c-badge-size-xs-border-radius` | `20px` |
+| `--c-badge-size-sm-border-radius` | `20px` |
+| `--c-badge-size-md-border-radius` | `24px` |
+| `--c-badge-size-lg-border-radius` | `28px` |
+| `--c-badge-size-xl-border-radius` | `32px` |
+| `--c-badge-bg-color` | `var(--c-sys-color-status-danger)` |
+| `--c-badge-text-color` | `var(--c-sys-color-content-on-bright)` |
+| `--c-badge-status-default-bg-color` | `#e0e0e0` |
+| `--c-badge-status-default-text-color` | `var(--c-sys-color-content-on-bright)` |
+| `--c-badge-status-info-bg-color` | `var(--c-sys-color-status-info)` |
+| `--c-badge-status-info-text-color` | `var(--c-sys-color-content-on-bright)` |
+| `--c-badge-status-success-bg-color` | `var(--c-sys-color-status-success)` |
+| `--c-badge-status-success-text-color` | `var(--c-sys-color-content-on-bright)` |
+| `--c-badge-status-warning-bg-color` | `var(--c-sys-color-status-warning)` |
+| `--c-badge-status-warning-text-color` | `var(--c-sys-color-content-on-bright)` |
+| `--c-badge-status-danger-bg-color` | `var(--c-sys-color-status-danger)` |
+| `--c-badge-status-danger-text-color` | `var(--c-sys-color-content-on-bright)` |
+| `--c-badge-status-primary-bg-color` | `var(--c-sys-color-action-primary)` |
+| `--c-badge-status-primary-text-color` | `var(--c-sys-color-content-on-bright)` |
+| `--c-badge-status-secondary-bg-color` | `rgb(var(--c-gray-6))` |
+| `--c-badge-status-secondary-text-color` | `var(--c-sys-color-content-on-bright)` |
+| `--c-badge-status-tertiary-bg-color` | `rgb(var(--c-gray-7))` |
+| `--c-badge-status-tertiary-text-color` | `var(--c-sys-color-content-on-dark)` |
+| `--c-badge-variant-outline-bg-color` | `transparent` |
+| `--c-badge-variant-outline-text-color` | `var(--c-sys-color-content-danger)` |
+| `--c-badge-variant-outline-status-info-text-color` | `var(--c-sys-color-content-info)` |
+| `--c-badge-variant-outline-status-success-text-color` | `var(--c-sys-color-content-success)` |
+| `--c-badge-variant-outline-status-warning-text-color` | `var(--c-sys-color-content-warning)` |
+| `--c-badge-variant-outline-status-danger-text-color` | `var(--c-sys-color-content-danger)` |
+| `--c-badge-variant-outline-status-primary-text-color` | `var(--c-sys-color-content-brand)` |
+| `--c-badge-variant-outline-status-default-text-color` | `var(--c-sys-color-content-primary)` |
+| `--c-badge-variant-outline-status-secondary-text-color` | `var(--c-sys-color-content-secondary)` |
+| `--c-badge-variant-outline-status-tertiary-text-color` | `var(--c-sys-color-content-secondary)` |
+| `--c-badge-border-color` | `var(--c-sys-color-surface-default)` |
+| `--c-badge-offset` | `2px` |
+| `--c-badge-ring-width` | `2px` |
+
+填充徽标按背景选择前景：亮色状态底用 `content-on-bright`；浅色主题的深灰 tertiary 用 `content-on-dark`，暗色主题的亮灰 tertiary 用 `content-on-bright`。两端的 Maple 浅色品牌均为深橙 primary 配置 `content-on-dark`。默认危险红 `var(--c-sys-color-status-danger)` 与中性背景 `#e0e0e0` 是组件视觉值。
+
+轮廓文字和描边使用 `content-brand/info/success/warning/danger`，适配普通中性表面；secondary 与 tertiary 轮廓均使用 `content-secondary` 保持可读性。`variant-outline-bg-color` 对所有状态均生效，默认透明。`color` 属性覆盖轮廓文字和描边，`text-color` 进一步覆盖文字；二者均保留背景变量的控制权。自定义前景或背景后须重新验证对比度。
 
 ### 类型定义
 
@@ -172,3 +188,7 @@ permalink: /components/badge/
 ```ts
 import type { BadgeInstance } from '@cedarjs/ui'
 ```
+
+### 颜色覆盖边界
+
+bg-color 兜底引用 system status-danger。中性固定浅灰与 secondary/tertiary 灰阶是有意的组件配色；border-color 隔离环可按宿主表面覆盖。自定义 color/text-color 由调用方保证对比度。

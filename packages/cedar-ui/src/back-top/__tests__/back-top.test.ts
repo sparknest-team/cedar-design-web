@@ -4,22 +4,15 @@ import { describe, expect, test } from 'vitest'
 import { BackTop, backTopProps } from '../index'
 
 describe('BackTop', () => {
-  test('renders an accessible keyboard target', async () => {
+  test('renders a native keyboard target', async () => {
     const wrapper = mount(BackTop, {
       props: { visibleHeight: 0, ariaLabel: '返回顶部', popupContainer: false },
-      attachTo: document.body,
     })
-    window.dispatchEvent(new Event('scroll'))
-    for (let i = 0; i < 20 && !wrapper.find('[role="button"]').exists(); i++) {
-      await new Promise((resolve) => setTimeout(resolve, 20))
-    }
     await nextTick()
-
-    const trigger = wrapper.get('[role="button"]')
     expect(BackTop.name).toBe('CBackTop')
     expect(backTopProps.duration.default).toBe(200)
-    expect(trigger.attributes('tabindex')).toBe('0')
-    expect(trigger.attributes('aria-label')).toBe('返回顶部')
+    expect(wrapper.get('button').attributes('type')).toBe('button')
+    expect(wrapper.get('button').attributes('aria-label')).toBe('返回顶部')
     wrapper.unmount()
   })
 })

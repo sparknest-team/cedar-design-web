@@ -39,7 +39,6 @@
     pointer-events: none;
   }
   &--checked &__track { background: var(--c-switch-current-track, var(--c-switch-track-active-background)); }
-  &--error &__track { background: var(--c-switch-track-error-background); }
   &__handle {
     position: absolute;
     inset-inline-start: calc(var(--c-switch-gap) * var(--c-switch-scale));
@@ -64,18 +63,40 @@
     padding-inline: calc((var(--c-switch-local-handle) + 2 * var(--c-switch-gap)) * var(--c-switch-scale)) calc(2 * var(--c-switch-gap) * var(--c-switch-scale));
   }
   &--checked &__text { padding-inline: calc(2 * var(--c-switch-gap) * var(--c-switch-scale)) calc((var(--c-switch-local-handle) + 2 * var(--c-switch-gap)) * var(--c-switch-scale)); }
-  &__loading { width: 80%; height: 80%; color: var(--c-switch-loading-color, currentColor); animation: c-switch-spin 1s linear infinite; }
+  &__loading { width: 80%; height: 80%; color: var(--c-switch-loading-color, currentColor); animation: c-switch-spin var(--c-switch-loading-duration) linear infinite; }
   &__ripple { position: absolute; inset: 0; border-radius: inherit; background: currentColor; opacity: 0; animation: c-switch-ripple var(--c-switch-ripple-duration) ease-out; }
   &--variant-round, &--variant-round &__handle { border-radius: var(--c-switch-round-radius); }
   &--variant-line { --c-switch-local-handle: var(--c-switch-line-handle-size); }
   &--variant-line &__track { top: 50%; bottom: auto; height: calc(var(--c-switch-line-height) * var(--c-switch-scale)); transform: translateY(-50%); }
-  &--variant-md3 {
-    --c-switch-local-width: var(--c-switch-md3-width);
-    --c-switch-local-height: var(--c-switch-md3-height);
-    --c-switch-local-handle: var(--c-switch-md3-handle-size);
+  &--variant-tonal {
+    --c-switch-local-width: var(--c-switch-tonal-width);
+    --c-switch-local-height: var(--c-switch-tonal-height);
+    --c-switch-local-handle: var(--c-switch-tonal-handle-size);
   }
-  &--variant-md3:not(.c-switch--checked) &__track { background: var(--c-switch-current-track, var(--c-switch-md3-track-background)); border: var(--c-switch-md3-border-width) solid var(--c-switch-md3-border-color); box-sizing: border-box; }
-  &--variant-md3:not(.c-switch--checked) &__handle { background: var(--c-switch-md3-border-color); }
+  &--variant-tonal:not(.c-switch--checked) &__track { background: var(--c-switch-current-track, var(--c-switch-tonal-track-background)); border: var(--c-switch-tonal-border-width) solid var(--c-switch-tonal-border-color); box-sizing: border-box; }
+  &--variant-tonal:not(.c-switch--checked) &__handle { background: var(--c-switch-tonal-border-color); }
+  &--variant-tonal:not(.c-switch--checked) &__handle {
+    color: var(--c-switch-tonal-handle-color);
+  }
+  &--variant-tonal:not(.c-switch--checked) &__text {
+    color: var(--c-switch-tonal-text-color);
+  }
+  &--error:not(.c-switch--disabled):not(.c-switch--loading) &__handle {
+    background: var(--c-switch-handle-background);
+    color: var(--c-switch-handle-color);
+  }
+  &--error:not(.c-switch--disabled):not(.c-switch--loading) &__text {
+    color: var(--c-switch-text-color);
+  }
+  // Unavailable states suppress validation; error wins over variant defaults.
+  &--error:not(.c-switch--disabled):not(.c-switch--loading) &__track {
+    background: var(--c-switch-track-error-background);
+    border-color: var(--c-switch-track-error-background);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c-switch__loading { animation: none; }
 }
 @keyframes c-switch-spin { to { transform: rotate(360deg); } }
 @keyframes c-switch-ripple { from { opacity: .25; transform: scale(1); } to { opacity: 0; transform: scale(var(--c-switch-ripple-scale)); } }

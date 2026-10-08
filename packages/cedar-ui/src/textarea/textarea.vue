@@ -1,3 +1,4 @@
+/opt/homebrew/Library/Homebrew/cmd/shellenv.sh: line 18: /bin/ps: Operation not permitted
 <template>
   <FieldDecorator
     v-bind="wrapperAttrs"
@@ -29,7 +30,7 @@
         :style="textareaStyle"
         :value="computedValue"
         :disabled="mergedDisabled"
-        :readonly="readonly"
+        :readonly="mergedReadonly"
         :rows="rows"
         :maxlength="undefined"
         :placeholder="placeholder"
@@ -77,7 +78,7 @@ import IconHover from '../_components/IconHover.vue'
 import { IconClose } from '@cedarjs/icons-vue/icon-close'
 import FieldDecorator from '../field-decorator'
 import { createNamespace } from '../_utils/global-config'
-import { getNativeTextareaAttrs, getSizeStyles } from './utils'
+import { getNativeTextareaAttrs, getSizeStyles, getTextareaAutoSizeStyle } from './utils'
 import { isFunction, isNull, isObject, isUndefined } from '../_utils/is'
 import { omit } from '../_utils/omit'
 import { INPUT_EVENTS } from '../_utils/constant'
@@ -86,6 +87,8 @@ import { useFormItem } from '../_hooks/use-form-item'
 import { useCursor } from '../_hooks/use-cursor'
 import { textareaProps } from './props'
 import { useI18n } from '../locale'
+import { useInputComposition } from '../_utils/input-composition'
+import { normalizeTextInputValue } from '../_utils/text-input-value'
 
 export default defineComponent({
   name: createNamespace("textarea").name,
@@ -104,13 +107,16 @@ export default defineComponent({
   setup(props, { emit, attrs, slots }) {
     const { n, classes } = createNamespace("textarea");
     const { t } = useI18n();
-    const { size, variant, disabled, modelValue } = toRefs(props);
-    const { formItemCtx, eventHandlers } = useFormItem();
-    const mergedDisabled = computed(() =>
-      Boolean(disabled.value ?? formItemCtx.disabled),
-    );
-    const mergedSize = computed(() => size.value ?? "md");
-    const mergedVariant = computed(() => variant.value ?? "outlined");
+    const { size, variant, disabled, readonly, error, modelValue } = toRefs(props);
+    const {
+      mergedSize: formSize,
+      mergedDisabled,
+      mergedReadonly,
+      mergedError: formError,
+      eventHandlers,
+    } = useFormItem({ size, disabled, readonly, error });
+    const mergedSize = computed(() => formSize.value ?? "md");
+    const mergedVariant = computed(() => variant.value ?? "outline");
 
     const textareaRef = ref<HTMLTextAreaElement>();
     const mirrorRef = ref<HTMLElement>();
@@ -140,8 +146,7 @@ export default defineComponent({
     const valueLength = computed(() => getValueLength(computedValue.value));
     const mergedError = computed(
       () =>
-        Boolean(formItemCtx.error) ||
-        props.error ||
+        formError.value ||
         Boolean(
           computedMaxLength.value &&
           maxLengthErrorOnly.value &&
@@ -163,7 +168,7 @@ export default defineComponent({
         Boolean(slots.suffix),
     );
 
-    const isComposition = ref(false);
+    const composition = useInputComposition();
 
     const keepControl = () => {
       recordCursor();
@@ -178,23 +183,13 @@ export default defineComponent({
       });
     };
 
-    const sliceValue = (value: string) =>
-      props.wordSlice?.(value, computedMaxLength.value) ??
-      value.slice(0, computedMaxLength.value);
-
-    const normalizeValue = (value: string) => {
-      if (
-        computedMaxLength.value &&
-        !maxLengthErrorOnly.value &&
-        getValueLength(value) > computedMaxLength.value
-      ) {
-        return sliceValue(value);
-      }
-      return value;
-    };
-
     const updateValue = (value: string) => {
-      const nextValue = normalizeValue(value);
+      const nextValue = normalizeTextInputValue(value, {
+        maxLength: computedMaxLength.value,
+        errorOnly: maxLengthErrorOnly.value,
+        wordLength: props.wordLength,
+        wordSlice: props.wordSlice,
+      });
       _value.value = nextValue;
       emit("update:modelValue", nextValue);
       keepControl();
@@ -242,18 +237,14 @@ export default defineComponent({
       eventHandlers.value?.onInput?.(ev);
     };
 
-    const handleCompositionStart = () => {
-      isComposition.value = true;
-    };
+    const handleCompositionStart = () => composition.start();
 
     const handleCompositionEnd = (ev: CompositionEvent) => {
-      if (!isComposition.value) return;
-      isComposition.value = false;
-      processInput(ev);
+      if (composition.end(ev)) processInput(ev);
     };
 
     const handleInput = (ev: Event) => {
-      if (!isComposition.value) processInput(ev);
+      if (composition.accepts(ev)) processInput(ev);
     };
 
     const handleKeydown = (ev: KeyboardEvent) => {
@@ -265,6 +256,7 @@ export default defineComponent({
       const value = updateValue("");
       preValue = value;
       emit("clear", ev);
+      eventHandlers.value?.onClear?.(ev);
       nextTick(() => textareaRef.value?.focus());
     };
 
@@ -305,33 +297,15 @@ export default defineComponent({
         return;
 
       const styles = getSizeStyles(window.getComputedStyle(textareaRef.value));
-      const fontSize = Number.parseFloat(styles["font-size"]) || 0;
-      const lineHeight =
-        Number.parseFloat(styles["line-height"]) || fontSize * 1.5;
-      const outerHeight =
-        (Number.parseFloat(styles["border-width"]) || 0) * 2 +
-        (Number.parseFloat(styles["padding-top"]) || 0) +
-        (Number.parseFloat(styles["padding-bottom"]) || 0);
       mirrorStyle.value = styles;
 
       nextTick(() => {
         const options = isObject(props.autoSize) ? props.autoSize : undefined;
-        const minHeight = options?.minRows
-          ? options.minRows * lineHeight + outerHeight
-          : 0;
-        const maxHeight = options?.maxRows
-          ? options.maxRows * lineHeight + outerHeight
-          : 0;
-        let height = mirrorRef.value?.offsetHeight ?? 0;
-        let overflow: CSSProperties["overflow"] = "hidden";
-
-        if (minHeight && height < minHeight) height = minHeight;
-        if (maxHeight && height > maxHeight) {
-          height = maxHeight;
-          overflow = "auto";
-        }
-
-        autoSizeStyle.value = { height: `${height}px`, overflow };
+        autoSizeStyle.value = getTextareaAutoSizeStyle(
+          styles,
+          mirrorRef.value?.offsetHeight ?? 0,
+          options,
+        );
         nextTick(computeIsScroll);
       });
     };
@@ -382,6 +356,7 @@ export default defineComponent({
       computedMaxLength,
       valueLength,
       mergedDisabled,
+      mergedReadonly,
       mergedError,
       mergedSize,
       mergedVariant,

@@ -15,7 +15,7 @@
       <c-button status="primary" @click="handleClick">Open Drawer</c-button>
     </div>
   </div>
-  <c-drawer popup-container="#parentNode" :open="visible" @confirm="handleConfirm" @cancel="handleCancel">
+  <c-drawer v-model:open="visible" popup-container="#parentNode" @confirm="handleConfirm" @cancel="handleCancel">
     <template #title>Title</template>
     <div>
       You can customize modal body text by the current situation. This modal will be closed immediately once you press

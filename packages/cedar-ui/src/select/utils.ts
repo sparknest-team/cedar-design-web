@@ -1,14 +1,14 @@
-import { matchesOptionText } from '../_utils/option-data'
 import { isBoolean, isFunction, isNumber, isObject, isString } from '../_utils/is'
+import { matchesOptionText } from '../_utils/option-data'
 import type {
   FilterOption,
-  SelectOptionGroup,
-  SelectOptionGroupInfo,
+  SelectFieldNames,
   SelectOption,
   SelectOptionData,
+  SelectOptionGroup,
+  SelectOptionGroupInfo,
   SelectOptionInfo,
   SelectOptionValue,
-  SelectFieldNames,
 } from './types'
 
 export const isGroupOption = (option: SelectOption): option is SelectOptionGroup => {
@@ -26,16 +26,17 @@ export const getValueString = (value: SelectOptionValue, valueKey = 'value') =>
 
 export const getKeyFromValue = (value?: SelectOptionValue, valueKey = 'value') => {
   if (isObject(value)) {
-    return `__arco__option__object__${value[valueKey]}`
+    const id = value[valueKey]
+    return `option:object:${JSON.stringify([typeof id, id])}`
   }
   if (value || isNumber(value) || isString(value) || isBoolean(value)) {
-    return `__arco__option__${typeof value}-${value}`
+    return `option:${JSON.stringify([typeof value, value])}`
   }
   return ''
 }
 
 export const hasEmptyStringKey = (optionInfoMap: Map<string, SelectOptionInfo>) => {
-  return optionInfoMap.has(`__arco__option__string-`)
+  return optionInfoMap.has(getKeyFromValue(''))
 }
 
 export const createOptionInfo = (

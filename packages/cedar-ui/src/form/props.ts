@@ -14,7 +14,7 @@ export const formProps = {
      */
     model: {
       type: Object,
-      required: true as const,
+      default: () => ({}),
     },
     /**
      * @zh 表单的布局方式，包括水平、垂直、多列
@@ -66,6 +66,14 @@ export const formProps = {
      * @en Whether to disable the form
      */
     disabled: {
+      type: Boolean,
+      default: undefined,
+    },
+    /**
+     * @zh 是否将表单控件设为只读
+     * @en Whether form controls are readonly
+     */
+    readonly: {
       type: Boolean,
       default: undefined,
     },

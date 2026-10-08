@@ -69,11 +69,11 @@ import type { DividerProps } from '@cedarjs/ui'
 
 | 变量名                                         | 默认值                     |
 | ---------------------------------------------- | -------------------------- |
-| `--c-divider-color`                            | `#363c54`                  |
-| `--c-divider-text-color`                       | `var(~'--c-color-text-1')` |
+| `--c-divider-color`                            | `var(--c-sys-color-border-default)` |
+| `--c-divider-text-color`                       | `var(--c-sys-color-content-secondary)` |
 | `--c-divider-text-padding`                     | `16px`                     |
 | `--c-divider-text-align-inset`                 | `24px`                     |
-| `--c-divider-opacity`                          | `0.12`                     |
+| `--c-divider-opacity`                          | 运行时由 `opacity` 属性写入（默认 `0.12`） |
 | `--c-divider-orientation-vertical-size-x-xs`   | `2px`                      |
 | `--c-divider-orientation-horizontal-size-x-xs` | `12px`                     |
 | `--c-divider-orientation-vertical-size-y-xs`   | `4px`                      |
@@ -94,6 +94,8 @@ import type { DividerProps } from '@cedarjs/ui'
 | `--c-divider-orientation-horizontal-size-x-xl` | `40px`                     |
 | `--c-divider-orientation-vertical-size-y-xl`   | `24px`                     |
 | `--c-divider-orientation-horizontal-size-y-xl` | `32px`                     |
+
+线条使用常规边框语义，分隔线文字使用辅助内容语义。`--c-divider-opacity` 由 `opacity` 属性按实例写入，不是 `:root` 中的固定默认值。桌面文字留白 `16px` 与移动端 `8px` 是平台密度差异。
 
 ## 同源实现与平台边界
 

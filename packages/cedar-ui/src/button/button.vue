@@ -57,7 +57,7 @@ const focusing = ref(false)
         v-else
         :type="loadingType"
         :size="loadingSize ?? states.size"
-        :color="loadingColor"
+        :color="loadingColor ?? 'currentColor'"
         :radius="loadingRadius"
       />
     </span>
@@ -65,7 +65,7 @@ const focusing = ref(false)
       >
       <slot name="icon" />
       <span v-if="busy && loadingMode === 'default'" :class="n('loading')" aria-hidden="true" :style="{ color: loadingColor }">
-        <BaseLoading :type="loadingType" :size="loadingSize ?? 'xs'" :color="loadingColor" :radius="loadingRadius" />
+        <BaseLoading :type="loadingType" :size="loadingSize ?? 'xs'" :color="loadingColor ?? 'currentColor'" :radius="loadingRadius" />
       </span>
     </span>
     <span v-if="$slots.default" :class="classes(n('content'), [busy && loadingMode === 'fill', n('--hidden')])"><slot /></span>

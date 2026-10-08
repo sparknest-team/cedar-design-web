@@ -1,31 +1,32 @@
 @import './token.less';
 
 .c-back-top {
+  box-sizing: border-box;
   position: fixed;
-  right: var(~'--c-back-top-margin-right');
-  bottom: var(~'--c-back-top-margin-bottom');
-  z-index: var(--c-z-index-local-sticky);
+  z-index: var(--c-back-top-z-index);
+  right: var(--c-back-top-right);
+  bottom: var(--c-back-top-bottom);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--c-back-top-button-size);
+  height: var(--c-back-top-button-size);
+  padding: 0;
+  border: 0;
+  border-radius: var(--c-back-top-button-border-radius);
+  background: var(--c-back-top-background);
+  color: var(--c-back-top-text-color);
+  font-size: var(--c-back-top-font-size);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 
-  &-btn {
-    width: var(~'--c-back-top-button-size-width');
-    height: var(~'--c-back-top-button-size-width');
-    color: var(~'--c-back-top-button-text-color');
-    font-size: var(~'--c-back-top-button-size-font');
-    text-align: center;
-    background-color: var(~'--c-back-top-button-bg');
-    border: none;
-    border-radius: var(~'--c-back-top-button-border-radius');
-    outline: none;
-    cursor: pointer;
-    cursor: pointer;
-    transition: all var(~'--c-transition-duration-2') var(~'--c-transition-timing-function-linear');
-
-    &:hover {
-      background-color: var(~'--c-back-top-button-bg-hover');
-    }
-
-    svg {
-      font-size: var(~'--c-back-top-button-size-icon');
-    }
+  > svg { width: var(--c-back-top-icon-size); height: var(--c-back-top-icon-size); }
+  &--inline { position: absolute; }
+  &:focus-visible {
+    outline: var(--c-back-top-focus-width) solid var(--c-back-top-focus-color);
+    outline-offset: var(--c-back-top-focus-offset);
+  }
+  @media (hover: hover) {
+    &:hover { background: var(--c-back-top-hover-background); }
   }
 }

@@ -1,3 +1,6 @@
+import { useRadioRegistration } from './use-radio-navigation'
+import { useChoiceKeyboard } from '../checkbox/use-choice-keyboard';
+import { useRadioControl } from '../checkbox/use-choice-control';
 import {
   computed,
   defineComponent,
@@ -5,13 +8,10 @@ import {
   inject,
   watch,
   nextTick,
-  toRef,
-  toRefs,
 } from "vue";
 import { getPrefixCls, createNamespace } from "../_utils/global-config";
 import IconHover from "../_components/IconHover.vue";
 import { radioGroupKey } from "./context";
-import { isNull, isUndefined } from "../_utils/is";
 import { useFormItem } from "../_hooks/use-form-item";
 import { radioProps } from "./props";
 
@@ -24,6 +24,8 @@ export default defineComponent({
   },
   props: radioProps,
   emits: {
+    focus: (event: FocusEvent) => true,
+    blur: (event: FocusEvent) => true,
     "update:modelValue": (value: string | number | boolean) => true,
     /**
      * @zh 值改变时触发
@@ -31,7 +33,7 @@ export default defineComponent({
      * @param { string | number | boolean } value
      * @param {Event} ev
      */
-    change: (value: string | number | boolean, ev: Event) => true,
+    change: (value: string | number | boolean, ev?: Event) => true,
   },
   /**
    * @zh 自定义单选框
@@ -41,90 +43,84 @@ export default defineComponent({
    * @binding {boolean} disabled
    * @version 2.18.0
    */
-  setup(props, { emit, slots }) {
+  setup(props, { emit, slots, expose }) {
     const prefixCls = getPrefixCls("radio");
-    const { error, modelValue } = toRefs(props);
     const radioGroupCtx = !props.uninjectGroupContext
       ? inject(radioGroupKey, undefined)
       : undefined;
     const {
       mergedDisabled: _mergedDisabled,
+      mergedReadonly: _mergedReadonly,
       mergedError: _mergedError,
       eventHandlers,
     } = useFormItem({
-      disabled: toRef(props, "disabled"),
-      error,
+      disabled: computed(() => props.disabled ?? radioGroupCtx?.disabled),
+      error: computed(() => props.error ?? radioGroupCtx?.error),
+      readonly: computed(() => props.readonly ?? radioGroupCtx?.readonly),
     });
 
     const inputRef = ref<HTMLInputElement | null>(null);
-    const _checked = ref(props.defaultChecked);
 
-    const isGroup = computed(() => Boolean(radioGroupCtx));
     const mergedVariant = computed(
       () => radioGroupCtx?.variant ?? props.variant,
     );
     const mergedDisabled = computed(
       () => radioGroupCtx?.disabled || _mergedDisabled.value,
     );
+    const mergedReadonly = computed(() => radioGroupCtx?.readonly || _mergedReadonly.value);
     const mergedError = computed(
       () => radioGroupCtx?.error || _mergedError.value,
     );
 
-    const computedChecked = computed(() => {
-      if (isGroup.value) {
-        return radioGroupCtx?.value === (props.value ?? true);
-      }
-
-      if (!isUndefined(props.modelValue)) {
-        return props.modelValue === (props.value ?? true);
-      }
-      return _checked.value;
+    const { checked: computedChecked, select } = useRadioControl(
+      props,
+      (value, event) => {
+        emit("update:modelValue", value);
+        emit("change", value, event);
+        eventHandlers.value?.onChange?.(event);
+      },
+      () => Boolean(mergedDisabled.value || mergedReadonly.value),
+      radioGroupCtx ? { value: () => radioGroupCtx.value, change: radioGroupCtx.handleChange } : undefined,
+    );
+    const tabIndex = useRadioRegistration(radioGroupCtx?.navigation, {
+      element: () => inputRef.value,
+      checked: () => computedChecked.value,
+      disabled: () => Boolean(mergedDisabled.value),
+      readonly: () => Boolean(mergedReadonly.value),
+      select,
     });
-
-    watch(modelValue, (value) => {
-      if (isUndefined(value) || isNull(value)) {
-        _checked.value = false;
-      }
+    expose({
+      select,
+      focus: (options?: FocusOptions) => { if (!mergedDisabled.value) inputRef.value?.focus(options); },
+      blur: () => inputRef.value?.blur(),
     });
-
-    watch(computedChecked, (curValue, preValue) => {
-      if (curValue !== preValue) {
-        _checked.value = curValue;
-        if (inputRef.value) {
-          inputRef.value.checked = curValue;
-        }
-      }
+    watch(computedChecked, checked => {
+      if (inputRef.value) inputRef.value.checked = checked;
     });
-
-    // const handleClick = (ev: MouseEvent) => {
-    //   if (!props.disabled && inputRef.value && ev.target !== inputRef.value) {
-    //     ev.preventDefault();
-    //     inputRef.value.click();
-    //   }
-    // };
 
     const handleFocus = (ev: FocusEvent) => {
+      emit('focus', ev);
       eventHandlers.value?.onFocus?.(ev);
     };
 
     const handleBlur = (ev: FocusEvent) => {
+      keyboard.reset();
+      emit('blur', ev);
       eventHandlers.value?.onBlur?.(ev);
     };
 
+    const keyboard = useChoiceKeyboard(() => inputRef.value?.click(), () => Boolean(mergedDisabled.value || mergedReadonly.value));
     const handleClick = (ev: Event) => {
       ev.stopPropagation();
+      if (mergedDisabled.value || mergedReadonly.value) ev.preventDefault();
     };
 
     const handleChange = (e: Event) => {
-      _checked.value = true;
-      if (isGroup.value) {
-        radioGroupCtx?.handleChange(props.value ?? true, e);
-      } else {
-        emit("update:modelValue", props.value ?? true);
-        emit("change", props.value ?? true, e);
-        eventHandlers.value?.onChange?.(e);
+      if (mergedDisabled.value || mergedReadonly.value) {
+        (e.target as HTMLInputElement).checked = computedChecked.value;
+        return;
       }
-
+      select(e);
       nextTick(() => {
         if (
           inputRef.value &&
@@ -136,7 +132,11 @@ export default defineComponent({
     };
 
     const cls = computed(() => [
-      `${mergedVariant.value === "button" ? `${prefixCls}-button` : prefixCls}`,
+      prefixCls,
+      mergedVariant.value === "button" && `${prefixCls}--button`,
+      computedChecked.value && `${prefixCls}--checked`,
+      mergedDisabled.value && `${prefixCls}--disabled`,
+      mergedError.value && `${prefixCls}--error`,
       {
         [`${prefixCls}-checked`]: computedChecked.value,
         [`${prefixCls}-disabled`]: mergedDisabled.value,
@@ -163,12 +163,16 @@ export default defineComponent({
         <input
           ref={inputRef}
           type="radio"
+          tabindex={tabIndex.value}
           checked={computedChecked.value}
           value={props.value}
           class={`${prefixCls}-target`}
           disabled={mergedDisabled.value}
+          aria-readonly={mergedReadonly.value || undefined}
           onClick={handleClick}
           onChange={handleChange}
+          onKeydown={keyboard.keydown}
+          onKeyup={keyboard.keyup}
           onFocus={handleFocus}
           onBlur={handleBlur}
         />
@@ -178,7 +182,7 @@ export default defineComponent({
             disabled: mergedDisabled.value,
           }) ?? defaultRadio())
         ) : (
-          <span class={`${prefixCls}-button-content`}>
+          <span class={`${prefixCls}__button-label`}>
             {slots.default && slots.default()}
           </span>
         )}

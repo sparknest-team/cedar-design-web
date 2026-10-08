@@ -9,7 +9,20 @@ import type { TriggerProps } from '../trigger'
 import type { ScrollbarProps } from '../scrollbar'
 import type { SelectFieldNames, SelectOptionData, SelectOptionGroup } from './types'
 
+import { fieldDecoratorProps } from '../field-decorator/props'
+
+export type SelectPresentation = 'menu'
 export const selectProps = {
+  showTags: { type: Boolean, default: true },
+  separator: { type: String, default: ',' },
+  textAlign: { type: String as PropType<'left' | 'right' | 'center'>, default: 'left' },
+  presentation: { type: String as PropType<SelectPresentation>, default: 'menu', validator: (value: string) => value === 'menu' },
+  readonly: { type: Boolean, default: undefined },
+  hint: fieldDecoratorProps.hint,
+  line: fieldDecoratorProps.line,
+  textColor: fieldDecoratorProps.textColor,
+  focusColor: fieldDecoratorProps.focusColor,
+  blurColor: fieldDecoratorProps.blurColor,
   /** 下拉菜单是否与触发框等宽；false 时按内容自适应。 */
   autoFitPopupWidth: { type: Boolean, default: true },
     /**
@@ -98,6 +111,7 @@ export const selectProps = {
      */
     disabled: {
       type: Boolean,
+      default: undefined,
     },
     /**
      * @zh 是否为错误状态
@@ -105,7 +119,7 @@ export const selectProps = {
      */
     error: {
       type: Boolean,
-      default: false,
+      default: undefined,
     },
     /**
      * @zh 是否允许清空

@@ -20,6 +20,6 @@
 ## Progress / Switch 后续实施
 
 - [x] 两端 percent 为 0～100，数字字符串与小数精度，边界、槽参数、ARIA 与示例迁移
-- [x] Switch circle/round/line/md3 独立复制，统一 Props/Events/Slots/样式
+- [x] Switch circle/round/line/tonal 独立复制，统一 Props/Events/Slots/样式
 - [x] Promise 拦截、只读/禁用、键盘、过期异步结果清理的配对测试
 - [x] 全库回归、实际构建、公共消费类型与源码复制检查：Cedar 424 项、Maple 1153 项通过；27 组源码一致性通过

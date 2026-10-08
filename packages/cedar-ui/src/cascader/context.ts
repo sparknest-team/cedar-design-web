@@ -1,8 +1,9 @@
 import { InjectionKey, Slots } from 'vue'
-import { CascaderOption, CascaderOptionInfo } from './types'
 import { UnionType } from '../_utils/types'
+import { CascaderOption, CascaderOptionInfo } from './types'
 
 export interface CascaderContext {
+  expandOption?: (option: CascaderOptionInfo) => Promise<void>
   onClickOption: (option: CascaderOptionInfo, checked?: boolean) => void
   setActiveKey: (key?: string) => void
   setSelectedPath: (key?: string) => void

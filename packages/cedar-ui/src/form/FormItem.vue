@@ -80,9 +80,11 @@ import { getValueByPath, setValueByPath } from '../_utils/get-value-by-path'
 import { Data } from '../_utils/types'
 import { getFinalValidateMessage, getFinalValidateStatus, getFormElementId } from './utils'
 import { useI18n } from '../locale'
+import { hasValidateTrigger } from './validate-trigger'
+import { cloneDeep } from 'lodash-es'
 
 export default defineComponent({
-  name: createNamespace("form-item").name,
+  name: createNamespace('form-item').name,
   components: {
     Row,
     Col,
@@ -135,6 +137,11 @@ export default defineComponent({
       type: Boolean,
       default: undefined,
     },
+    /** 是否只读；未设置时继承 Form。 */
+    readonly: {
+      type: Boolean,
+      default: undefined,
+    },
     /**
      * @zh 帮助文案
      * @en Help copywriting
@@ -181,7 +188,7 @@ export default defineComponent({
     /**
      * @zh 触发校验的事件
      * @en The event that triggers the verification
-     * @values 'change', 'input', 'focus', 'blur'
+     * @values 'change', 'input', 'focus', 'blur', 'clear'
      */
     validateTrigger: {
       type: [String, Array] as PropType<ValidateTrigger | ValidateTrigger[]>,
@@ -309,7 +316,7 @@ export default defineComponent({
    * @en Extra content
    * @slot extra
    */
-  setup(props) {
+  setup(props, { slots }) {
     const prefixCls = getPrefixCls('form-item')
     const { field } = toRefs(props)
     const formCtx = inject<Partial<FormContext>>(formInjectionKey, {})
@@ -343,7 +350,8 @@ export default defineComponent({
     const mergedWrapperStyle = computed(() => props.wrapperColStyle ?? formCtx.wrapperColStyle)
 
     // 记录初始值，用于重置表单
-    const initialValue = getValueByPath(formCtx.model, props.field)
+    const initialValue = ref<any>()
+    const hasCapturedInitial = ref(false)
 
     const validateStatus = reactive<Record<string, ValidateStatus | ''>>({})
     const validateMessage = reactive<Record<string, string>>({})
@@ -355,6 +363,7 @@ export default defineComponent({
     const fieldValue = computed(() => getValueByPath(formCtx.model, props.field))
 
     const computedDisabled = computed(() => Boolean(props.disabled ?? formCtx?.disabled))
+    const computedReadonly = computed(() => Boolean(props.readonly ?? formCtx?.readonly))
     const computedValidateStatus = computed(() => props.validateStatus ?? finalStatus.value)
     const isError = computed(() => computedValidateStatus.value === 'error')
 
@@ -428,10 +437,11 @@ export default defineComponent({
       return new Promise((resolve) => {
         schema.validate({ [_field]: _value }, (err: Data) => {
           const isError = Boolean(err?.[_field])
-          if (isCurrent()) updateValidateState(_field, {
-            status: isError ? 'error' : '',
-            message: err?.[_field].message ?? '',
-          })
+          if (isCurrent())
+            updateValidateState(_field, {
+              status: isError ? 'error' : '',
+              message: err?.[_field].message ?? '',
+            })
 
           const error = isError
             ? {
@@ -449,38 +459,21 @@ export default defineComponent({
       })
     }
 
-    const validateTriggers = computed(() => ([] as ValidateTrigger[]).concat(props.validateTrigger))
+    let active = true
+    const validateWithTrigger = (trigger: ValidateTrigger) => {
+      if (!hasValidateTrigger(props.validateTrigger, trigger)) return
+      nextTick(() => {
+        if (active && hasValidateTrigger(props.validateTrigger, trigger)) validateField()
+      })
+    }
 
-    const eventHandlers = computed(() =>
-      validateTriggers.value.reduce((event, trigger) => {
-        switch (trigger) {
-          case 'change':
-            event.onChange = () => {
-              validateField()
-            }
-            return event
-          case 'input':
-            event.onInput = () => {
-              nextTick(() => {
-                validateField()
-              })
-            }
-            return event
-          case 'focus':
-            event.onFocus = () => {
-              validateField()
-            }
-            return event
-          case 'blur':
-            event.onBlur = () => {
-              validateField()
-            }
-            return event
-          default:
-            return event
-        }
-      }, {} as FormItemEventHandler),
-    )
+    const eventHandlers = computed<FormItemEventHandler>(() => ({
+      onChange: () => validateWithTrigger('change'),
+      onInput: () => validateWithTrigger('input'),
+      onFocus: () => validateWithTrigger('focus'),
+      onBlur: () => validateWithTrigger('blur'),
+      onClear: () => validateWithTrigger('clear'),
+    }))
 
     provide(
       formItemInjectionKey,
@@ -488,8 +481,10 @@ export default defineComponent({
         eventHandlers,
         size: formCtx && toRef(formCtx, 'size'),
         disabled: computedDisabled,
+        readonly: computedReadonly,
         error: isError,
         feedback: computedFeedback,
+        hasOuterLabel: computed(() => props.noStyle ? Boolean(formItemCtx?.hasOuterLabel) : !props.hideLabel && Boolean(props.label || slots.label)),
         updateValidateState,
       }),
     )
@@ -529,7 +524,7 @@ export default defineComponent({
       clearValidate()
       validateDisabled.value = true
       if (formCtx?.model && field.value) {
-        setValueByPath(formCtx.model, field.value, initialValue)
+        setValueByPath(formCtx.model, field.value, cloneDeep(initialValue.value))
       }
 
       nextTick(() => {
@@ -548,12 +543,17 @@ export default defineComponent({
     })
 
     onMounted(() => {
+      if (!hasCapturedInitial.value && field.value && formCtx.model) {
+        initialValue.value = cloneDeep(getValueByPath(formCtx.model, field.value))
+        hasCapturedInitial.value = true
+      }
       if (formItemInfo.field) {
         formCtx.addField?.(formItemInfo)
       }
     })
 
     onBeforeUnmount(() => {
+      active = false
       validation.invalidate()
       if (formItemInfo.field) {
         formCtx.removeField?.(formItemInfo)

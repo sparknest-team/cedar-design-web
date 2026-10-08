@@ -1,29 +1,18 @@
+@import './token.less';
+
 .c-ellipsis {
-  &[c-ellipsis-cover] {
-    width: 100%;
-    overflow: hidden;
-    vertical-align: bottom;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  &--clamp[c-ellipsis-cover] {
-    display: -webkit-inline-box;
-    -webkit-box-orient: vertical;
-  }
-
-  &--line[c-ellipsis-cover] {
-    display: inline-block;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-
-  &--cursor[c-ellipsis-cover] {
-    cursor: pointer;
-  }
-
-  &--expand[c-ellipsis-cover] {
-    display: inline-block;
-    white-space: wrap;
-    overflow: visible;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  vertical-align: bottom;
+  -webkit-tap-highlight-color: transparent;
+  &--clamp { display: -webkit-box; -webkit-box-orient: vertical; }
+  &--line { display: block; white-space: nowrap; text-overflow: ellipsis; }
+  &--cursor { cursor: pointer; }
+  &--expand { display: block; white-space: normal; overflow: visible; }
+  &:focus-visible {
+    outline: var(--c-ellipsis-focus-width) solid var(--c-ellipsis-focus-color);
+    outline-offset: var(--c-ellipsis-focus-offset);
   }
 }

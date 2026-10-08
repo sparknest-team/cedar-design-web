@@ -153,9 +153,6 @@ export default defineComponent({
     dateRender: {
       type: Function as PropType<RenderFunc>,
     },
-    hideTrigger: {
-      type: Boolean,
-    },
     confirmBtnDisabled: {
       type: Boolean,
     },
@@ -193,7 +190,6 @@ export default defineComponent({
       format,
       value,
       disabledDate,
-      hideTrigger,
       showNowBtn,
       dateRender,
       showConfirmBtn,
@@ -218,7 +214,7 @@ export default defineComponent({
     const classNames = computed(() => [
       `${prefixCls.value}-container`,
       {
-        [`${prefixCls.value}-container-panel-only`]: hideTrigger.value,
+        [`${prefixCls.value}-container-panel-only`]: true,
         [`${prefixCls.value}-container-shortcuts-placement-left`]: showShortcutsInLeft.value,
         [`${prefixCls.value}-container-shortcuts-placement-right`]: showShortcutsInRight.value,
       },

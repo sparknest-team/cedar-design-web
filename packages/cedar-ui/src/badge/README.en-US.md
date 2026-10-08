@@ -111,7 +111,7 @@ type BadgeSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 | Name | Default |
 | --- | --- |
 | `--c-badge-font-weight` | `500` |
-| `--c-badge-bg-color` | `#ef4444` |
+| `--c-badge-bg-color` | `var(--c-sys-color-status-danger)` |
 | `--c-badge-text-color` | `#ffffff` |
 | `--c-badge-description-text-color` | `var(--c-color-text-1)` |
 
@@ -137,3 +137,7 @@ type BadgeSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 | `--c-badge-variant-outline-status-{status}-text-color` |
 
 The default `status="danger"` uses a red background with white text. Explicit `status="default"` uses neutral colors. All five sizes (`xs | sm | md | lg | xl`) are implemented.
+
+### Color override boundaries
+
+Fallback bg-color follows system status-danger. The fixed neutral default fill and gray secondary/tertiary fills are intentional; override border-color to match a different host surface. Custom color/text-color contrast is caller-owned.

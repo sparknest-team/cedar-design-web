@@ -24,7 +24,8 @@
 
   &__title + &__body { margin-top: var(--c-popover-title-content-gap); }
 
-  &__arrow {
+  // Wrapper appearance must win even when Trigger CSS is loaded last.
+  &__arrow&__arrow {
     z-index: var(--c-popover-arrow-z-index);
     background-color: var(--c-popover-background);
     border: var(--c-popover-border-width) solid var(--c-popover-border-color);

@@ -56,6 +56,12 @@ permalink: /components/form/
 
 <demo src="./__demos__/validate.vue"></demo>
 
+### 清空时校验
+
+`validate-trigger="clear"` 只在用户点击控件的清空按钮时校验；普通输入不会触发。本例清空后显示必填错误。
+
+<demo src="./__demos__/clear-trigger.vue"></demo>
+
 ### 自定义表单校验状态
 
 开启 feedback 可以让部分输入组件展示当前状态信息
@@ -92,13 +98,14 @@ permalink: /components/form/
 
 | 参数名                | 描述                                                      | 类型                                       |        默认值         |
 | --------------------- | --------------------------------------------------------- | ------------------------------------------ | :-------------------: |
-| model **(必填)**      | 表单数据对象                                              | `object`                                   |          `-`          |
+| model                 | 表单数据对象                                              | `object`                                   |         `{}`          |
 | layout                | 表单的布局方式，包括水平、垂直、多列                      | `'horizontal' \| 'vertical' \| 'inline'`   |    `'horizontal'`     |
 | size                  | 表单控件的尺寸                                            | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`     |        `'md'`         |
 | label-col-props       | 标签元素布局选项。参数同 `<col>` 组件一致                 | `object`                                   | `span: 5, offset: 0`  |
 | wrapper-col-props     | 表单控件布局选项。参数同 `<col>` 组件一致                 | `object`                                   | `span: 19, offset: 0` |
 | label-align           | 标签的对齐方向                                            | `'left' \| 'right'`                        |       `'right'`       |
 | disabled              | 是否禁用表单                                              | `boolean`                                  |          `-`          |
+| readonly              | 是否将表单控件设为只读                                    | `boolean`                                  |          `-`          |
 | rules                 | 表单项校验规则                                            | `Record<string, FieldRule \| FieldRule[]>` |          `-`          |
 | auto-label-width      | 是否开启自动标签宽度，仅在 `layout="horizontal"` 下生效。 | `boolean`                                  |        `false`        |
 | id                    | 表单控件`id`的前缀                                        | `string`                                   |          `-`          |
@@ -111,6 +118,7 @@ permalink: /components/form/
 | submit         | 表单提交时触发 | data: `{values: Record<string, any>; errors: Record<string, ValidatedError> \| undefined}`<br>ev: `Event` |
 | submit-success | 验证成功时触发 | values: `Record<string, any>`<br>ev: `Event`                                                              |
 | submit-failed  | 验证失败时触发 | data: `{values: Record<string, any>; errors: Record<string, ValidatedError>}`<br>ev: `Event`              |
+| reset          | 原生重置时触发，并重置字段值与校验状态 | ev: `Event` |
 
 ### `<form>` Methods
 
@@ -133,13 +141,14 @@ permalink: /components/form/
 | show-colon        | 是否显示冒号                                                                                             | `boolean`                                                          |  `false`   |
 | no-style          | 是否去除样式                                                                                             | `boolean`                                                          |  `false`   |
 | disabled          | 是否禁用                                                                                                 | `boolean`                                                          |    `-`     |
+| readonly          | 是否只读；未传时继承 Form                                                                               | `boolean`                                                          |    `-`     |
 | help              | 帮助文案                                                                                                 | `string`                                                           |    `-`     |
 | extra             | 额外显示的文案                                                                                           | `string`                                                           |    `-`     |
 | required          | 是否必须填写                                                                                             | `boolean`                                                          |  `false`   |
 | asterisk-position | 可选择将星号置于 label 前/后                                                                             | `'start' \| 'end'`                                                 | `'start'`  |
 | rules             | 表单项校验规则（优先级高于 form 的 rules）                                                               | `FieldRule \| FieldRule[]`                                         |    `-`     |
 | validate-status   | 校验状态                                                                                                 | `'success' \| 'warning' \| 'error' \| 'validating'`                |    `-`     |
-| validate-trigger  | 触发校验的事件                                                                                           | `'change' \| 'input' \| 'focus' \| 'blur'`                         | `'change'` |
+| validate-trigger  | 触发校验的事件；`clear` 仅由控件清空动作触发，不等同于 `change`                                  | `'change' \| 'input' \| 'focus' \| 'blur' \| 'clear'`             | `'change'` |
 | label-col-props   | 标签元素布局选项。参数同 `<col>` 组件一致                                                                | `object`                                                           |    `-`     |
 | wrapper-col-props | 表单控件布局选项。参数同 `<col>` 组件一致                                                                | `object`                                                           |    `-`     |
 | hide-label        | 是否隐藏标签                                                                                             | `boolean`                                                          |  `false`   |
@@ -239,3 +248,13 @@ const useFormItem = (data: { size?: Ref<Size | undefined>; disabled?: Ref<boolea
 ```ts
 import type { FormProps } from '@cedarjs/ui'
 ```
+
+### 五档密度与项目间距
+
+xs/sm/md/lg/xl 均通过 size 类选择对应几何。项目下间距和验证文案预留高度共同使用 size-*-item-margin-bottom；inline 使用独立 inline-item-margin-bottom，error/help 不重复添加项目下间距。
+
+| 变量 | 默认值 |
+| --- | --- |
+| `--c-form-size-xl-height` | `var(--c-size-xl)` |
+| `--c-form-size-xl-label-font-size` | `var(--c-sys-font-size-lg)` |
+| `--c-form-size-xl-item-margin-bottom` | `var(--c-spacing-8)` |

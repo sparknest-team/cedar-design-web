@@ -1,18 +1,13 @@
-import {
-  computed,
-  defineComponent,
-  provide,
-  reactive,
-  ref,
-  toRefs,
-  watch,
-} from "vue";
-import { getPrefixCls, createNamespace } from "../_utils/global-config";
-import { checkboxGroupKey } from "./context";
-import { useFormItem } from "../_hooks/use-form-item";
-import { CheckboxOption } from "./types";
-import Checkbox from "./checkbox";
-import { isFunction, isNumber, isString, isArray } from "../_utils/is";
+import { useCheckboxGroupMethods } from './use-checkbox-group-methods'
+import { ChoiceLabel } from '../checkbox/choice-label'
+import { computed, defineComponent, provide, reactive } from 'vue'
+import { getPrefixCls, createNamespace } from '../_utils/global-config'
+import { checkboxGroupKey } from './context'
+import { useChoiceForm } from './use-choice-form'
+import { useChoiceState, choiceLimit } from './choice-state'
+import { normalizeChoiceOptions } from './choice-options'
+import Checkbox from './checkbox'
+import { isFunction } from '../_utils/is';
 import { checkboxGroupProps } from "./props";
 
 const { name } = createNamespace("checkbox-group");
@@ -28,7 +23,7 @@ export default defineComponent({
      * @param {(string | number | boolean)[]} value
      * @param {Event} ev
      */
-    change: (value: (string | number | boolean)[], ev: Event) => true,
+    change: (value: (string | number | boolean)[], ev?: Event) => true,
   },
   /**
    * @zh checkbox 文案内容
@@ -45,49 +40,40 @@ export default defineComponent({
    * @binding {boolean} disabled
    * @version 2.27.0
    */
-  setup(props, { emit, slots }) {
-    const { disabled, error } = toRefs(props);
+  setup(props, { emit, slots, expose }) {
     const prefixCls = getPrefixCls("checkbox-group");
-    const { mergedDisabled, mergedError, eventHandlers } = useFormItem({
-      disabled,
-      error,
-    });
-
-    const _value = ref(props.defaultValue);
-    const computedValue = computed(() =>
-      isArray(props.modelValue) ? props.modelValue : _value.value,
+    const { mergedDisabled, mergedReadonly, mergedError, eventHandlers } = useChoiceForm(props);
+    const { value: computedValue, commit: handleChange } = useChoiceState(
+      () => props.modelValue,
+      props.defaultValue,
+      (value, event) => {
+        emit("update:modelValue", value);
+        emit("change", value, event);
+        eventHandlers.value?.onChange?.(event);
+      },
+      () => mergedDisabled.value || mergedReadonly.value,
     );
     const isMaxed = computed(() =>
-      props.max === undefined ? false : computedValue.value.length >= props.max,
+      computedValue.value.length >= choiceLimit(props.max),
     );
 
-    const options = computed((): CheckboxOption[] => {
-      return (props.options ?? []).map((option): CheckboxOption => {
-        if (isString(option) || isNumber(option)) {
-          return {
-            label: option,
-            value: option,
-          } as CheckboxOption;
-        }
-        return option as CheckboxOption;
-      });
-    });
+    const options = computed(() => normalizeChoiceOptions(props.options, props.fieldNames));
 
-    const handleChange = (
-      value: Array<string | number | boolean>,
-      e: Event,
-    ) => {
-      _value.value = value;
-      emit("update:modelValue", value);
-      emit("change", value, e);
-      eventHandlers.value?.onChange?.(e);
-    };
+    const { register: registerChoice, methods } = useCheckboxGroupMethods(
+      () => computedValue.value,
+      handleChange,
+      () => mergedDisabled.value || mergedReadonly.value,
+      () => props.max,
+    );
+    expose(methods);
 
     provide(
       checkboxGroupKey,
       reactive({
+        registerChoice,
         computedValue,
         disabled: mergedDisabled,
+        readonly: mergedReadonly,
         error: mergedError,
         isMaxed,
         slots,
@@ -100,33 +86,23 @@ export default defineComponent({
       `${prefixCls}-direction-${props.direction}`,
     ]);
 
-    watch(
-      () => props.modelValue,
-      (curValue) => {
-        if (isArray(curValue)) {
-          _value.value = [...curValue];
-        } else {
-          _value.value = [];
-        }
-      },
-    );
-
     const renderOptions = () => {
       return options.value.map((option) => {
         const checked = computedValue.value.includes(option.value);
         return (
           <Checkbox
-            key={option.value}
+            key={`${typeof option.value}:${String(option.value)}`}
             value={option.value}
-            disabled={option.disabled || (!checked && isMaxed.value)}
+            disabled={option.disabled}
+            readonly={option.readonly}
             indeterminate={option.indeterminate}
-            modelValue={checked}
+
           >
-            {slots.label
-              ? slots.label({ data: option })
+            <ChoiceLabel content={slots.label
+              ? slots.label({ data: option, checked: checked })
               : isFunction(option.label)
-                ? option.label()
-                : option.label}
+                ? option.label(option, checked)
+                : option.label} />
           </Checkbox>
         );
       });
@@ -134,7 +110,7 @@ export default defineComponent({
 
     return () => (
       <span class={cls.value}>
-        {options.value.length > 0 ? renderOptions() : slots.default?.()}
+        {props.options !== undefined ? renderOptions() : slots.default?.()}
       </span>
     );
   },

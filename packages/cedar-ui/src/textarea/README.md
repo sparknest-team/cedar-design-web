@@ -8,7 +8,7 @@ Textarea 是用于多行纯文本编辑的基础表单控件，适合评论、�
 
 ## 设计要点
 
-- 默认使用 `outlined` 外观，`clearable` 默认关闭。
+- 默认使用 `outline` 外观，`clearable` 默认关闭。
 - `input` 表示实时编辑，`change` 只在失焦且值发生变化时提交；Enter 保持换行语义。
 - `auto-size` 开启后由内容决定高度，并覆盖 `rows` 与手动 `resize` 的视觉结果。
 - Form/FormItem 负责业务校验规则和消息，Textarea 只提供事件信号和错误视觉状态。
@@ -23,7 +23,7 @@ Textarea 是用于多行纯文本编辑的基础表单控件，适合评论、�
 
 ### 状态与外观
 
-支持 `filled`、`outlined`、`standard` 三种外观和 `xs`、`sm`、`md`、`lg`、`xl` 五种尺寸。
+支持 `filled`、`outline`、`standard` 三种外观和 `xs`、`sm`、`md`、`lg`、`xl` 五种尺寸。
 
 <demo src="./__demos__/status.vue"></demo>
 
@@ -36,6 +36,8 @@ Textarea 是用于多行纯文本编辑的基础表单控件，适合评论、�
 ### 行数、自动高度与手动调整
 
 `rows` 使用原生可见行数语义。Cedar 默认允许纵向拖动；开启 `auto-size` 后关闭手动调整，并可使用 `minRows`、`maxRows` 约束高度。
+
+在 Form/FormItem 内未显式设置时，`size`、`disabled`、`readonly` 和 `error` 会继承表单状态；组件本地传入的值（包括 `false`）优先。
 
 <demo src="./__demos__/auto-size.vue"></demo>
 
@@ -67,7 +69,7 @@ Textarea 是用于多行纯文本编辑的基础表单控件，适合评论、�
 | default-value           | 非受控模式初始值                   | `string`                                            | `''`       |
 | model-modifiers         | v-model 修饰符；支持 `trim`        | `{ trim?: boolean }`                                | `{}`       |
 | placeholder             | 占位提示文字                       | `string`                                            | `-`        |
-| variant                 | `filled` / `outlined` / `standard` | `FormControlVariant`                                | `outlined` |
+| variant                 | `filled` / `outline` / `standard` | `FormControlVariant`                                | `outline` |
 | size                    | `xs` / `sm` / `md` / `lg` / `xl`   | `ComponentSize`                                     | `md`       |
 | clearable               | 是否允许清空                       | `boolean`                                           | `false`    |
 | disabled                | 是否禁用                           | `boolean`                                           | `false`    |
@@ -125,14 +127,19 @@ import type {
 
 ## 样式变量
 
-| 变量名                                  | 默认值                 |
-| --------------------------------------- | ---------------------- |
-| `--c-textarea-color-tip-text`           | `--c-color-text-3`     |
-| `--c-textarea-padding-x`                | `--c-spacing-6`        |
-| `--c-textarea-padding-y`                | `--c-spacing-2`        |
-| `--c-textarea-font-size`                | `--c-font-size-body-3` |
-| `--c-textarea-font-tip-size`            | `--c-font-size-body-1` |
-| `--c-textarea-layout-tip-right`         | `--c-spacing-5`        |
-| `--c-textarea-layout-tip-bottom`        | `--c-spacing-3`        |
-| `--c-textarea-size-min-height`          | `--c-size-8`           |
-| `--c-textarea-layout-tip-scroll-offset` | `15px`                 |
+| 变量名                                         | 默认值                            |
+| ---------------------------------------------- | --------------------------------- |
+| `--c-textarea-height`                          | `auto`                            |
+| `--c-textarea-min-height`                      | `--c-sys-control-height-xl`       |
+| `--c-textarea-font-size`                       | `--c-sys-font-size-md`            |
+| `--c-textarea-line-height`                     | `--c-line-height`                 |
+| `--c-textarea-padding-horizontal`              | `--c-sys-space-3`                 |
+| `--c-textarea-padding-vertical`                | `--c-sys-space-1`                 |
+| `--c-textarea-placeholder-color`               | `--c-sys-color-content-secondary`  |
+| `--c-textarea-counter-color`                   | `--c-sys-color-content-secondary`  |
+| `--c-textarea-counter-font-size`               | `--c-sys-font-size-xs`            |
+| `--c-textarea-counter-inset-inline-end`         | `--c-sys-space-5`                 |
+| `--c-textarea-counter-inset-block-end`          | `--c-sys-space-3`                 |
+| `--c-textarea-scrollbar-offset`                 | `15px`                            |
+
+计数器布局为显式平台差异：Cedar 内置计数器使用 counter-inset-inline-end、counter-inset-block-end 与 scrollbar-offset；Maple 外置计数行使用 counter-margin-top。仅公开本端真实生效的布局变量，颜色与字号语义仍保持共享。

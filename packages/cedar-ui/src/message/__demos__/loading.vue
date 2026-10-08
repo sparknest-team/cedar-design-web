@@ -5,22 +5,22 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { Message } from '@cedarjs/ui'
+import { defineComponent } from "vue";
+import { Message } from "@cedarjs/ui";
 
 export default defineComponent({
   setup() {
     const handleLoading = () => {
-      const message = Message.loading('This is a loading message')
+      const message = Message.loading("This is a loading message");
       setTimeout(() => {
-        message.close()
-        Message.success('Loaded')
-      }, 2000)
-    }
+        message.close();
+        Message.success("Loaded");
+      }, 2000);
+    };
 
     return {
       handleLoading,
-    }
+    };
   },
-})
+});
 </script>

@@ -1,9 +1,9 @@
 <template>
   <c-space direction="column" size="lg" style="width: 100%">
     <c-space size="sm" style="width: 100%">
-      <c-alert variant="standard" status="info" style="flex: 1">Standard · info</c-alert>
-      <c-alert variant="tonal" status="info" style="flex: 1">Tonal · info</c-alert>
-      <c-alert variant="outline" status="info" style="flex: 1">Outlined · info</c-alert>
+      <c-alert variant="standard" status="info" title="Standard" closable style="flex: 1">Standard · info</c-alert>
+      <c-alert variant="tonal" status="info" title="Tonal" closable style="flex: 1">Tonal · info</c-alert>
+      <c-alert variant="outline" status="info" title="Outline" closable style="flex: 1">Outlined · info</c-alert>
     </c-space>
     <c-space size="sm" style="width: 100%">
       <c-alert variant="standard" status="success" style="flex: 1">Standard · success</c-alert>

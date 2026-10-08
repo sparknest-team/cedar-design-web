@@ -1,24 +1,25 @@
 import type { Dayjs } from 'dayjs'
+import type { TimeDisabledRules } from '../time-rules'
 
 // 支持：Date ｜ 字符串 ｜ 时间戳
-export type TimeValue = Date | string | number
+export type { TimeValue } from '../time-value'
 
-export interface BasePanelProps {
+export interface BasePanelProps extends TimeDisabledRules {
+  min?: string
+  max?: string
   disableConfirm: boolean
   use12Hours: boolean
   step?: { hour?: number; minute?: number; second?: number }
-  disabledHours?: () => number[]
-  disabledMinutes?: (selectedHour?: number) => number[]
-  disabledSeconds?: (selectedHour?: number, selectedMinute?: number) => number[]
   hideDisabledOptions: boolean
 }
 
 export interface PanelProps extends Omit<BasePanelProps, 'disableConfirm'> {
   value?: Dayjs
   defaultValue?: Dayjs
-  format: string
+  format?: string
   visible: boolean
   hideFooter: boolean
+  confirmDisabled?: boolean
   isRange: boolean
   disabled: boolean
 }
@@ -27,23 +28,7 @@ export interface RangePanelProps extends Omit<PanelProps, 'value'> {
   value?: Array<Dayjs | undefined>
 }
 
-export interface TimePickerProps extends BasePanelProps {
-  type: 'time' | 'time-range'
-  modelValue?: TimeValue | TimeValue[]
-  defaultValue?: TimeValue | TimeValue[]
-  placeholder?: string | string[]
-  disabled: boolean
-  clearable: boolean
-  readonly: boolean
-  error: boolean
-  format?: string
-  size: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-  placement: 'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end'
-  open: boolean | undefined
-  defaultOpen: boolean
-  triggerProps?: Record<string, unknown>
-  unmountOnClose: boolean
-}
+export type { TimePickerProps } from './props'
 
 export interface TimeListItem {
   value: number | string

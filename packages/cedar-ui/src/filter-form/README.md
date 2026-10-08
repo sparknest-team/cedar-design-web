@@ -105,7 +105,6 @@ const fieldMap: FilterFormFieldMap = {
 | `--c-filter-form-border-radius` | `@radius-md` |
 | `--c-filter-form-background-color` | `@color-fill-1` |
 | `--c-filter-form-item-margin-bottom` | `16px` |
-| `--c-filter-form-col-gap` | `16px` |
 | `--c-filter-form-actions-gap` | `16px` |
 | `--c-filter-form-collapse-gap` | `4px` |
 | `--c-filter-form-collapse-color` | `@color-text-2` |
@@ -120,3 +119,5 @@ import type {
   FilterFormFieldRegistration,
 } from '@cedarjs/ui'
 ```
+
+Grid 列间距通过 `grid-props.colGap`（数字 px）控制；没有同名 CSS 覆盖入口，以确保 Grid 的数值测量与实际间距一致。

@@ -1,14 +1,26 @@
-@import '../../style/theme/index.less';
-
 :root {
+  --c-progress-group-transition-duration: var(--c-sys-motion-duration-standard);
+  --c-progress-group-tooltip-duration: var(--c-sys-motion-duration-fast);
+  --c-progress-group-tooltip-max-width: 240px;
+  --c-progress-group-tooltip-padding: 5px var(--c-sys-space-4);
+  --c-progress-group-tooltip-radius: var(--c-sys-radius-md);
+  --c-progress-group-tooltip-font-size: var(--c-sys-font-size-xs);
+  --c-progress-group-tooltip-line-height: 1.4;
+  --c-progress-group-tooltip-offset: var(--c-sys-space-4);
+  --c-progress-group-status-font-weight: var(--c-sys-font-weight-medium);
+  --c-progress-group-size-xs-thickness: 2px;
+  --c-progress-group-size-sm-thickness: 4px;
+  --c-progress-group-size-md-thickness: 8px;
+  --c-progress-group-size-lg-thickness: 12px;
+  --c-progress-group-size-xl-thickness: 16px;
   --c-progress-group-gap: var(~'--c-spacing-3');
   --c-progress-group-item-gap: var(~'--c-spacing-2');
   --c-progress-group-dot-size: var(~'--c-size-2');
   --c-progress-group-radius: 9999px;
-  --c-progress-group-track-color: var(~'--c-color-fill-2');
-  --c-progress-group-text-color: var(~'--c-color-text-1');
-  --c-progress-group-muted-color: var(~'--c-color-text-3');
+  --c-progress-group-track-color: var(--c-sys-color-state-hover);
+  --c-progress-group-text-color: var(--c-sys-color-content-primary);
+  --c-progress-group-muted-color: var(--c-sys-color-content-secondary);
   --c-progress-group-font-size: var(~'--c-font-size-body-1');
-  --c-progress-group-tooltip-bg: rgb(var(~'--c-gray-10'));
-  --c-progress-group-tooltip-color: var(~'--c-color-white');
+  --c-progress-group-tooltip-bg: var(--c-sys-color-surface-tooltip);
+  --c-progress-group-tooltip-color: var(--c-sys-color-content-on-dark);
 }

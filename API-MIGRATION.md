@@ -91,7 +91,7 @@ Cedar 旧调用、计算结果和初始值需要乘以 100；例如 :percent="0.
 非法/非有限值回退 0，有限超范围值截断；不接受百分号或 CSS 单位，不猜测旧比例格式。Maple 圆环几何不再先取整。
 Cedar 自动完成判断相应改为 100；显式 status 仍优先。Maple 新增共同 text 插槽，保留默认插槽并提供百分比参数。
 
-Switch 两端使用独立复制的相同组件、Props、样式：variant=circle/round/line/md3，默认 circle；size=sm/md/lg，默认 md。
+Switch 两端使用独立复制的相同组件、Props、样式：variant=circle/round/line/tonal，默认 circle；size=sm/md/lg，默认 md。
 Maple standard → line，省略 variant 的默认造型改为 circle；不保留 standard 别名。旧几何 CSS tokens 迁移到新的 style/token.less。
 checked-color/unchecked-color 统一控制轨道，滑块颜色由 token 定制；handle-elevation 仅 boolean/number。
 移除 Maple lazy-change；before-change(nextValue) 返回 boolean/void 或 Promise。false、抛错、拒绝 Promise 取消切换，不再接收 change 回调。
@@ -140,3 +140,7 @@ Cedar 内部样式改为 BEM：`c-col-12` → `c-col--span-12`，`c-col-md-12` �
 - 点击节点改为原生 button，外层为 nav；样式统一 BEM `__item` / `__item--active` / `--size-md`。Cedar 原单横线内部选择器需迁移。
 - CSS token 统一为文档的新变量表。旧 bg-item / active-bg-color 对应 active-background；hover-bg-color 对应 hover-background；item-width / item-height 对应 size-md（或具体尺寸），输入宽度统一 input-width；布局间距使用 gap / item-gap。
 - 跳转框清空或输入非整数不导航；Enter 后 blur 不重复通知。page-item-style 与 active-page-item-style 合并。
+
+## Switch 造型命名收敛
+
+第四种造型统一使用 variant="tonal"；对应变量采用 --c-switch-tonal-* / --mp-switch-tonal-*，包含 width、height、handle-size、border-width、border-color、track-background、text-color、handle-color。旧第四变体及变量需一起迁移，不保留别名。主题独立使用 default / maple × light / dark，不使用造型名作为主题名称。

@@ -186,45 +186,45 @@ TabNav 与 TabItem 使用同一个 Vue `key`，必须为字符串或数字，在
 
 | 变量 | 默认值 |
 | --- | --- |
-| `--c-tabs-background` | `var(--c-color-bg-2)` |
-| `--c-tabs-title-text-color` | `var(--c-color-text-2)` |
-| `--c-tabs-title-text-color-active` | `rgb(var(--c-primary-6))` |
-| `--c-tabs-title-text-color-disabled` | `var(--c-color-text-4)` |
-| `--c-tabs-muted-background` | `var(--c-color-fill-1)` |
-| `--c-tabs-border-color` | `var(--c-color-border-2)` |
-| `--c-tabs-hover-background` | `var(--c-color-fill-2)` |
-| `--c-tabs-nav-gap` | `4px` |
-| `--c-tabs-tab-gap` | `4px` |
-| `--c-tabs-header-padding` | `12px` |
-| `--c-tabs-control-height` | `28px` |
-| `--c-tabs-touch-target` | `44px` |
+| `--c-tabs-background` | `var(--c-sys-color-surface-default)` |
+| `--c-tabs-title-text-color` | `var(--c-sys-color-content-secondary)` |
+| `--c-tabs-title-text-color-active` | `var(--c-sys-color-content-brand)` |
+| `--c-tabs-title-text-color-disabled` | `var(--c-sys-color-content-disabled)` |
+| `--c-tabs-muted-background` | `var(--c-sys-color-surface-muted)` |
+| `--c-tabs-border-color` | `var(--c-sys-color-border-default)` |
+| `--c-tabs-hover-background` | `var(--c-sys-color-state-hover)` |
+| `--c-tabs-nav-gap` | `var(--c-sys-space-2)` |
+| `--c-tabs-tab-gap` | `var(--c-sys-space-2)` |
+| `--c-tabs-header-padding` | `var(--c-sys-space-5)` |
+| `--c-tabs-control-height` | `var(--c-sys-control-height-xs)` |
+| `--c-tabs-touch-target` | `var(--c-sys-control-touch-target)` |
 | `--c-tabs-border-width` | `1px` |
 | `--c-tabs-focus-width` | `2px` |
 | `--c-tabs-focus-offset` | `-3px` |
-| `--c-tabs-radius` | `4px` |
-| `--c-tabs-icon-gap` | `6px` |
-| `--c-tabs-content-padding` | `16px` |
+| `--c-tabs-radius` | `var(--c-sys-radius-md)` |
+| `--c-tabs-icon-gap` | `var(--c-sys-space-3)` |
+| `--c-tabs-content-padding` | `var(--c-sys-space-6)` |
 | `--c-tabs-indicator-size` | `2px` |
 | `--c-tabs-indicator-radius` | `1px` |
-| `--c-tabs-animation-duration` | `180ms` |
-| `--c-tabs-active-font-weight` | `600` |
-| `--c-tabs-group-padding` | `4px` |
-| `--c-tabs-capsule-radius` | `999px` |
-| `--c-tabs-active-shadow` | `0 1px 3px rgb(0 0 0 / 12%)` |
-| `--c-tabs-size-xs-tab-height` | `28px` |
-| `--c-tabs-size-xs-tab-padding` | `4px 8px` |
-| `--c-tabs-size-xs-tab-font-size` | `12px` |
-| `--c-tabs-size-sm-tab-height` | `32px` |
-| `--c-tabs-size-sm-tab-padding` | `6px 12px` |
-| `--c-tabs-size-sm-tab-font-size` | `13px` |
-| `--c-tabs-size-md-tab-height` | `36px` |
-| `--c-tabs-size-md-tab-padding` | `8px 16px` |
-| `--c-tabs-size-md-tab-font-size` | `14px` |
-| `--c-tabs-size-lg-tab-height` | `40px` |
-| `--c-tabs-size-lg-tab-padding` | `10px 20px` |
-| `--c-tabs-size-lg-tab-font-size` | `16px` |
-| `--c-tabs-size-xl-tab-height` | `44px` |
-| `--c-tabs-size-xl-tab-padding` | `12px 24px` |
-| `--c-tabs-size-xl-tab-font-size` | `18px` |
+| `--c-tabs-animation-duration` | `var(--c-sys-motion-duration-standard)` |
+| `--c-tabs-active-font-weight` | `var(--c-sys-font-weight-semibold)` |
+| `--c-tabs-group-padding` | `var(--c-sys-space-2)` |
+| `--c-tabs-capsule-radius` | `var(--c-sys-radius-pill)` |
+| `--c-tabs-active-shadow` | `0 1px 3px rgba(0, 0, 0, 0.12)` |
+| `--c-tabs-size-xs-tab-height` | `var(--c-sys-control-height-xs)` |
+| `--c-tabs-size-xs-tab-padding` | `var(--c-sys-space-2) var(--c-sys-space-4)` |
+| `--c-tabs-size-xs-tab-font-size` | `var(--c-sys-font-size-xs)` |
+| `--c-tabs-size-sm-tab-height` | `var(--c-sys-control-height-sm)` |
+| `--c-tabs-size-sm-tab-padding` | `var(--c-sys-space-3) var(--c-sys-space-5)` |
+| `--c-tabs-size-sm-tab-font-size` | `var(--c-sys-font-size-sm)` |
+| `--c-tabs-size-md-tab-height` | `var(--c-sys-control-height-md)` |
+| `--c-tabs-size-md-tab-padding` | `var(--c-sys-space-4) var(--c-sys-space-6)` |
+| `--c-tabs-size-md-tab-font-size` | `var(--c-sys-font-size-md)` |
+| `--c-tabs-size-lg-tab-height` | `var(--c-sys-control-height-lg)` |
+| `--c-tabs-size-lg-tab-padding` | `10px var(--c-sys-space-7)` |
+| `--c-tabs-size-lg-tab-font-size` | `var(--c-sys-font-size-lg)` |
+| `--c-tabs-size-xl-tab-height` | `var(--c-sys-control-height-xl)` |
+| `--c-tabs-size-xl-tab-padding` | `var(--c-sys-space-5) var(--c-sys-space-8)` |
+| `--c-tabs-size-xl-tab-font-size` | `var(--c-sys-font-size-xl)` |
 
 [全面对比与设计依据](./comparison.md)

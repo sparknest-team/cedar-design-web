@@ -7,7 +7,7 @@ const Radio = withInstall(_Radio, Object.assign(_Radio, {
   Group: _RadioGroup,
 }), { components: [_Radio, _RadioGroup] })
 
-export type RadioInstance = InstanceType<typeof _Radio>
+export type RadioInstance = InstanceType<typeof _Radio> & import('./props').RadioMethods
 export type RadioGroupInstance = InstanceType<typeof _RadioGroup>
 export { radioGroupProps, radioProps }
 export type { RadioGroupProps, RadioProps, RadioValue } from './props'
@@ -18,3 +18,7 @@ export const _RadioComponent = Radio
 export const _RadioGroupComponent = _RadioGroup
 
 export default Radio
+
+export type { RadioMethods, RadioModel } from './props'
+
+export type { RadioOption } from './types'

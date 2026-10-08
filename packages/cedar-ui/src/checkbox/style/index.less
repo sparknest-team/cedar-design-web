@@ -75,7 +75,7 @@
     }
   }
 
-  &:hover &-icon {
+  &:not(.c-checkbox-disabled):not(.c-checkbox-error):hover &-icon {
     border-color: var(~"--c-internal-checkbox-border-color-hover");
     transition:
       border-color var(~"--c-internal-checkbox-hover-duration")
@@ -133,12 +133,12 @@
     border-color: transparent;
   }
 
-  &-error &-icon {
+  &-error:not(.c-checkbox-disabled) &-icon {
     border-color: var(--c-checkbox-control-color-error);
   }
 
-  &-error&-checked &-icon,
-  &-error&-indeterminate &-icon {
+  &-error:not(.c-checkbox-disabled)&-checked &-icon,
+  &-error:not(.c-checkbox-disabled)&-indeterminate &-icon {
     background-color: var(--c-checkbox-control-color-error);
     border-color: transparent;
   }
@@ -148,6 +148,8 @@
     border-color: var(~"--c-checkbox-control-color-disabled");
   }
 
+  &-disabled&-indeterminate &-icon,
+  &-disabled&-indeterminate:hover &-icon,
   &-disabled&-checked &-icon,
   &-disabled&-checked:hover &-icon {
     background-color: var(~"--c-internal-checkbox-background-checked-disabled");
@@ -163,7 +165,7 @@
   }
 
   &-disabled:hover &-icon {
-    border-color: var(~"--c-checkbox-control-color");
+    border-color: var(~"--c-checkbox-control-color-disabled");
   }
 
   &-disabled &-label {
@@ -173,6 +175,10 @@
   &-disabled &-icon-check {
     color: var(~"--c-internal-checkbox-check-icon-color-disabled");
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c-checkbox .c-checkbox-icon, .c-checkbox .c-checkbox-icon-check, .c-checkbox .c-checkbox-icon::after { transition: none !important; }
 }
 
 // checkbox group

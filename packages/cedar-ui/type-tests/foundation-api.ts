@@ -36,7 +36,7 @@ void restoreMenuReference
 
 import type { TooltipProps, TooltipInstance } from '@cedarjs/ui/tooltip'
 import type { PopoverProps, PopoverInstance } from '@cedarjs/ui/popover'
-const tooltipControls: TooltipProps = { trigger: ['hover', 'focus'], disabled: false, unmountOnClose: false, duration: { enter: 80, leave: 60 }, showArrow: true, contentClass: 'content', popupClass: 'position', backgroundColor: 'red', textColor: 'white', xs: true }
+const tooltipControls: TooltipProps = { trigger: ['hover', 'focus'], disabled: false, unmountOnClose: false, duration: { enter: 80, leave: 60 }, showArrow: true, contentClass: 'content', popupClass: 'position', color: 'red', textColor: 'white', size: 'xs' }
 const popoverControls: PopoverProps = { title: 'Title', content: 'Body', trigger: 'manual', unmountOnClose: true, popupHoverStay: false, restoreFocus: false, duration: 80 }
 const bubbleMethods = (tooltip: TooltipInstance, popover: PopoverInstance) => {
   tooltip.setReference(); tooltip.open(); tooltip.close(); tooltip.focusReference()

@@ -78,3 +78,72 @@ Notification._context = app._context
 ```ts
 import type { BadgeInstance } from '@cedarjs/ui'
 ```
+
+## 公开 CSS 变量
+
+面板使用 surface-overlay，正文／标题使用 content-primary，关闭按钮使用 content-secondary，边框使用 border-default。状态图标使用可读 content 状态色；info 不再引用品牌填充色，loading 使用 content-brand。颜色变量按状态分组；自定义背景须同时检查内容、图标与关闭按钮。纯文本 action／footer 继承面板正文色；自带样式的插槽内容由业务负责。
+
+wrapper-* 控制列表位置／留白；padding-*、margin-* 控制面板布局；icon-*、title-*、content-* 控制各部分排版；close-* 控制关闭按钮；border-*、box-shadow 控制边框／阴影；transition-* 控制动效；z-index 控制层级。本阶段保留几何与动效默认值。下表列出实际声明，未声明所有历史几何变量均已验证消费。
+
+| 变量 | 默认值 |
+| --- | --- |
+| `--c-notification-wrapper-margin-top` | `var(--c-spacing-8)` |
+| `--c-notification-wrapper-margin-bottom` | `var(--c-spacing-8)` |
+| `--c-notification-wrapper-margin-left` | `var(--c-spacing-8)` |
+| `--c-notification-wrapper-margin-right` | `var(--c-spacing-8)` |
+| `--c-notification-z-index` | `var(--c-z-index-notification)` |
+| `--c-notification-border-radius` | `var(--c-border-radius-md)` |
+| `--c-notification-margin-bottom` | `var(--c-spacing-8)` |
+| `--c-notification-width` | `300px` |
+| `--c-notification-padding-top` | `var(--c-spacing-8)` |
+| `--c-notification-padding-bottom` | `var(--c-spacing-8)` |
+| `--c-notification-padding-left` | `var(--c-spacing-8)` |
+| `--c-notification-padding-right` | `var(--c-spacing-8)` |
+| `--c-notification-icon-font-size` | `24px` |
+| `--c-notification-title-font-size` | `var(--c-font-size-title-1)` |
+| `--c-notification-title-font-weight` | `var(--c-font-weight-500)` |
+| `--c-notification-content-font-size` | `var(--c-font-size-body-3)` |
+| `--c-notification-icon-margin-right` | `var(--c-spacing-7)` |
+| `--c-notification-title-margin-bottom` | `var(--c-spacing-2)` |
+| `--c-notification-footer-margin-top` | `var(--c-spacing-7)` |
+| `--c-notification-box-shadow` | `0 4px 12px rgba(0, 0, 0, 0.15)` |
+| `--c-notification-border-width` | `1px` |
+| `--c-notification-border-style` | `solid` |
+| `--c-notification-close-icon-color` | `var(--c-sys-color-content-secondary)` |
+| `--c-notification-close-icon-font-size` | `12px` |
+| `--c-notification-close-icon-top` | `var(--c-spacing-6)` |
+| `--c-notification-close-icon-right` | `var(--c-spacing-6)` |
+| `--c-notification-close-icon-hover-size` | `20px` |
+| `--c-notification-normal-bg` | `var(--c-sys-color-surface-overlay)` |
+| `--c-notification-normal-icon-color` | `var(--c-sys-color-content-primary)` |
+| `--c-notification-normal-title-color` | `var(--c-sys-color-content-primary)` |
+| `--c-notification-normal-content-color` | `var(--c-sys-color-content-primary)` |
+| `--c-notification-normal-border-color` | `var(--c-sys-color-border-default)` |
+| `--c-notification-info-bg` | `var(--c-sys-color-surface-overlay)` |
+| `--c-notification-info-icon-color` | `var(--c-sys-color-content-info)` |
+| `--c-notification-info-title-color` | `var(--c-sys-color-content-primary)` |
+| `--c-notification-info-content-color` | `var(--c-sys-color-content-primary)` |
+| `--c-notification-info-border-color` | `var(--c-sys-color-border-default)` |
+| `--c-notification-success-bg` | `var(--c-sys-color-surface-overlay)` |
+| `--c-notification-success-icon-color` | `var(--c-sys-color-content-success)` |
+| `--c-notification-success-title-color` | `var(--c-sys-color-content-primary)` |
+| `--c-notification-success-content-color` | `var(--c-sys-color-content-primary)` |
+| `--c-notification-success-border-color` | `var(--c-sys-color-border-default)` |
+| `--c-notification-warning-bg` | `var(--c-sys-color-surface-overlay)` |
+| `--c-notification-warning-icon-color` | `var(--c-sys-color-content-warning)` |
+| `--c-notification-warning-title-color` | `var(--c-sys-color-content-primary)` |
+| `--c-notification-warning-content-color` | `var(--c-sys-color-content-primary)` |
+| `--c-notification-warning-border-color` | `var(--c-sys-color-border-default)` |
+| `--c-notification-error-bg` | `var(--c-sys-color-surface-overlay)` |
+| `--c-notification-error-icon-color` | `var(--c-sys-color-content-danger)` |
+| `--c-notification-error-title-color` | `var(--c-sys-color-content-primary)` |
+| `--c-notification-error-content-color` | `var(--c-sys-color-content-primary)` |
+| `--c-notification-error-border-color` | `var(--c-sys-color-border-default)` |
+| `--c-notification-transition-duration` | `var(--c-transition-duration-2)` |
+| `--c-notification-transition-duration-enter` | `var(--c-transition-duration-4)` |
+| `--c-notification-transition-duration-leave` | `var(--c-transition-duration-3)` |
+| `--c-notification-transition-timing-function` | `var(--c-transition-timing-function-linear)` |
+| `--c-notification-transition-timing-function-enter` | `var(--c-transition-timing-function-overshoot)` |
+| `--c-notification-transition-timing-function-leave` | `var(--c-transition-timing-function-standard)` |
+
+Teleport 后主题变量按实际 DOM 祖先继承；放在内容内部的变量不会向上传到服务创建的容器。

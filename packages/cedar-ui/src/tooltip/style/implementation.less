@@ -13,16 +13,22 @@
     opacity: var(--c-tooltip-opacity);
   }
 
-  &__arrow {
+  // Wrapper appearance must win even when Trigger CSS is loaded last.
+  &__arrow&__arrow {
     background-color: var(--c-tooltip-background);
     opacity: var(--c-tooltip-opacity);
   }
 
-  &--status-primary { color: var(--c-tooltip-status-primary-text-color); background-color: var(--c-tooltip-status-primary-background); }
-  &--status-info { color: var(--c-tooltip-status-info-text-color); background-color: var(--c-tooltip-status-info-background); }
-  &--status-success { color: var(--c-tooltip-status-success-text-color); background-color: var(--c-tooltip-status-success-background); }
-  &--status-warning { color: var(--c-tooltip-status-warning-text-color); background-color: var(--c-tooltip-status-warning-background); }
-  &--status-danger { color: var(--c-tooltip-status-danger-text-color); background-color: var(--c-tooltip-status-danger-background); }
+  &__content&--status-primary,
+  &__arrow&--status-primary { color: var(--c-tooltip-status-primary-text-color); background-color: var(--c-tooltip-status-primary-background); }
+  &__content&--status-info,
+  &__arrow&--status-info { color: var(--c-tooltip-status-info-text-color); background-color: var(--c-tooltip-status-info-background); }
+  &__content&--status-success,
+  &__arrow&--status-success { color: var(--c-tooltip-status-success-text-color); background-color: var(--c-tooltip-status-success-background); }
+  &__content&--status-warning,
+  &__arrow&--status-warning { color: var(--c-tooltip-status-warning-text-color); background-color: var(--c-tooltip-status-warning-background); }
+  &__content&--status-danger,
+  &__arrow&--status-danger { color: var(--c-tooltip-status-danger-text-color); background-color: var(--c-tooltip-status-danger-background); }
 
   &--size-xs {
     padding: var(--c-tooltip-size-xs-padding-vertical) var(--c-tooltip-size-xs-padding-horizontal);

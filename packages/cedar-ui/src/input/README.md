@@ -21,7 +21,7 @@ permalink: /components/input/
 
 ### 尺寸
 
-输入框定义了四种默认尺寸 xs, sm, md, lg。
+输入框完整支持五种尺寸 `xs / sm / md / lg / xl`，默认 `md`。
 
 <demo src="./__demos__/size.vue"></demo>
 
@@ -31,11 +31,29 @@ permalink: /components/input/
 
 <demo src="./__demos__/group.vue"></demo>
 
+### 组合状态继承
+
+`InputGroup` 统一传递 `size / variant / disabled / readonly / hint`；子项显式设置的值（包括 `false`）优先。`InputPassword` 和清除按钮同样遵循继承后的状态。
+
+<demo src="./__demos__/group-state.vue"></demo>
+
+### 表单反馈
+
+通过 FormItem 的 `feedback` 和 `validate-status` 展示校验反馈。有外置 FormItem 标签时，Input 自动关闭内部浮动提示，避免重复标签。
+
+<demo src="./__demos__/form-feedback.vue"></demo>
+
 ### 前缀、后缀
 
 通过指定 prefix 和 suffix 插槽来在输入框内添加前缀和后缀。
 
 <demo src="./__demos__/prefix.vue"></demo>
+
+### 浮动提示
+
+设置 `hint` 后，提示文字作为关联原生输入框的标签，在聚焦或输入非空值时浮起；`line` 控制描边或底线是否显示。桌面端默认不启用浮动提示，仍可使用普通 `placeholder`；移动端默认启用。`text-color`、`focus-color`、`blur-color` 可覆盖文字与提示颜色。
+
+<demo src="./__demos__/floating-hint.vue"></demo>
 
 ### 状态
 
@@ -46,6 +64,7 @@ permalink: /components/input/
 ### 数字统计
 
 设置 max-length 可以限制最大字数，配合 show-word-limit 可以显示字数统计。
+超出长度时会截断，并通过 `update:model-value` 与 `input` 传出截断后的值。点击清空更新模型并触发 `clear`，随后的失焦不会补发 `change`。
 
 <demo src="./__demos__/word-limit.vue"></demo>
 
@@ -59,22 +78,33 @@ permalink: /components/input/
 
 ### `<Input>` Props
 
-| 参数名                    | 描述                                 | 类型                                                | 默认值  |
-| ------------------------- | ------------------------------------ | --------------------------------------------------- | :-----: |
-| model-value **(v-model)** | 绑定值                               | `string`                                            |   `-`   |
-| default-value             | 默认值（非受控状态）                 | `string`                                            |  `''`   |
-| variant                   | 输入框变体                           | `'filled' \| 'outline' \| 'standard'`               | `'filled'` |
-| size                      | 输入框大小                           | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`              | `'md'`  |
-| clearable                 | 是否允许清空输入框                   | `boolean`                                           | `true`  |
-| disabled                  | 是否禁用                             | `boolean`                                           | `false` |
-| readonly                  | 是否为只读状态                       | `boolean`                                           | `false` |
-| error                     | 是否为错误状态                       | `boolean`                                           | `false` |
-| placeholder               | 提示文字                             | `string`                                            |   `-`   |
-| max-length                | 输入值的最大长度                     | `number \| { length: number; errorOnly?: boolean }` |   `0`   |
-| show-word-limit           | 是否显示字数统计                     | `boolean`                                           | `false` |
-| word-length               | 字符长度的计算方法                   | `(value: string) => number`                         |   `-`   |
-| word-slice                | 字符截取方法，同 wordLength 一起使用 | `(value: string, maxLength: number) => string`      |   `-`   |
-| input-attrs               | 内部 input 元素的属性                | `object`                                            |   `-`   |
+| 参数名                    | 描述                                 | 类型                                                |   默认值    |
+| ------------------------- | ------------------------------------ | --------------------------------------------------- | :---------: |
+| model-value **(v-model)** | 绑定值                               | `string`                                            |     `-`     |
+| model-modifiers           | `v-model` 修饰符，支持 `trim`        | `{ trim?: boolean }`                                |    `{}`     |
+| default-value             | 默认值（非受控状态）                 | `string`                                            |    `''`     |
+| variant                   | 输入框变体                           | `'filled' \| 'outline' \| 'standard'`               | `'outline'` |
+| size                      | 输入框大小                           | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`              |   `'md'`    |
+| clearable                 | 是否允许清空输入框                   | `boolean`                                           |   `false`   |
+| disabled                  | 是否禁用，可继承 Form                | `boolean`                                           |     `-`     |
+| readonly                  | 是否只读，可继承 Form                | `boolean`                                           |     `-`     |
+| error                     | 是否为错误状态，可继承 FormItem      | `boolean`                                           |     `-`     |
+| placeholder               | 提示文字                             | `string`                                            |     `-`     |
+| hint                      | 提示文字是否浮起                     | `boolean`                                           |   `false`   |
+| line                      | 是否绘制边框或底线                   | `boolean`                                           |   `true`    |
+| text-color                | 输入文字颜色                         | `string`                                            |     `-`     |
+| focus-color               | 聚焦时提示和光标颜色                 | `string`                                            |     `-`     |
+| blur-color                | 未聚焦时提示颜色                     | `string`                                            |     `-`     |
+| aria-label                | 原生输入框的无障碍标签               | `string`                                            |     `-`     |
+| autofocus                 | 是否自动聚焦                         | `boolean`                                           |   `false`   |
+| enterkeyhint              | 移动端虚拟键盘回车键提示             | `string`                                            |     `-`     |
+| max-length                | 输入值的最大长度                     | `number \| { length: number; errorOnly?: boolean }` |     `0`     |
+| show-word-limit           | 是否显示字数统计                     | `boolean`                                           |   `false`   |
+| word-length               | 字符长度的计算方法                   | `(value: string) => number`                         |     `-`     |
+| word-slice                | 字符截取方法，同 wordLength 一起使用 | `(value: string, maxLength: number) => string`      |     `-`     |
+| input-attrs               | 内部 input 元素的属性                | `object`                                            |     `-`     |
+
+`disabled / readonly / size` 按子项 → InputGroup → FormItem/Form → 库默认值继承；Cedar 的尺寸还支持 ConfigProvider。`clearable` 只对非空且可编辑的输入生效：PC 在悬浮或焦点进入时显示，触控设备与 Maple 常驻显示。原生 `name / id / aria-* / data-*` 会透传给 input；`class / style` 留在外壳，`input-attrs` 不能覆盖受控值、类型、禁用、只读和长度策略。
 
 ### `<Input>` Events
 
@@ -93,6 +123,7 @@ permalink: /components/input/
 | ------ | ---------------- | ---- | ------ |
 | focus  | 使输入框获取焦点 | -    | -      |
 | blur   | 使输入框失去焦点 | -    | -      |
+| select | 选中输入内容 | - | - |
 
 ### `<input>` Slots
 
@@ -100,13 +131,27 @@ permalink: /components/input/
 | ------ | :------: | ---- |
 | suffix | 后缀元素 | -    |
 | prefix | 前缀元素 | -    |
+| clear-icon | 自定义清除按钮 | `clear(event?: Event)` |
 
 ### `<InputPassword>` Props
 
-| 参数名             | 描述                 | 类型      | 默认值 |
-| ------------------ | -------------------- | --------- | :----: |
-| visibility-toggle  | 是否显示密码可见性按钮 | `boolean` | `true` |
-| default-visibility | 默认是否可见，非受控 | `boolean` | `false` |
+| 参数名             | 描述                   | 类型      | 默认值  |
+| ------------------ | ---------------------- | --------- | :-----: |
+| visibility-toggle  | 是否显示密码可见性按钮 | `boolean` | `true`  |
+| default-visibility | 默认是否可见，非受控   | `boolean` | `false` |
+| visibility | 受控密码可见性，支持 v-model:visibility | `boolean` | `-` |
+
+InputPassword 支持所有 Input 属性、事件、插槽与方法。
+
+### `<InputGroup>` Props
+
+| 参数名 | 描述 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| size | 组内默认尺寸 | `ComponentSize` | 继承 Form/ConfigProvider 或 `md` |
+| variant | 组内默认变体 | `filled \| outline \| standard` | `filled` |
+| disabled | 组内禁用状态 | `boolean` | 继承 Form 或 `false` |
+| readonly | 组内只读状态 | `boolean` | 继承 Form 或 `false` |
+| hint | 组内浮动提示 | `boolean` | 库默认值 |
 
 ### `<InputPassword>` Events
 
@@ -119,5 +164,5 @@ permalink: /components/input/
 组件导出以下类型定义
 
 ```ts
-import type { InputProps } from '@cedarjs/ui'
+import type { InputProps } from "@cedarjs/ui";
 ```

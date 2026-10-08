@@ -1,45 +1,27 @@
-@import "./token.less";
-
+@import './token.less';
 .c-auto-complete {
   position: relative;
   display: inline-flex;
   box-sizing: border-box;
   width: 100%;
-  &-popup .c-select-popup {
-    background-color: var(~"--c-color-bg-popup");
-    border: 1px solid var(~"--c-auto-complete-popup-border-color");
-    border-radius: var(~"--c-auto-complete-popup-border-radius");
-    box-shadow: var(~"--c-auto-complete-popup-box-shadow");
-
-    .c-select-popup-inner {
-      max-height: var(~"--c-auto-complete-popup-max-height");
-      padding: var(~"--c-auto-complete-popup-padding-vertical") 0;
-    }
-
-    .c-select-option {
-      height: var(~"--c-auto-complete-option-height");
-      padding: 0 var(~"--c-auto-complete-option-padding-horizontal");
-      font-size: var(~"--c-auto-complete-popup-font-size");
-      line-height: $height;
-
-      .option-color(@status) {
-        @class-suffix: if(@status = default, ~"", ~"-@{status}");
-
-        &@{class-suffix} {
-          color: var(~"--c-auto-complete-option-text-color-@{status}");
-          background-color: var(~"--c-auto-complete-option-bg-@{status}");
-        }
-      }
-
-      .option-color(default);
-      .option-color(selected);
-      .option-color(hover);
-      // disabled 优先级最高，放在最后
-      .option-color(disabled);
-
-      &-selected {
-        font-weight: var(~"--c-auto-complete-option-font-weight-selected");
-      }
-    }
-  }
+}
+.c-auto-complete__dropdown {
+  --c-select-popup-max-height: var(--c-auto-complete-popup-max-height);
+  --c-select-popup-bg: var(--c-auto-complete-popup-bg);
+  --c-select-popup-border-radius: var(--c-auto-complete-popup-border-radius);
+  --c-select-popup-padding-vertical: var(--c-auto-complete-popup-padding-vertical);
+  --c-select-popup-font-size: var(--c-auto-complete-popup-font-size);
+  --c-select-popup-border-color: var(--c-auto-complete-popup-border-color);
+  --c-select-popup-box-shadow: var(--c-auto-complete-popup-box-shadow);
+  --c-select-popup-option-height: var(--c-auto-complete-option-height);
+  --c-select-popup-option-font-weight-selected: var(--c-auto-complete-option-font-weight-selected);
+  --c-select-popup-option-padding-horizontal: var(--c-auto-complete-option-padding-horizontal);
+  --c-select-popup-option-bg: var(--c-auto-complete-option-bg-default);
+  --c-select-popup-option-bg-hover: var(--c-auto-complete-option-bg-hover);
+  --c-select-popup-option-bg-selected: var(--c-auto-complete-option-bg-selected);
+  --c-select-popup-option-bg-disabled: var(--c-auto-complete-option-bg-disabled);
+  --c-select-popup-option-text-color: var(--c-auto-complete-option-text-color-default);
+  --c-select-popup-option-text-color-hover: var(--c-auto-complete-option-text-color-hover);
+  --c-select-popup-option-text-color-selected: var(--c-auto-complete-option-text-color-selected);
+  --c-select-popup-option-text-color-disabled: var(--c-auto-complete-option-text-color-disabled);
 }

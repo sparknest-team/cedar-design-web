@@ -78,3 +78,14 @@ import type {
   InfiniteScrollStatus,
 } from "@cedarjs/ui";
 ```
+
+### 样式变量
+
+| 变量名                                          | 默认值                  |
+| ----------------------------------------------- | ----------------------- |
+| `--c-infinite-scroll-status-min-height`         | `50px`                  |
+| `--c-infinite-scroll-status-padding`            | `12px 0`                |
+| `--c-infinite-scroll-status-color`              | `var(--c-color-text-3)` |
+| `--c-infinite-scroll-status-font-size`          | `var(--c-font-size-md)` |
+| `--c-infinite-scroll-loading-gap`               | `8px`                   |
+| `--c-infinite-scroll-error-color`               | `var(--c-color-danger)` |

@@ -1,5 +1,5 @@
 import { withInstall } from "../_utils/global-config";
-import _InfiniteScroll from "./infinite-scroll";
+import _InfiniteScroll from "./infinite-scroll.vue";
 import { infiniteScrollProps } from "./props";
 
 const InfiniteScroll = withInstall(

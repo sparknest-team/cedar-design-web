@@ -8,6 +8,20 @@ permalink: /components/select/
 
 ## 案例
 
+### 异步设备与 ID 回显
+
+<demo src="./__demos__/async-devices.vue"></demo>
+
+主体、控制器、选项算法、Menu 与样式已独立复制到 Maple；Cedar 仅提供 menu，Maple 在独立文件中扩展 list / picker，不共享运行时代码或实例。
+
+未设置 disabled / error 时继承表单状态；显式 false 可以覆盖继承值。FieldDecorator 和 SelectionField 不重复注入表单上下文，focus / blur 由 Select 向表单分发一次。
+
+### 同名选项
+
+标签展示允许同名，但每个选项的值必须唯一。删除第二个“设备”只移除 ID 2，不会误删 ID 1；搜索文字与已选值分别管理。
+
+<demo src="./__demos__/same-label.vue"></demo>
+
 ### 基础用法
 
 选择器的基本用法。
@@ -34,7 +48,7 @@ permalink: /components/select/
 
 ### 选择框大小
 
-选择框分为 mini、small、medium、large 四种尺寸。
+支持 xs、sm、md、lg、xl 五档尺寸。未设置时依次继承 InputGroup、FormItem、ConfigProvider，最终默认 md。
 
 <demo src="./__demos__/size.vue"></demo>
 
@@ -116,139 +130,65 @@ permalink: /components/select/
 
 ## API
 
-### Select Props
+### Select 属性
 
-| 属性                        | 说明                                                                             | 类型                                                                                          |               默认值                |
-| --------------------------- | -------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | :---------------------------------: |
-| multiple                    | 是否开启多选模式（多选模式默认开启搜索）                                         | `boolean`                                                                                     |               `false`               |
-| model-value **(v-model)**   | 绑定值                                                                           | `string\| number\| Record<string, any>\| (string \| number \| Record<string, any>)[]`         |                 `-`                 |
-| default-value               | 默认值（非受控模式）                                                             | `string\| number\| Record<string, unknown>\| (string \| number \| Record<string, unknown>)[]` |             `'' \| []`              |
-| input-value **(v-model)**   | 输入框的值                                                                       | `string`                                                                                      |                 `-`                 |
-| default-input-value         | 输入框的默认值（非受控模式）                                                     | `string`                                                                                      |                `''`                 |
-| size                        | 选择框的大小                                                                     | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`                                                        |               `'md'`                |
-| placeholder                 | 占位符                                                                           | `string`                                                                                      |                 `-`                 |
-| loading                     | 是否为加载中状态                                                                 | `boolean`                                                                                     |               `false`               |
-| disabled                    | 是否禁用                                                                         | `boolean`                                                                                     |               `false`               |
-| error                       | 是否为错误状态                                                                   | `boolean`                                                                                     |               `false`               |
-| variant                     | 选择框的变体                                                                     | `'filled' \| 'outline' \| 'standard'`                                                                      |             `'filled'`              |
-| clearable                   | 是否允许清空                                                                     | `boolean`                                                                                     |               `false`               |
-| filterable                | 是否允许搜索                                                                     | `boolean \| { retainInputValue?: boolean }`                                                   | `false (single) \| true (multiple)` |
-| creatable                   | 是否允许创建                                                                     | `boolean`                                                                                     |               `false`               |
-| max-tag-count               | 多选模式下，最多显示的标签数量。0 表示不限制                                     | `number`                                                                                      |                 `0`                 |
-| popup-container             | 弹出框的挂载容器                                                                 | `string \| HTMLElement \| false`                                                                       |                 `-`                 |
-| bordered                    | 是否显示输入框的边框                                                             | `boolean`                                                                                     |               `true`                |
-| default-active-first-option | 是否在无值时默认选择第一个选项                                                   | `boolean`                                                                                     |               `true`                |
-| open **(v-model)** | 是否显示下拉菜单                                                                 | `boolean`                                                                                     |                 `-`                 |
-| default-open       | 弹出框默认是否可见（非受控模式）                                                 | `boolean`                                                                                     |               `false`               |
-| unmount-on-close            | 是否在下拉菜单关闭时销毁元素                                                     | `boolean`                                                                                     |               `false`               |
-| filter-option               | 是否过滤选项                                                                     | `boolean \| ((inputValue: string, option: SelectOptionData) => boolean)`                      |               `true`                |
-| options                     | 选项数据                                                                         | `(string \| number \| SelectOptionData \| SelectOptionGroup)[]`                               |                `[]`                 |
-| virtual-list-props          | 传递虚拟列表属性，传入此参数以开启虚拟滚动 [VirtualListProps](#VirtualListProps) | `VirtualListProps`                                                                            |                 `-`                 |
-| auto-fit-popup-width | 菜单是否与触发框等宽；false 时按内容自适应（菜单展示模式）。 | `boolean` | `true` |
-| trigger-props               | 下拉菜单的触发器属性                                                             | `TriggerProps`                                                                                |                 `-`                 |
-| format-label                | 格式化显示内容                                                                   | `(data: SelectOptionData) => string`                                                          |                 `-`                 |
-| fallback-option             | 自定义值中不存在的选项                                                           | `boolean\| ((    value: string \| number \| Record<string, unknown>  ) => SelectOptionData)`  |               `true`                |
-| show-extra-options          | 是否在下拉菜单中显示额外选项                                                     | `boolean`                                                                                     |               `true`                |
-| search-delay                | 触发搜索事件的延迟时间                                                           | `number`                                                                                      |                `500`                |
-| limit                       | 多选时最多的选择个数                                                             | `number`                                                                                      |                 `0`                 |
-| field-names                 | 自定义 `SelectOptionData` 中的字段；当选项值为对象时，也用其中的 `value` 作为键属性 | `SelectFieldNames`                                                                            |                 `-`                 |
-| scrollbar                   | 是否开启虚拟滚动条                                                               | `boolean \| ScrollbarProps`                                                                   |               `true`                |
-| show-header-on-empty        | 空状态时是否显示header                                                           | `boolean`                                                                                     |               `false`               |
-| show-footer-on-empty        | 空状态时是否显示footer                                                           | `boolean`                                                                                     |               `false`               |
+分别使用 `v-model`、`v-model:open` 和 `v-model:input-value` 控制选中值、展开状态和搜索词。单选清空为 `''`，多选为 `[]`；Select 存在真实空字符串选项时，清空值为 `undefined`。
 
-### Select Events
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| `model-value / default-value` | 受控值 / 非受控初始值 | `Value` | `单选 ''，多选 []` |
+| `open / default-open` | 受控展开 / 默认展开 | `boolean` | `undefined / false` |
+| `input-value / default-input-value` | 搜索文本，独立于选中值 | `string` | `undefined / ''` |
+| `multiple` | 多选；默认启用搜索 | `boolean` | `false` |
+| `size` | 完整支持 xs、sm、md、lg、xl，未设置时继承分组与表单 | `ComponentSize` | `md` |
+| `variant` | filled、outline、standard；未设置时继承 InputGroup | `FormControlVariant` | `filled` |
+| `disabled / readonly / error` | 未设置时继承表单；显式 false 可覆盖 | `boolean` | `undefined` |
+| `placeholder` | 占位文本 | `string` | `—` |
+| `hint / line` | 浮动提示 / standard 变体下划线 | `boolean` | `true` |
+| `text-color / focus-color / blur-color` | 字段颜色 | `string` | `—` |
+| `loading` | 加载状态；禁止选择和确认 | `boolean` | `false` |
+| `show-tags` | 多选值以标签展示；false 改用分隔文本 | `boolean` | `true` |
+| `separator` | show-tags=false 时的多选分隔符 | `string` | `,` |
+| `text-align` | left、center、right | `string` | `left` |
+| `max-tag-count` | 标签数量上限，0 不限制 | `number` | `0` |
+| `tag-nowrap` | 标签内容不换行 | `boolean` | `false` |
+| `popup-container` | 选择器、元素、返回元素的函数或 false（原地渲染） | `PopupContainer` | `—` |
+| `trigger-props` | Menu 的 Trigger 属性；展开状态由字段控制 | `TriggerProps` | `—` |
+| `virtual-list-props` | Menu / List 的虚拟列表参数 | `VirtualListProps` | `—` |
+| `search-delay` | search 事件防抖时长（毫秒） | `number` | `500` |
+| `format-label` | 格式化已选标签；VNode 使用 label 插槽 | `function` | `—` |
+| `clearable` | 允许清除，保留禁用的已选项 | `boolean` | `true` |
+| `options` | 原始值、对象、分组均支持；三种展示使用同一数据源 | `SelectOption[]` | `[]` |
+| `field-names` | value、label、disabled、tagProps、render 字段映射；对象值须有唯一标识字段 | `SelectFieldNames` | `—` |
+| `filterable` | 开启搜索，可设置 retainInputValue | `boolean 或 { retainInputValue?: boolean }` | `单选 false / 多选 true` |
+| `filter-option` | false 关闭本地过滤；函数接收搜索词和原始选项 | `boolean 或 (input, option) => boolean` | `true` |
+| `creatable` | 允许创建不存在的选项 | `boolean` | `false` |
+| `fallback-option` | 异步选项未到达时反显值，或返回完整回退选项 | `boolean 或 (value) => SelectOptionData` | `true` |
+| `show-extra-options` | 菜单中展示回退/创建选项 | `boolean` | `true` |
+| `limit` | 多选数量上限，0 不限制 | `number` | `0` |
+| `auto-fit-popup-width` | Menu 与字段等宽 | `boolean` | `true` |
+| `default-active-first-option` | 默认激活首个可用选项（不会自动提交） | `boolean` | `true` |
+| `unmount-on-close` | 关闭 Menu 后销毁内容 | `boolean` | `false` |
+| `scrollbar` | Menu / List 滚动条配置 | `boolean 或 ScrollbarProps` | `true` |
+| `show-header-on-empty / show-footer-on-empty` | 空状态仍展示 header / footer | `boolean` | `false` |
+| `presentation` | 展示方式 | `menu` | `menu` |
 
-| 事件名                | 说明                       | 参数                                                                                            |
-| --------------------- | -------------------------- | ----------------------------------------------------------------------------------------------- |
-| change                | 值发生改变时触发           | value: `string \| number \| Record<string, any> \| (string \| number \| Record<string, any>)[]` |
-| input-value-change    | 输入框的值发生改变时触发   | inputValue: `string`                                                                            |
-| open-change           | 下拉框的显示状态改变时触发 | open: `boolean`                                                                                 |
-| clear                 | 点击清除按钮时触发         | -                                                                                               |
-| remove                | 点击标签的删除按钮时触发   | removed: `string \| number \| Record<string, any> \| undefined`                                 |
-| search                | 用户搜索时触发             | inputValue: `string`                                                                            |
-| dropdown-scroll       | 下拉菜单发生滚动时触发     | -                                                                                               |
-| dropdown-reach-bottom | 下拉菜单滚动到底部时触发   | -                                                                                               |
-| exceed-limit          | 多选超出限制时触发         | value: `string \| number \| Record<string, any> \| undefined`<br>ev: `Event`                    |
+### 事件与方法
 
-### Select Slots
+- `update:modelValue`、`change(value)`：提交时触发，编辑草稿不触发。
+- `update:open`、`open-change(open)`：请求改变展开状态。
+- `update:inputValue`、`input-value-change(text)`、`search(text)`：搜索状态。
+- `focus(event)`、`blur(event)`、`clear(event)`：原生字段事件；只有字段所有者通知 Form。
+- 方法：`focus()`、`blur()`。
 
-| 插槽名       | 描述                     | 参数                     |
-| ------------ | ------------------------ | ------------------------ |
-| trigger      | 自定义触发元素           | -                        |
-| prefix       | 前缀元素                 | -                        |
-| search-icon  | 选择框的搜索图标         | -                        |
-| loading-icon | 选择框的加载中图标       | -                        |
-| arrow-icon   | 选择框的箭头图标         | -                        |
-| footer       | 下拉框的页脚             | -                        |
-| header       | 下拉框的页头             | -                        |
-| label        | 选择框的显示内容         | data: `SelectOptionData` |
-| option       | 选项内容                 | data: `SelectOptionData` |
-| empty        | 选项为空时的显示内容     | -                        |
+Select 还提供 `remove(value)`、`exceed-limit(value, event)`、`dropdown-scroll(event)`、`dropdown-reach-bottom(event)`。
 
-### `<option>` Props
+### 插槽与选项数据
 
-| 参数名    | 描述                                            | 类型                     | 默认值  |
-| --------- | ----------------------------------------------- | ------------------------ | :-----: |
-| value     | 选项值（如不填，会从内容中获取）                | `string\|number\|object` |   `-`   |
-| label     | 选项标签（如不填，会从内容中获取）              | `string`                 |   `-`   |
-| disabled  | 是否禁用                                        | `boolean`                | `false` |
-| tag-props | 展示的标签属性                                  | `TagProps`               |   `-`   |
-| extra     | 额外数据。废弃，可使用对象形式的 value 扩展数据 | `object`                 |   `-`   |
-| index     | 用于手动指定选项的 index                        | `number`                 |   `-`   |
+使用 `label({ data })` 自定义已选标签，`selected` 替换整个已选区域。还支持 `prefix`、`suffix`、`clear-icon({ clear })`、`arrow-icon`、`loading-icon`、`search-icon`、`empty`、`option({ data })`。
 
-### `<optgroup>` Props
+选项 `label` 是用于搜索的纯文本；自定义选项内容使用 `render` 或 `option` 插槽，自定义反显使用 `format-label` 或 `label` 插槽。以 value 而非 label 识别选项。选项的 `disabled` 禁止选择和删除，`tagProps` 可定制已选标签。
 
-| 参数名 | 描述         | 类型     | 默认值 |
-| ------ | ------------ | -------- | :----: |
-| label  | 选项组的标题 | `string` |  `-`   |
+Select 还支持 `header`、`footer`、`trigger` 和默认插槽中的 `Option / Optgroup`。Option 属性为 `value`、`label`、`disabled`、`tagProps`、`index`；默认插槽提供 `selected`。分组数据为 `{ isGroup: true, label, options }`。Maple 的 List、Picker 同样支持插槽选项；Picker 展示选项的纯文本标签。
 
-### `<optgroup>` Slots
-
-| 插槽名 |     描述     | 参数 | 版本 |
-| ------ | :----------: | ---- | :--- |
-| label  | 选项组的标题 | -    |
-
-## 类型定义
-
-```ts
-/**
- * @zh 选项
- * @en Option
- */
-type Option = string | number | SelectOptionData | SelectOptionGroup
-
-/**
- * @zh 筛选
- * @en Filter
- */
-type FilterOption = boolean | ((inputValue: string, option: SelectOptionData) => boolean)
-```
-
-### SelectOptionData
-
-| 参数名   | 描述                     | 类型                                          | 默认值  |
-| -------- | ------------------------ | --------------------------------------------- | :-----: |
-| value    | 选项值                   | `string \| number \| Record<string, unknown>` |   `-`   |
-| label    | 选项内容                 | `string`                                      |   `-`   |
-| disabled | 是否禁用                 | `boolean`                                     | `false` |
-| tagProps | 选项对应的多选标签的属性，透传给 [Tag](/components/tag/) | `TagProps`                                    |   `-`   |
-| render   | 自定义渲染               | `RenderFunction`                              |   `-`   |
-
-### SelectOptionGroup
-
-| 参数名  | 描述           | 类型             | 默认值 |
-| ------- | -------------- | ---------------- | :----: |
-| isGroup | 是否为选项组   | `true`           |  `-`   |
-| label   | 选项组标题     | `string`         |  `-`   |
-| options | 选项组中的选项 | `SelectOption[]` |  `-`   |
-
-### VirtualListProps
-
-| 参数名             | 描述                                                               | 类型               | 默认值  |
-| ------------------ | ------------------------------------------------------------------ | ------------------ | :-----: |
-| height             | 可视区域高度                                                       | `number \| string` |   `-`   |
-| threshold          | 开启虚拟滚动的元素数量阈值，当数据数量小于阈值时不会开启虚拟滚动。 | `number`           |   `-`   |
-| isStaticItemHeight | （已废除）元素高度是否是固定的。废除，请使用 `fixedSize`           | `boolean`          | `false` |
-| fixedSize          | 元素高度是否是固定的。                                             | `boolean`          | `false` |
-| estimatedSize      | 元素高度不固定时的预估高度。                                       | `number`           |   `-`   |
-| buffer             | 视口边界外提前挂载的元素数量。                                     | `number`           |  `10`   |
+单选和多选选项统一使用 popup-option-padding-horizontal。组件没有隐式搜索高亮 DOM；自定义选项插槽负责其高亮片段样式。已删除无效的 multi-popup-option-padding-horizontal 与 popup-option-highlight-* 变量。

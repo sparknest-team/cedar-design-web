@@ -1,34 +1,49 @@
-# FieldDecorator
+# FieldDecorator 字段装饰器
 
-表单触发器外壳（与 Maple `FieldDecorator` **同名同职责骨架**）。
+FieldDecorator 是 Input、Textarea、Select 与日期时间控件的展示外壳，负责边框、尺寸、浮动提示、前后缀和清除按钮；不管理输入值、表单校验或弹层开合。
 
-## 职责
+## 两端同源约定
 
-- variant / size / disabled / error / focus
-- prefix / default / suffix 槽
-- 边框层（`__border` / `__border-state`）
+Cedar 完成实现后独立复制到 Maple，替换命名空间与导入路径；两端不引用另一端的运行时代码。主体、几何测量、插槽、事件及样式规则一致。
 
-## 消费者
+- 三种变体：`outline`（默认）、`filled`、`standard`。消费者可以显式选择自己的默认变体。
+- 五种尺寸：`xs / sm / md / lg / xl`，默认 `md`；具体高度使用各端 token。
+- `hint` 默认 Cedar 为 `false`，Maple 为 `true`。其他行为一致；Input 在 FormItem 已有外部标签时关闭浮动提示。
+- 有内容且可编辑时才渲染清除按钮；`0` 算非空，`[]` 算空。Cedar 在 hover/focus 时显示，Maple 常驻；触屏媒体条件下 Cedar 也常驻。
+- 默认按钮通过各端全局语言系统读取无障碍文案，不维护组件私有词典。
+- 内容列尺寸使用 ResizeObserver 观察，支持前缀变化及隐藏容器重新显示；卸载时清理监听。
 
-Input、Textarea、InputTag、InputLabel（Select/Cascader 经 SelectView）、**DatePicker / TimePicker 触发器**（`_components/picker`）。
+## Props
 
-内容（原生 input、tags、展示文本、range 双输入）放入 default slot；**不要在消费者里再画 `__border`**。
+描边缺口通过 `fieldset / legend` 实现，不使用背景色遮罩。缺口起点与内容列对齐，左右各预留 `hint-space`；`padding-inline-start` 中的 CSS `max()/calc()` 必须使用 Less 原样输出，避免不同 Less 版本将其提前计算为 `0px`。`check:input` 同时检查源码一致性和两端 Less 编译产物。
 
-## 与 Maple 的对齐 / 平台差
+| 属性 | 类型 | 默认值 / 含义 |
+| --- | --- | --- |
+| `tag` | `'div' \| 'span'` | `div`，外壳标签 |
+| `value` | `unknown` | 仅判断内容是否为空 |
+| `id` | `string` | 浮动标签关联的原生控件 id |
+| `title` | `string` | 原生标题提示 |
+| `size` | `ComponentSize` | `md`，实现全部五档尺寸 |
+| `variant` | `'outline' \| 'filled' \| 'standard'` | `outline` |
+| `placeholder` | `string` | 浮动标签文本 |
+| `hint` | `boolean` | Cedar false / Maple true |
+| `hint-center` | `boolean` | `true`；多行控件设为 false |
+| `line` | `boolean` | `true`，是否显示边框或底线 |
+| `focused` | `boolean` | 消费者传入焦点状态 |
+| `composing` | `boolean` | 输入法组合期间保持标签浮起 |
+| `disabled` / `readonly` / `error` | `boolean` | 消费者合并 Form / Group 后传入 |
+| `clearable` | `boolean` | `false`，是否允许清除 |
+| `text-color` / `focus-color` / `blur-color` | `string` | 自定义文字、焦点和非焦点颜色 |
+| `cursor` | `string` | 自定义光标 |
 
-| 项 | Cedar | Maple | 说明 |
-|---|---|---|---|
-| 组件名 | `FieldDecorator` | `FieldDecorator` | 对齐 |
-| variant | `filled` \| `outline` \| `standard`，默认 **filled** | 同枚举，默认 **standard** | 默认值平台差 |
-| size | `xs` \| `sm` \| `md` \| `lg` \| `xl`，默认 `md` | 壳：`small` \| `normal` | 映射：`sm↔small`，`md↔normal` |
-| 浮动 hint / line | 无（Form.Item 外置 label） | 有 | 平台差 |
-| clear | 消费者绘制 | 壳内置 | 平台差 |
-| Token | `--c-field-*` | `--mp-field-*` | 共享语义键对齐，hint 几何留 Maple |
+## 插槽与事件
 
-## Token 共享语义（两侧同后缀）
+`default` 放原生输入框、标签或展示内容；`prefix` / `suffix` 放附加内容；`clear-icon` 接收 `clear(event?)`，自定义按钮应调用它，清除不会冒泡打开选择面板。
 
-`color-text` / `placeholder-text` / `text-disabled` / `focus` / `blur` / `error` / `prefix-text` / `suffix-text` / `icon-clear`
-`border-radius` / `border-width` / `padding-x` / `size-icon` / `size-icon-clear`
-`variant-filled-bg(+-hover|-focus|-disabled|-error)`
-`variant-outline-border-color(+-hover|-focus|-disabled|-error)`
-`variant-standard-line-size(+-focus)` / `variant-standard-line-color(+-focus|-error|-disabled)`
+`clear(event)` 通知消费者更新值；`mousedown(event)` 供消费者管理焦点。外壳不自行修改模型。
+
+样式语义统一使用 `--c-field-*` / `--mp-field-*`；声明集中在各自 `style/token.less`，实现不跨库共享。不要在消费者中重复绘制边框。
+
+## 错误与禁用边框变量
+
+以下后缀分别加上 `--c-field-` / `--mp-field-`：`variant-outline-border-color-error` 控制 outline 错误边框；`variant-standard-line-color-error` 控制 standard 错误底线；`variant-standard-line-color-disabled` 控制 standard 禁用底线，默认引用 system border-subtle。禁用优先于错误、hover 和 focus。三个入口均支持局部覆盖；错误提示文字仍由 `field-error-color` 管理。内部变量不是业务 API，已确认无消费的遗留内部声明直接删除，不提供别名。

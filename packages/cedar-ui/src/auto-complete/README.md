@@ -2,137 +2,142 @@
 permalink: /components/auto-complete/
 ---
 
-# AutoComplete
+# AutoComplete 自动补全
 
-AutoComplete 在单行文本输入上提供候选建议。它始终允许自由输入，选择候选只是更快地填写字符串，不会把输入限制为选项值。
+允许自由输入的单行文本框，候选只是快捷填写方式。两端独立维护同源主体、Props、Menu 和样式；触控与 hover 差异由本地 Input 处理，没有跨库运行时或 platform 配置。
 
-## 设计要点
+shouldOpen 控制是否允许展开，filterOption 控制逐项过滤；它们不是同一个设置。没有候选、禁用或只读时不会打开。自动补全不提供 list/picker 展示。
 
-- 值模型始终为 `string`；字符串、数字和对象选项被选择后都会归一化为字符串。
-- `input` 与 `search` 表示实时编辑，`change` 表示失焦、Enter 或选项选择形成的一次提交。
-- 默认过滤忽略大小写；开启 `strict` 后使用区分大小写的包含匹配。
-- 获得焦点且存在可用候选时打开弹层；选择或清除后关闭弹层，但保留输入焦点。
-- 第一版与 Maple 对齐公开契约和 TypeScript 职责，不抽取共享包；后续允许按平台需求演进。
-
-## 基础用法
-
-使用 `v-model` 绑定输入文本，通过 `options` 提供候选。对象选项可携带额外业务字段。
+### 基础输入与选择
 
 <demo src="./__demos__/basic.vue"></demo>
 
-## 过滤与远程建议
+### 展开条件与过滤
 
-默认过滤按候选标签做不区分大小写的包含匹配。`strict` 适合大小写敏感的标识符；`filter-option` 也可以传入自定义函数，或设为 `false` 关闭内置过滤。
+<demo src="./__demos__/opening-policy.vue"></demo>
+
+### 大小写匹配
 
 <demo src="./__demos__/strict.vue"></demo>
 
-远程搜索时监听 `search` 更新候选，并关闭本地过滤，避免对服务端结果再次筛选。
+### 异步建议
 
 <demo src="./__demos__/remote.vue"></demo>
 
-## 自定义字段与内容
-
-对象字段名不一致时通过 `field-names` 映射 `value`、`label` 和 `disabled`。`option` 插槽收到归一化后的 `data`，原始对象保存在 `data.raw` 中。
+### 自定义字段与内容
 
 <demo src="./__demos__/footer.vue"></demo>
 
-## 尺寸与状态
+### 虚拟列表
 
-尺寸与 Input 保持一致，支持 `xs`、`sm`、`md`、`lg` 和 `xl`。
+<demo src="./__demos__/virtual-list.vue"></demo>
+
+### 五档尺寸
 
 <demo src="./__demos__/size.vue"></demo>
 
-`readonly` 允许复制但不允许编辑或打开候选；`disabled` 表示控件不参与当前流程。开启 `clearable` 后，仅在可编辑且有值时显示清除按钮。
+### 禁用与只读
 
 <demo src="./__demos__/state.vue"></demo>
 
-## 事件语义
+### 外观与浮动提示
 
-键盘输入的固定顺序为 `update:modelValue → input → search`；选项选择的固定顺序为 `update:modelValue → select → change`；清除只触发 `update:modelValue → clear`。如果选择值与当前值相同，仍触发 `select`，但不会重复触发更新或 `change`。
+<demo src="./__demos__/decorator.vue"></demo>
 
-| 交互 | 事件 |
-| --- | --- |
-| 键盘编辑 | `update:modelValue`, `input(value, ev)`, `search(value, ev)` |
-| 选择候选 | `update:modelValue`, `select(value, option, ev)`, `change(value, ev)` |
-| 失焦或 Enter 提交 | 值有变化时触发 `change(value, ev)` |
-| 清除 | `update:modelValue`, `clear(ev)` |
-
-## 键盘与无障碍
-
-输入元素使用 combobox 语义并关联 listbox。方向键移动活动候选，Enter 选择，Escape 关闭；Tab 保留浏览器原生焦点导航，不会被组件拦截。没有可见标签时，通过 `input-attrs` 提供 `aria-label`。
+### 键盘与无障碍
 
 <demo src="./__demos__/accessibility.vue"></demo>
 
 ## API
 
-### AutoComplete Props
+### Props
 
-| 参数名                    | 描述                                       | 类型                                                            | 默认值  |
-| ------------------------- | ------------------------------------------ | --------------------------------------------------------------- | :-----: |
-| model-value **(v-model)** | 绑定值                                     | `string`                                                        |   `-`   |
-| default-value             | 默认值（非受控模式）                       | `string`                                                        |  `''`   |
-| disabled                  | 是否禁用                                   | `boolean`                                                       | `false` |
-| options                   | 用于自动提示的数据                         | `(string \| number \| SelectOptionData \| SelectOptionGroup)[]` |  `[]`   |
-| field-names               | 自定义对象字段名                           | `AutoCompleteFieldNames`                                        |   `-`   |
-| popup-container           | 弹出框的挂载容器                           | `string \| HTMLElement \| false`                                |   `-`   |
-| strict                    | 是否为严格校验模式                         | `boolean`                                                       | `false` |
-| filter-option             | 自定义选项过滤方法                         | `FilterOption`                                                  | `true`  |
-| should-open               | 是否允许展开；不负责逐项过滤               | `(inputValue: string) => boolean`                                | 输入非空 |
-| trigger-props             | trigger 组件属性                           | `TriggerProps`                                                  |   `-`   |
-| variant                   | 输入框外观                                 | `'filled' \| 'outline' \| 'standard'`                           | `'filled'` |
-| size                      | 输入框尺寸                                 | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`                          |  `'md'`  |
-| clearable                 | 是否允许清空输入框                         | `boolean`                                                       | `false` |
-| readonly                  | 是否只读                                   | `boolean`                                                       | `false` |
-| error                     | 是否展示错误状态                           | `boolean`                                                       | `false` |
-| placeholder               | 占位提示文字                               | `string`                                                        |   `-`   |
-| max-length                | 最大长度；规则与 Input 一致                | `number \| object`                                              |   `0`   |
-| show-word-limit           | 是否显示字数统计                           | `boolean`                                                       | `false` |
-| word-length               | 自定义长度计算                             | `(value: string) => number`                                     |   `-`   |
-| word-slice                | 自定义截取方法                             | `(value: string, maxLength: number) => string`                  |   `-`   |
-| input-attrs               | 内部 input 的原生属性                      | `Record<string, unknown>`                                       |   `-`   |
-| virtual-list-props        | 传递虚拟列表属性，传入此参数以开启虚拟滚动 | `VirtualListProps`                                              |  `'-'`  |
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| `model-value` | 受控文本值 | `string` | `—` |
+| `default-value` | 非受控初始文本 | `string` | `''` |
+| `options` | 候选；支持分组，value 唯一，选择后转为字符串 | `(AutoCompleteOption \| SelectOptionGroup)[]` | `[]` |
+| `field-names` | 映射 value、label、disabled 等字段 | `AutoCompleteFieldNames` | `—` |
+| `should-open` | 允许展开的条件，不负责过滤候选 | `(value: string) => boolean` | `value.length > 0` |
+| `filter-option` | 按标签过滤；false 用于远程筛选 | `AutoCompleteFilterOption` | `true` |
+| `strict` | 内置过滤是否区分大小写 | `boolean` | `false` |
+| `popup-container` | 弹层挂载容器，与 Trigger 一致 | `PopupContainer` | `—` |
+| `trigger-props` | 弹层配置；不能覆盖内部 open / disabled / 容器优先级 | `TriggerProps` | `—` |
+| `virtual-list-props` | 传入后启用虚拟列表 | `VirtualListProps` | `—` |
+| `size` | 五档尺寸；未设置时继承 Group / Form / 全局配置 | `xs \| sm \| md \| lg \| xl` | `md` |
+| `variant` | 输入外观；未设置时继承 Group | `filled \| outline \| standard` | `outline` |
+| `disabled` | 禁用；未设置时继承，显式 false 覆盖 | `boolean` | `undefined` |
+| `readonly` | 只读，可聚焦复制，不展开候选 | `boolean` | `undefined` |
+| `error` | 错误状态；未设置时继承 FormItem | `boolean` | `undefined` |
+| `clearable` | 允许清除可编辑的非空值 | `boolean` | `false` |
+| `placeholder` | 占位文字或浮动提示内容 | `string` | `—` |
+| `hint` | 启用 Input 的浮动提示 | `boolean` | `undefined` |
+| `line` | 显示边框或底线 | `boolean` | `true` |
+| `text-color` | 实例文字颜色 | `string` | `—` |
+| `focus-color` | 实例聚焦颜色 | `string` | `—` |
+| `blur-color` | 实例失焦提示颜色 | `string` | `—` |
+| `enterkeyhint` | 移动虚拟键盘回车提示 | `InputHTMLAttributes['enterKeyHint']` | `—` |
+| `aria-label` | 输入框可访问名称 | `string` | `—` |
+| `max-length` | 输入与候选选择使用相同的截断规则 | `number \| { length: number; errorOnly?: boolean }` | `0` |
+| `show-word-limit` | 显示字数统计 | `boolean` | `false` |
+| `word-length` | 自定义长度计算 | `(value: string) => number` | `—` |
+| `word-slice` | 自定义截断 | `(value: string, maxLength: number) => string` | `—` |
+| `input-attrs` | 原生 input 属性，combobox 状态由组件维护 | `Record<string, unknown>` | `—` |
 
-展开条件与过滤条件相互独立：`filter-option=true` 按标签（缺省时按 value）忽略大小写匹配，`strict=true` 时区分大小写；传入函数可自定义过滤，输入为空时保留全部候选。`filter-option=false` 适合服务端筛选。没有候选或禁用时不会展开，`triggerProps.open` 不得绕过这些条件。若需要输入为空时也展示候选，设置 `:should-open="() => true"`。
+### Events
 
-### `<AutoComplete>` Events
-
-| 事件名 | 描述 | 参数 |
-| --- | --- | --- |
-| input | 用户实时输入时触发 | `value: string, ev: Event` |
-| search | 用户实时输入、需要刷新建议时触发 | `value: string, ev: Event` |
-| change | 编辑提交或选择新值时触发，同值去重 | `value: string, ev: Event` |
-| select | 选择候选时触发 | `value: string, option: AutoCompleteOptionInfo, ev: Event` |
-| clear | 清除时触发 | `ev: Event` |
-| focus / blur | 输入框获得或失去焦点时触发 | `ev: FocusEvent` |
-| dropdown-scroll | 候选弹层滚动时触发 | `ev: Event` |
-| dropdown-reach-bottom | 候选弹层滚动到底部时触发 | `ev: Event` |
-
-### AutoComplete Slots
-
-| 插槽名 | 描述 | 参数 |
-| --- | --- | --- |
-| option | 自定义候选内容 | `data: AutoCompleteOptionInfo` |
-| footer | 候选弹层底部内容 | `-` |
-| prefix | 输入框前缀 | `-` |
-| suffix | 输入框后缀 | `-` |
-| clear-icon | 自定义清除图标 | 与 Input 一致 |
-
-### AutoComplete Methods
-
-| 方法名 | 描述 |
+| 事件 | 参数 |
 | --- | --- |
-| focus | 使输入框获取焦点 |
-| blur | 使输入框失去焦点 |
+| `update:model-value` | `value: string` |
+| `input / search / change` | `value: string, event: Event` |
+| `select` | `value: string, option: AutoCompleteOptionInfo, event: Event` |
+| `clear` | `event: Event` |
+| `focus / blur` | `event: FocusEvent` |
+| `dropdown-scroll / dropdown-reach-bottom` | `event: Event` |
+
+输入顺序：`update:modelValue → input → search`；选择：`update:modelValue → select → change`；清除：`update:modelValue → clear`。同值选择只发 select。change 表示失焦、Enter 或候选选择产生的提交。Input 负责输入、焦点与清除的 Form 通知，AutoComplete 仅对候选提交通知一次。选择也遵守 maxLength；select 的 value 是最终提交字符串，option.value 保留原始候选。clear 参数为事件，不再是字符串。
+
+### Slots
+
+| 插槽 | 说明 |
+| --- | --- |
+| `option` | `{ data: AutoCompleteOptionInfo }` |
+| `footer` | 菜单底部 |
+| `prefix / suffix` | 输入框前后缀 |
+| `clear-icon` | `{ clear }` |
+
+### Methods
+
+`focus()` / `blur()`
+
+label 使用文本；复杂候选通过 option 插槽或选项 render 实现，不保留旧的函数/VNode label 写法。方向键浏览、Enter 选择、Escape 关闭，Tab 保留原生焦点导航。使用 Vue useId 保证 SSR 标识稳定。
 
 ## 类型定义
 
 ```ts
-import type {
-  AutoCompleteFieldNames,
-  AutoCompleteFilterOption,
-  AutoCompleteOption,
-  AutoCompleteOptionData,
-  AutoCompleteOptionInfo,
-  AutoCompleteProps,
-} from '@cedarjs/ui'
+import type { AutoCompleteProps, AutoCompleteInstance, AutoCompleteOption, AutoCompleteOptionData,
+  AutoCompleteOptionInfo, AutoCompleteFieldNames, AutoCompleteFilterOption } from '@cedarjs/ui'
 ```
+
+## 样式变量
+
+| Token | 默认值 |
+| --- | --- |
+| `--c-auto-complete-popup-max-height` | `200px` |
+| `--c-auto-complete-popup-bg` | `var(--c-sys-color-surface-overlay)` |
+| `--c-auto-complete-popup-border-radius` | `var(--c-sys-radius-md)` |
+| `--c-auto-complete-popup-padding-vertical` | `var(--c-sys-space-2)` |
+| `--c-auto-complete-popup-font-size` | `var(--c-sys-font-size-md)` |
+| `--c-auto-complete-popup-border-color` | `var(--c-sys-color-border-default)` |
+| `--c-auto-complete-popup-box-shadow` | `0 4px 10px rgba(0, 0, 0, 0.1)` |
+| `--c-auto-complete-option-height` | `36px` |
+| `--c-auto-complete-option-font-weight-selected` | `var(--c-sys-font-weight-medium)` |
+| `--c-auto-complete-option-padding-horizontal` | `var(--c-sys-space-5)` |
+| `--c-auto-complete-option-bg-default` | `var(--c-sys-color-surface-overlay)` |
+| `--c-auto-complete-option-bg-hover` | `var(--c-sys-color-state-hover)` |
+| `--c-auto-complete-option-bg-selected` | `var(--c-sys-color-surface-overlay)` |
+| `--c-auto-complete-option-bg-disabled` | `var(--c-sys-color-surface-overlay)` |
+| `--c-auto-complete-option-text-color-default` | `var(--c-sys-color-content-primary)` |
+| `--c-auto-complete-option-text-color-hover` | `var(--c-sys-color-content-primary)` |
+| `--c-auto-complete-option-text-color-selected` | `var(--c-sys-color-content-primary)` |
+| `--c-auto-complete-option-text-color-disabled` | `var(--c-sys-color-content-disabled)` |

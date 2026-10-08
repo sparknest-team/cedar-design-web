@@ -1,0 +1,12 @@
+- [x] Add independent SelectionField SFC/props/styles and direct FieldDecorator composition.
+- [x] Migrate Cedar Select off SelectView; preserve search, tags, option formatting, feedback and popup behavior.
+- [x] Migrate Maple menu/picker/list field rendering and value-based tag removal.
+- [x] Add paired field contracts and Select integration tests.
+- [x] Add duplicate-label demos and document exact partial progress.
+- [x] Migrate Cascader and TreeSelect, remove SelectView/InputLabel and obsolete date input shells.
+- [x] Introduce date/time single/range PickerField with an independently copied draft/commit/cancel protocol.
+- [x] Move Cedar popup/Form ownership into TemporalField; date/time Picker components render panels only.
+- [x] Remove hideTrigger from date/time Picker APIs and migrate custom-trigger demos to fields.
+- [x] Add paired contracts, Cascader identity regressions and a bilingual four-field demo.
+- [x] Coordinate range input/panel active endpoints using instance-local context in both libraries.
+- [x] Keep range focus and text drafts intact across internal focus moves; test cancellation, disabled ends and instance isolation.

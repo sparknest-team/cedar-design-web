@@ -8,7 +8,7 @@ const mount = (...args: any[]) => {
 }
 import { mount as mountComponent } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
-import Overlay from "../Overlay.vue";
+import Overlay from "../overlay.vue";
 import { overlayProps } from "../props";
 
 describe("Overlay", () => {
@@ -24,6 +24,7 @@ describe("Overlay", () => {
     });
     await wrapper.get(".c-overlay__content").trigger("click");
     expect(wrapper.emitted("update:open")).toBeUndefined();
+    await wrapper.get(".c-overlay__backdrop").trigger("pointerdown");
     await wrapper.get(".c-overlay__backdrop").trigger("click");
     expect(wrapper.emitted("click")?.[0]?.[0]).toBeInstanceOf(MouseEvent);
     expect(wrapper.emitted("update:open")?.at(-1)).toEqual([false]);
@@ -39,6 +40,7 @@ describe("Overlay", () => {
         "onUpdate:open": onUpdateOpen,
       },
     });
+    await wrapper.get(".c-overlay__backdrop").trigger("pointerdown");
     await wrapper.get(".c-overlay__backdrop").trigger("click");
     expect(onUpdateOpen).not.toHaveBeenCalled();
   });
@@ -54,6 +56,7 @@ describe("Overlay", () => {
     });
 
     expect(wrapper.emitted("open")).toHaveLength(1);
+    await wrapper.get(".c-overlay__backdrop").trigger("pointerdown");
     await wrapper.get(".c-overlay__backdrop").trigger("click");
     await wrapper.vm.$nextTick();
     expect(wrapper.emitted("close")).toHaveLength(1);

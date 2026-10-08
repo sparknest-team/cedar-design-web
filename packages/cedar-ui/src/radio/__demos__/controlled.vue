@@ -3,7 +3,7 @@
     <c-radio v-model="checked1">v-model</c-radio>
     <c-radio :model-value="true">binding "true"</c-radio>
     <c-radio :model-value="checked2">binding value2</c-radio>
-    <c-radio :default-checked="true">uncontrolled state</c-radio>
+    <c-radio :default-value="true">uncontrolled state</c-radio>
   </c-space>
   <div :style="{ marginTop: '20px' }">
     <c-space size="lg">

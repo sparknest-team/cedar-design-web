@@ -1,19 +1,55 @@
-import type { ExtractPropTypes, PropType } from 'vue'
-import type { MessageType } from '../_utils/constant'
-import { MESSAGE_TYPES } from '../_utils/constant'
-
-export const messageTypes = ['info', 'success', 'warning', 'danger', 'loading', 'default'] as const
-export type MessageStatus = (typeof messageTypes)[number]
+import type { PropType } from "vue";
+import { popupContainerProp } from "../_utils/popup-container";
+import {
+  messageVariants,
+  type MessageVariant,
+  messagePositions,
+  messageStatuses,
+  type MessageContent,
+  type MessagePosition,
+  type MessageStatus,
+} from "./types";
 
 export const messageProps = {
-  status: { type: String as PropType<MessageStatus>, default: 'info', validator: (value: MessageStatus) => messageTypes.includes(value) },
-  closable: Boolean,
+  /** 视觉强调层级，与语义状态独立 */
+  variant: {
+    type: String as PropType<MessageVariant>,
+    default: "neutral",
+    validator: (value: MessageVariant) => messageVariants.includes(value),
+  },
+  status: {
+    type: String as PropType<MessageStatus>,
+    default: "default",
+    validator: (value: MessageStatus) => messageStatuses.includes(value),
+  },
+  position: {
+    type: String as PropType<MessagePosition>,
+    default: "top",
+    validator: (value: MessagePosition) => messagePositions.includes(value),
+  },
+  content: [
+    String,
+    Number,
+    Object,
+    Array,
+    Function,
+  ] as PropType<MessageContent>,
+  icon: [String, Number, Object, Array, Function] as PropType<MessageContent>,
+  action: [String, Number, Object, Array, Function] as PropType<MessageContent>,
+  duration: {
+    type: Number,
+    default: 3000,
+    validator: (value: number) => value >= 0,
+  },
+  open: Boolean,
   showIcon: { type: Boolean, default: true },
-  duration: { type: Number, default: 3000, validator: (value: number) => value >= 0 },
+  closable: Boolean,
+  pauseOnHover: Boolean,
   resetOnUpdate: Boolean,
-  resetOnHover: Boolean,
-  closeButtonAriaLabel: { type: String, default: 'Close message' },
-} 
+  closeButtonAriaLabel: { type: String, default: "Close message" },
+  popupContainer: popupContainerProp,
+};
 
-export type MessageProps = import("vue").ExtractPublicPropTypes<typeof messageProps>
-export type { MessageType }
+export type MessageProps = import("vue").ExtractPublicPropTypes<
+  typeof messageProps
+>;

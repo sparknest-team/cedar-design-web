@@ -1,4 +1,4 @@
-import "../../style/index.less";
-import "../../input/style";
-import "../../select/style";
-import "./index.less";
+import '../../style/index.less'
+import '../../input/style'
+import '../../select/style'
+import './index.less'

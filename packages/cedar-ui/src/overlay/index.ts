@@ -1,5 +1,5 @@
 import { withInstall } from "../_utils/global-config";
-import _Overlay from "./Overlay.vue";
+import _Overlay from "./overlay.vue";
 import { overlayProps } from "./props";
 
 const Overlay = withInstall(_Overlay);

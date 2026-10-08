@@ -1,5 +1,3 @@
-@import "../../style/theme/index.less";
-
 /******** Notification CSS Variables *******/
 :root {
   --c-notification-wrapper-margin-top: var(~"--c-spacing-8");
@@ -27,41 +25,41 @@
   --c-notification-border-width: 1px;
   --c-notification-border-style: solid;
 
-  --c-notification-close-icon-color: var(~"--c-color-text-1");
+  --c-notification-close-icon-color: var(--c-sys-color-content-secondary);
   --c-notification-close-icon-font-size: 12px;
   --c-notification-close-icon-top: var(~"--c-spacing-6");
   --c-notification-close-icon-right: var(~"--c-spacing-6");
   --c-notification-close-icon-hover-size: 20px;
 
-  --c-notification-normal-bg: var(~"--c-color-bg-popup");
-  --c-notification-normal-icon-color: var(~"--c-color-text-1");
-  --c-notification-normal-title-color: var(~"--c-color-text-1");
-  --c-notification-normal-content-color: var(~"--c-color-text-1");
-  --c-notification-normal-border-color: var(~"--c-color-neutral-3");
+  --c-notification-normal-bg: var(--c-sys-color-surface-overlay);
+  --c-notification-normal-icon-color: var(--c-sys-color-content-primary);
+  --c-notification-normal-title-color: var(--c-sys-color-content-primary);
+  --c-notification-normal-content-color: var(--c-sys-color-content-primary);
+  --c-notification-normal-border-color: var(--c-sys-color-border-default);
 
-  --c-notification-info-bg: var(~"--c-color-bg-popup");
-  --c-notification-info-icon-color: rgb(var(~"--c-primary-6"));
-  --c-notification-info-title-color: var(~"--c-color-text-1");
-  --c-notification-info-content-color: var(~"--c-color-text-1");
-  --c-notification-info-border-color: var(~"--c-color-neutral-3");
+  --c-notification-info-bg: var(--c-sys-color-surface-overlay);
+  --c-notification-info-icon-color: var(--c-sys-color-content-info);
+  --c-notification-info-title-color: var(--c-sys-color-content-primary);
+  --c-notification-info-content-color: var(--c-sys-color-content-primary);
+  --c-notification-info-border-color: var(--c-sys-color-border-default);
 
-  --c-notification-success-bg: var(~"--c-color-bg-popup");
-  --c-notification-success-icon-color: rgb(var(~"--c-success-6"));
-  --c-notification-success-title-color: var(~"--c-color-text-1");
-  --c-notification-success-content-color: var(~"--c-color-text-1");
-  --c-notification-success-border-color: var(~"--c-color-neutral-3");
+  --c-notification-success-bg: var(--c-sys-color-surface-overlay);
+  --c-notification-success-icon-color: var(--c-sys-color-content-success);
+  --c-notification-success-title-color: var(--c-sys-color-content-primary);
+  --c-notification-success-content-color: var(--c-sys-color-content-primary);
+  --c-notification-success-border-color: var(--c-sys-color-border-default);
 
-  --c-notification-warning-bg: var(~"--c-color-bg-popup");
-  --c-notification-warning-icon-color: rgb(var(~"--c-warning-6"));
-  --c-notification-warning-title-color: var(~"--c-color-text-1");
-  --c-notification-warning-content-color: var(~"--c-color-text-1");
-  --c-notification-warning-border-color: var(~"--c-color-neutral-3");
+  --c-notification-warning-bg: var(--c-sys-color-surface-overlay);
+  --c-notification-warning-icon-color: var(--c-sys-color-content-warning);
+  --c-notification-warning-title-color: var(--c-sys-color-content-primary);
+  --c-notification-warning-content-color: var(--c-sys-color-content-primary);
+  --c-notification-warning-border-color: var(--c-sys-color-border-default);
 
-  --c-notification-error-bg: var(~"--c-color-bg-popup");
-  --c-notification-error-icon-color: rgb(var(~"--c-danger-6"));
-  --c-notification-error-title-color: var(~"--c-color-text-1");
-  --c-notification-error-content-color: var(~"--c-color-text-1");
-  --c-notification-error-border-color: var(~"--c-color-neutral-3");
+  --c-notification-error-bg: var(--c-sys-color-surface-overlay);
+  --c-notification-error-icon-color: var(--c-sys-color-content-danger);
+  --c-notification-error-title-color: var(--c-sys-color-content-primary);
+  --c-notification-error-content-color: var(--c-sys-color-content-primary);
+  --c-notification-error-border-color: var(--c-sys-color-border-default);
 
   --c-notification-transition-duration: var(~"--c-transition-duration-2");
   --c-notification-transition-duration-enter: var(~"--c-transition-duration-4");

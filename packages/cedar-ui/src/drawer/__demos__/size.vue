@@ -4,21 +4,21 @@
     <c-button status="primary" @click="handleClickMedium">md Drawer</c-button>
     <c-button status="primary" @click="handleClickLarge">lg Drawer</c-button>
   </c-space>
-  <c-drawer size="sm" :open="visibleSmall" @confirm="handleConfirm" @cancel="handleCancel" unmountOnClose>
+  <c-drawer v-model:open="visibleSmall" :width="280" @confirm="handleConfirm" @cancel="handleCancel" unmount-on-close>
     <template #title>Title</template>
     <div>
       You can customize modal body text by the current situation. This modal will be closed immediately once you press
       the OK button.
     </div>
   </c-drawer>
-  <c-drawer size="md" :open="visibleMedium" @confirm="handleConfirm" @cancel="handleCancel" unmountOnClose>
+  <c-drawer v-model:open="visibleMedium" :width="420" @confirm="handleConfirm" @cancel="handleCancel" unmount-on-close>
     <template #title>Title</template>
     <div>
       You can customize modal body text by the current situation. This modal will be closed immediately once you press
       the OK button.
     </div>
   </c-drawer>
-  <c-drawer size="lg" :open="visibleLarge" @confirm="handleConfirm" @cancel="handleCancel" unmountOnClose>
+  <c-drawer v-model:open="visibleLarge" :width="640" @confirm="handleConfirm" @cancel="handleCancel" unmount-on-close>
     <template #title>Title</template>
     <div>
       You can customize modal body text by the current situation. This modal will be closed immediately once you press

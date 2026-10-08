@@ -55,7 +55,7 @@ export default defineComponent({
       required: true,
     },
     onModeChange: {
-      type: Function as PropType<(value: any, ev: Event) => void>,
+      type: Function as PropType<(value: any, ev?: Event) => void>,
       required: true,
     },
     headerValueFormat: {

@@ -67,6 +67,7 @@
   // ===== type × variant 颜色组合 =====
 
   .alert-standard(@type) {
+    color: var(~'--c-alert-standard-@{type}-content');
     background-color: var(~'--c-alert-standard-@{type}-bg');
     border-color: var(~'--c-alert-standard-@{type}-border');
 
@@ -82,6 +83,7 @@
   }
 
   .alert-tonal(@type) {
+    color: var(~'--c-alert-tonal-@{type}-content');
     background-color: var(~'--c-alert-tonal-@{type}-bg');
     border-color: transparent;
 
@@ -97,6 +99,7 @@
   }
 
   .alert-outline(@type) {
+    color: var(~'--c-alert-outline-@{type}-content');
     background-color: transparent;
     border-color: var(~'--c-alert-outline-@{type}-border');
 
@@ -131,8 +134,12 @@
 }
 
 .c-alert-leave-leave-active {
-  transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease, margin 0.3s ease;
+  transition: max-height var(--c-alert-close-duration) var(--c-sys-motion-easing-standard), opacity var(--c-alert-close-duration) var(--c-sys-motion-easing-standard), padding var(--c-alert-close-duration) var(--c-sys-motion-easing-standard), margin var(--c-alert-close-duration) var(--c-sys-motion-easing-standard);
   overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c-alert-leave-leave-active { transition: none; }
 }
 .c-alert-leave-leave-to {
   max-height: 0 !important;

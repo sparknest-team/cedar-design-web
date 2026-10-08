@@ -6,7 +6,7 @@ import { getValueData } from './utils'
 import Tag from '../tag'
 import IconHover from '../_components/IconHover.vue'
 import { IconClose } from '@cedarjs/icons-vue/icon-close'
-import { InputTagFieldNames, TagData } from './types'
+import { InputTagFieldNames, TagData, TagDataInfo } from './types'
 import { omit } from '../_utils/omit'
 import pick from '../_utils/pick'
 import ResizeObserver from '../_components/resize-observer'
@@ -230,13 +230,19 @@ export default defineComponent({
       eventHandlers.value?.onChange?.(ev)
     }
 
+    const isTagClosable = (item: TagDataInfo) =>
+      !mergedDisabled.value && !props.readonly && !item.tagProps?.loading &&
+      Boolean(item.tagProps?.closable ?? item.closable)
+
     const handleRemove = (value: string | number, index: number, e: Event) => {
+      if (!valueData.value[index] || !isTagClosable(valueData.value[index])) return
       const newValue = computedValue.value?.filter((_, i) => i !== index)
       updateValue(newValue, e)
       emit('remove', value, e)
     }
 
     const handleClear = (e: MouseEvent) => {
+      if (mergedDisabled.value || props.readonly) return
       const newValue: any[] = []
       updateValue(newValue, e)
       emit('clear', e)
@@ -279,7 +285,7 @@ export default defineComponent({
 
     const getLastClosableIndex = () => {
       for (let i = valueData.value.length - 1; i >= 0; i--) {
-        if (valueData.value[i].closable) {
+        if (isTagClosable(valueData.value[i])) {
           return i
         }
       }
@@ -397,10 +403,11 @@ export default defineComponent({
                   <Tag
                     key={`tag-${item.value}`}
                     class={classes(n('tag'))}
-                    closable={!mergedDisabled.value && !props.readonly && item.closable}
                     show
                     nowrap={props.tagNowrap}
                     {...item.tagProps}
+                    closable={isTagClosable(item)}
+                    checkable={!mergedDisabled.value && !props.readonly && item.tagProps?.checkable}
                     onClose={(ev: MouseEvent) => handleRemove(item.value, index, ev)}
                   >
                     {slots.tag?.({ data: item.raw }) ?? props.formatTag?.(item.raw) ?? item.label}

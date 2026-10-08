@@ -140,3 +140,11 @@ SplitButton 已封装按钮与下拉命令菜单的组合，并通过 `MenuOptio
 实例提供 `open()`、`close()`、`resize()`、`setReference(reference?)`。根菜单支持上下键、Home/End、Enter；子菜单通过右键进入、左键或 Escape 返回，Escape 每次只关闭最上层并恢复焦点。
 
 样式类、CSS 变量与内部 DOM 标记统一使用 `c-dropdown-menu-*` / `--c-dropdown-menu-*` / `data-dropdown-menu-*`，不保留 `c-menu-*` 兼容名。
+
+### 状态与时长变量
+
+禁用优先于选中、指针 hover 和键盘 active。选中后的 hover 使用独立角色，默认继承选中背景；可单独覆盖以增加 hover 反馈。Maple 保留半透明选中遮层。
+
+| Token | Default |
+| --- | --- |
+| `--c-dropdown-menu-option-bg-selected-hover` | `var(--c-dropdown-menu-option-bg-selected)` |

@@ -1,55 +1,42 @@
+import { radioVariantProp } from './variant'
+import { radioValueProps } from '../checkbox/choice-value-props'
 import type { ExtractPropTypes, PropType } from "vue";
 import { componentSizes } from "../_utils/constant";
 import type { ComponentSize, Direction } from "../_utils/constant";
-import { RADIO_VARIANTS } from "./context";
-import type { RadioVariant } from "./context";
-import type { RadioOption } from "./types";
+import { choiceOptionsProps, radioGroupValueProps } from '../checkbox/choice-group-props'
 
-export type RadioValue = string | number | boolean;
+export type RadioValue = import('../checkbox/choice-value-props').ChoiceValue;
 
 export const radioProps = {
-  modelValue: {
-    type: [String, Number, Boolean] as PropType<RadioValue>,
-    default: undefined,
-  },
-  defaultChecked: { type: Boolean, default: false },
-  value: {
-    type: [String, Number, Boolean] as PropType<RadioValue>,
-    default: true,
-  },
-  variant: {
-    type: String as PropType<RadioVariant>,
-    default: "radio",
-    validator: (value: unknown): value is RadioVariant =>
-      RADIO_VARIANTS.includes(value as RadioVariant),
-  },
-  disabled: { type: Boolean, default: false },
-  error: { type: Boolean, default: false },
+  ...radioValueProps,
+  variant: radioVariantProp,
+  /** 是否禁用；未设置时继承表单 */
+  disabled: { type: Boolean, default: undefined },
+  /** 是否只读；未设置时继承表单 */
+  readonly: { type: Boolean, default: undefined },
+  error: { type: Boolean, default: undefined },
   uninjectGroupContext: { type: Boolean, default: false },
 };
 
 export const radioGroupProps = {
-  modelValue: {
-    type: [String, Number, Boolean] as PropType<RadioValue>,
-    default: undefined,
-  },
-  defaultValue: {
-    type: [String, Number, Boolean] as PropType<RadioValue>,
-    default: "",
-  },
+  ariaLabel: { type: String, default: '' },
+  ...radioGroupValueProps,
+  ...choiceOptionsProps,
   variant: radioProps.variant,
   size: {
     type: String as PropType<ComponentSize>,
     validator: (value: unknown): value is ComponentSize =>
       componentSizes.includes(value as ComponentSize),
   },
-  options: Array as PropType<Array<RadioValue | RadioOption>>,
   direction: {
     type: String as PropType<Direction>,
     default: "horizontal",
   },
-  disabled: { type: Boolean, default: false },
-  error: { type: Boolean, default: false },
+  /** 是否禁用；未设置时继承表单 */
+  disabled: { type: Boolean, default: undefined },
+  /** 是否只读；未设置时继承表单 */
+  readonly: { type: Boolean, default: undefined },
+  error: { type: Boolean, default: undefined },
 };
 
 export type RadioProps = import("vue").ExtractPublicPropTypes<
@@ -58,3 +45,10 @@ export type RadioProps = import("vue").ExtractPublicPropTypes<
 export type RadioGroupProps = import("vue").ExtractPublicPropTypes<
   typeof radioGroupProps
 >;
+
+export interface RadioMethods {
+  select(): void
+  focus(options?: FocusOptions): void
+  blur(): void
+}
+export type { RadioModel } from '../checkbox/choice-value-props'

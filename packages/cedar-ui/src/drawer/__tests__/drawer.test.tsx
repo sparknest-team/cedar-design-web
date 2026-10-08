@@ -8,7 +8,7 @@ const mount = (...args: any[]) => {
 }
 import { nextTick } from 'vue'
 import { mount as mountComponent } from '@vue/test-utils'
-import { describe, test, expect } from 'vitest'
+import { describe, test, expect, vi } from 'vitest'
 import { Drawer, drawerProps } from '../index'
 
 describe('Drawer', () => {
@@ -18,8 +18,14 @@ describe('Drawer', () => {
     const dialog = wrapper.get('[role="dialog"]')
     expect(Drawer.name).toBe('CDrawer')
     expect(drawerProps.closeButtonAriaLabel.default).toBe('Close drawer')
-    expect(drawerProps.beforeConfirm).toBeTruthy()
-    expect(drawerProps.beforeCancel).toBeTruthy()
+    expect(drawerProps.beforeClose).toBeTruthy()
+    expect(drawerProps).not.toHaveProperty('beforeConfirm')
+    expect(drawerProps).not.toHaveProperty('beforeCancel')
+    expect(drawerProps).toHaveProperty('lockScroll')
+    expect(drawerProps).toHaveProperty('zIndex')
+    expect(drawerProps).toHaveProperty('drawerClass')
+    expect(drawerProps).toHaveProperty('cancelButtonText')
+    expect(drawerProps).not.toHaveProperty('cancelText')
     expect(drawerProps.cancelButton.default).toBe(true)
     expect(drawerProps).toHaveProperty('overlay')
     expect(drawerProps).toHaveProperty('overlayClosable')
@@ -29,5 +35,25 @@ describe('Drawer', () => {
     expect(dialog.attributes('aria-label')).toBe('Settings')
     expect(wrapper.get('button[aria-label="Close drawer"]')).toBeTruthy()
     expect(wrapper.html()).toMatchSnapshot()
+  })
+
+  test('beforeClose receives close action and commits once', async () => {
+    let done: (() => void) | undefined
+    const beforeClose = vi.fn((_action, callback) => { done = callback })
+    const wrapper = mount(Drawer, {
+      props: { defaultOpen: true, popupContainer: false, beforeClose },
+    })
+    await nextTick()
+
+    await wrapper.get('button[aria-label="Close drawer"]').trigger('click')
+    expect(beforeClose).toHaveBeenCalledWith('close', expect.any(Function), expect.objectContaining({
+      confirmButtonLoading: expect.any(Object),
+      cancelButtonLoading: expect.any(Object),
+    }))
+    expect(wrapper.emitted('update:open')).toBeUndefined()
+
+    done?.()
+    done?.()
+    expect(wrapper.emitted('update:open')).toEqual([[false]])
   })
 })

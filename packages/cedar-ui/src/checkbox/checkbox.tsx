@@ -1,16 +1,17 @@
+import { useChoiceRegistration } from './use-checkbox-group-methods'
+import { useChoiceKeyboard } from '../checkbox/use-choice-keyboard';
+import { useCheckboxControl } from '../checkbox/use-choice-control';
 import {
   computed,
   defineComponent,
   inject,
   nextTick,
   ref,
-  toRefs,
   watch,
 } from "vue";
 import { getPrefixCls, createNamespace } from "../_utils/global-config";
 import IconHover from "../_components/IconHover.vue";
 import Check from "./icon-check";
-import { isArray, isNull, isUndefined } from "../_utils/is";
 import { checkboxGroupKey } from "./context";
 import { useFormItem } from "../_hooks/use-form-item";
 import { checkboxProps } from "./props";
@@ -25,6 +26,8 @@ export default defineComponent({
   },
   props: checkboxProps,
   emits: {
+    focus: (event: FocusEvent) => true,
+    blur: (event: FocusEvent) => true,
     "update:modelValue": (value: boolean | (string | number | boolean)[]) =>
       true,
     /**
@@ -33,7 +36,7 @@ export default defineComponent({
      * @param { boolean | (string | number | boolean)[] } value
      * @param {Event} ev
      */
-    change: (value: boolean | (string | number | boolean)[], ev: Event) => true,
+    change: (value: boolean | (string | number | boolean)[], ev?: Event) => true,
   },
   /**
    * @zh 自定义复选框
@@ -43,71 +46,67 @@ export default defineComponent({
    * @binding {boolean} disabled
    * @version 2.18.0
    */
-  setup(props, { emit, slots }) {
-    const { disabled, error, modelValue } = toRefs(props);
+  setup(props, { emit, slots, expose }) {
     const prefixCls = getPrefixCls("checkbox");
     const checkboxRef = ref<HTMLInputElement>();
     const checkboxGroupCtx = !props.uninjectGroupContext
       ? inject(checkboxGroupKey, undefined)
       : undefined;
-    const isGroup = Boolean(checkboxGroupCtx);
     const {
       mergedDisabled: _mergedDisabled,
+      mergedReadonly: _mergedReadonly,
       mergedError: _mergedError,
       eventHandlers,
     } = useFormItem({
-      disabled,
-      error,
+      disabled: computed(() => props.disabled ?? checkboxGroupCtx?.disabled),
+      error: computed(() => props.error ?? checkboxGroupCtx?.error),
+      readonly: computed(() => props.readonly ?? checkboxGroupCtx?.readonly),
     });
 
-    const _checked = ref(props.defaultChecked);
-    const computedValue = computed(() =>
-      isGroup
-        ? checkboxGroupCtx?.computedValue
-        : (props.modelValue ?? _checked.value),
-    );
-    const computedChecked = computed<boolean>(() => {
-      return isArray(computedValue.value)
-        ? computedValue.value.includes(props.value ?? true)
-        : Boolean(computedValue.value);
-    });
     const mergedDisabled = computed(
       () =>
         checkboxGroupCtx?.disabled ||
         _mergedDisabled?.value ||
         (!computedChecked.value && checkboxGroupCtx?.isMaxed),
     );
+    const mergedReadonly = computed(() => checkboxGroupCtx?.readonly || _mergedReadonly.value);
     const mergedError = computed(
       () => checkboxGroupCtx?.error || _mergedError.value,
     );
 
+    const { checked: computedChecked, toggle } = useCheckboxControl(
+      props,
+      (value, event) => {
+        emit("update:modelValue", value);
+        emit("change", value, event);
+        eventHandlers.value?.onChange?.(event);
+      },
+      () => Boolean(mergedDisabled.value || mergedReadonly.value),
+      checkboxGroupCtx ? { value: () => checkboxGroupCtx.computedValue, change: checkboxGroupCtx.handleChange } : undefined,
+    );
+    useChoiceRegistration(checkboxGroupCtx?.registerChoice, {
+      value: () => props.value,
+      disabled: () => Boolean(checkboxGroupCtx?.disabled || _mergedDisabled.value),
+      readonly: () => Boolean(mergedReadonly.value),
+      element: () => checkboxRef.value,
+    });
+    expose({
+      toggle,
+      focus: (options?: FocusOptions) => { if (!mergedDisabled.value) checkboxRef.value?.focus(options); },
+      blur: () => checkboxRef.value?.blur(),
+    });
+    const keyboard = useChoiceKeyboard(() => checkboxRef.value?.click(), () => Boolean(mergedDisabled.value || mergedReadonly.value));
     const handleClick = (ev: Event) => {
       ev.stopPropagation();
+      if (mergedDisabled.value || mergedReadonly.value) ev.preventDefault();
     };
 
     const handleChange = (e: Event) => {
-      const { checked } = e.target as HTMLInputElement;
-
-      let newValue: boolean | Array<string | number | boolean> = checked;
-      if (isArray(computedValue.value)) {
-        const set = new Set(computedValue.value);
-        if (checked) {
-          set.add(props.value ?? true);
-        } else {
-          set.delete(props.value ?? true);
-        }
-        newValue = Array.from(set);
+      if (mergedDisabled.value || mergedReadonly.value) {
+        (e.target as HTMLInputElement).checked = computedChecked.value;
+        return;
       }
-
-      _checked.value = checked;
-      if (isGroup && isArray(newValue)) {
-        checkboxGroupCtx?.handleChange(newValue, e);
-      } else {
-        emit("update:modelValue", newValue);
-        emit("change", newValue, e);
-        eventHandlers.value?.onChange?.(e);
-      }
-
+      toggle((e.target as HTMLInputElement).checked, e);
       nextTick(() => {
         if (
           checkboxRef.value &&
@@ -128,57 +127,36 @@ export default defineComponent({
       },
     ]);
 
-    // const handleClick = (ev: MouseEvent) => {
-    //   if (
-    //     !props.disabled &&
-    //     checkboxRef.value &&
-    //     ev.target !== checkboxRef.value
-    //   ) {
-    //     ev.preventDefault();
-    //     checkboxRef.value.click();
-    //   }
-    // };
-
     const handleFocus = (ev: FocusEvent) => {
+      emit('focus', ev);
       eventHandlers.value?.onFocus?.(ev);
     };
 
     const handleBlur = (ev: FocusEvent) => {
+      keyboard.reset();
+      emit('blur', ev);
       eventHandlers.value?.onBlur?.(ev);
     };
 
-    watch(modelValue, (value) => {
-      if (isUndefined(value) || isNull(value)) {
-        _checked.value = false;
-      }
+    watch(computedChecked, (checked) => {
+      if (checkboxRef.value) checkboxRef.value.checked = checked;
     });
-
-    watch(computedValue, (value) => {
-      let checked;
-      if (isArray(value)) {
-        checked = value.includes(props.value ?? true);
-      } else {
-        checked = value;
-      }
-      if (_checked.value !== checked) {
-        _checked.value = checked;
-      }
-      if (checkboxRef.value && checkboxRef.value.checked !== checked) {
-        checkboxRef.value.checked = checked;
-      }
-    });
-
     return () => (
       <label aria-disabled={mergedDisabled.value} class={cls.value}>
         <input
           ref={checkboxRef}
           type="checkbox"
           checked={computedChecked.value}
+          indeterminate={props.indeterminate}
+          aria-checked={props.indeterminate ? "mixed" : computedChecked.value}
           value={props.value}
           class={`${prefixCls}-target`}
           disabled={mergedDisabled.value}
+          aria-readonly={mergedReadonly.value || undefined}
           onClick={handleClick}
           onChange={handleChange}
+          onKeydown={keyboard.keydown}
+          onKeyup={keyboard.keyup}
           onFocus={handleFocus}
           onBlur={handleBlur}
         />

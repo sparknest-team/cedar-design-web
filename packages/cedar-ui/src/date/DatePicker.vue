@@ -1,0 +1,21 @@
+<template>
+  <DatePanel
+    v-bind="$attrs"
+    :options="props"
+    @update:model-value="emit('update:modelValue', $event)"
+    @change="(value, dates, texts) => emit('change', value, dates, texts)"
+    @select="(value, dates, texts) => emit('select', value, dates, texts)"
+    @confirm="(value, dates, texts) => emit('confirm', value, dates, texts)"
+  >
+    <template v-for="(_, name) in $slots" #[name]="scope"><slot :name="name" v-bind="scope || {}" /></template>
+  </DatePanel>
+</template>
+<script setup lang="ts">
+import { createNamespace } from '../_utils/global-config'
+import DatePanel from './DatePanel.vue'
+import { props as pickerProps } from './picker-props'
+
+defineOptions({ name: createNamespace('date-picker').name, inheritAttrs: false })
+const props = defineProps(pickerProps)
+const emit = defineEmits(['update:modelValue', 'change', 'select', 'confirm'])
+</script>

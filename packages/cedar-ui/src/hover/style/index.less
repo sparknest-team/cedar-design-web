@@ -10,8 +10,7 @@
   border-radius: inherit;
   background-color: transparent;
   opacity: 0;
-  // transition: opacity 0.15s;
-  // will-change: opacity;
+  transition: opacity var(--c-hover-transition-duration);
   pointer-events: none;
 
   &--hovering {
@@ -23,4 +22,8 @@
     background-color: currentColor;
     opacity: var(~'--c-hover-overlay-focusing-opacity');
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c-hover-overlay { transition: none; }
 }

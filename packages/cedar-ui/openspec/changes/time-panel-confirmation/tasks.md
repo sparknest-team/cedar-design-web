@@ -1,0 +1,7 @@
+- [x] Specify standalone and nested confirmation ownership.
+- [x] Separate mobile drafts from committed values; validate again on confirm.
+- [x] Add disabled wheel visibility and geometry-preserving clock hiding.
+- [x] Migrate internal field/date consumers and custom-action examples.
+- [x] Add paired-topic demos, API tables, Changesets and regression tests.
+- [x] Validate types, affected tests, demo syntax and source-copy guards.
+- [ ] Follow-up: component body/render-extension consolidation and remaining API audit.

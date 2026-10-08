@@ -1,7 +1,96 @@
-@import "../../style/theme/index.less";
-
 /******** Message CSS Variables *******/
 :root {
+  --c-message-neutral-default-bg: var(--c-sys-color-surface-overlay);
+  --c-message-neutral-default-content-color: var(--c-sys-color-content-primary);
+  --c-message-neutral-default-icon-color: var(--c-sys-color-content-primary);
+  --c-message-neutral-default-border-color: var(--c-sys-color-border-default);
+  --c-message-neutral-default-close-color: var(--c-sys-color-content-secondary);
+  --c-message-neutral-info-bg: var(--c-sys-color-surface-overlay);
+  --c-message-neutral-info-content-color: var(--c-sys-color-content-primary);
+  --c-message-neutral-info-icon-color: var(--c-sys-color-content-info);
+  --c-message-neutral-info-border-color: var(--c-sys-color-border-default);
+  --c-message-neutral-info-close-color: var(--c-sys-color-content-secondary);
+  --c-message-neutral-success-bg: var(--c-sys-color-surface-overlay);
+  --c-message-neutral-success-content-color: var(--c-sys-color-content-primary);
+  --c-message-neutral-success-icon-color: var(--c-sys-color-content-success);
+  --c-message-neutral-success-border-color: var(--c-sys-color-border-default);
+  --c-message-neutral-success-close-color: var(--c-sys-color-content-secondary);
+  --c-message-neutral-warning-bg: var(--c-sys-color-surface-overlay);
+  --c-message-neutral-warning-content-color: var(--c-sys-color-content-primary);
+  --c-message-neutral-warning-icon-color: var(--c-sys-color-content-warning);
+  --c-message-neutral-warning-border-color: var(--c-sys-color-border-default);
+  --c-message-neutral-warning-close-color: var(--c-sys-color-content-secondary);
+  --c-message-neutral-danger-bg: var(--c-sys-color-surface-overlay);
+  --c-message-neutral-danger-content-color: var(--c-sys-color-content-primary);
+  --c-message-neutral-danger-icon-color: var(--c-sys-color-content-danger);
+  --c-message-neutral-danger-border-color: var(--c-sys-color-border-default);
+  --c-message-neutral-danger-close-color: var(--c-sys-color-content-secondary);
+  --c-message-neutral-loading-bg: var(--c-sys-color-surface-overlay);
+  --c-message-neutral-loading-content-color: var(--c-sys-color-content-primary);
+  --c-message-neutral-loading-icon-color: var(--c-sys-color-content-brand);
+  --c-message-neutral-loading-border-color: var(--c-sys-color-border-default);
+  --c-message-neutral-loading-close-color: var(--c-sys-color-content-secondary);
+  --c-message-tonal-default-bg: var(--c-sys-color-surface-muted);
+  --c-message-tonal-default-content-color: var(--c-sys-color-content-primary);
+  --c-message-tonal-default-icon-color: var(--c-sys-color-content-primary);
+  --c-message-tonal-default-border-color: transparent;
+  --c-message-tonal-default-close-color: var(--c-sys-color-content-primary);
+  --c-message-tonal-info-bg: rgba(var(--c-blue-6), 0.12);
+  --c-message-tonal-info-content-color: var(--c-sys-color-content-primary);
+  --c-message-tonal-info-icon-color: var(--c-sys-color-content-info);
+  --c-message-tonal-info-border-color: transparent;
+  --c-message-tonal-info-close-color: var(--c-sys-color-content-primary);
+  --c-message-tonal-success-bg: var(--c-color-success-light-1);
+  --c-message-tonal-success-content-color: var(--c-sys-color-content-primary);
+  --c-message-tonal-success-icon-color: var(--c-sys-color-content-success);
+  --c-message-tonal-success-border-color: transparent;
+  --c-message-tonal-success-close-color: var(--c-sys-color-content-primary);
+  --c-message-tonal-warning-bg: var(--c-color-warning-light-1);
+  --c-message-tonal-warning-content-color: var(--c-sys-color-content-primary);
+  --c-message-tonal-warning-icon-color: var(--c-sys-color-content-warning);
+  --c-message-tonal-warning-border-color: transparent;
+  --c-message-tonal-warning-close-color: var(--c-sys-color-content-primary);
+  --c-message-tonal-danger-bg: var(--c-color-danger-light-1);
+  --c-message-tonal-danger-content-color: var(--c-sys-color-content-primary);
+  --c-message-tonal-danger-icon-color: var(--c-sys-color-content-danger);
+  --c-message-tonal-danger-border-color: transparent;
+  --c-message-tonal-danger-close-color: var(--c-sys-color-content-primary);
+  --c-message-tonal-loading-bg: var(--c-color-primary-light-1);
+  --c-message-tonal-loading-content-color: var(--c-sys-color-content-primary);
+  --c-message-tonal-loading-icon-color: var(--c-sys-color-content-brand);
+  --c-message-tonal-loading-border-color: transparent;
+  --c-message-tonal-loading-close-color: var(--c-sys-color-content-primary);
+  --c-message-solid-default-bg: #333;
+  --c-message-solid-default-content-color: var(--c-sys-color-content-on-dark);
+  --c-message-solid-default-icon-color: var(--c-sys-color-content-on-dark);
+  --c-message-solid-default-border-color: transparent;
+  --c-message-solid-default-close-color: var(--c-sys-color-content-on-dark);
+  --c-message-solid-info-bg: var(--c-sys-color-status-info);
+  --c-message-solid-info-content-color: var(--c-sys-color-content-on-bright);
+  --c-message-solid-info-icon-color: var(--c-sys-color-content-on-bright);
+  --c-message-solid-info-border-color: transparent;
+  --c-message-solid-info-close-color: var(--c-sys-color-content-on-bright);
+  --c-message-solid-success-bg: var(--c-sys-color-status-success);
+  --c-message-solid-success-content-color: var(--c-sys-color-content-on-bright);
+  --c-message-solid-success-icon-color: var(--c-sys-color-content-on-bright);
+  --c-message-solid-success-border-color: transparent;
+  --c-message-solid-success-close-color: var(--c-sys-color-content-on-bright);
+  --c-message-solid-warning-bg: var(--c-sys-color-status-warning);
+  --c-message-solid-warning-content-color: var(--c-sys-color-content-on-bright);
+  --c-message-solid-warning-icon-color: var(--c-sys-color-content-on-bright);
+  --c-message-solid-warning-border-color: transparent;
+  --c-message-solid-warning-close-color: var(--c-sys-color-content-on-bright);
+  --c-message-solid-danger-bg: var(--c-sys-color-status-danger);
+  --c-message-solid-danger-content-color: var(--c-sys-color-content-on-bright);
+  --c-message-solid-danger-icon-color: var(--c-sys-color-content-on-bright);
+  --c-message-solid-danger-border-color: transparent;
+  --c-message-solid-danger-close-color: var(--c-sys-color-content-on-bright);
+  --c-message-solid-loading-bg: #333;
+  --c-message-solid-loading-content-color: var(--c-sys-color-content-on-dark);
+  --c-message-solid-loading-icon-color: var(--c-sys-color-content-on-dark);
+  --c-message-solid-loading-border-color: transparent;
+  --c-message-solid-loading-close-color: var(--c-sys-color-content-on-dark);
+
   --c-message-wrapper-margin-top: var(~"--c-spacing-12");
   --c-message-wrapper-margin-bottom: var(~"--c-spacing-12");
   --c-message-wrapper-padding-horizontal: var(~"--c-spacing-5");
@@ -21,42 +110,10 @@
   --c-message-border-width: 1px;
   --c-message-border-style: solid;
 
-  --c-message-close-icon-color: var(~"--c-color-text-1");
   --c-message-close-icon-font-size: 12px;
-  --c-message-close-icon-top: 15px;
-  --c-message-close-icon-right: var(~"--c-spacing-7");
   --c-message-close-btn-margin-left: var(~"--c-spacing-4");
   --c-message-close-icon-hover-size: 20px;
-
-  --c-message-default-bg: var(~"--c-color-bg-popup");
-  --c-message-default-icon-color: var(~"--c-color-text-1");
-  --c-message-default-content-color: var(~"--c-color-text-1");
-  --c-message-default-border-color: var(~"--c-color-neutral-3");
-
-  --c-message-info-bg: var(~"--c-color-bg-popup");
-  --c-message-info-icon-color: rgb(var(~"--c-primary-6"));
-  --c-message-info-content-color: var(~"--c-color-text-1");
-  --c-message-info-border-color: var(~"--c-color-neutral-3");
-
-  --c-message-success-bg: var(~"--c-color-bg-popup");
-  --c-message-success-icon-color: rgb(var(~"--c-success-6"));
-  --c-message-success-content-color: var(~"--c-color-text-1");
-  --c-message-success-border-color: var(~"--c-color-neutral-3");
-
-  --c-message-warning-bg: var(~"--c-color-bg-popup");
-  --c-message-warning-icon-color: rgb(var(~"--c-warning-6"));
-  --c-message-warning-content-color: var(~"--c-color-text-1");
-  --c-message-warning-border-color: var(~"--c-color-neutral-3");
-
-  --c-message-danger-bg: var(~"--c-color-bg-popup");
-  --c-message-danger-icon-color: rgb(var(~"--c-danger-6"));
-  --c-message-danger-content-color: var(~"--c-color-text-1");
-  --c-message-danger-border-color: var(~"--c-color-neutral-3");
-
-  --c-message-loading-bg: var(~"--c-color-bg-popup");
-  --c-message-loading-icon-color: rgb(var(~"--c-primary-6"));
-  --c-message-loading-content-color: var(~"--c-color-text-1");
-  --c-message-loading-border-color: var(~"--c-color-neutral-3");
+  --c-message-close-icon-hover-opacity: 0.08;
 
   --c-message-transition-duration: var(~"--c-transition-duration-1");
   --c-message-transition-duration-icon: var(~"--c-transition-duration-4");

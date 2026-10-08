@@ -43,16 +43,18 @@
     >
       <slot name="extra-footer" />
     </div>
-    <div v-if="!hideFooter" :class="`${prefixCls}-footer-btn-wrapper`">
-      <Button
+    <div v-if="!hideFooter || $slots.actions" :class="`${prefixCls}-footer-btn-wrapper`">
+      <slot name="actions">
+    <Button
         variant="text"
         size="xs"
-        :disabled="confirmBtnDisabled"
+        :disabled="confirmDisabled || confirmBtnDisabled"
         @click="onConfirm"
       >
         {{ t("datePicker.confirmButtonText") }}
       </Button>
-    </div>
+    </slot>
+  </div>
   </div>
 </template>
 
@@ -78,6 +80,8 @@ export default defineComponent({
   },
   inheritAttrs: false,
   props: {
+    min: String,
+    max: String,
     value: {
       type: Array as PropType<RangePanelProps["value"]>,
     },
@@ -90,11 +94,11 @@ export default defineComponent({
     },
     format: {
       type: String,
-      default: "HH:mm:ss",
     },
     hideFooter: {
       type: Boolean,
     },
+    confirmDisabled: Boolean,
     use12Hours: {
       type: Boolean,
     },
@@ -144,6 +148,8 @@ export default defineComponent({
       format: props.format,
       use12Hours: props.use12Hours,
       step: props.step,
+      min: props.min,
+      max: props.max,
       disabledHours: props.disabledHours,
       disabledMinutes: props.disabledMinutes,
       disabledSeconds: props.disabledSeconds,

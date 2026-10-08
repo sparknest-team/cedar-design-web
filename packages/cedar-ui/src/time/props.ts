@@ -1,11 +1,36 @@
-import { popupContainerProp, type PopupContainer } from '../_utils/popup-container'
-import type { ExtractPropTypes, PropType } from 'vue'
+import { popupContainerProp } from '../_utils/popup-container'
+import type { PropType, StyleValue } from 'vue'
+import type { TimePickerProps } from './picker/props'
 import type { ComponentSize } from '../_utils/constant'
 import { componentSizes } from '../_utils/constant'
 import type { FormControlVariant } from '../_utils/form-control'
 import { formControlVariants } from '../_utils/form-control'
+import { fieldDecoratorProps } from '../field-decorator/props'
+import type { TimePanelPresentationProps, TimePopupPresentationProps } from './presentation-props'
+import type { TriggerProps } from '../trigger/props'
 
+/** Inclusive 24-hour clock bounds, independent of display format. */
 export const timeProps = {
+  /** 桌面字段允许键盘输入；移动端使用面板，不唤起软键盘。 */
+  inputEditable: { type: Boolean, default: true },
+  /** 本地浮层展示配置；展开状态与交互由字段管理。 */
+  popupProps: {
+    type: Object as PropType<TimePopupPresentationProps<Partial<TriggerProps>>>,
+    default: () => ({}),
+  },
+  /** 浮动提示；有 Form 外置标签时不启用。 */
+  hint: fieldDecoratorProps.hint,
+  /** 是否显示边框或底线。 */
+  line: fieldDecoratorProps.line,
+  textColor: fieldDecoratorProps.textColor,
+  focusColor: fieldDecoratorProps.focusColor,
+  blurColor: fieldDecoratorProps.blurColor,
+  /** 最早可选时间，HH:mm 或 HH:mm:ss，包含端点。 */
+  min: String,
+  /** 最晚可选时间，HH:mm 或 HH:mm:ss，包含端点。 */
+  max: String,
+  /** 隐藏禁用的时间选项。 */
+  hideDisabledOptions: Boolean,
   popupContainer: popupContainerProp,
     modelValue: {
       type: [String, Number, Date] as PropType<string | number | Date>,
@@ -22,8 +47,8 @@ export const timeProps = {
       type: Boolean,
       default: true,
     },
-    disabled: Boolean,
-    readonly: Boolean,
+    disabled: { type: Boolean, default: undefined },
+    readonly: { type: Boolean, default: undefined },
     size: {
       type: String as PropType<ComponentSize>,
       validator: (value: ComponentSize) => componentSizes.includes(value),
@@ -59,9 +84,9 @@ export const timeProps = {
       type: Function as PropType<(selectedHour?: number, selectedMinute?: number) => number[]>,
     },
     disableConfirm: Boolean,
-    error: Boolean,
+    error: { type: Boolean, default: undefined },
     timePickerProps: {
-      type: Object as PropType<Record<string, unknown> & { popupContainer?: PopupContainer }>,
+      type: Object as PropType<TimePanelPresentationProps<TimePickerProps & { class?: unknown; style?: StyleValue }>>,
       default: () => ({}),
     },
 } 

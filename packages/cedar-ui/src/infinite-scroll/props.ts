@@ -1,4 +1,5 @@
-import type { ExtractPropTypes, PropType } from "vue";
+import type { PropType } from "vue";
+import type { ExtractPublicPropTypes } from "../_utils/components";
 
 export type InfiniteScrollStatus = "idle" | "loading" | "error" | "finished";
 
@@ -24,6 +25,4 @@ export const infiniteScrollProps = {
   },
 };
 
-export type InfiniteScrollProps = Partial<
-  ExtractPropTypes<typeof infiniteScrollProps>
->;
+export type InfiniteScrollProps = ExtractPublicPropTypes<typeof infiniteScrollProps>;

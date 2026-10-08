@@ -1,22 +1,30 @@
+import type { PropType } from 'vue'
 import { popupContainerProp } from '../_utils/popup-container'
-import { createNamespace } from '../_utils/global-config'
-import { computed, defineComponent, PropType, provide, reactive, ref, toRefs, watch } from 'vue'
-import Trigger, { TriggerProps } from '../trigger'
-import SelectView from '../_components/select-view/select-view'
-import BaseCascaderPanel from './base-cascader-panel'
-import CascaderSearchPanel from './cascader-search-panel'
-import { CascaderFieldNames, CascaderOption, CascaderOptionInfo } from './types'
-import { isArray, isFunction, isNull, isUndefined } from '../_utils/is'
-import { BaseType, Data, UnionType } from '../_utils/types'
-import { useSelectedPath } from './hooks/use-selected-path'
-import { KEYBOARD_KEY, getKeyDownHandler } from '../_utils/keyboard'
-import { cascaderInjectionKey } from './context'
-import { ComponentSize } from '../_utils/constant'
-import { debounce } from '../_utils/debounce'
-import { useFormItem } from '../_hooks/use-form-item'
-import { VirtualListProps } from '../_components/virtual-list-v2/interface'
-
+import { formControlVariants, type FormControlVariant } from '../_utils/form-control'
+import type { TriggerProps } from '../trigger'
+import type { CascaderFieldNames, CascaderOption } from './types'
+import type { Data } from '../_utils/types'
+import type { ComponentSize } from '../_utils/constant'
+import type { VirtualListProps } from '../_components/virtual-list-v2/interface'
+import { fieldDecoratorProps } from '../field-decorator/props'
+export type CascaderPresentation = 'menu'
 export const cascaderProps = {
+  showTags: { type: Boolean, default: true },
+  separator: { type: String, default: ',' },
+  textAlign: { type: String as PropType<'left' | 'right' | 'center'>, default: 'left' },
+    presentation: { type: String as PropType<CascaderPresentation>, default: 'menu', validator: (value: string) => value === 'menu' },
+    autoFitPopupWidth: { type: Boolean, default: false },
+    hint: fieldDecoratorProps.hint,
+    line: fieldDecoratorProps.line,
+    textColor: fieldDecoratorProps.textColor,
+    focusColor: fieldDecoratorProps.focusColor,
+    blurColor: fieldDecoratorProps.blurColor,
+    readonly: { type: Boolean, default: undefined },
+    variant: {
+      type: String as PropType<FormControlVariant>,
+      default: undefined,
+      validator: (value: FormControlVariant) => formControlVariants.includes(value),
+    },
     /**
      * @zh 绑定值是否为路径
      * @en Whether the value is a path
@@ -75,7 +83,7 @@ export const cascaderProps = {
      */
     disabled: {
       type: Boolean,
-      default: false,
+      default: undefined,
     },
     /**
      * @zh 是否为错误状态
@@ -83,7 +91,7 @@ export const cascaderProps = {
      */
     error: {
       type: Boolean,
-      default: false,
+      default: undefined,
     },
     /**
      * @zh 选择框的大小
@@ -284,3 +292,5 @@ export const cascaderProps = {
       default: false,
     },
   }
+
+export type CascaderProps = import('vue').ExtractPublicPropTypes<typeof cascaderProps>

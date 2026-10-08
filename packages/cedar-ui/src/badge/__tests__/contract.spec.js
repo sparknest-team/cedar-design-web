@@ -36,7 +36,8 @@ describe('Badge aligned contract', () => {
     const style = outline.get('.c-badge__content').attributes('style')
     expect(style).toContain('border-color: red')
     expect(style).toContain('color: red')
-    expect(style).toContain('background-color: transparent')
+    // The outline background remains controlled by its public CSS variable.
+    expect(outline.get('.c-badge__content').element.style.backgroundColor).toBe('')
     custom.unmount()
     outline.unmount()
   })

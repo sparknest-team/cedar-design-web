@@ -91,7 +91,7 @@ const formRef = ref()
 const innerModel = ref<Record<string, unknown>>({})
 const collapsed_ = ref(props.collapsed)
 const missingFieldKeys = new Set<string>()
-/** Grid col-gap，与 --c-filter-form-col-gap 同值 */
+/** Grid measures numeric gaps; callers customize this with gridProps.colGap. */
 const colGap = 16
 
 const showSuffixItem = computed(() => props.collapsible || Boolean(slots.actions))

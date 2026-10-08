@@ -87,9 +87,11 @@ test("single click opens popover, advanced action opens dialog, failed save pres
     expect(pop).toBeTruthy();
     expect(w.getComponent(Dialog).props("open")).toBe(false);
     // The content slot is teleported by the shared Popover.
-    const advanced = [...document.querySelectorAll("button")].find(
-      (b) => b.textContent?.trim() === "高级编辑",
-    );
+    // Closed Popovers retain content; only interact with the open instance.
+    const advanced = w.findAllComponents(Popover)
+      .find((p) => p.props("open"))!
+      .findAllComponents(Button)
+      .find((button) => button.text() === "高级编辑")?.element as HTMLButtonElement | undefined;
     expect(advanced).toBeTruthy();
     advanced!.click();
     await flushPromises();
@@ -123,9 +125,11 @@ test("readonly preview opens full details without save or delete actions", async
       .vm.$emit("update:modelValue", true);
     await nextTick();
     await click(w.get(".c-scheduler__positioned-event button"));
-    const advanced = [...document.querySelectorAll("button")].find(
-      (b) => b.textContent?.trim() === "查看完整详情",
-    );
+    // Closed Popovers retain content; only interact with the open instance.
+    const advanced = w.findAllComponents(Popover)
+      .find((p) => p.props("open"))!
+      .findAllComponents(Button)
+      .find((button) => button.text() === "查看完整详情")?.element as HTMLButtonElement | undefined;
     expect(advanced).toBeTruthy();
     advanced!.click();
     await flushPromises();
@@ -156,9 +160,11 @@ test("cell creation uses Popover and preserves its draft when entering advanced 
     w.findComponent(Input).vm.$emit("update:modelValue", "格子草稿");
     await nextTick();
     expect(w.get(".c-scheduler__drag-preview").text()).toContain("格子草稿");
-    const advanced = [...document.querySelectorAll("button")].find(
-      (b) => b.textContent?.trim() === "高级编辑",
-    );
+    // Closed Popovers retain content; only interact with the open instance.
+    const advanced = w.findAllComponents(Popover)
+      .find((p) => p.props("open"))!
+      .findAllComponents(Button)
+      .find((button) => button.text() === "高级编辑")?.element as HTMLButtonElement | undefined;
     advanced!.click();
     await flushPromises();
     expect(w.getComponent(Dialog).props("open")).toBe(true);

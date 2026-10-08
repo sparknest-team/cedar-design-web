@@ -24,6 +24,7 @@
   }
 }
 
+
 .c-collapse-item {
   box-sizing: border-box;
   border-bottom: var(~'--c-collapse-item-border-width') solid var(~'--c-collapse-item-border-color');
@@ -130,4 +131,8 @@
 .collapse-slider-enter-active,
 .collapse-slider-leave-active {
   transition: height var(~'--c-collapse-motion-duration') var(~'--c-collapse-motion-easing');
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c-collapse-item, .c-collapse-item__expand-icon, .collapse-slider-enter-active, .collapse-slider-leave-active { transition: none; }
 }

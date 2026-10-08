@@ -160,3 +160,25 @@ permalink: /components/collapse/
 ```ts
 import type { CollapseInstance, CollapseToggleAllOptions, ExpandIconPosition } from '@cedarjs/ui'
 ```
+
+## 颜色变量
+
+Collapse 的公开颜色变量使用 system 语义作为默认值，Cedar 与 Maple 保持一致：
+
+| 变量 | 默认语义 |
+| --- | --- |
+| `--c-collapse-border-color` | `--c-sys-color-border-default` |
+| `--c-collapse-title-bg` | `--c-sys-color-surface-default` |
+| `--c-collapse-title-bg-active` | `--c-sys-color-surface-default` |
+| `--c-collapse-title-bg-disabled` | `--c-sys-color-surface-default` |
+| `--c-collapse-title-text-color` | `--c-sys-color-content-primary` |
+| `--c-collapse-title-text-color-disabled` | `--c-sys-color-content-disabled` |
+| `--c-collapse-content-text-color` | `--c-sys-color-content-primary` |
+| `--c-collapse-content-text-color-disabled` | `--c-sys-color-content-disabled` |
+| `--c-collapse-content-bg` | `--c-sys-color-surface-muted` |
+| `--c-collapse-expand-icon` | `var(--c-sys-color-content-secondary)` |
+| `--c-collapse-item-border-color` | `--c-sys-color-border-default` |
+
+### 减少动态效果
+
+内置 CSS 过渡遵循 `prefers-reduced-motion: reduce`。关闭过渡不改变最终显隐、选中／展开状态及事件语义；插槽内自定义动画由应用自行控制。

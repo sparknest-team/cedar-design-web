@@ -1,6 +1,5 @@
 import '../../../style/index.less'
-import '../../../field-decorator/style'
+import '../../../_components/picker-field/style'
 import '../../../input/style'
 import '../../../trigger/style'
-import '../../../_components/picker/style/index.less'
 import './index.less'

@@ -11,7 +11,7 @@
   <c-drawer
     :width="340"
     :height="340"
-    :open="visible"
+    v-model:open="visible"
     :placement="position"
     @confirm="handleConfirm"
     @cancel="handleCancel"

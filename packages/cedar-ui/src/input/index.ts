@@ -1,8 +1,8 @@
 import { withInstall } from '../_utils/global-config'
-import _Input from './input'
-import _InputPassword from './InputPassword.vue'
+import _Input from './input.vue'
 import _InputGroup from './InputGroup.vue'
 import _InputGroupLabel from './InputGroupLabel.vue'
+import _InputPassword from './InputPassword.vue'
 import { inputProps } from './props'
 
 const Input = withInstall(
@@ -12,13 +12,22 @@ const Input = withInstall(
     Group: _InputGroup,
     GroupLabel: _InputGroupLabel,
   }),
-  { components: [_Input, _InputGroup, _InputPassword] }
+  { components: [_Input, _InputGroup, _InputPassword, _InputGroupLabel] },
 )
 
 export type InputInstance = InstanceType<typeof _Input>
 export { inputProps }
-export { inputPasswordProps } from './props'
-export type { InputMaxLength, InputPasswordProps, InputProps, InputType, WordLength, WordSlice } from './props'
+export { inputPasswordProps, inputGroupProps } from './props'
+export type {
+  InputMaxLength,
+  InputPasswordProps,
+  InputGroupProps,
+  InputProps,
+  InputType,
+  InputVariant,
+  WordLength,
+  WordSlice,
+} from './props'
 export type InputPasswordInstance = InstanceType<typeof _InputPassword>
 export type InputGroupInstance = InstanceType<typeof _InputGroup>
 export type InputGroupLabelInstance = InstanceType<typeof _InputGroupLabel>

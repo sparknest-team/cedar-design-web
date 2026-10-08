@@ -229,3 +229,14 @@ permalink: /components/tree/
 ```ts
 import type { TreeInstance } from '@cedarjs/ui'
 ```
+
+### 五档密度与图标
+
+xs/sm/md/lg/xl 分别消费各档 icon-size、font-size、line-height、title-padding-vertical。图标尺寸同时参与展开按钮与缩进计算；show-line 跟随对应行高。
+
+| 变量 | 默认值 |
+| --- | --- |
+| `--c-tree-size-xl-icon-size` | `var(--c-size-4)` |
+| `--c-tree-size-xl-font-size` | `var(--c-sys-font-size-lg)` |
+| `--c-tree-size-xl-line-height` | `var(--c-size-xl)` |
+| `--c-tree-size-xl-title-padding-vertical` | `12px` |

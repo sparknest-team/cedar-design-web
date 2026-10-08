@@ -54,14 +54,19 @@
     }
 
     // hover
-    &-active,
-    &:not(&-disabled):hover {
+    &-active:not(&-selected):not(&-disabled),
+    &:not(&-selected):not(&-disabled):hover {
       color: var(~'--c-dropdown-menu-option-text-color-hover');
       background-color: var(~'--c-dropdown-menu-option-bg-hover');
       transition: all var(~"--c-transition-duration-1") var(~"--c-transition-timing-function-linear");
     }
 
     // disabled
+    &-selected:not(&-disabled):hover,
+    &-selected&-active:not(&-disabled) {
+      background-color: var(--c-dropdown-menu-option-bg-selected-hover);
+    }
+
     &-disabled {
       color: var(~'--c-dropdown-menu-option-text-color-disabled');
       background-color: var(~'--c-dropdown-menu-option-bg-disabled');

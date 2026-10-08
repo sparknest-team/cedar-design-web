@@ -1,13 +1,13 @@
 <template>
   <c-date-range-picker @change="onChange" @select="onSelect" style="margin-bottom: 20px" />
   <br />
-  <c-date-range-picker mode="week" @change="onChange" @select="onSelect" style="margin-bottom: 20px" />
+  <c-date-range-picker type="week" @change="onChange" @select="onSelect" style="margin-bottom: 20px" />
   <br />
-  <c-date-range-picker mode="month" @change="onChange" @select="onSelect" style="margin-bottom: 20px" />
+  <c-date-range-picker type="month" @change="onChange" @select="onSelect" style="margin-bottom: 20px" />
   <br />
-  <c-date-range-picker mode="year" @change="onChange" @select="onSelect" style="margin-bottom: 20px" />
+  <c-date-range-picker type="year" @change="onChange" @select="onSelect" style="margin-bottom: 20px" />
   <br />
-  <c-date-range-picker mode="quarter" @change="onChange" @select="onSelect" style="margin-bottom: 20px" />
+  <c-date-range-picker type="quarter" @change="onChange" @select="onSelect" style="margin-bottom: 20px" />
   <br />
   <c-date-range-picker
     showTime

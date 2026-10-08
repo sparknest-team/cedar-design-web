@@ -1,177 +1,61 @@
-import { AppContext, CSSProperties } from 'vue'
-import { ButtonProps } from '../button'
-import { RenderContent } from '../_utils/types'
+import type { AppContext, CSSProperties, Ref, StyleValue } from 'vue'
+import type { RenderContent } from '../_utils/types'
+import type { ButtonProps } from '../button'
+import type { DrawerPlacement } from './props'
+
+export type DrawerAction = 'confirm' | 'cancel' | 'close'
+
+export interface DrawerBeforeCloseRefs {
+  confirmButtonLoading: Ref<boolean>
+  cancelButtonLoading: Ref<boolean>
+  confirmButtonDisabled: Ref<boolean>
+  cancelButtonDisabled: Ref<boolean>
+}
 
 export interface DrawerConfig {
-  /**
-   * @zh 抽屉放置的位置
-   * @en Where the drawer is placed
-   * @values 'top','right','bottom','left'
-   * @default-value 'right'
-   */
-  placement?: 'top' | 'right' | 'bottom' | 'left'
-  /**
-   * @zh 标题
-   * @en Title
-   */
+  placement?: DrawerPlacement
   title?: RenderContent
-  /**
-   * @zh 内容
-   * @en Content
-   */
   content: RenderContent
-  /**
-   * @zh 是否显示背景层
-   * @en Whether to show the overlay
-   * @default-value true
-   */
   overlay?: boolean
-  /**
-   * @zh 背景层类名
-   * @en Class name of the overlay
-   */
   overlayClass?: string
-  /**
-   * @zh 背景层样式
-   * @en Style of the overlay
-   */
   overlayStyle?: CSSProperties
-  /**
-   * @zh 点击背景层是否可以关闭
-   * @en Click on the overlay layer to be able to close
-   * @default-value true
-   */
   overlayClosable?: boolean
-  /** 背景层动画名称 */
   overlayAnimationName?: string
-  /**
-   * @zh 是否展示关闭按钮
-   * @en Whether to show the close button
-   * @default-value true
-   */
   closable?: boolean
-  /**
-   * @zh 确认按钮的内容
-   * @en The content of the ok button
-   */
   confirmButtonText?: string
-  /**
-   * @zh 取消按钮的内容
-   * @en The content of the cancel button
-   */
-  cancelText?: string
-  /**
-   * @zh 确认按钮是否为加载中状态
-   * @en Whether the ok button is in the loading state
-   * @default-value false
-   */
+  cancelButtonText?: string
   confirmButtonLoading?: boolean
-  /**
-   * @zh 确认按钮的Props
-   * @en Props of confirm button
-   * @version 2.9.0
-   */
+  cancelButtonLoading?: boolean
+  confirmButtonDisabled?: boolean
+  cancelButtonDisabled?: boolean
   confirmButtonProps?: ButtonProps
-  /**
-   * @zh 取消按钮的Props
-   * @en Props of cancel button
-   * @version 2.9.0
-   */
   cancelButtonProps?: ButtonProps
-  /**
-   * @zh 抽屉的宽度（仅在placement为right,left时可用）
-   * @en The width of the drawer (only available when placement is right, left)
-   * @default-value 250
-   */
   width?: number | string
-  /**
-   * @zh 抽屉的高度（仅在placement为top,bottom时可用）
-   * @en The height of the drawer (only available when placement is top, bottom)
-   * @default-value 250
-   */
   height?: number | string
-  /**
-   * @zh 弹出框的挂载容器
-   * @en Mount container for popup
-   * @default-value 'body'
-   */
-  popupContainer?: string | HTMLElement
-  /**
-   * @zh 抽屉的样式
-   * @en Drawer style
-   */
+  popupContainer?: string | HTMLElement | false
+  drawerClass?: string | any[]
   drawerStyle?: CSSProperties
-  /**
-   * @zh 点击确定按钮时触发
-   * @en Triggered when the OK button is clicked
-   */
-  onConfirm?: (e?: Event) => void
-  /**
-   * @zh 点击取消、关闭按钮时触发
-   * @en Triggered when the cancel or close button is clicked
-   */
-  onCancel?: (e?: Event) => void
-  /** 点击背景层时触发 */
-  onClickOverlay?: (e?: Event) => void
-  /**
-   * @zh 触发 ok 事件前的回调函数。如果返回 false 则不会触发后续事件，也可使用 done 进行异步关闭。
-   * @en The callback function before the ok event is triggered. If false is returned, subsequent events will not be triggered, and done can also be used to close asynchronously.
-   */
-  beforeConfirm?: (done: (closed: boolean) => void) => void | boolean | Promise<void | boolean>
-  /**
-   * @zh 触发 cancel 事件前的回调函数。如果返回 false 则不会触发后续事件。
-   * @en The callback function before the cancel event is triggered. If it returns false, no subsequent events will be triggered.
-   */
-  beforeCancel?: () => boolean
-  /**
-   * @zh 抽屉打开后（动画结束）触发
-   * @en Triggered after the drawer is opened (the animation ends)
-   */
+  bodyClass?: string | any[]
+  bodyStyle?: StyleValue
+  onConfirm?: (event?: Event) => void
+  onCancel?: (event?: Event) => void
+  onClickOverlay?: (event?: Event) => void
+  onKeyEscape?: (event?: KeyboardEvent) => void
+  beforeClose?: (action: DrawerAction, done: () => void, refs: DrawerBeforeCloseRefs) => void
   onOpen?: () => void
-  /**
-   * @zh 抽屉关闭后（动画结束）触发
-   * @en Triggered when the drawer is closed (the animation ends)
-   */
-  onClose?: () => void
-  /**
-   * @zh 抽屉打开前触发
-   * @en Triggered before drawer is opened
-   * @version 2.43.0
-   */
   onOpened?: () => void
-  /**
-   * @zh 抽屉关闭前触发
-   * @en Triggered before drawer is closed
-   * @version 2.43.0
-   */
+  onClose?: () => void
   onClosed?: () => void
-  /**
-   * @zh 是否支持 ESC 键关闭抽屉
-   * @en Whether to support the ESC key to close the drawer
-   * @version 2.15.0
-   * @default-value true
-   */
   escToClose?: boolean
-  /**
-   * @zh 是否展示头部内容
-   * @en Whether to display high-quality content
-   * @version 2.33.0
-   * @default-value true
-   */
+  lockScroll?: boolean
+  closeOnRouteChange?: boolean
   header?: boolean | RenderContent
-  /**
-   * @zh 是否展示底部内容
-   * @en Whether to display the bottom content
-   * @version 2.11.0
-   * @default-value true
-   */
   footer?: boolean | RenderContent
-  /**
-   * @zh 是否显示取消按钮
-   * @en Whether to show the cancel button
-   * @default-value true
-   */
   cancelButton?: boolean
+  unmountOnClose?: boolean
+  ariaLabel?: string
+  closeButtonAriaLabel?: string
+  zIndex?: number
 }
 
 export type DrawerUpdateConfig = Omit<
@@ -180,34 +64,22 @@ export type DrawerUpdateConfig = Omit<
   | 'content'
   | 'onConfirm'
   | 'onCancel'
-  | 'beforeConfirm'
-  | 'beforeCancel'
+  | 'onClickOverlay'
+  | 'onKeyEscape'
+  | 'beforeClose'
   | 'onOpen'
-  | 'onClose'
   | 'onOpened'
+  | 'onClose'
   | 'onClosed'
   | 'header'
   | 'footer'
 >
 
 export interface DrawerReturn {
-  /**
-   * @zh 关闭抽屉
-   * @en Close Drawer
-   */
   close: () => void
-  /**
-   * @zh 更新抽屉
-   * @en Update Drawer
-   * @version 2.43.2
-   */
   update: (config: DrawerUpdateConfig) => void
 }
 
 export interface DrawerMethod {
-  /**
-   * @zh 打开抽屉
-   * @en Open drawer
-   */
   open: (config: DrawerConfig, appContext?: AppContext) => DrawerReturn
 }

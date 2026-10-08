@@ -10,11 +10,12 @@
   &__backdrop {
     position: absolute;
     inset: 0;
-    background-color: var(~"--c-overlay-background-color");
+    background-color: var(--c-overlay-background-color);
   }
 
   &__content {
     position: relative;
+    z-index: var(--c-overlay-content-z-index);
   }
 
   &--fade-enter-active,
@@ -26,4 +27,8 @@
   &--fade-leave-to {
     opacity: 0;
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c-overlay--fade-enter-active, .c-overlay--fade-leave-active { transition: none; }
 }

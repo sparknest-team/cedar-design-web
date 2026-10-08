@@ -1,11 +1,13 @@
-import { afterEach as unmountAfterEach } from 'vitest'
-const mountedWrappers: any[] = []
-unmountAfterEach(() => { for (const wrapper of mountedWrappers.splice(0)) wrapper.unmount() })
+import { afterEach as unmountAfterEach } from "vitest";
+const mountedWrappers: any[] = [];
+unmountAfterEach(() => {
+  for (const wrapper of mountedWrappers.splice(0)) wrapper.unmount();
+});
 const mount = (...args: any[]) => {
-  const wrapper = mountComponent(args[0], args[1])
-  mountedWrappers.push(wrapper)
-  return wrapper
-}
+  const wrapper = mountComponent(args[0], args[1]);
+  mountedWrappers.push(wrapper);
+  return wrapper;
+};
 import { createApp, createSSRApp, h, nextTick } from "vue";
 import { renderToString } from "@vue/server-renderer";
 import { mount as mountComponent } from "@vue/test-utils";
@@ -84,7 +86,7 @@ describe("Dialog component contract", () => {
     const overlayWrapper = mountDialog({ beforeClose });
     await nextTick();
     const wrapperElement = overlayWrapper.get(".c-dialog-wrapper");
-    await wrapperElement.trigger("mousedown");
+    await wrapperElement.trigger("pointerdown");
     await wrapperElement.trigger("click");
     expect(overlayWrapper.emitted("click-overlay")?.[0]?.[0]).toBeInstanceOf(
       Event,
@@ -116,6 +118,30 @@ describe("Dialog component contract", () => {
     done?.();
     await nextTick();
     expect(wrapper.emitted("confirm")).toHaveLength(1);
+    expect(wrapper.emitted("update:open")?.at(-1)).toEqual([false]);
+  });
+
+  test("ignores stale async close completions", async () => {
+    const completions: Array<() => void> = [];
+    const wrapper = mountDialog({
+      beforeClose: (_action, done) => completions.push(done),
+    });
+    await nextTick();
+    const confirm = wrapper.findAll(".c-dialog-footer button").at(-1)!;
+    await confirm.trigger("click");
+    await confirm.trigger("click");
+    completions[0]();
+    await nextTick();
+    expect(wrapper.emitted("confirm")).toBeUndefined();
+    completions[1]();
+    await nextTick();
+    expect(wrapper.emitted("confirm")).toHaveLength(1);
+  });
+
+  test("route close follows closeOnRouteChange", async () => {
+    const wrapper = mountDialog({ closeOnRouteChange: true });
+    window.dispatchEvent(new PopStateEvent("popstate"));
+    await nextTick();
     expect(wrapper.emitted("update:open")?.at(-1)).toEqual([false]);
   });
 

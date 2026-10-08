@@ -1,11 +1,11 @@
 import type { ComponentPublicInstance, Ref } from 'vue'
 import { computed, nextTick, provide, reactive, ref, watch } from 'vue'
-import { FilterOption, SelectOption, SelectFieldNames } from '../types'
 import { VirtualListRef } from '../../_components/virtual-list-v2/interface'
 import { getRelativeRect } from '../../_utils/dom'
-import { useOptions } from './use-options'
-import { KEYBOARD_KEY, getKeyDownHandler } from '../../_utils/keyboard'
+import { getKeyDownHandler, KEYBOARD_KEY } from '../../_utils/keyboard'
 import { selectInjectionKey } from '../context'
+import { FilterOption, SelectFieldNames, SelectOption } from '../types'
+import { useOptions } from './use-options'
 
 const DEFAULT_FIELD_NAMES = {
   value: 'value',
@@ -112,8 +112,9 @@ export const useSelect = ({
       virtualListRef.value.scrollTo({ key })
     }
     const optionInfo = optionInfoMap.get(key)
-    // @ts-ignore
-    const wrapperEle = dropdownRef?.value?.wrapperRef as HTMLElement
+
+    const wrapperEle = (dropdownRef?.value as (ComponentPublicInstance & { wrapperRef?: HTMLElement }) | undefined)
+      ?.wrapperRef
     const optionEle = optionRefs?.value[key] ?? optionInfo?.ref
 
     if (!wrapperEle || !optionEle) {
@@ -158,8 +159,7 @@ export const useSelect = ({
       [
         KEYBOARD_KEY.ENTER,
         (e: Event) => {
-          // @ts-ignore
-          if (!loading?.value && !e.isComposing) {
+          if (!loading?.value && !(e as KeyboardEvent).isComposing) {
             if (open.value) {
               if (activeKey.value) {
                 onSelect(activeKey.value, e)

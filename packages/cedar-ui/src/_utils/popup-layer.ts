@@ -1,4 +1,14 @@
-import { getCurrentInstance, inject, provide, onActivated, onBeforeUnmount, onDeactivated, onMounted, watch, type Ref } from 'vue'
+import {
+  getCurrentInstance,
+  inject,
+  onActivated,
+  onBeforeUnmount,
+  onDeactivated,
+  onMounted,
+  provide,
+  watch,
+  type Ref,
+} from 'vue'
 
 interface Layer {
   id: symbol
@@ -24,7 +34,11 @@ function registryFor(document: Document) {
 }
 
 /** Each library owns its registry. Layers never register during server rendering. */
-export function usePopupLayer(active: () => boolean, zIndex: Readonly<Ref<number>>) {
+export function usePopupLayer(
+  active: () => boolean,
+  zIndex: Readonly<Ref<number>>,
+  ownerDocument?: () => Document | undefined,
+) {
   const instance = getCurrentInstance()
   const id = Symbol('popup-layer')
   const depth = inject(depthKey, 0) + 1
@@ -33,29 +47,66 @@ export function usePopupLayer(active: () => boolean, zIndex: Readonly<Ref<number
   let mounted = false
   let suspended = false
 
-  const sync = () => {
-    if (!mounted || suspended || !registry) return
-    if (!active()) registry.layers.delete(id)
-    else if (!registry.layers.has(id)) registry.layers.set(id, { id, zIndex, depth, order: ++registry.sequence })
-  }
+  const resolveOwnerDocument = () =>
+    ownerDocument?.() ??
+    (instance?.vnode.el as Node | undefined)?.ownerDocument ??
+    (typeof document === 'undefined' ? undefined : document)
   const remove = () => registry?.layers.delete(id)
+  const sync = () => {
+    if (!mounted || suspended) {
+      return
+    }
+    const owner = resolveOwnerDocument()
+    const nextRegistry = owner ? registryFor(owner) : undefined
+    if (registry !== nextRegistry) {
+      remove()
+      registry = nextRegistry
+    }
+    if (!registry) {
+      return
+    }
+    if (!active()) {
+      registry.layers.delete(id)
+    } else if (!registry.layers.has(id)) {
+      registry.layers.set(id, { id, zIndex, depth, order: ++registry.sequence })
+    }
+  }
   watch(active, sync, { flush: 'sync' })
+  if (ownerDocument) {
+    watch(ownerDocument, sync, { flush: 'post' })
+  }
   onMounted(() => {
     mounted = true
-    const owner = (instance?.vnode.el as Node | undefined)?.ownerDocument ?? (typeof document === 'undefined' ? undefined : document)
-    if (owner) registry = registryFor(owner)
     sync()
   })
-  onActivated(() => { suspended = false; sync() })
-  onDeactivated(() => { suspended = true; remove() })
-  onBeforeUnmount(() => { mounted = false; remove() })
+  onActivated(() => {
+    suspended = false
+    sync()
+  })
+  onDeactivated(() => {
+    suspended = true
+    remove()
+  })
+  onBeforeUnmount(() => {
+    mounted = false
+    remove()
+  })
 
   function onStackTop(event?: Event) {
-    if (!registry || !active() || suspended || !registry.layers.has(id)) return false
-    if (event && registry.events.has(event)) return registry.events.get(event) === id
-    const top = [...registry.layers.values()].sort((a, b) => a.zIndex.value - b.zIndex.value || a.depth - b.depth || a.order - b.order).at(-1)?.id ?? null
+    if (!registry || !active() || suspended || !registry.layers.has(id)) {
+      return false
+    }
+    if (event && registry.events.has(event)) {
+      return registry.events.get(event) === id
+    }
+    const top =
+      [...registry.layers.values()]
+        .sort((a, b) => a.zIndex.value - b.zIndex.value || a.depth - b.depth || a.order - b.order)
+        .at(-1)?.id ?? null
     // Snapshot the recipient for the whole dispatch, even if it synchronously unmounts.
-    if (event) registry.events.set(event, top)
+    if (event) {
+      registry.events.set(event, top)
+    }
     return top === id
   }
   return { onStackTop }

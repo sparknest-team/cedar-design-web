@@ -55,7 +55,7 @@ permalink: /components/progress-group/
 | max | 所有分段计算占比时的总值 | `number` | `100` |
 | status | 是否展示累计百分比 | `boolean` | `false` |
 | size | 进度轨尺寸 | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` |
-| color | 分段未指定颜色时使用的默认颜色 | `string` | 主题主色 |
+| color | 分段未指定颜色时使用的默认颜色 | `string` | `content-brand` |
 | circle-size | 环形模式的直径 | `number \| string` | `120` |
 | stroke-width | 环形模式的轨道宽度 | `number` | `8` |
 | tooltip | 是否启用分段悬浮/聚焦提示 | `boolean` | `true` |
@@ -79,3 +79,41 @@ permalink: /components/progress-group/
 | status | `{ percent, value, max }` |
 | tooltip | `{ item, index, percent }` |
 | item / item-leading / item-label / item-trailing | `{ item, index, percent }` |
+
+### 样式变量
+
+| 变量 | 默认值 |
+| --- | --- |
+| `--c-progress-group-gap` | `var(--c-spacing-3)` |
+| `--c-progress-group-item-gap` | `var(--c-spacing-2)` |
+| `--c-progress-group-dot-size` | `var(--c-size-2)` |
+| `--c-progress-group-radius` | `9999px` |
+| `--c-progress-group-track-color` | `var(--c-sys-color-state-hover)` |
+| `--c-progress-group-text-color` | `var(--c-sys-color-content-primary)` |
+| `--c-progress-group-muted-color` | `var(--c-sys-color-content-secondary)` |
+| `--c-progress-group-font-size` | `var(--c-font-size-body-1)` |
+| `--c-progress-group-tooltip-bg` | `var(--c-sys-color-surface-tooltip)` |
+| `--c-progress-group-tooltip-color` | `var(--c-sys-color-content-on-dark)` |
+
+图形标记默认使用 system content-brand。颜色优先级：item.color → 组件 color → 默认值。自定义颜色需自行验证对比度；几何 Token 保留平台差异。
+
+### Geometry and motion variables
+
+Built-in effects respect `prefers-reduced-motion: reduce`. Track thickness applies to both horizontal and vertical layouts; circle geometry remains prop-driven.
+
+| Token | Default |
+| --- | --- |
+| `--c-progress-group-transition-duration` | `var(--c-sys-motion-duration-standard)` |
+| `--c-progress-group-tooltip-duration` | `var(--c-sys-motion-duration-fast)` |
+| `--c-progress-group-tooltip-max-width` | `240px` |
+| `--c-progress-group-tooltip-padding` | `5px var(--c-sys-space-4)` |
+| `--c-progress-group-tooltip-radius` | `var(--c-sys-radius-md)` |
+| `--c-progress-group-tooltip-font-size` | `var(--c-sys-font-size-xs)` |
+| `--c-progress-group-tooltip-line-height` | `1.4` |
+| `--c-progress-group-tooltip-offset` | `var(--c-sys-space-4)` |
+| `--c-progress-group-status-font-weight` | `var(--c-sys-font-weight-medium)` |
+| `--c-progress-group-size-xs-thickness` | `2px` |
+| `--c-progress-group-size-sm-thickness` | `4px` |
+| `--c-progress-group-size-md-thickness` | `8px` |
+| `--c-progress-group-size-lg-thickness` | `12px` |
+| `--c-progress-group-size-xl-thickness` | `16px` |

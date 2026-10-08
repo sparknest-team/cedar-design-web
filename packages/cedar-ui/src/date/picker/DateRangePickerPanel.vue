@@ -181,9 +181,6 @@ export default defineComponent({
     dateRender: {
       type: Function as PropType<RenderFunc>,
     },
-    hideTrigger: {
-      type: Boolean,
-    },
     startHeaderProps: {
       type: Object as PropType<StartHeaderProps>,
       default: () => ({}),
@@ -231,7 +228,6 @@ export default defineComponent({
       shortcuts,
       shortcutsPosition,
       format,
-      hideTrigger,
       value,
       disabledDate,
       disabledTime,
@@ -248,7 +244,7 @@ export default defineComponent({
     const classNames = computed(() => [
       `${prefixCls.value}-range-container`,
       {
-        [`${prefixCls.value}-range-container-panel-only`]: hideTrigger.value,
+        [`${prefixCls.value}-range-container-panel-only`]: true,
         [`${prefixCls.value}-range-container-shortcuts-placement-left`]:
           showShortcuts.value && shortcutsPosition.value === 'left',
         [`${prefixCls.value}-range-container-shortcuts-placement-right`]:

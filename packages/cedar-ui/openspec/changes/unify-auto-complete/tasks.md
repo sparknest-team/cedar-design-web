@@ -1,0 +1,8 @@
+- [x] Freeze the public contract and select Cedar as baseline.
+- [x] Complete inherited state, grouped options, mapped strict filtering and selection length handling.
+- [x] Independently copy component, props, entry, styles and tests into Maple.
+- [x] Migrate Maple callers and remove obsolete implementation, labels and snapshots.
+- [x] Add ten Chinese/English demo topics, API docs, source-copy guard and theme contract.
+- [x] Update menus, audit, Props inventory and changesets.
+- [x] Complete paired tests, SSR, types, scoped lint, same-source/Token checks, demo compilation and both production component bundles.
+- [x] Record limitations: full-library lint interrupted after prolonged silence; browser visual QA and full npm/docs production builds were not performed.

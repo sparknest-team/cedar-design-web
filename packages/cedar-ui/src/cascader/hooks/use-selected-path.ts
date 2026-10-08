@@ -18,7 +18,9 @@ export const useSelectedPath = (
   // active node key
   const activeKey = ref<string>()
   const activeOption = computed(() => {
-    if (activeKey.value) return optionMap.get(activeKey.value)
+    if (activeKey.value) {
+      return optionMap.get(activeKey.value)
+    }
     return undefined
   })
 

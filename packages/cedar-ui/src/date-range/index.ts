@@ -1,11 +1,11 @@
 import { withInstall } from '../_utils/global-config'
 import _DateRange from './DateRange.vue'
-import _DateRangePicker from '../date/picker/DateRangePicker.vue'
+import _DateRangePicker from './DateRangePicker.vue'
 import { dateRangeProps } from './props'
-import { dateRangePickerProps } from '../date/picker/props'
+import { props as dateRangePickerProps } from './picker-props'
 
 export type { DateRangeProps } from './props'
-export type { DateRangePickerProps } from '../date/picker/props'
+export type { DateRangePickerProps } from './picker-props'
 
 const DateRangePicker = withInstall(_DateRangePicker)
 
@@ -25,3 +25,6 @@ export const _DateRangeComponent = DateRange
 export const _DateRangePickerComponent = DateRangePicker
 
 export default DateRange
+
+export type { DateValue, DateSelection, DateSide, DateValueOptions } from '../date/date-value'
+export type { DateDisabledTime, DateRules } from '../date/date-rules'

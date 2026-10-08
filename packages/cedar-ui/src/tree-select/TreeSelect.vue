@@ -16,23 +16,23 @@
     @open-change="onVisibleChange"
   >
     <slot name="trigger">
-      <SelectView
-        ref="refSelectView"
-        :model-value="selectViewValue"
+      <SelectionField
+        ref="refSelectionField"
+        :items="selectViewValue"
         :input-value="searchValue"
-        :filterable="Boolean(allowSearch)"
+        :searchable="Boolean(allowSearch)"
         :clearable="clearable"
         :loading="loading"
-        :size="size"
+        :size="mergedSize"
         :max-tag-count="maxTagCount"
         :disabled="mergedDisabled"
-        :opened="panelVisible"
-        :error="error"
-        :bordered="border"
+        :open="panelVisible"
+        :error="mergedError"
+        :variant="border ? 'filled' : 'standard'"
         :placeholder="placeholder"
         :multiple="isMultiple"
         v-bind="$attrs"
-        @input-value-change="onSearchValueChange"
+        @update:input-value="onSearchValueChange"
         @clear="onInnerClear"
         @remove="onItemRemove"
         @blur="onBlur"
@@ -43,7 +43,7 @@
         <template v-if="$slots.label" #label="selectedData">
           <slot name="label" v-bind="selectedData" />
         </template>
-      </SelectView>
+      </SelectionField>
     </slot>
     <template #content>
       <div
@@ -121,7 +121,7 @@ import {
 import useMergeState from "../_hooks/use-merge-state";
 import { LabelValue } from "./types";
 import Trigger, { TriggerProps } from "../trigger";
-import SelectView from "../_components/select-view/select-view";
+import SelectionField from "../_components/selection-field/SelectionField.vue";
 import Panel from "./panel";
 import { getPrefixCls } from "../_utils/global-config";
 import { configProviderInjectionKey } from "../config-provider/context";
@@ -148,13 +148,13 @@ import {
 import { isNodeSelectable } from "../tree/utils";
 import { Data } from "../_utils/types";
 import { ScrollbarProps } from "../scrollbar";
-import { SelectViewValue } from "../_components/select-view/interface";
+import type { SelectionFieldItem } from "../_components/selection-field/props";
 
 export default defineComponent({
   name: createNamespace("tree-select").name,
   components: {
     Trigger,
-    SelectView,
+    SelectionField,
     Panel,
     Empty,
     Loading,
@@ -293,9 +293,12 @@ export default defineComponent({
       selectable,
       dropdownClassName,
     } = toRefs(props);
-    const { mergedDisabled, eventHandlers } = useFormItem({
-      disabled,
-    });
+    const { mergedDisabled, mergedError, mergedSize, eventHandlers } =
+      useFormItem({
+        disabled,
+        error: computed(() => props.error),
+        size: computed(() => props.size),
+      });
     const prefixCls = getPrefixCls("tree-select");
     const configCtx = inject(configProviderInjectionKey, undefined);
     const TreeSelectEmpty = configCtx?.slots.empty?.({
@@ -361,11 +364,15 @@ export default defineComponent({
           const node = key2TreeNode.value.get(i.value);
           return {
             ...i,
+            key: i.value,
             closable: !node || isNodeClosable(node),
           };
-        }) as SelectViewValue[];
+        }) as SelectionFieldItem[];
       }
-      return selectedValue.value as SelectViewValue[];
+      return selectedValue.value.map((item) => ({
+        ...item,
+        key: item.value,
+      })) as SelectionFieldItem[];
     });
 
     const setSelectedKeys = (newVal: TreeNodeKey[]) => {
@@ -420,9 +427,9 @@ export default defineComponent({
       }
 
       if (!visible) {
-        refSelectView.value &&
-          refSelectView.value.blur &&
-          refSelectView.value.blur();
+        refSelectionField.value &&
+          refSelectionField.value.blur &&
+          refSelectionField.value.blur();
       }
     };
 
@@ -441,7 +448,7 @@ export default defineComponent({
       () => !flattenTreeData.value.length || isEmptyFilterResult.value,
     );
 
-    const refSelectView = ref();
+    const refSelectionField = ref();
 
     const computedDropdownStyle = computed<StyleValue[]>(() => [
       dropdownStyle?.value || {},
@@ -449,18 +456,21 @@ export default defineComponent({
     ]);
 
     const onBlur = () => {
+      eventHandlers.value?.onBlur?.();
       if (!retainInputValue.value && computedInputValue.value) {
         updateInputValue("");
       }
     };
 
     return {
-      refSelectView,
+      refSelectionField,
       prefixCls,
       TreeSelectEmpty,
       selectedValue,
       selectedKeys,
       mergedDisabled,
+      mergedError,
+      mergedSize,
       searchValue: computedInputValue,
       panelVisible,
       isEmpty,
@@ -488,7 +498,8 @@ export default defineComponent({
       isSelectable,
       isCheckable,
       onBlur,
-      onItemRemove(id: string) {
+      onItemRemove(id: string | number | symbol) {
+        if (typeof id === "symbol") return;
         if (mergedDisabled.value) return;
         const node = key2TreeNode.value.get(id);
         if (treeCheckable.value && node) {

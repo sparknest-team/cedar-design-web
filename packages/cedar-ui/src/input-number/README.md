@@ -4,142 +4,130 @@ permalink: /components/input-number/
 
 # InputNumber
 
-用于输入、调整和提交数值的输入框。组件将展示字符串和业务数值分开处理：用户可以自然地输入 `-`、`.` 或 `1.` 等中间状态，提交时再统一执行解析、精度和范围修正。
+InputNumber 用于编辑和提交业务数字。两端主体、数值控制器、样式及公开 API 按独立源码复制维护，不共享运行时实例。
 
-默认情况下，`v-model` 在失焦或按下 Enter 时更新；如果需要跟随完整数字输入实时更新，可以使用 `model-event="input"`。无论哪种模式，`change` 都只表示一次已提交的值变化。
+- `model-value !== undefined` 表示受控；`default-value` 仅初始化非受控值。编辑草稿允许暂时不同于业务值；提交后若父组件拒绝更新，恢复到父组件值。外部回填不触发用户事件或校验。
+- 默认在 Enter / 失焦时更新；`model-event="input"` 输入完整数字时更新，但 `change` 仍在提交时触发。Enter 后再失焦不会重复提交。
+- 清空顺序为 **input → update:model-value → change → clear**，值为 `undefined`。这次改造移除了旧的“清空不触发 input/change”行为，不提供兼容分支。
+- `-`、`.`、`1.` 等输入中间态暂时保留；提交 `1.` 得到数字 1，单独符号恢复之前的业务值。非法文本、NaN、Infinity 不会写入业务值。IME 组合输入结束后只处理一次。
+- 范围优先于精度：舍入后仍限制在 min/max 内，非对齐边界保留实际值。两端采用独立配置的 Decimal 运算，不受应用修改 Decimal 全局配置影响；模型仍是 JavaScript number，不承诺任意精度的大数存储。
+- 禁用/只读/尺寸从 InputGroup、FormItem、Form 继承，显式 false 可以覆盖；Cedar 的缺省尺寸再读取 ConfigProvider，Maple 使用现有默认系统。字段外观与 hint 可继承 InputGroup；外层已有 FormItem 标题时不重复显示浮动标签。
+- 鼠标、触控都支持长按；释放、取消、移出、窗口失焦、组件停用/卸载或状态变化时停止。移动端建议用 button 布局增加触控面积；↑/↓ 步进，Enter 提交。
 
 ## 案例
 
-### 尺寸
+### 基础与状态
 
-输入框定义了四种默认尺寸 xs, sm, md, lg。
+<demo src="./__demos__/field-basic.vue"></demo>
 
-<demo src="./__demos__/size.vue"></demo>
+### 三种布局
 
-### 精度和步长
+<demo src="./__demos__/field-modes.vue"></demo>
 
-通过 precision 来设置数字精度。当 precision 小于 step 的小数位时，精度取 step 的小数个数。
+### 五档尺寸与字段外观
 
-<demo src="./__demos__/step-precision.vue"></demo>
+<demo src="./__demos__/field-options.vue"></demo>
 
-### 按钮模式
+### 受控值与事件顺序
 
-基础用法。
+<demo src="./__demos__/controlled-events.vue"></demo>
 
-<demo src="./__demos__/button-mode.vue"></demo>
+### 表单继承
 
-### 前缀、后缀
+<demo src="./__demos__/form-inheritance.vue"></demo>
 
-通过指定 `prefix` 和 `suffix` 插槽来在输入框内添加前缀和后缀；`prepend` 和 `append` 可以在输入框外添加附加内容，三种模式均生效。
+### 格式化与插槽
 
-<demo src="./__demos__/prefix.vue"></demo>
+<demo src="./__demos__/format-slots.vue"></demo>
 
-### 自定义图标
+### 小步长与范围边界
 
-通过指定`plus`和`minus`插槽来修改树枝增减的图标
-
-<demo src="./__demos__/custom-icon.vue"></demo>
-
-### 格式化展示值
-
-通过`formatter`和`parser`配合使用可以定义输入框展示值。
-
-<demo src="./__demos__/format.vue"></demo>
-
-### v-model的触发事件
-
-数字输入框默认在 blur 或者按下 Enter 时会修改绑定的值，通过设置属性 `model-event="input"` 让完整的数字在输入时更新绑定值。`change` 仍然只在提交时触发，不会因为每次键入而重复触发。
-
-输入过程中允许暂时超出 `min/max`，组件会在提交时修正范围；清空时只触发 `update:modelValue(undefined)` 和 `clear`。
-
-<demo src="./__demos__/v-model-event.vue"></demo>
-
-### 事件与清空
-
-`input` 用于监听编辑过程，参数中同时提供解析后的数字和当前展示文本；`change` 用于保存、计算或触发表单联动。开启 `clearable` 后，用户主动清空会触发 `clear`，不会额外制造一次 `input/change`。
-
-<demo src="./__demos__/events.vue"></demo>
-
-### 前后缀与自定义控件
-
-`prefix` 和 `suffix` 位于输入框内部，`prepend` 和 `append` 位于输入框外部；`plus` 和 `minus` 用于替换步进按钮图标，`clear-icon` 用于替换清空图标。
-
-<demo src="./__demos__/slots.vue"></demo>
-
-### 事件与清空
-
-`input` 用于监听编辑过程，参数中同时提供解析后的数字和当前展示文本；`change` 用于保存、计算或触发表单联动。开启 `clearable` 后，用户主动清空会触发 `clear`，不会额外制造一次 `input/change`。
-
-<demo src="./__demos__/events.vue"></demo>
-
-### 前后缀与自定义控件
-
-`prefix` 和 `suffix` 位于输入框内部，`prepend` 和 `append` 位于输入框外部；`plus` 和 `minus` 用于替换步进按钮图标，`clear-icon` 用于替换清空图标。
-
-<demo src="./__demos__/slots.vue"></demo>
-
-基础用法。
-
-<demo src="./__demos__/basic.vue"></demo>
+<demo src="./__demos__/number-boundaries.vue"></demo>
 
 ## API
 
-### `<InputNumber>` Props
+### Props
 
-| 参数名                    | 描述                                                           | 类型                                   |   默认值    |
-| ------------------------- | -------------------------------------------------------------- | -------------------------------------- | :---------: |
-| model-value **(v-model)** | 绑定值                                                         | `number`                               |     `-`     |
-| default-value             | 默认值（非受控模式）                                           | `number`                               |     `-`     |
-| mode                      | 模式（`embed`：按钮内嵌，`button`：左右按钮，`input`：纯输入） | `'embed' \| 'button' \| 'input'`       |  `'embed'`  |
-| precision                 | 数字精度                                                       | `number`                               |     `-`     |
-| step                      | 数字变化步长                                                   | `number`                               |     `1`     |
-| disabled                  | 是否禁用                                                       | `boolean`                              |   `false`   |
-| error                     | 是否为错误状态                                                 | `boolean`                              |   `false`   |
-| max                       | 最大值                                                         | `number`                               | `Infinity`  |
-| min                       | 最小值                                                         | `number`                               | `-Infinity` |
-| formatter                 | 定义输入框展示值                                               | `func`                                 |     `-`     |
-| parser                    | 从 `formatter` 转换为数字，和 `formatter` 搭配使用             | `func`                                 |     `-`     |
-| placeholder               | 输入框提示文字                                                 | `string`                               |     `-`     |
-| size                      | 输入框大小                                                     | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` |   `'md'`    |
-| clearable                 | 是否允许清空输入框                                             | `boolean`                              |   `false`   |
-| model-event               | 触发 `v-model` 的事件                                          | `'change' \| 'input'`                  | `'change'`  |
-| read-only                 | 只读                                                           | `boolean`                              |   `false`   |
-| input-attrs               | 内部input元素的属性                                            | `object`                               |     `-`     |
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| model-value | 受控值；undefined 表示空值/非受控 | `number` | — |
+| default-value | 非受控初始值 | `number` | — |
+| mode | 步进按钮布局 | `embed \| button \| input` | `embed` |
+| precision | 小数位数 0–100，不小于 step 的小数位 | `number` | — |
+| step | 正的有限步长，支持科学计数法 | `number` | `1` |
+| disabled | 禁用；未设置时继承 | `boolean` | 继承，否则 false |
+| error | 错误态；未设置时继承 FormItem | `boolean` | 继承，否则 false |
+| max | 最大值 | `number` | `Infinity` |
+| min | 最小值 | `number` | `-Infinity` |
+| formatter | 只格式化展示，不改变业务数字 | `(text: string) => string` | — |
+| parser | 每次编辑解析一次原始输入 | `(text: string) => string` | — |
+| placeholder | 输入提示 | `string` | — |
+| size | 五档均完整实现，可继承 | `xs \| sm \| md \| lg \| xl` | 继承，否则 md |
+| variant | 字段外观，可继承 InputGroup | `outline \| filled \| standard` | `outline` |
+| hint | 浮动提示，可继承 InputGroup / FieldDecorator | `boolean` | 库默认 |
+| clearable | 允许清空可编辑字段 | `boolean` | `false` |
+| model-event | model 更新时机；change 仍只在提交时触发 | `change \| input` | `change` |
+| readonly | 只读；允许聚焦复制，禁止改值 | `boolean` | 继承，否则 false |
+| input-attrs | 原生 input 补充属性 | `Record<string, unknown>` | — |
 
-### `<input-number>` Events
+### Events
 
-| 事件名  | 描述                   | 参数                                                                |
-| ------- | ---------------------- | ------------------------------------------------------------------- |
-| change  | 值发生改变时触发       | value: `number \| undefined`<br>ev: `Event`                         |
-| focus   | 输入框获取焦点时触发   | ev: `FocusEvent`                                                    |
-| blur    | 输入框失去焦点时触发   | ev: `FocusEvent`                                                    |
-| clear   | 用户点击清除按钮时触发 | ev: `Event`                                                         |
-| input   | 输入时触发             | value: `number \| undefined`<br>inputValue: `string`<br>ev: `Event` |
-| keydown | 按下键盘时触发         | ev: `KeyboardEvent`                                                 |
+| 事件 | 参数 | 说明 |
+| --- | --- | --- |
+| input | `(value: number \| undefined, text: string, event: Event)` | 编辑后解析值与展示文本 |
+| update:model-value | `(value: number \| undefined)` | 请求修改业务值 |
+| change | `(value: number \| undefined, event: Event)` | 提交、步进或清空 |
+| clear | `(event: Event)` | 主动清空 |
+| focus | `(event: FocusEvent)` | 获取焦点 |
+| blur | `(event: FocusEvent)` | 失去焦点 |
+| keydown | `(event: KeyboardEvent)` | 原生键盘事件，可 preventDefault 拦截默认操作 |
 
-### `<input-number>` Methods
+### Slots
 
-| 方法名 | 描述             | 参数 | 返回值 |
-| ------ | ---------------- | ---- | ------ |
-| focus  | 使输入框获取焦点 | -    | -      |
-| blur   | 使输入框失去焦点 | -    | -      |
+| 插槽 | 参数 | 说明 |
+| --- | --- | --- |
+| prefix / suffix | — | 字段内部前后缀 |
+| prepend / append | — | 字段外部标签 |
+| plus / minus | — | 步进按钮图标 |
+| clear-icon | `{ clear: (event?: Event) => void }` | 自定义清除按钮 |
 
-### `<input-number>` Slots
+### Methods
 
-| 插槽名     |     描述     | 参数                    |
-| ---------- | :----------: | ----------------------- |
-| minus      | 数值减少图标 | -                       |
-| plus       | 数值增加图标 | -                       |
-| append     |   后置标签   | -                       |
-| prepend    |   前置标签   | -                       |
-| suffix     |     后缀     | -                       |
-| prefix     |     前缀     | -                       |
-| clear-icon |   清空图标   | `{ clear: () => void }` |
+| 方法 / 属性 | 类型 | 说明 |
+| --- | --- | --- |
+| focus | `(options?: FocusOptions) => void` | 聚焦，禁用时无效 |
+| blur | `() => void` | 失焦 |
+| select | `() => void` | 选中输入内容 |
+| inputRef | `HTMLInputElement \| undefined` | 原生输入元素 |
 
-## 类型定义
-
-组件导出以下类型定义
+## 类型定义 / Types
 
 ```ts
-import type { InputNumberProps } from "@cedarjs/ui";
+import type { InputNumberProps, InputNumberInstance, InputNumberMode, InputNumberModelEvent, InputNumberSize, InputNumberVariant, InputNumberFormatter, InputNumberParser } from '@cedarjs/ui'
 ```
+
+## 样式变量
+
+| Token | Default |
+| --- | --- |
+| `--c-input-number-step-button-width` | `var(--c-sys-control-height-md)` |
+| `--c-input-number-step-button-color` | `var(--c-sys-color-content-secondary)` |
+| `--c-input-number-step-button-disabled-color` | `var(--c-sys-color-content-disabled)` |
+| `--c-input-number-step-button-border-color` | `var(--c-sys-color-border-subtle)` |
+| `--c-input-number-step-button-background` | `var(--c-sys-color-surface-muted)` |
+| `--c-input-number-step-button-hover-background` | `var(--c-sys-color-state-hover)` |
+| `--c-input-number-step-button-active-background` | `var(--c-sys-color-state-selected)` |
+| `--c-input-number-step-button-icon-size` | `14px` |
+| `--c-input-number-step-button-transition-duration` | `0.2s` |
+| `--c-input-number-addon-background` | `var(--c-sys-color-surface-muted)` |
+| `--c-input-number-addon-color` | `var(--c-sys-color-content-primary)` |
+| `--c-input-number-addon-border-color` | `var(--c-sys-color-border-default)` |
+| `--c-input-number-border-width` | `1px` |
+| `--c-input-number-border-radius` | `var(--c-field-border-radius)` |
+| `--c-input-number-size-xs-step-button-width` | `var(--c-sys-control-height-xs)` |
+| `--c-input-number-size-sm-step-button-width` | `var(--c-sys-control-height-sm)` |
+| `--c-input-number-size-md-step-button-width` | `var(--c-sys-control-height-md)` |
+| `--c-input-number-size-lg-step-button-width` | `var(--c-sys-control-height-lg)` |
+| `--c-input-number-size-xl-step-button-width` | `var(--c-sys-control-height-xl)` |
+
+旧的 `--c-field-number-*` Token 已移除，统一为以上 `--c-input-number-*`；不保留旧别名。字段通用外观继续使用 FieldDecorator 的 `--c-field-*` Token。

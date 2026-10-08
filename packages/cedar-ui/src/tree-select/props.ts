@@ -15,6 +15,7 @@ export const treeSelectProps = {
      * */
     disabled: {
       type: Boolean,
+      default: undefined,
     },
     /**
      * @zh 是否为加载中状态
@@ -29,6 +30,7 @@ export const treeSelectProps = {
      * */
     error: {
       type: Boolean,
+      default: undefined,
     },
     /**
      * @zh 选择框的大小

@@ -157,3 +157,46 @@ import type {
   AvatarTriggerType,
 } from "@cedarjs/ui";
 ```
+
+### 样式变量
+
+| 变量 | 默认值 |
+| --- | --- |
+| `--c-avatar-size-default` | `40px` |
+| `--c-avatar-font-size-text` | `20px` |
+| `--c-avatar-text-color` | `var(--c-sys-color-content-primary)` |
+| `--c-avatar-text-padding-inline` | `4px` |
+| `--c-avatar-bg` | `var(--c-color-fill-4)` |
+| `--c-avatar-border-width` | `2px` |
+| `--c-avatar-border-color` | `var(--c-sys-color-surface-default)` |
+| `--c-avatar-group-item-border` | `var(--c-sys-color-surface-default)` |
+| `--c-avatar-group-item-border-width` | `2px` |
+| `--c-avatar-group-offset` | `-10px` |
+| `--c-avatar-group-popover-item-spacing` | `8px` |
+| `--c-avatar-font-weight-text` | `500` |
+| `--c-avatar-circle-border-radius` | `50%` |
+| `--c-avatar-square-border-radius` | `4px` |
+| `--c-avatar-size-trigger-button` | `20px` |
+| `--c-avatar-trigger-button-bg` | `var(--c-color-fill-2)` |
+| `--c-avatar-trigger-button-bg-hover` | `var(--c-color-fill-3)` |
+| `--c-avatar-trigger-overlay-icon` | `var(--c-sys-color-content-on-dark)` |
+| `--c-avatar-trigger-overlay-bg` | `color-mix(in srgb, var(--c-color-black) 60%, transparent)` |
+| `--c-avatar-trigger-icon-button` | `var(--c-sys-color-content-primary)` |
+| `--c-avatar-spacing-trigger-button-right` | `4px` |
+| `--c-avatar-spacing-trigger-button-bottom` | `4px` |
+| `--c-avatar-size-trigger-icon` | `12px` |
+| `--c-avatar-trigger-button-border-radius` | `50%` |
+| `--c-avatar-font-size-max-count` | `20px` |
+| `--c-avatar-max-count-text-color` | `var(--c-sys-color-content-primary)` |
+| `--c-avatar-trigger-overlay-font-size` | `16px` |
+| `--c-avatar-hover-transform` | `scale(1.1)` |
+| `--c-avatar-motion-duration` | `0.2s` |
+| `--c-avatar-z-index-trigger` | `1` |
+| `--c-avatar-z-index-overlay` | `0` |
+| `--c-avatar-z-index-overlay-hover` | `2` |
+
+文字、汇总数量和按钮式触发图标默认使用主要内容色；描边跟随容器表面；只有深色交互遮罩上的图标使用 `content-on-dark`。头像背景的 `fill-4`、按钮背景与 hover 阶梯、黑色半透明遮罩保留为组件视觉值。使用 `color` 属性覆盖头像背景时，应同步检查文字对比度，必要时覆盖 `text-color`。
+
+### 减少动态效果
+
+内置 CSS 过渡遵循 `prefers-reduced-motion: reduce`。关闭过渡不改变最终显隐、选中／展开状态及事件语义；插槽内自定义动画由应用自行控制。

@@ -1,0 +1,6 @@
+- [x] Specify selection/commit events and range clear behavior.
+- [x] Implement independent event-date helpers and tests in both libraries.
+- [x] Align Maple empty range, select/change arguments and field disableConfirm.
+- [x] Add demos, documentation and changesets.
+- [x] Verify related tests, types, demo syntax and independent copies.
+- [ ] Separate follow-up: pure-panel confirmation UI, hideDisabledOptions and full component bodies.

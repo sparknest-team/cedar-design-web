@@ -95,20 +95,20 @@ import type { StatisticProps } from '@cedarjs/ui'
 
 | 变量名 | 默认值 |
 | --- | --- |
-| `--c-statistic-title-color` | `var(--c-color-text-2)` |
+| `--c-statistic-title-color` | `var(--c-sys-color-content-secondary)` |
 | `--c-statistic-title-font-size` | `var(--c-font-size-body-3)` |
 | `--c-statistic-title-margin-bottom` | `var(--c-spacing-4)` |
-| `--c-statistic-value-color` | `var(--c-color-text-1)` |
+| `--c-statistic-value-color` | `var(--c-sys-color-content-primary)` |
 | `--c-statistic-value-font-size` | `26px` |
 | `--c-statistic-value-font-weight` | `var(--c-font-weight-500)` |
 | `--c-statistic-decimal-font-size` | `inherit` |
-| `--c-statistic-prefix-color` | `var(--c-color-text-2)` |
+| `--c-statistic-prefix-color` | `var(--c-sys-color-content-secondary)` |
 | `--c-statistic-prefix-font-size` | `14px` |
 | `--c-statistic-prefix-spacing` | `var(--c-spacing-1)` |
-| `--c-statistic-suffix-color` | `var(--c-color-text-2)` |
+| `--c-statistic-suffix-color` | `var(--c-sys-color-content-secondary)` |
 | `--c-statistic-suffix-font-size` | `14px` |
 | `--c-statistic-suffix-spacing` | `var(--c-spacing-1)` |
-| `--c-statistic-extra-color` | `var(--c-color-text-2)` |
+| `--c-statistic-extra-color` | `var(--c-sys-color-content-secondary)` |
 | `--c-statistic-extra-font-size` | `var(--c-font-size-body-3)` |
 | `--c-statistic-extra-margin-top` | `var(--c-spacing-4)` |
 

@@ -48,6 +48,14 @@ export const zhSideBar: SidebarOptions = {
       link: "/themes/",
       children: [
         {
+          text: "Design Token 与 CSS 变量分层",
+          link: "/guide/design-tokens/",
+        },
+        {
+          text: "组件 CSS 变量参考",
+          link: "/guide/design-token-reference/",
+        },
+        {
           text: "主题定制",
           link: "/themes/",
         },

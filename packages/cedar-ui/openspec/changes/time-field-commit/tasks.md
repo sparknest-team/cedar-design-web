@@ -1,0 +1,6 @@
+- [x] Implement Cedar commit boundary and independently copy to Maple.
+- [x] Migrate typed fields, mobile fields and standalone time panels.
+- [x] Add paired transaction tests and Cedar text-input regressions.
+- [x] Update dynamic step demos, public docs and audit/menu reasons.
+- [x] Complete final checks: Cedar 101 / Maple 182 regressions; final paired 14-test controller checks, both typechecks, scoped lint, 18 time / 21 field pairs, 847 demos and audit sync. Full lint interrupted; production builds and browser QA not run.
+- [ ] Follow-up: keyboard/focus/Form composition, panel content and remaining Props/Slots.

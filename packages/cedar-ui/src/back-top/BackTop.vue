@@ -1,106 +1,38 @@
 <template>
-  <teleport :to="popupTarget" :disabled="popupContainer === false">
-  <transition name="fade-in">
-    <div
-      v-if="visible"
-      :class="prefixCls"
-      role="button"
-      tabindex="0"
+  <Teleport :to="popupTarget" :disabled="!mounted || popupContainer === false">
+    <button
+      v-show="visible"
+      v-bind="$attrs"
+      type="button"
+      :class="
+        classes(n(), formatElevation(elevation, 2), [visible, n('--active')], [popupContainer === false, n('--inline')])
+      "
+      :style="{ right: toSizeUnit(right), bottom: toSizeUnit(bottom) }"
       :aria-label="ariaLabel"
-      @click="scrollToTop"
-      @keydown.enter.prevent="scrollToTop"
-      @keydown.space.prevent="scrollToTop"
+      @click="handleClick"
     >
-      <slot>
-        <button :class="`${prefixCls}-btn`">
-          <icon-to-top />
-        </button>
-      </slot>
-    </div>
-  </transition>
-  </teleport>
+      <slot><IconToTop aria-hidden="true" /></slot>
+    </button>
+  </Teleport>
 </template>
 
-<script lang="ts">
-import { defineComponent, onMounted, onUnmounted, ref } from 'vue'
-// @ts-ignore
-import BTween from 'b-tween'
-import { createNamespace, getPrefixCls } from '../_utils/global-config'
-import { on, off } from '../_utils/dom'
-import { throttleByRaf } from '../_utils/throttle-by-raf'
-import { IconToTop } from '@cedarjs/icons-vue/icon-to-top'
-import { isString } from '../_utils/is'
-import { backTopProps } from './props'
+<script setup lang="ts">
+import { IconToTop } from '@cedarjs/icons-vue'
+import { createNamespace, formatElevation } from '../_utils/global-config'
+import { toSizeUnit } from '../_utils/maple/elements'
 import { usePopupContainer } from '../_utils/popup-container'
+import { backTopProps } from './props'
+import { useBackTop } from './use-back-top'
 
-export default defineComponent({
-  name: createNamespace('back-top').name,
-  components: {
-    IconToTop,
-  },
-  props: backTopProps,
-  setup(props) {
-    const popupTarget = usePopupContainer(() => props.popupContainer)
-    const prefixCls = getPrefixCls('back-top')
-    const visible = ref(false)
-    const target = ref<HTMLElement>()
-    const isWindow = !props.targetContainer
-
-    const scrollHandler = throttleByRaf(() => {
-      if (target.value) {
-        const { visibleHeight } = props
-        const { scrollTop } = target.value
-        visible.value = scrollTop >= visibleHeight
-      }
-    })
-
-    const getContainer = (container: string | HTMLElement) => {
-      if (isString(container)) {
-        return document.querySelector(container) as HTMLElement
-      }
-      return container
-    }
-
-    onMounted(() => {
-      target.value = isWindow ? document?.documentElement : getContainer(props.targetContainer)
-      if (target.value) {
-        on(isWindow ? window : target.value, 'scroll', scrollHandler)
-        scrollHandler()
-      }
-    })
-
-    onUnmounted(() => {
-      scrollHandler.cancel()
-      if (target.value) {
-        off(isWindow ? window : target.value, 'scroll', scrollHandler)
-      }
-    })
-
-    const scrollToTop = () => {
-      if (target.value) {
-        const { scrollTop } = target.value
-        const tween = new BTween({
-          from: { scrollTop },
-          to: { scrollTop: 0 },
-          easing: props.easing,
-          duration: props.duration,
-          onUpdate: (keys: any) => {
-            if (target.value) {
-              target.value.scrollTop = keys.scrollTop
-            }
-          },
-        })
-        tween.start()
-        // props.onClick && props.onClick();
-      }
-    }
-
-    return {
-      popupTarget,
-      prefixCls,
-      visible,
-      scrollToTop,
-    }
-  },
-})
+defineOptions({ name: createNamespace('back-top').name, inheritAttrs: false })
+const props = defineProps(backTopProps)
+const emit = defineEmits<{ click: [event: MouseEvent] }>()
+const { n, classes } = createNamespace('back-top')
+const popupTarget = usePopupContainer(() => props.popupContainer)
+const { visible, mounted, scrollToTop } = useBackTop(props)
+function handleClick(event: MouseEvent) {
+  scrollToTop()
+  emit('click', event)
+}
+defineExpose({ scrollToTop })
 </script>

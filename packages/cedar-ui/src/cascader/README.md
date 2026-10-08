@@ -8,6 +8,10 @@ permalink: /components/cascader/
 
 ## 案例
 
+### 异步设备与 ID 回显
+
+<demo src="./__demos__/async-devices.vue"></demo>
+
 ### 基本使用
 
 基础用法。
@@ -16,7 +20,7 @@ permalink: /components/cascader/
 
 ### 尺寸
 
-四种尺寸大小：xs，sm，md，lg
+完整支持 xs、sm、md、lg、xl 五档尺寸
 
 <demo src="./__demos__/size.vue"></demo>
 
@@ -78,64 +82,61 @@ modelValue 使用路径作为值。
 
 ## API
 
-### `<Cascader>` Props
+### Cascader 属性
 
-| 参数名                      | 描述                                         | 类型                                                                                                                                                               |               默认值                |
-| --------------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :---------------------------------: |
-| path-mode                   | 绑定值是否为路径                             | `boolean`                                                                                                                                                          |               `false`               |
-| multiple                    | 是否为多选状态（多选模式默认开启搜索）       | `boolean`                                                                                                                                                          |               `false`               |
-| model-value **(v-model)**   | 绑定值                                       | `string\| number\| Record<string, any>\| (    \| string    \| number    \| Record<string, any>    \| (string \| number \| Record<string, any>)[]  )[]\| undefined` |                 `-`                 |
-| default-value               | 默认值（非受控状态）                         | `string\| number\| Record<string, any>\| (    \| string    \| number    \| Record<string, any>    \| (string \| number \| Record<string, any>)[]  )[]\| undefined` |       `'' \| undefined \| []`       |
-| options                     | 级联选择器的选项                             | `CascaderOption[]`                                                                                                                                                 |                `[]`                 |
-| disabled                    | 是否禁用                                     | `boolean`                                                                                                                                                          |               `false`               |
-| error                       | 是否为错误状态                               | `boolean`                                                                                                                                                          |               `false`               |
-| size                        | 选择框的大小                                 | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`                                                                                                                             |               `'md'`                |
-| filterable                | 是否允许搜索                                 | `boolean`                                                                                                                                                          | `false (single) \| true (multiple)` |
-| clearable                   | 是否允许清除                                 | `boolean`                                                                                                                                                          |               `false`               |
-| input-value **(v-model)**   | 输入框的值                                   | `string`                                                                                                                                                           |                 `-`                 |
-| default-input-value         | 输入框的默认值（非受控状态）                 | `string`                                                                                                                                                           |                `''`                 |
-| open **(v-model)** | 是否显示下拉框                               | `boolean`                                                                                                                                                          |                 `-`                 |
-| expand-trigger              | 展开下一级的触发方式                         | `'click' \| 'hover'`                                                                                                                                               |              `'click'`              |
-| default-open       | 是否默认显示下拉框（非受控状态）             | `boolean`                                                                                                                                                          |               `false`               |
-| placeholder                 | 占位符                                       | `string`                                                                                                                                                           |                 `-`                 |
-| filter-option               | 自定义选项过滤方法                           | `(inputValue: string, option: CascaderOption) => boolean`                                                                                                          |                 `-`                 |
-| popup-container             | 弹出框的挂载容器                             | `string \| HTMLElement \| false`                                                                                                                       |                 `-`                 |
-| max-tag-count               | 多选模式下，最多显示的标签数量。0 表示不限制 | `number`                                                                                                                                                           |                 `0`                 |
-| format-label                | 格式化展示内容                               | `(options: CascaderOption[]) => string`                                                                                                                            |                 `-`                 |
-| trigger-props               | 下拉菜单的触发器属性                         | `TriggerProps`                                                                                                                                                     |                 `-`                 |
-| check-strictly              | 是否开启严格选择模式                         | `boolean`                                                                                                                                                          |               `false`               |
-| load-more                   | 数据懒加载函数，传入时开启懒加载功能         | `(  option: CascaderOption,  done: (children?: CascaderOption[]) => void) => void`                                                                                 |                 `-`                 |
-| loading                     | 是否为加载中状态                             | `boolean`                                                                                                                                                          |               `false`               |
-| search-option-only-label    | 搜索下拉菜单中的选项是否仅展示标签           | `boolean`                                                                                                                                                          |               `false`               |
-| search-delay                | 触发搜索事件的延迟时间                       | `number`                                                                                                                                                           |                `500`                |
-| field-names                 | 自定义 `CascaderOption` 中的字段；当选项值为对象时，也用其中的 `value` 作为键属性 | `CascaderFieldNames`                                                                                                                                               |                 `-`                 |
-| fallback                    | 自定义不存在选项的值的展示                   | `boolean\| ((    value:      \| string      \| number      \| Record<string, unknown>      \| (string \| number \| Record<string, unknown>)[]  ) => string)`       |               `true`                |
-| expand-child                | 是否展开子菜单                               | `boolean`                                                                                                                                                          |               `false`               |
-| virtual-list-props          | 传递虚拟列表属性，传入此参数以开启虚拟滚动   | `VirtualListProps`                                                                                                                                                 |                `'-'`                |
+分别使用 `v-model`、`v-model:open` 和 `v-model:input-value` 控制选中值、展开状态和搜索词。单选清空为 `''`，多选为 `[]`；Select 存在真实空字符串选项时，清空值为 `undefined`。
 
-### `<Cascader>` Events
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| `model-value / default-value` | 受控值 / 非受控初始值 | `Value` | `单选 ''，多选 []` |
+| `open / default-open` | 受控展开 / 默认展开 | `boolean` | `undefined / false` |
+| `input-value / default-input-value` | 搜索文本，独立于选中值 | `string` | `undefined / ''` |
+| `multiple` | 多选；默认启用搜索 | `boolean` | `false` |
+| `size` | 完整支持 xs、sm、md、lg、xl，未设置时继承分组与表单 | `ComponentSize` | `md` |
+| `variant` | filled、outline、standard；未设置时继承 InputGroup | `FormControlVariant` | `filled` |
+| `disabled / readonly / error` | 未设置时继承表单；显式 false 可覆盖 | `boolean` | `undefined` |
+| `placeholder` | 占位文本 | `string` | `—` |
+| `hint / line` | 浮动提示 / standard 变体下划线 | `boolean` | `true` |
+| `text-color / focus-color / blur-color` | 字段颜色 | `string` | `—` |
+| `loading` | 加载状态；禁止选择和确认 | `boolean` | `false` |
+| `show-tags` | 多选值以标签展示；false 改用分隔文本 | `boolean` | `true` |
+| `separator` | show-tags=false 时的多选分隔符 | `string` | `,` |
+| `text-align` | left、center、right | `string` | `left` |
+| `max-tag-count` | 标签数量上限，0 不限制 | `number` | `0` |
+| `tag-nowrap` | 标签内容不换行 | `boolean` | `false` |
+| `popup-container` | 选择器、元素、返回元素的函数或 false（原地渲染） | `PopupContainer` | `—` |
+| `trigger-props` | Menu 的 Trigger 属性；展开状态由字段控制 | `TriggerProps` | `—` |
+| `virtual-list-props` | Menu / List 的虚拟列表参数 | `VirtualListProps` | `—` |
+| `search-delay` | search 事件防抖时长（毫秒） | `number` | `500` |
+| `format-label` | 格式化已选标签；VNode 使用 label 插槽 | `function` | `—` |
+| `clearable` | 允许清除，保留禁用的已选项 | `boolean` | `false` |
+| `options` | 树形选项；叶值模式要求叶值唯一，路径模式可区分不同分支 | `CascaderOption[]` | `[]` |
+| `field-names` | value、label、disabled、children、isLeaf、tagProps、render 的字段映射 | `CascaderFieldNames` | `—` |
+| `path-mode` | true 返回完整路径；false 返回选中节点的值 | `boolean` | `false` |
+| `check-strictly` | 允许选中父节点；多选不关联父子节点 | `boolean` | `false` |
+| `filterable` | 开启搜索 | `boolean` | `单选 false / 多选 true` |
+| `filter-option` | 接收搜索词和原始节点 | `(input, option) => boolean` | `—` |
+| `expand-trigger` | Menu / List 的展开交互：click 或 hover | `string` | `click` |
+| `expand-child` | 展开到首个子节点 | `boolean` | `false` |
+| `load-more` | 异步加载子节点；完成后调用 done(children)，失败调用 done() 以允许重试 | `(option, done) => void` | `—` |
+| `fallback` | 尚未加载的值如何反显 | `boolean 或 (value) => string` | `true` |
+| `search-option-only-label` | 搜索结果仅显示节点标签，不显示路径 | `boolean` | `false` |
+| `auto-fit-popup-width` | Menu 是否与字段等宽 | `boolean` | `false` |
+| `presentation` | 展示方式 | `menu` | `menu` |
 
-| 事件名               | 描述                       | 参数                                                                                   |
-| -------------------- | -------------------------- | -------------------------------------------------------------------------------------- |
-| change               | 选中值改变时触发           | value: `string \| number \| (string \| number \| (string \| number)[])[] \| undefined` |
-| input-value-change   | 输入值改变时触发           | value: `string`                                                                        |
-| clear                | 点击清除按钮时触发         | -                                                                                      |
-| search               | 用户搜索时触发             | value: `string`                                                                        |
-| open-change | 下拉框的显示状态改变时触发 | open: `boolean`                                                                     |
-| focus                | 获得焦点时触发             | ev: `FocusEvent`                                                                       |
-| blur                 | 失去焦点时触发             | ev: `FocusEvent`                                                                       |
+### 事件与方法
 
-### `<Cascader>` Slots
+- `update:modelValue`、`change(value)`：提交时触发，编辑草稿不触发。
+- `update:open`、`open-change(open)`：请求改变展开状态。
+- `update:inputValue`、`input-value-change(text)`、`search(text)`：搜索状态。
+- `focus(event)`、`blur(event)`、`clear(event)`：原生字段事件；只有字段所有者通知 Form。
+- 方法：`focus()`、`blur()`。
 
-| 插槽名       |         描述         | 参数                   |
-| ------------ | :------------------: | ---------------------- |
-| label        |   选择框的显示内容   | data: `CascaderOption` |
-| prefix       |       前缀元素       | -                      |
-| arrow-icon   |   选择框的箭头图标   | -                      |
-| loading-icon |  选择框的加载中图标  | -                      |
-| search-icon  |   选择框的搜索图标   | -                      |
-| empty        | 选项为空时的显示内容 | -                      |
-| option       |       选项内容       | data: `CascaderOption` |
+### 插槽与选项数据
+
+使用 `label({ data })` 自定义已选标签，`selected` 替换整个已选区域。还支持 `prefix`、`suffix`、`clear-icon({ clear })`、`arrow-icon`、`loading-icon`、`search-icon`、`empty`、`option({ data })`。
+
+选项 `label` 是用于搜索的纯文本；自定义选项内容使用 `render` 或 `option` 插槽，自定义反显使用 `format-label` 或 `label` 插槽。以 value 而非 label 识别选项。选项的 `disabled` 禁止选择和删除，`tagProps` 可定制已选标签。
 
 ### `<CascaderPanel>` Props
 

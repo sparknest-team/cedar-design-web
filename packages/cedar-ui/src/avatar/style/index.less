@@ -120,6 +120,7 @@
   }
 }
 
+
 .c-avatar-group {
   display: inline-flex;
   align-items: center;
@@ -154,4 +155,8 @@
     display: flex;
     gap: var(~'--c-avatar-group-popover-item-spacing');
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c-avatar--hoverable, .c-avatar__trigger-icon-button, .c-avatar__trigger-icon-overlay { transition: none; }
 }

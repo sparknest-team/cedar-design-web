@@ -4,7 +4,7 @@
 Both Progress components SHALL accept finite decimal numbers or numeric strings on a 0–100 scale, clamp out-of-range values, and normalize invalid input to zero. Text slot values and accessible values SHALL use the same scale without rounding geometry. Cedar callers SHALL migrate old ratios by multiplying by 100; no automatic ratio detection is permitted.
 
 ### Requirement: Independent identical Switch implementations
-Both Switch components SHALL use independently copied source, props and styles, adapting only package namespace and local configuration/form bridges. Both SHALL implement circle/round/line/md3, default circle, sm/md/lg, controlled and uncontrolled values, readonly, loading, ripple, text/icon slots, and identical events.
+Both Switch components SHALL use independently copied source, props and styles, adapting only package namespace and local configuration/form bridges. Both SHALL implement circle/round/line/tonal, default circle, sm/md/lg, controlled and uncontrolled values, readonly, loading, ripple, text/icon slots, and identical events.
 
 #### Scenario: Async change control
 - **WHEN** beforeChange(nextValue) returns false or rejects

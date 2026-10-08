@@ -1,5 +1,5 @@
 <template>
-  <transition>
+
     <div
       ref="trackRef"
       :class="[`${prefixCls}-track`, `${prefixCls}-track-direction-${direction}`]"
@@ -9,7 +9,7 @@
         <div :class="`${prefixCls}-thumb-bar`" />
       </div>
     </div>
-  </transition>
+
 </template>
 
 <script lang="ts">

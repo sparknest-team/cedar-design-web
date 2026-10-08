@@ -68,7 +68,7 @@
     position: absolute;
     inset: 0;
     display: flex;
-    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: transform var(--c-sys-motion-duration-slow) var(--c-sys-motion-easing-standard);
     will-change: transform;
     pointer-events: none;
   }
@@ -161,6 +161,7 @@
     width: var(~"--c-image-preview-arrow-size");
     height: var(~"--c-image-preview-arrow-size");
     color: var(~"--c-image-preview-arrow-icon-color");
+    font-size: var(--c-image-preview-arrow-font-size);
     background-color: var(~"--c-image-preview-arrow-bg");
     border: 0;
     border-radius: 50%;

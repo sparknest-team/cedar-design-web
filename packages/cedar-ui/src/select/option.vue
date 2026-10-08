@@ -4,6 +4,9 @@
     v-show="isValid"
     ref="itemRef"
     :class="[cls, { [`${prefixCls}-has-suffix`]: Boolean($slots.suffix) }]"
+    role="option"
+    :aria-selected="isSelected"
+    :aria-disabled="disabled"
     @click="handleClick"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
@@ -11,18 +14,13 @@
     <span v-if="$slots.icon" :class="`${prefixCls}-icon`">
       <slot name="icon" />
     </span>
-    <checkbox
-      v-if="selectCtx && selectCtx.multiple"
-      :class="`${prefixCls}-checkbox`"
-      :model-value="isSelected"
-      :disabled="disabled"
-      uninject-group-context
-    >
-      <slot>{{ label }}</slot>
-    </checkbox>
+    <span v-if="selectCtx && selectCtx.multiple" :class="`${prefixCls}-checkbox`">
+      <SelectionIndicator :checked="isSelected" />
+      <slot :selected="isSelected">{{ label }}</slot>
+    </span>
     <template v-else>
       <span :class="`${prefixCls}-content`"
-        ><slot>{{ label }}</slot></span
+        ><slot :selected="isSelected">{{ label }}</slot></span
       >
     </template>
     <span v-if="$slots.suffix" :class="`${prefixCls}-suffix`">
@@ -36,29 +34,28 @@ import type { PropType } from 'vue'
 import {
   computed,
   defineComponent,
+  getCurrentInstance,
   inject,
-  reactive,
-  ref,
-  toRefs,
   onBeforeUnmount,
   onMounted,
   onUpdated,
-  getCurrentInstance,
+  reactive,
+  ref,
+  toRefs,
   watch,
 } from 'vue'
+import SelectionIndicator from '../_components/selection-field/SelectionIndicator.vue'
+import { isEqual } from '../_utils/is-equal'
 import type { TagProps } from '../tag'
-import { getPrefixCls } from '../_utils/global-config'
-import Checkbox from '../checkbox'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import { selectInjectionKey } from './context'
 import { getKeyFromValue, isValidOption } from './utils'
-import { isEqual } from '../_utils/is-equal'
-import { createNamespace } from '../_utils/global-config'
 
 const { name, n, classes } = createNamespace('option')
 export default defineComponent({
   name,
   components: {
-    Checkbox,
+    SelectionIndicator,
   },
   props: {
     /**
@@ -141,33 +138,34 @@ export default defineComponent({
 
     const isSelected = computed(() => selectCtx?.valueKeys.includes(key.value) ?? false)
     const isActive = computed(() => selectCtx?.activeKey === key.value)
-    let isValid = ref(true)
 
-    if (!props.internal) {
-      const optionInfo = reactive({
-        raw: {
-          value,
-          label,
-          disabled,
-          tagProps,
-        },
-        ref: itemRef,
-        index,
-        key,
-        origin: 'slot' as const,
+    const optionInfo = reactive({
+      raw: {
         value,
         label,
         disabled,
         tagProps,
-      })
+      },
+      ref: itemRef,
+      index,
+      key,
+      origin: 'slot' as const,
+      value,
+      label,
+      disabled,
+      tagProps,
+    })
 
-      isValid = computed(() =>
+    const isValid = computed(
+      () =>
+        props.internal ||
         isValidOption(optionInfo, {
           inputValue: selectCtx?.inputValue,
           filterOption: selectCtx?.filterOption,
         }),
-      )
+    )
 
+    if (!props.internal) {
       if (instance) {
         selectCtx?.addSlotOptionInfo(instance.uid, optionInfo)
       }

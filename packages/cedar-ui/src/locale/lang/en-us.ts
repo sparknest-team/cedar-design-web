@@ -94,6 +94,11 @@ const lang: CedarLang = {
   empty: {
     description: 'No Data',
   },
+  infiniteScroll: {
+    loading: 'Loading',
+    error: 'Load failed. Click to retry',
+    finished: 'No more',
+  },
   drawer: {
     confirmButtonText: 'Ok',
     cancelText: 'Cancel',

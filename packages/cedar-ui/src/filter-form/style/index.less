@@ -9,9 +9,13 @@
   }
 
   // 折叠时 Select 动画会抖动，关掉输入框过渡
+  .c-selection-field__input {
+    transition: none !important;
+  }
+
   .c-select-multiple,
   .c-select-single {
-    .c-select-view-input {
+    .c-selection-field__input {
       transition: none !important;
     }
   }

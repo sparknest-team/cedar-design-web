@@ -5,6 +5,7 @@
       <c-radio value="sm">sm</c-radio>
       <c-radio value="md">md</c-radio>
       <c-radio value="lg">lg</c-radio>
+      <c-radio value="xl">xl</c-radio>
     </c-radio-group>
     <c-input-tag :default-value="['one']" placeholder="Please enter something" :size="size" clearable />
   </c-space>

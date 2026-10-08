@@ -1,5 +1,12 @@
 @import './token.less';
 
+@media (prefers-reduced-motion: reduce) {
+  .zoom-modal-enter-active, .zoom-modal-appear-active, .zoom-modal-leave-active,
+  .fade-modal-enter-active, .fade-modal-appear-active, .fade-modal-leave-active {
+    transition: none !important;
+  }
+}
+
 .c-dialog-container {
   position: fixed;
   top: 0;
@@ -175,6 +182,7 @@
 
 // 简洁模式
 .c-dialog-simple {
+  border-radius: var(--c-dialog-simple-border-radius);
   width: var(~'--c-dialog-simple-width');
   padding: var(--c-dialog-simple-padding);
 

@@ -286,7 +286,7 @@ export default defineComponent({
       treeNodeIcon,
       extra,
       nodeStatus,
-      onCheckboxChange(checked: boolean | (string | number | boolean)[], e: Event) {
+      onCheckboxChange(checked: boolean | (string | number | boolean)[], e?: Event) {
         if (disableCheckbox.value || disabled.value) {
           return
         }

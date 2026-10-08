@@ -1,13 +1,13 @@
-import { defineComponent, inject, PropType } from "vue";
-import { CascaderOptionInfo } from "./types";
-import { getPrefixCls, createNamespace } from "../_utils/global-config";
-import { configProviderInjectionKey } from "../config-provider/context";
-import Empty from "../empty";
-import Loading from "../loading";
-import CascaderOption from "./cascader-option";
-import Scrollbar from "../scrollbar";
+import { defineComponent, inject, PropType } from 'vue'
+import { useEmptySlot } from '../_components/selection-field/empty-slot'
+import Scrollbar from '../scrollbar'
+import Empty from '../empty'
+import Loading from '../loading'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
+import CascaderOption from './cascader-option'
+import { CascaderOptionInfo } from './types'
 
-const { name } = createNamespace("cascader-search-panel");
+const { name } = createNamespace('cascader-search-panel')
 
 export default defineComponent({
   name,
@@ -23,20 +23,19 @@ export default defineComponent({
     pathLabel: Boolean,
   },
   setup(props, { slots }) {
-    const prefixCls = getPrefixCls("cascader");
-    const configCtx = inject(configProviderInjectionKey, undefined);
+    const prefixCls = getPrefixCls('cascader')
+    const emptySlot = useEmptySlot()
 
     const renderContent = () => {
       if (props.loading) {
-        return <Loading />;
+        return <Loading />
       }
       if (props.options.length === 0) {
         return (
           <div class={`${prefixCls}-list-empty`}>
-            {slots.empty?.() ??
-              configCtx?.slots.empty?.({ component: "cascader" }) ?? <Empty />}
+            {slots.empty?.() ?? emptySlot?.({ component: 'cascader' }) ?? <Empty />}
           </div>
-        );
+        )
       }
       return (
         <ul
@@ -62,13 +61,9 @@ export default defineComponent({
             />
           ))}
         </ul>
-      );
-    };
+      )
+    }
 
-    return () => (
-      <Scrollbar class={[`${prefixCls}-panel`, `${prefixCls}-search-panel`]}>
-        {renderContent()}
-      </Scrollbar>
-    );
+    return () => <Scrollbar class={[`${prefixCls}-panel`, `${prefixCls}-search-panel`]}>{renderContent()}</Scrollbar>
   },
-});
+})

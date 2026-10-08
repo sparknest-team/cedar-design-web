@@ -1,6 +1,7 @@
 const labels: Record<string, string> = {
   '最佳实践': 'Best practices', '卡片页面': 'Card page', '列表页面': 'List page', '详情页面': 'Detail page',
   '原子化 CSS': 'Atomic CSS', '常用写法': 'Common patterns', 'Utility 规范': 'Utility guidelines',
+  'Design Token 与 CSS 变量分层': 'Design tokens and CSS variable layers',
   '开发指南': 'Guide', '跨端复用标记说明': 'Cross-platform reuse', '快速上手': 'Quick start',
   '国际化': 'Internationalization', '更新日志': 'Changelog', '样式': 'Styles', '主题定制': 'Theming',
   '通用': 'General', '通用组件': 'General', '布局': 'Layout', '导航': 'Navigation',

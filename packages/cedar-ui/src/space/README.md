@@ -68,16 +68,16 @@ permalink: /components/space/
 
 | 变量名 | 默认值 |
 | --- | --- |
-| `--c-space-size-xs-row-gap` | `4px` |
-| `--c-space-size-xs-column-gap` | `4px` |
-| `--c-space-size-sm-row-gap` | `8px` |
-| `--c-space-size-sm-column-gap` | `6px` |
-| `--c-space-size-md-row-gap` | `12px` |
-| `--c-space-size-md-column-gap` | `8px` |
-| `--c-space-size-lg-row-gap` | `16px` |
-| `--c-space-size-lg-column-gap` | `12px` |
-| `--c-space-size-xl-row-gap` | `24px` |
-| `--c-space-size-xl-column-gap` | `16px` |
+| `--c-space-size-xs-row-gap` | `var(--c-sys-space-2)` |
+| `--c-space-size-xs-column-gap` | `var(--c-sys-space-2)` |
+| `--c-space-size-sm-row-gap` | `var(--c-sys-space-4)` |
+| `--c-space-size-sm-column-gap` | `var(--c-sys-space-3)` |
+| `--c-space-size-md-row-gap` | `var(--c-sys-space-5)` |
+| `--c-space-size-md-column-gap` | `var(--c-sys-space-4)` |
+| `--c-space-size-lg-row-gap` | `var(--c-sys-space-6)` |
+| `--c-space-size-lg-column-gap` | `var(--c-sys-space-5)` |
+| `--c-space-size-xl-row-gap` | `var(--c-sys-space-8)` |
+| `--c-space-size-xl-column-gap` | `var(--c-sys-space-6)` |
 
 ## 同源实现与平台边界
 

@@ -150,3 +150,99 @@ import type {
 两端各自保存完整源码，不引用公共核心，不共享组件实例或响应式状态；修改时同步维护两份实现。主体、Props、关键样式及配对测试纳入只读源码一致性检查，主题 token 和安装入口各自维护。
 
 关闭按钮支持键盘操作，close 只触发一次，closed 在离场动画完成后触发。Maple 内部关闭类由 __close-icon 调整为 __close-btn；默认图标资源由各库本地适配。
+
+### 完整变量默认值
+
+彩色标题、正文、图标及 outline 描边使用可读 system content。standard 与 tonal 使用同一第 1 阶浅底，前者额外带弱装饰描边；默认标题为 content-primary，正文、图标为 content-secondary。content 变量同时控制根容器继承色，关闭图标及未显式设色的操作内容跟随它。Maple 暗色继承同一套颜色，但保留原有几何覆盖（内边距 16px、图标 22px、图标/关闭间距 12px、正文行高 1.5）。color 仅改背景，调用方须同时验证前景对比度。下表为 :root 默认值，不是主题覆盖值。
+
+| 变量 | 默认值 |
+| --- | --- |
+| `--c-alert-padding-vertical` | `var(--c-sys-space-4)` |
+| `--c-alert-padding-horizontal` | `var(--c-sys-space-6)` |
+| `--c-alert-padding-vertical-with-title` | `var(--c-sys-space-6)` |
+| `--c-alert-padding-horizontal-with-title` | `var(--c-sys-space-6)` |
+| `--c-alert-border-radius` | `var(--c-sys-radius-md)` |
+| `--c-alert-border-width` | `1px` |
+| `--c-alert-font-size-content` | `var(--c-sys-font-size-md)` |
+| `--c-alert-font-size-title` | `var(--c-sys-font-size-lg)` |
+| `--c-alert-font-weight-title` | `var(--c-sys-font-weight-medium)` |
+| `--c-alert-line-height` | `1.5715` |
+| `--c-alert-line-height-title` | `1.5` |
+| `--c-alert-title-margin-bottom` | `var(--c-sys-space-2)` |
+| `--c-alert-icon-size` | `16px` |
+| `--c-alert-icon-margin-right` | `var(--c-sys-space-4)` |
+| `--c-alert-action-margin-left` | `var(--c-sys-space-5)` |
+| `--c-alert-close-margin-left` | `var(--c-sys-space-4)` |
+| `--c-alert-standard-info-bg` | `rgb(var(--c-blue-1))` |
+| `--c-alert-standard-info-border` | `rgb(var(--c-blue-3))` |
+| `--c-alert-standard-info-title` | `var(--c-sys-color-content-info)` |
+| `--c-alert-standard-info-content` | `var(--c-sys-color-content-info)` |
+| `--c-alert-standard-info-icon` | `var(--c-sys-color-content-info)` |
+| `--c-alert-standard-success-bg` | `rgb(var(--c-success-1))` |
+| `--c-alert-standard-success-border` | `rgb(var(--c-success-3))` |
+| `--c-alert-standard-success-title` | `var(--c-sys-color-content-success)` |
+| `--c-alert-standard-success-content` | `var(--c-sys-color-content-success)` |
+| `--c-alert-standard-success-icon` | `var(--c-sys-color-content-success)` |
+| `--c-alert-standard-warning-bg` | `rgb(var(--c-warning-1))` |
+| `--c-alert-standard-warning-border` | `rgb(var(--c-warning-3))` |
+| `--c-alert-standard-warning-title` | `var(--c-sys-color-content-warning)` |
+| `--c-alert-standard-warning-content` | `var(--c-sys-color-content-warning)` |
+| `--c-alert-standard-warning-icon` | `var(--c-sys-color-content-warning)` |
+| `--c-alert-standard-danger-bg` | `rgb(var(--c-danger-1))` |
+| `--c-alert-standard-danger-border` | `rgb(var(--c-danger-3))` |
+| `--c-alert-standard-danger-title` | `var(--c-sys-color-content-danger)` |
+| `--c-alert-standard-danger-content` | `var(--c-sys-color-content-danger)` |
+| `--c-alert-standard-danger-icon` | `var(--c-sys-color-content-danger)` |
+| `--c-alert-standard-default-bg` | `var(--c-color-fill-2)` |
+| `--c-alert-standard-default-border` | `var(--c-sys-color-border-default)` |
+| `--c-alert-standard-default-title` | `var(--c-sys-color-content-primary)` |
+| `--c-alert-standard-default-content` | `var(--c-sys-color-content-secondary)` |
+| `--c-alert-standard-default-icon` | `var(--c-sys-color-content-secondary)` |
+| `--c-alert-tonal-info-bg` | `rgb(var(--c-blue-1))` |
+| `--c-alert-tonal-info-title` | `var(--c-sys-color-content-info)` |
+| `--c-alert-tonal-info-content` | `var(--c-sys-color-content-info)` |
+| `--c-alert-tonal-info-icon` | `var(--c-sys-color-content-info)` |
+| `--c-alert-tonal-success-bg` | `rgb(var(--c-success-1))` |
+| `--c-alert-tonal-success-title` | `var(--c-sys-color-content-success)` |
+| `--c-alert-tonal-success-content` | `var(--c-sys-color-content-success)` |
+| `--c-alert-tonal-success-icon` | `var(--c-sys-color-content-success)` |
+| `--c-alert-tonal-warning-bg` | `rgb(var(--c-warning-1))` |
+| `--c-alert-tonal-warning-title` | `var(--c-sys-color-content-warning)` |
+| `--c-alert-tonal-warning-content` | `var(--c-sys-color-content-warning)` |
+| `--c-alert-tonal-warning-icon` | `var(--c-sys-color-content-warning)` |
+| `--c-alert-tonal-danger-bg` | `rgb(var(--c-danger-1))` |
+| `--c-alert-tonal-danger-title` | `var(--c-sys-color-content-danger)` |
+| `--c-alert-tonal-danger-content` | `var(--c-sys-color-content-danger)` |
+| `--c-alert-tonal-danger-icon` | `var(--c-sys-color-content-danger)` |
+| `--c-alert-tonal-default-bg` | `var(--c-color-fill-2)` |
+| `--c-alert-tonal-default-title` | `var(--c-sys-color-content-primary)` |
+| `--c-alert-tonal-default-content` | `var(--c-sys-color-content-secondary)` |
+| `--c-alert-tonal-default-icon` | `var(--c-sys-color-content-secondary)` |
+| `--c-alert-outline-info-border` | `var(--c-sys-color-content-info)` |
+| `--c-alert-outline-info-title` | `var(--c-sys-color-content-info)` |
+| `--c-alert-outline-info-content` | `var(--c-sys-color-content-info)` |
+| `--c-alert-outline-info-icon` | `var(--c-sys-color-content-info)` |
+| `--c-alert-outline-success-border` | `var(--c-sys-color-content-success)` |
+| `--c-alert-outline-success-title` | `var(--c-sys-color-content-success)` |
+| `--c-alert-outline-success-content` | `var(--c-sys-color-content-success)` |
+| `--c-alert-outline-success-icon` | `var(--c-sys-color-content-success)` |
+| `--c-alert-outline-warning-border` | `var(--c-sys-color-content-warning)` |
+| `--c-alert-outline-warning-title` | `var(--c-sys-color-content-warning)` |
+| `--c-alert-outline-warning-content` | `var(--c-sys-color-content-warning)` |
+| `--c-alert-outline-warning-icon` | `var(--c-sys-color-content-warning)` |
+| `--c-alert-outline-danger-border` | `var(--c-sys-color-content-danger)` |
+| `--c-alert-outline-danger-title` | `var(--c-sys-color-content-danger)` |
+| `--c-alert-outline-danger-content` | `var(--c-sys-color-content-danger)` |
+| `--c-alert-outline-danger-icon` | `var(--c-sys-color-content-danger)` |
+| `--c-alert-outline-default-border` | `var(--c-sys-color-border-default)` |
+| `--c-alert-outline-default-title` | `var(--c-sys-color-content-primary)` |
+| `--c-alert-outline-default-content` | `var(--c-sys-color-content-secondary)` |
+| `--c-alert-outline-default-icon` | `var(--c-sys-color-content-secondary)` |
+
+### 动效变量
+
+内置动效遵循 `prefers-reduced-motion: reduce`；减少动效不会阻止加载状态或关闭事件更新。
+
+| Token | Default |
+| --- | --- |
+| `--c-alert-close-duration` | `var(--c-sys-motion-duration-slow)` |

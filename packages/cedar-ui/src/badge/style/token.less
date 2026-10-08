@@ -1,20 +1,20 @@
 :root {
-  --c-badge-font-weight: 500;
+  --c-badge-font-weight: var(--c-sys-font-weight-medium);
 
   // description size
-  --c-badge-description-size-xs-font-size: 12px;
-  --c-badge-description-size-sm-font-size: 12px;
-  --c-badge-description-size-md-font-size: 14px;
-  --c-badge-description-size-lg-font-size: 16px;
-  --c-badge-description-size-xl-font-size: 18px;
-  --c-badge-description-text-color: var(--c-color-text-1);
+  --c-badge-description-size-xs-font-size: var(--c-sys-font-size-xs);
+  --c-badge-description-size-sm-font-size: var(--c-sys-font-size-xs);
+  --c-badge-description-size-md-font-size: var(--c-sys-font-size-md);
+  --c-badge-description-size-lg-font-size: var(--c-sys-font-size-lg);
+  --c-badge-description-size-xl-font-size: var(--c-sys-font-size-xl);
+  --c-badge-description-text-color: var(--c-sys-color-content-primary);
 
   // size: font-size
-  --c-badge-size-xs-font-size: 12px;
-  --c-badge-size-sm-font-size: 12px;
-  --c-badge-size-md-font-size: 12px;
-  --c-badge-size-lg-font-size: 14px;
-  --c-badge-size-xl-font-size: 16px;
+  --c-badge-size-xs-font-size: var(--c-sys-font-size-xs);
+  --c-badge-size-sm-font-size: var(--c-sys-font-size-xs);
+  --c-badge-size-md-font-size: var(--c-sys-font-size-xs);
+  --c-badge-size-lg-font-size: var(--c-sys-font-size-md);
+  --c-badge-size-xl-font-size: var(--c-sys-font-size-lg);
   // size: scale
   --c-badge-size-xs-scale: 0.6667;
   --c-badge-size-sm-scale: 0.8333;
@@ -34,15 +34,15 @@
   --c-badge-size-xl-dot-height: 8px;
   // size: inline space
   --c-badge-size-xs-space: 0px;
-  --c-badge-size-sm-space: 2px;
-  --c-badge-size-md-space: 6px;
-  --c-badge-size-lg-space: 6px;
-  --c-badge-size-xl-space: 8px;
+  --c-badge-size-sm-space: var(--c-sys-space-1);
+  --c-badge-size-md-space: var(--c-sys-space-3);
+  --c-badge-size-lg-space: var(--c-sys-space-3);
+  --c-badge-size-xl-space: var(--c-sys-space-4);
   // size: padding
-  --c-badge-size-xs-padding: 0 6px;
-  --c-badge-size-sm-padding: 0 6px;
-  --c-badge-size-md-padding: 0 8px;
-  --c-badge-size-lg-padding: 0 8px;
+  --c-badge-size-xs-padding: 0 var(--c-sys-space-3);
+  --c-badge-size-sm-padding: 0 var(--c-sys-space-3);
+  --c-badge-size-md-padding: 0 var(--c-sys-space-4);
+  --c-badge-size-lg-padding: 0 var(--c-sys-space-4);
   --c-badge-size-xl-padding: 0 10px;
   // size: height
   --c-badge-size-xs-height: 20px;
@@ -58,37 +58,41 @@
   --c-badge-size-xl-border-radius: 32px;
 
   // status
-  --c-badge-bg-color: #ef4444;
-  --c-badge-text-color: #ffffff;
+  --c-badge-bg-color: var(--c-sys-color-status-danger);
+  --c-badge-text-color: var(--c-sys-color-content-on-bright);
   --c-badge-status-default-bg-color: #e0e0e0;
-  --c-badge-status-default-text-color: #1d1b20;
-  --c-badge-status-info-bg-color: var(--c-color-info);
-  --c-badge-status-info-text-color: var(--c-color-white);
-  --c-badge-status-success-bg-color: var(--c-color-success);
-  --c-badge-status-success-text-color: var(--c-color-white);
-  --c-badge-status-warning-bg-color: var(--c-color-warning);
-  --c-badge-status-warning-text-color: var(--c-color-white);
-  --c-badge-status-danger-bg-color: var(--c-color-danger);
-  --c-badge-status-danger-text-color: var(--c-color-white);
-  --c-badge-status-primary-bg-color: var(--c-color-primary);
-  --c-badge-status-primary-text-color: var(--c-color-white);
+  --c-badge-status-default-text-color: var(--c-sys-color-content-on-bright);
+  --c-badge-status-info-bg-color: var(--c-sys-color-status-info);
+  --c-badge-status-info-text-color: var(--c-sys-color-content-on-bright);
+  --c-badge-status-success-bg-color: var(--c-sys-color-status-success);
+  --c-badge-status-success-text-color: var(--c-sys-color-content-on-bright);
+  --c-badge-status-warning-bg-color: var(--c-sys-color-status-warning);
+  --c-badge-status-warning-text-color: var(--c-sys-color-content-on-bright);
+  --c-badge-status-danger-bg-color: var(--c-sys-color-status-danger);
+  --c-badge-status-danger-text-color: var(--c-sys-color-content-on-bright);
+  --c-badge-status-primary-bg-color: var(--c-sys-color-action-primary);
+  --c-badge-status-primary-text-color: var(--c-sys-color-content-on-bright);
   --c-badge-status-secondary-bg-color: rgb(var(--c-gray-6));
-  --c-badge-status-secondary-text-color: var(--c-color-white);
+  --c-badge-status-secondary-text-color: var(--c-sys-color-content-on-bright);
   --c-badge-status-tertiary-bg-color: rgb(var(--c-gray-7));
-  --c-badge-status-tertiary-text-color: var(--c-color-white);
+  --c-badge-status-tertiary-text-color: var(--c-sys-color-content-on-dark);
 
   // variant=outline
   --c-badge-variant-outline-bg-color: transparent;
-  --c-badge-variant-outline-text-color: #ef4444;
-  --c-badge-variant-outline-status-info-text-color: var(--c-color-info);
-  --c-badge-variant-outline-status-success-text-color: var(--c-color-success);
-  --c-badge-variant-outline-status-warning-text-color: var(--c-color-warning);
-  --c-badge-variant-outline-status-danger-text-color: var(--c-color-danger);
-  --c-badge-variant-outline-status-primary-text-color: var(--c-color-primary);
-  --c-badge-variant-outline-status-default-text-color: #1d1b20;
-  --c-badge-variant-outline-status-secondary-text-color: rgb(var(--c-gray-6));
-  --c-badge-variant-outline-status-tertiary-text-color: rgb(var(--c-gray-7));
-  --c-badge-border-color: var(--c-color-bg-2);
+  --c-badge-variant-outline-text-color: var(--c-sys-color-content-danger);
+  --c-badge-variant-outline-status-info-text-color: var(--c-sys-color-content-info);
+  --c-badge-variant-outline-status-success-text-color: var(--c-sys-color-content-success);
+  --c-badge-variant-outline-status-warning-text-color: var(--c-sys-color-content-warning);
+  --c-badge-variant-outline-status-danger-text-color: var(--c-sys-color-content-danger);
+  --c-badge-variant-outline-status-primary-text-color: var(--c-sys-color-content-brand);
+  --c-badge-variant-outline-status-default-text-color: var(--c-sys-color-content-primary);
+  --c-badge-variant-outline-status-secondary-text-color: var(--c-sys-color-content-secondary);
+  --c-badge-variant-outline-status-tertiary-text-color: var(--c-sys-color-content-secondary);
+  --c-badge-border-color: var(--c-sys-color-surface-default);
   --c-badge-offset: 2px;
   --c-badge-ring-width: 2px;
+}
+
+:root[cedar-theme="dark"] {
+  --c-badge-status-tertiary-text-color: var(--c-sys-color-content-on-bright);
 }

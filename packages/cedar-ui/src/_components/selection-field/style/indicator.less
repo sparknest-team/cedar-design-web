@@ -1,0 +1,19 @@
+.c-selection-indicator {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--c-selection-indicator-size, 16px);
+  height: var(--c-selection-indicator-size, 16px);
+  margin-inline-end: var(--c-sys-space-2);
+  box-sizing: border-box;
+  color: white;
+  border: 1px solid var(--c-sys-color-border-strong);
+  border-radius: var(--c-sys-radius-sm);
+  pointer-events: none;
+  vertical-align: middle;
+  &--checked, &--mixed { background: var(--c-sys-color-action-primary); border-color: var(--c-sys-color-action-primary); }
+  &--radio { border-radius: 50%; }
+  &__dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  svg { width: 12px; height: 12px; }
+}

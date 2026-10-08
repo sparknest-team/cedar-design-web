@@ -6,7 +6,7 @@ const BackTop = withInstall(_BackTop, Object.assign(_BackTop, {
 }), { components: [_BackTop] })
 
 export type BackTopInstance = InstanceType<typeof _BackTop>
-export type { BackTopProps } from './props'
+export type { BackTopProps, BackTopTarget, BackTopEasing } from './props'
 export { BackTop, backTopProps }
 export const _BackTopComponent = BackTop
 

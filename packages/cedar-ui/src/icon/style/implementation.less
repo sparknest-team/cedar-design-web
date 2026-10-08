@@ -28,7 +28,7 @@
 
   &-spin,
   &--spin {
-    animation: c-icon-spin 1s infinite linear;
+    animation: c-icon-spin var(--c-icon-spin-duration) infinite linear;
   }
 }
 
@@ -36,4 +36,11 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c-icon-spin,
+  .c-icon--spin { animation: none; }
+  .c-icon { transition: none !important; }
+  .c-icon--shrinking { transform: none; }
 }

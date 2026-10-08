@@ -3,7 +3,7 @@
     <c-checkbox v-model="checked1">v-model</c-checkbox>
     <c-checkbox :model-value="true">binding value</c-checkbox>
     <c-checkbox :model-value="checked2">binding value2</c-checkbox>
-    <c-checkbox :default-checked="true">uncontrolled state</c-checkbox>
+    <c-checkbox :default-value="true">uncontrolled state</c-checkbox>
   </c-space>
   <div :style="{ marginTop: '20px' }">
     <a-button type="primary" @click="handleSetCheck"> {{ checked2 ? 'uncheck' : 'check' }} value2 </a-button>

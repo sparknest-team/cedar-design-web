@@ -1,8 +1,13 @@
-import { collectTreeLeaves } from '../_utils/tree-data'
 import { Ref } from 'vue'
-import { CascaderOption, CascaderOptionInfo, CascaderFieldNames } from './types'
 import { isArray, isNull, isNumber, isObject, isString, isUndefined } from '../_utils/is'
+import { collectTreeLeaves } from '../_utils/tree-data'
 import { BaseType, UnionType } from '../_utils/types'
+import { CascaderFieldNames, CascaderOption, CascaderOptionInfo } from './types'
+
+const valueIdentity = (value: unknown, field = 'value') => {
+  const id = isObject(value) ? value[field] : value
+  return JSON.stringify([typeof id, id])
+}
 
 export const getOptionInfos = (
   options: CascaderOption[],
@@ -41,7 +46,7 @@ export const getOptionInfos = (
         // raw
         value,
         label: item[fieldNames.label] ?? String(value),
-        disabled: Boolean(item[fieldNames.disabled]),
+        disabled: Boolean(parent?.disabled || item[fieldNames.disabled]),
         selectionDisabled: false,
         render: item[fieldNames.render],
         tagProps: item[fieldNames.tagProps],
@@ -50,24 +55,24 @@ export const getOptionInfos = (
         level: parentPath.length,
         index,
         key: '',
-        valueKey: String(isObject(value) ? value[fieldNames.value] : value),
+        valueKey: valueIdentity(value, fieldNames.value),
         parent,
         path: [],
         pathValue: [],
       }
       const path = parentPath.concat(data)
       const pathValue: UnionType[] = []
-      const key = path
-        .map((item) => {
+      const key = JSON.stringify(
+        path.map((item) => {
           pathValue.push(item.value)
           return item.valueKey
-        })
-        .join('-')
+        }),
+      )
       data.path = path
       data.pathValue = pathValue
       data.key = key
 
-      if (item[fieldNames.children]) {
+      if (item[fieldNames.children]?.length) {
         data.isLeaf = false
         data.children = travelOptions(item[fieldNames.children], data, (level ?? 1) + 1)
       } else if (enabledLazyLoad && !data.isLeaf) {
@@ -124,8 +129,12 @@ export const getCheckedStatus = (option: CascaderOptionInfo, valueMap?: Map<stri
       checked = true
     }
   } else {
-    const checkedLeafOptionNumber = collectTreeLeaves([option], node => node.children,
-      node => node.disabled || node.selectionDisabled, node => !!node.isLeaf).filter(node => valueMap?.has(node.key)).length
+    const checkedLeafOptionNumber = collectTreeLeaves(
+      [option],
+      (node) => node.children,
+      (node) => node.disabled || node.selectionDisabled,
+      (node) => !!node.isLeaf,
+    ).filter((node) => valueMap?.has(node.key)).length
     if (checkedLeafOptionNumber > 0 && checkedLeafOptionNumber >= (option.totalLeafOptions ?? 1)) {
       checked = true
     } else if (checkedLeafOptionNumber > 0) {
@@ -140,28 +149,30 @@ export const getCheckedStatus = (option: CascaderOptionInfo, valueMap?: Map<stri
 }
 
 export const getLeafOptionKeys = (option: CascaderOptionInfo) =>
-  collectTreeLeaves([option], node => node.children, () => false, node => !!node.isLeaf).map(node => node.key)
+  collectTreeLeaves(
+    [option],
+    (node) => node.children,
+    () => false,
+    (node) => !!node.isLeaf,
+  ).map((node) => node.key)
 
 export const getLeafOptionInfos = (option: CascaderOptionInfo) =>
-  collectTreeLeaves([option], node => node.children, node => node.disabled || node.selectionDisabled, node => !!node.isLeaf)
+  collectTreeLeaves(
+    [option],
+    (node) => node.children,
+    (node) => node.disabled || node.selectionDisabled,
+    (node) => !!node.isLeaf,
+  )
 
 export const getValueKey = (
   value: UnionType | UnionType[],
-  {
-    valueField,
-    leafOptionValueMap,
-  }: { valueField: string; leafOptionValueMap: Map<BaseType, string> },
+  { valueField, leafOptionValueMap }: { valueField: string; leafOptionValueMap: Map<BaseType, string> },
 ): string => {
   if (isArray(value)) {
-    return value
-      .map((item) => {
-        if (isObject(item)) return item[valueField]
-        return item
-      })
-      .join('-')
+    return JSON.stringify(value.map((item) => valueIdentity(item, valueField)))
   }
-  const _value = isObject(value) ? value[valueField] : value
-  return leafOptionValueMap.get(String(_value)) ?? String(_value)
+  const key = valueIdentity(value, valueField)
+  return leafOptionValueMap.get(key) ?? JSON.stringify([key])
 }
 
 export const getValidValues = (
@@ -209,14 +220,14 @@ export const getKeysFromValue = (
   } else if (isArray(value) && value.length > 0) {
     // TODO: 更好的写法？
     if (isString(value[0]) || isNumber(value[0])) {
-      const key = value.join('-')
+      const key = JSON.stringify(value.map((item) => valueIdentity(item)))
       if (leafOptionMap.has(key)) {
         keys.push(key)
       }
     } else {
       value.forEach((item) => {
         if (isArray(item)) {
-          const key = item.join('-')
+          const key = JSON.stringify(item.map((value) => valueIdentity(value)))
           if (leafOptionMap.has(key)) {
             keys.push(key)
           }

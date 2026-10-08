@@ -11,7 +11,7 @@ describe('DatePicker', () => {
   test('marks today deterministically and exposes keyboard-selectable cells', async () => {
     vi.useFakeTimers()
     vi.setSystemTime(new Date(2025, 0, 15, 12))
-    const wrapper = mount(DatePicker, { props: { hideTrigger: true } })
+    const wrapper = mount(DatePicker, {})
     await nextTick()
 
     const today = wrapper.find('.c-picker-cell-today')

@@ -2,45 +2,14 @@ import { computed, toRefs } from 'vue'
 import { isFunction } from '../../../_utils/is'
 import { Mode, FormatFunc, ValueFormat } from '../types'
 
+import { getDefaultFormat, getDefaultValueFormat } from '../../date-format'
+export { getDefaultFormat, getDefaultValueFormat } from '../../date-format'
+
 interface FormatProps {
   format?: string | FormatFunc
   valueFormat?: ValueFormat
   mode?: Mode
   showTime?: boolean
-}
-
-export function getDefaultFormat(mode: Mode = 'date', showTime = false) {
-  switch (mode) {
-    case 'date':
-      return showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD'
-    case 'month':
-      return 'YYYY-MM'
-    case 'year':
-      return 'YYYY'
-    case 'week':
-      return 'gggg-wo'
-    case 'quarter':
-      return 'YYYY-[Q]Q'
-    default:
-      return 'YYYY-MM-DD'
-  }
-}
-
-export function getDefaultValueFormat(mode: Mode = 'date', showTime = false) {
-  switch (mode) {
-    case 'date':
-      return showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD'
-    case 'month':
-      return 'YYYY-MM'
-    case 'year':
-      return 'YYYY'
-    case 'week':
-      return 'YYYY-MM-DD'
-    case 'quarter':
-      return 'YYYY-MM'
-    default:
-      return 'YYYY-MM-DD'
-  }
 }
 
 export default function useFormat(props: FormatProps) {

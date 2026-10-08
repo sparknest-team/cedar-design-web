@@ -7,7 +7,7 @@ test('Tabs active color is exposed through the shared system role', () => {
   const styles = readFileSync(resolve(process.cwd(), 'src/tabs/style/index.less'), 'utf8')
 
   expect(tokens).toContain(
-    '--c-tabs-title-text-color-active: var(--c-sys-color-action-primary);',
+    '--c-tabs-title-text-color-active: var(--c-sys-color-content-brand);',
   )
   expect(styles).toMatch(
     /&--tab-active\s*\{\s*color:\s*var\(--c-tabs-title-text-color-active\);\s*\}/,

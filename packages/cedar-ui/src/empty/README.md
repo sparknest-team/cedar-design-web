@@ -74,3 +74,18 @@ import type { EmptyImageSize, EmptyProps } from '@cedarjs/ui'
 ```
 
 ConfigProvider 的 `empty` 插槽可以替换未自定义内容的 Empty，不作为 Empty 的公开 Prop。
+
+### 样式变量
+
+| 变量 | 默认值 | 用途 |
+| --- | --- | --- |
+| `--c-empty-description-color` | `var(--c-sys-color-content-tertiary)` | 低强调的空状态说明文字 |
+| `--c-empty-icon-color` | `var(--c-sys-color-content-decorative)` | 非文字装饰图标；不用于需要阅读的文字 |
+| `--c-empty-padding` | `var(--c-spacing-5) 0` | 容器留白 |
+| `--c-empty-image-margin-bottom` | `var(--c-spacing-2)` | 图标与说明的间距 |
+| `--c-empty-description-font-size` | `var(--c-font-size-body-3)` | 说明文字字号 |
+| `--c-empty-description-line-height` | `var(--c-line-height)` | 说明文字行高 |
+| `--c-empty-extra-margin-top` | `var(--c-spacing-5)` | 额外操作上方间距 |
+| `--c-empty-size-xs/sm/md/lg/xl` | `var(--c-size-15/20/25/35/45)` | 默认图标／图片的尺寸档位 |
+
+描述是文字，必须按文本对比度检查；装饰图标可以更弱。自定义图片或插槽可能有自己的颜色，不会被 `icon-color` 强制重染。尺寸与间距按桌面／移动布局分别维护，但同名变量职责一致。

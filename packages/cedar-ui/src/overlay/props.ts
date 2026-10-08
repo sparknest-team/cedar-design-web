@@ -1,5 +1,5 @@
+import type { ExtractPublicPropTypes } from 'vue'
 import { popupContainerProp } from '../_utils/popup-container'
-import type { ExtractPropTypes, PropType } from "vue";
 
 export const overlayProps = {
   /** 是否显示背景层 */
@@ -18,6 +18,6 @@ export const overlayProps = {
   popupContainer: popupContainerProp,
   /** 自定义层级 */
   zIndex: Number,
-};
+}
 
-export type OverlayProps = import("vue").ExtractPublicPropTypes<typeof overlayProps>;
+export type OverlayProps = ExtractPublicPropTypes<typeof overlayProps>

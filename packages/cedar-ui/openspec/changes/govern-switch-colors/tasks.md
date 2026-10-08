@@ -1,0 +1,4 @@
+- [x] Implement paired defaults and tonal foreground consumers in both libraries.
+- [x] Register shared names/defaults and remove conflicting dark overrides.
+- [x] Add compiled state/contrast/override checks and run affected unit tests.
+- [x] Update component docs, design-token menu mirrors and migration boundaries.

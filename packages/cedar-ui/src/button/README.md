@@ -119,3 +119,106 @@ Cedar 原 loading-type=default/fill/line 改为 loading-mode=default/fill/line�
 ## 类型
 
 ButtonProps、ButtonVariant、ButtonLoadingMode、ButtonHandler、ButtonInstance、ButtonGroupProps、ButtonGroupInstance。
+
+## CSS 变量职责与完整默认值
+
+status-color 只负责实心背景，status-text-color 负责其对比前景；历史命名 status-icon-color 实际控制 text/outline/tonal 及 default icon-container 的可读文字和图标，status-icon-container-color 控制对应浅色表面。定制时应成对覆盖。disabled 优先于 color/text-color 属性；loading 默认继承 currentColor，显式 loading-color 优先。焦点环独立使用 content-brand。
+
+state-opacity-hover/active（0.08/0.12）用于实心、tonal 和图标容器；plain-state-opacity-hover/active（0.5/1）用于 text/outline 的浅色反馈。status-state-layer-color 控制实心反馈色；state-layer-color 控制 tonal/图标容器反馈色。active 高于 hover，disabled/loading 禁止反馈，覆盖层不遮挡前景。internal-button-state-* 是私有变量，不支持业务定制。自定义配色、瞬时 ripple、禁用对比度不在默认对比度保证内。
+
+下表是 :root 默认值而非主题覆盖。暗色 tertiary 的文字改为 on-bright、覆盖层改为 on-dark；Maple 品牌浅色 primary 的文字改为 on-dark、覆盖层改为 on-bright。尺寸与 loading 动效保留现有组件值，不属于本阶段统一范围。
+
+| 变量 | :root 默认值 |
+| --- | --- |
+| `--c-button-default-text-color` | `var(--c-sys-color-content-primary)` |
+| `--c-button-primary-text-color` | `var(--c-sys-color-content-on-bright)` |
+| `--c-button-danger-text-color` | `var(--c-sys-color-content-on-bright)` |
+| `--c-button-success-text-color` | `var(--c-sys-color-content-on-bright)` |
+| `--c-button-warning-text-color` | `var(--c-sys-color-content-on-bright)` |
+| `--c-button-info-text-color` | `var(--c-sys-color-content-on-bright)` |
+| `--c-button-default-color` | `var(--c-sys-color-surface-default)` |
+| `--c-button-primary-color` | `var(--c-sys-color-action-primary)` |
+| `--c-button-danger-color` | `var(--c-sys-color-status-danger)` |
+| `--c-button-success-color` | `var(--c-sys-color-status-success)` |
+| `--c-button-warning-color` | `var(--c-sys-color-status-warning)` |
+| `--c-button-info-color` | `var(--c-sys-color-status-info)` |
+| `--c-button-secondary-color` | `rgb(var(--c-gray-6))` |
+| `--c-button-secondary-text-color` | `var(--c-sys-color-content-on-bright)` |
+| `--c-button-tertiary-color` | `rgb(var(--c-gray-7))` |
+| `--c-button-tertiary-text-color` | `var(--c-sys-color-content-on-dark)` |
+| `--c-button-default-icon-color` | `var(--c-sys-color-content-primary)` |
+| `--c-button-primary-icon-color` | `var(--c-sys-color-content-brand)` |
+| `--c-button-danger-icon-color` | `var(--c-sys-color-content-danger)` |
+| `--c-button-success-icon-color` | `var(--c-sys-color-content-success)` |
+| `--c-button-warning-icon-color` | `var(--c-sys-color-content-warning)` |
+| `--c-button-info-icon-color` | `var(--c-sys-color-content-info)` |
+| `--c-button-default-icon-container-color` | `var(--c-sys-color-surface-muted)` |
+| `--c-button-primary-icon-container-color` | `rgb(var(--c-primary-1))` |
+| `--c-button-danger-icon-container-color` | `rgb(var(--c-danger-1))` |
+| `--c-button-success-icon-container-color` | `rgb(var(--c-success-1))` |
+| `--c-button-warning-icon-container-color` | `rgb(var(--c-warning-1))` |
+| `--c-button-info-icon-container-color` | `rgb(var(--c-blue-1))` |
+| `--c-button-disabled-color` | `var(--c-color-disabled)` |
+| `--c-button-disabled-text-color` | `var(--c-sys-color-content-disabled)` |
+| `--c-button-border-radius` | `var(--c-sys-radius-md)` |
+| `--c-button-mini-padding` | `0 var(--c-sys-space-4)` |
+| `--c-button-small-padding` | `0 var(--c-sys-space-5)` |
+| `--c-button-normal-padding` | `0 var(--c-sys-space-6)` |
+| `--c-button-large-padding` | `0 22px` |
+| `--c-button-xl-padding` | `0 28px` |
+| `--c-button-round-padding` | `var(--c-sys-space-3)` |
+| `--c-button-mini-height` | `20px` |
+| `--c-button-small-height` | `28px` |
+| `--c-button-normal-height` | `36px` |
+| `--c-button-large-height` | `44px` |
+| `--c-button-xl-height` | `52px` |
+| `--c-button-mini-font-size` | `var(--c-font-size-xs)` |
+| `--c-button-small-font-size` | `var(--c-sys-font-size-xs)` |
+| `--c-button-normal-font-size` | `var(--c-sys-font-size-md)` |
+| `--c-button-large-font-size` | `var(--c-sys-font-size-lg)` |
+| `--c-button-xl-font-size` | `var(--c-sys-font-size-xl)` |
+| `--c-button-content-gap` | `var(--c-sys-space-3)` |
+| `--c-button-line-height` | `1.2` |
+| `--c-button-stacked-height` | `48px` |
+| `--c-button-focus-width` | `2px` |
+| `--c-button-focus-color` | `var(--c-sys-color-content-brand)` |
+| `--c-button-focus-offset` | `2px` |
+| `--c-button-icon-container-padding` | `var(--c-sys-space-3)` |
+| `--c-button-loading-line-height` | `3px` |
+| `--c-button-loading-line-width` | `40%` |
+| `--c-button-loading-duration` | `1s` |
+| `--c-button-loading-static-opacity` | `0.5` |
+| `--c-button-secondary-icon-color` | `var(--c-sys-color-content-secondary)` |
+| `--c-button-secondary-icon-container-color` | `rgb(var(--c-gray-2))` |
+| `--c-button-tertiary-icon-color` | `var(--c-sys-color-content-secondary)` |
+| `--c-button-tertiary-icon-container-color` | `rgb(var(--c-gray-1))` |
+| `--c-button-mini-stacked-height` | `36px` |
+| `--c-button-small-stacked-height` | `44px` |
+| `--c-button-normal-stacked-height` | `var(--c-button-stacked-height)` |
+| `--c-button-large-stacked-height` | `56px` |
+| `--c-button-xl-stacked-height` | `64px` |
+| `--c-button-stacked-gap` | `var(--c-sys-space-2)` |
+| `--c-button-stacked-padding` | `var(--c-sys-space-2)` |
+| `--c-button-stacked-border-radius` | `var(--c-sys-radius-md)` |
+| `--c-button-group-border-radius` | `var(--c-sys-radius-md)` |
+| `--c-button-default-state-layer-color` | `var(--c-sys-color-content-primary)` |
+| `--c-button-primary-state-layer-color` | `var(--c-sys-color-content-on-dark)` |
+| `--c-button-info-state-layer-color` | `var(--c-sys-color-content-on-dark)` |
+| `--c-button-success-state-layer-color` | `var(--c-sys-color-content-on-dark)` |
+| `--c-button-warning-state-layer-color` | `var(--c-sys-color-content-on-dark)` |
+| `--c-button-danger-state-layer-color` | `var(--c-sys-color-content-on-dark)` |
+| `--c-button-secondary-state-layer-color` | `var(--c-sys-color-content-on-dark)` |
+| `--c-button-tertiary-state-layer-color` | `var(--c-sys-color-content-on-bright)` |
+| `--c-button-state-layer-color` | `var(--c-sys-color-surface-page)` |
+| `--c-button-state-opacity-hover` | `0.08` |
+| `--c-button-state-opacity-active` | `0.12` |
+| `--c-button-plain-state-opacity-hover` | `0.5` |
+| `--c-button-plain-state-opacity-active` | `1` |
+
+### 动效变量
+
+内置动效遵循 `prefers-reduced-motion: reduce`；减少动效不会阻止加载状态或关闭事件更新。
+
+| Token | Default |
+| --- | --- |
+| `--c-button-transition-duration` | `var(--c-sys-motion-duration-standard)` |

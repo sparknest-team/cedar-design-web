@@ -36,7 +36,7 @@ const makeReachable = (
   detectorBottom = 90,
 ) => {
   const root = wrapper.element as HTMLElement;
-  const detector = wrapper.find(".c-infinite-scroll-detector")
+  const detector = wrapper.find(".c-infinite-scroll__detector")
     .element as HTMLElement;
   vi.spyOn(root, "getBoundingClientRect").mockReturnValue(rect(0, 90));
   vi.spyOn(detector, "getBoundingClientRect").mockReturnValue(
@@ -195,7 +195,7 @@ describe("infinite-scroll public contract", () => {
     const defaultWrapper = mount(InfiniteScroll, {
       props: { status: "error", immediate: false },
     });
-    await defaultWrapper.find(".c-infinite-scroll-retry").trigger("click");
+    await defaultWrapper.find(".c-infinite-scroll__retry").trigger("click");
     expect(defaultWrapper.emitted("retry")).toHaveLength(1);
 
     let slotRetry: (() => void) | undefined;
@@ -321,21 +321,20 @@ describe("infinite-scroll public contract", () => {
   it("skips hidden layouts and resumes after they become measurable", () => {
     const target = makeTarget();
     const wrapper = mount(InfiniteScroll, {
+      attachTo: document.body,
       props: { target, immediate: false },
     });
     const root = wrapper.element as HTMLElement;
-    const detector = wrapper.find(".c-infinite-scroll-detector")
+    const detector = wrapper.find(".c-infinite-scroll__detector")
       .element as HTMLElement;
-    const rootRect = vi
-      .spyOn(root, "getBoundingClientRect")
-      .mockReturnValue(rect(0, 0, 0));
+    root.style.display = "none";
     const detectorRect = vi
       .spyOn(detector, "getBoundingClientRect")
       .mockReturnValue(rect(0, 0, 0));
     (wrapper.vm as any).check();
     expect(wrapper.emitted("load")).toBeUndefined();
 
-    rootRect.mockReturnValue(rect(0, 90));
+    root.style.display = "block";
     detectorRect.mockReturnValue(rect(90, 90));
     (wrapper.vm as any).check();
     expect(wrapper.emitted("load")).toHaveLength(1);

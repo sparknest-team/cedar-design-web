@@ -3,8 +3,8 @@
 .c-ripple {
   position: absolute;
   transition:
-    transform 0.2s var(~"--c-ripple-cubic-bezier"),
-    opacity 0.14s linear;
+    transform var(--c-ripple-expand-duration) var(~"--c-ripple-cubic-bezier"),
+    opacity var(--c-ripple-fade-duration) linear;
   top: 0;
   left: 0;
   border-radius: 50%;
@@ -13,4 +13,11 @@
   pointer-events: none;
   z-index: var(--c-z-index-local-sticky);
   background-color: var(~"--c-ripple-color");
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c-ripple {
+    transition: none;
+    opacity: 0 !important;
+  }
 }

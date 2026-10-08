@@ -1,15 +1,12 @@
 import type { PropType } from 'vue'
 import { computed, defineComponent, inject, ref } from 'vue'
-import Checkbox from '../checkbox'
-import Radio from '../radio'
-import { getPrefixCls, createNamespace } from '../_utils/global-config'
-import type { CascaderOption, CascaderOptionInfo } from './types'
-import { IconRight } from '@cedarjs/icons-vue/icon-right'
-import { IconLoading } from '@cedarjs/icons-vue/icon-loading'
-import { getCheckedStatus, getOptionLabel } from './utils'
+import { IconLoading, IconRight } from '@cedarjs/icons-vue'
+import SelectionIndicator from '../_components/selection-field/SelectionIndicator.vue'
 import { isFunction } from '../_utils/is'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import { CascaderContext, cascaderInjectionKey } from './context'
-
+import type { CascaderOption, CascaderOptionInfo } from './types'
+import { getCheckedStatus, getOptionLabel } from './utils'
 
 const { name } = createNamespace('cascader-option')
 
@@ -33,22 +30,30 @@ export default defineComponent({
     const isLoading = ref(false)
     const events: Record<string, any> = {}
 
-    const handlePathChange = (ev: Event) => {
-      if (isFunction(cascaderCtx.loadMore) && !props.option.isLeaf) {
-        const { isLeaf, children, key } = props.option
-        if (!isLeaf && !children) {
+    const handlePathChange = (_event: Event) => {
+      if (props.option.disabled) {
+        return
+      }
+      if (cascaderCtx.expandOption) {
+        isLoading.value = true
+        void cascaderCtx
+          .expandOption(props.option)
+          .catch(() => undefined)
+          .finally(() => {
+            isLoading.value = false
+          })
+      } else {
+        if (cascaderCtx.loadMore && !props.option.isLeaf && !props.option.children && !isLoading.value) {
           isLoading.value = true
-          new Promise<CascaderOption[] | undefined>((resolve) => {
-            cascaderCtx.loadMore?.(props.option.raw, resolve)
-          }).then((children?: CascaderOption[]) => {
+          cascaderCtx.loadMore(props.option.raw, (children) => {
             isLoading.value = false
             if (children) {
-              cascaderCtx.addLazyLoadOptions?.(children, key)
+              cascaderCtx.addLazyLoadOptions?.(children, props.option.key)
             }
           })
         }
+        cascaderCtx.setSelectedPath?.(props.option.key)
       }
-      cascaderCtx.setSelectedPath?.(props.option.key)
     }
 
     if (!props.option.disabled) {
@@ -60,10 +65,10 @@ export default defineComponent({
       } else {
         events.onClick.push((ev: Event) => handlePathChange(ev))
       }
-      if (props.option.isLeaf && !props.multiple) {
+      if (props.option.isLeaf || props.checkStrictly) {
         events.onClick.push((ev: Event) => {
           handlePathChange(ev)
-          cascaderCtx.onClickOption?.(props.option)
+          cascaderCtx.onClickOption?.(props.option, !checkedStatus.value.checked)
         })
       }
     }
@@ -101,10 +106,10 @@ export default defineComponent({
 
     const renderIcon = () => {
       if (isLoading.value) {
-        return <IconLoading />
+        return <IconLoading class={`${prefixCls}-loading-icon`} />
       }
       if (!props.searchOption && !props.option.isLeaf) {
-        return <IconRight />
+        return <IconRight class={`${prefixCls}-expand-icon`} />
       }
       return null
     }
@@ -120,34 +125,23 @@ export default defineComponent({
         class={cls.value}
         {...events}
       >
-        {props.multiple && (
-          <Checkbox
-            modelValue={checkedStatus.value.checked}
-            indeterminate={checkedStatus.value.indeterminate}
-            disabled={props.option.disabled || props.option.selectionDisabled}
-            uninjectGroupContext
-            onChange={(value: any, ev: Event) => {
-              ev.stopPropagation()
-              handlePathChange(ev)
+        {(props.multiple || props.checkStrictly) && (
+          <span
+            onClick={(event: MouseEvent) => {
+              event.stopPropagation()
+              if (props.option.disabled || props.option.selectionDisabled) {
+                return
+              }
+              handlePathChange(event)
               cascaderCtx.onClickOption?.(props.option, !checkedStatus.value.checked)
             }}
-            // @ts-ignore
-            onClick={(ev: Event) => ev.stopPropagation()}
-          />
-        )}
-        {props.checkStrictly && !props.multiple && (
-          <Radio
-            modelValue={cascaderCtx.valueMap?.has(props.option.key)}
-            disabled={props.option.disabled}
-            uninjectGroupContext
-            onChange={(value: any, ev: Event) => {
-              ev.stopPropagation()
-              handlePathChange(ev)
-              cascaderCtx.onClickOption?.(props.option, true)
-            }}
-            // @ts-ignore
-            onClick={(ev: Event) => ev.stopPropagation()}
-          />
+          >
+            <SelectionIndicator
+              checked={checkedStatus.value.checked}
+              indeterminate={checkedStatus.value.indeterminate}
+              radio={!props.multiple}
+            />
+          </span>
         )}
         <div class={`${prefixCls}-label`}>
           {renderLabelContent()}

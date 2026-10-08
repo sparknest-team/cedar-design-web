@@ -1,0 +1,61 @@
+.c-radio-group--button {
+  display: inline-flex;
+  flex-wrap: wrap;
+  &.c-radio-group--vertical { flex-direction: column; }
+  gap: var(--c-internal-radio-segment-gap);
+  padding: var(--c-internal-radio-segment-gap);
+  background: var(--c-internal-radio-segment-group-bg);
+  border-radius: var(--c-internal-radio-segment-radius);
+}
+each(xs sm md lg xl, {
+  .c-radio-group--size-@{value} {
+    --c-internal-radio-segment-height: var(~"--c-sys-control-height-@{value}");
+  }
+});
+
+.c-radio--button,
+.c-radio-group--button .c-radio--button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-height: var(--c-internal-radio-segment-height);
+  margin: 0;
+  padding: 0;
+  transform: none;
+  color: var(--c-radio-label-text-color);
+  line-height: var(--c-internal-radio-segment-height);
+  background: transparent;
+  border-radius: var(--c-internal-radio-segment-radius);
+  cursor: pointer;
+
+  .c-radio__action {
+    padding: 0;
+    color: inherit;
+    border-radius: inherit;
+  }
+  .c-radio__button-label {
+    display: block;
+    padding-inline: var(--c-internal-radio-segment-padding);
+  }
+  &:not(.c-radio--disabled):not(.c-radio--checked):hover {
+    background: var(--c-internal-radio-segment-hover);
+  }
+  &.c-radio--checked {
+    color: var(--c-radio-control-color-checked);
+    background: var(--c-internal-radio-segment-bg);
+  }
+  &.c-radio--error:not(.c-radio--disabled) {
+    color: var(--c-radio-control-color-error);
+  }
+  &.c-radio--disabled {
+    color: var(--c-radio-label-text-color-disabled);
+    cursor: not-allowed;
+  }
+}
+
+.c-radio:focus-within {
+  outline: var(--c-internal-radio-focus-width) solid var(--c-radio-control-color-checked);
+  outline-offset: var(--c-internal-radio-focus-offset);
+}

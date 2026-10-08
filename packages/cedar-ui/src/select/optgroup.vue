@@ -9,7 +9,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { getPrefixCls, createNamespace } from '../_utils/global-config'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
 
 const { name, n, classes } = createNamespace('optgroup')
 export default defineComponent({

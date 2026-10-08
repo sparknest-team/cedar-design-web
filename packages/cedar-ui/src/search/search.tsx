@@ -1,110 +1,22 @@
-import {
-  computed,
-  defineComponent,
-  PropType,
-  ref,
-  toRefs,
-  StyleValue,
-} from 'vue'
+import { computed, defineComponent, nextTick, ref } from 'vue'
+import type { StyleValue } from 'vue'
 import { createNamespace } from '../_utils/global-config'
-import IconHover from '../_components/IconHover.vue'
 import { IconSearch } from '@cedarjs/icons-vue/icon-search'
 import { IconLoading } from '@cedarjs/icons-vue/icon-loading'
-import Button, { ButtonProps } from '../button'
-import Input from '../input/input'
+import Button from '../button'
+import Input from '../input/input.vue'
 import InputGroup from '../input/InputGroup.vue'
-import type { ComponentSize } from '../_utils/constant'
 import { useSize } from '../_hooks/use-size'
-import { SelectOptionData } from '../select'
 import Select from '../select'
 import type { SearchResult } from './result'
 import DropdownMenu, { MenuOption } from '../dropdown-menu'
-
-function searchHistoryLocal(max: number) {
-  const maxLength = max
-
-  function search(element: string | undefined, list: string[]) {
-    if (!element) return
-    const index = list.indexOf(element)
-    if (index !== -1) {
-      list.splice(index, 1)
-      list.unshift(element)
-    } else {
-      list.unshift(element)
-    }
-  }
-
-  function push(element: string | undefined, list: string[]) {
-    const next = [...list]
-    search(element, next)
-    if (next.length > maxLength) {
-      next.pop()
-    }
-    return next
-  }
-
-  return {
-    push,
-  }
-}
+import { searchProps } from './props'
+import type { SearchField } from './props'
 
 export default defineComponent({
   name: createNamespace('search').name,
-  props: {
-    modelValue: String,
-    defaultValue: String,
-    searchButton: {
-      type: Boolean,
-      default: false,
-    },
-    loading: {
-      type: Boolean,
-      default: false,
-    },
-    disabled: {
-      type: Boolean,
-    },
-    variant: {
-      type: String as PropType<'filled' | 'outline' | 'standard'>,
-    },
-    size: {
-      type: String as PropType<ComponentSize>,
-    },
-    buttonText: {
-      type: String,
-    },
-    buttonProps: {
-      type: Object as PropType<ButtonProps>,
-    },
-    recentSearches: {
-      type: Array as PropType<string[]>,
-      default: () => [],
-    },
-    fields: {
-      type: Array as PropType<SelectOptionData[]>,
-      default: () => [],
-    },
-    selectStyle: {
-      type: [String, Object, Array] as PropType<StyleValue>,
-    },
-    defaultField: {
-      type: String,
-    },
-    modelField: {
-      type: String,
-    },
-    model: {
-      type: Object as PropType<Record<string, any>>,
-    },
-    maxSearchHistoryCount: {
-      type: Number,
-      default: 5,
-    },
-    clearable: {
-      type: Boolean,
-      default: false,
-    },
-  },
+  inheritAttrs: false,
+  props: searchProps,
   emits: {
     "update:modelValue": (value: string) => true,
     "update:modelField": (value: string) => true,

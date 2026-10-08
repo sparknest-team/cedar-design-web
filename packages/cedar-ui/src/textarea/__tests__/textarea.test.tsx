@@ -9,7 +9,7 @@ describe("Textarea", () => {
     await nextTick();
 
     expect(wrapper.classes()).toContain("c-textarea");
-    expect(wrapper.find(".c-field-decorator--variant-outlined").exists()).toBe(
+    expect(wrapper.find(".c-field-decorator--variant-outline").exists()).toBe(
       true,
     );
     expect(wrapper.get("textarea").attributes("rows")).toBeUndefined();
@@ -56,6 +56,7 @@ describe("Textarea", () => {
     expect(order).toEqual([]);
 
     await textarea.trigger("compositionend");
+    await textarea.trigger('input')
     expect(order).toEqual(["update", "input"]);
   });
 

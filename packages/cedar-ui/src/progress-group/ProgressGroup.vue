@@ -78,7 +78,7 @@ export default defineComponent({
     const normalizedMax = computed(() => Number.isFinite(props.max) && props.max > 0 ? props.max : 100)
     const normalizedItems = computed(() => props.items.map(item => {
       const value = Math.min(Math.max(Number(item.value) || 0, 0), normalizedMax.value)
-      return { ...item, value, color: item.color || props.color || 'rgb(var(--c-primary-6))', percent: value / normalizedMax.value * 100 }
+      return { ...item, value, color: item.color || props.color || 'var(--c-sys-color-content-brand)', percent: value / normalizedMax.value * 100 }
     }))
     const totalValue = computed(() => normalizedItems.value.reduce((sum, item) => sum + item.value, 0))
     const totalPercent = computed(() => Math.min(100, Math.round(totalValue.value / normalizedMax.value * 100)))

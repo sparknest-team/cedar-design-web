@@ -4,7 +4,7 @@
     :options="options"
     placeholder="输入或选择城市"
     clearable
-    style="width: 320px"
+    style="width: 100%; max-width: 320px"
   />
   <p>当前值：{{ value || '-' }}</p>
 </template>

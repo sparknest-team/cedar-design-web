@@ -59,18 +59,20 @@
   >
     <slot name="extra-footer"></slot>
   </div>
-  <div v-if="!hideFooter" :class="`${prefixCls}-footer-btn-wrapper`">
+  <div v-if="!hideFooter || $slots.actions" :class="`${prefixCls}-footer-btn-wrapper`">
+    <slot name="actions">
     <Button v-if="!isRange" size="xs" @click="onSelectNow">
       {{ t("datePicker.now") }}
     </Button>
     <Button
       variant="text"
       size="xs"
-      :disabled="confirmBtnDisabled || !selectedValue"
+      :disabled="confirmDisabled || confirmBtnDisabled || !selectedValue"
       @click="onConfirm"
     >
       {{ t("datePicker.confirmButtonText") }}
     </Button>
+  </slot>
   </div>
 </template>
 
@@ -103,6 +105,8 @@ export default defineComponent({
     Button,
   },
   props: {
+    min: String,
+    max: String,
     value: {
       type: Object as PropType<PanelProps["value"]>,
     },
@@ -111,7 +115,6 @@ export default defineComponent({
     },
     format: {
       type: String,
-      default: "HH:mm:ss",
     },
     use12Hours: {
       type: Boolean,
@@ -134,6 +137,7 @@ export default defineComponent({
     hideFooter: {
       type: Boolean,
     },
+    confirmDisabled: Boolean,
     isRange: {
       type: Boolean,
     },
@@ -153,6 +157,8 @@ export default defineComponent({
       visible,
       format,
       step,
+      min,
+      max,
       use12Hours,
       hideDisabledOptions,
       disabledHours,
@@ -204,6 +210,8 @@ export default defineComponent({
       reactive({
         format: computedFormat,
         step,
+        min,
+        max,
         use12Hours: computedUse12Hours,
         hideDisabledOptions,
         disabledHours,

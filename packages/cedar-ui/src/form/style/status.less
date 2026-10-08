@@ -22,27 +22,6 @@
   }
 }
 
-.select-view-status(@status) {
-  .c-select-view:not(.c-select-view-disabled),
-  .c-input-tag:not(.c-input-tag-disabled) {
-    background-color: var(~'--c-form-status-@{status}-bg');
-    border-color: var(~'--c-form-status-@{status}-border-color');
-
-    &:hover {
-      background-color: var(~'--c-form-status-@{status}-hover-bg');
-      border-color: var(~'--c-form-status-@{status}-hover-border-color');
-    }
-  }
-
-  .c-select-view:not(.c-select-view-disabled).c-select-view-focus,
-  .c-input-tag:not(.c-input-tag-disabled).c-input-tag-focus {
-    background-color: var(~'--c-form-status-@{status}-focus-bg');
-    border-color: var(~'--c-form-status-@{status}-focus-border-color');
-    box-shadow: 0 0 0 var(~'--c-form-status-@{status}-focus-shadow-size')
-      var(~'--c-form-status-@{status}-focus-shadow-color');
-  }
-}
-
 // datepicker
 .picker(@status) {
   .c-picker:not(.c-picker-disabled) {
@@ -69,7 +48,6 @@
 .validate-status (@status) {
   .c-form-item-status-@{status} {
     .input-status(@status);
-    .select-view-status(@status);
     .picker(@status);
   }
 
@@ -124,10 +102,6 @@
   .c-input-inner-wrapper,
   .c-textarea {
     padding-right: var(~'--c-form-has-feedback-control-padding-right');
-  }
-
-  .c-input-number-mode-embed .c-input-number-step-layer {
-    right: var(~'--c-form-has-feedback-input-number-step-right');
   }
 
   .select-view(~'c-select');

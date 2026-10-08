@@ -1,15 +1,15 @@
 <template>
   <c-space direction="column" fill>
-    <c-time v-model="value" style="width: 200px" />
-    <c-time v-model="value12" use12-hours style="width: 200px" />
-    <c-time v-model="valueStep" :step="{ hour: 2, minute: 5, second: 10 }" style="width: 200px" />
+    <c-time v-model="value" format="HH:mm" style="width: 100%; max-width: 320px" />
+    <c-time v-model="valueSeconds" format="HH:mm:ss" style="width: 100%; max-width: 320px" />
+    <c-time v-model="literalValue" format="[Time] HH:mm" style="width: 100%; max-width: 320px" />
   </c-space>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 
-const value = ref()
-const value12 = ref()
-const valueStep = ref()
+const value = ref('09:30')
+const valueSeconds = ref('09:30:20')
+const literalValue = ref('Time 09:30')
 </script>

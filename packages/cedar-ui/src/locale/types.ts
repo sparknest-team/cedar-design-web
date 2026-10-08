@@ -138,6 +138,11 @@ export interface CedarLang {
   empty: {
     description: string
   }
+  infiniteScroll: {
+    loading: string
+    error: string
+    finished: string
+  }
   calendar: CedarCalendarLang
   drawer: {
     confirmButtonText: string

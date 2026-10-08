@@ -45,7 +45,7 @@ describe("InputNumber", () => {
 
     await wrapper.get(".c-field-decorator__clear-btn").trigger("click");
     expect(wrapper.emitted("clear")).toHaveLength(1);
-    expect(wrapper.emitted("change")).toHaveLength(1);
+    expect(wrapper.emitted("change")).toHaveLength(2);
     expect(wrapper.emitted("update:modelValue")?.at(-1)).toEqual([undefined]);
   });
 
@@ -71,7 +71,7 @@ describe("InputNumber", () => {
   test("clamps and formats values when committing", async () => {
     const wrapper = mount(InputNumber, {
       props: {
-        modelValue: 1,
+        defaultValue: 1,
         min: 0,
         max: 2,
         precision: 1,

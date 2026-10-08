@@ -1,5 +1,5 @@
 <template>
-  <c-space direction="vertical" size="md">
+  <c-space direction="column" size="md">
     <c-auto-complete default-value="Cedar" :options="options" readonly />
     <c-auto-complete default-value="Maple" :options="options" disabled />
     <c-auto-complete default-value="Invalid" :options="options" error clearable />

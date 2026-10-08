@@ -117,30 +117,30 @@ Cedar inherits global size when omitted (xs/sm map to sm, others to md); Maple f
 | `--c-card-size-sm-section-margin` | `8px 0 0` |
 | `--c-card-size-sm-section-padding` | `0 12px` |
 | `--c-card-padding` | `0 0 15px 0` |
-| `--c-card-background` | `var(--c-color-bg-2)` |
-| `--c-card-filled-background` | `hsla(0, 0%, 93%, 1)` |
-| `--c-card-outline-color` | `var(--c-color-border-2)` |
+| `--c-card-background` | `var(--c-sys-color-surface-default)` |
+| `--c-card-filled-background` | `var(--c-sys-color-surface-muted)` |
+| `--c-card-outline-color` | `var(--c-sys-color-border-default)` |
 | `--c-card-border-radius` | `4px` |
 | `--c-card-image-width` | `100%` |
 | `--c-card-row-image-width` | `140px` |
 | `--c-card-image-height` | `200px` |
 | `--c-card-row-height` | `140px` |
-| `--c-card-title-color` | `#333` |
+| `--c-card-title-color` | `var(--c-sys-color-content-primary)` |
 | `--c-card-title-font-size` | `20px` |
 | `--c-card-title-padding` | `0 12px` |
 | `--c-card-title-margin` | `15px 0 0 0` |
 | `--c-card-title-row-margin` | `12px 0` |
 | `--c-card-content-padding` | `0 16px` |
 | `--c-card-content-margin` | `16px 0 0 0` |
-| `--c-card-content-color` | `var(--c-color-text-3)` |
+| `--c-card-content-color` | `var(--c-sys-color-content-tertiary)` |
 | `--c-card-content-font-size` | `14px` |
 | `--c-card-content-row-margin` | `16px 0 0 0` |
-| `--c-card-subtitle-color` | `rgba(0, 0, 0, 0.6)` |
+| `--c-card-subtitle-color` | `var(--c-sys-color-content-secondary)` |
 | `--c-card-subtitle-font-size` | `14px` |
 | `--c-card-subtitle-padding` | `0 12px` |
 | `--c-card-subtitle-margin` | `10px 0 0 0` |
 | `--c-card-subtitle-row-margin` | `-8px 0 0 0` |
-| `--c-card-description-color` | `rgba(0, 0, 0, 0.6)` |
+| `--c-card-description-color` | `var(--c-sys-color-content-secondary)` |
 | `--c-card-description-font-size` | `14px` |
 | `--c-card-description-margin` | `20px 0 0 0` |
 | `--c-card-description-padding` | `0 13px` |
@@ -152,9 +152,15 @@ Cedar inherits global size when omitted (xs/sm map to sm, others to md); Maple f
 | `--c-card-row-line-height` | `1.5` |
 | `--c-card-floating-buttons-bottom` | `16px` |
 | `--c-card-floating-buttons-right` | `16px` |
-| `--c-card-floating-buttons-color` | `#fff` |
+| `--c-card-floating-buttons-color` | `var(--c-sys-color-content-primary)` |
 | `--c-card-close-button-icon-size` | `24px` |
 | `--c-card-close-button-size` | `56px` |
-| `--c-card-close-button-primary-color` | `#212121` |
-| `--c-card-close-button-text-color` | `#fff` |
+| `--c-card-close-button-background` | `#212121` |
+| `--c-card-close-button-text-color` | `var(--c-sys-color-content-on-dark)` |
 | `--c-card-close-button-border-radius` | `50%` |
+
+Card body colors follow system roles: default and filled surfaces use `surface-default` and `surface-muted`, the outline uses `border-default`, and title, body, and supporting text use `content-primary`, `content-tertiary`, and `content-secondary`. The expanded floating-button container sits on the card surface and uses `content-primary`; text and icons on the dark close button use `content-on-dark`. Its `#212121` background is Card-specific, not the global primary action color. See the Design Token guide for the former variable name's migration.
+
+### Token consumer contract
+
+Row content consumes `--c-card-content-row-margin`, independently from the title margin. Card intentionally exposes only sm/md density, not all five control sizes. Motion uses `--c-card-animation-duration` (`var(--c-sys-motion-duration-slow)`) and `--c-card-animation-easing` (`var(--c-sys-motion-easing-standard)`). Reduced motion disables transitions on every animated Card section.

@@ -9,6 +9,8 @@ const Cascader = withInstall(_Cascader, Object.assign(_Cascader, {
 
 export type CascaderInstance = InstanceType<typeof _Cascader>
 export type CascaderPanelInstance = InstanceType<typeof _CascaderPanel>
+export type CascaderPanelProps = import('vue').ExtractPublicPropTypes<typeof _CascaderPanel.props>
+export const cascaderPanelProps = _CascaderPanel.props
 export type { CascaderOption, CascaderFieldNames } from './types'
 
 export { _CascaderPanel as CascaderPanel }

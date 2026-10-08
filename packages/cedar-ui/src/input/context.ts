@@ -1,10 +1,13 @@
-import { InjectionKey } from 'vue'
-import { ComponentSize } from '../_utils/constant'
+import type { ComputedRef, InjectionKey } from 'vue'
+import type { ComponentSize } from '../_utils/constant'
+import type { InputVariant } from './props'
 
-export interface GroupFieldContext {
-  size: ComponentSize | undefined
-  disabled: boolean
-  variant: 'filled' | 'outline' | 'standard' | undefined
+export interface InputGroupContext {
+  size: ComputedRef<ComponentSize>
+  disabled: ComputedRef<boolean>
+  readonly: ComputedRef<boolean>
+  variant: ComputedRef<InputVariant>
+  hint: ComputedRef<boolean | undefined>
 }
 
-export const fieldInjectionKey: InjectionKey<GroupFieldContext> = Symbol('CedarField')
+export const inputGroupKey: InjectionKey<InputGroupContext> = Symbol('InputGroup')

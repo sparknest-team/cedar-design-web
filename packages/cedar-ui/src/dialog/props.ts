@@ -1,4 +1,4 @@
-import { popupContainerProp } from '../_utils/popup-container'
+import { popupContainerProp } from "../_utils/popup-container";
 import type {
   CSSProperties,
   ExtractPropTypes,
@@ -64,6 +64,10 @@ export const dialogProps = {
   lockScroll: {
     type: Boolean,
     default: true,
+  },
+  closeOnRouteChange: {
+    type: Boolean,
+    default: false,
   },
   confirmButton: {
     type: Boolean,
@@ -165,4 +169,6 @@ export const dialogProps = {
   zIndex: Number,
 };
 
-export type DialogProps = import("vue").ExtractPublicPropTypes<typeof dialogProps>;
+export type DialogProps = import("vue").ExtractPublicPropTypes<
+  typeof dialogProps
+>;

@@ -1,0 +1,7 @@
+- [x] Copy focus boundary and migrate both libraries' time fields.
+- [x] Add Cedar public focus/blur and preserve Form notification ownership.
+- [x] Extract Maple local trigger keyboard, remove window listeners and handwritten Tab prevention.
+- [x] Add paired focus and field regressions, public event tests and reactive demos.
+- [x] Update docs, audit, menus and copy guards.
+- [x] Final validation: Cedar 107 / Maple 196 regressions, both typechecks, scoped lint, 23 field / 18 time pairs, 847 demos and audit sync passed. Full lint interrupted; production builds and browser QA not run.
+- [ ] Follow-up: panel content and remaining pure-panel Props/Slots.

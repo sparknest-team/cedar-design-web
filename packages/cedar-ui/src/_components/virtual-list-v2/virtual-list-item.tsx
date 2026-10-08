@@ -30,8 +30,8 @@ export default defineComponent({
     const itemRef = ref<HTMLElement | ComponentPublicInstance>()
 
     const setItemSize = () => {
-      // @ts-ignore
-      const ele = (itemRef.value?.$el ?? itemRef.value) as HTMLElement
+
+      const ele = (itemRef.value && '$el' in itemRef.value ? itemRef.value.$el : itemRef.value) as HTMLElement
       const height = ele?.getBoundingClientRect?.().height ?? ele?.offsetHeight
       if (height) {
         props.setItemSize(key, height)

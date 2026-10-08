@@ -1,7 +1,6 @@
 import { useElementResize } from '../_utils/resize-observer'
 import { createNamespace } from '../_utils/global-config'
 import { defineComponent } from 'vue'
-import ResizeObserver from 'resize-observer-polyfill'
 import { useFirstElement } from '../_hooks/use-first-element'
 
 export default defineComponent({
@@ -21,7 +20,7 @@ export default defineComponent({
     useElementResize(() => [firstElement.value], () => true, entries => {
       const entry = entries.find(entry => entry.target === firstElement.value)
       if (entry) emit('resize', entry)
-    }, ResizeObserver, false)
+    }, undefined, false)
 
     return () => {
       children.value = slots.default?.()

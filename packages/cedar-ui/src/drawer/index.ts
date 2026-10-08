@@ -5,7 +5,7 @@ import { withInstall } from '../_utils/global-config'
 import { isFunction } from '../_utils/is'
 import { omit } from '../_utils/omit'
 import { getSlotFunction } from '../_utils/vue-utils'
-import _Drawer from './Drawer.vue'
+import _Drawer from './drawer.vue'
 import { drawerProps } from './props'
 import type { DrawerConfig, DrawerMethod, DrawerUpdateConfig } from './types'
 
@@ -65,6 +65,11 @@ const open = (config: DrawerConfig, appContext?: AppContext) => {
     unmountOnClose: true,
     onConfirm: handleConfirm,
     onCancel: handleCancel,
+    'onUpdate:open': (value: boolean) => {
+      if (vm.component) {
+        vm.component.props.open = value
+      }
+    },
     onClosed: handleClose,
   }
 
@@ -82,14 +87,12 @@ const open = (config: DrawerConfig, appContext?: AppContext) => {
         'onConfirm',
         'onCancel',
         'onClosed',
-        'beforeConfirm',
-        'beforeCancel',
+        'beforeClose',
       ]),
       ...{
         header: typeof config.header === 'boolean' ? config.header : undefined,
         footer: typeof config.footer === 'boolean' ? config.footer : undefined,
-        beforeConfirm: config.beforeConfirm,
-        beforeCancel: config.beforeCancel,
+        beforeClose: config.beforeClose,
       },
     },
     {
@@ -125,7 +128,14 @@ const Drawer = withInstall(_Drawer, Object.assign(_Drawer, {
   },
 })
 
-export type { DrawerMethod, DrawerConfig, DrawerReturn } from './types'
+export type {
+  DrawerAction,
+  DrawerBeforeCloseRefs,
+  DrawerMethod,
+  DrawerConfig,
+  DrawerReturn,
+  DrawerUpdateConfig,
+} from './types'
 
 export type DrawerInstance = InstanceType<typeof _Drawer>
 export type { DrawerPlacement, DrawerProps } from './props'

@@ -1,76 +1,43 @@
 <template>
-  <DateRangePicker
-    v-bind="{ ...$attrs, ...pickerProps }"
-    :popup-container="popupContainer !== undefined ? popupContainer : pickerProps.popupContainer"
-    :model-value="modelValue"
-    :default-value="defaultValue"
-    :open="open"
-    :default-open="defaultOpen"
-    :clearable="clearable"
-    :disabled="disabled"
-    :readonly="readonly"
-    :size="size"
-    :variant="variant"
-    :separator="separator"
-    :placeholder="placeholder"
-    :disabled-date="disabledDate"
-    :mode="type"
-    :format="format"
-    :show-time="showTime"
-    :error="error"
-    :hide-trigger="false"
-    @update:model-value="onUpdateModelValue"
-    @update:open="onUpdateOpen"
-    @change="onChange"
-    @clear="onClear"
-    @open-change="onOpenChange"
+  <DateField
+    ref="field"
+    v-bind="$attrs"
+    :field-props="props"
+    range
+    :root-class="n()"
+    @update:model-value="emit('update:modelValue', $event)"
+    @update:open="emit('update:open', $event)"
+    @change="(value, dates, texts) => emit('change', value, dates, texts)"
+    @select="(value, dates, texts) => emit('select', value, dates, texts)"
+    @clear="emit('clear')"
+    @click="emit('click', $event)"
+    @open-change="emit('open-change', $event)"
+    @focus="emit('focus')"
+    @blur="emit('blur')"
   >
-    <template v-for="(_, name) in $slots" #[name]="slotData">
-      <slot :name="name" v-bind="slotData || {}" />
-    </template>
-  </DateRangePicker>
+    <template v-for="(_, name) in $slots" #[name]="scope"><slot :name="name" v-bind="scope || {}" /></template>
+  </DateField>
 </template>
-
-<script lang="ts">
-import { computed, defineComponent } from 'vue'
-import DateRangePicker from '../date/picker/DateRangePicker.vue'
+<script setup lang="ts">
+import { ref } from 'vue'
+import DateField from '../date/DateField.vue'
 import { createNamespace } from '../_utils/global-config'
-import type { CalendarValue } from '../date/picker/types'
-import { dateRangeProps } from './props'
+import { dateRangeProps as fieldProps } from './props'
 
-const { name } = createNamespace('date-range')
-
-/**
- * 表单日期范围字段。内部使用 DateRangePicker（带触发器）。
- * 面板能力请直接使用 DateRangePicker（默认无触发器）。
- */
-export default defineComponent({
-  name,
-  components: {
-    DateRangePicker,
-  },
-  inheritAttrs: false,
-  props: dateRangeProps,
-  emits: {
-    'update:modelValue': (value: CalendarValue[] | undefined) => true,
-    'update:open': (visible: boolean) => true,
-    change: (value: CalendarValue[] | undefined) => true,
-    clear: () => true,
-    'open-change': (visible: boolean) => true,
-  },
-  setup(props, { emit }) {
-    const pickerProps = computed(() => props.dateRangePickerProps || {})
-
-    return {
-      pickerProps,
-      onUpdateModelValue: (value: (CalendarValue | undefined)[] | undefined) =>
-        emit('update:modelValue', value as CalendarValue[] | undefined),
-      onUpdateOpen: (visible: boolean) => emit('update:open', visible),
-      onChange: (value: (CalendarValue | undefined)[] | undefined) =>
-        emit('change', value as CalendarValue[] | undefined),
-      onClear: () => emit('clear'),
-      onOpenChange: (visible: boolean) => emit('open-change', visible),
-    }
-  },
-})
+defineOptions({ name: createNamespace('date-range').name, inheritAttrs: false })
+const { n } = createNamespace('date-range')
+const props = defineProps(fieldProps)
+const emit = defineEmits([
+  'update:modelValue',
+  'update:open',
+  'change',
+  'select',
+  'clear',
+  'click',
+  'open-change',
+  'focus',
+  'blur',
+])
+const field = ref<InstanceType<typeof DateField>>()
+defineExpose({ focus: (index = 0) => field.value?.focus(index), blur: () => field.value?.blur() })
 </script>

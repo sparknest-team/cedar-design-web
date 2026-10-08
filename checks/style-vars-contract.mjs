@@ -10,5 +10,7 @@ const result = checkThemeContract({
 
 console.log(
   `Style variable contract passed: ${result.systemCount} shared system tokens, ` +
-    `${result.componentCount} component contracts, and no unresolved system references.`,
+    `${result.systemValueCount} governed system values, ${result.componentValueCount} governed component values, ` +
+    `${result.componentCount} component contracts, ` +
+    `and no unresolved system references.`,
 );

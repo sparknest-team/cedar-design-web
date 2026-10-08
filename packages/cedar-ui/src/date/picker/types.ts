@@ -82,7 +82,6 @@ export interface QuarterPickerProps {
 
 export interface BasePickerProps {
   locale?: Record<string, any>
-  hideTrigger: boolean
   clearable: boolean
   readonly: boolean
   error: boolean

@@ -15,12 +15,15 @@
 </template>
 
 <script lang="ts">
-import { createNamespace } from '../_utils/global-config'
 import { computed, defineComponent, PropType, provide, reactive, ref, toRefs, watch } from 'vue'
-import { BaseType, Data, UnionType } from '../_utils/types'
-import { CascaderBaseValue, CascaderFieldNames, CascaderOption, CascaderOptionInfo } from './types'
 import { isNull, isUndefined } from '../_utils/is'
+import { getKeyDownHandler, KEYBOARD_KEY } from '../_utils/keyboard'
+import { BaseType, Data, UnionType } from '../_utils/types'
+import { createNamespace } from '../_utils/global-config'
 import BaseCascaderPanel from './base-cascader-panel'
+import { cascaderInjectionKey } from './context'
+import { useSelectedPath } from './hooks/use-selected-path'
+import { CascaderBaseValue, CascaderFieldNames, CascaderOption, CascaderOptionInfo } from './types'
 import {
   getCheckedStatus,
   getLeafOptionInfos,
@@ -29,12 +32,9 @@ import {
   getValidValues,
   getValueKey,
 } from './utils'
-import { useSelectedPath } from './hooks/use-selected-path'
-import { cascaderInjectionKey } from './context'
-import { KEYBOARD_KEY, getKeyDownHandler } from '../_utils/keyboard'
 
 export default defineComponent({
-  name: createNamespace("cascader-panel").name,
+  name: createNamespace('cascader-panel').name,
   components: {
     BaseCascaderPanel,
   },
@@ -60,7 +60,7 @@ export default defineComponent({
      * @en Value
      */
     modelValue: {
-      type: [String, Number, Array] as PropType<
+      type: [String, Number, Object, Array] as PropType<
         | string
         | number
         | Record<string, any>
@@ -74,7 +74,7 @@ export default defineComponent({
      * @default-value '' \| undefined \| []
      */
     defaultValue: {
-      type: [String, Number, Array] as PropType<
+      type: [String, Number, Object, Array] as PropType<
         | string
         | number
         | Record<string, any>
@@ -166,11 +166,14 @@ export default defineComponent({
     const { options, checkStrictly, loadMore, modelValue, expandChild, expandTrigger } = toRefs(props)
     const _value = ref<CascaderBaseValue | undefined>(props.defaultValue)
 
-    watch(modelValue, (value) => {
-      if (isUndefined(value) || isNull(value)) {
-        _value.value = props.multiple ? [] : undefined
-      }
-    })
+    watch(
+      () => props.modelValue,
+      (value) => {
+        if (isUndefined(value) || isNull(value)) {
+          _value.value = props.multiple ? [] : undefined
+        }
+      },
+    )
 
     const optionInfos = ref<CascaderOptionInfo[]>([])
     const totalLevel = ref(1)
@@ -287,6 +290,9 @@ export default defineComponent({
     }
 
     const handleClickOption = (option: CascaderOptionInfo, checked?: boolean) => {
+      if (option.disabled || (!props.multiple && !props.checkStrictly && !option.isLeaf)) {
+        return
+      }
       if (props.multiple) {
         selectMultiple(option, checked ?? true)
       } else {

@@ -254,3 +254,7 @@ import { imagePreview } from "@cedarjs/ui";
 2. 默认缩放比例 `defaultScale` 此属性定义了默认的图片缩放比例。例如，当设置为 1.5 时，图片将默认放大到原始大小的 1.5 倍。
 
 3. `scaleStep` 控制滚轮、双击和工具栏每次放大或缩小的增量。
+
+### 变量消费边界
+
+预览组箭头字号由 `--c-image-preview-arrow-font-size` 控制。旧 actions-item、trigger、scale-value 尺寸以及 simple toolbar 变量对应的 DOM 已不存在，已删除这些无效入口；预览工具栏使用 preview-color-action-* 与 preview-padding-action-content，底栏使用现有 footer 变量。错误／加载层填满图片，不另加100px最小高度。缩放与轨道过渡消费 system motion，reduced-motion 时关闭。

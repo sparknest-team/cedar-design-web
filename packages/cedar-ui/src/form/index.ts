@@ -3,13 +3,18 @@ import _Form from './Form.vue'
 import _FormItem from './FormItem.vue'
 import { formProps } from './props'
 
-const Form = withInstall(_Form, Object.assign(_Form, {
-  Item: _FormItem,
-}), { components: [_Form, _FormItem] })
+const Form = withInstall(
+  _Form,
+  Object.assign(_Form, {
+    Item: _FormItem,
+  }),
+  { components: [_Form, _FormItem] },
+)
 
 export type FormInstance = InstanceType<typeof _Form>
 export type FormItemInstance = InstanceType<typeof _FormItem>
 export type { ValidateStatus, ValidateTrigger, ValidatedError, FieldRule, FormItemEventHandler } from './types'
+export type { FormValidateErrors } from './form-controller'
 
 export { _FormItem as FormItem }
 

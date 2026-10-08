@@ -9,6 +9,7 @@ import { formControlVariants } from '../../_utils/form-control'
 import type { DisabledTimeProps, FormatFunc, Mode, ShortcutType, WeekStart } from './types'
 
 export const pickerProps = {
+    disableConfirm: Boolean,
     /**
      * @zh 国际化配置，用于覆盖locale中的 `datePicker` 字段
      * @en Internationalization configuration, used to cover the locale file in the `datePicker` field
@@ -20,9 +21,6 @@ export const pickerProps = {
      * @zh 没有触发元素，只显示选择面板
      * @en There is no trigger element, only the selection panel is displayed
      * */
-    hideTrigger: {
-      type: Boolean,
-    },
     /**
      * @zh 是否允许清除
      * @en Whether to allow clear
@@ -243,6 +241,7 @@ export const pickerProps = {
 } 
 
 export const dateRangePickerProps = {
+    disableConfirm: Boolean,
     /**
      * @zh 范围选择器的类型
      * @en Type of range selector
@@ -368,10 +367,6 @@ export const dateRangePickerProps = {
     popupContainer: popupContainerProp,
     locale: {
       type: Object as PropType<Record<string, any>>,
-    },
-    hideTrigger: {
-      type: Boolean,
-      default: true,
     },
     clearable: {
       type: Boolean,
@@ -537,10 +532,6 @@ export const datePickerProps = {
      * @zh 没有触发元素，只显示选择面板（默认 true）
      * @en Panel only without trigger (default true)
      */
-    hideTrigger: {
-      type: Boolean,
-      default: true,
-    },
 } 
 
 export type DatePickerProps = import("vue").ExtractPublicPropTypes<typeof datePickerProps>

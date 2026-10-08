@@ -1,8 +1,8 @@
 import type { Ref } from 'vue'
 import { computed, reactive, ref, watch } from 'vue'
-import type { FilterOption, SelectOption, SelectOptionInfo, SelectFieldNames } from '../types'
-import { getOptionInfos, getValidOptions, isValidOption } from '../utils'
 import { isNumber } from '../../_utils/is'
+import type { FilterOption, SelectFieldNames, SelectOption, SelectOptionInfo } from '../types'
+import { getOptionInfos, getValidOptions, isValidOption } from '../utils'
 
 const DEFAULT_FIELD_NAMES = {
   value: 'value',

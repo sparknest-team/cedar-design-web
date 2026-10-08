@@ -1,22 +1,10 @@
 <template>
-  <div :class="classes(n())">
-    <slot />
-    <div :class="classes(n('border'))"></div>
-  </div>
+  <span :class="n()"><slot /></span>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
 import { createNamespace } from '../_utils/global-config'
 
-export default defineComponent({
-  name: createNamespace('input-group-label').name,
-  setup() {
-    const { n, classes } = createNamespace('input-group-label')
-    return {
-      n,
-      classes,
-    }
-  },
-})
+defineOptions({ name: createNamespace('input-group-label').name })
+const { n } = createNamespace('input-group-label')
 </script>

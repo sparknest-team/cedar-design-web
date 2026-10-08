@@ -1,0 +1,15 @@
+// Vitest Snapshot v1
+
+exports[`AutoComplete > base markup snapshot 1`] = `
+"<div class=\\"c-auto-complete\\">
+  <div class=\\"c-input\\">
+    <div class=\\"c-field-decorator c-field-decorator--size-md c-field-decorator--variant-outline\\">
+      <!--v-if--><span class=\\"c-field-decorator__middle\\"><input role=\\"combobox\\" aria-autocomplete=\\"list\\" aria-expanded=\\"false\\" aria-controls=\\"c-auto-complete-listbox-v-0\\" autocomplete=\\"off\\" id=\\"v-1\\" class=\\"c-input__inner\\" type=\\"text\\" value=\\"\\"></span>
+      <!--v-if-->
+      <!--v-if--><span class=\\"c-field-decorator__border\\" aria-hidden=\\"true\\"></span><span class=\\"c-field-decorator__border-state\\" aria-hidden=\\"true\\"></span>
+    </div>
+  </div>
+</div>
+<!--teleport start-->
+<!--teleport end-->"
+`;

@@ -93,6 +93,11 @@ const lang: CedarLang = {
   empty: {
     description: '暂无数据',
   },
+  infiniteScroll: {
+    loading: '加载中',
+    error: '加载失败，点击重试',
+    finished: '没有更多了',
+  },
   drawer: {
     confirmButtonText: '确定',
     cancelText: '取消',

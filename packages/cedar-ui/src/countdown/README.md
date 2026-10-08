@@ -109,7 +109,7 @@ import type { CountdownProps, CountdownInstance, TimeData } from '@cedarjs/ui'
 
 | 变量名                          | 默认值                     |
 | ------------------------------- | -------------------------- |
-| `--c-countdown-text-color`      | `var(--c-color-text-1)`    |
+| `--c-countdown-text-color`      | `var(--c-sys-color-content-primary)` |
 | `--c-countdown-text-font-size`  | `var(--c-font-size-lg)`    |
 
 ## 同源实现与平台边界

@@ -8,7 +8,7 @@
     :header="!custom.includes('hide header')"
     :footer="!custom.includes('hide footer')"
     :cancel-button="!custom.includes('hide cancel')"
-    :open="visible"
+    v-model:open="visible"
     @confirm="handleConfirm"
     @cancel="handleCancel"
     unmountOnClose

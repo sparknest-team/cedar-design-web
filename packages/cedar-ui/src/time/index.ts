@@ -25,3 +25,7 @@ export const _TimeComponent = Time
 export const _TimePickerComponent = TimePicker
 
 export default Time
+
+export type { TimeDisabledRules, TimeStep } from './time-rules'
+export type { TimeValue } from './time-value'
+export type { TimePanelPresentationProps, TimePopupPresentationProps, TimeWheelPresentationProps } from './presentation-props'

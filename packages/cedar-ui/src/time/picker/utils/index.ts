@@ -4,24 +4,9 @@ import type { Dayjs } from 'dayjs'
 import { dayjs } from '../../../_utils/date'
 import { isArray, isUndefined, isDayjs } from '../../../_utils/is'
 import { TimePickerProps } from '../types'
+import { isClockDisabled } from '../../time-rules'
 
-export function getColumnsFromFormat(format: string) {
-  const units = ['H', 'h', 'm', 's', 'a', 'A']
-  const list: string[] = []
-  let use12Hours = false
-  units.forEach((unit) => {
-    if (format.indexOf(unit) !== -1) {
-      list.push(unit)
-      if (unit === 'a' || unit === 'A') {
-        use12Hours = true
-      }
-    }
-  })
-  return {
-    list,
-    use12Hours,
-  }
-}
+export { getTimeFormatColumns as getColumnsFromFormat } from '../../time-format'
 
 const scrollIds = new Map<HTMLElement, number>()
 
@@ -112,17 +97,8 @@ export function isDisabledTime(
   const minute = value.minute()
   const second = value.second()
 
-  const disabledHourList = disabledHours?.() || []
-  const disabledMinuteList = disabledMinutes?.(hour) || []
-  const disabledSecondList = disabledSeconds?.(hour, minute) || []
-
-  const isDisabledItem = (num: number | undefined, disabledList: number[]) => {
-    return !isUndefined(num) && disabledList.includes(num)
-  }
-
-  return (
-    isDisabledItem(hour, disabledHourList) ||
-    isDisabledItem(minute, disabledMinuteList) ||
-    isDisabledItem(second, disabledSecondList)
+  return isClockDisabled(
+    { hour, minute, second },
+    { hours: disabledHours, minutes: disabledMinutes, seconds: disabledSeconds },
   )
 }

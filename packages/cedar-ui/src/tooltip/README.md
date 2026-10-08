@@ -56,3 +56,37 @@ Tooltip 内容具有 `role="tooltip"`，打开时会把内容 ID 写入实际触
 ## 同源约定
 
 Cedar 与 Maple 独立保存同一份主体、Props、外观映射和结构样式，只允许前缀、本地导入及主题 Token 值不同。不提供 `backgroundColor` 或布尔 `xs` 兼容入口。
+
+## 公开 CSS 变量
+
+以下为实际 :root 默认值。业务定制优先使用组件变量；内部定位变量不属于公开 API。
+
+| 变量 | 默认值 | 意义与场景 |
+| --- | --- | --- |
+| `--c-tooltip-background` | `var(--c-sys-color-surface-tooltip)` | 内容与箭头背景 |
+| `--c-tooltip-text-color` | `var(--c-sys-color-content-on-dark)` | 正文前景 |
+| `--c-tooltip-status-primary-background` | `var(--c-sys-color-action-primary)` | primary 状态内容与箭头背景 |
+| `--c-tooltip-status-info-background` | `var(--c-sys-color-status-info)` | info 状态内容与箭头背景 |
+| `--c-tooltip-status-success-background` | `var(--c-sys-color-status-success)` | success 状态内容与箭头背景 |
+| `--c-tooltip-status-warning-background` | `var(--c-sys-color-status-warning)` | warning 状态内容与箭头背景 |
+| `--c-tooltip-status-danger-background` | `var(--c-sys-color-status-danger)` | danger 状态内容与箭头背景 |
+| `--c-tooltip-status-primary-text-color` | `var(--c-sys-color-content-on-bright)` | primary 状态文字；与对应底色成对设置 |
+| `--c-tooltip-status-info-text-color` | `var(--c-sys-color-content-on-bright)` | info 状态文字；与对应底色成对设置 |
+| `--c-tooltip-status-success-text-color` | `var(--c-sys-color-content-on-bright)` | success 状态文字；与对应底色成对设置 |
+| `--c-tooltip-status-warning-text-color` | `var(--c-sys-color-content-on-bright)` | warning 状态文字；与对应底色成对设置 |
+| `--c-tooltip-status-danger-text-color` | `var(--c-sys-color-content-on-bright)` | danger 状态文字；与对应底色成对设置 |
+| `--c-tooltip-padding-horizontal` | `var(--c-sys-space-6)` | 内容横向内边距 |
+| `--c-tooltip-padding-vertical` | `var(--c-sys-space-4)` | 内容纵向内边距 |
+| `--c-tooltip-font-size` | `var(--c-sys-font-size-md)` | 内容字号 |
+| `--c-tooltip-line-height` | `var(--c-line-height)` | 内容行高 |
+| `--c-tooltip-border-radius` | `var(--c-sys-radius-md)` | 内容圆角 |
+| `--c-tooltip-max-width` | `350px` | 提示内容最大宽度 |
+| `--c-tooltip-opacity` | `1` | 内容与箭头透明度；改动需重新检查对比度 |
+| `--c-tooltip-size-xs-padding-horizontal` | `var(--c-sys-space-4)` | xs 尺寸：内容横向内边距 |
+| `--c-tooltip-size-xs-padding-vertical` | `var(--c-sys-space-2)` | xs 尺寸：内容纵向内边距 |
+| `--c-tooltip-size-xs-font-size` | `var(--c-sys-font-size-xs)` | xs 尺寸：内容字号 |
+| `--c-tooltip-animation-duration` | `var(--c-sys-motion-duration-standard)` | 组件入退场时长；reduced-motion 可覆盖 |
+
+所有内置主题 opacity 为 1。彩色背景配 on-bright；两端 Maple 浅色品牌的深橙 primary 配 on-dark。Maple 暗色保留圆角 4px、字号 14px、纵向／横向内边距 8px／16px。中性表面在明暗模式均保持深色。`color` 同时设置内容与箭头背景，`text-color` 设置文字；显式 content-style／arrow-style 覆盖各自节点。自定义颜色／透明度需重新验证。
+
+使用 Teleport 时，变量需放在实际 popup 的作用域中（例如通过 `popup-style`）；触发按钮上的变量不会自动继承到浮层。

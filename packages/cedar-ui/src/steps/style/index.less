@@ -14,7 +14,8 @@
     }
   }
 
-  &-changeable &-item:not(&-item-active):not(&-item-disabled) {
+  &-changeable:not(&-mode-arrow) &-item:not(&-item-active):not(&-item-disabled),
+  &-changeable&-mode-arrow &-item:not(&-item-active):not(&-item-disabled):not(&-item-process):not(&-item-error) {
     cursor: pointer;
 
     &:hover {
@@ -26,6 +27,10 @@
       }
     }
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c-steps-item-title, .c-steps-item-description { transition: none !important; }
 }
 
 // Line Less

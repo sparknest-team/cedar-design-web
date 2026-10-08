@@ -32,7 +32,7 @@
     transition: all var(--c-sys-motion-duration-fast) var(--c-sys-motion-easing-standard);
   }
 
-  &--checkable:hover {
+  &--checkable:not(.c-tag--checked):not(.c-tag--loading):hover {
     background-color: var(~"--c-tag-bg-not-checked-hover");
   }
 
@@ -41,7 +41,7 @@
     border-color: var(~"--c-tag-default-border-color");
   }
 
-  &--checkable--checked:hover {
+  &--status-default&--checkable&--checked:not(.c-tag--loading):not(.c-tag--variant-outline):hover {
     background-color: var(~"--c-tag-default-bg-hover");
     border-color: var(~"--c-tag-default-border-color-hover");
   }
@@ -109,16 +109,22 @@
   }
 
   each(@colors, {
-    &&--checked&--@{value} {
+    &&--checked&--variant-default&--@{value} {
       color: var(~'--c-tag-@{value}-text-color');
       background-color: var(~'--c-tag-@{value}-bg');
       border: var(~'--c-tag-border-width') var(~'--c-tag-border-type') var(~'--c-tag-@{value}-border-color');
 
     }
 
-    &&--checkable&--checked&--@{value}&:hover {
+    &&--checkable&--checked&--variant-default&--@{value}:not(.c-tag--loading):hover {
       background-color: var(~'--c-tag-@{value}-bg-hover');
       border-color: var(~'--c-tag-@{value}-border-color-hover');
+    }
+
+    &&--checked&--variant-outline&--@{value} {
+      color: var(~'--c-tag-@{value}-text-color');
+      background-color: transparent;
+      border-color: var(~'--c-tag-@{value}-text-color');
     }
 
     &&--checked&--@{value} &__icon,
@@ -152,7 +158,7 @@
 
   // === variant=default × status: filled ===
   .tagFilledStatus(@status, @colorVar) {
-    &--variant-default&--status-@{status} {
+    &--checked&--variant-default&--status-@{status} {
       color: var(~"--c-tag-status-@{status}-text-color");
       background-color: var(~"--c-tag-status-@{status}-bg-color");
       border-color: transparent;
@@ -175,7 +181,7 @@
       var(~"--c-tag-variant-outline-default-border-color");
   }
   .tagOutlineStatus(@status, @colorVar) {
-    &--variant-outline&--status-@{status} {
+    &--checked&--variant-outline&--status-@{status} {
       color: var(~"--c-tag-variant-outline-status-@{status}-color");
       background-color: transparent;
       border: var(~"--c-tag-border-width") var(~"--c-tag-border-type")
@@ -190,23 +196,6 @@
   .tagOutlineStatus(success, green);
   .tagOutlineStatus(warning, orange);
   .tagOutlineStatus(danger, red);
-}
-
-:root[cedar-theme="dark"] {
-  .c-tag--checked {
-    color: rgba(255, 255, 255, 0.9);
-  }
-
-  each(@colors, {
-    .c-tag--checked.c-tag--@{value} {
-      background-color: ~'rgba(var(--c-@{value}-6), 0.2)';
-
-    }
-
-    .c-tag--checkable.c-tag--checked.c-tag--@{value}:hover {
-      background-color: ~'rgba(var(--c-@{value}-6), 0.35)';
-    }
-  });
 }
 
 .c-tag--rtl {
@@ -226,5 +215,9 @@
   }
 }
 
-.c-tag-fade-enter-active, .c-tag-fade-leave-active { transition: opacity 0.15s linear; }
+.c-tag-fade-enter-active, .c-tag-fade-leave-active { transition: opacity var(--c-tag-fade-duration) linear; }
 .c-tag-fade-enter-from, .c-tag-fade-leave-to { opacity: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .c-tag, .c-tag-fade-enter-active, .c-tag-fade-leave-active { transition: none; }
+}

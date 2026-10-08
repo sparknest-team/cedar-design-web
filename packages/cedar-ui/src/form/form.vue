@@ -1,5 +1,5 @@
 <template>
-  <form :id="id" ref="formRef" :class="cls" @submit.prevent="handleSubmit">
+  <form :id="id" ref="formRef" :class="cls" @submit.prevent="handleSubmit" @reset.prevent="handleReset">
     <slot />
   </form>
 </template>
@@ -12,11 +12,11 @@ import scrollIntoView, { Options as ScrollIntoViewOptions } from 'scroll-into-vi
 import { FormItemInfo, formInjectionKey, FormContext } from './context'
 import { getPrefixCls } from '../_utils/global-config'
 import { ComponentSize } from '../_utils/constant'
-import { isArray, isFunction } from '../_utils/is'
 import { FieldData, FieldRule, ValidatedError } from './types'
 import { useSize } from '../_hooks/use-size'
 import { getFormElementId } from './utils'
 import { toPxNum } from '../_utils/maple/elements'
+import { createFormController, type FormValidateErrors } from './form-controller'
 
 const FORM_LAYOUTS = ['horizontal', 'vertical', 'inline'] as const
 type FormLayout = (typeof FORM_LAYOUTS)[number]
@@ -24,7 +24,7 @@ const FORM_LABEL_ALIGNS = ['left', 'right'] as const
 type FormLabelAlign = (typeof FORM_LABEL_ALIGNS)[number]
 
 export default defineComponent({
-  name: createNamespace("form").name,
+  name: createNamespace('form').name,
   props: formProps,
   emits: {
     /**
@@ -46,20 +46,21 @@ export default defineComponent({
      * @param {Record<string, any>} values
      * @param {Event} ev
      */
-    "submit-success": (values: Record<string, any>, ev: Event) => true,
+    'submit-success': (values: Record<string, any>, ev: Event) => true,
     /**
      * @zh 验证失败时触发
      * @en Triggered when verification failed
      * @param {{values: Record<string, any>; errors: Record<string, ValidatedError>}} data
      * @param {Event} ev
      */
-    "submit-failed": (
+    'submit-failed': (
       data: {
         values: Record<string, any>
         errors: Record<string, ValidatedError>
       },
       ev: Event,
     ) => true,
+    reset: (ev: Event) => true,
   },
   setup(props, { emit }) {
     const prefixCls = getPrefixCls('form')
@@ -69,6 +70,7 @@ export default defineComponent({
       model,
       layout,
       disabled,
+      readonly,
       labelAlign,
       labelColProps,
       wrapperColProps,
@@ -81,31 +83,10 @@ export default defineComponent({
 
     const autoLabelWidth = computed(() => props.layout === 'horizontal' && props.autoLabelWidth)
 
-    const fields: FormItemInfo[] = []
     const touchedFields: FormItemInfo[] = []
 
     const labelWidth = reactive<Record<string, number>>({})
     const maxLabelWidth = computed(() => Math.max(...Object.values(labelWidth)))
-
-    const addField = (formItemInfo: FormItemInfo) => {
-      if (formItemInfo && formItemInfo.field) {
-        fields.push(formItemInfo)
-      }
-    }
-
-    const removeField = (formItemInfo: FormItemInfo) => {
-      if (formItemInfo && formItemInfo.field) {
-        fields.splice(fields.indexOf(formItemInfo), 1)
-      }
-    }
-
-    const setFields = (data: Record<string, FieldData>) => {
-      fields.forEach((field) => {
-        if (data[field.field]) {
-          field.setField(data[field.field])
-        }
-      })
-    }
 
     const setLabelWidth = (width: number, uid?: number) => {
       if (uid && labelWidth[uid] !== width) {
@@ -119,36 +100,22 @@ export default defineComponent({
       }
     }
 
-    const resetFields = (field?: string | string[]) => {
-      const _fields = field ? ([] as string[]).concat(field) : []
-      fields.forEach((field) => {
-        if (_fields.length === 0 || _fields.includes(field.field)) {
-          field.resetField()
-        }
-      })
-    }
-
-    const clearValidate = (field?: string | string[]) => {
-      const _fields = field ? ([] as string[]).concat(field) : []
-      fields.forEach((field) => {
-        if (_fields.length === 0 || _fields.includes(field.field)) {
-          field.clearValidate()
-        }
-      })
-    }
-
     const scrollToField = (field: string, options?: ScrollIntoViewOptions) => {
       const node = formRef.value || document.body
-      const fieldNode = Array.from(node.querySelectorAll('[id]'))
-        .find((element) => element.id === getFormElementId(props.id, field))
+      const fieldNode = Array.from(node.querySelectorAll('[id]')).find(
+        (element) => element.id === getFormElementId(props.id, field),
+      )
 
       if (fieldNode) {
-        scrollIntoView(fieldNode as HTMLDivElement, {
-          behavior: 'smooth',
-          block: 'nearest',
-          scrollMode: 'if-needed',
-          ...options,
-        } as Parameters<typeof scrollIntoView>[1])
+        scrollIntoView(
+          fieldNode as HTMLDivElement,
+          {
+            behavior: 'smooth',
+            block: 'nearest',
+            scrollMode: 'if-needed',
+            ...options,
+          } as Parameters<typeof scrollIntoView>[1],
+        )
       }
     }
 
@@ -156,109 +123,61 @@ export default defineComponent({
       if (!props.scrollToError || !formRef.value) return
       // Use rendered order, not object-key/registration order (numeric fields can reorder).
       const fieldById = new Map(Object.keys(errors).map((field) => [getFormElementId(props.id, field), field]))
-      const nodes = Array.from(formRef.value.querySelectorAll('[id]'))
-        .filter((element) => fieldById.has(element.id))
+      const nodes = Array.from(formRef.value.querySelectorAll('[id]')).filter((element) => fieldById.has(element.id))
       const node = props.scrollToError === 'end' ? nodes[nodes.length - 1] : nodes[0]
       if (node) {
         const parsedOffset = toPxNum(props.scrollToErrorOffsetY)
         const offset = Number.isFinite(parsedOffset) ? parsedOffset : 0
-        scrollToField(fieldById.get(node.id)!, offset ? {
-          block: 'start',
-          behavior: (actions) => {
-            actions.forEach(({ el, top, left }) => el.scrollTo({ top: top - offset, left, behavior: 'smooth' }))
-          },
-        } : undefined)
+        scrollToField(
+          fieldById.get(node.id)!,
+          offset
+            ? {
+                block: 'start',
+                behavior: (actions) => {
+                  actions.forEach(({ el, top, left }) =>
+                    el.scrollTo({
+                      top: top - offset,
+                      left,
+                      behavior: 'smooth',
+                    }),
+                  )
+                },
+              }
+            : undefined,
+        )
       }
     }
 
-    const validate = (
-      callback?: (errors: undefined | Record<string, ValidatedError>) => void,
-    ): Promise<undefined | Record<string, ValidatedError>> => {
-      const list: Promise<any>[] = []
-
-      fields.forEach((field) => {
-        list.push(field.validate())
-      })
-
-      return Promise.all(list).then((result) => {
-        const errors: Record<string, ValidatedError> = {}
-        let hasError = false
-        result.forEach((item) => {
-          if (item) {
-            hasError = true
-            errors[item.field] = item
-          }
-        })
-
-        if (hasError) {
-          scrollToError(errors)
-        }
-
-        if (isFunction(callback)) {
-          callback(hasError ? errors : undefined)
-        }
-
-        return hasError ? errors : undefined
-      })
+    const controller = createFormController<ValidatedError, FieldData>({
+      onInvalid: scrollToError,
+    })
+    const fields = controller.fields
+    const unregisterFields = new WeakMap<FormItemInfo, () => void>()
+    const addField = (formItemInfo: FormItemInfo) => {
+      unregisterFields.set(formItemInfo, controller.registerField(formItemInfo))
     }
-
-    const validateField = (
-      field: string | string[],
-      callback?: (errors: undefined | Record<string, ValidatedError>) => void,
-    ) => {
-      const list: Promise<any>[] = []
-
-      for (const ctx of fields) {
-        if ((isArray(field) && field.includes(ctx.field)) || field === ctx.field) {
-          list.push(ctx.validate())
-        }
-      }
-
-      return Promise.all(list).then((result) => {
-        const errors: Record<string, ValidatedError> = {}
-        let hasError = false
-        result.forEach((item) => {
-          if (item) {
-            hasError = true
-            errors[item.field] = item
-          }
-        })
-
-        if (hasError) {
-          scrollToError(errors)
-        }
-
-        if (isFunction(callback)) {
-          callback(hasError ? errors : undefined)
-        }
-
-        return hasError ? errors : undefined
-      })
+    const removeField = (formItemInfo: FormItemInfo) => {
+      unregisterFields.get(formItemInfo)?.()
+      unregisterFields.delete(formItemInfo)
     }
+    const validate = (callback?: (errors: FormValidateErrors<ValidatedError>) => void) =>
+      controller.validate(undefined, callback)
+    const validateField = (field: string | string[], callback?: (errors: FormValidateErrors<ValidatedError>) => void) =>
+      controller.validate(field, callback)
 
     const handleSubmit = (e: Event) => {
-      const list: Promise<any>[] = []
-      fields.forEach((field) => {
-        list.push(field.validate())
-      })
-
-      Promise.all(list).then((result) => {
-        const errors: Record<string, ValidatedError> = {}
-        let hasError = false
-        result.forEach((item) => {
-          if (item) {
-            hasError = true
-            errors[item.field] = item
-          }
-        })
-        if (hasError) {
-          scrollToError(errors)
+      validate().then((errors) => {
+        if (errors) {
           emit('submit-failed', { values: model.value ?? {}, errors }, e)
         } else {
           emit('submit-success', model.value ?? {}, e)
         }
-        emit('submit', { values: model.value ?? {}, errors: hasError ? errors : undefined }, e)
+        emit('submit', { values: model.value ?? {}, errors }, e)
       })
+    }
+    const handleReset = (e: Event) => {
+      controller.resetFields()
+      emit('reset', e)
     }
 
     provide(
@@ -267,6 +186,7 @@ export default defineComponent({
         id,
         layout,
         disabled,
+        readonly,
         labelAlign,
         labelColProps,
         wrapperColProps,
@@ -300,11 +220,12 @@ export default defineComponent({
       cls,
       formRef,
       handleSubmit,
+      handleReset,
       innerValidate: validate,
       innerValidateField: validateField,
-      innerResetFields: resetFields,
-      innerClearValidate: clearValidate,
-      innerSetFields: setFields,
+      innerResetFields: controller.resetFields,
+      innerClearValidate: controller.clearValidate,
+      innerSetFields: controller.setFields,
       innerScrollToField: scrollToField,
     }
   },

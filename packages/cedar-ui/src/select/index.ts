@@ -10,8 +10,12 @@ const Select = withInstall(_Select, Object.assign(_Select, {
 }), { components: [_Select, _Option, _Optgroup] })
 
 export type SelectInstance = InstanceType<typeof _Select>
-export type SelectOptionInstance = InstanceType<typeof _Option>
-export type SelectOptGroupInstance = InstanceType<typeof _Optgroup>
+export type OptionInstance = InstanceType<typeof _Option>
+export type OptgroupInstance = InstanceType<typeof _Optgroup>
+export type OptionProps = import('vue').ExtractPublicPropTypes<typeof _Option.props>
+export type OptgroupProps = import('vue').ExtractPublicPropTypes<typeof _Optgroup.props>
+export const optionProps = _Option.props
+export const optgroupProps = _Optgroup.props
 export { selectProps }
 export type {
   SelectOption,

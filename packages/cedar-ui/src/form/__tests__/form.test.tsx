@@ -1,7 +1,9 @@
 import { defineComponent, h, inject, nextTick } from 'vue'
-import { mount } from '@vue/test-utils'
+import { flushPromises, mount } from '@vue/test-utils'
 import { describe, test, expect, vi } from 'vitest'
 import { Form } from '../index'
+import { FormItem } from '../index'
+import Input from '../../input'
 import { formInjectionKey } from '../context'
 import scrollIntoView from 'scroll-into-view-if-needed'
 
@@ -23,6 +25,21 @@ const Fields = defineComponent({
 })
 
 describe('Form', () => {
+  test('clear trigger validates only after clearing', async () => {
+    const wrapper = mount({
+      components: { CForm: Form, CFormItem: FormItem, CInput: Input },
+      data: () => ({ model: { keyword: 'seed' } }),
+      template: `<c-form :model="model"><c-form-item field="keyword" validate-trigger="clear" :rules="[{ required: true, message: 'Required' }]"><c-input v-model="model.keyword" clearable /></c-form-item></c-form>`,
+    })
+
+    await wrapper.get('input').setValue('edited')
+    expect(wrapper.find('.c-form-item-error').exists()).toBe(false)
+    await wrapper.get('.c-field-decorator__clear-btn').trigger('click')
+    await flushPromises()
+    expect(wrapper.vm.model.keyword).toBe('')
+    expect(wrapper.text()).toContain('Required')
+    wrapper.unmount()
+  })
   test('scrollToError selects first/last rendered error, not viewport alignment', async () => {
     const wrapper = mount(Form, {
       props: { model: {}, scrollToError: 'start' },

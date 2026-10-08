@@ -1,13 +1,12 @@
 import { defineComponent, inject, PropType, ref } from 'vue'
-import { configProviderInjectionKey } from '../config-provider/context'
-import { CascaderOptionInfo } from './types'
-import CascaderOption from './cascader-option'
-import { getPrefixCls, createNamespace } from '../_utils/global-config'
-import Empty from '../empty'
+import { useEmptySlot } from '../_components/selection-field/empty-slot'
 import Scrollbar from '../scrollbar'
 import VirtualList from '../_components/virtual-list-v2'
 import { VirtualListProps } from '../_components/virtual-list-v2/interface'
-
+import Empty from '../empty'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
+import CascaderOption from './cascader-option'
+import { CascaderOptionInfo } from './types'
 
 const { name } = createNamespace('cascader-column')
 
@@ -39,12 +38,12 @@ export default defineComponent({
   },
   setup(props, { slots }) {
     const prefixCls = getPrefixCls('cascader')
-    const configCtx = inject(configProviderInjectionKey, undefined)
+    const emptySlot = useEmptySlot()
     const virtualListRef = ref()
     const isVirtual = ref(Boolean(props.virtualListProps))
 
     const renderEmpty = () => {
-      return slots.empty?.() ?? configCtx?.slots.empty?.({ component: 'cascader' }) ?? <Empty />
+      return slots.empty?.() ?? emptySlot?.({ component: 'cascader' }) ?? <Empty />
     }
 
     return () => {
