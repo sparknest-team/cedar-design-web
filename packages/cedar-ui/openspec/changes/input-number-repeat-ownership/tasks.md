@@ -1,0 +1,4 @@
+- [x] Correct probe capture and reentrant positive continuation before accepting baseline: seven failures / one normal cadence pass per platform.
+- [x] Repair independent sources; eight ownership tests and full InputNumber Cedar45 / Maple48 pass.
+- [x] Synchronize component docs, shared/menu timing responsibilities, source classification and patch Changesets.
+- [ ] Native gesture / iframe-window acceptance remains separate from controlled timer tests.

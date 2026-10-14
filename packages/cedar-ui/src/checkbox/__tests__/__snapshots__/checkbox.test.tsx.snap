@@ -1,7 +1,7 @@
 // Vitest Snapshot v1
 
 exports[`Checkbox > render 1`] = `
-"<label class=\\"c-checkbox\\"><input type=\\"checkbox\\" aria-checked=\\"false\\" class=\\"c-checkbox-target\\" value=\\"true\\"><span class=\\"c-icon-hover c-checkbox-icon-hover\\"><div class=\\"c-checkbox-icon\\"><!----></div></span>
-  <!---->
+"<label class=\\"c-checkbox\\"><input class=\\"c-checkbox__input\\" type=\\"checkbox\\" aria-checked=\\"false\\" value=\\"true\\"><span class=\\"c-checkbox__control\\" aria-hidden=\\"true\\"><span class=\\"c-checkbox__icon\\"></span></span>
+  <!--v-if-->
 </label>"
 `;

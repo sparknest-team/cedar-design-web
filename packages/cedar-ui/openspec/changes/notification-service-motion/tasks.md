@@ -1,0 +1,6 @@
+- [x] Reproduce clear/re-add failures before repair.
+- [x] Verify clearing IDs alone still reuses an obsolete display timer.
+- [x] Assign internal WeakMap keys to item identities, preserving active-ID updates.
+- [x] Add isolated reduced-motion selector checks, fail before local CSS repair.
+- [x] Verify 17 component/service/SSR tests and 20 normal/44 reduced CSS cases.
+- [x] Finish final type/lint/gate and shared/menu documentation checks.

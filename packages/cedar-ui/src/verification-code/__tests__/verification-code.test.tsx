@@ -15,7 +15,7 @@ describe('VerificationCode', () => {
       'aria-label': 'Security code',
     })
     expect(inputs).toHaveLength(4)
-    expect(wrapper.findAll('.c-input--size-md')).toHaveLength(4)
+    expect(wrapper.findAll('.c-field-decorator--size-md')).toHaveLength(4)
     expect(inputs[0].attributes()).toMatchObject({
       'aria-label': 'Security code 1/4',
       autocomplete: 'one-time-code',
@@ -24,7 +24,7 @@ describe('VerificationCode', () => {
 
   test('emits finish after the final character', async () => {
     const wrapper = mount(VerificationCode, {
-      props: { length: 2, modelValue: '1' },
+      props: { length: 2, defaultValue: '1' },
     })
 
     await wrapper.findAll('input')[1].setValue('2')

@@ -8,7 +8,7 @@ permalink: /components/people-select/
 
 ## 基础用法
 
-基础用法。
+本例使用本地异步模拟接口，不需要 token，也不请求真实人员服务。初始 `demo.chen` 不在首批候选中，由详情接口按 ID 反显；可搜索姓名或 ID、选择、清除，并观察阅读模式同步。
 
 <demo src="./__demos__/basic.vue"></demo>
 

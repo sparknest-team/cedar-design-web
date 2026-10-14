@@ -51,10 +51,6 @@ class MessageManager {
     string | number,
     { restartTimer?: () => void }
   >();
-  private readonly closeTimers = new Map<
-    string | number,
-    ReturnType<typeof setTimeout>
-  >();
 
   constructor(
     target: HTMLElement,
@@ -96,12 +92,17 @@ class MessageManager {
                 ...componentProps,
                 key: id,
                 ref: (instance: { restartTimer?: () => void } | null) => {
-                  if (instance) this.instances.set(id, instance);
-                  else this.instances.delete(id);
+                  if (instance) {
+                    this.instances.set(id, instance);
+                  } else {
+                    this.instances.delete(id);
+                  }
                 },
                 popupContainer: false,
                 "onUpdate:open": (open: boolean) => {
-                  if (!open) this.close(item.id);
+                  if (!open) {
+                    this.close(item.id);
+                  }
                 },
                 onOpen,
                 onOpened,
@@ -127,16 +128,14 @@ class MessageManager {
     const id = options.id ?? `__message_${++seed}`;
     const existing = this.items.find((item) => item.id === id);
     if (existing) {
-      const closeTimer = this.closeTimers.get(id);
-      if (closeTimer !== undefined) clearTimeout(closeTimer);
-      this.closeTimers.delete(id);
       Object.assign(existing, options, {
         id,
         open: true,
         revision: existing.revision + 1,
       });
-      if (existing.resetOnUpdate)
+      if (existing.resetOnUpdate) {
         nextTick(() => this.instances.get(id)?.restartTimer?.());
+      }
       return this.handle(id);
     }
     this.items.push(
@@ -147,23 +146,26 @@ class MessageManager {
 
   close(id: string | number) {
     const item = this.items.find((candidate) => candidate.id === id);
-    if (!item?.open) return;
+    if (!item?.open) {
+      return;
+    }
     item.open = false;
-    this.closeTimers.set(
-      id,
-      setTimeout(() => this.finishClose(item), 200),
-    );
+    if (!this.instances.has(id)) {
+      this.finishClose(item);
+    }
   }
 
   clear() {
-    this.items.forEach((item) => this.close(item.id));
+    [...this.items].forEach((item) => this.close(item.id));
   }
 
   private handle(id: string | number): MessageReturn {
     let closed = false;
     return {
       close: () => {
-        if (closed) return;
+        if (closed) {
+          return;
+        }
         closed = true;
         this.close(id);
       },
@@ -171,19 +173,22 @@ class MessageManager {
   }
 
   private finishClose(item: MessageItem) {
-    if (item.open) return;
+    if (item.open) {
+      return;
+    }
     const index = this.items.indexOf(item);
-    if (index < 0) return;
-    const closeTimer = this.closeTimers.get(item.id);
-    if (closeTimer !== undefined) clearTimeout(closeTimer);
-    this.closeTimers.delete(item.id);
+    if (index < 0) {
+      return;
+    }
     this.items.splice(index, 1);
     item.onClosed?.(item.id);
     this.destroyIfEmpty();
   }
 
   private destroyIfEmpty() {
-    if (this.items.length || this.destroyed) return;
+    if (this.items.length || this.destroyed) {
+      return;
+    }
     this.destroyed = true;
     render(null, this.host);
     this.host.remove();
@@ -192,7 +197,9 @@ class MessageManager {
 }
 
 function resolveTarget(options: MessageOptions): HTMLElement | undefined {
-  if (typeof document === "undefined") return undefined;
+  if (typeof document === "undefined") {
+    return undefined;
+  }
   const target = resolvePopupContainer(options.popupContainer);
   return typeof target === "string"
     ? (document.querySelector<HTMLElement>(target) ?? document.body)
@@ -208,7 +215,9 @@ function findManager(
     (manager) =>
       manager.host.parentElement === target && manager.position === position,
   );
-  if (existing) return existing;
+  if (existing) {
+    return existing;
+  }
   const manager = new MessageManager(target, position, appContext);
   managers.add(manager);
   return manager;
@@ -226,7 +235,9 @@ const Message = ((
 ) => {
   const resolved = { ...defaultOptions, ...normalizeOptions(options) };
   const target = resolveTarget(resolved);
-  if (!target) return { close: () => {} };
+  if (!target) {
+    return { close: () => {} };
+  }
   return findManager(target, resolved.position ?? "top", appContext).add(
     resolved,
   );
@@ -235,7 +246,9 @@ const Message = ((
 function createStatusMethod(status: MessageStatus, loading = false) {
   return (options: MessageOptions | string, appContext?: AppContext) => {
     const resolved = { ...normalizeOptions(options), status };
-    if (loading && resolved.duration == null) resolved.duration = 0;
+    if (loading && resolved.duration == null) {
+      resolved.duration = 0;
+    }
     return Message(resolved, appContext);
   };
 }

@@ -10,7 +10,6 @@ export interface ConfigProvider {
   size?: ComponentSize
   updateAtScroll?: boolean
   scrollToClose?: boolean
-  exchangeTime?: boolean
   rtl?: boolean
   theme?: CedarTheme
 }

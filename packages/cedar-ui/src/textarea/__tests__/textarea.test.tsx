@@ -40,7 +40,7 @@ describe("Textarea", () => {
     expect(controlled.get("textarea").element.value).toBe("fixed");
   });
 
-  test("emits update before input and waits for composition end", async () => {
+  test("emits input before update and waits for composition end", async () => {
     const order: string[] = [];
     const wrapper = mount(Textarea, {
       props: {
@@ -57,7 +57,7 @@ describe("Textarea", () => {
 
     await textarea.trigger("compositionend");
     await textarea.trigger('input')
-    expect(order).toEqual(["update", "input"]);
+    expect(order).toEqual(["input", "update"]);
   });
 
   test("commits once on blur and preserves Enter for newlines", async () => {
@@ -98,7 +98,7 @@ describe("Textarea", () => {
     expect(wrapper.emitted("change")?.[0]?.[0]).toBe("draft");
   });
 
-  test("clears without input or change and keeps focus", async () => {
+  test("clears through input and change once and keeps focus", async () => {
     const wrapper = mount(Textarea, {
       attachTo: document.body,
       props: { defaultValue: "notes", clearable: true },
@@ -111,12 +111,12 @@ describe("Textarea", () => {
 
     expect(wrapper.emitted("update:modelValue")?.[0]).toEqual([""]);
     expect(wrapper.emitted("clear")?.[0]?.[0]).toBeInstanceOf(Event);
-    expect(wrapper.emitted("input")).toBeUndefined();
-    expect(wrapper.emitted("change")).toBeUndefined();
+    expect(wrapper.emitted("input")).toHaveLength(1);
+    expect(wrapper.emitted("change")).toHaveLength(1);
     expect(document.activeElement).toBe(textarea.element);
 
     await textarea.trigger("blur");
-    expect(wrapper.emitted("change")).toBeUndefined();
+    expect(wrapper.emitted("change")).toHaveLength(1);
     wrapper.unmount();
   });
 

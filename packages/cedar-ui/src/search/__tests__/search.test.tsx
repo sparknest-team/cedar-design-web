@@ -15,6 +15,7 @@ describe('Search', () => {
     const wrapper = mount(Search, {
       props: {
         model,
+        'onUpdate:model': nextModel => wrapper.setProps({ model: nextModel }),
         defaultField: 'name',
         fields: [
           { value: 'id', label: '设备 ID' },
@@ -28,7 +29,8 @@ describe('Search', () => {
     await input.setValue('设备 A')
 
     expect((input.element as HTMLInputElement).value).toBe('设备 A')
-    expect(model.name).toBe('设备 A')
+    expect(model.name).toBeUndefined()
+    expect(wrapper.emitted('update:model')?.[0]?.[0]).toEqual({ id: undefined, name: '设备 A' })
     expect(wrapper.emitted('update:modelValue')?.[0]).toEqual(['设备 A'])
     expect(wrapper.emitted('change')).toBeUndefined()
     await input.trigger('blur')

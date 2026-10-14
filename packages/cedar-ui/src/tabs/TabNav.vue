@@ -21,7 +21,11 @@
       @focus="ctx.focused.value = key"
     >
       <span v-if="$slots.icon" :class="n('icon')"><slot name="icon" /></span>
-      <span :class="n('tab-title')"><slot name="title"><slot>{{ title }}</slot></slot></span>
+      <span :class="n('tab-title')"
+        ><slot name="title"
+          ><slot>{{ title }}</slot></slot
+        ></span
+      >
     </button>
     <button
       v-if="ctx.props.editable && closable"
@@ -39,10 +43,12 @@
 </template>
 <script setup lang="ts">
 import { computed, getCurrentInstance, inject, nextTick, ref } from 'vue'
+import { createNamespace } from '../_utils/global-config'
 import { tabsInjectionKey } from './context'
-import { createNamespace } from './platform'
 import { tabNavProps, type TabsKey } from './props'
+import type { TabNavSlots } from './types'
 
+defineSlots<TabNavSlots>()
 defineOptions({ name: createNamespace('tab-nav').name })
 const props = defineProps(tabNavProps)
 const ctx = inject(tabsInjectionKey)!

@@ -14,7 +14,7 @@
       <c-button @click="scheduler?.duplicateEvent('backlog')"
         >复制未排期任务</c-button
       >
-      <c-checkbox v-model="reject">模拟副本保存失败</c-checkbox>
+      <c-checkbox v-model="reject">下一次副本保存失败</c-checkbox>
       <c-tag>已保存 {{ events.length }} 条日程</c-tag>
     </c-space>
     <c-scheduler
@@ -61,7 +61,9 @@ const events = ref<SchedulerEvent[]>([
   },
 ]);
 const persist: SchedulerBeforeTransaction = async () => {
+  const shouldReject = reject.value;
+  if (shouldReject) reject.value = false;
   await new Promise((resolve) => setTimeout(resolve, 200));
-  if (reject.value) throw new Error("Simulated save failure");
+  if (shouldReject) throw new Error("Simulated save failure");
 };
 </script>

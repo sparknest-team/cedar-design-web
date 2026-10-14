@@ -2,83 +2,103 @@
 permalink: /components/progress/
 ---
 
-# Progress
+# Progress 进度条
 
-组件描述。
+展示确定或不确定任务进度。两端主体、API 与样式为独立同源代码。
 
-## 基础用法
+## 案例
 
-基础用法。
+### 基础用法
 
 <demo src="./__demos__/basic.vue"></demo>
 
-## 循环进度条
+### 八种状态
 
-通过设置 `indeterminate` 属性，可以展示循环进度条。
-<demo src="./__demos__/loop.vue"></demo>
-
-## 进度条状态
-
-通过 `status` 指定进度条语义状态。
 <demo src="./__demos__/status.vue"></demo>
 
-## 环状进度条
+### 五档与自定义尺寸
 
-设置 `mode="circle"` 将会展示环形进度条。
-<demo src="./__demos__/circle.vue"></demo>
-
-## 迷你进度条
-
-设置`size="xs"`展示微型进度条。
-<demo src="./__demos__/mini.vue"></demo>
-
-## 进度条大小
-
-通过 `size` 设置进度条的大小
 <demo src="./__demos__/size.vue"></demo>
 
-## 步骤进度条
+### 环形进度
 
-通过设置 `steps` 展示步骤进度条。
+<demo src="./__demos__/circle.vue"></demo>
+
+### 分段进度
+
 <demo src="./__demos__/step.vue"></demo>
 
-## 组件配置
+### 不确定进度与动画
 
-### Progress Props
+<demo src="./__demos__/loop.vue"></demo>
 
-| 属性    | 说明     | 类型   | 默认值 |
-| ------- | -------- | ------ | ------ |
-| mode    | 展示模式 | `'line' \| 'circle'` | `'line'` |
-| status  | 状态     | `SemanticStatus` | `'default'` |
-| size | circle 外径 / line 轨道厚度；数字按 px，字符串可用 CSS 长度 | `ComponentSize \| number \| string` | `md` |
-| percent | Percentage, 0–100; numeric strings accepted; decimal precision retained | number / string | 0 |
+### 渐变、起点、隐藏轨道与文本
 
-### Progress Events
+<demo src="./__demos__/advanced.vue"></demo>
 
-| 事件名 | 说明           | 参数                          |
-| ------ | -------------- | ----------------------------- |
-| click  | 点击触发的事件 | `(event: MouseEvent) => void` |
+## API
 
-### Progress Slots
+### Props
 
-| 插槽名  | 说明           |
-| ------- | -------------- |
-| default | 自定义默认内容 |
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| mode | 线形或环形 | `line \| circle` | `line` |
+| percent | 0–100 百分比，保留小数；支持十进制数字字符串，非法值归零，越界裁剪 | `number \| string` | `0` |
+| size | 五档预设或自定义长度；线形厚度、环形直径 | `ProgressSize` | `md` |
+| stroke-width | 覆盖轨道厚度，数字按 px，字符串支持 CSS 长度 | `number \| string` | 随 size |
+| steps | 仅线形的分段数，向下取整并限制为 0–1000；不确定模式忽略 | `number` | `0` |
+| status | default/primary/secondary/tertiary/info/success/warning/danger；default 确定进度达到 100 时推导 success | `ProgressStatus` | `default` |
+| color | 进度颜色或渐变 stop 映射，优先于 status | `string \| Record<string, string>` | — |
+| track-color | 背景轨道颜色 | `string` | — |
+| buffer-color | 线形剩余轨道装饰色/渐变，不代表独立缓冲百分比 | `ProgressColor` | — |
+| track | 显示背景轨道；false 同时隐藏缓冲装饰层 | `boolean` | `true` |
+| show-text | 显示文本；xs 环形隐藏文本避免溢出 | `boolean` | `true` |
+| text-class | 文本容器类名 | `string` | — |
+| rotate | 环形起点从十二点顺时针旋转的角度 | `number` | `0` |
+| animation | 确定线形进度扫光动画，不应用于 steps | `boolean` | `false` |
+| indeterminate | 不确定进度；省略 aria-valuenow，不自动推导成功 | `boolean` | `false` |
 
-## 类型定义
+### 尺寸语义
 
-组件导出以下类型定义
+| size | xs | sm | md | lg | xl |
+| --- | --- | --- | --- | --- | --- |
+| 线形厚度 / 环形默认描边 (px) | 2 | 3 | 4 | 6 | 8 |
+| 环形直径 (px) | 16 | 48 | 64 | 80 | 96 |
 
-```ts
-import type { ProgressProps } from '@cedarjs/ui'
-```
+`size=12` / `size="12"` 表示 12px；`size="2rem"`、`"50%"`、`"calc(100% - 2px)"` 保留 CSS 长度。自定义线形 size 控制厚度，自定义环形 size 控制直径；stroke-width 始终优先控制厚度。非正数或非法长度回退 md。环形百分比直径需要父容器有明确宽度。五档均实际实现，xs 环形不显示文本。Cedar 未传 size 时继承 ConfigProvider，Maple 未传时默认 md。
 
-尺寸与跨端迁移约定见仓库根目录 `API-MIGRATION.md`。只支持文档列出的档位，不代表支持全部 ComponentSize。
+### Slots
 
-## Percent contract / 百分比契约
+| 插槽 | 参数 | 说明 |
+| --- | --- | --- |
+| text | `{ percent: number }` | 优先级高于 default |
+| default | `{ percent: number }` | 自定义显示文本 |
 
-percent 使用 0～100，12.5 表示 12.5%；数字字符串可用，不接受百分号、CSS 单位或十六进制字符串。超范围截断，NaN/Infinity/非法值回退 0。
-Cedar 旧值需要乘以 100（0.5 → 50）；不会自动猜测比例。文案插槽和 aria 值均为 0～100，Maple 圆环不再先取整计算。
+不确定进度默认显示省略号，可用 text 插槽提供业务文案。组件本身不操作值、无更新事件；请提供 `aria-label` 标识业务任务。所有内置动画尊重系统减少动态效果设置。
 
-percent uses 0–100, including decimal numeric strings. CSS units and percent signs are invalid. Finite out-of-range values are clamped; invalid/non-finite values become 0.
-Migrate Cedar ratios by multiplying by 100; there is no automatic ratio detection. Slot and accessible values use percentages; Maple circle geometry no longer rounds first.
+### 类型定义
+
+导出 `ProgressProps`、`ProgressInstance`、`ProgressSize`、`ProgressMode`、`ProgressStatus`、`ProgressColor` 和运行时 `progressProps`。
+
+## 样式变量
+
+| 变量 | 默认值 |
+| --- | --- |
+| `--c-progress-font-size` | `var(--c-sys-font-size-sm)` |
+| `--c-progress-text-color` | `var(--c-sys-color-content-secondary)` |
+| `--c-progress-track-color` | `var(--c-sys-color-state-hover)` |
+| `--c-progress-default-color` | `var(--c-sys-color-content-brand)` |
+| `--c-progress-primary-color` | `var(--c-sys-color-content-brand)` |
+| `--c-progress-secondary-color` | `var(--c-sys-color-content-secondary)` |
+| `--c-progress-tertiary-color` | `var(--c-sys-color-content-tertiary)` |
+| `--c-progress-info-color` | `var(--c-sys-color-content-info)` |
+| `--c-progress-success-color` | `var(--c-sys-color-content-success)` |
+| `--c-progress-warning-color` | `var(--c-sys-color-content-warning)` |
+| `--c-progress-danger-color` | `var(--c-sys-color-content-danger)` |
+| `--c-progress-line-border-radius` | `9999px` |
+| `--c-progress-text-gap` | `var(--c-sys-space-4)` |
+| `--c-progress-steps-gap` | `var(--c-sys-space-2)` |
+| `--c-progress-transition-duration` | `var(--c-sys-motion-duration-standard)` |
+| `--c-progress-animation-duration` | `1.5s` |
+
+环形确定进度的 success/danger 默认显示完成/失败图标（包括 xs）；text 插槽可覆盖，ARIA 数值始终保留。

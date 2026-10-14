@@ -16,6 +16,10 @@ permalink: /components/notification/
 
 ## API
 
+clear 同步释放条目与 ID，随后即使在同一个更新周期重加相同 ID，也会使用独立内部实例和新的完整展示计时；活动 ID 的普通更新仍原位更新。内部实例键不作为公共变量／API 暴露，clear 仍不额外触发业务 onClose。组件样式入口在减少动效下关闭 opacity／左右进入、appear、离开过渡及起始位移，不依赖全局极短时长兜底；静态布局／配色、业务展示期限不变。真实 OS 与浏览器矩阵另行验收。
+
+duration（默认 3000ms，0 持续显示）是业务展示计时，不是 CSS 动效时长。close 每个挂载实例只通知一次，立即取消计时器；离场期间的更新／重复关闭不再安排自动关闭。reset-on-update 只重启活动且未关闭实例的计时。KeepAlive 停用取消计时，重新激活从完整配置时长计时；卸载和已失效回调不会补发 close。列表仍通过实际 TransitionGroup 的离场完成卸载，不按 duration 等待 CSS 动画。现有六项 transition-* Token 控制 opacity／左右进入／离开效果，不改变自动关闭期限；正常消费者覆写检查不等于真实 OS 减少动效验收。
+
 ### `Notification` 全局方法
 
 `Notification` 提供的全局方法，可以通过以下三种方法使用：
@@ -76,7 +80,7 @@ Notification._context = app._context
 组件导出以下类型定义
 
 ```ts
-import type { BadgeInstance } from '@cedarjs/ui'
+import type { NotificationInstance, NotificationConfig, NotificationReturn } from '@cedarjs/ui'
 ```
 
 ## 公开 CSS 变量

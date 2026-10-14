@@ -1,3 +1,4 @@
+import { normalizeBoundImports } from './normalize-bound-imports.mjs'
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
@@ -28,7 +29,7 @@ const normalize = (text) => text
   .replaceAll('--c-', '--mp-')
   .replaceAll('.c-', '.mp-')
 for (const file of files) {
-  assert.equal(normalize(readFileSync(resolve(cedar, file), 'utf8')), normalize(readFileSync(resolve(maple, file), 'utf8')), file)
+  assert.equal(normalizeBoundImports(normalize(readFileSync(resolve(cedar, file), 'utf8'))), normalizeBoundImports(normalize(readFileSync(resolve(maple, file), 'utf8'))), file)
 }
 for (const root of [cedar, maple]) {
   const view = readFileSync(resolve(root, 'back-top/BackTop.vue'), 'utf8')

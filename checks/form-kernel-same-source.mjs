@@ -11,11 +11,24 @@ const normalize = (source) => source.replace(/["';,]/g, '').replace(/\s+/g, '')
 
 for (const file of [
   'form-controller.ts',
+  'item-decoration.ts',
+  '__tests__/decoration-contract.spec.ts',
   '__tests__/form-controller.spec.ts',
   'validate-trigger.ts',
+  'layout-props.ts',
+  'form-id.ts',
+  'use-form-item-layout.ts',
+  'use-form-label-width.ts',
+  '__tests__/layout-contract.spec.ts',
   '__tests__/validate-trigger.spec.ts',
 ]) {
   assert.equal(normalize(read(cedar, file)), normalize(read(maple, file)), `${file} differs`)
 }
 
-console.log('Form kernel parity passed: registry, validation, reset, clear, triggers and async race behavior are same-source.')
+assert.equal(
+  normalize(read(cedar, 'FormItemLabel.vue')).replaceAll('@cedarjs/icons-vue', '@icons').replaceAll('c-form-item-label', 'form-label'),
+  normalize(read(maple, 'FormItemLabel.vue')).replaceAll('@maplejs/icons-vue', '@icons').replaceAll('mp-form-item__label', 'form-label'),
+  'FormItemLabel.vue differs beyond local icon import and CSS namespace',
+)
+
+console.log('Form kernel parity passed: 12 copied pairs: registry, validation, reset, clear, triggers, async races, layout and label-width lifecycle are same-source.')

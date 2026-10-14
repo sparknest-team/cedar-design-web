@@ -1,3 +1,4 @@
+import { useDateCurrent } from '../../date-current'
 import type { Dayjs } from 'dayjs'
 import { computed, toRefs } from 'vue'
 import { Cell, IsSameTime, Mode } from '../types'
@@ -14,6 +15,7 @@ interface CellClassNameProps {
 
 export default function useCellClassName(props: CellClassNameProps) {
   const { rangeValues } = toRefs(props)
+  const showCurrent = useDateCurrent()
 
   const sortedRangeValues = computed(() =>
     rangeValues?.value && rangeValues.value.every(isDayjs)
@@ -50,7 +52,7 @@ export default function useCellClassName(props: CellClassNameProps) {
         `${prefixCls}-cell`,
         {
           [`${prefixCls}-cell-in-view`]: isInView,
-          [`${prefixCls}-cell-today`]: isToday,
+          [`${prefixCls}-cell-today`]: showCurrent.value && isToday,
           [`${prefixCls}-cell-selected`]: isSelected,
           [`${prefixCls}-cell-range-start`]: isRangeStart,
           [`${prefixCls}-cell-range-end`]: isRangeEnd,

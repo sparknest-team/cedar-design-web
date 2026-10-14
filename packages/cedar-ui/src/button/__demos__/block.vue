@@ -1,3 +1,3 @@
 <template>
-  <c-button block status="primary">Full width</c-button>
+  <c-button block>Full width</c-button>
 </template>

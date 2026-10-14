@@ -1,16 +1,16 @@
-<template>
-  <c-space direction="column" size="lg">
-    <c-verification-code v-model="value" style="width: 200px" @finish="onFinish" size="xs" />
-    <c-verification-code v-model="value" style="width: 220px" @finish="onFinish" size="sm" />
-    <c-verification-code v-model="value" style="width: 260px" @finish="onFinish" size="md" />
-    <c-verification-code v-model="value" style="width: 300px" @finish="onFinish" size="lg" />
-  </c-space>
-</template>
-
-<script lang="ts" setup>
+<script setup>
 import { ref } from 'vue'
-import { Message } from '@cedarjs/ui'
 
-const value = ref('654321')
-const onFinish = (value) => Message.info(`Verification code: ${value}`)
+const code = ref('')
 </script>
+<template>
+  <div class="verification-demo">
+    <c-verification-code v-model="code" aria-label="验证码" />
+    <p>当前值：{{ code || '未输入' }}</p>
+  </div>
+</template>
+<style scoped>
+.verification-demo {
+  max-width: 420px;
+}
+</style>

@@ -1,0 +1,6 @@
+- [x] Correct binding fixture and reproduce 3 failures / 1 pass per platform.
+- [x] Independently fix owner-window scheduling/cancellation and stale frame isolation.
+- [x] Full Trigger suites Cedar57 / Maple70 and types pass.
+- [x] Update shared/menu/component docs, patch Changesets and reviewed source classification.
+- [x] Separately verify listener cleanup when replacing popup windows (trigger-scroll-listener-window; simulated ownership).
+- [ ] Real browser/OS evidence remains independent.

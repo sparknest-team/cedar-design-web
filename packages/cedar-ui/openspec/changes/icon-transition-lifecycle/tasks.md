@@ -1,0 +1,7 @@
+- [x] Reproduce six failures and three controls on each independent Icon copy.
+- [x] Guard stale/consumed timers and detached preference callbacks; suspend and refresh correctly across KeepAlive.
+- [x] Rebind legacy reduced-motion probes to actual owner view and rerun full Icon Cedar20/Maple21.
+- [x] Configured declaration/Maple typecheck and relevant lint; sync shared standards, menu guides, component docs, demos, evidence and patch Changesets.
+- [x] Classify Icon/List hints without declaring native acceptance; independently verify classification/compiled checks and catalog.
+- [ ] Reconcile parallel date/time CSS inventory after its owner stabilizes; do not overwrite current drift.
+- [ ] Native Icon frames/OS/custom animations and same-node document adoption remain separate.

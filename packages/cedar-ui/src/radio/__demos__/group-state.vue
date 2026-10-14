@@ -8,7 +8,7 @@ const options = [{ label: '设备 A', value: 'a' }, { label: '设备 B', value: 
 </script>
 
 <template>
-  <c-space direction="vertical">
+  <c-space direction="column">
     <div>
       <p>非受控：default-value 只用于初始值</p>
       <c-radio-group :default-value="'a'" :options="options" />

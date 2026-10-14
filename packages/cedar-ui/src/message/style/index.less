@@ -419,3 +419,15 @@
     transform: scale(1);
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .c-message,
+  .fade-message-enter-active,
+  .fade-message-appear-active,
+  .fade-message-leave-active {
+    transition: none !important;
+  }
+  .c-message-icon {
+    animation: none !important;
+  }
+}

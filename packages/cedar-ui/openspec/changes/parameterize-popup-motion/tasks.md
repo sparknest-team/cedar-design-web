@@ -1,0 +1,4 @@
+- [x] Govern Maple-only motion defaults and real compiled consumers.
+- [x] Add failing-before lifecycle regressions and align independent helpers.
+- [x] Verify native Popup transition/lock/focus/unmount cycles (9 IAB cases, not OS preference).
+- [x] Synchronize source docs, guides, generated references and Changesets.

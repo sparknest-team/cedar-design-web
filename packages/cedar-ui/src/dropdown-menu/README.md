@@ -74,6 +74,12 @@ SplitButton 已封装按钮与下拉命令菜单的组合，并通过 `MenuOptio
 
 <demo src="./__demos__/placement.vue"></demo>
 
+### 定位策略
+
+根菜单和各级子菜单响应式使用同一 `strategy`，默认 `absolute`，可选 `fixed`。切换策略不会改变激活值或主动关闭菜单。`popup-container` 独立控制挂载位置；`fixed` 不保证脱离 transform 祖先的包含块。
+
+<demo src="./__demos__/positioning.vue"></demo>
+
 ## API
 
 ### `<DropdownMenu>` Props
@@ -88,6 +94,7 @@ SplitButton 已封装按钮与下拉命令菜单的组合，并通过 `MenuOptio
 | trigger | 根菜单触发方式 | `'hover' \| 'click' \| 'focus' \| 'contextMenu'` | `'click'` |
 | submenu-trigger | 各级子菜单的展开方式，对所有层级统一生效 | `'hover' \| 'click'` | `'hover'` |
 | placement | 弹出位置 | `DropdownMenuPosition` | `'bottom'` |
+| `strategy` | 根菜单及全部子菜单的定位策略 | `'absolute' \| 'fixed'` | `'absolute'` |
 | popup-container | 浮层挂载容器 | `string \| HTMLElement \| false` | `-` |
 | popup-max-height | 默认限制、自定义像素高度或不限高 | `boolean \| number` | `true` |
 | hide-on-select | 激活命令后关闭浮层 | `boolean` | `true` |

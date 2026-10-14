@@ -1,6 +1,6 @@
 <template>
-  <c-space direction="column" fill size="md">
-    <c-alert type="info">
+  <c-space direction="column" block size="md">
+    <c-alert status="info">
       Preset 在构建期注入主题；固定工具类是现成 CSS。二者可同时使用。
     </c-alert>
     <c-table :columns="columns" :data="data" :pagination="false" />

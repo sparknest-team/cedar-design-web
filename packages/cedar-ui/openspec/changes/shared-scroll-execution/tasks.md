@@ -1,0 +1,5 @@
+- [x] Reproduce9 failures /1 default control per platform.
+- [x] Bind probes to actual document.defaultView, not runner global-window wrappers.
+- [x] Final helper10 each and Maple existing IndexBar9 pass; synchronize source classification, docs and patch Changesets.
+- [x] Eight real IAB helper cases: main default/zero and same-origin iframe element/Window, forwarded native RAF/coordinates and final cleanup.
+- [ ] Form overlap, IndexBar async-state/cancellation, other browser conditions and OS evidence remain separate.

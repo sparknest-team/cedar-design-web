@@ -26,8 +26,11 @@ export const uploadProps = {
   multiple: Boolean,
   directory: Boolean,
   draggable: Boolean,
-  disabled: Boolean,
-  readonly: Boolean,
+  disabled: { type: Boolean, default: undefined },
+  readonly: { type: Boolean, default: undefined },
+  elevation: { type: [Boolean, Number], default: false },
+  ripple: { type: Boolean, default: true },
+  requestChoose: Function as PropType<import('./interfaces').UploadRequestChoose>,
   action: String,
   method: {
     type: String,
@@ -97,4 +100,4 @@ export const uploadProps = {
   isSuccessResponse: Function as PropType<UploadIsSuccessResponse>,
 }
 
-export type UploadProps = typeof uploadProps
+export type UploadProps = import('vue').ExtractPublicPropTypes<typeof uploadProps>

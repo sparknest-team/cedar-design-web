@@ -50,7 +50,7 @@ export interface DatePickerProps {
   defaultValue?: CalendarValue
   showTime: boolean
   timePickerProps?: Partial<TimePickerProps>
-  showNowBtn: boolean
+  showNowButton: boolean
   disabledTime?: DisabledTime
 }
 
@@ -81,7 +81,6 @@ export interface QuarterPickerProps {
 }
 
 export interface BasePickerProps {
-  locale?: Record<string, any>
   clearable: boolean
   readonly: boolean
   error: boolean

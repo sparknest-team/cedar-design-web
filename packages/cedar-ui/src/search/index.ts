@@ -1,5 +1,5 @@
 import { withInstall } from "../_utils/global-config";
-import _Search from "./search";
+import _Search from "./search.vue";
 import { searchProps } from "./props";
 
 const Search = withInstall(_Search, Object.assign(_Search, {}), {
@@ -16,3 +16,5 @@ export { Search, searchProps };
 export const _SearchComponent = Search;
 
 export default Search;
+
+export type { SearchEmits, SearchSlots, SearchExpose } from './types'

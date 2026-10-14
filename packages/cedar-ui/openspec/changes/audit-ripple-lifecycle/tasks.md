@@ -1,0 +1,4 @@
+- [x] Reproduce long transition, duplicate release, nested ownership and document/key lifecycle failures (five failing-before tests).
+- [x] Align independent runtime copies without changing token defaults.
+- [x] Verify lifecycle, actual compiled consumers, types and lint (native six cases; global inventory drift recorded separately).
+- [x] Synchronize guides, component docs, evidence and Changesets.

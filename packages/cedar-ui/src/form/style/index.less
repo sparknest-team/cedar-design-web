@@ -17,9 +17,11 @@
     margin-bottom: var(~'--c-form-inline-item-margin-bottom');
   }
 
-  &-auto-label-width &-item-label-col {
+  &-auto-label-width &-item-layout-horizontal &-item-label-col {
     > .c-form-item-label {
       white-space: nowrap;
+      max-width: none;
+      flex-shrink: 0;
     }
   }
 
@@ -248,7 +250,14 @@
   }
 
   &-tooltip {
-    margin-left: var(~'--c-form-tooltip-margin-left');
+    display: inline-flex;
+    align-items: center;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font: inherit;
+    cursor: pointer;
+    margin-inline-start: var(~'--c-form-tooltip-margin-left');
     color: var(~'--c-form-tooltip-text-color');
   }
 }

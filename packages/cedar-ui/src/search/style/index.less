@@ -1,17 +1,48 @@
+@import "./token.less";
 
 .c-search {
   position: relative;
   display: inline-flex;
+  align-items: center;
   box-sizing: border-box;
   width: 100%;
+  min-height: var(--c-search-size-min-height);
+  padding: var(--c-search-spacing-padding);
+  background: var(--c-search-color-bg);
 
-  .c-input__suffix {
-    color: var(~'--c-search-color-icon');
-    font-size: var(~'--c-search-size-icon');
+  .c-input-group { flex: 1; min-width: 0; }
+  &--round .c-field-decorator { border-radius: calc(var(--c-search-field-size-min-height) / 2); }
+  &--square .c-field-decorator { border-radius: var(--c-search-field-radius); }
+  &__label {
+    align-self: center;
+    margin-inline-end: var(--c-search-label-spacing-inline-end);
+    color: var(--c-search-label-color-text);
+    font-size: var(--c-search-label-font-size);
+    white-space: nowrap;
   }
-
-  .c-input__search-btn {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+  &__icon-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--c-search-color-icon);
+    font-size: var(--c-search-size-icon);
+    margin-inline-end: var(--c-search-icon-spacing);
+    cursor: pointer;
+    &:disabled { cursor: not-allowed; opacity: var(--c-search-opacity-disabled); }
+  }
+  &__action { margin-inline-start: var(--c-search-action-spacing-inline-start); color: var(--c-search-action-color-text); font-size: var(--c-search-action-font-size); }
+  &__field { display: flex; align-items: center; min-height: var(--c-search-field-size-min-height); padding: var(--c-search-field-spacing-padding); background: var(--c-search-field-color-bg); }
+  &__input { flex: 1; min-width: 0; }
+  &__select .c-selection-field__icon { font-size: var(--c-search-select-icon-size); margin-inline-start: var(--c-search-select-icon-spacing); }
+  &__select { min-width: var(--c-search-select-size-min-width); max-width: var(--c-search-select-size-max-width); }
+  &__popup-content { height: 100%; overflow: auto; background: var(--c-search-color-bg); }
+  &__history { padding: var(--c-search-history-spacing-padding); }
+  &__history-item {
+    display: flex; align-items: center; width: 100%;
+    min-height: var(--c-search-history-item-size-min-height);
+    padding: 0; border: 0; border-bottom: 1px solid var(--c-search-history-item-color-border);
+    background: transparent; color: var(--c-search-history-item-color-text); font: inherit; text-align: start; cursor: pointer;
   }
 }

@@ -1,9 +1,7 @@
 <template>
-  <div :style="{ width: '50%' }">
-    <c-progress :steps="3" :percent="30" />
-    <c-progress :steps="5" status="warning" :percent="100" />
-    <c-progress :steps="3" size="sm" :percent="30" />
+  <div style="display: grid; gap: 16px">
+    <c-progress :steps="5" :percent="40" />
+    <c-progress :steps="10" :percent="75" status="warning" size="lg" />
+    <c-progress :steps="5" :percent="100" />
   </div>
 </template>
-<script lang="ts" setup>
-</script>

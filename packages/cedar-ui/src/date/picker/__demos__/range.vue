@@ -10,26 +10,18 @@
   <c-date-range-picker type="quarter" @change="onChange" @select="onSelect" style="margin-bottom: 20px" />
   <br />
   <c-date-range-picker
-    showTime
-    :time-picker-props="{
-      defaultValue: ['00:00:00', '00:00:00'],
-    }"
+    show-time
+    :default-value="['2025-01-05 00:00:00', '2025-01-10 00:00:00']"
     @change="onChange"
     @select="onSelect" />
+  <p>{{ feedback }}</p>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
-export default defineComponent({
-  setup() {
-    return {
-      onSelect(dateString, date) {
-        console.log('onSelect', dateString, date)
-      },
-      onChange(dateString, date) {
-        console.log('onChange: ', dateString, date)
-      },
-    }
-  },
-})
+<script setup lang="ts">
+import { ref } from 'vue'
+import type { DateSelection } from '@cedarjs/ui'
+
+const feedback = ref('选择日期后查看事件值')
+const onSelect = (value: DateSelection) => { feedback.value = '选择：' + JSON.stringify(value) }
+const onChange = (value: DateSelection) => { feedback.value = '提交：' + JSON.stringify(value) }
 </script>

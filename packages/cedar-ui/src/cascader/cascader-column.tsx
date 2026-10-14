@@ -1,10 +1,10 @@
 import { defineComponent, inject, PropType, ref } from 'vue'
 import { useEmptySlot } from '../_components/selection-field/empty-slot'
-import Scrollbar from '../scrollbar'
 import VirtualList from '../_components/virtual-list-v2'
 import { VirtualListProps } from '../_components/virtual-list-v2/interface'
-import Empty from '../empty'
 import { createNamespace, getPrefixCls } from '../_utils/global-config'
+import Empty from '../empty'
+import Scrollbar from '../scrollbar'
 import CascaderOption from './cascader-option'
 import { CascaderOptionInfo } from './types'
 

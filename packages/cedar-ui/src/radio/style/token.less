@@ -1,22 +1,9 @@
 :root {
   --c-radio-control-color: var(--c-sys-color-content-secondary);
-  --c-internal-radio-border-width: var(~"--c-border-width-2");
   --c-radio-control-size: 14px;
-  --c-internal-radio-control-color-hover: var(--c-radio-control-color);
   --c-radio-control-color-disabled: var(--c-sys-color-content-disabled);
   --c-radio-control-color-error: var(--c-sys-color-content-danger);
-  --c-internal-radio-bg: var(--c-sys-color-surface-default);
   --c-radio-control-color-checked: var(--c-sys-color-content-brand);
-  --c-internal-radio-border-radius: var(~"--c-border-radius-circle");
-  --c-internal-radio-bg-disabled: var(--c-sys-color-surface-muted);
-  --c-internal-radio-control-color-checked-disabled: var(--c-radio-control-color-disabled);
-  --c-internal-radio-dot-bg-checked: var(--c-sys-color-surface-default);
-  --c-internal-radio-dot-bg-checked-disabled: var(
-    ~"--c-internal-radio-bg-disabled"
-  );
-  --c-internal-radio-icon-inner-size: calc(
-    var(~"--c-radio-control-size") - var(~"--c-internal-radio-border-width") * 2
-  );
   --c-radio-action-padding: calc(
     (var(~"--c-internal-radio-mask-height") / 2) -
       (var(~"--c-radio-control-size") / 2)
@@ -24,19 +11,13 @@
 
   --c-radio-label-text-color: var(--c-sys-color-content-primary);
   --c-radio-label-text-color-disabled: var(--c-sys-color-content-disabled);
-  --c-internal-radio-label-text-color-checked-disabled: var(--c-radio-label-text-color-disabled);
   --c-radio-label-font-size: var(~"--c-font-size-body-3");
   --c-radio-label-gap: var(~"--c-spacing-4");
 
   --c-internal-radio-mask-height: var(~"--c-size-6");
-  --c-internal-radio-mask-hover-bg: var(--c-sys-color-state-hover);
   --c-radio-group-gap: var(~"--c-spacing-8");
-  --c-internal-radio-group-vertical-line-height: var(~"--c-size-8");
 
   --c-radio-animation-duration: var(~"--c-transition-duration-3");
-  --c-internal-radio-transition-timing-function-overshoot: var(
-    ~"--c-transition-timing-function-overshoot"
-  );
 }
 
 @import './radio-button-token.less';

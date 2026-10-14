@@ -14,14 +14,20 @@ permalink: /guide/design-token-reference/
 
 声明来源: `src/_components/picker-field/style/token.less`
 
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
 | `--c-picker-field-gap` | 公开 | `8px` | 本组件 CSS<br>`gap` |
 | `--c-picker-field-input-min-width` | 公开 | `3em` | 本组件 CSS<br>`min-width` |
 
+</div>
+
 ## _components/selection-field
 
 声明来源: `src/_components/selection-field/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -31,9 +37,13 @@ permalink: /guide/design-token-reference/
 | `--c-selection-field-loading-duration` | 公开 | `1s` | 本组件 CSS<br>`animation` |
 | `--c-selection-field-search-min-width` | 公开 | `3em` | 本组件 CSS<br>`min-width` |
 
+</div>
+
 ## alert
 
 声明来源: `src/alert/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -120,9 +130,13 @@ permalink: /guide/design-token-reference/
 | `--c-alert-tonal-warning-icon` | 公开 | `var(--c-sys-color-content-warning)` | 本组件 CSS<br>`color` |
 | `--c-alert-tonal-warning-title` | 公开 | `var(--c-sys-color-content-warning)` | 本组件 CSS<br>`color` |
 
+</div>
+
 ## anchor
 
 声明来源: `src/anchor/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -131,7 +145,7 @@ permalink: /guide/design-token-reference/
 | `--c-anchor-color-bg-line-active` | 公开 | `rgb(var(--c-primary-6))` | 本组件 CSS<br>`background-color` |
 | `--c-anchor-color-bg-title-hover` | 公开 | `var(--c-color-fill-2)` | 本组件 CSS<br>`background-color` |
 | `--c-anchor-color-title` | 公开 | `var(--c-color-text-2)` | 本组件 CSS<br>`color` |
-| `--c-anchor-color-title-active` | 公开 | `rgb(var(--c-primary-6))` | 本组件 CSS<br>`color` |
+| `--c-anchor-color-title-active` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color` |
 | `--c-anchor-color-title-hover` | 公开 | `rgb(var(--c-primary-5))` | 本组件 CSS<br>`color` |
 | `--c-anchor-font-size-title` | 公开 | `14px` | 本组件 CSS<br>`font-size` |
 | `--c-anchor-font-weight-title-active` | 公开 | `var(--c-font-weight-500)` | 本组件 CSS<br>`font-weight` |
@@ -143,9 +157,13 @@ permalink: /guide/design-token-reference/
 | `--c-anchor-title-padding-x` | 公开 | `16px` | 本组件 CSS<br>`padding-left` |
 | `--c-anchor-title-padding-y` | 公开 | `4px` | 本组件 CSS<br>`padding` |
 
+</div>
+
 ## auto-complete
 
 声明来源: `src/auto-complete/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -168,9 +186,13 @@ permalink: /guide/design-token-reference/
 | `--c-auto-complete-popup-max-height` | 公开 | `200px` | 跨组件 CSS<br>`max-height` |
 | `--c-auto-complete-popup-padding-vertical` | 公开 | `var(--c-sys-space-2)` | 跨组件 CSS<br>`padding` |
 
+</div>
+
 ## avatar
 
 声明来源: `src/avatar/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -207,9 +229,13 @@ permalink: /guide/design-token-reference/
 | `--c-avatar-z-index-overlay-hover` | 公开 | `2` | 本组件 CSS<br>`z-index` |
 | `--c-avatar-z-index-trigger` | 公开 | `1` | 本组件 CSS<br>`z-index` |
 
+</div>
+
 ## back-top
 
 声明来源: `src/back-top/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -227,9 +253,13 @@ permalink: /guide/design-token-reference/
 | `--c-back-top-text-color` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color` |
 | `--c-back-top-z-index` | 公开 | `var(--c-z-index-local-sticky)` | 本组件 CSS<br>`z-index` |
 
+</div>
+
 ## badge
 
 声明来源: `src/badge/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -312,9 +342,13 @@ permalink: /guide/design-token-reference/
 | `--c-badge-variant-outline-status-warning-text-color` | 公开 | `var(--c-sys-color-content-warning)` | 本组件 CSS<br>`border`, `color` |
 | `--c-badge-variant-outline-text-color` | 公开 | `var(--c-sys-color-content-danger)` | 本组件 CSS<br>`border`, `color` |
 
+</div>
+
 ## breadcrumb
 
 声明来源: `src/breadcrumb/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -338,25 +372,31 @@ permalink: /guide/design-token-reference/
 | `--c-breadcrumb-text-color` | 公开 | `var(--c-color-text-2)` | 本组件 CSS<br>`color` |
 | `--c-breadcrumb-text-color-active` | 公开 | `var(--c-color-text-1)` | 本组件 CSS<br>`color` |
 
+</div>
+
 ## button
 
 声明来源: `src/button/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
 | `--c-button-border-radius` | 公开 | `var(--c-sys-radius-md)` | 本组件 CSS<br>`border-radius` |
 | `--c-button-content-gap` | 公开 | `var(--c-sys-space-3)` | 本组件 CSS<br>`gap` |
 | `--c-button-danger-color` | 公开 | `var(--c-sys-color-status-danger)` | 本组件 CSS<br>`background-color` |
+| `--c-button-danger-disabled-color` | 公开 | `rgb(var(--c-danger-3))`<br>`rgba(var(--c-danger-6), 0.5)` (`:root[cedar-theme="dark"]`) | 本组件 CSS<br>`background-color`, `color` |
 | `--c-button-danger-icon-color` | 公开 | `var(--c-sys-color-content-danger)` | 本组件 CSS<br>`color` |
 | `--c-button-danger-icon-container-color` | 公开 | `rgb(var(--c-danger-1))` | 本组件 CSS<br>`background-color` |
 | `--c-button-danger-state-layer-color` | 公开 | `var(--c-sys-color-content-on-dark)` | 本组件 CSS<br>`background-color` |
-| `--c-button-danger-text-color` | 公开 | `var(--c-sys-color-content-on-bright)` | 本组件 CSS<br>`color` |
+| `--c-button-danger-text-color` | 公开 | `var(--c-sys-color-content-on-dark)` | 本组件 CSS<br>`color` |
 | `--c-button-default-color` | 公开 | `var(--c-sys-color-surface-default)` | 本组件 CSS<br>`background-color` |
 | `--c-button-default-icon-color` | 公开 | `var(--c-sys-color-content-primary)` | 本组件 CSS<br>`color` |
 | `--c-button-default-icon-container-color` | 公开 | `var(--c-sys-color-surface-muted)` | 本组件 CSS<br>`background-color` |
 | `--c-button-default-state-layer-color` | 公开 | `var(--c-sys-color-content-primary)` | 本组件 CSS<br>`background-color` |
 | `--c-button-default-text-color` | 公开 | `var(--c-sys-color-content-primary)` | 本组件 CSS<br>`color` |
-| `--c-button-disabled-color` | 公开 | `var(--c-color-disabled)` | 本组件 CSS<br>`background-color` |
+| `--c-button-disabled-color` | 公开 | `var(--c-color-fill-2)` | 本组件 CSS<br>`background-color` |
+| `--c-button-disabled-solid-text-color` | 公开 | `var(--c-sys-color-content-on-dark)`<br>`rgba(255, 255, 255, 0.3)` (`:root[cedar-theme="dark"]`) | 本组件 CSS<br>`color` |
 | `--c-button-disabled-text-color` | 公开 | `var(--c-sys-color-content-disabled)` | 本组件 CSS<br>`color` |
 | `--c-button-focus-color` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`outline` |
 | `--c-button-focus-offset` | 公开 | `2px` | 本组件 CSS<br>`outline-offset` |
@@ -364,10 +404,11 @@ permalink: /guide/design-token-reference/
 | `--c-button-group-border-radius` | 公开 | `var(--c-sys-radius-md)` | 本组件 CSS<br>`border-radius` |
 | `--c-button-icon-container-padding` | 公开 | `var(--c-sys-space-3)` | 本组件 CSS<br>`padding` |
 | `--c-button-info-color` | 公开 | `var(--c-sys-color-status-info)` | 本组件 CSS<br>`background-color` |
+| `--c-button-info-disabled-color` | 公开 | `rgb(var(--c-blue-3))`<br>`rgba(var(--c-blue-6), 0.5)` (`:root[cedar-theme="dark"]`) | 本组件 CSS<br>`background-color`, `color` |
 | `--c-button-info-icon-color` | 公开 | `var(--c-sys-color-content-info)` | 本组件 CSS<br>`color` |
 | `--c-button-info-icon-container-color` | 公开 | `rgb(var(--c-blue-1))` | 本组件 CSS<br>`background-color` |
 | `--c-button-info-state-layer-color` | 公开 | `var(--c-sys-color-content-on-dark)` | 本组件 CSS<br>`background-color` |
-| `--c-button-info-text-color` | 公开 | `var(--c-sys-color-content-on-bright)` | 本组件 CSS<br>`color` |
+| `--c-button-info-text-color` | 公开 | `var(--c-sys-color-content-on-dark)` | 本组件 CSS<br>`color` |
 | `--c-button-large-font-size` | 公开 | `var(--c-sys-font-size-lg)` | 本组件 CSS<br>`font-size` |
 | `--c-button-large-height` | 公开 | `44px` | 本组件 CSS<br>`height`, `min-width`, `width` |
 | `--c-button-large-padding` | 公开 | `0 22px` | 本组件 CSS<br>`padding` |
@@ -388,16 +429,17 @@ permalink: /guide/design-token-reference/
 | `--c-button-plain-state-opacity-active` | 公开 | `1` | 本组件 CSS<br>`opacity` |
 | `--c-button-plain-state-opacity-hover` | 公开 | `0.5` | 本组件 CSS<br>`opacity` |
 | `--c-button-primary-color` | 公开 | `var(--c-sys-color-action-primary)` | 本组件 CSS<br>`background-color` |
+| `--c-button-primary-disabled-color` | 公开 | `rgb(var(--c-primary-3))`<br>`rgba(var(--c-primary-6), 0.5)` (`:root[cedar-theme="dark"]`) | 本组件 CSS<br>`background-color`, `color` |
 | `--c-button-primary-icon-color` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color` |
 | `--c-button-primary-icon-container-color` | 公开 | `rgb(var(--c-primary-1))` | 本组件 CSS<br>`background-color` |
 | `--c-button-primary-state-layer-color` | 公开 | `var(--c-sys-color-content-on-dark)` | 本组件 CSS<br>`background-color` |
-| `--c-button-primary-text-color` | 公开 | `var(--c-sys-color-content-on-bright)` | 本组件 CSS<br>`color` |
+| `--c-button-primary-text-color` | 公开 | `var(--c-sys-color-content-on-dark)` | 本组件 CSS<br>`color` |
 | `--c-button-round-padding` | 公开 | `var(--c-sys-space-3)` | 本组件 CSS<br>`padding` |
 | `--c-button-secondary-color` | 公开 | `rgb(var(--c-gray-6))` | 本组件 CSS<br>`background-color` |
 | `--c-button-secondary-icon-color` | 公开 | `var(--c-sys-color-content-secondary)` | 本组件 CSS<br>`color` |
 | `--c-button-secondary-icon-container-color` | 公开 | `rgb(var(--c-gray-2))` | 本组件 CSS<br>`background-color` |
 | `--c-button-secondary-state-layer-color` | 公开 | `var(--c-sys-color-content-on-dark)` | 本组件 CSS<br>`background-color` |
-| `--c-button-secondary-text-color` | 公开 | `var(--c-sys-color-content-on-bright)` | 本组件 CSS<br>`color` |
+| `--c-button-secondary-text-color` | 公开 | `var(--c-sys-color-content-on-dark)` | 本组件 CSS<br>`color` |
 | `--c-button-small-font-size` | 公开 | `var(--c-sys-font-size-xs)` | 本组件 CSS<br>`font-size` |
 | `--c-button-small-height` | 公开 | `28px` | 本组件 CSS<br>`height`, `min-width`, `width` |
 | `--c-button-small-padding` | 公开 | `0 var(--c-sys-space-5)` | 本组件 CSS<br>`padding` |
@@ -410,10 +452,11 @@ permalink: /guide/design-token-reference/
 | `--c-button-state-opacity-active` | 公开 | `0.12` | 本组件 CSS<br>`opacity` |
 | `--c-button-state-opacity-hover` | 公开 | `0.08` | 本组件 CSS<br>`opacity` |
 | `--c-button-success-color` | 公开 | `var(--c-sys-color-status-success)` | 本组件 CSS<br>`background-color` |
+| `--c-button-success-disabled-color` | 公开 | `rgb(var(--c-success-3))`<br>`rgba(var(--c-success-6), 0.5)` (`:root[cedar-theme="dark"]`) | 本组件 CSS<br>`background-color`, `color` |
 | `--c-button-success-icon-color` | 公开 | `var(--c-sys-color-content-success)` | 本组件 CSS<br>`color` |
 | `--c-button-success-icon-container-color` | 公开 | `rgb(var(--c-success-1))` | 本组件 CSS<br>`background-color` |
 | `--c-button-success-state-layer-color` | 公开 | `var(--c-sys-color-content-on-dark)` | 本组件 CSS<br>`background-color` |
-| `--c-button-success-text-color` | 公开 | `var(--c-sys-color-content-on-bright)` | 本组件 CSS<br>`color` |
+| `--c-button-success-text-color` | 公开 | `var(--c-sys-color-content-on-dark)` | 本组件 CSS<br>`color` |
 | `--c-button-tertiary-color` | 公开 | `rgb(var(--c-gray-7))` | 本组件 CSS<br>`background-color` |
 | `--c-button-tertiary-icon-color` | 公开 | `var(--c-sys-color-content-secondary)` | 本组件 CSS<br>`color` |
 | `--c-button-tertiary-icon-container-color` | 公开 | `rgb(var(--c-gray-1))` | 本组件 CSS<br>`background-color` |
@@ -421,18 +464,23 @@ permalink: /guide/design-token-reference/
 | `--c-button-tertiary-text-color` | 公开 | `var(--c-sys-color-content-on-dark)`<br>`var(--c-sys-color-content-on-bright)` (`:root[cedar-theme="dark"]`) | 本组件 CSS<br>`color` |
 | `--c-button-transition-duration` | 公开 | `var(--c-sys-motion-duration-standard)` | 本组件 CSS<br>`transition` |
 | `--c-button-warning-color` | 公开 | `var(--c-sys-color-status-warning)` | 本组件 CSS<br>`background-color` |
+| `--c-button-warning-disabled-color` | 公开 | `rgb(var(--c-warning-3))`<br>`rgba(var(--c-warning-6), 0.5)` (`:root[cedar-theme="dark"]`) | 本组件 CSS<br>`background-color`, `color` |
 | `--c-button-warning-icon-color` | 公开 | `var(--c-sys-color-content-warning)` | 本组件 CSS<br>`color` |
 | `--c-button-warning-icon-container-color` | 公开 | `rgb(var(--c-warning-1))` | 本组件 CSS<br>`background-color` |
 | `--c-button-warning-state-layer-color` | 公开 | `var(--c-sys-color-content-on-dark)` | 本组件 CSS<br>`background-color` |
-| `--c-button-warning-text-color` | 公开 | `var(--c-sys-color-content-on-bright)` | 本组件 CSS<br>`color` |
+| `--c-button-warning-text-color` | 公开 | `var(--c-sys-color-content-on-dark)` | 本组件 CSS<br>`color` |
 | `--c-button-xl-font-size` | 公开 | `var(--c-sys-font-size-xl)` | 本组件 CSS<br>`font-size` |
 | `--c-button-xl-height` | 公开 | `52px` | 本组件 CSS<br>`height`, `min-width`, `width` |
 | `--c-button-xl-padding` | 公开 | `0 28px` | 本组件 CSS<br>`padding` |
 | `--c-button-xl-stacked-height` | 公开 | `64px` | 本组件 CSS<br>`height`, `min-width` |
 
+</div>
+
 ## calendar
 
 声明来源: `src/calendar/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -449,7 +497,7 @@ permalink: /guide/design-token-reference/
 | `--c-calendar-cell-text-in-view` | 公开 | `var(--c-color-text-1)` | 本组件 CSS<br>`color` |
 | `--c-calendar-cell-text-not-in-view` | 公开 | `var(--c-color-text-4)` | 本组件 CSS<br>`color` |
 | `--c-calendar-cell-text-selected` | 公开 | `var(--c-color-white)` | 本组件 CSS<br>`color` |
-| `--c-calendar-cell-today-border-color` | 公开 | `rgb(var(--c-primary-6))` | 本组件 CSS<br>`border` |
+| `--c-calendar-cell-today-border-color` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`border` |
 | `--c-calendar-date-circle-border-radius` | 公开 | `var(--c-border-radius-circle)` | 本组件 CSS<br>`border-radius` |
 | `--c-calendar-date-circle-size` | 公开 | `var(--c-size-7)` | 本组件 CSS<br>`height`, `width` |
 | `--c-calendar-date-content-height` | 公开 | `70px` | 本组件 CSS<br>`height` |
@@ -501,7 +549,7 @@ permalink: /guide/design-token-reference/
 | `--c-calendar-panel-header-padding-vertical` | 公开 | `var(--c-spacing-4)` | 本组件 CSS<br>`padding` |
 | `--c-calendar-panel-header-value-font-size` | 公开 | `var(--c-font-size-body-3)` | 本组件 CSS<br>`font-size` |
 | `--c-calendar-panel-header-value-line-height` | 公开 | `var(--c-size-6)` | 本组件 CSS<br>`line-height` |
-| `--c-calendar-panel-text-color-cell-hover` | 公开 | `rgb(var(--c-primary-6))` | 本组件 CSS<br>`color` |
+| `--c-calendar-panel-text-color-cell-hover` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color` |
 | `--c-calendar-panel-text-color-cell-selected` | 公开 | `var(--c-color-white)` | 本组件 CSS<br>`color` |
 | `--c-calendar-panel-today-dot-offset` | 公开 | `var(--c-spacing-1)` | 本组件 CSS<br>`margin-left` |
 | `--c-calendar-panel-today-dot-size` | 公开 | `var(--c-spacing-2)` | 本组件 CSS<br>`height`, `width` |
@@ -521,9 +569,13 @@ permalink: /guide/design-token-reference/
 | `--c-calendar-year-cell-padding-horizontal` | 公开 | `var(--c-spacing-4)` | 本组件 CSS<br>`padding` |
 | `--c-calendar-year-cell-padding-vertical` | 公开 | `var(--c-spacing-8)` | 本组件 CSS<br>`padding` |
 
+</div>
+
 ## card
 
 声明来源: `src/card/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -576,29 +628,50 @@ permalink: /guide/design-token-reference/
 | `--c-card-title-padding` | 公开 | `0 12px` | 本组件 CSS<br>`padding` |
 | `--c-card-title-row-margin` | 公开 | `12px 0` | 本组件 CSS<br>`margin` |
 
+</div>
+
 ## carousel
 
 声明来源: `src/carousel/style/token.less`
 
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
-| `--c-carousel-arrow-color` | 公开 | `var(--c-color-white)` | 本组件 CSS<br>`color` |
-| `--c-carousel-arrow-font-size` | 公开 | `var(--c-font-size-title-1)` | 本组件 CSS<br>`font-size` |
-| `--c-carousel-arrow-margin` | 公开 | `var(--c-spacing-4)` | 本组件 CSS<br>`margin-left`, `margin-right` |
-| `--c-carousel-arrow-size` | 公开 | `var(--c-size-7)` | 本组件 CSS<br>`height`, `width` |
-| `--c-carousel-indicator-color-active` | 公开 | `var(--c-color-white)` | 本组件 CSS<br>`background` |
-| `--c-carousel-indicator-color-default` | 公开 | `rgba(255, 255, 255, 0.3)` | 本组件 CSS<br>`background` |
-| `--c-carousel-indicator-dot-size` | 公开 | `var(--c-spacing-3)` | 本组件 CSS<br>`height`, `width` |
-| `--c-carousel-indicator-gap` | 公开 | `var(--c-spacing-4)` | 本组件 CSS<br>`gap` |
-| `--c-carousel-indicator-line-border-radius` | 公开 | `var(--c-border-radius-sm)` | 本组件 CSS<br>`border-radius` |
-| `--c-carousel-indicator-line-height` | 公开 | `var(--c-border-width-3)` | 本组件 CSS<br>`height` |
-| `--c-carousel-indicator-line-width` | 公开 | `var(--c-spacing-6)` | 本组件 CSS<br>`width` |
-| `--c-carousel-indicator-outer-margin-bottom` | 公开 | `30px` | 本组件 CSS<br>`padding-bottom` |
-| `--c-carousel-indicator-position` | 公开 | `var(--c-spacing-6)` | 本组件 CSS<br>`bottom`, `left`, `right`, `top` |
+| `--c-carousel-arrow-background` | 公开 | `rgb(0 0 0 / 35%)` | 本组件 CSS<br>`background` |
+| `--c-carousel-arrow-background-hover` | 公开 | `rgb(0 0 0 / 55%)` | 本组件 CSS<br>`background` |
+| `--c-carousel-arrow-color` | 公开 | `var(--c-sys-color-content-on-dark)` | 本组件 CSS<br>`color` |
+| `--c-carousel-arrow-disabled-opacity` | 公开 | `0.4` | 本组件 CSS<br>`opacity` |
+| `--c-carousel-arrow-font-size` | 公开 | `var(--c-sys-font-size-xl)` | 本组件 CSS<br>`font-size` |
+| `--c-carousel-arrow-margin` | 公开 | `var(--c-sys-space-4)` | 本组件 CSS<br>`bottom`, `left`, `right`, `top` |
+| `--c-carousel-arrow-size` | 公开 | `var(--c-sys-control-height-md)` | 本组件 CSS<br>`height`, `width` |
+| `--c-carousel-card-duration` | 公开 | `var(--c-sys-motion-duration-standard)` | 本组件 CSS<br>`transition` |
+| `--c-carousel-card-opacity` | 公开 | `0.6` | 本组件 CSS<br>`opacity` |
+| `--c-carousel-card-scale` | 公开 | `0.85` | 本组件 CSS<br>`transform` |
+| `--c-carousel-fade-duration` | 公开 | `var(--c-sys-motion-duration-standard)` | 本组件 CSS<br>`transition` |
+| `--c-carousel-focus-color` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`outline` |
+| `--c-carousel-focus-offset` | 公开 | `2px` | 本组件 CSS<br>`outline-offset` |
+| `--c-carousel-focus-width` | 公开 | `2px` | 本组件 CSS<br>`outline` |
+| `--c-carousel-indicator-color-active` | 公开 | `var(--c-sys-color-content-on-dark)` | 本组件 CSS<br>`background` |
+| `--c-carousel-indicator-color-default` | 公开 | `rgb(255 255 255 / 35%)` | 本组件 CSS<br>`background` |
+| `--c-carousel-indicator-dot-size` | 公开 | `8px` | 本组件 CSS<br>`height`, `width` |
+| `--c-carousel-indicator-gap` | 公开 | `var(--c-sys-space-3)` | 本组件 CSS<br>`gap` |
+| `--c-carousel-indicator-line-border-radius` | 公开 | `var(--c-sys-radius-sm)` | 本组件 CSS<br>`border-radius` |
+| `--c-carousel-indicator-line-height` | 公开 | `3px` | 本组件 CSS<br>`height` |
+| `--c-carousel-indicator-line-width` | 公开 | `20px` | 本组件 CSS<br>`width` |
+| `--c-carousel-indicator-outer-margin-bottom` | 公开 | `var(--c-sys-space-8)` | 本组件 CSS<br>`padding-bottom` |
+| `--c-carousel-indicator-position` | 公开 | `var(--c-sys-space-4)` | 本组件 CSS<br>`bottom`, `left`, `right`, `top` |
+| `--c-carousel-navigation-z-index` | 公开 | `10` | 本组件 CSS<br>`z-index` |
+| `--c-carousel-transition-duration` | 公开 | `var(--c-sys-motion-duration-standard)` | 本组件 CSS<br>`transition` |
+| `--c-carousel-transition-timing-function` | 公开 | `ease` | 本组件 CSS<br>`transition` |
+
+</div>
 
 ## cascader
 
 声明来源: `src/cascader/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -630,47 +703,48 @@ permalink: /guide/design-token-reference/
 | `--c-cascader-size-item-icon` | 公开 | `12px` | 本组件 CSS<br>`font-size`, `margin-top`, `padding-right` |
 | `--c-cascader-slide-margin` | 公开 | `120px` | 本组件 CSS<br>`margin-left` |
 
+</div>
+
 ## checkbox
 
 声明来源: `src/checkbox/style/token.less`
 
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
-| `--c-checkbox-action-padding` | 公开 | `calc((var(--c-internal-checkbox-hover-size) / 2) - (var(--c-checkbox-control-size) / 2))` | 本组件 CSS<br>`padding-left` |
+| `--c-checkbox-action-padding` | 公开 | `5px` | 本组件 CSS<br>`padding` |
 | `--c-checkbox-animation-duration` | 公开 | `var(--c-transition-duration-3)` | 本组件 CSS<br>`transition` |
-| `--c-checkbox-control-color` | 公开 | `var(--c-sys-color-content-secondary)` | 本组件 CSS<br>`border`, `border-color` |
-| `--c-checkbox-control-color-checked` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`background-color` |
-| `--c-checkbox-control-color-disabled` | 公开 | `var(--c-sys-color-content-disabled)` | 本组件 CSS<br>`background-color`, `border-color` |
-| `--c-checkbox-control-color-error` | 公开 | `var(--c-sys-color-content-danger)` | 本组件 CSS<br>`background-color`, `border-color` |
-| `--c-checkbox-control-size` | 公开 | `14px` | 本组件 CSS<br>`height`, `padding-left`, `width` |
-| `--c-checkbox-group-gap` | 公开 | `var(--c-spacing-7)` | 本组件 CSS<br>`margin-right` |
+| `--c-checkbox-control-color` | 公开 | `var(--c-sys-color-content-secondary)` | 本组件 CSS<br>`color` |
+| `--c-checkbox-control-color-checked` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color`, `outline` |
+| `--c-checkbox-control-color-disabled` | 公开 | `var(--c-sys-color-content-disabled)` | 本组件 CSS<br>`color` |
+| `--c-checkbox-control-color-error` | 公开 | `var(--c-sys-color-content-danger)` | 本组件 CSS<br>`color` |
+| `--c-checkbox-control-size` | 公开 | `14px` | 本组件 CSS<br>`height`, `width` |
+| `--c-checkbox-group-gap` | 公开 | `var(--c-spacing-7)` | 本组件 CSS<br>`gap` |
 | `--c-checkbox-label-font-size` | 公开 | `var(--c-font-size-body-3)` | 本组件 CSS<br>`font-size` |
-| `--c-checkbox-label-gap` | 公开 | `var(--c-spacing-4)` | 本组件 CSS<br>`margin-left` |
+| `--c-checkbox-label-gap` | 公开 | `var(--c-spacing-4)` | 本组件 CSS<br>`margin-inline-start` |
 | `--c-checkbox-label-text-color` | 公开 | `var(--c-sys-color-content-primary)` | 本组件 CSS<br>`color` |
 | `--c-checkbox-label-text-color-disabled` | 公开 | `var(--c-sys-color-content-disabled)` | 本组件 CSS<br>`color` |
+| `--c-internal-checkbox-action-radius` | 内部 | `50%` | 本组件 CSS<br>`border-radius` |
 | `--c-internal-checkbox-background` | 内部 | `var(--c-sys-color-surface-default)` | 本组件 CSS<br>`background-color` |
-| `--c-internal-checkbox-background-checked-disabled` | 内部 | `var(--c-checkbox-control-color-disabled)` | 本组件 CSS<br>`background-color` |
 | `--c-internal-checkbox-background-disabled` | 内部 | `var(--c-sys-color-surface-muted)` | 本组件 CSS<br>`background-color` |
-| `--c-internal-checkbox-border-color-hover` | 内部 | `var(--c-checkbox-control-color)` | 本组件 CSS<br>`border-color` |
-| `--c-internal-checkbox-border-radius` | 内部 | `var(--c-border-radius-sm)` | 本组件 CSS<br>`border-radius` |
-| `--c-internal-checkbox-border-style` | 内部 | `solid` | 本组件 CSS<br>`border` |
-| `--c-internal-checkbox-border-width` | 内部 | `var(--c-border-width-2)` | 本组件 CSS<br>`border` |
-| `--c-internal-checkbox-check-icon-color` | 内部 | `var(--c-sys-color-surface-default)` | 本组件 CSS<br>`color` |
-| `--c-internal-checkbox-check-icon-color-disabled` | 内部 | `var(--c-sys-color-surface-default)` | 本组件 CSS<br>`color` |
-| `--c-internal-checkbox-check-icon-size` | 内部 | `var(--c-size-2)` | 本组件 CSS<br>`width` |
-| `--c-internal-checkbox-group-vertical-line-height` | 内部 | `var(--c-size-8)` | 本组件 CSS<br>`line-height` |
+| `--c-internal-checkbox-border-radius` | 内部 | `2px` | 本组件 CSS<br>`border-radius` |
+| `--c-internal-checkbox-border-width` | 内部 | `1px` | 本组件 CSS<br>`border` |
+| `--c-internal-checkbox-focus-offset` | 内部 | `2px` | 本组件 CSS<br>`outline-offset` |
+| `--c-internal-checkbox-focus-width` | 内部 | `2px` | 本组件 CSS<br>`outline` |
 | `--c-internal-checkbox-hover-background` | 内部 | `var(--c-sys-color-state-hover)` | 本组件 CSS<br>`background-color` |
-| `--c-internal-checkbox-hover-duration` | 内部 | `var(--c-transition-duration-1)` | 本组件 CSS<br>`transition` |
-| `--c-internal-checkbox-hover-size` | 内部 | `var(--c-size-6)` | 本组件 CSS<br>`height`, `padding-left`, `width` |
-| `--c-internal-checkbox-indeterminate-icon-color` | 内部 | `var(--c-sys-color-surface-default)` | 本组件 CSS<br>`background` |
-| `--c-internal-checkbox-indeterminate-icon-height` | 内部 | `2px` | 本组件 CSS<br>`height` |
-| `--c-internal-checkbox-indeterminate-icon-width` | 内部 | `6px` | 本组件 CSS<br>`width` |
-| `--c-internal-checkbox-linear` | 内部 | `var(--c-transition-timing-function-linear)` | 本组件 CSS<br>`transition` |
-| `--c-internal-checkbox-overshoot` | 内部 | `var(--c-transition-timing-function-overshoot)` | 本组件 CSS<br>`transition` |
+| `--c-internal-checkbox-mark-color` | 内部 | `var(--c-sys-color-surface-default)` | 本组件 CSS<br>`background-color`, `color` |
+| `--c-internal-checkbox-mark-height` | 内部 | `2px` | 本组件 CSS<br>`height` |
+| `--c-internal-checkbox-mark-radius` | 内部 | `1px` | 本组件 CSS<br>`border-radius` |
+| `--c-internal-checkbox-mark-size` | 内部 | `75%` | 本组件 CSS<br>`height`, `width` |
+
+</div>
 
 ## collapse
 
 声明来源: `src/collapse/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -706,9 +780,13 @@ permalink: /guide/design-token-reference/
 | `--c-collapse-title-text-color` | 公开 | `var(--c-sys-color-content-primary)` | 本组件 CSS<br>`color` |
 | `--c-collapse-title-text-color-disabled` | 公开 | `var(--c-sys-color-content-disabled)` | 本组件 CSS<br>`color` |
 
+</div>
+
 ## color-picker
 
 声明来源: `src/color-picker/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -760,30 +838,42 @@ permalink: /guide/design-token-reference/
 | `--c-color-picker-preview-size-xs` | 公开 | `var(--c-size-4)` | 本组件 CSS<br>`height`, `padding`, `width` |
 | `--c-color-picker-value-font-color` | 公开 | `var(--c-color-text-1)` | 本组件 CSS<br>`color` |
 | `--c-color-picker-value-font-color-disabled` | 公开 | `var(--c-color-text-4)` | 本组件 CSS<br>`color` |
-| `--c-color-picker-value-font-size` | 公开 | `var(--c-internal-field-size-md-font-size)` | 本组件 CSS<br>`font-size` |
+| `--c-color-picker-value-font-size` | 公开 | `var(--c-field-size-md-font-size)` | 本组件 CSS<br>`font-size` |
 | `--c-color-picker-value-margin-left` | 公开 | `var(--c-spacing-2)` | 本组件 CSS<br>`margin-left` |
+
+</div>
 
 ## count-to
 
 声明来源: `src/count-to/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
 | `--c-count-to-text-color` | 公开 | `var(--c-sys-color-content-primary)` | 本组件 CSS<br>`color` |
 | `--c-count-to-text-font-size` | 公开 | `var(--c-font-size-lg)` | 本组件 CSS<br>`font-size` |
 
+</div>
+
 ## countdown
 
 声明来源: `src/countdown/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
 | `--c-countdown-text-color` | 公开 | `var(--c-sys-color-content-primary)` | 本组件 CSS<br>`color` |
 | `--c-countdown-text-font-size` | 公开 | `var(--c-font-size-lg)` | 本组件 CSS<br>`font-size` |
 
+</div>
+
 ## date/picker
 
 声明来源: `src/date/picker/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -839,7 +929,7 @@ permalink: /guide/design-token-reference/
 | `--c-date-picker-panel-week-width` | 公开 | `298px` | 本组件 CSS<br>`width` |
 | `--c-date-picker-panel-year-width` | 公开 | `265px` | 本组件 CSS<br>`width` |
 | `--c-date-picker-row-padding-vertical` | 公开 | `var(--c-spacing-1)` | 本组件 CSS<br>`padding` |
-| `--c-date-picker-shortcuts-active-text-color` | 公开 | `rgb(var(--c-primary-6))` | 本组件 CSS<br>`color` |
+| `--c-date-picker-shortcuts-active-text-color` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color` |
 | `--c-date-picker-shortcuts-inline-item-margin-right` | 公开 | `var(--c-spacing-5)` | 本组件 CSS<br>`margin` |
 | `--c-date-picker-shortcuts-inline-item-margin-vertical` | 公开 | `5px` | 本组件 CSS<br>`margin` |
 | `--c-date-picker-shortcuts-item-padding-horizontal` | 公开 | `var(--c-spacing-7)` | 本组件 CSS<br>`padding` |
@@ -872,9 +962,13 @@ permalink: /guide/design-token-reference/
 | `--c-date-picker-week-list-item-color` | 公开 | `var(--c-color-text-3)` | 本组件 CSS<br>`color` |
 | `--c-date-picker-week-list-item-height` | 公开 | `var(--c-size-8)` | 本组件 CSS<br>`height`, `line-height` |
 
+</div>
+
 ## descriptions
 
 声明来源: `src/descriptions/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -920,9 +1014,13 @@ permalink: /guide/design-token-reference/
 | `--c-descriptions-text-color-value` | 公开 | `var(--c-color-text-1)` | 本组件 CSS<br>`color` |
 | `--c-descriptions-title-color` | 公开 | `var(--c-color-text-1)` | 本组件 CSS<br>`color` |
 
+</div>
+
 ## dialog
 
 声明来源: `src/dialog/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -965,9 +1063,13 @@ permalink: /guide/design-token-reference/
 | `--c-dialog-title-text-color` | 公开 | `var(--c-sys-color-content-primary)` | 本组件 CSS<br>`color` |
 | `--c-dialog-width` | 公开 | `520px` | 本组件 CSS<br>`width` |
 
+</div>
+
 ## divider
 
 声明来源: `src/divider/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -997,9 +1099,13 @@ permalink: /guide/design-token-reference/
 | `--c-divider-text-color` | 公开 | `var(--c-sys-color-content-secondary)` | 本组件 CSS<br>`color` |
 | `--c-divider-text-padding` | 公开 | `16px` | 本组件 CSS<br>`padding` |
 
+</div>
+
 ## drawer
 
 声明来源: `src/drawer/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -1023,9 +1129,13 @@ permalink: /guide/design-token-reference/
 | `--c-drawer-transition-timing-function` | 公开 | `var(--c-transition-timing-function-standard)` | 本组件 CSS<br>`transition` |
 | `--c-drawer-z-index` | 公开 | `var(--c-z-index-drawer)` | 本组件 CSS<br>`z-index` |
 
+</div>
+
 ## dropdown-menu
 
 声明来源: `src/dropdown-menu/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -1056,9 +1166,13 @@ permalink: /guide/design-token-reference/
 | `--c-dropdown-menu-option-text-color-selected` | 公开 | `var(--c-color-text-1)` | 本组件 CSS<br>`color` |
 | `--c-dropdown-menu-padding-vertical` | 公开 | `var(--c-spacing-2)` | 本组件 CSS<br>`margin`, `margin-top`, `padding` |
 
+</div>
+
 ## ellipsis
 
 声明来源: `src/ellipsis/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -1066,9 +1180,13 @@ permalink: /guide/design-token-reference/
 | `--c-ellipsis-focus-offset` | 公开 | `2px` | 本组件 CSS<br>`outline-offset` |
 | `--c-ellipsis-focus-width` | 公开 | `2px` | 本组件 CSS<br>`outline` |
 
+</div>
+
 ## empty
 
 声明来源: `src/empty/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -1085,15 +1203,19 @@ permalink: /guide/design-token-reference/
 | `--c-empty-size-xl` | 公开 | `var(--c-size-45)` | 本组件 CSS<br>`font-size`, `height`, `width` |
 | `--c-empty-size-xs` | 公开 | `var(--c-size-15)` | 本组件 CSS<br>`font-size`, `height`, `width` |
 
+</div>
+
 ## field-decorator
 
 声明来源: `src/field-decorator/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
 | `--c-field-blur-color` | 公开 | `var(--c-sys-color-content-tertiary)` | 本组件 CSS<br>`border-bottom`, `color` |
 | `--c-field-border-radius` | 公开 | `var(--c-border-radius-md)` | 本组件 CSS<br>`border-end-end-radius`, `border-end-start-radius`, `border-radius`, `border-start-end-radius`, `border-start-start-radius` |
-| `--c-field-border-width` | 公开 | `1px` | 本组件 CSS<br>`border`, `border-bottom`, `margin-inline-start`, `min-height`, `outline`, `padding-inline-start` |
+| `--c-field-border-width` | 公开 | `1px` | 本组件 CSS<br>`border`, `border-bottom`, `margin-inline-start`, `min-height`, `outline`, `outline-offset`, `padding-inline-start` |
 | `--c-field-clear-icon-color` | 公开 | `var(--c-sys-color-content-secondary)` | 本组件 CSS<br>`color` |
 | `--c-field-clear-icon-size` | 公开 | `12px` | 本组件 CSS<br>`font-size` |
 | `--c-field-clear-padding` | 公开 | `2px` | 本组件 CSS<br>`padding` |
@@ -1114,15 +1236,15 @@ permalink: /guide/design-token-reference/
 | `--c-field-placeholder-text-color` | 公开 | `var(--c-sys-color-content-tertiary)` | 本组件 CSS<br>`color` |
 | `--c-field-prefix-text-color` | 公开 | `var(--c-sys-color-content-secondary)` | 本组件 CSS<br>`color` |
 | `--c-field-size-lg-font-size` | 公开 | `14px` | 本组件 CSS<br>`font-size` |
-| `--c-field-size-lg-height` | 公开 | `36px` | 本组件 CSS<br>`height`, `min-height`, `padding`, `width` |
+| `--c-field-size-lg-height` | 公开 | `36px` | 本组件 CSS<br>`flex`, `height`, `min-height`, `padding` |
 | `--c-field-size-md-font-size` | 公开 | `14px` | 本组件 CSS<br>`font-size` |
-| `--c-field-size-md-height` | 公开 | `32px` | 本组件 CSS<br>`height`, `min-height`, `padding`, `width` |
+| `--c-field-size-md-height` | 公开 | `32px` | 本组件 CSS<br>`flex`, `height`, `min-height`, `padding` |
 | `--c-field-size-sm-font-size` | 公开 | `14px` | 本组件 CSS<br>`font-size` |
-| `--c-field-size-sm-height` | 公开 | `28px` | 本组件 CSS<br>`height`, `min-height`, `padding`, `width` |
+| `--c-field-size-sm-height` | 公开 | `28px` | 本组件 CSS<br>`flex`, `height`, `min-height`, `padding` |
 | `--c-field-size-xl-font-size` | 公开 | `16px` | 本组件 CSS<br>`font-size` |
-| `--c-field-size-xl-height` | 公开 | `44px` | 本组件 CSS<br>`min-height`, `width` |
+| `--c-field-size-xl-height` | 公开 | `44px` | 本组件 CSS<br>`flex`, `height`, `min-height` |
 | `--c-field-size-xs-font-size` | 公开 | `12px` | 本组件 CSS<br>`font-size` |
-| `--c-field-size-xs-height` | 公开 | `24px` | 本组件 CSS<br>`height`, `min-height`, `padding`, `width` |
+| `--c-field-size-xs-height` | 公开 | `24px` | 本组件 CSS<br>`flex`, `height`, `min-height`, `padding` |
 | `--c-field-suffix-text-color` | 公开 | `var(--c-sys-color-content-secondary)` | 本组件 CSS<br>`color` |
 | `--c-field-variant-filled-background` | 公开 | `var(--c-sys-color-surface-muted)` | 本组件 CSS<br>`background` |
 | `--c-field-variant-filled-background-disabled` | 公开 | `var(--c-color-fill-2)` | 本组件 CSS<br>`background` |
@@ -1140,27 +1262,16 @@ permalink: /guide/design-token-reference/
 | `--c-field-variant-standard-line-color-focus` | 公开 | `var(--c-field-focus-color)` | 本组件 CSS<br>`border-bottom-color` |
 | `--c-field-variant-standard-line-size` | 公开 | `1px` | 本组件 CSS<br>`border-bottom` |
 | `--c-field-variant-standard-line-size-focus` | 公开 | `2px` | 本组件 CSS<br>`border-bottom-width` |
-| `--c-internal-field-size-lg-font-size` | 内部 | `14px` | 跨组件 CSS<br>`font-size` |
-| `--c-internal-field-size-lg-line-height` | 内部 | `1.5715` | 跨组件 CSS<br>`line-height` |
-| `--c-internal-field-size-lg-padding-y` | 内部 | `9px` | 跨组件 CSS<br>`padding-bottom`, `padding-top` |
-| `--c-internal-field-size-md-font-size` | 内部 | `14px` | 跨组件 CSS<br>`font-size` |
-| `--c-internal-field-size-md-line-height` | 内部 | `1.5715` | 跨组件 CSS<br>`line-height` |
-| `--c-internal-field-size-md-padding-y` | 内部 | `5px` | 跨组件 CSS<br>`padding-bottom`, `padding-top` |
-| `--c-internal-field-size-sm-font-size` | 内部 | `14px` | 跨组件 CSS<br>`font-size` |
-| `--c-internal-field-size-sm-line-height` | 内部 | `1.5715` | 跨组件 CSS<br>`line-height` |
-| `--c-internal-field-size-sm-padding-y` | 内部 | `3px` | 跨组件 CSS<br>`padding-bottom`, `padding-top` |
-| `--c-internal-field-size-xl-font-size` | 内部 | `16px` | 跨组件 CSS<br>`font-size` |
-| `--c-internal-field-size-xl-line-height` | 内部 | `1.5` | 跨组件 CSS<br>`line-height` |
-| `--c-internal-field-size-xl-padding-y` | 内部 | `10px` | 跨组件 CSS<br>`padding-bottom`, `padding-top` |
-| `--c-internal-field-size-xs-font-size` | 内部 | `12px` | 跨组件 CSS<br>`font-size` |
-| `--c-internal-field-size-xs-line-height` | 内部 | `1.667` | 跨组件 CSS<br>`line-height` |
-| `--c-internal-field-size-xs-padding-y` | 内部 | `2px` | 跨组件 CSS<br>`padding-bottom`, `padding-top` |
 | `--c-search-color-icon` | 公开 | `var(--c-color-text-2)` | 跨组件 CSS<br>`color` |
 | `--c-search-size-icon` | 公开 | `14px` | 跨组件 CSS<br>`font-size` |
+
+</div>
 
 ## filter-form
 
 声明来源: `src/filter-form/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -1171,9 +1282,13 @@ permalink: /guide/design-token-reference/
 | `--c-filter-form-collapse-gap` | 公开 | `4px` | 本组件 CSS<br>`gap` |
 | `--c-filter-form-item-margin-bottom` | 公开 | `16px` | 本组件 CSS<br>`margin-bottom` |
 
+</div>
+
 ## form
 
 声明来源: `src/form/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -1211,7 +1326,7 @@ permalink: /guide/design-token-reference/
 | `--c-form-status-error-bg` | 公开 | `var(--c-color-danger-light-1)` | 本组件 CSS<br>`background-color` |
 | `--c-form-status-error-border-color` | 公开 | `transparent` | 本组件 CSS<br>`border-color` |
 | `--c-form-status-error-focus-bg` | 公开 | `var(--c-color-bg-2)` | 本组件 CSS<br>`background-color` |
-| `--c-form-status-error-focus-border-color` | 公开 | `rgb(var(--c-danger-6))` | 本组件 CSS<br>`border-color` |
+| `--c-form-status-error-focus-border-color` | 公开 | `var(--c-sys-color-content-danger)` | 本组件 CSS<br>`border-color` |
 | `--c-form-status-error-focus-shadow-color` | 公开 | `var(--c-color-danger-light-2)` | 本组件 CSS<br>`box-shadow` |
 | `--c-form-status-error-focus-shadow-size` | 公开 | `var(--c-shadow-distance-none)` | 本组件 CSS<br>`box-shadow` |
 | `--c-form-status-error-hover-bg` | 公开 | `var(--c-color-danger-light-2)` | 本组件 CSS<br>`background-color` |
@@ -1221,7 +1336,7 @@ permalink: /guide/design-token-reference/
 | `--c-form-status-success-bg` | 公开 | `var(--c-color-fill-2)` | 本组件 CSS<br>`background-color` |
 | `--c-form-status-success-border-color` | 公开 | `transparent` | 本组件 CSS<br>`border-color` |
 | `--c-form-status-success-focus-bg` | 公开 | `var(--c-color-bg-2)` | 本组件 CSS<br>`background-color` |
-| `--c-form-status-success-focus-border-color` | 公开 | `rgb(var(--c-success-6))` | 本组件 CSS<br>`border-color` |
+| `--c-form-status-success-focus-border-color` | 公开 | `var(--c-sys-color-content-success)` | 本组件 CSS<br>`border-color` |
 | `--c-form-status-success-focus-shadow-color` | 公开 | `var(--c-color-success-light-2)` | 本组件 CSS<br>`box-shadow` |
 | `--c-form-status-success-focus-shadow-size` | 公开 | `var(--c-shadow-distance-none)` | 本组件 CSS<br>`box-shadow` |
 | `--c-form-status-success-hover-bg` | 公开 | `var(--c-color-fill-3)` | 本组件 CSS<br>`background-color` |
@@ -1231,7 +1346,7 @@ permalink: /guide/design-token-reference/
 | `--c-form-status-validating-bg` | 公开 | `var(--c-color-fill-2)` | 本组件 CSS<br>`background-color` |
 | `--c-form-status-validating-border-color` | 公开 | `transparent` | 本组件 CSS<br>`border-color` |
 | `--c-form-status-validating-focus-bg` | 公开 | `var(--c-color-bg-2)` | 本组件 CSS<br>`background-color` |
-| `--c-form-status-validating-focus-border-color` | 公开 | `rgb(var(--c-primary-6))` | 本组件 CSS<br>`border-color` |
+| `--c-form-status-validating-focus-border-color` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`border-color` |
 | `--c-form-status-validating-focus-shadow-color` | 公开 | `var(--c-color-primary-light-2)` | 本组件 CSS<br>`box-shadow` |
 | `--c-form-status-validating-focus-shadow-size` | 公开 | `var(--c-shadow-distance-none)` | 本组件 CSS<br>`box-shadow` |
 | `--c-form-status-validating-hover-bg` | 公开 | `var(--c-color-fill-3)` | 本组件 CSS<br>`background-color` |
@@ -1241,23 +1356,27 @@ permalink: /guide/design-token-reference/
 | `--c-form-status-warning-bg` | 公开 | `var(--c-color-warning-light-1)` | 本组件 CSS<br>`background-color` |
 | `--c-form-status-warning-border-color` | 公开 | `transparent` | 本组件 CSS<br>`border-color` |
 | `--c-form-status-warning-focus-bg` | 公开 | `var(--c-color-bg-2)` | 本组件 CSS<br>`background-color` |
-| `--c-form-status-warning-focus-border-color` | 公开 | `rgb(var(--c-warning-6))` | 本组件 CSS<br>`border-color` |
+| `--c-form-status-warning-focus-border-color` | 公开 | `var(--c-sys-color-content-warning)` | 本组件 CSS<br>`border-color` |
 | `--c-form-status-warning-focus-shadow-color` | 公开 | `var(--c-color-warning-light-2)` | 本组件 CSS<br>`box-shadow` |
 | `--c-form-status-warning-focus-shadow-size` | 公开 | `var(--c-shadow-distance-none)` | 本组件 CSS<br>`box-shadow` |
 | `--c-form-status-warning-hover-bg` | 公开 | `var(--c-color-warning-light-2)` | 本组件 CSS<br>`background-color` |
 | `--c-form-status-warning-hover-border-color` | 公开 | `transparent` | 本组件 CSS<br>`border-color` |
 | `--c-form-status-warning-tip-icon-color` | 公开 | `var(--c-sys-color-content-warning)` | 本组件 CSS<br>`color` |
 | `--c-form-status-warning-tip-text-color` | 公开 | `var(--c-sys-color-content-warning)` | 本组件 CSS<br>`color` |
-| `--c-form-tooltip-margin-left` | 公开 | `var(--c-spacing-2)` | 本组件 CSS<br>`margin-left` |
+| `--c-form-tooltip-margin-left` | 公开 | `var(--c-sys-space-2)` | 本组件 CSS<br>`margin-inline-start` |
 | `--c-form-tooltip-text-color` | 公开 | `var(--c-sys-color-content-secondary)` | 本组件 CSS<br>`color` |
 | `--c-form-transition-duration-3` | 公开 | `var(--c-transition-duration-3)` | 本组件 CSS<br>`transition` |
 | `--c-form-transition-duration-5` | 公开 | `var(--c-transition-duration-5)` | 本组件 CSS<br>`animation` |
 | `--c-form-transition-timing-function-linear` | 公开 | `var(--c-transition-timing-function-linear)` | 本组件 CSS<br>`animation`, `transition` |
 | `--c-form-vertical-label-margin-bottom` | 公开 | `var(--c-spacing-4)` | 本组件 CSS<br>`margin-bottom` |
 
+</div>
+
 ## hover
 
 声明来源: `src/hover/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -1265,18 +1384,26 @@ permalink: /guide/design-token-reference/
 | `--c-hover-overlay-opacity` | 公开 | `0.04` | 本组件 CSS<br>`opacity` |
 | `--c-hover-transition-duration` | 公开 | `var(--c-sys-motion-duration-fast)` | 本组件 CSS<br>`transition` |
 
+</div>
+
 ## icon
 
 声明来源: `src/icon/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
 | `--c-icon-size` | 公开 | `inherit` | 本组件 CSS<br>`font-size` |
 | `--c-icon-spin-duration` | 公开 | `1s` | 本组件 CSS<br>`animation` |
 
+</div>
+
 ## image
 
 声明来源: `src/image/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -1297,7 +1424,7 @@ permalink: /guide/design-token-reference/
 | `--c-image-footer-outer-text-color` | 公开 | `var(--c-color-neutral-8)` | 本组件 CSS<br>`color` |
 | `--c-image-line-height-error-text` | 公开 | `1.6667` | 本组件 CSS<br>`line-height` |
 | `--c-image-loader-bg` | 公开 | `var(--c-color-neutral-1)` | 本组件 CSS<br>`background-color` |
-| `--c-image-loader-spin-text-color` | 公开 | `rgb(var(--c-primary-6))` | 本组件 CSS<br>`color` |
+| `--c-image-loader-spin-text-color` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color` |
 | `--c-image-loader-spin-text-text-color` | 公开 | `var(--c-color-neutral-6)` | 本组件 CSS<br>`color` |
 | `--c-image-padding-footer-inner-horizontal` | 公开 | `16px` | 本组件 CSS<br>`padding` |
 | `--c-image-padding-footer-inner-vertical` | 公开 | `9px` | 本组件 CSS<br>`padding` |
@@ -1316,12 +1443,12 @@ permalink: /guide/design-token-reference/
 | `--c-image-preview-color-action-disabled-bg` | 公开 | `transparent` | 本组件 CSS<br>`background-color` |
 | `--c-image-preview-color-action-disabled-text` | 公开 | `var(--c-color-text-4)` | 本组件 CSS<br>`color` |
 | `--c-image-preview-color-action-hover-bg` | 公开 | `var(--c-color-neutral-2)` | 本组件 CSS<br>`background-color` |
-| `--c-image-preview-color-action-hover-text` | 公开 | `rgb(var(--c-primary-6))` | 本组件 CSS<br>`color` |
+| `--c-image-preview-color-action-hover-text` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color` |
 | `--c-image-preview-color-action-text` | 公开 | `var(--c-color-neutral-8)` | 本组件 CSS<br>`color` |
 | `--c-image-preview-color-close-btn-bg` | 公开 | `rgba(0, 0, 0, 0.5)` | 本组件 CSS<br>`background` |
 | `--c-image-preview-color-close-btn-text` | 公开 | `var(--c-color-white)` | 本组件 CSS<br>`color` |
 | `--c-image-preview-color-loading-bg` | 公开 | `#232324` | 本组件 CSS<br>`background-color` |
-| `--c-image-preview-color-loading-text` | 公开 | `rgb(var(--c-primary-6))` | 本组件 CSS<br>`color` |
+| `--c-image-preview-color-loading-text` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color` |
 | `--c-image-preview-color-scale-value-text` | 公开 | `var(--c-color-white)` | 本组件 CSS<br>`color` |
 | `--c-image-preview-color-toolbar-bg` | 公开 | `var(--c-color-bg-2)` | 本组件 CSS<br>`background-color` |
 | `--c-image-preview-font-size-action` | 公开 | `14px` | 本组件 CSS<br>`font-size` |
@@ -1345,22 +1472,30 @@ permalink: /guide/design-token-reference/
 | `--c-image-title-text-color-footer-inner` | 公开 | `var(--c-color-white)` | 本组件 CSS<br>`color` |
 | `--c-image-title-text-color-footer-outer` | 公开 | `var(--c-color-text-1)` | 本组件 CSS<br>`color` |
 
+</div>
+
 ## infinite-scroll
 
 声明来源: `src/infinite-scroll/style/token.less`
 
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
-| `--c-infinite-scroll-error-color` | 公开 | `var(--c-color-danger)` | 本组件 CSS<br>`color` |
+| `--c-infinite-scroll-error-color` | 公开 | `var(--c-sys-color-content-danger)` | 本组件 CSS<br>`color` |
 | `--c-infinite-scroll-loading-gap` | 公开 | `8px` | 本组件 CSS<br>`gap` |
 | `--c-infinite-scroll-status-color` | 公开 | `var(--c-color-text-3)` | 本组件 CSS<br>`color` |
 | `--c-infinite-scroll-status-font-size` | 公开 | `var(--c-font-size-md)` | 本组件 CSS<br>`font-size` |
 | `--c-infinite-scroll-status-min-height` | 公开 | `50px` | 本组件 CSS<br>`min-height` |
 | `--c-infinite-scroll-status-padding` | 公开 | `12px 0` | 本组件 CSS<br>`padding` |
 
+</div>
+
 ## input
 
 声明来源: `src/input/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -1376,9 +1511,13 @@ permalink: /guide/design-token-reference/
 | `--c-input-feedback-validating-color` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color` |
 | `--c-input-feedback-warning-color` | 公开 | `var(--c-sys-color-content-warning)` | 本组件 CSS<br>`color` |
 
+</div>
+
 ## input-number
 
 声明来源: `src/input-number/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -1402,9 +1541,13 @@ permalink: /guide/design-token-reference/
 | `--c-input-number-step-button-transition-duration` | 公开 | `0.2s` | 本组件 CSS<br>`transition` |
 | `--c-input-number-step-button-width` | 公开 | `var(--c-sys-control-height-md)` | 本组件 CSS<br>`width` |
 
+</div>
+
 ## input-tag
 
 声明来源: `src/input-tag/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -1436,14 +1579,18 @@ permalink: /guide/design-token-reference/
 | `--c-input-tag-tag-margin-right` | 公开 | `4px` | 本组件 CSS<br>`margin-right` |
 | `--c-input-tag-tag-margin-y` | 公开 | `2px` | 本组件 CSS<br>`margin-bottom`, `margin-top` |
 
+</div>
+
 ## layout
 
 声明来源: `src/layout/style/token.less`
 
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
 | `--c-layout-border-color` | 公开 | `var(--c-color-border-2)` | 本组件 CSS<br>`border-bottom`, `border-left`, `border-right`, `border-top` |
-| `--c-layout-focus-color` | 公开 | `var(--c-color-primary)` | 本组件 CSS<br>`outline` |
+| `--c-layout-focus-color` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`outline` |
 | `--c-layout-font-color` | 公开 | `var(--c-color-text-1)` | 本组件 CSS<br>`color` |
 | `--c-layout-font-color-dark` | 公开 | `var(--c-color-white)` | 本组件 CSS<br>`color` |
 | `--c-layout-sider-background` | 公开 | `var(--c-color-menu-dark-bg)` | 本组件 CSS<br>`background` |
@@ -1453,9 +1600,13 @@ permalink: /guide/design-token-reference/
 | `--c-layout-trigger-height` | 公开 | `var(--c-size-12)` | 本组件 CSS<br>`height`, `padding-bottom`, `width` |
 | `--c-layout-trigger-light-border-color` | 公开 | `var(--c-color-bg-5)` | 本组件 CSS<br>`border-top` |
 
+</div>
+
 ## link
 
 声明来源: `src/link/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -1477,38 +1628,45 @@ permalink: /guide/design-token-reference/
 | `--c-link-text-color-active` | 公开 | `var(--c-link-text-color)` | 本组件 CSS<br>`color` |
 | `--c-link-text-color-default` | 公开 | `var(--c-color-text-1)` | 本组件 CSS<br>`color` |
 | `--c-link-text-color-disabled` | 公开 | `var(--c-color-link-light-3)` | 本组件 CSS<br>`color` |
-| `--c-link-text-color-error` | 公开 | `rgb(var(--c-danger-6))` | 本组件 CSS<br>`color` |
+| `--c-link-text-color-error` | 公开 | `var(--c-sys-color-content-danger)` | 本组件 CSS<br>`color` |
 | `--c-link-text-color-error-active` | 公开 | `var(--c-link-text-color-error)` | 本组件 CSS<br>`color` |
 | `--c-link-text-color-error-disabled` | 公开 | `var(--c-color-danger-light-3)` | 本组件 CSS<br>`color` |
 | `--c-link-text-color-error-hover` | 公开 | `var(--c-link-text-color-error)` | 本组件 CSS<br>`color` |
 | `--c-link-text-color-error-loading` | 公开 | `var(--c-color-danger-light-3)` | 本组件 CSS<br>`color` |
 | `--c-link-text-color-hover` | 公开 | `var(--c-link-text-color)` | 本组件 CSS<br>`color` |
-| `--c-link-text-color-info` | 公开 | `rgb(var(--c-blue-6))` | 本组件 CSS<br>`color` |
+| `--c-link-text-color-info` | 公开 | `var(--c-sys-color-content-info)` | 本组件 CSS<br>`color` |
 | `--c-link-text-color-loading` | 公开 | `var(--c-color-link-light-3)` | 本组件 CSS<br>`color` |
-| `--c-link-text-color-primary` | 公开 | `rgb(var(--c-primary-6))` | 本组件 CSS<br>`color` |
+| `--c-link-text-color-primary` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color` |
 | `--c-link-text-color-secondary` | 公开 | `var(--c-color-text-2)` | 本组件 CSS<br>`color` |
-| `--c-link-text-color-success` | 公开 | `rgb(var(--c-success-6))` | 本组件 CSS<br>`color` |
+| `--c-link-text-color-success` | 公开 | `var(--c-sys-color-content-success)` | 本组件 CSS<br>`color` |
 | `--c-link-text-color-success-active` | 公开 | `var(--c-link-text-color-success)` | 本组件 CSS<br>`color` |
 | `--c-link-text-color-success-disabled` | 公开 | `var(--c-color-success-light-3)` | 本组件 CSS<br>`color` |
 | `--c-link-text-color-success-hover` | 公开 | `var(--c-link-text-color-success)` | 本组件 CSS<br>`color` |
 | `--c-link-text-color-success-loading` | 公开 | `var(--c-color-success-light-3)` | 本组件 CSS<br>`color` |
 | `--c-link-text-color-tertiary` | 公开 | `var(--c-color-text-3)` | 本组件 CSS<br>`color` |
-| `--c-link-text-color-warning` | 公开 | `rgb(var(--c-warning-6))` | 本组件 CSS<br>`color` |
+| `--c-link-text-color-warning` | 公开 | `var(--c-sys-color-content-warning)` | 本组件 CSS<br>`color` |
 | `--c-link-text-color-warning-active` | 公开 | `var(--c-link-text-color-warning)` | 本组件 CSS<br>`color` |
 | `--c-link-text-color-warning-disabled` | 公开 | `var(--c-color-warning-light-2)` | 本组件 CSS<br>`color` |
 | `--c-link-text-color-warning-hover` | 公开 | `var(--c-link-text-color-warning)` | 本组件 CSS<br>`color` |
 | `--c-link-text-color-warning-loading` | 公开 | `var(--c-color-warning-light-2)` | 本组件 CSS<br>`color` |
 | `--c-link-transition-duration` | 公开 | `0.15s` | 本组件 CSS<br>`transition` |
 
+</div>
+
 ## list
 
 声明来源: `src/list/style/token.less`
 
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
+| `--c-list-background` | 公开 | `transparent` | 本组件 CSS<br>`background` |
 | `--c-list-border-color` | 公开 | `var(--c-color-neutral-3)` | 本组件 CSS<br>`border`, `border-bottom`, `border-top` |
 | `--c-list-border-radius` | 公开 | `var(--c-border-radius-md)` | 本组件 CSS<br>`border-radius` |
 | `--c-list-border-width` | 公开 | `1px` | 本组件 CSS<br>`border`, `border-bottom`, `border-top` |
+| `--c-list-empty-color` | 公开 | `var(--c-list-text-color)` | 本组件 CSS<br>`color` |
+| `--c-list-empty-padding` | 公开 | `16px` | 本组件 CSS<br>`padding` |
 | `--c-list-font-size` | 公开 | `var(--c-font-size-body-3)` | 本组件 CSS<br>`font-size` |
 | `--c-list-font-size-header` | 公开 | `var(--c-font-size-title-1)` | 本组件 CSS<br>`font-size` |
 | `--c-list-font-weight-header` | 公开 | `var(--c-font-weight-500)` | 本组件 CSS<br>`font-weight` |
@@ -1516,24 +1674,35 @@ permalink: /guide/design-token-reference/
 | `--c-list-item-suffix-margin-left` | 公开 | `var(--c-spacing-8)` | 本组件 CSS<br>`margin-left` |
 | `--c-list-line-height` | 公开 | `var(--c-line-height)` | 本组件 CSS<br>`line-height` |
 | `--c-list-line-height-header` | 公开 | `1.5` | 本组件 CSS<br>`line-height` |
+| `--c-list-loading-padding` | 公开 | `0px` | 本组件 CSS<br>`padding` |
+| `--c-list-size-lg-padding-horizontal-footer` | 公开 | `var(--c-list-size-lg-padding-horizontal-item)` | 本组件 CSS<br>`padding` |
 | `--c-list-size-lg-padding-horizontal-header` | 公开 | `var(--c-spacing-8)` | 本组件 CSS<br>`padding` |
 | `--c-list-size-lg-padding-horizontal-item` | 公开 | `var(--c-spacing-8)` | 本组件 CSS<br>`padding` |
+| `--c-list-size-lg-padding-vertical-footer` | 公开 | `var(--c-list-size-lg-padding-vertical-item)` | 本组件 CSS<br>`padding` |
 | `--c-list-size-lg-padding-vertical-header` | 公开 | `var(--c-spacing-7)` | 本组件 CSS<br>`padding` |
 | `--c-list-size-lg-padding-vertical-item` | 公开 | `17px` | 本组件 CSS<br>`padding` |
+| `--c-list-size-md-padding-horizontal-footer` | 公开 | `var(--c-list-size-md-padding-horizontal-item)` | 本组件 CSS<br>`padding` |
 | `--c-list-size-md-padding-horizontal-header` | 公开 | `var(--c-spacing-8)` | 本组件 CSS<br>`padding` |
 | `--c-list-size-md-padding-horizontal-item` | 公开 | `var(--c-spacing-8)` | 本组件 CSS<br>`padding` |
+| `--c-list-size-md-padding-vertical-footer` | 公开 | `var(--c-list-size-md-padding-vertical-item)` | 本组件 CSS<br>`padding` |
 | `--c-list-size-md-padding-vertical-header` | 公开 | `var(--c-spacing-6)` | 本组件 CSS<br>`padding` |
 | `--c-list-size-md-padding-vertical-item` | 公开 | `13px` | 本组件 CSS<br>`padding` |
+| `--c-list-size-sm-padding-horizontal-footer` | 公开 | `var(--c-list-size-sm-padding-horizontal-item)` | 本组件 CSS<br>`padding` |
 | `--c-list-size-sm-padding-horizontal-header` | 公开 | `var(--c-spacing-8)` | 本组件 CSS<br>`padding` |
 | `--c-list-size-sm-padding-horizontal-item` | 公开 | `var(--c-spacing-8)` | 本组件 CSS<br>`padding` |
+| `--c-list-size-sm-padding-vertical-footer` | 公开 | `var(--c-list-size-sm-padding-vertical-item)` | 本组件 CSS<br>`padding` |
 | `--c-list-size-sm-padding-vertical-header` | 公开 | `var(--c-spacing-4)` | 本组件 CSS<br>`padding` |
 | `--c-list-size-sm-padding-vertical-item` | 公开 | `9px` | 本组件 CSS<br>`padding` |
 | `--c-list-text-color` | 公开 | `var(--c-color-text-1)` | 本组件 CSS<br>`color` |
 | `--c-list-text-color-header` | 公开 | `var(--c-color-text-1)` | 本组件 CSS<br>`color` |
 
+</div>
+
 ## loading
 
 声明来源: `src/loading/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -1542,13 +1711,17 @@ permalink: /guide/design-token-reference/
 | `--c-loading-indicator-size` | 公开 | `20px` | 本组件 CSS<br>`font-size` |
 | `--c-loading-opacity` | 公开 | `0.38` | 本组件 CSS<br>`opacity` |
 | `--c-loading-overlay-background` | 公开 | `color-mix(in srgb, var(--c-color-bg-white) 62%, transparent)` | 本组件 CSS<br>`background` |
-| `--c-loading-tip-color` | 公开 | `rgb(var(--c-primary-6))` | 本组件 CSS<br>`color` |
+| `--c-loading-tip-color` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color` |
 | `--c-loading-tip-font-weight` | 公开 | `var(--c-font-weight-500)` | 本组件 CSS<br>`font-weight` |
 | `--c-loading-tip-margin` | 公开 | `var(--c-spacing-3) 0 0` | 本组件 CSS<br>`margin` |
+
+</div>
 
 ## map
 
 声明来源: `src/map/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -1588,16 +1761,24 @@ permalink: /guide/design-token-reference/
 | `--c-map-tips-color` | 公开 | `var(--c-color-text-3)` | 本组件 CSS<br>`color` |
 | `--c-map-tips-padding-y` | 公开 | `var(--c-spacing-5)` | 本组件 CSS<br>`padding` |
 
+</div>
+
 ## mention
 
 声明来源: `src/mention/style/token.less`
 
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
+
+</div>
 
 ## message
 
 声明来源: `src/message/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -1716,9 +1897,13 @@ permalink: /guide/design-token-reference/
 | `--c-message-wrapper-padding-horizontal` | 公开 | `var(--c-spacing-5)` | 本组件 CSS<br>`padding` |
 | `--c-message-z-index` | 公开 | `var(--c-z-index-message)` | 本组件 CSS<br>`z-index` |
 
+</div>
+
 ## nav-menu
 
 声明来源: `src/nav-menu/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -1743,7 +1928,7 @@ permalink: /guide/design-token-reference/
 | `--c-nav-menu-light-item-bg-selected` | 公开 | `var(--c-color-fill-2)` | 本组件 CSS<br>`background` |
 | `--c-nav-menu-light-item-text-color` | 公开 | `var(--c-color-text-2)` | 本组件 CSS<br>`color` |
 | `--c-nav-menu-light-item-text-color-disabled` | 公开 | `var(--c-color-text-4)` | 本组件 CSS<br>`color` |
-| `--c-nav-menu-light-item-text-color-selected` | 公开 | `rgb(var(--c-primary-6))` | 本组件 CSS<br>`color`, `outline` |
+| `--c-nav-menu-light-item-text-color-selected` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color`, `outline` |
 | `--c-nav-menu-motion-duration` | 公开 | `150ms` | 本组件 CSS<br>`transition` |
 | `--c-nav-menu-panel-width` | 公开 | `min(400px, 100vw)` | 运行时引用（不代表可见性证明）<br>`nav-menu/item.tsx` |
 | `--c-nav-menu-popup-max-height` | 公开 | `320px` | 本组件 CSS<br>`max-height` |
@@ -1755,9 +1940,13 @@ permalink: /guide/design-token-reference/
 | `--c-nav-menu-row-height-xl` | 公开 | `56px` | 本组件 CSS<br>`min-height` |
 | `--c-nav-menu-row-height-xs` | 公开 | `28px` | 本组件 CSS<br>`min-height` |
 
+</div>
+
 ## notification
 
 声明来源: `src/notification/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -1820,9 +2009,13 @@ permalink: /guide/design-token-reference/
 | `--c-notification-wrapper-margin-top` | 公开 | `var(--c-spacing-8)` | 本组件 CSS<br>`top` |
 | `--c-notification-z-index` | 公开 | `var(--c-z-index-notification)` | 本组件 CSS<br>`z-index` |
 
+</div>
+
 ## overlay
 
 声明来源: `src/overlay/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -1830,9 +2023,13 @@ permalink: /guide/design-token-reference/
 | `--c-overlay-background-color` | 公开 | `var(--c-sys-color-scrim)` | 本组件 CSS<br>`background-color` |
 | `--c-overlay-content-z-index` | 公开 | `var(--c-sys-layer-raised)` | 本组件 CSS<br>`z-index` |
 
+</div>
+
 ## page-header
 
 声明来源: `src/page-header/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -1850,17 +2047,21 @@ permalink: /guide/design-token-reference/
 | `--c-page-header-title-font-size` | 公开 | `var(--c-font-size-title-2)` | 本组件 CSS<br>`font-size` |
 | `--c-page-header-title-font-weight` | 公开 | `600` | 本组件 CSS<br>`font-weight` |
 
+</div>
+
 ## pagination
 
 声明来源: `src/pagination/style/token.less`
 
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
 | `--c-pagination-active-background` | 公开 | `var(--c-color-primary-light-1)` | 本组件 CSS<br>`background` |
-| `--c-pagination-active-color` | 公开 | `var(--c-color-primary)` | 本组件 CSS<br>`color` |
+| `--c-pagination-active-color` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color` |
 | `--c-pagination-disabled-background` | 公开 | `var(--c-color-fill-1)` | 本组件 CSS<br>`background` |
 | `--c-pagination-disabled-color` | 公开 | `var(--c-color-text-4)` | 本组件 CSS<br>`color` |
-| `--c-pagination-focus-color` | 公开 | `var(--c-color-primary)` | 本组件 CSS<br>`outline` |
+| `--c-pagination-focus-color` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`outline` |
 | `--c-pagination-focus-offset` | 公开 | `1px` | 本组件 CSS<br>`outline-offset` |
 | `--c-pagination-focus-space` | 公开 | `3px` | 本组件 CSS<br>`padding` |
 | `--c-pagination-focus-width` | 公开 | `2px` | 本组件 CSS<br>`outline` |
@@ -1882,9 +2083,13 @@ permalink: /guide/design-token-reference/
 | `--c-pagination-text-color` | 公开 | `var(--c-color-text-1)` | 本组件 CSS<br>`color` |
 | `--c-pagination-touch-size` | 公开 | `44px` | 本组件 CSS<br>`height`, `min-height` |
 
+</div>
+
 ## paper
 
 声明来源: `src/paper/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -1894,9 +2099,13 @@ permalink: /guide/design-token-reference/
 | `--c-paper-border-width` | 公开 | `1px` | 本组件 CSS<br>`border` |
 | `--c-paper-transition-duration` | 公开 | `var(--c-sys-motion-duration-slow)` | 本组件 CSS<br>`transition` |
 
+</div>
+
 ## popconfirm
 
 声明来源: `src/popconfirm/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -1912,18 +2121,22 @@ permalink: /guide/design-token-reference/
 | `--c-popconfirm-line-height` | 公开 | `var(--c-line-height)` | 本组件 CSS<br>`height`, `line-height` |
 | `--c-popconfirm-padding-horizontal` | 公开 | `var(--c-spacing-7)` | 本组件 CSS<br>`padding` |
 | `--c-popconfirm-padding-vertical` | 公开 | `var(--c-spacing-7)` | 本组件 CSS<br>`padding` |
-| `--c-popconfirm-status-danger-title-icon-color` | 公开 | `rgb(var(--c-danger-6))` | 本组件 CSS<br>`color` |
-| `--c-popconfirm-status-info-title-icon-color` | 公开 | `rgb(var(--c-primary-6))` | 本组件 CSS<br>`color` |
-| `--c-popconfirm-status-success-title-icon-color` | 公开 | `rgb(var(--c-success-6))` | 本组件 CSS<br>`color` |
+| `--c-popconfirm-status-danger-title-icon-color` | 公开 | `var(--c-sys-color-content-danger)` | 本组件 CSS<br>`color` |
+| `--c-popconfirm-status-info-title-icon-color` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color` |
+| `--c-popconfirm-status-success-title-icon-color` | 公开 | `var(--c-sys-color-content-success)` | 本组件 CSS<br>`color` |
 | `--c-popconfirm-title-font-size` | 公开 | `var(--c-font-size-body-3)` | 本组件 CSS<br>`font-size`, `height` |
-| `--c-popconfirm-title-icon-color` | 公开 | `rgb(var(--c-warning-6))` | 本组件 CSS<br>`color` |
+| `--c-popconfirm-title-icon-color` | 公开 | `var(--c-sys-color-content-warning)` | 本组件 CSS<br>`color` |
 | `--c-popconfirm-title-icon-size` | 公开 | `18px` | 本组件 CSS<br>`font-size` |
 | `--c-popconfirm-title-margin-bottom` | 公开 | `var(--c-spacing-7)` | 本组件 CSS<br>`margin-bottom` |
 | `--c-popconfirm-title-text-color` | 公开 | `var(--c-color-text-1)` | 本组件 CSS<br>`color` |
 
+</div>
+
 ## popover
 
 声明来源: `src/popover/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -1944,81 +2157,48 @@ permalink: /guide/design-token-reference/
 | `--c-popover-title-font-weight` | 公开 | `var(--c-sys-font-weight-medium)` | 本组件 CSS<br>`font-weight` |
 | `--c-popover-title-text-color` | 公开 | `var(--c-sys-color-content-primary)` | 本组件 CSS<br>`color` |
 
+</div>
+
 ## progress
 
 声明来源: `src/progress/style/token.less`
 
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
-| `--c-progress-bar-bg-transition-duration` | 公开 | `0.3s` | 本组件 CSS<br>`transition` |
-| `--c-progress-bar-transition-duration` | 公开 | `0.6s` | 本组件 CSS<br>`transition` |
-| `--c-progress-circle-icon-color-danger` | 公开 | `rgb(var(--c-danger-6))` | 本组件 CSS<br>`color` |
-| `--c-progress-circle-icon-color-success` | 公开 | `rgb(var(--c-success-6))` | 本组件 CSS<br>`color` |
-| `--c-progress-circle-icon-color-warning` | 公开 | `rgb(var(--c-warning-6))` | 本组件 CSS<br>`color` |
-| `--c-progress-circle-mask-stroke` | 公开 | `var(--c-color-fill-3)` | 本组件 CSS<br>`stroke` |
-| `--c-progress-circle-path-stroke` | 公开 | `rgb(var(--c-primary-6))` | 本组件 CSS<br>`stroke` |
-| `--c-progress-circle-path-stroke-danger` | 公开 | `rgb(var(--c-danger-6))` | 本组件 CSS<br>`stroke` |
-| `--c-progress-circle-path-stroke-success` | 公开 | `rgb(var(--c-success-6))` | 本组件 CSS<br>`stroke` |
-| `--c-progress-circle-path-stroke-warning` | 公开 | `rgb(var(--c-warning-6))` | 本组件 CSS<br>`stroke` |
-| `--c-progress-circle-size-lg-font-size` | 公开 | `16px` | 本组件 CSS<br>`font-size` |
-| `--c-progress-circle-size-lg-icon-size` | 公开 | `var(--c-size-4)` | 本组件 CSS<br>`font-size` |
-| `--c-progress-circle-size-md-font-size` | 公开 | `var(--c-font-size-body-3)` | 本组件 CSS<br>`font-size` |
-| `--c-progress-circle-size-md-icon-size` | 公开 | `var(--c-size-4)` | 本组件 CSS<br>`font-size` |
-| `--c-progress-circle-size-sm-font-size` | 公开 | `var(--c-font-size-body-2)` | 本组件 CSS<br>`font-size` |
-| `--c-progress-circle-size-sm-icon-size` | 公开 | `14px` | 本组件 CSS<br>`font-size` |
-| `--c-progress-circle-size-xs-mask-stroke` | 公开 | `var(--c-color-primary-light-3)` | 本组件 CSS<br>`stroke` |
-| `--c-progress-circle-size-xs-mask-stroke-danger` | 公开 | `var(--c-color-danger-light-3)` | 本组件 CSS<br>`stroke` |
-| `--c-progress-circle-size-xs-mask-stroke-success` | 公开 | `var(--c-color-success-light-3)` | 本组件 CSS<br>`stroke` |
-| `--c-progress-circle-size-xs-mask-stroke-warning` | 公开 | `var(--c-color-warning-light-3)` | 本组件 CSS<br>`stroke` |
-| `--c-progress-circle-text-color` | 公开 | `var(--c-color-text-3)` | 本组件 CSS<br>`color` |
-| `--c-progress-indeterminate-animation-duration` | 公开 | `2.2s` | 本组件 CSS<br>`animation-duration` |
-| `--c-progress-indeterminate-highlight` | 公开 | `rgba(255, 255, 255, 0.5)` | 本组件 CSS<br>`background` |
-| `--c-progress-line-bg` | 公开 | `var(--c-color-fill-3)` | 本组件 CSS<br>`background-color` |
-| `--c-progress-line-border-radius` | 公开 | `100px` | 本组件 CSS<br>`border-bottom-left-radius`, `border-bottom-right-radius`, `border-radius`, `border-top-left-radius`, `border-top-right-radius` |
-| `--c-progress-line-buffer-bg` | 公开 | `var(--c-color-primary-light-3)` | 本组件 CSS<br>`background-color` |
-| `--c-progress-line-icon-color` | 公开 | `var(--c-color-text-2)` | 本组件 CSS<br>`color` |
-| `--c-progress-line-icon-color-danger` | 公开 | `rgb(var(--c-danger-6))` | 本组件 CSS<br>`color` |
-| `--c-progress-line-icon-color-success` | 公开 | `rgb(var(--c-success-6))` | 本组件 CSS<br>`color` |
-| `--c-progress-line-icon-color-warning` | 公开 | `rgb(var(--c-warning-6))` | 本组件 CSS<br>`color` |
-| `--c-progress-line-icon-margin-left` | 公开 | `var(--c-spacing-2)` | 本组件 CSS<br>`margin-left` |
-| `--c-progress-line-inner-bg` | 公开 | `rgb(var(--c-primary-6))` | 本组件 CSS<br>`background-color` |
-| `--c-progress-line-inner-bg-danger` | 公开 | `rgb(var(--c-danger-6))` | 本组件 CSS<br>`background-color` |
-| `--c-progress-line-inner-bg-success` | 公开 | `rgb(var(--c-success-6))` | 本组件 CSS<br>`background-color` |
-| `--c-progress-line-inner-bg-warning` | 公开 | `rgb(var(--c-warning-6))` | 本组件 CSS<br>`background-color` |
-| `--c-progress-line-size-lg-font-size` | 公开 | `16px` | 本组件 CSS<br>`font-size` |
-| `--c-progress-line-size-lg-icon-size` | 公开 | `14px` | 本组件 CSS<br>`font-size` |
-| `--c-progress-line-size-lg-text-margin-left` | 公开 | `var(--c-spacing-7)` | 本组件 CSS<br>`margin-left` |
-| `--c-progress-line-size-md-font-size` | 公开 | `var(--c-font-size-body-1)` | 本组件 CSS<br>`font-size` |
-| `--c-progress-line-size-md-icon-size` | 公开 | `12px` | 本组件 CSS<br>`font-size` |
-| `--c-progress-line-size-sm-font-size` | 公开 | `var(--c-font-size-body-1)` | 本组件 CSS<br>`font-size` |
-| `--c-progress-line-size-sm-icon-size` | 公开 | `12px` | 本组件 CSS<br>`font-size` |
-| `--c-progress-line-size-sm-text-margin-left` | 公开 | `var(--c-spacing-7)` | 本组件 CSS<br>`margin-left` |
-| `--c-progress-line-text-color` | 公开 | `var(--c-color-text-2)` | 本组件 CSS<br>`color` |
-| `--c-progress-line-text-margin-left` | 公开 | `var(--c-spacing-7)` | 本组件 CSS<br>`margin-left` |
-| `--c-progress-line-text-width` | 公开 | `var(--c-size-8)` | 本组件 CSS<br>`min-width` |
-| `--c-progress-loading-animation-duration` | 公开 | `1.5s` | 本组件 CSS<br>`animation` |
-| `--c-progress-steps-item-bg` | 公开 | `var(--c-color-fill-3)` | 本组件 CSS<br>`background-color` |
-| `--c-progress-steps-item-bg-active` | 公开 | `rgb(var(--c-primary-6))` | 本组件 CSS<br>`background-color` |
-| `--c-progress-steps-item-bg-danger` | 公开 | `rgb(var(--c-danger-6))` | 本组件 CSS<br>`background-color` |
-| `--c-progress-steps-item-bg-success` | 公开 | `rgb(var(--c-success-6))` | 本组件 CSS<br>`background-color` |
-| `--c-progress-steps-item-bg-warning` | 公开 | `rgb(var(--c-warning-6))` | 本组件 CSS<br>`background-color` |
-| `--c-progress-steps-item-margin-right` | 公开 | `3px` | 本组件 CSS<br>`margin-right` |
-| `--c-progress-steps-size-sm-item-margin-right` | 公开 | `3px` | 本组件 CSS<br>`margin-right` |
-| `--c-progress-steps-size-sm-item-width` | 公开 | `2px` | 本组件 CSS<br>`border-radius`, `width` |
-| `--c-progress-steps-text-margin-left` | 公开 | `var(--c-spacing-4)` | 本组件 CSS<br>`margin-left` |
-| `--c-progress-transition-timing-function-linear` | 公开 | `var(--c-transition-timing-function-linear)` | 本组件 CSS<br>`transition` |
-| `--c-progress-transition-timing-function-standard` | 公开 | `var(--c-transition-timing-function-standard)` | 本组件 CSS<br>`animation`, `transition` |
+| `--c-internal-progress-highlight` | 内部 | `rgba(255, 255, 255, 0.5)` | 本组件 CSS<br>`background` |
+| `--c-progress-animation-duration` | 公开 | `1.5s` | 本组件 CSS<br>`animation`, `animation-delay` |
+| `--c-progress-danger-color` | 公开 | `var(--c-sys-color-content-danger)` | 本组件 CSS<br>`color` |
+| `--c-progress-default-color` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color` |
+| `--c-progress-font-size` | 公开 | `var(--c-sys-font-size-sm)` | 本组件 CSS<br>`font-size` |
+| `--c-progress-info-color` | 公开 | `var(--c-sys-color-content-info)` | 本组件 CSS<br>`color` |
+| `--c-progress-line-border-radius` | 公开 | `9999px` | 本组件 CSS<br>`border-radius` |
+| `--c-progress-primary-color` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color` |
+| `--c-progress-secondary-color` | 公开 | `var(--c-sys-color-content-secondary)` | 本组件 CSS<br>`color` |
+| `--c-progress-steps-gap` | 公开 | `var(--c-sys-space-2)` | 本组件 CSS<br>`gap` |
+| `--c-progress-success-color` | 公开 | `var(--c-sys-color-content-success)` | 本组件 CSS<br>`color` |
+| `--c-progress-tertiary-color` | 公开 | `var(--c-sys-color-content-tertiary)` | 本组件 CSS<br>`color` |
+| `--c-progress-text-color` | 公开 | `var(--c-sys-color-content-secondary)` | 本组件 CSS<br>`color` |
+| `--c-progress-text-gap` | 公开 | `var(--c-sys-space-4)` | 本组件 CSS<br>`gap` |
+| `--c-progress-track-color` | 公开 | `var(--c-sys-color-state-hover)` | 本组件 CSS<br>`background`, `stroke` |
+| `--c-progress-transition-duration` | 公开 | `var(--c-sys-motion-duration-standard)` | 本组件 CSS<br>`transition` |
+| `--c-progress-warning-color` | 公开 | `var(--c-sys-color-content-warning)` | 本组件 CSS<br>`color` |
+
+</div>
 
 ## progress-group
 
 声明来源: `src/progress-group/style/token.less`
 
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
-| `--c-progress-group-dot-size` | 公开 | `var(--c-size-2)` | 本组件 CSS<br>`height`, `width` |
-| `--c-progress-group-font-size` | 公开 | `var(--c-font-size-body-1)` | 本组件 CSS<br>`font-size` |
-| `--c-progress-group-gap` | 公开 | `var(--c-spacing-3)` | 本组件 CSS<br>`gap` |
-| `--c-progress-group-item-gap` | 公开 | `var(--c-spacing-2)` | 本组件 CSS<br>`gap` |
+| `--c-progress-group-dot-size` | 公开 | `var(--c-sys-space-4)` | 本组件 CSS<br>`height`, `width` |
+| `--c-progress-group-font-size` | 公开 | `var(--c-sys-font-size-sm)` | 本组件 CSS<br>`font-size` |
+| `--c-progress-group-gap` | 公开 | `var(--c-sys-space-3)` | 本组件 CSS<br>`gap` |
+| `--c-progress-group-item-gap` | 公开 | `var(--c-sys-space-2)` | 本组件 CSS<br>`gap` |
 | `--c-progress-group-muted-color` | 公开 | `var(--c-sys-color-content-secondary)` | 本组件 CSS<br>`color` |
 | `--c-progress-group-radius` | 公开 | `9999px` | 本组件 CSS<br>`border-radius`, `clip-path` |
 | `--c-progress-group-size-lg-thickness` | 公开 | `12px` | 本组件 CSS<br>`height`, `width` |
@@ -2026,8 +2206,8 @@ permalink: /guide/design-token-reference/
 | `--c-progress-group-size-sm-thickness` | 公开 | `4px` | 本组件 CSS<br>`height`, `width` |
 | `--c-progress-group-size-xl-thickness` | 公开 | `16px` | 本组件 CSS<br>`height`, `width` |
 | `--c-progress-group-size-xs-thickness` | 公开 | `2px` | 本组件 CSS<br>`height`, `width` |
-| `--c-progress-group-status-font-weight` | 公开 | `var(--c-sys-font-weight-medium)` | 本组件 CSS<br>`font-weight` |
 | `--c-progress-group-text-color` | 公开 | `var(--c-sys-color-content-primary)` | 本组件 CSS<br>`color` |
+| `--c-progress-group-text-font-weight` | 公开 | `var(--c-sys-font-weight-medium)` | 本组件 CSS<br>`font-weight` |
 | `--c-progress-group-tooltip-bg` | 公开 | `var(--c-sys-color-surface-tooltip)` | 本组件 CSS<br>`background` |
 | `--c-progress-group-tooltip-color` | 公开 | `var(--c-sys-color-content-on-dark)` | 本组件 CSS<br>`color` |
 | `--c-progress-group-tooltip-duration` | 公开 | `var(--c-sys-motion-duration-fast)` | 本组件 CSS<br>`animation` |
@@ -2040,27 +2220,19 @@ permalink: /guide/design-token-reference/
 | `--c-progress-group-track-color` | 公开 | `var(--c-sys-color-state-hover)` | 本组件 CSS<br>`background`, `stroke` |
 | `--c-progress-group-transition-duration` | 公开 | `var(--c-sys-motion-duration-standard)` | 本组件 CSS<br>`animation`, `transition` |
 
+</div>
+
 ## radio
 
 声明来源: `src/radio/style/token.less`
 
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
-| `--c-internal-radio-bg` | 内部 | `var(--c-sys-color-surface-default)` | 本组件 CSS<br>`background-color` |
-| `--c-internal-radio-bg-disabled` | 内部 | `var(--c-sys-color-surface-muted)` | 本组件 CSS<br>`background-color` |
-| `--c-internal-radio-border-radius` | 内部 | `var(--c-border-radius-circle)` | 本组件 CSS<br>`border-radius` |
-| `--c-internal-radio-border-width` | 内部 | `var(--c-border-width-2)` | 本组件 CSS<br>`border`, `height`, `width` |
-| `--c-internal-radio-control-color-checked-disabled` | 内部 | `var(--c-radio-control-color-disabled)` | 本组件 CSS<br>`background-color` |
-| `--c-internal-radio-control-color-hover` | 内部 | `var(--c-radio-control-color)` | 本组件 CSS<br>`border-color` |
-| `--c-internal-radio-dot-bg-checked` | 内部 | `var(--c-sys-color-surface-default)` | 本组件 CSS<br>`background-color` |
-| `--c-internal-radio-dot-bg-checked-disabled` | 内部 | `var(--c-internal-radio-bg-disabled)` | 本组件 CSS<br>`background-color` |
 | `--c-internal-radio-focus-offset` | 内部 | `2px` | 本组件 CSS<br>`outline-offset` |
 | `--c-internal-radio-focus-width` | 内部 | `2px` | 本组件 CSS<br>`outline` |
-| `--c-internal-radio-group-vertical-line-height` | 内部 | `var(--c-size-8)` | 本组件 CSS<br>`line-height` |
-| `--c-internal-radio-icon-inner-size` | 内部 | `calc(var(--c-radio-control-size) - var(--c-internal-radio-border-width) * 2)` | 本组件 CSS<br>`height`, `width` |
-| `--c-internal-radio-label-text-color-checked-disabled` | 内部 | `var(--c-radio-label-text-color-disabled)` | 本组件 CSS<br>`color` |
-| `--c-internal-radio-mask-height` | 内部 | `var(--c-size-6)` | 本组件 CSS<br>`height`, `padding-left`, `width` |
-| `--c-internal-radio-mask-hover-bg` | 内部 | `var(--c-sys-color-state-hover)` | 本组件 CSS<br>`background-color` |
+| `--c-internal-radio-mask-height` | 内部 | `var(--c-size-6)` | 本组件 CSS<br>`padding` |
 | `--c-internal-radio-segment-bg` | 内部 | `var(--c-sys-color-surface-default)` | 本组件 CSS<br>`background` |
 | `--c-internal-radio-segment-gap` | 内部 | `3px` | 本组件 CSS<br>`gap`, `padding` |
 | `--c-internal-radio-segment-group-bg` | 内部 | `var(--c-sys-color-surface-muted)` | 本组件 CSS<br>`background` |
@@ -2068,39 +2240,52 @@ permalink: /guide/design-token-reference/
 | `--c-internal-radio-segment-hover` | 内部 | `var(--c-sys-color-state-hover)` | 本组件 CSS<br>`background` |
 | `--c-internal-radio-segment-padding` | 内部 | `12px` | 本组件 CSS<br>`padding-inline` |
 | `--c-internal-radio-segment-radius` | 内部 | `var(--c-sys-radius-md)` | 本组件 CSS<br>`border-radius` |
-| `--c-internal-radio-transition-timing-function-overshoot` | 内部 | `var(--c-transition-timing-function-overshoot)` | 本组件 CSS<br>`transition` |
-| `--c-radio-action-padding` | 公开 | `calc((var(--c-internal-radio-mask-height) / 2) - (var(--c-radio-control-size) / 2))` | 本组件 CSS<br>`padding-left` |
+| `--c-radio-action-padding` | 公开 | `calc((var(--c-internal-radio-mask-height) / 2) - (var(--c-radio-control-size) / 2))` | 本组件 CSS<br>`padding` |
 | `--c-radio-animation-duration` | 公开 | `var(--c-transition-duration-3)` | 本组件 CSS<br>`transition` |
-| `--c-radio-control-color` | 公开 | `var(--c-sys-color-content-secondary)` | 本组件 CSS<br>`border`, `border-color` |
-| `--c-radio-control-color-checked` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`background-color`, `border-color`, `color`, `outline` |
-| `--c-radio-control-color-disabled` | 公开 | `var(--c-sys-color-content-disabled)` | 本组件 CSS<br>`background-color`, `border-color` |
-| `--c-radio-control-color-error` | 公开 | `var(--c-sys-color-content-danger)` | 本组件 CSS<br>`background-color`, `border-color`, `color` |
-| `--c-radio-control-size` | 公开 | `14px` | 本组件 CSS<br>`height`, `line-height`, `padding-left`, `width` |
-| `--c-radio-group-gap` | 公开 | `var(--c-spacing-8)` | 本组件 CSS<br>`margin-inline-end` |
+| `--c-radio-control-color` | 公开 | `var(--c-sys-color-content-secondary)` | 本组件 CSS<br>`color` |
+| `--c-radio-control-color-checked` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color`, `outline` |
+| `--c-radio-control-color-disabled` | 公开 | `var(--c-sys-color-content-disabled)` | 本组件 CSS<br>`color` |
+| `--c-radio-control-color-error` | 公开 | `var(--c-sys-color-content-danger)` | 本组件 CSS<br>`color` |
+| `--c-radio-control-size` | 公开 | `14px` | 本组件 CSS<br>`font-size`, `height`, `padding`, `width` |
+| `--c-radio-group-gap` | 公开 | `var(--c-spacing-8)` | 本组件 CSS<br>`gap` |
 | `--c-radio-label-font-size` | 公开 | `var(--c-font-size-body-3)` | 本组件 CSS<br>`font-size` |
-| `--c-radio-label-gap` | 公开 | `var(--c-spacing-4)` | 本组件 CSS<br>`margin-left` |
+| `--c-radio-label-gap` | 公开 | `var(--c-spacing-4)` | 本组件 CSS<br>`margin-inline-start` |
 | `--c-radio-label-text-color` | 公开 | `var(--c-sys-color-content-primary)` | 本组件 CSS<br>`color` |
 | `--c-radio-label-text-color-disabled` | 公开 | `var(--c-sys-color-content-disabled)` | 本组件 CSS<br>`color` |
+
+</div>
 
 ## rate
 
 声明来源: `src/rate/style/token.less`
 
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
-| `--c-rate-bg` | 公开 | `var(--c-color-fill-3)` | 本组件 CSS<br>`color` |
-| `--c-rate-bg-active` | 公开 | `rgb(var(--c-gold-6))` | 本组件 CSS<br>`color` |
-| `--c-rate-font-size` | 公开 | `var(--c-font-size-title-3)` | 本组件 CSS<br>`font-size` |
-| `--c-rate-gap-size` | 公开 | `var(--c-spacing-4)` | 本组件 CSS<br>`margin-right` |
+| `--c-rate-action-padding` | 公开 | `0px` | 本组件 CSS<br>`padding` |
+| `--c-rate-active-color` | 公开 | `rgb(var(--c-gold-6))` | 本组件 CSS<br>`color` |
+| `--c-rate-active-scale` | 公开 | `1.2` | 本组件 CSS<br>`transform` |
+| `--c-rate-disabled-color` | 公开 | `var(--c-sys-color-content-disabled)` | 本组件 CSS<br>`color` |
+| `--c-rate-empty-color` | 公开 | `var(--c-color-fill-3)` | 本组件 CSS<br>`color` |
+| `--c-rate-error-color` | 公开 | `var(--c-sys-color-content-danger)` | 本组件 CSS<br>`color` |
+| `--c-rate-focus-color` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`outline` |
+| `--c-rate-focus-offset` | 公开 | `2px` | 本组件 CSS<br>`outline-offset` |
+| `--c-rate-focus-width` | 公开 | `2px` | 本组件 CSS<br>`outline` |
+| `--c-rate-gap` | 公开 | `var(--c-spacing-4)` | 本组件 CSS<br>`margin-right` |
 | `--c-rate-min-height` | 公开 | `var(--c-size-md)` | 本组件 CSS<br>`min-height` |
-| `--c-rate-scale-active` | 公开 | `1.2` | 本组件 CSS<br>`transform` |
+| `--c-rate-scale-duration` | 公开 | `var(--c-transition-duration-4)` | 本组件 CSS<br>`animation` |
+| `--c-rate-size` | 公开 | `var(--c-font-size-title-3)` | 本组件 CSS<br>`font-size` |
 | `--c-rate-transition-duration` | 公开 | `var(--c-transition-duration-2)` | 本组件 CSS<br>`transition` |
-| `--c-rate-transition-duration-scale` | 公开 | `var(--c-transition-duration-4)` | 本组件 CSS<br>`animation` |
 | `--c-rate-transition-timing-function` | 公开 | `var(--c-transition-timing-function-standard)` | 本组件 CSS<br>`animation`, `transition` |
+
+</div>
 
 ## resize-box
 
 声明来源: `src/resize-box/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -2108,9 +2293,13 @@ permalink: /guide/design-token-reference/
 | `--c-resize-box-trigger-font-size-icon` | 公开 | `12px` | 本组件 CSS<br>`font-size`, `margin` |
 | `--c-resize-box-trigger-icon-color` | 公开 | `var(--c-color-text-1)` | 本组件 CSS<br>`color` |
 
+</div>
+
 ## result
 
 声明来源: `src/result/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -2118,7 +2307,7 @@ permalink: /guide/design-token-reference/
 | `--c-result-border-radius` | 公开 | `var(--c-border-radius-md)` | 本组件 CSS<br>`border-radius` |
 | `--c-result-content-margin` | 公开 | `var(--c-spacing-8) 0 0` | 本组件 CSS<br>`margin` |
 | `--c-result-danger-border-color` | 公开 | `var(--c-color-danger-light-3)` | 本组件 CSS<br>`border-color` |
-| `--c-result-danger-color` | 公开 | `rgb(var(--c-danger-6))` | 本组件 CSS<br>`fill` |
+| `--c-result-danger-color` | 公开 | `var(--c-sys-color-content-danger)` | 本组件 CSS<br>`fill` |
 | `--c-result-empty-border-color` | 公开 | `rgb(var(--c-gray-2))` | 本组件 CSS<br>`border-color` |
 | `--c-result-empty-color` | 公开 | `rgb(var(--c-gray-5))` | 本组件 CSS<br>`fill` |
 | `--c-result-extra-margin` | 公开 | `var(--c-spacing-8) 0 0` | 本组件 CSS<br>`margin` |
@@ -2133,17 +2322,23 @@ permalink: /guide/design-token-reference/
 | `--c-result-subtitle-line-height` | 公开 | `1.5715` | 本组件 CSS<br>`line-height` |
 | `--c-result-subtitle-margin` | 公开 | `var(--c-spacing-4) 0 0` | 本组件 CSS<br>`margin` |
 | `--c-result-success-border-color` | 公开 | `var(--c-color-success-light-3)` | 本组件 CSS<br>`border-color` |
-| `--c-result-success-color` | 公开 | `rgb(var(--c-success-6))` | 本组件 CSS<br>`fill` |
+| `--c-result-success-color` | 公开 | `var(--c-sys-color-content-success)` | 本组件 CSS<br>`fill` |
 | `--c-result-title-color` | 公开 | `var(--c-color-text-1)` | 本组件 CSS<br>`color` |
 | `--c-result-title-font-size` | 公开 | `var(--c-font-size-title-1)` | 本组件 CSS<br>`font-size` |
 | `--c-result-title-font-weight` | 公开 | `var(--c-font-weight-500)` | 本组件 CSS<br>`font-weight` |
 | `--c-result-title-margin` | 公开 | `var(--c-spacing-7) 0 0` | 本组件 CSS<br>`margin` |
 | `--c-result-warning-border-color` | 公开 | `var(--c-color-warning-light-3)` | 本组件 CSS<br>`border-color` |
-| `--c-result-warning-color` | 公开 | `rgb(var(--c-warning-6))` | 本组件 CSS<br>`fill` |
+| `--c-result-warning-color` | 公开 | `var(--c-sys-color-content-warning)` | 本组件 CSS<br>`fill` |
+
+</div>
 
 ## ripple
 
 声明来源: `src/ripple/style/token.less`
+
+expand-duration／fade-duration 消费到 transform／opacity 过渡；运行时再读取实际波纹计算后的 duration/delay，避免提前淡出或删除。两个 250ms 生命周期下限不是 CSS Token。采样边界与清理归属见设计指南；此间接时序消费不冒充运行时字面 var() 引用。
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -2152,9 +2347,13 @@ permalink: /guide/design-token-reference/
 | `--c-ripple-expand-duration` | 公开 | `200ms` | 本组件 CSS<br>`transition` |
 | `--c-ripple-fade-duration` | 公开 | `140ms` | 本组件 CSS<br>`transition` |
 
+</div>
+
 ## scheduler
 
 声明来源: `src/scheduler/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -2177,7 +2376,7 @@ permalink: /guide/design-token-reference/
 | `--c-scheduler-event-min-height` | 公开 | `20px` | 本组件 CSS<br>`min-height`, `min-width` |
 | `--c-scheduler-event-padding` | 公开 | `4px` | 本组件 CSS<br>`padding` |
 | `--c-scheduler-event-radius` | 公开 | `4px` | 本组件 CSS<br>`border-radius` |
-| `--c-scheduler-focus-color` | 公开 | `rgb(var(--c-primary-6))` | 本组件 CSS<br>`outline` |
+| `--c-scheduler-focus-color` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`outline` |
 | `--c-scheduler-focus-width` | 公开 | `2px` | 本组件 CSS<br>`outline`, `outline-offset` |
 | `--c-scheduler-font-size` | 公开 | `14px` | 本组件 CSS<br>`font-size` |
 | `--c-scheduler-gap` | 公开 | `12px` | 本组件 CSS<br>`gap`, `margin-bottom`, `padding` |
@@ -2194,7 +2393,7 @@ permalink: /guide/design-token-reference/
 | `--c-scheduler-mode-width` | 公开 | `150px` | 本组件 CSS<br>`width` |
 | `--c-scheduler-month-cell-height` | 公开 | `124px` | 本组件 CSS<br>`height`, `min-height` |
 | `--c-scheduler-muted-color` | 公开 | `var(--c-color-text-3)` | 本组件 CSS<br>`color` |
-| `--c-scheduler-now-color` | 公开 | `rgb(var(--c-danger-6))` | 本组件 CSS<br>`border-top`, `color` |
+| `--c-scheduler-now-color` | 公开 | `var(--c-sys-color-content-danger)` | 本组件 CSS<br>`border-top`, `color` |
 | `--c-scheduler-now-width` | 公开 | `2px` | 本组件 CSS<br>`border-top` |
 | `--c-scheduler-now-z-index` | 公开 | `3` | 本组件 CSS<br>`z-index` |
 | `--c-scheduler-padding` | 公开 | `16px` | 本组件 CSS<br>`margin-bottom`, `padding` |
@@ -2213,14 +2412,18 @@ permalink: /guide/design-token-reference/
 | `--c-scheduler-subtle-background` | 公开 | `var(--c-color-fill-1)` | 本组件 CSS<br>`background` |
 | `--c-scheduler-timeline-min-width` | 公开 | `1000px` | 本组件 CSS<br>`min-width` |
 | `--c-scheduler-today-background` | 公开 | `var(--c-color-primary-light-1)` | 本组件 CSS<br>`background` |
-| `--c-scheduler-today-color` | 公开 | `rgb(var(--c-primary-6))` | 本组件 CSS<br>`color` |
+| `--c-scheduler-today-color` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color` |
 | `--c-scheduler-unavailable-background` | 公开 | `var(--c-color-fill-2)` | 本组件 CSS<br>`background` |
 | `--c-scheduler-virtual-height` | 公开 | `480px` | 运行时引用（不代表可见性证明）<br>`scheduler/components/SchedulerTimelineRows.vue` |
 | `--c-scheduler-weekday-count` | 公开 | `7` | 本组件 CSS<br>`grid-template-columns` |
 
+</div>
+
 ## scrollbar
 
 声明来源: `src/scrollbar/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -2233,9 +2436,49 @@ permalink: /guide/design-token-reference/
 | `--c-scrollbar-track-border-size` | 公开 | `1px` | 本组件 CSS<br>`border-bottom`, `border-left`, `border-right`, `border-top`, `margin`, `right` |
 | `--c-scrollbar-track-size` | 公开 | `15px` | 本组件 CSS<br>`height`, `margin`, `width` |
 
+</div>
+
+## search
+
+声明来源: `src/search/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
+| --- | --- | --- | --- |
+| `--c-search-action-color-text` | 公开 | `var(--c-sys-color-content-primary)` | 本组件 CSS<br>`color` |
+| `--c-search-action-font-size` | 公开 | `16px` | 本组件 CSS<br>`font-size` |
+| `--c-search-action-spacing-inline-start` | 公开 | `16px` | 本组件 CSS<br>`margin-inline-start` |
+| `--c-search-color-bg` | 公开 | `var(--c-sys-color-surface-default)` | 本组件 CSS<br>`background` |
+| `--c-search-color-icon` | 公开 | `var(--c-sys-color-content-secondary)` | 本组件 CSS<br>`color` |
+| `--c-search-field-color-bg` | 公开 | `var(--c-sys-color-surface-muted)` | 本组件 CSS<br>`background` |
+| `--c-search-field-radius` | 公开 | `4px` | 本组件 CSS<br>`border-radius` |
+| `--c-search-field-size-min-height` | 公开 | `32px` | 本组件 CSS<br>`border-radius`, `min-height` |
+| `--c-search-field-spacing-padding` | 公开 | `0` | 本组件 CSS<br>`padding` |
+| `--c-search-history-item-color-border` | 公开 | `var(--c-sys-color-border-default)` | 本组件 CSS<br>`border-bottom` |
+| `--c-search-history-item-color-text` | 公开 | `var(--c-sys-color-content-primary)` | 本组件 CSS<br>`color` |
+| `--c-search-history-item-size-min-height` | 公开 | `44px` | 本组件 CSS<br>`min-height` |
+| `--c-search-history-spacing-padding` | 公开 | `8px 16px 24px` | 本组件 CSS<br>`padding` |
+| `--c-search-icon-spacing` | 公开 | `8px` | 本组件 CSS<br>`margin-inline-end` |
+| `--c-search-label-color-text` | 公开 | `var(--c-sys-color-content-primary)` | 本组件 CSS<br>`color` |
+| `--c-search-label-font-size` | 公开 | `16px` | 本组件 CSS<br>`font-size` |
+| `--c-search-label-spacing-inline-end` | 公开 | `10px` | 本组件 CSS<br>`margin-inline-end` |
+| `--c-search-opacity-disabled` | 公开 | `0.6` | 本组件 CSS<br>`opacity` |
+| `--c-search-select-icon-size` | 公开 | `18px` | 本组件 CSS<br>`font-size` |
+| `--c-search-select-icon-spacing` | 公开 | `2px` | 本组件 CSS<br>`margin-inline-start` |
+| `--c-search-select-size-max-width` | 公开 | `120px` | 本组件 CSS<br>`max-width` |
+| `--c-search-select-size-min-width` | 公开 | `72px` | 本组件 CSS<br>`min-width` |
+| `--c-search-size-icon` | 公开 | `16px` | 本组件 CSS<br>`font-size` |
+| `--c-search-size-min-height` | 公开 | `32px` | 本组件 CSS<br>`min-height` |
+| `--c-search-spacing-padding` | 公开 | `0` | 本组件 CSS<br>`padding` |
+
+</div>
+
 ## segmented
 
 声明来源: `src/segmented/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -2268,9 +2511,13 @@ permalink: /guide/design-token-reference/
 | `--c-segmented-padding` | 公开 | `var(--c-border-width-3)` | 本组件 CSS<br>`padding` |
 | `--c-segmented-shadow-selected` | 公开 | `0 1px 2px rgba(0, 0, 0, 0.06)` | 本组件 CSS<br>`box-shadow` |
 
+</div>
+
 ## select
 
 声明来源: `src/select/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -2301,9 +2548,13 @@ permalink: /guide/design-token-reference/
 | `--c-select-popup-option-text-color-selected` | 公开 | `var(--c-sys-color-content-primary)` | 本组件 CSS<br>`color` |
 | `--c-select-popup-padding-vertical` | 公开 | `var(--c-sys-space-2)` | 本组件 CSS<br>`padding` |
 
+</div>
+
 ## skeleton
 
 声明来源: `src/skeleton/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -2330,56 +2581,44 @@ permalink: /guide/design-token-reference/
 | `--c-skeleton-title-width` | 公开 | `50%` | 本组件 CSS<br>`width` |
 | `--c-skeleton-transition-duration` | 公开 | `var(--c-sys-motion-duration-slow)` | 本组件 CSS<br>`transition` |
 
+</div>
+
 ## slider
 
 声明来源: `src/slider/style/token.less`
 
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
-| `--c-slider-bar-bg` | 公开 | `rgb(var(--c-primary-6))` | 本组件 CSS<br>`background`, `background-color`, `border-color` |
-| `--c-slider-bar-bg-disabled` | 公开 | `var(--c-color-fill-3)` | 本组件 CSS<br>`background`, `background-color`, `border-color` |
-| `--c-slider-button-active-scale` | 公开 | `calc(var(--c-slider-button-width-active) / var(--c-slider-button-width))` | 本组件 CSS<br>`transform` |
-| `--c-slider-button-bg` | 公开 | `var(--c-color-bg-2)` | 本组件 CSS<br>`background` |
-| `--c-slider-button-border-color` | 公开 | `rgb(var(--c-primary-6))` | 本组件 CSS<br>`border` |
-| `--c-slider-button-border-color-disabled` | 公开 | `var(--c-color-fill-3)` | 本组件 CSS<br>`border-color` |
-| `--c-slider-button-border-width` | 公开 | `var(--c-border-width-2)` | 本组件 CSS<br>`border` |
-| `--c-slider-button-half-width` | 公开 | `calc(var(--c-slider-button-width) / 2)` | 本组件 CSS<br>`margin-bottom`, `margin-top` |
-| `--c-slider-button-shadow-active` | 公开 | `var(--c-shadow1-down)` | 本组件 CSS<br>`box-shadow` |
-| `--c-slider-button-width` | 公开 | `var(--c-size-3)` | 本组件 CSS<br>`height`, `left`, `margin-bottom`, `margin-top`, `max-width`, `min-width`, `top`, `transform`, `width` |
-| `--c-slider-button-width-active` | 公开 | `14px` | 本组件 CSS<br>`transform` |
-| `--c-slider-dot-bg` | 公开 | `var(--c-color-bg-2)` | 本组件 CSS<br>`background-color` |
-| `--c-slider-dot-border-width` | 公开 | `var(--c-border-width-2)` | 本组件 CSS<br>`border` |
-| `--c-slider-dot-font-size` | 公开 | `var(--c-font-size-body-1)` | 本组件 CSS<br>`font-size` |
-| `--c-slider-dot-width` | 公开 | `var(--c-size-2)` | 本组件 CSS<br>`height`, `width` |
-| `--c-slider-input-height` | 公开 | `var(--c-size-8)` | 本组件 CSS<br>`height` |
-| `--c-slider-input-hyphens-margin` | 公开 | `calc((var(--c-slider-input-range-width) - var(--c-slider-input-range-content-width)) / 2)` | 本组件 CSS<br>`margin` |
-| `--c-slider-input-margin-left` | 公开 | `var(--c-spacing-8)` | 本组件 CSS<br>`margin-left` |
-| `--c-slider-input-range-content-bg` | 公开 | `rgb(var(--c-gray-6))` | 本组件 CSS<br>`background` |
-| `--c-slider-input-range-content-height` | 公开 | `2px` | 本组件 CSS<br>`height` |
-| `--c-slider-input-range-content-width` | 公开 | `var(--c-size-2)` | 本组件 CSS<br>`margin`, `width` |
-| `--c-slider-input-range-width` | 公开 | `var(--c-size-5)` | 本组件 CSS<br>`margin` |
-| `--c-slider-input-width` | 公开 | `var(--c-size-15)` | 本组件 CSS<br>`width` |
-| `--c-slider-mark-font-size` | 公开 | `var(--c-font-size-body-3)` | 本组件 CSS<br>`font-size` |
-| `--c-slider-mark-left` | 公开 | `3px` | 本组件 CSS<br>`left` |
-| `--c-slider-mark-text-color` | 公开 | `var(--c-color-text-3)` | 本组件 CSS<br>`color` |
-| `--c-slider-road-bg` | 公开 | `var(--c-color-fill-3)` | 本组件 CSS<br>`background`, `background-color`, `border` |
-| `--c-slider-road-bg-disabled` | 公开 | `var(--c-color-fill-2)` | 本组件 CSS<br>`background`, `background-color`, `border-color` |
-| `--c-slider-road-width` | 公开 | `2px` | 本组件 CSS<br>`border-radius`, `height`, `margin-top`, `transform`, `width` |
-| `--c-slider-tick-height` | 公开 | `3px` | 本组件 CSS<br>`height`, `width` |
-| `--c-slider-tick-margin-top` | 公开 | `calc(var(--c-slider-road-width) / -2)` | 本组件 CSS<br>`margin-top` |
-| `--c-slider-tick-vertical-translate-x` | 公开 | `calc(var(--c-slider-road-width) / 2)` | 本组件 CSS<br>`transform` |
-| `--c-slider-tick-width` | 公开 | `1px` | 本组件 CSS<br>`height`, `width` |
-| `--c-slider-transition-duration` | 公开 | `var(--c-transition-duration-3)` | 本组件 CSS<br>`transition` |
-| `--c-slider-transition-timing-function` | 公开 | `var(--c-transition-timing-function-overshoot)` | 本组件 CSS<br>`transition` |
-| `--c-slider-vertical-height` | 公开 | `200px` | 本组件 CSS<br>`min-height` |
-| `--c-slider-vertical-min-width` | 公开 | `calc(var(--c-slider-button-width) + 10px)` | 本组件 CSS<br>`min-width` |
-| `--c-slider-with-mark-margin-bottom` | 公开 | `var(--c-spacing-9)` | 本组件 CSS<br>`margin-bottom` |
-| `--c-slider-with-mark-padding` | 公开 | `var(--c-spacing-8)` | 本组件 CSS<br>`padding` |
-| `--c-slider-with-mark-padding-vertical` | 公开 | `var(--c-spacing-8)` | 本组件 CSS<br>`padding` |
+| `--c-internal-slider-border-width` | 内部 | `2px` | 本组件 CSS<br>`border`, `outline` |
+| `--c-internal-slider-focus-offset` | 内部 | `3px` | 本组件 CSS<br>`outline-offset` |
+| `--c-internal-slider-mark-offset` | 内部 | `8px` | 本组件 CSS<br>`left`, `top` |
+| `--c-slider-active-color` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`background`, `outline` |
+| `--c-slider-control-height` | 公开 | `var(--c-sys-control-height-md)` | 本组件 CSS<br>`height`, `min-height`, `padding-bottom`, `padding-inline-end`, `width` |
+| `--c-slider-disabled-color` | 公开 | `var(--c-sys-color-content-disabled)` | 本组件 CSS<br>`background`, `border-color` |
+| `--c-slider-error-color` | 公开 | `var(--c-sys-color-content-danger)` | 本组件 CSS<br>`background`, `border-color` |
+| `--c-slider-font-size` | 公开 | `var(--c-sys-font-size-sm)` | 本组件 CSS<br>`font-size` |
+| `--c-slider-gap` | 公开 | `var(--c-sys-space-4)` | 本组件 CSS<br>`bottom`, `gap`, `left`, `padding` |
+| `--c-slider-input-width` | 公开 | `80px` | 本组件 CSS<br>`width` |
+| `--c-slider-radius` | 公开 | `var(--c-sys-radius-md)` | 本组件 CSS<br>`border-radius` |
+| `--c-slider-text-color` | 公开 | `var(--c-sys-color-content-secondary)` | 本组件 CSS<br>`color` |
+| `--c-slider-thumb-border-color` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`border` |
+| `--c-slider-thumb-color` | 公开 | `var(--c-sys-color-surface-default)` | 本组件 CSS<br>`background` |
+| `--c-slider-thumb-size` | 公开 | `16px` | 本组件 CSS<br>`height`, `width` |
+| `--c-slider-tooltip-background` | 公开 | `var(--c-sys-color-surface-tooltip)` | 本组件 CSS<br>`background` |
+| `--c-slider-tooltip-color` | 公开 | `var(--c-sys-color-content-on-dark)` | 本组件 CSS<br>`color` |
+| `--c-slider-track-color` | 公开 | `var(--c-sys-color-state-hover)` | 本组件 CSS<br>`background` |
+| `--c-slider-track-height` | 公开 | `4px` | 本组件 CSS<br>`height`, `width` |
+| `--c-slider-transition-duration` | 公开 | `var(--c-sys-motion-duration-fast)` | 本组件 CSS<br>`transition` |
+
+</div>
 
 ## space
 
 声明来源: `src/space/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -2394,9 +2633,13 @@ permalink: /guide/design-token-reference/
 | `--c-space-size-xs-column-gap` | 公开 | `var(--c-sys-space-2)` | 已审动态运行时<br>`space/space.tsx: getSize -> gapStyle -> style.gap` |
 | `--c-space-size-xs-row-gap` | 公开 | `var(--c-sys-space-2)` | 已审动态运行时<br>`space/space.tsx: getSize -> gapStyle -> style.gap` |
 
+</div>
+
 ## split
 
 声明来源: `src/split/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -2405,9 +2648,13 @@ permalink: /guide/design-token-reference/
 | `--c-split-trigger-icon-color` | 公开 | `var(--c-color-text-1)` | 本组件 CSS<br>`color` |
 | `--c-split-trigger-size-icon-wrapper` | 公开 | `6px` | 本组件 CSS<br>`height`, `width` |
 
+</div>
+
 ## statistic
 
 声明来源: `src/statistic/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -2428,9 +2675,13 @@ permalink: /guide/design-token-reference/
 | `--c-statistic-value-font-size` | 公开 | `26px` | 本组件 CSS<br>`font-size` |
 | `--c-statistic-value-font-weight` | 公开 | `var(--c-font-weight-500)` | 本组件 CSS<br>`font-weight` |
 
+</div>
+
 ## steps
 
 声明来源: `src/steps/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -2550,9 +2801,13 @@ permalink: /guide/design-token-reference/
 | `--c-steps-transition-timing-function-linear` | 公开 | `var(--c-transition-timing-function-linear)` | 本组件 CSS<br>`transition` |
 | `--c-steps-vertical-item-min-height` | 公开 | `90px` | 本组件 CSS<br>`min-height` |
 
+</div>
+
 ## switch
 
 声明来源: `src/switch/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -2590,9 +2845,13 @@ permalink: /guide/design-token-reference/
 | `--c-switch-track-error-background` | 公开 | `var(--c-sys-color-content-danger)` | 本组件 CSS<br>`background`, `border-color` |
 | `--c-switch-width` | 公开 | `40px` | 本组件 CSS<br>`min-width` |
 
+</div>
+
 ## table
 
 声明来源: `src/table/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -2638,7 +2897,7 @@ permalink: /guide/design-token-reference/
 | `--c-table-expand-icon-hover-bg` | 公开 | `var(--c-color-neutral-4)` | 本组件 CSS<br>`background-color` |
 | `--c-table-expand-icon-hover-border-color` | 公开 | `transparent` | 本组件 CSS<br>`border-color` |
 | `--c-table-expand-icon-hover-color` | 公开 | `var(--c-color-text-1)` | 本组件 CSS<br>`color` |
-| `--c-table-expand-loading-icon-color` | 公开 | `rgb(var(--c-primary-6))` | 本组件 CSS<br>`color` |
+| `--c-table-expand-loading-icon-color` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color` |
 | `--c-table-extra-column-icon-color` | 公开 | `var(--c-color-text-2)` | 本组件 CSS<br>`color` |
 | `--c-table-extra-column-icon-hover-color` | 公开 | `var(--c-color-text-1)` | 本组件 CSS<br>`color` |
 | `--c-table-filters-bottom-gap` | 公开 | `8px` | 本组件 CSS<br>`margin-right` |
@@ -2668,12 +2927,12 @@ permalink: /guide/design-token-reference/
 | `--c-table-header-cell-action-margin-left` | 公开 | `2px` | 本组件 CSS<br>`margin-left` |
 | `--c-table-header-cell-bg` | 公开 | `var(--c-color-neutral-2)` | 本组件 CSS<br>`background-color` |
 | `--c-table-header-cell-text-color` | 公开 | `rgb(var(--c-gray-10))` | 本组件 CSS<br>`color` |
-| `--c-table-header-filters-icon-active-color` | 公开 | `rgb(var(--c-primary-6))` | 本组件 CSS<br>`color` |
+| `--c-table-header-filters-icon-active-color` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color` |
 | `--c-table-header-filters-icon-color` | 公开 | `var(--c-color-text-2)` | 本组件 CSS<br>`color` |
 | `--c-table-header-filters-icon-hover-bg` | 公开 | `var(--c-color-neutral-4)` | 本组件 CSS<br>`background-color` |
 | `--c-table-header-sorted-cell-bg` | 公开 | `var(--c-color-neutral-3)` | 本组件 CSS<br>`background-color` |
 | `--c-table-header-sorted-cell-hover-bg` | 公开 | `rgba(var(--c-gray-4), 0.5)` | 本组件 CSS<br>`background-color` |
-| `--c-table-header-sorter-icon-active-color` | 公开 | `rgb(var(--c-primary-6))` | 本组件 CSS<br>`color` |
+| `--c-table-header-sorter-icon-active-color` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color` |
 | `--c-table-header-sorter-icon-color` | 公开 | `var(--c-color-neutral-5)` | 本组件 CSS<br>`color` |
 | `--c-table-header-sorter-icon-down-top` | 公开 | `-3px` | 本组件 CSS<br>`top` |
 | `--c-table-header-sorter-icon-font-size` | 公开 | `12px` | 本组件 CSS<br>`font-size` |
@@ -2688,7 +2947,7 @@ permalink: /guide/design-token-reference/
 | `--c-table-pagination-margin` | 公开 | `var(--c-spacing-6)` | 本组件 CSS<br>`margin-bottom`, `margin-top` |
 | `--c-table-pagination-sticky-bg` | 公开 | `var(--c-color-bg-1)` | 本组件 CSS<br>`background-color` |
 | `--c-table-pagination-sticky-padding` | 公开 | `12px 0` | 本组件 CSS<br>`padding` |
-| `--c-table-resizing-border-color` | 公开 | `rgb(var(--c-primary-6))` | 本组件 CSS<br>`border-right-color` |
+| `--c-table-resizing-border-color` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`border-right-color` |
 | `--c-table-selection-col-width` | 公开 | `40px` | 本组件 CSS<br>`max-width`, `min-width`, `width` |
 | `--c-table-shadow-left` | 公开 | `inset 6px 0 8px -3px rgba(0, 0, 0, 0.15)` | 本组件 CSS<br>`box-shadow` |
 | `--c-table-shadow-right` | 公开 | `inset -6px 0 8px -3px rgba(0, 0, 0, 0.15)` | 本组件 CSS<br>`box-shadow` |
@@ -2722,9 +2981,13 @@ permalink: /guide/design-token-reference/
 | `--c-table-transition-duration` | 公开 | `var(--c-transition-duration-1)` | 本组件 CSS<br>`transition` |
 | `--c-table-transition-timing-function` | 公开 | `var(--c-transition-timing-function-linear)` | 本组件 CSS<br>`transition` |
 
+</div>
+
 ## tabs
 
 声明来源: `src/tabs/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -2769,9 +3032,13 @@ permalink: /guide/design-token-reference/
 | `--c-tabs-title-text-color-disabled` | 公开 | `var(--c-sys-color-content-disabled)` | 本组件 CSS<br>`color` |
 | `--c-tabs-touch-target` | 公开 | `var(--c-sys-control-touch-target)` | 本组件 CSS<br>`min-height`, `min-width` |
 
+</div>
+
 ## tag
 
 声明来源: `src/tag/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -2906,16 +3173,19 @@ permalink: /guide/design-token-reference/
 | `--c-tag-variant-outline-status-tertiary-color` | 公开 | `var(--c-sys-color-content-secondary)` | 本组件 CSS<br>`border`, `color` |
 | `--c-tag-variant-outline-status-warning-color` | 公开 | `var(--c-sys-color-content-warning)` | 本组件 CSS<br>`border`, `color` |
 
+</div>
+
 ## textarea
 
 声明来源: `src/textarea/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
 | `--c-textarea-counter-color` | 公开 | `var(--c-sys-color-content-secondary)` | 本组件 CSS<br>`color` |
 | `--c-textarea-counter-font-size` | 公开 | `var(--c-sys-font-size-xs)` | 本组件 CSS<br>`font-size` |
-| `--c-textarea-counter-inset-block-end` | 公开 | `var(--c-sys-space-3)` | 本组件 CSS<br>`bottom` |
-| `--c-textarea-counter-inset-inline-end` | 公开 | `var(--c-sys-space-5)` | 本组件 CSS<br>`right` |
+| `--c-textarea-counter-margin-top` | 公开 | `var(--c-sys-space-2)` | 本组件 CSS<br>`margin-block-start` |
 | `--c-textarea-font-size` | 公开 | `var(--c-sys-font-size-md)` | 本组件 CSS<br>`font-size` |
 | `--c-textarea-height` | 公开 | `auto` | 本组件 CSS<br>`height` |
 | `--c-textarea-line-height` | 公开 | `var(--c-line-height)` | 本组件 CSS<br>`line-height` |
@@ -2923,11 +3193,14 @@ permalink: /guide/design-token-reference/
 | `--c-textarea-padding-horizontal` | 公开 | `var(--c-sys-space-3)` | 本组件 CSS<br>`padding` |
 | `--c-textarea-padding-vertical` | 公开 | `var(--c-sys-space-1)` | 本组件 CSS<br>`padding` |
 | `--c-textarea-placeholder-color` | 公开 | `var(--c-sys-color-content-secondary)` | 本组件 CSS<br>`color` |
-| `--c-textarea-scrollbar-offset` | 公开 | `15px` | 本组件 CSS<br>`right` |
+
+</div>
 
 ## time/picker
 
 声明来源: `src/time/picker/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -2956,9 +3229,13 @@ permalink: /guide/design-token-reference/
 | `--c-time-picker-range-panel-title-padding-vertical` | 公开 | `var(--c-spacing-3)` | 本组件 CSS<br>`padding` |
 | `--c-time-picker-range-wrapper-padding` | 公开 | `var(--c-spacing-4)` | 本组件 CSS<br>`padding` |
 
+</div>
+
 ## timeline
 
 声明来源: `src/timeline/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -2987,9 +3264,13 @@ permalink: /guide/design-token-reference/
 | `--c-timeline-vertical-margin-line-bottom` | 公开 | `var(--c-spacing-2)` | 本组件 CSS<br>`bottom` |
 | `--c-timeline-vertical-margin-line-top` | 公开 | `var(--c-spacing-2)` | 本组件 CSS<br>`top` |
 
+</div>
+
 ## tooltip
 
 声明来源: `src/tooltip/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -3017,9 +3298,13 @@ permalink: /guide/design-token-reference/
 | `--c-tooltip-status-warning-text-color` | 公开 | `var(--c-sys-color-content-on-bright)` | 本组件 CSS<br>`color` |
 | `--c-tooltip-text-color` | 公开 | `var(--c-sys-color-content-on-dark)` | 本组件 CSS<br>`color` |
 
+</div>
+
 ## transfer
 
 声明来源: `src/transfer/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -3027,7 +3312,7 @@ permalink: /guide/design-token-reference/
 | `--c-transfer-border-radius` | 公开 | `var(--c-border-radius-sm)` | 本组件 CSS<br>`border-radius` |
 | `--c-transfer-border-width` | 公开 | `var(--c-border-width-1)` | 本组件 CSS<br>`border`, `margin-left` |
 | `--c-transfer-checkbox-padding-left` | 公开 | `var(--c-spacing-3)` | 本组件 CSS<br>`padding-left` |
-| `--c-transfer-clear-text-color` | 公开 | `rgb(var(--c-primary-6))` | 本组件 CSS<br>`color` |
+| `--c-transfer-clear-text-color` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color` |
 | `--c-transfer-draggable-list-padding-y` | 公开 | `var(--c-spacing-4)` | 本组件 CSS<br>`padding` |
 | `--c-transfer-footer-height` | 公开 | `var(--c-size-10)` | 本组件 CSS<br>`height` |
 | `--c-transfer-footer-padding-horizontal` | 公开 | `var(--c-spacing-4)` | 本组件 CSS<br>`padding`, `right` |
@@ -3082,20 +3367,24 @@ permalink: /guide/design-token-reference/
 | `--c-transfer-title-height` | 公开 | `var(--c-size-10)` | 本组件 CSS<br>`height`, `line-height` |
 | `--c-transfer-transition-timing-function-linear` | 公开 | `var(--c-transition-timing-function-linear)` | 本组件 CSS<br>`animation-timing-function` |
 
+</div>
+
 ## tree
 
 声明来源: `src/tree/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
 | `--c-tree-checkbox-margin-right` | 公开 | `var(--c-spacing-5)` | 本组件 CSS<br>`margin-right` |
 | `--c-tree-custom-icon-margin-right` | 公开 | `var(--c-spacing-5)` | 本组件 CSS<br>`margin-right` |
-| `--c-tree-drag-icon-color` | 公开 | `rgb(var(--c-primary-6))` | 本组件 CSS<br>`color` |
+| `--c-tree-drag-icon-color` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color` |
 | `--c-tree-drag-icon-spacing-right` | 公开 | `var(--c-spacing-6)` | 本组件 CSS<br>`right` |
 | `--c-tree-drag-icon-spacing-text` | 公开 | `var(--c-spacing-22)` | 本组件 CSS<br>`margin-left` |
 | `--c-tree-draggable-gap-bg` | 公开 | `rgb(var(--c-primary-6))` | 本组件 CSS<br>`background-color` |
 | `--c-tree-draggable-gap-height` | 公开 | `2px` | 本组件 CSS<br>`border-radius`, `bottom`, `height`, `margin-top`, `top` |
-| `--c-tree-loading-icon-color` | 公开 | `rgb(var(--c-primary-6))` | 本组件 CSS<br>`color` |
+| `--c-tree-loading-icon-color` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color` |
 | `--c-tree-node-border-radius` | 公开 | `var(--c-border-radius-sm)` | 本组件 CSS<br>`border-radius` |
 | `--c-tree-showline-line-bg` | 公开 | `var(--c-color-neutral-3)` | 本组件 CSS<br>`border-left` |
 | `--c-tree-showline-line-spacing-vertical` | 公开 | `var(--c-spacing-2)` | 本组件 CSS<br>`bottom`, `top` |
@@ -3134,16 +3423,20 @@ permalink: /guide/design-token-reference/
 | `--c-tree-title-bg-hover` | 公开 | `var(--c-color-fill-2)` | 本组件 CSS<br>`background-color` |
 | `--c-tree-title-padding-horizontal` | 公开 | `var(--c-spacing-2)` | 本组件 CSS<br>`margin-left`, `padding-left`, `padding-right` |
 | `--c-tree-title-text-color` | 公开 | `var(--c-color-text-1)` | 本组件 CSS<br>`color` |
-| `--c-tree-title-text-color-active` | 公开 | `rgb(var(--c-primary-6))` | 本组件 CSS<br>`color` |
+| `--c-tree-title-text-color-active` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color` |
 | `--c-tree-title-text-color-active-disabled` | 公开 | `var(--c-color-primary-light-3)` | 本组件 CSS<br>`color` |
 | `--c-tree-title-text-color-disabled` | 公开 | `var(--c-color-text-4)` | 本组件 CSS<br>`color` |
 | `--c-tree-title-text-color-dragging` | 公开 | `var(--c-color-text-4)` | 本组件 CSS<br>`color` |
 | `--c-tree-title-text-color-highlight` | 公开 | `var(--c-color-text-1)` | 本组件 CSS<br>`color` |
 | `--c-tree-title-text-color-hover` | 公开 | `var(--c-color-text-1)` | 本组件 CSS<br>`color` |
 
+</div>
+
 ## tree-select
 
 声明来源: `src/tree-select/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -3152,9 +3445,13 @@ permalink: /guide/design-token-reference/
 | `--c-tree-select-popup-padding-right` | 公开 | `var(--c-spacing-2)` | 本组件 CSS<br>`padding-right` |
 | `--c-tree-select-popup-padding-vertical` | 公开 | `var(--c-spacing-2)` | 本组件 CSS<br>`padding` |
 
+</div>
+
 ## trigger
 
 声明来源: `src/trigger/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -3164,9 +3461,13 @@ permalink: /guide/design-token-reference/
 | `--c-trigger-transition-duration` | 公开 | `var(--c-sys-motion-duration-fast)` | 本组件 CSS<br>`transition` |
 | `--c-trigger-transition-easing` | 公开 | `var(--c-sys-motion-easing-standard)` | 本组件 CSS<br>`transition` |
 
+</div>
+
 ## typography
 
 声明来源: `src/typography/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
@@ -3182,7 +3483,7 @@ permalink: /guide/design-token-reference/
 | `--c-typography-edit-padding-x` | 公开 | `var(--c-spacing-6)` | 本组件 CSS<br>`left`, `margin-right` |
 | `--c-typography-edit-padding-y` | 公开 | `var(--c-spacing-2)` | 本组件 CSS<br>`margin-bottom`, `margin-top` |
 | `--c-typography-expand-margin-x` | 公开 | `var(--c-spacing-2)` | 本组件 CSS<br>`margin` |
-| `--c-typography-expand-text-color` | 公开 | `rgb(var(--c-primary-6))` | 本组件 CSS<br>`color` |
+| `--c-typography-expand-text-color` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color` |
 | `--c-typography-expand-text-color-hover` | 公开 | `rgb(var(--c-primary-5))` | 本组件 CSS<br>`color` |
 | `--c-typography-font-size-h1` | 公开 | `var(--c-font-size-display-1)` | 本组件 CSS<br>`font-size` |
 | `--c-typography-font-size-h2` | 公开 | `var(--c-size-8)` | 本组件 CSS<br>`font-size` |
@@ -3196,7 +3497,7 @@ permalink: /guide/design-token-reference/
 | `--c-typography-icon-copy-bg` | 公开 | `transparent` | 本组件 CSS<br>`background-color` |
 | `--c-typography-icon-copy-bg-hover` | 公开 | `var(--c-color-fill-2)` | 本组件 CSS<br>`background-color` |
 | `--c-typography-icon-copy-color` | 公开 | `var(--c-color-text-2)` | 本组件 CSS<br>`color` |
-| `--c-typography-icon-copy-color-copied` | 公开 | `rgb(var(--c-success-6))` | 本组件 CSS<br>`color` |
+| `--c-typography-icon-copy-color-copied` | 公开 | `var(--c-sys-color-content-success)` | 本组件 CSS<br>`color` |
 | `--c-typography-icon-copy-color-hover` | 公开 | `var(--c-color-text-2)` | 本组件 CSS<br>`color` |
 | `--c-typography-icon-edit-bg` | 公开 | `transparent` | 本组件 CSS<br>`background-color` |
 | `--c-typography-icon-edit-bg-hover` | 公开 | `var(--c-color-fill-2)` | 本组件 CSS<br>`background-color` |
@@ -3211,61 +3512,72 @@ permalink: /guide/design-token-reference/
 | `--c-typography-text-bg-mark` | 公开 | `rgb(var(--c-yellow-4))` | 本组件 CSS<br>`background-color` |
 | `--c-typography-text-color` | 公开 | `var(--c-color-text-1)` | 本组件 CSS<br>`color` |
 | `--c-typography-text-color-disabled` | 公开 | `var(--c-color-text-4)` | 本组件 CSS<br>`color` |
-| `--c-typography-text-color-error` | 公开 | `rgb(var(--c-danger-6))` | 本组件 CSS<br>`color` |
-| `--c-typography-text-color-primary` | 公开 | `rgb(var(--c-primary-6))` | 本组件 CSS<br>`color` |
+| `--c-typography-text-color-error` | 公开 | `var(--c-sys-color-content-danger)` | 本组件 CSS<br>`color` |
+| `--c-typography-text-color-primary` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color` |
 | `--c-typography-text-color-secondary` | 公开 | `var(--c-color-text-2)` | 本组件 CSS<br>`color` |
-| `--c-typography-text-color-success` | 公开 | `rgb(var(--c-success-6))` | 本组件 CSS<br>`color` |
-| `--c-typography-text-color-warning` | 公开 | `rgb(var(--c-warning-6))` | 本组件 CSS<br>`color` |
+| `--c-typography-text-color-success` | 公开 | `var(--c-sys-color-content-success)` | 本组件 CSS<br>`color` |
+| `--c-typography-text-color-warning` | 公开 | `var(--c-sys-color-content-warning)` | 本组件 CSS<br>`color` |
 | `--c-typography-text-font-weight-bold` | 公开 | `var(--c-font-weight-500)` | 本组件 CSS<br>`font-weight` |
 | `--c-typography-text-margin-code-horizontal` | 公开 | `var(--c-spacing-1)` | 本组件 CSS<br>`margin` |
 | `--c-typography-text-padding-code-horizontal` | 公开 | `var(--c-spacing-4)` | 本组件 CSS<br>`padding` |
 | `--c-typography-text-padding-code-vertical` | 公开 | `var(--c-spacing-1)` | 本组件 CSS<br>`padding` |
 
+</div>
+
 ## upload
 
 声明来源: `src/upload/style/token.less`
 
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
-| `--c-upload-action-border-radius` | 公开 | `var(--c-border-radius-md)` | 本组件 CSS<br>`border-radius` |
-| `--c-upload-action-picture-card-color` | 公开 | `var(--c-color-white)` | 本组件 CSS<br>`color` |
-| `--c-upload-action-size` | 公开 | `var(--c-size-7)` | 本组件 CSS<br>`height`, `width` |
-| `--c-upload-actions-gap` | 公开 | `var(--c-spacing-1)` | 本组件 CSS<br>`gap` |
-| `--c-upload-card-size` | 公开 | `var(--c-size-24)` | 本组件 CSS<br>`height`, `width` |
-| `--c-upload-gap` | 公开 | `var(--c-spacing-4)` | 本组件 CSS<br>`gap` |
-| `--c-upload-icon-font-size` | 公开 | `18px` | 本组件 CSS<br>`font-size` |
-| `--c-upload-item-border-radius` | 公开 | `var(--c-border-radius-md)` | 本组件 CSS<br>`border-radius` |
-| `--c-upload-item-gap` | 公开 | `var(--c-spacing-5)` | 本组件 CSS<br>`gap` |
-| `--c-upload-item-min-height` | 公开 | `var(--c-size-10)` | 本组件 CSS<br>`min-height` |
-| `--c-upload-item-padding-horizontal` | 公开 | `var(--c-spacing-4)` | 本组件 CSS<br>`padding` |
-| `--c-upload-item-padding-vertical` | 公开 | `var(--c-spacing-2)` | 本组件 CSS<br>`padding` |
-| `--c-upload-item-picture-min-height` | 公开 | `var(--c-size-16)` | 本组件 CSS<br>`min-height` |
-| `--c-upload-item-picture-padding` | 公开 | `7px` | 本组件 CSS<br>`padding` |
-| `--c-upload-list-gap` | 公开 | `var(--c-spacing-2)` | 本组件 CSS<br>`gap` |
-| `--c-upload-meta-gap` | 公开 | `var(--c-spacing-4)` | 本组件 CSS<br>`gap` |
-| `--c-upload-meta-picture-card-color` | 公开 | `var(--c-color-white)` | 本组件 CSS<br>`color` |
-| `--c-upload-meta-picture-card-padding-horizontal` | 公开 | `var(--c-spacing-3)` | 本组件 CSS<br>`padding` |
-| `--c-upload-meta-picture-card-padding-vertical` | 公开 | `var(--c-spacing-2)` | 本组件 CSS<br>`padding` |
-| `--c-upload-picture-action-bg` | 公开 | `rgba(255, 255, 255, 0.18)` | 本组件 CSS<br>`background` |
-| `--c-upload-picture-card-overlay-bg` | 公开 | `rgba(0, 0, 0, 0.5)` | 本组件 CSS<br>`background` |
-| `--c-upload-picture-grid-gap` | 公开 | `var(--c-spacing-4)` | 本组件 CSS<br>`gap` |
-| `--c-upload-picture-overlay-bg` | 公开 | `rgba(0, 0, 0, 0.56)` | 本组件 CSS<br>`background` |
-| `--c-upload-progress-border-radius` | 公开 | `999px` | 本组件 CSS<br>`border-radius` |
-| `--c-upload-progress-height` | 公开 | `var(--c-spacing-1)` | 本组件 CSS<br>`height` |
-| `--c-upload-size-font-size` | 公开 | `var(--c-font-size-body-1)` | 本组件 CSS<br>`font-size` |
-| `--c-upload-status-icon-font-size` | 公开 | `var(--c-font-size-lg)` | 本组件 CSS<br>`font-size` |
-| `--c-upload-thumb-border-radius` | 公开 | `var(--c-border-radius-md)` | 本组件 CSS<br>`border-radius` |
-| `--c-upload-thumb-size` | 公开 | `var(--c-size-12)` | 本组件 CSS<br>`height`, `width` |
-| `--c-upload-trigger-border-radius` | 公开 | `var(--c-border-radius-md)` | 本组件 CSS<br>`border-radius` |
-| `--c-upload-trigger-draggable-min-height` | 公开 | `var(--c-size-24)` | 本组件 CSS<br>`min-height` |
-| `--c-upload-trigger-gap` | 公开 | `var(--c-spacing-3)` | 本组件 CSS<br>`gap` |
-| `--c-upload-trigger-min-height` | 公开 | `var(--c-size-8)` | 本组件 CSS<br>`min-height` |
-| `--c-upload-trigger-padding-horizontal` | 公开 | `var(--c-spacing-6)` | 本组件 CSS<br>`padding` |
+| `--c-upload-action-size` | 公开 | `var(--c-sys-control-touch-target)` | 本组件 CSS<br>`height`, `width` |
+| `--c-upload-active-color` | 公开 | `var(--c-sys-color-action-primary)` | 本组件 CSS<br>`accent-color`, `border-color`, `outline` |
+| `--c-upload-background` | 公开 | `var(--c-sys-color-surface-default)` | 本组件 CSS<br>`background` |
+| `--c-upload-border-color` | 公开 | `var(--c-sys-color-border-default)` | 本组件 CSS<br>`border` |
+| `--c-upload-border-radius` | 公开 | `var(--c-sys-radius-md)` | 本组件 CSS<br>`border-radius` |
+| `--c-upload-card-size` | 公开 | `calc(var(--c-sys-control-height-md) * 2)` | 本组件 CSS<br>`height`, `min-height`, `width` |
+| `--c-upload-disabled-opacity` | 公开 | `0.56` | 本组件 CSS<br>`opacity` |
+| `--c-upload-error-color` | 公开 | `var(--c-sys-color-content-danger)` | 本组件 CSS<br>`color` |
+| `--c-upload-font-size` | 公开 | `var(--c-sys-font-size-md)` | 本组件 CSS<br>`font-size` |
+| `--c-upload-gap` | 公开 | `var(--c-sys-space-4)` | 本组件 CSS<br>`gap` |
+| `--c-upload-hover-background` | 公开 | `var(--c-sys-color-state-hover)` | 本组件 CSS<br>`background` |
+| `--c-upload-item-min-height` | 公开 | `var(--c-sys-control-height-md)` | 本组件 CSS<br>`min-height` |
+| `--c-upload-item-padding` | 公开 | `var(--c-sys-space-4)` | 本组件 CSS<br>`padding` |
+| `--c-upload-progress-height` | 公开 | `var(--c-sys-space-2)` | 本组件 CSS<br>`height` |
+| `--c-upload-secondary-text-color` | 公开 | `var(--c-sys-color-content-secondary)` | 本组件 CSS<br>`color` |
+| `--c-upload-text-color` | 公开 | `var(--c-sys-color-content-primary)` | 本组件 CSS<br>`color` |
+| `--c-upload-thumb-size` | 公开 | `var(--c-sys-control-height-lg)` | 本组件 CSS<br>`height`, `width` |
+| `--c-upload-trigger-draggable-min-height` | 公开 | `calc(var(--c-sys-control-height-md) * 2)` | 本组件 CSS<br>`min-height` |
+| `--c-upload-trigger-min-height` | 公开 | `var(--c-sys-control-height-md)` | 本组件 CSS<br>`min-height` |
+| `--c-upload-trigger-padding-horizontal` | 公开 | `var(--c-sys-space-6)` | 本组件 CSS<br>`padding-inline` |
+
+</div>
 
 ## verification-code
 
 声明来源: `src/verification-code/style/token.less`
 
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
-| `--c-verification-code-column-gap` | 公开 | `var(--c-spacing-2)` | 本组件 CSS<br>`column-gap` |
+| `--c-verification-code-cell-height` | 公开 | `initial` | 本组件 CSS<br>`height` |
+| `--c-verification-code-cell-max-width` | 公开 | `initial` | 本组件 CSS<br>`flex` |
+| `--c-verification-code-gutter` | 公开 | `var(--c-sys-space-2)` | 本组件 CSS<br>`gap` |
+| `--c-verification-code-input-font-size` | 公开 | `initial` | 本组件 CSS<br>`font-size` |
+
+</div>
+
+## watermark
+
+声明来源: `src/watermark/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
+| --- | --- | --- | --- |
+| `--c-watermark-content-color` | 公开 | `rgba(0, 0, 0, 0.15)` | 运行时引用（不代表可见性证明）<br>`watermark/watermark.tsx` |
+
+</div>

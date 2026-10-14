@@ -1,5 +1,5 @@
 import type { ComponentPublicInstance, Ref } from 'vue'
-import { computed, nextTick, provide, reactive, ref, watch } from 'vue'
+import { computed, nextTick, onActivated, onBeforeUnmount, onDeactivated, provide, reactive, ref, watch } from 'vue'
 import { VirtualListRef } from '../../_components/virtual-list-v2/interface'
 import { getRelativeRect } from '../../_utils/dom'
 import { getKeyDownHandler, KEYBOARD_KEY } from '../../_utils/keyboard'
@@ -77,15 +77,23 @@ export const useSelect = ({
   })
 
   const activeKey = ref<string | undefined>()
+  let active = true
+  let disposed = false
+  let scrollRequest = 0
+  const available = () => active && !disposed
+  onActivated(() => { if (!disposed) active = true })
+  onDeactivated(() => { active = false; scrollRequest++ })
+  onBeforeUnmount(() => { disposed = true; active = false; scrollRequest++ })
 
   watch(enabledOptionKeys, (enabledKeys) => {
     if (!activeKey.value || !enabledKeys.includes(activeKey.value)) {
-      // eslint-disable-next-line prefer-destructuring
-      activeKey.value = enabledKeys[0]
+      ;[activeKey.value] = enabledKeys
     }
   })
 
   const setActiveKey = (key?: string) => {
+    if (!available()) return
+    scrollRequest++
     activeKey.value = key
   }
 
@@ -108,9 +116,15 @@ export const useSelect = ({
   }
 
   const scrollIntoView = (key: string) => {
+    if (!available() || !open.value || !enabledOptionKeys.value.includes(key)) return
+    const request = ++scrollRequest
+    const dropdown = dropdownRef?.value
+    const virtual = virtualListRef?.value
     if (virtualListRef?.value) {
       virtualListRef.value.scrollTo({ key })
     }
+    if (!available() || !open.value || request !== scrollRequest ||
+      dropdownRef?.value !== dropdown || virtualListRef?.value !== virtual) return
     const optionInfo = optionInfoMap.get(key)
 
     const wrapperEle = (dropdownRef?.value as (ComponentPublicInstance & { wrapperRef?: HTMLElement }) | undefined)
@@ -135,7 +149,8 @@ export const useSelect = ({
 
   // Handling when the drop-down box is displayed/hide
   watch(open, (visible) => {
-    if (visible) {
+    const request = ++scrollRequest
+    if (visible && available()) {
       // get last value key
       const current = valueKeys.value[valueKeys.value.length - 1]
       let _activeKey = (defaultActiveFirstOption?.value ?? true) ? enabledOptionKeys.value[0] : undefined
@@ -145,16 +160,24 @@ export const useSelect = ({
       if (_activeKey !== activeKey.value) {
         activeKey.value = _activeKey
       }
-      // Execute scrollIntoView after the pop-up animation ends, otherwise unnecessary scrolling will occur
+      // Wait for render/option registration, not CSS animation completion.
+      const key = activeKey.value
+      const dropdown = dropdownRef?.value
+      const virtual = virtualListRef?.value
       nextTick(() => {
+        if (!available() || !open.value || request !== scrollRequest ||
+          (key && key !== activeKey.value) ||
+          (dropdown && dropdown !== dropdownRef?.value) ||
+          (virtual && virtual !== virtualListRef?.value)) return
+        scrollRequest++
         if (activeKey.value) {
           scrollIntoView(activeKey.value)
         }
       })
     }
-  })
+  }, { flush: 'sync' })
 
-  const handleKeyDown = getKeyDownHandler(
+  const dispatchKeyDown = getKeyDownHandler(
     new Map([
       [
         KEYBOARD_KEY.ENTER,
@@ -209,6 +232,9 @@ export const useSelect = ({
       ],
     ]),
   )
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (available()) dispatchKeyDown(event)
+  }
 
   provide(
     selectInjectionKey,
@@ -221,7 +247,9 @@ export const useSelect = ({
       valueKeys,
       activeKey,
       setActiveKey,
-      onSelect,
+      onSelect: (key: string, event: Event) => {
+        if (available() && open.value) onSelect(key, event)
+      },
       getNextSlotOptionIndex,
       addSlotOptionInfo,
       removeSlotOptionInfo,

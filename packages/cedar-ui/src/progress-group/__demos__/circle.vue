@@ -8,9 +8,9 @@ const items = [
 
 <template>
   <div style="display: flex; align-items: flex-start; gap: 48px">
-    <c-progress-group mode="circle" :items="items" status />
-    <c-progress-group mode="circle" :items="items" :circle-size="168" :stroke-width="12" status>
-      <template #status="{ value, max }">
+    <c-progress-group mode="circle" :items="items" show-text />
+    <c-progress-group mode="circle" :items="items" :circle-size="168" :stroke-width="12" show-text>
+      <template #text="{ value, max }">
         <div style="text-align: center"><strong>{{ value }}</strong><br /><small>/ {{ max }} GB</small></div>
       </template>
     </c-progress-group>

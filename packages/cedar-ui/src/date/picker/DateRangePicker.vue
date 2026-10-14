@@ -3,18 +3,17 @@
 </template>
 
 <script lang="ts">
+import { normalizeDateRange } from '../normalize-date-range';
 import type { Dayjs } from "dayjs";
 import {
   computed,
   defineComponent,
-  inject,
   nextTick,
   onUnmounted,
   reactive,
   ref,
   toRefs,
   watch,
-  watchEffect,
 } from "vue";
 import { CalendarValue, Mode, ShortcutType } from "./types";
 import { createNamespace, getPrefixCls } from "../../_utils/global-config";
@@ -27,7 +26,6 @@ import {
   dayjs,
   getNow,
   getDateValue,
-  initializeDateLocale,
 } from "../../_utils/date";
 import useState from "../../_hooks/use-state";
 import {
@@ -46,8 +44,6 @@ import useMergeState from "../../_hooks/use-merge-state";
 import useProvideDatePickerTransform from "./hooks/use-provide-datepicker-transform";
 import { EmitType } from "../../_utils/types";
 import { getReturnRangeValue } from "./hooks/use-value-format";
-import { useI18n } from "../../locale";
-import { configProviderInjectionKey } from "../../config-provider/context";
 import { dateRangePickerProps } from "./props";
 import { useRangeFieldIndex } from "../../_components/picker-field/range-field-context";
 
@@ -162,7 +158,6 @@ export default defineComponent({
       disabled,
       disabledDate,
       disabledTime,
-      locale,
       pickerValue,
       defaultPickerValue,
       valueFormat,
@@ -174,25 +169,13 @@ export default defineComponent({
       showConfirmBtn,
     } = toRefs(props);
 
-    const { locale: globalLocal } = useI18n();
-    const configCtx = inject(configProviderInjectionKey, undefined);
-    watchEffect(() => {
-      initializeDateLocale(globalLocal.value, dayStartOfWeek.value);
-    });
 
-    const mergedExchangeTime = computed(() => {
-      return !(!exchangeTime.value || !(configCtx?.exchangeTime ?? true));
-    });
 
     const mergedSize = size;
     const formDisabled = computed(() => false);
     const mergedError = error;
 
-    const datePickerT = useProvideDatePickerTransform(
-      reactive({
-        locale,
-      }),
-    );
+    const datePickerT = useProvideDatePickerTransform();
 
     const prefixCls = getPrefixCls("picker");
 
@@ -446,14 +429,10 @@ export default defineComponent({
     }
 
     function getSortedDayjsArrayByExchangeTimeOrNot(newValue: Dayjs[]) {
-      let sortedValue = getSortedDayjsArray(newValue);
-      if (hasTime.value && !mergedExchangeTime.value) {
-        sortedValue = [
-          getMergedOpValue(sortedValue[0], newValue[0]),
-          getMergedOpValue(sortedValue[1], newValue[1]),
-        ];
-      }
-      return sortedValue;
+      const normalized = normalizeDateRange(newValue.map(value => value.toDate()), {
+        type: mode.value, valueFormat: 'Date', showTime: Boolean(hasTime.value), exchangeTime: exchangeTime.value,
+      }) as Date[];
+      return normalized.map(value => dayjs(value));
     }
 
     function confirm(
@@ -462,12 +441,6 @@ export default defineComponent({
       emitOk?: boolean,
     ) {
       if (triggerDisabled.value || props.readonly) return;
-      if (
-        isDisabledDate(value?.[0], "start") ||
-        isDisabledDate(value?.[1], "end")
-      ) {
-        return;
-      }
 
       let newValue = value ? [...value] : undefined;
 
@@ -475,6 +448,7 @@ export default defineComponent({
         newValue = getSortedDayjsArrayByExchangeTimeOrNot(newValue);
       }
 
+      if (isDisabledDate(newValue?.[0], "start") || isDisabledDate(newValue?.[1], "end")) return;
       emitChange(newValue, emitOk);
       setSelectedValue(newValue || []);
       setProcessValue(undefined);

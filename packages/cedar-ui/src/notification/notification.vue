@@ -1,5 +1,12 @@
 <template>
-  <li role="alert" :class="[prefixCls, `${prefixCls}-${type}`, { [`${prefixCls}-closable`]: closable }]">
+  <li
+    role="alert"
+    :class="[
+      prefixCls,
+      `${prefixCls}-${type}`,
+      { [`${prefixCls}-closable`]: closable },
+    ]"
+  >
     <div v-if="showIcon" :class="`${prefixCls}-left`">
       <div :class="`${prefixCls}-icon`">
         <slot name="icon">
@@ -21,7 +28,13 @@
         <slot name="footer" />
       </div>
     </div>
-    <button v-if="closable" type="button" :aria-label="closeButtonAriaLabel" :class="`${prefixCls}-close-btn`" @click="handleClose">
+    <button
+      v-if="closable"
+      type="button"
+      :aria-label="closeButtonAriaLabel"
+      :class="`${prefixCls}-close-btn`"
+      @click="handleClose"
+    >
       <slot name="closeIconElement">
         <a-icon-hover>
           <slot name="closeIcon">
@@ -33,65 +46,85 @@
   </li>
 </template>
 
-<script lang="ts">
-import { defineComponent, onMounted, onUnmounted, onUpdated } from 'vue'
-import { createNamespace, getPrefixCls } from '../_utils/global-config'
-import AIconHover from '../_components/IconHover.vue'
-import { IconClose } from '@cedarjs/icons-vue/icon-close'
-import { IconInfoCircleFill } from '@cedarjs/icons-vue/icon-info-circle-fill'
-import { IconCheckCircleFill } from '@cedarjs/icons-vue/icon-check-circle-fill'
-import { IconExclamationCircleFill } from '@cedarjs/icons-vue/icon-exclamation-circle-fill'
-import { IconCloseCircleFill } from '@cedarjs/icons-vue/icon-close-circle-fill'
-import { notificationProps } from './props'
+<script setup lang="ts">
+import {
+  onActivated,
+  onBeforeUnmount,
+  onDeactivated,
+  onMounted,
+  onUpdated,
+} from "vue";
+import { createNamespace, getPrefixCls } from "../_utils/global-config";
+import AIconHover from "../_components/IconHover.vue";
+import { IconClose } from "@cedarjs/icons-vue/icon-close";
+import { IconInfoCircleFill } from "@cedarjs/icons-vue/icon-info-circle-fill";
+import { IconCheckCircleFill } from "@cedarjs/icons-vue/icon-check-circle-fill";
+import { IconExclamationCircleFill } from "@cedarjs/icons-vue/icon-exclamation-circle-fill";
+import { IconCloseCircleFill } from "@cedarjs/icons-vue/icon-close-circle-fill";
+import { notificationProps } from "./props";
 
-export default defineComponent({
-  name: createNamespace('notification').name,
-  components: {
-    AIconHover,
-    IconInfoCircleFill,
-    IconCheckCircleFill,
-    IconExclamationCircleFill,
-    IconCloseCircleFill,
-    IconClose,
-  },
-  props: notificationProps,
-  emits: ['close'],
-  setup(props, context) {
-    const prefixCls = getPrefixCls('notification')
-    let timer = 0
+defineOptions({
+  name: createNamespace("notification").name,
+});
+const props = defineProps(notificationProps);
+const emit = defineEmits(["close"]);
+const prefixCls = getPrefixCls("notification");
+let timer: number | undefined;
+let generation = 0;
+let active = false;
+let closed = false;
 
-    const handleClose = () => {
-      context.emit('close')
+const clearTimer = () => {
+  generation += 1;
+  if (timer !== undefined) {
+    window.clearTimeout(timer);
+    timer = undefined;
+  }
+};
+const handleClose = () => {
+  if (!active || closed) {
+    return;
+  }
+  closed = true;
+  clearTimer();
+  emit("close");
+};
+const startTimer = () => {
+  clearTimer();
+  if (
+    !active ||
+    closed ||
+    !Number.isFinite(props.duration) ||
+    props.duration <= 0
+  ) {
+    return;
+  }
+  const version = generation;
+  timer = window.setTimeout(() => {
+    if (version === generation && active && !closed) {
+      timer = undefined;
+      handleClose();
     }
-
-    onMounted(() => {
-      if (props.duration > 0) {
-        timer = window.setTimeout(handleClose, props.duration)
-      }
-    })
-
-    onUpdated(() => {
-      if (props.resetOnUpdate) {
-        if (timer) {
-          window.clearTimeout(timer)
-          timer = 0
-        }
-        if (props.duration > 0) {
-          timer = window.setTimeout(handleClose, props.duration)
-        }
-      }
-    })
-
-    onUnmounted(() => {
-      if (timer) {
-        window.clearTimeout(timer)
-      }
-    })
-
-    return {
-      prefixCls,
-      handleClose,
-    }
-  },
-})
+  }, props.duration);
+};
+const activate = () => {
+  if (active) {
+    return;
+  }
+  active = true;
+  startTimer();
+};
+const deactivate = () => {
+  active = false;
+  clearTimer();
+};
+onMounted(activate);
+onActivated(activate);
+onDeactivated(deactivate);
+onBeforeUnmount(deactivate);
+onUpdated(() => {
+  if (props.resetOnUpdate && active && !closed) {
+    startTimer();
+  }
+});
 </script>

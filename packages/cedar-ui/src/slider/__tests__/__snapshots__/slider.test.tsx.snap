@@ -1,16 +1,13 @@
 // Vitest Snapshot v1
 
-exports[`Slider > render 1`] = `
-"<div class=\\"c-slider\\">
-  <div class=\\"c-slider-track\\">
-    <div class=\\"c-slider-bar\\" style=\\"left: 0%; right: 100%;\\"></div>
-    <!--v-if-->
-    <!--v-if-->
-    <!--v-if-->
-    <!--v-if-->
-    <div style=\\"left: 0%;\\" tabindex=\\"0\\" role=\\"slider\\" aria-disabled=\\"false\\" aria-valuemax=\\"100\\" aria-valuemin=\\"0\\" aria-valuenow=\\"0\\" aria-valuetext=\\"0\\" class=\\"c-slider-btn\\"></div>
-    <!--teleport start-->
-    <!--teleport end-->
+exports[`Slider > installs, snapshots and SSR 1`] = `
+"<div class=\\"c-slider c-slider--horizontal\\">
+  <div class=\\"c-slider__track\\">
+    <div class=\\"c-slider__rail\\"></div>
+    <div class=\\"c-slider__fill\\" style=\\"left: 0%; width: 0%;\\"></div>
+    <div class=\\"c-slider__thumb\\" style=\\"left: 0%;\\" role=\\"slider\\" tabindex=\\"0\\" aria-valuemin=\\"0\\" aria-valuemax=\\"100\\" aria-valuenow=\\"0\\" aria-valuetext=\\"0\\" aria-orientation=\\"horizontal\\"><span class=\\"c-slider__handle\\"></span>
+      <!--v-if-->
+    </div>
   </div>
   <!--v-if-->
 </div>"

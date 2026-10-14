@@ -26,8 +26,8 @@
   </Trigger>
 </template>
 <script setup lang="ts">
-import Trigger, { type TriggerProps } from '../../trigger'
 import { createNamespace } from '../../_utils/global-config'
+import Trigger, { type TriggerProps } from '../../trigger'
 
 defineOptions({ name: createNamespace('selection-menu-presentation').name })
 defineProps<{

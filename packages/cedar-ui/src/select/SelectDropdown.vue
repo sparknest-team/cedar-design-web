@@ -33,13 +33,13 @@
 import type { PropType } from 'vue'
 import { computed, defineComponent, inject, toRefs } from 'vue'
 import { useEmptySlot } from '../_components/selection-field/empty-slot'
-import Scrollbar, { ScrollbarProps } from '../scrollbar'
 import { useComponentRef } from '../_hooks/use-component-ref'
 import { useScrollbar } from '../_hooks/use-scrollbar'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import type { EmitType } from '../_utils/types'
 import Empty from '../empty'
 import Loading from '../loading'
-import { createNamespace, getPrefixCls } from '../_utils/global-config'
+import Scrollbar, { ScrollbarProps } from '../scrollbar'
 
 const { name, n, classes } = createNamespace('select-dropdown')
 

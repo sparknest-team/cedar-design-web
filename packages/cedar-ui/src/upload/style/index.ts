@@ -1,3 +1,5 @@
 import '../../style/index.less'
 import '../../image/style'
+import '../../ripple/style'
+import '../../drawer/style'
 import './index.less'

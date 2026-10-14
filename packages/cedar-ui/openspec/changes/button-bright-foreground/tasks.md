@@ -1,0 +1,4 @@
+- [x] Preserve palette values and system on-dark/on-bright meanings.
+- [x] User decided to retain white on-dark foreground as a documented design exception; on-bright candidate is not adopted.
+- [x] Check primary solids separately without relaxing global text thresholds.
+- [x] Update public variable tables, shared guides and patch changesets.

@@ -8,6 +8,7 @@ export interface RadioNavigationItem {
   select(event: KeyboardEvent): void
 }
 export interface RadioNavigation {
+  restore(): void
   register(item: RadioNavigationItem): () => void
   tabIndex(item: RadioNavigationItem): number | undefined
   keydown(event: KeyboardEvent): void
@@ -41,6 +42,16 @@ export function useRadioNavigation(hasSelection: () => boolean): RadioNavigation
   onUpdated(refresh)
   onScopeDispose(() => { disposed = true; members.clear(); ordered.value = [] })
   return {
+    restore() {
+      // Native activation also unchecks the previous same-name member, even
+      // when a controlled parent rejects the proposed value.
+      for (const item of members) {
+        const element = item.element() as HTMLInputElement | null | undefined
+        if (element) {
+          element.checked = item.checked()
+        }
+      }
+    },
     register,
     tabIndex: item => item.disabled() ? undefined : !mounted.value && hasSelection() && !item.checked() ? -1 : item === entry.value ? 0 : -1,
     keydown(event) {

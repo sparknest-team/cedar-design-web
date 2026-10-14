@@ -39,6 +39,8 @@ function appendData(formData: FormData, data?: Awaited<UploadData>) {
 }
 
 export function uploadRequest(options: UploadRequestOptions): UploadRequest {
+  let aborted = false
+  let settled = false
   const xhr = new XMLHttpRequest()
   const file = options.file
 
@@ -47,24 +49,28 @@ export function uploadRequest(options: UploadRequestOptions): UploadRequest {
   }
 
   xhr.upload.onprogress = (event) => {
+    if (aborted || settled) return
     const percent = event.lengthComputable && event.total > 0 ? Math.round((event.loaded / event.total) * 100) : 0
     options.onProgress(Object.assign(event, { percent }))
   }
 
   xhr.onerror = (event) => {
+    if (aborted || settled) return
+    settled = true
     options.onError(getResponse(xhr) ?? event, event)
   }
 
   xhr.onload = (event) => {
-    const isSuccess = options.isSuccessResponse
-      ? options.isSuccessResponse(xhr, file)
-      : xhr.status >= 200 && xhr.status < 300
-
-    if (isSuccess) {
-      options.onSuccess(getResponse(xhr), event)
-    } else {
-      options.onError(getResponse(xhr), event)
-    }
+    if (aborted || settled) return
+    settled = true
+    let isSuccess: boolean
+    let response: unknown
+    try {
+      isSuccess = options.isSuccessResponse ? options.isSuccessResponse(xhr, file) : xhr.status >= 200 && xhr.status < 300
+      response = getResponse(xhr)
+    } catch (error) { options.onError(error, event); return }
+    if (isSuccess) options.onSuccess(response, event)
+    else options.onError(response, event)
   }
 
   Promise.all([
@@ -73,6 +79,7 @@ export function uploadRequest(options: UploadRequestOptions): UploadRequest {
     resolveValue<string>(options.name, file),
   ])
     .then(([headers, data, name]) => {
+      if (aborted || settled) return
       const formData = new FormData()
       appendData(formData, data)
       if (file.file) {
@@ -93,11 +100,12 @@ export function uploadRequest(options: UploadRequestOptions): UploadRequest {
       xhr.send(formData)
     })
     .catch((error) => {
-      options.onError(error)
+      if (!aborted && !settled) { settled = true; options.onError(error) }
     })
 
   return {
     abort() {
+      aborted = true
       xhr.abort()
     },
   }

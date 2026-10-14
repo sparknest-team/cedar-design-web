@@ -39,7 +39,7 @@
         />
         <PanelFooter
           :prefix-cls="prefixCls"
-          :show-today-btn="showNowBtn && !(showConfirmBtn || showShortcutsInBottom)"
+          :show-today-btn="showNowButton && !(showConfirmBtn || showShortcutsInBottom)"
           :show-confirm-btn="showConfirmBtn"
           :confirm-btn-disabled="confirmBtnDisabled"
           @today-btn-click="onTodayBtnClick"
@@ -156,7 +156,7 @@ export default defineComponent({
     confirmBtnDisabled: {
       type: Boolean,
     },
-    showNowBtn: {
+    showNowButton: {
       type: Boolean,
     },
     headerIcons: {
@@ -190,7 +190,7 @@ export default defineComponent({
       format,
       value,
       disabledDate,
-      showNowBtn,
+      showNowButton,
       dateRender,
       showConfirmBtn,
       headerValue,
@@ -201,7 +201,7 @@ export default defineComponent({
 
     const hasShortcuts = computed(() => Boolean(shortcuts.value && shortcuts.value.length))
 
-    const showShortcutsNowBtn = computed(() => showNowBtn.value && showConfirmBtn.value && !hasShortcuts.value)
+    const showShortcutsNowBtn = computed(() => showNowButton.value && showConfirmBtn.value && !hasShortcuts.value)
 
     const showShortcuts = computed(() => showShortcutsNowBtn.value || hasShortcuts.value)
 
@@ -282,7 +282,7 @@ export default defineComponent({
     const shortcutsProps = reactive({
       prefixCls,
       shortcuts,
-      showNowBtn: showShortcutsNowBtn,
+      showNowButton: showShortcutsNowBtn,
       onItemClick: onShortcutClick,
       onItemMouseEnter: onShortcutMouseEnter,
       onItemMouseLeave: onShortcutMouseLeave,

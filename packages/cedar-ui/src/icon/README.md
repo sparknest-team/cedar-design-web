@@ -4,6 +4,12 @@ permalink: /components/icon/
 
 # Icon
 
+## 名称切换与生命周期
+
+transition默认0，是JS视觉替换参数，不是新增CSS Token；CSS和计时使用同一归一化时长，负值／非有限值按0。时长改变取消旧阶段并立即提交当前名称。替换／减少动效变化／停用／卸载使旧计时回调失效，已消费回调不能清掉新动画。KeepAlive停用不排动画、解绑偏好监听，激活显示最新名称、不重放旧动画；监听使用实际span所属窗口，旧监听不能影响新绑定。注册／slot优先／spin保留。两端9项模拟回归各6基线失败，完整Icon Cedar20／Maple21通过，不等于真实OS或浏览器验收。
+
+<demo src="./__demos__/lifecycle.vue"></demo>
+
 图标以独立 SVG Vue 组件的形式由 `@cedarjs/icons-vue` 提供，支持按需导入和 Tree Shaking。
 
 配置 `CedarResolver()` 后，推荐使用模板标签自动按需导入。`c-icon-*` 是
@@ -154,4 +160,4 @@ import type { IconProps } from "@cedarjs/ui";
 | --- | --- |
 | `--c-icon-spin-duration` | `1s` |
 
-内置动效遵循 prefers-reduced-motion: reduce：保留内容与状态反馈，关闭装饰性旋转、扫光和波纹。Icon 名称切换跳过等待，并取消尚未结束的切换。Ripple 时长变量只控制 CSS，250ms 生命周期计时未改变，每段视觉时长应不超过 250ms；自定义动画类由调用方负责适配。
+内置动效遵循 prefers-reduced-motion: reduce：保留内容与状态反馈，关闭装饰性旋转、扫光和波纹。Icon 名称切换直接显示最新值并取消未结束阶段，CSS与JS时长保持一致；自定义动画类由调用方负责适配。Ripple的时长与清理策略以Ripple组件文档为准，不将其历史250ms规则当作Icon的时长上限。

@@ -1,17 +1,13 @@
+import type { FormLabelKey } from './use-form-label-width'
+import type { FormLayoutOptions } from './use-form-item-layout'
 import { InjectionKey } from 'vue'
 import { Data } from '../_utils/types'
 import { FieldData, FieldRule, FormItemEventHandler, ValidatedError, ValidateStatus } from './types'
 import { ComponentSize } from '../_utils/constant'
 
-export interface FormContext {
-  layout: string
+export interface FormContext extends FormLayoutOptions {
   disabled?: boolean
   readonly?: boolean
-  labelAlign: string
-  labelColProps?: any
-  wrapperColProps?: any
-  labelColStyle?: any
-  wrapperColStyle?: any
   model: Data
   size: ComponentSize
   rules?: Record<string, FieldRule | FieldRule[]>
@@ -23,8 +19,8 @@ export interface FormContext {
     field: string | string[],
     callback?: (errors: undefined | Record<string, ValidatedError>) => void,
   ) => Promise<undefined | Record<string, ValidatedError>>
-  setLabelWidth: (width: number, uid?: number) => void
-  removeLabelWidth: (uid?: number) => void
+  setLabelWidth: (width: number, uid?: FormLabelKey) => void
+  removeLabelWidth: (uid?: FormLabelKey) => void
   maxLabelWidth: number
   autoLabelWidth: boolean
   id?: string

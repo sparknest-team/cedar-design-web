@@ -1,14 +1,17 @@
-import type { PropType } from 'vue'
-import { defineComponent, TransitionGroup } from 'vue'
-import { getPrefixCls, createNamespace } from '../_utils/global-config'
-import { toKebabCase } from '../_utils/convert-case'
-import Notification from './Notification.vue'
-import { NOTIFICATION_POSITION, NotificationItem, NotificationPosition } from './types'
-import usePopupManager from '../_hooks/use-popup-manager'
-import { getSlotFunction } from '../_utils/vue-utils'
+import type { PropType } from "vue";
+import { defineComponent, TransitionGroup } from "vue";
+import { getPrefixCls, createNamespace } from "../_utils/global-config";
+import { toKebabCase } from "../_utils/convert-case";
+import Notification from "./Notification.vue";
+import {
+  NOTIFICATION_POSITION,
+  NotificationItem,
+  NotificationPosition,
+} from "./types";
+import usePopupManager from "../_hooks/use-popup-manager";
+import { getSlotFunction } from "../_utils/vue-utils";
 
-
-const { name } = createNamespace('notification-list')
+const { name } = createNamespace("notification-list");
 
 export default defineComponent({
   name,
@@ -19,28 +22,39 @@ export default defineComponent({
     },
     position: {
       type: String as PropType<NotificationPosition>,
-      default: 'topRight',
+      default: "topRight",
       validator: (value: any) => {
-        return NOTIFICATION_POSITION.includes(value)
+        return NOTIFICATION_POSITION.includes(value);
       },
     },
   },
-  emits: ['close', 'closed'],
+  emits: ["close", "closed"],
   setup(props, context) {
-    const prefixCls = getPrefixCls('notification-list')
-    const kebabPosition = toKebabCase(props.position)
-    const { zIndex } = usePopupManager('message', { runOnMounted: true })
+    // A re-added logical ID is a new item, not the old component/timer.
+    const itemKeys = new WeakMap<NotificationItem, number>();
+    let nextItemKey = 0;
+    const getItemKey = (item: NotificationItem) => {
+      let key = itemKeys.get(item);
+      if (key === undefined) {
+        key = nextItemKey++;
+        itemKeys.set(item, key);
+      }
+      return key;
+    };
+    const prefixCls = getPrefixCls("notification-list");
+    const kebabPosition = toKebabCase(props.position);
+    const { zIndex } = usePopupManager("message", { runOnMounted: true });
 
-    const isRight = props.position.includes('Right')
+    const isRight = props.position.includes("Right");
 
     return () => (
       <TransitionGroup
         {...({
           class: [prefixCls, `${prefixCls}-${kebabPosition}`],
           style: { zIndex: zIndex.value },
-          name: `slide-${isRight ? 'right' : 'left'}-notification`,
-          onAfterLeave: () => context.emit('closed'),
-          tag: 'ul',
+          name: `slide-${isRight ? "right" : "left"}-notification`,
+          onAfterLeave: () => context.emit("closed"),
+          tag: "ul",
         } as any)}
       >
         {props.notifications.map((item) => {
@@ -51,10 +65,10 @@ export default defineComponent({
             footer: getSlotFunction(item.footer),
             closeIcon: getSlotFunction(item.closeIcon),
             closeIconElement: getSlotFunction(item.closeIconElement),
-          }
+          };
           return (
             <Notification
-              key={item.id}
+              key={getItemKey(item)}
               type={item.type}
               style={item.style}
               class={item.class}
@@ -63,11 +77,11 @@ export default defineComponent({
               showIcon={item.showIcon}
               resetOnUpdate={item.resetOnUpdate}
               v-slots={slots}
-              onClose={() => context.emit('close', item.id)}
+              onClose={() => context.emit("close", item.id)}
             />
-          )
+          );
         })}
       </TransitionGroup>
-    )
+    );
   },
-})
+});

@@ -1,3 +1,4 @@
 import '../../style/index.less'
-import '../../tooltip/style'
+import '../../icon/style'
+import '../../ripple/style'
 import './index.less'

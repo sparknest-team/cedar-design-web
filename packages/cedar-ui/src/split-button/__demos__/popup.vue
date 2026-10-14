@@ -1,18 +1,17 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Message } from '@cedarjs/ui'
+import { ref } from "vue";
+import { Message } from "@cedarjs/ui";
 
-const lastAction = ref('')
+const lastAction = ref("");
 const handleSelect = (value: unknown, option: { label?: unknown }) => {
-  lastAction.value = String(value)
-  Message.info(String(option.label))
-}
+  lastAction.value = String(value);
+  Message.info(String(option.label));
+};
 </script>
 
 <template>
   <c-space direction="column" align="flex-start">
     <c-split-button
-      status="primary"
       placement="bottom-start"
       :offset-y="8"
       :popup-max-height="160"
@@ -27,7 +26,7 @@ const handleSelect = (value: unknown, option: { label?: unknown }) => {
         <c-menu-option label="暂无权限" value="restricted" disabled />
       </template>
     </c-split-button>
-    <span aria-live="polite">最近操作: {{ lastAction || '暂无操作' }}</span>
+    <span aria-live="polite">最近操作: {{ lastAction || "暂无操作" }}</span>
     <span>选择后菜单保持展开，可连续选择；点击外部关闭。</span>
   </c-space>
 </template>

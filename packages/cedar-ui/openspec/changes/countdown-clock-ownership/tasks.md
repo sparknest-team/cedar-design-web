@@ -1,0 +1,4 @@
+- [x] Reproduce six failures per platform with two existing-behavior controls.
+- [x] Repair independent sources; eight clock tests and full Countdown Cedar18 / Maple20 pass.
+- [x] Synchronize component docs, shared/menu semantic boundaries, classification and patch Changesets.
+- [ ] Real browser / cross-window RAF and OS evidence remain separate.

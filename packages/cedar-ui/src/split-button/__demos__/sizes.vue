@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { Message } from '@cedarjs/ui'
+import { Message } from "@cedarjs/ui";
 
 const publish = () => {
-  Message.info('发布成功')
-}
+  Message.info("发布成功");
+};
 const handleSelect = (_value: unknown, option: { label?: unknown }) => {
-  Message.info(String(option.label))
-}
-const sizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const
+  Message.info(String(option.label));
+};
+const sizes = ["xs", "sm", "md", "lg", "xl"] as const;
 </script>
 
 <template>
@@ -16,7 +16,6 @@ const sizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const
       v-for="size in sizes"
       :key="size"
       :size="size"
-      status="primary"
       @click="publish"
       @select="handleSelect"
     >

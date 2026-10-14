@@ -2,6 +2,8 @@
 permalink: /components/button/
 ---
 
+Button 禁用配色按 Arco 的变体逻辑区分：彩色实心使用淡化状态背景；text/outline 保持透明背景并淡化状态文字；tonal 保留浅色背景。中性按钮使用中性禁用色。禁用时暂停 color/text-color 覆盖，关闭 hover/active 反馈和阴影。
+
 # Button
 
 两端使用同一份实现和示例，组件前缀、主题基础变量与注册入口各自保留。
@@ -13,6 +15,8 @@ permalink: /components/button/
 <demo src="./__demos__/basic.vue"></demo>
 
 ### 四种变体
+
+`default` 变体的 primary、info、success、warning、danger 和 secondary 填充按钮使用白色文案。
 
 <demo src="./__demos__/variants.vue"></demo>
 
@@ -131,7 +135,7 @@ state-opacity-hover/active（0.08/0.12）用于实心、tonal 和图标容器；
 | 变量 | :root 默认值 |
 | --- | --- |
 | `--c-button-default-text-color` | `var(--c-sys-color-content-primary)` |
-| `--c-button-primary-text-color` | `var(--c-sys-color-content-on-bright)` |
+| `--c-button-primary-text-color` | `var(--c-sys-color-content-on-dark)` |
 | `--c-button-danger-text-color` | `var(--c-sys-color-content-on-bright)` |
 | `--c-button-success-text-color` | `var(--c-sys-color-content-on-bright)` |
 | `--c-button-warning-text-color` | `var(--c-sys-color-content-on-bright)` |

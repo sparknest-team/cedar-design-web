@@ -6,9 +6,19 @@ permalink: /components/time/
 
 # Time
 
+父级在确认后保持弹层展开时，没有新选择的重复确认不会重复提交；新的时间选择会开启新事务，可以再次确认。
+
+展开时，原生 combobox 通过 `aria-controls` 关联当前实例的命名弹层；关闭后同步更新状态并移除关联。`aria-label`、`aria-describedby` 可传递给原生控件。自定义 selected/触发插槽需自行保留可访问名称、键盘操作和状态关联。
+
 表单时间字段（带触发器）。内部使用 `TimePicker`。
 
 纯面板请使用 [`TimePicker`](/components/time-picker/)（默认无触发器）。时间范围字段请使用 [`TimeRange`](/components/time-range/)。
+
+### 手输与面板选择
+
+`inputEditable` 默认为 `true`（Maple 默认为 `false`）。回车或失焦提交，Esc 撤销；格式、步长、边界和禁用规则与面板一致。无效输入或父级拒绝受控更新时回到模型值；切换为不可编辑、只读或禁用会丢弃未提交输入。输入法组合期间不提交。范围两端之间移动焦点不提交。
+
+<demo src="./__demos__/text-entry.vue"></demo>
 
 ### 默认值与受控值
 

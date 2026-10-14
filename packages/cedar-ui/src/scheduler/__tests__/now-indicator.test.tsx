@@ -6,8 +6,9 @@ import Scheduler from "../Scheduler.vue";
 import { getSchedulerNowPosition } from "../core";
 import { useSchedulerNow } from "../use-now";
 afterEach(() => {
-  vi.useRealTimers();
   vi.restoreAllMocks();
+  vi.useRealTimers();
+  expect(typeof globalThis.setInterval).toBe("function");
 });
 test("local position uses fractional minutes and half-open hours on the same date", () => {
   const day = new Date(2026, 8, 16);
@@ -28,7 +29,7 @@ test("local position uses fractional minutes and half-open hours on the same dat
   expect(getSchedulerNowPosition(day, day, 20, 8)).toBeUndefined();
 });
 test("clock starts on mount, pauses when hidden/disabled, refreshes on return and cleans up", async () => {
-  vi.useFakeTimers();
+  vi.useFakeTimers({ toFake: ["Date", "setInterval", "clearInterval"] });
   vi.setSystemTime(new Date(2026, 8, 16, 10));
   const hidden = vi.spyOn(document, "hidden", "get").mockReturnValue(false);
   const Host = defineComponent({
@@ -40,33 +41,31 @@ test("clock starts on mount, pauses when hidden/disabled, refreshes on return an
       return null;
     },
   });
-  const interval = vi.spyOn(globalThis, "setInterval");
-  const clear = vi.spyOn(globalThis, "clearInterval");
   const w = mount(Host, { props: { enabled: true } });
   try {
-    expect(interval).toHaveBeenCalledTimes(1);
+    expect(vi.getTimerCount()).toBe(1);
     const first = +w.vm.now!;
     vi.advanceTimersByTime(30000);
     expect(+w.vm.now!).toBe(first + 30000);
     hidden.mockReturnValue(true);
     document.dispatchEvent(new Event("visibilitychange"));
-    expect(clear).toHaveBeenCalledWith(interval.mock.results.at(-1)!.value);
+    expect(vi.getTimerCount()).toBe(0);
     vi.setSystemTime(new Date(2026, 8, 17, 0, 1));
     hidden.mockReturnValue(false);
     document.dispatchEvent(new Event("visibilitychange"));
     expect(w.vm.now!.getDate()).toBe(17);
     await w.setProps({ enabled: false });
     expect(w.vm.now).toBeUndefined();
-    expect(clear).toHaveBeenCalledWith(interval.mock.results.at(-1)!.value);
+    expect(vi.getTimerCount()).toBe(0);
     await w.setProps({ enabled: true });
-    expect(interval).toHaveBeenCalledTimes(3);
+    expect(vi.getTimerCount()).toBe(1);
   } finally {
     w.unmount();
   }
-  expect(clear).toHaveBeenCalledWith(interval.mock.results.at(-1)!.value);
+  expect(vi.getTimerCount()).toBe(0);
 });
 test("resource columns show lines only for today, clock updates and unsupported views hide them", async () => {
-  vi.useFakeTimers();
+  vi.useFakeTimers({ toFake: ["Date", "setInterval", "clearInterval"] });
   vi.setSystemTime(new Date(2026, 8, 16, 14));
   vi.spyOn(document, "hidden", "get").mockReturnValue(false);
   const w = mount(Scheduler, {
@@ -105,8 +104,7 @@ test("resource columns show lines only for today, clock updates and unsupported 
   }
 });
 test("SSR renders no clock marker or interval", async () => {
-  vi.useFakeTimers();
-  const interval = vi.spyOn(globalThis, "setInterval");
+  vi.useFakeTimers({ toFake: ["Date", "setInterval", "clearInterval"] });
   const Host = defineComponent({
     setup() {
       const now = useSchedulerNow(() => true);
@@ -114,5 +112,5 @@ test("SSR renders no clock marker or interval", async () => {
     },
   });
   expect(await renderToString(createSSRApp(Host))).not.toContain("Date");
-  expect(interval).not.toHaveBeenCalled();
+  expect(vi.getTimerCount()).toBe(0);
 });

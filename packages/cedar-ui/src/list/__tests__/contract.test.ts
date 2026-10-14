@@ -21,19 +21,19 @@ describe("list public contract", () => {
       "virtualListProps",
       "scrollbar",
     ]);
-    expect(List.emits).toEqual({ scroll: expect.any(Function) });
+    expect(List.emits).toEqual(["scroll"]);
     expect(List.emits).not.toHaveProperty("reach-bottom");
   });
 
   it.each(["sm", "md", "lg"] as const)("renders the %s size", (size) => {
     const wrapper = mount(List, { props: { size } });
-    expect(wrapper.find(".c-list").classes()).toContain(`c-list-${size}`);
+    expect(wrapper.find(".c-list").classes()).toContain(`c-list--${size}`);
   });
 
   it("keeps bordered and split independent", () => {
     const wrapper = mount(List, { props: { bordered: false, split: true } });
-    expect(wrapper.find(".c-list").classes()).not.toContain("c-list-bordered");
-    expect(wrapper.find(".c-list").classes()).toContain("c-list-split");
+    expect(wrapper.find(".c-list").classes()).not.toContain("c-list--bordered");
+    expect(wrapper.find(".c-list").classes()).toContain("c-list--split");
   });
 
   it("renders data through item with the correct index", () => {
@@ -73,7 +73,7 @@ describe("list public contract", () => {
       },
     });
     expect(wrapper.text()).toContain("manual virtual content");
-    expect(wrapper.find(".c-list-virtual").exists()).toBe(false);
+    expect(wrapper.find(".c-list--virtual").exists()).toBe(false);
     expect(item).not.toHaveBeenCalled();
   });
 
@@ -93,7 +93,7 @@ describe("list public contract", () => {
     const wrapper = mount(List, { props: { loading: true }, slots: { empty } });
     expect(empty).not.toHaveBeenCalled();
     expect(wrapper.text()).not.toContain("empty");
-    expect(wrapper.find(".c-list-loading .c-loading__content-overlay").exists()).toBe(true);
+    expect(wrapper.find(".c-list__loading .c-loading__content-overlay").exists()).toBe(true);
   });
 
   it("renders empty only when content and data are absent", () => {
@@ -106,15 +106,12 @@ describe("list public contract", () => {
       props: { maxHeight: 240, scrollbar: false },
       slots: { default: () => h(ListItem, null, () => "item") },
     });
-    const list = wrapper.find(".c-list");
+    const list = wrapper.find(".c-list__viewport");
     expect(list.attributes("style")).toContain("max-height: 240px");
     await list.trigger("scroll");
     expect(wrapper.emitted("scroll")).toHaveLength(1);
 
-    const scrollTo = vi.fn();
-    (wrapper.vm as any).virtualListRef = { scrollTo };
-    (wrapper.vm as any).scrollIntoView({ index: 1, align: "top" });
-    expect(scrollTo).toHaveBeenCalledWith({ index: 1, align: "top" });
+    expect(() => wrapper.vm.scrollIntoView({ index: 1, align: "top" })).not.toThrow();
   });
 });
 

@@ -12,6 +12,6 @@ describe("Radio", () => {
 
   test("renders the error state", () => {
     const wrapper = mount(Radio, { props: { error: true } });
-    expect(wrapper.classes()).toContain("c-radio-error");
+    expect(wrapper.classes()).toContain("c-radio--error");
   });
 });

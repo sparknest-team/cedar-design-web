@@ -1,0 +1,5 @@
+- [x] Reproduce duplicate-close, post-close update and inactive timer failures.
+- [x] Guard timer generations and cancel resources at close/deactivation/disposal.
+- [x] Align edited SFC with script-setup convention.
+- [x] Verify 9 lifecycle tests, existing accessible-close test and SSR.
+- [x] Verify CSS consumers, types, lint and shared/menu documentation.

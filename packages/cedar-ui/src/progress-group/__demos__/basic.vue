@@ -9,5 +9,5 @@ const items: ProgressGroupItem[] = [
 </script>
 
 <template>
-  <c-progress-group :items="items" :max="128" status style="max-width: 520px" />
+  <c-progress-group :items="items" :max="128" show-text style="max-width: 520px" />
 </template>

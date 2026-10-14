@@ -66,6 +66,7 @@ const calendarLang: CedarCalendarLang = {
 }
 
 const lang: CedarLang = {
+  search: { search: 'Search', cancel: 'Cancel', history: 'Search history' },
   locale: 'en-US',
   common: {
     placeholderSelect: 'Please select',
@@ -150,7 +151,16 @@ const lang: CedarLang = {
       columnTitlePlaceholder: 'Enter column name',
     },
   },
+  carousel: {
+    label: 'Carousel',
+    previous: 'Previous slide',
+    next: 'Next slide',
+    slide: '{index} of {total}',
+    goto: 'Go to slide {index}',
+  },
   upload: {
+    download: 'Download',
+    close: 'Close',
     drag: 'Drag file to this area to upload or',
     click: 'Click to upload',
     start: 'Start',

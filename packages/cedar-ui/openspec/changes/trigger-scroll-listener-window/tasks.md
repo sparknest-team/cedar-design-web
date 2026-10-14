@@ -1,0 +1,5 @@
+- [x] Correct iframe forwarding probes; exclude initialization removal records.
+- [x] Reproduce three new listener cleanup failures per platform.
+- [x] Save binding window and verify full Trigger Cedar60 / Maple73.
+- [x] Update source classification, shared/menu/component docs and patch Changesets.
+- [ ] Real browser/OS and same-node document adoption evidence remain separate.

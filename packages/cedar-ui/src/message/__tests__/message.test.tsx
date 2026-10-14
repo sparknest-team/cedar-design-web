@@ -16,6 +16,7 @@ afterEach(async () => {
 describe("Message", () => {
   test("provides an accessible close control", async () => {
     const wrapper = mount(_MessageComponent, {
+      global: { stubs: { transition: false } },
       props: { open: true, popupContainer: false, closable: true, duration: 0 },
     });
     await wrapper.get('button[aria-label="Close message"]').trigger("click");
@@ -23,6 +24,7 @@ describe("Message", () => {
     expect(wrapper.find(".c-message-icon-hover").exists()).toBe(true);
     expect(messageProps.duration.validator(0)).toBe(true);
     expect(wrapper.emitted("update:open")).toEqual([[false]]);
+    wrapper.unmount();
   });
 
   test("renders messages created by Message.info", async () => {
@@ -86,6 +88,7 @@ test("message variants apply to component, service, defaults and id updates", as
   expect(messageProps.variant.default).toBe("neutral");
   expect(messageProps.variant.validator("tonal")).toBe(true);
   const wrapper = mount(_MessageComponent, {
+    global: { stubs: { transition: false } },
     props: { open: true, popupContainer: false, duration: 0 },
   });
   expect(wrapper.find(".c-message--variant-neutral").exists()).toBe(true);

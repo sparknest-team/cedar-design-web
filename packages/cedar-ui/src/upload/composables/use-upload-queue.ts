@@ -1,96 +1,38 @@
-import { computed, ref, watch } from 'vue'
-import { revokeThumbnailUrl } from '../utils/thumbnail'
+import { computed, nextTick, ref } from 'vue'
 import type { UploadFileItem, UploadStatus } from '../interfaces'
-
-function cloneFile(file: UploadFileItem): UploadFileItem {
-  return {
-    ...file,
-    status: file.status || 'success',
-    percent: file.percent ?? (file.status === 'error' ? 0 : 100),
-  }
-}
-
 export function useUploadQueue(options: {
   modelValue?: () => UploadFileItem[] | undefined
   defaultValue?: () => UploadFileItem[] | undefined
-  onChange?: (files: UploadFileItem[], file: UploadFileItem) => void
+  onChange?: (files: UploadFileItem[], file?: UploadFileItem) => void
   onUpdateModelValue?: (files: UploadFileItem[]) => void
 }) {
-  const innerFileList = ref<UploadFileItem[]>((options.defaultValue?.() || []).map(cloneFile))
-  const mergedFileList = computed(() => options.modelValue?.() || innerFileList.value)
-
-  watch(
-    () => options.modelValue?.(),
-    (files) => {
-      if (files) {
-        innerFileList.value = files.map(cloneFile)
-      }
-    },
-    { deep: true },
-  )
-
-  function commit(next: UploadFileItem[], changedFile: UploadFileItem) {
-    if (!options.modelValue?.()) {
-      innerFileList.value = next
-    }
-
+  const inner = ref<UploadFileItem[]>((options.defaultValue?.() ?? []).map(file => ({ ...file })))
+  const fileList = computed(() => options.modelValue?.() ?? inner.value)
+  let pending: UploadFileItem[] | undefined
+  let pendingBase: UploadFileItem[] | undefined
+  const mutationList = () => pending && fileList.value === pendingBase ? pending : fileList.value
+  function commit(next: UploadFileItem[], changed?: UploadFileItem) {
+    pendingBase = fileList.value
+    pending = next
+    if (options.modelValue?.() === undefined) inner.value = next
+    nextTick(() => { if (pending === next) { pending = undefined; pendingBase = undefined } })
     options.onUpdateModelValue?.(next)
-    options.onChange?.(next, changedFile)
+    options.onChange?.(next, changed)
   }
-
-  function append(files: UploadFileItem[]) {
-    const next = [...mergedFileList.value, ...files]
-    files.forEach((file) => commit(next, file))
+  function append(files: UploadFileItem[]) { if (files.length) commit([...mutationList(), ...files], files[0]) }
+  function patch(uid: string, values: Partial<UploadFileItem>) {
+    const found = mutationList().find(file => file.uid === uid)
+    if (!found) return
+    const changed = { ...found, ...values }
+    commit(mutationList().map(file => file.uid === uid ? changed : file), changed)
   }
-
-  function patch(uid: string, patcher: Partial<UploadFileItem> | ((file: UploadFileItem) => Partial<UploadFileItem>)) {
-    const next = mergedFileList.value.map((file) => {
-      if (file.uid !== uid) {
-        return file
-      }
-
-      const patch = typeof patcher === 'function' ? patcher(file) : patcher
-      return { ...file, ...patch }
-    })
-    const changedFile = next.find((file) => file.uid === uid)
-    if (changedFile) {
-      commit(next, changedFile)
-    }
-  }
-
   function remove(file: UploadFileItem) {
-    revokeThumbnailUrl(file)
-    const removedFile = { ...file, status: 'removed' as const }
-    const next = mergedFileList.value.filter((item) => item.uid !== file.uid)
-    commit(next, removedFile)
+    if (mutationList().some(item => item.uid === file.uid)) commit(mutationList().filter(item => item.uid !== file.uid), { ...file, status: 'removed' })
   }
-
   function clearByStatus(status: UploadStatus) {
-    const removing = mergedFileList.value.filter((file) => file.status === status)
-    removing.forEach(revokeThumbnailUrl)
-    const next = mergedFileList.value.filter((file) => file.status !== status)
-    if (removing[0]) {
-      commit(next, { ...removing[0], status: 'removed' })
-    }
+    const first = mutationList().find(file => file.status === status)
+    if (first) commit(mutationList().filter(file => file.status !== status), { ...first, status: 'removed' })
   }
-
-  function reset() {
-    mergedFileList.value.forEach(revokeThumbnailUrl)
-    innerFileList.value = []
-    options.onUpdateModelValue?.([])
-  }
-
-  function getFiles(status?: UploadStatus) {
-    return status ? mergedFileList.value.filter((file) => file.status === status) : [...mergedFileList.value]
-  }
-
-  return {
-    fileList: mergedFileList,
-    append,
-    patch,
-    remove,
-    reset,
-    clearByStatus,
-    getFiles,
-  }
+  function reset() { if (fileList.value.length) commit([]) }
+  return { fileList, append, patch, remove, reset, clearByStatus, getFiles: (status?: UploadStatus) => fileList.value.filter(file => !status || file.status === status) }
 }

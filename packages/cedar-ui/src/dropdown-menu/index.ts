@@ -25,3 +25,5 @@ export default DropdownMenu
 
 export { menuOptionProps } from './option-props'
 export type { MenuOptionProps } from './option-props'
+
+export type { DropdownMenuStrategy, DropdownMenuSubmenuTrigger, DropdownMenuReference } from './types'

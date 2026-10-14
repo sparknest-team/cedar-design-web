@@ -1,4 +1,6 @@
 import type { PropType } from 'vue'
+import type { DateTimePickerOptions } from '../date/time-picker-options'
+import type { DateRangePickerOptions } from './picker-props'
 import { fieldDecoratorProps } from '../field-decorator/props'
 import { popupContainerProp, type PopupContainer } from '../_utils/popup-container'
 import { dateRuleProps, dateRangeValueProps } from '../date/core-props'
@@ -12,10 +14,8 @@ export const dateRangeProps = {
   disableConfirm: Boolean,
   popupContainer: popupContainerProp,
   popupProps: { type: Object as PropType<Record<string, unknown> & { popupContainer?: PopupContainer }>, default: () => ({}) },
-  dateRangePickerProps: { type: Object as PropType<Record<string, unknown>>, default: () => ({}) },
-  datePickerProps: { type: Object as PropType<Record<string, unknown>>, default: () => ({}) },
-  timePickerProps: { type: Object as PropType<Record<string, unknown>>, default: () => ({}) },
-  pickerProps: { type: Object as PropType<Record<string, unknown>>, default: () => ({}) },
+  dateRangePickerProps: { type: Object as PropType<DateRangePickerOptions>, default: () => ({}) },
+  timePickerProps: { type: Object as PropType<DateTimePickerOptions>, default: () => ({}) },
   inputEditable: { type: Boolean, default: true },
   disabled: { type: [Boolean, Array] as PropType<boolean | boolean[]>, default: undefined },
   readonly: { type: Boolean, default: undefined },

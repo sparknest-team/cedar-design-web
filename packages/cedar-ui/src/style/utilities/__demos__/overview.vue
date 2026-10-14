@@ -67,13 +67,13 @@
 }
 
 .spacing-stage {
-  display: c-flex;
-  c-flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
   gap: 8px;
 }
 
 .box {
-  display: c-inline-block;
+  display: inline-block;
 }
 
 .inner {

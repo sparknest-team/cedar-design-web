@@ -11,13 +11,6 @@ import type { DisabledTimeProps, FormatFunc, Mode, ShortcutType, WeekStart } fro
 export const pickerProps = {
     disableConfirm: Boolean,
     /**
-     * @zh 国际化配置，用于覆盖locale中的 `datePicker` 字段
-     * @en Internationalization configuration, used to cover the locale file in the `datePicker` field
-     */
-    locale: {
-      type: Object as PropType<Record<string, any>>,
-    },
-    /**
      * @zh 没有触发元素，只显示选择面板
      * @en There is no trigger element, only the selection panel is displayed
      * */
@@ -205,7 +198,7 @@ export const pickerProps = {
     timePickerProps: {
       type: Object as PropType<Partial<TimePickerProps>>,
     },
-    showNowBtn: {
+    showNowButton: {
       type: Boolean,
       default: true,
     },
@@ -365,9 +358,6 @@ export const dateRangePickerProps = {
       default: true,
     },
     popupContainer: popupContainerProp,
-    locale: {
-      type: Object as PropType<Record<string, any>>,
-    },
     clearable: {
       type: Boolean,
       default: true,
@@ -524,7 +514,7 @@ export const datePickerProps = {
      * @zh 是否显示 `showTime` 时，选择当前时间的按钮
      * @en Whether to display the now button when showTime
      */
-    showNowBtn: {
+    showNowButton: {
       type: Boolean,
       default: true,
     },

@@ -65,6 +65,7 @@ const calendarLang: CedarCalendarLang = {
 }
 
 const lang: CedarLang = {
+  search: { search: '搜索', cancel: '取消', history: '搜索历史' },
   locale: 'zh-CN',
   common: {
     placeholderSelect: '请选择',
@@ -149,7 +150,16 @@ const lang: CedarLang = {
       columnTitlePlaceholder: '请输入列名称',
     },
   },
+  carousel: {
+    label: '轮播',
+    previous: '上一页',
+    next: '下一页',
+    slide: '第 {index} 页，共 {total} 页',
+    goto: '切换到第 {index} 页',
+  },
   upload: {
+    download: '下载',
+    close: '关闭',
     drag: '将文件拖拽到此处，或',
     click: '点击上传',
     start: '开始',

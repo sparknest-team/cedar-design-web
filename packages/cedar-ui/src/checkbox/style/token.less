@@ -9,33 +9,21 @@
   --c-checkbox-label-text-color-disabled: var(--c-sys-color-content-disabled);
   --c-checkbox-label-font-size: var(~"--c-font-size-body-3");
   --c-checkbox-label-gap: var(~"--c-spacing-4");
-  --c-checkbox-action-padding: calc(
-    (var(~"--c-internal-checkbox-hover-size") / 2) -
-      (var(~"--c-checkbox-control-size") / 2)
-  );
+  --c-checkbox-action-padding: 5px;
   --c-checkbox-group-gap: var(~"--c-spacing-7");
   --c-checkbox-animation-duration: var(~"--c-transition-duration-3");
 
-  // Rendering details are private and may differ between platforms.
-  --c-internal-checkbox-border-width: var(~"--c-border-width-2");
-  --c-internal-checkbox-border-style: solid;
-  --c-internal-checkbox-border-radius: var(~"--c-border-radius-sm");
-  --c-internal-checkbox-hover-size: var(~"--c-size-6");
+  // Independent copies of rendering details; platform defaults live above.
+  --c-internal-checkbox-border-width: 1px;
+  --c-internal-checkbox-border-radius: 2px;
+  --c-internal-checkbox-action-radius: 50%;
+  --c-internal-checkbox-focus-width: 2px;
+  --c-internal-checkbox-focus-offset: 2px;
   --c-internal-checkbox-hover-background: var(--c-sys-color-state-hover);
   --c-internal-checkbox-background: var(--c-sys-color-surface-default);
   --c-internal-checkbox-background-disabled: var(--c-sys-color-surface-muted);
-  --c-internal-checkbox-background-checked-disabled: var(--c-checkbox-control-color-disabled);
-  --c-internal-checkbox-border-color-hover: var(--c-checkbox-control-color);
-  --c-internal-checkbox-group-vertical-line-height: var(~"--c-size-8");
-  --c-internal-checkbox-check-icon-size: var(~"--c-size-2");
-  --c-internal-checkbox-check-icon-color: var(--c-sys-color-surface-default);
-  --c-internal-checkbox-check-icon-color-disabled: var(--c-sys-color-surface-default);
-  --c-internal-checkbox-indeterminate-icon-width: 6px;
-  --c-internal-checkbox-indeterminate-icon-height: 2px;
-  --c-internal-checkbox-indeterminate-icon-color: var(--c-sys-color-surface-default);
-  --c-internal-checkbox-hover-duration: var(~"--c-transition-duration-1");
-  --c-internal-checkbox-linear: var(~"--c-transition-timing-function-linear");
-  --c-internal-checkbox-overshoot: var(
-    ~"--c-transition-timing-function-overshoot"
-  );
+  --c-internal-checkbox-mark-size: 75%;
+  --c-internal-checkbox-mark-height: 2px;
+  --c-internal-checkbox-mark-radius: 1px;
+  --c-internal-checkbox-mark-color: var(--c-sys-color-surface-default);
 }

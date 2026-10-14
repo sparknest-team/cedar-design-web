@@ -1,0 +1,4 @@
+- [x] Reproduce three new regressions per platform, retaining five existing resize tests.
+- [x] Fix separate binding/frame generation ownership in independent sources.
+- [x] Full Trigger Cedar63 / Maple76 pass; synchronize docs, classification and Changesets.
+- [ ] Remaining target/document boundaries and real browser/OS evidence remain separate.

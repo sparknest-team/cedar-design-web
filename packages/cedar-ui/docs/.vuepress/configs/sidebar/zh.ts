@@ -514,6 +514,10 @@ export const zhSideBar: SidebarOptions = {
           link: "/components/watermark/",
         },
         {
+          text: "Ripple 水波指令",
+          link: "/components/ripple/",
+        },
+        {
           text: "Scrollbar 滚动条",
           link: "/components/scrollbar/",
         },

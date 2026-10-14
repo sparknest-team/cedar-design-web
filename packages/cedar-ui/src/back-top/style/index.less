@@ -20,13 +20,20 @@
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 
-  > svg { width: var(--c-back-top-icon-size); height: var(--c-back-top-icon-size); }
-  &--inline { position: absolute; }
+  > svg {
+    width: var(--c-back-top-icon-size);
+    height: var(--c-back-top-icon-size);
+  }
+  &--inline {
+    position: absolute;
+  }
   &:focus-visible {
     outline: var(--c-back-top-focus-width) solid var(--c-back-top-focus-color);
     outline-offset: var(--c-back-top-focus-offset);
   }
   @media (hover: hover) {
-    &:hover { background: var(--c-back-top-hover-background); }
+    &:hover {
+      background: var(--c-back-top-hover-background);
+    }
   }
 }

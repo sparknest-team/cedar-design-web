@@ -1,9 +1,9 @@
 import { defineComponent, inject, PropType } from 'vue'
 import { useEmptySlot } from '../_components/selection-field/empty-slot'
-import Scrollbar from '../scrollbar'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import Empty from '../empty'
 import Loading from '../loading'
-import { createNamespace, getPrefixCls } from '../_utils/global-config'
+import Scrollbar from '../scrollbar'
 import CascaderOption from './cascader-option'
 import { CascaderOptionInfo } from './types'
 

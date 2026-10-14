@@ -2,7 +2,7 @@
 permalink: /components/style/elevation/
 ---
 
-## 海拔 Elevation
+# 海拔 Elevation
 
 Material 式海拔阴影 `c-elevation--0` … `c-elevation--24`，表现元素立体层次。
 

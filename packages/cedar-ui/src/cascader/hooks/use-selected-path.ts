@@ -61,8 +61,7 @@ export const useSelectedPath = (
     let target = key ? optionMap.get(key) : undefined
     if (expandChild.value) {
       while (target && target.children && target.children.length > 0) {
-        // eslint-disable-next-line prefer-destructuring
-        target = target.children[0]
+        ;[target] = target.children
       }
     }
     return target

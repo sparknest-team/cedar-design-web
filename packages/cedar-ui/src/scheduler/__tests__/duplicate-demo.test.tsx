@@ -45,11 +45,18 @@ test("demo copies all-day/backlog drafts, preserves failed draft and retries", a
     expect(editor.props("open")).toBe(true);
     expect(editor.props("error")?.code).toBe("rejected");
     expect(w.getComponent(Scheduler).props("modelValue")).toHaveLength(3);
-    w.getComponent(Checkbox).vm.$emit("update:modelValue", false);
-    await flushPromises();
+    expect(w.getComponent(Checkbox).props("modelValue")).toBe(false);
     editor.vm.$emit("save", editor.props("event"));
     await new Promise((r) => setTimeout(r, 250));
     await flushPromises();
+    expect(w.getComponent(Scheduler).props("modelValue")).toHaveLength(4);
+    await click("复制评审会议");
+    editor.vm.$emit("save", editor.props("event"));
+    await flushPromises();
+    expect(editor.props("error")?.code).toBe("capacity");
+    editor.vm.$emit("update:open", false);
+    await flushPromises();
+    expect(editor.props("error")).toBeUndefined();
     expect(w.getComponent(Scheduler).props("modelValue")).toHaveLength(4);
   } finally {
     w.unmount();

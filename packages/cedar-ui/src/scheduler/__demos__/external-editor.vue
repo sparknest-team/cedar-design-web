@@ -3,7 +3,7 @@
     关闭内置编辑器，统一接收工具栏、日期格、卡片拖入及已有日程请求，使用独立
     Dialog。取消不写入，保存失败保留表单。
   </p>
-  <c-checkbox v-model="reject">模拟接口保存失败</c-checkbox>
+  <c-checkbox v-model="reject">下一次模拟接口提交失败</c-checkbox>
   <c-scheduler
     ref="scheduler"
     v-model="events"
@@ -125,7 +125,10 @@ function openEditor(value: SchedulerEditorRequest) {
   open.value = true;
 }
 const beforeChange: SchedulerBeforeChange = async () => {
-  if (reject.value) throw new Error("模拟接口保存失败，请关闭模拟开关后重试");
+  if (reject.value) {
+    reject.value = false;
+    throw new Error("模拟接口提交失败，请保留草稿直接重试");
+  }
   return true;
 };
 function showError(error: unknown) {

@@ -1,6 +1,6 @@
 import { withInstall } from "../_utils/global-config";
-import _List from "./list";
-import _ListItem from "./list-item";
+import _List from "./list.vue";
+import _ListItem from "./list-item.vue";
 import { listProps } from "./props";
 
 const List = withInstall(
@@ -13,7 +13,7 @@ const List = withInstall(
 
 export type ListInstance = InstanceType<typeof _List>;
 export type ListItemInstance = InstanceType<typeof _ListItem>;
-export type { ListProps } from "./props";
+export type { ListProps, ListSize, ListVirtualListProps, ListScrollbarProps, ListExpose, ListSlots, ListEmits } from "./props";
 
 export { _ListItem as ListItem };
 

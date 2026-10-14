@@ -25,19 +25,3 @@
     -webkit-text-fill-color: var(~'--c-field-control-text-color-disabled');
   }
 }
-
-.field-decorator-native-size(@size) {
-  padding-top: var(~'--c-internal-field-size-@{size}-padding-y');
-  padding-bottom: var(~'--c-internal-field-size-@{size}-padding-y');
-  font-size: var(~'--c-internal-field-size-@{size}-font-size');
-  line-height: var(~'--c-internal-field-size-@{size}-line-height');
-}
-
-// 兼容旧 mixin 名（逐步删除调用方后可移除）
-.input-style() {
-  .field-decorator-native-style();
-}
-
-.input-size(@size) {
-  .field-decorator-native-size(@size);
-}

@@ -1,28 +1,10 @@
-import { toRefs, provide } from 'vue'
-import { dayjs } from '../../../_utils/date'
+import { provide } from 'vue'
 import { useI18n } from '../../../locale'
-import { BasePickerProps } from '../types'
-import { getValueByPath } from '../../../_utils/get-value-by-path'
-import { PickerContext, PickerInjectionKey } from '../context'
+import { PickerInjectionKey, type PickerContext } from '../context'
 
-interface DatePickerTransform {
-  locale?: BasePickerProps['locale']
-}
-
-export default function useDatePickerTransform(props: DatePickerTransform) {
-  const { locale } = toRefs(props)
-  const { locale: i18nLocale, t } = useI18n()
-  dayjs.locale(i18nLocale.value.toLowerCase())
-
-  const datePickerT: typeof t = (key: string, ...args: any[]): any => {
-    const keyForLocale = key.startsWith('datePicker.') ? key.split('.').slice(1).join('.') : key
-
-    return getValueByPath(locale?.value || {}, keyForLocale) || t(key, ...args)
-  }
-
-  provide<PickerContext>(PickerInjectionKey, {
-    datePickerT,
-  })
-
-  return datePickerT
+/** 日期标签与动作都使用全局 Locale/ConfigProvider，不维护第二份组件字典。 */
+export default function useDatePickerTransform() {
+  const { t } = useI18n()
+  provide<PickerContext>(PickerInjectionKey, { datePickerT: t })
+  return t
 }

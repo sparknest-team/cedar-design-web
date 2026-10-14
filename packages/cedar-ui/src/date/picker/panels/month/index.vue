@@ -41,6 +41,8 @@ import PanelHeader, { HeaderLabelClickFunc } from '../Header.vue'
 import PanelBody from '../Body.vue'
 import useInjectDatePickerTransform from '../../hooks/use-inject-datepicker-transform'
 
+import { dateMonthLabel } from '../../../date-labels'
+
 const MONTH_LIST = [
   'January',
   'February',
@@ -110,9 +112,10 @@ export default defineComponent({
 
     const rows = computed(() => {
       const year = headerValue.value.year()
-      const isAbbr = props.abbreviation ? 'short' : 'long'
       const flatData = newArray<Cell>(CELL_COUNT).map((_, index) => ({
-        label: datePickerT(`datePicker.month.${isAbbr}.${MONTH_LIST[index]}`),
+        label: dateMonthLabel(props.abbreviation,
+          datePickerT(`datePicker.month.short.${MONTH_LIST[index]}`),
+          datePickerT(`datePicker.month.long.${MONTH_LIST[index]}`)),
         value: dayjs(`${year}-${index + 1}`, 'YYYY-M'),
       }))
       const rows = newArray(ROW_COUNT).map((_, index) => flatData.slice(index * COL_COUNT, (index + 1) * COL_COUNT))

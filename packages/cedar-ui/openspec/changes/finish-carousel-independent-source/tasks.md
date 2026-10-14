@@ -1,0 +1,5 @@
+- [x] Define complete shared props, item context and public types.
+- [x] Repair controlled model, layout, pointer and autoplay lifecycle.
+- [x] Copy complete Cedar source to Maple with local imports/prefix only.
+- [x] Align tokens, demos, documentation and changesets.
+- [x] Verify targeted tests, lint, type checks and source parity.

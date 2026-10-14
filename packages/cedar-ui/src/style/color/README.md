@@ -2,7 +2,7 @@
 permalink: /components/color/
 ---
 
-## 颜色 Color
+# 颜色 Color
 
 语义色工具类带库前缀：Cedar `c-*`，Maple `mp-*`（变量 `--c-*` / `--mp-*`）。
 完整色阶与语义变量见 [色板 Palette](/components/palette/)。

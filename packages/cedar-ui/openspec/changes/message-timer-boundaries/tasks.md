@@ -1,0 +1,6 @@
+- [x] Reproduce inactive update, retained restart, exhausted hover and non-finite duration behavior.
+- [x] Add active ownership and KeepAlive cleanup in independent platform copies.
+- [x] Preserve zero/reset/remaining-time behavior and old generation guard.
+- [x] Pass complete Message suites: Cedar26 and Maple34.
+- [x] Sync component docs, shared standard, menu guides and patch Changesets.
+- [x] Separate simulated evidence from future native IAB and OS acceptance.

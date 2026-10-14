@@ -11,7 +11,7 @@ import { computed, inject, ref, unref, useSlots } from 'vue'
 import { createNamespace } from '../_utils/global-config'
 import DropdownMenuView from './view'
 import { menuInjectionKey } from './context'
-import { panelAppearance } from './platform'
+import { panelAppearance } from './appearance'
 defineOptions({ name: createNamespace('dropdown-menu-panel').name })
 const props = defineProps({ isEmpty: Boolean, bottomOffset: { type: Number, default: 0 }, elevation: { type: [Boolean, Number], default: true }, submenu: Boolean })
 const emit = defineEmits(['scroll', 'reach-bottom'])

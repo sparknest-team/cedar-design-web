@@ -2,7 +2,7 @@
 permalink: /components/style/utilities/
 ---
 
-## Utilities 工具类总览
+# Utilities 工具类总览
 
 Cedar / Maple 语义与结构一致，**类名必须带库前缀**（`c-` / `mp-`），变量分别为 `--c-*` / `--mp-*`，避免两端混用撞名。  
 不做无前缀别名，不做向后兼容。

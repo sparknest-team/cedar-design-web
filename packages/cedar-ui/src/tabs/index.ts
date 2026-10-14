@@ -21,4 +21,5 @@ export const _TabPaneComponent = _TabPane
 export const _TabsItemsComponent = _TabsItems
 export { Tabs, _TabPane as TabPane, _TabNav as TabNav, _TabsNavs as TabsNavs, _TabItem as TabItem, _TabsItems as TabsItems }
 export * from './props'
+export type { TabsEmits, TabsSlots, TabNavSlots, TabPaneSlots, TabsNavsSlots, TabsItemsSlots, TabItemSlots, TabsNavsExpose } from './types'
 export default Tabs

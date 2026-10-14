@@ -1,6 +1,6 @@
-import { InjectionKey } from 'vue'
+import type { InjectionKey } from 'vue'
 
-export const PickerInjectionKey: InjectionKey<string> = Symbol('PickerInjectionKey')
+export const PickerInjectionKey: InjectionKey<PickerContext> = Symbol('PickerInjectionKey')
 
 export type PickerContext = Readonly<{
   datePickerT: (key: string, ...args: any[]) => any

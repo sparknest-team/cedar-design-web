@@ -8,6 +8,8 @@ permalink: /components/checkbox/
 
 ## 案例
 
+分组示例覆盖父级接受/拒绝更新、只读和异步选项回显；移除选项不会清空业务值。示例外层 Space 的纵向布局使用 `direction="column"`，与选择组自身的 `direction="vertical"` 分开理解。
+
 ### 基础用法
 
 基础用法。
@@ -28,7 +30,7 @@ permalink: /components/checkbox/
 
 ### 复选框组
 
-通过 `CheckboxGroup`组件展示复选框组。设置`direction="column"`可以展示竖向的复选框组
+通过 `CheckboxGroup`组件展示复选框组。设置`direction="vertical"`可以展示竖向的复选框组
 
 <demo src="./__demos__/checkbox-group.vue"></demo>
 
@@ -101,6 +103,16 @@ CheckboxGroup 使用 `ChoiceValue[]`，`max` 只接受 number，请使用 `:max=
 
 <demo src="./__demos__/group-methods.vue"></demo>
 
+### 原生控件与外观
+
+两端主体均独立复制为原生 checkbox + label。Tab 聚焦，空格/Enter 切换；只读可聚焦，禁用不可聚焦。半选通过 aria-checked="mixed" 表达，点击标签只激活一次。没有可见标签时设置 aria-label；name 传到原生输入，子项未设置时继承 Group。
+
+icon-size 接受像素数字或 CSS 长度字符串，不是 ComponentSize 档位；默认图标 Cedar 为 14px、Maple 为 24px。实例颜色仅作用于普通状态，错误和禁用颜色优先。checkbox 插槽覆盖整个控件外观（也可在 Group 上统一设置），checked-icon、unchecked-icon、indeterminate-icon 仅替换对应图标。以上图标槽是装饰内容，不应放置另一个独立可聚焦控件。
+
+<demo src="./__demos__/native-control.vue"></demo>
+
+<demo src="./__demos__/custom-control.vue"></demo>
+
 ## API
 
 `ChoiceValue = string | number | boolean`；`CheckboxModel = boolean | ChoiceValue[]`；`RadioModel = ChoiceValue | null`。
@@ -115,7 +127,14 @@ CheckboxGroup 使用 `ChoiceValue[]`，`max` 只接受 number，请使用 `:max=
 | disabled | 是否禁用；未设置时继承表单/分组 | boolean | undefined |
 | readonly | 是否只读；未设置时继承表单/分组 | boolean | undefined |
 | error | 错误态；未设置时继承表单/分组 | boolean | undefined |
-| indeterminate        | 是否为半选状态             | boolean                                       | false  |
+| indeterminate | 是否为半选状态 | boolean | false |
+| checked-color | 实例选中颜色；错误/禁用优先 | string | undefined |
+| unchecked-color | 实例未选中颜色；错误/禁用优先 | string | undefined |
+| icon-size | 数字为 px，字符串为 CSS 长度 | number \| string | undefined |
+| ripple | 是否启用波纹 | boolean | true |
+| uninject-group-context | 脱离外层 CheckboxGroup，仍参与表单 | boolean | false |
+| name | 原生字段名，未设置时继承 Group | string | undefined |
+| aria-label | 无可见标签时的无障碍名称 | string | undefined |
 
 ### Checkbox Events
 
@@ -123,6 +142,7 @@ CheckboxGroup 使用 `ChoiceValue[]`，`max` 只接受 number，请使用 `:max=
 | ------ | ---------------- | ---------------------------------------------------------- |
 | update:model-value | 提议新值 | value: CheckboxModel |
 | change | 值变化 | value: CheckboxModel, event?: Event |
+| click | 点击；禁用不触发 | event: MouseEvent |
 | focus | 聚焦 | event: FocusEvent |
 | blur | 失焦 | event: FocusEvent |
 
@@ -138,7 +158,11 @@ CheckboxGroup 使用 `ChoiceValue[]`，`max` 只接受 number，请使用 `:max=
 
 | 插槽名   | 说明         | 参数                                   |
 | -------- | ------------ | -------------------------------------- |
-| checkbox | 自定义复选框 | checked: boolean<br/>disabled: boolean |
+| checkbox | 自定义完整控件外观 | checked: boolean, disabled: boolean, indeterminate: boolean |
+| checked-icon | 选中图标 | - |
+| unchecked-icon | 未选中图标 | - |
+| indeterminate-icon | 半选图标 | - |
+| default | 标签 | checked: boolean |
 
 ### CheckboxGroup Props
 
@@ -153,6 +177,8 @@ CheckboxGroup 使用 `ChoiceValue[]`，`max` 只接受 number，请使用 `:max=
 | readonly | 是否只读；未设置时继承表单/分组 | boolean | undefined |
 | error | 错误态；未设置时继承表单/分组 | boolean | undefined |
 | field-names | 选项字段映射 | ChoiceFieldNames | undefined |
+| name | 组内原生输入字段名 | string | undefined |
+| aria-label | 分组无障碍名称 | string | undefined |
 
 ### CheckboxGroup Methods
 
@@ -205,3 +231,20 @@ import type { CheckboxProps } from '@cedarjs/ui'
 ### 减少动态效果
 
 内置 CSS 过渡遵循 `prefers-reduced-motion: reduce`。关闭过渡不改变最终显隐、选中／展开状态及事件语义；插槽内自定义动画由应用自行控制。
+
+### 样式变量
+
+| 变量名 | 默认值 |
+| --- | --- |
+| `--c-checkbox-control-color` | `var(--c-sys-color-content-secondary)` |
+| `--c-checkbox-control-color-checked` | `var(--c-sys-color-content-brand)` |
+| `--c-checkbox-control-color-disabled` | `var(--c-sys-color-content-disabled)` |
+| `--c-checkbox-control-color-error` | `var(--c-sys-color-content-danger)` |
+| `--c-checkbox-control-size` | `14px` |
+| `--c-checkbox-label-text-color` | `var(--c-sys-color-content-primary)` |
+| `--c-checkbox-label-text-color-disabled` | `var(--c-sys-color-content-disabled)` |
+| `--c-checkbox-label-font-size` | `var(--c-font-size-body-3)` |
+| `--c-checkbox-label-gap` | `var(--c-spacing-4)` |
+| `--c-checkbox-action-padding` | `5px` |
+| `--c-checkbox-group-gap` | `var(--c-spacing-7)` |
+| `--c-checkbox-animation-duration` | `var(--c-transition-duration-3)` |

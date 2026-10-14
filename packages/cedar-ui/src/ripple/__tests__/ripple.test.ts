@@ -10,6 +10,7 @@ const Wrapper = defineComponent({
 })
 
 afterEach(() => {
+  vi.restoreAllMocks()
   vi.useRealTimers()
 })
 
@@ -22,6 +23,7 @@ describe('Ripple', () => {
 
   test('supports keyboard feedback and disabled state', async () => {
     vi.useFakeTimers()
+    vi.spyOn(performance, 'now').mockImplementation(() => Date.now())
     const wrapper = mount(Wrapper, { attachTo: document.body })
     await wrapper.trigger('keydown', { key: 'Enter' })
     vi.advanceTimersByTime(60)

@@ -4,10 +4,7 @@
       <slot name="icon" :size="normalizedImageSize" />
     </div>
     <div v-else :class="n('image-container')" aria-hidden="true">
-      <div
-        :class="classes(n('image'), n(status), [animation, n('--animated')])"
-        :style="imageStyle"
-      >
+      <div :class="classes(n('image'), n(status), [animation, n('--animated')])" :style="imageStyle">
         <component :is="statusComponent" />
       </div>
     </div>
@@ -28,23 +25,21 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue";
-import { createNamespace } from "../_utils/global-config";
-import { toSizeUnit } from "../_utils/maple/elements";
-import { resultStatusComponents } from "./platform";
-import { resultProps } from "./props";
+import { computed } from 'vue'
+import { createNamespace } from '../_utils/global-config'
+import { toSizeUnit } from '../_utils/maple/elements'
+import { resultStatusComponents } from './platform'
+import { resultProps } from './props'
 
 defineOptions({
-  name: createNamespace("result").name,
-});
+  name: createNamespace('result').name,
+})
 
-const props = defineProps(resultProps);
-const { n, classes } = createNamespace("result");
-const statusComponent = computed(() => resultStatusComponents[props.status]);
-const normalizedImageSize = computed(() =>
-  props.imageSize == null ? undefined : toSizeUnit(props.imageSize),
-);
+const props = defineProps(resultProps)
+const { n, classes } = createNamespace('result')
+const statusComponent = computed(() => resultStatusComponents[props.status])
+const normalizedImageSize = computed(() => (props.imageSize == null ? undefined : toSizeUnit(props.imageSize)))
 const imageStyle = computed(() => ({
-  "--c-result-image-size": normalizedImageSize.value,
-}));
+  '--c-result-image-size': normalizedImageSize.value,
+}))
 </script>

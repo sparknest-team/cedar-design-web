@@ -5,6 +5,7 @@
 </template>
 
 <script lang="ts">
+import { useFormLabelWidths } from './use-form-label-width'
 import { formProps } from './props'
 import { createNamespace } from '../_utils/global-config'
 import { computed, defineComponent, PropType, provide, reactive, toRefs, ref } from 'vue'
@@ -76,29 +77,17 @@ export default defineComponent({
       wrapperColProps,
       labelColStyle,
       wrapperColStyle,
+      labelColFlex,
       size,
       rules,
     } = toRefs(props)
     const { mergedSize } = useSize(size)
 
-    const autoLabelWidth = computed(() => props.layout === 'horizontal' && props.autoLabelWidth)
+    const autoLabelWidth = computed(() => props.autoLabelWidth)
 
     const touchedFields: FormItemInfo[] = []
 
-    const labelWidth = reactive<Record<string, number>>({})
-    const maxLabelWidth = computed(() => Math.max(...Object.values(labelWidth)))
-
-    const setLabelWidth = (width: number, uid?: number) => {
-      if (uid && labelWidth[uid] !== width) {
-        labelWidth[uid] = width
-      }
-    }
-
-    const removeLabelWidth = (uid?: number) => {
-      if (uid) {
-        delete labelWidth[uid]
-      }
-    }
+    const { maxLabelWidth, setLabelWidth, removeLabelWidth } = useFormLabelWidths()
 
     const scrollToField = (field: string, options?: ScrollIntoViewOptions) => {
       const node = formRef.value || document.body
@@ -192,6 +181,7 @@ export default defineComponent({
         wrapperColProps,
         labelColStyle,
         wrapperColStyle,
+        labelColFlex,
         model,
         size: mergedSize,
         rules,

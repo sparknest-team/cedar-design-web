@@ -24,6 +24,7 @@
   flex-direction: column;
   width: 100%;
   height: 100%;
+  max-width: 100%;
   overflow: auto;
   line-height: var(~'--c-drawer-line-height');
   background-color: var(~'--c-drawer-bg');
@@ -229,4 +230,23 @@
 
 .slide-bottom-drawer-leave-active {
   transition: transform var(~'--c-drawer-transition-duration') var(~'--c-drawer-transition-timing-function');
+}
+// Local entry must honor the preference even without the full foundation CSS.
+.drawer-reduced-motion(@name) {
+  .@{name}-enter-active,
+  .@{name}-appear-active,
+  .@{name}-leave-active,
+  .@{name}-enter-from,
+  .@{name}-appear-from,
+  .@{name}-leave-to {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .drawer-reduced-motion(fade-drawer);
+  .drawer-reduced-motion(slide-left-drawer);
+  .drawer-reduced-motion(slide-right-drawer);
+  .drawer-reduced-motion(slide-top-drawer);
+  .drawer-reduced-motion(slide-bottom-drawer);
 }

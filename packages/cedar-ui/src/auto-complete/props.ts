@@ -1,9 +1,9 @@
 import type { PropType, RenderFunction } from 'vue'
 import type { VirtualListProps } from '../_components/virtual-list-v2/interface'
+import { popupContainerProp } from '../_utils/popup-container'
 import { inputProps } from '../input/props'
 import type { SelectFieldNames, SelectOptionGroup } from '../select/types'
 import type { TriggerProps } from '../trigger'
-import { popupContainerProp } from '../_utils/popup-container'
 
 export interface AutoCompleteOptionData {
   value?: string | number

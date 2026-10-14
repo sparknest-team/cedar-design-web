@@ -13,7 +13,7 @@ async function load() {
 </script>
 
 <template>
-  <c-space direction="vertical">
+  <c-space direction="column">
     <p>业务值独立于当前选项，加载或移除选项不会清空已选值：{{ value }}</p>
     <c-space>
       <c-button size="sm" @click="load">加载选项</c-button>

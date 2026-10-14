@@ -2,11 +2,13 @@
 permalink: /components/split-button/
 ---
 
+禁用的分段复用 Button 禁用配色并关闭交互反馈；整体禁用同时移除组阴影，仅禁用菜单按钮会阻止菜单打开并关闭非受控的已打开菜单。
+
 # SplitButton 分裂按钮
 
 将一个主操作与一组相关菜单操作组合在同一个按钮组中。
 
-示例统一使用两端都支持的 `Message.info(...)`。默认选择菜单项后关闭；仅“浮层与连续选择”设置 `hide-on-select=false`，保留菜单并显示选择反馈。箭头的图标容器仅在 default 变体使用独立填充色，outline / text 保持透明背景。
+示例统一使用两端都支持的 `Message.info(...)`。默认选择菜单项后关闭；仅“浮层与连续选择”设置 `hide-on-select=false`，保留菜单并显示选择反馈。箭头通过 icon 插槽显示，两段默认继承相同的 variant、status 和自定义颜色；不自动启用 icon-container 的独立配色。
 
 ## 案例
 

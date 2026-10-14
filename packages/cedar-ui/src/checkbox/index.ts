@@ -1,6 +1,6 @@
 import { withInstall } from '../_utils/global-config'
-import _Checkbox from './checkbox'
-import _CheckboxGroup from './checkbox-group'
+import _Checkbox from './checkbox.vue'
+import _CheckboxGroup from './checkbox-group.vue'
 import { checkboxGroupProps, checkboxProps } from './props'
 
 const Checkbox = withInstall(_Checkbox, Object.assign(_Checkbox, {

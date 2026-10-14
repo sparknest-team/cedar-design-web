@@ -1,4 +1,4 @@
-import type { CardProps, ProgressProps, SwitchProps, RateProps, AffixProps, BadgeProps, MessageProps, PopupContainer, FormProps, PaginationProps, TriggerProps } from '@cedarjs/ui'
+import type { DropdownMenuProps, DropdownMenuStrategy, DropdownMenuSubmenuTrigger, CardProps, ProgressProps, SwitchProps, RateProps, AffixProps, BadgeProps, MessageProps, PopupContainer, FormProps, PaginationProps, TriggerProps } from '@cedarjs/ui'
 
 const card: CardProps = { variant: 'outline', size: 'sm', direction: 'row' }
 const progress: ProgressProps[] = [{}, { size: 24 }, { size: '2rem' }, { size: 'xl' }]
@@ -15,11 +15,11 @@ const pagination: PaginationProps = { total: 10 }
 const badSwitch: SwitchProps = { size: 24 }
 // @ts-expect-error Card does not implement lg.
 const badCard: CardProps = { size: 'lg' }
-// @ts-expect-error Required runtime inputs must remain required for callers.
-const missingModel: FormProps = {}
+// Form provides a fresh empty model by default; callers may omit it.
+const optionalModel: FormProps = {}
 // @ts-expect-error Required runtime inputs must remain required for callers.
 const missingTotal: PaginationProps = {}
-void [card, progress, switches, rate, affix, badge, message, trigger, form, pagination, badSwitch, badCard, missingModel, missingTotal]
+void [card, progress, switches, rate, affix, badge, message, trigger, form, pagination, badSwitch, badCard, optionalModel, missingTotal]
 
 // Switch and Progress use the same public types on both platforms.
 const fractionalProgress: ProgressProps = { percent: '12.5' }
@@ -52,3 +52,11 @@ const itemSlot = (slot: NavMenuItemSlotContext) => { slot.select('custom'); slot
 const invalidItem: NavMenuItemProps = { popupLayout: 'fullscreen' }
 // @ts-expect-error labels now follow selection; use the label slot for manual rendering
 const removedItemLabelSwitch: NavMenuItemProps = { updateLabel: true }
+
+const menuStrategy: DropdownMenuStrategy = 'fixed'
+const submenuTrigger: DropdownMenuSubmenuTrigger = 'click'
+const positionedMenu: DropdownMenuProps = { strategy: menuStrategy, submenuTrigger }
+const defaultMenu: DropdownMenuProps = {}
+// @ts-expect-error strategy is not a CSS position free-form string
+const invalidMenuStrategy: DropdownMenuStrategy = 'sticky'
+void [positionedMenu, defaultMenu, invalidMenuStrategy]

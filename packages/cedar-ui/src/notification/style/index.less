@@ -261,3 +261,22 @@
   transition: all var(~"--c-notification-transition-duration-leave")
     var(~"--c-notification-transition-timing-function-leave");
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .c-notification,
+  .slide-left-notification-enter-active,
+  .slide-left-notification-appear-active,
+  .slide-left-notification-leave-active,
+  .slide-right-notification-enter-active,
+  .slide-right-notification-appear-active,
+  .slide-right-notification-leave-active {
+    transition: none !important;
+  }
+
+  .slide-left-notification-enter-from,
+  .slide-left-notification-appear-from,
+  .slide-right-notification-enter-from,
+  .slide-right-notification-appear-from {
+    transform: none !important;
+  }
+}

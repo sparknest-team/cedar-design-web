@@ -15,6 +15,8 @@ Both libraries use the same implementation and examples; package prefixes, theme
 
 ### Four variants
 
+The `default` variant uses white text for primary, info, success, warning, danger and secondary solid fills.
+
 <demo src="./__demos__/variants.vue"></demo>
 
 ### Five sizes

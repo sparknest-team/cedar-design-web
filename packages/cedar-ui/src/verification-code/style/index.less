@@ -1,29 +1,21 @@
 @import './token.less';
-
 .c-verification-code {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  box-sizing: border-box;
   width: 100%;
-  column-gap: var(~'--c-verification-code-column-gap');
-
-  .c-field-decorator {
-    padding-right: 0;
-    padding-left: 0;
-
-    .c-input__inner {
-      text-align: center;
-    }
-  }
+  &__cells { display: flex; align-items: center; gap: var(--c-verification-code-gutter); width: 100%; }
+  &__cell { flex: 0 1 var(--c-verification-code-cell-max-width, var(--c-internal-verification-code-size)); min-width: 0; height: var(--c-verification-code-cell-height, var(--c-internal-verification-code-size)); }
+  &__separator { display: inline-flex; flex-shrink: 0; }
+  &--align-start &__cells { justify-content: flex-start; }
+  &--align-center &__cells { justify-content: center; }
+  &--align-end &__cells { justify-content: flex-end; }
+  .c-input__inner { text-align: center; font-size: var(--c-verification-code-input-font-size, var(--c-internal-verification-code-font-size)); min-width: 0; }
+  .c-field-decorator { padding: 0; height: 100%; }
+  .c-input { height: 100%; }
   .size(@size) {
-    .c-input--size-@{size} {
-      width: var(~'--c-field-size-@{size}-height');
+    &--size-@{size} {
+      --c-internal-verification-code-size: var(~'--c-field-size-@{size}-height');
+      --c-internal-verification-code-font-size: var(~'--c-field-size-@{size}-font-size');
     }
   }
-
-  .size(xs);
-  .size(sm);
-  .size(md);
-  .size(lg);
-  .size(xl);
+  .size(xs); .size(sm); .size(md); .size(lg); .size(xl);
 }

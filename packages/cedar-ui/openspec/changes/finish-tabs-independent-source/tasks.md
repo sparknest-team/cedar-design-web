@@ -1,0 +1,4 @@
+- [x] Remove platform adapters and unused panel binding.
+- [x] Export and apply public events, slots and resize types.
+- [x] Verify configuration, SSR, controlled state, observer cleanup and hidden panels.
+- [x] Run both targeted suites, lint and source parity checks; update documentation.

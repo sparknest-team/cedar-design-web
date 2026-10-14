@@ -10,11 +10,21 @@ permalink: /components/time-range/
 
 纯面板请使用 [`TimeRangePicker`](/components/time-range-picker/)（默认无触发器）。
 
+### 手输与面板选择
+
+`inputEditable` 默认为 `true`（Maple 默认为 `false`）。回车或失焦提交，Esc 撤销；格式、步长、边界和禁用规则与面板一致。无效输入或父级拒绝受控更新时回到模型值；切换为不可编辑、只读或禁用会丢弃未提交输入。输入法组合期间不提交。范围两端之间移动焦点不提交。
+
+<demo src="./__demos__/text-entry.vue"></demo>
+
 ### 默认值与受控值
 
 `defaultValue` 初始化字段/纯面板的非受控值，仅读取一次；后续选择保存在各自实例。传入 `modelValue` 后以父级值为准。字段 `defaultOpen` 只初始化一次；受控 `open` 需父级接收 `update:open`，`open-change(open: boolean)` 通知显隐请求。`clear` 不携带参数。纯面板支持 `disabled`，同时禁用范围两端。
 
 <demo src="./__demos__/default-state.vue"></demo>
+
+示例可分别拒绝值更新与展开更新：拒绝时保留父级模型/显隐，提案单独显示；重新打开从父级模型恢复。关闭请求不代表父级已接受。
+
+父级拒绝关闭、面板保持展开时，没有新选择的重复确认不会重复提交；再次选择新时间会开启新事务，可重新确认提交。
 
 ### 选择与提交
 
@@ -70,6 +80,8 @@ permalink: /components/time-range/
 
 <demo src="./__demos__/show-next-day.vue"></demo>
 
+此示例开启文本编辑并显示模型，保留 22:00→次日06:00 的端点顺序；清除为 `undefined`，可通过重置按钮恢复。`show-next-day` 表示时间顺序与标签，不将模型自动转换为下一日日期。
+
 ### 尺寸
 
 <demo src="./__demos__/size.vue"></demo>
@@ -79,6 +91,8 @@ permalink: /components/time-range/
 小时候选以 0 点为起点，十二小时制只改变显示；无效步长回退为 1。
 
 <demo src="./__demos__/step.vue"></demo>
+
+可切换十二小时面板，分钟/秒步长保持不变；显式 `HH:mm:ss` 仍决定模型格式，AM/PM 选择转换为对应的 24 小时值。
 
 ## API
 

@@ -25,8 +25,8 @@
 
 <script setup lang="ts">
 import { computed, ref, type CSSProperties } from 'vue'
-import Tooltip, { type TooltipProps } from '../tooltip'
 import { createNamespace } from '../_utils/global-config'
+import Tooltip, { type TooltipProps } from '../tooltip'
 import { ellipsisProps } from './props'
 
 defineOptions({ name: createNamespace('ellipsis').name, inheritAttrs: false })

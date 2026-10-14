@@ -11,7 +11,6 @@ import {
   ref,
   toRefs,
   watch,
-  watchEffect,
   onUnmounted,
 } from "vue";
 import {
@@ -19,7 +18,6 @@ import {
   getNow,
   isValueChange,
   getDateValue,
-  initializeDateLocale,
 } from "../../_utils/date";
 import { createNamespace, getPrefixCls } from "../../_utils/global-config";
 import useState from "../../_hooks/use-state";
@@ -38,7 +36,6 @@ import { omit } from "../../_utils/omit";
 import useTimePickerValue from "./hooks/use-time-picker-value";
 import { mergeValueWithTime } from "./utils";
 import { useReturnValue } from "./hooks/use-value-format";
-import { useI18n } from "../../locale";
 import { pickerProps } from "./props";
 
 /**
@@ -180,7 +177,6 @@ export default defineComponent({
       disabledDate,
       disabledTime,
       readonly,
-      locale,
       pickerValue,
       defaultPickerValue,
       dayStartOfWeek,
@@ -188,18 +184,10 @@ export default defineComponent({
       showConfirmBtn,
     } = toRefs(props);
 
-    const { locale: globalLocal } = useI18n();
-    watchEffect(() => {
-      initializeDateLocale(globalLocal.value, dayStartOfWeek.value);
-    });
 
     const mergedDisabled = computed(() => Boolean(disabled.value));
 
-    const datePickerT = useProvideDatePickerTransform(
-      reactive({
-        locale,
-      }),
-    );
+    const datePickerT = useProvideDatePickerTransform();
 
     const prefixCls = getPrefixCls("picker");
 
@@ -487,7 +475,7 @@ export default defineComponent({
 
         "abbreviation",
       ]),
-      showNowBtn: props.showNowBtn && mode.value === "date",
+      showNowButton: props.showNowButton && mode.value === "date",
       prefixCls,
       format: parseValueFormat.value,
       value: panelValue.value,

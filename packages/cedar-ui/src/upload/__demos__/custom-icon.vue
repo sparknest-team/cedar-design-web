@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { UploadFileItem } from '@cedarjs/ui'
+import type { UploadFileItem, UploadPreviewEvent } from '@cedarjs/ui'
 
 const files = ref<UploadFileItem[]>([
-  { uid: 'custom-item-1', name: 'design-assets.zip', url: '/design-assets.zip', status: 'success', percent: 100 },
+  { uid: 'custom-item-1', name: 'design-assets.zip', url: 'data:text/plain,Example%20download', status: 'success', percent: 100 },
 ])
 </script>
 

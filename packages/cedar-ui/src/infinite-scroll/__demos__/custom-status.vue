@@ -24,15 +24,18 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { onBeforeUnmount, onDeactivated, ref } from "vue";
 import type { InfiniteScrollStatus } from "@cedarjs/ui";
 
 const scroller = ref<HTMLElement>();
 const data = ref<string[]>([]);
 const status = ref<InfiniteScrollStatus>("idle");
+let timer: ReturnType<typeof window.setTimeout> | undefined;
 
 const fetchData = () => {
-  window.setTimeout(() => {
+  window.clearTimeout(timer);
+  timer = window.setTimeout(() => {
+    timer = undefined;
     const start = data.value.length;
     data.value.push(
       ...Array.from(
@@ -43,6 +46,14 @@ const fetchData = () => {
     status.value = data.value.length >= 32 ? "finished" : "idle";
   }, 600);
 };
+onBeforeUnmount(() => window.clearTimeout(timer));
+onDeactivated(() => {
+  window.clearTimeout(timer);
+  timer = undefined;
+  if (status.value === "loading") {
+    status.value = "idle";
+  }
+});
 </script>
 
 <style scoped>

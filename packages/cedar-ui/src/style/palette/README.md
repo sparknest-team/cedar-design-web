@@ -2,7 +2,7 @@
 permalink: /components/palette/
 ---
 
-## 色板 Palette
+# 色板 Palette
 
 ### 介绍
 

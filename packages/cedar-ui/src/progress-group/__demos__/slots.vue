@@ -7,8 +7,8 @@ const items = [
 </script>
 
 <template>
-  <c-progress-group :items="items" status style="max-width: 520px">
-    <template #status="{ value, max }">已使用 {{ value }} / {{ max }} GB</template>
+  <c-progress-group :items="items" show-text style="max-width: 520px">
+    <template #text="{ value, max }">已使用 {{ value }} / {{ max }} GB</template>
     <template #item-trailing="{ item }">{{ item.value }} GB</template>
     <template #tooltip="{ item, percent }">{{ item.label }} · {{ item.value }} GB · {{ Math.round(percent) }}%</template>
   </c-progress-group>

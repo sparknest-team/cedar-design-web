@@ -15,25 +15,50 @@
     @key-escape="$emit('key-escape')"
     @long-press="$emit('long-press', mergedCurrent)"
   >
-    <template #image="{ scale, rotate, translateX, translateY, moving, previewedImgProps }">
+    <template
+      #image="{
+        scale,
+        rotate,
+        translateX,
+        translateY,
+        moving,
+        previewedImgProps,
+      }"
+    >
       <div
+        ref="trackRef"
         :class="[
           n('track'),
-          { [n('track-moving')]: moving && scale <= 1, [n('track-instant')]: trackInstant },
+          {
+            [n('track-moving')]: moving && scale <= 1,
+            [n('track-instant')]: trackInstant,
+          },
         ]"
         data-image-preview-track
         :style="trackStyle(translateX, scale)"
         @transitionend="handleTrackTransitionEnd"
       >
-        <div v-for="(image, index) in trackImages" :key="`${index}-${image}`" :class="n('slide')" data-image-preview-slide>
+        <div
+          v-for="(image, index) in trackImages"
+          :key="`${index}-${image}`"
+          :class="n('slide')"
+          data-image-preview-slide
+        >
           <img
             v-bind="previewedImgProps"
             role="img"
             data-image-preview-image
             :src="image"
             :alt="previewedImgProps?.alt || image"
-            :class="[previewedImgProps?.class, n('image'), { [n('--prevent')]: imagePreventDefault }]"
-            :style="[previewedImgProps?.style, slideImageStyle(index, scale, rotate, translateX, translateY)]"
+            :class="[
+              previewedImgProps?.class,
+              n('image'),
+              { [n('--prevent')]: imagePreventDefault },
+            ]"
+            :style="[
+              previewedImgProps?.style,
+              slideImageStyle(index, scale, rotate, translateX, translateY),
+            ]"
             :draggable="false"
             @click.stop
             @dragstart.prevent
@@ -42,7 +67,9 @@
         </div>
       </div>
     </template>
-    <template v-if="$slots['close-icon']" #close-icon><slot name="close-icon" /></template>
+    <template v-if="$slots['close-icon']" #close-icon
+      ><slot name="close-icon"
+    /></template>
     <template #overlay>
       <button
         v-if="previewImages.length > 1"
@@ -68,240 +95,442 @@
       >
         ›
       </button>
-      <slot name="indicator" :index="mergedCurrent" :length="previewImages.length">
+      <slot
+        name="indicator"
+        :index="mergedCurrent"
+        :length="previewImages.length"
+      >
         <div v-if="previewImages.length > 1" :class="n('indicator')">
           {{ mergedCurrent + 1 }} / {{ previewImages.length }}
         </div>
       </slot>
     </template>
-    <template v-if="$slots.extra" #extra><slot name="extra" :url="currentUrl" /></template>
-    <template v-if="$slots.actions" #actions><slot name="actions" :url="currentUrl" /></template>
+    <template v-if="$slots.extra" #extra
+      ><slot name="extra" :url="currentUrl"
+    /></template>
+    <template v-if="$slots.actions" #actions
+      ><slot name="actions" :url="currentUrl"
+    /></template>
   </ImagePreview>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, nextTick, onBeforeUnmount, provide, ref, toRef, watch } from 'vue'
-import { createNamespace } from '../_utils/global-config'
-import type { ImagePreviewInstance } from './api'
-import { useImagePreviewGroupState } from './composables/useImagePreviewGroup'
-import { PreviewGroupInjectionKey } from './context'
-import { imagePreviewGroupProps } from './groupProps'
-import ImagePreview from './Preview.vue'
+import {
+  computed,
+  defineComponent,
+  nextTick,
+  onActivated,
+  onBeforeUnmount,
+  onDeactivated,
+  provide,
+  ref,
+  toRef,
+  watch,
+} from "vue";
+import { createNamespace } from "../_utils/global-config";
+import type { ImagePreviewInstance } from "./api";
+import { useImagePreviewGroupState } from "./composables/useImagePreviewGroup";
+import { PreviewGroupInjectionKey } from "./context";
+import { imagePreviewGroupProps } from "./groupProps";
+import ImagePreview from "./Preview.vue";
 
-const { name, n } = createNamespace('image-preview')
+const { name, n } = createNamespace("image-preview");
 
 export default defineComponent({
-  name: createNamespace('image-preview-group').name,
+  name: createNamespace("image-preview-group").name,
   components: { ImagePreview },
   inheritAttrs: false,
   props: imagePreviewGroupProps,
   emits: [
-    'update:open',
-    'update:current',
-    'change',
-    'open-change',
-    'open',
-    'opened',
-    'close',
-    'closed',
-    'key-escape',
-    'long-press',
+    "update:open",
+    "update:current",
+    "change",
+    "open-change",
+    "open",
+    "opened",
+    "close",
+    "closed",
+    "key-escape",
+    "long-press",
   ],
   setup(props, { emit }) {
-    const previousIndex = ref(props.defaultCurrent)
+    const previousIndex = ref(props.defaultCurrent);
     const group = useImagePreviewGroupState({
-      images: toRef(props, 'images'),
-      open: toRef(props, 'open'),
+      images: toRef(props, "images"),
+      open: toRef(props, "open"),
       defaultOpen: props.defaultOpen,
-      current: toRef(props, 'current'),
+      current: toRef(props, "current"),
       defaultCurrent: props.defaultCurrent,
       onOpenChange: (open) => {
-        emit('update:open', open)
-        emit('open-change', open)
-        props.onOpenChange?.(open)
+        emit("update:open", open);
+        emit("open-change", open);
+        props.onOpenChange?.(open);
       },
       onCurrentChange: (index) => {
-        const previous = previousIndex.value
-        previousIndex.value = index
-        emit('update:current', index)
-        emit('change', index, previous)
+        const previous = previousIndex.value;
+        previousIndex.value = index;
+        emit("update:current", index);
+        emit("change", index, previous);
       },
-    })
-    const previewRef = ref<ImagePreviewInstance>()
-    const currentUrl = computed(() => group.previewImages.value[group.mergedCurrent.value])
-    const visualCurrent = ref(0)
-    const trackInstant = ref(false)
+    });
+    const previewRef = ref<ImagePreviewInstance>();
+    const currentUrl = computed(
+      () => group.previewImages.value[group.mergedCurrent.value],
+    );
+    const visualCurrent = ref(0);
+    const trackInstant = ref(false);
     const trackImages = computed(() =>
       props.loop && group.previewImages.value.length > 1
-        ? [...group.previewImages.value, ...group.previewImages.value, ...group.previewImages.value]
+        ? [
+            ...group.previewImages.value,
+            ...group.previewImages.value,
+            ...group.previewImages.value,
+          ]
         : group.previewImages.value,
-    )
-    let recenterTimer: ReturnType<typeof setTimeout> | undefined
-    let releaseFrame: number | undefined
-    let paintFrame: number | undefined
+    );
+    const trackRef = ref<HTMLElement>();
+    let active = true;
+    let disposed = false;
+    let instantGeneration = 0;
+    let recenterGeneration = 0;
+    let frameOwner: Window | undefined;
+    let timerOwner: Window | undefined;
+    let recenterNode: HTMLElement | undefined;
+    let recenterStarted: number | undefined;
+    let recenterTimer: number | undefined;
+    let releaseFrame: number | undefined;
+    let paintFrame: number | undefined;
     const previewBindings = computed(() => {
-      const { images, current, defaultCurrent, loop, open, defaultOpen, ...shared } = props
-      return shared
-    })
+      const {
+        images,
+        current,
+        defaultCurrent,
+        loop,
+        open,
+        defaultOpen,
+        ...shared
+      } = props;
+      return shared;
+    });
 
-    provide(PreviewGroupInjectionKey, { registerImageUrl: group.registerImageUrl, preview: group.previewByImageId })
+    provide(PreviewGroupInjectionKey, {
+      registerImageUrl: group.registerImageUrl,
+      preview: (id: number) => {
+        if (available()) group.previewByImageId(id);
+      },
+    });
 
     function canonicalVisual(index = group.mergedCurrent.value) {
-      const length = group.previewImages.value.length
-      return props.loop && length > 1 ? length + index : index
+      const length = group.previewImages.value.length;
+      return props.loop && length > 1 ? length + index : index;
+    }
+    const available = () => active && !disposed;
+    function cancelFrames() {
+      instantGeneration++;
+      if (releaseFrame !== undefined)
+        frameOwner?.cancelAnimationFrame(releaseFrame);
+      if (paintFrame !== undefined)
+        frameOwner?.cancelAnimationFrame(paintFrame);
+      releaseFrame = paintFrame = undefined;
+      frameOwner = undefined;
+    }
+    function cancelRecenter() {
+      recenterGeneration++;
+      if (recenterTimer !== undefined) timerOwner?.clearTimeout(recenterTimer);
+      recenterTimer = undefined;
+      timerOwner = undefined;
+      recenterNode = undefined;
+      recenterStarted = undefined;
     }
     function setVisualInstant(index = group.mergedCurrent.value) {
-      if (releaseFrame !== undefined) {
-        cancelAnimationFrame(releaseFrame)
-      }
-      if (paintFrame !== undefined) {
-        cancelAnimationFrame(paintFrame)
-      }
-      trackInstant.value = true
-      visualCurrent.value = canonicalVisual(index)
+      cancelRecenter();
+      cancelFrames();
+      visualCurrent.value = canonicalVisual(index);
+      trackInstant.value = available() && group.mergedOpen.value;
+      if (!trackInstant.value) return;
+      const generation = instantGeneration;
       nextTick(() => {
-        if (typeof requestAnimationFrame !== 'function') {
-          trackInstant.value = false
-          return
+        if (
+          !available() ||
+          !group.mergedOpen.value ||
+          generation !== instantGeneration
+        )
+          return;
+        const track = trackRef.value;
+        const view = track?.ownerDocument.defaultView;
+        if (
+          !track ||
+          !view ||
+          typeof view.requestAnimationFrame !== "function"
+        ) {
+          trackInstant.value = false;
+          return;
         }
-        releaseFrame = requestAnimationFrame(() => {
-          paintFrame = requestAnimationFrame(() => {
-            trackInstant.value = false
-            releaseFrame = undefined
-            paintFrame = undefined
-          })
-        })
-      })
+        const current = () =>
+          available() &&
+          group.mergedOpen.value &&
+          generation === instantGeneration &&
+          trackRef.value === track &&
+          track.ownerDocument.defaultView === view;
+        frameOwner = view;
+        let released = false;
+        releaseFrame = view.requestAnimationFrame(() => {
+          if (!current() || released) return;
+          released = true;
+          releaseFrame = undefined;
+          let painted = false;
+          paintFrame = view.requestAnimationFrame(() => {
+            if (!current() || painted) return;
+            painted = true;
+            trackInstant.value = false;
+            paintFrame = undefined;
+            frameOwner = undefined;
+          });
+        });
+      });
     }
     function needsRecenter() {
-      const length = group.previewImages.value.length
-      return props.loop && length > 1 && (visualCurrent.value < length || visualCurrent.value >= length * 2)
+      const length = group.previewImages.value.length;
+      return (
+        props.loop &&
+        length > 1 &&
+        (visualCurrent.value < length || visualCurrent.value >= length * 2)
+      );
     }
     function recenterIfNeeded() {
-      if (!needsRecenter()) {
-        return
+      if (!available() || !group.mergedOpen.value || !needsRecenter()) return;
+      setVisualInstant();
+    }
+    function transitionTime(track: HTMLElement) {
+      const style = track.ownerDocument.defaultView?.getComputedStyle(track);
+      if (!style?.transitionProperty) return undefined;
+      const properties = style.transitionProperty
+        .split(",")
+        .map((value) => value.trim());
+      if (properties.every((value) => value === "none")) return 0;
+      const durations = style.transitionDuration.split(",");
+      const delays = style.transitionDelay.split(",");
+      const time = (value: string) => {
+        const match = value.trim().match(/^(-?\d*\.?\d+)(ms|s)$/);
+        return match
+          ? Number(match[1]) * (match[2] === "s" ? 1000 : 1)
+          : undefined;
+      };
+      let result = 0;
+      for (let index = 0; index < properties.length; index++) {
+        if (properties[index] !== "transform" && properties[index] !== "all")
+          continue;
+        const duration = time(durations[index % durations.length]);
+        const delay = time(delays[index % delays.length]);
+        if (duration === undefined || delay === undefined) return undefined;
+        result = Math.max(0, duration) + (delay ?? 0);
       }
-      if (recenterTimer) {
-        clearTimeout(recenterTimer)
-      }
-      recenterTimer = undefined
-      setVisualInstant()
+      return Math.max(0, result);
     }
     function scheduleRecenter() {
-      if (recenterTimer) {
-        clearTimeout(recenterTimer)
-      }
-      if (!needsRecenter()) {
-        return
-      }
-      recenterTimer = setTimeout(recenterIfNeeded, 400)
+      cancelRecenter();
+      if (!available() || !group.mergedOpen.value || !needsRecenter()) return;
+      const generation = recenterGeneration;
+      const initialTrack = trackRef.value;
+      let scheduled = false;
+      recenterNode = initialTrack;
+      recenterStarted =
+        initialTrack?.ownerDocument.defaultView?.performance.now();
+      nextTick(() => {
+        if (
+          !available() ||
+          !group.mergedOpen.value ||
+          generation !== recenterGeneration ||
+          scheduled ||
+          !needsRecenter()
+        )
+          return;
+        const track = trackRef.value;
+        const view = track?.ownerDocument.defaultView;
+        if (!track || !view || (initialTrack && track !== initialTrack)) return;
+        scheduled = true;
+        recenterNode = track;
+        recenterStarted ??= view.performance.now();
+        timerOwner = view;
+        // 400ms is only an unavailable/unresolved-style fallback, not a duration cap.
+        recenterTimer = view.setTimeout(
+          () => {
+            if (
+              !available() ||
+              !group.mergedOpen.value ||
+              generation !== recenterGeneration ||
+              trackRef.value !== track ||
+              track.ownerDocument.defaultView !== view
+            )
+              return;
+            recenterGeneration++;
+            recenterTimer = undefined;
+            timerOwner = undefined;
+            recenterIfNeeded();
+          },
+          transitionTime(track) ?? 400,
+        );
+      });
     }
     function handleTrackTransitionEnd(event: TransitionEvent) {
-      if (event.target !== event.currentTarget || event.propertyName !== 'transform') {
-        return
-      }
-      recenterIfNeeded()
+      if (
+        !available() ||
+        !group.mergedOpen.value ||
+        event.target !== event.currentTarget ||
+        event.propertyName !== "transform" ||
+        (recenterNode && event.target !== recenterNode)
+      )
+        return;
+      // A previously created event can be delivered after a newer navigation.
+      if (
+        recenterStarted !== undefined &&
+        event.timeStamp > 0 &&
+        event.timeStamp < recenterStarted
+      )
+        return;
+      recenterIfNeeded();
     }
 
+    // Child registration runs in a watchEffect; settle content after that effect.
+    watch([group.previewImages, () => props.loop], () => setVisualInstant(), {
+      immediate: true,
+      deep: true,
+      flush: "post",
+    });
     watch(
-      () => group.previewImages.value.length,
-      () => setVisualInstant(),
-      { immediate: true },
-    )
-    watch(group.mergedCurrent, (index) => {
-      const length = group.previewImages.value.length
-      const represented = length ? ((visualCurrent.value % length) + length) % length : 0
-      if (represented !== index) {
-        setVisualInstant(index)
+      group.mergedCurrent,
+      (index) => {
+        const length = group.previewImages.value.length;
+        const represented = length
+          ? ((visualCurrent.value % length) + length) % length
+          : 0;
+        if (represented !== index) setVisualInstant(index);
+      },
+      { flush: "sync" },
+    );
+    watch(group.mergedOpen, () => setVisualInstant(), { flush: "sync" });
+    function suspend() {
+      active = false;
+      cancelRecenter();
+      cancelFrames();
+      trackInstant.value = false;
+    }
+    onDeactivated(suspend);
+    onActivated(() => {
+      if (!disposed && !active) {
+        active = true;
+        setVisualInstant();
       }
-    })
+    });
     onBeforeUnmount(() => {
-      if (recenterTimer) {
-        clearTimeout(recenterTimer)
-      }
-      if (releaseFrame !== undefined) {
-        cancelAnimationFrame(releaseFrame)
-      }
-      if (paintFrame !== undefined) {
-        cancelAnimationFrame(paintFrame)
-      }
-    })
+      disposed = true;
+      suspend();
+    });
 
     function trackStyle(translateX: number, scale: number) {
-      const offset = scale <= 1 ? translateX : 0
-      return { transform: `translate3d(calc(${-visualCurrent.value * 100}% + ${offset}px), 0, 0)` }
+      const offset = scale <= 1 ? translateX : 0;
+      return {
+        transform: `translate3d(calc(${-visualCurrent.value * 100}% + ${offset}px), 0, 0)`,
+      };
     }
-    function slideImageStyle(index: number, scale: number, rotate: number, x: number, y: number) {
-      const isCurrent = index === visualCurrent.value
-      const panX = isCurrent && scale > 1 ? x : 0
-      const panY = isCurrent && scale > 1 ? y : 0
-      return { transform: `translate(${panX}px, ${panY}px) rotate(${rotate}deg) scale(${scale})` }
+    function slideImageStyle(
+      index: number,
+      scale: number,
+      rotate: number,
+      x: number,
+      y: number,
+    ) {
+      const isCurrent = index === visualCurrent.value;
+      const panX = isCurrent && scale > 1 ? x : 0;
+      const panY = isCurrent && scale > 1 ? y : 0;
+      return {
+        transform: `translate(${panX}px, ${panY}px) rotate(${rotate}deg) scale(${scale})`,
+      };
     }
 
-    function to(index: number, direction?: 'prev' | 'next') {
-      const length = group.previewImages.value.length
+    function to(index: number, direction?: "prev" | "next") {
+      if (!available()) return;
+      const length = group.previewImages.value.length;
       if (!Number.isInteger(index) || index < 0 || index >= length) {
-        return
+        return;
       }
       if (index === group.mergedCurrent.value) {
-        return
+        return;
       }
+      cancelRecenter();
+      cancelFrames();
+      trackInstant.value = false;
+      const command = recenterGeneration;
       if (props.loop && group.previewImages.value.length > 1 && direction) {
-        visualCurrent.value += direction === 'next' ? 1 : -1
+        visualCurrent.value += direction === "next" ? 1 : -1;
       } else {
-        visualCurrent.value = index
+        visualCurrent.value = index;
       }
-      group.mergedCurrent.value = index
-      previewRef.value?.reset()
-      scheduleRecenter()
+      group.mergedCurrent.value = index;
+      if (!available() || !group.mergedOpen.value || command !== recenterGeneration) return;
+      previewRef.value?.reset();
+      if (!available() || !group.mergedOpen.value || command !== recenterGeneration) return;
+      scheduleRecenter();
     }
     function open(index = 0) {
-      to(index)
-      group.open(index)
+      if (!available()) return;
+      to(index);
+      if (available()) group.open(index);
     }
     function close() {
-      group.close()
+      if (!available()) return;
+      group.close();
     }
     function prev() {
-      const index = group.mergedCurrent.value - 1
+      if (!available()) return;
+      const index = group.mergedCurrent.value - 1;
       if (index >= 0) {
-        to(index, 'prev')
+        to(index, "prev");
       } else if (props.loop && group.previewImages.value.length) {
-        to(group.previewImages.value.length - 1, 'prev')
+        to(group.previewImages.value.length - 1, "prev");
       }
     }
     function next() {
-      const index = group.mergedCurrent.value + 1
+      if (!available()) return;
+      const index = group.mergedCurrent.value + 1;
       if (index < group.previewImages.value.length) {
-        to(index, 'next')
+        to(index, "next");
       } else if (props.loop && group.previewImages.value.length) {
-        to(0, 'next')
+        to(0, "next");
       }
     }
     function reset() {
-      previewRef.value?.reset()
+      if (!available()) return;
+      previewRef.value?.reset();
     }
     function zoomTo(scale: number) {
-      previewRef.value?.zoomTo(scale)
+      if (!available()) return;
+      previewRef.value?.zoomTo(scale);
     }
     function zoomIn() {
-      previewRef.value?.zoomIn()
+      if (!available()) return;
+      previewRef.value?.zoomIn();
     }
     function zoomOut() {
-      previewRef.value?.zoomOut()
+      if (!available()) return;
+      previewRef.value?.zoomOut();
     }
     function rotateLeft() {
-      previewRef.value?.rotateLeft()
+      if (!available()) return;
+      previewRef.value?.rotateLeft();
     }
     function rotateRight() {
-      previewRef.value?.rotateRight()
+      if (!available()) return;
+      previewRef.value?.rotateRight();
     }
     function toggleFullscreen() {
-      previewRef.value?.toggleFullscreen()
+      if (!available()) return;
+      previewRef.value?.toggleFullscreen();
     }
 
     return {
       n,
+      trackRef,
       ...group,
       previewRef,
       currentUrl,
@@ -323,7 +552,7 @@ export default defineComponent({
       rotateLeft,
       rotateRight,
       toggleFullscreen,
-    }
+    };
   },
-})
+});
 </script>

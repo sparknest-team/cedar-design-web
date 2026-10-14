@@ -7,10 +7,23 @@
   overflow: hidden;
   vertical-align: bottom;
   -webkit-tap-highlight-color: transparent;
-  &--clamp { display: -webkit-box; -webkit-box-orient: vertical; }
-  &--line { display: block; white-space: nowrap; text-overflow: ellipsis; }
-  &--cursor { cursor: pointer; }
-  &--expand { display: block; white-space: normal; overflow: visible; }
+  &--clamp {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+  }
+  &--line {
+    display: block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  &--cursor {
+    cursor: pointer;
+  }
+  &--expand {
+    display: block;
+    white-space: normal;
+    overflow: visible;
+  }
   &:focus-visible {
     outline: var(--c-ellipsis-focus-width) solid var(--c-ellipsis-focus-color);
     outline-offset: var(--c-ellipsis-focus-offset);

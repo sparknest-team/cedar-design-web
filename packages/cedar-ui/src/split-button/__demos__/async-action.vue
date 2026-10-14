@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Message } from '@cedarjs/ui'
+import { ref } from "vue";
+import { Message } from "@cedarjs/ui";
 
-const completed = ref(0)
+const completed = ref(0);
 const publish = async () => {
-  await new Promise<void>((resolve) => setTimeout(resolve, 800))
-  completed.value += 1
-  Message.info('发布成功')
-}
+  await new Promise<void>((resolve) => setTimeout(resolve, 800));
+  completed.value += 1;
+  Message.info("发布成功");
+};
 const handleSelect = (_value: unknown, option: { label?: unknown }) => {
-  Message.info(String(option.label))
-}
+  Message.info(String(option.label));
+};
 </script>
 
 <template>
   <c-space direction="column" align="flex-start">
-    <c-split-button status="primary" auto-loading @click="publish" @select="handleSelect">
+    <c-split-button auto-loading @click="publish" @select="handleSelect">
       发布
 
       <template #content>

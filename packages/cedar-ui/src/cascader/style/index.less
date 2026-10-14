@@ -132,7 +132,10 @@
 
     &-label {
       flex-grow: 1;
-      padding-right: calc(var(~'--c-cascader-padding-item-right') + var(~'--c-cascader-size-item-icon') + var(~'--c-cascader-margin-item-icon-left'));
+      padding-right: calc(
+        var(~'--c-cascader-padding-item-right') + var(~'--c-cascader-size-item-icon') +
+          var(~'--c-cascader-margin-item-icon-left')
+      );
       padding-left: var(~'--c-cascader-padding-item-left');
     }
 
@@ -147,7 +150,7 @@
     }
 
     .c-icon-check {
-      color: rgb(var(~'--c-primary-6'));
+      color: var(--c-sys-color-content-brand);
     }
 
     .c-cascader-option-loading-icon {
@@ -155,7 +158,7 @@
       top: 50%;
       right: var(~'--c-cascader-padding-item-right');
       margin-top: calc(var(~'--c-cascader-size-item-icon') / -2);
-      color: rgb(var(~'--c-primary-6'));
+      color: var(--c-sys-color-content-brand);
       font-size: var(~'--c-cascader-size-item-icon');
     }
   }
@@ -165,13 +168,11 @@
     color: var(~'--c-cascader-item-text-color-hover');
     background-color: var(~'--c-cascader-item-bg-hover');
 
-    .c-checkbox:not(.c-checkbox-disabled):not(.c-checkbox-checked):hover
-      .c-checkbox-icon-hover::before {
+    .c-checkbox:not(.c-checkbox--disabled):not(.c-checkbox--checked):hover .c-checkbox__control {
       background-color: var(~'--c-cascader-checkbox-bg-hover');
     }
 
-    .c-radio:not(.c-radio-disabled):not(.c-radio-checked):hover
-      .c-radio-icon-hover::before {
+    .c-radio:not(.c-radio--disabled):not(.c-radio--checked):hover .c-radio__control {
       background-color: var(~'--c-cascader-checkbox-bg-hover');
     }
   }

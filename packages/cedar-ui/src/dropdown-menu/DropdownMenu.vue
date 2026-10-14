@@ -12,7 +12,9 @@ import { createNamespace } from '../_utils/global-config'
 import DropdownMenuView from './view'
 import type { TriggerInstance } from '../trigger'
 import { dropdownMenuProps } from './props'
-import { Trigger, rootTriggerAppearance, type DropdownMenuReference } from './platform'
+import { rootTriggerAppearance } from './appearance'
+import Trigger from '../trigger'
+import type { DropdownMenuReference } from './types'
 import DropdownMenuPanel from './DropdownMenuPanel.vue'
 import DropdownMenuOptions from './options'
 import { useTriggerState } from '../trigger/state'
@@ -42,7 +44,7 @@ const selection = useMenuSelection(props, (value, option, event, selectedValue) 
   }
 })
 provide(menuSelectionKey, selection)
-provide(menuInjectionKey, { popupMaxHeight: computed(() => props.popupMaxHeight), modelValue: computed(() => props.modelValue), submenuTrigger: computed(() => props.submenuTrigger), onOptionClick: selection.select })
+provide(menuInjectionKey, { strategy: computed(() => props.strategy), popupMaxHeight: computed(() => props.popupMaxHeight), modelValue: computed(() => props.modelValue), submenuTrigger: computed(() => props.submenuTrigger), onOptionClick: selection.select })
 useMenuKeyboard({
   reference: () => menu.value?.getReference?.(), panel: () => panel.value?.panel,
   visible: () => computedOpen.value, disabled: () => props.disabled,

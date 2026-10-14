@@ -7,7 +7,7 @@ const Progress = withInstall(_Progress, Object.assign(_Progress, {
 
 export type ProgressInstance = InstanceType<typeof _Progress>
 export { progressProps }
-export type { ProgressColor, ProgressMode, ProgressProps } from './props'
+export type { ProgressColor, ProgressMode, ProgressProps, ProgressStatus } from './props'
 export { Progress }
 export const _ProgressComponent = Progress
 

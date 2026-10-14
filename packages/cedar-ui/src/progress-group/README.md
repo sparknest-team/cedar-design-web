@@ -8,7 +8,7 @@ permalink: /components/progress-group/
 
 ## 基础用法
 
-`items` 中每项的 `value` 都以 `max` 为基准计算宽度，开启 `status` 可展示累计百分比。
+`items` 中每项的 `value` 都以 `max` 为基准计算宽度，开启 `show-text` 可展示累计百分比。
 
 <demo src="./__demos__/basic.vue"></demo>
 
@@ -38,11 +38,19 @@ permalink: /components/progress-group/
 
 ## 自定义状态与数值
 
-使用 `status` 和 `item-trailing` 插槽自定义累计状态与图例尾部内容。
+使用 `text` 和 `item-trailing` 插槽自定义累计状态与图例尾部内容。
 
 鼠标悬浮或键盘聚焦分段时会显示提示并加粗当前分段。item 的 `tip` 可覆盖默认文案，`tooltip` 插槽可完全自定义内容。
 
 <demo src="./__demos__/slots.vue"></demo>
+
+### 超额数据与键盘提示
+
+<demo src="./__demos__/overflow-keyboard.vue"></demo>
+
+线形与环形按数据顺序累计裁剪到 max；图例和提示仍保留每项原始占比。例如 70+50 时第二段实际显示 30%，图例仍为 50%。非有限值和负数归零，非法 max 回退 100。Tab 聚焦可见分段展示提示，Escape 关闭；鼠标离开不会关闭仍处于焦点的提示。用 aria-label 为整个分组命名。
+
+size 五档均实现，仅影响线形厚度（2/4/8/12/16px）；环形用 circle-size（支持 number/CSS长度）和 stroke-width。累计文本开关为 show-text，自定义插槽为 text，已删除旧布尔 status / status 插槽。
 
 ## API
 
@@ -50,10 +58,11 @@ permalink: /components/progress-group/
 
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
+| aria-label | 分组的无障碍名称 | `string` | — |
 | items | 分段数据 | `ProgressGroupItem[]` | `[]` |
 | mode | 展示模式 | `'line' \| 'circle'` | `'line'` |
 | max | 所有分段计算占比时的总值 | `number` | `100` |
-| status | 是否展示累计百分比 | `boolean` | `false` |
+| show-text | 是否展示累计百分比 | `boolean` | `false` |
 | size | 进度轨尺寸 | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` |
 | color | 分段未指定颜色时使用的默认颜色 | `string` | `content-brand` |
 | circle-size | 环形模式的直径 | `number \| string` | `120` |
@@ -76,7 +85,7 @@ permalink: /components/progress-group/
 
 | 名称 | 插槽参数 |
 | --- | --- |
-| status | `{ percent, value, max }` |
+| text | `{ percent, value, max }` |
 | tooltip | `{ item, index, percent }` |
 | item / item-leading / item-label / item-trailing | `{ item, index, percent }` |
 
@@ -84,14 +93,14 @@ permalink: /components/progress-group/
 
 | 变量 | 默认值 |
 | --- | --- |
-| `--c-progress-group-gap` | `var(--c-spacing-3)` |
-| `--c-progress-group-item-gap` | `var(--c-spacing-2)` |
-| `--c-progress-group-dot-size` | `var(--c-size-2)` |
+| `--c-progress-group-gap` | `var(--c-sys-space-3)` |
+| `--c-progress-group-item-gap` | `var(--c-sys-space-2)` |
+| `--c-progress-group-dot-size` | `var(--c-sys-space-4)` |
 | `--c-progress-group-radius` | `9999px` |
 | `--c-progress-group-track-color` | `var(--c-sys-color-state-hover)` |
 | `--c-progress-group-text-color` | `var(--c-sys-color-content-primary)` |
 | `--c-progress-group-muted-color` | `var(--c-sys-color-content-secondary)` |
-| `--c-progress-group-font-size` | `var(--c-font-size-body-1)` |
+| `--c-progress-group-font-size` | `var(--c-sys-font-size-sm)` |
 | `--c-progress-group-tooltip-bg` | `var(--c-sys-color-surface-tooltip)` |
 | `--c-progress-group-tooltip-color` | `var(--c-sys-color-content-on-dark)` |
 
@@ -111,7 +120,7 @@ Built-in effects respect `prefers-reduced-motion: reduce`. Track thickness appli
 | `--c-progress-group-tooltip-font-size` | `var(--c-sys-font-size-xs)` |
 | `--c-progress-group-tooltip-line-height` | `1.4` |
 | `--c-progress-group-tooltip-offset` | `var(--c-sys-space-4)` |
-| `--c-progress-group-status-font-weight` | `var(--c-sys-font-weight-medium)` |
+| `--c-progress-group-text-font-weight` | `var(--c-sys-font-weight-medium)` |
 | `--c-progress-group-size-xs-thickness` | `2px` |
 | `--c-progress-group-size-sm-thickness` | `4px` |
 | `--c-progress-group-size-md-thickness` | `8px` |

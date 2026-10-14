@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { Message } from '@cedarjs/ui'
+import { Message } from "@cedarjs/ui";
 
 const publish = () => {
-  Message.info('发布成功')
-}
+  Message.info("发布成功");
+};
 const handleSelect = (_value: unknown, option: { label?: unknown }) => {
-  Message.info(String(option.label))
-}
+  Message.info(String(option.label));
+};
 </script>
 
 <template>
-  <c-split-button status="primary" @click="publish" @select="handleSelect">
+  <c-split-button @click="publish" @select="handleSelect">
     发布
     <template #icon="{ open }">
       <c-icon-menu-down

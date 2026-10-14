@@ -1,0 +1,8 @@
+- [x] List/ListItem SFC、Props、类型与样式主体独立复制
+- [x] 统一34个公共Token，保留平台默认密度
+- [x] Maple补齐maxHeight/scrollbar/virtualListProps/scroll与scrollIntoView
+- [x] 两端虚拟列表align/无效目标/异步竞态/非空数据缩小/threshold基础回归
+- [x] 两端定向测试与lint；同源和Token门禁
+- [x] 中文与英文Demo、文档、changesets
+- [x] 主批次整库类型、构建、公开Token、Demo编译与SSR验收
+- [ ] 浏览器视觉验收

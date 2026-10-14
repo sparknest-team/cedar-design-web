@@ -167,12 +167,12 @@ describe("Input", () => {
     await clear.trigger("click");
     expect(wrapper.emitted("update:modelValue")?.[0]).toEqual([""]);
     expect(wrapper.emitted("clear")).toHaveLength(1);
-    expect(onInput).not.toHaveBeenCalled();
-    expect(onChange).not.toHaveBeenCalled();
+    expect(onInput).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenCalledTimes(1);
     expect(onClear).toHaveBeenCalledTimes(1);
     expect(onClear).toHaveBeenCalledWith(expect.any(Event));
     await wrapper.get('input').trigger('blur')
-    expect(onChange).not.toHaveBeenCalled()
+    expect(onChange).toHaveBeenCalledTimes(1)
   });
 
   test("does not expose clearing while readonly", () => {

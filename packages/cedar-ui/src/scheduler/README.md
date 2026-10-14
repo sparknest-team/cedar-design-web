@@ -46,6 +46,8 @@ permalink: /components/scheduler/
 
 <demo src="./__demos__/drag-feedback.vue"></demo>
 
+下方“已提交日程”直接展示 v-model 的起止时间与资源 ID，便于核对只修改目标日程；预览不是提交值。可使用“重置日程”恢复两个独立 ID 的初始场景。
+
 ### 不关联资源的计划
 
 只管理日期与时间，不需要准备人员列表；没有资源、查询回调或关联 ID 时，侧栏和编辑器自动隐藏资源选择。
@@ -295,6 +297,8 @@ const { events, loading, error, refresh } = useSchedulerDataSource({
 
 示例可切换设备接口和人员接口。仅提供当前 4 条可见资源，而已有日程关联第 12 条，通过 `resolve-resources` 单独回显。打开资源下拉框后远程搜索、滚动或点击加载更多；搜索结果不会添加资源视图的行/列。可模拟搜索与回显失败，查看 ID 保留及重试。
 
+示例状态文案按当前请求更新：回显或搜索失败后，成功重试会清除旧失败提示；切换设备/人员接口会重置示例反馈。失败和重试都不会将资源显示名称写进日程，关联仍只存稳定 ID。
+
 <demo src="./__demos__/async-resources.vue"></demo>
 
 日程只保存 `resourceIds`；`id` 是稳定标识，`label` 是显示名称。业务层把 `userId/displayName`、`deviceId/deviceName` 等接口字段映射为 `{ id, label }`。不要把名称当 ID，也不要为了回显把全量目录放进 `resources`。
@@ -382,6 +386,8 @@ before-change 返回 false 取消，抛错或拒绝 Promise 会触发 change-err
 
 <demo src="./__demos__/async-change.vue"></demo>
 
+示例只使用本地 600ms 模拟保存。“下一次模拟保存失败”仅失败一次后自动复位，可在保留草稿的编辑器中直接重试。“父组件接受更新”关闭后，验证通过仍只是提案，下方模型明细和卡片保持已保存值；取消编辑也不写入。卸载、停用或重置清理示例请求计时器。
+
 ### 自定义日程与只读
 
 插槽提供展示内容；外层已经是可聚焦按钮，插槽内避免嵌套交互控件。只读仍能打开详情。
@@ -401,6 +407,8 @@ before-change 返回 false 取消，抛错或拒绝 Promise 会触发 change-err
 设置 `editable=false` 后，工具栏新增、空白格点击、卡片拖入和已有日程点击统一通过 `editor-request` 交给业务方。组件不打开内置 Drawer，也不自动保存。`request.event` 已带生成的 ID、日期/时间和资源；`source` 标明来源，`readonly` 用于只读详情。
 
 <demo src="./__demos__/external-editor.vue"></demo>
+
+示例中的“下一次模拟接口提交失败”只拒绝一次保存或删除，随后自动复位；失败时 Dialog 保留草稿，保存可直接再次确认，删除可再次点击删除，无需关闭窗口操作外部开关。取消则丢弃未保存草稿。
 
 业务方可以使用 Dialog、独立路由或其他表单。确认时调用 `change({ type: request.action === 'create' ? 'create' : 'update', event })`，等待返回 `true` 后关闭；返回 `false` 时保留表单，可监听 `change-error` 显示错误。删除已有日程使用 `type: 'remove'`。
 
@@ -639,6 +647,10 @@ const resourceFilters = { station: ["station:north"], person: ["person:lin"] };
 <demo src="./__demos__/duplicate-events.vue"></demo>
 
 详情中的“复制日程”使用当前已保存日程创建新草稿，未保存的表单修改不会带入。副本保持标题、日期、时长、全天状态、资源、描述、颜色、`metadata`，生成新 ID；取消不创建数据。定时、全天、未排期均支持。保存仍经过工作时间、维护、容量、冲突和保存钩子，成功后可以撤销重做。
+
+示例中的“下一次副本保存失败”只拒绝下一次提交，并自动复位；失败时抽屉保留草稿，可直接点击保存重试，不需要先关闭抽屉操作外部开关。此开关仅模拟本地保存，不是组件属性。
+
+保存被容量、可用时间或业务钩子拒绝时，编辑器保留草稿与错误以便修正重试；点击取消关闭编辑器后清除该次错误，不在日历外层残留过期提示，已保存模型不变。
 
 实例方法 `duplicateEvent(id): boolean` 用于打开复制草稿；返回 `true` 只表示草稿已打开或编辑请求已发出，**不表示已保存**。日程不存在、只读或组件正在加载/保存、禁用时返回 `false`。`editable=false` 时发送 `editor-request`，其 `action='create'`、`source='duplicate'`。自定义 `editor` 插槽可调用 `duplicate()`；新建模式下该动作无效。
 

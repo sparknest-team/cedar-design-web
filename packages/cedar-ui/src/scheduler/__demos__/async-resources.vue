@@ -63,9 +63,12 @@ const events = ref<SchedulerEvent[]>([]);
 const feedback = ref("打开详情查看名称回显，或在资源下拉框搜索。");
 const failNextSearch = ref(false);
 const failNextResolve = ref(false);
+const failedOperation = ref<"search" | "resolve">();
 watch(
   kind,
   () => {
+    failedOperation.value = undefined;
+    feedback.value = "打开详情查看名称回显，或在资源下拉框搜索。";
     page.value = 0;
     events.value = [
       {
@@ -115,6 +118,10 @@ const requestResources: SchedulerRequestResources = async ({
     (item) => item.label.includes(query) || item.id.includes(query),
   );
   const offset = Number(cursor ?? 0);
+  if (failedOperation.value === "search") {
+    failedOperation.value = undefined;
+    feedback.value = "搜索重试成功，可继续选择资源。";
+  }
   return {
     items: matches.slice(offset, offset + 4),
     nextCursor: offset + 4 < matches.length ? String(offset + 4) : undefined,
@@ -126,6 +133,10 @@ const resolveResources: SchedulerResolveResources = async (ids, { signal }) => {
   failNextResolve.value = false;
   await delay(signal);
   if (fail) throw new Error("模拟回显网络错误");
+  if (failedOperation.value === "resolve") {
+    failedOperation.value = undefined;
+    feedback.value = "资源名称回显成功，关联 ID 保持不变。";
+  }
   return data.filter((item) => ids.includes(item.id));
 };
 const beforeChange: SchedulerBeforeChange = async ({ event, type }) => {
@@ -143,9 +154,10 @@ function resourceError(
   _error: unknown,
   context: SchedulerResourceErrorContext,
 ) {
+  failedOperation.value = context.type;
   feedback.value =
     context.type === "resolve"
-      ? "回显失败：ID 仍保留，点击上方重试按钮。"
+      ? "回显失败：ID 仍保留，点击日程内的重试按钮。"
       : "搜索失败：可在下拉框内重试。";
 }
 function retryHydration() {

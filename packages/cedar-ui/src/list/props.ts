@@ -1,70 +1,42 @@
-import type { ExtractPropTypes, PropType } from "vue";
-import type { VirtualListProps } from "../_components/virtual-list-v2/interface";
-import type { ScrollbarProps } from "../scrollbar";
+import type { PropType, StyleValue, VNodeChild } from 'vue'
+import type { ComponentSize } from '../_utils/constant'
+import type { VirtualListProps, ScrollIntoViewOptions } from '../_components/virtual-list-v2/interface'
 
+export type ListSize = Extract<ComponentSize, 'sm' | 'md' | 'lg'>
+export type ListVirtualListProps = Omit<VirtualListProps, 'data' | 'isStaticItemHeight'>
+export interface ListScrollbarProps {
+  type?: 'track' | 'embed'
+  outerClass?: string | Record<string, boolean> | unknown[]
+  outerStyle?: StyleValue
+  hide?: boolean
+  disableHorizontal?: boolean
+  disableVertical?: boolean
+}
+export interface ListExpose { scrollIntoView(options: ScrollIntoViewOptions): void }
+export interface ListSlots {
+  default?: () => VNodeChild
+  header?: () => VNodeChild
+  footer?: () => VNodeChild
+  empty?: () => VNodeChild
+  item?: (props: { item: unknown; index: number }) => VNodeChild
+}
+export interface ListEmits { scroll: (event: Event) => void }
 export const listProps = {
-  /**
-   * @zh 列表数据，需要和 `item` 插槽同时使用
-   * @en List data, need to be used with `item` slot at the same time
-   */
-  data: {
-    type: Array as PropType<unknown[]>,
-  },
-  /**
-   * @zh 列表大小
-   * @en List size
-   */
-  size: {
-    type: String as PropType<"sm" | "md" | "lg">,
-    default: "md",
-  },
-  /**
-   * @zh 是否显示边框
-   * @en Whether to show the border
-   */
-  bordered: {
-    type: Boolean,
-    default: true,
-  },
-  /**
-   * @zh 是否显示分割线
-   * @en Whether to show the dividing line
-   */
-  split: {
-    type: Boolean,
-    default: true,
-  },
-  /**
-   * @zh 是否为加载中状态
-   * @en Whether it is loading state
-   */
-  loading: {
-    type: Boolean,
-    default: false,
-  },
-  /**
-   * @zh 列表的最大高度
-   * @en Maximum height of the list
-   */
-  maxHeight: {
-    type: [String, Number] as PropType<string | number>,
-    default: 0,
-  },
-  /**
-   * @zh 传递虚拟列表属性，传入此参数以开启虚拟滚动 [VirtualListProps](#VirtualListProps)
-   * @en Pass virtual list properties, pass in this parameter to turn on virtual scrolling [VirtualListProps](#VirtualListProps)
-   */
-  virtualListProps: {
-    type: Object as PropType<VirtualListProps>,
-  },
-  /**
-   * @zh 是否开启虚拟滚动条
-   * @en Whether to enable virtual scroll bar
-   */
-  scrollbar: {
-    type: [Object, Boolean] as PropType<boolean | ScrollbarProps>,
-    default: true,
-  },
-};
-
-export type ListProps = import("vue").ExtractPublicPropTypes<typeof listProps>;
+  /** 数据列表，与 item 插槽配合；default 插槽优先。 */
+  data: Array as PropType<unknown[]>,
+  /** 实现 sm/md/lg 三档。 */
+  size: { type: String as PropType<ListSize>, default: 'md', validator: (value: string) => ['sm', 'md', 'lg'].includes(value) },
+  /** 显示外边框。 */
+  bordered: { type: Boolean, default: true },
+  /** 显示列表项、头部和尾部分隔线。 */
+  split: { type: Boolean, default: true },
+  /** 加载反馈，不管理分页请求。 */
+  loading: Boolean,
+  /** 滚动区域最大高度；数字以 px 为单位，0 为不限。 */
+  maxHeight: { type: [String, Number], default: 0 },
+  /** 数据模式的虚拟化参数；default 插槽存在时不生效。 */
+  virtualListProps: Object as PropType<ListVirtualListProps>,
+  /** 普通列表的自定义滚动条；虚拟列表使用自身滚动视口。 */
+  scrollbar: { type: [Boolean, Object] as PropType<boolean | ListScrollbarProps>, default: true },
+}
+export type ListProps = import('vue').ExtractPublicPropTypes<typeof listProps>

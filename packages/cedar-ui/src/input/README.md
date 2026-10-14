@@ -64,7 +64,7 @@ permalink: /components/input/
 ### 数字统计
 
 设置 max-length 可以限制最大字数，配合 show-word-limit 可以显示字数统计。
-超出长度时会截断，并通过 `update:model-value` 与 `input` 传出截断后的值。点击清空更新模型并触发 `clear`，随后的失焦不会补发 `change`。
+超出长度时会截断，并通过 `update:model-value` 与 `input` 传出截断后的值。清空按 `clear → input → update:model-value → change` 通知，随后失焦不会补发 `change`。
 
 <demo src="./__demos__/word-limit.vue"></demo>
 
@@ -73,6 +73,12 @@ permalink: /components/input/
 用于输入密码。
 
 <demo src="./__demos__/password.vue"></demo>
+
+### 主体与事件契约
+
+两端维护独立复制的主体。输入按 input → update:modelValue 通知；清空按 clear → input → update:modelValue → change 通知，各一次，Form 对应语义也各接收一次。只读、禁用和组合输入期间禁止清空。受控提议被拒绝后恢复原生内容，包括不支持光标 API 的输入类型。
+
+<demo src="./__demos__/event-pipeline.vue"></demo>
 
 ## API
 
@@ -111,7 +117,7 @@ permalink: /components/input/
 | 事件名      | 描述                           | 参数                           |
 | ----------- | ------------------------------ | ------------------------------ |
 | input       | 用户输入时触发                 | value: `string`<br>ev: `Event` |
-| change      | 仅在输入框失焦或按下回车时触发 | value: `string`<br>ev: `Event` |
+| change      | 失焦、回车提交或清空时触发 | value: `string`<br>ev: `Event` |
 | press-enter | 用户按下回车时触发             | ev: `KeyboardEvent`            |
 | clear       | 用户点击清除按钮时触发         | ev: `MouseEvent`               |
 | focus       | 输入框获取焦点时触发           | ev: `FocusEvent`               |
@@ -166,3 +172,5 @@ InputPassword 支持所有 Input 属性、事件、插槽与方法。
 ```ts
 import type { InputProps } from "@cedarjs/ui";
 ```
+
+公开类型 / Public types: `InputEmits`, `InputSlots`, `InputExpose`, `InputGroupSlots`, `InputPasswordEmits`, `InputPasswordSlots`, `InputPasswordExpose`.

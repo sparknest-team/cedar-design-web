@@ -2,7 +2,7 @@
 permalink: /components/style/atomic-css/
 ---
 
-## 原子化 CSS
+# 原子化 CSS
 
 Cedar 提供两套能力：
 

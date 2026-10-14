@@ -29,3 +29,12 @@ export default Date
 
 export type { DateValue, DateSelection, DateSide, DateValueOptions } from '../date/date-value'
 export type { DateDisabledTime, DateRules } from '../date/date-rules'
+
+export type { DateType } from './props'
+export type { DatePickerType, DatePickerOptions } from './picker-props'
+export type { DateWeekStart } from './panel-props'
+export type { DateEventPayload, DateChangeArgs, DateEmits, DatePickerEmits } from './events'
+
+export type { DateShortcut, DateShortcutsPosition } from './panel-tools-props'
+
+export type { DateTimePickerOptions } from './time-picker-options'

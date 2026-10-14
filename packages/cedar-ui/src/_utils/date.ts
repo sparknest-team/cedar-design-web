@@ -72,13 +72,8 @@ export const methods = {
     return time.set(unit, value)
   },
   isSameWeek(date1: Dayjs, date2: Dayjs, weekStart: number) {
-    // calculate week number of the given date considering the given start of week
-    const getWeek = (date: Dayjs) => {
-      const day = date.day()
-      const diff = day - weekStart + (day < weekStart ? 7 : 0)
-      return date.subtract(diff, 'day').week()
-    }
-    return getWeek(date1) === getWeek(date2)
+    const start = (date: Dayjs) => date.subtract((date.day() - weekStart + 7) % 7, 'day').startOf('day')
+    return start(date1).isSame(start(date2), 'day')
   },
 }
 
@@ -186,10 +181,6 @@ export function getDateValue(value: Dayjs | Dayjs[] | (Dayjs | undefined)[] | un
   }
 
   return formatValue(value)
-}
-
-export function initializeDateLocale(localeName: string, weekStart: number) {
-  dayjs.locale({ ...dayjs.Ls[localeName.toLocaleLowerCase()], weekStart })
 }
 
 export function pickDataAttributes<T extends Record<string, any>, K extends keyof T>(obj: T): { [key in K]: any } {

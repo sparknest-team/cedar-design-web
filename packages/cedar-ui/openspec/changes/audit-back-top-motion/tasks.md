@@ -1,0 +1,4 @@
+- [x] Reproduce mid-animation preference and stale-frame regressions.
+- [x] Align source and tests on both platforms.
+- [x] Verify cancellation, target-document preference, SSR, types and lint.
+- [x] Update shared guides and component documentation.

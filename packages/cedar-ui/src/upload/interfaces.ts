@@ -11,9 +11,10 @@ export type UploadResolveType = 'file' | 'data-url' | 'object-url'
 
 export type UploadCapture = InputHTMLAttributes['capture']
 
-export type UploadRejectedReason = 'accept' | 'before-add' | 'max-file-size' | 'max-total-size' | 'max-files' | 'before-read'
+export type UploadRejectedReason = 'accept' | 'before-add' | 'max-file-size' | 'max-total-size' | 'max-files' | 'before-read' | 'read-error'
 
 export interface UploadFileItem {
+  fit?: UploadImageFit
   uid: string
   name?: string
   size?: number
@@ -112,4 +113,32 @@ export interface UploadItemSlotProps {
 export interface UploadStyleProps {
   class?: string
   style?: string | CSSProperties
+}
+
+export interface UploadPreviewEvent {
+  readonly defaultPrevented: boolean
+  preventDefault: () => void
+  originalEvent?: MouseEvent
+}
+export type UploadRequestChoose = (chooseFile: () => void, event: Event) => void | Promise<void>
+export interface UploadEmits {
+  'update:modelValue': [files: UploadFileItem[]]
+  read: [file: UploadFileItem]
+  change: [files: UploadFileItem[], file?: UploadFileItem]
+  rejected: [files: UploadRejectedFile[]]
+  exceed: [files: File[], fileList: UploadFileItem[]]
+  progress: [file: UploadFileItem, event?: ProgressEvent]
+  success: [file: UploadFileItem]
+  error: [file: UploadFileItem]
+  remove: [file: UploadFileItem]
+  preview: [file: UploadFileItem, event: UploadPreviewEvent]
+}
+export interface UploadSlots {
+  trigger?: (scope: UploadTriggerSlotProps) => VNodeChild
+  item?: (scope: UploadItemSlotProps) => VNodeChild
+  'remove-button'?: (scope: UploadItemSlotProps) => VNodeChild
+}
+export interface UploadExpose extends UploadPublicMethods {
+  closePreview: () => void
+  preview: (file: UploadFileItem) => void
 }

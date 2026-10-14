@@ -1647,7 +1647,10 @@ watch(
       editorSnapshot = JSON.stringify(
         value.value.find((event) => event.id === editorEvent.value?.id),
       );
-    else if (previous) void restoreEditorFocus();
+    else if (previous) {
+      error.value = undefined;
+      void restoreEditorFocus();
+    }
   },
   { flush: "sync" },
 );

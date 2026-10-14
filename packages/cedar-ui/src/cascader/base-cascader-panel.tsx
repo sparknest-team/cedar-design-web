@@ -1,9 +1,9 @@
 import { defineComponent, inject, PropType, TransitionGroup } from 'vue'
 import { useEmptySlot } from '../_components/selection-field/empty-slot'
 import { VirtualListProps } from '../_components/virtual-list-v2/interface'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import Empty from '../empty'
 import Loading from '../loading'
-import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import CascaderColumn from './cascader-column'
 import { CascaderOptionInfo } from './types'
 

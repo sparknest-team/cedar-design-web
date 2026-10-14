@@ -1,0 +1,39 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+import type { SearchResult } from '@cedarjs/ui'
+
+const field = ref('name')
+const model = ref<Record<string, unknown>>({ name: '设备 A', tenant: 'demo' })
+const accepted = ref(true)
+const history = ref(['设备 A', '42'])
+const result = ref<SearchResult>()
+const fields = [
+  { value: 'name', label: '设备名称', placeholder: '输入名称' },
+  { value: 'id', label: '设备 ID', placeholder: '输入 ID' },
+]
+function updateModel(proposal: Record<string, unknown>) {
+  if (accepted.value) model.value = proposal
+}
+function updateField(proposal: string) {
+  if (accepted.value) field.value = proposal
+}
+function search(next: SearchResult) {
+  result.value = next
+  history.value = next.recentSearches
+}
+</script>
+<template>
+  <div class="search-demo">
+    <label><input v-model="accepted" type="checkbox">接受模型更新（取消后演示受控拒绝）</label>
+    <c-search :model="model" :model-field="field" :fields="fields"
+      :recent-searches="history" :history-popup="false" search-button button-text="搜索"
+      clearable @update:model="updateModel" @update:model-field="updateField" @search="search" />
+    <c-button variant="text" @click="model = { name: '外部替换', tenant: 'demo' }">外部替换模型</c-button>
+    <div>已接受模型：{{ model }}</div>
+    <pre v-if="result">{{ JSON.stringify(result, null, 2) }}</pre>
+  </div>
+</template>
+<style scoped>
+.search-demo { display: flex; flex-direction: column; gap: 12px; max-width: 100%; }
+.search-demo pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+</style>

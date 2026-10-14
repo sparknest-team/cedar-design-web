@@ -5,7 +5,7 @@
       <c-checkbox value="2">Option 2</c-checkbox>
       <c-checkbox value="3">Option 3</c-checkbox>
     </c-checkbox-group>
-    <c-checkbox-group direction="column">
+    <c-checkbox-group direction="vertical">
       <c-checkbox value="1">Option 1</c-checkbox>
       <c-checkbox value="2">Option 2</c-checkbox>
       <c-checkbox value="3">Option 3</c-checkbox>

@@ -1,0 +1,6 @@
+- [x] Reproduce six callback-ownership regressions on each platform.
+- [x] Implement independent generation and owner-state guards.
+- [x] Run full Trigger suites: Cedar 53 / Maple 66.
+- [x] Synchronize shared/menu/component docs and classification source hashes.
+- [x] Complete separately scoped Trigger RAF owner-window audit (trigger-raf-window-ownership; simulated ownership).
+- [ ] Add native browser/OS lifecycle evidence when available.

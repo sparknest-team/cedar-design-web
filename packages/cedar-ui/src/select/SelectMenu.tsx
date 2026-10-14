@@ -6,8 +6,8 @@ import {
   type UnwrapNestedRefs,
 } from 'vue'
 import VirtualList from '../_components/virtual-list-v2'
-import { isFunction } from '../_utils/is'
 import { createNamespace } from '../_utils/global-config'
+import { isFunction } from '../_utils/is'
 import OptGroup from './Optgroup.vue'
 import Option from './Option.vue'
 import SelectDropdown from './SelectDropdown.vue'

@@ -244,7 +244,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .c-button { transition: none; }
+  .c-button {
+    transition: none;
+  }
 }
 
 // Interaction, layout and loading contract shared by both libraries.
@@ -302,7 +304,8 @@
     width: var(--c-button-loading-line-width);
     height: 100%;
     background: currentColor;
-    animation: c-button-loading-line var(--c-button-loading-duration) linear infinite;
+    animation: c-button-loading-line var(--c-button-loading-duration) linear
+      infinite;
   }
   @media (prefers-reduced-motion: reduce) {
     &__loading-line {
@@ -344,8 +347,12 @@
     position: absolute;
     inset: 0;
   }
-  &--loading-default > &--icon > :not(&__loading) { visibility: hidden; }
-  &__content { line-height: 1; }
+  &--loading-default > &--icon > :not(&__loading) {
+    visibility: hidden;
+  }
+  &__content {
+    line-height: 1;
+  }
 }
 
 // State layer is behind content; active wins hover, blocked states suppress both.
@@ -353,18 +360,29 @@
   --c-internal-button-state-layer-color: var(--c-button-state-layer-color);
   isolation: isolate;
   --c-internal-button-state-opacity-hover: var(--c-button-state-opacity-hover);
-  --c-internal-button-state-opacity-active: var(--c-button-state-opacity-active);
-  &--variant-text, &--variant-outline {
-    --c-internal-button-state-opacity-hover: var(--c-button-plain-state-opacity-hover);
-    --c-internal-button-state-opacity-active: var(--c-button-plain-state-opacity-active);
+  --c-internal-button-state-opacity-active: var(
+    --c-button-state-opacity-active
+  );
+  &--variant-text,
+  &--variant-outline {
+    --c-internal-button-state-opacity-hover: var(
+      --c-button-plain-state-opacity-hover
+    );
+    --c-internal-button-state-opacity-active: var(
+      --c-button-plain-state-opacity-active
+    );
   }
   .solid-state(@status) {
     &--variant-text&--status-@{status},
     &--variant-outline&--status-@{status} {
-      --c-internal-button-state-layer-color: var(~'--c-button-@{status}-icon-container-color');
+      --c-internal-button-state-layer-color: var(
+        ~"--c-button-@{status}-icon-container-color"
+      );
     }
     &--variant-default&--status-@{status}:not(&--icon-container) {
-      --c-internal-button-state-layer-color: var(~'--c-button-@{status}-state-layer-color');
+      --c-internal-button-state-layer-color: var(
+        ~"--c-button-@{status}-state-layer-color"
+      );
     }
   }
   .solid-state(default);
@@ -389,5 +407,36 @@
   &&--disabled {
     color: var(--c-button-disabled-text-color);
     background-color: var(--c-button-disabled-color);
+    &.c-button--variant-text,
+    &.c-button--variant-outline {
+      background-color: transparent;
+    }
+    .semantic-disabled(@status) {
+      &.c-button--status-@{status} {
+        color: var(~"--c-button-@{status}-disabled-color");
+        &.c-button--variant-default:not(.c-button--icon-container) {
+          color: var(--c-button-disabled-solid-text-color);
+          background-color: var(~"--c-button-@{status}-disabled-color");
+        }
+        &.c-button--variant-tonal,
+        &.c-button--variant-default.c-button--icon-container {
+          background-color: var(~"--c-button-@{status}-icon-container-color");
+        }
+      }
+    }
+    .neutral-disabled(@status) {
+      &.c-button--status-@{status}.c-button--variant-tonal,
+      &.c-button--status-@{status}.c-button--variant-default.c-button--icon-container {
+        background-color: var(~'--c-button-@{status}-icon-container-color');
+      }
+    }
+    .neutral-disabled(default);
+    .neutral-disabled(secondary);
+    .neutral-disabled(tertiary);
+    .semantic-disabled(primary);
+    .semantic-disabled(info);
+    .semantic-disabled(success);
+    .semantic-disabled(warning);
+    .semantic-disabled(danger);
   }
 }

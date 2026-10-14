@@ -4,9 +4,17 @@ permalink: /components/list/
 
 # List
 
+VirtualList 消费者生命周期已专项验证：新请求、数据变化、停用及卸载使旧 nextTick 补偿失效，保留命令在停用／卸载后无效，激活不重放旧补偿。补偿不是 RAF 插值，不新增 CSS Token／API；各端15项专项通过，完整 List Cedar41／Maple34通过，真实浏览器新增0。既有 key／index／align 及测量契约保持。下文分类说明保留先前时点。
+
+`scrollIntoView` 仅在虚拟模式向内部 VirtualList 的 `scrollTo` 转发 options，不是直接调用 DOM `scrollIntoView`，也没有本地动效计时器。原生滚动、减少动效或保留命令的生命周期须以 VirtualList 消费者专项为准；方法名／调用提示不等于视觉验收。本轮源码分类不改 List API／实现。
+
 最基础的列表展示，可承载文字、列表、图片、段落，常用于后台数据展示页面。
 
 ## 案例
+
+### 保留命令与 KeepAlive 生命周期
+
+<demo src="./__demos__/virtual-lifecycle.vue"></demo>
 
 ### 基础用法
 
@@ -42,66 +50,86 @@ permalink: /components/list/
 
 <demo src="./__demos__/virtual-list.vue"></demo>
 
+
+### 容器滚动
+
+<demo src="./__demos__/bounded-scroll.vue"></demo>
+
+### 虚拟定位
+
+<demo src="./__demos__/virtual-navigation.vue"></demo>
+
 ## API
 
-### `<list>` Props
+### List Props
 
-| 参数名             | 描述                                                                             | 类型                        | 默认值  | 版本   |
-| ------------------ | -------------------------------------------------------------------------------- | --------------------------- | :-----: | :----- |
-| data               | 列表数据，需要和 `item` 插槽同时使用                                             | `unknown[]`                 |   `-`   |        |
-| size               | 列表大小                                                                         | `'sm' \| 'md' \| 'lg'`      | `'md'`  |        |
-| bordered           | 是否显示边框                                                                     | `boolean`                   | `true`  |        |
-| split              | 是否显示分割线                                                                   | `boolean`                   | `true`  |        |
-| loading            | 是否为加载中状态                                                                 | `boolean`                   | `false` |        |
-| max-height         | 列表的最大高度                                                                   | `string \| number`          |   `0`   |        |
-| virtual-list-props | 传递虚拟列表属性，传入此参数以开启虚拟滚动 [VirtualListProps](#VirtualListProps) | `VirtualListProps`          |   `-`   |        |
-| scrollbar          | 是否开启虚拟滚动条                                                               | `boolean \| ScrollbarProps` | `true`  | 2.38.0 |
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| data | 数据，与 item 插槽配合 | unknown[] | undefined |
+| size | 仅实现 sm/md/lg，不支持 xs/xl | 'sm' \| 'md' \| 'lg' | md |
+| bordered | 外边框 | boolean | true |
+| split | 头尾及列表项分隔线，与边框独立 | boolean | true |
+| loading | 首次加载/刷新反馈，不管理分页 | boolean | false |
+| max-height | 普通列表最大高度；数字px/CSS长度，0不限 | number \| string | 0 |
+| virtual-list-props | 数据模式虚拟化；default插槽存在时忽略 | ListVirtualListProps | undefined |
+| scrollbar | 普通列表自定义滚动条；false使用原生滚动 | boolean \| ListScrollbarProps | true |
 
-### `<list>` Events
+虚拟列表使用独立视口，不额外嵌套自定义滚动条。virtualListProps.height 优先于 maxHeight；均省略时虚拟视口默认 200px。数字/带单位CSS长度受支持，非法或非正 max-height 不限制高度。
 
-| 事件名 | 描述           | 参数    |
-| ------ | -------------- | ------- |
-| scroll | 列表滚动时触发 | `Event` |
+ListVirtualListProps 支持 height、threshold、fixedSize、estimatedSize、buffer、itemKey、component。没有废弃的 isStaticItemHeight；data 统一由 List.data 提供。数据量小于或等于 threshold 时渲染全部；非固定高度使用测量值与 estimatedSize 估计，buffer 控制前后预渲染行数。
 
-### `<list>` Methods
+ListScrollbarProps 支持 type: 'track'|'embed'、outerClass、outerStyle、hide、disableHorizontal、disableVertical。属性作为 JavaScript 对象字段使用 camelCase。
 
-| 方法名         | 描述               | 参数                                                                                     | 返回值 |
-| -------------- | ------------------ | ---------------------------------------------------------------------------------------- | ------ |
-| scrollIntoView | 虚拟滚动到某个元素 | options: `{ index?: number; key?: number \| string; align: 'auto' \| 'top' \| 'bottom'}` | -      |
+### Events / Methods
 
-### `<list>` Slots
+- scroll(event: Event)：真实滚动事件，一次滚动通知一次。
+- scrollIntoView({ index?, key?, align })：虚拟列表定位，index 优先；align 为 top/bottom/auto。auto 在项目已完整可见时不滚动，否则最小滚动使其可见。无效目标、非虚拟模式不操作。
 
-| 插槽名  | 描述                                       | 参数                           |
-| ------- | ------------------------------------------ | ------------------------------ |
-| default | 自定义列表内容；提供时优先于 `data`        | -                              |
-| item    | `data` 驱动的列表项                        | index: `number`<br>item: `any` |
-| empty   | 非加载状态且无默认内容、无数据时的空白展示 | -                              |
-| footer  | 底部信息                                   | -                              |
-| header  | 头部信息                                   | -                              |
+### Slots
 
-### `<list-item>` Slots
+List：default（优先于data）、item({ item, index })、header、footer、empty。空态仅无默认插槽、无数据、非加载时渲染。ListItem：prefix、default、suffix，保持列表项语义，不管理按钮/业务交互。
 
-| 插槽名  |    描述    | 参数 |
-| ------- | :--------: | ---- |
-| default | 列表项主体 | -    |
-| prefix  | 列表项前缀 | -    |
-| suffix  | 列表项后缀 | -    |
+### 类型
 
-### VirtualListProps
+ListProps、ListSize、ListVirtualListProps、ListScrollbarProps、ListExpose、ListSlots、ListEmits、ListInstance、ListItemInstance。
 
-| 参数名             | 描述                                                                | 类型               | 默认值  | 版本   |
-| ------------------ | ------------------------------------------------------------------- | ------------------ | :-----: | :----- |
-| height             | 可视区域高度                                                        | `number \| string` |   `-`   |        |
-| threshold          | 开启虚拟滚动的元素数量阈值，当数据数量小于阈值时不会开启虚拟滚动。  | `number`           |   `-`   |        |
-| isStaticItemHeight | （已废除）元素高度是否是固定的。2.34.1 版本废除，请使用 `fixedSize` | `boolean`          | `false` |        |
-| fixedSize          | 元素高度是否是固定的。                                              | `boolean`          | `false` | 2.34.1 |
-| estimatedSize      | 元素高度不固定时的预估高度。                                        | `number`           |   `-`   | 2.34.1 |
-| buffer             | 视口边界外提前挂载的元素数量。                                      | `number`           |  `10`   | 2.34.1 |
+List 与 InfiniteScroll 分工独立：List管理展示与可选虚拟视口；无限分页应组合 InfiniteScroll 的 status/target 交互，不在 List 中重复维护加载状态机。
 
-### 类型定义
+## 样式变量
 
-组件导出以下类型定义
-
-```ts
-import type { ListInstance, ListProps } from "@cedarjs/ui";
-```
+| Token | Default |
+| --- | --- |
+| `--c-list-background` | `transparent` |
+| `--c-list-empty-padding` | `16px` |
+| `--c-list-empty-color` | `var(--c-list-text-color)` |
+| `--c-list-loading-padding` | `0px` |
+| `--c-list-border-width` | `1px` |
+| `--c-list-border-color` | `var(--c-color-neutral-3)` |
+| `--c-list-border-radius` | `var(--c-border-radius-md)` |
+| `--c-list-text-color` | `var(--c-color-text-1)` |
+| `--c-list-font-size` | `var(--c-font-size-body-3)` |
+| `--c-list-line-height` | `var(--c-line-height)` |
+| `--c-list-text-color-header` | `var(--c-color-text-1)` |
+| `--c-list-font-size-header` | `var(--c-font-size-title-1)` |
+| `--c-list-font-weight-header` | `var(--c-font-weight-500)` |
+| `--c-list-line-height-header` | `1.5` |
+| `--c-list-size-sm-padding-vertical-header` | `var(--c-spacing-4)` |
+| `--c-list-size-sm-padding-horizontal-header` | `var(--c-spacing-8)` |
+| `--c-list-size-sm-padding-vertical-item` | `9px` |
+| `--c-list-size-sm-padding-horizontal-item` | `var(--c-spacing-8)` |
+| `--c-list-size-md-padding-vertical-header` | `var(--c-spacing-6)` |
+| `--c-list-size-md-padding-horizontal-header` | `var(--c-spacing-8)` |
+| `--c-list-size-md-padding-vertical-item` | `13px` |
+| `--c-list-size-md-padding-horizontal-item` | `var(--c-spacing-8)` |
+| `--c-list-size-lg-padding-vertical-header` | `var(--c-spacing-7)` |
+| `--c-list-size-lg-padding-horizontal-header` | `var(--c-spacing-8)` |
+| `--c-list-size-lg-padding-vertical-item` | `17px` |
+| `--c-list-size-lg-padding-horizontal-item` | `var(--c-spacing-8)` |
+| `--c-list-item-prefix-margin-right` | `var(--c-spacing-8)` |
+| `--c-list-item-suffix-margin-left` | `var(--c-spacing-8)` |
+| `--c-list-size-sm-padding-vertical-footer` | `var(--c-list-size-sm-padding-vertical-item)` |
+| `--c-list-size-sm-padding-horizontal-footer` | `var(--c-list-size-sm-padding-horizontal-item)` |
+| `--c-list-size-md-padding-vertical-footer` | `var(--c-list-size-md-padding-vertical-item)` |
+| `--c-list-size-md-padding-horizontal-footer` | `var(--c-list-size-md-padding-horizontal-item)` |
+| `--c-list-size-lg-padding-vertical-footer` | `var(--c-list-size-lg-padding-vertical-item)` |
+| `--c-list-size-lg-padding-horizontal-footer` | `var(--c-list-size-lg-padding-horizontal-item)` |

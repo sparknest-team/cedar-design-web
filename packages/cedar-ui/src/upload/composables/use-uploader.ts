@@ -1,8 +1,9 @@
-import { computed, onBeforeUnmount } from 'vue'
+import { computed, reactive, nextTick, onActivated, onBeforeUnmount, onDeactivated, watch } from 'vue'
 import { useFilePicker } from './use-file-picker'
 import { useUploadQueue } from './use-upload-queue'
 import { uploadRequest } from '../utils/request'
-import { resolveThumbnailUrl, revokeThumbnailUrl } from '../utils/thumbnail'
+import { resolveThumbnailUrl } from '../utils/thumbnail'
+import { isAcceptedFile } from '../utils/accept'
 import { createUploadUid } from '../utils/uid'
 import type {
   UploadBeforeRead,
@@ -51,304 +52,231 @@ export interface UseUploaderOptions {
   beforeRemove?: () => UploadBeforeRemove | undefined
   isSuccessResponse?: () => UploadIsSuccessResponse | undefined
   onUpdateModelValue?: (files: UploadFileItem[]) => void
-  onChange?: (files: UploadFileItem[], file: UploadFileItem) => void
+  onChange?: (files: UploadFileItem[], file?: UploadFileItem) => void
   onRejected?: (files: UploadRejectedFile[]) => void
   onExceed?: (files: File[], fileList: UploadFileItem[]) => void
   onProgress?: (file: UploadFileItem, event?: ProgressEvent) => void
   onSuccess?: (file: UploadFileItem) => void
   onError?: (file: UploadFileItem) => void
   onRemove?: (file: UploadFileItem) => void
-  onPreview?: (file: UploadFileItem, event: MouseEvent) => void
+  onPreview?: (file: UploadFileItem, event: import('../interfaces').UploadPreviewEvent) => void
   listType?: () => UploadListType
 }
 
-const defaultMethod = 'post'
-const defaultName = 'file'
-const defaultResolveType: UploadResolveType = 'object-url'
 
 export function useUploader(options: UseUploaderOptions) {
-  const requests = new Map<string, UploadRequest>()
-
-  const disabled = computed(() => Boolean(options.disabled?.() || options.readonly?.()))
-  const queue = useUploadQueue({
-    modelValue: options.modelValue,
-    defaultValue: options.defaultValue,
-    onChange: options.onChange,
-    onUpdateModelValue: options.onUpdateModelValue,
-  })
-
-  const picker = useFilePicker({
-    accept: () => options.accept?.(),
-    directory: () => Boolean(options.directory?.()),
-    disabled: () => disabled.value,
-    onFiles: addFiles,
-  })
-
-  const maxReached = computed(() => {
-    const maxFiles = options.maxFiles?.()
-    return maxFiles !== undefined && maxFiles > 0 && queue.fileList.value.length >= maxFiles
-  })
-
-  function emitRejected(rejected: UploadRejectedFile[]) {
-    if (rejected.length) {
-      options.onRejected?.(rejected)
+  let active = true
+  let inactive = false
+  let generation = 0
+  let adding = Promise.resolve()
+  const owned = new Map<string, string>()
+  const leases = new Map<string, number>()
+  const deferredRelease = new Set<string>()
+  const accepted = new Set<string>()
+  const pendingAuto = new Set<string>()
+  const attempts = new Map<string, { request?: UploadRequest; resolvedFile?: File; reservedSize?: number }>()
+  const removals = new Map<string, object>()
+  const identities = new Map<string, File | undefined>()
+  const disabled = computed(() => !active || inactive || Boolean(options.disabled?.() || options.readonly?.()))
+  const queue = useUploadQueue({ modelValue: options.modelValue, defaultValue: options.defaultValue,
+    onChange: options.onChange, onUpdateModelValue: options.onUpdateModelValue })
+  const picker = useFilePicker({ accept: options.accept, directory: options.directory, disabled: () => disabled.value, onFiles: addFiles })
+  const maxReached = computed(() => (options.maxFiles?.() ?? 0) > 0 && queue.fileList.value.length >= options.maxFiles!()!)
+  const valid = (epoch: number) => active && generation === epoch && !disabled.value
+  function release(uid: string) {
+    if (leases.get(uid)) { deferredRelease.add(uid); return }
+    deferredRelease.delete(uid)
+    const url = owned.get(uid)
+    if (url) URL.revokeObjectURL(url)
+    owned.delete(uid)
+  }
+  function retainUrls(uids: string[]) {
+    uids.forEach(uid => leases.set(uid, (leases.get(uid) ?? 0) + 1))
+    let released = false
+    return () => {
+      if (released) return
+      released = true
+      uids.forEach(uid => { leases.set(uid, Math.max(0, (leases.get(uid) ?? 0) - 1)); if (deferredRelease.has(uid)) release(uid) })
     }
   }
-
-  async function applyFilters(files: File[], initialRejected: UploadRejectedFile[]) {
+  function cancelAttempt(uid: string) {
+    const attempt = attempts.get(uid)
+    attempts.delete(uid)
+    try { attempt?.request?.abort?.() } catch { /* An abort failure cannot resurrect an obsolete attempt. */ }
+  }
+  watch(() => queue.fileList.value.map(file => [file.uid, file.file, file.url, file.thumbnailUrl] as const), entries => {
+    const uids = entries.map(([uid]) => uid)
+    if (!active) return
+    for (const uid of accepted) if (!uids.includes(uid)) { cancelAttempt(uid); release(uid); pendingAuto.delete(uid); accepted.delete(uid); identities.delete(uid); removals.delete(uid) }
+    for (const file of queue.fileList.value) {
+      if (identities.has(file.uid) && identities.get(file.uid) !== file.file && attempts.get(file.uid)?.resolvedFile !== file.file) { cancelAttempt(file.uid); removals.delete(file.uid) }
+      if (accepted.has(file.uid) && owned.has(file.uid) && file.url !== owned.get(file.uid) && file.thumbnailUrl !== owned.get(file.uid)) release(file.uid)
+      identities.set(file.uid, file.file)
+      accepted.add(file.uid)
+      if (pendingAuto.delete(file.uid) && options.autoUpload?.() !== false && (options.action?.() || options.customRequest?.())) void submit(file)
+    }
+  }, { immediate: true, flush: 'post' })
+  function reject(files: UploadRejectedFile[]) { if (active && files.length) options.onRejected?.(files) }
+  function addFiles(files: File[], initialRejected: UploadRejectedFile[] = []) {
+    const epoch = generation
+    adding = adding.then(() => prepareFiles(files, initialRejected, epoch)).catch(() => {})
+    return adding
+  }
+  async function prepareFiles(files: File[], initialRejected: UploadRejectedFile[], epoch: number) {
+    if (!valid(epoch)) return
     const rejected = [...initialRejected]
-    let nextFiles = [...files]
-
+    let candidates = files
     if (options.beforeAdd) {
-      const acceptedFiles = await options.beforeAdd(nextFiles)
-      const acceptedFileSet = new Set(acceptedFiles)
-      nextFiles.forEach((file) => {
-        if (!acceptedFileSet.has(file)) {
-          rejected.push({ file, reason: 'before-add' })
-        }
-      })
-      nextFiles = acceptedFiles
+      try {
+        candidates = await options.beforeAdd(files)
+        for (const file of files) if (!candidates.includes(file)) rejected.push({ file, reason: 'before-add' })
+      } catch { reject([...rejected, ...files.map(file => ({ file, reason: 'before-add' as const }))]); return }
     }
-
-    const maxFileSize = options.maxFileSize?.()
-    if (maxFileSize !== undefined) {
-      const validFiles = nextFiles.filter((file) => {
-        if (file.size > maxFileSize) {
-          rejected.push({ file, reason: 'max-file-size' })
-          return false
-        }
-        return true
-      })
-      nextFiles = validFiles
+    if (!valid(epoch)) return
+    const items: UploadFileItem[] = []
+    for (const original of candidates) {
+      if (!valid(epoch)) break
+      let file = original
+      try {
+        const result = await options.beforeRead?.()?.(file)
+        if (result === false) { rejected.push({ file, reason: 'before-read' }); continue }
+        if (typeof File !== 'undefined' && result instanceof File) file = result
+      } catch { rejected.push({ file, reason: 'before-read' }); continue }
+      if (!valid(epoch)) break
+      let reason: UploadRejectedFile['reason'] | undefined
+      const total = [...queue.fileList.value, ...items].reduce((sum, item) => sum + (item.size ?? 0), 0)
+      if (!isAcceptedFile(file, options.accept?.())) reason = 'accept'
+      else if (options.maxFileSize?.() !== undefined && file.size > options.maxFileSize!()!) reason = 'max-file-size'
+      else if (options.maxTotalSize?.() !== undefined && total + file.size > options.maxTotalSize!()!) reason = 'max-total-size'
+      else if ((options.maxFiles?.() ?? 0) > 0 && queue.fileList.value.length + items.length >= options.maxFiles!()!) reason = 'max-files'
+      if (reason) { rejected.push({ file, reason }); continue }
+      const item: UploadFileItem = { uid: createUploadUid(), name: file.name, size: file.size, type: file.type, file, status: 'ready', percent: 0 }
+      try {
+        const url = await resolveThumbnailUrl({ file, fileItem: item, resolveType: options.resolveType?.() ?? 'object-url',
+          createThumbnailUrl: options.createThumbnailUrl?.(), onOwnedUrl: url => owned.set(item.uid, url) })
+        if (!valid(epoch)) { release(item.uid); break }
+        item.url = url
+        if (file.type.startsWith('image/')) item.thumbnailUrl = url
+        items.push(item)
+      } catch { release(item.uid); rejected.push({ file, reason: 'read-error' }) }
     }
-
-    const maxTotalSize = options.maxTotalSize?.()
-    if (maxTotalSize !== undefined) {
-      let totalSize = queue.fileList.value.reduce((sum, file) => sum + (file.size || 0), 0)
-      nextFiles = nextFiles.filter((file) => {
-        totalSize += file.size
-        if (totalSize > maxTotalSize) {
-          rejected.push({ file, reason: 'max-total-size' })
-          return false
-        }
-        return true
-      })
-    }
-
-    const maxFiles = options.maxFiles?.()
-    if (maxFiles !== undefined && maxFiles > 0 && queue.fileList.value.length + nextFiles.length > maxFiles) {
-      options.onExceed?.(nextFiles, queue.fileList.value)
-      const allowedCount = Math.max(maxFiles - queue.fileList.value.length, 0)
-      nextFiles.slice(allowedCount).forEach((file) => rejected.push({ file, reason: 'max-files' }))
-      nextFiles = nextFiles.slice(0, allowedCount)
-    }
-
-    return { files: nextFiles, rejected }
+    if (!valid(epoch)) { items.forEach(item => release(item.uid)); return }
+    reject(rejected)
+    if (rejected.some(file => file.reason === 'max-files')) options.onExceed?.(candidates, queue.fileList.value)
+    if (!items.length) return
+    items.forEach(file => pendingAuto.add(file.uid))
+    queue.append(items)
+    items.forEach(file => options.onRead?.(reactive(file)))
+    await nextTick()
   }
-
-  async function createFileItem(file: File): Promise<UploadFileItem | undefined> {
-    const beforeRead = options.beforeRead?.()
-    let nextFile = file
-
-    if (beforeRead) {
-      const result = await beforeRead(file)
-      if (!result) {
-        emitRejected([{ file, reason: 'before-read' }])
-        return undefined
-      }
-      if (result instanceof File) {
-        nextFile = result
-      }
-    }
-
-    const fileItem: UploadFileItem = {
-      uid: createUploadUid(),
-      name: nextFile.name,
-      size: nextFile.size,
-      type: nextFile.type,
-      file: nextFile,
-      status: 'reading',
-      percent: 0,
-    }
-
-    const thumbnailUrl = await resolveThumbnailUrl({
-      file: nextFile,
-      fileItem,
-      resolveType: options.resolveType?.() || defaultResolveType,
-      createThumbnailUrl: options.createThumbnailUrl?.(),
-    })
-
-    return {
-      ...fileItem,
-      url: thumbnailUrl,
-      thumbnailUrl,
-      status: 'ready',
-    }
-  }
-
-  async function addFiles(files: File[], initialRejected: UploadRejectedFile[]) {
-    if (disabled.value) {
-      return
-    }
-
-    const { files: filteredFiles, rejected } = await applyFilters(files, initialRejected)
-    emitRejected(rejected)
-
-    const fileItems = (await Promise.all(filteredFiles.map(createFileItem))).filter(Boolean) as UploadFileItem[]
-    if (!fileItems.length) {
-      return
-    }
-
-    queue.append(fileItems)
-    fileItems.forEach((file) => options.onRead?.(file))
-
-    if (options.autoUpload?.() !== false && (options.action?.() || options.customRequest?.())) {
-      submitMany(fileItems)
-    }
-  }
-
-  async function submitMany(files: UploadFileItem[]) {
-    files.forEach(submit)
-  }
-
   async function submit(file?: UploadFileItem) {
-    const targets = file ? [file] : queue.fileList.value.filter((item) => item.status === 'ready' || item.status === 'error' || item.status === 'canceled')
-    if (!targets.length || disabled.value) {
-      return
-    }
-
-    targets.forEach(uploadFile)
+    if (disabled.value || !(options.action?.() || options.customRequest?.())) return
+    const targets = file ? queue.fileList.value.filter(item => item.uid === file.uid) : queue.fileList.value.filter(item => ['ready', 'error', 'canceled'].includes(item.status))
+    await Promise.all(targets.map(uploadFile))
   }
-
   async function uploadFile(file: UploadFileItem) {
-    const beforeUpload = options.beforeUpload?.()
-    let uploadFileItem = file
-
-    if (beforeUpload) {
-      const result = await beforeUpload(file)
-      if (!result) {
-        return
+    if (attempts.has(file.uid)) return
+    const attempt: { request?: UploadRequest; resolvedFile?: File; reservedSize?: number } = {}
+    attempts.set(file.uid, attempt)
+    const current = () => active && !inactive && attempts.get(file.uid) === attempt && queue.fileList.value.some(entry => entry.uid === file.uid && (entry.file === file.file || entry.file === item.file))
+    let item = file
+    try {
+      const result = await options.beforeUpload?.()?.(file)
+      if (!current() || disabled.value) { if (attempts.get(file.uid) === attempt) cancelAttempt(file.uid); return }
+      if (result === false) { attempts.delete(file.uid); return }
+      if (typeof Blob !== 'undefined' && result instanceof Blob) {
+        const raw = result instanceof File ? result : new File([result], file.name ?? 'file', { type: result.type })
+        const total = queue.fileList.value.filter(entry => entry.uid !== file.uid).reduce((sum, entry) => sum + (attempts.get(entry.uid)?.reservedSize ?? entry.size ?? 0), 0)
+        const reason = !isAcceptedFile(raw, options.accept?.()) ? 'accept'
+          : options.maxFileSize?.() !== undefined && raw.size > options.maxFileSize!()! ? 'max-file-size'
+          : options.maxTotalSize?.() !== undefined && total + raw.size > options.maxTotalSize!()! ? 'max-total-size' : undefined
+        if (reason) { attempts.delete(file.uid); reject([{ file: raw, reason }]); return }
+        attempt.resolvedFile = raw
+        attempt.reservedSize = raw.size
+        item = { ...file, file: raw, size: raw.size, type: raw.type }
       }
-      if (result instanceof File || result instanceof Blob) {
-        uploadFileItem = {
-          ...file,
-          file: result instanceof File ? result : new File([result], file.name || 'file', { type: result.type }),
-          size: result.size,
-          type: result.type,
-        }
+      queue.patch(file.uid, { ...item, status: 'uploading', percent: 0, error: undefined })
+      if (!current() || disabled.value) { if (attempts.get(file.uid) === attempt) cancelAttempt(file.uid); return }
+      const handleProgress = (event: import('../interfaces').UploadProgressEvent) => {
+        if (!current()) return
+        const changed = { ...item, status: 'uploading' as const, percent: event.percent }
+        queue.patch(file.uid, { status: changed.status, percent: changed.percent }); options.onProgress?.(changed, event)
       }
-    }
-
-    queue.patch(file.uid, { ...uploadFileItem, status: 'uploading', percent: 0, error: undefined })
-
-    const handleProgress = (event: { percent: number } & ProgressEvent) => {
-      queue.patch(file.uid, { status: 'uploading', percent: event.percent })
-      const latest = queue.fileList.value.find((item) => item.uid === file.uid)
-      if (latest) {
-        options.onProgress?.(latest, event)
+      const handleSuccess = (response?: unknown) => {
+        if (!current()) return
+        attempts.delete(file.uid)
+        const changed = { ...item, status: 'success' as const, percent: 100, response }
+        queue.patch(file.uid, { status: changed.status, percent: changed.percent, response }); options.onSuccess?.(changed)
       }
-    }
-
-    const handleSuccess = (response?: unknown) => {
-      queue.patch(file.uid, { status: 'success', percent: 100, response })
-      requests.delete(file.uid)
-      const latest = queue.fileList.value.find((item) => item.uid === file.uid)
-      if (latest) {
-        options.onSuccess?.(latest)
+      const handleError = (error?: unknown) => {
+        if (!current()) return
+        attempts.delete(file.uid)
+        const changed = { ...item, status: 'error' as const, percent: 0, error }
+        queue.patch(file.uid, { status: changed.status, percent: changed.percent, error }); options.onError?.(changed)
       }
-    }
-
-    const handleError = (error?: unknown) => {
-      queue.patch(file.uid, { status: 'error', percent: 0, error })
-      requests.delete(file.uid)
-      const latest = queue.fileList.value.find((item) => item.uid === file.uid)
-      if (latest) {
-        options.onError?.(latest)
+      const requestOptions = { action: options.action?.(), method: options.method?.() ?? 'post', headers: options.headers?.(),
+        data: options.data?.(), name: options.name?.() ?? 'file', withCredentials: Boolean(options.withCredentials?.()),
+        isSuccessResponse: options.isSuccessResponse?.(), file: item, onProgress: handleProgress, onSuccess: handleSuccess, onError: handleError }
+      const request = await (options.customRequest?.()?.(requestOptions) ?? (options.customRequest?.() ? undefined : uploadRequest(requestOptions)))
+      if (request) {
+        if (current()) attempt.request = request
+        else { try { request.abort?.() } catch { /* Obsolete transport is already detached. */ } }
       }
-    }
-
-    const requestOptions = {
-      action: options.action?.(),
-      method: options.method?.() ?? defaultMethod,
-      headers: options.headers?.(),
-      data: options.data?.(),
-      name: options.name?.() ?? defaultName,
-      withCredentials: Boolean(options.withCredentials?.()),
-      isSuccessResponse: options.isSuccessResponse?.(),
-      file: uploadFileItem,
-      onProgress: handleProgress,
-      onSuccess: handleSuccess,
-      onError: handleError,
-    }
-
-    const customRequest = options.customRequest?.()
-    const request = await (customRequest
-      ? customRequest(requestOptions)
-      : uploadRequest(requestOptions))
-    if (request) {
-      requests.set(file.uid, request)
+    } catch (error) {
+      if (!current()) return
+      attempts.delete(file.uid)
+      const changed = { ...item, status: 'error' as const, percent: 0, error }
+      queue.patch(file.uid, changed); options.onError?.(changed)
     }
   }
-
   function abort(file?: UploadFileItem) {
-    const targets = file ? [file] : queue.fileList.value.filter((item) => item.status === 'uploading')
-    targets.forEach((target) => {
-      requests.get(target.uid)?.abort?.()
-      requests.delete(target.uid)
-      queue.patch(target.uid, { status: 'canceled', percent: 0 })
-    })
+    if (disabled.value) return
+    const targets = file ? [file.uid] : [...attempts.keys()]
+    targets.forEach(uid => { pendingAuto.delete(uid); cancelAttempt(uid); queue.patch(uid, { status: 'canceled', percent: 0 }) })
   }
-
   async function remove(file: UploadFileItem) {
-    const beforeRemove = options.beforeRemove?.()
-    if (beforeRemove && !(await beforeRemove(file, queue.fileList.value))) {
-      return
+    if (disabled.value || removals.has(file.uid)) return
+    if (!queue.fileList.value.some(item => item.uid === file.uid)) {
+      pendingAuto.delete(file.uid); release(file.uid); return
     }
-
-    abort(file)
-    queue.remove(file)
-    options.onRemove?.(file)
+    const token = {}
+    removals.set(file.uid, token)
+    const epoch = generation
+    try {
+      if (await options.beforeRemove?.()?.(file, queue.fileList.value) === false) return
+      if (!valid(epoch) || removals.get(file.uid) !== token || !queue.fileList.value.some(item => item.uid === file.uid)) return
+      cancelAttempt(file.uid); pendingAuto.delete(file.uid)
+      queue.remove(file); options.onRemove?.(file)
+    } catch { /* Rejected removal leaves the accepted list intact. */ }
+    finally { if (removals.get(file.uid) === token) removals.delete(file.uid) }
   }
-
-  function retry(file: UploadFileItem) {
-    if (file.status === 'error' || file.status === 'canceled') {
-      submit(file)
-    }
+  function retry(file: UploadFileItem) { return submit(file) }
+  function preview(file: UploadFileItem, originalEvent?: MouseEvent) {
+    if (!active || options.disabled?.()) return
+    let prevented = false
+    options.onPreview?.(file, { originalEvent, get defaultPrevented() { return prevented }, preventDefault() { prevented = true } })
   }
-
-  function preview(file: UploadFileItem, event: MouseEvent) {
-    options.onPreview?.(file, event)
-  }
-
   function reset() {
-    abort()
+    if (disabled.value) return
+    generation++
+    removals.clear()
+    for (const uid of attempts.keys()) cancelAttempt(uid)
+    pendingAuto.clear()
+    for (const uid of owned.keys()) if (!accepted.has(uid)) release(uid)
     queue.reset()
   }
-
-  onBeforeUnmount(() => {
-    abort()
-    queue.fileList.value.forEach(revokeThumbnailUrl)
+  onActivated(() => { inactive = false })
+  onDeactivated(() => {
+    inactive = true; generation++; removals.clear()
+    for (const uid of attempts.keys()) { cancelAttempt(uid); queue.patch(uid, { status: 'canceled', percent: 0 }) }
   })
-
-  return {
-    fileList: queue.fileList,
-    maxReached,
-    disabled,
-    inputRef: picker.inputRef,
-    dragOver: picker.dragOver,
-    chooseFile: picker.chooseFile,
-    handleInputChange: picker.handleInputChange,
-    handleDragOver: picker.handleDragOver,
-    handleDragLeave: picker.handleDragLeave,
-    handleDrop: picker.handleDrop,
-    submit,
-    abort,
-    retry,
-    remove,
-    preview,
-    reset,
-    clearSuccess: () => queue.clearByStatus('success'),
-    clearError: () => queue.clearByStatus('error'),
-    getFiles: queue.getFiles,
-  }
+  onBeforeUnmount(() => {
+    active = false; generation++; removals.clear()
+    for (const uid of attempts.keys()) cancelAttempt(uid)
+    for (const uid of owned.keys()) release(uid)
+    pendingAuto.clear()
+  })
+  return { fileList: queue.fileList, maxReached, disabled, ...picker, retainUrls, addFiles, submit, abort, retry, remove, preview, reset,
+    clearSuccess: () => { if (!disabled.value) queue.clearByStatus('success') },
+    clearError: () => { if (!disabled.value) queue.clearByStatus('error') }, getFiles: queue.getFiles }
 }

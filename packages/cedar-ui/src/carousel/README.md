@@ -24,6 +24,8 @@ permalink: /components/carousel/
 
 <demo src="./__demos__/autoplay.vue"></demo>
 
+示例使用 2000ms 间隔，下方页码按 1 开始显示（API 索引仍从 0 开始）。取消勾选立即停止自动播放，重新开启后继续；焦点在轮播内部时也会暂停。
+
 ### 悬停暂停自动播放
 
 `auto-play` 支持传入对象 `{ interval, hoverToPause }` 进行高级配置。
@@ -90,78 +92,127 @@ permalink: /components/carousel/
 
 <demo src="./__demos__/change-event.vue"></demo>
 
+### effect-fade
+
+<demo src="./__demos__/effect-fade.vue"></demo>
+
+### effect-card
+
+<demo src="./__demos__/effect-card.vue"></demo>
+
+### centered-slides
+
+<demo src="./__demos__/centered-slides.vue"></demo>
+
+### controlled
+
+<demo src="./__demos__/controlled.vue"></demo>
+
+### auto-sized
+
+<demo src="./__demos__/auto-sized.vue"></demo>
+
+### interactive-content
+
+<demo src="./__demos__/interactive-content.vue"></demo>
+
 ## API
 
-### `<Carousel>` Props
+### Carousel Props
 
-| 属性                       | 说明                                                                                 | 类型                                              | 默认值                             |
-| -------------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------- | ---------------------------------- |
-| current(`v-model`)         | 当前展示索引（0-based）                                                               | `number`                                          | -                                  |
-| default-current            | 当前展示索引默认值（0-based）                                                         | `number`                                          | `0`                                |
-| loop                       | 是否循环轮播                                                                         | `boolean`                                         | `true`                             |
-| auto-play                  | 是否自动播放；`true` 为 3000ms，数字为间隔毫秒，或 `{ interval, hoverToPause }`       | `boolean \| number \| CarouselAutoPlayConfig`     | `false`                            |
-| move-speed                 | 幻灯片移动速率（毫秒）                                                               | `number`                                          | `500`                              |
-| trigger                    | 指示器切换触发方式                                                                   | `CarouselTriggerEvent`                            | `click`                            |
-| direction                  | 幻灯片移动方向                                                                       | `'horizontal' \| 'vertical'`                      | `horizontal`                       |
-| show-arrow                 | 切换箭头显示时机                                                                     | `CarouselArrowType`                               | `always`                           |
-| arrow-class                | 切换箭头样式                                                                         | `string`                                          | `-`                                |
-| indicator                  | 是否显示指示器                                                                       | `boolean`                                         | `true`                             |
-| indicator-type             | 指示器类型                                                                           | `CarouselIndicatorType`                           | `dot`                              |
-| indicator-position         | 指示器位置                                                                           | `CarouselIndicatorPosition`                       | `bottom`                           |
-| indicator-class            | 指示器的样式                                                                         | `string`                                          | `-`                                |
-| indicator-color            | 指示器颜色                                                                           | `string`                                          | `-`                                |
-| height                     | 轮播容器高度                                                                         | `string`                                          | `-`                                |
-| transition-timing-function | 过渡速度曲线                                                                         | `string`                                          | `cubic-bezier(0.34, 0.69, 0.1, 1)` |
-| touchable                  | 是否允许触摸滑动                                                                     | `boolean`                                         | `true`                             |
-| draggable                  | 是否允许鼠标拖拽切换                                                                 | `boolean`                                         | `false`                            |
-| mousewheel                 | 是否允许鼠标滚轮切换                                                                 | `boolean`                                         | `false`                            |
-| keyboard                   | 是否允许键盘方向键切换                                                               | `boolean`                                         | `false`                            |
-| slides-per-view            | 每屏显示的 slide 数量，`'auto'` 时由 slide 自身宽度决定                               | `number \| 'auto'`                                | `1`                                |
-| space-between              | slide 之间的间距                                                                     | `string \| number`                                | `0`                                |
-| aria-label                 | 轮播区域无障碍标签                                                                   | `string`                                          | `Carousel`                         |
-| previous-button-aria-label | 上一页按钮无障碍标签                                                                 | `string`                                          | `Previous slide`                   |
-| next-button-aria-label     | 下一页按钮无障碍标签                                                                 | `string`                                          | `Next slide`                       |
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| `current` | 受控索引，零基 | `number` | `undefined` |
+| `default-current` | 非受控初始索引 | `number` | `0` |
+| `loop` | 循环，跨边界不复制实例 | `boolean` | `true` |
+| `auto-play` | 自动播放及间隔 | `boolean \| number \| CarouselAutoPlayConfig` | `false` |
+| `move-speed` | 显式切换时长（毫秒） | `number` | `undefined (token)` |
+| `trigger` | 指示器触发方式 | `click \| hover` | `click` |
+| `direction` | 内部滑动方向 | `horizontal \| vertical` | `horizontal` |
+| `show-arrow` | 箭头显示策略 | `always \| hover \| never` | `always` |
+| `arrow-class` | 箭头附加类 | `string` | `undefined` |
+| `indicator` | 显示指示器 | `boolean` | `true` |
+| `indicator-type` | 指示器样式 | `dot \| line \| slider` | `dot` |
+| `indicator-position` | 指示器位置 | `bottom \| top \| left \| right \| outer` | `bottom` |
+| `indicator-class` | 指示器附加类 | `string` | `undefined` |
+| `indicator-color` | 自定义指示器背景 | `string` | `undefined` |
+| `height` | 容器高度，数字为px | `number \| string` | `undefined` |
+| `transition-timing-function` | 显式缓动曲线 | `string` | `undefined (token)` |
+| `touchable` | 触摸拖动 | `boolean` | `true` |
+| `draggable` | 鼠标拖动，可与触摸并存 | `boolean` | `false` |
+| `mousewheel` | 滚轮切换 | `boolean` | `false` |
+| `keyboard` | 组件内方向键/Home/End | `boolean` | `false` |
+| `slides-per-view` | 同时显示页数；auto使用子项宽高 | `number \| auto` | `1` |
+| `space-between` | 项间距；数字/数字字符串为px | `number \| string` | `0` |
+| `effect` | 视觉效果，两端全部支持 | `slide \| fade \| card` | `slide` |
+| `centered-slides` | 当前页居中 | `boolean` | `false` |
+| `aria-label` | 轮播可访问名称 | `string` | Locale |
+| `previous-button-aria-label` | 上一页按钮名称 | `string` | Locale |
+| `next-button-aria-label` | 下一页按钮名称 | `string` | Locale |
 
-### `<Carousel>` Events
+### 模型与交互
+索引从零开始。受控操作先发 update:current，再发 change(index, previousIndex, isManual)，父级接受 current 前不移动；外部赋值不补发 change。方法 options 的 event:false 只关闭 change，不吞掉模型提议。用户操作的 isManual 为 true，自动播放为 false。
 
-| 事件名 | 描述                       | 参数                                                            |
-| ------ | -------------------------- | --------------------------------------------------------------- |
-| `update:current` | v-model 绑定值更新时触发（0-based） | `index: number` |
-| `change` | 幻灯片发生切换时的回调函数（0-based） | `index: number` <br/> `prevIndex: number` <br/> `isManual: boolean` |
+loop 跨边界移动原有子项，不复制组件实例。非循环且未居中时，末尾视区钳制以避免留白，选中项可能在最后一组可见项内移动而不再移动轨道。部分可见页保持可访问，完全离屏页 inert。fade 固定展示一页；auto 使用 CarouselItem 显式 width（横向）或 height（纵向），纵向需提供容器高度。默认插槽只统计 CarouselItem（可包在 Vue Fragment 中），注释、普通元素不成为页。
 
-### `<Carousel>` Methods
+auto-play=true 使用 3000ms 且悬停暂停，数字指定毫秒且不启用悬停暂停；对象配置 interval/hoverToPause。焦点在组件内、拖动中、文档/祖先隐藏、KeepAlive 停用始终暂停。尊重减少动态效果偏好。输入框、按钮等交互子项保留原生行为，自定义交互区域可加 data-carousel-no-drag。show-arrow=hover 在键盘聚焦时也显示。
 
-通过 ref 可以调用以下方法：
+### Events
+| 事件 | 参数 |
+| --- | --- |
+| update:current | index: number |
+| change | index: number, previousIndex: number, isManual: boolean |
 
-| 方法名 | 说明 | 参数 |
-| --- | --- | --- |
-| `next` | 切换到下一页 | `-` |
-| `prev` | 切换到上一页 | `-` |
-| `to` | 跳转到指定索引 | `index: number` |
-| `resize` | 重新计算轮播尺寸 | `-` |
+### Slots
+| 插槽 | 参数 |
+| --- | --- |
+| default | CarouselItem |
+| prev / next / indicator | { index, length, hovering, prev, next, to, resize } |
 
-### `<Carousel>` Slots
+### Methods
+| 方法 | 签名 |
+| --- | --- |
+| prev / next | (options?: CarouselToOptions) => void |
+| to | (index: number, options?: CarouselToOptions) => void |
+| resize | () => void |
 
-| 插槽名 | 说明 | 参数 |
-| --- | --- | --- |
-| `default` | 轮播项内容，放置 `<CarouselItem>` | `-` |
-| `prev` | 自定义上一页按钮 | `{ index, length, prev, next, to, hovering }` |
-| `next` | 自定义下一页按钮 | `{ index, length, prev, next, to, hovering }` |
-| `indicator` | 自定义指示器 | `{ index, length, prev, next, to, hovering }` |
+CarouselItem 无自有 Props、事件或方法；默认插槽为页面内容。
 
-### `<CarouselItem>` Props
+### Types
+CarouselProps, CarouselItemProps, CarouselInstance, CarouselItemInstance, CarouselEmits, CarouselSlots, CarouselItemSlots, CarouselExpose, CarouselSlotScope, CarouselToOptions, CarouselChangeData, CarouselDirection, CarouselEffect, CarouselAutoPlayConfig, CarouselArrowType, CarouselIndicatorType, CarouselIndicatorPosition, CarouselTriggerEvent.
 
-`CarouselItem` 无额外 props，通过 provide/inject 从父组件 `Carousel` 获取配置。
+### 样式变量
 
-### 类型定义
+| Token | 默认值 |
+| --- | --- |
+| `--c-carousel-indicator-dot-size` | `8px` |
+| `--c-carousel-indicator-position` | `var(--c-sys-space-4)` |
+| `--c-carousel-indicator-gap` | `var(--c-sys-space-3)` |
+| `--c-carousel-indicator-color-default` | `rgb(255 255 255 / 35%)` |
+| `--c-carousel-indicator-color-active` | `var(--c-sys-color-content-on-dark)` |
+| `--c-carousel-indicator-outer-margin-bottom` | `var(--c-sys-space-8)` |
+| `--c-carousel-indicator-line-width` | `20px` |
+| `--c-carousel-indicator-line-height` | `3px` |
+| `--c-carousel-indicator-line-border-radius` | `var(--c-sys-radius-sm)` |
+| `--c-carousel-arrow-size` | `var(--c-sys-control-height-md)` |
+| `--c-carousel-arrow-font-size` | `var(--c-sys-font-size-xl)` |
+| `--c-carousel-arrow-margin` | `var(--c-sys-space-4)` |
+| `--c-carousel-arrow-color` | `var(--c-sys-color-content-on-dark)` |
+| `--c-carousel-arrow-background` | `rgb(0 0 0 / 35%)` |
+| `--c-carousel-arrow-background-hover` | `rgb(0 0 0 / 55%)` |
+| `--c-carousel-arrow-disabled-opacity` | `0.4` |
+| `--c-carousel-navigation-z-index` | `10` |
+| `--c-carousel-transition-duration` | `var(--c-sys-motion-duration-standard)` |
+| `--c-carousel-transition-timing-function` | `ease` |
+| `--c-carousel-fade-duration` | `var(--c-sys-motion-duration-standard)` |
+| `--c-carousel-card-duration` | `var(--c-sys-motion-duration-standard)` |
+| `--c-carousel-card-scale` | `0.85` |
+| `--c-carousel-card-opacity` | `0.6` |
+| `--c-carousel-focus-width` | `2px` |
+| `--c-carousel-focus-offset` | `2px` |
+| `--c-carousel-focus-color` | `var(--c-sys-color-content-brand)` |
 
-```ts
-type CarouselTriggerEvent = 'click' | 'hover'
-type CarouselArrowType = 'always' | 'hover' | 'never'
-type CarouselIndicatorType = 'dot' | 'line' | 'slider'
-type CarouselIndicatorPosition = 'bottom' | 'top' | 'left' | 'right' | 'outer'
-type CarouselAutoPlayConfig = {
-  interval?: number
-  hoverToPause?: boolean
-}
-```
+
+### 循环过渡边界
+
+每个轮播项始终只有一个组件实例。普通上一页/下一页在出场项离开后回收位置；跨多页或居中跳转若需要同一项同时占据两个位置，则直接无动画定位，不复制交互内容，也不排队执行无限过渡。项目数量小于可视页数时不会复制项目填满。可访问名称跟随全局 Locale，显式标签属性优先。

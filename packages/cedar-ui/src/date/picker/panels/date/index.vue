@@ -65,6 +65,7 @@
 </template>
 
 <script lang="ts">
+import { useScopedDate } from '../../../date-locale'
 import { calendarMonthDays } from "../../../../_utils/picker-data"
 import { createNamespace } from '../../../../_utils/global-config'
 import { computed, defineComponent, PropType, reactive, toRefs } from 'vue'
@@ -184,6 +185,7 @@ export default defineComponent({
       toRefs(props)
 
     const datePickerT = useDatePickerTransform()
+    const scoped = useScopedDate()
 
     const isWeek = computed(() => mode?.value === 'week')
 
@@ -239,7 +241,7 @@ export default defineComponent({
           // 取第一个作为周 cell 的值
           const valueOfWeek = row[0].value
           row.unshift({
-            label: valueOfWeek.week(),
+            label: scoped(valueOfWeek).week(),
             value: valueOfWeek,
           })
         }

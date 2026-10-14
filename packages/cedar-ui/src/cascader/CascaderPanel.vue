@@ -16,10 +16,10 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType, provide, reactive, ref, toRefs, watch } from 'vue'
+import { createNamespace } from '../_utils/global-config'
 import { isNull, isUndefined } from '../_utils/is'
 import { getKeyDownHandler, KEYBOARD_KEY } from '../_utils/keyboard'
 import { BaseType, Data, UnionType } from '../_utils/types'
-import { createNamespace } from '../_utils/global-config'
 import BaseCascaderPanel from './base-cascader-panel'
 import { cascaderInjectionKey } from './context'
 import { useSelectedPath } from './hooks/use-selected-path'

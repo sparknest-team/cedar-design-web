@@ -38,7 +38,7 @@ export default defineComponent({
    * @version 2.28.0
    */
   setup(props, { slots }) {
-    const { prefixCls, locale, size, updateAtScroll, scrollToClose, exchangeTime, rtl, theme } = toRefs(props)
+    const { prefixCls, locale, size, updateAtScroll, scrollToClose, rtl, theme } = toRefs(props)
 
     const config = reactive({
       slots,
@@ -47,7 +47,6 @@ export default defineComponent({
       size,
       updateAtScroll,
       scrollToClose,
-      exchangeTime,
       rtl,
       theme,
     })

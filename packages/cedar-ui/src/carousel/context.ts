@@ -1,12 +1,10 @@
-import { type Ref, InjectionKey } from 'vue'
+import type { ComputedRef, CSSProperties, InjectionKey } from 'vue'
 
 export interface CarouselContext {
-  items: Ref<number[]>
-  current: Ref<number>
-  size: Ref<number>
-  vertical: Ref<boolean>
-  registerItem: (uid: number, setTranslate: (v: number) => void) => void
-  unregisterItem: (uid: number) => void
+  keys: ComputedRef<Array<string | number | symbol>>
+  current: ComputedRef<number>
+  visible: ComputedRef<number[]>
+  slideLabel: (index: number) => string
+  itemStyle: (index: number) => CSSProperties
 }
-
-export const carouselInjectionKey: InjectionKey<CarouselContext> = Symbol('CCarousel')
+export const carouselInjectionKey: InjectionKey<CarouselContext> = Symbol('Carousel')

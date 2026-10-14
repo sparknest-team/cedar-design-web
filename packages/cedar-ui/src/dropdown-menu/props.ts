@@ -1,5 +1,8 @@
 import type { PropType } from 'vue'
-import { triggerPropDefaults, menuDefaults, rootPlatformProps, componentSizes, type ComponentSize, type DropdownMenuPosition, type DropdownMenuReference, type DropdownMenuSubmenuTrigger } from './platform'
+import { menuDefaults } from './appearance'
+import { triggerProps as triggerPropDefaults } from '../trigger'
+import { componentSizes, type ComponentSize } from '../_utils/constant'
+import type { DropdownMenuPosition, DropdownMenuReference, DropdownMenuSubmenuTrigger } from './types'
 import type { DropdownMenuFieldNames } from './selection'
 import type { DropdownMenuOption, MenuValue } from './types'
 export type { DropdownMenuOption, MenuOptionLabel, MenuOptionLabelRender } from './types'
@@ -16,7 +19,8 @@ export const dropdownMenuProps = {
   submenuTrigger: { type: String as PropType<DropdownMenuSubmenuTrigger>, default: menuDefaults.submenuTrigger, validator: (value: unknown) => value === 'click' || value === 'hover' },
   placement: { type: String as PropType<DropdownMenuPosition>, default: 'bottom' },
   reference: { type: [String, Object] as PropType<DropdownMenuReference>, default: undefined },
-  ...rootPlatformProps,
+  /** 定位策略，所有层级子菜单响应式继承。 */
+  strategy: triggerPropDefaults.strategy,
   popupContainer: triggerPropDefaults.popupContainer,
   popupClass: [String, Array, Object],
   offsetX: { type: [String, Number], default: 0 },

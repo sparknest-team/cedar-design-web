@@ -97,6 +97,8 @@ import type { DrawerAction, DrawerBeforeCloseRefs, DrawerConfig, DrawerProps } f
 
 ## CSS 变量与颜色语义
 
+内置 fade／四方向 slide 在 prefers-reduced-motion: reduce 下关闭过渡与起始位移，组件样式自身生效，不依赖全局动效兜底。默认时长不变；业务自定义动画另行适配。已有编译 CSS 检查不等于真实 OS 动态切换验收。
+
 面板 bg 使用 surface-raised；overlay-bg 使用 sys-color-scrim；header-text-color／content-text-color 使用 content-primary，关闭按钮与标题共享 header-text-color；border-color 使用 border-default。几何、动效与层级保留 Drawer 既有默认值。Drawer 是 Cedar 平台组件，不在 Maple 创建空壳同名变量。
 
 overlay-style 可设置实例遮罩变量，drawer-style 可设置面板内变量；两者是兄弟节点，变量不会互相继承。全局主题在实际共同祖先设置 system 变量。显式背景属性优先于变量消费。已移除从未被消费的 close-icon-right 变量；关闭按钮位置由标题布局和 close-btn-margin-left 控制，不提供无效兼容别名。

@@ -1,6 +1,6 @@
 <template>
   <div :class="`${prefixCls}-shortcuts`">
-    <Button v-if="showNowBtn" size="xs" @click="() => onNowClick()">
+    <Button v-if="showNowButton" size="xs" @click="() => onNowClick()">
       {{ datePickerT('datePicker.now') }}
     </Button>
     <Button
@@ -48,7 +48,7 @@ export default defineComponent({
       type: Array as PropType<ShortcutsProps['shortcuts']>,
       default: () => [],
     },
-    showNowBtn: {
+    showNowButton: {
       type: Boolean,
     },
   },

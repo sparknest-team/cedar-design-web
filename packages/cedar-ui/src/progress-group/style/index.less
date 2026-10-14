@@ -44,7 +44,7 @@
   &__circle-track { stroke: var(~'--c-progress-group-track-color'); }
   &__circle-segment { cursor: pointer; pointer-events: stroke; transition: stroke-dasharray var(--c-progress-group-transition-duration) ease-out, stroke-dashoffset var(--c-progress-group-transition-duration) ease-out; }
   &__circle-active-segment { pointer-events: none; animation: c-progress-group-circle-hover-in var(--c-progress-group-transition-duration) ease-out; }
-  &__circle-status { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(~'--c-progress-group-text-color'); font-weight: var(--c-progress-group-status-font-weight); pointer-events: none; }
+  &__circle-status { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(~'--c-progress-group-text-color'); font-weight: var(--c-progress-group-text-font-weight); pointer-events: none; }
   &__circle-tooltip { bottom: calc(100% + var(--c-progress-group-tooltip-offset)); left: 50%; transform: translateX(-50%); }
   &--horizontal&--xs &__track { height: var(--c-progress-group-size-xs-thickness); }
   &--horizontal&--sm &__track { height: var(--c-progress-group-size-sm-thickness); }
@@ -67,3 +67,5 @@
   .c-progress-group__active-segment { transition: none; }
   .c-progress-group__tooltip, .c-progress-group__circle-active-segment { animation: none; }
 }
+
+.c-progress-group__segment:focus-visible, .c-progress-group__circle-segment:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }

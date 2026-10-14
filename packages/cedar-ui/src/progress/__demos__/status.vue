@@ -1,18 +1,11 @@
+<script setup lang="ts">
+const statuses = ['default', 'primary', 'secondary', 'tertiary', 'info', 'success', 'warning', 'danger'] as const
+</script>
 <template>
-  <c-space direction="column" :style="{ width: '50%' }">
-    <c-progress :percent="percent" />
-    <br />
-    <c-progress status="warning" :percent="percent" />
-    <br />
-    <c-progress status="danger" :percent="percent" />
-    <br />
-  </c-space>
-  <div :style="{ marginTop: '20px' }">
-    <c-slider v-model="percent" :max="100" :step="10" :style="{ width: '150px' }" />
+  <div style="display: grid; gap: 16px">
+    <c-progress v-for="status in statuses" :key="status" :status="status" :percent="60"
+      ><template #text>{{ status }}</template></c-progress
+    >
+    <c-progress :percent="100" />
   </div>
 </template>
-
-<script lang="ts" setup>
-import { ref } from 'vue'
-const percent = ref(20)
-</script>

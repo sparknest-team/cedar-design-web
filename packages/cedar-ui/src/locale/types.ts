@@ -110,6 +110,7 @@ export interface ValidateMessage {
 }
 
 export interface CedarLang {
+  search: { search: string; cancel: string; history: string }
   locale: string
   common: {
     placeholderSelect: string
@@ -194,7 +195,16 @@ export interface CedarLang {
       columnTitlePlaceholder: string
     }
   }
+  carousel: {
+    label: string
+    previous: string
+    next: string
+    slide: string
+    goto: string
+  }
   upload: {
+    download: string
+    close: string
     start: string
     cancel: string
     delete: string

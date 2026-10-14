@@ -1,0 +1,6 @@
+- [x] Reproduce fixed 200ms disposal before a held component completion on both platforms.
+- [x] Remove forced component duration and service fallback.
+- [x] Fix never-mounted close/clear and snapshot iteration; preserve same-id open completion guard.
+- [x] Add source contract gate and service/creation-tick regression.
+- [x] Sync guides, component docs and patch Changesets.
+- [x] Supplement native IAB default/light/top CSS duration/zero/reopen evidence on both platforms; retain other themes/positions, hover, KeepAlive and OS as unverified.

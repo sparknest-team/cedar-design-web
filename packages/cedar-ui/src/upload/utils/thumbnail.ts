@@ -1,42 +1,20 @@
 import type { UploadCreateThumbnailUrl, UploadFileItem, UploadResolveType } from '../interfaces'
-
-function readAsDataUrl(file: File) {
-  return new Promise<string>((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = () => resolve(String(reader.result || ''))
-    reader.onerror = () => reject(reader.error)
-    reader.readAsDataURL(file)
-  })
-}
-
 export async function resolveThumbnailUrl(options: {
-  file: File
-  fileItem: UploadFileItem
-  resolveType: UploadResolveType
+  file: File; fileItem: UploadFileItem; resolveType: UploadResolveType
   createThumbnailUrl?: UploadCreateThumbnailUrl
+  onOwnedUrl?: (url: string) => void
 }) {
-  const customUrl = await options.createThumbnailUrl?.(options)
-  if (customUrl) {
-    return customUrl
-  }
-
-  if (!options.file.type.startsWith('image/')) {
-    return undefined
-  }
-
-  if (options.resolveType === 'data-url') {
-    return readAsDataUrl(options.file)
-  }
-
-  if (options.resolveType === 'object-url') {
-    return URL.createObjectURL(options.file)
-  }
-
-  return undefined
-}
-
-export function revokeThumbnailUrl(file: UploadFileItem) {
-  if (file.thumbnailUrl?.startsWith('blob:')) {
-    URL.revokeObjectURL(file.thumbnailUrl)
-  }
+  const custom = await options.createThumbnailUrl?.(options)
+  if (custom) return custom
+  if (options.resolveType === 'file') return undefined
+  if (options.resolveType === 'data-url') return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => resolve(String(reader.result ?? ''))
+    reader.onerror = () => reject(reader.error)
+    reader.onabort = () => reject(new Error('File reading aborted'))
+    reader.readAsDataURL(options.file)
+  })
+  const url = URL.createObjectURL(options.file)
+  options.onOwnedUrl?.(url)
+  return url
 }

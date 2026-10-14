@@ -1,0 +1,4 @@
+- [x] 补齐 strategy Props、公开类型和各级响应式传递
+- [x] 移除 platform 聚合层，检查独立源码一致性
+- [x] 补齐双端交互测试、类型样例和定位 Demo
+- [x] 验证专项测试、Lint、Typecheck、Demo 检查并更新审计

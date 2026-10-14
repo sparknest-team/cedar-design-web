@@ -14,7 +14,7 @@ import DropdownMenuView from './view'
 import { props as optionProps } from './option-props'
 import { menuSelectionKey } from './selection'
 import { menuInjectionKey, menuLevelKey } from './context'
-import { useOptionAppearance } from './platform'
+import { useOptionAppearance } from './appearance'
 defineOptions({ name: createNamespace('menu-option').name })
 const props = defineProps(optionProps)
 const emit = defineEmits(['click', 'key-arrow-x'])

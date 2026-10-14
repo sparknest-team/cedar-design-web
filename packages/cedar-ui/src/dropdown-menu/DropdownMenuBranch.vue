@@ -8,7 +8,8 @@ import { createNamespace } from '../_utils/global-config'
 import DropdownMenuView from './view'
 import type { TriggerInstance } from '../trigger'
 import { dropdownMenuBranchProps } from './branch-props'
-import { Trigger, menuDefaults, submenuTriggerAppearance } from './platform'
+import { menuDefaults, submenuTriggerAppearance } from './appearance'
+import Trigger from '../trigger'
 import DropdownMenuPanel from './DropdownMenuPanel.vue'
 import MenuOption from './MenuOption.vue'
 import DropdownMenuOptions from './options'
@@ -52,7 +53,8 @@ const viewOptions = computed(() => {
   return {
     kind: 'submenu', triggerComponent: Trigger, triggerRef,
     triggerProps: {
-      ...submenuTriggerAppearance(), open: computedOpen.value, trigger: trigger.value,
+      ...submenuTriggerAppearance(),
+      strategy: menu?.strategy.value ?? 'absolute', open: computedOpen.value, trigger: trigger.value,
       placement: 'right-start', unmountOnClose: true, disabled: disabled.value, escToClose: false,
       onOpenChange: (open: boolean) => { if (open) activate(); computedOpen.value = open },
     },

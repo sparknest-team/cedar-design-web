@@ -1,82 +1,19 @@
-@import "../../style/theme/index.less";
-
 :root {
-  --c-progress-line-bg: var(~"--c-color-fill-3");
-  --c-progress-line-inner-bg: rgb(var(~"--c-primary-6"));
-  --c-progress-line-inner-bg-success: rgb(var(~"--c-success-6"));
-  --c-progress-line-inner-bg-danger: rgb(var(~"--c-danger-6"));
-  --c-progress-line-inner-bg-warning: rgb(var(~"--c-warning-6"));
-  --c-progress-line-buffer-bg: var(~"--c-color-primary-light-3");
-
-  --c-progress-line-size-lg-font-size: 16px;
-  --c-progress-line-size-sm-font-size: var(~"--c-font-size-body-1");
-  --c-progress-line-size-md-font-size: var(~"--c-font-size-body-1");
-  --c-progress-line-size-lg-text-margin-left: var(~"--c-spacing-7");
-  --c-progress-line-size-sm-text-margin-left: var(~"--c-spacing-7");
-
-  --c-progress-line-icon-color-success: rgb(var(~"--c-success-6"));
-  --c-progress-line-icon-color-danger: rgb(var(~"--c-danger-6"));
-  --c-progress-line-icon-color-warning: rgb(var(~"--c-warning-6"));
-  --c-progress-line-text-margin-left: var(~"--c-spacing-7");
-  --c-progress-line-icon-margin-left: var(~"--c-spacing-2");
-  --c-progress-line-text-color: var(~"--c-color-text-2");
-  --c-progress-line-icon-color: var(~"--c-color-text-2");
-  --c-progress-line-text-width: var(~"--c-size-8");
-
-  --c-progress-line-size-md-icon-size: 12px;
-  --c-progress-line-size-sm-icon-size: 12px;
-  --c-progress-line-size-lg-icon-size: 14px;
-
-  --c-progress-circle-size-sm-font-size: var(~"--c-font-size-body-2");
-  --c-progress-circle-size-md-font-size: var(~"--c-font-size-body-3");
-  --c-progress-circle-size-lg-font-size: 16px;
-
-  --c-progress-circle-size-sm-icon-size: 14px;
-  --c-progress-circle-size-md-icon-size: var(~"--c-size-4");
-  --c-progress-circle-size-lg-icon-size: var(~"--c-size-4");
-  --c-progress-circle-text-color: var(~"--c-color-text-3");
-
-  --c-progress-circle-mask-stroke: var(~"--c-color-fill-3");
-  --c-progress-circle-size-xs-mask-stroke: var(~"--c-color-primary-light-3");
-  --c-progress-circle-size-xs-mask-stroke-success: var(
-    ~"--c-color-success-light-3"
-  );
-  --c-progress-circle-size-xs-mask-stroke-danger: var(
-    ~"--c-color-danger-light-3"
-  );
-  --c-progress-circle-size-xs-mask-stroke-warning: var(
-    ~"--c-color-warning-light-3"
-  );
-
-  --c-progress-circle-path-stroke: rgb(var(~"--c-primary-6"));
-  --c-progress-circle-path-stroke-success: rgb(var(~"--c-success-6"));
-  --c-progress-circle-path-stroke-danger: rgb(var(~"--c-danger-6"));
-  --c-progress-circle-path-stroke-warning: rgb(var(~"--c-warning-6"));
-
-  --c-progress-circle-icon-color-success: rgb(var(~"--c-success-6"));
-  --c-progress-circle-icon-color-danger: rgb(var(~"--c-danger-6"));
-  --c-progress-circle-icon-color-warning: rgb(var(~"--c-warning-6"));
-
-  --c-progress-steps-size-sm-item-width: 2px;
-  --c-progress-steps-item-margin-right: 3px;
-  --c-progress-steps-size-sm-item-margin-right: 3px;
-  --c-progress-steps-item-bg: var(~"--c-color-fill-3");
-  --c-progress-steps-item-bg-active: rgb(var(~"--c-primary-6"));
-  --c-progress-steps-item-bg-success: rgb(var(~"--c-success-6"));
-  --c-progress-steps-item-bg-danger: rgb(var(~"--c-danger-6"));
-  --c-progress-steps-item-bg-warning: rgb(var(~"--c-warning-6"));
-  --c-progress-steps-text-margin-left: var(~"--c-spacing-4");
-
-  --c-progress-line-border-radius: 100px;
-  --c-progress-transition-timing-function-standard: var(
-    ~"--c-transition-timing-function-standard"
-  );
-  --c-progress-transition-timing-function-linear: var(
-    ~"--c-transition-timing-function-linear"
-  );
-  --c-progress-bar-transition-duration: 0.6s;
-  --c-progress-bar-bg-transition-duration: 0.3s;
-  --c-progress-loading-animation-duration: 1.5s;
-  --c-progress-indeterminate-animation-duration: 2.2s;
-  --c-progress-indeterminate-highlight: rgb(255 255 255 / 50%);
+  --c-progress-font-size: var(--c-sys-font-size-sm);
+  --c-progress-text-color: var(--c-sys-color-content-secondary);
+  --c-progress-track-color: var(--c-sys-color-state-hover);
+  --c-progress-default-color: var(--c-sys-color-content-brand);
+  --c-progress-primary-color: var(--c-sys-color-content-brand);
+  --c-progress-secondary-color: var(--c-sys-color-content-secondary);
+  --c-progress-tertiary-color: var(--c-sys-color-content-tertiary);
+  --c-progress-info-color: var(--c-sys-color-content-info);
+  --c-progress-success-color: var(--c-sys-color-content-success);
+  --c-progress-warning-color: var(--c-sys-color-content-warning);
+  --c-progress-danger-color: var(--c-sys-color-content-danger);
+  --c-progress-line-border-radius: 9999px;
+  --c-progress-text-gap: var(--c-sys-space-4);
+  --c-progress-steps-gap: var(--c-sys-space-2);
+  --c-progress-transition-duration: var(--c-sys-motion-duration-standard);
+  --c-progress-animation-duration: 1.5s;
+  --c-internal-progress-highlight: rgb(255 255 255 / 50%);
 }

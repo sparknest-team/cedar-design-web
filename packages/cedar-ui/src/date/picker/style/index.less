@@ -336,3 +336,26 @@
   padding: var(--c-date-picker-actions-padding);
   background: var(--c-color-bg-popup);
 }
+
+.c-date-panel__layout {
+  display: flex;
+  width: 100%;
+  gap: var(--c-sys-space-2);
+  align-items: flex-start;
+  &--bottom { flex-direction: column; > .c-date-shortcuts { order: 1; } }
+  &--right > .c-date-shortcuts { order: 1; }
+}
+.c-date-panel__main { min-width: 0; flex: 1; }
+.c-date-shortcuts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--c-sys-space-2);
+  &--left, &--right { flex-direction: column; }
+}
+
+.c-date-panel-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--c-sys-space-2);
+}

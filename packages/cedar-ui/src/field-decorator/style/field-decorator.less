@@ -19,6 +19,12 @@
   cursor: text;
   transition: background-color var(--c-field-hint-duration);
 
+  // Error and filled backgrounds must not hide keyboard focus.
+  &:has(:focus-visible):not(&--disabled) {
+    outline: var(--c-field-border-width) solid var(--c-field-custom-focus, var(--c-field-focus-color));
+    outline-offset: var(--c-field-border-width);
+  }
+
   .size(@size) {
     &--size-@{size} {
       --c-internal-field-height: var(~'--c-field-size-@{size}-height');
@@ -133,7 +139,7 @@
   &__border--notched {
     top: calc(-0.5em * var(--c-field-hint-scale));
     // Preserve CSS max()/calc(); Less 3 otherwise evaluates this expression to 0px.
-    padding-inline-start: ~"max(0px, calc(var(--c-internal-field-content-offset, var(--c-field-padding-horizontal)) - var(--c-field-hint-space) - var(--c-field-border-width)))";
+    padding-inline-start: ~'max(0px, calc(var(--c-internal-field-content-offset, var(--c-field-padding-horizontal)) - var(--c-field-hint-space) - var(--c-field-border-width)))';
   }
   &__legend {
     display: block;

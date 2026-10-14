@@ -2,17 +2,17 @@
   <c-checkbox-group :default-value="['1']">
     <c-checkbox value="1">
       <template #checkbox="{ checked }">
-        <c-tag :checked="checked" checkable>This is a tag checkbox 1</c-tag>
+        <c-tag :checked="checked">This is a tag checkbox 1</c-tag>
       </template>
     </c-checkbox>
     <c-checkbox value="2">
       <template #checkbox="{ checked }">
-        <c-tag :checked="checked" checkable>This is a tag checkbox 2</c-tag>
+        <c-tag :checked="checked">This is a tag checkbox 2</c-tag>
       </template>
     </c-checkbox>
     <c-checkbox value="3">
       <template #checkbox="{ checked }">
-        <c-tag :checked="checked" checkable>This is a tag checkbox 3</c-tag>
+        <c-tag :checked="checked">This is a tag checkbox 3</c-tag>
       </template>
     </c-checkbox>
   </c-checkbox-group>
@@ -28,7 +28,7 @@
               </div>
               <div>
                 <div class="custom-checkbox-card-title">Checkbox Card {{ item }}</div>
-                <a-typography-text type="secondary"> this is a text </a-typography-text>
+                <span>this is a text</span>
               </div>
             </c-space>
           </template>

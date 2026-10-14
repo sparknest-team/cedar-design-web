@@ -4,9 +4,15 @@ permalink: /components/infinite-scroll/
 
 # InfiniteScroll
 
+触底检测的 RAF（零延迟定时器 fallback）只合并测量，不是 CSS 动效时长。替换绑定、停用和卸载使旧任务及观察器失效，已消费回调不重放、不清掉新句柄；保留 check／retry 在停用／卸载后无效，激活使用新绑定与新检查。业务请求由调用方负责取消。两端各10项受控专项通过，不等于原生浏览器／OS／跨文档验收。
+
 InfiniteScroll 负责检测接近滚动底部并驱动分页状态，不负责请求、数据拼接或列表布局。通常与 `List` 组合使用。
 
 ## 案例
+
+### 测量绑定生命周期
+
+<demo src="./__demos__/scheduler-lifecycle.vue"></demo>
 
 ### 与列表组合
 
@@ -19,6 +25,10 @@ InfiniteScroll 负责检测接近滚动底部并驱动分页状态，不负责�
 请求失败时将 `status` 设置为 `error`。默认错误区域和 `error` 插槽都可以触发 `retry`，重试事件不会额外触发 `load`。
 
 <demo src="./__demos__/error.vue"></demo>
+
+自定义重试操作请使用按钮，支持键盘 Enter/Space。示例中的模拟请求会在卸载或停用时清理计时器，避免离开页面后继续回写。
+
+基础、自定义状态和错误重试示例均清理模拟请求；KeepAlive 恢复后可从 idle 状态重新加载，不复用取消前的计时器。
 
 ### 自定义状态
 

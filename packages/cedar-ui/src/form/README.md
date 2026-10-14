@@ -8,6 +8,16 @@ permalink: /components/form/
 
 标签一律由 `FormItem` 的 `label`（或 label 插槽）负责渲染；控件本身只提供 `placeholder` 等占位文案，不承担字段标签。
 
+### 标签与内容装饰
+
+<demo src="./__demos__/decoration.vue"></demo>
+
+### 校验展示状态
+
+显式 validate-status 优先于自动状态；error 才显示错误信息，其他状态显示 help。它只控制展示，不改变 validate 的真实结果。自动校验经历 validating → success/error；clearValidate 恢复未校验状态。setFields 仅传 message 会设为 error；显式 status='' 和 message='' 可清空。
+
+<demo src="./__demos__/presentation-status.vue"></demo>
+
 ## 案例
 
 ### 基础用法
@@ -25,30 +35,29 @@ permalink: /components/form/
 ### 额外信息和帮助信息
 
 可以使用 extra 添加额外信息。
-如果需要在外部自定义校验信息，可以使用`help`属性或插槽。设置`help`时校验信息会被屏蔽。
+如果需要在外部自定义校验信息，可以使用`help`属性或插槽。error 状态下校验信息优先；无错误展示时显示 help。
 
 <demo src="./__demos__/extra.vue"></demo>
 
 ### 嵌套数据
 
 展示了多种表单项嵌套的方式。
-表单项组件默认会将表单项状态和事件绑定到第一子组件，如果想要使用表单项进行布局设置，请设置 :merge-props="false"
-以关闭绑定，或者使用函数指定需要绑定的数据。
-如果使用 grid 组件进行布局，请设置 :content-flex="false" 关闭表单项内容的 flex 布局。
+表单控件通过 FormItem 注入的上下文继承状态和事件，无需绑定到第一子组件。
+如果使用 Grid 组件进行布局，请设置 :content-flex="false" 关闭表单项内容的 flex 布局。
 
 <demo src="./__demos__/nested-data.vue"></demo>
 
 ### 栅格布局
 
-展示了使用栅格布局的方式。可以使用 `label-col-flex` 属性指定标签的具体宽度。
+展示了使用栅格布局的方式。可以使用 `label-col-flex` 的带单位字符串指定标签宽度，数字表示 Col 伸缩比例。
 
 ### 自动标签宽度
 
 设置 `auto-label-width` 开启自动标签宽度。仅在 `layout="horizontal"` 布局下生效。
 
-\*_目前仅在首次加载后生效_。
+自动宽度随标签修改、字段增删更新，各个表单独立计算。
 
-<demo src="./__demos__/auto-tag-width.vue"></demo>
+<demo src="./__demos__/auto-label-width.vue"></demo>
 
 ### 验证表单
 
@@ -82,7 +91,9 @@ permalink: /components/form/
 
 ### 表单异步校验
 
-通过异步的方法校验表单功能。
+本地模拟异步校验，用户名输入 `admin` 后提交通过，其他值显示错误；不访问外部接口。原生提交/重置按钮使用 `html-type`。重置会取消本例的模拟校验并忽略旧提交结果，卸载或停用也会清理计时器。
+
+外层标签通过 `label-attrs.for` 对应 Input 的 `id`；多个示例实例使用独立 ID，便于点击标签聚焦和辅助技术识别。
 
 <demo src="./__demos__/async-validate-form.vue"></demo>
 
@@ -91,6 +102,20 @@ permalink: /components/form/
 展示了提交失败自动滚动到第一个错误字段和手动滚动对应字段的使用方法。
 
 <demo src="./__demos__/scroll-assign.vue"></demo>
+
+### 标签栅格与局部覆盖
+
+两端默认横向比例为标签 5/24、内容 19/24；Cedar 默认 horizontal，Maple 默认 vertical。仅 horizontal 消费栅格比例与自动宽度；vertical/inline 不套用 Col 百分比。响应式 xs/sm 等按视口宽度生效。
+
+<demo src="./__demos__/label-columns.vue"></demo>
+
+### 固定标签宽度
+
+FormItem 显式配置优先于 Form。Col 参数与 style 对象整项覆盖，不做深层合并。label-col-flex 优先于 auto-label-width；带单位字符串指定宽度，数字沿用 Col 的伸缩比例（并非 px），内容列自动填满剩余空间。隐藏标签时内容占满。
+
+<demo src="./__demos__/fixed-label-width.vue"></demo>
+
+自动宽度只测量未指定 label-col-flex 的横向标签；标签文字变化、动态增删会重新对齐。多个 Form 各自计算，标签为空或移除全部字段时不会产生 Infinity/NaN。使用很长的标签时建议在窄屏切换 vertical 或设置固定宽度。
 
 ## API
 
@@ -101,6 +126,9 @@ permalink: /components/form/
 | model                 | 表单数据对象                                              | `object`                                   |         `{}`          |
 | layout                | 表单的布局方式，包括水平、垂直、多列                      | `'horizontal' \| 'vertical' \| 'inline'`   |    `'horizontal'`     |
 | size                  | 表单控件的尺寸                                            | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`     |        `'md'`         |
+| label-col-flex | 标签列 flex；数字为伸缩比例，带单位字符串为宽度 | `number \| string` | `-` |
+| label-col-style | 标签列逐实例样式 | `CSSProperties` | `-` |
+| wrapper-col-style | 内容列逐实例样式 | `CSSProperties` | `-` |
 | label-col-props       | 标签元素布局选项。参数同 `<col>` 组件一致                 | `object`                                   | `span: 5, offset: 0`  |
 | wrapper-col-props     | 表单控件布局选项。参数同 `<col>` 组件一致                 | `object`                                   | `span: 19, offset: 0` |
 | label-align           | 标签的对齐方向                                            | `'left' \| 'right'`                        |       `'right'`       |
@@ -133,6 +161,8 @@ permalink: /components/form/
 
 ### `<FormItem>` Props
 
+未传布局、标签/内容栅格、样式、对齐和 flex 时继承 Form；显式值覆盖。
+
 | 参数名            | 描述                                                                                                     | 类型                                                               |   默认值   |
 | ----------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | :--------: |
 | field             | 表单元素在数据对象中的path（数据项必填）                                                                 | `string`                                                           |    `''`    |
@@ -149,6 +179,9 @@ permalink: /components/form/
 | rules             | 表单项校验规则（优先级高于 form 的 rules）                                                               | `FieldRule \| FieldRule[]`                                         |    `-`     |
 | validate-status   | 校验状态                                                                                                 | `'success' \| 'warning' \| 'error' \| 'validating'`                |    `-`     |
 | validate-trigger  | 触发校验的事件；`clear` 仅由控件清空动作触发，不等同于 `change`                                  | `'change' \| 'input' \| 'focus' \| 'blur' \| 'clear'`             | `'change'` |
+| size | 控件尺寸，未传继承 Form；标签外观仍由 Form 布局控制 | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `-` |
+| layout | 表单项布局；未传继承 Form | `'horizontal' \| 'vertical' \| 'inline'` | `-` |
+| label-align | 标签对齐；未传继承 Form | `'left' \| 'right'` | `-` |
 | label-col-props   | 标签元素布局选项。参数同 `<col>` 组件一致                                                                | `object`                                                           |    `-`     |
 | wrapper-col-props | 表单控件布局选项。参数同 `<col>` 组件一致                                                                | `object`                                                           |    `-`     |
 | hide-label        | 是否隐藏标签                                                                                             | `boolean`                                                          |  `false`   |
@@ -159,11 +192,10 @@ permalink: /components/form/
 | row-class         | 表单项布局组件的 class                                                                                   | `string\|array\|object`                                            |    `-`     |
 | content-class     | 表单控件包裹层的 class                                                                                   | `string\|array\|object`                                            |    `-`     |
 | content-flex      | 内容层是否开启 flex 布局                                                                                 | `boolean`                                                          |   `true`   |
-| merge-props       | （已废除）控制传递到子元素上的 Props。默认包括 disabled、error、size、 events 和 FormItem 上的额外属性。 | `boolean \| ((props: Record<string, any>) => Record<string, any>)` |   `true`   |
 | label-col-flex    | 设置标签 `Col` 组件的 flex 属性。设置时表单 `Col` 组件的 flex 属性会被设置为 `auto`。                    | `number\|string`                                                   |    `-`     |
 | feedback          | 是否显示表单控件的反馈图标                                                                               | `boolean`                                                          |  `false`   |
 | label-component   | 表单项标签渲染的元素                                                                                     | `string`                                                           | `'label'`  |
-| label-attrs       | 表单项元素的属性                                                                                         | `object`                                                           |    `-`     |
+| label-attrs       | 标签原生属性；for 指向控件真实 id                                                                                         | `object`                                                           |    `-`     |
 
 ### `<FormItem>` Slots
 

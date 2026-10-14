@@ -10,7 +10,7 @@ describe('ProgressGroup', () => {
   ]
 
   it('renders segments, legend and total status', () => {
-    const wrapper = mount(ProgressGroup, { props: { items, max: 128, status: true } })
+    const wrapper = mount(ProgressGroup, { props: { items, max: 128, showText: true } })
     expect(wrapper.findAll('[role="progressbar"]')).toHaveLength(3)
     expect(wrapper.find('.c-progress-group__status').text()).toBe('58%')
     expect(wrapper.findAll('.c-progress-group__item')).toHaveLength(3)
@@ -18,16 +18,16 @@ describe('ProgressGroup', () => {
   })
 
   it('normalizes invalid max and clamps item values', () => {
-    const wrapper = mount(ProgressGroup, { props: { items: [{ label: 'A', value: 120 }, { label: 'B', value: -1 }], max: 0, status: true } })
+    const wrapper = mount(ProgressGroup, { props: { items: [{ label: 'A', value: 120 }, { label: 'B', value: -1 }], max: 0, showText: true } })
     expect(wrapper.find('.c-progress-group__status').text()).toBe('100%')
     expect(wrapper.findAll('[role="progressbar"]')[0].attributes('aria-valuenow')).toBe('100')
   })
 
   it('renders cumulative circular segments', () => {
-    const wrapper = mount(ProgressGroup, { props: { items, max: 128, mode: 'circle', status: true } })
+    const wrapper = mount(ProgressGroup, { props: { items, max: 128, mode: 'circle', showText: true } })
     expect(wrapper.findAll('.c-progress-group__circle-segment')).toHaveLength(3)
     expect(wrapper.find('.c-progress-group__circle-status').text()).toBe('58%')
-    expect(wrapper.find('.c-progress-group__circle').attributes('aria-valuenow')).toBe('74')
+    expect(wrapper.findAll('.c-progress-group__circle-segment')[0].attributes('aria-valuenow')).toBe('24')
   })
 
   it('highlights a hovered segment and shows its tip', async () => {

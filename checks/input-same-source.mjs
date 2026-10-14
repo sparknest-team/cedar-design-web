@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
-import { createRequire } from 'node:module'
 import { readFileSync } from 'node:fs'
+import { createRequire } from 'node:module'
 import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -54,7 +54,7 @@ for (const [a, b] of pairs) {
 console.log(
   'Input / FieldDecorator: ' +
     pairs.length +
-  ' independently maintained source pairs match; form/locale bridges and token defaults remain local.',
+    ' independently maintained source pairs match; form/locale bridges and token defaults remain local.',
 )
 
 /** Source parity alone cannot catch differences between the two Less compilers. */

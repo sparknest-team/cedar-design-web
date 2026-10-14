@@ -45,9 +45,9 @@ import {
   watch,
 } from 'vue'
 import SelectionIndicator from '../_components/selection-field/SelectionIndicator.vue'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import { isEqual } from '../_utils/is-equal'
 import type { TagProps } from '../tag'
-import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import { selectInjectionKey } from './context'
 import { getKeyFromValue, isValidOption } from './utils'
 

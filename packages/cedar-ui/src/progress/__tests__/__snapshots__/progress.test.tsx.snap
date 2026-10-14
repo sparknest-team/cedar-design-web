@@ -1,15 +1,12 @@
 // Vitest Snapshot v1
 
-exports[`Progress > render 1`] = `
-"<div class=\\"c-progress c-progress--line c-progress--md c-progress--default\\">
-  <div role=\\"progressbar\\" aria-valuemin=\\"0\\" aria-valuemax=\\"100\\" aria-valuenow=\\"0\\" class=\\"c-progress-line__wrapper\\">
-    <div class=\\"c-progress-line\\" style=\\"width: 100%; height: 4px;\\">
-      <div class=\\"c-progress-line__bar-buffer\\"></div>
-      <div class=\\"c-progress-line__bar\\" style=\\"width: 0%;\\"></div>
-    </div>
-    <div class=\\"c-progress-line__text\\">0%
+exports[`Progress complete contract > installs and renders default text 1`] = `
+"<div class=\\"c-progress c-progress--line c-progress--md c-progress--default\\" role=\\"progressbar\\" aria-valuemin=\\"0\\" aria-valuemax=\\"100\\" aria-valuenow=\\"0\\">
+  <div class=\\"c-progress__line\\">
+    <div class=\\"c-progress__track\\" style=\\"height: 4px;\\">
       <!--v-if-->
-    </div>
+      <div class=\\"c-progress__bar\\" style=\\"width: 0%;\\"></div>
+    </div><span class=\\"c-progress__text\\">0%</span>
   </div>
 </div>"
 `;

@@ -12,6 +12,6 @@ describe("Checkbox", () => {
 
   test("renders the error state", () => {
     const wrapper = mount(Checkbox, { props: { error: true } });
-    expect(wrapper.classes()).toContain("c-checkbox-error");
+    expect(wrapper.classes()).toContain("c-checkbox--error");
   });
 });

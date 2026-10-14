@@ -59,15 +59,6 @@ export const configProviderProps = {
       default: false,
     },
     /**
-     * @zh 是否交换时间
-     * @en Whether to exchange time
-     * @version 2.48.0
-     */
-    exchangeTime: {
-      type: Boolean,
-      default: true,
-    },
-    /**
      * @zh 视图的表现形式是从右开始向左结束
      * @en View starts from the right and ends on the left
      */

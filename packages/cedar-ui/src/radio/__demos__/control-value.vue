@@ -5,7 +5,7 @@ const value = ref(null)
 
 </script>
 <template>
-  <c-space direction="vertical">
+  <c-space direction="column">
     <p>null 表示未选中；重复选择不会取消。 当前值：{{ value }}</p>
     <c-radio ref="control" v-model="value" :value="false">选择 false 选项</c-radio>
     <c-space>

@@ -10,7 +10,7 @@ permalink: /components/popconfirm/
 
 ### 基础用法
 
-折叠列表的基本使用方法。
+点击按钮打开确认框；确认或取消后收起。示例只演示确认交互，不执行业务数据删除。
 
 <demo src="./__demos__/basic.vue"></demo>
 

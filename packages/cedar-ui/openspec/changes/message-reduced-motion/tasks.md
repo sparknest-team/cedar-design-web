@@ -1,0 +1,5 @@
+- [x] Reproduce isolated reduced transition failure on Cedar and Maple independently.
+- [x] Add local rules and retain static standalone placement.
+- [x] Validate28 normal consumers/paired overrides and68 reduced selector/layout cases.
+- [x] Sync shared standard, all menu guides, component docs and patch Changesets.
+- [ ] Real OS dynamic preference change remains unverified; do not relabel compiled results.

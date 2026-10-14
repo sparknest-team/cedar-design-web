@@ -2,12 +2,25 @@ import { computed, nextTick, onActivated, onBeforeUnmount, onDeactivated, onMoun
 export function usePopupTransition(active: () => boolean, unmount: () => boolean,
   emit: (event: 'open' | 'close' | 'opened' | 'closed') => void) {
   let live = false, suspended = false
+  let phase: 'opening' | 'opened' | 'closing' | 'closed' = active() ? 'opening' : 'closed'
   const rendered = ref(active()), leaving = ref(false)
-  const shouldRender = computed(() => active() || (!unmount() && rendered.value))
-  function opened() { if (live && !suspended && active()) emit('opened') }
-  function closed() { if (live && !suspended && !active()) { leaving.value = false; emit('closed') } }
+  const shouldRender = computed(() => active() || leaving.value || (!unmount() && rendered.value))
+  function opened() {
+    if (live && !suspended && active() && phase === 'opening') {
+      phase = 'opened'
+      emit('opened')
+    }
+  }
+  function closed() {
+    if (live && !suspended && !active() && phase === 'closing') {
+      phase = 'closed'
+      leaving.value = false
+      emit('closed')
+    }
+  }
   watch(active, open => {
     leaving.value = !open
+    phase = open ? 'opening' : 'closing'
     if (open) rendered.value = true
     emit(open ? 'open' : 'close')
   }, { immediate: active() })

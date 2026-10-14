@@ -3,7 +3,6 @@
     <Transition
       name="fade-message"
       appear
-      :duration="150"
       @after-enter="emit('opened')"
       @after-leave="emit('closed')"
     >

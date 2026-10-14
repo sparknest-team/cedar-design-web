@@ -2,11 +2,11 @@
 :root {
   --c-button-transition-duration: var(--c-sys-motion-duration-standard);
   --c-button-default-text-color: var(--c-sys-color-content-primary);
-  --c-button-primary-text-color: var(--c-sys-color-content-on-bright);
-  --c-button-danger-text-color: var(--c-sys-color-content-on-bright);
-  --c-button-success-text-color: var(--c-sys-color-content-on-bright);
-  --c-button-warning-text-color: var(--c-sys-color-content-on-bright);
-  --c-button-info-text-color: var(--c-sys-color-content-on-bright);
+  --c-button-primary-text-color: var(--c-sys-color-content-on-dark);
+  --c-button-danger-text-color: var(--c-sys-color-content-on-dark);
+  --c-button-success-text-color: var(--c-sys-color-content-on-dark);
+  --c-button-warning-text-color: var(--c-sys-color-content-on-dark);
+  --c-button-info-text-color: var(--c-sys-color-content-on-dark);
   --c-button-default-color: var(--c-sys-color-surface-default);
   --c-button-primary-color: var(--c-sys-color-action-primary);
   --c-button-danger-color: var(--c-sys-color-status-danger);
@@ -14,7 +14,7 @@
   --c-button-warning-color: var(--c-sys-color-status-warning);
   --c-button-info-color: var(--c-sys-color-status-info);
   --c-button-secondary-color: rgb(var(--c-gray-6));
-  --c-button-secondary-text-color: var(--c-sys-color-content-on-bright);
+  --c-button-secondary-text-color: var(--c-sys-color-content-on-dark);
   --c-button-tertiary-color: rgb(var(--c-gray-7));
   --c-button-tertiary-text-color: var(--c-sys-color-content-on-dark);
   --c-button-default-icon-color: var(--c-sys-color-content-primary);
@@ -29,8 +29,14 @@
   --c-button-success-icon-container-color: rgb(var(--c-success-1));
   --c-button-warning-icon-container-color: rgb(var(--c-warning-1));
   --c-button-info-icon-container-color: rgb(var(--c-blue-1));
-  --c-button-disabled-color: var(--c-color-disabled);
+  --c-button-disabled-color: var(--c-color-fill-2);
   --c-button-disabled-text-color: var(--c-sys-color-content-disabled);
+  --c-button-disabled-solid-text-color: var(--c-sys-color-content-on-dark);
+  --c-button-primary-disabled-color: rgb(var(--c-primary-3));
+  --c-button-info-disabled-color: rgb(var(--c-blue-3));
+  --c-button-success-disabled-color: rgb(var(--c-success-3));
+  --c-button-warning-disabled-color: rgb(var(--c-warning-3));
+  --c-button-danger-disabled-color: rgb(var(--c-danger-3));
   --c-button-border-radius: var(--c-sys-radius-md);
   --c-button-mini-padding: 0 var(--c-sys-space-4);
   --c-button-small-padding: 0 var(--c-sys-space-5);
@@ -97,6 +103,12 @@
 }
 
 :root[cedar-theme="dark"] {
+  --c-button-disabled-solid-text-color: rgba(255, 255, 255, 0.3);
+  --c-button-info-disabled-color: rgba(var(--c-blue-6), 0.5);
+  --c-button-danger-disabled-color: rgba(var(--c-danger-6), 0.5);
+  --c-button-warning-disabled-color: rgba(var(--c-warning-6), 0.5);
+  --c-button-success-disabled-color: rgba(var(--c-success-6), 0.5);
+  --c-button-primary-disabled-color: rgba(var(--c-primary-6), 0.5);
   --c-button-tertiary-text-color: var(--c-sys-color-content-on-bright);
   --c-button-tertiary-state-layer-color: var(--c-sys-color-content-on-dark);
 }

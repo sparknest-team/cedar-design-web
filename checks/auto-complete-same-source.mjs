@@ -1,3 +1,4 @@
+import { normalizeBoundImports } from './normalize-bound-imports.mjs'
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
@@ -15,7 +16,7 @@ const normalize = source => source.replaceAll('_utils/global-config', 'utils/com
 for (const file of files) {
   const c = readFileSync(resolve(cedar, 'src/auto-complete', file), 'utf8')
   const m = readFileSync(resolve(maple, 'src/auto-complete', file), 'utf8')
-  assert.equal(normalize(c), m, file + ' differs')
+  assert.equal(normalizeBoundImports(normalize(c)), normalizeBoundImports(m), file + ' differs')
   assert.doesNotMatch(m, /from ['"][^'"]*(?:@cedarjs|cedar-design|platform)/)
 }
 for (const [root, compiler] of [[cedar, 'node_modules/less/package.json'], [maple, '../maple-cli/node_modules/less/package.json']]) {

@@ -2,58 +2,122 @@
 permalink: /components/upload/
 ---
 
-# Upload
+# Upload 上传
 
-`Upload` manages file selection, validation, preview and request lifecycle. The built-in request is standards-only `XMLHttpRequest` with `FormData`; use `custom-request` when the application owns the network client.
+读取、队列和请求采用两端独立复制的同源实现；未配置 action/custom-request 时仅读取，供业务自行管理进度与结果。
 
-## Examples
+## 案例
 
-### Basic
+### 只读取文件
 
-<demo src="./__demos__/basic.vue"></demo>
+<demo src="./__demos__/read-only.vue"></demo>
 
-### Picture card
+### 手动队列和可取消请求
 
-<demo src="./__demos__/picture-card.vue"></demo>
+可直接“加入示例文件”，也可选择本地文件；两种方式均不访问网络。点击提交后观察进度，取消会停止活动请求，重试会重新上传。开启“首次请求失败”时，同一文件首次失败、重试成功。活动请求数在完成、取消、失败及离开 Demo 后清零。
 
-### Picture list and default files
+<demo src="./__demos__/queue-request.vue"></demo>
 
-<demo src="./__demos__/picture.vue"></demo>
+### 替换后的约束校验
 
-<demo src="./__demos__/upload-list.vue"></demo>
+<demo src="./__demos__/replacement-validation.vue"></demo>
 
-### Desktop selection
+### 图卡、插槽与自定义预览
 
-<demo src="./__demos__/draggable.vue"></demo>
+<demo src="./__demos__/custom-surface.vue"></demo>
 
-<demo src="./__demos__/directory.vue"></demo>
+### 外部管理进度
 
-### Validation and limits
-
-<demo src="./__demos__/limit.vue"></demo>
-
-<demo src="./__demos__/before-upload.vue"></demo>
-
-<demo src="./__demos__/before-remove.vue"></demo>
-
-### Custom trigger, item and preview
-
-<demo src="./__demos__/custom-upload-node.vue"></demo>
-
-<demo src="./__demos__/custom-icon.vue"></demo>
-
-<demo src="./__demos__/custom-preview.vue"></demo>
-
-### Custom request
-
-<demo src="./__demos__/custom-request.vue"></demo>
-
-### Manual upload
-
-<demo src="./__demos__/manual.vue"></demo>
+<demo src="./__demos__/external-state.vue"></demo>
 
 ## API
 
-The component uses `v-model` with `UploadFileItem[]`. A file uses `url` for its final resource and optional `thumbnailUrl` for its display image. Status is one of `ready`, `reading`, `uploading`, `success`, `error`, `canceled`, or `removed`; progress is always `0-100`.
+### Props
 
-Core props are `action`, `method`, `headers`, `data`, `name`, `custom-request`, `auto-upload`, `max-files`, `max-file-size`, `max-total-size`, `list-type`, `image-fit`, `before-add`, `before-read`, `before-upload`, and `before-remove`.
+| 属性 | 类型 | 默认值/说明 |
+| --- | --- | --- |
+| model-value / default-value | UploadFileItem[] | 受控值 / 非受控初值[] |
+| accept / capture | string / 原生capture | 未指定 |
+| multiple / directory / draggable | boolean | false |
+| disabled / readonly | boolean | undefined，继承Form，显式false优先 |
+| action / method | string | 无 / post |
+| headers / data | object 或 async(file) => object | 请求准备阶段仍可取消 |
+| name | string / (file) => string | file |
+| with-credentials | boolean | false |
+| custom-request | (UploadRequestOptions) => UploadRequest / Promise / void | 自定义transport，可返回abort |
+| auto-upload | boolean | true；必须同时有action或custom-request才启动 |
+| max-files / max-file-size / max-total-size | number | 未指定；大小单位字节，max-files>0生效 |
+| resolve-type | file / data-url / object-url | object-url；所有文件生成url，图片生成thumbnailUrl |
+| create-thumbnail-url | (options) => string / Promise | 自定义URL归调用方所有，不自动回收 |
+| before-add | async(files) => File[] | 批次筛选/替换 |
+| before-read | async(file) => boolean / File | false/reject拒绝；替换后重新校验 |
+| before-upload | async(item) => boolean / File / Blob | false/reject取消准备；替换后重新校验 |
+| before-remove | async(item,list) => boolean | false/reject不删除 |
+| is-success-response | (xhr,item) => boolean | 默认HTTP2xx |
+| request-choose | (chooseFile,event) => void / Promise | 接管选择入口，异常不会自动打开文件框 |
+| list-type | text / picture / picture-card | text，两端均支持 |
+| image-fit | fill / contain / cover / none / scale-down | cover；item.fit优先 |
+| preview | boolean | true |
+| show-file-list / show-upload-button / show-remove-button | boolean | true |
+| show-retry-button / show-cancel-button / show-preview-button | boolean | true |
+| show-download-button | boolean | false；禁用时不可操作 |
+| elevation / ripple | boolean或number / boolean | false / true |
+
+UploadFileItem 的 uid、status、percent 必填，name/size/type/file/url/thumbnailUrl/fit/response/error 可选。status为ready/reading/uploading/success/error/canceled/removed。
+
+### Events
+
+- update:model-value(files)，change(files, changedFile?)：队列提议顺序，Form每次change仅一次。进度与状态更新也属于change。
+- read(item)：读取完成，可自行接管业务上传；不是服务端成功。
+- rejected(UploadRejectedFile[])：reason为accept/before-add/before-read/read-error/max-file-size/max-total-size/max-files。
+- exceed(nativeFiles, acceptedList)：超过数量时通知。
+- progress(item,event?)、success(item)、error(item)：当前有效请求通知；旧请求/取消回调不生效。
+- remove(item)：通过删除钩子后的删除提议。
+- preview(item, UploadPreviewEvent)：调用event.preventDefault()取消内建图片/视频预览；程序调用也可取消，originalEvent可选。
+
+### Slots
+
+- trigger({chooseFile,dragOver,disabled})：自定义选择入口。
+- item({file,index,remove,retry,abort})：自定义整项。
+- remove-button({file,index,remove,retry,abort})：自定义删除操作。
+
+### Expose
+
+chooseFile()、submit(file?)、abort(file?)、retry(file)、remove(file)、reset()、clearSuccess()、clearError()、getFiles(status?)、preview(file)、closePreview()。useUploader(options)提供同源无UI逻辑，另有addFiles(files)和input/drag处理接口。
+
+### 受控与生命周期
+
+受控父级拒绝新增时只发读取与列表提议，不自动上传；后续父级接受该uid才会自动上传一次。同tick提议事务合并，跨tick仍以实际父级列表为真源，拒绝项目不占总大小；父级负责迟到列表替换的一致性。显式remove未接受项、reset或卸载会释放其生成URL；任意外部URL不会被回收。内建预览保留自己的URL使用权至关闭，不关闭其他组件后来打开的预览。
+
+取消覆盖before-upload、异步headers/data/name及异步custom-request句柄阶段；重试和外部同uid换File令旧回调失效。before-read和before-upload的替换会复查限制，max-total-size只累计已接受项及当前正在准备的合法批次/请求。禁用/只读禁止选择、移除、提交等更改；只读允许预览/下载。KeepAlive停用取消当前准备/请求，恢复后允许新操作。
+
+## 类型定义
+
+UploadProps、UploadEmits、UploadSlots、UploadExpose、UploadPublicMethods、UploadFileItem、UploadStatus、UploadListType、UploadResolveType、UploadImageFit、UploadCapture、UploadRejectedFile、UploadRejectedReason、UploadRequestOptions、UploadRequest、UploadCustomRequest、UploadProgressEvent、UploadData、UploadHeaders、UploadBeforeRead、UploadBeforeUpload、UploadBeforeRemove、UploadCreateThumbnailUrl、UploadIsSuccessResponse、UploadRequestChoose、UploadPreviewEvent、UseUploaderOptions、UploadInstance。
+
+## 样式变量
+
+两端公共后缀一致，所有默认值见下表（前缀分别为c/mp）。
+
+| 变量 | 默认值 |
+| --- | --- |
+| --c-upload-gap | var(--c-sys-space-4) |
+| --c-upload-trigger-min-height | var(--c-sys-control-height-md) |
+| --c-upload-trigger-padding-horizontal | var(--c-sys-space-6) |
+| --c-upload-trigger-draggable-min-height | calc(var(--c-sys-control-height-md) * 2) |
+| --c-upload-card-size | calc(var(--c-sys-control-height-md) * 2) |
+| --c-upload-item-min-height | var(--c-sys-control-height-md) |
+| --c-upload-item-padding | var(--c-sys-space-4) |
+| --c-upload-thumb-size | var(--c-sys-control-height-lg) |
+| --c-upload-border-radius | var(--c-sys-radius-md) |
+| --c-upload-border-color | var(--c-sys-color-border-default) |
+| --c-upload-background | var(--c-sys-color-surface-default) |
+| --c-upload-text-color | var(--c-sys-color-content-primary) |
+| --c-upload-secondary-text-color | var(--c-sys-color-content-secondary) |
+| --c-upload-hover-background | var(--c-sys-color-state-hover) |
+| --c-upload-active-color | var(--c-sys-color-action-primary) |
+| --c-upload-error-color | var(--c-sys-color-content-danger) |
+| --c-upload-action-size | var(--c-sys-control-touch-target) |
+| --c-upload-progress-height | var(--c-sys-space-2) |
+| --c-upload-disabled-opacity | .56 |
+| --c-upload-font-size | var(--c-sys-font-size-md) |

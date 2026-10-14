@@ -2,7 +2,7 @@
 permalink: /components/style/typography/
 ---
 
-## 字体排版 Typography
+# 字体排版 Typography
 
 样式工具类，用来设置文本与排版相关属性（Cedar PC 扩展；Maple 侧栏保留同名入口，能力见 Maple Typography 说明页）。
 

@@ -32,6 +32,16 @@ permalink: /components/message/
 
 `duration` 单位为毫秒，`0` 表示常驻；`Message.loading(...)` 默认常驻。
 
+展示期限独立于 CSS 进出动效。重启、hover 暂停、清理或卸载使旧计时回调失效，关闭状态在回调执行时再次检查；不会用动效 Token 修改业务展示时长。
+
+KeepAlive 停用取消计时，激活从当前配置完整 duration 重启；停用期间更新、卸载后保留的 restart 不调度。hover 正时长已耗尽时恢复会请求关闭，显式重置为0仍常驻。仅有限正 duration 自动关闭，负数和非有限值不调度。
+
+服务等待真实离场完成再清理和调用 onClosed，不再强制150ms或200ms退出。未挂载就 close/clear 的条目直接清理；此时服务 onClosed 仍报告完成，但组件未产生 open/opened/close 动画事件。业务 duration 与 CSS 过渡时长分开。
+
+真实IAB default/light/top服务的默认、600ms、零和离场重开四组已通过；重开可替换根DOM，不能依赖其节点身份。其他主题／位置、hover、KeepAlive和真实OS仍需独立验收。
+
+减少动效偏好下，独立样式取消根/进出过渡及装饰图标淡入，保留静态定位、颜色和业务展示期限；子图标自身动效仍由Icon规范负责。隔离Less检查不是实际OS验收。
+
 <demo src="./__demos__/time.vue"></demo>
 
 ## 可关闭
@@ -64,7 +74,7 @@ permalink: /components/message/
 
 ## 视觉变体
 
-视觉变体与 status 独立：neutral 是中性浮层与状态图标；tonal 是低强调状态色底与深色正文；solid 是高强调实色底与配套前景。Cedar 默认 neutral，Maple 默认 solid，显式传入同一 variant 即得到同一套颜色语义。default/loading 的 solid 保留深色底，loading 图标仍表达进度。两端导出 MessageVariant，函数调用、setDefaultOptions 和相同 id 更新都支持 variant。
+视觉变体与 status 独立：neutral 是中性浮层与状态图标；tonal 是低强调状态色底与深色正文；solid 是高强调实色底与配套前景。Cedar 与 Maple 默认均为 neutral；显式 solid / tonal 保持相同视觉语义。default/loading 的 solid 保留深色底，loading 图标仍表达进度。两端导出 MessageVariant，函数调用、setDefaultOptions 和相同 id 更新都支持 variant。
 
 <demo src="./__demos__/variant.vue"></demo>
 
@@ -114,7 +124,7 @@ permalink: /components/message/
 
 ## 公开 CSS 变量
 
-视觉变体与 status 独立：neutral 是中性浮层与状态图标；tonal 是低强调状态色底与深色正文；solid 是高强调实色底与配套前景。Cedar 默认 neutral，Maple 默认 solid，显式传入同一 variant 即得到同一套颜色语义。default/loading 的 solid 保留深色底，loading 图标仍表达进度。两端导出 MessageVariant，函数调用、setDefaultOptions 和相同 id 更新都支持 variant。
+视觉变体与 status 独立：neutral 是中性浮层与状态图标；tonal 是低强调状态色底与深色正文；solid 是高强调实色底与配套前景。Cedar 与 Maple 默认均为 neutral；显式 solid / tonal 保持相同视觉语义。default/loading 的 solid 保留深色底，loading 图标仍表达进度。两端导出 MessageVariant，函数调用、setDefaultOptions 和相同 id 更新都支持 variant。
 
 颜色命名为 `--c-message-{variant}-{status}-{bg|content-color|icon-color|border-color|close-color}`。bg 控制面板底，content-color 控制正文与未单独设色的 action，icon-color 控制状态图标，border-color 控制边线，close-color 控制关闭按钮。自定义背景时需要同时验证三个前景。几何变量保留端侧密度，不要求两端强行同值。变量必须作用于实际 Teleport 容器祖先。
 

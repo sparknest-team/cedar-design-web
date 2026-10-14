@@ -40,3 +40,5 @@ export const _InputGroupComponent = _InputGroup
 export const _InputGroupLabelComponent = _InputGroupLabel
 
 export default Input
+
+export type { InputEmits, InputSlots, InputExpose, InputGroupSlots, InputPasswordEmits, InputPasswordSlots, InputPasswordExpose } from './types'

@@ -10,6 +10,12 @@ permalink: /components/date-picker/
 
 ## 案例
 
+### 字段与嵌入式面板
+
+字段管理输入与浮层，纯面板直接嵌入页面。日历周起点统一为 day-start-of-week（数字 0～6，0 为周日），动态修改立即生效。
+
+<demo src="./__demos__/entry-boundary.vue"></demo>
+
 ### 基本用法
 
 默认只渲染面板。
@@ -42,11 +48,16 @@ permalink: /components/date-picker/
 
 ### Props
 
+纯面板不接收 open/default-open、popup-container、placement、trigger-props、placeholder、variant、clearable 等字段/浮层属性。浮层配置请使用 Date/DateRange 的 popup-props；输入可编辑性使用字段 input-editable。确认区只由 disable-confirm 控制，不再使用 show-confirm-btn。
+
 | 参数 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
 | `model-value` | 绑定值 | `Date \| string \| number` | `-` |
 | `type` | 面板类型 | `date \| week \| month \| year \| quarter` | `date` |
 | `format` | 展示格式 | `string \| Function` | `-` |
+| `day-start-of-week` | 每周第一天（仅日历），整数 0～6 | `DateWeekStart` | `0` |
+| `readonly` | 只读，不更改选择 | `boolean` | `false` |
+| `time-picker-props` | 本库时间面板展示选项 | `Partial<TimePickerProps>` | `-` |
 | `show-time` | 选择时间 | `boolean` | `false` |
 | `disabled` | 禁用 | `boolean` | `false` |
 | `disabled-date` | 禁用日期 | `Function` | `-` |
@@ -82,3 +93,58 @@ permalink: /components/date-picker/
 | `confirm` | 确认有效选择，不使用 ok | value, date(s), formatted text(s) |
 
 设置 `:disable-confirm="false"` 显示确认区；`actions` 插槽提供 `{ confirm, disabled }`，自定义操作仍须调用 confirm 完成校验。
+
+## 公共入口与类型
+
+根入口和 date 子路径均导出 DatePicker、DatePickerProps、DatePickerInstance、DatePickerType、DatePickerOptions、DatePickerEmits。面板可以单独 app.use 安装，也可使用 Date.Picker。Options 只允许展示配置，不含模型、格式、边界和禁用规则。没有独立的 date-picker/date-range-picker npm 子路径。
+
+两端共同支持 abbreviation；日期语言使用全局 Locale。移动端 presentation、multiple/range、触摸手势及面板外观为真实展示差异，不把差集机械补成空 API。
+
+### 快捷选项与日历视口
+
+<demo src="./__demos__/panel-tools.vue"></demo>
+
+两端均导出 `DateShortcut`、`DateShortcutsPosition`。快捷项包含 `label`、`value`（值或按需执行的函数）、可选 `format`（快捷值的输入格式）与 `disabled`；输出使用面板的 `value-format`。悬停或聚焦只预览，不提交；点击走普通日期选择的校验与确认流程。设置 `preview-shortcut=false` 仅关闭预览。`shortcuts-position` 支持 left/bottom/right，移动端建议 bottom。
+
+`picker-value` 管理日历视口，不是选中值；`default-picker-value` 仅初始化读取。范围视口为两个日期。导航发出 `update:picker-value` 和 `picker-value-change(value, dates, texts)`，不触发 `change` 或 `select`；受控更新不被接纳时保留原视口。`select-shortcut(shortcut)` 仅在快捷项通过校验并被接受后触发。移动端滚轮/时钟展示不提供日历月份导航。字段通过 `date-picker-props` 配置这些选项，转发上述三个事件。
+
+### 当前日期与范围策略
+
+<demo src="./__demos__/current-range.vue"></demo>
+
+| 属性 | 说明 | 默认值 |
+| --- | --- | --- |
+| `show-current` | 日历中高亮当前日/月/年，不产生选择或提交 | true |
+| `show-now-button` | DatePicker 单选面板的选择当前按钮，多选/范围不显示 | true |
+
+选择当前按面板 type、时间精度与 value-format 生成候选，遵守 disabled/readonly、min/max、日期和时间禁用规则及 disable-confirm。disable-confirm=false 时只选择草稿，确认才提交；挂载或改变高亮均不写模型。字段通过 date-picker-props 配置。旧 showNowBtn 名称已删除，不保留别名。
+
+actions 插槽提供 `{ confirm, disabled, selectNow, nowDisabled }`。自定义按钮应调用这两个受保护动作，不应直接写模型。
+
+DateRangePicker 的 `exchange-time` 默认 true。反序交互日期在 true 时交换整个日期时间端点；false 时只交换日期、保留起止位置的时分秒。结果仍须通过端点规则和锁定端点校验。外部模型、手输值和快捷项不静默重排；保留时间位置后同日时间仍逆序的候选不能提交。Cedar 原 ConfigProvider.exchangeTime 全局覆盖已移除。
+
+## 月份标签
+
+`abbreviation`（boolean，默认 `true`）控制日历月份网格的缩写；`false` 使用当前 Locale 的完整月份名。运行时修改立即生效，不改变值，也不触发选择事件。此开关不影响星期标签、标题、滚轮列或值格式。范围日历以顶层选项为准，嵌套日历参数不能覆盖。
+
+<demo src="./__demos__/month-labels.vue"></demo>
+
+### 语言与嵌套日历参数
+
+日期标签、标题和动作接入各库的全局 Locale 与既有 Provider。Cedar 删除日期组件级 `locale`，不保留覆盖字典或兼容别名。切换语言不会选择或提交日期。
+
+### 内嵌时间与滚轮展示
+
+`time-picker-props` 使用 `DateTimePickerOptions`：`use12Hours`、`step`、`hideDisabledOptions`、`class`、`style`。仅配置时间展示；日期值、格式/秒精度、约束和确认仍由日期所有者管理。`step` 负责展示采样，不静默修正外部值。未知参数及监听函数不转发。
+
+<demo src="./__demos__/time-presentation.vue"></demo>
+
+### 日期语言的实例隔离
+
+日期所有者读取本库全局 Locale/Provider，周起始日由各实例 `day-start-of-week` 管理。不切换宿主 Dayjs 默认语言，也不覆盖宿主基础语言配置；只在各库命名空间下注册日期语言元数据，组件实例与源码不跨库共享。
+
+`value-format` 是稳定英文日期协议（包括月份名称 token），`format` 的显示及手输文本使用界面语言。切换语言不会改写模型，也不会令英文月份名称模型失效。默认数字协议、Date 对象、时间戳不变。中文核心语言与 Maple 内置语言数据已接入；其他日期格式优先使用已注册 Dayjs 语言数据，未加载的语言安全回退英文。
+
+周号和周比较不再依赖全局周起始设置，跨年同周号不能被误判成同一周。两个不同周起始实例的挂载、更新和卸载互不影响。
+
+<demo src="./__demos__/locale-isolation.vue"></demo>

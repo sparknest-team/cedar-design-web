@@ -8,7 +8,7 @@ const items = [
 
 <template>
   <div style="display: flex; gap: 64px; align-items: flex-start">
-    <c-progress-group :items="items" status style="width: 420px" />
-    <c-progress-group :items="items" orientation="vertical" size="lg" status style="height: 220px" />
+    <c-progress-group :items="items" show-text style="width: 420px" />
+    <c-progress-group :items="items" orientation="vertical" size="lg" show-text style="height: 220px" />
   </div>
 </template>
