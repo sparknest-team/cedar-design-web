@@ -1,5 +1,5 @@
 <template>
-  <c-space>
+  <c-space wrap>
     <c-tag color="gray">
       <template #icon>
         <c-icon-github />

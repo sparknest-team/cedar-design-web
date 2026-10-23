@@ -1,0 +1,359 @@
+{
+  "fields": [
+    {
+      "name": "model-value",
+      "description": "绑定值",
+      "type": "(string | number | TagData)[]",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "default-value",
+      "description": "默认值（非受控状态）",
+      "type": "(string | number | TagData)[]",
+      "defaultValue": "() => []",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "input-value",
+      "description": "输入框的值",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "default-input-value",
+      "description": "输入框的默认值（非受控状态）",
+      "type": "string",
+      "defaultValue": "''",
+      "kind": "string"
+    },
+    {
+      "name": "placeholder",
+      "description": "占位符",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "disabled",
+      "description": "是否禁用",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "error",
+      "description": "是否为错误状态",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "readonly",
+      "description": "是否为只读模式",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "clearable",
+      "description": "是否允许清空",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "size",
+      "description": "输入框的大小",
+      "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
+      "defaultValue": "undefined",
+      "kind": "enum",
+      "options": [
+        "xs",
+        "sm",
+        "md",
+        "lg",
+        "xl"
+      ],
+      "initial": "xs"
+    },
+    {
+      "name": "variant",
+      "description": "输入框的变体",
+      "type": "'filled' | 'outline' | 'standard'",
+      "defaultValue": "'filled'",
+      "kind": "enum",
+      "options": [
+        "filled",
+        "outline",
+        "standard"
+      ],
+      "initial": "filled"
+    },
+    {
+      "name": "max-tag-count",
+      "description": "最多展示的标签个数，0 表示不限制",
+      "type": "number",
+      "defaultValue": "0",
+      "kind": "number"
+    },
+    {
+      "name": "retain-input-value",
+      "description": "是否保留输入框的内容",
+      "type": "boolean | { create?: boolean; blur?: boolean }",
+      "defaultValue": "false",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "format-tag",
+      "description": "格式化标签内容",
+      "type": "(data: TagData) => string",
+      "defaultValue": "undefined",
+      "kind": "callback"
+    },
+    {
+      "name": "unique-value",
+      "description": "是否仅创建唯一的值",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "field-names",
+      "description": "自定义 TagData 中的字段",
+      "type": "InputTagFieldNames",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "tag-nowrap",
+      "description": "标签内容不换行",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "presentation",
+      "type": "'inline' | 'click' | 'dblclick'",
+      "defaultValue": "undefined",
+      "description": "字段编辑方式，字段 > FormItem > Form 继承；默认 inline。",
+      "kind": "enum",
+      "options": [
+        "inline",
+        "click",
+        "dblclick"
+      ],
+      "initial": "inline"
+    },
+    {
+      "name": "read-pretty",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "纯阅读展示；字段 > FormItem > Form 继承，显式 false 覆盖父级。",
+      "kind": "boolean"
+    },
+    {
+      "name": "before-commit",
+      "type": "BeforeFieldCommit",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "callback"
+    },
+    {
+      "name": "open",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "default-open",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "popup-container",
+      "type": "string | HTMLElement | false",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "json",
+      "initial": "\"body\""
+    },
+    {
+      "name": "base-cls",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "string"
+    },
+    {
+      "name": "focused",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "// private",
+      "kind": "boolean"
+    },
+    {
+      "name": "disabled-input",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "uninject-form-item-context",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "TagData.value",
+      "description": "model-value.0 · 标签值",
+      "type": "string | number",
+      "defaultValue": "-",
+      "kind": "scalar",
+      "path": [
+        "model-value",
+        0,
+        "value"
+      ]
+    },
+    {
+      "name": "TagData.label",
+      "description": "model-value.0 · 标签内容",
+      "type": "string",
+      "defaultValue": "-",
+      "kind": "string",
+      "path": [
+        "model-value",
+        0,
+        "label"
+      ]
+    },
+    {
+      "name": "TagData.closable",
+      "description": "model-value.0 · 是否可关闭",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean",
+      "path": [
+        "model-value",
+        0,
+        "closable"
+      ]
+    },
+    {
+      "name": "TagData.tag-props",
+      "description": "model-value.0 · 标签属性",
+      "type": "TagProps",
+      "defaultValue": "-",
+      "kind": "json",
+      "initial": "{}",
+      "path": [
+        "model-value",
+        0,
+        "tagProps"
+      ]
+    }
+  ],
+  "events": [
+    "change",
+    "input-value-change",
+    "press-enter",
+    "remove",
+    "clear",
+    "focus",
+    "blur",
+    "update:modelValue",
+    "update:open"
+  ],
+  "scenarios": [
+    {
+      "name": "model-value",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "default-value",
+      "kind": "prop",
+      "demos": [
+        "basic.vue",
+        "max.vue",
+        "size.vue",
+        "status.vue"
+      ]
+    },
+    {
+      "name": "retain-input-value",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "format-tag",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "field-names",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "before-commit",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "tag",
+      "kind": "slot",
+      "demos": [
+        "basic.vue",
+        "max.vue",
+        "size.vue",
+        "status.vue"
+      ]
+    },
+    {
+      "name": "prefix",
+      "kind": "slot",
+      "demos": []
+    },
+    {
+      "name": "suffix",
+      "kind": "slot",
+      "demos": []
+    },
+    {
+      "name": "focus",
+      "kind": "method",
+      "demos": []
+    },
+    {
+      "name": "blur",
+      "kind": "method",
+      "demos": []
+    }
+  ],
+  "slotNames": [
+    "tag",
+    "prefix",
+    "suffix"
+  ],
+  "slotDefaults": {
+    "tag": false,
+    "prefix": false,
+    "suffix": false
+  },
+  "methodNames": [
+    "focus",
+    "blur"
+  ]
+}

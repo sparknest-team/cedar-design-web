@@ -202,6 +202,7 @@ export default defineComponent({
 
     const handleClick = (ev: Event) => {
       if (
+        !isLoading.value &&
         isFunction(tableCtx.loadMore) &&
         !props.record?.isLeaf &&
         !props.record?.children
@@ -240,16 +241,7 @@ export default defineComponent({
           {props.showExpandBtn && (
             <span
               class={`${prefixCls}-cell-inline-icon`}
-              role="button"
-              tabindex={0}
-              aria-label="切换展开状态"
               onClick={handleClick}
-              onKeydown={(event: KeyboardEvent) => {
-                if (event.key === 'Enter' || event.key === ' ') {
-                  event.preventDefault()
-                  handleClick(event as unknown as MouseEvent)
-                }
-              }}
             >
               {isLoading.value ? (
                 <IconLoading />

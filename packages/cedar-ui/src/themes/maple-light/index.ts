@@ -25,7 +25,7 @@ const mapleLight: StyleVars = {
   '--c-primary-9': '101, 39, 11',
   '--c-primary-10': '67, 20, 7',
   '--c-tooltip-status-primary-text-color': 'var(--c-sys-color-content-on-dark)',
-  '--c-button-primary-text-color': 'var(--c-sys-color-content-on-dark)',
+  '--c-button-solid-text-color': 'var(--c-sys-color-content-on-dark)',
   '--c-button-primary-state-layer-color': 'var(--c-sys-color-content-on-bright)',
   '--c-badge-status-primary-text-color': 'var(--c-sys-color-content-on-dark)',
 }

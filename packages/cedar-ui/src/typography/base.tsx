@@ -4,7 +4,9 @@ import {
   toRefs,
   computed,
   ref,
-  onUnmounted,
+  onBeforeUnmount,
+  onActivated,
+  onDeactivated,
   VNodeTypes,
   watch,
   reactive,
@@ -176,6 +178,10 @@ export default defineComponent({
 
     const wrapperRef = ref()
     const fullText = ref('')
+    let active = true
+    let disposed = false
+    const lifecycleEpoch = ref(0)
+    const available = () => active && !disposed
 
     // for edit
     const [editing, setEditing] = useMergeState(
@@ -187,18 +193,20 @@ export default defineComponent({
     const mergeEditing = computed(() => editable.value && editing.value)
 
     function onEditStart() {
+      if (!available() || props.disabled) return
       emit('update:editing', true)
       emit('edit-start')
       setEditing(true)
     }
 
     function onEditChange(text: string) {
+      if (!available() || props.disabled) return
       emit('update:editText', text)
       emit('change', text)
     }
 
     function onEditEnd() {
-      if (!editing.value) return
+      if (!available() || !editing.value) return
       emit('update:editing', false)
       emit('edit-end')
       setEditing(false)
@@ -206,26 +214,40 @@ export default defineComponent({
 
     // for copy
     const isCopied = ref(false)
-    let copyTimer: NodeJS.Timeout | null = null
+    let copyTimer: ReturnType<typeof setTimeout> | null = null
+    let copyGeneration = 0
+
+    function cancelCopy() {
+      copyGeneration++
+      if (copyTimer !== null) clearTimeout(copyTimer)
+      copyTimer = null
+      isCopied.value = false
+    }
 
     function onCopyClick() {
+      if (!available() || props.disabled || !copyable.value) return
+      cancelCopy()
+      const generation = copyGeneration
+      const current = () => available() && !props.disabled && copyable.value && generation === copyGeneration
       const text = copyText.value ?? fullText.value
 
       clipboard(text || '')
+      if (!current()) return
 
       isCopied.value = true
 
       emit('copy', text)
+      if (!current()) return
 
       copyTimer = setTimeout(() => {
+        if (!current()) return
+        copyGeneration++
+        copyTimer = null
         isCopied.value = false
       }, copyDelay.value)
     }
 
-    onUnmounted(() => {
-      copyTimer && clearTimeout(copyTimer)
-      copyTimer = null
-    })
+    watch([copyable, copyDelay, () => props.disabled], cancelCopy, { flush: 'sync' })
 
     // for ellipsis
     const isEllipsis = ref(false)
@@ -234,9 +256,17 @@ export default defineComponent({
     const ellipsisConfig = computed<EllipsisInternalConfig>(() =>
       normalizeEllipsisConfig((isObject(ellipsis.value) && ellipsis.value) || {}),
     )
-    let rafId: number = null as any
+    let rafId: number | null = null
+    let measureGeneration = 0
+
+    function cancelMeasurement() {
+      measureGeneration++
+      if (rafId !== null) caf(rafId)
+      rafId = null
+    }
 
     function onExpandClick() {
+      if (!available() || props.disabled) return
       const newVal = !expanded.value
       expanded.value = newVal
       emit('expand', newVal)
@@ -290,22 +320,26 @@ export default defineComponent({
       )
     }
 
-    function calEllipsis() {
-      if (!wrapperRef.value) return
+    function calEllipsis(generation: number) {
+      const element = wrapperRef.value
+      const current = () => available() && generation === measureGeneration && element === wrapperRef.value && !!ellipsis.value && !expanded.value && !mergeEditing.value
+      if (!element || !current()) return
 
-      const { ellipsis, text } = measure(
-        wrapperRef.value,
+      const { ellipsis: measuredEllipsis, text } = measure(
+        element,
         ellipsisConfig.value,
         renderOperations(!!ellipsisConfig.value.expandable),
         fullText.value,
       )
+      if (!current()) return
 
-      if (isEllipsis.value !== ellipsis) {
-        isEllipsis.value = ellipsis
+      if (isEllipsis.value !== measuredEllipsis) {
+        isEllipsis.value = measuredEllipsis
         if (!ellipsisConfig.value.css) {
-          emit('ellipsis', ellipsis)
+          emit('ellipsis', measuredEllipsis)
         }
       }
+      if (!current()) return
 
       if (ellipsisText.value !== text) {
         ellipsisText.value = text || ''
@@ -313,33 +347,56 @@ export default defineComponent({
     }
 
     function resizeOnNextFrame() {
-      const needCalEllipsis = ellipsis.value && !expanded.value
+      cancelMeasurement()
+      const needCalEllipsis = available() && ellipsis.value && !expanded.value && !mergeEditing.value && !ellipsisConfig.value.css
       if (!needCalEllipsis) return
 
-      caf(rafId)
+      const generation = measureGeneration
       rafId = raf(() => {
-        calEllipsis()
+        if (!available() || generation !== measureGeneration) return
+        rafId = null
+        // Consume before measuring: a replay or reentrant operation cannot reuse this frame.
+        measureGeneration++
+        calEllipsis(measureGeneration)
       })
     }
 
-    onUnmounted(() => {
-      caf(rafId)
+    onBeforeUnmount(() => {
+      disposed = true
+      active = false
+      lifecycleEpoch.value++
+      cancelCopy()
+      cancelMeasurement()
+    })
+    onDeactivated(() => {
+      active = false
+      lifecycleEpoch.value++
+      cancelCopy()
+      cancelMeasurement()
+    })
+    onActivated(() => {
+      if (active || disposed) return
+      active = true
+      lifecycleEpoch.value++
+      if (ellipsisConfig.value.css) calTooltip()
+      else resizeOnNextFrame()
     })
 
     watch(
-      () => ellipsisConfig.value.rows,
+      () => [ellipsisConfig.value, expanded.value, mergeEditing.value],
       () => {
         resizeOnNextFrame()
-      },
+      }, { flush: 'sync' },
     )
 
     watch(ellipsis, (newVal) => {
       if (newVal) {
         resizeOnNextFrame()
       } else {
+        cancelMeasurement()
         isEllipsis.value = false
       }
-    })
+    }, { flush: 'sync' })
 
     let children: VNode[] = []
 
@@ -361,12 +418,24 @@ export default defineComponent({
     const showCSSTooltip = ref(false)
 
     const calTooltip = () => {
-      if (wrapperRef.value && contentRef.value) {
-        const _show = contentRef.value.offsetHeight > wrapperRef.value.offsetHeight
+      if (available() && !expanded.value && !mergeEditing.value && ellipsisConfig.value.css && wrapperRef.value && contentRef.value) {
+        const generation = measureGeneration
+        const wrapper = wrapperRef.value, content = contentRef.value
+        const _show = content.offsetHeight > wrapper.offsetHeight
+        if (!available() || generation !== measureGeneration || wrapper !== wrapperRef.value || content !== contentRef.value) return
         if (_show !== showCSSTooltip.value) {
           showCSSTooltip.value = _show
           emit('ellipsis', _show)
         }
+      }
+    }
+
+    function createResizeHandler(css = false) {
+      const epoch = lifecycleEpoch.value
+      return () => {
+        if (!available() || epoch !== lifecycleEpoch.value) return
+        if (css) calTooltip()
+        else resizeOnNextFrame()
       }
     }
 
@@ -422,7 +491,7 @@ export default defineComponent({
           return (
             <TooltipComponent
               {...tooltipProps}
-              onResize={() => calTooltip()}
+              onResize={createResizeHandler(true)}
               v-slots={{
                 content: () => fullText.value,
               }}
@@ -434,9 +503,7 @@ export default defineComponent({
 
         return (
           <ResizeObserver
-            onResize={() => {
-              calTooltip()
-            }}
+            onResize={createResizeHandler(true)}
           >
             {Outer}
           </ResizeObserver>
@@ -446,7 +513,7 @@ export default defineComponent({
       const Content = Wrap(props as BaseInternalProps, showEllipsis ? ellipsisText.value : children)
 
       return (
-        <ResizeObserver onResize={() => resizeOnNextFrame()}>
+        <ResizeObserver onResize={createResizeHandler()}>
           <Component class={classNames.value} ref={wrapperRef} {...titleAttrs} {...attrs}>
             {showEllipsis && showTooltip ? (
               <TooltipComponent

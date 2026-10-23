@@ -37,9 +37,15 @@
     text-align: inherit;
     cursor: inherit;
 
-    &::placeholder { color: var(--c-field-placeholder-text-color, var(--c-field-blur-color)); }
-    &--with-value { min-width: var(--c-selection-field-input-min-width); }
-    &:read-only { caret-color: transparent; }
+    &::placeholder {
+      color: var(--c-field-placeholder-text-color, var(--c-field-blur-color));
+    }
+    &--with-value {
+      min-width: var(--c-selection-field-input-min-width);
+    }
+    &:read-only {
+      caret-color: transparent;
+    }
   }
 
   &:not(&--multiple) &__selection {
@@ -52,21 +58,87 @@
   }
 
   &--nowrap &__content,
-  &--nowrap &__selection { flex-wrap: nowrap; }
+  &--nowrap &__selection {
+    flex-wrap: nowrap;
+  }
+
+  // Keep editing controls outside the scrollable selection viewport.
+  &--nowrap&--multiple &__selection {
+    flex: 1 1 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  &--nowrap&--multiple &__input--with-value {
+    flex: 0 0 var(--c-selection-field-search-min-width);
+    &:read-only {
+      flex-basis: var(--c-selection-field-input-min-width);
+    }
+  }
+
+  &--nowrap &__tag,
+  &--nowrap &__summary,
+  &--nowrap &__label {
+    flex: none;
+    min-width: 0;
+    max-width: 100%;
+  }
+  &--nowrap &__label {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  &--nowrap &__tag .c-tag__text {
+    flex: 1 1 auto;
+  }
+  &--nowrap &__tag .c-tag__close-btn,
+  &--nowrap &__tag .c-tag__icon,
+  &--nowrap &__tag .c-tag__loading-icon {
+    flex: none;
+  }
+
+  &__tag-label {
+    display: block;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  &__tag-label--truncated {
+    cursor: pointer;
+    &:focus-visible {
+      outline: var(--c-field-border-width) solid var(--c-field-focus-color);
+      outline-offset: calc(-1 * var(--c-field-border-width));
+    }
+  }
 
   &__icon {
     display: inline-flex;
     flex: none;
     transition: transform var(--c-selection-field-icon-transition-duration);
-    &--open { transform: rotate(180deg); }
-    &--loading { animation: c-selection-field-spin var(--c-selection-field-loading-duration) linear infinite; }
+    &--open {
+      transform: rotate(180deg);
+    }
+    &--loading {
+      animation: c-selection-field-spin var(--c-selection-field-loading-duration) linear infinite;
+    }
   }
 }
 
 @keyframes c-selection-field-spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .c-selection-field__icon { transition: none; animation: none; }
+  .c-selection-field__icon {
+    transition: none;
+    animation: none;
+  }
 }

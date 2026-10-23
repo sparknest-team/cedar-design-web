@@ -1,14 +1,19 @@
 import { withInstall } from '../_utils/global-config'
-import _Checkbox from './checkbox.vue'
-import _CheckboxGroup from './checkbox-group.vue'
+import _CheckboxGroup from './group-presentation'
+import _Checkbox from './presentation'
 import { checkboxGroupProps, checkboxProps } from './props'
 
-const Checkbox = withInstall(_Checkbox, Object.assign(_Checkbox, {
-  Group: _CheckboxGroup,
-}), { components: [_Checkbox, _CheckboxGroup] })
+const Checkbox = withInstall(
+  _Checkbox,
+  Object.assign(_Checkbox, {
+    Group: _CheckboxGroup,
+  }),
+  { components: [_Checkbox, _CheckboxGroup] },
+)
 
 export type CheckboxInstance = InstanceType<typeof _Checkbox> & import('./props').CheckboxMethods
-export type CheckboxGroupInstance = InstanceType<typeof _CheckboxGroup> & import('./use-checkbox-group-methods').CheckboxGroupMethods
+export type CheckboxGroupInstance = InstanceType<typeof _CheckboxGroup> &
+  import('./use-checkbox-group-methods').CheckboxGroupMethods
 export { checkboxGroupProps, checkboxProps }
 export type { CheckboxGroupProps, CheckboxProps, CheckboxValue } from './props'
 export type { CheckboxOption } from './types'

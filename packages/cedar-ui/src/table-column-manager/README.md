@@ -46,6 +46,13 @@ permalink: /components/table-column-manager/
 
 <demo src="./__demos__/remote.vue"></demo>
 
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
+
 ## API
 
 ### 状态与持久化结构

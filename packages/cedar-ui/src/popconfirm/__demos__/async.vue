@@ -2,14 +2,14 @@
   <c-popconfirm :before-confirm="handleBeforeConfirm">
     <c-button>Click To Show</c-button>
     <template #content>
-      <Form>
+      <c-form>
         <c-form-item label="Name">
           <c-input  />
         </c-form-item>
         <c-form-item label="Post">
           <c-input  />
         </c-form-item>
-      </Form>
+      </c-form>
     </template>
   </c-popconfirm>
 </template>

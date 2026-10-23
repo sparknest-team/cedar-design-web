@@ -1,6 +1,12 @@
 import type { ExtractPropTypes, PropType } from 'vue'
+import { fieldPresentationProps } from '../_components/field-presentation/props'
 
 export const peopleSelectProps = {
+  ...fieldPresentationProps,
+  /** 禁用；未设置时继承 Form / FormItem。 */
+  disabled: { type: Boolean, default: undefined },
+  /** 只读；允许回显，不允许打开编辑、选择或清空。 */
+  readonly: { type: Boolean, default: undefined },
   /**
    *
    */
@@ -45,4 +51,4 @@ export const peopleSelectProps = {
   },
 }
 
-export type PeopleSelectProps = import("vue").ExtractPublicPropTypes<typeof peopleSelectProps>
+export type PeopleSelectProps = import('vue').ExtractPublicPropTypes<typeof peopleSelectProps>

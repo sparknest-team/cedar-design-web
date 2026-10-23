@@ -1,0 +1,129 @@
+{
+  "fields": [
+    {
+      "name": "show-back",
+      "description": "是否显示返回按钮",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "title",
+      "description": "页头的主标题",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "subtitle",
+      "description": "页头的次标题",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "extra",
+      "description": "右侧附加内容",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    }
+  ],
+  "events": [
+    "back"
+  ],
+  "scenarios": [
+    {
+      "name": "header",
+      "kind": "slot",
+      "demos": [
+        "basic.vue",
+        "breadcrumb.vue",
+        "content.vue",
+        "transparent.vue"
+      ]
+    },
+    {
+      "name": "back",
+      "kind": "slot",
+      "demos": [
+        "basic.vue",
+        "breadcrumb.vue",
+        "content.vue",
+        "transparent.vue"
+      ]
+    },
+    {
+      "name": "avatar",
+      "kind": "slot",
+      "demos": [
+        "content.vue"
+      ]
+    },
+    {
+      "name": "title",
+      "kind": "slot",
+      "demos": [
+        "basic.vue",
+        "breadcrumb.vue",
+        "content.vue",
+        "transparent.vue"
+      ]
+    },
+    {
+      "name": "subtitle",
+      "kind": "slot",
+      "demos": [
+        "basic.vue",
+        "breadcrumb.vue",
+        "content.vue",
+        "transparent.vue"
+      ]
+    },
+    {
+      "name": "extra",
+      "kind": "slot",
+      "demos": [
+        "basic.vue",
+        "breadcrumb.vue",
+        "content.vue",
+        "transparent.vue"
+      ]
+    },
+    {
+      "name": "default",
+      "kind": "slot",
+      "demos": [
+        "basic.vue",
+        "breadcrumb.vue",
+        "transparent.vue"
+      ]
+    },
+    {
+      "name": "footer",
+      "kind": "slot",
+      "demos": [
+        "content.vue"
+      ]
+    }
+  ],
+  "slotNames": [
+    "extra",
+    "header",
+    "back",
+    "avatar",
+    "title",
+    "subtitle",
+    "footer"
+  ],
+  "slotDefaults": {
+    "extra": true,
+    "header": false,
+    "back": false,
+    "avatar": false,
+    "title": false,
+    "subtitle": false,
+    "footer": false
+  },
+  "methodNames": []
+}

@@ -2,12 +2,14 @@
   <Form
     ref="formRef"
     :model="innerModel"
-    :class="classes(n())"
+    :class="classes(n(), [responsiveCols <= 1, n('--stacked')])"
     layout="vertical"
     :rules="rules"
   >
     <Grid
       :col-gap="colGap"
+      :row-gap="16"
+      :collapsed-rows="responsiveCols <= 2 ? 2 : 1"
       :collapsed="collapsed_"
       :cols="cols"
       v-bind="gridProps"
@@ -25,7 +27,7 @@
           <component
             :is="item.registration.component"
             v-bind="getFieldBind(item)"
-            v-on="getFieldListeners(item)"
+            @update:model-value="onFieldValue(item, $event)"
             @keyup.enter="onFieldEnter(item)"
             @blur="onFieldBlur(item)"
           />
@@ -36,19 +38,24 @@
         v-if="showSuffixItem"
         #="{ overflow }"
         suffix
+        :span="2"
       >
-        <FormItem hide-label>
+        <FormItem hide-label :class="classes(n('action-item'))">
           <div :class="classes(n('actions'))">
-            <div
+            <button
               v-if="collapsible && (overflow || !collapsed_)"
+              type="button"
+              :aria-expanded="!collapsed_"
               :class="classes(n('collapse'))"
               @click="toggleCollapsed"
             >
               <IconDownCircle v-if="collapsed_" />
               <IconUpCircle v-else />
               {{ collapsed_ ? t('filterForm.expandMore') : t('filterForm.collapseMore') }}
+            </button>
+            <div v-if="$slots.actions" :class="classes(n('action-slot'))">
+              <slot name="actions" />
             </div>
-            <slot name="actions" />
           </div>
         </FormItem>
       </GridItem>
@@ -57,9 +64,11 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, useSlots, watch, type Component } from 'vue'
+import { computed, ref, useSlots, watch } from 'vue'
 import Form, { FormItem } from '../form'
 import Grid, { GridItem } from '../grid'
+import { useResponsiveState } from '../grid/hook/use-responsive-state'
+import type { ResponsiveValue } from '../grid/types'
 import { getValueByPath, setValueByPath } from '../_utils/get-value-by-path'
 import { debounce } from '../_utils/debounce'
 import { isString } from '../_utils/is'
@@ -90,9 +99,12 @@ const slots = useSlots()
 const formRef = ref()
 const innerModel = ref<Record<string, unknown>>({})
 const collapsed_ = ref(props.collapsed)
-const missingFieldKeys = new Set<string>()
 /** Grid measures numeric gaps; callers customize this with gridProps.colGap. */
 const colGap = 16
+const responsiveCols = useResponsiveState(
+  computed(() => (props.gridProps?.cols as number | ResponsiveValue | undefined) ?? props.cols),
+  1,
+)
 
 const showSuffixItem = computed(() => props.collapsible || Boolean(slots.actions))
 
@@ -130,33 +142,17 @@ function emitModel() {
   emit('update:modelValue', cloneModel(innerModel.value))
 }
 
-function isVueComponent(value: unknown): value is Component {
-  return Boolean(
-    value
-      && (typeof value === 'function'
-        || (typeof value === 'object'
-          && ('setup' in value || 'render' in value || 'template' in value || '__asyncLoader' in value))),
-  )
-}
-
 function resolveRegistration(field: FilterFormField): FilterFormFieldRegistration | undefined {
-  const type = field.type
-  if (isVueComponent(type)) {
-    return normalizeFieldRegistration(type)
+  const component = field.component
+  if (isString(component)) {
+    return normalizeFieldRegistration(props.fieldMap?.[component])
   }
-  if (!isString(type) || !type) {
-    return undefined
-  }
-  const reg = normalizeFieldRegistration(props.fieldMap?.[type])
-  if (!reg && !missingFieldKeys.has(type)) {
-    missingFieldKeys.add(type)
-  }
-  return reg
+  return normalizeFieldRegistration(component)
 }
 
 type ResolvedField = {
   field: FilterFormField
-  registration: FilterFormFieldRegistration & { valueEvent: 'change' | 'update:modelValue' }
+  registration: FilterFormFieldRegistration
 }
 
 const resolvedFields = computed((): ResolvedField[] => {
@@ -168,10 +164,7 @@ const resolvedFields = computed((): ResolvedField[] => {
       }
       return {
         field,
-        registration: {
-          ...registration,
-          valueEvent: registration.valueEvent || 'change',
-        },
+        registration,
       }
     })
     .filter((item): item is ResolvedField => Boolean(item))
@@ -183,9 +176,6 @@ function getFieldBind(item: ResolvedField) {
     ...(registration.defaultProps || {}),
     ...(field.props || {}),
     modelValue: getValueByPath(innerModel.value, field.field),
-  }
-  if (registration.optionsFromMap) {
-    bind.options = field.props?.options || props.optionsMap?.[field.field]
   }
   return bind
 }
@@ -199,12 +189,6 @@ function onFieldValue(item: ResolvedField, value: unknown) {
   patchFieldValue(item.field.field, value)
   if (item.field.autoEmitChange !== false) {
     emitChange(cloneModel(innerModel.value), item.field.field)
-  }
-}
-
-function getFieldListeners(item: ResolvedField) {
-  return {
-    [item.registration.valueEvent]: (value: unknown) => onFieldValue(item, value),
   }
 }
 

@@ -1,5 +1,6 @@
 <template>
   <c-space direction="column" size="lg" fill>
+    <p>长度按 UTF-16 码元计算；试着输入 123456789😀Z，默认截断保留 123456789，不拆开 emoji。</p>
     <c-textarea
       v-model="limited"
       placeholder="超过 10 个字符会截断"

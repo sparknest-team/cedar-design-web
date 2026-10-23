@@ -1,0 +1,50 @@
+{
+  "fields": [
+    {
+      "name": "min",
+      "description": "最少展示的元素个数",
+      "type": "number",
+      "defaultValue": "0",
+      "kind": "number"
+    },
+    {
+      "name": "margin",
+      "description": "项目间隔",
+      "type": "number",
+      "defaultValue": "8",
+      "kind": "number"
+    },
+    {
+      "name": "from",
+      "description": "折叠方向",
+      "type": "'start' | 'end'",
+      "defaultValue": "'end'",
+      "kind": "enum",
+      "options": [
+        "start",
+        "end"
+      ],
+      "initial": "end"
+    }
+  ],
+  "events": [
+    "change"
+  ],
+  "scenarios": [
+    {
+      "name": "overflow",
+      "kind": "slot",
+      "demos": [
+        "basic.vue",
+        "from.vue"
+      ]
+    }
+  ],
+  "slotNames": [
+    "overflow"
+  ],
+  "slotDefaults": {
+    "overflow": false
+  },
+  "methodNames": []
+}

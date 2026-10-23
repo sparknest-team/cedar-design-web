@@ -1,7 +1,9 @@
 import type { PropType } from 'vue'
+import { fieldPresentationProps } from '../_components/field-presentation/props'
 import type { SelectOptionData, SelectOptionGroup } from '../select/types'
 
 export const mentionProps = {
+  ...fieldPresentationProps,
   /**
    * @zh 绑定值
    * @en Value
@@ -65,4 +67,4 @@ export const mentionProps = {
     type: Boolean,
     default: false,
   },
-} 
+}

@@ -36,6 +36,8 @@ permalink: /components/statistic/
 
 通过 `animation` 开启数值滚动动画，可用 `start` 控制播放时机。
 
+本例 Start 将父级 `start` 从 `false` 改为 `true`，从 `value-from` 播放到目标值；重复点击不会重播。`start=false` 暂停，随后切回 `true` 会从 `value-from` 重新播放，不是从暂停位置继续。需要可重播按钮时，由父级先设为 `false`，等待一次 Vue 更新后再设为 `true`。
+
 <demo src="./__demos__/animation.vue"></demo>
 
 ### 自定义数值
@@ -49,6 +51,13 @@ permalink: /components/statistic/
 `Countdown` 是独立组件，模板中使用 `<c-countdown>`。完整用法见 [Countdown 倒计时](/components/countdown/)。
 
 <demo src="../countdown/__demos__/statistic.vue"></demo>
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
 
 ## API
 

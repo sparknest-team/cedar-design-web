@@ -1,3 +1,5 @@
+> 已被替代：当前公共组件统一为 `Menu`，注册名 `CMenu`，子路径 `@cedarjs/ui/menu`。本目录仅保留历史变更记录；现行命名要求见 [Menu 规范](../unify-menu-name-and-context-point/specs/menu/spec.md)。
+
 # 将 Menu 收口为 DropdownMenu 命令菜单
 
 Cedar 的 `Menu` 同时暴露命令菜单和多选树状态，容易与 Select、Cascader 的数据选择职责混淆。将根组件破坏性重命名为 `DropdownMenu`，明确它用于从临时浮层激活命令；仅保留 MenuOption 供 SplitButton 与手写内容复用。

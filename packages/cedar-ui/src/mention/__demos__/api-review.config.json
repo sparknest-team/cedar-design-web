@@ -1,0 +1,174 @@
+{
+  "fields": [
+    {
+      "name": "model-value",
+      "description": "绑定值",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "default-value",
+      "description": "默认值（非受控状态）",
+      "type": "string",
+      "defaultValue": "''",
+      "kind": "string"
+    },
+    {
+      "name": "data",
+      "description": "用于自动补全的数据",
+      "type": "(string | number | SelectOptionData | SelectOptionGroup)[]",
+      "defaultValue": "() => []",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "prefix",
+      "description": "触发自动补全的关键字",
+      "type": "string | string[]",
+      "defaultValue": "'@'",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "split",
+      "description": "选中项的前后分隔符",
+      "type": "string",
+      "defaultValue": "' '",
+      "kind": "string"
+    },
+    {
+      "name": "type",
+      "description": "输入框或文本域",
+      "type": "'input' | 'textarea'",
+      "defaultValue": "'input'",
+      "kind": "enum",
+      "options": [
+        "input",
+        "textarea"
+      ],
+      "initial": "input"
+    },
+    {
+      "name": "disabled",
+      "description": "是否禁用",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "clearable",
+      "description": "是否允许清空输入框",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "presentation",
+      "type": "'inline' | 'click' | 'dblclick'",
+      "defaultValue": "undefined",
+      "description": "字段编辑方式，字段 > FormItem > Form 继承；默认 inline。",
+      "kind": "enum",
+      "options": [
+        "inline",
+        "click",
+        "dblclick"
+      ],
+      "initial": "inline"
+    },
+    {
+      "name": "read-pretty",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "纯阅读展示；字段 > FormItem > Form 继承，显式 false 覆盖父级。",
+      "kind": "boolean"
+    },
+    {
+      "name": "before-commit",
+      "type": "BeforeFieldCommit",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "callback"
+    },
+    {
+      "name": "open",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "default-open",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "popup-container",
+      "type": "string | HTMLElement | false",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "json",
+      "initial": "\"body\""
+    }
+  ],
+  "events": [
+    "change",
+    "search",
+    "select",
+    "clear",
+    "focus",
+    "blur",
+    "update:modelValue",
+    "update:open"
+  ],
+  "scenarios": [
+    {
+      "name": "data",
+      "kind": "prop",
+      "demos": [
+        "basic.vue",
+        "mirror-lifecycle.vue",
+        "prefix.vue"
+      ]
+    },
+    {
+      "name": "prefix",
+      "kind": "prop",
+      "demos": [
+        "prefix.vue"
+      ]
+    },
+    {
+      "name": "before-commit",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "option",
+      "kind": "slot",
+      "demos": []
+    },
+    {
+      "name": "focus",
+      "kind": "method",
+      "demos": []
+    },
+    {
+      "name": "blur",
+      "kind": "method",
+      "demos": []
+    }
+  ],
+  "slotNames": [
+    "option"
+  ],
+  "slotDefaults": {
+    "option": false
+  },
+  "methodNames": [
+    "focus",
+    "blur"
+  ]
+}

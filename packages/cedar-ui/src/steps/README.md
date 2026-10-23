@@ -74,6 +74,19 @@ permalink: /components/steps/
 
 <demo src="./__demos__/changeable.vue"></demo>
 
+### 外观组合
+
+适用于多步骤流程的当前状态。调整状态、尺寸，用相同数据观察变化。内容保持一致，便于比较不同设置的实际效果。
+
+<demo src="./__demos__/appearance-lab.vue"></demo>
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
+
 ## API
 
 ### Steps Props

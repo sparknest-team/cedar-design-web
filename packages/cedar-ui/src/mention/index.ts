@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _Mention from './mention'
+import _Mention from './presentation'
 import { mentionProps } from './props'
 
 const Mention = withInstall(_Mention, Object.assign(_Mention, {

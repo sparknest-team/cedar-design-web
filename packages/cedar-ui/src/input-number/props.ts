@@ -1,6 +1,7 @@
 import type { ExtractPublicPropTypes, PropType } from 'vue'
-import { inputProps, type InputVariant } from '../input/props'
+import { fieldPresentationProps } from '../_components/field-presentation/props'
 import type { ComponentSize } from '../_utils/constant'
+import { inputProps, type InputVariant } from '../input/props'
 
 export const inputNumberModes = ['embed', 'button', 'input'] as const
 export const inputNumberModelEvents = ['change', 'input'] as const
@@ -12,12 +13,17 @@ export type InputNumberFormatter = (value: string) => string
 export type InputNumberParser = (value: string) => string
 
 export const inputNumberProps = {
+  ...fieldPresentationProps,
   /** 受控业务数值；空值为 undefined。 */
   modelValue: Number,
   /** 非受控初始值。 */
   defaultValue: Number,
   /** 按钮布局。 */
-  mode: { type: String as PropType<InputNumberMode>, default: 'embed', validator: (value: InputNumberMode) => inputNumberModes.includes(value) },
+  mode: {
+    type: String as PropType<InputNumberMode>,
+    default: 'embed',
+    validator: (value: InputNumberMode) => inputNumberModes.includes(value),
+  },
   /** 小数精度，范围 0–100，不小于步长的小数位数。 */
   precision: { type: Number, validator: (value: number) => Number.isInteger(value) && value >= 0 && value <= 100 },
   /** 正的有限步长。 */
@@ -45,7 +51,11 @@ export const inputNumberProps = {
   /** 是否允许清空。 */
   clearable: inputProps.clearable,
   /** model 更新时机；change 始终表示提交。 */
-  modelEvent: { type: String as PropType<InputNumberModelEvent>, default: 'change', validator: (value: InputNumberModelEvent) => inputNumberModelEvents.includes(value) },
+  modelEvent: {
+    type: String as PropType<InputNumberModelEvent>,
+    default: 'change',
+    validator: (value: InputNumberModelEvent) => inputNumberModelEvents.includes(value),
+  },
   /** 未设置时继承 Group / FormItem / Form。 */
   readonly: inputProps.readonly,
   /** 原生 input 补充属性，受控状态由组件决定。 */

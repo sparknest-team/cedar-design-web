@@ -8,7 +8,7 @@ const sources = ["/cat.jpg", "/cat2.jpg", "/cat3.jpg"];
 
 <template>
   <section class="carousel-autoplay-demo">
-    <label><input v-model="playing" type="checkbox" /> 自动播放</label>
+    <c-checkbox v-model="playing"> 自动播放</c-checkbox>
     <p role="status">当前页：{{ current + 1 }}；切换次数：{{ changes }}</p>
     <c-carousel
       v-model:current="current"

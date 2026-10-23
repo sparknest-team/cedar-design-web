@@ -24,7 +24,7 @@
 
 ### New Capabilities
 
-- `button`: 提供 PC 与移动端共用的 `Button` 组件契约，定义 `status`（`primary | success | warning | danger | info | secondary | contrast | default`）、`variant`（`default | text | outline | tonal`）、`size`（`xs | sm | md | lg`）、`htmlType`、`component`、`block` / `round` / `disabled` / `loading` / `autoLoading` / `iconContainer` / `ripple` / `focusable` / `autofocus` / `color` / `textColor` / `elevation` / `stacked` / `loadingType` 等 props，以及 `ButtonGroup` 对子按钮的 `status / variant / size / disabled / stacked / vertical / elevation / color / textColor` 继承语义。
+- `button`: 提供 PC 与移动端共用的 `Button` 组件契约，定义 `status`（`primary | success | warning | danger | info | secondary | contrast | default`）、`variant`（`default | text | outline | tonal`）、`size`（`xs | sm | md | lg`）、`htmlType`、`component`、`block` / `round` / `disabled` / `loading` / `autoLoading` / `ripple` / `focusable` / `autofocus` / `color` / `textColor` / `elevation` / `stacked` / `loadingType` 等 props，以及 `ButtonGroup` 对子按钮的 `status / variant / size / disabled / stacked / vertical / elevation / color / textColor` 继承语义。
 
 ### Modified Capabilities
 

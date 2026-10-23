@@ -10,9 +10,13 @@ import { slimsearchPlugin } from '@vuepress/plugin-slimsearch'
 import components from 'unplugin-vue-components/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import type { Plugin } from 'vite'
-import { CedarResolver, CedarStyleImports } from '@cedarjs/resolver'
+import { CedarStyleImports } from '@cedarjs/resolver'
+import { createSiteImportPlugin, createSiteResolver } from './site-imports'
+import { acquireDocsDevLock } from './dev-lock'
+import { atomicTempPlugin } from './atomic-temp'
 
 const projRoot = path.resolve(__dirname, '../../')
+if (process.argv.includes('dev')) acquireDocsDevLock(projRoot)
 const docsTemp = path.resolve(__dirname, process.env.NODE_ENV === 'production' ? '.temp-build' : '.temp')
 
 
@@ -66,6 +70,7 @@ export default defineUserConfig({
     '/en/': { lang: 'en-US', title: 'Cedar Design Web', description: 'Vue component library' },
   },
   plugins: [
+    atomicTempPlugin(),
     localizedPages(),
     codeBlockPlugin,
     slimsearchPlugin({
@@ -85,17 +90,18 @@ export default defineUserConfig({
       plugins: [
         uploadMockPlugin(),
         CedarStyleImports(),
+        createSiteImportPlugin(path.resolve(projRoot, 'src')),
         // @ts-ignore
         vueJsx(),
         components({
           dts: process.env.CEDAR_DOCS_GENERATE_TYPES === '1',
           resolvers: [
-            CedarResolver(),
+            ...createSiteResolver(path.resolve(projRoot, 'src')),
           ],
         }),
         AutoImport({
           resolvers: [
-            CedarResolver(),
+            ...createSiteResolver(path.resolve(projRoot, 'src')),
           ],
           eslintrc: {
             enabled: process.env.CEDAR_DOCS_GENERATE_TYPES === '1',
@@ -114,7 +120,12 @@ export default defineUserConfig({
         },
       },
       resolve: {
+        dedupe: ['vue'],
         alias: [
+          {
+            find: '@ui-foundation/ui-doc-preview',
+            replacement: path.resolve(projRoot, '../../../design-ui/packages/ui-doc-preview/src/index.ts'),
+          },
           {
             find: /^@cedarjs\/ui$/,
             replacement: path.resolve(projRoot, 'src/index.ts'),

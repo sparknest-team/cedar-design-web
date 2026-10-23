@@ -402,7 +402,7 @@ export default defineComponent({
       }
       return { ...DEFAULT_BORDERED, wrapper: props.bordered };
     });
-    const { children, components } = useChildrenComponents("TableColumn");
+    const { children, components } = useChildrenComponents(createNamespace("table-column").name);
     const checkStrictly = computed(
       () => rowSelection.value?.checkStrictly ?? true,
     );
@@ -1637,6 +1637,8 @@ export default defineComponent({
         <button
           type="button"
           class={`${prefixCls}-expand-btn`}
+          aria-label="切换展开状态"
+          aria-expanded={expanded}
           onClick={(ev: Event) => {
             handleExpand(currentKey, record.raw);
             if (stopPropagation) {

@@ -1,0 +1,93 @@
+{
+  "fields": [
+    {
+      "name": "images",
+      "description": "图片列表（设置了本属性之后，将不再收集子 Image 的图片信息）",
+      "type": "string[]",
+      "defaultValue": "-",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "current",
+      "description": "当前展示的图片的下标",
+      "type": "number",
+      "defaultValue": "-",
+      "kind": "number"
+    },
+    {
+      "name": "default-current",
+      "description": "第一张展示的图片的下标",
+      "type": "number",
+      "defaultValue": "0",
+      "kind": "number"
+    },
+    {
+      "name": "loop",
+      "description": "是否无限循环",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "open",
+      "description": "是否打开，受控属性",
+      "type": "boolean",
+      "defaultValue": "-",
+      "kind": "boolean"
+    },
+    {
+      "name": "default-open",
+      "description": "默认是否打开，非受控",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "overlay-closable",
+      "description": "点击图片外的 overlay 是否触发关闭，点击图片不会关闭",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "closable",
+      "description": "是否显示关闭按钮",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "actions-layout",
+      "description": "控制条的布局",
+      "type": "string[]",
+      "defaultValue": "[  'fullScreen',  'rotateRight',  'rotateLeft',  'zoomIn',  'zoomOut',  'originalSize',]",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "popup-container",
+      "description": "设置弹出框的挂载点，同 teleport 的 to，缺省值是 document.body",
+      "type": "string | HTMLElement | false",
+      "defaultValue": "-",
+      "kind": "json",
+      "initial": "\"body\""
+    }
+  ],
+  "methodNames": [],
+  "events": [
+    "change",
+    "open-change"
+  ],
+  "slotNames": [
+    "close-icon",
+    "indicator",
+    "actions"
+  ],
+  "slotDefaults": {
+    "close-icon": true,
+    "indicator": true,
+    "actions": true
+  },
+  "scenarios": []
+}

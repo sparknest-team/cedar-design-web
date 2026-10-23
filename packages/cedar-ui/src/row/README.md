@@ -34,6 +34,21 @@ permalink: /components/row/
 
 <demo src="./__demos__/nested.vue"></demo>
 
+### 布局与对齐
+
+适用于row。调整交叉轴对齐、主轴分配，用相同数据观察变化。内容保持一致，便于比较不同设置的实际效果。
+
+<demo src="./__demos__/layout-lab.vue"></demo>
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
+
+## API
+
 <!-- same-source-api:start -->
 ### Props
 
@@ -62,6 +77,8 @@ permalink: /components/row/
 | Method | Description |
 | --- | --- |
 <!-- same-source-api:end -->
+
+换行示例分别切换换行与普通 `div` 模式。普通模式移除 Row 布局样式及子 Col 间距；间距示例区分水平与垂直间距。Row 使用 Flex，不依赖 CSS Grid。
 
 ## 响应式与可访问性
 

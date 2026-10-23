@@ -7,7 +7,7 @@ const items = [
 </script>
 
 <template>
-  <div style="display: flex; align-items: flex-start; gap: 48px">
+  <div style="display: flex; flex-wrap: wrap; align-items: flex-start; gap: 48px">
     <c-progress-group mode="circle" :items="items" show-text />
     <c-progress-group mode="circle" :items="items" :circle-size="168" :stroke-width="12" show-text>
       <template #text="{ value, max }">

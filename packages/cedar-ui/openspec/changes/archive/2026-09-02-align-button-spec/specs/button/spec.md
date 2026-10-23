@@ -81,7 +81,6 @@
 - `disabled: boolean | undefined = undefined` —— 禁用态，未显式设置时由父 group 决定
 - `loading: boolean = false` —— loading 态，期间禁用点击
 - `autoLoading: boolean = false` —— 异步 onClick 自动管理 loading
-- `iconContainer: boolean = false` —— 仅图标的容器，调整内边距
 - `ripple: boolean` —— 是否显示水波纹，PC 默认 `false`，移动默认 `true`（端差异保留）
 - `focusable: boolean` —— 是否可聚焦，PC 默认 `false`，移动默认 `true`（端差异保留）
 - `autofocus: boolean = false` —— 挂载后自动聚焦
@@ -89,8 +88,8 @@
 
 #### Scenario: 各布尔 prop 切换对应 modifier
 
-- **WHEN** `block` / `round` / `loading` / `disabled` / `iconContainer` / `stacked` 任一为 `true`
-- **THEN** 根元素对应带 `--block` / `--round` / `--loading` / `--disabled` / `--icon-container` / `--stacked` modifier 类
+- **WHEN** `block` / `round` / `loading` / `disabled` / `stacked` 任一为 `true`
+- **THEN** 根元素对应带 `--block` / `--round` / `--loading` / `--disabled` / `--stacked` modifier 类
 
 #### Scenario: 父子 disabled 兜底
 

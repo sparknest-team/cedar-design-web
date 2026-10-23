@@ -1,12 +1,12 @@
 <template>
-  <c-space size="lg">
+  <c-space wrap size="lg">
     <c-radio v-model="checked1">v-model</c-radio>
     <c-radio :model-value="true">binding "true"</c-radio>
     <c-radio :model-value="checked2">binding value2</c-radio>
     <c-radio :default-value="true">uncontrolled state</c-radio>
   </c-space>
   <div :style="{ marginTop: '20px' }">
-    <c-space size="lg">
+    <c-space wrap size="lg">
       <c-button status="primary" @click="handleSetCheck"> {{ checked2 ? 'uncheck' : 'check' }} value2 </c-button>
       <c-button @click="handleReset"> reset all</c-button>
     </c-space>

@@ -1,5 +1,6 @@
 <template>
-  <Trigger
+  <component
+    :is="editor ? EditorContent : Trigger"
     :class="`${prefixCls}-trigger`"
     auto-fit-popup-min-width
     trigger="click"
@@ -8,7 +9,7 @@
     animation-name="slide-dynamic-origin"
     :prevent-focus="true"
     v-bind="triggerProps"
-    :disabled="mergedDisabled"
+    :disabled="mergedDisabled || mergedReadonly"
     :open="panelVisible"
     :popup-container="popupContainer"
     :close-on-click-reference="!allowSearch"
@@ -26,6 +27,7 @@
         :size="mergedSize"
         :max-tag-count="maxTagCount"
         :disabled="mergedDisabled"
+        :readonly="mergedReadonly"
         :open="panelVisible"
         :error="mergedError"
         :variant="border ? 'filled' : 'standard'"
@@ -35,6 +37,10 @@
         @update:input-value="onSearchValueChange"
         @clear="onInnerClear"
         @remove="onItemRemove"
+        :aria-controls="panelVisible ? panelRef?.treeId : undefined"
+        :aria-activedescendant="panelVisible ? panelRef?.activeId : undefined"
+        aria-haspopup="tree"
+        @keydown="onKeydown"
         @blur="onBlur"
       >
         <template v-if="$slots.prefix" #prefix>
@@ -46,64 +52,91 @@
       </SelectionField>
     </slot>
     <template #content>
-      <div
-        :class="[
-          `${prefixCls}-popup`,
-          {
-            [`${prefixCls}-has-header`]: Boolean($slots.header),
-            [`${prefixCls}-has-footer`]: Boolean($slots.footer),
-          },
-          dropdownClassName,
-        ]"
-        :style="computedDropdownStyle"
+      <component
+        :is="editor ? SelectedOptions : PlainContent"
+        :multiple="isMultiple"
+        :items="selectViewValue"
+        :disabled="mergedDisabled || mergedReadonly"
+        @remove="onItemRemove"
+        @clear="onEditorClear"
       >
-        <div
-          v-if="$slots.header && (!isEmpty || showHeaderOnEmpty)"
-          :class="`${prefixCls}-header`"
-        >
-          <slot name="header" />
-        </div>
-        <slot v-if="loading" name="loader">
-          <Loading />
-        </slot>
-        <slot v-else-if="isEmpty" name="empty">
-          <component :is="TreeSelectEmpty ? TreeSelectEmpty : 'Empty'" />
-        </slot>
-        <Panel
-          v-else
-          :selected-keys="selectedKeys"
-          :show-checkable="treeCheckable"
-          :scrollbar="scrollbar"
-          :tree-props="{
-            actionOnNodeClick: selectable === 'leaf' ? 'expand' : undefined,
-            blockNode: true,
-            ...treeProps,
-            data,
-            checkStrictly: treeCheckStrictly,
-            checkedStrategy: treeCheckedStrategy,
-            fieldNames,
-            multiple,
-            loadMore,
-            filterTreeNode: computedFilterTreeNode,
-            size,
-            checkable: isCheckable,
-            selectable: isSelectable,
-            searchValue: searchValue,
-          }"
-          :tree-slots="pickSubCompSlots($slots, 'tree')"
-          @change="onSelectChange"
+        <Input
+          v-if="editor && allowSearch"
+          :model-value="searchValue"
+          presentation="inline"
+          variant="outline"
+          :hint="false"
+          :disabled="mergedDisabled || mergedReadonly"
+          clearable
+          :aria-label="texts.search.value"
+          :placeholder="texts.search.value"
+          @update:model-value="onSearchValueChange"
         />
         <div
-          v-if="$slots.footer && (!isEmpty || showFooterOnEmpty)"
-          :class="`${prefixCls}-footer`"
+          :class="[
+            `${prefixCls}-popup`,
+            {
+              [`${prefixCls}-has-header`]: Boolean($slots.header),
+              [`${prefixCls}-has-footer`]: Boolean($slots.footer),
+            },
+            dropdownClassName,
+          ]"
+          :style="computedDropdownStyle"
         >
-          <slot name="footer" />
+          <div
+            v-if="$slots.header && (!isEmpty || showHeaderOnEmpty)"
+            :class="`${prefixCls}-header`"
+          >
+            <slot name="header" />
+          </div>
+          <slot v-if="loading" name="loader">
+            <Loading />
+          </slot>
+          <slot v-else-if="isEmpty" name="empty">
+            <component :is="TreeSelectEmpty ? TreeSelectEmpty : 'Empty'" />
+          </slot>
+          <Panel
+            v-else
+            ref="panelRef"
+            :candidate-filter="keyboardCandidateFilter"
+            :selected-keys="selectedKeys"
+            :show-checkable="treeCheckable"
+            :scrollbar="scrollbar"
+            :tree-props="{
+              actionOnNodeClick: selectable === 'leaf' ? 'expand' : undefined,
+              blockNode: true,
+              ...treeProps,
+              data,
+              checkStrictly: treeCheckStrictly,
+              checkedStrategy: treeCheckedStrategy,
+              fieldNames,
+              multiple,
+              loadMore,
+              filterTreeNode: computedFilterTreeNode,
+              size,
+              checkable: isCheckable,
+              selectable: isSelectable,
+              searchValue: searchValue,
+            }"
+            :tree-slots="pickSubCompSlots($slots, 'tree')"
+            @change="onSelectChange"
+          />
+          <div
+            v-if="$slots.footer && (!isEmpty || showFooterOnEmpty)"
+            :class="`${prefixCls}-footer`"
+          >
+            <slot name="footer" />
+          </div>
         </div>
-      </div>
+      </component>
     </template>
-  </Trigger>
+  </component>
 </template>
 <script lang="ts">
+import Input from "../input";
+import SelectedOptions from "../_components/selected-options/SelectedOptions.vue";
+import { selectionEditorSurface } from "../_components/selected-options/context";
+import { useFieldTexts } from "../_components/field-presentation/texts";
 import { treeSelectProps } from "./props";
 import { createNamespace } from "../_utils/global-config";
 import {
@@ -117,12 +150,13 @@ import {
   toRefs,
   StyleValue,
   inject,
+  watch,
 } from "vue";
 import useMergeState from "../_hooks/use-merge-state";
 import { LabelValue } from "./types";
 import Trigger, { TriggerProps } from "../trigger";
 import SelectionField from "../_components/selection-field/SelectionField.vue";
-import Panel from "./panel";
+import Panel, { type TreeSelectPanelHandle } from "./panel";
 import { getPrefixCls } from "../_utils/global-config";
 import { configProviderInjectionKey } from "../config-provider/context";
 import useSelectedState from "./hooks/use-selected-state";
@@ -153,6 +187,8 @@ import type { SelectionFieldItem } from "../_components/selection-field/props";
 export default defineComponent({
   name: createNamespace("tree-select").name,
   components: {
+    Input,
+    SelectedOptions,
     Trigger,
     SelectionField,
     Panel,
@@ -293,13 +329,21 @@ export default defineComponent({
       selectable,
       dropdownClassName,
     } = toRefs(props);
-    const { mergedDisabled, mergedError, mergedSize, eventHandlers } =
-      useFormItem({
-        disabled,
-        error: computed(() => props.error),
-        size: computed(() => props.size),
-      });
+    const {
+      mergedDisabled,
+      mergedReadonly,
+      mergedError,
+      mergedSize,
+      eventHandlers,
+    } = useFormItem({
+      disabled,
+      readonly: computed(() => props.readonly),
+      error: computed(() => props.error),
+      size: computed(() => props.size),
+    });
     const prefixCls = getPrefixCls("tree-select");
+    const editor = inject(selectionEditorSurface, undefined);
+    const texts = useFieldTexts();
     const configCtx = inject(configProviderInjectionKey, undefined);
     const TreeSelectEmpty = configCtx?.slots.empty?.({
       component: "tree-select",
@@ -404,6 +448,7 @@ export default defineComponent({
     };
 
     const handleInputValueChange = (inputValue: string) => {
+      if (mergedDisabled.value || mergedReadonly.value) return;
       if (inputValue !== computedInputValue.value) {
         setPanelVisible(true);
         updateInputValue(inputValue);
@@ -420,6 +465,7 @@ export default defineComponent({
       }),
     );
     const setPanelVisible = (visible: boolean) => {
+      if (visible && (mergedDisabled.value || mergedReadonly.value)) return;
       if (visible !== panelVisible.value) {
         setLocalPanelVisible(visible);
         emit("open-change", visible);
@@ -432,6 +478,15 @@ export default defineComponent({
           refSelectionField.value.blur();
       }
     };
+
+    watch(
+      [mergedDisabled, mergedReadonly],
+      () => {
+        if (mergedDisabled.value || mergedReadonly.value)
+          setPanelVisible(false);
+      },
+      { flush: "sync" },
+    );
 
     const { isEmptyFilterResult, filterTreeNode: computedFilterTreeNode } =
       useFilterTreeNode(
@@ -448,7 +503,42 @@ export default defineComponent({
       () => !flattenTreeData.value.length || isEmptyFilterResult.value,
     );
 
+    const keyboardCandidateFilter = computed(() => {
+      const query = computedInputValue.value;
+      if (!query || disableFilter.value) return undefined;
+      return (node: TreeNodeData) =>
+        filterTreeNode.value
+          ? filterTreeNode.value(query, node)
+          : String(
+              node[(fieldNames.value?.key ?? "key") as keyof TreeNodeData] ??
+                "",
+            ).includes(query);
+    });
     const refSelectionField = ref();
+    const panelRef = ref<TreeSelectPanelHandle>();
+    const onKeydown = (event: KeyboardEvent) => {
+      if (
+        event.isComposing ||
+        event.keyCode === 229 ||
+        mergedDisabled.value ||
+        mergedReadonly.value ||
+        props.loading
+      )
+        return;
+      if (
+        !panelVisible.value &&
+        ["Enter", "ArrowDown", "ArrowUp"].includes(event.key)
+      ) {
+        event.preventDefault();
+        event.stopPropagation();
+        setPanelVisible(true);
+        return;
+      }
+      if (panelVisible.value) panelRef.value?.handleKeydown(event);
+    };
+    watch(panelVisible, (visible) => {
+      if (visible) nextTick(() => panelRef.value?.resetActive());
+    });
 
     const computedDropdownStyle = computed<StyleValue[]>(() => [
       dropdownStyle?.value || {},
@@ -463,12 +553,37 @@ export default defineComponent({
     };
 
     return {
+      editor,
+      texts,
+      Trigger,
+      SelectedOptions,
+      Input,
+      EditorContent: defineComponent({
+        name: createNamespace("tree-select-editor-content").name,
+        inheritAttrs: false,
+        setup:
+          (_, { slots }) =>
+          () =>
+            slots.content?.(),
+      }),
+      PlainContent: defineComponent({
+        name: createNamespace("tree-select-menu-content").name,
+        inheritAttrs: false,
+        setup:
+          (_, { slots }) =>
+          () =>
+            slots.default?.(),
+      }),
+      keyboardCandidateFilter,
       refSelectionField,
+      panelRef,
+      onKeydown,
       prefixCls,
       TreeSelectEmpty,
       selectedValue,
       selectedKeys,
       mergedDisabled,
+      mergedReadonly,
       mergedError,
       mergedSize,
       searchValue: computedInputValue,
@@ -479,7 +594,8 @@ export default defineComponent({
       selectViewValue,
       computedDropdownStyle,
       onSearchValueChange: handleInputValueChange,
-      onSelectChange(newVal: string[]) {
+      onSelectChange(newVal: TreeNodeKey[]) {
+        if (mergedDisabled.value || mergedReadonly.value) return;
         setSelectedKeys(newVal);
         if (!retainInputValue.value && computedInputValue.value) {
           updateInputValue("");
@@ -490,8 +606,26 @@ export default defineComponent({
         }
       },
       onVisibleChange: setPanelVisible,
+      onEditorClear() {
+        if (mergedDisabled.value || mergedReadonly.value) return;
+        setSelectedKeys(
+          selectedKeys.value.filter((key) =>
+            selectViewValue.value.some(
+              (item) => item.key === key && item.closable === false,
+            ),
+          ),
+        );
+        emit("clear");
+      },
       onInnerClear() {
-        setSelectedKeys([]);
+        if (mergedDisabled.value || mergedReadonly.value) return;
+        setSelectedKeys(
+          selectedKeys.value.filter((key) =>
+            selectViewValue.value.some(
+              (item) => item.key === key && item.closable === false,
+            ),
+          ),
+        );
         emit("clear");
       },
       pickSubCompSlots,
@@ -500,7 +634,7 @@ export default defineComponent({
       onBlur,
       onItemRemove(id: string | number | symbol) {
         if (typeof id === "symbol") return;
-        if (mergedDisabled.value) return;
+        if (mergedDisabled.value || mergedReadonly.value) return;
         const node = key2TreeNode.value.get(id);
         if (treeCheckable.value && node) {
           if (isNodeClosable(node)) {

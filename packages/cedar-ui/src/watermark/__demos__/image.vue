@@ -1,16 +1,36 @@
-<template>
-  <c-watermark
-    content="Cedar Design"
-    grayscale
-    :image="image"
-    :width="48"
-    :height="48"
-  >
-    <div style="width: 100%; height: 300px" />
-  </c-watermark>
-</template>
-
-<script lang="ts" setup>
-const image =
-  "data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2248%22 height=%2248%22 viewBox=%220 0 48 48%22%3E%3Ccircle cx=%2224%22 cy=%2224%22 r=%2220%22 fill=%22%23165dff%22/%3E%3Cpath d=%22M16 24h16M24 16v16%22 stroke=%22white%22 stroke-width=%224%22/%3E%3C/svg%3E";
+<script setup>
+import { computed, ref } from "vue";
+const failed = ref(false);
+const errors = ref([]);
+const localImage =
+  "data:image/svg+xml," +
+  encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="160" height="48"><rect width="160" height="48" rx="8" fill="#0284c7"/><circle cx="80" cy="24" r="14" fill="white"/></svg>',
+  );
+const image = computed(() =>
+  failed.value ? "data:image/png;base64,invalid-local-image" : localImage,
+);
 </script>
+<template>
+  <section class="watermark-image-failure-demo">
+    <c-checkbox v-model="failed"> Fail local image / 本地图片失败</c-checkbox>
+    <c-button html-type="button" :disabled="!failed" @click="failed = false"
+      >Restore image / 恢复图片</c-button
+    >
+    <c-watermark
+      content="FALLBACK 201"
+      :image="image"
+      :width="160"
+      :height="48"
+      :font="{ color: '#be123c' }"
+      style="background: white"
+      @error="errors.push($event.source)"
+    >
+      <div style="height: 240px" />
+    </c-watermark>
+    <p role="status">
+      Mode: {{ failed ? "failure" : "image" }} · Errors:
+      {{ errors.join(",") || "-" }}
+    </p>
+  </section>
+</template>

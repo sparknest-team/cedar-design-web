@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ImagePreviewAction as CImagePreviewAction } from '../index'
+
 import { ref } from 'vue'
 const active = ref(true)
 const open = ref(false)

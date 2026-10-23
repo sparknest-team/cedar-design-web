@@ -1,0 +1,27 @@
+{
+  "fields": [
+    {
+      "name": "span",
+      "description": "所占列数",
+      "type": "number",
+      "defaultValue": "1",
+      "kind": "number"
+    },
+    {
+      "name": "label",
+      "description": "标签",
+      "type": "string",
+      "defaultValue": "-",
+      "kind": "string"
+    }
+  ],
+  "methodNames": [],
+  "events": [],
+  "slotNames": [
+    "label"
+  ],
+  "slotDefaults": {
+    "label": false
+  },
+  "scenarios": []
+}

@@ -45,11 +45,13 @@
       </c-form-item>
     </c-form>
     <p role="status">提交结果：{{ result }}；活动校验：{{ pendingCount }}</p>
-    <pre>{{ form }}</pre>
+    <ModelOutput>{{ form }}</ModelOutput>
   </section>
 </template>
 
 <script setup lang="ts">
+import ModelOutput from '../__demo-utils__/ModelOutput.vue'
+
 import { onBeforeUnmount, onDeactivated, reactive, ref, useId } from "vue";
 import type { FormInstance, FieldRule } from "@cedarjs/ui";
 

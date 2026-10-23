@@ -1,3 +1,5 @@
+> 已被替代：当前公共组件统一为 `Menu`，注册名 `CMenu`，子路径 `@cedarjs/ui/menu`。本目录仅保留历史变更记录；现行命名要求见 [Menu 规范](../../../unify-menu-name-and-context-point/specs/menu/spec.md)。
+
 # DropdownMenu
 
 ## Requirements

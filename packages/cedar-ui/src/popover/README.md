@@ -16,6 +16,13 @@ Popover 默认 `unmount-on-close="false"`，关闭后保留表单草稿。
 
 <demo src="./__demos__/interactive.vue"></demo>
 
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
+
 ## API
 
 Popover 继承 Trigger 的定位、容器、受控状态、关闭策略和公开方法。

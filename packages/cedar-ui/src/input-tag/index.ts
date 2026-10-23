@@ -1,9 +1,8 @@
 import { withInstall } from '../_utils/global-config'
-import _InputTag from './input-tag'
+import _InputTag from './presentation'
 import { inputTagProps } from './props'
 
-const InputTag = withInstall(_InputTag, Object.assign(_InputTag, {
-}), { components: [_InputTag] })
+const InputTag = withInstall(_InputTag, Object.assign(_InputTag, {}), { components: [_InputTag] })
 
 export type InputTagInstance = InstanceType<typeof _InputTag>
 export type { InputTagProps } from './props'

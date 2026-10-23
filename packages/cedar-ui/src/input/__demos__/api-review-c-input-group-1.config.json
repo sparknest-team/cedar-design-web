@@ -1,0 +1,58 @@
+{
+  "fields": [
+    {
+      "name": "size",
+      "description": "组内默认尺寸",
+      "type": "ComponentSize",
+      "defaultValue": "继承 Form/ConfigProvider 或 md",
+      "kind": "enum",
+      "options": [
+        "xs",
+        "sm",
+        "md",
+        "lg",
+        "xl"
+      ],
+      "initial": "xs"
+    },
+    {
+      "name": "variant",
+      "description": "组内默认变体",
+      "type": "filled | outline | standard",
+      "defaultValue": "filled",
+      "kind": "enum",
+      "options": [
+        "filled",
+        "outline",
+        "standard"
+      ],
+      "initial": "filled"
+    },
+    {
+      "name": "disabled",
+      "description": "组内禁用状态",
+      "type": "boolean",
+      "defaultValue": "继承 Form 或 false",
+      "kind": "boolean"
+    },
+    {
+      "name": "readonly",
+      "description": "组内只读状态",
+      "type": "boolean",
+      "defaultValue": "继承 Form 或 false",
+      "kind": "boolean"
+    },
+    {
+      "name": "hint",
+      "description": "组内浮动提示",
+      "type": "boolean",
+      "defaultValue": "库默认值",
+      "kind": "boolean"
+    }
+  ],
+  "methodNames": [],
+  "events": [],
+  "slotNames": [],
+  "slotDefaults": {},
+  "scenarios": []
+}

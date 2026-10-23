@@ -1,4 +1,4 @@
-import type { ExtractPropTypes, PropType } from 'vue'
+import type { PropType } from 'vue'
 import type { FieldRule } from '../form/types'
 import type {
   FilterFormField,
@@ -27,17 +27,10 @@ export const filterFormProps = {
     default: () => [],
   },
   /**
-   * 字段组件注册表；key 对应 `fields[].type`，用到谁注册谁
+   * 字段组件注册表；可选，key 对应 `fields[].component` 的字符串值
    */
   fieldMap: {
     type: Object as PropType<FilterFormFieldMap>,
-    default: () => ({}),
-  },
-  /**
-   * 字段 options 字典；`optionsFromMap` 注册项会读取 `optionsMap[field]`
-   */
-  optionsMap: {
-    type: Object as PropType<Record<string, unknown>>,
     default: () => ({}),
   },
   /**

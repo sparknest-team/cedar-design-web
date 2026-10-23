@@ -4,7 +4,7 @@
     <div :class="`${prefixCls}-range-panel-wrapper`">
       <!-- panel -->
       <div :class="`${prefixCls}-range`">
-        <div :class="`${prefixCls}-range-wrapper`">
+        <div :class="`${prefixCls}-range-wrapper`" @mouseleave="$emit('range-mouse-leave')">
           <template v-if="startHeaderMode || endHeaderMode">
             <YearPanel v-if="startHeaderMode === 'year'" v-bind="startPanelProps" />
             <YearPanel v-if="endHeaderMode === 'year'" v-bind="endPanelProps" />
@@ -212,6 +212,7 @@ export default defineComponent({
   emits: [
     'cell-click',
     'cell-mouse-enter',
+    'range-mouse-leave',
     'time-picker-select',
     'shortcut-click',
     'shortcut-mouse-enter',
@@ -314,9 +315,9 @@ export default defineComponent({
     }
 
     function getDisabledDateFunc(index: 0 | 1) {
-      return isFunction(disabledDate?.value)
-        ? (current: Date) => disabledDate?.value?.(current, index === 0 ? 'start' : 'end') || false
-        : undefined
+      return (current: Date) =>
+        (props.disabled[0] && props.disabled[1]) ||
+        (isFunction(disabledDate?.value) && disabledDate.value!(current, index === 0 ? 'start' : 'end')) || false
     }
 
     function getDisabledTimeFunc(index: 0 | 1) {

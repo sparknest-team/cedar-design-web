@@ -1,0 +1,106 @@
+{
+  "fields": [
+    {
+      "name": "default-value",
+      "description": "非受控默认值",
+      "type": "string | number",
+      "defaultValue": "undefined",
+      "kind": "scalar"
+    },
+    {
+      "name": "options",
+      "description": "选项列表",
+      "type": "(string | number | SegmentedOption)[]",
+      "defaultValue": "() => []",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "size",
+      "description": "尺寸",
+      "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
+      "defaultValue": "'md'",
+      "kind": "enum",
+      "options": [
+        "xs",
+        "sm",
+        "md",
+        "lg",
+        "xl"
+      ],
+      "initial": "md"
+    },
+    {
+      "name": "disabled",
+      "description": "禁用",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "block",
+      "description": "撑满父宽度",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "direction",
+      "description": "方向",
+      "type": "\"horizontal\" | \"vertical\"",
+      "defaultValue": "'horizontal'",
+      "kind": "enum",
+      "options": [
+        "horizontal",
+        "vertical"
+      ],
+      "initial": "horizontal"
+    },
+    {
+      "name": "name",
+      "description": "原生 name",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "model-value",
+      "type": "string | number",
+      "defaultValue": "undefined",
+      "description": "@zh 绑定值\n@en Binding value\n/",
+      "kind": "scalar"
+    }
+  ],
+  "events": [
+    "change",
+    "update:modelValue"
+  ],
+  "scenarios": [
+    {
+      "name": "options",
+      "kind": "prop",
+      "demos": [
+        "basic.vue",
+        "block.vue",
+        "controlled.vue",
+        "disabled.vue",
+        "size.vue"
+      ]
+    },
+    {
+      "name": "label",
+      "kind": "slot",
+      "demos": [
+        "controlled.vue",
+        "disabled.vue"
+      ]
+    }
+  ],
+  "slotNames": [
+    "label"
+  ],
+  "slotDefaults": {
+    "label": false
+  },
+  "methodNames": []
+}

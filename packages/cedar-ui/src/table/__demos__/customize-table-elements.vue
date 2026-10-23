@@ -1,17 +1,20 @@
 <template>
   <c-table :columns="columns" :data="data" row-class="common-row">
     <template #tr>
-      <tr class="my-tr" @contextmenu="onContextMenu" />
+      <tr class="my-tr" @contextmenu.prevent="onContextMenu" />
     </template>
     <template #td>
       <td class="my-td" />
     </template>
   </c-table>
+  <c-tag>行右键回调：{{ contextMenus }}</c-tag>
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue'
+const contextMenus = ref(0)
 const onContextMenu = () => {
-  console.log('right click')
+  contextMenus.value++
 }
 
 const columns = [

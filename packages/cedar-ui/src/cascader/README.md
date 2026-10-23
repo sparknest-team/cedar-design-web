@@ -8,13 +8,9 @@ permalink: /components/cascader/
 
 ## 案例
 
-### 异步设备与 ID 回显
-
-<demo src="./__demos__/async-devices.vue"></demo>
-
 ### 基本使用
 
-基础用法。
+逐级选择地区，选择叶子节点后收起并回填完整路径。下方显示当前绑定值；禁用状态放在独立案例中。
 
 <demo src="./__demos__/basic.vue"></demo>
 
@@ -24,17 +20,23 @@ permalink: /components/cascader/
 
 <demo src="./__demos__/size.vue"></demo>
 
-### 允许清除
-
-设置属性 `clearable` 允许清除输入框的内容。
-
-<demo src="./__demos__/clearable.vue"></demo>
-
 ### 禁用选项
 
 设置属性 `disabled` 禁用选项。
 
 <demo src="./__demos__/disabled.vue"></demo>
+
+### 表单控件尺寸对照
+
+切换 size 和字段变体，对比有值、可清空、多选不换行的 Cascader、Select、Input 与 Button。长标签文字省略，删除图标保留，标签行可横向滚动；清空按钮和箭头固定在外侧。被省略的标签正文支持悬停、键盘聚焦或点按查看完整文字，点外部或按 Esc 关闭，不改变选中值。
+
+<demo src="../field-decorator/__demos__/control-sizes.vue"></demo>
+
+### 允许清除
+
+设置属性 `clearable` 允许清除输入框的内容。
+
+<demo src="./__demos__/clearable.vue"></demo>
 
 ### 多选模式
 
@@ -80,6 +82,33 @@ modelValue 使用路径作为值。
 
 <demo src="./__demos__/path-mode.vue"></demo>
 
+### 管理已选项
+
+多选面板顶部提供已选数量与清空。Cedar 在列表上方显示可删除标签；Maple 点击数量查看已选明细，支持逐项移除并返回可选项。popup/popover 与 dialog 共用该内容。移除和清空先修改草稿，关闭取消会恢复原值，确认后才提交；禁用项保留，异步确认期间禁用操作。面板的清空入口独立于字段清空图标。
+
+### 外观组合
+
+适用于地区等层级选项。调整变体、尺寸，用相同数据观察变化。内容保持一致，便于比较不同设置的实际效果。
+
+<demo src="./__demos__/appearance-lab.vue"></demo>
+
+### 交互状态切换
+
+适用于地区等层级选项。调整禁用、只读、错误反馈，用相同数据观察变化。控制区始终可用，可以随时恢复编辑；错误外观本身不会触发表单校验。
+
+<demo src="./__demos__/state-lab.vue"></demo>
+
+### 异步设备与 ID 回显
+
+<demo src="./__demos__/async-devices.vue"></demo>
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
+
 ## API
 
 ### Cascader 属性
@@ -103,7 +132,7 @@ modelValue 使用路径作为值。
 | `separator` | show-tags=false 时的多选分隔符 | `string` | `,` |
 | `text-align` | left、center、right | `string` | `left` |
 | `max-tag-count` | 标签数量上限，0 不限制 | `number` | `0` |
-| `tag-nowrap` | 标签内容不换行 | `boolean` | `false` |
+| `tag-nowrap` | 标签单行显示；长文字省略、删除图标保留，标签行可横向滚动；悬停、聚焦或点按省略正文查看全文 | `boolean` | `false` |
 | `popup-container` | 选择器、元素、返回元素的函数或 false（原地渲染） | `PopupContainer` | `—` |
 | `trigger-props` | Menu 的 Trigger 属性；展开状态由字段控制 | `TriggerProps` | `—` |
 | `virtual-list-props` | Menu / List 的虚拟列表参数 | `VirtualListProps` | `—` |
@@ -184,3 +213,15 @@ modelValue 使用路径作为值。
 ```ts
 import type { CascaderProps } from '@cedarjs/ui'
 ```
+
+### Form 字段展示与确认
+
+本组件支持 `presentation`，字段 > FormItem > Form 逐层继承；未指定时为 `inline`，保留原有交互。支持值：`inline / click / dblclick`。其他编辑展示使用 Cell 入口和一份草稿，确认后才更新 v-model；取消、重置或启用 readPretty 丢弃草稿。
+
+Cedar 使用 presentation="click" / "dblclick" 在原位进入编辑，Enter/F2 也可进入；取消/Escape 丢弃草稿，确认后提交。 readPretty 为纯阅读属性，与 readonly、disabled 独立。
+
+`before-commit(value, { previousValue, signal })` 可拦截弹层保存；FormItem 先校验候选值，失败保持编辑。`open / default-open / update:open` 控制编辑层。`#read="{ value, text }"` 可自定义阅读内容。集中示例见 Form 的“各类字段统一展示”。
+
+原 menu/list/picker 展示改为 inline/popup（PC 使用 popover）；不保留旧枚举别名。弹层复用原选项索引、搜索、异步加载与虚拟列表算法。
+
+`read-pretty` 为独立布尔属性，与 `readonly`、`disabled` 同级；字段 > FormItem > Form 继承，显式 `false` 覆盖父级。默认 `false`。纯阅读不显示编辑器。

@@ -21,7 +21,7 @@ function toggleName() {
 }
 </script>
 <template>
-  <c-space>
+  <c-space wrap>
     <c-button @click="toggleName">{{
       english ? "Switch name" : "切换名称"
     }}</c-button>

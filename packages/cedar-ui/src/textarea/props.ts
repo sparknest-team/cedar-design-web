@@ -1,12 +1,17 @@
 import type { ExtractPublicPropTypes, PropType } from 'vue'
+import { fieldPresentationProps } from '../_components/field-presentation/props'
 import { inputProps, type InputMaxLength, type InputVariant } from '../input/props'
 import { textareaDefaults } from './defaults'
 
-export interface TextareaAutoSize { minRows?: number; maxRows?: number }
+export interface TextareaAutoSize {
+  minRows?: number
+  maxRows?: number
+}
 export type TextareaMaxLength = InputMaxLength
 export type TextareaVariant = InputVariant
 export type { WordLength, WordSlice } from '../input/props'
 export const textareaProps = {
+  ...fieldPresentationProps,
   /** 与 Input 保持一致的 modelValue 契约。 */
   modelValue: inputProps.modelValue,
   /** 与 Input 保持一致的 modelModifiers 契约。 */

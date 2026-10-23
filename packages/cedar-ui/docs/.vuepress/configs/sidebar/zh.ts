@@ -69,7 +69,7 @@ export const zhSideBar: SidebarOptions = {
         },
         {
           text: "颜色 Color",
-          link: "/components/color/",
+          link: "/components/style/color/",
         },
         {
           text: "总览 Utilities",
@@ -182,8 +182,8 @@ export const zhSideBar: SidebarOptions = {
           link: "/components/nav-menu/",
         },
         {
-          text: "DropdownMenu 下拉命令菜单",
-          link: "/components/dropdown-menu/",
+          text: "Menu 菜单",
+          link: "/components/menu/",
         },
         {
           text: "SplitButton 分裂按钮",
@@ -296,7 +296,7 @@ export const zhSideBar: SidebarOptions = {
         },
         {
           text: "Color 颜色字段",
-          link: "/components/color-field/",
+          link: "/components/color/",
         },
         {
           text: "ColorPicker 颜色面板",

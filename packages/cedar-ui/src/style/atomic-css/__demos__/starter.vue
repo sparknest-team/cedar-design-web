@@ -10,7 +10,9 @@
       <span class="starter-status">Success</span>
     </div>
 
-    <button class="starter-button">c-bg-primary · hover:c-opacity-80</button>
+    <c-button class="starter-button"
+      >c-bg-primary · hover:c-opacity-80</c-button
+    >
   </div>
 </template>
 

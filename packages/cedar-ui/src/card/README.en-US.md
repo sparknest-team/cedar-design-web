@@ -5,6 +5,14 @@ lang: en-US
 
 # Card
 
+Source changes synchronously invalidate render generations. Close, row direction, newer work, deactivation or disposal prevent old nextTick/timer/double-frame continuations from changing newer phases. Render/timer deliveries consume once. Recheck lifecycle/request/node after geometry hooks to reject reentrant disposal. Suspension cancels both timers and retained close/click input is inert; activation starts a fresh phase from current props without replay, and initial KeepAlive activation does not duplicate the wait.
+
+### Floating scheduler lifecycle / 浮起调度生命周期
+
+500ms ripple wait is interaction policy; floating-duration defaults to250ms for collapse and transition. DoubleRaf settles layout; cancellation rejects stale continuation writes, not underlying frames. Public API and CSS variables are unchanged. Full Card Cedar21/Maple44 and scoped15 each are controlled tests, not native browser/OS certification.
+
+<demo src="./__demos__/scheduler-lifecycle.vue"></demo>
+
 The same scenarios, parameters and interactions as Cedar. Only component prefixes differ; themes and site shells remain independent.
 
 ## Examples

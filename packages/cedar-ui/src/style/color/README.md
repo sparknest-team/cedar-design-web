@@ -1,5 +1,5 @@
 ---
-permalink: /components/color/
+permalink: /components/style/color/
 ---
 
 # 颜色 Color

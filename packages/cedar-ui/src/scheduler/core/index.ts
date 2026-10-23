@@ -210,7 +210,7 @@ export function moveSchedulerEvent(
 ): SchedulerEvent {
   const next = cloneSchedulerEvent(event);
   let resourceIds = next.resourceIds ?? [];
-  if (toResourceId != null)
+  if (toResourceId != null && toResourceId !== fromResourceId)
     resourceIds = [
       ...new Set([
         ...resourceIds.filter((id) => id !== fromResourceId),

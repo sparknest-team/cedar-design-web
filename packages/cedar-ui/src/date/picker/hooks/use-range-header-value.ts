@@ -1,10 +1,9 @@
-import type { Dayjs } from 'dayjs'
 import { computed, nextTick, reactive, toRefs, watch } from 'vue'
-import pick from '../../../_utils/pick'
-import { getSortedDayjsArray, methods } from '../../../_utils/date'
+import type { Dayjs } from 'dayjs'
+import { getDayjsValue, getSortedDayjsArray, methods } from '../../../_utils/date'
 import { CalendarValue, Mode } from '../types'
-import usePanelSpan from './use-panel-span'
 import useHeaderValue from './use-header-value'
+import usePanelSpan from './use-panel-span'
 
 interface RangeHeaderValueProps {
   mode: Mode
@@ -35,8 +34,15 @@ export default function useRangeHeaderValue(props: RangeHeaderValueProps) {
   const startMode = computed(() => startHeaderMode?.value || mode.value)
   const endMode = computed(() => endHeaderMode?.value || mode.value)
 
-  const startValue = computed(() => value.value?.[0])
-  const endValue = computed(() => value.value?.[1])
+  const controlledViewport = computed(() => {
+    const dates = value.value?.map((part) => getDayjsValue(part, format.value))
+    if (dates?.length === 2 && dates[0] && dates[1]) {
+      return getFixedValue([dates[0], dates[1]]).map((part) => part.toDate())
+    }
+    return value.value
+  })
+  const startValue = computed(() => controlledViewport.value?.[0])
+  const endValue = computed(() => controlledViewport.value?.[1])
 
   const startDefaultValue = computed(() => defaultValue.value?.[0])
   const endDefaultValue = computed(() => defaultValue.value?.[1])
@@ -47,7 +53,6 @@ export default function useRangeHeaderValue(props: RangeHeaderValueProps) {
   const {
     headerValue: startHeaderValue,
     setHeaderValue: setStartHeaderValue,
-    headerOperations: startHeaderOperations,
     getDefaultLocalValue: getDefaultStartHeaderValue,
   } = useHeaderValue(
     reactive({
@@ -65,7 +70,6 @@ export default function useRangeHeaderValue(props: RangeHeaderValueProps) {
   const {
     headerValue: endHeaderValue,
     setHeaderValue: setEndHeaderValue,
-    headerOperations: endHeaderOperations,
     getDefaultLocalValue: getDefaultEndHeaderValue,
   } = useHeaderValue(
     reactive({
@@ -81,6 +85,15 @@ export default function useRangeHeaderValue(props: RangeHeaderValueProps) {
   )
 
   const setHeaderValue = (newVal: Dayjs[]) => {
+    const startChanged = !isSame(startHeaderValue.value, newVal[0])
+    const endChanged = !isSame(endHeaderValue.value, newVal[1])
+    if (startChanged && !endChanged) {
+      newVal = [newVal[0], methods.add(newVal[0], span.value, 'M')]
+    } else if (endChanged && !startChanged) {
+      newVal = [methods.subtract(newVal[1], span.value, 'M'), newVal[1]]
+    } else {
+      newVal = getFixedValue(newVal)
+    }
     const isSameStartValue = isSame(startHeaderValue.value, newVal[0])
     const isSameEndValue = isSame(endHeaderValue.value, newVal[1])
 
@@ -123,46 +136,38 @@ export default function useRangeHeaderValue(props: RangeHeaderValueProps) {
   setStartHeaderValue(header0, false)
   setEndHeaderValue(header1, false)
 
-  const resetHeaderValue = () => {
+  const resetHeaderValue = (isCurrent: () => boolean = () => true) => {
+    // Controlled viewports are owned by the parent, including on open/reopen.
+    if (!isCurrent() || value.value !== undefined) return
     const defaultStartHeaderValue = getDefaultStartHeaderValue()
     const defaultEndHeaderValue = getDefaultEndHeaderValue()
+    if (!isCurrent()) return
+    let pending = true
 
     // Because selectedValue is used, it may not be updated in time, so add nextTick
     nextTick(() => {
+      if (!pending || !isCurrent()) return
+      pending = false
       const [selected0, selected1] = getFormSelectedValue()
       const [header0, header1] = getFixedValue([
         selected0 || defaultStartHeaderValue,
         selected1 || defaultEndHeaderValue,
       ])
-      setHeaderValue([header0, header1])
+      if (isCurrent()) setHeaderValue([header0, header1])
     })
   }
 
-  /** ************* 以下为操作 ****************** */
-
-  const canShortenMonth = computed(() =>
-    methods.add(startHeaderValue.value, span.value, 'M').isBefore(endHeaderValue.value, unit.value),
-  )
-
-  const canShortenYear = computed(() =>
-    methods.add(startHeaderValue.value, superSpan.value, 'M').isBefore(endHeaderValue.value, unit.value),
-  )
-
-  const computedStartHeaderOperations = computed(() => {
-    const operations = ['onSuperPrev']
-    if (isDateOrWeek.value) operations.push('onPrev')
-    if (canShortenMonth.value && isDateOrWeek) operations.push('onNext')
-    if (canShortenYear.value) operations.push('onSuperNext')
-    return pick(startHeaderOperations.value as any, operations)
-  })
-
-  const computedEndHeaderOperations = computed(() => {
-    const operations = ['onSuperNext']
-    if (isDateOrWeek.value) operations.push('onNext')
-    if (canShortenMonth.value && isDateOrWeek.value) operations.push('onPrev')
-    if (canShortenYear.value) operations.push('onSuperPrev')
-    return pick(endHeaderOperations.value as any, operations)
-  })
+  // The outer arrows move the viewport pair together; navigation never changes selection.
+  const shiftViewport = (months: number) =>
+    setHeaderValue([methods.add(startHeaderValue.value, months, 'M'), methods.add(endHeaderValue.value, months, 'M')])
+  const computedStartHeaderOperations = computed(() => ({
+    onSuperPrev: () => shiftViewport(-superSpan.value),
+    ...(isDateOrWeek.value ? { onPrev: () => shiftViewport(-span.value) } : {}),
+  }))
+  const computedEndHeaderOperations = computed(() => ({
+    onSuperNext: () => shiftViewport(superSpan.value),
+    ...(isDateOrWeek.value ? { onNext: () => shiftViewport(span.value) } : {}),
+  }))
 
   return {
     startHeaderValue,

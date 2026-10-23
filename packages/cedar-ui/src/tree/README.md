@@ -14,6 +14,12 @@ permalink: /components/tree/
 
 <demo src="./__demos__/basic.vue"></demo>
 
+### 不同尺寸
+
+不同尺寸的树。
+
+<demo src="./__demos__/size.vue"></demo>
+
 ### 节点占一行
 
 节点占据一整行。
@@ -63,12 +69,6 @@ permalink: /components/tree/
 
 <demo src="./__demos__/show-line.vue"></demo>
 
-### 不同尺寸
-
-不同尺寸的树。
-
-<demo src="./__demos__/size.vue"></demo>
-
 ### 定制节点图标
 
 节点图标可以通过 `tree` 的 `icon` 插槽全局指定，也可以通过节点的 `icon` 属性单独指定。
@@ -104,6 +104,15 @@ permalink: /components/tree/
 通过 `fieldNames` 字段可以自定义 data 的字段名。
 
 <demo src="./__demos__/field-names.vue"></demo>
+
+## 虚拟滚动命令的职责
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
 
 ## API
 
@@ -176,8 +185,8 @@ permalink: /components/tree/
 | title         |        标题        | title: `string`      |
 | extra         | 渲染额外的节点内容 | -                    |
 | drag-icon     |   定制 drag 图标   | node: `TreeNodeData` |
-| loading-icon  | 定制 loading 图标  | -                    |
-| switcher-icon | 定制 switcher 图标 | -                    |
+| loading-icon  | 定制 loading 图标  | TreeNodeData |
+| switcher-icon | 定制 switcher 图标 | TreeNodeData |
 | icon          |    定制节点图标    | node: `TreeNodeData` |
 
 ### TreeNodeData

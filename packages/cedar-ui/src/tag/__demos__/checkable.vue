@@ -1,5 +1,5 @@
 <template>
-  <c-space>
+  <c-space wrap>
     <c-tag checkable>Awesome</c-tag>
     <c-tag checkable status="primary" :default-checked="false">点击选中</c-tag>
     <c-tag checkable status="warning" variant="outline">描边状态</c-tag>

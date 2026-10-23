@@ -1,5 +1,4 @@
-import { computed, toRefs, watchEffect, ref } from 'vue'
-import { debounce } from '../../_utils/debounce'
+import { computed, toRefs, watch, ref } from 'vue'
 import { TreeFieldNames, Node, TreeNodeData, TreeNodeKey } from '../../tree/types'
 import { FilterTreeNode } from '../types'
 import { isUndefined } from '../../_utils/is'
@@ -37,32 +36,35 @@ export default function useFilterTreeNode(props: {
           if (!isFiltering.value) return true
 
           const key = node[keyField.value] as TreeNodeKey
-          return filteredKeysSet.value?.has(key || '') ?? false
+          return filteredKeysSet.value?.has(key) ?? false
         },
   )
 
-  const updateFilteredKeysSet = debounce((treeData: Node[], keyword: string) => {
-    const hitNodes = treeData.filter((node) => filterMethod.value(keyword, node.treeNodeData))
-
-    const _keysSet = new Set<TreeNodeKey>()
-
-    hitNodes.forEach((node) => {
-      _keysSet.add(node.key)
-      node.pathParentKeys.forEach((_key) => {
-        _keysSet.add(_key)
-      })
-    })
-
-    filteredKeysSet.value = _keysSet
-  }, 100)
-
-  watchEffect(() => {
-    if (disableFilter?.value) {
+  watch(
+    [
+      () => flattenTreeData.value,
+      () => searchValue.value,
+      () => filterMethod.value,
+      () => disableFilter?.value,
+      () => keyField.value,
+    ] as const,
+    ([treeData, keyword, method, disabled], _previous, cleanup) => {
+      // Retire old results immediately; pending timers cannot resurrect removed nodes.
       filteredKeysSet.value = undefined
-    } else {
-      updateFilteredKeysSet(flattenTreeData.value, searchValue.value)
-    }
-  })
+      if (disabled || !keyword) return
+      const timer = setTimeout(() => {
+        const keys = new Set<TreeNodeKey>()
+        for (const node of treeData) {
+          if (!method(keyword, node.treeNodeData)) continue
+          keys.add(node.key)
+          node.pathParentKeys.forEach((key) => keys.add(key))
+        }
+        filteredKeysSet.value = keys
+      }, 100)
+      cleanup(() => clearTimeout(timer))
+    },
+    { immediate: true, flush: 'sync' },
+  )
 
   return {
     isEmptyFilterResult,

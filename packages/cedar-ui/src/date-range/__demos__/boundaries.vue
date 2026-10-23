@@ -7,7 +7,7 @@ const disabledDate = (date: Date, side: 'start' | 'end') => side === 'end' && da
   <div class="date-contract-demo">
     <c-date-range v-model="value" value-format="YYYY/MM/DD" format="DD-MM-YYYY"
       min="2026/09/01" max="2026/09/30" :disabled-date="disabledDate" />
-    <p>仅可选九月，结束日期不能是周日。确认提交，取消丢弃草稿。</p>
+    <p>仅可选九月，结束日期不能是周日。请选齐两个端点；确认提交，Escape 取消草稿。</p>
     <output>{{ value }}</output>
   </div>
 </template>

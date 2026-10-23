@@ -1,0 +1,3 @@
+# Anchor scroll lifecycle
+
+Own visual scroll, measurement RAF, container listeners and post-render change notification by task/binding/lifetime. Replacement/deactivation/disposal/configuration invalidates old writes and physically cancels owned frames. Private slide preserves300ms/quartOut while exposing internal cancellation and current owner-window preference handling; no public API or CSS variables added. Same-hash repeated clicks preserve one pending change. Link registration cleanup uses original DOM identity. JSDOM/controlled frames are not native layout/OS/browser certification; Maple has no corresponding runtime.

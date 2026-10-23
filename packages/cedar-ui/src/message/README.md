@@ -38,8 +38,6 @@ KeepAlive 停用取消计时，激活从当前配置完整 duration 重启；停
 
 服务等待真实离场完成再清理和调用 onClosed，不再强制150ms或200ms退出。未挂载就 close/clear 的条目直接清理；此时服务 onClosed 仍报告完成，但组件未产生 open/opened/close 动画事件。业务 duration 与 CSS 过渡时长分开。
 
-真实IAB default/light/top服务的默认、600ms、零和离场重开四组已通过；重开可替换根DOM，不能依赖其节点身份。其他主题／位置、hover、KeepAlive和真实OS仍需独立验收。
-
 减少动效偏好下，独立样式取消根/进出过渡及装饰图标淡入，保留静态定位、颜色和业务展示期限；子图标自身动效仍由Icon规范负责。隔离Less检查不是实际OS验收。
 
 <demo src="./__demos__/time.vue"></demo>
@@ -77,6 +75,19 @@ KeepAlive 停用取消计时，激活从当前配置完整 duration 重启；停
 视觉变体与 status 独立：neutral 是中性浮层与状态图标；tonal 是低强调状态色底与深色正文；solid 是高强调实色底与配套前景。Cedar 与 Maple 默认均为 neutral；显式 solid / tonal 保持相同视觉语义。default/loading 的 solid 保留深色底，loading 图标仍表达进度。两端导出 MessageVariant，函数调用、setDefaultOptions 和相同 id 更新都支持 variant。
 
 <demo src="./__demos__/variant.vue"></demo>
+
+### 外观组合
+
+适用于操作结果的即时反馈。调整变体、状态，用相同数据观察变化。内容保持一致，便于比较不同设置的实际效果。
+
+<demo src="./__demos__/appearance-lab.vue"></demo>
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
 
 ## API
 

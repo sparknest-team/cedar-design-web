@@ -1,11 +1,15 @@
 <template>
   <c-space direction="column" size="lg">
-    <c-cascader disabled :options="options" placeholder="Please select ..." />
-    <c-cascader :options="options" default-value="datunli" expand-trigger="hover" placeholder="Please select ..." />
+    <c-cascader v-model="value" :options="options" placeholder="请选择地区" />
+    <p role="status">当前值：{{ value ?? '未选择' }}</p>
   </c-space>
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue'
+import type { CascaderProps } from '@cedarjs/ui'
+
+const value = ref<CascaderProps['modelValue']>()
 
 const options = [
   {

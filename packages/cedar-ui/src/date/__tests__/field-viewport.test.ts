@@ -1,12 +1,12 @@
 import { defineComponent, nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it } from 'vitest'
-import DateInput from '../Date.vue'
 import DateRange from '../../date-range/DateRange.vue'
+import DateInput from '../Date.vue'
 
 const Surface = defineComponent({ template: '<div><slot /><slot name="content" /></div>' })
 const wrappers: ReturnType<typeof mount>[] = []
-afterEach(() => wrappers.splice(0).forEach(wrapper => wrapper.unmount()))
+afterEach(() => wrappers.splice(0).forEach((wrapper) => wrapper.unmount()))
 describe('desktop field real calendar viewport', () => {
   for (const range of [false, true]) {
     it(`routes real calendar navigation through the field (range=${range})`, async () => {
@@ -14,7 +14,10 @@ describe('desktop field real calendar viewport', () => {
       const nested = { pickerValue: initial }
       const global = { stubs: { TemporalTrigger: Surface } }
       const wrapper = range
-        ? mount(DateRange, { props: { defaultOpen: true, modelValue: ['2025-01-15', '2025-01-20'], dateRangePickerProps: nested }, global })
+        ? mount(DateRange, {
+            props: { defaultOpen: true, modelValue: ['2025-01-15', '2025-01-20'], dateRangePickerProps: nested },
+            global,
+          })
         : mount(DateInput, { props: { defaultOpen: true, modelValue: '2025-01-15', datePickerProps: nested }, global })
       wrappers.push(wrapper)
       await nextTick()

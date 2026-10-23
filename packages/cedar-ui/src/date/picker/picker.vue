@@ -11,7 +11,10 @@ import {
   ref,
   toRefs,
   watch,
-  onUnmounted,
+  onMounted,
+  onActivated,
+  onDeactivated,
+  onBeforeUnmount,
 } from "vue";
 import {
   dayjs,
@@ -411,20 +414,46 @@ export default defineComponent({
       confirm(panelValue.value, false, true);
     }
 
-    let clearPreviewTimer: any;
-    onUnmounted(() => {
-      clearTimeout(clearPreviewTimer);
-    });
+    let clearPreviewTimer: ReturnType<typeof setTimeout> | undefined;
+    let previewGeneration = 0;
+    let previewMounted = false;
+    let previewActive = true;
+    let previewDisposed = false;
+    const canPreview = () => previewMounted && previewActive && !previewDisposed &&
+      panelVisible.value && previewShortcut.value && !mergedDisabled.value && !readonly.value;
+    const cancelPreviewClear = () => {
+      previewGeneration++;
+      if (clearPreviewTimer !== undefined) clearTimeout(clearPreviewTimer);
+      clearPreviewTimer = undefined;
+    };
+    const resetPreview = () => {
+      cancelPreviewClear();
+      setPreviewValue(undefined);
+    };
+    onMounted(() => { previewMounted = true; });
+    onActivated(() => { previewActive = true; });
+    onDeactivated(() => { previewActive = false; resetPreview(); });
+    onBeforeUnmount(() => { previewDisposed = true; resetPreview(); });
+    watch([panelVisible, mergedDisabled, readonly, previewShortcut, modelValue], resetPreview, { flush: "sync" });
 
     function onPanelShortcutMouseEnter(value: Dayjs) {
-      clearTimeout(clearPreviewTimer);
+      if (!canPreview()) return;
+      cancelPreviewClear();
+      const request = previewGeneration;
       setPreviewValue(value);
+      if (!canPreview() || request !== previewGeneration) return;
       setInputValue(undefined);
     }
 
     function onPanelShortcutMouseLeave() {
-      clearTimeout(clearPreviewTimer);
+      if (!canPreview()) return;
+      cancelPreviewClear();
+      const request = previewGeneration;
+      let pending = true;
       clearPreviewTimer = setTimeout(() => {
+        if (!pending || request !== previewGeneration || !canPreview()) return;
+        pending = false;
+        clearPreviewTimer = undefined;
         setPreviewValue(undefined);
       }, 100);
     }

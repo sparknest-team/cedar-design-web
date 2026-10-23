@@ -1,5 +1,5 @@
 <template>
-  <c-space>
+  <c-space wrap>
     <c-segmented disabled :options="['A', 'B', 'C']" default-value="A" />
     <c-segmented
       v-model="value"

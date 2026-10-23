@@ -1,0 +1,167 @@
+{
+  "fields": [
+    {
+      "name": "color",
+      "description": "自定义背景色（outline 时为边框色）",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string",
+      "initial": "#5268cc"
+    },
+    {
+      "name": "text-color",
+      "description": "自定义文字色",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string",
+      "initial": "#5268cc"
+    },
+    {
+      "name": "status",
+      "description": "标签状态色（与 color 互斥，color 优先）",
+      "type": "\"default\" | \"primary\" | \"secondary\" | \"tertiary\" | \"info\" | \"success\" | \"warning\" | \"danger\"",
+      "defaultValue": "'default'",
+      "kind": "enum",
+      "options": [
+        "default",
+        "primary",
+        "secondary",
+        "tertiary",
+        "info",
+        "success",
+        "warning",
+        "danger"
+      ],
+      "initial": "default"
+    },
+    {
+      "name": "variant",
+      "description": "标签变体（与 Button 对齐）",
+      "type": "'default' | 'outline'",
+      "defaultValue": "'default'",
+      "kind": "enum",
+      "options": [
+        "default",
+        "outline"
+      ],
+      "initial": "default"
+    },
+    {
+      "name": "size",
+      "description": "标签的大小",
+      "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
+      "defaultValue": "'md'",
+      "kind": "enum",
+      "options": [
+        "xs",
+        "sm",
+        "md",
+        "lg",
+        "xl"
+      ],
+      "initial": "md"
+    },
+    {
+      "name": "show",
+      "description": "标签是否可见",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "default-show",
+      "description": "标签默认是否可见",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "loading",
+      "description": "标签是否为加载中状态",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "closable",
+      "description": "标签是否可关闭",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "checkable",
+      "description": "标签是否可选中",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "checked",
+      "description": "标签是否选中（标签可选中时可用）",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "default-checked",
+      "description": "标签默认选中状态（标签可选中时可用）",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "nowrap",
+      "description": "内容是否不换行（超出省略）",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "round",
+      "description": "是否为圆角胶囊形",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    }
+  ],
+  "events": [
+    "close",
+    "check",
+    "update:show",
+    "update:checked"
+  ],
+  "scenarios": [
+    {
+      "name": "default",
+      "kind": "slot",
+      "demos": [
+        "checkable.vue"
+      ]
+    },
+    {
+      "name": "icon",
+      "kind": "slot",
+      "demos": [
+        "basic.vue",
+        "closable.vue",
+        "dynamic-tag.vue",
+        "icon.vue"
+      ]
+    },
+    {
+      "name": "close-icon",
+      "kind": "slot",
+      "demos": []
+    }
+  ],
+  "slotNames": [
+    "icon",
+    "close-icon"
+  ],
+  "slotDefaults": {
+    "icon": true,
+    "close-icon": false
+  },
+  "methodNames": []
+}

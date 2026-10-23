@@ -1,7 +1,7 @@
 import '../../style/index.less'
 import '../../button/style'
 import '../../input/style'
-import '../../dropdown-menu/style'
+import '../../menu/style'
 import '../../select/style'
 import '../../icon/style'
 import '../../drawer/style'

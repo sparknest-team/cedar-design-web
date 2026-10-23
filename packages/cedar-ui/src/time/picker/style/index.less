@@ -148,3 +148,12 @@
     line-height: var(~'--c-time-picker-range-panel-title-line-height');
   }
 }
+
+.c-time-field-popover .c-timepicker-container {
+  max-width: calc(100vw - var(--c-time-picker-popover-gap));
+  --c-time-picker-column-height: ~'min(var(--c-time-picker-popover-column-max-height), calc(50dvh - var(--c-time-picker-popover-body-reserve)))';
+  .c-timepicker-range-panel { flex: 1; min-width: 0; }
+  .c-timepicker-range-panel-body > .c-timepicker { width: 100%; min-width: 0; }
+  .c-timepicker-range-panel .c-timepicker-column { flex: 1; min-width: 0; }
+  .c-timepicker-range-panel .c-timepicker-cell-inner { padding-inline: 0; text-align: center; }
+}

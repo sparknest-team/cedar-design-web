@@ -1,0 +1,111 @@
+{
+  "fields": [
+    {
+      "name": "model-value",
+      "description": "绑定值",
+      "type": "date",
+      "defaultValue": "undefined",
+      "kind": "date",
+      "initial": "2026-10-21"
+    },
+    {
+      "name": "default-value",
+      "description": "默认值（非受控状态）",
+      "type": "date",
+      "defaultValue": "undefined",
+      "kind": "date",
+      "initial": "2026-10-21"
+    },
+    {
+      "name": "mode",
+      "description": "模式",
+      "type": "'month' | 'year'",
+      "defaultValue": "undefined",
+      "kind": "enum",
+      "options": [
+        "month",
+        "year"
+      ],
+      "initial": "month"
+    },
+    {
+      "name": "default-mode",
+      "description": "默认模式",
+      "type": "'month' | 'year'",
+      "defaultValue": "'month'",
+      "kind": "enum",
+      "options": [
+        "month",
+        "year"
+      ],
+      "initial": "month"
+    },
+    {
+      "name": "modes",
+      "description": "显示的模式",
+      "type": "('month' | 'year')[]",
+      "defaultValue": "() => ['month', 'year']",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "day-start-of-week",
+      "description": "一周开始日",
+      "type": "0 | 1",
+      "defaultValue": "0",
+      "kind": "enum",
+      "options": [
+        "0",
+        "1"
+      ],
+      "initial": "0"
+    },
+    {
+      "name": "is-week",
+      "description": "是否显示周序号",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "allow-select",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "panel",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "panel-width",
+      "type": "number",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "number"
+    },
+    {
+      "name": "panel-today-btn",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    }
+  ],
+  "methodNames": [],
+  "events": [
+    "change",
+    "panel-change"
+  ],
+  "slotNames": [
+    "header"
+  ],
+  "slotDefaults": {
+    "header": false
+  },
+  "scenarios": []
+}

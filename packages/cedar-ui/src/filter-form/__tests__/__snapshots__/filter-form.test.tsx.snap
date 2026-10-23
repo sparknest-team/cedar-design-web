@@ -1,15 +1,16 @@
 // Vitest Snapshot v1
 
 exports[`FilterForm > render 1`] = `
-"<form class=\\"c-form c-form-layout-vertical c-form-size-md c-filter-form\\">
-  <div class=\\"c-grid\\" style=\\"gap: 0px 16px; grid-template-columns: repeat(1, minmax(0px, 1fr));\\">
+"<form class=\\"c-form c-form-layout-vertical c-form-size-md c-filter-form c-filter-form--stacked\\">
+  <div class=\\"c-grid\\" style=\\"gap: 16px 16px; grid-template-columns: repeat(1, minmax(0px, 1fr));\\">
     <div class=\\"c-grid-item\\" style=\\"grid-column: 1 / span 1;\\">
-      <div class=\\"c-form-item c-form-item-layout-vertical\\">
+      <div class=\\"c-form-item c-form-item-layout-vertical c-filter-form__action-item\\">
         <!--v-if-->
         <div class=\\"c-form-item-wrapper-col\\">
           <div class=\\"c-form-item-content-wrapper\\">
             <div class=\\"c-form-item-content c-form-item-content-flex\\">
               <div class=\\"c-filter-form__actions\\">
+                <!--v-if-->
                 <!--v-if-->
               </div>
             </div>

@@ -11,7 +11,7 @@ Maple Carousel fade/card durations, Picker option check color and TimeRange next
 
 ### Requirement: Persistent dropdown selection
 
-DropdownMenu SHALL preserve selected painting through pointer hover and keyboard active states via an independent selected-hover variable. Disabled SHALL win over selection and all interactive painting states.
+Menu SHALL preserve selected painting through pointer hover and keyboard active states via an independent selected-hover variable. Disabled SHALL win over selection and all interactive painting states.
 
 #### Scenario: Disabled selected item is hovered
 

@@ -8,6 +8,8 @@ permalink: /components/ripple/
 
 ## 基本使用
 
+支持触摸、鼠标主键和宿主 Enter/Space；鼠标从实际按下位置扩散，在所属 document 松开或窗口失焦时释放。忽略非主键与触摸产生的兼容鼠标事件；缺少 sourceCapabilities 时采用触摸后 800ms 去重窗口。键盘从中心扩散，请使用原生按钮。移动模拟站的点击不等同真实触屏验收。
+
 <demo src="./__demos__/basic.vue"></demo>
 
 ## 选项
@@ -33,3 +35,11 @@ permalink: /components/ripple/
 变量设置在实际指令宿主，由波纹继承；以上默认值目前两端一致。250ms 分别为节点创建后的最小展示和开始淡出后的最小移除等待，不是视觉时长或总生命周期。运行时读取实际波纹的 computed transition duration/delay；淡出等待创建+250ms 或激活+扩散时长的较晚者，删除等待 max(250ms, 消退时长)。长时长覆写不再截断，0ms／无样式仍保留清理下限。reduce 隐藏装饰波纹；扩散在创建／激活、消退在开始淡出时采样，不保证任意中途 CSS 改动或 animation。
 
 重复释放只排队一次；禁用／卸载清理所属定时器与直接子波纹，不误删嵌套实例。文档事件绑定／移除使用挂载时 ownerDocument，不承诺跨文档搬迁自动重绑。仅本宿主 Enter／Space 与对应 keyup 或 blur 参与；指令不为普通 div 提供按钮语义、可访问名称或点击业务能力。真实触摸设备／OS 偏好另行验收。
+
+<!-- api-review:start -->
+
+### 组合审查 / API review
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->

@@ -1,11 +1,15 @@
 import { withInstall } from '../_utils/global-config'
-import _Cascader from './Cascader.vue'
 import _CascaderPanel from './CascaderPanel.vue'
+import _Cascader from './presentation'
 import { cascaderProps } from './props'
 
-const Cascader = withInstall(_Cascader, Object.assign(_Cascader, {
-  CascaderPanel: _CascaderPanel,
-}), { components: [_Cascader, _CascaderPanel] })
+const Cascader = withInstall(
+  _Cascader,
+  Object.assign(_Cascader, {
+    CascaderPanel: _CascaderPanel,
+  }),
+  { components: [_Cascader, _CascaderPanel] },
+)
 
 export type CascaderInstance = InstanceType<typeof _Cascader>
 export type CascaderPanelInstance = InstanceType<typeof _CascaderPanel>

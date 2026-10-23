@@ -318,7 +318,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onBeforeUnmount, watch } from "vue";
+import { computed, ref, onBeforeUnmount, onMounted, onActivated, onDeactivated, watch } from "vue";
 import CButton from "../../button";
 import CPopover from "../../popover";
 import { createNamespace } from "../../_utils/global-config";
@@ -422,6 +422,8 @@ const selectionStyle = computed(() => {
 let cancelRange = () => {};
 let ignoreClick = false;
 let clickTimer: ReturnType<typeof setTimeout> | undefined;
+let mounted = false, active = true, disposed = false, rangeVersion = 0;
+const available = () => mounted && active && !disposed;
 function suppressRangeClick(event: MouseEvent) {
   if (ignoreClick) {
     event.preventDefault();
@@ -433,17 +435,30 @@ function beginRange(
   column: (typeof props.columns)[number],
 ) {
   if (
+    !available() ||
     !props.dragToCreate ||
+    props.disabled ||
     props.locked ||
     column.resource?.disabled ||
     pointer.button !== 0
   )
     return;
+  const version = ++rangeVersion;
   cancelRange();
+  clearTimeout(clickTimer);
+  ignoreClick = false;
+  const host = root.value;
+  if (!host || !available() || version !== rangeVersion) return;
+  const columns = props.columns;
+  const step = props.step, startHour = props.startHour, endHour = props.endHour;
   const snap = props.snapDuration ?? props.step;
+  let live = true;
+  const owns = () => available() && version === rangeVersion && root.value === host && props.columns === columns && columns.includes(column) && props.step === step && props.startHour === startHour && props.endHour === endHour && (props.snapDuration ?? props.step) === snap && props.dragToCreate && !props.locked && !props.disabled && !column.resource?.disabled;
+  const current = () => live && owns();
   const origin = pointer.currentTarget as HTMLElement;
   const resolve = (element: HTMLElement, y: number) => {
     const rect = element.getBoundingClientRect();
+    if (!current()) return;
     return getSchedulerCellDate(
       element.dataset.schedulerDate!,
       props.step,
@@ -452,13 +467,14 @@ function beginRange(
     );
   };
   const start = resolve(origin, pointer.clientY);
+  if (!start || !current()) return;
   let end = start,
     moved = false;
   const touch = pointer.pointerType === "touch";
   let armed = !touch;
   let holdTimer: ReturnType<typeof setTimeout> | undefined;
   const move = (event: PointerEvent) => {
-    if (event.pointerId !== pointer.pointerId) return;
+    if (!current() || event.pointerId !== pointer.pointerId) return;
     if (
       !armed &&
       Math.hypot(
@@ -466,7 +482,7 @@ function beginRange(
         event.clientY - pointer.clientY,
       ) >= 8
     ) {
-      cancelRange();
+      cancel();
       return;
     }
     if (!armed) return;
@@ -487,10 +503,12 @@ function beginRange(
           root.value?.contains(el) &&
           el.dataset.schedulerColumn === column.key,
       );
-    if (!target) return;
+    if (!target || !current()) return;
     moved = true;
     event.preventDefault();
-    end = resolve(target, event.clientY);
+    const resolved = resolve(target, event.clientY);
+    if (!resolved || !current()) return;
+    end = resolved;
     const range = getSchedulerSelectionRange(start, end, snap);
     const boundary = new Date(column.date);
     boundary.setHours(props.endHour, 0, 0, 0);
@@ -498,52 +516,66 @@ function beginRange(
     selection.value = { key: column.key, range };
   };
   const up = (event: PointerEvent) => {
-    if (event.pointerId !== pointer.pointerId) return;
+    if (!current() || event.pointerId !== pointer.pointerId) return;
     const range = selection.value?.range;
-    cancelRange();
-    if (moved && range && !props.locked) {
+    cancel();
+    if (moved && range && owns()) {
       ignoreClick = true;
       clickTimer = setTimeout(() => {
-        ignoreClick = false;
+        if (owns()) ignoreClick = false;
       }, 0);
       emit("create-range", range.start, range.end, column.resource?.id);
     }
   };
   const key = (event: KeyboardEvent) => {
-    if (event.key === "Escape") cancelRange();
+    if (current() && event.key === "Escape") cancel();
   };
-  const cancel = () => cancelRange();
-  cancelRange = () => {
+  const pointerCancel = (event: PointerEvent) => { if (current() && event.pointerId === pointer.pointerId) cancel(); };
+  const blur = () => { if (current()) cancel(); };
+  const cancel = () => {
+    if (!live) return;
+    live = false;
     clearTimeout(holdTimer);
     document.removeEventListener("pointermove", move, true);
     document.removeEventListener("pointerup", up, true);
-    document.removeEventListener("pointercancel", cancel, true);
+    document.removeEventListener("pointercancel", pointerCancel, true);
     document.removeEventListener("keydown", key);
-    window.removeEventListener("blur", cancel);
+    window.removeEventListener("blur", blur);
+    if (cancelRange === cancel) cancelRange = () => {};
     selection.value = undefined;
-    cancelRange = () => {};
   };
+  cancelRange = cancel;
   if (touch)
     holdTimer = setTimeout(() => {
-      armed = true;
+      if (current()) armed = true;
     }, 350);
   document.addEventListener("pointermove", move, {
     capture: true,
     passive: false,
   });
   document.addEventListener("pointerup", up, true);
-  document.addEventListener("pointercancel", cancel, true);
+  document.addEventListener("pointercancel", pointerCancel, true);
   document.addEventListener("keydown", key);
-  window.addEventListener("blur", cancel);
+  window.addEventListener("blur", blur);
 }
-watch(
-  () => [props.locked, props.columns, props.dragToCreate],
-  () => cancelRange(),
-  { deep: true },
-);
-onBeforeUnmount(() => {
+function clearRange() {
+  rangeVersion++;
   cancelRange();
   clearTimeout(clickTimer);
+  ignoreClick = false;
+}
+watch(
+  () => [props.locked, props.disabled, props.columns, props.dragToCreate, props.step, props.snapDuration, props.startHour, props.endHour],
+  clearRange,
+  { deep: true, flush: "sync" },
+);
+onMounted(() => { mounted = true; });
+onActivated(() => { active = true; });
+onDeactivated(() => { active = false; clearRange(); });
+onBeforeUnmount(() => {
+  disposed = true;
+  clearRange();
+  mounted = false;
 });
 const minutes = computed(() =>
   Array.from(

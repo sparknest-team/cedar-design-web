@@ -10,6 +10,8 @@ permalink: /components/watermark/
 
 ### 基础用法
 
+局部示例提供深色底、显示开关及合成文字输入；显式font.color在深色底用白色0.4透明度、浅色底用黑色0.25透明度。改变文字/颜色会重新生成PNG；水印层pointer-events:none，内容按钮支持点击和Enter。隐藏卸载该实例，恢复后只保留一层并保留示例计数。这是局部显式配色与清理验收，不代表默认主题Token、全站暗色或防篡改已验收，不提供正文文字对比度合规保证。
+
 使用 `content` 设置文字水印，默认插槽放置被水印覆盖的内容。
 
 <demo src="./__demos__/basic.vue"></demo>
@@ -21,6 +23,8 @@ permalink: /components/watermark/
 <demo src="./__demos__/multiline.vue"></demo>
 
 ### 图片水印
+
+图片示例只使用合成SVG data URL。“本地图片失败”切换为故意无效的data URL，原生Image错误通知source=image，并回退红色FALLBACK 201文字。聚焦“恢复图片”按Enter后恢复原图，错误历史保留但不追加、覆盖层仍一层；恢复按钮再次禁用。这不是外部网络、CORS、Canvas故障或图片加载竞争验收。
 
 图片优先于文字；图片加载失败且存在文字时自动回退文字。
 
@@ -34,9 +38,18 @@ permalink: /components/watermark/
 
 ### 全屏水印
 
+示例按钮可点击、Space 或 Enter 切换。全屏层固定覆盖视口且不拦截指针操作；退出后回到原局部容器，默认插槽内容不搬走。反复开启/退出不应累积全屏层，卸载会移除该实例的层。这里使用本地文字生成PNG，不代表图片加载失败、动态主题或防篡改组合均已浏览器验收。
+
 开启后，水印层固定覆盖整个视口；默认插槽内容仍保留在原位置。
 
 <demo src="./__demos__/fullscreen.vue"></demo>
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
 
 ## API
 

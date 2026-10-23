@@ -1,4 +1,4 @@
-# DropdownMenu 定位契约收口
+# Menu 定位契约收口
 
 补齐 Cedar strategy，统一两端根/多级子菜单的响应式定位策略。默认 absolute，可选 fixed；popupContainer 与定位策略独立，fixed 不自动改变挂载点或规避 transform 祖先。
 

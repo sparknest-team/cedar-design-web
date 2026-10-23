@@ -1,0 +1,34 @@
+{
+  "fields": [
+    {
+      "name": "shape",
+      "description": "图形骨架的形状",
+      "type": "'square' | 'circle'",
+      "defaultValue": "'square'",
+      "kind": "enum",
+      "options": [
+        "square",
+        "circle"
+      ],
+      "initial": "square"
+    },
+    {
+      "name": "size",
+      "description": "图形骨架的大小",
+      "type": "'sm' | 'md' | 'lg'",
+      "defaultValue": "'md'",
+      "kind": "enum",
+      "options": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "initial": "md"
+    }
+  ],
+  "methodNames": [],
+  "events": [],
+  "slotNames": [],
+  "slotDefaults": {},
+  "scenarios": []
+}

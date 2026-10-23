@@ -1,5 +1,5 @@
 <template>
-  <c-space direction="vertical">
+  <c-space direction="column">
     <h4>简单用法</h4>
     <c-switch v-model="simpleLoading" />
     <c-card

@@ -1,10 +1,18 @@
-import { computed, defineComponent, PropType, ref, toRefs, Slots } from 'vue'
+import { computed, defineComponent, PropType, ref, toRefs, Slots, watch, useId, nextTick } from 'vue'
 import Tree from '../tree'
-import { TreeProps, TreeNodeKey } from '../tree/types'
+import { isNodeSelectable } from '../tree/utils'
+import { isNodeCheckable } from '../tree/utils/check-utils'
+import { TreeProps, TreeNodeKey, Node, TreeNodeData } from '../tree/types'
 import { useScrollbar } from '../_hooks/use-scrollbar'
 import Scrollbar, { ScrollbarProps } from '../scrollbar'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
 
+export interface TreeSelectPanelHandle {
+  handleKeydown: (event: KeyboardEvent) => void
+  resetActive: () => void
+  activeId?: string
+  treeId: string
+}
 
 const { name } = createNamespace('tree-select-panel')
 
@@ -18,6 +26,7 @@ export default defineComponent({
       type: Object as PropType<Partial<TreeProps>>,
       default: () => ({}),
     },
+    candidateFilter: Function as PropType<(node: TreeNodeData) => boolean>,
     selectedKeys: {
       type: Array as PropType<TreeNodeKey[]>,
     },
@@ -34,11 +43,98 @@ export default defineComponent({
     },
   },
   emits: ['change'],
-  setup(props, { emit }) {
+  setup(props, { emit, expose }) {
     const { showCheckable, selectedKeys, treeProps, scrollbar } = toRefs(props)
     const { displayScrollbar, scrollbarProps } = useScrollbar(scrollbar)
     const prefixCls = getPrefixCls('tree-select')
     const refTree = ref()
+
+    const treeId = `tree-select-${useId()}`
+    const activeKey = ref<TreeNodeKey>()
+    const visibleNodes = computed<Node[]>(() => {
+      const context = refTree.value?.treeContext
+      if (!context) return []
+      const expanded = new Set<TreeNodeKey>(context.expandedKeys)
+      // Expanded descendants are rendered by TransitionNodeList during animation.
+      // They are keyboard candidates even before the normal tree list takes over.
+      return context.flattenTreeData.filter(
+        (node: Node) =>
+          node.pathParentKeys.every((key) => expanded.has(key)) &&
+          (!context.filterTreeNode || context.filterTreeNode(node.treeNodeData)),
+      )
+    })
+    const visibleNodeMap = computed(() => new Map(visibleNodes.value.map((node) => [node.key, node])))
+    const enabledNodes = computed(() => visibleNodes.value.filter((node) => !node.disabled))
+    const nodeId = (key: TreeNodeKey) => `${treeId}-${typeof key}-${encodeURIComponent(String(key))}`
+    const activeId = computed(() => (activeKey.value === undefined ? undefined : nodeId(activeKey.value)))
+    const resetActive = () => {
+      const matches = props.candidateFilter
+        ? enabledNodes.value.filter((node) => props.candidateFilter?.(node.treeNodeData))
+        : enabledNodes.value
+      const candidates = matches.length ? matches : enabledNodes.value
+      const selected = props.selectedKeys?.find((key) => candidates.some((node) => node.key === key))
+      activeKey.value = selected ?? candidates[0]?.key
+    }
+    watch(
+      enabledNodes,
+      () => {
+        const current = visibleNodeMap.value.get(activeKey.value as TreeNodeKey)
+        if (
+          !current ||
+          current.disabled ||
+          (props.candidateFilter &&
+            !props.candidateFilter(current.treeNodeData) &&
+            enabledNodes.value.some((node) => props.candidateFilter?.(node.treeNodeData)))
+        )
+          resetActive()
+      },
+      { immediate: true },
+    )
+    watch(() => props.candidateFilter, resetActive)
+    const moveTo = (key?: TreeNodeKey) => {
+      activeKey.value = key
+      if (key !== undefined) refTree.value?.scrollIntoView({ key, align: 'auto' })
+    }
+    const expand = (node: Node, expanded: boolean, event: KeyboardEvent) => {
+      const tree = refTree.value
+      if (tree?.treeContext.loadingKeys.includes(node.key)) return
+      if (expanded && !node.children?.length && tree?.treeContext.onLoadMore) tree.treeContext.onLoadMore(node.key)
+      else tree?.treeContext.onExpand(expanded, node.key, event)
+    }
+    const handleKeydown = (event: KeyboardEvent) => {
+      if (event.isComposing || event.keyCode === 229) return
+      if (!['Enter', 'ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return
+      event.preventDefault()
+      event.stopPropagation()
+      const nodes = enabledNodes.value
+      if (!nodes.length) return
+      const index = nodes.findIndex((node) => node.key === activeKey.value)
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        const step = event.key === 'ArrowDown' ? 1 : -1
+        moveTo(nodes[index < 0 ? (step > 0 ? 0 : nodes.length - 1) : (index + step + nodes.length) % nodes.length].key)
+        return
+      }
+      if (event.key === 'Home' || event.key === 'End') {
+        moveTo(nodes[event.key === 'Home' ? 0 : nodes.length - 1].key)
+        return
+      }
+      const node = nodes[index < 0 ? 0 : index]
+      const expanded = refTree.value?.computedExpandedKeys.includes(node.key)
+      if (event.key === 'ArrowRight') {
+        if (!node.isLeaf && !expanded) expand(node, true, event)
+        else moveTo(nodes.find((child) => child.parentKey === node.key)?.key ?? node.key)
+      } else if (event.key === 'ArrowLeft') {
+        if (!node.isLeaf && expanded) expand(node, false, event)
+        else if (nodes.some((parent) => parent.key === node.parentKey)) moveTo(node.parentKey)
+      } else if (props.showCheckable ? isNodeCheckable(node) : isNodeSelectable(node)) {
+        if (props.showCheckable) refTree.value?.toggleCheck(node.key, event)
+        else refTree.value?.treeContext.onSelect(node.key, event)
+      } else if (!node.isLeaf) expand(node, !expanded, event)
+      nextTick(() => {
+        if (activeKey.value !== undefined) refTree.value?.scrollIntoView({ key: activeKey.value, align: 'auto' })
+      })
+    }
+    expose({ handleKeydown, activeId, treeId, resetActive })
 
     const computedTreeProps = computed(() => {
       return {
@@ -66,10 +162,35 @@ export default defineComponent({
         <Tree
           ref={refTree}
           {...computedTreeProps.value}
+          id={treeId}
+          role="tree"
+          aria-multiselectable={Boolean(props.treeProps.multiple || props.showCheckable)}
           // @ts-ignore
           onSelect={onSelect}
           onCheck={onCheck}
-          v-slots={props.treeSlots}
+          v-slots={{
+            ...props.treeSlots,
+            title: (node: TreeNodeData, status: any) => {
+              const key = node[(props.treeProps.fieldNames?.key ?? 'key') as keyof TreeNodeData] as TreeNodeKey
+              return (
+                <span
+                  id={nodeId(key)}
+                  role="treeitem"
+                  aria-selected={status.selected}
+                  aria-checked={props.showCheckable ? status.checked : undefined}
+                  aria-disabled={visibleNodeMap.value.get(key)?.disabled}
+                  aria-expanded={status.isLeaf ? undefined : status.expanded}
+                  class={[`${prefixCls}-option`, { [`${prefixCls}-option-active`]: key === activeKey.value }]}
+                  onMouseenter={() => {
+                    if (visibleNodeMap.value.has(key) && !visibleNodeMap.value.get(key)?.disabled) activeKey.value = key
+                  }}
+                >
+                  {props.treeSlots.title?.(node, status) ??
+                    node[(props.treeProps.fieldNames?.title ?? 'title') as keyof TreeNodeData]}
+                </span>
+              )
+            },
+          }}
         />
       )
     }

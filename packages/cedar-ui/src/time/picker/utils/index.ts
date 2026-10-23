@@ -1,5 +1,4 @@
 import { clockSeconds, isOvernight } from '../../../_utils/picker-data'
-import BTween from 'b-tween'
 import type { Dayjs } from 'dayjs'
 import { dayjs } from '../../../_utils/date'
 import { isArray, isUndefined, isDayjs } from '../../../_utils/is'
@@ -8,32 +7,59 @@ import { isClockDisabled } from '../../time-rules'
 
 export { getTimeFormatColumns as getColumnsFromFormat } from '../../time-format'
 
-const scrollIds = new Map<HTMLElement, number>()
+const scrollTasks = new WeakMap<HTMLElement, () => void>()
 
 export function scrollTo(element: HTMLElement, to: number, duration: number) {
-  const scrollId = scrollIds.get(element)
-  if (!isUndefined(scrollId)) {
-    cancelAnimationFrame(scrollId)
+  scrollTasks.get(element)?.()
+  const view = element.ownerDocument.defaultView
+  let active = true
+  let frame: { id?: number } | undefined
+  const current = () => active && scrollTasks.get(element) === cancel
+  const cancel = () => {
+    active = false
+    if (frame?.id !== undefined) view?.cancelAnimationFrame(frame.id)
+    frame = undefined
+    if (scrollTasks.get(element) === cancel) scrollTasks.delete(element)
   }
-
-  if (duration <= 0) {
+  scrollTasks.set(element, cancel)
+  const reduced = () => view?.matchMedia?.('(prefers-reduced-motion: reduce)').matches === true
+  const finish = () => {
+    if (!current()) return
     element.scrollTop = to
+    if (current()) cancel()
+  }
+  if (!view || !Number.isFinite(duration) || duration <= 0 || reduced()) {
+    finish()
+    return cancel
   }
 
-  scrollIds.set(
-    element,
-    requestAnimationFrame(() => {
-      const tween = new BTween({
-        from: { scrollTop: element.scrollTop },
-        to: { scrollTop: to },
-        duration,
-        onUpdate: (keys: { scrollTop: number }) => {
-          element.scrollTop = keys.scrollTop
-        },
-      })
-      tween.start()
-    }),
-  )
+  let startedAt: number | undefined
+  let from = 0
+  const schedule = () => {
+    if (!current()) return
+    const ticket: { id?: number } = {}
+    frame = ticket
+    ticket.id = view.requestAnimationFrame((time) => {
+      if (!current() || frame !== ticket) return
+      frame = undefined
+      const shouldReduce = reduced()
+      if (!current()) return
+      if (shouldReduce) { finish(); return }
+      if (startedAt === undefined) {
+        startedAt = time
+        from = element.scrollTop
+      }
+      if (!current()) return
+      const progress = Math.min(1, Math.max(0, (time - startedAt) / duration))
+      element.scrollTop = from + (to - from) * progress
+      if (!current()) return
+      if (progress === 1) cancel()
+      else schedule()
+    })
+    if (!current()) view.cancelAnimationFrame(ticket.id)
+  }
+  schedule()
+  return cancel
 }
 
 export function getFormattedValue(time: Dayjs, format: string): string

@@ -5,7 +5,7 @@ const current = ref(5)
 </script>
 <template>
   <div class="pagination-demo">
-    <c-pagination v-model:current="current" v-model:page-size="pageSize" :total="200" show-page-size :page-size-options="[10, 20, 50]" :page-size-props="{ placement: 'bottom-start' }" />
+    <c-pagination v-model:current="current" v-model:page-size="pageSize" :total="200" show-page-size :page-size-options="[10, 20, 50, 100]" :page-size-props="{ placement: 'bottom-start' }" />
     <span>Current: {{ current }} · Page size: {{ pageSize }}</span>
   </div>
 </template>

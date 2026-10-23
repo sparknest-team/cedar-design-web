@@ -1,8 +1,11 @@
+import { useDemoControls } from "../../../test-utils/demo-controls";
 import { nextTick } from "vue";
-import { mount } from "@vue/test-utils";
+import { config as demoTestConfig, mount } from "@vue/test-utils";
 import { expect, it } from "vitest";
 import Demo from "../__demos__/default-state.vue";
 import TimeRange from "../index";
+
+useDemoControls(demoTestConfig);
 
 it("controlled demo rejects proposals without mutating parent state, then accepts new requests", async () => {
   const wrapper = mount(Demo, {

@@ -1,4 +1,5 @@
 import type { PropType } from 'vue'
+import { readPrettyProp, fieldPresentationProp } from '../_components/field-presentation/context'
 import type { ComponentSize } from '../_utils/constant'
 import type { RowProps } from '../row/props'
 import { formItemDecorationProps } from './item-decoration'
@@ -6,6 +7,9 @@ import { formItemLayoutProps } from './layout-props'
 import type { FieldRule, ValidateStatus, ValidateTrigger } from './types'
 
 export const formItemProps = {
+  /** 字段展示方式，未设置时继承上层。 */
+  presentation: fieldPresentationProp,
+  readPretty: readPrettyProp,
   ...formItemLayoutProps,
   ...formItemDecorationProps,
   /** 控件尺寸；未设置时继承 Form，不改变标签密度。 */

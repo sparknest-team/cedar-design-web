@@ -1,11 +1,15 @@
 import { withInstall } from '../_utils/global-config'
-import _Radio from './radio.vue'
-import _RadioGroup from './radio-group.vue'
+import _RadioGroup from './group-presentation'
+import _Radio from './presentation'
 import { radioGroupProps, radioProps } from './props'
 
-const Radio = withInstall(_Radio, Object.assign(_Radio, {
-  Group: _RadioGroup,
-}), { components: [_Radio, _RadioGroup] })
+const Radio = withInstall(
+  _Radio,
+  Object.assign(_Radio, {
+    Group: _RadioGroup,
+  }),
+  { components: [_Radio, _RadioGroup] },
+)
 
 export type RadioInstance = InstanceType<typeof _Radio> & import('./props').RadioMethods
 export type RadioGroupInstance = InstanceType<typeof _RadioGroup>

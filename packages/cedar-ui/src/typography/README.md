@@ -44,6 +44,19 @@ permalink: /components/typography/
 
 <demo src="./__demos__/ellipsis.vue"></demo>
 
+### 测量与复制反馈生命周期
+
+<demo src="./__demos__/scheduler-lifecycle.vue"></demo>
+
+复制反馈使用现有 `copy-delay`（默认 3000ms），是交互反馈等待，不是 CSS 动效完成时间。重复复制替换旧等待；关闭复制、禁用或修改等待时长会清除当前反馈。停用／卸载取消反馈计时与省略测量 RAF，保留操作和旧回调不能继续写入；激活重新测量，不恢复旧任务。禁用态文字仍可测量省略，不允许复制／编辑／展开交互。省略关闭、展开或进入编辑会取消旧测量；完成后重放和测量重入不能覆盖新结果。
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
+
 ## API
 
 ### Common Props

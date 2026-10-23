@@ -123,10 +123,11 @@
       </c-form>
     </template>
   </c-scheduler>
-  <details class="scheduler-mock-log">
-    <summary>查看最近一次 Mock API 请求</summary>
-    <pre>{{ lastRequest || "尚未提交" }}</pre>
-  </details>
+  <c-collapse class="scheduler-mock-log">
+    <c-collapse-item name="request" title="查看最近一次 Mock API 请求">
+      <pre>{{ lastRequest || "尚未提交" }}</pre>
+    </c-collapse-item>
+  </c-collapse>
 </template>
 
 <script setup lang="ts">

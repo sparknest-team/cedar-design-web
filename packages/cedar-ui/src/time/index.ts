@@ -1,8 +1,8 @@
 import { withInstall } from '../_utils/global-config'
-import _Time from './Time.vue'
-import _TimePicker from './picker/TimePicker.vue'
-import { timeProps } from './props'
 import { timePickerProps } from './picker/props'
+import _TimePicker from './picker/TimePicker.vue'
+import _Time from './presentation'
+import { timeProps } from './props'
 
 export type { TimeProps } from './props'
 export type { TimePickerProps } from './picker/props'
@@ -28,4 +28,8 @@ export default Time
 
 export type { TimeDisabledRules, TimeStep } from './time-rules'
 export type { TimeValue } from './time-value'
-export type { TimePanelPresentationProps, TimePopupPresentationProps, TimeWheelPresentationProps } from './presentation-props'
+export type {
+  TimePanelPresentationProps,
+  TimePopupPresentationProps,
+  TimeWheelPresentationProps,
+} from './presentation-props'

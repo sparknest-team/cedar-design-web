@@ -1,6 +1,7 @@
+import { rangePreviewKey } from './range-preview'
 import { useDateCurrent } from '../../date-current'
 import type { Dayjs } from 'dayjs'
-import { computed, toRefs } from 'vue'
+import { computed, inject, toRefs } from 'vue'
 import { Cell, IsSameTime, Mode } from '../types'
 import { getNow, getSortedDayjsArray } from '../../../_utils/date'
 import { isDayjs } from '../../../_utils/is'
@@ -15,6 +16,7 @@ interface CellClassNameProps {
 
 export default function useCellClassName(props: CellClassNameProps) {
   const { rangeValues } = toRefs(props)
+  const preview = inject(rangePreviewKey, computed(() => false))
   const showCurrent = useDateCurrent()
 
   const sortedRangeValues = computed(() =>
@@ -53,10 +55,13 @@ export default function useCellClassName(props: CellClassNameProps) {
         {
           [`${prefixCls}-cell-in-view`]: isInView,
           [`${prefixCls}-cell-today`]: showCurrent.value && isToday,
-          [`${prefixCls}-cell-selected`]: isSelected,
-          [`${prefixCls}-cell-range-start`]: isRangeStart,
-          [`${prefixCls}-cell-range-end`]: isRangeEnd,
-          [`${prefixCls}-cell-in-range`]: isInRange,
+          [`${prefixCls}-cell-selected`]: !preview.value && isSelected,
+          [`${prefixCls}-cell-range-start`]: !preview.value && isRangeStart,
+          [`${prefixCls}-cell-range-end`]: !preview.value && isRangeEnd,
+          [`${prefixCls}-cell-in-range`]: !preview.value && isInRange,
+          [`${prefixCls}-cell-hover-range-start`]: preview.value && isRangeStart,
+          [`${prefixCls}-cell-hover-range-end`]: preview.value && isRangeEnd,
+          [`${prefixCls}-cell-hover-in-range`]: preview.value && isInRange,
           [`${prefixCls}-cell-disabled`]: disabled,
         },
         cellData.classNames,

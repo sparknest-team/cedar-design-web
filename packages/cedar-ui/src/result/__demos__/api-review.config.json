@@ -1,0 +1,125 @@
+{
+  "fields": [
+    {
+      "name": "status",
+      "description": "结果页显示的状态",
+      "type": "\"info\" | \"success\" | \"warning\" | \"danger\" | \"question\" | \"empty\" | \"403\" | \"404\" | \"500\"",
+      "defaultValue": "\"info\"",
+      "kind": "enum",
+      "options": [
+        "info",
+        "success",
+        "warning",
+        "danger",
+        "question",
+        "empty",
+        "403",
+        "404",
+        "500"
+      ],
+      "initial": "info"
+    },
+    {
+      "name": "title",
+      "description": "标题内容",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "subtitle",
+      "description": "子标题内容",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "image-size",
+      "description": "状态图形尺寸，数字表示 px",
+      "type": "string | number",
+      "defaultValue": "undefined",
+      "kind": "scalar"
+    },
+    {
+      "name": "animation",
+      "description": "是否启用状态图形动画",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    }
+  ],
+  "events": [],
+  "scenarios": [
+    {
+      "name": "icon",
+      "kind": "slot",
+      "demos": [
+        "all.vue",
+        "custom.vue"
+      ]
+    },
+    {
+      "name": "title",
+      "kind": "slot",
+      "demos": [
+        "basic.vue",
+        "403.vue",
+        "404.vue",
+        "500.vue",
+        "all.vue",
+        "custom.vue",
+        "error.vue",
+        "success.vue",
+        "warning.vue"
+      ]
+    },
+    {
+      "name": "subtitle",
+      "kind": "slot",
+      "demos": [
+        "basic.vue",
+        "403.vue",
+        "404.vue",
+        "500.vue",
+        "all.vue",
+        "custom.vue",
+        "error.vue",
+        "success.vue",
+        "warning.vue"
+      ]
+    },
+    {
+      "name": "extra",
+      "kind": "slot",
+      "demos": [
+        "basic.vue",
+        "403.vue",
+        "404.vue",
+        "500.vue",
+        "all.vue",
+        "custom.vue",
+        "error.vue",
+        "success.vue",
+        "warning.vue"
+      ]
+    },
+    {
+      "name": "default",
+      "kind": "slot",
+      "demos": []
+    }
+  ],
+  "slotNames": [
+    "extra",
+    "icon",
+    "title",
+    "subtitle"
+  ],
+  "slotDefaults": {
+    "extra": true,
+    "icon": false,
+    "title": false,
+    "subtitle": false
+  },
+  "methodNames": []
+}

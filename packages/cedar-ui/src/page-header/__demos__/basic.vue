@@ -1,26 +1,25 @@
 <template>
-  <div :style="{ background: 'var(--color-fill-2)', padding: '28px' }">
+  <c-card variant="outline" size="md">
     <c-page-header
-      :style="{ background: 'var(--color-bg-2)' }"
       show-back
-      title="Cedar Design"
-      subtitle="页面级标题区"
+      title="设计系统"
+      subtitle="项目概览"
       @back="onBack"
     >
       <template #extra>
-        <c-radio-group type="button" default-value="md">
-          <c-radio value="xs">xs</c-radio>
-          <c-radio value="sm">sm</c-radio>
-          <c-radio value="md">md</c-radio>
-        </c-radio-group>
+        <c-space size="sm" wrap>
+          <c-button @click="onFollow">关注</c-button>
+          <c-button status="primary" @click="onCreate">创建任务</c-button>
+        </c-space>
       </template>
     </c-page-header>
-  </div>
+  </c-card>
 </template>
 
-<script lang="ts" setup>
-import { Message } from '@cedarjs/ui'
-const onBack = () => {
-  Message.info('点击返回')
-}
+<script setup lang="ts">
+import { Message } from "@cedarjs/ui";
+
+const onBack = () => Message.info("点击返回");
+const onFollow = () => Message.success("已关注项目");
+const onCreate = () => Message.info("点击创建任务");
 </script>

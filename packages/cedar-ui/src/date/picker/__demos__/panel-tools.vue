@@ -1,27 +1,27 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-const selected = ref('2025-01-15')
-const viewport = ref('2025-01-01')
-const acceptNavigation = ref(true)
+import { ref } from "vue";
+const selected = ref("2025-01-15");
+const viewport = ref("2025-01-01");
+const acceptNavigation = ref(true);
 const shortcuts = [
-  { label: '月初', value: '2025-01-01' },
-  { label: '下个月', value: () => '2025-02-01' },
-  { label: '不可选', value: '2025-03-01', disabled: true },
-]
+  { label: "月初", value: "2025-01-01" },
+  { label: "下个月", value: () => "2025-02-01" },
+  { label: "不可选", value: "2025-03-01", disabled: true },
+];
 function navigate(value: unknown) {
-  if (acceptNavigation.value && typeof value === 'string') viewport.value = value
+  if (acceptNavigation.value && typeof value === "string")
+    viewport.value = value;
 }
 </script>
 <template>
   <div>
     <p>选择值：{{ selected }}；视口：{{ viewport }}</p>
-    <label><input v-model="acceptNavigation" type="checkbox" /> 接受视口导航</label>
+    <c-checkbox v-model="acceptNavigation"> 接受视口导航</c-checkbox>
     <c-date-picker
       v-model="selected"
       :picker-value="viewport"
       :shortcuts="shortcuts"
       :disable-confirm="false"
-      
       @update:picker-value="navigate"
     />
     <p>范围快捷项走同一套确认与校验。</p>

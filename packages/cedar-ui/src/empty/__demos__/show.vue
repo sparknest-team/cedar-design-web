@@ -1,6 +1,15 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+const showIcon = ref(true)
+const showDescription = ref(true)
+</script>
+
 <template>
-  <c-space direction="vertical" fill>
-    <c-empty description="隐藏图标" :show-icon="false" />
-    <c-empty description="隐藏描述" :show-description="false" />
+  <c-space direction="column" :size="16">
+    <c-space wrap>
+      <c-button @click="showIcon = !showIcon">Toggle icon</c-button>
+      <c-button @click="showDescription = !showDescription">Toggle description</c-button>
+    </c-space>
+    <c-empty data-demo-empty description="Dynamic empty state" :show-icon="showIcon" :show-description="showDescription" />
   </c-space>
 </template>

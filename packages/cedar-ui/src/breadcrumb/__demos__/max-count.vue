@@ -10,7 +10,7 @@
     </c-breadcrumb>
     <c-breadcrumb :routes="maxRoutes" :max-count="3" @click.prevent>
       <template #more-icon="{ omittedItems }">
-        <c-tooltip :content="omittedItems.map((item) => item.label).join(' / ')">
+        <c-tooltip :trigger="['hover', 'focus', 'click']" :content="omittedItems.map((item) => item.label).join(' / ')">
           <c-icon-more />
         </c-tooltip>
       </template>

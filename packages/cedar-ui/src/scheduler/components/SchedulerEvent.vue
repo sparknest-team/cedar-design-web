@@ -19,7 +19,7 @@
     @pointerdown="pointerDown($event, false)"
     @click.capture="captureClick"
     @dragstart="startDrag"
-    @dragend="emit('drag-end')"
+    v-on="{ dragend: onNativeEnd }"
   >
     <CButton
       :class="n('event-button')"
@@ -92,7 +92,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref, watch } from "vue";
+import { computed, onBeforeUnmount, onMounted, onActivated, onDeactivated, ref, shallowRef, watch } from "vue";
 import CButton from "../../button";
 import { createNamespace } from "../../_utils/global-config";
 import type { SchedulerEvent } from "../core";
@@ -133,6 +133,15 @@ defineSlots<{ default(props: { event: SchedulerEvent }): unknown }>();
 const canModify = computed(
   () => props.movable !== false && !props.disabled && !props.event.readonly,
 );
+const canResize = computed(() => !!props.resizable && props.event.resizable !== false && !props.event.milestone);
+let nativeVersion: number | undefined;
+const onNativeEnd = shallowRef<() => void>(() => {});
+function finishNative() {
+  const owned = nativeVersion !== undefined;
+  nativeVersion = undefined;
+  onNativeEnd.value = () => {};
+  if (owned) emit("drag-end");
+}
 const eventTheme = computed(() => ({
   ...(props.event.color
     ? { "--c-scheduler-event-color": props.event.color }
@@ -153,20 +162,31 @@ const eventTheme = computed(() => ({
     : {}),
 }));
 function begin(event: DragEvent, resize: SchedulerResize) {
+  if (!available()) return;
   if (
     props.movable === false ||
     props.disabled ||
     props.event.readonly ||
-    (resize && props.event.resizable === false)
+    (resize && !canResize.value)
   ) {
     event.preventDefault();
     return;
   }
+  const version = ++managedVersion;
+  const item = props.event;
+  cancelGesture();
+  finishNative();
+  const current = () => available() && version === managedVersion && props.event === item && canModify.value && (!resize || canResize.value);
+  if (!current()) return;
   if (event.dataTransfer) {
     event.dataTransfer.effectAllowed = "move";
-    event.dataTransfer.setData("text/plain", props.event.id);
+    if (!current()) return;
+    event.dataTransfer.setData("text/plain", item.id);
+    if (!current()) return;
   }
-  emit("drag-start", props.event, resize);
+  nativeVersion = version;
+  onNativeEnd.value = () => { if (current() && nativeVersion === version) finishNative(); };
+  emit("drag-start", item, resize);
 }
 function startDrag(event: DragEvent) {
   begin(event, false);
@@ -186,6 +206,8 @@ let cancelGesture = () => {};
 let detach = () => {};
 let suppressClick = false;
 let resetClick: ReturnType<typeof setTimeout> | undefined;
+let mounted = false, active = true, disposed = false, managedVersion = 0;
+const available = () => mounted && active && !disposed;
 function captureClick(event: MouseEvent) {
   if (suppressClick) {
     event.preventDefault();
@@ -194,22 +216,38 @@ function captureClick(event: MouseEvent) {
 }
 function pointerDown(event: PointerEvent, resize: SchedulerResize) {
   if (
-    (resize && props.event.resizable === false) ||
+    !available() ||
+    (resize && !canResize.value) ||
     event.button !== 0 ||
     props.movable === false ||
     props.disabled ||
     props.event.readonly
   )
     return;
+  const previous = managedVersion;
+  finishNative();
+  if (!available() || previous !== managedVersion) return;
   if (props.managedPointer) {
-    const start = () =>
+    const version = ++managedVersion;
+    cancelGesture();
+    clearTimeout(resetClick);
+    suppressClick = false;
+    const item = props.event;
+    const current = () => available() && version === managedVersion && props.managedPointer && props.event === item && canModify.value && (!resize || canResize.value);
+    let started = false, completed = false;
+    const start = () => {
+      if (!current() || started) return;
+      started = true;
       emit("pointer-start", event, resize, (moved) => {
+        if (!current() || completed) return;
+        completed = true;
         suppressClick = moved;
         clearTimeout(resetClick);
         resetClick = setTimeout(() => {
-          suppressClick = false;
+          if (current()) suppressClick = false;
         }, 0);
       });
+    };
     if (event.pointerType !== "touch") {
       start();
       return;
@@ -217,7 +255,9 @@ function pointerDown(event: PointerEvent, resize: SchedulerResize) {
     const pointerId = event.pointerId;
     const x = event.clientX;
     const y = event.clientY;
+    let waiting = true;
     const timer = setTimeout(() => {
+      if (!current() || !waiting) return;
       cleanup();
       start();
     }, 350);
@@ -232,44 +272,63 @@ function pointerDown(event: PointerEvent, resize: SchedulerResize) {
       if (next.pointerId === pointerId) cleanup();
     };
     const cleanup = () => {
+      if (!waiting) return;
+      waiting = false;
       clearTimeout(timer);
       document.removeEventListener("pointermove", move, true);
       document.removeEventListener("pointerup", end, true);
       document.removeEventListener("pointercancel", end, true);
-      cancelGesture = () => {};
+      document.removeEventListener("keydown", key);
+      window.removeEventListener("blur", cleanup);
+      if (cancelGesture === cleanup) cancelGesture = () => {};
     };
-    cancelGesture();
+    const key = (next: KeyboardEvent) => { if (next.key === "Escape") cleanup(); };
     cancelGesture = cleanup;
     document.addEventListener("pointermove", move, true);
     document.addEventListener("pointerup", end, true);
     document.addEventListener("pointercancel", end, true);
+    document.addEventListener("keydown", key);
+    window.addEventListener("blur", cleanup);
     return;
   }
-  detach();
+  const version = ++managedVersion;
+  cancelGesture();
+  if (!available() || version !== managedVersion) return;
   clearTimeout(resetClick);
   suppressClick = false;
+  const origin = root.value;
+  const item = props.event;
+  if (!origin) return;
+  let live = true;
+  const owns = () => available() && version === managedVersion && root.value === origin && props.event === item && !props.managedPointer && canModify.value && (!resize || canResize.value);
+  const current = () => live && owns();
   const x = event.clientX;
   const y = event.clientY;
   const touch = event.pointerType === "touch";
   let armed = !touch;
   let holdTimer: ReturnType<typeof setTimeout> | undefined;
   const pointerId = event.pointerId;
-  const rect = root.value!.getBoundingClientRect();
-  const styles = window.getComputedStyle(root.value!);
+  const rect = origin.getBoundingClientRect();
+  if (!current()) return;
+  const styles = window.getComputedStyle(origin);
+  if (!current()) return;
   const theme: Record<string, string> = {};
   for (let index = 0; index < styles.length; index++) {
     const key = styles.item(index);
     if (key.startsWith("--c-scheduler-"))
       theme[key] = styles.getPropertyValue(key);
+    if (!current()) return;
   }
   // Teleport must retain per-instance theme overrides instead of using body defaults.
   theme["--c-scheduler-event-background"] = styles.backgroundColor;
   theme["--c-scheduler-event-background-image"] = styles.backgroundImage;
   theme["--c-scheduler-event-accent-color"] = styles.borderLeftColor;
   theme["--c-scheduler-color"] = styles.color;
+  if (!current()) return;
   ghostTheme.value = theme;
+  if (!current()) return;
   const move = (next: PointerEvent) => {
-    if (next.pointerId !== pointerId) return;
+    if (!current() || next.pointerId !== pointerId) return;
     if (!armed && Math.hypot(next.clientX - x, next.clientY - y) >= 8) {
       cancel();
       return;
@@ -279,7 +338,9 @@ function pointerDown(event: PointerEvent, resize: SchedulerResize) {
       return;
     if (!dragging.value) {
       dragging.value = true;
-      emit("drag-start", props.event, resize);
+      if (!current()) return;
+      emit("drag-start", item, resize);
+      if (!current()) return;
     }
     suppressClick = true;
     next.preventDefault();
@@ -294,34 +355,54 @@ function pointerDown(event: PointerEvent, resize: SchedulerResize) {
         width,
       };
     }
+    if (!current()) return;
     emit("pointer-move", next.clientX, next.clientY);
   };
   const cancel = () => {
+    if (!live) return;
+    live = false;
     clearTimeout(holdTimer);
-    detach();
+    detachLocal();
+    if (detach === detachLocal) detach = () => {};
+    if (cancelGesture === cancel) cancelGesture = () => {};
+    const ending = managedVersion;
     dragging.value = false;
+    if (ending !== managedVersion) return;
     ghost.value = undefined;
+    if (ending !== managedVersion) return;
     suppressClick = false;
     emit("drag-end");
   };
   const up = (next: PointerEvent) => {
-    if (next.pointerId !== pointerId) return;
+    if (!current() || next.pointerId !== pointerId) return;
     const moved = dragging.value;
     if (moved) emit("pointer-drop", next.clientX, next.clientY);
+    if (!current()) return;
     cancel();
+    if (!owns()) return;
     suppressClick = moved;
     resetClick = setTimeout(() => {
-      suppressClick = false;
+      if (owns()) suppressClick = false;
     }, 0);
   };
   const key = (next: KeyboardEvent) => {
-    if (next.key === "Escape") cancel();
+    if (current() && next.key === "Escape") cancel();
   };
   // A fresh press invalidates a gesture whose release was lost outside the page.
-  const restart = () => cancel();
+  const restart = () => { if (current()) cancel(); };
+  const pointerCancel = (next: PointerEvent) => { if (current() && next.pointerId === pointerId) cancel(); };
+  const blur = () => { if (current()) cancel(); };
+  const detachLocal = () => {
+    document.removeEventListener("pointerdown", restart, true);
+    document.removeEventListener("pointermove", move, true);
+    document.removeEventListener("pointerup", up, true);
+    document.removeEventListener("pointercancel", pointerCancel, true);
+    document.removeEventListener("keydown", key);
+    window.removeEventListener("blur", blur);
+  };
   if (touch)
     holdTimer = setTimeout(() => {
-      armed = true;
+      if (current()) armed = true;
     }, 350);
   cancelGesture = cancel;
   document.addEventListener("pointerdown", restart, true);
@@ -330,28 +411,33 @@ function pointerDown(event: PointerEvent, resize: SchedulerResize) {
     capture: true,
   });
   document.addEventListener("pointerup", up, true);
-  document.addEventListener("pointercancel", cancel, true);
+  document.addEventListener("pointercancel", pointerCancel, true);
   document.addEventListener("keydown", key);
-  window.addEventListener("blur", cancel);
-  detach = () => {
-    document.removeEventListener("pointerdown", restart, true);
-    document.removeEventListener("pointermove", move, true);
-    document.removeEventListener("pointerup", up, true);
-    document.removeEventListener("pointercancel", cancel, true);
-    document.removeEventListener("keydown", key);
-    window.removeEventListener("blur", cancel);
-  };
+  window.addEventListener("blur", blur);
+  detach = detachLocal;
 }
 watch(
-  () => [props.movable, props.disabled, props.event.readonly],
+  () => [props.movable, props.disabled, props.event.readonly, props.event.resizable, props.event, props.managedPointer, props.resizable, props.event.milestone],
   () => {
-    if (props.movable === false || props.disabled || props.event.readonly)
-      cancelGesture();
+    managedVersion++;
+    clearTimeout(resetClick);
+    suppressClick = false;
+    cancelGesture();
+    finishNative();
   },
+  { flush: "sync" },
 );
-onBeforeUnmount(() => {
+function suspend() {
+  active = false;
+  managedVersion++;
   cancelGesture();
   detach();
   clearTimeout(resetClick);
-});
+  suppressClick = false;
+  finishNative();
+}
+onMounted(() => { mounted = true; });
+onActivated(() => { active = true; });
+onDeactivated(suspend);
+onBeforeUnmount(() => { disposed = true; suspend(); mounted = false; });
 </script>

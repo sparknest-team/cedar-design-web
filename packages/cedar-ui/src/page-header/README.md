@@ -4,33 +4,42 @@ permalink: /components/page-header/
 
 # PageHeader 页头
 
+返回按钮只派发 `back` 事件，不自动调用路由或浏览器历史。示例通过 Message 显示通知；真实返回目的地由调用方处理。原生按钮支持点击、Enter 和空格。
+
 展示当前页面的标题、上下文和相关操作。API 参照 Naive UI；组件不负责固定定位、背景等业务布局与皮肤能力，可通过 `class` / `style` 实现。
 
 ## 案例
 
 ### 基础用法
 
-带返回、主标题、副标题与右侧操作。
+使用 Card 承载页头、Space 排列操作。桌面端将标题、副标题和右侧“关注”“创建任务”横向展示，点击操作查看消息反馈。
 
 <demo src="./__demos__/basic.vue"></demo>
 
 ### 页头上方内容
 
-通过 `header` 插槽展示面包屑等页头上方内容。
+使用 Card 承载页头，通过 `header` 插槽在标题上方展示面包屑，区分页面路径与当前页面信息。
 
 <demo src="./__demos__/breadcrumb.vue"></demo>
 
 ### 完整结构
 
-包含 `header`、`avatar`、正文和 `footer`。
+使用 Card 承载页头，通过 Space、Row / Col、Descriptions、Grid、Statistic 和 Divider 组合项目资料、统计和底部信息，无需自定义样式。桌面端标题与操作横向排列，资料和统计随栅格断点换行。
 
 <demo src="./__demos__/content.vue"></demo>
 
 ### 透明底色
 
-默认无底色，可用 `style` 或类名设置背景。
+页头默认透明。使用 Card 的 `tonal` 变体提供底色，展示页头自然融入外层表面，无需自定义背景样式。
 
 <demo src="./__demos__/transparent.vue"></demo>
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
 
 ## API
 

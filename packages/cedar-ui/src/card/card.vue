@@ -154,6 +154,7 @@ const RIPPLE_DELAY = 500
 
     let generation = 0
     let active = true
+let disposed = false
     let dropdownFloaterTop = 'auto'
     let dropdownFloaterLeft = 'auto'
     let dropper: ReturnType<typeof setTimeout> | undefined
@@ -164,105 +165,151 @@ const RIPPLE_DELAY = 500
       () => !isRow.value,
     )
 
-    watch(
-      () => props.floating && !isRow.value,
-      (value) => {
+const wantsFloating = () => props.floating && !isRow.value
+const available = () => active && !disposed
+function current(token: number, element: HTMLElement | null) {
+  return available() && token === generation && card.value === element
+}
 
-        nextTick(() => {
-          if (!active) return
-          if (value) floating()
-          else if (floater.value !== null || floated.value) dropdown()
-        })
-      },
-      { immediate: true },
-    )
+watch(
+  wantsFloating,
+  (value) => {
+    const token = ++generation
+    let consumed = false
+    nextTick(() => {
+      if (!available() || token !== generation || consumed || value !== wantsFloating()) {
+        return
+      }
+      consumed = true
+      if (value) {
+        floating()
+      } else if (floater.value !== null || floated.value || floaterPosition.value !== undefined) {
+        dropdown()
+      }
+    })
+  },
+  { immediate: true, flush: 'sync' },
+)
 
-    function floating() {
-      const currentGeneration = ++generation
-      clearTimeout(floater.value ?? undefined)
-      clearTimeout(dropper)
-
-      floater.value = null
-
-      floater.value = setTimeout(
-        async () => {
-          if (!card.value || currentGeneration !== generation) return
-          const { width, height, left, top } = getRect(card.value)
-          holderWidth.value = toSizeUnit(width)!
-          holderHeight.value = toSizeUnit(height)!
-          floaterWidth.value = holderWidth.value
-          floaterHeight.value = holderHeight.value
-          floaterTop.value = toSizeUnit(top)!
-          floaterLeft.value = toSizeUnit(left)!
-          floaterPosition.value = 'fixed'
-          dropdownFloaterTop = floaterTop.value
-          dropdownFloaterLeft = floaterLeft.value
-          showFloatingButtons.value = true
-
-          await doubleRaf()
-          if (!card.value || currentGeneration !== generation) return
-
-          floaterTop.value = '0'
-          floaterLeft.value = '0'
-          floaterWidth.value = '100vw'
-          floaterHeight.value = '100vh'
-          contentHeight.value = 'auto'
-          opacity.value = '1'
-          floaterOverflow.value = 'auto'
-          floated.value = true
-        },
-        props.ripple ? RIPPLE_DELAY : 0,
-      )
-    }
-
-    function dropdown() {
-      generation++
-      clearTimeout(dropper)
-      clearTimeout(floater.value ?? undefined)
-      floater.value = null
-
+function floating() {
+  if (!available() || !wantsFloating()) {
+    return
+  }
+  const token = ++generation
+  const element = card.value
+  let consumed = false
+  clearTimeout(floater.value ?? undefined)
+  clearTimeout(dropper)
+  dropper = undefined
+  floater.value = setTimeout(
+    async () => {
+      if (!element || !current(token, element) || !wantsFloating() || consumed) {
+        return
+      }
+      consumed = true
+      const { width, height, left, top } = getRect(element)
+      // Measurement can invoke application-provided geometry hooks.
+      if (!current(token, element) || !wantsFloating()) {
+        return
+      }
+      holderWidth.value = toSizeUnit(width)!
+      holderHeight.value = toSizeUnit(height)!
       floaterWidth.value = holderWidth.value
       floaterHeight.value = holderHeight.value
-      floaterTop.value = dropdownFloaterTop
-      floaterLeft.value = dropdownFloaterLeft
-      contentHeight.value = '0px'
-      opacity.value = '0'
-      showFloatingButtons.value = false
+      floaterTop.value = toSizeUnit(top)!
+      floaterLeft.value = toSizeUnit(left)!
+      floaterPosition.value = 'fixed'
+      dropdownFloaterTop = floaterTop.value
+      dropdownFloaterLeft = floaterLeft.value
+      showFloatingButtons.value = true
 
-      dropper = setTimeout(() => {
-        holderWidth.value = 'auto'
-        holderHeight.value = 'auto'
-        floaterWidth.value = '100%'
-        floaterHeight.value = '100%'
-        floaterTop.value = 'auto'
-        floaterLeft.value = 'auto'
-        dropdownFloaterTop = 'auto'
-        dropdownFloaterLeft = 'auto'
-        floaterOverflow.value = 'hidden'
-        floaterPosition.value = undefined
-        floated.value = false
-      }, props.floatingDuration)
+      // The existing non-abortable helper still settles; only this continuation
+      // owns permission to expand. It is not a CSS animation-duration timer.
+      await doubleRaf()
+      if (!current(token, element) || !wantsFloating()) {
+        return
+      }
+      floaterTop.value = '0'
+      floaterLeft.value = '0'
+      floaterWidth.value = '100vw'
+      floaterHeight.value = '100vh'
+      contentHeight.value = 'auto'
+      opacity.value = '1'
+      floaterOverflow.value = 'auto'
+      floated.value = true
+    },
+    props.ripple ? RIPPLE_DELAY : 0,
+  )
+}
+
+function dropdown() {
+  if (!available() || wantsFloating()) {
+    return
+  }
+  const token = ++generation
+  const element = card.value
+  let consumed = false
+  clearTimeout(dropper)
+  clearTimeout(floater.value ?? undefined)
+  floater.value = null
+  floaterWidth.value = holderWidth.value
+  floaterHeight.value = holderHeight.value
+  floaterTop.value = dropdownFloaterTop
+  floaterLeft.value = dropdownFloaterLeft
+  contentHeight.value = '0px'
+  opacity.value = '0'
+  showFloatingButtons.value = false
+  dropper = setTimeout(() => {
+    if (!current(token, element) || wantsFloating() || consumed) {
+      return
     }
-
-    function close() {
-      emit('update:floating', false)
-    }
-
-    function handleClick(e: Event) {
-      emit('click', e)
-    }
-
-
-    onBeforeUnmount(cleanup)
-    onDeactivated(cleanup)
-    onActivated(() => {
-      active = true
-      if (props.floating && !isRow.value) floating()
-    })
-    function cleanup() {
-      active = false
-      clearTimeout(floater.value ?? undefined)
-      clearTimeout(dropper)
-      generation++
-    }
+    consumed = true
+    dropper = undefined
+    holderWidth.value = 'auto'
+    holderHeight.value = 'auto'
+    floaterWidth.value = '100%'
+    floaterHeight.value = '100%'
+    floaterTop.value = 'auto'
+    floaterLeft.value = 'auto'
+    dropdownFloaterTop = 'auto'
+    dropdownFloaterLeft = 'auto'
+    floaterOverflow.value = 'hidden'
+    floaterPosition.value = undefined
+    floated.value = false
+  }, props.floatingDuration)
+}
+function close() {
+  if (available()) {
+    emit('update:floating', false)
+  }
+}
+function handleClick(e: Event) {
+  if (available()) {
+    emit('click', e)
+  }
+}
+onBeforeUnmount(() => {
+  disposed = true
+  cleanup()
+})
+onDeactivated(cleanup)
+onActivated(() => {
+  if (disposed || active) {
+    return
+  }
+  active = true
+  if (wantsFloating()) {
+    floating()
+  } else if (floaterPosition.value !== undefined || floated.value) {
+    dropdown()
+  }
+})
+function cleanup() {
+  active = false
+  generation++
+  clearTimeout(floater.value ?? undefined)
+  clearTimeout(dropper)
+  floater.value = null
+  dropper = undefined
+}
 </script>

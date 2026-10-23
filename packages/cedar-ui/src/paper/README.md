@@ -8,13 +8,26 @@ Paper 是承载内容的底层表面：背景、圆角、可选边框与阴影�
 
 适用于自定义面板、表单分区、侧栏底板以及弹层内部表面。Paper 不负责弹层定位、焦点管理，也不会自动赋予按钮语义。交互内容请使用 Button 等语义组件。
 
-## 示例
+## 案例
 
 ```html
 <c-paper bordered>基础边框</c-paper>
 <c-paper bordered :elevation="2" style="padding: 16px">边框与阴影独立</c-paper>
 <c-paper :width="120" height="4rem" :radius="8" />
 ```
+
+## 动态属性
+
+边框与阴影独立切换；显式 radius 优先于 round，取消显式值后恢复圆形。Paper 不提供按钮语义，示例在内部使用原生按钮，并由父级统计冒泡的 click。
+
+<demo src="./__demos__/live-properties.vue"></demo>
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
 
 ## API
 

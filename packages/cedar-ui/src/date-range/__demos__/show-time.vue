@@ -6,6 +6,7 @@
     format="YYYY-MM-DD HH:mm:ss"
     clearable
   />
+  <p role="status" aria-label="Date-time range model">{{ JSON.stringify(range) ?? 'undefined' }}</p>
 </template>
 
 <script setup>

@@ -76,7 +76,7 @@ const styleDirAliases: Record<string, string> = {
   LayoutFooter: "layout",
   LayoutHeader: "layout",
   LayoutSider: "layout",
-  MenuOption: "dropdown-menu",
+  MenuOption: "menu",
   Optgroup: "select",
   Option: "select",
   SkeletonLine: "skeleton",
@@ -95,7 +95,6 @@ const styleDirAliases: Record<string, string> = {
 
 /** Components without a style directory; resolve without style side effects. */
 const noStyleComponents = new Set([
-  "Color",
   "Context",
   "StyleProvider",
 ]);

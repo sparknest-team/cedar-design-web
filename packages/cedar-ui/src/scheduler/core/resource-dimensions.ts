@@ -112,6 +112,11 @@ export function moveSchedulerResourceRow(
     from.resourceIds.some((id) => !resourceIds.includes(id))
   )
     throw new RangeError("Incompatible scheduler resource rows");
+  if (
+    from.resourceIds.length === to.resourceIds.length &&
+    from.resourceIds.every((id, index) => id === to.resourceIds[index])
+  )
+    return [...resourceIds];
   return [
     ...new Set([
       ...resourceIds.filter((id) => !from.resourceIds.includes(id)),

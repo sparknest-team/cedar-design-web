@@ -1,11 +1,13 @@
 import type { PropType } from 'vue'
-import type { DateTimePickerOptions } from '../date/time-picker-options'
-import type { DateRangePickerOptions } from './picker-props'
-import { fieldDecoratorProps } from '../field-decorator/props'
+import { fieldPresentationProps } from '../_components/field-presentation/props'
 import { popupContainerProp, type PopupContainer } from '../_utils/popup-container'
-import { dateRuleProps, dateRangeValueProps } from '../date/core-props'
+import { dateRangeValueProps, dateRuleProps } from '../date/core-props'
+import type { DateTimePickerOptions } from '../date/time-picker-options'
+import { fieldDecoratorProps } from '../field-decorator/props'
+import type { DateRangePickerOptions } from './picker-props'
 
 export const dateRangeProps = {
+  ...fieldPresentationProps,
   ...dateRuleProps,
   ...dateRangeValueProps,
 
@@ -13,7 +15,10 @@ export const dateRangeProps = {
   defaultOpen: Boolean,
   disableConfirm: Boolean,
   popupContainer: popupContainerProp,
-  popupProps: { type: Object as PropType<Record<string, unknown> & { popupContainer?: PopupContainer }>, default: () => ({}) },
+  popupProps: {
+    type: Object as PropType<Record<string, unknown> & { popupContainer?: PopupContainer }>,
+    default: () => ({}),
+  },
   dateRangePickerProps: { type: Object as PropType<DateRangePickerOptions>, default: () => ({}) },
   timePickerProps: { type: Object as PropType<DateTimePickerOptions>, default: () => ({}) },
   inputEditable: { type: Boolean, default: true },

@@ -7,6 +7,9 @@ import {
   toRefs,
   ComponentPublicInstance,
   onMounted,
+  onActivated,
+  onDeactivated,
+  onBeforeUnmount,
   watch,
   nextTick,
   toRef,
@@ -86,7 +89,13 @@ export default defineComponent({
   setup(props, { emit, attrs, slots }) {
     const prefixCls = getPrefixCls('mention')
 
-    let styleDeclaration: CSSStyleDeclaration
+    const active = ref(true)
+    let disposed = false
+    const lifecycleEpoch = ref(0)
+    const available = () => active.value && !disposed
+    let mirrorGeneration = 0
+    let styleGeneration = 0
+    const invalidateMirror = () => { mirrorGeneration++ }
 
     const { mergedDisabled, eventHandlers } = useFormItem({
       disabled: toRef(props, 'disabled'),
@@ -121,12 +130,13 @@ export default defineComponent({
       }
     }
 
-    const inputRef = ref<HTMLElement>()
+    const inputRef = ref<{ textareaRef?: HTMLTextAreaElement; focus?: () => void; blur?: () => void }>()
 
     const measureText = computed(() => measureInfo.value.text)
     const filterOption = ref(true)
 
     const handleInput = (value: string, e: Event) => {
+      if (!available() || mergedDisabled.value) return
       const text = getTextBeforeSelection(e.target as HTMLInputElement)
       const lastMeasure = getLastMeasureIndex(text, props.prefix)
       if (lastMeasure.location > -1) {
@@ -152,6 +162,7 @@ export default defineComponent({
     }
 
     const handleClear = (ev: Event) => {
+      if (!available() || mergedDisabled.value) return
       _value.value = ''
       emit('update:modelValue', '')
       emit('change', '')
@@ -161,18 +172,29 @@ export default defineComponent({
 
     const _open = ref(false)
     const computedOpen = computed(
-      () => _open.value && measureInfo.value.measuring && validOptionInfos.value.length > 0,
+      () => available() && !mergedDisabled.value && _open.value && measureInfo.value.measuring && validOptionInfos.value.length > 0,
     )
 
     const handleResize = () => {
-      mirrorStyle.value = getSizeStyles(styleDeclaration)
+      if (!available() || props.type !== 'textarea') return
+      const element = inputRef.value?.textareaRef
+      const view = element?.ownerDocument.defaultView
+      if (!element || !view) return
+      const generation = ++styleGeneration
+      const current = () => available() && generation === styleGeneration && props.type === 'textarea' && element === inputRef.value?.textareaRef
+      const declaration = view.getComputedStyle(element)
+      if (!current()) return
+      const styles = getSizeStyles(declaration)
+      if (current()) mirrorStyle.value = styles
     }
 
     const handleOpenChange = (open: boolean) => {
+      if (!available() || mergedDisabled.value) return
       _open.value = open
     }
 
     const handleSelect = (key: string, e: Event) => {
+      if (!available() || mergedDisabled.value) return
       const { value } = optionInfoMap.get(key) ?? {}
       const measureStart = measureInfo.value.location
       const measureEnd = measureInfo.value.location + measureInfo.value.text.length
@@ -208,14 +230,7 @@ export default defineComponent({
 
     const mirrorStyle = ref()
 
-    onMounted(() => {
-      // @ts-ignore
-      if (props.type === 'textarea' && inputRef.value?.textareaRef) {
-        // @ts-ignore
-        styleDeclaration = window.getComputedStyle(inputRef.value.textareaRef)
-        mirrorStyle.value = getSizeStyles(styleDeclaration)
-      }
-    })
+    onMounted(handleResize)
 
     const getOptionContentFunc = (item: SelectOptionInfo) => {
       if (isFunction(slots.option) && item.value) {
@@ -254,34 +269,76 @@ export default defineComponent({
 
     const mirrorRef = ref<HTMLElement>()
 
-    watch(computedOpen, (visible) => {
-      if (props.type === 'textarea' && visible) {
-        nextTick(() => {
-          if (
-            // @ts-ignore
-            inputRef.value?.textareaRef &&
-            // @ts-ignore
-            inputRef.value.textareaRef.scrollTop > 0
-          ) {
-            // @ts-ignore
-            mirrorRef.value?.scrollTo(0, inputRef.value.textareaRef.scrollTop)
-          }
-        })
-      }
+    const mirrorSources = [computedOpen, computedValue, measureInfo, validOptionInfos, () => props.type, mergedDisabled]
+    watch(mirrorSources, () => { invalidateMirror(); styleGeneration++ }, { flush: 'sync' })
+    // Capture the rendered textarea/mirror pair, not a previous mode's refs.
+    watch(mirrorSources, () => {
+      if (!available() || props.type !== 'textarea') return
+      handleResize()
+      if (!computedOpen.value) return
+      const input = inputRef.value
+      const element = input?.textareaRef
+      const mirror = mirrorRef.value
+      if (!element || !mirror) return
+      const generation = ++mirrorGeneration
+      const current = () => available() && generation === mirrorGeneration && computedOpen.value && props.type === 'textarea' && input === inputRef.value && element === inputRef.value?.textareaRef && mirror === mirrorRef.value
+      nextTick(() => {
+        if (!current()) return
+        // Consume once, before a geometry getter or native method can reenter.
+        mirrorGeneration++
+        const consumedGeneration = mirrorGeneration
+        const top = element.scrollTop
+        if (!available() || consumedGeneration !== mirrorGeneration || !computedOpen.value || input !== inputRef.value || element !== inputRef.value?.textareaRef || mirror !== mirrorRef.value) return
+        if (Number.isFinite(top)) mirror.scrollTo(0, Math.max(0, top))
+      })
+    }, { flush: 'post' })
+
+    onDeactivated(() => {
+      active.value = false
+      lifecycleEpoch.value++
+      invalidateMirror()
+      styleGeneration++
+    })
+    onBeforeUnmount(() => {
+      disposed = true
+      active.value = false
+      lifecycleEpoch.value++
+      invalidateMirror()
+      styleGeneration++
+    })
+    onActivated(() => {
+      if (active.value || disposed) return
+      lifecycleEpoch.value++
+      active.value = true
     })
 
+    /** Make the input focus while its owner is active and enabled. @public */
+    const focus = () => {
+      if (available() && !mergedDisabled.value) inputRef.value?.focus?.()
+    }
+    /** Make the input blur while its owner is active. @public */
+    const blur = () => {
+      if (available()) inputRef.value?.blur?.()
+    }
+    const onKeydown = (event: KeyboardEvent) => {
+      if (available() && !mergedDisabled.value) handleKeyDown(event)
+    }
+
     const onFocus = (ev: FocusEvent) => {
+      if (!available() || mergedDisabled.value) return
       emit('focus', ev)
     }
     const onBlur = (ev: FocusEvent) => {
+      if (!available()) return
       emit('blur', ev)
     }
 
     const render = () => {
+      const epoch = lifecycleEpoch.value
       if (props.type === 'textarea') {
         return (
           <div class={prefixCls}>
-            <ResizeObserver onResize={handleResize}>
+            <ResizeObserver onResize={() => { if (epoch === lifecycleEpoch.value) handleResize() }}>
               <Textarea
                 {...attrs}
                 ref={inputRef}
@@ -293,7 +350,7 @@ export default defineComponent({
                 onFocus={onFocus}
                 onBlur={onBlur}
                 // @ts-ignore
-                onKeydown={handleKeyDown}
+                onKeydown={onKeydown}
               />
             </ResizeObserver>
             {measureInfo.value.measuring && validOptionInfos.value.length > 0 && (
@@ -344,7 +401,7 @@ export default defineComponent({
             onFocus={onFocus}
             onBlur={onBlur}
             // @ts-ignore
-            onKeydown={handleKeyDown}
+            onKeydown={onKeydown}
           />
         </Trigger>
       )
@@ -352,28 +409,10 @@ export default defineComponent({
 
     return {
       inputRef,
+      focus,
+      blur,
       render,
     }
-  },
-  methods: {
-    /**
-     * @zh 使输入框获取焦点
-     * @en Make the input box focus
-     * @public
-     * @version 2.24.0
-     */
-    focus() {
-      ;(this.inputRef as HTMLInputElement)?.focus()
-    },
-    /**
-     * @zh 使输入框失去焦点
-     * @en Make the input box lose focus
-     * @public
-     * @version 2.24.0
-     */
-    blur() {
-      ;(this.inputRef as HTMLInputElement)?.blur()
-    },
   },
   render() {
     return this.render()

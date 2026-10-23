@@ -1,4 +1,4 @@
-import { nextTick, onBeforeUnmount, ref } from "vue";
+import { nextTick, onBeforeUnmount, onMounted, onActivated, onDeactivated, ref } from "vue";
 import type { SchedulerEvent } from "./core";
 import type { SchedulerResize } from "./drag";
 
@@ -21,8 +21,10 @@ export function useTimelinePointer(options: {
     width: number;
     height: number;
   }>();
+  let mounted = false, suspended = false, disposed = false, generation = 0;
+  const available = () => mounted && !suspended && !disposed;
   let cleanup = () => {};
-  const cancel = () => cleanup();
+  const cancel = () => { generation++; cleanup(); };
   function begin(
     pointer: PointerEvent,
     event: SchedulerEvent,
@@ -30,18 +32,34 @@ export function useTimelinePointer(options: {
     resourceId: string,
     finished: (moved: boolean) => void,
   ) {
-    cancel();
-    if (options.locked() || pointer.button !== 0 || event.readonly) return;
+    if (!available()) return;
+    const request = ++generation;
+    cleanup();
+    if (request !== generation || !available() || options.locked() || pointer.button !== 0 || event.readonly) return;
+    if (request !== generation || !available()) return;
     const origin = pointer.currentTarget as HTMLElement;
     const viewport =
       origin.closest<HTMLElement>(".c-scheduler__virtual-rows") ??
       origin.closest<HTMLElement>(".c-scheduler__main");
     const rect = origin.getBoundingClientRect();
+    if (request !== generation || !available()) return;
     let x = pointer.clientX,
       y = pointer.clientY,
       moved = false,
       frame = 0,
       active = true;
+    let frameVersion = 0;
+    const current = () => active && request === generation && available();
+    const schedule = () => {
+      if (!current()) return;
+      const version = ++frameVersion;
+      frame = requestAnimationFrame(() => {
+        if (!current() || version !== frameVersion) return;
+        frameVersion++;
+        frame = 0;
+        tick();
+      });
+    };
     const edge = (position: number, start: number, end: number) =>
       position < start || position > end
         ? 0
@@ -51,31 +69,42 @@ export function useTimelinePointer(options: {
             ? 12 * (1 - (end - position) / 40)
             : 0;
     const tick = () => {
-      if (!active || options.locked()) {
+      if (!current()) return;
+      const locked = options.locked();
+      if (!current()) return;
+      if (locked) {
         cancel();
         return;
       }
       if (moved && viewport) {
         const area = viewport.getBoundingClientRect();
+        if (!current()) return;
         const dx = edge(x, area.left, area.right),
           dy = edge(y, area.top, area.bottom);
         if (dx || dy) {
           const left = viewport.scrollLeft,
             top = viewport.scrollTop;
+          if (!current()) return;
           viewport.scrollLeft += dx;
+          if (!current()) return;
           viewport.scrollTop += dy;
+          if (!current()) return;
           if (left !== viewport.scrollLeft || top !== viewport.scrollTop) {
             viewport.dispatchEvent(new Event("scroll"));
+            if (!current()) return;
             void nextTick(() => {
-              if (active) options.move(x, y);
+              if (current()) options.move(x, y);
             });
           }
         }
       }
-      frame = requestAnimationFrame(tick);
+      schedule();
     };
     const move = (next: PointerEvent) => {
-      if (next.pointerId !== pointer.pointerId) return;
+      if (!current() || next.pointerId !== pointer.pointerId) return;
+      const locked = options.locked();
+      if (!current()) return;
+      if (locked) { cancel(); return; }
       x = next.clientX;
       y = next.clientY;
       if (!moved && Math.hypot(x - pointer.clientX, y - pointer.clientY) < 5)
@@ -83,6 +112,7 @@ export function useTimelinePointer(options: {
       if (!moved) {
         moved = true;
         options.start(event, resize, resourceId);
+        if (!current()) return;
       }
       next.preventDefault();
       if (!resize)
@@ -93,32 +123,39 @@ export function useTimelinePointer(options: {
           width: rect.width,
           height: rect.height,
         };
+      if (!current()) return;
       options.move(x, y);
     };
     const up = (next: PointerEvent) => {
-      if (next.pointerId !== pointer.pointerId) return;
-      if (moved && !options.locked()) options.drop(next.clientX, next.clientY);
-      cancel();
+      if (!current() || next.pointerId !== pointer.pointerId) return;
+      const locked = options.locked();
+      if (!current()) return;
+      if (moved && !locked) options.drop(next.clientX, next.clientY);
+      if (current()) cancel();
     };
     const key = (next: KeyboardEvent) => {
-      if (next.key === "Escape") cancel();
+      if (current() && next.key === "Escape") cancel();
     };
     const pointerCancel = (next: PointerEvent) => {
-      if (next.pointerId === pointer.pointerId) cancel();
+      if (current() && next.pointerId === pointer.pointerId) cancel();
     };
+    const blur = () => { if (current()) cancel(); };
     cleanup = () => {
       if (!active) return;
       active = false;
+      frameVersion++;
+      cleanup = () => {};
+      const ending = generation;
       cancelAnimationFrame(frame);
       document.removeEventListener("pointermove", move, true);
       document.removeEventListener("pointerup", up, true);
       document.removeEventListener("pointercancel", pointerCancel, true);
       document.removeEventListener("keydown", key);
-      window.removeEventListener("blur", cancel);
+      window.removeEventListener("blur", blur);
       ghost.value = undefined;
+      if (ending !== generation) return;
       finished(moved);
-      if (moved) options.end();
-      cleanup = () => {};
+      if (moved && ending === generation) options.end();
     };
     document.addEventListener("pointermove", move, {
       capture: true,
@@ -127,9 +164,12 @@ export function useTimelinePointer(options: {
     document.addEventListener("pointerup", up, true);
     document.addEventListener("pointercancel", pointerCancel, true);
     document.addEventListener("keydown", key);
-    window.addEventListener("blur", cancel);
-    frame = requestAnimationFrame(tick);
+    window.addEventListener("blur", blur);
+    schedule();
   }
-  onBeforeUnmount(cancel);
+  onMounted(() => { mounted = true; });
+  onActivated(() => { suspended = false; });
+  onDeactivated(() => { suspended = true; cancel(); });
+  onBeforeUnmount(() => { disposed = true; cancel(); mounted = false; });
   return { begin, cancel, ghost };
 }

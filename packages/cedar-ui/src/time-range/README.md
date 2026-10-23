@@ -10,6 +10,20 @@ permalink: /components/time-range/
 
 纯面板请使用 [`TimeRangePicker`](/components/time-range-picker/)（默认无触发器）。
 
+## 案例
+
+### 基本用法
+
+<demo src="./__demos__/basic.vue"></demo>
+
+### 清除与禁用
+
+<demo src="./__demos__/status.vue"></demo>
+
+### 尺寸
+
+<demo src="./__demos__/size.vue"></demo>
+
 ### 手输与面板选择
 
 `inputEditable` 默认为 `true`（Maple 默认为 `false`）。回车或失焦提交，Esc 撤销；格式、步长、边界和禁用规则与面板一致。无效输入或父级拒绝受控更新时回到模型值；切换为不可编辑、只读或禁用会丢弃未提交输入。输入法组合期间不提交。范围两端之间移动焦点不提交。
@@ -38,15 +52,9 @@ permalink: /components/time-range/
 
 父级直接替换模型会重置草稿，但不会触发 `select` 或 `change`。示例提供“外部更新”按钮，可与用户选择、确认提交分别观察。
 
-## 案例
-
 起止输入使用同一字段焦点：Tab 在两端间切换时保留草稿，不触发 blur 校验或提交；Enter 或离开整个字段才提交，Escape 丢弃草稿。点击结束输入会激活时间面板的结束端。
 
 字段使用 PickerField → FieldDecorator；面板只负责选择，不注入表单。有效文本在回车或失焦时提交，Escape 或外部关闭丢弃未确认草稿，清除立即提交空值。四类字段的统一示例见 [Date](/components/date/#统一字段与提交)。
-
-### 基本用法
-
-<demo src="./__demos__/basic.vue"></demo>
 
 ### 模型类型与固定文字
 
@@ -70,10 +78,6 @@ permalink: /components/time-range/
 
 <demo src="./__demos__/placeholder.vue"></demo>
 
-### 清除与禁用
-
-<demo src="./__demos__/status.vue"></demo>
-
 ### 次日标记
 
 结束时间早于开始时间时，开启 `show-next-day` 会在字段与面板结束侧显示「次日」，且确认时**不再自动交换**起止时间。
@@ -82,10 +86,6 @@ permalink: /components/time-range/
 
 此示例开启文本编辑并显示模型，保留 22:00→次日06:00 的端点顺序；清除为 `undefined`，可通过重置按钮恢复。`show-next-day` 表示时间顺序与标签，不将模型自动转换为下一日日期。
 
-### 尺寸
-
-<demo src="./__demos__/size.vue"></demo>
-
 ### 独立步长示例
 
 小时候选以 0 点为起点，十二小时制只改变显示；无效步长回退为 1。
@@ -93,6 +93,19 @@ permalink: /components/time-range/
 <demo src="./__demos__/step.vue"></demo>
 
 可切换十二小时面板，分钟/秒步长保持不变；显式 `HH:mm:ss` 仍决定模型格式，AM/PM 选择转换为对应的 24 小时值。
+
+### 交互状态切换
+
+适用于营业时段等时间范围。调整禁用、只读、错误反馈，用相同数据观察变化。控制区始终可用，可以随时恢复编辑；错误外观本身不会触发表单校验。
+
+<demo src="./__demos__/state-lab.vue"></demo>
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
 
 ## API
 
@@ -148,3 +161,15 @@ Maple 的 pickerProps 可配置 optionHeight/optionCount 等外观，不可替�
 | `disable-confirm` | 跳过确认，有效选择立即提交并请求关闭 | `boolean` | `false` |
 | `show-next-day` | 结束早于开始时显示「次日」，并关闭确认时的起止交换 | `boolean` | `false` |
 | `time-range-picker-props` | 透传给 TimeRangePicker | `object` | `{}` |
+
+### Form 字段展示与确认
+
+本组件支持 `presentation`，字段 > FormItem > Form 逐层继承；未指定时为 `inline`，保留原有交互。支持值：`inline / click / dblclick`。其他编辑展示使用 Cell 入口和一份草稿，确认后才更新 v-model；取消、重置或启用 readPretty 丢弃草稿。
+
+Cedar 使用 presentation="click" / "dblclick" 在原位进入编辑，Enter/F2 也可进入；取消/Escape 丢弃草稿，确认后提交。 readPretty 为纯阅读属性，与 readonly、disabled 独立。
+
+`before-commit(value, { previousValue, signal })` 可拦截弹层保存；FormItem 先校验候选值，失败保持编辑。`open / default-open / update:open` 控制编辑层。`#read="{ value, text }"` 可自定义阅读内容。集中示例见 Form 的“各类字段统一展示”。
+
+日期／时间字段在 inline 下沿用原确认策略；在 popover/popup/dialog 中，内部纯面板隐藏确认工具栏，由编辑层提供唯一一组确认／取消。独立 DatePicker、DateRangePicker、TimePicker、TimeRangePicker 保留原有面板 API 和确认行为，不继承 Form 的字段展示。
+
+`read-pretty` 为独立布尔属性，与 `readonly`、`disabled` 同级；字段 > FormItem > Form 继承，显式 `false` 覆盖父级。默认 `false`。纯阅读不显示编辑器。

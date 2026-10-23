@@ -1,0 +1,79 @@
+{
+  "fields": [
+    {
+      "name": "size",
+      "description": "inherit",
+      "type": "number | string",
+      "defaultValue": "-",
+      "kind": "scalar"
+    },
+    {
+      "name": "color",
+      "description": "图标颜色",
+      "type": "string",
+      "defaultValue": "-",
+      "kind": "string",
+      "initial": "#5268cc"
+    },
+    {
+      "name": "rotate",
+      "description": "旋转角度",
+      "type": "number",
+      "defaultValue": "-",
+      "kind": "number"
+    },
+    {
+      "name": "spin",
+      "description": "是否旋转",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "title",
+      "description": "无障碍标题",
+      "type": "string",
+      "defaultValue": "-",
+      "kind": "string"
+    },
+    {
+      "name": "stroke-width",
+      "description": "线宽",
+      "type": "number",
+      "defaultValue": "4",
+      "kind": "number"
+    },
+    {
+      "name": "stroke-linecap",
+      "description": "端点类型",
+      "type": "'butt' | 'round' | 'square'",
+      "defaultValue": "'butt'",
+      "kind": "enum",
+      "options": [
+        "butt",
+        "round",
+        "square"
+      ],
+      "initial": "butt"
+    },
+    {
+      "name": "stroke-linejoin",
+      "description": "拐角类型",
+      "type": "'bevel' | 'inherit' | 'miter' | 'round'",
+      "defaultValue": "'miter'",
+      "kind": "enum",
+      "options": [
+        "bevel",
+        "inherit",
+        "miter",
+        "round"
+      ],
+      "initial": "miter"
+    }
+  ],
+  "methodNames": [],
+  "events": [],
+  "slotNames": [],
+  "slotDefaults": {},
+  "scenarios": []
+}

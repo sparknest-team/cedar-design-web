@@ -1,0 +1,203 @@
+{
+  "fields": [
+    {
+      "name": "model-value",
+      "description": "地图的初始值，表示所选位置的信息。",
+      "type": "Object",
+      "defaultValue": "undefined",
+      "kind": "string",
+      "initial": "review-class"
+    },
+    {
+      "name": "default-value",
+      "description": "用来设置默认地图中心点",
+      "type": "{ [key in valueKeyAlias[keys]]: any }",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "driver",
+      "description": "Fetch.genDriiver的返回值",
+      "type": "Driver",
+      "defaultValue": "undefined",
+      "kind": "scenario"
+    },
+    {
+      "name": "fetch",
+      "description": "Fetch.genFetch的返回值",
+      "type": "CoreService",
+      "defaultValue": "undefined",
+      "kind": "scenario"
+    },
+    {
+      "name": "geocoder-url",
+      "description": "geocoderUrl接口路径",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "geocoder-handler",
+      "description": "用于处理地图编码服务的响应。",
+      "type": "(longitude: number, latitude: number)=>{})",
+      "defaultValue": "undefined",
+      "kind": "callback"
+    },
+    {
+      "name": "base-path",
+      "description": "地图的基础路径，配置获取地图数据的基础 URL。",
+      "type": "string",
+      "defaultValue": "'/pe/powerpro'",
+      "kind": "string"
+    },
+    {
+      "name": "is-international",
+      "description": "指示地图是否为谷歌地图。",
+      "type": "Boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "show-name",
+      "description": "是否展示悬浮框名称",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "show-locate-me-button",
+      "description": "是否展示定位到当前位置按钮",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "show-edit-address-button",
+      "description": "是否展示修改地点悬浮按钮",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "show-map-tips",
+      "description": "是否展示地图上方tips",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "map-type",
+      "description": "要显示的地图类型。",
+      "type": "'amaps' | 'google' | 'qqmaps'",
+      "defaultValue": "'qqmaps'",
+      "kind": "enum",
+      "options": [
+        "amaps",
+        "google",
+        "qqmaps"
+      ],
+      "initial": "qqmaps"
+    },
+    {
+      "name": "enable-gis-search",
+      "description": "是否启用gis搜索(开启时fetch为必传)",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "value-key-scope",
+      "description": "一个字符串数组，表示要在地图上显示的值列表。",
+      "type": "Array",
+      "defaultValue": "() => ['longitude', 'latitude', 'address', 'name', 'adcode', 'countryCode', 'city', 'country']",
+      "kind": "string",
+      "initial": "review-class"
+    },
+    {
+      "name": "value-key-alias",
+      "description": "一个对象，表示地图键到值的映射关系。",
+      "type": "Object",
+      "defaultValue": "() => ({\n      longitude: 'longitude',\n      latitude: 'latitude',\n      address: 'address',\n      name: 'name',\n      adcode: 'adcode',\n      countryCode: 'countryCode',\n      city: 'city',\n      country: 'country',\n    })",
+      "kind": "string",
+      "initial": "review-class"
+    },
+    {
+      "name": "popup-container",
+      "type": "string | HTMLElement | false",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "json",
+      "initial": "\"body\""
+    }
+  ],
+  "events": [
+    "change",
+    "init",
+    "loading:address",
+    "loaded:address",
+    "update:modelValue"
+  ],
+  "scenarios": [
+    {
+      "name": "model-value",
+      "kind": "prop",
+      "demos": [
+        "basic.vue",
+        "google.vue",
+        "use-vmodel.vue"
+      ]
+    },
+    {
+      "name": "default-value",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "driver",
+      "kind": "prop",
+      "demos": [
+        "use-vmodel.vue"
+      ]
+    },
+    {
+      "name": "fetch",
+      "kind": "prop",
+      "demos": [
+        "basic.vue",
+        "google.vue",
+        "use-vmodel.vue"
+      ]
+    },
+    {
+      "name": "geocoder-handler",
+      "kind": "prop",
+      "demos": [
+        "basic.vue",
+        "auth.vue",
+        "google.vue"
+      ]
+    },
+    {
+      "name": "value-key-scope",
+      "kind": "prop",
+      "demos": [
+        "basic.vue",
+        "google.vue",
+        "use-vmodel.vue"
+      ]
+    },
+    {
+      "name": "value-key-alias",
+      "kind": "prop",
+      "demos": [
+        "basic.vue",
+        "google.vue",
+        "use-vmodel.vue"
+      ]
+    }
+  ],
+  "slotNames": [],
+  "slotDefaults": {},
+  "methodNames": []
+}

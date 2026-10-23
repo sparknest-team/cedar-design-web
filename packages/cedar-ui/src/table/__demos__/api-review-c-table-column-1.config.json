@@ -1,0 +1,356 @@
+{
+  "fields": [
+    {
+      "name": "data-index",
+      "description": "列信息的标识，对应TableData中的数据",
+      "type": "string",
+      "defaultValue": "-",
+      "kind": "string"
+    },
+    {
+      "name": "title",
+      "description": "列标题",
+      "type": "string",
+      "defaultValue": "-",
+      "kind": "string"
+    },
+    {
+      "name": "width",
+      "description": "列宽度",
+      "type": "number",
+      "defaultValue": "-",
+      "kind": "number"
+    },
+    {
+      "name": "min-width",
+      "description": "最小列宽",
+      "type": "number",
+      "defaultValue": "80",
+      "kind": "number"
+    },
+    {
+      "name": "align",
+      "description": "对齐方向",
+      "type": "'left' | 'center' | 'right'",
+      "defaultValue": "-",
+      "kind": "enum",
+      "options": [
+        "left",
+        "center",
+        "right"
+      ],
+      "initial": "left"
+    },
+    {
+      "name": "fixed",
+      "description": "固定位置",
+      "type": "'left' | 'right'",
+      "defaultValue": "-",
+      "kind": "enum",
+      "options": [
+        "left",
+        "right"
+      ],
+      "initial": "left"
+    },
+    {
+      "name": "ellipsis",
+      "description": "是否显示为省略",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "sortable",
+      "description": "排序相关选项",
+      "type": "TableSortable",
+      "defaultValue": "-",
+      "kind": "json",
+      "initial": "{\"sortDirections\":[\"ascend\",\"descend\"]}"
+    },
+    {
+      "name": "filterable",
+      "description": "过滤相关选项",
+      "type": "TableFilterable",
+      "defaultValue": "-",
+      "kind": "json",
+      "initial": "{\"filters\":[{\"text\":\"Review\",\"value\":\"Review\"}],\"multiple\":true}"
+    },
+    {
+      "name": "cell-class",
+      "description": "自定义单元格类名",
+      "type": "ClassName",
+      "defaultValue": "-",
+      "kind": "string",
+      "initial": "review-class"
+    },
+    {
+      "name": "header-cell-class",
+      "description": "自定义表头单元格类名",
+      "type": "ClassName",
+      "defaultValue": "-",
+      "kind": "string",
+      "initial": "review-class"
+    },
+    {
+      "name": "body-cell-class",
+      "description": "自定义内容单元格类名",
+      "type": "ClassName | ((record: TableData) => ClassName)",
+      "defaultValue": "-",
+      "kind": "callback"
+    },
+    {
+      "name": "summary-cell-class",
+      "description": "自定义总结栏单元格类名",
+      "type": "ClassName | ((record: TableData) => ClassName)",
+      "defaultValue": "-",
+      "kind": "callback"
+    },
+    {
+      "name": "cell-style",
+      "description": "自定义单元格样式",
+      "type": "CSSProperties",
+      "defaultValue": "-",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "header-cell-style",
+      "description": "自定义表头单元格样式",
+      "type": "CSSProperties",
+      "defaultValue": "-",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "body-cell-style",
+      "description": "自定义内容单元格样式",
+      "type": "CSSProperties | ((record: TableData) => CSSProperties)",
+      "defaultValue": "-",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "summary-cell-style",
+      "description": "自定义总结栏单元格样式",
+      "type": "CSSProperties | ((record: TableData) => CSSProperties)",
+      "defaultValue": "-",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "index",
+      "description": "用于手动指定选项的 index。",
+      "type": "number",
+      "defaultValue": "-",
+      "kind": "number"
+    },
+    {
+      "name": "tooltip",
+      "description": "在省略时是否显示文字提示",
+      "type": "boolean|object",
+      "defaultValue": "false",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "TableSortable.sort-directions",
+      "description": "sortable · 支持的排序方向",
+      "type": "('ascend' | 'descend')[]",
+      "defaultValue": "-",
+      "kind": "json",
+      "initial": "[]",
+      "path": [
+        "sortable",
+        "sortDirections"
+      ]
+    },
+    {
+      "name": "TableSortable.sorter",
+      "description": "sortable · 排序函数。设置为 true 可关闭内部排序。",
+      "type": "((        a: TableData,        b: TableData,        extra: { dataIndex: string; direction: 'ascend' | 'descend' }      ) => number)    | boolean",
+      "defaultValue": "-",
+      "kind": "callback",
+      "path": [
+        "sortable",
+        "sorter"
+      ]
+    },
+    {
+      "name": "TableSortable.sort-order",
+      "description": "sortable · 排序方向",
+      "type": "'ascend' | 'descend' | ''",
+      "defaultValue": "-",
+      "kind": "enum",
+      "options": [
+        "ascend",
+        "descend"
+      ],
+      "initial": "ascend",
+      "path": [
+        "sortable",
+        "sortOrder"
+      ]
+    },
+    {
+      "name": "TableSortable.default-sort-order",
+      "description": "sortable · 默认排序方向（非受控模式）",
+      "type": "'ascend' | 'descend' | ''",
+      "defaultValue": "-",
+      "kind": "enum",
+      "options": [
+        "ascend",
+        "descend"
+      ],
+      "initial": "ascend",
+      "path": [
+        "sortable",
+        "defaultSortOrder"
+      ]
+    },
+    {
+      "name": "TableFilterable.filters",
+      "description": "filterable · 筛选数据",
+      "type": "TableFilterData[]",
+      "defaultValue": "-",
+      "kind": "json",
+      "initial": "[]",
+      "path": [
+        "filterable",
+        "filters"
+      ]
+    },
+    {
+      "name": "TableFilterable.filter",
+      "description": "filterable · 筛选函数,用法类似于Array.prototype.filter",
+      "type": "(filteredValue: string[],  record:TableData)=> boolean",
+      "defaultValue": "-",
+      "kind": "callback",
+      "path": [
+        "filterable",
+        "filter"
+      ]
+    },
+    {
+      "name": "TableFilterable.multiple",
+      "description": "filterable · 是否支持多选",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean",
+      "path": [
+        "filterable",
+        "multiple"
+      ]
+    },
+    {
+      "name": "TableFilterable.filtered-value",
+      "description": "filterable · 筛选项",
+      "type": "string[]",
+      "defaultValue": "-",
+      "kind": "json",
+      "initial": "[]",
+      "path": [
+        "filterable",
+        "filteredValue"
+      ]
+    },
+    {
+      "name": "TableFilterable.default-filtered-value",
+      "description": "filterable · 默认筛选项",
+      "type": "string[]",
+      "defaultValue": "-",
+      "kind": "json",
+      "initial": "[]",
+      "path": [
+        "filterable",
+        "defaultFilteredValue"
+      ]
+    },
+    {
+      "name": "TableFilterable.render-content",
+      "description": "filterable · 筛选框的内容",
+      "type": "(data: {    filterValue: string[];    setFilterValue: (filterValue: string[]) => void;    handleFilterConfirm: (event: Event) => void;    handleFilterReset: (event: Event) => void;  }) => VNodeChild",
+      "defaultValue": "-",
+      "kind": "callback",
+      "path": [
+        "filterable",
+        "renderContent"
+      ]
+    },
+    {
+      "name": "TableFilterable.icon",
+      "description": "filterable · 筛选按钮的图标",
+      "type": "RenderFunction",
+      "defaultValue": "-",
+      "kind": "callback",
+      "path": [
+        "filterable",
+        "icon"
+      ]
+    },
+    {
+      "name": "TableFilterable.trigger-props",
+      "description": "filterable · 筛选框的弹出框配置",
+      "type": "TriggerProps",
+      "defaultValue": "-",
+      "kind": "json",
+      "initial": "{}",
+      "path": [
+        "filterable",
+        "triggerProps"
+      ]
+    },
+    {
+      "name": "TableFilterable.align-left",
+      "description": "filterable · 筛选图标是否左对齐",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean",
+      "path": [
+        "filterable",
+        "alignLeft"
+      ]
+    },
+    {
+      "name": "TableFilterData.text",
+      "description": "filterable.filters.0 · 筛选数据选项的内容",
+      "type": "string | RenderFunction",
+      "defaultValue": "-",
+      "kind": "callback",
+      "path": [
+        "filterable",
+        "filters",
+        0,
+        "text"
+      ]
+    },
+    {
+      "name": "TableFilterData.value",
+      "description": "filterable.filters.0 · 筛选数据选项的值",
+      "type": "string",
+      "defaultValue": "-",
+      "kind": "string",
+      "path": [
+        "filterable",
+        "filters",
+        0,
+        "value"
+      ]
+    }
+  ],
+  "methodNames": [],
+  "events": [],
+  "slotNames": [
+    "cell",
+    "filter-icon",
+    "filter-content",
+    "title"
+  ],
+  "slotDefaults": {
+    "cell": true,
+    "filter-icon": false,
+    "filter-content": false,
+    "title": false
+  },
+  "scenarios": []
+}

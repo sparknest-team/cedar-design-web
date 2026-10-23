@@ -64,6 +64,9 @@ test("cross rows include empty combinations and stable ID keys independent of la
     ),
   ).toEqual(["p2", "unknown", "s2", "p1"]);
   expect(event.resourceIds).toEqual(["s1", "p1", "p2"]);
+  expect(
+    moveSchedulerResourceRow(event.resourceIds, rows[0], rows[0]),
+  ).toEqual(["s1", "p1", "p2"]);
 });
 test("one event appears in both participant rows and filtering reduces rows without mutating data", async () => {
   const w = setup();

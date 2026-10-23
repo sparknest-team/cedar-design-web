@@ -22,7 +22,7 @@
       <template v-for="item in 2" :key="item">
         <c-checkbox :value="item">
           <template #checkbox="{ checked }">
-            <c-space align="start" class="custom-checkbox-card" :class="{ 'custom-checkbox-card-checked': checked }">
+            <c-space wrap align="start" class="custom-checkbox-card" :class="{ 'custom-checkbox-card-checked': checked }">
               <div class="custom-checkbox-card-mask">
                 <div class="custom-checkbox-card-mask-dot" />
               </div>

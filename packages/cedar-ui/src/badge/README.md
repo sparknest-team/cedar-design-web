@@ -12,6 +12,14 @@ permalink: /components/badge/
 
 <demo src="./__demos__/basic.vue"></demo>
 
+### 五种尺寸
+
+<demo src="./__demos__/size.vue"></demo>
+
+### 实心与描边
+
+<demo src="./__demos__/variant.vue"></demo>
+
 ### 内联与独立展示
 
 <demo src="./__demos__/inline.vue"></demo>
@@ -32,10 +40,6 @@ permalink: /components/badge/
 
 <demo src="./__demos__/color.vue"></demo>
 
-### 五种尺寸
-
-<demo src="./__demos__/size.vue"></demo>
-
 ### 位置与偏移
 
 <demo src="./__demos__/position.vue"></demo>
@@ -44,9 +48,18 @@ permalink: /components/badge/
 
 <demo src="./__demos__/show.vue"></demo>
 
-### 实心与描边
+### 外观组合
 
-<demo src="./__demos__/variant.vue"></demo>
+适用于通知数量和标记。调整变体、状态、尺寸，用相同数据观察变化。内容保持一致，便于比较不同设置的实际效果。
+
+<demo src="./__demos__/appearance-lab.vue"></demo>
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
 
 ## API
 

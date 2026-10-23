@@ -1,0 +1,48 @@
+{
+  "fields": [
+    {
+      "name": "width",
+      "description": "宽度",
+      "type": "number",
+      "defaultValue": "undefined",
+      "kind": "number"
+    },
+    {
+      "name": "height",
+      "description": "高度",
+      "type": "number",
+      "defaultValue": "undefined",
+      "kind": "number"
+    },
+    {
+      "name": "component",
+      "description": "伸缩框的 html 标签",
+      "type": "string",
+      "defaultValue": "'div'",
+      "kind": "string"
+    },
+    {
+      "name": "directions",
+      "description": "可以进行伸缩的边，有上、下、左、右可以使用",
+      "type": "('left' | 'right' | 'top' | 'bottom')[]",
+      "defaultValue": "() => ['right']",
+      "kind": "json",
+      "initial": "[]"
+    }
+  ],
+  "methodNames": [],
+  "events": [
+    "moving-start",
+    "moving",
+    "moving-end"
+  ],
+  "slotNames": [
+    "resize-trigger",
+    "resize-trigger-icon"
+  ],
+  "slotDefaults": {
+    "resize-trigger": true,
+    "resize-trigger-icon": false
+  },
+  "scenarios": []
+}

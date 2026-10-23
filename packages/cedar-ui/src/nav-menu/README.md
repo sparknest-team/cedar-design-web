@@ -6,7 +6,18 @@ permalink: /components/nav-menu/
 
 通过 `options` 定义导航结构，支持纵向展开、横向下拉及横向溢出收纳。子菜单由 `children` 自动产生，也可用 `NavMenu.Item` 定义独立一级入口；无需 SubMenu/ItemGroup 组件。
 
+### 程序化滚动的生命周期
+
+`scrollTo(key)` 展开路径后等待渲染，再以 nearest 对齐原生定位；返回 `Promise<void>`。连续调用只执行最新仍有效的请求。禁用、options／fieldNames／mode／responsive／折叠配置变化、KeepAlive 停用及卸载使旧请求失效；重新激活后请显式发起新请求，不会重放旧滚动。取消不回滚已经执行的浏览器滚动，不新增 CSS duration Token 或公共取消方法。
+
 ## 案例
+
+<!-- api-review:start -->
+### 组合审查 / API review
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
 
 NavMenu 有两种清晰的使用方式：导航树使用 `options`，业务筛选等独立入口使用 `NavMenu.Item`。下面先介绍常用导航，再逐步进入层级、响应式和高级定制。
 
@@ -195,7 +206,6 @@ label/icon/extra 均接收 `{ option, selected, expanded, active, level }`；act
 
 纵向 Up/Down 与横向 Left/Right 移动焦点，Home/End 到首尾；Right 展开纵向分支，Down 打开横向分支；Left 返回父级，弹出层 Escape 关闭当前层并恢复参考项焦点。Enter/空格激活节点。禁用项跳过；输入框保留原生按键。横向缩窄导致当前项进入“更多”时，焦点迁移至更多入口。
 
-
 ## NavMenu.Item API
 
 标题默认跟随匹配的选中选项。`label` 插槽优先级最高：固定标题可写 `<template #label>高级筛选</template>`；手动标题可绑定独立的响应式变量。原 `update-label` 已移除。
@@ -224,7 +234,6 @@ label/icon/extra 均接收 `{ option, selected, expanded, active, level }`；act
 所有入口插槽和 `content` 插槽收到 `{ modelValue, selectedOption, active, open, select, close }`。`select(key, event?)` 发出 `update:modelValue` 和 `select(key, option, event)`；自定义面板可以选择 options 外的值，此时 option 为 undefined。`close()` 关闭并恢复入口焦点。受控值只有父组件接受后才影响标题和高亮。`hideOnSelect` 独立于值是否被接受，需手动确认时设为 false。
 
 Item 还发出 `update:open`、入口 `click`，暴露 `select`、`close`、`setOpen` 方法。通栏 / 全高是非模态浮层，不锁定页面滚动或限制焦点；默认挂载到 body，使用自定义容器时需避免祖先 transform 改变 fixed 定位基准。
-
 
 ## 从旧版本迁移
 

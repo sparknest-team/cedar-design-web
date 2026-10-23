@@ -1,0 +1,327 @@
+{
+  "fields": [
+    {
+      "name": "options",
+      "description": "命令树",
+      "type": "MenuOptionData[]",
+      "defaultValue": "() => []",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "field-names",
+      "description": "label/value/children/disabled 字段映射",
+      "type": "MenuFieldNames",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "model-value",
+      "description": "当前激活值，用于受控高亮",
+      "type": "MenuValue",
+      "defaultValue": "undefined",
+      "kind": "scenario"
+    },
+    {
+      "name": "open",
+      "description": "浮层是否可见",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "default-open",
+      "description": "非受控默认可见状态",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "trigger",
+      "description": "根菜单触发方式",
+      "type": "'hover' | 'click' | 'focus' | 'contextMenu'",
+      "defaultValue": "'click'",
+      "kind": "enum",
+      "options": [
+        "hover",
+        "click",
+        "focus",
+        "contextMenu"
+      ],
+      "initial": "click"
+    },
+    {
+      "name": "submenu-trigger",
+      "description": "各级子菜单的展开方式，对所有层级统一生效",
+      "type": "'click' | 'hover'",
+      "defaultValue": "'hover' as MenuSubmenuTrigger",
+      "kind": "enum",
+      "options": [
+        "click",
+        "hover"
+      ],
+      "initial": "click"
+    },
+    {
+      "name": "placement",
+      "description": "弹出位置",
+      "type": "MenuPosition",
+      "defaultValue": "'bottom'",
+      "kind": "scenario"
+    },
+    {
+      "name": "strategy",
+      "description": "根菜单及全部子菜单的定位策略",
+      "type": "'absolute' | 'fixed'",
+      "defaultValue": "undefined",
+      "kind": "enum",
+      "options": [
+        "absolute",
+        "fixed"
+      ],
+      "initial": "absolute"
+    },
+    {
+      "name": "popup-container",
+      "description": "浮层挂载容器",
+      "type": "string | HTMLElement | false",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "\"body\""
+    },
+    {
+      "name": "popup-max-height",
+      "description": "默认限制、自定义像素高度或不限高",
+      "type": "boolean | number",
+      "defaultValue": "true",
+      "kind": "json",
+      "initial": "true"
+    },
+    {
+      "name": "hide-on-select",
+      "description": "激活命令后关闭浮层",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "auto-fit-popup-width",
+      "description": "浮层宽度跟随触发器",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "disabled",
+      "description": "禁用菜单",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "align-point",
+      "description": "浮层跟随鼠标位置",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "size",
+      "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
+      "defaultValue": "'md'",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "enum",
+      "options": [
+        "xs",
+        "sm",
+        "md",
+        "lg",
+        "xl"
+      ],
+      "initial": "md"
+    },
+    {
+      "name": "unmount-on-close",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "reference",
+      "type": "MenuReference",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "string",
+      "initial": "body"
+    },
+    {
+      "name": "popup-class",
+      "type": "[String, Array, Object]",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "string",
+      "initial": "review-class"
+    },
+    {
+      "name": "offset-x",
+      "type": "string | number",
+      "defaultValue": "0",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "scalar"
+    },
+    {
+      "name": "offset-y",
+      "type": "string | number",
+      "defaultValue": "0",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "scalar"
+    },
+    {
+      "name": "mouse-enter-delay",
+      "type": "number",
+      "defaultValue": "100",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "number"
+    },
+    {
+      "name": "mouse-leave-delay",
+      "type": "number",
+      "defaultValue": "100",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "number"
+    },
+    {
+      "name": "close-on-click-reference",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "cover",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "elevation",
+      "type": "[Boolean, Number]",
+      "defaultValue": "true",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "json",
+      "initial": "2"
+    }
+  ],
+  "events": [
+    "update:modelValue",
+    "open-change",
+    "select",
+    "update:open"
+  ],
+  "scenarios": [
+    {
+      "name": "options",
+      "kind": "prop",
+      "demos": [
+        "basic.vue",
+        "group.vue",
+        "option-content.vue",
+        "popup-height.vue",
+        "positioning.vue",
+        "selection.vue",
+        "submenu.vue"
+      ]
+    },
+    {
+      "name": "field-names",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "model-value",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "placement",
+      "kind": "prop",
+      "demos": [
+        "placement.vue"
+      ]
+    },
+    {
+      "name": "reference",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "popup-class",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "elevation",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "default",
+      "kind": "slot",
+      "demos": []
+    },
+    {
+      "name": "content",
+      "kind": "slot",
+      "demos": [
+        "context-menu.vue",
+        "controlled.vue",
+        "disabled.vue",
+        "footer.vue",
+        "placement.vue",
+        "popup-height.vue",
+        "trigger.vue"
+      ]
+    },
+    {
+      "name": "footer",
+      "kind": "slot",
+      "demos": [
+        "footer.vue",
+        "positioning.vue"
+      ]
+    },
+    {
+      "name": "option-label",
+      "kind": "slot",
+      "demos": []
+    },
+    {
+      "name": "option-icon",
+      "kind": "slot",
+      "demos": []
+    },
+    {
+      "name": "option-extra",
+      "kind": "slot",
+      "demos": []
+    }
+  ],
+  "slotNames": [
+    "content",
+    "footer",
+    "option-label",
+    "option-icon",
+    "option-extra"
+  ],
+  "slotDefaults": {
+    "content": false,
+    "footer": false,
+    "option-label": false,
+    "option-icon": false,
+    "option-extra": false
+  },
+  "methodNames": []
+}

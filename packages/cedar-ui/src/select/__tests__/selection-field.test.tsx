@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import { nextTick } from 'vue'
+import { h, nextTick } from 'vue'
 import { describe, expect, test, vi } from 'vitest'
 import { Select } from '../index'
 import { formItemInjectionKey } from '../../form/context'
@@ -48,4 +48,17 @@ describe('Select field integration', () => {
     expect(onBlur).toHaveBeenCalledTimes(1)
     wrapper.unmount()
   })
+})
+
+ test('passes committed values and plain option text to the read slot', async () => {
+  const read = vi.fn(({ text }) => h('span', { 'data-read-text': '' }, text))
+  const wrapper = mount(Select, {
+    props: { multiple: true, modelValue: [1, 2], options, readPretty: true, separator: ' / ' },
+    slots: { label: () => h('strong', 'custom label'), read },
+  })
+  expect(wrapper.get('[data-read-text]').text()).toBe('设备 / 设备')
+  expect(read.mock.calls.at(-1)?.[0]).toMatchObject({ value: [1, 2], text: '设备 / 设备' })
+  await wrapper.setProps({ modelValue: [2] })
+  expect(wrapper.get('[data-read-text]').text()).toBe('设备')
+  wrapper.unmount()
 })

@@ -32,6 +32,19 @@ Tooltip 只实现 `md` 和 `xs` 两档，默认 `md`。
 <demo src="./__demos__/directive.vue"></demo>
 <demo src="./__demos__/text-ellipsis.vue"></demo>
 
+### 外观组合
+
+适用于悬浮时的补充说明。调整状态、尺寸，用相同数据观察变化。内容保持一致，便于比较不同设置的实际效果。
+
+<demo src="./__demos__/appearance-lab.vue"></demo>
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
+
 ## API
 
 Tooltip 继承 Trigger 的定位、容器、受控状态、关闭策略和公开方法。

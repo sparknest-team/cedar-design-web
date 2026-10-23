@@ -14,6 +14,18 @@ permalink: /components/tag/
 
 <demo src="./__demos__/basic.vue"></demo>
 
+### 标签的尺寸
+
+标签的大小分为：`sm`、`md`、`lg` 三种，可以在不同场景下选择合适按钮尺寸。推荐及默认尺寸为 `md`。
+
+<demo src="./__demos__/size.vue"></demo>
+
+### 状态与变体
+
+通过 `status` 与 `variant` 切换不同语义颜色和呈现风格（与 Button 对齐）。`color` 与 `status` 同时设置时 `color` 优先。
+
+<demo src="./__demos__/status.vue"></demo>
+
 ### 可关闭标签
 
 通过 `closable` 属性控制标签是否可关闭。可关闭标签可通过 `close` 事件执行一些关闭后操作，也可通过 `show` 属性控制标签的显示或隐藏。
@@ -28,6 +40,8 @@ permalink: /components/tag/
 
 ### 可选中
 
+可选中标签可用 Space / Enter 切换，checked 受控时仍由父级决定是否接受；未传 checked 的此示例由组件自持状态。loading 阻止选中动作，但不是 disabled API。关闭按钮也支持 Space / Enter，关闭不应冒泡为选中。动态示例点击 Add Tag 后聚焦输入，Enter 新增一项；固定首项不提供关闭按钮。这里只说明已展示的操作，不代表长按/异步与触屏组合已全部验收。
+
 通过设置 `checkable` ，可以实现点击选中的效果。
 
 <demo src="./__demos__/checkable.vue"></demo>
@@ -37,12 +51,6 @@ permalink: /components/tag/
 我们提供多种预设色彩的标签样式，通过 `color` 设置不同颜色。如果预设值不能满足你的需求，`color` 字段也可以设置自定义色值。
 
 <demo src="./__demos__/color.vue"></demo>
-
-### 标签的尺寸
-
-标签的大小分为：`sm`、`md`、`lg` 三种，可以在不同场景下选择合适按钮尺寸。推荐及默认尺寸为 `md`。
-
-<demo src="./__demos__/size.vue"></demo>
 
 ### 加载中状态
 
@@ -56,11 +64,18 @@ permalink: /components/tag/
 
 <demo src="./__demos__/icon.vue"></demo>
 
-### 状态与变体
+### 外观组合
 
-通过 `status` 与 `variant` 切换不同语义颜色和呈现风格（与 Button 对齐）。`color` 与 `status` 同时设置时 `color` 优先。
+适用于短标签与分类标记。调整变体、状态、尺寸，用相同数据观察变化。内容保持一致，便于比较不同设置的实际效果。
 
-<demo src="./__demos__/status.vue"></demo>
+<demo src="./__demos__/appearance-lab.vue"></demo>
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
 
 ## API
 

@@ -1,4 +1,4 @@
-import type { DropdownMenuProps, DropdownMenuStrategy, DropdownMenuSubmenuTrigger, CardProps, ProgressProps, SwitchProps, RateProps, AffixProps, BadgeProps, MessageProps, PopupContainer, FormProps, PaginationProps, TriggerProps } from '@cedarjs/ui'
+import type { MenuProps, MenuStrategy, MenuSubmenuTrigger, CardProps, ProgressProps, SwitchProps, RateProps, AffixProps, BadgeProps, MessageProps, PopupContainer, FormProps, PaginationProps, TriggerProps } from '@cedarjs/ui'
 
 const card: CardProps = { variant: 'outline', size: 'sm', direction: 'row' }
 const progress: ProgressProps[] = [{}, { size: 24 }, { size: '2rem' }, { size: 'xl' }]
@@ -53,10 +53,10 @@ const invalidItem: NavMenuItemProps = { popupLayout: 'fullscreen' }
 // @ts-expect-error labels now follow selection; use the label slot for manual rendering
 const removedItemLabelSwitch: NavMenuItemProps = { updateLabel: true }
 
-const menuStrategy: DropdownMenuStrategy = 'fixed'
-const submenuTrigger: DropdownMenuSubmenuTrigger = 'click'
-const positionedMenu: DropdownMenuProps = { strategy: menuStrategy, submenuTrigger }
-const defaultMenu: DropdownMenuProps = {}
+const menuStrategy: MenuStrategy = 'fixed'
+const submenuTrigger: MenuSubmenuTrigger = 'click'
+const positionedMenu: MenuProps = { strategy: menuStrategy, submenuTrigger }
+const defaultMenu: MenuProps = {}
 // @ts-expect-error strategy is not a CSS position free-form string
-const invalidMenuStrategy: DropdownMenuStrategy = 'sticky'
+const invalidMenuStrategy: MenuStrategy = 'sticky'
 void [positionedMenu, defaultMenu, invalidMenuStrategy]

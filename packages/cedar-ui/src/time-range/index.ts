@@ -1,8 +1,8 @@
 import { withInstall } from '../_utils/global-config'
-import _TimeRange from './TimeRange.vue'
-import _TimeRangePicker from '../time/picker/TimeRangePicker.vue'
-import { timeRangeProps } from './props'
 import { timeRangePickerProps } from '../time/picker/props'
+import _TimeRangePicker from '../time/picker/TimeRangePicker.vue'
+import _TimeRange from './presentation'
+import { timeRangeProps } from './props'
 
 export type { TimeRangeProps } from './props'
 export type { TimeRangePickerProps } from '../time/picker/props'

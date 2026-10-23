@@ -1,0 +1,307 @@
+{
+  "fields": [
+    {
+      "name": "options",
+      "description": "导航结构",
+      "type": "NavMenuOption[]",
+      "defaultValue": "() => []",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "model-value",
+      "description": "当前选中 key，支持 v-model；null 表示无选中",
+      "type": "string / number / null",
+      "defaultValue": "undefined",
+      "kind": "scalar"
+    },
+    {
+      "name": "default-value",
+      "description": "非受控初始选中值",
+      "type": "string / number / null",
+      "defaultValue": "null",
+      "kind": "scalar"
+    },
+    {
+      "name": "active-item",
+      "description": "受控的具名 NavMenu.Item 激活项，支持 v-model:active-item",
+      "type": "string / number / null",
+      "defaultValue": "undefined",
+      "kind": "scalar"
+    },
+    {
+      "name": "default-active-item",
+      "description": "非受控的具名 NavMenu.Item 初始激活项",
+      "type": "string / number / null",
+      "defaultValue": "null",
+      "kind": "scalar"
+    },
+    {
+      "name": "expanded-keys",
+      "description": "受控展开分支",
+      "type": "(string / number)[]",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "default-expanded-keys",
+      "description": "非受控初始展开分支",
+      "type": "(string / number)[]",
+      "defaultValue": "() => []",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "default-expand-all",
+      "description": "初始展开所有分支",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "auto-expand-selected",
+      "description": "纵向非折叠时展开选中项祖先；受控时发出更新请求",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "accordion",
+      "description": "同层只展开一个分支",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "mode",
+      "description": "导航方向",
+      "type": "vertical / horizontal",
+      "defaultValue": "'vertical'",
+      "kind": "enum",
+      "options": [
+        "vertical",
+        "horizontal"
+      ],
+      "initial": "vertical"
+    },
+    {
+      "name": "collapsed",
+      "description": "折叠状态，支持 v-model:collapsed",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "default-collapsed",
+      "description": "非受控初始折叠",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "theme",
+      "description": "主题",
+      "type": "'light' | 'dark'",
+      "defaultValue": "undefined",
+      "kind": "enum",
+      "options": [
+        "light",
+        "dark"
+      ],
+      "initial": "light"
+    },
+    {
+      "name": "size",
+      "description": "尺寸",
+      "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
+      "defaultValue": "'md'",
+      "kind": "enum",
+      "options": [
+        "xs",
+        "sm",
+        "md",
+        "lg",
+        "xl"
+      ],
+      "initial": "md"
+    },
+    {
+      "name": "disabled",
+      "description": "全局禁用选择和用户展开",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "field-names",
+      "description": "key/label/children/disabled 字段映射",
+      "type": "NavMenuFieldNames",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "responsive",
+      "description": "横向菜单启用更多收纳",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "indent",
+      "description": "每层缩进（px）",
+      "type": "number",
+      "defaultValue": "24",
+      "kind": "number"
+    },
+    {
+      "name": "root-indent",
+      "description": "根缩进（px）",
+      "type": "number",
+      "defaultValue": "12",
+      "kind": "number"
+    },
+    {
+      "name": "collapsed-width",
+      "description": "折叠宽度（px）",
+      "type": "number",
+      "defaultValue": "56",
+      "kind": "number"
+    },
+    {
+      "name": "icon-size",
+      "description": "图标尺寸（px）",
+      "type": "number",
+      "defaultValue": "20",
+      "kind": "number"
+    },
+    {
+      "name": "popup-container",
+      "description": "浮层挂载容器，false 为当前位置",
+      "type": "string | HTMLElement | false",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "\"body\""
+    },
+    {
+      "name": "popup-class",
+      "description": "浮层附加类名",
+      "type": "string / array / object",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "overflow-label",
+      "description": "更多入口标签",
+      "type": "string",
+      "defaultValue": "'更多'",
+      "kind": "string"
+    },
+    {
+      "name": "node-props",
+      "description": "节点 DOM 属性和事件；内部选择、禁用和键盘语义保留",
+      "type": "(context) => Record<string, unknown>",
+      "defaultValue": "undefined",
+      "kind": "callback"
+    }
+  ],
+  "events": [
+    "update:modelValue",
+    "update:activeItem",
+    "update:expandedKeys",
+    "update:collapsed",
+    "select"
+  ],
+  "scenarios": [
+    {
+      "name": "options",
+      "kind": "prop",
+      "demos": [
+        "basic.vue",
+        "breakpoint.vue",
+        "collapsed.vue",
+        "controlled.vue",
+        "custom-content.vue",
+        "custom-items.vue",
+        "field-names.vue",
+        "horizontal-sub-menu.vue",
+        "hover-button.vue",
+        "hover.vue",
+        "item-label-independent.vue",
+        "item-label.vue",
+        "items-horizontal.vue",
+        "items-vertical.vue",
+        "size.vue",
+        "sub-menu.vue",
+        "theme.vue"
+      ]
+    },
+    {
+      "name": "expanded-keys",
+      "kind": "prop",
+      "demos": [
+        "controlled.vue"
+      ]
+    },
+    {
+      "name": "default-expanded-keys",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "field-names",
+      "kind": "prop",
+      "demos": [
+        "field-names.vue"
+      ]
+    },
+    {
+      "name": "popup-class",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "node-props",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "show-option",
+      "kind": "method",
+      "demos": []
+    },
+    {
+      "name": "scroll-to",
+      "kind": "method",
+      "demos": []
+    },
+    {
+      "name": "resize",
+      "kind": "method",
+      "demos": [
+        "breakpoint.vue"
+      ]
+    },
+    {
+      "name": "set-collapsed",
+      "kind": "method",
+      "demos": []
+    },
+    {
+      "name": "set-active-item",
+      "kind": "method",
+      "demos": []
+    }
+  ],
+  "slotNames": [],
+  "slotDefaults": {},
+  "methodNames": [
+    "show-option",
+    "scroll-to",
+    "resize",
+    "set-collapsed",
+    "set-active-item"
+  ]
+}

@@ -1,5 +1,6 @@
 import { withInstall } from '../_utils/global-config'
-import _Upload from './upload.vue'
+import _Upload from './presentation'
+
 const Upload = withInstall(_Upload, _Upload, { components: [_Upload] })
 export type UploadInstance = InstanceType<typeof _Upload>
 export type * from './interfaces'

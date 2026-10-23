@@ -1,0 +1,23 @@
+{
+  "fields": [
+    {
+      "name": "scrollable",
+      "description": "是否在自身启用原生滚动（需要约束高度）",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "has-sider",
+      "description": "表示子元素里有 Sider，一般不用指定。可用于服务端渲染时避免样式闪动",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    }
+  ],
+  "events": [],
+  "scenarios": [],
+  "slotNames": [],
+  "slotDefaults": {},
+  "methodNames": []
+}

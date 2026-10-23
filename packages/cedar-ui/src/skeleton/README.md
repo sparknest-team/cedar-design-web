@@ -32,7 +32,16 @@ permalink: /components/skeleton/
 
 ### 全屏模式
 
+点击后展示两秒再恢复，这是示例中的定时逻辑；组件本身不请求数据，也不会自动结束加载。实际业务应由请求结果控制 `loading`。
+
 <demo src="./__demos__/fullscreen.vue"></demo>
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
 
 ## API
 

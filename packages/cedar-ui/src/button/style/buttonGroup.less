@@ -1,13 +1,13 @@
 .c-button-group {
   display: inline-flex;
-  border-radius: var(--c-button-group-border-radius);
+  border-radius: var(--c-button-border-radius);
   max-width: 100%;
   box-sizing: border-box;
   align-items: stretch;
   overflow: visible;
 
   > .c-button {
-    border-radius: var(--c-button-group-border-radius);
+    border-radius: var(--c-button-border-radius);
     flex-shrink: 0;
     &:active {
       box-shadow: none;
@@ -52,6 +52,11 @@
 
   &--vertical {
     flex-direction: column;
+
+    // Align icon/text columns even when action labels have different lengths.
+    > .c-button:not(.c-button--stacked):not(.c-button--round):not(.c-button--icon-only) {
+      justify-content: flex-start;
+    }
 
     > .c-button {
       &:first-child {

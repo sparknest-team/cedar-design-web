@@ -14,6 +14,12 @@ permalink: /components/rate/
 
 <demo src="./__demos__/basic.vue"></demo>
 
+### 只读模式
+
+通过设置 `readonly` 属性让评分组件为只读状态。
+
+<demo src="./__demos__/readonly.vue"></demo>
+
 ### 半选
 
 指定 `allow-half` 来开启半选。
@@ -25,12 +31,6 @@ permalink: /components/rate/
 通过 color 可以自定义颜色。另外可以通过对象形式自定义不同分值时的颜色。
 
 <demo src="./__demos__/color.vue"></demo>
-
-### 只读模式
-
-通过设置 `readonly` 属性让评分组件为只读状态。
-
-<demo src="./__demos__/readonly.vue"></demo>
 
 ### 支持清除
 
@@ -63,6 +63,19 @@ permalink: /components/rate/
 ### 尺寸与符号
 
 <demo src="./__demos__/sizes-and-symbols.vue"></demo>
+
+### 交互状态切换
+
+适用于评分反馈。调整禁用、只读，用相同数据观察变化。控制区始终可用，可以随时恢复编辑；错误外观本身不会触发表单校验。
+
+<demo src="./__demos__/state-lab.vue"></demo>
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
 
 ## API
 
@@ -138,3 +151,13 @@ focus() 聚焦评分，blur() 移除焦点。只读仍可聚焦，禁用移出 T
 两端公开 Token 后缀及含义一致；Cedar 保留金色星形和紧凑间距，Maple 保留主色星形与触控内边距，默认值差异已登记主题契约。源码各自维护，不共享运行时。
 
 `transition-duration` 控制 hover/颜色过渡，`scale-duration` 控制选中动画，`transition-timing-function` 控制缓动。低动态偏好下关闭非必要动画；`size` / `gap` Prop 会覆盖当前实例的对应 Token。
+
+### Form 字段展示与确认
+
+本组件支持 `presentation`，字段 > FormItem > Form 逐层继承；未指定时为 `inline`，保留原有交互。支持值：`inline / click / dblclick`。其他编辑展示使用 Cell 入口和一份草稿，确认后才更新 v-model；取消、重置或启用 readPretty 丢弃草稿。
+
+Cedar 使用 presentation="click" / "dblclick" 在原位进入编辑，Enter/F2 也可进入；取消/Escape 丢弃草稿，确认后提交。 readPretty 为纯阅读属性，与 readonly、disabled 独立。
+
+`before-commit(value, { previousValue, signal })` 可拦截弹层保存；FormItem 先校验候选值，失败保持编辑。`open / default-open / update:open` 控制编辑层。`#read="{ value, text }"` 可自定义阅读内容。集中示例见 Form 的“各类字段统一展示”。
+
+`read-pretty` 为独立布尔属性，与 `readonly`、`disabled` 同级；字段 > FormItem > Form 继承，显式 `false` 覆盖父级。默认 `false`。纯阅读不显示编辑器。

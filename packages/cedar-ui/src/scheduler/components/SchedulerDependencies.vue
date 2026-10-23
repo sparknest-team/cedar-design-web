@@ -32,7 +32,7 @@
   </svg>
 </template>
 <script setup lang="ts">
-import { ref, watch, nextTick, onBeforeUnmount, useId } from "vue";
+import { ref, watch, nextTick, onBeforeUnmount, onMounted, onActivated, onDeactivated, useId } from "vue";
 import { createNamespace } from "../../_utils/global-config";
 import type { SchedulerDependency, SchedulerEvent } from "../core";
 defineOptions({ name: createNamespace("scheduler-dependencies").name });
@@ -46,27 +46,36 @@ const marker = `scheduler-arrow-${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
 const paths = ref<{ id: string; d: string; label: string }[]>([]),
   width = ref(0),
   height = ref(0);
-let frame = 0,
-  detach = () => {};
-let alive=true;
-function refresh() {
-  if(!alive)return;
-  cancelAnimationFrame(frame);
-  frame = requestAnimationFrame(() => {
-    const host = props.host;
-    if (!host) return;
+let frame: { view: Window; id: number } | undefined;
+let detach = () => {};
+let scheduleCurrent = () => {};
+let mounted = false, active = false, disposed = false;
+let generation = 0, binding = 0, rendering = 0;
+function cancelFrame() {
+  generation++;
+  if (frame) frame.view.cancelAnimationFrame(frame.id);
+  frame = undefined;
+}
+function measure(host: HTMLElement, current: () => boolean) {
+    if (!current()) return;
     const bounds = host.getBoundingClientRect();
-    width.value = host.scrollWidth;
-    height.value = host.scrollHeight;
+    if (!current()) return;
+    const nextWidth = host.scrollWidth;
+    if (!current()) return;
+    const nextHeight = host.scrollHeight;
+    if (!current()) return;
     const targets = new Map<string, DOMRect>();
     for (const element of host.querySelectorAll<HTMLElement>(
       "[data-scheduler-event-id]",
     )) {
+      if (!current()) return;
       const rect = element.getBoundingClientRect();
+      if (!current()) return;
       const clip =
         element
           .closest(".c-scheduler__virtual-rows")
           ?.getBoundingClientRect() ?? bounds;
+      if (!current()) return;
       if (
         rect.bottom > clip.top &&
         rect.top < clip.bottom &&
@@ -76,7 +85,8 @@ function refresh() {
         targets.set(element.dataset.schedulerEventId!, rect);
     }
     const events = new Map(props.events.map((event) => [event.id, event]));
-    paths.value = props.dependencies.flatMap((edge) => {
+    const nextPaths = props.dependencies.flatMap((edge) => {
+      if (!current()) return [];
       const from = targets.get(edge.fromId),
         to = targets.get(edge.toId);
       if (!from || !to) return [];
@@ -98,39 +108,84 @@ function refresh() {
         },
       ];
     });
+    if (!current()) return;
+    width.value = nextWidth;
+    if (!current()) return;
+    height.value = nextHeight;
+    if (current()) paths.value = nextPaths;
+}
+function queueRefresh() {
+  cancelFrame();
+  const version = ++rendering;
+  const identity = binding;
+  nextTick(() => {
+    if (version === rendering && identity === binding && mounted && active && !disposed) scheduleCurrent();
   });
 }
-watch(
-  () => props.host,
-  async (host) => {
-    detach();
-    if (!host) return;
-    host.addEventListener("scroll", refresh, true);
-    const observer =
-      typeof ResizeObserver === "undefined"
-        ? undefined
-        : new ResizeObserver(refresh);
-    observer?.observe(host);
-    detach = () => {
-      host.removeEventListener("scroll", refresh, true);
-      observer?.disconnect();
-    };
-    await nextTick();
-    refresh();
-  },
-  { immediate: true },
-);
+function bind() {
+  binding++;
+  rendering++;
+  detach();
+  detach = () => {};
+  scheduleCurrent = () => {};
+  cancelFrame();
+  paths.value = [];
+  width.value = height.value = 0;
+  const host = props.host;
+  if (!mounted || !active || disposed || !host) return;
+  const identity = binding;
+  const current = () => mounted && active && !disposed && identity === binding && props.host === host;
+  const schedule = () => {
+    if (!current()) return;
+    cancelFrame();
+    const version = generation;
+    const view = host.ownerDocument.defaultView;
+    if (!view) return;
+    const id = view.requestAnimationFrame(() => {
+      if (!current() || version !== generation) return;
+      frame = undefined;
+      const execution = ++generation;
+      measure(host, () => current() && execution === generation);
+    });
+    frame = { view, id };
+  };
+  scheduleCurrent = schedule;
+  const view = host.ownerDocument.defaultView;
+  const observer = view?.ResizeObserver ? new view.ResizeObserver(schedule) : undefined;
+  host.addEventListener("scroll", schedule, true);
+  detach = () => {
+    host.removeEventListener("scroll", schedule, true);
+    observer?.disconnect();
+  };
+  observer?.observe(host);
+  if (current()) queueRefresh();
+}
+watch(() => props.host, bind, { immediate: true, flush: "sync" });
 watch(
   () => [props.events, props.dependencies],
-  async () => {
-    await nextTick();
-    refresh();
-  },
-  { deep: true },
+  queueRefresh,
+  { deep: true, flush: "sync" },
 );
-onBeforeUnmount(() => {
-  alive=false;
+function resume() {
+  if (!mounted || active || disposed) return;
+  active = true;
+  bind();
+}
+function suspend() {
+  active = false;
+  binding++;
+  rendering++;
+  cancelFrame();
   detach();
-  cancelAnimationFrame(frame);
+  detach = () => {};
+  scheduleCurrent = () => {};
+}
+onMounted(() => { mounted = true; resume(); });
+onActivated(resume);
+onDeactivated(suspend);
+onBeforeUnmount(() => {
+  disposed = true;
+  suspend();
+  mounted = false;
 });
 </script>

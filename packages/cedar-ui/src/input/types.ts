@@ -1,6 +1,7 @@
 import type { VNodeChild } from 'vue'
 
 export interface InputEmits {
+  'update:open': [value: boolean]
   'update:modelValue': [value: string]
   input: [value: string, event: Event]
   change: [value: string, event: Event]
@@ -12,6 +13,7 @@ export interface InputEmits {
   click: [event: MouseEvent]
 }
 export interface InputSlots {
+  read?(scope: { value: string }): VNodeChild
   prefix?(): VNodeChild
   suffix?(): VNodeChild
   'clear-icon'?(scope: { clear(event?: Event): void }): VNodeChild
@@ -22,7 +24,9 @@ export interface InputExpose {
   blur(): void
   select(): void
 }
-export interface InputGroupSlots { default?(): VNodeChild }
+export interface InputGroupSlots {
+  default?(): VNodeChild
+}
 export interface InputPasswordEmits extends InputEmits {
   'visibility-change': [visible: boolean]
   'update:visibility': [visible: boolean]
@@ -34,4 +38,3 @@ export interface InputPasswordExpose {
   blur(): void
   select(): void
 }
-

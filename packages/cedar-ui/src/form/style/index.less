@@ -234,7 +234,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .form-blink-enter-active, .form-blink-appear-active { transition: none !important; animation: none !important; }
+  .form-blink-enter-active,
+  .form-blink-appear-active {
+    transition: none !important;
+    animation: none !important;
+  }
 }
 
 .c-form-item-label {
@@ -274,10 +278,8 @@
 
 .form-blink-enter-active,
 .form-blink-appear-active {
-  transition: opacity var(~'--c-form-transition-duration-3')
-    var(~'--c-form-transition-timing-function-linear');
-  animation: ~'c-form-blink' var(~'--c-form-transition-duration-5')
-    var(~'--c-form-transition-timing-function-linear');
+  transition: opacity var(~'--c-form-transition-duration-3') var(~'--c-form-transition-timing-function-linear');
+  animation: ~'c-form-blink' var(~'--c-form-transition-duration-5') var(~'--c-form-transition-timing-function-linear');
 }
 
 .form-blink-enter-done {
@@ -296,3 +298,5 @@
     opacity: 1;
   }
 }
+
+@import '../../_components/field-presentation/form.less';

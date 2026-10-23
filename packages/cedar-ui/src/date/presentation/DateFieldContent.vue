@@ -1,6 +1,7 @@
 <template>
   <TemporalTrigger
     v-bind="popupProps"
+    :popup-class="[fieldProps.popupProps?.popupClass, 'c-date-field-popover']"
     :open="state.open.value"
     :disabled="state.disabled.value || state.readonly.value"
     :placement="popupProps.placement || 'bottom-start'"
@@ -33,7 +34,17 @@
       </PickerField>
     </slot>
     <template #content>
-      <div :id="popupId" role="dialog" :aria-label="locale.placeholder(false)">
+      <div
+        :id="popupId"
+        class="c-date-field-panel"
+        :class="{
+          'c-date-field-panel--range': range,
+          'c-date-field-panel--week': fieldProps.type === 'week',
+          'c-date-field-panel--time': !range && panelProps.showTime,
+        }"
+        role="dialog"
+        :aria-label="locale.placeholder(false)"
+      >
         <component
           :is="DatePanel"
           v-if="state.open.value"

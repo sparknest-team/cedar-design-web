@@ -110,6 +110,8 @@ export interface ValidateMessage {
 }
 
 export interface CedarLang {
+  fieldPresentation?: { clickEdit?: string; doubleClickEdit?: string; edit: string; close: string; search: string; selected: string; limit: string; selectionCount: string; selectionRemove: string; selectionBack: string; selectionEmpty: string }
+
   search: { search: string; cancel: string; history: string }
   locale: string
   common: {
@@ -218,6 +220,12 @@ export interface CedarLang {
     click: string
   }
   datePicker: {
+    previousMonth: string
+    nextMonth: string
+    previousYear: string
+    nextYear: string
+    previousPeriod: string
+    nextPeriod: string
     view: CedarCalendarLang['view']
     month: CedarCalendarLang['month']
     week: CedarCalendarLang['week']

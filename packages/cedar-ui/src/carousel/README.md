@@ -4,7 +4,7 @@ permalink: /components/carousel/
 
 # Carousel
 
-用于展示多张图片、视频或内嵌框架等内容的循环播放，支持系统自动播放或用户手动切换。
+自动播放的间隔是业务播放节奏（business-clock），不是 CSS 动效时长；默认关闭，启用 true 时默认3000ms，数字／配置间隔、hover/focus/隐藏暂停规则保持。取消或重排使旧播放任务失效；当前回调消费一次后才调用导航。停用／卸载保留 next／prev／to、键盘和滚轮入口无效，不能翻页或拦截输入。激活建立新观察器／事件绑定，解绑前迟交付不得借新 active 状态重新排任务。
 
 ## 案例
 
@@ -46,6 +46,8 @@ permalink: /components/carousel/
 
 ### 多图同屏
 
+示例同时显示2.5项，可用鼠标拖拽并切换“接受切换”和“循环”。Current为父级已接受的零基索引，Proposal记录切换请求，Changes统计change事件；受控拒绝时仍可能发出提案及change，不等于模型已更新。接受后可正反拖动，首项向前循环到末项；关闭循环后末端继续拖动不越界、不重复通知。此处是鼠标组合示例，不代表真机触屏或所有居中/自动宽度组合均已验收。
+
 通过 `slides-per-view` 和 `space-between` 属性可以控制每屏显示的 slide 数量及间距。
 
 <demo src="./__demos__/multi-slides.vue"></demo>
@@ -70,7 +72,7 @@ permalink: /components/carousel/
 
 ### 鼠标滚轮控制
 
-通过 `mousewheel` 属性可以开启鼠标滚轮切换。
+通过 `mousewheel` 属性可以开启鼠标滚轮切换。滚轮作用在轮播区域时切换页，不滚动外层页面；开启 loop 时从首项向前切换到末项。该能力不等同于触屏拖拽。
 
 <demo src="./__demos__/mousewheel.vue"></demo>
 
@@ -94,9 +96,13 @@ permalink: /components/carousel/
 
 ### effect-fade
 
+通过指示器按钮切换；非活动页透明且退出交互。各页重叠在同一网格位置，活动页占满视口宽度而不是分列。示例图片使用站点根路径，避免组件子路由下解析为相对资源。
+
 <demo src="./__demos__/effect-fade.vue"></demo>
 
 ### effect-card
+
+活动项恢复原始比例和不透明度，相邻项缩小、降低不透明度；上一页/下一页按钮支持原生键盘操作。
 
 <demo src="./__demos__/effect-card.vue"></demo>
 
@@ -110,11 +116,46 @@ permalink: /components/carousel/
 
 ### auto-sized
 
+“反转顺序”以卡片宽度作为本示例的唯一key，反转同一批卡片。current按位置索引而非业务卡片身份解释：索引1从220px变成180px，索引与change次数不变；向左拖到索引2后恢复顺序，当前位置对应180px，向右拖回索引1。重排本身不提交切换；任意插入排序、身份保持、持按中重排和物理触屏仍未覆盖。
+
+Reverse cards reorders the same uniquely keyed cards (their distinct widths are the Demo keys). Current is positional, not a business-card identity: index 1 changes from 220px to 180px without changing the index or event count. Drag left to index 2, restore order to show 180px there, then drag right to index 1. Reordering alone emits no change. Arbitrary insertion/sorting, identity-following selection, reordering during a held gesture and physical touch remain unverified.
+
+活动第五项删除组合：选中新增第五项后关闭“增加末项”，父级Current仍4、Changes不增加；显示层将越界索引限制到剩余第四项并居中。随后向左拖动才按四项循环到0，回写模型并增加一次change。这里不自动修正父级受控值；业务若需要删除即重写索引，应自行更新current。未覆盖任意重排或持按手势中删除。
+
+When the active fifth card is removed, parent Current stays 4 without another change; the view clamps it to the remaining fourth card and centers that card. A subsequent left drag wraps to 0 and updates the model once. Applications that need immediate parent-index correction must update current themselves. Arbitrary reordering and deletion during a held gesture remain unverified.
+
+从末项索引3清空再恢复时，父级Current保留3、Changes不增加；恢复后末项仍居中，随后向左拖动才循环到0并增加一次change。空态不把受控父级值强制回写0。此记录不覆盖活动末项删除、任意越界值或手势中清空。
+
+Clearing from index 3 retains the parent Current and change count. Restoring centers the last card; the next left drag wraps to 0 and emits once. Empty content does not force the controlled parent value to 0. Active-card deletion, arbitrary invalid indices and clearing during a held gesture remain unverified.
+
+“清空项目”临时移除所有卡片，空态导航禁用、拖动不发切换；解除后恢复此前配置的卡片，不自动切换。从初始索引0清空再恢复后，向右拖动可正常循环到末项。此流程未覆盖非零越界受控索引或清空途中仍按住指针。
+
+“增加末项”追加200px第五项，不改变当前有效索引或增加change；从首项向右拖到新增项，再向右拖回原末项后移除第五项，仍保持原末项和次数。此时向左拖可按恢复后的四项循环回首项。这里只覆盖移除非活动末项，未认证删除当前项、任意重排或手势途中增删。
+
+先拖到末项，再开启“加宽卡片”（各项增加80px）和“窄容器”（300px），当前模型与change次数不因尺寸变化而增加；观察当前340px卡片重新居中，再向左拖动循环到首项。恢复开关后应继续居中。本段描述真实ResizeObserver响应已结束手势后的尺寸变化，不代表按住拖动期间改变尺寸。
+
+居中自动宽度示例包含140/220/180/260px四个独立项目，间隔12px。鼠标拖拽逐项切换，首尾均可循环；Current显示已接受的零基模型，Changes记录change事件次数。当前项宽度不同仍保持居中。本示例不代表真机触屏、手势中尺寸变化或动态增删项目已全部验收。
+
 <demo src="./__demos__/auto-sized.vue"></demo>
 
 ### interactive-content
 
+当前索引和变更次数展示受控模型。输入框内的方向键、Home/End和鼠标拖选文字保留原生编辑，不切换轮播；拖动背景，或聚焦轮播容器后按方向键，才切换页面。返回原页面仍保留输入文字；示例不涉及外部保存或物理触屏文字选择。
+
 <demo src="./__demos__/interactive-content.vue"></demo>
+
+### Scheduler lifecycle / 调度生命周期
+
+<demo src="./__demos__/scheduler-lifecycle.vue"></demo>
+
+用于展示多张图片、视频或内嵌框架等内容的循环播放，支持系统自动播放或用户手动切换。
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
 
 ## API
 
@@ -211,7 +252,6 @@ CarouselProps, CarouselItemProps, CarouselInstance, CarouselItemInstance, Carous
 | `--c-carousel-focus-width` | `2px` |
 | `--c-carousel-focus-offset` | `2px` |
 | `--c-carousel-focus-color` | `var(--c-sys-color-content-brand)` |
-
 
 ### 循环过渡边界
 

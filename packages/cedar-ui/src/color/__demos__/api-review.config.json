@@ -1,0 +1,179 @@
+{
+  "fields": [
+    {
+      "name": "model-value",
+      "description": "绑定值",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "format",
+      "description": "颜色格式",
+      "type": "'hex' | 'rgb'",
+      "defaultValue": "undefined",
+      "kind": "enum",
+      "options": [
+        "hex",
+        "rgb"
+      ],
+      "initial": "hex"
+    },
+    {
+      "name": "size",
+      "description": "尺寸",
+      "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
+      "defaultValue": "'md'",
+      "kind": "enum",
+      "options": [
+        "xs",
+        "sm",
+        "md",
+        "lg",
+        "xl"
+      ],
+      "initial": "md"
+    },
+    {
+      "name": "show-text",
+      "description": "显示颜色值",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "show-history",
+      "description": "显示历史颜色",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "show-preset",
+      "description": "显示预设颜色",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "disabled",
+      "description": "禁用",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "disabled-alpha",
+      "description": "禁用透明通道",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "color-picker-props",
+      "description": "透传给 ColorPicker",
+      "type": "object",
+      "defaultValue": "() => ({})",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "presentation",
+      "type": "'inline' | 'click' | 'dblclick'",
+      "defaultValue": "undefined",
+      "description": "字段编辑方式，字段 > FormItem > Form 继承；默认 inline。",
+      "kind": "enum",
+      "options": [
+        "inline",
+        "click",
+        "dblclick"
+      ],
+      "initial": "inline"
+    },
+    {
+      "name": "read-pretty",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "纯阅读展示；字段 > FormItem > Form 继承，显式 false 覆盖父级。",
+      "kind": "boolean"
+    },
+    {
+      "name": "before-commit",
+      "type": "BeforeFieldCommit",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "callback"
+    },
+    {
+      "name": "open",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "default-open",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "popup-container",
+      "type": "string | HTMLElement | false",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "json",
+      "initial": "\"body\""
+    },
+    {
+      "name": "readonly",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "default-value",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "@zh 默认值\n@en Default value\n/",
+      "kind": "string"
+    },
+    {
+      "name": "history-colors",
+      "type": "string[]",
+      "defaultValue": "undefined",
+      "description": "@zh 历史颜色\n@en History colors\n/",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "preset-colors",
+      "type": "string[]",
+      "defaultValue": "undefined",
+      "description": "@zh 预设颜色\n@en Preset colors\n/",
+      "kind": "json",
+      "initial": "[]"
+    }
+  ],
+  "events": [
+    "update:modelValue",
+    "update:open"
+  ],
+  "scenarios": [
+    {
+      "name": "color-picker-props",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "before-commit",
+      "kind": "prop",
+      "demos": []
+    }
+  ],
+  "slotNames": [],
+  "slotDefaults": {},
+  "methodNames": []
+}

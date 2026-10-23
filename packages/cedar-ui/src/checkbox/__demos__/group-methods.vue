@@ -19,7 +19,7 @@ const options = [
   <section class="group-methods-demo">
     <p>最多选择 4 项（包含未加载的 remote）。全选/反选保留只读和未加载的已选值。</p>
     <c-checkbox-group ref="group" v-model="value" :options="reverse ? [...options].reverse() : options" :max="4" direction="vertical" />
-    <c-space>
+    <c-space wrap>
       <c-button @click="proposal = group?.checkAll() ?? []">全选</c-button>
       <c-button @click="proposal = group?.inverseAll() ?? []">反选</c-button>
       <c-button @click="reverse = !reverse">调整选项顺序</c-button>

@@ -211,7 +211,7 @@ export default defineComponent({
     const instance = getCurrentInstance()
     const tableCtx = inject<Partial<TableContext>>(tableInjectionKey, {})
     const tableColumnCtx = inject(tableColumnInjectionKey, undefined)
-    const { children, components } = useChildrenComponents('TableColumn')
+    const { children, components } = useChildrenComponents(name)
 
     const childrenColumnMap = reactive(new Map<number, TableColumnData>())
 

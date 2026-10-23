@@ -259,6 +259,7 @@ export function useUploader(options: UseUploaderOptions) {
   function reset() {
     if (disabled.value) return
     generation++
+    adding = Promise.resolve()
     removals.clear()
     for (const uid of attempts.keys()) cancelAttempt(uid)
     pendingAuto.clear()
@@ -267,7 +268,9 @@ export function useUploader(options: UseUploaderOptions) {
   }
   onActivated(() => { inactive = false })
   onDeactivated(() => {
-    inactive = true; generation++; removals.clear()
+    inactive = true; generation++
+    adding = Promise.resolve()
+    removals.clear()
     for (const uid of attempts.keys()) { cancelAttempt(uid); queue.patch(uid, { status: 'canceled', percent: 0 }) }
   })
   onBeforeUnmount(() => {

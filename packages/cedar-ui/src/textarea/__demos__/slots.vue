@@ -3,7 +3,9 @@
     <template #prefix>说明</template>
     <template #suffix>Markdown</template>
     <template #clear-icon="{ clear }">
-      <button type="button" aria-label="清空文本" @click="clear">×</button>
+      <c-button html-type="button" aria-label="清空文本" @click="clear"
+        >×</c-button
+      >
     </template>
   </c-textarea>
 </template>

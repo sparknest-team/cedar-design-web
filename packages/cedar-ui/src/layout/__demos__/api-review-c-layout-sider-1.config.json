@@ -1,0 +1,107 @@
+{
+  "fields": [
+    {
+      "name": "theme",
+      "description": "主题颜色",
+      "type": "'dark' | 'light'",
+      "defaultValue": "'light'",
+      "kind": "enum",
+      "options": [
+        "dark",
+        "light"
+      ],
+      "initial": "light"
+    },
+    {
+      "name": "collapsed",
+      "description": "当前收起状态",
+      "type": "boolean",
+      "defaultValue": "-",
+      "kind": "boolean"
+    },
+    {
+      "name": "default-collapsed",
+      "description": "默认的收起状态",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "collapsible",
+      "description": "是否可收起",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "width",
+      "description": "宽度",
+      "type": "number | string",
+      "defaultValue": "200",
+      "kind": "scalar"
+    },
+    {
+      "name": "collapsed-width",
+      "description": "收缩宽度",
+      "type": "number",
+      "defaultValue": "48",
+      "kind": "number"
+    },
+    {
+      "name": "reverse-arrow",
+      "description": "翻转折叠提示箭头的方向，当 Sider 在右边时可以使用",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "breakpoint",
+      "description": "触发响应式布局的断点, 详见响应式栅格",
+      "type": "'xxl' | 'xl' | 'lg' | 'md' | 'sm' | 'xs'",
+      "defaultValue": "-",
+      "kind": "enum",
+      "options": [
+        "xxl",
+        "xl",
+        "lg",
+        "md",
+        "sm",
+        "xs"
+      ],
+      "initial": "xxl"
+    },
+    {
+      "name": "resize-directions",
+      "description": "可以用 ResizeBox 替换原生的 aside 标签，这个参数即 ResizeBox的 directions 参数。详情请看 ResizeBox。",
+      "type": "Array<'left' | 'right' | 'top' | 'bottom'>",
+      "defaultValue": "-",
+      "kind": "enum",
+      "options": [
+        "left",
+        "right",
+        "top",
+        "bottom"
+      ],
+      "initial": "left"
+    },
+    {
+      "name": "hide-trigger",
+      "description": "隐藏底部折叠触发器",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    }
+  ],
+  "methodNames": [],
+  "events": [
+    "collapse",
+    "breakpoint"
+  ],
+  "slotNames": [
+    "trigger"
+  ],
+  "slotDefaults": {
+    "trigger": false
+  },
+  "scenarios": []
+}

@@ -1,0 +1,95 @@
+{
+  "fields": [
+    {
+      "name": "href",
+      "description": "链接地址",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "target",
+      "description": "原生链接打开目标",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "rel",
+      "description": "原生链接关系",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "status",
+      "description": "链接的状态",
+      "type": "\"default\" | \"primary\" | \"secondary\" | \"tertiary\" | \"info\" | \"success\" | \"warning\" | \"danger\"",
+      "defaultValue": "'default'",
+      "kind": "enum",
+      "options": [
+        "default",
+        "primary",
+        "secondary",
+        "tertiary",
+        "info",
+        "success",
+        "warning",
+        "danger"
+      ],
+      "initial": "default"
+    },
+    {
+      "name": "underline",
+      "description": "下划线显示策略",
+      "type": "\"always\" | \"hover\" | \"none\"",
+      "defaultValue": "'none'",
+      "kind": "enum",
+      "options": [
+        "always",
+        "hover",
+        "none"
+      ],
+      "initial": "none"
+    },
+    {
+      "name": "hoverable",
+      "description": "鼠标悬浮时存在底色",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "icon",
+      "description": "图标",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "loading",
+      "description": "链接是否为加载中状态",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "disabled",
+      "description": "链接是否禁用",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    }
+  ],
+  "methodNames": [],
+  "events": [
+    "click"
+  ],
+  "slotNames": [
+    "icon"
+  ],
+  "slotDefaults": {
+    "icon": true
+  },
+  "scenarios": []
+}

@@ -115,7 +115,7 @@ export interface FieldRule<FieldValue = any> {
    * @param value
    * @param callback
    */
-  validator?: (value: FieldValue | undefined, callback: (error?: string) => void) => void
+  validator?: (value: FieldValue | undefined, callback: (error?: string) => void, context?: { model: Readonly<Record<string, unknown>>; field: string }) => void
 }
 
 export interface FieldData {

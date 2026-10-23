@@ -1,0 +1,99 @@
+{
+  "fields": [
+    {
+      "name": "type",
+      "description": "加载动画类型",
+      "type": "\"circle\" | \"wave\" | \"cube\" | \"rect\" | \"disappear\"",
+      "defaultValue": "\"circle\"",
+      "kind": "enum",
+      "options": [
+        "circle",
+        "wave",
+        "cube",
+        "rect",
+        "disappear"
+      ],
+      "initial": "circle"
+    },
+    {
+      "name": "size",
+      "description": "加载指示器的尺寸；数字表示 px",
+      "type": "xs | sm | md | lg | xl | number",
+      "defaultValue": "\"md\"",
+      "kind": "scenario"
+    },
+    {
+      "name": "radius",
+      "description": "circle 类型的半径",
+      "type": "string | number",
+      "defaultValue": "undefined",
+      "kind": "scalar"
+    },
+    {
+      "name": "color",
+      "description": "加载指示器和提示文案的颜色",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string",
+      "initial": "#5268cc"
+    },
+    {
+      "name": "loading",
+      "description": "是否为加载中状态（仅在包裹内容时生效）",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "tip",
+      "description": "提示文案",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "hide-icon",
+      "description": "是否隐藏加载指示器",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    }
+  ],
+  "events": [],
+  "scenarios": [
+    {
+      "name": "size",
+      "kind": "prop",
+      "demos": [
+        "size.vue"
+      ]
+    },
+    {
+      "name": "default",
+      "kind": "slot",
+      "demos": []
+    },
+    {
+      "name": "tip",
+      "kind": "slot",
+      "demos": [
+        "directive.vue",
+        "wrap.vue"
+      ]
+    },
+    {
+      "name": "icon",
+      "kind": "slot",
+      "demos": []
+    }
+  ],
+  "slotNames": [
+    "tip",
+    "icon"
+  ],
+  "slotDefaults": {
+    "tip": false,
+    "icon": false
+  },
+  "methodNames": []
+}

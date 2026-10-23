@@ -8,6 +8,17 @@ import { CedarResolver, resolveCedarComponent } from "../lib/index.js";
 
 const [components, directives] = CedarResolver();
 
+test("resolves Menu and MenuOption through the menu style entry", () => {
+  for (const name of ["Menu", "MenuOption"]) {
+    assert.deepEqual(components.resolve(`C${name}`), {
+      from: "@cedarjs/ui",
+      name: `_${name}Component`,
+      sideEffects: ["@cedarjs/ui/menu/style"],
+    });
+  }
+  assert.equal(components.resolve("CDropdownMenu"), undefined);
+});
+
 test("ignores browser globals and unknown C-prefixed components", () => {
   for (const name of ["CSS", "CSSStyleSheet", "CSSStyleDeclaration", "CustomEvent", "Cache", "Crypto", "CompressionStream", "CNotARealComponent", "CButtonUnknown"]) {
     assert.equal(components.resolve(name), undefined, name);
@@ -95,7 +106,7 @@ test("resolves UI components with their styles", () => {
 test("maps sub-components to their parent style directory", () => {
   for (const [name, dir] of [
     ["COption", "select"],
-    ["CMenuOption", "dropdown-menu"],
+    ["CMenuOption", "menu"],
     ["CTypographyText", "typography"],
     ["CStep", "steps"],
     ["CAnchorLink", "anchor"],
@@ -188,7 +199,7 @@ test("every component exposed by CedarVue has a resolver alias", () => {
 });
 
 test("resolves components without styles with no side effects", () => {
-  for (const name of ["CColor", "CContext", "CStyleProvider"]) {
+  for (const name of ["CContext", "CStyleProvider"]) {
     assert.deepEqual(components.resolve(name), {
       from: "@cedarjs/ui",
       name: `_${name.slice(1)}Component`,
@@ -260,3 +271,10 @@ test('Row and Col resolve independent styles', () => {
     assert.deepEqual(resolved.sideEffects, ['@cedarjs/ui/' + name.toLowerCase() + '/style'])
   }
 })
+
+test("Color imports its ColorPicker style dependency", () => {
+  const [components] = CedarResolver();
+  assert.deepEqual(components.resolve("CColor")?.sideEffects, ["@cedarjs/ui/color/style"]);
+  const entry = readFileSync(new URL("../../cedar-ui/src/color/style/index.ts", import.meta.url), "utf8");
+  assert.match(entry, /import ['"]\.\.\/\.\.\/color-picker\/style['"]/);
+});

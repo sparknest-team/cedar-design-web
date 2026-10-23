@@ -1,5 +1,5 @@
 <template>
-  <c-space>
+  <c-space size="sm">
     <c-link loading>加载中</c-link>
     <c-link :loading="loading" @click="handleClick">点击加载</c-link>
   </c-space>

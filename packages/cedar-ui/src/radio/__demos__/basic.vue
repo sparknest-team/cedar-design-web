@@ -1,5 +1,5 @@
 <template>
-  <c-space size="lg" fill>
+  <c-space wrap size="lg" fill>
     <c-radio value="radio">Radio</c-radio>
     <c-radio value="disabled radio" default-value="disabled radio" disabled>Disabled Radio </c-radio>
     <c-radio-group v-model="type" variant="button">

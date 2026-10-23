@@ -1,0 +1,66 @@
+{
+  "fields": [
+    {
+      "name": "time",
+      "description": "倒计时时长（毫秒）",
+      "type": "number | string",
+      "defaultValue": "0",
+      "kind": "scalar"
+    },
+    {
+      "name": "format",
+      "description": "展示格式",
+      "type": "string",
+      "defaultValue": "'HH:mm:ss'",
+      "kind": "string"
+    },
+    {
+      "name": "auto-start",
+      "description": "是否自动开始倒计时",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    }
+  ],
+  "events": [
+    "change",
+    "end"
+  ],
+  "scenarios": [
+    {
+      "name": "default",
+      "kind": "slot",
+      "demos": [
+        "custom.vue"
+      ]
+    },
+    {
+      "name": "start",
+      "kind": "method",
+      "demos": [
+        "manual.vue"
+      ]
+    },
+    {
+      "name": "pause",
+      "kind": "method",
+      "demos": [
+        "manual.vue"
+      ]
+    },
+    {
+      "name": "reset",
+      "kind": "method",
+      "demos": [
+        "manual.vue"
+      ]
+    }
+  ],
+  "slotNames": [],
+  "slotDefaults": {},
+  "methodNames": [
+    "start",
+    "pause",
+    "reset"
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "fields": [
+    {
+      "name": "src",
+      "description": "图片获取地址",
+      "type": "string",
+      "defaultValue": "-",
+      "kind": "string"
+    },
+    {
+      "name": "open",
+      "description": "是否打开",
+      "type": "boolean",
+      "defaultValue": "-",
+      "kind": "boolean"
+    },
+    {
+      "name": "default-open",
+      "description": "默认是否打开，非受控",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "overlay-closable",
+      "description": "点击图片外的 overlay 是否触发关闭，点击图片不会关闭",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "closable",
+      "description": "是否显示关闭按钮",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "actions-layout",
+      "description": "操作项的布局",
+      "type": "string[]",
+      "defaultValue": "[  'fullScreen',  'rotateRight',  'rotateLeft',  'zoomIn',  'zoomOut',  'originalSize',]",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "popup-container",
+      "description": "设置弹出框的挂载点，同 teleport 的 to，缺省值是 document.body",
+      "type": "HTMLElement | string | false",
+      "defaultValue": "-",
+      "kind": "json",
+      "initial": "\"body\""
+    },
+    {
+      "name": "esc-to-close",
+      "description": "是否支持 ESC 键关闭预览",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "wheel-zoom",
+      "description": "是否开启滚轮缩放",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "keyboard",
+      "description": "是否开启键盘控制",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "default-scale",
+      "description": "默认缩放比",
+      "type": "number",
+      "defaultValue": "1",
+      "kind": "number"
+    },
+    {
+      "name": "scale-step",
+      "description": "每次缩放的增量",
+      "type": "number",
+      "defaultValue": "0.5",
+      "kind": "number"
+    }
+  ],
+  "methodNames": [],
+  "events": [
+    "close",
+    "open-change"
+  ],
+  "slotNames": [
+    "actions"
+  ],
+  "slotDefaults": {
+    "actions": true
+  },
+  "scenarios": []
+}

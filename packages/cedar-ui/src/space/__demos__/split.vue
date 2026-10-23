@@ -8,12 +8,12 @@
   </c-radio-group>
   <br />
   <br />
-  通过 divider 组件实现分割，并且通过 size-x 和 size-y 调整分割线尺寸。
+  通过 divider 组件实现分割，并且通过 inset 和 spacing 调整分割线尺寸。
   <br />
   <br />
   <c-space :size="size" wrap>
     <template #split>
-      <c-divider orientation="vertical" size-x="md" size-y="0" />
+      <c-divider orientation="vertical" inset="md" spacing="0" />
     </template>
     <c-button status="primary">Item1</c-button>
     <c-button status="primary">Item2</c-button>

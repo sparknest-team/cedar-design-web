@@ -1,0 +1,844 @@
+{
+  "fields": [
+    {
+      "name": "size",
+      "description": "尺寸",
+      "type": "'xs' | 'sm' | 'md' | 'lg' | 'xl'",
+      "defaultValue": "'md'",
+      "kind": "enum",
+      "options": [
+        "xs",
+        "sm",
+        "md",
+        "lg",
+        "xl"
+      ],
+      "initial": "md"
+    },
+    {
+      "name": "block-node",
+      "description": "节点是否占据一行",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "default-expand-all",
+      "description": "是否默认展开父节点",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "multiple",
+      "description": "是否支持多选",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "checkable",
+      "description": "是否在节点前添加复选框",
+      "type": "boolean| ((    node: TreeNodeData,    info: {      level: number;      isLeaf: boolean;    }  ) => boolean)",
+      "defaultValue": "false",
+      "kind": "scenario"
+    },
+    {
+      "name": "selectable",
+      "description": "是否支持选择",
+      "type": "boolean| ((    node: TreeNodeData,    info: {      level: number;      isLeaf: boolean;    }  ) => boolean)",
+      "defaultValue": "true",
+      "kind": "callback"
+    },
+    {
+      "name": "check-strictly",
+      "description": "是否取消父子节点关联",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "checked-strategy",
+      "description": "定制回填方式   all: 返回所有选中的节点   parent: 父子节点都选中时只返回父节点   child: 只返回子节点",
+      "type": "'all' | 'parent' | 'child'",
+      "defaultValue": "'all'",
+      "kind": "enum",
+      "options": [
+        "all",
+        "parent",
+        "child"
+      ],
+      "initial": "all"
+    },
+    {
+      "name": "default-selected-keys",
+      "description": "默认选中的树节点",
+      "type": "Array<string | number>",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "selected-keys",
+      "description": "选中的树节点",
+      "type": "Array<string | number>",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "default-checked-keys",
+      "description": "默认选中复选框的树节点",
+      "type": "Array<string | number>",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "checked-keys",
+      "description": "选中复选框的树节点",
+      "type": "Array<string | number>",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "default-expanded-keys",
+      "description": "默认展开的节点",
+      "type": "Array<string | number>",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "expanded-keys",
+      "description": "展开的节点",
+      "type": "Array<string | number>",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "data",
+      "description": "传入data,生成对应的树结构",
+      "type": "TreeNodeData[]",
+      "defaultValue": "() => []",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "field-names",
+      "description": "指定节点数据中的字段名",
+      "type": "TreeFieldNames",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "show-line",
+      "description": "是否展示连接线",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "load-more",
+      "description": "异步加载数据的回调，返回一个 Promise",
+      "type": "(node: TreeNodeData) => Promise<void>",
+      "defaultValue": "undefined",
+      "kind": "callback"
+    },
+    {
+      "name": "draggable",
+      "description": "是否可以拖拽",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "allow-drop",
+      "description": "拖拽时是否允许在某节点上释放",
+      "type": "(options: {  dropNode: TreeNodeData;  dropPosition: -1 | 0 | 1;}) => boolean",
+      "defaultValue": "undefined",
+      "kind": "callback"
+    },
+    {
+      "name": "virtual-list-props",
+      "description": "传递虚拟列表属性，传入此参数以开启虚拟滚动，[VirtualListProps](#VirtualListProps)",
+      "type": "VirtualListProps",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "default-expand-selected",
+      "description": "是否默认展开已选中节点的父节点",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "default-expand-checked",
+      "description": "是否默认展开已选中复选框节点的父节点",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "auto-expand-parent",
+      "description": "是否自动展开已展开节点的父节点",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "half-checked-keys",
+      "description": "半选状态的节点.仅在 checkable 且 checkStrictly 时生效",
+      "type": "Array<string | number>",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "only-check-leaf",
+      "description": "开启后 checkedKeys 只处理叶子节点，父节点状态由子节点决定（仅在 checkable 且 checkStrictly 为 false 时生效）",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "animation",
+      "description": "是否开启展开时的过渡动效",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "action-on-node-click",
+      "description": "点击节点的时候触发的动作",
+      "type": "'expand'",
+      "defaultValue": "undefined",
+      "kind": "enum",
+      "options": [
+        "expand"
+      ],
+      "initial": "expand"
+    },
+    {
+      "name": "filter-tree-node",
+      "type": "FilterTreeNode",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "callback"
+    },
+    {
+      "name": "search-value",
+      "type": "string",
+      "defaultValue": "''",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "string"
+    },
+    {
+      "name": "disable-select-action-only",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "// internal",
+      "kind": "boolean"
+    },
+    {
+      "name": "TreeNodeData.key",
+      "description": "data.0 · 唯一标示",
+      "type": "string | number",
+      "defaultValue": "-",
+      "kind": "scalar",
+      "path": [
+        "data",
+        0,
+        "key"
+      ]
+    },
+    {
+      "name": "TreeNodeData.title",
+      "description": "data.0 · 该节点显示的标题",
+      "type": "string",
+      "defaultValue": "-",
+      "kind": "string",
+      "path": [
+        "data",
+        0,
+        "title"
+      ]
+    },
+    {
+      "name": "TreeNodeData.selectable",
+      "description": "data.0 · 是否允许选中",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean",
+      "path": [
+        "data",
+        0,
+        "selectable"
+      ]
+    },
+    {
+      "name": "TreeNodeData.disabled",
+      "description": "data.0 · 是否禁用节点",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean",
+      "path": [
+        "data",
+        0,
+        "disabled"
+      ]
+    },
+    {
+      "name": "TreeNodeData.disable-checkbox",
+      "description": "data.0 · 是否禁用复选框",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean",
+      "path": [
+        "data",
+        0,
+        "disableCheckbox"
+      ]
+    },
+    {
+      "name": "TreeNodeData.checkable",
+      "description": "data.0 · 是否显示多选框",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean",
+      "path": [
+        "data",
+        0,
+        "checkable"
+      ]
+    },
+    {
+      "name": "TreeNodeData.draggable",
+      "description": "data.0 · 是否可以拖拽",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean",
+      "path": [
+        "data",
+        0,
+        "draggable"
+      ]
+    },
+    {
+      "name": "TreeNodeData.is-leaf",
+      "description": "data.0 · 是否是叶子节点。动态加载时有效",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean",
+      "path": [
+        "data",
+        0,
+        "isLeaf"
+      ]
+    },
+    {
+      "name": "TreeNodeData.icon",
+      "description": "data.0 · 节点的图标",
+      "type": "() => VNode",
+      "defaultValue": "-",
+      "kind": "callback",
+      "path": [
+        "data",
+        0,
+        "icon"
+      ]
+    },
+    {
+      "name": "TreeNodeData.switcher-icon",
+      "description": "data.0 · 定制 switcher 图标，优先级大于 tree",
+      "type": "() => VNode",
+      "defaultValue": "-",
+      "kind": "callback",
+      "path": [
+        "data",
+        0,
+        "switcherIcon"
+      ]
+    },
+    {
+      "name": "TreeNodeData.loading-icon",
+      "description": "data.0 · 定制 loading 图标，优先级大于 tree",
+      "type": "() => VNode",
+      "defaultValue": "-",
+      "kind": "callback",
+      "path": [
+        "data",
+        0,
+        "loadingIcon"
+      ]
+    },
+    {
+      "name": "TreeNodeData.drag-icon",
+      "description": "data.0 · 定制 drag 图标，优先级大于 tree",
+      "type": "() => VNode",
+      "defaultValue": "-",
+      "kind": "callback",
+      "path": [
+        "data",
+        0,
+        "dragIcon"
+      ]
+    },
+    {
+      "name": "TreeNodeData.children",
+      "description": "data.0 · 子节点",
+      "type": "TreeNodeData[]",
+      "defaultValue": "-",
+      "kind": "json",
+      "initial": "[]",
+      "path": [
+        "data",
+        0,
+        "children"
+      ]
+    },
+    {
+      "name": "TreeFieldNames.key",
+      "description": "field-names · 指定 key 在 TreeNodeData 中的字段名",
+      "type": "string",
+      "defaultValue": "key",
+      "kind": "string",
+      "path": [
+        "field-names",
+        "key"
+      ]
+    },
+    {
+      "name": "TreeFieldNames.title",
+      "description": "field-names · 指定 title 在 TreeNodeData 中的字段名",
+      "type": "string",
+      "defaultValue": "title",
+      "kind": "string",
+      "path": [
+        "field-names",
+        "title"
+      ]
+    },
+    {
+      "name": "TreeFieldNames.disabled",
+      "description": "field-names · 指定 disabled 在 TreeNodeData 中的字段名",
+      "type": "string",
+      "defaultValue": "disabled",
+      "kind": "string",
+      "path": [
+        "field-names",
+        "disabled"
+      ]
+    },
+    {
+      "name": "TreeFieldNames.children",
+      "description": "field-names · 指定 children 在 TreeNodeData 中的字段名",
+      "type": "string",
+      "defaultValue": "children",
+      "kind": "string",
+      "path": [
+        "field-names",
+        "children"
+      ]
+    },
+    {
+      "name": "TreeFieldNames.is-leaf",
+      "description": "field-names · 指定 isLeaf 在 TreeNodeData 中的字段名",
+      "type": "string",
+      "defaultValue": "isLeaf",
+      "kind": "string",
+      "path": [
+        "field-names",
+        "isLeaf"
+      ]
+    },
+    {
+      "name": "TreeFieldNames.disable-checkbox",
+      "description": "field-names · 指定 disableCheckbox 在 TreeNodeData 中的字段名",
+      "type": "string",
+      "defaultValue": "disableCheckbox",
+      "kind": "string",
+      "path": [
+        "field-names",
+        "disableCheckbox"
+      ]
+    },
+    {
+      "name": "TreeFieldNames.checkable",
+      "description": "field-names · 指定 checkable 在 TreeNodeData 中的字段名",
+      "type": "string",
+      "defaultValue": "checkable",
+      "kind": "string",
+      "path": [
+        "field-names",
+        "checkable"
+      ]
+    },
+    {
+      "name": "TreeFieldNames.icon",
+      "description": "field-names · 指定 icon 在 TreeNodeData 中的字段名",
+      "type": "string",
+      "defaultValue": "checkable",
+      "kind": "string",
+      "path": [
+        "field-names",
+        "icon"
+      ]
+    },
+    {
+      "name": "VirtualListProps.height",
+      "description": "virtual-list-props · 可视区域高度",
+      "type": "number | string",
+      "defaultValue": "-",
+      "kind": "scalar",
+      "path": [
+        "virtual-list-props",
+        "height"
+      ]
+    },
+    {
+      "name": "VirtualListProps.threshold",
+      "description": "virtual-list-props · 开启虚拟滚动的元素数量阈值，当数据数量小于阈值时不会开启虚拟滚动。",
+      "type": "number",
+      "defaultValue": "-",
+      "kind": "number",
+      "path": [
+        "virtual-list-props",
+        "threshold"
+      ]
+    },
+    {
+      "name": "VirtualListProps.is-static-item-height",
+      "description": "virtual-list-props · （已废除）元素高度是否是固定的。请使用 fixedSize",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean",
+      "path": [
+        "virtual-list-props",
+        "isStaticItemHeight"
+      ]
+    },
+    {
+      "name": "VirtualListProps.fixed-size",
+      "description": "virtual-list-props · 元素高度是否是固定的。",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean",
+      "path": [
+        "virtual-list-props",
+        "fixedSize"
+      ]
+    },
+    {
+      "name": "VirtualListProps.estimated-size",
+      "description": "virtual-list-props · 元素高度不固定时的预估高度。",
+      "type": "number",
+      "defaultValue": "-",
+      "kind": "number",
+      "path": [
+        "virtual-list-props",
+        "estimatedSize"
+      ]
+    },
+    {
+      "name": "VirtualListProps.buffer",
+      "description": "virtual-list-props · 视口边界外提前挂载的元素数量。",
+      "type": "number",
+      "defaultValue": "10",
+      "kind": "number",
+      "path": [
+        "virtual-list-props",
+        "buffer"
+      ]
+    }
+  ],
+  "events": [
+    "select",
+    "check",
+    "expand",
+    "drag-start",
+    "drag-end",
+    "drag-over",
+    "drag-leave",
+    "drop",
+    "update:expandedKeys"
+  ],
+  "scenarios": [
+    {
+      "name": "checkable",
+      "kind": "prop",
+      "demos": [
+        "checkable.vue",
+        "checked-strategy.vue",
+        "control.vue",
+        "draggable.vue",
+        "render-extra.vue",
+        "size.vue",
+        "virtual.vue"
+      ]
+    },
+    {
+      "name": "selectable",
+      "kind": "prop",
+      "demos": [
+        "field-names.vue",
+        "render-extra.vue"
+      ]
+    },
+    {
+      "name": "default-selected-keys",
+      "kind": "prop",
+      "demos": [
+        "basic.vue",
+        "field-names.vue",
+        "show-line.vue"
+      ]
+    },
+    {
+      "name": "selected-keys",
+      "kind": "prop",
+      "demos": [
+        "basic.vue",
+        "control.vue",
+        "field-names.vue",
+        "multiple.vue",
+        "show-line.vue"
+      ]
+    },
+    {
+      "name": "default-checked-keys",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "checked-keys",
+      "kind": "prop",
+      "demos": [
+        "checkable.vue",
+        "checked-strategy.vue",
+        "control.vue",
+        "draggable.vue"
+      ]
+    },
+    {
+      "name": "default-expanded-keys",
+      "kind": "prop",
+      "demos": [
+        "basic.vue"
+      ]
+    },
+    {
+      "name": "expanded-keys",
+      "kind": "prop",
+      "demos": [
+        "basic.vue",
+        "control.vue"
+      ]
+    },
+    {
+      "name": "data",
+      "kind": "prop",
+      "demos": [
+        "basic.vue",
+        "block-node.vue",
+        "checkable.vue",
+        "checked-strategy.vue",
+        "control.vue",
+        "draggable.vue",
+        "field-names.vue",
+        "icons.vue",
+        "load-more.vue",
+        "multiple.vue",
+        "node-icon.vue",
+        "render-extra.vue",
+        "search.vue",
+        "show-line.vue",
+        "size.vue",
+        "virtual.vue"
+      ]
+    },
+    {
+      "name": "field-names",
+      "kind": "prop",
+      "demos": [
+        "field-names.vue"
+      ]
+    },
+    {
+      "name": "load-more",
+      "kind": "prop",
+      "demos": [
+        "load-more.vue"
+      ]
+    },
+    {
+      "name": "allow-drop",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "virtual-list-props",
+      "kind": "prop",
+      "demos": [
+        "virtual.vue"
+      ]
+    },
+    {
+      "name": "half-checked-keys",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "filter-tree-node",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "title",
+      "kind": "slot",
+      "demos": [
+        "basic.vue",
+        "block-node.vue",
+        "checkable.vue",
+        "checked-strategy.vue",
+        "control.vue",
+        "draggable.vue",
+        "field-names.vue",
+        "icons.vue",
+        "load-more.vue",
+        "multiple.vue",
+        "node-icon.vue",
+        "render-extra.vue",
+        "search.vue",
+        "show-line.vue",
+        "size.vue",
+        "virtual.vue"
+      ]
+    },
+    {
+      "name": "extra",
+      "kind": "slot",
+      "demos": [
+        "render-extra.vue"
+      ]
+    },
+    {
+      "name": "drag-icon",
+      "kind": "slot",
+      "demos": []
+    },
+    {
+      "name": "loading-icon",
+      "kind": "slot",
+      "demos": []
+    },
+    {
+      "name": "switcher-icon",
+      "kind": "slot",
+      "demos": [
+        "icons.vue"
+      ]
+    },
+    {
+      "name": "icon",
+      "kind": "slot",
+      "demos": [
+        "field-names.vue",
+        "icons.vue",
+        "node-icon.vue",
+        "render-extra.vue"
+      ]
+    },
+    {
+      "name": "scroll-into-view",
+      "kind": "method",
+      "demos": [
+        "virtual.vue"
+      ]
+    },
+    {
+      "name": "get-selected-nodes",
+      "kind": "method",
+      "demos": []
+    },
+    {
+      "name": "get-checked-nodes",
+      "kind": "method",
+      "demos": []
+    },
+    {
+      "name": "get-half-checked-nodes",
+      "kind": "method",
+      "demos": []
+    },
+    {
+      "name": "get-expanded-nodes",
+      "kind": "method",
+      "demos": []
+    },
+    {
+      "name": "check-all",
+      "kind": "method",
+      "demos": []
+    },
+    {
+      "name": "check-node",
+      "kind": "method",
+      "demos": []
+    },
+    {
+      "name": "select-all",
+      "kind": "method",
+      "demos": []
+    },
+    {
+      "name": "select-node",
+      "kind": "method",
+      "demos": []
+    },
+    {
+      "name": "expand-all",
+      "kind": "method",
+      "demos": []
+    },
+    {
+      "name": "expand-node",
+      "kind": "method",
+      "demos": []
+    }
+  ],
+  "slotNames": [
+    "title",
+    "extra",
+    "drag-icon",
+    "loading-icon",
+    "switcher-icon",
+    "icon"
+  ],
+  "slotDefaults": {
+    "title": false,
+    "extra": false,
+    "drag-icon": false,
+    "loading-icon": false,
+    "switcher-icon": false,
+    "icon": false
+  },
+  "methodNames": [
+    "scroll-into-view",
+    "get-selected-nodes",
+    "get-checked-nodes",
+    "get-half-checked-nodes",
+    "get-expanded-nodes",
+    "check-all",
+    "check-node",
+    "select-all",
+    "select-node",
+    "expand-all",
+    "expand-node"
+  ]
+}

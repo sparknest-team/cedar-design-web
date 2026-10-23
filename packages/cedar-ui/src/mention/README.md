@@ -20,6 +20,19 @@ permalink: /components/mention/
 
 <demo src="./__demos__/prefix.vue"></demo>
 
+### 镜像重定位生命周期
+
+<demo src="./__demos__/mirror-lifecycle.vue"></demo>
+
+样式从当前 textarea 所属窗口读取，旧观察器不能跨停用／激活提交；几何及样式读取返回后再次核对，防止重入卸载。停用／卸载的保留输入、弹层事件和 focus／blur 命令无效；禁用时不接受输入或 focus，活动实例仍允许 blur。公开方法签名、颜色和 CSS 变量不变。Maple 无对应 Mention 运行时，不新增移动端副本。
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
+
 ## API
 
 ### `<mention>` Props
@@ -68,3 +81,7 @@ import type { MentionInstance } from '@cedarjs/ui'
 ```
 
 Mention 复用 Input／Textarea 的排版和间距，测量镜像复制原生输入框计算样式。自定义请覆盖对应输入组件变量；不再提供无效的 mention-font-size、mention-line-height 或 mention-padding-*。
+
+### Form 字段展示与确认
+
+Cedar 使用 presentation="click" / "dblclick" 在原位进入编辑，Enter/F2 也可进入；取消/Escape 丢弃草稿，确认后提交。 readPretty 为纯阅读属性，与 readonly、disabled 独立。

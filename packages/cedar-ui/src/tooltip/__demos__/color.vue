@@ -1,5 +1,5 @@
 <template>
-  <c-space>
+  <c-space wrap>
     <c-tooltip content="This is tooltip content" color="#3491FA">
       <c-button>#3491FA</c-button>
     </c-tooltip>

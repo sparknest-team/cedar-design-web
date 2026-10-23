@@ -2,6 +2,7 @@
   <div :class="prefixCls">
     <div :class="`${prefixCls}-inner`">
       <PanelHeader
+        mode="year"
         v-bind="{
           ...headerOperations,
           icons: headerIcons,

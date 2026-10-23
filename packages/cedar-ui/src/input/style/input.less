@@ -19,7 +19,7 @@
     font: inherit;
     font-size: var(--c-input-control-font-size);
     line-height: var(--c-input-control-line-height);
-    caret-color: var(--c-field-custom-focus, var(--c-field-focus-color));
+    caret-color: currentColor;
     cursor: inherit;
     -webkit-appearance: none;
     &::placeholder {
@@ -29,9 +29,6 @@
       color: var(--c-field-control-text-color-disabled);
       -webkit-text-fill-color: var(--c-field-control-text-color-disabled);
     }
-  }
-  .c-field-decorator--error &__inner {
-    caret-color: var(--c-field-error-color);
   }
   &__word-limit {
     color: var(--c-input-counter-color);

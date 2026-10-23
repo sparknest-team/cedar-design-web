@@ -1,0 +1,327 @@
+{
+  "fields": [
+    {
+      "name": "model-value",
+      "description": "受控值",
+      "type": "boolean | ChoiceValue[]",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "default-value",
+      "description": "非受控初始值",
+      "type": "boolean | ChoiceValue[]",
+      "defaultValue": "false",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "value",
+      "description": "数组/分组模式的选项标识",
+      "type": "string|number|boolean",
+      "defaultValue": "true",
+      "kind": "json",
+      "initial": "false"
+    },
+    {
+      "name": "disabled",
+      "description": "是否禁用；未设置时继承表单/分组",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "readonly",
+      "description": "是否只读；未设置时继承表单/分组",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "error",
+      "description": "错误态；未设置时继承表单/分组",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "indeterminate",
+      "description": "是否为半选状态",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "checked-color",
+      "description": "实例选中颜色；错误/禁用优先",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string",
+      "initial": "#5268cc"
+    },
+    {
+      "name": "unchecked-color",
+      "description": "实例未选中颜色；错误/禁用优先",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string",
+      "initial": "#5268cc"
+    },
+    {
+      "name": "icon-size",
+      "description": "数字为 px，字符串为 CSS 长度",
+      "type": "number | string",
+      "defaultValue": "undefined",
+      "kind": "scalar"
+    },
+    {
+      "name": "ripple",
+      "description": "是否启用波纹",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "uninject-group-context",
+      "description": "脱离外层 CheckboxGroup，仍参与表单",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "name",
+      "description": "原生字段名，未设置时继承 Group",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "aria-label",
+      "description": "无可见标签时的无障碍名称",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "presentation",
+      "type": "'inline' | 'click' | 'dblclick'",
+      "defaultValue": "undefined",
+      "description": "字段编辑方式，字段 > FormItem > Form 继承；默认 inline。",
+      "kind": "enum",
+      "options": [
+        "inline",
+        "click",
+        "dblclick"
+      ],
+      "initial": "inline"
+    },
+    {
+      "name": "read-pretty",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "纯阅读展示；字段 > FormItem > Form 继承，显式 false 覆盖父级。",
+      "kind": "boolean"
+    },
+    {
+      "name": "before-commit",
+      "type": "BeforeFieldCommit",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "callback"
+    },
+    {
+      "name": "open",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "default-open",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "popup-container",
+      "type": "string | HTMLElement | false",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "json",
+      "initial": "\"body\""
+    }
+  ],
+  "events": [
+    "update:modelValue",
+    "change",
+    "click",
+    "focus",
+    "blur",
+    "update:open"
+  ],
+  "scenarios": [
+    {
+      "name": "model-value",
+      "kind": "prop",
+      "demos": [
+        "checked-all-indeterminate.vue",
+        "controlled-mode.vue",
+        "group-state.vue"
+      ]
+    },
+    {
+      "name": "default-value",
+      "kind": "prop",
+      "demos": [
+        "checkbox-group.vue",
+        "checked-custom.vue",
+        "control-value.vue",
+        "controlled-mode.vue",
+        "custom-control.vue",
+        "disabled.vue",
+        "group-state.vue",
+        "max-checked.vue",
+        "native-control.vue"
+      ]
+    },
+    {
+      "name": "value",
+      "kind": "prop",
+      "demos": [
+        "basic.vue",
+        "async-options.vue",
+        "checkbox-group-options.vue",
+        "checkbox-group.vue",
+        "checked-all-indeterminate.vue",
+        "checked-custom.vue",
+        "control-value.vue",
+        "controlled-mode.vue",
+        "custom-control.vue",
+        "disabled.vue",
+        "grid.vue",
+        "group-methods.vue",
+        "group-state.vue",
+        "max-checked.vue",
+        "native-control.vue",
+        "option-data.vue"
+      ]
+    },
+    {
+      "name": "before-commit",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "checkbox",
+      "kind": "slot",
+      "demos": [
+        "basic.vue",
+        "async-options.vue",
+        "checkbox-group-options.vue",
+        "checkbox-group.vue",
+        "checked-all-indeterminate.vue",
+        "checked-custom.vue",
+        "control-value.vue",
+        "controlled-mode.vue",
+        "custom-control.vue",
+        "disabled.vue",
+        "grid.vue",
+        "group-methods.vue",
+        "group-state.vue",
+        "max-checked.vue",
+        "native-control.vue",
+        "option-data.vue"
+      ]
+    },
+    {
+      "name": "checked-icon",
+      "kind": "slot",
+      "demos": [
+        "custom-control.vue"
+      ]
+    },
+    {
+      "name": "unchecked-icon",
+      "kind": "slot",
+      "demos": [
+        "custom-control.vue"
+      ]
+    },
+    {
+      "name": "indeterminate-icon",
+      "kind": "slot",
+      "demos": []
+    },
+    {
+      "name": "default",
+      "kind": "slot",
+      "demos": [
+        "basic.vue",
+        "checkbox-group-options.vue",
+        "checkbox-group.vue",
+        "checked-all-indeterminate.vue",
+        "checked-custom.vue",
+        "control-value.vue",
+        "controlled-mode.vue",
+        "custom-control.vue",
+        "disabled.vue",
+        "grid.vue",
+        "group-state.vue",
+        "max-checked.vue",
+        "native-control.vue"
+      ]
+    },
+    {
+      "name": "toggle",
+      "kind": "method",
+      "demos": [
+        "control-value.vue"
+      ]
+    },
+    {
+      "name": "focus",
+      "kind": "method",
+      "demos": [
+        "control-value.vue"
+      ]
+    },
+    {
+      "name": "blur",
+      "kind": "method",
+      "demos": []
+    },
+    {
+      "name": "check-all",
+      "kind": "method",
+      "demos": [
+        "group-methods.vue"
+      ]
+    },
+    {
+      "name": "inverse-all",
+      "kind": "method",
+      "demos": [
+        "group-methods.vue"
+      ]
+    }
+  ],
+  "slotNames": [
+    "checkbox",
+    "checked-icon",
+    "unchecked-icon",
+    "indeterminate-icon"
+  ],
+  "slotDefaults": {
+    "checkbox": false,
+    "checked-icon": false,
+    "unchecked-icon": false,
+    "indeterminate-icon": false
+  },
+  "methodNames": [
+    "toggle",
+    "focus",
+    "blur"
+  ]
+}

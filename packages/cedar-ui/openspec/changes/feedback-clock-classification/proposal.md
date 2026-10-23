@@ -1,0 +1,5 @@
+# 反馈业务时钟分类补录
+
+三份Message／Notification计时源码hash与旧审计一致，当前重新读取并按business-clock登记。展示期限不消费CSS视觉时长，现有资源清理和服务完成链保持；不制造新产品修复或API／Token变更。
+
+本次分类收口Message／Notification两族，不重复计历史IAB。Ripple／LoadingBar的统一调度取消／重复交付尚需新探针，保留待审；Message服务nextTick更新身份及跨文档／OS为独立边界。

@@ -1,0 +1,123 @@
+{
+  "fields": [
+    {
+      "name": "status",
+      "description": "分页状态，支持 v-model:status",
+      "type": "\"idle\" | \"loading\" | \"error\" | \"finished\"",
+      "defaultValue": "\"idle\"",
+      "kind": "enum",
+      "options": [
+        "idle",
+        "loading",
+        "error",
+        "finished"
+      ],
+      "initial": "idle"
+    },
+    {
+      "name": "bottom-offset",
+      "description": "距离底部的触发阈值，数字按 px，字符串按 CSS length",
+      "type": "string | number",
+      "defaultValue": "0",
+      "kind": "scalar"
+    },
+    {
+      "name": "immediate",
+      "description": "挂载并解析滚动容器后是否立即检查",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "disabled",
+      "description": "是否暂停加载和重试",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "target",
+      "description": "滚动容器；未传时使用最近滚动父级",
+      "type": "string | HTMLElement",
+      "defaultValue": "undefined",
+      "kind": "string",
+      "initial": "body"
+    }
+  ],
+  "events": [
+    "update:status",
+    "load",
+    "retry"
+  ],
+  "scenarios": [
+    {
+      "name": "target",
+      "kind": "prop",
+      "demos": [
+        "custom-status.vue",
+        "error.vue",
+        "list.vue",
+        "scheduler-lifecycle.vue"
+      ]
+    },
+    {
+      "name": "default",
+      "kind": "slot",
+      "demos": []
+    },
+    {
+      "name": "loading",
+      "kind": "slot",
+      "demos": [
+        "custom-status.vue",
+        "error.vue",
+        "list.vue"
+      ]
+    },
+    {
+      "name": "error",
+      "kind": "slot",
+      "demos": [
+        "error.vue"
+      ]
+    },
+    {
+      "name": "finished",
+      "kind": "slot",
+      "demos": [
+        "custom-status.vue",
+        "error.vue",
+        "list.vue",
+        "scheduler-lifecycle.vue"
+      ]
+    },
+    {
+      "name": "check",
+      "kind": "method",
+      "demos": [
+        "scheduler-lifecycle.vue"
+      ]
+    },
+    {
+      "name": "retry",
+      "kind": "method",
+      "demos": [
+        "error.vue"
+      ]
+    }
+  ],
+  "slotNames": [
+    "loading",
+    "finished",
+    "error"
+  ],
+  "slotDefaults": {
+    "loading": true,
+    "finished": true,
+    "error": false
+  },
+  "methodNames": [
+    "check",
+    "retry"
+  ]
+}

@@ -34,6 +34,13 @@ permalink: /components/affix/
 
 <demo src="./__demos__/controls.vue"></demo>
 
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
+
 ## API
 
 <!-- same-source-api:start -->

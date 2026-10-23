@@ -4,7 +4,7 @@ const list = ref()
 const rows = Array.from({ length: 1000 }, (_, id) => ({ id, name: '记录 ' + (id + 1) }))
 </script>
 <template>
-  <c-space direction="vertical" style="width: 100%">
+  <c-space direction="column" style="width: 100%">
     <c-space wrap>
       <c-button @click="list.scrollIntoView({ key: 499, align: 'top' })">第 500 项置顶</c-button>
       <c-button @click="list.scrollIntoView({ key: 499, align: 'bottom' })">第 500 项置底</c-button>

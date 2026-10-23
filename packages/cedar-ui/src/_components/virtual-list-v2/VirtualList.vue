@@ -28,6 +28,7 @@
         <VirtualListItem
           v-for="(item, index) of currentList"
           :key="getItemKey(item, virtualEnabled ? start + index : index)"
+          :index="virtualEnabled ? start + index : index"
           :has-item-size="hasItemSize"
           :set-item-size="setItemSize"
         >
@@ -120,6 +121,7 @@ export default defineComponent({
     const containerRef = ref<HTMLElement>()
     const contentRef = ref<HTMLElement>()
     let scrollRequest = 0
+    let commandedScroll: { top: number; correct: () => void } | undefined
     let mounted = false
     let active = true
     let disposed = false
@@ -128,8 +130,8 @@ export default defineComponent({
       available() && request === scrollRequest && containerRef.value === element
     onMounted(() => { mounted = true })
     onActivated(() => { if (!disposed) active = true })
-    onDeactivated(() => { active = false; scrollRequest++ })
-    onBeforeUnmount(() => { disposed = true; mounted = active = false; scrollRequest++ })
+    onDeactivated(() => { active = false; scrollRequest++; commandedScroll = undefined })
+    onBeforeUnmount(() => { disposed = true; mounted = active = false; scrollRequest++; commandedScroll = undefined })
 
     const style = computed(() => {
       return {
@@ -168,6 +170,7 @@ export default defineComponent({
     const virtualEnabled = computed(() => !props.threshold || data.value.length > props.threshold)
     watch([dataKeys, virtualEnabled], () => {
       scrollRequest++
+      commandedScroll = undefined
       setStart(start.value)
     })
 
@@ -182,14 +185,19 @@ export default defineComponent({
     const onScroll = (ev: Event) => {
       if (!available()) return
       const element = containerRef.value!
-      const request = ++scrollRequest
       const { scrollTop, scrollHeight, offsetHeight } = ev.target as HTMLElement
+      // Our own scroll event can render additional measured rows. Keep its
+      // alignment transaction; a different native position cancels it.
+      const correction = commandedScroll?.top === scrollTop ? commandedScroll.correct : undefined
+      const request = correction ? scrollRequest : ++scrollRequest
+      if (!correction) commandedScroll = undefined
       const _start = getStartByScroll(scrollTop)
       if (virtualEnabled.value && _start !== start.value) {
         setStart(_start)
         nextTick(() => {
           if (!isCurrent(request, element)) return
-          scrollTo(scrollTop)
+          if (correction) correction()
+          else scrollTo(scrollTop)
         })
       }
       emit('scroll', ev)
@@ -205,6 +213,7 @@ export default defineComponent({
       const element = containerRef.value
       if (!element) return
       const request = ++scrollRequest
+      commandedScroll = undefined
       if (isNumber(options)) {
         if (Number.isFinite(options)) element.scrollTop = Math.max(0, options)
         return
@@ -212,17 +221,30 @@ export default defineComponent({
       const index = options.index ?? dataKeys.value.indexOf(options.key ?? '')
       if (!Number.isInteger(index) || index < 0 || index >= dataKeys.value.length) return
       const align = options.align ?? 'top'
+      const bounds = () => {
+        const row = element.querySelector<HTMLElement>(`[data-virtual-list-index="${index}"]`)
+        const rect = row?.getBoundingClientRect()
+        if (rect?.height) {
+          const origin = element.getBoundingClientRect().top + element.clientTop
+          return { top: element.scrollTop + rect.top - origin, bottom: element.scrollTop + rect.bottom - origin }
+        }
+        return { top: getScrollOffset(index), bottom: getScrollOffset(index + 1) }
+      }
+      const viewport = element.clientHeight || element.offsetHeight
+      const initialBounds = bounds()
+      if (align === 'auto' && initialBounds.top >= element.scrollTop
+        && initialBounds.bottom <= element.scrollTop + viewport) return
       const apply = () => {
         const target = containerRef.value
         if (!target || !isCurrent(request, element)) return
-        const top = getScrollOffset(index)
-        const bottom = getScrollOffset(index + 1)
+        const { top, bottom } = bounds()
         const viewport = target.clientHeight || target.offsetHeight
         const current = target.scrollTop
         const next = align === 'bottom' ? bottom - viewport
           : align === 'auto' ? top < current ? top : bottom > current + viewport ? bottom - viewport : current
             : top
         target.scrollTop = Math.max(0, next)
+        commandedScroll = { top: target.scrollTop, correct: apply }
       }
       if (virtualEnabled.value) setStart(index - buffer.value)
       apply()

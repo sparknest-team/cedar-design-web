@@ -1,0 +1,167 @@
+{
+  "fields": [
+    {
+      "name": "content",
+      "description": "内容",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "placement",
+      "description": "弹出位置",
+      "type": "'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'left-start' | 'left-end' | 'right' | 'right-start' | 'right-end'",
+      "defaultValue": "'top'",
+      "kind": "enum",
+      "options": [
+        "top",
+        "top-start",
+        "top-end",
+        "bottom",
+        "bottom-start",
+        "bottom-end",
+        "left",
+        "left-start",
+        "left-end",
+        "right",
+        "right-start",
+        "right-end"
+      ],
+      "initial": "top"
+    },
+    {
+      "name": "open",
+      "description": "气泡确认框是否可见",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "default-open",
+      "description": "气泡确认框默认是否可见（非受控模式）",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "type",
+      "description": "气泡确认框的类型",
+      "type": "\"info\" | \"success\" | \"warning\" | \"error\"",
+      "defaultValue": "'info'",
+      "kind": "enum",
+      "options": [
+        "info",
+        "success",
+        "warning",
+        "error"
+      ],
+      "initial": "info"
+    },
+    {
+      "name": "confirm-button-text",
+      "description": "确认按钮的内容",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "cancel-text",
+      "description": "取消按钮的内容",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "confirm-button-loading",
+      "description": "确认按钮是否为加载中状态",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "confirm-button-props",
+      "description": "确认按钮的Props",
+      "type": "ButtonProps",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "cancel-button-props",
+      "description": "取消按钮的Props",
+      "type": "ButtonProps",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "content-class",
+      "description": "弹出框内容的类名",
+      "type": "ClassName",
+      "defaultValue": "undefined",
+      "kind": "string",
+      "initial": "review-class"
+    },
+    {
+      "name": "content-style",
+      "description": "弹出框内容的样式",
+      "type": "CSSProperties",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "arrow-class",
+      "description": "弹出框箭头的类名",
+      "type": "ClassName",
+      "defaultValue": "undefined",
+      "kind": "string",
+      "initial": "review-class"
+    },
+    {
+      "name": "arrow-style",
+      "description": "弹出框箭头的样式",
+      "type": "CSSProperties",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "popup-container",
+      "description": "弹出框的挂载点",
+      "type": "string | HTMLElement | false",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "\"body\""
+    },
+    {
+      "name": "before-confirm",
+      "description": "触发 confirm 事件前的回调函数。如果返回 false 则不会触发后续事件，也可使用 done 进行异步关闭。",
+      "type": "(  done: (closed: boolean) => void) => void | boolean | Promise<void | boolean>",
+      "defaultValue": "undefined",
+      "kind": "callback"
+    },
+    {
+      "name": "before-cancel",
+      "description": "触发 cancel 事件前的回调函数。如果返回 false 则不会触发后续事件。",
+      "type": "() => boolean",
+      "defaultValue": "undefined",
+      "kind": "callback"
+    }
+  ],
+  "methodNames": [],
+  "events": [
+    "open-change",
+    "confirm",
+    "cancel"
+  ],
+  "slotNames": [
+    "content",
+    "icon"
+  ],
+  "slotDefaults": {
+    "content": true,
+    "icon": false
+  },
+  "scenarios": []
+}

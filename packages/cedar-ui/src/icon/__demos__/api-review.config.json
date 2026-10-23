@@ -1,0 +1,84 @@
+{
+  "fields": [
+    {
+      "name": "name",
+      "description": "已注册图标名称（本例提供六个可切换图标）",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "enum",
+      "options": [
+        "arrow-left",
+        "arrow-right",
+        "check-circle",
+        "info-circle",
+        "refresh",
+        "search"
+      ],
+      "initial": "arrow-left"
+    },
+    {
+      "name": "size",
+      "description": "图标尺寸（默认继承字号）",
+      "type": "number | string",
+      "defaultValue": "undefined",
+      "kind": "scalar"
+    },
+    {
+      "name": "color",
+      "description": "图标颜色",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string",
+      "initial": "#5268cc"
+    },
+    {
+      "name": "rotate",
+      "description": "旋转角度",
+      "type": "number",
+      "defaultValue": "undefined",
+      "kind": "number"
+    },
+    {
+      "name": "spin",
+      "description": "是否持续旋转",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "transition",
+      "description": "名称切换动画时长（ms）",
+      "type": "number | string",
+      "defaultValue": "0",
+      "kind": "scalar"
+    },
+    {
+      "name": "animation-class",
+      "description": "自定义切换动画类名",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    }
+  ],
+  "events": [
+    "click"
+  ],
+  "scenarios": [
+    {
+      "name": "default",
+      "kind": "slot",
+      "demos": [
+        "custom.vue",
+        "direction.vue",
+        "edit.vue",
+        "general.vue",
+        "interactive-button.vue",
+        "logo.vue",
+        "media.vue"
+      ]
+    }
+  ],
+  "slotNames": [],
+  "slotDefaults": {},
+  "methodNames": []
+}

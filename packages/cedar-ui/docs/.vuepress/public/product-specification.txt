@@ -1,0 +1,4 @@
+Cedar Upload review fixture
+Product: demo attachment
+Version: 1
+This local document is used to verify preview and download behavior.

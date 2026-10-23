@@ -1,0 +1,5 @@
+- [x] Inspect existing shared Trigger/Menu logic and identify point overwrite on mouse re-entry.
+- [x] Synchronize the point capture fix and regression tests across both libraries.
+- [x] Rename public API, paths, styles, resolvers and consumers to Menu in both libraries.
+- [x] Update documentation, examples and source-parity checks.
+- [x] Run affected behavior, resolver, type and lint checks and record their actual results.

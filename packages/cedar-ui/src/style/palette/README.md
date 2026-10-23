@@ -7,7 +7,7 @@ permalink: /components/palette/
 ### 介绍
 
 Cedar 色阶以 CSS 变量提供，前缀一律 `--c-*`（与 Maple 的 `--mp-*` 同构）。
-业务页优先用 [颜色 Color](/components/color/) 语义工具类（如 `c-text-1` / `c-fill-2`）；需要精细色阶或主题覆盖时再直接引用色阶变量。
+业务页优先用 [颜色 Color](/components/style/color/) 语义工具类（如 `c-text-1` / `c-fill-2`）；需要精细色阶或主题覆盖时再直接引用色阶变量。
 
 完整色阶见 `style/color/css-variables.less`，语义见 `style/theme/css-variables.less`；暗色由 `:root[cedar-theme=dark]` 覆盖。
 

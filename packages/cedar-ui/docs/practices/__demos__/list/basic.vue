@@ -4,8 +4,6 @@
       ref="filterForm"
       v-model="filter"
       :fields="filterFields"
-      :field-map="fieldMap"
-      :options-map="optionsMap"
       class="px-24 pt-24 pb-8 mb-16"
       @change="search"
     >
@@ -104,7 +102,7 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted, defineComponent, h } from 'vue'
 import { useRouter } from 'vue-router'
-import { Select, type FilterFormField, type FilterFormFieldMap, type SearchField } from '@cedarjs/ui'
+import { Select, type FilterFormField, type SearchField } from '@cedarjs/ui'
 import { ListFilter, StationList, StationListItem } from './list.model'
 
 const visible = ref(false)
@@ -141,14 +139,6 @@ const pagination = reactive({
   pageSizeOptions: [10, 20, 30, 40, 50],
 })
 
-const optionsMap = ref<Record<string, unknown>>({})
-
-const fieldMap: FilterFormFieldMap = {
-  select: {
-    component: Select,
-    optionsFromMap: true,
-  },
-}
 const columns = ref([
   {
     title: '场站名称',
@@ -208,10 +198,11 @@ const columns = ref([
 
 const filterFields: FilterFormField[] = [
   {
-    type: 'select',
+    component: Select,
     field: 'regionNameArray',
     label: '城市公司',
     props: {
+      options: [],
       placeholder: '全部',
       multiple: true,
       clearable: true,

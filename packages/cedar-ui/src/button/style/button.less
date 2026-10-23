@@ -1,368 +1,130 @@
 .c-button {
   position: relative;
+  display: inline-flex;
+  box-sizing: border-box;
   justify-content: center;
   align-items: center;
+  gap: var(--c-button-content-gap);
   outline: none;
   border: none;
   border-radius: var(--c-button-border-radius);
   user-select: none;
   cursor: pointer;
   font-family: inherit;
-  transition:
-    box-shadow var(--c-button-transition-duration),
-    background-color var(--c-button-transition-duration),
-    border-radius var(--c-button-transition-duration);
-  will-change: box-shadow;
-  -webkit-tap-highlight-color: transparent;
+  line-height: 1.2;
+  text-decoration: none;
   white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    box-shadow var(--c-sys-motion-duration-standard),
+    background-color var(--c-sys-motion-duration-standard),
+    border-radius var(--c-sys-motion-duration-standard);
 
   &__content {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-  }
-
-  // === variant=default × status: filled ===
-  &--variant-default {
-    &.c-button--status-default {
-      color: var(--c-button-default-text-color);
-      background-color: var(--c-button-default-color);
-    }
-
-    &.c-button--status-primary {
-      color: var(--c-button-primary-text-color);
-      background-color: var(--c-button-primary-color);
-    }
-
-    &.c-button--status-info {
-      color: var(--c-button-info-text-color);
-      background-color: var(--c-button-info-color);
-    }
-
-    &.c-button--status-success {
-      color: var(--c-button-success-text-color);
-      background-color: var(--c-button-success-color);
-    }
-
-    &.c-button--status-warning {
-      color: var(--c-button-warning-text-color);
-      background-color: var(--c-button-warning-color);
-    }
-
-    &.c-button--status-danger {
-      color: var(--c-button-danger-text-color);
-      background-color: var(--c-button-danger-color);
-    }
-
-    &.c-button--status-secondary {
-      color: var(--c-button-secondary-text-color);
-      background-color: var(--c-button-secondary-color);
-    }
-
-    &.c-button--status-tertiary {
-      color: var(--c-button-tertiary-text-color);
-      background-color: var(--c-button-tertiary-color);
-    }
-  }
-
-  // === variant=text: 透明背景 + status 取色 ===
-  &--variant-text {
-    background-color: transparent;
-
-    &:active {
-      box-shadow: none;
-    }
-
-    &.c-button--status-default {
-      color: var(--c-button-default-icon-color);
-    }
-    &.c-button--status-primary {
-      color: var(--c-button-primary-icon-color);
-    }
-    &.c-button--status-info {
-      color: var(--c-button-info-icon-color);
-    }
-    &.c-button--status-success {
-      color: var(--c-button-success-icon-color);
-    }
-    &.c-button--status-warning {
-      color: var(--c-button-warning-icon-color);
-    }
-    &.c-button--status-danger {
-      color: var(--c-button-danger-icon-color);
-    }
-    &.c-button--status-secondary {
-      color: var(--c-button-secondary-icon-color);
-    }
-    &.c-button--status-tertiary {
-      color: var(--c-button-tertiary-icon-color);
-    }
-  }
-
-  // === variant=outline: 描边 + status 取色 ===
-  &--variant-outline {
-    background-color: transparent;
-    border: thin solid currentColor;
-
-    &.c-button--status-default {
-      color: var(--c-button-default-icon-color);
-    }
-    &.c-button--status-primary {
-      color: var(--c-button-primary-icon-color);
-    }
-    &.c-button--status-info {
-      color: var(--c-button-info-icon-color);
-    }
-    &.c-button--status-success {
-      color: var(--c-button-success-icon-color);
-    }
-    &.c-button--status-warning {
-      color: var(--c-button-warning-icon-color);
-    }
-    &.c-button--status-danger {
-      color: var(--c-button-danger-icon-color);
-    }
-    &.c-button--status-secondary {
-      color: var(--c-button-secondary-icon-color);
-    }
-    &.c-button--status-tertiary {
-      color: var(--c-button-tertiary-icon-color);
-    }
-  }
-
-  // === variant=tonal: 浅色填充 ===
-  &--variant-tonal {
-    &.c-button--status-default {
-      color: var(--c-button-default-icon-color);
-      background-color: var(--c-button-default-icon-container-color);
-    }
-    &.c-button--status-primary {
-      color: var(--c-button-primary-icon-color);
-      background-color: var(--c-button-primary-icon-container-color);
-    }
-    &.c-button--status-info {
-      color: var(--c-button-info-icon-color);
-      background-color: var(--c-button-info-icon-container-color);
-    }
-    &.c-button--status-success {
-      color: var(--c-button-success-icon-color);
-      background-color: var(--c-button-success-icon-container-color);
-    }
-    &.c-button--status-warning {
-      color: var(--c-button-warning-icon-color);
-      background-color: var(--c-button-warning-icon-container-color);
-    }
-    &.c-button--status-danger {
-      color: var(--c-button-danger-icon-color);
-      background-color: var(--c-button-danger-icon-container-color);
-    }
-    &.c-button--status-secondary {
-      color: var(--c-button-secondary-icon-color);
-      background-color: var(--c-button-secondary-icon-container-color);
-    }
-    &.c-button--status-tertiary {
-      color: var(--c-button-tertiary-icon-color);
-      background-color: var(--c-button-tertiary-icon-container-color);
-    }
-  }
-
-  // === icon-container 单色块按钮 ===
-  &&--icon-container-default {
-    color: var(--c-button-default-icon-color);
-    background-color: var(--c-button-default-icon-container-color);
-  }
-  &&--icon-container-primary {
-    color: var(--c-button-primary-icon-color);
-    background-color: var(--c-button-primary-icon-container-color);
-  }
-  &&--icon-container-info {
-    color: var(--c-button-info-icon-color);
-    background-color: var(--c-button-info-icon-container-color);
-  }
-  &&--icon-container-success {
-    color: var(--c-button-success-icon-color);
-    background-color: var(--c-button-success-icon-container-color);
-  }
-  &&--icon-container-warning {
-    color: var(--c-button-warning-icon-color);
-    background-color: var(--c-button-warning-icon-container-color);
-  }
-  &&--icon-container-danger {
-    color: var(--c-button-danger-icon-color);
-    background-color: var(--c-button-danger-icon-container-color);
-  }
-
-  // === sizes ===
-  &--size-md {
-    height: var(--c-button-normal-height);
-    padding: var(--c-button-normal-padding);
-    font-size: var(--c-button-normal-font-size);
-  }
-  &--size-lg {
-    height: var(--c-button-large-height);
-    padding: var(--c-button-large-padding);
-    font-size: var(--c-button-large-font-size);
-  }
-  &--size-sm {
-    height: var(--c-button-small-height);
-    padding: var(--c-button-small-padding);
-    font-size: var(--c-button-small-font-size);
-  }
-  &--size-xs {
-    height: var(--c-button-mini-height);
-    padding: var(--c-button-mini-padding);
-    font-size: var(--c-button-mini-font-size);
-  }
-  &--size-xl {
-    height: var(--c-button-xl-height);
-    padding: var(--c-button-xl-padding);
-    font-size: var(--c-button-xl-font-size);
-  }
-
-  &--round {
-    padding: var(--c-button-round-padding);
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  &--block {
-    width: 100%;
-  }
-
-  &--loading {
-    cursor: default;
-  }
-
-  &--hidden {
-    opacity: 0;
-  }
-
-  &--disabled {
-    cursor: not-allowed;
-    box-shadow: none !important;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .c-button {
-    transition: none;
-  }
-}
-
-// Interaction, layout and loading contract shared by both libraries.
-.c-button {
-  display: inline-flex;
-  box-sizing: border-box;
-  text-decoration: none;
-  gap: var(--c-button-content-gap);
-  line-height: var(--c-button-line-height);
-  &--stacked {
-    flex-direction: column;
-    gap: var(--c-button-stacked-gap);
-    border-radius: var(--c-button-stacked-border-radius);
-    padding-block: var(--c-button-stacked-padding);
-  }
-  &--focus:not(.c-button--disabled):not(.c-button--loading):focus-visible {
-    outline: var(--c-button-focus-width) solid var(--c-button-focus-color);
-    outline-offset: var(--c-button-focus-offset);
+    line-height: 1;
   }
   &--icon {
     position: relative;
     flex-shrink: 0;
     display: inline-flex;
     align-items: center;
-  }
-  &--icon-container {
-    padding: var(--c-button-icon-container-padding);
-  }
-  &&--icon-container-secondary {
-    color: var(--c-button-secondary-icon-color);
-    background-color: var(--c-button-secondary-icon-container-color);
-  }
-  &&--icon-container-tertiary {
-    color: var(--c-button-tertiary-icon-color);
-    background-color: var(--c-button-tertiary-icon-container-color);
-  }
-  &__loading {
-    display: inline-flex;
-    align-items: center;
     justify-content: center;
-    pointer-events: none;
-  }
-  &--loading-fill > &__loading {
-    position: absolute;
-    inset: 0;
-  }
-  &--loading-line > &__loading {
-    position: absolute;
-    inset: auto 0 0;
-    height: var(--c-button-loading-line-height);
-    overflow: hidden;
-    border-radius: inherit;
-  }
-  &__loading-line {
-    width: var(--c-button-loading-line-width);
-    height: 100%;
-    background: currentColor;
-    animation: c-button-loading-line var(--c-button-loading-duration) linear
-      infinite;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    &__loading-line {
-      animation: none;
-      width: 100%;
-      opacity: var(--c-button-loading-static-opacity);
-    }
-  }
-}
-@keyframes c-button-loading-line {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(300%);
-  }
-}
-
-// Shape dimensions follow the selected size; empty text must not stretch icons.
-.c-button {
-  .shape-size(@size, @name) {
-    &--size-@{size}&--round {
-      width: var(~"--c-button-@{name}-height");
-      height: var(~"--c-button-@{name}-height");
-      min-width: var(~"--c-button-@{name}-height");
-      padding: 0;
-    }
-    &--size-@{size}&--stacked:not(&--round) {
-      height: var(~"--c-button-@{name}-stacked-height");
-      min-width: var(~"--c-button-@{name}-stacked-height");
-    }
-  }
-  .shape-size(xs, mini);
-  .shape-size(sm, small);
-  .shape-size(md, normal);
-  .shape-size(lg, large);
-  .shape-size(xl, xl);
-  &--icon > &__loading {
-    position: absolute;
-    inset: 0;
-  }
-  &--loading-default > &--icon > :not(&__loading) {
-    visibility: hidden;
-  }
-  &__content {
     line-height: 1;
   }
-}
+  &--block {
+    width: 100%;
+  }
+  &--round {
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  &--stacked {
+    flex-direction: column;
+    gap: var(--c-button-stacked-gap);
+  }
+  &--loading {
+    cursor: default;
+  }
+  &--hidden {
+    opacity: 0;
+  }
 
-// State layer is behind content; active wins hover, blocked states suppress both.
-.c-button {
+  .size(@size, @font, @stack-min-height) {
+    &--size-@{size} {
+      height: var(~"--c-button-@{size}-height");
+      padding: var(~"--c-button-@{size}-padding");
+      font-size: var(~"--c-@{font}");
+    }
+    // Minimum padding stays intact when icons or labels need more height.
+    &--size-@{size}&--stacked:not(&--round):not(&--icon-only) {
+      height: auto;
+      padding-block: var(--c-sys-space-4);
+      min-height: ~"max(@{stack-min-height}, calc(2em + var(--c-button-stacked-gap) + 2 * var(--c-sys-space-4)))";
+      min-width: ~"max(@{stack-min-height}, calc(2em + var(--c-button-stacked-gap) + 2 * var(--c-sys-space-4)))";
+    }
+    &--size-@{size}&--round,
+    &--size-@{size}&--icon-only {
+      width: var(~"--c-button-@{size}-height");
+      min-width: var(~"--c-button-@{size}-height");
+      padding: 0;
+    }
+  }
+  .size(xs, @button-font-size-xs, 44px);
+  .size(sm, @button-font-size-sm, 48px);
+  .size(md, @button-font-size-md, 56px);
+  .size(lg, @button-font-size-lg, 64px);
+  .size(xl, @button-font-size-xl, 72px);
+
+  &--variant-text,
+  &--variant-outline {
+    background-color: transparent;
+  }
+  &--variant-outline {
+    border: thin solid currentColor;
+  }
+  .palette(@status, @solid-text, @solid-layer) {
+    &--status-@{status} {
+      &.c-button--variant-default {
+        color: var(~"--c-button-@{solid-text}");
+        background-color: var(~"--c-button-@{status}-color");
+        --c-internal-button-state-layer-color: var(
+          ~"--c-button-@{solid-layer}"
+        );
+      }
+      &.c-button--variant-text,
+      &.c-button--variant-outline,
+      &.c-button--variant-tonal {
+        color: var(~"--c-button-@{status}-foreground-color");
+      }
+      &.c-button--variant-tonal {
+        background-color: var(~"--c-button-@{status}-tonal-color");
+      }
+      &.c-button--variant-text,
+      &.c-button--variant-outline {
+        --c-internal-button-state-layer-color: var(
+          ~"--c-button-@{status}-tonal-color"
+        );
+      }
+    }
+  }
+  .palette(default, default-foreground-color, default-foreground-color);
+  .palette(primary, solid-text-color, primary-state-layer-color);
+  .palette(info, solid-text-color, solid-state-layer-color);
+  .palette(success, solid-text-color, solid-state-layer-color);
+  .palette(warning, solid-text-color, solid-state-layer-color);
+  .palette(danger, solid-text-color, solid-state-layer-color);
+  .palette(secondary, solid-text-color, solid-state-layer-color);
+  .palette(tertiary, tertiary-text-color, tertiary-state-layer-color);
+
   --c-internal-button-state-layer-color: var(--c-button-state-layer-color);
-  isolation: isolate;
   --c-internal-button-state-opacity-hover: var(--c-button-state-opacity-hover);
   --c-internal-button-state-opacity-active: var(
     --c-button-state-opacity-active
   );
+  isolation: isolate;
   &--variant-text,
   &--variant-outline {
     --c-internal-button-state-opacity-hover: var(
@@ -372,27 +134,6 @@
       --c-button-plain-state-opacity-active
     );
   }
-  .solid-state(@status) {
-    &--variant-text&--status-@{status},
-    &--variant-outline&--status-@{status} {
-      --c-internal-button-state-layer-color: var(
-        ~"--c-button-@{status}-icon-container-color"
-      );
-    }
-    &--variant-default&--status-@{status}:not(&--icon-container) {
-      --c-internal-button-state-layer-color: var(
-        ~"--c-button-@{status}-state-layer-color"
-      );
-    }
-  }
-  .solid-state(default);
-  .solid-state(primary);
-  .solid-state(info);
-  .solid-state(success);
-  .solid-state(warning);
-  .solid-state(danger);
-  .solid-state(secondary);
-  .solid-state(tertiary);
   > .c-hover-overlay {
     z-index: -1;
     background-color: var(--c-internal-button-state-layer-color);
@@ -404,39 +145,98 @@
   &:not(&--disabled):not(&--loading):active > .c-hover-overlay {
     opacity: var(--c-internal-button-state-opacity-active);
   }
+  &--focus:not(&--disabled):not(&--loading):focus-visible {
+    outline: var(--c-sys-space-1) solid var(--c-button-focus-color);
+    outline-offset: var(--c-sys-space-1);
+  }
   &&--disabled {
     color: var(--c-button-disabled-text-color);
     background-color: var(--c-button-disabled-color);
+    cursor: not-allowed;
+    box-shadow: none !important;
     &.c-button--variant-text,
     &.c-button--variant-outline {
       background-color: transparent;
     }
+    .disabled-tonal(@status) {
+      &.c-button--status-@{status}.c-button--variant-tonal {
+        background-color: var(~"--c-button-@{status}-tonal-color");
+      }
+    }
+    .disabled-tonal(default);
+    .disabled-tonal(primary);
+    .disabled-tonal(info);
+    .disabled-tonal(success);
+    .disabled-tonal(warning);
+    .disabled-tonal(danger);
+    .disabled-tonal(secondary);
+    .disabled-tonal(tertiary);
     .semantic-disabled(@status) {
       &.c-button--status-@{status} {
         color: var(~"--c-button-@{status}-disabled-color");
-        &.c-button--variant-default:not(.c-button--icon-container) {
+        &.c-button--variant-default {
           color: var(--c-button-disabled-solid-text-color);
           background-color: var(~"--c-button-@{status}-disabled-color");
         }
-        &.c-button--variant-tonal,
-        &.c-button--variant-default.c-button--icon-container {
-          background-color: var(~"--c-button-@{status}-icon-container-color");
-        }
       }
     }
-    .neutral-disabled(@status) {
-      &.c-button--status-@{status}.c-button--variant-tonal,
-      &.c-button--status-@{status}.c-button--variant-default.c-button--icon-container {
-        background-color: var(~'--c-button-@{status}-icon-container-color');
-      }
-    }
-    .neutral-disabled(default);
-    .neutral-disabled(secondary);
-    .neutral-disabled(tertiary);
     .semantic-disabled(primary);
     .semantic-disabled(info);
     .semantic-disabled(success);
     .semantic-disabled(warning);
     .semantic-disabled(danger);
+  }
+
+  &__loading {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+  &__loading > .c-loading {
+    display: flex;
+  }
+  &--loading-fill > &__loading {
+    position: absolute;
+    inset: 0;
+  }
+  &--icon > &__loading {
+    position: absolute;
+    inset: 0;
+  }
+  &--loading-default > &--icon > :not(&__loading) {
+    visibility: hidden;
+  }
+  &--loading-line > &__loading {
+    position: absolute;
+    inset: auto 0 0;
+    height: var(--c-button-loading-line-height);
+    overflow: hidden;
+    border-radius: inherit;
+  }
+  &__loading-line {
+    width: 40%;
+    height: 100%;
+    background: currentColor;
+    animation: c-button-loading-line var(--c-button-loading-duration) linear
+      infinite;
+  }
+}
+@keyframes c-button-loading-line {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(300%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .c-button {
+    transition: none;
+    &__loading-line {
+      animation: none;
+      width: 100%;
+      opacity: 0.5;
+    }
   }
 }

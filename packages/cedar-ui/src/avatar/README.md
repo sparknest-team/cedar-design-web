@@ -28,7 +28,7 @@ permalink: /components/avatar/
 
 ### 文字自适应
 
-默认会按头像宽度缩放过长文字。修改输入框内容可以实时看到缩放效果；将 `autoFixFontSize` 设为 `false` 后保持原始字号。
+默认会按头像宽度缩放过长文字。插槽文本更新后会重新测量；改回可容纳的短文本时恢复原始比例。将 `auto-fix-font-size` 设为 `false` 后保持原始字号。
 
 <demo src="./__demos__/auto-fix.vue"></demo>
 
@@ -79,6 +79,13 @@ permalink: /components/avatar/
 使用 `trigger-icon` 插槽添加交互入口。`triggerType` 支持独立按钮（`button`）和悬浮背景层（`overlay`）两种形式；点击会触发 `click`。
 
 <demo src="./__demos__/trigger.vue"></demo>
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
 
 ## API
 

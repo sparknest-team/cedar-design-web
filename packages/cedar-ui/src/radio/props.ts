@@ -1,11 +1,14 @@
-import type { PropType, ExtractPublicPropTypes, InputHTMLAttributes } from 'vue'
+import type { ExtractPublicPropTypes, InputHTMLAttributes, PropType } from 'vue'
+import { fieldPresentationProps } from '../_components/field-presentation/props'
 import { componentSizes } from '../_utils/constant'
 import type { ComponentSize, Direction } from '../_utils/constant'
-import { radioValueProps } from '../checkbox/choice-value-props'
 import { choiceOptionsProps, radioGroupValueProps } from '../checkbox/choice-group-props'
+import { radioValueProps } from '../checkbox/choice-value-props'
 import { radioVariantProp } from './variant'
+
 export type RadioValue = import('../checkbox/choice-value-props').ChoiceValue
 export const radioProps = {
+  ...fieldPresentationProps,
   ...radioValueProps,
   /** 外观，分组设置优先。 */
   variant: radioVariantProp,
@@ -29,12 +32,16 @@ export const radioProps = {
   uninjectGroupContext: { type: Boolean, default: false },
 }
 export const radioGroupProps = {
+  ...fieldPresentationProps,
   ...radioGroupValueProps,
   ...choiceOptionsProps,
   ariaLabel: { type: String, default: '' },
   name: String,
   variant: radioVariantProp,
-  size: { type: String as PropType<ComponentSize>, validator: (value: unknown) => componentSizes.includes(value as ComponentSize) },
+  size: {
+    type: String as PropType<ComponentSize>,
+    validator: (value: unknown) => componentSizes.includes(value as ComponentSize),
+  },
   direction: { type: String as PropType<Direction>, default: 'horizontal' },
   disabled: { type: Boolean, default: undefined },
   readonly: { type: Boolean, default: undefined },
@@ -42,7 +49,11 @@ export const radioGroupProps = {
 }
 export type RadioProps = ExtractPublicPropTypes<typeof radioProps>
 export type RadioGroupProps = ExtractPublicPropTypes<typeof radioGroupProps>
-export interface RadioMethods { select(): void; focus(options?: FocusOptions): void; blur(): void }
+export interface RadioMethods {
+  select(): void
+  focus(options?: FocusOptions): void
+  blur(): void
+}
 export type { RadioModel } from '../checkbox/choice-value-props'
 
 export type RadioEmits = {

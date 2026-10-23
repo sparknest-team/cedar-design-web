@@ -6,23 +6,29 @@ permalink: /components/time-picker/
 
 时间选择**面板**（默认无触发器）。
 
-表单字段请使用 [`Time`](/components/time/)；时间范围字段请使用 [`TimeRange`](/components/time-range/)；范围面板请使用 [`TimeRangePicker`](/components/time-range-picker/)。
-
-### 纯面板确认与禁用选项
-
-纯面板默认确认后提交：选择时仅发 select，确认后才更新模型并发 change；disable-confirm 开启后有效选择立即提交。hide-disabled-options 默认 false，开启后隐藏禁用项；时钟保留原刻度角度。字段和日期组件内部显式跳过子面板确认，由外层负责提交。外部模型替换会重置草稿，不主动派发事件。
-
-<demo src="./__demos__/panel-behavior.vue"></demo>
-
-独立面板直接管理自己的草稿与提交状态。外部替换模型会重置草稿，不触发选择或变更事件；只读、禁用均阻止选择和确认。Cedar 使用列表，Maple 使用滚轮或时钟，展示层不另建一份草稿。
-
 ## 案例
+
+### 列表滚动任务审计（2026-10-16）
+
+私有工具保留正时长线性滚动（列选择100ms）；零／负／非有限时长及owner减弱动态直接到位，动态reduce下一帧收束。同元素新请求取消旧任务，旧帧／重复帧不覆盖新偏移。工具取消保持当前偏移，不触发选择提交；无新增公开API或CSS Token。
+
+表单字段请使用 [`Time`](/components/time/)；时间范围字段请使用 [`TimeRange`](/components/time-range/)；范围面板请使用 [`TimeRangePicker`](/components/time-range-picker/)。
 
 ### 基本用法
 
 默认只渲染面板。
 
 <demo src="./__demos__/basic.vue"></demo>
+
+### 纯面板确认与禁用选项
+
+纯面板默认确认后提交：选择时仅发 select，确认后才更新模型并发 change；disable-confirm 开启后有效选择立即提交。hide-disabled-options 默认 false，开启后隐藏禁用项；时钟保留原刻度角度。字段和日期组件内部显式跳过子面板确认，由外层负责提交。外部模型替换会重置草稿，不主动派发事件。
+
+单值面板未确认草稿中打开只读、隐藏禁用小时或切立即提交，不会隐式提交旧草稿；解除只读也不提交，下一次有效选择才提交一次。Maple滚轮/时钟展示切换保留同一草稿，不回写父模型；鼠标/键盘验收不等于物理触屏惯性行为通过。
+
+<demo src="./__demos__/panel-behavior.vue"></demo>
+
+独立面板直接管理自己的草稿与提交状态。外部替换模型会重置草稿，不触发选择或变更事件；只读、禁用均阻止选择和确认。Cedar 使用列表，Maple 使用滚轮或时钟，展示层不另建一份草稿。
 
 ### 禁用部分时间选项
 
@@ -45,6 +51,13 @@ permalink: /components/time-picker/
 ### 十二小时制
 
 <demo src="./__demos__/use12Hours.vue"></demo>
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
 
 ## API
 
@@ -69,7 +82,6 @@ permalink: /components/time-picker/
 - `actions({ confirm, canConfirm, value })`：替换默认操作栏；`value` 是草稿，调用 `confirm()` 提交，并根据 `canConfirm` 禁用按钮。
 
 单时间事件值为格式化字符串及 Date；范围事件值为对应数组。纯面板不再派发 `open-change`、`update:open` 或 `clear`。
-
 
 ### Props
 

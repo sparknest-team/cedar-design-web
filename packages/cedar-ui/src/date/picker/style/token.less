@@ -1,6 +1,20 @@
 @import '../../../style/theme/index.less';
 
 :root {
+  --c-date-picker-time-panel-min-width: 160px;
+  --c-date-picker-panel-preferred-width: var(--c-date-picker-popover-width);
+  --c-date-picker-shortcuts-column-width: 128px;
+  --c-date-picker-popover-gap: 32px;
+  --c-date-picker-popover-width: calc(var(--c-date-picker-panel-date-width) + 2px);
+  --c-date-picker-week-popover-width: calc(var(--c-date-picker-panel-week-width) + 2px);
+  --c-date-picker-datetime-popover-width: calc(var(--c-date-picker-panel-date-width) + var(--c-date-picker-time-panel-min-width) + 2px);
+  --c-date-picker-range-popover-width: calc(var(--c-date-picker-panel-date-width) * 2 + 2px);
+  --c-date-picker-week-range-popover-width: calc(var(--c-date-picker-panel-week-width) * 2 + 2px);
+  --c-date-picker-popover-max-height: calc(50dvh - var(--c-date-picker-popover-gap));
+  --c-date-picker-panel-background: var(--c-sys-color-surface-overlay);
+  --c-date-picker-panel-border: var(--c-color-border-2);
+  --c-date-picker-panel-radius: 8px;
+
   --c-date-picker-actions-padding: 8px 12px;
   --c-date-picker-container-border-radius: var(~'--c-border-radius-md');
   --c-date-picker-container-min-height: var(~'--c-size-15');
@@ -11,6 +25,7 @@
   --c-date-picker-header-label-padding: var(~'--c-spacing-1');
   --c-date-picker-header-label-border-radius: var(~'--c-border-radius-sm');
   --c-date-picker-panel-date-width: 265px;
+  --c-date-picker-range-panel-min-width: 224px;
   --c-date-picker-panel-month-width: 265px;
   --c-date-picker-panel-year-width: 265px;
   --c-date-picker-panel-week-width: 298px;
@@ -41,9 +56,10 @@
   --c-date-picker-cell-bg-disabled: var(~'--c-color-fill-1');
   --c-date-picker-cell-range-boundary-text-color: var(~'--c-color-white');
   --c-date-picker-cell-range-boundary-bg: rgb(var(~'--c-primary-6'));
-  --c-date-picker-cell-bg-hover-in-range: var(~'--c-color-primary-light-1');
+  --c-date-picker-cell-bg-hover-in-range: var(~'--c-color-fill-2');
+  --c-date-picker-preview-outline: 1px dashed var(~'--c-color-primary');
   --c-date-picker-cell-hover-range-boundary-text-color: var(~'--c-color-text-1');
-  --c-date-picker-cell-hover-range-boundary-bg: var(~'--c-color-primary-light-2');
+  --c-date-picker-cell-hover-range-boundary-bg: var(~'--c-color-fill-2');
   --c-date-picker-panel-border-color: var(~'--c-color-neutral-3');
   --c-date-picker-panel-cell-text-color-hover: var(~'--c-color-text-1');
   --c-date-picker-panel-cell-bg-hover: var(~'--c-color-fill-3');

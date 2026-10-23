@@ -1,4 +1,4 @@
-import { computed, mergeProps, nextTick, defineComponent, h, inject, onBeforeUnmount, ref, type PropType, type VNodeChild } from 'vue'
+import { computed, mergeProps, nextTick, defineComponent, h, inject, onActivated, onBeforeUnmount, onDeactivated, ref, watch, type PropType, type VNodeChild } from 'vue'
 import Trigger, { type TriggerInstance } from '../trigger'
 import Tooltip from '../tooltip'
 import NavMenuArrow from './arrow'
@@ -17,22 +17,40 @@ const NavNode = defineComponent({
     const floating = computed(() => props.popup || api.props.mode === 'horizontal' || api.collapsed.value)
     const open = computed(() => api.expanded.value.includes(props.node.key))
     const disabled = computed(() => !!api.props.disabled || props.node.disabled)
-    onBeforeUnmount(() => api.register(props.node, null))
+    let active = true, disposed = false, focusGeneration = 0
+    const available = () => active && !disposed
+    const invalidateFocus = () => { focusGeneration++ }
+    watch(open, value => { if (!value) invalidateFocus() }, { flush: 'sync' })
+    watch(() => [disabled.value, props.node, props.popup, api.props.mode, api.collapsed.value], invalidateFocus, { deep: true, flush: 'sync' })
+    onDeactivated(() => { active = false; invalidateFocus() })
+    onActivated(() => { if (!disposed) active = true })
+    onBeforeUnmount(() => { disposed = true; active = false; invalidateFocus(); api.register(props.node, null) })
+    function ownsFocus(document: Document, origin: Element | null) {
+      const current = document.activeElement
+      return !current || current === origin || current === document.body || !current.isConnected
+    }
     const content = (kind: 'label' | 'icon' | 'extra'): VNodeChild => {
       const context = api.context(props.node)
       const value = props.node.option[kind === 'label' ? api.labelField.value : kind] as NavMenuContent
       return api.slots[kind]?.(context) ?? (typeof value === 'function' ? value(context) : value)
     }
     async function enter() {
+      if (!available() || disabled.value) return
+      const request = ++focusGeneration, reference = element.value
+      const document = reference?.ownerDocument, origin = document?.activeElement ?? null
+      const current = () => available() && !disabled.value && request === focusGeneration && reference === element.value
       api.expand(props.node, true)
+      if (!current()) return
       await nextTick()
-      if (!open.value) return
+      if (!current() || !open.value || !document || !ownsFocus(document, origin)) return
       const first = panel.value?.querySelector<HTMLElement>('[data-nav-item]:not([aria-disabled="true"])')
+      if (!current()) return
+      invalidateFocus()
       first?.focus()
     }
     function onKeydown(event: KeyboardEvent) {
       const key = event.key
-      if (disabled.value || event.defaultPrevented || event.target !== element.value) return
+      if (!available() || disabled.value || event.defaultPrevented || event.target !== element.value) return
       if (props.node.children.length && ((floating.value && key === (api.props.mode === 'horizontal' && !props.popup ? 'ArrowDown' : 'ArrowRight')) || (!floating.value && key === 'ArrowRight'))) {
         event.preventDefault(); event.stopPropagation(); void enter()
       } else if (!floating.value && key === 'ArrowLeft' && open.value) {
@@ -44,10 +62,18 @@ const NavNode = defineComponent({
       }
     }
     function onPanelKeydown(event: KeyboardEvent) {
-      if (event.defaultPrevented) return
+      if (!available() || disabled.value || event.defaultPrevented) return
       if (event.key === 'Escape' || event.key === 'ArrowLeft') {
+        const reference = element.value, originalTrigger = trigger.value
+        const document = reference?.ownerDocument, origin = document?.activeElement ?? null
         event.preventDefault(); event.stopPropagation(); api.expand(props.node, false)
-        nextTick(() => { if (!open.value) trigger.value?.focusReference() })
+        if (!available() || disabled.value) return
+        const request = ++focusGeneration
+        nextTick(() => {
+          if (!available() || disabled.value || request !== focusGeneration || open.value || reference !== element.value || originalTrigger !== trigger.value || !document || !ownsFocus(document, origin)) return
+          invalidateFocus()
+          originalTrigger?.focusReference()
+        })
         return
       }
       if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return
@@ -72,15 +98,15 @@ const NavNode = defineComponent({
         'aria-current': api.selected.value === node.key ? 'page' : undefined,
         'aria-disabled': disabled.value || undefined, 'aria-expanded': node.children.length ? open.value : undefined,
         'aria-haspopup': node.children.length && floating.value ? 'menu' : undefined,
-        onFocus: () => { api.focusKey.value = node.key }, onKeydown,
-        onClick: (event: MouseEvent) => { if (disabled.value) { event.preventDefault(); event.stopPropagation(); return }; if (node.children.length) api.expand(node, !open.value); else api.select(node, event) },
+        onFocus: () => { if (available() && !disabled.value) api.focusKey.value = node.key }, onKeydown,
+        onClick: (event: MouseEvent) => { if (!available()) return; if (disabled.value) { event.preventDefault(); event.stopPropagation(); return }; if (node.children.length) api.expand(node, !open.value); else api.select(node, event) },
       }), [h('span', { class: n('icon') }, [content('icon')]), h('span', { class: n('label') }, [content('label')]), h('span', { class: n('extra') }, [content('extra')]), node.children.length ? h(NavMenuArrow, { open: open.value, inline: !floating.value, placement: api.props.mode === 'horizontal' && !props.popup ? 'bottom-start' : 'right-start' }) : null])
       let reference: VNodeChild
       if (node.children.length && floating.value) {
         reference = h(Trigger, { ref: trigger, trigger: 'hover', open: open.value, disabled: disabled.value, escToClose: false, unmountOnClose: true,
           popupContainer: api.props.popupContainer, popupClass: api.props.popupClass, popupOffset: 4, mouseEnterDelay: 100, mouseLeaveDelay: 100,
           placement: api.props.mode === 'horizontal' && !props.popup ? 'bottom-start' : 'right-start',
-          onOpenChange: (value: boolean) => api.expand(node, value),
+          onOpenChange: (value: boolean) => { if (available()) api.expand(node, value) },
         }, { default: item, content: () => h('ul', { ref: panel, role: 'menu', 'data-nav-panel': '', class: [n('popup'), n(`--${api.theme.value}`), n(`--${api.props.size}`)], style: { '--c-nav-menu-icon-size': `${api.props.iconSize}px` }, onKeydown: onPanelKeydown }, children()) })
       } else if (api.collapsed.value && !props.popup && !node.children.length) reference = h(Tooltip, { placement: 'right', disabled: disabled.value, popupContainer: api.props.popupContainer }, { default: item, content: () => content('label') })
       else reference = item()

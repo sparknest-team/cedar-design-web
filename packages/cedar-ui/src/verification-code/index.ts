@@ -1,9 +1,10 @@
 import { withInstall } from '../_utils/global-config'
-import _VerificationCode from './verification-code.vue'
+import _VerificationCode from './presentation'
 import { verificationCodeProps } from './props'
 
-const VerificationCode = withInstall(_VerificationCode, Object.assign(_VerificationCode, {
-}), { components: [_VerificationCode] })
+const VerificationCode = withInstall(_VerificationCode, Object.assign(_VerificationCode, {}), {
+  components: [_VerificationCode],
+})
 
 export type VerificationCodeInstance = InstanceType<typeof _VerificationCode>
 export { VerificationCode, verificationCodeProps }

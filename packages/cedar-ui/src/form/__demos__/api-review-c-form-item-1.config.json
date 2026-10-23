@@ -1,0 +1,549 @@
+{
+  "fields": [
+    {
+      "name": "field",
+      "description": "表单元素在数据对象中的path（数据项必填）",
+      "type": "string",
+      "defaultValue": "''",
+      "kind": "string"
+    },
+    {
+      "name": "label",
+      "description": "标签的文本",
+      "type": "string",
+      "defaultValue": "-",
+      "kind": "string"
+    },
+    {
+      "name": "tooltip",
+      "description": "提示内容",
+      "type": "string",
+      "defaultValue": "-",
+      "kind": "string"
+    },
+    {
+      "name": "show-colon",
+      "description": "是否显示冒号",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "no-style",
+      "description": "是否去除样式",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "disabled",
+      "description": "是否禁用",
+      "type": "boolean",
+      "defaultValue": "-",
+      "kind": "boolean"
+    },
+    {
+      "name": "readonly",
+      "description": "是否只读；未传时继承 Form",
+      "type": "boolean",
+      "defaultValue": "-",
+      "kind": "boolean"
+    },
+    {
+      "name": "help",
+      "description": "帮助文案",
+      "type": "string",
+      "defaultValue": "-",
+      "kind": "string"
+    },
+    {
+      "name": "extra",
+      "description": "额外显示的文案",
+      "type": "string",
+      "defaultValue": "-",
+      "kind": "string"
+    },
+    {
+      "name": "required",
+      "description": "是否必须填写",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "asterisk-position",
+      "description": "可选择将星号置于 label 前/后",
+      "type": "'start' | 'end'",
+      "defaultValue": "'start'",
+      "kind": "enum",
+      "options": [
+        "start",
+        "end"
+      ],
+      "initial": "start"
+    },
+    {
+      "name": "rules",
+      "description": "表单项校验规则（优先级高于 form 的 rules）",
+      "type": "FieldRule | FieldRule[]",
+      "defaultValue": "-",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "validate-status",
+      "description": "校验状态",
+      "type": "'success' | 'warning' | 'error' | 'validating'",
+      "defaultValue": "-",
+      "kind": "enum",
+      "options": [
+        "success",
+        "warning",
+        "error",
+        "validating"
+      ],
+      "initial": "success"
+    },
+    {
+      "name": "validate-trigger",
+      "description": "触发校验的事件；clear 仅由控件清空动作触发，不等同于 change",
+      "type": "'change' | 'input' | 'focus' | 'blur' | 'clear'",
+      "defaultValue": "'change'",
+      "kind": "enum",
+      "options": [
+        "change",
+        "input",
+        "focus",
+        "blur",
+        "clear"
+      ],
+      "initial": "change"
+    },
+    {
+      "name": "size",
+      "description": "控件尺寸，未传继承 Form；标签外观仍由 Form 布局控制",
+      "type": "'xs' | 'sm' | 'md' | 'lg' | 'xl'",
+      "defaultValue": "-",
+      "kind": "enum",
+      "options": [
+        "xs",
+        "sm",
+        "md",
+        "lg",
+        "xl"
+      ],
+      "initial": "xs"
+    },
+    {
+      "name": "layout",
+      "description": "表单项布局；未传继承 Form",
+      "type": "'horizontal' | 'vertical' | 'inline'",
+      "defaultValue": "-",
+      "kind": "enum",
+      "options": [
+        "horizontal",
+        "vertical",
+        "inline"
+      ],
+      "initial": "horizontal"
+    },
+    {
+      "name": "label-align",
+      "description": "标签对齐；未传继承 Form",
+      "type": "'left' | 'right'",
+      "defaultValue": "-",
+      "kind": "enum",
+      "options": [
+        "left",
+        "right"
+      ],
+      "initial": "left"
+    },
+    {
+      "name": "label-col-props",
+      "description": "标签元素布局选项。参数同 <col> 组件一致",
+      "type": "object",
+      "defaultValue": "-",
+      "kind": "string",
+      "initial": "review-class"
+    },
+    {
+      "name": "wrapper-col-props",
+      "description": "表单控件布局选项。参数同 <col> 组件一致",
+      "type": "object",
+      "defaultValue": "-",
+      "kind": "string",
+      "initial": "review-class"
+    },
+    {
+      "name": "hide-label",
+      "description": "是否隐藏标签",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "hide-asterisk",
+      "description": "是否隐藏星号",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "label-col-style",
+      "description": "标签元素布局组件的 style",
+      "type": "object",
+      "defaultValue": "-",
+      "kind": "string",
+      "initial": "review-class"
+    },
+    {
+      "name": "wrapper-col-style",
+      "description": "表单控件布局组件的 style",
+      "type": "object",
+      "defaultValue": "-",
+      "kind": "string",
+      "initial": "review-class"
+    },
+    {
+      "name": "row-props",
+      "description": "表单项布局选项。参数同 <row> 组件一致",
+      "type": "object",
+      "defaultValue": "-",
+      "kind": "string",
+      "initial": "review-class"
+    },
+    {
+      "name": "row-class",
+      "description": "表单项布局组件的 class",
+      "type": "string|array|object",
+      "defaultValue": "-",
+      "kind": "string",
+      "initial": "review-class"
+    },
+    {
+      "name": "content-class",
+      "description": "表单控件包裹层的 class",
+      "type": "string|array|object",
+      "defaultValue": "-",
+      "kind": "string",
+      "initial": "review-class"
+    },
+    {
+      "name": "content-flex",
+      "description": "内容层是否开启 flex 布局",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "label-col-flex",
+      "description": "设置标签 Col 组件的 flex 属性。设置时表单 Col 组件的 flex 属性会被设置为 auto。",
+      "type": "number|string",
+      "defaultValue": "-",
+      "kind": "scalar"
+    },
+    {
+      "name": "feedback",
+      "description": "是否显示表单控件的反馈图标",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "label-component",
+      "description": "表单项标签渲染的元素",
+      "type": "string",
+      "defaultValue": "'label'",
+      "kind": "string"
+    },
+    {
+      "name": "label-attrs",
+      "description": "标签原生属性；for 指向控件真实 id",
+      "type": "object",
+      "defaultValue": "-",
+      "kind": "string",
+      "initial": "review-class"
+    },
+    {
+      "name": "FieldRule.type",
+      "description": "rules.0 · 校验的值的类型，默认为 'string'",
+      "type": "'string'    | 'number'    | 'boolean'    | 'array'    | 'object'    | 'email'    | 'url'    | 'ip'",
+      "defaultValue": "-",
+      "kind": "enum",
+      "options": [
+        "string",
+        "number",
+        "boolean",
+        "array",
+        "object",
+        "email",
+        "url",
+        "ip"
+      ],
+      "initial": "string",
+      "path": [
+        "rules",
+        0,
+        "type"
+      ]
+    },
+    {
+      "name": "FieldRule.required",
+      "description": "rules.0 · 是否必填",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean",
+      "path": [
+        "rules",
+        0,
+        "required"
+      ]
+    },
+    {
+      "name": "FieldRule.message",
+      "description": "rules.0 · 校验失败时展示的信息",
+      "type": "string",
+      "defaultValue": "-",
+      "kind": "string",
+      "path": [
+        "rules",
+        0,
+        "message"
+      ]
+    },
+    {
+      "name": "FieldRule.length",
+      "description": "rules.0 · 校验长度（string, array）",
+      "type": "number",
+      "defaultValue": "-",
+      "kind": "number",
+      "path": [
+        "rules",
+        0,
+        "length"
+      ]
+    },
+    {
+      "name": "FieldRule.max-length",
+      "description": "rules.0 · 最大长度（string）",
+      "type": "number",
+      "defaultValue": "-",
+      "kind": "number",
+      "path": [
+        "rules",
+        0,
+        "maxLength"
+      ]
+    },
+    {
+      "name": "FieldRule.min-length",
+      "description": "rules.0 · 最小长度（string）",
+      "type": "number",
+      "defaultValue": "-",
+      "kind": "number",
+      "path": [
+        "rules",
+        0,
+        "minLength"
+      ]
+    },
+    {
+      "name": "FieldRule.match",
+      "description": "rules.0 · 匹配校验（string）",
+      "type": "RegExp",
+      "defaultValue": "-",
+      "kind": "regexp",
+      "initial": "^[A-Z]",
+      "path": [
+        "rules",
+        0,
+        "match"
+      ]
+    },
+    {
+      "name": "FieldRule.uppercase",
+      "description": "rules.0 · 大写（string）",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean",
+      "path": [
+        "rules",
+        0,
+        "uppercase"
+      ]
+    },
+    {
+      "name": "FieldRule.lowercase",
+      "description": "rules.0 · 小写（string）",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean",
+      "path": [
+        "rules",
+        0,
+        "lowercase"
+      ]
+    },
+    {
+      "name": "FieldRule.min",
+      "description": "rules.0 · 最小值（number）",
+      "type": "number",
+      "defaultValue": "-",
+      "kind": "number",
+      "path": [
+        "rules",
+        0,
+        "min"
+      ]
+    },
+    {
+      "name": "FieldRule.max",
+      "description": "rules.0 · 最大值（number）",
+      "type": "number",
+      "defaultValue": "-",
+      "kind": "number",
+      "path": [
+        "rules",
+        0,
+        "max"
+      ]
+    },
+    {
+      "name": "FieldRule.equal",
+      "description": "rules.0 · 校验数值（number）",
+      "type": "number",
+      "defaultValue": "-",
+      "kind": "number",
+      "path": [
+        "rules",
+        0,
+        "equal"
+      ]
+    },
+    {
+      "name": "FieldRule.positive",
+      "description": "rules.0 · 正数（number）",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean",
+      "path": [
+        "rules",
+        0,
+        "positive"
+      ]
+    },
+    {
+      "name": "FieldRule.negative",
+      "description": "rules.0 · 负数（number）",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean",
+      "path": [
+        "rules",
+        0,
+        "negative"
+      ]
+    },
+    {
+      "name": "FieldRule.true",
+      "description": "rules.0 · 是否为 true（boolean）",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean",
+      "path": [
+        "rules",
+        0,
+        "true"
+      ]
+    },
+    {
+      "name": "FieldRule.false",
+      "description": "rules.0 · 是否为 false（boolean）",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean",
+      "path": [
+        "rules",
+        0,
+        "false"
+      ]
+    },
+    {
+      "name": "FieldRule.includes",
+      "description": "rules.0 · 数组中是否包含给定值（array）",
+      "type": "any[]",
+      "defaultValue": "-",
+      "kind": "json",
+      "initial": "[]",
+      "path": [
+        "rules",
+        0,
+        "includes"
+      ]
+    },
+    {
+      "name": "FieldRule.deep-equal",
+      "description": "rules.0 · 数组元素是否相等（array）",
+      "type": "any",
+      "defaultValue": "-",
+      "kind": "json",
+      "initial": "null",
+      "path": [
+        "rules",
+        0,
+        "deepEqual"
+      ]
+    },
+    {
+      "name": "FieldRule.empty",
+      "description": "rules.0 · 是否为空（object）",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean",
+      "path": [
+        "rules",
+        0,
+        "empty"
+      ]
+    },
+    {
+      "name": "FieldRule.has-keys",
+      "description": "rules.0 · 对象是否包含给定属性（object）",
+      "type": "string[]",
+      "defaultValue": "-",
+      "kind": "json",
+      "initial": "[]",
+      "path": [
+        "rules",
+        0,
+        "hasKeys"
+      ]
+    },
+    {
+      "name": "FieldRule.validator",
+      "description": "rules.0 · 自定义校验规则",
+      "type": "(    value: FieldValue | undefined,    callback: (error?: string) => void  ) => void",
+      "defaultValue": "-",
+      "kind": "callback",
+      "path": [
+        "rules",
+        0,
+        "validator"
+      ]
+    }
+  ],
+  "methodNames": [],
+  "events": [],
+  "slotNames": [
+    "label",
+    "help",
+    "extra"
+  ],
+  "slotDefaults": {
+    "label": false,
+    "help": false,
+    "extra": false
+  },
+  "scenarios": []
+}

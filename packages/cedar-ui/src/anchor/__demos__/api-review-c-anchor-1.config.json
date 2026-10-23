@@ -1,0 +1,48 @@
+{
+  "fields": [
+    {
+      "name": "boundary",
+      "description": "滚动边界值，设置该值为数字后，将会在距离滚动容器 boundary 距离时停止滚动。",
+      "type": "'start' | 'end' | 'center' | 'nearest' | number",
+      "defaultValue": "'start'",
+      "kind": "scenario"
+    },
+    {
+      "name": "show-line",
+      "description": "是否显示左侧轴线",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "show-background",
+      "description": "是否显示背景",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "scroll-container",
+      "description": "滚动容器",
+      "type": "string | HTMLElement | Window",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "\"body\""
+    },
+    {
+      "name": "change-hash",
+      "description": "是否改变hash。设置为 false 时点击锚点不会改变页面的 hash",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    }
+  ],
+  "methodNames": [],
+  "events": [
+    "select",
+    "change"
+  ],
+  "slotNames": [],
+  "slotDefaults": {},
+  "scenarios": []
+}

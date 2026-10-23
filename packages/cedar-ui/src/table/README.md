@@ -4,6 +4,8 @@ permalink: /components/table/
 
 # Table
 
+跨端边界：本组件与 Maple Table 独立维护，菜单保留“独立”。Maple 的轻量插槽表格/本地分页示例不提供本组件的排序、行选择或远程数据 API；两端有交互记录不等于 API 同源或全部配置已验收。
+
 用于数据收集展示、分析整理、操作处理。
 
 ## 案例
@@ -13,6 +15,12 @@ permalink: /components/table/
 表格的基本用法，需要传递 `columns` 和 `data`。
 
 <demo src="./__demos__/basic.vue"></demo>
+
+### 空数据
+
+数据为空时显示缺省提示；通过 `empty` 插槽提供业务引导，不把空状态和尺寸控制混在基础案例中。
+
+<demo src="./__demos__/empty-state.vue"></demo>
 
 ### 行选择器
 
@@ -265,6 +273,13 @@ Table **不内置**列管理。通过扩展点与外部 `TableColumnManager` 组
 <demo src="./__demos__/column-manager-async.vue"></demo>
 
 详见 [`TableColumnManager`](/components/table-column-manager/)。
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
 
 ## API
 

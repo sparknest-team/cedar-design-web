@@ -1,4 +1,5 @@
 import type { ExtractPublicPropTypes, PropType } from 'vue'
+import { fieldPresentationProps } from '../_components/field-presentation/props'
 import type { ComponentSize } from '../_utils/constant'
 
 export const switchVariants = ['circle', 'round', 'line', 'tonal'] as const
@@ -9,6 +10,7 @@ export type SwitchValue = string | number | boolean
 export type SwitchBeforeChange = (nextValue: SwitchValue) => boolean | void | Promise<boolean | void>
 
 export const switchProps = {
+  ...fieldPresentationProps,
   /** 受控值；省略时使用内部状态 */
   modelValue: { type: [String, Number, Boolean] as PropType<SwitchValue>, default: undefined },
   /** 非受控初始选中状态 */
@@ -20,7 +22,11 @@ export const switchProps = {
   /** 加载中，禁止切换 */
   loading: Boolean,
   /** 四种相同的跨端造型 */
-  variant: { type: String as PropType<SwitchVariant>, default: 'circle', validator: (v: SwitchVariant) => switchVariants.includes(v) },
+  variant: {
+    type: String as PropType<SwitchVariant>,
+    default: 'circle',
+    validator: (v: SwitchVariant) => switchVariants.includes(v),
+  },
   /** 仅实现 sm/md/lg，省略时采用平台配置或 md */
   size: { type: String as PropType<SwitchSize>, validator: (v: SwitchSize) => switchSizes.includes(v) },
   /** 选中值 */

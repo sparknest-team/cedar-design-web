@@ -1,0 +1,324 @@
+{
+  "fields": [
+    {
+      "name": "model-value",
+      "description": "绑定值",
+      "type": "string | number | Date",
+      "defaultValue": "undefined",
+      "kind": "scenario"
+    },
+    {
+      "name": "open",
+      "description": "弹层显隐",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "popup-props",
+      "description": "本地 Trigger 的展示配置，不控制字段状态",
+      "type": "TimePopupPresentationProps<Partial<TriggerProps>>",
+      "defaultValue": "() => ({})",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "input-editable",
+      "description": "允许桌面文本输入",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "clearable",
+      "description": "可清除",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "disabled",
+      "description": "禁用",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "readonly",
+      "description": "只读",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "size",
+      "description": "尺寸",
+      "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
+      "defaultValue": "undefined",
+      "kind": "enum",
+      "options": [
+        "xs",
+        "sm",
+        "md",
+        "lg",
+        "xl"
+      ],
+      "initial": "xs"
+    },
+    {
+      "name": "variant",
+      "description": "输入框变体",
+      "type": "\"filled\" | \"outline\" | \"standard\"",
+      "defaultValue": "'filled'",
+      "kind": "enum",
+      "options": [
+        "filled",
+        "outline",
+        "standard"
+      ],
+      "initial": "filled"
+    },
+    {
+      "name": "placeholder",
+      "description": "占位",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "format",
+      "description": "展示格式",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "use12-hours",
+      "description": "12 小时制",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "hide-disabled-options",
+      "description": "隐藏禁用时间选项",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "step",
+      "description": "时分秒步长",
+      "type": "object",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "disable-confirm",
+      "description": "跳过确认",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "time-picker-props",
+      "description": "透传给 TimePicker",
+      "type": "object",
+      "defaultValue": "() => ({})",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "presentation",
+      "type": "'inline' | 'click' | 'dblclick'",
+      "defaultValue": "undefined",
+      "description": "字段编辑方式，字段 > FormItem > Form 继承；默认 inline。",
+      "kind": "enum",
+      "options": [
+        "inline",
+        "click",
+        "dblclick"
+      ],
+      "initial": "inline"
+    },
+    {
+      "name": "read-pretty",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "纯阅读展示；字段 > FormItem > Form 继承，显式 false 覆盖父级。",
+      "kind": "boolean"
+    },
+    {
+      "name": "before-commit",
+      "type": "BeforeFieldCommit",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "callback"
+    },
+    {
+      "name": "default-open",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "popup-container",
+      "type": "string | HTMLElement | false",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "json",
+      "initial": "\"body\""
+    },
+    {
+      "name": "hint",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "浮动提示；有 Form 外置标签时不启用。",
+      "kind": "boolean"
+    },
+    {
+      "name": "line",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "是否显示边框或底线。",
+      "kind": "boolean"
+    },
+    {
+      "name": "text-color",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "string",
+      "initial": "#5268cc"
+    },
+    {
+      "name": "focus-color",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "string",
+      "initial": "#5268cc"
+    },
+    {
+      "name": "blur-color",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "string",
+      "initial": "#5268cc"
+    },
+    {
+      "name": "min",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "最早可选时间，HH:mm 或 HH:mm:ss，包含端点。",
+      "kind": "string"
+    },
+    {
+      "name": "max",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "最晚可选时间，HH:mm 或 HH:mm:ss，包含端点。",
+      "kind": "string"
+    },
+    {
+      "name": "default-value",
+      "type": "string | number | Date",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "scenario"
+    },
+    {
+      "name": "disabled-hours",
+      "type": "() => number[]",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "callback"
+    },
+    {
+      "name": "disabled-minutes",
+      "type": "(selectedHour?: number) => number[]",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "callback"
+    },
+    {
+      "name": "disabled-seconds",
+      "type": "(selectedHour?: number, selectedMinute?: number) => number[]",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "callback"
+    },
+    {
+      "name": "error",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    }
+  ],
+  "events": [
+    "update:modelValue",
+    "update:open"
+  ],
+  "scenarios": [
+    {
+      "name": "model-value",
+      "kind": "prop",
+      "demos": [
+        "step.vue"
+      ]
+    },
+    {
+      "name": "popup-props",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "step",
+      "kind": "prop",
+      "demos": [
+        "step.vue"
+      ]
+    },
+    {
+      "name": "time-picker-props",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "before-commit",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "default-value",
+      "kind": "prop",
+      "demos": [
+        "default-state.vue"
+      ]
+    },
+    {
+      "name": "disabled-hours",
+      "kind": "prop",
+      "demos": [
+        "step.vue"
+      ]
+    },
+    {
+      "name": "disabled-minutes",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "disabled-seconds",
+      "kind": "prop",
+      "demos": []
+    }
+  ],
+  "slotNames": [],
+  "slotDefaults": {},
+  "methodNames": []
+}

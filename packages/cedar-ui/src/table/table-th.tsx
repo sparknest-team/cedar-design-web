@@ -202,7 +202,6 @@ export default defineComponent({
                 [`${prefixCls}-filters-align-left`]: inlineFilter.value,
               },
             ]}
-            disabled={!inlineFilter.value}
             // @ts-ignore
             onClick={(ev: Event) => ev.stopPropagation()}
           >

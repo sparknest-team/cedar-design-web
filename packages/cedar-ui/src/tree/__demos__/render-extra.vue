@@ -1,11 +1,31 @@
 <template>
   <div style="width: 500px; padding: 2px; overflow: auto">
-    <c-tree :blockNode="true" :checkable="true" :data="treeData">
+    <c-space wrap>
+      <c-checkbox v-model="leafChecksOnly">Leaf checkboxes only</c-checkbox>
+      <c-checkbox v-model="leafSelectionOnly">Leaf selection only</c-checkbox>
+      <c-checkbox v-model="strict">Strict checks</c-checkbox>
+      <c-tag>Checked: {{ checkedKeys.join(', ') || '-' }}</c-tag>
+      <c-tag>Selected: {{ selectedKeys.join(', ') || '-' }}</c-tag>
+    </c-space>
+    <c-tree
+      :block-node="true"
+      :checkable="leafChecksOnly ? isLeafNode : true"
+      :selectable="leafSelectionOnly ? isLeafNode : true"
+      :check-strictly="strict"
+      :data="treeData"
+      @check="keys => checkedKeys = keys"
+      @select="keys => selectedKeys = keys"
+    >
       <template #extra="nodeData">
-        <c-icon-plus
-          style="position: absolute; right: 8px; font-size: 12px; top: 10px; color: #3370ff"
-          @click="() => onIconClick(nodeData)"
-        />
+        <c-button
+          variant="text"
+          size="xs"
+          :aria-label="'Add child to ' + nodeData.title + ' (' + nodeData.key + ')'"
+          style="position: absolute; right: 8px; top: 2px"
+          @click.stop="onIconClick(nodeData)"
+        >
+          <template #icon><c-icon-plus /></template>
+        </c-button>
       </template>
     </c-tree>
   </div>
@@ -13,6 +33,13 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
+
+const leafChecksOnly = ref(false)
+const leafSelectionOnly = ref(false)
+const strict = ref(false)
+const checkedKeys = ref<(string | number)[]>([])
+const selectedKeys = ref<(string | number)[]>([])
+const isLeafNode = (_node: unknown, info: { isLeaf: boolean }) => info.isLeaf
 
 function onIconClick(nodeData) {
   const children = nodeData.children || []

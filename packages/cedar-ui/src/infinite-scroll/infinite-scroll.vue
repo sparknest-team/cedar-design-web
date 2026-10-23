@@ -147,7 +147,9 @@ function bindScroller(initial = false) {
   }
   const generation = bindingGeneration
   const scheduleBoundCheck = () => {
-    if (generation === bindingGeneration) scheduleCheck()
+    if (generation === bindingGeneration) {
+      scheduleCheck()
+    }
   }
 
   scroller.addEventListener('scroll', scheduleCheck, { passive: true })
@@ -157,7 +159,9 @@ function bindScroller(initial = false) {
   if (typeof ResizeObserver !== 'undefined') {
     let skipInitialNotification = initial && !props.immediate
     resizeObserver = new ResizeObserver(() => {
-      if (generation !== bindingGeneration) return
+      if (generation !== bindingGeneration) {
+        return
+      }
       if (skipInitialNotification) {
         skipInitialNotification = false
         return
@@ -229,7 +233,9 @@ function scheduleCheck() {
   }
   const generation = ++checkGeneration
   const run = () => {
-    if (generation !== checkGeneration || !mounted || !active) return
+    if (generation !== checkGeneration || !mounted || !active) {
+      return
+    }
     checkGeneration++
     frameId = null
     timeoutId = null

@@ -39,9 +39,7 @@
           这是卡片中的一段长文本内容，用于演示在卡片组件中使用省略组件的效果。文本内容可能会很长，需要控制显示行数。
         </c-ellipsis>
         <div class="card-footer">
-          <c-ellipsis style="width: 120px">
-            这是一个很长的标签文本
-          </c-ellipsis>
+          <c-ellipsis style="width: 120px"> 这是一个很长的标签文本 </c-ellipsis>
         </div>
       </div>
     </div>
@@ -51,26 +49,29 @@
       <c-ellipsis style="width: 250px" :line-clamp="2">
         {{ dynamicText }}
       </c-ellipsis>
-      <button @click="toggleText" class="demo-button">
-        {{ isLongText ? '显示短文本' : '显示长文本' }}
-      </button>
+      <c-button @click="toggleText" class="demo-button">
+        {{ isLongText ? "显示短文本" : "显示长文本" }}
+      </c-button>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
-const isLongText = ref(true)
-const dynamicText = ref('这是一段很长的文本内容，用于演示动态内容的省略效果。当文本内容发生变化时，省略组件会自动适应新的内容长度。')
+import { ref } from "vue";
+const isLongText = ref(true);
+const dynamicText = ref(
+  "这是一段很长的文本内容，用于演示动态内容的省略效果。当文本内容发生变化时，省略组件会自动适应新的内容长度。",
+);
 
 const toggleText = () => {
-  isLongText.value = !isLongText.value
+  isLongText.value = !isLongText.value;
   if (isLongText.value) {
-    dynamicText.value = '这是一段很长的文本内容，用于演示动态内容的省略效果。当文本内容发生变化时，省略组件会自动适应新的内容长度。'
+    dynamicText.value =
+      "这是一段很长的文本内容，用于演示动态内容的省略效果。当文本内容发生变化时，省略组件会自动适应新的内容长度。";
   } else {
-    dynamicText.value = '这是短文本。'
+    dynamicText.value = "这是短文本。";
   }
-}
+};
 </script>
 
 <style scoped>

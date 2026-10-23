@@ -4,21 +4,7 @@ permalink: /components/image/
 
 # Image
 
-本批轨道调度已独立审查（前文“另待审”为历史）：关闭／换图／loop变化／停用／卸载取消旧任务，帧与渲染回调消费一次；激活只规范化当前轨道，保留命令不重放。双帧是状态结算，零时长也保留；循环仍使用三份图片。两端轨道消费系统 slow／standard（当前240ms），Maple不再固定280ms。重定位读取实际transform时长＋delay，400ms仅样式无法读取／解析时保底。专项各27、完整Image Cedar62／Maple114；受控队列和32组Less级联不是原生浏览器认证。
-
-### PreviewGroup track lifecycle / 轨道生命周期
-
-<demo src="./__demos__/track-lifecycle.vue"></demo>
-
-预览长按500ms、双击识别320ms属于交互策略，不是CSS时长／延迟关闭。抬手、移动、关闭、换src、停用和卸载使旧计时失效，消费后不重放；停用／卸载保留输入无效。停用解绑键盘／模式监听、释放capture并清moving，激活读当前模式并接受新手势。专项各17／完整Cedar35、Maple87通过，控制时钟／MQL／事件不等于原生触控／浏览器／OS认证；PreviewGroup轨道调度另待审，API／Token不变。
-
-展示图片，支持说明、加载回退与预览。两端示例分组一致。
-
 ## 案例
-
-### 预览交互生命周期
-
-<demo src="./__demos__/controller-lifecycle.vue"></demo>
 
 ### 基础用法
 
@@ -31,12 +17,6 @@ permalink: /components/image/
 通过 `object-fit` 控制图片如何适应容器。
 
 <demo src="./__demos__/fit-mode.vue"></demo>
-
-### 尺寸、圆角与位置
-
-`width` / `height`、`radius` 和 `object-position` 控制几何与裁切位置。
-
-<demo src="./__demos__/presentation.vue"></demo>
 
 ### 标题与描述
 
@@ -80,6 +60,30 @@ permalink: /components/image/
 
 <demo src="./__demos__/ripple.vue"></demo>
 
+### 点击背景层关闭
+
+通过 `preview-props.overlayClosable` 控制点击图片外的背景层是否关闭预览。左图开启，右图关闭；点击图片本身均不会关闭预览。
+
+<demo src="./__demos__/overlay-closable.vue"></demo>
+
+### 尺寸、圆角与位置
+
+`width` / `height`、`radius` 和 `object-position` 控制几何与裁切位置。
+
+<demo src="./__demos__/presentation.vue"></demo>
+
+### PreviewGroup track lifecycle / 轨道生命周期
+
+<demo src="./__demos__/track-lifecycle.vue"></demo>
+
+展示图片，支持说明、加载回退与预览。两端示例分组一致。
+
+单图与预览组未设置 `popup-container` 时均挂载到 body 并覆盖视口；只有显式 `false` 才原地渲染，需要父容器提供定位和尺寸。预览组仅由当前图片的 load/error 结束加载提示，切回已加载的缓存图片不会残留加载图标。
+
+### 预览交互生命周期
+
+<demo src="./__demos__/controller-lifecycle.vue"></demo>
+
 ### 禁用预览
 
 <demo src="./__demos__/disable-preview.vue"></demo>
@@ -89,12 +93,6 @@ permalink: /components/image/
 通过 `preview-src`、`v-model:preview-open` 和 `preview-props` 配置 Image 内嵌预览。
 
 <demo src="./__demos__/preview-entry.vue"></demo>
-
-### 点击背景层关闭
-
-通过 `preview-props.overlayClosable` 控制点击图片外的背景层是否关闭预览。左图开启，右图关闭；点击图片本身均不会关闭预览。
-
-<demo src="./__demos__/overlay-closable.vue"></demo>
 
 ### 指定挂载容器
 
@@ -129,6 +127,13 @@ permalink: /components/image/
 命令式 API 对单图和多图返回同一套控制方法。
 
 <demo src="./__demos__/imperative-preview.vue"></demo>
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
 
 ## API
 

@@ -12,17 +12,23 @@ permalink: /components/space/
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### 垂直间距
-
-可以设置垂直方向排列的间距。
-
-<demo src="./__demos__/vertical.vue"></demo>
-
 ### 尺寸
 
 内置 xs / sm / md / lg / xl 五档，默认 md；支持数字、CSS 长度和 [行间距, 列间距]，具体值见下方同源约定。
 
 <demo src="./__demos__/size.vue"></demo>
+
+### 动态布局
+
+切换方向、列间距和换行，添加/删除子项；行间距固定8px，列间距在8px/24px间切换。方向不会交换两个gap的几何轴含义。窄容器内未换行时可横向滚动。
+
+<demo src="./__demos__/interactive-layout.vue"></demo>
+
+### 垂直间距
+
+可以设置垂直方向排列的间距。
+
+<demo src="./__demos__/vertical.vue"></demo>
 
 ### 对齐
 
@@ -41,6 +47,19 @@ permalink: /components/space/
 为相邻子元素设置分隔符。
 
 <demo src="./__demos__/split.vue"></demo>
+
+### 布局与对齐
+
+适用于space。调整排列方向、交叉轴对齐、主轴分配，用相同数据观察变化。内容保持一致，便于比较不同设置的实际效果。
+
+<demo src="./__demos__/layout-lab.vue"></demo>
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
 
 ## API
 

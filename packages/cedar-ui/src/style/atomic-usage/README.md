@@ -33,7 +33,7 @@ permalink: /components/style/atomic-usage/
 
 ## 语义颜色与字号
 
-业务优先使用语义颜色，不在组件中硬编码品牌色。固定颜色工具类与 preset 类的能力范围不同，见 [颜色 Color](/components/color/) 与 [Utilities 总览](/components/style/utilities/)。
+业务优先使用语义颜色，不在组件中硬编码品牌色。固定颜色工具类与 preset 类的能力范围不同，见 [颜色 Color](/components/style/color/) 与 [Utilities 总览](/components/style/utilities/)。
 
 <demo src="../atomic-css/__demos__/colors.vue"></demo>
 <demo src="../atomic-css/__demos__/font-size.vue"></demo>

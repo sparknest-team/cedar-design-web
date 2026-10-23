@@ -20,6 +20,13 @@ permalink: /components/split/
 
 <demo src="./__demos__/nested.vue"></demo>
 
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
+
 ## API
 
 ### `<split>` Props

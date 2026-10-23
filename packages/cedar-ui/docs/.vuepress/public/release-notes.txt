@@ -1,0 +1,3 @@
+Cedar Upload review fixture
+Release: 1
+Changes: provide real local attachments for the Upload demo.

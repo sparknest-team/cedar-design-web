@@ -1,0 +1,107 @@
+{
+  "fields": [
+    {
+      "name": "type",
+      "description": "参数类型",
+      "type": "string",
+      "defaultValue": "-",
+      "kind": "string"
+    },
+    {
+      "name": "prefix-cls",
+      "type": "string",
+      "defaultValue": "'c'",
+      "description": "@zh 组件类名前缀\n@en Component classname prefix\n/",
+      "kind": "string"
+    },
+    {
+      "name": "locale",
+      "type": "CedarLang",
+      "defaultValue": "undefined",
+      "description": "@zh 配置语言包\n@en Configure language pack\n/",
+      "kind": "locale",
+      "options": [
+        "zh-CN",
+        "en-US"
+      ],
+      "initial": "zh-CN"
+    },
+    {
+      "name": "size",
+      "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
+      "defaultValue": "undefined",
+      "description": "@zh 大小\n@en ComponentSize\n@version 2.14.0\n/",
+      "kind": "enum",
+      "options": [
+        "xs",
+        "sm",
+        "md",
+        "lg",
+        "xl"
+      ],
+      "initial": "xs"
+    },
+    {
+      "name": "global",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "@zh 是否全局生效\n@en Is global effect\n@version 2.25.0\n/",
+      "kind": "boolean"
+    },
+    {
+      "name": "update-at-scroll",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "@zh 是否在容器滚动时更新弹出框的位置\n@us Whether to update the position of the popup when the container is scrolled\n@version 2.25.0\n/",
+      "kind": "boolean"
+    },
+    {
+      "name": "scroll-to-close",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "@zh 是否在滚动时关闭弹出框\n@en Whether to close the popover when scrolling\n@version 2.46.0\n/",
+      "kind": "boolean"
+    },
+    {
+      "name": "rtl",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "@zh 视图的表现形式是从右开始向左结束\n@en View starts from the right and ends on the left\n/",
+      "kind": "boolean"
+    },
+    {
+      "name": "theme",
+      "type": "\"light\" | \"dark\"",
+      "defaultValue": "undefined",
+      "description": "@zh 全局主题：`light` 亮色，`dark` 暗色\n@en Global theme: `light` or `dark`\n/",
+      "kind": "enum",
+      "options": [
+        "light",
+        "dark"
+      ],
+      "initial": "light"
+    }
+  ],
+  "events": [
+    "click"
+  ],
+  "scenarios": [
+    {
+      "name": "locale",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "default",
+      "kind": "slot",
+      "demos": []
+    }
+  ],
+  "slotNames": [
+    "default"
+  ],
+  "slotDefaults": {
+    "default": false
+  },
+  "methodNames": []
+}

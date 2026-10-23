@@ -15,17 +15,17 @@ permalink: /components/collapse/
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### 手风琴模式
-
-通过 `accordion` 开启手风琴模式，同时只能打开一个面板。手风琴模式下 `activeNames` 仍为数组，最多包含一项。
-
-<demo src="./__demos__/accordion.vue"></demo>
-
 ### 禁用
 
 通过 `disabled` 禁用面板。
 
 <demo src="./__demos__/disabled.vue"></demo>
+
+### 手风琴模式
+
+通过 `accordion` 开启手风琴模式，同时只能打开一个面板。手风琴模式下 `activeNames` 仍为数组，最多包含一项。
+
+<demo src="./__demos__/accordion.vue"></demo>
 
 ### 嵌套面板
 
@@ -86,6 +86,13 @@ permalink: /components/collapse/
 通过 `toggleAll` 批量展开 / 收起面板。手风琴模式下不可用。
 
 <demo src="./__demos__/toggle-all.vue"></demo>
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
 
 ## API
 

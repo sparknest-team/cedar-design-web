@@ -14,6 +14,24 @@ permalink: /components/date/
 
 ## 案例
 
+### 基本用法
+
+<demo src="./__demos__/basic.vue"></demo>
+
+### 清除与禁用
+
+<demo src="./__demos__/status.vue"></demo>
+
+### 尺寸
+
+<demo src="./__demos__/size.vue"></demo>
+
+### 表单控件尺寸对照
+
+切换五档 size 和三种字段变体，比较 Input、Button、Select、日期时间及其他单行表单控件的高度。Button 在这里固定使用 outline。DatePicker/TimePicker 是面板，此处使用带输入框的 Date/Time 字段。示例同时展示有值、可清空、标签删除与长标签多选；Select/Cascader 设置 tag-nowrap 时保持同档高度，长标签文字省略、删除图标保留；标签行可横向滚动，清空按钮和箭头固定在外侧。被省略的标签正文支持悬停、键盘聚焦或点按查看完整文字，点外部或按 Esc 关闭，不改变选中值。可清空后恢复选中值重复比较。多行文本和允许换行的多选内容按内容撑高。
+
+<demo src="../field-decorator/__demos__/control-sizes.vue"></demo>
+
 ### 字段与面板边界
 
 字段保留输入和浮层状态；嵌套面板参数只接受展示选项，不能覆盖顶层模型、格式或校验规则。
@@ -36,10 +54,6 @@ Date / DateRange / Time / TimeRange 使用相同的 PickerField → FieldDecorat
 
 <demo src="./__demos__/rejected-close.vue"></demo>
 
-### 基本用法
-
-<demo src="./__demos__/basic.vue"></demo>
-
 ### 选择类型
 
 通过 `type` 切换日 / 周 / 月 / 年 / 季度。
@@ -50,17 +64,28 @@ Date / DateRange / Time / TimeRange 使用相同的 PickerField → FieldDecorat
 
 <demo src="./__demos__/show-time.vue"></demo>
 
-### 清除与禁用
-
-<demo src="./__demos__/status.vue"></demo>
-
-### 尺寸
-
-<demo src="./__demos__/size.vue"></demo>
-
 ### 模型格式与显示格式
 
 <demo src="./__demos__/value-formats.vue"></demo>
+
+### 外观组合
+
+适用于选择单个日期。调整变体、尺寸，用相同数据观察变化。内容保持一致，便于比较不同设置的实际效果。
+
+<demo src="./__demos__/appearance-lab.vue"></demo>
+
+### 交互状态切换
+
+适用于选择单个日期。调整禁用、只读、错误反馈，用相同数据观察变化。控制区始终可用，可以随时恢复编辑；错误外观本身不会触发表单校验。
+
+<demo src="./__demos__/state-lab.vue"></demo>
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
 
 ## API
 
@@ -188,3 +213,17 @@ Cedar 只实现桌面日历，不公开移动 `presentation`。Maple 在字段/�
 ### 动态日期限制
 
 更新或移除 `min` / `max` 会重新计算可选日期，不自动修改已有模型或草稿。面板导航与候选日期校验是不同职责，已有值超出新限制时也不会被静默重写；用户重新选择或确认时按当前限制校验。
+
+### Form 字段展示与确认
+
+本组件支持 `presentation`，字段 > FormItem > Form 逐层继承；未指定时为 `inline`，保留原有交互。支持值：`inline / click / dblclick`。其他编辑展示使用 Cell 入口和一份草稿，确认后才更新 v-model；取消、重置或启用 readPretty 丢弃草稿。
+
+Cedar 使用 presentation="click" / "dblclick" 在原位进入编辑，Enter/F2 也可进入；取消/Escape 丢弃草稿，确认后提交。 readPretty 为纯阅读属性，与 readonly、disabled 独立。
+
+`before-commit(value, { previousValue, signal })` 可拦截弹层保存；FormItem 先校验候选值，失败保持编辑。`open / default-open / update:open` 控制编辑层。`#read="{ value, text }"` 可自定义阅读内容。集中示例见 Form 的“各类字段统一展示”。
+
+日期／时间字段在 inline 下沿用原确认策略；在 popover/popup/dialog 中，内部纯面板隐藏确认工具栏，由编辑层提供唯一一组确认／取消。独立 DatePicker、DateRangePicker、TimePicker、TimeRangePicker 保留原有面板 API 和确认行为，不继承 Form 的字段展示。
+
+独立 DatePicker / DateRangePicker 与 inline 共用日历基准宽度（每个 265px）。单日期带时间时，宽屏下日历与时间列左右排列；范围在宽屏保留两个并排日历。面板会按窄容器换行，侧边快捷项另占一列，不压缩日历；确认与 actions 插槽保持由面板自身管理。
+
+`read-pretty` 为独立布尔属性，与 `readonly`、`disabled` 同级；字段 > FormItem > Form 继承，显式 `false` 覆盖父级。默认 `false`。纯阅读不显示编辑器。

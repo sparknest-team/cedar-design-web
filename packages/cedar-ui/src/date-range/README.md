@@ -12,6 +12,18 @@ permalink: /components/date-range/
 
 ## 案例
 
+### 基本用法
+
+<demo src="./__demos__/basic.vue"></demo>
+
+### 清除与禁用
+
+<demo src="./__demos__/status.vue"></demo>
+
+### 尺寸
+
+<demo src="./__demos__/size.vue"></demo>
+
 ### 字段与面板边界
 
 字段保留输入和浮层状态；嵌套面板参数只接受展示选项，不能覆盖顶层模型、格式或校验规则。
@@ -32,10 +44,6 @@ permalink: /components/date-range/
 
 <demo src="./__demos__/rejected-close.vue"></demo>
 
-### 基本用法
-
-<demo src="./__demos__/basic.vue"></demo>
-
 ### 选择类型
 
 通过 `type` 切换日 / 周 / 月 / 年 / 季度范围。
@@ -46,21 +54,34 @@ permalink: /components/date-range/
 
 <demo src="./__demos__/separator.vue"></demo>
 
-### 清除与禁用
-
-<demo src="./__demos__/status.vue"></demo>
-
 ### 带时间
 
 <demo src="./__demos__/show-time.vue"></demo>
 
-### 尺寸
-
-<demo src="./__demos__/size.vue"></demo>
-
 ### 边界和端点禁用
 
+桌面日历需要选齐起点和终点后才能确认；点击结束输入可先选终点、再选起点。Escape 关闭时丢弃未确认的范围。
+
 <demo src="./__demos__/boundaries.vue"></demo>
+
+### 外观组合
+
+适用于预订或查询的起止日期。调整变体、尺寸，用相同数据观察变化。内容保持一致，便于比较不同设置的实际效果。
+
+<demo src="./__demos__/appearance-lab.vue"></demo>
+
+### 交互状态切换
+
+适用于预订或查询的起止日期。调整只读、错误反馈，用相同数据观察变化。控制区始终可用，可以随时恢复编辑；错误外观本身不会触发表单校验。
+
+<demo src="./__demos__/state-lab.vue"></demo>
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
 
 ## API
 
@@ -100,6 +121,8 @@ permalink: /components/date-range/
 
 `DateValue = Date | string | number`。单值清除为 undefined，范围清除为 []。
 `disabledDate(date, side)` 和 `disabledTime(date, side)` 的 date 始终为 Date，side 为 start/end。
+
+`disabled-date` 限制起止端点，范围可以跨过中间的禁用项；不会逐项扫描或自动截断范围。日期、月份、年份均采用此规则。中间禁用项保持灰色，翻页保留已选起点并清除悬浮预览；反向点选按时间先后排序。
 时间回调返回 `disabledHours()`、`disabledMinutes(hour)`、`disabledSeconds(hour, minute)` 数字列表。
 非法日期、不完整或逆序范围不能提交；确认时重新验证动态禁用规则。范围锁定端点不能被清除或改动。
 嵌套面板 props 只配置展示，不得覆盖顶层 model-value、格式、边界、禁用规则或控制事件。
@@ -129,6 +152,10 @@ permalink: /components/date-range/
 日期标签、标题和动作接入各库的全局 Locale 与既有 Provider。Cedar 删除日期组件级 `locale`，不保留覆盖字典或兼容别名。切换语言不会选择或提交日期。
 
 ### 内嵌时间与滚轮展示
+
+日期范围的内嵌时间选择也属于外层草稿：修改起点或终点时间不会提前写回，显式确认后才提交；取消保留原模型。日期时间手输的反序范围不会自动交换端点。
+
+Embedded time edits update the outer range draft, not the committed model. Confirm explicitly to submit; cancel preserves the previous value. Reversed date-time text input is rejected rather than reordered.
 
 `time-picker-props` 使用 `DateTimePickerOptions`：`use12Hours`、`step`、`hideDisabledOptions`、`class`、`style`。仅配置时间展示；日期值、格式/秒精度、约束和确认仍由日期所有者管理。`step` 负责展示采样，不静默修正外部值。未知参数及监听函数不转发。
 
@@ -181,3 +208,23 @@ Cedar 只实现桌面日历，不公开移动 `presentation`。Maple 在字段/�
 ### 动态日期限制
 
 更新或移除 `min` / `max` 会重新计算可选日期，不自动修改已有模型或草稿。面板导航与候选日期校验是不同职责，已有值超出新限制时也不会被静默重写；用户重新选择或确认时按当前限制校验。
+
+### Form 字段展示与确认
+
+本组件支持 `presentation`，字段 > FormItem > Form 逐层继承；未指定时为 `inline`，保留原有交互。支持值：`inline / click / dblclick`。其他编辑展示使用 Cell 入口和一份草稿，确认后才更新 v-model；取消、重置或启用 readPretty 丢弃草稿。
+
+Cedar 使用 presentation="click" / "dblclick" 在原位进入编辑，Enter/F2 也可进入；取消/Escape 丢弃草稿，确认后提交。 readPretty 为纯阅读属性，与 readonly、disabled 独立。
+
+`before-commit(value, { previousValue, signal })` 可拦截弹层保存；FormItem 先校验候选值，失败保持编辑。`open / default-open / update:open` 控制编辑层。`#read="{ value, text }"` 可自定义阅读内容。集中示例见 Form 的“各类字段统一展示”。
+
+日期／时间字段在 inline 下沿用原确认策略；在 popover/popup/dialog 中，内部纯面板隐藏确认工具栏，由编辑层提供唯一一组确认／取消。独立 DatePicker、DateRangePicker、TimePicker、TimeRangePicker 保留原有面板 API 和确认行为，不继承 Form 的字段展示。
+
+### 范围日历的视口与选择
+
+默认双日历从起始日期所在月开始显示连续两个月；两侧外部箭头联动翻月，跨年连续。月份／年份标题选择同步调整相邻面板，视口导航只发 picker-value 事件，不修改选中范围。显式 picker-value / default-picker-value 可以指定独立视口；同月或逆序视口只在显示层纠正，不回写受控值。
+
+已有范围时重新点选第一个日期会进入未完成草稿，确认暂时禁用；第二个端点合法后才可确认。反向点选按日期排序，取消恢复先前已提交值。禁用端点和日期／时间限制仍在选择及确认时校验。
+
+独立 DatePicker / DateRangePicker 与 inline 共用日历基准宽度（每个 265px）。单日期带时间时，宽屏下日历与时间列左右排列；范围在宽屏保留两个并排日历。面板会按窄容器换行，侧边快捷项另占一列，不压缩日历；确认与 actions 插槽保持由面板自身管理。
+
+`read-pretty` 为独立布尔属性，与 `readonly`、`disabled` 同级；字段 > FormItem > Form 继承，显式 `false` 覆盖父级。默认 `false`。纯阅读不显示编辑器。

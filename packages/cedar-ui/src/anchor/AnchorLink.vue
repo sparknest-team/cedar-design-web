@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, inject, onMounted, ref } from 'vue'
+import { computed, defineComponent, inject, ref, watch } from 'vue'
 import { createNamespace } from '../_utils/global-config'
 import { anchorInjectionKey } from './context'
 
@@ -34,11 +34,11 @@ export default defineComponent({
 
     const context = inject(anchorInjectionKey, undefined)
 
-    onMounted(() => {
-      if (props.href && linkRef.value) {
-        context?.addLink(props.href, linkRef.value)
-      }
-    })
+    watch([() => props.href, linkRef], ([hash, node], _previous, cleanup) => {
+      if (!hash || !node) return
+      context?.addLink(hash, node)
+      cleanup(() => context?.removeLink(hash, node))
+    }, { flush: 'post', immediate: true })
 
     const cls = computed(() => classes(n('link'), [context?.currentLink === props.href, n('--link-active')]))
 

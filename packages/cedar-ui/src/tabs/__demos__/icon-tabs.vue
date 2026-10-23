@@ -1,5 +1,5 @@
 <template>
-  <c-space direction="vertical" size="lg">
+  <c-space direction="column" size="lg">
     <c-tabs>
       <c-tabs-navs>
         <c-tab-nav key="1">

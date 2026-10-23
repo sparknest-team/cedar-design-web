@@ -64,6 +64,8 @@ lang: en-US
 | --- | --- |
 <!-- same-source-api:end -->
 
+The wrap example toggles wrapping and plain `div` mode independently. Plain mode removes Row layout styles and child Col spacing; gutter controls distinguish horizontal spacing from vertical spacing. Row uses Flex, not CSS Grid.
+
 ## Responsive behavior and accessibility
 
 Breakpoints use the viewport: xs is the baseline, sm ≥576, md ≥768, lg ≥992, xl ≥1200, xxl ≥1600px. Values cascade from the largest matching configured breakpoint. SSR uses xs; the viewport and Grid collapse/reordering are resolved after mount. These layout containers add no keyboard shortcuts; consumers provide semantic content and focusable controls. No public methods or dedicated theme tokens.

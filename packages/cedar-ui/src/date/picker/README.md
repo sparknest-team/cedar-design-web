@@ -6,21 +6,35 @@ permalink: /components/date-picker/
 
 日期选择**面板**（默认无触发器）。通过 `type` 切换年/月/周/日/季度。
 
-表单字段请使用 [`Date`](/components/date/)；日期范围字段请使用 [`DateRange`](/components/date-range/)；范围面板请使用 [`DateRangePicker`](/components/date-range-picker/)。
-
 ## 案例
 
-### 字段与嵌入式面板
+### 单值快捷预览等待（2026-10-16）
 
-字段管理输入与浮层，纯面板直接嵌入页面。日历周起点统一为 day-start-of-week（数字 0～6，0 为周日），动态修改立即生效。
+离开快捷项后的100ms为悬停交互宽限，不是CSS动画完成时长；不提交模型。新预览、关闭、禁用、只读、关闭快捷预览、模型替换、停用／卸载使旧等待失效；已取消／已消费回调不能清掉新预览。重新激活只接受新hover，不恢复旧等待。保留100ms默认值与公开API，无新CSS Token。
 
-<demo src="./__demos__/entry-boundary.vue"></demo>
+表单字段请使用 [`Date`](/components/date/)；日期范围字段请使用 [`DateRange`](/components/date-range/)；范围面板请使用 [`DateRangePicker`](/components/date-range-picker/)。
 
 ### 基本用法
 
 默认只渲染面板。
 
 <demo src="./__demos__/basic.vue"></demo>
+
+### 窄屏与组合面板
+
+独立面板随容器宽度收缩；范围日历在空间不足时上下排列。可切换快捷项位置，检查时间、导航与确认操作。
+
+<demo src="./__demos__/responsive-panels.vue"></demo>
+
+### 字段与嵌入式面板
+
+字段管理输入与浮层，纯面板直接嵌入页面。日历周起点统一为 day-start-of-week（数字 0～6，0 为周日），动态修改立即生效。
+
+本例纯面板显式设置 `:disable-confirm="false"`：点击日期只修改草稿，“已提交”在确认后更新。切换周起点或移除边界不提交新值；恢复边界不会清除已有模型，超出新边界的草稿不能确认，请重新选择合法日期。
+
+面板箭头提供可访问名称，并跟随组件语言系统切换；日面板为上一月/下一月，月份面板为上一年/下一年，年份列表为上一组/下一组年份。月份预览变化不等于提交日期。
+
+<demo src="./__demos__/entry-boundary.vue"></demo>
 
 ### 选择类型
 
@@ -44,6 +58,13 @@ permalink: /components/date-picker/
 
 <demo src="./__demos__/footer.vue"></demo>
 
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
+
 ## API
 
 ### Props
@@ -64,7 +85,6 @@ permalink: /components/date-picker/
 
 桌面日历展示能力（快捷选择、页脚和单元格插槽）保留在独立的 presentation 实现中。
 
-
 ### 日期族统一契约
 
 | 参数 | 说明 | 类型 | 默认值 |
@@ -75,7 +95,6 @@ permalink: /components/date-picker/
 | `min` / `max` | 包含端点的边界；字符串按 value-format 解析 | DateValue | — |
 | `disabled-time` | 当前日期、端点的时间禁用列表 | (date: Date, side: DateSide) => DateDisabledTime | — |
 | `disable-confirm` | 选择后立即提交 | boolean | true |
-
 
 `DateValue = Date | string | number`。单值清除为 undefined，范围清除为 []。
 `disabledDate(date, side)` 和 `disabledTime(date, side)` 的 date 始终为 Date，side 为 start/end。
@@ -148,3 +167,7 @@ DateRangePicker 的 `exchange-time` 默认 true。反序交互日期在 true 时
 周号和周比较不再依赖全局周起始设置，跨年同周号不能被误判成同一周。两个不同周起始实例的挂载、更新和卸载互不影响。
 
 <demo src="./__demos__/locale-isolation.vue"></demo>
+
+### 编辑容器与面板复用
+
+DatePicker / DateRangePicker 独立使用时自带表面背景和操作区；actions 插槽替换整个默认操作区。嵌入 Form 的弹层时，统一外壳负责标题、关闭与底部确认，日期面板只贡献此刻等辅助操作，避免重复确认。关闭放弃草稿，确认失败仍保留草稿。

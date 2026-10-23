@@ -4,13 +4,19 @@ permalink: /components/card/
 
 # Card
 
-与 Maple 使用相同场景、参数和交互顺序；示例源码仅替换组件前缀，主题与站点外壳各自保留。
-
 ## 案例
 
 ### 基础用法与副标题
 
 <demo src="./__demos__/basic.vue"></demo>
+
+### 变体与阴影
+
+<demo src="./__demos__/variant.vue"></demo>
+
+### 尺寸
+
+<demo src="./__demos__/size.vue"></demo>
 
 ### 自定义标题区域
 
@@ -20,26 +26,13 @@ permalink: /components/card/
 
 <demo src="./__demos__/hoverable.vue"></demo>
 
-### 变体与阴影
-
-<demo src="./__demos__/variant.vue"></demo>
-
 ### 图片与三种布局
 
 <demo src="./__demos__/image.vue"></demo>
 
-### 尺寸
-
-<demo src="./__demos__/size.vue"></demo>
-
 ### 长标题与提示
 
 <demo src="./__demos__/tooltip.vue"></demo>
-
-### 内容插槽
-
-<demo src="./__demos__/slots.vue"></demo>
-
 
 ### 水波与点击事件
 
@@ -50,6 +43,29 @@ permalink: /components/card/
 <demo src="./__demos__/floating.vue"></demo>
 
 长标题示例通过插槽内的 CSS 和原生 `title` 提供提示；Card 本身没有 `ellipsis` / `tooltip` 属性。
+
+### 外观组合
+
+适用于信息分组和内容层次。调整变体、尺寸，用相同数据观察变化。内容保持一致，便于比较不同设置的实际效果。
+
+<demo src="./__demos__/appearance-lab.vue"></demo>
+
+### 内容插槽
+
+<demo src="./__demos__/slots.vue"></demo>
+
+### Floating scheduler lifecycle / 浮起调度生命周期
+
+<demo src="./__demos__/scheduler-lifecycle.vue"></demo>
+
+与 Maple 使用相同场景、参数和交互顺序；示例源码仅替换组件前缀，主题与站点外壳各自保留。
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
 
 ## API
 

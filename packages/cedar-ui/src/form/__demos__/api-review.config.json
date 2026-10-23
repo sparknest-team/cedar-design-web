@@ -1,0 +1,590 @@
+{
+  "fields": [
+    {
+      "name": "model",
+      "description": "表单数据对象",
+      "type": "object",
+      "defaultValue": "() => ({})",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "layout",
+      "description": "表单的布局方式，包括水平、垂直、多列",
+      "type": "'horizontal' | 'vertical' | 'inline'",
+      "defaultValue": "'horizontal'",
+      "kind": "enum",
+      "options": [
+        "horizontal",
+        "vertical",
+        "inline"
+      ],
+      "initial": "horizontal"
+    },
+    {
+      "name": "size",
+      "description": "表单控件的尺寸",
+      "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
+      "defaultValue": "undefined",
+      "kind": "enum",
+      "options": [
+        "xs",
+        "sm",
+        "md",
+        "lg",
+        "xl"
+      ],
+      "initial": "xs"
+    },
+    {
+      "name": "label-col-flex",
+      "description": "标签列 flex；数字为伸缩比例，带单位字符串为宽度",
+      "type": "number | string",
+      "defaultValue": "undefined",
+      "kind": "scalar"
+    },
+    {
+      "name": "label-col-style",
+      "description": "标签列逐实例样式",
+      "type": "CSSProperties",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "wrapper-col-style",
+      "description": "内容列逐实例样式",
+      "type": "CSSProperties",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "label-col-props",
+      "description": "标签元素布局选项。参数同 <col> 组件一致",
+      "type": "object",
+      "defaultValue": "() => ({ span: 5, offset: 0 })",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "wrapper-col-props",
+      "description": "表单控件布局选项。参数同 <col> 组件一致",
+      "type": "object",
+      "defaultValue": "() => ({ span: 19, offset: 0 })",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "label-align",
+      "description": "标签的对齐方向",
+      "type": "'left' | 'right'",
+      "defaultValue": "'right'",
+      "kind": "enum",
+      "options": [
+        "left",
+        "right"
+      ],
+      "initial": "right"
+    },
+    {
+      "name": "disabled",
+      "description": "是否禁用表单",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "readonly",
+      "description": "是否将表单控件设为只读",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "rules",
+      "description": "表单项校验规则",
+      "type": "Record<string, FieldRule | FieldRule[]>",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "auto-label-width",
+      "description": "是否开启自动标签宽度，仅在 layout=\"horizontal\" 下生效。",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "id",
+      "description": "表单控件id的前缀",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "scroll-to-error",
+      "description": "验证失败后滚动到页面顺序的第一个（start）或最后一个（end）错误字段；不是视口对齐方式",
+      "type": "'start' | 'end'",
+      "defaultValue": "undefined",
+      "kind": "enum",
+      "options": [
+        "start",
+        "end"
+      ],
+      "initial": "start"
+    },
+    {
+      "name": "presentation",
+      "type": "'inline' | 'click' | 'dblclick'",
+      "defaultValue": "undefined",
+      "description": "字段编辑方式，字段 > FormItem > Form 继承；默认 inline。",
+      "kind": "enum",
+      "options": [
+        "inline",
+        "click",
+        "dblclick"
+      ],
+      "initial": "inline"
+    },
+    {
+      "name": "read-pretty",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "纯阅读展示；字段 > FormItem > Form 继承，显式 false 覆盖父级。",
+      "kind": "boolean"
+    },
+    {
+      "name": "scroll-to-error-offset-y",
+      "type": "string | number",
+      "defaultValue": "0",
+      "description": "错误滚动的顶部偏移，数字按 px；支持 px/rem/vw/vh",
+      "kind": "scalar"
+    },
+    {
+      "name": "FieldRule.type",
+      "description": "rules.$first.0 · 校验的值的类型，默认为 'string'",
+      "type": "'string'    | 'number'    | 'boolean'    | 'array'    | 'object'    | 'email'    | 'url'    | 'ip'",
+      "defaultValue": "-",
+      "kind": "enum",
+      "options": [
+        "string",
+        "number",
+        "boolean",
+        "array",
+        "object",
+        "email",
+        "url",
+        "ip"
+      ],
+      "initial": "string",
+      "path": [
+        "rules",
+        "$first",
+        0,
+        "type"
+      ]
+    },
+    {
+      "name": "FieldRule.required",
+      "description": "rules.$first.0 · 是否必填",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean",
+      "path": [
+        "rules",
+        "$first",
+        0,
+        "required"
+      ]
+    },
+    {
+      "name": "FieldRule.message",
+      "description": "rules.$first.0 · 校验失败时展示的信息",
+      "type": "string",
+      "defaultValue": "-",
+      "kind": "string",
+      "path": [
+        "rules",
+        "$first",
+        0,
+        "message"
+      ]
+    },
+    {
+      "name": "FieldRule.length",
+      "description": "rules.$first.0 · 校验长度（string, array）",
+      "type": "number",
+      "defaultValue": "-",
+      "kind": "number",
+      "path": [
+        "rules",
+        "$first",
+        0,
+        "length"
+      ]
+    },
+    {
+      "name": "FieldRule.max-length",
+      "description": "rules.$first.0 · 最大长度（string）",
+      "type": "number",
+      "defaultValue": "-",
+      "kind": "number",
+      "path": [
+        "rules",
+        "$first",
+        0,
+        "maxLength"
+      ]
+    },
+    {
+      "name": "FieldRule.min-length",
+      "description": "rules.$first.0 · 最小长度（string）",
+      "type": "number",
+      "defaultValue": "-",
+      "kind": "number",
+      "path": [
+        "rules",
+        "$first",
+        0,
+        "minLength"
+      ]
+    },
+    {
+      "name": "FieldRule.match",
+      "description": "rules.$first.0 · 匹配校验（string）",
+      "type": "RegExp",
+      "defaultValue": "-",
+      "kind": "regexp",
+      "initial": "^[A-Z]",
+      "path": [
+        "rules",
+        "$first",
+        0,
+        "match"
+      ]
+    },
+    {
+      "name": "FieldRule.uppercase",
+      "description": "rules.$first.0 · 大写（string）",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean",
+      "path": [
+        "rules",
+        "$first",
+        0,
+        "uppercase"
+      ]
+    },
+    {
+      "name": "FieldRule.lowercase",
+      "description": "rules.$first.0 · 小写（string）",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean",
+      "path": [
+        "rules",
+        "$first",
+        0,
+        "lowercase"
+      ]
+    },
+    {
+      "name": "FieldRule.min",
+      "description": "rules.$first.0 · 最小值（number）",
+      "type": "number",
+      "defaultValue": "-",
+      "kind": "number",
+      "path": [
+        "rules",
+        "$first",
+        0,
+        "min"
+      ]
+    },
+    {
+      "name": "FieldRule.max",
+      "description": "rules.$first.0 · 最大值（number）",
+      "type": "number",
+      "defaultValue": "-",
+      "kind": "number",
+      "path": [
+        "rules",
+        "$first",
+        0,
+        "max"
+      ]
+    },
+    {
+      "name": "FieldRule.equal",
+      "description": "rules.$first.0 · 校验数值（number）",
+      "type": "number",
+      "defaultValue": "-",
+      "kind": "number",
+      "path": [
+        "rules",
+        "$first",
+        0,
+        "equal"
+      ]
+    },
+    {
+      "name": "FieldRule.positive",
+      "description": "rules.$first.0 · 正数（number）",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean",
+      "path": [
+        "rules",
+        "$first",
+        0,
+        "positive"
+      ]
+    },
+    {
+      "name": "FieldRule.negative",
+      "description": "rules.$first.0 · 负数（number）",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean",
+      "path": [
+        "rules",
+        "$first",
+        0,
+        "negative"
+      ]
+    },
+    {
+      "name": "FieldRule.true",
+      "description": "rules.$first.0 · 是否为 true（boolean）",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean",
+      "path": [
+        "rules",
+        "$first",
+        0,
+        "true"
+      ]
+    },
+    {
+      "name": "FieldRule.false",
+      "description": "rules.$first.0 · 是否为 false（boolean）",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean",
+      "path": [
+        "rules",
+        "$first",
+        0,
+        "false"
+      ]
+    },
+    {
+      "name": "FieldRule.includes",
+      "description": "rules.$first.0 · 数组中是否包含给定值（array）",
+      "type": "any[]",
+      "defaultValue": "-",
+      "kind": "json",
+      "initial": "[]",
+      "path": [
+        "rules",
+        "$first",
+        0,
+        "includes"
+      ]
+    },
+    {
+      "name": "FieldRule.deep-equal",
+      "description": "rules.$first.0 · 数组元素是否相等（array）",
+      "type": "any",
+      "defaultValue": "-",
+      "kind": "json",
+      "initial": "null",
+      "path": [
+        "rules",
+        "$first",
+        0,
+        "deepEqual"
+      ]
+    },
+    {
+      "name": "FieldRule.empty",
+      "description": "rules.$first.0 · 是否为空（object）",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean",
+      "path": [
+        "rules",
+        "$first",
+        0,
+        "empty"
+      ]
+    },
+    {
+      "name": "FieldRule.has-keys",
+      "description": "rules.$first.0 · 对象是否包含给定属性（object）",
+      "type": "string[]",
+      "defaultValue": "-",
+      "kind": "json",
+      "initial": "[]",
+      "path": [
+        "rules",
+        "$first",
+        0,
+        "hasKeys"
+      ]
+    },
+    {
+      "name": "FieldRule.validator",
+      "description": "rules.$first.0 · 自定义校验规则",
+      "type": "(    value: FieldValue | undefined,    callback: (error?: string) => void  ) => void",
+      "defaultValue": "-",
+      "kind": "callback",
+      "path": [
+        "rules",
+        "$first",
+        0,
+        "validator"
+      ]
+    }
+  ],
+  "events": [
+    "submit",
+    "submit-success",
+    "submit-failed",
+    "reset"
+  ],
+  "scenarios": [
+    {
+      "name": "model",
+      "kind": "prop",
+      "demos": [
+        "basic.vue",
+        "async-fields.vue",
+        "async-race.vue",
+        "async-validate-form.vue",
+        "auto-label-width.vue",
+        "clear-trigger.vue",
+        "cross-field.vue",
+        "decoration.vue",
+        "dynamic-form.vue",
+        "field-components.vue",
+        "field-presentation.vue",
+        "fixed-label-width.vue",
+        "grid-layout.vue",
+        "label-columns.vue",
+        "layout.vue",
+        "nested-data.vue",
+        "presentation-state.vue",
+        "scroll-assign.vue",
+        "validate.vue"
+      ]
+    },
+    {
+      "name": "label-col-props",
+      "kind": "prop",
+      "demos": [
+        "label-columns.vue"
+      ]
+    },
+    {
+      "name": "wrapper-col-props",
+      "kind": "prop",
+      "demos": [
+        "label-columns.vue"
+      ]
+    },
+    {
+      "name": "rules",
+      "kind": "prop",
+      "demos": [
+        "async-fields.vue",
+        "async-race.vue",
+        "async-validate-form.vue",
+        "clear-trigger.vue",
+        "cross-field.vue",
+        "field-presentation.vue",
+        "nested-data.vue",
+        "presentation-state.vue",
+        "scroll-assign.vue",
+        "validate.vue"
+      ]
+    },
+    {
+      "name": "validate",
+      "kind": "method",
+      "demos": [
+        "async-fields.vue",
+        "async-race.vue",
+        "clear-trigger.vue",
+        "cross-field.vue",
+        "feedback.vue",
+        "nested-data.vue",
+        "presentation-status.vue",
+        "scroll-assign.vue",
+        "validate.vue"
+      ]
+    },
+    {
+      "name": "validate-field",
+      "kind": "method",
+      "demos": [
+        "async-race.vue",
+        "cross-field.vue"
+      ]
+    },
+    {
+      "name": "reset-fields",
+      "kind": "method",
+      "demos": [
+        "basic.vue",
+        "async-fields.vue",
+        "async-race.vue",
+        "clear-trigger.vue",
+        "presentation-state.vue",
+        "scroll-assign.vue"
+      ]
+    },
+    {
+      "name": "clear-validate",
+      "kind": "method",
+      "demos": [
+        "async-fields.vue",
+        "async-race.vue"
+      ]
+    },
+    {
+      "name": "set-fields",
+      "kind": "method",
+      "demos": [
+        "basic.vue",
+        "async-fields.vue",
+        "async-race.vue",
+        "async-validate-form.vue",
+        "clear-trigger.vue",
+        "presentation-state.vue",
+        "scroll-assign.vue"
+      ]
+    },
+    {
+      "name": "scroll-to-field",
+      "kind": "method",
+      "demos": [
+        "scroll-assign.vue"
+      ]
+    }
+  ],
+  "slotNames": [],
+  "slotDefaults": {},
+  "methodNames": [
+    "validate",
+    "validate-field",
+    "reset-fields",
+    "clear-validate",
+    "set-fields",
+    "scroll-to-field"
+  ]
+}

@@ -1,0 +1,153 @@
+{
+  "fields": [
+    {
+      "name": "status",
+      "description": "警告提示的类型",
+      "type": "'info' | 'success' | 'warning' | 'danger' | 'default'",
+      "defaultValue": "'info'",
+      "kind": "enum",
+      "options": [
+        "info",
+        "success",
+        "warning",
+        "danger",
+        "default"
+      ],
+      "initial": "info"
+    },
+    {
+      "name": "variant",
+      "description": "视觉变体",
+      "type": "'tonal' | 'outline' | 'standard'",
+      "defaultValue": "'standard'",
+      "kind": "enum",
+      "options": [
+        "tonal",
+        "outline",
+        "standard"
+      ],
+      "initial": "standard"
+    },
+    {
+      "name": "color",
+      "description": "自定义背景色（覆盖 type 派生背景）",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string",
+      "initial": "#5268cc"
+    },
+    {
+      "name": "title",
+      "description": "警告提示的标题",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "message",
+      "description": "内容文本（亦可使用默认插槽）",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "show-icon",
+      "description": "是否展示图标",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "closable",
+      "description": "是否展示关闭按钮",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "banner",
+      "description": "是否作为顶部公告使用（去除边框和圆角）",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "center",
+      "description": "内容是否居中显示",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "elevation",
+      "description": "阴影层级，可选 true / false 或 0-24",
+      "type": "boolean | number",
+      "defaultValue": "false",
+      "kind": "json",
+      "initial": "false"
+    }
+  ],
+  "events": [
+    "close",
+    "closed"
+  ],
+  "scenarios": [
+    {
+      "name": "default",
+      "kind": "slot",
+      "demos": [
+        "custom-icon.vue",
+        "type.vue",
+        "variant.vue"
+      ]
+    },
+    {
+      "name": "icon",
+      "kind": "slot",
+      "demos": [
+        "close-icon.vue",
+        "custom-icon.vue",
+        "show-icon.vue",
+        "type.vue"
+      ]
+    },
+    {
+      "name": "title",
+      "kind": "slot",
+      "demos": [
+        "action.vue",
+        "closable.vue",
+        "show-icon.vue",
+        "title.vue",
+        "variant.vue"
+      ]
+    },
+    {
+      "name": "action",
+      "kind": "slot",
+      "demos": [
+        "action.vue"
+      ]
+    },
+    {
+      "name": "close-icon",
+      "kind": "slot",
+      "demos": [
+        "close-icon.vue"
+      ]
+    }
+  ],
+  "slotNames": [
+    "icon",
+    "title",
+    "action",
+    "close-icon"
+  ],
+  "slotDefaults": {
+    "icon": false,
+    "title": false,
+    "action": false,
+    "close-icon": false
+  },
+  "methodNames": []
+}

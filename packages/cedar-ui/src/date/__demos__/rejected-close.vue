@@ -15,8 +15,12 @@ function requestOpen(next) {
 <template>
   <div style="display: flex; flex-direction: column; gap: 12px">
     <p>关闭请求会被父级拒绝；选择新日期后可再次确认，重复确认不应重复提交。</p>
-    <c-date v-model="value" :open="open" @update:open="requestOpen" @change="commits++" />
+    <c-date v-model="value" :open="open" @update:open="requestOpen" @change="commits++">
+      <template #actions="{ confirm, disabled }">
+        <c-button :disabled="disabled" @click="confirm()">确认</c-button>
+        <c-button @click="open = false">允许关闭</c-button>
+      </template>
+    </c-date>
     <span data-test="date-transaction-state">值：{{ value }}；提交：{{ commits }}；拒绝关闭：{{ closeRequests }}</span>
-    <c-button @click="open = false">允许关闭</c-button>
   </div>
 </template>

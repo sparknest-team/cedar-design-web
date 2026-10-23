@@ -1,23 +1,14 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+const value = ref('')
+const trimmed = ref('')
+</script>
 <template>
   <c-space direction="column">
-    <c-radio-group v-model="variant">
-      <c-radio value="filled">filled</c-radio>
-      <c-radio value="outline">outline</c-radio>
-      <c-radio value="standard">standard</c-radio>
-    </c-radio-group>
-    <c-radio-group v-model="size">
-      <c-radio value="xs">xs</c-radio>
-      <c-radio value="sm">sm</c-radio>
-      <c-radio value="md">md</c-radio>
-      <c-radio value="lg">lg</c-radio>
-    </c-radio-group>
-    <c-textarea placeholder="请输入" clearable :variant="variant" :size="size" />
+    <c-textarea v-model="value" clearable placeholder="请输入多行文本" aria-label="受控文本" />
+    <p role="status">当前值：{{ value || '（空）' }}</p>
+    <c-textarea default-value="这是一段非受控初始文本" aria-label="非受控文本" />
+    <c-textarea v-model.trim="trimmed" placeholder="输入首尾空白，失焦后去除" aria-label="去除首尾空白" />
+    <p role="status">去除空白后的值：{{ JSON.stringify(trimmed) }}</p>
   </c-space>
 </template>
-
-<script lang="ts" setup>
-import { ref } from 'vue'
-
-const variant = ref('filled')
-const size = ref('md')
-</script>

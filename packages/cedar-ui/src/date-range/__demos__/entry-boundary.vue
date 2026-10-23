@@ -2,6 +2,9 @@
 import { ref } from "vue";
 import type { DateValue } from "@cedarjs/ui";
 const limited = ref(true);
+const blockEnd20 = ref(false);
+const disabledEnd = (date: Date, side: "start" | "end") =>
+  side === "end" && blockEnd20.value && date.getDate() === 20;
 const fieldValue = ref<DateValue[]>(["2025-02-12", "2025-02-14"]);
 const panelValue = ref<DateValue[]>(["2025-02-12", "2025-02-14"]);
 </script>
@@ -23,12 +26,16 @@ const panelValue = ref<DateValue[]>(["2025-02-12", "2025-02-14"]);
     </div>
     <div>
       <p>范围面板：日历从周一开始，点击确认后才提交。</p>
+      <c-checkbox v-model="blockEnd20">
+        禁用20日结束（不改已提交值）</c-checkbox
+      >
       <c-date-range-picker
         :min="limited ? '2025-02-01' : undefined"
         :max="limited ? '2025-02-28' : undefined"
         v-model="panelValue"
         :day-start-of-week="1"
         :disable-confirm="false"
+        :disabled-date="disabledEnd"
       >
         <template #actions="{ confirm, disabled }">
           <c-button :disabled="disabled" @click="confirm"

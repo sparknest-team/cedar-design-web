@@ -1,8 +1,8 @@
 <template>
   <c-tree :data="treeData" show-line>
-    <template #switcher-icon="{ isLeaf }">
-      <c-icon-down v-if="!isLeaf" />
-      <c-icon-star v-if="isLeaf" />
+    <template #switcher-icon="{ children }">
+      <c-icon-down v-if="children?.length" />
+      <c-icon-star v-else />
     </template>
   </c-tree>
 </template>

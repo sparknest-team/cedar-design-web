@@ -49,6 +49,14 @@
 .c-picker-container-panel-only,
 .c-picker-range-container-panel-only {
   box-shadow: none;
+  max-width: 100%;
+  min-width: 0;
+  .c-picker-header { flex-wrap: wrap; }
+  .c-picker-cell { min-width: 0; }
+  .c-picker-date-value { min-width: 0; max-width: 100%; }
+  .c-panel-date .c-picker-date-value { width: var(--c-date-picker-panel-cell-circle-height); }
+  .c-panel-year .c-picker-date { padding-inline: 0; }
+
 }
 .c-picker-container-panel-only .c-panel-date-inner,
 .c-picker-range-container-panel-only .c-panel-date-inner {
@@ -56,6 +64,43 @@
 }
 .c-picker-range-container-panel-only .c-panel-date {
   width: 100%;
+}
+
+.c-picker-container-panel-only .c-panel-date {
+  flex-wrap: wrap;
+  .c-panel-date-inner { flex: 1 1 var(--c-date-picker-panel-date-width); min-width: 0; }
+  .c-panel-date-timepicker {
+    box-sizing: border-box;
+    flex: 1 1 var(--c-date-picker-time-panel-min-width);
+    min-width: min(100%, var(--c-date-picker-time-panel-min-width));
+  }
+}
+.c-picker-container-panel-only .c-panel-month,
+.c-picker-container-panel-only .c-panel-year,
+.c-picker-container-panel-only .c-panel-quarter,
+.c-picker-container-panel-only .c-panel-week-inner,
+.c-picker-range-container-panel-only .c-panel-week-inner { max-width: 100%; }
+.c-picker-container-panel-only .c-panel-date-with-view-tabs,
+.c-picker-range-container-panel-only .c-panel-date-with-view-tabs { min-width: 0; }
+
+// Embedded calendars share the available width; narrow hosts stack the pair.
+.c-picker-range-container-panel-only {
+  width: 100%;
+
+  .c-picker-range-wrapper {
+    flex-wrap: wrap;
+
+    > * {
+      flex: 1 1 0;
+      min-width: min(100%, var(--c-date-picker-range-panel-min-width));
+    }
+  }
+
+  .c-panel-month-inner,
+  .c-panel-quarter-inner,
+  .c-panel-year-inner {
+    width: 100%;
+  }
 }
 
 .c-picker {
@@ -71,6 +116,7 @@
       font-size: var(~'--c-date-picker-header-title-font-size');
       line-height: var(~'--c-date-picker-header-title-line-height');
       text-align: center;
+      white-space: nowrap;
     }
 
     &-icon {
@@ -190,7 +236,7 @@
     transition: background-color var(~'--c-date-picker-transition-duration-1') var(~'--c-date-picker-transition-timing-function-linear');
   }
 
-  &-cell-in-view:not(&-cell-selected):not(&-cell-range-start):not(&-cell-range-end):not(&-cell-disabled):not(
+  &-cell-in-view:not(&-cell-selected):not(&-cell-range-start):not(&-cell-range-end):not(&-cell-hover-range-start):not(&-cell-hover-range-end):not(&-cell-disabled):not(
       &-cell-week
     )
     &-date-value:hover {
@@ -254,6 +300,8 @@
 
   &-cell-hover-range-start &-date-value,
   &-cell-hover-range-end &-date-value {
+    outline: var(~'--c-date-picker-preview-outline');
+    outline-offset: -1px;
     color: var(~'--c-date-picker-cell-hover-range-boundary-text-color');
     background-color: var(~'--c-date-picker-cell-hover-range-boundary-bg');
     border-radius: var(~'--c-date-picker-panel-cell-selected-border-radius');
@@ -339,17 +387,33 @@
 
 .c-date-panel__layout {
   display: flex;
+  flex-wrap: wrap;
   width: 100%;
   gap: var(--c-sys-space-2);
   align-items: flex-start;
-  &--bottom { flex-direction: column; > .c-date-shortcuts { order: 1; } }
+  &--bottom {
+    flex-direction: column;
+    > .c-date-shortcuts { order: 1; }
+  }
   &--right > .c-date-shortcuts { order: 1; }
 }
-.c-date-panel__main { min-width: 0; flex: 1; }
+.c-date-panel__main {
+  min-width: 0;
+  width: 100%;
+  flex: 1 1 var(--c-date-picker-panel-date-width);
+}
+.c-date-panel__layout--bottom > .c-date-panel__main { flex-basis: auto; }
 .c-date-shortcuts {
+  max-width: 100%;
   display: flex;
   flex-wrap: wrap;
   gap: var(--c-sys-space-2);
+  .c-button {
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    height: auto;
+  }
   &--left, &--right { flex-direction: column; }
 }
 
@@ -358,4 +422,81 @@
   justify-content: flex-end;
   align-items: center;
   gap: var(--c-sys-space-2);
+}
+
+// Linked range navigation only needs the outer arrows. Hidden placeholders must not squeeze month labels.
+.c-picker-range-container .c-picker-header-icon-hidden {
+  display: none;
+}
+
+.c-date-panel__layout {
+  box-sizing: border-box;
+  background: var(--c-date-picker-panel-background);
+  border: 1px solid var(--c-date-picker-panel-border);
+  border-radius: var(--c-date-picker-panel-radius);
+}
+.c-date-panel__layout--embedded {
+  border: 0;
+  border-radius: 0;
+  background: inherit;
+}
+
+.c-date-panel__main > .c-picker-container-panel-only,
+.c-date-panel__main > .c-picker-range-container-panel-only { border: 0; }
+.c-date-panel-actions { padding: var(--c-date-picker-actions-padding); }
+
+// Give floating panels a preferred width before applying narrow-host wrapping.
+// Each calendar uses the same width, with a separate column for single-date time selection.
+.c-date-field-popover .c-date-field-panel {
+  width: var(--c-date-picker-popover-width);
+  max-width: calc(100vw - var(--c-date-picker-popover-gap));
+}
+.c-date-field-popover .c-date-field-panel--week {
+  width: var(--c-date-picker-week-popover-width);
+}
+.c-date-field-popover .c-date-field-panel--time {
+  width: var(--c-date-picker-datetime-popover-width);
+}
+.c-date-field-popover .c-date-field-panel--range {
+  width: var(--c-date-picker-range-popover-width);
+  max-width: calc(100vw - var(--c-date-picker-popover-gap));
+}
+.c-date-field-popover .c-date-field-panel--range.c-date-field-panel--week {
+  width: var(--c-date-picker-week-range-popover-width);
+}
+.c-date-field-popover .c-date-panel__layout {
+  max-width: calc(100vw - var(--c-date-picker-popover-gap));
+}
+.c-date-field-popover .c-date-panel__main {
+  display: flex;
+  flex-direction: column;
+  max-height: var(--c-date-picker-popover-max-height);
+  > :first-child { min-height: 0; overflow: auto; }
+  > .c-date-panel-actions { flex-shrink: 0; }
+}
+
+.c-date-panel-actions > .c-button--variant-text { margin-right: auto; }
+
+// Shared preferred dimensions for independent and floating calendar panels.
+.c-date-panel__layout--standalone {
+  width: var(--c-date-picker-panel-preferred-width);
+  max-width: 100%;
+  > .c-date-panel__main { flex-basis: auto; }
+}
+.c-date-panel__layout--standalone.c-date-panel__layout--time {
+  --c-date-picker-panel-preferred-width: var(--c-date-picker-datetime-popover-width);
+}
+.c-date-panel__layout--standalone.c-date-panel__layout--range {
+  --c-date-picker-panel-preferred-width: var(--c-date-picker-range-popover-width);
+}
+.c-date-panel__layout--standalone.c-date-panel__layout--week {
+  --c-date-picker-panel-preferred-width: var(--c-date-picker-week-popover-width);
+}
+.c-date-panel__layout--standalone.c-date-panel__layout--range.c-date-panel__layout--week {
+  --c-date-picker-panel-preferred-width: var(--c-date-picker-week-range-popover-width);
+}
+.c-date-panel__layout--standalone.c-date-panel__layout--side-shortcuts {
+  width: calc(var(--c-date-picker-panel-preferred-width) + var(--c-date-picker-shortcuts-column-width) + var(--c-sys-space-2));
+  > .c-date-panel__main { flex: 1 1 calc(var(--c-date-picker-panel-preferred-width) - 2px); width: auto; }
+  > .c-date-shortcuts { flex: 1 1 var(--c-date-picker-shortcuts-column-width); min-width: 0; }
 }

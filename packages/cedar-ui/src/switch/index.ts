@@ -1,9 +1,8 @@
 import { withInstall } from '../_utils/global-config'
-import _Switch from './Switch.vue'
+import _Switch from './presentation'
 import { switchProps } from './props'
 
-const Switch = withInstall(_Switch, Object.assign(_Switch, {
-}), { components: [_Switch] })
+const Switch = withInstall(_Switch, Object.assign(_Switch, {}), { components: [_Switch] })
 
 export type SwitchInstance = InstanceType<typeof _Switch>
 export { switchProps }

@@ -1,0 +1,199 @@
+{
+  "fields": [
+    {
+      "name": "aria-label",
+      "description": "分组的无障碍名称",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "items",
+      "description": "分段数据",
+      "type": "ProgressGroupItem[]",
+      "defaultValue": "() => []",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "mode",
+      "description": "展示模式",
+      "type": "'line' | 'circle'",
+      "defaultValue": "'line'",
+      "kind": "enum",
+      "options": [
+        "line",
+        "circle"
+      ],
+      "initial": "line"
+    },
+    {
+      "name": "max",
+      "description": "所有分段计算占比时的总值",
+      "type": "number",
+      "defaultValue": "100",
+      "kind": "number"
+    },
+    {
+      "name": "show-text",
+      "description": "是否展示累计百分比",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "size",
+      "description": "进度轨尺寸",
+      "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
+      "defaultValue": "'md'",
+      "kind": "enum",
+      "options": [
+        "xs",
+        "sm",
+        "md",
+        "lg",
+        "xl"
+      ],
+      "initial": "md"
+    },
+    {
+      "name": "color",
+      "description": "分段未指定颜色时使用的默认颜色",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string",
+      "initial": "#5268cc"
+    },
+    {
+      "name": "circle-size",
+      "description": "环形模式的直径",
+      "type": "number | string",
+      "defaultValue": "120",
+      "kind": "scalar"
+    },
+    {
+      "name": "stroke-width",
+      "description": "环形模式的轨道宽度",
+      "type": "number",
+      "defaultValue": "8",
+      "kind": "number"
+    },
+    {
+      "name": "tooltip",
+      "description": "是否启用分段悬浮/聚焦提示",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "orientation",
+      "description": "排列方向",
+      "type": "'horizontal' | 'vertical'",
+      "defaultValue": "'horizontal'",
+      "kind": "enum",
+      "options": [
+        "horizontal",
+        "vertical"
+      ],
+      "initial": "horizontal"
+    },
+    {
+      "name": "Item.label",
+      "description": "items.0 · 图例名称",
+      "type": "string",
+      "defaultValue": "",
+      "kind": "string",
+      "path": [
+        "items",
+        0,
+        "label"
+      ]
+    },
+    {
+      "name": "Item.value",
+      "description": "items.0 · 分段数值",
+      "type": "number",
+      "defaultValue": "",
+      "kind": "number",
+      "path": [
+        "items",
+        0,
+        "value"
+      ]
+    },
+    {
+      "name": "Item.color",
+      "description": "items.0 · 分段颜色",
+      "type": "string",
+      "defaultValue": "",
+      "kind": "string",
+      "path": [
+        "items",
+        0,
+        "color"
+      ]
+    },
+    {
+      "name": "Item.icon",
+      "description": "items.0 · 图例图标组件",
+      "type": "Component",
+      "defaultValue": "",
+      "kind": "component",
+      "options": [
+        "Button",
+        "Input",
+        "Tag",
+        "Checkbox"
+      ],
+      "initial": "Input",
+      "path": [
+        "items",
+        0,
+        "icon"
+      ]
+    },
+    {
+      "name": "Item.slot",
+      "description": "items.0 · 自定义插槽名前缀",
+      "type": "string",
+      "defaultValue": "",
+      "kind": "string",
+      "path": [
+        "items",
+        0,
+        "slot"
+      ]
+    },
+    {
+      "name": "Item.tip",
+      "description": "items.0 · 自定义提示文案",
+      "type": "string",
+      "defaultValue": "",
+      "kind": "string",
+      "path": [
+        "items",
+        0,
+        "tip"
+      ]
+    }
+  ],
+  "methodNames": [],
+  "events": [],
+  "slotNames": [
+    "text",
+    "item-trailing",
+    "tooltip",
+    "item",
+    "item-leading",
+    "item-label"
+  ],
+  "slotDefaults": {
+    "text": true,
+    "item-trailing": true,
+    "tooltip": true,
+    "item": false,
+    "item-leading": false,
+    "item-label": false
+  },
+  "scenarios": []
+}

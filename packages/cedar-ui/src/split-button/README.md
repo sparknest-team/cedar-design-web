@@ -8,7 +8,7 @@ permalink: /components/split-button/
 
 将一个主操作与一组相关菜单操作组合在同一个按钮组中。
 
-示例统一使用两端都支持的 `Message.info(...)`。默认选择菜单项后关闭；仅“浮层与连续选择”设置 `hide-on-select=false`，保留菜单并显示选择反馈。箭头通过 icon 插槽显示，两段默认继承相同的 variant、status 和自定义颜色；不自动启用 icon-container 的独立配色。
+示例统一使用两端都支持的 `Message.info(...)`。默认选择菜单项后关闭；仅“浮层与连续选择”设置 `hide-on-select=false`，保留菜单并显示选择反馈。箭头通过 icon 插槽显示，两段默认继承相同的 variant、status 和自定义颜色，图标布局不改变配色。
 
 ## 案例
 
@@ -26,23 +26,17 @@ permalink: /components/split-button/
 
 <demo src="./__demos__/variants.vue"></demo>
 
-### 五档尺寸
-
-支持 xs、sm、md、lg、xl 五档尺寸，默认 md；窄屏自动换行。
-
-<demo src="./__demos__/sizes.vue"></demo>
-
 ### 禁用状态
 
 对比整体禁用、仅主按钮禁用、仅菜单按钮禁用。整体 disabled 优先，子按钮的 disabled: false 不能解除整体禁用。
 
 <demo src="./__demos__/disabled.vue"></demo>
 
-### 异步操作
+### 五档尺寸
 
-@click 直接返回 Promise，auto-loading 等待完成并阻止重复点击；完成次数用于观察是否重复执行。
+支持 xs、sm、md、lg、xl 五档尺寸，默认 md；窄屏自动换行。
 
-<demo src="./__demos__/async-action.vue"></demo>
+<demo src="./__demos__/sizes.vue"></demo>
 
 ### 自定义图标
 
@@ -64,6 +58,25 @@ permalink: /components/split-button/
 
 <demo src="./__demos__/popup.vue"></demo>
 
+### 外观组合
+
+适用于主操作和附加菜单。调整状态、尺寸，用相同数据观察变化。内容保持一致，便于比较不同设置的实际效果。
+
+<demo src="./__demos__/appearance-lab.vue"></demo>
+
+### 异步操作
+
+@click 直接返回 Promise，auto-loading 等待完成并阻止重复点击；完成次数用于观察是否重复执行。
+
+<demo src="./__demos__/async-action.vue"></demo>
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
+
 ## API
 
 ### `<split-button>` Props
@@ -83,7 +96,7 @@ permalink: /components/split-button/
 | trigger-button-props | 菜单触发按钮属性                          | `Partial<ButtonProps>`                           |    `-`    |
 | auto-loading         | 主按钮异步点击时是否自动加载              | `boolean`                                        |  `false`  |
 | trigger              | 菜单触发方式                              | `'hover' \| 'click' \| 'focus' \| 'contextMenu'` |  `click`  |
-| placement            | 菜单弹出位置                              | `DropdownMenuPosition`（标准十二方位）           | `bottom`  |
+| placement            | 菜单弹出位置                              | `MenuPosition`（标准十二方位）           | `bottom`  |
 | popup-container      | 菜单挂载容器                              | `PopupContainer`                                 |    `-`    |
 | popup-max-height     | 菜单最大高度                              | `boolean \| number`                              |  `true`   |
 | popup-class          | 菜单浮层类名                              | `string \| array \| object`                      |    `-`    |
@@ -120,7 +133,7 @@ permalink: /components/split-button/
 
 `click` 与 Button 一样是消费 Promise 返回值的 `onClick` 控制回调 Prop，支持 `@click`，不再通过 `emit` 重复分发。与 `button-props.onClick` 同时设置时，各执行一次。
 
-两端主体、Props、样式依赖入口及契约测试独立同源复制；Cedar 菜单定位由 DropdownMenu 适配，不共享实例或运行时。
+两端主体、Props、样式依赖入口及契约测试独立同源复制；Cedar 菜单定位由 Menu 适配，不共享实例或运行时。
 
 ## 类型定义
 

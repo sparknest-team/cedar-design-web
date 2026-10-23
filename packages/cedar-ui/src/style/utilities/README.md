@@ -25,7 +25,7 @@ Cedar / Maple 语义与结构一致，**类名必须带库前缀**（`c-` / `mp-
 
 | 页面                                                 | 内容                                         |
 | ---------------------------------------------------- | -------------------------------------------- |
-| [颜色 Color](/components/color/)                     | 文字 / 填充 / 边框 / 背景层级                |
+| [颜色 Color](/components/style/color/)                     | 文字 / 填充 / 边框 / 背景层级                |
 | [常用写法](/components/style/atomic-usage/)          | Flex / 间距 / 尺寸 / 溢出 / 圆角等日常原子类 |
 | [海拔 Elevation](/components/style/elevation/)       | `c-elevation--0` … `--24`                    |
 | [字体排版 Typography](/components/style/typography/) | PC 排版工具包                                |

@@ -1,0 +1,23 @@
+{
+  "fields": [
+    {
+      "name": "color",
+      "description": "水波颜色",
+      "type": "string",
+      "defaultValue": "currentColor",
+      "kind": "string"
+    },
+    {
+      "name": "disabled",
+      "description": "禁止产生水波，并取消待执行动画",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    }
+  ],
+  "events": [],
+  "scenarios": [],
+  "slotNames": [],
+  "slotDefaults": {},
+  "methodNames": []
+}

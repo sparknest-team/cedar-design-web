@@ -1,5 +1,5 @@
 <template>
-  <c-space>
+  <c-space wrap>
     <c-tag closable>Tag</c-tag>
     <c-tag closable>
       <template #icon>

@@ -6,7 +6,7 @@ permalink: /components/color-picker/
 
 颜色选择**面板**（默认无触发器）。
 
-表单字段请使用 [`Color`](/components/color-field/)。
+表单字段请使用 [`Color`](/components/color/)。
 
 ## 案例
 
@@ -15,6 +15,10 @@ permalink: /components/color-picker/
 默认只渲染面板。
 
 <demo src="./__demos__/basic.vue"></demo>
+
+### 禁用
+
+<demo src="./__demos__/disabled.vue"></demo>
 
 ### 颜色格式
 
@@ -28,9 +32,12 @@ permalink: /components/color-picker/
 
 <demo src="./__demos__/colors.vue"></demo>
 
-### 禁用
+<!-- api-review:start -->
+### 功能调试
 
-<demo src="./__demos__/disabled.vue"></demo>
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
 
 ## API
 

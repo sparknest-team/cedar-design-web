@@ -1,9 +1,9 @@
-# DropdownMenu positioning
+# Menu positioning
 
 ## ADDED Requirements
 
 ### Requirement: Consistent strategy across levels
-Both libraries SHALL expose strategy: 'absolute' | 'fixed', default 'absolute'. Root and every open or subsequently opened submenu SHALL react to root strategy changes without changing selected values or open state. Nested independent DropdownMenu instances SHALL retain their own strategy.
+Both libraries SHALL expose strategy: 'absolute' | 'fixed', default 'absolute'. Root and every open or subsequently opened submenu SHALL react to root strategy changes without changing selected values or open state. Nested independent Menu instances SHALL retain their own strategy.
 
 #### Scenario: Update an open three-level tree
 - GIVEN a root and two submenu levels are open with fixed strategy

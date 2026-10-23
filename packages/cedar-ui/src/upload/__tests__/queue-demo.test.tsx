@@ -5,6 +5,7 @@ import Button from "../../button";
 import Checkbox from "../../checkbox";
 import Space from "../../space";
 import QueueDemo from "../__demos__/queue-request.vue";
+import ExternalDemo from "../__demos__/external-state.vue";
 
 const wrappers = [];
 afterEach(() => {
@@ -73,6 +74,27 @@ test("first failure is visible and a retry succeeds", async () => {
   await flushPromises();
   await tick(2200);
   expect(wrapper.find(".c-upload__item--success").exists()).toBe(true);
+});
+
+test("external completion preserves canceled items and external retry can restart them", async () => {
+  const wrapper = create(ExternalDemo);
+  await click(wrapper, "加入外部上传项");
+  await click(wrapper, "加入外部上传项");
+  await wrapper.find(".c-upload__item--uploading button").trigger("click");
+  await flushPromises();
+  await click(wrapper, "模拟外部完成");
+  expect(wrapper.findAll(".c-upload__item--canceled")).toHaveLength(1);
+  expect(wrapper.findAll(".c-upload__item--success")).toHaveLength(1);
+  expect(wrapper.findAll(".c-upload__item--canceled button")).toHaveLength(1);
+  await click(wrapper, "模拟外部重试");
+  expect(wrapper.findAll(".c-upload__item--uploading")).toHaveLength(1);
+  expect(wrapper.findAll(".c-upload__item--success")).toHaveLength(1);
+  await wrapper.find(".c-upload__item--uploading button:last-child").trigger("click");
+  await flushPromises();
+  await click(wrapper, "加入外部上传项");
+  await click(wrapper, "模拟外部完成");
+  expect(wrapper.findAll(".c-upload__item--success")).toHaveLength(2);
+  expect(wrapper.text()).not.toContain("external-1.txt");
 });
 
 test("unmounting the active demo clears its request timer", async () => {

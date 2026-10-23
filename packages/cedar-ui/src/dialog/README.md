@@ -12,12 +12,6 @@ permalink: /components/dialog/
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### 异步关闭
-
-通过 `before-close` / `beforeClose` 实现异步关闭，可通过 `refs` 控制按钮 loading。
-
-<demo src="./__demos__/async.vue"></demo>
-
 ### 函数调用
 
 <demo src="./__demos__/global.vue"></demo>
@@ -85,6 +79,19 @@ permalink: /components/dialog/
 ### 最大高度
 
 <demo src="./__demos__/max-height.vue"></demo>
+
+### 异步关闭
+
+通过 `before-close` / `beforeClose` 实现异步关闭，可通过 `refs` 控制按钮 loading。
+
+<demo src="./__demos__/async.vue"></demo>
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
 
 ## API
 

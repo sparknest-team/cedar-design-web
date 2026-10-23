@@ -1,0 +1,126 @@
+{
+  "fields": [
+    {
+      "name": "model-value",
+      "description": "绑定值",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "default-value",
+      "description": "默认值",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "format",
+      "description": "颜色值格式",
+      "type": "'hex' | 'rgb'",
+      "defaultValue": "undefined",
+      "kind": "enum",
+      "options": [
+        "hex",
+        "rgb"
+      ],
+      "initial": "hex"
+    },
+    {
+      "name": "size",
+      "description": "尺寸",
+      "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
+      "defaultValue": "'md'",
+      "kind": "enum",
+      "options": [
+        "xs",
+        "sm",
+        "md",
+        "lg",
+        "xl"
+      ],
+      "initial": "md"
+    },
+    {
+      "name": "show-text",
+      "description": "显示颜色值",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "show-history",
+      "description": "显示历史颜色",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "show-preset",
+      "description": "显示预设颜色",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "disabled",
+      "description": "禁用",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "disabled-alpha",
+      "description": "禁用透明通道",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "hide-trigger",
+      "description": "无触发器，仅面板",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "history-colors",
+      "description": "历史颜色",
+      "type": "string[]",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "preset-colors",
+      "description": "预设颜色",
+      "type": "string[]",
+      "defaultValue": "() => colors",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "trigger-props",
+      "type": "Partial<TriggerProps>",
+      "defaultValue": "undefined",
+      "description": "@zh 接受所有 [Trigger](/vue/component/trigger) 组件的Props\n@en Can accept Props of all [Trigger](/vue/component/trigger) components",
+      "kind": "json",
+      "initial": "{}"
+    }
+  ],
+  "events": [
+    "update:modelValue"
+  ],
+  "scenarios": [
+    {
+      "name": "trigger-props",
+      "kind": "prop",
+      "demos": [
+        "trigger.vue"
+      ]
+    }
+  ],
+  "slotNames": [],
+  "slotDefaults": {},
+  "methodNames": []
+}

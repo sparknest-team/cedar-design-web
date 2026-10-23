@@ -1,0 +1,369 @@
+{
+  "fields": [
+    {
+      "name": "model-value",
+      "description": "绑定值",
+      "type": "Date | string | number",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "\"2026-10-21\""
+    },
+    {
+      "name": "type",
+      "description": "选择类型",
+      "type": "'date' | 'month' | 'year' | 'week' | 'quarter'",
+      "defaultValue": "'date'",
+      "kind": "enum",
+      "options": [
+        "date",
+        "month",
+        "year",
+        "week",
+        "quarter"
+      ],
+      "initial": "date"
+    },
+    {
+      "name": "open",
+      "description": "弹层显隐",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "clearable",
+      "description": "可清除",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "disabled",
+      "description": "禁用",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "readonly",
+      "description": "只读",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "size",
+      "description": "尺寸",
+      "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
+      "defaultValue": "'md'",
+      "kind": "enum",
+      "options": [
+        "xs",
+        "sm",
+        "md",
+        "lg",
+        "xl"
+      ],
+      "initial": "md"
+    },
+    {
+      "name": "variant",
+      "description": "输入框变体",
+      "type": "\"filled\" | \"outline\" | \"standard\"",
+      "defaultValue": "'filled'",
+      "kind": "enum",
+      "options": [
+        "filled",
+        "outline",
+        "standard"
+      ],
+      "initial": "filled"
+    },
+    {
+      "name": "placeholder",
+      "description": "占位",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "disabled-date",
+      "description": "禁用日期",
+      "type": "Function",
+      "defaultValue": "undefined",
+      "kind": "callback"
+    },
+    {
+      "name": "format",
+      "description": "展示格式",
+      "type": "string | Function",
+      "defaultValue": "undefined",
+      "kind": "string",
+      "initial": "YYYY-MM-DD"
+    },
+    {
+      "name": "show-time",
+      "description": "选择时间",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "date-picker-props",
+      "description": "面板展示选项",
+      "type": "DatePickerOptions",
+      "defaultValue": "() => ({})",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "presentation",
+      "type": "'inline' | 'click' | 'dblclick'",
+      "defaultValue": "undefined",
+      "description": "字段编辑方式，字段 > FormItem > Form 继承；默认 inline。",
+      "kind": "enum",
+      "options": [
+        "inline",
+        "click",
+        "dblclick"
+      ],
+      "initial": "inline"
+    },
+    {
+      "name": "read-pretty",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "纯阅读展示；字段 > FormItem > Form 继承，显式 false 覆盖父级。",
+      "kind": "boolean"
+    },
+    {
+      "name": "before-commit",
+      "type": "BeforeFieldCommit",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "callback"
+    },
+    {
+      "name": "default-open",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "popup-container",
+      "type": "string | HTMLElement | false",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "json",
+      "initial": "\"body\""
+    },
+    {
+      "name": "use-seconds",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "未指定 format 时是否包含秒；显式 format 优先。",
+      "kind": "boolean"
+    },
+    {
+      "name": "value-format",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "string"
+    },
+    {
+      "name": "min",
+      "type": "Date | string | number",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "json",
+      "initial": "\"2026-10-21\""
+    },
+    {
+      "name": "max",
+      "type": "Date | string | number",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "json",
+      "initial": "\"2026-10-21\""
+    },
+    {
+      "name": "disabled-time",
+      "type": "DateRules['disabledTime']",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "disable-confirm",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "default-value",
+      "type": "Date | string | number",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "json",
+      "initial": "\"2026-10-21\""
+    },
+    {
+      "name": "popup-props",
+      "type": "Record<string, unknown> & { popupContainer?: PopupContainer }",
+      "defaultValue": "() => ({})",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "time-picker-props",
+      "type": "DateTimePickerOptions",
+      "defaultValue": "() => ({})",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "input-editable",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "error",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "separator",
+      "type": "string",
+      "defaultValue": "', '",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "string"
+    },
+    {
+      "name": "hint",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "line",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "text-color",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "string",
+      "initial": "#5268cc"
+    },
+    {
+      "name": "focus-color",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "string",
+      "initial": "#5268cc"
+    },
+    {
+      "name": "blur-color",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "string",
+      "initial": "#5268cc"
+    }
+  ],
+  "events": [
+    "update:modelValue",
+    "select",
+    "change",
+    "update:open",
+    "open-change",
+    "clear",
+    "focus",
+    "blur",
+    "click",
+    "update:pickerValue",
+    "picker-value-change",
+    "select-shortcut"
+  ],
+  "scenarios": [
+    {
+      "name": "model-value",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "disabled-date",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "format",
+      "kind": "prop",
+      "demos": [
+        "show-time.vue",
+        "value-formats.vue"
+      ]
+    },
+    {
+      "name": "date-picker-props",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "before-commit",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "min",
+      "kind": "prop",
+      "demos": [
+        "show-time.vue"
+      ]
+    },
+    {
+      "name": "max",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "disabled-time",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "default-value",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "popup-props",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "time-picker-props",
+      "kind": "prop",
+      "demos": []
+    }
+  ],
+  "slotNames": [],
+  "slotDefaults": {},
+  "methodNames": []
+}

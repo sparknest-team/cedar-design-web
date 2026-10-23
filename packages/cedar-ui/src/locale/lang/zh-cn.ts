@@ -65,6 +65,14 @@ const calendarLang: CedarCalendarLang = {
 }
 
 const lang: CedarLang = {
+  fieldPresentation: {
+    clickEdit: '单击编辑',
+    doubleClickEdit: '双击编辑',
+    selectionCount: '已选 {count} 个',
+    selectionRemove: '移除',
+    selectionBack: '返回可选项',
+    selectionEmpty: '暂无已选项',
+ edit: '编辑', close: '关闭', search: '搜索选项', selected: '已选择', limit: '最多选择' },
   search: { search: '搜索', cancel: '取消', history: '搜索历史' },
   locale: 'zh-CN',
   common: {
@@ -174,6 +182,12 @@ const lang: CedarLang = {
   },
   calendar: calendarLang,
   datePicker: {
+    previousMonth: '上一月',
+    nextMonth: '下一月',
+    previousYear: '上一年',
+    nextYear: '下一年',
+    previousPeriod: '上一组年份',
+    nextPeriod: '下一组年份',
     view: calendarLang.view,
     month: calendarLang.month,
     week: calendarLang.week,

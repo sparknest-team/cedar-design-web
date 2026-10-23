@@ -1,8 +1,8 @@
 import { withInstall } from '../_utils/global-config'
-import _Date from './Date.vue'
 import _DatePicker from './DatePicker.vue'
-import { dateProps } from './props'
 import { props as datePickerProps } from './picker-props'
+import _Date from './presentation'
+import { dateProps } from './props'
 
 export type { ShortcutType } from './picker/types'
 export type { DatePickerProps } from './picker-props'

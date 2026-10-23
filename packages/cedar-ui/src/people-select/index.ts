@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _PeopleSelect from './people-select'
+import _PeopleSelect from './presentation'
 import { peopleSelectProps } from './props'
 
 const PeopleSelect = withInstall(_PeopleSelect, Object.assign(_PeopleSelect, {

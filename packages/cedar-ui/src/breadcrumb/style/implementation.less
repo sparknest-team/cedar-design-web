@@ -25,32 +25,55 @@
       color: inherit;
     }
 
-    a {
+    a,
+    &__content:is(button) {
       display: inline-block;
       margin: calc(0 - var(~'--c-breadcrumb-padding-text-horizontal'));
       padding: 0 var(~'--c-breadcrumb-padding-text-horizontal');
+      border: 0;
+      font: inherit;
+      line-height: inherit;
       color: var(~'--c-breadcrumb-link-text-color');
       text-decoration: none;
       border-radius: var(~'--c-breadcrumb-text-border-radius-hover');
       background-color: var(~'--c-breadcrumb-bg');
       cursor: pointer;
+      touch-action: manipulation;
 
-      &:hover {
+      &:active,
+      &.c-breadcrumb-item--pressed {
         color: var(~'--c-breadcrumb-link-text-color-hover');
         background-color: var(~'--c-breadcrumb-bg-hover');
+        text-decoration: underline;
       }
-    }
 
-    &__content:is(a) {
-      color: var(~'--c-breadcrumb-link-text-color');
-      text-decoration: none;
-      border-radius: var(~'--c-breadcrumb-text-border-radius-hover');
-      background-color: var(~'--c-breadcrumb-bg');
-      cursor: pointer;
+      @media (hover: hover) and (pointer: fine) {
+        &:hover {
+          color: var(~'--c-breadcrumb-link-text-color-hover');
+          background-color: var(~'--c-breadcrumb-bg-hover');
+          text-decoration: underline;
+        }
+      }
 
-      &:hover {
-        color: var(~'--c-breadcrumb-link-text-color-hover');
-        background-color: var(~'--c-breadcrumb-bg-hover');
+      @media (pointer: coarse) {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: var(~'--c-breadcrumb-touch-target-size');
+        min-height: var(~'--c-breadcrumb-touch-target-size');
+        box-sizing: border-box;
+        vertical-align: middle;
+
+        &:hover:not(:active):not(.c-breadcrumb-item--pressed) {
+          color: var(~'--c-breadcrumb-link-text-color');
+          background-color: var(~'--c-breadcrumb-bg');
+          text-decoration: none;
+        }
+      }
+
+      &:focus-visible {
+        outline: auto;
+        text-decoration: underline;
       }
     }
 

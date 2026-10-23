@@ -34,7 +34,7 @@ const projectLabel = computed(() => projects.find(item => item.key === project.v
         :popup-style="{ width: 'min(360px, 100vw)' }"
       >
         <template #content="{ close }">
-          <c-space direction="vertical" style="width: 100%; height: 100%">
+          <c-space direction="column" style="width: 100%; height: 100%">
             <h3>任务筛选</h3>
             <p>应用后高亮入口，保留“高级筛选”标题。</p>
             <c-input v-model="keyword" placeholder="输入任务关键词" aria-label="任务关键词" />

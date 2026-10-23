@@ -14,17 +14,17 @@ permalink: /components/alert/
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### 提示类型
-
-警告提示有 `info`、`success`、`warning`、`danger`、`default` 五种类型。`default` 类型下默认不展示图标，可通过 `#icon` 插槽自定义。
-
-<demo src="./__demos__/type.vue"></demo>
-
 ### 视觉变体
 
 `variant` 支持 `standard`（默认，浅色填充 + 描边）、`tonal`（浅色填充无描边）、`outline`（透明背景 + 描边）。
 
 <demo src="./__demos__/variant.vue"></demo>
+
+### 提示类型
+
+警告提示有 `info`、`success`、`warning`、`danger`、`default` 五种类型。`default` 类型下默认不展示图标，可通过 `#icon` 插槽自定义。
+
+<demo src="./__demos__/type.vue"></demo>
 
 ### 提示标题
 
@@ -64,6 +64,8 @@ permalink: /components/alert/
 
 ### 可关闭
 
+关闭按钮支持点击、Space 与 Enter。close 表示开始关闭，closed 在退出动画结束后触发；若业务在 close 中直接卸载组件，就不能继续观察该实例的动画结束。每个 Alert 独立关闭；需要重开时由业务以新实例重建，不代表旧实例的内部可见状态自动恢复。
+
 通过设置 `closable`，可开启关闭按钮。
 
 <demo src="./__demos__/closable.vue"></demo>
@@ -73,6 +75,19 @@ permalink: /components/alert/
 指定 `close-icon` slot，自定义关闭元素。
 
 <demo src="./__demos__/close-icon.vue"></demo>
+
+### 外观组合
+
+适用于提示信息的强调程度。调整变体、状态，用相同数据观察变化。内容保持一致，便于比较不同设置的实际效果。
+
+<demo src="./__demos__/appearance-lab.vue"></demo>
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
 
 ## API
 

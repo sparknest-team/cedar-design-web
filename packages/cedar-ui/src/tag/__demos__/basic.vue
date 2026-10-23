@@ -1,5 +1,5 @@
 <template>
-  <c-space fill>
+  <c-space wrap fill>
     <c-tag>Default</c-tag>
     <c-tag>Tag 1</c-tag>
     <c-tag>Tag 2</c-tag>
@@ -11,7 +11,7 @@
     </c-tag>
   </c-space>
   <br />
-  <c-space fill>
+  <c-space wrap fill>
     <c-tag>gray</c-tag>
     <c-tag color="brand">brand</c-tag>
     <c-tag color="green">green</c-tag>

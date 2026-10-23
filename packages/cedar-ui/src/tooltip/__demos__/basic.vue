@@ -1,5 +1,5 @@
 <template>
-  <c-space>
+  <c-space wrap>
     <c-tooltip content="This is tooltip content">
       <c-button>Mouse over to display tooltip</c-button>
     </c-tooltip>

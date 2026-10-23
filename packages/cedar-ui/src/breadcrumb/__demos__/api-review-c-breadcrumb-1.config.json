@@ -1,0 +1,76 @@
+{
+  "fields": [
+    {
+      "name": "max-count",
+      "description": "最多展示的正常面包屑项数量，不包含 more（0 表示不限制）",
+      "type": "number",
+      "defaultValue": "0",
+      "kind": "number"
+    },
+    {
+      "name": "routes",
+      "description": "设置路径",
+      "type": "BreadcrumbRoute[]",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "separator",
+      "description": "分隔符文字",
+      "type": "string | number",
+      "defaultValue": "'/'",
+      "kind": "scalar"
+    },
+    {
+      "name": "BreadcrumbRoute.label",
+      "description": "routes.0 · 面包屑名称",
+      "type": "string",
+      "defaultValue": "-",
+      "kind": "string",
+      "path": [
+        "routes",
+        0,
+        "label"
+      ]
+    },
+    {
+      "name": "BreadcrumbRoute.path",
+      "description": "routes.0 · 跳转路径(a标签的href)",
+      "type": "string",
+      "defaultValue": "",
+      "kind": "string",
+      "path": [
+        "routes",
+        0,
+        "path"
+      ]
+    },
+    {
+      "name": "BreadcrumbRoute.children",
+      "description": "routes.0 · 下拉菜单展示项",
+      "type": "{label:string,path:string}[]",
+      "defaultValue": "-",
+      "kind": "json",
+      "initial": "[]",
+      "path": [
+        "routes",
+        0,
+        "children"
+      ]
+    }
+  ],
+  "methodNames": [],
+  "events": [],
+  "slotNames": [
+    "separator",
+    "more-icon",
+    "item-render"
+  ],
+  "slotDefaults": {
+    "separator": true,
+    "more-icon": false,
+    "item-render": false
+  },
+  "scenarios": []
+}

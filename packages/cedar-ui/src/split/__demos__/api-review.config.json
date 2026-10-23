@@ -1,0 +1,104 @@
+{
+  "fields": [
+    {
+      "name": "component",
+      "description": "分割框的 html 标签",
+      "type": "string",
+      "defaultValue": "'div'",
+      "kind": "string"
+    },
+    {
+      "name": "orientation",
+      "description": "分割的方向",
+      "type": "'horizontal' | 'vertical'",
+      "defaultValue": "'horizontal'",
+      "kind": "enum",
+      "options": [
+        "horizontal",
+        "vertical"
+      ],
+      "initial": "horizontal"
+    },
+    {
+      "name": "size",
+      "description": "分割的大小，可以是 0~1 代表百分比，或具体数值的像素，如 300px",
+      "type": "number|string",
+      "defaultValue": "undefined",
+      "kind": "scalar"
+    },
+    {
+      "name": "default-size",
+      "description": "默认分割的大小，可以是 0~1 代表百分比，或具体数值的像素，如 300px",
+      "type": "number|string",
+      "defaultValue": "0.5",
+      "kind": "scalar"
+    },
+    {
+      "name": "min",
+      "description": "最小阈值，可以是 0~1 代表百分比，或具体数值的像素，如 300px",
+      "type": "number|string",
+      "defaultValue": "undefined",
+      "kind": "scalar"
+    },
+    {
+      "name": "max",
+      "description": "最大阈值，可以是 0~1 代表百分比，或具体数值的像素，如 300px",
+      "type": "number|string",
+      "defaultValue": "undefined",
+      "kind": "scalar"
+    },
+    {
+      "name": "disabled",
+      "description": "是否禁用",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    }
+  ],
+  "events": [
+    "move-start",
+    "moving",
+    "move-end"
+  ],
+  "scenarios": [
+    {
+      "name": "first",
+      "kind": "slot",
+      "demos": [
+        "basic.vue",
+        "nested.vue"
+      ]
+    },
+    {
+      "name": "resize-trigger",
+      "kind": "slot",
+      "demos": []
+    },
+    {
+      "name": "resize-trigger-icon",
+      "kind": "slot",
+      "demos": []
+    },
+    {
+      "name": "second",
+      "kind": "slot",
+      "demos": [
+        "basic.vue",
+        "nested.vue"
+      ]
+    }
+  ],
+  "slotNames": [
+    "first",
+    "second",
+    "resize-trigger",
+    "resize-trigger-icon"
+  ],
+  "slotDefaults": {
+    "first": true,
+    "second": true,
+    "resize-trigger": false,
+    "resize-trigger-icon": false
+  },
+  "methodNames": []
+}

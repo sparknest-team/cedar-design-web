@@ -3,13 +3,13 @@
 <template>
   <c-carousel class="carousel" effect="fade">
     <c-carousel-item>
-      <img class="carousel-item" :src="'cat.jpg'" alt="" />
+      <img class="carousel-item" :src="'/cat.jpg'" alt="" />
     </c-carousel-item>
     <c-carousel-item>
-      <img class="carousel-item" :src="'cat2.jpg'" alt="" />
+      <img class="carousel-item" :src="'/cat2.jpg'" alt="" />
     </c-carousel-item>
     <c-carousel-item>
-      <img class="carousel-item" :src="'cat3.jpg'" alt="" />
+      <img class="carousel-item" :src="'/cat3.jpg'" alt="" />
     </c-carousel-item>
   </c-carousel>
 </template>

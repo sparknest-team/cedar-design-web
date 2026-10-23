@@ -30,6 +30,13 @@ permalink: /components/resize-box/
 
 <demo src="./__demos__/custom-triggers.vue"></demo>
 
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
+
 ## API
 
 ### `<resize-box>` Props

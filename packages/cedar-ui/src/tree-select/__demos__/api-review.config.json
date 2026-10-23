@@ -1,0 +1,397 @@
+{
+  "fields": [
+    {
+      "name": "type",
+      "description": "参数类型",
+      "type": "string",
+      "defaultValue": "-",
+      "kind": "string"
+    },
+    {
+      "name": "presentation",
+      "type": "'inline' | 'click' | 'dblclick'",
+      "defaultValue": "undefined",
+      "description": "字段编辑方式，字段 > FormItem > Form 继承；默认 inline。",
+      "kind": "enum",
+      "options": [
+        "inline",
+        "click",
+        "dblclick"
+      ],
+      "initial": "inline"
+    },
+    {
+      "name": "read-pretty",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "纯阅读展示；字段 > FormItem > Form 继承，显式 false 覆盖父级。",
+      "kind": "boolean"
+    },
+    {
+      "name": "before-commit",
+      "type": "BeforeFieldCommit",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "callback"
+    },
+    {
+      "name": "open",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "@zh 弹出框是否可见\n@en Whether the pop-up box is visible\n@v-model\n/",
+      "kind": "boolean"
+    },
+    {
+      "name": "default-open",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "@zh 默认弹出框是否可见\n@en Whether the default pop-up box is visible",
+      "kind": "boolean"
+    },
+    {
+      "name": "popup-container",
+      "type": "string | HTMLElement | false",
+      "defaultValue": "undefined",
+      "description": "@zh 弹出框的挂载容器\n@en Mount container for pop-up box\n/",
+      "kind": "json",
+      "initial": "\"body\""
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "@zh 是否禁用\n@en Whether to disable",
+      "kind": "boolean"
+    },
+    {
+      "name": "loading",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "@zh 是否为加载中状态\n@en Whether it is loading state",
+      "kind": "boolean"
+    },
+    {
+      "name": "error",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "@zh 是否为错误状态\n@en Whether it is an error state",
+      "kind": "boolean"
+    },
+    {
+      "name": "size",
+      "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
+      "defaultValue": "undefined",
+      "description": "@zh 选择框的大小\n@en The size of the selection box.\n@values 'xs','sm','md','lg','xl'\n@default-value 'md'",
+      "kind": "enum",
+      "options": [
+        "xs",
+        "sm",
+        "md",
+        "lg",
+        "xl"
+      ],
+      "initial": "xs"
+    },
+    {
+      "name": "border",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "@zh 是否显示边框\n@en Whether to show the border",
+      "kind": "boolean"
+    },
+    {
+      "name": "allow-search",
+      "type": "boolean | { retainInputValue?: boolean }",
+      "defaultValue": "(props: Data) => Boolean(props.multiple)",
+      "description": "@zh 是否允许搜索\n@en Whether to allow searching\n@default-value false (single) \\| true (multiple)",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "clearable",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "@zh 是否允许清除\n@en Whether to allow clear",
+      "kind": "boolean"
+    },
+    {
+      "name": "placeholder",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "@zh 提示文案\n@en Prompt copy",
+      "kind": "string"
+    },
+    {
+      "name": "max-tag-count",
+      "type": "number",
+      "defaultValue": "undefined",
+      "description": "@zh 最多显示的标签数量，仅在多选模式有效\n@en The maximum number of labels displayed, only valid in multi-select mode",
+      "kind": "number"
+    },
+    {
+      "name": "multiple",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "@zh 是否支持多选\n@en Whether to support multiple selection",
+      "kind": "boolean"
+    },
+    {
+      "name": "default-value",
+      "type": "string | number | Array<string | number> | LabelValue | LabelValue[]",
+      "defaultValue": "undefined",
+      "description": "@zh 默认值\n@en Default value",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "model-value",
+      "type": "string | number | Array<string | number> | LabelValue | LabelValue[]",
+      "defaultValue": "undefined",
+      "description": "@zh 绑定值\n@en Value",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "field-names",
+      "type": "TreeFieldNames",
+      "defaultValue": "undefined",
+      "description": "@zh 指定节点数据中的字段名\n@en Specify the field name in the node data",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "data",
+      "type": "TreeNodeData[]",
+      "defaultValue": "() => []",
+      "description": "@zh 数据\n@en Data",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "label-in-value",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "@zh 设置value格式。默认是string，设置为true时候，value格式为： { label: string, value: string }\n@en Set the value format. The default is string, when set to true, the value format is: {label: string, value: string}",
+      "kind": "boolean"
+    },
+    {
+      "name": "tree-checkable",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "@zh 是否展示复选框\n@en Whether to show checkbox",
+      "kind": "boolean"
+    },
+    {
+      "name": "tree-check-strictly",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "@zh 父子节点是否关联\n@en Whether the parent and child nodes are related",
+      "kind": "boolean"
+    },
+    {
+      "name": "tree-checked-strategy",
+      "type": "'all' | 'parent' | 'child'",
+      "defaultValue": "'all'",
+      "description": "@zh 定制回显方式\n@en Customized echo method",
+      "kind": "enum",
+      "options": [
+        "all",
+        "parent",
+        "child"
+      ],
+      "initial": "all"
+    },
+    {
+      "name": "tree-props",
+      "type": "Partial<TreeProps>",
+      "defaultValue": "undefined",
+      "description": "@zh 可以接受所有 [Tree](/vue/component/tree) 组件的Props\n@en Can accept Props of all [Tree](/vue/component/tree) components",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "trigger-props",
+      "type": "Partial<TriggerProps>",
+      "defaultValue": "undefined",
+      "description": "@zh 可以接受所有 [Trigger](/vue/component/trigger) 组件的Props\n@en Can accept Props of all [Trigger](/vue/component/trigger) components",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "dropdown-style",
+      "type": "CSSProperties",
+      "defaultValue": "undefined",
+      "description": "@zh 下拉框样式\n@en Drop-down box style",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "dropdown-class-name",
+      "type": "string | string[]",
+      "defaultValue": "undefined",
+      "description": "@zh 下拉框样式 class\n@en Drop-down box style class",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "filter-tree-node",
+      "type": "(searchKey: string, nodeData: TreeNodeData) => boolean",
+      "defaultValue": "undefined",
+      "description": "@zh 自定义节点过滤函数\n@en Custom node filter function",
+      "kind": "callback"
+    },
+    {
+      "name": "load-more",
+      "type": "(nodeData: TreeNodeData) => Promise<void>",
+      "defaultValue": "undefined",
+      "description": "@zh 动态加载数据\n@en Load data dynamically",
+      "kind": "callback"
+    },
+    {
+      "name": "disable-filter",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "@zh 禁用内部过滤逻辑\n@en Disable internal filtering logic",
+      "kind": "boolean"
+    },
+    {
+      "name": "fallback-option",
+      "type": "boolean | ((key: number | string) => TreeNodeData | boolean)",
+      "defaultValue": "true",
+      "description": "@zh 为 value 中找不到匹配项的 key 定义节点数据\n@en Customize node data for keys that do not match options\n@version 2.22.0\n/",
+      "kind": "callback"
+    },
+    {
+      "name": "selectable",
+      "type": "boolean | 'leaf' | ((node: TreeNodeData, info: { isLeaf: boolean; level: number }) => boolean)",
+      "defaultValue": "true",
+      "description": "@zh 设置可选择的节点，默认全部可选\n@en Set the nodes that can be selected, all can be selected by default\n@version 2.27.0\n/",
+      "kind": "callback"
+    },
+    {
+      "name": "scrollbar",
+      "type": "boolean | ScrollbarProps",
+      "defaultValue": "true",
+      "description": "@zh 是否开启虚拟滚动条\n@en Whether to enable virtual scroll bar\n@version 2.39.0\n/",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "show-header-on-empty",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "@zh 空状态时是否显示header\n@en Whether to display the header in the empty state\n/",
+      "kind": "boolean"
+    },
+    {
+      "name": "show-footer-on-empty",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "@zh 空状态时是否显示footer\n@en Whether to display the footer in the empty state\n/",
+      "kind": "boolean"
+    },
+    {
+      "name": "input-value",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "@zh 输入框的值\n@en The value of the input\n@v-model\n@version 2.55.0\n/",
+      "kind": "string"
+    },
+    {
+      "name": "default-input-value",
+      "type": "string",
+      "defaultValue": "''",
+      "description": "@zh 输入框的默认值（非受控模式）\n@en The default value of the input (uncontrolled mode)\n@version 2.55.0\n/",
+      "kind": "string"
+    }
+  ],
+  "events": [
+    "click",
+    "update:open",
+    "update:modelValue"
+  ],
+  "scenarios": [
+    {
+      "name": "before-commit",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "allow-search",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "default-value",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "model-value",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "field-names",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "data",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "tree-props",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "trigger-props",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "dropdown-class-name",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "filter-tree-node",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "load-more",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "fallback-option",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "selectable",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "scrollbar",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "default",
+      "kind": "slot",
+      "demos": []
+    }
+  ],
+  "slotNames": [
+    "default"
+  ],
+  "slotDefaults": {
+    "default": false
+  },
+  "methodNames": []
+}

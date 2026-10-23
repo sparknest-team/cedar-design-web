@@ -1,4 +1,4 @@
-import { computed, defineComponent, h, inject, mergeProps, nextTick, onBeforeUnmount, onDeactivated, ref, watch } from 'vue'
+import { computed, defineComponent, h, inject, mergeProps, nextTick, onActivated, onBeforeUnmount, onDeactivated, ref, watch } from 'vue'
 import { createNamespace } from '../_utils/global-config'
 import Trigger from '../trigger'
 import { useElementResize } from '../_utils/resize-observer'
@@ -31,16 +31,28 @@ export default defineComponent({
     const tree = computed(() => createNavMenuTree(props.options, props.fieldNames))
     const selected = computed(() => value.value == null ? undefined : tree.value.byKey.get(value.value))
     const hasPopup = () => !!slots.content || props.options.length > 0
+    let suspended = false, disposed = false, bindingGeneration = 0, measurementOperation = 0, focusGeneration = 0
+    let focusTask: { kind: 'open' | 'close' } | undefined
+    const bindingRevision = ref(0)
+    const available = () => !suspended && !disposed
+    function cancelFocus() { focusGeneration++; focusTask = undefined }
+    watch(open, opened => { if (focusTask && opened !== (focusTask.kind === 'open')) cancelFocus() }, { flush: 'sync' })
+    watch(() => [disabled.value, props.options, props.fieldNames, props.placement, props.popupLayout, props.trigger], cancelFocus, { deep: true, flush: 'sync' })
     const top = ref(0)
     const edges = ref({ left: 0, right: 0, viewportWidth: 0 })
     function measure() {
+      if (!available() || !open.value) return
+      const operation = ++measurementOperation
       const element = reference.value
+      const current = () => available() && open.value && operation === measurementOperation && element === reference.value
       const rect = element?.getBoundingClientRect()
-      if (!rect) return
-      top.value = Math.max(0, rect.bottom)
-      edges.value = { left: rect.left, right: rect.right, viewportWidth: element?.ownerDocument.defaultView?.innerWidth ?? 0 }
+      if (!rect || !current()) return
+      const bottom = rect.bottom, left = rect.left, right = rect.right, viewportWidth = element?.ownerDocument.defaultView?.innerWidth ?? 0
+      if (!current()) return
+      top.value = Math.max(0, bottom)
+      if (current()) edges.value = { left, right, viewportWidth }
     }
-    useElementResize(() => [reference.value], () => open.value, measure)
+    useElementResize(() => [reference.value], () => { bindingRevision.value; return available() && open.value }, measure)
     const fullHeightPosition = computed(() => {
       if (props.placement.startsWith('right')) {
         const left = Math.max(0, Math.min(edges.value.right, edges.value.viewportWidth))
@@ -53,32 +65,58 @@ export default defineComponent({
       return { right: 0 }
     })
     let detach: (() => void) | undefined
-    watch([open, reference], ([opened]) => {
-      detach?.(); detach = undefined
-      const win = reference.value?.ownerDocument.defaultView
-      if (opened && win) {
-        measure(); win.addEventListener('resize', measure); win.addEventListener('scroll', measure, true)
-        detach = () => { win.removeEventListener('resize', measure); win.removeEventListener('scroll', measure, true) }
+    function clearBinding() { bindingGeneration++; measurementOperation++; detach?.(); detach = undefined }
+    watch([open, reference, bindingRevision], ([opened]) => {
+      clearBinding()
+      const element = reference.value, win = element?.ownerDocument.defaultView, generation = bindingGeneration
+      const current = () => available() && open.value && generation === bindingGeneration && element === reference.value
+      if (opened && win && current()) {
+        const update = () => { if (current()) measure() }
+        measure()
+        if (!current()) return
+        win.addEventListener('resize', update); win.addEventListener('scroll', update, true)
+        detach = () => { win.removeEventListener('resize', update); win.removeEventListener('scroll', update, true) }
       }
     }, { flush: 'post', immediate: true })
-    onBeforeUnmount(() => detach?.())
+    onBeforeUnmount(() => { disposed = true; cancelFocus(); clearBinding() })
     const unregister = parent?.registerItem(itemId, () => setOpen(false), props.name)
     onBeforeUnmount(() => unregister?.())
-    function activate() { parent?.activateItem(itemId) }
+    function activate() { if (available()) parent?.activateItem(itemId) }
     watch(open, value => { if (value) activate() }, { immediate: true, flush: 'sync' })
-    function setOpen(next: boolean) {
+    function requestOpen(next: boolean, deactivating = false) {
+      if (!available() && !deactivating) return
       if (next && (disabled.value || !hasPopup())) return
       if (next) activate()
+      if (!available() && !deactivating) return
       if (next === open.value) return
       if (props.open === undefined) localOpen.value = next
       emit('update:open', next)
     }
-    function focusPanel() { nextTick(() => { if (open.value) panel.value?.querySelector<HTMLElement>('[data-nav-item]:not([aria-disabled="true"]),button:not(:disabled),input:not(:disabled),[tabindex="0"]')?.focus() }) }
-    function close() { setOpen(false); nextTick(() => { if (!open.value) reference.value?.focus() }) }
-    onDeactivated(() => setOpen(false))
+    function setOpen(next: boolean) { if (!available()) return; cancelFocus(); requestOpen(next) }
+    function queueFocus(kind: 'open' | 'close') {
+      if (!available() || disabled.value) return
+      cancelFocus()
+      const task = { kind }, generation = focusGeneration, element = reference.value
+      const document = element?.ownerDocument, origin = document?.activeElement
+      const current = () => available() && !disabled.value && generation === focusGeneration && element === reference.value
+      focusTask = task
+      nextTick(() => {
+        if (focusTask !== task || !current()) return
+        focusTask = undefined
+        if (open.value !== (kind === 'open') || !document) return
+        const focused = document.activeElement
+        if (focused && focused !== origin && focused !== document.body && focused.isConnected) return
+        const target = kind === 'open' ? panel.value?.querySelector<HTMLElement>('[data-nav-item]:not([aria-disabled="true"]),button:not(:disabled),input:not(:disabled),[tabindex="0"]') : element
+        if (current()) target?.focus()
+      })
+    }
+    function focusPanel() { queueFocus('open') }
+    function close() { if (!available()) return; setOpen(false); queueFocus('close') }
+    onDeactivated(() => { suspended = true; cancelFocus(); clearBinding(); requestOpen(false, true) })
+    onActivated(() => { if (!disposed && suspended) { suspended = false; bindingRevision.value++ } })
     function select(key: NavMenuKey | null, event?: Event) {
       const node = key == null ? undefined : tree.value.byKey.get(key)
-      if (disabled.value || node?.disabled || (node && (node.type !== 'item' || node.children.length))) return
+      if (!available() || disabled.value || node?.disabled || (node && (node.type !== 'item' || node.children.length))) return
       if (props.modelValue === undefined) localValue.value = key
       if (props.name !== undefined) parent?.selectItem(props.name)
       emit('update:modelValue', key); emit('select', key, node?.option, event)
@@ -103,6 +141,7 @@ export default defineComponent({
       'aria-haspopup': hasPopup() ? (slots.content ? 'dialog' : 'menu') : undefined,
       class: [n('item'), { [n('--active')]: active.value, [n('--disabled')]: disabled.value }],
       onClick: (event: MouseEvent) => {
+        if (!available()) return
         if (disabled.value) { event.preventDefault(); return }
         activate()
         // Opening a panel does not mean that it has produced a valid selection.
@@ -111,7 +150,7 @@ export default defineComponent({
         emit('click', event)
       },
       onKeydown: (event: KeyboardEvent) => {
-        if (event.target !== event.currentTarget || disabled.value) return
+        if (!available() || event.target !== event.currentTarget || disabled.value) return
         if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); event.stopPropagation(); if (hasPopup()) setOpen(!open.value); else reference.value?.click() }
         if (event.key === 'ArrowDown' && hasPopup()) { event.preventDefault(); event.stopPropagation(); setOpen(true); focusPanel() }
       },
@@ -121,7 +160,7 @@ export default defineComponent({
       role: slots.content ? 'dialog' : undefined, 'aria-label': typeof props.label === 'string' ? props.label : undefined,
       class: [n('popup'), n(`--${parent?.theme.value ?? 'light'}`), n(`--${parent?.props.size ?? 'md'}`), n(`panel--${props.popupLayout}`)],
       style: [props.popupLayout === 'full-width' ? { position: 'fixed', left: 0, right: 0, top: `${top.value}px`, maxHeight: `calc(100dvh - ${top.value}px)` } : props.popupLayout === 'full-height' ? { position: 'fixed', top: 0, bottom: 0, maxHeight: '100dvh', width: 'var(--c-nav-menu-panel-width)', ...fullHeightPosition.value } : {}, props.popupStyle],
-      onKeydown: (event: KeyboardEvent) => { if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); close() } },
+      onKeydown: (event: KeyboardEvent) => { if (available() && !disabled.value && event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); close() } },
     }, slots.content?.(context()) ?? [h(NavMenu, {
       options: props.options, fieldNames: props.fieldNames, modelValue: value.value, mode: props.optionsMode,
       theme: parent?.theme.value as 'light' | 'dark' | undefined, size: parent?.props.size,

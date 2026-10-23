@@ -1,0 +1,225 @@
+{
+  "fields": [
+    {
+      "name": "model-value",
+      "description": "表单值",
+      "type": "Record<string, unknown>",
+      "defaultValue": "() => ({})",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "fields",
+      "description": "筛选项 schema",
+      "type": "FilterFormField[]",
+      "defaultValue": "() => []",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "field-map",
+      "description": "可选字段组件注册表",
+      "type": "FilterFormFieldMap",
+      "defaultValue": "() => ({})",
+      "kind": "scenario"
+    },
+    {
+      "name": "rules",
+      "description": "透传 Form 校验规则",
+      "type": "object",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "collapsed",
+      "description": "是否折叠多余项",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "collapsible",
+      "description": "是否启用展开/收起",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "cols",
+      "description": "响应式列数",
+      "type": "number | object",
+      "defaultValue": "() => ({ xs: 1, sm: 2, md: 3, lg: 3, xl: 4, xxl: 5 })",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "grid-props",
+      "description": "Grid 其余属性",
+      "type": "object",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "change-debounce",
+      "description": "change 防抖毫秒",
+      "type": "number",
+      "defaultValue": "500",
+      "kind": "number"
+    },
+    {
+      "name": "FilterFormField.component",
+      "description": "fields.0 · Vue 组件，或 fieldMap 的 key",
+      "type": "string | Component",
+      "defaultValue": "-",
+      "kind": "component",
+      "options": [
+        "Button",
+        "Input",
+        "Tag",
+        "Checkbox"
+      ],
+      "initial": "Input",
+      "path": [
+        "fields",
+        0,
+        "component"
+      ]
+    },
+    {
+      "name": "FilterFormField.field",
+      "description": "fields.0 · 表单字段路径",
+      "type": "string",
+      "defaultValue": "-",
+      "kind": "string",
+      "path": [
+        "fields",
+        0,
+        "field"
+      ]
+    },
+    {
+      "name": "FilterFormField.label",
+      "description": "fields.0 · 标签",
+      "type": "string",
+      "defaultValue": "-",
+      "kind": "string",
+      "path": [
+        "fields",
+        0,
+        "label"
+      ]
+    },
+    {
+      "name": "FilterFormField.visible",
+      "description": "fields.0 · 是否渲染",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean",
+      "path": [
+        "fields",
+        0,
+        "visible"
+      ]
+    },
+    {
+      "name": "FilterFormField.auto-emit-change",
+      "description": "fields.0 · 输入过程是否触发 change",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean",
+      "path": [
+        "fields",
+        0,
+        "autoEmitChange"
+      ]
+    },
+    {
+      "name": "FilterFormField.props",
+      "description": "fields.0 · 透传给字段组件",
+      "type": "object",
+      "defaultValue": "-",
+      "kind": "string",
+      "initial": "review-class",
+      "path": [
+        "fields",
+        0,
+        "props"
+      ]
+    },
+    {
+      "name": "FilterFormField.grid-item-props",
+      "description": "fields.0 · GridItem 属性",
+      "type": "object",
+      "defaultValue": "-",
+      "kind": "string",
+      "initial": "review-class",
+      "path": [
+        "fields",
+        0,
+        "gridItemProps"
+      ]
+    },
+    {
+      "name": "FilterFormField.form-item-props",
+      "description": "fields.0 · FormItem 属性",
+      "type": "object",
+      "defaultValue": "-",
+      "kind": "string",
+      "initial": "review-class",
+      "path": [
+        "fields",
+        0,
+        "formItemProps"
+      ]
+    },
+    {
+      "name": "FilterFormFieldRegistration.component",
+      "description": "field-map.$first · 字段组件",
+      "type": "Component",
+      "defaultValue": "-",
+      "kind": "component",
+      "options": [
+        "Button",
+        "Input",
+        "Tag",
+        "Checkbox"
+      ],
+      "initial": "Input",
+      "path": [
+        "field-map",
+        "$first",
+        "component"
+      ]
+    },
+    {
+      "name": "FilterFormFieldRegistration.default-props",
+      "description": "field-map.$first · 默认 props",
+      "type": "object",
+      "defaultValue": "-",
+      "kind": "string",
+      "initial": "review-class",
+      "path": [
+        "field-map",
+        "$first",
+        "defaultProps"
+      ]
+    }
+  ],
+  "methodNames": [
+    "form-ref"
+  ],
+  "events": [
+    "update:modelValue",
+    "update:collapsed",
+    "change"
+  ],
+  "slotNames": [
+    "actions"
+  ],
+  "slotDefaults": {
+    "actions": false
+  },
+  "scenarios": []
+}

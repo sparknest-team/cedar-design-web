@@ -28,6 +28,13 @@ permalink: /components/ellipsis/
 
 <demo src="./__demos__/custom-tooltip.vue"></demo>
 
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
+
 ## API
 
 ### Props

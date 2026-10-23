@@ -19,7 +19,7 @@ import {
   type ShallowRef,
 } from 'vue'
 import type { TableColumnData } from '../table/types'
-import DropdownMenu, { MenuOption } from '../dropdown-menu'
+import Menu, { MenuOption } from '../menu'
 import { IconMore } from '@cedarjs/icons-vue'
 import { cloneDeep } from 'lodash-es'
 import type {
@@ -294,7 +294,7 @@ const TableColumnHeaderAction = defineComponent({
 
     return () =>
       h(
-        DropdownMenu,
+        Menu,
         { trigger: 'click', placement: 'bottom-end' },
         {
           default: () =>

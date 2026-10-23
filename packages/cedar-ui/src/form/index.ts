@@ -33,3 +33,5 @@ export type { FormLayout, FormLabelAlign, FormColProps, FormLabelFlex } from './
 export type { FormItemProps } from './item-props'
 
 export type { FormItemAsteriskPosition, FormItemValidateStatus } from './item-decoration'
+
+export type { FieldPresentation, BeforeFieldCommit } from '../_components/field-presentation/context'

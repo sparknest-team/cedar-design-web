@@ -1,5 +1,5 @@
 <template>
-  <c-space>
+  <c-space wrap size="sm">
     <c-link status="default">默认链接</c-link>
     <c-link status="primary">主要链接</c-link>
     <c-link status="secondary">次要链接</c-link>

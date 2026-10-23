@@ -66,6 +66,20 @@ const calendarLang: CedarCalendarLang = {
 }
 
 const lang: CedarLang = {
+  fieldPresentation: {
+    clickEdit: 'Click to edit',
+    doubleClickEdit: 'Double-click to edit',
+    selectionCount: '{count} selected',
+    selectionRemove: 'Remove',
+    selectionBack: 'Back to options',
+    selectionEmpty: 'No selected options',
+
+    edit: 'Edit',
+    close: 'Close',
+    search: 'Search options',
+    selected: 'Selected',
+    limit: 'Select at most',
+  },
   search: { search: 'Search', cancel: 'Cancel', history: 'Search history' },
   locale: 'en-US',
   common: {
@@ -175,6 +189,12 @@ const lang: CedarLang = {
   },
   calendar: calendarLang,
   datePicker: {
+    previousMonth: 'Previous month',
+    nextMonth: 'Next month',
+    previousYear: 'Previous year',
+    nextYear: 'Next year',
+    previousPeriod: 'Previous years',
+    nextPeriod: 'Next years',
     view: calendarLang.view,
     month: calendarLang.month,
     week: calendarLang.week,

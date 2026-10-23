@@ -19,7 +19,7 @@
 <script lang="ts">
 import { treeProps } from './props'
 import { createNamespace } from '../_utils/global-config'
-import { defineComponent, computed, provide, reactive, PropType, toRefs, ref } from 'vue'
+import { defineComponent, computed, provide, reactive, PropType, toRefs, ref, onBeforeUnmount, onDeactivated, onActivated, watch } from 'vue'
 import { getPrefixCls } from '../_utils/global-config'
 import { TreeInjectionKey } from './context'
 import usePickSlots from '../_hooks/use-pick-slots'
@@ -557,26 +557,52 @@ export default defineComponent({
       currentExpandKeys.value.splice(index, 1)
     }
 
+    const loadOwners = new Map<TreeNodeKey, TreeNodeData>()
+    let loadEpoch = 0
+    let loadActive = true
+    const retireLoads = () => {
+      loadActive = false
+      loadEpoch++
+      loadingKeys.value = []
+      loadOwners.clear()
+    }
+    onBeforeUnmount(retireLoads)
+    onDeactivated(retireLoads)
+    onActivated(() => { loadActive = true })
+    watch(loadMore, () => { loadEpoch++; loadingKeys.value = []; loadOwners.clear() }, { flush: 'sync' })
+    watch(key2TreeNode, (nodes) => {
+      for (const [key, node] of loadOwners) {
+        if (nodes.get(key)?.treeNodeData !== node) loadOwners.delete(key)
+      }
+      loadingKeys.value = loadingKeys.value.filter((key) => loadOwners.has(key))
+    }, { flush: 'sync' })
     const onLoadMore = computed(() =>
       loadMore?.value
         ? async (key: TreeNodeKey) => {
-            if (!isFunction(loadMore.value)) return
-
+            if (!loadActive || !isFunction(loadMore.value)) return
+            const epoch = loadEpoch
+            const loader = loadMore.value
             const node = key2TreeNode.value.get(key)
             if (!node) return
 
             const { treeNodeData } = node
-
+            if (loadOwners.get(key) === treeNodeData) return
+            loadOwners.set(key, treeNodeData)
             loadingKeys.value = [...new Set([...loadingKeys.value, key])]
 
             try {
-              await loadMore.value(treeNodeData)
+              await loader(treeNodeData)
+              if (!loadActive || epoch !== loadEpoch || loader !== loadMore.value || loadOwners.get(key) !== treeNodeData) return
+              loadOwners.delete(key)
               loadingKeys.value = loadingKeys.value.filter((v) => v !== key)
+              if (key2TreeNode.value.get(key)?.treeNodeData !== treeNodeData) return
               onExpand(true, key)
               if (checkedKeys.value.includes(key)) {
                 onCheck(true, key)
               }
             } catch (err) {
+              if (!loadActive || epoch !== loadEpoch || loadOwners.get(key) !== treeNodeData) return
+              loadOwners.delete(key)
               loadingKeys.value = loadingKeys.value.filter((v) => v !== key)
               // eslint-disable-next-line no-console
               console.error('[tree]load data error: ', err)

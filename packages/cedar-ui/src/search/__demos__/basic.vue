@@ -43,7 +43,7 @@ const inputStyle = { width: "360px" };
 const keyword = ref("");
 const buttonKeyword = ref("");
 const textButtonKeyword = ref("");
-const variant = ref("outlined");
+const variant = ref("outline");
 const recentSearches = ref<string[]>(["设备 A", "设备 B", "设备 C"]);
 const latestResult = ref<SearchResult>();
 

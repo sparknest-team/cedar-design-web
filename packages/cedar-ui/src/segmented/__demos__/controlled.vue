@@ -1,5 +1,5 @@
 <template>
-  <c-space direction="vertical">
+  <c-space direction="column">
     <c-segmented :model-value="value" :options="options" @change="onChange" />
     <div>当前值：{{ value }}</div>
   </c-space>

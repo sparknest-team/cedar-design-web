@@ -1,12 +1,12 @@
 <template>
   <div :class="`${prefixCls}-header`">
-    <button type="button" :class="getIconClassName(showSuperPrev)" :aria-label="previousYearLabel" @click="onSuperPrev">
+    <button type="button" :class="getIconClassName(showSuperPrev)" :aria-label="previousYearLabel" :disabled="!showSuperPrev" :aria-hidden="!showSuperPrev" :tabindex="showSuperPrev ? undefined : -1" @click="onSuperPrev">
       <template v-if="showSuperPrev">
         <RenderFunction v-if="icons && icons.prevDouble" :render-func="icons && icons.prevDouble" />
         <IconDoubleLeft v-else />
       </template>
     </button>
-    <button type="button" :class="getIconClassName(showPrev)" :aria-label="previousMonthLabel" @click="onPrev">
+    <button type="button" :class="getIconClassName(showPrev)" :aria-label="previousMonthLabel" :disabled="!showPrev" :aria-hidden="!showPrev" :tabindex="showPrev ? undefined : -1" @click="onPrev">
       <template v-if="showPrev">
         <RenderFunction v-if="icons && icons.prev" :render-func="icons && icons.prev" />
         <IconLeft v-else />
@@ -24,13 +24,13 @@
       </template>
       <template v-else>{{ title }}</template>
     </div>
-    <button type="button" :class="getIconClassName(showNext)" :aria-label="nextMonthLabel" @click="onNext">
+    <button type="button" :class="getIconClassName(showNext)" :aria-label="nextMonthLabel" :disabled="!showNext" :aria-hidden="!showNext" :tabindex="showNext ? undefined : -1" @click="onNext">
       <template v-if="showNext">
         <RenderFunction v-if="icons && icons.next" :render-func="icons && icons.next" />
         <IconRight v-else />
       </template>
     </button>
-    <button type="button" :class="getIconClassName(showSuperNext)" :aria-label="nextYearLabel" @click="onSuperNext">
+    <button type="button" :class="getIconClassName(showSuperNext)" :aria-label="nextYearLabel" :disabled="!showSuperNext" :aria-hidden="!showSuperNext" :tabindex="showSuperNext ? undefined : -1" @click="onSuperNext">
       <template v-if="showSuperNext">
         <RenderFunction v-if="icons && icons.nextDouble" :render-func="icons && icons.nextDouble" />
         <IconDoubleRight v-else />
@@ -50,6 +50,7 @@ import { IconDoubleRight } from '@cedarjs/icons-vue/icon-double-right'
 import { HeaderIcons, Mode } from '../types'
 import RenderFunction from '../../../_components/render-function'
 import { createNamespace } from '../../../_utils/global-config'
+import { useI18n } from '../../../locale'
 
 type ClickCallbackFunc = (payload: MouseEvent) => void
 
@@ -101,6 +102,8 @@ export default defineComponent({
   },
   emits: ['label-click'],
   setup(props) {
+    const { t } = useI18n()
+    const navigationUnit = computed(() => props.mode === 'year' ? 'Period' : ['month', 'quarter'].includes(props.mode) ? 'Year' : 'Month')
     return {
       showPrev: computed(() => isFunction(props.onPrev)),
       showSuperPrev: computed(() => isFunction(props.onSuperPrev)),
@@ -116,10 +119,10 @@ export default defineComponent({
           [`${props.prefixCls}-header-icon-hidden`]: !show,
         },
       ],
-      previousYearLabel: '上一年',
-      previousMonthLabel: '上一月',
-      nextMonthLabel: '下一月',
-      nextYearLabel: '下一年',
+      previousYearLabel: computed(() => t(props.mode === 'year' ? 'datePicker.previousPeriod' : 'datePicker.previousYear')),
+      previousMonthLabel: computed(() => t(`datePicker.previous${navigationUnit.value}`)),
+      nextMonthLabel: computed(() => t(`datePicker.next${navigationUnit.value}`)),
+      nextYearLabel: computed(() => t(props.mode === 'year' ? 'datePicker.nextPeriod' : 'datePicker.nextYear')),
     }
   },
 })

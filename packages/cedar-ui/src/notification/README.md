@@ -14,6 +14,13 @@ permalink: /components/notification/
 
 <demo src="./__demos__/basic.vue"></demo>
 
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
+
 ## API
 
 clear 同步释放条目与 ID，随后即使在同一个更新周期重加相同 ID，也会使用独立内部实例和新的完整展示计时；活动 ID 的普通更新仍原位更新。内部实例键不作为公共变量／API 暴露，clear 仍不额外触发业务 onClose。组件样式入口在减少动效下关闭 opacity／左右进入、appear、离开过渡及起始位移，不依赖全局极短时长兜底；静态布局／配色、业务展示期限不变。真实 OS 与浏览器矩阵另行验收。

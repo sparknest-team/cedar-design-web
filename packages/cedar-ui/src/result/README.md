@@ -10,6 +10,8 @@ permalink: /components/result/
 
 ### 基础用法
 
+Next status 循环六种本地结果状态并更新标题/图形，Reset status 恢复 info；按钮不发请求或导航。Result 只展示传入的 status，不根据标题文字推断成功/失败。
+
 展示结果状态。
 
 <demo src="./__demos__/basic.vue"></demo>
@@ -61,6 +63,13 @@ permalink: /components/result/
 完整功能
 
 <demo src="./__demos__/all.vue"></demo>
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
 
 ## API
 

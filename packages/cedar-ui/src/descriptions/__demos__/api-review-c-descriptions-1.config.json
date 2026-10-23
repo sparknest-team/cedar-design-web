@@ -1,0 +1,155 @@
+{
+  "fields": [
+    {
+      "name": "data",
+      "description": "描述列表的数据",
+      "type": "DescData[]",
+      "defaultValue": "() => []",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "column",
+      "description": "每行放置的数据个数。2.20.0 版本支持响应式配置，配置可参考 Grid",
+      "type": "number | ResponsiveValue",
+      "defaultValue": "3",
+      "kind": "scenario"
+    },
+    {
+      "name": "title",
+      "description": "描述列表的标题",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "layout",
+      "description": "描述列表的排列方式",
+      "type": "'horizontal' | 'vertical' | 'inline-horizontal' | 'inline-vertical' | 'inline-auto'",
+      "defaultValue": "'horizontal'",
+      "kind": "enum",
+      "options": [
+        "horizontal",
+        "vertical",
+        "inline-horizontal",
+        "inline-vertical",
+        "inline-auto"
+      ],
+      "initial": "horizontal"
+    },
+    {
+      "name": "align",
+      "description": "文字的对齐位置",
+      "type": "TextAlign | { label?: TextAlign; value?: TextAlign }",
+      "defaultValue": "'left'",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "size",
+      "description": "描述列表的大小",
+      "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
+      "defaultValue": "undefined",
+      "kind": "enum",
+      "options": [
+        "xs",
+        "sm",
+        "md",
+        "lg",
+        "xl"
+      ],
+      "initial": "xs"
+    },
+    {
+      "name": "bordered",
+      "description": "是否显示边框",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "label-style",
+      "description": "数据标签的样式",
+      "type": "CSSProperties",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "value-style",
+      "description": "数据内容的样式",
+      "type": "CSSProperties",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "table-layout",
+      "description": "描述中表格样式的 layout-fixed，当设置成 fixed 时，宽度会均分。",
+      "type": "'auto' | 'fixed'",
+      "defaultValue": "'auto'",
+      "kind": "enum",
+      "options": [
+        "auto",
+        "fixed"
+      ],
+      "initial": "auto"
+    },
+    {
+      "name": "aria-label",
+      "description": "描述列表的无障碍标签",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "DescData.label",
+      "description": "data.0 · 标签",
+      "type": "string | RenderFunction",
+      "defaultValue": "-",
+      "kind": "callback",
+      "path": [
+        "data",
+        0,
+        "label"
+      ]
+    },
+    {
+      "name": "DescData.value",
+      "description": "data.0 · 数据",
+      "type": "string | RenderFunction",
+      "defaultValue": "-",
+      "kind": "callback",
+      "path": [
+        "data",
+        0,
+        "value"
+      ]
+    },
+    {
+      "name": "DescData.span",
+      "description": "data.0 · 所占列数",
+      "type": "number",
+      "defaultValue": "-",
+      "kind": "number",
+      "path": [
+        "data",
+        0,
+        "span"
+      ]
+    }
+  ],
+  "methodNames": [],
+  "events": [],
+  "slotNames": [
+    "value",
+    "label",
+    "title"
+  ],
+  "slotDefaults": {
+    "value": false,
+    "label": false,
+    "title": false
+  },
+  "scenarios": []
+}

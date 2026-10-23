@@ -35,7 +35,7 @@
   </template>
 </template>
 <script setup lang="ts">
-import { computed, ref, watch, nextTick } from "vue";
+import { computed, ref, shallowRef, watch, nextTick, onMounted, onActivated, onDeactivated, onBeforeUnmount } from "vue";
 import VirtualList from "../../_components/virtual-list-v2";
 import { createNamespace } from "../../_utils/global-config";
 import type { SchedulerResource } from "../core";
@@ -85,26 +85,45 @@ const entries = computed(() =>
 );
 // Rebuild the shared list's size cache, then restore the visible row rather than jumping to top.
 let restoreVersion = 0;
-watch(
-  [entries, () => props.layoutVersion, () => props.options],
-  async (_, previous) => {
+let mounted = false, active = false, disposed = false;
+let dirty = false, restoring = false, scrollVersion = 0;
+const onScroll = shallowRef<(event: Event) => void>(() => {});
+function available() { return mounted && active && !disposed; }
+async function restore(previousEntries: typeof entries.value = []) {
     const version = ++restoreVersion;
-    const element = list.value?.$el as HTMLElement | undefined;
+    if (!available()) { dirty = true; return; }
+    dirty = false;
+    restoring = true;
+    const currentEntries = entries.value;
+    const options = props.options;
+    const layout = props.layoutVersion;
+    const current = () => available() && version === restoreVersion && entries.value === currentEntries && props.options === options && props.layoutVersion === layout;
+    if (!options) { restoring = false; return; }
+    const previousList = list.value;
+    const element = previousList?.$el as HTMLElement | undefined;
+    if (!current()) return;
     const left = element?.scrollLeft ?? 0;
+    if (!current()) return;
     const bounds = element?.getBoundingClientRect();
-    const visible =
-      element &&
-      Array.from(
-        element.querySelectorAll<HTMLElement>("[data-scheduler-entry]"),
-      ).find((row) => row.getBoundingClientRect().bottom > (bounds?.top ?? 0));
+    if (!current()) return;
+    let visible: HTMLElement | undefined;
+    if (element) {
+      for (const row of element.querySelectorAll<HTMLElement>("[data-scheduler-entry]")) {
+        if (!current()) return;
+        const rect = row.getBoundingClientRect();
+        if (!current()) return;
+        if (rect.bottom > (bounds?.top ?? 0)) { visible = row; break; }
+      }
+    }
     const fallback = element?.querySelector<HTMLElement>(
       "[data-scheduler-entry]",
     );
+    if (!current()) return;
     const anchor = visible ?? fallback;
     const key = anchor?.dataset.schedulerEntry;
     const offset =
       anchor && bounds ? anchor.getBoundingClientRect().top - bounds.top : 0;
-    const previousEntries = previous?.[0] ?? [];
+    if (!current()) return;
     const oldIndex = previousEntries.findIndex((item) => item.key === key);
     const target =
       entries.value.find((item) => item.key === key)?.key ??
@@ -112,26 +131,62 @@ watch(
         ?.key;
     revision.value++;
     await nextTick();
-    if (version !== restoreVersion || !list.value) return;
-    if (target) list.value.scrollTo({ key: target });
+    if (!current() || !list.value) return;
+    const restoredList = list.value;
+    if (target) restoredList.scrollTo({ key: target });
+    if (!current() || list.value !== restoredList) return;
     await nextTick();
-    if (version !== restoreVersion || !list.value) return;
-    const viewport = list.value.$el as HTMLElement;
+    if (!current() || list.value !== restoredList) return;
+    const viewport = restoredList.$el as HTMLElement;
+    const ownsViewport = () => current() && list.value === restoredList && restoredList.$el === viewport;
+    if (!ownsViewport()) return;
     const row = Array.from(
       viewport.querySelectorAll<HTMLElement>("[data-scheduler-entry]"),
     ).find((item) => item.dataset.schedulerEntry === target);
-    if (row)
-      viewport.scrollTop +=
-        row.getBoundingClientRect().top -
-        viewport.getBoundingClientRect().top -
-        offset;
+    if (!ownsViewport()) return;
+    if (row) {
+      const top = row.getBoundingClientRect().top;
+      if (!ownsViewport()) return;
+      const viewportTop = viewport.getBoundingClientRect().top;
+      if (!ownsViewport()) return;
+      viewport.scrollTop += top - viewportTop - offset;
+    }
+    if (!ownsViewport()) return;
     viewport.scrollLeft = left;
-    viewport.dispatchEvent(new Event("scroll"));
-  },
+    if (ownsViewport()) viewport.dispatchEvent(new Event("scroll"));
+    if (current()) restoring = false;
+}
+watch(
+  [entries, () => props.layoutVersion, () => props.options],
+  (_, previous) => restore(previous?.[0] ?? []),
   { deep: true },
 );
-function onScroll(event: Event) {
-  if (heading.value)
-    heading.value.scrollLeft = (event.target as HTMLElement).scrollLeft;
+function resume() {
+  if (!mounted || active || disposed) return;
+  active = true;
+  const identity = ++scrollVersion;
+  onScroll.value = (event) => {
+    const viewport = list.value?.$el as HTMLElement | undefined;
+    const target = heading.value;
+    if (!available() || identity !== scrollVersion || !viewport || !target || event.target !== viewport) return;
+    const left = viewport.scrollLeft;
+    if (available() && identity === scrollVersion && heading.value === target) target.scrollLeft = left;
+  };
+  if (dirty) {
+    const version = ++restoreVersion;
+    nextTick(() => { if (available() && version === restoreVersion) restore(entries.value); });
+  }
 }
+function suspend() {
+  active = false;
+  dirty = dirty || restoring;
+  restoring = false;
+  restoreVersion++;
+  scrollVersion++;
+  onScroll.value = () => {};
+}
+onMounted(() => { mounted = true; resume(); });
+onActivated(resume);
+onDeactivated(suspend);
+onBeforeUnmount(() => { disposed = true; suspend(); mounted = false; });
 </script>

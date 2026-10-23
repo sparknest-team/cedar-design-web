@@ -31,8 +31,8 @@ const updateOpen = (next) => {
       clearable
     />
     <p>受控值与展开状态</p>
-    <label><input v-model="acceptValue" type="checkbox" /> 接受值更新</label>
-    <label><input v-model="acceptOpen" type="checkbox" /> 接受展开更新</label>
+    <c-checkbox v-model="acceptValue"> 接受值更新</c-checkbox>
+    <c-checkbox v-model="acceptOpen"> 接受展开更新</c-checkbox>
     <c-time-range
       :model-value="value"
       :open="open"
@@ -43,7 +43,7 @@ const updateOpen = (next) => {
       @change="commits++"
     />
     <span>{{ value }} / {{ open }}</span>
-    <label><input v-model="acceptClose" type="checkbox" /> 接受关闭请求</label>
+    <c-checkbox v-model="acceptClose"> 接受关闭请求</c-checkbox>
     <output aria-label="Commit count">{{ commits }}</output>
     <output aria-label="Controlled proposals">{{
       JSON.stringify({ value: proposal, open: openProposal })

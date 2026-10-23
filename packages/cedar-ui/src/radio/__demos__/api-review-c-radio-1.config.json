@@ -1,0 +1,198 @@
+{
+  "fields": [
+    {
+      "name": "model-value",
+      "description": "受控值",
+      "type": "ChoiceValue | null",
+      "defaultValue": "undefined",
+      "kind": "scenario"
+    },
+    {
+      "name": "default-value",
+      "description": "非受控初始值",
+      "type": "ChoiceValue | null",
+      "defaultValue": "null",
+      "kind": "scenario"
+    },
+    {
+      "name": "value",
+      "description": "选项的value",
+      "type": "string|number|boolean",
+      "defaultValue": "true",
+      "kind": "json",
+      "initial": "false"
+    },
+    {
+      "name": "variant",
+      "description": "单选的类型",
+      "type": "\"radio\" | \"button\"",
+      "defaultValue": "'radio' as RadioVariant",
+      "kind": "enum",
+      "options": [
+        "radio",
+        "button"
+      ],
+      "initial": "radio"
+    },
+    {
+      "name": "disabled",
+      "description": "是否禁用；未设置时继承表单/分组",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "readonly",
+      "description": "是否只读；未设置时继承表单/分组",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "error",
+      "description": "错误态；未设置时继承表单/分组",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "presentation",
+      "type": "'inline' | 'click' | 'dblclick'",
+      "defaultValue": "undefined",
+      "description": "字段编辑方式，字段 > FormItem > Form 继承；默认 inline。",
+      "kind": "enum",
+      "options": [
+        "inline",
+        "click",
+        "dblclick"
+      ],
+      "initial": "inline"
+    },
+    {
+      "name": "read-pretty",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "纯阅读展示；字段 > FormItem > Form 继承，显式 false 覆盖父级。",
+      "kind": "boolean"
+    },
+    {
+      "name": "before-commit",
+      "type": "BeforeFieldCommit",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "callback"
+    },
+    {
+      "name": "open",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "default-open",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "popup-container",
+      "type": "string | HTMLElement | false",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "json",
+      "initial": "\"body\""
+    },
+    {
+      "name": "checked-color",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "实例颜色及图标长度，number 为 px。",
+      "kind": "string",
+      "initial": "#5268cc"
+    },
+    {
+      "name": "unchecked-color",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "string",
+      "initial": "#5268cc"
+    },
+    {
+      "name": "icon-size",
+      "type": "string | number",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "scalar"
+    },
+    {
+      "name": "ripple",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "触控水波纹。",
+      "kind": "boolean"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "原生表单字段名；缺省继承分组。",
+      "kind": "string"
+    },
+    {
+      "name": "input-attrs",
+      "type": "InputHTMLAttributes",
+      "defaultValue": "undefined",
+      "description": "原生 input 属性，受控状态由组件管理。",
+      "kind": "scenario"
+    },
+    {
+      "name": "aria-label",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "无障碍名称。",
+      "kind": "string"
+    },
+    {
+      "name": "uninject-group-context",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "内部复合控件隔离分组上下文。",
+      "kind": "boolean"
+    },
+    {
+      "name": "radio",
+      "description": "原生字段名，子项覆盖分组",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "radio-group",
+      "description": "原生字段名，子项覆盖分组",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    }
+  ],
+  "methodNames": [
+    "select",
+    "focus",
+    "blur"
+  ],
+  "events": [
+    "update:modelValue",
+    "change",
+    "focus",
+    "blur"
+  ],
+  "slotNames": [
+    "radio"
+  ],
+  "slotDefaults": {
+    "radio": true
+  },
+  "scenarios": []
+}

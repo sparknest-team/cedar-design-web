@@ -1,96 +1,41 @@
 <script setup lang="ts">
 import { ref } from "vue";
-const modes = ["default", "fill", "line"] as const;
-const types = ["circle", "wave", "cube", "rect", "disappear"] as const;
-const variants = ["default", "tonal", "outline", "text"] as const;
-const sizes = ["xs", "sm", "md", "lg", "xl", 20] as const;
-const size = ref<(typeof sizes)[number]>("sm");
-const mode = ref<(typeof modes)[number]>("default");
-const variant = ref<(typeof variants)[number]>("default");
+const mode = ref("default");
+const size = ref("md");
+const modes = ["default", "fill", "line"];
+const sizes = ["xs", "sm", "md", "lg", "xl"];
+const types = ["circle", "wave", "cube", "rect", "disappear"];
 </script>
 <template>
-  <div class="demo-panel">
-    <div class="demo-controls">
-      <div class="demo-control">
-        <span class="demo-label">Loading size</span
-        ><c-radio-group v-model="size"
-          ><c-radio v-for="value in sizes" :key="value" :value="value">{{
-            typeof value === "number" ? `${value}px` : value
-          }}</c-radio></c-radio-group
-        >
-      </div>
-      <div class="demo-control">
-        <span class="demo-label">Loading mode</span
-        ><c-radio-group v-model="mode"
-          ><c-radio v-for="value in modes" :key="value" :value="value">{{
-            value
-          }}</c-radio></c-radio-group
-        >
-      </div>
-      <div class="demo-control">
-        <span class="demo-label">Variant</span
-        ><c-radio-group v-model="variant"
-          ><c-radio v-for="value in variants" :key="value" :value="value">{{
-            value
-          }}</c-radio></c-radio-group
-        >
-      </div>
-    </div>
-    <div class="demo-preview" :data-loading-size="size">
-      <c-button
-        v-for="type in types"
+  <c-space direction="column" :size="16">
+    <c-space wrap>
+      <label
+        >Layout<c-select
+          v-model="mode"
+          :clearable="false"
+          :options="modes.map((value) => ({ label: value, value }))"
+          aria-label="Loading mode"
+      /></label>
+      <label
+        >Size<c-select
+          v-model="size"
+          :disabled="mode === 'line'"
+          :clearable="false"
+          :options="sizes.map((value) => ({ label: value, value }))"
+          aria-label="Loading size"
+      /></label>
+    </c-space>
+    <p v-if="mode === 'line'">line 使用底部进度线，loading-type 和 loading-size 不适用；可通过 loading-color 调整颜色。</p>
+    <c-space wrap
+      ><c-button
+        v-for="type in mode === 'line' ? ['line'] : types"
         :key="type"
         loading
-        :size="size === 'xl' ? 'xl' : size === 'lg' ? 'lg' : 'md'"
-        :loading-type="type"
-        :loading-size="size"
+        :loading-type="mode === 'line' ? 'circle' : type"
         :loading-mode="mode"
-        :variant="variant"
+        :loading-size="size"
         >{{ type }}</c-button
-      >
-    </div>
-    <div class="demo-control">
-      <span class="demo-label">Custom color / radius</span>
-      <div>
-        <c-button loading loading-color="#e05279" :loading-radius="8"
-          >Custom spinner</c-button
-        >
-      </div>
-    </div>
-  </div>
+      ></c-space
+    >
+  </c-space>
 </template>
-
-<style scoped>
-.demo-panel {
-  display: grid;
-  gap: 20px;
-}
-.demo-controls {
-  display: grid;
-  gap: 16px;
-}
-.demo-control {
-  display: grid;
-  gap: 8px;
-}
-.demo-label {
-  font-size: 13px;
-  opacity: 0.7;
-}
-.demo-toggles,
-.demo-preview {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
-}
-.demo-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-.demo-preview {
-  min-height: 64px;
-  padding-block: 8px;
-}
-</style>

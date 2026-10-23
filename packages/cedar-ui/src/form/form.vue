@@ -5,19 +5,32 @@
 </template>
 
 <script lang="ts">
-import { useFormLabelWidths } from './use-form-label-width'
-import { formProps } from './props'
-import { createNamespace } from '../_utils/global-config'
-import { computed, defineComponent, PropType, provide, reactive, toRefs, ref } from 'vue'
+import {
+  computed,
+  defineComponent,
+  onActivated,
+  onBeforeUnmount,
+  onDeactivated,
+  onMounted,
+  PropType,
+  provide,
+  reactive,
+  ref,
+  toRefs,
+  watch,
+} from 'vue'
 import scrollIntoView, { Options as ScrollIntoViewOptions } from 'scroll-into-view-if-needed'
-import { FormItemInfo, formInjectionKey, FormContext } from './context'
-import { getPrefixCls } from '../_utils/global-config'
-import { ComponentSize } from '../_utils/constant'
-import { FieldData, FieldRule, ValidatedError } from './types'
+import { provideFormPresentation } from '../_components/field-presentation/context'
 import { useSize } from '../_hooks/use-size'
-import { getFormElementId } from './utils'
+import { ComponentSize } from '../_utils/constant'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import { toPxNum } from '../_utils/maple/elements'
-import { createFormController, type FormValidateErrors } from './form-controller'
+import { FormContext, formInjectionKey, FormItemInfo } from './context'
+import { createFormController, type FormFieldController, type FormValidateErrors } from './form-controller'
+import { formProps } from './props'
+import { FieldData, FieldRule, ValidatedError } from './types'
+import { useFormLabelWidths } from './use-form-label-width'
+import { getFormElementId } from './utils'
 
 const FORM_LAYOUTS = ['horizontal', 'vertical', 'inline'] as const
 type FormLayout = (typeof FORM_LAYOUTS)[number]
@@ -64,6 +77,10 @@ export default defineComponent({
     reset: (ev: Event) => true,
   },
   setup(props, { emit }) {
+    const presentationState = provideFormPresentation(
+      () => props.presentation,
+      () => props.readPretty,
+    )
     const prefixCls = getPrefixCls('form')
     const formRef = ref<HTMLFormElement>()
     const {
@@ -89,13 +106,51 @@ export default defineComponent({
 
     const { maxLabelWidth, setLabelWidth, removeLabelWidth } = useFormLabelWidths()
 
-    const scrollToField = (field: string, options?: ScrollIntoViewOptions) => {
-      const node = formRef.value || document.body
+    let scrollMounted = false
+    let scrollActive = true
+    let scrollDisposed = false
+    let scrollEpoch = 0
+    let invalidScrollContext: { epoch: number; mode: typeof props.scrollToError } | undefined
+    const canScroll = () => scrollMounted && scrollActive && !scrollDisposed && !!formRef.value
+    const invalidateScroll = () => {
+      scrollEpoch++
+    }
+    onMounted(() => {
+      scrollMounted = true
+    })
+    onActivated(() => {
+      scrollActive = true
+    })
+    onDeactivated(() => {
+      scrollActive = false
+      invalidateScroll()
+    })
+    onBeforeUnmount(() => {
+      scrollDisposed = true
+      invalidateScroll()
+    })
+    watch(() => props.scrollToError, invalidateScroll, { flush: 'sync' })
+
+    const scrollToField = (field: string, options?: ScrollIntoViewOptions, offset = 0, isEligible = () => true) => {
+      if (!canScroll()) return
+      const epoch = ++scrollEpoch
+      const node = formRef.value!
       const fieldNode = Array.from(node.querySelectorAll('[id]')).find(
         (element) => element.id === getFormElementId(props.id, field),
       )
+      const isCurrent = () =>
+        canScroll() &&
+        epoch === scrollEpoch &&
+        formRef.value === node &&
+        !!fieldNode &&
+        node.contains(fieldNode) &&
+        fieldNode.id === getFormElementId(props.id, field) &&
+        isEligible() &&
+        canScroll() &&
+        epoch === scrollEpoch
+      let pendingActions = true
 
-      if (fieldNode) {
+      if (fieldNode && isCurrent()) {
         scrollIntoView(
           fieldNode as HTMLDivElement,
           {
@@ -103,36 +158,52 @@ export default defineComponent({
             block: 'nearest',
             scrollMode: 'if-needed',
             ...options,
+            ...(offset
+              ? {
+                  behavior: (actions) => {
+                    if (!pendingActions) return
+                    pendingActions = false
+                    actions.forEach(({ el, top, left }) => {
+                      if (isCurrent())
+                        el.scrollTo({
+                          top: top - offset,
+                          left,
+                          behavior: 'smooth',
+                        })
+                    })
+                  },
+                }
+              : {}),
           } as Parameters<typeof scrollIntoView>[1],
         )
       }
     }
 
-    const scrollToError = (errors: Record<string, ValidatedError>) => {
-      if (!props.scrollToError || !formRef.value) return
+    const scrollToError = (
+      errors: Record<string, ValidatedError>,
+      items: FormFieldController<ValidatedError, FieldData>[],
+    ) => {
+      const context = invalidScrollContext
+      invalidScrollContext = undefined
+      if (!context?.mode || !canScroll() || context.epoch !== scrollEpoch || context.mode !== props.scrollToError)
+        return
       // Use rendered order, not object-key/registration order (numeric fields can reorder).
-      const fieldById = new Map(Object.keys(errors).map((field) => [getFormElementId(props.id, field), field]))
-      const nodes = Array.from(formRef.value.querySelectorAll('[id]')).filter((element) => fieldById.has(element.id))
-      const node = props.scrollToError === 'end' ? nodes[nodes.length - 1] : nodes[0]
-      if (node) {
+      const fieldById = new Map(
+        items
+          .filter((item) => errors[item.field] && controller.fields.includes(item))
+          .map((item) => [getFormElementId(props.id, item.field), { item, field: item.field }]),
+      )
+      const nodes = Array.from(formRef.value!.querySelectorAll('[id]')).filter((element) => fieldById.has(element.id))
+      const node = context.mode === 'end' ? nodes[nodes.length - 1] : nodes[0]
+      if (node && context.epoch === scrollEpoch) {
+        const target = fieldById.get(node.id)!
         const parsedOffset = toPxNum(props.scrollToErrorOffsetY)
         const offset = Number.isFinite(parsedOffset) ? parsedOffset : 0
         scrollToField(
-          fieldById.get(node.id)!,
-          offset
-            ? {
-                block: 'start',
-                behavior: (actions) => {
-                  actions.forEach(({ el, top, left }) =>
-                    el.scrollTo({
-                      top: top - offset,
-                      left,
-                      behavior: 'smooth',
-                    }),
-                  )
-                },
-              }
-            : undefined,
+          target.field,
+          offset ? { block: 'start' } : undefined,
+          offset,
+          () => controller.fields.includes(target.item) && target.item.field === target.field,
         )
       }
     }
@@ -140,22 +211,75 @@ export default defineComponent({
     const controller = createFormController<ValidatedError, FieldData>({
       onInvalid: scrollToError,
     })
+    const validateForScroll = controller.validate
+    controller.validate = (fields, callback) => {
+      invalidateScroll()
+      const context = { epoch: scrollEpoch, mode: props.scrollToError }
+      return validateForScroll(fields, (errors) => {
+        callback?.(errors)
+        invalidScrollContext = context
+      })
+    }
     const fields = controller.fields
     const unregisterFields = new WeakMap<FormItemInfo, () => void>()
     const addField = (formItemInfo: FormItemInfo) => {
+      if (unregisterFields.has(formItemInfo)) return
       unregisterFields.set(formItemInfo, controller.registerField(formItemInfo))
     }
     const removeField = (formItemInfo: FormItemInfo) => {
       unregisterFields.get(formItemInfo)?.()
       unregisterFields.delete(formItemInfo)
     }
-    const validate = (callback?: (errors: FormValidateErrors<ValidatedError>) => void) =>
-      controller.validate(undefined, callback)
-    const validateField = (field: string | string[], callback?: (errors: FormValidateErrors<ValidatedError>) => void) =>
-      controller.validate(field, callback)
-
+    let submitEpoch = 0
+    const invalidateSubmit = () => {
+      submitEpoch++
+    }
+    const validate = (callback?: (errors: FormValidateErrors<ValidatedError>) => void) => {
+      invalidateSubmit()
+      return controller.validate(undefined, callback)
+    }
+    const validateField = (
+      field: string | string[],
+      callback?: (errors: FormValidateErrors<ValidatedError>) => void,
+    ) => {
+      invalidateSubmit()
+      return controller.validate(field, callback)
+    }
+    onBeforeUnmount(invalidateSubmit)
+    onDeactivated(invalidateSubmit)
+    const resetFields = (field?: string | string[]) => {
+      invalidateSubmit()
+      invalidateScroll()
+      presentationState.cancel(field)
+      controller.resetFields(field)
+    }
+    const clearValidate = (field?: string | string[]) => {
+      invalidateSubmit()
+      invalidateScroll()
+      controller.clearValidate(field)
+    }
+    const setFields = (data: Record<string, FieldData>) => {
+      invalidateSubmit()
+      invalidateScroll()
+      controller.setFields(data)
+    }
     const handleSubmit = (e: Event) => {
-      validate().then((errors) => {
+      if (presentationState.blocked()) {
+        emit(
+          'submit-failed',
+          {
+            values: model.value ?? {},
+            errors: {
+              editing: { field: 'editing', message: '请先完成当前字段编辑' },
+            } as any,
+          },
+          e,
+        )
+        return
+      }
+      const epoch = ++submitEpoch
+      controller.validate().then((errors) => {
+        if (epoch !== submitEpoch) return
         if (errors) {
           emit('submit-failed', { values: model.value ?? {}, errors }, e)
         } else {
@@ -165,7 +289,7 @@ export default defineComponent({
       })
     }
     const handleReset = (e: Event) => {
-      controller.resetFields()
+      resetFields()
       emit('reset', e)
     }
 
@@ -213,9 +337,9 @@ export default defineComponent({
       handleReset,
       innerValidate: validate,
       innerValidateField: validateField,
-      innerResetFields: controller.resetFields,
-      innerClearValidate: controller.clearValidate,
-      innerSetFields: controller.setFields,
+      innerResetFields: resetFields,
+      innerClearValidate: clearValidate,
+      innerSetFields: setFields,
       innerScrollToField: scrollToField,
     }
   },

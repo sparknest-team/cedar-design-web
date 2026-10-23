@@ -6,6 +6,10 @@ permalink: /components/breadcrumb/
 
 面包屑是辅助导航模式，用于识别页面在层次结构内的位置，并根据需要向上返回。
 
+当前位置（最后一级）默认使用主文字色，不额外加粗，并标记 `aria-current="page"`。纯文本无点击反馈；配置 `href` 的链接、绑定 `@click` 的操作和下拉入口显示品牌色、手型及悬停 / 按下反馈，键盘聚焦时显示焦点轮廓。`@click` 操作支持 Enter 和空格。最后一级通常保持纯文本；显式提供链接或操作时仍可交互。
+
+触屏设备上，可点击项的触摸区域至少为 44 × 44px；按下显示底色和下划线，松手后恢复，不保留鼠标悬停效果。省略图标支持点击查看隐藏路径。
+
 ## 案例
 
 ### 基本用法
@@ -29,7 +33,7 @@ permalink: /components/breadcrumb/
 ### 参数化配置
 
 通过`routes`来传递面包屑数据。若是要自定义面包屑的话，建议使用`BreadcrumbItem`
-组件默认使用a标签的href属性绑定路径，可通过`item`插槽自定义渲染
+组件默认仅为前面的层级渲染链接，最后一级保持文本；可通过 `item-render` 插槽自定义渲染。
 
 <demo src="./__demos__/routes.vue"></demo>
 
@@ -47,9 +51,16 @@ permalink: /components/breadcrumb/
 
 ### 链接与点击
 
-子项可通过 `href` 渲染为链接；`click` 事件不会在省略项触发。
+对比纯文本、`href` 链接和 `@click` 操作。点击后下方显示选择结果；最后一级默认保持纯文本。省略项不会触发 `click`。
 
 <demo src="./__demos__/link.vue"></demo>
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
 
 ## API
 
@@ -76,7 +87,7 @@ permalink: /components/breadcrumb/
 | separator      | 分隔符文字   | `string \| number`            | `-`    |
 | href           | 跳转链接     | `string`                      | `-`    |
 | droplist       | 下拉菜单内容 | `BreadcrumbRoute['children']` | `-`    |
-| dropdown-props | 下拉菜单属性 | `DropdownMenuProps`           | `-`    |
+| dropdown-props | 下拉菜单属性 | `MenuProps`           | `-`    |
 
 ### BreadcrumbItem Events
 

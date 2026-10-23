@@ -8,11 +8,10 @@ const range = ref(["09:00:00", "18:00:00"]);
 </script>
 <template>
   <c-space direction="column" :size="12" style="width: 100%">
-    <label
-      ><input v-model="readonly" type="checkbox" />
-      只读字段仍可聚焦，但不能展开修改</label
+    <c-checkbox v-model="readonly">
+      只读字段仍可聚焦，但不能展开修改</c-checkbox
     >
-    <input placeholder="在这里按 Enter，不会打开时间面板" />
+    <c-input placeholder="在这里按 Enter，不会打开时间面板" />
     <small aria-live="polite">{{ lastEvent }}</small>
     <div aria-live="polite">
       <div>开始模型: {{ start ?? "undefined" }}</div>

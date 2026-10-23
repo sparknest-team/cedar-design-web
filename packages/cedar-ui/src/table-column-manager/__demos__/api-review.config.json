@@ -1,0 +1,174 @@
+{
+  "fields": [
+    {
+      "name": "model-value",
+      "description": "已选列完整状态（顺序、标题、冻结）",
+      "type": "ColumnManagerItem[]",
+      "defaultValue": "-",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "default-value",
+      "description": "非受控初始已选状态",
+      "type": "ColumnManagerItem[]",
+      "defaultValue": "-",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "columns",
+      "description": "当前表格列，确认时拼回完整列定义",
+      "type": "TableColumnData[]",
+      "defaultValue": "[]",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "options",
+      "description": "左侧列定义",
+      "type": "ColumnDefinitions",
+      "defaultValue": "[]",
+      "kind": "scenario"
+    },
+    {
+      "name": "load-options",
+      "description": "异步加载列定义",
+      "type": "() => Promise<ColumnDefinitions>",
+      "defaultValue": "-",
+      "kind": "callback"
+    },
+    {
+      "name": "remote-search",
+      "description": "远程搜索（有值时隐藏顶栏全选）",
+      "type": "(keyword: string) => Promise<void>",
+      "defaultValue": "-",
+      "kind": "callback"
+    },
+    {
+      "name": "fallback-item",
+      "description": "值不在定义中时反显",
+      "type": "(dataIndex: string) => ColumnDefinition | undefined",
+      "defaultValue": "-",
+      "kind": "callback"
+    },
+    {
+      "name": "insert-at",
+      "description": "插入上下文，影响新增列落点",
+      "type": "{ dataIndex: string; side: 'left' | 'right' }",
+      "defaultValue": "-",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "open",
+      "description": "抽屉是否可见（v-model:open）",
+      "type": "boolean",
+      "defaultValue": "-",
+      "kind": "boolean"
+    },
+    {
+      "name": "drawer-title",
+      "description": "抽屉标题",
+      "type": "string",
+      "defaultValue": "自定义列",
+      "kind": "string"
+    },
+    {
+      "name": "drawer-width",
+      "description": "抽屉宽度",
+      "type": "number | string",
+      "defaultValue": "720",
+      "kind": "scalar"
+    },
+    {
+      "name": "inline",
+      "description": "是否只渲染内联面板（不渲染抽屉）",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "placeholder",
+      "description": "搜索框占位",
+      "type": "string",
+      "defaultValue": "-",
+      "kind": "string"
+    }
+  ],
+  "events": [
+    "update:modelValue",
+    "update:open",
+    "confirm",
+    "change"
+  ],
+  "scenarios": [
+    {
+      "name": "model-value",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "default-value",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "columns",
+      "kind": "prop",
+      "demos": [
+        "basic.vue",
+        "remote.vue",
+        "with-table-header-menu.vue",
+        "with-table-ungrouped.vue",
+        "with-table.vue"
+      ]
+    },
+    {
+      "name": "options",
+      "kind": "prop",
+      "demos": [
+        "basic.vue",
+        "with-table.vue"
+      ]
+    },
+    {
+      "name": "load-options",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "remote-search",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "fallback-item",
+      "kind": "prop",
+      "demos": [
+        "basic.vue"
+      ]
+    },
+    {
+      "name": "insert-at",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "get-result",
+      "kind": "method",
+      "demos": []
+    },
+    {
+      "name": "load-catalog",
+      "kind": "method",
+      "demos": []
+    }
+  ],
+  "slotNames": [],
+  "slotDefaults": {},
+  "methodNames": [
+    "get-result",
+    "load-catalog"
+  ]
+}

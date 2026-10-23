@@ -1,0 +1,227 @@
+{
+  "fields": [
+    {
+      "name": "model-value",
+      "description": "绑定值",
+      "type": "Date | string | number",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "\"2026-10-21\""
+    },
+    {
+      "name": "type",
+      "description": "面板类型",
+      "type": "date | week | month | year | quarter",
+      "defaultValue": "date",
+      "kind": "enum",
+      "options": [
+        "date",
+        "week",
+        "month",
+        "year",
+        "quarter"
+      ],
+      "initial": "date"
+    },
+    {
+      "name": "format",
+      "description": "展示格式",
+      "type": "string | Function",
+      "defaultValue": "undefined",
+      "kind": "string",
+      "initial": "YYYY-MM-DD"
+    },
+    {
+      "name": "day-start-of-week",
+      "description": "每周第一天（仅日历），整数 0～6",
+      "type": "0 | 1 | 2 | 3 | 4 | 5 | 6",
+      "defaultValue": "0",
+      "kind": "enum",
+      "options": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "initial": "0"
+    },
+    {
+      "name": "readonly",
+      "description": "只读，不更改选择",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "time-picker-props",
+      "description": "本库时间面板展示选项",
+      "type": "Partial<TimePickerProps>",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "show-time",
+      "description": "选择时间",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "disabled",
+      "description": "禁用",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "disabled-date",
+      "description": "禁用日期",
+      "type": "Function",
+      "defaultValue": "undefined",
+      "kind": "callback"
+    },
+    {
+      "name": "default-value",
+      "type": "Date | string | number",
+      "defaultValue": "undefined",
+      "description": "@zh 默认值\n@en Default value\n/",
+      "kind": "json",
+      "initial": "\"2026-10-21\""
+    },
+    {
+      "name": "mode",
+      "type": "'date' | 'year' | 'quarter' | 'month' | 'week'",
+      "defaultValue": "'date'",
+      "description": "@zh 选择器类型\n@en Picker type\n/",
+      "kind": "enum",
+      "options": [
+        "date",
+        "year",
+        "quarter",
+        "month",
+        "week"
+      ],
+      "initial": "date"
+    },
+    {
+      "name": "disabled-time",
+      "type": "(current: Date) => DisabledTimeProps",
+      "defaultValue": "undefined",
+      "description": "@zh 不可选取的时间\n@en Unselectable time\n/",
+      "kind": "callback"
+    },
+    {
+      "name": "show-now-button",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "@zh 是否显示 `showTime` 时，选择当前时间的按钮\n@en Whether to display the now button when showTime\n/",
+      "kind": "boolean"
+    },
+    {
+      "name": "value-format",
+      "description": "模型与事件的格式，可为自定义日期格式、Date 或 timestamp",
+      "type": "string",
+      "defaultValue": "随 type",
+      "kind": "string"
+    },
+    {
+      "name": "use-seconds",
+      "description": "默认时间精度；显式 format 优先",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "min",
+      "description": "包含端点的边界；字符串按 value-format 解析",
+      "type": "DateValue",
+      "defaultValue": "—",
+      "kind": "json",
+      "initial": "\"2026-10-21\""
+    },
+    {
+      "name": "max",
+      "description": "包含端点的边界；字符串按 value-format 解析",
+      "type": "DateValue",
+      "defaultValue": "—",
+      "kind": "json",
+      "initial": "\"2026-10-21\""
+    },
+    {
+      "name": "disable-confirm",
+      "description": "选择后立即提交",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    }
+  ],
+  "events": [
+    "update:modelValue",
+    "select",
+    "change",
+    "confirm"
+  ],
+  "scenarios": [
+    {
+      "name": "model-value",
+      "kind": "prop",
+      "demos": [
+        "time-presentation.vue"
+      ]
+    },
+    {
+      "name": "format",
+      "kind": "prop",
+      "demos": [
+        "current-range.vue",
+        "field-panel-tools.vue",
+        "locale-isolation.vue",
+        "show-time.vue",
+        "text-entry.vue"
+      ]
+    },
+    {
+      "name": "time-picker-props",
+      "kind": "prop",
+      "demos": [
+        "time-presentation.vue"
+      ]
+    },
+    {
+      "name": "disabled-date",
+      "kind": "prop",
+      "demos": [
+        "disabled-parts.vue",
+        "disabled.vue",
+        "dynamic-range.vue"
+      ]
+    },
+    {
+      "name": "default-value",
+      "kind": "prop",
+      "demos": [
+        "basic.vue",
+        "default-value.vue",
+        "panel-tools.vue",
+        "panel.vue",
+        "range-panel.vue",
+        "range.vue",
+        "show-time.vue"
+      ]
+    },
+    {
+      "name": "disabled-time",
+      "kind": "prop",
+      "demos": [
+        "disabled-parts.vue"
+      ]
+    }
+  ],
+  "slotNames": [],
+  "slotDefaults": {},
+  "methodNames": []
+}

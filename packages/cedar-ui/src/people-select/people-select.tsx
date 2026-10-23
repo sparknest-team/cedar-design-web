@@ -1,11 +1,23 @@
-import { computed, defineComponent, onMounted, reactive, ref, useAttrs, useSlots, watch } from 'vue'
+import {
+  computed,
+  defineComponent,
+  inject,
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  ref,
+  useAttrs,
+  useSlots,
+  watch,
+} from 'vue'
+import { selectionEditorSurface } from '../_components/selected-options/context'
+import { useFormItem } from '../_hooks/use-form-item'
 import Select, { Option } from '../select'
 import { peopleSelectProps } from './props'
 import Empty from '../empty'
 import { useFetch } from '../_utils/use-fetch'
 import { useApi } from './useApi'
 import { createNamespace } from '../_utils/global-config'
-
 
 const { name } = createNamespace('people-select')
 
@@ -17,6 +29,11 @@ export default defineComponent({
   emits: ['change', 'clear', 'update:modelValue'],
 
   setup(props, { emit }) {
+    const editor = inject(selectionEditorSurface, undefined)
+    const { mergedDisabled, mergedReadonly } = useFormItem({
+      disabled: computed(() => props.disabled),
+      readonly: computed(() => props.readonly),
+    })
     const attrs = useAttrs()
     const slots = useSlots()
     const fieldProps = reactive({
@@ -25,6 +42,23 @@ export default defineComponent({
       userMobile: '',
     })
     const loading = ref(false)
+    const panelOpen = ref(false)
+    let searchRequest = 0
+    let detailRequest = 0
+    onBeforeUnmount(() => {
+      searchRequest += 1
+      detailRequest += 1
+    })
+    watch(
+      [mergedDisabled, mergedReadonly],
+      () => {
+        if (mergedDisabled.value || mergedReadonly.value) {
+          searchRequest += 1
+          loading.value = false
+        }
+      },
+      { flush: 'sync' },
+    )
     const peopleList = ref<Record<string, any>[]>([])
     const peopleListSelected = ref<Record<string, any>[]>([])
     const urlType_ = ref(props?.urlType)
@@ -41,9 +75,12 @@ export default defineComponent({
       return userName
     })
     const initPeople = () => {
+      const detail = ++detailRequest
       if (props.modelValue) {
         fieldProps.userId = props.modelValue
+        const selectedId = props.modelValue
         getPeopleFromNaponen(fieldProps.userId).then((res: any) => {
+          if (detail !== detailRequest || props.modelValue !== selectedId) return
           if (props.modelValue === 'oss') {
             fieldProps.userId = 'oss'
             fieldProps.userMobile = ''
@@ -77,9 +114,13 @@ export default defineComponent({
     )
 
     const onLoadPeople = (userId?: string) => {
+      if (mergedDisabled.value || mergedReadonly.value) return
       // 加载状态结束
       loading.value = true
+      peopleList.value = []
+      const request = ++searchRequest
       getPeople(userId).then((res: any) => {
+        if (request !== searchRequest) return
         if (res.resultCode === 'success') {
           res.data.result_list.forEach((user: any) => {
             user.userId = user.user_id
@@ -92,19 +133,40 @@ export default defineComponent({
         loading.value = false
       })
     }
+    const onQueryChange = () => {
+      if (!panelOpen.value || mergedDisabled.value || mergedReadonly.value) return
+      searchRequest++
+      peopleList.value = []
+      loading.value = true
+    }
+    const onPanelChange = (visible: boolean) => {
+      panelOpen.value = visible
+      if (!visible) {
+        searchRequest++
+        loading.value = false
+        peopleList.value = []
+      } else if (!loading.value && !peopleList.value.length) {
+        onLoadPeople()
+      }
+    }
     onMounted(() => {
       initPeople()
       onLoadPeople()
     })
     const onPeopleClear = () => {
+      if (mergedDisabled.value || mergedReadonly.value) return
+      detailRequest += 1
       fieldProps.userId = ''
       fieldProps.userName = ''
       fieldProps.userMobile = ''
       emit('update:modelValue', fieldProps.userId) // 更新prop的值
       emit('clear')
       emit('change', fieldProps.userId)
+      if (panelOpen.value) onLoadPeople()
     }
     const onPeopleChange = (value: any) => {
+      if (mergedDisabled.value || mergedReadonly.value || loading.value) return
+      detailRequest += 1
       peopleListSelected.value = []
       const people = peopleList.value.find((item) => item.userId === value)
       if (people) {
@@ -118,7 +180,7 @@ export default defineComponent({
         } else {
           fieldProps.userId = people.worker_user_id
           fieldProps.userMobile = people.mobile
-          // fieldProps.userName = people.userName
+          fieldProps.userName = people.userName
         }
         emit('update:modelValue', fieldProps.userId) // 更新prop的值
         emit('change', fieldProps.userId)
@@ -129,22 +191,25 @@ export default defineComponent({
         <Select
           {...attrs}
           {...props}
+          disabled={mergedDisabled.value}
+          readonly={mergedReadonly.value}
+          open={editor && !mergedDisabled.value && !mergedReadonly.value ? true : undefined}
           modelValue={fieldProps.userId}
           loading={loading.value}
           onSearch={onLoadPeople}
+          onUpdate:inputValue={onQueryChange}
+          onOpen-change={onPanelChange}
           filterable
           filterOption={false}
+          showExtraOptions={false}
+          fallbackOption={(value) => ({
+            value,
+            label: peopleListSelected.value.find((item) => item.userId === value)?.userName ?? String(value),
+          })}
           v-slots={slots}
           onChange={onPeopleChange}
           onClear={onPeopleClear}
         >
-          {peopleListSelected.value.map((item) => {
-            return (
-              <Option style="display:none" value={item.userId}>
-                {item.userName}
-              </Option>
-            )
-          })}
           {peopleList.value.map((item) => {
             return <Option value={item.userId}>{item.userName}</Option>
           })}

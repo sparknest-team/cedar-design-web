@@ -8,6 +8,10 @@ permalink: /components/loading/
 
 ## 案例
 
+### 大小
+
+<demo src="./__demos__/size.vue"></demo>
+
 ### 类型
 
 <demo src="./__demos__/type.vue"></demo>
@@ -16,17 +20,22 @@ permalink: /components/loading/
 
 <demo src="./__demos__/color.vue"></demo>
 
-### 大小
-
-<demo src="./__demos__/size.vue"></demo>
-
 ### 包裹内容
 
 <demo src="./__demos__/wrap.vue"></demo>
 
 ### 加载指令
 
+两种指令示例分别维护加载状态，控件与宿主卡片通过 `Space direction="column"` 纵向排列；关闭一个不会影响另一个遮罩。
+
 <demo src="./__demos__/directive.vue"></demo>
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
 
 ## API
 

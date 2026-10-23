@@ -4,7 +4,7 @@ const score = ref(2.5)
 </script>
 
 <template>
-  <c-space direction="vertical">
+  <c-space direction="column">
     <p>Tab 聚焦；方向键按半分调整；Home 清零，End 满分。重复点击当前分数可清空。</p>
     <c-rate v-model="score" allow-half clearable aria-label="服务评分" />
     <span>当前评分：{{ score }}</span>

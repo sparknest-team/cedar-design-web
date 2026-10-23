@@ -1,0 +1,66 @@
+{
+  "fields": [
+    {
+      "name": "status",
+      "description": "结果页显示的状态",
+      "type": "\"info\" | \"success\" | \"warning\" | \"danger\" | \"question\" | \"empty\" | \"403\" | \"404\" | \"500\"",
+      "defaultValue": "\"info\"",
+      "kind": "enum",
+      "options": [
+        "info",
+        "success",
+        "warning",
+        "danger",
+        "question",
+        "empty",
+        "403",
+        "404",
+        "500"
+      ],
+      "initial": "info"
+    },
+    {
+      "name": "title",
+      "description": "标题内容",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "subtitle",
+      "description": "子标题内容",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "image-size",
+      "description": "状态图形尺寸，数字表示 px",
+      "type": "string | number",
+      "defaultValue": "undefined",
+      "kind": "scalar"
+    },
+    {
+      "name": "animation",
+      "description": "是否启用状态图形动画",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    }
+  ],
+  "methodNames": [],
+  "events": [],
+  "slotNames": [
+    "icon",
+    "subtitle",
+    "extra",
+    "title"
+  ],
+  "slotDefaults": {
+    "icon": true,
+    "subtitle": true,
+    "extra": true,
+    "title": false
+  },
+  "scenarios": []
+}

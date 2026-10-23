@@ -6,12 +6,7 @@ permalink: /components/textarea/
 
 Textarea 是用于多行纯文本编辑的基础表单控件，适合评论、反馈和说明等较长内容。
 
-## 设计要点
-
-- 默认使用 `outline` 外观，`clearable` 默认关闭。
-- `input` 表示实时编辑，`change` 在失焦值变化或清空时提交；Enter 保持换行语义。
-- `auto-size` 开启后由内容决定高度，并覆盖 `rows` 与手动 `resize` 的视觉结果。
-- Form/FormItem 负责业务校验规则和消息，Textarea 只提供事件信号和错误视觉状态。
+默认长度按 UTF-16 码元计算（emoji 通常占 2）；默认截断不会拆开有效的代理对，边界不足时舍去整个字符。若需按用户感知字符（字素簇）计数和裁剪，请配套提供 `word-length` 与 `word-slice`；自定义裁剪结果由业务负责。
 
 ## 案例
 
@@ -47,12 +42,6 @@ Textarea 是用于多行纯文本编辑的基础表单控件，适合评论、�
 
 <demo src="./__demos__/interaction.vue"></demo>
 
-### 前缀、后缀和清除图标
-
-<demo src="./__demos__/slots.vue"></demo>
-
-自定义 `clear-icon` 会收到 `clear(event?)` 方法。自定义交互元素需要保留可访问名称和键盘操作。
-
 ### 原生属性与无障碍
 
 通过 `textarea-attrs` 补充 `name`、`autocomplete`、`inputmode`、`aria-describedby` 等原生属性。组件管理的值、禁用、只读、行数、长度、核心事件和错误态具有更高优先级。
@@ -65,12 +54,43 @@ Textarea 是用于多行纯文本编辑的基础表单控件，适合评论、�
 
 <demo src="./__demos__/body-contract.vue"></demo>
 
+### 外观组合
+
+适用于备注、说明等多行输入。调整变体、尺寸，用相同数据观察变化。内容保持一致，便于比较不同设置的实际效果。
+
+<demo src="./__demos__/appearance-lab.vue"></demo>
+
+### 交互状态切换
+
+适用于备注、说明等多行输入。调整禁用、只读、错误反馈，用相同数据观察变化。控制区始终可用，可以随时恢复编辑；错误外观本身不会触发表单校验。
+
+<demo src="./__demos__/state-lab.vue"></demo>
+
+### 前缀、后缀和清除图标
+
+<demo src="./__demos__/slots.vue"></demo>
+
+自定义 `clear-icon` 会收到 `clear(event?)` 方法。自定义交互元素需要保留可访问名称和键盘操作。
+
+## 设计要点
+
+- 默认使用 `outline` 外观，`clearable` 默认关闭。
+- `input` 表示实时编辑，`change` 在失焦值变化或清空时提交；Enter 保持换行语义。
+- `auto-size` 开启后由内容决定高度，并覆盖 `rows` 与手动 `resize` 的视觉结果。
+- Form/FormItem 负责业务校验规则和消息，Textarea 只提供事件信号和错误视觉状态。
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
+
 ## API
 
 ### Textarea Props
 
 支持与 Input 一致的 hint、line、text-color、focus-color、blur-color；hint 未设置时继承 InputGroup/库默认值。外层 FormItem 有标签时隐藏内部浮动提示。
-
 
 
 | 属性                    | 说明                               | 类型                                                | 默认值     |
@@ -164,3 +184,13 @@ size 支持 xs/sm/md/lg/xl 的 FieldDecorator 外壳密度；文本域高度/文
 `TextareaProps`、`TextareaVariant`、`TextareaMaxLength`、`TextareaAutoSize`、`TextareaEmits`、`TextareaSlots`、`TextareaExpose`、`TextareaInstance`。
 
 原生方法：`focus(options?: FocusOptions)`、`blur()`、`select()`；`textareaRef` 为原生元素。
+
+### Form 字段展示与确认
+
+本组件支持 `presentation`，字段 > FormItem > Form 逐层继承；未指定时为 `inline`，保留原有交互。支持值：`inline / click / dblclick`。其他编辑展示使用 Cell 入口和一份草稿，确认后才更新 v-model；取消、重置或启用 readPretty 丢弃草稿。
+
+Cedar 使用 presentation="click" / "dblclick" 在原位进入编辑，Enter/F2 也可进入；取消/Escape 丢弃草稿，确认后提交。 readPretty 为纯阅读属性，与 readonly、disabled 独立。
+
+`before-commit(value, { previousValue, signal })` 可拦截弹层保存；FormItem 先校验候选值，失败保持编辑。`open / default-open / update:open` 控制编辑层。`#read="{ value, text }"` 可自定义阅读内容。集中示例见 Form 的“各类字段统一展示”。
+
+`read-pretty` 为独立布尔属性，与 `readonly`、`disabled` 同级；字段 > FormItem > Form 继承，显式 `false` 覆盖父级。默认 `false`。纯阅读不显示编辑器。

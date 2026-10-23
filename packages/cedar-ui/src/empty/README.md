@@ -14,19 +14,21 @@ permalink: /components/empty/
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### 自定义图片和文案
-
-通过 `image` 插槽自定义图标、图片，或通过默认插槽修改文案。
-
-<demo src="./__demos__/user-define.vue"></demo>
-
 ### 图片尺寸
 
 通过 `image-size` 属性控制图标尺寸，可选值为 `xs` `sm` `md` `lg` `xl`，也可传入数值。
 
 <demo src="./__demos__/size.vue"></demo>
 
+### 自定义图片和文案
+
+通过 `image` 插槽自定义图标、图片，或通过默认插槽修改文案。
+
+<demo src="./__demos__/user-define.vue"></demo>
+
 ### 操作按钮
+
+Reload 只更新本地刷新次数和描述，不请求服务；真实业务请自行接入请求与结果状态。
 
 通过 `extra` 插槽添加操作按钮。
 
@@ -34,9 +36,18 @@ permalink: /components/empty/
 
 ### 显示与隐藏
 
+通过两个按钮分别隐藏和恢复图标、描述。两者同时隐藏不代表隐藏整个组件，也不影响 extra 插槽。
+
 通过 `show-icon`、`show-description` 控制图标和描述是否显示。
 
 <demo src="./__demos__/show.vue"></demo>
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
 
 ## API
 

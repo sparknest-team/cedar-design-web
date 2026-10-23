@@ -40,6 +40,13 @@ Drawer 不提供离散 `size` 枚举；左右位置使用 `width`，上下位置
 
 <demo src="./__demos__/function-call.vue"></demo>
 
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
+
 ## API
 
 ### Props

@@ -110,4 +110,4 @@ StyleProvider.setStyleVars(customTheme)
 | `--c-color-border-1` … `--c-color-border-4` | 边框语义 |
 | `--c-color-scheme` / `--c-color-body` / `--c-color-text` | 主题切换 / body |
 
-完整色阶见 [色板 Palette](/components/palette/)，语义工具类见 [颜色 Color](/components/color/)。
+完整色阶见 [色板 Palette](/components/palette/)，语义工具类见 [颜色 Color](/components/style/color/)。

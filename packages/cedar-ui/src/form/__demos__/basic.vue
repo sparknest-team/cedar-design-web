@@ -16,26 +16,11 @@
   </c-form>
   {{ form.name }}
 </template>
-<script lang="ts">
-import { reactive, ref, defineComponent } from 'vue'
-export default defineComponent({
-  setup() {
-    const refForm = ref<FormInstance>()
-    const form = reactive({
-      name: '',
-      post: '',
-      isRead: false,
-    })
-    const handleSubmit = (data: any) => {
-      console.log(data)
-      refForm.value?.resetFields(data)
-    }
+<script setup lang="ts">
+import { reactive, ref } from "vue";
+import type { FormInstance } from "../index";
 
-    return {
-      form,
-      refForm,
-      handleSubmit,
-    }
-  },
-})
+const refForm = ref<FormInstance>();
+const form = reactive({ name: "", post: "", isRead: false });
+const handleSubmit = (data: any) => refForm.value?.resetFields(data);
 </script>

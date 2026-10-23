@@ -7,9 +7,13 @@ import { normalizeDateRange } from '../normalize-date-range';
 import type { Dayjs } from "dayjs";
 import {
   computed,
+  provide,
   defineComponent,
   nextTick,
-  onUnmounted,
+  onMounted,
+  onActivated,
+  onDeactivated,
+  onBeforeUnmount,
   reactive,
   ref,
   toRefs,
@@ -27,6 +31,7 @@ import {
   getNow,
   getDateValue,
 } from "../../_utils/date";
+import { rangePreviewKey, clearRangePreviewKey } from './hooks/range-preview';
 import useState from "../../_hooks/use-state";
 import {
   isCompleteRangeValue,
@@ -249,9 +254,19 @@ export default defineComponent({
       Array<Dayjs | undefined> | undefined
     >();
     // 预览值
-    const [previewValue, setPreviewValue] = useState<
+    const [previewValue, setRawPreviewValue] = useState<
       Array<Dayjs | undefined> | undefined
     >();
+    provide(rangePreviewKey, computed(() => previewValue.value !== undefined));
+    provide(clearRangePreviewKey, () => {
+      if (processValue.value && !isCompleteRangeValue(processValue.value)) setPreviewValue(undefined);
+    });
+    function setPreviewValue(value: Array<Dayjs | undefined> | undefined) {
+      const request = ++shortcutPreviewGeneration;
+      cancelShortcutClear();
+      setRawPreviewValue(value);
+      return request;
+    }
     // 待确认的选中值
     const forSelectedValue = computed(
       () => processValue.value ?? selectedValue.value,
@@ -300,6 +315,7 @@ export default defineComponent({
         selectedValue: panelValue,
         format: parseValueFormat,
         onChange: (newVal: Dayjs[]) => {
+          if (processValue.value && !isCompleteRangeValue(processValue.value)) setPreviewValue(undefined);
           const returnValue = getReturnRangeValue(
             newVal,
             returnValueFormat.value,
@@ -525,6 +541,7 @@ export default defineComponent({
     }
 
     function onPanelCellMouseEnter(date: Dayjs) {
+      if (triggerDisabled.value || props.readonly) return;
       if (
         processValue.value &&
         panelValue.value[nextFocusedIndex.value] &&
@@ -586,26 +603,60 @@ export default defineComponent({
       const newValue = getValueToModify(true);
       if (newValue[updateIndex]) {
         newValue[updateIndex] = mergedOpValue;
-        select(newValue, { emitSelect: true });
+        emitSelectEvent(newValue);
+        if (!needConfirm.value && isCompleteRangeValue(newValue)) {
+          confirm(newValue, false);
+        } else {
+          select(newValue);
+        }
       }
     }
 
-    let clearShortcutPreviewTimer: any;
-    onUnmounted(() => {
-      clearTimeout(clearShortcutPreviewTimer);
-    });
+    let clearShortcutPreviewTimer: ReturnType<typeof setTimeout> | undefined;
+    let shortcutTimerGeneration = 0;
+    let shortcutPreviewGeneration = 0;
+    let shortcutMounted = false;
+    let shortcutActive = true;
+    let shortcutDisposed = false;
+    const canPreviewShortcut = () => shortcutMounted && shortcutActive && !shortcutDisposed &&
+      panelVisible.value && previewShortcut.value && !triggerDisabled.value && !props.readonly;
+    const isCurrentShortcut = (request: number) => canPreviewShortcut() && request === shortcutPreviewGeneration;
+    const cancelShortcutClear = () => {
+      shortcutTimerGeneration++;
+      if (clearShortcutPreviewTimer !== undefined) clearTimeout(clearShortcutPreviewTimer);
+      clearShortcutPreviewTimer = undefined;
+    };
+    const resetShortcutPreview = () => {
+      setPreviewValue(undefined);
+    };
+    onMounted(() => { shortcutMounted = true; });
+    onActivated(() => { shortcutActive = true; });
+    onDeactivated(() => { shortcutActive = false; resetShortcutPreview(); });
+    onBeforeUnmount(() => { shortcutDisposed = true; resetShortcutPreview(); });
+    watch([panelVisible, disabled, () => props.readonly, previewShortcut, modelValue], resetShortcutPreview, { flush: "sync", deep: true });
 
     function onPanelShortcutMouseEnter(value: Array<Dayjs | undefined>) {
-      clearTimeout(clearShortcutPreviewTimer);
-      preview(value, { updateHeader: true });
+      if (!canPreviewShortcut()) return;
+      const request = setPreviewValue(value);
+      if (!isCurrentShortcut(request)) return;
+      setInputValue(undefined);
+      if (isCurrentShortcut(request)) resetHeaderValue(() => isCurrentShortcut(request));
     }
 
     function onPanelShortcutMouseLeave() {
-      clearTimeout(clearShortcutPreviewTimer);
+      if (!canPreviewShortcut()) return;
+      cancelShortcutClear();
+      const timerRequest = shortcutTimerGeneration;
+      const previewRequest = shortcutPreviewGeneration;
+      let pending = true;
       clearShortcutPreviewTimer = setTimeout(() => {
-        setPreviewValue(undefined);
+        if (!pending || timerRequest !== shortcutTimerGeneration || !isCurrentShortcut(previewRequest)) return;
+        pending = false;
+        clearShortcutPreviewTimer = undefined;
+        const request = setPreviewValue(undefined);
+        if (!isCurrentShortcut(request)) return;
         setInputValue(undefined);
-        resetHeaderValue();
+        if (isCurrentShortcut(request)) resetHeaderValue(() => isCurrentShortcut(request));
       }, 100);
     }
 
@@ -674,6 +725,11 @@ export default defineComponent({
       visible: panelVisible.value,
       onCellClick: onPanelCellClick,
       onCellMouseEnter: onPanelCellMouseEnter,
+      onRangeMouseLeave: () => {
+        if (processValue.value && !isCompleteRangeValue(processValue.value)) {
+          setPreviewValue(undefined);
+        }
+      },
       onShortcutClick: onPanelShortcutClick,
       onShortcutMouseEnter: previewShortcut.value
         ? onPanelShortcutMouseEnter

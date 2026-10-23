@@ -1,6 +1,6 @@
 <template>
   <c-tree
-    :default-selected-keys="['0-0-1']"
+    :default-selected-keys="['0-0-2-1-0-0']"
     :fieldNames="{
       key: 'value',
       title: 'label',

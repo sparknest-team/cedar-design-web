@@ -1,0 +1,516 @@
+{
+  "fields": [
+    {
+      "name": "model-value",
+      "description": "日程数据，支持 v-model；传入时受控",
+      "type": "SchedulerEvent[]",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "preview-event",
+      "description": "尚未保存的新增日程占位，只参与视觉展示",
+      "type": "SchedulerEvent",
+      "defaultValue": "undefined",
+      "kind": "scenario"
+    },
+    {
+      "name": "default-value",
+      "description": "非受控初始数据",
+      "type": "SchedulerEvent[]",
+      "defaultValue": "() => []",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "mode",
+      "description": "当前视图，支持 v-model:mode",
+      "type": "SchedulerMode",
+      "defaultValue": "undefined",
+      "kind": "scenario"
+    },
+    {
+      "name": "default-mode",
+      "description": "非受控默认视图",
+      "type": "SchedulerMode",
+      "defaultValue": "\"week\"",
+      "kind": "scenario"
+    },
+    {
+      "name": "date",
+      "description": "定位日期，支持 v-model:date",
+      "type": "Date / string / number",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "\"2026-10-21\""
+    },
+    {
+      "name": "default-date",
+      "description": "初始定位日期",
+      "type": "Date / string / number",
+      "defaultValue": "() => new Date()",
+      "kind": "json",
+      "initial": "\"2026-10-21\""
+    },
+    {
+      "name": "resource-dimensions",
+      "description": "维度定义 { id, label }[]",
+      "type": "SchedulerResourceDimension[]",
+      "defaultValue": "() => []",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "resource-filters",
+      "description": "跨维度组合筛选，支持 v-model:resource-filters",
+      "type": "import(\"./core\").SchedulerResourceFilters",
+      "defaultValue": "undefined",
+      "kind": "enum",
+      "options": [
+        "./core"
+      ],
+      "initial": "./core"
+    },
+    {
+      "name": "default-resource-filters",
+      "description": "非受控筛选初值",
+      "type": "import(\"./core\").SchedulerResourceFilters",
+      "defaultValue": "() => ({})",
+      "kind": "enum",
+      "options": [
+        "./core"
+      ],
+      "initial": "./core"
+    },
+    {
+      "name": "resource-dimension",
+      "description": "资源行/列展示维度，空字符串显示全部",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "default-resource-dimension",
+      "description": "非受控展示维度初值",
+      "type": "string",
+      "defaultValue": "\"\"",
+      "kind": "string"
+    },
+    {
+      "name": "resources",
+      "description": "当前可见资源行/列及本地选项，不要求全量目录",
+      "type": "SchedulerResource[]",
+      "defaultValue": "() => []",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "resource-label",
+      "description": "资源字段名称，如设备、会议室",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "request-resources",
+      "description": "按关键词和游标查询候选资源",
+      "type": "SchedulerRequestResources",
+      "defaultValue": "undefined",
+      "kind": "scenario"
+    },
+    {
+      "name": "resolve-resources",
+      "description": "按 ID 批量补全名称",
+      "type": "SchedulerResolveResources",
+      "defaultValue": "undefined",
+      "kind": "scenario"
+    },
+    {
+      "name": "modes",
+      "description": "允许切换的视图",
+      "type": "SchedulerMode[]",
+      "defaultValue": "() => [...schedulerModes]",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "first-day-of-week",
+      "description": "周起始，0 周日至 6 周六",
+      "type": "number",
+      "defaultValue": "1",
+      "kind": "number"
+    },
+    {
+      "name": "start-hour",
+      "description": "时间网格起始小时，0–23",
+      "type": "number",
+      "defaultValue": "8",
+      "kind": "number"
+    },
+    {
+      "name": "end-hour",
+      "description": "时间网格结束小时，必须大于起始，最多 24",
+      "type": "number",
+      "defaultValue": "20",
+      "kind": "number"
+    },
+    {
+      "name": "initial-scroll-minute",
+      "description": "时间网格首次显示时定位的当天分钟数，后续保留用户滚动位置",
+      "type": "number",
+      "defaultValue": "undefined",
+      "kind": "number"
+    },
+    {
+      "name": "step",
+      "description": "时间格及吸附分钟，正整数且整除 60",
+      "type": "number",
+      "defaultValue": "30",
+      "kind": "number"
+    },
+    {
+      "name": "slot-duration",
+      "description": "网格分钟数，正整数",
+      "type": "number",
+      "defaultValue": "undefined",
+      "kind": "number"
+    },
+    {
+      "name": "snap-duration",
+      "description": "指针吸附分钟数，正整数",
+      "type": "number",
+      "defaultValue": "undefined",
+      "kind": "number"
+    },
+    {
+      "name": "default-duration",
+      "description": "单击新建默认分钟数，正整数",
+      "type": "number",
+      "defaultValue": "undefined",
+      "kind": "number"
+    },
+    {
+      "name": "drag-to-create",
+      "description": "日/周/资源日程空白时段拖选",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "month-event-limit",
+      "description": "月视图每日直接展示上限，超出通过 Popover 查看",
+      "type": "number",
+      "defaultValue": "undefined",
+      "kind": "number"
+    },
+    {
+      "name": "overlap-event-limit",
+      "description": "时间网格重叠组直接展示上限，超出通过 Popover 查看",
+      "type": "number",
+      "defaultValue": "undefined",
+      "kind": "number"
+    },
+    {
+      "name": "show-date-header",
+      "description": "时间线日期分层表头",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "show-assignment-details",
+      "description": "编辑资源占用量与角色",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "show-resource-load",
+      "description": "资源峰值、容量及范围利用率",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "rule-policy",
+      "description": "capacity/unavailable/conflict 的 allow/warn/block 策略",
+      "type": "import(\"./core\").SchedulerRulePolicy",
+      "defaultValue": "() => ({})",
+      "kind": "enum",
+      "options": [
+        "./core"
+      ],
+      "initial": "./core"
+    },
+    {
+      "name": "dependencies",
+      "description": "任务依赖关系",
+      "type": "SchedulerDependency[]",
+      "defaultValue": "() => []",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "event-layout",
+      "description": "时间网格布局 stack / columns / 几何回调；默认周视图 stack、其他 columns",
+      "type": "SchedulerEventLayout",
+      "defaultValue": "undefined",
+      "kind": "scenario"
+    },
+    {
+      "name": "readonly",
+      "description": "可查看和导航，不能修改",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "disabled",
+      "description": "禁用交互",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "loading",
+      "description": "数据加载中，禁止修改",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "hidden-days",
+      "description": "周、月、议程隐藏指定星期，0–6，不可全部隐藏",
+      "type": "number[]",
+      "defaultValue": "() => []",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "show-now-indicator",
+      "description": "日、周、资源日程显示当前本地时间标线",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "show-sidebar",
+      "description": "显示筛选和未排期列表",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "allow-overlap",
+      "description": "允许同资源时间重叠",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "editable",
+      "description": "启用内置编辑器；false 通过 editor-request 接管",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "before-change",
+      "description": "返回 false 取消；异步拦截、保存接口",
+      "type": "SchedulerBeforeChange / SchedulerBeforeChange[]",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "selectable",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "selected-keys",
+      "type": "string[]",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "default-selected-keys",
+      "type": "string[]",
+      "defaultValue": "() => []",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "history",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "history-limit",
+      "type": "number",
+      "defaultValue": "20",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "number"
+    },
+    {
+      "name": "before-transaction",
+      "type": "defineListenerProp<SchedulerBeforeTransaction>()",
+      "defaultValue": "undefined",
+      "description": "统一事务保存钩子；设置后替代 beforeChange，批量操作只调用一次。",
+      "kind": "callback"
+    },
+    {
+      "name": "working-hours",
+      "type": "import(\"./core\").SchedulerWorkingHours[]",
+      "defaultValue": "undefined",
+      "description": "本地周工作时间；未传不限制，空数组禁止定时日程。",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "date-working-hours",
+      "type": "import(\"./core\").SchedulerDateWorkingHours[]",
+      "defaultValue": "() => []",
+      "description": "指定日期替换周工作时间；空 intervals 表示当天关闭。",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "disabled-ranges",
+      "type": "import(\"./core\").SchedulerDisabledRange[]",
+      "defaultValue": "() => []",
+      "description": "半开区间；可限定资源，如设备维护、会议室停用。",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "zoom",
+      "type": "number",
+      "defaultValue": "undefined",
+      "description": "资源时间线缩放倍数，0.5–4。",
+      "kind": "number"
+    },
+    {
+      "name": "default-zoom",
+      "type": "number",
+      "defaultValue": "1",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "number"
+    },
+    {
+      "name": "scale",
+      "type": "import(\"./core\").SchedulerScale",
+      "defaultValue": "undefined",
+      "description": "资源时间线刻度；hour 聚焦定位日，day 展示一周。",
+      "kind": "enum",
+      "options": [
+        "./core"
+      ],
+      "initial": "./core"
+    },
+    {
+      "name": "default-scale",
+      "type": "import(\"./core\").SchedulerScale",
+      "defaultValue": "\"day\"",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "enum",
+      "options": [
+        "./core"
+      ],
+      "initial": "./core"
+    },
+    {
+      "name": "virtual-list-props",
+      "type": "SchedulerVirtualListProps",
+      "defaultValue": "undefined",
+      "description": "配置后启用资源时间线虚拟滚动；省略保持完整渲染。",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "resource-group-dimensions",
+      "type": "string[]",
+      "defaultValue": "() => []",
+      "description": "资源时间线交叉分组，按维度顺序组合；至少两个不同维度。",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "resource-group-by",
+      "type": "(resource: SchedulerResource) => string",
+      "defaultValue": "undefined",
+      "description": "按稳定分组键组织时间线资源，空字符串表示未分组。",
+      "kind": "scenario"
+    },
+    {
+      "name": "expanded-keys",
+      "type": "string[]",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "default-expanded-keys",
+      "type": "string[]",
+      "defaultValue": "undefined",
+      "description": "省略时默认展开所有分组。",
+      "kind": "json",
+      "initial": "[]"
+    }
+  ],
+  "methodNames": [
+    "change",
+    "duplicate-event",
+    "go-to-date"
+  ],
+  "events": [
+    "update:modelValue",
+    "update:resourceFilters",
+    "update:resourceDimension",
+    "update:mode",
+    "update:zoom",
+    "rule-warning",
+    "update:date",
+    "change",
+    "change-error",
+    "event-click",
+    "cell-click",
+    "range-change",
+    "resource-error",
+    "editor-request"
+  ],
+  "slotNames": [
+    "toolbar",
+    "sidebar",
+    "resource-header",
+    "column-background",
+    "event",
+    "sidebar-extra",
+    "toolbar-extra",
+    "editor",
+    "empty",
+    "loading"
+  ],
+  "slotDefaults": {
+    "toolbar": true,
+    "sidebar": true,
+    "resource-header": true,
+    "column-background": true,
+    "event": true,
+    "sidebar-extra": false,
+    "toolbar-extra": false,
+    "editor": false,
+    "empty": false,
+    "loading": false
+  },
+  "scenarios": []
+}

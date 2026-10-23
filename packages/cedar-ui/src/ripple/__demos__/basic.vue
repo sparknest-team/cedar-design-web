@@ -8,9 +8,16 @@ const disabled = ref(false);
 </script>
 
 <template>
-  <c-space>
-    <button v-ripple="{ disabled }" class="ripple-demo">Ripple</button>
-    <button v-ripple="{ disabled }" class="ripple-demo ripple-demo--long">600ms 扩散／800ms 消退</button>
+  <c-space wrap>
+    <c-button :ripple="false" v-ripple="{ disabled }" class="ripple-demo"
+      >Ripple</c-button
+    >
+    <c-button
+      :ripple="false"
+      v-ripple="{ disabled }"
+      class="ripple-demo ripple-demo--long"
+      >600ms 扩散／800ms 消退</c-button
+    >
     <c-button @click="disabled = !disabled">{{
       disabled ? "启用水波" : "禁用水波"
     }}</c-button>

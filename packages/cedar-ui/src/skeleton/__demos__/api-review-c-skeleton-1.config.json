@@ -1,0 +1,98 @@
+{
+  "fields": [
+    {
+      "name": "loading",
+      "description": "是否展示骨架屏（加载中状态）",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "animation",
+      "description": "是否开启骨架屏动画",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "title",
+      "description": "是否显示标题占位",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "avatar",
+      "description": "是否显示头像占位",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "card",
+      "description": "是否显示卡片占位",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "rows",
+      "description": "段落行数",
+      "type": "number | string",
+      "defaultValue": "3",
+      "kind": "scalar"
+    },
+    {
+      "name": "rows-width",
+      "description": "每行宽度",
+      "type": "Array<number | string>",
+      "defaultValue": "[]",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "title-width",
+      "description": "50%",
+      "type": "number | string",
+      "defaultValue": "-",
+      "kind": "scalar"
+    },
+    {
+      "name": "avatar-size",
+      "description": "34px",
+      "type": "number | string",
+      "defaultValue": "-",
+      "kind": "scalar"
+    },
+    {
+      "name": "card-height",
+      "description": "160px",
+      "type": "number | string",
+      "defaultValue": "-",
+      "kind": "scalar"
+    },
+    {
+      "name": "fullscreen",
+      "description": "是否使用全屏占位",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "fullscreen-z-index",
+      "description": "全屏占位层级",
+      "type": "number | string",
+      "defaultValue": "100",
+      "kind": "scalar"
+    }
+  ],
+  "methodNames": [],
+  "events": [],
+  "slotNames": [
+    "template"
+  ],
+  "slotDefaults": {
+    "template": true
+  },
+  "scenarios": []
+}

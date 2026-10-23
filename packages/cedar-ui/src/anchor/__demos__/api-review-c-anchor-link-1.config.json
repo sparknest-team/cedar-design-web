@@ -1,0 +1,27 @@
+{
+  "fields": [
+    {
+      "name": "title",
+      "description": "锚点链接的文本内容",
+      "type": "string",
+      "defaultValue": "-",
+      "kind": "string"
+    },
+    {
+      "name": "href",
+      "description": "锚点链接的地址",
+      "type": "string",
+      "defaultValue": "-",
+      "kind": "string"
+    }
+  ],
+  "methodNames": [],
+  "events": [],
+  "slotNames": [
+    "sublist"
+  ],
+  "slotDefaults": {
+    "sublist": true
+  },
+  "scenarios": []
+}

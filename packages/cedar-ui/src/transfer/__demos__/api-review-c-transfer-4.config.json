@@ -1,0 +1,318 @@
+{
+  "fields": [
+    {
+      "name": "data",
+      "description": "穿梭框的数据",
+      "type": "TransferItem[]",
+      "defaultValue": "() => []",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "model-value",
+      "description": "右侧有序完整状态",
+      "type": "TransferTargetItem[]",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "default-value",
+      "description": "非受控状态下的右侧完整状态",
+      "type": "TransferTargetItem[]",
+      "defaultValue": "() => []",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "disabled",
+      "description": "是否禁用",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "virtual-scroll",
+      "description": "是否启用虚拟滚动",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "target-draggable",
+      "description": "是否允许拖拽调整右侧顺序",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "target-operation",
+      "description": "右侧操作显示为删除图标或操作菜单",
+      "type": "'remove' | 'menu'",
+      "defaultValue": "'remove'",
+      "kind": "enum",
+      "options": [
+        "remove",
+        "menu"
+      ],
+      "initial": "remove"
+    },
+    {
+      "name": "clear-text",
+      "description": "右侧清空按钮文本",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "target-actions",
+      "description": "追加到右侧菜单的自定义操作",
+      "type": "TransferTargetAction[]",
+      "defaultValue": "() => []",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "source-filterable",
+      "description": "是否显示源列表搜索框",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "target-filterable",
+      "description": "是否显示目标列表搜索框",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "show-search",
+      "description": "是否同时显示两侧搜索框",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "filter",
+      "description": "自定义过滤函数",
+      "type": "TransferFilter",
+      "defaultValue": "(value: string, item: TransferItem) => item.label.toLowerCase().includes(value.toLowerCase())",
+      "kind": "callback"
+    },
+    {
+      "name": "source-filter-placeholder",
+      "description": "源列表搜索框占位文本",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "target-filter-placeholder",
+      "description": "目标列表搜索框占位文本",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "show-selected",
+      "description": "是否在源列表保留已选项",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "source-title",
+      "description": "源列表标题",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "target-title",
+      "description": "目标列表标题",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "show-select-all",
+      "description": "是否展示全选勾选框",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "title",
+      "description": "源列表和目标列表标题",
+      "type": "string[]",
+      "defaultValue": "() => ['全选', '已选']",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "source-search-props",
+      "description": "Cedar Search 的源搜索框配置",
+      "type": "object",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "target-search-props",
+      "description": "Cedar Search 的目标搜索框配置",
+      "type": "object",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "presentation",
+      "type": "'inline' | 'click' | 'dblclick'",
+      "defaultValue": "undefined",
+      "description": "字段编辑方式，字段 > FormItem > Form 继承；默认 inline。",
+      "kind": "enum",
+      "options": [
+        "inline",
+        "click",
+        "dblclick"
+      ],
+      "initial": "inline"
+    },
+    {
+      "name": "read-pretty",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "纯阅读展示；字段 > FormItem > Form 继承，显式 false 覆盖父级。",
+      "kind": "boolean"
+    },
+    {
+      "name": "before-commit",
+      "type": "BeforeFieldCommit",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "callback"
+    },
+    {
+      "name": "open",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "default-open",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "popup-container",
+      "type": "string | HTMLElement | false",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "json",
+      "initial": "\"body\""
+    },
+    {
+      "name": "TransferItem.value",
+      "description": "data.0 · 选项的值",
+      "type": "string | number",
+      "defaultValue": "-",
+      "kind": "scalar",
+      "path": [
+        "data",
+        0,
+        "value"
+      ]
+    },
+    {
+      "name": "TransferItem.label",
+      "description": "data.0 · 选项的标签",
+      "type": "string",
+      "defaultValue": "-",
+      "kind": "string",
+      "path": [
+        "data",
+        0,
+        "label"
+      ]
+    },
+    {
+      "name": "TransferItem.disabled",
+      "description": "data.0 · 是否禁用",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean",
+      "path": [
+        "data",
+        0,
+        "disabled"
+      ]
+    },
+    {
+      "name": "TransferItem.group",
+      "description": "data.0 · 源列表分组标题",
+      "type": "string",
+      "defaultValue": "-",
+      "kind": "string",
+      "path": [
+        "data",
+        0,
+        "group"
+      ]
+    },
+    {
+      "name": "TransferItem.tip",
+      "description": "data.0 · 选项提示内容",
+      "type": "string | (() => VNodeChild)",
+      "defaultValue": "-",
+      "kind": "node",
+      "initial": "审查提示 / Review tip",
+      "path": [
+        "data",
+        0,
+        "tip"
+      ]
+    },
+    {
+      "name": "TransferItem.required",
+      "description": "data.0 · 是否为必选项，必选项不可删除",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean",
+      "path": [
+        "data",
+        0,
+        "required"
+      ]
+    }
+  ],
+  "methodNames": [],
+  "events": [
+    "change",
+    "search",
+    "rename",
+    "target-action"
+  ],
+  "slotNames": [
+    "source",
+    "source-title",
+    "to-target-icon",
+    "to-source-icon",
+    "target",
+    "target-title",
+    "item"
+  ],
+  "slotDefaults": {
+    "source": true,
+    "source-title": false,
+    "to-target-icon": false,
+    "to-source-icon": false,
+    "target": false,
+    "target-title": false,
+    "item": false
+  },
+  "scenarios": []
+}

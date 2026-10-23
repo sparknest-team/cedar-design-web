@@ -49,4 +49,4 @@ for (const component of ['date/picker/Picker.vue', 'date/picker/DateRangePicker.
   const source = readFileSync(resolve(cedar, 'src', component), 'utf8')
   assert.doesNotMatch(source, /useFormItem|<Trigger|<DateInput|<DateRangeInput/)
 }
-console.log('Field layers: 23 independent source pairs, four Less outputs and Cedar ownership boundaries verified. Select/Cascader also have a separate presentation source check.')
+console.log('Field layers: 25 independent source pairs, four Less outputs and Cedar ownership boundaries verified. Select/Cascader also have a separate presentation source check.')

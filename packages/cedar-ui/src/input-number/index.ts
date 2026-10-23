@@ -1,13 +1,13 @@
-import { withInstall } from "../_utils/global-config";
-import _InputNumber from "./InputNumber.vue";
-import { inputNumberProps } from "./props";
+import { withInstall } from '../_utils/global-config'
+import _InputNumber from './presentation'
+import { inputNumberProps } from './props'
 
 const InputNumber = withInstall(_InputNumber, Object.assign(_InputNumber, {}), {
   components: [_InputNumber],
-});
+})
 
-export type InputNumberInstance = InstanceType<typeof _InputNumber>;
-export { InputNumber, inputNumberProps };
+export type InputNumberInstance = InstanceType<typeof _InputNumber>
+export { InputNumber, inputNumberProps }
 export type {
   InputNumberMode,
   InputNumberSize,
@@ -16,7 +16,7 @@ export type {
   InputNumberModelEvent,
   InputNumberParser,
   InputNumberProps,
-} from "./props";
-export const _InputNumberComponent = InputNumber;
+} from './props'
+export const _InputNumberComponent = InputNumber
 
-export default InputNumber;
+export default InputNumber

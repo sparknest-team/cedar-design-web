@@ -1,0 +1,273 @@
+{
+  "fields": [
+    {
+      "name": "model-value",
+      "description": "绑定值",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "model-modifiers",
+      "description": "v-model 修饰符，支持 trim",
+      "type": "{ trim?: boolean }",
+      "defaultValue": "() => ({})",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "default-value",
+      "description": "默认值（非受控状态）",
+      "type": "string",
+      "defaultValue": "''",
+      "kind": "string"
+    },
+    {
+      "name": "variant",
+      "description": "输入框变体",
+      "type": "\"filled\" | \"outline\" | \"standard\"",
+      "defaultValue": "undefined",
+      "kind": "enum",
+      "options": [
+        "filled",
+        "outline",
+        "standard"
+      ],
+      "initial": "filled"
+    },
+    {
+      "name": "size",
+      "description": "输入框大小",
+      "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
+      "defaultValue": "undefined",
+      "kind": "enum",
+      "options": [
+        "xs",
+        "sm",
+        "md",
+        "lg",
+        "xl"
+      ],
+      "initial": "xs"
+    },
+    {
+      "name": "clearable",
+      "description": "是否允许清空输入框",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "disabled",
+      "description": "是否禁用，可继承 Form",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "readonly",
+      "description": "是否只读，可继承 Form",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "error",
+      "description": "是否为错误状态，可继承 FormItem",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "placeholder",
+      "description": "提示文字",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "hint",
+      "description": "提示文字是否浮起",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "line",
+      "description": "是否绘制边框或底线",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "text-color",
+      "description": "输入文字颜色",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string",
+      "initial": "#5268cc"
+    },
+    {
+      "name": "focus-color",
+      "description": "聚焦提示及支持的边框通道；不控制 caret",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string",
+      "initial": "#5268cc"
+    },
+    {
+      "name": "blur-color",
+      "description": "未聚焦时提示颜色",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string",
+      "initial": "#5268cc"
+    },
+    {
+      "name": "aria-label",
+      "description": "原生输入框的无障碍标签",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "autofocus",
+      "description": "是否自动聚焦",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "enterkeyhint",
+      "description": "移动端虚拟键盘回车键提示",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "max-length",
+      "description": "输入值的最大长度",
+      "type": "number | { length: number; errorOnly?: boolean }",
+      "defaultValue": "0",
+      "kind": "json",
+      "initial": "{\"length\":20,\"errorOnly\":false}"
+    },
+    {
+      "name": "show-word-limit",
+      "description": "是否显示字数统计",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "word-length",
+      "description": "字符长度的计算方法",
+      "type": "(value: string) => number",
+      "defaultValue": "undefined",
+      "kind": "callback"
+    },
+    {
+      "name": "word-slice",
+      "description": "字符截取方法，同 wordLength 一起使用",
+      "type": "(value: string, maxLength: number) => string",
+      "defaultValue": "undefined",
+      "kind": "callback"
+    },
+    {
+      "name": "input-attrs",
+      "description": "内部 input 元素的属性",
+      "type": "object",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "presentation",
+      "type": "'inline' | 'click' | 'dblclick'",
+      "defaultValue": "undefined",
+      "description": "字段编辑方式，字段 > FormItem > Form 继承；默认 inline。",
+      "kind": "enum",
+      "options": [
+        "inline",
+        "click",
+        "dblclick"
+      ],
+      "initial": "inline"
+    },
+    {
+      "name": "read-pretty",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "纯阅读展示；字段 > FormItem > Form 继承，显式 false 覆盖父级。",
+      "kind": "boolean"
+    },
+    {
+      "name": "before-commit",
+      "type": "BeforeFieldCommit",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "callback"
+    },
+    {
+      "name": "popup-container",
+      "type": "string | HTMLElement | false",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "json",
+      "initial": "\"body\""
+    },
+    {
+      "name": "open",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "default-open",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "type",
+      "type": "\"text\" | \"password\" | \"number\" | \"tel\" | \"email\"",
+      "defaultValue": "'text'",
+      "description": "输入类型，number 使用文本输入与归一化。",
+      "kind": "enum",
+      "options": [
+        "text",
+        "password",
+        "number",
+        "tel",
+        "email"
+      ],
+      "initial": "text"
+    }
+  ],
+  "methodNames": [
+    "focus",
+    "blur",
+    "select"
+  ],
+  "events": [
+    "input",
+    "change",
+    "press-enter",
+    "clear",
+    "focus",
+    "blur"
+  ],
+  "slotNames": [
+    "suffix",
+    "prefix",
+    "clear-icon"
+  ],
+  "slotDefaults": {
+    "suffix": false,
+    "prefix": false,
+    "clear-icon": false
+  },
+  "scenarios": []
+}

@@ -22,7 +22,7 @@
     outline: none;
     background: transparent;
     color: inherit;
-    caret-color: var(--c-field-custom-focus, var(--c-field-focus-color));
+    caret-color: currentColor;
     font: inherit;
     font-size: var(--c-textarea-font-size);
     line-height: var(--c-textarea-line-height);
@@ -35,7 +35,6 @@
       &::placeholder { color: var(--c-field-control-text-color-disabled); }
     }
   }
-  .c-field-decorator--error &__inner { caret-color: var(--c-field-error-color); }
   &__mirror {
     position: absolute;
     visibility: hidden;

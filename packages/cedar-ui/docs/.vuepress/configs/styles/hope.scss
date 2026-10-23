@@ -72,7 +72,7 @@ td {
   border: 0 none;
 }
 
-.vp-page a:not(.header-anchor):hover {
+.vp-page a:not(.header-anchor):not(.c-link):not(.c-breadcrumb-item__content):hover {
   text-decoration: none;
 }
 
@@ -156,4 +156,18 @@ body {
 
 tbody tr:nth-child(odd) {
   background: unset;
+}
+
+// Component links render their own icons; prose external-link decoration must not leak into demos.
+.external-link-icon
+  .theme-hope-content
+  a.c-link[href*="://"]:not(.no-external-link-icon)::after,
+.external-link-icon
+  .theme-hope-content
+  a.c-link[target="_blank"]:not(.no-external-link-icon)::after {
+  content: none;
+}
+
+.theme-hope-content a.c-link {
+  font-weight: inherit;
 }

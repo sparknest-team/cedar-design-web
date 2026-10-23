@@ -19,6 +19,10 @@ const fieldOnly = new Set([
   'open',
   'defaultOpen',
   'inputEditable',
+  'presentation',
+  'panelType',
+  'readPretty',
+  'beforeCommit',
 ])
 export function dateFieldPanelOptions(
   options: DateFieldProps,
@@ -41,5 +45,6 @@ export function dateFieldPanelOptions(
     ...presentation,
     ...Object.fromEntries(Object.entries(options).filter(([key]) => !fieldOnly.has(key))),
     ...nestedOptions,
+    ...((options as Record<string, any>).panelType ? { presentation: (options as Record<string, any>).panelType } : {}),
   }
 }

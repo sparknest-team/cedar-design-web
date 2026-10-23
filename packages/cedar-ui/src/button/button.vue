@@ -1,18 +1,29 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import vHover, { HoverOverlay as BaseHoverOverlay, useHoverOverlay } from '../hover'
-import BaseLoading from '../loading'
-import vRipple from '../ripple'
-import { createNamespace } from '../_utils/global-config'
-import { buttonProps } from './props'
-import { useButton } from './use-button'
+import { computed, ref } from "vue";
+import vHover, {
+  HoverOverlay as BaseHoverOverlay,
+  useHoverOverlay,
+} from "../hover";
+import BaseLoading from "../loading";
+import vRipple from "../ripple";
+import { createNamespace } from "../_utils/global-config";
+import { buttonProps } from "./props";
+import { useButton } from "./use-button";
 
-defineOptions({ name: createNamespace('button').name })
-const props = defineProps(buttonProps)
-const { n, classes } = createNamespace('button')
-const { states, busy, blocked, computedStyle, handleClick, handleTouchstart } = useButton(props)
-const { hovering, handleHovering } = useHoverOverlay()
-const focusing = ref(false)
+defineOptions({ name: createNamespace("button").name });
+const props = defineProps(buttonProps);
+const { n, classes } = createNamespace("button");
+const { states, busy, blocked, computedStyle, handleClick, handleTouchstart } =
+  useButton(props);
+const { hovering, handleHovering } = useHoverOverlay();
+const focusing = ref(false);
+// Button indicators use a compact square for every animation and icon layout.
+const indicatorSize = computed(() => {
+  const size = props.loadingSize ?? states.value.size;
+  return typeof size === "number"
+    ? size
+    : { xs: 12, sm: 14, md: 16, lg: 18, xl: 20 }[size];
+});
 </script>
 
 <template>
@@ -29,9 +40,8 @@ const focusing = ref(false)
         [block, n('--block')],
         [round, n('--round')],
         [states.stacked, n('--stacked')],
-        [states.iconContainer, n('--icon-container')],
-        [states.iconContainer && states.variant === 'default', n(`--icon-container-${states.status}`)],
-        [states.variant === 'default' && !states.iconContainer, states.elevation],
+        [$slots.icon && !$slots.default, n('--icon-only')],
+        [states.variant === 'default', states.elevation],
         [busy, n('--loading')],
         [busy, n(`--loading-${loadingMode}`)],
         [states.disabled, n('--disabled')],
@@ -51,24 +61,47 @@ const focusing = ref(false)
     @focus="focusing = true"
     @blur="focusing = false"
   >
-    <span v-if="busy && !(loadingMode === 'default' && $slots.icon)" :class="n('loading')" aria-hidden="true" :style="{ color: loadingColor }">
+    <span
+      v-if="busy && !(loadingMode === 'default' && $slots.icon)"
+      :class="n('loading')"
+      aria-hidden="true"
+      :style="{ color: loadingColor }"
+    >
       <span v-if="loadingMode === 'line'" :class="n('loading-line')" />
       <BaseLoading
         v-else
         :type="loadingType"
-        :size="loadingSize ?? states.size"
+        :size="indicatorSize"
         :color="loadingColor ?? 'currentColor'"
-        :radius="loadingRadius"
       />
     </span>
-    <span v-if="$slots.icon" :class="classes(n('--icon'), [busy && loadingMode === 'fill', n('--hidden')])"
-      >
+    <span
+      v-if="$slots.icon"
+      :class="
+        classes(n('--icon'), [busy && loadingMode === 'fill', n('--hidden')])
+      "
+    >
       <slot name="icon" />
-      <span v-if="busy && loadingMode === 'default'" :class="n('loading')" aria-hidden="true" :style="{ color: loadingColor }">
-        <BaseLoading :type="loadingType" :size="loadingSize ?? 'xs'" :color="loadingColor ?? 'currentColor'" :radius="loadingRadius" />
+      <span
+        v-if="busy && loadingMode === 'default'"
+        :class="n('loading')"
+        aria-hidden="true"
+        :style="{ color: loadingColor }"
+      >
+        <BaseLoading
+          :type="loadingType"
+          :size="indicatorSize"
+          :color="loadingColor ?? 'currentColor'"
+        />
       </span>
     </span>
-    <span v-if="$slots.default" :class="classes(n('content'), [busy && loadingMode === 'fill', n('--hidden')])"><slot /></span>
+    <span
+      v-if="$slots.default"
+      :class="
+        classes(n('content'), [busy && loadingMode === 'fill', n('--hidden')])
+      "
+      ><slot
+    /></span>
     <BaseHoverOverlay :hovering="!blocked && hovering" />
   </component>
 </template>

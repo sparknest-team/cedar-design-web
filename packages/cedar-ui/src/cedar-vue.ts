@@ -27,7 +27,6 @@ import Descriptions, { DescriptionsItem } from './descriptions'
 import Dialog from './dialog'
 import Divider from './divider'
 import Drawer from './drawer'
-import DropdownMenu, { MenuOption } from './dropdown-menu'
 import Empty from './empty'
 import FilterForm from './filter-form'
 import Form, { FormItem } from './form'
@@ -44,6 +43,7 @@ import Link from './link'
 import List, { ListItem } from './list'
 import Map, { MapSelect } from './map'
 import Mention from './mention'
+import Menu, { MenuOption } from './menu'
 import Message from './message'
 import NavMenu, { NavMenuItem } from './nav-menu'
 import Notification from './notification'
@@ -125,7 +125,6 @@ const components: Record<string, Plugin> = {
   Dialog: Dialog as Plugin,
   Divider: Divider as Plugin,
   Drawer: Drawer as Plugin,
-  DropdownMenu: DropdownMenu as Plugin,
   Empty: Empty as Plugin,
   FilterForm: FilterForm as Plugin,
   Form: Form as Plugin,
@@ -142,6 +141,7 @@ const components: Record<string, Plugin> = {
   List: List as Plugin,
   Map: Map as Plugin,
   Mention: Mention as Plugin,
+  Menu: Menu as Plugin,
   Message: Message as Plugin,
   NavMenu: NavMenu as Plugin,
   Notification: Notification as Plugin,

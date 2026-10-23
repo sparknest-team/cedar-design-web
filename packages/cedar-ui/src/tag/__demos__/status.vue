@@ -1,5 +1,5 @@
 <template>
-  <c-space direction="vertical" :size="12">
+  <c-space direction="column" :size="12">
     <c-space wrap>
       <c-tag status="primary">primary</c-tag>
       <c-tag status="secondary">secondary</c-tag>

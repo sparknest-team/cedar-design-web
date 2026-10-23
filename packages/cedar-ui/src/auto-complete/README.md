@@ -8,9 +8,19 @@ permalink: /components/auto-complete/
 
 shouldOpen 控制是否允许展开，filterOption 控制逐项过滤；它们不是同一个设置。没有候选、禁用或只读时不会打开。自动补全不提供 list/picker 展示。
 
+## 案例
+
 ### 基础输入与选择
 
 <demo src="./__demos__/basic.vue"></demo>
+
+### 五档尺寸
+
+<demo src="./__demos__/size.vue"></demo>
+
+### 禁用与只读
+
+<demo src="./__demos__/state.vue"></demo>
 
 ### 展开条件与过滤
 
@@ -32,14 +42,6 @@ shouldOpen 控制是否允许展开，filterOption 控制逐项过滤；它们�
 
 <demo src="./__demos__/virtual-list.vue"></demo>
 
-### 五档尺寸
-
-<demo src="./__demos__/size.vue"></demo>
-
-### 禁用与只读
-
-<demo src="./__demos__/state.vue"></demo>
-
 ### 外观与浮动提示
 
 <demo src="./__demos__/decorator.vue"></demo>
@@ -47,6 +49,31 @@ shouldOpen 控制是否允许展开，filterOption 控制逐项过滤；它们�
 ### 键盘与无障碍
 
 <demo src="./__demos__/accessibility.vue"></demo>
+
+选项分组与 Menu 使用一致的间距逻辑：标题行高 20px，上下各 4px 留白（总高 28px）；后续分组前额外留 8px，首组不添加组间距。标题与选项文字左对齐；AutoComplete 的标题缩进跟随其选项水平 padding 配置。
+
+### 分组间距
+
+<demo src="./__demos__/group-spacing.vue"></demo>
+
+### 外观组合
+
+适用于允许自由输入的候选提示。调整变体、尺寸，用相同数据观察变化。内容保持一致，便于比较不同设置的实际效果。
+
+<demo src="./__demos__/appearance-lab.vue"></demo>
+
+### 交互状态切换
+
+适用于允许自由输入的候选提示。调整禁用、只读、错误反馈，用相同数据观察变化。控制区始终可用，可以随时恢复编辑；错误外观本身不会触发表单校验。
+
+<demo src="./__demos__/state-lab.vue"></demo>
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
 
 ## API
 
@@ -143,3 +170,13 @@ import type { AutoCompleteProps, AutoCompleteInstance, AutoCompleteOption, AutoC
 | `--c-auto-complete-option-text-color-disabled` | `var(--c-sys-color-content-disabled)` |
 
 清空不发 search，也不重新展开候选面板，包括从键盘聚焦的清空按钮回到输入框。受控值由父级决定：连续被拒绝的清空或选择仍各自发出 change 提议；已接受的候选选择只通知 Form 一次。
+
+### Form 字段展示与确认
+
+本组件支持 `presentation`，字段 > FormItem > Form 逐层继承；未指定时为 `inline`，保留原有交互。支持值：`inline / click / dblclick`。其他编辑展示使用 Cell 入口和一份草稿，确认后才更新 v-model；取消、重置或启用 readPretty 丢弃草稿。
+
+Cedar 使用 presentation="click" / "dblclick" 在原位进入编辑，Enter/F2 也可进入；取消/Escape 丢弃草稿，确认后提交。 readPretty 为纯阅读属性，与 readonly、disabled 独立。
+
+`before-commit(value, { previousValue, signal })` 可拦截弹层保存；FormItem 先校验候选值，失败保持编辑。`open / default-open / update:open` 控制编辑层。`#read="{ value, text }"` 可自定义阅读内容。集中示例见 Form 的“各类字段统一展示”。
+
+`read-pretty` 为独立布尔属性，与 `readonly`、`disabled` 同级；字段 > FormItem > Form 继承，显式 `false` 覆盖父级。默认 `false`。纯阅读不显示编辑器。

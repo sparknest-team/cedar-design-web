@@ -29,6 +29,7 @@
     <div v-if="showTimeView" :class="`${prefixCls}-timepicker`">
       <header :class="`${prefixCls}-timepicker-title`">{{ datePickerT('datePicker.selectTime') }}</header>
       <TimePanel
+        :visible="true"
         v-bind="{
           ...timePickerProps,
           ...disabledTimeProps,

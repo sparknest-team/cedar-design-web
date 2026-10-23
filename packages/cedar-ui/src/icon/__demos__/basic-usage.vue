@@ -1,29 +1,27 @@
 <script setup lang="ts">
-import { IconCheckCircleFill } from '@cedarjs/icons-vue'
+import { IconCheckCircleFill } from "@cedarjs/icons-vue";
 </script>
-
 <template>
-  <c-space direction="vertical">
+  <div class="icon-demo-row">
     <div>
-      <div class="demo-label">Resolver 自动按需导入</div>
-      <c-icon size="40" color="red">
-        <c-icon-check-circle-fill />
-      </c-icon>
+      <p>Resolver 自动按需导入</p>
+      <c-icon size="40" color="red"><c-icon-check-circle-fill /></c-icon>
     </div>
-
     <div>
-      <div class="demo-label">手动按需导入</div>
-      <c-icon size="40" color="red">
-        <IconCheckCircleFill />
-      </c-icon>
+      <p>手动按需导入</p>
+      <c-icon size="40" color="red"><IconCheckCircleFill /></c-icon>
     </div>
-  </c-space>
+  </div>
 </template>
-
 <style scoped>
-.demo-label {
-  margin-bottom: 8px;
-  color: var(--color-text-2);
+.icon-demo-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 32px;
+}
+p {
+  margin: 0 0 12px;
   font-size: 14px;
 }
 </style>

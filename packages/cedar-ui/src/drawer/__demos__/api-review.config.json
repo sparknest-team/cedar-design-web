@@ -1,0 +1,316 @@
+{
+  "fields": [
+    {
+      "name": "open",
+      "description": "是否可见",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "default-open",
+      "description": "非受控模式下是否默认可见",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "placement",
+      "description": "进入方向",
+      "type": "\"top\" | \"right\" | \"bottom\" | \"left\"",
+      "defaultValue": "'right'",
+      "kind": "enum",
+      "options": [
+        "top",
+        "right",
+        "bottom",
+        "left"
+      ],
+      "initial": "right"
+    },
+    {
+      "name": "title",
+      "description": "标题",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "overlay",
+      "description": "是否显示遮罩",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "overlay-closable",
+      "description": "点击遮罩是否请求关闭",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "closable",
+      "description": "是否显示关闭按钮",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "unmount-on-close",
+      "description": "关闭动画后是否卸载内容",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "popup-container",
+      "description": "挂载容器",
+      "type": "string | HTMLElement | false",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "\"body\""
+    },
+    {
+      "name": "before-close",
+      "description": "关闭控制钩子；调用 done() 后提交",
+      "type": "(action, done, refs) => void",
+      "defaultValue": "undefined",
+      "kind": "callback"
+    },
+    {
+      "name": "esc-to-close",
+      "description": "ESC 是否请求关闭",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "lock-scroll",
+      "description": "是否锁定挂载容器滚动",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "close-on-route-change",
+      "description": "路由变化时是否请求关闭",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "z-index",
+      "description": "自定义层级",
+      "type": "number",
+      "defaultValue": "undefined",
+      "kind": "number"
+    },
+    {
+      "name": "overlay-class",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "遮罩类名。",
+      "kind": "string"
+    },
+    {
+      "name": "overlay-style",
+      "type": "CSSProperties",
+      "defaultValue": "undefined",
+      "description": "遮罩样式。",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "confirm-button-text",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "确认按钮文字。",
+      "kind": "string"
+    },
+    {
+      "name": "cancel-button-text",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "取消按钮文字。",
+      "kind": "string"
+    },
+    {
+      "name": "confirm-button-loading",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "确认按钮是否加载中。",
+      "kind": "boolean"
+    },
+    {
+      "name": "cancel-button-loading",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "取消按钮是否加载中。",
+      "kind": "boolean"
+    },
+    {
+      "name": "confirm-button-disabled",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "确认按钮是否禁用。",
+      "kind": "boolean"
+    },
+    {
+      "name": "cancel-button-disabled",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "取消按钮是否禁用。",
+      "kind": "boolean"
+    },
+    {
+      "name": "confirm-button-props",
+      "type": "ButtonProps",
+      "defaultValue": "undefined",
+      "description": "确认按钮属性。",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "cancel-button-props",
+      "type": "ButtonProps",
+      "defaultValue": "undefined",
+      "description": "取消按钮属性。",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "width",
+      "type": "string | number",
+      "defaultValue": "250",
+      "description": "左右抽屉宽度。",
+      "kind": "scalar"
+    },
+    {
+      "name": "height",
+      "type": "string | number",
+      "defaultValue": "250",
+      "description": "上下抽屉高度。",
+      "kind": "scalar"
+    },
+    {
+      "name": "drawer-class",
+      "type": "string | any[]",
+      "defaultValue": "undefined",
+      "description": "抽屉面板类名。",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "drawer-style",
+      "type": "CSSProperties",
+      "defaultValue": "undefined",
+      "description": "抽屉面板样式。",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "body-class",
+      "type": "string | any[]",
+      "defaultValue": "undefined",
+      "description": "内容区类名。",
+      "kind": "json",
+      "initial": "[]"
+    },
+    {
+      "name": "body-style",
+      "type": "StyleValue",
+      "defaultValue": "undefined",
+      "description": "内容区样式。",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "overlay-animation-name",
+      "type": "string",
+      "defaultValue": "'fade-drawer'",
+      "description": "遮罩动画名称。",
+      "kind": "string"
+    },
+    {
+      "name": "header",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "是否显示头部。",
+      "kind": "boolean"
+    },
+    {
+      "name": "footer",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "是否显示底部。",
+      "kind": "boolean"
+    },
+    {
+      "name": "cancel-button",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "是否显示取消按钮。",
+      "kind": "boolean"
+    },
+    {
+      "name": "aria-label",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "抽屉无可见标题时的可访问名称。",
+      "kind": "string"
+    },
+    {
+      "name": "close-button-aria-label",
+      "type": "string",
+      "defaultValue": "'Close drawer'",
+      "description": "关闭按钮的可访问名称。",
+      "kind": "string"
+    }
+  ],
+  "events": [
+    "update:open",
+    "confirm",
+    "cancel",
+    "open",
+    "close",
+    "opened",
+    "closed",
+    "click-overlay",
+    "key-escape"
+  ],
+  "scenarios": [
+    {
+      "name": "before-close",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "confirm-button-props",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "cancel-button-props",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "drawer-class",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "body-class",
+      "kind": "prop",
+      "demos": []
+    }
+  ],
+  "slotNames": [
+    "title"
+  ],
+  "slotDefaults": {
+    "title": true
+  },
+  "methodNames": []
+}

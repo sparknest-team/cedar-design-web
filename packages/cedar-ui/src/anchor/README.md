@@ -38,6 +38,23 @@ permalink: /components/anchor/
 
 <demo src="./__demos__/hash.vue"></demo>
 
+### 滚动消费者生命周期
+
+<demo src="./__demos__/scroll-lifecycle.vue"></demo>
+
+连续点击会取消上一次滚动；KeepAlive 停用、卸载、滚动容器或 boundary 改变会取消当前滚动与测量帧，移除原容器监听。激活只重新绑定和测量，不恢复旧动画。旧通知、旧滚动完成和重复帧不能覆盖新阶段；同一目标的重复点击仍保留一次有效的待发 change 通知。失效的保留点击不阻止默认导航，也不发 select。
+
+私有视觉滚动保留 300ms／quartOut；它不是 CSS transition 完成计时，不新增时长 Token。帧由目标所属窗口创建／取消，每帧检查当前减少动效偏好；已开启时直接定位，运行中开启则下一帧完成。取消停在当前位置，不跳到目标、不发完成通知。nextTick 通知只能逻辑失效，不能物理撤销已排队续体或回滚已执行滚动。
+
+AnchorLink 卸载及 href 变化会注销原节点；旧节点清理不会删除同 hash 的新注册。测量／几何读取后再次核对归属，防止停用、卸载或新请求重入后提交旧结果。公开 Props／Events、颜色和 CSS 变量保持不变；Maple 没有对应 Anchor 运行时。
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
+
 ## API
 
 ### `<anchor>` Props

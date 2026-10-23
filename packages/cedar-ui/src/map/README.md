@@ -4,27 +4,38 @@ permalink: /components/map/
 
 # Map
 
-## 特殊说明
-
-<demo src="./__demos__/auth.vue"></demo>
-
 ## 案例
 
 ### 基础用法
 
-基础用法。
+无需登录或配置密钥即可运行。点击按钮更新本地位置模型；未接入 SDK 时显示降级提示并禁用搜索，不请求定位权限。真实地图的选点与搜索需要应用接入 SDK 适配器后再验收。
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### google地图
+### 国际地图配置
 
-google地图
+通过 `map-type="google"` 和 `is-international` 配置国际地图；未接入 SDK 时保留同样的降级展示。
 
 <demo src="./__demos__/google.vue"></demo>
 
 [//]: # '### v-model'
 [//]: # '使用v-model语法，会自动更新值，并且不会丢失类型'
 [//]: # '<demo src="./__demos__/use-vmodel.vue"></demo>'
+
+## 特殊说明
+
+地图SDK正在迁移：当前源码未提供原map-core运行时导入；MapService、SearchService、LngLat的类型声明不等于可用依赖，缺任一依赖时初始化会进入降级显示，不代表真实地图初始化成功。恢复正式适配器／第三方生命周期契约前，不将降级渲染测试当地图服务验收。
+
+内部300ms中心更新和500ms选点等待用于抑制程序化moveend反向解析，不是CSS动画完成时长或公开CSS变量；不应通过覆盖视觉duration Token控制它们。真实SDK下的计时取消、停用／卸载、旧回调／异步结果及监听释放尚待独立验证；MapSelect地址回填和定位也不由缺SDK测试覆盖。
+
+<demo src="./__demos__/auth.vue"></demo>
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
 
 ## API
 

@@ -120,6 +120,10 @@ describe("scheduler-core", () => {
     expect(moved.metadata).toEqual({ orderId: "order-1" });
     expect(moved.metadata).not.toBe(original.metadata);
     expect(original.resourceIds).toEqual(["a", "b"]);
+    expect(
+      moveSchedulerEvent(original, "2026-09-10T11:00:00", "a", "a")
+        .resourceIds,
+    ).toEqual(["a", "b"]);
     expect(+schedulerDate(moved.end!) - +schedulerDate(moved.start!)).toBe(
       3600000,
     );

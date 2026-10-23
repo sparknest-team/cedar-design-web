@@ -3,6 +3,8 @@ import { mount } from '@vue/test-utils'
 import { describe, test, expect, vi } from 'vitest'
 import { FilterForm } from '../index'
 import Input from '../../input'
+import Select from '../../select'
+import type { FilterFormField } from '../types'
 
 function stubMatchMedia() {
   vi.stubGlobal('matchMedia', () => ({
@@ -15,6 +17,77 @@ function stubMatchMedia() {
 }
 
 describe('FilterForm', () => {
+  test('single-column collapse retains a field above the actions', async () => {
+    stubMatchMedia()
+    const wrapper = mount(FilterForm, {
+      props: {
+        cols: 1,
+        fields: Array.from({ length: 3 }, (_, i) => ({ component: 'input', field: `f${i}`, label: `F${i}` })),
+        fieldMap: { input: { component: Input } },
+      },
+    })
+    try {
+      await nextTick()
+      await nextTick()
+      const items = wrapper.findAll('.c-grid-item')
+      expect(items[0].element.style.display).not.toBe('none')
+      expect(items[1].element.style.display).toBe('none')
+      expect(wrapper.get('button.c-filter-form__collapse').attributes('aria-expanded')).toBe('false')
+      await wrapper.get('button.c-filter-form__collapse').trigger('click')
+      expect(items.slice(0, 3).every(item => item.element.style.display !== 'none')).toBe(true)
+    } finally {
+      wrapper.unmount()
+    }
+  })
+  test('direct components sync nested values only through update:modelValue', async () => {
+    stubMatchMedia()
+    const wrapper = mount(FilterForm, {
+      props: {
+        modelValue: { search: { keyword: '' } },
+        fields: [{ component: Input, field: 'search.keyword', autoEmitChange: false }],
+      },
+    })
+    const input = wrapper.findComponent(Input)
+    input.vm.$emit('change', 'ignored')
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    input.vm.$emit('update:modelValue', 'cedar')
+    await nextTick()
+    expect(wrapper.emitted('update:modelValue')).toEqual([[{ search: { keyword: 'cedar' } }]])
+    expect(input.props('modelValue')).toBe('cedar')
+    expect(wrapper.emitted('change')).toBeUndefined()
+    await wrapper.setProps({ modelValue: { search: { keyword: 'external' } } })
+    expect(input.props('modelValue')).toBe('external')
+    wrapper.unmount()
+  })
+
+  test('registered components merge defaults and receive refreshed options', async () => {
+    stubMatchMedia()
+    const fields = (options: unknown[]): FilterFormField[] => [{
+      component: 'select', field: 'status', props: { placeholder: '状态', options },
+    }]
+    const wrapper = mount(FilterForm, {
+      props: {
+        fields: fields([]),
+        fieldMap: { select: { component: Select, defaultProps: { clearable: true, placeholder: '全部' } } },
+        changeDebounce: 0,
+      },
+    })
+    const select = wrapper.findComponent(Select)
+    expect(select.props('clearable')).toBe(true)
+    expect(select.props('placeholder')).toBe('状态')
+    const options = [{ label: '启用', value: 'enabled' }]
+    await wrapper.setProps({ fields: fields(options) })
+    expect(select.props('options')).toEqual(options)
+    select.vm.$emit('update:modelValue', 'enabled')
+    select.vm.$emit('change', 'enabled')
+    expect(wrapper.emitted('update:modelValue')).toEqual([[{ status: 'enabled' }]])
+    await new Promise(resolve => setTimeout(resolve, 10))
+    expect(wrapper.emitted('change')).toEqual([[{ status: 'enabled' }, 'status']])
+    await wrapper.setProps({ fields: fields([]) })
+    expect(select.props('options')).toEqual([])
+    wrapper.unmount()
+  })
+
   test('render', async () => {
     stubMatchMedia()
     const wrapper = mount(FilterForm)
@@ -28,11 +101,11 @@ describe('FilterForm', () => {
       props: {
         modelValue: { keyword: '' },
         fieldMap: {
-          input: { component: Input, valueEvent: 'update:modelValue' },
+          input: { component: Input },
         },
         fields: [
           {
-            type: 'input',
+            component: 'input',
             field: 'keyword',
             label: '关键词',
           },
@@ -50,7 +123,7 @@ describe('FilterForm', () => {
         modelValue: {},
         fields: [
           {
-            type: 'select',
+            component: 'select',
             field: 'type',
             label: '类型',
           },
@@ -64,7 +137,7 @@ describe('FilterForm', () => {
   test('shows expand/collapse when fields overflow', async () => {
     stubMatchMedia()
     const fields = Array.from({ length: 8 }, (_, i) => ({
-      type: 'input',
+      component: 'input',
       field: `f${i}`,
       label: `F${i}`,
     }))
@@ -74,7 +147,7 @@ describe('FilterForm', () => {
         collapsed: true,
         cols: 3,
         fieldMap: {
-          input: { component: Input, valueEvent: 'update:modelValue' },
+          input: { component: Input },
         },
         fields,
       },
@@ -88,11 +161,15 @@ describe('FilterForm', () => {
 
     const collapseBtn = wrapper.find('.c-filter-form__collapse')
     expect(collapseBtn.exists()).toBe(true)
+    expect(collapseBtn.element.tagName).toBe('BUTTON')
+    expect(collapseBtn.attributes('type')).toBe('button')
+    expect(collapseBtn.attributes('aria-expanded')).toBe('false')
     expect(collapseBtn.text()).toContain('展开')
 
     await collapseBtn.trigger('click')
     await nextTick()
     expect(wrapper.find('.c-filter-form__collapse').text()).toContain('收起')
+    expect(wrapper.find('.c-filter-form__collapse').attributes('aria-expanded')).toBe('true')
     expect(wrapper.emitted('update:collapsed')?.[0]).toEqual([false])
 
     wrapper.unmount()
@@ -101,7 +178,7 @@ describe('FilterForm', () => {
   test('collapsible works without actions slot', async () => {
     stubMatchMedia()
     const fields = Array.from({ length: 6 }, (_, i) => ({
-      type: 'input',
+      component: 'input',
       field: `f${i}`,
       label: `F${i}`,
     }))
@@ -110,7 +187,7 @@ describe('FilterForm', () => {
         modelValue: {},
         cols: 2,
         fieldMap: {
-          input: { component: Input, valueEvent: 'update:modelValue' },
+          input: { component: Input },
         },
         fields,
       },

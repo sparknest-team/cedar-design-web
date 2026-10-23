@@ -3,19 +3,15 @@
     v-model="filter"
     v-model:collapsed="collapsed"
     :fields="fields"
-    :field-map="fieldMap"
-    :options-map="optionsMap"
     :rules="rules"
-    @change="onChange"
   >
     <template #actions>
-      <c-space>
-        <c-button @click="reset">重置</c-button>
-        <c-button status="primary" @click="search">搜索</c-button>
-      </c-space>
+      <c-button variant="outline" :elevation="false" @click="reset">重置</c-button>
+      <c-button status="primary" :elevation="false" @click="search">搜索</c-button>
     </template>
   </c-filter-form>
   <pre class="demo-filter-json">{{ filter }}</pre>
+  <p role="status">{{ result }}</p>
 </template>
 
 <script lang="ts" setup>
@@ -26,10 +22,10 @@ import {
   Input,
   Select,
   type FilterFormField,
-  type FilterFormFieldMap,
 } from '@cedarjs/ui'
 
 const collapsed = ref(true)
+const result = ref('尚未搜索')
 const filter = ref<Record<string, unknown>>({
   region: undefined,
   status: undefined,
@@ -37,27 +33,7 @@ const filter = ref<Record<string, unknown>>({
   timeRange: undefined,
 })
 
-const fieldMap: FilterFormFieldMap = {
-  cascader: {
-    component: Cascader,
-  },
-  select: {
-    component: Select,
-    optionsFromMap: true,
-  },
-  input: {
-    component: Input,
-    valueEvent: 'update:modelValue',
-  },
-  'date-range': {
-    component: DateRange,
-    defaultProps: {
-      valueFormat: 'timestamp',
-    },
-  },
-}
-
-const optionsMap = {
+const options = {
   status: [
     { label: '待处理', value: 'pending' },
     { label: '进行中', value: 'doing' },
@@ -75,12 +51,14 @@ const rules = {
 
 const fields: FilterFormField[] = [
   {
-    type: 'cascader',
+    component: Cascader,
     field: 'region',
     label: '地区',
     props: {
       clearable: true,
+      placeholder: '请选择地区',
       pathMode: true,
+      variant: 'outline',
       options: [
         {
           value: 'beijing',
@@ -99,42 +77,39 @@ const fields: FilterFormField[] = [
     },
   },
   {
-    type: 'select',
+    component: Select,
     field: 'status',
     label: '状态',
-    props: { clearable: true, placeholder: '全部' },
+    props: { variant: 'outline', clearable: true, placeholder: '全部', options: options.status },
   },
   {
-    type: 'select',
+    component: Select,
     field: 'owner',
     label: '负责人',
-    props: { clearable: true, placeholder: '全部' },
+    props: { variant: 'outline', clearable: true, placeholder: '全部', options: options.owner },
   },
   {
-    type: 'input',
+    component: Input,
     field: 'keyword',
     label: '关键词',
     autoEmitChange: false,
-    props: { clearable: true, placeholder: '回车或失焦触发' },
+    props: { variant: 'outline', clearable: true, placeholder: '回车或失焦触发' },
   },
   {
-    type: 'date-range',
+    component: DateRange,
     field: 'timeRange',
     label: '时间范围',
     gridItemProps: { span: 2 },
-    props: { clearable: true, showTime: true },
+    props: { variant: 'outline', valueFormat: 'timestamp', clearable: true, showTime: true },
   },
 ]
 
-function onChange(_value: Record<string, unknown>, field: string) {
-  console.log('[FilterForm] change', field)
-}
-
 function search() {
-  console.log('[FilterForm] search', filter.value)
+  result.value = `搜索条件：${JSON.stringify(filter.value)}`
 }
 
 function reset() {
+  result.value = '已重置'
   filter.value = {
     region: undefined,
     status: undefined,
@@ -149,7 +124,8 @@ function reset() {
   margin-top: 16px;
   padding: 12px 16px;
   border-radius: 4px;
-  background: var(--color-fill-2, #f2f3f5);
+  background: var(--c-sys-color-surface-muted);
+  color: var(--c-sys-color-content-secondary);
   font-size: 12px;
   line-height: 1.5;
   white-space: pre-wrap;

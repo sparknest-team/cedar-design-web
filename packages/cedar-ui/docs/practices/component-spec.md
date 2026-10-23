@@ -209,12 +209,11 @@ Button 和 SplitButton 的 `onClick` 是消费 Promise 返回值以驱动 `autoL
 
 ### 4.4 特殊 prop 语义说明
 
-- **`sizeX` / `sizeY`（divider）**：命名锚定**几何方向**而非视觉方向 ——
-  - `sizeX` 始终代表"沿 x 轴方向上的间距"（即左右间距），`sizeY` 始终代表"沿 y 轴方向上的间距"（即上下间距）。
-  - 当 `orientation='horizontal'` 时，分割线视觉上呈水平延伸，"沿 x 轴的间距"对应**两端 inset**，"沿 y 轴的间距"对应**上下 margin**。
-  - 当 `orientation='vertical'` 时，分割线视觉上呈竖直延伸，二者视觉上"互换"。
-  - **这是有意行为**，规范要求：当组件存在"方向 + 双轴间距"两类 prop 时，**间距 prop 按几何轴命名**（`sizeX` / `sizeY`），并在 README 显式说明 `orientation` 切换后视觉表现如何变化。
-  - 反例：`marginTop` / `marginBottom` / `marginLeft` / `marginRight` 这种按"视觉方位"命名的 prop 在带 `orientation` 切换时会语义错乱，**禁止**使用。
+- **`inset` / `spacing`（divider）**：按分割线方向描述间距。
+  - `inset` 是沿分割线方向的两端缩进：水平时左右，竖直时上下；默认不缩进。
+  - `spacing` 是垂直于分割线方向的外间距：水平时上下，竖直时左右；默认 `md`。
+  - 两者支持五档预设、数值（px）、CSS 长度与 `[start, end]`；标量对称应用，水平方向遵循逻辑起止位置与 RTL。
+  - 两端同步迁移源码、类型、调用方、示例、文档、样式和 token；不提供旧属性或 token 别名。
 - **`hairline` 与 `thickness` 互斥**：同时出现时以 `hairline` 优先，组件内必须显式判断（参考 [src/divider/divider.vue](src/divider/divider.vue)）。
 
 ---
@@ -329,6 +328,8 @@ export function useXxxGroup() {
 
 ## 8. 文档规范（README.md）
 
+示例分组遵守 `design-ui/standards/demo-design.md`：同类功能放在一起，每张案例最多组合三个相关维度，基础案例在前，功能调试在后；两端同步案例名称、说明和源码引用。
+
 固定段落顺序：
 
 ````markdown
@@ -378,7 +379,7 @@ import type { ComponentProps } from "@cedarjs/ui";
 
 - 所有 `<demo src="...">` 路径必须是 `kebab-case`。
 - 当组件存在"父级配置 + 子级覆盖"机制时，必须在表格下方加 **注意** 段说明继承关系（参考 button README）。
-- `orientation` / `sizeX` / `sizeY` 这类有方向语义的 prop，必须显式说明切换 orientation 后的视觉表现。
+- `orientation` / `inset` / `spacing` 这类有方向语义的 prop，必须显式说明切换 orientation 后的视觉表现。
 
 ---
 
@@ -419,7 +420,7 @@ describe('Component', () => {
 - ❌ 在 props 中直接写联合字面量而不复用 `Status` / `Size` 等公共枚举。
 - ❌ 提交残留的 `console.log`。
 - ❌ `index.ts` 漏导出 `xxxProps` / `_XxxComponent`。
-- ❌ 组件内部用 `marginTop` / `marginLeft` 等"视觉方位"命名间距 prop 配合 `orientation` 切换 —— 必须用几何轴命名（`sizeX` / `sizeY`）。
+- ❌ 组件内部用 `marginTop` / `marginLeft` 等"视觉方位"命名间距 prop 配合 `orientation` 切换 —— 应使用沿线缩进与线外间距命名（`inset` / `spacing`）。
 
 ## 附录 A：跨端对齐案例 — Alert
 

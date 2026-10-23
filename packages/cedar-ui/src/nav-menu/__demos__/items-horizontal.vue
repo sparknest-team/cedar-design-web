@@ -39,7 +39,7 @@ const regionLabel = computed(() => regions.find(item => item.key === region.valu
         :hide-on-select="false"
       >
         <template #content="{ close }">
-          <c-space direction="vertical" style="width: 100%">
+          <c-space direction="column" style="width: 100%">
             <strong>按关键词筛选</strong>
             <c-input v-model="keyword" placeholder="输入资源名称" aria-label="资源名称" />
             <c-space>

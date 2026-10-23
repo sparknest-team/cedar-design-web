@@ -8,6 +8,9 @@ const workspace = fileURLToPath(new URL('../../', import.meta.url))
 const cedar = resolve(workspace, 'cedar-design-web/packages/cedar-ui/src')
 const maple = resolve(workspace, 'maple-design-mobile/packages/maple-ui/src')
 const files = [
+  '_components/field-presentation/with-field-presentation.ts',
+  '_components/field-presentation/use-field-search.ts',
+  '_components/field-presentation/option-labels.ts',
   "select/Option.vue",
   "select/types.ts",
   "select/utils.ts",

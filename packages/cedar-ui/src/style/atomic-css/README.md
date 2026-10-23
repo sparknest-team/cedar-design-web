@@ -36,11 +36,11 @@ UnoCSS 和 Tailwind **二选一配置**，但组件里的类名完全相同。�
       <span class="c-text-success">Success</span>
     </div>
 
-    <button
+    <c-button
       class="c-rounded-md c-border-0 c-bg-primary c-px-16 c-py-8 c-text-white hover:c-opacity-80"
     >
       保存
-    </button>
+    </c-button>
   </div>
 </template>
 ```
@@ -157,7 +157,7 @@ export default {
 <div class="c-bg-body c-text-primary">primary</div>
 
 <!-- 状态变体 -->
-<button class="c-border c-border-primary hover:c-bg-primary">hover</button>
+<c-button class="c-border c-border-primary hover:c-bg-primary">hover</c-button>
 
 <!-- 响应式变体；断点本身不加 c- 前缀 -->
 <div class="c-bg-primary sm:c-bg-info md:c-bg-warning">responsive</div>

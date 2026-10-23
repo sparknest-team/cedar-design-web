@@ -48,6 +48,7 @@ declare module "vue" {
     CDragContainer: (typeof import("@cedarjs/ui/web-vue"))["DragContainer"];
     CDrawer: (typeof import("@cedarjs/ui/web-vue"))["Drawer"];
     CEmpty: (typeof import("@cedarjs/ui/web-vue"))["Empty"];
+    CFieldDecorator: (typeof import("@cedarjs/ui"))["FieldDecorator"];
     CForm: (typeof import("@cedarjs/ui/web-vue"))["Form"];
     CFormItem: (typeof import("@cedarjs/ui/web-vue"))["FormItem"];
     CGrid: (typeof import("@cedarjs/ui/web-vue"))["Grid"];
@@ -73,7 +74,7 @@ declare module "vue" {
     CListItem: (typeof import("@cedarjs/ui/web-vue"))["ListItem"];
     CListItemMeta: (typeof import("@cedarjs/ui/web-vue"))["ListItemMeta"];
     CMention: (typeof import("@cedarjs/ui/web-vue"))["Mention"];
-    CDropdownMenu: (typeof import("@cedarjs/ui/web-vue"))["DropdownMenu"];
+    CMenu: (typeof import("@cedarjs/ui/web-vue"))["Menu"];
     CSplitButton: (typeof import("@cedarjs/ui/web-vue"))["SplitButton"];
     CMenuOption: (typeof import("@cedarjs/ui/web-vue"))["MenuOption"];
     CNavMenu: (typeof import("@cedarjs/ui/web-vue"))["NavMenu"];

@@ -7,6 +7,7 @@ const workspace = fileURLToPath(new URL('../../', import.meta.url))
 const cedar = resolve(workspace, 'cedar-design-web/packages/cedar-ui/src')
 const maple = resolve(workspace, 'maple-design-mobile/packages/maple-ui/src')
 const files = [
+  'date-range/__tests__/field-range-session.spec.js',
   'date/date-format.ts',
   'date/date-value.ts',
   'date/date-locale.ts',

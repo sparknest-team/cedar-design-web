@@ -9,7 +9,7 @@
     <template #prefix><span aria-hidden="true">⌕</span></template>
     <template #suffix><span>⌘ K</span></template>
     <template #clear-icon="{ clear }">
-      <button type="button" aria-label="清空" @click="clear">×</button>
+      <c-button html-type="button" aria-label="清空" @click="clear">×</c-button>
     </template>
     <template #button-default>查找</template>
   </c-search>

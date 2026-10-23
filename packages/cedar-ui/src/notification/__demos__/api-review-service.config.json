@@ -1,0 +1,152 @@
+{
+  "fields": [
+    {
+      "name": "content",
+      "description": "内容",
+      "type": "RenderContent",
+      "defaultValue": "-",
+      "kind": "string"
+    },
+    {
+      "name": "title",
+      "description": "标题",
+      "type": "RenderContent",
+      "defaultValue": "-",
+      "kind": "string"
+    },
+    {
+      "name": "icon",
+      "description": "图标",
+      "type": "RenderFunction",
+      "defaultValue": "-",
+      "kind": "callback"
+    },
+    {
+      "name": "id",
+      "description": "唯一id",
+      "type": "string",
+      "defaultValue": "-",
+      "kind": "string"
+    },
+    {
+      "name": "style",
+      "description": "样式",
+      "type": "CSSProperties",
+      "defaultValue": "-",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "class",
+      "description": "样式类名",
+      "type": "ClassName",
+      "defaultValue": "-",
+      "kind": "string",
+      "initial": "review-class"
+    },
+    {
+      "name": "position",
+      "description": "位置",
+      "type": "'topLeft'|'topRight'|'bottomLeft'|'bottomRight'",
+      "defaultValue": "-",
+      "kind": "enum",
+      "options": [
+        "topLeft",
+        "topRight",
+        "bottomLeft",
+        "bottomRight"
+      ],
+      "initial": "topLeft"
+    },
+    {
+      "name": "show-icon",
+      "description": "是否显示图标",
+      "type": "boolean",
+      "defaultValue": "true",
+      "kind": "boolean"
+    },
+    {
+      "name": "closable",
+      "description": "是否可关闭",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "duration",
+      "description": "显示的持续时间，单位为 ms",
+      "type": "number",
+      "defaultValue": "3000",
+      "kind": "number"
+    },
+    {
+      "name": "footer",
+      "description": "底部内容",
+      "type": "RenderFunction",
+      "defaultValue": "-",
+      "kind": "callback"
+    },
+    {
+      "name": "close-icon",
+      "description": "关闭按钮图标",
+      "type": "RenderFunction",
+      "defaultValue": "-",
+      "kind": "callback"
+    },
+    {
+      "name": "close-icon-element",
+      "description": "关闭按钮元素",
+      "type": "RenderFunction",
+      "defaultValue": "-",
+      "kind": "callback"
+    },
+    {
+      "name": "on-close",
+      "description": "关闭时的回调函数",
+      "type": "(id: number | string) => void",
+      "defaultValue": "-",
+      "kind": "callback"
+    },
+    {
+      "name": "type",
+      "type": "\"info\" | \"success\" | \"warning\" | \"error\"",
+      "defaultValue": "'info'",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "enum",
+      "options": [
+        "info",
+        "success",
+        "warning",
+        "error"
+      ],
+      "initial": "info"
+    },
+    {
+      "name": "reset-on-update",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "close-button-aria-label",
+      "type": "string",
+      "defaultValue": "'Close notification'",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "string"
+    }
+  ],
+  "methodNames": [
+    "info",
+    "success",
+    "warning",
+    "error",
+    "remove",
+    "clear"
+  ],
+  "events": [
+    "close"
+  ],
+  "slotNames": [],
+  "scenarios": []
+}

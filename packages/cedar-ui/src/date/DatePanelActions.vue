@@ -1,5 +1,5 @@
 <template>
-  <div v-if="showNow || showConfirm" :class="n()">
+  <div v-if="showNow || showConfirm || $slots.default" :class="n()">
     <slot
       v-bind="{
         confirm: () => emit('confirm'),
@@ -9,7 +9,9 @@
       }"
     >
       <Button v-if="showNow" variant="text" :disabled="nowDisabled" @click="emit('select-now')">{{ nowText }}</Button>
-      <Button v-if="showConfirm" :disabled="!canConfirm" @click="emit('confirm')">{{ confirmText }}</Button>
+      <Button v-if="showConfirm" status="primary" :disabled="!canConfirm" @click="emit('confirm')">{{
+        confirmText
+      }}</Button>
     </slot>
   </div>
 </template>

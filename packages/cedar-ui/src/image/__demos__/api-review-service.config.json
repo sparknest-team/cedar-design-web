@@ -1,0 +1,215 @@
+{
+  "fields": [
+    {
+      "name": "src",
+      "description": "图片获取地址",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "width",
+      "description": "图片显示宽度",
+      "type": "string | number",
+      "defaultValue": "undefined",
+      "kind": "scalar"
+    },
+    {
+      "name": "height",
+      "description": "图片显示高度",
+      "type": "string | number",
+      "defaultValue": "undefined",
+      "kind": "scalar"
+    },
+    {
+      "name": "title",
+      "description": "标题",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "description",
+      "description": "描述，将显示在底部，如果 alt 没有值，则会将其设置给 alt",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "object-fit",
+      "description": "确定图片如何适应容器框",
+      "type": "'fill' | 'contain' | 'cover' | 'none' | 'scale-down'",
+      "defaultValue": "'fill'",
+      "kind": "enum",
+      "options": [
+        "fill",
+        "contain",
+        "cover",
+        "none",
+        "scale-down"
+      ],
+      "initial": "fill"
+    },
+    {
+      "name": "alt",
+      "description": "图片的文字描述",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
+      "name": "hide-footer",
+      "description": "是否隐藏 footer（支持 'never'，错误时仍显示底部）",
+      "type": "boolean | 'never'",
+      "defaultValue": "false",
+      "kind": "scenario"
+    },
+    {
+      "name": "footer-position",
+      "description": "底部显示的位置",
+      "type": "'inner' | 'outer'",
+      "defaultValue": "'inner'",
+      "kind": "enum",
+      "options": [
+        "inner",
+        "outer"
+      ],
+      "initial": "inner"
+    },
+    {
+      "name": "show-loader",
+      "description": "是否显示加载中效果",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "preview-disabled",
+      "description": "是否禁用点击预览",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "preview-open",
+      "description": "控制预览的打开状态",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "default-preview-open",
+      "description": "预览的默认打开状态",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "preview-props",
+      "description": "预览的配置项",
+      "type": "ImagePreviewProps",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "footer-class",
+      "description": "底部显示区域的类名",
+      "type": "string|array|object",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "popup-container",
+      "description": "预览挂载容器",
+      "type": "string | HTMLElement | false",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "\"body\""
+    },
+    {
+      "name": "preview-src",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "string"
+    },
+    {
+      "name": "fallback-src",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "string"
+    },
+    {
+      "name": "object-position",
+      "type": "string",
+      "defaultValue": "'50% 50%'",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "string"
+    },
+    {
+      "name": "radius",
+      "type": "string | number",
+      "defaultValue": "0",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "scalar"
+    },
+    {
+      "name": "load-description",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "string"
+    },
+    {
+      "name": "lazy",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "img-props",
+      "type": "ImgHTMLAttributes",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "json",
+      "initial": "{\"alt\":\"审查图片 / Review image\",\"draggable\":false}"
+    },
+    {
+      "name": "previewed-img-props",
+      "type": "ImgHTMLAttributes",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "json",
+      "initial": "{\"alt\":\"审查图片 / Review image\",\"draggable\":false}"
+    },
+    {
+      "name": "ripple",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "block",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    }
+  ],
+  "methodNames": [
+    "image-preview",
+    "image-preview.close",
+    "image-preview.set-default-options",
+    "image-preview.reset-default-options"
+  ],
+  "events": [
+    "preview-open-change"
+  ],
+  "slotNames": [],
+  "scenarios": []
+}

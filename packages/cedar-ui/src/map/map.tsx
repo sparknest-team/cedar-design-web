@@ -62,6 +62,7 @@ export default defineComponent({
   ],
 
   setup(props, { emit }) {
+    const sdkAvailable = typeof MapService !== "undefined" && typeof SearchService !== "undefined" && typeof LngLat !== "undefined";
     const { t } = useI18n();
     const attrs = useAttrs();
     const slots = useSlots();
@@ -471,6 +472,7 @@ export default defineComponent({
 
     const isLocating = ref(false);
     const locateMe = async () => {
+      if (!sdkAvailable) return;
       if (isLocating.value) {
         return;
       }
@@ -501,6 +503,7 @@ export default defineComponent({
         <div class="map-wrapper">
           <div class="map-search">
             <Input
+              disabled={!sdkAvailable}
               class="map-search-input"
               modelValue={searchVal.value}
               onUpdate:modelValue={(v: string) => {
@@ -539,16 +542,14 @@ export default defineComponent({
                 ))}
               </div>
             ) : isInited.value ? (
-              <div class="map-search-box-empty">{t("map.noData")}</div>
+              <div class="map-search-box-empty" role="status">{sdkAvailable ? t("map.noData") : "Map SDK unavailable / 地图服务未配置"}</div>
             ) : (
               ""
             )}
           </div>
-          <img
-            src="https://xxx.com/pe-fe-statics/map-cur-position.png"
-            alt=""
-            class="position-dot"
-          />
+          <svg viewBox="0 0 24 24" class="position-dot" aria-hidden="true">
+            <path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 10a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
+          </svg>
           {props.showLocateMeButton ? (
             <div
               class="locate-me-btn"

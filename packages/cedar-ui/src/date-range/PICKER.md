@@ -8,15 +8,33 @@ permalink: /components/date-range-picker/
 
 日期范围选择**面板**（默认无触发器）。
 
+### 快捷预览宽限与表头结算（2026-10-16）
+
+离开快捷项后的100ms是交互宽限，不是CSS动画结束时间，不提交模型。新预览／单元格选择／配置或模型变化、停用卸载会使旧等待失效；旧回调不能清新预览或输入草稿。表头渲染等待按原预览归属一次消费，离开后的宽限期仍可正常显示预览表头；激活不恢复旧任务。
+
+21项受控范围专项通过；其余分层回归见证据。此审计不认证所有select／confirm／input命令、非快捷表头调用方或原生hover／OS，API／CSS Token／100ms默认值保持。证据：design-ui/audits/evidence/date-range-shortcut-preview-2026-10-16/results.json。
+
 表单字段请使用 [`DateRange`](/components/date-range/)。单日期面板请使用 [`DatePicker`](/components/date-picker/)。
 
 ## 案例
+
+### 窄屏与组合面板
+
+独立面板随容器宽度收缩；范围日历在空间不足时上下排列。可切换快捷项位置，检查时间、导航与确认操作。
+
+<demo src="../date/picker/__demos__/responsive-panels.vue"></demo>
 
 ### 字段与嵌入式面板
 
 字段管理输入与浮层，纯面板直接嵌入页面。日历周起点统一为 day-start-of-week（数字 0～6，0 为周日），动态修改立即生效。
 
+本例通过 `actions` 插槽调用 `confirm`，并把 `disabled` 绑定到提交按钮。选择草稿不更新“已提交”，确认后才写回；动态收紧边界不会清除已有模型，但不合法草稿不能提交。双日历两侧的月份可能不同，请依据各自标题选择日期。仅占位而无导航回调的箭头禁用，并退出 Tab 顺序及无障碍树。
+
 <demo src="./__demos__/entry-boundary.vue"></demo>
+
+“禁用20日结束”动态改变 `disabled-date` 回调：先选10~20草稿，再启用禁用，提交不可用且已提交值不变；解除禁用只恢复确认资格，不自动提交。禁用只作用于结束端，不应误禁起点20日。
+
+The “disable day 20 as the end” switch changes `disabled-date` dynamically. A pending 10–20 range cannot commit while blocked; the committed model stays unchanged. Unblocking only restores confirmation eligibility, without committing. Day 20 remains valid as the start.
 
 ### 基本用法
 
@@ -35,6 +53,22 @@ permalink: /components/date-range-picker/
 ### 禁用部分日期
 
 <demo src="./__demos__/picker/disabled-parts.vue"></demo>
+
+### 端点锁定
+
+双锁不拦截父级主动更新模型，但日期与确认保持禁用；外部更新后解锁起点，只恢复起点编辑，不自动提交。此时选择16并确认保留新终点22，不恢复旧终点15。
+
+点击“外部改为18~22”直接更新父模型：未确认的旧草稿随之同步，锁定端以新模型为基准；外部更新不增加选择或确认次数。之后选择24并确认，只提交18~24，不恢复旧起点。
+
+先编辑草稿再锁定该端，不代表授权草稿覆盖已提交端点：只要锁定端草稿与模型不同，确认保持不可用。解除锁定保留草稿并恢复确认，但本身不提交，仍需显式确认。
+
+逆序候选如果会交换锁定端，必须在写入内部日历草稿前拒绝；已提交范围与当前展示草稿均不改变，之后的合法选择仍可确认。范围排序不能静默移动锁定端。
+
+本例显式设置 disable-confirm=false。仅一端锁定时，单次日期选择只编辑未锁端，不重新开始两次点击选范围；双锁时日期候选同步禁用语义，确认不可用。解除锁定恢复编辑，本身不提交。
+
+`disabled=[起点锁定, 终点锁定]` 保留已提交端点，只修改另一端的草稿；确认后才回写模型。切换锁定本身不提交；两端都锁定时不能选择。此处是独立面板，不提供弹层取消链。
+
+<demo src="./__demos__/picker/endpoint-lock.vue"></demo>
 
 ## API
 
@@ -103,6 +137,10 @@ exchange-time 默认 true，反序交互交换整个日期时间端点；false �
 日期标签、标题和动作接入各库的全局 Locale 与既有 Provider。Cedar 删除日期组件级 `locale`，不保留覆盖字典或兼容别名。切换语言不会选择或提交日期。
 
 ### 内嵌时间与滚轮展示
+
+内嵌时间列的选择与日期列使用同一草稿事务；默认修改起点或终点时间后仍需外层确认，不会丢失时间选择，也不会提前写回模型。
+
+Embedded time columns and date columns share one draft transaction. By default, changing either endpoint time requires the outer confirmation; the edit is preserved without committing early.
 
 `time-picker-props` 使用 `DateTimePickerOptions`：`use12Hours`、`step`、`hideDisabledOptions`、`class`、`style`。仅配置时间展示；日期值、格式/秒精度、约束和确认仍由日期所有者管理。`step` 负责展示采样，不静默修正外部值。未知参数及监听函数不转发。
 

@@ -1,5 +1,5 @@
 <template>
-  <c-space size="lg">
+  <c-space wrap size="lg">
     <c-progress mode="circle" :percent="percent" />
     <c-progress mode="circle" status="warning" :percent="percent" />
     <c-progress mode="circle" status="danger" :percent="percent" />

@@ -12,27 +12,34 @@ permalink: /components/segmented/
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### 受控
-
-<demo src="./__demos__/controlled.vue"></demo>
-
 ### 尺寸
 
 <demo src="./__demos__/size.vue"></demo>
 
-### 块级撑满
-
-<demo src="./__demos__/block.vue"></demo>
-
 ### 禁用
 
 <demo src="./__demos__/disabled.vue"></demo>
+
+### 受控
+
+<demo src="./__demos__/controlled.vue"></demo>
+
+### 块级撑满
+
+<demo src="./__demos__/block.vue"></demo>
 
 ## 可访问性
 
 - 根节点使用 `role="radiogroup"`，选项为原生 `radio`，支持键盘切换。
 - 可通过 `name` 绑定表单字段名。
 - 整体禁用时设置 `aria-disabled`。
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
 
 ## API
 

@@ -9,7 +9,7 @@ import { radioGroupProps } from './props'
 import { radioGroupKey } from './context'
 import { useRadioForm } from './form-adapter'
 import { useRadioNavigation } from './use-radio-navigation'
-import Radio from './radio.vue'
+import Radio from './presentation'
 defineOptions({ name: createNamespace('radio-group').name })
 const { n, classes } = createNamespace('radio-group')
 const props = defineProps(radioGroupProps)

@@ -184,6 +184,17 @@
     height: 100%;
   }
 
+  // Loading's content wrapper must carry the constrained height through to the table.
+  > .c-loading > .c-loading__content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+  }
+
   // footer
   &-footer {
     border-radius: 0 0 var(~"--c-table-border-radius")

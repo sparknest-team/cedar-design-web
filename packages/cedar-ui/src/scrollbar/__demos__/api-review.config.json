@@ -1,0 +1,87 @@
+{
+  "fields": [
+    {
+      "name": "type",
+      "description": "类型",
+      "type": "'track' | 'embed'",
+      "defaultValue": "'embed'",
+      "kind": "enum",
+      "options": [
+        "track",
+        "embed"
+      ],
+      "initial": "embed"
+    },
+    {
+      "name": "outer-class",
+      "description": "外层的类名",
+      "type": "string|object|array",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "outer-style",
+      "description": "外层的样式",
+      "type": "StyleValue",
+      "defaultValue": "undefined",
+      "kind": "json",
+      "initial": "{}"
+    },
+    {
+      "name": "hide",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "// private",
+      "kind": "boolean"
+    },
+    {
+      "name": "disable-horizontal",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    },
+    {
+      "name": "disable-vertical",
+      "type": "boolean",
+      "defaultValue": "false",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "boolean"
+    }
+  ],
+  "events": [
+    "scroll"
+  ],
+  "scenarios": [
+    {
+      "name": "outer-class",
+      "kind": "prop",
+      "demos": []
+    },
+    {
+      "name": "scroll-to",
+      "kind": "method",
+      "demos": [
+        "lifecycle.vue"
+      ]
+    },
+    {
+      "name": "scroll-top",
+      "kind": "method",
+      "demos": []
+    },
+    {
+      "name": "scroll-left",
+      "kind": "method",
+      "demos": []
+    }
+  ],
+  "slotNames": [],
+  "slotDefaults": {},
+  "methodNames": [
+    "scroll-to",
+    "scroll-top",
+    "scroll-left"
+  ]
+}

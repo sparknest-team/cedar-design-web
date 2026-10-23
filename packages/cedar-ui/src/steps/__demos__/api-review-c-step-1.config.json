@@ -1,0 +1,54 @@
+{
+  "fields": [
+    {
+      "name": "title",
+      "description": "步骤的标题",
+      "type": "string",
+      "defaultValue": "-",
+      "kind": "string"
+    },
+    {
+      "name": "description",
+      "description": "步骤的描述",
+      "type": "string",
+      "defaultValue": "-",
+      "kind": "string"
+    },
+    {
+      "name": "status",
+      "description": "步骤的状态",
+      "type": "'wait' | 'process' | 'finish' | 'error'",
+      "defaultValue": "-",
+      "kind": "enum",
+      "options": [
+        "wait",
+        "process",
+        "finish",
+        "error"
+      ],
+      "initial": "wait"
+    },
+    {
+      "name": "disabled",
+      "description": "是否禁用步骤",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    }
+  ],
+  "methodNames": [],
+  "events": [],
+  "slotNames": [
+    "icon",
+    "title",
+    "node",
+    "description"
+  ],
+  "slotDefaults": {
+    "icon": true,
+    "title": false,
+    "node": false,
+    "description": false
+  },
+  "scenarios": []
+}

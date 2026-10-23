@@ -43,7 +43,9 @@
     "types": ["node", "vite/client"],
     "baseUrl": ".",
     "paths": {
-      "@cedarjs/ui": ["src/index.ts"]
+      "@cedarjs/ui": ["src/index.ts"],
+      "@ui-foundation/ui-doc-preview": ["../../../design-ui/packages/ui-doc-preview/src/index.ts"],
+      "vue": ["./node_modules/vue"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "vitest.config.ts", "docs/**/*.ts", "docs/**/*.d.ts", "docs/.vuepress/auto-imports.d.ts"]

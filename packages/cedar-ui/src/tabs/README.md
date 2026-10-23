@@ -75,6 +75,19 @@ permalink: /components/tabs/
 
 <demo src="./__demos__/no-padding.vue"></demo>
 
+### 外观组合
+
+适用于同级内容之间的切换。调整变体、尺寸，用相同数据观察变化。内容保持一致，便于比较不同设置的实际效果。
+
+<demo src="./__demos__/appearance-lab.vue"></demo>
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
+
 ## API
 
 ### Tabs Props

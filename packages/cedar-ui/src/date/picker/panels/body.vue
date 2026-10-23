@@ -32,11 +32,6 @@
                 onCellMouseEnter(cell)
               }
             "
-            @mouseleave="
-              () => {
-                onCellMouseLeave(cell)
-              }
-            "
             @click="
               () => {
                 onCellClick(cell)
@@ -60,9 +55,10 @@
 
 <script lang="ts">
 import type { Dayjs } from 'dayjs'
-import { computed, defineComponent, PropType, reactive, toRefs } from 'vue'
+import { computed, defineComponent, inject, PropType, reactive, toRefs } from 'vue'
 import type { Cell, DisabledDate, IsSameTime, Mode } from '../types'
 import { isFunction } from '../../../_utils/is'
+import { clearRangePreviewKey } from '../hooks/range-preview'
 import useCellClassName from '../hooks/use-cell-class-name'
 import RenderFunction, { RenderFunc } from '../../../_components/render-function'
 import { getDateValue } from '../../../_utils/date'
@@ -104,6 +100,7 @@ export default defineComponent({
   },
   emits: ['cell-click', 'cell-mouse-enter'],
   setup(props, { emit }) {
+    const clearRangePreview = inject(clearRangePreviewKey, undefined)
     const { prefixCls, value, disabledDate, isSameTime, mode, rangeValues } = toRefs(props)
 
     const { getCellClassName } = useCellClassName(
@@ -134,12 +131,7 @@ export default defineComponent({
       },
       onCellMouseEnter: (cellData: Cell) => {
         const disabled = isCellDisabled(cellData)
-        if (disabled) return
-        emit('cell-mouse-enter', cellData)
-      },
-      onCellMouseLeave: (cellData: Cell) => {
-        const disabled = isCellDisabled(cellData)
-        if (disabled) return
+        if (disabled) { clearRangePreview?.(); return }
         emit('cell-mouse-enter', cellData)
       },
       getDateValue,

@@ -11,16 +11,17 @@
     :wrap="layoutWrap"
     :div="layout !== 'horizontal' || hideLabel"
     v-bind="rowProps"
+    :data-presentation="presentationState.resolved.value === 'inline' ? undefined : presentationState.resolved.value"
   >
     <Col v-if="!hideLabel" :class="labelColCls" :style="mergedLabelStyle" v-bind="mergedLabelCol">
       <FormItemLabel
         :measure-width="measureLabel"
         :registry="labelRegistry"
-        :required="hideAsterisk ? false : isRequired"
+        :required="!presentationState.readPretty.value && !hideAsterisk && isRequired"
         :show-colon="showColon"
         :asterisk-position="asteriskPosition"
         :component="labelComponent"
-        :attrs="labelAttrs"
+        :attrs="presentationState.readPretty.value ? { ...labelAttrs, for: undefined } : labelAttrs"
         :tooltip="tooltip"
       >
         <slot v-if="$slots.label || label" name="label">{{ label }}</slot>
@@ -40,7 +41,11 @@
           <slot />
         </div>
       </div>
-      <FormItemMessage v-if="isError || $slots.help || help" :error="isError ? finalMessage : []" :help="help">
+      <FormItemMessage
+        v-if="isError || $slots.help || help"
+        :error="!presentationState.readPretty.value && isError ? finalMessage : []"
+        :help="help"
+      >
         <template v-if="$slots.help" #help>
           <slot name="help" />
         </template>
@@ -53,10 +58,6 @@
 </template>
 
 <script lang="ts">
-import { resolveFormItemStatus } from './item-decoration'
-import { formItemProps } from './item-props'
-import { useFormItemLayout } from './use-form-item-layout'
-import { createNamespace } from '../_utils/global-config'
 import {
   computed,
   defineComponent,
@@ -69,22 +70,26 @@ import {
   ref,
   toRefs,
 } from 'vue'
+import { Schema } from 'b-validate'
+import { cloneDeep } from 'lodash-es'
+import { provideItemPresentation } from '../_components/field-presentation/context'
 // @ts-ignore
 import { createRequestGuard } from '../_utils/async-request'
-import { Schema } from 'b-validate'
-import { FormContext, formInjectionKey, FormItemInfo, formItemInjectionKey } from './context'
-import { FieldData, FieldRule, ValidateStatus, ValidateTrigger, FormItemEventHandler } from './types'
-import Row from '../row'
+import { getValueByPath, setValueByPath } from '../_utils/get-value-by-path'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
+import { Data } from '../_utils/types'
 import Col from '../col'
+import { useI18n } from '../locale'
+import Row from '../row'
+import { FormContext, formInjectionKey, FormItemInfo, formItemInjectionKey } from './context'
 import FormItemLabel from './FormItemLabel.vue'
 import FormItemMessage from './FormItemMessage.vue'
-import { getPrefixCls } from '../_utils/global-config'
-import { getValueByPath, setValueByPath } from '../_utils/get-value-by-path'
-import { Data } from '../_utils/types'
+import { resolveFormItemStatus } from './item-decoration'
+import { formItemProps } from './item-props'
+import { FieldData, FieldRule, FormItemEventHandler, ValidateStatus, ValidateTrigger } from './types'
+import { useFormItemLayout } from './use-form-item-layout'
 import { getFinalValidateMessage, getFinalValidateStatus, getFormElementId } from './utils'
-import { useI18n } from '../locale'
 import { hasValidateTrigger } from './validate-trigger'
-import { cloneDeep } from 'lodash-es'
 
 export default defineComponent({
   name: createNamespace('form-item').name,
@@ -114,9 +119,19 @@ export default defineComponent({
     const prefixCls = getPrefixCls('form-item')
     const { field } = toRefs(props)
     const formCtx = inject<Partial<FormContext>>(formInjectionKey, {})
-    const resolvedLayout = useFormItemLayout(() => props, () => formCtx)
-    const { autoLabelWidth, layout, measureLabel, labelCol: mergedLabelCol,
-      labelStyle: mergedLabelStyle, wrapperStyle: mergedWrapperStyle, wrap: layoutWrap } = resolvedLayout
+    const resolvedLayout = useFormItemLayout(
+      () => props,
+      () => formCtx,
+    )
+    const {
+      autoLabelWidth,
+      layout,
+      measureLabel,
+      labelCol: mergedLabelCol,
+      labelStyle: mergedLabelStyle,
+      wrapperStyle: mergedWrapperStyle,
+      wrap: layoutWrap,
+    } = resolvedLayout
     const { i18nMessage } = useI18n()
 
     const mergedWrapperCol = computed(() => ({
@@ -136,6 +151,15 @@ export default defineComponent({
     const validateDisabled = ref(false)
 
     const fieldValue = computed(() => getValueByPath(formCtx.model, props.field))
+    const presentationState = provideItemPresentation({
+      presentation: () => props.presentation,
+      readPretty: () => props.readPretty,
+      label: computed(() => props.label),
+      field: computed(() => props.field),
+      message: computed(() => String(finalMessage.value)),
+      validate: async (candidate) => !(await validateField({ value: candidate })),
+      resetValidation: () => clearValidate(),
+    })
 
     const computedDisabled = computed(() => Boolean(props.disabled ?? formCtx?.disabled))
     const computedReadonly = computed(() => Boolean(props.readonly ?? formCtx?.readonly))
@@ -173,7 +197,7 @@ export default defineComponent({
     )
 
     const validation = createRequestGuard()
-    const validateField = (): Promise<any> => {
+    const validateField = (candidate?: { value: unknown }): Promise<any> => {
       const isCurrent = validation.begin()
       if (validateDisabled.value) {
         return Promise.resolve()
@@ -188,7 +212,9 @@ export default defineComponent({
       }
 
       const _field = field.value
-      const _value = fieldValue.value
+      const _value = candidate ? candidate.value : fieldValue.value
+      const candidateModel = candidate ? cloneDeep(formCtx.model ?? {}) : (formCtx.model ?? {})
+      if (candidate && _field) setValueByPath(candidateModel, _field, candidate.value)
       updateValidateState(_field, {
         status: 'validating',
         message: '',
@@ -197,6 +223,9 @@ export default defineComponent({
       const schema = new Schema(
         {
           [_field]: rules.map(({ ...rule }) => {
+            const validator = rule.validator
+            if (validator)
+              rule.validator = (value, callback) => validator(value, callback, { model: candidateModel, field: _field })
             if (!rule.type && !rule.validator) {
               rule.type = 'string'
             }
@@ -259,7 +288,9 @@ export default defineComponent({
         readonly: computedReadonly,
         error: isError,
         feedback: computedFeedback,
-        hasOuterLabel: computed(() => props.noStyle ? Boolean(formItemCtx?.hasOuterLabel) : !props.hideLabel && Boolean(props.label || slots.label)),
+        hasOuterLabel: computed(() =>
+          props.noStyle ? Boolean(formItemCtx?.hasOuterLabel) : !props.hideLabel && Boolean(props.label || slots.label),
+        ),
         updateValidateState,
       }),
     )
@@ -296,6 +327,7 @@ export default defineComponent({
     }
 
     const resetField = () => {
+      presentationState.cancel()
       clearValidate()
       validateDisabled.value = true
       if (formCtx?.model && field.value) {
@@ -361,8 +393,15 @@ export default defineComponent({
     ])
 
     return {
+      presentationState,
       prefixCls,
-      labelRegistry: formCtx.setLabelWidth && formCtx.removeLabelWidth ? { setLabelWidth: formCtx.setLabelWidth, removeLabelWidth: formCtx.removeLabelWidth } : undefined,
+      labelRegistry:
+        formCtx.setLabelWidth && formCtx.removeLabelWidth
+          ? {
+              setLabelWidth: formCtx.setLabelWidth,
+              removeLabelWidth: formCtx.removeLabelWidth,
+            }
+          : undefined,
       cls,
       isRequired,
       isError,

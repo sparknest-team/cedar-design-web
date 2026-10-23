@@ -28,9 +28,22 @@ permalink: /components/search/
 
 <demo src="./__demos__/controlled-fields.vue"></demo>
 
+### 交互状态切换
+
+适用于关键词输入与搜索提交。调整禁用、只读，用相同数据观察变化。控制区始终可用，可以随时恢复编辑；错误外观本身不会触发表单校验。
+
+<demo src="./__demos__/state-lab.vue"></demo>
+
 ### 历史展示与插槽
 
 <demo src="./__demos__/presentation.vue"></demo>
+
+<!-- api-review:start -->
+### 功能调试
+
+<demo src="./__demos__/api-review.vue"></demo>
+
+<!-- api-review:end -->
 
 ## API
 

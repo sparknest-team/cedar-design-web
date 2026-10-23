@@ -55,3 +55,8 @@ test('covers every documented Cedar programmatic API and preview alias', () => {
     assert(result.code.includes('@cedarjs/ui/' + style + '/style'), name)
   }
 })
+
+test('Color named imports include the wrapper style entry', () => {
+  const result = transform("import { Color, _ColorComponent } from '@cedarjs/ui'")
+  assert.equal(result.code.split('import "@cedarjs/ui/color/style";').length - 1, 1)
+})

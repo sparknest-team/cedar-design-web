@@ -7,7 +7,7 @@
     <template #sidebar-extra="{ startDrag, cancelDrag, disabled }">
       <strong>自定义卡片</strong>
       <p>拖到右侧日期或时间格，确认后新增。卡片可重复使用。</p>
-      <button
+      <c-button
         v-for="card in cards"
         :key="card.title"
         class="scheduler-template-card"
@@ -18,7 +18,7 @@
       >
         <strong>{{ card.title }}</strong>
         <span>{{ card.description }} · {{ card.duration }} 分钟</span>
-      </button>
+      </c-button>
     </template>
   </c-scheduler>
 </template>

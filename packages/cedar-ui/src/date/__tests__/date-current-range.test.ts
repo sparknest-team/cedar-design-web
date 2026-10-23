@@ -10,6 +10,14 @@ const Content = defineComponent({ props: ['value'], emits: ['confirm'], template
 afterEach(() => vi.useRealTimers())
 
 describe('date current action and interaction range policy', () => {
+  it('renders a custom action when built-in actions are hidden', () => {
+    const wrapper = shallowMount(DatePanelActions, {
+      props: { showNow: false, showConfirm: false, nowDisabled: false, canConfirm: true },
+      slots: { default: '<button type="button">允许关闭</button>' },
+    })
+    expect(wrapper.get('button').text()).toBe('允许关闭')
+    wrapper.unmount()
+  })
   it('normalizes current Date/timestamp values to panel precision', () => {
     const now = new Date(2025, 4, 15, 9, 30, 12, 123)
     expect(currentDateValue({ valueFormat: 'Date' }, now)).toEqual(new Date(2025, 4, 15))
