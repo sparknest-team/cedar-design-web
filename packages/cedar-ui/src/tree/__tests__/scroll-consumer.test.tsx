@@ -10,7 +10,7 @@ afterEach(() => cleanups.splice(0).reverse().forEach((cleanup) => cleanup()))
 async function create(virtual = true) {
   const active = ref(true)
   const props = ref({
-    data: Array.from({ length: 40 }, (_, index) => ({ key: `node-${index}`, title: `Node ${index}` })),
+    data: Array.from({ length: 40 }, (_, index) => ({ value: `node-${index}`, label: `Node ${index}` })),
     virtualListProps: virtual ? { height: 90, estimatedSize: 30, fixedSize: true, buffer: 2 } : undefined,
   })
   const wrapper = mount(defineComponent({
@@ -39,7 +39,7 @@ describe('Tree actual VirtualList scroll consumer', () => {
   })
   test('key/bottom options retain downstream alignment semantics', async () => {
     const f = await create()
-    f.scroll({ key: 'node-15', align: 'bottom' })
+    f.scroll({ value: 'node-15', align: 'bottom' })
     await nextTick()
     expect(f.element!.scrollTop).toBe(390)
   })

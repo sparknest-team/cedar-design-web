@@ -3,7 +3,7 @@
     <c-button @click="divider = !divider">
       {{ divider ? 'Hide divider' : 'Show divider' }}
     </c-button>
-    <c-collapse :default-active-names="[]" :divider="divider">
+    <c-collapse :default-value="[]" :divider="divider">
       <c-collapse-item title="Beijing Toutiao Technology Co., Ltd." name="1">
         <div>Beijing Toutiao Technology Co., Ltd.</div>
       </c-collapse-item>

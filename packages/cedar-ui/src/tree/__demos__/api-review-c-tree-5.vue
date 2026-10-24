@@ -9,9 +9,9 @@
       :load-more="loadMore"
       v-bind="__apiReview.bindings"
       v-on="__apiReview.listeners"
-      ><template v-if="__apiReview.slotEnabled['title']" #title="__reviewSlot"
+      ><template v-if="__apiReview.slotEnabled['label']" #label="__reviewSlot"
         ><DemoReviewSlot
-          name="title"
+          name="label"
           :context="__reviewSlot"
           :controls="__apiReview.controls"
           :record="__apiReview.record"
@@ -65,23 +65,23 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review-c-tree-5.config.json";
 
 import { ref } from "vue";
 
 const treeData = ref([
   {
-    title: "Trunk 0-0",
-    key: "0-0",
+    label: "Trunk 0-0",
+    value: "0-0",
   },
   {
-    title: "Trunk 0-1",
-    key: "0-1",
+    label: "Trunk 0-1",
+    value: "0-1",
     children: [
       {
-        title: "Branch 0-1-1",
-        key: "0-1-1",
+        label: "Branch 0-1-1",
+        value: "0-1-1",
       },
     ],
   },
@@ -91,7 +91,7 @@ const loadMore = (nodeData) => {
   return new Promise((resolve) => {
     setTimeout(() => {
       nodeData.children = [
-        { title: `leaf`, key: `${nodeData.key}-1`, isLeaf: true },
+        { label: `leaf`, value: `${nodeData.key}-1`, isLeaf: true },
       ];
       resolve();
     }, 1000);

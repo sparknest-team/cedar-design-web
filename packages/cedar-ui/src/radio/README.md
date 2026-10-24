@@ -210,7 +210,7 @@ Tab 进入已选项（没有已选项时进入第一个可用项）；方向键�
 组件导出以下类型定义
 
 ```ts
-import type { RadioProps } from '@cedarjs/ui'
+import type { RadioProps } from '@cedar-design/ui'
 ```
 
 ### ChoiceFieldNames

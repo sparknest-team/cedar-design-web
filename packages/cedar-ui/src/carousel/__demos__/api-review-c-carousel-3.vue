@@ -4,7 +4,7 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review-c-carousel-3.config.json";
 </script>
 <template>
@@ -49,7 +49,7 @@ import __apiReviewRawConfig from "./api-review-c-carousel-3.config.json";
       /></c-carousel-item>
       <template
         v-if="__apiReview.slotEnabled['indicator'] !== false"
-        #indicator="{ index, length, to }"
+        #indicator="{ slideNumber, length, to }"
       >
         <div
           style="
@@ -66,10 +66,10 @@ import __apiReviewRawConfig from "./api-review-c-carousel-3.config.json";
             :key="i"
             size="xs"
             round
-            :variant="i - 1 === index ? 'default' : 'tonal'"
-            :status="i - 1 === index ? 'primary' : 'default'"
+            :variant="i === slideNumber ? 'default' : 'tonal'"
+            :status="i === slideNumber ? 'primary' : 'default'"
             :aria-label="`跳转至第 ${i} 页`"
-            @click="to(i - 1)"
+            @click="to(i)"
             >{{ i }}</c-button
           >
         </div>

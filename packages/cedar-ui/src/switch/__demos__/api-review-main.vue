@@ -4,7 +4,7 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review.config.json";
 
 import { ref } from "vue";
@@ -59,7 +59,7 @@ const enabled = ref(false);
             :record="__apiReview.record" /></template></c-switch
       ><output>{{ enabled }}</output
       ><c-switch
-        default-checked
+        :default-value="true"
         aria-label="Initially enabled"
         v-bind="__apiReview.bindings"
         v-on="__apiReview.listeners"

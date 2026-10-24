@@ -7,16 +7,16 @@ import { ref } from 'vue'
 
 const treeData = ref([
   {
-    title: 'Trunk 0-0',
-    key: '0-0',
+    label: 'Trunk 0-0',
+    value: '0-0',
   },
   {
-    title: 'Trunk 0-1',
-    key: '0-1',
+    label: 'Trunk 0-1',
+    value: '0-1',
     children: [
       {
-        title: 'Branch 0-1-1',
-        key: '0-1-1',
+        label: 'Branch 0-1-1',
+        value: '0-1-1',
       },
     ],
   },
@@ -25,7 +25,7 @@ const treeData = ref([
 const loadMore = (nodeData) => {
   return new Promise((resolve) => {
     setTimeout(() => {
-      nodeData.children = [{ title: `leaf`, key: `${nodeData.key}-1`, isLeaf: true }]
+      nodeData.children = [{ label: `leaf`, value: `${nodeData.key}-1`, isLeaf: true }]
       resolve()
     }, 1000)
   })

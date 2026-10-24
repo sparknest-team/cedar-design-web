@@ -4,7 +4,7 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review-c-list-1.config.json";
 
 const rows = Array.from({ length: 20 }, (_, index) => ({

@@ -32,7 +32,7 @@ permalink: /components/image/
 
 ### 错误状态
 
-图片加载失败时展示默认错误态，也可用 `error` 插槽自定义。
+图片加载失败时展示默认错误态，也可用 `error` 插槽自定义。示例使用损坏的内联图片数据触发解码失败，不发送无效网络请求。
 
 <demo src="./__demos__/error.vue"></demo>
 
@@ -90,7 +90,7 @@ permalink: /components/image/
 
 ### 预览入口与受控
 
-通过 `preview-src`、`v-model:preview-open` 和 `preview-props` 配置 Image 内嵌预览。
+通过 `preview-src`、`v-model:open` 和 `preview-props` 配置 Image 内嵌预览。
 
 <demo src="./__demos__/preview-entry.vue"></demo>
 
@@ -137,6 +137,8 @@ permalink: /components/image/
 
 ## API
 
+图片预览组使用 `v-model` 绑定从 1 开始的图片序号，`defaultValue` 提供非受控初始图片序号；面板开关独立使用 `v-model:open` 与 `defaultOpen`。函数式预览配置同步使用 modelValue/defaultValue 和 onUpdate:modelValue。
+
 ### `<image>` Props
 
 | 参数名                     | 描述                                                    | 类型                                                       |  默认值   | 版本   |
@@ -152,8 +154,8 @@ permalink: /components/image/
 | footer-position            | 底部显示的位置                                          | `'inner' \| 'outer'`                                       | `'inner'` |        |
 | show-loader                | 是否显示加载中效果                                      | `boolean`                                                  |  `false`  |        |
 | preview-disabled           | 是否禁用点击预览                                        | `boolean`                                                  |  `false`  |        |
-| preview-open **(v-model)** | 控制预览的打开状态                                      | `boolean`                                                  |    `-`    |        |
-| default-preview-open       | 预览的默认打开状态                                      | `boolean`                                                  |  `false`  |        |
+| open **(v-model)** | 控制预览的打开状态                                      | `boolean`                                                  |    `-`    |        |
+| default-open       | 预览的默认打开状态                                      | `boolean`                                                  |  `false`  |        |
 | preview-props              | 预览的配置项                                            | `ImagePreviewProps`                                        |    `-`    |        |
 | footer-class               | 底部显示区域的类名                                      | `string\|array\|object`                                    |    `-`    | 2.23.0 |
 | popup-container            | 预览挂载容器                                            | `string \| HTMLElement \| false`                           |    `-`    |        |
@@ -162,7 +164,7 @@ permalink: /components/image/
 
 | 事件名              | 描述                 | 参数            |
 | ------------------- | -------------------- | --------------- |
-| preview-open-change | 预览的打开和关闭事件 | open: `boolean` |
+| open-change | 预览的打开和关闭事件 | open: `boolean` |
 
 ### `<image>` Slots
 
@@ -209,8 +211,8 @@ permalink: /components/image/
 | 参数名                | 描述                                                              | 类型                    |                                           默认值                                           |
 | --------------------- | ----------------------------------------------------------------- | ----------------------- | :----------------------------------------------------------------------------------------: |
 | images                | 图片列表（设置了本属性之后，将不再收集子 Image 的图片信息）       | `string[]`              |                                            `-`                                             |
-| current **(v-model)** | 当前展示的图片的下标                                              | `number`                |                                            `-`                                             |
-| default-current       | 第一张展示的图片的下标                                            | `number`                |                                            `0`                                             |
+| model-value **(v-model)** | 当前展示的图片的序号（从 1 开始）                                              | `number`                |                                            `-`                                             |
+| default-value       | 第一张展示的图片的序号（从 1 开始）                                            | `number`                |                                            `1`                                             |
 | loop                  | 是否无限循环                                                      | `boolean`               |                                          `false`                                           |
 | open **(v-model)**    | 是否打开，受控属性                                                | `boolean`               |                                            `-`                                             |
 | default-open          | 默认是否打开，非受控                                              | `boolean`               |                                          `false`                                           |
@@ -223,7 +225,7 @@ permalink: /components/image/
 
 | 事件名      | 描述             | 参数            |
 | ----------- | ---------------- | --------------- |
-| change      | 切换图片         | index: `number` |
+| change      | 切换图片         | imageNumber: `number`，previousImageNumber: `number` |
 | open-change | 预览的打开和关闭 | open: `boolean` |
 
 ### `<image-preview-group>` Slots
@@ -242,8 +244,8 @@ permalink: /components/image/
 ### 类型定义
 
 ```ts
-import type { ImageInstance } from "@cedarjs/ui";
-import { imagePreview } from "@cedarjs/ui";
+import type { ImageInstance } from "@cedar-design/ui";
+import { imagePreview } from "@cedar-design/ui";
 ```
 
 ### `imagePreview` 方法
@@ -277,3 +279,7 @@ import { imagePreview } from "@cedarjs/ui";
 ### 变量消费边界
 
 预览组箭头字号由 `--c-image-preview-arrow-font-size` 控制。旧 actions-item、trigger、scale-value 尺寸以及 simple toolbar 变量对应的 DOM 已不存在，已删除这些无效入口；预览工具栏使用 preview-color-action-* 与 preview-padding-action-content，底栏使用现有 footer 变量。错误／加载层填满图片，不另加100px最小高度。缩放与轨道过渡消费 system motion，reduced-motion 时关闭。
+
+### 图片预览组序号
+
+`modelValue/defaultValue` 从 **1** 开始，`1` 表示第 1 张。`open(imageNumber = 1)`、`to(imageNumber)` 接收相同序号，无效或非整数序号会被忽略。`prev()/next()` 在循环边界也回传同一规则的序号。模型事件为 `update:modelValue(imageNumber)`，切换通知为 `change(imageNumber, previousImageNumber)`；外部赋值不补发切换通知。长按通知为 `long-press(imageNumber)`，指示器插槽参数为 `{ imageNumber, length }`。内部数组下标仍从 0 开始。

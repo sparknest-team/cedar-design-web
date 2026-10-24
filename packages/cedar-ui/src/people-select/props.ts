@@ -18,10 +18,9 @@ export const peopleSelectProps = {
     type: String,
     default: '-',
   },
-  modelValue: {
-    type: String,
-    default: '',
-  },
+  modelValue: { type: String, default: undefined },
+  /** 非受控初始选中人员标识，仅创建时读取。 */
+  defaultValue: { type: String, default: '' },
   isLabel: {
     type: Boolean,
     default: false,

@@ -4,7 +4,7 @@
   </c-space>
 </template>
 <script lang="ts" setup>
-import { Notification } from '@cedarjs/ui'
+import { Notification } from '@cedar-design/ui'
 
 const handleNotification = () => {
   Notification.info({

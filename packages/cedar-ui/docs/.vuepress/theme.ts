@@ -109,6 +109,7 @@ export default hopeTheme(
       // },
     },
     markdown: {
+      highlighter: { type: 'prismjs', themes: { light: 'one-light', dark: 'one-dark' } },
       codeTabs: true,
       tabs: true,
     },

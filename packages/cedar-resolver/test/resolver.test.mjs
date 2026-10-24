@@ -11,9 +11,9 @@ const [components, directives] = CedarResolver();
 test("resolves Menu and MenuOption through the menu style entry", () => {
   for (const name of ["Menu", "MenuOption"]) {
     assert.deepEqual(components.resolve(`C${name}`), {
-      from: "@cedarjs/ui",
+      from: "@cedar-design/ui",
       name: `_${name}Component`,
-      sideEffects: ["@cedarjs/ui/menu/style"],
+      sideEffects: ["@cedar-design/ui/menu/style"],
     });
   }
   assert.equal(components.resolve("CDropdownMenu"), undefined);
@@ -48,7 +48,11 @@ test("the shipped component registry matches actual UI root exports", () => {
 test("the docs auto-import transform leaves CSS globals untouched", async () => {
   // Use the exact plugin installed by the docs workspace, not a resolver-only mock.
   const requireFromUI = createRequire(new URL("../../cedar-ui/package.json", import.meta.url));
-  const { default: AutoImport } = await import(pathToFileURL(requireFromUI.resolve("unplugin-auto-import/vite")).href);
+  // require.resolve selects the CJS condition even when passed to import(). Use
+  // the package's declared ESM entry so Node 20 does not require ESM-only unimport.
+  const manifestPath = requireFromUI.resolve("unplugin-auto-import/package.json");
+  const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+  const { default: AutoImport } = await import(new URL(manifest.exports["./vite"].import, pathToFileURL(manifestPath)).href);
   const plugin = AutoImport({ resolvers: [CedarResolver()], dts: false, eslintrc: { enabled: false } });
   const transform = typeof plugin.transform === "function" ? plugin.transform : plugin.transform.handler;
   const helper = new URL("../../cedar-ui/src/_utils/size-length.ts", import.meta.url);
@@ -60,46 +64,46 @@ test("the docs auto-import transform leaves CSS globals untouched", async () => 
   const transformed = await transform.call({}, mixed, "/src/resolver-regression.ts");
   assert.ok(transformed?.code, "Known components and function APIs must still auto-import");
   assert.match(transformed.code, /_ButtonComponent/);
-  assert.match(transformed.code, /@cedarjs\/ui\/button\/style/);
-  assert.match(transformed.code, /@cedarjs\/ui\/message\/style/);
+  assert.match(transformed.code, /@cedar-design\/ui\/button\/style/);
+  assert.match(transformed.code, /@cedar-design\/ui\/message\/style/);
   assert.doesNotMatch(transformed.code, /_SS(?:StyleSheet)?Component|\/s-s(?:\/|-style-sheet)/);
 });
 
 test("resolves UI components with their styles", () => {
   assert.deepEqual(components.resolve("CProgressGroup"), {
-    from: "@cedarjs/ui",
+    from: "@cedar-design/ui",
     name: "_ProgressGroupComponent",
-    sideEffects: ["@cedarjs/ui/progress-group/style"],
+    sideEffects: ["@cedar-design/ui/progress-group/style"],
   });
 
   assert.deepEqual(components.resolve("CButton"), {
-    from: "@cedarjs/ui",
+    from: "@cedar-design/ui",
     name: "_ButtonComponent",
-    sideEffects: ["@cedarjs/ui/button/style"],
+    sideEffects: ["@cedar-design/ui/button/style"],
   });
 
   assert.deepEqual(components.resolve("CIcon"), {
-    from: "@cedarjs/ui",
+    from: "@cedar-design/ui",
     name: "_IconComponent",
-    sideEffects: ["@cedarjs/ui/icon/style"],
+    sideEffects: ["@cedar-design/ui/icon/style"],
   });
 
   assert.deepEqual(components.resolve("CDatePicker"), {
-    from: "@cedarjs/ui",
+    from: "@cedar-design/ui",
     name: "_DatePickerComponent",
-    sideEffects: ["@cedarjs/ui/date/picker/style"],
+    sideEffects: ["@cedar-design/ui/date/picker/style"],
   });
 
   assert.deepEqual(components.resolve("CButtonGroup"), {
-    from: "@cedarjs/ui",
+    from: "@cedar-design/ui",
     name: "_ButtonGroupComponent",
-    sideEffects: ["@cedarjs/ui/button/style"],
+    sideEffects: ["@cedar-design/ui/button/style"],
   });
 
   assert.deepEqual(components.resolve("CCountdown"), {
-    from: "@cedarjs/ui",
+    from: "@cedar-design/ui",
     name: "_CountdownComponent",
-    sideEffects: ["@cedarjs/ui/countdown/style"],
+    sideEffects: ["@cedar-design/ui/countdown/style"],
   });
 });
 
@@ -118,9 +122,9 @@ test("maps sub-components to their parent style directory", () => {
     ["CCascaderPanel", "cascader"],
   ]) {
     assert.deepEqual(components.resolve(name), {
-      from: "@cedarjs/ui",
+      from: "@cedar-design/ui",
       name: `_${name.slice(1)}Component`,
-      sideEffects: [`@cedarjs/ui/${dir}/style`],
+      sideEffects: [`@cedar-design/ui/${dir}/style`],
     });
   }
 });
@@ -148,7 +152,7 @@ test("resolves every public component to an existing style entry", () => {
     assert.ok(result, `C${name} should resolve`);
     assert.equal(result.name, `_${name}Component`);
     for (const sideEffect of result.sideEffects ?? []) {
-      const stylePath = sideEffect.replace("@cedarjs/ui/", "");
+      const stylePath = sideEffect.replace("@cedar-design/ui/", "");
       assert.ok(
         existsSync(new URL(`${stylePath}/index.ts`, uiRoot)),
         `${sideEffect} should exist`,
@@ -201,7 +205,7 @@ test("every component exposed by CedarVue has a resolver alias", () => {
 test("resolves components without styles with no side effects", () => {
   for (const name of ["CContext", "CStyleProvider"]) {
     assert.deepEqual(components.resolve(name), {
-      from: "@cedarjs/ui",
+      from: "@cedar-design/ui",
       name: `_${name.slice(1)}Component`,
       sideEffects: undefined,
     });
@@ -210,12 +214,12 @@ test("resolves components without styles with no side effects", () => {
 
 test("resolves SVG icons from the standalone icon package", () => {
   assert.deepEqual(components.resolve("CIconCheckCircleFill"), {
-    from: "@cedarjs/icons-vue/icon-check-circle-fill",
+    from: "@cedar-design/icons-vue/icon-check-circle-fill",
     name: "IconCheckCircleFill",
   });
 
   assert.deepEqual(components.resolve("CIconFacebookCircleFill"), {
-    from: "@cedarjs/icons-vue/icon-facebook-circle-fill",
+    from: "@cedar-design/icons-vue/icon-facebook-circle-fill",
     name: "IconFacebookCircleFill",
   });
 });
@@ -232,18 +236,18 @@ test("resolves programmatic APIs and directives", () => {
   ]) {
     assert.equal(autoImports.resolve(name)?.name, name);
     assert.deepEqual(autoImports.resolve(name)?.sideEffects, [
-      `@cedarjs/ui/${style}/style`,
+      `@cedar-design/ui/${style}/style`,
     ]);
   }
   assert.deepEqual(autoImports.resolve("StyleProvider"), {
-    from: "@cedarjs/ui",
+    from: "@cedar-design/ui",
     name: "StyleProvider",
     sideEffects: undefined,
   });
   assert.deepEqual(directives.resolve("CLoading"), {
-    from: "@cedarjs/ui",
+    from: "@cedar-design/ui",
     name: "vLoading",
-    sideEffects: ["@cedarjs/ui/loading/style"],
+    sideEffects: ["@cedar-design/ui/loading/style"],
   });
   assert.equal(directives.resolve("Loading"), undefined);
   assert.equal(directives.resolve("Tooltip")?.name, "vTooltip");
@@ -268,13 +272,13 @@ test('Row and Col resolve independent styles', () => {
   for (const name of ['Row', 'Col']) {
     const resolved = components.resolve('C' + name)
     assert.equal(resolved.name, '_' + name + 'Component')
-    assert.deepEqual(resolved.sideEffects, ['@cedarjs/ui/' + name.toLowerCase() + '/style'])
+    assert.deepEqual(resolved.sideEffects, ['@cedar-design/ui/' + name.toLowerCase() + '/style'])
   }
 })
 
 test("Color imports its ColorPicker style dependency", () => {
   const [components] = CedarResolver();
-  assert.deepEqual(components.resolve("CColor")?.sideEffects, ["@cedarjs/ui/color/style"]);
+  assert.deepEqual(components.resolve("CColor")?.sideEffects, ["@cedar-design/ui/color/style"]);
   const entry = readFileSync(new URL("../../cedar-ui/src/color/style/index.ts", import.meta.url), "utf8");
   assert.match(entry, /import ['"]\.\.\/\.\.\/color-picker\/style['"]/);
 });

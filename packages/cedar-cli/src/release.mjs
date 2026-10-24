@@ -127,7 +127,7 @@ async function resolveWorkspaces() {
       continue
     }
     const pkg = await fse.readJson(pkgPath)
-    if (pkg.name?.startsWith('@cedarjs/') && !pkg.private) {
+    if (pkg.name?.startsWith('@cedar-design/') && !pkg.private) {
       results.push({ name: pkg.name, version: pkg.version, packageJsonPath: pkgPath, packageJson: pkg })
     }
   }

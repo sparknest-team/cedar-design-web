@@ -117,11 +117,11 @@
 
 <script setup lang="ts">
 import { computed, ref, toRef, useSlots, type CSSProperties } from "vue";
-import { IconCheckCircleFill } from "@cedarjs/icons-vue/icon-check-circle-fill";
-import { IconClose } from "@cedarjs/icons-vue/icon-close";
-import { IconCloseCircleFill } from "@cedarjs/icons-vue/icon-close-circle-fill";
-import { IconExclamationCircleFill } from "@cedarjs/icons-vue/icon-exclamation-circle-fill";
-import { IconInfoCircleFill } from "@cedarjs/icons-vue/icon-info-circle-fill";
+import { IconCheckCircleFill } from "@cedar-design/icons-vue/icon-check-circle-fill";
+import { IconClose } from "@cedar-design/icons-vue/icon-close";
+import { IconCloseCircleFill } from "@cedar-design/icons-vue/icon-close-circle-fill";
+import { IconExclamationCircleFill } from "@cedar-design/icons-vue/icon-exclamation-circle-fill";
+import { IconInfoCircleFill } from "@cedar-design/icons-vue/icon-info-circle-fill";
 import IconHover from "../_components/IconHover.vue";
 import { createNamespace, getPrefixCls } from "../_utils/global-config";
 import { isNumber } from "../_utils/is";

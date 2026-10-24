@@ -33,3 +33,24 @@ test('regenerates fallback English content on source HMR without replacing autho
     expect(createPage).not.toHaveBeenCalled()
   } finally { await rm(folder, { recursive: true }) }
 })
+
+
+test('parallel fallbacks finish in source order and retain authored English pages', async () => {
+  const folder = await mkdtemp(join(tmpdir(), 'cedar-locale-order-'))
+  try {
+    const originals = await Promise.all(Array.from({ length: 19 }, async (_, i) => {
+      const filePath = join(folder, `${i}.md`)
+      await writeFile(filePath, `# Page ${i}\n\n## 案例\n`)
+      return { filePath, path: `/page-${i}/`, frontmatter: {} }
+    }))
+    const authored = { path: '/en/page-4/', frontmatter: { lang: 'en-US' } }
+    const app = { env: { isDev: true }, pages: [...originals, authored] } as any
+    const plugin = localizedPages() as any
+    await plugin.onInitialized(app)
+    expect(app.pages[19]).toBe(authored)
+    expect(app.pages.slice(20).map((page: any) => page.path)).toEqual(
+      originals.filter((_, i) => i !== 4).map(page => `/en${page.path}`),
+    )
+    expect(app.pages.slice(20).every((page: any) => page.content.includes('## Examples'))).toBe(true)
+  } finally { await rm(folder, { recursive: true, force: true }) }
+})

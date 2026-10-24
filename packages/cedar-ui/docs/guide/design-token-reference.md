@@ -387,17 +387,17 @@ permalink: /guide/design-token-reference/
 | `--c-badge-status-default-bg-color` | 公开 | `#e0e0e0` | 本组件 CSS<br>`background-color` |
 | `--c-badge-status-default-text-color` | 公开 | `var(--c-sys-color-content-on-bright)` | 本组件 CSS<br>`color` |
 | `--c-badge-status-info-bg-color` | 公开 | `var(--c-sys-color-status-info)` | 本组件 CSS<br>`background-color` |
-| `--c-badge-status-info-text-color` | 公开 | `var(--c-sys-color-content-on-bright)` | 本组件 CSS<br>`color` |
+| `--c-badge-status-info-text-color` | 公开 | `var(--c-sys-color-content-on-dark)` | 本组件 CSS<br>`color` |
 | `--c-badge-status-primary-bg-color` | 公开 | `var(--c-sys-color-action-primary)` | 本组件 CSS<br>`background-color` |
-| `--c-badge-status-primary-text-color` | 公开 | `var(--c-sys-color-content-on-bright)` | 本组件 CSS<br>`color` |
+| `--c-badge-status-primary-text-color` | 公开 | `var(--c-sys-color-content-on-dark)` | 本组件 CSS<br>`color` |
 | `--c-badge-status-secondary-bg-color` | 公开 | `rgb(var(--c-gray-6))` | 本组件 CSS<br>`background-color` |
-| `--c-badge-status-secondary-text-color` | 公开 | `var(--c-sys-color-content-on-bright)` | 本组件 CSS<br>`color` |
+| `--c-badge-status-secondary-text-color` | 公开 | `var(--c-sys-color-content-on-dark)` | 本组件 CSS<br>`color` |
 | `--c-badge-status-success-bg-color` | 公开 | `var(--c-sys-color-status-success)` | 本组件 CSS<br>`background-color` |
-| `--c-badge-status-success-text-color` | 公开 | `var(--c-sys-color-content-on-bright)` | 本组件 CSS<br>`color` |
+| `--c-badge-status-success-text-color` | 公开 | `var(--c-sys-color-content-on-dark)` | 本组件 CSS<br>`color` |
 | `--c-badge-status-tertiary-bg-color` | 公开 | `rgb(var(--c-gray-7))` | 本组件 CSS<br>`background-color` |
 | `--c-badge-status-tertiary-text-color` | 公开 | `var(--c-sys-color-content-on-dark)`<br>`var(--c-sys-color-content-on-bright)` (`:root[cedar-theme="dark"]`) | 本组件 CSS<br>`color` |
 | `--c-badge-status-warning-bg-color` | 公开 | `var(--c-sys-color-status-warning)` | 本组件 CSS<br>`background-color` |
-| `--c-badge-status-warning-text-color` | 公开 | `var(--c-sys-color-content-on-bright)` | 本组件 CSS<br>`color` |
+| `--c-badge-status-warning-text-color` | 公开 | `var(--c-sys-color-content-on-dark)` | 本组件 CSS<br>`color` |
 | `--c-badge-text-color` | 公开 | `var(--c-sys-color-content-on-bright)` | 本组件 CSS<br>`color` |
 | `--c-badge-variant-outline-bg-color` | 公开 | `transparent` | 本组件 CSS<br>`background-color` |
 | `--c-badge-variant-outline-status-danger-text-color` | 公开 | `var(--c-sys-color-content-danger)` | 本组件 CSS<br>`border`, `color` |
@@ -1680,33 +1680,38 @@ permalink: /guide/design-token-reference/
 | `--c-link-margin-icon-right` | 公开 | `var(--c-spacing-3)` | 本组件 CSS<br>`margin-right` |
 | `--c-link-padding-horizontal` | 公开 | `var(--c-spacing-2)` | 本组件 CSS<br>`padding` |
 | `--c-link-padding-vertical` | 公开 | `1px` | 本组件 CSS<br>`padding` |
-| `--c-link-size-icon` | 公开 | `var(--c-size-3)` | 本组件 CSS<br>`font-size` |
+| `--c-link-size-icon` | 公开 | `1em` | 本组件 CSS<br>`font-size` |
+| `--c-link-size-lg-font-size` | 公开 | `var(--c-sys-font-size-lg)` | 本组件 CSS<br>`font-size` |
+| `--c-link-size-md-font-size` | 公开 | `var(--c-link-font-size)` | 本组件 CSS<br>`font-size` |
+| `--c-link-size-sm-font-size` | 公开 | `var(--c-sys-font-size-sm)` | 本组件 CSS<br>`font-size` |
+| `--c-link-size-xl-font-size` | 公开 | `var(--c-sys-font-size-xl)` | 本组件 CSS<br>`font-size` |
+| `--c-link-size-xs-font-size` | 公开 | `var(--c-sys-font-size-xs)` | 本组件 CSS<br>`font-size` |
 | `--c-link-spin-duration` | 公开 | `1s` | 本组件 CSS<br>`animation` |
-| `--c-link-text-color` | 公开 | `rgb(var(--c-link-6))` | 本组件 CSS<br>`color` |
+| `--c-link-text-color` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color` |
 | `--c-link-text-color-active` | 公开 | `var(--c-link-text-color)` | 本组件 CSS<br>`color` |
-| `--c-link-text-color-default` | 公开 | `var(--c-color-text-1)` | 本组件 CSS<br>`color` |
-| `--c-link-text-color-disabled` | 公开 | `var(--c-color-link-light-3)` | 本组件 CSS<br>`color` |
+| `--c-link-text-color-default` | 公开 | `var(--c-sys-color-content-primary)` | 本组件 CSS<br>`color` |
+| `--c-link-text-color-disabled` | 公开 | `var(--c-sys-color-content-disabled)` | 本组件 CSS<br>`color` |
 | `--c-link-text-color-error` | 公开 | `var(--c-sys-color-content-danger)` | 本组件 CSS<br>`color` |
 | `--c-link-text-color-error-active` | 公开 | `var(--c-link-text-color-error)` | 本组件 CSS<br>`color` |
-| `--c-link-text-color-error-disabled` | 公开 | `var(--c-color-danger-light-3)` | 本组件 CSS<br>`color` |
+| `--c-link-text-color-error-disabled` | 公开 | `var(--c-sys-color-content-disabled)` | 本组件 CSS<br>`color` |
 | `--c-link-text-color-error-hover` | 公开 | `var(--c-link-text-color-error)` | 本组件 CSS<br>`color` |
-| `--c-link-text-color-error-loading` | 公开 | `var(--c-color-danger-light-3)` | 本组件 CSS<br>`color` |
+| `--c-link-text-color-error-loading` | 公开 | `var(--c-sys-color-content-disabled)` | 本组件 CSS<br>`color` |
 | `--c-link-text-color-hover` | 公开 | `var(--c-link-text-color)` | 本组件 CSS<br>`color` |
 | `--c-link-text-color-info` | 公开 | `var(--c-sys-color-content-info)` | 本组件 CSS<br>`color` |
-| `--c-link-text-color-loading` | 公开 | `var(--c-color-link-light-3)` | 本组件 CSS<br>`color` |
+| `--c-link-text-color-loading` | 公开 | `var(--c-sys-color-content-disabled)` | 本组件 CSS<br>`color` |
 | `--c-link-text-color-primary` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color` |
-| `--c-link-text-color-secondary` | 公开 | `var(--c-color-text-2)` | 本组件 CSS<br>`color` |
+| `--c-link-text-color-secondary` | 公开 | `var(--c-sys-color-content-secondary)` | 本组件 CSS<br>`color` |
 | `--c-link-text-color-success` | 公开 | `var(--c-sys-color-content-success)` | 本组件 CSS<br>`color` |
 | `--c-link-text-color-success-active` | 公开 | `var(--c-link-text-color-success)` | 本组件 CSS<br>`color` |
-| `--c-link-text-color-success-disabled` | 公开 | `var(--c-color-success-light-3)` | 本组件 CSS<br>`color` |
+| `--c-link-text-color-success-disabled` | 公开 | `var(--c-sys-color-content-disabled)` | 本组件 CSS<br>`color` |
 | `--c-link-text-color-success-hover` | 公开 | `var(--c-link-text-color-success)` | 本组件 CSS<br>`color` |
-| `--c-link-text-color-success-loading` | 公开 | `var(--c-color-success-light-3)` | 本组件 CSS<br>`color` |
-| `--c-link-text-color-tertiary` | 公开 | `var(--c-color-text-3)` | 本组件 CSS<br>`color` |
+| `--c-link-text-color-success-loading` | 公开 | `var(--c-sys-color-content-disabled)` | 本组件 CSS<br>`color` |
+| `--c-link-text-color-tertiary` | 公开 | `var(--c-sys-color-content-secondary)` | 本组件 CSS<br>`color` |
 | `--c-link-text-color-warning` | 公开 | `var(--c-sys-color-content-warning)` | 本组件 CSS<br>`color` |
 | `--c-link-text-color-warning-active` | 公开 | `var(--c-link-text-color-warning)` | 本组件 CSS<br>`color` |
-| `--c-link-text-color-warning-disabled` | 公开 | `var(--c-color-warning-light-2)` | 本组件 CSS<br>`color` |
+| `--c-link-text-color-warning-disabled` | 公开 | `var(--c-sys-color-content-disabled)` | 本组件 CSS<br>`color` |
 | `--c-link-text-color-warning-hover` | 公开 | `var(--c-link-text-color-warning)` | 本组件 CSS<br>`color` |
-| `--c-link-text-color-warning-loading` | 公开 | `var(--c-color-warning-light-2)` | 本组件 CSS<br>`color` |
+| `--c-link-text-color-warning-loading` | 公开 | `var(--c-sys-color-content-disabled)` | 本组件 CSS<br>`color` |
 | `--c-link-transition-duration` | 公开 | `0.15s` | 本组件 CSS<br>`transition` |
 
 </div>
@@ -3348,15 +3353,15 @@ expand-duration／fade-duration 消费到 transform／opacity 过渡；运行时
 | `--c-tooltip-size-xs-padding-horizontal` | 公开 | `var(--c-sys-space-4)` | 本组件 CSS<br>`padding` |
 | `--c-tooltip-size-xs-padding-vertical` | 公开 | `var(--c-sys-space-2)` | 本组件 CSS<br>`padding` |
 | `--c-tooltip-status-danger-background` | 公开 | `var(--c-sys-color-status-danger)` | 本组件 CSS<br>`background-color` |
-| `--c-tooltip-status-danger-text-color` | 公开 | `var(--c-sys-color-content-on-bright)` | 本组件 CSS<br>`color` |
+| `--c-tooltip-status-danger-text-color` | 公开 | `var(--c-sys-color-content-on-dark)` | 本组件 CSS<br>`color` |
 | `--c-tooltip-status-info-background` | 公开 | `var(--c-sys-color-status-info)` | 本组件 CSS<br>`background-color` |
-| `--c-tooltip-status-info-text-color` | 公开 | `var(--c-sys-color-content-on-bright)` | 本组件 CSS<br>`color` |
+| `--c-tooltip-status-info-text-color` | 公开 | `var(--c-sys-color-content-on-dark)` | 本组件 CSS<br>`color` |
 | `--c-tooltip-status-primary-background` | 公开 | `var(--c-sys-color-action-primary)` | 本组件 CSS<br>`background-color` |
-| `--c-tooltip-status-primary-text-color` | 公开 | `var(--c-sys-color-content-on-bright)` | 本组件 CSS<br>`color` |
+| `--c-tooltip-status-primary-text-color` | 公开 | `var(--c-sys-color-content-on-dark)` | 本组件 CSS<br>`color` |
 | `--c-tooltip-status-success-background` | 公开 | `var(--c-sys-color-status-success)` | 本组件 CSS<br>`background-color` |
-| `--c-tooltip-status-success-text-color` | 公开 | `var(--c-sys-color-content-on-bright)` | 本组件 CSS<br>`color` |
+| `--c-tooltip-status-success-text-color` | 公开 | `var(--c-sys-color-content-on-dark)` | 本组件 CSS<br>`color` |
 | `--c-tooltip-status-warning-background` | 公开 | `var(--c-sys-color-status-warning)` | 本组件 CSS<br>`background-color` |
-| `--c-tooltip-status-warning-text-color` | 公开 | `var(--c-sys-color-content-on-bright)` | 本组件 CSS<br>`color` |
+| `--c-tooltip-status-warning-text-color` | 公开 | `var(--c-sys-color-content-on-dark)` | 本组件 CSS<br>`color` |
 | `--c-tooltip-text-color` | 公开 | `var(--c-sys-color-content-on-dark)` | 本组件 CSS<br>`color` |
 
 </div>

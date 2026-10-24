@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Drawer } from '@cedarjs/ui'
+import { Drawer } from '@cedar-design/ui'
 
 const handleClick = () => {
   Drawer.open({

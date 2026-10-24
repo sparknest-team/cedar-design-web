@@ -43,7 +43,7 @@ import type {
   SchedulerEvent,
   SchedulerResource,
   SchedulerEventTemplate,
-} from "@cedarjs/ui";
+} from "@cedar-design/ui";
 const devices: SchedulerResource[] = [
   { id: "laser-01", label: "激光切割机 01" },
   { id: "printer-02", label: "3D 打印机 02" },

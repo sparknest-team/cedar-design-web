@@ -14,6 +14,12 @@ permalink: /components/link/
 
 <demo src="./__demos__/basic.vue"></demo>
 
+### 五种尺寸
+
+通过 `size` 设置五档尺寸，文字、图标和加载图标同步缩放，默认 `md`。
+
+<demo src="./__demos__/size.vue"></demo>
+
 ### 链接状态
 
 链接使用统一语义状态，例如 `default`（默认）、`success`、`warning` 和 `danger`。
@@ -76,6 +82,7 @@ permalink: /components/link/
 | href      | 链接地址             | `string`                                 | -         |
 | target    | 原生链接打开目标     | `string`                                 | -         |
 | rel       | 原生链接关系         | `string`                                 | -         |
+| size | 文字、图标和加载图标尺寸 | 'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl' | 'md' |
 | status    | 链接的状态           | `SemanticStatus`                         | `default` |
 | underline | 下划线显示策略       | `always \| hover \| none`               | `none`    |
 | hoverable | 鼠标悬浮时存在底色   | `boolean`                                | `false`   |
@@ -101,9 +108,13 @@ permalink: /components/link/
 组件导出以下类型定义
 
 ```ts
-import type { LinkProps, LinkUnderline, LinkInstance } from '@cedarjs/ui'
+import type { LinkProps, LinkUnderline, LinkInstance } from '@cedar-design/ui'
 ```
 
 ### 样式迁移
 
 内部类名统一为 `c-link--status-*`、`c-link--underline-*`、`c-link--disabled`、`c-link--loading` 和 `c-link__icon`。请迁移旧的单连字符选择器，优先通过 `--c-link-*` CSS 变量定制。焦点支持 `--c-link-focus-width`（2px）、`--c-link-focus-offset`（2px）、`--c-link-focus-color`（currentColor）、`--c-link-focus-opacity`（0.8）。减少动态效果偏好下关闭加载旋转和过渡。
+
+文字配色与 Button 的 text 变体一致：default 使用 content-primary，secondary / tertiary 使用 content-secondary，彩色状态使用对应 content 语义色，禁用和加载使用 content-disabled。两品牌明暗模式均继承这些规则。
+
+尺寸变量：`--c-link-size-xs-font-size`, `--c-link-size-sm-font-size`, `--c-link-size-md-font-size`, `--c-link-size-lg-font-size`, `--c-link-size-xl-font-size`。默认分别为 12 / 13 / 14 / 16 / 18px；md 引用原有 `--c-link-font-size`，图标和加载图标使用 1em。

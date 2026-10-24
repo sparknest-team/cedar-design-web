@@ -220,7 +220,7 @@ import type {
   DialogReturn,
   DialogService,
   DialogType,
-} from "@cedarjs/ui";
+} from "@cedar-design/ui";
 ```
 
 ### 样式变量

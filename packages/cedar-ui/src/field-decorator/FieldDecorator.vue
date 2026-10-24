@@ -64,7 +64,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { IconCloseCircleFill } from '@cedarjs/icons-vue'
+import { IconCloseCircleFill } from '@cedar-design/icons-vue'
 import { createNamespace } from '../_utils/global-config'
 import { fieldDecoratorProps } from './props'
 import { useFieldGeometry } from './use-field-geometry'

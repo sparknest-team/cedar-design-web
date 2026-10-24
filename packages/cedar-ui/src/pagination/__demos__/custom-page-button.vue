@@ -4,7 +4,7 @@ import { ref } from 'vue'
 </script>
 <template>
   <div class="pagination-demo">
-    <c-pagination :total="300" :default-current="10" :buffer-size="0" :responsive="false" :page-item-style="{ borderRadius: '8px' }" :active-page-item-style="{ fontWeight: '700' }">
+    <c-pagination :total="300" :default-value="10" :buffer-size="0" :responsive="false" :page-item-style="{ borderRadius: '8px' }" :active-page-item-style="{ fontWeight: '700' }">
       <template #page-item="{ page }">{{ page }}</template>
       <template #page-item-step="{ type }">{{ type === 'previous' ? 'Prev' : 'Next' }}</template>
       <template #page-item-ellipsis>✦</template>

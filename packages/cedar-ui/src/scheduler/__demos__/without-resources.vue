@@ -8,7 +8,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import type { SchedulerEvent } from "@cedarjs/ui";
+import type { SchedulerEvent } from "@cedar-design/ui";
 const events = ref<SchedulerEvent[]>([
   {
     id: "release",

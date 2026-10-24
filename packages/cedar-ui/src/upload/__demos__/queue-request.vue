@@ -5,7 +5,7 @@ import type {
   UploadInstance,
   UploadProgressEvent,
   UploadRequestOptions,
-} from "@cedarjs/ui";
+} from "@cedar-design/ui";
 
 const files = ref<UploadFileItem[]>([]);
 const uploader = ref<UploadInstance>();
@@ -13,6 +13,7 @@ const failOnce = ref(false);
 const activeRequests = ref(0);
 const timers = new Set<ReturnType<typeof setInterval>>();
 const attempts = new Map<string, number>();
+const exampleUrls = new Set<string>();
 let sequence = 0;
 
 function addExample() {
@@ -21,6 +22,8 @@ function addExample() {
     `example-${++sequence}.txt`,
     { type: "text/plain" },
   );
+  const url = URL.createObjectURL(file);
+  exampleUrls.add(url);
   files.value = [
     ...files.value,
     {
@@ -29,6 +32,7 @@ function addExample() {
       size: file.size,
       type: file.type,
       file,
+      url,
       status: "ready",
       percent: 0,
     },
@@ -73,7 +77,11 @@ function cleanup() {
   timers.clear();
   activeRequests.value = 0;
 }
-onBeforeUnmount(cleanup);
+onBeforeUnmount(() => {
+  cleanup();
+  exampleUrls.forEach((url) => URL.revokeObjectURL(url));
+  exampleUrls.clear();
+});
 onDeactivated(cleanup);
 </script>
 

@@ -24,6 +24,13 @@
       "kind": "scenario"
     },
     {
+      "name": "default-value",
+      "description": "非受控初始值，仅创建时读取",
+      "type": "MenuValue",
+      "defaultValue": "undefined",
+      "kind": "scenario"
+    },
+    {
       "name": "open",
       "description": "浮层是否可见",
       "type": "boolean",

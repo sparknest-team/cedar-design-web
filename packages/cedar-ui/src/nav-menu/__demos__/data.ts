@@ -1,5 +1,5 @@
 import { h } from 'vue'
-import { IconApps } from '@cedarjs/icons-vue/icon-apps'
+import { IconApps } from '@cedar-design/icons-vue/icon-apps'
 import type { NavMenuOption } from '..'
 export const options: NavMenuOption[] = [
   { key: 0, label: '首页', icon: () => h(IconApps) },

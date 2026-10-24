@@ -84,17 +84,17 @@
             <div class="panel-scroll source-scroll">
               <c-tree
                 :data="sourceTree"
-                :checked-keys="sourceKeys"
-                :expanded-keys="expandedSources"
+                :checked-values="sourceKeys"
+                :expanded-values="expandedSources"
                 checkable
                 only-check-leaf
                 block-node
                 :selectable="false"
                 :disabled="saving"
-                @update:expanded-keys="expandedSources = $event"
+                @update:expanded-values="expandedSources = $event"
                 @check="checkSources"
               >
-                <template #title="node">
+                <template #label="node">
                   <span
                     v-if="node.resourceId"
                     class="source-object"
@@ -120,7 +120,7 @@
                       >
                     </span>
                   </span>
-                  <span v-else>{{ node.title }}</span>
+                  <span v-else>{{ node.label }}</span>
                 </template>
               </c-tree>
             </div>
@@ -132,17 +132,17 @@
             <div class="panel-scroll">
               <c-tree
                 :data="pendingTree"
-                :checked-keys="pendingKeys"
-                :expanded-keys="expandedPending"
+                :checked-values="pendingKeys"
+                :expanded-values="expandedPending"
                 checkable
                 only-check-leaf
                 block-node
                 :selectable="false"
                 :disabled="disabled"
-                @update:expanded-keys="expandedPending = $event"
+                @update:expanded-values="expandedPending = $event"
                 @check="checkPending"
               >
-                <template #title="node">
+                <template #label="node">
                   <div
                     v-if="node.taskId"
                     class="pending-task"
@@ -166,7 +166,7 @@
                     >
                     <small>{{ task(node.taskId)?.source }}</small>
                   </div>
-                  <span v-else>{{ node.title }}</span>
+                  <span v-else>{{ node.label }}</span>
                 </template>
               </c-tree>
               <c-empty
@@ -578,11 +578,11 @@ interface Node extends TreeNodeData {
   children?: Node[];
 }
 const group = (key: string, title: string, ids: string[]): Node => ({
-  key,
-  title,
+  value: key,
+  label: title,
   children: ids.map((id) => ({
-    key: `${key}/${id}`,
-    title: resource(id)?.label,
+    value: `${key}/${id}`,
+    label: resource(id)?.label,
     resourceId: id,
   })),
 });
@@ -618,7 +618,7 @@ const sourceKeys = computed(() =>
   sourceTree.value
     .flatMap((node) => node.children ?? [])
     .filter((node) => selected.value.includes(node.resourceId!))
-    .map((node) => node.key!),
+    .map((node) => node.value!),
 );
 function checkSources(
   _keys: Array<string | number>,
@@ -653,11 +653,11 @@ const pendingTree = computed<Node[]>(() =>
     return tasks.length
       ? [
           {
-            key: `pending/${id}`,
-            title: owner?.label,
+            value: `pending/${id}`,
+            label: owner?.label,
             children: tasks.map((entry) => ({
-              key: `pending/${id}/${entry.id}`,
-              title: entry.title,
+              value: `pending/${id}/${entry.id}`,
+              label: entry.title,
               taskId: entry.id,
             })),
           },
@@ -672,7 +672,7 @@ const pendingKeys = computed(() =>
   pendingTree.value
     .flatMap((node) => node.children ?? [])
     .filter((node) => selectedTasks.value.includes(node.taskId!))
-    .map((node) => node.key!),
+    .map((node) => node.value!),
 );
 function checkPending(
   _keys: Array<string | number>,

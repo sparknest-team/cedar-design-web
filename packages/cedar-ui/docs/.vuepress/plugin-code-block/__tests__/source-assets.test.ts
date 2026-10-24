@@ -1,5 +1,8 @@
+import { mkdtemp, rm, symlink, writeFile } from 'node:fs/promises'
+import { join } from 'node:path'
+import { tmpdir } from 'node:os'
 import { afterEach, expect, test, vi } from 'vitest'
-import { registerSource, sourceAssetsPlugin } from '../src/node/utils/source-assets'
+import { clearPageSources, getSourcePages, registerSource, sourceAssetsPlugin } from '../src/node/utils/source-assets'
 import { loadSource } from '../src/client/source-data'
 
 const originalFetch = globalThis.fetch
@@ -49,4 +52,57 @@ test('source requests deduplicate, preserve exact text and retry after failure',
   fetcher.mockResolvedValueOnce({ ok: false, status: 500 })
   await expect(loadSource('/source-retry')).rejects.toThrow('500')
   await expect(loadSource('/source-retry')).resolves.toEqual(source)
+})
+
+test('defers dev highlights until requested and reuses the response', () => {
+  const app = { options: { base: '/' } } as any
+  const highlight = vi.fn(() => '<pre>lazy</pre>')
+  const snapshot = { ...source, highlightCode: '' }
+  const url = registerSource(app, 'lazy', snapshot, { highlight })
+  expect(highlight).not.toHaveBeenCalled()
+  const use = vi.fn()
+  ;(sourceAssetsPlugin(app).configureServer as any)({ middlewares: { use } })
+  const handler = use.mock.calls[0][1]
+  const response = { setHeader: vi.fn(), end: vi.fn(), statusCode: 200 }
+  const request = { url: '/' + url.split('/').pop() }
+  handler(request, response)
+  handler(request, response)
+  expect(highlight).toHaveBeenCalledTimes(1)
+  expect(JSON.parse(response.end.mock.calls[0][0])).toEqual({ ...snapshot, highlightCode: '<pre>lazy</pre>' })
+  expect(JSON.parse(response.end.mock.calls[0][0])).not.toHaveProperty('filePath')
+})
+
+test('edited and removed assets cannot return an old cached response', () => {
+  const app = { options: { base: '/' } } as any
+  const url = registerSource(app, 'edit', source, { pagePath: '/page.md', filePath: '/demo.vue' })
+  const changed = { ...source, rawCode: '<template>updated</template>', highlightCode: '' }
+  const newUrl = registerSource(app, 'edit', changed, { highlight: () => '<pre>updated</pre>', pagePath: '/page.md', filePath: '/demo.vue' })
+  expect(newUrl).not.toBe(url)
+  const use = vi.fn()
+  ;(sourceAssetsPlugin(app).configureServer as any)({ middlewares: { use } })
+  const handler = use.mock.calls[0][1]
+  const response = { setHeader: vi.fn(), end: vi.fn(), statusCode: 200 }
+  handler({ url: '/' + url.split('/').pop() }, response)
+  expect(response.statusCode).toBe(404)
+  handler({ url: '/' + newUrl.split('/').pop() }, response)
+  expect(JSON.parse(response.end.mock.calls[1][0]).rawCode).toBe(changed.rawCode)
+  clearPageSources(app, '/page.md')
+  handler({ url: '/' + newUrl.split('/').pop() }, response)
+  expect(response.statusCode).toBe(404)
+  expect(getSourcePages(app, '/demo.vue')).toEqual([])
+})
+
+
+test('HMR resolves symlinked source files to the same registered dependency', async () => {
+  const folder = await mkdtemp(join(tmpdir(), 'cedar-source-realpath-'))
+  try {
+    const file = join(folder, 'data.ts')
+    const alias = join(folder, 'alias.ts')
+    await writeFile(file, 'export const value = 1')
+    await symlink(file, alias)
+    const app = { options: { base: '/' } } as any
+    registerSource(app, 'alias', source, { filePath: alias, pagePath: '/example.md' })
+    expect(getSourcePages(app, file)).toEqual(['/example.md'])
+    expect(getSourcePages(app, alias)).toEqual(['/example.md'])
+  } finally { await rm(folder, { recursive: true, force: true }) }
 })

@@ -1,4 +1,4 @@
-import type { MenuProps, MenuStrategy, MenuSubmenuTrigger, CardProps, ProgressProps, SwitchProps, RateProps, AffixProps, BadgeProps, MessageProps, PopupContainer, FormProps, PaginationProps, TriggerProps } from '@cedarjs/ui'
+import type { MenuProps, MenuStrategy, MenuSubmenuTrigger, CardProps, ProgressProps, SwitchProps, RateProps, AffixProps, BadgeProps, MessageProps, PopupContainer, FormProps, PaginationProps, TriggerProps } from '@cedar-design/ui'
 
 const card: CardProps = { variant: 'outline', size: 'sm', direction: 'row' }
 const progress: ProgressProps[] = [{}, { size: 24 }, { size: '2rem' }, { size: 'xl' }]
@@ -33,18 +33,18 @@ const oldElevation: SwitchProps = { handleElevation: '4' }
 void [fractionalProgress, tonalSwitch, oldVariant, oldInterceptor, oldElevation]
 
 
-import NavMenu, { type NavMenuProps, type NavMenuOption, type NavMenuInstance } from '@cedarjs/ui/nav-menu'
-const navOptions: NavMenuOption[] = [{ key: 0, label: 'Home' }, { key: 'group', type: 'group', children: [{ key: 'leaf', label: ({ selected }) => selected ? 'Selected' : 'Leaf' }] }]
+import NavMenu, { type NavMenuProps, type NavMenuOption, type NavMenuInstance } from '@cedar-design/ui/nav-menu'
+const navOptions: NavMenuOption[] = [{ key: 0, label: 'Home' }, { key: 'group', type: 'group', children: [{ key: 'leaf', label: ({ active }) => active ? 'Selected' : 'Leaf' }] }]
 const navProps: NavMenuProps = { options: navOptions, modelValue: 0, expandedKeys: ['group'], mode: 'horizontal' }
 const navMethods = (menu: NavMenuInstance) => { menu.showOption(0); menu.scrollTo('leaf'); menu.resize(); menu.setCollapsed(true) }
-import { NavMenuItem } from '@cedarjs/ui/nav-menu'
+import { NavMenuItem } from '@cedar-design/ui/nav-menu'
 // @ts-expect-error old pop mode has been removed
 const invalidNavMode: NavMenuProps = { mode: 'pop' }
 // @ts-expect-error navigation is single selection
 const invalidNavValue: NavMenuProps = { modelValue: ['leaf'] }
 void navProps; void navMethods; void invalidNavMode; void invalidNavValue
 
-import type { NavMenuItemProps, NavMenuItemInstance, NavMenuItemSlotContext } from '@cedarjs/ui/nav-menu'
+import type { NavMenuItemProps, NavMenuItemInstance, NavMenuItemSlotContext } from '@cedar-design/ui/nav-menu'
 const independentItem: NavMenuItemProps = { options: navOptions, modelValue: 0, active: false, popupLayout: 'full-width' }
 const itemMethods = (item: NavMenuItemInstance) => { item.close(); item.select(null); item.setOpen(true) }
 const itemSlot = (slot: NavMenuItemSlotContext) => { slot.select('custom'); slot.close() }

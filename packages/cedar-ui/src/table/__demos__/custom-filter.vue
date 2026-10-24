@@ -16,7 +16,7 @@
 
 <script lang="ts" setup>
 import { reactive, h } from 'vue'
-import { Search } from '@cedarjs/ui'
+import { Search } from '@cedar-design/ui'
 const columns = [
   {
     title: 'Name',

@@ -4,7 +4,7 @@ import Upload from '..'
 import Button from '../../button'
 import Space from '../../space'
 import Demo from '../__demos__/late-request.vue'
-vi.mock('@cedarjs/ui', () => import('..'))
+vi.mock('@cedar-design/ui', () => import('..'))
 
 test('late transport handles abort obsolete attempts and only accept current success', async () => {
   const wrapper = mount(Demo, { global: { components: { CUpload: Upload, CButton: Button, CSpace: Space } } })

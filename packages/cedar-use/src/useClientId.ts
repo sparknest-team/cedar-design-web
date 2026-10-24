@@ -1,5 +1,5 @@
 import { getCurrentInstance, onMounted, ref } from 'vue'
-import { kebabCase } from '@cedarjs/shared'
+import { kebabCase } from '@cedar-design/shared'
 
 export function useClientId() {
   const instance = getCurrentInstance()!

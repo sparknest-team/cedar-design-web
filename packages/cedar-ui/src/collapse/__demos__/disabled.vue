@@ -3,7 +3,7 @@
     <c-button @click="disabled = !disabled">
       {{ disabled ? 'Enable' : 'Disable' }}
     </c-button>
-    <c-collapse :default-active-names="[1]">
+    <c-collapse :default-value="[1]">
       <c-collapse-item title="Beijing Toutiao Technology Co., Ltd." :name="1" :disabled="disabled">
         <div>Beijing Toutiao Technology Co., Ltd.</div>
       </c-collapse-item>

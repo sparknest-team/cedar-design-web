@@ -126,18 +126,37 @@ describe('CountTo', () => {
 
   test('end event', async () => {
     const onEnd = vi.fn()
-
-    const wrapper = mount(CountTo, {
-      props: {
-        from: 0,
-        to: 100,
-        duration: DURATION,
-        onEnd,
-      },
+    let now = 1000
+    let frameId = 0
+    const frames = new Map<number, FrameRequestCallback>()
+    const clock = vi.spyOn(performance, 'now').mockImplementation(() => now)
+    const raf = vi.spyOn(globalThis, 'requestAnimationFrame').mockImplementation((callback) => {
+      frames.set(++frameId, callback)
+      return frameId
     })
-
-    await delay(DURATION + 20)
-    expect(onEnd).toHaveBeenCalled()
-    wrapper.unmount()
+    const cancel = vi.spyOn(globalThis, 'cancelAnimationFrame').mockImplementation((id) => { frames.delete(id) })
+    const advance = (elapsed: number) => {
+      now += elapsed
+      const callbacks = [...frames.values()]
+      frames.clear()
+      callbacks.forEach((callback) => callback(now))
+    }
+    let wrapper: ReturnType<typeof mount> | undefined
+    try {
+      wrapper = mount(CountTo, { props: { from: 0, to: 100, duration: DURATION, onEnd } })
+      advance(DURATION - 1)
+      expect(onEnd).not.toHaveBeenCalled()
+      advance(1)
+      await nextTick()
+      expect(wrapper.text()).toBe('100')
+      expect(onEnd).toHaveBeenCalledTimes(1)
+      advance(DURATION)
+      expect(onEnd).toHaveBeenCalledTimes(1)
+    } finally {
+      wrapper?.unmount()
+      clock.mockRestore()
+      raf.mockRestore()
+      cancel.mockRestore()
+    }
   })
 })

@@ -28,11 +28,11 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review-c-verification-code-2.config.json";
 
 import { ref } from "vue";
-import { Message } from "@cedarjs/ui";
+import { Message } from "@cedar-design/ui";
 
 const value = ref("654321");
 const onFinish = (value) => Message.info(`Verification code: ${value}`);

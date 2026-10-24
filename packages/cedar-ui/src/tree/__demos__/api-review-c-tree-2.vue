@@ -21,9 +21,9 @@
       }"
       v-bind="__apiReview.bindings"
       v-on="__apiReview.listeners"
-      ><template v-if="__apiReview.slotEnabled['title']" #title="__reviewSlot"
+      ><template v-if="__apiReview.slotEnabled['label']" #label="__reviewSlot"
         ><DemoReviewSlot
-          name="title"
+          name="label"
           :context="__reviewSlot"
           :controls="__apiReview.controls"
           :record="__apiReview.record"
@@ -77,7 +77,7 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review-c-tree-2.config.json";
 
 import { ref } from "vue";
@@ -87,11 +87,11 @@ function loop(path = "0", level = 2) {
   for (let i = 0; i < 10; i += 1) {
     const key = `${path}-${i}`;
     const treeNode: {
-      title: string;
-      key: string;
+      label: string;
+      value: string;
       children?: ReturnType<typeof loop>;
     } = {
-      title: key,
+      label: key,
       key,
     };
 
@@ -107,6 +107,6 @@ function loop(path = "0", level = 2) {
 const treeRef = ref();
 const treeData = loop();
 const scrollIntoView = () => {
-  treeRef.value && treeRef.value.scrollIntoView({ key: "0-0-2-2" });
+  treeRef.value && treeRef.value.scrollIntoView({ value: "0-0-2-2" });
 };
 </script>

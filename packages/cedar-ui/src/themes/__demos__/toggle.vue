@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts" setup>
-import { StyleProvider, Themes, type StyleVars } from '@cedarjs/ui'
+import { StyleProvider, Themes, type StyleVars } from '@cedar-design/ui'
 
 function apply(theme: StyleVars | null) {
   StyleProvider.setStyleVars(theme)

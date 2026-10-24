@@ -2,11 +2,11 @@ import type {
   ConfigProviderProps, DateProps, DatePickerProps, DateRangeProps, DateRangePickerProps, DateWeekStart,
   DatePickerType, DateRangePickerType, DatePickerOptions, DateRangePickerOptions,
   DateEmits, DateRangeEmits, DatePickerEmits, DateRangePickerEmits, DateShortcut, DateShortcutsPosition,
-} from '@cedarjs/ui'
-import { DatePicker } from '@cedarjs/ui/date'
-import { DateRangePicker } from '@cedarjs/ui/date-range'
-import type { DatePickerProps as SubpathPanel } from '@cedarjs/ui/date'
-import type { DateRangePickerProps as SubpathRange } from '@cedarjs/ui/date-range'
+} from '@cedar-design/ui'
+import { DatePicker } from '@cedar-design/ui/date'
+import { DateRangePicker } from '@cedar-design/ui/date-range'
+import type { DatePickerProps as SubpathPanel } from '@cedar-design/ui/date'
+import type { DateRangePickerProps as SubpathRange } from '@cedar-design/ui/date-range'
 
 const week: DateWeekStart = 1
 const type: DatePickerType = 'month'
@@ -70,7 +70,7 @@ const localDictionary: DatePickerProps = { locale: {} }
 const rangeLocalDictionary: DateRangePickerProps = { locale: {} }
 void [localDictionary, rangeLocalDictionary]
 
-const timeView: import('@cedarjs/ui').DateTimePickerOptions = { use12Hours: true, step: { minute: 15 }, hideDisabledOptions: true }
+const timeView: import('@cedar-design/ui').DateTimePickerOptions = { use12Hours: true, step: { minute: 15 }, hideDisabledOptions: true }
 const dateTimeView: DatePickerProps = { timePickerProps: timeView }
 // @ts-expect-error Nested time options cannot override date precision.
 const nestedTimeFormat: DatePickerProps = { timePickerProps: { format: 'ss' } }

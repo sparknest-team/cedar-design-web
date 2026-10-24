@@ -59,21 +59,21 @@ permalink: /components/loading/
 
 ```ts
 // 1. 全量安装：自动注册 Loading 组件和 v-c-loading 指令
-import CedarVue from "@cedarjs/ui";
+import CedarVue from "@cedar-design/ui";
 
 app.use(CedarVue);
 ```
 
 ```ts
 // 2. 按需安装 Loading：同时注册组件和指令
-import { Loading } from "@cedarjs/ui";
+import { Loading } from "@cedar-design/ui";
 
 app.use(Loading);
 ```
 
 ```ts
 // 3. 只手动注册指令
-import { vLoading } from "@cedarjs/ui";
+import { vLoading } from "@cedar-design/ui";
 
 app.directive("c-loading", vLoading);
 ```
@@ -93,7 +93,7 @@ app.directive("c-loading", vLoading);
 组件导出以下类型定义：
 
 ```ts
-import type { LoadingProps } from "@cedarjs/ui";
+import type { LoadingProps } from "@cedar-design/ui";
 ```
 
 加载指令的遮罩会阻止点击默认行为和冒泡，点击遮罩不会触发 Card 或父级的普通 `@click`；关闭加载后恢复正常点击。遮罩不会禁用底层控件的键盘操作，如需完全禁止操作，请同时设置控件的 `disabled`。

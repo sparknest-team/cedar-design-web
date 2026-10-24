@@ -105,7 +105,7 @@ permalink: /components/layout/
 组件导出以下类型定义
 
 ```ts
-import type { LayoutProps } from '@cedarjs/ui'
+import type { LayoutProps } from '@cedar-design/ui'
 ```
 
 ### 新增布局能力

@@ -1,17 +1,17 @@
 import { mount, flushPromises } from '@vue/test-utils'
 import { expect, test } from 'vitest'
 import DateRange from '..'
-import EditorPanel from '../../_components/field-presentation/EditorPanel.vue'
+import DatePanel from '../../date/DatePanel.vue'
 
 const pc = true
 async function fixture(initial = ['2026-10-19', '2026-10-22']) {
   const wrapper = mount(DateRange, { props: {
-    modelValue: initial, presentation: 'dialog', valueFormat: 'YYYY-MM-DD',
+    modelValue: initial, presentation: 'inline', disableConfirm: false, valueFormat: 'YYYY-MM-DD',
     ...(!pc ? { panelType: 'calendar' } : {}),
   } })
   await wrapper.get('[aria-haspopup=dialog]').trigger('click')
   await flushPromises()
-  const panel = wrapper.getComponent(EditorPanel)
+  const panel = wrapper.getComponent(DatePanel)
   const cells = () => panel.findAll(pc ? '.c-picker-cell-in-view' : '.mp-day-picker__button--usable')
   const cell = (day, calendar = 0) => cells().filter(node => node.text() === String(day))[calendar]
   const filled = () => cells().filter(node => node.classes().includes(pc ? 'c-picker-cell-in-range' : 'mp-button--status-primary')).map(node => node.text())

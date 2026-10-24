@@ -23,7 +23,7 @@ permalink: /components/ripple/
 
 ## 样式
 
-直接注册指令时，引入 `@cedarjs/ui/ripple/style`；运行时代码不导入 CSS，以支持 SSR 包导入。样式名使用 `--c-ripple-*`，声明见 `style/token.less`。主题默认值无需强行与移动端同值，动画规则与消费协议保持一致。
+直接注册指令时，引入 `@cedar-design/ui/ripple/style`；运行时代码不导入 CSS，以支持 SSR 包导入。样式名使用 `--c-ripple-*`，声明见 `style/token.less`。主题默认值无需强行与移动端同值，动画规则与消费协议保持一致。
 
 | 变量 | 默认值 | 职责 |
 | --- | --- | --- |

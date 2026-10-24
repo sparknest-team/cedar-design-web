@@ -51,7 +51,7 @@
 </template>
 <script setup lang="ts">
 import { computed, ref, useId, useSlots } from 'vue'
-import { IconClockCircle } from '@cedarjs/icons-vue'
+import { IconClockCircle } from '@cedar-design/icons-vue'
 import FeedbackIcon from '../../_components/FeedbackIcon.vue'
 import PickerField from '../../_components/picker-field/PickerField.vue'
 import TemporalTrigger from '../../_components/picker-field/presentation/TemporalTrigger.vue'

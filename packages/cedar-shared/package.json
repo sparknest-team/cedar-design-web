@@ -1,6 +1,6 @@
 {
-  "name": "@cedarjs/shared",
-  "version": "1.0.3",
+  "name": "@cedar-design/shared",
+  "version": "1.0.0",
   "description": "shared utilities of Cedar",
   "keywords": [
     "shared",
@@ -29,18 +29,21 @@
   "module": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
-    "lib"
+    "lib",
+    "THIRD_PARTY_NOTICES"
   ],
   "scripts": {
     "build": "tsup src/index.ts --format esm,cjs --out-dir=lib --dts --clean",
-    "dev": "tsup src/index.ts --format esm --out-dir=lib --watch --dts"
-  },
-  "dependencies": {
-    "rattail": "1.0.17"
+    "dev": "tsup src/index.ts --format esm --out-dir=lib --watch --dts",
+    "test": "node --test ../../scripts/quality/shared-bundle.test.mjs"
   },
   "devDependencies": {
     "@types/node": "catalog:",
     "tsup": "catalog:",
     "typescript": "catalog:"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

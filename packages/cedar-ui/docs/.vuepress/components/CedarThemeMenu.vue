@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, shallowRef } from 'vue'
-import { IconChevronDown, IconPaletteFill } from '@cedarjs/icons-vue'
+import { IconChevronDown } from '@cedar-design/icons-vue/icon-chevron-down'
+import { IconPaletteFill } from '@cedar-design/icons-vue/icon-palette-fill'
 import { getDocsTheme, setDocsTheme, type CedarDocsTheme } from '../theme-config'
 
 const open = ref(false)

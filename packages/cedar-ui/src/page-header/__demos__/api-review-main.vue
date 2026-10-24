@@ -78,10 +78,10 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review.config.json";
 
-import { Message } from "@cedarjs/ui";
+import { Message } from "@cedar-design/ui";
 
 const onBack = () => Message.info("点击返回");
 const onFollow = () => Message.success("已关注项目");

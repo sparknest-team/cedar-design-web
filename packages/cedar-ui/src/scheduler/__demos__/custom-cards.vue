@@ -24,7 +24,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import type { SchedulerEvent, SchedulerEventTemplate } from "@cedarjs/ui";
+import type { SchedulerEvent, SchedulerEventTemplate } from "@cedar-design/ui";
 import { resources } from "./data";
 const events = ref<SchedulerEvent[]>([]);
 const cards: SchedulerEventTemplate[] = [

@@ -11,6 +11,8 @@ The same scenarios, parameters and interactions as Cedar. Only component prefixe
 
 ### Basic usage
 
+Badges use a red background and white text by default.
+
 <demo src="./__demos__/basic.vue"></demo>
 
 ### Inline and standalone
@@ -111,7 +113,7 @@ type BadgeSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 | Name | Default |
 | --- | --- |
 | `--c-badge-font-weight` | `500` |
-| `--c-badge-bg-color` | `var(--c-sys-color-status-danger)` |
+| `--c-badge-bg-color` | `rgb(var(--c-danger-7))` |
 | `--c-badge-text-color` | `#ffffff` |
 | `--c-badge-description-text-color` | `var(--c-color-text-1)` |
 
@@ -140,4 +142,4 @@ The default `status="danger"` uses a red background with white text. Explicit `s
 
 ### Color override boundaries
 
-Fallback bg-color follows system status-danger. The fixed neutral default fill and gray secondary/tertiary fills are intentional; override border-color to match a different host surface. Custom color/text-color contrast is caller-owned.
+Fallback and danger fills use red backgrounds with white text: danger step 7 in light themes and step 4 in dark themes. The fixed neutral default fill and gray secondary/tertiary fills are intentional; override border-color to match a different host surface. Custom color/text-color contrast is caller-owned.

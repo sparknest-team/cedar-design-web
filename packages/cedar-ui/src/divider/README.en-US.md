@@ -103,7 +103,7 @@ Toggle orientation, default slot text, opacity and hairline to inspect updates a
 ## Types
 
 ```ts
-import type { DividerProps, DividerInstance, DividerSize } from '@cedarjs/ui'
+import type { DividerProps, DividerInstance, DividerSize } from '@cedar-design/ui'
 ```
 
 ### Style Variables

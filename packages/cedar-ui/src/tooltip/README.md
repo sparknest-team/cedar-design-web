@@ -83,11 +83,11 @@ Cedar 与 Maple 独立保存同一份主体、Props、外观映射和结构样�
 | `--c-tooltip-status-success-background` | `var(--c-sys-color-status-success)` | success 状态内容与箭头背景 |
 | `--c-tooltip-status-warning-background` | `var(--c-sys-color-status-warning)` | warning 状态内容与箭头背景 |
 | `--c-tooltip-status-danger-background` | `var(--c-sys-color-status-danger)` | danger 状态内容与箭头背景 |
-| `--c-tooltip-status-primary-text-color` | `var(--c-sys-color-content-on-bright)` | primary 状态文字；与对应底色成对设置 |
-| `--c-tooltip-status-info-text-color` | `var(--c-sys-color-content-on-bright)` | info 状态文字；与对应底色成对设置 |
-| `--c-tooltip-status-success-text-color` | `var(--c-sys-color-content-on-bright)` | success 状态文字；与对应底色成对设置 |
-| `--c-tooltip-status-warning-text-color` | `var(--c-sys-color-content-on-bright)` | warning 状态文字；与对应底色成对设置 |
-| `--c-tooltip-status-danger-text-color` | `var(--c-sys-color-content-on-bright)` | danger 状态文字；与对应底色成对设置 |
+| `--c-tooltip-status-primary-text-color` | `var(--c-sys-color-content-on-dark)` | primary 状态文字；与对应底色成对设置 |
+| `--c-tooltip-status-info-text-color` | `var(--c-sys-color-content-on-dark)` | info 状态文字；与对应底色成对设置 |
+| `--c-tooltip-status-success-text-color` | `var(--c-sys-color-content-on-dark)` | success 状态文字；与对应底色成对设置 |
+| `--c-tooltip-status-warning-text-color` | `var(--c-sys-color-content-on-dark)` | warning 状态文字；与对应底色成对设置 |
+| `--c-tooltip-status-danger-text-color` | `var(--c-sys-color-content-on-dark)` | danger 状态文字；与对应底色成对设置 |
 | `--c-tooltip-padding-horizontal` | `var(--c-sys-space-6)` | 内容横向内边距 |
 | `--c-tooltip-padding-vertical` | `var(--c-sys-space-4)` | 内容纵向内边距 |
 | `--c-tooltip-font-size` | `var(--c-sys-font-size-md)` | 内容字号 |
@@ -100,6 +100,6 @@ Cedar 与 Maple 独立保存同一份主体、Props、外观映射和结构样�
 | `--c-tooltip-size-xs-font-size` | `var(--c-sys-font-size-xs)` | xs 尺寸：内容字号 |
 | `--c-tooltip-animation-duration` | `var(--c-sys-motion-duration-standard)` | 组件入退场时长；reduced-motion 可覆盖 |
 
-所有内置主题 opacity 为 1。彩色背景配 on-bright；两端 Maple 浅色品牌的深橙 primary 配 on-dark。Maple 暗色保留圆角 4px、字号 14px、纵向／横向内边距 8px／16px。中性表面在明暗模式均保持深色。`color` 同时设置内容与箭头背景，`text-color` 设置文字；显式 content-style／arrow-style 覆盖各自节点。自定义颜色／透明度需重新验证。
+所有内置主题 opacity 为 1。彩色实心状态文字遵循 Button，统一使用 on-dark，明暗模式一致。Maple 暗色保留圆角 4px、字号 14px、纵向／横向内边距 8px／16px。中性表面在明暗模式均保持深色。`color` 同时设置内容与箭头背景，`text-color` 设置文字；显式 content-style／arrow-style 覆盖各自节点。自定义颜色／透明度需重新验证。
 
 使用 Teleport 时，变量需放在实际 popup 的作用域中（例如通过 `popup-style`）；触发按钮上的变量不会自动继承到浮层。

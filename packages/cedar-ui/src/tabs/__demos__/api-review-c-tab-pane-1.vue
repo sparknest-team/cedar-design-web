@@ -4,7 +4,7 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review-c-tab-pane-1.config.json";
 </script>
 <template>
@@ -12,9 +12,9 @@ import __apiReviewRawConfig from "./api-review-c-tab-pane-1.config.json";
     v-slot="__apiReview"
     v-bind="defineReviewConfig(__apiReviewRawConfig)"
   >
-    <c-tabs default-active="overview">
+    <c-tabs default-value="overview">
       <c-tab-pane
-        key="overview"
+        name="overview"
         title="概览"
         v-bind="__apiReview.bindings"
         v-on="__apiReview.listeners"
@@ -28,7 +28,7 @@ import __apiReviewRawConfig from "./api-review-c-tab-pane-1.config.json";
             :record="__apiReview.record" /></template
       ></c-tab-pane>
       <c-tab-pane
-        key="details"
+        name="details"
         title="详情"
         v-bind="__apiReview.bindings"
         v-on="__apiReview.listeners"
@@ -42,7 +42,7 @@ import __apiReviewRawConfig from "./api-review-c-tab-pane-1.config.json";
             :record="__apiReview.record" /></template
       ></c-tab-pane>
       <c-tab-pane
-        key="settings"
+        name="settings"
         title="设置"
         v-bind="__apiReview.bindings"
         v-on="__apiReview.listeners"

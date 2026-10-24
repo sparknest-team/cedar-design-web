@@ -108,7 +108,7 @@ import type {
   SchedulerEditorRequest,
   SchedulerEvent,
   SchedulerResource,
-} from "@cedarjs/ui";
+} from "@cedar-design/ui";
 import EventSummaryPopover from "./event-summary-popover.vue";
 import {
   toTaskCalendarEvent,

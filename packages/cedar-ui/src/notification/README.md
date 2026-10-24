@@ -40,7 +40,7 @@ duration（默认 3000ms，0 持续显示）是业务展示计时，不是 CSS �
 
 ```ts
 import { createApp } from 'vue'
-import { Notification } from '@cedarjs/ui'
+import { Notification } from '@cedar-design/ui'
 
 const app = createApp(App)
 Notification._context = app._context
@@ -87,7 +87,7 @@ Notification._context = app._context
 组件导出以下类型定义
 
 ```ts
-import type { NotificationInstance, NotificationConfig, NotificationReturn } from '@cedarjs/ui'
+import type { NotificationInstance, NotificationConfig, NotificationReturn } from '@cedar-design/ui'
 ```
 
 ## 公开 CSS 变量

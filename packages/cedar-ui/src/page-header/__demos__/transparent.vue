@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import { Message } from "@cedarjs/ui";
+import { Message } from "@cedar-design/ui";
 
 const onFollow = () => Message.success("已关注项目");
 </script>

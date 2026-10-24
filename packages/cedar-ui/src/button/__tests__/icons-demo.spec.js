@@ -5,7 +5,7 @@ import {
   IconCheck,
   IconDelete,
   IconClose,
-} from "@cedarjs/icons-vue";
+} from "@cedar-design/icons-vue";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { expect, test } from "vitest";

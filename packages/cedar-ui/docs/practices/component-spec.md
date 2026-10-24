@@ -39,7 +39,7 @@ src/<component>/
 
 **统一**使用 `createNamespace('<kebab-name>')` 返回的 `name` 作为 `defineOptions` / `defineComponent` 的 name，与仓库现有 50+ 个组件保持一致。
 
-背景：rattail 的 `createNamespaceFn` 内部把 `'<prefix>-<kebab>'` 转成 PascalCase 作为 `name`，所以 `createNamespace('button').name === 'CButton'`。这个值带 `C` 前缀，**天然避开了与 HTML 标签同名时 Vue `<component :is>` 触发的自递归解析**（如果 `name === 'Button'`，Vue 在解析 `<component :is="'button'">` 时会把 `'button'` normalize 成 `'Button'` 命中自身组件，导致无限递归）。
+背景：本地 `@cedar-design/shared` 的 `createNamespaceFn` 内部把 `'<prefix>-<kebab>'` 转成 PascalCase 作为 `name`，所以 `createNamespace('button').name === 'CButton'`。两端实现遵守 `design-ui/standards/shared-foundation.md`，不再整包转出 rattail。这个值带 `C` 前缀，**天然避开了与 HTML 标签同名时 Vue `<component :is>` 触发的自递归解析**（如果 `name === 'Button'`，Vue 在解析 `<component :is="'button'">` 时会把 `'button'` normalize 成 `'Button'` 命中自身组件，导致无限递归）。
 
 #### TSX / 普通 `<script>` 组件
 
@@ -263,12 +263,12 @@ export default Comp;
 
 ## 6. 父子组件通信
 
-需要父子配置继承时（如 `ButtonGroup` ↔ `Button`），统一使用 `@cedarjs/use` 的 `useChildren` / `useParent`：
+需要父子配置继承时（如 `ButtonGroup` ↔ `Button`），统一使用 `@cedar-design/use` 的 `useChildren` / `useParent`：
 
 ```ts
 // provide.ts
 import type { ComputedRef } from "vue";
-import { useChildren, useParent } from "@cedarjs/use";
+import { useChildren, useParent } from "@cedar-design/use";
 
 export interface XxxGroupProvider {
   status: ComputedRef<Status>;
@@ -365,7 +365,7 @@ permalink: /components/<component>/
 组件导出以下类型定义
 
 ```ts
-import type { ComponentProps } from "@cedarjs/ui";
+import type { ComponentProps } from "@cedar-design/ui";
 ```
 ````
 
@@ -444,11 +444,17 @@ Steps 按 Pagination 语义完成 PC ↔ Mobile API 对齐（进度序号，不�
 
 **核心约定**：
 
-- 进度 prop：`current` / `defaultCurrent`（**1-based**）；不用 `active`。
+- 进度 prop：`modelValue` / `defaultValue`（**1-based**）；不用 `active`。
 - 状态：`status: wait | process | finish | error`；子项可覆盖；推导规则 `step < current → finish`。
-- 点击：`changeable` 门控 + `onChange(step, ev)` / `v-model:current`。
+- 点击：`changeable` 门控 + `onChange(step, ev)` / 普通 `v-model`。
 - Step 内容：`title` / `description` / `disabled` + `#icon` / `#description`。
 - PC 独有：`type` / `labelPlacement` / `small` / `showLine` / `#node`（移动不实现）。
 - 移动移除：`activeColor` / 三态 icon props / `click-step`。
 
 OpenSpec change：`openspec/changes/align-steps-spec/`。
+
+### 主值与非受控初始值约定
+
+主值采用 modelValue/update:modelValue，非受控初始值采用 defaultValue。Tabs、Collapse、Pagination、Steps 支持普通 v-model；Collapse 仍为 name 数组，Pagination 与 Steps 仍从 1 开始。defaultValue 仅创建时读取，不监听后续更新，也不在初始化时回写父级。Pagination 的 pageSize、选择器的 inputValue/open 保留独立具名模型。选项对象默认使用 value/label（树形使用 children），不与组件主值混淆。
+
+主值命名审查范围见 design-ui/audits/primary-model-naming.md：Carousel/TabBar、可选 Tag、图片预览组采用 modelValue/defaultValue；Carousel 与图片预览组公开序号从 1 开始，FloatingPanel 停靠高度采用 modelValue/defaultValue 与普通 v-model；Image 内嵌预览统一 open/defaultOpen。声明式子项 name 不替代选项数据 value/label 或原生表单 name。

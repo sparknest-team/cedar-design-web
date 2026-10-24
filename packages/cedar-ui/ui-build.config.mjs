@@ -1,13 +1,13 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
-import { defineConfig } from '@cedarjs/cli'
+import { defineConfig } from '@cedar-design/cli'
 
 const root = import.meta.dirname
 const pkg = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8'))
 
 export default defineConfig({
   root,
-  name: '@cedarjs/ui',
+  name: '@cedar-design/ui',
   globalName: 'Cedar',
   bundleName: 'cedar',
   external: [

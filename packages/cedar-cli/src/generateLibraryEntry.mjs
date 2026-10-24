@@ -17,11 +17,10 @@ const INSTALL_SKIP_DIRS = new Set([
   'context',
   'themes',
   'ellipsis',
-  'field-decorator',
   'loading',
 ])
 /** Still export from root index, but never app.use */
-const NON_INSTALL_EXPORT_DIRS = new Set(['locale', 'utils', 'context', 'themes', 'ellipsis', 'field-decorator', 'loading'])
+const NON_INSTALL_EXPORT_DIRS = new Set(['locale', 'utils', 'context', 'themes', 'ellipsis', 'loading'])
 
 /** export * would clash with another package member; use explicit lines instead */
 const EXPLICIT_INDEX_EXPORTS = new Map([

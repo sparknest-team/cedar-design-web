@@ -27,7 +27,7 @@ import {
   onMounted,
   onBeforeUnmount,
 } from "vue";
-import type { PopoverPlacement } from "@cedarjs/ui";
+import type { PopoverPlacement } from "@cedar-design/ui";
 import { getEventSummaryPosition } from "./event-summary-position";
 const props = defineProps<{
   open: boolean;

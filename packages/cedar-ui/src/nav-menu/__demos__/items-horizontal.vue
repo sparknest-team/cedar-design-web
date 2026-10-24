@@ -34,7 +34,7 @@ const regionLabel = computed(() => regions.find(item => item.key === region.valu
       />
       <c-nav-menu-item
         label="高级筛选"
-        :active="!!appliedKeyword"
+        :highlight="!!appliedKeyword"
         popup-layout="full-width"
         :hide-on-select="false"
       >

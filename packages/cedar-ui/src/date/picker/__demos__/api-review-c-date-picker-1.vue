@@ -4,11 +4,11 @@ import DemoApiReviewPanel from "../../../../docs/.vuepress/components/ApiReviewP
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review-c-date-picker-1.config.json";
 
 import { ref } from "vue";
-import type { DateSelection } from "@cedarjs/ui";
+import type { DateSelection } from "@cedar-design/ui";
 const limited = ref(true);
 const fieldValue = ref<DateSelection>("2025-02-12");
 const panelValue = ref<DateSelection>("2025-02-12");

@@ -113,7 +113,7 @@ Countdown 的 RAF 刷新业务剩余时间，不是视觉插值；CSS duration�
 组件导出以下类型定义
 
 ```ts
-import type { CountdownProps, CountdownInstance, TimeData } from '@cedarjs/ui'
+import type { CountdownProps, CountdownInstance, TimeData } from '@cedar-design/ui'
 ```
 
 ### 样式变量

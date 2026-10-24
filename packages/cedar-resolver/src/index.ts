@@ -1,4 +1,4 @@
-import { kebabCase } from "@cedarjs/shared";
+import { kebabCase } from "@cedar-design/shared";
 import componentNames from "./component-names.json";
 
 // Public _XxxComponent aliases only. Keep this shipped registry independent of
@@ -29,7 +29,7 @@ const cedarDirectives: Record<string, string> = {
   Tooltip: "vTooltip",
 };
 
-/** Component name → style directory under `@cedarjs/ui` (when not kebabCase(name)). */
+/** Component name → style directory under `@cedar-design/ui` (when not kebabCase(name)). */
 const styleDirAliases: Record<string, string> = {
   NavMenuItem: "nav-menu",
   AnchorLink: "anchor",
@@ -104,7 +104,7 @@ function getStyleSideEffects(name: string, importStyle = true) {
     return undefined;
   }
   const dir = styleDirAliases[name] ?? kebabCase(name);
-  return [`@cedarjs/ui/${dir}/style`];
+  return [`@cedar-design/ui/${dir}/style`];
 }
 
 export function resolveCedarComponent(
@@ -116,7 +116,7 @@ export function resolveCedarComponent(
     return undefined;
   }
   return {
-    from: "@cedarjs/ui",
+    from: "@cedar-design/ui",
     name: programmatic ? name : `_${name}Component`,
     sideEffects: getStyleSideEffects(name, options.importStyle),
   };
@@ -125,7 +125,7 @@ export function resolveCedarComponent(
 function resolveCedarIcon(name: string) {
   const iconName = name.slice("CIcon".length);
   return {
-    from: `@cedarjs/icons-vue/icon-${kebabCase(iconName)}`,
+    from: `@cedar-design/icons-vue/icon-${kebabCase(iconName)}`,
     name: `Icon${iconName}`,
   };
 }
@@ -159,7 +159,7 @@ export function CedarResolver(options: CedarResolverOptions = {}) {
 
         const styleName = name === "CLoading" ? "Loading" : name;
         return {
-          from: "@cedarjs/ui",
+          from: "@cedar-design/ui",
           name: cedarDirectives[name],
           sideEffects: getStyleSideEffects(styleName, options.importStyle),
         };
@@ -181,7 +181,7 @@ export function CedarStyleImports(options: Pick<CedarResolverOptions, 'importSty
       if (options.importStyle === false ||
         !/\.(?:[cm]?[jt]sx?|vue|md)(?:\?|$)/.test(id) ||
         /[?&](?:type=style|raw(?:&|$)|url(?:&|$))/.test(id) ||
-        !code.includes('@cedarjs/ui')) return
+        !code.includes('@cedar-design/ui')) return
       const ast = this.parse(code) as {
         body: Array<{ type: string; source?: { value: string }; specifiers?: Array<{
           type: string; imported?: { name?: string; value?: string }
@@ -190,7 +190,7 @@ export function CedarStyleImports(options: Pick<CedarResolverOptions, 'importSty
       const existing = new Set(ast.body.filter(node => node.type === 'ImportDeclaration').map(node => node.source?.value))
       const styles = new Set<string>()
       for (const node of ast.body) {
-        if (node.type !== 'ImportDeclaration' || node.source?.value !== '@cedarjs/ui') continue
+        if (node.type !== 'ImportDeclaration' || node.source?.value !== '@cedar-design/ui') continue
         for (const specifier of node.specifiers ?? []) {
           if (specifier.type !== 'ImportSpecifier') continue
           const imported = specifier.imported?.name ?? specifier.imported?.value ?? ''

@@ -1,5 +1,5 @@
 ---
-"@cedarjs/ui": patch
+"@cedar-design/ui": patch
 ---
 
 Document unchanged Maple year-panel native-scroll evidence and Date candidate closure:31/33 families,165/178 hints;not parallel integration or native acceptance.

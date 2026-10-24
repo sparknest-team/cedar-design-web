@@ -14,8 +14,8 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { stateFromColumns } from '@cedarjs/ui'
-import type { ColumnDefinitions, TableColumnData, TableColumnManagerInstance } from '@cedarjs/ui'
+import { stateFromColumns } from '@cedar-design/ui'
+import type { ColumnDefinitions, TableColumnData, TableColumnManagerInstance } from '@cedar-design/ui'
 
 const visible = ref(false)
 const mgrRef = ref<TableColumnManagerInstance>()

@@ -157,7 +157,7 @@ import type {
   TextareaProps,
   WordLength,
   WordSlice,
-} from "@cedarjs/ui";
+} from "@cedar-design/ui";
 ```
 
 ## 样式变量

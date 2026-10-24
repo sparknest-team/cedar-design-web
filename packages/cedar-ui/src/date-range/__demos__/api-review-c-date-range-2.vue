@@ -4,11 +4,11 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review-c-date-range-2.config.json";
 
 import { ref } from "vue";
-import type { DateValue } from "@cedarjs/ui";
+import type { DateValue } from "@cedar-design/ui";
 const limited = ref(true);
 const blockEnd20 = ref(false);
 const disabledEnd = (date: Date, side: "start" | "end") =>

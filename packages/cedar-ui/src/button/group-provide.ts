@@ -1,5 +1,5 @@
 import type { ComputedRef } from 'vue'
-import { useChildren } from '@cedarjs/use'
+import { useChildren } from '@cedar-design/use'
 import type { ComponentSize, SemanticStatus } from '../_utils/constant'
 import type { ButtonVariant } from './props'
 

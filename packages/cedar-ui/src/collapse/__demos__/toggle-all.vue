@@ -8,7 +8,7 @@
       <c-button @click="toggleAll({ expand: false })">Collapse all</c-button>
       <c-button @click="toggleAll({ expand: false, skipDisabled: true })">Collapse all (skip disabled)</c-button>
     </c-space>
-    <c-collapse ref="collapseRef" v-model:active-names="activeNames">
+    <c-collapse ref="collapseRef" v-model="activeNames">
       <c-collapse-item title="Panel 1" name="1">
         <div>Content 1</div>
       </c-collapse-item>

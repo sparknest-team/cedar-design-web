@@ -27,11 +27,11 @@ for (const presentation of ["click"] as const) {
           allowSearch: true,
           data: [
             {
-              key: "east",
-              title: "华东",
+              value: "east",
+              label: "华东",
               children: [
-                { key: "shanghai", title: "上海" },
-                { key: "hangzhou", title: "杭州" },
+                { value: "shanghai", label: "上海" },
+                { value: "hangzhou", label: "杭州" },
               ],
             },
           ],
@@ -148,8 +148,8 @@ it("clears removable tree selections while retaining disabled selections", async
       clearable: true,
       modelValue: ["open", "locked"],
       data: [
-        { key: "open", title: "可修改" },
-        { key: "locked", title: "不可修改", disabled: true },
+        { value: "open", label: "可修改" },
+        { value: "locked", label: "不可修改", disabled: true },
       ],
     },
     global,

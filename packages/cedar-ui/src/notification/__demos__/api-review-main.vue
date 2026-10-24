@@ -1,8 +1,8 @@
 <script setup>
 import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPanel.vue";
 import { onUnmounted } from "vue";
-import { Notification } from "@cedarjs/ui";
-import { defineReviewConfig } from "@ui-foundation/ui-doc-preview";
+import { Notification } from "@cedar-design/ui";
+import { defineReviewConfig } from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review.config.json";
 function run(action, bindings) {
   const options = Object.fromEntries(

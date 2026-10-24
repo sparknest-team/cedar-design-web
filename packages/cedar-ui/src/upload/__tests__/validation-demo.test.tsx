@@ -12,7 +12,7 @@ import Demo from "../__demos__/replacement-validation.vue";
 
 useDemoControls(demoTestConfig);
 
-vi.mock("@cedarjs/ui", () => import(".."));
+vi.mock("@cedar-design/ui", () => import(".."));
 
 const wrappers = [];
 afterEach(() => wrappers.splice(0).forEach((wrapper) => wrapper.unmount()));

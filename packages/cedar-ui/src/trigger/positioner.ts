@@ -17,7 +17,6 @@ import {
   getTransformOrigin,
 } from "./geometry";
 import { calculatePopupPosition, getScrollElements } from "./position";
-import { triggerResizeObserverFallback } from "./platform";
 import { useTriggerResize } from "./resize";
 import type { TriggerPopupTranslate, TriggerStrategy } from "./types";
 
@@ -362,7 +361,6 @@ export function useTriggerPositioner(
       if (entries.some((entry) => entry.target === context.reference.value))
         context.referenceResize();
     },
-    triggerResizeObserverFallback,
   );
 
   onMounted(() => nextTick(update));

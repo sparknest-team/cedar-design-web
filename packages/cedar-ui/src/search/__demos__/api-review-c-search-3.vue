@@ -4,11 +4,11 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review-c-search-3.config.json";
 
 import { ref } from "vue";
-import type { SearchResult } from "@cedarjs/ui";
+import type { SearchResult } from "@cedar-design/ui";
 
 const field = ref("name");
 const model = ref<Record<string, unknown>>({ name: "设备 A", tenant: "demo" });

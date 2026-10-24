@@ -65,7 +65,7 @@ permalink: /components/back-top/
 ### 类型
 
 ```ts
-import type { BackTopProps, BackTopInstance, BackTopTarget, BackTopEasing } from '@cedarjs/ui'
+import type { BackTopProps, BackTopInstance, BackTopTarget, BackTopEasing } from '@cedar-design/ui'
 ```
 
 ### 样式变量

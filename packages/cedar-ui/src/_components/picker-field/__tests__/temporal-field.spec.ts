@@ -46,7 +46,7 @@ describe("Cedar temporal field owner", () => {
     wrapper.unmount();
   });
   test.each([false, true])(
-    "typed ranges follow panel ordering, next day=%s",
+    "typed ranges follow panel validation without swapping endpoints, next day=%s",
     async (showNextDay) => {
       const wrapper = mount(TimeRange, {
         props: { format: "HH:mm", showNextDay, defaultValue: ["09:00", "18:00"] },
@@ -56,9 +56,17 @@ describe("Cedar temporal field owner", () => {
       await start.setValue("19:00");
       await end.setValue("10:00");
       await end.trigger("keydown", { key: "Enter" });
-      expect(wrapper.emitted("change")![0][0]).toEqual(
-        showNextDay ? ["19:00", "10:00"] : ["10:00", "19:00"],
-      );
+      if (showNextDay) {
+        expect(wrapper.emitted("change")![0][0]).toEqual(["19:00", "10:00"]);
+        expect(wrapper.emitted("update:modelValue")).toEqual([[["19:00", "10:00"]]]);
+      } else {
+        expect(wrapper.emitted("change")).toBeUndefined();
+        expect(wrapper.emitted("update:modelValue")).toBeUndefined();
+        await start.setValue("09:00");
+        await end.setValue("20:00");
+        await end.trigger("keydown", { key: "Enter" });
+        expect(wrapper.emitted("change")?.map((args) => args[0])).toEqual([["09:00", "20:00"]]);
+      }
       wrapper.unmount();
     },
   );

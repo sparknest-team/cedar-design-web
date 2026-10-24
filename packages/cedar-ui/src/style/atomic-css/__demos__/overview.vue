@@ -18,7 +18,7 @@ const data = [
   {
     kind: "Preset 颜色",
     example: "c-bg-primary / c-text-success",
-    note: "需配置 @cedarjs/preset-*",
+    note: "需配置 @cedar-design/preset-*",
   },
   {
     kind: "Preset 字号",

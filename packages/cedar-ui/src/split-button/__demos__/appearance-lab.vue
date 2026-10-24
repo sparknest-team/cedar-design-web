@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import type { ComponentSize, SemanticStatus } from "../../_utils/constant";
-import { Message } from "@cedarjs/ui";
+import { Message } from "@cedar-design/ui";
 const publish = () => {
   Message.info("发布成功");
 };

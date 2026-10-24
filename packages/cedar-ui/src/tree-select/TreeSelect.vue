@@ -99,7 +99,7 @@
             v-else
             ref="panelRef"
             :candidate-filter="keyboardCandidateFilter"
-            :selected-keys="selectedKeys"
+            :selected-values="selectedValues"
             :show-checkable="treeCheckable"
             :scrollbar="scrollbar"
             :tree-props="{
@@ -165,7 +165,7 @@ import {
   TreeFieldNames,
   TreeNodeData,
   TreeProps,
-  TreeNodeKey,
+  TreeNodeValue,
   Node,
 } from "../tree/types";
 import { isUndefined, isFunction, isObject } from "../_utils/is";
@@ -290,8 +290,8 @@ export default defineComponent({
   /**
    * @zh 定制 tree 组件的节点标题
    * @en Custom the node title of the tree component
-   * @slot tree-slot-title
-   * @binding {string} title
+   * @slot tree-slot-label
+   * @binding {TreeNodeData} node
    */
   /**
    * @zh 定制 tree 组件的渲染额外节点内容
@@ -375,10 +375,10 @@ export default defineComponent({
     );
 
     const {
-      selectedKeys,
+      selectedValues,
       selectedValue,
-      setLocalSelectedKeys,
-      localSelectedKeys,
+      setLocalSelectedValues,
+      localSelectedValues,
       localSelectedValue,
     } = useSelectedState(
       reactive({
@@ -419,14 +419,14 @@ export default defineComponent({
       })) as SelectionFieldItem[];
     });
 
-    const setSelectedKeys = (newVal: TreeNodeKey[]) => {
-      setLocalSelectedKeys(newVal);
+    const setSelectedValues = (newVal: TreeNodeValue[]) => {
+      setLocalSelectedValues(newVal);
 
       nextTick(() => {
         const forEmitValue =
           (labelInValue.value
             ? localSelectedValue.value
-            : localSelectedKeys.value) || [];
+            : localSelectedValues.value) || [];
 
         const emitValue = isMultiple.value ? forEmitValue : forEmitValue[0];
 
@@ -510,7 +510,7 @@ export default defineComponent({
         filterTreeNode.value
           ? filterTreeNode.value(query, node)
           : String(
-              node[(fieldNames.value?.key ?? "key") as keyof TreeNodeData] ??
+              node[(fieldNames.value?.value ?? "value") as keyof TreeNodeData] ??
                 "",
             ).includes(query);
     });
@@ -581,7 +581,7 @@ export default defineComponent({
       prefixCls,
       TreeSelectEmpty,
       selectedValue,
-      selectedKeys,
+      selectedValues,
       mergedDisabled,
       mergedReadonly,
       mergedError,
@@ -594,9 +594,9 @@ export default defineComponent({
       selectViewValue,
       computedDropdownStyle,
       onSearchValueChange: handleInputValueChange,
-      onSelectChange(newVal: TreeNodeKey[]) {
+      onSelectChange(newVal: TreeNodeValue[]) {
         if (mergedDisabled.value || mergedReadonly.value) return;
-        setSelectedKeys(newVal);
+        setSelectedValues(newVal);
         if (!retainInputValue.value && computedInputValue.value) {
           updateInputValue("");
         }
@@ -608,8 +608,8 @@ export default defineComponent({
       onVisibleChange: setPanelVisible,
       onEditorClear() {
         if (mergedDisabled.value || mergedReadonly.value) return;
-        setSelectedKeys(
-          selectedKeys.value.filter((key) =>
+        setSelectedValues(
+          selectedValues.value.filter((key) =>
             selectViewValue.value.some(
               (item) => item.key === key && item.closable === false,
             ),
@@ -619,8 +619,8 @@ export default defineComponent({
       },
       onInnerClear() {
         if (mergedDisabled.value || mergedReadonly.value) return;
-        setSelectedKeys(
-          selectedKeys.value.filter((key) =>
+        setSelectedValues(
+          selectedValues.value.filter((key) =>
             selectViewValue.value.some(
               (item) => item.key === key && item.closable === false,
             ),
@@ -641,15 +641,15 @@ export default defineComponent({
             const [newVal] = getCheckedStateByCheck({
               node,
               checked: false,
-              checkedKeys: selectedKeys.value,
+              checkedValues: selectedValues.value,
               indeterminateKeys: [],
               checkStrictly: treeCheckStrictly.value,
             });
-            setSelectedKeys(newVal);
+            setSelectedValues(newVal);
           }
         } else {
-          const newVal = selectedKeys.value.filter((i) => i !== id);
-          setSelectedKeys(newVal);
+          const newVal = selectedValues.value.filter((i) => i !== id);
+          setSelectedValues(newVal);
         }
       },
     };

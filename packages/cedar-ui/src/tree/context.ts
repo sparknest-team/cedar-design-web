@@ -1,5 +1,5 @@
 import { InjectionKey, Slot } from 'vue'
-import type { Node, DropPosition, TreeNodeKey, TreeProps, Key2TreeNode, FilterTreeNode } from './types'
+import type { Node, DropPosition, TreeNodeValue, TreeProps, Key2TreeNode, FilterTreeNode } from './types'
 
 export const TreeInjectionKey: InjectionKey<TreeContext> = Symbol('TreeInjectionKey')
 
@@ -14,22 +14,22 @@ export type TreeContext = Readonly<{
   treeData: Node[]
   flattenTreeData: Node[]
   key2TreeNode: Key2TreeNode
-  checkedKeys: TreeNodeKey[]
+  checkedValues: TreeNodeValue[]
   filterTreeNode?: FilterTreeNode
-  indeterminateKeys: TreeNodeKey[]
-  selectedKeys: TreeNodeKey[]
-  expandedKeys: TreeNodeKey[]
-  loadingKeys: TreeNodeKey[]
-  currentExpandKeys: TreeNodeKey[]
-  onLoadMore?: (key: TreeNodeKey) => void
-  onCheck: (checked: boolean, key: TreeNodeKey, e?: Event) => void
-  onSelect: (key: TreeNodeKey, e: Event) => void
-  onExpand: (expanded: boolean, key: TreeNodeKey, e?: Event) => void
-  onExpandEnd: (key: TreeNodeKey) => void
-  onDragStart?: (key: TreeNodeKey, e: DragEvent) => void
-  onDragEnd?: (key: TreeNodeKey, e: DragEvent) => void
-  onDragOver?: (key: TreeNodeKey, e: DragEvent) => void
-  onDragLeave?: (key: TreeNodeKey, e: DragEvent) => void
-  onDrop?: (key: TreeNodeKey, dropPosition: DropPosition, e: DragEvent) => void
-  allowDrop?: (key: TreeNodeKey, dropPosition: DropPosition) => boolean
+  indeterminateKeys: TreeNodeValue[]
+  selectedValues: TreeNodeValue[]
+  expandedValues: TreeNodeValue[]
+  loadingKeys: TreeNodeValue[]
+  currentExpandKeys: TreeNodeValue[]
+  onLoadMore?: (key: TreeNodeValue) => void
+  onCheck: (checked: boolean, key: TreeNodeValue, e?: Event) => void
+  onSelect: (key: TreeNodeValue, e: Event) => void
+  onExpand: (expanded: boolean, key: TreeNodeValue, e?: Event) => void
+  onExpandEnd: (key: TreeNodeValue) => void
+  onDragStart?: (key: TreeNodeValue, e: DragEvent) => void
+  onDragEnd?: (key: TreeNodeValue, e: DragEvent) => void
+  onDragOver?: (key: TreeNodeValue, e: DragEvent) => void
+  onDragLeave?: (key: TreeNodeValue, e: DragEvent) => void
+  onDrop?: (key: TreeNodeValue, dropPosition: DropPosition, e: DragEvent) => void
+  allowDrop?: (key: TreeNodeValue, dropPosition: DropPosition) => boolean
 }>

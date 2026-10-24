@@ -3,7 +3,7 @@
     <c-button @click="offset = !offset">
       {{ offset ? 'Hide offset' : 'Show offset' }}
     </c-button>
-    <c-collapse v-model:active-names="activeNames" :offset="offset">
+    <c-collapse v-model="activeNames" :offset="offset">
       <c-collapse-item title="Beijing Toutiao Technology Co., Ltd." name="1">
         <div>Beijing Toutiao Technology Co., Ltd.</div>
       </c-collapse-item>

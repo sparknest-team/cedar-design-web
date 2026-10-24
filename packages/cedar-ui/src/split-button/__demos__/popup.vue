@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { Message } from "@cedarjs/ui";
+import { Message } from "@cedar-design/ui";
 
 const lastAction = ref("");
 const handleSelect = (value: unknown, option: { label?: unknown }) => {

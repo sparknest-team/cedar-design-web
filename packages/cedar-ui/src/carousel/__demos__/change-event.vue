@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-const handleChange = (index) => {
-  console.log('slide:', index)
+const handleChange = (slideNumber) => {
+  console.log('slide:', slideNumber)
 }
 </script>

@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
 
-const current = ref(0);
+const current = ref(1);
 const changes = ref(0);
 </script>
 
@@ -12,7 +12,7 @@ const changes = ref(0);
   </p>
   <p role="status">Current: {{ current }} · Changes: {{ changes }}</p>
   <c-carousel
-    v-model:current="current"
+    v-model="current"
     class="carousel-interactive-demo"
     height="180px"
     draggable

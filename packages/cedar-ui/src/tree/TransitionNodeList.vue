@@ -13,7 +13,7 @@ import ExpandTransition from './ExpandTransition.vue'
 import { getPrefixCls } from '../_utils/global-config'
 import useTreeContext from './hooks/use-tree-context'
 import BaseTreeNode from './BaseNode.vue'
-import { TreeNodeKey } from './types'
+import { TreeNodeValue } from './types'
 
 export default defineComponent({
   name: createNamespace("transition-node-list").name,
@@ -23,7 +23,7 @@ export default defineComponent({
   },
   props: {
     nodeKey: {
-      type: [String, Number] as PropType<TreeNodeKey>,
+      type: [String, Number] as PropType<TreeNodeValue>,
       required: true,
     },
   },
@@ -35,10 +35,10 @@ export default defineComponent({
 
     const { nodeKey } = toRefs(props)
 
-    const expanded = computed(() => treeContext.expandedKeys?.includes?.(nodeKey.value))
+    const expanded = computed(() => treeContext.expandedValues?.includes?.(nodeKey.value))
 
     const visibleNodeList = computed(() => {
-      const expandedKeysSet = new Set(treeContext.expandedKeys || [])
+      const expandedValuesSet = new Set(treeContext.expandedValues || [])
       const childNodeList = treeContext.flattenTreeData?.filter((node) => {
         if (node.pathParentKeys?.includes(nodeKey.value)) {
           return !treeContext.filterTreeNode || treeContext.filterTreeNode?.(node.treeNodeData)
@@ -49,11 +49,11 @@ export default defineComponent({
       return childNodeList?.filter((node) => {
         if (expanded.value) {
           // When expanding, only when each parent node is in expanded state will it be displayed by itself
-          return node.pathParentKeys?.every((_key) => expandedKeysSet.has(_key))
+          return node.pathParentKeys?.every((_key) => expandedValuesSet.has(_key))
         }
         // When collapsed, only when all the parent nodes after the position corresponding to the nodeKey are in the expanded state, will they be displayed
         const index = node.pathParentKeys.indexOf(nodeKey.value)
-        return node.pathParentKeys.slice(index + 1).every((_key) => expandedKeysSet.has(_key))
+        return node.pathParentKeys.slice(index + 1).every((_key) => expandedValuesSet.has(_key))
       })
     })
 

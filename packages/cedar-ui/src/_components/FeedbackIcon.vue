@@ -10,10 +10,10 @@
 <script lang="ts">
 import { createNamespace } from '../_utils/global-config'
 import { computed, defineComponent } from 'vue'
-import { IconLoading } from '@cedarjs/icons-vue/icon-loading'
-import { IconCheckCircleFill } from '@cedarjs/icons-vue/icon-check-circle-fill'
-import { IconExclamationCircleFill } from '@cedarjs/icons-vue/icon-exclamation-circle-fill'
-import { IconCloseCircleFill } from '@cedarjs/icons-vue/icon-close-circle-fill'
+import { IconLoading } from '@cedar-design/icons-vue/icon-loading'
+import { IconCheckCircleFill } from '@cedar-design/icons-vue/icon-check-circle-fill'
+import { IconExclamationCircleFill } from '@cedar-design/icons-vue/icon-exclamation-circle-fill'
+import { IconCloseCircleFill } from '@cedar-design/icons-vue/icon-close-circle-fill'
 import { getPrefixCls } from '../_utils/global-config'
 
 export default defineComponent({

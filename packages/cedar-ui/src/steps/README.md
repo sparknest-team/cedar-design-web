@@ -89,6 +89,8 @@ permalink: /components/steps/
 
 ## API
 
+主值使用普通 `v-model`：`modelValue` 表示当前步骤序号，从 1 开始。`defaultValue` 仅在创建时初始化非受控状态，之后修改不会重置当前值；初始化不触发 `update:modelValue`。提供 `modelValue` 时由父级控制，以受控值为准。
+
 ### Steps Props
 
 | 属性                 | 说明                     | 类型                                                  | 默认值         |
@@ -96,8 +98,8 @@ permalink: /components/steps/
 | type                 | 步骤条的类型             | `'default'` \| `'arrow'` \| `'dot'` \| `'navigation'` | `'default'`    |
 | orientation            | 步骤条的方向             | `'horizontal'` \| `'vertical'`                        | `'horizontal'` |
 | content-placement    | 内容相对节点的位置       | `'right'` \| `'bottom'`                               | `'right'`      |
-| current(**v-model**) | 当前步骤数               | `number`                                              | `-`            |
-| default-current      | 默认的步骤数(非受控状态) | `number`                                              | `1`            |
+| model-value(**v-model**) | 当前步骤数               | `number`                                              | `-`            |
+| default-value      | 默认的步骤数(非受控状态) | `number`                                              | `1`            |
 | status               | 当前步骤状态             | `'wait'` \| `'process'` \| `'finish'` \| `'error'`    | `'process'`    |
 | show-line            | 是否显示连接线           | `boolean`                                             | `true`         |
 | size                 | 步骤条尺寸               | `'sm'` \| `'md'`                                     | `'md'`         |
@@ -108,7 +110,7 @@ permalink: /components/steps/
 | 事件名              | 说明                           | 参数                         |
 | ------------------- | ------------------------------ | ---------------------------- |
 | change              | 步骤数发生改变时触发（需开启 `changeable`） | current:`number`<br/>previous:`number`<br/>ev:`Event` |
-| update:current      | `v-model:current` 同步         | step:`number`                |
+| update:modelValue      | `v-model` 同步         | step:`number`                |
 
 ### Steps Slots
 
@@ -151,7 +153,7 @@ import type {
   StepsContentPlacement,
   StepsInstance,
   StepsStepInstance,
-} from '@cedarjs/ui'
+} from '@cedar-design/ui'
 ```
 
 ## 同源实现与平台边界
@@ -159,3 +161,5 @@ import type {
 两端各自保存完整源码，不引用公共核心，不共享组件实例或响应式状态；修改时同步维护两份实现。主体、Props、关键样式及配对测试纳入只读源码一致性检查，主题 token 和安装入口各自维护。
 
 Steps 和 Step 的主体、Props、上下文协议与样式同源复制；注入 Symbol 分别定义在各库，不跨库共享。保留四种 type 和原有状态/事件契约。
+
+`active` 只表示当前步骤序号（从 1 开始）是否对应 modelValue；与 status（wait/process/finish/error）分开。当前步骤即使为 error，active 仍为 true；焦点、悬停不会改变 active。

@@ -1,5 +1,5 @@
 import type { ComputedRef, Slots } from 'vue'
-import { useChildren, useParent } from '@cedarjs/use'
+import { useChildren, useParent } from '@cedar-design/use'
 import type { BreadcrumbMoreIconSlotData } from './types'
 
 export interface BreadcrumbProvider {

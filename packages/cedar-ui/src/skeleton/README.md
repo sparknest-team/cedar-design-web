@@ -94,7 +94,7 @@ import type {
   SkeletonInstance,
   SkeletonLineProps,
   SkeletonShapeProps,
-} from "@cedarjs/ui";
+} from "@cedar-design/ui";
 ```
 
 ## 同源实现与平台边界

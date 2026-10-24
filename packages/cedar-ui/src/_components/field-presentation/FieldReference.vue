@@ -33,7 +33,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { createNamespace } from "../../_utils/global-config";
-import { IconEdit } from "@cedarjs/icons-vue/icon-edit";
+import { IconEdit } from "@cedar-design/icons-vue/icon-edit";
 import { useI18n } from "../../locale";
 import type { FieldPresentation } from "./context";
 defineOptions({

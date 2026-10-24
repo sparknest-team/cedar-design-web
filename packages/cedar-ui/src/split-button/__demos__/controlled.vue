@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { Message } from "@cedarjs/ui";
+import { Message } from "@cedar-design/ui";
 
 const publish = () => {
   Message.info("发布成功");

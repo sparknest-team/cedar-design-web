@@ -1,5 +1,5 @@
 ---
-"@cedarjs/ui": patch
+"@cedar-design/ui": patch
 ---
 
 修复 Layout 非受控侧栏折叠状态类名、底部触发器定位和嵌套 flex 收缩；修复演示旧颜色变量和全局样式污染，补充折叠演示。

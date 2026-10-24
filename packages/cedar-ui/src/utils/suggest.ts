@@ -1,4 +1,4 @@
-// TODO: 脱敏迁移 - @maplejs/map-core 暂不可用，先用本地类型占位，接入公有地图包后再替换
+// TODO: 脱敏迁移 - @maple-design/map-core 暂不可用，先用本地类型占位，接入公有地图包后再替换
 
 export interface PoiInfo {
   type?: string

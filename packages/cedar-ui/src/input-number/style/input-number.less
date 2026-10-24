@@ -152,6 +152,18 @@
         var(--c-input-number-step-button-border-color);
     }
   }
+  // Standard fields have no horizontal padding to cancel out.
+  .c-field-decorator--variant-standard {
+    .c-input-number__step {
+      margin-inline-end: 0;
+    }
+    .c-field-decorator__prefix > .c-input-number__step-button {
+      margin-inline-start: 0;
+    }
+    .c-field-decorator__suffix > .c-input-number__step-button {
+      margin-inline-end: 0;
+    }
+  }
 }
 @media (hover: hover) {
   .c-input-number__step-button:not(:disabled):hover {

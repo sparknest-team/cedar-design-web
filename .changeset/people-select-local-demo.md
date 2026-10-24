@@ -1,5 +1,5 @@
 ---
-'@cedarjs/ui': patch
+'@cedar-design/ui': patch
 ---
 
 Restore the PeopleSelect documentation demo with a local asynchronous ID lookup and search adapter. Remove obsolete credential storage and hidden, uninitialized examples.

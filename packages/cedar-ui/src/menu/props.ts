@@ -11,6 +11,8 @@ export const menuProps = {
   options: { type: Array as PropType<MenuOptionData[]>, default: () => [] },
   fieldNames: Object as PropType<MenuFieldNames>,
   modelValue: { type: [String, Number, Boolean, Object] as PropType<MenuValue>, default: undefined },
+  /** 非受控初始选中值，仅创建时读取。 */
+  defaultValue: { type: [String, Number, Boolean, Object] as PropType<MenuValue>, default: undefined },
   size: { type: String as PropType<ComponentSize>, default: 'md', validator: (value: unknown) => componentSizes.includes(value as ComponentSize) },
   open: { type: Boolean, default: undefined },
   defaultOpen: Boolean,

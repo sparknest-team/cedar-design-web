@@ -161,11 +161,12 @@ describe('InputNumber field contract', () => {
     expect(input.attributes()).toMatchObject({ id: 'amount', name: 'price', inputmode: 'numeric', 'aria-label': 'Price', role: 'spinbutton' })
     expect(wrapper.classes()).toContain('custom-field')
     expect(wrapper.find('[class*="field-decorator--size-' + size + '"]').exists()).toBe(true)
-    wrapper.vm.focus()
+    const instance = wrapper.vm as InputNumberInstance
+    instance.focus()
     expect(document.activeElement).toBe(input.element)
-    wrapper.vm.select()
+    instance.select()
     expect(input.element.selectionStart).toBe(0)
-    wrapper.vm.blur()
+    instance.blur()
     expect(document.activeElement).not.toBe(input.element)
   })
 

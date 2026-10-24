@@ -22,3 +22,22 @@ test('initialization batches all pages into one map; only dev changes refresh it
     expect(prepareVmiComponents).toHaveBeenCalledTimes(isDev ? 2 : 1)
   }
 })
+
+
+test('reuses fenced highlights across locales while respecting metadata, edits and app isolation', () => {
+  const render = vi.fn((code, lang, attrs) => `${lang}:${attrs}:${code}`)
+  const md = { options: { highlight: render } }
+  const plugin = codeBlockPlugin() as any
+  plugin.extendsMarkdown(md, {})
+  expect(md.options.highlight('const a = 1', 'ts', '')).toBe('ts::const a = 1')
+  md.options.highlight('const a = 1', 'ts', '')
+  expect(render).toHaveBeenCalledTimes(1)
+  md.options.highlight('const a = 1', 'ts', '{1}')
+  md.options.highlight('const a = 1', 'js', '')
+  md.options.highlight('const a = 2', 'ts', '')
+  expect(render).toHaveBeenCalledTimes(4)
+  const other = { options: { highlight: render } }
+  plugin.extendsMarkdown(other, {})
+  other.options.highlight('const a = 1', 'ts', '')
+  expect(render).toHaveBeenCalledTimes(5)
+})

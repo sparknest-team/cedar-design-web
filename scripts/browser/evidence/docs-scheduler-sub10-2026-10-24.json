@@ -1,0 +1,353 @@
+{
+  "date": "2026-10-24",
+  "goal": "Scheduler startup + cold first page <10000ms; not achieved",
+  "conditions": {
+    "freshViteCache": true,
+    "freshChromiumContext": true,
+    "viewport": "1440x1000",
+    "externalRequestsBlocked": true,
+    "browserHttpCache": "disabled by routing",
+    "totalDefinition": "configuration + app.init + app.prepare + server start, plus first navigation through mounted examples and two animation frames; browser launcher excluded",
+    "schedulerExamples": 43,
+    "prewarm": false,
+    "lazyDemos": false,
+    "interactionAndHmrChecks": "after timing samples",
+    "visibilityCheck": "final-4 additionally waits for all ancestors of the first Scheduler to reach opacity >=0.99, then two animation frames; screenshot visually checked"
+  },
+  "previousResult": {
+    "serverReadyMs": 12495,
+    "firstPageMs": 10693,
+    "coldTotalMs": 23188
+  },
+  "samples": [
+    {
+      "serverReadyMs": 6664.971792,
+      "firstPageMs": 12162.626333,
+      "repeatPageMs": 3422.662375,
+      "sample": "cedar-perf-sub10-a.json",
+      "coldTotalMs": 18827.598125,
+      "fullReloadCount": 1,
+      "localHttpFailures": [],
+      "sourceRequestsBeforeExpand": 0,
+      "sources": [
+        {
+          "file": "./__demos__/basic.vue",
+          "bytes": 269,
+          "firstExpandMs": 137.70000004768372,
+          "repeatExpandMs": 43.09999990463257
+        },
+        {
+          "file": "./__demos__/task-calendar-workbench.vue",
+          "bytes": 39385,
+          "firstExpandMs": 95.80000019073486,
+          "repeatExpandMs": 75.69999980926514
+        }
+      ]
+    },
+    {
+      "serverReadyMs": 8065.776292,
+      "firstPageMs": 27767.690666000002,
+      "repeatPageMs": 4793.166041999997,
+      "sample": "cedar-perf-sub10-b.json",
+      "coldTotalMs": 35833.466958000005,
+      "fullReloadCount": 2,
+      "localHttpFailures": [],
+      "sourceRequestsBeforeExpand": 0,
+      "sources": [
+        {
+          "file": "./__demos__/basic.vue",
+          "bytes": 269,
+          "firstExpandMs": 150.90000009536743,
+          "repeatExpandMs": 70.20000004768372
+        },
+        {
+          "file": "./__demos__/task-calendar-workbench.vue",
+          "bytes": 39385,
+          "firstExpandMs": 106.70000004768372,
+          "repeatExpandMs": 73.89999985694885
+        }
+      ]
+    },
+    {
+      "serverReadyMs": 24560.171292000003,
+      "firstPageMs": 17421.436708999998,
+      "repeatPageMs": 5009.498667,
+      "sample": "cedar-perf-sub10-c.json",
+      "coldTotalMs": 41981.608001,
+      "fullReloadCount": 0,
+      "localHttpFailures": [],
+      "sourceRequestsBeforeExpand": 0,
+      "sources": [
+        {
+          "file": "./__demos__/basic.vue",
+          "bytes": 269,
+          "firstExpandMs": 161.29999995231628,
+          "repeatExpandMs": 57.700000047683716
+        },
+        {
+          "file": "./__demos__/task-calendar-workbench.vue",
+          "bytes": 39385,
+          "firstExpandMs": 120.90000009536743,
+          "repeatExpandMs": 92.70000004768372
+        }
+      ]
+    },
+    {
+      "serverReadyMs": 7548.337207999999,
+      "firstPageMs": 9451.194583000002,
+      "repeatPageMs": 4138.952332999997,
+      "sample": "cedar-perf-sub10-d.json",
+      "coldTotalMs": 16999.531791,
+      "fullReloadCount": 0,
+      "localHttpFailures": [],
+      "sourceRequestsBeforeExpand": 0,
+      "sources": [
+        {
+          "file": "./__demos__/basic.vue",
+          "bytes": 269,
+          "firstExpandMs": 168,
+          "repeatExpandMs": 36.700000047683716
+        },
+        {
+          "file": "./__demos__/task-calendar-workbench.vue",
+          "bytes": 39385,
+          "firstExpandMs": 105.70000004768372,
+          "repeatExpandMs": 78.79999995231628
+        }
+      ]
+    },
+    {
+      "serverReadyMs": 11715.841583,
+      "firstPageMs": 22106.436625000002,
+      "repeatPageMs": 4507.476750000002,
+      "sample": "cedar-perf-sub10-e.json",
+      "coldTotalMs": 33822.278208,
+      "fullReloadCount": 0,
+      "localHttpFailures": [],
+      "sourceRequestsBeforeExpand": 0,
+      "sources": [
+        {
+          "file": "./__demos__/basic.vue",
+          "bytes": 269,
+          "firstExpandMs": 177.09999990463257,
+          "repeatExpandMs": 33
+        },
+        {
+          "file": "./__demos__/task-calendar-workbench.vue",
+          "bytes": 39385,
+          "firstExpandMs": 123.19999980926514,
+          "repeatExpandMs": 88.39999985694885
+        }
+      ]
+    },
+    {
+      "serverReadyMs": 11710.973166,
+      "firstPageMs": 10051.381375,
+      "repeatPageMs": 4507.287375,
+      "allExamplesMounted": 43,
+      "failure": "locator.waitFor: Target page, context or browser has been closed\nCall log:\n\u001b[2m  - waiting for locator('.vmi-previewer-example').first().getByText('冷启动回归日程', { exact: true }).first()\u001b[22m\n\n    at verifySchedulerExamples (/Users/shuaimeng/github_web/cedar-design-web/scripts/browser/docs-scheduler-smoke.mjs:27:60)\n    at async file:///Users/shuaimeng/github_web/cedar-design-web/scripts/browser/docs-startup-performance.mjs:168:103",
+      "sample": "cedar-perf-sub10-f.json",
+      "coldTotalMs": 21762.354541,
+      "fullReloadCount": 0,
+      "localHttpFailures": [],
+      "sourceRequestsBeforeExpand": 0,
+      "sources": [
+        {
+          "file": "./__demos__/basic.vue",
+          "bytes": 269,
+          "firstExpandMs": 153.20000004768372,
+          "repeatExpandMs": 39.60000014305115
+        },
+        {
+          "file": "./__demos__/task-calendar-workbench.vue",
+          "bytes": 39385,
+          "firstExpandMs": 106.69999980926514,
+          "repeatExpandMs": 72.5
+        }
+      ]
+    },
+    {
+      "serverReadyMs": 11630.19075,
+      "firstPageMs": 17357.013667,
+      "repeatPageMs": 6448.197625000001,
+      "allExamplesMounted": 43,
+      "interactions": {
+        "monthAndWeek": true,
+        "dateNavigation": true,
+        "editAndSave": true
+      },
+      "hmr": {
+        "demoUpdateMs": 1438.1848329999993,
+        "importUpdateMs": 288.1162499999991,
+        "sourceUrlChanged": true,
+        "importUrlChanged": true,
+        "rawCopyTextCurrent": true,
+        "liveDemoUpdated": true
+      },
+      "sample": "cedar-perf-sub10-final-1.json",
+      "coldTotalMs": 28987.204417,
+      "fullReloadCount": 0,
+      "localHttpFailures": [],
+      "sourceRequestsBeforeExpand": 0,
+      "sources": [
+        {
+          "file": "./__demos__/basic.vue",
+          "bytes": 269,
+          "firstExpandMs": 155,
+          "repeatExpandMs": 52.19999980926514
+        },
+        {
+          "file": "./__demos__/task-calendar-workbench.vue",
+          "bytes": 39385,
+          "firstExpandMs": 172.29999995231628,
+          "repeatExpandMs": 87.29999995231628
+        }
+      ]
+    },
+    {
+      "serverReadyMs": 25025.679625,
+      "firstPageMs": 33377.10187500001,
+      "repeatPageMs": 6444.407415999987,
+      "allExamplesMounted": 43,
+      "sample": "cedar-perf-sub10-final-2.json",
+      "coldTotalMs": 58402.78150000001,
+      "fullReloadCount": 0,
+      "localHttpFailures": [],
+      "sourceRequestsBeforeExpand": 0,
+      "sources": [
+        {
+          "file": "./__demos__/basic.vue",
+          "bytes": 269,
+          "firstExpandMs": 167.60000014305115,
+          "repeatExpandMs": 59.200000047683716
+        },
+        {
+          "file": "./__demos__/task-calendar-workbench.vue",
+          "bytes": 39385,
+          "firstExpandMs": 155.70000004768372,
+          "repeatExpandMs": 84.80000019073486
+        }
+      ]
+    },
+    {
+      "serverReadyMs": 8840.811542,
+      "firstPageMs": 16722.256666,
+      "repeatPageMs": 5178.974667000002,
+      "allExamplesMounted": 43,
+      "hostLoadAtStart": [
+        32.30078125,
+        19.07861328125,
+        14.75
+      ],
+      "hostLoadAtEnd": [
+        29.8291015625,
+        19.92236328125,
+        15.23046875
+      ],
+      "sample": "cedar-perf-sub10-final-3.json",
+      "coldTotalMs": 25563.068208,
+      "fullReloadCount": 0,
+      "localHttpFailures": [],
+      "sourceRequestsBeforeExpand": 0,
+      "sources": [
+        {
+          "file": "./__demos__/basic.vue",
+          "bytes": 269,
+          "firstExpandMs": 93.60000014305115,
+          "repeatExpandMs": 56.09999990463257
+        },
+        {
+          "file": "./__demos__/task-calendar-workbench.vue",
+          "bytes": 39385,
+          "firstExpandMs": 121.60000014305115,
+          "repeatExpandMs": 89
+        }
+      ]
+    },
+    {
+      "serverReadyMs": 10746.939375,
+      "firstPageMs": 9026.850666000002,
+      "repeatPageMs": 3648.1381250000013,
+      "allExamplesMounted": 43,
+      "hostLoadAtStart": [
+        18.44384765625,
+        19.5673828125,
+        15.822265625
+      ],
+      "hostLoadAtEnd": [
+        16.47021484375,
+        19.0107421875,
+        15.75146484375
+      ],
+      "sample": "cedar-perf-sub10-final-4.json",
+      "coldTotalMs": 19773.790041,
+      "fullReloadCount": 0,
+      "localHttpFailures": [],
+      "sourceRequestsBeforeExpand": 0,
+      "sources": [
+        {
+          "file": "./__demos__/basic.vue",
+          "bytes": 269,
+          "firstExpandMs": 150.40000009536743,
+          "repeatExpandMs": 37.299999952316284
+        },
+        {
+          "file": "./__demos__/task-calendar-workbench.vue",
+          "bytes": 39385,
+          "firstExpandMs": 106.90000009536743,
+          "repeatExpandMs": 63.10000014305115
+        }
+      ]
+    },
+    {
+      "serverReadyMs": 23127.732083000003,
+      "firstPageMs": 13360.384624999999,
+      "repeatPageMs": 3967.8759999999966,
+      "allExamplesMounted": 43,
+      "failure": "locator.dblclick: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.vmi-previewer-example').first().getByText('首页设计评审', { exact: true }).first()\u001b[22m\n\n    at verifySchedulerExamples (/Users/shuaimeng/github_web/cedar-design-web/scripts/browser/docs-scheduler-smoke.mjs:22:59)\n    at async file:///Users/shuaimeng/github_web/cedar-design-web/scripts/browser/docs-startup-performance.mjs:171:103",
+      "sample": "cedar-perf-sub10-g.json",
+      "coldTotalMs": 36488.116708,
+      "fullReloadCount": 0,
+      "localHttpFailures": [],
+      "sourceRequestsBeforeExpand": 0,
+      "sources": [
+        {
+          "file": "./__demos__/basic.vue",
+          "bytes": 269,
+          "firstExpandMs": 152.70000004768372,
+          "repeatExpandMs": 39
+        },
+        {
+          "file": "./__demos__/task-calendar-workbench.vue",
+          "bytes": 39385,
+          "firstExpandMs": 118.10000014305115,
+          "repeatExpandMs": 97.20000004768372
+        }
+      ]
+    },
+    {
+      "sample": "cpu-profile (diagnostic only)",
+      "serverReadyMs": 5963.030292,
+      "firstPageMs": 9552.099542000002,
+      "coldTotalMs": 15515.129834000003,
+      "allExamplesMounted": 43,
+      "browserIdleMs": 7227,
+      "dateLabelSelfMs": 63
+    }
+  ],
+  "checks": {
+    "docPipelineTests": 36,
+    "patchPackage": "passed",
+    "fullProductionBuild": "not rerun"
+  },
+  "limitations": [
+    "Host load rose from around 6-10 to around 20 during measurements. All samples retained; no stable speedup claim.",
+    "A/B had dependency reloads. B also overlapped incidental CPU work. C was under high host load. D/E theme bundling experiment removed. F/G functional probes had incorrect UI expectations/selectors; final-1 fixed probe passed. G four-worker experiment removed.",
+    "Empty-stack Event errors occurred when external font/icon scripts were blocked, as in baseline. Local HTTP failures separately recorded."
+  ],
+  "measurementValidity": {
+    "startupAndFirstPage": "Superseded: v1 omitted transformUserConfigToPlugin, so the real custom client entry was not registered. Not valid as full-site timings.",
+    "retainedFor": "Audit and source-pane diagnostics; actual component checks covered Scheduler but not the custom theme menu.",
+    "replacement": "docs-vite-waterfall-cli-v2-2026-10-24.json"
+  }
+}

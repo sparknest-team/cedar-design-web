@@ -12,9 +12,9 @@
       <template v-if="__apiReview.slotEnabled['icon'] !== false" #icon>
         <c-icon-star />
       </template>
-      <template v-if="__apiReview.slotEnabled['title']" #title="__reviewSlot"
+      <template v-if="__apiReview.slotEnabled['label']" #label="__reviewSlot"
         ><DemoReviewSlot
-          name="title"
+          name="label"
           :context="__reviewSlot"
           :controls="__apiReview.controls"
           :record="__apiReview.record"
@@ -61,35 +61,35 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review-c-tree-6.config.json";
 
-import { IconDriveFile } from "@cedarjs/icons-vue";
+import { IconDriveFile } from "@cedar-design/icons-vue";
 import { h } from "vue";
 
 const treeData = [
   {
-    title: "Trunk",
-    key: "node1",
+    label: "Trunk",
+    value: "node1",
     children: [
       {
-        title: "Leaf",
-        key: "node2",
+        label: "Leaf",
+        value: "node2",
       },
     ],
   },
   {
-    title: "Trunk",
-    key: "node3",
+    label: "Trunk",
+    value: "node3",
     children: [
       {
-        title: "Leaf",
-        key: "node4",
+        label: "Leaf",
+        value: "node4",
         icon: () => h(IconDriveFile),
       },
       {
-        title: "Leaf",
-        key: "node5",
+        label: "Leaf",
+        value: "node5",
         icon: () => h(IconDriveFile),
       },
     ],

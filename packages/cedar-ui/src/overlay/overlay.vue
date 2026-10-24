@@ -25,7 +25,7 @@
 
 <script setup lang="ts">
 import { computed, onActivated, onDeactivated, ref } from 'vue'
-import { useEventListener } from '@cedarjs/use'
+import { useEventListener } from '@cedar-design/use'
 import { createNamespace } from '../_utils/global-config'
 import { usePopupContainer } from '../_utils/popup-container'
 import { usePopupLayer } from '../_utils/popup-layer'

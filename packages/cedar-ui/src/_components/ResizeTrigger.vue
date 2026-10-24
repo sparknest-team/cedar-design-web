@@ -17,8 +17,8 @@
 <script lang="tsx">
 import { createNamespace } from '../_utils/global-config'
 import { computed, defineComponent, PropType, toRefs } from 'vue'
-import { IconDragDot } from '@cedarjs/icons-vue/icon-drag-dot'
-import { IconDragDotVertical } from '@cedarjs/icons-vue/icon-drag-dot-vertical'
+import { IconDragDot } from '@cedar-design/icons-vue/icon-drag-dot'
+import { IconDragDotVertical } from '@cedar-design/icons-vue/icon-drag-dot-vertical'
 import ResizeObserver from './resize-observer'
 
 export default defineComponent({

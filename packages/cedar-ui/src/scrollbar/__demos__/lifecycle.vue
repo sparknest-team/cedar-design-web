@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { ScrollbarInstance } from '@cedarjs/ui'
+import type { ScrollbarInstance } from '@cedar-design/ui'
 const active = ref(true)
 const mounted = ref(true)
 const bar = ref<ScrollbarInstance>()

@@ -1,0 +1,3 @@
+- [x] Migrate implementation, callers, docs and demos
+- [x] Add name/key independence and FAB open-model regression coverage
+- [x] Validate tests, types, lint and source parity; see verification.md

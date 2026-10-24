@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import type { DateShortcut } from "@cedarjs/ui";
+import type { DateShortcut } from "@cedar-design/ui";
 
 const selected = ref("2025-01-15");
 const viewport = ref("2025-01-01");

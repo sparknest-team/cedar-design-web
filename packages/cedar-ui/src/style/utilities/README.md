@@ -13,7 +13,7 @@ Cedar / Maple 语义与结构一致，**类名必须带库前缀**（`c-` / `mp-
 | 形态          | 固定 Utilities + Uno/TW preset                           | 独立 Utilities + Uno/TW preset                                       |
 | Token         | `--c-*`                                                  | `--mp-*`                                                             |
 | 暗色          | 只改 token，类名不变                                     | 同左                                                                 |
-| 原子化 preset | `@cedarjs/preset-unocss` / `@cedarjs/preset-tailwindcss` | `@maplejs/maple-preset-unocss` / `@maplejs/maple-preset-tailwindcss` |
+| 原子化 preset | `@cedar-design/preset-unocss` / `@cedar-design/preset-tailwindcss` | `@maple-design/preset-unocss` / `@maple-design/preset-tailwindcss` |
 
 完整规范见 [Utility 工具类规范](/practices/utility-spec/)。色阶变量（`--c-red-1…10` 等）见 [Palette](/components/palette/)，不进默认工具包。
 

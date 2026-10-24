@@ -1,5 +1,5 @@
 import { computed, toRefs, watch, ref } from 'vue'
-import { TreeFieldNames, Node, TreeNodeData, TreeNodeKey } from '../../tree/types'
+import { TreeFieldNames, Node, TreeNodeData, TreeNodeValue } from '../../tree/types'
 import { FilterTreeNode } from '../types'
 import { isUndefined } from '../../_utils/is'
 
@@ -12,16 +12,16 @@ export default function useFilterTreeNode(props: {
 }) {
   const { searchValue, flattenTreeData, filterMethod: propFilterMethod, disableFilter, fieldNames } = toRefs(props)
 
-  const keyField = computed(() => (fieldNames.value?.key || 'key') as keyof TreeNodeData)
+  const keyField = computed(() => (fieldNames.value?.value || 'value') as keyof TreeNodeData)
 
   const defaultFilterMethod = (keyword: string, node: TreeNodeData) => {
-    const key = node[keyField.value] as TreeNodeKey
+    const key = node[keyField.value] as TreeNodeValue
     return !isUndefined(key) && String(key).indexOf(keyword) > -1
   }
 
   const filterMethod = computed(() => propFilterMethod?.value || defaultFilterMethod)
 
-  const filteredKeysSet = ref<Set<TreeNodeKey>>()
+  const filteredKeysSet = ref<Set<TreeNodeValue>>()
 
   const isFiltering = computed(() => !!searchValue.value)
 
@@ -35,7 +35,7 @@ export default function useFilterTreeNode(props: {
       : (node: TreeNodeData) => {
           if (!isFiltering.value) return true
 
-          const key = node[keyField.value] as TreeNodeKey
+          const key = node[keyField.value] as TreeNodeValue
           return filteredKeysSet.value?.has(key) ?? false
         },
   )
@@ -53,7 +53,7 @@ export default function useFilterTreeNode(props: {
       filteredKeysSet.value = undefined
       if (disabled || !keyword) return
       const timer = setTimeout(() => {
-        const keys = new Set<TreeNodeKey>()
+        const keys = new Set<TreeNodeValue>()
         for (const node of treeData) {
           if (!method(keyword, node.treeNodeData)) continue
           keys.add(node.key)

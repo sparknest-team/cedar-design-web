@@ -15,5 +15,5 @@
 </template>
 
 <script lang="ts" setup>
-import { IconArrowFall, IconArrowRise } from '@cedarjs/icons-vue'
+import { IconArrowFall, IconArrowRise } from '@cedar-design/icons-vue'
 </script>

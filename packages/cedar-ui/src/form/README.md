@@ -405,7 +405,7 @@ const useFormItem = (data: { size?: Ref<Size | undefined>; disabled?: Ref<boolea
 组件导出以下类型定义
 
 ```ts
-import type { FormProps } from '@cedarjs/ui'
+import type { FormProps } from '@cedar-design/ui'
 ```
 
 ### 五档密度与项目间距

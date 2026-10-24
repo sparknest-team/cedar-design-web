@@ -232,11 +232,11 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review.config.json";
 
 import { ref } from "vue";
-import type { SearchResult } from "@cedarjs/ui";
+import type { SearchResult } from "@cedar-design/ui";
 
 const inputStyle = { width: "360px" };
 const keyword = ref("");

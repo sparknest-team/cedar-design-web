@@ -116,5 +116,5 @@ interface ModelValueType {
 组件导出以下类型定义
 
 ```ts
-import type { MapProps } from '@cedarjs/ui'
+import type { MapProps } from '@cedar-design/ui'
 ```

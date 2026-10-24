@@ -7,7 +7,7 @@ describe('TreeSelect', () => {
   test('uses the shared field decorator and renders the selected node', async () => {
     const wrapper = mount(TreeSelect, {
       props: {
-        data: [{ key: 'beijing', title: 'Beijing' }],
+        data: [{ value: 'beijing', label: 'Beijing' }],
         modelValue: 'beijing',
       },
     })

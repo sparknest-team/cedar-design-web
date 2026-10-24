@@ -1,6 +1,6 @@
 {
-  "name": "@cedarjs/use",
-  "version": "1.0.3",
+  "name": "@cedar-design/use",
+  "version": "1.0.0",
   "description": "composable utilities of Cedar",
   "keywords": [
     "composable",
@@ -36,7 +36,7 @@
     "dev": "tsup src/index.ts --format esm --out-dir=lib --watch --dts"
   },
   "dependencies": {
-    "@cedarjs/shared": "workspace:*"
+    "@cedar-design/shared": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "catalog:",
@@ -46,5 +46,9 @@
   },
   "peerDependencies": {
     "vue": "^3.2.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

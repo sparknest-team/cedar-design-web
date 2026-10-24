@@ -125,7 +125,7 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review-c-scheduler-2.config.json";
 
 import { computed, onScopeDispose, ref, watch } from "vue";
@@ -135,7 +135,7 @@ import type {
   SchedulerResolveResources,
   SchedulerBeforeChange,
   SchedulerResourceErrorContext,
-} from "@cedarjs/ui";
+} from "@cedar-design/ui";
 
 const kind = ref<"device" | "person">("device");
 // 业务接口字段在接入层适配，Scheduler 始终只认识 id / label。

@@ -1,8 +1,12 @@
 {
-  "name": "@cedarjs/preset-unocss",
+  "name": "@cedar-design/preset-unocss",
   "version": "1.0.0",
   "description": "UnoCSS preset for Cedar Design",
-  "keywords": ["unocss", "preset", "cedar"],
+  "keywords": [
+    "unocss",
+    "preset",
+    "cedar"
+  ],
   "license": "MIT",
   "author": "shuai.meng",
   "sideEffects": false,
@@ -18,7 +22,9 @@
   "main": "lib/index.cjs",
   "module": "lib/index.js",
   "types": "lib/index.d.ts",
-  "files": ["lib"],
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "build": "tsup src/index.ts --format esm,cjs --out-dir=lib --dts --clean",
     "dev": "tsup src/index.ts --format esm --out-dir=lib --watch --dts"
@@ -31,5 +37,9 @@
   },
   "peerDependencies": {
     "unocss": "^0.58.5"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

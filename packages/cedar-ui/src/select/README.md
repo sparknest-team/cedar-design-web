@@ -14,6 +14,12 @@ permalink: /components/select/
 
 <demo src="./__demos__/basic.vue"></demo>
 
+### 候选高亮与表单数据流
+
+初始 `form.city` 为 `undefined`。打开面板只激活候选行，不触发 `update:modelValue` 或 `change`，表单仍为空。inline 点击选项或按 Enter 后提交；click 在面板内选择只是草稿，确认后才提交，取消不改变表单。两个示例分别显示已提交值、更新次数和真实事件日志；日志按最新在前排列。
+
+<demo src="./__demos__/selection-data-flow.vue"></demo>
+
 ### 禁用与只读
 
 <demo src="./__demos__/state.vue"></demo>
@@ -181,6 +187,8 @@ permalink: /components/select/
 
 ## API
 
+单选和多选的已选行右侧均显示主色对勾；仅候选高亮时不显示对勾。click/dblclick 编辑面板内的对勾表示当前草稿选择，确认后才提交表单；禁用已选项保持禁用外观。
+
 ### Select 属性
 
 分别使用 `v-model`、`v-model:open` 和 `v-model:input-value` 控制选中值、展开状态和搜索词。单选清空为 `''`，多选为 `[]`；Select 存在真实空字符串选项时，清空值为 `undefined`。
@@ -218,7 +226,7 @@ permalink: /components/select/
 | `show-extra-options` | 菜单中展示回退/创建选项 | `boolean` | `true` |
 | `limit` | 多选数量上限，0 不限制 | `number` | `0` |
 | `auto-fit-popup-width` | Menu 与字段等宽 | `boolean` | `true` |
-| `default-active-first-option` | 默认激活首个可用选项（不会自动提交） | `boolean` | `true` |
+| `default-active-first-option` | 打开选项列表时，无有效选中项则默认激活首个可用候选；仅高亮，不更新 modelValue 或触发 change。已有有效选中项优先激活该项 | `boolean` | `true` |
 | `unmount-on-close` | 关闭 Menu 后销毁内容 | `boolean` | `false` |
 | `scrollbar` | Menu / List 滚动条配置 | `boolean 或 ScrollbarProps` | `true` |
 | `show-header-on-empty / show-footer-on-empty` | 空状态仍展示 header / footer | `boolean` | `false` |
@@ -323,3 +331,11 @@ Select 还支持 `header`、`footer`、`trigger` 和默认插槽中的 `Option /
 | --- | --- | --- |
 | focus | 聚焦实际字段 | - |
 | blur | 移出实际字段焦点 | - |
+
+### 选中对勾样式变量
+
+| 变量 | 默认值 |
+| --- | --- |
+| `--c-select-popup-option-check-color` | `var(--c-sys-color-action-primary)` |
+| `--c-select-popup-option-check-size` | `var(--c-sys-font-size-md)` |
+| `--c-select-popup-option-check-gap` | `var(--c-sys-space-4)` |

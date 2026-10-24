@@ -4,7 +4,7 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review-c-image-preview-group-1.config.json";
 
 import { ImagePreviewAction as CImagePreviewAction } from "../index";
@@ -12,7 +12,7 @@ import { ImagePreviewAction as CImagePreviewAction } from "../index";
 import { ref } from "vue";
 
 const open = ref(false);
-const current = ref(0);
+const current = ref(1);
 const images = ["/cat.jpg", "/cat2.jpg"];
 
 function onAction() {
@@ -31,7 +31,7 @@ function onAction() {
       >
       <c-image-preview-group
         v-model:open="open"
-        v-model:current="current"
+        v-model="current"
         :images="images"
         :loop="false"
         v-bind="__apiReview.bindings"
@@ -45,9 +45,9 @@ function onAction() {
         </template>
         <template
           v-if="__apiReview.slotEnabled['indicator'] !== false"
-          #indicator="{ index, length }"
+          #indicator="{ imageNumber, length }"
         >
-          <span class="indicator">{{ index + 1 }} / {{ length }}</span>
+          <span class="indicator">{{ imageNumber }} / {{ length }}</span>
         </template>
         <template v-if="__apiReview.slotEnabled['actions'] !== false" #actions>
           <c-image-preview-action name="切换" @click="onAction"

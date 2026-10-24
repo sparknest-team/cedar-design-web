@@ -3,6 +3,7 @@ import { createHighlightCache } from '../src/node/utils/highlight-cache'
 import { createPageCodeDepsHelper } from '../src/node/utils/dep'
 import { prepareVmiComponents } from '../src/node/prepare/prepareVmiComponents'
 import { vitePageHMR } from '../src/node/plugins/hmr'
+import { registerSource } from '../src/node/utils/source-assets'
 import { handlePageChange } from '@vuepress/cli'
 
 vi.mock('@vuepress/cli', () => ({ handlePageChange: vi.fn() }))
@@ -62,4 +63,18 @@ describe('documentation repeated work', () => {
     expect(handlePageChange).toHaveBeenCalledTimes(1)
     expect(handlePageChange).toHaveBeenCalledWith(app, 'page.md')
   })
+})
+
+
+test('refreshes every page referencing an edited companion source even without direct module importers', async () => {
+  vi.mocked(handlePageChange).mockClear()
+  const app = { options: { base: '/' }, pages: [] } as any
+  const source = { name: 'data.ts', rawCode: 'export const value = 1', highlightCode: '' }
+  registerSource(app, 'first', source, { filePath: '/data.ts', pagePath: '/first.md' })
+  registerSource(app, 'duplicate', source, { filePath: '/data.ts', pagePath: '/first.md' })
+  registerSource(app, 'second', source, { filePath: '/data.ts', pagePath: '/second.md' })
+  await (vitePageHMR(app).handleHotUpdate as any)({ file: '/data.ts', modules: [] })
+  expect(handlePageChange).toHaveBeenCalledTimes(2)
+  expect(handlePageChange).toHaveBeenCalledWith(app, '/first.md')
+  expect(handlePageChange).toHaveBeenCalledWith(app, '/second.md')
 })

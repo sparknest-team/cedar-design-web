@@ -8,7 +8,7 @@
       :key="schedulerDateKey(day)"
       :class="n('month-heading')"
     >
-      {{ day.toLocaleDateString(locale, { weekday: "short" }) }}
+      {{ weekdayFormatter.format(day) }}
     </div>
     <div
       v-for="day in days"
@@ -110,7 +110,7 @@ import {
 import type { SchedulerEvent } from "../core";
 import type { SchedulerMessages } from "../locale";
 import type { SchedulerResize } from "../drag";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 defineOptions({ name: createNamespace("scheduler-month-view").name });
 const { n, classes } = createNamespace("scheduler");
 const props = defineProps<{
@@ -149,22 +149,18 @@ function createFromEmpty(event: MouseEvent, day: Date) {
     return;
   emit("create", day);
 }
-const dayLabel = (day: Date) =>
-  day.toLocaleDateString(props.locale, {
-    month: "short",
-    day: "numeric",
-    weekday: "short",
-  });
+const dayFormatter = computed(() => new Intl.DateTimeFormat(props.locale, {
+  month: "short", day: "numeric", weekday: "short",
+}));
+const timeFormatter = computed(() => new Intl.DateTimeFormat(props.locale, {
+  hour: "2-digit", minute: "2-digit", hour12: false,
+}));
+const weekdayFormatter = computed(() => new Intl.DateTimeFormat(props.locale, { weekday: "short" }));
+const dayLabel = (day: Date) => dayFormatter.value.format(day);
 const eventTime = (event: SchedulerEvent) =>
   event.allDay
     ? props.messages.allDay
-    : event.start == null
-      ? ""
-      : schedulerDate(event.start).toLocaleTimeString(props.locale, {
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: false,
-        });
+    : event.start == null ? "" : timeFormatter.value.format(schedulerDate(event.start));
 const moreLabel = (count: number) =>
   props.messages.moreEvents.replace("{count}", String(count));
 const setOpenDay = (day: Date, open: boolean) => {

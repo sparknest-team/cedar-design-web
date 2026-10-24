@@ -4,7 +4,7 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review-c-image-1.config.json";
 </script>
 <template>
@@ -16,7 +16,7 @@ import __apiReviewRawConfig from "./api-review-c-image-1.config.json";
       <c-image
         width="160"
         height="120"
-        src="invalid-image.jpg"
+        src="data:image/png;base64,AA=="
         v-bind="__apiReview.bindings"
         v-on="__apiReview.listeners"
         ><template v-if="__apiReview.slotEnabled['error']" #error="__reviewSlot"
@@ -63,7 +63,7 @@ import __apiReviewRawConfig from "./api-review-c-image-1.config.json";
       <c-image
         width="160"
         height="120"
-        src="invalid-image.jpg"
+        src="data:image/png;base64,AA=="
         alt="自定义错误内容"
         v-bind="__apiReview.bindings"
         v-on="__apiReview.listeners"

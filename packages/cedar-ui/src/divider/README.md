@@ -102,7 +102,7 @@ permalink: /components/divider/
 ## 类型定义
 
 ```ts
-import type { DividerProps, DividerInstance, DividerSize } from '@cedarjs/ui'
+import type { DividerProps, DividerInstance, DividerSize } from '@cedar-design/ui'
 ```
 
 ### 样式变量

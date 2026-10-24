@@ -97,14 +97,14 @@
       "kind": "boolean"
     },
     {
-      "name": "checked",
+      "name": "model-value",
       "description": "标签是否选中（标签可选中时可用）",
       "type": "boolean",
       "defaultValue": "undefined",
       "kind": "boolean"
     },
     {
-      "name": "default-checked",
+      "name": "default-value",
       "description": "标签默认选中状态（标签可选中时可用）",
       "type": "boolean",
       "defaultValue": "true",
@@ -129,7 +129,7 @@
     "close",
     "check",
     "update:show",
-    "update:checked"
+    "update:modelValue"
   ],
   "scenarios": [
     {

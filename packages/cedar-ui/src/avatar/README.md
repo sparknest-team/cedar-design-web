@@ -162,7 +162,7 @@ import type {
   AvatarObjectFit,
   AvatarShape,
   AvatarTriggerType,
-} from "@cedarjs/ui";
+} from "@cedar-design/ui";
 ```
 
 ### 样式变量

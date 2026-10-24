@@ -28,7 +28,7 @@ const __demoAppearance = __demoReactive({ status: "wait", size: "md" });
           aria-label="size"
       /></label>
     </c-space>
-    <c-steps :current="2" v-bind="__demoAppearance">
+    <c-steps :model-value="2" v-bind="__demoAppearance">
       <c-step>Succeeded</c-step>
       <c-step>Processing</c-step>
       <c-step>Pending</c-step>

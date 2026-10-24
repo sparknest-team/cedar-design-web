@@ -1,7 +1,7 @@
 import { defineComponent, h } from "vue";
 import { mount } from "@vue/test-utils";
 import { describe, expect, it } from "vitest";
-import { IconAlert, IconCheckCircle } from '@cedarjs/icons-vue'
+import { IconAlert, IconCheckCircle } from '@cedar-design/icons-vue'
 import IconComponent from "..";
 
 describe("icon public contract", () => {

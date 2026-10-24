@@ -99,7 +99,7 @@ test("save failures retain editor and draft; removing last tasks dissolves an or
     trigger();
     await flushPromises();
     const sourceBefore = [
-      ...w.findAllComponents(Tree)[0].props("checkedKeys")!,
+      ...w.findAllComponents(Tree)[0].props("checkedValues")!,
     ];
     const fail = w
       .findAllComponents(Checkbox)
@@ -122,7 +122,7 @@ test("save failures retain editor and draft; removing last tasks dissolves an or
     expect(
       s.props("modelValue")!.some((e) => e.metadata?.orderId === "ATT-101"),
     ).toBe(false);
-    expect(w.findAllComponents(Tree)[0].props("checkedKeys")).toEqual(
+    expect(w.findAllComponents(Tree)[0].props("checkedValues")).toEqual(
       sourceBefore,
     );
     expect(w.findAllComponents(Dialog)[0].props("open")).toBe(false);

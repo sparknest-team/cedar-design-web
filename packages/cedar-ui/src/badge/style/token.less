@@ -58,22 +58,22 @@
   --c-badge-size-xl-border-radius: 32px;
 
   // status
-  --c-badge-bg-color: var(--c-sys-color-status-danger);
-  --c-badge-text-color: var(--c-sys-color-content-on-bright);
+  --c-badge-bg-color: rgb(var(--c-danger-7));
+  --c-badge-text-color: var(--c-sys-color-content-on-dark);
   --c-badge-status-default-bg-color: #e0e0e0;
   --c-badge-status-default-text-color: var(--c-sys-color-content-on-bright);
   --c-badge-status-info-bg-color: var(--c-sys-color-status-info);
-  --c-badge-status-info-text-color: var(--c-sys-color-content-on-bright);
+  --c-badge-status-info-text-color: var(--c-sys-color-content-on-dark);
   --c-badge-status-success-bg-color: var(--c-sys-color-status-success);
-  --c-badge-status-success-text-color: var(--c-sys-color-content-on-bright);
+  --c-badge-status-success-text-color: var(--c-sys-color-content-on-dark);
   --c-badge-status-warning-bg-color: var(--c-sys-color-status-warning);
-  --c-badge-status-warning-text-color: var(--c-sys-color-content-on-bright);
-  --c-badge-status-danger-bg-color: var(--c-sys-color-status-danger);
-  --c-badge-status-danger-text-color: var(--c-sys-color-content-on-bright);
+  --c-badge-status-warning-text-color: var(--c-sys-color-content-on-dark);
+  --c-badge-status-danger-bg-color: rgb(var(--c-danger-7));
+  --c-badge-status-danger-text-color: var(--c-sys-color-content-on-dark);
   --c-badge-status-primary-bg-color: var(--c-sys-color-action-primary);
-  --c-badge-status-primary-text-color: var(--c-sys-color-content-on-bright);
+  --c-badge-status-primary-text-color: var(--c-sys-color-content-on-dark);
   --c-badge-status-secondary-bg-color: rgb(var(--c-gray-6));
-  --c-badge-status-secondary-text-color: var(--c-sys-color-content-on-bright);
+  --c-badge-status-secondary-text-color: var(--c-sys-color-content-on-dark);
   --c-badge-status-tertiary-bg-color: rgb(var(--c-gray-7));
   --c-badge-status-tertiary-text-color: var(--c-sys-color-content-on-dark);
 
@@ -94,5 +94,7 @@
 }
 
 :root[cedar-theme="dark"] {
+  --c-badge-bg-color: rgb(var(--c-danger-4));
+  --c-badge-status-danger-bg-color: rgb(var(--c-danger-4));
   --c-badge-status-tertiary-text-color: var(--c-sys-color-content-on-bright);
 }

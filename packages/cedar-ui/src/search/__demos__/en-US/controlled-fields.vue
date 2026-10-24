@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import type { SearchResult } from "@cedarjs/ui";
+import type { SearchResult } from "@cedar-design/ui";
 
 const field = ref("name");
 const model = ref<Record<string, unknown>>({

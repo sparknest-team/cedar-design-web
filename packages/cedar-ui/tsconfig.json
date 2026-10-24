@@ -43,8 +43,8 @@
     "types": ["node", "vite/client"],
     "baseUrl": ".",
     "paths": {
-      "@cedarjs/ui": ["src/index.ts"],
-      "@ui-foundation/ui-doc-preview": ["../../../design-ui/packages/ui-doc-preview/src/index.ts"],
+      "@cedar-design/ui": ["src/index.ts"],
+      "@sparknest/ui-doc-preview": ["../../../design-ui/packages/ui-doc-preview/src/index.ts"],
       "vue": ["./node_modules/vue"]
     }
   },

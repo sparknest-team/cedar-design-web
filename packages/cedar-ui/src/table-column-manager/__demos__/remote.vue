@@ -17,8 +17,8 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { useTableColumnManager } from '@cedarjs/ui'
-import type { ColumnDefinition, ColumnDefinitionSource, ManagedTableColumn } from '@cedarjs/ui'
+import { useTableColumnManager } from '@cedar-design/ui'
+import type { ColumnDefinition, ColumnDefinitionSource, ManagedTableColumn } from '@cedar-design/ui'
 
 const defaultColumns: ManagedTableColumn[] = [
   { dataIndex: 'id', title: '编号', width: 100, fixed: 'left', manager: { required: true } },

@@ -1,5 +1,5 @@
 ---
-"@cedarjs/ui": patch
+"@cedar-design/ui": patch
 ---
 
 Accept valid popup-container HTMLElements from an iframe's own realm while still rejecting SVG and non-elements. Preserve real Teleport target, state, event ownership and cleanup contracts with regression coverage.

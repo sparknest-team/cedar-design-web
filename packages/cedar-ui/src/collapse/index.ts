@@ -10,6 +10,9 @@ const Collapse = withInstall(_Collapse, Object.assign(_Collapse, {
 export type CollapseInstance = InstanceType<typeof _Collapse>
 export type CollapseItemInstance = InstanceType<typeof _CollapseItem>
 export type {
+  CollapseExpandIconSlotProps,
+  CollapseSlots,
+  CollapseItemSlots,
   CollapseActiveNames,
   CollapseItemProps,
   CollapseName,

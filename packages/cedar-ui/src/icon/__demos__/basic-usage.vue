@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IconCheckCircleFill } from "@cedarjs/icons-vue";
+import { IconCheckCircleFill } from "@cedar-design/icons-vue";
 </script>
 <template>
   <div class="icon-demo-row">

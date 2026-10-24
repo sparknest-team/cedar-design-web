@@ -36,7 +36,7 @@ describe('Image same source', () => {
   })
 
   it('keeps collection state exclusively on ImagePreviewGroup', () => {
-    for (const key of ['images', 'current', 'defaultCurrent', 'loop']) {
+    for (const key of ['images', 'modelValue', 'defaultValue', 'loop']) {
       expect(imagePreviewProps).not.toHaveProperty(key)
       expect(imagePreviewGroupProps).toHaveProperty(key)
     }
@@ -84,24 +84,24 @@ describe('Image same source', () => {
     const closableWrapper = mount(Image, {
       props: {
         src: 'a.jpg',
-        defaultPreviewOpen: true,
+        defaultOpen: true,
         previewProps: { overlayClosable: true },
         popupContainer: false,
       },
     })
     await closableWrapper.find('[data-image-preview-image]').trigger('click')
     await closableWrapper.vm.$nextTick()
-    expect(closableWrapper.emitted('update:previewOpen')).toBeUndefined()
+    expect(closableWrapper.emitted('update:open')).toBeUndefined()
     expect(closableWrapper.findComponent(ImagePreview).vm.mergedOpen).toBe(true)
     await closableWrapper.find('[data-image-preview-container]').trigger('click')
     await closableWrapper.vm.$nextTick()
-    expect(closableWrapper.emitted('update:previewOpen')?.at(-1)).toEqual([false])
+    expect(closableWrapper.emitted('update:open')?.at(-1)).toEqual([false])
     closableWrapper.unmount()
 
     const persistentWrapper = mount(Image, {
       props: {
         src: 'a.jpg',
-        defaultPreviewOpen: true,
+        defaultOpen: true,
         previewProps: { overlayClosable: false },
         popupContainer: false,
       },
@@ -109,7 +109,7 @@ describe('Image same source', () => {
     await persistentWrapper.find('[data-image-preview-container]').trigger('click')
     await persistentWrapper.vm.$nextTick()
     expect(persistentWrapper.findComponent(Overlay).props('overlayClosable')).toBe(false)
-    expect(persistentWrapper.emitted('update:previewOpen')).toBeUndefined()
+    expect(persistentWrapper.emitted('update:open')).toBeUndefined()
     expect(persistentWrapper.findComponent(ImagePreview).vm.mergedOpen).toBe(true)
     persistentWrapper.unmount()
   })
@@ -154,7 +154,7 @@ describe('Image same source', () => {
     expect(wrapper.findComponent(ImagePreview).props('src')).toBe('b.jpg')
     expect(wrapper.findAll('[data-image-preview-slide]')).toHaveLength(2)
     expect(wrapper.find('[data-image-preview-track]').attributes('style')).toContain('calc(-100% + 0px)')
-    expect(wrapper.emitted('change')?.at(-1)).toEqual([1, 0])
+    expect(wrapper.emitted('change')?.at(-1)).toEqual([2, 1])
 
     const stage = wrapper.find('[data-image-preview-stage]')
     await stage.trigger('pointerdown', { button: 0, pointerId: 2, pointerType: 'touch', clientX: 100, clientY: 20 })
@@ -165,7 +165,7 @@ describe('Image same source', () => {
     await stage.trigger('pointerup', { button: 0, pointerId: 2, pointerType: 'touch', clientX: 164, clientY: 20 })
     await wrapper.vm.$nextTick()
     expect(wrapper.findComponent(ImagePreview).props('src')).toBe('a.jpg')
-    expect(wrapper.emitted('change')?.at(-1)).toEqual([0, 1])
+    expect(wrapper.emitted('change')?.at(-1)).toEqual([1, 2])
     wrapper.vm.zoomTo(2)
     expect(wrapper.findComponent(ImagePreview).vm.scale).toBe(2)
     wrapper.unmount()
@@ -175,7 +175,7 @@ describe('Image same source', () => {
   it('recenters loop clones without an animated jump', async () => {
     vi.useFakeTimers()
     const wrapper = mount(ImagePreviewGroup, {
-      props: { images: ['a.jpg', 'b.jpg'], defaultCurrent: 1, defaultOpen: true, loop: true, defaultScale: 1.25, popupContainer: false },
+      props: { images: ['a.jpg', 'b.jpg'], defaultValue: 2, defaultOpen: true, loop: true, defaultScale: 1.25, popupContainer: false },
     })
     await wrapper.vm.$nextTick()
     expect(wrapper.findAll('[data-image-preview-slide]')).toHaveLength(6)
@@ -198,10 +198,10 @@ describe('Image same source', () => {
     expect(wrapper.vm.mergePreview).toBe(true)
     await wrapper.find('img').trigger('click')
     await wrapper.vm.$nextTick()
-    expect(wrapper.emitted('update:previewOpen')?.at(-1)).toEqual([true])
+    expect(wrapper.emitted('update:open')?.at(-1)).toEqual([true])
     await wrapper.find('[data-image-preview-close]').trigger('click')
     await wrapper.vm.$nextTick()
-    expect(wrapper.emitted('update:previewOpen')?.at(-1)).toEqual([false])
+    expect(wrapper.emitted('update:open')?.at(-1)).toEqual([false])
     wrapper.unmount()
   })
 

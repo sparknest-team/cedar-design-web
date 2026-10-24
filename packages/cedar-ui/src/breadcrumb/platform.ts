@@ -1,2 +1,2 @@
-export { IconMore } from '@cedarjs/icons-vue/icon-more'
-export { IconDown } from '@cedarjs/icons-vue/icon-down'
+export { IconMore } from '@cedar-design/icons-vue/icon-more'
+export { IconDown } from '@cedar-design/icons-vue/icon-down'

@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { DateSelection } from '@cedarjs/ui'
+import type { DateSelection } from '@cedar-design/ui'
 
 const feedback = ref('选择日期后查看事件值')
 const onSelect = (value: DateSelection) => { feedback.value = '选择：' + JSON.stringify(value) }

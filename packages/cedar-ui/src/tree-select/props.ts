@@ -5,7 +5,7 @@ import type { ComponentSize } from '../_utils/constant'
 import { popupContainerProp } from '../_utils/popup-container'
 import type { Data } from '../_utils/types'
 import type { ScrollbarProps } from '../scrollbar'
-import type { TreeFieldNames, TreeNodeData, TreeNodeKey, TreeProps } from '../tree/types'
+import type { TreeFieldNames, TreeNodeData, TreeNodeValue, TreeProps } from '../tree/types'
 import type { TriggerProps } from '../trigger'
 import type { LabelValue } from './types'
 
@@ -229,7 +229,7 @@ export const treeSelectProps = {
    * @version 2.22.0
    */
   fallbackOption: {
-    type: [Boolean, Function] as PropType<boolean | ((key: number | string) => TreeNodeData | boolean)>,
+    type: [Boolean, Function] as PropType<boolean | ((value: number | string) => TreeNodeData | boolean)>,
     default: true,
   },
   /**

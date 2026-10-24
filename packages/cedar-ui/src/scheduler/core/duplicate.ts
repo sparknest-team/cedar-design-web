@@ -1,8 +1,8 @@
 import {
   cloneSchedulerEvent,
   validateSchedulerEvent,
-  SchedulerError,
-} from "./index";
+} from "./base";
+import { SchedulerError } from "./types";
 import type { SchedulerEvent } from "./types";
 
 /** Copy standard event fields into an independent event, without recurrence identity. */

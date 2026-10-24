@@ -8,18 +8,18 @@ permalink: /guide/quickstart/
 
 ```shell
 # npm
-npm i @cedarjs/ui @cedarjs/icons-vue
+npm i @cedar-design/ui @cedar-design/icons-vue
 
 # pnpm
-pnpm add @cedarjs/ui @cedarjs/icons-vue
+pnpm add @cedar-design/ui @cedar-design/icons-vue
 ```
 
 ## 自动按需引入（推荐）
 
-Cedar 提供内部维护的 `@cedarjs/resolver`。配合 `unplugin-vue-components`，模板中使用到的组件、独立 SVG 图标、指令及组件样式会在编译时自动按需引入。
+Cedar 提供内部维护的 `@cedar-design/resolver`。配合 `unplugin-vue-components`，模板中使用到的组件、独立 SVG 图标、指令及组件样式会在编译时自动按需引入。
 
 ```shell
-npm i @cedarjs/resolver unplugin-auto-import unplugin-vue-components -D
+npm i @cedar-design/resolver unplugin-auto-import unplugin-vue-components -D
 ```
 
 ### Vite
@@ -29,7 +29,7 @@ npm i @cedarjs/resolver unplugin-auto-import unplugin-vue-components -D
 import vue from "@vitejs/plugin-vue";
 import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
-import { CedarResolver } from "@cedarjs/resolver";
+import { CedarResolver } from "@cedar-design/resolver";
 import { defineConfig } from "vite";
 
 export default defineConfig({
@@ -59,13 +59,13 @@ export default defineConfig({
 Resolver 会分别生成：
 
 ```ts
-import { Button, Icon } from "@cedarjs/ui";
-import { IconCheckCircleFill } from "@cedarjs/icons-vue/icon-check-circle-fill";
-import "@cedarjs/ui/button/style";
-import "@cedarjs/ui/icon/style";
+import { Button, Icon } from "@cedar-design/ui";
+import { IconCheckCircleFill } from "@cedar-design/icons-vue/icon-check-circle-fill";
+import "@cedar-design/ui/button/style";
+import "@cedar-design/ui/icon/style";
 ```
 
-独立 SVG 图标通过 `currentColor` 继承容器颜色，因此图标子包不需要额外 CSS；`c-icon` 容器自身需要加载 `@cedarjs/ui/icon/style`。
+独立 SVG 图标通过 `currentColor` 继承容器颜色，因此图标子包不需要额外 CSS；`c-icon` 容器自身需要加载 `@cedar-design/ui/icon/style`。
 
 ### 动态名称与显式注册
 
@@ -74,7 +74,7 @@ import "@cedarjs/ui/icon/style";
 ```ts
 // main.ts
 import { createApp } from "vue";
-import { IconCheckCircleFill, IconWarning } from "@cedarjs/icons-vue";
+import { IconCheckCircleFill, IconWarning } from "@cedar-design/icons-vue";
 import App from "./App.vue";
 
 const app = createApp(App);
@@ -86,7 +86,7 @@ app.mount("#app");
 如果业务需要通过任意名称使用全部图标，也可以主动批量注册；这种写法会加载完整图标集合：
 
 ```ts
-import * as CedarIconsVue from "@cedarjs/icons-vue";
+import * as CedarIconsVue from "@cedar-design/icons-vue";
 
 for (const [name, component] of Object.entries(CedarIconsVue)) {
   if (name.startsWith("Icon")) app.component(name, component);
@@ -95,7 +95,7 @@ for (const [name, component] of Object.entries(CedarIconsVue)) {
 
 ### 直接使用 SVG 图标
 
-`@cedarjs/icons-vue` 中的每个 SVG 图标都是独立的 Vue 组件，也可以不使用 `c-icon` 容器直接渲染：
+`@cedar-design/icons-vue` 中的每个 SVG 图标都是独立的 Vue 组件，也可以不使用 `c-icon` 容器直接渲染：
 
 ```vue
 <script setup lang="ts">
@@ -104,7 +104,7 @@ import {
   IconEdit,
   IconSearch,
   IconShareExternal,
-} from "@cedarjs/icons-vue";
+} from "@cedar-design/icons-vue";
 </script>
 
 <template>
@@ -139,9 +139,9 @@ Message.success("保存成功");
 
 ```vue
 <script setup lang="ts">
-import { Button } from "@cedarjs/ui";
-import { IconCheckCircleFill } from "@cedarjs/icons-vue/icon-check-circle-fill";
-import "@cedarjs/ui/button/style";
+import { Button } from "@cedar-design/ui";
+import { IconCheckCircleFill } from "@cedar-design/icons-vue/icon-check-circle-fill";
+import "@cedar-design/ui/button/style";
 </script>
 
 <template>
@@ -156,8 +156,8 @@ import "@cedarjs/ui/button/style";
 
 ```ts
 import { createApp } from "vue";
-import Cedar from "@cedarjs/ui";
-import "@cedarjs/ui/style";
+import Cedar from "@cedar-design/ui";
+import "@cedar-design/ui/style";
 import App from "./App.vue";
 
 createApp(App).use(Cedar).mount("#app");
@@ -170,7 +170,7 @@ createApp(App).use(Cedar).mount("#app");
 每个组件都提供 `setPropsDefaults`，用于统一修改之后创建的声明式组件默认值。请在应用挂载前调用：
 
 ```ts
-import { Button, StyleProvider } from "@cedarjs/ui";
+import { Button, StyleProvider } from "@cedar-design/ui";
 
 Button.setPropsDefaults({
   status: "primary",

@@ -86,5 +86,5 @@ permalink: /components/calendar/
 组件导出以下类型定义
 
 ```ts
-import type { CalendarInstance } from "@cedarjs/ui";
+import type { CalendarInstance } from "@cedar-design/ui";
 ```

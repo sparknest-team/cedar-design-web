@@ -1,5 +1,5 @@
 ---
-"@cedarjs/ui": major
+"@cedar-design/ui": major
 ---
 
 Authorized Select catalog follow-up revalidates the formatting-only hook hash and flat group-heading consumers, preserving production behavior/defaults. Shared motion/catalog gates pass; this audit adds no product API or native-acceptance claim.

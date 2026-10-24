@@ -28,6 +28,7 @@ import Dialog from './dialog'
 import Divider from './divider'
 import Drawer from './drawer'
 import Empty from './empty'
+import FieldDecorator from './field-decorator'
 import FilterForm from './filter-form'
 import Form, { FormItem } from './form'
 import Grid, { GridItem } from './grid'
@@ -126,6 +127,7 @@ const components: Record<string, Plugin> = {
   Divider: Divider as Plugin,
   Drawer: Drawer as Plugin,
   Empty: Empty as Plugin,
+  FieldDecorator: FieldDecorator as Plugin,
   FilterForm: FilterForm as Plugin,
   Form: Form as Plugin,
   Grid: Grid as Plugin,

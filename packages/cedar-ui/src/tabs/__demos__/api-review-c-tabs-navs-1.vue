@@ -4,7 +4,7 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review-c-tabs-navs-1.config.json";
 
 import { ref } from "vue";
@@ -40,7 +40,7 @@ function remove(key: string | number) {
       <c-checkbox v-model="autoSwitch">新增自动切换</c-checkbox>
     </c-space>
     <c-tabs
-      v-model:active="active"
+      v-model="active"
       :editable="editable"
       :show-add-button="addable"
       :auto-switch="autoSwitch"
@@ -55,7 +55,7 @@ function remove(key: string | number) {
         <template v-if="__apiReview.slotEnabled['prefix'] !== false" #prefix
           ><c-tag>动态标签</c-tag></template
         >
-        <c-tab-nav v-for="item in items" :key="item.key" :title="item.title" />
+        <c-tab-nav v-for="item in items" :key="item.key" :name="item.key" :title="item.title" />
         <template v-if="__apiReview.slotEnabled['suffix'] !== false" #suffix
           ><c-tag>共 {{ items.length }} 项</c-tag></template
         >
@@ -64,7 +64,7 @@ function remove(key: string | number) {
         >
       </c-tabs-navs>
       <c-tabs-items
-        ><c-tab-item v-for="item in items" :key="item.key"
+        ><c-tab-item v-for="item in items" :key="item.key" :name="item.key"
           >{{ item.title }} 内容</c-tab-item
         ></c-tabs-items
       >

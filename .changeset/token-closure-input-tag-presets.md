@@ -1,5 +1,5 @@
 ---
-"@cedarjs/ui": minor
+"@cedar-design/ui": minor
 ---
 
 Complete InputTag xl content tokens and prevent tagProps from bypassing parent disabled/readonly or keyboard-removal restrictions. Preserve explicit tag colors while disabled and map neutral content to system roles.

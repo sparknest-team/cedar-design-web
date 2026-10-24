@@ -1,6 +1,6 @@
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { checkThemeContract } from "@ui-foundation/theme-contract/checker";
+import { checkThemeContract } from "@sparknest/theme-contract/checker";
 
 const workspace = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const result = checkThemeContract({

@@ -24,8 +24,8 @@ import {
   isPlainObject,
   isString,
   normalizeToArray,
-} from '@cedarjs/shared'
-import { useEventListener } from '@cedarjs/use'
+} from '@cedar-design/shared'
+import { useEventListener } from '@cedar-design/use'
 import type { ZodSafeParseResult, ZodType } from 'zod'
 
 export type ListenerProp<F> = F | F[]

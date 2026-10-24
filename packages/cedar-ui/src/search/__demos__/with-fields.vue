@@ -22,7 +22,7 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import type { SearchResult, SearchField } from "@cedarjs/ui";
+import type { SearchResult, SearchField } from "@cedar-design/ui";
 
 const inputStyle = { width: "420px" };
 const keyword = ref("");

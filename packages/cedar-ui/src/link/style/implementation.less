@@ -90,6 +90,17 @@
     cursor: default;
   }
 
+  .size(@size) {
+    &--size-@{size} {
+      font-size: var(~'--c-link-size-@{size}-font-size');
+    }
+  }
+  .size(xs);
+  .size(sm);
+  .size(md);
+  .size(lg);
+  .size(xl);
+
   // 不同状态
   &--status-success {
     color: var(~'--c-link-text-color-success');

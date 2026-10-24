@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { Message } from "@cedarjs/ui";
+import { Message } from "@cedar-design/ui";
 import { ref } from "vue";
 
 const open = ref(false);

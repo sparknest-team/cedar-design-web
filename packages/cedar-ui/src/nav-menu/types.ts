@@ -2,7 +2,13 @@ import type { CSSProperties, HTMLAttributes, VNodeChild } from 'vue'
 export type NavMenuKey = string | number
 export type NavMenuMode = import('../_utils/constant').Direction
 export type NavMenuTheme = 'light' | 'dark'
-export interface NavMenuRenderContext { option: NavMenuOption; selected: boolean; expanded: boolean; active: boolean; level: number }
+export interface NavMenuRenderContext {
+  option: NavMenuOption
+  /** 当前普通节点自身匹配主值；不包含祖先路径、展开或焦点状态。 */
+  active: boolean
+  expanded: boolean
+  level: number
+}
 export type NavMenuContent = VNodeChild | ((context: NavMenuRenderContext) => VNodeChild)
 export interface NavMenuOption {
   key?: NavMenuKey

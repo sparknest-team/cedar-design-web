@@ -1,4 +1,4 @@
-import { schedulerDate, schedulerDateKey } from "./index";
+import { schedulerDate, schedulerDateKey } from "./base";
 import type { SchedulerDate } from "./types";
 
 /** Local wall-clock percentage on the same time grid as event layout. */

@@ -1,5 +1,5 @@
-// TODO: 脱敏迁移 - 暂时注释 @maplejs/map-core，后续替换为公有包
-// import { LngLat, Map, MapService, PoiInfo, SearchResult, SearchService } from '@maplejs/map-core'
+// TODO: 脱敏迁移 - 暂时注释 @maple-design/map-core，后续替换为公有包
+// import { LngLat, Map, MapService, PoiInfo, SearchResult, SearchService } from '@maple-design/map-core'
 type PoiInfo = Record<string, any>;
 type SearchResult<T> = { list: T[] };
 type MapCoreLngLat = { getLng: () => number; getLat: () => number };
@@ -29,7 +29,7 @@ import {
   useSlots,
   watch,
 } from "vue";
-import { IconEdit, IconSearch } from "@cedarjs/icons-vue";
+import { IconEdit, IconSearch } from "@cedar-design/icons-vue";
 import Input from "../input";
 import { useI18n } from "../locale";
 import Popconfirm from "../popconfirm";

@@ -72,8 +72,8 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { schedulerDate } from "@cedarjs/ui/scheduler/core";
-import type { SchedulerEvent, SchedulerBeforeChange } from "@cedarjs/ui";
+import { schedulerDate } from "@cedar-design/ui/scheduler/core";
+import type { SchedulerEvent, SchedulerBeforeChange } from "@cedar-design/ui";
 const events = ref<SchedulerEvent[]>([
   {
     id: "plan",

@@ -4,10 +4,10 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review.config.json";
 
-import type { ProgressGroupItem } from "@cedarjs/ui";
+import type { ProgressGroupItem } from "@cedar-design/ui";
 
 const items: ProgressGroupItem[] = [
   { label: "系统", value: 24, color: "#64748b" },

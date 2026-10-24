@@ -26,8 +26,8 @@ for (const file of [
 }
 
 assert.equal(
-  normalize(read(cedar, 'FormItemLabel.vue')).replaceAll('@cedarjs/icons-vue', '@icons').replaceAll('c-form-item-label', 'form-label'),
-  normalize(read(maple, 'FormItemLabel.vue')).replaceAll('@maplejs/icons-vue', '@icons').replaceAll('mp-form-item__label', 'form-label'),
+  normalize(read(cedar, 'FormItemLabel.vue')).replaceAll('@cedar-design/icons-vue', '@icons').replaceAll('c-form-item-label', 'form-label'),
+  normalize(read(maple, 'FormItemLabel.vue')).replaceAll('@maple-design/icons-vue', '@icons').replaceAll('mp-form-item__label', 'form-label'),
   'FormItemLabel.vue differs beyond local icon import and CSS namespace',
 )
 

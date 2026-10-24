@@ -34,7 +34,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import type { SchedulerEvent, SchedulerResource } from "@cedarjs/ui";
+import type { SchedulerEvent, SchedulerResource } from "@cedar-design/ui";
 const resources: SchedulerResource[] = [
   { id: "a", label: "工作台 A" },
   { id: "b", label: "工作台 B" },

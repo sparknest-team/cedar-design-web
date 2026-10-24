@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconToTop } from '@cedarjs/icons-vue'
+import { IconToTop } from '@cedar-design/icons-vue'
 import { createNamespace, formatElevation } from '../_utils/global-config'
 import { toSizeUnit } from '../_utils/maple/elements'
 import { usePopupContainer } from '../_utils/popup-container'

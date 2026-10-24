@@ -4,7 +4,7 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review-c-pagination-1.config.json";
 
 import { ref } from "vue";
@@ -17,7 +17,7 @@ import { ref } from "vue";
     <div class="pagination-demo">
       <c-pagination
         :total="300"
-        :default-current="10"
+        :default-value="10"
         :buffer-size="0"
         :responsive="false"
         :page-item-style="{ borderRadius: '8px' }"

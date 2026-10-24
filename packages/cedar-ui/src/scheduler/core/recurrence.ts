@@ -4,7 +4,7 @@ import {
   schedulerDate,
   schedulerDateKey,
   validateSchedulerEvent,
-} from "./index";
+} from "./base";
 import { SchedulerError } from "./types";
 import { createSchedulerRecurrenceMatcher } from "./recurrence-rule";
 import type { SchedulerDate, SchedulerEvent, SchedulerRange } from "./types";

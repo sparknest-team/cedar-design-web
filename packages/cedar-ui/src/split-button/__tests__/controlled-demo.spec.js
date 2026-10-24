@@ -7,7 +7,7 @@ import Button from '../../button'
 import Space from '../../space'
 import { MenuOption } from '../../menu'
 
-vi.mock('@cedarjs/ui', () => ({ Message: { info: vi.fn() } }))
+vi.mock('@cedar-design/ui', () => ({ Message: { info: vi.fn() } }))
 vi.mock('../__demos__/locale', () => ({ t: key => key }))
 
 test('controlled demo stays open after the external click, then closes on selection or outside click', async () => {

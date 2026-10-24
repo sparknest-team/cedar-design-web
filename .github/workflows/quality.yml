@@ -12,12 +12,21 @@ concurrency:
 jobs:
   quality:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: cedar-design-web
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: cedar-design-web
       - uses: actions/checkout@v4
         with:
           repository: loca-spirit/design-ui
-          path: .design-ui
+          path: design-ui
+      - uses: actions/checkout@v4
+        with:
+          repository: loca-spirit/maple-design-mobile
+          path: maple-design-mobile
       - uses: pnpm/action-setup@v4
         with:
           version: 9.6.0
@@ -25,11 +34,23 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
+          cache-dependency-path: |
+            cedar-design-web/pnpm-lock.yaml
+            maple-design-mobile/pnpm-lock.yaml
+            design-ui/pnpm-lock.yaml
+      - run: corepack pnpm install --frozen-lockfile
+        working-directory: design-ui
       - run: pnpm install --frozen-lockfile
-      - run: pnpm spec:check
-      - run: pnpm lint
-      - run: pnpm typecheck
-      - run: pnpm test
-      - run: pnpm build:lib
-      - run: pnpm package:check
-      - run: pnpm build:doc
+        working-directory: maple-design-mobile
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: node ../design-ui/bin/ci-toolchain-check.mjs
+      - run: node ../design-ui/bin/case-paths-check.mjs
+      - run: node --test ../design-ui/bin/ci-contract.test.mjs ../design-ui/bin/ci-toolchain-check.test.mjs ../design-ui/bin/shared-source-contract.test.mjs ../design-ui/bin/case-paths-check.test.mjs ../design-ui/packages/ui-build/test/environment.test.mjs ../design-ui/browser/inventory.test.mjs
+      - run: pnpm quality
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cedar-design-web-production-browser
+          path: cedar-design-web/artifacts/docs-components
+          if-no-files-found: warn

@@ -7,7 +7,7 @@ import Button from '../../button'
 import { RadioGroup } from '../../radio'
 import Space from '../../space'
 
-vi.mock('@cedarjs/ui', () => import('..'))
+vi.mock('@cedar-design/ui', () => import('..'))
 
 test.each([
   [Demo, '加入示例图片', '准备并提交', '取消准备', '完成准备', '重置队列', '待返回准备任务', '请求次数'],

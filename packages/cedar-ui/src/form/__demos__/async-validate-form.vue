@@ -53,7 +53,7 @@
 import ModelOutput from '../__demo-utils__/ModelOutput.vue'
 
 import { onBeforeUnmount, onDeactivated, reactive, ref, useId } from "vue";
-import type { FormInstance, FieldRule } from "@cedarjs/ui";
+import type { FormInstance, FieldRule } from "@cedar-design/ui";
 
 const formRef = ref<FormInstance>();
 const demoId = useId();

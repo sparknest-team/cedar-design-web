@@ -8,8 +8,8 @@ Cedar 提供两套能力：
 
 | 能力             | 包 / 入口                                                | 何时用                           |
 | ---------------- | -------------------------------------------------------- | -------------------------------- |
-| 固定工具类 `c-*` | `@cedarjs/ui` 的 `style/utilities/index.less`            | 不接 Uno/TW 时使用               |
-| Uno / TW preset  | `@cedarjs/preset-unocss` / `@cedarjs/preset-tailwindcss` | 使用带 `c-` 前缀的完整原子化体系 |
+| 固定工具类 `c-*` | `@cedar-design/ui` 的 `style/utilities/index.less`            | 不接 Uno/TW 时使用               |
+| Uno / TW preset  | `@cedar-design/preset-unocss` / `@cedar-design/preset-tailwindcss` | 使用带 `c-` 前缀的完整原子化体系 |
 
 Preset **不是组件**，是构建期配置：装好后即可写 `c-flex`、`c-p-16`、`c-bg-primary`、`c-text-md` 等。主题切换（暗色 / StyleProvider）只改 CSS 变量，类名不变。日常分类速查见 [常用写法](/components/style/atomic-usage/)。
 
@@ -60,7 +60,7 @@ UnoCSS 和 Tailwind **二选一配置**，但组件里的类名完全相同。�
 ### 安装
 
 ```shell
-pnpm add -D @cedarjs/preset-unocss unocss
+pnpm add -D @cedar-design/preset-unocss unocss
 ```
 
 ### 配置
@@ -68,7 +68,7 @@ pnpm add -D @cedarjs/preset-unocss unocss
 ```js
 // uno.config.ts
 import { defineConfig } from "unocss";
-import { presetCedar } from "@cedarjs/preset-unocss";
+import { presetCedar } from "@cedar-design/preset-unocss";
 
 export default defineConfig({
   presets: [presetCedar()],
@@ -80,7 +80,7 @@ export default defineConfig({
 ### 需已加载主题变量
 
 ```js
-import "@cedarjs/ui/dist/index.css";
+import "@cedar-design/ui/dist/index.css";
 // 或自行引入含 --c-* 的主题样式
 ```
 
@@ -91,14 +91,14 @@ import "@cedarjs/ui/dist/index.css";
 ### 安装
 
 ```shell
-pnpm add -D @cedarjs/preset-tailwindcss tailwindcss
+pnpm add -D @cedar-design/preset-tailwindcss tailwindcss
 ```
 
 ### Tailwind v3
 
 ```js
 // tailwind.config.js
-import { presetCedar } from "@cedarjs/preset-tailwindcss";
+import { presetCedar } from "@cedar-design/preset-tailwindcss";
 
 export default {
   content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
@@ -110,7 +110,7 @@ export default {
 
 ```js
 // tailwind.config.js
-import { presetCedar } from "@cedarjs/preset-tailwindcss";
+import { presetCedar } from "@cedar-design/preset-tailwindcss";
 
 export default {
   presets: [presetCedar()],

@@ -1,6 +1,6 @@
-import { buildLibrary as buildLibraryBase } from '@ui-foundation/ui-build'
+import { buildLibrary as buildLibraryBase } from '@sparknest/ui-build'
 
-export { defineConfig } from '@ui-foundation/ui-build'
+export { defineConfig } from '@sparknest/ui-build'
 export { generateLibraryEntry } from './generateLibraryEntry.mjs'
 export * from './release.mjs'
 

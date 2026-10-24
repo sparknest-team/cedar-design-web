@@ -37,7 +37,7 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import type { SearchResult } from "@cedarjs/ui";
+import type { SearchResult } from "@cedar-design/ui";
 
 const inputStyle = { width: "360px" };
 const keyword = ref("");

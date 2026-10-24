@@ -1,5 +1,5 @@
 ---
-'@cedarjs/ui': major
+'@cedar-design/ui': major
 ---
 
 Align the first component-contract batch with Maple:

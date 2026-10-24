@@ -45,6 +45,16 @@ src/<component>/
 | 构建 npm 包（根目录含依赖包） | `pnpm build:lib` |
 | 构建文档 | `pnpm build:doc` |
 | 构建 npm 包及文档 | `pnpm build` |
+| 完整本地 CI（含 lint、测试、CLI / resolver、构建与发布包检查） | 仓库根目录 `pnpm quality`；先按同级目录安装 Cedar、Maple、design-ui，契约检查依赖两端源码 |
+| CLI 入口生成与样式依赖回归 | 仓库根目录 `pnpm check:cli` |
+| Resolver 真实自动导入回归 | 仓库根目录 `pnpm check:resolver` |
+| 文档生成、源码资产及开发生命周期回归 | 仓库根目录 `pnpm check:doc-pipeline` |
+| 生产文档亮暗主题、交互和源码回归 | 先 `pnpm build:doc`，再于仓库根目录运行 `pnpm check:docs-theme`；首次运行需 `pnpm exec playwright install chromium`，CI 自动安装浏览器 |
+| 全组件生产浏览器回归 | 构建后运行 `pnpm check:docs-components`；显式覆盖清单见 `design-ui/browser/contracts.mjs`，新增组件必须补行为契约；输出 `artifacts/docs-components/cedar/coverage.json` |
+| 全库运行时依赖与 HMR 兜底门禁 | 仓库根目录 `pnpm check:runtime-dependencies`（公共契约见 `design-ui/standards/component-anatomy.md`） |
+| shared 发布运行时、类型和体积回归 | 仓库根目录 `pnpm check:shared`（公共契约见 `design-ui/standards/shared-foundation.md`） |
+
+构建环境、发布产物消费行为与 CI 工具链遵守 `design-ui/standards/build-and-ci.md`；不能用自定义 NODE_ENV 编译发布包，也不能把入口版本当成子进程版本的证明。
 
 ## 与移动端（Maple Design Mobile）的关系
 

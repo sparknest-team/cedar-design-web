@@ -2,14 +2,15 @@ import { h, reactive } from 'vue'
 import { flushPromises, mount } from '@vue/test-utils'
 import { expect, test } from 'vitest'
 import DateRange from '..'
-import EditorPanel from '../../_components/field-presentation/EditorPanel.vue'
+import DatePanel from '../../date/DatePanel.vue'
 import Form from '../../form/Form.vue'
 import FormItem from '../../form/FormItem.vue'
 
 const initial = ['2026-10-19', '2026-10-22']
 const props = {
   modelValue: initial,
-  presentation: 'dialog',
+  presentation: 'inline',
+  disableConfirm: false,
   valueFormat: 'YYYY-MM-DD',
   ...('panelType' in DateRange.props ? { panelType: 'calendar' } : {}),
 }
@@ -24,7 +25,7 @@ test('restarting a range blocks confirmation until both endpoints are chosen, th
   try {
     await wrapper.get('[aria-haspopup=dialog]').trigger('click')
     await flushPromises()
-    const panel = wrapper.getComponent(EditorPanel)
+    const panel = wrapper.getComponent(DatePanel)
     await day(panel, '25').trigger('click')
     await flushPromises()
     expect(action(panel, ['确定', '确认']).attributes('disabled')).toBeDefined()
@@ -47,14 +48,14 @@ test('canceling a half-selected range restores the previous complete selection o
   try {
     await wrapper.get('[aria-haspopup=dialog]').trigger('click')
     await flushPromises()
-    let panel = wrapper.getComponent(EditorPanel)
+    let panel = wrapper.getComponent(DatePanel)
     await day(panel, '25').trigger('click')
-    await action(panel, ['×']).trigger('click')
+    await wrapper.get('input').trigger('keydown', { key: 'Escape' })
     await flushPromises()
     expect(wrapper.emitted('update:modelValue')).toBeUndefined()
     await wrapper.get('[aria-haspopup=dialog]').trigger('click')
     await flushPromises()
-    panel = wrapper.getComponent(EditorPanel)
+    panel = wrapper.getComponent(DatePanel)
     expect(action(panel, ['确定', '确认']).attributes('disabled')).toBeUndefined()
   } finally {
     wrapper.unmount()
@@ -64,7 +65,7 @@ test('canceling a half-selected range restores the previous complete selection o
 test('Form inheritance also blocks confirmation for an incomplete range', async () => {
   const model = reactive({ days: [...initial] })
   const wrapper = mount(Form, {
-    props: { model, presentation: 'dialog' },
+    props: { model, presentation: 'inline' },
     slots: {
       default: () =>
         h(FormItem, { field: 'days', label: '范围' }, () =>
@@ -82,7 +83,7 @@ test('Form inheritance also blocks confirmation for an incomplete range', async 
   try {
     await wrapper.get('[aria-haspopup=dialog]').trigger('click')
     await flushPromises()
-    const panel = wrapper.getComponent(EditorPanel)
+    const panel = wrapper.getComponent(DatePanel)
     await day(panel, '25').trigger('click')
     await flushPromises()
     expect(action(panel, ['确定', '确认']).attributes('disabled')).toBeDefined()

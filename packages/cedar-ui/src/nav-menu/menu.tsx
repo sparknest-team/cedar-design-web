@@ -164,7 +164,7 @@ export default defineComponent({
       activateItem,
       selectItem: setActiveItem,
       props, selected, activeItem, expanded, collapsed, theme, activePath, focusKey, slots, labelField: computed(() => tree.value.names.label),
-      context(node) { return { option: node.option, selected: selected.value === node.key, expanded: expanded.value.includes(node.key), active: activePath.value.has(node.key), level: node.level } },
+      context(node) { return { option: node.option, active: node.type === 'item' && selected.value === node.key, expanded: expanded.value.includes(node.key), level: node.level } },
       select(node, event) {
         if (!available() || props.disabled || node.disabled || node.type !== 'item' || node.children.length) return
         const request = ++focusGeneration

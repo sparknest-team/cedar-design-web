@@ -4,7 +4,7 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review-c-avatar-1.config.json";
 </script>
 <template>
@@ -44,7 +44,7 @@ import __apiReviewRawConfig from "./api-review-c-avatar-1.config.json";
       </c-space>
       <c-space direction="column" align="center" :size="8">
         <c-avatar
-          image-url="/missing-avatar.jpg"
+          image-url="data:image/png;base64,AA=="
           error="/cat.jpg"
           alt="失败时回退到占位图"
           :size="48"
@@ -72,7 +72,7 @@ import __apiReviewRawConfig from "./api-review-c-avatar-1.config.json";
       </c-space>
       <c-space direction="column" align="center" :size="8">
         <c-avatar
-          image-url="/missing-avatar.jpg"
+          image-url="data:image/png;base64,AA=="
           alt="失败插槽"
           :size="48"
           v-bind="__apiReview.bindings"

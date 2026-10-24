@@ -1,4 +1,4 @@
-import { isString, removeItem } from '@cedarjs/shared'
+import { isString, removeItem } from '@cedar-design/shared'
 
 export interface CacheInstance<T> {
   cache: T[]

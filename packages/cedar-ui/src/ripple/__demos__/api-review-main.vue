@@ -4,12 +4,12 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review.config.json";
 
 import { ref } from "vue";
-import { Ripple } from "@cedarjs/ui";
-import "@cedarjs/ui/ripple/style";
+import { Ripple } from "@cedar-design/ui";
+import "@cedar-design/ui/ripple/style";
 
 const vRipple = Ripple;
 const disabled = ref(false);
@@ -21,18 +21,20 @@ const disabled = ref(false);
     v-bind="defineReviewConfig(__apiReviewRawConfig)"
   >
     <c-space wrap>
-      <c-button
-        :ripple="false"
+      <div
+        role="button" tabindex="0"
         v-ripple="{ ...{ disabled }, ...__apiReview.bindings }"
         class="ripple-demo"
-        >Ripple</c-button
       >
-      <c-button
-        :ripple="false"
+        Ripple
+      </div>
+      <div
+        role="button" tabindex="0"
         v-ripple="{ ...{ disabled }, ...__apiReview.bindings }"
         class="ripple-demo ripple-demo--long"
-        >600ms 扩散／800ms 消退</c-button
       >
+        600ms 扩散／800ms 消退
+      </div>
       <c-button @click="disabled = !disabled">{{
         disabled ? "启用水波" : "禁用水波"
       }}</c-button>

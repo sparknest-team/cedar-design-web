@@ -27,3 +27,5 @@ export { menuOptionProps } from './option-props'
 export type { MenuOptionProps } from './option-props'
 
 export type { MenuStrategy, MenuSubmenuTrigger, MenuReference } from './types'
+
+export type { MenuSlots, MenuOptionSlots } from './types'

@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { Dialog, Message } from "@cedarjs/ui";
+import { Dialog, Message } from "@cedar-design/ui";
 
 function openBasic() {
   Dialog.open("This dialog was opened from a string message.");

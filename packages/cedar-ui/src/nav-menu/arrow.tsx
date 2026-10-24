@@ -1,5 +1,5 @@
 import { defineComponent, h, type PropType } from 'vue'
-import { IconRight } from '@cedarjs/icons-vue/icon-right'
+import { IconRight } from '@cedar-design/icons-vue/icon-right'
 import { createNamespace } from '../_utils/global-config'
 import type { TriggerPosition } from '../_utils/constant'
 const { n } = createNamespace('nav-menu')

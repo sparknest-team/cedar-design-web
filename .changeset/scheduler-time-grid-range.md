@@ -1,5 +1,5 @@
 ---
-"@cedarjs/ui": patch
+"@cedar-design/ui": patch
 ---
 
 隔离TimeGrid范围新建的旧监听、长按、取消、几何读取与点击结算，补齐停用／卸载与配置失效，保留原吸附和默认阈值。

@@ -4,7 +4,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { Message } from '@cedarjs/ui'
+import { Message } from '@cedar-design/ui'
 
 const value = ref('654321')
 const onFinish = (value) => Message.info(`Verification code: ${value}`)

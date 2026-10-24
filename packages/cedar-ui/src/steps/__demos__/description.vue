@@ -8,7 +8,7 @@
       status
     }}</c-radio>
   </c-radio-group>
-  <c-steps :current="2" :status="currentStatus">
+  <c-steps :model-value="2" :status="currentStatus">
     <c-step>Succeeded</c-step>
     <c-step>Processing</c-step>
     <c-step>Pending</c-step>

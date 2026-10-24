@@ -1,5 +1,5 @@
 import { isRef, onBeforeUnmount, onDeactivated, unref, watch, type Ref, type WatchStopHandle } from 'vue'
-import { inBrowser, isFunction } from '@cedarjs/shared'
+import { inBrowser, isFunction } from '@cedar-design/shared'
 import { onSmartMounted } from './onSmartMounted.js'
 
 export type UseEventListenerTarget = EventTarget | Ref<EventTarget | undefined | null> | (() => EventTarget | undefined | null)

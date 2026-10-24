@@ -8,7 +8,7 @@ test('inherits reactive provider size and RTL with explicit overrides', async ()
   const config = reactive({ size: 'lg', rtl: true })
   const wrapper = mount(Tabs, {
     global: { provide: { [configProviderInjectionKey]: config } },
-    slots: { default: () => h(TabPane, { key: 'a', title: 'a' }) },
+    slots: { default: () => h(TabPane, { name: 'a', title: 'a' }) },
   })
   expect(wrapper.classes()).toContain('c-tabs--size-lg')
   expect(wrapper.attributes('dir')).toBe('rtl')

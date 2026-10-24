@@ -4,7 +4,7 @@ import { ImagePreviewAction as CImagePreviewAction } from '../index'
 import { ref } from 'vue'
 
 const open = ref(false)
-const current = ref(0)
+const current = ref(1)
 const images = ['/cat.jpg', '/cat2.jpg']
 
 function onAction() {
@@ -15,12 +15,12 @@ function onAction() {
 <template>
   <c-space direction="column" :size="16">
     <c-button status="primary" size="sm" @click="open = true">打开自定义预览</c-button>
-    <c-image-preview-group v-model:open="open" v-model:current="current" :images="images" :loop="false">
+    <c-image-preview-group v-model:open="open" v-model="current" :images="images" :loop="false">
       <template #close-icon>
         <span class="close-icon">×</span>
       </template>
-      <template #indicator="{ index, length }">
-        <span class="indicator">{{ index + 1 }} / {{ length }}</span>
+      <template #indicator="{ imageNumber, length }">
+        <span class="indicator">{{ imageNumber }} / {{ length }}</span>
       </template>
       <template #actions>
         <c-image-preview-action name="切换" @click="onAction">+</c-image-preview-action>

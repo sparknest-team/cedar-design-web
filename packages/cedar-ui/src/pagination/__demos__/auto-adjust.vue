@@ -8,7 +8,7 @@ function reset() { total.value = 200; current.value = 18 }
 <template>
   <div class="pagination-demo">
     <div class="pagination-demo-controls"><c-switch v-model="autoAdjust" /> Auto adjust<c-button @click="total = 25">Reduce total</c-button><c-button @click="reset">Reset</c-button></div>
-    <c-pagination v-model:current="current" :total="total" :auto-adjust="autoAdjust" show-total show-page-size />
+    <c-pagination v-model="current" :total="total" :auto-adjust="autoAdjust" show-total show-page-size />
     <span>Current: {{ current }} · Total: {{ total }}</span>
   </div>
 </template>

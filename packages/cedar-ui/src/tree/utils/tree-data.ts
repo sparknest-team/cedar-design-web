@@ -1,6 +1,6 @@
 import { omit } from '../../_utils/omit'
 import { isFunction, isUndefined } from '../../_utils/is'
-import { TreeNodeData, Node, TreeFieldNames, TreeNodeKey, SelectableType, CheckableType } from '../types'
+import { TreeNodeData, Node, TreeFieldNames, TreeNodeValue, SelectableType, CheckableType } from '../types'
 
 interface TreeProps {
   fieldNames?: TreeFieldNames
@@ -78,9 +78,11 @@ function generateNode(options: NodeOptions): Node {
   const isLeaf = treeProps.loadMore ? !!mapTreeNodeData.isLeaf : !mapTreeNodeData.children?.length
   const level = parentNode ? parentNode.level + 1 : 0
 
+  const value = mapTreeNodeData.value ?? generateKey()
   const treeNodeProps = {
     ...omit(mapTreeNodeData, ['children']),
-    key: mapTreeNodeData.key ?? generateKey(),
+    key: value,
+    value,
     selectable: getEnableResult({
       subEnable: mapTreeNodeData.selectable,
       superEnable: treeProps?.selectable,
@@ -114,7 +116,7 @@ function generateNode(options: NodeOptions): Node {
     treeNodeData,
     parent: parentNode,
     parentKey: parentNode?.key,
-    pathParentKeys: parentNode ? [...parentNode.pathParentKeys, parentNode.key as TreeNodeKey] : [],
+    pathParentKeys: parentNode ? [...parentNode.pathParentKeys, parentNode.key as TreeNodeValue] : [],
   }
 
   return node

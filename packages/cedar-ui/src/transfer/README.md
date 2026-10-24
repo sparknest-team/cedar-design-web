@@ -143,7 +143,7 @@ import type {
   TransferTargetItem,
   TransferTargetOperation,
   TransferValue,
-} from '@cedarjs/ui'
+} from '@cedar-design/ui'
 ```
 
 ### Form 字段展示与确认

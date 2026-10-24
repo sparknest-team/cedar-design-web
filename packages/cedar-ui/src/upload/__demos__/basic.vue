@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { UploadFileItem, UploadPreviewEvent } from '@cedarjs/ui'
+import type { UploadFileItem, UploadPreviewEvent } from '@cedar-design/ui'
 
 const files = ref<UploadFileItem[]>([
   { uid: 'basic-1', name: 'product-specification.txt', url: '/product-specification.txt', status: 'success', percent: 100 },

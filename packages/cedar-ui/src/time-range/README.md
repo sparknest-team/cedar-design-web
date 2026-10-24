@@ -44,9 +44,9 @@ permalink: /components/time-range/
 
 字段的 `focus` / `blur` 事件均无参数，同一次聚焦或失焦只通知一次；范围两端切换不产生额外整字段事件。只读字段仍可聚焦，但不能展开修改；禁用字段不能聚焦，已聚焦时动态禁用会释放焦点状态并通知失焦。
 
-字段和纯面板提交时按当前格式、步长及禁用规则重新校验；Cedar 手动输入也遵守相同规则。规则变化不会自动改写已提交值。范围提交默认按时间排序，开启 `show-next-day` 保留输入顺序。清空仍提交 `undefined`，不受候选时间限制，但遵守只读/禁用状态。
+字段和纯面板提交时按当前格式、步长及禁用规则重新校验；Cedar 手动输入也遵守相同规则。规则变化不会自动改写已提交值。起止端点始终不自动交换；关闭 `show-next-day` 时倒序范围不能提交，开启后允许结束早于开始。清空仍提交 `undefined`，不受候选时间限制，但遵守只读/禁用状态。
 
-`select(value, date)` 表示用户选择草稿，`change(value, date)` 表示提交。单值和范围字段清除均返回 `undefined`，对应 Date 参数也为 `undefined`，`clear` 不带参数。Date 参数是本地时间表示（不自动进行次日日期运算）。字段默认确认后提交；`disable-confirm` 开启后有效选择立即提交并请求关闭。范围提交会排序，开启 `show-next-day` 后保留端点顺序。受控 `open` 仍需父级接受更新。独立纯面板同样默认确认后提交；开启 disable-confirm 后立即提交，但不会关闭面板。
+`select(value, date)` 表示用户选择草稿，`change(value, date)` 表示提交。单值和范围字段清除均返回 `undefined`，对应 Date 参数也为 `undefined`，`clear` 不带参数。Date 参数是本地时间表示（不自动进行次日日期运算）。字段默认确认后提交；`disable-confirm` 开启后仅有效选择立即提交并请求关闭，不允许次日时的倒序草稿仍不能提交。受控 `open` 仍需父级接受更新。独立纯面板同样默认确认后提交；开启 disable-confirm 后有效选择立即提交，但不会关闭面板。
 
 <demo src="./__demos__/selection-events.vue"></demo>
 
@@ -80,7 +80,7 @@ permalink: /components/time-range/
 
 ### 次日标记
 
-结束时间早于开始时间时，开启 `show-next-day` 会在字段与面板结束侧显示「次日」，且确认时**不再自动交换**起止时间。
+结束时间早于开始时间时，开启 `show-next-day` 会在字段与面板结束侧显示「次日」并允许提交；关闭时倒序范围不能提交。起止端点始终不自动交换。
 
 <demo src="./__demos__/show-next-day.vue"></demo>
 
@@ -159,7 +159,7 @@ Maple 的 pickerProps 可配置 optionHeight/optionCount 等外观，不可替�
 | `use12-hours` | 12 小时制 | `boolean` | `false` |
 | `hide-disabled-options` | 隐藏禁用时间选项 | `boolean` | `false` |
 | `disable-confirm` | 跳过确认，有效选择立即提交并请求关闭 | `boolean` | `false` |
-| `show-next-day` | 结束早于开始时显示「次日」，并关闭确认时的起止交换 | `boolean` | `false` |
+| `show-next-day` | 允许结束早于开始并显示「次日」；关闭时倒序范围不能提交，起止始终不交换 | `boolean` | `false` |
 | `time-range-picker-props` | 透传给 TimeRangePicker | `object` | `{}` |
 
 ### Form 字段展示与确认

@@ -86,5 +86,5 @@ AnchorLink 卸载及 href 变化会注销原节点；旧节点清理不会删除
 组件导出以下类型定义
 
 ```ts
-import type { AnchorInstance } from '@cedarjs/ui'
+import type { AnchorInstance } from '@cedar-design/ui'
 ```

@@ -105,7 +105,7 @@ permalink: /components/icon/
 组件导出以下类型定义
 
 ```ts
-import type { IconProps } from "@cedarjs/ui";
+import type { IconProps } from "@cedar-design/ui";
 ```
 
 ## 同源实现与平台边界

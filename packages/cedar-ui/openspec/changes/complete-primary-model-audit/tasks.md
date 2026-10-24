@@ -1,0 +1,4 @@
+- [x] Audit public models, defaults, panels and item identifiers
+- [x] Migrate both platforms and consumers, demos, docs and types
+- [x] Add initialization and custom-value regression coverage
+- [x] Validate affected tests, type checks, lint and source parity; see verification.md for full-gate limitations

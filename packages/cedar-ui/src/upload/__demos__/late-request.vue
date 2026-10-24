@@ -1,6 +1,6 @@
 <script setup>
 import { onBeforeUnmount, onDeactivated, ref, shallowRef } from 'vue'
-import { useUploader } from '@cedarjs/ui'
+import { useUploader } from '@cedar-design/ui'
 
 const files = ref([])
 const handles = shallowRef([])

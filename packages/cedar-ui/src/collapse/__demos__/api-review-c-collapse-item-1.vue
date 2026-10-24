@@ -4,7 +4,7 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review-c-collapse-item-1.config.json";
 </script>
 <template>
@@ -12,9 +12,9 @@ import __apiReviewRawConfig from "./api-review-c-collapse-item-1.config.json";
     v-slot="__apiReview"
     v-bind="defineReviewConfig(__apiReviewRawConfig)"
   >
-    <c-collapse :default-active-names="['1', 2]">
-      <template #expand-icon="{ active }">
-        <span>{{ active ? "▼" : "▶" }}</span>
+    <c-collapse :default-value="['1', 2]">
+      <template #expand-icon="{ expanded }">
+        <span>{{ expanded ? "▼" : "▶" }}</span>
       </template>
       <c-collapse-item
         title="Beijing Toutiao Technology Co., Ltd."
@@ -24,9 +24,9 @@ import __apiReviewRawConfig from "./api-review-c-collapse-item-1.config.json";
       >
         <template
           v-if="__apiReview.slotEnabled['expand-icon'] !== false"
-          #expand-icon="{ active }"
+          #expand-icon="{ expanded }"
         >
-          <span>{{ active ? "^^" : "vv" }}</span>
+          <span>{{ expanded ? "^^" : "vv" }}</span>
         </template>
         <div>Beijing Toutiao Technology Co., Ltd.</div>
         <template v-if="__apiReview.slotEnabled['title']" #title="__reviewSlot"

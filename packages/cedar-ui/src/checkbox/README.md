@@ -4,6 +4,8 @@ permalink: /components/checkbox/
 
 # Checkbox
 
+独立 Checkbox 的 modelValue 在布尔模式下表示是否选中，在数组模式下表示选中选项的集合；value 是当前选项的标识。CheckboxGroup 的 modelValue 是选中值数组。defaultValue 只初始化非受控状态，不会回写父级绑定值。
+
 在一组数据中，用户可通过复选框选择一个或多个数据。
 
 ## 案例
@@ -238,7 +240,7 @@ icon-size 接受像素数字或 CSS 长度字符串，不是 ComponentSize 档�
 组件导出以下类型定义
 
 ```ts
-import type { CheckboxProps } from '@cedarjs/ui'
+import type { CheckboxProps } from '@cedar-design/ui'
 ```
 
 ### ChoiceFieldNames

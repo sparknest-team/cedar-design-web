@@ -1,8 +1,8 @@
 import {
   applySchedulerChange,
   cloneSchedulerEvent,
-  SchedulerError,
-} from "./index";
+} from "./base";
+import { SchedulerError } from "./types";
 import type {
   SchedulerEvent,
   SchedulerChange,

@@ -127,40 +127,58 @@
     color: var(~'--c-cascader-item-text-color');
     font-size: var(~'--c-cascader-font-item-size');
     line-height: var(~'--c-cascader-size-item-height');
+    align-items: center;
     background-color: transparent;
     cursor: pointer;
 
     &-label {
+      display: flex;
+      align-items: center;
       flex-grow: 1;
-      padding-right: calc(
-        var(~'--c-cascader-padding-item-right') + var(~'--c-cascader-size-item-icon') +
-          var(~'--c-cascader-margin-item-icon-left')
-      );
-      padding-left: var(~'--c-cascader-padding-item-left');
+      min-width: 0;
+      padding-right: var(--c-cascader-padding-item-right);
+      padding-left: var(--c-cascader-padding-item-left);
+    }
+
+    &-label-content {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .c-cascader-option-expand-icon,
-    .c-icon-check {
-      position: absolute;
-      top: 50%;
-      right: var(~'--c-cascader-padding-item-right');
-      color: var(~'--c-cascader-item-icon-color');
-      font-size: var(~'--c-cascader-size-item-icon');
-      transform: translateY(-50%);
-    }
-
-    .c-icon-check {
-      color: var(--c-sys-color-content-brand);
-    }
-
     .c-cascader-option-loading-icon {
-      position: absolute;
-      top: 50%;
-      right: var(~'--c-cascader-padding-item-right');
-      margin-top: calc(var(~'--c-cascader-size-item-icon') / -2);
-      color: var(--c-sys-color-content-brand);
-      font-size: var(~'--c-cascader-size-item-icon');
+      flex: none;
+      margin-inline-start: var(--c-cascader-margin-item-icon-left);
+      width: var(--c-cascader-size-item-icon);
+      height: var(--c-cascader-size-item-icon);
+      color: var(--c-cascader-item-icon-color);
     }
+
+    &-checkbox {
+      display: inline-flex;
+      align-items: center;
+      flex: none;
+    }
+
+    &-check {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: none;
+      margin-inline-end: var(--c-cascader-padding-item-right);
+      color: var(--c-cascader-item-check-color);
+      width: var(--c-cascader-item-check-size);
+      height: var(--c-cascader-item-check-size);
+
+      svg {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+
   }
 
   &-option:hover,
@@ -189,8 +207,8 @@
         color: inherit;
       }
 
-      .c-icon-check {
-        color: var(~'--c-color-primary-light-3');
+      .c-cascader-option-check {
+        color: var(--c-cascader-item-text-color-disabled);
       }
     }
   }

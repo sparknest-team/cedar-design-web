@@ -1,5 +1,6 @@
 import { ref } from 'vue'
-import { isFunction, motion, MotionState } from '@cedarjs/shared'
+import { isFunction, motion } from '@cedar-design/shared'
+import type { MotionState } from '@cedar-design/shared'
 
 export interface UseMotionOptions {
   from: number | (() => number)

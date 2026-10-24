@@ -34,26 +34,26 @@ const regions = [
 ];
 const treeOptions = [
   {
-    key: "east",
-    title: "华东",
+    value: "east",
+    label: "华东",
     children: [
-      { key: "shanghai", title: "上海" },
+      { value: "shanghai", label: "上海" },
       {
-        key: "zhejiang",
-        title: "浙江",
+        value: "zhejiang",
+        label: "浙江",
         children: [
-          { key: "hangzhou", title: "杭州" },
-          { key: "ningbo", title: "宁波" },
+          { value: "hangzhou", label: "杭州" },
+          { value: "ningbo", label: "宁波" },
         ],
       },
     ],
   },
   {
-    key: "north",
-    title: "华北",
+    value: "north",
+    label: "华北",
     children: [
-      { key: "beijing", title: "北京" },
-      { key: "tianjin", title: "天津", disabled: true },
+      { value: "beijing", label: "北京" },
+      { value: "tianjin", label: "天津", disabled: true },
     ],
   },
 ];
@@ -90,7 +90,7 @@ const model = ref({
           v-model="model.tree"
           :data="treeOptions"
           :filter-tree-node="
-            (query, node) => String(node.title).includes(query)
+            (query, node) => String(node.label).includes(query)
           "
           allow-search
       /></c-form-item>
@@ -101,7 +101,7 @@ const model = ref({
           multiple
           tree-checkable
           :filter-tree-node="
-            (query, node) => String(node.title).includes(query)
+            (query, node) => String(node.label).includes(query)
           "
           allow-search
       /></c-form-item>

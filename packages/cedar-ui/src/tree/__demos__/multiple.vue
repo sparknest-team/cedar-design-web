@@ -4,65 +4,65 @@
     v-model="multiple"
     @change="
       () => {
-        selectedKeys = []
+        selectedValues = []
       }
     "
   >
     multiple
   </c-checkbox>
   <br />
-  <c-typography-text> Current: {{ selectedKeys?.join(' , ') }} </c-typography-text>
+  <c-typography-text> Current: {{ selectedValues?.join(' , ') }} </c-typography-text>
   <br />
-  <c-tree v-model:selected-keys="selectedKeys" :multiple="multiple" :data="treeData" />
+  <c-tree v-model:selected-values="selectedValues" :multiple="multiple" :data="treeData" />
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-const selectedKeys = ref([])
+const selectedValues = ref([])
 const multiple = ref(true)
 const treeData = [
   {
-    title: 'Trunk 0-0',
-    key: '0-0',
+    label: 'Trunk 0-0',
+    value: '0-0',
     children: [
       {
-        title: 'Leaf',
-        key: '0-0-1',
+        label: 'Leaf',
+        value: '0-0-1',
       },
       {
-        title: 'Branch 0-0-2',
-        key: '0-0-2',
+        label: 'Branch 0-0-2',
+        value: '0-0-2',
         children: [
           {
-            title: 'Leaf',
-            key: '0-0-2-1',
+            label: 'Leaf',
+            value: '0-0-2-1',
           },
         ],
       },
     ],
   },
   {
-    title: 'Trunk 0-1',
-    key: '0-1',
+    label: 'Trunk 0-1',
+    value: '0-1',
     children: [
       {
-        title: 'Branch 0-1-1',
-        key: '0-1-1',
+        label: 'Branch 0-1-1',
+        value: '0-1-1',
         children: [
           {
-            title: 'Leaf',
-            key: '0-1-1-1',
+            label: 'Leaf',
+            value: '0-1-1-1',
           },
           {
-            title: 'Leaf',
-            key: '0-1-1-2',
+            label: 'Leaf',
+            value: '0-1-1-2',
           },
         ],
       },
       {
-        title: 'Leaf',
-        key: '0-1-2',
+        label: 'Leaf',
+        value: '0-1-2',
       },
     ],
   },

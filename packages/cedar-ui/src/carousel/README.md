@@ -24,7 +24,7 @@ permalink: /components/carousel/
 
 <demo src="./__demos__/autoplay.vue"></demo>
 
-示例使用 2000ms 间隔，下方页码按 1 开始显示（API 索引仍从 0 开始）。取消勾选立即停止自动播放，重新开启后继续；焦点在轮播内部时也会暂停。
+示例使用 2000ms 间隔，下方页码按 1 开始显示（API 序号同样从 1 开始）。取消勾选立即停止自动播放，重新开启后继续；焦点在轮播内部时也会暂停。
 
 ### 悬停暂停自动播放
 
@@ -46,7 +46,7 @@ permalink: /components/carousel/
 
 ### 多图同屏
 
-示例同时显示2.5项，可用鼠标拖拽并切换“接受切换”和“循环”。Current为父级已接受的零基索引，Proposal记录切换请求，Changes统计change事件；受控拒绝时仍可能发出提案及change，不等于模型已更新。接受后可正反拖动，首项向前循环到末项；关闭循环后末端继续拖动不越界、不重复通知。此处是鼠标组合示例，不代表真机触屏或所有居中/自动宽度组合均已验收。
+示例同时显示2.5项，可用鼠标拖拽并切换“接受切换”和“循环”。Current为父级已接受的从 1 开始的页序号，Proposal记录切换请求，Changes统计change事件；受控拒绝时仍可能发出提案及change，不等于模型已更新。接受后可正反拖动，首项向前循环到末项；关闭循环后末端继续拖动不越界、不重复通知。此处是鼠标组合示例，不代表真机触屏或所有居中/自动宽度组合均已验收。
 
 通过 `slides-per-view` 和 `space-between` 属性可以控制每屏显示的 slide 数量及间距。
 
@@ -116,25 +116,25 @@ permalink: /components/carousel/
 
 ### auto-sized
 
-“反转顺序”以卡片宽度作为本示例的唯一key，反转同一批卡片。current按位置索引而非业务卡片身份解释：索引1从220px变成180px，索引与change次数不变；向左拖到索引2后恢复顺序，当前位置对应180px，向右拖回索引1。重排本身不提交切换；任意插入排序、身份保持、持按中重排和物理触屏仍未覆盖。
+“反转顺序”以卡片宽度作为本示例的唯一key，反转同一批卡片。current 按页序号而非业务卡片身份解释：页序号 2从220px变成180px，索引与change次数不变；向左拖到页序号 3后恢复顺序，当前位置对应180px，向右拖回页序号 2。重排本身不提交切换；任意插入排序、身份保持、持按中重排和物理触屏仍未覆盖。
 
-Reverse cards reorders the same uniquely keyed cards (their distinct widths are the Demo keys). Current is positional, not a business-card identity: index 1 changes from 220px to 180px without changing the index or event count. Drag left to index 2, restore order to show 180px there, then drag right to index 1. Reordering alone emits no change. Arbitrary insertion/sorting, identity-following selection, reordering during a held gesture and physical touch remain unverified.
+Reverse cards reorders the same uniquely keyed cards (their distinct widths are the Demo keys). Current is positional, not a business-card identity: slide number 2 changes from 220px to 180px without changing the index or event count. Drag left to slide number 3, restore order to show 180px there, then drag right to slide number 2. Reordering alone emits no change. Arbitrary insertion/sorting, identity-following selection, reordering during a held gesture and physical touch remain unverified.
 
-活动第五项删除组合：选中新增第五项后关闭“增加末项”，父级Current仍4、Changes不增加；显示层将越界索引限制到剩余第四项并居中。随后向左拖动才按四项循环到0，回写模型并增加一次change。这里不自动修正父级受控值；业务若需要删除即重写索引，应自行更新current。未覆盖任意重排或持按手势中删除。
+活动第五项删除组合：选中新增第五项后关闭“增加末项”，父级Current仍4、Changes不增加；显示层将越界索引限制到剩余第四项并居中。随后向左拖动才按四项循环到 1，回写模型并增加一次change。这里不自动修正父级受控值；业务若需要删除即重写索引，应自行更新current。未覆盖任意重排或持按手势中删除。
 
-When the active fifth card is removed, parent Current stays 4 without another change; the view clamps it to the remaining fourth card and centers that card. A subsequent left drag wraps to 0 and updates the model once. Applications that need immediate parent-index correction must update current themselves. Arbitrary reordering and deletion during a held gesture remain unverified.
+When the active fifth card is removed, parent Current stays 5 without another change; the view clamps it to the remaining fourth card and centers that card. A subsequent left drag wraps to 1 and updates the model once. Applications that need immediate parent-index correction must update current themselves. Arbitrary reordering and deletion during a held gesture remain unverified.
 
-从末项索引3清空再恢复时，父级Current保留3、Changes不增加；恢复后末项仍居中，随后向左拖动才循环到0并增加一次change。空态不把受控父级值强制回写0。此记录不覆盖活动末项删除、任意越界值或手势中清空。
+从末项页序号 4清空再恢复时，父级Current保留3、Changes不增加；恢复后末项仍居中，随后向左拖动才循环到 1并增加一次change。空态不把受控父级值强制回写0。此记录不覆盖活动末项删除、任意越界值或手势中清空。
 
-Clearing from index 3 retains the parent Current and change count. Restoring centers the last card; the next left drag wraps to 0 and emits once. Empty content does not force the controlled parent value to 0. Active-card deletion, arbitrary invalid indices and clearing during a held gesture remain unverified.
+Clearing from slide number 4 retains the parent Current and change count. Restoring centers the last card; the next left drag wraps to 1 and emits once. Empty content does not force the controlled parent value to 0. Active-card deletion, arbitrary invalid indices and clearing during a held gesture remain unverified.
 
-“清空项目”临时移除所有卡片，空态导航禁用、拖动不发切换；解除后恢复此前配置的卡片，不自动切换。从初始索引0清空再恢复后，向右拖动可正常循环到末项。此流程未覆盖非零越界受控索引或清空途中仍按住指针。
+“清空项目”临时移除所有卡片，空态导航禁用、拖动不发切换；解除后恢复此前配置的卡片，不自动切换。从初始页序号 1清空再恢复后，向右拖动可正常循环到末项。此流程未覆盖非零越界受控索引或清空途中仍按住指针。
 
 “增加末项”追加200px第五项，不改变当前有效索引或增加change；从首项向右拖到新增项，再向右拖回原末项后移除第五项，仍保持原末项和次数。此时向左拖可按恢复后的四项循环回首项。这里只覆盖移除非活动末项，未认证删除当前项、任意重排或手势途中增删。
 
 先拖到末项，再开启“加宽卡片”（各项增加80px）和“窄容器”（300px），当前模型与change次数不因尺寸变化而增加；观察当前340px卡片重新居中，再向左拖动循环到首项。恢复开关后应继续居中。本段描述真实ResizeObserver响应已结束手势后的尺寸变化，不代表按住拖动期间改变尺寸。
 
-居中自动宽度示例包含140/220/180/260px四个独立项目，间隔12px。鼠标拖拽逐项切换，首尾均可循环；Current显示已接受的零基模型，Changes记录change事件次数。当前项宽度不同仍保持居中。本示例不代表真机触屏、手势中尺寸变化或动态增删项目已全部验收。
+居中自动宽度示例包含140/220/180/260px四个独立项目，间隔12px。鼠标拖拽逐项切换，首尾均可循环；Current显示已接受的从 1 开始的模型，Changes记录change事件次数。当前项宽度不同仍保持居中。本示例不代表真机触屏、手势中尺寸变化或动态增删项目已全部验收。
 
 <demo src="./__demos__/auto-sized.vue"></demo>
 
@@ -159,12 +159,16 @@ Clearing from index 3 retains the parent Current and change count. Restoring cen
 
 ## API
 
+### 主值与默认值
+
+使用普通 `v-model`。`modelValue` 表示当前页序号，从 1 开始；`defaultValue` 仅在创建时初始化非受控值，后续修改不会重置当前状态。显式绑定值优先，初始化不发出 `update:modelValue`。
+
 ### Carousel Props
 
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| `current` | 受控索引，零基 | `number` | `undefined` |
-| `default-current` | 非受控初始索引 | `number` | `0` |
+| `model-value` | 受控页序号，从 1 开始 | `number` | `undefined` |
+| `default-value` | 非受控初始页序号（从 1 开始） | `number` | `1` |
 | `loop` | 循环，跨边界不复制实例 | `boolean` | `true` |
 | `auto-play` | 自动播放及间隔 | `boolean \| number \| CarouselAutoPlayConfig` | `false` |
 | `move-speed` | 显式切换时长（毫秒） | `number` | `undefined (token)` |
@@ -192,7 +196,7 @@ Clearing from index 3 retains the parent Current and change count. Restoring cen
 | `next-button-aria-label` | 下一页按钮名称 | `string` | Locale |
 
 ### 模型与交互
-索引从零开始。受控操作先发 update:current，再发 change(index, previousIndex, isManual)，父级接受 current 前不移动；外部赋值不补发 change。方法 options 的 event:false 只关闭 change，不吞掉模型提议。用户操作的 isManual 为 true，自动播放为 false。
+公开页序号从 1 开始。受控操作先发 update:model-value，再发 change(slideNumber, previousSlideNumber, isManual)，父级接受 current 前不移动；外部赋值不补发 change。方法 options 的 event:false 只关闭 change，不吞掉模型提议。用户操作的 isManual 为 true，自动播放为 false。
 
 loop 跨边界移动原有子项，不复制组件实例。非循环且未居中时，末尾视区钳制以避免留白，选中项可能在最后一组可见项内移动而不再移动轨道。部分可见页保持可访问，完全离屏页 inert。fade 固定展示一页；auto 使用 CarouselItem 显式 width（横向）或 height（纵向），纵向需提供容器高度。默认插槽只统计 CarouselItem（可包在 Vue Fragment 中），注释、普通元素不成为页。
 
@@ -201,20 +205,20 @@ auto-play=true 使用 3000ms 且悬停暂停，数字指定毫秒且不启用悬
 ### Events
 | 事件 | 参数 |
 | --- | --- |
-| update:current | index: number |
-| change | index: number, previousIndex: number, isManual: boolean |
+| update:model-value | slideNumber: number |
+| change | slideNumber: number, previousSlideNumber: number, isManual: boolean |
 
 ### Slots
 | 插槽 | 参数 |
 | --- | --- |
 | default | CarouselItem |
-| prev / next / indicator | { index, length, hovering, prev, next, to, resize } |
+| prev / next / indicator | { slideNumber, length, hovering, prev, next, to, resize } |
 
 ### Methods
 | 方法 | 签名 |
 | --- | --- |
 | prev / next | (options?: CarouselToOptions) => void |
-| to | (index: number, options?: CarouselToOptions) => void |
+| to | (slideNumber: number, options?: CarouselToOptions) => void |
 | resize | () => void |
 
 CarouselItem 无自有 Props、事件或方法；默认插槽为页面内容。

@@ -11,8 +11,8 @@ vi.mock('vue', async () => {
     return actual.nextTick()
   } }
 })
-vi.mock('@cedarjs/shared', async () => {
-  const actual = await vi.importActual('@cedarjs/shared')
+vi.mock('@cedar-design/shared', async () => {
+  const actual = await vi.importActual('@cedar-design/shared')
   return { ...actual, doubleRaf: () => new Promise((resolve) => paints.push(resolve)) }
 })
 const owners = []

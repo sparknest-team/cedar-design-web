@@ -234,8 +234,7 @@
         "items-horizontal.vue",
         "items-vertical.vue",
         "size.vue",
-        "sub-menu.vue",
-        "theme.vue"
+        "sub-menu.vue"
       ]
     },
     {

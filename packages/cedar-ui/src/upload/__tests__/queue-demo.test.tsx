@@ -1,5 +1,5 @@
 import { flushPromises, mount } from "@vue/test-utils";
-import { afterEach, expect, test, vi } from "vitest";
+import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import Upload from "..";
 import Button from "../../button";
 import Checkbox from "../../checkbox";
@@ -8,9 +8,18 @@ import QueueDemo from "../__demos__/queue-request.vue";
 import ExternalDemo from "../__demos__/external-state.vue";
 
 const wrappers = [];
+const OriginalURL = URL;
+beforeEach(() => {
+  let sequence = 0;
+  vi.stubGlobal("URL", Object.assign(class extends OriginalURL {}, {
+    createObjectURL: vi.fn(() => `blob:queue-review-${++sequence}`),
+    revokeObjectURL: vi.fn(),
+  }));
+});
 afterEach(() => {
   wrappers.splice(0).forEach((wrapper) => wrapper.unmount());
   vi.useRealTimers();
+  vi.stubGlobal("URL", OriginalURL);
 });
 const create = (Demo = QueueDemo) => {
   vi.useFakeTimers();
@@ -48,14 +57,14 @@ test("actual queue demo cancels without stale progress and retries successfully"
   expect(wrapper.text()).toContain("活动请求：1");
   await tick(400);
   expect(wrapper.text()).toContain("(20%)");
-  await wrapper.find(".c-upload__item--uploading button").trigger("click");
+  await wrapper.find('.c-upload__item--uploading button[aria-label="取消"]').trigger("click");
   await flushPromises();
   expect(wrapper.find(".c-upload__item--canceled").exists()).toBe(true);
   expect(wrapper.text()).toContain("活动请求：0");
   const canceledState = wrapper.text();
   await tick(600);
   expect(wrapper.text()).toBe(canceledState);
-  await wrapper.find(".c-upload__item--canceled button").trigger("click");
+  await wrapper.find('.c-upload__item--canceled button[aria-label="点击重试"]').trigger("click");
   await flushPromises();
   await tick(2200);
   expect(wrapper.find(".c-upload__item--success").exists()).toBe(true);
@@ -70,7 +79,7 @@ test("first failure is visible and a retry succeeds", async () => {
   await tick(2200);
   expect(wrapper.find(".c-upload__item--error").exists()).toBe(true);
   expect(wrapper.text()).toContain("活动请求：0");
-  await wrapper.find(".c-upload__item--error button").trigger("click");
+  await wrapper.find('.c-upload__item--error button[aria-label="点击重试"]').trigger("click");
   await flushPromises();
   await tick(2200);
   expect(wrapper.find(".c-upload__item--success").exists()).toBe(true);
@@ -105,6 +114,7 @@ test("unmounting the active demo clears its request timer", async () => {
   wrapper.unmount();
   wrappers.splice(wrappers.indexOf(wrapper), 1);
   expect(vi.getTimerCount()).toBe(0);
+  expect(URL.revokeObjectURL).toHaveBeenCalledWith("blob:queue-review-1");
 });
 import { h, KeepAlive, ref } from "vue";
 test("deactivation cancels the request and reactivation can retry", async () => {
@@ -125,7 +135,7 @@ test("deactivation cancels the request and reactivation can retry", async () => 
   enabled.value = true;
   await flushPromises();
   expect(wrapper.find(".c-upload__item--canceled").exists()).toBe(true);
-  await wrapper.find(".c-upload__item--canceled button").trigger("click");
+  await wrapper.find('.c-upload__item--canceled button[aria-label="点击重试"]').trigger("click");
   await flushPromises();
   await tick(2200);
   expect(wrapper.find(".c-upload__item--success").exists()).toBe(true);

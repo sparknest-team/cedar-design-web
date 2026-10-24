@@ -17,30 +17,30 @@ import { ref } from 'vue'
 const size = ref('md')
 const treeData = [
   {
-    title: 'Trunk 0-0',
-    key: '0-0',
+    label: 'Trunk 0-0',
+    value: '0-0',
     children: [
       {
-        title: 'Branch 0-0-0',
-        key: '0-0-0',
+        label: 'Branch 0-0-0',
+        value: '0-0-0',
         children: [
           {
-            title: 'Leaf',
-            key: '0-0-0-0',
+            label: 'Leaf',
+            value: '0-0-0-0',
           },
           {
-            title: 'Leaf',
-            key: '0-0-0-1',
+            label: 'Leaf',
+            value: '0-0-0-1',
           },
         ],
       },
       {
-        title: 'Branch 0-0-1',
-        key: '0-0-1',
+        label: 'Branch 0-0-1',
+        value: '0-0-1',
         children: [
           {
-            title: 'Leaf',
-            key: '0-0-1-0',
+            label: 'Leaf',
+            value: '0-0-1-0',
           },
         ],
       },

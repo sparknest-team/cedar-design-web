@@ -1,5 +1,5 @@
 {
-  "name": "@cedarjs/resolver",
+  "name": "@cedar-design/resolver",
   "version": "1.0.0",
   "description": "Cedar resolver for unplugin-vue-components and unplugin-auto-import",
   "license": "MIT",
@@ -15,18 +15,24 @@
   "main": "lib/index.cjs",
   "module": "lib/index.js",
   "types": "lib/index.d.ts",
-  "files": ["lib"],
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "build": "tsup src/index.ts --format esm,cjs --out-dir=lib --dts --clean",
     "typecheck": "tsc --noEmit",
     "test": "pnpm build && node --test test/*.test.mjs"
   },
   "dependencies": {
-    "@cedarjs/shared": "workspace:*"
+    "@cedar-design/shared": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "catalog:",
     "tsup": "catalog:",
     "typescript": "catalog:"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

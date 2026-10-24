@@ -4,7 +4,7 @@ import { afterEach, describe, expect, test } from 'vitest'
 import NavMenu, { NavMenuItem } from '..'
 const wrappers: ReturnType<typeof mount>[] = []
 afterEach(() => wrappers.splice(0).forEach(w => w.unmount()))
-const options = [{ key: 0, label: '全部' }, { key: 'a', label: '分类 A' }, { key: 'off', label: '不可选', disabled: true }]
+const options = [{ key: 0, label: '全部' }, { key: '', label: '空字符串' }, { key: 'a', label: '分类 A' }, { key: 'off', label: '不可选', disabled: true }]
 const settle = async () => { await nextTick(); await new Promise(r => setTimeout(r, 40)); await nextTick() }
 async function create(props = {}, slots = {}) {
   const w = mount(NavMenuItem, { attachTo: document.body, props: { label: '分类', options, popupContainer: false, ...props }, slots })
@@ -12,6 +12,35 @@ async function create(props = {}, slots = {}) {
 }
 const label = (w: any) => w.find('[data-nav-item] > .c-nav-menu__label').text()
 describe('independent NavMenuItem', () => {
+  test('implicit active follows accepted model values, including zero and empty string', async () => {
+    const w = await create({ modelValue: null, defaultOpen: true, hideOnSelect: false })
+    const isActive = () => w.find('[data-nav-item]').classes().includes('c-nav-menu--active')
+    expect(isActive()).toBe(false)
+    await w.find('[data-nav-key="a"]').trigger('click'); await settle()
+    expect(w.emitted('update:modelValue')).toEqual([['a']])
+    expect(isActive()).toBe(false)
+    for (const modelValue of [0, '', 'a']) {
+      await w.setProps({ modelValue })
+      expect(isActive()).toBe(true)
+    }
+    await w.setProps({ modelValue: null })
+    expect(isActive()).toBe(false)
+  })
+  test('explicit highlight overrides styling without changing the selected value', async () => {
+    const w = await create({ modelValue: 'a', highlight: false })
+    expect(label(w)).toBe('分类 A')
+    expect(w.find('[data-nav-item]').classes()).not.toContain('c-nav-menu--active')
+    await w.setProps({ modelValue: null, highlight: true })
+    expect(label(w)).toBe('分类')
+    expect(w.find('[data-nav-item]').classes()).toContain('c-nav-menu--active')
+    expect(w.emitted('update:modelValue')).toBeUndefined()
+  })
+  test('only custom content panels retain content padding', async () => {
+    const optionsPanel = await create({ defaultOpen: true })
+    expect(optionsPanel.find('.c-nav-menu__popup').classes()).not.toContain('c-nav-menu__panel--custom')
+    const customPanel = await create({ defaultOpen: true }, { content: () => h('input') })
+    expect(customPanel.find('.c-nav-menu__popup').classes()).toContain('c-nav-menu__panel--custom')
+  })
   test('click opens options and accepted selection updates the label by default', async () => {
     const w = await create(); await w.find('[data-nav-item]').trigger('click'); await settle()
     await w.find('[data-nav-key="a"]').trigger('click'); await settle()
@@ -19,7 +48,7 @@ describe('independent NavMenuItem', () => {
     expect(w.find('[data-nav-item]').attributes('aria-expanded')).toBe('false')
   })
   test('fixed title, independent active and persistent popup', async () => {
-    const w = await create({ defaultOpen: true, hideOnSelect: false, active: false }, { label: () => '分类' })
+    const w = await create({ defaultOpen: true, hideOnSelect: false, highlight: false }, { label: () => '分类' })
     await w.find('[data-nav-key="a"]').trigger('click'); await settle()
     expect(label(w)).toBe('分类'); expect(w.find('[data-nav-item]').classes()).not.toContain('c-nav-menu--active')
     expect(w.find('[data-nav-item]').attributes('aria-expanded')).toBe('true')
@@ -55,7 +84,7 @@ describe('independent NavMenuItem', () => {
       props: { mode: 'horizontal', defaultActiveItem: 'first', popupContainer: false },
       slots: { default: () => [
         h(NavMenuItem, { name: 'first', label: 'First', options, defaultValue: 0 }),
-        h(NavMenuItem, { name: 'second', label: 'Second', options, defaultValue: 'a', active: true }),
+        h(NavMenuItem, { name: 'second', label: 'Second', options, defaultValue: 'a' }),
       ] },
     })
     wrappers.push(w); await settle()

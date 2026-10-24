@@ -98,5 +98,5 @@ Next status 循环六种本地结果状态并更新标题/图形，Reset status 
 组件导出以下类型定义
 
 ```ts
-import type { ResultInstance } from '@cedarjs/ui'
+import type { ResultInstance } from '@cedar-design/ui'
 ```

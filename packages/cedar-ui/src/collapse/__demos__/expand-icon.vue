@@ -1,11 +1,11 @@
 <template>
-  <c-collapse :default-active-names="['1', 2]">
-    <template #expand-icon="{ active }">
-      <span>{{ active ? '▼' : '▶' }}</span>
+  <c-collapse :default-value="['1', 2]">
+    <template #expand-icon="{ expanded }">
+      <span>{{ expanded ? '▼' : '▶' }}</span>
     </template>
     <c-collapse-item title="Beijing Toutiao Technology Co., Ltd." name="1">
-      <template #expand-icon="{ active }">
-        <span>{{ active ? '^^' : 'vv' }}</span>
+      <template #expand-icon="{ expanded }">
+        <span>{{ expanded ? '^^' : 'vv' }}</span>
       </template>
       <div>Beijing Toutiao Technology Co., Ltd.</div>
     </c-collapse-item>

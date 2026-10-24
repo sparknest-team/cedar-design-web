@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { UploadFileItem, UploadPreviewEvent } from '@cedarjs/ui'
+import type { UploadFileItem, UploadPreviewEvent } from '@cedar-design/ui'
 
 const files = ref<UploadFileItem[]>([
   { uid: 'folder-1', name: 'assets/logo.svg', url: '/assets/logo.svg', status: 'success', percent: 100 },

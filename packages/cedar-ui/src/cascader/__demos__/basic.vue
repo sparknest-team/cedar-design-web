@@ -7,7 +7,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import type { CascaderProps } from '@cedarjs/ui'
+import type { CascaderProps } from '@cedar-design/ui'
 
 const value = ref<CascaderProps['modelValue']>()
 

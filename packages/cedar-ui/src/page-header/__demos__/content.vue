@@ -59,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import { Message } from "@cedarjs/ui";
+import { Message } from "@cedar-design/ui";
 
 const onBack = () => Message.info("点击返回");
 const onFollow = () => Message.success("已关注项目");

@@ -92,11 +92,11 @@ TimeGrid拖动新建范围由当前指针会话拥有；取消、停用／卸载
 import {
   expandSchedulerRecurrences,
   setSchedulerRecurrenceException,
-} from "@cedarjs/ui/scheduler/core";
+} from "@cedar-design/ui/scheduler/core";
 import type {
   SchedulerRecurringEvent,
   SchedulerRecurrenceException,
-} from "@cedarjs/ui/scheduler/core";
+} from "@cedar-design/ui/scheduler/core";
 
 const series: SchedulerRecurringEvent[] = [
   {
@@ -166,7 +166,7 @@ exceptions = setSchedulerRecurrenceException(exceptions, occurrences[0], {
 | overflow    | skip（默认）跳过不存在的日期，last-day 落到月底；只用于数字日期规则，不能与 weekOfMonth 同时使用 |
 
 ```ts
-import type { SchedulerRecurrenceRule } from "@cedarjs/ui/scheduler/core";
+import type { SchedulerRecurrenceRule } from "@cedar-design/ui/scheduler/core";
 
 const rules = [
   { frequency: "monthly", dayOfMonth: 31, overflow: "skip" },
@@ -193,11 +193,11 @@ const rules = [
 import {
   isSchedulerWorkingDate,
   getSchedulerCalendarDisabledRanges,
-} from "@cedarjs/ui/scheduler/core";
+} from "@cedar-design/ui/scheduler/core";
 import type {
   SchedulerBusinessCalendar,
   SchedulerRecurrenceRule,
-} from "@cedarjs/ui/scheduler/core";
+} from "@cedar-design/ui/scheduler/core";
 
 const businessCalendar: SchedulerBusinessCalendar = {
   workingDays: [1, 2, 3, 4, 5],
@@ -237,7 +237,7 @@ isSchedulerWorkingDate("2026-02-28", businessCalendar); // true
 `splitSchedulerRecurrence` 生成系列层提案，不直接修改日历或调用服务端。示例使用外部 Cedar Dialog 选择“仅本次 / 本次及以后”，将系列与例外一起保存成功后再发布到日历。模拟保存失败会保留原数据与表单。
 
 ```ts
-import { splitSchedulerRecurrence } from "@cedarjs/ui/scheduler/core";
+import { splitSchedulerRecurrence } from "@cedar-design/ui/scheduler/core";
 
 const proposal = splitSchedulerRecurrence(
   series,
@@ -275,8 +275,8 @@ const proposal = splitSchedulerRecurrence(
 
 ```ts
 import { ref } from "vue";
-import { useSchedulerDataSource } from "@cedarjs/ui";
-import type { SchedulerRange } from "@cedarjs/ui";
+import { useSchedulerDataSource } from "@cedar-design/ui";
+import type { SchedulerRange } from "@cedar-design/ui";
 
 const range = ref<SchedulerRange>();
 const { events, loading, error, refresh } = useSchedulerDataSource({
@@ -355,7 +355,7 @@ const { events, loading, error, refresh } = useSchedulerDataSource({
 import type {
   SchedulerRequestResources,
   SchedulerResolveResources,
-} from "@cedarjs/ui";
+} from "@cedar-design/ui";
 
 const requestResources: SchedulerRequestResources = async ({
   query,
@@ -554,7 +554,7 @@ Event 新增 `resourceDetails?: Record<string, { units?: number; role?: string }
 
 <demo src="./__demos__/zoned-recurrence.vue"></demo>
 
-高级引擎从 `@cedarjs/ui/scheduler/adapters` 导入，使用 [rrule](https://github.com/jkbrzt/rrule) 解析 RFC RRULE 字段、使用 [Temporal polyfill](https://github.com/js-temporal/temporal-polyfill) 转换 IANA 时区，未替换轻量 core 重复规则。
+高级引擎从 `@cedar-design/ui/scheduler/adapters` 导入，使用 [rrule](https://github.com/jkbrzt/rrule) 解析 RFC RRULE 字段、使用 [Temporal polyfill](https://github.com/js-temporal/temporal-polyfill) 转换 IANA 时区，未替换轻量 core 重复规则。
 
 `expandSchedulerRRule({event, rule, timeZone?}, range, options?)` 接受定时种子和单个 RRULE 值（可带 RRULE: 前缀），DTSTART 由 event.start 唯一决定，不能在 rule 中再次指定。支持 BYDAY、BYSETPOS 等规则；options 提供 excludeDates/includeDates（真实时间点）、maxOccurrences、maxIterations。超出预算抛错，不静默截断。生成稳定的 seriesId/originalStart，供业务保存例外。
 
@@ -678,7 +678,7 @@ const resourceFilters = { station: ["station:north"], person: ["person:lin"] };
 
 实例方法 `duplicateEvent(id): boolean` 用于打开复制草稿；返回 `true` 只表示草稿已打开或编辑请求已发出，**不表示已保存**。日程不存在、只读或组件正在加载/保存、禁用时返回 `false`。`editable=false` 时发送 `editor-request`，其 `action='create'`、`source='duplicate'`。自定义 `editor` 插槽可调用 `duplicate()`；新建模式下该动作无效。
 
-纯核心 `duplicateSchedulerEvent(event, newId)` 从 `@cedarjs/ui/scheduler/core` 导出，返回脱离原数据的标准 `SchedulerEvent`，不修改源数据，也不执行保存。调用者负责 ID 在数据集中的唯一性；空 ID、与源相同 ID、非法或只读源日程会抛错。复制重复实例不会保留 `seriesId/originalStart`，会成为独立普通日程。标准 `metadata` 会浅复制；未声明的对象扩展字段不会自动复制，需要应用在提交前按自身规则添加。
+纯核心 `duplicateSchedulerEvent(event, newId)` 从 `@cedar-design/ui/scheduler/core` 导出，返回脱离原数据的标准 `SchedulerEvent`，不修改源数据，也不执行保存。调用者负责 ID 在数据集中的唯一性；空 ID、与源相同 ID、非法或只读源日程会抛错。复制重复实例不会保留 `seriesId/originalStart`，会成为独立普通日程。标准 `metadata` 会浅复制；未声明的对象扩展字段不会自动复制，需要应用在提交前按自身规则添加。
 
 ### 工作时间与维护时段
 
@@ -695,7 +695,7 @@ const resourceFilters = { station: ["station:north"], person: ["person:lin"] };
 默认允许重叠时，显式容量仍生效；`allow-overlap="false"` 更严格，继续禁止任何资源冲突。维护和工作时间校验也继续生效。新建、编辑、拖动、批量事务、撤销重做均校验最终排期；超额返回 `SchedulerError.code === 'capacity'`，`capacityIssues` 提供 `resourceId/start/end/load/capacity/eventIds/exceeded`。纯删除允许释放容量，外部降低容量不会自动修改已有日程。
 
 - `getSchedulerResourceLoad(events, resource, range?)` 返回有占用的分段负载，`range` 可裁剪统计范围；同一时段事件集合变化时分段，未配置容量的资源也可统计。
-- `getSchedulerCapacityIssues(event, events, resources)` 按 ID 替换候选日程，只检查候选时间和关联资源，返回超额时段。两项工具均可从 `@cedarjs/ui/scheduler/core` 导入，无 Vue/DOM 依赖。
+- `getSchedulerCapacityIssues(event, events, resources)` 按 ID 替换候选日程，只检查候选时间和关联资源，返回超额时段。两项工具均可从 `@cedar-design/ui/scheduler/core` 导入，无 Vue/DOM 依赖。
 
 容量使用已知资源目录（包括远程回显）和当前已加载日程。未知资源无法推断容量，未加载日程也不会被计入；服务端应在保存事务中校验完整数据和并发版本。`resourceDetails` 补充占用量，`resourceIds` 仍是唯一分配来源。网格的灰色时段仍表示工作时间/维护，负载由纯工具输出，可通过资源表头插槽和 Cedar 组件展示。
 
@@ -725,7 +725,7 @@ const resourceFilters = { station: ["station:north"], person: ["person:lin"] };
 import type {
   SchedulerWorkingHours,
   SchedulerDisabledRange,
-} from "@cedarjs/ui";
+} from "@cedar-design/ui";
 const workingHours: SchedulerWorkingHours[] = [
   { daysOfWeek: [1, 2, 3, 4, 5], startMinute: 540, endMinute: 720 },
   { daysOfWeek: [1, 2, 3, 4, 5], startMinute: 780, endMinute: 1080 },
@@ -781,7 +781,7 @@ const disabledRanges: SchedulerDisabledRange[] = [
 **保存钩子约定：**设置 `before-transaction` 后，它统一接管单条、批量、撤销和重做，替代 `before-change`，避免同一操作保存两次。只有 `before-change` 的旧应用保持单条行为；执行多条事务会明确返回 `transaction-hook-required`，请迁移到一次性的原子保存接口。前端原子提交不能替代后端数据库事务。
 
 ```ts
-import type { SchedulerBeforeTransaction } from "@cedarjs/ui";
+import type { SchedulerBeforeTransaction } from "@cedar-design/ui";
 const beforeTransaction: SchedulerBeforeTransaction = async (context) => {
   // 在这里向业务后端提交整个 context.changes；失败抛错或返回 false。
   // 后端应对整批变更校验版本、权限和最终资源占用，再原子保存。
@@ -917,7 +917,7 @@ import type {
   SchedulerEditorRequest,
   SchedulerEditorAction,
   SchedulerEditorSlotProps,
-} from "@cedarjs/ui";
+} from "@cedar-design/ui";
 
 interface SchedulerEvent {
   id: string;
@@ -1011,7 +1011,7 @@ import {
   applySchedulerChange,
   getSchedulerConflicts,
   layoutSchedulerEvents,
-} from "@cedarjs/ui/scheduler/core";
+} from "@cedar-design/ui/scheduler/core";
 ```
 
 其余日期与时间线工具也从该入口导出。核心提供计算与不可变变更，不承担网络、权限认证或数据库事务。

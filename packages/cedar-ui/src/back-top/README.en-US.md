@@ -63,7 +63,7 @@ When `popup-container=false`, the button is positioned absolutely; give its cont
 ### Types
 
 ```ts
-import type { BackTopProps, BackTopInstance, BackTopTarget, BackTopEasing } from '@cedarjs/ui'
+import type { BackTopProps, BackTopInstance, BackTopTarget, BackTopEasing } from '@cedar-design/ui'
 ```
 
 ### CSS tokens

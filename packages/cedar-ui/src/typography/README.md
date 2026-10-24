@@ -137,5 +137,5 @@ import type {
   TypographyTitleInstance,
   TypographyTextInstance,
   EllipsisConfig,
-} from '@cedarjs/ui'
+} from '@cedar-design/ui'
 ```

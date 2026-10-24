@@ -1,4 +1,4 @@
-import type { FormProps, FormItemProps, FormLayout, FormLabelAlign, FormColProps, FormLabelFlex } from '@cedarjs/ui'
+import type { FormProps, FormItemProps, FormLayout, FormLabelAlign, FormColProps, FormLabelFlex } from '@cedar-design/ui'
 
 const layout: FormLayout = 'horizontal'
 const align: FormLabelAlign = 'left'

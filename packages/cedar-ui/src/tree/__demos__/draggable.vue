@@ -8,56 +8,56 @@ import { ref } from 'vue'
 
 const defaultTreeData = [
   {
-    title: 'Trunk 0-0',
-    key: '0-0',
+    label: 'Trunk 0-0',
+    value: '0-0',
     children: [
       {
-        title: 'Leaf 0-0-1',
-        key: '0-0-1',
+        label: 'Leaf 0-0-1',
+        value: '0-0-1',
       },
       {
-        title: 'Branch 0-0-2',
-        key: '0-0-2',
+        label: 'Branch 0-0-2',
+        value: '0-0-2',
         disableCheckbox: true,
         children: [
           {
             draggable: false,
-            title: 'Leaf 0-0-2-1 (Drag disabled)',
-            key: '0-0-2-1',
+            label: 'Leaf 0-0-2-1 (Drag disabled)',
+            value: '0-0-2-1',
           },
         ],
       },
     ],
   },
   {
-    title: 'Trunk 0-1',
-    key: '0-1',
+    label: 'Trunk 0-1',
+    value: '0-1',
     children: [
       {
-        title: 'Branch 0-1-1',
-        key: '0-1-1',
+        label: 'Branch 0-1-1',
+        value: '0-1-1',
         checkable: false,
         children: [
           {
-            title: 'Leaf 0-1-1-1',
-            key: '0-1-1-1',
+            label: 'Leaf 0-1-1-1',
+            value: '0-1-1-1',
           },
           {
-            title: 'Leaf 0-1-1-2',
-            key: '0-1-1-2',
+            label: 'Leaf 0-1-1-2',
+            value: '0-1-1-2',
           },
         ],
       },
       {
-        title: 'Leaf 0-1-2',
-        key: '0-1-2',
+        label: 'Leaf 0-1-2',
+        value: '0-1-2',
       },
     ],
   },
 ]
 
 const treeData = ref(defaultTreeData)
-const checkedKeys = ref([])
+const checkedValues = ref([])
 const checked = ref(false)
 
 function onDrop({ dragNode, dropNode, dropPosition }) {

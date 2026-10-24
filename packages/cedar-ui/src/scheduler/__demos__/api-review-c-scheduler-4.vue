@@ -117,7 +117,7 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review-c-scheduler-4.config.json";
 
 import { ref } from "vue";
@@ -125,7 +125,7 @@ import type {
   SchedulerEvent,
   SchedulerResource,
   SchedulerEventTemplate,
-} from "@cedarjs/ui";
+} from "@cedar-design/ui";
 const devices: SchedulerResource[] = [
   { id: "laser-01", label: "激光切割机 01" },
   { id: "printer-02", label: "3D 打印机 02" },

@@ -83,5 +83,5 @@ permalink: /components/popconfirm/
 组件导出以下类型定义
 
 ```ts
-import type { PopconfirmInstance } from '@cedarjs/ui'
+import type { PopconfirmInstance } from '@cedar-design/ui'
 ```

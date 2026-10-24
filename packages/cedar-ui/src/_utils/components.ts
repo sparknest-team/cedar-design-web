@@ -1,5 +1,5 @@
 import { type PropType, type ExtractPropTypes } from 'vue'
-import { createNamespaceFn } from '@cedarjs/shared'
+import { createNamespaceFn } from '@cedar-design/shared'
 
 export type ExtractPublicPropTypes<P> = Partial<ExtractPropTypes<P>>
 

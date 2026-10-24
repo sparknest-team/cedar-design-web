@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue'
 import type { NavMenuKey, NavMenuOption } from '../types'
 
-const section = ref('overview')
+const section = ref<NavMenuKey | null>('overview')
 const project = ref<NavMenuKey | null>(null)
 const keyword = ref('')
 const appliedKeyword = ref('')
@@ -16,9 +16,9 @@ const projectLabel = computed(() => projects.find(item => item.key === project.v
 
 <template>
   <div class="vertical-items-demo">
-    <c-nav-menu mode="vertical" class="vertical-items-demo__menu">
-      <c-nav-menu-item label="工作概览" :active="section === 'overview'" @click="section = 'overview'" />
-      <c-nav-menu-item label="我的任务" :active="section === 'tasks'" @click="section = 'tasks'" />
+    <c-nav-menu v-model:active-item="section" mode="vertical" class="vertical-items-demo__menu">
+      <c-nav-menu-item label="工作概览" name="overview" />
+      <c-nav-menu-item label="我的任务" name="tasks" />
       <c-nav-menu-item
         v-model="project"
         label="选择项目"
@@ -28,7 +28,7 @@ const projectLabel = computed(() => projects.find(item => item.key === project.v
       />
       <c-nav-menu-item
         label="高级筛选"
-        :active="!!appliedKeyword"
+        :highlight="!!appliedKeyword"
         popup-layout="full-height"
         placement="right-start"
         :popup-style="{ width: 'min(360px, 100vw)' }"

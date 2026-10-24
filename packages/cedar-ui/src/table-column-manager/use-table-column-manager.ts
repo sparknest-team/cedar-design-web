@@ -20,7 +20,7 @@ import {
 } from 'vue'
 import type { TableColumnData } from '../table/types'
 import Menu, { MenuOption } from '../menu'
-import { IconMore } from '@cedarjs/icons-vue'
+import { IconMore } from '@cedar-design/icons-vue'
 import { cloneDeep } from 'lodash-es'
 import type {
   ColumnCatalog,

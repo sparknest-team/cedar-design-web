@@ -14,7 +14,7 @@ import ButtonDemo from "../__demos__/variants.vue";
 
 useDemoControls();
 
-vi.mock("@cedarjs/ui", () => ({ Message: { info: vi.fn() } }));
+vi.mock("@cedar-design/ui", () => ({ Message: { info: vi.fn() } }));
 // Documentation bootstrap needs @config in the site; component tests isolate that shell.
 
 const components = {
@@ -62,23 +62,28 @@ test("button catalog controls update variant and size while preserving every sem
   }
 });
 
-test("split button variant demo starts neutral and radio controls update both appearance roles", async () => {
+test("split button variant catalog keeps all four neutral variants and working primary and menu actions", async () => {
+  const { Message } = await import("@cedar-design/ui");
+  vi.clearAllMocks();
   const wrapper = mount(SplitDemo, { global: { components } });
   try {
-    const buttons = () => wrapper.findAllComponents(Button);
-    for (const button of buttons()) {
-      expect(button.props("status")).toBeUndefined();
-      expect(button.classes()).toContain("c-button--status-default");
-      expect(button.classes()).toContain("c-button--variant-default");
+    const splits = wrapper.findAllComponents(SplitButton);
+    const variants = ["default", "outline", "tonal", "text"];
+    expect(splits).toHaveLength(variants.length);
+    for (const [index, split] of splits.entries()) {
+      const buttons = split.findAllComponents(Button);
+      expect(buttons).toHaveLength(2);
+      for (const button of buttons) {
+        expect(button.props("status")).toBeUndefined();
+        expect(button.classes()).toContain("c-button--status-default");
+        expect(button.classes()).toContain(`c-button--variant-${variants[index]}`);
+      }
+      await buttons[0].trigger("click");
+      expect(Message.info).toHaveBeenLastCalledWith("发布成功");
+      split.vm.$emit("select", "draft", { label: "保存草稿" });
+      expect(Message.info).toHaveBeenLastCalledWith("保存草稿");
     }
-    const groups = wrapper.findAllComponents(RadioGroup);
-    groups[0].vm.$emit("update:modelValue", "outline");
-    groups[1].vm.$emit("update:modelValue", "danger");
-    await nextTick();
-    for (const button of buttons()) {
-      expect(button.classes()).toContain("c-button--variant-outline");
-      expect(button.classes()).toContain("c-button--status-danger");
-    }
+    expect(Message.info).toHaveBeenCalledTimes(variants.length * 2);
   } finally {
     wrapper.unmount();
   }

@@ -3,7 +3,7 @@
 </template>
 <script setup lang="ts">
 import { computed } from 'vue'
-import { IconCheckCircleFill, IconCloseCircleFill, IconExclamationCircleFill, IconLoading } from '@cedarjs/icons-vue'
+import { IconCheckCircleFill, IconCloseCircleFill, IconExclamationCircleFill, IconLoading } from '@cedar-design/icons-vue'
 import { createNamespace } from '../_utils/global-config'
 
 defineOptions({ name: createNamespace('input-feedback').name })

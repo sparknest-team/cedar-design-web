@@ -31,7 +31,7 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review.config.json";
 
 import { ref } from "vue";
@@ -41,7 +41,7 @@ import {
   Input,
   Select,
   type FilterFormField,
-} from "@cedarjs/ui";
+} from "@cedar-design/ui";
 
 const collapsed = ref(true);
 const result = ref("尚未搜索");

@@ -4,7 +4,7 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review-c-image-3.config.json";
 </script>
 <template>
@@ -14,7 +14,7 @@ import __apiReviewRawConfig from "./api-review-c-image-3.config.json";
   >
     <c-image
       width="200"
-      src="invalid-image.jpg"
+      src="data:image/png;base64,AA=="
       title="一只猫"
       description="错误时仍显示底部信息"
       hide-footer="never"

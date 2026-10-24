@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { Ripple } from "@cedarjs/ui";
-import "@cedarjs/ui/ripple/style";
+import { Ripple } from "@cedar-design/ui";
+import "@cedar-design/ui/ripple/style";
 
 const vRipple = Ripple;
 const disabled = ref(false);
@@ -9,14 +9,14 @@ const disabled = ref(false);
 
 <template>
   <c-space wrap>
-    <c-button :ripple="false" v-ripple="{ disabled }" class="ripple-demo"
-      >Ripple</c-button
+    <div role="button" tabindex="0" v-ripple="{ disabled }" class="ripple-demo"
+      >Ripple</div
     >
-    <c-button
-      :ripple="false"
+    <div
+      role="button" tabindex="0"
       v-ripple="{ disabled }"
       class="ripple-demo ripple-demo--long"
-      >600ms 扩散／800ms 消退</c-button
+      >600ms 扩散／800ms 消退</div
     >
     <c-button @click="disabled = !disabled">{{
       disabled ? "启用水波" : "禁用水波"

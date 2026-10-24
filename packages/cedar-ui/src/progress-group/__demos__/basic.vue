@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ProgressGroupItem } from '@cedarjs/ui'
+import type { ProgressGroupItem } from '@cedar-design/ui'
 
 const items: ProgressGroupItem[] = [
   { label: '系统', value: 24, color: '#64748b' },

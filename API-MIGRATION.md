@@ -29,7 +29,7 @@ clickToClose 改为 closeOnClickReference。模板使用对应 kebab-case 写法
 
 ## 组件及命名
 
-- Cedar 与 Maple 的命令菜单统一为 `Menu`；子路径分别为 `@cedarjs/ui/menu` 和 `@maplejs/maple-ui/menu`，模板标签分别为 `<c-menu>` 和 `<mp-menu>`。公开类型为 `MenuProps`、`MenuInstance`、`MenuPosition`；选项数据类型为 `MenuOptionData`，条目组件为 `MenuOption`。
+- Cedar 与 Maple 的命令菜单统一为 `Menu`；子路径分别为 `@cedar-design/ui/menu` 和 `@maple-design/ui/menu`，模板标签分别为 `<c-menu>` 和 `<mp-menu>`。公开类型为 `MenuProps`、`MenuInstance`、`MenuPosition`；选项数据类型为 `MenuOptionData`，条目组件为 `MenuOption`。
 - Menu 不支持 `multiple`，也不导出 MenuGroup/MenuSubmenu；使用 `options` 的 `type: 'group' | 'divider'` 与 `children` 描述结构。单值 `modelValue` 和 `select(value, option, event)` 保留，label/icon/extra 支持 VNode、上下文渲染函数及根级作用域插槽。
 - 样式类、CSS 变量和内部 DOM 标记统一使用 `c-menu-*` / `mp-menu-*`、`--c-menu-*` / `--mp-menu-*` 与 `data-menu-*`，不保留旧命名兼容别名。
 - Maple Sticky 改名 Affix；手动重新定位使用 updatePosition()。target 表示滚动目标；

@@ -7,7 +7,7 @@ function previewSingle() {
 }
 
 function previewMultiple() {
-  handle = imagePreview({ images, current: 0 })
+  handle = imagePreview({ images, modelValue: 1 })
 }
 
 function next() {

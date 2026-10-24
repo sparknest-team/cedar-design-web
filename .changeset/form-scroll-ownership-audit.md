@@ -1,5 +1,5 @@
 ---
-"@cedarjs/ui": patch
+"@cedar-design/ui": patch
 ---
 
 Document Maple Form scroll-task baseline boundaries without extrapolating controlled failures to Cedar or claiming a completed repair/native acceptance.

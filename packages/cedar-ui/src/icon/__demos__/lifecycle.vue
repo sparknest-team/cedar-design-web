@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, getCurrentInstance, KeepAlive, ref } from "vue";
-import { IconArrowLeft, IconArrowRight } from "@cedarjs/icons-vue";
+import { IconArrowLeft, IconArrowRight } from "@cedar-design/icons-vue";
 
 const language = ref("zh-CN");
 const english = computed(() => language.value === "en-US");

@@ -19,7 +19,7 @@ permalink: /components/style-provider/
 ## 全局调用
 
 ```ts
-import { StyleProvider, Themes } from '@cedarjs/ui'
+import { StyleProvider, Themes } from '@cedar-design/ui'
 
 StyleProvider.setStyleVars(Themes.default.dark)
 StyleProvider.setStyleVars(Themes.maple.light)
@@ -34,7 +34,7 @@ StyleProvider.setStyleVars(null)
 ## 安装与默认值
 
 ```ts
-import { StyleProvider } from '@cedarjs/ui'
+import { StyleProvider } from '@cedar-design/ui'
 
 app.use(StyleProvider)
 

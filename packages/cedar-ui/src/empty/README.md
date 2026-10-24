@@ -81,7 +81,7 @@ Reload 只更新本地刷新次数和描述，不请求服务；真实业务请�
 组件导出以下类型定义
 
 ```ts
-import type { EmptyImageSize, EmptyProps } from '@cedarjs/ui'
+import type { EmptyImageSize, EmptyProps } from '@cedar-design/ui'
 ```
 
 ConfigProvider 的 `empty` 插槽可以替换未自定义内容的 Empty，不作为 Empty 的公开 Prop。

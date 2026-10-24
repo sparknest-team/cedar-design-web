@@ -4,7 +4,7 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review-c-radio-1.config.json";
 </script>
 <template>
@@ -22,7 +22,7 @@ import __apiReviewRawConfig from "./api-review-c-radio-1.config.json";
           v-if="__apiReview.slotEnabled['radio'] !== false"
           #radio="{ checked }"
         >
-          <c-tag :checked="checked" checkable>This is a tag radio 1</c-tag>
+          <c-tag :model-value="checked" checkable>This is a tag radio 1</c-tag>
         </template>
       </c-radio>
       <c-radio
@@ -34,7 +34,7 @@ import __apiReviewRawConfig from "./api-review-c-radio-1.config.json";
           v-if="__apiReview.slotEnabled['radio'] !== false"
           #radio="{ checked }"
         >
-          <c-tag :checked="checked" checkable>This is a tag radio 2</c-tag>
+          <c-tag :model-value="checked" checkable>This is a tag radio 2</c-tag>
         </template>
       </c-radio>
       <c-radio
@@ -46,7 +46,7 @@ import __apiReviewRawConfig from "./api-review-c-radio-1.config.json";
           v-if="__apiReview.slotEnabled['radio'] !== false"
           #radio="{ checked }"
         >
-          <c-tag :checked="checked" checkable>This is a tag radio 3</c-tag>
+          <c-tag :model-value="checked" checkable>This is a tag radio 3</c-tag>
         </template>
       </c-radio>
     </c-radio-group>

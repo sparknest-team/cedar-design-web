@@ -54,7 +54,7 @@
 
 <script setup lang="ts">
 import { computed, nextTick, ref, useId, watch, type ComponentPublicInstance } from 'vue'
-import { IconCalendar, IconClockCircle } from '@cedarjs/icons-vue'
+import { IconCalendar, IconClockCircle } from '@cedar-design/icons-vue'
 import FieldDecorator from '../../field-decorator/FieldDecorator.vue'
 import { fieldDecoratorProps } from '../../field-decorator/props'
 import { splitInputAttrs } from '../../input/native-attrs'

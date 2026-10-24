@@ -6,7 +6,7 @@ const more = ref(false)
 <template>
   <div class="pagination-demo">
     <div class="pagination-demo-controls"><c-radio-group v-model="buffer"><c-radio v-for="value in [0, 1, 2]" :key="value" :value="value">Buffer {{ value }}</c-radio></c-radio-group><c-switch v-model="more" /> Show more</div>
-    <c-pagination :total="500" :default-current="12" :buffer-size="buffer" :show-more="more" :responsive="false" />
+    <c-pagination :total="500" :default-value="12" :buffer-size="buffer" :show-more="more" :responsive="false" />
   </div>
 </template>
 <style scoped>

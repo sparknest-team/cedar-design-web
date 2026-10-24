@@ -3,7 +3,7 @@ import type {
   SchedulerInstance,
   SchedulerBeforeChange,
   SchedulerEvent,
-} from "@cedarjs/ui";
+} from "@cedar-design/ui";
 import {
   getSchedulerRange,
   applySchedulerChange,

@@ -91,7 +91,7 @@ import type {
   InfiniteScrollMethods,
   InfiniteScrollProps,
   InfiniteScrollStatus,
-} from "@cedarjs/ui";
+} from "@cedar-design/ui";
 ```
 
 ### 样式变量

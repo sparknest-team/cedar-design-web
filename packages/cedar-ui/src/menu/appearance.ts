@@ -1,3 +1,4 @@
+import type { MenuOptionSlots } from './types'
 import { getRootTriggerOptions } from './trigger-options'
 import type { MenuSubmenuTrigger } from './types'
 import type { CSSProperties, Slots, Ref } from 'vue'
@@ -8,7 +9,7 @@ import { computed, h } from 'vue'
 import { getPrefixCls } from '../_utils/global-config'
 import Scrollbar from '../scrollbar'
 import Empty from '../empty'
-import { IconRight } from '@cedarjs/icons-vue/icon-right'
+import { IconRight } from '@cedar-design/icons-vue/icon-right'
 export function rootTriggerAppearance(props: MenuProps) {
   return { ...getRootTriggerOptions(props), popupOffset: 4, animationName: 'slide-dynamic-origin', autoFitTransformOrigin: true, openedClass: `${getPrefixCls('menu')}-open` }
 }
@@ -18,9 +19,9 @@ export function panelAppearance(props: { isEmpty: boolean; submenu: boolean }, s
   return { class: [p, { [`${p}-has-footer`]: !!slots.footer, [`${p}-submenu`]: props.submenu }], empty: props.isEmpty, emptyClass: `${p}-empty`, emptyContent: () => slots.empty?.() ?? h(Empty),
     scroll: Scrollbar, scrollClass: `${p}-list-wrapper`, scrollStyle: style, listTag: 'ul', listClass: `${p}-list`, footerClass: `${p}-footer` }
 }
-export function useOptionAppearance(props: { active: boolean; childrenTrigger: boolean }, state: OptionState, slots: Slots) {
+export function useOptionAppearance(props: { highlight: boolean; childrenTrigger: boolean }, state: OptionState, slots: MenuOptionSlots) {
   const p = getPrefixCls('menu-option')
-  return computed<MenuViewOptions>(() => ({ tag: 'li', class: [p, { [`${p}-disabled`]: state.disabled.value, [`${p}-active`]: props.active, [`${p}-selected`]: state.optionSelected.value, [`${p}-has-suffix`]: !!slots.suffix || props.childrenTrigger }],
+  return computed<MenuViewOptions>(() => ({ tag: 'li', class: [p, { [`${p}-disabled`]: state.disabled.value, [`${p}-active`]: props.highlight || state.isFocusing.value, [`${p}-selected`]: state.optionSelected.value, [`${p}-has-suffix`]: !!slots.suffix || props.childrenTrigger }],
     contentTag: 'span', contentClass: `${p}-content`, label: state.labelVNode.value,
     iconClass: `${p}-icon`, suffixClass: `${p}-suffix`, arrow: props.childrenTrigger && !slots.suffix ? () => h(IconRight) : undefined, arrowClass: `${p}-suffix` }))
 }

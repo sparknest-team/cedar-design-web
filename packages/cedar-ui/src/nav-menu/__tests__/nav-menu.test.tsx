@@ -63,7 +63,7 @@ describe('NavMenu options API', () => {
     expect(row(w, 1).exists()).toBe(false); expect(row(w, 0).text()).toContain('Changed')
   })
   test('VNode, render functions, scoped slots and node props compose', async () => {
-    const click = vi.fn(); const render = vi.fn(context => context.selected ? 'Selected' : 'Unselected')
+    const click = vi.fn(); const render = vi.fn(context => context.active ? 'Selected' : 'Unselected')
     const w = await create({ options: [{ key: 'x', label: render, icon: h('i', 'icon'), extra: h('b', 'extra') }], nodeProps: () => ({ 'data-custom': 'yes', onClick: click }) })
     expect(w.text()).toContain('Unselected'); expect(w.find('i').text()).toBe('icon')
     await row(w, 'x').trigger('click'); expect(click).toHaveBeenCalledTimes(1); expect(w.text()).toContain('Selected')

@@ -4,8 +4,8 @@
       <c-checkbox v-model="leafChecksOnly">Leaf checkboxes only</c-checkbox>
       <c-checkbox v-model="leafSelectionOnly">Leaf selection only</c-checkbox>
       <c-checkbox v-model="strict">Strict checks</c-checkbox>
-      <c-tag>Checked: {{ checkedKeys.join(', ') || '-' }}</c-tag>
-      <c-tag>Selected: {{ selectedKeys.join(', ') || '-' }}</c-tag>
+      <c-tag>Checked: {{ checkedValues.join(', ') || '-' }}</c-tag>
+      <c-tag>Selected: {{ selectedValues.join(', ') || '-' }}</c-tag>
     </c-space>
     <c-tree
       :block-node="true"
@@ -13,8 +13,8 @@
       :selectable="leafSelectionOnly ? isLeafNode : true"
       :check-strictly="strict"
       :data="treeData"
-      @check="keys => checkedKeys = keys"
-      @select="keys => selectedKeys = keys"
+      @check="keys => checkedValues = keys"
+      @select="keys => selectedValues = keys"
     >
       <template #extra="nodeData">
         <c-button
@@ -37,15 +37,15 @@ import { ref } from 'vue'
 const leafChecksOnly = ref(false)
 const leafSelectionOnly = ref(false)
 const strict = ref(false)
-const checkedKeys = ref<(string | number)[]>([])
-const selectedKeys = ref<(string | number)[]>([])
+const checkedValues = ref<(string | number)[]>([])
+const selectedValues = ref<(string | number)[]>([])
 const isLeafNode = (_node: unknown, info: { isLeaf: boolean }) => info.isLeaf
 
 function onIconClick(nodeData) {
   const children = nodeData.children || []
   children.push({
-    title: 'new tree node',
-    key: nodeData.key + '-' + (children.length + 1),
+    label: 'new tree node',
+    value: nodeData.key + '-' + (children.length + 1),
   })
   nodeData.children = children
 
@@ -54,46 +54,46 @@ function onIconClick(nodeData) {
 
 const treeData = ref([
   {
-    title: 'Trunk',
-    key: '0-0',
+    label: 'Trunk',
+    value: '0-0',
     children: [
       {
-        title: 'Leaf',
-        key: '0-0-1',
+        label: 'Leaf',
+        value: '0-0-1',
       },
       {
-        title: 'Branch',
-        key: '0-0-2',
+        label: 'Branch',
+        value: '0-0-2',
         children: [
           {
-            title: 'Leaf',
-            key: '0-0-2-1',
+            label: 'Leaf',
+            value: '0-0-2-1',
           },
         ],
       },
     ],
   },
   {
-    title: 'Trunk',
-    key: '0-1',
+    label: 'Trunk',
+    value: '0-1',
     children: [
       {
-        title: 'Branch',
-        key: '0-1-1',
+        label: 'Branch',
+        value: '0-1-1',
         children: [
           {
-            title: 'Leaf',
-            key: '0-1-1-1',
+            label: 'Leaf',
+            value: '0-1-1-1',
           },
           {
-            title: 'Leaf',
-            key: '0-1-1-2',
+            label: 'Leaf',
+            value: '0-1-1-2',
           },
         ],
       },
       {
-        title: 'Leaf',
-        key: '0-1-2',
+        label: 'Leaf',
+        value: '0-1-2',
       },
     ],
   },

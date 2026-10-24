@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { FormItemValidateStatus } from '@cedarjs/ui'
+import type { FormItemValidateStatus } from '@cedar-design/ui'
 const status = ref<FormItemValidateStatus>('warning')
 const statuses: FormItemValidateStatus[] = ['success', 'warning', 'error', 'validating']
 </script>

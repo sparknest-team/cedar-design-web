@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-const current = ref(0);
+const current = ref(1);
 const playing = ref(true);
 const changes = ref(0);
 const sources = ["/cat.jpg", "/cat2.jpg", "/cat3.jpg"];
@@ -11,7 +11,7 @@ const sources = ["/cat.jpg", "/cat2.jpg", "/cat3.jpg"];
     <c-checkbox v-model="playing"> 自动播放</c-checkbox>
     <p role="status">当前页：{{ current + 1 }}；切换次数：{{ changes }}</p>
     <c-carousel
-      v-model:current="current"
+      v-model="current"
       height="180px"
       :auto-play="playing ? 2000 : false"
       @change="changes += 1"

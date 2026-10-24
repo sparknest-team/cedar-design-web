@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import { inBrowser } from '@cedarjs/shared'
+import { inBrowser } from '@cedar-design/shared'
 import { onSmartMounted } from './onSmartMounted'
 import { onWindowResize } from './onWindowResize'
 

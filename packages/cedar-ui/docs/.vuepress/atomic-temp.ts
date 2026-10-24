@@ -5,6 +5,16 @@ import type { App, Plugin } from '@vuepress/core'
 /** Keep Vite from reading a truncated page-data module during regeneration. */
 export function protectTempWrites(app: Pick<App, 'writeTemp' | 'dir'>) {
   const pending = new Map<string, Promise<string>>()
+  const directories = new Map<string, Promise<void>>()
+  const ensureDirectory = (directory: string) => {
+    let ready = directories.get(directory)
+    if (!ready) {
+      ready = mkdir(directory, { recursive: true }).then(() => {})
+      directories.set(directory, ready)
+      ready.catch(() => { if (directories.get(directory) === ready) directories.delete(directory) })
+    }
+    return ready
+  }
   let sequence = 0
   app.writeTemp = (file, content) => {
     const target = app.dir.temp(file)
@@ -14,13 +24,25 @@ export function protectTempWrites(app: Pick<App, 'writeTemp' | 'dir'>) {
       } catch (error) {
         if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error
       }
-      await mkdir(dirname(target), { recursive: true })
+      const directory = dirname(target)
+      await ensureDirectory(directory)
       const temporary = `${target}.${process.pid}.${sequence++}.tmp`
+      let renamed = false
       try {
-        await writeFile(temporary, content)
+        try {
+          await writeFile(temporary, content)
+        } catch (error) {
+          if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error
+          // A developer may clean .temp while dev is running. Recreate a
+          // removed directory instead of trusting the successful mkdir cache.
+          directories.delete(directory)
+          await ensureDirectory(directory)
+          await writeFile(temporary, content)
+        }
         await rename(temporary, target)
+        renamed = true
       } finally {
-        await unlink(temporary).catch(error => {
+        if (!renamed) await unlink(temporary).catch(error => {
           if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error
         })
       }

@@ -1,0 +1,29 @@
+import { nextTick } from 'vue'
+import { mount } from '@vue/test-utils'
+import { expect, test, vi } from 'vitest'
+import Menu, { MenuOption } from '..'
+import Button from '../../button'
+import Space from '../../space'
+import Demo from '../__demos__/trigger.vue'
+
+test('trigger demo closes the click menu when the hover button is clicked', async () => {
+  vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
+  const wrapper = mount(Demo, { attachTo: document.body, global: { components: {
+    CMenu: Menu, CMenuOption: MenuOption, CButton: Button, CSpace: Space,
+  } } })
+  try {
+    const menus = wrapper.findAllComponents(Menu)
+    const buttons = wrapper.findAll('button')
+    await buttons[0].trigger('click')
+    await nextTick()
+    expect(menus[0].emitted('update:open')).toEqual([[true]])
+    await buttons[1].trigger('mouseenter')
+    vi.advanceTimersByTime(110)
+    await nextTick()
+    expect(menus[1].emitted('update:open')).toEqual([[true]])
+    await buttons[1].trigger('click')
+    await nextTick()
+    expect(menus[0].emitted('update:open')).toEqual([[true], [false]])
+    expect(menus[1].emitted('update:open')).toEqual([[true]])
+  } finally { wrapper.unmount(); vi.useRealTimers() }
+})

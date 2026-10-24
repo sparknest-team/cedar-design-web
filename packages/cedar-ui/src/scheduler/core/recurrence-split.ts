@@ -2,7 +2,7 @@ import {
   cloneSchedulerEvent,
   schedulerDate,
   validateSchedulerEvent,
-} from "./index";
+} from "./base";
 import { expandSchedulerRecurrences } from "./recurrence";
 import type {
   SchedulerOccurrence,

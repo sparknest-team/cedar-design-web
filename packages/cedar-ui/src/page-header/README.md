@@ -74,7 +74,7 @@ permalink: /components/page-header/
 ## 类型定义
 
 ```ts
-import type { PageHeaderProps } from '@cedarjs/ui'
+import type { PageHeaderProps } from '@cedar-design/ui'
 ```
 
 ## 同源实现与平台边界

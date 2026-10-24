@@ -1,5 +1,5 @@
 import type { SchedulerDate, SchedulerEvent } from "./types";
-import { schedulerDate, schedulerDateKey } from "./index";
+import { schedulerDate, schedulerDateKey } from "./base";
 
 export interface SchedulerWorkingHours {
   daysOfWeek: number[];

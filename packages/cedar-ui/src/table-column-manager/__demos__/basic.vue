@@ -38,7 +38,7 @@ import type {
   ColumnManagerItem,
   ColumnManagerResult,
   TableColumnData,
-} from '@cedarjs/ui'
+} from '@cedar-design/ui'
 
 const openDrawer = ref(false)
 const openDialog = ref(false)

@@ -26,7 +26,7 @@
 
 <script setup lang="ts">
 import { computed, ref, useAttrs, useSlots } from 'vue'
-import { IconEye, IconEyeInvisible } from '@cedarjs/icons-vue'
+import { IconEye, IconEyeInvisible } from '@cedar-design/icons-vue'
 import { useFieldLocale } from '../field-decorator/use-field-locale'
 import { createNamespace } from '../_utils/global-config'
 import Input from './input.vue'

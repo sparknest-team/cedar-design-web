@@ -71,8 +71,8 @@ test('AutoComplete candidate replacement retires the old keyboard key and keeps 
 })
 test('TreeSelect async branch loading is deduplicated and Enter uses newly loaded candidates', async () => {
   const task = deferred()
-  const data = reactive<any[]>([{ key: 'parent', title: 'Parent', isLeaf: false }])
-  const loadMore = vi.fn(async (node: any) => { await task.promise; node.children = [{ key: 'fresh', title: 'Fresh', isLeaf: true }] })
+  const data = reactive<any[]>([{ value: 'parent', label: 'Parent', isLeaf: false }])
+  const loadMore = vi.fn(async (node: any) => { await task.promise; node.children = [{ value: 'fresh', label: 'Fresh', isLeaf: true }] })
   const f = formField(TreeSelect, { data, loadMore, selectable: 'leaf', treeProps: { defaultExpandAll: false, animation: true } })
   await f.open(); const input = f.panel().get('input')
   await input.trigger('keydown', { key: 'Enter' }); await input.trigger('keydown', { key: 'Enter' }); await flushPromises()
@@ -85,8 +85,8 @@ test('TreeSelect async branch loading is deduplicated and Enter uses newly loade
 })
 test('TreeSelect reset retires late expansion/checking and asynchronous confirmation', async () => {
   const load = deferred(), save = deferred<void | false>()
-  const data = reactive<any[]>([{ key: 'parent', title: 'Parent', isLeaf: false }])
-  const loadMore = vi.fn(async (node: any) => { await load.promise; node.children = [{ key: 'fresh', title: 'Fresh', isLeaf: true }] })
+  const data = reactive<any[]>([{ value: 'parent', label: 'Parent', isLeaf: false }])
+  const loadMore = vi.fn(async (node: any) => { await load.promise; node.children = [{ value: 'fresh', label: 'Fresh', isLeaf: true }] })
   const f = formField(TreeSelect, { data, loadMore, multiple: true, treeCheckable: true, beforeCommit: () => save.promise, treeProps: { defaultExpandAll: false, animation: false } }, ['parent'])
   await f.open(); const tree = f.owner.getComponent(Tree)
   const pendingLoad = (tree.vm as any).treeContext.onLoadMore('parent')
@@ -105,8 +105,8 @@ test('TreeSelect reset retires late expansion/checking and asynchronous confirma
 })
 
 test('TreeSelect cancels pending filter work on reset and keeps numeric zero searchable', async () => {
-  const filter = vi.fn((query: string, node: any) => node.title.includes(query))
-  const f = formField(TreeSelect, { data: [{ key: 0, title: 'Zero' }, { key: 'old', title: 'Old' }], allowSearch: true, filterTreeNode: filter })
+  const filter = vi.fn((query: string, node: any) => node.label.includes(query))
+  const f = formField(TreeSelect, { data: [{ value: 0, label: 'Zero' }, { value: 'old', label: 'Old' }], allowSearch: true, filterTreeNode: filter })
   await f.open(); await f.panel().get('input').setValue('Zero'); await flushPromises()
   f.owner.vm.resetFields(); await flushPromises()
   const calls = filter.mock.calls.length
@@ -155,12 +155,12 @@ test('PeopleSelect retires old candidates during the search debounce window, bef
 
 test('Tree replacement under the same key owns its loading state and expansion', async () => {
   const oldLoad = deferred(), newLoad = deferred()
-  const loadMore = vi.fn((node: any) => node.title === 'Old branch' ? oldLoad.promise : newLoad.promise)
-  const owner = mount(Tree, { props: { data: [{ key: 'parent', title: 'Old branch', isLeaf: false }], loadMore, defaultExpandAll: false } })
+  const loadMore = vi.fn((node: any) => node.label === 'Old branch' ? oldLoad.promise : newLoad.promise)
+  const owner = mount(Tree, { props: { data: [{ value: 'parent', label: 'Old branch', isLeaf: false }], loadMore, defaultExpandAll: false } })
   owners.push(owner)
   const context = (owner.vm as any).treeContext
   const first = context.onLoadMore('parent')
-  await owner.setProps({ data: [{ key: 'parent', title: 'New branch', isLeaf: false }] })
+  await owner.setProps({ data: [{ value: 'parent', label: 'New branch', isLeaf: false }] })
   const second = context.onLoadMore('parent')
   expect(loadMore).toHaveBeenCalledTimes(2)
   oldLoad.resolve(); await first

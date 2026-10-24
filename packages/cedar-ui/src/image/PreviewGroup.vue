@@ -13,7 +13,7 @@
     @close="$emit('close')"
     @closed="$emit('closed')"
     @key-escape="$emit('key-escape')"
-    @long-press="$emit('long-press', mergedCurrent)"
+    @long-press="$emit('long-press', mergedCurrent + 1)"
   >
     <template
       #image="{
@@ -97,7 +97,7 @@
       </button>
       <slot
         name="indicator"
-        :index="mergedCurrent"
+        :image-number="mergedCurrent + 1"
         :length="previewImages.length"
       >
         <div v-if="previewImages.length > 1" :class="n('indicator')">
@@ -143,7 +143,7 @@ export default defineComponent({
   props: imagePreviewGroupProps,
   emits: [
     "update:open",
-    "update:current",
+    "update:modelValue",
     "change",
     "open-change",
     "open",
@@ -154,25 +154,28 @@ export default defineComponent({
     "long-press",
   ],
   setup(props, { emit }) {
-    const previousIndex = ref(props.defaultCurrent);
+    const previousImageNumber = ref(props.modelValue ?? props.defaultValue);
     const group = useImagePreviewGroupState({
       images: toRef(props, "images"),
       open: toRef(props, "open"),
       defaultOpen: props.defaultOpen,
-      current: toRef(props, "current"),
-      defaultCurrent: props.defaultCurrent,
+      modelValue: toRef(props, "modelValue"),
+      defaultValue: props.defaultValue,
       onOpenChange: (open) => {
         emit("update:open", open);
         emit("open-change", open);
         props.onOpenChange?.(open);
       },
-      onCurrentChange: (index) => {
-        const previous = previousIndex.value;
-        previousIndex.value = index;
-        emit("update:current", index);
-        emit("change", index, previous);
+      onCurrentChange: (imageNumber) => {
+        const previous = previousImageNumber.value;
+        previousImageNumber.value = imageNumber;
+        emit("update:modelValue", imageNumber);
+        emit("change", imageNumber, previous);
       },
     });
+    watch(() => props.modelValue, (value) => {
+      if (value !== undefined) previousImageNumber.value = value
+    }, { flush: 'sync' })
     const previewRef = ref<ImagePreviewInstance>();
     const currentUrl = computed(
       () => group.previewImages.value[group.mergedCurrent.value],
@@ -203,8 +206,8 @@ export default defineComponent({
     const previewBindings = computed(() => {
       const {
         images,
-        current,
-        defaultCurrent,
+        modelValue,
+        defaultValue,
         loop,
         open,
         defaultOpen,
@@ -448,7 +451,7 @@ export default defineComponent({
       };
     }
 
-    function to(index: number, direction?: "prev" | "next") {
+    function toIndex(index: number, direction?: "prev" | "next") {
       if (!available()) return;
       const length = group.previewImages.value.length;
       if (!Number.isInteger(index) || index < 0 || index >= length) {
@@ -472,10 +475,13 @@ export default defineComponent({
       if (!available() || !group.mergedOpen.value || command !== recenterGeneration) return;
       scheduleRecenter();
     }
-    function open(index = 0) {
-      if (!available()) return;
-      to(index);
-      if (available()) group.open(index);
+    function to(imageNumber: number) {
+      toIndex(imageNumber - 1)
+    }
+    function open(imageNumber = 1) {
+      if (!available() || !Number.isInteger(imageNumber) || imageNumber < 1 || imageNumber > group.previewImages.value.length) return;
+      toIndex(imageNumber - 1);
+      if (available()) group.mergedOpen.value = true;
     }
     function close() {
       if (!available()) return;
@@ -485,18 +491,18 @@ export default defineComponent({
       if (!available()) return;
       const index = group.mergedCurrent.value - 1;
       if (index >= 0) {
-        to(index, "prev");
+        toIndex(index, "prev");
       } else if (props.loop && group.previewImages.value.length) {
-        to(group.previewImages.value.length - 1, "prev");
+        toIndex(group.previewImages.value.length - 1, "prev");
       }
     }
     function next() {
       if (!available()) return;
       const index = group.mergedCurrent.value + 1;
       if (index < group.previewImages.value.length) {
-        to(index, "next");
+        toIndex(index, "next");
       } else if (props.loop && group.previewImages.value.length) {
-        to(0, "next");
+        toIndex(0, "next");
       }
     }
     function reset() {

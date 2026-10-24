@@ -18,7 +18,7 @@
 
 <script lang="ts" setup>
 import { onBeforeUnmount, onDeactivated, ref } from "vue";
-import type { InfiniteScrollStatus } from "@cedarjs/ui";
+import type { InfiniteScrollStatus } from "@cedar-design/ui";
 
 const scroller = ref<HTMLElement>();
 const page = ref(0);

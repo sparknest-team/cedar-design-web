@@ -7,7 +7,7 @@ import {
   IconInfoCircle,
   IconRefresh,
   IconSearch,
-} from "@cedarjs/icons-vue";
+} from "@cedar-design/icons-vue";
 const iconName = ref("arrow-left");
 const app = getCurrentInstance()?.appContext.app;
 const icons = {

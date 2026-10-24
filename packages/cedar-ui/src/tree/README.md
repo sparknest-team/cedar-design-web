@@ -10,7 +10,7 @@ permalink: /components/tree/
 
 ### 基础用法
 
-为每个节点赋予全局唯一的 `key`（必填项），`title` 为该节点显示的内容。
+为每个节点赋予全局唯一的 `value`（必填项），`label` 为该节点显示的内容。
 
 <demo src="./__demos__/basic.vue"></demo>
 
@@ -34,13 +34,13 @@ permalink: /components/tree/
 
 ### 带复选框的树
 
-为 `Tree` 添加 `checkable` 属性即可使树具有复选框功能，可以用 `defaultCheckedKeys` 指定复选框默认选中的节点。
+为 `Tree` 添加 `checkable` 属性即可使树具有复选框功能，可以用 `defaultCheckedValues` 指定复选框默认选中的节点。
 
 <demo src="./__demos__/checkable.vue"></demo>
 
 ### 双向绑定
 
-`selectedKeys` 、 `checkedKeys` 、 `expandedKeys` 属性均可受控，不仅支持 `v-model` ，还可以在对应的 `select` / `check` /
+`selectedValues` 、 `checkedValues` 、 `expandedValues` 属性均可受控，不仅支持 `v-model` ，还可以在对应的 `select` / `check` /
 `expand` 事件中自行控制如何更新属性值。
 
 <demo src="./__demos__/control.vue"></demo>
@@ -128,12 +128,12 @@ permalink: /components/tree/
 | selectable                      | 是否支持选择                                                                                                    | `boolean\| ((    node: TreeNodeData,    info: {      level: number;      isLeaf: boolean;    }  ) => boolean)` | `true`  |
 | check-strictly                  | 是否取消父子节点关联                                                                                            | `boolean`                                                                                                      | `false` |
 | checked-strategy                | 定制回填方式 <br/> all: 返回所有选中的节点 <br/> parent: 父子节点都选中时只返回父节点 <br/> child: 只返回子节点 | `'all' \| 'parent' \| 'child'`                                                                                 | `'all'` |
-| default-selected-keys           | 默认选中的树节点                                                                                                | `Array<string \| number>`                                                                                      |   `-`   |
-| selected-keys **(v-model)**     | 选中的树节点                                                                                                    | `Array<string \| number>`                                                                                      |   `-`   |
-| default-checked-keys            | 默认选中复选框的树节点                                                                                          | `Array<string \| number>`                                                                                      |   `-`   |
-| checked-keys **(v-model)**      | 选中复选框的树节点                                                                                              | `Array<string \| number>`                                                                                      |   `-`   |
-| default-expanded-keys           | 默认展开的节点                                                                                                  | `Array<string \| number>`                                                                                      |   `-`   |
-| expanded-keys **(v-model)**     | 展开的节点                                                                                                      | `Array<string \| number>`                                                                                      |   `-`   |
+| default-selected-values           | 默认选中的树节点                                                                                                | `Array<string \| number>`                                                                                      |   `-`   |
+| selected-values **(v-model)**     | 选中的树节点                                                                                                    | `Array<string \| number>`                                                                                      |   `-`   |
+| default-checked-values            | 默认选中复选框的树节点                                                                                          | `Array<string \| number>`                                                                                      |   `-`   |
+| checked-values **(v-model)**      | 选中复选框的树节点                                                                                              | `Array<string \| number>`                                                                                      |   `-`   |
+| default-expanded-values           | 默认展开的节点                                                                                                  | `Array<string \| number>`                                                                                      |   `-`   |
+| expanded-values **(v-model)**     | 展开的节点                                                                                                      | `Array<string \| number>`                                                                                      |   `-`   |
 | data                            | 传入`data`,生成对应的树结构                                                                                     | `TreeNodeData[]`                                                                                               |  `[]`   |
 | field-names                     | 指定节点数据中的字段名                                                                                          | `TreeFieldNames`                                                                                               |   `-`   |
 | show-line                       | 是否展示连接线                                                                                                  | `boolean`                                                                                                      | `false` |
@@ -144,8 +144,8 @@ permalink: /components/tree/
 | default-expand-selected         | 是否默认展开已选中节点的父节点                                                                                  | `boolean`                                                                                                      | `false` |
 | default-expand-checked          | 是否默认展开已选中复选框节点的父节点                                                                            | `boolean`                                                                                                      | `false` |
 | auto-expand-parent              | 是否自动展开已展开节点的父节点                                                                                  | `boolean`                                                                                                      | `true`  |
-| half-checked-keys **(v-model)** | 半选状态的节点.仅在 checkable 且 checkStrictly 时生效                                                           | `Array<string \| number>`                                                                                      |   `-`   |
-| only-check-leaf                 | 开启后 checkedKeys 只处理叶子节点，父节点状态由子节点决定（仅在 checkable 且 checkStrictly 为 false 时生效）    | `boolean`                                                                                                      | `false` |
+| half-checked-values **(v-model)** | 半选状态的节点.仅在 checkable 且 checkStrictly 时生效                                                           | `Array<string \| number>`                                                                                      |   `-`   |
+| only-check-leaf                 | 开启后 checkedValues 只处理叶子节点，父节点状态由子节点决定（仅在 checkable 且 checkStrictly 为 false 时生效）    | `boolean`                                                                                                      | `false` |
 | animation                       | 是否开启展开时的过渡动效                                                                                        | `boolean`                                                                                                      | `true`  |
 | action-on-node-click            | 点击节点的时候触发的动作                                                                                        | `'expand'`                                                                                                     |   `-`   |
 
@@ -153,8 +153,8 @@ permalink: /components/tree/
 
 | 事件名     | 描述                                                                                   | 参数                                                                                                                                                                                                            |
 | ---------- | -------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| select     | 点击树节点时触发                                                                       | selectedKeys: `Array<string \| number>`<br>data: `{ selected?: boolean; selectedNodes: TreeNodeData[]; node?: TreeNodeData; e?: Event; }`                                                                       |
-| check      | 点击树节点复选框时触发。`halfCheckedKeys` 和 `halfCheckedNodes` 从 `2.19.0` 开始支持。 | checkedKeys: `Array<string \| number>`<br>data: `{ checked?: boolean; checkedNodes: TreeNodeData[]; node?: TreeNodeData; e?: Event; halfCheckedKeys: (string \| number)[]; halfCheckedNodes: TreeNodeData[]; }` |
+| select     | 点击树节点时触发                                                                       | selectedValues: `Array<string \| number>`<br>data: `{ selected?: boolean; selectedNodes: TreeNodeData[]; node?: TreeNodeData; e?: Event; }`                                                                       |
+| check      | 点击树节点复选框时触发。`halfCheckedValues` 和 `halfCheckedNodes` 从 `2.19.0` 开始支持。 | checkedValues: `Array<string \| number>`<br>data: `{ checked?: boolean; checkedNodes: TreeNodeData[]; node?: TreeNodeData; e?: Event; halfCheckedValues: (string \| number)[]; halfCheckedNodes: TreeNodeData[]; }` |
 | expand     | 展开/关闭                                                                              | expandKeys: `Array<string \| number>`<br>data: `{ expanded?: boolean; expandNodes: TreeNodeData[]; node?: TreeNodeData; e?: Event; }`                                                                           |
 | drag-start | 节点开始拖拽                                                                           | ev: `DragEvent`<br>node: `TreeNodeData`                                                                                                                                                                         |
 | drag-end   | 节点结束拖拽                                                                           | ev: `DragEvent`<br>node: `TreeNodeData`                                                                                                                                                                         |
@@ -166,23 +166,23 @@ permalink: /components/tree/
 
 | 方法名              | 描述                                                                     | 参数                                                                                     | 返回值         |
 | ------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- | -------------- |
-| scrollIntoView      | 虚拟列表滚动某个元素                                                     | options: `{ index?: number; key?: number \| string; align: 'auto' \| 'top' \| 'bottom'}` | -              |
+| scrollIntoView      | 虚拟列表滚动某个元素                                                     | options: `{ index?: number; value?: number \| string; align: 'auto' \| 'top' \| 'bottom'}` | -              |
 | getSelectedNodes    | 获取选中的节点                                                           | -                                                                                        | TreeNodeData[] |
 | getCheckedNodes     | 获取选中复选框的节点。支持传入 `checkedStrategy`，没有传则取组件的配置。 | options: `checkedStrategy?: 'all' \| 'parent' \| 'child'; includeHalfChecked?: boolean;` | TreeNodeData[] |
 | getHalfCheckedNodes | 获取复选框半选的节点                                                     | -                                                                                        | TreeNodeData[] |
 | getExpandedNodes    | 获取展开的节点                                                           | -                                                                                        | TreeNodeData[] |
 | checkAll            | 设置全部节点的复选框状态                                                 | checked: `boolean`                                                                       | -              |
-| checkNode           | 设置指定节点的复选框状态                                                 | key: `TreeNodeKey \| TreeNodeKey[]`<br>checked: `boolean`<br>onlyCheckLeaf: `boolean`    | -              |
+| checkNode           | 设置指定节点的复选框状态                                                 | value: `TreeNodeValue \| TreeNodeValue[]`<br>checked: `boolean`<br>onlyCheckLeaf: `boolean`    | -              |
 | selectAll           | 设置全部节点的选中状态                                                   | selected: `boolean`                                                                      | -              |
-| selectNode          | 设置指定节点的选中状态                                                   | key: `TreeNodeKey \| TreeNodeKey[]`<br>selected: `boolean`                               | -              |
+| selectNode          | 设置指定节点的选中状态                                                   | value: `TreeNodeValue \| TreeNodeValue[]`<br>selected: `boolean`                               | -              |
 | expandAll           | 设置全部节点的展开状态                                                   | expanded: `boolean`                                                                      | -              |
-| expandNode          | 设置指定节点的展开状态                                                   | key: `TreeNodeKey \| TreeNodeKey[]`<br>expanded: `boolean`                               | -              |
+| expandNode          | 设置指定节点的展开状态                                                   | value: `TreeNodeValue \| TreeNodeValue[]`<br>expanded: `boolean`                               | -              |
 
 ### `<tree>` Slots
 
 | 插槽名        |        描述        | 参数                 |
 | ------------- | :----------------: | -------------------- |
-| title         |        标题        | title: `string`      |
+| label         | 节点内容 | node: `TreeNodeData` |
 | extra         | 渲染额外的节点内容 | -                    |
 | drag-icon     |   定制 drag 图标   | node: `TreeNodeData` |
 | loading-icon  | 定制 loading 图标  | TreeNodeData |
@@ -193,8 +193,8 @@ permalink: /components/tree/
 
 | 参数名          | 描述                                | 类型               | 默认值  |
 | --------------- | ----------------------------------- | ------------------ | :-----: |
-| key             | 唯一标示                            | `string \| number` |   `-`   |
-| title           | 该节点显示的标题                    | `string`           |   `-`   |
+| value             | 唯一标示                            | `string \| number` |   `-`   |
+| label           | 该节点显示的标题                    | `string`           |   `-`   |
 | selectable      | 是否允许选中                        | `boolean`          | `false` |
 | disabled        | 是否禁用节点                        | `boolean`          | `false` |
 | disableCheckbox | 是否禁用复选框                      | `boolean`          | `false` |
@@ -211,8 +211,8 @@ permalink: /components/tree/
 
 | 参数名          | 描述                                            | 类型     |      默认值       |
 | --------------- | ----------------------------------------------- | -------- | :---------------: |
-| key             | 指定 key 在 TreeNodeData 中的字段名             | `string` |       `key`       |
-| title           | 指定 title 在 TreeNodeData 中的字段名           | `string` |      `title`      |
+| value             | 指定 value 在 TreeNodeData 中的字段名             | `string` |       `value`       |
+| label           | 指定 label 在 TreeNodeData 中的字段名           | `string` |      `label`      |
 | disabled        | 指定 disabled 在 TreeNodeData 中的字段名        | `string` |    `disabled`     |
 | children        | 指定 children 在 TreeNodeData 中的字段名        | `string` |    `children`     |
 | isLeaf          | 指定 isLeaf 在 TreeNodeData 中的字段名          | `string` |     `isLeaf`      |
@@ -236,7 +236,7 @@ permalink: /components/tree/
 组件导出以下类型定义
 
 ```ts
-import type { TreeInstance } from '@cedarjs/ui'
+import type { TreeInstance } from '@cedar-design/ui'
 ```
 
 ### 五档密度与图标
@@ -249,3 +249,9 @@ xs/sm/md/lg/xl 分别消费各档 icon-size、font-size、line-height、title-pa
 | `--c-tree-size-xl-font-size` | `var(--c-sys-font-size-lg)` |
 | `--c-tree-size-xl-line-height` | `var(--c-size-xl)` |
 | `--c-tree-size-xl-title-padding-vertical` | `12px` |
+
+### 节点字段与业务值
+
+节点默认使用 `{ value, label, children }`，`value` 是全树唯一的字符串或数字（支持 `0`），`label` 是展示内容。后端使用其他字段时可配置 `fieldNames: { value: 'id', label: 'text', children: 'items' }`，无需修改后端数据。声明式组件子项的 `name`、Vue 的 `:key` 和 Table 的 `rowKey` 保持各自含义。
+
+Tree 的独立状态采用 `selectedValues/defaultSelectedValues`、`checkedValues/defaultCheckedValues`、`halfCheckedValues`、`expandedValues/defaultExpandedValues`，分别通过同名具名 v-model 更新；`check` 事件数据中的半选集合为 `halfCheckedValues`。节点内容插槽为 `label`，TreeSelect 对应透传插槽为 `tree-slot-label`。`scrollIntoView({ value })` 按业务值定位；显式 `index` 仍表示虚拟列表从 0 开始的数组下标。

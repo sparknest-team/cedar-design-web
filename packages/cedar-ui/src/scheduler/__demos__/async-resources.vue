@@ -37,7 +37,7 @@ import type {
   SchedulerResolveResources,
   SchedulerBeforeChange,
   SchedulerResourceErrorContext,
-} from "@cedarjs/ui";
+} from "@cedar-design/ui";
 
 const kind = ref<"device" | "person">("device");
 // 业务接口字段在接入层适配，Scheduler 始终只认识 id / label。

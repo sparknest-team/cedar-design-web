@@ -1,4 +1,4 @@
-import type { TimeProps, TimeRangeProps } from '@cedarjs/ui'
+import type { TimeProps, TimeRangeProps } from '@cedar-design/ui'
 
 const single: TimeProps[] = [{}, { inputEditable: true }, { inputEditable: false }]
 const range: TimeRangeProps[] = [{}, { inputEditable: true }, { inputEditable: false }]

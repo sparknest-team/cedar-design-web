@@ -17,7 +17,7 @@ features:
 ---
 
 ```shell
-yarn add @cedarjs/ui@1.x
+yarn add @cedar-design/ui@1.x
 ```
 
 ## 本地构建

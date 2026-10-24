@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import type { InfiniteScrollStatus } from "@cedarjs/ui";
+import type { InfiniteScrollStatus } from "@cedar-design/ui";
 const first = ref<HTMLElement>();
 const second = ref<HTMLElement>();
 const alternate = ref(false);

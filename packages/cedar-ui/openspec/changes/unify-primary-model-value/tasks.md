@@ -1,0 +1,3 @@
+- [x] Migrate both platforms and consumers
+- [x] Update examples, API docs and shared model convention
+- [x] Run affected tests, types, lint and source parity; record workspace limitations in verification.md

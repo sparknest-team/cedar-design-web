@@ -1,5 +1,5 @@
 import { onBeforeUnmount, onDeactivated, ref } from 'vue'
-import { getScrollTop } from '@cedarjs/shared'
+import { getScrollTop } from '@cedar-design/shared'
 
 export type TouchDirection = 'horizontal' | 'vertical'
 

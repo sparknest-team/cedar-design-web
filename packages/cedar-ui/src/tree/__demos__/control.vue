@@ -1,17 +1,17 @@
 <template>
   <c-button-group style="margin-bottom: 20px">
     <c-button status="primary" @click="toggleChecked">
-      {{ checkedKeys?.length ? 'deselect all' : 'select all' }}
+      {{ checkedValues?.length ? 'deselect all' : 'select all' }}
     </c-button>
     <c-button status="primary" @click="toggleExpanded">
-      {{ expandedKeys?.length ? 'fold' : 'unfold' }}
+      {{ expandedValues?.length ? 'fold' : 'unfold' }}
     </c-button>
   </c-button-group>
   <c-tree
     :checkable="true"
-    v-model:selected-keys="selectedKeys"
-    v-model:checked-keys="checkedKeys"
-    v-model:expanded-keys="expandedKeys"
+    v-model:selected-values="selectedValues"
+    v-model:checked-values="checkedValues"
+    v-model:expanded-values="expandedValues"
     @select="onSelect"
     @check="onCheck"
     @expand="onExpand"
@@ -21,64 +21,64 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-const allCheckedKeys = ['0-0', '0-0-1', '0-0-2', '0-0-2-1', '0-1', '0-1-1', '0-1-2']
-const allExpandedKeys = ['0-0', '0-1', '0-0-2']
-const selectedKeys = ref([])
-const checkedKeys = ref([])
-const expandedKeys = ref([])
+const allCheckedValues = ['0-0', '0-0-1', '0-0-2', '0-0-2-1', '0-1', '0-1-1', '0-1-2']
+const allExpandedValues = ['0-0', '0-1', '0-0-2']
+const selectedValues = ref([])
+const checkedValues = ref([])
+const expandedValues = ref([])
 
 function toggleChecked() {
-  checkedKeys.value = checkedKeys?.value.length ? [] : allCheckedKeys
+  checkedValues.value = checkedValues?.value.length ? [] : allCheckedValues
 }
 
 function toggleExpanded() {
-  expandedKeys.value = expandedKeys?.value.length ? [] : allExpandedKeys
+  expandedValues.value = expandedValues?.value.length ? [] : allExpandedValues
 }
 
-function onSelect(newSelectedKeys, event) {
-  console.log('select: ', newSelectedKeys, event)
+function onSelect(newSelectedValues, event) {
+  console.log('select: ', newSelectedValues, event)
 }
 
-function onCheck(newCheckedKeys, event) {
-  console.log('check: ', newCheckedKeys, event)
+function onCheck(newCheckedValues, event) {
+  console.log('check: ', newCheckedValues, event)
 }
 
-function onExpand(newExpandedKeys, event) {
-  console.log('expand: ', newExpandedKeys, event)
+function onExpand(newExpandedValues, event) {
+  console.log('expand: ', newExpandedValues, event)
 }
 
 const treeData = [
   {
-    title: 'Trunk 0-0',
-    key: '0-0',
+    label: 'Trunk 0-0',
+    value: '0-0',
     children: [
       {
-        title: 'Leaf 0-0-1',
-        key: '0-0-1',
+        label: 'Leaf 0-0-1',
+        value: '0-0-1',
       },
       {
-        title: 'Branch 0-0-2',
-        key: '0-0-2',
+        label: 'Branch 0-0-2',
+        value: '0-0-2',
         children: [
           {
-            title: 'Leaf 0-0-2-1',
-            key: '0-0-2-1',
+            label: 'Leaf 0-0-2-1',
+            value: '0-0-2-1',
           },
         ],
       },
     ],
   },
   {
-    title: 'Trunk 0-1',
-    key: '0-1',
+    label: 'Trunk 0-1',
+    value: '0-1',
     children: [
       {
-        title: 'Leaf 0-1-1',
-        key: '0-1-1',
+        label: 'Leaf 0-1-1',
+        value: '0-1-1',
       },
       {
-        title: 'Leaf 0-1-2',
-        key: '0-1-2',
+        label: 'Leaf 0-1-2',
+        value: '0-1-2',
       },
     ],
   },

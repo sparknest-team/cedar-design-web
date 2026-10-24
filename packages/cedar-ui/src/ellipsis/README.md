@@ -59,7 +59,7 @@ permalink: /components/ellipsis/
 ### 类型
 
 ```ts
-import type { EllipsisProps, EllipsisInstance, EllipsisExpandTrigger } from '@cedarjs/ui'
+import type { EllipsisProps, EllipsisInstance, EllipsisExpandTrigger } from '@cedar-design/ui'
 ```
 
 ### 样式变量

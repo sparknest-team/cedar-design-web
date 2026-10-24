@@ -97,7 +97,7 @@ permalink: /components/statistic/
 组件导出以下类型定义
 
 ```ts
-import type { StatisticProps } from '@cedarjs/ui'
+import type { StatisticProps } from '@cedar-design/ui'
 ```
 
 ### 样式变量

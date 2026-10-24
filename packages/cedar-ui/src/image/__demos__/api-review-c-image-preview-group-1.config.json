@@ -9,17 +9,17 @@
       "initial": "[]"
     },
     {
-      "name": "current",
-      "description": "当前展示的图片的下标",
+      "name": "model-value",
+      "description": "当前图片序号，从 1 开始",
       "type": "number",
       "defaultValue": "-",
       "kind": "number"
     },
     {
-      "name": "default-current",
-      "description": "第一张展示的图片的下标",
+      "name": "default-value",
+      "description": "非受控初始图片序号，从 1 开始",
       "type": "number",
-      "defaultValue": "0",
+      "defaultValue": "1",
       "kind": "number"
     },
     {

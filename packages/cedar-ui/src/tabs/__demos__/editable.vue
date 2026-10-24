@@ -4,10 +4,10 @@
       <template #suffix>
         <c-button>Action</c-button>
       </template>
-      <c-tab-nav v-for="(item, index) of data" :key="item.key" :title="item.title" :closable="index !== 2" />
+      <c-tab-nav v-for="(item, index) of data" :key="item.key" :name="item.key" :title="item.title" :closable="index !== 2" />
     </c-tabs-navs>
     <c-tabs-items>
-      <c-tab-item v-for="(item, index) of data" :key="item.key">{{ item?.content }}</c-tab-item>
+      <c-tab-item v-for="(item, index) of data" :key="item.key" :name="item.key">{{ item?.content }}</c-tab-item>
     </c-tabs-items>
   </c-tabs>
 </template>

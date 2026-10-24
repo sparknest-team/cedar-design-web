@@ -6,8 +6,8 @@
 
 <script lang="ts" setup>
 import { computed, onMounted, onUnmounted, onActivated, onDeactivated, watch } from 'vue'
-import { floor, toNumber } from '@cedarjs/shared'
-import { useMotion } from '@cedarjs/use'
+import { floor, toNumber } from '@cedar-design/shared'
+import { useMotion } from '@cedar-design/use'
 import { createNamespace } from '../_utils/global-config'
 import { countToProps } from './props'
 

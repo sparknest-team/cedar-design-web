@@ -3,7 +3,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import { Message } from "@cedarjs/ui";
+import { Message } from "@cedar-design/ui";
 
 export default defineComponent({
   setup() {

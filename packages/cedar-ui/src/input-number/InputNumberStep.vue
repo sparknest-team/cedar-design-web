@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconChevronDown, IconChevronUp, IconMinus, IconPlus } from '@cedarjs/icons-vue'
+import { IconChevronDown, IconChevronUp, IconMinus, IconPlus } from '@cedar-design/icons-vue'
 import { createNamespace } from '../_utils/global-config'
 import type { StepMethod } from './number-arithmetic'
 

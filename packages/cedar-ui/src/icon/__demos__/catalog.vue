@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { iconNames } from "@cedarjs/icons-vue";
-import * as CedarIcons from "@cedarjs/icons-vue";
+import { iconNames } from "@cedar-design/icons-vue";
+import * as CedarIcons from "@cedar-design/icons-vue";
 import { Message } from "../../message";
 
 const keyword = ref("");
@@ -87,16 +87,18 @@ async function copyIcon(name: string) {
       {{ group }} <small>{{ names.length }}</small>
     </h3>
     <div class="icon-catalog">
-      <button
+      <c-button
         v-for="name in names"
         :key="name"
         class="icon-card"
-        type="button"
+        variant="outline"
         @click="copyIcon(name)"
       >
-        <component :is="resolveIcon(name)" :size="40" />
-        <span>{{ name }}</span>
-      </button>
+        <span class="icon-card-content">
+          <component :is="resolveIcon(name)" :size="40" />
+          <span class="icon-name">{{ name }}</span>
+        </span>
+      </c-button>
     </div>
   </section>
 </template>
@@ -145,7 +147,13 @@ async function copyIcon(name: string) {
   color: rgb(var(--c-primary-6));
   border-color: rgb(var(--c-primary-6));
 }
-.icon-card span {
+.icon-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.icon-name {
   width: 100%;
   text-align: center;
   font-size: 13px;

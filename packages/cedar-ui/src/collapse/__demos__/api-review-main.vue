@@ -4,7 +4,7 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review.config.json";
 </script>
 <template>
@@ -13,7 +13,7 @@ import __apiReviewRawConfig from "./api-review.config.json";
     v-bind="defineReviewConfig(__apiReviewRawConfig)"
   >
     <c-collapse
-      :default-active-names="['1', 2]"
+      :default-value="['1', 2]"
       v-bind="__apiReview.bindings"
       v-on="__apiReview.listeners"
     >

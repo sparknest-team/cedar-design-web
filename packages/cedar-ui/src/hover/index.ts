@@ -1,5 +1,5 @@
 import { ref, type App, type Directive, type DirectiveBinding, type Plugin } from 'vue'
-import { camelize, inMobile, isFunction } from '@cedarjs/shared'
+import { camelize, inMobile, isFunction } from '@cedar-design/shared'
 import HoverOverlay from './HoverOverlay.vue'
 import { hoverOverlayProps } from './overlay-props'
 

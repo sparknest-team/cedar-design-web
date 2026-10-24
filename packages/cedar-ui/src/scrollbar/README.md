@@ -66,5 +66,5 @@ scrollTo(0,0)／单轴0是合法坐标，不用真值判断；恢复零位置也
 组件导出以下类型定义
 
 ```ts
-import type { ScrollbarBoxInstance } from '@cedarjs/ui'
+import type { ScrollbarBoxInstance } from '@cedar-design/ui'
 ```

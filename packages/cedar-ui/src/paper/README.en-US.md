@@ -47,7 +47,7 @@ The default slot contains surface content. The click event emits the original Mo
 ## Types and independent copies
 
 ```ts
-import type { PaperProps, PaperInstance } from '@cedarjs/ui'
+import type { PaperProps, PaperInstance } from '@cedar-design/ui'
 ```
 
 Both libraries maintain independent source copies, styles and tests; no shared runtime or component instances. Decorative motion respects prefers-reduced-motion. Ripple interaction coverage is tracked separately from this surface demo.

@@ -53,8 +53,8 @@ import { useRowSelection } from "./hooks/use-row-selection";
 import { useExpand } from "./hooks/use-expand";
 import { usePagination } from "./hooks/use-pagination";
 import { updateColumnsWidth } from "./hooks/use-columns-layout";
-import { IconPlus } from "@cedarjs/icons-vue/icon-plus";
-import { IconMinus } from "@cedarjs/icons-vue/icon-minus";
+import { IconPlus } from "@cedar-design/icons-vue/icon-plus";
+import { IconMinus } from "@cedar-design/icons-vue/icon-minus";
 import Loading from "../loading";
 import Pagination, { PaginationProps } from "../pagination";
 import Empty from "../empty";
@@ -2184,9 +2184,9 @@ export default defineComponent({
     const renderPagination = () => {
       const paginationProps = isObject(props.pagination)
         ? omit(props.pagination, [
-            "current",
+            "modelValue",
             "pageSize",
-            "defaultCurrent",
+            "defaultValue",
             "defaultPageSize",
           ])
         : {};
@@ -2212,7 +2212,7 @@ export default defineComponent({
           {slots["pagination-left"]?.()}
           <Pagination
             total={validData.value.length}
-            current={page.value}
+            modelValue={page.value}
             pageSize={pageSize.value}
             onChange={(page: number) => {
               handlePageChange(page);

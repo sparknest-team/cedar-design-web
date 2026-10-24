@@ -8,7 +8,7 @@
         {{ hideIcon ? 'Show icon' : 'Hide icon' }}
       </c-button>
     </c-space>
-    <c-collapse :default-active-names="['1']" :expand-icon-position="position" :show-expand-icon="!hideIcon">
+    <c-collapse :default-value="['1']" :expand-icon-position="position" :show-expand-icon="!hideIcon">
       <c-collapse-item title="Beijing Toutiao Technology Co., Ltd." name="1">
         <template #extra>
           <c-tag size="sm">city</c-tag>

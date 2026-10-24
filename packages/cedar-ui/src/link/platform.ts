@@ -1,2 +1,2 @@
-export { IconLink } from '@cedarjs/icons-vue/icon-link'
-export { IconLoading } from '@cedarjs/icons-vue/icon-loading'
+export { IconLink } from '@cedar-design/icons-vue/icon-link'
+export { IconLoading } from '@cedar-design/icons-vue/icon-loading'

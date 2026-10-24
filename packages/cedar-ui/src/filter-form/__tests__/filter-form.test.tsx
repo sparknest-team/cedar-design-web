@@ -61,6 +61,8 @@ describe('FilterForm', () => {
   })
 
   test('registered components merge defaults and receive refreshed options', async () => {
+    vi.useFakeTimers()
+    try {
     stubMatchMedia()
     const fields = (options: unknown[]): FilterFormField[] => [{
       component: 'select', field: 'status', props: { placeholder: '状态', options },
@@ -81,11 +83,14 @@ describe('FilterForm', () => {
     select.vm.$emit('update:modelValue', 'enabled')
     select.vm.$emit('change', 'enabled')
     expect(wrapper.emitted('update:modelValue')).toEqual([[{ status: 'enabled' }]])
-    await new Promise(resolve => setTimeout(resolve, 10))
+    vi.runOnlyPendingTimers()
     expect(wrapper.emitted('change')).toEqual([[{ status: 'enabled' }, 'status']])
     await wrapper.setProps({ fields: fields([]) })
     expect(select.props('options')).toEqual([])
     wrapper.unmount()
+    } finally {
+      vi.useRealTimers()
+    }
   })
 
   test('render', async () => {

@@ -9,6 +9,13 @@
       "initial": "{}"
     },
     {
+      "name": "default-value",
+      "description": "非受控初始值，仅创建时读取",
+      "type": "Record<string, unknown>",
+      "defaultValue": "undefined",
+      "kind": "json"
+    },
+    {
       "name": "fields",
       "description": "筛选项 schema",
       "type": "FilterFormField[]",

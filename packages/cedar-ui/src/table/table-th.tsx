@@ -11,9 +11,9 @@ import Checkbox from "../checkbox";
 import Radio from "../radio";
 import Button from "../button";
 import Trigger from "../trigger";
-import { IconCaretDown } from '@cedarjs/icons-vue/icon-caret-down'
-import { IconCaretUp } from '@cedarjs/icons-vue/icon-caret-up'
-import { IconFilter } from '@cedarjs/icons-vue/icon-filter'
+import { IconCaretDown } from '@cedar-design/icons-vue/icon-caret-down'
+import { IconCaretUp } from '@cedar-design/icons-vue/icon-caret-up'
+import { IconFilter } from '@cedar-design/icons-vue/icon-filter'
 import { TableColumnData, TableOperationColumn } from "./types";
 import { useColumnSorter } from "./hooks/use-column-sorter";
 import { useColumnFilter } from "./hooks/use-column-filter";

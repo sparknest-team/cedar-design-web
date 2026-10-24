@@ -4,11 +4,11 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review-c-carousel-2.config.json";
 
 import { computed, ref } from "vue";
-const current = ref(0);
+const current = ref(1);
 const changes = ref(0);
 const wider = ref(false);
 const compact = ref(false);
@@ -38,7 +38,7 @@ const widths = computed(() => {
       <c-checkbox v-model="reversed"> Reverse cards / 反转顺序</c-checkbox>
       <p role="status">Current: {{ current }} · Changes: {{ changes }}</p>
       <c-carousel
-        v-model:current="current"
+        v-model="current"
         slides-per-view="auto"
         :space-between="12"
         :style="{ width: compact ? '300px' : '100%' }"

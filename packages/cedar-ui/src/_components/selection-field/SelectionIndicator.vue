@@ -9,7 +9,7 @@
   </span>
 </template>
 <script setup lang="ts">
-import { IconCheck, IconMinus } from '@cedarjs/icons-vue'
+import { IconCheck, IconMinus } from '@cedar-design/icons-vue'
 import { createNamespace } from '../../_utils/global-config'
 
 defineOptions({ name: createNamespace('selection-indicator').name })

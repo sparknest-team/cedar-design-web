@@ -72,7 +72,7 @@ import type { ResponsiveValue } from '../grid/types'
 import { getValueByPath, setValueByPath } from '../_utils/get-value-by-path'
 import { debounce } from '../_utils/debounce'
 import { isString } from '../_utils/is'
-import { IconDownCircle, IconUpCircle } from '@cedarjs/icons-vue'
+import { IconDownCircle, IconUpCircle } from '@cedar-design/icons-vue'
 import { useI18n } from '../locale'
 import { createNamespace } from '../_utils/global-config'
 import { filterFormProps } from './props'
@@ -97,7 +97,7 @@ const emit = defineEmits<{
 const { t } = useI18n()
 const slots = useSlots()
 const formRef = ref()
-const innerModel = ref<Record<string, unknown>>({})
+const innerModel = ref<Record<string, unknown>>(cloneModel(props.defaultValue))
 const collapsed_ = ref(props.collapsed)
 /** Grid measures numeric gaps; callers customize this with gridProps.colGap. */
 const colGap = 16
@@ -115,7 +115,7 @@ const emitChange = debounce((value: Record<string, unknown>, field: string) => {
 watch(
   () => props.modelValue,
   (value) => {
-    innerModel.value = cloneModel(value)
+    if (value !== undefined) innerModel.value = cloneModel(value)
   },
   { immediate: true, deep: true },
 )

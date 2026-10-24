@@ -109,7 +109,7 @@ export function presetCedar(options: PresetCedarOptions = {}): Preset[] {
   return [
     presetUno({ prefix: "c-" }),
     {
-      name: "@cedarjs/preset-unocss",
+      name: "@cedar-design/preset-unocss",
       blocklist: [/^(?:[\w-]+:)*c-shadow(?:-.+)?$/],
       theme: {
         colors: getColors(options),

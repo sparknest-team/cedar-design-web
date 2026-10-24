@@ -1,0 +1,2975 @@
+{
+  "date": "2026-10-24",
+  "goal": {
+    "startupPlusFirstPageUnderMs": 10000,
+    "achieved": false
+  },
+  "correction": "All v1 measurements omitted the VuePress CLI user-config plugin and did not register the real custom client. They are not full-site results and are superseded. V2 registers the actual client, CLI page/config watchers, onWatched hooks, and asserts the theme button is visible.",
+  "conditions": {
+    "benchmarkVersion": "cli-equivalent-v2",
+    "freshNodeServerAndViteCache": true,
+    "freshBrowserContext": true,
+    "viewport": "1440x1000",
+    "externalRequestsBlocked": true,
+    "browserHttpCache": "disabled by routing",
+    "startupDefinition": "configuration loading + app.init + app.prepare + app.dev + CLI watcher registration; excludes tool/module imports, tool directory setup and Chromium launch",
+    "firstPageDefinition": "navigation until custom theme menu and all 43 mounted examples, opaque component ancestors and two animation frames",
+    "sourceDefinition": "click until complete highlighted source visible plus two animation frames",
+    "prewarm": false,
+    "lazyDemos": false,
+    "osDiskCacheFlushed": false,
+    "baselineMeaning": "Only theme Sass aggregation and presentation-JS bundling disabled. Initial source-read reuse and export-catalog reuse remain enabled in both variants.",
+    "inputDrift": "Another task changed the largest demo from 39385 to 39421 bytes during the pause. All samples retained. An additional pair explicitly verifies identical rendered-page fingerprint, including demo and direct-source content URLs."
+  },
+  "summary": {
+    "beforeMedianMs": 12500.819167,
+    "afterMedianMs": 10626.30175,
+    "reductionPercent": 14.995156653000796,
+    "beforeTotalMs": [
+      12500.819167,
+      12870.399624,
+      12443.076709
+    ],
+    "afterTotalMs": [
+      11042.862625,
+      10554.970501,
+      10626.30175
+    ],
+    "matchedInputPair": {
+      "hash": "a5885bd8bc7f2f002e2d0dcc2e87c9a9472c5ce65602582ac1c07fdda8bb5e73",
+      "verified": true,
+      "beforeMs": 13152.470416,
+      "afterMs": 10765.705666,
+      "reductionPercent": 18.146893127366383
+    }
+  },
+  "checks": {
+    "docPipelineTests": 40,
+    "newNodeUtilitiesTypeCheck": "passed",
+    "benchmarkSyntaxAndDiffCheck": "passed",
+    "themeAndLanguageNavigation": "passed",
+    "schedulerEditAndSave": "passed",
+    "sourceAndCompanionHmr": "passed",
+    "reusedSassCompilerPaletteEdit": "passed; real loadedUrls retained",
+    "fullProductionBuild": "not rerun"
+  },
+  "records": [
+    {
+      "file": "/private/tmp/cedar-waterfall-cli-v2-series-20261024/1-baseline-combined.json",
+      "mode": "baseline-combined",
+      "benchmarkVersion": "cli-equivalent-v2",
+      "customClientRegistered": true,
+      "node": "v23.9.0",
+      "pages": 274,
+      "pageContentHash": null,
+      "startupMs": 4577.938125,
+      "firstPageMs": 7922.881042,
+      "totalMs": 12500.819167,
+      "repeatPageMs": 4872.636791000001,
+      "allExamplesMounted": 43,
+      "sourceRequestsBeforeExpand": 0,
+      "resourceCount": 1024,
+      "themeNativeScriptRequests": 138,
+      "themeBundleChunkRequests": 0,
+      "themeSassRequests": 47,
+      "aggregatedThemeSassRequests": 0,
+      "browserLongTasks": [
+        {
+          "startTime": 5721,
+          "duration": 1757
+        },
+        {
+          "startTime": 7479.399999856949,
+          "duration": 56
+        }
+      ],
+      "viteReloads": [],
+      "localHttpFailures": [],
+      "configurationChangedDuringRun": false,
+      "pageErrors": [
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        }
+      ],
+      "hostSamplesThroughFirstPage": [
+        {
+          "time": 1992.999084,
+          "load": [
+            3.2099609375,
+            4.5634765625,
+            6.0419921875
+          ],
+          "busyPercent": 32.18694885361552
+        },
+        {
+          "time": 3498.73025,
+          "load": [
+            3.2099609375,
+            4.5634765625,
+            6.0419921875
+          ],
+          "busyPercent": 39.91596638655462
+        },
+        {
+          "time": 4529.672709,
+          "load": [
+            3.2099609375,
+            4.5634765625,
+            6.0419921875
+          ],
+          "busyPercent": 36.9062119366626
+        },
+        {
+          "time": 5530.459834,
+          "load": [
+            3.2099609375,
+            4.5634765625,
+            6.0419921875
+          ],
+          "busyPercent": 65.57788944723619
+        },
+        {
+          "time": 6544.347459,
+          "load": [
+            4.23388671875,
+            4.7529296875,
+            6.10009765625
+          ],
+          "busyPercent": 70.58823529411764
+        },
+        {
+          "time": 7544.471542,
+          "load": [
+            4.23388671875,
+            4.7529296875,
+            6.10009765625
+          ],
+          "busyPercent": 64.73551637279597
+        },
+        {
+          "time": 8544.219667,
+          "load": [
+            4.23388671875,
+            4.7529296875,
+            6.10009765625
+          ],
+          "busyPercent": 66.45649432534678
+        },
+        {
+          "time": 9549.009792,
+          "load": [
+            4.23388671875,
+            4.7529296875,
+            6.10009765625
+          ],
+          "busyPercent": 55.90452261306533
+        },
+        {
+          "time": 10549.753542,
+          "load": [
+            4.23388671875,
+            4.7529296875,
+            6.10009765625
+          ],
+          "busyPercent": 59.89911727616646
+        },
+        {
+          "time": 11550.313959,
+          "load": [
+            4.134765625,
+            4.7236328125,
+            6.08154296875
+          ],
+          "busyPercent": 60.07604562737643
+        },
+        {
+          "time": 12551.93625,
+          "load": [
+            4.134765625,
+            4.7236328125,
+            6.08154296875
+          ],
+          "busyPercent": 57.861635220125784
+        },
+        {
+          "time": 13557.13975,
+          "load": [
+            4.134765625,
+            4.7236328125,
+            6.08154296875
+          ],
+          "busyPercent": 82.27215980024968
+        }
+      ],
+      "sources": [
+        {
+          "file": "./__demos__/basic.vue",
+          "bytes": 269,
+          "firstExpandMs": 173.70000004768372,
+          "repeatExpandMs": 41.700000047683716
+        },
+        {
+          "file": "./__demos__/task-calendar-workbench.vue",
+          "bytes": 39385,
+          "firstExpandMs": 107.70000004768372,
+          "repeatExpandMs": 192
+        }
+      ],
+      "interactions": null,
+      "hmr": null,
+      "failure": null,
+      "gate": {
+        "at": "2026-10-24T09:43:47.827Z",
+        "samples": [
+          17.772215269086356,
+          14.429109159347552,
+          36.26097867001255,
+          15.30740276035132,
+          14.28571428571429,
+          16.957605985037404,
+          17.987421383647796,
+          17.587939698492463
+        ],
+        "mean": 18.823548401461217,
+        "stddev": 6.737425036393353,
+        "load": [
+          3.3154296875,
+          4.60693359375,
+          6.06591796875
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "file": "/private/tmp/cedar-waterfall-cli-v2-series-20261024/2-bundled.json",
+      "mode": "bundled",
+      "benchmarkVersion": "cli-equivalent-v2",
+      "customClientRegistered": true,
+      "node": "v23.9.0",
+      "pages": 274,
+      "pageContentHash": null,
+      "startupMs": 4849.353708000001,
+      "firstPageMs": 6193.508916999999,
+      "totalMs": 11042.862625,
+      "repeatPageMs": 3474.806584,
+      "allExamplesMounted": 43,
+      "sourceRequestsBeforeExpand": 0,
+      "resourceCount": 918,
+      "themeNativeScriptRequests": 74,
+      "themeBundleChunkRequests": 2,
+      "themeSassRequests": 2,
+      "aggregatedThemeSassRequests": 1,
+      "browserLongTasks": [
+        {
+          "startTime": 4285.800000190735,
+          "duration": 1621
+        }
+      ],
+      "viteReloads": [],
+      "localHttpFailures": [],
+      "configurationChangedDuringRun": false,
+      "pageErrors": [
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        }
+      ],
+      "hostSamplesThroughFirstPage": [
+        {
+          "time": 2098.31025,
+          "load": [
+            9.83203125,
+            6.78369140625,
+            6.681640625
+          ],
+          "busyPercent": 32.443703085904914
+        },
+        {
+          "time": 3589.419208,
+          "load": [
+            9.83203125,
+            6.78369140625,
+            6.681640625
+          ],
+          "busyPercent": 35.483870967741936
+        },
+        {
+          "time": 4638.494416,
+          "load": [
+            9.83203125,
+            6.78369140625,
+            6.681640625
+          ],
+          "busyPercent": 34.96420047732697
+        },
+        {
+          "time": 5638.198958,
+          "load": [
+            9.83203125,
+            6.78369140625,
+            6.681640625
+          ],
+          "busyPercent": 77.20403022670025
+        },
+        {
+          "time": 6644.998416,
+          "load": [
+            9.83203125,
+            6.78369140625,
+            6.681640625
+          ],
+          "busyPercent": 77.69423558897243
+        },
+        {
+          "time": 7648.724958,
+          "load": [
+            10.00537109375,
+            6.8701171875,
+            6.71240234375
+          ],
+          "busyPercent": 79.17189460476789
+        },
+        {
+          "time": 8677.797708,
+          "load": [
+            10.00537109375,
+            6.8701171875,
+            6.71240234375
+          ],
+          "busyPercent": 49.754901960784316
+        },
+        {
+          "time": 9679.967541,
+          "load": [
+            10.00537109375,
+            6.8701171875,
+            6.71240234375
+          ],
+          "busyPercent": 57.07070707070707
+        },
+        {
+          "time": 10680.294458,
+          "load": [
+            10.00537109375,
+            6.8701171875,
+            6.71240234375
+          ],
+          "busyPercent": 47.46192893401015
+        },
+        {
+          "time": 11681.449583,
+          "load": [
+            10.00537109375,
+            6.8701171875,
+            6.71240234375
+          ],
+          "busyPercent": 34.58646616541353
+        }
+      ],
+      "sources": [
+        {
+          "file": "./__demos__/basic.vue",
+          "bytes": 269,
+          "firstExpandMs": 137.89999985694885,
+          "repeatExpandMs": 103.79999995231628
+        },
+        {
+          "file": "./__demos__/task-calendar-workbench.vue",
+          "bytes": 39385,
+          "firstExpandMs": 107.5,
+          "repeatExpandMs": 150.60000014305115
+        }
+      ],
+      "interactions": null,
+      "hmr": null,
+      "failure": null,
+      "gate": {
+        "at": "2026-10-24T09:46:27.263Z",
+        "samples": [
+          15.375000000000005,
+          15.625,
+          18.21608040201005,
+          20.93316519546028,
+          14.249999999999996,
+          26.90863579474343,
+          17.610062893081757,
+          15.625
+        ],
+        "mean": 18.06786803566194,
+        "stddev": 3.8788451553363656,
+        "load": [
+          9.73046875,
+          6.712890625,
+          6.65625
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "file": "/private/tmp/cedar-waterfall-cli-v2-series-20261024/3-bundled.json",
+      "mode": "bundled",
+      "benchmarkVersion": "cli-equivalent-v2",
+      "customClientRegistered": true,
+      "node": "v23.9.0",
+      "pages": 274,
+      "pageContentHash": null,
+      "startupMs": 4470.322959,
+      "firstPageMs": 6084.647541999999,
+      "totalMs": 10554.970501,
+      "repeatPageMs": 3410.2649170000004,
+      "allExamplesMounted": 43,
+      "sourceRequestsBeforeExpand": 0,
+      "resourceCount": 918,
+      "themeNativeScriptRequests": 74,
+      "themeBundleChunkRequests": 2,
+      "themeSassRequests": 2,
+      "aggregatedThemeSassRequests": 1,
+      "browserLongTasks": [
+        {
+          "startTime": 4213,
+          "duration": 1586
+        }
+      ],
+      "viteReloads": [],
+      "localHttpFailures": [],
+      "configurationChangedDuringRun": false,
+      "pageErrors": [
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        }
+      ],
+      "hostSamplesThroughFirstPage": [
+        {
+          "time": 1935.285667,
+          "load": [
+            6.759765625,
+            6.373046875,
+            6.5361328125
+          ],
+          "busyPercent": 32.845379688929555
+        },
+        {
+          "time": 3323.455208,
+          "load": [
+            6.759765625,
+            6.373046875,
+            6.5361328125
+          ],
+          "busyPercent": 34.45761166818596
+        },
+        {
+          "time": 4335.769167,
+          "load": [
+            6.759765625,
+            6.373046875,
+            6.5361328125
+          ],
+          "busyPercent": 31.795511221945137
+        },
+        {
+          "time": 5336.566542,
+          "load": [
+            6.759765625,
+            6.373046875,
+            6.5361328125
+          ],
+          "busyPercent": 66.62468513853904
+        },
+        {
+          "time": 6357.072542,
+          "load": [
+            6.759765625,
+            6.373046875,
+            6.5361328125
+          ],
+          "busyPercent": 58.86699507389162
+        },
+        {
+          "time": 7396.158,
+          "load": [
+            7.17919921875,
+            6.46630859375,
+            6.56787109375
+          ],
+          "busyPercent": 57.49086479902557
+        },
+        {
+          "time": 8432.737625,
+          "load": [
+            7.17919921875,
+            6.46630859375,
+            6.56787109375
+          ],
+          "busyPercent": 52.131546894031665
+        },
+        {
+          "time": 9556.591583,
+          "load": [
+            7.17919921875,
+            6.46630859375,
+            6.56787109375
+          ],
+          "busyPercent": 58.08988764044945
+        },
+        {
+          "time": 10558.019,
+          "load": [
+            7.17919921875,
+            6.46630859375,
+            6.56787109375
+          ],
+          "busyPercent": 42.56926952141058
+        },
+        {
+          "time": 11559.4365,
+          "load": [
+            7.17919921875,
+            6.46630859375,
+            6.56787109375
+          ],
+          "busyPercent": 28.535669586983726
+        }
+      ],
+      "sources": [
+        {
+          "file": "./__demos__/basic.vue",
+          "bytes": 269,
+          "firstExpandMs": 170.90000009536743,
+          "repeatExpandMs": 52.200000047683716
+        },
+        {
+          "file": "./__demos__/task-calendar-workbench.vue",
+          "bytes": 39385,
+          "firstExpandMs": 108.69999980926514,
+          "repeatExpandMs": 151.70000004768372
+        }
+      ],
+      "interactions": null,
+      "hmr": null,
+      "failure": null,
+      "gate": {
+        "at": "2026-10-24T09:47:02.172Z",
+        "samples": [
+          19.14893617021277,
+          17.772215269086356,
+          17.23270440251572,
+          24.436090225563913,
+          14.267834793491863,
+          13.048933500627358,
+          21.223470661672906,
+          19.37106918238993
+        ],
+        "mean": 18.312656775695103,
+        "stddev": 3.415307754740405,
+        "load": [
+          7,
+          6.41357421875,
+          6.55126953125
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "file": "/private/tmp/cedar-waterfall-cli-v2-series-20261024/4-baseline-combined.json",
+      "mode": "baseline-combined",
+      "benchmarkVersion": "cli-equivalent-v2",
+      "customClientRegistered": true,
+      "node": "v23.9.0",
+      "pages": 274,
+      "pageContentHash": null,
+      "startupMs": 4988.905333000001,
+      "firstPageMs": 7881.494290999999,
+      "totalMs": 12870.399624,
+      "repeatPageMs": 3434.6441250000025,
+      "allExamplesMounted": 43,
+      "sourceRequestsBeforeExpand": 0,
+      "resourceCount": 1024,
+      "themeNativeScriptRequests": 138,
+      "themeBundleChunkRequests": 0,
+      "themeSassRequests": 47,
+      "aggregatedThemeSassRequests": 0,
+      "browserLongTasks": [
+        {
+          "startTime": 5935.099999904633,
+          "duration": 1660
+        }
+      ],
+      "viteReloads": [],
+      "localHttpFailures": [],
+      "configurationChangedDuringRun": false,
+      "pageErrors": [
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        }
+      ],
+      "hostSamplesThroughFirstPage": [
+        {
+          "time": 2172.7475,
+          "load": [
+            8.95458984375,
+            13.474609375,
+            10.58935546875
+          ],
+          "busyPercent": 37.01996927803379
+        },
+        {
+          "time": 3798.016125,
+          "load": [
+            8.4775390625,
+            13.30029296875,
+            10.54443359375
+          ],
+          "busyPercent": 34.057408844065165
+        },
+        {
+          "time": 4833.591333,
+          "load": [
+            8.4775390625,
+            13.30029296875,
+            10.54443359375
+          ],
+          "busyPercent": 41.504854368932044
+        },
+        {
+          "time": 5834.403208,
+          "load": [
+            8.4775390625,
+            13.30029296875,
+            10.54443359375
+          ],
+          "busyPercent": 65.74307304785893
+        },
+        {
+          "time": 6834.502333,
+          "load": [
+            8.4775390625,
+            13.30029296875,
+            10.54443359375
+          ],
+          "busyPercent": 61.97718631178708
+        },
+        {
+          "time": 7834.728875,
+          "load": [
+            8.4775390625,
+            13.30029296875,
+            10.54443359375
+          ],
+          "busyPercent": 66.9609079445145
+        },
+        {
+          "time": 8834.409333,
+          "load": [
+            8.19873046875,
+            13.162109375,
+            10.51171875
+          ],
+          "busyPercent": 67.92929292929293
+        },
+        {
+          "time": 9916.892875,
+          "load": [
+            8.19873046875,
+            13.162109375,
+            10.51171875
+          ],
+          "busyPercent": 62.36933797909408
+        },
+        {
+          "time": 10950.859875,
+          "load": [
+            8.19873046875,
+            13.162109375,
+            10.51171875
+          ],
+          "busyPercent": 50.85995085995086
+        },
+        {
+          "time": 11950.846292,
+          "load": [
+            8.19873046875,
+            13.162109375,
+            10.51171875
+          ],
+          "busyPercent": 60.12578616352201
+        },
+        {
+          "time": 12951.376792,
+          "load": [
+            8.19873046875,
+            13.162109375,
+            10.51171875
+          ],
+          "busyPercent": 42.04545454545454
+        },
+        {
+          "time": 13953.022417,
+          "load": [
+            7.6220703125,
+            12.9599609375,
+            10.45556640625
+          ],
+          "busyPercent": 29.145728643216085
+        }
+      ],
+      "sources": [
+        {
+          "file": "./__demos__/basic.vue",
+          "bytes": 269,
+          "firstExpandMs": 175.70000004768372,
+          "repeatExpandMs": 29.700000047683716
+        },
+        {
+          "file": "./__demos__/task-calendar-workbench.vue",
+          "bytes": 39421,
+          "firstExpandMs": 105.09999990463257,
+          "repeatExpandMs": 179.89999985694885
+        }
+      ],
+      "interactions": null,
+      "hmr": null,
+      "failure": null,
+      "gate": {
+        "at": "2026-10-24T09:55:15.706Z",
+        "samples": [
+          27.6595744680851,
+          14.392991239048813,
+          18.170426065162903,
+          15.954773869346738,
+          21.25786163522012,
+          15.874999999999995,
+          16.625,
+          29.648241206030146
+        ],
+        "mean": 19.947983560361727,
+        "stddev": 5.395301220643701,
+        "load": [
+          8.95458984375,
+          13.474609375,
+          10.58935546875
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "file": "/private/tmp/cedar-waterfall-cli-v2-series-20261024/5-baseline-combined.json",
+      "mode": "baseline-combined",
+      "benchmarkVersion": "cli-equivalent-v2",
+      "customClientRegistered": true,
+      "node": "v23.9.0",
+      "pages": 274,
+      "pageContentHash": null,
+      "startupMs": 4824.958209,
+      "firstPageMs": 7618.1185000000005,
+      "totalMs": 12443.076709,
+      "repeatPageMs": 3445.696499999998,
+      "allExamplesMounted": 43,
+      "sourceRequestsBeforeExpand": 0,
+      "resourceCount": 1024,
+      "themeNativeScriptRequests": 138,
+      "themeBundleChunkRequests": 0,
+      "themeSassRequests": 47,
+      "aggregatedThemeSassRequests": 0,
+      "browserLongTasks": [
+        {
+          "startTime": 5728.100000143051,
+          "duration": 1598
+        }
+      ],
+      "viteReloads": [],
+      "localHttpFailures": [],
+      "configurationChangedDuringRun": false,
+      "pageErrors": [
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        }
+      ],
+      "hostSamplesThroughFirstPage": [
+        {
+          "time": 1950.115792,
+          "load": [
+            6.1455078125,
+            12.1767578125,
+            10.24462890625
+          ],
+          "busyPercent": 46.64926022628373
+        },
+        {
+          "time": 3518.360834,
+          "load": [
+            6.1455078125,
+            12.1767578125,
+            10.24462890625
+          ],
+          "busyPercent": 42.799678197908285
+        },
+        {
+          "time": 4549.01825,
+          "load": [
+            6.1455078125,
+            12.1767578125,
+            10.24462890625
+          ],
+          "busyPercent": 36.441717791411044
+        },
+        {
+          "time": 5549.253417,
+          "load": [
+            6.1455078125,
+            12.1767578125,
+            10.24462890625
+          ],
+          "busyPercent": 72.73869346733667
+        },
+        {
+          "time": 6552.278292,
+          "load": [
+            6.1455078125,
+            12.1767578125,
+            10.24462890625
+          ],
+          "busyPercent": 74.93702770780857
+        },
+        {
+          "time": 7552.73925,
+          "load": [
+            5.7333984375,
+            11.99072265625,
+            10.1904296875
+          ],
+          "busyPercent": 65.57377049180329
+        },
+        {
+          "time": 8553.462042,
+          "load": [
+            5.7333984375,
+            11.99072265625,
+            10.1904296875
+          ],
+          "busyPercent": 68.43434343434343
+        },
+        {
+          "time": 9554.097959,
+          "load": [
+            5.7333984375,
+            11.99072265625,
+            10.1904296875
+          ],
+          "busyPercent": 54.020100502512555
+        },
+        {
+          "time": 10555.476959,
+          "load": [
+            5.7333984375,
+            11.99072265625,
+            10.1904296875
+          ],
+          "busyPercent": 52.65151515151515
+        },
+        {
+          "time": 11555.419917,
+          "load": [
+            5.7333984375,
+            11.99072265625,
+            10.1904296875
+          ],
+          "busyPercent": 55.893536121673
+        },
+        {
+          "time": 12556.704167,
+          "load": [
+            5.51416015625,
+            11.84130859375,
+            10.14794921875
+          ],
+          "busyPercent": 37.296620775969956
+        },
+        {
+          "time": 13556.217375,
+          "load": [
+            5.51416015625,
+            11.84130859375,
+            10.14794921875
+          ],
+          "busyPercent": 32.03026481715007
+        }
+      ],
+      "sources": [
+        {
+          "file": "./__demos__/basic.vue",
+          "bytes": 269,
+          "firstExpandMs": 171.09999990463257,
+          "repeatExpandMs": 112.09999990463257
+        },
+        {
+          "file": "./__demos__/task-calendar-workbench.vue",
+          "bytes": 39421,
+          "firstExpandMs": 261,
+          "repeatExpandMs": 87
+        }
+      ],
+      "interactions": null,
+      "hmr": null,
+      "failure": null,
+      "gate": {
+        "at": "2026-10-24T09:55:52.425Z",
+        "samples": [
+          23.173803526448367,
+          26.72521957340025,
+          14.142678347934922,
+          13.749999999999996,
+          12.437185929648242,
+          37.013801756587206,
+          21.999999999999996,
+          22.72159800249688
+        ],
+        "mean": 21.49553589206448,
+        "stddev": 7.655488274739755,
+        "load": [
+          6.41943359375,
+          12.33203125,
+          10.28759765625
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "file": "/private/tmp/cedar-waterfall-cli-v2-series-20261024/6-bundled.json",
+      "mode": "bundled",
+      "benchmarkVersion": "cli-equivalent-v2",
+      "customClientRegistered": true,
+      "node": "v23.9.0",
+      "pages": 274,
+      "pageContentHash": null,
+      "startupMs": 4381.099042,
+      "firstPageMs": 6245.202708000001,
+      "totalMs": 10626.30175,
+      "repeatPageMs": 3382.296209000002,
+      "allExamplesMounted": 43,
+      "sourceRequestsBeforeExpand": 0,
+      "resourceCount": 918,
+      "themeNativeScriptRequests": 74,
+      "themeBundleChunkRequests": 2,
+      "themeSassRequests": 2,
+      "aggregatedThemeSassRequests": 1,
+      "browserLongTasks": [
+        {
+          "startTime": 4304.099999904633,
+          "duration": 1648
+        }
+      ],
+      "viteReloads": [],
+      "localHttpFailures": [],
+      "configurationChangedDuringRun": false,
+      "pageErrors": [
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        }
+      ],
+      "hostSamplesThroughFirstPage": [
+        {
+          "time": 1842.772667,
+          "load": [
+            4.81494140625,
+            11.375,
+            10.0107421875
+          ],
+          "busyPercent": 53.02734375
+        },
+        {
+          "time": 3126.768792,
+          "load": [
+            4.81494140625,
+            11.375,
+            10.0107421875
+          ],
+          "busyPercent": 55.73122529644269
+        },
+        {
+          "time": 4156.043542,
+          "load": [
+            4.90966796875,
+            11.28564453125,
+            9.98681640625
+          ],
+          "busyPercent": 32.63803680981595
+        },
+        {
+          "time": 5156.335209,
+          "load": [
+            4.90966796875,
+            11.28564453125,
+            9.98681640625
+          ],
+          "busyPercent": 76.19647355163728
+        },
+        {
+          "time": 6156.983167,
+          "load": [
+            4.90966796875,
+            11.28564453125,
+            9.98681640625
+          ],
+          "busyPercent": 58.36477987421384
+        },
+        {
+          "time": 7168.677,
+          "load": [
+            4.90966796875,
+            11.28564453125,
+            9.98681640625
+          ],
+          "busyPercent": 61.021170610211705
+        },
+        {
+          "time": 8170.310375,
+          "load": [
+            4.90966796875,
+            11.28564453125,
+            9.98681640625
+          ],
+          "busyPercent": 47.672955974842765
+        },
+        {
+          "time": 9174.027875,
+          "load": [
+            4.99658203125,
+            11.19775390625,
+            9.96337890625
+          ],
+          "busyPercent": 70.16434892541088
+        },
+        {
+          "time": 10175.554834,
+          "load": [
+            4.99658203125,
+            11.19775390625,
+            9.96337890625
+          ],
+          "busyPercent": 47.72727272727273
+        },
+        {
+          "time": 11177.186959,
+          "load": [
+            4.99658203125,
+            11.19775390625,
+            9.96337890625
+          ],
+          "busyPercent": 45.93241551939925
+        }
+      ],
+      "sources": [
+        {
+          "file": "./__demos__/basic.vue",
+          "bytes": 269,
+          "firstExpandMs": 173.20000004768372,
+          "repeatExpandMs": 41
+        },
+        {
+          "file": "./__demos__/task-calendar-workbench.vue",
+          "bytes": 39421,
+          "firstExpandMs": 108.79999995231628,
+          "repeatExpandMs": 151.20000004768372
+        }
+      ],
+      "interactions": {
+        "monthAndWeek": true,
+        "dateNavigation": true,
+        "editAndSave": true,
+        "themeMenu": true,
+        "englishRouteAndReturn": true
+      },
+      "hmr": {
+        "demoUpdateMs": 190.7255839999998,
+        "importUpdateMs": 132.23520799999824,
+        "sourceUrlChanged": true,
+        "importUrlChanged": true,
+        "rawCopyTextCurrent": true,
+        "liveDemoUpdated": true
+      },
+      "failure": null,
+      "gate": {
+        "at": "2026-10-24T09:56:21.004Z",
+        "samples": [
+          14.661654135338342,
+          15.829145728643212,
+          20.050125313283207,
+          18.07980049875312,
+          13.358302122347066,
+          13.207547169811317,
+          16.226415094339618,
+          28.160200250312894
+        ],
+        "mean": 17.446648789103598,
+        "stddev": 4.589460734383304,
+        "load": [
+          4.81494140625,
+          11.375,
+          10.0107421875
+        ],
+        "accepted": true
+      }
+    }
+  ],
+  "auditRecords": [
+    {
+      "file": "/private/tmp/cedar-waterfall-cli-v2-hash-pair-20261024/1-baseline-combined.json",
+      "mode": "baseline-combined",
+      "benchmarkVersion": "cli-equivalent-v2",
+      "customClientRegistered": true,
+      "node": "v23.9.0",
+      "pages": 274,
+      "pageContentHash": "a5885bd8bc7f2f002e2d0dcc2e87c9a9472c5ce65602582ac1c07fdda8bb5e73",
+      "startupMs": 4659.544541,
+      "firstPageMs": 8492.925875,
+      "totalMs": 13152.470416,
+      "repeatPageMs": 4146.496666999999,
+      "allExamplesMounted": 43,
+      "sourceRequestsBeforeExpand": 0,
+      "resourceCount": 1024,
+      "themeNativeScriptRequests": 138,
+      "themeBundleChunkRequests": 0,
+      "themeSassRequests": 47,
+      "aggregatedThemeSassRequests": 0,
+      "browserLongTasks": [
+        {
+          "startTime": 6404.699999809265,
+          "duration": 1761
+        }
+      ],
+      "viteReloads": [],
+      "localHttpFailures": [],
+      "configurationChangedDuringRun": false,
+      "pageErrors": [
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        }
+      ],
+      "hostSamplesThroughFirstPage": [
+        {
+          "time": 2017.072709,
+          "load": [
+            7.29345703125,
+            9.978515625,
+            9.69287109375
+          ],
+          "busyPercent": 35.98949211908932
+        },
+        {
+          "time": 3525.520834,
+          "load": [
+            7.189453125,
+            9.912109375,
+            9.6708984375
+          ],
+          "busyPercent": 43.07178631051754
+        },
+        {
+          "time": 4575.848209,
+          "load": [
+            7.189453125,
+            9.912109375,
+            9.6708984375
+          ],
+          "busyPercent": 46.27403846153846
+        },
+        {
+          "time": 5576.833334,
+          "load": [
+            7.189453125,
+            9.912109375,
+            9.6708984375
+          ],
+          "busyPercent": 67.38035264483628
+        },
+        {
+          "time": 6596.718959,
+          "load": [
+            7.189453125,
+            9.912109375,
+            9.6708984375
+          ],
+          "busyPercent": 80.56930693069306
+        },
+        {
+          "time": 7596.763834,
+          "load": [
+            7.189453125,
+            9.912109375,
+            9.6708984375
+          ],
+          "busyPercent": 64.60176991150442
+        },
+        {
+          "time": 8596.850792,
+          "load": [
+            6.693359375,
+            9.763671875,
+            9.61962890625
+          ],
+          "busyPercent": 69.73518284993695
+        },
+        {
+          "time": 9603.868167,
+          "load": [
+            6.693359375,
+            9.763671875,
+            9.61962890625
+          ],
+          "busyPercent": 54.862842892768086
+        },
+        {
+          "time": 10605.744917,
+          "load": [
+            6.693359375,
+            9.763671875,
+            9.61962890625
+          ],
+          "busyPercent": 61.79066834804539
+        },
+        {
+          "time": 11800.779959,
+          "load": [
+            6.693359375,
+            9.763671875,
+            9.61962890625
+          ],
+          "busyPercent": 98.42767295597484
+        },
+        {
+          "time": 12803.7175,
+          "load": [
+            6.693359375,
+            9.763671875,
+            9.61962890625
+          ],
+          "busyPercent": 91.10275689223057
+        },
+        {
+          "time": 13804.621709,
+          "load": [
+            6.5576171875,
+            9.6845703125,
+            9.59228515625
+          ],
+          "busyPercent": 62.579013906447535
+        }
+      ],
+      "sources": [
+        {
+          "file": "./__demos__/basic.vue",
+          "bytes": 269,
+          "firstExpandMs": 190.70000004768372,
+          "repeatExpandMs": 54.299999952316284
+        },
+        {
+          "file": "./__demos__/task-calendar-workbench.vue",
+          "bytes": 39421,
+          "firstExpandMs": 123.5,
+          "repeatExpandMs": 204.19999980926514
+        }
+      ],
+      "interactions": null,
+      "hmr": null,
+      "failure": null,
+      "gate": {
+        "at": "2026-10-24T09:59:31.416Z",
+        "samples": [
+          18.867924528301884,
+          14.731585518102374,
+          13.124999999999998,
+          18.113207547169807,
+          15.855181023720355,
+          11.93467336683417,
+          14.768460575719644,
+          17.06398996235885
+        ],
+        "mean": 15.557502815275885,
+        "stddev": 2.241520818306284,
+        "load": [
+          7.29345703125,
+          9.978515625,
+          9.69287109375
+        ],
+        "accepted": true
+      }
+    },
+    {
+      "file": "/private/tmp/cedar-waterfall-cli-v2-hash-pair-20261024/2-bundled.json",
+      "mode": "bundled",
+      "benchmarkVersion": "cli-equivalent-v2",
+      "customClientRegistered": true,
+      "node": "v23.9.0",
+      "pages": 274,
+      "pageContentHash": "a5885bd8bc7f2f002e2d0dcc2e87c9a9472c5ce65602582ac1c07fdda8bb5e73",
+      "startupMs": 4635.34525,
+      "firstPageMs": 6130.3604159999995,
+      "totalMs": 10765.705666,
+      "repeatPageMs": 3370.284540999999,
+      "allExamplesMounted": 43,
+      "sourceRequestsBeforeExpand": 0,
+      "resourceCount": 918,
+      "themeNativeScriptRequests": 74,
+      "themeBundleChunkRequests": 2,
+      "themeSassRequests": 2,
+      "aggregatedThemeSassRequests": 1,
+      "browserLongTasks": [
+        {
+          "startTime": 4218.599999904633,
+          "duration": 1621
+        }
+      ],
+      "viteReloads": [],
+      "localHttpFailures": [],
+      "configurationChangedDuringRun": false,
+      "pageErrors": [
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        },
+        {
+          "message": "Event",
+          "stack": ""
+        }
+      ],
+      "hostSamplesThroughFirstPage": [
+        {
+          "time": 1940.265583,
+          "load": [
+            6.5751953125,
+            9.548828125,
+            9.54541015625
+          ],
+          "busyPercent": 33.18014705882353
+        },
+        {
+          "time": 3439.54025,
+          "load": [
+            6.60888671875,
+            9.50634765625,
+            9.5302734375
+          ],
+          "busyPercent": 35.462184873949575
+        },
+        {
+          "time": 4463.867583,
+          "load": [
+            6.60888671875,
+            9.50634765625,
+            9.5302734375
+          ],
+          "busyPercent": 32.06388206388206
+        },
+        {
+          "time": 5464.784041,
+          "load": [
+            6.60888671875,
+            9.50634765625,
+            9.5302734375
+          ],
+          "busyPercent": 66.75031367628608
+        },
+        {
+          "time": 6466.90125,
+          "load": [
+            6.60888671875,
+            9.50634765625,
+            9.5302734375
+          ],
+          "busyPercent": 62.958280657395704
+        },
+        {
+          "time": 7466.078958,
+          "load": [
+            6.60888671875,
+            9.50634765625,
+            9.5302734375
+          ],
+          "busyPercent": 58.4070796460177
+        },
+        {
+          "time": 8472.619458,
+          "load": [
+            6.23974609375,
+            9.38134765625,
+            9.48583984375
+          ],
+          "busyPercent": 44.987468671679196
+        },
+        {
+          "time": 9474.376583,
+          "load": [
+            6.23974609375,
+            9.38134765625,
+            9.48583984375
+          ],
+          "busyPercent": 57.68261964735517
+        },
+        {
+          "time": 10475.949,
+          "load": [
+            6.23974609375,
+            9.38134765625,
+            9.48583984375
+          ],
+          "busyPercent": 45.51201011378002
+        },
+        {
+          "time": 11476.972291,
+          "load": [
+            6.23974609375,
+            9.38134765625,
+            9.48583984375
+          ],
+          "busyPercent": 52.075471698113205
+        }
+      ],
+      "sources": [
+        {
+          "file": "./__demos__/basic.vue",
+          "bytes": 269,
+          "firstExpandMs": 172.40000009536743,
+          "repeatExpandMs": 40.69999980926514
+        },
+        {
+          "file": "./__demos__/task-calendar-workbench.vue",
+          "bytes": 39421,
+          "firstExpandMs": 125.40000009536743,
+          "repeatExpandMs": 90.79999995231628
+        }
+      ],
+      "interactions": {
+        "monthAndWeek": true,
+        "dateNavigation": true,
+        "editAndSave": true,
+        "themeMenu": true,
+        "englishRouteAndReturn": true
+      },
+      "hmr": {
+        "demoUpdateMs": 198.48716699999932,
+        "importUpdateMs": 132.3184169999986,
+        "sourceUrlChanged": true,
+        "importUrlChanged": true,
+        "rawCopyTextCurrent": true,
+        "liveDemoUpdated": true
+      },
+      "failure": null,
+      "gate": {
+        "at": "2026-10-24T10:00:01.759Z",
+        "samples": [
+          31.48614609571788,
+          29.65779467680608,
+          26.90863579474343,
+          33.0390920554855,
+          15.671641791044777,
+          12.468513853904284,
+          18.60174781523096,
+          17.861635220125784
+        ],
+        "mean": 23.21190091288234,
+        "stddev": 7.436455321521124,
+        "load": [
+          6.5751953125,
+          9.548828125,
+          9.54541015625
+        ],
+        "accepted": true
+      }
+    }
+  ],
+  "gateHistory": {
+    "criteria": {
+      "windowSeconds": 8,
+      "meanBusyMax": 25,
+      "maxBusyMax": 75,
+      "stddevMax": 8,
+      "waitLimitSeconds": 180
+    },
+    "rejectedAndAcceptedWindows": [
+      {
+        "at": "2026-10-24T09:43:47.827Z",
+        "samples": [
+          17.772215269086356,
+          14.429109159347552,
+          36.26097867001255,
+          15.30740276035132,
+          14.28571428571429,
+          16.957605985037404,
+          17.987421383647796,
+          17.587939698492463
+        ],
+        "mean": 18.823548401461217,
+        "stddev": 6.737425036393353,
+        "load": [
+          3.3154296875,
+          4.60693359375,
+          6.06591796875
+        ],
+        "accepted": true
+      },
+      {
+        "at": "2026-10-24T09:44:19.037Z",
+        "samples": [
+          100,
+          96.62077596996245,
+          91.98998748435544,
+          96.12015018773467,
+          97.50312109862672,
+          97.98994974874373,
+          96.63341645885288,
+          73.45911949685535
+        ],
+        "mean": 93.7895650556414,
+        "stddev": 7.969501250150814,
+        "load": [
+          5.79833984375,
+          5.064453125,
+          6.171875
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:44:27.047Z",
+        "samples": [
+          45.922208281053955,
+          64.05063291139241,
+          80.32581453634086,
+          48.10126582278481,
+          39.64868255959849,
+          67.29559748427674,
+          57.7020202020202,
+          55.27638190954774
+        ],
+        "mean": 57.29032546337691,
+        "stddev": 12.27582437519062,
+        "load": [
+          5.4140625,
+          4.99658203125,
+          6.14111328125
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:44:35.059Z",
+        "samples": [
+          61.58690176322419,
+          50.18867924528302,
+          58.11320754716981,
+          57.39570164348926,
+          56.90954773869347,
+          52.015113350125944,
+          60.277427490542244,
+          70.52896725440806
+        ],
+        "mean": 58.376943254116995,
+        "stddev": 5.834097506177074,
+        "load": [
+          6.509765625,
+          5.2568359375,
+          6.220703125
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:44:43.071Z",
+        "samples": [
+          53.5264483627204,
+          57.61006289308176,
+          63.27044025157234,
+          72.43994943109988,
+          55.15075376884422,
+          76.22641509433963,
+          68.13048933500627,
+          87.02770780856423
+        ],
+        "mean": 66.6727833681536,
+        "stddev": 10.841310290230636,
+        "load": [
+          6.30859375,
+          5.23583984375,
+          6.20751953125
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:44:51.082Z",
+        "samples": [
+          68.639798488665,
+          55.22012578616352,
+          46.85138539042821,
+          47.414880201765456,
+          42.64150943396226,
+          37.892095357590975,
+          39.824120603015075,
+          67.68060836501901
+        ],
+        "mean": 50.770565453326185,
+        "stddev": 11.199550338119947,
+        "load": [
+          5.79296875,
+          5.1611328125,
+          6.16943359375
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:44:59.091Z",
+        "samples": [
+          64.82412060301507,
+          72.39648682559599,
+          63.38383838383839,
+          48.68255959849436,
+          75.09481668773704,
+          44.165621079046424,
+          48.55345911949686,
+          45.238095238095234
+        ],
+        "mean": 57.79237469191492,
+        "stddev": 11.752707909399525,
+        "load": [
+          5.9716796875,
+          5.220703125,
+          6.17822265625
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:45:07.104Z",
+        "samples": [
+          38.16120906801007,
+          69.54887218045113,
+          72.1662468513854,
+          23.929471032745596,
+          32.29036295369212,
+          28.785982478097626,
+          23.684210526315784,
+          19.975031210986273
+        ],
+        "mean": 38.567673287710505,
+        "stddev": 19.382436998645904,
+        "load": [
+          6.0537109375,
+          5.25,
+          6.1826171875
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:45:15.116Z",
+        "samples": [
+          30.538172715894873,
+          23.124999999999996,
+          26.817042606516296,
+          39.34426229508197,
+          51.75438596491229,
+          47.23618090452262,
+          38.54818523153942,
+          44.27672955974843
+        ],
+        "mean": 37.704994909776985,
+        "stddev": 9.469040715414028,
+        "load": [
+          5.35009765625,
+          5.1259765625,
+          6.12744140625
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:45:23.129Z",
+        "samples": [
+          50.314465408805034,
+          64.57286432160805,
+          80.83228247162674,
+          63.27044025157234,
+          26.78347934918648,
+          32.1608040201005,
+          29.374999999999996,
+          68.72635561160152
+        ],
+        "mean": 52.004461429312585,
+        "stddev": 19.171493580210186,
+        "load": [
+          5.16162109375,
+          5.09033203125,
+          6.10888671875
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:45:31.147Z",
+        "samples": [
+          92.96482412060301,
+          91.73967459324155,
+          93.74217772215269,
+          76.00502512562815,
+          41.666666666666664,
+          23.970037453183522,
+          27.352572145545796,
+          28.07017543859649
+        ],
+        "mean": 59.43889415820224,
+        "stddev": 30.01229080609474,
+        "load": [
+          5.51123046875,
+          5.16845703125,
+          6.12451171875
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:45:39.167Z",
+        "samples": [
+          67.9245283018868,
+          100,
+          99.75155279503105,
+          100,
+          100,
+          99.625,
+          98.87780548628429,
+          85.73216520650814
+        ],
+        "mean": 93.98888147371379,
+        "stddev": 10.867384105631272,
+        "load": [
+          8.494140625,
+          5.8203125,
+          6.3447265625
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:45:47.196Z",
+        "samples": [
+          97.36842105263158,
+          86.5,
+          74.06015037593986,
+          92.375,
+          96.52173913043478,
+          90.28642590286427,
+          81.02372034956305,
+          82.45614035087719
+        ],
+        "mean": 87.57394964528883,
+        "stddev": 7.5769043242404495,
+        "load": [
+          9.4951171875,
+          6.072265625,
+          6.43017578125
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:45:55.207Z",
+        "samples": [
+          59.94993742177722,
+          67.66541822721598,
+          66.41604010025063,
+          71.51819322459222,
+          55.56946182728411,
+          54.80649188514357,
+          59.55056179775281,
+          53.56695869837297
+        ],
+        "mean": 61.13038289779869,
+        "stddev": 6.2305855939360155,
+        "load": [
+          10.78271484375,
+          6.4638671875,
+          6.564453125
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:46:03.226Z",
+        "samples": [
+          55.081555834378925,
+          54.975124378109456,
+          60.150375939849624,
+          64.26799007444168,
+          67,
+          52.065081351689614,
+          52.7431421446384,
+          57.55305867665419
+        ],
+        "mean": 57.97954104997024,
+        "stddev": 5.069926367841819,
+        "load": [
+          11.8408203125,
+          6.7548828125,
+          6.66650390625
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:46:11.237Z",
+        "samples": [
+          57.78894472361809,
+          56.838143036386455,
+          58.5,
+          53.70138017565872,
+          66.75031367628608,
+          61.07634543178973,
+          47.57160647571607,
+          51.44291091593476
+        ],
+        "mean": 56.70870555442374,
+        "stddev": 5.529034239462444,
+        "load": [
+          12.041015625,
+          6.97412109375,
+          6.74560546875
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:46:19.249Z",
+        "samples": [
+          51.44291091593476,
+          47.05882352941176,
+          58.30212234706617,
+          43.287327478042656,
+          32.03517587939698,
+          29.57393483709273,
+          15.394242803504376,
+          14.500000000000002
+        ],
+        "mean": 36.449317223806176,
+        "stddev": 15.221354916913679,
+        "load": [
+          10.49072265625,
+          6.8095703125,
+          6.68994140625
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:46:27.263Z",
+        "samples": [
+          15.375000000000005,
+          15.625,
+          18.21608040201005,
+          20.93316519546028,
+          14.249999999999996,
+          26.90863579474343,
+          17.610062893081757,
+          15.625
+        ],
+        "mean": 18.06786803566194,
+        "stddev": 3.8788451553363656,
+        "load": [
+          9.73046875,
+          6.712890625,
+          6.65625
+        ],
+        "accepted": true
+      },
+      {
+        "at": "2026-10-24T09:46:54.160Z",
+        "samples": [
+          56.075949367088604,
+          17.211055276381913,
+          17.396745932415524,
+          12.531328320802004,
+          17.254408060453397,
+          16.354556803995003,
+          19.899874843554443,
+          15.162907268170422
+        ],
+        "mean": 21.485853234107662,
+        "stddev": 13.221116005611988,
+        "load": [
+          7.5224609375,
+          6.50537109375,
+          6.58447265625
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:47:02.172Z",
+        "samples": [
+          19.14893617021277,
+          17.772215269086356,
+          17.23270440251572,
+          24.436090225563913,
+          14.267834793491863,
+          13.048933500627358,
+          21.223470661672906,
+          19.37106918238993
+        ],
+        "mean": 18.312656775695103,
+        "stddev": 3.415307754740405,
+        "load": [
+          7,
+          6.41357421875,
+          6.55126953125
+        ],
+        "accepted": true
+      },
+      {
+        "at": "2026-10-24T09:47:28.323Z",
+        "samples": [
+          14.321608040201006,
+          16.354556803995003,
+          25.283018867924532,
+          32.3943661971831,
+          61.111111111111114,
+          53.9622641509434,
+          44.84924623115578,
+          39.19597989949749
+        ],
+        "mean": 35.93401891275143,
+        "stddev": 15.91166965251003,
+        "load": [
+          6.25927734375,
+          6.29638671875,
+          6.5048828125
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:47:36.334Z",
+        "samples": [
+          40.7035175879397,
+          37.71929824561403,
+          40.32663316582915,
+          40.80604534005038,
+          38.77038895859472,
+          40.476190476190474,
+          37.957124842370746,
+          39.17396745932415
+        ],
+        "mean": 39.49164575948917,
+        "stddev": 1.1715328038593251,
+        "load": [
+          7.6474609375,
+          6.583984375,
+          6.603515625
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:47:44.344Z",
+        "samples": [
+          42.4812030075188,
+          38.9168765743073,
+          40.72681704260651,
+          56.51629072681704,
+          64.9497487437186,
+          52.63819095477387,
+          62.911392405063296,
+          54.64824120603016
+        ],
+        "mean": 51.72359508260444,
+        "stddev": 9.372972441892973,
+        "load": [
+          7.21435546875,
+          6.5302734375,
+          6.583984375
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:47:52.353Z",
+        "samples": [
+          47.86432160804021,
+          43.50567465321563,
+          45.79673776662484,
+          40.62893081761006,
+          48.546144121365366,
+          44.51450189155107,
+          45.04391468005019,
+          42.82115869017632
+        ],
+        "mean": 44.84017302857921,
+        "stddev": 2.4375743730013917,
+        "load": [
+          6.87646484375,
+          6.47119140625,
+          6.5625
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:48:00.362Z",
+        "samples": [
+          48.93617021276596,
+          52.327044025157235,
+          63.21112515802781,
+          32.83208020050126,
+          47.984886649874056,
+          46.733668341708544,
+          34.430379746835435,
+          37.515683814303635
+        ],
+        "mean": 45.49637976864675,
+        "stddev": 9.529941199689357,
+        "load": [
+          7.38525390625,
+          6.60107421875,
+          6.60791015625
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:48:08.370Z",
+        "samples": [
+          38.06532663316583,
+          39.79848866498741,
+          37.27959697732997,
+          46.80050188205772,
+          31.731984829329964,
+          39.924433249370274,
+          39.34426229508197,
+          36.85534591194969
+        ],
+        "mean": 38.72499255540911,
+        "stddev": 3.9228570727432595,
+        "load": [
+          8.15478515625,
+          6.7734375,
+          6.66845703125
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:48:16.382Z",
+        "samples": [
+          51.201011378002526,
+          39.64868255959849,
+          44.611528822055135,
+          53.92405063291139,
+          36.05527638190955,
+          53.70138017565872,
+          48.86649874055416,
+          43.702770780856426
+        ],
+        "mean": 46.4638999339433,
+        "stddev": 6.145012404413914,
+        "load": [
+          7.21435546875,
+          6.61572265625,
+          6.61328125
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:48:24.392Z",
+        "samples": [
+          52.015113350125944,
+          59.59849435382685,
+          39.06447534766119,
+          36.4321608040201,
+          39.092055485498115,
+          40.100250626566414,
+          43.8685208596713,
+          40.45226130653267
+        ],
+        "mean": 43.82791651673782,
+        "stddev": 7.423353867563735,
+        "load": [
+          7.54931640625,
+          6.7099609375,
+          6.646484375
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:48:32.400Z",
+        "samples": [
+          50.441361916771754,
+          37.20050441361917,
+          46.173149309912176,
+          34.46969696969697,
+          31.823899371069185,
+          41.4572864321608,
+          34.2964824120603,
+          74.14880201765448
+        ],
+        "mean": 43.751397855368104,
+        "stddev": 12.945126730874463,
+        "load": [
+          7.1044921875,
+          6.63134765625,
+          6.619140625
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:48:40.410Z",
+        "samples": [
+          37.48427672955975,
+          42.85714285714286,
+          42.8030303030303,
+          44.51450189155107,
+          37.311557788944725,
+          75.6926952141058,
+          62.28070175438596,
+          44.905660377358494
+        ],
+        "mean": 48.48119586450987,
+        "stddev": 12.594521409752755,
+        "load": [
+          7.00146484375,
+          6.6259765625,
+          6.6171875
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:48:48.418Z",
+        "samples": [
+          47.53476611883691,
+          46.97732997481109,
+          50.63291139240506,
+          61.160151324085746,
+          32.70676691729323,
+          43.48925410872313,
+          48.86934673366834,
+          50.18915510718789
+        ],
+        "mean": 47.69496020962643,
+        "stddev": 7.419717633376787,
+        "load": [
+          6.9208984375,
+          6.615234375,
+          6.61328125
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:48:56.430Z",
+        "samples": [
+          40.85750315258512,
+          39.57286432160804,
+          52.015113350125944,
+          38.66498740554156,
+          44.51450189155107,
+          45.39722572509458,
+          59.24528301886792,
+          77.77777777777779
+        ],
+        "mean": 49.755657080393995,
+        "stddev": 12.41336169509584,
+        "load": [
+          5.93603515625,
+          6.41357421875,
+          6.54150390625
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:49:04.445Z",
+        "samples": [
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100
+        ],
+        "mean": 100,
+        "stddev": 0,
+        "load": [
+          8.7802734375,
+          7.0078125,
+          6.7509765625
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:49:12.463Z",
+        "samples": [
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100
+        ],
+        "mean": 100,
+        "stddev": 0,
+        "load": [
+          9.9189453125,
+          7.27294921875,
+          6.845703125
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:49:20.481Z",
+        "samples": [
+          100,
+          100,
+          97.62796504369538,
+          92.71356783919597,
+          98.24341279799246,
+          99.62640099626401,
+          99.12826899128268,
+          94.4792973651192
+        ],
+        "mean": 97.7273641291937,
+        "stddev": 2.5461466082571484,
+        "load": [
+          10.63232421875,
+          7.5107421875,
+          6.9345703125
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:49:28.516Z",
+        "samples": [
+          98.62155388471177,
+          93.875,
+          95.23809523809523,
+          94.84924623115577,
+          97.12858926342072,
+          97.74718397997498,
+          96.875,
+          99.37655860349128
+        ],
+        "mean": 96.71390340010623,
+        "stddev": 1.7926508633830747,
+        "load": [
+          10.90185546875,
+          7.6181640625,
+          6.9755859375
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:49:36.610Z",
+        "samples": [
+          99.87531172069825,
+          98.61982434127981,
+          99.87531172069825,
+          100,
+          98.49246231155779,
+          99.25280199252802,
+          92.08542713567839,
+          88.79093198992443
+        ],
+        "mean": 97.12400890154562,
+        "stddev": 3.982461939858978,
+        "load": [
+          11.83251953125,
+          7.92626953125,
+          7.09228515625
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:49:44.663Z",
+        "samples": [
+          80.15075376884423,
+          81.03015075376885,
+          95.28415961305924,
+          99.00497512437812,
+          94.61152882205513,
+          96.49561952440551,
+          94.49311639549437,
+          98.3729662077597
+        ],
+        "mean": 92.43040877622064,
+        "stddev": 7.008714229576918,
+        "load": [
+          13.01416015625,
+          8.30712890625,
+          7.23681640625
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:49:52.687Z",
+        "samples": [
+          98.87218045112782,
+          93.11639549436796,
+          87.78337531486147,
+          88.17610062893083,
+          94.73023839397742,
+          96.2406015037594,
+          99.87515605493134,
+          99.62732919254658
+        ],
+        "mean": 94.80267212931285,
+        "stddev": 4.523089389113718,
+        "load": [
+          14.7744140625,
+          8.75,
+          7.3994140625
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:50:00.717Z",
+        "samples": [
+          100,
+          99.75124378109453,
+          99.87546699875467,
+          99.37578027465668,
+          100,
+          99.62640099626401,
+          100,
+          99.62640099626401
+        ],
+        "mean": 99.78191163087924,
+        "stddev": 0.21380204850808424,
+        "load": [
+          15.5771484375,
+          9.1201171875,
+          7.54638671875
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:50:08.750Z",
+        "samples": [
+          99.50186799501867,
+          100,
+          98.75156054931335,
+          100,
+          100,
+          100,
+          100,
+          100
+        ],
+        "mean": 99.7816785680415,
+        "stddev": 0.42211114875086886,
+        "load": [
+          15.37060546875,
+          9.18408203125,
+          7.578125
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:50:16.781Z",
+        "samples": [
+          100,
+          99.87730061349693,
+          100,
+          99.87515605493134,
+          99.7496871088861,
+          99.87515605493134,
+          100,
+          99.87546699875467
+        ],
+        "mean": 99.90659585387505,
+        "stddev": 0.0826116641576399,
+        "load": [
+          16.40234375,
+          9.60595703125,
+          7.74658203125
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:50:24.819Z",
+        "samples": [
+          99.87468671679198,
+          99.87531172069825,
+          96.37046307884856,
+          93.734335839599,
+          100,
+          99.87562189054727,
+          100,
+          99.875
+        ],
+        "mean": 98.70067740581062,
+        "stddev": 2.2076151584578154,
+        "load": [
+          16.74072265625,
+          9.89892578125,
+          7.8720703125
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:54:19.627Z",
+        "samples": [
+          49.68474148802018,
+          41.4572864321608,
+          49.875,
+          37.59398496240601,
+          31.439393939393945,
+          30.075187969924812,
+          31.038798498122656,
+          31.493099121706404
+        ],
+        "mean": 37.83218655146685,
+        "stddev": 7.794897998712921,
+        "load": [
+          13.009765625,
+          14.7724609375,
+          10.818359375
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:54:27.647Z",
+        "samples": [
+          53.105196451204066,
+          37.34335839598998,
+          36.762860727728985,
+          36.56998738965952,
+          41.38364779874214,
+          36.13550815558344,
+          40.35308953341741,
+          70.82262210796915
+        ],
+        "mean": 44.05953382003683,
+        "stddev": 11.380998096606046,
+        "load": [
+          12.2880859375,
+          14.59326171875,
+          10.7783203125
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:54:35.655Z",
+        "samples": [
+          93.47553324968632,
+          97.12140175219024,
+          98.86934673366834,
+          98.75,
+          99.62453066332915,
+          99.12609238451935,
+          97.375,
+          93.72647427854454
+        ],
+        "mean": 97.25854738274224,
+        "stddev": 2.2562084665565507,
+        "load": [
+          12.63720703125,
+          14.58984375,
+          10.8212890625
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:54:43.667Z",
+        "samples": [
+          90.57788944723619,
+          99.75031210986268,
+          99.62593516209476,
+          98.99874843554443,
+          98.37702871410737,
+          99.62406015037594,
+          99.875,
+          99.625
+        ],
+        "mean": 98.30674675240267,
+        "stddev": 2.957526512785691,
+        "load": [
+          12.666015625,
+          14.56298828125,
+          10.833984375
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:54:51.672Z",
+        "samples": [
+          99.75,
+          90.98873591989988,
+          60.71428571428572,
+          67.97966963151208,
+          74.36868686868688,
+          83.60655737704919,
+          88.57868020304569,
+          85.96713021491782
+        ],
+        "mean": 81.49421824117466,
+        "stddev": 12.058709354144117,
+        "load": [
+          12.22998046875,
+          14.4111328125,
+          10.8232421875
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:54:59.682Z",
+        "samples": [
+          88.0352644836272,
+          83.73570520965691,
+          75.60355781448538,
+          78.18411097099623,
+          72.58883248730965,
+          82.33799237611181,
+          86.85208596713021,
+          85.24173027989822
+        ],
+        "mean": 81.57240994865195,
+        "stddev": 5.198386431127315,
+        "load": [
+          11.12451171875,
+          14.10107421875,
+          10.7548828125
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:55:07.693Z",
+        "samples": [
+          53.68956743002544,
+          48.80503144654088,
+          37.182741116751274,
+          21.90237797246558,
+          19.899244332493705,
+          23.994974874371856,
+          20.175438596491226,
+          15.577889447236181
+        ],
+        "mean": 30.15340815204702,
+        "stddev": 13.575735081712976,
+        "load": [
+          10.3134765625,
+          13.88330078125,
+          10.697265625
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:55:15.706Z",
+        "samples": [
+          27.6595744680851,
+          14.392991239048813,
+          18.170426065162903,
+          15.954773869346738,
+          21.25786163522012,
+          15.874999999999995,
+          16.625,
+          29.648241206030146
+        ],
+        "mean": 19.947983560361727,
+        "stddev": 5.395301220643701,
+        "load": [
+          8.95458984375,
+          13.474609375,
+          10.58935546875
+        ],
+        "accepted": true
+      },
+      {
+        "at": "2026-10-24T09:55:44.412Z",
+        "samples": [
+          14.893617021276595,
+          13.892365456821022,
+          17.8168130489335,
+          12.265331664580724,
+          14.518147684605754,
+          26.599749058971145,
+          39.52020202020202,
+          27.091136079900124
+        ],
+        "mean": 20.82467025441136,
+        "stddev": 8.856205369647112,
+        "load": [
+          6.369140625,
+          12.42236328125,
+          10.30712890625
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:55:52.425Z",
+        "samples": [
+          23.173803526448367,
+          26.72521957340025,
+          14.142678347934922,
+          13.749999999999996,
+          12.437185929648242,
+          37.013801756587206,
+          21.999999999999996,
+          22.72159800249688
+        ],
+        "mean": 21.49553589206448,
+        "stddev": 7.655488274739755,
+        "load": [
+          6.41943359375,
+          12.33203125,
+          10.28759765625
+        ],
+        "accepted": true
+      },
+      {
+        "at": "2026-10-24T09:56:21.004Z",
+        "samples": [
+          14.661654135338342,
+          15.829145728643212,
+          20.050125313283207,
+          18.07980049875312,
+          13.358302122347066,
+          13.207547169811317,
+          16.226415094339618,
+          28.160200250312894
+        ],
+        "mean": 17.446648789103598,
+        "stddev": 4.589460734383304,
+        "load": [
+          4.81494140625,
+          11.375,
+          10.0107421875
+        ],
+        "accepted": true
+      }
+    ],
+    "interruptions": [
+      {
+        "at": "2026-10-24T09:54:11.611Z",
+        "reason": "Error: No stable host window within 180 seconds; measurements not started under unsuitable load"
+      }
+    ],
+    "auditWindows": [
+      {
+        "at": "2026-10-24T09:59:15.391Z",
+        "samples": [
+          42.33668341708543,
+          34.339622641509436,
+          32.20125786163523,
+          29.92424242424242,
+          36.23737373737374,
+          30.112923462986195,
+          31.85840707964602,
+          42.21105527638191
+        ],
+        "mean": 34.902695737607544,
+        "stddev": 4.6779681020189114,
+        "load": [
+          8.5712890625,
+          10.34033203125,
+          9.81298828125
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:59:23.404Z",
+        "samples": [
+          34.41802252816019,
+          28.045685279187815,
+          30.865746549560857,
+          29.166666666666664,
+          44.76670870113493,
+          19.725343320848943,
+          18.193224592220826,
+          15.73033707865169
+        ],
+        "mean": 27.61396683955399,
+        "stddev": 8.98529686373168,
+        "load": [
+          8.4453125,
+          10.28466796875,
+          9.79638671875
+        ],
+        "accepted": false
+      },
+      {
+        "at": "2026-10-24T09:59:31.416Z",
+        "samples": [
+          18.867924528301884,
+          14.731585518102374,
+          13.124999999999998,
+          18.113207547169807,
+          15.855181023720355,
+          11.93467336683417,
+          14.768460575719644,
+          17.06398996235885
+        ],
+        "mean": 15.557502815275885,
+        "stddev": 2.241520818306284,
+        "load": [
+          7.29345703125,
+          9.978515625,
+          9.69287109375
+        ],
+        "accepted": true
+      },
+      {
+        "at": "2026-10-24T10:00:01.759Z",
+        "samples": [
+          31.48614609571788,
+          29.65779467680608,
+          26.90863579474343,
+          33.0390920554855,
+          15.671641791044777,
+          12.468513853904284,
+          18.60174781523096,
+          17.861635220125784
+        ],
+        "mean": 23.21190091288234,
+        "stddev": 7.436455321521124,
+        "load": [
+          6.5751953125,
+          9.548828125,
+          9.54541015625
+        ],
+        "accepted": true
+      }
+    ]
+  },
+  "notes": [
+    "No sample was discarded because of its duration. Gates use CPU occupancy and variance before a run; background load may still change during a run.",
+    "Empty-stack Event errors come from blocked external font/icon scripts, including during post-timing reloads and route checks. Local HTTP failures and other errors are separately retained.",
+    "Remaining total still exceeds 10 seconds. The first-mount main-thread task remains around 1.6-1.7 seconds; local component compilation/request chains still contribute.",
+    "Theme JS providers/composables/utils, VuePress state and local UI sources remain native modules; only immutable theme presentation modules are bundled on their first actual request."
+  ],
+  "excludedExperimentalRecords": [
+    {
+      "path": "/private/tmp/cedar-waterfall-series-20261024",
+      "reason": "v1 omitted custom client; not full-site timings"
+    },
+    {
+      "path": "/private/tmp/cedar-waterfall-client-series-20261024",
+      "reason": "v1 omitted custom client; not full-site timings"
+    },
+    {
+      "path": "/private/tmp/cedar-waterfall-final-series-20261024",
+      "reason": "v1 custom-theme-menu validation failed and exposed missing CLI user-config registration; superseded"
+    },
+    {
+      "path": "/private/tmp/cedar-waterfall-cli-v2-probe.json",
+      "reason": "v2 functionality probe passed, but lacked the formal pre-run CPU gate; not used in comparison summary"
+    }
+  ]
+}

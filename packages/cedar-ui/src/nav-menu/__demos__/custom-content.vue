@@ -1,6 +1,6 @@
 <template>
   <c-nav-menu :options="options">
-    <template #label="{ option, selected }"><strong :style="{ fontWeight: selected ? 700 : 400 }">{{ option.label }}</strong></template>
+    <template #label="{ option, active }"><strong :style="{ fontWeight: active ? 700 : 400 }">{{ option.label }}</strong></template>
     <template #extra="{ option }"><c-tag v-if="option.key === 'inbox'">3</c-tag></template>
   </c-nav-menu>
 </template>

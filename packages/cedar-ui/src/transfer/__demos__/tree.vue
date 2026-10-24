@@ -4,7 +4,7 @@
       <c-tree
         :checkable="true"
         checked-strategy="child"
-        :checked-keys="selectedKeys"
+        :checked-values="selectedKeys"
         :data="getTreeData(data)"
         @check="onSelect"
       />
@@ -15,50 +15,50 @@
 <script lang="ts" setup>
 const treeData = [
   {
-    title: 'Trunk 0-0',
-    key: '0-0',
+    label: 'Trunk 0-0',
+    value: '0-0',
     children: [
       {
-        title: 'Leaf 0-0-1',
-        key: '0-0-1',
+        label: 'Leaf 0-0-1',
+        value: '0-0-1',
       },
       {
-        title: 'Branch 0-0-2',
-        key: '0-0-2',
+        label: 'Branch 0-0-2',
+        value: '0-0-2',
         children: [
           {
-            title: 'Leaf 0-0-2-1',
-            key: '0-0-2-1',
+            label: 'Leaf 0-0-2-1',
+            value: '0-0-2-1',
           },
           {
-            title: 'Leaf 0-0-2-2',
-            key: '0-0-2-2',
+            label: 'Leaf 0-0-2-2',
+            value: '0-0-2-2',
           },
         ],
       },
     ],
   },
   {
-    title: 'Trunk 0-1',
-    key: '0-1',
+    label: 'Trunk 0-1',
+    value: '0-1',
     children: [
       {
-        title: 'Branch 0-1-1',
-        key: '0-1-1',
+        label: 'Branch 0-1-1',
+        value: '0-1-1',
         children: [
           {
-            title: 'Leaf 0-1-1-1',
-            key: '0-1-1-1',
+            label: 'Leaf 0-1-1-1',
+            value: '0-1-1-1',
           },
           {
-            title: 'Leaf 0-1-1-2',
-            key: '0-1-1-2',
+            label: 'Leaf 0-1-1-2',
+            value: '0-1-1-2',
           },
         ],
       },
       {
-        title: 'Leaf 0-1-2',
-        key: '0-1-2',
+        label: 'Leaf 0-1-2',
+        value: '0-1-2',
       },
     ],
   },
@@ -67,7 +67,7 @@ const treeData = [
 const getTransferData = (treeData = [], transferDataSource = []) => {
   treeData.forEach((item) => {
     if (item.children) getTransferData(item.children, transferDataSource)
-    else transferDataSource.push({ label: item.title, value: item.key })
+    else transferDataSource.push({ label: item.label, value: item.value })
   })
   return transferDataSource
 }
@@ -78,8 +78,8 @@ const getTreeData = (data = []) => {
   const travel = (_treeData = []) => {
     const treeDataSource = []
     _treeData.forEach((item) => {
-      if (item.children || values.includes(item.key)) {
-        treeDataSource.push({ title: item.title, key: item.key, children: travel(item.children) })
+      if (item.children || values.includes(item.value)) {
+        treeDataSource.push({ label: item.label, value: item.value, children: travel(item.children) })
       }
     })
     return treeDataSource

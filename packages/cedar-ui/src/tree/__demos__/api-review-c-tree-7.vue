@@ -15,17 +15,17 @@
         v-on="__apiReview.listeners"
       >
         <template
-          v-if="__apiReview.slotEnabled['title'] !== false"
-          #title="nodeData"
+          v-if="__apiReview.slotEnabled['label'] !== false"
+          #label="nodeData"
         >
           <template v-if="(index = getMatchIndex(nodeData?.title)) < 0">
             {{ nodeData?.title }}
           </template>
           <span v-else>
-            {{ nodeData?.title?.substr(0, index) }}
+            {{ nodeData?.label?.substr(0, index) }}
             <span style="color: var(--color-primary-light-4)">
-              {{ nodeData?.title?.substr(index, searchKey.length) }} </span
-            >{{ nodeData?.title?.substr(index + searchKey.length) }}
+              {{ nodeData?.label?.substr(index, searchKey.length) }} </span
+            >{{ nodeData?.label?.substr(index + searchKey.length) }}
           </span>
         </template>
         <template v-if="__apiReview.slotEnabled['extra']" #extra="__reviewSlot"
@@ -78,7 +78,7 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review-c-tree-7.config.json";
 
 import { computed, ref } from "vue";
@@ -87,46 +87,46 @@ let index;
 
 const originTreeData = [
   {
-    title: "Trunk 0-0",
-    key: "0-0",
+    label: "Trunk 0-0",
+    value: "0-0",
     children: [
       {
-        title: "Branch 0-0-1",
-        key: "0-0-1",
+        label: "Branch 0-0-1",
+        value: "0-0-1",
         children: [
           {
-            title: "Leaf 0-0-1-1",
-            key: "0-0-1-1",
+            label: "Leaf 0-0-1-1",
+            value: "0-0-1-1",
           },
           {
-            title: "Leaf 0-0-1-2",
-            key: "0-0-1-2",
+            label: "Leaf 0-0-1-2",
+            value: "0-0-1-2",
           },
         ],
       },
     ],
   },
   {
-    title: "Trunk 0-1",
-    key: "0-1",
+    label: "Trunk 0-1",
+    value: "0-1",
     children: [
       {
-        title: "Branch 0-1-1",
-        key: "0-1-1",
+        label: "Branch 0-1-1",
+        value: "0-1-1",
         children: [
           {
-            title: "Leaf 0-1-1-0",
-            key: "0-1-1-0",
+            label: "Leaf 0-1-1-0",
+            value: "0-1-1-0",
           },
         ],
       },
       {
-        title: "Branch 0-1-2",
-        key: "0-1-2",
+        label: "Branch 0-1-2",
+        value: "0-1-2",
         children: [
           {
-            title: "Leaf 0-1-2-0",
-            key: "0-1-2-0",
+            label: "Leaf 0-1-2-0",
+            value: "0-1-2-0",
           },
         ],
       },

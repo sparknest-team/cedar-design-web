@@ -4,7 +4,7 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review-c-tab-item-1.config.json";
 </script>
 <template>
@@ -13,7 +13,7 @@ import __apiReviewRawConfig from "./api-review-c-tab-item-1.config.json";
     v-bind="defineReviewConfig(__apiReviewRawConfig)"
   >
     <c-tabs
-      default-active="overview"
+      default-value="overview"
       item-class="custom-tab-content"
       :item-style="{ padding: '16px' }"
       item-wrapper-class="custom-tab-panel"
@@ -25,18 +25,18 @@ import __apiReviewRawConfig from "./api-review-c-tab-item-1.config.json";
       :tab-style="{ borderRadius: '8px' }"
     >
       <c-tabs-navs :style="{ paddingInline: 0 }">
-        <c-tab-nav key="overview" title="概览" />
-        <c-tab-nav key="details" title="详情" />
+        <c-tab-nav name="overview" title="概览" />
+        <c-tab-nav name="details" title="详情" />
       </c-tabs-navs>
       <c-tabs-items>
         <c-tab-item
-          key="overview"
+          name="overview"
           v-bind="__apiReview.bindings"
           v-on="__apiReview.listeners"
           >统一设置导航、内容和内容外层样式。</c-tab-item
         >
         <c-tab-item
-          key="details"
+          name="details"
           v-bind="__apiReview.bindings"
           v-on="__apiReview.listeners"
           >自定义类名保留内置选中状态，样式支持响应式更新。</c-tab-item

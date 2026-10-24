@@ -4,7 +4,7 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review-c-tab-nav-1.config.json";
 </script>
 <template>
@@ -16,7 +16,7 @@ import __apiReviewRawConfig from "./api-review-c-tab-nav-1.config.json";
       <c-tabs>
         <c-tabs-navs>
           <c-tab-nav
-            key="1"
+            name="1"
             v-bind="__apiReview.bindings"
             v-on="__apiReview.listeners"
           >
@@ -28,7 +28,7 @@ import __apiReviewRawConfig from "./api-review-c-tab-nav-1.config.json";
             >
           </c-tab-nav>
           <c-tab-nav
-            key="2"
+            name="2"
             v-bind="__apiReview.bindings"
             v-on="__apiReview.listeners"
           >
@@ -40,7 +40,7 @@ import __apiReviewRawConfig from "./api-review-c-tab-nav-1.config.json";
             >
           </c-tab-nav>
           <c-tab-nav
-            key="3"
+            name="3"
             v-bind="__apiReview.bindings"
             v-on="__apiReview.listeners"
           >
@@ -53,16 +53,16 @@ import __apiReviewRawConfig from "./api-review-c-tab-nav-1.config.json";
           </c-tab-nav>
         </c-tabs-navs>
         <c-tabs-items>
-          <c-tab-item key="1"> Content of Tab Panel 1</c-tab-item>
-          <c-tab-item key="2"> Content of Tab Panel 2</c-tab-item>
-          <c-tab-item key="3"> Content of Tab Panel 3</c-tab-item>
+          <c-tab-item name="1"> Content of Tab Panel 1</c-tab-item>
+          <c-tab-item name="2"> Content of Tab Panel 2</c-tab-item>
+          <c-tab-item name="3"> Content of Tab Panel 3</c-tab-item>
         </c-tabs-items>
       </c-tabs>
 
       <c-tabs>
         <c-tabs-navs>
           <c-tab-nav
-            key="1"
+            name="1"
             item-vertical
             v-bind="__apiReview.bindings"
             v-on="__apiReview.listeners"
@@ -75,7 +75,7 @@ import __apiReviewRawConfig from "./api-review-c-tab-nav-1.config.json";
             >
           </c-tab-nav>
           <c-tab-nav
-            key="2"
+            name="2"
             item-vertical
             v-bind="__apiReview.bindings"
             v-on="__apiReview.listeners"
@@ -88,7 +88,7 @@ import __apiReviewRawConfig from "./api-review-c-tab-nav-1.config.json";
             >
           </c-tab-nav>
           <c-tab-nav
-            key="3"
+            name="3"
             item-vertical
             v-bind="__apiReview.bindings"
             v-on="__apiReview.listeners"
@@ -102,9 +102,9 @@ import __apiReviewRawConfig from "./api-review-c-tab-nav-1.config.json";
           </c-tab-nav>
         </c-tabs-navs>
         <c-tabs-items>
-          <c-tab-item key="1"> Content of Tab Panel 1</c-tab-item>
-          <c-tab-item key="2"> Content of Tab Panel 2</c-tab-item>
-          <c-tab-item key="3"> Content of Tab Panel 3</c-tab-item>
+          <c-tab-item name="1"> Content of Tab Panel 1</c-tab-item>
+          <c-tab-item name="2"> Content of Tab Panel 2</c-tab-item>
+          <c-tab-item name="3"> Content of Tab Panel 3</c-tab-item>
         </c-tabs-items>
       </c-tabs>
     </c-space>

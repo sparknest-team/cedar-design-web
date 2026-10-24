@@ -30,7 +30,7 @@ permalink: /components/menu/
 
 SplitButton 已封装按钮与下拉命令菜单的组合，并通过 `MenuOption` 定义附加操作，完整用法见 [SplitButton](/components/split-button/)。
 
-### 激活值与 select 事件
+### 选中值与 select 事件
 
 使用 `v-model` 管理当前激活值。激活命令时先触发 `update:modelValue`，再触发 `select(value, option, event)`；`select` 表示激活菜单项，不表示表单值变化。
 
@@ -52,9 +52,17 @@ SplitButton 已封装按钮与下拉命令菜单的组合，并通过 `MenuOptio
 
 ### 自定义选项内容
 
-推荐直接在选项中传入 `icon`、`extra` 或 VNode；三者也可使用接收 `{ option, active, level }` 的渲染函数。需要统一渲染整组数据时，使用 `option-label`、`option-icon`、`option-extra` 作用域插槽。这个模式与 NavMenu 一致，比为每项拼装模板更适合动态数据。
+选项的 `label`、`icon`、`extra` 都支持文本、VNode 或接收 `{ option, active, level }` 的渲染函数。需要统一渲染整组数据时，使用 `option-label`、`option-icon`、`option-extra` 作用域插槽。
+
+`active` 只表示当前选项自身是否匹配菜单的选中值。选中子项时，父分支的 `active` 仍为 `false`；后代选中及展开状态只用于组件内部的路径强调，不作为渲染参数公开。根 Menu 使用 `modelValue/defaultValue` 控制选中值、`open/defaultOpen` 控制展开。`MenuOption` 的视觉强调统一使用 `highlight`，不会改变选中值。
 
 <demo src="./__demos__/option-content.vue"></demo>
+
+### 选中与视觉强调
+
+对比渲染函数、作用域插槽和手写 MenuOption。父分支可以有选中路径样式，但 active 仍为 false；highlight 也不会把选项变成选中值。
+
+<demo src="./__demos__/active-rendering.vue"></demo>
 
 ### 触发方式
 
@@ -90,6 +98,10 @@ SplitButton 已封装按钮与下拉命令菜单的组合，并通过 `MenuOptio
 <!-- api-review:end -->
 
 ## API
+
+### 主值与默认值
+
+使用普通 `v-model`。`modelValue` 表示选中选项的 value；`defaultValue` 仅在创建时初始化非受控值，后续修改不会重置当前状态。显式绑定值优先，初始化不发出 `update:modelValue`。
 
 ### `<Menu>` Props
 
@@ -132,7 +144,7 @@ SplitButton 已封装按钮与下拉命令菜单的组合，并通过 `MenuOptio
 
 | 事件名 | 描述 | 参数 |
 | --- | --- | --- |
-| update:model-value | 当前激活值更新请求 | `value: MenuValue` |
+| update:model-value | 当前选中值更新请求 | `value: MenuValue` |
 | open-change | 浮层显示状态更新请求 | `open: boolean` |
 | select | 用户激活菜单项 | `value, option, event` |
 
@@ -149,7 +161,7 @@ SplitButton 已封装按钮与下拉命令菜单的组合，并通过 `MenuOptio
 
 ### `<MenuOption>`
 
-保留给 SplitButton 和少量手写 `content` 场景。Props 包含 `label`、`value`、`disabled`、`ripple`；插槽包含 `default`、`icon`、`suffix`；点击时触发 `click`。分组和子菜单只通过 `options` 描述，不再导出 `MenuGroup`、`MenuSubmenu`。
+保留给 SplitButton 和少量手写 `content` 场景。Props 包含 `label`、`value`、`disabled`、`ripple`、`highlight`；`label` 渲染函数及 `default`、`icon`、`suffix` 插槽统一接收 `{ option, active, level }`；点击时触发 `click`。`highlight` 只控制视觉强调，不提交选中值。分组和子菜单只通过 `options` 描述，不再导出 `MenuGroup`、`MenuSubmenu`。
 
 ### 实例与键盘
 
@@ -159,8 +171,12 @@ SplitButton 已封装按钮与下拉命令菜单的组合，并通过 `MenuOptio
 
 ### 状态与时长变量
 
-禁用优先于选中、指针 hover 和键盘 active。选中后的 hover 使用独立角色，默认继承选中背景；可单独覆盖以增加 hover 反馈。两端的选中背景都直接绘制在选项上。
+禁用优先于选中、指针 hover 和键盘焦点。选中后的 hover 使用独立角色，默认继承选中背景；可单独覆盖以增加 hover 反馈。两端的选中背景都直接绘制在选项上。
 
 | Token | Default |
 | --- | --- |
 | `--c-menu-option-bg-selected-hover` | `var(--c-menu-option-bg-selected)` |
+
+### 数据身份与触发器切换
+
+可重排的数据项应提供稳定、唯一的 `value`，内部 Vue key 由业务值生成；数字 `0`、字符串 `'0'`、布尔值 `false` 保持不同身份。没有显式 value 的分组、分隔符或展示项按原始选项对象维持渲染身份，不新增公开 key 别名。点击另一个已经因 hover 打开的同级触发按钮，会关闭原先的菜单；点击子菜单内部不会误关父级。

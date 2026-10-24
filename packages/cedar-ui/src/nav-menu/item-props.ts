@@ -9,7 +9,8 @@ export const navMenuItemProps = {
   modelValue: navMenuProps.modelValue,
   defaultValue: navMenuProps.defaultValue,
   fieldNames: navMenuProps.fieldNames,
-  active: { type: Boolean, default: undefined },
+  /** 入口的视觉高亮覆盖；不改变当前入口或选中值，省略时跟随业务 active。 */
+  highlight: { type: Boolean, default: undefined },
   disabled: Boolean,
   open: { type: Boolean, default: undefined },
   defaultOpen: Boolean,
@@ -26,6 +27,7 @@ export type NavMenuItemProps = import('vue').ExtractPublicPropTypes<typeof navMe
 export interface NavMenuItemSlotContext {
   modelValue: import('./types').NavMenuKey | null
   selectedOption: import('./types').NavMenuOption | undefined
+  /** 业务当前入口；独立于 highlight 和 open。 */
   active: boolean
   open: boolean
   select: (key: import('./types').NavMenuKey | null, event?: Event) => void

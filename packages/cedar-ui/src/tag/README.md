@@ -79,6 +79,10 @@ permalink: /components/tag/
 
 ## API
 
+### 主值与默认值
+
+使用普通 `v-model`。`modelValue` 表示可选标签是否选中，布尔值；`defaultValue` 仅在创建时初始化非受控值，后续修改不会重置当前状态。显式绑定值优先，初始化不发出 `update:modelValue`。
+
 ### `<Tag>` Props
 
 | 属性                  | 说明                                 | 类型                                                                                                                                                   | 默认值  |
@@ -93,8 +97,8 @@ permalink: /components/tag/
 | loading               | 标签是否为加载中状态                 | `boolean`                                                                                                                                              | `false` |
 | closable              | 标签是否可关闭                       | `boolean`                                                                                                                                              | `false` |
 | checkable             | 标签是否可选中                       | `boolean`                                                                                                                                              | `false` |
-| checked **(v-model)** | 标签是否选中（标签可选中时可用）     | `boolean`                                                                                                                                              | -       |
-| default-checked       | 标签默认选中状态（标签可选中时可用） | `boolean`                                                                                                                                              | `true`  |
+| model-value **(v-model)** | 标签是否选中（标签可选中时可用）     | `boolean`                                                                                                                                              | -       |
+| default-value       | 标签默认选中状态（标签可选中时可用） | `boolean`                                                                                                                                              | `true`  |
 | nowrap                | 内容是否不换行（超出省略）           | `boolean`                                                                                                                                              | `false` |
 | round                 | 是否为圆角胶囊形                     | `boolean`                                                                                                                                              | `false` |
 
@@ -105,7 +109,7 @@ permalink: /components/tag/
 | close  | 点击关闭按钮时触发                     | `(event: MouseEvent) => void`                 |
 | check  | 用户选中时触发（仅在可选中模式下触发） | `(check: boolean, event: MouseEvent) => void` |
 | update:show | 可见状态变化                       | `(show: boolean) => void`                     |
-| update:checked | 选中状态变化                     | `(checked: boolean) => void`                  |
+| update:model-value | 选中状态变化                     | `(checked: boolean) => void`                  |
 
 ### `<Tag>` Slots
 
@@ -120,7 +124,7 @@ permalink: /components/tag/
 组件导出以下类型定义
 
 ```ts
-import type { TagProps } from '@cedarjs/ui'
+import type { TagProps } from '@cedar-design/ui'
 ```
 
 ## 同源实现与平台边界

@@ -90,7 +90,7 @@ export const treeProps = {
      * @zh 默认选中的树节点
      * @en Tree node selected by default
      * */
-    defaultSelectedKeys: {
+    defaultSelectedValues: {
       type: Array as PropType<Array<string | number>>,
     },
     /**
@@ -98,14 +98,14 @@ export const treeProps = {
      * @en Selected tree node
      * @v-model
      */
-    selectedKeys: {
+    selectedValues: {
       type: Array as PropType<Array<string | number>>,
     },
     /**
      * @zh 默认选中复选框的树节点
      * @en Tree node with checkbox selected by default
      * */
-    defaultCheckedKeys: {
+    defaultCheckedValues: {
       type: Array as PropType<Array<string | number>>,
     },
     /**
@@ -113,14 +113,14 @@ export const treeProps = {
      * @en Tree node with check box selected
      * @v-model
      */
-    checkedKeys: {
+    checkedValues: {
       type: Array as PropType<Array<string | number>>,
     },
     /**
      * @zh 默认展开的节点
      * @en Nodes expanded by default
      * */
-    defaultExpandedKeys: {
+    defaultExpandedValues: {
       type: Array as PropType<Array<string | number>>,
     },
     /**
@@ -128,7 +128,7 @@ export const treeProps = {
      * @en Expanded node
      * @v-model
      */
-    expandedKeys: {
+    expandedValues: {
       type: Array as PropType<Array<string | number>>,
     },
     /**
@@ -219,12 +219,12 @@ export const treeProps = {
      * @version 2.19.0
      * @v-model
      */
-    halfCheckedKeys: {
+    halfCheckedValues: {
       type: Array as PropType<Array<string | number>>,
     },
     /**
-     * @zh 开启后 checkedKeys 只处理叶子节点，父节点状态由子节点决定（仅在 checkable 且 checkStrictly 为 false 时生效）
-     * @en When enabled, checkedKeys is only for checked leaf nodes, and the status of the parent node is determined by the child node.(Only valid when checkable and checkStrictly is false)
+     * @zh 开启后 checkedValues 只处理叶子节点，父节点状态由子节点决定（仅在 checkable 且 checkStrictly 为 false 时生效）
+     * @en When enabled, checkedValues is only for checked leaf nodes, and the status of the parent node is determined by the child node.(Only valid when checkable and checkStrictly is false)
      * @version 2.21.0
      */
     onlyCheckLeaf: {

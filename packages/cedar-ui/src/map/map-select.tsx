@@ -1,7 +1,7 @@
 import { ref, defineComponent, useAttrs, useSlots, onMounted, h, watch, getCurrentInstance, computed, toRaw } from 'vue'
 import { setValueWithAlias, dataToScope, realTransformAlias } from '../utils/useSetValueWithAlias'
 import { mapProps, type PoiKeys } from './props'
-import { IconLocation, IconLoading } from '@cedarjs/icons-vue'
+import { IconLocation, IconLoading } from '@cedar-design/icons-vue'
 import Input from '../input'
 import Dialog from '../dialog'
 import Map from './map'

@@ -1,18 +1,18 @@
 import { CSSProperties } from 'vue'
-import { TreeFieldNames, TreeNodeData, TreeProps, TreeNodeKey, LoadMore, CheckedStrategy } from '../tree/types'
+import { TreeFieldNames, TreeNodeData, TreeProps, TreeNodeValue, LoadMore, CheckedStrategy } from '../tree/types'
 import { TriggerProps } from '../trigger'
 import { ComponentSize } from '../_utils/constant'
 
 export interface LabelValue {
-  value: TreeNodeKey
+  value: TreeNodeValue
   label: string | number
 }
 
-export type TreeSelectValue = TreeNodeKey | TreeNodeKey[] | LabelValue | LabelValue[]
+export type TreeSelectValue = TreeNodeValue | TreeNodeValue[] | LabelValue | LabelValue[]
 
 export type FilterTreeNode = (searchKey: string, nodeData: TreeNodeData) => boolean
 
-export type FallbackOption = boolean | ((key: TreeNodeKey) => TreeNodeData | boolean)
+export type FallbackOption = boolean | ((value: TreeNodeValue) => TreeNodeData | boolean)
 
 export type ChangeHandler = (selectedValue: TreeSelectValue | undefined) => void
 

@@ -4,7 +4,7 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review-c-pagination-3.config.json";
 
 import { ref } from "vue";
@@ -18,7 +18,7 @@ const current = ref(5);
   >
     <div class="pagination-demo">
       <c-pagination
-        v-model:current="current"
+        v-model="current"
         v-model:page-size="pageSize"
         :total="200"
         show-page-size

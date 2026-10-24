@@ -1,4 +1,4 @@
-import { schedulerDate, schedulerDateKey } from "./index";
+import { schedulerDate, schedulerDateKey } from "./base";
 import { SchedulerError } from "./types";
 import type { SchedulerDate, SchedulerRange } from "./types";
 import type { SchedulerDisabledRange } from "./availability";

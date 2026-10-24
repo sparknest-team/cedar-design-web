@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Message } from "@cedarjs/ui";
+import { Message } from "@cedar-design/ui";
 </script>
 <template>
   <c-icon

@@ -9,7 +9,7 @@ import {
   type ComputedRef,
   type VNode,
 } from 'vue'
-import { isArray, removeItem } from '@cedarjs/shared'
+import { isArray, removeItem } from '@cedar-design/shared'
 
 function flatVNodes(subTree: any) {
   const vNodes: VNode[] = []

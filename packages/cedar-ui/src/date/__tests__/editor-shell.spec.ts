@@ -3,6 +3,7 @@ import { flushPromises, mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it } from 'vitest'
 import DateInput from '../index'
 import DatePicker from '../DatePicker.vue'
+import DatePanel from '../DatePanel.vue'
 import TimePanel from '../../time/picker/Panel.vue'
 import EditorPanel from '../../_components/field-presentation/EditorPanel.vue'
 
@@ -12,7 +13,7 @@ const wrappers: ReturnType<typeof mount>[] = []
 afterEach(() => wrappers.splice(0).forEach(wrapper => wrapper.unmount()))
 
 describe('date editor action ownership', () => {
-  it('renders one close and one confirmation in the host; now changes only the draft', async () => {
+  it('keeps native date controls inside the compact editor; Now changes only the draft until host confirmation', async () => {
     const wrapper = mount(DateInput, {
       props: { modelValue: '2025-01-15 09:30:00', showTime: true, datePickerProps: { showNowButton: true }, presentation: 'dblclick' },
       global: { stubs: { Dialog: Surface, DatePanelContent: Content } },
@@ -20,16 +21,23 @@ describe('date editor action ownership', () => {
     wrappers.push(wrapper)
     await wrapper.get('[aria-haspopup=dialog]').trigger('click')
     await flushPromises()
+    expect(wrapper.findComponent(EditorPanel).exists()).toBe(false)
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    await wrapper.get('[aria-haspopup=dialog]').trigger('dblclick')
+    await flushPromises()
     const panel = wrapper.getComponent(EditorPanel)
-    expect(panel.get('[role=heading]').text()).toBe('请选择')
+    expect(panel.find('[role=heading]').exists()).toBe(false)
     expect(panel.findAll('button[aria-label="关闭"]')).toHaveLength(1)
-    expect(panel.findAll('footer button').map(button => button.text())).toEqual(['此刻', '确定'])
-    expect(panel.find('[class$="__body"]').findAll('button')).toHaveLength(0)
-    await panel.findAll('footer button')[0].trigger('click')
+    expect(panel.findAll('footer button').map(button => button.text())).toEqual(['确定', '×'])
+    await panel.get('input').trigger('click')
+    await flushPromises()
+    const native = wrapper.getComponent(DatePanel)
+    expect(native.findAll('button').filter(button => button.text() === '确定')).toHaveLength(0)
+    await native.findAll('button').find(button => button.text() === '此刻')!.trigger('click')
     expect(wrapper.emitted('update:modelValue')).toBeUndefined()
     const candidate = wrapper.emitted('select')?.[0][0]
     expect(candidate).toBeTruthy()
-    await panel.findAll('footer button')[1].trigger('click')
+    await panel.findAll('footer button')[0].trigger('click')
     await flushPromises()
     expect(wrapper.emitted('update:modelValue')?.[0][0]).toEqual(candidate)
   })

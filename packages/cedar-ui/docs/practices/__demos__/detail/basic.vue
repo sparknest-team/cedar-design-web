@@ -14,16 +14,16 @@
     </div>
   </c-affix>
   <div class="m-24 c-bg-0">
-    <c-tabs :body-padding="false" default-active="3">
+    <c-tabs :body-padding="false" default-value="3">
       <c-tabs-navs>
-        <c-tab-nav key="1" title="基础信息" />
-        <c-tab-nav key="2" title="关联线索" />
-        <c-tab-nav key="3" title="商务信息" />
+        <c-tab-nav name="1" title="基础信息" />
+        <c-tab-nav name="2" title="关联线索" />
+        <c-tab-nav name="3" title="商务信息" />
       </c-tabs-navs>
       <c-tabs-items>
-        <c-tab-item key="1">基础信息</c-tab-item>
-        <c-tab-item key="2">关联线索</c-tab-item>
-        <c-tab-item key="3">
+        <c-tab-item name="1">基础信息</c-tab-item>
+        <c-tab-item name="2">关联线索</c-tab-item>
+        <c-tab-item name="3">
           <c-space :size="24" class="p-24" direction="column" fill>
             <!--card-->
             <div>

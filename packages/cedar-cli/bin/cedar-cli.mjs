@@ -10,6 +10,7 @@ if (command !== 'compile') {
   console.error('Usage: cedar-cli compile [config]')
   process.exitCode = 1
 } else {
+  process.env.NODE_ENV = 'production'
   const configUrl = new URL(`file://${resolve(process.cwd(), configPath)}`)
   const configModule = await import(configUrl.href)
   const config = configModule.default

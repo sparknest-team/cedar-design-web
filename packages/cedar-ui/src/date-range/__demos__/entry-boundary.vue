@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import type { DateValue } from "@cedarjs/ui";
+import type { DateValue } from "@cedar-design/ui";
 const limited = ref(true);
 const blockEnd20 = ref(false);
 const disabledEnd = (date: Date, side: "start" | "end") =>

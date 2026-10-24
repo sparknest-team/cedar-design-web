@@ -5,7 +5,7 @@
         height: '200px',
         width: '100%',
         minWidth: '500px',
-        border: '1px solid var(--color-border)',
+        border: '1px solid var(--c-color-border-2)',
       }"
       v-model:size="size"
       min="80px"

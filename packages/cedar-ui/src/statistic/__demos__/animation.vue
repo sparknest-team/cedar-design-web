@@ -19,7 +19,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { IconArrowRise } from '@cedarjs/icons-vue'
+import { IconArrowRise } from '@cedar-design/icons-vue'
 
 const started = ref(false)
 </script>

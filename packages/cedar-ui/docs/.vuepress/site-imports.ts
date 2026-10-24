@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import ts from 'typescript'
 import type { Plugin } from 'vite'
-import { CedarResolver } from '@cedarjs/resolver'
+import { CedarResolver } from '@cedar-design/resolver'
 
 /** Resolve docs imports through the public component entries, avoiding the runtime barrel. */
 export function readSiteExports(sourceDir: string) {
@@ -40,13 +40,12 @@ export function readSiteExports(sourceDir: string) {
   return modules
 }
 
-export function createSiteResolver(sourceDir: string) {
-  const modules = readSiteExports(sourceDir)
+export function createSiteResolver(sourceDir: string, modules = readSiteExports(sourceDir)) {
   return CedarResolver().map(resolver => ({
     ...resolver,
     resolve(name: string) {
       const result = resolver.resolve(name)
-      if (result?.from !== '@cedarjs/ui') return result
+      if (result?.from !== '@cedar-design/ui') return result
       const from = modules.get(result.name)
       if (!from) throw new Error(`[Cedar docs] Missing public export: ${result.name}`)
       return { ...result, from }
@@ -54,20 +53,42 @@ export function createSiteResolver(sourceDir: string) {
   }))
 }
 
-export function createSiteImportPlugin(sourceDir: string): Plugin {
-  const modules = readSiteExports(sourceDir)
+export function getSiteComponentExcludes(sourceDir: string) {
+  const source = sourceDir.replace(/\\/g, '/').replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  return [/node_modules/, new RegExp(`^(?:/@fs)?${source}/(?!(?:[^/]+/)*(?:example|examples|__demos__|docs)/).*\\.(?:vue|[cm]?[jt]sx?)(?:\\?|$)`)]
+}
+
+function readSiteIconExports(sourceDir: string) {
+  const filename = resolve(sourceDir, '../../cedar-icons-vue/src/index.ts')
+  const source = ts.createSourceFile(filename, readFileSync(filename, 'utf8'), ts.ScriptTarget.Latest, true)
+  const icons = new Map<string, string>()
+  for (const statement of source.statements) {
+    if (!ts.isExportDeclaration(statement) || !statement.moduleSpecifier || !ts.isStringLiteral(statement.moduleSpecifier)
+      || !statement.moduleSpecifier.text.startsWith('./icon-') || !statement.exportClause || !ts.isNamedExports(statement.exportClause)) continue
+    for (const item of statement.exportClause.elements) {
+      icons.set(item.name.text, `@cedar-design/icons-vue/${statement.moduleSpecifier.text.slice(2)}`)
+    }
+  }
+  return icons
+}
+
+export function createSiteImportPlugin(sourceDir: string, modules = readSiteExports(sourceDir)): Plugin {
+  const icons = readSiteIconExports(sourceDir)
   return {
     name: 'cedar:site-source-imports',
     enforce: 'post',
     transform(code, id) {
-      if (!/\.(?:[cm]?[jt]sx?|vue|md)(?:\?|$)/.test(id) || !code.includes('@cedarjs/ui')) return
+      if (!/\.(?:[cm]?[jt]sx?|vue|md)(?:\?|$)/.test(id) || (!code.includes('@cedar-design/ui') && !code.includes('@cedar-design/icons-vue'))) return
       const source = ts.createSourceFile(id, code, ts.ScriptTarget.Latest, true)
       const edits: Array<{start: number; end: number; value: string}> = []
       for (const statement of source.statements) {
-        if (!ts.isImportDeclaration(statement) || !ts.isStringLiteral(statement.moduleSpecifier) || statement.moduleSpecifier.text !== '@cedarjs/ui' || !statement.importClause || statement.importClause.isTypeOnly || statement.importClause.name || !statement.importClause.namedBindings || !ts.isNamedImports(statement.importClause.namedBindings)) continue
+        if (!ts.isImportDeclaration(statement) || !ts.isStringLiteral(statement.moduleSpecifier) || !statement.importClause || statement.importClause.isTypeOnly || statement.importClause.name || !statement.importClause.namedBindings || !ts.isNamedImports(statement.importClause.namedBindings)) continue
+        const targets = statement.moduleSpecifier.text === '@cedar-design/ui' ? modules
+          : statement.moduleSpecifier.text === '@cedar-design/icons-vue' ? icons : undefined
+        if (!targets) continue
         const items = statement.importClause.namedBindings.elements
-        if (!items.length || items.some(item => !modules.has((item.propertyName ?? item.name).text))) continue
-        edits.push({start: statement.getStart(source), end: statement.end, value: items.map(item => `import { ${item.getText(source)} } from ${JSON.stringify(modules.get((item.propertyName ?? item.name).text))};`).join('\n')})
+        if (!items.length || items.some(item => !targets.has((item.propertyName ?? item.name).text))) continue
+        edits.push({start: statement.getStart(source), end: statement.end, value: items.map(item => `import { ${item.getText(source)} } from ${JSON.stringify(targets.get((item.propertyName ?? item.name).text))};`).join('\n')})
       }
       if (!edits.length) return
       let result = code

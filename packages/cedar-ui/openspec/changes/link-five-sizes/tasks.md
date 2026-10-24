@@ -1,0 +1,3 @@
+- [x] Implement matching props, types and size styles in both libraries.
+- [x] Update Chinese/English demos, mobile examples and API reference.
+- [x] Verify paired tests, theme contracts, lint and actual desktop/mobile sizing.

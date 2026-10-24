@@ -20,11 +20,11 @@ function loop(path = '0', level = 2) {
   for (let i = 0; i < 10; i += 1) {
     const key = `${path}-${i}`
     const treeNode: {
-      title: string
-      key: string
+      label: string
+      value: string
       children?: ReturnType<typeof loop>
     } = {
-      title: key,
+      label: key,
       key,
     }
 
@@ -40,6 +40,6 @@ function loop(path = '0', level = 2) {
 const treeRef = ref()
 const treeData = loop()
 const scrollIntoView = () => {
-  treeRef.value && treeRef.value.scrollIntoView({ key: '0-0-2-2' })
+  treeRef.value && treeRef.value.scrollIntoView({ value: '0-0-2-2' })
 }
 </script>

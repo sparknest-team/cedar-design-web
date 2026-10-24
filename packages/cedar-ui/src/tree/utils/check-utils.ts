@@ -1,4 +1,4 @@
-import { Key2TreeNode, Node, TreeNodeKey } from '../types'
+import { Key2TreeNode, Node, TreeNodeValue } from '../types'
 
 function SetAdd<T>(set: Set<T>): (value: T) => Set<T> {
   return Set.prototype.add.bind(set)
@@ -14,7 +14,7 @@ export function isNodeCheckable(node: Node) {
 }
 
 function getChildrenKeys(node: Node) {
-  const keys: TreeNodeKey[] = []
+  const keys: TreeNodeValue[] = []
   node.children?.forEach((child) => {
     if (isNodeCheckable(child)) {
       keys.push(child.key, ...getChildrenKeys(child))
@@ -23,7 +23,7 @@ function getChildrenKeys(node: Node) {
   return keys
 }
 
-function updateParent(options: { node: Node; checkedKeySet: Set<TreeNodeKey>; indeterminateKeySet: Set<TreeNodeKey> }) {
+function updateParent(options: { node: Node; checkedKeySet: Set<TreeNodeValue>; indeterminateKeySet: Set<TreeNodeValue> }) {
   const { node, checkedKeySet, indeterminateKeySet } = options
   let parentNode = node.parent
   while (parentNode) {
@@ -61,14 +61,14 @@ function updateParent(options: { node: Node; checkedKeySet: Set<TreeNodeKey>; in
 export function getCheckedStateByCheck(options: {
   node: Node
   checked: boolean
-  checkedKeys: TreeNodeKey[]
-  indeterminateKeys: TreeNodeKey[]
+  checkedValues: TreeNodeValue[]
+  indeterminateKeys: TreeNodeValue[]
   checkStrictly?: boolean
 }) {
-  const { node, checked, checkedKeys, indeterminateKeys, checkStrictly = false } = options
+  const { node, checked, checkedValues, indeterminateKeys, checkStrictly = false } = options
 
   const { key } = node
-  const checkedKeySet = new Set(checkedKeys)
+  const checkedKeySet = new Set(checkedValues)
   const indeterminateKeySet = new Set(indeterminateKeys)
 
   // 更新自己
@@ -93,19 +93,19 @@ export function getCheckedStateByCheck(options: {
 }
 
 export function getCheckedStateByInitKeys(options: {
-  initCheckedKeys: TreeNodeKey[]
+  initCheckedValues: TreeNodeValue[]
   key2TreeNode: Key2TreeNode
   checkStrictly?: boolean
   onlyCheckLeaf?: boolean
 }) {
-  const { initCheckedKeys, key2TreeNode, checkStrictly, onlyCheckLeaf } = options
+  const { initCheckedValues, key2TreeNode, checkStrictly, onlyCheckLeaf } = options
 
-  const checkedKeySet = new Set<TreeNodeKey>()
-  const childCheckedKeySet = new Set<TreeNodeKey>()
-  const indeterminateKeySet = new Set<TreeNodeKey>()
+  const checkedKeySet = new Set<TreeNodeValue>()
+  const childCheckedKeySet = new Set<TreeNodeValue>()
+  const indeterminateKeySet = new Set<TreeNodeValue>()
 
   if (!checkStrictly) {
-    initCheckedKeys.forEach((key) => {
+    initCheckedValues.forEach((key) => {
       const node = key2TreeNode.get(key)
       if (!node || childCheckedKeySet.has(key) || (onlyCheckLeaf && node.children?.length)) {
         return
@@ -121,7 +121,7 @@ export function getCheckedStateByInitKeys(options: {
       updateParent({ node, checkedKeySet, indeterminateKeySet })
     })
   } else {
-    initCheckedKeys.forEach(SetAdd(checkedKeySet))
+    initCheckedValues.forEach(SetAdd(checkedKeySet))
   }
 
   return [[...checkedKeySet, ...childCheckedKeySet], [...indeterminateKeySet]]

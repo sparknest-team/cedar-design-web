@@ -8,7 +8,7 @@ permalink: /guide/theme/
 
 Cedar 与 Maple 对齐：
 
-- `import { StyleProvider, Themes } from '@cedarjs/ui'`
+- `import { StyleProvider, Themes } from '@cedar-design/ui'`
 - `StyleProvider.setStyleVars(Themes.default.dark)` 使用默认青绿色暗色主题
 - `StyleProvider.setStyleVars(Themes.maple.light)` 使用枫叶亮色主题
 - 两套主题都提供 `light` / `dark`

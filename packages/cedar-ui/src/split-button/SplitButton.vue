@@ -49,7 +49,7 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import { IconMenuDown } from '@cedarjs/icons-vue'
+import { IconMenuDown } from '@cedar-design/icons-vue'
 import { createNamespace } from '../_utils/global-config'
 import Button, { ButtonGroup, type ButtonHandler } from '../button'
 import Menu, { type MenuInstance } from '../menu'

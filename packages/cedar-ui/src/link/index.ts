@@ -6,7 +6,7 @@ const Link = withInstall(_Link)
 
 export type LinkInstance = InstanceType<typeof _Link>
 export { linkProps }
-export type { LinkProps, LinkUnderline } from './props'
+export type { LinkProps, LinkUnderline, LinkSize } from './props'
 export { Link }
 export const _LinkComponent = Link
 

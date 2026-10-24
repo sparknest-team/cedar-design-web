@@ -104,7 +104,7 @@ permalink: /components/input-tag/
 组件导出以下类型定义
 
 ```ts
-import type { InputTagInstance } from '@cedarjs/ui'
+import type { InputTagInstance } from '@cedar-design/ui'
 ```
 
 ## InputTag 旧图标引用收尾

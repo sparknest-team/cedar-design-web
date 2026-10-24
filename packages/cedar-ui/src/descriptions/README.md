@@ -96,5 +96,5 @@ permalink: /components/descriptions/
 组件导出以下类型定义
 
 ```ts
-import type { DescriptionsProps } from "@cedarjs/ui";
+import type { DescriptionsProps } from "@cedar-design/ui";
 ```

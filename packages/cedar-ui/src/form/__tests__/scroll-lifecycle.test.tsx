@@ -2,7 +2,7 @@ import { defineComponent, h, inject, KeepAlive, nextTick, onBeforeUnmount, ref }
 import { mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import scrollIntoView from 'scroll-into-view-if-needed'
-import Form from '../form.vue'
+import Form from '../Form.vue'
 import { formInjectionKey, type FormItemInfo } from '../context'
 
 vi.mock('scroll-into-view-if-needed', () => ({ default: vi.fn() }))

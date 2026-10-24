@@ -1,0 +1,135 @@
+{
+  "date": "2026-10-24",
+  "node": "23.9.0",
+  "conditions": {
+    "browser": "Playwright Chromium, 1440x1000",
+    "freshServerAndViteCachePerPage": true,
+    "freshBrowserContextPerPage": true,
+    "externalRequestsBlocked": true,
+    "browserHttpCache": "disabled by routing in both before and after",
+    "coldTotalDefinition": "serverReadyMs + firstPageMs; excludes automation browser-launch overhead",
+    "sourceReadyDefinition": "clicked until full highlighted source is visible and two animation frames paint",
+    "samples": "single matched scenario per page; values vary with machine load"
+  },
+  "pages": [
+    {
+      "name": "button",
+      "before": {
+        "serverReadyMs": 10333.984792,
+        "firstPageMs": 16068.469041999999,
+        "coldTotalMs": 26402.453834,
+        "repeatPageMs": 3110.164875000002,
+        "largestSource": {
+          "file": "../field-decorator/__demos__/control-sizes.vue",
+          "bytes": 7817,
+          "firstExpandMs": 306.7999999523163,
+          "repeatExpandMs": 34.199999928474426
+        },
+        "sourceServiceMs": 259.6
+      },
+      "after": {
+        "serverReadyMs": 10261.411583000001,
+        "firstPageMs": 7530.522625,
+        "coldTotalMs": 17791.934208,
+        "repeatPageMs": 1520.8865829999995,
+        "largestSource": {
+          "file": "../field-decorator/__demos__/control-sizes.vue",
+          "bytes": 7817,
+          "firstExpandMs": 60.200000047683716,
+          "repeatExpandMs": 36.80000019073486
+        },
+        "sourceServiceMs": 8.1,
+        "resourceCount": 895,
+        "iconResourceCount": 60
+      },
+      "noSourceRequestsBeforeExpand": true,
+      "noViteFullReload": true,
+      "noLocalHttpFailures": true,
+      "sourceTextAndThemeChecksPassed": true
+    },
+    {
+      "name": "table",
+      "before": {
+        "serverReadyMs": 12633.240625,
+        "firstPageMs": 29370.957083,
+        "coldTotalMs": 42004.197708,
+        "repeatPageMs": 4122.452124999996,
+        "largestSource": {
+          "file": "./__demos__/layout-fit-matrix.vue",
+          "bytes": 4305,
+          "firstExpandMs": 476.60000002384186,
+          "repeatExpandMs": 52.39999997615814
+        },
+        "sourceServiceMs": 410.1
+      },
+      "after": {
+        "serverReadyMs": 10089.821791999999,
+        "firstPageMs": 8286.752,
+        "coldTotalMs": 18376.573792,
+        "repeatPageMs": 2165.1217080000024,
+        "largestSource": {
+          "file": "./__demos__/layout-fit-matrix.vue",
+          "bytes": 4305,
+          "firstExpandMs": 110,
+          "repeatExpandMs": 36
+        },
+        "sourceServiceMs": 7.2,
+        "resourceCount": 895,
+        "iconResourceCount": 62
+      },
+      "noSourceRequestsBeforeExpand": true,
+      "noViteFullReload": true,
+      "noLocalHttpFailures": true,
+      "sourceTextAndThemeChecksPassed": true
+    },
+    {
+      "name": "scheduler",
+      "before": {
+        "serverReadyMs": 14255.222957999998,
+        "firstPageMs": 21445.847958000002,
+        "coldTotalMs": 35701.070916,
+        "repeatPageMs": 4018.9790829999984,
+        "largestSource": {
+          "file": "./__demos__/task-calendar-workbench.vue",
+          "bytes": 39385,
+          "firstExpandMs": 1368.3000000715256,
+          "repeatExpandMs": 78.39999997615814
+        },
+        "sourceServiceMs": 1282.6
+      },
+      "after": {
+        "serverReadyMs": 12495.366875,
+        "firstPageMs": 10692.532166,
+        "coldTotalMs": 23187.899041,
+        "repeatPageMs": 3739.206917000003,
+        "largestSource": {
+          "file": "./__demos__/task-calendar-workbench.vue",
+          "bytes": 39385,
+          "firstExpandMs": 105.5,
+          "repeatExpandMs": 70.5
+        },
+        "sourceServiceMs": 26.6,
+        "resourceCount": 1002,
+        "iconResourceCount": 62
+      },
+      "noSourceRequestsBeforeExpand": true,
+      "noViteFullReload": true,
+      "noLocalHttpFailures": true,
+      "sourceTextAndThemeChecksPassed": true
+    }
+  ],
+  "hmr": {
+    "demoUpdateMs": 94.01987500000178,
+    "importUpdateMs": 148.49104200000147,
+    "sourceUrlChanged": true,
+    "importUrlChanged": true,
+    "rawCopyTextCurrent": true,
+    "liveDemoUpdated": true
+  },
+  "regressionTestsPassed": 31,
+  "measurementValidity": {
+    "startupAndFirstPage": "Superseded: v1 omitted transformUserConfigToPlugin, so the real custom client entry was not registered. Not valid as full-site timings.",
+    "retainedFor": "Audit and source-pane diagnostics; actual component checks covered Scheduler but not the custom theme menu.",
+    "replacement": "docs-vite-waterfall-cli-v2-2026-10-24.json"
+  }
+}

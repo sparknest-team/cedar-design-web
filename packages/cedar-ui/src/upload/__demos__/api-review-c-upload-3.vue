@@ -4,11 +4,11 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review-c-upload-3.config.json";
 
 import { ref } from "vue";
-import type { UploadFileItem, UploadPreviewEvent } from "@cedarjs/ui";
+import type { UploadFileItem, UploadPreviewEvent } from "@cedar-design/ui";
 
 const files = ref<UploadFileItem[]>([
   {

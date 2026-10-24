@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { UploadCustomRequest, UploadFileItem, UploadProgressEvent } from '@cedarjs/ui'
+import type { UploadCustomRequest, UploadFileItem, UploadProgressEvent } from '@cedar-design/ui'
 
 const files = ref<UploadFileItem[]>([])
 

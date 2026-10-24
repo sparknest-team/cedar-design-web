@@ -1,4 +1,5 @@
-import { schedulerDate, validateSchedulerEvent, SchedulerError } from "./index";
+import { schedulerDate, validateSchedulerEvent } from "./base";
+import { SchedulerError } from "./types";
 import type {
   SchedulerEvent,
   SchedulerRange,

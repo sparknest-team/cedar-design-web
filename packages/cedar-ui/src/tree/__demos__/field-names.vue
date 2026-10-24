@@ -1,9 +1,9 @@
 <template>
   <c-tree
-    :default-selected-keys="['0-0-2-1-0-0']"
+    :default-selected-values="['0-0-2-1-0-0']"
     :fieldNames="{
-      key: 'value',
-      title: 'label',
+      value: 'value',
+      label: 'label',
       children: 'items',
       icon: 'customIcon',
     }"
@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts" setup>
-import { IconDriveFile, IconStar } from '@cedarjs/icons-vue'
+import { IconDriveFile, IconStar } from '@cedar-design/icons-vue'
 import { h } from 'vue'
 
 const treeData = [

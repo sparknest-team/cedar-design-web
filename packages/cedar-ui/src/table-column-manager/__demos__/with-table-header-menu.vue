@@ -88,8 +88,8 @@
 
 <script lang="ts" setup>
 import { computed, onMounted, ref, watch } from "vue";
-import { useTableColumnManager } from "@cedarjs/ui";
-import type { ColumnDefinitions, ManagedTableColumn } from "@cedarjs/ui";
+import { useTableColumnManager } from "@cedar-design/ui";
+import type { ColumnDefinitions, ManagedTableColumn } from "@cedar-design/ui";
 
 const STORAGE_KEY = "cedar-demo:table-column-manager:with-table-header-menu";
 let storage: Storage | undefined;

@@ -30,8 +30,8 @@ export default withFieldPresentation(Base, {
     optionValueText(value, {
       ...props,
       fieldNames: {
-        value: props.fieldNames?.key ?? "key",
-        label: props.fieldNames?.title ?? "title",
+        value: props.fieldNames?.value ?? "value",
+        label: props.fieldNames?.label ?? "label",
         children: props.fieldNames?.children ?? "children",
       },
     }),

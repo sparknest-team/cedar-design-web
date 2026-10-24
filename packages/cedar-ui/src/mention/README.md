@@ -77,7 +77,7 @@ permalink: /components/mention/
 组件导出以下类型定义
 
 ```ts
-import type { MentionInstance } from '@cedarjs/ui'
+import type { MentionInstance } from '@cedar-design/ui'
 ```
 
 Mention 复用 Input／Textarea 的排版和间距，测量镜像复制原生输入框计算样式。自定义请覆盖对应输入组件变量；不再提供无效的 mention-font-size、mention-line-height 或 mention-padding-*。

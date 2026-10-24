@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import type { BackTopInstance } from "@cedarjs/ui";
+import type { BackTopInstance } from "@cedar-design/ui";
 const first = ref<HTMLElement>();
 const second = ref<HTMLElement>();
 const active = ref(true);

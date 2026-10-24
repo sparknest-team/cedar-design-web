@@ -1,30 +1,30 @@
 import { computed, ref, toRefs, watchEffect, watch } from 'vue'
 import { isArray, isFunction, isObject } from '../../_utils/is'
 import { FallbackOption, LabelValue, TreeSelectValue } from '../types'
-import { Key2TreeNode, TreeFieldNames, TreeNodeData, TreeNodeKey } from '../../tree/types'
+import { Key2TreeNode, TreeFieldNames, TreeNodeData, TreeNodeValue } from '../../tree/types'
 
-function isLabelValue(value: TreeNodeKey | LabelValue): value is LabelValue {
+function isLabelValue(value: TreeNodeValue | LabelValue): value is LabelValue {
   return isObject(value)
 }
 
-function isValidKey(key: TreeNodeKey) {
+function isValidKey(key: TreeNodeValue) {
   return key !== undefined && key !== null && key !== ''
 }
 
-function getKey(value: TreeNodeKey | LabelValue) {
+function getKey(value: TreeNodeValue | LabelValue) {
   return isLabelValue(value) ? value.value : value
 }
 
-function getLabel(value: TreeNodeKey | LabelValue) {
+function getLabel(value: TreeNodeValue | LabelValue) {
   return isLabelValue(value) ? value.label : undefined
 }
 
-function isValidValue(value: TreeNodeKey | LabelValue) {
+function isValidValue(value: TreeNodeValue | LabelValue) {
   const key = getKey(value)
   return isValidKey(key)
 }
 
-function getKeys(value: (TreeNodeKey | LabelValue)[]) {
+function getKeys(value: (TreeNodeValue | LabelValue)[]) {
   return value.map(getKey).filter(isValidKey)
 }
 
@@ -46,12 +46,12 @@ export default function useSelectedState(props: {
     return multiple?.value || treeCheckable?.value ? validValue : validValue.slice(0, 1)
   }
 
-  function getLabelValues(value: (TreeNodeKey | LabelValue)[], originValue?: LabelValue[]) {
+  function getLabelValues(value: (TreeNodeValue | LabelValue)[], originValue?: LabelValue[]) {
     const res: LabelValue[] = []
     const validValue = value ? value.filter(isValidValue) : []
 
     if (validValue.length) {
-      const originValueMap = new Map<TreeNodeKey, LabelValue>()
+      const originValueMap = new Map<TreeNodeValue, LabelValue>()
       originValue?.forEach((item) => {
         originValueMap.set(item.value, item)
       })
@@ -61,7 +61,7 @@ export default function useSelectedState(props: {
         const originValueItem = originValueMap.get(key)
         const node = key2TreeNode.value.get(key)
         let fallbackNodeData: TreeNodeData | null = null
-        const nodeDataTitle = (fieldNames?.value?.title || 'title') as 'title'
+        const nodeDataTitle = (fieldNames?.value?.label || 'label') as 'label'
 
         if (!node) {
           const fallbackResult = isFunction(fallbackOption?.value) ? fallbackOption?.value(key) : fallbackOption?.value
@@ -79,7 +79,7 @@ export default function useSelectedState(props: {
           ...(isLabelValue(item) ? item : {}),
           ...(originValueItem || {}),
           value: key,
-          label: getLabel(item) ?? node?.title ?? originValueItem?.label ?? fallbackNodeData?.[nodeDataTitle] ?? key,
+          label: getLabel(item) ?? node?.label ?? originValueItem?.label ?? fallbackNodeData?.[nodeDataTitle] ?? key,
         })
       })
     }
@@ -87,7 +87,7 @@ export default function useSelectedState(props: {
     return res
   }
 
-  const computedModelValueKeys = ref<TreeNodeKey[]>()
+  const computedModelValueKeys = ref<TreeNodeValue[]>()
   const computedModelValue = ref<LabelValue[]>()
   watchEffect(() => {
     const isControlled = modelValue?.value !== undefined
@@ -112,16 +112,16 @@ export default function useSelectedState(props: {
     localValue.value = value || []
   })
 
-  const selectedKeys = computed(() => computedModelValueKeys.value ?? localValueKeys.value)
+  const selectedValues = computed(() => computedModelValueKeys.value ?? localValueKeys.value)
   const selectedValue = computed(() => computedModelValue.value ?? localValue.value)
 
   return {
-    selectedKeys,
+    selectedValues,
     selectedValue,
-    setLocalSelectedKeys(keys: TreeNodeKey[]) {
+    setLocalSelectedValues(keys: TreeNodeValue[]) {
       localValueKeys.value = keys
     },
-    localSelectedKeys: localValueKeys,
+    localSelectedValues: localValueKeys,
     localSelectedValue: localValue,
   }
 }

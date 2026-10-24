@@ -29,11 +29,17 @@ export default defineComponent({
   emits: ['change', 'clear', 'update:modelValue'],
 
   setup(props, { emit }) {
+    const localValue = ref(props.defaultValue)
+    const value = computed(() => props.modelValue !== undefined ? props.modelValue : localValue.value)
     const editor = inject(selectionEditorSurface, undefined)
     const { mergedDisabled, mergedReadonly } = useFormItem({
       disabled: computed(() => props.disabled),
       readonly: computed(() => props.readonly),
     })
+    function commitValue(next: string) {
+      if (props.modelValue === undefined) localValue.value = next
+      emit('update:modelValue', next)
+    }
     const attrs = useAttrs()
     const slots = useSlots()
     const fieldProps = reactive({
@@ -76,12 +82,12 @@ export default defineComponent({
     })
     const initPeople = () => {
       const detail = ++detailRequest
-      if (props.modelValue) {
-        fieldProps.userId = props.modelValue
-        const selectedId = props.modelValue
+      if (value.value) {
+        fieldProps.userId = value.value
+        const selectedId = value.value
         getPeopleFromNaponen(fieldProps.userId).then((res: any) => {
-          if (detail !== detailRequest || props.modelValue !== selectedId) return
-          if (props.modelValue === 'oss') {
+          if (detail !== detailRequest || value.value !== selectedId) return
+          if (value.value === 'oss') {
             fieldProps.userId = 'oss'
             fieldProps.userMobile = ''
             fieldProps.userName = 'OSS' + '（oss）'
@@ -107,7 +113,7 @@ export default defineComponent({
     }
 
     watch(
-      () => props.modelValue,
+      () => value.value,
       () => {
         initPeople()
       },
@@ -159,7 +165,7 @@ export default defineComponent({
       fieldProps.userId = ''
       fieldProps.userName = ''
       fieldProps.userMobile = ''
-      emit('update:modelValue', fieldProps.userId) // 更新prop的值
+      commitValue(fieldProps.userId) // 更新prop的值
       emit('clear')
       emit('change', fieldProps.userId)
       if (panelOpen.value) onLoadPeople()
@@ -182,7 +188,7 @@ export default defineComponent({
           fieldProps.userMobile = people.mobile
           fieldProps.userName = people.userName
         }
-        emit('update:modelValue', fieldProps.userId) // 更新prop的值
+        commitValue(fieldProps.userId) // 更新prop的值
         emit('change', fieldProps.userId)
       }
     }

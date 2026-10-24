@@ -4,7 +4,7 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review.config.json";
 
 import { getCurrentInstance, ref } from "vue";
@@ -15,7 +15,7 @@ import {
   IconInfoCircle,
   IconRefresh,
   IconSearch,
-} from "@cedarjs/icons-vue";
+} from "@cedar-design/icons-vue";
 const iconName = ref("arrow-left");
 const app = getCurrentInstance()?.appContext.app;
 const icons = {

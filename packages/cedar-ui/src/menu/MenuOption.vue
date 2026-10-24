@@ -1,24 +1,26 @@
 <template>
   <MenuView :options="viewOptions">
-    <template v-for="(_, slotName) in $slots" #[slotName]="slotProps">
-      <slot :name="slotName" v-bind="slotProps || {}" />
-    </template>
+    <template v-if="$slots.default" #default><slot v-bind="renderContext" /></template>
+    <template v-if="$slots.icon" #icon><slot name="icon" v-bind="renderContext" /></template>
+    <template v-if="$slots.suffix" #suffix><slot name="suffix" v-bind="renderContext" /></template>
   </MenuView>
 </template>
 
 <script setup lang="ts">
-import { computed, inject, ref, useSlots } from 'vue'
-import { useEventListener } from '@cedarjs/use'
+import { computed, inject, ref } from 'vue'
+import { useEventListener } from '@cedar-design/use'
 import { createNamespace } from '../_utils/global-config'
 import MenuView from './view'
 import { props as optionProps } from './option-props'
 import { menuSelectionKey } from './selection'
-import { menuInjectionKey, menuLevelKey } from './context'
+import { menuInjectionKey, menuLevelKey, menuRenderLevelKey } from './context'
+import type { MenuRenderContext, MenuOptionSlots } from './types'
 import { useOptionAppearance } from './appearance'
 defineOptions({ name: createNamespace('menu-option').name })
 const props = defineProps(optionProps)
 const emit = defineEmits(['click', 'key-arrow-x'])
-const slots = useSlots()
+const slots = defineSlots<MenuOptionSlots>()
+const renderLevel = inject(menuRenderLevelKey, undefined)
 const root = ref<HTMLElement>()
 const isFocusing = ref(false)
 const selection = props.uninjectContext ? undefined : inject(menuSelectionKey, undefined)
@@ -28,7 +30,12 @@ const value = computed(() => props.value !== undefined ? props.value : typeof pr
 const optionSelected = computed(() => selection?.isSelected(value.value) ?? (value.value !== undefined && context?.modelValue?.value === value.value))
 const disabled = computed(() => props.disabled || !!selection?.disabled.value)
 const size = computed(() => selection?.size.value ?? 'md')
-const labelVNode = computed(() => typeof props.label === 'function' ? props.label(props.option ?? { label: props.label, value: props.value, disabled: props.disabled, ripple: props.ripple }, optionSelected.value) : props.label)
+const renderContext = computed<MenuRenderContext>(() => ({
+  option: props.option ?? { label: props.label, value: props.value, disabled: props.disabled, ripple: props.ripple },
+  active: !!optionSelected.value,
+  level: renderLevel?.value ?? 0,
+}))
+const labelVNode = computed(() => typeof props.label === 'function' ? props.label(renderContext.value) : props.label)
 function handleSelect(event: Event) {
   if (disabled.value || props.childrenTrigger) return
   const option = props.option ?? { value: value.value, label: props.label, disabled: disabled.value, ripple: props.ripple }

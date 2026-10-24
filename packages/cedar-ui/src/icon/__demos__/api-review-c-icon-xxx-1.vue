@@ -4,10 +4,10 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review-c-icon-xxx-1.config.json";
 
-import { IconCheckCircleFill } from "@cedarjs/icons-vue";
+import { IconCheckCircleFill } from "@cedar-design/icons-vue";
 </script>
 
 <template>

@@ -7,7 +7,7 @@ const variants = ['circle', 'round', 'line', 'tonal'] as const
     ><template v-for="variant in variants" :key="variant"
       ><c-switch :variant="variant" disabled :aria-label="variant + ' off'" /><c-switch
         :variant="variant"
-        default-checked
+        :default-value="true"
         disabled
         :aria-label="variant + ' on'" /></template
   ></c-space>

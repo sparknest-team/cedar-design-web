@@ -1,5 +1,5 @@
-export { IconImageClose as ImageErrorIcon } from '@cedarjs/icons-vue/icon-image-close'
-export { IconLoading as ImageLoadingIcon } from '@cedarjs/icons-vue/icon-loading'
+export { IconImageClose as ImageErrorIcon } from '@cedar-design/icons-vue/icon-image-close'
+export { IconLoading as ImageLoadingIcon } from '@cedar-design/icons-vue/icon-loading'
 export { toSizeUnit } from '../_utils/maple/elements'
 export { useElementResize } from '../_utils/resize-observer'
 export { getAllElements } from '../_utils/vue-utils'

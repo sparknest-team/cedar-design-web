@@ -44,15 +44,15 @@ test("auto-width centered Demo accepts one change per drag and wraps both bounda
       }
       await flushPromises();
     };
-    for (const [index, current] of [1, 2, 3, 0].entries()) {
+    for (const [index, current] of [2, 3, 4, 1].entries()) {
       await drag(450, 250);
       expect(wrapper.get("[role=status]").text()).toBe(
         `Current: ${current} · Changes: ${index + 1}`,
       );
-      expect(wrapper.findComponent(Carousel).props("current")).toBe(current);
+      expect(wrapper.findComponent(Carousel).props("modelValue")).toBe(current);
     }
     await drag(250, 450);
-    expect(wrapper.get("[role=status]").text()).toBe("Current: 3 · Changes: 5");
+    expect(wrapper.get("[role=status]").text()).toBe("Current: 4 · Changes: 5");
     await wrapper.findAll("input[type=checkbox]")[0].setValue(true);
     await wrapper.findAll("input[type=checkbox]")[1].setValue(true);
     Object.defineProperty(viewport, "clientWidth", {
@@ -67,14 +67,14 @@ test("auto-width centered Demo accepts one change per drag and wraps both bounda
     });
     wrapper.findComponent(Carousel).vm.resize();
     await flushPromises();
-    expect(wrapper.get("[role=status]").text()).toBe("Current: 3 · Changes: 5");
+    expect(wrapper.get("[role=status]").text()).toBe("Current: 4 · Changes: 5");
     expect(
       wrapper
         .findAll("[aria-roledescription=slide]")
         .map((slide) => slide.element.style.width),
     ).toEqual(["220px", "300px", "260px", "340px"]);
     await drag(250, 50);
-    expect(wrapper.get("[role=status]").text()).toBe("Current: 0 · Changes: 6");
+    expect(wrapper.get("[role=status]").text()).toBe("Current: 1 · Changes: 6");
     await wrapper.findAll("input[type=checkbox]")[0].setValue(false);
     await wrapper.findAll("input[type=checkbox]")[1].setValue(false);
     expect(wrapper.findAll("[aria-roledescription=slide]")).toHaveLength(4);
@@ -85,29 +85,29 @@ test("auto-width centered Demo accepts one change per drag and wraps both bounda
     ).toEqual(["140px", "220px", "180px", "260px"]);
     await wrapper.findAll("input[type=checkbox]")[2].setValue(true);
     expect(wrapper.findAll("[aria-roledescription=slide]")).toHaveLength(5);
-    expect(wrapper.get("[role=status]").text()).toBe("Current: 0 · Changes: 6");
+    expect(wrapper.get("[role=status]").text()).toBe("Current: 1 · Changes: 6");
     await drag(250, 450);
-    expect(wrapper.get("[role=status]").text()).toBe("Current: 4 · Changes: 7");
+    expect(wrapper.get("[role=status]").text()).toBe("Current: 5 · Changes: 7");
     await drag(250, 450);
-    expect(wrapper.get("[role=status]").text()).toBe("Current: 3 · Changes: 8");
+    expect(wrapper.get("[role=status]").text()).toBe("Current: 4 · Changes: 8");
     await wrapper.findAll("input[type=checkbox]")[2].setValue(false);
     expect(wrapper.findAll("[aria-roledescription=slide]")).toHaveLength(4);
-    expect(wrapper.get("[role=status]").text()).toBe("Current: 3 · Changes: 8");
+    expect(wrapper.get("[role=status]").text()).toBe("Current: 4 · Changes: 8");
     await drag(450, 250);
-    expect(wrapper.get("[role=status]").text()).toBe("Current: 0 · Changes: 9");
+    expect(wrapper.get("[role=status]").text()).toBe("Current: 1 · Changes: 9");
     await wrapper.findAll("input[type=checkbox]")[3].setValue(true);
     expect(wrapper.findAll("[aria-roledescription=slide]")).toHaveLength(0);
     expect(
       wrapper.findAll("button").every((button) => button.element.disabled),
     ).toBe(true);
     await drag(250, 450);
-    expect(wrapper.get("[role=status]").text()).toBe("Current: 0 · Changes: 9");
+    expect(wrapper.get("[role=status]").text()).toBe("Current: 1 · Changes: 9");
     await wrapper.findAll("input[type=checkbox]")[3].setValue(false);
     expect(wrapper.findAll("[aria-roledescription=slide]")).toHaveLength(4);
-    expect(wrapper.get("[role=status]").text()).toBe("Current: 0 · Changes: 9");
+    expect(wrapper.get("[role=status]").text()).toBe("Current: 1 · Changes: 9");
     await drag(250, 450);
     expect(wrapper.get("[role=status]").text()).toBe(
-      "Current: 3 · Changes: 10",
+      "Current: 4 · Changes: 10",
     );
     await wrapper.findAll("input[type=checkbox]")[3].setValue(true);
     expect(wrapper.findAll("[aria-roledescription=slide]")).toHaveLength(0);
@@ -115,33 +115,33 @@ test("auto-width centered Demo accepts one change per drag and wraps both bounda
       wrapper.findAll("button").every((button) => button.element.disabled),
     ).toBe(true);
     expect(wrapper.get("[role=status]").text()).toBe(
-      "Current: 3 · Changes: 10",
+      "Current: 4 · Changes: 10",
     );
     await wrapper.findAll("input[type=checkbox]")[3].setValue(false);
     expect(wrapper.findAll("[aria-roledescription=slide]")).toHaveLength(4);
     expect(wrapper.get("[role=status]").text()).toBe(
-      "Current: 3 · Changes: 10",
+      "Current: 4 · Changes: 10",
     );
     await drag(450, 250);
     expect(wrapper.get("[role=status]").text()).toBe(
-      "Current: 0 · Changes: 11",
+      "Current: 1 · Changes: 11",
     );
     await wrapper.findAll("input[type=checkbox]")[2].setValue(true);
     await drag(250, 450);
     expect(wrapper.get("[role=status]").text()).toBe(
-      "Current: 4 · Changes: 12",
+      "Current: 5 · Changes: 12",
     );
     await wrapper.findAll("input[type=checkbox]")[2].setValue(false);
     expect(wrapper.findAll("[aria-roledescription=slide]")).toHaveLength(4);
     expect(wrapper.get("[role=status]").text()).toBe(
-      "Current: 4 · Changes: 12",
+      "Current: 5 · Changes: 12",
     );
     expect(
       wrapper.get("button[aria-current=true]").attributes("aria-label"),
     ).toContain("4");
     await drag(450, 250);
     expect(wrapper.get("[role=status]").text()).toBe(
-      "Current: 0 · Changes: 13",
+      "Current: 1 · Changes: 13",
     );
     const initialSlides = wrapper
       .findAll("[aria-roledescription=slide]")
@@ -158,11 +158,11 @@ test("auto-width centered Demo accepts one change per drag and wraps both bounda
         .map((slide) => slide.element),
     ).toEqual([...initialSlides].reverse());
     expect(wrapper.get("[role=status]").text()).toBe(
-      "Current: 0 · Changes: 13",
+      "Current: 1 · Changes: 13",
     );
     await drag(450, 250);
     expect(wrapper.get("[role=status]").text()).toBe(
-      "Current: 1 · Changes: 14",
+      "Current: 2 · Changes: 14",
     );
     await wrapper.findAll("input[type=checkbox]")[4].setValue(false);
     expect(
@@ -171,11 +171,11 @@ test("auto-width centered Demo accepts one change per drag and wraps both bounda
         .map((slide) => slide.element),
     ).toEqual(initialSlides);
     expect(wrapper.get("[role=status]").text()).toBe(
-      "Current: 1 · Changes: 14",
+      "Current: 2 · Changes: 14",
     );
     await drag(250, 450);
     expect(wrapper.get("[role=status]").text()).toBe(
-      "Current: 0 · Changes: 15",
+      "Current: 1 · Changes: 15",
     );
   } finally {
     wrapper.unmount();

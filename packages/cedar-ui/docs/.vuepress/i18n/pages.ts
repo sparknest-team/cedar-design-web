@@ -22,12 +22,20 @@ export function localizedPages(): Plugin {
     async onInitialized(app) {
       const originals = app.pages.filter(page => page.filePath && !page.path.startsWith('/en/'))
       const paths = new Set(app.pages.map(page => page.path))
-      for (const page of originals) {
+      const missing = originals.filter(page => {
         const path = `/en${page.path}`
-        if (paths.has(path)) continue
-        app.pages.push(await translate(app, page))
+        if (paths.has(path)) return false
         paths.add(path)
-      }
+        return true
+      })
+      const translated = new Array<Page>(missing.length)
+      const pending = missing.entries()
+      // Bounded I/O concurrency; all locales still finish before startup and
+      // results keep their original order regardless of read completion order.
+      await Promise.all(Array.from({ length: Math.min(8, missing.length) }, async () => {
+        for (const [index, page] of pending) translated[index] = await translate(app, page)
+      }))
+      app.pages.push(...translated)
       initialized = true
     },
     async extendsPage(page, app) {

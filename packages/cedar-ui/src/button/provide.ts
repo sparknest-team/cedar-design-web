@@ -1,4 +1,4 @@
-import { useParent } from '@cedarjs/use'
+import { useParent } from '@cedar-design/use'
 import { BUTTON_GROUP_BIND_BUTTON_KEY, ButtonGroupProvider } from './group-provide'
 
 export function useButtonGroup() {

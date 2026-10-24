@@ -1,5 +1,5 @@
 ---
-"@cedarjs/ui": major
+"@cedar-design/ui": major
 ---
 
 Align Search value, field, editing, submission, clear, loading, history, button, and accessibility contracts with Maple.

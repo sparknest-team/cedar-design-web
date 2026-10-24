@@ -27,9 +27,10 @@ export default defineComponent({
     const value = computed(() => props.modelValue !== undefined ? props.modelValue : localValue.value)
     const disabled = computed(() => props.disabled || !!parent?.props.disabled)
     const open = computed(() => !disabled.value && (props.open ?? localOpen.value))
-    const active = computed(() => props.name !== undefined && parent ? parent.activeItem.value === props.name : props.active ?? value.value != null)
     const tree = computed(() => createNavMenuTree(props.options, props.fieldNames))
     const selected = computed(() => value.value == null ? undefined : tree.value.byKey.get(value.value))
+    const active = computed(() => props.name !== undefined && parent ? parent.activeItem.value === props.name : selected.value?.type === 'item')
+    const highlighted = computed(() => props.highlight ?? active.value)
     const hasPopup = () => !!slots.content || props.options.length > 0
     let suspended = false, disposed = false, bindingGeneration = 0, measurementOperation = 0, focusGeneration = 0
     let focusTask: { kind: 'open' | 'close' } | undefined
@@ -126,7 +127,7 @@ export default defineComponent({
     function renderLabel() {
       const node = selected.value
       const content = (node ? node.option[tree.value.names.label] : props.label) as NavMenuContent
-      return typeof content === 'function' ? content({ option: node?.option ?? {}, selected: !!node, active: active.value, expanded: open.value, level: 0 }) : content
+      return typeof content === 'function' ? content({ option: node?.option ?? {}, active: node?.type === 'item', expanded: open.value, level: 0 }) : content
     }
     expose({ close, select, setOpen })
     return () => h('li', { class: n('node'), role: 'none' }, [h(Trigger, {
@@ -139,7 +140,7 @@ export default defineComponent({
       ref: reference, role: 'menuitem', tabindex: disabled.value ? -1 : 0, 'data-nav-item': '',
       'aria-disabled': disabled.value || undefined, 'aria-expanded': hasPopup() ? open.value : undefined,
       'aria-haspopup': hasPopup() ? (slots.content ? 'dialog' : 'menu') : undefined,
-      class: [n('item'), { [n('--active')]: active.value, [n('--disabled')]: disabled.value }],
+      class: [n('item'), { [n('--active')]: highlighted.value, [n('--disabled')]: disabled.value }],
       onClick: (event: MouseEvent) => {
         if (!available()) return
         if (disabled.value) { event.preventDefault(); return }
@@ -158,7 +159,7 @@ export default defineComponent({
     content: () => h('div', {
       ref: panel,
       role: slots.content ? 'dialog' : undefined, 'aria-label': typeof props.label === 'string' ? props.label : undefined,
-      class: [n('popup'), n(`--${parent?.theme.value ?? 'light'}`), n(`--${parent?.props.size ?? 'md'}`), n(`panel--${props.popupLayout}`)],
+      class: [n('popup'), n(`--${parent?.theme.value ?? 'light'}`), n(`--${parent?.props.size ?? 'md'}`), n(`panel--${props.popupLayout}`), { [n('panel--custom')]: !!slots.content }],
       style: [props.popupLayout === 'full-width' ? { position: 'fixed', left: 0, right: 0, top: `${top.value}px`, maxHeight: `calc(100dvh - ${top.value}px)` } : props.popupLayout === 'full-height' ? { position: 'fixed', top: 0, bottom: 0, maxHeight: '100dvh', width: 'var(--c-nav-menu-panel-width)', ...fullHeightPosition.value } : {}, props.popupStyle],
       onKeydown: (event: KeyboardEvent) => { if (available() && !disabled.value && event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); close() } },
     }, slots.content?.(context()) ?? [h(NavMenu, {

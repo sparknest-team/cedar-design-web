@@ -5,7 +5,7 @@
 </template>
 <script lang="ts" setup>
 import { h } from "vue";
-import { Message } from "@cedarjs/ui";
+import { Message } from "@cedar-design/ui";
 
 const columns = [
   {

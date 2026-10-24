@@ -13,6 +13,7 @@
   position: relative;
   &--dark { --c-nav-menu-current-bg: var(--c-nav-menu-dark-bg); --c-nav-menu-current-color: var(--c-nav-menu-dark-item-text-color); --c-nav-menu-current-hover: var(--c-nav-menu-dark-item-bg-hover); --c-nav-menu-current-active: var(--c-nav-menu-dark-item-bg-selected); --c-nav-menu-current-selected: var(--c-nav-menu-dark-item-text-color-selected); --c-nav-menu-current-disabled: var(--c-nav-menu-dark-item-text-color-disabled); }
   &__list, &__popup { list-style: none; margin: 0; padding: 0; }
+  &__node > &__item { width: 100%; }
   &__item { box-sizing: border-box; display: flex; align-items: center; gap: var(--c-nav-menu-content-gap); min-height: var(--c-nav-menu-row-height); padding: 0 var(--c-nav-menu-content-padding); cursor: pointer; border-radius: var(--c-nav-menu-border-radius); white-space: nowrap; outline-offset: var(--c-nav-menu-focus-offset); }
   &__item:hover { background: var(--c-nav-menu-current-hover); }
   &__item:focus-visible { outline: var(--c-nav-menu-focus-width) solid var(--c-nav-menu-current-selected); }
@@ -42,7 +43,9 @@
   &--xl { --c-nav-menu-row-height: var(--c-nav-menu-row-height-xl); }
   &__measure { position: absolute; top: 0; left: 0; display: flex; width: 100%; height: 0; overflow: hidden; visibility: hidden; pointer-events: none; }
   &__measure > &__item { flex: none; }
-  &__popup { min-width: var(--c-nav-menu-popup-min-width); max-height: var(--c-nav-menu-popup-max-height); overflow: auto; padding: var(--c-nav-menu-content-gap); border: var(--c-nav-menu-divider-width) solid var(--c-nav-menu-divider-color); border-radius: var(--c-nav-menu-border-radius); box-shadow: var(--c-nav-menu-popup-shadow); }
+  &__popup { min-width: var(--c-nav-menu-popup-min-width); max-height: var(--c-nav-menu-popup-max-height); overflow: auto; padding: var(--c-nav-menu-content-gap) 0; border: var(--c-nav-menu-divider-width) solid var(--c-nav-menu-divider-color); border-radius: var(--c-nav-menu-border-radius); box-shadow: var(--c-nav-menu-popup-shadow); }
+  &__popup &__item { border-radius: 0; }
+  &__panel--custom { padding: var(--c-nav-menu-content-gap); }
 }
 
 .c-nav-menu__panel--full-width, .c-nav-menu__panel--full-height { box-sizing: border-box; max-width: 100vw; border-radius: 0; }

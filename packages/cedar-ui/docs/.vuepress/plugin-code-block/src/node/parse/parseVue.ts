@@ -3,7 +3,8 @@ import type { Node } from 'posthtml-parser'
 import type { PageCodeDep } from '../utils/index.js'
 import { slugify } from '@mdit-vue/shared'
 import { readSource } from './readSource.js'
-import { markdownText } from '../utils/highlight.js'
+import { path } from '@vuepress/utils'
+import { highlight, markdownText } from '../utils/highlight.js'
 import { registerSource } from '../utils/source-assets'
 
 export const parseVue = (app: App, node: Node, dep: PageCodeDep): Node => {
@@ -11,7 +12,7 @@ export const parseVue = (app: App, node: Node, dep: PageCodeDep): Node => {
     return node
   }
 
-  const sources = readSource(dep.compPath, true, true)
+  const sources = readSource(dep.compPath, true, true, app.env.isDev, app)
 
   const iframeSrc = dep.compAttrs.demoUrl
     ? dep.compAttrs.demoUrl
@@ -88,7 +89,13 @@ export const parseVue = (app: App, node: Node, dep: PageCodeDep): Node => {
               tag: 'VmiSourceCodeItem',
               attrs: {
                 name: source.name,
-                sourceUrl: registerSource(app, `${dep.compPath}:${index}`, source),
+                sourceUrl: registerSource(app, `${dep.pagePath}:${dep.compPath}:${index}`, source, {
+                  filePath: source.filePath,
+                  pagePath: dep.pagePath,
+                  highlight: app.env.isDev
+                    ? () => highlight(source.rawCode, path.extname(source.name).slice(1), true)
+                    : undefined,
+                }),
               },
             }
           }),

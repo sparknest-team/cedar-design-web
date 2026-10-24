@@ -1,3 +1,4 @@
+import { getSourcePages } from '../utils/source-assets'
 import { handlePageChange as handleVuePressPageChange } from '@vuepress/cli'
 import type { App } from '@vuepress/core'
 import type { Plugin, HmrContext } from 'vite'
@@ -18,10 +19,10 @@ export const vitePageHMR = (app: App): Plugin => {
           }
         }
       }
-      const files = new Set(app.pages
+      const files = new Set([...getSourcePages(app, ctx.file), ...app.pages
         .filter(page => paths.has(page.componentFilePath) && !(page as any)._PageMapPluginOptions)
         .map(page => page.filePath)
-        .filter((file): file is string => !!file))
+        .filter((file): file is string => !!file)])
       for (const file of files) await handleVuePressPageChange(app, file)
     },
   }

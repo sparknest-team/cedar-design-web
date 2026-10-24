@@ -1,4 +1,4 @@
-import { StyleProvider, Themes } from '@cedarjs/ui'
+import { StyleProvider, Themes } from '@cedar-design/ui'
 
 export type CedarDocsTheme = 'lightTheme' | 'darkTheme'
 

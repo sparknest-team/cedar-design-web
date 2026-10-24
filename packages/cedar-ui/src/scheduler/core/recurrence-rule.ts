@@ -1,5 +1,5 @@
 import { createSchedulerBusinessCalendar } from "./business-calendar";
-import { schedulerDate } from "./index";
+import { schedulerDate } from "./base";
 import { SchedulerError } from "./types";
 import type { SchedulerRecurrenceRule } from "./recurrence";
 const dayNumber = (date: Date) =>

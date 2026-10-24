@@ -9,9 +9,11 @@ const options = [{ key: 0, label: '全部分类' }, { key: 'design', label: '设
   <c-nav-menu mode="horizontal">
     <c-nav-menu-item v-model="category" label="分类" :options="options" />
     <c-nav-menu-item label="分类通栏" :options="options" popup-layout="full-width" options-mode="horizontal" />
-    <c-nav-menu-item label="高级筛选" :active="filtered" popup-layout="full-width" :hide-on-select="false">
+    <c-nav-menu-item label="高级筛选" :highlight="filtered" popup-layout="full-width" :hide-on-select="false">
+      <template #label="{ active }">高级筛选（active={{ active }}）</template>
       <template #content="{ select, close }">
         <c-space direction="column">
+          <p>这个面板提交 options 外的筛选值；应用后通过 highlight 强调入口，active 仍为 false。</p>
           <c-input v-model="keyword" placeholder="输入筛选关键词" />
           <c-space>
             <c-button @click="filtered = !!keyword; select(keyword); close()">应用筛选</c-button>

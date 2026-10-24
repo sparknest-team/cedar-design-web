@@ -10,6 +10,14 @@ permalink: /components/input/
 
 ## 案例
 
+### 默认值与双向绑定
+
+`modelValue` 是受控值，通过普通 `v-model` 绑定；父级提供的值优先，包括空字符串。`defaultValue` 是非受控初始值，仅在组件创建时读取；之后由组件内部保存用户输入。修改 `defaultValue` 不会重置现有文字，重新挂载才会重新读取，也不会在初始化时触发 `update:modelValue` 或写入父级表单。
+
+需要表单默认值时，直接初始化绑定字段，例如 `const text = ref('北京')`，然后使用 `<c-input v-model="text" />`。
+
+<demo src="./__demos__/default-value.vue"></demo>
+
 ### 变体
 
 设置 `variant` 来调整不同风格的输入框。
@@ -116,7 +124,7 @@ permalink: /components/input/
 | ------------------------- | ------------------------------------ | --------------------------------------------------- | :---------: |
 | model-value **(v-model)** | 绑定值                               | `string`                                            |     `-`     |
 | model-modifiers           | `v-model` 修饰符，支持 `trim`        | `{ trim?: boolean }`                                |    `{}`     |
-| default-value             | 默认值（非受控状态）                 | `string`                                            |    `''`     |
+| default-value             | 非受控初始值，仅创建时读取；后续修改不重置输入，不回写父级                 | `string`                                            |    `''`     |
 | variant                   | 输入框变体                           | `'filled' \| 'outline' \| 'standard'`               | `'outline'` |
 | size                      | 输入框大小                           | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`              |   `'md'`    |
 | clearable                 | 是否允许清空输入框                   | `boolean`                                           |   `false`   |
@@ -198,7 +206,7 @@ InputPassword 支持所有 Input 属性、事件、插槽与方法。
 组件导出以下类型定义
 
 ```ts
-import type { InputProps } from "@cedarjs/ui";
+import type { InputProps } from "@cedar-design/ui";
 ```
 
 公开类型 / Public types: `InputEmits`, `InputSlots`, `InputExpose`, `InputGroupSlots`, `InputPasswordEmits`, `InputPasswordSlots`, `InputPasswordExpose`.

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useFormItem } from '@cedarjs/ui'
+import { useFormItem } from '@cedar-design/ui'
 const { mergedSize, mergedDisabled, mergedError, feedback, eventHandlers } = useFormItem()
 const notices = ref<string[]>([])
 function notify(name: 'onChange' | 'onInput' | 'onFocus' | 'onBlur', event: Event) {

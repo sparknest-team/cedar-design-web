@@ -1,5 +1,5 @@
 ---
-'@cedarjs/ui': patch
+'@cedar-design/ui': patch
 ---
 
 将 Time/TimeRange 主体从日期字段中独立出来，删除日期主体的时间分支，并以明确的时间选项类型替代通用配置类型。保留字段输入、草稿、焦点和 Form 通知行为，为后续向 Maple 独立复制时间主体建立边界。

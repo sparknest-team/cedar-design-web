@@ -2,17 +2,17 @@
   <c-radio-group default-value="1">
     <c-radio value="1">
       <template #radio="{ checked }">
-        <c-tag :checked="checked" checkable>This is a tag radio 1</c-tag>
+        <c-tag :model-value="checked" checkable>This is a tag radio 1</c-tag>
       </template>
     </c-radio>
     <c-radio value="2">
       <template #radio="{ checked }">
-        <c-tag :checked="checked" checkable>This is a tag radio 2</c-tag>
+        <c-tag :model-value="checked" checkable>This is a tag radio 2</c-tag>
       </template>
     </c-radio>
     <c-radio value="3">
       <template #radio="{ checked }">
-        <c-tag :checked="checked" checkable>This is a tag radio 3</c-tag>
+        <c-tag :model-value="checked" checkable>This is a tag radio 3</c-tag>
       </template>
     </c-radio>
   </c-radio-group>

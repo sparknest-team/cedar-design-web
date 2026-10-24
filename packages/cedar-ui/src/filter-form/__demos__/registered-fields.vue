@@ -5,7 +5,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { Input, Select, type FilterFormField, type FilterFormFieldMap } from '@cedarjs/ui'
+import { Input, Select, type FilterFormField, type FilterFormFieldMap } from '@cedar-design/ui'
 
 const filter = ref<Record<string, unknown>>({ keyword: '', status: undefined })
 const fieldMap: FilterFormFieldMap = {

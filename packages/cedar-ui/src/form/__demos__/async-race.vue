@@ -55,7 +55,7 @@ import {
   shallowRef,
   useId,
 } from "vue";
-import type { FormInstance, FieldRule } from "@cedarjs/ui";
+import type { FormInstance, FieldRule } from "@cedar-design/ui";
 
 interface Pending {
   value: unknown;

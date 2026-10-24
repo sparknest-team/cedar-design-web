@@ -1,4 +1,4 @@
-import { schedulerDate } from "./index";
+import { schedulerDate } from "./base";
 import type { SchedulerDate, SchedulerRange } from "./types";
 /** Resolve a pointer inside a displayed cell to a snapped local minute. */
 export function getSchedulerCellDate(

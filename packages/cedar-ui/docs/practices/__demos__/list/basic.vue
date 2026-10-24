@@ -102,7 +102,7 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted, defineComponent, h } from 'vue'
 import { useRouter } from 'vue-router'
-import { Select, type FilterFormField, type SearchField } from '@cedarjs/ui'
+import { Select, type FilterFormField, type SearchField } from '@cedar-design/ui'
 import { ListFilter, StationList, StationListItem } from './list.model'
 
 const visible = ref(false)

@@ -9,7 +9,7 @@ const previewOpen = ref(false)
     <c-image width="160" height="120" object-fit="cover" src="/cat.jpg" preview-src="/cat2.jpg" />
     <c-button status="primary" size="sm" @click="previewOpen = true">打开预览</c-button>
     <c-image
-      v-model:preview-open="previewOpen"
+      v-model:open="previewOpen"
       width="160"
       height="120"
       object-fit="cover"

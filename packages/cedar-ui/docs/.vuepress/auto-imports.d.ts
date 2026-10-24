@@ -6,12 +6,12 @@
 // biome-ignore lint: disable
 export {}
 declare global {
-  const Dialog: typeof import('@cedarjs/ui').Dialog
-  const Drawer: typeof import('@cedarjs/ui').Drawer
-  const ImagePreviewFn: typeof import('@cedarjs/ui').ImagePreviewFn
-  const Message: typeof import('@cedarjs/ui').Message
-  const Notification: typeof import('@cedarjs/ui').Notification
-  const StyleProvider: typeof import('@cedarjs/ui').StyleProvider
-  const imagePreview: typeof import('@cedarjs/ui').imagePreview
-  const previewImage: typeof import('@cedarjs/ui').previewImage
+  const Dialog: typeof import('@cedar-design/ui').Dialog
+  const Drawer: typeof import('@cedar-design/ui').Drawer
+  const ImagePreviewFn: typeof import('@cedar-design/ui').ImagePreviewFn
+  const Message: typeof import('@cedar-design/ui').Message
+  const Notification: typeof import('@cedar-design/ui').Notification
+  const StyleProvider: typeof import('@cedar-design/ui').StyleProvider
+  const imagePreview: typeof import('@cedar-design/ui').imagePreview
+  const previewImage: typeof import('@cedar-design/ui').previewImage
 }

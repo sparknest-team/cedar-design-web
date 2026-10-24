@@ -16,6 +16,13 @@
       "kind": "string"
     },
     {
+      "name": "default-value",
+      "description": "非受控初始值，仅创建时读取",
+      "type": "string",
+      "defaultValue": "undefined",
+      "kind": "string"
+    },
+    {
       "name": "is-label",
       "description": "是否是阅读模式",
       "type": "boolean",

@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from "vue";
-const current = ref(0);
+const current = ref(1);
 const accept = ref(true);
-const proposal = ref(0);
+const proposal = ref(1);
 function update(value) {
   proposal.value = value;
   if (accept.value) current.value = value;
@@ -12,11 +12,11 @@ function update(value) {
   <c-checkbox v-model="accept"> Accept changes / 接受切换</c-checkbox>
   <p>Current: {{ current }} · Proposal: {{ proposal }}</p>
   <c-carousel
-    :current="current"
+    :model-value="current"
     height="180px"
     keyboard
     draggable
-    @update:current="update"
+    @update:modelValue="update"
   >
     <c-carousel-item v-for="item in 4" :key="item"
       ><div class="carousel-demo-panel">Slide {{ item }}</div></c-carousel-item

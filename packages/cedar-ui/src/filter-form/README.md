@@ -19,7 +19,7 @@ The filter uses the theme surface with a subtle border and 20px inset, rather th
 <demo src="./__demos__/basic.vue"></demo>
 
 ```ts
-import { Input, Select, type FilterFormField } from '@cedarjs/ui'
+import { Input, Select, type FilterFormField } from '@cedar-design/ui'
 
 const fields: FilterFormField[] = [
   { field: 'keyword', label: '关键词', component: Input },
@@ -54,6 +54,10 @@ const fields: FilterFormField[] = [
 <!-- api-review:end -->
 
 ## API
+
+### 主值与默认值
+
+使用普通 `v-model`。`modelValue` 表示筛选字段对象；`defaultValue` 仅在创建时初始化非受控值，后续修改不会重置当前状态。显式绑定值优先，初始化不发出 `update:modelValue`。
 
 ### FilterForm Props
 
@@ -137,7 +141,7 @@ import type {
   FilterFormField,
   FilterFormFieldMap,
   FilterFormFieldRegistration,
-} from '@cedarjs/ui'
+} from '@cedar-design/ui'
 ```
 
 Grid 列间距通过 `grid-props.colGap`（数字 px）控制；没有同名 CSS 覆盖入口，以确保 Grid 的数值测量与实际间距一致。

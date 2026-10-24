@@ -13,7 +13,7 @@ Regression tests also run the docs workspace's real auto-import plugin over `siz
 与 MapleStyleImports 对齐：CedarStyleImports 使用 resolver 的样式映射，在 Vue/TypeScript 编译后为显式具名值导入补样式。支持组件、Message、Notification、Dialog、Drawer、ImagePreviewFn/previewImage/imagePreview 及别名；去重，跳过类型、命名空间、默认导入和无样式工具。importStyle:false 可关闭。
 
 ```ts
-import { CedarResolver, CedarStyleImports } from '@cedarjs/resolver'
+import { CedarResolver, CedarStyleImports } from '@cedar-design/resolver'
 
 // Vite plugins 数组（不是 resolvers 数组）：
 plugins: [
@@ -24,4 +24,4 @@ plugins: [
 ]
 ```
 
-页面仅需 `import { Message } from '@cedarjs/ui'`，无需手动引入样式。Cedar 文档站已内置该插件；更新后需重启文档开发服务。两端分别维护插件源码，不共享运行时实现。
+页面仅需 `import { Message } from '@cedar-design/ui'`，无需手动引入样式。Cedar 文档站已内置该插件；更新后需重启文档开发服务。两端分别维护插件源码，不共享运行时实现。

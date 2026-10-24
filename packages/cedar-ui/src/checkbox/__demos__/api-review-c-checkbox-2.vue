@@ -4,7 +4,7 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review-c-checkbox-2.config.json";
 </script>
 <template>
@@ -22,7 +22,7 @@ import __apiReviewRawConfig from "./api-review-c-checkbox-2.config.json";
           v-if="__apiReview.slotEnabled['checkbox'] !== false"
           #checkbox="{ checked }"
         >
-          <c-tag :checked="checked">This is a tag checkbox 1</c-tag>
+          <c-tag :model-value="checked">This is a tag checkbox 1</c-tag>
         </template>
         <template
           v-if="__apiReview.slotEnabled['checked-icon']"
@@ -60,7 +60,7 @@ import __apiReviewRawConfig from "./api-review-c-checkbox-2.config.json";
           v-if="__apiReview.slotEnabled['checkbox'] !== false"
           #checkbox="{ checked }"
         >
-          <c-tag :checked="checked">This is a tag checkbox 2</c-tag>
+          <c-tag :model-value="checked">This is a tag checkbox 2</c-tag>
         </template>
         <template
           v-if="__apiReview.slotEnabled['checked-icon']"
@@ -98,7 +98,7 @@ import __apiReviewRawConfig from "./api-review-c-checkbox-2.config.json";
           v-if="__apiReview.slotEnabled['checkbox'] !== false"
           #checkbox="{ checked }"
         >
-          <c-tag :checked="checked">This is a tag checkbox 3</c-tag>
+          <c-tag :model-value="checked">This is a tag checkbox 3</c-tag>
         </template>
         <template
           v-if="__apiReview.slotEnabled['checked-icon']"

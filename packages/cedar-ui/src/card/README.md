@@ -184,7 +184,7 @@ Card 主体颜色按 system 语义分层：普通背景、filled 背景和描边
 组件导出以下类型定义
 
 ```ts
-import type { CardProps } from '@cedarjs/ui'
+import type { CardProps } from '@cedar-design/ui'
 ```
 
 尺寸与跨端迁移约定见仓库根目录 `API-MIGRATION.md`。只支持文档列出的档位，不代表支持全部 ComponentSize。

@@ -1,5 +1,5 @@
 ---
-"@cedarjs/ui": patch
+"@cedar-design/ui": patch
 ---
 
 Keep private time-column scroll tasks cancellable and owner-window scoped; reject stale/replayed frames and settle invalid durations/reduced motion immediately. Preserve positive linear timing. Component lifecycle wiring remains a separate audit phase.

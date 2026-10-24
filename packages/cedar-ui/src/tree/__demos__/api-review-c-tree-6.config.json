@@ -71,7 +71,7 @@
       "initial": "all"
     },
     {
-      "name": "default-selected-keys",
+      "name": "default-selected-values",
       "description": "默认选中的树节点",
       "type": "Array<string | number>",
       "defaultValue": "undefined",
@@ -79,7 +79,7 @@
       "initial": "[]"
     },
     {
-      "name": "selected-keys",
+      "name": "selected-values",
       "description": "选中的树节点",
       "type": "Array<string | number>",
       "defaultValue": "undefined",
@@ -87,7 +87,7 @@
       "initial": "[]"
     },
     {
-      "name": "default-checked-keys",
+      "name": "default-checked-values",
       "description": "默认选中复选框的树节点",
       "type": "Array<string | number>",
       "defaultValue": "undefined",
@@ -95,7 +95,7 @@
       "initial": "[]"
     },
     {
-      "name": "checked-keys",
+      "name": "checked-values",
       "description": "选中复选框的树节点",
       "type": "Array<string | number>",
       "defaultValue": "undefined",
@@ -103,7 +103,7 @@
       "initial": "[]"
     },
     {
-      "name": "default-expanded-keys",
+      "name": "default-expanded-values",
       "description": "默认展开的节点",
       "type": "Array<string | number>",
       "defaultValue": "undefined",
@@ -111,7 +111,7 @@
       "initial": "[]"
     },
     {
-      "name": "expanded-keys",
+      "name": "expanded-values",
       "description": "展开的节点",
       "type": "Array<string | number>",
       "defaultValue": "undefined",
@@ -192,7 +192,7 @@
       "kind": "boolean"
     },
     {
-      "name": "half-checked-keys",
+      "name": "half-checked-values",
       "description": "半选状态的节点.仅在 checkable 且 checkStrictly 时生效",
       "type": "Array<string | number>",
       "defaultValue": "undefined",
@@ -201,7 +201,7 @@
     },
     {
       "name": "only-check-leaf",
-      "description": "开启后 checkedKeys 只处理叶子节点，父节点状态由子节点决定（仅在 checkable 且 checkStrictly 为 false 时生效）",
+      "description": "开启后 checkedValues 只处理叶子节点，父节点状态由子节点决定（仅在 checkable 且 checkStrictly 为 false 时生效）",
       "type": "boolean",
       "defaultValue": "false",
       "kind": "boolean"
@@ -246,7 +246,7 @@
       "kind": "boolean"
     },
     {
-      "name": "TreeNodeData.key",
+      "name": "TreeNodeData.value",
       "description": "data.0 · 唯一标示",
       "type": "string | number",
       "defaultValue": "-",
@@ -254,11 +254,11 @@
       "path": [
         "data",
         0,
-        "key"
+        "value"
       ]
     },
     {
-      "name": "TreeNodeData.title",
+      "name": "TreeNodeData.label",
       "description": "data.0 · 该节点显示的标题",
       "type": "string",
       "defaultValue": "-",
@@ -266,7 +266,7 @@
       "path": [
         "data",
         0,
-        "title"
+        "label"
       ]
     },
     {
@@ -403,25 +403,25 @@
       ]
     },
     {
-      "name": "TreeFieldNames.key",
-      "description": "field-names · 指定 key 在 TreeNodeData 中的字段名",
+      "name": "TreeFieldNames.value",
+      "description": "field-names · 指定 value 在 TreeNodeData 中的字段名",
       "type": "string",
-      "defaultValue": "key",
+      "defaultValue": "value",
       "kind": "string",
       "path": [
         "field-names",
-        "key"
+        "value"
       ]
     },
     {
-      "name": "TreeFieldNames.title",
-      "description": "field-names · 指定 title 在 TreeNodeData 中的字段名",
+      "name": "TreeFieldNames.label",
+      "description": "field-names · 指定 label 在 TreeNodeData 中的字段名",
       "type": "string",
-      "defaultValue": "title",
+      "defaultValue": "label",
       "kind": "string",
       "path": [
         "field-names",
-        "title"
+        "label"
       ]
     },
     {
@@ -582,7 +582,7 @@
   ],
   "slotNames": [
     "icon",
-    "title",
+    "label",
     "extra",
     "drag-icon",
     "loading-icon",
@@ -590,7 +590,7 @@
   ],
   "slotDefaults": {
     "icon": true,
-    "title": false,
+    "label": false,
     "extra": false,
     "drag-icon": false,
     "loading-icon": false,

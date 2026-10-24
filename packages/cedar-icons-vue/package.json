@@ -1,5 +1,5 @@
 {
-  "name": "@cedarjs/icons-vue",
+  "name": "@cedar-design/icons-vue",
   "version": "1.0.0",
   "description": "SVG icon components for Cedar",
   "license": "MIT",
@@ -20,7 +20,11 @@
       "require": "./lib/*/index.cjs"
     }
   },
-  "files": ["es", "lib", "types"],
+  "files": [
+    "es",
+    "lib",
+    "types"
+  ],
   "scripts": {
     "generate": "node scripts/generate.mjs",
     "generate:check": "node scripts/generate.mjs --check",
@@ -37,5 +41,9 @@
     "vite": "^5.4.0",
     "vue": "catalog:",
     "vue-tsc": "^2.0.29"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

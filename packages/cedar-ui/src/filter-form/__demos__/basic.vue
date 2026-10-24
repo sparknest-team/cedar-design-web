@@ -22,7 +22,7 @@ import {
   Input,
   Select,
   type FilterFormField,
-} from '@cedarjs/ui'
+} from '@cedar-design/ui'
 
 const collapsed = ref(true)
 const result = ref('尚未搜索')

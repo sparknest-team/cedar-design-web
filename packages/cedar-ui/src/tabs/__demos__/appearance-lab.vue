@@ -34,10 +34,10 @@ const __demoAppearance = __demoReactive({ variant: "line", size: "md" });
           aria-label="size"
       /></label>
     </c-space>
-    <c-tabs default-active="overview" v-bind="__demoAppearance">
-      <c-tab-pane key="overview" title="概览">概览内容</c-tab-pane>
-      <c-tab-pane key="details" title="详情">详情内容</c-tab-pane>
-      <c-tab-pane key="settings" title="设置">设置内容</c-tab-pane>
+    <c-tabs default-value="overview" v-bind="__demoAppearance">
+      <c-tab-pane name="overview" title="概览">概览内容</c-tab-pane>
+      <c-tab-pane name="details" title="详情">详情内容</c-tab-pane>
+      <c-tab-pane name="settings" title="设置">设置内容</c-tab-pane>
     </c-tabs>
   </c-space>
 </template>

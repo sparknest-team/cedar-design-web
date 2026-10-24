@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive as __demoReactive } from "vue";
 import { ref } from "vue";
-import type { FormItemValidateStatus } from "@cedarjs/ui";
+import type { FormItemValidateStatus } from "@cedar-design/ui";
 const status = ref<FormItemValidateStatus>("warning");
 const __demoState = __demoReactive({ disabled: false, readonly: false });
 </script>

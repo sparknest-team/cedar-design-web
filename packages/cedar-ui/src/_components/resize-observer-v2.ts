@@ -20,7 +20,7 @@ export default defineComponent({
     useElementResize(() => [firstElement.value], () => true, entries => {
       const entry = entries.find(entry => entry.target === firstElement.value)
       if (entry) emit('resize', entry)
-    }, undefined, false)
+    }, false)
 
     return () => {
       children.value = slots.default?.()

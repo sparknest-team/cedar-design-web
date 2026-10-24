@@ -80,7 +80,7 @@
 
 <script setup lang="ts">
 import { computed, ref, type CSSProperties } from 'vue'
-import { IconClose } from '@cedarjs/icons-vue/icon-close'
+import { IconClose } from '@cedar-design/icons-vue/icon-close'
 import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import { isFunction, isNumber } from '../_utils/is'
 import { useModalSurface, type ModalSurfaceCloseRequest } from '../_utils/modal-surface'

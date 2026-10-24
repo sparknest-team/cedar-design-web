@@ -16,7 +16,7 @@ import {
 } from "./types";
 import { getFixedCls, getStyle } from "./utils";
 import { getValueByPath } from "../_utils/get-value-by-path";
-import { IconLoading } from '@cedarjs/icons-vue/icon-loading'
+import { IconLoading } from '@cedar-design/icons-vue/icon-loading'
 import { isFunction, isObject } from "../_utils/is";
 import { TableContext, tableInjectionKey } from "./context";
 import AutoTooltip from "../_components/auto-tooltip/auto-tooltip";

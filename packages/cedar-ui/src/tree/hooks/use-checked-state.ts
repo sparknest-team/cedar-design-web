@@ -1,53 +1,53 @@
 import { toRefs, ref, watchEffect, computed } from 'vue'
-import { TreeNodeKey, Key2TreeNode } from '../types'
+import { TreeNodeValue, Key2TreeNode } from '../types'
 import { getCheckedStateByInitKeys } from '../utils/check-utils'
 
 export default function useCheckedState(props: {
-  defaultCheckedKeys: TreeNodeKey[] | undefined
-  checkedKeys: TreeNodeKey[] | undefined
-  halfCheckedKeys: TreeNodeKey[] | undefined
+  defaultCheckedValues: TreeNodeValue[] | undefined
+  checkedValues: TreeNodeValue[] | undefined
+  halfCheckedValues: TreeNodeValue[] | undefined
   key2TreeNode: Key2TreeNode
   checkStrictly: boolean
   onlyCheckLeaf: boolean
 }) {
   const {
-    defaultCheckedKeys,
-    checkedKeys: propCheckedKeys,
+    defaultCheckedValues,
+    checkedValues: propCheckedValues,
     key2TreeNode,
     checkStrictly,
-    halfCheckedKeys,
+    halfCheckedValues,
     onlyCheckLeaf,
   } = toRefs(props)
 
   const isInitialized = ref(false)
-  const localCheckedKeys = ref<TreeNodeKey[]>([])
-  const localIndeterminateKeys = ref<TreeNodeKey[]>([])
-  const computedCheckedKeys = ref<TreeNodeKey[]>()
-  const computedIndeterminateKeys = ref<TreeNodeKey[]>()
+  const localCheckedValues = ref<TreeNodeValue[]>([])
+  const localIndeterminateKeys = ref<TreeNodeValue[]>([])
+  const computedCheckedValues = ref<TreeNodeValue[]>()
+  const computedIndeterminateKeys = ref<TreeNodeValue[]>()
 
-  const getStateByKeys = (keys: TreeNodeKey[]) => {
+  const getStateByKeys = (keys: TreeNodeValue[]) => {
     return getCheckedStateByInitKeys({
-      initCheckedKeys: keys,
+      initCheckedValues: keys,
       key2TreeNode: key2TreeNode.value,
       checkStrictly: checkStrictly.value,
       onlyCheckLeaf: onlyCheckLeaf.value,
     })
   }
 
-  const init = (keys: TreeNodeKey[]) => {
+  const init = (keys: TreeNodeValue[]) => {
     const initState = getStateByKeys(keys)
-    ;[localCheckedKeys.value, localIndeterminateKeys.value] = initState
+    ;[localCheckedValues.value, localIndeterminateKeys.value] = initState
   }
 
-  init(propCheckedKeys.value || defaultCheckedKeys?.value || [])
+  init(propCheckedValues.value || defaultCheckedValues?.value || [])
 
   watchEffect(() => {
-    if (propCheckedKeys.value) {
-      ;[computedCheckedKeys.value, computedIndeterminateKeys.value] = getStateByKeys(propCheckedKeys.value)
+    if (propCheckedValues.value) {
+      ;[computedCheckedValues.value, computedIndeterminateKeys.value] = getStateByKeys(propCheckedValues.value)
     } else if (isInitialized.value) {
-      computedCheckedKeys.value = undefined
+      computedCheckedValues.value = undefined
       computedIndeterminateKeys.value = undefined
-      localCheckedKeys.value = []
+      localCheckedValues.value = []
       localIndeterminateKeys.value = []
     }
     if (!isInitialized.value) {
@@ -56,21 +56,21 @@ export default function useCheckedState(props: {
   })
 
   return {
-    checkedKeys: computed(() => computedCheckedKeys.value || localCheckedKeys.value),
+    checkedValues: computed(() => computedCheckedValues.value || localCheckedValues.value),
     indeterminateKeys: computed(() => {
-      if (checkStrictly.value && halfCheckedKeys.value) {
-        return halfCheckedKeys.value
+      if (checkStrictly.value && halfCheckedValues.value) {
+        return halfCheckedValues.value
       }
       return computedIndeterminateKeys.value || localIndeterminateKeys.value
     }),
-    setCheckedState(newCheckedKeys: TreeNodeKey[], newIndeterminateKeys: TreeNodeKey[], reinitialize = false) {
+    setCheckedState(newCheckedValues: TreeNodeValue[], newIndeterminateKeys: TreeNodeValue[], reinitialize = false) {
       if (reinitialize) {
-        init(newCheckedKeys)
+        init(newCheckedValues)
       } else {
-        localCheckedKeys.value = newCheckedKeys
+        localCheckedValues.value = newCheckedValues
         localIndeterminateKeys.value = newIndeterminateKeys
       }
-      return [localCheckedKeys.value, localIndeterminateKeys.value]
+      return [localCheckedValues.value, localIndeterminateKeys.value]
     },
   }
 }

@@ -1,4 +1,4 @@
-import { schedulerDate } from "./index";
+import { schedulerDate } from "./base";
 import type { SchedulerEvent } from "./types";
 export interface SchedulerDependency {
   id: string;

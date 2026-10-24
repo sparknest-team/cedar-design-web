@@ -14,3 +14,6 @@ export const menuInjectionKey: InjectionKey<MenuContext> = Symbol('Menu')
 export interface MenuBranch { close(): void; allowClose(): void; focus?(): void }
 export interface MenuLevel { visible: Ref<boolean>; register(branch: MenuBranch): () => void; activate(branch?: MenuBranch): void; leave?: () => void }
 export const menuLevelKey: InjectionKey<MenuLevel> = Symbol('MenuLevel')
+
+/** Private row depth for declarative MenuOption rendering callbacks. */
+export const menuRenderLevelKey: InjectionKey<Readonly<Ref<number>>> = Symbol('MenuRenderLevel')

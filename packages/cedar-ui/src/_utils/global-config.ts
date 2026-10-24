@@ -2,7 +2,7 @@ import type { App, Component, Plugin } from 'vue'
 import { getCurrentInstance, inject } from 'vue'
 import { configProviderInjectionKey } from '../config-provider/context'
 import type { CedarOptions } from './types'
-import { createNamespaceFn } from '@cedarjs/shared'
+import { createNamespaceFn } from '@cedar-design/shared'
 import { withPropsDefaultsSetter } from './maple/components'
 
 const COMPONENT_PREFIX = 'C'

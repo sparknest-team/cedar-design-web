@@ -2,7 +2,7 @@ import { computed, defineComponent, PropType, ref, toRefs, Slots, watch, useId, 
 import Tree from '../tree'
 import { isNodeSelectable } from '../tree/utils'
 import { isNodeCheckable } from '../tree/utils/check-utils'
-import { TreeProps, TreeNodeKey, Node, TreeNodeData } from '../tree/types'
+import { TreeProps, TreeNodeValue, Node, TreeNodeData } from '../tree/types'
 import { useScrollbar } from '../_hooks/use-scrollbar'
 import Scrollbar, { ScrollbarProps } from '../scrollbar'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
@@ -27,8 +27,8 @@ export default defineComponent({
       default: () => ({}),
     },
     candidateFilter: Function as PropType<(node: TreeNodeData) => boolean>,
-    selectedKeys: {
-      type: Array as PropType<TreeNodeKey[]>,
+    selectedValues: {
+      type: Array as PropType<TreeNodeValue[]>,
     },
     showCheckable: {
       type: Boolean,
@@ -44,17 +44,17 @@ export default defineComponent({
   },
   emits: ['change'],
   setup(props, { emit, expose }) {
-    const { showCheckable, selectedKeys, treeProps, scrollbar } = toRefs(props)
+    const { showCheckable, selectedValues, treeProps, scrollbar } = toRefs(props)
     const { displayScrollbar, scrollbarProps } = useScrollbar(scrollbar)
     const prefixCls = getPrefixCls('tree-select')
     const refTree = ref()
 
     const treeId = `tree-select-${useId()}`
-    const activeKey = ref<TreeNodeKey>()
+    const activeKey = ref<TreeNodeValue>()
     const visibleNodes = computed<Node[]>(() => {
       const context = refTree.value?.treeContext
       if (!context) return []
-      const expanded = new Set<TreeNodeKey>(context.expandedKeys)
+      const expanded = new Set<TreeNodeValue>(context.expandedValues)
       // Expanded descendants are rendered by TransitionNodeList during animation.
       // They are keyboard candidates even before the normal tree list takes over.
       return context.flattenTreeData.filter(
@@ -65,20 +65,20 @@ export default defineComponent({
     })
     const visibleNodeMap = computed(() => new Map(visibleNodes.value.map((node) => [node.key, node])))
     const enabledNodes = computed(() => visibleNodes.value.filter((node) => !node.disabled))
-    const nodeId = (key: TreeNodeKey) => `${treeId}-${typeof key}-${encodeURIComponent(String(key))}`
+    const nodeId = (key: TreeNodeValue) => `${treeId}-${typeof key}-${encodeURIComponent(String(key))}`
     const activeId = computed(() => (activeKey.value === undefined ? undefined : nodeId(activeKey.value)))
     const resetActive = () => {
       const matches = props.candidateFilter
         ? enabledNodes.value.filter((node) => props.candidateFilter?.(node.treeNodeData))
         : enabledNodes.value
       const candidates = matches.length ? matches : enabledNodes.value
-      const selected = props.selectedKeys?.find((key) => candidates.some((node) => node.key === key))
+      const selected = props.selectedValues?.find((key) => candidates.some((node) => node.key === key))
       activeKey.value = selected ?? candidates[0]?.key
     }
     watch(
       enabledNodes,
       () => {
-        const current = visibleNodeMap.value.get(activeKey.value as TreeNodeKey)
+        const current = visibleNodeMap.value.get(activeKey.value as TreeNodeValue)
         if (
           !current ||
           current.disabled ||
@@ -91,7 +91,7 @@ export default defineComponent({
       { immediate: true },
     )
     watch(() => props.candidateFilter, resetActive)
-    const moveTo = (key?: TreeNodeKey) => {
+    const moveTo = (key?: TreeNodeValue) => {
       activeKey.value = key
       if (key !== undefined) refTree.value?.scrollIntoView({ key, align: 'auto' })
     }
@@ -119,7 +119,7 @@ export default defineComponent({
         return
       }
       const node = nodes[index < 0 ? 0 : index]
-      const expanded = refTree.value?.computedExpandedKeys.includes(node.key)
+      const expanded = refTree.value?.computedExpandedValues.includes(node.key)
       if (event.key === 'ArrowRight') {
         if (!node.isLeaf && !expanded) expand(node, true, event)
         else moveTo(nodes.find((child) => child.parentKey === node.key)?.key ?? node.key)
@@ -131,7 +131,7 @@ export default defineComponent({
         else refTree.value?.treeContext.onSelect(node.key, event)
       } else if (!node.isLeaf) expand(node, !expanded, event)
       nextTick(() => {
-        if (activeKey.value !== undefined) refTree.value?.scrollIntoView({ key: activeKey.value, align: 'auto' })
+        if (activeKey.value !== undefined) refTree.value?.scrollIntoView({ value: activeKey.value, align: 'auto' })
       })
     }
     expose({ handleKeydown, activeId, treeId, resetActive })
@@ -140,12 +140,12 @@ export default defineComponent({
       return {
         ...treeProps.value,
         disableSelectActionOnly: true,
-        checkedKeys: showCheckable.value ? selectedKeys.value : [],
-        selectedKeys: showCheckable.value ? [] : selectedKeys.value,
+        checkedValues: showCheckable.value ? selectedValues.value : [],
+        selectedValues: showCheckable.value ? [] : selectedValues.value,
       }
     })
 
-    const onSelect = (newVal: TreeNodeKey[], e: Event) => {
+    const onSelect = (newVal: TreeNodeValue[], e: Event) => {
       if (showCheckable.value) {
         refTree.value?.toggleCheck?.(newVal[0], e)
       } else {
@@ -153,7 +153,7 @@ export default defineComponent({
       }
     }
 
-    const onCheck = (newVal: TreeNodeKey[]) => {
+    const onCheck = (newVal: TreeNodeValue[]) => {
       emit('change', newVal)
     }
 
@@ -170,8 +170,8 @@ export default defineComponent({
           onCheck={onCheck}
           v-slots={{
             ...props.treeSlots,
-            title: (node: TreeNodeData, status: any) => {
-              const key = node[(props.treeProps.fieldNames?.key ?? 'key') as keyof TreeNodeData] as TreeNodeKey
+            label: (node: TreeNodeData, status: any) => {
+              const key = node[(props.treeProps.fieldNames?.value ?? 'value') as keyof TreeNodeData] as TreeNodeValue
               return (
                 <span
                   id={nodeId(key)}
@@ -185,8 +185,8 @@ export default defineComponent({
                     if (visibleNodeMap.value.has(key) && !visibleNodeMap.value.get(key)?.disabled) activeKey.value = key
                   }}
                 >
-                  {props.treeSlots.title?.(node, status) ??
-                    node[(props.treeProps.fieldNames?.title ?? 'title') as keyof TreeNodeData]}
+                  {props.treeSlots.label?.(node, status) ??
+                    node[(props.treeProps.fieldNames?.label ?? 'label') as keyof TreeNodeData]}
                 </span>
               )
             },

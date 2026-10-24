@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-import { Dialog } from '@cedarjs/ui'
+import { Dialog } from '@cedar-design/ui'
 
 export default {
   setup() {

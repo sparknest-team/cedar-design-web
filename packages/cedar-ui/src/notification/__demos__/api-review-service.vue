@@ -1,8 +1,8 @@
 <script setup>
 import { onUnmounted, shallowRef } from "vue";
-import { Notification as ReviewService } from "@cedarjs/ui";
+import { Notification as ReviewService } from "@cedar-design/ui";
 import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPanel.vue";
-import { defineReviewConfig } from "@ui-foundation/ui-doc-preview";
+import { defineReviewConfig } from "@sparknest/ui-doc-preview";
 import raw from "./api-review-service.config.json";
 const handle = shallowRef();
 const sample = {

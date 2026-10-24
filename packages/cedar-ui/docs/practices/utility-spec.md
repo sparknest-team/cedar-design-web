@@ -17,7 +17,7 @@ permalink: /practices/utility-spec/
 
 | | Cedar | Maple |
 |---|---|---|
-| 原子化 CSS preset | `@cedarjs/preset-unocss` / `@cedarjs/preset-tailwindcss` | `@maplejs/maple-preset-unocss` / `@maplejs/maple-preset-tailwindcss` |
+| 原子化 CSS preset | `@cedar-design/preset-unocss` / `@cedar-design/preset-tailwindcss` | `@maple-design/preset-unocss` / `@maple-design/preset-tailwindcss` |
 | 暗色 | 只改 token，类名不变 | 同左 |
 
 ## 标准集合
@@ -53,7 +53,7 @@ permalink: /practices/utility-spec/
 | 项 | Cedar | Maple |
 |---|---|---|
 | Typography 工具包 | 有（PC） | 无；用 token / 原子化 |
-| 原子化 CSS preset | `@cedarjs/preset-unocss` / `@cedarjs/preset-tailwindcss` | `@maplejs/maple-preset-unocss` / `@maplejs/maple-preset-tailwindcss` |
+| 原子化 CSS preset | `@cedar-design/preset-unocss` / `@cedar-design/preset-tailwindcss` | `@maple-design/preset-unocss` / `@maple-design/preset-tailwindcss` |
 
 ## 禁止
 

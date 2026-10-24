@@ -8,7 +8,7 @@ import Demo from "../__demos__/replacement-validation.vue";
 
 useDemoControls();
 
-vi.mock("@cedarjs/ui", () => import(".."));
+vi.mock("@cedar-design/ui", () => import(".."));
 
 test.each([
   [Demo, "加入小图片", "返回最早缩略图", "拒绝最早缩略图", "重置队列"],

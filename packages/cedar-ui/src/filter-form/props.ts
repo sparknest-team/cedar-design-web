@@ -17,8 +17,10 @@ export const filterFormProps = {
    */
   modelValue: {
     type: Object as PropType<Record<string, unknown>>,
-    default: () => ({}),
+    default: undefined,
   },
+  /** 非受控初始表单值，仅创建时读取。 */
+  defaultValue: { type: Object as PropType<Record<string, unknown>>, default: () => ({}) },
   /**
    * 筛选项 schema
    */

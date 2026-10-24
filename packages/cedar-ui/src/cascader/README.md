@@ -109,6 +109,8 @@ modelValue 使用路径作为值。
 
 <!-- api-review:end -->
 
+单选已选项在右侧显示内置主色对勾。多选使用 Checkbox：可选后代全部未选为未选，部分选中为半选，全部可选叶子选中为全选；禁用叶子不参与全选计算。checkStrictly 开启时父子独立选择，不汇总半选。确认式编辑面板中的选择先作为草稿，确认后才提交。
+
 ## API
 
 ### Cascader 属性
@@ -211,7 +213,7 @@ modelValue 使用路径作为值。
 组件导出以下类型定义
 
 ```ts
-import type { CascaderProps } from '@cedarjs/ui'
+import type { CascaderProps } from '@cedar-design/ui'
 ```
 
 ### Form 字段展示与确认
@@ -225,3 +227,10 @@ Cedar 使用 presentation="click" / "dblclick" 在原位进入编辑，Enter/F2 
 原 menu/list/picker 展示改为 inline/popup（PC 使用 popover）；不保留旧枚举别名。弹层复用原选项索引、搜索、异步加载与虚拟列表算法。
 
 `read-pretty` 为独立布尔属性，与 `readonly`、`disabled` 同级；字段 > FormItem > Form 继承，显式 `false` 覆盖父级。默认 `false`。纯阅读不显示编辑器。
+
+### 单选对勾样式变量
+
+| 变量 | 默认值 |
+| --- | --- |
+| `--c-cascader-item-check-color` | `var(--c-sys-color-action-primary)` |
+| `--c-cascader-item-check-size` | `var(--c-sys-font-size-md)` |

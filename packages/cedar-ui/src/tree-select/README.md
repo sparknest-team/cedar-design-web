@@ -48,7 +48,7 @@ permalink: /components/tree-select/
 组件导出以下类型定义
 
 ```ts
-import type { TreeSelectProps } from '@cedarjs/ui'
+import type { TreeSelectProps } from '@cedar-design/ui'
 ```
 
 ### Form 字段展示与确认
@@ -63,3 +63,9 @@ Cedar 使用 presentation="click" / "dblclick" 在原位进入编辑，Enter/F2 
 面板打开时，方向键导航可见且未禁用的节点，左右键展开/收起或移动到子/父节点，Home/End 定位首末节点；Enter 选择/勾选当前节点，不能选择的分支则展开或收起。搜索优先激活匹配节点，多选复用树的勾选规则。Esc 先关闭面板并保留草稿、恢复输入焦点；面板关闭后 Enter 保存字段，Esc 取消编辑。与 AutoComplete、PeopleSelect 的对比示例见 Form 的“各类字段统一展示”。
 
 异步加载同一节点时合并重复展开操作；节点被替换、编辑器关闭或表单重置后，旧请求不再触发展开或勾选。加载完成后，方向键可立即进入新子节点。搜索词或候选变化时先清除旧过滤结果，避免 Enter 选中旧候选；字段确认仍先校验，再执行异步提交。
+
+### 节点字段与业务值
+
+节点默认使用 `{ value, label, children }`，`value` 是全树唯一的字符串或数字（支持 `0`），`label` 是展示内容。后端使用其他字段时可配置 `fieldNames: { value: 'id', label: 'text', children: 'items' }`，无需修改后端数据。声明式组件子项的 `name`、Vue 的 `:key` 和 Table 的 `rowKey` 保持各自含义。
+
+Tree 的独立状态采用 `selectedValues/defaultSelectedValues`、`checkedValues/defaultCheckedValues`、`halfCheckedValues`、`expandedValues/defaultExpandedValues`，分别通过同名具名 v-model 更新；`check` 事件数据中的半选集合为 `halfCheckedValues`。节点内容插槽为 `label`，TreeSelect 对应透传插槽为 `tree-slot-label`。`scrollIntoView({ value })` 按业务值定位；显式 `index` 仍表示虚拟列表从 0 开始的数组下标。

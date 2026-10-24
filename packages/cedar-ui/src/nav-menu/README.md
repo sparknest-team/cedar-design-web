@@ -71,6 +71,12 @@ NavMenu 有两种清晰的使用方式：导航树使用 `options`，业务筛�
 
 <demo src="./__demos__/items-vertical.vue" title="纵向工作台" desc="组合页面入口、项目下拉和右侧全高筛选面板。"></demo>
 
+#### 入口状态与视觉强调
+
+通过插槽直接显示业务 `active` 和面板 `open`。独立入口匹配有效选项时才 active；`highlight` 可以单独覆盖外观。具名入口只在选择叶子项后更新 activeItem，打开面板不会提前激活。
+
+<demo src="./__demos__/entry-state.vue" title="入口状态与视觉强调" desc="比较 active、open 与 highlight；支持数字 0、空字符串、清空和未匹配值。"></demo>
+
 #### 标题更新策略
 
 Item 的标题默认跟随选中项，也可以通过 `#label` 保持固定标题，或把选中值与显示标题分开管理。高亮状态可以由根菜单统一管理，也可以由每个 Item 独立管理。
@@ -114,12 +120,6 @@ Item 的标题默认跟随选中项，也可以通过 `#label` 保持固定标�
 NavMenu 支持 `xs`、`sm`、`md`、`lg` 和 `xl` 五档组件尺寸。
 
 <demo src="./__demos__/size.vue" title="五种尺寸" desc="并排比较五档菜单高度和文字尺寸。"></demo>
-
-#### 主题
-
-`light` 适合普通内容区域，`dark` 适合深色侧边栏或顶部栏。
-
-<demo src="./__demos__/theme.vue" title="明暗主题" desc="比较 light 与 dark 两种菜单主题。"></demo>
 
 ## NavMenu API
 
@@ -186,7 +186,7 @@ interface NavMenuOption {
 
 默认插槽用于放置独立的 `CNavMenuItem`。存在默认插槽时，横向菜单使用滚动，`responsive` 不进行更多收纳。
 
-label/icon/extra 均接收 `{ option, selected, expanded, active, level }`；active 表示处于选中项祖先路径，level 从 0 开始。
+label/icon/extra 渲染函数、同名插槽及 nodeProps 均接收 `{ option, active, expanded, level }`。`active` 只表示当前节点自身匹配 modelValue，祖先路径强调留在内部；`expanded` 表示分支展开，level 从 0 开始。
 
 ### 方法
 
@@ -210,17 +210,19 @@ label/icon/extra 均接收 `{ option, selected, expanded, active, level }`；act
 
 标题默认跟随匹配的选中选项。`label` 插槽优先级最高：固定标题可写 `<template #label>高级筛选</template>`；手动标题可绑定独立的响应式变量。原 `update-label` 已移除。
 
+`v-model` 保存面板的选中值。插槽 `active` 只表示业务上的当前入口：提供 name 且处于根菜单中时，由根 activeItem 是否等于该 name 决定；独立入口则由主值是否匹配 options 中的普通选项决定（包括 0 和空字符串）。未知值、分组和分隔项不激活独立入口。`highlight` 仅覆盖视觉强调，true 强制强调、false 取消强调，省略时跟随 active；它不改变 active 或主值。打开面板不会激活入口。
+
 `CNavMenuItem`（也可写 `NavMenu.Item`）是自定义一级入口，不参与根菜单普通导航树的 `modelValue`。未提供 `name` 时，Item 根据自己的值独立高亮，适合分类、地区等多个筛选条件同时生效；提供唯一 `name` 后，由根菜单的 `activeItem/defaultActiveItem` 统一保持单选高亮。两种模式都只允许同一时间展开一个 Item 面板，且不会清空其他面板的内部值。普通一级导航仍使用根 NavMenu 的 `options + v-model`。每个入口通过自己的 `options` 定义菜单，或通过 `content` 插槽完全替换面板。默认插槽自定义入口本身，`label`、`icon` 插槽局部自定义入口，`option-label`、`option-icon`、`option-extra` 自定义选项。
 
 有默认插槽时，横向菜单使用滚动而不收入“更多”，避免复制包含表单的入口。纯 `options` 菜单继续支持自动溢出收纳。新 Item 不兼容旧的子组件收集协议。同一 NavMenu 下的 Item 面板互斥，点击其他入口会请求关闭已打开的面板；受控 open 需要业务接受 update:open。
 
 | Item 属性 | 说明 | 默认 |
 | --- | --- | --- |
-| name | 稳定且唯一的入口标识；提供后由根菜单 activeItem 互斥高亮，并优先于 active | — |
+| name | 稳定且唯一的入口标识；提供后由根菜单 activeItem 互斥管理当前入口；视觉覆盖另用 highlight | — |
 | label | 未选中或选中值未匹配 options 时的入口标题，支持 VNode / 渲染函数 | — |
 | options / fieldNames | 与 NavMenu 相同的选项和字段映射 | `[]` |
 | modelValue / defaultValue | 独立受控值 / 初始值，支持字符串、数字和 null | `undefined` / `null` |
-| active | 独立高亮；省略时根据选中值是否非 null 判断 | — |
+| highlight | 入口视觉强调覆盖，不改变业务 active 或选中值；省略时跟随 active | — |
 | hideOnSelect | 调用 select 后关闭面板 | `true` |
 | open / defaultOpen | 受控 / 初始面板状态 | `undefined` / `false` |
 | disabled | 禁用入口（同时遵循父菜单 disabled） | `false` |
@@ -231,7 +233,7 @@ label/icon/extra 均接收 `{ option, selected, expanded, active, level }`；act
 | popupContainer / popupClass | Trigger 挂载容器及浮层类名 | 跟随父菜单 |
 | optionsMode | 默认选项面板的横向 / 纵向排列 | `vertical` |
 
-所有入口插槽和 `content` 插槽收到 `{ modelValue, selectedOption, active, open, select, close }`。`select(key, event?)` 发出 `update:modelValue` 和 `select(key, option, event)`；自定义面板可以选择 options 外的值，此时 option 为 undefined。`close()` 关闭并恢复入口焦点。受控值只有父组件接受后才影响标题和高亮。`hideOnSelect` 独立于值是否被接受，需手动确认时设为 false。
+所有入口插槽和 `content` 插槽收到 `{ modelValue, selectedOption, active, open, select, close }`。`select(key, event?)` 发出 `update:modelValue` 和 `select(key, option, event)`；自定义面板可以选择 options 外的值，此时 option 为 undefined；独立入口 active 为 false，如需强调可显式设置 highlight。`close()` 关闭并恢复入口焦点。受控值只有父组件接受后才影响标题和业务 active。入口插槽的 active 表示入口状态；label 渲染函数的 active 则表示其上下文 option 自身是否匹配 Item 的主值，未匹配时为 false。`hideOnSelect` 独立于值是否被接受，需手动确认时设为 false。
 
 Item 还发出 `update:open`、入口 `click`，暴露 `select`、`close`、`setOpen` 方法。通栏 / 全高是非模态浮层，不锁定页面滚动或限制焦点；默认挂载到 body，使用自定义容器时需避免祖先 transform 改变 fixed 定位基准。
 

@@ -85,14 +85,14 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { cloneSchedulerEvent, schedulerDate } from "@cedarjs/ui/scheduler/core";
+import { cloneSchedulerEvent, schedulerDate } from "@cedar-design/ui/scheduler/core";
 import type {
   SchedulerInstance,
   SchedulerEvent,
   SchedulerEditorRequest,
   SchedulerEventTemplate,
   SchedulerBeforeChange,
-} from "@cedarjs/ui";
+} from "@cedar-design/ui";
 const scheduler = ref<SchedulerInstance>();
 const events = ref<SchedulerEvent[]>([
   {

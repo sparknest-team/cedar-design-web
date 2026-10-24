@@ -23,6 +23,10 @@ permalink: /components/people-select/
 
 ## API
 
+### 主值与默认值
+
+使用普通 `v-model`。`modelValue` 表示选中人员的标识；`defaultValue` 仅在创建时初始化非受控值，后续修改不会重置当前状态。显式绑定值优先，初始化不发出 `update:modelValue`。
+
 ### PeopleSelect Props
 
 其它属性参照Select组件。
@@ -54,7 +58,7 @@ permalink: /components/people-select/
 组件导出以下类型定义
 
 ```ts
-import type { PeopleSelectProps } from '@cedarjs/ui'
+import type { PeopleSelectProps } from '@cedar-design/ui'
 ```
 
 ### Form 字段展示与确认

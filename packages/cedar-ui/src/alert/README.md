@@ -133,7 +133,7 @@ import type {
   AlertProps,
   AlertStatus,
   AlertVariant,
-} from '@cedarjs/ui'
+} from '@cedar-design/ui'
 ```
 
 ### 样式变量

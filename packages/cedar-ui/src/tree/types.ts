@@ -2,19 +2,19 @@ import { Slot, VNode } from 'vue'
 import { VirtualListProps } from '../_components/virtual-list-v2/interface'
 import { ComponentSize } from '../_utils/constant'
 
-export type TreeNodeKey = number | string
+export type TreeNodeValue = number | string
 
 export interface TreeNodeData {
   /**
    * @zh 唯一标示
-   * @en Unique key
+   * @en Unique node value
    * */
-  key?: string | number
+  value?: string | number
   /**
    * @zh 该节点显示的标题
    * @en The title of the node
    * */
-  title?: string
+  label?: string
   /**
    * @zh 是否允许选中
    * @en Whether to allow selection
@@ -87,12 +87,12 @@ export interface TreeNodeProps extends Omit<TreeNodeData, 'children'> {
 }
 
 export interface Node extends TreeNodeProps {
-  key: TreeNodeKey
+  key: TreeNodeValue
   treeNodeProps: TreeNodeProps
   treeNodeData: TreeNodeData
   parent?: Node
-  parentKey?: TreeNodeKey
-  pathParentKeys: TreeNodeKey[]
+  parentKey?: TreeNodeValue
+  pathParentKeys: TreeNodeValue[]
   children?: Node[]
 }
 
@@ -100,17 +100,17 @@ export type FilterTreeNode = (node: TreeNodeData) => boolean
 
 export interface TreeFieldNames {
   /**
-   * @zh 指定 key 在 TreeNodeData 中的字段名
-   * @en Specify the field name of key in TreeNodeData
-   * @default-value key
+   * @zh 指定 value 在 TreeNodeData 中的字段名
+   * @en Specify the field name of value in TreeNodeData
+   * @default-value value
    */
-  key?: string
+  value?: string
   /**
-   * @zh 指定 title 在 TreeNodeData 中的字段名
-   * @en Specify the field name of title in TreeNodeData
-   * @default-value title
+   * @zh 指定 label 在 TreeNodeData 中的字段名
+   * @en Specify the field name of label in TreeNodeData
+   * @default-value label
    */
-  title?: string
+  label?: string
   /**
    * @zh 指定 disabled 在 TreeNodeData 中的字段名
    * @en Specify the field name of disabled in TreeNodeData
@@ -174,13 +174,13 @@ export interface TreeProps {
   selectable: SelectableType
   checkStrictly: boolean
   checkedStrategy: CheckedStrategy
-  defaultSelectedKeys?: TreeNodeKey[]
-  selectedKeys?: TreeNodeKey[]
-  defaultCheckedKeys?: TreeNodeKey[]
-  checkedKeys?: TreeNodeKey[]
-  halfCheckedKeys: TreeNodeKey[] | undefined
-  defaultExpandedKeys?: TreeNodeKey[]
-  expandedKeys?: TreeNodeKey[]
+  defaultSelectedValues?: TreeNodeValue[]
+  selectedValues?: TreeNodeValue[]
+  defaultCheckedValues?: TreeNodeValue[]
+  checkedValues?: TreeNodeValue[]
+  halfCheckedValues: TreeNodeValue[] | undefined
+  defaultExpandedValues?: TreeNodeValue[]
+  expandedValues?: TreeNodeValue[]
   data: TreeNodeData[]
   fieldNames?: TreeFieldNames
   virtualListProps?: VirtualListProps
@@ -197,9 +197,9 @@ export interface TreeProps {
   switcherIcon?: Slot
   loadingIcon?: Slot
   extra?: Slot
-  title?: Slot
+  label?: Slot
   onSelect?: (
-    selectedKeys: TreeNodeKey[],
+    selectedValues: TreeNodeValue[],
     event: {
       selected?: boolean
       selectedNodes: TreeNodeData[]
@@ -208,18 +208,18 @@ export interface TreeProps {
     },
   ) => void
   onCheck?: (
-    checkedKeys: TreeNodeKey[],
+    checkedValues: TreeNodeValue[],
     event: {
       checked?: boolean
       checkedNodes: TreeNodeData[]
       node?: TreeNodeData
-      halfCheckedKeys: TreeNodeKey[]
+      halfCheckedValues: TreeNodeValue[]
       halfCheckedNodes: TreeNodeData[]
       e?: Event
     },
   ) => void
   onExpand?: (
-    expandedKeys: TreeNodeKey[],
+    expandedValues: TreeNodeValue[],
     event: {
       expanded: boolean
       expandedNodes: TreeNodeData[]
@@ -236,4 +236,4 @@ export interface TreeProps {
   searchValue?: string
 }
 
-export type Key2TreeNode = Map<TreeNodeKey, Node>
+export type Key2TreeNode = Map<TreeNodeValue, Node>

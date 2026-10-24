@@ -75,7 +75,7 @@
       <span :class="`${prefixCls}-title-text`">
         <RenderFunction v-if="treeTitle" :render-func="treeTitle" />
         <!-- 标题，treeTitle 优先级高于节点的 title -->
-        <slot v-else name="title" :title="title">{{ title }}</slot>
+        <slot v-else name="label" :label="label">{{ label }}</slot>
 
         <span v-if="draggable" :class="[`${prefixCls}-icon`, `${prefixCls}-drag-icon`]">
           <!-- 拖拽图标 -->
@@ -109,7 +109,7 @@ import type { RenderFunc } from '../_components/render-function'
 import { isFunction } from '../_utils/is'
 import { Node } from './types'
 import useDraggable from './hooks/use-draggable'
-import { IconDragDotVertical } from '@cedarjs/icons-vue/icon-drag-dot-vertical'
+import { IconDragDotVertical } from '@cedar-design/icons-vue/icon-drag-dot-vertical'
 import { toArray } from '../_utils/to-array'
 
 export default defineComponent({
@@ -121,8 +121,9 @@ export default defineComponent({
     IconDragDotVertical,
   },
   props: {
+    value: [String, Number],
     /** 标题 */
-    title: {
+    label: {
       type: String,
     },
     /** 是否允许选中  */
@@ -226,13 +227,13 @@ export default defineComponent({
       },
     ])
 
-    const checked = computed(() => treeContext.checkedKeys?.includes?.(key.value))
+    const checked = computed(() => treeContext.checkedValues?.includes?.(key.value))
 
     const indeterminate = computed(() => treeContext.indeterminateKeys?.includes?.(key.value))
 
-    const selected = computed(() => treeContext.selectedKeys?.includes?.(key.value))
+    const selected = computed(() => treeContext.selectedValues?.includes?.(key.value))
 
-    const expanded = computed(() => treeContext.expandedKeys?.includes?.(key.value))
+    const expanded = computed(() => treeContext.expandedValues?.includes?.(key.value))
 
     const loading = computed(() => treeContext.loadingKeys?.includes?.(key.value))
 

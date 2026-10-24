@@ -99,7 +99,7 @@ Drawer 不提供离散 `size` 枚举；左右位置使用 `width`，上下位置
 `Drawer.open(config)` 使用 camelCase 的同名配置，例如 `cancelButtonText`、`beforeClose`、`closeOnRouteChange`。通知事件使用 `onConfirm`、`onCancel`、`onOpen`、`onOpened`、`onClose`、`onClosed`、`onClickOverlay` 和 `onKeyEscape`。
 
 ```ts
-import type { DrawerAction, DrawerBeforeCloseRefs, DrawerConfig, DrawerProps } from '@cedarjs/ui'
+import type { DrawerAction, DrawerBeforeCloseRefs, DrawerConfig, DrawerProps } from '@cedar-design/ui'
 ```
 
 ## CSS 变量与颜色语义

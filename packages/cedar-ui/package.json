@@ -1,5 +1,5 @@
 {
-  "name": "@cedarjs/ui",
+  "name": "@cedar-design/ui",
   "version": "1.0.0",
   "main": "lib/index.js",
   "module": "es/index.mjs",
@@ -52,7 +52,7 @@
     "dev": "vuepress dev docs",
     "ui:gen": "tsx scripts/generate/component.ts",
     "build:lib": "cedar-cli compile ui-build.config.mjs",
-    "build:doc": "vuepress build docs --dest dist",
+    "build:doc": "node --max-old-space-size=6144 ./node_modules/vuepress/bin/vuepress.js build docs --dest dist",
     "dtsgen": "tsx scripts dtsgen 'components/**/*.{ts,tsx,vue}'",
     "watch": "vite build --watch",
     "test:watch": "vitest",
@@ -69,9 +69,9 @@
     "typecheck:contracts": "tsc -p tsconfig.contracts.json"
   },
   "dependencies": {
-    "@cedarjs/icons-vue": "workspace:*",
-    "@cedarjs/shared": "workspace:*",
-    "@cedarjs/use": "workspace:*",
+    "@cedar-design/icons-vue": "workspace:*",
+    "@cedar-design/shared": "workspace:*",
+    "@cedar-design/use": "workspace:*",
     "@js-temporal/polyfill": "^0.5.1",
     "b-tween": "^0.3.3",
     "b-validate": "^1.5.3",
@@ -99,9 +99,9 @@
     ]
   },
   "devDependencies": {
-    "@cedarjs/cli": "workspace:*",
-    "@cedarjs/resolver": "workspace:*",
-    "@cedarjs/ui": "workspace:*",
+    "@cedar-design/cli": "workspace:*",
+    "@cedar-design/resolver": "workspace:*",
+    "@cedar-design/ui": "workspace:*",
     "@changesets/changelog-github": "^0.4.8",
     "@changesets/cli": "^2.26.1",
     "@commitlint/cli": "^17.5.1",
@@ -157,6 +157,7 @@
     "posthtml-parser": "^0.11.0",
     "posthtml-render": "^3.0.0",
     "prettier": "^3.3.3",
+    "prismjs": "1.30.0",
     "prompts": "^2.4.2",
     "sandpack-vue3": "^3.1.12",
     "sass": "^1.80.3",
@@ -183,5 +184,9 @@
   "overrides": {
     "vue": "^3.5.12"
   },
-  "packageManager": "pnpm@9.6.0"
+  "packageManager": "pnpm@9.6.0",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
 }

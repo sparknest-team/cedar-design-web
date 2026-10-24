@@ -73,7 +73,7 @@ radius、width、height 的数字和数字字符串使用 px，其他字符串�
 ### 类型
 
 ```ts
-import type { PaperProps, PaperInstance } from '@cedarjs/ui'
+import type { PaperProps, PaperInstance } from '@cedar-design/ui'
 ```
 
 ## 独立同源维护

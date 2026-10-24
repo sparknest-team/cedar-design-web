@@ -167,7 +167,7 @@ import Sortable from "sortablejs";
 import { getPrefixCls } from "../_utils/global-config";
 import Checkbox from "../checkbox";
 import IconHover from "../_components/IconHover.vue";
-import { IconDelete } from "@cedarjs/icons-vue/icon-delete";
+import { IconDelete } from "@cedar-design/icons-vue/icon-delete";
 import Search from "../search";
 import List from "../list";
 import TransferListItem from "./transfer-list-item";

@@ -116,7 +116,7 @@ permalink: /components/breadcrumb/
 组件导出以下类型定义
 
 ```ts
-import type { BreadcrumbProps, BreadcrumbItemProps, BreadcrumbRoute } from '@cedarjs/ui'
+import type { BreadcrumbProps, BreadcrumbItemProps, BreadcrumbRoute } from '@cedar-design/ui'
 ```
 
 ## 同源实现与平台边界

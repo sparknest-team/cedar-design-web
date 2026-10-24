@@ -53,7 +53,7 @@ Single-line or multi-line truncation with optional expansion and Tooltip.
 ### Types
 
 ```ts
-import type { EllipsisProps, EllipsisInstance, EllipsisExpandTrigger } from '@cedarjs/ui'
+import type { EllipsisProps, EllipsisInstance, EllipsisExpandTrigger } from '@cedar-design/ui'
 ```
 
 ### CSS tokens

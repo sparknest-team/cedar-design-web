@@ -5,19 +5,19 @@
     v-bind="defineReviewConfig(__apiReviewRawConfig)"
   >
     <c-tree
-      :default-selected-keys="['0-0-2-1-0-0']"
+      :default-selected-values="['0-0-2-1-0-0']"
       :fieldNames="{
-        key: 'value',
-        title: 'label',
+        value: 'value',
+        label: 'label',
         children: 'items',
         icon: 'customIcon',
       }"
       :data="treeData"
       v-bind="__apiReview.bindings"
       v-on="__apiReview.listeners"
-      ><template v-if="__apiReview.slotEnabled['title']" #title="__reviewSlot"
+      ><template v-if="__apiReview.slotEnabled['label']" #label="__reviewSlot"
         ><DemoReviewSlot
-          name="title"
+          name="label"
           :context="__reviewSlot"
           :controls="__apiReview.controls"
           :record="__apiReview.record"
@@ -71,10 +71,10 @@ import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPane
 import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
-} from "@ui-foundation/ui-doc-preview";
+} from "@sparknest/ui-doc-preview";
 import __apiReviewRawConfig from "./api-review-c-tree-3.config.json";
 
-import { IconDriveFile, IconStar } from "@cedarjs/icons-vue";
+import { IconDriveFile, IconStar } from "@cedar-design/icons-vue";
 import { h } from "vue";
 
 const treeData = [

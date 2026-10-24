@@ -4,7 +4,7 @@
     v-model="checkedStrategy"
     @change="
       (value) => {
-        checkedKeys = []
+        checkedValues = []
       }
     "
   >
@@ -14,60 +14,60 @@
   </c-radio-group>
   <br />
   <c-typography-text style="margin: 24px 0; display: inline-block">
-    Current: {{ checkedKeys?.join(' , ') }}
+    Current: {{ checkedValues?.join(' , ') }}
   </c-typography-text>
   <br />
-  <c-tree :checkable="true" v-model:checked-keys="checkedKeys" :checked-strategy="checkedStrategy" :data="treeData" />
+  <c-tree :checkable="true" v-model:checked-values="checkedValues" :checked-strategy="checkedStrategy" :data="treeData" />
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-const checkedKeys = ref([])
+const checkedValues = ref([])
 const checkedStrategy = ref('all')
 
 const treeData = [
   {
-    title: 'Trunk 0-0',
-    key: '0-0',
+    label: 'Trunk 0-0',
+    value: '0-0',
     children: [
       {
-        title: 'Leaf',
-        key: '0-0-1',
+        label: 'Leaf',
+        value: '0-0-1',
       },
       {
-        title: 'Branch 0-0-2',
-        key: '0-0-2',
+        label: 'Branch 0-0-2',
+        value: '0-0-2',
         children: [
           {
-            title: 'Leaf',
-            key: '0-0-2-1',
+            label: 'Leaf',
+            value: '0-0-2-1',
           },
         ],
       },
     ],
   },
   {
-    title: 'Trunk 0-1',
-    key: '0-1',
+    label: 'Trunk 0-1',
+    value: '0-1',
     children: [
       {
-        title: 'Branch 0-1-1',
-        key: '0-1-1',
+        label: 'Branch 0-1-1',
+        value: '0-1-1',
         children: [
           {
-            title: 'Leaf',
-            key: '0-1-1-1',
+            label: 'Leaf',
+            value: '0-1-1-1',
           },
           {
-            title: 'Leaf',
-            key: '0-1-1-2',
+            label: 'Leaf',
+            value: '0-1-1-2',
           },
         ],
       },
       {
-        title: 'Leaf',
-        key: '0-1-2',
+        label: 'Leaf',
+        value: '0-1-2',
       },
     ],
   },

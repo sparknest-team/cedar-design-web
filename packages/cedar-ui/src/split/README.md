@@ -63,7 +63,7 @@ permalink: /components/split/
 组件导出以下类型定义
 
 ```ts
-import type { SplitInstance } from '@cedarjs/ui'
+import type { SplitInstance } from '@cedar-design/ui'
 ```
 
 `--c-split-trigger-size-icon-wrapper`（默认6px）控制分隔手柄粗细：竖直手柄为宽度，水平手柄为高度；不改变沿面板方向的100%长度。

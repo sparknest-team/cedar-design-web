@@ -5,7 +5,7 @@ import Upload from "..";
 import Button from "../../button";
 import Space from "../../space";
 import Demo from "../__demos__/metadata-request.vue";
-vi.mock("@cedarjs/ui", () => import(".."));
+vi.mock("@cedar-design/ui", () => import(".."));
 test("metadata rejection settles once and late rejected canceled work cannot overwrite retries", async () => {
   const OriginalXHR = XMLHttpRequest;
   const send = vi.fn();

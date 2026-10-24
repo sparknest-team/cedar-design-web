@@ -8,7 +8,7 @@ permalink: /components/config-provider/
 
 ## 基础用法
 
-基础用法。
+通过 Provider 为子组件设置统一尺寸，点击按钮在 sm / lg 之间切换；内部 Input 和 Button 无需重复声明 size。
 
 <demo src="./__demos__/basic.vue"></demo>
 
@@ -46,5 +46,5 @@ permalink: /components/config-provider/
 组件导出以下类型定义
 
 ```ts
-import type { ConfigProviderProps } from '@cedarjs/ui'
+import type { ConfigProviderProps } from '@cedar-design/ui'
 ```

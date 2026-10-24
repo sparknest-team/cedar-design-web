@@ -3,7 +3,7 @@
     <c-radio-group v-model="currentStatus" variant="button" style="margin-bottom: 16px">
       <c-radio v-for="status in statuses" :key="status" :value="status">{{ status }}</c-radio>
     </c-radio-group>
-    <c-steps changeable :current="current" :status="currentStatus" @change="setCurrent">
+    <c-steps changeable :model-value="current" :status="currentStatus" @change="setCurrent">
       <c-step description="This is a description">Succeeded</c-step>
       <c-step description="This is a description">Processing</c-step>
       <c-step description="This is a description">Pending</c-step>

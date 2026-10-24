@@ -91,14 +91,14 @@
       "kind": "boolean"
     },
     {
-      "name": "preview-open",
+      "name": "open",
       "description": "控制预览的打开状态",
       "type": "boolean",
       "defaultValue": "undefined",
       "kind": "boolean"
     },
     {
-      "name": "default-preview-open",
+      "name": "default-open",
       "description": "预览的默认打开状态",
       "type": "boolean",
       "defaultValue": "false",
@@ -202,7 +202,7 @@
     }
   ],
   "events": [
-    "preview-open-change"
+    "open-change"
   ],
   "scenarios": [
     {

@@ -37,7 +37,7 @@ Cedar 色板与 Maple 结构对齐：**RGB 通道色阶** + **语义色** + **�
 </template>
 
 <script setup>
-import { StyleProvider, Themes } from '@cedarjs/ui'
+import { StyleProvider, Themes } from '@cedar-design/ui'
 </script>
 ```
 
@@ -82,7 +82,7 @@ body {
 ### 主题定制
 
 ```ts
-import { StyleProvider, Themes } from '@cedarjs/ui'
+import { StyleProvider, Themes } from '@cedar-design/ui'
 
 const customTheme = {
   ...Themes.maple.light,

@@ -8,11 +8,11 @@
       "kind": "scenario"
     },
     {
-      "name": "default-checked",
-      "description": "",
-      "type": "boolean",
-      "defaultValue": "false",
-      "kind": "boolean"
+      "name": "default-value",
+      "description": "非受控初始实际值；省略时使用 uncheckedValue",
+      "type": "string / number / boolean",
+      "defaultValue": "undefined",
+      "kind": "scalar"
     },
     {
       "name": "checked-value",

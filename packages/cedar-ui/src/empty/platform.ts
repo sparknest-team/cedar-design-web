@@ -1,5 +1,5 @@
 import { computed, inject, provide, type ComputedRef } from 'vue'
-import { IconEmpty as DefaultEmptyIcon } from '@cedarjs/icons-vue/icon-empty'
+import { IconEmpty as DefaultEmptyIcon } from '@cedar-design/icons-vue/icon-empty'
 import { configProviderInjectionKey } from '../config-provider/context'
 import { useI18n } from '../locale'
 

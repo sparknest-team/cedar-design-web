@@ -256,7 +256,7 @@
     },
     {
       "name": "fallback-option",
-      "type": "boolean | ((key: number | string) => TreeNodeData | boolean)",
+      "type": "boolean | ((value: number | string) => TreeNodeData | boolean)",
       "defaultValue": "true",
       "description": "@zh 为 value 中找不到匹配项的 key 定义节点数据\n@en Customize node data for keys that do not match options\n@version 2.22.0\n/",
       "kind": "callback"

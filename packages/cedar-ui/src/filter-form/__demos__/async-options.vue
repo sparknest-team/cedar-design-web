@@ -26,7 +26,7 @@ import {
   Input,
   Select,
   type FilterFormField,
-} from '@cedarjs/ui'
+} from '@cedar-design/ui'
 
 const filter = ref<Record<string, unknown>>({
   category: undefined,

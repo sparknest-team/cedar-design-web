@@ -1,9 +1,9 @@
 import { ref, toRefs } from 'vue'
 import { throttleByRaf } from '../../_utils/throttle-by-raf'
-import { DropPosition, TreeNodeKey } from '../types'
+import { DropPosition, TreeNodeValue } from '../types'
 import useTreeContext from './use-tree-context'
 
-export default function useDraggable(props: { key: TreeNodeKey; refTitle: HTMLElement | undefined }) {
+export default function useDraggable(props: { key: TreeNodeValue; refTitle: HTMLElement | undefined }) {
   const { key, refTitle } = toRefs(props)
   const treeContext = useTreeContext()
 

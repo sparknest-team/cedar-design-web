@@ -1,7 +1,7 @@
 // Vitest Snapshot v1
 
 exports[`Link > render 1`] = `
-"<a class=\\"c-link c-link--status-default c-link--underline-none c-link--hoverless\\">
+"<a class=\\"c-link c-link--size-md c-link--status-default c-link--underline-none c-link--hoverless\\">
   <!--v-if-->
 </a>"
 `;

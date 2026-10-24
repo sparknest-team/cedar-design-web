@@ -63,13 +63,17 @@ The same scenarios, parameters and interactions as Cedar. Only component prefixe
 
 ## API
 
+### Model and default value
+
+Use ordinary `v-model`. `modelValue` is the actual switch value, matching checkedValue/uncheckedValue. `defaultValue` initializes uncontrolled state only at creation; changing it later does not reset the current state. A supplied model takes precedence. Initialization emits no `update:modelValue`.
+
 <!-- same-source-api:start -->
 ### Props
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | model-value | Controlled value; omit for internal state | string / number / boolean | undefined |
-| default-checked | Initial uncontrolled checked state; initialization only | boolean | false |
+| default-value | Initial uncontrolled value; falls back to uncheckedValue | string / number / boolean | undefined |
 | checked-value | Checked value | string / number / boolean | true |
 | unchecked-value | Unchecked value | string / number / boolean | false |
 | variant | Appearance | circle / round / line / tonal | circle |

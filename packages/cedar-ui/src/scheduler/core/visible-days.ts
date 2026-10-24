@@ -1,4 +1,4 @@
-import { getSchedulerDays } from "./index";
+import { getSchedulerDays } from "./base";
 import type { SchedulerRange } from "./types";
 
 export function isValidSchedulerHiddenDays(days: readonly number[]): boolean {

@@ -1,0 +1,5 @@
+- [x] 核对 Tree / Select / Cascader / 声明式子项的渲染身份
+- [x] 双端 Menu 稳定 key 与 Trigger 同级参考元素切换修复
+- [x] FloatingPanel 普通模型迁移源码、示例、文档与调试配置
+- [x] 身份重排、触发切换、默认值与关联组件回归
+- [x] 类型、lint、同源与全量 demo 规范检查

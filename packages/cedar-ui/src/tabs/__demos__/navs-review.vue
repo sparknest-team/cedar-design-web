@@ -19,14 +19,14 @@ function remove(key: string | number) {
     <c-checkbox v-model="addable">显示新增</c-checkbox>
     <c-checkbox v-model="autoSwitch">新增自动切换</c-checkbox>
   </c-space>
-  <c-tabs v-model:active="active" :editable="editable" :show-add-button="addable" :auto-switch="autoSwitch" @add="add" @delete="remove">
+  <c-tabs v-model="active" :editable="editable" :show-add-button="addable" :auto-switch="autoSwitch" @add="add" @delete="remove">
     <c-tabs-navs aria-label="交付审查标签">
       <template #prefix><c-tag>动态标签</c-tag></template>
-      <c-tab-nav v-for="item in items" :key="item.key" :title="item.title" />
+      <c-tab-nav v-for="item in items" :key="item.key" :name="item.key" :title="item.title" />
       <template #suffix><c-tag>共 {{ items.length }} 项</c-tag></template>
       <template #add-icon><c-tag>＋</c-tag></template>
     </c-tabs-navs>
-    <c-tabs-items><c-tab-item v-for="item in items" :key="item.key">{{ item.title }} 内容</c-tab-item></c-tabs-items>
+    <c-tabs-items><c-tab-item v-for="item in items" :key="item.key" :name="item.key">{{ item.title }} 内容</c-tab-item></c-tabs-items>
   </c-tabs>
   <p role="status">当前标签：{{ active }}；数量：{{ items.length }}</p>
 </template>

@@ -60,8 +60,8 @@
 <script setup lang="ts">
 import { computed, reactive, ref, useAttrs } from 'vue'
 import type { StyleValue } from 'vue'
-import { IconSearch } from '@cedarjs/icons-vue/icon-search'
-import { IconLoading } from '@cedarjs/icons-vue/icon-loading'
+import { IconSearch } from '@cedar-design/icons-vue/icon-search'
+import { IconLoading } from '@cedar-design/icons-vue/icon-loading'
 import SearchButton from '../button'
 import SearchInput from '../input/input.vue'
 import SearchInputGroup from '../input/InputGroup.vue'

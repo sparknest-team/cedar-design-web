@@ -138,5 +138,5 @@ permalink: /components/split-button/
 ## 类型定义
 
 ```ts
-import type { SplitButtonInstance, SplitButtonProps } from '@cedarjs/ui'
+import type { SplitButtonInstance, SplitButtonProps } from '@cedar-design/ui'
 ```
