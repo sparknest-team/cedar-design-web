@@ -11,7 +11,7 @@ export default hopeTheme(
     hostname,
 
     author: {
-      name: 'shuai.meng, jiaming.wu, qinglin.wang',
+      name: '孟帅、吴甲明',
     },
 
     iconAssets: 'fontawesome-with-brands',
