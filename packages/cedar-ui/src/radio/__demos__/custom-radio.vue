@@ -22,7 +22,7 @@
       <template v-for="item in 2" :key="item">
         <c-radio :value="item">
           <template #radio="{ checked }">
-            <c-space wrap align="start" class="custom-radio-card" :class="{ 'custom-radio-card-checked': checked }">
+            <c-space wrap align="flex-start" class="custom-radio-card" :class="{ 'custom-radio-card-checked': checked }">
               <div class="custom-radio-card-mask">
                 <div class="custom-radio-card-mask-dot" />
               </div>

@@ -1,0 +1,4 @@
+- [x] Reproduce stale callbacks, teardown, retries, URLs and listener replacement.
+- [x] Implement per-element/per-attempt ownership and bounded total attempts.
+- [x] Document module-wide configuration/cache and export public types.
+- [x] Finish browser, type, lint and consumer validation.

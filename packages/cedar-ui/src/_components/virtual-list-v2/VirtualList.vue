@@ -40,6 +40,7 @@
 </template>
 
 <script lang="ts">
+import { useDirection, inlineScrollLeft, setInlineScrollLeft } from '../../_utils/direction'
 import { createNamespace } from '../../_utils/global-config'
 import { computed, defineComponent, nextTick, ref, toRefs, PropType, watch, onMounted, onActivated, onDeactivated, onBeforeUnmount } from 'vue'
 import { useSize } from './hooks/use-size'
@@ -119,6 +120,8 @@ export default defineComponent({
     })
 
     const containerRef = ref<HTMLElement>()
+    const { dir } = useDirection(() => containerRef.value)
+    let readingOffset = 0
     const contentRef = ref<HTMLElement>()
     let scrollRequest = 0
     let commandedScroll: { top: number; correct: () => void } | undefined
@@ -132,6 +135,10 @@ export default defineComponent({
     onActivated(() => { if (!disposed) active = true })
     onDeactivated(() => { active = false; scrollRequest++; commandedScroll = undefined })
     onBeforeUnmount(() => { disposed = true; mounted = active = false; scrollRequest++; commandedScroll = undefined })
+
+    watch(dir, () => {
+      if (available() && containerRef.value) setInlineScrollLeft(containerRef.value, readingOffset)
+    }, { flush: 'post' })
 
     const style = computed(() => {
       return {
@@ -185,6 +192,7 @@ export default defineComponent({
     const onScroll = (ev: Event) => {
       if (!available()) return
       const element = containerRef.value!
+      readingOffset = inlineScrollLeft(element)
       const { scrollTop, scrollHeight, offsetHeight } = ev.target as HTMLElement
       // Our own scroll event can render additional measured rows. Keep its
       // alignment transaction; a different native position cancels it.

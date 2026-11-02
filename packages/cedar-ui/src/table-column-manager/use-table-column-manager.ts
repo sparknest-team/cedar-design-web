@@ -1,5 +1,8 @@
 import { createNamespace } from '../_utils/global-config'
+import { createRequestGuard } from '../_utils/async-request'
 import {
+  getCurrentScope,
+  onScopeDispose,
   type Ref,
   type ComputedRef,
   type MaybeRefOrGetter,
@@ -313,6 +316,14 @@ const TableColumnHeaderAction = defineComponent({
 })
 
 export function useTableColumnManager(options: UseTableColumnManagerOptions): UseTableColumnManagerReturn {
+  const catalogRequest = createRequestGuard()
+  const restoreRequest = createRequestGuard()
+  let active = true
+  if (getCurrentScope()) onScopeDispose(() => {
+    active = false
+    catalogRequest.invalidate()
+    restoreRequest.invalidate()
+  })
   const rawDefaultColumns = computed(() => toValue(options.defaultColumns))
   const stripManager = (input: ManagedTableColumn[]): TableColumnData[] =>
     input.map(({ manager: _manager, children, ...column }) => ({
@@ -365,6 +376,8 @@ export function useTableColumnManager(options: UseTableColumnManagerOptions): Us
   // ---- state ----
   const createDefaultColumns = () => cloneDeep(defaultColumns.value)
   const columns = ref<TableColumnData[]>(cloneDeep(createDefaultColumns())) as Ref<TableColumnData[]>
+  // Any newer public column edit owns the state over an older restore request.
+  watch(columns, () => restoreRequest.invalidate(), { deep: true, flush: 'sync' })
   const resizedKeys = ref<Set<string>>(new Set())
   const managerVisible = ref(false)
 
@@ -381,6 +394,23 @@ export function useTableColumnManager(options: UseTableColumnManagerOptions): Us
     _managerItems.value = state.value.items.map((item) => ({ ...item }))
   }
 
+  // Stable callbacks avoid treating catalog/open updates as a different loader.
+  const loadCatalogOptions = async () => {
+    const source = options.columnSource
+    if (!active || !source) return catalog.value
+    const isCurrent = catalogRequest.begin()
+    const result = await source.search({ keyword: '' })
+    if (isCurrent() && source === options.columnSource) remoteSearchDefinitions.value = result.items
+    return catalog.value
+  }
+  const remoteSearchOptions = async (keyword: string) => {
+    const source = options.columnSource
+    if (!active || !source) return
+    const isCurrent = catalogRequest.begin()
+    const result = await source.search({ keyword })
+    if (isCurrent() && source === options.columnSource) remoteSearchDefinitions.value = result.items
+  }
+
   // ---- manager props ----
   const managerProps = computed(() => ({
     modelValue: _managerItems.value,
@@ -394,15 +424,8 @@ export function useTableColumnManager(options: UseTableColumnManagerOptions): Us
     options: catalog.value,
     ...(options.columnSource
       ? {
-          loadOptions: async () => {
-            const result = await options.columnSource!.search({ keyword: '' })
-            remoteSearchDefinitions.value = result.items
-            return catalog.value
-          },
-          remoteSearch: async (keyword: string) => {
-            const result = await options.columnSource!.search({ keyword })
-            remoteSearchDefinitions.value = result.items
-          },
+          loadOptions: loadCatalogOptions,
+          remoteSearch: remoteSearchOptions,
         }
       : {}),
     open: managerVisible.value,
@@ -506,19 +529,24 @@ export function useTableColumnManager(options: UseTableColumnManagerOptions): Us
   }
 
   const restore = async (value: unknown) => {
-    if (options.columnSource) {
+    if (!active) return
+    const isCurrent = restoreRequest.begin()
+    const source = options.columnSource
+    if (source) {
       const candidate = value as Partial<ColumnManagerState> | null
       const known = new Set(flattenCatalog(catalog.value).map((item) => item.dataIndex))
       const missing = Array.isArray(candidate?.items)
         ? candidate.items.map((item) => item?.dataIndex).filter((key): key is string => !!key && !known.has(key))
         : []
       if (missing.length) {
-        const resolved = await options.columnSource.resolve([...new Set(missing)])
+        const resolved = await source.resolve([...new Set(missing)])
+        if (!isCurrent() || source !== options.columnSource) return
         const existing = resolvedDefinitions.value
         const resolvedKeys = new Set(resolved.map((item) => item.dataIndex))
         resolvedDefinitions.value = [...existing.filter((item) => !resolvedKeys.has(item.dataIndex)), ...resolved]
       }
     }
+    if (!isCurrent() || source !== options.columnSource) return
     const normalized = normalizeColumnManagerState({
       state: value,
       catalog: catalog.value,

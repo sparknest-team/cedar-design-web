@@ -80,7 +80,7 @@ export default defineComponent({
       return null
     }
 
-    const style = computed(() => getOperationStyle(props.operationColumn, props.operations))
+    const style = computed(() => getOperationStyle(props.operationColumn, props.operations, tableCtx.readingDirection, tableCtx.physicalDataColumns, tableCtx.tableLayout))
 
     const cls = computed(() => [
       `${prefixCls}-th`,

@@ -23,7 +23,7 @@ const handleClick = () => {
   visible.value = true
 }
 
-const handleBeforeConfirm = (done) => {
+const handleBeforeConfirm = (_payload, done) => {
   window.setTimeout(() => {
     done()
   }, 3000)

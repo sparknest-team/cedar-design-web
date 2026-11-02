@@ -12,6 +12,7 @@ import {
 } from 'vue'
 import type { TriggerEvent } from './contract'
 import { bindTriggerEvents, type TriggerElement } from './reference'
+import { isTriggerReferenceClickBlocked } from './reference-click'
 
 export type { TriggerEvent } from './contract'
 export interface InteractionOptions {
@@ -167,7 +168,7 @@ export function useTriggerInteraction(
 
   const onClick = (event: Event) => {
     api.onReferenceEvent?.('onClick', event)
-    if (options.disabled) {
+    if (options.disabled || isTriggerReferenceClickBlocked(event)) {
       return
     }
     if (has('click')) {
@@ -267,7 +268,8 @@ export function useTriggerInteraction(
   // the top layer. An unrelated top layer still protects the branch below it.
   const hasTopDescendant = (event: Event, branch = context): boolean =>
     [...branch.children].some(
-      (child) => dismissedInteractions.get(event)?.has(child) || child.isTopLayer?.(event) || hasTopDescendant(event, child),
+      (child) =>
+        dismissedInteractions.get(event)?.has(child) || child.isTopLayer?.(event) || hasTopDescendant(event, child),
     )
   const isTopPeerReference = (event: Event) =>
     [...(owner ? (referenceInteractions.get(owner) ?? []) : [])].some(

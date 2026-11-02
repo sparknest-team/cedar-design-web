@@ -18,7 +18,7 @@ const marks = { 0: "0", 25: "25", 50: "50", 75: "75", 100: "100" };
     v-slot="__apiReview"
     v-bind="defineReviewConfig(__apiReviewRawConfig)"
   >
-    <div style="display: grid; gap: 32px; padding: 24px 12px">
+    <c-space direction="column" size="32px" style="padding: 24px 12px">
       <c-slider
         v-model="value"
         :step="5"
@@ -38,6 +38,6 @@ const marks = { 0: "0", 25: "25", 50: "50", 75: "75", 100: "100" };
         v-bind="__apiReview.bindings"
         v-on="__apiReview.listeners"
       />
-    </div>
+    </c-space>
   </DemoApiReviewPanel>
 </template>

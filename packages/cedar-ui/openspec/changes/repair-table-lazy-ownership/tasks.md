@@ -1,0 +1,3 @@
+- [x] Reproduce same-key stale cache, callback lifetime and slot loading failures.
+- [x] Repair cache/request ownership, callback settlement, synchronous error cleanup and loading wrapper.
+- [x] Verify both tables, desktop consumers, browser contracts, demo and final static gates.

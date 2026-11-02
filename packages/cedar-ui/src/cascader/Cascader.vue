@@ -3,6 +3,8 @@
     <template #reference>
       <SelectionField
         ref="fieldRef"
+        :loading-mode="loadingMode"
+        :open-trigger-target="openTriggerTarget"
         :show-tags="showTags"
         :separator="separator"
         :text-align="textAlign"
@@ -40,9 +42,13 @@
         <template v-if="$slots.prefix" #prefix>
           <slot name="prefix" />
         </template>
-        <template v-if="$slots.selected" #selected><slot name="selected" /></template>
+        <template v-if="$slots.selected" #selected
+          ><slot name="selected"
+        /></template>
         <template v-if="$slots.suffix" #suffix><slot name="suffix" /></template>
-        <template v-if="$slots['clear-icon']" #clear-icon="scope"><slot name="clear-icon" v-bind="scope" /></template>
+        <template v-if="$slots['clear-icon']" #clear-icon="scope"
+          ><slot name="clear-icon" v-bind="scope"
+        /></template>
         <template v-if="$slots['arrow-icon']" #arrow-icon>
           <slot name="arrow-icon" />
         </template>
@@ -62,20 +68,23 @@
   </component>
 </template>
 <script setup lang="ts">
-import { reactive, ref, toRefs, useSlots } from 'vue'
-import SelectionField from '../_components/selection-field/SelectionField.vue'
-import { createNamespace } from '../_utils/global-config'
-import CascaderMenu from './CascaderMenu.vue'
-import { cascaderEmits } from './emits'
-import { presentations } from './presentations'
-import { cascaderProps } from './props'
-import { useCascaderController } from './use-cascader-controller'
+import { reactive, ref, toRefs, useSlots } from "vue";
+import SelectionField from "../_components/selection-field/SelectionField.vue";
+import { createNamespace } from "../_utils/global-config";
+import CascaderMenu from "./CascaderMenu.vue";
+import { cascaderEmits } from "./emits";
+import { presentations } from "./presentations";
+import { cascaderProps } from "./props";
+import { useCascaderController } from "./use-cascader-controller";
 
-defineOptions({ name: createNamespace('cascader').name, inheritAttrs: false })
-const props = defineProps(cascaderProps)
-const emit = defineEmits(cascaderEmits)
-const controller = reactive(useCascaderController(props, { emit, slots: useSlots() }))
+defineOptions({ name: createNamespace("cascader").name, inheritAttrs: false });
+const props = defineProps(cascaderProps);
+const emit = defineEmits(cascaderEmits);
+const controller = reactive(
+  useCascaderController(props, { emit, slots: useSlots() }),
+);
 const {
+  loading,
   fieldItems,
   computedInputValue,
   mergedDisabled,
@@ -91,7 +100,11 @@ const {
   handleBlur,
   handleRemove,
   handleKeyDown,
-} = toRefs(controller)
-const fieldRef = ref<InstanceType<typeof SelectionField>>()
-defineExpose({ focus: () => fieldRef.value?.focus(), blur: () => fieldRef.value?.blur() })
+} = toRefs(controller);
+const fieldRef = ref<InstanceType<typeof SelectionField>>();
+defineExpose({
+  refresh: controller.refresh,
+  focus: () => fieldRef.value?.focus(),
+  blur: () => fieldRef.value?.blur(),
+});
 </script>

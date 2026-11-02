@@ -136,15 +136,15 @@
     },
     {
       "name": "before-confirm",
-      "description": "触发 confirm 事件前的回调函数。如果返回 false 则不会触发后续事件，也可使用 done 进行异步关闭。",
-      "type": "(  done: (closed: boolean) => void) => void | boolean | Promise<void | boolean>",
+      "description": "before hook; synchronous void waits for done; first completion wins",
+      "type": "boolean | Promise<boolean | void> | done callback",
       "defaultValue": "undefined",
       "kind": "callback"
     },
     {
       "name": "before-cancel",
-      "description": "触发 cancel 事件前的回调函数。如果返回 false 则不会触发后续事件。",
-      "type": "() => boolean",
+      "description": "before hook; synchronous void waits for done; first completion wins",
+      "type": "boolean | Promise<boolean | void> | done callback",
       "defaultValue": "undefined",
       "kind": "callback"
     }

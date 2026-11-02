@@ -6,22 +6,23 @@ permalink: /components/popover/
 
 点击触发元素后展示结构化内容。Popover 可以包含按钮、表单和其他交互元素；纯文字说明使用 Tooltip。
 
-## 基础用法
+## 基础示例
+
+### 基础用法
 
 <demo src="./__demos__/basic.vue"></demo>
 
-## 交互内容与状态保留
+## 交互与控制
+
+### 交互内容与状态保留
 
 Popover 默认 `unmount-on-close="false"`，关闭后保留表单草稿。
 
 <demo src="./__demos__/interactive.vue"></demo>
 
-<!-- api-review:start -->
-### 功能调试
+## 阅读方向
 
-<demo src="./__demos__/api-review.vue"></demo>
-
-<!-- api-review:end -->
+继承最近的 `dir="ltr|rtl"`，支持运行时切换与局部覆盖。内容默认对齐阅读起点，弹层继承来源方向；逻辑 start/end 对齐随方向变化，显式 left/right 方位保持物理语义。
 
 ## API
 
@@ -32,7 +33,7 @@ Popover 继承 Trigger 的定位、容器、受控状态、关闭策略和公开
 | title | 标题 | `string` | — |
 | content | 正文 | `string` | — |
 | trigger | 触发方式 | `TriggerEvent \| TriggerEvent[]` | `click` |
-| placement | 首选方位 | `TriggerPlacement` | `bottom` |
+| placement | 浮层相对触发元素的首选方位，默认 bottom；启用默认的 auto-fit-position 时，空间不足会自动翻转并约束到可视区域，不保证最终停在该侧 | `TriggerPlacement` | `bottom` |
 | show-arrow | 是否显示箭头 | `boolean` | `true` |
 | popup-offset | 沿方位主轴的距离 | `number` | `10` |
 | unmount-on-close | 关闭后卸载内容；默认保留交互草稿 | `boolean` | `false` |

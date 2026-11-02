@@ -1,5 +1,5 @@
 <template>
-  <div v-bind="$attrs" :class="cls">
+  <div ref="root" v-bind="$attrs" :class="cls">
     <transfer-view
       type="source"
       :class="`${prefixCls}-view-source`"
@@ -9,7 +9,7 @@
       :disabled="mergedDisabled"
       :selected="computedSelected"
       :show-search="sourceShowSearch"
-      :filter="mergedFilter"
+      :filter="sourceFilter"
       :show-select-all="showSelectAll"
       :simple="false"
       :search-props="mergedSourceSearchProps"
@@ -52,9 +52,11 @@
         <slot name="target-title" v-bind="titleProps" />
       </template>
     </transfer-view>
+
   </div>
   <Dialog
     :open="renameVisible"
+    :dir="dir"
     title="重命名"
     :width="420"
     unmount-on-close
@@ -66,6 +68,8 @@
 </template>
 
 <script lang="ts">
+import { useDirection } from '@cedar-design/use'
+import { useOptionRequest } from '../_hooks/use-option-request'
 import { transferProps } from './props'
 import { createNamespace } from '../_utils/global-config'
 import { computed, defineComponent, PropType, provide, reactive, ref, toRef } from 'vue'
@@ -82,25 +86,27 @@ export default defineComponent({
   name: createNamespace("transfer").name,
   inheritAttrs: false,
   components: {
+
     TransferView,
     Dialog,
     Input,
   },
   props: transferProps,
   emits: {
-    'update:modelValue': (value: TransferTargetItem[]) => true,
+    'update:modelValue': (value: TransferTargetItem[] | null) => true,
     /**
      * @zh 目标选择框的值改变时触发
      * @en Triggered when the value of the target selection box changes
      * @property {string[]} value
      */
-    change: (value: TransferTargetItem[]) => true,
+    change: (value: TransferTargetItem[] | null) => true,
     /**
      * @zh 用户搜索时触发
      * @en Triggered when the user searches
      * @property {string} value
      * @property {'target'|'source'} type
      */
+    "load-error": (error: unknown) => true,
     search: (value: string, type: 'target' | 'source') => true,
     rename: (value: TransferValue, label: string) => true,
     "target-action": (key: string, item: TransferItem) => true,
@@ -119,7 +125,6 @@ export default defineComponent({
    * @binding {TransferItem[]} data
    * @binding {string[]} selectedKeys
    * @binding {(value: string[]) => void} onSelect
-   * @version 2.39.0
    */
   /**
    * @zh 目标面板
@@ -128,7 +133,6 @@ export default defineComponent({
    * @binding {TransferItem[]} data
    * @binding {string[]} selectedKeys
    * @binding {(value: string[]) => void} onSelect
-   * @version 2.39.0
    */
   /**
    * @zh 源标题插槽
@@ -141,7 +145,6 @@ export default defineComponent({
    * @binding {boolean} indeterminate
    * @binding {(checked:boolean) => void} onSelectAllChange
    * @binding {() => void} onClear
-   * @version 2.45.0
    */
   /**
    * @zh 目标标题插槽
@@ -154,37 +157,39 @@ export default defineComponent({
    * @binding {boolean} indeterminate
    * @binding {(checked:boolean) => void} onSelectAllChange
    * @binding {() => void} onClear
-   * @version 2.45.0
    */
   /**
    * @zh 移至源图标插槽
    * @en To source icon slot
    * @slot to-source-icon
-   * @version 2.52.0
    */
   /**
    * @zh 移至目标图标插槽
    * @en To target icon slot
    * @slot to-target-icon
-   * @version 2.52.0
    */
   setup(props, { emit, slots }) {
     const { mergedDisabled, eventHandlers } = useFormItem({
       disabled: toRef(props, 'disabled'),
     })
+    const source = useOptionRequest(() => props.data, () => mergedDisabled.value, error => emit('load-error', error), () => 0, transferProps)
+    const data = source.options
+    const root = ref<HTMLElement>()
+    const { dir } = useDirection(() => root.value)
     const prefixCls = getPrefixCls('transfer')
 
     const _target = ref<TransferTargetItem[]>(props.defaultValue.map((item) => ({ ...item })))
     const renameVisible = ref(false)
     const renamingValue = ref<TransferValue>()
     const renameDraft = ref('')
-    const computedTarget = computed(() => props.modelValue ?? _target.value)
+    const computedTarget = computed(() => props.modelValue === null ? [] : props.modelValue ?? _target.value)
     const computedTargetValues = computed(() => computedTarget.value.map((item) => item.value))
     const sourceTitle = computed(() => props.sourceTitle ?? props.title?.[0])
     const targetTitle = computed(() => props.targetTitle ?? props.title?.[1])
     const sourceShowSearch = computed(() => props.showSearch || props.sourceFilterable)
     const targetShowSearch = computed(() => props.showSearch || props.targetFilterable)
-    const mergedFilter = computed(() => props.filter)
+    const mergedFilter = computed(() => props.filter ?? ((value: string, item: TransferItem) => item.label.toLowerCase().includes(value.toLowerCase())))
+    const sourceFilter = computed(() => source.remote.value && !props.filter ? () => true : mergedFilter.value)
     const mergedSourceSearchProps = computed(() => ({
       ...props.sourceSearchProps,
       placeholder: props.sourceFilterPlaceholder ?? props.sourceSearchProps?.placeholder,
@@ -210,7 +215,7 @@ export default defineComponent({
         validSelected: [],
       }
 
-      const itemByValue = new Map(props.data.map((item) => [item.value, item]))
+      const itemByValue = new Map(data.value.map((item) => [item.value, item]))
       const targetState = new Map(computedTarget.value.map((item) => [item.value, item]))
       const displayItem = (item: TransferItem, isTarget: boolean): TransferItem => {
         const state = targetState.get(item.value)
@@ -221,7 +226,7 @@ export default defineComponent({
         }
       }
 
-      for (const item of props.data) {
+      for (const item of data.value) {
         const isTarget = computedTargetValues.value.includes(item.value)
         if (props.showSelected || !isTarget) {
           sourceInfo.data.push(displayItem(item, isTarget))
@@ -255,11 +260,12 @@ export default defineComponent({
 
     const handleSearch = (value: string, type: 'target' | 'source') => {
       emit('search', value, type)
+      if (type === 'source') void source.search(value)
     }
 
     const moveTo = (values: TransferValue[], target: 'target' | 'source') => {
       const existing = new Set(computedTargetValues.value)
-      const sourceItems = new Map(props.data.map((item) => [item.value, item]))
+      const sourceItems = new Map(data.value.map((item) => [item.value, item]))
       let newTarget: TransferTargetItem[]
       if (target === 'target') {
         const added = values
@@ -283,7 +289,7 @@ export default defineComponent({
     const handleSelect = (values: TransferValue[]) => {
       const selected = new Set(values)
       const existing = new Map(computedTarget.value.map((item) => [item.value, item]))
-      const sourceItems = new Map(props.data.map((item) => [item.value, item]))
+      const sourceItems = new Map(data.value.map((item) => [item.value, item]))
       const next = values
         .map((value) => {
           const current = existing.get(value)
@@ -330,16 +336,21 @@ export default defineComponent({
     const handleReorder = (items: TransferItem[], detail: { oldValue?: TransferItem; newValue?: TransferItem }) => {
       const existing = new Map(computedTarget.value.map((item) => [item.value, item]))
       const movedValue = detail.oldValue?.value
-      updateTarget(
-        items.map((item) => {
-          const targetItem = { ...(existing.get(item.value) ?? { value: item.value }) }
-          if (item.value === movedValue) {
-            if (detail.newValue?.fixed) targetItem.fixed = detail.newValue.fixed
-            else delete targetItem.fixed
-          }
-          return targetItem
-        })
-      )
+      const reorderedValues = new Set(items.map((item) => item.value))
+      let index = 0
+      // The view can reorder a filtered subset. Preserve every other target,
+      // including selected values absent from the current remote candidate page.
+      const reordered = computedTarget.value.map((current) => {
+        if (!reorderedValues.has(current.value)) return current
+        const item = items[index++]
+        const targetItem = { ...(existing.get(item.value) ?? current) }
+        if (item.value === movedValue) {
+          if (detail.newValue?.fixed) targetItem.fixed = detail.newValue.fixed
+          else delete targetItem.fixed
+        }
+        return targetItem
+      })
+      updateTarget(reordered)
     }
 
     const startRename = (item: TransferItem) => {
@@ -378,7 +389,10 @@ export default defineComponent({
     const cls = computed(() => [prefixCls, { [`${prefixCls}-disabled`]: mergedDisabled.value }])
 
     return {
+      root,
+      dir,
       prefixCls,
+      data,
       cls,
       dataInfo,
       computedSelected: computedTargetValues,
@@ -388,6 +402,7 @@ export default defineComponent({
       sourceShowSearch,
       targetShowSearch,
       mergedFilter,
+      sourceFilter,
       mergedSourceSearchProps,
       mergedTargetSearchProps,
       mergedClearText,

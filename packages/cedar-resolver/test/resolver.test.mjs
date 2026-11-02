@@ -8,6 +8,12 @@ import { CedarResolver, resolveCedarComponent } from "../lib/index.js";
 
 const [components, directives] = CedarResolver();
 
+test('standalone icons include motion styles unless disabled', () => {
+  const [unstyled] = CedarResolver({ importStyle: false })
+  assert.deepEqual(components.resolve('CIconCheck').sideEffects, ['@cedar-design/icons-vue/style.css'])
+  assert.equal(unstyled.resolve('CIconCheck').sideEffects, undefined)
+})
+
 test("resolves Menu and MenuOption through the menu style entry", () => {
   for (const name of ["Menu", "MenuOption"]) {
     assert.deepEqual(components.resolve(`C${name}`), {
@@ -216,11 +222,13 @@ test("resolves SVG icons from the standalone icon package", () => {
   assert.deepEqual(components.resolve("CIconCheckCircleFill"), {
     from: "@cedar-design/icons-vue/icon-check-circle-fill",
     name: "IconCheckCircleFill",
+    sideEffects: ['@cedar-design/icons-vue/style.css'],
   });
 
   assert.deepEqual(components.resolve("CIconFacebookCircleFill"), {
     from: "@cedar-design/icons-vue/icon-facebook-circle-fill",
     name: "IconFacebookCircleFill",
+    sideEffects: ['@cedar-design/icons-vue/style.css'],
   });
 });
 

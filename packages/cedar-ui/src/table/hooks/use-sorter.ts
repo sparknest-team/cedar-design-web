@@ -13,11 +13,10 @@ export const useSorter = ({
 }) => {
   const _sorter = ref<Sorter | undefined>(getDefaultSorter(columns.value))
 
-  watch(columns, (columns) => {
-    const newSorter = getDefaultSorter(columns)
-    if (!isEqual(newSorter, _sorter.value)) {
-      _sorter.value = newSorter
-    }
+  // Rebuilding visual columns (RTL or resize) must not reset uncontrolled state.
+  // Only a change to the declared defaults starts a new default-state transaction.
+  watch(() => getDefaultSorter(columns.value), (next, previous) => {
+    if (!isEqual(next, previous)) _sorter.value = next
   })
 
   const computedSorter = computed<Sorter | undefined>(() => {

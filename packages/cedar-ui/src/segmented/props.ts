@@ -1,6 +1,6 @@
 import type { ExtractPropTypes, PropType, VNodeChild } from 'vue'
-import { componentSizes, DIRECTIONS } from '../_utils/constant'
-import type { ComponentSize, Direction } from '../_utils/constant'
+import { componentSizes, orientations } from '../_utils/constant'
+import type { ComponentSize, Orientation } from '../_utils/constant'
 
 export type SegmentedValue = string | number
 
@@ -64,12 +64,12 @@ export const segmentedProps = {
   },
   /**
    * @zh 排列方向
-   * @en Direction
+   * @en Orientation
    */
-  direction: {
-    type: String as PropType<Direction>,
+  orientation: {
+    type: String as PropType<Orientation>,
     default: 'horizontal',
-    validator: (value: unknown): value is Direction => DIRECTIONS.includes(value as Direction),
+    validator: (value: unknown): value is Orientation => orientations.includes(value as Orientation),
   },
   /**
    * @zh 原生 name，用于表单与无障碍

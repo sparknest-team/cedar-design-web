@@ -1,32 +1,41 @@
 import { h, KeepAlive, nextTick, reactive, ref } from 'vue'
 import { mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import Checkbox from '../index'
-import Radio from '../../radio'
 import { formHost } from '../../input-number/__tests__/form-host'
+import Radio from '../../radio'
+import Checkbox from '../index'
 
 const wrappers = []
 function make(Item, props = {}) {
-  const wrapper = mount(Item, { props, attachTo: document.body })
+  const wrapper = mount(Item, { props: { editMode: 'direct', ...props }, attachTo: document.body })
   wrappers.push(wrapper)
   return wrapper
 }
 function focusedElement(wrapper, label) {
   const input = wrapper.find('input')
-  return input.exists() ? input : wrapper.find('.mp-' + label + '__action')
+  return input.exists() ? input : wrapper.find('.c-' + label + '__action')
 }
 function checked(wrapper, label) {
   const input = wrapper.find('input')
-  return input.exists() ? input.element.checked : wrapper.find('.mp-' + label + '__action').classes().includes('mp-' + label + '--checked')
+  return input.exists()
+    ? input.element.checked
+    : wrapper
+        .find('.c-' + label + '__action')
+        .classes()
+        .includes('mp-' + label + '--checked')
 }
 async function click(wrapper, label) {
   const input = wrapper.find('input')
   if (input.exists()) {
     input.element.checked = label === 'checkbox' ? !input.element.checked : true
     await input.trigger('change')
-  } else await wrapper.find('.mp-' + label).trigger('click')
+  } else {
+    await wrapper.find('.c-' + label).trigger('click')
+  }
 }
-afterEach(() => { wrappers.splice(0).forEach(wrapper => wrapper.unmount()) })
+afterEach(() => {
+  wrappers.splice(0).forEach((wrapper) => wrapper.unmount())
+})
 
 describe('choice control contract copies', () => {
   it('keeps checkbox boolean models boolean regardless of value', async () => {
@@ -82,12 +91,21 @@ describe('choice control contract copies', () => {
     it(label + ' guards methods and exposes focus/blur with single form notifications', async () => {
       const state = reactive({ disabled: true, readonly: false })
       const calls = []
-      const wrapper = mount(formHost(state, {
-        onChange: () => calls.push('form'),
-      }, () => h(Item, {
-        'onUpdate:modelValue': () => calls.push('update'),
-        onChange: () => calls.push('change'),
-      })), { attachTo: document.body })
+      const wrapper = mount(
+        formHost(
+          state,
+          {
+            onChange: () => calls.push('form'),
+          },
+          () =>
+            h(Item, {
+              editMode: 'direct',
+              'onUpdate:modelValue': () => calls.push('update'),
+              onChange: () => calls.push('change'),
+            }),
+        ),
+        { attachTo: document.body },
+      )
       wrappers.push(wrapper)
       const item = wrapper.findComponent(Item)
       const api = item.vm.$.exposed || item.vm
@@ -165,7 +183,12 @@ it('keyboard activates only the local control and cancels a blurred Space press'
 it('does not complete a Space press after KeepAlive deactivation', async () => {
   const show = ref(true)
   const changed = vi.fn()
-  const host = mount({ setup: () => () => h(KeepAlive, null, { default: () => show.value ? h(Checkbox, { onChange: changed }) : null }) })
+  const host = mount({
+    setup: () => () =>
+      h(KeepAlive, null, {
+        default: () => (show.value ? h(Checkbox, { editMode: 'direct', onChange: changed }) : null),
+      }),
+  })
   wrappers.push(host)
   await focusedElement(host.findComponent(Checkbox), 'checkbox').trigger('keydown', { key: ' ' })
   show.value = false

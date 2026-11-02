@@ -33,6 +33,7 @@
         <component :is="auxiliaryActions" v-if="auxiliaryActions" />
       </div>
 
+      <Button v-if="clearable" variant="text" :disabled="disabled || pending" @mousedown.prevent @click="$emit('clear')">{{ clearText }}</Button>
       <Button
         status="primary"
         v-if="needConfirm"
@@ -72,6 +73,7 @@ import { isolateEditorForm } from "./form-bridge";
 import { useFieldTexts } from "./texts";
 
 const props = defineProps<{
+  clearable?: boolean;
   compact?: boolean;
   title?: string;
   intent?: "input" | "select";
@@ -83,7 +85,7 @@ const props = defineProps<{
   count?: number;
   limit?: number;
 }>();
-defineEmits<{ confirm: []; cancel: [] }>();
+defineEmits<{ confirm: []; cancel: []; clear: [] }>();
 defineOptions({ name: createNamespace("field-editor-panel").name });
 const { n } = createNamespace("field-presentation");
 const auxiliaryActions = shallowRef<() => import("vue").VNodeChild>();
@@ -95,6 +97,7 @@ const { i18nMessage } = useI18n();
 const confirmText = computed(() => i18nMessage.value.dialog.confirmButtonText);
 const texts = useFieldTexts();
 const closeText = texts.close;
+const clearText = texts.clear;
 const panelElement = ref<HTMLElement>();
 defineExpose({
   focus: () =>

@@ -1,0 +1,4 @@
+- [x] Add shared explicit loading and component integrations.
+- [x] Unify before-hook feedback and lifecycle cleanup.
+- [x] Update paired docs, examples and tests.
+- [x] Run types, focused behavior checks, lint and browser verification. Results and limitations: [implementation audit](../../../../../../component-api-comparison-2026-10-29/01-button/统一加载与守卫反馈.md).

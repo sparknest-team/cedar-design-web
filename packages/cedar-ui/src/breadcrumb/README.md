@@ -10,7 +10,7 @@ permalink: /components/breadcrumb/
 
 触屏设备上，可点击项的触摸区域至少为 44 × 44px；按下显示底色和下划线，松手后恢复，不保留鼠标悬停效果。省略图标支持点击查看隐藏路径。
 
-## 案例
+## 基础示例
 
 ### 基本用法
 
@@ -18,19 +18,18 @@ permalink: /components/breadcrumb/
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### 自定义分隔符
-
-通过`separator`属性或插槽自定义分隔符，面包屑子项也可通过`separator`属性或插槽自定义分隔符，且优先级高于父项。
-
-<demo src="./__demos__/custom-split.vue"></demo>
-
-### 自定义图标
-
-可以在内容中使用自定义图标
-
-<demo src="./__demos__/custom-icon.vue"></demo>
+## 内容与展示
 
 ### 参数化配置
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `routes` | 设置路径 | 参数化配置、带有下拉菜单、显示省略 |
+| `max-count` | 最多展示的正常面包屑项数量，不包含 more（0 表示不限制） | 显示省略 |
+<!-- demo-config-notes:end -->
 
 通过`routes`来传递面包屑数据。若是要自定义面包屑的话，建议使用`BreadcrumbItem`
 组件默认仅为前面的层级渲染链接，最后一级保持文本；可通过 `item-render` 插槽自定义渲染。
@@ -55,12 +54,19 @@ permalink: /components/breadcrumb/
 
 <demo src="./__demos__/link.vue"></demo>
 
-<!-- api-review:start -->
-### 功能调试
+## 自定义与插槽
 
-<demo src="./__demos__/api-review.vue"></demo>
+### 自定义分隔符
 
-<!-- api-review:end -->
+通过`separator`属性或插槽自定义分隔符，面包屑子项也可通过`separator`属性或插槽自定义分隔符，且优先级高于父项。
+
+<demo src="./__demos__/custom-split.vue"></demo>
+
+### 自定义图标
+
+可以在内容中使用自定义图标
+
+<demo src="./__demos__/custom-icon.vue"></demo>
 
 ## API
 

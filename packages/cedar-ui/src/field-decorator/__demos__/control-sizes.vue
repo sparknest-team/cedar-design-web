@@ -202,7 +202,7 @@ function resetSelections() {
           <p>Select · long values / nowrap</p>
           <c-select
             v-model="selectOverflow"
-            presentation="inline"
+            edit-mode="direct"
             :size="size"
             :variant="variant"
             :options="selectedOptions"
@@ -216,7 +216,7 @@ function resetSelections() {
           <p>Cascader · long values / nowrap</p>
           <c-cascader
             v-model="cascaderOverflow"
-            presentation="inline"
+            edit-mode="direct"
             :size="size"
             :variant="variant"
             :options="selectedCascaderOptions"

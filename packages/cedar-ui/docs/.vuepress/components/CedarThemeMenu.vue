@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import DirectionToggle from '../../../../../../design-ui/packages/ui-doc-preview/src/DirectionToggle.vue'
 import { onBeforeUnmount, onMounted, ref, shallowRef } from 'vue'
 import { IconChevronDown } from '@cedar-design/icons-vue/icon-chevron-down'
 import { IconPaletteFill } from '@cedar-design/icons-vue/icon-palette-fill'
@@ -56,6 +57,7 @@ onBeforeUnmount(() => {
 
 <template>
   <Teleport v-if="navbarTarget" :to="navbarTarget">
+    <DirectionToggle />
     <div class="cedar-docs-theme vp-nav-item">
       <button
         class="cedar-docs-theme__trigger"

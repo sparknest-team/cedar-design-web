@@ -17,6 +17,8 @@ Maple 也提供 UnoCSS / Tailwind CSS preset。`mp-` 是否生效取决于生成
 
 > 下方 Demo 用与 Preset 等价的 CSS（`var(--c-*)`）做视觉预览；真实项目中这些类由 Uno / Tailwind 生成。
 
+## 基础示例
+
 ### 新手示例
 
 UnoCSS 和 Tailwind **二选一配置**，但组件里的类名完全相同。可以先复制下面这张卡片，再逐个调整类名观察效果：
@@ -52,6 +54,108 @@ UnoCSS 和 Tailwind **二选一配置**，但组件里的类名完全相同。�
 ### 与固定工具类的分工
 
 <demo src="./__demos__/overview.vue"></demo>
+
+---
+
+## 颜色、文字与间距
+
+### 颜色 Color
+
+主题色 key 使用无前缀语义名，最终生成的 utility 统一带 `c-` 前缀。
+
+| Theme key  | CSS 变量             | 背景            | 文字              | 边框颜色           |
+| ---------- | -------------------- | --------------- | ----------------- | ------------------ |
+| `body`     | `--c-color-body`     | `c-bg-body`     | —                 | —                  |
+| `primary`  | `--c-color-primary`  | `c-bg-primary`  | `c-text-primary`  | `c-border-primary` |
+| `info`     | `--c-color-info`     | `c-bg-info`     | `c-text-info`     | `c-border-info`    |
+| `success`  | `--c-color-success`  | `c-bg-success`  | `c-text-success`  | `c-border-success` |
+| `warning`  | `--c-color-warning`  | `c-bg-warning`  | `c-text-warning`  | `c-border-warning` |
+| `danger`   | `--c-color-danger`   | `c-bg-danger`   | `c-text-danger`   | `c-border-danger`  |
+| `disabled` | `--c-color-disabled` | `c-bg-disabled` | `c-text-disabled` | —                  |
+
+颜色类只设置对应的颜色属性。比如 `c-border-primary` 只设置 `border-color`，需要和边框宽度类一起使用：
+
+```html
+<div class="c-border c-border-primary">primary border</div>
+<div class="c-border-2 c-border-danger">danger border</div>
+```
+
+常见组合方式：
+
+```html
+<!-- 静态颜色 -->
+<div class="c-bg-body c-text-primary">primary</div>
+
+<!-- 状态变体 -->
+<c-button class="c-border c-border-primary hover:c-bg-primary">hover</c-button>
+
+<!-- 响应式变体；断点本身不加 c- 前缀 -->
+<div class="c-bg-primary sm:c-bg-info md:c-bg-warning">responsive</div>
+```
+
+UnoCSS / Tailwind 只扫描源码中完整出现的类名。不要用 `c-bg-${status}` 动态拼接；必须动态选择时，使用完整类名映射或生成器的 safelist。
+
+<demo src="./__demos__/colors.vue"></demo>
+
+### 字号 Font size
+
+| 档位 | CSS 变量           | Uno / Tailwind 类名 |
+| ---- | ------------------ | ------------------- |
+| xs   | `--c-font-size-xs` | `c-text-xs`         |
+| sm   | `--c-font-size-sm` | `c-text-sm`         |
+| md   | `--c-font-size-md` | `c-text-md`         |
+| lg   | `--c-font-size-lg` | `c-text-lg`         |
+
+> 两套引擎使用同一套类名。不要与固定工具类语义色 `c-text-1…4` 混淆。
+
+<demo src="./__demos__/font-size.vue"></demo>
+
+### 间距 Spacing
+
+间距与宽高数值直接对应像素：`1 = 1px`。例如 `c-p-8` 为 8px、`c-mt-16` 为 16px、`c-h-10` 为 10px；
+百分比用 `c-w-full` / `c-h-full` 或 `c-w-1/2`。方向写法与 Uno / Tailwind 一致。
+
+| 类型           | 示例                                              |
+| -------------- | ------------------------------------------------- |
+| margin         | `c-m-16` `c-mt-16` `c-mx-8` `c-my-24`             |
+| padding        | `c-p-16` `c-pt-16` `c-px-8` `c-py-24`             |
+| gap            | `c-gap-8` `c-gap-x-16` `c-gap-y-24`               |
+| auto           | `c-m-auto` `c-ml-auto`                            |
+| width / height | `c-w-10` `c-h-10` `c-w-full` `c-h-auto` `c-w-1/2` |
+
+<demo src="./__demos__/spacing.vue"></demo>
+
+## 响应式与组合
+
+### 断点 Breakpoints / Screens
+
+两边数值一致（框架惯例，**不加** `c-` 前缀）：
+
+| 断点 | 宽度   |
+| ---- | ------ |
+| `sm` | 768px  |
+| `md` | 992px  |
+| `lg` | 1200px |
+| `xl` | 1920px |
+
+写法示例：`sm:c-bg-info` `md:c-bg-warning` `lg:c-bg-danger` `xl:c-bg-success`
+
+<demo src="./__demos__/breakpoints.vue"></demo>
+
+### 组合示例
+
+```html
+<template>
+  <div class="c-bg-body c-text-md">
+    <span class="c-text-primary">primary</span>
+    <div class="c-bg-primary c-text-lg sm:c-bg-info md:c-bg-warning">
+      responsive
+    </div>
+  </div>
+</template>
+```
+
+<demo src="./__demos__/combined.vue"></demo>
 
 ---
 
@@ -125,107 +229,7 @@ export default {
 
 ---
 
-## 用法一览（与主题绑定的类）
-
 完整分类（Flex / 间距 / 尺寸 / 溢出 / 圆角等）见 [常用写法](/components/style/atomic-usage/)。下面只列 preset 挂到 Cedar token 上的那几项。
-
-### 颜色 Color
-
-主题色 key 使用无前缀语义名，最终生成的 utility 统一带 `c-` 前缀。
-
-| Theme key  | CSS 变量             | 背景            | 文字              | 边框颜色           |
-| ---------- | -------------------- | --------------- | ----------------- | ------------------ |
-| `body`     | `--c-color-body`     | `c-bg-body`     | —                 | —                  |
-| `primary`  | `--c-color-primary`  | `c-bg-primary`  | `c-text-primary`  | `c-border-primary` |
-| `info`     | `--c-color-info`     | `c-bg-info`     | `c-text-info`     | `c-border-info`    |
-| `success`  | `--c-color-success`  | `c-bg-success`  | `c-text-success`  | `c-border-success` |
-| `warning`  | `--c-color-warning`  | `c-bg-warning`  | `c-text-warning`  | `c-border-warning` |
-| `danger`   | `--c-color-danger`   | `c-bg-danger`   | `c-text-danger`   | `c-border-danger`  |
-| `disabled` | `--c-color-disabled` | `c-bg-disabled` | `c-text-disabled` | —                  |
-
-颜色类只设置对应的颜色属性。比如 `c-border-primary` 只设置 `border-color`，需要和边框宽度类一起使用：
-
-```html
-<div class="c-border c-border-primary">primary border</div>
-<div class="c-border-2 c-border-danger">danger border</div>
-```
-
-常见组合方式：
-
-```html
-<!-- 静态颜色 -->
-<div class="c-bg-body c-text-primary">primary</div>
-
-<!-- 状态变体 -->
-<c-button class="c-border c-border-primary hover:c-bg-primary">hover</c-button>
-
-<!-- 响应式变体；断点本身不加 c- 前缀 -->
-<div class="c-bg-primary sm:c-bg-info md:c-bg-warning">responsive</div>
-```
-
-UnoCSS / Tailwind 只扫描源码中完整出现的类名。不要用 `c-bg-${status}` 动态拼接；必须动态选择时，使用完整类名映射或生成器的 safelist。
-
-<demo src="./__demos__/colors.vue"></demo>
-
-### 字号 Font size
-
-| 档位 | CSS 变量           | Uno / Tailwind 类名 |
-| ---- | ------------------ | ------------------- |
-| xs   | `--c-font-size-xs` | `c-text-xs`         |
-| sm   | `--c-font-size-sm` | `c-text-sm`         |
-| md   | `--c-font-size-md` | `c-text-md`         |
-| lg   | `--c-font-size-lg` | `c-text-lg`         |
-
-> 两套引擎使用同一套类名。不要与固定工具类语义色 `c-text-1…4` 混淆。
-
-<demo src="./__demos__/font-size.vue"></demo>
-
-### 间距 Spacing
-
-间距与宽高数值直接对应像素：`1 = 1px`。例如 `c-p-8` 为 8px、`c-mt-16` 为 16px、`c-h-10` 为 10px；
-百分比用 `c-w-full` / `c-h-full` 或 `c-w-1/2`。方向写法与 Uno / Tailwind 一致。
-
-| 类型           | 示例                                              |
-| -------------- | ------------------------------------------------- |
-| margin         | `c-m-16` `c-mt-16` `c-mx-8` `c-my-24`             |
-| padding        | `c-p-16` `c-pt-16` `c-px-8` `c-py-24`             |
-| gap            | `c-gap-8` `c-gap-x-16` `c-gap-y-24`               |
-| auto           | `c-m-auto` `c-ml-auto`                            |
-| width / height | `c-w-10` `c-h-10` `c-w-full` `c-h-auto` `c-w-1/2` |
-
-<demo src="./__demos__/spacing.vue"></demo>
-
-### 断点 Breakpoints / Screens
-
-两边数值一致（框架惯例，**不加** `c-` 前缀）：
-
-| 断点 | 宽度   |
-| ---- | ------ |
-| `sm` | 768px  |
-| `md` | 992px  |
-| `lg` | 1200px |
-| `xl` | 1920px |
-
-写法示例：`sm:c-bg-info` `md:c-bg-warning` `lg:c-bg-danger` `xl:c-bg-success`
-
-<demo src="./__demos__/breakpoints.vue"></demo>
-
-### 组合示例
-
-```html
-<template>
-  <div class="c-bg-body c-text-md">
-    <span class="c-text-primary">primary</span>
-    <div class="c-bg-primary c-text-lg sm:c-bg-info md:c-bg-warning">
-      responsive
-    </div>
-  </div>
-</template>
-```
-
-<demo src="./__demos__/combined.vue"></demo>
-
----
 
 ## 可选配置
 

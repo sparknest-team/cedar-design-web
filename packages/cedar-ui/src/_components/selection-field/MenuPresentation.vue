@@ -9,8 +9,13 @@
       popupOffset: 4,
       autoFitPopupWidth: controller.props.autoFitPopupWidth ?? true,
       unmountOnClose: controller.props.unmountOnClose ?? false,
-      closeOnClickReference: !(controller.props.filterable || controller.props.creatable),
+      closeOnClickReference: !(
+        controller.props.filterable || controller.props.creatable
+      ),
       ...controller.props.triggerProps,
+      ...(controller.props.openTriggerTarget === 'icon'
+        ? { trigger: 'click' }
+        : {}),
     }"
     :open="controller.computedOpen"
     :disabled="controller.mergedDisabled || controller.mergedReadonly"
@@ -26,24 +31,25 @@
   </Trigger>
 </template>
 <script setup lang="ts">
-import { createNamespace } from '../../_utils/global-config'
-import Trigger, { type TriggerProps } from '../../trigger'
+import { createNamespace } from "../../_utils/global-config";
+import Trigger, { type TriggerProps } from "../../trigger";
 
-defineOptions({ name: createNamespace('selection-menu-presentation').name })
+defineOptions({ name: createNamespace("selection-menu-presentation").name });
 defineProps<{
   controller: {
     props: {
-      triggerProps?: TriggerProps
-      popupContainer?: TriggerProps['popupContainer']
-      autoFitPopupWidth?: boolean
-      unmountOnClose?: boolean
-      filterable?: boolean | object
-      creatable?: boolean
-    }
-    computedOpen: boolean
-    mergedDisabled: boolean
-    mergedReadonly: boolean
-    handleOpenChange: (open: boolean) => void
-  }
-}>()
+      openTriggerTarget?: "field" | "icon";
+      triggerProps?: TriggerProps;
+      popupContainer?: TriggerProps["popupContainer"];
+      autoFitPopupWidth?: boolean;
+      unmountOnClose?: boolean;
+      filterable?: boolean | object;
+      creatable?: boolean;
+    };
+    computedOpen: boolean;
+    mergedDisabled: boolean;
+    mergedReadonly: boolean;
+    handleOpenChange: (open: boolean) => void;
+  };
+}>();
 </script>

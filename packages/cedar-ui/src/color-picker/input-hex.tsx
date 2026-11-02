@@ -30,14 +30,14 @@ export default defineComponent({
     const { color } = toRefs(props)
     const [hex, setHex] = useState(color.value.hex)
 
-    const handlerChange = (value: string) => {
-      const _rgb = hexToRgb(value) || { r: 255, g: 0, b: 0 }
+    const handlerChange = (value: string | null) => {
+      const _rgb = hexToRgb(value ?? '') || { r: 255, g: 0, b: 0 }
       const hsv = rgbToHsv(_rgb.r, _rgb.g, _rgb.b)
       props.onHsvChange?.(hsv)
     }
 
-    const onInputChange = (value: string) => {
-      const matchValue = value.match(/[a-fA-F0-9]*/g)?.join('') ?? ''
+    const onInputChange = (value: string | null) => {
+      const matchValue = (value ?? '').match(/[a-fA-F0-9]*/g)?.join('') ?? ''
       if (matchValue !== color.value.hex) {
         handlerChange(matchValue.toUpperCase())
       }

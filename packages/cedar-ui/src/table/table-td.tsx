@@ -1,25 +1,12 @@
-import {
-  computed,
-  createVNode,
-  defineComponent,
-  inject,
-  PropType,
-  ref,
-  VNode,
-} from "vue";
-import { getPrefixCls, createNamespace } from "../_utils/global-config";
-import {
-  TableColumnData,
-  TableData,
-  TableDataWithRaw,
-  TableOperationColumn,
-} from "./types";
-import { getFixedCls, getStyle } from "./utils";
-import { getValueByPath } from "../_utils/get-value-by-path";
+import { computed, createVNode, defineComponent, inject, onActivated, onBeforeUnmount, onDeactivated, PropType, ref, VNode, watch } from "vue"
+import { getPrefixCls, createNamespace } from "../_utils/global-config"
+import { TableColumnData, TableData, TableDataWithRaw, TableOperationColumn } from "./types"
+import { getFixedCls, getStyle } from "./utils"
+import { getValueByPath } from "../_utils/get-value-by-path"
 import { IconLoading } from '@cedar-design/icons-vue/icon-loading'
-import { isFunction, isObject } from "../_utils/is";
-import { TableContext, tableInjectionKey } from "./context";
-import AutoTooltip from "../_components/auto-tooltip/auto-tooltip";
+import { isFunction, isObject } from "../_utils/is"
+import { TableContext, tableInjectionKey } from "./context"
+import AutoTooltip from "../_components/auto-tooltip/auto-tooltip"
 
 const TD_TYPES = [
   "normal",
@@ -128,7 +115,7 @@ export default defineComponent({
         [`${prefixCls}-col-sorted`]: isSorted.value,
         [`${prefixCls}-td-resizing`]: resizing.value,
       },
-      ...getFixedCls(prefixCls, props.column),
+      ...getFixedCls(prefixCls, props.column, tableCtx.readingDirection === 'rtl' && tableCtx.hasPhysicalLeftOperations),
       props.column?.cellClass,
       getCustomClass(),
     ]);
@@ -154,6 +141,7 @@ export default defineComponent({
           operations: props.operations,
         },
         tableCtx.tableLayout,
+        tableCtx.readingDirection,
       );
       const customStyle = getCustomStyle();
       return {
@@ -199,23 +187,38 @@ export default defineComponent({
     };
 
     const isLoading = ref(false);
-
+    let lazyActive = true;
+    let lazyRun = 0;
+    const cancelLazyLoad = () => { lazyRun++; isLoading.value = false; };
+    watch([() => props.record?.raw, () => props.record?.key, () => props.record?.isLeaf, () => props.record?.children, () => tableCtx.loadMore], cancelLazyLoad, { flush: 'sync' });
+    onActivated(() => { lazyActive = true; });
+    const stopLazyLoad = () => { lazyActive = false; cancelLazyLoad(); };
+    onDeactivated(stopLazyLoad);
+    onBeforeUnmount(stopLazyLoad);
     const handleClick = (ev: Event) => {
-      if (
-        !isLoading.value &&
-        isFunction(tableCtx.loadMore) &&
-        !props.record?.isLeaf &&
-        !props.record?.children
-      ) {
-        isLoading.value = true;
-        new Promise<TableData[] | undefined>((resolve) => {
-          tableCtx.loadMore?.(props.record.raw, resolve);
-        }).then((children?: TableData[]) => {
-          tableCtx.addLazyLoadData?.(children, props.record);
-          isLoading.value = false;
-        });
-      }
       ev.stopPropagation();
+      const record = props.record;
+      const loader = tableCtx.loadMore;
+      if (!lazyActive || isLoading.value || typeof loader !== 'function' || record.isLeaf || record.children) return;
+      const run = ++lazyRun;
+      let settled = false;
+      isLoading.value = true;
+      const done = (children?: TableData[]) => {
+        if (settled) return;
+        settled = true;
+        if (!lazyActive || run !== lazyRun || props.record.raw !== record.raw || props.record.key !== record.key || tableCtx.loadMore !== loader) return;
+        isLoading.value = false;
+        if (children !== undefined) tableCtx.addLazyLoadData?.(children, record);
+      };
+      try {
+        const result = loader(record.raw, done) as unknown;
+        if (result && typeof (result as PromiseLike<unknown>).then === 'function') {
+          return Promise.resolve(result).catch((error) => { done(); throw error; });
+        }
+      } catch (error) {
+        done();
+        throw error;
+      }
     };
 
     const renderCell = () => {
@@ -223,7 +226,7 @@ export default defineComponent({
         <span
           class={[
             `${prefixCls}-cell`,
-            `${prefixCls}-cell-align-${props.column?.align ?? "left"}`,
+            `${prefixCls}-cell-align-${props.column?.align ?? "start"}`,
             {
               [`${prefixCls}-cell-fixed-expand`]: props.isFixedExpand,
               [`${prefixCls}-cell-expand-icon`]: props.showExpandBtn,
@@ -234,7 +237,7 @@ export default defineComponent({
           {props.indentSize > 0 && (
             <span
               style={{
-                paddingLeft: `${props.indentSize}px`,
+                paddingInlineStart: `${props.indentSize}px`,
               }}
             />
           )}

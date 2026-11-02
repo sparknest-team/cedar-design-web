@@ -8,13 +8,19 @@ permalink: /components/table/
 
 用于数据收集展示、分析整理、操作处理。
 
-## 案例
+## 基础示例
 
 ### 基础用法
 
-表格的基本用法，需要传递 `columns` 和 `data`。
+传入 `columns` 和 `data` 即可展示表格；默认铺满容器，列宽超出时自动横向滚动。
 
 <demo src="./__demos__/basic.vue"></demo>
+
+### 手动加载与原生插槽
+
+布尔值或对象 loading 同时适用于数据模式与原生插槽模式；对象需要显式 loading: true。切换加载时保留行、草稿与焦点，通知事件不负责自动执行加载任务。
+
+<demo src="./__demos__/loading.vue"></demo>
 
 ### 空数据
 
@@ -22,23 +28,96 @@ permalink: /components/table/
 
 <demo src="./__demos__/empty-state.vue"></demo>
 
-### 行选择器
+## 列宽、布局与固定列
 
-通过设置 `row-selection` 开启行选择器。
+### 列宽配置场景
 
-<demo src="./__demos__/row-selection.vue"></demo>
+<!-- demo-config-notes:start -->
+#### 本组配置对照
 
-### 行选择器(单选框)
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `columns` | 表格的列描述信息 | 列宽配置场景、固定列、分组表头与固定列 |
+| `data` | 表格的数据 | 列宽配置场景、固定列、分组表头与固定列 |
+| `pagination` | 分页的属性配置 | 列宽配置场景、布局、自适应与拖拽调宽 |
+| `bordered` | 是否显示边框 | 分组表头与固定列、布局、自适应与拖拽调宽 |
+| `sticky-pagination` | 分页相对页面/外层滚动容器吸底；数字为距底部偏移（px） | 列宽配置场景 |
+| `row-selection` | 表格的行选择器配置 | 列宽配置场景 |
+<!-- demo-config-notes:end -->
 
-通过设置 `rowSelection.type='radio'` 开启单选模式。
+表格宽度和列宽是两层配置：`style="width: 100%"` 或 `style="width: 480px"` 控制外层容器，`columns` 中的 `width` / `minWidth` 控制各列。无需设置 `scroll.x` 或 `scroll.y`。
 
-<demo src="./__demos__/row-selection-single.vue"></demo>
+先用下面七种组合比较不指定列宽、全部最小宽、定宽与弹性混合、全部定宽、横向溢出、左右固定列，以及选择列/扩展列。切换 100%、480px、360px 可以直接观察重算和横向滚动。
 
-### 展开行
+| 配置 | 分配规则（默认 `table-layout="fixed"`、`fit=true`） |
+| --- | --- |
+| 不设置列宽 | 以每列 80px 为基础，按比例分配剩余空间 |
+| `minWidth` | 指定弹性列的基础宽度；空间不足时保留基础宽度并横向滚动 |
+| `width` + 弹性列 | 显式 `width` 保持不变，剩余空间给弹性列，按各自 `minWidth` 比例分配 |
+| 全部指定 `width` | 超出容器时保留列宽；不足容器时按比例放大普通数据列以铺满 |
+| `fit=false` | 仍至少铺满容器；剩余空间由所有普通数据列按基础宽度比例分摊 |
+| 选择列 / 扩展列 | 选择列按自己的操作列宽度保留；扩展列不参与普通数据列的比例放大 |
 
-通过设置 `expandable` 开启展开行功能。可以在 `data` 中添加 `expand` 属性，设置展开行显示内容。
+这里的“弹性”指剩余宽度分配，不是浏览器的 `table-layout: auto`。未设置 `width` 的列才是弹性列；`minWidth` 不会让显式 `width` 的列变成弹性列。以上分配规则针对默认的 `fixed` 布局。
 
-<demo src="./__demos__/expandable.vue"></demo>
+<demo src="./__demos__/column-width-scenarios.vue"></demo>
+
+### 固定列
+
+在 `columns` 中指定 `fixed: 'left'` 或 `fixed: 'right'`，可将列固定到左侧或右侧。固定列建议设置 `width`。当列最小宽之和超过容器时会自动出现横向滚动。
+
+<demo src="./__demos__/fixed.vue"></demo>
+
+### 分组表头与固定列
+
+分组表头使用固定列时，需要优先指定数据列为固定列。
+如果一个分组下的所有数据列都是固定列，此时可以设置分组列为固定列，宽度为子列宽度之和。
+
+<demo src="./__demos__/columns-children-and-fixed.vue"></demo>
+
+### 布局、自适应与拖拽调宽
+
+在同一张表中依次切换布局、剩余空间分配、分组表头、拖拽调宽和窄容器，直接比较相同列配置的变化。
+
+| 配置 | 作用与限制 |
+| --- | --- |
+| `table-layout="fixed"`（默认） | 组件计算列宽并写入 `<col>`，长文本不会任意撑开列 |
+| `table-layout="auto"` | 浏览器按内容分配实际列宽，长文本可能撑开列；固定列偏移根据渲染后实测宽度修正 |
+| `column-resizable` | 仅 `fixed` 布局渲染拖拽把手；拖拽后的宽度参与下一次宽度计算 |
+| `max-height` 或任意列 `ellipsis` | 会强制使用 `fixed`，保证高度限制和省略行为可靠 |
+
+`width` 不代表任何配置下都严格不变：存在弹性列且 `fit=true` 时定宽列保持原宽；全部指定宽度或 `fit=false` 时，Cedar 会按上面的规则铺满容器。
+
+<demo src="./__demos__/column-sizing-playground.vue"></demo>
+
+### 自动滚动与高度设置
+
+- 横向：组件比较计算后的列宽总和与可用容器宽度，自动决定是否需要滚动；调整容器或列配置会重新计算。
+- 纵向：设置 `height` 固定高度，或设置 `max-height` 让内容少时收缩、超出后滚动。不限制高度时，由页面/外层容器负责纵向滚动。
+- 粘性：`sticky-header` / `sticky-pagination` 控制相对页面或外层滚动容器的定位。存在横向溢出且启用了粘性分页时，悬浮表格或焦点位于表格内即可显示底部同步滚动条。
+
+下方“滚动与粘性定位”分组专门展示高度、表头和分页的组合。
+
+## 表头与列结构
+
+### 分组表头
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `columns` | 表格的列描述信息 | 分组表头、文本省略和提示、单元格合并 |
+| `data` | 表格的数据 | 分组表头、文本省略和提示、单元格合并 |
+| `bordered` | 是否显示边框 | 分组表头、单元格合并 |
+| `span-method` | 单元格合并方法（索引从数据项开始计数） | 单元格合并 |
+| `row-selection` | 表格的行选择器配置 | 单元格合并 |
+| `span-all` | 是否让合并方法的索引包含所有 | 单元格合并 |
+<!-- demo-config-notes:end -->
+
+`columns` 内可以设置 `children`，用于表头分组。
+
+<demo src="./__demos__/columns-children.vue"></demo>
 
 ### 文本省略和提示
 
@@ -47,96 +126,36 @@ permalink: /components/table/
 
 <demo src="./__demos__/ellipsis-and-tooltip.vue"></demo>
 
-### 树形数据展示
+### 单元格合并
 
-树形数据展示的例子，`data` 里有 `children` 字段时会展示为树形表格。
+通过 `span-method` 属性进行单元格合并。可以设置 `span-all` 让列索引包含操作列，注意：目前如果合并多项选择器会导致全选状态判断错误。
 
-<demo src="./__demos__/tree-children.vue"></demo>
+<demo src="./__demos__/span-method.vue"></demo>
 
-### 子树懒加载
+### 总结行
 
-通过 `load-more` 属性可以开启子树懒加载功能。
-开启子树懒加载功能后，需要在无子树节点标注 `isLeaf: true`，没有标注且没有 `children` 属性的节点会认为需要子树懒加载处理。
-`load-more` 属性有提供 `done` 函数进行回调，可以在回调中传入懒加载的子树。如果 `done` 函数没有传入数据会认为懒加载失败，此节点可以再次触发懒加载。
+设置 `summary` 可以开启表尾总结行，并可以通过 `summary-text` 指定首列文字。
+如果想要自定义总结行展示，可以传入函数。函数的返回值为需要展示的数据，结构同 `data` 一样即可，支持多行数据。
+注意：控制列暂不可以自定义内容
 
-<demo src="./__demos__/load-more.vue"></demo>
+<demo src="./__demos__/summary.vue"></demo>
 
-### 表格属性
-
-这里罗列了一些表格的属性，你可以方便的打开或关闭一些属性，查看它的效果。
-
-<demo src="./__demos__/form-attribute.vue"></demo>
-
-### 排序和筛选
-
-通过设置 `columns` 中的 `sortable` 和 `filterable` 属性，可以配置排序和筛选功能。 通过 `filter-icon-align-left`
-属性可以让筛选按钮左对齐。
-<br/>
-如果想实现远程排序，可以通过`sortable.sorter=true` 来关闭内部排序，并通过 `change` 或者 `sorterChange` 事件来实现服务器端排序。
-<br/>
-如果想实现远程筛选，则需要不传`filterable.filter`或者使`filterable.filter`返回`true`,来关闭内部筛选，并通过 `change`
-或者`filterChange`事件来实现服务器端筛选。
-<demo src="./__demos__/sort-and-filter.vue"></demo>
-
-### 自定义筛选菜单
-
-通过插槽可以自定义筛选菜单内容。
-
-<demo src="./__demos__/custom-filter.vue"></demo>
-
-### 表格布局 table-layout
-
-Element / Cedar 的 CSS 布局只有两种：
-
-| 值 | 含义 |
-| --- | --- |
-| `fixed`（默认） | 列宽由 JS + `<col>` 决定，**不被单元格内容撑开**；`width` / `min-width` / `fit` 自适应都在这套下工作 |
-| `auto` | 交给浏览器按内容分配列宽；长文本可能把列撑得很宽 |
-
-什么时候会从你设置的值变成 `fixed`：
-
-- 设置了 `max-height` → **强制 fixed**（与 Element 一致）
-- 任意列开启了 `ellipsis` → 强制 fixed（保证省略可靠）
-
-注意：列宽「自适应铺满」不是换了一种 `table-layout`，而是在 **`fixed` + `fit: true`** 下用 `min-width` 做剩余空间分配。
-
-<demo src="./__demos__/table-layout.vue"></demo>
-
-### 列宽自适应（fixed + fit）
-
-默认 `table-layout: fixed` + `fit: true`。
-
-- 设了 `width` 的列为固定宽，不参与剩余空间分配
-- 只设 `min-width`（或不设，默认 80）的列为弹性列，按 `min-width` 比例分配剩余宽度
-- 当 `Σ(width | minWidth) ≤ 容器宽` 时铺满容器，**无横向滚动**
-
-<demo src="./__demos__/column-width-fit.vue"></demo>
-
-### 横向滚动
-
-当列最小宽之和大于容器宽度时，自动出现横向滚动条；弹性列停在各自的 `min-width`。
-
-<demo src="./__demos__/column-scroll-x.vue"></demo>
-
-### fit 开关
-
-`fit` 决定剩余空间如何分配：开启时全部给未设 `width` 的弹性列；关闭时按各列基础宽度（`width` / `minWidth`）比例放大分摊。无论开关，表格都至少铺满父容器宽度（列宽之和溢出才横向滚动）。
-
-<demo src="./__demos__/column-fit.vue"></demo>
-
-### 布局 × fit × 分组 排列组合
-
-平铺/分组 × `table-layout` × `fit` 共 8 种组合的对照矩阵：
-
-- `fit: true` 剩余空间全给弹性列（示例中只设 `min-width` 的 **名称**、**更新时间**）；`fit: false` 按各列基础宽度比例放大分摊
-- **拖拽调宽仅 `fixed` 布局可用**：`auto` 布局不渲染拖拽把手（列宽由浏览器按内容分配，拖拽宽度不会生效）
-- `auto` 布局下冻结列（示例中 **优先级** 左冻结、**状态** 右冻结）的 sticky 偏移以渲染后测量的真实宽度为准
-
-<demo src="./__demos__/layout-fit-matrix.vue"></demo>
-
-<demo src="./__demos__/width-chase-test.vue"></demo>
+## 滚动与粘性定位
 
 ### 纵向滚动（height）
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `columns` | 表格的列描述信息 | 纵向滚动（height）、流体高度（max-height）、固定列 + 固定表头 |
+| `data` | 表格的数据 | 纵向滚动（height）、流体高度（max-height）、固定列 + 固定表头 |
+| `pagination` | 分页的属性配置 | 纵向滚动（height）、流体高度（max-height）、固定列 + 固定表头 |
+| `height` | 表格高度。设置后表头固定，表体滚动。数字单位为 px | 纵向滚动（height）、固定列 + 固定表头 |
+| `sticky-header` | 表头相对页面/外层滚动容器吸顶；数字为距顶部偏移（px） | 表头吸顶（页面滚动）、粘性表头、分页与横向滚动条 |
+| `sticky-pagination` | 分页相对页面/外层滚动容器吸底；数字为距底部偏移（px） | 分页吸底（页面滚动）、粘性表头、分页与横向滚动条 |
+<!-- demo-config-notes:end -->
 
 通过 `height` 开启固定高度：表头固定，表体纵向滚动。
 
@@ -148,23 +167,11 @@ Element / Cedar 的 CSS 布局只有两种：
 
 <demo src="./__demos__/fluid-height.vue"></demo>
 
-### 固定列
-
-在 `columns` 中指定 `fixed: 'left'` 或 `fixed: 'right'`，可将列固定到左侧或右侧。固定列建议设置 `width`。当列最小宽之和超过容器时会自动出现横向滚动。
-
-<demo src="./__demos__/fixed.vue"></demo>
-
 ### 固定列 + 固定表头
 
 同时设置 `height` 与左右固定列（对齐 Element 的 fixed column and header 场景）。
 
 <demo src="./__demos__/fixed-column-and-header.vue"></demo>
-
-### 单元格合并
-
-通过 `span-method` 属性进行单元格合并。可以设置 `span-all` 让列索引包含操作列，注意：目前如果合并多项选择器会导致全选状态判断错误。
-
-<demo src="./__demos__/span-method.vue"></demo>
 
 ### 表头吸顶（页面滚动）
 
@@ -182,19 +189,96 @@ Element / Cedar 的 CSS 布局只有两种：
 
 <demo src="./__demos__/sticky-panation.vue"></demo>
 
-### 总结行
+### 粘性表头、分页与横向滚动条
 
-设置 `summary` 可以开启表尾总结行，并可以通过 `summary-text` 指定首列文字。
-如果想要自定义总结行展示，可以传入函数。函数的返回值为需要展示的数据，结构同 `data` 一样即可，支持多行数据。
-注意：控制列暂不可以自定义内容
+<demo src="./__demos__/sticky-layout.vue"></demo>
 
-<demo src="./__demos__/summary.vue"></demo>
+sticky-header 与 sticky-pagination 相对页面或外层滚动容器定位。数值 0 表示启用且偏移为 0。与 height/max-height 限制表格内部滚动是两种不同场景。祖先应保留实际滚动布局，不要额外套 overflow:hidden 阻断粘性定位。
 
-### 调整列宽
+内置分页吸底时，将同步横向滚动条放在分页上方并一起吸底。表体与该滚动条双向同步，分页不再盖住唯一可用的横向滚动入口；没有横向溢出时不显示这条滚动条。
 
-使用 `column-resizable` 属性开启列宽调整。建议初始设置除最后一列外其他列的默认列宽。仅 `table-layout: fixed` 下生效——`auto` 布局列宽由浏览器按内容分配，不渲染拖拽把手。
+需要完全自定义布局时传 pagination=false，分页和当前页数据由业务控制。示例可以切换这种模式。此时 Table 不进行内置分页切片；后端分页传当前页，前端分页由业务先 slice。pagination 对象里的 total 仅控制分页总数，不会自动发请求。
 
-<demo src="./__demos__/column-resizable.vue"></demo>
+### 只替换分页内容，保留 Table 的吸底布局
+
+完整 pagination 插槽接收 { page, pageSize, total, onChange, onPageSizeChange }。放入业务分页组件即可替换内置 Pagination；Table 继续负责数据分页与滚动条/分页的上下布局。业务分页不要自行 position:fixed，否则会离开该布局。pagination=false 则完全退出这套分页协议，适合业务自己管理当前页数据和整个布局。
+
+```vue
+<c-table :data="rows" :columns="columns" sticky-header sticky-pagination :pagination="{ pageSize: 20 }">
+  <template #pagination="pager">
+    <business-pagination :page="pager.page" :page-size="pager.pageSize" :total="pager.total" @change="pager.onChange" />
+  </template>
+</c-table>
+```
+
+横向操作条的最小高度由 `--c-table-sticky-scrollbar-height` 控制，默认 16px；实际高度同时保留浏览器原生滚动条所需空间。
+
+### 分页挂载到外部容器
+
+`pagination.container` 接收 CSS 选择器或 HTMLElement，省略时分页仍在表格内部。只是改变挂载位置，页码、数据切片、事件和粘性底部仍由同一个 Table 管理，无需插槽或另一套分页状态。使用同一个滚动容器时，外部宿主可设为 display: contents，让粘性分页与横向滚动条共享滚动上下文。指定目标必须实际存在；Vue 3.5 defer 支持同一渲染批次内创建的目标。SSR 由宿主框架处理 Teleport 输出。`pagination=false` 仍表示完全关闭 Table 分页及数据切片。
+
+```vue
+<c-table
+  :data="rows" :columns="columns"
+  :sticky-header="0" :sticky-pagination="0"
+  :pagination="{ pageSize: 10, total: 500, container: '#table-pagination' }"
+/>
+<div id="table-pagination" style="display: contents" />
+```
+
+粘性定位示例提供外层滚动容器，Table 本身不设置 height/max-height 或纵向滚动限制。可切换整页滚动、自定义分页和外置底部挂载点。Table 统一管理同步横向滚动条与 pagination 插槽组成的吸附区域，pagination.container 移动整个区域。外置目标必须处于预期的滚动与布局边界内，任意 DOM 位置不保证相同的 sticky 效果。
+
+开启粘性分页时隐藏内部横向滑块及原生横向滚动条，底部复用 Scrollbar 的 embed 模式，在鼠标悬浮整个 Table 或键盘焦点进入 Table 时显示；分页挂载到外部容器时同样生效。拖动、轨道点击和触控板保持同步。示例的纵向滚动由外层容器负责，Table 未设置 height/max-height。
+
+## 选择与数据交互
+
+### 行选择器
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `columns` | 表格的列描述信息 | 行选择器、行选择器(单选框)、展开行 |
+| `data` | 表格的数据 | 行选择器、行选择器(单选框)、展开行 |
+| `row-selection` | 表格的行选择器配置 | 行选择器、行选择器(单选框)、树形数据展示 |
+| `draggable` | 表格拖拽排序的配置 | 可拖拽表格、拖拽锚点 |
+| `selected-keys` | 已选择的行（受控模式）优先于 `rowSelection` | 行选择器 |
+| `pagination` | 分页的属性配置 | 行选择器 |
+<!-- demo-config-notes:end -->
+
+通过设置 `row-selection` 开启行选择器。
+
+<demo src="./__demos__/row-selection.vue"></demo>
+
+### 行选择器(单选框)
+
+通过设置 `rowSelection.type='radio'` 开启单选模式。
+
+<demo src="./__demos__/row-selection-single.vue"></demo>
+
+### 展开行
+
+通过设置 `expandable` 开启展开行功能。可以在 `data` 中添加 `expand` 属性，设置展开行显示内容。
+
+<demo src="./__demos__/expandable.vue"></demo>
+
+### 树形数据展示
+
+树形数据展示的例子，`data` 里有 `children` 字段时会展示为树形表格。
+
+<demo src="./__demos__/tree-children.vue"></demo>
+
+### 排序和筛选
+
+通过设置 `columns` 中的 `sortable` 和 `filterable` 属性，可以配置排序和筛选功能。 通过 `filter-icon-align-left`
+属性可以让筛选按钮左对齐。
+<br/>
+如果想实现远程排序，可以通过`sortable.sorter=true` 来关闭内部排序，并通过 `change` 或者 `sorterChange` 事件来实现服务器端排序。
+<br/>
+如果想实现远程筛选，则需要不传`filterable.filter`或者使`filterable.filter`返回`true`,来关闭内部筛选，并通过 `change`
+或者`filterChange`事件来实现服务器端筛选。
+<demo src="./__demos__/sort-and-filter.vue"></demo>
 
 ### 可拖拽表格
 
@@ -210,19 +294,6 @@ Element / Cedar 的 CSS 布局只有两种：
 
 <demo src="./__demos__/droppable-anchor.vue"></demo>
 
-### 分组表头
-
-`columns` 内可以设置 `children`，用于表头分组。
-
-<demo src="./__demos__/columns-children.vue"></demo>
-
-### 分组表头与固定列
-
-分组表头使用固定列时，需要优先指定数据列为固定列。
-如果一个分组下的所有数据列都是固定列，此时可以设置分组列为固定列，宽度为子列宽度之和。
-
-<demo src="./__demos__/columns-children-and-fixed.vue"></demo>
-
 ### 可编辑表格
 
 可以在使用插槽获得的数据，修改 `data` 中的数据，达到可编辑表格的功能。
@@ -230,27 +301,21 @@ Element / Cedar 的 CSS 布局只有两种：
 
 <demo src="./__demos__/editable-form.vue"></demo>
 
-### 自定义渲染
-
-通过 `#columns` 插槽和 `<a-table-column>` 组件可以使用模板的方法自定义列渲染。
-注意：在使用 `#columns` 插槽后，将会屏蔽 `columns` 属性
-
-<demo src="./__demos__/custom-rendering.vue"></demo>
-
-### 自定义表格元素
-
-可以通过特定插槽自定义表格元素的渲染。仅需要传入表格元素，内部属性会自动附加上去
-
-<demo src="./__demos__/customize-table-elements.vue"></demo>
-
-### 虚拟列表
-
-设置 `virtual-list-props` 开启虚拟列表功能。
-目前虚拟滚动表格受限比较多，开启虚拟滚动后不能使用展开行、树形数据、固定列等功能
-
-<demo src="./__demos__/virtual-list-props.vue"></demo>
+## 列管理与渲染定制
 
 ### 自定义表头 / 列管理
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `columns` | 表格的列描述信息 | 自定义表头 / 列管理、自定义筛选菜单、自定义渲染 |
+| `data` | 表格的数据 | 自定义表头 / 列管理、自定义筛选菜单、自定义渲染 |
+| `pagination` | 分页的属性配置 | 自定义表头 / 列管理 |
+| `size` | 表格的大小 | 自定义表头 / 列管理 |
+| `row-class` | 表格行元素的类名。 | 自定义表格元素 |
+<!-- demo-config-notes:end -->
 
 Table **不内置**列管理。通过扩展点与外部 `TableColumnManager` 组合：
 
@@ -266,6 +331,48 @@ Table **不内置**列管理。通过扩展点与外部 `TableColumnManager` 组
 
 <demo src="./__demos__/custom-table-columns.vue"></demo>
 
+### 自定义筛选菜单
+
+通过插槽可以自定义筛选菜单内容。
+
+<demo src="./__demos__/custom-filter.vue"></demo>
+
+### 自定义渲染
+
+通过 `#columns` 插槽和 `<c-table-column>` 组件可以使用模板的方法自定义列渲染。
+注意：在使用 `#columns` 插槽后，将会屏蔽 `columns` 属性
+
+<demo src="./__demos__/custom-rendering.vue"></demo>
+
+### 自定义表格元素
+
+可以通过特定插槽自定义表格元素的渲染。仅需要传入表格元素，内部属性会自动附加上去
+
+<demo src="./__demos__/customize-table-elements.vue"></demo>
+
+## 异步与大数据
+
+### 子树懒加载
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `columns` | 表格的列描述信息 | 子树懒加载、异步目录、虚拟列表 |
+| `data` | 表格的数据 | 子树懒加载、异步目录、虚拟列表 |
+| `pagination` | 分页的属性配置 | 异步目录、虚拟列表 |
+| `load-more` | 数据懒加载函数，传入时开启懒加载功能 | 子树懒加载 |
+| `size` | 表格的大小 | 异步目录 |
+| `row-selection` | 表格的行选择器配置 | 虚拟列表 |
+<!-- demo-config-notes:end -->
+
+通过 `load-more` 属性可以开启子树懒加载功能。
+开启子树懒加载功能后，需要在无子树节点标注 `isLeaf: true`，没有标注且没有 `children` 属性的节点会认为需要子树懒加载处理。
+`load-more` 属性有提供 `done` 函数进行回调，可以在回调中传入懒加载的子树。如果 `done` 函数没有传入数据会认为懒加载失败，此节点可以再次触发懒加载。
+
+<demo src="./__demos__/load-more.vue"></demo>
+
 ### 异步目录
 
 `TableColumnManager` 的 `loadOptions` / `remoteSearch` 在外部弹层中使用。
@@ -274,12 +381,45 @@ Table **不内置**列管理。通过扩展点与外部 `TableColumnManager` 组
 
 详见 [`TableColumnManager`](/components/table-column-manager/)。
 
-<!-- api-review:start -->
-### 功能调试
+### 虚拟列表
 
-<demo src="./__demos__/api-review.vue"></demo>
+设置 `virtual-list-props` 开启虚拟列表功能。
+目前虚拟滚动表格受限比较多，开启虚拟滚动后不能使用展开行、树形数据、固定列等功能
 
-<!-- api-review:end -->
+<demo src="./__demos__/virtual-list-props.vue"></demo>
+
+## 业务组合
+
+### 关联业务行与列类型
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `columns` | 表格的列描述信息 | 任务筛选与数据联动、表格属性 |
+| `data` | 表格的数据 | 任务筛选与数据联动、表格属性 |
+| `pagination` | 分页的属性配置 | 任务筛选与数据联动 |
+| `bordered` | 是否显示边框 | 表格属性 |
+| `hoverable` | 是否显示选中效果 | 表格属性 |
+| `stripe` | 是否开启斑马纹效果 | 表格属性 |
+<!-- demo-config-notes:end -->
+
+使用 `defineTableConfig<User>` 将数据、列路径、渲染、排序和筛选回调关联到业务行。`rowKey` 显式指定业务身份；示例增加行时通过 computed 重新校验配置，数据更新照常传给原 Table。
+
+<demo src="./__demos__/typed-config.vue"></demo>
+
+### 任务筛选与数据联动
+
+查询任务或部门、按状态筛选、完成任务；统计和结果同步更新，支持空结果与恢复。
+
+<demo src="./__demos__/task-workbench.vue"></demo>
+
+### 表格属性
+
+这里罗列了一些表格的属性，你可以方便的打开或关闭一些属性，查看它的效果。
+
+<demo src="./__demos__/form-attribute.vue"></demo>
 
 ## API
 
@@ -300,8 +440,8 @@ Table **不内置**列管理。通过扩展点与外部 `TableColumnManager` 组
 | height                      | 表格高度。设置后表头固定，表体滚动。数字单位为 px                                          | `number \| string`                                                                                                                                                            |     `-`     |
 | max-height                  | 表格最大高度。内容不足时收缩，超出后表体滚动。数字单位为 px                                | `number \| string`                                                                                                                                                            |     `-`     |
 | fit                         | 剩余空间的分配方式（表格始终至少铺满父容器）。`true`：全给未设 `width` 的弹性列；`false`：按各列基础宽度比例放大分摊 | `boolean`                                                                                                                                                                     |   `true`    |
-| pagination                  | 分页的属性配置                                                                             | `boolean \| PaginationProps`                                                                                                                                                  |   `true`    |
-| page-position               | 分页选择器的位置                                                                           | `'tl' \| 'top' \| tr' \| 'bl' \| 'bottom' \| 'br'`                                                                                                                            |   `'br'`    |
+| pagination                  | 分页的属性配置                                                                             | `boolean \| TablePaginationConfig`                                                                                                                                                  |   `true`    |
+| page-position               | 分页器在表格容器内部的区域，当前使用 tl/top/tr/bl/bottom/br；不是条数选择器的弹层方位 | `'tl' \| 'top' \| tr' \| 'bl' \| 'bottom' \| 'br'`                                                                                                                            |   `'br'`    |
 | indent-size                 | 树形表格的缩进距离                                                                         | `number`                                                                                                                                                                      |    `16`     |
 | row-key                     | 表格行 `key` 的取值字段                                                                    | `string`                                                                                                                                                                      |   `'key'`   |
 | show-header                 | 是否显示表头                                                                               | `boolean`                                                                                                                                                                     |   `true`    |
@@ -470,7 +610,7 @@ Table **不内置**列管理。通过扩展点与外部 `TableColumnManager` 组
 | ---------------- | ------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | :-----: |
 | dataIndex        | 列信息的标识，对应 `TableData` 中的数据                 | `string`                                                                                            |   `-`   |
 | title            | 列标题                                                  | `string \| RenderFunction`                                                                          |   `-`   |
-| width            | 列宽度。设置后为固定列宽，不参与剩余空间分配            | `number`                                                                                            |   `-`   |
+| width            | 列宽基准。有弹性列且 fit=true 时保持固定；全部定宽且不足容器时按比例放大            | `number`                                                                                            |   `-`   |
 | minWidth         | 最小列宽。未设置 `width` 时按比例分配剩余空间；默认 80  | `number`                                                                                            |   `80`  |
 | align            | 对齐方向                                                | `'left' \| 'center' \| 'right'`                                                                     |   `-`   |
 | fixed            | 固定位置                                                | `'left' \| 'right'`                                                                                 |   `-`   |
@@ -566,3 +706,59 @@ Table **不内置**列管理。通过扩展点与外部 `TableColumnManager` 组
 | fixed | 固定位置 | `'left' \| 'right'` | `'right'` |
 | align | 对齐 | `'left' \| 'center' \| 'right'` | `'center'` |
 | dataIndex | 列标识 | `string` | `__cedar_table_extra__` |
+
+### 分页配置类型
+
+`TablePaginationConfig = Omit<PaginationProps, 'total'> & { total?: number }`。表格省略 `pagination.total` 时由有效数据条数推导；远程分页可继续显式传入总数。原 `PaginationProps` 对象仍可直接传给表格，独立 `Pagination` 的 `total` 必填要求不变。根入口与 table 入口均导出 `TablePaginationConfig`。
+
+
+### 透传配置的现有优先级（F07）
+
+列 filterable.triggerProps 在内部 Trigger 配置之后展开，嵌套 open 等字段目前可以覆盖筛选浮层状态。F07 兼容阶段保留该顺序和类型，不自动禁止这些旧能力；如未来收紧，需单独评估筛选状态与浮层状态的迁移。
+
+
+## 可选的业务行类型配置（F08-A）
+
+```ts
+import { defineTableConfig } from '@cedar-design/ui'
+import type { TypedTableConfig, TypedTableColumn, TableDataPath } from '@cedar-design/ui/table'
+
+interface User { id: string; name: string; age: number }
+const users: User[] = [{ id: 'a', name: 'Alice', age: 20 }]
+const config = defineTableConfig<User>({
+  rowKey: 'id', data: users,
+  columns: [{ dataIndex: 'age', render: ({ record }) => record.age.toFixed(0) }],
+})
+```
+
+将 config 用于 `<c-table v-bind="config" />` 或 TSX `<Table {...config} />`。无需业务侧 as any；原 TableData、TableColumnData、TableProps 及组件 Props 保持。新入口检查发生在入参阶段，返回原 TableProps 供旧组件调用，运行时返回同一对象，不复制数据/列、不调整排序筛选、不包装组件。
+
+| 关联范围 | 新类型的规则 |
+| --- | --- |
+| data / columns | 相同 Row，树形 children 递归使用同一业务结构 |
+| dataIndex | 校验字段与嵌套路径，例如 profile.city、tags[0].label、tags.0.label；递归最多五层业务结构；动态字符串和更深路径继续使用旧入口 |
+| render / sortable / filterable | record、比较器与筛选器参数为 Row，分组 children 列同样关联 |
+| 行回调 | 单元格样式/类、rowClass、expandable、loadMore、spanMethod 与自定义合计关联 Row |
+| rowKey | 必须显式传入 Row 中值为 string/number 的字段；这里是字段名，不是嵌套路径 |
+| summary | 可省略、false，或返回完整 Row 的自定义函数；自动 summary=true 不保证是业务行，新入口不接受，原 Table 配置仍支持 |
+
+业务接口通常不需要显式 extends TableData；其 any 索引会使 keyof 变宽，削弱字段拼写检查。使用普通业务 interface，通过泛型约束检查表格保留元数据的兼容性。后端数据内容仍需业务校验，类型不会检查 ID 是否唯一。
+
+类型入口只覆盖这份配置内的关联；原组件的模板插槽、组件事件和自定义 components 扩展不会自动变成 Row 泛型。返回的 TableProps 仍为旧宽类型，不应期待后续任意修改返回对象也继续校验 Row。响应式来源会替换数组时，用 `computed(() => defineTableConfig<Row>(...))` 保持更新；不要把调用时的 rows.value 当成持续跟随 ref 的订阅。
+
+自动合计行可能包含文本、总数和缺失字段，不能让 render(record: User) 假定其完整。需要自动合计或异构树行时继续使用原宽配置；采用自定义合计的新入口需提供完整业务行。两种入口的原 Table 行为都不改变。
+
+跨端范围：Maple Table 是原生表格展示容器，没有 data/columns API，本次不增加关联配置入口；两端 Select/Cascader 类型关联留待分别确认。
+
+
+## 阅读方向与滚动
+
+Table 继承最近的原生 `dir`。普通列按阅读方向排列；显式 `fixed: left/right` 保持物理侧，内部按冻结区稳定分区，不修改传入的列、数据或业务索引。跨冻结区的多级分组表头会分段显示，保持每段与正文列对齐。省略 align 时按阅读起点对齐，显式 left/right 保持物理对齐。
+
+表头、正文、汇总和吸底滚动条以非负的“距阅读起点距离”同步，适配原生 RTL 的负 scrollLeft。切换方向保留该距离并按新视口范围钳制；虚拟行的纵向定位不改变横向距离。Teleport 分页/吸底区域继承来源表格方向。
+
+列宽手柄支持方向感知的鼠标/触摸拖动与左右键调整，键盘步长 10px、Shift 为 50px，Home 到达 40px 下限；保持原有 fixed 布局才可调宽的约束。吸底滚动条支持左右键、Home/End，测量按帧合并并在停用/卸载时清理。切换阅读方向不会更改选择、排序、筛选、分页状态或触发列宽事件。
+
+懒加载子节点缓存归属于源节点对象及其行 key，不因复用同一 key 而继承旧节点缓存。替换节点、行 key 或加载函数会使旧任务/缓存失效；停用或卸载会使待完成的单元格回调失效。done() 表示未取得子节点，结束等待并允许重试；done([]) 接受空结果，同一次任务只接受首次完成。同步加载异常释放等待后仍进入 Vue 错误通道。保持 load-more 的 done 回调协议，不将通知事件返回的 Promise 当作任务入口。
+
+回调式加载函数若返回 Promise，其拒绝会释放等待并进入 Vue 错误通道；完成值会被忽略，不能代替 done。这是显式加载属性的异常处理，不会收集 expand 等通知事件的 Promise。

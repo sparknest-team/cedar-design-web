@@ -6,4 +6,4 @@ export type DotType = 'hollow' | 'solid'
 
 export type LineType = 'solid' | 'dashed' | 'dotted'
 
-export type PositionType = 'left' | 'right' | 'top' | 'bottom'
+export type TimelineItemContentPlacement = 'left' | 'right' | 'top' | 'bottom'

@@ -34,14 +34,15 @@
 <script setup lang="ts">
 import { computed, onActivated, onBeforeUnmount, onDeactivated, ref, watch, type CSSProperties } from 'vue'
 import { createNamespace } from '../_utils/global-config'
+import { invokeBeforeHook } from '../_hooks/use-action-guard'
 import { switchProps, type SwitchValue } from './props'
 import { useSwitchPlatform } from './platform'
 
 defineOptions({ name: createNamespace('switch').name })
 const props = defineProps(switchProps)
 const emit = defineEmits<{
-  (event: 'update:modelValue', value: SwitchValue): void
-  (event: 'change', value: SwitchValue, originalEvent: Event): void
+  (event: 'update:modelValue', value: SwitchValue | null): void
+  (event: 'change', value: SwitchValue | null, originalEvent: Event): void
   (event: 'click', originalEvent: Event): void
   (event: 'focus' | 'blur', originalEvent: FocusEvent): void
 }>()
@@ -55,11 +56,12 @@ const busy = computed(() => props.loading || pending.value)
 const rippleKey = ref(0)
 let active = true
 let generation = 0
-function cancelPending() { generation++; pending.value = false }
+let controller: AbortController | undefined
+function cancelPending() { generation++; controller?.abort(); controller = undefined; pending.value = false }
 onBeforeUnmount(() => { active = false; cancelPending() })
 onDeactivated(() => { active = false; cancelPending() })
 onActivated(() => { active = true })
-watch(() => [props.modelValue, props.checkedValue, props.uncheckedValue, props.loading, platform.disabled.value, platform.readonly.value], cancelPending, { flush: 'sync' })
+watch(() => [props.modelValue, props.checkedValue, props.uncheckedValue, props.beforeChange, props.loading, platform.disabled.value, platform.readonly.value], cancelPending, { flush: 'sync' })
 
 async function toggle(event: Event) {
   if (!active || busy.value || platform.disabled.value) return
@@ -70,13 +72,12 @@ async function toggle(event: Event) {
   const version = ++generation
   try {
     if (props.beforeChange) {
-      const result = props.beforeChange(next)
-      let permitted: boolean | void
-      if (result && typeof (result as Promise<unknown>).then === 'function') {
-        pending.value = true
-        permitted = await result
-      } else permitted = result as boolean | void
-      if (permitted === false) return
+      const hook = props.beforeChange
+      controller = new AbortController()
+      pending.value = true
+      const context = { signal: controller.signal, event }
+      const permitted = await invokeBeforeHook(done => hook({ value: next, previousValue: props.modelValue !== undefined ? props.modelValue : internal.value }, done, context), context)
+      if (!permitted) return
     }
     if (!active || version !== generation || props.loading || platform.disabled.value || platform.readonly.value) return
     if (props.modelValue === undefined) internal.value = next

@@ -12,7 +12,7 @@ async function fixture(Component) {
   const owner = mount(defineComponent({ setup: () => () => h(KeepAlive, null, () => active.value ? h(Child) : null) }), {
     global: { stubs: {
       ResizeObserver: defineComponent({setup:(_, {slots})=>()=>h('div',slots.default?.())}),
-      Thumb: defineComponent({props:['direction'],setup(props,{expose}) { expose({setOffset:(value)=>offsets[props.direction](value)});return()=>h('i') }}),
+      Thumb: defineComponent({props:['orientation'],setup(props,{expose}) { expose({setOffset:(value)=>offsets[props.orientation](value)});return()=>h('i') }}),
     } },
   })
   const offsets = { horizontal: vi.fn(), vertical: vi.fn() }

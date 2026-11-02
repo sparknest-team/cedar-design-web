@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.p1-published-api.json",
+  "include": [
+    "type-tests/f08-table.vue"
+  ],
+  "vueCompilerOptions": {
+    "strictTemplates": true
+  }
+}

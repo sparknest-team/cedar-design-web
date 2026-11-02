@@ -113,9 +113,9 @@
   & blockquote {
     margin: 0;
     margin-bottom: 1em;
-    padding-left: var(~'--c-typography-blockquote-padding-left');
+    padding-inline-start: var(~'--c-typography-blockquote-padding-left');
     background-color: var(~'--c-typography-blockquote-bg');
-    border-left: var(~'--c-typography-blockquote-border-width') solid var(~'--c-typography-blockquote-border-left-color');
+    border-inline-start: var(~'--c-typography-blockquote-border-width') solid var(~'--c-typography-blockquote-border-left-color');
   }
 
   & ol,
@@ -126,7 +126,7 @@
 
   & ul li,
   & ol li {
-    margin-left: var(~'--c-typography-list-item-margin-left');
+    margin-inline-start: var(~'--c-typography-list-item-margin-left');
   }
 
   & ul {
@@ -150,7 +150,7 @@
 
   &-operation-copy,
   &-operation-copied {
-    margin-left: var(~'--c-typography-operation-margin-left');
+    margin-inline-start: var(~'--c-typography-operation-margin-left');
     padding: var(~'--c-typography-operation-padding');
   }
 
@@ -172,7 +172,7 @@
   }
 
   &-operation-edit {
-    margin-left: var(~'--c-typography-operation-margin-left');
+    margin-inline-start: var(~'--c-typography-operation-margin-left');
     padding: var(~'--c-typography-operation-padding');
     color: var(~'--c-typography-icon-edit-color');
     background-color: var(~'--c-typography-icon-edit-bg');
@@ -199,9 +199,9 @@
   // edit content
   &-edit-content {
     position: relative;
-    left: calc(0px - var(~'--c-typography-edit-padding-x') + var(~'--c-typography-edit-border-width'));
+    inset-inline-start: calc(0px - var(~'--c-typography-edit-padding-x') + var(~'--c-typography-edit-border-width'));
     margin-top: calc(0px - var(~'--c-typography-edit-padding-y') + var(~'--c-typography-edit-border-width'));
-    margin-right: calc(0px - var(~'--c-typography-edit-padding-x') + var(~'--c-typography-edit-border-width'));
+    margin-inline-end: calc(0px - var(~'--c-typography-edit-padding-x') + var(~'--c-typography-edit-border-width'));
     margin-bottom: calc(1em - var(~'--c-typography-edit-padding-y') - var(~'--c-typography-edit-border-width'));
   }
 
@@ -209,6 +209,12 @@
   &-css-operation {
     margin-top: -1em;
     margin-bottom: 1em;
-    text-align: right;
+    text-align: end;
   }
+}
+
+.c-typography :is(pre, code), pre.c-typography, code.c-typography {
+  direction: ltr;
+  unicode-bidi: isolate;
+  text-align: start;
 }

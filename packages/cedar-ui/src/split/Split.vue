@@ -6,8 +6,16 @@
     <ResizeTrigger
       v-if="!disabled"
       :prefix-cls="`${prefixCls}-trigger`"
-      :direction="isHorizontal ? 'vertical' : 'horizontal'"
-      @mousedown="onMoveStart"
+      :orientation="isHorizontal ? 'vertical' : 'horizontal'"
+      role="separator"
+      tabindex="0"
+      :aria-orientation="isHorizontal ? 'vertical' : 'horizontal'"
+      :aria-valuemin="separatorRange.min"
+      :aria-valuemax="separatorRange.max"
+      :aria-valuenow="separatorRange.now"
+      @keydown="onKeydown"
+      @pointerdown="gesture.begin"
+      @mousedown="gesture.begin"
       @resize="onTriggerResize"
     >
       <template #default>
@@ -23,13 +31,15 @@
   </component>
 </template>
 <script lang="ts">
+import { useDirection } from '@cedar-design/use'
+import { useResizeGesture } from '../_hooks/use-resize-gesture'
+import { useElementResize } from '../_utils/resize-observer'
 import { splitProps } from './props'
 import { createNamespace } from '../_utils/global-config'
-import { computed, defineComponent, PropType, reactive, ref, toRefs, onMounted, nextTick } from 'vue'
+import { computed, defineComponent, PropType, reactive, ref, toRefs, onMounted, nextTick, watch } from 'vue'
 import ResizeTrigger from '../_components/ResizeTrigger.vue'
 import useMergeState from '../_hooks/use-merge-state'
 import { getPrefixCls } from '../_utils/global-config'
-import { off, on } from '../_utils/dom'
 import { isNumber, isString } from '../_utils/is'
 import { SplitProps } from './types'
 
@@ -118,6 +128,8 @@ export default defineComponent({
     const { orientation, size: propSize, defaultSize, min, max } = toRefs(props)
     const triggerSize = ref(0)
     const wrapperRef = ref<HTMLDivElement>()
+    const { dir, isRtl } = useDirection(() => wrapperRef.value)
+    const extent = ref(0)
     const prefixCls = getPrefixCls('split')
     const [size, setSize] = useMergeState(
       defaultSize.value,
@@ -200,69 +212,43 @@ export default defineComponent({
       return legalPxSize
     }
 
-    function getNewPxSize({
-      startContainerSize,
-      startSize,
-      startPosition,
-      endPosition,
-    }: {
-      startContainerSize: number
-      startSize: number | string
-      startPosition: number
-      endPosition: number
-    }) {
-      const startPxSize = getPxSize({
-        size: startSize,
-        containerSize: startContainerSize,
-      })
-      return getLegalPxSize(`${startPxSize + (endPosition - startPosition)}px`, startContainerSize)
-    }
-
-    // 移动中，更新 firstPane 的占位大小
-    function onMoving(e: MouseEvent) {
-      emit('moving', e)
-
-      const newPxSize = isHorizontal.value
-        ? getNewPxSize({
-            startContainerSize: record.startContainerSize,
-            startSize: record.startSize,
-            startPosition: record.startPageX,
-            endPosition: e.pageX,
-          })
-        : getNewPxSize({
-            startContainerSize: record.startContainerSize,
-            startSize: record.startSize,
-            startPosition: record.startPageY,
-            endPosition: e.pageY,
-          })
-
-      updateSize(newPxSize, record.startContainerSize)
-    }
-
-    // 移动结束，解除事件绑定
-    function onMovingEnd(e: MouseEvent) {
-      off(window, 'mousemove', onMoving)
-      off(window, 'mouseup', onMovingEnd)
-      off(window, 'contextmenu', onMovingEnd)
-
-      document.body.style.cursor = 'default'
-      emit('move-end', e)
-    }
-
-    // 移动开始，记录初始值，绑定移动事件
-    async function onMoveStart(e: MouseEvent) {
-      emit('move-start', e)
-
-      record.startPageX = e.pageX
-      record.startPageY = e.pageY
-      record.startContainerSize = await getContainerSize()
-      record.startSize = size.value ?? 0
-
-      on(window, 'mousemove', onMoving)
-      on(window, 'mouseup', onMovingEnd)
-      on(window, 'contextmenu', onMovingEnd)
-
-      document.body.style.cursor = isHorizontal.value ? 'col-resize' : 'row-resize'
+    const measure = () => { extent.value = (isHorizontal.value ? wrapperRef.value?.clientWidth : wrapperRef.value?.clientHeight) ?? 0 }
+    useElementResize(() => [wrapperRef.value], () => true, measure)
+    const separatorRange = computed(() => {
+      const total = extent.value || 1
+      return { min: getLegalPxSize('0px', total) / total * 100, max: getLegalPxSize(`${total}px`, total) / total * 100, now: getLegalPxSize(size.value ?? 0, total) / total * 100 }
+    })
+    const gesture = useResizeGesture({
+      element: () => wrapperRef.value,
+      cursor: () => isHorizontal.value ? 'col-resize' : 'row-resize',
+      start(event) {
+        if (props.disabled) return false
+        measure()
+        record.startContainerSize = extent.value
+        record.startSize = size.value ?? 0
+        emit('move-start', event)
+        return !!record.startContainerSize
+      },
+      move(dx, dy, event) {
+        const delta = isHorizontal.value ? (isRtl.value ? -dx : dx) : dy
+        const initial = getPxSize({ size: record.startSize, containerSize: record.startContainerSize })
+        updateSize(getLegalPxSize(`${initial + delta}px`, record.startContainerSize), record.startContainerSize)
+        emit('moving', event)
+      },
+      end: event => emit('move-end', event),
+    })
+    watch([dir, orientation, () => props.disabled], gesture.cancel, { flush: 'sync' })
+    function onKeydown(event: KeyboardEvent) {
+      if (props.disabled || event.target !== event.currentTarget) return
+      const grow = isHorizontal.value ? (isRtl.value ? 'ArrowLeft' : 'ArrowRight') : 'ArrowDown'
+      const shrink = isHorizontal.value ? (isRtl.value ? 'ArrowRight' : 'ArrowLeft') : 'ArrowUp'
+      if (!['Home', 'End', grow, shrink].includes(event.key)) return
+      event.preventDefault()
+      measure()
+      const total = extent.value
+      const current = getPxSize({ size: size.value, containerSize: total })
+      const next = event.key === 'Home' ? 0 : event.key === 'End' ? total : current + (event.key === grow ? 1 : -1) * (event.shiftKey ? 50 : 10)
+      updateSize(getLegalPxSize(`${next}px`, total), total)
     }
 
     function onTriggerResize(entry: ResizeObserverEntry) {
@@ -281,7 +267,9 @@ export default defineComponent({
       classNames,
       isHorizontal,
       wrapperRef,
-      onMoveStart,
+      gesture,
+      separatorRange,
+      onKeydown,
       onTriggerResize,
       firstPaneStyles,
     }

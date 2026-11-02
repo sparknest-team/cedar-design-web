@@ -6,7 +6,7 @@ permalink: /components/list/
 
 最基础的列表展示，可承载文字、列表、图片、段落，常用于后台数据展示页面。
 
-## 案例
+## 基础示例
 
 ### 基础用法
 
@@ -14,13 +14,26 @@ permalink: /components/list/
 
 <demo src="./__demos__/basic.vue"></demo>
 
+## 外观与状态
+
 ### 不同尺寸
 
 列表组件提供了三种大小 `sm, md, lg` ，可根据业务需求自行选择。
 
 <demo src="./__demos__/size.vue"></demo>
 
+## 内容与布局
+
 ### 前缀与后缀
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `bordered` | 外边框 | 自定义内容 |
+| `data` | 数据，与 item 插槽配合 | 自定义内容 |
+<!-- demo-config-notes:end -->
 
 `list-item` 只提供 `prefix` / 默认内容 / `suffix` 三列布局。头像、标题、操作都由业务自己组合。
 
@@ -34,6 +47,25 @@ permalink: /components/list/
 
 同时提供默认插槽与 `data` 时，默认插槽优先，`item` 插槽不会被调用。`loading` 仅表示整张列表首次加载或刷新；需要滚动分页时请使用 [InfiniteScroll](/components/infinite-scroll/) 组合。
 
+## 滚动与虚拟列表
+
+### 容器滚动
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `data` | 数据，与 item 插槽配合 | 容器滚动、无限长列表、虚拟定位 |
+| `virtual-list-props` | 数据模式虚拟化；default插槽存在时忽略 | 无限长列表、虚拟定位 |
+| `max-height` | 普通列表最大高度；数字px/CSS长度，0不限 | 容器滚动 |
+| `scrollbar` | 普通列表自定义滚动条；false使用原生滚动 | 容器滚动 |
+| `size` | 仅实现 sm/md/lg，不支持 xs/xl | 容器滚动 |
+| `split` | 头尾及列表项分隔线，与边框独立 | 容器滚动 |
+<!-- demo-config-notes:end -->
+
+<demo src="./__demos__/bounded-scroll.vue"></demo>
+
 ### 无限长列表
 
 通过指定 `virtualListProps` 来开启虚拟列表，在大量数据时获得高性能表现。
@@ -41,10 +73,6 @@ permalink: /components/list/
 属性解决，[使用方式](/vue/docs/faq#%E8%99%9A%E6%8B%9F%E5%88%97%E8%A1%A8%E7%9A%84%E4%BD%BF%E7%94%A8)。
 
 <demo src="./__demos__/virtual-list.vue"></demo>
-
-### 容器滚动
-
-<demo src="./__demos__/bounded-scroll.vue"></demo>
 
 ### 虚拟定位
 
@@ -54,16 +82,20 @@ permalink: /components/list/
 
 <demo src="./__demos__/virtual-navigation.vue"></demo>
 
+## 生命周期
+
 ### 保留命令与 KeepAlive 生命周期
 
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `data` | 数据，与 item 插槽配合 | 保留命令与 KeepAlive 生命周期 |
+| `virtual-list-props` | 数据模式虚拟化；default插槽存在时忽略 | 保留命令与 KeepAlive 生命周期 |
+<!-- demo-config-notes:end -->
+
 <demo src="./__demos__/virtual-lifecycle.vue"></demo>
-
-<!-- api-review:start -->
-### 功能调试
-
-<demo src="./__demos__/api-review.vue"></demo>
-
-<!-- api-review:end -->
 
 ## API
 

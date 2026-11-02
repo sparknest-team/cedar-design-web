@@ -6,7 +6,7 @@ permalink: /components/anchor/
 
 通过锚点可快速找到信息内容在当前页面的位置。
 
-## 案例
+## 基础示例
 
 ### 基础用法
 
@@ -14,11 +14,7 @@ permalink: /components/anchor/
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### 无轴线模式
-
-当页面滚动或浏览器窗口改变时，元素向下滚动到距底部一定距离时固定。
-
-<demo src="./__demos__/show-line.vue"></demo>
+## 布局与排列
 
 ### 固钉位置
 
@@ -26,17 +22,36 @@ permalink: /components/anchor/
 
 <demo src="./__demos__/affix.vue"></demo>
 
-### 锚点滚动偏移量
+## 内容与展示
 
-可以设置 `boundary` 来定制锚点滚动偏移量。
+### 无轴线模式
 
-<demo src="./__demos__/boundary.vue"></demo>
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `show-line` | 是否显示左侧轴线 | 无轴线模式 |
+| `change-hash` | 是否改变hash。设置为 `false` 时点击锚点不会改变页面的 hash | 是否改变hash |
+<!-- demo-config-notes:end -->
+
+当页面滚动或浏览器窗口改变时，元素向下滚动到距底部一定距离时固定。
+
+<demo src="./__demos__/show-line.vue"></demo>
 
 ### 是否改变hash
 
 可以设置点击锚点而不改变浏览器历史。
 
 <demo src="./__demos__/hash.vue"></demo>
+
+## 生命周期与边界
+
+### 锚点滚动偏移量
+
+可以设置 `boundary` 来定制锚点滚动偏移量。
+
+<demo src="./__demos__/boundary.vue"></demo>
 
 ### 滚动消费者生命周期
 
@@ -48,12 +63,9 @@ permalink: /components/anchor/
 
 AnchorLink 卸载及 href 变化会注销原节点；旧节点清理不会删除同 hash 的新注册。测量／几何读取后再次核对归属，防止停用、卸载或新请求重入后提交旧结果。公开 Props／Events、颜色和 CSS 变量保持不变；Maple 没有对应 Anchor 运行时。
 
-<!-- api-review:start -->
-### 功能调试
+## 阅读方向
 
-<demo src="./__demos__/api-review.vue"></demo>
-
-<!-- api-review:end -->
+轴线和高亮位于阅读起点，链接缩进使用逻辑位置，纵向滚动和锚点目标保持不变。
 
 ## API
 

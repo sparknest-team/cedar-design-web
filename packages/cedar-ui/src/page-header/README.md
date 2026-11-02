@@ -8,7 +8,7 @@ permalink: /components/page-header/
 
 展示当前页面的标题、上下文和相关操作。API 参照 Naive UI；组件不负责固定定位、背景等业务布局与皮肤能力，可通过 `class` / `style` 实现。
 
-## 案例
+## 基础示例
 
 ### 基础用法
 
@@ -16,11 +16,36 @@ permalink: /components/page-header/
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### 页头上方内容
+## 内容与展示
+
+### 面包屑与透明表面
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `title` | 页头的主标题 | 面包屑与透明表面、完整结构 |
+| `subtitle` | 页头的次标题 | 面包屑与透明表面、完整结构 |
+| `show-back` | 是否显示返回按钮 | 完整结构 |
+<!-- demo-config-notes:end -->
+
+比较面包屑导航和透明背景下的标题层级；完整业务内容另见独立案例。
+
+<details>
+<summary>配置说明与使用限制</summary>
+
+#### 页头上方内容
 
 使用 Card 承载页头，通过 `header` 插槽在标题上方展示面包屑，区分页面路径与当前页面信息。
 
-<demo src="./__demos__/breadcrumb.vue"></demo>
+#### 透明底色
+
+页头默认透明。使用 Card 的 `tonal` 变体提供底色，展示页头自然融入外层表面，无需自定义背景样式。
+
+</details>
+
+<demo src="./__demos__/surface-comparison.vue"></demo>
 
 ### 完整结构
 
@@ -28,18 +53,9 @@ permalink: /components/page-header/
 
 <demo src="./__demos__/content.vue"></demo>
 
-### 透明底色
+## 阅读方向
 
-页头默认透明。使用 Card 的 `tonal` 变体提供底色，展示页头自然融入外层表面，无需自定义背景样式。
-
-<demo src="./__demos__/transparent.vue"></demo>
-
-<!-- api-review:start -->
-### 功能调试
-
-<demo src="./__demos__/api-review.vue"></demo>
-
-<!-- api-review:end -->
+继承最近的 `dir="ltr|rtl"`，支持运行时切换与局部覆盖。返回按钮位于阅读起点，默认返回图形在 RTL 下指向右侧。标题、副标题与扩展区沿阅读顺序排列；自定义返回插槽不自动镜像。
 
 ## API
 

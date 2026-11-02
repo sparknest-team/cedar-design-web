@@ -1,7 +1,9 @@
+import { useDirection } from '@cedar-design/use'
 import { computed, mergeProps, defineComponent, h, inject, nextTick, onActivated, onBeforeUnmount, onDeactivated, provide, ref, watch, type VNodeChild } from 'vue'
 import { createNamespace } from '../_utils/global-config'
 import { useElementResize } from '../_utils/resize-observer'
 import { SiderInjectionKey } from '../layout/context'
+import { useNavMenuItemNames } from './item-names'
 import { navMenuProps } from './props'
 import { createNavMenuTree } from './tree'
 import { navMenuKey, type NavMenuContext } from './context'
@@ -23,6 +25,7 @@ export default defineComponent({
   setup(props, { emit, slots, attrs, expose }) {
     const sider = inject(SiderInjectionKey, undefined)
     const root = ref<HTMLElement>()
+    const { dir, isRtl } = useDirection(() => root.value)
     const measure = ref<HTMLElement>()
     const localValue = ref(props.defaultValue)
     const localActiveItem = ref(props.defaultActiveItem)
@@ -66,18 +69,19 @@ export default defineComponent({
       disposed = true; scrollAvailable = false; invalidateScroll(); invalidateRender()
       elements.clear(); elementOwners.clear(); itemClosers.clear(); itemNames.clear()
     })
-    const itemClosers = new Map<symbol, () => void>()
-    const itemNames = new Map<NavMenuKey, symbol>()
+    const itemClosers = new Map<symbol, (restoreFocus?: boolean) => void>()
+    const itemNames = useNavMenuItemNames()
     let activationGeneration = 0
-    function activateItem(id?: symbol) {
+    function activateItem(id?: symbol, restoreFocus = false) {
       if (!available()) return false
       const request = ++activationGeneration
       for (const [key, close] of [...itemClosers]) {
         if (!available() || request !== activationGeneration) return false
-        if (key !== id && itemClosers.get(key) === close) close()
+        if (key !== id && itemClosers.get(key) === close) close(restoreFocus)
       }
       return available() && request === activationGeneration
     }
+    function close() { activateItem(undefined, true) }
     function setActiveItem(value: NavMenuKey | null) {
       if (!available() || value === activeItem.value) return
       if (props.activeItem === undefined) localActiveItem.value = value
@@ -156,14 +160,13 @@ export default defineComponent({
     const api: NavMenuContext = {
       registerItem(id, close, name) {
         if (disposed) return () => undefined
-        if (name !== undefined && itemNames.has(name)) throw new Error(`NavMenu.Item duplicate name: ${name}`)
+        const unregisterName = itemNames.register(id, name)
         itemClosers.set(id, close)
-        if (name !== undefined) itemNames.set(name, id)
-        return () => { itemClosers.delete(id); if (name !== undefined && itemNames.get(name) === id) itemNames.delete(name) }
+        return () => { itemClosers.delete(id); unregisterName() }
       },
       activateItem,
       selectItem: setActiveItem,
-      props, selected, activeItem, expanded, collapsed, theme, activePath, focusKey, slots, labelField: computed(() => tree.value.names.label),
+      dir, props, selected, activeItem, expanded, collapsed, theme, activePath, focusKey, slots, labelField: computed(() => tree.value.names.label),
       context(node) { return { option: node.option, active: node.type === 'item' && selected.value === node.key, expanded: expanded.value.includes(node.key), level: node.level } },
       select(node, event) {
         if (!available() || props.disabled || node.disabled || node.type !== 'item' || node.children.length) return
@@ -240,8 +243,11 @@ export default defineComponent({
     useElementResize(() => [root.value, measure.value, ...Array.from(measure.value?.children ?? [])], () => props.mode === 'horizontal' && props.responsive && !slots.default, resize)
     watch(() => [props.options, props.mode, props.responsive, props.size], () => afterRender(resize), { deep: true })
     const visibleNodes = computed(() => props.mode === 'horizontal' && props.responsive && !slots.default ? tree.value.roots.slice(0, visibleCount.value) : tree.value.roots)
+    function ownedRows() {
+      return Array.from(root.value?.querySelectorAll<HTMLElement>('[data-nav-item]:not([aria-disabled="true"])') ?? []).filter(row => row.closest(`.${n()}`) === root.value && !row.closest('[inert],[aria-hidden="true"]'))
+    }
     function updateRovingFocus() {
-      const rows = Array.from(root.value?.querySelectorAll<HTMLElement>('[data-nav-item]:not([aria-disabled="true"])') ?? [])
+      const rows = ownedRows()
       if (!rows.some(row => row === elements.get(focusKey.value!))) {
         const first = [...elements].find(([, el]) => el === rows[0])
         focusKey.value = first?.[0]
@@ -252,22 +258,22 @@ export default defineComponent({
     function onKeydown(event: KeyboardEvent) {
       if (!available() || event.defaultPrevented || props.disabled || (event.target as HTMLElement)?.closest('input,textarea,[contenteditable="true"]')) return
       const horizontal = props.mode === 'horizontal'
-      const next = horizontal ? 'ArrowRight' : 'ArrowDown', previous = horizontal ? 'ArrowLeft' : 'ArrowUp'
-      const rows = Array.from(root.value?.querySelectorAll<HTMLElement>('[data-nav-item]:not([aria-disabled="true"])') ?? [])
+      const next = horizontal ? (isRtl.value ? 'ArrowLeft' : 'ArrowRight') : 'ArrowDown', previous = horizontal ? (isRtl.value ? 'ArrowRight' : 'ArrowLeft') : 'ArrowUp'
+      const rows = ownedRows()
       const index = rows.indexOf(root.value?.ownerDocument.activeElement as HTMLElement)
       if (index < 0) return
       if (event.key === 'Home' || event.key === 'End' || event.key === next || event.key === previous) {
         event.preventDefault()
         const target = event.key === 'Home' ? 0 : event.key === 'End' ? rows.length - 1 : (index + (event.key === previous ? -1 : 1) + rows.length) % rows.length
         rows[target]?.focus()
-      } else if (!horizontal && event.key === 'ArrowLeft') {
+      } else if (!horizontal && event.key === (isRtl.value ? 'ArrowRight' : 'ArrowLeft')) {
         const ancestors = tree.value.ancestors(focusKey.value)
         const parent = ancestors[ancestors.length - 1]
         if (parent?.type === 'item') { event.preventDefault(); expand(parent, false); focus(parent.key) }
       }
     }
     function setCollapsed(value: boolean) { if (!available()) return; if (props.collapsed === undefined && !sider) localCollapsed.value = value; emit('update:collapsed', value) }
-    expose({ showOption, scrollTo, resize, setCollapsed, setActiveItem })
+    expose({ close, showOption, scrollTo, resize, setCollapsed, setActiveItem })
     const measureContent = (node: NavMenuNode): VNodeChild => {
       const context = api.context(node)
       const render = (kind: 'label' | 'icon' | 'extra') => { const value = node.option[kind === 'label' ? tree.value.names.label : kind] as NavMenuContent; return slots[kind]?.(context) ?? (typeof value === 'function' ? value(context) : value) }

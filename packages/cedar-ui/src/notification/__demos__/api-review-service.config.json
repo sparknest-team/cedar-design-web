@@ -47,16 +47,16 @@
     {
       "name": "position",
       "description": "位置",
-      "type": "'topLeft'|'topRight'|'bottomLeft'|'bottomRight'",
+      "type": "'top-left'|'top-right'|'bottom-left'|'bottom-right'",
       "defaultValue": "-",
       "kind": "enum",
       "options": [
-        "topLeft",
-        "topRight",
-        "bottomLeft",
-        "bottomRight"
+        "top-left",
+        "top-right",
+        "bottom-left",
+        "bottom-right"
       ],
-      "initial": "topLeft"
+      "initial": "top-left"
     },
     {
       "name": "show-icon",

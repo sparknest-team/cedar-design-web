@@ -14,7 +14,6 @@ export default defineComponent({
    * @zh 标签
    * @en Label
    * @slot label
-   * @version 2.18.0
    */
   setup() {
     const prefixCls = getPrefixCls('descriptions')

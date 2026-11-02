@@ -63,11 +63,15 @@
       "kind": "boolean"
     },
     {
-      "name": "rtl",
-      "type": "boolean",
-      "defaultValue": "false",
-      "description": "@zh 视图的表现形式是从右开始向左结束\n@en View starts from the right and ends on the left\n/",
-      "kind": "boolean"
+      "name": "dir",
+      "type": "\"ltr\" | \"rtl\"",
+      "defaultValue": "undefined",
+      "description": "阅读方向；省略时继承父作用域或原生 DOM dir",
+      "kind": "enum",
+      "options": [
+        "ltr",
+        "rtl"
+      ]
     },
     {
       "name": "theme",

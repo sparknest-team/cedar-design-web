@@ -59,7 +59,7 @@ export default defineComponent({
     ])
 
     const handleRemove = () => {
-      if (props.data.required) return
+      if (props.disabled || props.data.required) return
       transferCtx?.moveTo([props.data.value], 'source')
     }
 
@@ -114,11 +114,11 @@ export default defineComponent({
       <div
         class={cls.value}
         role="button"
-        tabindex={props.data.disabled ? -1 : 0}
-        aria-disabled={props.data.disabled}
+        tabindex={props.disabled ? -1 : 0}
+        aria-disabled={props.disabled}
         onClick={handleClick}
         onKeydown={(event: KeyboardEvent) => {
-          if (event.key === 'Enter' || event.key === ' ') {
+          if (event.target === event.currentTarget && (event.key === 'Enter' || event.key === ' ')) {
             event.preventDefault()
             handleClick(event as unknown as MouseEvent)
           }
@@ -163,11 +163,9 @@ export default defineComponent({
           )}
         </div>
         {props.clearable && !props.disabled && props.operationMode === 'remove' && (
-          <span onClick={handleRemove}>
-            <IconHover class={`${prefixCls}-remove-btn`}>
-              <IconClose />
-            </IconHover>
-          </span>
+          <button type="button" class={`${prefixCls}-remove-btn`} aria-label={`移回候选：${props.data.label}`} disabled={props.data.required} onClick={(event: MouseEvent) => { event.stopPropagation(); handleRemove() }}>
+            <IconClose />
+          </button>
         )}
         {props.clearable && !props.disabled && props.operationMode === 'menu' && (
           <Popover trigger="click" placement="bottom-start" v-slots={{ content: operationMenu }}>

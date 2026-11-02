@@ -8,17 +8,17 @@
       "kind": "string"
     },
     {
-      "name": "presentation",
-      "type": "'inline' | 'click' | 'dblclick'",
+      "name": "edit-mode",
+      "type": "'direct' | 'click' | 'dblclick'",
       "defaultValue": "undefined",
-      "description": "字段编辑方式，字段 > FormItem > Form 继承；默认 inline。",
+      "description": "字段编辑方式，字段 > FormItem > Form 继承；默认 direct。",
       "kind": "enum",
       "options": [
-        "inline",
+        "direct",
         "click",
         "dblclick"
       ],
-      "initial": "inline"
+      "initial": "direct"
     },
     {
       "name": "read-pretty",
@@ -100,11 +100,11 @@
       "kind": "boolean"
     },
     {
-      "name": "allow-search",
-      "type": "boolean | { retainInputValue?: boolean }",
-      "defaultValue": "(props: Data) => Boolean(props.multiple)",
-      "description": "@zh 是否允许搜索\n@en Whether to allow searching\n@default-value false (single) \\| true (multiple)",
-      "kind": "json",
+      "name": "filterable",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "是否启用搜索；省略时单选关闭、多选开启",
+      "kind": "boolean",
       "initial": "{}"
     },
     {
@@ -303,6 +303,28 @@
       "defaultValue": "''",
       "description": "@zh 输入框的默认值（非受控模式）\n@en The default value of the input (uncontrolled mode)\n@version 2.55.0\n/",
       "kind": "string"
+    },
+    {
+      "name": "retain-input-value",
+      "description": "选中后保留搜索文本",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "case-sensitive",
+      "description": "内置本地过滤是否区分大小写；自定义过滤函数优先",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "search-fields",
+      "type": "readonly ('label' | 'value')[]",
+      "defaultValue": "['label']",
+      "description": "内置匹配字段，多字段 OR；默认 label",
+      "kind": "json",
+      "initial": "[\"label\"]"
     }
   ],
   "events": [
@@ -317,7 +339,7 @@
       "demos": []
     },
     {
-      "name": "allow-search",
+      "name": "filterable",
       "kind": "prop",
       "demos": []
     },

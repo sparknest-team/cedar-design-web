@@ -1,9 +1,9 @@
 import { h, nextTick, reactive } from 'vue'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
-import Checkbox, { CheckboxGroup } from '../index'
-import Radio, { RadioGroup } from '../../radio'
 import { formHost } from '../../input-number/__tests__/form-host'
+import Radio, { RadioGroup } from '../../radio'
+import Checkbox, { CheckboxGroup } from '../index'
 
 const variants = [
   { label: 'checkbox', Item: Checkbox, Group: CheckboxGroup, empty: [], initial: ['a'], next: ['b'] },
@@ -13,24 +13,31 @@ const variants = [
 async function activate(item, label) {
   const input = item.find('input')
   if (input.exists()) {
-    if (input.element.disabled) return
+    if (input.element.disabled) {
+      return
+    }
     input.element.checked = label === 'checkbox' ? !input.element.checked : true
     await input.trigger('change')
   } else {
-    await item.find('.mp-' + label).trigger('click')
+    await item.find('.c-' + label).trigger('click')
   }
 }
 
 function isChecked(item, label) {
   const input = item.find('input')
-  return input.exists() ? input.element.checked : item.find('.mp-' + label + '__action').classes().includes('mp-' + label + '--checked')
+  return input.exists()
+    ? input.element.checked
+    : item
+        .find('.c-' + label + '__action')
+        .classes()
+        .includes('mp-' + label + '--checked')
 }
 
 for (const { label, Item, Group, empty, initial, next } of variants) {
   describe(label + ' group state contract', () => {
-    const children = () => ['a', 'b', 'c'].map(value => h(Item, { value }, () => value))
+    const children = () => ['a', 'b', 'c'].map((value) => h(Item, { editMode: 'direct', value }, () => value))
     function group(props = {}) {
-      return mount(Group, { props, slots: { default: children } })
+      return mount(Group, { props: { editMode: 'direct', ...props }, slots: { default: children } })
     }
 
     it('uses defaultValue once and edits without a model listener', async () => {
@@ -53,7 +60,9 @@ for (const { label, Item, Group, empty, initial, next } of variants) {
       await activate(items[0], label)
       expect(isChecked(items[0], label)).toBe(false)
       await activate(items[1], label)
-      expect(wrapper.emitted('update:modelValue').map(args => args[0])).toEqual(label === 'checkbox' ? [['a'], ['b']] : ['a', 'b'])
+      expect(wrapper.emitted('update:modelValue').map((args) => args[0])).toEqual(
+        label === 'checkbox' ? [['a'], ['b']] : ['a', 'b'],
+      )
       expect(isChecked(items[1], label)).toBe(false)
       wrapper.unmount()
     })
@@ -78,12 +87,20 @@ for (const { label, Item, Group, empty, initial, next } of variants) {
     it('notifies update, change, and form exactly once in order', async () => {
       const order = []
       const state = reactive({ disabled: false, readonly: false })
-      const wrapper = mount(formHost(state, { onChange: () => order.push('form') }, () =>
-        h(Group, {
-          defaultValue: empty,
-          'onUpdate:modelValue': () => order.push('update'),
-          onChange: () => order.push('change'),
-        }, children)))
+      const wrapper = mount(
+        formHost(state, { onChange: () => order.push('form') }, () =>
+          h(
+            Group,
+            {
+              editMode: 'direct',
+              defaultValue: empty,
+              'onUpdate:modelValue': () => order.push('update'),
+              onChange: () => order.push('change'),
+            },
+            children,
+          ),
+        ),
+      )
       await nextTick()
       await activate(wrapper.findAllComponents(Item)[0], label)
       expect(order).toEqual(['update', 'change', 'form'])
@@ -94,8 +111,13 @@ for (const { label, Item, Group, empty, initial, next } of variants) {
       const state = reactive({ disabled: true, readonly: false })
       const groupProps = reactive({})
       const changed = vi.fn()
-      const wrapper = mount(formHost(state, { onChange: changed }, () =>
-        h(Group, { ...groupProps, defaultValue: empty }, () => h(Item, { value: 'a' }))))
+      const wrapper = mount(
+        formHost(state, { onChange: changed }, () =>
+          h(Group, { editMode: 'direct', ...groupProps, defaultValue: empty }, () =>
+            h(Item, { editMode: 'direct', value: 'a' }),
+          ),
+        ),
+      )
       await nextTick()
       await activate(wrapper.findComponent(Item), label)
       expect(changed).not.toHaveBeenCalled()
@@ -109,7 +131,10 @@ for (const { label, Item, Group, empty, initial, next } of variants) {
       expect(changed).toHaveBeenCalledTimes(1)
       wrapper.unmount()
 
-      const locked = mount(Group, { props: { readonly: true }, slots: { default: () => h(Item, { value: 'a', readonly: false }) } })
+      const locked = mount(Group, {
+        props: { editMode: 'direct', readonly: true },
+        slots: { default: () => h(Item, { editMode: 'direct', value: 'a', readonly: false }) },
+      })
       await nextTick()
       await activate(locked.findComponent(Item), label)
       expect(locked.emitted('change')).toBeUndefined()
@@ -117,7 +142,7 @@ for (const { label, Item, Group, empty, initial, next } of variants) {
     })
 
     it('keeps async options and unmounted selected values without reverse writes', async () => {
-      const wrapper = mount(Group, { props: { modelValue: initial, options: [] } })
+      const wrapper = mount(Group, { props: { editMode: 'direct', modelValue: initial, options: [] } })
       await wrapper.setProps({ options: [{ label: 'A', value: 'a' }] })
       expect(isChecked(wrapper.findComponent(Item), label)).toBe(true)
       await wrapper.setProps({ options: [{ label: 'B', value: 'b' }] })
@@ -128,10 +153,16 @@ for (const { label, Item, Group, empty, initial, next } of variants) {
     })
 
     it('supports boolean false and number zero option identity', async () => {
-      const wrapper = mount(Group, { props: {
-        defaultValue: label === 'checkbox' ? [false] : false,
-        options: [{ label: 'False', value: false }, { label: 'Zero', value: 0 }],
-      } })
+      const wrapper = mount(Group, {
+        props: {
+          editMode: 'direct',
+          defaultValue: label === 'checkbox' ? [false] : false,
+          options: [
+            { label: 'False', value: false },
+            { label: 'Zero', value: 0 },
+          ],
+        },
+      })
       await nextTick()
       const items = wrapper.findAllComponents(Item)
       expect(isChecked(items[0], label)).toBe(true)
@@ -145,8 +176,8 @@ for (const { label, Item, Group, empty, initial, next } of variants) {
 
 it('checkbox max blocks additions but permits removing an existing selection', async () => {
   const wrapper = mount(CheckboxGroup, {
-    props: { defaultValue: ['a'], max: 1 },
-    slots: { default: () => ['a', 'b'].map(value => h(Checkbox, { value })) },
+    props: { editMode: 'direct', defaultValue: ['a'], max: 1 },
+    slots: { default: () => ['a', 'b'].map((value) => h(Checkbox, { editMode: 'direct', value })) },
   })
   await nextTick()
   const items = wrapper.findAllComponents(Checkbox)
@@ -161,8 +192,8 @@ it('checkbox max blocks additions but permits removing an existing selection', a
 
 it('radio repeated selection does not emit another change', async () => {
   const wrapper = mount(RadioGroup, {
-    props: { defaultValue: 'a' },
-    slots: { default: () => h(Radio, { value: 'a' }) },
+    props: { editMode: 'direct', defaultValue: 'a' },
+    slots: { default: () => h(Radio, { editMode: 'direct', value: 'a' }) },
   })
   await nextTick()
   await activate(wrapper.findComponent(Radio), 'radio')

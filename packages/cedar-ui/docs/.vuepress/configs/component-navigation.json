@@ -1,0 +1,647 @@
+{
+  "groups": [
+    {
+      "id": "general",
+      "label": "通用组件",
+      "en": "General"
+    },
+    {
+      "id": "layout",
+      "label": "布局",
+      "en": "Layout"
+    },
+    {
+      "id": "navigation",
+      "label": "导航",
+      "en": "Navigation"
+    },
+    {
+      "id": "entry",
+      "label": "数据输入",
+      "en": "Data entry"
+    },
+    {
+      "id": "display",
+      "label": "数据展示",
+      "en": "Data display"
+    },
+    {
+      "id": "feedback",
+      "label": "反馈",
+      "en": "Feedback"
+    },
+    {
+      "id": "other",
+      "label": "其他",
+      "en": "Other"
+    }
+  ],
+  "components": [
+    {
+      "id": "button",
+      "name": "Button 按钮",
+      "group": "general",
+      "route": "/components/button/"
+    },
+    {
+      "id": "icon",
+      "name": "Icon 图标",
+      "group": "general",
+      "route": "/components/icon/"
+    },
+    {
+      "id": "link",
+      "name": "Link 链接",
+      "group": "general",
+      "route": "/components/link/"
+    },
+    {
+      "id": "typography",
+      "name": "Typography 排版",
+      "group": "general",
+      "route": "/components/typography/"
+    },
+    {
+      "id": "layout",
+      "name": "Layout 布局",
+      "group": "layout",
+      "route": "/components/layout/"
+    },
+    {
+      "id": "row",
+      "name": "Row 行",
+      "group": "layout",
+      "route": "/components/row/"
+    },
+    {
+      "id": "col",
+      "name": "Col 列",
+      "group": "layout",
+      "route": "/components/col/"
+    },
+    {
+      "id": "grid",
+      "name": "Grid 栅格",
+      "group": "layout",
+      "route": "/components/grid/"
+    },
+    {
+      "id": "space",
+      "name": "Space 间距",
+      "group": "layout",
+      "route": "/components/space/"
+    },
+    {
+      "id": "divider",
+      "name": "Divider 分割线",
+      "group": "layout",
+      "route": "/components/divider/"
+    },
+    {
+      "id": "split",
+      "name": "Split 面板分割",
+      "group": "layout",
+      "route": "/components/split/"
+    },
+    {
+      "id": "resize-box",
+      "name": "ResizeBox 伸缩框",
+      "group": "layout",
+      "route": "/components/resize-box/"
+    },
+    {
+      "id": "overflow-list",
+      "name": "OverflowList 折叠列表",
+      "group": "layout",
+      "route": "/components/overflow-list/"
+    },
+    {
+      "id": "breadcrumb",
+      "name": "Breadcrumb 面包屑",
+      "group": "navigation",
+      "route": "/components/breadcrumb/"
+    },
+    {
+      "id": "menu",
+      "name": "Menu 菜单",
+      "group": "navigation",
+      "route": "/components/menu/"
+    },
+    {
+      "id": "nav-menu",
+      "name": "NavMenu 导航菜单",
+      "group": "navigation",
+      "route": "/components/nav-menu/"
+    },
+    {
+      "id": "split-button",
+      "name": "SplitButton 分裂按钮",
+      "group": "navigation",
+      "route": "/components/split-button/"
+    },
+    {
+      "id": "page-header",
+      "name": "PageHeader 页头",
+      "group": "navigation",
+      "route": "/components/page-header/"
+    },
+    {
+      "id": "pagination",
+      "name": "Pagination 分页",
+      "group": "navigation",
+      "route": "/components/pagination/"
+    },
+    {
+      "id": "steps",
+      "name": "Steps 步骤条",
+      "group": "navigation",
+      "route": "/components/steps/"
+    },
+    {
+      "id": "anchor",
+      "name": "Anchor 锚点",
+      "group": "navigation",
+      "route": "/components/anchor/"
+    },
+    {
+      "id": "form",
+      "name": "Form 表单",
+      "group": "entry",
+      "route": "/components/form/"
+    },
+    {
+      "id": "filter-form",
+      "name": "FilterForm 筛选表单",
+      "group": "entry",
+      "route": "/components/filter-form/"
+    },
+    {
+      "id": "field-decorator",
+      "name": "FieldDecorator 字段外壳",
+      "group": "entry",
+      "route": "/components/field-decorator/"
+    },
+    {
+      "id": "input",
+      "name": "Input 输入框",
+      "group": "entry",
+      "route": "/components/input/"
+    },
+    {
+      "id": "textarea",
+      "name": "Textarea 文本域",
+      "group": "entry",
+      "route": "/components/textarea/"
+    },
+    {
+      "id": "input-number",
+      "name": "InputNumber 数字输入框",
+      "group": "entry",
+      "route": "/components/input-number/"
+    },
+    {
+      "id": "input-tag",
+      "name": "InputTag 标签输入",
+      "group": "entry",
+      "route": "/components/input-tag/"
+    },
+    {
+      "id": "verification-code",
+      "name": "VerificationCode 验证码输入",
+      "group": "entry",
+      "route": "/components/verification-code/"
+    },
+    {
+      "id": "auto-complete",
+      "name": "AutoComplete 自动补全",
+      "group": "entry",
+      "route": "/components/auto-complete/"
+    },
+    {
+      "id": "mention",
+      "name": "Mention 提及",
+      "group": "entry",
+      "route": "/components/mention/"
+    },
+    {
+      "id": "search",
+      "name": "Search 搜索框",
+      "group": "entry",
+      "route": "/components/search/"
+    },
+    {
+      "id": "select",
+      "name": "Select 下拉框",
+      "group": "entry",
+      "route": "/components/select/"
+    },
+    {
+      "id": "people-select",
+      "name": "PeopleSelect 人员选择",
+      "group": "entry",
+      "route": "/components/people-select/"
+    },
+    {
+      "id": "tree-select",
+      "name": "TreeSelect 树选择",
+      "group": "entry",
+      "route": "/components/tree-select/"
+    },
+    {
+      "id": "cascader",
+      "name": "Cascader 级联选择",
+      "group": "entry",
+      "route": "/components/cascader/"
+    },
+    {
+      "id": "transfer",
+      "name": "Transfer 数据穿梭框",
+      "group": "entry",
+      "route": "/components/transfer/"
+    },
+    {
+      "id": "checkbox",
+      "name": "Checkbox 复选框",
+      "group": "entry",
+      "route": "/components/checkbox/"
+    },
+    {
+      "id": "radio",
+      "name": "Radio 单选框",
+      "group": "entry",
+      "route": "/components/radio/"
+    },
+    {
+      "id": "switch",
+      "name": "Switch 开关",
+      "group": "entry",
+      "route": "/components/switch/"
+    },
+    {
+      "id": "segmented",
+      "name": "Segmented 分段控制器",
+      "group": "entry",
+      "route": "/components/segmented/"
+    },
+    {
+      "id": "slider",
+      "name": "Slider 滑块",
+      "group": "entry",
+      "route": "/components/slider/"
+    },
+    {
+      "id": "rate",
+      "name": "Rate 评分",
+      "group": "entry",
+      "route": "/components/rate/"
+    },
+    {
+      "id": "date",
+      "name": "Date 日期字段",
+      "group": "entry",
+      "route": "/components/date/"
+    },
+    {
+      "id": "date-range",
+      "name": "DateRange 日期范围字段",
+      "group": "entry",
+      "route": "/components/date-range/"
+    },
+    {
+      "id": "date-picker",
+      "name": "DatePicker 日期面板",
+      "group": "entry",
+      "route": "/components/date-picker/"
+    },
+    {
+      "id": "date-range-picker",
+      "name": "DateRangePicker 日期范围面板",
+      "group": "entry",
+      "route": "/components/date-range-picker/"
+    },
+    {
+      "id": "time",
+      "name": "Time 时间字段",
+      "group": "entry",
+      "route": "/components/time/"
+    },
+    {
+      "id": "time-range",
+      "name": "TimeRange 时间范围字段",
+      "group": "entry",
+      "route": "/components/time-range/"
+    },
+    {
+      "id": "time-picker",
+      "name": "TimePicker 时间面板",
+      "group": "entry",
+      "route": "/components/time-picker/"
+    },
+    {
+      "id": "time-range-picker",
+      "name": "TimeRangePicker 时间范围面板",
+      "group": "entry",
+      "route": "/components/time-range-picker/"
+    },
+    {
+      "id": "color",
+      "name": "Color 颜色字段",
+      "group": "entry",
+      "route": "/components/color/"
+    },
+    {
+      "id": "color-picker",
+      "name": "ColorPicker 颜色面板",
+      "group": "entry",
+      "route": "/components/color-picker/"
+    },
+    {
+      "id": "upload",
+      "name": "Upload 上传",
+      "group": "entry",
+      "route": "/components/upload/"
+    },
+    {
+      "id": "avatar",
+      "name": "Avatar 头像",
+      "group": "display",
+      "route": "/components/avatar/"
+    },
+    {
+      "id": "badge",
+      "name": "Badge 徽标数",
+      "group": "display",
+      "route": "/components/badge/"
+    },
+    {
+      "id": "tag",
+      "name": "Tag 标签",
+      "group": "display",
+      "route": "/components/tag/"
+    },
+    {
+      "id": "ellipsis",
+      "name": "Ellipsis 文本省略",
+      "group": "display",
+      "route": "/components/ellipsis/"
+    },
+    {
+      "id": "empty",
+      "name": "Empty 空状态",
+      "group": "display",
+      "route": "/components/empty/"
+    },
+    {
+      "id": "image",
+      "name": "Image 图片",
+      "group": "display",
+      "route": "/components/image/"
+    },
+    {
+      "id": "tabs",
+      "name": "Tabs 标签页",
+      "group": "display",
+      "route": "/components/tabs/"
+    },
+    {
+      "id": "collapse",
+      "name": "Collapse 折叠面板",
+      "group": "display",
+      "route": "/components/collapse/"
+    },
+    {
+      "id": "list",
+      "name": "List 列表",
+      "group": "display",
+      "route": "/components/list/"
+    },
+    {
+      "id": "infinite-scroll",
+      "name": "InfiniteScroll 无限滚动",
+      "group": "display",
+      "route": "/components/infinite-scroll/"
+    },
+    {
+      "id": "carousel",
+      "name": "Carousel 图片轮播",
+      "group": "display",
+      "route": "/components/carousel/"
+    },
+    {
+      "id": "paper",
+      "name": "Paper 基础表面",
+      "group": "display",
+      "route": "/components/paper/"
+    },
+    {
+      "id": "card",
+      "name": "Card 卡片",
+      "group": "display",
+      "route": "/components/card/"
+    },
+    {
+      "id": "table",
+      "name": "Table 表格",
+      "group": "display",
+      "route": "/components/table/"
+    },
+    {
+      "id": "table-column-manager",
+      "name": "TableColumnManager 表格列管理",
+      "group": "display",
+      "route": "/components/table-column-manager/"
+    },
+    {
+      "id": "tree",
+      "name": "Tree 树",
+      "group": "display",
+      "route": "/components/tree/"
+    },
+    {
+      "id": "descriptions",
+      "name": "Descriptions 描述列表",
+      "group": "display",
+      "route": "/components/descriptions/"
+    },
+    {
+      "id": "calendar",
+      "name": "Calendar 日历",
+      "group": "display",
+      "route": "/components/calendar/"
+    },
+    {
+      "id": "scheduler",
+      "name": "Scheduler 日程调度",
+      "group": "display",
+      "route": "/components/scheduler/"
+    },
+    {
+      "id": "map",
+      "name": "Map 地图",
+      "group": "display",
+      "route": "/components/map/"
+    },
+    {
+      "id": "timeline",
+      "name": "Timeline 时间轴",
+      "group": "display",
+      "route": "/components/timeline/"
+    },
+    {
+      "id": "statistic",
+      "name": "Statistic 数值展示",
+      "group": "display",
+      "route": "/components/statistic/"
+    },
+    {
+      "id": "count-to",
+      "name": "CountTo 数字动画",
+      "group": "display",
+      "route": "/components/count-to/"
+    },
+    {
+      "id": "countdown",
+      "name": "Countdown 倒计时",
+      "group": "display",
+      "route": "/components/countdown/"
+    },
+    {
+      "id": "popover",
+      "name": "Popover 气泡卡片",
+      "group": "display",
+      "route": "/components/popover/"
+    },
+    {
+      "id": "tooltip",
+      "name": "Tooltip 文字气泡",
+      "group": "display",
+      "route": "/components/tooltip/"
+    },
+    {
+      "id": "trigger",
+      "name": "Trigger 浮层触发",
+      "group": "display",
+      "route": "/components/trigger/"
+    },
+    {
+      "id": "alert",
+      "name": "Alert 警告提示",
+      "group": "feedback",
+      "route": "/components/alert/"
+    },
+    {
+      "id": "message",
+      "name": "Message 消息",
+      "group": "feedback",
+      "route": "/components/message/"
+    },
+    {
+      "id": "notification",
+      "name": "Notification 通知提醒框",
+      "group": "feedback",
+      "route": "/components/notification/"
+    },
+    {
+      "id": "overlay",
+      "name": "Overlay 背景层",
+      "group": "feedback",
+      "route": "/components/overlay/"
+    },
+    {
+      "id": "dialog",
+      "name": "Dialog 对话框",
+      "group": "feedback",
+      "route": "/components/dialog/"
+    },
+    {
+      "id": "drawer",
+      "name": "Drawer 抽屉",
+      "group": "feedback",
+      "route": "/components/drawer/"
+    },
+    {
+      "id": "popconfirm",
+      "name": "Popconfirm 气泡确认框",
+      "group": "feedback",
+      "route": "/components/popconfirm/"
+    },
+    {
+      "id": "loading",
+      "name": "Loading 加载",
+      "group": "feedback",
+      "route": "/components/loading/"
+    },
+    {
+      "id": "skeleton",
+      "name": "Skeleton 骨架屏",
+      "group": "feedback",
+      "route": "/components/skeleton/"
+    },
+    {
+      "id": "progress",
+      "name": "Progress 进度条",
+      "group": "feedback",
+      "route": "/components/progress/"
+    },
+    {
+      "id": "progress-group",
+      "name": "ProgressGroup 分组进度",
+      "group": "feedback",
+      "route": "/components/progress-group/"
+    },
+    {
+      "id": "result",
+      "name": "Result 结果",
+      "group": "feedback",
+      "route": "/components/result/"
+    },
+    {
+      "id": "affix",
+      "name": "Affix 固钉",
+      "group": "other",
+      "route": "/components/affix/"
+    },
+    {
+      "id": "back-top",
+      "name": "BackTop 返回顶部",
+      "group": "other",
+      "route": "/components/back-top/"
+    },
+    {
+      "id": "scrollbar",
+      "name": "Scrollbar 滚动条",
+      "group": "other",
+      "route": "/components/scrollbar/"
+    },
+    {
+      "id": "watermark",
+      "name": "Watermark 水印",
+      "group": "other",
+      "route": "/components/watermark/"
+    },
+    {
+      "id": "ripple",
+      "name": "Ripple 水波指令",
+      "group": "other",
+      "route": "/components/ripple/"
+    },
+    {
+      "id": "hover",
+      "name": "Hover 悬停反馈",
+      "group": "other",
+      "route": "/components/hover/"
+    },
+    {
+      "id": "config-provider",
+      "name": "ConfigProvider 全局配置",
+      "group": "other",
+      "route": "/components/config-provider/"
+    },
+    {
+      "id": "style-provider",
+      "name": "StyleProvider",
+      "group": "other",
+      "route": "/components/style-provider/"
+    }
+  ]
+}

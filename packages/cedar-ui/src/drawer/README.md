@@ -6,29 +6,38 @@ permalink: /components/drawer/
 
 从容器一侧进入的桌面抽屉。Drawer 与 Maple Popup 共用同一套模态表面控制逻辑；标题、页脚、操作按钮和宽高仍是 Drawer 的桌面端能力。
 
-## 案例
+## 基础示例
 
 ### 基础用法
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### 自定义宽度
+## 尺寸与定位
+
+### 抽屉尺寸与方向
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `unmount-on-close` | 关闭动画后是否卸载内容 | 抽屉尺寸与方向 |
+| `placement` | 抽屉面板在容器中的出现侧，默认 right；不是相对按钮的定位，不执行浮层避让翻转 | 抽屉尺寸与方向 |
+| `popup-container` | 挂载容器 | 挂载位置 |
+<!-- demo-config-notes:end -->
+
+依次打开不同抽屉，比较方向和占用空间；嵌套、挂载容器与关闭拦截另见后续案例。
+
+<details>
+<summary>配置说明与使用限制</summary>
+
+#### 自定义宽度
 
 Drawer 不提供离散 `size` 枚举；左右位置使用 `width`，上下位置使用 `height`，均支持 `number | string`。
 
-<demo src="./__demos__/size.vue"></demo>
+</details>
 
-### 抽屉位置
-
-<demo src="./__demos__/location.vue"></demo>
-
-### 自定义节点
-
-<demo src="./__demos__/custom-node.vue"></demo>
-
-### 嵌套抽屉
-
-<demo src="./__demos__/nest-drawer.vue"></demo>
+<demo src="./__demos__/position-size-comparison.vue"></demo>
 
 ### 挂载位置
 
@@ -36,16 +45,41 @@ Drawer 不提供离散 `size` 枚举；左右位置使用 `width`，上下位置
 
 <demo src="./__demos__/popup-container.vue"></demo>
 
+## 内容与嵌套
+
+### 嵌套抽屉
+
+<demo src="./__demos__/nest-drawer.vue"></demo>
+
+### 自定义节点
+
+<demo src="./__demos__/custom-node.vue"></demo>
+
 ### 函数调用
 
 <demo src="./__demos__/function-call.vue"></demo>
 
-<!-- api-review:start -->
-### 功能调试
+## 关闭与异步控制
 
-<demo src="./__demos__/api-review.vue"></demo>
+### before 钩子与 done 兼容
 
-<!-- api-review:end -->
+`beforeClose({ action }, done, context)` 为统一入口，不新增另一套命名。
+
+
+只记录日志的同步钩子应显式 return true；同步 undefined 表示仍在等待回调。注意：以前返回 `Promise<void>` 却不调用 done 的异步钩子，现在会在 Promise 完成后放行。
+
+
+<demo src="./__demos__/guard-protocol.vue"></demo>
+
+
+Promise 与 done 共用一次完成状态：`false` / `done(false)` 阻止，`true` / `done()` 允许；Promise&lt;void&gt; 正常完成允许。重复完成只生效一次，异常触发 guard-error，取消或卸载后迟到结果无效。此类关闭/确认回调同步返回 void 时保留原回调协议，等待 done。
+
+
+守卫统一使用 `(payload, done, context)`：关闭 payload 为 `{ action }`，切换和提交为 `{ value, previousValue }`，Popup 为 `{ reason }`。context 提供 `signal` 和可选原始 `event`。返回 boolean/Promise，或调用 done()/done(false)；同步 void 等待 done，Promise&lt;void&gt; 放行。首次完成生效。等待期间自动管理 loading/disabled，取消后旧结果失效，不暴露内部按钮 refs。
+
+## 阅读方向
+
+继承最近的 `dir="ltr|rtl"`，支持运行时切换与局部覆盖。抽屉 placement 的 left/right 保持物理侧，进入/退出仍从对应屏幕边缘运动；标题、内容和底部动作继承阅读方向。方向切换不提交或清空内容。
 
 ## API
 
@@ -53,9 +87,10 @@ Drawer 不提供离散 `size` 枚举；左右位置使用 `width`，上下位置
 
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
+| dir | 阅读方向；省略时继承来源作用域。物理 left/right 方位保持原意。 | `ReadingDirection` (`ltr` / `rtl`) | — |
 | open **(v-model)** | 是否可见 | `boolean` | - |
 | default-open | 非受控模式下是否默认可见 | `boolean` | `false` |
-| placement | 进入方向 | `'top' \| 'right' \| 'bottom' \| 'left'` | `'right'` |
+| placement | 抽屉面板在容器中的出现侧，默认 right；不是相对按钮的定位，不执行浮层避让翻转 | `'top' \| 'right' \| 'bottom' \| 'left'` | `'right'` |
 | title | 标题 | `string` | - |
 | overlay | 是否显示遮罩 | `boolean` | `true` |
 | overlay-class / overlay-style | 遮罩类名 / 样式 | `string / CSSProperties` | - |
@@ -70,14 +105,13 @@ Drawer 不提供离散 `size` 枚举；左右位置使用 `width`，上下位置
 | popup-container | 挂载容器 | `string \| HTMLElement \| false` | `'body'` |
 | drawer-class / drawer-style | 面板类名 / 样式 | `string \| any[] / CSSProperties` | - |
 | body-class / body-style | 内容区类名 / 样式 | `string \| any[] / StyleValue` | - |
-| before-close | 关闭控制钩子；调用 `done()` 后提交 | `(action, done, refs) => void` | - |
+| `before-close` | 返回 boolean/Promise 或调用 done；首次完成生效 | `DrawerBeforeClose` | — |
 | esc-to-close | ESC 是否请求关闭 | `boolean` | `true` |
 | lock-scroll | 是否锁定挂载容器滚动 | `boolean` | `true` |
 | close-on-route-change | 路由变化时是否请求关闭 | `boolean` | `false` |
 | z-index | 自定义层级 | `number` | 自动分配 |
 | header / footer / cancel-button | 是否显示对应区域 | `boolean` | `true` |
 
-`before-close` 的 `action` 为 `'confirm' | 'cancel' | 'close'`。关闭按钮、遮罩、ESC 和路由属于 `close`；实例暴露的 `close()` 是强制关闭方法，与 Dialog 一致，不经过拦截器。`refs` 可控制两个按钮的 loading / disabled 状态。
 
 ### Events
 
@@ -99,7 +133,7 @@ Drawer 不提供离散 `size` 枚举；左右位置使用 `width`，上下位置
 `Drawer.open(config)` 使用 camelCase 的同名配置，例如 `cancelButtonText`、`beforeClose`、`closeOnRouteChange`。通知事件使用 `onConfirm`、`onCancel`、`onOpen`、`onOpened`、`onClose`、`onClosed`、`onClickOverlay` 和 `onKeyEscape`。
 
 ```ts
-import type { DrawerAction, DrawerBeforeCloseRefs, DrawerConfig, DrawerProps } from '@cedar-design/ui'
+import type { DrawerAction, DrawerConfig, DrawerProps } from '@cedar-design/ui'
 ```
 
 ## CSS 变量与颜色语义
@@ -131,3 +165,7 @@ overlay-style 可设置实例遮罩变量，drawer-style 可设置面板内变�
 | `--c-drawer-close-btn-margin-left` | `var(--c-spacing-4)` |
 | `--c-drawer-transition-duration` | `var(--c-transition-duration-3)` |
 | `--c-drawer-transition-timing-function` | `var(--c-transition-timing-function-standard)` |
+
+### 守卫等待反馈
+
+before-* 等待期间显示加载反馈并标记 aria-busy；拒绝或失败后恢复，重复提交不再启动同一操作。普通事件返回的 Promise 不参与加载。

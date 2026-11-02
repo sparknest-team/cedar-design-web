@@ -14,13 +14,7 @@
       "type": "date | week | month | year | quarter",
       "defaultValue": "date",
       "kind": "enum",
-      "options": [
-        "date",
-        "week",
-        "month",
-        "year",
-        "quarter"
-      ],
+      "options": ["date", "week", "month", "year", "quarter"],
       "initial": "date"
     },
     {
@@ -37,15 +31,7 @@
       "type": "0 | 1 | 2 | 3 | 4 | 5 | 6",
       "defaultValue": "0",
       "kind": "enum",
-      "options": [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6"
-      ],
+      "options": ["0", "1", "2", "3", "4", "5", "6"],
       "initial": "0"
     },
     {
@@ -98,13 +84,7 @@
       "defaultValue": "'date'",
       "description": "@zh 选择器类型\n@en Picker type\n/",
       "kind": "enum",
-      "options": [
-        "date",
-        "year",
-        "quarter",
-        "month",
-        "week"
-      ],
+      "options": ["date", "year", "quarter", "month", "week"],
       "initial": "date"
     },
     {
@@ -127,13 +107,6 @@
       "type": "string",
       "defaultValue": "随 type",
       "kind": "string"
-    },
-    {
-      "name": "use-seconds",
-      "description": "默认时间精度；显式 format 优先",
-      "type": "boolean",
-      "defaultValue": "true",
-      "kind": "boolean"
     },
     {
       "name": "min",
@@ -160,12 +133,7 @@
     }
   ],
   "methodNames": [],
-  "events": [
-    "update:modelValue",
-    "select",
-    "change",
-    "confirm"
-  ],
+  "events": ["update:modelValue", "select", "change", "confirm"],
   "slotNames": [],
   "slotDefaults": {},
   "scenarios": []

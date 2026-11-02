@@ -1,0 +1,37 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "declaration": false,
+    "emitDeclarationOnly": false,
+    "rootDir": ".",
+    "paths": {
+      "@cedar-design/ui": [
+        "src/index.ts"
+      ],
+      "@sparknest/ui-doc-preview": [
+        "../../../design-ui/packages/ui-doc-preview/src/index.ts"
+      ],
+      "vue": [
+        "./node_modules/vue"
+      ],
+      "@cedar-design/ui/*": [
+        "./src/*/index.ts"
+      ]
+    }
+  },
+  "include": [
+    "type-tests/p1-api.ts",
+    "src/**/*.d.ts",
+    "type-tests/p2-api.ts",
+    "type-tests/f07-api.ts",
+    "type-tests/f08-table.tsx",
+    "type-tests/f08-table.vue",
+    "type-tests/api-naming.ts",
+    "type-tests/button-group.ts",
+    "type-tests/icon.ts",
+    "type-tests/link.ts",
+    "type-tests/space.ts",
+    "type-tests/divider.ts"
+  ]
+}

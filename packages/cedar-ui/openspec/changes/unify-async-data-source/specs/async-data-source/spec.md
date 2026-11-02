@@ -1,0 +1,7 @@
+## ADDED Requirements
+
+### Requirement: external personnel options
+PeopleSelect SHALL accept readonly standard person options and external loading, and SHALL emit search(query) without requesting or interpreting its result. Option changes SHALL NOT emit model updates. String identity, default value, form restrictions and clearing SHALL remain compatible. Options label SHALL be used in inline, readPretty, label and click/dblclick views; missing labels MAY use explicit label or ID. Echo-only values SHALL NOT become candidates. The old transport API removal SHALL be marked major.
+
+### Requirement: shared initialization and asynchronous ownership
+Both use packages SHALL export the same useAsyncData implementation and types. A no-argument loader SHALL be accepted. Initialization SHALL execute once per client mount, SHALL NOT auto-run in SSR, and SHALL be disabled by immediate:false. Manual execute before mount SHALL suppress duplicate initialization. New requests, cancellation and disposal SHALL retire stale results regardless of transport abort support. Cancelling SHALL immediately settle pending executions. Errors SHALL be observable without unhandled rejection. Optional debounce SHALL apply to manual execute only; optional cache SHALL be per instance, explicitly keyed for override loaders, bounded and TTL limited. Refresh SHALL bypass debounce/cache and retry the latest request. Component array APIs and special node/cursor/progress protocols SHALL remain unchanged.

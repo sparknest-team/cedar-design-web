@@ -1,3 +1,4 @@
+import type { ReadingDirection } from '@cedar-design/use'
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { CedarLang } from '../locale/types'
 import type { ComponentSize } from '../_utils/constant'
@@ -25,7 +26,6 @@ export const configProviderProps = {
     /**
      * @zh 大小
      * @en ComponentSize
-     * @version 2.14.0
      */
     size: {
       type: String as PropType<ComponentSize>,
@@ -34,7 +34,6 @@ export const configProviderProps = {
     /**
      * @zh 是否全局生效
      * @en Is global effect
-     * @version 2.25.0
      */
     global: {
       type: Boolean,
@@ -43,7 +42,6 @@ export const configProviderProps = {
     /**
      * @zh 是否在容器滚动时更新弹出框的位置
      * @us Whether to update the position of the popup when the container is scrolled
-     * @version 2.25.0
      */
     updateAtScroll: {
       type: Boolean,
@@ -52,20 +50,16 @@ export const configProviderProps = {
     /**
      * @zh 是否在滚动时关闭弹出框
      * @en Whether to close the popover when scrolling
-     * @version 2.46.0
      */
     scrollToClose: {
       type: Boolean,
       default: false,
     },
     /**
-     * @zh 视图的表现形式是从右开始向左结束
-     * @en View starts from the right and ends on the left
+     * @zh 阅读方向；未指定时继承父作用域或原生 DOM dir
+     * @en Reading direction; inherits the parent scope or native DOM dir when omitted
      */
-    rtl: {
-      type: Boolean,
-      default: false,
-    },
+    dir: { type: String as PropType<ReadingDirection> },
     /**
      * @zh 全局主题：`light` 亮色，`dark` 暗色
      * @en Global theme: `light` or `dark`

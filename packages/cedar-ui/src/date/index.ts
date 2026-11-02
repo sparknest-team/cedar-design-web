@@ -38,3 +38,5 @@ export type { DateEventPayload, DateChangeArgs, DateEmits, DatePickerEmits } fro
 export type { DateShortcut, DateShortcutsPosition } from './panel-tools-props'
 
 export type { DateTimePickerOptions } from './time-picker-options'
+
+export type { DatePopupOptions } from './popup-options'

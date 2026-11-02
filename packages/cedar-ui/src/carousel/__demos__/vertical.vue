@@ -1,5 +1,5 @@
 <template>
-  <c-carousel direction="vertical" :style="{ width: '600px', height: '300px' }">
+  <c-carousel orientation="vertical" :style="{ width: '600px', height: '300px' }">
     <c-carousel-item>
       <img src="/cat.jpg" style="width:100%;height:100%;object-fit:cover;pointer-events:none">
     </c-carousel-item>

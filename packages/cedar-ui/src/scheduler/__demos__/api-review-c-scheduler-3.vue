@@ -13,197 +13,190 @@
       <c-checkbox v-model="rejectSave">模拟后端保存失败</c-checkbox>
       <span>{{ requestStatus }}</span>
     </c-space>
-    <c-scheduler
-      v-model="events"
-      default-date="2026-09-09"
-      default-mode="week"
-      :resources="resources"
-      :loading="loading"
-      :before-change="saveToMockServer"
-      v-bind="__apiReview.bindings"
-      v-on="__apiReview.listeners"
-    >
-      <template
-        v-if="__apiReview.slotEnabled['event'] !== false"
-        #event="{ event }"
+    <c-loading :loading="loading" style="display: block">
+      <c-scheduler
+        :readonly="loading"
+        v-model="events"
+        default-date="2026-09-09"
+        default-mode="week"
+        :resources="resources"
+        :before-change="saveToMockServer"
+        v-bind="__apiReview.bindings"
+        v-on="__apiReview.listeners"
       >
-        <span>{{ event.title }}</span>
-        <c-tag size="sm" :status="event.readonly ? 'neutral' : 'info'">
-          {{ typeOf(event).label }} · {{ event.readonly ? "只读" : "可编辑" }}
-        </c-tag>
-      </template>
-
-      <template
-        v-if="__apiReview.slotEnabled['editor'] !== false"
-        #editor="{
-          action,
-          event,
-          save,
-          remove,
-          close,
-          readonly,
-          pending,
-          errorMessage,
-        }"
-      >
-        <h3>{{ action === "create" ? "新增日程" : "编辑日程" }}</h3>
-        <c-alert v-if="errorMessage" status="danger">
-          {{ errorMessage }}
-        </c-alert>
-        <c-form
-          :model="event"
-          layout="vertical"
-          @submit="prepareAndSave(event, save)"
+        <template
+          v-if="__apiReview.slotEnabled['event'] !== false"
+          #event="{ event }"
         >
-          <c-form-item label="日程类型">
-            <c-select
-              :model-value="typeOf(event).id"
-              :disabled="readonly || pending"
-              @update:model-value="applyType(event, $event)"
-            >
-              <c-option
-                v-for="type in eventTypes"
-                :key="type.id"
-                :value="type.id"
+          <span>{{ event.title }}</span>
+          <c-tag size="sm" :status="event.readonly ? 'neutral' : 'info'">
+            {{ typeOf(event).label }} · {{ event.readonly ? "只读" : "可编辑" }}
+          </c-tag>
+        </template>
+
+        <template
+          v-if="__apiReview.slotEnabled['editor'] !== false"
+          #editor="{
+            action,
+            event,
+            save,
+            remove,
+            close,
+            readonly,
+            pending,
+            errorMessage,
+          }"
+        >
+          <h3>{{ action === "create" ? "新增日程" : "编辑日程" }}</h3>
+          <c-alert v-if="errorMessage" status="danger">
+            {{ errorMessage }}
+          </c-alert>
+          <c-form
+            :model="event"
+            layout="vertical"
+            @submit="prepareAndSave(event, save)"
+          >
+            <c-form-item label="日程类型">
+              <c-select
+                :model-value="typeOf(event).id"
+                :disabled="readonly || pending"
+                @update:model-value="applyType(event, $event)"
               >
-                {{ type.label }} ·
-                {{ type.readonly ? "默认只读" : "默认可编辑" }}
-              </c-option>
-            </c-select>
-          </c-form-item>
+                <c-option
+                  v-for="type in eventTypes"
+                  :key="type.id"
+                  :value="type.id"
+                >
+                  {{ type.label }} ·
+                  {{ type.readonly ? "默认只读" : "默认可编辑" }}
+                </c-option>
+              </c-select>
+            </c-form-item>
 
-          <div class="scheduler-type-preview" :style="previewStyle(event)">
-            <strong>{{ typeOf(event).label }}</strong>
-            <span>{{ typeOf(event).description }}</span>
-          </div>
+            <div class="scheduler-type-preview" :style="previewStyle(event)">
+              <strong>{{ typeOf(event).label }}</strong>
+              <span>{{ typeOf(event).description }}</span>
+            </div>
 
-          <c-form-item label="标题">
-            <c-input
-              v-model="event.title"
-              :disabled="readonly || pending"
-              placeholder="请输入日程标题"
-            />
-          </c-form-item>
-          <c-form-item label="开始时间">
-            <c-date
-              :model-value="
-                event.start == null ? undefined : schedulerDate(event.start)
-              "
-              :disabled="readonly || pending"
-              show-time
-              value-format="Date"
-              @update:model-value="event.start = $event"
-            />
-          </c-form-item>
-          <c-form-item label="结束时间">
-            <c-date
-              :model-value="
-                event.end == null ? undefined : schedulerDate(event.end)
-              "
-              :disabled="readonly || pending"
-              show-time
-              value-format="Date"
-              @update:model-value="event.end = $event"
-            />
-          </c-form-item>
-          <c-form-item>
-            <c-checkbox
-              :model-value="!event.readonly"
-              :disabled="readonly || pending"
-              @update:model-value="event.readonly = !$event"
-            >
-              创建后允许修改和拖拽
-            </c-checkbox>
-          </c-form-item>
-          <c-space>
-            <c-button :disabled="pending" @click="close">取消</c-button>
-            <c-button
-              v-if="action === 'edit' && !readonly"
-              status="danger"
-              :disabled="pending"
-              @click="remove"
-              >删除</c-button
-            >
-            <c-button
-              v-if="!readonly"
-              html-type="submit"
-              status="primary"
-              :loading="pending"
-              >保存日程</c-button
-            >
-          </c-space>
-        </c-form>
-      </template>
-      <template
-        v-if="__apiReview.slotEnabled['sidebar']"
-        #sidebar="__reviewSlot"
-        ><DemoReviewSlot
-          name="sidebar"
-          :context="__reviewSlot"
-          :controls="__apiReview.controls"
-          :record="__apiReview.record"
-      /></template>
-      <template
-        v-if="__apiReview.slotEnabled['sidebar-extra']"
-        #sidebar-extra="__reviewSlot"
-        ><DemoReviewSlot
-          name="sidebar-extra"
-          :context="__reviewSlot"
-          :controls="__apiReview.controls"
-          :record="__apiReview.record"
-      /></template>
-      <template
-        v-if="__apiReview.slotEnabled['resource-header']"
-        #resource-header="__reviewSlot"
-        ><DemoReviewSlot
-          name="resource-header"
-          :context="__reviewSlot"
-          :controls="__apiReview.controls"
-          :record="__apiReview.record"
-      /></template>
-      <template
-        v-if="__apiReview.slotEnabled['toolbar']"
-        #toolbar="__reviewSlot"
-        ><DemoReviewSlot
-          name="toolbar"
-          :context="__reviewSlot"
-          :controls="__apiReview.controls"
-          :record="__apiReview.record"
-      /></template>
-      <template
-        v-if="__apiReview.slotEnabled['column-background']"
-        #column-background="__reviewSlot"
-        ><DemoReviewSlot
-          name="column-background"
-          :context="__reviewSlot"
-          :controls="__apiReview.controls"
-          :record="__apiReview.record"
-      /></template>
-      <template
-        v-if="__apiReview.slotEnabled['toolbar-extra']"
-        #toolbar-extra="__reviewSlot"
-        ><DemoReviewSlot
-          name="toolbar-extra"
-          :context="__reviewSlot"
-          :controls="__apiReview.controls"
-          :record="__apiReview.record"
-      /></template>
-      <template v-if="__apiReview.slotEnabled['empty']" #empty="__reviewSlot"
-        ><DemoReviewSlot
-          name="empty"
-          :context="__reviewSlot"
-          :controls="__apiReview.controls"
-          :record="__apiReview.record"
-      /></template>
-      <template
-        v-if="__apiReview.slotEnabled['loading']"
-        #loading="__reviewSlot"
-        ><DemoReviewSlot
-          name="loading"
-          :context="__reviewSlot"
-          :controls="__apiReview.controls"
-          :record="__apiReview.record" /></template
-    ></c-scheduler>
+            <c-form-item label="标题">
+              <c-input
+                v-model="event.title"
+                :disabled="readonly || pending"
+                placeholder="请输入日程标题"
+              />
+            </c-form-item>
+            <c-form-item label="开始时间">
+              <c-date
+                :model-value="
+                  event.start == null ? undefined : schedulerDate(event.start)
+                "
+                :disabled="readonly || pending"
+                show-time
+                value-format="Date"
+                @update:model-value="event.start = $event"
+              />
+            </c-form-item>
+            <c-form-item label="结束时间">
+              <c-date
+                :model-value="
+                  event.end == null ? undefined : schedulerDate(event.end)
+                "
+                :disabled="readonly || pending"
+                show-time
+                value-format="Date"
+                @update:model-value="event.end = $event"
+              />
+            </c-form-item>
+            <c-form-item>
+              <c-checkbox
+                :model-value="!event.readonly"
+                :disabled="readonly || pending"
+                @update:model-value="event.readonly = !$event"
+              >
+                创建后允许修改和拖拽
+              </c-checkbox>
+            </c-form-item>
+            <c-space>
+              <c-button :disabled="pending" @click="close">取消</c-button>
+              <c-button
+                v-if="action === 'edit' && !readonly"
+                status="danger"
+                :disabled="pending"
+                @click="remove"
+                >删除</c-button
+              >
+              <c-button
+                v-if="!readonly"
+                html-type="submit"
+                status="primary"
+                :loading="pending"
+                >保存日程</c-button
+              >
+            </c-space>
+          </c-form>
+        </template>
+        <template
+          v-if="__apiReview.slotEnabled['sidebar']"
+          #sidebar="__reviewSlot"
+          ><DemoReviewSlot
+            name="sidebar"
+            :context="__reviewSlot"
+            :controls="__apiReview.controls"
+            :record="__apiReview.record"
+        /></template>
+        <template
+          v-if="__apiReview.slotEnabled['sidebar-extra']"
+          #sidebar-extra="__reviewSlot"
+          ><DemoReviewSlot
+            name="sidebar-extra"
+            :context="__reviewSlot"
+            :controls="__apiReview.controls"
+            :record="__apiReview.record"
+        /></template>
+        <template
+          v-if="__apiReview.slotEnabled['resource-header']"
+          #resource-header="__reviewSlot"
+          ><DemoReviewSlot
+            name="resource-header"
+            :context="__reviewSlot"
+            :controls="__apiReview.controls"
+            :record="__apiReview.record"
+        /></template>
+        <template
+          v-if="__apiReview.slotEnabled['toolbar']"
+          #toolbar="__reviewSlot"
+          ><DemoReviewSlot
+            name="toolbar"
+            :context="__reviewSlot"
+            :controls="__apiReview.controls"
+            :record="__apiReview.record"
+        /></template>
+        <template
+          v-if="__apiReview.slotEnabled['column-background']"
+          #column-background="__reviewSlot"
+          ><DemoReviewSlot
+            name="column-background"
+            :context="__reviewSlot"
+            :controls="__apiReview.controls"
+            :record="__apiReview.record"
+        /></template>
+        <template
+          v-if="__apiReview.slotEnabled['toolbar-extra']"
+          #toolbar-extra="__reviewSlot"
+          ><DemoReviewSlot
+            name="toolbar-extra"
+            :context="__reviewSlot"
+            :controls="__apiReview.controls"
+            :record="__apiReview.record"
+        /></template>
+        <template v-if="__apiReview.slotEnabled['empty']" #empty="__reviewSlot"
+          ><DemoReviewSlot
+            name="empty"
+            :context="__reviewSlot"
+            :controls="__apiReview.controls"
+            :record="__apiReview.record" /></template
+      ></c-scheduler>
+    </c-loading>
     <c-collapse class="scheduler-mock-log">
       <c-collapse-item name="request" title="查看最近一次 Mock API 请求">
         <pre>{{ lastRequest || "尚未提交" }}</pre>
@@ -218,7 +211,7 @@ import {
   defineReviewConfig,
   ReviewSlot as DemoReviewSlot,
 } from "@sparknest/ui-doc-preview";
-import __apiReviewRawConfig from "./api-review-c-scheduler-3.config.json";
+import __apiReviewRawConfig from "./api-review.config.json";
 
 import { onMounted, ref } from "vue";
 import { resources } from "./data";

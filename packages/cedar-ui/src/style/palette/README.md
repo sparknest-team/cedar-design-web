@@ -37,6 +37,8 @@ background: rgba(var(--c-primary-6), 0.12);
 
 `--c-primary-*` 映射到 `--c-brand-*`，覆盖 brand 色阶即可联动主色。更多见 [主题定制](/guide/theme/)。
 
+## 基础示例
+
 ### 色阶预览
 
 <demo src="./__demos__/colors.vue"></demo>

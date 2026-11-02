@@ -1,3 +1,4 @@
+import { normalizeTypeScript } from './normalize-source.mjs'
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
@@ -22,7 +23,7 @@ for (const file of [
   '__tests__/layout-contract.spec.ts',
   '__tests__/validate-trigger.spec.ts',
 ]) {
-  assert.equal(normalize(read(cedar, file)), normalize(read(maple, file)), `${file} differs`)
+  assert.equal(await normalizeTypeScript(read(cedar, file)), await normalizeTypeScript(read(maple, file)), `${file} differs`)
 }
 
 assert.equal(

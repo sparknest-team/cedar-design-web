@@ -6,7 +6,11 @@ permalink: /components/input-tag/
 
 用来输入标签。
 
-## 案例
+## 阅读方向
+
+标签按阅读顺序排列，标签值的数组顺序保持不变。空输入时 Backspace 删除业务数组中最后一个可关闭标签；Enter 添加标签，输入法组合期间不触发标签提交或删除。
+
+## 基础示例
 
 ### 基础用法
 
@@ -14,54 +18,110 @@ permalink: /components/input-tag/
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### 输入框状态
+## 外观与状态
+
+### 标签输入尺寸与状态
+
+<!-- demo-config-notes:start -->
+
+#### 本组配置对照
+
+| 配置            | 作用                 | 相关示例           |
+| --------------- | -------------------- | ------------------ |
+| `default-value` | 默认值（非受控状态） | 标签输入尺寸与状态 |
+| `placeholder`   | 占位符               | 标签输入尺寸与状态 |
+| `size`          | 输入框的大小         | 标签输入尺寸与状态 |
+| `clearable`     | 是否允许清空         | 标签输入尺寸与状态 |
+| `disabled`      | 是否禁用             | 标签输入尺寸与状态 |
+| `readonly`      | 是否为只读模式       | 标签输入尺寸与状态 |
+
+<!-- demo-config-notes:end -->
+
+比较尺寸和禁用/只读/错误外观，操作可编辑实例观察标签布局；空值协议保持独立。
+
+<details>
+<summary>配置说明与使用限制</summary>
+
+#### 输入框状态
 
 输入框有禁用、只读和错误三种状态。
 
-<demo src="./__demos__/status.vue"></demo>
-
-### 输入框尺寸
+#### 输入框尺寸
 
 输入框分为 `xs`、`sm`、`md`、`lg`、`xl` 五种尺寸。
 
-<demo src="./__demos__/size.vue"></demo>
+</details>
+
+<demo src="./__demos__/appearance-state-comparison.vue"></demo>
+
+## 内容与展示
 
 ### 最多展示标签数量
+
+<!-- demo-config-notes:start -->
+
+#### 本组配置对照
+
+| 配置            | 作用                               | 相关示例         |
+| --------------- | ---------------------------------- | ---------------- |
+| `default-value` | 默认值（非受控状态）               | 最多展示标签数量 |
+| `placeholder`   | 占位符                             | 最多展示标签数量 |
+| `max-tag-count` | 最多展示的标签个数，`0` 表示不限制 | 最多展示标签数量 |
+| `clearable`     | 是否允许清空                       | 最多展示标签数量 |
+
+<!-- demo-config-notes:end -->
 
 设置最多展示标签数量。
 
 <demo src="./__demos__/max.vue"></demo>
 
-<!-- api-review:start -->
-### 功能调试
+## 加载与等待
 
-<demo src="./__demos__/api-review.vue"></demo>
+### 受控加载
 
-<!-- api-review:end -->
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| `loading` | 业务显式控制的加载状态 | `boolean` | `false` |
+
+
+通过 loading 显式展示等待；普通事件返回值不参与加载。before-* 守卫按其契约管理内部等待状态。
+
+<demo src="./__demos__/loading.vue"></demo>
 
 ## API
 
+### 空值识别与阅读空文案
+
+`empty-values` 用于空值识别，`empty-value` 保留原清空输出；`empty-text` 仅在 `read-pretty` 空内容下展示，默认 `'-'`，字段 > FormItem > Form，自定义 read 插槽优先。显式配置 empty-values 后，内置 required 接入该策略，自定义校验仍收到原值。详见[统一说明](/guide/empty-values/)。
+
+| 参数         | 类型               | 缺省与范围                                            |
+| ------------ | ------------------ | ----------------------------------------------------- |
+| empty-values | readonly unknown[] | 字段 > FormItem > Form > 组件族默认；完整覆盖，不合并 |
+| empty-text   | string             | 字段 > FormItem > Form > '-'；显式 '' 有效            |
+
+以上是字段展示层 API；纯面板不因此新增阅读模式。Form 与 FormItem 提供继承配置。empty-value 的现有类型与默认输出仍按该组件原 API 执行。
+
 ### `<input-tag>` Props
 
-| 参数名                    | 描述                               | 类型                                              |   默认值    |
-| ------------------------- | ---------------------------------- | ------------------------------------------------- | :---------: |
-| model-value **(v-model)** | 绑定值                             | `(string \| number \| TagData)[]`                 |     `-`     |
-| default-value             | 默认值（非受控状态）               | `(string \| number \| TagData)[]`                 |    `[]`     |
-| input-value **(v-model)** | 输入框的值                         | `string`                                          |     `-`     |
-| default-input-value       | 输入框的默认值（非受控状态）       | `string`                                          |    `''`     |
-| placeholder               | 占位符                             | `string`                                          |     `-`     |
-| disabled                  | 是否禁用                           | `boolean`                                         |   `false`   |
-| error                     | 是否为错误状态                     | `boolean`                                         |   `false`   |
-| readonly                  | 是否为只读模式                     | `boolean`                                         |   `false`   |
-| clearable                 | 是否允许清空                       | `boolean`                                         |   `false`   |
-| size                      | 输入框的大小                       | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`                    |   `'md'`    |
-| variant                   | 输入框的变体                       | `'filled' \| 'outline' \| 'standard'`                          | `'filled'` |
-| max-tag-count             | 最多展示的标签个数，`0` 表示不限制 | `number`                                          |     `0`     |
-| retain-input-value        | 是否保留输入框的内容               | `boolean \| { create?: boolean; blur?: boolean }` |   `false`   |
-| format-tag                | 格式化标签内容                     | `(data: TagData) => string`                       |     `-`     |
-| unique-value              | 是否仅创建唯一的值                 | `boolean`                                         |   `false`   |
-| field-names               | 自定义 `TagData` 中的字段          | `InputTagFieldNames`                              |     `-`     |
-| tag-nowrap                | 标签内容不换行                     | `boolean`                                         |   `false`   |
+| 参数名                    | 描述                               | 类型                                              |   默认值   |
+| ------------------------- | ---------------------------------- | ------------------------------------------------- | :--------: |
+| model-value **(v-model)** | 绑定值                             | `(string \| number \| TagData)[]`                 |    `-`     |
+| default-value             | 默认值（非受控状态）               | `(string \| number \| TagData)[]`                 |    `[]`    |
+| input-value **(v-model)** | 输入框的值                         | `string`                                          |    `-`     |
+| default-input-value       | 输入框的默认值（非受控状态）       | `string`                                          |    `''`    |
+| placeholder               | 占位符                             | `string`                                          |    `-`     |
+| disabled                  | 是否禁用                           | `boolean`                                         |  `false`   |
+| error                     | 是否为错误状态                     | `boolean`                                         |  `false`   |
+| readonly                  | 是否为只读模式                     | `boolean`                                         |  `false`   |
+| clearable                 | 是否允许清空                       | `boolean`                                         |  `false`   |
+| size                      | 输入框的大小                       | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`            |   `'md'`   |
+| variant                   | 输入框的变体                       | `'filled' \| 'outline' \| 'standard'`             | `'filled'` |
+| max-tag-count             | 最多展示的标签个数，`0` 表示不限制 | `number`                                          |    `0`     |
+| retain-input-value        | 是否保留输入框的内容               | `boolean \| { create?: boolean; blur?: boolean }` |  `false`   |
+| format-tag                | 格式化标签内容                     | `(data: TagData) => string`                       |    `-`     |
+| unique-value              | 是否仅创建唯一的值                 | `boolean`                                         |  `false`   |
+| field-names               | 自定义 `TagData` 中的字段          | `InputTagFieldNames`                              |    `-`     |
+| tag-nowrap                | 标签内容不换行                     | `boolean`                                         |  `false`   |
 
 ### `<input-tag>` Events
 
@@ -104,7 +164,7 @@ permalink: /components/input-tag/
 组件导出以下类型定义
 
 ```ts
-import type { InputTagInstance } from '@cedar-design/ui'
+import type { InputTagInstance } from "@cedar-design/ui";
 ```
 
 ## InputTag 旧图标引用收尾
@@ -129,42 +189,48 @@ InputTag 保留 27 项内容变量，已加入无消费检查；两端 Badge / T
 
 ### 当前内容变量
 
-| 变量 | 默认值 |
-| --- | --- |
-| `--c-input-tag-size-xs-tag-height` | `20px` |
-| `--c-input-tag-size-sm-tag-height` | `20px` |
-| `--c-input-tag-size-md-tag-height` | `24px` |
-| `--c-input-tag-size-lg-tag-height` | `28px` |
-| `--c-input-tag-size-xl-tag-height` | `32px` |
-| `--c-input-tag-size-xs-font-size` | `12px` |
-| `--c-input-tag-size-sm-font-size` | `14px` |
-| `--c-input-tag-size-md-font-size` | `14px` |
-| `--c-input-tag-size-lg-font-size` | `14px` |
-| `--c-input-tag-size-xl-font-size` | `16px` |
-| `--c-input-tag-color-text-default` | `var(--c-sys-color-content-primary)` |
-| `--c-input-tag-color-text-disabled` | `var(--c-sys-color-content-disabled)` |
-| `--c-input-tag-tag-margin-right` | `4px` |
-| `--c-input-tag-tag-margin-y` | `2px` |
-| `--c-input-tag-padding-x` | `4px` |
-| `--c-input-tag-size-xs-padding-y` | `0px` |
-| `--c-input-tag-size-sm-padding-y` | `2px` |
-| `--c-input-tag-size-md-padding-y` | `2px` |
-| `--c-input-tag-size-lg-padding-y` | `2px` |
-| `--c-input-tag-size-xl-padding-y` | `4px` |
-| `--c-input-tag-tag-font-size` | `12px` |
-| `--c-input-tag-tag-color-bg` | `var(--c-sys-color-surface-default)` |
-| `--c-input-tag-tag-color-bg-focus` | `var(--c-sys-color-state-hover)` |
-| `--c-input-tag-tag-color-bg-disabled` | `var(--c-sys-color-state-hover)` |
-| `--c-input-tag-tag-color-border` | `var(--c-color-fill-3)` |
-| `--c-input-tag-tag-color-border-disabled` | `var(--c-color-fill-3)` |
-| `--c-input-tag-tag-color-border-focus` | `var(--c-sys-color-state-hover)` |
+| 变量                                      | 默认值                                |
+| ----------------------------------------- | ------------------------------------- |
+| `--c-input-tag-size-xs-tag-height`        | `20px`                                |
+| `--c-input-tag-size-sm-tag-height`        | `20px`                                |
+| `--c-input-tag-size-md-tag-height`        | `24px`                                |
+| `--c-input-tag-size-lg-tag-height`        | `28px`                                |
+| `--c-input-tag-size-xl-tag-height`        | `32px`                                |
+| `--c-input-tag-size-xs-font-size`         | `12px`                                |
+| `--c-input-tag-size-sm-font-size`         | `14px`                                |
+| `--c-input-tag-size-md-font-size`         | `14px`                                |
+| `--c-input-tag-size-lg-font-size`         | `14px`                                |
+| `--c-input-tag-size-xl-font-size`         | `16px`                                |
+| `--c-input-tag-color-text-default`        | `var(--c-sys-color-content-primary)`  |
+| `--c-input-tag-color-text-disabled`       | `var(--c-sys-color-content-disabled)` |
+| `--c-input-tag-tag-margin-right`          | `4px`                                 |
+| `--c-input-tag-tag-margin-y`              | `2px`                                 |
+| `--c-input-tag-padding-x`                 | `4px`                                 |
+| `--c-input-tag-size-xs-padding-y`         | `0px`                                 |
+| `--c-input-tag-size-sm-padding-y`         | `2px`                                 |
+| `--c-input-tag-size-md-padding-y`         | `2px`                                 |
+| `--c-input-tag-size-lg-padding-y`         | `2px`                                 |
+| `--c-input-tag-size-xl-padding-y`         | `4px`                                 |
+| `--c-input-tag-tag-font-size`             | `12px`                                |
+| `--c-input-tag-tag-color-bg`              | `var(--c-sys-color-surface-default)`  |
+| `--c-input-tag-tag-color-bg-focus`        | `var(--c-sys-color-state-hover)`      |
+| `--c-input-tag-tag-color-bg-disabled`     | `var(--c-sys-color-state-hover)`      |
+| `--c-input-tag-tag-color-border`          | `var(--c-color-fill-3)`               |
+| `--c-input-tag-tag-color-border-disabled` | `var(--c-color-fill-3)`               |
+| `--c-input-tag-tag-color-border-focus`    | `var(--c-sys-color-state-hover)`      |
 
 ### Form 字段展示与确认
 
-本组件支持 `presentation`，字段 > FormItem > Form 逐层继承；未指定时为 `inline`，保留原有交互。支持值：`inline / click / dblclick`。其他编辑展示使用 Cell 入口和一份草稿，确认后才更新 v-model；取消、重置或启用 readPretty 丢弃草稿。
+本组件支持 `edit-mode`，字段 > FormItem > Form 逐层继承；未指定时为 `direct`，保留原有交互。支持值：`direct / click / dblclick`。非 direct 编辑模式通过字段值入口打开编辑面板，并维护单份草稿；确认后才更新 v-model，取消、重置或启用 readPretty 时丢弃草稿。
 
-Cedar 使用 presentation="click" / "dblclick" 在原位进入编辑，Enter/F2 也可进入；取消/Escape 丢弃草稿，确认后提交。 readPretty 为纯阅读属性，与 readonly、disabled 独立。
+Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，Enter/F2 也可进入；取消/Escape 丢弃草稿，确认后提交。readPretty 为独立阅读属性，与 readonly、disabled 分开。
 
 `before-commit(value, { previousValue, signal })` 可拦截弹层保存；FormItem 先校验候选值，失败保持编辑。`open / default-open / update:open` 控制编辑层。`#read="{ value, text }"` 可自定义阅读内容。集中示例见 Form 的“各类字段统一展示”。
 
 `read-pretty` 为独立布尔属性，与 `readonly`、`disabled` 同级；字段 > FormItem > Form 继承，显式 `false` 覆盖父级。默认 `false`。纯阅读不显示编辑器。
+
+## 配置清空后的值
+
+`empty-value` 指定当前组件已有清空动作的输出；省略时采用该组件默认返回。具体类型以组件 API 为准。它不改变 empty-values 的识别规则，也不改变 Form reset 的初始值。
+
+`empty-value` 可显式设为 `null`（或 `() => null`），清空时原样提交 null；省略时保留组件原默认值。界面把 null 显示为空，不会把普通输入的空字符串自动转成 null。支持弹出编辑的字段中，清空先修改草稿，确认后提交，取消则保留原值。

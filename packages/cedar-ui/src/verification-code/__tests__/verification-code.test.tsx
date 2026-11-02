@@ -10,7 +10,7 @@ describe('VerificationCode', () => {
     })
     const inputs = wrapper.findAll('input')
 
-    expect(wrapper.attributes()).toMatchObject({
+    expect(wrapper.get('[role=group]').attributes()).toMatchObject({
       role: 'group',
       'aria-label': 'Security code',
     })

@@ -18,7 +18,7 @@
     box-sizing: border-box;
     min-width: 0;
     padding: var(--c-field-presentation-padding);
-    text-align: start;
+    text-align: var(--c-form-content-align, start);
   }
   &__reference:disabled {
     cursor: default;
@@ -26,7 +26,7 @@
   &__read {
     width: 100%;
     overflow-wrap: anywhere;
-    text-align: start;
+    text-align: var(--c-form-content-align, start);
     padding-block: var(--c-field-presentation-padding);
   }
   &__panel {
@@ -74,7 +74,10 @@
   min-width: 0;
 }
 .c-field-presentation__reference-group .c-field-presentation__reference {
-  padding-inline-end: calc(var(--c-field-presentation-edit-size) + 2 * var(--c-field-presentation-padding));
+  padding-inline-end: calc(
+    var(--c-field-presentation-edit-size) + 2 *
+      var(--c-field-presentation-padding)
+  );
 }
 .c-field-presentation__edit {
   position: absolute;
@@ -104,7 +107,8 @@
     pointer-events: none;
   }
   .c-field-presentation__reference-group:hover .c-field-presentation__edit,
-  .c-field-presentation__reference-group:focus-within .c-field-presentation__edit {
+  .c-field-presentation__reference-group:focus-within
+    .c-field-presentation__edit {
     opacity: 1;
     pointer-events: auto;
   }
@@ -160,7 +164,7 @@
   border-top: 1px solid var(--c-field-presentation-border);
 }
 .c-field-presentation__auxiliary {
-  margin-right: auto;
+  margin-inline-end: auto;
 }
 .c-field-presentation__auxiliary .c-date-panel-actions {
   padding: 0;
@@ -238,4 +242,15 @@
 }
 .c-field-presentation__confirm-icon::before {
   content: "✓";
+}
+
+.c-field-presentation__reference--icon {
+  cursor: text;
+  user-select: text;
+}
+
+.c-field-presentation__reference > span:first-child {
+  flex: 1;
+  min-width: 0;
+  text-align: inherit;
 }

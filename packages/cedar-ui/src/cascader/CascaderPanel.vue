@@ -21,6 +21,7 @@ import { isNull, isUndefined } from '../_utils/is'
 import { getKeyDownHandler, KEYBOARD_KEY } from '../_utils/keyboard'
 import { BaseType, Data, UnionType } from '../_utils/types'
 import BaseCascaderPanel from './base-cascader-panel'
+import { useLazyOptions } from './use-lazy-options'
 import { cascaderInjectionKey } from './context'
 import { useSelectedPath } from './hooks/use-selected-path'
 import { CascaderBaseValue, CascaderFieldNames, CascaderOption, CascaderOptionInfo } from './types'
@@ -110,7 +111,6 @@ export default defineComponent({
     /**
      * @zh 数据懒加载函数，传入时开启懒加载功能
      * @en Data lazy loading function, open the lazy loading function when it is passed in
-     * @version 2.13.0
      */
     loadMore: {
       type: Function as PropType<(option: CascaderOption, done: (children?: CascaderOption[]) => void) => void>,
@@ -118,7 +118,6 @@ export default defineComponent({
     /**
      * @zh 自定义 `CascaderOption` 中的字段；当选项值为对象时，也用其中的 `value` 作为键属性
      * @en Customize fields in `CascaderOption`; when option value is an object, `value` is also used as the key property
-     * @version 2.22.0
      */
     fieldNames: {
       type: Object as PropType<CascaderFieldNames>,
@@ -126,7 +125,6 @@ export default defineComponent({
     /**
      * @zh 是否展开子菜单
      * @en whether to expand the submenu
-     * @version 2.29.0
      */
     expandChild: {
       type: Boolean,
@@ -160,7 +158,6 @@ export default defineComponent({
    * @zh 选项为空时的显示内容
    * @en Display content when the option is empty
    * @slot empty
-   * @version 2.23.0
    */
   setup(props, { emit, slots }) {
     const { options, checkStrictly, loadMore, modelValue, expandChild, expandTrigger } = toRefs(props)
@@ -184,10 +181,6 @@ export default defineComponent({
     const leafOptionSet = reactive(new Set<CascaderOptionInfo>())
 
     const lazyLoadOptions = reactive<Record<string, CascaderOption[]>>({})
-
-    const addLazyLoadOptions = (children: CascaderOption[], key: string) => {
-      lazyLoadOptions[key] = children
-    }
 
     const DEFAULT_FIELD_NAMES = {
       value: 'value',
@@ -307,6 +300,19 @@ export default defineComponent({
         expandChild,
       })
 
+    const loadLazyOption = useLazyOptions({
+      options: () => props.options,
+      loader: () => props.loadMore,
+      fieldNames: () => props.fieldNames,
+      blocked: () => false,
+      cache: lazyLoadOptions,
+    })
+    const expandOption = (option: CascaderOptionInfo): Promise<void> => {
+      if (option.disabled) return Promise.resolve()
+      setSelectedPath(option.key)
+      return loadLazyOption(option)
+    }
+
     provide(
       cascaderInjectionKey,
       reactive({
@@ -314,7 +320,7 @@ export default defineComponent({
         setActiveKey,
         setSelectedPath,
         loadMore,
-        addLazyLoadOptions,
+        expandOption,
         slots,
         valueMap: computedValueMap,
         expandTrigger,

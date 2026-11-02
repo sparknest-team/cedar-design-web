@@ -6,7 +6,7 @@ permalink: /components/empty/
 
 指当前场景没有对应的数据内容，呈现出的一种状态。
 
-## 案例
+## 基础示例
 
 ### 基础用法
 
@@ -14,25 +14,57 @@ permalink: /components/empty/
 
 <demo src="./__demos__/basic.vue"></demo>
 
+## 外观与状态
+
 ### 图片尺寸
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `image-size` | 图片/图标尺寸 | 图片尺寸 |
+| `description` | 描述内容，缺省时使用国际化文案 | 图片尺寸 |
+<!-- demo-config-notes:end -->
 
 通过 `image-size` 属性控制图标尺寸，可选值为 `xs` `sm` `md` `lg` `xl`，也可传入数值。
 
 <demo src="./__demos__/size.vue"></demo>
 
-### 自定义图片和文案
+## 内容与展示
 
-通过 `image` 插槽自定义图标、图片，或通过默认插槽修改文案。
+### 空态图形与补充操作
 
-<demo src="./__demos__/user-define.vue"></demo>
+<!-- demo-config-notes:start -->
+#### 本组配置对照
 
-### 操作按钮
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `description` | 描述内容，缺省时使用国际化文案 | 空态图形与补充操作、显示与隐藏 |
+| `image-url` | 自定义图片的地址 | 空态图形与补充操作 |
+| `alt` | 图片替代文本 | 空态图形与补充操作 |
+| `show-icon` | 是否显示图标 | 显示与隐藏 |
+| `show-description` | 是否显示描述 | 显示与隐藏 |
+<!-- demo-config-notes:end -->
+
+对比自定义图形和补充操作，观察替换默认内容与保留业务操作入口的区别。
+
+<details>
+<summary>配置说明与使用限制</summary>
+
+#### 操作按钮
 
 Reload 只更新本地刷新次数和描述，不请求服务；真实业务请自行接入请求与结果状态。
 
 通过 `extra` 插槽添加操作按钮。
 
-<demo src="./__demos__/extra.vue"></demo>
+#### 自定义图片和文案
+
+通过 `image` 插槽自定义图标、图片，或通过默认插槽修改文案。
+
+</details>
+
+<demo src="./__demos__/content-comparison.vue"></demo>
 
 ### 显示与隐藏
 
@@ -41,13 +73,6 @@ Reload 只更新本地刷新次数和描述，不请求服务；真实业务请�
 通过 `show-icon`、`show-description` 控制图标和描述是否显示。
 
 <demo src="./__demos__/show.vue"></demo>
-
-<!-- api-review:start -->
-### 功能调试
-
-<demo src="./__demos__/api-review.vue"></demo>
-
-<!-- api-review:end -->
 
 ## API
 

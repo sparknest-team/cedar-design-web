@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { ref } from "vue";
-const yesterday = new Date();
-yesterday.setDate(yesterday.getDate() - 1);
-const selected = ref(yesterday);
-const showCurrent = ref(true);
-const showNowButton = ref(true);
-const exchangeTime = ref(true);
-const range = ref(["2025-01-05 09:00", "2025-01-10 18:00"]);
+import { ref } from 'vue'
+
+const yesterday = new Date()
+yesterday.setDate(yesterday.getDate() - 1)
+const selected = ref(yesterday)
+const showCurrent = ref(true)
+const showNowButton = ref(true)
+const exchangeTime = ref(true)
+const range = ref(['2025-01-05 09:00', '2025-01-10 18:00'])
 </script>
 <template>
   <div>
@@ -27,7 +28,8 @@ const range = ref(["2025-01-05 09:00", "2025-01-10 18:00"]);
     <c-date-range-picker
       v-model="range"
       show-time
-      :use-seconds="false"
+      format="YYYY-MM-DD HH:mm"
+      value-format="YYYY-MM-DD HH:mm"
       :exchange-time="exchangeTime"
       :disable-confirm="false"
     />

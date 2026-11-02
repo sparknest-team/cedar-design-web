@@ -6,7 +6,7 @@ permalink: /components/avatar/
 
 用于展示用户或事物的头像，支持图片、文字、图标和头像组。
 
-## 案例
+## 基础示例
 
 ### 基础用法
 
@@ -14,19 +14,100 @@ permalink: /components/avatar/
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### 尺寸
+## 外观与状态
+
+### 尺寸与形状对比
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `shape` | 头像形状 | 尺寸与形状对比、颜色与边框、头像可悬停 |
+| `image-url` | 图片地址 | 尺寸与形状对比、头像可悬停 |
+| `alt` | 图片替代文本 | 尺寸与形状对比、头像可悬停 |
+| `bordered` | 是否显示描边 | 颜色与边框、头像可悬停 |
+| `size` | 头像宽高；数字为 px，字符串为 CSS 长度 | 尺寸与形状对比 |
+| `color` | 头像背景色 | 颜色与边框 |
+<!-- demo-config-notes:end -->
+
+先比较相同内容在各尺寸下的占位，再比较圆形和方形边界；图片适配与错误回退保持独立。
+
+<details>
+<summary>配置说明与使用限制</summary>
+
+#### 尺寸
 
 `size` 控制头像宽高：数字为 px，字符串为 CSS 长度（如 `3rem`）。未设置时使用 `--c-avatar-size-default`。可同时用于文字头像和图片头像。
 
-<demo src="./__demos__/size.vue"></demo>
-
-### 形状
+#### 形状
 
 `shape` 支持圆形和方形。
 
-<demo src="./__demos__/shape.vue"></demo>
+</details>
+
+<demo src="./__demos__/shape-size-comparison.vue"></demo>
+
+### 颜色与边框
+
+使用 `color` 设置背景色，可传入主题色变量。`bordered` / `borderColor` 控制描边。
+
+<demo src="./__demos__/style.vue"></demo>
+
+### 头像可悬停
+
+设置 `hoverable` 后，鼠标悬停时头像会放大，可单独使用，也可以用在头像组里。
+
+<demo src="./__demos__/hoverable.vue"></demo>
+
+## 布局与排列
+
+### 头像组排列与溢出
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `image-url` | 图片地址 | 头像组排列与溢出 |
+| `alt` | 图片替代文本 | 头像组排列与溢出 |
+| `bordered` | 是否显示描边 | 头像组排列与溢出 |
+| `color` | 头像背景色 | 头像组排列与溢出 |
+<!-- demo-config-notes:end -->
+
+比较横向和纵向头像组，观察最大数量、重叠顺序和溢出提示。
+
+<details>
+<summary>配置说明与使用限制</summary>
+
+#### 头像组
+
+`AvatarGroup` 会自动堆叠子头像。可以用 `bordered` 做出叠层描边，`maxCount` 将超出的头像收纳到 Popover，`maxStyle` 定制汇总头像，`zIndexAscend` 按顺序递增层级。`shape` / `size` / `offset` 会作用到组内全部子头像。
+
+#### 纵向头像组
+
+`vertical` 改为纵向堆叠，`offset` 控制重叠间距，数字为 px。
+
+</details>
+
+<demo src="./__demos__/group-comparison.vue"></demo>
+
+## 内容与展示
 
 ### 文字自适应
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `image-url` | 图片地址 | 图片头像、图片填充、加载与回退 |
+| `alt` | 图片替代文本 | 图片头像、图片填充、加载与回退 |
+| `size` | 头像宽高；数字为 px，字符串为 CSS 长度 | 图片头像、图片填充、加载与回退 |
+| `shape` | 头像形状 | 文字自适应、图片头像 |
+| `auto-fix-font-size` | 是否自动缩放过长的文字内容 | 文字自适应 |
+| `object-fit` | 图片填充方式 | 图片填充 |
+<!-- demo-config-notes:end -->
 
 默认会按头像宽度缩放过长文字。插槽文本更新后会重新测量；改回可容纳的短文本时恢复原始比例。将 `auto-fix-font-size` 设为 `false` 后保持原始字号。
 
@@ -50,42 +131,24 @@ permalink: /components/avatar/
 
 <demo src="./__demos__/fallback.vue"></demo>
 
-### 颜色与边框
-
-使用 `color` 设置背景色，可传入主题色变量。`bordered` / `borderColor` 控制描边。
-
-<demo src="./__demos__/style.vue"></demo>
-
-### 头像组
-
-`AvatarGroup` 会自动堆叠子头像。可以用 `bordered` 做出叠层描边，`maxCount` 将超出的头像收纳到 Popover，`maxStyle` 定制汇总头像，`zIndexAscend` 按顺序递增层级。`shape` / `size` / `offset` 会作用到组内全部子头像。
-
-<demo src="./__demos__/group.vue"></demo>
-
-### 纵向头像组
-
-`vertical` 改为纵向堆叠，`offset` 控制重叠间距，数字为 px。
-
-<demo src="./__demos__/group-vertical.vue"></demo>
-
-### 头像可悬停
-
-设置 `hoverable` 后，鼠标悬停时头像会放大，可单独使用，也可以用在头像组里。
-
-<demo src="./__demos__/hoverable.vue"></demo>
+## 交互与控制
 
 ### 交互图标
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `image-url` | 图片地址 | 交互图标 |
+| `alt` | 图片替代文本 | 交互图标 |
+| `size` | 头像宽高；数字为 px，字符串为 CSS 长度 | 交互图标 |
+| `trigger-type` | 交互图标展示方式 | 交互图标 |
+<!-- demo-config-notes:end -->
 
 使用 `trigger-icon` 插槽添加交互入口。`triggerType` 支持独立按钮（`button`）和悬浮背景层（`overlay`）两种形式；点击会触发 `click`。
 
 <demo src="./__demos__/trigger.vue"></demo>
-
-<!-- api-review:start -->
-### 功能调试
-
-<demo src="./__demos__/api-review.vue"></demo>
-
-<!-- api-review:end -->
 
 ## API
 

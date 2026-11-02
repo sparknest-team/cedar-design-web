@@ -6,19 +6,74 @@ permalink: /components/time-picker/
 
 时间选择**面板**（默认无触发器）。
 
-## 案例
-
 ### 列表滚动任务审计（2026-10-16）
 
 私有工具保留正时长线性滚动（列选择100ms）；零／负／非有限时长及owner减弱动态直接到位，动态reduce下一帧收束。同元素新请求取消旧任务，旧帧／重复帧不覆盖新偏移。工具取消保持当前偏移，不触发选择提交；无新增公开API或CSS Token。
 
 表单字段请使用 [`Time`](/components/time/)；时间范围字段请使用 [`TimeRange`](/components/time-range/)；范围面板请使用 [`TimeRangePicker`](/components/time-range-picker/)。
 
+## 基础示例
+
 ### 基本用法
 
 默认只渲染面板。
 
 <demo src="./__demos__/basic.vue"></demo>
+
+## 格式与展示
+
+### 定制格式
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `format` | 展示格式 | 定制格式、十二小时制 |
+| `use12-hours` | 12 小时制 | 十二小时制 |
+<!-- demo-config-notes:end -->
+
+<demo src="./__demos__/format.vue"></demo>
+
+### 十二小时制
+
+<demo src="./__demos__/use12Hours.vue"></demo>
+
+## 选择规则与交互
+
+### 禁用部分时间选项
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `format` | 展示格式 | 禁用部分时间选项、时间上下限、纯面板确认与禁用选项 |
+| `disable-confirm` | 跳过确认 | 跳过确认、纯面板确认与禁用选项 |
+| `use12-hours` | 12 小时制 | 禁用部分时间选项 |
+| `step` | 时分秒步长 | 定制步长 |
+| `hide-disabled-options` | 隐藏禁用时间选项 | 纯面板确认与禁用选项 |
+<!-- demo-config-notes:end -->
+
+禁用回调中的小时始终为 0–23，与面板是否使用十二小时制无关：午夜为 0，中午为 12，下午 1 点为 13。切换 AM/PM 后会重新计算禁用选项。
+
+<demo src="./__demos__/disabled-parts.vue"></demo>
+
+### 定制步长
+
+<demo src="./__demos__/step.vue"></demo>
+
+### 时间上下限
+
+`min` / `max` 的类型为 `string`，默认不限制；格式固定为 24 小时制 `HH:mm` 或 `HH:mm:ss`，不受 `format` 或 `use12Hours` 影响，包含端点。`HH:mm` 的秒视为 00。范围的两个端点分别校验；`showNextDay` 不把边界变成跨午夜区间。`min > max` 时没有可提交时间。无法解析的边界按未设置处理。
+
+动态修改边界不会改写外部模型。提交须同时满足边界、步长和禁用回调；不显示秒时按秒为 00 校验。列表粗粒度列在整个小时/分钟都越界时禁用，最终确认仍校验完整时间。隐藏禁用项使用 `hide-disabled-options`。
+
+<demo src="../__demos__/bounds.vue"></demo>
+
+### 跳过确认
+
+<demo src="./__demos__/no-confirm.vue"></demo>
 
 ### 纯面板确认与禁用选项
 
@@ -30,46 +85,13 @@ permalink: /components/time-picker/
 
 独立面板直接管理自己的草稿与提交状态。外部替换模型会重置草稿，不触发选择或变更事件；只读、禁用均阻止选择和确认。Cedar 使用列表，Maple 使用滚轮或时钟，展示层不另建一份草稿。
 
-### 禁用部分时间选项
+## 阅读方向
 
-禁用回调中的小时始终为 0–23，与面板是否使用十二小时制无关：午夜为 0，中午为 12，下午 1 点为 13。切换 AM/PM 后会重新计算禁用选项。
-
-<demo src="./__demos__/disabled-parts.vue"></demo>
-
-### 跳过确认
-
-<demo src="./__demos__/no-confirm.vue"></demo>
-
-### 定制格式
-
-<demo src="./__demos__/format.vue"></demo>
-
-### 定制步长
-
-<demo src="./__demos__/step.vue"></demo>
-
-### 十二小时制
-
-<demo src="./__demos__/use12Hours.vue"></demo>
-
-<!-- api-review:start -->
-### 功能调试
-
-<demo src="./__demos__/api-review.vue"></demo>
-
-<!-- api-review:end -->
+继承最近的 `dir="ltr|rtl"`，方向切换不修改时间或提交草稿。小时、分钟、秒等列按阅读顺序排列；左右键沿视觉方向跨列移动焦点。Cedar 的上下键与 Home/End 在当前时间列移动焦点，Enter/Space 选择，禁用项跳过；Maple 滚轮保留上下键和 Home/End 的选值行为。是否即时提交仍由原有确认配置决定。弹层继承字段来源方向。
 
 ## API
 
 面板主体统一管理草稿和确认，展示内容只渲染这一份状态。上方示例展示 extra 插槽及有效确认次数；重复确认相同值会触发 confirm，不会重复触发 change。
-
-### 时间上下限
-
-`min` / `max` 的类型为 `string`，默认不限制；格式固定为 24 小时制 `HH:mm` 或 `HH:mm:ss`，不受 `format` 或 `use12Hours` 影响，包含端点。`HH:mm` 的秒视为 00。范围的两个端点分别校验；`showNextDay` 不把边界变成跨午夜区间。`min > max` 时没有可提交时间。无法解析的边界按未设置处理。
-
-动态修改边界不会改写外部模型。提交须同时满足边界、步长和禁用回调；不显示秒时按秒为 00 校验。列表粗粒度列在整个小时/分钟都越界时禁用，最终确认仍校验完整时间。隐藏禁用项使用 `hide-disabled-options`。
-
-<demo src="../__demos__/bounds.vue"></demo>
 
 ### 纯面板事件与插槽边界
 

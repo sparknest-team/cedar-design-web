@@ -73,6 +73,7 @@
     <Teleport v-if="ghost" to="body">
       <div
         :class="[n('drag-ghost'), n('event')]"
+        :dir="direction"
         :style="{
           ...ghostTheme,
           left: `${ghost.left}px`,
@@ -94,6 +95,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, onActivated, onDeactivated, ref, shallowRef, watch } from "vue";
 import CButton from "../../button";
+import { useDirection } from "../../_utils/direction";
 import { createNamespace } from "../../_utils/global-config";
 import type { SchedulerEvent } from "../core";
 import type { SchedulerResize } from "../drag";
@@ -196,6 +198,7 @@ function resizeDrag(event: DragEvent) {
 }
 const dragging = ref(false);
 const root = ref<HTMLElement>();
+const { dir: direction } = useDirection(() => root.value);
 const ghost = ref<{
   left: number;
   top: number;
@@ -322,7 +325,7 @@ function pointerDown(event: PointerEvent, resize: SchedulerResize) {
   // Teleport must retain per-instance theme overrides instead of using body defaults.
   theme["--c-scheduler-event-background"] = styles.backgroundColor;
   theme["--c-scheduler-event-background-image"] = styles.backgroundImage;
-  theme["--c-scheduler-event-accent-color"] = styles.borderLeftColor;
+  theme["--c-scheduler-event-accent-color"] = styles.borderInlineStartColor;
   theme["--c-scheduler-color"] = styles.color;
   if (!current()) return;
   ghostTheme.value = theme;
@@ -417,7 +420,7 @@ function pointerDown(event: PointerEvent, resize: SchedulerResize) {
   detach = detachLocal;
 }
 watch(
-  () => [props.movable, props.disabled, props.event.readonly, props.event.resizable, props.event, props.managedPointer, props.resizable, props.event.milestone],
+  () => [direction.value, props.movable, props.disabled, props.event.readonly, props.event.resizable, props.event, props.managedPointer, props.resizable, props.event.milestone],
   () => {
     managedVersion++;
     clearTimeout(resetClick);

@@ -1,21 +1,35 @@
-import type { ExtractPropTypes, ExtractPublicPropTypes, PropType, StyleValue } from 'vue'
-import type { ButtonProps } from '../button'
-import { inputProps } from '../input'
+import { fieldLoadingProps } from '../field-decorator/props'
+import { emptyValueProp } from "../_utils/empty-value";
+import type {
+  ExtractPropTypes,
+  ExtractPublicPropTypes,
+  PropType,
+  StyleValue,
+} from "vue";
+import type { ButtonProps } from "../button";
+import { inputProps } from "../input";
 
-export type SearchShape = 'square' | 'round'
-export type SearchActionType = 'cancel' | 'search'
+export type SearchShape = "square" | "round";
+export type SearchEditMode = "direct" | "popup";
+export type SearchActionType = "cancel" | "search";
 
 export interface SearchField {
-  value: string
-  label: string
-  placeholder?: string
+  value: string;
+  label: string;
+  placeholder?: string;
 }
 
 export const searchProps = {
+  ...fieldLoadingProps,
+  readPretty: inputProps.readPretty,
+  emptyValues: inputProps.emptyValues,
+  emptyText: inputProps.emptyText,
+  /** 清空动作产生的模型值；省略保留原默认值。 */
+  emptyValue: emptyValueProp<string>(),
   /** 搜索关键词 */
-  modelValue: String,
+  modelValue: String as PropType<string | null>,
   /** 默认搜索关键词（非受控状态） */
-  defaultValue: { type: String, default: '' },
+  defaultValue: { type: String, default: "" },
   /** 当前搜索字段 */
   modelField: String,
   /** 默认搜索字段（非受控状态） */
@@ -36,10 +50,12 @@ export const searchProps = {
     type: Number,
     default: 5,
   },
-  /** 是否通过全屏弹层展示搜索历史 */
-  historyPopup: {
-    type: Boolean,
-    default: false,
+  /** 行内搜索与历史菜单，或全屏搜索弹层。 */
+  /** 搜索编辑模式；direct 为直接编辑，popup 为全屏弹层。 */
+  editMode: {
+    type: String as PropType<SearchEditMode>,
+    default: "direct",
+    validator: (value: string) => ["direct", "popup"].includes(value),
   },
   /** 搜索字段可选项 */
   fields: {
@@ -52,14 +68,12 @@ export const searchProps = {
   buttonText: String,
   /** 公共搜索按钮属性 */
   buttonProps: Object as PropType<ButtonProps>,
-  /** 是否处于加载状态 */
-  loading: { type: Boolean, default: false },
   /** 搜索框左侧文本 */
   label: String,
   /** 内层搜索框形状 */
   shape: {
     type: String as PropType<SearchShape>,
-    default: 'square',
+    default: "square",
   },
   /** 外层背景色 */
   background: String,
@@ -70,14 +84,14 @@ export const searchProps = {
   /** 移动端操作按钮类型 */
   actionType: {
     type: String as PropType<SearchActionType>,
-    default: 'cancel',
+    default: "cancel",
   },
   /** 是否显示移动端操作按钮 */
   showAction: Boolean,
   /** 搜索图标名称 */
   searchIcon: {
     type: String,
-    default: 'search',
+    default: "search",
   },
   modelModifiers: inputProps.modelModifiers,
   type: inputProps.type,
@@ -92,12 +106,12 @@ export const searchProps = {
   focusColor: inputProps.focusColor,
   blurColor: inputProps.blurColor,
   size: inputProps.size,
-  variant: { ...inputProps.variant, default: 'outline' },
+  variant: { ...inputProps.variant, default: "outline" },
   /** 是否允许清空 */
   clearable: { type: Boolean, default: false },
   inputAttrs: inputProps.inputAttrs,
   error: inputProps.error,
-}
+};
 
-export type SearchProps = ExtractPublicPropTypes<typeof searchProps>
-export type SearchResolvedProps = ExtractPropTypes<typeof searchProps>
+export type SearchProps = ExtractPublicPropTypes<typeof searchProps>;
+export type SearchResolvedProps = ExtractPropTypes<typeof searchProps>;

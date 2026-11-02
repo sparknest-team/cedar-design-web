@@ -8,7 +8,9 @@ permalink: /components/filter-form/
 
 持久化（记住筛选）由业务侧自行处理：组件只通过 `v-model` 同步值，不读写 storage。
 
-## 基础用法
+## 基础示例
+
+### 基础用法
 
 在 `fields` 中直接传入组件并配置字段。宽屏会自动多列展示，超出时可展开/收起。
 
@@ -34,24 +36,40 @@ const fields: FilterFormField[] = [
 
 所有字段组件统一使用 `modelValue` / `update:modelValue` 同步值。自定义组件也应遵循该协议；其他协议可通过包装组件适配。值同步与 FilterForm 的防抖 `change` 通知独立，`autoEmitChange: false` 时值仍会即时同步。
 
-## 可选组件注册表
+## 内容与展示
+
+### 可选组件注册表
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `fields` | 筛选项 schema | 可选组件注册表 |
+| `field-map` | 可选字段组件注册表 | 可选组件注册表 |
+| `collapsible` | 是否启用展开/收起 | 可选组件注册表 |
+<!-- demo-config-notes:end -->
 
 需要复用组件默认属性或使用后端 JSON schema 时，可通过 `fieldMap` 注册组件，字段的 `component` 填写注册表 key。注册表支持直接传组件或 `{ component, defaultProps }`，字段 `props` 覆盖注册表默认属性。未注册的字符串 key 不渲染。
 
 <demo src="./__demos__/registered-fields.vue"></demo>
 
-## 异步 options
+## 异步与动态数据
+
+### 异步 options
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `fields` | 筛选项 schema | 异步 options |
+| `collapsible` | 是否启用展开/收起 | 异步 options |
+<!-- demo-config-notes:end -->
 
 选项统一通过字段 `props.options` 传入。使用 `computed` 根据响应式选项构造 `fields`，接口返回后即可更新选项。关闭折叠时适合筛选项较少的场景。
 
 <demo src="./__demos__/async-options.vue"></demo>
-
-<!-- api-review:start -->
-### 功能调试
-
-<demo src="./__demos__/api-review.vue"></demo>
-
-<!-- api-review:end -->
 
 ## API
 
@@ -145,3 +163,5 @@ import type {
 ```
 
 Grid 列间距通过 `grid-props.colGap`（数字 px）控制；没有同名 CSS 覆盖入口，以确保 Grid 的数值测量与实际间距一致。
+
+changeDebounce 改变时按新延迟重排待发送快照，0为立即通知。回车先取消待发送任务再通知当前值；外部重置或不同模型替换会取消旧快照，但正常接受 update:modelValue 的相同值回传不会取消 change。KeepAlive 停用与卸载取消待发送任务；重新激活后接受新输入。

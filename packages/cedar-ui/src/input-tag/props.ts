@@ -1,11 +1,15 @@
-import type { ExtractPropTypes, PropType } from 'vue'
-import { fieldPresentationProps } from '../_components/field-presentation/props'
-import type { ComponentSize } from '../_utils/constant'
-import { componentSizes } from '../_utils/constant'
-import type { InputTagFieldNames, TagData } from './types'
+import { fieldLoadingProps } from '../field-decorator/props'
+import { emptyValueProp } from "../_utils/empty-value";
+import type { ExtractPropTypes, PropType } from "vue";
+import { fieldPresentationProps } from "../_components/field-presentation/props";
+import type { ComponentSize } from "../_utils/constant";
+import { componentSizes } from "../_utils/constant";
+import type { InputTagFieldNames, TagData } from "./types";
 
 export const inputTagProps = {
   ...fieldPresentationProps,
+  loading: fieldLoadingProps.loading,
+  emptyValue: emptyValueProp<(string | number | TagData)[]>(),
   baseCls: String,
   /**
    * @zh 绑定值
@@ -13,7 +17,7 @@ export const inputTagProps = {
    * @v-model
    */
   modelValue: {
-    type: Array as PropType<(string | number | TagData)[]>,
+    type: Array as PropType<(string | number | TagData)[] | null>,
   },
   /**
    * @zh 默认值（非受控状态）
@@ -35,7 +39,7 @@ export const inputTagProps = {
    */
   defaultInputValue: {
     type: String,
-    default: '',
+    default: "",
   },
   /**
    * @zh 占位符
@@ -91,9 +95,10 @@ export const inputTagProps = {
    * @default-value 'filled'
    */
   variant: {
-    type: String as PropType<'filled' | 'outline' | 'standard'>,
-    default: 'filled',
-    validator: (value: string) => ['filled', 'outline', 'standard'].includes(value),
+    type: String as PropType<"filled" | "outline" | "standard">,
+    default: "filled",
+    validator: (value: string) =>
+      ["filled", "outline", "standard"].includes(value),
   },
   /**
    * @zh 最多展示的标签个数，`0` 表示不限制
@@ -109,7 +114,9 @@ export const inputTagProps = {
    * @en Whether to keep the content of the input box
    */
   retainInputValue: {
-    type: [Boolean, Object] as PropType<boolean | { create?: boolean; blur?: boolean }>,
+    type: [Boolean, Object] as PropType<
+      boolean | { create?: boolean; blur?: boolean }
+    >,
     default: false,
   },
   /**
@@ -122,7 +129,6 @@ export const inputTagProps = {
   /**
    * @zh 是否仅创建唯一的值
    * @en Whether to create only unique values
-   * @version 2.15.0
    */
   uniqueValue: {
     type: Boolean,
@@ -131,7 +137,6 @@ export const inputTagProps = {
   /**
    * @zh 自定义 `TagData` 中的字段
    * @en Customize fields in `TagData`
-   * @version 2.22.0
    */
   fieldNames: {
     type: Object as PropType<InputTagFieldNames>,
@@ -139,7 +144,6 @@ export const inputTagProps = {
   /**
    * @zh 标签内容不换行
    * @en Tag content does not wrap
-   * @version 2.56.1
    */
   tagNowrap: {
     type: Boolean,
@@ -149,9 +153,9 @@ export const inputTagProps = {
   focused: Boolean,
   disabledInput: Boolean,
   uninjectFormItemContext: Boolean,
-}
+};
 
 export type InputTagProps = Omit<
   Partial<ExtractPropTypes<typeof inputTagProps>>,
-  'baseCls' | 'focused' | 'disabledInput' | 'uninjectFormItemContext'
->
+  "baseCls" | "focused" | "disabledInput" | "uninjectFormItemContext"
+>;

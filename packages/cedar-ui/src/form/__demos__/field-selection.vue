@@ -1,8 +1,8 @@
 <script setup>
 import ModelOutput from "../__demo-utils__/ModelOutput.vue";
 import { ref, watch } from "vue";
-const presentation = ref("inline");
-const presentations = ["inline", "click", "dblclick"].map((value) => ({
+const editMode = ref("direct");
+const presentations = ["direct", "click", "dblclick"].map((value) => ({
   value,
   label: value,
 }));
@@ -30,40 +30,6 @@ const people = [
   { value: "chen", label: "陈晨 · 设计" },
   { value: "zhou", label: "周宁 · 运营" },
 ];
-const staffRecord = (item) => ({
-  user_id: item.value,
-  worker_user_id: item.value,
-  display_name: item.label,
-  cn_name: item.label,
-});
-const peopleFetch = {
-  get: async (_url, { params } = {}) => ({
-    resultCode: "success",
-    data: {
-      list: people
-        .filter((item) => item.value === params?.worker_user_id)
-        .map(staffRecord),
-    },
-  }),
-  post: async (_url, { params } = {}) => {
-    const query = params?.name || "";
-    await new Promise((resolve) =>
-      setTimeout(resolve, query ? (query.length % 2 ? 700 : 350) : 150),
-    );
-    return {
-      resultCode: "success",
-      data: {
-        result_list: people
-          .filter(
-            (item) =>
-              !params?.name ||
-              `${item.value} ${item.label}`.includes(params.name),
-          )
-          .map(staffRecord),
-      },
-    };
-  },
-};
 const suggestions = [
   {
     isGroup: true,
@@ -93,14 +59,17 @@ const model = ref({
 </script>
 
 <template>
-  <c-space direction="column" :size="16">
-    <c-select
-      v-model="presentation"
-      :options="presentations"
-      :clearable="false"
-      aria-label="字段展示方式"
-    />
-    <c-form :model="model" :presentation="presentation">
+  <c-space direction="column" align="stretch" :size="16">
+    <c-form-item layout="vertical" size="sm" label="字段展示方式">
+      <c-radio-group
+        v-model="editMode"
+        aria-label="字段展示方式"
+        :options="presentations"
+        variant="button"
+        size="sm"
+      />
+    </c-form-item>
+    <c-form :model="model" :edit-mode="editMode">
       <c-form-item field="device" label="单选设备"
         ><c-select v-model="model.device" :options="devices" filterable
       /></c-form-item>
@@ -123,7 +92,7 @@ const model = ref({
         ><c-people-select
           v-model="model.person"
           :label="people.find((item) => item.value === model.person)?.label"
-          :fetch="peopleFetch"
+          :options="people"
           clearable
           placeholder="搜索人员"
       /></c-form-item>

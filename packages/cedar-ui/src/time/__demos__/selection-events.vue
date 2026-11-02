@@ -18,7 +18,7 @@ function record(name, value, dates) {
 </script>
 
 <template>
-  <div style="display: flex; flex-direction: column; gap: 12px; width: 100%">
+  <c-space direction="column" size="12px" style="width: 100%">
     <c-checkbox v-model="readonly"> 只读：可聚焦，不可修改</c-checkbox>
     <c-checkbox v-model="disabled"> 禁用：释放焦点，不可修改</c-checkbox>
     <c-checkbox v-model="immediate"> 选择后立即提交</c-checkbox>
@@ -50,5 +50,5 @@ function record(name, value, dates) {
     >
       {{ event }}
     </div>
-  </div>
+  </c-space>
 </template>

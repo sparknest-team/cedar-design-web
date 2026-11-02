@@ -10,7 +10,7 @@ import { getPrefixCls, createNamespace } from "../_utils/global-config";
 import type { ModeType, LabelPositionType } from "./types";
 import { timelineInjectionKey } from "./context";
 import Item from "./Item.vue";
-import { Direction } from "../_utils/constant";
+import { Orientation } from "../_utils/constant";
 import { useChildrenComponents } from "../_hooks/use-children-components";
 
 export const timelineProps = {
@@ -27,7 +27,7 @@ export const timelineProps = {
    * @values 'horizontal', 'vertical'
    */
   orientation: {
-    type: String as PropType<Direction>,
+    type: String as PropType<Orientation>,
     default: "vertical",
   },
   /**

@@ -6,13 +6,27 @@ permalink: /components/dialog/
 
 在当前页面打开一个浮层，承载相关操作。组件式与函数式 API 命名一致。
 
-## 案例
+## 基础示例
 
 ### 基本用法
 
 <demo src="./__demos__/basic.vue"></demo>
 
+## 调用方式与内容
+
 ### 函数调用
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `title` | 标题 | 确认框、弹出层表单、简洁模式 |
+| `type` | 类型图标：`info` `success` `warning` `error` | 确认框、简洁模式 |
+| `message` | 内容（也可用 default 插槽） | 确认框、简洁模式 |
+| `before-close` | 返回 boolean/Promise 或调用 done；首次完成生效 | 弹出层表单 |
+| `simple` | 简洁布局（紧凑 padding、footer 居中） | 简洁模式 |
+<!-- demo-config-notes:end -->
 
 <demo src="./__demos__/global.vue"></demo>
 
@@ -34,41 +48,39 @@ permalink: /components/dialog/
 
 <demo src="./__demos__/form.vue"></demo>
 
-### 自定义底部
-
-`footer` 插槽会暴露 `confirm`、`cancel` 和 `close` 方法，便于组合自定义操作。
-
-<demo src="./__demos__/custom-footer.vue"></demo>
-
-### 定制按钮文字
-
-<demo src="./__demos__/custom-text.vue"></demo>
-
-### 对话框宽度
-
-通过 `width` 自定义宽度。
-
-<demo src="./__demos__/width.vue"></demo>
-
 ### 简洁模式
 
 `simple` 适合内容简短、操作聚焦的对话框。
 
 <demo src="./__demos__/simple.vue"></demo>
 
-### 可拖动
+## 尺寸与布局
 
-<demo src="./__demos__/draggable.vue"></demo>
+### 弹窗尺寸与长内容
 
-### 全屏
+<!-- demo-config-notes:start -->
+#### 本组配置对照
 
-<demo src="./__demos__/fullscreen.vue"></demo>
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `title` | 标题 | 去除内容边距、最大高度 |
+| `body-style` | 内容区 style | 去除内容边距、最大高度 |
+| `width` | 宽度 | 弹窗尺寸与长内容 |
+| `fullscreen` | 全屏 | 弹窗尺寸与长内容 |
+<!-- demo-config-notes:end -->
 
-### 高级属性
+分别打开弹窗，比较宽度、全屏或长内容的可视范围；关闭当前弹窗后再打开另一种布局。
 
-组合 `footer`、`hide-title`、`body-class` / `body-style` 和 `unmount-on-close` 控制对话框的渲染行为。
+<details>
+<summary>配置说明与使用限制</summary>
 
-<demo src="./__demos__/advanced.vue"></demo>
+#### 对话框宽度
+
+通过 `width` 自定义宽度。
+
+</details>
+
+<demo src="./__demos__/size-comparison.vue"></demo>
 
 ### 去除内容边距
 
@@ -80,18 +92,76 @@ permalink: /components/dialog/
 
 <demo src="./__demos__/max-height.vue"></demo>
 
+## 交互与定制
+
+### 可拖动
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `unmount-on-close` | 关闭后卸载 | 定制按钮文字、高级属性 |
+| `draggable` | 可拖动 | 可拖动 |
+| `confirm-button-text` | 确认按钮文案 | 定制按钮文字 |
+| `cancel-button-text` | 取消按钮文案 | 定制按钮文字 |
+| `footer` | 是否展示 footer 区域 | 高级属性 |
+| `type` | 类型图标：`info` `success` `warning` `error` | 高级属性 |
+<!-- demo-config-notes:end -->
+
+<demo src="./__demos__/draggable.vue"></demo>
+
+### 自定义底部
+
+`footer` 插槽会暴露 `confirm`、`cancel` 和 `close` 方法，便于组合自定义操作。
+
+<demo src="./__demos__/custom-footer.vue"></demo>
+
+### 定制按钮文字
+
+<demo src="./__demos__/custom-text.vue"></demo>
+
+### 高级属性
+
+组合 `footer`、`hide-title`、`body-class` / `body-style` 和 `unmount-on-close` 控制对话框的渲染行为。
+
+<demo src="./__demos__/advanced.vue"></demo>
+
+## 异步与关闭控制
+
 ### 异步关闭
 
-通过 `before-close` / `beforeClose` 实现异步关闭，可通过 `refs` 控制按钮 loading。
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `before-close` | 返回 boolean/Promise 或调用 done；首次完成生效 | 异步关闭、before 钩子与 done 兼容 |
+| `title` | 标题 | 异步关闭 |
+| `message` | 内容（也可用 default 插槽） | 异步关闭 |
+<!-- demo-config-notes:end -->
 
 <demo src="./__demos__/async.vue"></demo>
 
-<!-- api-review:start -->
-### 功能调试
+### before 钩子与 done 兼容
 
-<demo src="./__demos__/api-review.vue"></demo>
+`beforeClose({ action }, done, context)` 为统一入口，不新增另一套命名。
 
-<!-- api-review:end -->
+
+只记录日志的同步钩子应显式 return true；同步 undefined 表示仍在等待回调。注意：以前返回 `Promise<void>` 却不调用 done 的异步钩子，现在会在 Promise 完成后放行。
+
+
+<demo src="./__demos__/guard-protocol.vue"></demo>
+
+
+Promise 与 done 共用一次完成状态：`false` / `done(false)` 阻止，`true` / `done()` 允许；Promise&lt;void&gt; 正常完成允许。重复完成只生效一次，异常触发 guard-error，取消或卸载后迟到结果无效。此类关闭/确认回调同步返回 void 时保留原回调协议，等待 done。
+
+
+守卫统一使用 `(payload, done, context)`：关闭 payload 为 `{ action }`，切换和提交为 `{ value, previousValue }`，Popup 为 `{ reason }`。context 提供 `signal` 和可选原始 `event`。返回 boolean/Promise，或调用 done()/done(false)；同步 void 等待 done，Promise&lt;void&gt; 放行。首次完成生效。等待期间自动管理 loading/disabled，取消后旧结果失效，不暴露内部按钮 refs。
+
+## 阅读方向
+
+继承最近的 `dir="ltr|rtl"`，支持运行时切换与局部覆盖。内容、标题与动作间距使用逻辑起止位置；外部弹层继承来源方向。关闭、确认、取消和未提交状态不因方向切换改变。
 
 ## API
 
@@ -99,6 +169,7 @@ permalink: /components/dialog/
 
 | 参数名                    | 描述                                         | 类型                             | 默认值       |
 | ------------------------- | -------------------------------------------- | -------------------------------- | ------------ |
+| dir | 阅读方向；省略时继承来源作用域。物理 left/right 方位保持原意。 | `ReadingDirection` (`ltr` / `rtl`) | — |
 | `open` **(v-model)**      | 是否显示                                     | `boolean`                        | `-`          |
 | `default-open`            | 非受控默认显示                               | `boolean`                        | `false`      |
 | `title`                   | 标题                                         | `string`                         | `-`          |
@@ -141,7 +212,7 @@ permalink: /components/dialog/
 | `overlay-animation-name`     | 背景层动画                                     | `string`                         | `fade-modal` |
 | `dialog-animation-name`   | 对话框动画                                   | `string`                         | `zoom-modal` |
 | `z-index`                 | 层级                                         | `number`                         | `-`          |
-| `before-close`            | 关闭前拦截                                   | `(action, done, refs) => void`   | `-`          |
+| `before-close` | 返回 boolean/Promise 或调用 done；首次完成生效 | `DialogBeforeClose` | — |
 
 ### `<Dialog>` Events
 
@@ -214,7 +285,6 @@ permalink: /components/dialog/
 ```ts
 import type {
   DialogAction,
-  DialogBeforeCloseRefs,
   DialogConfig,
   DialogMethod,
   DialogReturn,
@@ -273,3 +343,9 @@ Dialog 的公开颜色变量与 Maple 同义：`--c-dialog-background` 表示浮
 | `--c-dialog-fullscreen-height` | `100vh` |
 | `--c-dialog-animation-duration` | `var(--c-sys-motion-duration-slow)` |
 | `--c-dialog-animation-easing` | `var(--c-sys-motion-easing-standard)` |
+
+### 守卫等待反馈
+
+before-* 等待期间显示加载反馈并标记 aria-busy；拒绝或失败后恢复，重复提交不再启动同一操作。普通事件返回的 Promise 不参与加载。
+
+函数调用的通知回调不控制任务完成。服务的选择或关闭结果独立于回调异常结算，关闭完成时仍会清理所属宿主。异常继续通过调用方或 Vue 错误通道传递；回调返回 Promise 不控制 loading 或关闭。

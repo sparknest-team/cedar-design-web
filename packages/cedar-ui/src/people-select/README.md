@@ -2,68 +2,127 @@
 permalink: /components/people-select/
 ---
 
-# PeopleSelect
+# PeopleSelect 人员选择
 
-人员选择组件。
+`options` 接收人员数组或加载函数，组件内部管理等待、取消与过期结果；`fallback-option` 同步读取独立的响应式回显数据，异步查询完成后更新该数据即可回显。头像由 `avatar` 提供。组件提供可选的电话、聊天图标，拨号、聊天和权限仍由业务实现。
 
-## 基础用法
+## 全局默认属性与局部覆盖
 
-本例使用本地异步模拟接口，不需要 token，也不请求真实人员服务。初始 `demo.chen` 不在首批候选中，由详情接口按 ID 反显；可搜索姓名或 ID、选择、清除，并观察阅读模式同步。
+```ts
+import { PeopleSelect, type PeopleSelectProps } from "@cedar-design/ui";
+PeopleSelect.setPropsDefaults({
+  options: (query, { signal }) => peopleService.search(query, signal),
+  fallbackOption: (id) => personCache.value[id] ?? { value: id, label: id },
+  showPhone: true,
+  showChat: true,
+  call: (person) => businessPhone.call(person.mobile),
+  chat: (person) => businessChat.open(person.value),
+} satisfies PeopleSelectProps);
+```
 
-<demo src="./__demos__/basic.vue"></demo>
+```vue
+<c-people-select v-model="personId" />
+<!-- 本页覆盖候选接口与聊天行为，关闭电话图标 -->
+<c-people-select
+  v-model="personId"
+  :options="loadMyTeam"
+  :chat="openTeamChat"
+  :show-phone="false"
+  read-pretty
+/>
+<!-- 数组覆盖全局加载函数；空数组也表示明确使用本地空数据 -->
+<c-people-select v-model="personId" :options="[]" />
+```
 
-## 组件配置
+局部属性优先于全局默认。图标只在阅读态展示；默认 show-phone/show-chat 为 false。启用显示但没有处理函数时，按钮禁用；未选人员、禁用状态也不能触发动作。函数返回 Promise 时按钮自动等待，失败触发 action-error(error, call|chat)。组件不自动打开 tel: 链接，也不包含聊天 SDK。业务需要独立处理读取权限与操作权限时，可覆盖操作区域。
 
-<!-- api-review:start -->
-### 功能调试
+setPropsDefaults 在挂载前配置一次，修改组件定义的默认属性；不是按应用或租户隔离的上下文。SSR 不应逐请求修改，动态页面/租户配置推荐封装业务组件并透传 props。
 
-<demo src="./__demos__/api-review.vue"></demo>
+## 自定义操作区域
 
-<!-- api-review:end -->
+```vue
+<c-people-select v-model="personId" read-pretty>
+  <template #actions="{ person, disabled }">
+    <business-person-actions :person="person" :disabled="disabled" />
+  </template>
+</c-people-select>
+```
+
+操作区域优先级：actions 插槽 → render-actions → 内置电话/聊天按钮。它们均不会触发字段编辑或更改已选人员。
+
+## 基础示例
+
+### 完整业务示例
+
+<demo src="./__demos__/injected-services.vue"></demo>
 
 ## API
 
-### 主值与默认值
+### 空值识别与阅读空文案
 
-使用普通 `v-model`。`modelValue` 表示选中人员的标识；`defaultValue` 仅在创建时初始化非受控值，后续修改不会重置当前状态。显式绑定值优先，初始化不发出 `update:modelValue`。
+`empty-values` 用于空值识别，`empty-value` 保留原清空输出；`empty-text` 仅在 `read-pretty` 空内容下展示，默认 `'-'`，字段 > FormItem > Form，自定义 read 插槽优先。显式配置 empty-values 后，内置 required 接入该策略，自定义校验仍收到原值。详见[统一说明](/guide/empty-values/)。
 
-### PeopleSelect Props
+| 参数         | 类型               | 缺省与范围                                            |
+| ------------ | ------------------ | ----------------------------------------------------- |
+| empty-values | readonly unknown[] | 字段 > FormItem > Form > 组件族默认；完整覆盖，不合并 |
+| empty-text   | string             | 字段 > FormItem > Form > '-'；显式 '' 有效            |
 
-其它属性参照Select组件。
+以上是字段展示层 API；纯面板不因此新增阅读模式。Form 与 FormItem 提供继承配置。empty-value 的现有类型与默认输出仍按该组件原 API 执行。
 
-| 属性       | 说明                                   | 类型    | 默认值 |
-| ---------- | -------------------------------------- | ------- | ------ |
-| fetch      | 需要主动传入发请求的fetch              | any     | -      |
-| model-value | 绑定值                                 | string  | -      |
-| is-label   | 是否是阅读模式                         | boolean | -      |
-| url-type   | 选人地址的url类型，默认有三种oss、ares | string  | ares   |
+| 属性                    | 说明                                             | 默认值 |
+| ----------------------- | ------------------------------------------------ | ------ |
+| v-model / default-value | 字符串 ID，null 表示显式清空                     | — / '' |
+| options                 | 人员数组，或 (query, { signal }) => 数组/Promise | —      |
+| fallback-option         | boolean / (id) => PeopleSelectOption             | true   |
+| show-avatar             | 展示 avatar                                      | true   |
+| show-phone / show-chat  | 阅读态电话 / 聊天图标                            | false  |
+| call / chat             | (person) => void/Promise，由业务实现             | —      |
+| render-actions          | ({ person, disabled }) => VNodeChild             | —      |
+| is-label / read-pretty  | 阅读态，仅解析已选人员，不加载候选               | false  |
+| disabled / readonly     | 省略继承表单状态                                 | —      |
+| empty-value             | 清空结果；可指定 null 或返回 null 的函数         | ''     |
 
-`disabled`、`readonly` 支持字段显式设置及 Form / FormItem 继承。弹层确认期间不可编辑；校验失败保留草稿，表单重置关闭弹层并丢弃未完成提交。
+人员数据为 `{ value: string, label: string, avatar?: string, mobile?: string, disabled?: boolean }`。
 
-### PeopleSelect Events
+signal 可选地传给 fetch 取消过期请求；不是 HTTP 参数，也不会回滚服务器操作。忽略 signal 时，组件仍隔离旧结果。函数结果默认不再本地二次过滤，filter-option 只配置本地匹配策略。
 
-| 事件名 | 说明               | 参数                    |
-| ------ | ------------------ | ----------------------- |
-| change | 选人时候触发的事件 | `(val: string) => void` |
-| clear  | 点击清除触发的事件 | -                       |
+事件：update:model-value、change、clear、search、load-error(error, options)、action-error(error, call|chat)。实例方法：refresh()、focus()、blur()。无独立 request 属性，无需外部 useAsyncData 或专用 provider key。
 
-### PeopleSelect Slots
+`empty-value` 可显式设为 `null`（或 `() => null`），清空时原样提交 null；省略时保留组件原默认值。界面把 null 显示为空，不会把普通输入的空字符串自动转成 null。支持弹出编辑的字段中，清空先修改草稿，确认后提交，取消则保留原值。
 
-| 插槽名  | 说明           |
-| ------- | -------------- |
-| default | 自定义默认内容 |
+`fallback-option` 与候选 options 独立，不返回 Promise、不主动发请求。回显优先使用当前候选项，不存在时读取 fallback；传入 false 关闭未匹配值的回显。
 
-## 类型定义
+### 业务请求如何接收取消信号
 
-组件导出以下类型定义
+组件为每次操作创建 AbortController，把 signal 传入加载函数。业务需要逐层透传给请求库。fetch 原生支持 AbortSignal；Axios 0.22+ 支持 signal；ofetch、Ky 会向底层 fetch 传递或合并这个信号。未支持的封装需要把 abort 事件适配到自己的取消方法。取消客户端请求不能回滚服务端已完成的操作。
 
 ```ts
-import type { PeopleSelectProps } from '@cedar-design/ui'
+async function loadPeople(query, { signal }) {
+  const response = await fetch(`/api/people?q=${encodeURIComponent(query)}`, {
+    signal,
+  });
+  if (!response.ok) throw new Error("People request failed");
+  return response.json();
+}
+
+// Axios: preserve signal through your service wrapper.
+async function loadWithAxios(query, { signal }) {
+  const { data } = await axios.get("/api/people", {
+    params: { q: query },
+    signal,
+  });
+  return data;
+}
+
+// Other fetch wrappers:
+const loadWithOfetch = (query, { signal }) =>
+  ofetch("/api/people", { query: { q: query }, signal });
+const loadWithKy = (query, { signal }) =>
+  ky.get("/api/people", { searchParams: { q: query }, signal }).json();
 ```
 
-### Form 字段展示与确认
+[AbortSignal](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal) · [Axios cancellation](https://axios-http.com/docs/cancellation) · [ofetch](https://github.com/unjs/ofetch) · [Ky](https://github.com/sindresorhus/ky#cancellation)
 
-Cedar 使用 presentation="click" / "dblclick" 在原位进入编辑，Enter/F2 也可进入；取消/Escape 丢弃草稿，确认后提交。 readPretty 为纯阅读属性，与 readonly、disabled 独立。
+### 共享字段加载
 
-
-搜索输入变化时立即移除旧候选，防抖与请求期间不能通过 Enter 选择旧结果；只采纳最后一次搜索响应。ID 反显不进入候选列表，关闭面板或重置后，迟到响应不会恢复旧列表。校验失败保留所选草稿，异步确认期间锁定字段及取消操作，重置可中止本次编辑。
+`loading-mode="line"` 使用 FieldDecorator 的共享加载线；默认模式保留本组件已有的加载展示。加载状态本身不隐式设置 disabled 或 readonly。

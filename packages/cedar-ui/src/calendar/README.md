@@ -6,7 +6,7 @@ permalink: /components/calendar/
 
 用于展示月历或年历，并支持单日期选择、自定义日期内容和受控状态。表单中的日期输入请使用 Date，带选择面板的复杂选择请使用 DatePicker，日程编排请使用 Scheduler。
 
-## 案例
+## 基础示例
 
 ### 基础用法
 
@@ -14,13 +14,20 @@ permalink: /components/calendar/
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### 受控状态与事件
-
-通过 `v-model` 从外部设置日期，并通过 `change`、`panel-change` 区分日期选择和面板翻页。
-
-<demo src="./__demos__/controlled.vue"></demo>
+## 视图与日期展示
 
 ### 月视图与年视图
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `mode` | 模式 | 月视图与年视图 |
+| `modes` | 显示的模式 | 月视图与年视图 |
+| `day-start-of-week` | 一周开始日 | 一周起始与周序号 |
+| `is-week` | 是否显示周序号 | 一周起始与周序号 |
+<!-- demo-config-notes:end -->
 
 使用 `mode` 控制视图。未传入 `mode` 时，也可以通过头部的模式切换器改变内部视图。
 
@@ -32,7 +39,13 @@ permalink: /components/calendar/
 
 <demo src="./__demos__/week-options.vue"></demo>
 
-## 定制
+## 交互与内容定制
+
+### 受控状态与事件
+
+通过 `v-model` 从外部设置日期，并通过 `change`、`panel-change` 区分日期选择和面板翻页。
+
+<demo src="./__demos__/controlled.vue"></demo>
 
 ### 自定义日期单元格
 
@@ -45,13 +58,6 @@ permalink: /components/calendar/
 `header` 插槽替换中间标题，上一页、下一页、今天和模式切换仍由 Calendar 管理。
 
 <demo src="./__demos__/custom-header.vue"></demo>
-
-<!-- api-review:start -->
-### 功能调试
-
-<demo src="./__demos__/api-review.vue"></demo>
-
-<!-- api-review:end -->
 
 ## API
 

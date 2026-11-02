@@ -6,25 +6,32 @@ permalink: /components/skeleton/
 
 将加载中的数据用灰色占位。
 
-## 案例
+## 基础示例
 
 ### 基础用法
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### 标题与段落
+## 内容与展示
 
-<demo src="./__demos__/title-and-rows.vue"></demo>
+### 骨架内容形态对比
 
-### 头像与卡片
+<!-- demo-config-notes:start -->
+#### 本组配置对照
 
-<demo src="./__demos__/avatar-and-card.vue"></demo>
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `title` | 是否显示标题占位 | 骨架内容形态对比、动画 |
+| `loading` | 是否展示骨架屏（加载中状态） | 骨架内容形态对比、全屏模式 |
+| `avatar` | 是否显示头像占位 | 骨架内容形态对比、动画 |
+| `rows` | 段落行数 | 骨架内容形态对比 |
+| `rows-width` | 每行宽度 | 骨架内容形态对比 |
+| `card` | 是否显示卡片占位 | 骨架内容形态对比 |
+<!-- demo-config-notes:end -->
 
-### 自定义模板
+比较标题/文本行与头像/卡片形态，按最终内容轮廓选择占位布局；动画和全屏加载另行展示。
 
-通过 `template` 插槽组合 `SkeletonLine` 和 `SkeletonShape`。
-
-<demo src="./__demos__/custom-template.vue"></demo>
+<demo src="./__demos__/content-comparison.vue"></demo>
 
 ### 动画
 
@@ -36,12 +43,13 @@ permalink: /components/skeleton/
 
 <demo src="./__demos__/fullscreen.vue"></demo>
 
-<!-- api-review:start -->
-### 功能调试
+## 自定义与插槽
 
-<demo src="./__demos__/api-review.vue"></demo>
+### 自定义模板
 
-<!-- api-review:end -->
+通过 `template` 插槽组合 `SkeletonLine` 和 `SkeletonShape`。
+
+<demo src="./__demos__/custom-template.vue"></demo>
 
 ## API
 

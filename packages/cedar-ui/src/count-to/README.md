@@ -6,7 +6,7 @@ permalink: /components/count-to/
 
 展示起始数值到目标数值的数字动画。
 
-## 案例
+## 基础示例
 
 ### 基础用法
 
@@ -14,17 +14,43 @@ permalink: /components/count-to/
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### 精度
+## 内容与展示
+
+### 精度、时长与动画曲线
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `to` | 目标值 | 精度、时长与动画曲线 |
+| `precision` | 小数精度 | 精度、时长与动画曲线 |
+| `duration` | 动画持续时间（毫秒） | 精度、时长与动画曲线 |
+| `timing-function` | 动画缓动函数 | 精度、时长与动画曲线 |
+<!-- demo-config-notes:end -->
+
+比较小数精度对最终文本的影响，以及时长和缓动曲线对数字变化过程的影响；手动启动、暂停另行展示。
+
+<details>
+<summary>配置说明与使用限制</summary>
+
+#### 精度
 
 通过 `precision` 控制小数位数。
 
-<demo src="./__demos__/precision.vue"></demo>
-
-### 自定义时长
+#### 自定义时长
 
 通过 `duration` 指定动画时长（毫秒）。
 
-<demo src="./__demos__/duration.vue"></demo>
+#### 自定义动画曲线
+
+通过 `timing-function` 指定缓动函数。
+
+</details>
+
+<demo src="./__demos__/number-format-comparison.vue"></demo>
+
+## 自定义与插槽
 
 ### 自定义样式
 
@@ -32,24 +58,22 @@ permalink: /components/count-to/
 
 <demo src="./__demos__/custom.vue"></demo>
 
-### 自定义动画曲线
-
-通过 `timing-function` 指定缓动函数。
-
-<demo src="./__demos__/timing-function.vue"></demo>
+## 交互与控制
 
 ### 手动控制
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `to` | 目标值 | 手动控制 |
+| `auto-start` | 是否自动开始播放动画 | 手动控制 |
+<!-- demo-config-notes:end -->
 
 设置 `auto-start` 为 `false`，通过 `start`、`pause`、`reset` 手动控制动画。
 
 <demo src="./__demos__/manual.vue"></demo>
-
-<!-- api-review:start -->
-### 功能调试
-
-<demo src="./__demos__/api-review.vue"></demo>
-
-<!-- api-review:end -->
 
 ## API
 

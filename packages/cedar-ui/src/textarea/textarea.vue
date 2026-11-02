@@ -1,6 +1,7 @@
 <template>
   <div v-bind="splitAttrs.root" :class="classes(n(), [mergedDisabled, n('--disabled')])" @mousedown="handleMousedown">
     <FieldDecorator
+        :loading="loading" :loading-mode="loadingMode"
       :id="textareaId" :value="value" :variant="mergedVariant" :size="mergedSize"
       :disabled="mergedDisabled" :readonly="mergedReadonly" :error="mergedError"
       :focused="focused" :placeholder="placeholder" :hint="mergedHint" :hint-center="false"
@@ -11,7 +12,9 @@
       <template v-if="$slots.prefix" #prefix><slot name="prefix" /></template>
       <div v-if="autoSize" ref="mirrorRef" :class="n('mirror')" :style="mirrorStyle" aria-hidden="true">{{ `${value}\n` }}</div>
       <textarea
-        v-bind="nativeAttrs" :id="textareaId" ref="textareaRef" :class="n('inner')"
+        
+        v-bind="nativeAttrs"
+        :aria-busy="loading || undefined" :id="textareaId" ref="textareaRef" :class="n('inner')"
         :style="textareaStyle" :value="value" :disabled="mergedDisabled" :readonly="mergedReadonly"
         :rows="rows" :maxlength="undefined" :placeholder="mergedHint ? undefined : placeholder"
         :aria-label="ariaLabel ?? nativeAttrs['aria-label']"
@@ -74,7 +77,7 @@ function processInput(event: Event) {
   if (mergedDisabled.value || mergedReadonly.value) return
   const input = event.target as HTMLTextAreaElement
   const restore = captureInputSelection(input)
-  updateValue(input.value, (nextValue) => { emit('input', nextValue, event); eventHandlers.value?.onInput?.(event) })
+  updateValue(input.value, (nextValue) => { emit('input', nextValue ?? '', event); eventHandlers.value?.onInput?.(event) })
   void nextTick(() => restore(value.value))
 }
 function handleInput(event: Event) { if (composition.accepts(event)) processInput(event) }
@@ -91,7 +94,7 @@ function handleClear(event: Event) {
   if (!props.clearable || mergedDisabled.value || mergedReadonly.value || composition.isComposing.value || !value.value) return
   emit('clear', event)
   eventHandlers.value?.onClear?.(event)
-  clearValue(event, (nextValue) => { emit('input', nextValue, event); eventHandlers.value?.onInput?.(event) })
+  clearValue(event, (nextValue) => { emit('input', nextValue ?? '', event); eventHandlers.value?.onInput?.(event) })
   focus()
 }
 function handleMousedown(event: MouseEvent) {

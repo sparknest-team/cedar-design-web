@@ -15,11 +15,11 @@ async function updateLayout() {
 </script>
 
 <template>
-  <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 12px">
+  <c-space wrap size="12px" style="margin-bottom: 12px">
     <c-checkbox v-model="disabled"> Disabled</c-checkbox>
     <c-checkbox v-model="cssMode"> CSS sticky</c-checkbox>
     <c-button @click="updateLayout">Change layout and update position</c-button>
-  </div>
+  </c-space>
   <p aria-live="polite">Position updates: {{ updates }}</p>
   <div ref="containerRef" class="scroller">
     <div class="scroll-content">

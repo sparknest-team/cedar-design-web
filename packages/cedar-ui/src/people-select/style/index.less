@@ -1,3 +1,25 @@
-.c-people-select {
-  --c-people-select-background: black;
+@import "./token.less";
+.c-people-select-person {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  gap: var(--c-people-select-content-gap);
+  &__avatar {
+    width: var(--c-people-select-avatar-size);
+    height: var(--c-people-select-avatar-size);
+    border-radius: var(--c-people-select-avatar-radius);
+    object-fit: cover;
+    flex: none;
+  }
+  &__name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  &__actions {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+
+  }
 }

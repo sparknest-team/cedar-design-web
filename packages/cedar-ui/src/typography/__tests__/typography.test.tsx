@@ -1,7 +1,9 @@
 import { nextTick } from 'vue'
-import { mount } from '@vue/test-utils'
-import { describe, test, expect } from 'vitest'
+import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { afterEach, describe, test, expect } from 'vitest'
 import { Typography, TypographyParagraph, TypographyText, TypographyTitle } from '../index'
+
+enableAutoUnmount(afterEach)
 
 describe('Typography', () => {
   test('render', async () => {

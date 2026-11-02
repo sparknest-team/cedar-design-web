@@ -18,6 +18,11 @@ export default defineComponent({
   ],
   setup(props, { emit, slots }) {
     let resizeObserver: ResizeObserver | null
+    let view: Window | null = null
+    let frame: number | undefined
+    let pending: ResizeObserverEntry | undefined
+    let generation = 0
+    let observed: HTMLElement | undefined
 
     const componentRef = ref<HTMLElement | ComponentPublicInstance>()
 
@@ -27,14 +32,33 @@ export default defineComponent({
 
     const createResizeObserver = (target: HTMLElement) => {
       if (!target) return
+      observed = target
+      view = target.ownerDocument.defaultView
+      const binding = ++generation
       resizeObserver = new ResizeObserver((entries: ResizeObserverEntry[]) => {
-        const entry = entries[0]
-        emit('resize', entry)
+        if (binding !== generation || !view) return
+        pending = entries[0]
+        if (frame !== undefined) return
+        // Consumers can change the observed layout. Leave the observer's
+        // delivery cycle before emitting, and coalesce repeated notifications.
+        frame = view.requestAnimationFrame(() => {
+          if (binding !== generation) return
+          frame = undefined
+          const entry = pending
+          pending = undefined
+          if (entry) emit('resize', entry)
+        })
       })
       resizeObserver.observe(target)
     }
 
     const destroyResizeObserver = () => {
+      generation++
+      if (frame !== undefined) view?.cancelAnimationFrame(frame)
+      frame = undefined
+      pending = undefined
+      view = null
+      observed = undefined
       if (resizeObserver) {
         resizeObserver.disconnect()
         resizeObserver = null
@@ -42,6 +66,7 @@ export default defineComponent({
     }
 
     watch(element, (_element) => {
+      if (_element === observed) return
       if (resizeObserver) destroyResizeObserver()
       if (_element) createResizeObserver(_element)
     })

@@ -578,7 +578,7 @@
         "control.vue",
         "draggable.vue",
         "render-extra.vue",
-        "size.vue",
+        "appearance-comparison.vue",
         "virtual.vue"
       ]
     },
@@ -596,7 +596,7 @@
       "demos": [
         "basic.vue",
         "field-names.vue",
-        "show-line.vue"
+        "appearance-comparison.vue"
       ]
     },
     {
@@ -607,7 +607,7 @@
         "control.vue",
         "field-names.vue",
         "multiple.vue",
-        "show-line.vue"
+        "appearance-comparison.vue"
       ]
     },
     {
@@ -645,7 +645,7 @@
       "kind": "prop",
       "demos": [
         "basic.vue",
-        "block-node.vue",
+        "appearance-comparison.vue",
         "checkable.vue",
         "checked-strategy.vue",
         "control.vue",
@@ -657,8 +657,6 @@
         "node-icon.vue",
         "render-extra.vue",
         "search.vue",
-        "show-line.vue",
-        "size.vue",
         "virtual.vue"
       ]
     },
@@ -703,7 +701,7 @@
       "kind": "slot",
       "demos": [
         "basic.vue",
-        "block-node.vue",
+        "appearance-comparison.vue",
         "checkable.vue",
         "checked-strategy.vue",
         "control.vue",
@@ -715,8 +713,6 @@
         "node-icon.vue",
         "render-extra.vue",
         "search.vue",
-        "show-line.vue",
-        "size.vue",
         "virtual.vue"
       ]
     },

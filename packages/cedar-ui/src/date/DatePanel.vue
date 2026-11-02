@@ -58,6 +58,7 @@ import { computed, h, inject, onBeforeUnmount, provide, useSlots, type PropType 
 import { editorAuxiliaryActions } from '../_components/field-presentation/editor-actions'
 import { provideRangePanel } from '../_components/picker-field/range-field-context'
 import { useFieldValue } from '../_components/picker-field/use-field-value'
+import { resolveEmptyValue } from '../_utils/empty-value'
 import { createNamespace } from '../_utils/global-config'
 import { currentDateValue, provideDateCurrent } from './date-current'
 import { provideDateLocale, scopeDateOptions } from './date-locale'
@@ -71,8 +72,14 @@ import { useDateLocale } from './presentation/use-date-locale'
 import { useDatePanelTools } from './use-date-panel-tools'
 import { useDateSelection } from './use-date-selection'
 
-defineOptions({ name: createNamespace('date-panel').name, inheritAttrs: false })
-const props = defineProps({ options: { type: Object as PropType<DatePanelOptions>, required: true }, range: Boolean })
+defineOptions({
+  name: createNamespace('date-panel').name,
+  inheritAttrs: false,
+})
+const props = defineProps({
+  options: { type: Object as PropType<DatePanelOptions>, required: true },
+  range: Boolean,
+})
 const emit = defineEmits([
   'update:modelValue',
   'change',
@@ -104,6 +111,8 @@ const blocked = computed(() =>
   ),
 )
 const selection = useDateSelection({
+  emptyValue: () =>
+    resolveEmptyValue<DateSelection>(options.value, props.range || options.value.multiple ? [] : undefined),
   value: () => model.value.value,
   rules: () => options.value,
   range: () => isRange.value,

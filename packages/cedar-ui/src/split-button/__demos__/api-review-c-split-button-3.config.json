@@ -102,13 +102,6 @@
       "initial": "{}"
     },
     {
-      "name": "auto-loading",
-      "description": "主按钮异步点击时是否自动加载",
-      "type": "boolean",
-      "defaultValue": "undefined",
-      "kind": "boolean"
-    },
-    {
       "name": "trigger",
       "description": "菜单触发方式",
       "type": "'hover' | 'click' | 'focus' | 'contextMenu'",
@@ -125,7 +118,7 @@
     {
       "name": "placement",
       "description": "菜单弹出位置",
-      "type": "MenuPosition（标准十二方位）",
+      "type": "MenuPlacement（标准十二方位）",
       "defaultValue": "undefined",
       "kind": "scenario"
     },

@@ -42,12 +42,12 @@ export function fromClockValue(value: string | undefined, options: TimeFormatOpt
   return seconds === null ? undefined : formatClockLabel(seconds, resolveTimeFormat(options).format)
 }
 
-export function getFormattedTimeChoices(value: TimeValue | undefined, rules: FormattedTimeRules) {
+export function getFormattedTimeChoices(value: TimeValue | null | undefined, rules: FormattedTimeRules) {
   const result = getTimeChoices(toClockValue(value, rules), getTimeConstraints(rules))
   return { ...result, value: fromClockValue(result.value, rules) }
 }
 
-export function isFormattedTimeAllowed(value: TimeValue | undefined, rules: FormattedTimeRules) {
+export function isFormattedTimeAllowed(value: TimeValue | null | undefined, rules: FormattedTimeRules) {
   return isTimeAllowed(toClockValue(value, rules), getTimeConstraints(rules))
 }
 

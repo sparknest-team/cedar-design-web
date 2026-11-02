@@ -1,7 +1,7 @@
 import type { CSSProperties, HTMLAttributes, VNodeChild } from 'vue'
 export type { MenuFieldNames } from './selection'
 import type { TriggerProps } from '../trigger'
-export type { TriggerPlacement as MenuPosition, Reference as MenuReference } from '../trigger'
+export type { TriggerPlacement as MenuPlacement, Reference as MenuReference } from '../trigger'
 export type MenuSubmenuTrigger = 'click' | 'hover'
 export type MenuStrategy = NonNullable<TriggerProps['strategy']>
 export type { MenuProps } from './props'

@@ -1,10 +1,10 @@
 import { h, nextTick, reactive } from 'vue'
 import { flushPromises, mount } from '@vue/test-utils'
 import { expect, test, vi } from 'vitest'
-import Form from '../Form.vue'
-import FormItem from '../FormItem.vue'
 import Select from '../../select/select'
 import SelectMenu from '../../select/SelectMenu'
+import Form from '../Form.vue'
+import FormItem from '../FormItem.vue'
 
 async function fixture() {
   const model = reactive({ device: 'a' })
@@ -15,12 +15,24 @@ async function fixture() {
     return original(callback, ms)
   }) as typeof setTimeout)
   const owner = mount(Form, {
-    props: { model, presentation: 'click' },
-    slots: { default: () => h(FormItem, { field: 'device', label: 'Device' }, () => h(Select, {
-      modelValue: model.device, filterable: true, searchDelay: 83,
-      options: [{ value: 'a', label: 'A' }, { value: 'b', label: 'B' }],
-      'onUpdate:modelValue': (value: string) => { model.device = value },
-    })) },
+    props: { model, editMode: 'click' },
+    slots: {
+      default: () =>
+        h(FormItem, { field: 'device', label: 'Device' }, () =>
+          h(Select, {
+            modelValue: model.device,
+            filterable: true,
+            searchDelay: 83,
+            options: [
+              { value: 'a', label: 'A' },
+              { value: 'b', label: 'B' },
+            ],
+            'onUpdate:modelValue': (value: string) => {
+              model.device = value
+            },
+          }),
+        ),
+    },
   })
   await owner.get('[aria-haspopup=dialog]').trigger('click')
   await flushPromises()
@@ -40,7 +52,8 @@ test('matching Form reset retires the real Select search across reopening withou
     expect(f.owner.get('[aria-haspopup=dialog]').attributes('aria-expanded')).toBe('false')
     f.controller.handleOpenChange(true)
     await nextTick()
-    f.queue[0](); f.queue[0]()
+    f.queue[0]()
+    f.queue[0]()
     expect(f.select.emitted('search')).toBeUndefined()
     expect(f.model.device).toBe('a')
   } finally {

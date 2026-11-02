@@ -19,7 +19,7 @@
     min-width: 0;
 
     > * + * {
-      margin-left: var(--c-page-header-item-gap);
+      margin-inline-start: var(--c-page-header-item-gap);
     }
   }
 
@@ -76,7 +76,7 @@
 
   &__extra {
     flex-shrink: 0;
-    margin-left: var(--c-page-header-item-gap);
+    margin-inline-start: var(--c-page-header-item-gap);
   }
 }
 
@@ -87,3 +87,5 @@
 .c-page-header__footer {
   margin-top: var(--c-page-header-footer-margin-top);
 }
+
+.c-page-header__back-icon:dir(rtl) { transform: rotate(180deg); }

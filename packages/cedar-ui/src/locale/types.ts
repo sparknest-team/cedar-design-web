@@ -205,6 +205,8 @@ export interface CedarLang {
     goto: string
   }
   upload: {
+    replace: string;
+    duration: string;
     download: string
     close: string
     start: string

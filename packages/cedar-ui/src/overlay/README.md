@@ -6,20 +6,13 @@ permalink: /components/overlay/
 
 用于在页面内容上方创建背景层，并可承载需要强调的内容。
 
-## 案例
+## 基础示例
 
 ### 基本使用
 
 通过 `v-model:open` 控制显示状态。默认点击背景区域或按 Escape 会关闭；点击默认插槽内容不会关闭。
 
 <demo src="./__demos__/basic.vue"></demo>
-
-<!-- api-review:start -->
-### 功能调试
-
-<demo src="./__demos__/api-review.vue"></demo>
-
-<!-- api-review:end -->
 
 ## API
 

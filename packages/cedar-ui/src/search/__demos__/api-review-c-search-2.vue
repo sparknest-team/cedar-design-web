@@ -19,10 +19,10 @@ const lastAction = ref("尚未搜索");
     v-bind="defineReviewConfig(__apiReviewRawConfig)"
   >
     <div class="search-demo">
-      <c-checkbox v-model="popup">全屏搜索历史（关闭后使用菜单）</c-checkbox>
+      <c-checkbox v-model="popup">popup 全屏搜索（关闭后为 direct）</c-checkbox>
       <c-search
         v-model="keyword"
-        :history-popup="popup"
+        :edit-mode="popup ? 'popup' : 'direct'"
         :recent-searches="history"
         label="资源"
         placeholder="输入资源名称"

@@ -7,17 +7,23 @@ function target(item) {
   const input = item.find('input')
   return input.exists() ? input : item.find('[tabindex]')
 }
-const items = wrapper => wrapper.findAllComponents(Radio)
-const tabs = wrapper => items(wrapper).map(item => {
-  const input = item.find('input')
-  return input.exists() ? input.attributes('tabindex') : item.find('.mp-radio__action').attributes('tabindex')
-})
-const settled = async () => { await nextTick(); await nextTick() }
+const items = (wrapper) => wrapper.findAllComponents(Radio)
+const tabs = (wrapper) =>
+  items(wrapper).map((item) => {
+    const input = item.find('input')
+    return input.exists() ? input.attributes('tabindex') : item.find('.c-radio__action').attributes('tabindex')
+  })
+const settled = async () => {
+  await nextTick()
+  await nextTick()
+}
 
 for (const variant of ['radio', 'button']) {
   describe('radio navigation / ' + variant, () => {
     it('maintains one tab entry and cycles locally with the original event', async () => {
-      const wrapper = mount(RadioGroup, { props: { variant, ariaLabel: 'Choices', options: ['a', 'b', 'c'] } })
+      const wrapper = mount(RadioGroup, {
+        props: { editMode: 'direct', variant, ariaLabel: 'Choices', options: ['a', 'b', 'c'] },
+      })
       await settled()
       expect(wrapper.attributes('role') || wrapper.find('[role="radiogroup"]').attributes('role')).toBe('radiogroup')
       expect(tabs(wrapper)).toEqual(['0', '-1', '-1'])
@@ -28,14 +34,20 @@ for (const variant of ['radio', 'button']) {
       expect(tabs(wrapper)).toEqual(['-1', '0', '-1'])
       await target(items(wrapper)[1]).trigger('keydown', { key: 'End' })
       await target(items(wrapper)[2]).trigger('keydown', { key: 'ArrowDown' })
-      expect(wrapper.emitted('change').map(args => args[0])).toEqual(['b', 'c', 'a'])
+      expect(wrapper.emitted('change').map((args) => args[0])).toEqual(['b', 'c', 'a'])
       wrapper.unmount()
     })
 
     it('skips disabled, focuses readonly without selecting, and supports Home', async () => {
-      const wrapper = mount(RadioGroup, { attachTo: document.body, props: {
-        variant, defaultValue: 'a', options: ['a', { value: 'b', disabled: true }, { value: 'c', readonly: true }, 'd'],
-      } })
+      const wrapper = mount(RadioGroup, {
+        attachTo: document.body,
+        props: {
+          editMode: 'direct',
+          variant,
+          defaultValue: 'a',
+          options: ['a', { value: 'b', disabled: true }, { value: 'c', readonly: true }, 'd'],
+        },
+      })
       await settled()
       await target(items(wrapper)[0]).trigger('keydown', { key: 'ArrowRight' })
       expect(document.activeElement).toBe(target(items(wrapper)[2]).element)
@@ -48,7 +60,9 @@ for (const variant of ['radio', 'button']) {
     })
 
     it('respects rejected controlled values, readonly and modified/repeated keys', async () => {
-      const wrapper = mount(RadioGroup, { props: { variant, modelValue: 'a', options: ['a', 'b'] } })
+      const wrapper = mount(RadioGroup, {
+        props: { editMode: 'direct', variant, modelValue: 'a', options: ['a', 'b'] },
+      })
       await settled()
       await target(items(wrapper)[0]).trigger('keydown', { key: 'ArrowRight', ctrlKey: true })
       await target(items(wrapper)[0]).trigger('keydown', { key: 'ArrowRight', repeat: true })
@@ -65,7 +79,9 @@ for (const variant of ['radio', 'button']) {
     })
 
     it('recovers tab entry after reset, selected removal and disabled updates', async () => {
-      const wrapper = mount(RadioGroup, { props: { variant, modelValue: 'b', options: ['a', 'b'] } })
+      const wrapper = mount(RadioGroup, {
+        props: { editMode: 'direct', variant, modelValue: 'b', options: ['a', 'b'] },
+      })
       await settled()
       expect(tabs(wrapper)).toEqual(['-1', '0'])
       await wrapper.setProps({ modelValue: null })
@@ -83,7 +99,10 @@ for (const variant of ['radio', 'button']) {
 
     it('tracks keyed DOM order and handles no enabled options', async () => {
       const order = ref(['a', 'b', 'c'])
-      const wrapper = mount(RadioGroup, { props: { variant }, slots: { default: () => order.value.map(value => h(Radio, { key: value, value })) } })
+      const wrapper = mount(RadioGroup, {
+        props: { editMode: 'direct', variant },
+        slots: { default: () => order.value.map((value) => h(Radio, { editMode: 'direct', key: value, value })) },
+      })
       await settled()
       order.value = ['c', 'a', 'b']
       await settled()
@@ -99,15 +118,20 @@ for (const variant of ['radio', 'button']) {
 }
 
 it('does not respond to window events, nested groups or interactive label descendants', async () => {
-  const wrapper = mount(RadioGroup, { slots: { default: () => [
-    h(Radio, { value: 'outer' }, () => h('button', 'Embedded')),
-    h(RadioGroup, { options: ['a', 'b'] }),
-  ] } })
+  const wrapper = mount(RadioGroup, {
+    props: { editMode: 'direct' },
+    slots: {
+      default: () => [
+        h(Radio, { editMode: 'direct', value: 'outer' }, () => h('button', 'Embedded')),
+        h(RadioGroup, { editMode: 'direct', options: ['a', 'b'] }),
+      ],
+    },
+  })
   await settled()
   window.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }))
   await wrapper.find('button').trigger('keydown', { key: 'ArrowRight' })
   expect(wrapper.emitted('change')).toBeUndefined()
-  const nested = wrapper.findAllComponents(RadioGroup).find(item => item.vm.$ !== wrapper.vm.$)
+  const nested = wrapper.findAllComponents(RadioGroup).find((item) => item.vm.$ !== wrapper.vm.$)
   await target(items(nested)[0]).trigger('keydown', { key: 'ArrowRight' })
   expect(nested.emitted('change')[0][0]).toBe('b')
   expect(wrapper.emitted('change')).toBeUndefined()
@@ -116,11 +140,16 @@ it('does not respond to window events, nested groups or interactive label descen
 
 it('cleans up KeepAlive registrations and keeps restored ordering', async () => {
   const show = ref(true)
-  const Child = defineComponent({ setup: () => () => h(Radio, { value: 'a' }) })
-  const wrapper = mount(RadioGroup, { slots: { default: () => [
-    h(KeepAlive, null, { default: () => show.value ? h(Child) : null }),
-    h(Radio, { value: 'b' }),
-  ] } })
+  const Child = defineComponent({ setup: () => () => h(Radio, { editMode: 'direct', value: 'a' }) })
+  const wrapper = mount(RadioGroup, {
+    props: { editMode: 'direct' },
+    slots: {
+      default: () => [
+        h(KeepAlive, null, { default: () => (show.value ? h(Child) : null) }),
+        h(Radio, { editMode: 'direct', value: 'b' }),
+      ],
+    },
+  })
   await settled()
   show.value = false
   await settled()
@@ -132,7 +161,7 @@ it('cleans up KeepAlive registrations and keeps restored ordering', async () => 
 })
 
 it('supports all five button sizes and inherits the group variant', async () => {
-  const wrapper = mount(RadioGroup, { props: { variant: 'button', options: ['a', 'b'] } })
+  const wrapper = mount(RadioGroup, { props: { editMode: 'direct', variant: 'button', options: ['a', 'b'] } })
   for (const size of ['xs', 'sm', 'md', 'lg', 'xl']) {
     await wrapper.setProps({ size })
     await settled()

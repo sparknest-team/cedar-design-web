@@ -72,7 +72,7 @@ function reset() {
       </p>
     </div>
 
-    <c-space>
+    <c-space wrap>
       <c-button :disabled="!pending || manual === null" @click="applyLabel">
         {{ pending ? `应用手动标题：${selectedLabel}` : "手动标题已同步" }}
       </c-button>
@@ -88,6 +88,8 @@ function reset() {
 <style scoped>
 .item-label-demo {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
   gap: 16px;
   min-height: 220px;
 }

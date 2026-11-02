@@ -1,48 +1,52 @@
 import { flushPromises, mount } from "@vue/test-utils";
-import { nextTick } from "vue";
 import { expect, test, vi } from "vitest";
 import PeopleSelect from "..";
 import BasicDemo from "../__demos__/basic.vue";
-
-test("local asynchronous demo resolves an ID absent from the first page and supports search", async () => {
-  vi.useFakeTimers();
-  const wrapper = mount(BasicDemo, {
-    global: {
-      components: { CPeopleSelect: PeopleSelect },
-      stubs: {
-        CSpace: { template: "<div><slot /></div>" },
-        CButton: { template: "<button><slot /></button>" },
-      },
-    },
-  });
+import AsyncDemo from "../__demos__/data-source.vue";
+const global = {
+  components: { CPeopleSelect: PeopleSelect },
+  stubs: {
+    CSpace: { template: "<div><slot /></div>" },
+    CButton: { template: "<button><slot /></button>" },
+  },
+};
+test("basic demo uses static options and no transport configuration", async () => {
+  const wrapper = mount(BasicDemo, { global });
   try {
-    vi.advanceTimersByTime(250);
-    await flushPromises();
-    await nextTick();
-    expect(wrapper.text()).toContain("陈悦");
-    expect(wrapper.text()).toContain("当前 ID：demo.chen");
-    expect(wrapper.text()).not.toContain("更新token");
-    const adapter = wrapper.findComponent(PeopleSelect).props("fetch");
-    const firstPage = adapter.post("", { params: {} });
-    vi.advanceTimersByTime(250);
-    await flushPromises();
-    expect(
-      (await firstPage).data.result_list.map(
-        (person: { user_id: string }) => person.user_id,
-      ),
-    ).toEqual(["demo.lin", "demo.zhou"]);
-    const search = adapter.post("", { params: { name: "陈悦" } });
-    vi.advanceTimersByTime(250);
-    await flushPromises();
-    expect((await search).data.result_list[0].user_id).toBe("demo.chen");
+    expect(wrapper.text()).toContain("孟帅");
+    expect(wrapper.getComponent(PeopleSelect).props("options")).toHaveLength(2);
     wrapper
-      .findComponent(PeopleSelect)
-      .vm.$emit("update:modelValue", "demo.lin");
-    await nextTick();
-    vi.advanceTimersByTime(250);
+      .getComponent(PeopleSelect)
+      .vm.$emit("update:modelValue", "wujiaming");
     await flushPromises();
-    expect(wrapper.text()).toContain("当前 ID：demo.lin");
-    expect(wrapper.text()).toContain("林晓");
+    expect(wrapper.text()).toContain("当前 ID：wujiaming");
+  } finally {
+    wrapper.unmount();
+  }
+});
+test("async demo initializes options once and performs debounced external searches", async () => {
+  vi.useFakeTimers();
+  const wrapper = mount(AsyncDemo, { global });
+  try {
+    const field = wrapper.getComponent(PeopleSelect);
+    await flushPromises();
+    expect(field.props("loading")).toBe(true);
+    vi.advanceTimersByTime(200);
+    await flushPromises();
+    expect(field.props("options")).toHaveLength(2);
+    field.vm.$emit("search", "吴");
+    await flushPromises();
+    expect(field.props("options")).toHaveLength(0);
+    expect(field.props("loading")).toBe(true);
+    vi.advanceTimersByTime(450);
+    await flushPromises();
+    expect(field.props("options")).toEqual([
+      { value: "wujiaming", label: "吴甲明" },
+    ]);
+    expect(field.props("loading")).toBe(false);
+    field.vm.$emit("search", "吴");
+    await flushPromises();
+    expect(field.props("options")).toHaveLength(1);
   } finally {
     wrapper.unmount();
     vi.useRealTimers();

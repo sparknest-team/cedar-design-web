@@ -34,8 +34,8 @@ async function fixture(Component, foreign = false) {
     extras.push(()=>frame.remove());attachTo=frame.contentDocument.body
   }
   observe(window);observe(attachTo.ownerDocument.defaultView)
-  const active=ref(true), direction=ref('horizontal'), data=ref({ratio:2,thumbSize:20,max:100})
-  const Child=defineComponent({setup:()=>()=>h(Component,{direction:direction.value,data:data.value})})
+  const active=ref(true), orientation=ref('horizontal'), data=ref({ratio:2,thumbSize:20,max:100})
+  const Child=defineComponent({setup:()=>()=>h(Component,{orientation:orientation.value,data:data.value})})
   const owner=mount(defineComponent({setup:()=>()=>h(KeepAlive,null,()=>active.value?h(Child):null)}),{attachTo})
   owners.push(owner);await flush()
   const child=owner.findComponent(Component),vm=child.vm
@@ -48,9 +48,9 @@ async function fixture(Component, foreign = false) {
   const bindings=(name)=>views.flatMap(item=>item.add.mock.calls.filter(call=>call[0]===name).map(call=>({item,callback:call[1]})))
   const last=(name)=>bindings(name).at(-1).callback
   const removed=(name,callback)=>views.some(item=>item.off.mock.calls.some(call=>call[0]===name&&call[1]===callback))
-  const offset=()=>Number.parseFloat(vm.thumbStyle[direction.value==='horizontal'?'left':'top'])
+  const offset=()=>Number.parseFloat(vm.thumbStyle[orientation.value==='horizontal'?'left':'top'])
   const dragging=()=>vm.thumbCls.some(value=>typeof value==='object'&&Object.values(value).some(Boolean))
-  return {owner,child,vm,thumb,track,view,active,direction,data,event,start,bindings,last,removed,offset,dragging}
+  return {owner,child,vm,thumb,track,view,active,orientation,data,event,start,bindings,last,removed,offset,dragging}
 }
 for(const [name,Component,Bar] of [['public-thumb',Public,PublicBar],['legacy-thumb',Legacy,LegacyBar]]) describe(name,()=>{
   test('current drag moves and ordinary mouseup stops delivery',async()=>{
@@ -112,8 +112,8 @@ for(const [name,Component,Bar] of [['public-thumb',Public,PublicBar],['legacy-th
     const f=await fixture(Component);f.start();f.view.dispatchEvent(new f.view.Event('blur'))
     expect(f.dragging()).toBe(false)
   })
-  test('direction change cancels old gesture',async()=>{
-    const f=await fixture(Component);f.start();f.direction.value='vertical';await flush()
+  test('orientation change cancels old gesture',async()=>{
+    const f=await fixture(Component);f.start();f.orientation.value='vertical';await flush()
     expect(f.dragging()).toBe(false)
   })
   test('geometry reentrant unmount cannot bind drag',async()=>{
@@ -176,7 +176,7 @@ for(const [name,Component,Bar] of [['public-thumb',Public,PublicBar],['legacy-th
     const scroll = vi.fn()
     Object.defineProperty(element,'scrollTo',{configurable:true,value:scroll})
     bar.vm.handleResize(); await flush()
-    const thumb = bar.findAllComponents(Component).find(item=>item.props('direction')==='horizontal').vm
+    const thumb = bar.findAllComponents(Component).find(item=>item.props('orientation')==='horizontal').vm
     const rect = {left:10,top:10,right:110,bottom:110,width:100,height:100,x:10,y:10,toJSON(){}}
     vi.spyOn(thumb.thumbRef,'getBoundingClientRect').mockReturnValue(rect)
     vi.spyOn(thumb.trackRef,'getBoundingClientRect').mockReturnValue(rect)

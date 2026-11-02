@@ -1,0 +1,5 @@
+- [x] 两端新增同源 useAsyncData 与初始化/搜索设计文档。
+- [x] PeopleSelect options/loading/search，删除内部传输，迁移用例、调用方与类型契约。
+- [x] 补基础静态、远程搜索与两端 Select 初始化 Demo。
+- [x] 保留并记录特殊加载协议及两端现存差异。
+- [x] 完成最终测试、lint、类型和文档验证记录（见 validation.md）。

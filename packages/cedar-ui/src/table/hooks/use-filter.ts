@@ -12,11 +12,10 @@ export const useFilter = ({
 }) => {
   const _filters = ref<Filters>(getDefaultFilters(columns.value))
 
-  watch(columns, (columns) => {
-    const newFilters = getDefaultFilters(columns)
-    if (!isEqual(newFilters, _filters.value)) {
-      _filters.value = newFilters
-    }
+  // Rebuilding visual columns (RTL or resize) must not reset uncontrolled state.
+  // Only a change to the declared defaults starts a new default-state transaction.
+  watch(() => getDefaultFilters(columns.value), (next, previous) => {
+    if (!isEqual(next, previous)) _filters.value = next
   })
 
   const computedFilters = computed<Filters>(() => {
@@ -76,7 +75,7 @@ const getDefaultFilters = (columns: TableColumnData[]) => {
   const filters: Filters = {}
   for (const item of columns) {
     if (item.dataIndex && item.filterable?.defaultFilteredValue) {
-      filters[item.dataIndex] = item.filterable.defaultFilteredValue
+      filters[item.dataIndex] = [...item.filterable.defaultFilteredValue]
     }
   }
   return filters

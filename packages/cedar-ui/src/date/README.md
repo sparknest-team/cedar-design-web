@@ -1,10 +1,12 @@
 ---
 title: Date 日期
-description: '表单日期字段。通过 type 切换年/月/周/日/季度；面板请使用 DatePicker。'
+description: "表单日期字段。通过 type 切换年/月/周/日/季度；面板请使用 DatePicker。"
 permalink: /components/date/
 ---
 
 # Date
+
+浮动日期面板按可视视口限制高度，正常高度完整展示日历；只有窗口放不下时才滚动，确认操作保持可见。可通过 `--c-date-picker-popover-max-height` 调整最大高度（默认 `100dvh - 32px`）。
 
 展开时，原生 combobox 通过 `aria-controls` 关联当前实例的命名弹层；关闭后同步更新状态并移除关联。`aria-label`、`aria-describedby` 可传递给原生控件。自定义 selected/触发插槽需自行保留可访问名称、键盘操作和状态关联。
 
@@ -12,19 +14,43 @@ permalink: /components/date/
 
 纯面板请使用 [`DatePicker`](/components/date-picker/)（默认无触发器）。日期范围字段请使用 [`DateRange`](/components/date-range/)。
 
-## 案例
+## 基础示例
 
 ### 基本用法
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### 清除与禁用
+## 外观与日期展示
 
-<demo src="./__demos__/status.vue"></demo>
+### 外观配置对比
 
-### 尺寸
+<!-- demo-config-notes:start -->
 
-<demo src="./__demos__/size.vue"></demo>
+#### 本组配置对照
+
+| 配置           | 作用                                                    | 相关示例                         |
+| -------------- | ------------------------------------------------------- | -------------------------------- |
+| `value-format` | 模型与事件的格式，可为自定义日期格式、Date 或 timestamp | 外观配置对比、日期语言的实例隔离 |
+| `type`         | 选择类型                                                | 选择类型、日期语言的实例隔离     |
+| `size`         | 尺寸                                                    | 表单控件尺寸对照                 |
+| `variant`      | 输入框变体                                              | 表单控件尺寸对照                 |
+| `placeholder`  | 占位                                                    | 表单控件尺寸对照                 |
+| `clearable`    | 可清除                                                  | 选择类型                         |
+
+<!-- demo-config-notes:end -->
+
+选择一个对比维度后，同屏展示它的全部可选值；其余配置和内容保持一致。可切换其他配置检查组合效果；输入类预览共享一个值。
+
+<details>
+<summary>配置说明与使用限制</summary>
+
+#### 外观组合
+
+适用于选择单个日期。调整变体、尺寸，用相同数据观察变化。内容保持一致，便于比较不同设置的实际效果。
+
+</details>
+
+<demo src="./__demos__/appearance-lab.vue"></demo>
 
 ### 表单控件尺寸对照
 
@@ -32,117 +58,13 @@ permalink: /components/date/
 
 <demo src="../field-decorator/__demos__/control-sizes.vue"></demo>
 
-### 字段与面板边界
-
-字段保留输入和浮层状态；嵌套面板参数只接受展示选项，不能覆盖顶层模型、格式或校验规则。
-
-<demo src="./picker/__demos__/entry-boundary.vue"></demo>
-
-### 日期值格式
-
-两端使用独立复制的日期值、约束、面板和字段主体。年/月/日模型格式为 `YYYY` / `YYYY-MM` / `YYYY-MM-DD`，日期时间默认含秒；`:use-seconds="false"` 使用分钟精度。`format` 只控制显示，`value-format` 控制模型和事件，支持自定义格式、`Date` 与 `timestamp`。Cedar 另提供周/季度面板；Maple 另提供移动端滚轮和时钟展示。
-
-### 统一字段与提交
-
-Date / DateRange / Time / TimeRange 使用相同的 PickerField → FieldDecorator 字段链路。桌面支持键入有效值后回车或失焦提交；有确认按钮的面板只在确认时写回，Escape 或外部关闭丢弃草稿。清除立即提交空值。面板组件不再提供 `hideTrigger` 双模式，自定义触发器使用字段的默认插槽。
-
-<demo src="./__demos__/field-protocol.vue"></demo>
-
-### 受控关闭被拒绝
-
-父级可以拒绝 `update:open(false)`，此时面板仍展开。一次选择只能提交并请求关闭一次；受控模型回写相同值不会重置已确认状态。在保持展开时选择新日期会开启新事务，可以再次确认。示例显示模型、提交次数与关闭请求次数。
-
-<demo src="./__demos__/rejected-close.vue"></demo>
-
 ### 选择类型
 
 通过 `type` 切换日 / 周 / 月 / 年 / 季度。
 
 <demo src="./__demos__/type.vue"></demo>
 
-### 带时间
-
-<demo src="./__demos__/show-time.vue"></demo>
-
-### 模型格式与显示格式
-
-<demo src="./__demos__/value-formats.vue"></demo>
-
-### 外观组合
-
-适用于选择单个日期。调整变体、尺寸，用相同数据观察变化。内容保持一致，便于比较不同设置的实际效果。
-
-<demo src="./__demos__/appearance-lab.vue"></demo>
-
-### 交互状态切换
-
-适用于选择单个日期。调整禁用、只读、错误反馈，用相同数据观察变化。控制区始终可用，可以随时恢复编辑；错误外观本身不会触发表单校验。
-
-<demo src="./__demos__/state-lab.vue"></demo>
-
-<!-- api-review:start -->
-### 功能调试
-
-<demo src="./__demos__/api-review.vue"></demo>
-
-<!-- api-review:end -->
-
-## API
-
-### Props
-
-| 参数 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| `model-value` | 绑定值 | `Date \| string \| number` | `-` |
-| `type` | 选择类型 | `date \| week \| month \| year \| quarter` | `date` |
-| `open` | 弹层显隐 | `boolean` | `-` |
-| `clearable` | 可清除 | `boolean` | `true` |
-| `disabled` | 禁用 | `boolean` | `false` |
-| `readonly` | 只读 | `boolean` | `false` |
-| `size` | 尺寸 | `xs \| sm \| md \| lg \| xl` | `-` |
-| `variant` | 输入框变体 | `filled \| outline \| standard` | `filled` |
-| `placeholder` | 占位 | `string` | `-` |
-| `disabled-date` | 禁用日期 | `Function` | `-` |
-| `format` | 展示格式 | `string \| Function` | 随 `type` |
-| `show-time` | 选择时间 | `boolean` | `false` |
-| `date-picker-props` | 面板展示选项 | `DatePickerOptions` | `{}` |
-
-
-### 日期族统一契约
-
-| 参数 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| `default-value` | 非受控初始值，仅初始化读取 | DateValue / DateValue[] | — |
-| `value-format` | 模型与事件的格式，可为自定义日期格式、Date 或 timestamp | string | 随 type |
-| `use-seconds` | 默认时间精度；显式 format 优先 | boolean | true |
-| `min` / `max` | 包含端点的边界；字符串按 value-format 解析 | DateValue | — |
-| `disabled-time` | 当前日期、端点的时间禁用列表 | (date: Date, side: DateSide) => DateDisabledTime | — |
-| `disable-confirm` | 选择后立即提交 | boolean | false |
-| `default-open` | 非受控初始展开 | boolean | false |
-| `popup-props` | Trigger 展示配置；不允许覆盖展开状态及规则 | object | {} |
-| `popup-container` | 挂载目标；顶层优先，支持 false 原地渲染 | string / HTMLElement / (() => HTMLElement) / false | — |
-
-`DateValue = Date | string | number`。单值清除为 undefined，范围清除为 []。
-`disabledDate(date, side)` 和 `disabledTime(date, side)` 的 date 始终为 Date，side 为 start/end。
-时间回调返回 `disabledHours()`、`disabledMinutes(hour)`、`disabledSeconds(hour, minute)` 数字列表。
-非法日期、不完整或逆序范围不能提交；确认时重新验证动态禁用规则。范围锁定端点不能被清除或改动。
-嵌套面板 props 只配置展示，不得覆盖顶层 model-value、格式、边界、禁用规则或控制事件。
-
-### Events
-
-| 事件 | 说明 | 参数 |
-| --- | --- | --- |
-| `update:model-value` | 写入模型 | value |
-| `select` | 选择草稿，不等于提交 | value, date(s), formatted text(s) |
-| `change` | 有效值正式变化 | value, date(s), formatted text(s) |
-| `update:open` / `open-change` | 展开状态变化 | open: boolean |
-| `clear` | 清除 | 无 |
-| `focus` / `blur` | 整个字段的焦点边界 | 无 |
-| `click` | 点击字段 | event |
-
-桌面支持键盘编辑。默认面板先编辑草稿再确认；设置 disable-confirm 可直接提交。Escape 或关闭会丢弃草稿。focus(index = 0) 定位起止输入，blur() 关闭浮层。
-
-## 月份标签
+### 月份标签
 
 字段通过 `date-picker-props`（Date）或 `date-range-picker-props`（DateRange）配置面板的该选项。
 
@@ -154,6 +76,35 @@ Date / DateRange / Time / TimeRange 使用相同的 PickerField → FieldDecorat
 
 日期标签、标题和动作接入各库的全局 Locale 与既有 Provider。Cedar 删除日期组件级 `locale`，不保留覆盖字典或兼容别名。切换语言不会选择或提交日期。
 
+### 日期语言的实例隔离
+
+日期所有者读取本库全局 Locale/Provider，周起始日由各实例 `day-start-of-week` 管理。不切换宿主 Dayjs 默认语言，也不覆盖宿主基础语言配置；只在各库命名空间下注册日期语言元数据，组件实例与源码不跨库共享。
+
+`value-format` 是稳定英文日期协议（包括月份名称 token），`format` 的显示及手输文本使用界面语言。切换语言不会改写模型，也不会令英文月份名称模型失效。默认数字协议、Date 对象、时间戳不变。中文核心语言与 Maple 内置语言数据已接入；其他日期格式优先使用已注册 Dayjs 语言数据，未加载的语言安全回退英文。
+
+周号和周比较不再依赖全局周起始设置，跨年同周号不能被误判成同一周。两个不同周起始实例的挂载、更新和卸载互不影响。
+
+<demo src="./picker/__demos__/locale-isolation.vue"></demo>
+
+## 时间与选择规则
+
+### 带时间
+
+<!-- demo-config-notes:start -->
+
+#### 本组配置对照
+
+| 配置           | 作用                                                    | 相关示例 |
+| -------------- | ------------------------------------------------------- | -------- |
+| `show-time`    | 选择时间                                                | 带时间   |
+| `format`       | 展示格式                                                | 带时间   |
+| `value-format` | 模型与事件的格式，可为自定义日期格式、Date 或 timestamp | 带时间   |
+| `clearable`    | 可清除                                                  | 带时间   |
+
+<!-- demo-config-notes:end -->
+
+<demo src="./__demos__/show-time.vue"></demo>
+
 ### 内嵌时间与滚轮展示
 
 `time-picker-props` 使用 `DateTimePickerOptions`：`use12Hours`、`step`、`hideDisabledOptions`、`class`、`style`。仅配置时间展示；日期值、格式/秒精度、约束和确认仍由日期所有者管理。`step` 负责展示采样，不静默修正外部值。未知参数及监听函数不转发。
@@ -164,15 +115,30 @@ Date / DateRange / Time / TimeRange 使用相同的 PickerField → FieldDecorat
 
 Cedar 不公开 `Date.pickerProps`、`DateRange.pickerProps` 或 `DateRange.datePickerProps`：PC 字段不渲染移动滚轮或范围内部的移动日历插件，原无效参数已删除且无兼容别名。Maple 保留这些真实扩展，使用 DateWheelOptions 与 DateRangeCalendarOptions。两端通过 `Date.datePickerProps` / `DateRange.dateRangePickerProps` 配置完整面板，`timePickerProps` 配置内嵌时间展示。初始日期时间放在顶层 `defaultValue`，不要放在 `timePickerProps.defaultValue` 中。
 
-### 日期语言的实例隔离
+## 值模型与输入
 
-日期所有者读取本库全局 Locale/Provider，周起始日由各实例 `day-start-of-week` 管理。不切换宿主 Dayjs 默认语言，也不覆盖宿主基础语言配置；只在各库命名空间下注册日期语言元数据，组件实例与源码不跨库共享。
+### 模型格式与显示格式
 
-`value-format` 是稳定英文日期协议（包括月份名称 token），`format` 的显示及手输文本使用界面语言。切换语言不会改写模型，也不会令英文月份名称模型失效。默认数字协议、Date 对象、时间戳不变。中文核心语言与 Maple 内置语言数据已接入；其他日期格式优先使用已注册 Dayjs 语言数据，未加载的语言安全回退英文。
+<!-- demo-config-notes:start -->
 
-周号和周比较不再依赖全局周起始设置，跨年同周号不能被误判成同一周。两个不同周起始实例的挂载、更新和卸载互不影响。
+#### 本组配置对照
 
-<demo src="./picker/__demos__/locale-isolation.vue"></demo>
+| 配置                | 作用                                                    | 相关示例                                                               |
+| ------------------- | ------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `format`            | 展示格式                                                | 模型格式与显示格式、字符串模型：年月日、年月与月日范围、手输与面板选择 |
+| `value-format`      | 模型与事件的格式，可为自定义日期格式、Date 或 timestamp | 模型格式与显示格式、字符串模型：年月日、年月与月日范围                 |
+| `type`              | 选择类型                                                | 字符串模型：年月日、年月与月日范围、周与季度手输                       |
+| `date-picker-props` | 面板展示选项                                            | 周与季度手输                                                           |
+
+<!-- demo-config-notes:end -->
+
+<demo src="./__demos__/value-formats.vue"></demo>
+
+### 字符串模型：年月日、年月与月日范围
+
+`format` 决定显示，`value-format` 决定提交值。下面直接得到 `"2026-09-10"`、`"2026-09"` 或 `["09-10", "10-10"]`，无需将 Date 再转换。日期范围使用数组。`MM-DD` 没有年份，解析时使用当前年，不能表示跨年先后或某个明确年份的 2 月 29 日；有跨年、时区或闰年要求时保留 `YYYY-MM-DD`，在业务提交时单独映射月日。默认仍是 page，未指定 timeZone 使用浏览器本地时区。
+
+<demo src="./__demos__/string-values.vue"></demo>
 
 ### 周与季度手输
 
@@ -188,15 +154,53 @@ Cedar 不公开 `Date.pickerProps`、`DateRange.pickerProps` 或 `DateRange.date
 
 <demo src="./picker/__demos__/text-entry.vue"></demo>
 
+## 交互与字段配置
+
+### 交互状态对比
+
+<!-- demo-config-notes:start -->
+
+#### 本组配置对照
+
+| 配置                | 作用                                                    | 相关示例                             |
+| ------------------- | ------------------------------------------------------- | ------------------------------------ |
+| `disabled`          | 禁用                                                    | 交互状态对比、统一字段与提交         |
+| `open`              | 弹层显隐                                                | 受控关闭被拒绝、透传配置边界与优先级 |
+| `date-picker-props` | 面板展示选项                                            | 字段视口与快捷项事件、字段与面板边界 |
+| `placeholder`       | 占位                                                    | 统一字段与提交、字段与面板边界       |
+| `value-format`      | 模型与事件的格式，可为自定义日期格式、Date 或 timestamp | 交互状态对比                         |
+| `readonly`          | 只读                                                    | 交互状态对比                         |
+
+<!-- demo-config-notes:end -->
+
+在同一实例上切换禁用、只读和错误状态后再操作控件，比较可编辑性和交互反馈。恢复开关位于目标控件外；错误外观本身不会执行校验。
+
+<details>
+<summary>配置说明与使用限制</summary>
+
+#### 交互状态切换
+
+适用于选择单个日期。调整禁用、只读、错误反馈，用相同数据观察变化。控制区始终可用，可以随时恢复编辑；错误外观本身不会触发表单校验。
+
+</details>
+
+<demo src="./__demos__/state-lab.vue"></demo>
+
+### 受控关闭被拒绝
+
+父级可以拒绝 `update:open(false)`，此时面板仍展开。一次选择只能提交并请求关闭一次；受控模型回写相同值不会重置已确认状态。在保持展开时选择新日期会开启新事务，可以再次确认。示例显示模型、提交次数与关闭请求次数。
+
+<demo src="./__demos__/rejected-close.vue"></demo>
+
 ### 字段视口与快捷项事件
 
 字段通过嵌套 `date-picker-props` 配置 `pickerValue`、`defaultPickerValue` 和快捷项，不新增第二套顶层视口 Prop。嵌套配置里的监听器不会透传；在字段组件上监听以下事件并回写嵌套 `pickerValue`。
 
-| 事件 | 说明 | 参数 |
-| --- | --- | --- |
-| `update:picker-value` | 请求日历视口更新，不改变选择模型 | value: DateSelection |
-| `picker-value-change` | 已请求的视口及展示通知 | value, date(s), formatted text(s) |
-| `select-shortcut` | 接受的快捷项，仍遵守字段确认策略 | shortcut: DateShortcut |
+| 事件                  | 说明                             | 参数                              |
+| --------------------- | -------------------------------- | --------------------------------- |
+| `update:picker-value` | 请求日历视口更新，不改变选择模型 | value: DateSelection              |
+| `picker-value-change` | 已请求的视口及展示通知           | value, date(s), formatted text(s) |
+| `select-shortcut`     | 接受的快捷项，仍遵守字段确认策略 | shortcut: DateShortcut            |
 
 受控视口拒绝更新时保持原月份，后续回写才更新；快捷项选择先进入字段草稿，默认确认后提交。滚轮/时钟没有日历月份导航能力。
 
@@ -204,7 +208,7 @@ Cedar 不公开 `Date.pickerProps`、`DateRange.pickerProps` 或 `DateRange.date
 
 ### 展示模式的所有权
 
-Cedar 只实现桌面日历，不公开移动 `presentation`。Maple 在字段/纯面板根选择真实展示模式；字段嵌套 `DatePickerOptions` / `DateRangePickerOptions` 不包含 presentation，两库复制的过滤器均拒绝嵌套选择器，不通过隐式覆盖保留无效 API。
+Cedar 只实现桌面日历，不公开移动 `edit-mode`。Maple 在字段/纯面板根选择真实展示模式；字段嵌套 `DatePickerOptions` / `DateRangePickerOptions` 不包含 presentation，两库复制的过滤器均拒绝嵌套选择器，不通过隐式覆盖保留无效 API。
 
 ### 周起始日的响应式展示
 
@@ -216,14 +220,136 @@ Cedar 只实现桌面日历，不公开移动 `presentation`。Maple 在字段/�
 
 ### Form 字段展示与确认
 
-本组件支持 `presentation`，字段 > FormItem > Form 逐层继承；未指定时为 `inline`，保留原有交互。支持值：`inline / click / dblclick`。其他编辑展示使用 Cell 入口和一份草稿，确认后才更新 v-model；取消、重置或启用 readPretty 丢弃草稿。
+本组件支持 `edit-mode`，字段 > FormItem > Form 逐层继承；未指定时为 `direct`，保留原有交互。支持值：`direct / click / dblclick`。非 direct 编辑模式通过字段值入口打开编辑面板，并维护单份草稿；确认后才更新 v-model，取消、重置或启用 readPretty 时丢弃草稿。
 
-Cedar 使用 presentation="click" / "dblclick" 在原位进入编辑，Enter/F2 也可进入；取消/Escape 丢弃草稿，确认后提交。 readPretty 为纯阅读属性，与 readonly、disabled 独立。
+Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，Enter/F2 也可进入；取消/Escape 丢弃草稿，确认后提交。readPretty 为独立阅读属性，与 readonly、disabled 分开。
 
 `before-commit(value, { previousValue, signal })` 可拦截弹层保存；FormItem 先校验候选值，失败保持编辑。`open / default-open / update:open` 控制编辑层。`#read="{ value, text }"` 可自定义阅读内容。集中示例见 Form 的“各类字段统一展示”。
 
-日期／时间字段在 inline 下沿用原确认策略；在 popover/popup/dialog 中，内部纯面板隐藏确认工具栏，由编辑层提供唯一一组确认／取消。独立 DatePicker、DateRangePicker、TimePicker、TimeRangePicker 保留原有面板 API 和确认行为，不继承 Form 的字段展示。
+日期／时间字段在 inline 下沿用原确认策略；在 click/dblclick 编辑展示中，内部纯面板隐藏确认工具栏，由编辑层提供唯一一组确认／取消。独立 DatePicker、DateRangePicker、TimePicker、TimeRangePicker 保留原有面板 API 和确认行为，不继承 Form 的字段展示。
 
 独立 DatePicker / DateRangePicker 与 inline 共用日历基准宽度（每个 265px）。单日期带时间时，宽屏下日历与时间列左右排列；范围在宽屏保留两个并排日历。面板会按窄容器换行，侧边快捷项另占一列，不压缩日历；确认与 actions 插槽保持由面板自身管理。
 
 `read-pretty` 为独立布尔属性，与 `readonly`、`disabled` 同级；字段 > FormItem > Form 继承，显式 `false` 覆盖父级。默认 `false`。纯阅读不显示编辑器。
+
+### 统一字段与提交
+
+Date / DateRange / Time / TimeRange 使用相同的 PickerField → FieldDecorator 字段链路。桌面支持键入有效值后回车或失焦提交；有确认按钮的面板只在确认时写回，Escape 或外部关闭丢弃草稿。清除立即提交空值。面板组件不再提供 `hideTrigger` 双模式，自定义触发器使用字段的默认插槽。
+
+<demo src="./__demos__/field-protocol.vue"></demo>
+
+### 字段与面板边界
+
+字段保留输入和浮层状态；嵌套面板参数只接受展示选项，不能覆盖顶层模型、格式或校验规则。
+
+<demo src="./picker/__demos__/entry-boundary.vue"></demo>
+
+### 日期值格式
+
+两端使用独立复制的日期值、约束、面板和字段主体。年/月/日模型格式为 `YYYY` / `YYYY-MM` / `YYYY-MM-DD`，日期时间默认含秒；`format="YYYY-MM-DD HH:mm"` 与 `value-format="YYYY-MM-DD HH:mm"` 使用分钟字符串。`format` 只控制显示，`value-format` 控制模型和事件，支持自定义格式、`Date` 与 `timestamp`。Cedar 另提供周/季度面板；Maple 另提供移动端滚轮和时钟展示。
+
+### 透传配置边界与优先级
+
+建议使用 `DatePopupOptions` 声明 popup-props；仅用于 inline 锚定弹层的允许展示/定位配置。open/defaultOpen、disabled/readonly、modelValue、值格式、日期规则及通知监听由字段管理，已有 datePresentationOptions 会过滤托管字段和 onXxx 监听。popup-container 顶层明确传入时优先（包括 false），否则回退 popupProps.popupContainer；popupClass 与内部类合并。trigger、closeOnClickReference、preventFocus、popupOffset 由字段展示层固定（偏移当前为 4）；Maple 还固定 unmountOnClose=true。新类型为两端共同的安全子集，不能设置这些固定项；Cedar 旧配置可透传的 unmountOnClose 不受本次影响。可使用 popupTranslate 定制附加平移。其他有效展示字段保持原透传。
+
+本次仅新增可主动选用的专用类型，不收窄已发布的宽属性类型，不增加运行时过滤、不改变覆盖顺序；旧业务写法继续可编译。若直接使用旧宽属性，内部托管字段仍可能通过类型检查，但不代表能控制内部状态。
+
+```ts
+import type { DatePopupOptions } from "@cedar-design/ui";
+```
+
+<demo src="./__demos__/passthrough-options.vue"></demo>
+日期范围还会保留未改动端点的原始 Date／时间戳及隐藏毫秒，避免重复小时中的第二次发生被错误转换成第一次。夏令时仅跳过半小时的地区仍可选择剩余有效分钟；交互范围排序比较真实时刻，交换日期但保留时间时会重新计算目标日期的时区偏移。
+
+### 复制与编辑
+
+open-trigger-target="icon" 时，输入区可以编辑或复制，只有右侧选择按钮响应点击打开。关闭手输或搜索后，已有文本仍可复制。
+
+<demo src="./__demos__/open-trigger-target.vue"></demo>
+
+### 共享字段加载
+
+`loading` 控制共享字段加载状态；`loading-mode` 为 `default`（指示器）或 `line`（底部不定进度线），默认 `default`。渲染统一由 FieldDecorator 负责，不隐式改变 disabled/readonly；需要禁止编辑时单独设置。
+
+## 阅读方向
+
+组件继承最近的 `dir="ltr|rtl"`，支持运行时切换与局部方向覆盖。日历日期、月份、年份按阅读顺序排列，前后翻页图形随方向调整，日期值与起止顺序保持原义。分页网格中左右键按视觉方向移动焦点，上下键移动一行，Home/End 移至当前行首尾并跳过禁用项；焦点移动不提交，Enter/Space 沿用选值行为，边界停留在当前显示网格。快捷区 `shortcuts-position="left|right"` 保持物理侧，底部使用 `bottom`。弹层继承字段来源方向。
+
+## API
+
+### 空值识别与阅读空文案
+
+`empty-values` 用于空值识别，`empty-value` 保留原清空输出；`empty-text` 仅在 `read-pretty` 空内容下展示，默认 `'-'`，字段 > FormItem > Form，自定义 read 插槽优先。显式配置 empty-values 后，内置 required 接入该策略，自定义校验仍收到原值。详见[统一说明](/guide/empty-values/)。
+
+| 参数         | 类型               | 缺省与范围                                            |
+| ------------ | ------------------ | ----------------------------------------------------- |
+| empty-values | readonly unknown[] | 字段 > FormItem > Form > 组件族默认；完整覆盖，不合并 |
+| empty-text   | string             | 字段 > FormItem > Form > '-'；显式 '' 有效            |
+
+以上是字段展示层 API；纯面板不因此新增阅读模式。Form 与 FormItem 提供继承配置。empty-value 的现有类型与默认输出仍按该组件原 API 执行。
+
+### Props
+
+| 参数                  | 说明                                                                                   | 类型                                       | 默认值    |
+| --------------------- | -------------------------------------------------------------------------------------- | ------------------------------------------ | --------- |
+| `open-trigger-target` | 打开面板的点击区域；field 为整个字段，icon 仅右侧选择按钮。不影响键盘展开及受控 open。 | `'field' \| 'icon'`                        | `'field'` |
+| `model-value`         | 绑定值                                                                                 | `Date \| string \| number`                 | `-`       |
+| `type`                | 选择类型                                                                               | `date \| week \| month \| year \| quarter` | `date`    |
+| `open`                | 弹层显隐                                                                               | `boolean`                                  | `-`       |
+| `clearable`           | 可清除                                                                                 | `boolean`                                  | `true`    |
+| `disabled`            | 禁用                                                                                   | `boolean`                                  | `false`   |
+| `readonly`            | 只读                                                                                   | `boolean`                                  | `false`   |
+| `size`                | 尺寸                                                                                   | `xs \| sm \| md \| lg \| xl`               | `-`       |
+| `variant`             | 输入框变体                                                                             | `filled \| outline \| standard`            | `filled`  |
+| `placeholder`         | 占位                                                                                   | `string`                                   | `-`       |
+| `disabled-date`       | 禁用日期                                                                               | `Function`                                 | `-`       |
+| `format`              | 展示格式                                                                               | `string \| Function`                       | 随 `type` |
+| `show-time`           | 选择时间                                                                               | `boolean`                                  | `false`   |
+| `date-picker-props`   | 面板展示选项                                                                           | `DatePickerOptions`                        | `{}`      |
+
+### 日期族统一契约
+
+| 参数              | 说明                                                                                                                                           | 类型                                               | 默认值  |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- | ------- |
+| `default-value`   | 非受控初始值，仅初始化读取                                                                                                                     | DateValue / DateValue[]                            | —       |
+| `value-format`    | 模型与事件的格式，可为自定义日期格式、Date 或 timestamp                                                                                        | string                                             | 随 type |
+| `min` / `max`     | 包含端点的边界；字符串按 value-format 解析                                                                                                     | DateValue                                          | —       |
+| `disabled-time`   | 当前日期、端点的时间禁用列表                                                                                                                   | (date: Date, side: DateSide) => DateDisabledTime   | —       |
+| `disable-confirm` | 选择后立即提交                                                                                                                                 | boolean                                            | false   |
+| `default-open`    | 非受控初始展开                                                                                                                                 | boolean                                            | false   |
+| `popup-props`     | 可选的字段浮层展示配置，placement 默认 bottom-start；交给底层 Trigger 自动定位，可覆盖首选方位；不增加顶层 placement，不允许覆盖字段状态和规则 | object                                             | {}      |
+| `popup-container` | 挂载目标；顶层优先，支持 false 原地渲染                                                                                                        | string / HTMLElement / (() => HTMLElement) / false | —       |
+
+`DateValue = Date | string | number`。单值清除为 undefined，范围清除为 []。
+`disabledDate(date, side)` 和 `disabledTime(date, side)` 的 date 始终为 Date，side 为 start/end。
+时间回调返回 `disabledHours()`、`disabledMinutes(hour)`、`disabledSeconds(hour, minute)` 数字列表。
+非法日期、不完整或逆序范围不能提交；确认时重新验证动态禁用规则。范围锁定端点不能被清除或改动。
+嵌套面板 props 只配置展示，不得覆盖顶层 model-value、格式、边界、禁用规则或控制事件。
+
+### Events
+
+| 事件                          | 说明                 | 参数                              |
+| ----------------------------- | -------------------- | --------------------------------- |
+| `update:model-value`          | 写入模型             | value                             |
+| `select`                      | 选择草稿，不等于提交 | value, date(s), formatted text(s) |
+| `change`                      | 有效值正式变化       | value, date(s), formatted text(s) |
+| `update:open` / `open-change` | 展开状态变化         | open: boolean                     |
+| `clear`                       | 清除                 | 无                                |
+| `focus` / `blur`              | 整个字段的焦点边界   | 无                                |
+| `click`                       | 点击字段             | event                             |
+
+桌面支持键盘编辑。默认面板先编辑草稿再确认；设置 disable-confirm 可直接提交。Escape 或关闭会丢弃草稿。focus(index = 0) 定位起止输入，blur() 关闭浮层。
+
+## 显式时区
+
+`timeZone` 接受 IANA 名称，例如 `Asia/Shanghai`。Date 与毫秒时间戳表示真实时刻，字符串表示目标时区的当地时间；展示、手输、min/max、快捷项和禁用规则遵守同一协议，事件 Date 保留真实时刻。未设置时保持本地时区行为。不存在的夏令时时间禁止提交，重复时间取第一次，非法时区禁止提交。Maple 的 scroll / line 属于移动日历呈现能力，桌面端继续使用现有面板。
+
+## 配置清空后的值
+
+`empty-value` 指定当前组件已有清空动作的输出；省略时采用该组件默认返回。具体类型以组件 API 为准。它不改变 empty-values 的识别规则，也不改变 Form reset 的初始值。
+
+`empty-value` 可显式设为 `null`（或 `() => null`），清空时原样提交 null；省略时保留组件原默认值。界面把 null 显示为空，不会把普通输入的空字符串自动转成 null。支持弹出编辑的字段中，清空先修改草稿，确认后提交，取消则保留原值。
+
+### 方位语义与配置入口
+
+Date 字段默认从输入框下方 bottom-start 打开。需要时通过 popupProps.placement 覆盖首选方位，由底层 Trigger 定位；不是透传给 Popup 或 Popover。DatePicker 是独立日期面板，没有输入框锚点，不能把旧 date/picker 目录中的 placement 当成当前 DatePicker 的公开属性。

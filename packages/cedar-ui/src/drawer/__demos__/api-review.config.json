@@ -73,8 +73,8 @@
     },
     {
       "name": "before-close",
-      "description": "关闭控制钩子；调用 done() 后提交",
-      "type": "(action, done, refs) => void",
+      "description": "before hook; synchronous void waits for done; first completion wins",
+      "type": "boolean | Promise<boolean | void> | done callback",
       "defaultValue": "undefined",
       "kind": "callback"
     },

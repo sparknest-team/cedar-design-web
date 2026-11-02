@@ -63,8 +63,13 @@ describe('Transfer', () => {
 
     const searches = wrapper.findAllComponents({ name: 'CSearch' })
     expect(searches).toHaveLength(2)
-    expect(wrapper.find('.c-transfer-view-source .c-search input').attributes('placeholder')).toBe('Search source')
-    expect(wrapper.find('.c-transfer-view-target .c-search input').attributes('placeholder')).toBe('Search target')
+    for (const [side, expected] of [['source', 'Search source'], ['target', 'Search target']]) {
+      const search = wrapper.find(`.c-transfer-view-${side} .c-search`)
+      const input = search.find('input')
+      // Floating hints provide the accessible name through their associated label.
+      const label = search.find(`label[for="${input.attributes('id')}"]`)
+      expect(input.attributes('placeholder') ?? (label.exists() ? label.text() : undefined)).toBe(expected)
+    }
   })
 
   test('renders groups and draggable target in the standard layout', () => {

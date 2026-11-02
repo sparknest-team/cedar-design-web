@@ -23,7 +23,7 @@ const updateOpen = (next) => {
 </script>
 
 <template>
-  <div style="display: flex; flex-direction: column; gap: 12px; width: 100%">
+  <c-space direction="column" size="12px" style="width: 100%">
     <p>非受控初始值，无需绑定 v-model</p>
     <c-time-range
       :default-value="['09:00', '10:00']"
@@ -48,5 +48,5 @@ const updateOpen = (next) => {
     <output aria-label="Controlled proposals">{{
       JSON.stringify({ value: proposal, open: openProposal })
     }}</output>
-  </div>
+  </c-space>
 </template>

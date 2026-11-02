@@ -7,27 +7,45 @@ lang: en-US
 
 Single-line or multi-line truncation with optional expansion and Tooltip.
 
-## Examples
+## Basic examples
 
 ### Single line
 
 <demo src="./__demos__/basic.vue"></demo>
 
+## Content and presentation
+
 ### Multiple lines
 
 <demo src="./__demos__/multiline.vue"></demo>
 
+## Customization and slots
+
+### Custom tooltip
+
+<demo src="./__demos__/custom-tooltip.vue"></demo>
+
+## Interaction and control
+
 ### Interactive expansion
+
+<!-- demo-config-notes:start -->
+#### Configuration reference for this comparison
+
+| Configuration | Purpose | Related examples |
+| --- | --- | --- |
+| `line-clamp` | Positive line count; omitted or invalid means single line | Interactive expansion, Controlled expansion |
+| `expand-trigger` | Enable click / Enter / Space toggling | Interactive expansion, Controlled expansion |
+| `tooltip` | Tooltip configuration; false disables it | Interactive expansion, Controlled expansion |
+| `expand` | Controlled expansion | Controlled expansion |
+<!-- demo-config-notes:end -->
+
 
 <demo src="./__demos__/expand.vue"></demo>
 
 ### Controlled expansion
 
 <demo src="./__demos__/controlled.vue"></demo>
-
-### Custom tooltip
-
-<demo src="./__demos__/custom-tooltip.vue"></demo>
 
 ## API
 
@@ -41,14 +59,14 @@ Single-line or multi-line truncation with optional expansion and Tooltip.
 | `line-clamp` | Positive line count; omitted or invalid means single line | `number \| string` | `—` |
 | `tooltip` | Tooltip configuration; false disables it | `boolean \| TooltipProps` | `true` |
 
-`expand` never changes locally: the parent must accept `update:expand`. Omit it for internal state initialized by `default-expand`. Tooltip uses its own default width and triggers; it is not conditional on measured overflow. For touch activation, configure `tooltip.trigger` with `click`. CSS width/class/style apply to the text node.
+Providing `expand` makes the component request updates from its parent rather than changing controlled state. When omitted, internal state is used, initialized once by `default-expand`. Tooltip follows its own width and trigger defaults; display does not depend on measured overflow. Touch callers can include `click` in `tooltip.trigger` explicitly. External class/style/width apply directly to the text node.
 
 ### Events and slots
 
-- `update:expand(expand: boolean)`: requested state after a user action; external updates do not emit.
-- `default`: text content.
-- `tooltip-content`: custom tooltip; otherwise use `tooltip.content` when supplied, then the text content. Content is never duplicated.
-- Keyboard: interactive text supports Enter / Space; tooltip-enabled text supports Tab focus. No public methods.
+- `update:expand(expand: boolean)`: the new state requested by user interaction; external updates do not emit it.
+- `default`: body text.
+- `tooltip-content`: tooltip content. Without it, tooltip.content takes precedence, then body text; content is not concatenated twice.
+- Keyboard: expandable text supports Enter / Space; tooltip-enabled text is focusable with Tab. No public instance methods.
 
 ### Types
 
@@ -56,7 +74,7 @@ Single-line or multi-line truncation with optional expansion and Tooltip.
 import type { EllipsisProps, EllipsisInstance, EllipsisExpandTrigger } from '@cedar-design/ui'
 ```
 
-### CSS tokens
+### Style variables
 
 | Token | Default |
 | --- | --- |

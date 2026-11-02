@@ -1,3 +1,5 @@
+import type { OptionsLoader } from '../_hooks/use-option-request'
+import { emptyValueProp } from '../_utils/empty-value'
 import { computed, defineComponent, PropType, provide, reactive, ref, toRef } from 'vue'
 import { fieldPresentationProps } from '../_components/field-presentation/props'
 import { useFormItem } from '../_hooks/use-form-item'
@@ -18,13 +20,14 @@ import type {
 
 export const transferProps = {
   ...fieldPresentationProps,
+  emptyValue: emptyValueProp<TransferTargetItem[]>(),
   /**
    * @zh 穿梭框的数据
    * @en Data of the transfer
    */
   data: {
-    type: Array as PropType<TransferItem[]>,
-    default: () => [],
+    type: [Array, Function] as PropType<readonly TransferItem[] | OptionsLoader<TransferItem>>,
+    default: undefined,
   },
   /**
    * @zh 目标选择框中的值
@@ -32,7 +35,7 @@ export const transferProps = {
    * @v-model
    */
   modelValue: {
-    type: Array as PropType<TransferTargetItem[]>,
+    type: Array as PropType<TransferTargetItem[] | null>,
     default: undefined,
   },
   /**
@@ -80,7 +83,6 @@ export const transferProps = {
   /** 搜索过滤函数。 */
   filter: {
     type: Function as PropType<TransferFilter>,
-    default: (value: string, item: TransferItem) => item.label.toLowerCase().includes(value.toLowerCase()),
   },
   sourceFilterPlaceholder: String,
   targetFilterPlaceholder: String,
@@ -94,7 +96,6 @@ export const transferProps = {
   /**
    * @zh 是否展示全选勾选框
    * @en Whether show select all checkbox on the header
-   * @version 2.39.0
    */
   showSelectAll: {
     type: Boolean,
@@ -111,7 +112,6 @@ export const transferProps = {
   /**
    * @zh 源选择框的搜索框配置
    * @en Search box configuration for source selection box
-   * @version 2.51.1
    */
   sourceSearchProps: {
     type: Object,
@@ -119,7 +119,6 @@ export const transferProps = {
   /**
    * @zh 目标选择框的搜索框配置
    * @en Search box configuration for target selection box
-   * @version 2.51.1
    */
   targetSearchProps: {
     type: Object,

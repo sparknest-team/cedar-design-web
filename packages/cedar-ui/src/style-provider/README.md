@@ -6,7 +6,9 @@ permalink: /components/style-provider/
 
 两端独立同源，API、安装、默认值设置和运行逻辑一致；仅平台标识与本地导入不同。
 
-## 案例
+## 基础示例
+
+### 基础用法
 
 <demo src="./__demos__/basic.vue"></demo>
 
@@ -46,13 +48,6 @@ StyleProvider.setPropsDefaults({
 
 在应用初始化、挂载组件之前设置默认值，不追溯更新已挂载实例；显式 Props 优先。对象形式会为每个实例复制变量对象，也支持工厂和 `null`。默认配置仅属于本库，不跨库共享。
 安装固定注册 `CStyleProvider`，不修改应用全局配置；自定义别名使用 `app.component('MyStyleProvider', StyleProvider)`。
-
-<!-- api-review:start -->
-### 功能调试
-
-<demo src="./__demos__/api-review.vue"></demo>
-
-<!-- api-review:end -->
 
 ## API
 

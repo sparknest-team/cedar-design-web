@@ -23,6 +23,8 @@ afterEach(() => {
 })
 async function settle() { for (let i = 0; i < 6; i++) await nextTick() }
 async function fixture() {
+  vi.spyOn(HTMLElement.prototype, 'scrollWidth', 'get').mockReturnValue(1200)
+  vi.spyOn(HTMLElement.prototype, 'clientWidth', 'get').mockReturnValue(600)
   const active = ref(true)
   const layout = ref('first')
   const options = ref<{ height: number } | undefined>({ height: 200 })

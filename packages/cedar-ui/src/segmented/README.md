@@ -6,40 +6,57 @@ permalink: /components/segmented/
 
 用于在少数互斥选项之间快速切换。
 
-## 案例
+## 基础示例
 
 ### 基础用法
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### 尺寸
+## 外观与状态
 
-<demo src="./__demos__/size.vue"></demo>
+### 分段尺寸与禁用状态
 
-### 禁用
+<!-- demo-config-notes:start -->
+#### 本组配置对照
 
-<demo src="./__demos__/disabled.vue"></demo>
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `size` | 尺寸 | 分段尺寸与禁用状态 |
+| `options` | 选项列表 | 分段尺寸与禁用状态 |
+| `disabled` | 禁用 | 分段尺寸与禁用状态 |
+| `default-value` | 非受控默认值 | 分段尺寸与禁用状态 |
+<!-- demo-config-notes:end -->
+
+比较不同尺寸的密度与禁用选项的行为；受控值和块级布局保持独立。
+
+<demo src="./__demos__/appearance-state-comparison.vue"></demo>
+
+## 布局与排列
+
+### 块级撑满
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `block` | 撑满父宽度 | 块级撑满 |
+| `options` | 选项列表 | 块级撑满 |
+<!-- demo-config-notes:end -->
+
+<demo src="./__demos__/block.vue"></demo>
+
+## 交互与控制
 
 ### 受控
 
 <demo src="./__demos__/controlled.vue"></demo>
-
-### 块级撑满
-
-<demo src="./__demos__/block.vue"></demo>
 
 ## 可访问性
 
 - 根节点使用 `role="radiogroup"`，选项为原生 `radio`，支持键盘切换。
 - 可通过 `name` 绑定表单字段名。
 - 整体禁用时设置 `aria-disabled`。
-
-<!-- api-review:start -->
-### 功能调试
-
-<demo src="./__demos__/api-review.vue"></demo>
-
-<!-- api-review:end -->
 
 ## API
 
@@ -53,7 +70,7 @@ permalink: /components/segmented/
 | size | 尺寸 | `xs \| sm \| md \| lg \| xl` | `md` |
 | disabled | 禁用 | `boolean` | `false` |
 | block | 撑满父宽度 | `boolean` | `false` |
-| direction | 方向 | `horizontal \| vertical` | `horizontal` |
+| orientation | 分段选项的横纵排列，默认 horizontal；不表示文字阅读方向 | `horizontal \| vertical` | `horizontal` |
 | name | 原生 name | `string` | — |
 
 ### SegmentedOption

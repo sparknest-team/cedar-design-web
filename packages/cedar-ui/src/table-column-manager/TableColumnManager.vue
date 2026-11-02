@@ -23,7 +23,7 @@
     @confirm="handleInsertConfirm"
   >
     <div v-if="!insertableItems.length" style="color: var(--c-color-text-3)">没有可插入的列</div>
-    <c-checkbox-group v-else v-model="insertSelected" direction="vertical">
+    <c-checkbox-group v-else v-model="insertSelected" orientation="vertical">
       <c-checkbox v-for="item in insertableItems" :key="item.dataIndex" :value="item.dataIndex">
         {{ item.title }}
       </c-checkbox>
@@ -48,8 +48,9 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, inject, ref, watch } from 'vue'
-import { cloneDeep } from 'lodash-es'
+import { computed, inject, onBeforeUnmount, ref, watch } from 'vue'
+import { createRequestGuard } from '../_utils/async-request'
+import { cloneDeep, isEqual } from 'lodash-es'
 import Drawer from '../drawer'
 import CDialog from '../dialog'
 import CCheckbox, { CheckboxGroup as CCheckboxGroup } from '../checkbox'
@@ -82,9 +83,22 @@ const emit = defineEmits<{
 const prefixCls = getPrefixCls('table-column-manager')
 const ctx = inject(TableColumnManagerContextKey, null)
 const innerCatalog = ref<ColumnCatalog>(cloneDeep(props.options))
+let lastOptions = cloneDeep(props.options)
 const innerItems = ref<ColumnManagerItem[]>(cloneDeep(props.defaultValue ?? props.modelValue ?? []))
 const initialKeys = ref(innerItems.value.map((item) => item.dataIndex))
-const loading = ref(false)
+const catalogPending = ref(false)
+const searchPending = ref(false)
+const loading = computed(() => catalogPending.value || searchPending.value)
+const catalogRequest = createRequestGuard()
+const searchRequest = createRequestGuard()
+let disposed = false
+onBeforeUnmount(() => {
+  disposed = true
+  catalogRequest.invalidate()
+  searchRequest.invalidate()
+  catalogPending.value = false
+  searchPending.value = false
+})
 
 const targetItems = computed<TransferTargetItem[]>({
   get: () =>
@@ -184,24 +198,34 @@ const drawerProps = computed(() => ({
 }))
 
 const loadCatalog = async () => {
-  if (!props.loadOptions) return
-  loading.value = true
+  if (disposed) return
+  const loader = props.loadOptions
+  const isCurrent = catalogRequest.begin()
+  catalogPending.value = false
+  if (!loader) return
+  catalogPending.value = true
   try {
-    innerCatalog.value = cloneDeep(await props.loadOptions())
+    const result = await loader()
+    if (isCurrent()) innerCatalog.value = cloneDeep(result)
   } finally {
-    loading.value = false
+    if (isCurrent()) catalogPending.value = false
   }
 }
-
 const handleSearch = async (value: string, type: 'source' | 'target') => {
-  if (type !== 'source' || !props.remoteSearch) return
-  loading.value = true
+  if (disposed || type !== 'source') return
+  const search = props.remoteSearch
+  const isCurrent = searchRequest.begin()
+  searchPending.value = false
+  if (!search) return
+  searchPending.value = true
   try {
-    await props.remoteSearch(value)
+    await search(value)
   } finally {
-    loading.value = false
+    if (isCurrent()) searchPending.value = false
   }
 }
+watch(() => props.loadOptions, () => loadCatalog(), { immediate: true })
+watch(() => props.remoteSearch, () => { searchRequest.invalidate(); searchPending.value = false })
 
 const insertVisible = computed({
   get: () => ctx?.insertVisible.value ?? false,
@@ -241,6 +265,10 @@ const handleEditConfirm = () => ctx?.handleEditConfirm()
 watch(
   () => props.options,
   (value) => {
+    if (isEqual(value, lastOptions)) return
+    lastOptions = cloneDeep(value)
+    catalogRequest.invalidate()
+    catalogPending.value = false
     innerCatalog.value = cloneDeep(value ?? [])
   },
   { deep: true }
@@ -253,7 +281,7 @@ watch(
   { deep: true }
 )
 
-void loadCatalog()
+
 
 defineExpose({
   getResult,

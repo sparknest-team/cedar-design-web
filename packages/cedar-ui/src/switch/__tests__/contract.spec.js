@@ -80,7 +80,7 @@ test('pending interceptor locks repeated input and commits once', async () => {
   expect(wrapper.attributes('aria-busy')).toBe('true')
   await wrapper.trigger('click')
   expect(beforeChange).toHaveBeenCalledTimes(1)
-  expect(beforeChange).toHaveBeenCalledWith(true)
+  expect(beforeChange).toHaveBeenCalledWith({ value: true, previousValue: false }, expect.any(Function), expect.objectContaining({ signal: expect.any(AbortSignal) }))
   resolve(true); await flushPromises()
   expect(wrapper.emitted('change')).toHaveLength(1)
   expect(wrapper.attributes('aria-busy')).toBeUndefined()

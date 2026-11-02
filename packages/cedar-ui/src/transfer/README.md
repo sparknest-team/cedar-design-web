@@ -6,7 +6,7 @@ permalink: /components/transfer/
 
 两栏布局的多选组件。勾选左侧选项后会即时加入右侧，右侧选项可以直接移除。
 
-## 案例
+## 基础示例
 
 ### 基础用法
 
@@ -14,17 +14,30 @@ permalink: /components/transfer/
 
 <demo src="./__demos__/basic.vue"></demo>
 
+## 搜索与数据结构
+
 ### 搜索
+
+<!-- demo-config-notes:start -->
+
+#### 本组配置对照
+
+| 配置                        | 作用                       | 相关示例                     |
+| --------------------------- | -------------------------- | ---------------------------- |
+| `data`                      | 穿梭框的数据               | 搜索、分组与拖拽、树型穿梭框 |
+| `source-filterable`         | 是否显示源列表搜索框       | 搜索、分组与拖拽             |
+| `default-value`             | 非受控状态下的右侧完整状态 | 搜索、树型穿梭框             |
+| `source-filter-placeholder` | 源列表搜索框占位文本       | 搜索、分组与拖拽             |
+| `target-filterable`         | 是否显示目标列表搜索框     | 搜索                         |
+| `target-filter-placeholder` | 目标列表搜索框占位文本     | 搜索                         |
+
+<!-- demo-config-notes:end -->
 
 通过 `source-filterable`、`target-filterable` 分别开启两侧搜索，通过 `filter` 自定义过滤逻辑；也可使用 `show-search` 同时开启两侧搜索。
 
+目标列表筛选后拖拽，只调整可见项在完整目标序列中的位置；隐藏的必选项、暂不在候选数据中的已选项及其自定义元数据都会保留。
+
 <demo src="./__demos__/search.vue"></demo>
-
-### 大数据
-
-通过 `virtual-scroll` 开启虚拟滚动，可流畅处理大量选项。
-
-<demo src="./__demos__/large-data.vue"></demo>
 
 ### 分组与拖拽
 
@@ -38,16 +51,10 @@ permalink: /components/transfer/
 
 ```ts
 const value = ref([
-  { value: 'id', label: '编号', fixed: 'left' },
-  { value: 'name', label: '名称' },
-])
+  { value: "id", label: "编号", fixed: "left" },
+  { value: "name", label: "名称" },
+]);
 ```
-
-### 自定义选项渲染
-
-通过 `item` 插槽自定义选项的渲染内容。
-
-<demo src="./__demos__/custom.vue"></demo>
 
 ### 树型穿梭框
 
@@ -55,47 +62,91 @@ const value = ref([
 
 <demo src="./__demos__/tree.vue"></demo>
 
+## 内容定制
+
+### 自定义选项渲染
+
+<!-- demo-config-notes:start -->
+
+#### 本组配置对照
+
+| 配置            | 作用                       | 相关示例                     |
+| --------------- | -------------------------- | ---------------------------- |
+| `data`          | 穿梭框的数据               | 自定义选项渲染、自定义标题栏 |
+| `default-value` | 非受控状态下的右侧完整状态 | 自定义选项渲染、自定义标题栏 |
+
+<!-- demo-config-notes:end -->
+
+通过 `item` 插槽自定义选项的渲染内容。
+
+<demo src="./__demos__/custom.vue"></demo>
+
 ### 自定义标题栏
 
 通过 `source-title` ,`target-title` 插槽自定义标题栏的渲染内容
 
 <demo src="./__demos__/custom-header.vue"></demo>
 
-<!-- api-review:start -->
-### 功能调试
+## 大数据
 
-<demo src="./__demos__/api-review.vue"></demo>
+### 大数据
 
-<!-- api-review:end -->
+<!-- demo-config-notes:start -->
+
+#### 本组配置对照
+
+| 配置                        | 作用                 | 相关示例 |
+| --------------------------- | -------------------- | -------- |
+| `data`                      | 穿梭框的数据         | 大数据   |
+| `virtual-scroll`            | 是否启用虚拟滚动     | 大数据   |
+| `source-filterable`         | 是否显示源列表搜索框 | 大数据   |
+| `source-filter-placeholder` | 源列表搜索框占位文本 | 大数据   |
+
+<!-- demo-config-notes:end -->
+
+通过 `virtual-scroll` 开启虚拟滚动，可流畅处理大量选项。
+
+<demo src="./__demos__/large-data.vue"></demo>
 
 ## API
 
+### 空值识别与阅读空文案
+
+`empty-values` 用于空值识别，`empty-value` 保留原清空输出；`empty-text` 仅在 `read-pretty` 空内容下展示，默认 `'-'`，字段 > FormItem > Form，自定义 read 插槽优先。显式配置 empty-values 后，内置 required 接入该策略，自定义校验仍收到原值。详见[统一说明](/guide/empty-values/)。
+
+| 参数         | 类型               | 缺省与范围                                            |
+| ------------ | ------------------ | ----------------------------------------------------- |
+| empty-values | readonly unknown[] | 字段 > FormItem > Form > 组件族默认；完整覆盖，不合并 |
+| empty-text   | string             | 字段 > FormItem > Form > '-'；显式 '' 有效            |
+
+以上是字段展示层 API；纯面板不因此新增阅读模式。Form 与 FormItem 提供继承配置。empty-value 的现有类型与默认输出仍按该组件原 API 执行。
+
 ### `<transfer>` Props
 
-| 参数名                    | 描述                                        | 类型                     |         默认值         |
-| ------------------------- | ------------------------------------------- | ------------------------ | :--------------------: |
-| data                      | 穿梭框的数据                                | `TransferItem[]`         |          `[]`          |
-| model-value **(v-model)** | 右侧有序完整状态                            | `TransferTargetItem[]`   |          `-`           |
-| default-value             | 非受控状态下的右侧完整状态                  | `TransferTargetItem[]`   |          `[]`          |
-| disabled                  | 是否禁用                                    | `boolean`                |        `false`         |
-| virtual-scroll            | 是否启用虚拟滚动                            | `boolean`                |        `false`         |
-| target-draggable          | 是否允许拖拽调整右侧顺序                    | `boolean`                |        `false`         |
-| target-operation          | 右侧操作显示为删除图标或操作菜单            | `'remove' \| 'menu'`     |       `'remove'`       |
-| clear-text                | 右侧清空按钮文本                            | `string`                 |         `清空`         |
-| target-actions            | 追加到右侧菜单的自定义操作                  | `TransferTargetAction[]` |          `[]`          |
-| source-filterable         | 是否显示源列表搜索框                        | `boolean`                |        `false`         |
-| target-filterable         | 是否显示目标列表搜索框                      | `boolean`                |        `false`         |
-| show-search               | 是否同时显示两侧搜索框                      | `boolean`                |        `false`         |
-| filter                    | 自定义过滤函数                              | `TransferFilter`         |   标签忽略大小写匹配   |
-| source-filter-placeholder | 源列表搜索框占位文本                        | `string`                 |          `-`           |
-| target-filter-placeholder | 目标列表搜索框占位文本                      | `string`                 |          `-`           |
-| show-selected             | 是否在源列表保留已选项                      | `boolean`                |         `true`         |
-| source-title              | 源列表标题                                  | `string`                 |          `-`           |
-| target-title              | 目标列表标题                                | `string`                 |          `-`           |
-| show-select-all           | 是否展示全选勾选框                          | `boolean`                |         `true`         |
-| title                     | 源列表和目标列表标题                        | `string[]`               | `['Source', 'Target']` |
-| source-search-props       | Cedar Search 的源搜索框配置                 | `object`                 |          `-`           |
-| target-search-props       | Cedar Search 的目标搜索框配置               | `object`                 |          `-`           |
+| 参数名                    | 描述                             | 类型                                                        |         默认值         |
+| ------------------------- | -------------------------------- | ----------------------------------------------------------- | :--------------------: |
+| data                      | 穿梭框的数据                     | `TransferItem[]` / `(query, { signal }) => Array / Promise` |      `undefined`       |
+| model-value **(v-model)** | 右侧有序完整状态                 | `TransferTargetItem[]`                                      |          `-`           |
+| default-value             | 非受控状态下的右侧完整状态       | `TransferTargetItem[]`                                      |          `[]`          |
+| disabled                  | 是否禁用                         | `boolean`                                                   |        `false`         |
+| virtual-scroll            | 是否启用虚拟滚动                 | `boolean`                                                   |        `false`         |
+| target-draggable          | 是否允许拖拽调整右侧顺序         | `boolean`                                                   |        `false`         |
+| target-operation          | 右侧操作显示为删除图标或操作菜单 | `'remove' \| 'menu'`                                        |       `'remove'`       |
+| clear-text                | 右侧清空按钮文本                 | `string`                                                    |         `清空`         |
+| target-actions            | 追加到右侧菜单的自定义操作       | `TransferTargetAction[]`                                    |          `[]`          |
+| source-filterable         | 是否显示源列表搜索框             | `boolean`                                                   |        `false`         |
+| target-filterable         | 是否显示目标列表搜索框           | `boolean`                                                   |        `false`         |
+| show-search               | 是否同时显示两侧搜索框           | `boolean`                                                   |        `false`         |
+| filter                    | 自定义过滤函数                   | `TransferFilter`                                            |   标签忽略大小写匹配   |
+| source-filter-placeholder | 源列表搜索框占位文本             | `string`                                                    |          `-`           |
+| target-filter-placeholder | 目标列表搜索框占位文本           | `string`                                                    |          `-`           |
+| show-selected             | 是否在源列表保留已选项           | `boolean`                                                   |         `true`         |
+| source-title              | 源列表标题                       | `string`                                                    |          `-`           |
+| target-title              | 目标列表标题                     | `string`                                                    |          `-`           |
+| show-select-all           | 是否展示全选勾选框               | `boolean`                                                   |         `true`         |
+| title                     | 源列表和目标列表标题             | `string[]`                                                  | `['Source', 'Target']` |
+| source-search-props       | Cedar Search 的源搜索框配置      | `object`                                                    |          `-`           |
+| target-search-props       | Cedar Search 的目标搜索框配置    | `object`                                                    |          `-`           |
 
 ### `<transfer>` Events
 
@@ -143,15 +194,23 @@ import type {
   TransferTargetItem,
   TransferTargetOperation,
   TransferValue,
-} from '@cedar-design/ui'
+} from "@cedar-design/ui";
 ```
 
 ### Form 字段展示与确认
 
-本组件支持 `presentation`，字段 > FormItem > Form 逐层继承；未指定时为 `inline`，保留原有交互。支持值：`inline / click / dblclick`。其他编辑展示使用 Cell 入口和一份草稿，确认后才更新 v-model；取消、重置或启用 readPretty 丢弃草稿。
+本组件支持 `edit-mode`，字段 > FormItem > Form 逐层继承；未指定时为 `direct`，保留原有交互。支持值：`direct / click / dblclick`。非 direct 编辑模式通过字段值入口打开编辑面板，并维护单份草稿；确认后才更新 v-model，取消、重置或启用 readPretty 时丢弃草稿。
 
-Cedar 使用 presentation="click" / "dblclick" 在原位进入编辑，Enter/F2 也可进入；取消/Escape 丢弃草稿，确认后提交。 readPretty 为纯阅读属性，与 readonly、disabled 独立。
+Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，Enter/F2 也可进入；取消/Escape 丢弃草稿，确认后提交。readPretty 为独立阅读属性，与 readonly、disabled 分开。
 
 `before-commit(value, { previousValue, signal })` 可拦截弹层保存；FormItem 先校验候选值，失败保持编辑。`open / default-open / update:open` 控制编辑层。`#read="{ value, text }"` 可自定义阅读内容。集中示例见 Form 的“各类字段统一展示”。
 
 `read-pretty` 为独立布尔属性，与 `readonly`、`disabled` 同级；字段 > FormItem > Form 继承，显式 `false` 覆盖父级。默认 `false`。纯阅读不显示编辑器。
+
+候选属性 `data` 支持数组或 `(query, { signal }) => 数组/Promise`。加载、取消、过期结果隔离由组件内部处理，失败触发 load-error。单选/多选分组初始化以空字符串查询，搜索型字段在查询变化时调用；树形字段根数据与原有 load-more 子节点懒加载独立。
+
+## 阅读方向与键盘交互
+
+Transfer 通过候选列表复选框直接维护已选值。候选区位于阅读起点、已选区位于阅读结束侧；RTL 下候选在右、已选在左。标题、搜索、清空与操作按钮间距和拼接圆角随方向调整。
+
+切换方向不会修改 `modelValue`、已选项顺序、搜索条件或冻结状态。列表内上下拖动的顺序语义保持不变。移除按钮可使用键盘操作，必选项和禁用项不会被移除。冻结的 `left/right` 值保持现有业务分组含义，不随阅读方向交换。

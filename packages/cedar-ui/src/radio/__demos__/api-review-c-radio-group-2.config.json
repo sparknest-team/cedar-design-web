@@ -50,7 +50,7 @@
       "initial": "{}"
     },
     {
-      "name": "direction",
+      "name": "orientation",
       "description": "单选框组的方向",
       "type": "'horizontal'|'vertical'",
       "defaultValue": "'horizontal'",

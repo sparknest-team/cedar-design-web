@@ -1,31 +1,58 @@
-import type { ExtractPropTypes, PropType } from 'vue'
+import { fieldLoadingProps } from '../field-decorator/props'
+import { emptyValuesProp, emptyTextProp } from "../_utils/empty-value";
+import { openTriggerTargetProp } from "../_components/picker-field/open-trigger";
+import type { OptionsLoader } from "../_hooks/use-option-request";
+import type { SelectOption } from "./types";
+import type { ExtractPropTypes, PropType } from "vue";
 import {
   beforeFieldCommitProp,
+  fieldEditModeProp,
   readPrettyProp,
-  fieldPresentationProp,
-  type FieldPresentation,
-} from '../_components/field-presentation/context'
-import type { VirtualListProps } from '../_components/virtual-list-v2/interface'
-import { componentSizes } from '../_utils/constant'
-import type { ComponentSize } from '../_utils/constant'
-import { formControlVariants } from '../_utils/form-control'
-import type { FormControlVariant } from '../_utils/form-control'
-import { popupContainerProp } from '../_utils/popup-container'
-import { fieldDecoratorProps } from '../field-decorator/props'
-import type { ScrollbarProps } from '../scrollbar'
-import type { TriggerProps } from '../trigger'
-import type { SelectFieldNames, SelectOptionData, SelectOptionGroup } from './types'
+  type FieldEditMode,
+} from "../_components/field-presentation/context";
+import type { VirtualListProps } from "../_components/virtual-list-v2/interface";
+import { componentSizes } from "../_utils/constant";
+import type { ComponentSize } from "../_utils/constant";
+import { formControlVariants } from "../_utils/form-control";
+import type { FormControlVariant } from "../_utils/form-control";
+import type { OptionSearchField } from "../_utils/option-data";
+import { popupContainerProp } from "../_utils/popup-container";
+import { fieldDecoratorProps } from "../field-decorator/props";
+import type { ScrollbarProps } from "../scrollbar";
+import type { TriggerProps } from "../trigger";
+import type {
+  SelectEmptyValue,
+  SelectFieldNames,
+  SelectOptionData,
+  SelectOptionGroup,
+  SelectValue,
+} from "./types";
 
-export type SelectPresentation = FieldPresentation
+export type SelectEditMode = FieldEditMode;
 export const selectProps = {
-  showTags: { type: Boolean, default: true },
-  separator: { type: String, default: ',' },
-  textAlign: {
-    type: String as PropType<'left' | 'right' | 'center'>,
-    default: 'left',
+  ...fieldLoadingProps,
+  openTriggerTarget: openTriggerTargetProp,
+  /** 异步候选加载器；显式 options 优先，组件管理加载和请求取消。 */
+  /** 内置本地过滤是否区分大小写；自定义过滤函数优先。 */
+  caseSensitive: { type: Boolean, default: false },
+  /** 内置搜索字段；语义字段通过 fieldNames 映射。 */
+  searchFields: {
+    type: Array as PropType<readonly OptionSearchField[]>,
+    default: () => ["label"],
   },
-  presentation: fieldPresentationProp,
+  showTags: { type: Boolean, default: true },
+  separator: { type: String, default: "," },
+  /** 文字对齐；未设置时继承 FormItem.contentAlign，独立使用默认阅读起点 start。 */
+  textAlign: {
+    type: String as PropType<"left" | "right" | "center">,
+  },
+  /** 编辑模式，未设置时继承 FormItem / Form。 */
+  editMode: fieldEditModeProp,
   readPretty: readPrettyProp,
+  /** 模型空值识别；不改变受控判定或清空输出。 */
+  emptyValues: emptyValuesProp,
+  /** 纯阅读空值文案；字段 > FormItem > Form，缺省为 '-'。 */
+  emptyText: emptyTextProp,
   beforeCommit: beforeFieldCommitProp,
   readonly: { type: Boolean, default: undefined },
   hint: fieldDecoratorProps.hint,
@@ -48,9 +75,13 @@ export const selectProps = {
    * @en Value
    */
   modelValue: {
-    type: [String, Number, Boolean, Object, Array] as PropType<
-      string | number | boolean | Record<string, unknown> | (string | number | boolean | Record<string, unknown>)[]
-    >,
+    type: [
+      String,
+      Number,
+      Boolean,
+      Object,
+      Array,
+    ] as PropType<SelectValue | null>,
     default: undefined,
   },
   /**
@@ -59,10 +90,8 @@ export const selectProps = {
    * @default-value '' \| []
    */
   defaultValue: {
-    type: [String, Number, Boolean, Object, Array] as PropType<
-      string | number | boolean | Record<string, unknown> | (string | number | boolean | Record<string, unknown>)[]
-    >,
-    default: (props: { multiple?: boolean }) => (props.multiple ? [] : ''),
+    type: [String, Number, Boolean, Object, Array] as PropType<SelectValue>,
+    default: (props: { multiple?: boolean }) => (props.multiple ? [] : ""),
   },
   /**
    * @zh 输入框的值
@@ -78,7 +107,7 @@ export const selectProps = {
    */
   defaultInputValue: {
     type: String,
-    default: '',
+    default: "",
   },
   /**
    * @zh 选择框的大小
@@ -88,7 +117,8 @@ export const selectProps = {
    */
   size: {
     type: String as PropType<ComponentSize>,
-    validator: (value: unknown): value is ComponentSize => componentSizes.includes(value as ComponentSize),
+    validator: (value: unknown): value is ComponentSize =>
+      componentSizes.includes(value as ComponentSize),
   },
   /**
    * @zh 选择框的变体
@@ -107,14 +137,6 @@ export const selectProps = {
    */
   placeholder: String,
   /**
-   * @zh 是否为加载中状态
-   * @en Whether it is loading state
-   */
-  loading: {
-    type: Boolean,
-    default: false,
-  },
-  /**
    * @zh 是否禁用
    * @en Whether to disable
    */
@@ -131,6 +153,21 @@ export const selectProps = {
     default: undefined,
   },
   /**
+   * @zh 单选清空值；省略时保留 1.x 空值规则。函数可返回 undefined。
+   * @en Single-select clear value; omitted preserves 1.x rules. A function may return undefined.
+   */
+  emptyValue: {
+    type: [
+      String,
+      Number,
+      Boolean,
+      Object,
+      Array,
+      Function,
+    ] as PropType<SelectEmptyValue>,
+    default: undefined,
+  },
+  /**
    * @zh 是否允许清空
    * @en Whether to allow clear
    */
@@ -144,7 +181,9 @@ export const selectProps = {
    * @default-value false (single) \| true (multiple)
    */
   filterable: {
-    type: [Boolean, Object] as PropType<boolean | { retainInputValue?: boolean }>,
+    type: [Boolean, Object] as PropType<
+      boolean | { retainInputValue?: boolean }
+    >,
     default: (props: { multiple?: boolean }) => Boolean(props.multiple),
   },
   /**
@@ -171,7 +210,6 @@ export const selectProps = {
   /**
    * @zh 打开列表且无有效选中项时激活首个可用候选；仅高亮，不更新 modelValue 或触发 change
    * @en Activate the first enabled candidate on opening when no valid selection exists; highlighting does not update modelValue or emit change
-   * @version 2.43.0
    */
   defaultActiveFirstOption: {
     type: Boolean,
@@ -207,16 +245,20 @@ export const selectProps = {
    * @en Whether to filter options
    */
   filterOption: {
-    type: [Boolean, Function] as PropType<boolean | ((inputValue: string, option: SelectOptionData) => boolean)>,
-    default: true,
+    type: [Boolean, Function] as PropType<
+      boolean | ((inputValue: string, option: SelectOptionData) => boolean)
+    >,
+    default: undefined,
   },
   /**
    * @zh 选项数据
    * @en Option data
    */
   options: {
-    type: Array as PropType<(string | number | boolean | SelectOptionData | SelectOptionGroup)[]>,
-    default: () => [],
+    type: [Array, Function] as PropType<
+      readonly SelectOption[] | OptionsLoader<SelectOption>
+    >,
+    default: undefined,
   },
   /**
    * @zh 传递虚拟列表属性，传入此参数以开启虚拟滚动 [VirtualListProps](#VirtualListProps)
@@ -231,6 +273,7 @@ export const selectProps = {
    * @en Trigger props of the drop-down menu
    * @type TriggerProps
    */
+  /** 可选的下拉浮层 Trigger 配置；placement 默认 bottom-start，空间不足时自动调整；字段拥有展开状态，不提供顶层 placement */
   triggerProps: {
     type: Object as PropType<TriggerProps>,
   },
@@ -244,18 +287,19 @@ export const selectProps = {
   /**
    * @zh 自定义值中不存在的选项
    * @en Options that do not exist in custom values
-   * @version 2.10.0
    */
   fallbackOption: {
     type: [Boolean, Function] as PropType<
-      boolean | ((value: string | number | boolean | Record<string, unknown>) => SelectOptionData)
+      | boolean
+      | ((
+          value: string | number | boolean | Record<string, unknown>,
+        ) => SelectOptionData)
     >,
     default: true,
   },
   /**
    * @zh 是否在下拉菜单中显示额外选项
    * @en Options that do not exist in custom values
-   * @version 2.10.0
    */
   showExtraOptions: {
     type: Boolean,
@@ -264,7 +308,6 @@ export const selectProps = {
   /**
    * @zh 触发搜索事件的延迟时间
    * @en Delay time to trigger search event
-   * @version 2.18.0
    */
   searchDelay: {
     type: Number,
@@ -273,7 +316,6 @@ export const selectProps = {
   /**
    * @zh 多选时最多的选择个数
    * @en Maximum number of choices in multiple choice
-   * @version 2.18.0
    */
   limit: {
     type: Number,
@@ -282,7 +324,6 @@ export const selectProps = {
   /**
    * @zh 自定义 `SelectOptionData` 中的字段；当选项值为对象时，也用其中的 `value` 作为键属性
    * @en Customize fields in `SelectOptionData`; when option value is an object, `value` is also used as the key property
-   * @version 2.22.0
    */
   fieldNames: {
     type: Object as PropType<SelectFieldNames>,
@@ -290,7 +331,6 @@ export const selectProps = {
   /**
    * @zh 是否开启虚拟滚动条
    * @en Whether to enable virtual scroll bar
-   * @version 2.38.0
    */
   scrollbar: {
     type: [Boolean, Object] as PropType<boolean | ScrollbarProps>,
@@ -315,12 +355,13 @@ export const selectProps = {
   /**
    * @zh 标签内容不换行
    * @en Tag content does not wrap
-   * @version 2.56.1
    */
   tagNowrap: {
     type: Boolean,
     default: false,
   },
-}
+};
 
-export type SelectProps = import('vue').ExtractPublicPropTypes<typeof selectProps>
+export type SelectProps = import("vue").ExtractPublicPropTypes<
+  typeof selectProps
+>;

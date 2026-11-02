@@ -506,7 +506,8 @@ export default defineComponent({
               disabled={!sdkAvailable}
               class="map-search-input"
               modelValue={searchVal.value}
-              onUpdate:modelValue={(v: string) => {
+              onUpdate:modelValue={(next: string | null) => {
+                const v = next ?? '';
                 searchVal.value = v;
                 handleSearch(v);
               }}
@@ -593,7 +594,8 @@ export default defineComponent({
                           <Textarea
                             class="new-address-input"
                             modelValue={newAddress.value}
-                            onUpdate:modelValue={(v: string) => {
+                            onUpdate:modelValue={(next: string | null) => {
+                const v = next ?? '';
                               newAddress.value = v;
                             }}
                             auto-size

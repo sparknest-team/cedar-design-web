@@ -17,7 +17,7 @@
   >
     <slot />
     <template #content>
-      <div :class="`${prefixCls}-body`">
+      <div :class="`${prefixCls}-body`" :aria-busy="guardPending || mergedConfirmButtonLoading || cancelButtonProps?.loading || undefined">
         <span :class="`${prefixCls}-icon`">
           <slot name="icon">
             <icon-info-circle-fill v-if="type === 'info'" />
@@ -31,7 +31,13 @@
         </span>
       </div>
       <div :class="`${prefixCls}-footer`">
-        <Button size="xs" v-bind="cancelButtonProps" @click="handleCancel">
+        <Button
+          size="xs"
+          v-bind="cancelButtonProps"
+          :disabled="cancelButtonProps?.disabled || guardPending"
+          :loading="Boolean(cancelButtonProps?.loading) || (guardPending && pendingAction === 'cancel')"
+          @click="handleCancel"
+        >
           {{ cancelText || t("popconfirm.cancelText") }}
         </Button>
         <Button
@@ -39,6 +45,7 @@
           size="xs"
           v-bind="confirmButtonProps"
           :loading="mergedConfirmButtonLoading"
+          :disabled="confirmButtonProps?.disabled || guardPending"
           @click="handleConfirm"
         >
           {{ confirmButtonText || t("popconfirm.confirmButtonText") }}
@@ -49,7 +56,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, ref, watch } from "vue";
 import { createNamespace, getPrefixCls } from "../_utils/global-config";
 import { IconInfoCircleFill } from "@cedar-design/icons-vue/icon-info-circle-fill";
 import { IconCheckCircleFill } from "@cedar-design/icons-vue/icon-check-circle-fill";
@@ -59,6 +66,7 @@ import Button from "../button";
 import Trigger from "../trigger";
 import { useI18n } from "../locale";
 import { isBoolean, isFunction, isPromise } from "../_utils/is";
+import { invokeBeforeHook, useActionGuard } from "../_hooks/use-action-guard";
 import { popconfirmProps } from "./props";
 
 export default defineComponent({
@@ -73,6 +81,7 @@ export default defineComponent({
   },
   props: popconfirmProps,
   emits: {
+    "guard-error": (error: unknown, action: "confirm" | "cancel") => true,
     "update:open": (visible: boolean) => true,
     /**
      * @zh 气泡确认框的显隐状态改变时触发
@@ -107,84 +116,81 @@ export default defineComponent({
 
     const _open = ref(props.defaultOpen);
     const computedOpen = computed(() => props.open ?? _open.value);
-    const _confirmButtonLoading = ref(false);
+    const guard = useActionGuard();
+    const pendingAction = ref<"confirm" | "cancel">();
     const mergedConfirmButtonLoading = computed(
-      () => props.confirmButtonLoading || _confirmButtonLoading.value,
+      () =>
+        props.confirmButtonLoading || Boolean(props.confirmButtonProps?.loading) ||
+        (guard.pending.value && pendingAction.value === "confirm"),
     );
 
-    // Used to ignore closed Promises
-    let promiseNumber = 0;
-
+    let operation = 0;
+    const retire = () => {
+      operation++;
+      guard.cancel();
+    };
     const close = () => {
-      promiseNumber++;
-      if (_confirmButtonLoading.value) {
-        _confirmButtonLoading.value = false;
-      }
+      retire();
       _open.value = false;
       emit("update:open", false);
       emit("open-change", false);
     };
-
     const handleOpenChange = (visible: boolean) => {
-      if (!visible) {
-        close();
-      } else {
-        _open.value = visible;
-        emit("update:open", visible);
-        emit("open-change", visible);
+      if (!visible) close();
+      else {
+        _open.value = true;
+        emit("update:open", true);
+        emit("open-change", true);
       }
     };
-
-    const handleConfirm = async () => {
-      const currentPromiseNumber = promiseNumber;
-      const closed = await new Promise<boolean>(
-        // eslint-disable-next-line no-async-promise-executor
-        async (resolve) => {
-          if (isFunction(props.beforeConfirm)) {
-            let result = props.beforeConfirm((closed = true) =>
-              resolve(closed),
-            );
-            if (isPromise(result) || !isBoolean(result)) {
-              _confirmButtonLoading.value = true;
-            }
-            if (isPromise(result)) {
-              try {
-                // if beforeConfirm is Promise<void> ,set Defaults true
-                result = (await result) ?? true;
-              } catch (error) {
-                result = false;
-                throw error;
-              }
-            }
-            if (isBoolean(result)) {
-              resolve(result);
-            }
-          } else {
-            resolve(true);
-          }
-        },
+    watch(computedOpen, retire, { flush: "sync" });
+    watch(
+      [
+        () => props.beforeConfirm,
+        () => props.beforeCancel,
+        () => props.confirmButtonProps?.disabled,
+        () => props.cancelButtonProps?.disabled,
+      ],
+      retire,
+      { flush: "sync" },
+    );
+    const requestAction = async (
+      action: "confirm" | "cancel",
+      event?: Event,
+    ) => {
+      if (
+        !computedOpen.value ||
+        guard.pending.value ||
+        (action === "confirm"
+          ? props.confirmButtonProps?.disabled
+          : props.cancelButtonProps?.disabled)
+      )
+        return;
+      const id = ++operation;
+      pendingAction.value = action;
+      const hook =
+        action === "confirm" ? props.beforeConfirm : props.beforeCancel;
+      if (!hook) {
+        if (action === "confirm") emit("confirm"); else emit("cancel");
+        close();
+        return;
+      }
+      const outcome = await guard.run(
+        action,
+        (_action, context) =>
+          hook ? invokeBeforeHook((done) => hook({ action: _action } as never, done, context), context) : true,
+        event,
       );
-
-      if (currentPromiseNumber === promiseNumber) {
-        if (closed) {
-          emit("confirm");
-          close();
-        } else if (_confirmButtonLoading.value) {
-          _confirmButtonLoading.value = false;
-        }
-      }
-    };
-
-    const handleCancel = () => {
-      let result = true;
-      if (isFunction(props.beforeCancel)) {
-        result = props.beforeCancel() ?? false;
-      }
-      if (result) {
-        emit("cancel");
+      if (id !== operation || !computedOpen.value) return;
+      if (outcome.status === "allowed") {
+        if (action === "confirm") emit("confirm");
+        else emit("cancel");
         close();
-      }
+      } else if (outcome.status === "error")
+        emit("guard-error", outcome.error, action);
     };
+    const handleConfirm = (event?: Event) => requestAction("confirm", event);
+    const handleCancel = (event?: Event) => requestAction("cancel", event);
 
     const contentCls = computed(() => [
       `${prefixCls}-popup-content`,
@@ -198,6 +204,8 @@ export default defineComponent({
 
     return {
       prefixCls,
+      guardPending: guard.pending,
+      pendingAction,
       contentCls,
       arrowCls,
       computedOpen,

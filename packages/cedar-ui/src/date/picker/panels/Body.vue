@@ -1,5 +1,5 @@
 <template>
-  <div :class="`${prefixCls}-body`">
+  <div :class="`${prefixCls}-body`" @keydown="onGridKeydown">
     <div
       v-for="(row, rowIndex) in rows"
       :key="rowIndex"
@@ -24,6 +24,7 @@
             :key="colIndex"
             :class="getCellClassName(cell)"
             role="button"
+            data-temporal-cell
             :tabindex="isCellDisabled(cell) ? -1 : 0"
             :aria-disabled="isCellDisabled(cell)"
             :aria-selected="isCellSelected(cell)"
@@ -54,6 +55,7 @@
 </template>
 
 <script lang="ts">
+import { navigateTemporalGrid } from '../../../_utils/temporal-keyboard'
 import type { Dayjs } from 'dayjs'
 import { computed, defineComponent, inject, PropType, reactive, toRefs } from 'vue'
 import type { Cell, DisabledDate, IsSameTime, Mode } from '../types'
@@ -117,6 +119,12 @@ export default defineComponent({
       !!(isFunction(disabledDate?.value) && disabledDate?.value(getDateValue(cellData.value)))
 
     return {
+      onGridKeydown: (event: KeyboardEvent) =>
+        navigateTemporalGrid(
+          event,
+          '[data-temporal-cell]',
+          Math.max(1, (props.rows[0]?.length ?? 7) - (props.mode === 'week' ? 1 : 0)),
+        ),
       isWeek: computed(() => mode?.value === 'week'),
       getCellClassName: (cellData: Cell) => {
         const disabled = isCellDisabled(cellData)

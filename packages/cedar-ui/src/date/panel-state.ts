@@ -1,9 +1,11 @@
+import type { EmptyValue } from '../_utils/empty-value'
 import type { DateRules } from './date-rules'
 import type { DateSelection } from './date-value'
 import type { DateWeekStart } from './panel-props'
 import type { DateShortcut, DateShortcutsPosition } from './panel-tools-props'
 
 export interface DatePanelOptions extends DateRules {
+  emptyValue?: EmptyValue<DateSelection>
   dayStartOfWeek?: DateWeekStart
   abbreviation?: boolean
   showCurrent?: boolean

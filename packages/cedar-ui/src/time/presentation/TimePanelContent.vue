@@ -1,5 +1,5 @@
 <template>
-  <div v-bind="$attrs" :class="`${prefixCls}-container`">
+  <div @keydown="onColumnsKeydown" v-bind="$attrs" :class="`${prefixCls}-container`">
     <component
       :is="isRange ? 'RangePanel' : 'Panel'"
       v-bind="{ ...panelProps, ...(isRange ? { showNextDay } : {}) }"
@@ -30,6 +30,7 @@
 </template>
 
 <script lang="ts">
+import { navigateTemporalColumns } from '../../_utils/temporal-keyboard'
 import { defineComponent, toRefs, type PropType, type ExtractPropTypes } from 'vue'
 import { createNamespace } from '../../_utils/global-config'
 import Panel from '../picker/Panel.vue'
@@ -51,7 +52,11 @@ export default defineComponent({
   },
   setup(props) {
     // Reuse the owner's refs: the view never creates a second model or draft.
-    return { ...toRefs(props.options), ...props.state }
+    return {
+      onColumnsKeydown: (event: KeyboardEvent) => navigateTemporalColumns(event, '[role=listbox]', '[role=option]'),
+      ...toRefs(props.options),
+      ...props.state,
+    }
   },
 })
 </script>

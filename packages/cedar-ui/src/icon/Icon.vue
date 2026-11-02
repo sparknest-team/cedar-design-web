@@ -17,6 +17,7 @@ import {
   getCurrentInstance,
   onActivated,
   onBeforeUnmount,
+  onBeforeUpdate,
   onDeactivated,
   onMounted,
   ref,
@@ -34,6 +35,15 @@ defineOptions({
 const props = defineProps(iconProps);
 const emit = defineEmits<{ click: [event: MouseEvent] }>();
 const instance = getCurrentInstance();
+const slots = instance!.slots;
+let hasDefaultSlot = Boolean(slots.default);
+onBeforeUpdate(() => {
+  if (hasDefaultSlot !== Boolean(slots.default)) {
+    hasDefaultSlot = !hasDefaultSlot;
+    cancelTransition();
+    nextName.value = props.name;
+  }
+});
 const prefixCls = createNamespace("icon").n();
 const nextName = ref<string>();
 const animateInProgress = ref(false);
@@ -142,6 +152,7 @@ watch(
     if (disposed) return;
     const duration = transitionDuration.value;
     if (
+      hasDefaultSlot ||
       !active ||
       reduce ||
       newName === oldName ||

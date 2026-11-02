@@ -15,7 +15,7 @@ export interface TableColumnManagerProps {
   createColumn?: (definition: ColumnCatalogItem) => TableColumnData
   /** 左侧可选列目录 */
   options?: ColumnCatalog
-  /** 打开时异步加载目录 */
+  /** 创建时、加载函数更换或调用loadCatalog时异步读取目录 */
   loadOptions?: () => Promise<ColumnCatalog>
   remoteSearch?: (searchValue: string) => Promise<void>
   /** 值不在目录中时反显 */

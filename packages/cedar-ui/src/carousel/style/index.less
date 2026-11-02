@@ -51,3 +51,8 @@
 .c-carousel-item { box-sizing: border-box; flex-shrink: 0; min-width: 0; overflow: hidden; height: 100%; }
 @media (hover: hover) { .c-carousel__arrow:hover:not(:disabled) { background: var(--c-carousel-arrow-background-hover); } }
 @media (prefers-reduced-motion: reduce) { .c-carousel__track, .c-carousel--fade .c-carousel-item, .c-carousel--card .c-carousel-item { transition: none; } }
+
+.c-carousel--rtl:not(.c-carousel--vertical) {
+  .c-carousel__arrow-prev { left: auto; right: var(--c-carousel-arrow-margin); }
+  .c-carousel__arrow-next { right: auto; left: var(--c-carousel-arrow-margin); }
+}

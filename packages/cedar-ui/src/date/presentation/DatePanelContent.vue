@@ -24,16 +24,16 @@
   </CalendarContent>
 </template>
 <script setup lang="ts">
+import dayjs from 'dayjs'
 import { computed, shallowRef, useSlots, watch } from 'vue'
 import { createNamespace } from '../../_utils/global-config'
 import { calendarValueFormat, fromCalendarValue, toCalendarValue } from '../calendar-value'
-import { isDateDisabled } from '../date-rules'
+import { isCalendarDateDisabled } from '../date-rules'
 import { dateTimeDisabledRules } from '../date-time-rules'
 import {
   dateDisplayFormat,
   dateUsesSeconds,
-  dateValueFormat,
-  outputDateValue,
+  parseDateValue,
   sameDateSelection,
   type DateSelection,
   type DateSide,
@@ -62,6 +62,9 @@ const bindings = computed(() => {
     defaultPickerValue: _defaultPicker,
     ...options
   } = props.options
+  const instant = (date: Date) => options.timeZone
+    ? parseDateValue(dayjs(date).format('YYYY-MM-DD HH:mm:ss'), { ...options, valueFormat: 'YYYY-MM-DD HH:mm:ss' })?.toDate()
+    : date
   return {
     ...options,
     timePickerProps: {
@@ -79,14 +82,10 @@ const bindings = computed(() => {
     open: true,
     disableConfirm: true,
     disabledDate: (date: Date | undefined, side: DateSide = 'start') =>
-      !date ||
-      isDateDisabled(
-        outputDateValue(date, props.options),
-        { ...props.options, valueFormat: dateValueFormat(props.options), showTime: false },
-        side,
-      ),
+      !date || !instant(date) ||
+      isCalendarDateDisabled(instant(date)!, props.options, side),
     disabledTime: (date: Date, side: DateSide = 'start') => {
-      const rules = dateTimeDisabledRules(date, props.options, side)
+      const rules = dateTimeDisabledRules(instant(date) ?? new Date(NaN), props.options, side)
       return {
         disabledHours: rules?.disabledHours,
         disabledMinutes: () => rules?.disabledMinutes?.(date.getHours()) ?? [],
@@ -113,7 +112,7 @@ function navigate(value: DateSelection) {
   emit('navigate', fromCalendarValue(value, props.options))
 }
 function selectDraft(value: DateSelection) {
-  const candidate = fromCalendarValue(value, props.options)
+  const candidate = fromCalendarValue(value, props.options, props.value)
   const normalized = normalizeDateRange(candidate, props.options)
   // The renderer suppresses change for the existing range, but restarting and
   // choosing it again must still complete the outer draft transaction.
@@ -125,7 +124,7 @@ function selectDraft(value: DateSelection) {
   }
 }
 function select(value: DateSelection) {
-  const candidate = fromCalendarValue(value, props.options)
+  const candidate = fromCalendarValue(value, props.options, props.value)
   emit('select', props.range ? normalizeDateRange(candidate, props.options) : candidate)
 }
 </script>

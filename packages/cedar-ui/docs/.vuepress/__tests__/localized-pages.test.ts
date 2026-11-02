@@ -22,9 +22,13 @@ test('regenerates fallback English content on source HMR without replacing autho
     await plugin.onInitialized(app)
     expect(app.pages[1].path).toBe('/en/input/')
     expect(app.pages[1].content).toContain('## Examples')
-    await writeFile(filePath, '# Input\n\n## 案例\n\n更新后的说明。')
+    // Config reloads reuse the plugin before the next app has resolved pages.
+    await expect(plugin.extendsPage(page, { env: { isDev: true } })).resolves.toBeUndefined()
+    await writeFile(filePath, '# Input\n\n## 基础示例\n\n更新后的说明。\n\n## 交互与控制\n\n交互。')
     await plugin.extendsPage(page, app)
     expect(app.pages[1].content).toContain('更新后的说明。')
+    expect(app.pages[1].content).toContain('## Basic examples')
+    expect(app.pages[1].content).toContain('## Interaction and control')
     expect(preparePageComponent).toHaveBeenCalled()
     expect(preparePageChunk).toHaveBeenCalled()
     app.pages[1].frontmatter = { lang: 'en-US' }

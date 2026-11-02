@@ -26,7 +26,7 @@ export default defineComponent({
     const classNames = [`${prefixCls}-edit-content`]
     const inputRef = ref<typeof Input>()
 
-    function onChange(value: string) {
+    function onChange(value: string | null) {
       emit('update:text', value)
       emit('change', value)
     }

@@ -1,5 +1,5 @@
 <template>
-  <div :class="classNames" :data-level="level" :data-key="nodekey">
+  <div :id="nodeId" :class="classNames" :data-level="level" :data-key="nodekey" :data-focused="focused" :role="externallyManaged ? undefined : 'treeitem'" :aria-level="externallyManaged ? undefined : level + 1" :aria-expanded="externallyManaged || isLeaf ? undefined : expanded" :aria-selected="externallyManaged ? undefined : selected" :aria-checked="!externallyManaged && checkable ? (indeterminate ? 'mixed' : checked) : undefined" :aria-disabled="disabled || undefined">
     <!-- 缩进 -->
     <span :class="`${prefixCls}-indent`">
       <span
@@ -242,6 +242,8 @@ export default defineComponent({
     const treeNodeIcon = computed(() => treeContext.nodeIcon)
 
     function onSwitcherClick(e: Event) {
+      if (disabled.value) return
+      treeContext.focusNode?.(key.value)
       if (isLeaf.value) return
       if (!children.value?.length && isFunction(treeContext.onLoadMore)) {
         treeContext.onLoadMore(key.value)
@@ -271,7 +273,10 @@ export default defineComponent({
     )
 
     return {
+      externallyManaged: treeContext.externallyManaged,
       nodekey: key,
+      focused: computed(() => treeContext.focusedValue === key.value),
+      nodeId: computed(() => treeContext.nodeId?.(key.value)),
       refTitle,
       prefixCls,
       classNames,
@@ -287,13 +292,14 @@ export default defineComponent({
       treeNodeIcon,
       extra,
       nodeStatus,
-      onCheckboxChange(checked: boolean | (string | number | boolean)[], e?: Event) {
+      onCheckboxChange(checked: boolean | (string | number | boolean)[] | null, e?: Event) {
         if (disableCheckbox.value || disabled.value) {
           return
         }
         treeContext.onCheck?.(Boolean(checked), key.value, e)
       },
       onTitleClick(e: Event) {
+        if (!disabled.value) treeContext.focusNode?.(key.value)
         if (actionOnNodeClick.value.includes('expand')) {
           onSwitcherClick(e)
         }

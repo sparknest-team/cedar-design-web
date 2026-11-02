@@ -142,7 +142,7 @@ import __apiReviewRawConfig from "./api-review-c-checkbox-2.config.json";
               #checkbox="{ checked }"
             >
               <c-space wrap
-                align="start"
+                align="flex-start"
                 class="custom-checkbox-card"
                 :class="{ 'custom-checkbox-card-checked': checked }"
               >

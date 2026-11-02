@@ -1,5 +1,5 @@
 <template>
-  <c-radio-group direction="vertical">
+  <c-radio-group orientation="vertical">
     <c-radio value="A">A</c-radio>
     <c-radio value="B">B</c-radio>
     <c-radio value="C">C</c-radio>

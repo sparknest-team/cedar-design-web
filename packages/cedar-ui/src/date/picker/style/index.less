@@ -266,13 +266,13 @@
   }
 
   &-cell-range-start &-date {
-    border-top-left-radius: var(~'--c-date-picker-panel-cell-boundary-border-radius');
-    border-bottom-left-radius: var(~'--c-date-picker-panel-cell-boundary-border-radius');
+    border-start-start-radius: var(~'--c-date-picker-panel-cell-boundary-border-radius');
+    border-end-start-radius: var(~'--c-date-picker-panel-cell-boundary-border-radius');
   }
 
   &-cell-range-end &-date {
-    border-top-right-radius: var(~'--c-date-picker-panel-cell-boundary-border-radius');
-    border-bottom-right-radius: var(~'--c-date-picker-panel-cell-boundary-border-radius');
+    border-start-end-radius: var(~'--c-date-picker-panel-cell-boundary-border-radius');
+    border-end-end-radius: var(~'--c-date-picker-panel-cell-boundary-border-radius');
   }
 
   &-cell-in-range-near-hover &-date {
@@ -291,11 +291,15 @@
   }
 
   &-cell-hover-range-start &-date {
-    border-radius: var(~'--c-date-picker-panel-cell-boundary-border-radius') 0 0 var(~'--c-date-picker-panel-cell-boundary-border-radius');
+    border-radius: 0;
+    border-start-start-radius: var(~'--c-date-picker-panel-cell-boundary-border-radius');
+    border-end-start-radius: var(~'--c-date-picker-panel-cell-boundary-border-radius');
   }
 
   &-cell-hover-range-end &-date {
-    border-radius: 0 var(~'--c-date-picker-panel-cell-boundary-border-radius') var(~'--c-date-picker-panel-cell-boundary-border-radius') 0;
+    border-radius: 0;
+    border-start-end-radius: var(~'--c-date-picker-panel-cell-boundary-border-radius');
+    border-end-end-radius: var(~'--c-date-picker-panel-cell-boundary-border-radius');
   }
 
   &-cell-hover-range-start &-date-value,
@@ -333,7 +337,7 @@
       border-top: 1px solid var(~'--c-date-picker-panel-border-color');
 
       & :only-child {
-        margin-left: auto;
+        margin-inline-start: auto;
       }
     }
 
@@ -363,9 +367,8 @@
     flex: 1;
 
     & > * {
-      margin: var(~'--c-date-picker-shortcuts-inline-item-margin-vertical')
-        var(~'--c-date-picker-shortcuts-inline-item-margin-right')
-        var(~'--c-date-picker-shortcuts-inline-item-margin-vertical') 0;
+      margin-block: var(~'--c-date-picker-shortcuts-inline-item-margin-vertical');
+      margin-inline: 0 var(~'--c-date-picker-shortcuts-inline-item-margin-right');
     }
   }
 }
@@ -475,7 +478,7 @@
   > .c-date-panel-actions { flex-shrink: 0; }
 }
 
-.c-date-panel-actions > .c-button--variant-text { margin-right: auto; }
+.c-date-panel-actions > .c-button--variant-text { margin-inline-end: auto; }
 
 // Shared preferred dimensions for independent and floating calendar panels.
 .c-date-panel__layout--standalone {
@@ -500,3 +503,8 @@
   > .c-date-panel__main { flex: 1 1 calc(var(--c-date-picker-panel-preferred-width) - 2px); width: auto; }
   > .c-date-shortcuts { flex: 1 1 var(--c-date-picker-shortcuts-column-width); min-width: 0; }
 }
+
+.c-picker-header > button:dir(rtl) > svg { transform: rotate(180deg); }
+.c-date-panel__layout--left:dir(rtl), .c-date-panel__layout--right:dir(rtl),
+.c-picker-container-shortcuts-placement-left:dir(rtl), .c-picker-container-shortcuts-placement-right:dir(rtl),
+.c-picker-range-container-shortcuts-placement-left:dir(rtl), .c-picker-range-container-shortcuts-placement-right:dir(rtl) { flex-direction: row-reverse; }

@@ -8,12 +8,13 @@
     <c-checkbox v-model="rejectSave">模拟后端保存失败</c-checkbox>
     <span>{{ requestStatus }}</span>
   </c-space>
+  <c-loading :loading="loading" style="display: block">
   <c-scheduler
+    :readonly="loading"
     v-model="events"
     default-date="2026-09-09"
     default-mode="week"
     :resources="resources"
-    :loading="loading"
     :before-change="saveToMockServer"
   >
     <template #event="{ event }">
@@ -123,6 +124,7 @@
       </c-form>
     </template>
   </c-scheduler>
+  </c-loading>
   <c-collapse class="scheduler-mock-log">
     <c-collapse-item name="request" title="查看最近一次 Mock API 请求">
       <pre>{{ lastRequest || "尚未提交" }}</pre>

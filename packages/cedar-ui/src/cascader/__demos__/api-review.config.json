@@ -206,7 +206,7 @@
       "kind": "callback"
     },
     {
-      "name": "fallback",
+      "name": "fallback-option",
       "description": "尚未加载的值如何反显",
       "type": "boolean 或 (value) => string",
       "defaultValue": "true",
@@ -227,17 +227,17 @@
       "kind": "boolean"
     },
     {
-      "name": "presentation",
-      "description": "字段编辑方式，字段 > FormItem > Form 继承；默认 inline。",
-      "type": "'inline' | 'click' | 'dblclick'",
+      "name": "edit-mode",
+      "description": "字段编辑方式，字段 > FormItem > Form 继承；默认 direct。",
+      "type": "'direct' | 'click' | 'dblclick'",
       "defaultValue": "undefined",
       "kind": "enum",
       "options": [
-        "inline",
+        "direct",
         "click",
         "dblclick"
       ],
-      "initial": "inline"
+      "initial": "direct"
     },
     {
       "name": "read-pretty",
@@ -442,6 +442,21 @@
         0,
         "isLeaf"
       ]
+    },
+    {
+      "name": "case-sensitive",
+      "description": "内置本地过滤是否区分大小写；自定义过滤函数优先",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "search-fields",
+      "type": "readonly ('label' | 'value')[]",
+      "defaultValue": "['label']",
+      "description": "内置匹配字段，多字段 OR；默认 label",
+      "kind": "json",
+      "initial": "[\"label\"]"
     }
   ],
   "events": [
@@ -474,14 +489,14 @@
         "async-devices.vue",
         "check-strictly.vue",
         "clearable.vue",
-        "disabled.vue",
+        "state-lab.vue",
         "filterable.vue",
         "format-label.vue",
         "load-more.vue",
         "loading.vue",
         "multiple.vue",
         "path-mode.vue",
-        "size.vue"
+        "appearance-lab.vue"
       ]
     },
     {
@@ -504,7 +519,7 @@
       ]
     },
     {
-      "name": "fallback",
+      "name": "fallback-option",
       "kind": "prop",
       "demos": []
     },

@@ -5,23 +5,25 @@ const __demoLayout = __demoReactive({ align: "start", justify: "start" });
 </script>
 <template>
   <c-space direction="column" :size="16">
-    <c-space wrap>
-      <label
-        >align<c-select
+    <c-form layout="vertical">
+      <c-form-item layout="vertical" size="sm" label="align">
+        <c-radio-group
           v-model="__demoLayout['align']"
-          :clearable="false"
+          aria-label="align"
           :options="[
             { label: 'start', value: 'start' },
             { label: 'center', value: 'center' },
             { label: 'end', value: 'end' },
             { label: 'stretch', value: 'stretch' },
           ]"
-          aria-label="align"
-      /></label>
-      <label
-        >justify<c-select
+          variant="button"
+          size="sm"
+        />
+      </c-form-item>
+      <c-form-item layout="vertical" size="sm" label="justify">
+        <c-radio-group
           v-model="__demoLayout['justify']"
-          :clearable="false"
+          aria-label="justify"
           :options="[
             { label: 'start', value: 'start' },
             { label: 'center', value: 'center' },
@@ -29,9 +31,11 @@ const __demoLayout = __demoReactive({ align: "start", justify: "start" });
             { label: 'space-around', value: 'space-around' },
             { label: 'space-between', value: 'space-between' },
           ]"
-          aria-label="justify"
-      /></label>
-    </c-space>
+          variant="button"
+          size="sm"
+        />
+      </c-form-item>
+    </c-form>
     <c-row :gutter="12" v-bind="__demoLayout"
       ><c-col v-for="i in 3" :key="i" :span="8"
         ><div class="cell">8</div></c-col

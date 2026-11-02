@@ -6,12 +6,16 @@
       :key="direction"
       :prefix-cls="`${prefixCls}-trigger`"
       :class="`${prefixCls}-direction-${direction}`"
-      :direction="isHorizontal(direction) ? 'horizontal' : 'vertical'"
-      @mousedown="
-        (e) => {
-          onMoveStart(direction, e)
-        }
-      "
+      :orientation="isHorizontal(direction) ? 'horizontal' : 'vertical'"
+      role="separator"
+      tabindex="0"
+      :aria-label="`Resize ${direction} edge`"
+      :aria-orientation="isHorizontal(direction) ? 'horizontal' : 'vertical'"
+      :aria-valuemin="0"
+      :aria-valuenow="isHorizontal(direction) ? (height ?? measuredHeight) : (width ?? measuredWidth)"
+      @keydown="onKeydown(direction, $event)"
+      @pointerdown="onMoveStart(direction, $event)"
+      @mousedown="onMoveStart(direction, $event)"
       @resize="
         (entry) => {
           onTiggerResize(direction, entry)
@@ -26,14 +30,16 @@
   </component>
 </template>
 <script lang="ts">
+import { useDirection } from '@cedar-design/use'
+import { useElementResize } from '../_utils/resize-observer'
+import { useResizeGesture } from '../_hooks/use-resize-gesture'
 import { resizeBoxProps } from './props'
 import { createNamespace } from '../_utils/global-config'
-import { computed, defineComponent, PropType, toRefs, ref, reactive } from 'vue'
+import { computed, defineComponent, PropType, toRefs, ref, reactive, watch } from 'vue'
 import ResizeTrigger from '../_components/ResizeTrigger.vue'
 import useMergeState from '../_hooks/use-merge-state'
 import { getPrefixCls } from '../_utils/global-config'
 import { isNumber } from '../_utils/is'
-import { off, on } from '../_utils/dom'
 
 export type DirectionType = 'left' | 'right' | 'top' | 'bottom'
 
@@ -118,6 +124,7 @@ export default defineComponent({
 
     const wrapperRef = ref<HTMLDivElement>()
 
+    const { dir } = useDirection(() => wrapperRef.value)
     const paddingStyles = reactive<Partial<Record<PaddingCSSProperties, string>>>({})
 
     const prefixCls = getPrefixCls('resizebox')
@@ -146,83 +153,51 @@ export default defineComponent({
       },
     }
 
-    function onMoving(e: MouseEvent) {
-      if (!record.moving) return
-
-      const { startPageX, startPageY, startWidth, startHeight, direction } = record
-      let newWidth = startWidth
-      let newHeight = startHeight
-
-      // 往右移动的距离
-      const offsetX = e.pageX - startPageX
-      // 往下移动的距离
-      const offsetY = e.pageY - startPageY
-
-      switch (direction) {
-        case DIRECTION_LEFT:
-          newWidth = startWidth - offsetX
-          setWidth(newWidth)
-          emit('update:width', newWidth)
-          break
-        case DIRECTION_RIGHT:
-          newWidth = startWidth + offsetX
-          setWidth(newWidth)
-          emit('update:width', newWidth)
-          break
-        case DIRECTION_TOP:
-          newHeight = startHeight - offsetY
-          setHeight(newHeight)
-          emit('update:height', newHeight)
-          break
-        case DIRECTION_BOTTOM:
-          newHeight = startHeight + offsetY
-          setHeight(newHeight)
-          emit('update:height', newHeight)
-          break
-        default:
-          break
-      }
-
-      emit(
-        'moving',
-        {
-          width: newWidth,
-          height: newHeight,
-        },
-        e,
-      )
+    function applyDelta(direction: DirectionType, dx: number, dy: number, initialWidth: number, initialHeight: number, event?: MouseEvent) {
+      const horizontal = direction === 'left' || direction === 'right'
+      const value = Math.max(0, horizontal ? initialWidth + (direction === 'left' ? -dx : dx) : initialHeight + (direction === 'top' ? -dy : dy))
+      if (horizontal) { setWidth(value); emit('update:width', value) }
+      else { setHeight(value); emit('update:height', value) }
+      if (event) emit('moving', { width: horizontal ? value : initialWidth, height: horizontal ? initialHeight : value }, event)
     }
-
-    function onMoveEnd(e: MouseEvent) {
-      record.moving = false
-
-      off(window, 'mousemove', onMoving)
-      off(window, 'mouseup', onMoveEnd)
-      off(window, 'contextmenu', onMoveEnd)
-
-      document.body.style.cursor = 'default'
-
-      emit('moving-end', e)
-    }
-
-    function onMoveStart(direction: DirectionType, e: MouseEvent) {
-      emit('moving-start', e)
-
-      record.moving = true
-      record.startPageX = e.pageX
-      record.startPageY = e.pageY
-      record.direction = direction
-
-      const { top, left, right, bottom } = record.padding
+    const measuredWidth = ref(0), measuredHeight = ref(0)
+    function measure() {
+      const { left, right, top, bottom } = record.padding
       record.startWidth = getRealSize(wrapperRef.value?.clientWidth || 0, left + right)
       record.startHeight = getRealSize(wrapperRef.value?.clientHeight || 0, top + bottom)
-
-      on(window, 'mousemove', onMoving)
-      on(window, 'mouseup', onMoveEnd)
-      on(window, 'contextmenu', onMoveEnd)
-
-      document.body.style.cursor = isHorizontal(direction) ? 'row-resize' : 'col-resize'
     }
+    useElementResize(() => [wrapperRef.value], () => true, () => {
+      const { left, right, top, bottom } = record.padding
+      measuredWidth.value = getRealSize(wrapperRef.value?.clientWidth || 0, left + right)
+      measuredHeight.value = getRealSize(wrapperRef.value?.clientHeight || 0, top + bottom)
+    })
+    const gesture = useResizeGesture({
+      element: () => wrapperRef.value,
+      cursor: () => isHorizontal(record.direction as DirectionType) ? 'row-resize' : 'col-resize',
+      start(event) { measure(); emit('moving-start', event) },
+      move: (dx, dy, event) => applyDelta(record.direction as DirectionType, dx, dy, record.startWidth, record.startHeight, event),
+      end: event => emit('moving-end', event),
+    })
+    function onMoveStart(direction: DirectionType, event: MouseEvent) {
+      if (gesture.active() || !allowDirections.value.includes(direction)) return
+      // Do not replace the active edge on a compatibility mouse event.
+      if (event.type === 'mousedown' && 'PointerEvent' in window) return
+      record.direction = direction
+      gesture.begin(event)
+    }
+    function onKeydown(direction: DirectionType, event: KeyboardEvent) {
+      if (event.target !== event.currentTarget || !allowDirections.value.includes(direction)) return
+      const vertical = isHorizontal(direction)
+      if (!(vertical ? ['ArrowUp', 'ArrowDown'] : ['ArrowLeft', 'ArrowRight']).includes(event.key)) return
+      event.preventDefault()
+      measure()
+      const step = (event.shiftKey ? 50 : 10) * (event.key === 'ArrowRight' || event.key === 'ArrowDown' ? 1 : -1)
+      applyDelta(direction, vertical ? 0 : step, vertical ? step : 0, record.startWidth, record.startHeight)
+    }
+    watch([dir, allowDirections], () => {
+      gesture.cancel()
+      for (const direction of allDirections) if (!allowDirections.value.includes(direction)) { delete paddingStyles[`padding-${direction}`]; record.padding[direction] = 0 }
+    }, { flush: 'sync' })
 
     function onTiggerResize(direction: DirectionType, entry: ResizeObserverEntry) {
       const { width, height } = entry.contentRect
@@ -233,6 +208,11 @@ export default defineComponent({
 
     return {
       prefixCls,
+      width,
+      height,
+      measuredWidth,
+      measuredHeight,
+      onKeydown,
       classNames,
       styles,
       wrapperRef,

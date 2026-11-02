@@ -6,7 +6,7 @@ permalink: /components/watermark/
 
 给页面或局部区域添加文字、图片水印。组件会自动响应属性和主题变化，无需手动刷新。
 
-## 案例
+## 基础示例
 
 ### 基础用法
 
@@ -16,7 +16,22 @@ permalink: /components/watermark/
 
 <demo src="./__demos__/basic.vue"></demo>
 
+## 内容与展示
+
 ### 多行文本
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `content` | 单行或多行文字；图片加载失败时作为回退内容 | 多行文本、图片水印、全屏水印 |
+| `image` | 图片地址，优先于文字 | 图片水印 |
+| `width` | 单块水印宽度，默认按内容测量 | 图片水印 |
+| `height` | 单块水印高度，默认按内容测量 | 图片水印 |
+| `font` | 文字样式 | 图片水印 |
+| `fullscreen` | 是否固定覆盖整个视口 | 全屏水印 |
+<!-- demo-config-notes:end -->
 
 通过字符串数组设置多行文字水印。
 
@@ -30,12 +45,6 @@ permalink: /components/watermark/
 
 <demo src="./__demos__/image.vue"></demo>
 
-### 自定义
-
-调整旋转、间距、偏移、字体、重复和错列方式。
-
-<demo src="./__demos__/custom.vue"></demo>
-
 ### 全屏水印
 
 示例按钮可点击、Space 或 Enter 切换。全屏层固定覆盖视口且不拦截指针操作；退出后回到原局部容器，默认插槽内容不搬走。反复开启/退出不应累积全屏层，卸载会移除该实例的层。这里使用本地文字生成PNG，不代表图片加载失败、动态主题或防篡改组合均已浏览器验收。
@@ -44,12 +53,25 @@ permalink: /components/watermark/
 
 <demo src="./__demos__/fullscreen.vue"></demo>
 
-<!-- api-review:start -->
-### 功能调试
+## 自定义与插槽
 
-<demo src="./__demos__/api-review.vue"></demo>
+### 自定义
 
-<!-- api-review:end -->
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `content` | 单行或多行文字；图片加载失败时作为回退内容 | 自定义 |
+| `rotate` | 旋转角度 | 自定义 |
+| `gap` | 水印间距 `[x, y]` | 自定义 |
+| `offset` | 第一块水印相对容器的偏移，默认是间距的一半 | 自定义 |
+| `font` | 文字样式 | 自定义 |
+<!-- demo-config-notes:end -->
+
+调整旋转、间距、偏移、字体、重复和错列方式。
+
+<demo src="./__demos__/custom.vue"></demo>
 
 ## API
 

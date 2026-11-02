@@ -6,43 +6,32 @@ permalink: /components/carousel/
 
 自动播放的间隔是业务播放节奏（business-clock），不是 CSS 动效时长；默认关闭，启用 true 时默认3000ms，数字／配置间隔、hover/focus/隐藏暂停规则保持。取消或重排使旧播放任务失效；当前回调消费一次后才调用导航。停用／卸载保留 next／prev／to、键盘和滚轮入口无效，不能翻页或拦截输入。激活建立新观察器／事件绑定，解绑前迟交付不得借新 active 状态重新排任务。
 
-## 案例
+## 基础示例
 
 ### 基础用法
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### 禁止循环
-
-通过 `loop` 属性可以控制是否循环轮播。
-
-<demo src="./__demos__/forbid-loop.vue"></demo>
-
-### 自动播放
-
-通过 `auto-play` 开启自动播放。传入 `true` 使用默认间隔 3000ms；传入数字则作为间隔（毫秒）。
-
-<demo src="./__demos__/autoplay.vue"></demo>
-
-示例使用 2000ms 间隔，下方页码按 1 开始显示（API 序号同样从 1 开始）。取消勾选立即停止自动播放，重新开启后继续；焦点在轮播内部时也会暂停。
-
-### 悬停暂停自动播放
-
-`auto-play` 支持传入对象 `{ interval, hoverToPause }` 进行高级配置。
-
-<demo src="./__demos__/auto-play-hover.vue"></demo>
+## 方向与布局
 
 ### 垂直轮播
 
-通过 `direction` 属性可以控制轮播方向，支持 `horizontal` 和 `vertical`。
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `slides-per-view` | 同时显示页数；auto使用子项宽高 | 多图同屏、centered-slides、auto-sized |
+| `space-between` | 项间距；数字/数字字符串为px | 多图同屏、centered-slides、auto-sized |
+| `draggable` | 鼠标拖动，可与触摸并存 | 多图同屏、auto-sized |
+| `centered-slides` | 当前页居中 | centered-slides、auto-sized |
+| `orientation` | 轮播内容滑动的横纵轴向，默认 horizontal；不决定指示器所在位置 | 垂直轮播 |
+| `model-value` | 受控页序号，从 1 开始 | 多图同屏 |
+<!-- demo-config-notes:end -->
+
+通过 `orientation` 属性可以控制轮播方向，支持 `horizontal` 和 `vertical`。
 
 <demo src="./__demos__/vertical.vue"></demo>
-
-### 切换箭头
-
-通过 `show-arrow` 控制切换箭头的显示时机，支持 `always`、`hover`、`never`。PC 端默认 `always`。
-
-<demo src="./__demos__/navigation.vue"></demo>
 
 ### 多图同屏
 
@@ -52,67 +41,9 @@ permalink: /components/carousel/
 
 <demo src="./__demos__/multi-slides.vue"></demo>
 
-### 指示器类型
-
-通过 `indicator-type` 设置指示器类型，支持 `dot`、`line`、`slider`。隐藏指示器请使用 `indicator`。
-
-<demo src="./__demos__/indicator-type.vue"></demo>
-
-### 指示器位置
-
-通过 `indicator-position` 属性可以设置指示器位置。
-
-<demo src="./__demos__/indicator-position.vue"></demo>
-
-### 悬停触发
-
-通过 `trigger` 属性可以设置指示器的触发方式，支持 `click` 和 `hover`。
-
-<demo src="./__demos__/trigger.vue"></demo>
-
-### 鼠标滚轮控制
-
-通过 `mousewheel` 属性可以开启鼠标滚轮切换。滚轮作用在轮播区域时切换页，不滚动外层页面；开启 loop 时从首项向前切换到末项。该能力不等同于触屏拖拽。
-
-<demo src="./__demos__/mousewheel.vue"></demo>
-
-### 键盘控制
-
-通过 `keyboard` 属性可以开启键盘方向键切换。
-
-<demo src="./__demos__/keyboard.vue"></demo>
-
-### 自定义指示器
-
-通过 `#indicator` 插槽可以自定义指示器。
-
-<demo src="./__demos__/custom-indicator.vue"></demo>
-
-### 监听切换事件
-
-通过 `change` 事件可以监听幻灯片切换。
-
-<demo src="./__demos__/change-event.vue"></demo>
-
-### effect-fade
-
-通过指示器按钮切换；非活动页透明且退出交互。各页重叠在同一网格位置，活动页占满视口宽度而不是分列。示例图片使用站点根路径，避免组件子路由下解析为相对资源。
-
-<demo src="./__demos__/effect-fade.vue"></demo>
-
-### effect-card
-
-活动项恢复原始比例和不透明度，相邻项缩小、降低不透明度；上一页/下一页按钮支持原生键盘操作。
-
-<demo src="./__demos__/effect-card.vue"></demo>
-
 ### centered-slides
 
 <demo src="./__demos__/centered-slides.vue"></demo>
-
-### controlled
-
-<demo src="./__demos__/controlled.vue"></demo>
 
 ### auto-sized
 
@@ -138,24 +69,157 @@ Clearing from slide number 4 retains the parent Current and change count. Restor
 
 <demo src="./__demos__/auto-sized.vue"></demo>
 
+## 切换控件与效果
+
+### 切换箭头
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `show-arrow` | 箭头显示策略 | 切换箭头 |
+| `indicator-type` | 指示器样式 | 指示器样式与位置 |
+| `indicator-position` | 指示器在轮播容器中的边缘或 outer 外部区域，默认 bottom；不是浮层相对触发器的方位 | 指示器样式与位置 |
+| `effect` | 视觉效果，两端全部支持 | 切换效果对比 |
+<!-- demo-config-notes:end -->
+
+通过 `show-arrow` 控制切换箭头的显示时机，支持 `always`、`hover`、`never`。PC 端默认 `always`。
+
+<demo src="./__demos__/navigation.vue"></demo>
+
+### 指示器样式与位置
+
+所有指示器方案使用相同的三张本地幻灯片和当前页模型。点击任一方案的指示器或翻页箭头，其他方案同步切换。第一组比较 dot、line、slider 样式，第二组比较 top、outer 位置；窄屏下自动纵向排列。
+
+<details>
+<summary>配置说明与使用限制</summary>
+
+#### 指示器类型
+
+通过 `indicator-type` 设置指示器类型，支持 `dot`、`line`、`slider`。隐藏指示器请使用 `indicator`。
+
+#### 指示器位置
+
+通过 `indicator-position` 属性可以设置指示器位置。
+
+</details>
+
+<demo src="./__demos__/indicator-comparison.vue"></demo>
+
+### 切换效果对比
+
+在各预览中切换相邻项，比较淡入淡出、卡片与滑动效果；自动播放和输入方式不混入效果配置。
+
+<details>
+<summary>配置说明与使用限制</summary>
+
+#### effect-fade
+
+通过指示器按钮切换；非活动页透明且退出交互。各页重叠在同一网格位置，活动页占满视口宽度而不是分列。示例图片使用站点根路径，避免组件子路由下解析为相对资源。
+
+#### effect-card
+
+活动项恢复原始比例和不透明度，相邻项缩小、降低不透明度；上一页/下一页按钮支持原生键盘操作。
+
+</details>
+
+<demo src="./__demos__/effect-comparison.vue"></demo>
+
+### 自定义指示器
+
+通过 `#indicator` 插槽可以自定义指示器。
+
+<demo src="./__demos__/custom-indicator.vue"></demo>
+
+## 播放与交互
+
+### 禁止循环
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `height` | 容器高度，数字为px | 自动播放、controlled、interactive-content |
+| `keyboard` | 组件内方向键/Home/End | 键盘控制、controlled、interactive-content |
+| `auto-play` | 自动播放及间隔 | 自动播放、悬停暂停自动播放 |
+| `draggable` | 鼠标拖动，可与触摸并存 | controlled、interactive-content |
+| `loop` | 循环，跨边界不复制实例 | 禁止循环 |
+| `trigger` | 指示器触发方式 | 悬停触发 |
+<!-- demo-config-notes:end -->
+
+通过 `loop` 属性可以控制是否循环轮播。
+
+<demo src="./__demos__/forbid-loop.vue"></demo>
+
+### 自动播放
+
+通过 `auto-play` 开启自动播放。传入 `true` 使用默认间隔 3000ms；传入数字则作为间隔（毫秒）。
+
+<demo src="./__demos__/autoplay.vue"></demo>
+
+示例使用 2000ms 间隔，下方页码按 1 开始显示（API 序号同样从 1 开始）。取消勾选立即停止自动播放，重新开启后继续；焦点在轮播内部时也会暂停。
+
+### 悬停暂停自动播放
+
+`auto-play` 支持传入对象 `{ interval, hoverToPause }` 进行高级配置。
+
+<demo src="./__demos__/auto-play-hover.vue"></demo>
+
+### 悬停触发
+
+通过 `trigger` 属性可以设置指示器的触发方式，支持 `click` 和 `hover`。
+
+<demo src="./__demos__/trigger.vue"></demo>
+
+### 鼠标滚轮控制
+
+通过 `mousewheel` 属性可以开启鼠标滚轮切换。滚轮作用在轮播区域时切换页，不滚动外层页面；开启 loop 时从首项向前切换到末项。该能力不等同于触屏拖拽。
+
+<demo src="./__demos__/mousewheel.vue"></demo>
+
+### 键盘控制
+
+通过 `keyboard` 属性可以开启键盘方向键切换。
+
+<demo src="./__demos__/keyboard.vue"></demo>
+
+### 监听切换事件
+
+通过 `change` 事件可以监听幻灯片切换。
+
+<demo src="./__demos__/change-event.vue"></demo>
+
+### controlled
+
+<demo src="./__demos__/controlled.vue"></demo>
+
 ### interactive-content
 
 当前索引和变更次数展示受控模型。输入框内的方向键、Home/End和鼠标拖选文字保留原生编辑，不切换轮播；拖动背景，或聚焦轮播容器后按方向键，才切换页面。返回原页面仍保留输入文字；示例不涉及外部保存或物理触屏文字选择。
 
 <demo src="./__demos__/interactive-content.vue"></demo>
 
+## 生命周期
+
 ### Scheduler lifecycle / 调度生命周期
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `auto-play` | 自动播放及间隔 | Scheduler lifecycle / 调度生命周期 |
+| `move-speed` | 显式切换时长（毫秒） | Scheduler lifecycle / 调度生命周期 |
+| `height` | 容器高度，数字为px | Scheduler lifecycle / 调度生命周期 |
+| `keyboard` | 组件内方向键/Home/End | Scheduler lifecycle / 调度生命周期 |
+| `mousewheel` | 滚轮切换 | Scheduler lifecycle / 调度生命周期 |
+<!-- demo-config-notes:end -->
 
 <demo src="./__demos__/scheduler-lifecycle.vue"></demo>
 
 用于展示多张图片、视频或内嵌框架等内容的循环播放，支持系统自动播放或用户手动切换。
-
-<!-- api-review:start -->
-### 功能调试
-
-<demo src="./__demos__/api-review.vue"></demo>
-
-<!-- api-review:end -->
 
 ## API
 
@@ -173,12 +237,12 @@ Clearing from slide number 4 retains the parent Current and change count. Restor
 | `auto-play` | 自动播放及间隔 | `boolean \| number \| CarouselAutoPlayConfig` | `false` |
 | `move-speed` | 显式切换时长（毫秒） | `number` | `undefined (token)` |
 | `trigger` | 指示器触发方式 | `click \| hover` | `click` |
-| `direction` | 内部滑动方向 | `horizontal \| vertical` | `horizontal` |
+| `orientation` | 轮播内容滑动的横纵轴向，默认 horizontal；不决定指示器所在位置 | `horizontal \| vertical` | `horizontal` |
 | `show-arrow` | 箭头显示策略 | `always \| hover \| never` | `always` |
 | `arrow-class` | 箭头附加类 | `string` | `undefined` |
 | `indicator` | 显示指示器 | `boolean` | `true` |
 | `indicator-type` | 指示器样式 | `dot \| line \| slider` | `dot` |
-| `indicator-position` | 指示器位置 | `bottom \| top \| left \| right \| outer` | `bottom` |
+| `indicator-position` | 指示器在轮播容器中的边缘或 outer 外部区域，默认 bottom；不是浮层相对触发器的方位 | `bottom \| top \| left \| right \| outer` | `bottom` |
 | `indicator-class` | 指示器附加类 | `string` | `undefined` |
 | `indicator-color` | 自定义指示器背景 | `string` | `undefined` |
 | `height` | 容器高度，数字为px | `number \| string` | `undefined` |
@@ -224,7 +288,7 @@ auto-play=true 使用 3000ms 且悬停暂停，数字指定毫秒且不启用悬
 CarouselItem 无自有 Props、事件或方法；默认插槽为页面内容。
 
 ### Types
-CarouselProps, CarouselItemProps, CarouselInstance, CarouselItemInstance, CarouselEmits, CarouselSlots, CarouselItemSlots, CarouselExpose, CarouselSlotScope, CarouselToOptions, CarouselChangeData, CarouselDirection, CarouselEffect, CarouselAutoPlayConfig, CarouselArrowType, CarouselIndicatorType, CarouselIndicatorPosition, CarouselTriggerEvent.
+CarouselProps, CarouselItemProps, CarouselInstance, CarouselItemInstance, CarouselEmits, CarouselSlots, CarouselItemSlots, CarouselExpose, CarouselSlotScope, CarouselToOptions, CarouselChangeData, CarouselOrientation, CarouselEffect, CarouselAutoPlayConfig, CarouselArrowType, CarouselIndicatorType, CarouselIndicatorPosition, CarouselTriggerEvent.
 
 ### 样式变量
 
@@ -260,3 +324,5 @@ CarouselProps, CarouselItemProps, CarouselInstance, CarouselItemInstance, Carous
 ### 循环过渡边界
 
 每个轮播项始终只有一个组件实例。普通上一页/下一页在出场项离开后回收位置；跨多页或居中跳转若需要同一项同时占据两个位置，则直接无动画定位，不复制交互内容，也不排队执行无限过渡。项目数量小于可视页数时不会复制项目填满。可访问名称跟随全局 Locale，显式标签属性优先。
+
+根节点的 `keydown`、`mouseenter`、`mouseleave`、`focusin`、`focusout` 原生监听器与内部翻页、自动播放暂停逻辑同时生效；原生 `.once` 监听器在该根元素生命周期内只执行一次。

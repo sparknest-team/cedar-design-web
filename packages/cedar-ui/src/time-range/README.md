@@ -1,6 +1,6 @@
 ---
 title: TimeRange 时间范围
-description: '表单时间范围字段。面板请使用 TimeRangePicker。'
+description: "表单时间范围字段。面板请使用 TimeRangePicker。"
 permalink: /components/time-range/
 ---
 
@@ -10,19 +10,140 @@ permalink: /components/time-range/
 
 纯面板请使用 [`TimeRangePicker`](/components/time-range-picker/)（默认无触发器）。
 
-## 案例
+## 基础示例
 
 ### 基本用法
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### 清除与禁用
-
-<demo src="./__demos__/status.vue"></demo>
+## 外观与展示
 
 ### 尺寸
 
+<!-- demo-config-notes:start -->
+
+#### 本组配置对照
+
+| 配置            | 作用                                                                   | 相关示例                                           |
+| --------------- | ---------------------------------------------------------------------- | -------------------------------------------------- |
+| `format`        | 展示格式                                                               | 字段外壳与配置边界、范围格式与十二小时制、次日标记 |
+| `clearable`     | 可清除                                                                 | 范围格式与十二小时制、自定义占位、次日标记         |
+| `placeholder`   | 占位                                                                   | 字段外壳与配置边界、自定义占位                     |
+| `show-next-day` | 允许结束早于开始并显示「次日」；关闭时倒序范围不能提交，起止始终不交换 | 范围格式与十二小时制、次日标记                     |
+| `size`          | 尺寸                                                                   | 尺寸                                               |
+| `variant`       | 输入框变体                                                             | 字段外壳与配置边界                                 |
+
+<!-- demo-config-notes:end -->
+
 <demo src="./__demos__/size.vue"></demo>
+
+### 字段外壳与配置边界
+
+`hint` 控制浮动提示（Cedar 默认 false，Maple 默认 true），有 Form 外置标签时不启用。`line` 默认 true；`text-color / focus-color / blur-color` 为可选颜色字符串。`error` 未设置时继承 Form，显式 false 覆盖错误态。TimeRange 的 `separator` 默认 `~`，允许空字符串。默认 variant 保留 Cedar filled、Maple standard，可显式指定同一变体。
+
+字段顶层负责值、默认值、展开、格式、步长、边界、禁用规则和只读/禁用状态。请直接在字段上设置这些属性，不放进 timePickerProps/timeRangePickerProps。嵌套配置只允许对应面板的展示属性；不能通过模型/确认/选择事件替换字段流程。类型会拒绝此类配置，运行时也过滤，且不会把嵌套规则作为顶层未设置时的回退。
+
+Maple 的 pickerProps 可配置 optionHeight/optionCount 等外观，不可替换 columns、fieldNames、选中值、toolbar 或展开状态。popupProps 可设置定位、外观和生命周期回调，但不能设置 open/defaultOpen 或覆盖展开更新事件；顶层 popupContainer（包括 false）优先。纯时间面板内部的嵌套配置遵循相同规则。
+
+<demo src="./__demos__/field-appearance.vue"></demo>
+
+字段交互由本库的一份实例控制器编排：select 暂存草稿，确认时按当前规则校验后提交并通知 Form。清除通过相同提交路径写入 undefined，再通知 clear；只读、禁用或未开启 clearable 时不能清除。只读仍可聚焦，focus/blur 去重；受控关闭请求尚未被接受时，不会重复提交。
+
+### 范围格式与十二小时制
+
+比较范围的分钟、秒与十二小时制显示，操作起止端点观察格式；跨日判断和值格式独立展示。
+
+<details>
+<summary>配置说明与使用限制</summary>
+
+#### 显示格式
+
+未设置 `format` 时默认 `HH:mm:ss`；开启 `use12-hours` 后默认 `hh:mm:ss a`，字段与纯面板一致。显式 `format` 决定字符串值的解析和输出格式，`use12-hours` 还可独立控制面板小时列；建议十二小时格式包含 `a` 或 `A`，以区分上午与下午。
+
+使用方括号包裹固定文字，例如 `[Time] HH:mm`。固定文字不参与时间列识别，不会因为包含 `s` 或 `A` 而额外显示秒或 AM/PM 列。空格式或没有时、分、秒 token 的格式回退到上述默认格式。
+
+</details>
+
+<demo src="./__demos__/format-comparison.vue"></demo>
+
+### 自定义占位
+
+<demo src="./__demos__/placeholder.vue"></demo>
+
+### 次日标记
+
+结束时间早于开始时间时，开启 `show-next-day` 会在字段与面板结束侧显示「次日」并允许提交；关闭时倒序范围不能提交。起止端点始终不自动交换。
+
+<demo src="./__demos__/show-next-day.vue"></demo>
+
+此示例开启文本编辑并显示模型，保留 22:00→次日06:00 的端点顺序；清除为 `undefined`，可通过重置按钮恢复。`show-next-day` 表示时间顺序与标签，不将模型自动转换为下一日日期。
+
+## 值模型与选择规则
+
+### 模型类型与固定文字
+
+<!-- demo-config-notes:start -->
+
+#### 本组配置对照
+
+| 配置          | 作用      | 相关示例                                     |
+| ------------- | --------- | -------------------------------------------- |
+| `format`      | 展示格式  | 模型类型与固定文字、独立步长示例、时间上下限 |
+| `use12-hours` | 12 小时制 | 独立步长示例                                 |
+
+<!-- demo-config-notes:end -->
+
+字符串按 `format` 严格解析，不接受溢出时间或不匹配的格式；Date 和毫秒时间戳按本地时间反显。提交值始终为格式化字符串（范围为数组）。
+
+<demo src="./__demos__/format-model.vue"></demo>
+
+### 独立步长示例
+
+小时候选以 0 点为起点，十二小时制只改变显示；无效步长回退为 1。
+
+<demo src="./__demos__/step.vue"></demo>
+
+可切换十二小时面板，分钟/秒步长保持不变；显式 `HH:mm:ss` 仍决定模型格式，AM/PM 选择转换为对应的 24 小时值。
+
+### 时间上下限
+
+`min` / `max` 的类型为 `string`，默认不限制；格式固定为 24 小时制 `HH:mm` 或 `HH:mm:ss`，不受 `format` 或 `use12Hours` 影响，包含端点。`HH:mm` 的秒视为 00。范围的两个端点分别校验；`showNextDay` 不把边界变成跨午夜区间。`min > max` 时没有可提交时间。无法解析的边界按未设置处理。
+
+动态修改边界不会改写外部模型。提交须同时满足边界、步长和禁用回调；不显示秒时按秒为 00 校验。列表粗粒度列在整个小时/分钟都越界时禁用，最终确认仍校验完整时间。隐藏禁用项使用 `hide-disabled-options`。
+
+<demo src="./__demos__/bounds.vue"></demo>
+
+## 输入与状态控制
+
+### 交互状态对比
+
+<!-- demo-config-notes:start -->
+
+#### 本组配置对照
+
+| 配置             | 作用             | 相关示例                                     |
+| ---------------- | ---------------- | -------------------------------------------- |
+| `format`         | 展示格式         | 交互状态对比、手输与面板选择、默认值与受控值 |
+| `clearable`      | 可清除           | 手输与面板选择、默认值与受控值、选择与提交   |
+| `disabled`       | 禁用             | 交互状态对比、选择与提交                     |
+| `readonly`       | 只读             | 交互状态对比、选择与提交                     |
+| `input-editable` | 允许桌面文本输入 | 手输与面板选择、复制与编辑                   |
+| `model-value`    | 绑定值           | 默认值与受控值                               |
+
+<!-- demo-config-notes:end -->
+
+在同一实例上切换禁用、只读和错误状态后再操作控件，比较可编辑性和交互反馈。恢复开关位于目标控件外；错误外观本身不会执行校验。
+
+<details>
+<summary>配置说明与使用限制</summary>
+
+#### 交互状态切换
+
+适用于营业时段等时间范围。调整禁用、只读、错误反馈，用相同数据观察变化。控制区始终可用，可以随时恢复编辑；错误外观本身不会触发表单校验。
+
+</details>
+
+<demo src="./__demos__/state-lab.vue"></demo>
 
 ### 手输与面板选择
 
@@ -56,58 +177,32 @@ permalink: /components/time-range/
 
 字段使用 PickerField → FieldDecorator；面板只负责选择，不注入表单。有效文本在回车或失焦时提交，Escape 或外部关闭丢弃未确认草稿，清除立即提交空值。四类字段的统一示例见 [Date](/components/date/#统一字段与提交)。
 
-### 模型类型与固定文字
+### 复制与编辑
 
-字符串按 `format` 严格解析，不接受溢出时间或不匹配的格式；Date 和毫秒时间戳按本地时间反显。提交值始终为格式化字符串（范围为数组）。
+open-trigger-target="icon" 时，输入区可以编辑或复制，只有右侧选择按钮响应点击打开。关闭手输或搜索后，已有文本仍可复制。
 
-<demo src="./__demos__/format-model.vue"></demo>
+<demo src="./__demos__/open-trigger-target.vue"></demo>
 
-### 显示格式
+### 共享字段加载
 
-未设置 `format` 时默认 `HH:mm:ss`；开启 `use12-hours` 后默认 `hh:mm:ss a`，字段与纯面板一致。显式 `format` 决定字符串值的解析和输出格式，`use12-hours` 还可独立控制面板小时列；建议十二小时格式包含 `a` 或 `A`，以区分上午与下午。
+`loading` 控制共享字段加载状态；`loading-mode` 为 `default`（指示器）或 `line`（底部不定进度线），默认 `default`。渲染统一由 FieldDecorator 负责，不隐式改变 disabled/readonly；需要禁止编辑时单独设置。
 
-使用方括号包裹固定文字，例如 `[Time] HH:mm`。固定文字不参与时间列识别，不会因为包含 `s` 或 `A` 而额外显示秒或 AM/PM 列。空格式或没有时、分、秒 token 的格式回退到上述默认格式。
+## 阅读方向
 
-<demo src="./__demos__/format.vue"></demo>
-
-### 十二小时制
-
-<demo src="./__demos__/ampm.vue"></demo>
-
-### 自定义占位
-
-<demo src="./__demos__/placeholder.vue"></demo>
-
-### 次日标记
-
-结束时间早于开始时间时，开启 `show-next-day` 会在字段与面板结束侧显示「次日」并允许提交；关闭时倒序范围不能提交。起止端点始终不自动交换。
-
-<demo src="./__demos__/show-next-day.vue"></demo>
-
-此示例开启文本编辑并显示模型，保留 22:00→次日06:00 的端点顺序；清除为 `undefined`，可通过重置按钮恢复。`show-next-day` 表示时间顺序与标签，不将模型自动转换为下一日日期。
-
-### 独立步长示例
-
-小时候选以 0 点为起点，十二小时制只改变显示；无效步长回退为 1。
-
-<demo src="./__demos__/step.vue"></demo>
-
-可切换十二小时面板，分钟/秒步长保持不变；显式 `HH:mm:ss` 仍决定模型格式，AM/PM 选择转换为对应的 24 小时值。
-
-### 交互状态切换
-
-适用于营业时段等时间范围。调整禁用、只读、错误反馈，用相同数据观察变化。控制区始终可用，可以随时恢复编辑；错误外观本身不会触发表单校验。
-
-<demo src="./__demos__/state-lab.vue"></demo>
-
-<!-- api-review:start -->
-### 功能调试
-
-<demo src="./__demos__/api-review.vue"></demo>
-
-<!-- api-review:end -->
+范围值始终保持 `[开始, 结束]`，LTR/RTL 切换只调整布局，不交换端点或修改跨日语义。时间列与起止面板按阅读顺序排列，左右键沿视觉方向移动焦点，可跨起止时间列；Cedar 上下键移动焦点、Enter/Space 选择，Maple 上下键保留滚轮选值语义。草稿与确认行为沿用原有配置，弹层继承字段来源方向。
 
 ## API
+
+### 空值识别与阅读空文案
+
+`empty-values` 用于空值识别，`empty-value` 保留原清空输出；`empty-text` 仅在 `read-pretty` 空内容下展示，默认 `'-'`，字段 > FormItem > Form，自定义 read 插槽优先。显式配置 empty-values 后，内置 required 接入该策略，自定义校验仍收到原值。详见[统一说明](/guide/empty-values/)。
+
+| 参数         | 类型               | 缺省与范围                                            |
+| ------------ | ------------------ | ----------------------------------------------------- |
+| empty-values | readonly unknown[] | 字段 > FormItem > Form > 组件族默认；完整覆盖，不合并 |
+| empty-text   | string             | 字段 > FormItem > Form > '-'；显式 '' 有效            |
+
+以上是字段展示层 API；纯面板不因此新增阅读模式。Form 与 FormItem 提供继承配置。empty-value 的现有类型与默认输出仍按该组件原 API 执行。
 
 ### 浮层配置与字段通知
 
@@ -119,57 +214,46 @@ permalink: /components/time-range/
 
 `placeholder` 字符串用于两端；数组分别指定起止文案，缺项为空；显式空字符串不会回退默认文案。
 
-### 字段外壳与配置边界
-
-`hint` 控制浮动提示（Cedar 默认 false，Maple 默认 true），有 Form 外置标签时不启用。`line` 默认 true；`text-color / focus-color / blur-color` 为可选颜色字符串。`error` 未设置时继承 Form，显式 false 覆盖错误态。TimeRange 的 `separator` 默认 ` ~ `，允许空字符串。默认 variant 保留 Cedar filled、Maple standard，可显式指定同一变体。
-
-字段顶层负责值、默认值、展开、格式、步长、边界、禁用规则和只读/禁用状态。请直接在字段上设置这些属性，不放进 timePickerProps/timeRangePickerProps。嵌套配置只允许对应面板的展示属性；不能通过模型/确认/选择事件替换字段流程。类型会拒绝此类配置，运行时也过滤，且不会把嵌套规则作为顶层未设置时的回退。
-
-Maple 的 pickerProps 可配置 optionHeight/optionCount 等外观，不可替换 columns、fieldNames、选中值、toolbar 或展开状态。popupProps 可设置定位、外观和生命周期回调，但不能设置 open/defaultOpen 或覆盖展开更新事件；顶层 popupContainer（包括 false）优先。纯时间面板内部的嵌套配置遵循相同规则。
-
-<demo src="./__demos__/field-appearance.vue"></demo>
-
-
-字段交互由本库的一份实例控制器编排：select 暂存草稿，确认时按当前规则校验后提交并通知 Form。清除通过相同提交路径写入 undefined，再通知 clear；只读、禁用或未开启 clearable 时不能清除。只读仍可聚焦，focus/blur 去重；受控关闭请求尚未被接受时，不会重复提交。
-
-### 时间上下限
-
-`min` / `max` 的类型为 `string`，默认不限制；格式固定为 24 小时制 `HH:mm` 或 `HH:mm:ss`，不受 `format` 或 `use12Hours` 影响，包含端点。`HH:mm` 的秒视为 00。范围的两个端点分别校验；`showNextDay` 不把边界变成跨午夜区间。`min > max` 时没有可提交时间。无法解析的边界按未设置处理。
-
-动态修改边界不会改写外部模型。提交须同时满足边界、步长和禁用回调；不显示秒时按秒为 00 校验。列表粗粒度列在整个小时/分钟都越界时禁用，最终确认仍校验完整时间。隐藏禁用项使用 `hide-disabled-options`。
-
-<demo src="./__demos__/bounds.vue"></demo>
-
-
 ### Props
 
-| 参数 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| `model-value` | 绑定值 | `(string \| number \| Date)[]` | `-` |
-| `open` | 弹层显隐 | `boolean` | `-` |
-| `popup-props` | 本地 Trigger 的展示配置，不控制字段状态 | `TimePopupPresentationProps<Partial<TriggerProps>>` | `{}` |
-| `input-editable` | 允许桌面文本输入 | `boolean` | `true` |
-| `clearable` | 可清除 | `boolean` | `true` |
-| `disabled` | 禁用 | `boolean` | `false` |
-| `readonly` | 只读 | `boolean` | `false` |
-| `size` | 尺寸 | `xs \| sm \| md \| lg \| xl` | `-` |
-| `variant` | 输入框变体 | `filled \| outline \| standard` | `filled` |
-| `placeholder` | 占位 | `string \| string[]` | `-` |
-| `format` | 展示格式 | `string` | `-` |
-| `use12-hours` | 12 小时制 | `boolean` | `false` |
-| `hide-disabled-options` | 隐藏禁用时间选项 | `boolean` | `false` |
-| `disable-confirm` | 跳过确认，有效选择立即提交并请求关闭 | `boolean` | `false` |
-| `show-next-day` | 允许结束早于开始并显示「次日」；关闭时倒序范围不能提交，起止始终不交换 | `boolean` | `false` |
-| `time-range-picker-props` | 透传给 TimeRangePicker | `object` | `{}` |
+| 参数                      | 说明                                                                                   | 类型                                                | 默认值    |
+| ------------------------- | -------------------------------------------------------------------------------------- | --------------------------------------------------- | --------- |
+| `open-trigger-target`     | 打开面板的点击区域；field 为整个字段，icon 仅右侧选择按钮。不影响键盘展开及受控 open。 | `'field' \| 'icon'`                                 | `'field'` |
+| `model-value`             | 绑定值                                                                                 | `(string \| number \| Date)[]`                      | `-`       |
+| `open`                    | 弹层显隐                                                                               | `boolean`                                           | `-`       |
+| `popup-props`             | 本地 Trigger 的展示配置，不控制字段状态                                                | `TimePopupPresentationProps<Partial<TriggerProps>>` | `{}`      |
+| `input-editable`          | 允许桌面文本输入                                                                       | `boolean`                                           | `true`    |
+| `clearable`               | 可清除                                                                                 | `boolean`                                           | `true`    |
+| `disabled`                | 禁用                                                                                   | `boolean`                                           | `false`   |
+| `readonly`                | 只读                                                                                   | `boolean`                                           | `false`   |
+| `size`                    | 尺寸                                                                                   | `xs \| sm \| md \| lg \| xl`                        | `-`       |
+| `variant`                 | 输入框变体                                                                             | `filled \| outline \| standard`                     | `filled`  |
+| `placeholder`             | 占位                                                                                   | `string \| string[]`                                | `-`       |
+| `format`                  | 展示格式                                                                               | `string`                                            | `-`       |
+| `use12-hours`             | 12 小时制                                                                              | `boolean`                                           | `false`   |
+| `hide-disabled-options`   | 隐藏禁用时间选项                                                                       | `boolean`                                           | `false`   |
+| `disable-confirm`         | 跳过确认，有效选择立即提交并请求关闭                                                   | `boolean`                                           | `false`   |
+| `show-next-day`           | 允许结束早于开始并显示「次日」；关闭时倒序范围不能提交，起止始终不交换                 | `boolean`                                           | `false`   |
+| `time-range-picker-props` | 透传给 TimeRangePicker                                                                 | `object`                                            | `{}`      |
 
 ### Form 字段展示与确认
 
-本组件支持 `presentation`，字段 > FormItem > Form 逐层继承；未指定时为 `inline`，保留原有交互。支持值：`inline / click / dblclick`。其他编辑展示使用 Cell 入口和一份草稿，确认后才更新 v-model；取消、重置或启用 readPretty 丢弃草稿。
+本组件支持 `edit-mode`，字段 > FormItem > Form 逐层继承；未指定时为 `direct`，保留原有交互。支持值：`direct / click / dblclick`。非 direct 编辑模式通过字段值入口打开编辑面板，并维护单份草稿；确认后才更新 v-model，取消、重置或启用 readPretty 时丢弃草稿。
 
-Cedar 使用 presentation="click" / "dblclick" 在原位进入编辑，Enter/F2 也可进入；取消/Escape 丢弃草稿，确认后提交。 readPretty 为纯阅读属性，与 readonly、disabled 独立。
+Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，Enter/F2 也可进入；取消/Escape 丢弃草稿，确认后提交。readPretty 为独立阅读属性，与 readonly、disabled 分开。
 
 `before-commit(value, { previousValue, signal })` 可拦截弹层保存；FormItem 先校验候选值，失败保持编辑。`open / default-open / update:open` 控制编辑层。`#read="{ value, text }"` 可自定义阅读内容。集中示例见 Form 的“各类字段统一展示”。
 
-日期／时间字段在 inline 下沿用原确认策略；在 popover/popup/dialog 中，内部纯面板隐藏确认工具栏，由编辑层提供唯一一组确认／取消。独立 DatePicker、DateRangePicker、TimePicker、TimeRangePicker 保留原有面板 API 和确认行为，不继承 Form 的字段展示。
+日期／时间字段在 inline 下沿用原确认策略；在 click/dblclick 编辑展示中，内部纯面板隐藏确认工具栏，由编辑层提供唯一一组确认／取消。独立 DatePicker、DateRangePicker、TimePicker、TimeRangePicker 保留原有面板 API 和确认行为，不继承 Form 的字段展示。
 
 `read-pretty` 为独立布尔属性，与 `readonly`、`disabled` 同级；字段 > FormItem > Form 继承，显式 `false` 覆盖父级。默认 `false`。纯阅读不显示编辑器。
+
+### 透传配置边界核对（F07）
+
+现有 TimePopupPresentationProps 与运行时过滤保持；open/defaultOpen、disabled、trigger、closeOnClickReference、preventFocus 和对应展开更新归字段管理。顶层 popup-container 明确设置时优先，否则嵌套回退，popupClass 合并内部类。inline 展示层固定 popupOffset=4；Maple 还固定 unmountOnClose=true，这些旧类型中的字段不保证能控制最终值。本轮不收窄既有 Time 类型，也不改变运行行为。
+
+## 配置清空后的值
+
+`empty-value` 指定当前组件已有清空动作的输出；省略时采用该组件默认返回。具体类型以组件 API 为准。它不改变 empty-values 的识别规则，也不改变 Form reset 的初始值。
+
+`empty-value` 可显式设为 `null`（或 `() => null`），清空时原样提交 null；省略时保留组件原默认值。界面把 null 显示为空，不会把普通输入的空字符串自动转成 null。支持弹出编辑的字段中，清空先修改草稿，确认后提交，取消则保留原值。

@@ -4,9 +4,9 @@ import Empty from '..'
 import Button from '../../button'
 import Space from '../../space'
 import Show from '../__demos__/show.vue'
-import Extra from '../__demos__/extra.vue'
+import Extra from '../__demos__/content-comparison.vue'
 
-const global = { components: { CEmpty: Empty, CSpace: Space, CButton: Button } }
+const global = { components: { CEmpty: Empty, CSpace: Space, CButton: Button }, stubs: { CIconExclamationCircleFill: true } }
 
 test('visibility demo toggles both regions independently', async () => {
   const owner = mount(Show, { global })

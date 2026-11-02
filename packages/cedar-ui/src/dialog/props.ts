@@ -1,3 +1,5 @@
+import { readingDirectionProp } from '../_utils/direction'
+import type { DialogBeforeClose } from "./types";
 import { popupContainerProp } from "../_utils/popup-container";
 import type {
   CSSProperties,
@@ -6,9 +8,11 @@ import type {
   StyleValue,
 } from "vue";
 import type { ButtonProps } from "../button";
-import type { DialogAction, DialogBeforeCloseRefs, DialogType } from "./types";
+import type { DialogAction, DialogType } from "./types";
 
 export const dialogProps = {
+  /** 阅读方向，省略时继承来源作用域；函数式调用可显式指定。 */
+  dir: readingDirectionProp,
   open: {
     type: Boolean,
     default: undefined,
@@ -116,15 +120,7 @@ export const dialogProps = {
   dialogStyle: {
     type: Object as PropType<CSSProperties>,
   },
-  beforeClose: {
-    type: Function as PropType<
-      (
-        action: DialogAction,
-        done: () => void,
-        refs: DialogBeforeCloseRefs,
-      ) => void
-    >,
-  },
+  beforeClose: { type: Function as PropType<DialogBeforeClose> },
   draggable: {
     type: Boolean,
     default: false,

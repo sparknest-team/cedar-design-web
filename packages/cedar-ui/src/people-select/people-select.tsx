@@ -1,228 +1,91 @@
-import {
-  computed,
-  defineComponent,
-  inject,
-  onBeforeUnmount,
-  onMounted,
-  reactive,
-  ref,
-  useAttrs,
-  useSlots,
-  watch,
-} from 'vue'
-import { selectionEditorSurface } from '../_components/selected-options/context'
-import { useFormItem } from '../_hooks/use-form-item'
-import Select, { Option } from '../select'
-import { peopleSelectProps } from './props'
-import Empty from '../empty'
-import { useFetch } from '../_utils/use-fetch'
-import { useApi } from './useApi'
-import { createNamespace } from '../_utils/global-config'
+import { computed, defineComponent, inject, ref } from "vue";
+import { selectionEditorSurface } from "../_components/selected-options/context";
+import { useFormItem } from "../_hooks/use-form-item";
+import Select from "../select";
+import { peopleSelectProps } from "./props";
+import { createNamespace } from "../_utils/global-config";
 
-const { name } = createNamespace('people-select')
+const { name } = createNamespace("people-select");
 
 export default defineComponent({
   name,
-
+  inheritAttrs: false,
   props: peopleSelectProps,
-
-  emits: ['change', 'clear', 'update:modelValue'],
-
-  setup(props, { emit }) {
-    const localValue = ref(props.defaultValue)
-    const value = computed(() => props.modelValue !== undefined ? props.modelValue : localValue.value)
-    const editor = inject(selectionEditorSurface, undefined)
+  emits: {
+    "update:modelValue": (value: string | null) => value === null || typeof value === "string",
+    change: (value: string | null) => value === null || typeof value === "string",
+    clear: () => true,
+    search: (query: string) => typeof query === "string",
+  },
+  setup(props, { emit, attrs, slots }) {
+    const localValue = ref<string | null>(props.defaultValue);
+    const value = computed(() =>
+      props.modelValue !== undefined ? props.modelValue : localValue.value,
+    );
+    const editor = inject(selectionEditorSurface, undefined);
     const { mergedDisabled, mergedReadonly } = useFormItem({
       disabled: computed(() => props.disabled),
       readonly: computed(() => props.readonly),
-    })
-    function commitValue(next: string) {
-      if (props.modelValue === undefined) localValue.value = next
-      emit('update:modelValue', next)
-    }
-    const attrs = useAttrs()
-    const slots = useSlots()
-    const fieldProps = reactive({
-      userId: '',
-      userName: '',
-      userMobile: '',
-    })
-    const loading = ref(false)
-    const panelOpen = ref(false)
-    let searchRequest = 0
-    let detailRequest = 0
-    onBeforeUnmount(() => {
-      searchRequest += 1
-      detailRequest += 1
-    })
-    watch(
-      [mergedDisabled, mergedReadonly],
-      () => {
-        if (mergedDisabled.value || mergedReadonly.value) {
-          searchRequest += 1
-          loading.value = false
-        }
-      },
-      { flush: 'sync' },
-    )
-    const peopleList = ref<Record<string, any>[]>([])
-    const peopleListSelected = ref<Record<string, any>[]>([])
-    const urlType_ = ref(props?.urlType)
-    const { fetch } = useFetch(props.fetch)
-    const { getPeople, getPeopleFromNaponen } = useApi(fetch, urlType_)
-    const getNameText = computed(() => {
-      let userName = fieldProps.userName
-      if (fieldProps.userId && userName) {
-        userName += `(${fieldProps.userId})`
-      }
-      if (props.isLabel) {
-        return userName === '' ? props.defaultText : userName
-      }
-      return userName
-    })
-    const initPeople = () => {
-      const detail = ++detailRequest
-      if (value.value) {
-        fieldProps.userId = value.value
-        const selectedId = value.value
-        getPeopleFromNaponen(fieldProps.userId).then((res: any) => {
-          if (detail !== detailRequest || value.value !== selectedId) return
-          if (value.value === 'oss') {
-            fieldProps.userId = 'oss'
-            fieldProps.userMobile = ''
-            fieldProps.userName = 'OSS' + '（oss）'
-            peopleListSelected.value.unshift(fieldProps)
-            return
-          }
-          if (res.resultCode === 'success' && res.data.list && res.data.list.length) {
-            const people = res.data.list[0]
-            const name = people.cn_name || people.display_name
-            const id = people.worker_user_id || people.user_id
-            fieldProps.userId = id
-            fieldProps.userMobile = people.mobile
-            fieldProps.userName = name + '（' + id + '）'
-            peopleListSelected.value.unshift(fieldProps)
-          }
-        })
-      } else {
-        fieldProps.userId = undefined as any
-        fieldProps.userMobile = undefined as any
-        fieldProps.userName = undefined as any
-        peopleListSelected.value = []
-      }
-    }
-
-    watch(
-      () => value.value,
-      () => {
-        initPeople()
-      },
-    )
-
-    const onLoadPeople = (userId?: string) => {
-      if (mergedDisabled.value || mergedReadonly.value) return
-      // 加载状态结束
-      loading.value = true
-      peopleList.value = []
-      const request = ++searchRequest
-      getPeople(userId).then((res: any) => {
-        if (request !== searchRequest) return
-        if (res.resultCode === 'success') {
-          res.data.result_list.forEach((user: any) => {
-            user.userId = user.user_id
-            user.userName = user.display_name + '（' + user.user_id + '）'
-            user.cn_name = user.name
-            user.worker_user_id = user.user_id
-          })
-          peopleList.value = res.data.result_list
-        }
-        loading.value = false
-      })
-    }
-    const onQueryChange = () => {
-      if (!panelOpen.value || mergedDisabled.value || mergedReadonly.value) return
-      searchRequest++
-      peopleList.value = []
-      loading.value = true
-    }
-    const onPanelChange = (visible: boolean) => {
-      panelOpen.value = visible
-      if (!visible) {
-        searchRequest++
-        loading.value = false
-        peopleList.value = []
-      } else if (!loading.value && !peopleList.value.length) {
-        onLoadPeople()
-      }
-    }
-    onMounted(() => {
-      initPeople()
-      onLoadPeople()
-    })
-    const onPeopleClear = () => {
-      if (mergedDisabled.value || mergedReadonly.value) return
-      detailRequest += 1
-      fieldProps.userId = ''
-      fieldProps.userName = ''
-      fieldProps.userMobile = ''
-      commitValue(fieldProps.userId) // 更新prop的值
-      emit('clear')
-      emit('change', fieldProps.userId)
-      if (panelOpen.value) onLoadPeople()
-    }
-    const onPeopleChange = (value: any) => {
-      if (mergedDisabled.value || mergedReadonly.value || loading.value) return
-      detailRequest += 1
-      peopleListSelected.value = []
-      const people = peopleList.value.find((item) => item.userId === value)
-      if (people) {
-        peopleListSelected.value.unshift(people)
-        if (people.userId === fieldProps.userId) {
-          if (props.clearable) {
-            fieldProps.userId = '' // 在initPeople中区分初始化与清空
-            fieldProps.userName = ''
-            fieldProps.userMobile = ''
-          }
-        } else {
-          fieldProps.userId = people.worker_user_id
-          fieldProps.userMobile = people.mobile
-          fieldProps.userName = people.userName
-        }
-        commitValue(fieldProps.userId) // 更新prop的值
-        emit('change', fieldProps.userId)
-      }
-    }
+    });
+    const options = computed(() =>
+      (Array.isArray(props.options) ? props.options : []).map((option) => ({ ...option })),
+    );
+    const blocked = () =>
+      mergedDisabled.value || mergedReadonly.value || props.loading;
+    const label = computed(
+      () =>
+        (Array.isArray(props.options) ? props.options : []).find((option) => option.value === value.value)
+          ?.label ||
+        props.label ||
+        value.value ||
+        props.defaultText,
+    );
+    const commit = (next: unknown) => {
+      if (blocked()) return;
+      // PeopleSelect has one string identity; clearing keeps the published empty string.
+      const text = next === null ? null : typeof next === "string" ? next : "";
+      if (props.modelValue === undefined) localValue.value = text;
+      emit("update:modelValue", text);
+      emit("change", text);
+    };
     return () =>
-      !props.isLabel ? (
+      props.isLabel ? (
+        <div>{label.value}</div>
+      ) : (
         <Select
           {...attrs}
-          {...props}
+          {...{ name: props.name }}
+          placeholder={props.placeholder}
+          clearable={props.clearable}
+          emptyValue={props.emptyValue}
+          filterable={props.filterable}
+          filterOption={props.filterOption}
+          caseSensitive={props.caseSensitive}
+          searchFields={props.searchFields}
+          searchDelay={props.searchDelay}
           disabled={mergedDisabled.value}
           readonly={mergedReadonly.value}
-          open={editor && !mergedDisabled.value && !mergedReadonly.value ? true : undefined}
-          modelValue={fieldProps.userId}
-          loading={loading.value}
-          onSearch={onLoadPeople}
-          onUpdate:inputValue={onQueryChange}
-          onOpen-change={onPanelChange}
-          filterable
-          filterOption={false}
+          open={
+            editor && !mergedDisabled.value && !mergedReadonly.value
+              ? true
+              : undefined
+          }
+          modelValue={value.value}
+          options={options.value}
+          loading={props.loading}
+          loadingMode={props.loadingMode}
           showExtraOptions={false}
-          fallbackOption={(value) => ({
-            value,
-            label: peopleListSelected.value.find((item) => item.userId === value)?.userName ?? String(value),
-          })}
+          fallbackOption={props.fallbackOption === false ? false : (id) => typeof props.fallbackOption === 'function' ? props.fallbackOption(String(id)) : ({ value: id, label: props.label || String(id) })}
+          onSearch={(query: string) => {
+            if (!mergedDisabled.value && !mergedReadonly.value)
+              emit("search", query);
+          }}
+          onChange={commit}
+          onClear={() => {
+            if (!blocked()) emit("clear");
+          }}
           v-slots={slots}
-          onChange={onPeopleChange}
-          onClear={onPeopleClear}
-        >
-          {peopleList.value.map((item) => {
-            return <Option value={item.userId}>{item.userName}</Option>
-          })}
-          {peopleList.value?.length === 0 ? <Empty /> : <div></div>}
-        </Select>
-      ) : (
-        <div>{fieldProps.userName}</div>
-      )
+        />
+      );
   },
-})
+});

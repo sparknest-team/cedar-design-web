@@ -8,26 +8,40 @@ Paper 是承载内容的底层表面：背景、圆角、可选边框与阴影�
 
 适用于自定义面板、表单分区、侧栏底板以及弹层内部表面。Paper 不负责弹层定位、焦点管理，也不会自动赋予按钮语义。交互内容请使用 Button 等语义组件。
 
-## 案例
-
 ```html
 <c-paper bordered>基础边框</c-paper>
 <c-paper bordered :elevation="2" style="padding: 16px">边框与阴影独立</c-paper>
 <c-paper :width="120" height="4rem" :radius="8" />
 ```
 
-## 动态属性
+## 基础示例
+
+### 演示
+
+<demo src="./__demos__/basic.vue"></demo>
+
+内置动效遵循 prefers-reduced-motion: reduce：保留内容与状态反馈，关闭装饰性旋转、扫光和波纹。Icon 名称切换跳过等待，并取消尚未结束的切换。Ripple 时长变量只控制 CSS，250ms 生命周期计时未改变，每段视觉时长应不超过 250ms；自定义动画类由调用方负责适配。
+
+## 交互与控制
+
+### 动态属性
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `bordered` | 显示边框，与 elevation 独立 | 动态属性 |
+| `round` | 50% 圆角；宽高相等时为圆形 | 动态属性 |
+| `radius` | 圆角，显式值优先于 round | 动态属性 |
+| `elevation` | false 关闭；true 使用 2 级；数字为 0–24 | 动态属性 |
+| `width` | 宽度 | 动态属性 |
+| `height` | 高度 | 动态属性 |
+<!-- demo-config-notes:end -->
 
 边框与阴影独立切换；显式 radius 优先于 round，取消显式值后恢复圆形。Paper 不提供按钮语义，示例在内部使用原生按钮，并由父级统计冒泡的 click。
 
 <demo src="./__demos__/live-properties.vue"></demo>
-
-<!-- api-review:start -->
-### 功能调试
-
-<demo src="./__demos__/api-review.vue"></demo>
-
-<!-- api-review:end -->
 
 ## API
 
@@ -81,9 +95,3 @@ import type { PaperProps, PaperInstance } from '@cedar-design/ui'
 两端分别保存主体、Props、样式、token 和契约测试，只调整前缀及本地导入；不引用跨库核心，不共享组件实例或状态。
 
 Maple 迁移说明：默认背景改为主题表面色，默认不再显示手形光标；inline 内部类改为 mp-paper--inline。原有尺寸、圆角、阴影与水波 API 保留。
-
-## 演示
-
-<demo src="./__demos__/basic.vue"></demo>
-
-内置动效遵循 prefers-reduced-motion: reduce：保留内容与状态反馈，关闭装饰性旋转、扫光和波纹。Icon 名称切换跳过等待，并取消尚未结束的切换。Ripple 时长变量只控制 CSS，250ms 生命周期计时未改变，每段视觉时长应不超过 250ms；自定义动画类由调用方负责适配。

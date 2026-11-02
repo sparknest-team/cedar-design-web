@@ -1,16 +1,35 @@
-import type { CSSProperties, PropType } from 'vue'
-import { fieldPresentationProps } from '../_components/field-presentation/props'
-import type { VirtualListProps } from '../_components/virtual-list-v2/interface'
-import type { ComponentSize } from '../_utils/constant'
-import { popupContainerProp } from '../_utils/popup-container'
-import type { Data } from '../_utils/types'
-import type { ScrollbarProps } from '../scrollbar'
-import type { TreeFieldNames, TreeNodeData, TreeNodeValue, TreeProps } from '../tree/types'
-import type { TriggerProps } from '../trigger'
-import type { LabelValue } from './types'
+import { fieldLoadingProps } from '../field-decorator/props'
+import { openTriggerTargetProp } from "../_components/picker-field/open-trigger";
+import type { OptionsLoader } from "../_hooks/use-option-request";
+import { emptyValueProp } from "../_utils/empty-value";
+import type { OptionSearchField } from "../_utils/option-data";
+import type { CSSProperties, PropType } from "vue";
+import { fieldPresentationProps } from "../_components/field-presentation/props";
+import type { VirtualListProps } from "../_components/virtual-list-v2/interface";
+import type { ComponentSize } from "../_utils/constant";
+import { popupContainerProp } from "../_utils/popup-container";
+import type { ScrollbarProps } from "../scrollbar";
+import type {
+  TreeFieldNames,
+  TreeNodeData,
+  TreeNodeValue,
+  TreeProps,
+} from "../tree/types";
+import type { TriggerProps } from "../trigger";
+import type { LabelValue } from "./types";
 
 export const treeSelectProps = {
+  ...fieldLoadingProps,
+  openTriggerTarget: openTriggerTargetProp,
+  /** 内置字段匹配是否区分大小写。 */
+  caseSensitive: { type: Boolean, default: false },
+  searchFields: {
+    type: Array as PropType<readonly OptionSearchField[]>,
+    default: () => ["label"],
+  },
   ...fieldPresentationProps,
+  emptyValue: emptyValueProp<TreeNodeValue | TreeNodeValue[] | undefined>(),
+  /** 清空动作产生的模型值；省略保留原默认值。 */
   /** 只读；未设置时继承 Form / FormItem。 */
   readonly: { type: Boolean, default: undefined },
   /**
@@ -20,13 +39,6 @@ export const treeSelectProps = {
   disabled: {
     type: Boolean,
     default: undefined,
-  },
-  /**
-   * @zh 是否为加载中状态
-   * @en Whether it is loading state
-   * */
-  loading: {
-    type: Boolean,
   },
   /**
    * @zh 是否为错误状态
@@ -58,10 +70,12 @@ export const treeSelectProps = {
    * @en Whether to allow searching
    * @default-value false (single) \| true (multiple)
    * */
-  allowSearch: {
-    type: [Boolean, Object] as PropType<boolean | { retainInputValue?: boolean }>,
-    default: (props: Data) => Boolean(props.multiple),
+  filterable: {
+    type: Boolean,
+    default: undefined,
   },
+  /** 搜索选中后是否保留输入文本。 */
+  retainInputValue: Boolean,
   /**
    * @zh 是否允许清除
    * @en Whether to allow clear
@@ -121,8 +135,10 @@ export const treeSelectProps = {
    * @en Data
    * */
   data: {
-    type: Array as PropType<TreeNodeData[]>,
-    default: () => [],
+    type: [Array, Function] as PropType<
+      readonly TreeNodeData[] | OptionsLoader<TreeNodeData>
+    >,
+    default: undefined,
   },
   /**
    * @zh 设置value格式。默认是string，设置为true时候，value格式为： { label: string, value: string }
@@ -150,8 +166,8 @@ export const treeSelectProps = {
    * @en Customized echo method
    * */
   treeCheckedStrategy: {
-    type: String as PropType<'all' | 'parent' | 'child'>,
-    default: 'all',
+    type: String as PropType<"all" | "parent" | "child">,
+    default: "all",
   },
   /**
    * @zh 可以接受所有 [Tree](/vue/component/tree) 组件的Props
@@ -202,7 +218,9 @@ export const treeSelectProps = {
    * @en Custom node filter function
    * */
   filterTreeNode: {
-    type: Function as PropType<(searchKey: string, nodeData: TreeNodeData) => boolean>,
+    type: Function as PropType<
+      (searchKey: string, nodeData: TreeNodeData) => boolean
+    >,
   },
   /**
    * @zh 动态加载数据
@@ -226,27 +244,31 @@ export const treeSelectProps = {
   /**
    * @zh 为 value 中找不到匹配项的 key 定义节点数据
    * @en Customize node data for keys that do not match options
-   * @version 2.22.0
    */
   fallbackOption: {
-    type: [Boolean, Function] as PropType<boolean | ((value: number | string) => TreeNodeData | boolean)>,
+    type: [Boolean, Function] as PropType<
+      boolean | ((value: number | string) => TreeNodeData | boolean)
+    >,
     default: true,
   },
   /**
    * @zh 设置可选择的节点，默认全部可选
    * @en Set the nodes that can be selected, all can be selected by default
-   * @version 2.27.0
    */
   selectable: {
     type: [Boolean, String, Function] as PropType<
-      boolean | 'leaf' | ((node: TreeNodeData, info: { isLeaf: boolean; level: number }) => boolean)
+      | boolean
+      | "leaf"
+      | ((
+          node: TreeNodeData,
+          info: { isLeaf: boolean; level: number },
+        ) => boolean)
     >,
     default: true,
   },
   /**
    * @zh 是否开启虚拟滚动条
    * @en Whether to enable virtual scroll bar
-   * @version 2.39.0
    */
   scrollbar: {
     type: [Boolean, Object] as PropType<boolean | ScrollbarProps>,
@@ -272,7 +294,6 @@ export const treeSelectProps = {
    * @zh 输入框的值
    * @en The value of the input
    * @v-model
-   * @version 2.55.0
    */
   inputValue: {
     type: String,
@@ -280,10 +301,9 @@ export const treeSelectProps = {
   /**
    * @zh 输入框的默认值（非受控模式）
    * @en The default value of the input (uncontrolled mode)
-   * @version 2.55.0
    */
   defaultInputValue: {
     type: String,
-    default: '',
+    default: "",
   },
-}
+};

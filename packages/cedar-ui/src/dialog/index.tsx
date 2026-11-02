@@ -57,7 +57,6 @@ export type {
   DialogTitleAlign,
   DialogRenderContent,
   DialogUpdateConfig,
-  DialogBeforeCloseRefs,
 } from "./types";
 export type { DialogProps } from "./props";
 export type DialogInstance = InstanceType<typeof _Dialog>;
@@ -65,3 +64,7 @@ export { Dialog, dialogProps };
 export const _DialogComponent = Dialog;
 
 export default Dialog;
+
+export type { DialogBeforeClose } from "./types";
+
+export type { BeforeHookContext, BeforeHookDone } from '../_hooks/use-action-guard'

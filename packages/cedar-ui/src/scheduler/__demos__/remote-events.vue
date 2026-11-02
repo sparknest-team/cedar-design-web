@@ -26,8 +26,7 @@
       v-model="events"
       v-model:date="date"
       default-mode="day"
-      :loading="loading"
-      :readonly="!!error"
+      :readonly="loading || !!error"
       :before-transaction="persist"
       @range-change="range = $event"
     />

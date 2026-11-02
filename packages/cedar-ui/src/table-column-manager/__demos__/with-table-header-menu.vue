@@ -11,7 +11,7 @@
       <code>fixed</code> 布局可用）。
     </c-alert>
 
-    <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center">
+    <c-space wrap size="16px" align="center">
       <c-button status="secondary" size="sm" @click="open">列管理</c-button>
       <c-link @click="resetToDefault">重置</c-link>
       <c-switch
@@ -29,9 +29,9 @@
       <span style="color: var(--c-color-text-3); margin-left: 8px">
         当前 {{ leafColumns.length }} 列
       </span>
-    </div>
+    </c-space>
 
-    <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
+    <c-space wrap size="8px" align="center">
       <c-tag
         v-for="col in leafColumns"
         :key="col.dataIndex"
@@ -44,7 +44,7 @@
           >（{{ col.fixed === "left" ? "左冻" : "右冻" }}）</template
         >
       </c-tag>
-    </div>
+    </c-space>
 
     <c-table
       v-model:columns="columns"

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, useAttrs } from "vue";
 import vHover, {
   HoverOverlay as BaseHoverOverlay,
   useHoverOverlay,
@@ -10,11 +10,14 @@ import { createNamespace } from "../_utils/global-config";
 import { buttonProps } from "./props";
 import { useButton } from "./use-button";
 
-defineOptions({ name: createNamespace("button").name });
+defineOptions({ name: createNamespace("button").name, inheritAttrs: false });
 const props = defineProps(buttonProps);
+const attrs = useAttrs()
+const rootAttrs = () => Object.fromEntries(Object.entries(attrs).filter(([key]) => key !== 'class' && key !== 'style'));
+const emit = defineEmits<{ click: [event: MouseEvent]; touchstart: [event: TouchEvent] }>();
 const { n, classes } = createNamespace("button");
 const { states, busy, blocked, computedStyle, handleClick, handleTouchstart } =
-  useButton(props);
+  useButton(props, emit);
 const { hovering, handleHovering } = useHoverOverlay();
 const focusing = ref(false);
 // Button indicators use a compact square for every animation and icon layout.
@@ -29,9 +32,12 @@ const indicatorSize = computed(() => {
 <template>
   <component
     :is="component"
+    v-bind="rootAttrs()"
+    :href="component === 'a' && !blocked ? attrs.href : undefined"
+    :role="component === 'a' && blocked ? 'link' : attrs.role"
     v-ripple="{ disabled: blocked || !ripple }"
     v-hover:desktop="handleHovering"
-    :class="
+    :class="[
       classes(
         n(),
         n(`--size-${states.size}`),
@@ -47,14 +53,15 @@ const indicatorSize = computed(() => {
         [states.disabled, n('--disabled')],
         [!blocked && focusing && focusable, n('--focus')],
         [!blocked && hovering, n('--hovering')],
-      )
-    "
-    :style="computedStyle"
+      ),
+      attrs.class,
+    ]"
+    :style="[computedStyle, attrs.style]"
     :type="component === 'button' ? htmlType : undefined"
     :disabled="component === 'button' ? blocked : undefined"
     :aria-disabled="component === 'a' && blocked ? true : undefined"
     :aria-busy="busy || undefined"
-    :tabindex="!focusable || (component === 'a' && blocked) ? -1 : undefined"
+    :tabindex="!focusable || (component === 'a' && blocked) ? -1 : attrs.tabindex"
     :autofocus="autofocus"
     @click="handleClick"
     @touchstart="handleTouchstart"

@@ -7,7 +7,7 @@ export type {
   ComponentSize,
   SemanticStatus,
   MessageType,
-  Direction,
+  Orientation,
 } from './_utils/constant'
 export * from './locale'
 export * from './ellipsis'

@@ -1,15 +1,15 @@
+import { buttonVariants, type ButtonVariant } from './variant'
+export { buttonVariants } from './variant'
+export type { ButtonVariant } from './variant'
 import type { ExtractPublicPropTypes, PropType } from "vue";
 import { componentSizes, semanticStatuses } from "../_utils/constant";
 import type { ComponentSize, SemanticStatus } from "../_utils/constant";
 import type { LoadingType, LoadingSize } from "../loading/props";
 
-export const buttonVariants = ["default", "text", "outline", "tonal"] as const;
 export const buttonHtmlTypes = ["button", "submit", "reset"] as const;
 export const buttonComponents = ["button", "a"] as const;
 export const buttonLoadingModes = ["default", "fill", "line"] as const;
-export type ButtonVariant = (typeof buttonVariants)[number];
 export type ButtonLoadingMode = (typeof buttonLoadingModes)[number];
-export type ButtonHandler = (event: Event) => void | Promise<unknown>;
 
 export const buttonProps = {
   /** 主题色，省略时继承按钮组 */
@@ -59,8 +59,6 @@ export const buttonProps = {
   loadingSize: [String, Number] as PropType<LoadingSize>,
   /** 加载颜色 */
   loadingColor: { type: String, default: "currentColor" },
-  /** 等待事件处理函数返回的 Promise，并阻止重复操作 */
-  autoLoading: Boolean,
   /** 禁用，省略时继承按钮组 */
   disabled: { type: Boolean, default: undefined },
   /** 点击水波 */
@@ -80,9 +78,7 @@ export const buttonProps = {
   },
   /** 图标文字纵向排列，省略时继承按钮组 */
   stacked: { type: Boolean, default: undefined },
-  // Explicit listener props retain Promise results for autoLoading. Vue emit() discards returns.
-  onClick: [Function, Array] as PropType<ButtonHandler | ButtonHandler[]>,
-  onTouchstart: [Function, Array] as PropType<ButtonHandler | ButtonHandler[]>,
+
 };
 export type ButtonProps = ExtractPublicPropTypes<typeof buttonProps>;
 export { buttonGroupProps } from "./group-props";

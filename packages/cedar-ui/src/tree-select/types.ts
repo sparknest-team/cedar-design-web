@@ -8,7 +8,7 @@ export interface LabelValue {
   label: string | number
 }
 
-export type TreeSelectValue = TreeNodeValue | TreeNodeValue[] | LabelValue | LabelValue[]
+export type TreeSelectValue = null | TreeNodeValue | TreeNodeValue[] | LabelValue | LabelValue[]
 
 export type FilterTreeNode = (searchKey: string, nodeData: TreeNodeData) => boolean
 
@@ -28,7 +28,7 @@ export interface TreeSelectProps {
   error: boolean
   size: ComponentSize
   border: boolean
-  allowSearch: boolean
+  filterable: boolean
   clearable: boolean
   placeholder: string | undefined
   retainInputValue: boolean

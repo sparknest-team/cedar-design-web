@@ -8,7 +8,7 @@ exports[`FilterForm > render 1`] = `
         <!--v-if-->
         <div class=\\"c-form-item-wrapper-col\\">
           <div class=\\"c-form-item-content-wrapper\\">
-            <div class=\\"c-form-item-content c-form-item-content-flex\\">
+            <div style=\\"--c-form-content-align: start; --c-form-content-justify: flex-start; text-align: start; justify-content: flex-start;\\" class=\\"c-form-item-content c-form-item-content-flex\\">
               <div class=\\"c-filter-form__actions\\">
                 <!--v-if-->
                 <!--v-if-->

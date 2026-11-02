@@ -1,0 +1,4 @@
+- [x] Fix horizontal content sizing and valid zero/negative thickness behavior.
+- [x] Align validators, runtime fallbacks and named/type exports.
+- [x] Update paired demos, docs and regression tests.
+- [x] Verify tests, types, lint, browser and shared gates.

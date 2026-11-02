@@ -140,7 +140,6 @@ export interface ValidatedError {
   /**
    * @zh 标签的文本
    * @en Label text
-   * @version 2.18.0
    */
   label: string
   /**

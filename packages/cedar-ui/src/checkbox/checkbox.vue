@@ -39,6 +39,7 @@
       </template>
     </span>
     <span v-if="$slots.default" :class="n('label')"><slot :checked="checked" /></span>
+
   </label>
 </template>
 

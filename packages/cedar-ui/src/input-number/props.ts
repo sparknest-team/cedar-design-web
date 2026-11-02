@@ -1,6 +1,8 @@
+import { fieldLoadingProps } from '../field-decorator/props'
 import type { ExtractPublicPropTypes, PropType } from 'vue'
 import { fieldPresentationProps } from '../_components/field-presentation/props'
 import type { ComponentSize } from '../_utils/constant'
+import { emptyValueProp } from '../_utils/empty-value'
 import { inputProps, type InputVariant } from '../input/props'
 
 export const inputNumberModes = ['embed', 'button', 'input'] as const
@@ -13,11 +15,24 @@ export type InputNumberFormatter = (value: string) => string
 export type InputNumberParser = (value: string) => string
 
 export const inputNumberProps = {
+  ...fieldLoadingProps,
   ...fieldPresentationProps,
+  emptyValue: emptyValueProp<number | undefined>(),
+  /** 清空动作产生的模型值；省略保留原默认值。 */
   /** 受控业务数值；空值为 undefined。 */
-  modelValue: Number,
+  modelValue: Number as PropType<number | null>,
   /** 非受控初始值。 */
   defaultValue: Number,
+  /** 禁止手输，仍可使用步进按钮和方向键。 */
+  disableInput: Boolean,
+  /** 独立禁用增加或减少；按钮和方向键均遵守。 */
+  disableIncrement: Boolean,
+  disableDecrement: Boolean,
+  /** 是否显示增加／减少按钮。 */
+  incrementButton: { type: Boolean, default: true },
+  decrementButton: { type: Boolean, default: true },
+  /** 是否开启长按连续步进。 */
+  press: { type: Boolean, default: true },
   /** 按钮布局。 */
   mode: {
     type: String as PropType<InputNumberMode>,
@@ -25,9 +40,16 @@ export const inputNumberProps = {
     validator: (value: InputNumberMode) => inputNumberModes.includes(value),
   },
   /** 小数精度，范围 0–100，不小于步长的小数位数。 */
-  precision: { type: Number, validator: (value: number) => Number.isInteger(value) && value >= 0 && value <= 100 },
+  precision: {
+    type: Number,
+    validator: (value: number) => Number.isInteger(value) && value >= 0 && value <= 100,
+  },
   /** 正的有限步长。 */
-  step: { type: Number, default: 1, validator: (value: number) => Number.isFinite(value) && value > 0 },
+  step: {
+    type: Number,
+    default: 1,
+    validator: (value: number) => Number.isFinite(value) && value > 0,
+  },
   /** 未设置时继承 Group / FormItem / Form。 */
   disabled: inputProps.disabled,
   /** 未设置时继承 FormItem。 */

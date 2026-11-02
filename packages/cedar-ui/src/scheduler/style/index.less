@@ -44,7 +44,7 @@
     width: var(--c-scheduler-sidebar-width);
     flex-shrink: 0;
     padding: var(--c-scheduler-padding);
-    border-right: var(--c-scheduler-border-width) solid
+    border-inline-end: var(--c-scheduler-border-width) solid
       var(--c-scheduler-border-color);
     max-height: var(--c-scheduler-max-height);
     overflow: auto;
@@ -115,7 +115,7 @@
     text-align: center;
   }
   &__column-heading {
-    border-left: var(--c-scheduler-border-width) solid
+    border-inline-start: var(--c-scheduler-border-width) solid
       var(--c-scheduler-border-color);
   }
   &__time-gutter {
@@ -124,7 +124,7 @@
   }
   &__all-day {
     padding: var(--c-scheduler-event-padding);
-    border-left: var(--c-scheduler-border-width) solid
+    border-inline-start: var(--c-scheduler-border-width) solid
       var(--c-scheduler-border-color);
   }
   &__time-body {
@@ -144,7 +144,7 @@
   }
   &__time-column {
     position: relative;
-    border-left: var(--c-scheduler-border-width) solid
+    border-inline-start: var(--c-scheduler-border-width) solid
       var(--c-scheduler-border-color);
   }
   &__time-cell {
@@ -222,7 +222,7 @@
     touch-action: none;
     user-select: none;
     position: relative;
-    border-left: var(--c-scheduler-event-accent-width) solid
+    border-inline-start: var(--c-scheduler-event-accent-width) solid
       var(--c-scheduler-event-accent-color);
     border-radius: var(--c-scheduler-event-radius);
     background-color: var(--c-scheduler-event-background);
@@ -270,7 +270,7 @@
     min-height: var(--c-scheduler-event-min-height);
     justify-content: flex-start;
     align-items: flex-start;
-    text-align: left;
+    text-align: start;
     padding: var(--c-scheduler-event-padding);
     color: var(--c-scheduler-color);
     font-size: var(--c-scheduler-event-font-size);
@@ -340,7 +340,7 @@
     transition:
       top var(--c-scheduler-preview-duration) ease-out,
       height var(--c-scheduler-preview-duration) ease-out,
-      left var(--c-scheduler-preview-duration) ease-out,
+      inset-inline-start var(--c-scheduler-preview-duration) ease-out,
       width var(--c-scheduler-preview-duration) ease-out;
     & * {
       pointer-events: none !important;
@@ -373,7 +373,7 @@
     padding: var(--c-scheduler-event-padding);
     border-top: var(--c-scheduler-border-width) solid
       var(--c-scheduler-border-color);
-    border-right: var(--c-scheduler-border-width) solid
+    border-inline-end: var(--c-scheduler-border-width) solid
       var(--c-scheduler-border-color);
   }
   &__month-more {
@@ -388,7 +388,7 @@
   &__month-more-event {
     justify-content: flex-start;
     overflow: hidden;
-    text-align: left;
+    text-align: start;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -444,7 +444,7 @@
   }
   &__timeline-cells > * {
     border-radius: 0;
-    border-left: var(--c-scheduler-border-width) solid
+    border-inline-start: var(--c-scheduler-border-width) solid
       var(--c-scheduler-border-color);
     height: 100%;
     padding: 0;
@@ -502,11 +502,11 @@
   width: var(--c-scheduler-resource-width);
   min-height: var(--c-scheduler-heading-height);
   position: sticky;
-  left: 0;
+  inset-inline-start: 0;
 }
 .c-scheduler__resource-label {
   position: sticky;
-  left: 0;
+  inset-inline-start: 0;
   z-index: var(--c-scheduler-resource-z-index);
   background: var(--c-scheduler-background);
 }
@@ -516,7 +516,7 @@
 }
 .c-scheduler__timeline-heading > span:first-child {
   position: sticky;
-  left: 0;
+  inset-inline-start: 0;
   height: 100%;
   display: flex;
   align-items: center;
@@ -574,11 +574,33 @@
 }
 .c-scheduler__dependency-layer {
   position: absolute;
-  left: 0;
+  // Cover the full scroll content; paths still use physical SVG coordinates.
+  inset-inline-start: 0;
   top: 0;
   pointer-events: none;
   color: var(--c-scheduler-event-color);
   stroke: currentColor;
   stroke-width: var(--c-scheduler-dependency-width);
   z-index: var(--c-scheduler-preview-z-index);
+}
+
+.c-scheduler__timeline-event .c-scheduler__resize {
+  top: 0;
+  bottom: 0;
+  left: auto;
+  right: auto;
+  inset-inline-end: 0;
+  width: var(--c-scheduler-resize-height);
+  height: auto;
+  cursor: ew-resize;
+  &--start {
+    inset-inline-start: 0;
+    inset-inline-end: auto;
+  }
+}
+
+@media (pointer: coarse) {
+  .c-scheduler__timeline-event .c-scheduler__resize {
+    width: max(var(--c-scheduler-resize-height), 14px);
+  }
 }

@@ -1,7 +1,8 @@
-import { InjectionKey } from 'vue'
+import { InjectionKey } from "vue";
 
 export interface ZIndexContext {
-  zIndex: number
+  zIndex: number;
 }
 
-export const zIndexInjectionKey: InjectionKey<ZIndexContext> = Symbol('CedarZIndex')
+export const zIndexInjectionKey: InjectionKey<ZIndexContext> =
+  Symbol("CedarZIndex");

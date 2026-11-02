@@ -100,7 +100,7 @@
         :image-number="mergedCurrent + 1"
         :length="previewImages.length"
       >
-        <div v-if="previewImages.length > 1" :class="n('indicator')">
+        <div v-if="previewImages.length > 1" :class="n('indicator')" dir="ltr">
           {{ mergedCurrent + 1 }} / {{ previewImages.length }}
         </div>
       </slot>
@@ -115,6 +115,7 @@
 </template>
 
 <script lang="ts">
+import { useDirection } from '../_utils/direction'
 import {
   computed,
   defineComponent,
@@ -164,7 +165,6 @@ export default defineComponent({
       onOpenChange: (open) => {
         emit("update:open", open);
         emit("open-change", open);
-        props.onOpenChange?.(open);
       },
       onCurrentChange: (imageNumber) => {
         const previous = previousImageNumber.value;
@@ -192,6 +192,7 @@ export default defineComponent({
         : group.previewImages.value,
     );
     const trackRef = ref<HTMLElement>();
+    const { isRtl } = useDirection(() => trackRef.value)
     let active = true;
     let disposed = false;
     let instantGeneration = 0;
@@ -411,6 +412,7 @@ export default defineComponent({
       },
       { flush: "sync" },
     );
+    watch(isRtl, () => setVisualInstant(), { flush: 'sync' })
     watch(group.mergedOpen, () => setVisualInstant(), { flush: "sync" });
     function suspend() {
       active = false;
@@ -433,7 +435,7 @@ export default defineComponent({
     function trackStyle(translateX: number, scale: number) {
       const offset = scale <= 1 ? translateX : 0;
       return {
-        transform: `translate3d(calc(${-visualCurrent.value * 100}% + ${offset}px), 0, 0)`,
+        transform: `translate3d(calc(${(isRtl.value ? 1 : -1) * visualCurrent.value * 100}% + ${offset}px), 0, 0)`,
       };
     }
     function slideImageStyle(

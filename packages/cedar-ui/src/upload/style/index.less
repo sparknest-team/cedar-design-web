@@ -39,9 +39,27 @@
 }
 
 .c-upload--picture-card .c-upload__item { position: relative; overflow: hidden; padding: 0; }
-.c-upload--picture-card .c-upload__meta { position: absolute; inset: auto 0 0; box-sizing: border-box; padding: var(--c-upload-item-padding); background: var(--c-sys-color-scrim); color: var(--c-sys-color-content-on-dark); }
+.c-upload--picture-card .c-upload__meta {
+  pointer-events: none; position: absolute; inset: auto 0 0; box-sizing: border-box; padding: var(--c-upload-item-padding); background: var(--c-sys-color-scrim); color: var(--c-sys-color-content-on-dark); }
 .c-upload--picture-card .c-upload__actions { position: absolute; inset: 0; align-items: center; justify-content: center; background: var(--c-sys-color-scrim); color: var(--c-sys-color-content-on-dark); opacity: 0; pointer-events: none; }
 .c-upload--picture-card .c-upload__actions > * { pointer-events: auto; }
 .c-upload--picture-card .c-upload__item:hover .c-upload__actions,
 .c-upload--picture-card .c-upload__item:focus-within .c-upload__actions { opacity: 1; }
 @media (hover: none) { .c-upload--picture-card .c-upload__actions { position: static; opacity: 1; } }
+
+.c-upload__thumb {
+  position: relative;
+}
+.c-upload__duration {
+  position: absolute;
+  inset-inline-end: var(--c-sys-space-2);
+  inset-block-end: var(--c-sys-space-2);
+  padding: var(--c-upload-duration-padding);
+  border-radius: var(--c-upload-duration-radius);
+  background: var(--c-upload-duration-background);
+  color: var(--c-upload-duration-color);
+  font-size: var(--c-upload-duration-font-size);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.4;
+  pointer-events: none;
+}

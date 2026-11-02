@@ -1,7 +1,8 @@
 import type { CSSProperties, HTMLAttributes, VNodeChild } from 'vue'
 export type NavMenuKey = string | number
-export type NavMenuMode = import('../_utils/constant').Direction
+export type NavMenuMode = import('../_utils/constant').Orientation
 export type NavMenuTheme = 'light' | 'dark'
+export type NavMenuPopupLayout = 'dropdown' | 'full-width' | 'full-height' | 'full'
 export interface NavMenuRenderContext {
   option: NavMenuOption
   /** 当前普通节点自身匹配主值；不包含祖先路径、展开或焦点状态。 */
@@ -27,6 +28,7 @@ export interface NavMenuNode { key: NavMenuKey; option: NavMenuOption; children:
 export type NavMenuProps = import('vue').ExtractPublicPropTypes<typeof import('./props').navMenuProps>
 
 export interface NavMenuExposed {
+  close(): void
   showOption(key?: NavMenuKey | null): void
   scrollTo(key?: NavMenuKey | null): Promise<void>
   resize(): void

@@ -3,18 +3,27 @@ import { renderToString } from '@vue/server-renderer'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
 import { formHost } from '../../input-number/__tests__/form-host'
-import Input from '../index'
 import Textarea from '../../textarea'
+import Input from '../index'
 
-for (const [name, Component, selector] of [['Input', Input, 'input'], ['Textarea', Textarea, 'textarea']]) {
+for (const [name, Component, selector] of [
+  ['Input', Input, 'input'],
+  ['Textarea', Textarea, 'textarea'],
+]) {
   describe(name + ' input pipeline', () => {
     it('emits input before update and clears through each semantic once', async () => {
       const order = []
-      const wrapper = mount(Component, { props: {
-        defaultValue: 'a', clearable: true,
-        onInput: () => order.push('input'), 'onUpdate:modelValue': () => order.push('update'),
-        onClear: () => order.push('clear'), onChange: () => order.push('change'),
-      } })
+      const wrapper = mount(Component, {
+        props: {
+          editMode: 'direct',
+          defaultValue: 'a',
+          clearable: true,
+          onInput: () => order.push('input'),
+          'onUpdate:modelValue': () => order.push('update'),
+          onClear: () => order.push('clear'),
+          onChange: () => order.push('change'),
+        },
+      })
       await wrapper.get(selector).setValue('b')
       expect(order).toEqual(['input', 'update'])
       order.length = 0
@@ -26,7 +35,9 @@ for (const [name, Component, selector] of [['Input', Input, 'input'], ['Textarea
     })
     it('notifies each Form semantic once on clear', async () => {
       const handlers = { onInput: vi.fn(), onChange: vi.fn(), onClear: vi.fn() }
-      const wrapper = mount(formHost({}, handlers, () => h(Component, { defaultValue: 'draft', clearable: true })))
+      const wrapper = mount(
+        formHost({}, handlers, () => h(Component, { editMode: 'direct', defaultValue: 'draft', clearable: true })),
+      )
       await wrapper.get('button').trigger('click')
       expect(handlers.onInput).toHaveBeenCalledTimes(1)
       expect(handlers.onChange).toHaveBeenCalledTimes(1)
@@ -36,7 +47,7 @@ for (const [name, Component, selector] of [['Input', Input, 'input'], ['Textarea
       wrapper.unmount()
     })
     it('does not invent change when editing returns to the focus-entry value', async () => {
-      const wrapper = mount(Component, { props: { defaultValue: 'a' } })
+      const wrapper = mount(Component, { props: { editMode: 'direct', defaultValue: 'a' } })
       const input = wrapper.get(selector)
       await input.trigger('focus')
       await input.setValue('b')
@@ -46,7 +57,7 @@ for (const [name, Component, selector] of [['Input', Input, 'input'], ['Textarea
       wrapper.unmount()
     })
     it('does not re-commit rejected clear proposals on blur', async () => {
-      const wrapper = mount(Component, { props: { modelValue: 'fixed', clearable: true } })
+      const wrapper = mount(Component, { props: { editMode: 'direct', modelValue: 'fixed', clearable: true } })
       await wrapper.get('button').trigger('click')
       await nextTick()
       expect(wrapper.get(selector).element.value).toBe('fixed')
@@ -57,7 +68,15 @@ for (const [name, Component, selector] of [['Input', Input, 'input'], ['Textarea
       wrapper.unmount()
     })
     it('keeps readonly/disabled values intact even on synthetic input and blur', async () => {
-      const wrapper = mount(Component, { props: { defaultValue: ' a ', readonly: true, modelModifiers: { trim: true }, clearable: true } })
+      const wrapper = mount(Component, {
+        props: {
+          editMode: 'direct',
+          defaultValue: ' a ',
+          readonly: true,
+          modelModifiers: { trim: true },
+          clearable: true,
+        },
+      })
       const input = wrapper.get(selector)
       await input.setValue('changed')
       await input.trigger('blur')
@@ -69,7 +88,7 @@ for (const [name, Component, selector] of [['Input', Input, 'input'], ['Textarea
       wrapper.unmount()
     })
     it('does not clear an in-progress composition', async () => {
-      const wrapper = mount(Component, { props: { defaultValue: 'before', clearable: true } })
+      const wrapper = mount(Component, { props: { editMode: 'direct', defaultValue: 'before', clearable: true } })
       await wrapper.get(selector).trigger('compositionstart')
       await wrapper.get('button').trigger('click')
       expect(wrapper.emitted('clear')).toBeUndefined()
@@ -77,14 +96,24 @@ for (const [name, Component, selector] of [['Input', Input, 'input'], ['Textarea
       wrapper.unmount()
     })
     it('server-renders a native name and a stable hint association', async () => {
-      const html = await renderToString(createSSRApp({ render: () => h(Component, { hint: true, placeholder: 'Name', [selector === 'input' ? 'inputAttrs' : 'textareaAttrs']: { id: 'native-field', name: 'field' } }) }))
+      const html = await renderToString(
+        createSSRApp({
+          render: () =>
+            h(Component, {
+              editMode: 'direct',
+              hint: true,
+              placeholder: 'Name',
+              [selector === 'input' ? 'inputAttrs' : 'textareaAttrs']: { id: 'native-field', name: 'field' },
+            }),
+        }),
+      )
       expect(html).toContain('for="native-field"')
       expect(html).toContain('name="field"')
     })
   })
 }
 it('restores rejected email input when no selection API is available', async () => {
-  const wrapper = mount(Input, { props: { modelValue: 'kept@example.com', type: 'email' } })
+  const wrapper = mount(Input, { props: { editMode: 'direct', modelValue: 'kept@example.com', type: 'email' } })
   await wrapper.get('input').setValue('rejected@example.com')
   await nextTick()
   expect(wrapper.get('input').element.value).toBe('kept@example.com')
@@ -92,7 +121,9 @@ it('restores rejected email input when no selection API is available', async () 
 })
 
 it('honors a consumer preventing Enter before committing the query', async () => {
-  const wrapper = mount(Input, { props: { defaultValue: 'query', onKeydown: (event) => event.preventDefault() } })
+  const wrapper = mount(Input, {
+    props: { editMode: 'direct', defaultValue: 'query', onKeydown: (event) => event.preventDefault() },
+  })
   await wrapper.get('input').trigger('focus')
   await wrapper.get('input').setValue('draft')
   await wrapper.get('input').trigger('keydown', { key: 'Enter' })

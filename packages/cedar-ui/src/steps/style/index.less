@@ -79,3 +79,9 @@
     }
   }
 }
+
+// Only directional geometry is mirrored; titles, numbers and custom icons stay readable.
+.c-steps:dir(rtl) {
+  &.c-steps-mode-dot.c-steps-vertical .c-steps-item-tail { transform: translateX(50%); }
+  &.c-steps-mode-navigation .c-steps-item-content::after { transform: rotate(-45deg); }
+}

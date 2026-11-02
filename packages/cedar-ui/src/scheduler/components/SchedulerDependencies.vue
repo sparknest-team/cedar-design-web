@@ -33,6 +33,8 @@
 </template>
 <script setup lang="ts">
 import { ref, watch, nextTick, onBeforeUnmount, onMounted, onActivated, onDeactivated, useId } from "vue";
+import { useDirection, physicalScrollLeft } from "../../_utils/direction";
+import { schedulerTimeEdge } from "../coordinates";
 import { createNamespace } from "../../_utils/global-config";
 import type { SchedulerDependency, SchedulerEvent } from "../core";
 defineOptions({ name: createNamespace("scheduler-dependencies").name });
@@ -42,6 +44,8 @@ const props = defineProps<{
   dependencies: SchedulerDependency[];
   events: SchedulerEvent[];
 }>();
+const { dir: direction } = useDirection(() => props.host);
+watch(direction, () => queueRefresh());
 const marker = `scheduler-arrow-${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
 const paths = ref<{ id: string; d: string; label: string }[]>([]),
   width = ref(0),
@@ -92,11 +96,11 @@ function measure(host: HTMLElement, current: () => boolean) {
       if (!from || !to) return [];
       const [a, b] = (edge.type ?? "finish-to-start").split("-to-");
       const x1 =
-          (a === "start" ? from.left : from.right) -
+          schedulerTimeEdge(from, a, direction.value) -
           bounds.left +
-          host.scrollLeft,
+          physicalScrollLeft(host),
         x2 =
-          (b === "start" ? to.left : to.right) - bounds.left + host.scrollLeft;
+          schedulerTimeEdge(to, b, direction.value) - bounds.left + physicalScrollLeft(host);
       const y1 = from.top + from.height / 2 - bounds.top + host.scrollTop,
         y2 = to.top + to.height / 2 - bounds.top + host.scrollTop;
       const middle = (x1 + x2) / 2;

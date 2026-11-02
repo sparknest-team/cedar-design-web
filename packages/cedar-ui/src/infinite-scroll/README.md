@@ -6,7 +6,7 @@ permalink: /components/infinite-scroll/
 
 InfiniteScroll 负责检测接近滚动底部并驱动分页状态，不负责请求、数据拼接或列表布局。通常与 `List` 组合使用。
 
-## 案例
+## 基础示例
 
 ### 与列表组合
 
@@ -14,7 +14,18 @@ InfiniteScroll 负责检测接近滚动底部并驱动分页状态，不负责�
 
 <demo src="./__demos__/list.vue"></demo>
 
+## 内容与展示
+
 ### 加载失败
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `status` | 分页状态，支持 `v-model:status` | 加载失败 |
+| `target` | 滚动容器；未传时使用最近滚动父级 | 加载失败 |
+<!-- demo-config-notes:end -->
 
 请求失败时将 `status` 设置为 `error`。默认错误区域和 `error` 插槽都可以触发 `retry`，重试事件不会额外触发 `load`。
 
@@ -24,7 +35,19 @@ InfiniteScroll 负责检测接近滚动底部并驱动分页状态，不负责�
 
 基础、自定义状态和错误重试示例均清理模拟请求；KeepAlive 恢复后可从 idle 状态重新加载，不复用取消前的计时器。
 
+## 自定义与插槽
+
 ### 自定义状态
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `status` | 分页状态，支持 `v-model:status` | 自定义状态 |
+| `target` | 滚动容器；未传时使用最近滚动父级 | 自定义状态 |
+| `bottom-offset` | 距离底部的触发阈值，数字按 px，字符串按 CSS length | 自定义状态 |
+<!-- demo-config-notes:end -->
 
 通过 `loading`、`finished` 插槽自定义底部状态，同时可使用 CSS 长度设置 `bottom-offset`。
 
@@ -32,16 +55,21 @@ InfiniteScroll 负责检测接近滚动底部并驱动分页状态，不负责�
 
 虚拟列表场景应将 `target` 指向实际虚拟滚动容器，并在追加数据后把 `status` 改回 `idle`；必要时调用 `check()`。
 
+## 生命周期与边界
+
 ### 测量绑定生命周期
 
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `status` | 分页状态，支持 `v-model:status` | 测量绑定生命周期 |
+| `target` | 滚动容器；未传时使用最近滚动父级 | 测量绑定生命周期 |
+| `immediate` | 挂载并解析滚动容器后是否立即检查 | 测量绑定生命周期 |
+<!-- demo-config-notes:end -->
+
 <demo src="./__demos__/scheduler-lifecycle.vue"></demo>
-
-<!-- api-review:start -->
-### 功能调试
-
-<demo src="./__demos__/api-review.vue"></demo>
-
-<!-- api-review:end -->
 
 ## API
 

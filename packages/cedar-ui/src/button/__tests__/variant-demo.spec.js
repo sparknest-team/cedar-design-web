@@ -1,11 +1,12 @@
 import { nextTick } from "vue";
 import { mount } from "@vue/test-utils";
 import { expect, test, vi } from "vitest";
+import Card from "../../card";
 import Button from "..";
 import { useDemoControls } from "../../../test-utils/demo-controls";
 import { MenuOption } from "../../menu";
 import Radio, { RadioGroup } from "../../radio";
-import Select from "../../select";
+import Form, { FormItem } from "../../form";
 import Space from "../../space";
 import SplitButton from "../../split-button";
 import SplitDemo from "../../split-button/__demos__/variants.vue";
@@ -19,6 +20,9 @@ vi.mock("@cedar-design/ui", () => ({ Message: { info: vi.fn() } }));
 
 const components = {
   CButton: Button,
+  CCard: Card,
+  CForm: Form,
+  CFormItem: FormItem,
   CSplitButton: SplitButton,
   CRadio: Radio,
   CRadioGroup: RadioGroup,
@@ -47,11 +51,19 @@ test("button catalog controls update variant and size while preserving every sem
       expect(button.classes()).toContain("c-button--variant-default");
       expect(button.props("size")).toBe("md");
     }
-    const controls = wrapper.findAllComponents(Select);
-    expect(controls).toHaveLength(2);
+    const controls = wrapper.findAllComponents(RadioGroup);
+    expect(controls).toHaveLength(3);
     controls[0].vm.$emit("update:modelValue", "outline");
     controls[1].vm.$emit("update:modelValue", "lg");
     await nextTick();
+    controls[2].vm.$emit("update:modelValue", "light");
+    await nextTick();
+    expect(
+      wrapper
+        .find(".button-variant-card")
+        .element.style.getPropertyValue("--c-card-background"),
+    ).toBe("#FFFFFF");
+
     for (const [index, button] of buttons().entries()) {
       expect(button.classes()).toContain("c-button--variant-outline");
       expect(button.classes()).toContain(`c-button--status-${statuses[index]}`);
@@ -76,7 +88,9 @@ test("split button variant catalog keeps all four neutral variants and working p
       for (const button of buttons) {
         expect(button.props("status")).toBeUndefined();
         expect(button.classes()).toContain("c-button--status-default");
-        expect(button.classes()).toContain(`c-button--variant-${variants[index]}`);
+        expect(button.classes()).toContain(
+          `c-button--variant-${variants[index]}`,
+        );
       }
       await buttons[0].trigger("click");
       expect(Message.info).toHaveBeenLastCalledWith("发布成功");

@@ -10,9 +10,9 @@ permalink: /components/split-button/
 
 示例统一使用两端都支持的 `Message.info(...)`。默认选择菜单项后关闭；仅“浮层与连续选择”设置 `hide-on-select=false`，保留菜单并显示选择反馈。箭头通过 icon 插槽显示，两段默认继承相同的 variant、status 和自定义颜色，图标布局不改变配色。
 
-## 案例
-
 两端示例场景及交互逻辑保持一致，分别维护代码副本；仅组件前缀、包名和文档语言接入不同。
+
+## 基础示例
 
 ### 基础用法
 
@@ -20,7 +20,21 @@ permalink: /components/split-button/
 
 <demo src="./__demos__/basic.vue"></demo>
 
+## 外观与状态
+
 ### 视觉变体
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `variant` | 按钮组变体 | 视觉变体 |
+| `disabled` | 是否禁用整个分裂按钮 | 禁用状态 |
+| `button-props` | 主按钮属性 | 禁用状态 |
+| `trigger-button-props` | 菜单触发按钮属性 | 禁用状态 |
+| `placement` | 浮层相对触发元素的首选方位，默认 bottom；启用默认的 auto-fit-position 时，空间不足会自动翻转并约束到可视区域，不保证最终停在该侧 | 外观配置对比 |
+<!-- demo-config-notes:end -->
 
 统一展示 default、outline、tonal、text 四种变体。
 
@@ -32,17 +46,53 @@ permalink: /components/split-button/
 
 <demo src="./__demos__/disabled.vue"></demo>
 
-### 五档尺寸
+### 外观配置对比
+
+选择一个对比维度后，同屏展示它的全部可选值；其余配置和内容保持一致。可切换其他配置检查组合效果；输入类预览共享一个值。
+
+<details>
+<summary>配置说明与使用限制</summary>
+
+#### 五档尺寸
 
 支持 xs、sm、md、lg、xl 五档尺寸，默认 md；窄屏自动换行。
 
-<demo src="./__demos__/sizes.vue"></demo>
+#### 外观组合
+
+适用于主操作和附加菜单。调整状态、尺寸，用相同数据观察变化。内容保持一致，便于比较不同设置的实际效果。
+
+</details>
+
+<demo src="./__demos__/appearance-lab.vue"></demo>
+
+## 内容与展示
+
+### 浮层与连续选择
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `placement` | 浮层相对触发元素的首选方位，默认 bottom；启用默认的 auto-fit-position 时，空间不足会自动翻转并约束到可视区域，不保证最终停在该侧 | 浮层与连续选择 |
+| `offset-y` | 屏幕垂直偏移，数字为 px，字符串按长度转换 | 浮层与连续选择 |
+| `popup-max-height` | 菜单最大高度 | 浮层与连续选择 |
+| `hide-on-select` | 选择菜单项后是否关闭菜单 | 浮层与连续选择 |
+<!-- demo-config-notes:end -->
+
+演示 bottom-start、8px 纵向偏移和 160px 最大高度。hide-on-select=false 支持连续选择，页面显示最近选中的 value。
+
+<demo src="./__demos__/popup.vue"></demo>
+
+## 自定义与插槽
 
 ### 自定义图标
 
 使用 icon 插槽中的 open 状态旋转箭头，两端使用相同图标。
 
 <demo src="./__demos__/custom-icon.vue"></demo>
+
+## 交互与控制
 
 ### 受控展开
 
@@ -52,30 +102,17 @@ permalink: /components/split-button/
 
 <demo src="./__demos__/controlled.vue"></demo>
 
-### 浮层与连续选择
-
-演示 bottom-start、8px 纵向偏移和 160px 最大高度。hide-on-select=false 支持连续选择，页面显示最近选中的 value。
-
-<demo src="./__demos__/popup.vue"></demo>
-
-### 外观组合
-
-适用于主操作和附加菜单。调整状态、尺寸，用相同数据观察变化。内容保持一致，便于比较不同设置的实际效果。
-
-<demo src="./__demos__/appearance-lab.vue"></demo>
+## 异步与动态数据
 
 ### 异步操作
 
-@click 直接返回 Promise，auto-loading 等待完成并阻止重复点击；完成次数用于观察是否重复执行。
+click 是普通事件通知，支持 async 回调；loading 由业务状态控制，建议在 finally 中恢复。事件监听器的 Promise 不会自动驱动加载。禁用／加载链接移除有效 href。
 
 <demo src="./__demos__/async-action.vue"></demo>
 
-<!-- api-review:start -->
-### 功能调试
+## 阅读方向
 
-<demo src="./__demos__/api-review.vue"></demo>
-
-<!-- api-review:end -->
+主按钮位于阅读起点，菜单按钮位于阅读终点；LTR/RTL 切换不交换业务动作或额外触发选择。Enter/Space 保留原生按钮行为，菜单按钮支持上下键打开菜单并跳过禁用项，Home/End 定位首尾，Enter 选择，Escape 关闭并归还焦点。弹层继承触发按钮来源方向，start/end 对齐随方向变化，显式 left/right 保持物理侧。自定义向下图形不额外镜像。
 
 ## API
 
@@ -94,9 +131,8 @@ permalink: /components/split-button/
 | elevation            | 按钮组海拔阴影                            | `boolean \| number`                              |  `true`   |
 | button-props         | 主按钮属性                                | `Partial<ButtonProps>`                           |    `-`    |
 | trigger-button-props | 菜单触发按钮属性                          | `Partial<ButtonProps>`                           |    `-`    |
-| auto-loading         | 主按钮异步点击时是否自动加载              | `boolean`                                        |  `false`  |
 | trigger              | 菜单触发方式                              | `'hover' \| 'click' \| 'focus' \| 'contextMenu'` |  `click`  |
-| placement            | 菜单弹出位置                              | `MenuPosition`（标准十二方位）           | `bottom`  |
+| placement            | 浮层相对触发元素的首选方位，默认 bottom；启用默认的 auto-fit-position 时，空间不足会自动翻转并约束到可视区域，不保证最终停在该侧 | `MenuPlacement`（标准十二方位）           | `bottom`  |
 | popup-container      | 菜单挂载容器                              | `PopupContainer`                                 |    `-`    |
 | popup-max-height     | 菜单最大高度                              | `boolean \| number`                              |  `true`   |
 | popup-class          | 菜单浮层类名                              | `string \| array \| object`                      |    `-`    |
@@ -131,7 +167,7 @@ permalink: /components/split-button/
 
 受控 `open` 只发出更新请求，需由调用方更新。主按钮点击正常冒泡，不打开菜单。
 
-`click` 与 Button 一样是消费 Promise 返回值的 `onClick` 控制回调 Prop，支持 `@click`，不再通过 `emit` 重复分发。与 `button-props.onClick` 同时设置时，各执行一次。
+`click` 与 Button 一样是普通事件通知；不会等待监听器的返回值。异步操作由业务通过 `button-props.loading` 控制主按钮加载。
 
 两端主体、Props、样式依赖入口及契约测试独立同源复制；Cedar 菜单定位由 Menu 适配，不共享实例或运行时。
 
@@ -140,3 +176,8 @@ permalink: /components/split-button/
 ```ts
 import type { SplitButtonInstance, SplitButtonProps } from '@cedar-design/ui'
 ```
+
+
+### 方位语义与配置入口
+
+菜单方位通过内部 Menu 的 placement 传递给 Trigger，使用 MenuPlacement 类型，不新增第二个定位入口。

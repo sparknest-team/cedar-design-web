@@ -1,5 +1,7 @@
-import { computed, defineComponent, createVNode, PropType } from 'vue'
+import { computed, defineComponent, createVNode, PropType, inject, isVNode, Fragment } from 'vue'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
+import { tableInjectionKey } from './context'
+import { orderPhysicalColumns } from './column-direction'
 import { TableDataWithRaw } from './types'
 
 
@@ -24,6 +26,7 @@ export default defineComponent({
     },
   },
   setup(props, { slots }) {
+    const context = inject(tableInjectionKey, undefined)
     const prefixCls = getPrefixCls('table')
 
     const cls = computed(() => [
@@ -43,7 +46,14 @@ export default defineComponent({
         })[0] ?? 'tr',
         { class: cls.value },
         {
-          default: slots.default,
+          default: () => {
+            if (context?.readingDirection !== 'rtl') return slots.default?.()
+            const flatten = (nodes: any[]): any[] => nodes.flatMap(node => Array.isArray(node) ? flatten(node) : isVNode(node) && node.type === Fragment && Array.isArray(node.children) ? flatten(node.children) : [node])
+            return orderPhysicalColumns(flatten(slots.default?.() ?? []), node => {
+              if (!isVNode(node)) return undefined
+              return node.props?.column?.fixed ?? (node.props?.operationColumn?.fixed ? 'left' : undefined)
+            }, context.readingDirection)
+          },
         },
       )
     }

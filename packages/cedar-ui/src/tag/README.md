@@ -6,7 +6,7 @@ permalink: /components/tag/
 
 用于信息的选择、筛选、分类。用户通过标签进行信息反馈和交互操作。
 
-## 案例
+## 基础示例
 
 ### 基础用法
 
@@ -14,19 +14,87 @@ permalink: /components/tag/
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### 标签的尺寸
+## 外观与状态
+
+### 标签的颜色
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `color` | 自定义背景色（outline 时为边框色） | 标签的颜色 |
+| `closable` | 标签是否可关闭 | 标签的颜色 |
+<!-- demo-config-notes:end -->
+
+我们提供多种预设色彩的标签样式，通过 `color` 设置不同颜色。如果预设值不能满足你的需求，`color` 字段也可以设置自定义色值。
+
+<demo src="./__demos__/color.vue"></demo>
+
+### 外观配置对比
+
+选择一个对比维度后，同屏展示它的全部可选值；其余配置和内容保持一致。可切换其他配置检查组合效果；输入类预览共享一个值。
+
+<details>
+<summary>配置说明与使用限制</summary>
+
+#### 标签的尺寸
 
 标签的大小分为：`sm`、`md`、`lg` 三种，可以在不同场景下选择合适按钮尺寸。推荐及默认尺寸为 `md`。
 
-<demo src="./__demos__/size.vue"></demo>
-
-### 状态与变体
+#### 状态与变体
 
 通过 `status` 与 `variant` 切换不同语义颜色和呈现风格（与 Button 对齐）。`color` 与 `status` 同时设置时 `color` 优先。
 
-<demo src="./__demos__/status.vue"></demo>
+#### 外观组合
+
+适用于短标签与分类标记。调整变体、状态、尺寸，用相同数据观察变化。内容保持一致，便于比较不同设置的实际效果。
+
+</details>
+
+<demo src="./__demos__/appearance-lab.vue"></demo>
+
+## 内容与展示
+
+### 可选中
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `color` | 自定义背景色（outline 时为边框色） | 可选中、带图标的标签 |
+| `checkable` | 标签是否可选中 | 可选中 |
+| `status` | 标签状态色（与 `color` 互斥，`color` 优先） | 可选中 |
+| `default-value` | 标签默认选中状态（标签可选中时可用） | 可选中 |
+| `variant` | 标签变体（与 Button 对齐） | 可选中 |
+| `loading` | 标签是否为加载中状态 | 可选中 |
+<!-- demo-config-notes:end -->
+
+可选中标签可用 Space / Enter 切换，checked 受控时仍由父级决定是否接受；未传 checked 的此示例由组件自持状态。loading 阻止选中动作，但不是 disabled API。关闭按钮也支持 Space / Enter，关闭不应冒泡为选中。动态示例点击 Add Tag 后聚焦输入，Enter 新增一项；固定首项不提供关闭按钮。这里只说明已展示的操作，不代表长按/异步与触屏组合已全部验收。
+
+通过设置 `checkable` ，可以实现点击选中的效果。
+
+<demo src="./__demos__/checkable.vue"></demo>
+
+### 带图标的标签
+
+可通过 `icon` 插槽在标签中加入图标。
+
+<demo src="./__demos__/icon.vue"></demo>
+
+## 交互与控制
 
 ### 可关闭标签
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `closable` | 标签是否可关闭 | 可关闭标签、动态编辑标签 |
+| `loading` | 标签是否为加载中状态 | 加载中状态 |
+<!-- demo-config-notes:end -->
 
 通过 `closable` 属性控制标签是否可关闭。可关闭标签可通过 `close` 事件执行一些关闭后操作，也可通过 `show` 属性控制标签的显示或隐藏。
 
@@ -38,44 +106,11 @@ permalink: /components/tag/
 
 <demo src="./__demos__/dynamic-tag.vue"></demo>
 
-### 可选中
-
-可选中标签可用 Space / Enter 切换，checked 受控时仍由父级决定是否接受；未传 checked 的此示例由组件自持状态。loading 阻止选中动作，但不是 disabled API。关闭按钮也支持 Space / Enter，关闭不应冒泡为选中。动态示例点击 Add Tag 后聚焦输入，Enter 新增一项；固定首项不提供关闭按钮。这里只说明已展示的操作，不代表长按/异步与触屏组合已全部验收。
-
-通过设置 `checkable` ，可以实现点击选中的效果。
-
-<demo src="./__demos__/checkable.vue"></demo>
-
-### 标签的颜色
-
-我们提供多种预设色彩的标签样式，通过 `color` 设置不同颜色。如果预设值不能满足你的需求，`color` 字段也可以设置自定义色值。
-
-<demo src="./__demos__/color.vue"></demo>
-
 ### 加载中状态
 
 标签的加载中状态。
 
 <demo src="./__demos__/loading.vue"></demo>
-
-### 带图标的标签
-
-可通过 `icon` 插槽在标签中加入图标。
-
-<demo src="./__demos__/icon.vue"></demo>
-
-### 外观组合
-
-适用于短标签与分类标记。调整变体、状态、尺寸，用相同数据观察变化。内容保持一致，便于比较不同设置的实际效果。
-
-<demo src="./__demos__/appearance-lab.vue"></demo>
-
-<!-- api-review:start -->
-### 功能调试
-
-<demo src="./__demos__/api-review.vue"></demo>
-
-<!-- api-review:end -->
 
 ## API
 

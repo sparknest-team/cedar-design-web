@@ -1,0 +1,3 @@
+- [x] Reproduce callback settlement and cleanup failures on applicable platforms.
+- [x] Implement reliable settlement, cleanup and ActionSheet owner lifetime.
+- [x] Validate affected components, service callers, browser, types and lint.

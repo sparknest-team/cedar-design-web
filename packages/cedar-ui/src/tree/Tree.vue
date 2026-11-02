@@ -1,10 +1,11 @@
 <template>
-  <div :class="classNames">
+  <div ref="root" :class="classNames" role="tree" :tabindex="externallyManaged ? undefined : 0" :aria-multiselectable="multiple || undefined" :aria-activedescendant="externallyManaged ? undefined : activeDescendant" @keydown="onKeydown" @focus="onTreeFocus">
     <VirtualList
       v-if="virtualListProps"
       ref="virtualListRef"
       v-bind="(virtualListProps as any)"
       :data="visibleTreeNodeList"
+      item-key="key"
     >
       <template #item="{ item: node }">
         <TreeNode :key="node.key" v-bind="node.treeNodeProps" />
@@ -17,11 +18,12 @@
 </template>
 
 <script lang="ts">
+import { useDirection } from '@cedar-design/use'
 import { treeProps } from './props'
 import { createNamespace } from '../_utils/global-config'
-import { defineComponent, computed, provide, reactive, PropType, toRefs, ref, onBeforeUnmount, onDeactivated, onActivated, watch } from 'vue'
+import { defineComponent, computed, provide, reactive, PropType, toRefs, ref, onBeforeUnmount, onDeactivated, onActivated, watch, nextTick, useId, inject } from 'vue'
 import { getPrefixCls } from '../_utils/global-config'
-import { TreeInjectionKey } from './context'
+import { TreeInjectionKey, TreeKeyboardOwnerKey } from './context'
 import usePickSlots from '../_hooks/use-pick-slots'
 import type {
   TreeFieldNames,
@@ -40,7 +42,7 @@ import useMergeState from '../_hooks/use-merge-state'
 import useCheckedState from './hooks/use-checked-state'
 import useTreeData from './hooks/use-tree-data'
 import VirtualList from '../_components/virtual-list-v2'
-import type { VirtualListProps, ScrollIntoViewOptions } from '../_components/virtual-list-v2/interface'
+import type { VirtualListProps, VirtualListRef, ScrollIntoViewOptions } from '../_components/virtual-list-v2/interface'
 
 export default defineComponent({
   name: createNamespace("tree").name,
@@ -141,7 +143,6 @@ export default defineComponent({
    * @en Custom node icon
    * @slot icon
    * @binding {TreeNodeData} node
-   * @version 2.18.0
    */
   /**
    * @zh 定制 switcher 图标
@@ -201,6 +202,13 @@ export default defineComponent({
       animation,
     } = toRefs(props)
 
+    const externallyManaged = inject(TreeKeyboardOwnerKey, false)
+    const root = ref<HTMLElement>()
+    const virtualListRef = ref<VirtualListRef>()
+    const treeId = `tree-${useId()}`
+    const focusedValue = ref<TreeNodeValue>()
+    const { isRtl } = useDirection(() => root.value)
+    const nodeId = (key: TreeNodeValue) => `${treeId}-${typeof key}-${encodeURIComponent(String(key))}`
     const prefixCls = getPrefixCls('tree')
     const classNames = computed(() => [
       `${prefixCls}`,
@@ -315,6 +323,59 @@ export default defineComponent({
         return isRoot || isVisibleNode
       })
     })
+
+    const focusableNodes = computed(() => visibleTreeNodeList.value.filter(node => !node.disabled))
+    const activeDescendant = computed(() => focusedValue.value === undefined ? undefined : nodeId(focusedValue.value))
+    function focusNode(key: TreeNodeValue) {
+      if (externallyManaged) return
+      if (!focusableNodes.value.some(node => node.key === key)) return
+      focusedValue.value = key
+      virtualListRef.value?.scrollTo({ key, align: 'auto' })
+      root.value?.focus({ preventScroll: true })
+      nextTick(() => {
+        if (focusedValue.value !== key || !root.value || root.value.ownerDocument.activeElement !== root.value) return
+        root.value.ownerDocument.getElementById(nodeId(key))?.scrollIntoView?.({ block: 'nearest', inline: 'nearest' })
+      })
+    }
+    function onTreeFocus(event: FocusEvent) {
+      if (event.target !== root.value || focusedValue.value !== undefined) return
+      const node = focusableNodes.value.find(node => selectedValues.value.includes(node.key)) ?? focusableNodes.value[0]
+      if (node) focusNode(node.key)
+    }
+    watch(focusableNodes, nodes => {
+      if (focusedValue.value === undefined || nodes.some(node => node.key === focusedValue.value)) return
+      const old = key2TreeNode.value.get(focusedValue.value)
+      focusedValue.value = [...(old?.pathParentKeys ?? [])].reverse().find(key => nodes.some(node => node.key === key)) ?? nodes[0]?.key
+    })
+    function onKeydown(event: KeyboardEvent) {
+      if (externallyManaged || event.isComposing || event.defaultPrevented || event.target !== root.value || event.altKey || event.ctrlKey || event.metaKey) return
+      const nodes = focusableNodes.value
+      const index = nodes.findIndex(node => node.key === focusedValue.value)
+      const node = nodes[index < 0 ? 0 : index]
+      if (!node) return
+      const forward = isRtl.value ? 'ArrowLeft' : 'ArrowRight'
+      const backward = isRtl.value ? 'ArrowRight' : 'ArrowLeft'
+      if (!['ArrowDown', 'ArrowUp', forward, backward, 'Home', 'End', 'Enter', ' '].includes(event.key)) return
+      event.preventDefault()
+      if (event.key === 'Home' || event.key === 'End') focusNode(nodes[event.key === 'Home' ? 0 : nodes.length - 1].key)
+      else if (event.key === 'ArrowDown' || event.key === 'ArrowUp') focusNode(nodes[Math.max(0, Math.min(nodes.length - 1, index + (event.key === 'ArrowDown' ? 1 : -1)))].key)
+      else if (event.key === forward && !node.isLeaf) {
+        if (!expandedValues.value.includes(node.key)) {
+          if (!node.children?.length && onLoadMore.value) void onLoadMore.value(node.key)
+          else onExpand(true, node.key, event)
+        } else {
+          const child = nodes.find(child => child.parentKey === node.key)
+          if (child) focusNode(child.key)
+        }
+      } else if (event.key === backward) {
+        if (expandedValues.value.includes(node.key) && !node.isLeaf) onExpand(false, node.key, event)
+        else {
+          const parent = [...node.pathParentKeys].reverse().find(key => nodes.some(node => node.key === key))
+          if (parent !== undefined) focusNode(parent)
+        }
+      } else if (event.key === ' ' && isNodeCheckable(node)) onCheck(!checkedValues.value.includes(node.key), node.key, event)
+      else if ((event.key === 'Enter' || event.key === ' ') && isNodeSelectable(node)) onSelect(node.key, event)
+    }
 
     function getPublicCheckedValues(rawCheckedValues: TreeNodeValue[], rawCheckedStrategy = checkedStrategy.value) {
       let publicCheckedValues = [...rawCheckedValues]
@@ -613,6 +674,10 @@ export default defineComponent({
 
     const treeContext = reactive({
       treeProps: props,
+      externallyManaged,
+      focusedValue,
+      nodeId,
+      focusNode,
       switcherIcon,
       loadingIcon,
       dragIcon,
@@ -690,10 +755,15 @@ export default defineComponent({
     provide(TreeInjectionKey, treeContext)
 
     return {
+      root,
+      externallyManaged,
+      activeDescendant,
+      onKeydown,
+      onTreeFocus,
       classNames,
       visibleTreeNodeList,
       treeContext,
-      virtualListRef: ref(),
+      virtualListRef,
       computedSelectedValues: selectedValues,
       computedExpandedValues: expandedValues,
       computedCheckedValues: checkedValues,
@@ -733,7 +803,6 @@ export default defineComponent({
      * @en Get selected nodes
      * @returns {TreeNodeData[]}
      * @public
-     * @version 2.19.0
      */
     getSelectedNodes() {
       return this.getNodes(this.computedSelectedValues)
@@ -744,7 +813,6 @@ export default defineComponent({
      * @param { checkedStrategy?: 'all' | 'parent' | 'child'; includeHalfChecked?: boolean; } options
      * @returns {TreeNodeData[]}
      * @public
-     * @version 2.19.0
      */
     getCheckedNodes(
       options: {
@@ -762,7 +830,6 @@ export default defineComponent({
      * @en Get half checked nodes
      * @returns {TreeNodeData[]}
      * @public
-     * @version 2.19.0
      */
     getHalfCheckedNodes() {
       return this.getNodes(this.computedIndeterminateKeys)
@@ -772,7 +839,6 @@ export default defineComponent({
      * @en Get expanded nodes
      * @returns {TreeNodeData[]}
      * @public
-     * @version 2.19.0
      */
     getExpandedNodes() {
       return this.getNodes(this.computedExpandedValues)
@@ -782,7 +848,6 @@ export default defineComponent({
      * @en Set the checkbox state of all nodes
      * @param { boolean } checked
      * @public
-     * @version 2.20.0
      */
     checkAll(checked = true) {
       const { key2TreeNode } = this.treeContext
@@ -801,7 +866,6 @@ export default defineComponent({
      * @param { boolean } checked
      * @param { boolean } onlyCheckLeaf
      * @public
-     * @version 2.20.0，onlyCheckLeaf from 2.21.0
      */
     checkNode(key: TreeNodeValue | TreeNodeValue[], checked = true, onlyCheckLeaf = false) {
       const { checkStrictly, treeContext } = this
@@ -820,7 +884,6 @@ export default defineComponent({
      * @en Set the selected state of all nodes
      * @param { boolean } selected
      * @public
-     * @version 2.20.0
      */
     selectAll(selected = true) {
       const { key2TreeNode } = this.treeContext
@@ -839,7 +902,6 @@ export default defineComponent({
      * @param { TreeNodeValue | TreeNodeValue[] } key
      * @param { boolean } selected
      * @public
-     * @version 2.20.0
      */
     selectNode(key: TreeNodeValue | TreeNodeValue[], selected = true) {
       const { key2TreeNode } = this.treeContext
@@ -855,7 +917,6 @@ export default defineComponent({
      * @en Set the expanded state of all nodes
      * @param { boolean } expanded
      * @public
-     * @version 2.20.0
      */
     expandAll(expanded = true) {
       const { key2TreeNode } = this.treeContext
@@ -874,7 +935,6 @@ export default defineComponent({
      * @param { TreeNodeValue | TreeNodeValue[] } key
      * @param { boolean } expanded
      * @public
-     * @version 2.20.0
      */
     expandNode(key: TreeNodeValue | TreeNodeValue[], expanded = true) {
       const { key2TreeNode } = this.treeContext

@@ -34,3 +34,5 @@ export type { DateRangePickerType, DateRangePickerOptions } from './picker-props
 export type { DateRangeEmits, DateRangePickerEmits } from '../date/events'
 
 export type { DateTimePickerOptions } from '../date/time-picker-options'
+
+export type { DateRangePopupOptions } from './popup-options'

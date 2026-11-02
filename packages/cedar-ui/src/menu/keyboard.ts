@@ -1,3 +1,4 @@
+import { resolveDirection } from '../_utils/direction'
 import { nextTick, onMounted, onBeforeUnmount, onActivated, onDeactivated, watch } from 'vue'
 
 interface MenuKeyboardOptions {
@@ -34,7 +35,7 @@ export function useMenuKeyboard(options: MenuKeyboardOptions) {
     const reference = options.reference()
     const active = reference?.ownerDocument.activeElement
     if (!options.visible()) {
-      const openKeyPressed = options.openKey ? key === options.openKey : key === 'ArrowDown' || key === 'ArrowUp'
+      const openKeyPressed = options.openKey ? key === (resolveDirection(reference) === 'rtl' ? 'ArrowLeft' : options.openKey) : key === 'ArrowDown' || key === 'ArrowUp'
       if (options.open && openKeyPressed && (active === reference || !!reference?.contains(active ?? null))) {
         event.preventDefault()
         options.open()
@@ -46,7 +47,7 @@ export function useMenuKeyboard(options: MenuKeyboardOptions) {
     if (!options.isTopLayer(event)) return
     // Menu-backed inputs keep native caret navigation and text entry.
     if (active?.closest('input, textarea, [contenteditable="true"], [role="textbox"]') && ['Home', 'End', 'Enter', ' '].includes(key)) return
-    if (key === 'Escape' || (options.openKey && key === 'ArrowLeft')) {
+    if (key === 'Escape' || (options.openKey && key === (resolveDirection(reference) === 'rtl' ? 'ArrowRight' : 'ArrowLeft'))) {
       event.preventDefault()
       options.close()
       if (key === 'Escape') options.escape?.()

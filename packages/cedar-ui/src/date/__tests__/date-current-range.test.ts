@@ -6,13 +6,22 @@ import DatePanel from '../DatePanel.vue'
 import DatePanelActions from '../DatePanelActions.vue'
 import { normalizeDateRange } from '../normalize-date-range'
 
-const Content = defineComponent({ props: ['value'], emits: ['confirm'], template: '<div />' })
+const Content = defineComponent({
+  props: ['value'],
+  emits: ['confirm'],
+  template: '<div />',
+})
 afterEach(() => vi.useRealTimers())
 
 describe('date current action and interaction range policy', () => {
   it('renders a custom action when built-in actions are hidden', () => {
     const wrapper = shallowMount(DatePanelActions, {
-      props: { showNow: false, showConfirm: false, nowDisabled: false, canConfirm: true },
+      props: {
+        showNow: false,
+        showConfirm: false,
+        nowDisabled: false,
+        canConfirm: true,
+      },
       slots: { default: '<button type="button">允许关闭</button>' },
     })
     expect(wrapper.get('button').text()).toBe('允许关闭')
@@ -27,13 +36,16 @@ describe('date current action and interaction range policy', () => {
     expect(currentDateValue({ valueFormat: 'Date', type: 'week', dayStartOfWeek: 1 }, now)).toEqual(
       new Date(2025, 4, 12),
     )
-    expect(currentDateValue({ showTime: true, useSeconds: false, valueFormat: 'Date' }, now)).toEqual(
+    expect(currentDateValue({ showTime: true, format: 'YYYY-MM-DD HH:mm', valueFormat: 'Date' }, now)).toEqual(
       new Date(2025, 4, 15, 9, 30),
     )
   })
   it('orders whole endpoints without mutating arrays or Date objects', () => {
     const value = [new Date(2025, 0, 20, 9), new Date(2025, 0, 10, 18)]
-    const result = normalizeDateRange(value, { valueFormat: 'Date', showTime: true })
+    const result = normalizeDateRange(value, {
+      valueFormat: 'Date',
+      showTime: true,
+    })
     expect(result).toEqual([value[1], value[0]])
     expect(result).not.toBe(value)
     expect((result as Date[])[0]).not.toBe(value[1])
@@ -41,7 +53,10 @@ describe('date current action and interaction range policy', () => {
   })
   it('preserves endpoint clock positions when exchangeTime is false', () => {
     expect(
-      normalizeDateRange(['2025-01-20 09:30:10', '2025-01-10 18:45:20'], { showTime: true, exchangeTime: false }),
+      normalizeDateRange(['2025-01-20 09:30:10', '2025-01-10 18:45:20'], {
+        showTime: true,
+        exchangeTime: false,
+      }),
     ).toEqual(['2025-01-10 09:30:10', '2025-01-20 18:45:20'])
   })
   it('handles custom formats, timestamps and month precision', () => {
@@ -54,7 +69,12 @@ describe('date current action and interaction range policy', () => {
     ).toEqual(['10/01/2025 09:30', '20/01/2025 18:45'])
     const first = new Date(2025, 0, 20, 9).getTime()
     const second = new Date(2025, 0, 10, 18).getTime()
-    expect(normalizeDateRange([first, second], { valueFormat: 'timestamp', showTime: true })).toEqual([second, first])
+    expect(
+      normalizeDateRange([first, second], {
+        valueFormat: 'timestamp',
+        showTime: true,
+      }),
+    ).toEqual([second, first])
     expect(normalizeDateRange(['2025-05', '2025-01'], { type: 'month' })).toEqual(['2025-01', '2025-05'])
   })
   it('does not repair invalid or incomplete candidates', () => {
@@ -65,7 +85,10 @@ describe('date current action and interaction range policy', () => {
   function mountPanel(options = {}, range = false) {
     vi.useFakeTimers()
     vi.setSystemTime(new Date(2025, 0, 15, 9, 30, 12))
-    return shallowMount(DatePanel, { props: { options, range }, global: { stubs: { DatePanelContent: Content } } })
+    return shallowMount(DatePanel, {
+      props: { options, range },
+      global: { stubs: { DatePanelContent: Content } },
+    })
   }
   it('selects the current value lazily using model format and standard events', () => {
     const wrapper = mountPanel({ valueFormat: 'timestamp', showTime: true })
@@ -77,7 +100,10 @@ describe('date current action and interaction range policy', () => {
     wrapper.unmount()
   })
   it('defers current-date commit until confirmation', async () => {
-    const wrapper = mountPanel({ modelValue: '2025-01-01', disableConfirm: false })
+    const wrapper = mountPanel({
+      modelValue: '2025-01-01',
+      disableConfirm: false,
+    })
     wrapper.getComponent(DatePanelActions).vm.$emit('select-now')
     await nextTick()
     expect(wrapper.getComponent(Content).props('value')).toBe('2025-01-15')

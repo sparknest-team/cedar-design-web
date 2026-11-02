@@ -1,11 +1,13 @@
 import assert from "node:assert/strict";
-import { cp, mkdir, mkdtemp, readFile, readdir, rm } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, readdir, rm } from "node:fs/promises";
 import { createServer } from "node:http";
 import { tmpdir } from "node:os";
 import { dirname, extname, resolve, sep } from "node:path";
 import { after, before, describe, it } from "node:test";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright";
+import { copyProductionSnapshot } from "../../../design-ui/browser/snapshot.mjs";
+import { navigateWithDiagnostics } from "../../../design-ui/browser/navigation.mjs";
 
 const root = fileURLToPath(new URL("../../", import.meta.url));
 const ui = resolve(root, "packages/cedar-ui");
@@ -166,7 +168,7 @@ async function sourceState(page, component) {
 async function interact(page, component) {
   const demo = page.locator(".vmi-previewer-example").first();
   if (component === "input") {
-    const input = demo.locator("input").first();
+    const input = demo.locator(".c-input input").first();
     await input.fill("Production demo QA");
     assert.equal(await input.inputValue(), "Production demo QA");
     await input.focus();
@@ -252,11 +254,17 @@ async function interact(page, component) {
     await modes.click();
     await page.getByRole("option", { name: "月", exact: true }).click();
     await demo.locator(".c-scheduler__month").waitFor({ state: "visible" });
-    assert.match(await demo.innerText(), /首页设计评审/);
+    assert.match(
+      await demo.locator(".c-scheduler__month").innerText(),
+      /项目同步/,
+    );
     await modes.click();
     await page.getByRole("option", { name: "周", exact: true }).click();
     await demo.locator(".c-scheduler__time-grid").waitFor({ state: "visible" });
-    assert.match(await demo.innerText(), /接口联调/);
+    assert.match(
+      await demo.locator(".c-scheduler__time-grid").innerText(),
+      /项目同步/,
+    );
   } else if (component === "upload") {
     await demo.locator('input[type="file"]').setInputFiles({
       name: "production-demo.txt",
@@ -322,17 +330,17 @@ async function interact(page, component) {
       .first()
       .evaluate((element) => element.getBoundingClientRect().height);
     await variants
-      .getByRole("combobox", { name: "Button variant", exact: true })
+      .getByRole("radiogroup", { name: "Button variant", exact: true })
+      .getByText("outline", { exact: true })
       .click();
-    await page.getByRole("option", { name: "outline", exact: true }).click();
     assert.equal(
       await variants.locator(".c-button--variant-outline").count(),
       8,
     );
     await variants
-      .getByRole("combobox", { name: "Button size", exact: true })
+      .getByRole("radiogroup", { name: "Button size", exact: true })
+      .getByText("lg", { exact: true })
       .click();
-    await page.getByRole("option", { name: "lg", exact: true }).click();
     assert.equal(await variants.locator(".c-button--size-lg").count(), 8);
     assert.ok(
       (await variants
@@ -360,7 +368,7 @@ describe(
           },
         );
         directory = await mkdtemp(resolve(tmpdir(), "cedar-docs-theme-"));
-        await cp(resolve(ui, "dist"), directory, { recursive: true });
+        await copyProductionSnapshot(resolve(ui, "dist"), directory);
         server = createServer(async (request, response) => {
           try {
             const pathname = decodeURIComponent(
@@ -417,7 +425,10 @@ describe(
           file,
           `${createHash("sha256").update(raw).digest("hex")}.json`,
         );
-        assert.match(source.highlightCode, /^<pre class="cedar-demo-code"><code>/);
+        assert.match(
+          source.highlightCode,
+          /^<pre class="cedar-demo-code"><code>/,
+        );
         assert.match(source.highlightCode, /class="token /);
         assets.add(`${source.name}\0${source.rawCode}`);
       }
@@ -481,7 +492,7 @@ describe(
                 )
                   failures.push(`${response.status()}: ${response.url()}`);
               });
-              await page.goto(`${origin}/components/tabs/`);
+              await navigateWithDiagnostics(page, `${origin}/components/tabs/`);
               const menu = page.getByRole("button", {
                 name: "切换主题",
                 exact: true,
@@ -540,7 +551,10 @@ describe(
 
               for (const component of components) {
                 await t.test(component, async () => {
-                  await page.goto(`${origin}/components/${component}/`);
+                  await navigateWithDiagnostics(
+                    page,
+                    `${origin}/components/${component}/`,
+                  );
                   const expected = await readDemos(component);
                   await page.waitForFunction(
                     (count) =>

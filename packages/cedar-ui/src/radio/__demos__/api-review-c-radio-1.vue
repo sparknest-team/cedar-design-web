@@ -64,7 +64,7 @@ import __apiReviewRawConfig from "./api-review-c-radio-1.config.json";
               #radio="{ checked }"
             >
               <c-space wrap
-                align="start"
+                align="flex-start"
                 class="custom-radio-card"
                 :class="{ 'custom-radio-card-checked': checked }"
               >

@@ -21,8 +21,8 @@
 
   .size(@size) {
     &--size-@{size} {
-      --c-internal-field-height: var(~'--c-field-size-@{size}-height');
-      --c-internal-field-font-size: var(~'--c-field-size-@{size}-font-size');
+      --c-internal-field-height: var(~"--c-field-size-@{size}-height");
+      --c-internal-field-font-size: var(~"--c-field-size-@{size}-font-size");
     }
   }
   .size(xs);
@@ -87,8 +87,14 @@
   &__placeholder {
     position: absolute;
     top: 50%;
-    left: var(--c-internal-field-content-offset, var(--c-field-padding-horizontal));
-    max-width: var(--c-internal-field-content-width, calc(100% - var(--c-field-padding-horizontal) * 2));
+    inset-inline-start: var(
+      --c-internal-field-content-offset,
+      var(--c-field-padding-horizontal)
+    );
+    max-width: var(
+      --c-internal-field-content-width,
+      calc(100% - var(--c-field-padding-horizontal) * 2)
+    );
     margin: 0;
     overflow: hidden;
     color: var(--c-field-custom-blur, var(--c-field-placeholder-text-color));
@@ -98,14 +104,17 @@
     text-overflow: ellipsis;
     pointer-events: none;
     transform: translateY(-50%);
-    transform-origin: left center;
+    transform-origin: var(--c-internal-field-hint-origin, left center);
     transition:
       top var(--c-field-hint-duration),
       transform var(--c-field-hint-duration),
       color var(--c-field-hint-duration);
   }
   &--multiline &__placeholder {
-    top: calc(var(--c-field-content-padding-vertical) + 0.5em * var(--c-field-line-height));
+    top: calc(
+      var(--c-field-content-padding-vertical) + 0.5em *
+        var(--c-field-line-height)
+    );
   }
   // Browser autofill can paint a value before Vue receives an input event.
   &--floating &__placeholder,
@@ -135,7 +144,7 @@
   &__border--notched {
     top: calc(-0.5em * var(--c-field-hint-scale));
     // Preserve CSS max()/calc(); Less 3 otherwise evaluates this expression to 0px.
-    padding-inline-start: ~'max(0px, calc(var(--c-internal-field-content-offset, var(--c-field-padding-horizontal)) - var(--c-field-hint-space) - var(--c-field-border-width)))';
+    padding-inline-start: ~"max(0px, calc(var(--c-internal-field-content-offset, var(--c-field-padding-horizontal)) - var(--c-field-hint-space) - var(--c-field-border-width)))";
   }
   &__legend {
     display: block;
@@ -160,6 +169,10 @@
     max-width: var(--c-internal-field-content-width, 100%);
   }
 
+  &--variant-outline {
+    background: var(--c-field-variant-outline-background);
+  }
+
   &--variant-outline &__border {
     border-color: var(--c-field-variant-outline-border-color);
   }
@@ -170,7 +183,10 @@
   &--variant-outline&--focus &__border-state,
   &--variant-outline:focus-within &__border-state {
     opacity: 1;
-    border-color: var(--c-field-custom-focus, var(--c-field-variant-outline-border-color-focus));
+    border-color: var(
+      --c-field-custom-focus,
+      var(--c-field-variant-outline-border-color-focus)
+    );
   }
 
   &--variant-filled {
@@ -196,7 +212,10 @@
     }
     .c-field-decorator__border-state {
       border-bottom-width: var(--c-field-variant-standard-line-size-focus);
-      border-bottom-color: var(--c-field-custom-focus, var(--c-field-variant-standard-line-color-focus));
+      border-bottom-color: var(
+        --c-field-custom-focus,
+        var(--c-field-variant-standard-line-color-focus)
+      );
       transform: scaleX(0);
       transition: transform var(--c-field-hint-duration);
       opacity: 1;
@@ -268,5 +287,49 @@
 @media (prefers-reduced-motion: reduce) {
   .c-field-decorator {
     --c-field-hint-duration: 0s;
+  }
+}
+
+.c-field-decorator__middle > input,
+.c-field-decorator__middle > textarea {
+  text-align: var(--c-form-content-align, inherit);
+}
+
+.c-field-decorator__loading-icon {
+  display: inline-flex;
+  align-items: center;
+  pointer-events: none;
+}
+.c-field-decorator__loading-line {
+  position: absolute;
+  inset: auto 0 0;
+  height: var(--c-field-loading-line-size);
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 1;
+  color: var(--c-field-loading-color);
+  > span {
+    display: block;
+    width: 40%;
+    height: 100%;
+    background: currentColor;
+    animation: c-field-loading-line var(--c-field-loading-duration) linear
+      infinite;
+  }
+}
+@keyframes c-field-loading-line {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(300%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .c-field-decorator__loading-line > span {
+    animation: none;
+    width: 100%;
+    opacity: 0.5;
   }
 }

@@ -279,8 +279,6 @@ export const schedulerProps = {
   readonly: { type: Boolean, default: false },
   /** 禁用组件交互。 */
   disabled: { type: Boolean, default: false },
-  /** 数据加载中，禁止提交修改。 */
-  loading: { type: Boolean, default: false },
   /** 显示资源筛选与未排期列表。 */
   showSidebar: { type: Boolean, default: true },
   /** 是否允许同一资源在同一时段存在多个日程。 */

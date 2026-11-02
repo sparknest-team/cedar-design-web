@@ -6,29 +6,68 @@ permalink: /components/message/
 
 用于展示轻量级、非模态的全局反馈。Cedar 与 Maple 共享同一套公开契约、队列、计时和命令式服务；两端分别维护源码和端侧外观。
 
-## 基本使用
+## 基础示例
+
+### 基本使用
 
 直接调用 `Message(...)` 创建 `default` 提示。
 
 <demo src="./__demos__/basic.vue"></demo>
 
-## 消息状态
+## 外观与状态
+
+### 消息状态
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `status` | 语义状态 | 外观组合 |
+| `position` | 消息自身在可视区域中的 top/center/bottom 区域，默认 top；不相对触发元素定位 | 外观组合 |
+| `closable` | 是否显示关闭按钮 | 外观组合 |
+| `duration` | 自动关闭时长（ms），`0` 不自动关闭 | 外观组合 |
+| `variant` | 视觉强调层级 | 外观组合 |
+<!-- demo-config-notes:end -->
 
 状态统一为 `default / info / success / warning / danger / loading`。函数方法使用 `error`，组件状态使用标准语义 `danger`；普通提示直接调用 `Message(...)`，不提供 `normal` 别名。
 
 <demo src="./__demos__/type.vue"></demo>
 
-## 自定义图标
+### 视觉变体
 
-<demo src="./__demos__/custom-icon.vue"></demo>
+视觉变体与 status 独立：neutral 是中性浮层与状态图标；tonal 是低强调状态色底与深色正文；solid 是高强调实色底与配套前景。Cedar 与 Maple 默认均为 neutral；显式 solid / tonal 保持相同视觉语义。default/loading 的 solid 保留深色底，loading 图标仍表达进度。两端导出 MessageVariant，函数调用、setDefaultOptions 和相同 id 更新都支持 variant。
 
-## 位置
+<demo src="./__demos__/variant.vue"></demo>
+
+### 外观组合
+
+适用于操作结果的即时反馈。调整变体、状态，用相同数据观察变化。内容保持一致，便于比较不同设置的实际效果。
+
+<demo src="./__demos__/appearance-lab.vue"></demo>
+
+## 布局与排列
+
+### 位置
 
 两端均支持 `top / center / bottom`。
 
 <demo src="./__demos__/location.vue"></demo>
 
-## 显示时长
+## 内容与展示
+
+### 显示时长
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `status` | 语义状态 | 组件调用 |
+| `position` | 消息自身在可视区域中的 top/center/bottom 区域，默认 top；不相对触发元素定位 | 组件调用 |
+| `closable` | 是否显示关闭按钮 | 组件调用 |
+| `duration` | 自动关闭时长（ms），`0` 不自动关闭 | 组件调用 |
+<!-- demo-config-notes:end -->
 
 `duration` 单位为毫秒，`0` 表示常驻；`Message.loading(...)` 默认常驻。
 
@@ -42,52 +81,45 @@ KeepAlive 停用取消计时，激活从当前配置完整 duration 重启；停
 
 <demo src="./__demos__/time.vue"></demo>
 
-## 可关闭
-
-<demo src="./__demos__/closable.vue"></demo>
-
-## 更新已有提示
+### 更新已有提示
 
 同一挂载容器和位置内，相同 `id` 更新原实例，不创建重复 DOM。仅当 `resetOnUpdate` 为 `true` 时，更新会重新计算完整显示时长。
 
 <demo src="./__demos__/update.vue"></demo>
 
-## Loading 与多实例
-
-<demo src="./__demos__/loading.vue"></demo>
-
-<demo src="./__demos__/multiple.vue"></demo>
-
-## 悬停暂停
+### 悬停暂停
 
 `pauseOnHover` 会保存剩余时间，鼠标离开后从剩余时间继续，而不是重新开始完整时长。
 
 <demo src="./__demos__/pause-on-hover.vue"></demo>
 
-## 组件调用
+### 组件调用
 
 声明式组件适合由页面状态控制显示，并支持 `icon`、`action` 插槽和完整开关生命周期。
 
 <demo src="./__demos__/component.vue"></demo>
 
-## 视觉变体
+## 自定义与插槽
 
-视觉变体与 status 独立：neutral 是中性浮层与状态图标；tonal 是低强调状态色底与深色正文；solid 是高强调实色底与配套前景。Cedar 与 Maple 默认均为 neutral；显式 solid / tonal 保持相同视觉语义。default/loading 的 solid 保留深色底，loading 图标仍表达进度。两端导出 MessageVariant，函数调用、setDefaultOptions 和相同 id 更新都支持 variant。
+### 自定义图标
 
-<demo src="./__demos__/variant.vue"></demo>
+<demo src="./__demos__/custom-icon.vue"></demo>
 
-### 外观组合
+## 交互与控制
 
-适用于操作结果的即时反馈。调整变体、状态，用相同数据观察变化。内容保持一致，便于比较不同设置的实际效果。
+### 可关闭
 
-<demo src="./__demos__/appearance-lab.vue"></demo>
+<demo src="./__demos__/closable.vue"></demo>
 
-<!-- api-review:start -->
-### 功能调试
+### Loading 与多实例
 
-<demo src="./__demos__/api-review.vue"></demo>
+<demo src="./__demos__/loading.vue"></demo>
 
-<!-- api-review:end -->
+<demo src="./__demos__/multiple.vue"></demo>
+
+## 阅读方向
+
+继承最近的 `dir="ltr|rtl"`，支持运行时切换与局部覆盖。内容、图标与关闭按钮间距随阅读方向排列；方向切换不改变消息类型、计时或关闭语义。函数式调用遵循显式配置或文档方向。
 
 ## API
 
@@ -99,7 +131,7 @@ KeepAlive 停用取消计时，激活从当前配置完整 duration 重启；停
 | id                    | 队列内唯一标识，相同 id 更新原实例     | `string \| number`                                           | 自动生成        |
 | status                | 语义状态                               | `default \| info \| success \| warning \| danger \| loading` | `default`       |
 | variant | 视觉强调层级 | `neutral \| tonal \| solid` | `neutral` |
-| position              | 显示位置                               | `top \| center \| bottom`                                    | `top`           |
+| position              | 消息自身在可视区域中的 top/center/bottom 区域，默认 top；不相对触发元素定位 | `top \| center \| bottom`                                    | `top`           |
 | content               | 内容                                   | `MessageContent`                                             | -               |
 | icon                  | 自定义图标                             | `MessageContent`                                             | -               |
 | action                | 操作区内容                             | `MessageContent`                                             | -               |
@@ -255,3 +287,5 @@ KeepAlive 停用取消计时，激活从当前配置完整 duration 重启；停
 | `--c-message-transition-duration-icon` | `var(--c-transition-duration-4)` |
 | `--c-message-transition-timing-function` | `var( --c-transition-timing-function-linear )` |
 | `--c-message-transition-timing-function-icon` | `var( --c-transition-timing-function-overshoot )` |
+
+close/closed 通知回调抛错不会保留已关闭项目或空管理器宿主，资源清理独立于通知回调执行。

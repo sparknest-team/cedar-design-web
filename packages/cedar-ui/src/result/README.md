@@ -6,7 +6,7 @@ permalink: /components/result/
 
 用于反馈一系列操作任务的处理结果，当有重要操作需告知用户处理结果，且反馈内容较为复杂时使用。
 
-## 案例
+## 基础示例
 
 ### 基础用法
 
@@ -16,47 +16,63 @@ Next status 循环六种本地结果状态并更新标题/图形，Reset status 
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### 成功状态
+## 内容与展示
+
+### 成功、警告与失败
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `status` | 结果页显示的状态 | 成功、警告与失败、HTTP 结果状态对比、完整功能 |
+| `title` | 标题内容 | 成功、警告与失败、完整功能 |
+| `subtitle` | 子标题内容 | HTTP 结果状态对比 |
+<!-- demo-config-notes:end -->
+
+对比语义状态如何影响图形、标题和操作区；HTTP 状态与自定义图形另行展示。
+
+<details>
+<summary>配置说明与使用限制</summary>
+
+#### 成功状态
 
 展示成功状态。
 
-<demo src="./__demos__/success.vue"></demo>
-
-### 警告状态
+#### 警告状态
 
 展示警告状态。
 
-<demo src="./__demos__/warning.vue"></demo>
-
-### 错误状态
+#### 错误状态
 
 展示错误状态。
 
-<demo src="./__demos__/error.vue"></demo>
+</details>
 
-### HTTP状态码 403
+<demo src="./__demos__/status-comparison.vue"></demo>
+
+### HTTP 结果状态对比
+
+比较无权限、资源不存在和服务器错误的内容层级，按业务恢复路径选择操作文案。
+
+<details>
+<summary>配置说明与使用限制</summary>
+
+#### HTTP状态码 403
 
 没有当前页面的访问权限。
 
-<demo src="./__demos__/403.vue"></demo>
-
-### HTTP状态码 404
+#### HTTP状态码 404
 
 页面未找到
 
-<demo src="./__demos__/404.vue"></demo>
-
-### HTTP状态码 500
+#### HTTP状态码 500
 
 通常表示服务器错误
 
-<demo src="./__demos__/500.vue"></demo>
+</details>
 
-### 自定义状态
-
-自定义状态。需要传入指定的图标
-
-<demo src="./__demos__/custom.vue"></demo>
+<demo src="./__demos__/http-status-comparison.vue"></demo>
 
 ### 完整功能
 
@@ -64,12 +80,22 @@ Next status 循环六种本地结果状态并更新标题/图形，Reset status 
 
 <demo src="./__demos__/all.vue"></demo>
 
-<!-- api-review:start -->
-### 功能调试
+## 自定义与插槽
 
-<demo src="./__demos__/api-review.vue"></demo>
+### 自定义状态
 
-<!-- api-review:end -->
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `title` | 标题内容 | 自定义状态 |
+| `subtitle` | 子标题内容 | 自定义状态 |
+<!-- demo-config-notes:end -->
+
+自定义状态。需要传入指定的图标
+
+<demo src="./__demos__/custom.vue"></demo>
 
 ## API
 

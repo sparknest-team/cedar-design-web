@@ -18,11 +18,15 @@ const rangeShortcuts = [
 </script>
 <template>
   <div>
-    <c-select
-      v-model="position"
-      aria-label="独立面板快捷位置"
-      :options="positions"
-    />
+    <c-form-item layout="vertical" size="sm" label="独立面板快捷位置">
+      <c-radio-group
+        v-model="position"
+        aria-label="独立面板快捷位置"
+        :options="positions"
+        variant="button"
+        size="sm"
+      />
+    </c-form-item>
 
     <section
       v-for="type in types"

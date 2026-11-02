@@ -191,7 +191,6 @@ export const treeProps = {
     /**
      * @zh 是否默认展开已选中节点的父节点
      * @en Whether to expand the parent node of the selected node by default
-     * @version 2.9.0
      */
     defaultExpandSelected: {
       type: Boolean,
@@ -199,7 +198,6 @@ export const treeProps = {
     /**
      * @zh 是否默认展开已选中复选框节点的父节点
      * @en Whether to expand the parent node of the checked node by default
-     * @version 2.9.0
      */
     defaultExpandChecked: {
       type: Boolean,
@@ -207,7 +205,6 @@ export const treeProps = {
     /**
      * @zh 是否自动展开已展开节点的父节点
      * @en Whether to automatically expand the parent node of the expanded node
-     * @version 2.9.0
      */
     autoExpandParent: {
       type: Boolean,
@@ -216,7 +213,6 @@ export const treeProps = {
     /**
      * @zh 半选状态的节点.仅在 checkable 且 checkStrictly 时生效
      * @en The keys of half checked. Only valid when checkable and checkStrictly
-     * @version 2.19.0
      * @v-model
      */
     halfCheckedValues: {
@@ -225,7 +221,6 @@ export const treeProps = {
     /**
      * @zh 开启后 checkedValues 只处理叶子节点，父节点状态由子节点决定（仅在 checkable 且 checkStrictly 为 false 时生效）
      * @en When enabled, checkedValues is only for checked leaf nodes, and the status of the parent node is determined by the child node.(Only valid when checkable and checkStrictly is false)
-     * @version 2.21.0
      */
     onlyCheckLeaf: {
       type: Boolean,
@@ -234,7 +229,6 @@ export const treeProps = {
     /**
      * @zh 是否开启展开时的过渡动效
      * @en Whether to enable expand transition animation
-     * @version 2.21.0
      */
     animation: {
       type: Boolean,
@@ -243,7 +237,6 @@ export const treeProps = {
     /**
      * @zh 点击节点的时候触发的动作
      * @en The action triggered when the node is clicked
-     * @version 2.27.0
      */
     actionOnNodeClick: {
       type: String as PropType<'expand'>,

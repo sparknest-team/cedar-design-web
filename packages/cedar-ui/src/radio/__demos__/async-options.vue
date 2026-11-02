@@ -76,8 +76,8 @@ onUnmounted(cleanup);
 <template>
   <c-space class="radio-async-demo" direction="column">
     <p>业务值独立于当前选项，加载或移除选项不会清空已选值：{{ value }}</p>
-    <c-checkbox v-model="manual" @change="remove">
-      Manual responses / 手动返回</c-checkbox
+    <c-checkbox v-model="manual" edit-mode="direct" @change="remove"
+      >Manual responses / 手动返回</c-checkbox
     >
     <c-space wrap>
       <c-button size="sm" @click="load">加载选项</c-button>
@@ -101,7 +101,12 @@ onUnmounted(cleanup);
           : "加载完成后保留当前选值和键盘焦点。"
       }}
     </p>
-    <c-radio-group v-model="value" :options="options" @change="changeCount++" />
+    <c-radio-group
+      v-model="value"
+      edit-mode="direct"
+      :options="options"
+      @change="changeCount++"
+    />
     <p>用户变更次数：{{ changeCount }}</p>
     <p role="status">
       Applied: {{ applied }} · Ignored: {{ ignored }} · Pending:

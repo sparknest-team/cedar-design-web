@@ -8,11 +8,11 @@ const lastAction = ref("No search yet");
 <template>
   <div class="search-demo">
     <c-checkbox v-model="popup"
-      >Fullscreen history (uncheck for a menu)</c-checkbox
+      >popup fullscreen search (uncheck for inline)</c-checkbox
     >
     <c-search
       v-model="keyword"
-      :history-popup="popup"
+      :edit-mode="popup ? 'popup' : 'direct'"
       :recent-searches="history"
       label="Resource"
       placeholder="Enter resource name"

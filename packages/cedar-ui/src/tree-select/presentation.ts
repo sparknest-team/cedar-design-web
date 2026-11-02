@@ -1,8 +1,8 @@
-import { h } from "vue";
-import SelectionEditor from "../_components/selected-options/SelectionEditor.vue";
-import { optionValueText } from "../_components/field-presentation/option-labels";
-import { withFieldPresentation } from "../_components/field-presentation/with-field-presentation";
-import Base from "./TreeSelect.vue";
+import { h } from "vue"
+import SelectionEditor from "../_components/selected-options/SelectionEditor.vue"
+import { optionValueText } from "../_components/field-presentation/option-labels"
+import { withFieldPresentation } from "../_components/field-presentation/with-field-presentation"
+import Base from "./TreeSelect.vue"
 
 export default withFieldPresentation(Base, {
   editor: ({ props, attrs, value, update, emit, slots, disabled, readonly }) =>
@@ -13,7 +13,7 @@ export default withFieldPresentation(Base, {
           ...attrs,
           ...props,
           modelValue: value,
-          presentation: "inline",
+          editMode: "direct",
           disabled: disabled || readonly,
           "onUpdate:modelValue": update,
           onSearch: (query: string) => emit("search", query),

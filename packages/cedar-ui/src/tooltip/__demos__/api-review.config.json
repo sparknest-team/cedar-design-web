@@ -394,7 +394,7 @@
       "name": "placement",
       "kind": "prop",
       "demos": [
-        "mini.vue",
+        "appearance-lab.vue",
         "placement.vue"
       ]
     },

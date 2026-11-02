@@ -1,5 +1,7 @@
+import { fieldLoadingProps } from '../field-decorator/props'
 import type { ExtractPublicPropTypes, PropType } from 'vue'
 import { fieldPresentationProps } from '../_components/field-presentation/props'
+import { emptyValueProp } from '../_utils/empty-value'
 import { inputProps, type InputMaxLength, type InputVariant } from '../input/props'
 import { textareaDefaults } from './defaults'
 
@@ -11,7 +13,10 @@ export type TextareaMaxLength = InputMaxLength
 export type TextareaVariant = InputVariant
 export type { WordLength, WordSlice } from '../input/props'
 export const textareaProps = {
+  ...fieldLoadingProps,
   ...fieldPresentationProps,
+  emptyValue: emptyValueProp<string>(),
+  /** 清空动作产生的模型值；省略保留原默认值。 */
   /** 与 Input 保持一致的 modelValue 契约。 */
   modelValue: inputProps.modelValue,
   /** 与 Input 保持一致的 modelModifiers 契约。 */
@@ -61,7 +66,10 @@ export const textareaProps = {
   /** 允许垂直调整高度；autoSize 开启时忽略。 */
   resize: { type: Boolean, default: textareaDefaults.resize },
   /** 按内容调整高度，可限制最小/最大行数。 */
-  autoSize: { type: [Boolean, Object] as PropType<boolean | TextareaAutoSize>, default: false },
+  autoSize: {
+    type: [Boolean, Object] as PropType<boolean | TextareaAutoSize>,
+    default: false,
+  },
   /** 原生属性；受控值、状态和组件事件不可覆盖。 */
   textareaAttrs: Object as PropType<Record<string, unknown>>,
 }

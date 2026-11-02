@@ -1,20 +1,20 @@
-import { afterEach, describe, expect, test, vi } from 'vitest'
 import { h, nextTick, reactive, ref } from 'vue'
 import { mount } from '@vue/test-utils'
 import { Decimal } from 'decimal.js'
+import { afterEach, describe, expect, test, vi } from 'vitest'
 import InputNumber, { type InputNumberInstance } from '..'
 import InputGroup from '../../input/InputGroup.vue'
-import { formHost } from './form-host'
 import { roundNumber, stepNumber } from '../number-arithmetic'
+import { formHost } from './form-host'
 
 const wrappers: Array<ReturnType<typeof mount>> = []
 const render = (component: any = InputNumber, options: any = {}) => {
-  const wrapper = mount(component, options)
+  const wrapper = mount(component, { ...options, props: { editMode: 'direct', ...options.props } })
   wrappers.push(wrapper)
   return wrapper
 }
 afterEach(() => {
-  wrappers.splice(0).forEach(wrapper => wrapper.unmount())
+  wrappers.splice(0).forEach((wrapper) => wrapper.unmount())
   vi.useRealTimers()
 })
 describe('InputNumber field contract', () => {
@@ -32,11 +32,19 @@ describe('InputNumber field contract', () => {
   test('accepts controlled input echoes without losing commit changes', async () => {
     const value = ref<number | undefined>(1)
     const change = vi.fn()
-    const wrapper = render({ render: () => h(InputNumber, {
-      modelValue: value.value, modelEvent: 'input', clearable: true,
-      'onUpdate:modelValue': (next: number | undefined) => { value.value = next },
-      onChange: change,
-    }) })
+    const wrapper = render({
+      render: () =>
+        h(InputNumber, {
+          editMode: 'direct',
+          modelValue: value.value,
+          modelEvent: 'input',
+          clearable: true,
+          'onUpdate:modelValue': (next: number | undefined) => {
+            value.value = next
+          },
+          onChange: change,
+        }),
+    })
     const input = wrapper.get('input')
     await input.trigger('focus')
     await input.setValue('2')
@@ -65,13 +73,16 @@ describe('InputNumber field contract', () => {
 
   test('clear follows the same semantic event order and blur does not repeat', async () => {
     const order: string[] = []
-    const wrapper = render(InputNumber, { props: {
-      defaultValue: 3, clearable: true,
-      onInput: () => order.push('input'),
-      'onUpdate:modelValue': () => order.push('update'),
-      onChange: () => order.push('change'),
-      onClear: () => order.push('clear'),
-    } })
+    const wrapper = render(InputNumber, {
+      props: {
+        defaultValue: 3,
+        clearable: true,
+        onInput: () => order.push('input'),
+        'onUpdate:modelValue': () => order.push('update'),
+        onChange: () => order.push('change'),
+        onClear: () => order.push('clear'),
+      },
+    })
     await wrapper.get('[aria-label="清空"]').trigger('click')
     await wrapper.get('input').trigger('blur')
     expect(order).toEqual(['input', 'update', 'change', 'clear'])
@@ -110,10 +121,15 @@ describe('InputNumber field contract', () => {
   test('inherits form state and allows explicit false/size overrides', async () => {
     const state = reactive({ disabled: true, readonly: true, error: true, size: 'xl' })
     const override = ref(false)
-    const wrapper = render(formHost(state, {}, () => h(InputNumber, {
-      defaultValue: 1,
-      ...(override.value ? { disabled: false, readonly: false, error: false, size: 'xs' } : {}),
-    })))
+    const wrapper = render(
+      formHost(state, {}, () =>
+        h(InputNumber, {
+          editMode: 'direct',
+          defaultValue: 1,
+          ...(override.value ? { disabled: false, readonly: false, error: false, size: 'xs' } : {}),
+        }),
+      ),
+    )
     expect(wrapper.get('input').attributes('disabled')).toBeDefined()
     expect(wrapper.get('input').attributes('readonly')).toBeDefined()
     expect(wrapper.get('input').attributes('aria-invalid')).toBe('true')
@@ -130,7 +146,9 @@ describe('InputNumber field contract', () => {
   test('only the numeric field notifies FormItem, once per semantic event', async () => {
     const handlers = { onInput: vi.fn(), onChange: vi.fn(), onClear: vi.fn(), onFocus: vi.fn(), onBlur: vi.fn() }
     const state = reactive({ disabled: false, readonly: false, error: false, size: 'md' })
-    const wrapper = render(formHost(state, handlers, () => h(InputNumber, { defaultValue: 1, clearable: true })))
+    const wrapper = render(
+      formHost(state, handlers, () => h(InputNumber, { editMode: 'direct', defaultValue: 1, clearable: true })),
+    )
     const input = wrapper.get('input')
     await input.trigger('focus')
     await input.setValue('2')
@@ -147,28 +165,48 @@ describe('InputNumber field contract', () => {
   })
 
   test('InputGroup supplies variant, hint and size', () => {
-    const wrapper = render({ render: () => h(InputGroup, { variant: 'filled', hint: true, size: 'lg' }, {
-      default: () => h(InputNumber, { placeholder: 'Amount' }),
-    }) })
+    const wrapper = render({
+      render: () =>
+        h(
+          InputGroup,
+          { editMode: 'direct', variant: 'filled', hint: true, size: 'lg' },
+          {
+            default: () => h(InputNumber, { editMode: 'direct', placeholder: 'Amount' }),
+          },
+        ),
+    })
     expect(wrapper.find('[class*="field-decorator--variant-filled"]').exists()).toBe(true)
     expect(wrapper.find('[class*="field-decorator--size-lg"]').exists()).toBe(true)
     expect(wrapper.get('label').text()).toBe('Amount')
   })
 
-  test.each(['xs','sm','md','lg','xl'])('renders size %s with native attributes and public focus/select', async size => {
-    const wrapper = render(InputNumber, { props: { size, defaultValue: 2, inputAttrs: { id: 'amount', name: 'price', inputmode: 'numeric' } }, attrs: { 'aria-label': 'Price', class: 'custom-field' }, attachTo: document.body })
-    const input = wrapper.get('input')
-    expect(input.attributes()).toMatchObject({ id: 'amount', name: 'price', inputmode: 'numeric', 'aria-label': 'Price', role: 'spinbutton' })
-    expect(wrapper.classes()).toContain('custom-field')
-    expect(wrapper.find('[class*="field-decorator--size-' + size + '"]').exists()).toBe(true)
-    const instance = wrapper.vm as InputNumberInstance
-    instance.focus()
-    expect(document.activeElement).toBe(input.element)
-    instance.select()
-    expect(input.element.selectionStart).toBe(0)
-    instance.blur()
-    expect(document.activeElement).not.toBe(input.element)
-  })
+  test.each(['xs', 'sm', 'md', 'lg', 'xl'])(
+    'renders size %s with native attributes and public focus/select',
+    async (size) => {
+      const wrapper = render(InputNumber, {
+        props: { size, defaultValue: 2, inputAttrs: { id: 'amount', name: 'price', inputmode: 'numeric' } },
+        attrs: { 'aria-label': 'Price', class: 'custom-field' },
+        attachTo: document.body,
+      })
+      const input = wrapper.get('input')
+      expect(input.attributes()).toMatchObject({
+        id: 'amount',
+        name: 'price',
+        inputmode: 'numeric',
+        'aria-label': 'Price',
+        role: 'spinbutton',
+      })
+      expect(wrapper.classes()).toContain('custom-field')
+      expect(wrapper.find('[class*="field-decorator--size-' + size + '"]').exists()).toBe(true)
+      const instance = wrapper.vm as InputNumberInstance
+      instance.focus()
+      expect(document.activeElement).toBe(input.element)
+      instance.select()
+      expect(input.element.selectionStart).toBe(0)
+      instance.blur()
+      expect(document.activeElement).not.toBe(input.element)
+    },
+  )
 
   test('readonly blocks all mutations and hides step buttons', async () => {
     const wrapper = render(InputNumber, { props: { defaultValue: 2, readonly: true, clearable: true } })
@@ -201,6 +239,8 @@ describe('InputNumber field contract', () => {
       expect(stepNumber(0.1, 0.2, 'plus')).toBe(0.3)
       expect(roundNumber(-1.25, 1)).toBe(-1.3)
       expect(stepNumber(1e20, 1e5, 'plus')).toBe(100000000000000100000)
-    } finally { Decimal.set({ precision, rounding }) }
+    } finally {
+      Decimal.set({ precision, rounding })
+    }
   })
 })

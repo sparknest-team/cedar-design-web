@@ -62,7 +62,7 @@
     font-size: calc(var(--c-switch-font-size) * var(--c-switch-scale));
     padding-inline: calc((var(--c-switch-local-handle) + 2 * var(--c-switch-gap)) * var(--c-switch-scale)) calc(2 * var(--c-switch-gap) * var(--c-switch-scale));
   }
-  &--checked &__text { padding-inline: calc(2 * var(--c-switch-gap) * var(--c-switch-scale)) calc((var(--c-switch-local-handle) + 2 * var(--c-switch-gap)) * var(--c-switch-scale)); }
+  &--checked &__text { color: var(--c-switch-checked-text-color); padding-inline: calc(2 * var(--c-switch-gap) * var(--c-switch-scale)) calc((var(--c-switch-local-handle) + 2 * var(--c-switch-gap)) * var(--c-switch-scale)); }
   &__loading { width: 80%; height: 80%; color: var(--c-switch-loading-color, currentColor); animation: c-switch-spin var(--c-switch-loading-duration) linear infinite; }
   &__ripple { position: absolute; inset: 0; border-radius: inherit; background: currentColor; opacity: 0; animation: c-switch-ripple var(--c-switch-ripple-duration) ease-out; }
   &--variant-round, &--variant-round &__handle { border-radius: var(--c-switch-round-radius); }

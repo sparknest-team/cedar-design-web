@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { onActivated, onBeforeUnmount, onDeactivated, ref } from 'vue'
 
 interface ControlBlockParams {
   value: [number, number]
@@ -33,31 +33,44 @@ export const useControlBlock = ({ value, onChange }: ControlBlockParams) => {
     }
   }
 
+  let enabled = true
+  let generation = 0
+  let binding: { view: Window; move: (event: MouseEvent) => void; end: () => void } | undefined
   const removeListener = () => {
+    generation++
     active.value = false
-    window.removeEventListener('mousemove', onMouseMove)
-    window.removeEventListener('mouseup', removeListener)
-    window.removeEventListener('contextmenu', removeListener)
-  }
-
-  const onMouseDown = (ev: MouseEvent) => {
-    // 避免拖拽时选中文本 / 触发失焦
-    ev.preventDefault()
-    active.value = true
-    setCurrentPosition(ev)
-    window.addEventListener('mousemove', onMouseMove)
-    window.addEventListener('mouseup', removeListener)
-    window.addEventListener('contextmenu', removeListener)
-  }
-
-  function onMouseMove(ev: MouseEvent) {
-    ev.preventDefault()
-    if (ev.buttons > 0) {
-      setCurrentPosition(ev)
-    } else {
-      removeListener()
+    if (binding) {
+      binding.view.removeEventListener('mousemove', binding.move)
+      binding.view.removeEventListener('mouseup', binding.end)
+      binding.view.removeEventListener('contextmenu', binding.end)
+      binding = undefined
     }
   }
+  const onMouseDown = (ev: MouseEvent) => {
+    const view = blockRef.value?.ownerDocument.defaultView
+    if (!enabled || !view || ev.button !== 0) return
+    ev.preventDefault()
+    removeListener()
+    const cycle = generation
+    active.value = true
+    setCurrentPosition(ev)
+    if (!enabled || !active.value || cycle !== generation) return
+    const end = () => { if (cycle === generation) removeListener() }
+    const move = (event: MouseEvent) => {
+      if (!enabled || !active.value || cycle !== generation) return
+      event.preventDefault()
+      if (event.buttons > 0) setCurrentPosition(event)
+      else end()
+    }
+    binding = { view, move, end }
+    view.addEventListener('mousemove', move)
+    view.addEventListener('mouseup', end)
+    view.addEventListener('contextmenu', end)
+  }
+  const stop = () => { enabled = false; removeListener() }
+  onActivated(() => { enabled = true })
+  onDeactivated(stop)
+  onBeforeUnmount(stop)
 
   return {
     active,

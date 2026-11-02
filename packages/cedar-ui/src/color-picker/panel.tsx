@@ -36,6 +36,7 @@ export default defineComponent({
     onHsvChange: Function as PropType<(hsv: HSV) => void>,
   },
   setup(props) {
+
     const { t } = useI18n()
     const prefixCls = getPrefixCls('color-picker')
     const hsv = computed(() => props.color.hsv)
@@ -161,7 +162,8 @@ export default defineComponent({
           </div>
         </div>
         {renderColorSec()}
-      </div>
+
+</div>
     )
   },
 })

@@ -23,10 +23,10 @@ void [card, progress, switches, rate, affix, badge, message, trigger, form, pagi
 
 // Switch and Progress use the same public types on both platforms.
 const fractionalProgress: ProgressProps = { percent: '12.5' }
-const tonalSwitch: SwitchProps = { variant: 'tonal', readonly: true, beforeChange: async next => next !== 'blocked' }
+const tonalSwitch: SwitchProps = { variant: 'tonal', readonly: true, beforeChange: async ({ value }) => value !== 'blocked' }
 // @ts-expect-error Removed Maple alias; use line.
 const oldVariant: SwitchProps = { variant: 'standard' }
-// @ts-expect-error Interceptors no longer receive a done callback.
+// @ts-expect-error The callback completes with a boolean, not a payload object.
 const oldInterceptor: SwitchProps = { beforeChange: (value, done) => done(value) }
 // @ts-expect-error Shadow levels are numbers, not numeric strings.
 const oldElevation: SwitchProps = { handleElevation: '4' }

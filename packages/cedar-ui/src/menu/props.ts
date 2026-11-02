@@ -2,7 +2,7 @@ import type { PropType } from 'vue'
 import { menuDefaults } from './appearance'
 import { triggerProps as triggerPropDefaults } from '../trigger'
 import { componentSizes, type ComponentSize } from '../_utils/constant'
-import type { MenuPosition, MenuReference, MenuSubmenuTrigger } from './types'
+import type { MenuPlacement, MenuReference, MenuSubmenuTrigger } from './types'
 import type { MenuFieldNames } from './selection'
 import type { MenuOptionData, MenuValue } from './types'
 export type { MenuOptionData, MenuOptionLabel, MenuOptionLabelRender } from './types'
@@ -19,7 +19,8 @@ export const menuProps = {
   unmountOnClose: { type: Boolean, default: menuDefaults.unmountOnClose },
   trigger: { type: [String, Array] as PropType<'click' | 'hover' | 'focus' | 'contextMenu' | ('click' | 'hover' | 'focus' | 'contextMenu')[]>, default: 'click' },
   submenuTrigger: { type: String as PropType<MenuSubmenuTrigger>, default: menuDefaults.submenuTrigger, validator: (value: unknown) => value === 'click' || value === 'hover' },
-  placement: { type: String as PropType<MenuPosition>, default: 'bottom' },
+  /** 浮层相对触发元素的首选方位，默认 bottom；启用默认的 auto-fit-position 时，空间不足会自动翻转并约束到可视区域，不保证最终停在该侧 */
+  placement: { type: String as PropType<MenuPlacement>, default: 'bottom' },
   reference: { type: [String, Object] as PropType<MenuReference>, default: undefined },
   /** 定位策略，所有层级子菜单响应式继承。 */
   strategy: triggerPropDefaults.strategy,

@@ -95,3 +95,7 @@ src/<component>/
 - 跑单组件：`yarn vitest run src/<component>`。
 
 更多细节见 [docs/practices/component-spec.md](docs/practices/component-spec.md)。
+
+## 浏览器兼容性
+
+构建后执行 `pnpm check:compatibility`，运行三引擎完整生产回归。原生版本和移动真机发布验收见 `design-ui/standards/browser-compatibility.md`（同级仓库）。使用 `pnpm compatibility:native:init` 创建待验收报告，`pnpm check:compatibility:release` 核对最终发布产物与原生证据。模拟手机不等于真机通过。

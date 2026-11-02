@@ -122,8 +122,7 @@ test("cancel does not commit and permissions reject copy commands", async () => 
     for (const props of [
       { readonly: true },
       { readonly: false, disabled: true },
-      { disabled: false, loading: true },
-      { loading: false, modelValue: [{ ...event, readonly: true }] },
+      { disabled: false, modelValue: [{ ...event, readonly: true }] },
     ]) {
       await w.setProps(props);
       expect(w.vm.duplicateEvent("a")).toBe(false);

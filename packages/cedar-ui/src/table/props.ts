@@ -9,10 +9,10 @@ import type {
   TableExpandable,
   TableOperationColumn,
   TablePagePosition,
+  TablePaginationConfig,
   TableRowSelection,
 } from "./types";
 import type { TableExtraColumnConfig } from "./extra-column";
-import type { PaginationProps } from "../pagination";
 import type { ScrollbarProps } from "../scrollbar";
 import type { VirtualListProps } from "../_components/virtual-list-v2/interface";
 import type { BaseType } from "../_utils/types";
@@ -125,7 +125,7 @@ export const tableProps = {
      * @en Pagination properties configuration
      */
     pagination: {
-      type: [Boolean, Object] as PropType<boolean | PaginationProps>,
+      type: [Boolean, Object] as PropType<boolean | TablePaginationConfig>,
       default: true,
     },
     /**
@@ -172,7 +172,6 @@ export const tableProps = {
     /**
      * @zh 单元格合并方法（索引从数据项开始计数）
      * @en Cell merge method (The index starts counting from the data item)
-     * @version 2.10.0
      */
     spanMethod: {
       type: Function as PropType<
@@ -187,7 +186,6 @@ export const tableProps = {
     /**
      * @zh 是否让合并方法的索引包含所有
      * @en Whether to make the index of the span method contain all
-     * @version 2.18.0
      */
     spanAll: {
       type: Boolean,
@@ -199,7 +197,6 @@ export const tableProps = {
     /**
      * @zh 数据懒加载函数，传入时开启懒加载功能
      * @en Data lazy loading function, open the lazy loading function when it is passed in
-     * @version 2.13.0
      */
     loadMore: {
       type: Function as PropType<
@@ -209,7 +206,6 @@ export const tableProps = {
     /**
      * @zh 筛选图标是否左对齐
      * @en Whether the filter icon is aligned to the left
-     * @version 2.13.0
      */
     filterIconAlignLeft: {
       type: Boolean,
@@ -218,7 +214,6 @@ export const tableProps = {
     /**
      * @zh 是否在子树为空时隐藏展开按钮
      * @en Whether to hide expand button when subtree is empty
-     * @version 2.14.0
      */
     hideExpandButtonOnEmpty: {
       type: Boolean,
@@ -227,7 +222,6 @@ export const tableProps = {
     /**
      * @zh 表格行元素的类名。`2.34.0` 版本增加函数值支持
      * @en The class name of the table row element. The `2.34.0` version adds support for function values.
-     * @version 2.16.0
      */
     rowClass: {
       type: [String, Array, Object, Function] as PropType<
@@ -240,7 +234,6 @@ export const tableProps = {
     /**
      * @zh 表格拖拽排序的配置
      * @en Table drag and drop sorting configuration
-     * @version 2.16.0
      */
     draggable: {
       type: Object as PropType<TableDraggable>,
@@ -251,7 +244,6 @@ export const tableProps = {
     /**
      * @zh 是否允许调整列宽
      * @en Whether to allow the column width to be adjusted
-     * @version 2.16.0
      */
     columnResizable: {
       type: Boolean,
@@ -259,7 +251,6 @@ export const tableProps = {
     /**
      * @zh 显示表尾总结行
      * @en Show footer summary row
-     * @version 2.21.0
      */
     summary: {
       type: [Boolean, Function] as PropType<
@@ -273,7 +264,6 @@ export const tableProps = {
     /**
      * @zh 总结行的首列文字
      * @en The first column of text in the summary line
-     * @version 2.21.0
      */
     summaryText: {
       type: String,
@@ -282,7 +272,6 @@ export const tableProps = {
     /**
      * @zh 总结行的单元格合并方法
      * @en Cell Merge Method for Summarizing Rows
-     * @version 2.21.0
      */
     summarySpanMethod: {
       type: Function as PropType<
@@ -297,7 +286,6 @@ export const tableProps = {
     /**
      * @zh 已选择的行（受控模式）优先于 `rowSelection`
      * @en Selected row (controlled mode) takes precedence over `rowSelection`
-     * @version 2.25.0
      */
     selectedKeys: {
       type: Array as PropType<(string | number)[]>,
@@ -305,7 +293,6 @@ export const tableProps = {
     /**
      * @zh 默认已选择的行（非受控模式）优先于 `rowSelection`
      * @en The selected row by default (uncontrolled mode) takes precedence over `rowSelection`
-     * @version 2.25.0
      */
     defaultSelectedKeys: {
       type: Array as PropType<(string | number)[]>,
@@ -313,7 +300,6 @@ export const tableProps = {
     /**
      * @zh 显示的展开行、子树（受控模式）优先于 `expandable`
      * @en Displayed Expanded Row, Subtree (Controlled Mode) takes precedence over `expandable`
-     * @version 2.25.0
      */
     expandedKeys: {
       type: Array as PropType<(string | number)[]>,
@@ -321,7 +307,6 @@ export const tableProps = {
     /**
      * @zh 默认显示的展开行、子树（非受控模式）优先于 `expandable`
      * @en Expand row, Subtree displayed by default (Uncontrolled mode) takes precedence over `expandable`
-     * @version 2.25.0
      */
     defaultExpandedKeys: {
       type: Array as PropType<(string | number)[]>,
@@ -329,7 +314,6 @@ export const tableProps = {
     /**
      * @zh 是否默认展开所有的行
      * @en Whether to expand all rows by default
-     * @version 2.25.0
      */
     defaultExpandAllRows: {
       type: Boolean,
@@ -338,7 +322,6 @@ export const tableProps = {
     /**
      * @zh 是否开启表头吸顶。相对**页面/外层滚动容器**吸顶，不是表格内部滚动。数字为距离滚动容器顶部的偏移（px）
      * @en Sticky header relative to the page/outer scroll container (not table body scroll). Number is top offset in px
-     * @version 2.30.0
      */
     stickyHeader: {
       type: [Boolean, Number],
@@ -355,7 +338,6 @@ export const tableProps = {
     /**
      * @zh 是否开启虚拟滚动条
      * @en Whether to enable virtual scroll bar
-     * @version 2.38.0
      */
     scrollbar: {
       type: [Object, Boolean] as PropType<boolean | ScrollbarProps>,
@@ -364,7 +346,6 @@ export const tableProps = {
     /**
      * @zh 是否展示空子树
      * @en Whether to display empty subtrees
-     * @version 2.51.0
      */
     showEmptyTree: {
       type: Boolean,

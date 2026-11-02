@@ -1,30 +1,36 @@
-import type { PropType } from 'vue'
-import { fieldPresentationProps } from '../_components/field-presentation/props'
-import type { SelectOptionData, SelectOptionGroup } from '../select/types'
+import { fieldLoadingProps } from '../field-decorator/props'
+import type { OptionsLoader } from '../_hooks/use-option-request'
+import { emptyValueProp } from "../_utils/empty-value";
+import type { PropType } from "vue";
+import { fieldPresentationProps } from "../_components/field-presentation/props";
+import type { SelectOptionData, SelectOptionGroup } from "../select/types";
 
 export const mentionProps = {
+  readonly: { type: Boolean, default: undefined },
   ...fieldPresentationProps,
+  loading: fieldLoadingProps.loading,
+  emptyValue: emptyValueProp<string>(),
   /**
    * @zh 绑定值
    * @en Value
    * @v-model
    */
-  modelValue: String,
+  modelValue: String as PropType<string | null>,
   /**
    * @zh 默认值（非受控状态）
    * @en Default value (uncontrolled state)
    */
   defaultValue: {
     type: String,
-    default: '',
+    default: "",
   },
   /**
    * @zh 用于自动补全的数据
    * @en Data for automatic completion
    */
   data: {
-    type: Array as PropType<(string | number | SelectOptionData | SelectOptionGroup)[]>,
-    default: () => [],
+    type: [Array, Function] as PropType<readonly (string | number | SelectOptionData | SelectOptionGroup)[] | OptionsLoader<string | number | SelectOptionData | SelectOptionGroup>>,
+    default: undefined,
   },
   /**
    * @zh 触发自动补全的关键字
@@ -32,7 +38,7 @@ export const mentionProps = {
    */
   prefix: {
     type: [String, Array] as PropType<string | string[]>,
-    default: '@',
+    default: "@",
   },
   /**
    * @zh 选中项的前后分隔符
@@ -40,15 +46,15 @@ export const mentionProps = {
    */
   split: {
     type: String,
-    default: ' ',
+    default: " ",
   },
   /**
    * @zh 输入框或文本域
    * @en default input or textarea
    */
   type: {
-    type: String as PropType<'input' | 'textarea'>,
-    default: 'input',
+    type: String as PropType<"input" | "textarea">,
+    default: "input",
   },
   /**
    * @zh 是否禁用
@@ -61,10 +67,9 @@ export const mentionProps = {
   /**
    * @zh 是否允许清空输入框
    * @en Whether to allow the input to be cleared
-   * @version 2.23.0
    */
   clearable: {
     type: Boolean,
     default: false,
   },
-}
+};

@@ -11,7 +11,7 @@ const loading = ref(false);
       <c-checkbox v-model="vertical">Vertical group</c-checkbox>
       <c-checkbox v-model="loading">Load first action</c-checkbox>
     </c-space>
-    <c-button-group status="primary" :stacked="stacked" :vertical="vertical">
+    <c-button-group aria-label="Save or cancel" status="primary" :stacked="stacked" :vertical="vertical">
       <c-button :loading="loading"
         ><template #icon><c-icon-check /></template>Save</c-button
       >

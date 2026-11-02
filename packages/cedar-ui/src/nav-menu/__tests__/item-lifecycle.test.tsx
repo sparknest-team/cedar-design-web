@@ -66,7 +66,8 @@ describe('NavMenu.Item consumer lifetime', () => {
     expect(fixture.geometry).not.toHaveBeenCalled()
   })
   test('geometry getter disposal cannot register new window listeners', async () => {
-    const fixture = await create(false)
+    const fixture = await create()
+    fixture.open.value = false; await actualVue.nextTick()
     fixture.geometry.mockImplementation(() => { fixture.wrapper.unmount(); return { bottom: 40, left: 10, right: 70 } as DOMRect })
     fixture.add.mockClear()
     fixture.open.value = true; await actualVue.nextTick()

@@ -63,28 +63,26 @@ import {
 import __apiReviewRawConfig from "./api-review-c-dialog-3.config.json";
 
 import { ref } from "vue";
-import type { DialogAction, DialogBeforeCloseRefs } from "../types";
+import type { DialogAction } from "../types";
 
 const asyncOpen = ref(false);
 const loadingOpen = ref(false);
 
-function beforeClose(_action: DialogAction, done: () => void) {
+function beforeClose({ action: _action }: { action: DialogAction }, done: () => void) {
   window.setTimeout(done, 1000);
 }
 
 function buttonLoadingClose(
-  action: DialogAction,
+  { action }: { action: DialogAction },
   done: () => void,
-  refs: DialogBeforeCloseRefs,
+
 ) {
   if (action !== "confirm") {
     done();
     return;
   }
 
-  refs.confirmButtonLoading.value = true;
   window.setTimeout(() => {
-    refs.confirmButtonLoading.value = false;
     done();
   }, 1000);
 }

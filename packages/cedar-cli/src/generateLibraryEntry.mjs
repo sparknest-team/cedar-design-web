@@ -239,7 +239,7 @@ export type {
   ComponentSize,
   SemanticStatus,
   MessageType,
-  Direction,
+  Orientation,
 } from './_utils/constant'
 ${indexExports.join('\n')}
 `

@@ -9,21 +9,23 @@ const __demoLayout = __demoReactive({
 </script>
 <template>
   <c-space direction="column" :size="16">
-    <c-space wrap>
-      <label
-        >direction<c-select
+    <c-form layout="vertical">
+      <c-form-item layout="vertical" size="sm" label="direction">
+        <c-radio-group
           v-model="__demoLayout['direction']"
-          :clearable="false"
+          aria-label="direction"
           :options="[
             { label: 'row', value: 'row' },
             { label: 'column', value: 'column' },
           ]"
-          aria-label="direction"
-      /></label>
-      <label
-        >align<c-select
+          variant="button"
+          size="sm"
+        />
+      </c-form-item>
+      <c-form-item layout="vertical" size="sm" label="align">
+        <c-radio-group
           v-model="__demoLayout['align']"
-          :clearable="false"
+          aria-label="align"
           :options="[
             { label: 'flex-start', value: 'flex-start' },
             { label: 'flex-end', value: 'flex-end' },
@@ -31,10 +33,12 @@ const __demoLayout = __demoReactive({
             { label: 'baseline', value: 'baseline' },
             { label: 'stretch', value: 'stretch' },
           ]"
-          aria-label="align"
-      /></label>
-      <label
-        >justify<c-select
+          variant="button"
+          size="sm"
+        />
+      </c-form-item>
+      <c-form-item layout="vertical" size="sm" label="justify">
+        <c-select
           v-model="__demoLayout['justify']"
           :clearable="false"
           :options="[
@@ -46,8 +50,9 @@ const __demoLayout = __demoReactive({
             { label: 'space-evenly', value: 'space-evenly' },
           ]"
           aria-label="justify"
-      /></label>
-    </c-space>
+        />
+      </c-form-item>
+    </c-form>
     <c-space v-bind="__demoLayout">
       <div>Space:</div>
       <c-tag v-if="false">Tag</c-tag>

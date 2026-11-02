@@ -2,7 +2,7 @@ import { flushPromises, mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import Cascader from '../../../cascader'
 import Select from '../../../select'
-import type { FieldPresentation } from '../../field-presentation/context'
+import type { FieldEditMode } from '../../field-presentation/context'
 import { mobile } from '../platform'
 
 const p = mobile ? 'mp' : 'c'
@@ -20,12 +20,12 @@ const global = {
     teleport: true,
   },
 }
-for (const presentation of [mobile ? 'popup' : 'click', 'click'] as FieldPresentation[]) {
-  describe(`selection editor ${presentation}`, () => {
+for (const editMode of [mobile ? 'popup' : 'click', 'click'] as FieldEditMode[]) {
+  describe(`selection editor ${editMode}`, () => {
     it('uses a full list without inline checkboxes and commits the draft only on confirmation', async () => {
       const wrapper = mount(Select, {
         props: {
-          presentation,
+          editMode,
           defaultOpen: true,
           multiple: true,
           modelValue: [1],
@@ -60,7 +60,7 @@ for (const presentation of [mobile ? 'popup' : 'click', 'click'] as FieldPresent
           children: [{ value: 'zhejiang', label: '浙江', children: [{ value: 'ningbo', label: '宁波' }] }],
         },
       ]
-      const wrapper = mount(Cascader, { props: { presentation, options }, global })
+      const wrapper = mount(Cascader, { props: { editMode, options }, global })
       try {
         await wrapper.get('[aria-haspopup=dialog]').trigger('click')
         await flushPromises()
@@ -87,3 +87,50 @@ for (const presentation of [mobile ? 'popup' : 'click', 'click'] as FieldPresent
     })
   })
 }
+
+describe('inline selection menus', () => {
+  for (const [name, component, options, value] of [
+    [
+      'Select',
+      Select,
+      [
+        { value: 'a', label: 'Alpha' },
+        { value: 'b', label: 'Beta' },
+      ],
+      ['a'],
+    ],
+    [
+      'Cascader',
+      Cascader,
+      [
+        { value: 'a', label: 'Alpha' },
+        { value: 'b', label: 'Beta' },
+      ],
+      ['a'],
+    ],
+  ] as const) {
+    it(`${name} keeps selected values in the field and omits the duplicate summary/clear`, async () => {
+      const wrapper = mount(component as any, {
+        props: {
+          editMode: 'direct',
+          multiple: true,
+          defaultOpen: true,
+          clearable: true,
+          options,
+          modelValue: value,
+        },
+        global,
+      })
+      try {
+        await flushPromises()
+        expect(wrapper.find(`.${p}-selected-options__summary`).exists()).toBe(false)
+        expect(wrapper.find(`.${p}-selected-options__tags`).exists()).toBe(false)
+        expect(wrapper.find(`.${p}-selected-options__details`).exists()).toBe(false)
+        expect(wrapper.get(`.${p}-selection-field`).text()).toContain('Alpha')
+        expect(wrapper.find('[role=option], [role=menuitem]').exists()).toBe(true)
+      } finally {
+        wrapper.unmount()
+      }
+    })
+  }
+})

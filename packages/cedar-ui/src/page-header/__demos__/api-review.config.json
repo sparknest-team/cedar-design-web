@@ -38,9 +38,8 @@
       "kind": "slot",
       "demos": [
         "basic.vue",
-        "breadcrumb.vue",
-        "content.vue",
-        "transparent.vue"
+        "surface-comparison.vue",
+        "content.vue"
       ]
     },
     {
@@ -48,9 +47,8 @@
       "kind": "slot",
       "demos": [
         "basic.vue",
-        "breadcrumb.vue",
-        "content.vue",
-        "transparent.vue"
+        "surface-comparison.vue",
+        "content.vue"
       ]
     },
     {
@@ -65,9 +63,8 @@
       "kind": "slot",
       "demos": [
         "basic.vue",
-        "breadcrumb.vue",
-        "content.vue",
-        "transparent.vue"
+        "surface-comparison.vue",
+        "content.vue"
       ]
     },
     {
@@ -75,9 +72,8 @@
       "kind": "slot",
       "demos": [
         "basic.vue",
-        "breadcrumb.vue",
-        "content.vue",
-        "transparent.vue"
+        "surface-comparison.vue",
+        "content.vue"
       ]
     },
     {
@@ -85,9 +81,8 @@
       "kind": "slot",
       "demos": [
         "basic.vue",
-        "breadcrumb.vue",
-        "content.vue",
-        "transparent.vue"
+        "surface-comparison.vue",
+        "content.vue"
       ]
     },
     {
@@ -95,8 +90,7 @@
       "kind": "slot",
       "demos": [
         "basic.vue",
-        "breadcrumb.vue",
-        "transparent.vue"
+        "surface-comparison.vue"
       ]
     },
     {

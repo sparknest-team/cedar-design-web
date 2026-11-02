@@ -6,42 +6,70 @@ permalink: /components/descriptions/
 
 一般用于详情页的信息展示。
 
-## 基础用法
+## 基础示例
+
+### 基础用法
 
 简单地成组展示多个只读字段，一般用于详情页的信息。
 
 <demo src="./__demos__/basic.vue"></demo>
 
-## 常用案例
+## 布局与排列
 
-单列的描述列表样式。
+### 标签文本对齐
 
-<demo src="./__demos__/singel-column-style.vue"></demo>
+<!-- demo-config-notes:start -->
+#### 本组配置对照
 
-## 标签文本对齐
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `data` | 描述列表的数据 | 标签文本对齐、布局模式 |
+| `title` | 描述列表的标题 | 标签文本对齐、布局模式 |
+| `layout` | 描述列表的排列方式 | 标签文本对齐、布局模式 |
+| `align` | 文字的对齐位置 | 标签文本对齐 |
+| `size` | 描述列表的大小 | 布局模式 |
+| `bordered` | 是否显示边框 | 布局模式 |
+<!-- demo-config-notes:end -->
 
 标签文本可以设置左对齐右对齐，也可以设置垂直的排列方式。
 
 <demo src="./__demos__/label-text-alignment.vue"></demo>
 
-## 带边框样式
-
-带边框和背景颜色的列表。
-
-<demo src="./__demos__/border-background-list.vue"></demo>
-
-## 布局模式
+### 布局模式
 
 有水平排列、垂直排列、行内水平排列、行内垂直、行内自适应分隔排列五种布局模式。
 
 <demo src="./__demos__/layout-pattern.vue"></demo>
 
-<!-- api-review:start -->
-### 功能调试
+## 内容与展示
 
-<demo src="./__demos__/api-review.vue"></demo>
+### 常用案例
 
-<!-- api-review:end -->
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `data` | 描述列表的数据 | 常用案例、带边框样式 |
+| `title` | 描述列表的标题 | 常用案例、带边框样式 |
+| `column` | 每行放置的数据个数。2.20.0 版本支持响应式配置，配置可参考 Grid | 常用案例 |
+| `size` | 描述列表的大小 | 常用案例 |
+| `bordered` | 是否显示边框 | 带边框样式 |
+<!-- demo-config-notes:end -->
+
+单列的描述列表样式。
+
+<demo src="./__demos__/singel-column-style.vue"></demo>
+
+### 带边框样式
+
+带边框和背景颜色的列表。
+
+<demo src="./__demos__/border-background-list.vue"></demo>
+
+## 阅读方向
+
+继承最近的 `dir="ltr|rtl"`，支持运行时切换与局部覆盖。标签和值按阅读顺序排列，边界和默认文本对齐使用逻辑起止位置；切换方向不反转记录、列定义或 span 的含义。
 
 ## API
 

@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import { describe, test, expect, vi, beforeEach } from "vitest";
+import { describe, test, expect, vi, beforeEach, afterAll } from "vitest";
 import { nextTick } from "vue";
 import Table from "../table";
 
@@ -14,7 +14,16 @@ vi.mock("resize-observer-polyfill", () => ({
     disconnect() {}
   },
 }));
+const originalCallbacks = Object.getOwnPropertyDescriptor(globalThis, "__roCallbacks");
+const originalClientWidth = Object.getOwnPropertyDescriptor(HTMLElement.prototype, "clientWidth");
 (globalThis as any).__roCallbacks = [];
+
+afterAll(() => {
+  if (originalCallbacks) Object.defineProperty(globalThis, "__roCallbacks", originalCallbacks);
+  else Reflect.deleteProperty(globalThis, "__roCallbacks");
+  if (originalClientWidth) Object.defineProperty(HTMLElement.prototype, "clientWidth", originalClientWidth);
+  else Reflect.deleteProperty(HTMLElement.prototype, "clientWidth");
+});
 
 // jsdom 的 clientWidth 恒为 0，mock 成可调容器宽
 let containerWidth = 1000;
@@ -60,6 +69,7 @@ describe("table dynamic width (对齐 element：根节点 100%，表格宽度按
     });
     await nextTick();
     fireResize();
+    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
     await nextTick();
 
     const tableEl = wrapper.find("table.c-table-element");
@@ -70,6 +80,7 @@ describe("table dynamic width (对齐 element：根节点 100%，表格宽度按
     // 父容器缩小到 600 → 动态重算
     containerWidth = 600;
     fireResize();
+    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
     await nextTick();
     expect(wrapper.find("table.c-table-element").attributes("style")).toContain(
       "width: 600px",
@@ -78,6 +89,7 @@ describe("table dynamic width (对齐 element：根节点 100%，表格宽度按
     // 父容器小于最小列宽之和 → 保持最小宽并开启横向滚动
     containerWidth = 150;
     fireResize();
+    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
     await nextTick();
     expect(wrapper.find("table.c-table-element").attributes("style")).toContain(
       "width: 200px",
@@ -120,6 +132,7 @@ describe("table dynamic width (对齐 element：根节点 100%，表格宽度按
     });
     await nextTick();
     fireResize();
+    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
     await nextTick();
     // 120/200/120 按比例分剩余 1000-468=532 → 265/441/266，extra 钉死 28
     expect(exact.find("table.c-table-element").attributes("style")).toContain(
@@ -156,6 +169,7 @@ describe("table dynamic width (对齐 element：根节点 100%，表格宽度按
     });
     await nextTick();
     fireResize();
+    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
     await nextTick();
     expect(flex.find("table.c-table-element").attributes("style")).toContain(
       "width: 1000px",
@@ -190,6 +204,7 @@ describe("table dynamic width (对齐 element：根节点 100%，表格宽度按
     });
     await nextTick();
     fireResize();
+    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
     await nextTick();
 
     // 120/200/120 按比例分剩余 1000-468=532 → 265/441/266，extra 钉死 28，
@@ -205,6 +220,7 @@ describe("table dynamic width (对齐 element：根节点 100%，表格宽度按
     // 容器小于列宽之和 → 不压缩，保持列宽之和并开启横向滚动
     containerWidth = 400;
     fireResize();
+    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
     await nextTick();
     expect(wrapper.find("table.c-table-element").attributes("style")).toContain(
       "width: 468px",

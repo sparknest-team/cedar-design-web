@@ -2,7 +2,7 @@ import { AppContext, CSSProperties, RenderFunction } from 'vue'
 import { ClassName, RenderContent } from '../_utils/types'
 import { MessageType } from '../_utils/constant'
 
-export const NOTIFICATION_POSITION = ['topLeft', 'topRight', 'bottomLeft', 'bottomRight'] as const
+export const NOTIFICATION_POSITION = ['top-left', 'top-right', 'bottom-left', 'bottom-right'] as const
 
 export type NotificationPosition = (typeof NOTIFICATION_POSITION)[number]
 
@@ -73,7 +73,7 @@ export interface NotificationConfig {
   /**
    * @zh 位置
    * @en Position
-   * @type 'topLeft'|'topRight'|'bottomLeft'|'bottomRight'
+   * @type 'top-left'|'top-right'|'bottom-left'|'bottom-right'
    */
   position?: NotificationPosition
   /**
@@ -97,7 +97,6 @@ export interface NotificationConfig {
   /**
    * @zh 底部内容
    * @en Footer Content
-   * @version 2.25.0
    */
   footer?: RenderFunction
   /**

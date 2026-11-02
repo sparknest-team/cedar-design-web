@@ -77,8 +77,8 @@ onUnmounted(cleanup);
 <template>
   <c-space class="checkbox-async-demo" direction="column">
     <p>业务值独立于当前选项，加载或移除选项不会清空已选值：{{ value }}</p>
-    <c-checkbox v-model="manual" @change="remove">
-      Manual responses / 手动返回</c-checkbox
+    <c-checkbox v-model="manual" edit-mode="direct" @change="remove"
+      >Manual responses / 手动返回</c-checkbox
     >
     <c-space wrap>
       <c-button size="sm" @click="load">加载选项</c-button>
@@ -102,6 +102,7 @@ onUnmounted(cleanup);
     </p>
     <c-checkbox-group
       v-model="value"
+      edit-mode="direct"
       :options="options"
       :max="2"
       @change="changeCount++"

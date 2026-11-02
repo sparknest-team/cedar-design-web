@@ -95,6 +95,7 @@ import Overlay from '../overlay'
 import { createNamespace } from '../_utils/global-config'
 import { usePopupContainer } from '../_utils/popup-container'
 import type { ImagePreviewActionName } from './api'
+import { useDirection } from '../_utils/direction'
 import { usePreviewController } from './composables/usePreviewController'
 import {
   IconDownload,
@@ -134,7 +135,10 @@ export default defineComponent({
   ],
   setup(props, { emit }) {
     const refs = toRefs(props)
+    const refWrapper = ref<HTMLElement>()
+    const { isRtl } = useDirection(() => refWrapper.value)
     const controller = usePreviewController({
+      isRtl,
       open: refs.open,
       defaultOpen: props.defaultOpen,
       src: refs.src,
@@ -151,13 +155,11 @@ export default defineComponent({
       onOpenChange: (open) => {
         emit('update:open', open)
         emit('open-change', open)
-        props.onOpenChange?.(open)
       },
       onLongPress: () => emit('long-press'),
       onPrev: () => emit('prev'),
       onNext: () => emit('next'),
     })
-    const refWrapper = ref<HTMLElement>()
     const isPreviewLoading = ref(Boolean(props.src))
     function handlePreviewSettled(event: Event) {
       const image = event.target as HTMLImageElement

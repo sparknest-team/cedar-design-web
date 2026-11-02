@@ -4,6 +4,7 @@
 
 <script setup lang="ts">
 import { computed, h, inject, nextTick, ref, useSlots } from 'vue'
+import { useDirection } from '../_utils/direction'
 import { createNamespace } from '../_utils/global-config'
 import MenuView from './view'
 import type { TriggerInstance } from '../trigger'
@@ -22,6 +23,7 @@ const props = defineProps(menuBranchProps)
 const slots = useSlots()
 const computedOpen = ref(false)
 const triggerRef = ref<TriggerInstance>()
+const { isRtl } = useDirection(() => triggerRef.value?.getReference?.())
 const panel = ref<InstanceType<typeof MenuPanel>>()
 const selection = inject(menuSelectionKey, undefined)
 const menu = inject(menuInjectionKey, undefined)
@@ -41,7 +43,7 @@ const keyboard = useMenuKeyboard({
 // Under click, hovering must not collapse a sibling the user opened on purpose.
 function handleMouseenter() { if (trigger.value === 'hover') activate() }
 async function handleArrow(key: 'ArrowLeft' | 'ArrowRight') {
-  if (key !== 'ArrowRight') return
+  if (key !== (isRtl.value ? 'ArrowLeft' : 'ArrowRight')) return
   open()
   await nextTick()
   if (computedOpen.value) keyboard.focus('ArrowDown')
@@ -58,7 +60,7 @@ const viewOptions = computed(() => {
     triggerProps: {
       ...submenuTriggerAppearance(),
       strategy: menu?.strategy.value ?? 'absolute', open: computedOpen.value, trigger: trigger.value,
-      placement: 'right-start', unmountOnClose: true, disabled: disabled.value, escToClose: false,
+      placement: isRtl.value ? 'left-start' : 'right-start', unmountOnClose: true, disabled: disabled.value, escToClose: false,
       onOpenChange: (open: boolean) => { if (open) activate(); computedOpen.value = open },
     },
     reference: () => h(MenuOption, {

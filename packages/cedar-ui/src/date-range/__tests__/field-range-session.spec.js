@@ -9,7 +9,7 @@ import FormItem from '../../form/FormItem.vue'
 const initial = ['2026-10-19', '2026-10-22']
 const props = {
   modelValue: initial,
-  presentation: 'inline',
+  editMode: 'direct',
   disableConfirm: false,
   valueFormat: 'YYYY-MM-DD',
   ...('panelType' in DateRange.props ? { panelType: 'calendar' } : {}),
@@ -65,13 +65,13 @@ test('canceling a half-selected range restores the previous complete selection o
 test('Form inheritance also blocks confirmation for an incomplete range', async () => {
   const model = reactive({ days: [...initial] })
   const wrapper = mount(Form, {
-    props: { model, presentation: 'inline' },
+    props: { model, editMode: 'direct' },
     slots: {
       default: () =>
         h(FormItem, { field: 'days', label: '范围' }, () =>
           h(DateRange, {
             ...props,
-            presentation: undefined,
+            editMode: undefined,
             modelValue: model.days,
             'onUpdate:modelValue': (value) => {
               model.days = value

@@ -1,3 +1,4 @@
+import type { OptionSearchField } from '../../_utils/option-data'
 import type { ComponentPublicInstance, Ref } from 'vue'
 import { computed, nextTick, onActivated, onBeforeUnmount, onDeactivated, provide, reactive, ref, watch } from 'vue'
 import { VirtualListRef } from '../../_components/virtual-list-v2/interface'
@@ -21,6 +22,8 @@ export const useSelect = ({
   extraOptions,
   inputValue,
   filterOption,
+  caseSensitive,
+  searchFields,
   showExtraOptions,
   component,
   fieldNames,
@@ -40,6 +43,8 @@ export const useSelect = ({
   extraOptions?: Ref<SelectOption[]>
   inputValue?: Ref<string>
   filterOption?: Ref<FilterOption>
+  caseSensitive?: Ref<boolean>
+  searchFields?: Ref<readonly OptionSearchField[]>
   showExtraOptions?: Ref<boolean>
   component?: Ref<'li' | 'div'>
   fieldNames?: Ref<SelectFieldNames | undefined>
@@ -72,6 +77,8 @@ export const useSelect = ({
     extraOptions,
     inputValue,
     filterOption,
+    caseSensitive,
+    searchFields,
     showExtraOptions,
     fieldNames,
   })
@@ -277,6 +284,8 @@ export const useSelect = ({
       fieldNames: mergedFieldNames,
       inputValue,
       filterOption,
+      caseSensitive,
+      searchFields,
       component,
       valueKeys,
       activeKey,

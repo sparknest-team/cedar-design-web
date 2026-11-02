@@ -8,7 +8,7 @@
   overflow: hidden;
   font-size: var(~'--c-alert-font-size-content');
   line-height: var(~'--c-alert-line-height');
-  text-align: left;
+  text-align: start;
   border-radius: var(~'--c-alert-border-radius');
   border: var(~'--c-alert-border-width') solid transparent;
 
@@ -33,7 +33,7 @@
   &__icon {
     display: inline-flex;
     align-items: center;
-    margin-right: var(~'--c-alert-icon-margin-right');
+    margin-inline-end: var(~'--c-alert-icon-margin-right');
     font-size: var(~'--c-alert-icon-size');
   }
 
@@ -55,12 +55,12 @@
 
   &__action {
     flex-shrink: 0;
-    margin-left: var(~'--c-alert-action-margin-left');
+    margin-inline-start: var(~'--c-alert-action-margin-left');
   }
 
   &__close-btn {
     flex-shrink: 0;
-    margin-left: var(~'--c-alert-close-margin-left');
+    margin-inline-start: var(~'--c-alert-close-margin-left');
     cursor: pointer;
   }
 

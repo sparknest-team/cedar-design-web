@@ -11,3 +11,6 @@ export function matchesOptionText(label: unknown, query: string, caseSensitive =
   const text = String(label ?? '')
   return caseSensitive ? text.includes(query) : text.toLowerCase().includes(query.toLowerCase())
 }
+
+/** Semantic fields; fieldNames maps them to business data keys. */
+export type OptionSearchField = 'label' | 'value'

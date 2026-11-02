@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
+
 const sizes = ["xs", "sm", "md", "lg", "xl"] as const;
 const variants = ["default", "text", "outline", "tonal"] as const;
 const layouts = ["icon", "inline", "stacked"] as const;
@@ -16,22 +17,24 @@ const items = [
 </script>
 <template>
   <c-space direction="column" :size="16">
-    <c-space wrap>
-      <label
-        >Variant<c-select
+    <c-form layout="vertical" size="sm">
+      <c-form-item label="Variant" field="variant">
+        <c-radio-group
           v-model="variant"
-          :options="variants.map((value) => ({ label: value, value }))"
-          :clearable="false"
+          :options="variants"
           aria-label="Icon button variant"
-      /></label>
-      <label
-        >Size<c-select
+          variant="button"
+        />
+      </c-form-item>
+      <c-form-item label="Size" field="size">
+        <c-radio-group
           v-model="size"
-          :options="sizes.map((value) => ({ label: value, value }))"
-          :clearable="false"
+          :options="sizes"
           aria-label="Icon button size"
-      /></label>
-    </c-space>
+          variant="button"
+        />
+      </c-form-item>
+    </c-form>
     <c-space
       v-for="layout in layouts"
       :key="layout"

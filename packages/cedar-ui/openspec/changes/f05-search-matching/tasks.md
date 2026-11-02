@@ -1,0 +1,5 @@
+- [x] 两端实现 caseSensitive，移除 AutoComplete strict。
+- [x] 保留 TreeSelect value 默认值与各组件原有过滤范围。
+- [x] 补大小写和 value/label 同搜 Demo、文档及 API playground 配置。
+- [x] 补组件行为、键盘、slots、字段映射、类型和 Demo 回归。
+- [x] 完成最终验证记录（见 validation.md）；F06 仅给出待确认建议，没有修改实现。

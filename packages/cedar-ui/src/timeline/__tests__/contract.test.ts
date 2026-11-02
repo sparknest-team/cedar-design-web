@@ -29,3 +29,22 @@ describe('timeline public contract', () => {
     expect(items[2].classes()).toContain('c-timeline-item-last')
   })
 })
+
+
+it('contentPlacement follows orientation while preserving timeline items', async () => {
+  const placement = { value: 'right' }
+  const wrapper = mount(Timeline, {
+    props: { mode: 'alternate', orientation: 'vertical' },
+    slots: { default: () => h(TimelineItem, { contentPlacement: placement.value }, () => 'Milestone') },
+  })
+  try {
+    await nextTick()
+    expect(wrapper.find('.c-timeline-item').classes()).toContain('c-timeline-item-vertical-right')
+    placement.value = 'bottom'
+    await wrapper.setProps({ orientation: 'horizontal' })
+    expect(wrapper.find('.c-timeline-item').classes()).toContain('c-timeline-item-horizontal-bottom')
+    expect(wrapper.text()).toContain('Milestone')
+  } finally {
+    wrapper.unmount()
+  }
+})

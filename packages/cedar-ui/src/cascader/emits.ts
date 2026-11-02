@@ -1,11 +1,12 @@
 export const cascaderEmits = {
+  'load-error': (error: unknown) => true,
   'update:modelValue': (
     value:
       | string
       | number
       | Record<string, any>
       | (string | number | Record<string, any> | (string | number | Record<string, any>)[])[]
-      | undefined,
+      | null | undefined,
   ) => true,
   'update:open': (visible: boolean) => true,
   /**
@@ -19,7 +20,7 @@ export const cascaderEmits = {
       | number
       | Record<string, any>
       | (string | number | Record<string, any> | (string | number | Record<string, any>)[])[]
-      | undefined,
+      | null | undefined,
   ) => true,
   /**
    * @zh 输入值改变时触发

@@ -10,26 +10,24 @@ import EditorPanel from '../EditorPanel.vue'
 
 const owners: ReturnType<typeof mount>[] = []
 afterEach(() => { owners.splice(0).forEach((owner) => owner.unmount()); vi.restoreAllMocks() })
-const records = () => ['old', 'new', 'disabled'].map((key) => ({ user_id: key, worker_user_id: key, display_name: key }))
-const fetch = { post: async () => ({ resultCode: 'success', data: { result_list: records() } }), get: async (_url: string, { params }: any) => ({ resultCode: 'success', data: { list: records().filter((item) => item.user_id === params.worker_user_id) } }) }
 const cases = [
   ['AutoComplete', AutoComplete, { options: ['old', 'new'], shouldOpen: () => true }],
-  ['TreeSelect', TreeSelect, { data: [{ key: 'old', title: 'Old' }, { key: 'disabled', title: 'Disabled', disabled: true }, { key: 'new', title: 'New' }], allowSearch: true }],
-  ['PeopleSelect', PeopleSelect, { fetch }],
+  ['TreeSelect', TreeSelect, { data: [{ value: 'old', label: 'Old' }, { value: 'disabled', label: 'Disabled', disabled: true }, { value: 'new', label: 'New' }], filterable: true }],
+  ['PeopleSelect', PeopleSelect, { options: ['old', 'new', 'disabled'].map(value => ({ value, label: `${value}（${value}）` })) }],
 ] as const
-function fixture(Field: any, extra: any, presentation = 'click', initial: unknown = 'old') {
+function fixture(Field: any, extra: any, editMode = 'click', initial: unknown = 'old') {
   const model = reactive({ value: initial })
-  const wrapper = mount(Form, { attachTo: document.body, props: { model, presentation }, slots: { default: () => h(FormItem, { field: 'value', label: 'Field' }, () => h(Field, { ...extra, modelValue: model.value, 'onUpdate:modelValue': (value: unknown) => { model.value = value } })) } })
+  const wrapper = mount(Form, { attachTo: document.body, props: { model, editMode }, slots: { default: () => h(FormItem, { field: 'value', label: 'Field' }, () => h(Field, { ...extra, modelValue: model.value, 'onUpdate:modelValue': (value: unknown) => { model.value = value } })) } })
   owners.push(wrapper)
   const panel = () => wrapper.getComponent(EditorPanel)
   const open = async () => { await wrapper.get('.c-field-presentation__edit').trigger('click'); await flushPromises(); if (panel().get('input').attributes('aria-expanded') !== 'true') { await panel().get('input').trigger('click'); await flushPromises() } }
   return { wrapper, model, panel, open }
 }
 for (const [name, Field, props] of cases) {
-  for (const presentation of ['click', 'dblclick']) {
-    test(`${name} ${presentation}: edit icon, owned popup clicks, and two-stage Escape`, async () => {
-      const f = fixture(Field, props, presentation)
-      expect(f.wrapper.get('.c-field-presentation__reference-group').attributes('title')).toBe(presentation === 'click' ? '单击编辑' : '双击编辑')
+  for (const editMode of ['click', 'dblclick']) {
+    test(`${name} ${editMode}: edit icon, owned popup clicks, and two-stage Escape`, async () => {
+      const f = fixture(Field, props, editMode)
+      expect(f.wrapper.get('.c-field-presentation__reference-group').attributes('title')).toBe(editMode === 'click' ? '单击编辑' : '双击编辑')
       await f.open()
       const popup = document.querySelector<HTMLElement>('[trigger-placement]')!
       expect(popup).toBeTruthy()
@@ -88,7 +86,7 @@ test('TreeSelect multiple keyboard checking retains the draft across Escape and 
   expect(f.model.value).toEqual(['old', 'new'])
 })
 test('TreeSelect navigation honors custom field names and numeric zero keys', async () => {
-  const f = fixture(TreeSelect, { data: [{ id: 0, name: 'Zero' }, { id: 'old', name: 'Old' }, { id: 'blocked', name: 'Blocked', blocked: true }, { id: 'new', name: 'New' }], fieldNames: { key: 'id', title: 'name', disabled: 'blocked' } })
+  const f = fixture(TreeSelect, { data: [{ id: 0, name: 'Zero' }, { id: 'old', name: 'Old' }, { id: 'blocked', name: 'Blocked', blocked: true }, { id: 'new', name: 'New' }], fieldNames: { value: 'id', label: 'name', disabled: 'blocked' } })
   await f.open()
   const input = f.panel().get('input')
   await input.trigger('keydown', { key: 'Home' }); await flushPromises()
@@ -103,7 +101,7 @@ test('TreeSelect navigation honors custom field names and numeric zero keys', as
 })
 
 test('TreeSelect search makes the matching leaf active instead of a retained ancestor', async () => {
-  const f = fixture(TreeSelect, { data: [{ key: 'parent', title: 'Parent', children: [{ key: 'old', title: 'Old' }, { key: 'new', title: 'New' }] }], treeProps: { defaultExpandAll: true, animation: false }, allowSearch: true, filterTreeNode: (query: string, node: any) => node.title.includes(query) })
+  const f = fixture(TreeSelect, { data: [{ value: 'parent', label: 'Parent', children: [{ value: 'old', label: 'Old' }, { value: 'new', label: 'New' }] }], treeProps: { defaultExpandAll: true, animation: false }, filterable: true, filterTreeNode: (query: string, node: any) => node.label.includes(query) })
   await f.open()
   const input = f.panel().get('input')
   await input.setValue('New'); await new Promise((resolve) => setTimeout(resolve, 130)); await flushPromises()
@@ -114,7 +112,7 @@ test('TreeSelect search makes the matching leaf active instead of a retained anc
   expect(f.model.value).toBe('new')
 })
 test('TreeSelect Enter expands a nonselectable parent before choosing a visible leaf', async () => {
-  const f = fixture(TreeSelect, { data: [{ key: 'parent', title: 'Parent', children: [{ key: 'new', title: 'New' }] }], selectable: 'leaf', treeProps: { animation: false, defaultExpandAll: false } }, 'click', '')
+  const f = fixture(TreeSelect, { data: [{ value: 'parent', label: 'Parent', children: [{ value: 'new', label: 'New' }] }], selectable: 'leaf', treeProps: { animation: false, defaultExpandAll: false } }, 'click', '')
   await f.open()
   const input = f.panel().get('input')
   const tree = f.panel().getComponent({ name: 'CTree' }).vm as any
@@ -125,7 +123,7 @@ test('TreeSelect Enter expands a nonselectable parent before choosing a visible 
   expect(expansion).toHaveBeenCalledTimes(1)
   expect(input.attributes('aria-expanded')).toBe('true')
   expect(f.model.value).toBe('')
-  expect((f.panel().getComponent({ name: 'CTree' }).vm as any).computedExpandedKeys).toContain('parent')
+  expect((f.panel().getComponent({ name: 'CTree' }).vm as any).computedExpandedValues).toContain('parent')
   expect([...document.querySelectorAll('[role=treeitem]')].map((node) => node.textContent)).toContain('New')
   await input.trigger('keydown', { key: 'ArrowRight' }); await flushPromises()
   expect(input.attributes('aria-activedescendant')).toContain('string-new')

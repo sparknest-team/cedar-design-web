@@ -1,3 +1,4 @@
+import { useDirection } from '../_utils/direction'
 import { calendarProps } from './props'
 import { defineComponent, computed, toRefs, PropType, ref } from 'vue'
 import type { Dayjs, UnitType } from 'dayjs'
@@ -48,7 +49,6 @@ export default defineComponent({
    * @binding {number} year
    * @binding {number} month
    * @binding {number} date
-   * @version 2.53.0
    */
   /**
    * @zh 自定义头部内容
@@ -56,9 +56,9 @@ export default defineComponent({
    * @slot header
    * @binding {number} year
    * @binding {number} month
-   * @version 2.53.0
    */
   setup(props, { emit, slots }) {
+    const { isRtl } = useDirection()
     const { dayStartOfWeek, isWeek } = toRefs(props)
     const prefixCls = getPrefixCls('calendar')
     const _mode = ref(props.defaultMode)
@@ -142,6 +142,7 @@ export default defineComponent({
     }
 
     const cls = computed(() => [
+      { [`${prefixCls}-rtl`]: isRtl.value },
       prefixCls,
       computedMode.value === 'month' ? `${prefixCls}-mode-month` : `${prefixCls}-mode-year`,
       {

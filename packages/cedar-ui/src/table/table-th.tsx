@@ -216,7 +216,7 @@ export default defineComponent({
     const cellCls = computed(() => {
       const cls: any[] = [
         `${prefixCls}-cell`,
-        `${prefixCls}-cell-align-${props.column?.align ?? (props.column.children ? "center" : "left")}`,
+        `${prefixCls}-cell-align-${props.column?.align ?? (props.column.children ? "center" : "start")}`,
       ];
 
       if (hasSorter.value) {
@@ -411,6 +411,7 @@ export default defineComponent({
           operations: props.operations,
         },
         tableCtx.tableLayout,
+        tableCtx.readingDirection,
       );
       return {
         ...baseStyle,
@@ -425,7 +426,7 @@ export default defineComponent({
         [`${prefixCls}-col-sorted`]: Boolean(sortOrder.value),
         [`${prefixCls}-th-resizing`]: resizing.value,
       },
-      ...getFixedCls(prefixCls, props.column),
+      ...getFixedCls(prefixCls, props.column, tableCtx.readingDirection === 'rtl' && tableCtx.hasPhysicalLeftOperations),
       props.column?.cellClass,
       props.column?.headerCellClass,
     ]);
@@ -459,7 +460,15 @@ export default defineComponent({
             props.resizable && (
               <span
                 class={`${prefixCls}-column-handle`}
+                role="separator"
+                tabindex={0}
+                aria-label={`Resize ${typeof props.column.title === 'string' ? props.column.title : props.column.dataIndex} column`}
+                aria-orientation="vertical"
+                aria-valuemin={40}
+                aria-valuenow={props.column._resizeWidth ?? props.column._realWidth ?? props.column.width}
+                onPointerdown={handleMouseDown}
                 onMousedown={handleMouseDown}
+                onKeydown={(event: KeyboardEvent) => { if (props.column.dataIndex) tableCtx.onThKeydown?.(props.column.dataIndex, event) }}
               />
             ),
           ],

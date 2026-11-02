@@ -1,16 +1,25 @@
-import type { PropType } from 'vue'
-import { readPrettyProp, fieldPresentationProp } from '../_components/field-presentation/context'
-import type { ComponentSize } from '../_utils/constant'
-import { formLayoutProps } from './layout-props'
-import type { FormLayout } from './layout-props'
-import type { FieldRule } from './types'
+import { emptyValuesProp, emptyTextProp } from "../_utils/empty-value";
+import type { PropType } from "vue";
+import {
+  fieldEditModeProp,
+  readPrettyProp,
+} from "../_components/field-presentation/context";
+import type { ComponentSize } from "../_utils/constant";
+import { formLayoutProps } from "./layout-props";
+import type { FormLayout } from "./layout-props";
+import type { FieldRule } from "./types";
 
-export type { FormLayout, FormLabelAlign } from './layout-props'
+export type { FormLayout, FormLabelAlign } from "./layout-props";
 
 export const formProps = {
-  /** 字段展示方式，未设置时继承上层。 */
-  presentation: fieldPresentationProp,
+  /** 表单内字段的统一编辑模式；未设置时保留各字段默认值。 */
+  editMode: fieldEditModeProp,
+  fieldEditModeProp,
   readPretty: readPrettyProp,
+  /** 模型空值识别；不改变受控判定或清空输出。 */
+  emptyValues: emptyValuesProp,
+  /** 纯阅读空值文案；字段 > FormItem > Form，缺省为 '-'。 */
+  emptyText: emptyTextProp,
   ...formLayoutProps,
   /**
    * @zh 表单数据对象
@@ -27,7 +36,7 @@ export const formProps = {
    */
   layout: {
     type: String as PropType<FormLayout>,
-    default: 'horizontal',
+    default: "horizontal",
   },
   /**
    * @zh 表单控件的尺寸
@@ -71,11 +80,10 @@ export const formProps = {
   /**
    * @zh 验证失败后滚动到第一个（start）或最后一个（end）错误字段；不传则不滚动
    * @en Scroll to the first (start) or last (end) invalid field; omitted disables scrolling
-   * @version 2.51.0
    */
   scrollToError: {
-    type: String as PropType<'start' | 'end'>,
+    type: String as PropType<"start" | "end">,
   },
   /** 错误滚动的顶部偏移，数字按 px；支持 px/rem/vw/vh */
   scrollToErrorOffsetY: { type: [Number, String], default: 0 },
-}
+};

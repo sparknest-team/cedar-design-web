@@ -26,6 +26,8 @@ export type TdInstance = InstanceType<typeof _Td>
 export type TableColumnInstance = InstanceType<typeof _Column>
 
 export type {
+  TablePaginationConfig,
+  TablePaginationScope,
   TableData,
   TableSortable,
   TableFilterData,
@@ -56,3 +58,6 @@ export { tableProps }
 
 export default Table
 export type TableProps = import('vue').ExtractPublicPropTypes<typeof import('./props').tableProps>
+
+export { defineTableConfig } from './typed-config'
+export type { TableDataPath, TypedTableRow, TypedTableRowKey, TypedTableColumn, TypedTableSortable, TypedTableFilterable, TypedTableExpandable, TypedTableConfig } from './typed-config'

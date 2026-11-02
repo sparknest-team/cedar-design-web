@@ -1,0 +1,3 @@
+- [x] Reproduce rejected rule pending feedback and verify stale rejection ownership.
+- [x] Repair current-task feedback cleanup without swallowing errors.
+- [x] Validate Form consumers, browser behavior and final static gates.

@@ -2,7 +2,7 @@ import { translateNavigation } from './i18n/navigation'
 import { hopeTheme } from 'vuepress-theme-hope'
 
 import { zhNavBar } from './configs/navbar/index'
-import { zhSideBar } from './configs/sidebar/index'
+import { enSideBar, zhSideBar } from './configs/sidebar/index'
 
 const hostname = process.env.HOSTNAME ?? 'https://xxx.com/pages/cedar-design-web'
 
@@ -14,9 +14,10 @@ export default hopeTheme(
       name: '孟帅、吴甲明',
     },
 
-    iconAssets: 'fontawesome-with-brands',
+    // Navigation and component icons are bundled SVGs. Do not load the unused
+    // Font Awesome CDN scripts: scripts inserted before load can block it.
 
-    logo: 'https://xxx.com/pe-fe-statics/cedar/logo.png',
+    logo: '/logo.svg',
 
     repo: 'https://xxx/pe.frontend/cedar/cedar-design-web',
 
@@ -32,7 +33,7 @@ export default hopeTheme(
       '/en/': {
         selectLanguageName: 'English',
         navbar: translateNavigation(zhNavBar),
-        sidebar: { '/en/': translateNavigation((zhSideBar as any)['/']) },
+        sidebar: enSideBar,
         prevLink: false, nextLink: false,
       },
       '/': {

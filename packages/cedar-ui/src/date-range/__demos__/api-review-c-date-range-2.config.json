@@ -125,17 +125,17 @@
       "initial": "{}"
     },
     {
-      "name": "presentation",
-      "type": "'inline' | 'click' | 'dblclick'",
+      "name": "edit-mode",
+      "type": "'direct' | 'click' | 'dblclick'",
       "defaultValue": "undefined",
-      "description": "字段编辑方式，字段 > FormItem > Form 继承；默认 inline。",
+      "description": "字段编辑方式，字段 > FormItem > Form 继承；默认 direct。",
       "kind": "enum",
       "options": [
-        "inline",
+        "direct",
         "click",
         "dblclick"
       ],
-      "initial": "inline"
+      "initial": "direct"
     },
     {
       "name": "read-pretty",
@@ -165,13 +165,6 @@
       "description": "源码公开属性 / Public source prop",
       "kind": "json",
       "initial": "\"body\""
-    },
-    {
-      "name": "use-seconds",
-      "type": "boolean",
-      "defaultValue": "true",
-      "description": "未指定 format 时是否包含秒；显式 format 优先。",
-      "kind": "boolean"
     },
     {
       "name": "value-format",

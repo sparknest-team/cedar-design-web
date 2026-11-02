@@ -88,7 +88,9 @@ onDeactivated(cleanup);
 <template>
   <div>
     <p>本地模拟请求；支持取消、重试和手动提交，不访问网络。</p>
-    <c-checkbox v-model="failOnce">首次请求失败（重试成功）</c-checkbox>
+    <c-checkbox v-model="failOnce" edit-mode="direct"
+      >首次请求失败（重试成功）</c-checkbox
+    >
     <c-space wrap>
       <c-button @click="addExample">加入示例文件</c-button>
       <c-button @click="uploader?.submit()">提交队列</c-button>
@@ -96,11 +98,18 @@ onDeactivated(cleanup);
     <c-upload
       ref="uploader"
       v-model="files"
+      edit-mode="direct"
       multiple
       :auto-upload="false"
       :custom-request="request"
     />
-    <p>队列状态：{{ files.map((file) => `${file.name}: ${file.status} (${file.percent}%)`).join('；') || '空' }}</p>
+    <p>
+      队列状态：{{
+        files
+          .map((file) => `${file.name}: ${file.status} (${file.percent}%)`)
+          .join("；") || "空"
+      }}
+    </p>
     <p>活动请求：{{ activeRequests }}</p>
   </div>
 </template>

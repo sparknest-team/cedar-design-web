@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import { describe, test, expect, vi, beforeEach } from "vitest";
+import { describe, test, expect, vi, beforeEach, afterAll } from "vitest";
 import { nextTick } from "vue";
 import Table from "../table";
 
@@ -14,7 +14,19 @@ vi.mock("resize-observer-polyfill", () => ({
     disconnect() {}
   },
 }));
+const originalCallbacks = Object.getOwnPropertyDescriptor(globalThis, "__roCallbacks");
+const originalClientWidth = Object.getOwnPropertyDescriptor(HTMLElement.prototype, "clientWidth");
+const originalBoundingRect = Object.getOwnPropertyDescriptor(HTMLElement.prototype, "getBoundingClientRect");
 (globalThis as any).__roCallbacks = [];
+
+afterAll(() => {
+  if (originalCallbacks) Object.defineProperty(globalThis, "__roCallbacks", originalCallbacks);
+  else Reflect.deleteProperty(globalThis, "__roCallbacks");
+  if (originalClientWidth) Object.defineProperty(HTMLElement.prototype, "clientWidth", originalClientWidth);
+  else Reflect.deleteProperty(HTMLElement.prototype, "clientWidth");
+  if (originalBoundingRect) Object.defineProperty(HTMLElement.prototype, "getBoundingClientRect", originalBoundingRect);
+  else Reflect.deleteProperty(HTMLElement.prototype, "getBoundingClientRect");
+});
 
 // jsdom 的 clientWidth 恒为 0，mock 成可调容器宽
 let containerWidth = 1000;
@@ -35,6 +47,7 @@ const measuredWidths: Record<string, number> = {
 };
 Object.defineProperty(HTMLElement.prototype, "getBoundingClientRect", {
   configurable: true,
+  writable: true,
   value(this: HTMLElement) {
     const key =
       this.getAttribute?.("data-column-key") ??
@@ -99,6 +112,7 @@ describe("table-layout=auto 下冻结列：渲染后量宽回写修正 sticky �
     });
     await nextTick();
     fireResize();
+    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
     await settle();
 
     // auto 下 colgroup 不渲染 col（对齐 element）
@@ -147,6 +161,7 @@ describe("table-layout=auto 下冻结列：渲染后量宽回写修正 sticky �
     });
     await nextTick();
     fireResize();
+    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
     await settle();
 
     // getBoundingClientRect mock 虽返回 90/36，但 fixed 模式不触发回写
@@ -175,6 +190,7 @@ describe("table-layout=auto 下冻结列：渲染后量宽回写修正 sticky �
     });
     await nextTick();
     fireResize();
+    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
     await settle();
 
     // fixed：渲染拖拽把手（extra 列是最后一列，无把手）→ p1/p2/name/status 共 4 个
@@ -183,7 +199,7 @@ describe("table-layout=auto 下冻结列：渲染后量宽回写修正 sticky �
     // 拖拽 p1 到 300px：p2 的 left 偏移跟随拖拽宽度
     await wrapper
       .find('th[data-column-key="p1"] .c-table-column-handle')
-      .trigger("mousedown");
+      .trigger("mousedown", { clientX: wrapper.get('th[data-column-key="p1"]').element.getBoundingClientRect().right });
     window.dispatchEvent(new MouseEvent("mousemove", { clientX: 300 }));
     window.dispatchEvent(new MouseEvent("mouseup"));
     await settle();

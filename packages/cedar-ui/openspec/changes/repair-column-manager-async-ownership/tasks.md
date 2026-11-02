@@ -1,0 +1,3 @@
+- [x] Reproduce stale work and pending-state failures.
+- [x] Implement owned cancellation and current-job checks.
+- [x] Validate applicable consumers, browser, type/lint gates and evidence.

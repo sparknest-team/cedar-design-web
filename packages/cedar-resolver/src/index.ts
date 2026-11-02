@@ -122,11 +122,12 @@ export function resolveCedarComponent(
   };
 }
 
-function resolveCedarIcon(name: string) {
+function resolveCedarIcon(name: string, importStyle = true) {
   const iconName = name.slice("CIcon".length);
   return {
     from: `@cedar-design/icons-vue/icon-${kebabCase(iconName)}`,
     name: `Icon${iconName}`,
+    sideEffects: importStyle ? ['@cedar-design/icons-vue/style.css'] : undefined,
   };
 }
 
@@ -140,7 +141,7 @@ export function CedarResolver(options: CedarResolverOptions = {}) {
       type: "component" as const,
       resolve(name: string) {
         if (name.startsWith("CIcon") && name.length > "CIcon".length) {
-          return resolveCedarIcon(name);
+          return resolveCedarIcon(name, options.importStyle);
         }
 
         if (/^C[A-Z]/.test(name)) {

@@ -37,6 +37,7 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef, watch, nextTick, onMounted, onActivated, onDeactivated, onBeforeUnmount } from "vue";
 import VirtualList from "../../_components/virtual-list-v2";
+import { useDirection, inlineScrollLeft, setInlineScrollLeft } from "../../_utils/direction";
 import { createNamespace } from "../../_utils/global-config";
 import type { SchedulerResource } from "../core";
 import type { SchedulerVirtualListProps } from "../props";
@@ -58,6 +59,13 @@ defineSlots<{
 const heading = ref<HTMLElement>();
 const list = ref<InstanceType<typeof VirtualList>>();
 const revision = ref(0);
+const { dir } = useDirection(() => heading.value);
+watch(dir, async () => {
+  await nextTick();
+  const viewport = list.value?.$el as HTMLElement | undefined;
+  if (available() && viewport && heading.value)
+    setInlineScrollLeft(heading.value, inlineScrollLeft(viewport));
+});
 const estimate = computed(() =>
   Number.isFinite(props.options?.estimatedSize) &&
   props.options!.estimatedSize! > 0
@@ -102,7 +110,7 @@ async function restore(previousEntries: typeof entries.value = []) {
     const previousList = list.value;
     const element = previousList?.$el as HTMLElement | undefined;
     if (!current()) return;
-    const left = element?.scrollLeft ?? 0;
+    const left = element ? inlineScrollLeft(element) : 0;
     if (!current()) return;
     const bounds = element?.getBoundingClientRect();
     if (!current()) return;
@@ -152,7 +160,7 @@ async function restore(previousEntries: typeof entries.value = []) {
       viewport.scrollTop += top - viewportTop - offset;
     }
     if (!ownsViewport()) return;
-    viewport.scrollLeft = left;
+    setInlineScrollLeft(viewport, left);
     if (ownsViewport()) viewport.dispatchEvent(new Event("scroll"));
     if (current()) restoring = false;
 }
@@ -169,8 +177,8 @@ function resume() {
     const viewport = list.value?.$el as HTMLElement | undefined;
     const target = heading.value;
     if (!available() || identity !== scrollVersion || !viewport || !target || event.target !== viewport) return;
-    const left = viewport.scrollLeft;
-    if (available() && identity === scrollVersion && heading.value === target) target.scrollLeft = left;
+    const left = inlineScrollLeft(viewport);
+    if (available() && identity === scrollVersion && heading.value === target) setInlineScrollLeft(target, left);
   };
   if (dirty) {
     const version = ++restoreVersion;

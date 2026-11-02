@@ -6,7 +6,7 @@ permalink: /components/notification/
 
 全局展示通知提醒，将信息及时有效的传达给用户。
 
-## 案例
+## 基础示例
 
 ### 基本用法
 
@@ -14,12 +14,9 @@ permalink: /components/notification/
 
 <demo src="./__demos__/basic.vue"></demo>
 
-<!-- api-review:start -->
-### 功能调试
+## 阅读方向
 
-<demo src="./__demos__/api-review.vue"></demo>
-
-<!-- api-review:end -->
+继承最近的 `dir="ltr|rtl"`，支持运行时切换与局部覆盖。弹出角落显式命名的 left/right 保持物理侧；图标、内容、关闭与底部动作采用阅读方向。函数式调用应使用明确方向或文档方向，不借用其他应用实例的上下文。
 
 ## API
 
@@ -67,7 +64,7 @@ Notification._context = app._context
 | id               | 唯一id                      | `string`                                             |   `-`   |        |
 | style            | 样式                        | `CSSProperties`                                      |   `-`   |        |
 | class            | 样式类名                    | `ClassName`                                          |   `-`   |        |
-| position         | 位置                        | `'topLeft'\|'topRight'\|'bottomLeft'\|'bottomRight'` |   `-`   |        |
+| position         | 通知自身在可视区域中的物理角落，默认 top-right；四角使用上下在前的 kebab-case 拼写 | `'top-left'\|'top-right'\|'bottom-left'\|'bottom-right'` | `top-right` |        |
 | showIcon         | 是否显示图标                | `boolean`                                            | `true`  |        |
 | closable         | 是否可关闭                  | `boolean`                                            | `false` |        |
 | duration         | 显示的持续时间，单位为 `ms` | `number`                                             | `3000`  |        |
@@ -158,3 +155,5 @@ wrapper-* 控制列表位置／留白；padding-*、margin-* 控制面板布局�
 | `--c-notification-transition-timing-function-leave` | `var(--c-transition-timing-function-standard)` |
 
 Teleport 后主题变量按实际 DOM 祖先继承；放在内容内部的变量不会向上传到服务创建的容器。
+
+close/closed 通知回调抛错不会保留已关闭项目或空管理器宿主，资源清理独立于通知回调执行。

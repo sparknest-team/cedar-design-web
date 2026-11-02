@@ -5,6 +5,7 @@
         v-if="shouldRender"
         v-show="mergedOpen"
         ref="overlayRoot"
+      :dir="readingDirection"
         :class="n()"
         :style="{ zIndex: mergedZIndex }"
         v-bind="$attrs"
@@ -24,7 +25,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onActivated, onDeactivated, ref } from 'vue'
+import { useDirection } from '../_utils/direction'
+import { useAttrs, computed, onActivated, onDeactivated, ref } from 'vue'
 import { useEventListener } from '@cedar-design/use'
 import { createNamespace } from '../_utils/global-config'
 import { usePopupContainer } from '../_utils/popup-container'
@@ -40,6 +42,8 @@ defineOptions({
 })
 
 const props = defineProps(overlayProps)
+const directionAttrs = useAttrs()
+const { dir: readingDirection } = useDirection(undefined, () => directionAttrs.dir)
 const emit = defineEmits<{
   (event: 'update:open', value: boolean): void
   (event: 'open' | 'opened' | 'close' | 'closed'): void

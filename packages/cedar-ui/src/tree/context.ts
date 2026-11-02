@@ -4,6 +4,10 @@ import type { Node, DropPosition, TreeNodeValue, TreeProps, Key2TreeNode, Filter
 export const TreeInjectionKey: InjectionKey<TreeContext> = Symbol('TreeInjectionKey')
 
 export type TreeContext = Readonly<{
+  externallyManaged?: boolean
+  focusedValue?: TreeNodeValue
+  nodeId?: (key: TreeNodeValue) => string
+  focusNode?: (key: TreeNodeValue) => void
   treeProps: TreeProps
   switcherIcon?: Slot
   loadingIcon?: Slot
@@ -33,3 +37,6 @@ export type TreeContext = Readonly<{
   onDrop?: (key: TreeNodeValue, dropPosition: DropPosition, e: DragEvent) => void
   allowDrop?: (key: TreeNodeValue, dropPosition: DropPosition) => boolean
 }>
+
+/** Embedded owners (for example a combobox) keep DOM focus and supply their own treeitem semantics. */
+export const TreeKeyboardOwnerKey: InjectionKey<boolean> = Symbol('TreeKeyboardOwner')

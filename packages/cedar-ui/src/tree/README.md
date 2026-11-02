@@ -6,7 +6,7 @@ permalink: /components/tree/
 
 对于文件夹、分类目录、组织架构等层级较多的内容，树可以清楚显示他们的层级关系，并具有展开、收起、选择等交互功能。
 
-## 案例
+## 基础示例
 
 ### 基础用法
 
@@ -14,19 +14,59 @@ permalink: /components/tree/
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### 不同尺寸
+## 外观与布局
+
+### 树节点密度与连接线
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `block-node` | 节点是否占据一行 | 树节点密度与连接线 |
+| `checkable` | 是否在节点前添加复选框 | 树节点密度与连接线 |
+| `size` | 尺寸 | 树节点密度与连接线 |
+| `data` | 传入`data`,生成对应的树结构 | 树节点密度与连接线 |
+| `default-selected-values` | 默认选中的树节点 | 树节点密度与连接线 |
+| `show-line` | 是否展示连接线 | 树节点密度与连接线 |
+<!-- demo-config-notes:end -->
+
+比较节点尺寸、整行占位和连接线；选择策略、拖拽与异步子节点保持独立。
+
+<details>
+<summary>配置说明与使用限制</summary>
+
+#### 不同尺寸
 
 不同尺寸的树。
 
-<demo src="./__demos__/size.vue"></demo>
-
-### 节点占一行
+#### 节点占一行
 
 节点占据一整行。
 
-<demo src="./__demos__/block-node.vue"></demo>
+#### 显示连接线
+
+为 `Tree` 添加 `showLine` 属性即可使树具有连接线
+
+</details>
+
+<demo src="./__demos__/appearance-comparison.vue"></demo>
+
+## 节点选择与状态
 
 ### 多选
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `data` | 传入`data`,生成对应的树结构 | 多选、带复选框的树、双向绑定 |
+| `checkable` | 是否在节点前添加复选框 | 带复选框的树、双向绑定、设置回填方式 |
+| `multiple` | 是否支持多选 | 多选 |
+| `check-strictly` | 是否取消父子节点关联 | 带复选框的树 |
+| `checked-strategy` | 定制回填方式 <br/> all: 返回所有选中的节点 <br/> parent: 父子节点都选中时只返回父节点 <br/> child: 只返回子节点 | 设置回填方式 |
+<!-- demo-config-notes:end -->
 
 `Tree` 设置 `multiple` 属性为`true`，可以启用多选。
 
@@ -45,41 +85,32 @@ permalink: /components/tree/
 
 <demo src="./__demos__/control.vue"></demo>
 
-### 动态加载
-
-动态加载节点。
-
-<demo src="./__demos__/load-more.vue"></demo>
-
-### 拖拽
-
-可拖拽的树节点。
-
-<demo src="./__demos__/draggable.vue"></demo>
-
 ### 设置回填方式
 
 为 `Tree` 添加 `checkedStrategy` 可以设置选中时的回填方式
 
 <demo src="./__demos__/checked-strategy.vue"></demo>
 
-### 显示连接线
-
-为 `Tree` 添加 `showLine` 属性即可使树具有连接线
-
-<demo src="./__demos__/show-line.vue"></demo>
+## 节点内容定制
 
 ### 定制节点图标
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `data` | 传入`data`,生成对应的树结构 | 定制节点图标、定制组件图标、定制额外节点 |
+| `show-line` | 是否展示连接线 | 定制组件图标 |
+| `block-node` | 节点是否占据一行 | 定制额外节点 |
+| `checkable` | 是否在节点前添加复选框 | 定制额外节点 |
+| `selectable` | 是否支持选择 | 定制额外节点 |
+| `check-strictly` | 是否取消父子节点关联 | 定制额外节点 |
+<!-- demo-config-notes:end -->
 
 节点图标可以通过 `tree` 的 `icon` 插槽全局指定，也可以通过节点的 `icon` 属性单独指定。
 
 <demo src="./__demos__/node-icon.vue"></demo>
-
-### 定制额外节点
-
-`Tree` 提供了名为 `extra` 的 `Slot`, 可以在节点上定制额外的内容。
-
-<demo src="./__demos__/render-extra.vue"></demo>
 
 ### 定制组件图标
 
@@ -87,17 +118,11 @@ permalink: /components/tree/
 
 <demo src="./__demos__/icons.vue"></demo>
 
-### 虚拟列表
+### 定制额外节点
 
-通过指定 `virtualListProps` 来开启虚拟列表，在大量数据时获得高性能表现。
+`Tree` 提供了名为 `extra` 的 `Slot`, 可以在节点上定制额外的内容。
 
-<demo src="./__demos__/virtual.vue"></demo>
-
-### 搜索树
-
-展示如何实现搜索树的效果。
-
-<demo src="./__demos__/search.vue"></demo>
+<demo src="./__demos__/render-extra.vue"></demo>
 
 ### 自定义 data 的字段名称
 
@@ -105,14 +130,56 @@ permalink: /components/tree/
 
 <demo src="./__demos__/field-names.vue"></demo>
 
-## 虚拟滚动命令的职责
+## 搜索与拖拽
 
-<!-- api-review:start -->
-### 功能调试
+### 搜索树
 
-<demo src="./__demos__/api-review.vue"></demo>
+<!-- demo-config-notes:start -->
+#### 本组配置对照
 
-<!-- api-review:end -->
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `data` | 传入`data`,生成对应的树结构 | 搜索树、拖拽 |
+| `draggable` | 是否可以拖拽 | 拖拽 |
+| `block-node` | 节点是否占据一行 | 拖拽 |
+| `checkable` | 是否在节点前添加复选框 | 拖拽 |
+<!-- demo-config-notes:end -->
+
+展示如何实现搜索树的效果。
+
+<demo src="./__demos__/search.vue"></demo>
+
+### 拖拽
+
+可拖拽的树节点。
+
+<demo src="./__demos__/draggable.vue"></demo>
+
+## 异步与虚拟滚动
+
+### 动态加载
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `data` | 传入`data`,生成对应的树结构 | 动态加载、虚拟列表 |
+| `load-more` | 异步加载数据的回调，返回一个 `Promise` | 动态加载 |
+| `block-node` | 节点是否占据一行 | 虚拟列表 |
+| `checkable` | 是否在节点前添加复选框 | 虚拟列表 |
+| `virtual-list-props` | 传递虚拟列表属性，传入此参数以开启虚拟滚动，[VirtualListProps](#VirtualListProps) | 虚拟列表 |
+<!-- demo-config-notes:end -->
+
+动态加载节点。
+
+<demo src="./__demos__/load-more.vue"></demo>
+
+### 虚拟列表
+
+通过指定 `virtualListProps` 来开启虚拟列表，在大量数据时获得高性能表现。
+
+<demo src="./__demos__/virtual.vue"></demo>
 
 ## API
 
@@ -255,3 +322,14 @@ xs/sm/md/lg/xl 分别消费各档 icon-size、font-size、line-height、title-pa
 节点默认使用 `{ value, label, children }`，`value` 是全树唯一的字符串或数字（支持 `0`），`label` 是展示内容。后端使用其他字段时可配置 `fieldNames: { value: 'id', label: 'text', children: 'items' }`，无需修改后端数据。声明式组件子项的 `name`、Vue 的 `:key` 和 Table 的 `rowKey` 保持各自含义。
 
 Tree 的独立状态采用 `selectedValues/defaultSelectedValues`、`checkedValues/defaultCheckedValues`、`halfCheckedValues`、`expandedValues/defaultExpandedValues`，分别通过同名具名 v-model 更新；`check` 事件数据中的半选集合为 `halfCheckedValues`。节点内容插槽为 `label`，TreeSelect 对应透传插槽为 `tree-slot-label`。`scrollIntoView({ value })` 按业务值定位；显式 `index` 仍表示虚拟列表从 0 开始的数组下标。
+
+
+| 焦点轮廓变量 | 默认值 |
+| --- | --- |
+| `--c-tree-focus-outline-width` | `2px` |
+
+## 阅读方向与键盘交互
+
+Tree 继承容器阅读方向，缩进、连接线和展开箭头随方向显示。键盘焦点与选中状态独立：上下键移动到上一/下一可用可见节点，Home/End 移动到首尾。LTR 右键展开或进入子级、左键收起或返回父级；RTL 左右互换。Enter 选中，Space 优先勾选可勾选节点，否则执行选中。
+
+键盘跳过禁用节点，根节点通过 `aria-activedescendant` 标识当前焦点，虚拟滚动时保持根节点焦点。展开、过滤、删除节点后会修正活动节点。拖放的前/内/后仍由纵向位置决定，不因 RTL 反转。TreeSelect 内嵌使用时由组合框管理焦点。

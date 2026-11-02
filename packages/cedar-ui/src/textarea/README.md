@@ -8,7 +8,11 @@ Textarea 是用于多行纯文本编辑的基础表单控件，适合评论、�
 
 默认长度按 UTF-16 码元计算（emoji 通常占 2）；默认截断不会拆开有效的代理对，边界不足时舍去整个字符。若需按用户感知字符（字素簇）计数和裁剪，请配套提供 `word-length` 与 `word-slice`；自定义裁剪结果由业务负责。
 
-## 案例
+## 阅读方向
+
+多行输入继承来源 `dir`，文字默认按阅读起点对齐，计数按阅读终点排列。切换方向保留原生编辑器、焦点与选区，不交换原生光标或换行键。
+
+## 基础示例
 
 ### 基础用法与值模型
 
@@ -16,17 +20,105 @@ Textarea 是用于多行纯文本编辑的基础表单控件，适合评论、�
 
 <demo src="./__demos__/basic.vue"></demo>
 
+## 外观与状态
+
 ### 状态与外观
+
+<!-- demo-config-notes:start -->
+
+#### 本组配置对照
+
+| 配置            | 作用                              | 相关示例   |
+| --------------- | --------------------------------- | ---------- |
+| `placeholder`   | 占位提示文字                      | 状态与外观 |
+| `variant`       | `filled` / `outline` / `standard` | 状态与外观 |
+| `default-value` | 非受控模式初始值                  | 状态与外观 |
+| `readonly`      | 是否只读                          | 状态与外观 |
+| `disabled`      | 是否禁用                          | 状态与外观 |
+| `error`         | 是否显示错误状态                  | 状态与外观 |
+
+<!-- demo-config-notes:end -->
 
 支持 `filled`、`outline`、`standard` 三种外观和 `xs`、`sm`、`md`、`lg`、`xl` 五种尺寸。
 
 <demo src="./__demos__/status.vue"></demo>
 
+### 外观组合
+
+适用于备注、说明等多行输入。调整变体、尺寸，用相同数据观察变化。内容保持一致，便于比较不同设置的实际效果。
+
+<demo src="./__demos__/appearance-lab.vue"></demo>
+
+## 内容与展示
+
 ### 字数限制
+
+<!-- demo-config-notes:start -->
+
+#### 本组配置对照
+
+| 配置              | 作用                                     | 相关示例         |
+| ----------------- | ---------------------------------------- | ---------------- |
+| `placeholder`     | 占位提示文字                             | 字数限制         |
+| `max-length`      | 最大长度；对象形式可启用仅错误模式       | 字数限制         |
+| `clearable`       | 是否允许清空                             | 字数限制         |
+| `show-word-limit` | 是否显示字数统计                         | 字数限制         |
+| `aria-label`      | 无可见标签时提供的可访问名称             | 原生属性与无障碍 |
+| `rows`            | 原生可见行数，仍受 min-height Token 约束 | 原生属性与无障碍 |
+
+<!-- demo-config-notes:end -->
 
 数字形式会在用户编辑时截断；`errorOnly: true` 会保留超长内容并显示错误状态。外部受控值不会仅因超长而被组件反向改写。
 
 <demo src="./__demos__/max-length.vue"></demo>
+
+### 原生属性与无障碍
+
+通过 `textarea-attrs` 补充 `name`、`autocomplete`、`inputmode`、`aria-describedby` 等原生属性。组件管理的值、禁用、只读、行数、长度、核心事件和错误态具有更高优先级。
+
+<demo src="./__demos__/native-attrs.vue"></demo>
+
+## 自定义与插槽
+
+### 前缀、后缀和清除图标
+
+<!-- demo-config-notes:start -->
+
+#### 本组配置对照
+
+| 配置          | 作用         | 相关示例             |
+| ------------- | ------------ | -------------------- |
+| `clearable`   | 是否允许清空 | 前缀、后缀和清除图标 |
+| `placeholder` | 占位提示文字 | 前缀、后缀和清除图标 |
+
+<!-- demo-config-notes:end -->
+
+<demo src="./__demos__/slots.vue"></demo>
+
+自定义 `clear-icon` 会收到 `clear(event?)` 方法。自定义交互元素需要保留可访问名称和键盘操作。
+
+## 交互与控制
+
+### 交互状态切换
+
+<!-- demo-config-notes:start -->
+
+#### 本组配置对照
+
+| 配置          | 作用                                     | 相关示例                                           |
+| ------------- | ---------------------------------------- | -------------------------------------------------- |
+| `placeholder` | 占位提示文字                             | 行数、自动高度与手动调整、事件语义、主体与事件契约 |
+| `rows`        | 原生可见行数，仍受 min-height Token 约束 | 行数、自动高度与手动调整、主体与事件契约           |
+| `auto-size`   | 是否自动高度，可设置最小/最大行数        | 行数、自动高度与手动调整、主体与事件契约           |
+| `clearable`   | 是否允许清空                             | 事件语义、主体与事件契约                           |
+| `disabled`    | 是否禁用                                 | 交互状态切换                                       |
+| `readonly`    | 是否只读                                 | 交互状态切换                                       |
+
+<!-- demo-config-notes:end -->
+
+适用于备注、说明等多行输入。调整禁用、只读、错误反馈，用相同数据观察变化。控制区始终可用，可以随时恢复编辑；错误外观本身不会触发表单校验。
+
+<demo src="./__demos__/state-lab.vue"></demo>
 
 ### 行数、自动高度与手动调整
 
@@ -42,35 +134,11 @@ Textarea 是用于多行纯文本编辑的基础表单控件，适合评论、�
 
 <demo src="./__demos__/interaction.vue"></demo>
 
-### 原生属性与无障碍
-
-通过 `textarea-attrs` 补充 `name`、`autocomplete`、`inputmode`、`aria-describedby` 等原生属性。组件管理的值、禁用、只读、行数、长度、核心事件和错误态具有更高优先级。
-
-<demo src="./__demos__/native-attrs.vue"></demo>
-
 ### 主体与事件契约
 
 两端维护独立复制的主体。输入按 input → update:modelValue 通知；清空按 clear → input → update:modelValue → change 通知，各一次，Form 对应语义也各接收一次。只读、禁用和组合输入期间禁止清空。受控提议被拒绝后恢复原生内容，包括不支持光标 API 的输入类型。
 
 <demo src="./__demos__/body-contract.vue"></demo>
-
-### 外观组合
-
-适用于备注、说明等多行输入。调整变体、尺寸，用相同数据观察变化。内容保持一致，便于比较不同设置的实际效果。
-
-<demo src="./__demos__/appearance-lab.vue"></demo>
-
-### 交互状态切换
-
-适用于备注、说明等多行输入。调整禁用、只读、错误反馈，用相同数据观察变化。控制区始终可用，可以随时恢复编辑；错误外观本身不会触发表单校验。
-
-<demo src="./__demos__/state-lab.vue"></demo>
-
-### 前缀、后缀和清除图标
-
-<demo src="./__demos__/slots.vue"></demo>
-
-自定义 `clear-icon` 会收到 `clear(event?)` 方法。自定义交互元素需要保留可访问名称和键盘操作。
 
 ## 设计要点
 
@@ -79,59 +147,66 @@ Textarea 是用于多行纯文本编辑的基础表单控件，适合评论、�
 - `auto-size` 开启后由内容决定高度，并覆盖 `rows` 与手动 `resize` 的视觉结果。
 - Form/FormItem 负责业务校验规则和消息，Textarea 只提供事件信号和错误视觉状态。
 
-<!-- api-review:start -->
-### 功能调试
+### 共享字段加载
 
-<demo src="./__demos__/api-review.vue"></demo>
-
-<!-- api-review:end -->
+`loading` 控制共享字段加载状态；`loading-mode` 为 `default`（指示器）或 `line`（底部不定进度线），默认 `default`。渲染统一由 FieldDecorator 负责，不隐式改变 disabled/readonly；需要禁止编辑时单独设置。
 
 ## API
+
+### 空值识别与阅读空文案
+
+`empty-values` 用于空值识别，`empty-value` 保留原清空输出；`empty-text` 仅在 `read-pretty` 空内容下展示，默认 `'-'`，字段 > FormItem > Form，自定义 read 插槽优先。显式配置 empty-values 后，内置 required 接入该策略，自定义校验仍收到原值。详见[统一说明](/guide/empty-values/)。
+
+| 参数         | 类型               | 缺省与范围                                            |
+| ------------ | ------------------ | ----------------------------------------------------- |
+| empty-values | readonly unknown[] | 字段 > FormItem > Form > 组件族默认；完整覆盖，不合并 |
+| empty-text   | string             | 字段 > FormItem > Form > '-'；显式 '' 有效            |
+
+以上是字段展示层 API；纯面板不因此新增阅读模式。Form 与 FormItem 提供继承配置。empty-value 的现有类型与默认输出仍按该组件原 API 执行。
 
 ### Textarea Props
 
 支持与 Input 一致的 hint、line、text-color、focus-color、blur-color；hint 未设置时继承 InputGroup/库默认值。外层 FormItem 有标签时隐藏内部浮动提示。
 
-
-| 属性                    | 说明                               | 类型                                                | 默认值     |
-| ----------------------- | ---------------------------------- | --------------------------------------------------- | ---------- |
-| model-value (`v-model`) | 受控绑定值                         | `string`                                            | `-`        |
-| default-value           | 非受控模式初始值                   | `string`                                            | `''`       |
-| model-modifiers         | v-model 修饰符；支持 `trim`        | `{ trim?: boolean }`                                | `{}`       |
-| placeholder             | 占位提示文字                       | `string`                                            | `-`        |
-| variant                 | `filled` / `outline` / `standard` | `FormControlVariant`                                | `outline` |
-| size                    | `xs` / `sm` / `md` / `lg` / `xl`   | `ComponentSize`                                     | `md`       |
-| clearable               | 是否允许清空                       | `boolean`                                           | `false`    |
-| disabled                | 是否禁用                           | `boolean`                                           | `false`    |
-| readonly                | 是否只读                           | `boolean`                                           | `false`    |
-| error                   | 是否显示错误状态                   | `boolean`                                           | `false`    |
-| rows                    | 原生可见行数，仍受 min-height Token 约束                       | `string \| number`                                  | `-`        |
-| resize                  | 是否允许纵向拖动调整尺寸           | `boolean`                                           | `true`     |
-| auto-size               | 是否自动高度，可设置最小/最大行数  | `boolean \| { minRows?: number; maxRows?: number }` | `false`    |
-| max-length              | 最大长度；对象形式可启用仅错误模式 | `number \| { length: number; errorOnly?: boolean }` | `0`        |
-| show-word-limit         | 是否显示字数统计                   | `boolean`                                           | `false`    |
-| word-length             | 自定义长度计算方法                 | `(value: string) => number`                         | `-`        |
-| word-slice              | 自定义截取方法                     | `(value: string, maxLength: number) => string`      | `-`        |
-| aria-label              | 无可见标签时提供的可访问名称       | `string`                                            | `-`        |
-| autofocus               | 是否自动聚焦                       | `boolean`                                           | `false`    |
-| enterkeyhint            | 虚拟键盘回车键提示                 | `string`                                            | `-`        |
-| textarea-attrs          | 内部 textarea 元素的补充原生属性   | `Record<string, unknown>`                           | `-`        |
-| hint | 浮动提示，未设置时继承 InputGroup/库默认 | boolean | undefined |
-| line | 显示边框/底线 | boolean | true |
-| text-color | 实例文字颜色 | string | undefined |
-| focus-color | 实例聚焦颜色 | string | undefined |
-| blur-color | 实例失焦提示颜色 | string | undefined |
+| 属性                    | 说明                                     | 类型                                                | 默认值    |
+| ----------------------- | ---------------------------------------- | --------------------------------------------------- | --------- |
+| model-value (`v-model`) | 受控绑定值                               | `string`                                            | `-`       |
+| default-value           | 非受控模式初始值                         | `string`                                            | `''`      |
+| model-modifiers         | v-model 修饰符；支持 `trim`              | `{ trim?: boolean }`                                | `{}`      |
+| placeholder             | 占位提示文字                             | `string`                                            | `-`       |
+| variant                 | `filled` / `outline` / `standard`        | `FormControlVariant`                                | `outline` |
+| size                    | `xs` / `sm` / `md` / `lg` / `xl`         | `ComponentSize`                                     | `md`      |
+| clearable               | 是否允许清空                             | `boolean`                                           | `false`   |
+| disabled                | 是否禁用                                 | `boolean`                                           | `false`   |
+| readonly                | 是否只读                                 | `boolean`                                           | `false`   |
+| error                   | 是否显示错误状态                         | `boolean`                                           | `false`   |
+| rows                    | 原生可见行数，仍受 min-height Token 约束 | `string \| number`                                  | `-`       |
+| resize                  | 是否允许纵向拖动调整尺寸                 | `boolean`                                           | `true`    |
+| auto-size               | 是否自动高度，可设置最小/最大行数        | `boolean \| { minRows?: number; maxRows?: number }` | `false`   |
+| max-length              | 最大长度；对象形式可启用仅错误模式       | `number \| { length: number; errorOnly?: boolean }` | `0`       |
+| show-word-limit         | 是否显示字数统计                         | `boolean`                                           | `false`   |
+| word-length             | 自定义长度计算方法                       | `(value: string) => number`                         | `-`       |
+| word-slice              | 自定义截取方法                           | `(value: string, maxLength: number) => string`      | `-`       |
+| aria-label              | 无可见标签时提供的可访问名称             | `string`                                            | `-`       |
+| autofocus               | 是否自动聚焦                             | `boolean`                                           | `false`   |
+| enterkeyhint            | 虚拟键盘回车键提示                       | `string`                                            | `-`       |
+| textarea-attrs          | 内部 textarea 元素的补充原生属性         | `Record<string, unknown>`                           | `-`       |
+| hint                    | 浮动提示，未设置时继承 InputGroup/库默认 | boolean                                             | undefined |
+| line                    | 显示边框/底线                            | boolean                                             | true      |
+| text-color              | 实例文字颜色                             | string                                              | undefined |
+| focus-color             | 实例聚焦颜色                             | string                                              | undefined |
+| blur-color              | 实例失焦提示颜色                         | string                                              | undefined |
 
 ### Textarea Events
 
-| 事件名  | 说明                                | 参数                       |
-| ------- | ----------------------------------- | -------------------------- |
-| input   | IME 完成后的用户输入                | `value: string, ev: Event` |
-| change  | 失焦提交且值变化时触发              | `value: string, ev: Event` |
-| keydown | 用户按键时触发；Enter 不提交 change | `ev: KeyboardEvent`        |
+| 事件名  | 说明                                                                | 参数                       |
+| ------- | ------------------------------------------------------------------- | -------------------------- |
+| input   | IME 完成后的用户输入                                                | `value: string, ev: Event` |
+| change  | 失焦提交且值变化时触发                                              | `value: string, ev: Event` |
+| keydown | 用户按键时触发；Enter 不提交 change                                 | `ev: KeyboardEvent`        |
 | clear   | 用户清空时触发，按 clear → input → update:model-value → change 通知 | `ev: Event`                |
-| focus   | 获得焦点时触发                      | `ev: FocusEvent`           |
-| blur    | 失去焦点时触发                      | `ev: FocusEvent`           |
+| focus   | 获得焦点时触发                                                      | `ev: FocusEvent`           |
+| blur    | 失去焦点时触发                                                      | `ev: FocusEvent`           |
 
 ### Textarea Slots
 
@@ -162,18 +237,18 @@ import type {
 
 ## 样式变量
 
-| 变量名                                         | 默认值                            |
-| ---------------------------------------------- | --------------------------------- |
-| `--c-textarea-height`                          | `auto`                            |
-| `--c-textarea-min-height`                      | `--c-sys-control-height-xl`       |
-| `--c-textarea-font-size`                       | `--c-sys-font-size-md`            |
-| `--c-textarea-line-height`                     | `--c-line-height`                 |
-| `--c-textarea-padding-horizontal`              | `--c-sys-space-3`                 |
-| `--c-textarea-padding-vertical`                | `--c-sys-space-1`                 |
-| `--c-textarea-placeholder-color`               | `--c-sys-color-content-secondary`  |
-| `--c-textarea-counter-color`                   | `--c-sys-color-content-secondary`  |
-| `--c-textarea-counter-font-size`               | `--c-sys-font-size-xs`            |
-| `--c-textarea-counter-margin-top` | `var(--c-sys-space-2)` |
+| 变量名                            | 默认值                            |
+| --------------------------------- | --------------------------------- |
+| `--c-textarea-height`             | `auto`                            |
+| `--c-textarea-min-height`         | `--c-sys-control-height-xl`       |
+| `--c-textarea-font-size`          | `--c-sys-font-size-md`            |
+| `--c-textarea-line-height`        | `--c-line-height`                 |
+| `--c-textarea-padding-horizontal` | `--c-sys-space-3`                 |
+| `--c-textarea-padding-vertical`   | `--c-sys-space-1`                 |
+| `--c-textarea-placeholder-color`  | `--c-sys-color-content-secondary` |
+| `--c-textarea-counter-color`      | `--c-sys-color-content-secondary` |
+| `--c-textarea-counter-font-size`  | `--c-sys-font-size-xs`            |
+| `--c-textarea-counter-margin-top` | `var(--c-sys-space-2)`            |
 
 两端计数器均在外侧，使用 counter-margin-top 控制顶部间距，避免覆盖文本。
 
@@ -187,10 +262,18 @@ size 支持 xs/sm/md/lg/xl 的 FieldDecorator 外壳密度；文本域高度/文
 
 ### Form 字段展示与确认
 
-本组件支持 `presentation`，字段 > FormItem > Form 逐层继承；未指定时为 `inline`，保留原有交互。支持值：`inline / click / dblclick`。其他编辑展示使用 Cell 入口和一份草稿，确认后才更新 v-model；取消、重置或启用 readPretty 丢弃草稿。
+本组件支持 `edit-mode`，字段 > FormItem > Form 逐层继承；未指定时为 `direct`，保留原有交互。支持值：`direct / click / dblclick`。非 direct 编辑模式通过字段值入口打开编辑面板，并维护单份草稿；确认后才更新 v-model，取消、重置或启用 readPretty 时丢弃草稿。
 
-Cedar 使用 presentation="click" / "dblclick" 在原位进入编辑，Enter/F2 也可进入；取消/Escape 丢弃草稿，确认后提交。 readPretty 为纯阅读属性，与 readonly、disabled 独立。
+Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，Enter/F2 也可进入；取消/Escape 丢弃草稿，确认后提交。readPretty 为独立阅读属性，与 readonly、disabled 分开。
 
 `before-commit(value, { previousValue, signal })` 可拦截弹层保存；FormItem 先校验候选值，失败保持编辑。`open / default-open / update:open` 控制编辑层。`#read="{ value, text }"` 可自定义阅读内容。集中示例见 Form 的“各类字段统一展示”。
 
 `read-pretty` 为独立布尔属性，与 `readonly`、`disabled` 同级；字段 > FormItem > Form 继承，显式 `false` 覆盖父级。默认 `false`。纯阅读不显示编辑器。
+
+统一光标色通过 `--c-field-caret-color` 设置（默认 `currentColor`）；本组件可用 `--c-textarea-caret-color` 单独覆盖，默认 `var(--c-field-caret-color)`。
+
+## 配置清空后的值
+
+`empty-value` 指定当前组件已有清空动作的输出；省略时采用该组件默认返回。具体类型以组件 API 为准。它不改变 empty-values 的识别规则，也不改变 Form reset 的初始值。
+
+`empty-value` 可显式设为 `null`（或 `() => null`），清空时原样提交 null；省略时保留组件原默认值。界面把 null 显示为空，不会把普通输入的空字符串自动转成 null。支持弹出编辑的字段中，清空先修改草稿，确认后提交，取消则保留原值。

@@ -45,8 +45,8 @@ test("week defaults to percentage-offset stacks; pointer and keyboard activation
     expect(cards).toHaveLength(3);
     cards.forEach((card, index) => {
       const style = (card.element as HTMLElement).style;
-      expect(parseFloat(style.left)).toBeCloseTo((index * 100) / 3);
-      expect(parseFloat(style.left) + parseFloat(style.width)).toBeCloseTo(100);
+      expect(parseFloat(style.insetInlineStart)).toBeCloseTo((index * 100) / 3);
+      expect(parseFloat(style.insetInlineStart) + parseFloat(style.width)).toBeCloseTo(100);
     });
     const button = cards[0].get("button");
     await mouse(button, "click", 1);

@@ -1,8 +1,10 @@
+---
+permalink: /components/field-decorator/
+---
+
 # FieldDecorator 字段装饰器
 
 FieldDecorator 是 Input、Textarea、Select 与日期时间控件的展示外壳，负责边框、尺寸、浮动提示、前后缀和清除按钮；不管理输入值、表单校验或弹层开合。
-
-## 两端同源约定
 
 Cedar 完成实现后独立复制到 Maple，替换命名空间与导入路径；两端不引用另一端的运行时代码。主体、几何测量、插槽、事件及样式规则一致。
 
@@ -13,18 +15,35 @@ Cedar 完成实现后独立复制到 Maple，替换命名空间与导入路径�
 - 默认按钮通过各端全局语言系统读取无障碍文案，不维护组件私有词典。
 - 内容列尺寸使用 ResizeObserver 观察，支持前缀变化及隐藏容器重新显示；卸载时清理监听。
 
+输入控件聚焦时不额外绘制外圈 outline，沿用各变体已有的边框、底线或背景聚焦反馈；适用于 Input、Textarea、Date 和 Time 等消费者。
+
+输入框、文本域和数字输入框的光标使用 `currentColor`，与当前输入文字颜色一致；错误态不单独覆盖光标颜色。
+
+`--c-field-caret-color` 默认 `currentColor`，统一控制 Input、InputNumber 与 Textarea 的光标颜色；不改变文字色。
+
+## 基础示例
+
 ### 表单控件尺寸对照
 
 切换五档 size 和三种字段变体，比较 Input、Button、Select、日期时间及其他单行表单控件的高度。Button 在这里固定使用 outline。DatePicker/TimePicker 是面板，此处使用带输入框的 Date/Time 字段。示例同时展示有值、可清空、标签删除与长标签多选；Select/Cascader 设置 tag-nowrap 时保持同档高度，长标签文字省略、删除图标保留；标签行可横向滚动，清空按钮和箭头固定在外侧。被省略的标签正文支持悬停、键盘聚焦或点按查看完整文字，点外部或按 Esc 关闭，不改变选中值。可清空后恢复选中值重复比较。多行文本和允许换行的多选内容按内容撑高。
 
 <demo src="./__demos__/control-sizes.vue"></demo>
 
-<!-- api-review:start -->
-### 功能调试
+## 加载与等待
 
-<demo src="./__demos__/api-review.vue"></demo>
+### 共享字段加载
 
-<!-- api-review:end -->
+`loading` 控制共享字段加载状态；`loading-mode` 为 `default`（指示器）或 `line`（底部不定进度线），默认 `default`。渲染统一由 FieldDecorator 负责，不隐式改变 disabled/readonly；需要禁止编辑时单独设置。
+
+ <demo src="./__demos__/loading.vue"></demo>
+
+### Loading tokens
+
+| Token | Default |
+| --- | --- |
+| `--c-field-loading-line-size` | `2px` |
+| `--c-field-loading-duration` | `1s` |
+| `--c-field-loading-color` | `var(--c-field-focus-color)` |
 
 ## Props
 
@@ -60,8 +79,5 @@ Cedar 完成实现后独立复制到 Maple，替换命名空间与导入路径�
 ## 错误与禁用边框变量
 
 以下后缀分别加上 `--c-field-` / `--mp-field-`：`variant-outline-border-color-error` 控制 outline 错误边框；`variant-standard-line-color-error` 控制 standard 错误底线；`variant-standard-line-color-disabled` 控制 standard 禁用底线，默认引用 system border-subtle。禁用优先于错误、hover 和 focus。三个入口均支持局部覆盖；错误提示文字仍由 `field-error-color` 管理。内部变量不是业务 API，已确认无消费的遗留内部声明直接删除，不提供别名。
-## 键盘焦点
 
-输入控件聚焦时不额外绘制外圈 outline，沿用各变体已有的边框、底线或背景聚焦反馈；适用于 Input、Textarea、Date 和 Time 等消费者。
-
-输入框、文本域和数字输入框的光标使用 `currentColor`，与当前输入文字颜色一致；错误态不单独覆盖光标颜色。
+动态更换 `tag` 后，尺寸观察会绑定当前根节点和内容节点。KeepAlive 停用释放观察和排队测量；旧激活代次的帧不会修改当前布局。

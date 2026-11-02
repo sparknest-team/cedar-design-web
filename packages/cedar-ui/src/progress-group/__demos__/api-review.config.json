@@ -185,10 +185,9 @@
       "demos": [
         "basic.vue",
         "circle.vue",
-        "color.vue",
+        "appearance-comparison.vue",
         "orientation.vue",
         "overflow-keyboard.vue",
-        "sizes.vue",
         "slots.vue"
       ]
     },
@@ -198,7 +197,7 @@
       "demos": [
         "basic.vue",
         "circle.vue",
-        "color.vue",
+        "appearance-comparison.vue",
         "orientation.vue",
         "overflow-keyboard.vue",
         "slots.vue"

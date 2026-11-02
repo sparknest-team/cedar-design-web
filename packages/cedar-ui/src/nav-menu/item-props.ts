@@ -11,15 +11,17 @@ export const navMenuItemProps = {
   fieldNames: navMenuProps.fieldNames,
   /** 入口的视觉高亮覆盖；不改变当前入口或选中值，省略时跟随业务 active。 */
   highlight: { type: Boolean, default: undefined },
-  disabled: Boolean,
+  disabled: { type: Boolean, default: undefined },
   open: { type: Boolean, default: undefined },
   defaultOpen: Boolean,
   hideOnSelect: { type: Boolean, default: true },
+  /** 关闭后卸载面板内容；默认保留首次展开后的状态。 */
+  unmountOnClose: { type: Boolean, default: false },
   trigger: { ...triggerProps.trigger, default: 'click' },
   placement: { ...triggerProps.placement, default: 'bottom-start' },
   popupContainer: navMenuProps.popupContainer,
   popupClass: navMenuProps.popupClass,
-  popupLayout: { type: String as PropType<'dropdown' | 'full-width' | 'full-height'>, default: 'dropdown' },
+  popupLayout: { type: String as PropType<import('./types').NavMenuPopupLayout>, default: 'dropdown' },
   popupStyle: Object as PropType<CSSProperties>,
   optionsMode: navMenuProps.mode,
 }

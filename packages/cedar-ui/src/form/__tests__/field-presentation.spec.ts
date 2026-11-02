@@ -15,10 +15,10 @@ const options = [
   { value: 2, label: '设备 B' },
 ]
 const overlay = 'click' as const
-function inputForm(presentation?: string, fieldPresentation?: string, readPretty = false, fieldReadPretty?: boolean) {
+function inputForm(editMode?: string, fieldPresentation?: string, readPretty = false, fieldReadPretty?: boolean) {
   const model = reactive({ name: '原值' })
   const wrapper = mount(Form, {
-    props: { model, presentation: presentation as any, readPretty },
+    props: { model, editMode: editMode as any, readPretty },
     slots: {
       default: () =>
         h(
@@ -31,7 +31,7 @@ function inputForm(presentation?: string, fieldPresentation?: string, readPretty
           () =>
             h(Input, {
               modelValue: model.name,
-              presentation: fieldPresentation as any,
+              editMode: fieldPresentation as any,
               readPretty: fieldReadPretty,
               'onUpdate:modelValue': (value) => {
                 model.name = value
@@ -50,7 +50,10 @@ describe('field presentation', () => {
       await wrapper.get('[aria-haspopup=dialog]').trigger('click')
       await flushPromises()
       expect(focus).toHaveBeenCalledWith({ preventScroll: true })
-    } finally { wrapper.unmount(); focus.mockRestore() }
+    } finally {
+      wrapper.unmount()
+      focus.mockRestore()
+    }
   })
 
   test('default Input stays directly editable with the original v-model', async () => {
@@ -70,12 +73,12 @@ describe('field presentation', () => {
     wrapper.unmount()
   })
   test('explicit field overrides inherited read', () => {
-    const { wrapper } = inputForm(undefined, 'inline', true, false)
+    const { wrapper } = inputForm(undefined, 'direct', true, false)
     expect(wrapper.find('input').exists()).toBe(true)
     wrapper.unmount()
   })
-  test.each([overlay] as const)('%s Input uses draft, cancellation and one commit', async (presentation) => {
-    const { wrapper, model } = inputForm(presentation)
+  test.each([overlay] as const)('%s Input uses draft, cancellation and one commit', async (editMode) => {
+    const { wrapper, model } = inputForm(editMode)
     await wrapper.get('[aria-haspopup=dialog]').trigger('click')
     await flushPromises()
     await wrapper.getComponent(EditorPanel).get('input').setValue('草稿')
@@ -124,7 +127,7 @@ describe('field presentation', () => {
         }),
     )
     const wrapper = mount(Input, {
-      props: { presentation: 'click', modelValue: '原值', beforeCommit: save },
+      props: { editMode: 'click', modelValue: '原值', beforeCommit: save },
     })
     await wrapper.get('[aria-haspopup=dialog]').trigger('click')
     await flushPromises()
@@ -161,35 +164,33 @@ describe('field presentation', () => {
     expect(search).not.toHaveBeenCalled()
     wrapper.unmount()
   })
-  test.each(['click'] as const)(
-    'Select %s confirmation buffers values and keeps search local',
-    async (presentation) => {
-      const wrapper = mount(Select, {
-        props: {
-          presentation,
-          defaultOpen: false,
-          modelValue: [1],
-          multiple: true,
-          options,
-        },
-      })
-      if (presentation === 'click') await wrapper.get('[aria-haspopup=dialog]').trigger('click')
+  test.each(['click'] as const)('Select %s confirmation buffers values and keeps search local', async (editMode) => {
+    const wrapper = mount(Select, {
+      props: {
+        editMode,
+        defaultOpen: false,
+        modelValue: [1],
+        multiple: true,
+        options,
+      },
+    })
+    if (editMode === 'click') await wrapper.get('[aria-haspopup=dialog]').trigger('click')
 
-      await flushPromises()
-      const controller = wrapper.findComponent(SelectMenu).props('controller')
-      controller.handleOpenChange(true)
-      await flushPromises()
-      controller.handleSelect(getKeyFromValue(2), new Event('click'))
-      expect(wrapper.emitted('change')).toBeUndefined()
-      wrapper.getComponent(EditorPanel).vm.$emit('confirm'); await flushPromises()
-      await flushPromises()
-      expect(wrapper.emitted('change')).toEqual([[[1, 2]]])
-      wrapper.unmount()
-    },
-  )
+    await flushPromises()
+    const controller = wrapper.findComponent(SelectMenu).props('controller')
+    controller.handleOpenChange(true)
+    await flushPromises()
+    controller.handleSelect(getKeyFromValue(2), new Event('click'))
+    expect(wrapper.emitted('change')).toBeUndefined()
+    wrapper.getComponent(EditorPanel).vm.$emit('confirm')
+    await flushPromises()
+    await flushPromises()
+    expect(wrapper.emitted('change')).toEqual([[[1, 2]]])
+    wrapper.unmount()
+  })
   test('Select panel search filters while remote mode retains server candidates', async () => {
     const wrapper = mount(Select, {
-      props: { presentation: 'click', options, filterable: true },
+      props: { editMode: 'click', options, filterable: true },
     })
     await wrapper.get('[aria-haspopup=dialog]').trigger('click')
     await flushPromises()
@@ -224,7 +225,7 @@ describe('field presentation', () => {
   })
   test('read cancels a queued remote search', async () => {
     vi.useFakeTimers()
-    const wrapper = mount(Select, { props: { presentation: 'click', options, filterable: true, searchDelay: 100 } })
+    const wrapper = mount(Select, { props: { editMode: 'click', options, filterable: true, searchDelay: 100 } })
     try {
       await wrapper.get('[aria-haspopup=dialog]').trigger('click')
       await flushPromises()
@@ -240,7 +241,7 @@ describe('field presentation', () => {
   })
 
   test('remote loading preserves the open panel and existing selection draft', async () => {
-    const wrapper = mount(Select, { props: { presentation: 'click', modelValue: [1], multiple: true, options } })
+    const wrapper = mount(Select, { props: { editMode: 'click', modelValue: [1], multiple: true, options } })
     await wrapper.get('[aria-haspopup=dialog]').trigger('click')
     await flushPromises()
     const controller = wrapper.findComponent(SelectMenu).props('controller')
@@ -249,7 +250,8 @@ describe('field presentation', () => {
     expect(controller.computedOpen).toBe(true)
     expect(wrapper.emitted('change')).toBeUndefined()
     await wrapper.setProps({ loading: false })
-    wrapper.getComponent(EditorPanel).vm.$emit('confirm'); await flushPromises()
+    wrapper.getComponent(EditorPanel).vm.$emit('confirm')
+    await flushPromises()
     await flushPromises()
     expect(wrapper.emitted('change')).toEqual([[[1, 2]]])
     wrapper.unmount()

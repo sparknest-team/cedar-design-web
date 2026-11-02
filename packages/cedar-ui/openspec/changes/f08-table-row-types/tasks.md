@@ -1,0 +1,4 @@
+- [x] 核对 Cedar 与 Maple Table 当前接口和合计/树数据边界。
+- [x] 新增可选关联类型与无数据变换的兼容配置入口。
+- [x] 补真实 Table Demo、运行用例、Vue/TSX 源与发布声明消费测试。
+- [x] 验证旧类型/行为、文档、规范、lint、类型与相关回归并记录结果：Cedar49、Maple8用例；Cedar类型/声明/严格Vue/TSX/lint通过。Maple全量lint既有脚本66条错误已单列，未扩大修改。

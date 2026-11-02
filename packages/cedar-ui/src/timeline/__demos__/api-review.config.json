@@ -60,7 +60,7 @@
       "name": "pending",
       "kind": "prop",
       "demos": [
-        "direction.vue",
+        "layout-comparison.vue",
         "pending.vue"
       ]
     },
@@ -70,7 +70,7 @@
       "demos": [
         "dot.vue",
         "icon.vue",
-        "label.vue",
+        "layout-comparison.vue",
         "pending.vue"
       ]
     }

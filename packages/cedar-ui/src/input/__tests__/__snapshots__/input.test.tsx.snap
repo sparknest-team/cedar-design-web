@@ -3,7 +3,8 @@
 exports[`Input > render 1`] = `
 "<div class=\\"c-input\\">
   <div class=\\"c-field-decorator c-field-decorator--size-md c-field-decorator--variant-outline\\">
-    <!--v-if--><span class=\\"c-field-decorator__middle\\"><input id=\\"v-0\\" class=\\"c-input__inner\\" type=\\"text\\" value=\\"\\"></span>
+    <!--v-if--><span class=\\"c-field-decorator__middle\\"><input id=\\"v-0\\" autocomplete=\\"off\\" class=\\"c-input__inner\\" type=\\"text\\" value=\\"\\"></span>
+    <!--v-if-->
     <!--v-if-->
     <!--v-if--><span class=\\"c-field-decorator__border\\" aria-hidden=\\"true\\"></span><span class=\\"c-field-decorator__border-state\\" aria-hidden=\\"true\\"></span>
   </div>

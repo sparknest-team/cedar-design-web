@@ -53,7 +53,7 @@
       "kind": "slot",
       "demos": [
         "size.vue",
-        "user-define.vue"
+        "content-comparison.vue"
       ]
     },
     {
@@ -67,7 +67,7 @@
       "name": "extra",
       "kind": "slot",
       "demos": [
-        "extra.vue"
+        "content-comparison.vue"
       ]
     }
   ],

@@ -10,7 +10,8 @@ import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { expect, test } from "vitest";
 import Button from "..";
-import Select from "../../select";
+import Form, { FormItem } from "../../form";
+import { RadioGroup } from "../../radio";
 import Space from "../../space";
 import IconsDemo from "../__demos__/icons.vue";
 import { useDemoControls } from "../../../test-utils/demo-controls";
@@ -28,7 +29,9 @@ test("icon layouts share variant and size controls without hiding labels", async
         CIconDelete: IconDelete,
         CIconClose: IconClose,
         CButton: Button,
-        CSelect: Select,
+        CRadioGroup: RadioGroup,
+        CForm: Form,
+        CFormItem: FormItem,
         CSpace: Space,
       },
     },
@@ -74,7 +77,7 @@ test("icon layouts share variant and size controls without hiding labels", async
         .slice(12)
         .every((b) => b.classes().includes("c-button--stacked")),
     ).toBe(true);
-    const controls = wrapper.findAllComponents(Select);
+    const controls = wrapper.findAllComponents(RadioGroup);
     for (const variant of ["default", "text", "outline", "tonal"]) {
       controls[0].vm.$emit("update:modelValue", variant);
       for (const size of ["xs", "sm", "md", "lg", "xl"]) {

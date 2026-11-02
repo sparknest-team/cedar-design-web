@@ -6,7 +6,7 @@ permalink: /components/tabs/
 
 导航与内容使用同一套 API，PC 和移动端通过主题变量保留视觉密度差异。
 
-## 案例
+## 基础示例
 
 ### 最简单用法
 
@@ -14,19 +14,30 @@ permalink: /components/tabs/
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### 仅导航
+## 外观与状态
 
-只需要标签导航时，无需编写内容组件；直接在 `TabsNavs` 中声明 `TabNav` 即可。
+### 外观组合
 
-<demo src="./__demos__/nav-content.vue"></demo>
+适用于同级内容之间的切换。调整变体、尺寸，用相同数据观察变化。内容保持一致，便于比较不同设置的实际效果。
 
-### 完整组合
+<demo src="./__demos__/appearance-lab.vue"></demo>
 
-需要分别控制导航和内容时，可以组合使用 `TabsNavs`、`TabNav`、`TabsItems` 和 `TabItem`。
-
-<demo src="./__demos__/same-source.vue"></demo>
+## 外观与方向
 
 ### 外观变体与尺寸
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `orientation` | 标签导航的横纵轴向，默认 horizontal；影响导航布局和方向键操作 | 外观变体与尺寸、方向与指示器位置 |
+| `item-style` | `StyleValue` | 自定义内容间距、自定义内部样式 |
+| `default-value` | `string / number` | 自定义内容间距、自定义内部样式 |
+| `variant` | `line / card / outline / plain / capsule / enclosed` | 外观变体与尺寸 |
+| `size` | `xs / sm / md / lg / xl` | 外观变体与尺寸 |
+| `editable` | `boolean` | 外观变体与尺寸 |
+<!-- demo-config-notes:end -->
 
 通过 `variant`、`size` 和 `orientation` 切换标签页的外观、尺寸与排列方向。
 
@@ -39,35 +50,11 @@ permalink: /components/tabs/
 
 <demo src="./__demos__/position.vue"></demo>
 
-### 动态增删标签
-
-编辑模式支持增加和关闭标签，标签数据仍由使用者维护。
-
-<demo src="./__demos__/editable.vue"></demo>
-
 ### 图标标签
 
 通过 `icon` 插槽为标签添加图标，配合 `item-vertical` 可以让图标与文字纵向排列。
 
 <demo src="./__demos__/icon-tabs.vue"></demo>
-
-### 按需挂载内容
-
-开启 `lazy-load` 后，面板会在第一次激活时挂载，适合初始化成本较高的内容。
-
-<demo src="./__demos__/lazy-load.vue"></demo>
-
-### 导航附加内容
-
-使用 `TabsNavs` 的 `prefix`、`suffix` 和 `add-icon` 插槽扩展导航区域。
-
-<demo src="./__demos__/suffix.vue"></demo>
-
-### 切换触发方式
-
-`trigger` 支持点击或悬浮切换；触摸设备始终使用点击操作。
-
-<demo src="./__demos__/trigger.vue"></demo>
 
 ### 自定义内容间距
 
@@ -75,18 +62,76 @@ permalink: /components/tabs/
 
 <demo src="./__demos__/no-padding.vue"></demo>
 
-### 外观组合
+### 自定义内部样式
 
-适用于同级内容之间的切换。调整变体、尺寸，用相同数据观察变化。内容保持一致，便于比较不同设置的实际效果。
+<demo src="./__demos__/custom-style.vue"></demo>
 
-<demo src="./__demos__/appearance-lab.vue"></demo>
+六个样式属性统一配置在 Tabs 上，对所有对应项生效。自定义类名与内置类名合并；内联样式可覆盖默认间距。`item-wrapper-*` 对应 role="tabpanel" 外层，`item-*` 对应实际内容内层，`tab-*` 对应导航标签外层。
 
-<!-- api-review:start -->
-### 功能调试
+内容间距使用 `item-style`，导航整体间距可通过 TabsNavs 的 `style` 或 CSS token 调整。
 
-<demo src="./__demos__/api-review.vue"></demo>
+## 导航与内容组合
 
-<!-- api-review:end -->
+### 仅导航
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `default-value` | `string / number` | 仅导航 |
+| `swipeable` | `boolean` | 完整组合 |
+| `lazy-load` | `boolean` | 完整组合 |
+<!-- demo-config-notes:end -->
+
+只需要标签导航时，无需编写内容组件；直接在 `TabsNavs` 中声明 `TabNav` 即可。
+
+<demo src="./__demos__/nav-content.vue"></demo>
+
+### 完整组合
+
+需要分别控制导航和内容时，可以组合使用 `TabsNavs`、`TabNav`、`TabsItems` 和 `TabItem`。
+
+<demo src="./__demos__/same-source.vue"></demo>
+
+### 导航附加内容
+
+使用 `TabsNavs` 的 `prefix`、`suffix` 和 `add-icon` 插槽扩展导航区域。
+
+<demo src="./__demos__/suffix.vue"></demo>
+
+## 交互与动态标签
+
+### 切换触发方式
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `default-value` | `string / number` | 切换触发方式、按需挂载内容 |
+| `trigger` | `click / hover` | 切换触发方式 |
+| `lazy-load` | `boolean` | 按需挂载内容 |
+| `variant` | `line / card / outline / plain / capsule / enclosed` | 动态增删标签 |
+| `editable` | `boolean` | 动态增删标签 |
+| `show-add-button` | `boolean` | 动态增删标签 |
+<!-- demo-config-notes:end -->
+
+`trigger` 支持点击或悬浮切换；触摸设备始终使用点击操作。
+
+<demo src="./__demos__/trigger.vue"></demo>
+
+### 按需挂载内容
+
+开启 `lazy-load` 后，面板会在第一次激活时挂载，适合初始化成本较高的内容。
+
+<demo src="./__demos__/lazy-load.vue"></demo>
+
+### 动态增删标签
+
+编辑模式支持增加和关闭标签，标签数据仍由使用者维护。
+
+<demo src="./__demos__/editable.vue"></demo>
 
 ## API
 
@@ -102,8 +147,8 @@ TabPane、TabNav、TabItem 都需要唯一的 `name`；选中值及导航与面�
 | default-value | `string / number` | `undefined` | 非受控初值，省略选首个可用项 |
 | variant | `line / card / outline / plain / capsule / enclosed` | `line` | 视觉变体 |
 | size | `xs / sm / md / lg / xl` | `全局值或 md` | 尺寸 |
-| orientation | `horizontal / vertical` | `horizontal` | 导航方向 |
-| indicator-position | `normal / reverse` | `normal` | 指示器在内容侧或相反侧 |
+| orientation | 标签导航的横纵轴向，默认 horizontal；影响导航布局和方向键操作 | `horizontal` | 导航方向 |
+| indicator-position | 指示器位于导航靠内容的一侧 normal 或相反侧 reverse，默认 normal；不使用四边值 | `normal` | 指示器在内容侧或相反侧 |
 | editable | `boolean` | `false` | 允许关闭标签 |
 | show-add-button | `boolean` | `false` | 编辑模式显示新增按钮 |
 | auto-switch | `boolean` | `false` | 新增后切换最后一个可用标签 |
@@ -119,7 +164,7 @@ TabPane、TabNav、TabItem 都需要唯一的 `name`；选中值及导航与面�
 | tab-style | `StyleValue` | `undefined` | 导航标签外层（含标题与关闭按钮）样式，支持字符串、对象和数组 |
 | hide-content | `boolean` | `false` | 隐藏内容区域 |
 | trigger | `click / hover` | `click` | 鼠标触发方式，触摸始终点击 |
-| scroll-position | `start / end / center / auto / number` | `auto` | 选中标签滚动位置，数字为起点偏移 |
+| scroll-position | 选中标签在导航滚动视口中的目标位置或数值偏移，默认 auto；不是弹层方位 | `auto` | 选中标签滚动位置，数字为起点偏移 |
 | scroll-buttons | `boolean / auto` | `auto` | 溢出时显示箭头，auto 在触摸设备隐藏 |
 | activation-mode | `automatic / manual` | `automatic` | 方向键是否立即选中 |
 | swipeable | `boolean` | `false` | 内容横向触摸切换；不循环 |
@@ -191,14 +236,6 @@ TabNav 与 TabItem 使用相同的 `name` 建立对应关系；`name` 在同组�
 ### 类型
 
 导出 TabsName、TabsVariant、TabsTrigger、TabsIndicatorPosition、TabsScrollPosition、TabsActivationMode，以及六组件对应的 Props / Instance / 运行时 props / `_XxxComponent`。同一 props 定义用于两端。
-
-## 自定义内部样式
-
-<demo src="./__demos__/custom-style.vue"></demo>
-
-六个样式属性统一配置在 Tabs 上，对所有对应项生效。自定义类名与内置类名合并；内联样式可覆盖默认间距。`item-wrapper-*` 对应 role="tabpanel" 外层，`item-*` 对应实际内容内层，`tab-*` 对应导航标签外层。
-
-内容间距使用 `item-style`，导航整体间距可通过 TabsNavs 的 `style` 或 CSS token 调整。
 
 ## 样式变量
 

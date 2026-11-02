@@ -57,11 +57,11 @@ describe("Notification service ID ownership", () => {
     Notification.info({
       id: "scoped-left",
       content: "keep left",
-      position: "topLeft",
+      position: "top-left",
       duration: 0,
     });
     await nextTick();
-    Notification.clear("topRight");
+    Notification.clear("top-right");
     Notification.info({
       id: "scoped-right",
       content: "scoped new right",
@@ -78,7 +78,7 @@ describe("Notification service ID ownership", () => {
       duration: 0,
     });
     await nextTick();
-    Notification.clear("topRight");
+    Notification.clear("top-right");
     Notification.info({
       id: "clear-readd",
       content: "new content",
@@ -91,13 +91,13 @@ describe("Notification service ID ownership", () => {
     Notification.info({
       id: "left-id",
       content: "old left",
-      position: "topLeft",
+      position: "top-left",
       duration: 0,
     });
     Notification.info({
       id: "right-id",
       content: "old right",
-      position: "bottomRight",
+      position: "bottom-right",
       duration: 0,
     });
     await nextTick();
@@ -105,13 +105,13 @@ describe("Notification service ID ownership", () => {
     Notification.info({
       id: "left-id",
       content: "new left",
-      position: "topLeft",
+      position: "top-left",
       duration: 0,
     });
     Notification.info({
       id: "right-id",
       content: "new right",
-      position: "bottomRight",
+      position: "bottom-right",
       duration: 0,
     });
     await nextTick();
@@ -129,7 +129,7 @@ describe("Notification service ID ownership", () => {
     });
     await nextTick();
     vi.advanceTimersByTime(30);
-    Notification.clear("topRight");
+    Notification.clear("top-right");
     Notification.info({
       id: "timer-readd",
       content: "new timed",
@@ -150,3 +150,49 @@ describe("Notification service ID ownership", () => {
     expect(oldClose).not.toHaveBeenCalled();
   });
 });
+
+
+test('canonical corner values create independent notification regions', async () => {
+  const corners = ['top-left', 'top-right', 'bottom-left', 'bottom-right'] as const;
+  for (const position of corners) {
+    Notification.info({ id: position, content: position, position, duration: 0 });
+  }
+  await nextTick();
+  for (const position of corners) {
+    expect(document.querySelector(`.c-notification-list-${position}`)?.textContent).toContain(position);
+  }
+  Notification.clear('bottom-left');
+  await nextTick();
+  expect(document.querySelector('.c-notification-list-top-right')?.textContent).toContain('top-right');
+  expect(document.querySelector('.c-notification-list-bottom-right')?.textContent).toContain('bottom-right');
+});
+
+test('throwing close callback cannot retain the notification or reserve its ID', async () => {
+  const cause = new Error('close notification')
+  const handle = Notification.info({ id: 'throw-close', content: 'stale callback item', duration: 0, onClose: () => { throw cause } })
+  await nextTick()
+  expect(() => handle.close()).toThrow(cause)
+  await nextTick()
+  vi.advanceTimersByTime(500)
+  await nextTick()
+  expect(document.body.textContent).not.toContain('stale callback item')
+  Notification.info({ id: 'throw-close', content: 'new item', duration: 0 })
+  await nextTick()
+  expect(document.body.textContent).toContain('new item')
+  expect(document.body.textContent).not.toContain('stale callback item')
+})
+
+test('a close notification may replace its own logical ID without corrupting new ownership', async () => {
+  const old = Notification.info({ id: 'reentrant-close', content: 'old reentrant', duration: 0, onClose: () => {
+    Notification.info({ id: 'reentrant-close', content: 'new reentrant', duration: 0 })
+  } })
+  await nextTick()
+  old.close()
+  await nextTick()
+  Notification.info({ id: 'reentrant-close', content: 'updated reentrant', duration: 0 })
+  await nextTick()
+  vi.advanceTimersByTime(500)
+  await nextTick()
+  expect(document.querySelectorAll('.c-notification')).toHaveLength(1)
+  expect(document.body.textContent).toContain('updated reentrant')
+})

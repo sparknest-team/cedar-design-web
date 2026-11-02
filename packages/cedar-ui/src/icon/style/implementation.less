@@ -22,8 +22,8 @@
   }
 
   &--shrinking {
-    transform: scale(0);
-    transition-property: transform;
+    scale: 0;
+    transition-property: scale;
   }
 
   &-spin,
@@ -42,5 +42,5 @@
   .c-icon-spin,
   .c-icon--spin { animation: none; }
   .c-icon { transition: none !important; }
-  .c-icon--shrinking { transform: none; }
+  .c-icon--shrinking { scale: none; }
 }

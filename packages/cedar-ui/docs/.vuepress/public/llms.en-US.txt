@@ -1,0 +1,121 @@
+# Cedar Design Web
+
+> Vue 3 component library. Package: @cedar-design/ui. Component prefix: C / c-.
+
+Read the quick start and the relevant component page before generating code. Follow the documented props, events, slots, imports and styles. Do not substitute APIs from another component library.
+
+Documentation language: en-US.
+
+- [Full documentation](./llms-full.en-US.txt)
+- [Affix](./llms/en-US/components/affix.md): /en/components/affix/
+- [Alert](./llms/en-US/components/alert.md): /en/components/alert/
+- [Anchor](./llms/en-US/components/anchor.md): /en/components/anchor/
+- [AutoComplete](./llms/en-US/components/auto-complete.md): /en/components/auto-complete/
+- [Avatar](./llms/en-US/components/avatar.md): /en/components/avatar/
+- [BackTop](./llms/en-US/components/back-top.md): /en/components/back-top/
+- [Badge](./llms/en-US/components/badge.md): /en/components/badge/
+- [Breadcrumb](./llms/en-US/components/breadcrumb.md): /en/components/breadcrumb/
+- [Button](./llms/en-US/components/button.md): /en/components/button/
+- [Calendar](./llms/en-US/components/calendar.md): /en/components/calendar/
+- [Card](./llms/en-US/components/card.md): /en/components/card/
+- [Carousel](./llms/en-US/components/carousel.md): /en/components/carousel/
+- [Cascader](./llms/en-US/components/cascader.md): /en/components/cascader/
+- [Checkbox](./llms/en-US/components/checkbox.md): /en/components/checkbox/
+- [Col](./llms/en-US/components/col.md): /en/components/col/
+- [Collapse](./llms/en-US/components/collapse.md): /en/components/collapse/
+- [Color Picker](./llms/en-US/components/color-picker.md): /en/components/color-picker/
+- [Color](./llms/en-US/components/color.md): /en/components/color/
+- [Config Provider](./llms/en-US/components/config-provider.md): /en/components/config-provider/
+- [Count To](./llms/en-US/components/count-to.md): /en/components/count-to/
+- [Countdown](./llms/en-US/components/countdown.md): /en/components/countdown/
+- [Date Picker](./llms/en-US/components/date-picker.md): /en/components/date-picker/
+- [DateRange](./llms/en-US/components/date-range.md): /en/components/date-range/
+- [Date](./llms/en-US/components/date.md): /en/components/date/
+- [Descriptions](./llms/en-US/components/descriptions.md): /en/components/descriptions/
+- [Dialog](./llms/en-US/components/dialog.md): /en/components/dialog/
+- [Divider](./llms/en-US/components/divider.md): /en/components/divider/
+- [Drawer](./llms/en-US/components/drawer.md): /en/components/drawer/
+- [Ellipsis](./llms/en-US/components/ellipsis.md): /en/components/ellipsis/
+- [Empty](./llms/en-US/components/empty.md): /en/components/empty/
+- [Field Decorator](./llms/en-US/components/field-decorator.md): /en/components/field-decorator/
+- [Filter Form](./llms/en-US/components/filter-form.md): /en/components/filter-form/
+- [Form](./llms/en-US/components/form.md): /en/components/form/
+- [Grid](./llms/en-US/components/grid.md): /en/components/grid/
+- [Hover](./llms/en-US/components/hover.md): /en/components/hover/
+- [Icon](./llms/en-US/components/icon.md): /en/components/icon/
+- [Image](./llms/en-US/components/image.md): /en/components/image/
+- [Infinite Scroll](./llms/en-US/components/infinite-scroll.md): /en/components/infinite-scroll/
+- [InputNumber](./llms/en-US/components/input-number.md): /en/components/input-number/
+- [InputTag](./llms/en-US/components/input-tag.md): /en/components/input-tag/
+- [Input](./llms/en-US/components/input.md): /en/components/input/
+- [Layout](./llms/en-US/components/layout.md): /en/components/layout/
+- [Link](./llms/en-US/components/link.md): /en/components/link/
+- [List](./llms/en-US/components/list.md): /en/components/list/
+- [Loading](./llms/en-US/components/loading.md): /en/components/loading/
+- [Map](./llms/en-US/components/map.md): /en/components/map/
+- [Mention](./llms/en-US/components/mention.md): /en/components/mention/
+- [Menu](./llms/en-US/components/menu.md): /en/components/menu/
+- [Message](./llms/en-US/components/message.md): /en/components/message/
+- [Nav Menu](./llms/en-US/components/nav-menu.md): /en/components/nav-menu/
+- [Notification](./llms/en-US/components/notification.md): /en/components/notification/
+- [Overflow List](./llms/en-US/components/overflow-list.md): /en/components/overflow-list/
+- [Overlay](./llms/en-US/components/overlay.md): /en/components/overlay/
+- [Page Header](./llms/en-US/components/page-header.md): /en/components/page-header/
+- [Pagination](./llms/en-US/components/pagination.md): /en/components/pagination/
+- [Style Palette](./llms/en-US/components/palette.md): /en/components/palette/
+- [Paper](./llms/en-US/components/paper.md): /en/components/paper/
+- [PeopleSelect](./llms/en-US/components/people-select.md): /en/components/people-select/
+- [Popconfirm](./llms/en-US/components/popconfirm.md): /en/components/popconfirm/
+- [Popover](./llms/en-US/components/popover.md): /en/components/popover/
+- [Progress Group](./llms/en-US/components/progress-group.md): /en/components/progress-group/
+- [Progress](./llms/en-US/components/progress.md): /en/components/progress/
+- [Radio](./llms/en-US/components/radio.md): /en/components/radio/
+- [Rate](./llms/en-US/components/rate.md): /en/components/rate/
+- [Resize Box](./llms/en-US/components/resize-box.md): /en/components/resize-box/
+- [Result](./llms/en-US/components/result.md): /en/components/result/
+- [Ripple](./llms/en-US/components/ripple.md): /en/components/ripple/
+- [Row](./llms/en-US/components/row.md): /en/components/row/
+- [Scheduler](./llms/en-US/components/scheduler.md): /en/components/scheduler/
+- [Scrollbar](./llms/en-US/components/scrollbar.md): /en/components/scrollbar/
+- [Search](./llms/en-US/components/search.md): /en/components/search/
+- [Segmented](./llms/en-US/components/segmented.md): /en/components/segmented/
+- [Select](./llms/en-US/components/select.md): /en/components/select/
+- [Skeleton](./llms/en-US/components/skeleton.md): /en/components/skeleton/
+- [Slider](./llms/en-US/components/slider.md): /en/components/slider/
+- [Space](./llms/en-US/components/space.md): /en/components/space/
+- [Split Button](./llms/en-US/components/split-button.md): /en/components/split-button/
+- [Split](./llms/en-US/components/split.md): /en/components/split/
+- [Statistic](./llms/en-US/components/statistic.md): /en/components/statistic/
+- [Steps](./llms/en-US/components/steps.md): /en/components/steps/
+- [Style Provider](./llms/en-US/components/style-provider.md): /en/components/style-provider/
+- [Style Atomic Css](./llms/en-US/components/style/atomic-css.md): /en/components/style/atomic-css/
+- [Style Atomic Usage](./llms/en-US/components/style/atomic-usage.md): /en/components/style/atomic-usage/
+- [Style Color](./llms/en-US/components/style/color.md): /en/components/style/color/
+- [Style Elevation](./llms/en-US/components/style/elevation.md): /en/components/style/elevation/
+- [Style Typography](./llms/en-US/components/style/typography.md): /en/components/style/typography/
+- [Style Utilities](./llms/en-US/components/style/utilities.md): /en/components/style/utilities/
+- [Switch](./llms/en-US/components/switch.md): /en/components/switch/
+- [Table Column Manager](./llms/en-US/components/table-column-manager.md): /en/components/table-column-manager/
+- [Table](./llms/en-US/components/table.md): /en/components/table/
+- [Tabs](./llms/en-US/components/tabs.md): /en/components/tabs/
+- [Tag](./llms/en-US/components/tag.md): /en/components/tag/
+- [Textarea](./llms/en-US/components/textarea.md): /en/components/textarea/
+- [Time Picker](./llms/en-US/components/time-picker.md): /en/components/time-picker/
+- [TimeRange](./llms/en-US/components/time-range.md): /en/components/time-range/
+- [Time](./llms/en-US/components/time.md): /en/components/time/
+- [Timeline](./llms/en-US/components/timeline.md): /en/components/timeline/
+- [Tooltip](./llms/en-US/components/tooltip.md): /en/components/tooltip/
+- [Transfer](./llms/en-US/components/transfer.md): /en/components/transfer/
+- [TreeSelect](./llms/en-US/components/tree-select.md): /en/components/tree-select/
+- [Tree](./llms/en-US/components/tree.md): /en/components/tree/
+- [Trigger](./llms/en-US/components/trigger.md): /en/components/trigger/
+- [Typography](./llms/en-US/components/typography.md): /en/components/typography/
+- [Upload](./llms/en-US/components/upload.md): /en/components/upload/
+- [Verification Code](./llms/en-US/components/verification-code.md): /en/components/verification-code/
+- [Watermark](./llms/en-US/components/watermark.md): /en/components/watermark/
+- [Controlled state, defaults and clear values: learn by interaction](./llms/en-US/guide/controlled-uncontrolled.md): /en/guide/controlled-uncontrolled/
+- [Empty recognition, clear output and reading placeholders](./llms/en-US/guide/empty-values.md): /en/guide/empty-values/
+- [LLM documentation](./llms/en-US/guide/llms.md): /en/guide/llms/
+- [Cedar Design Web](./llms/en-US/index.md): /en/
+- [Loading and waiting](./llms/en-US/showcase/loading.md): /en/showcase/loading/
+- [Themes](./llms/en-US/themes.md): /en/themes/

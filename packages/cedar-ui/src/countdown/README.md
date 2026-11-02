@@ -4,8 +4,6 @@ permalink: /components/countdown/
 
 # Countdown 倒计时
 
-## 案例
-
 ### Countdown 业务时钟与停用边界
 
 Countdown 的 RAF 刷新业务剩余时间，不是视觉插值；CSS duration／减少动效不能改变业务计时。暂停与 KeepAlive 停用冻结剩余时间，重新激活按冻结值续跑，不把停用期间计入消耗。停用时更新 time／reset 可更新剩余数据及 change 通知，但不申请 RAF；auto-start 的启动延后到激活，手动 pause 取消待恢复。停用期间直接 start 被忽略，卸载后的 start／reset 不再通知或调度。
@@ -14,33 +12,45 @@ Countdown 的 RAF 刷新业务剩余时间，不是视觉插值；CSS duration�
 
 `time` 为剩余时长（毫秒）。若要对准某个时刻，传入 `deadline - Date.now()`。
 
+## 基础示例
+
 ### 基础用法
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### 自定义格式
+## 内容与展示
 
-`format` 占位符为 `DD` / `HH` / `mm` / `ss` / `S`（`SS` / `SSS`）。未出现的高位会累加到下一级。
+### 时间格式与自定义内容
 
-<demo src="./__demos__/format.vue"></demo>
+<!-- demo-config-notes:start -->
+#### 本组配置对照
 
-### 显示毫秒
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `time` | 倒计时时长（毫秒） | 时间格式与自定义内容、嵌入 Statistic |
+| `format` | 展示格式 | 时间格式与自定义内容、嵌入 Statistic |
+<!-- demo-config-notes:end -->
+
+比较单位格式、毫秒显示和自定义时间片段。使用各示例中的时间字段检查最终文本，而非把精度与启动控制混在一起。
+
+<details>
+<summary>配置说明与使用限制</summary>
+
+#### 显示毫秒
 
 通过 `S` / `SS` / `SSS` 展示毫秒。
 
-<demo src="./__demos__/millisecond.vue"></demo>
+#### 自定义格式
 
-### 自定义样式
+`format` 占位符为 `DD` / `HH` / `mm` / `ss` / `S`（`SS` / `SSS`）。未出现的高位会累加到下一级。
+
+#### 自定义样式
 
 默认插槽参数为 `timeData`，可按天、时、分、秒分别渲染。
 
-<demo src="./__demos__/custom.vue"></demo>
+</details>
 
-### 手动控制
-
-设置 `auto-start` 为 `false`，通过 `start`、`pause`、`reset` 控制。倒计时结束时触发 `end`。
-
-<demo src="./__demos__/manual.vue"></demo>
+<demo src="./__demos__/format-comparison.vue"></demo>
 
 ### 嵌入 Statistic
 
@@ -48,12 +58,23 @@ Countdown 的 RAF 刷新业务剩余时间，不是视觉插值；CSS duration�
 
 <demo src="./__demos__/statistic.vue"></demo>
 
-<!-- api-review:start -->
-### 功能调试
+## 交互与控制
 
-<demo src="./__demos__/api-review.vue"></demo>
+### 手动控制
 
-<!-- api-review:end -->
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `time` | 倒计时时长（毫秒） | 手动控制 |
+| `auto-start` | 是否自动开始倒计时 | 手动控制 |
+| `format` | 展示格式 | 手动控制 |
+<!-- demo-config-notes:end -->
+
+设置 `auto-start` 为 `false`，通过 `start`、`pause`、`reset` 控制。倒计时结束时触发 `end`。
+
+<demo src="./__demos__/manual.vue"></demo>
 
 ## API
 

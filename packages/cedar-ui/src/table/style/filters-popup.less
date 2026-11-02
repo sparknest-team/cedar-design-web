@@ -25,8 +25,8 @@
     width: 100%;
     max-width: var(~'--c-table-filters-text-max-width');
     height: var(~'--c-table-filters-text-height');
-    margin-right: 0;
-    padding-left: var(~'--c-table-filters-text-padding-left');
+    margin-inline-end: 0;
+    padding-inline-start: var(~'--c-table-filters-text-padding-left');
     overflow: hidden;
     line-height: var(~'--c-table-filters-text-line-height');
     white-space: nowrap;
@@ -43,7 +43,7 @@
     border-top: 1px solid var(~'--c-table-border-color');
 
     > *:not(*:last-child) {
-      margin-right: var(~'--c-table-filters-bottom-gap');
+      margin-inline-end: var(~'--c-table-filters-bottom-gap');
     }
   }
 }

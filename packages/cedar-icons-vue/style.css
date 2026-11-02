@@ -1,0 +1,12 @@
+svg.c-icon-spin {
+  animation: c-svg-icon-spin var(--c-icon-spin-duration, 1s) infinite linear;
+}
+
+@keyframes c-svg-icon-spin {
+  from { rotate: 0deg; }
+  to { rotate: 360deg; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  svg.c-icon-spin { animation: none; }
+}

@@ -6,6 +6,7 @@ import {
   Fragment,
   h,
   isVNode,
+  mergeProps,
   nextTick,
   onActivated,
   onBeforeUnmount,
@@ -18,6 +19,7 @@ import {
   type CSSProperties,
   type VNode,
 } from 'vue'
+import { useDirection } from '../_utils/direction'
 import { createNamespace } from '../_utils/global-config'
 import { carouselInjectionKey } from './context'
 import { DownIcon, NextIcon, PreviousIcon, UpIcon } from './icons'
@@ -34,6 +36,11 @@ const attrs = useAttrs()
 const text = useCarouselLocale()
 const { n, classes } = createNamespace('carousel')
 const root = ref<HTMLElement>()
+const { isRtl } = useDirection(
+  () => root.value,
+  () => attrs.dir,
+)
+const axisSign = computed(() => (!vertical.value && isRtl.value ? -1 : 1))
 const viewportEl = ref<HTMLElement>()
 const track = ref<HTMLElement>()
 const keys = ref<Array<string | number | symbol>>([])
@@ -42,7 +49,7 @@ const measured = ref<number[]>([])
 const measuredGap = ref(0)
 const local = ref(props.defaultValue)
 const current = computed(() => normalizeIndex((props.modelValue ?? local.value) - 1, keys.value.length))
-const vertical = computed(() => props.direction === 'vertical')
+const vertical = computed(() => props.orientation === 'vertical')
 const layout = computed(() =>
   carouselLayout(
     viewport.value,
@@ -153,7 +160,9 @@ function to(slideNumber: number, options: CarouselToOptions = {}) {
   toIndex(slideNumber - 1, options)
 }
 function toIndex(index: number, options: CarouselToOptions = {}) {
-  if (!active || disposed) { return }
+  if (!active || disposed) {
+    return
+  }
   if (!keys.value.length || !Number.isFinite(index)) {
     return
   }
@@ -185,7 +194,7 @@ function itemStyle(index: number): CSSProperties {
   const dimension = vertical.value ? 'height' : 'width'
   const shift = itemShift(index)
   return {
-    translate: shift ? (vertical.value ? '0 ' + shift + 'px' : shift + 'px 0') : undefined,
+    translate: shift ? (vertical.value ? '0 ' + shift + 'px' : shift * axisSign.value + 'px 0') : undefined,
     [dimension]:
       props.slidesPerView === 'auto'
         ? 'auto'
@@ -314,7 +323,7 @@ function pointerMove(event: PointerEvent) {
       event.preventDefault()
     }
   }
-  dragOffset.value = props.effect === 'fade' ? 0 : delta
+  dragOffset.value = props.effect === 'fade' ? 0 : delta * axisSign.value
 }
 function pointerUp(event: PointerEvent) {
   if (!pointer || pointer.id !== event.pointerId) {
@@ -329,16 +338,18 @@ function pointerUp(event: PointerEvent) {
     suppressClick = true
   }
   if (shouldMove) {
-    toIndex(current.value + (delta < 0 ? 1 : -1))
+    toIndex(current.value + (delta * axisSign.value < 0 ? 1 : -1))
   }
 }
 function keydown(event: KeyboardEvent) {
-  if (!active || disposed) { return }
+  if (!active || disposed) {
+    return
+  }
   if (!props.keyboard || editable(event.target) || event.altKey || event.ctrlKey || event.metaKey) {
     return
   }
-  const previous = vertical.value ? 'ArrowUp' : 'ArrowLeft'
-  const following = vertical.value ? 'ArrowDown' : 'ArrowRight'
+  const previous = vertical.value ? 'ArrowUp' : isRtl.value ? 'ArrowRight' : 'ArrowLeft'
+  const following = vertical.value ? 'ArrowDown' : isRtl.value ? 'ArrowLeft' : 'ArrowRight'
   if (![previous, following, 'Home', 'End'].includes(event.key)) {
     return
   }
@@ -353,7 +364,9 @@ function keydown(event: KeyboardEvent) {
 }
 let wheelTime = 0
 function wheel(event: WheelEvent) {
-  if (!active || disposed) { return }
+  if (!active || disposed) {
+    return
+  }
   if (!props.mousewheel || editable(event.target) || keys.value.length < 2 || Math.abs(event.deltaY) < 10) {
     return
   }
@@ -367,12 +380,16 @@ function wheel(event: WheelEvent) {
   toIndex(current.value + (event.deltaY > 0 ? 1 : -1))
 }
 function focusin() {
-  if (!active || disposed) { return }
+  if (!active || disposed) {
+    return
+  }
   focused.value = true
   schedule()
 }
 function focusout(event: FocusEvent) {
-  if (!active || disposed) { return }
+  if (!active || disposed) {
+    return
+  }
   if (!root.value?.contains(event.relatedTarget as Node)) {
     focused.value = false
     schedule()
@@ -386,11 +403,15 @@ function attach() {
   owner = root.value?.ownerDocument
   const binding = ++bindingGeneration
   const measure = () => {
-    if (active && binding === bindingGeneration) { resize() }
+    if (active && binding === bindingGeneration) {
+      resize()
+    }
   }
   bindingResize = measure
   bindingWheel = (event) => {
-    if (active && binding === bindingGeneration) { wheel(event) }
+    if (active && binding === bindingGeneration) {
+      wheel(event)
+    }
   }
   if (typeof ResizeObserver !== 'undefined') {
     observer = new ResizeObserver(measure)
@@ -437,7 +458,9 @@ function detach() {
     owner?.removeEventListener('visibilitychange', bindingResize)
     owner?.defaultView?.removeEventListener('resize', bindingResize)
   }
-  if (bindingWheel) { viewportEl.value?.removeEventListener('wheel', bindingWheel) }
+  if (bindingWheel) {
+    viewportEl.value?.removeEventListener('wheel', bindingWheel)
+  }
   bindingResize = undefined
   bindingWheel = undefined
   focused.value = false
@@ -447,7 +470,10 @@ function detach() {
 onMounted(attach)
 onActivated(attach)
 onDeactivated(detach)
-onBeforeUnmount(() => { disposed = true; detach() })
+onBeforeUnmount(() => {
+  disposed = true
+  detach()
+})
 watch(
   current,
   (index, previous) => {
@@ -455,8 +481,12 @@ watch(
     const generation = motionGeneration
     const element = track.value
     const view = owner?.defaultView
-    const valid = () => active && !disposed && generation === motionGeneration &&
-      track.value === element && element?.ownerDocument.defaultView === view
+    const valid = () =>
+      active &&
+      !disposed &&
+      generation === motionGeneration &&
+      track.value === element &&
+      element?.ownerDocument.defaultView === view
     schedule()
     let from =
       motionOffset.value ??
@@ -467,7 +497,8 @@ watch(
     const transform = track.value && owner?.defaultView?.getComputedStyle(track.value).transform
     if (transform?.startsWith('matrix(')) {
       const matrix = transform.slice(7, -1).split(',').map(Number)
-      from = -(matrix[vertical.value ? 5 : 4] || 0)
+      // CSS matrices are physical; loop windows use logical offsets.
+      from = -(matrix[vertical.value ? 5 : 4] || 0) * axisSign.value
     }
     noMotion.value = false
     motionOffset.value = undefined
@@ -496,11 +527,15 @@ watch(
       scheduled = true
       const raw = element && view?.getComputedStyle(element).transitionDuration
       const duration = props.moveSpeed ?? (raw ? parseFloat(raw) * (raw.includes('ms') ? 1 : 1000) : 180)
-      if (!valid()) { return }
+      if (!valid()) {
+        return
+      }
       let settled = false
       settleTimer = setTimeout(
         () => {
-          if (!valid() || settled) { return }
+          if (!valid() || settled) {
+            return
+          }
           settled = true
           settleTimer = undefined
           noMotion.value = true
@@ -510,12 +545,16 @@ watch(
             frameOwner = view
             let first = false
             animationFrame = view.requestAnimationFrame(() => {
-              if (!valid() || first) { return }
+              if (!valid() || first) {
+                return
+              }
               first = true
               animationFrame = 0
               let second = false
               animationFrame = view.requestAnimationFrame(() => {
-                if (!valid() || second) { return }
+                if (!valid() || second) {
+                  return
+                }
                 second = true
                 animationFrame = 0
                 frameOwner = undefined
@@ -532,7 +571,7 @@ watch(
 )
 watch(
   () => [
-    props.direction,
+    props.orientation,
     props.slidesPerView,
     props.spaceBetween,
     props.effect,
@@ -549,7 +588,11 @@ watch(
     transitionStart.value = undefined
     cancelPointer()
     const binding = bindingGeneration
-    nextTick(() => { if (active && binding === bindingGeneration) { resize() } })
+    nextTick(() => {
+      if (active && binding === bindingGeneration) {
+        resize()
+      }
+    })
   },
   { deep: true },
 )
@@ -571,7 +614,11 @@ const Render = () => {
     const render = ++renderGeneration
     const binding = bindingGeneration
     nextTick(() => {
-      if (active && render === renderGeneration && (binding === bindingGeneration || (binding === 0 && bindingGeneration === 1))) {
+      if (
+        active &&
+        render === renderGeneration &&
+        (binding === bindingGeneration || (binding === 0 && bindingGeneration === 1))
+      ) {
         observer?.disconnect()
         if (viewportEl.value) {
           observer?.observe(viewportEl.value)
@@ -583,7 +630,15 @@ const Render = () => {
       }
     })
   }
-  const scope = { slideNumber: current.value + 1, length: keys.value.length, hovering: hovering.value, next, prev, to, resize }
+  const scope = {
+    slideNumber: current.value + 1,
+    length: keys.value.length,
+    hovering: hovering.value,
+    next,
+    prev,
+    to,
+    resize,
+  }
   const duration: CSSProperties = {
     '--c-internal-carousel-duration':
       props.moveSpeed !== undefined && Number.isFinite(props.moveSpeed)
@@ -605,11 +660,14 @@ const Render = () => {
           n(),
           n('--' + props.effect),
           [vertical.value, n('--vertical')],
+          [isRtl.value, n('--rtl')],
           [props.indicatorPosition === 'outer', n('--outer')],
         ),
         attrs.class,
       ],
       style: [duration, { height: toSize(props.height) }, attrs.style as CSSProperties],
+      ...mergeProps(
+        {
       onMouseenter: () => {
         hovering.value = true
         schedule()
@@ -621,6 +679,11 @@ const Render = () => {
       onFocusin: focusin,
       onFocusout: focusout,
       onKeydown: keydown,
+        },
+        Object.fromEntries(Object.entries(attrs).filter(([key]) =>
+          ['onMouseenter', 'onMouseleave', 'onFocusin', 'onFocusout', 'onKeydown'].includes(key),
+        )),
+      ),
     },
     [
       h(
@@ -665,7 +728,7 @@ const Render = () => {
                     : 'translate' +
                       (vertical.value ? 'Y' : 'X') +
                       '(' +
-                      (-renderedOffset.value + dragOffset.value) +
+                      (-renderedOffset.value + dragOffset.value) * axisSign.value +
                       'px)',
                 transitionDuration: dragging.value || noMotion.value ? '0ms' : undefined,
               },
@@ -686,7 +749,7 @@ const Render = () => {
                   disabled: !keys.value.length || (!props.loop && current.value === 0),
                   onClick: () => prev(),
                 },
-                [h(vertical.value ? UpIcon : PreviousIcon)],
+                [h(vertical.value ? UpIcon : isRtl.value ? NextIcon : PreviousIcon)],
               ),
             slots.next?.(scope) ??
               h(
@@ -698,7 +761,7 @@ const Render = () => {
                   disabled: !keys.value.length || (!props.loop && current.value === keys.value.length - 1),
                   onClick: () => next(),
                 },
-                [h(vertical.value ? DownIcon : NextIcon)],
+                [h(vertical.value ? DownIcon : isRtl.value ? PreviousIcon : NextIcon)],
               ),
           ]
         : []),

@@ -1,4 +1,4 @@
-import { computed, onBeforeUnmount, ref, watch } from "vue";
+import { computed, onActivated, onDeactivated, onBeforeUnmount, ref, watch } from "vue";
 import type { ComputedRef, Ref, ExtractPropTypes } from "vue";
 import type { schedulerProps } from "./props";
 import type { SchedulerEmit } from "./use-scheduler";
@@ -39,15 +39,20 @@ export function useSchedulerTransactions(
   const undoStack = ref<RecordEntry[]>([]),
     redoStack = ref<RecordEntry[]>([]);
   let alive = true;
+  let operation = 0;
+  const retire = () => { operation++; pending.value = false; awaiting = undefined; };
   let dataRevision = 0;
   let baseline = fingerprint(value.value);
   let awaiting: { expected: string; accept: () => void } | undefined;
+  onDeactivated(() => { alive = false; retire(); });
+  onActivated(() => { alive = true; });
   onBeforeUnmount(() => {
+    retire();
     alive = false;
     awaiting = undefined;
   });
   const locked = computed(
-    () => props.readonly || props.disabled || props.loading || pending.value,
+    () => props.readonly || props.disabled || pending.value,
   );
   const limit = () =>
     Number.isInteger(props.historyLimit) && props.historyLimit > 0
@@ -121,7 +126,8 @@ export function useSchedulerTransactions(
     action: SchedulerTransactionAction = "change",
     record?: RecordEntry,
   ): Promise<boolean> {
-    if (locked.value) return false;
+    if (!alive || locked.value) return false;
+    const ticket = ++operation;
     pending.value = true;
     warnings.value = [];
     error.value = undefined;
@@ -269,11 +275,10 @@ export function useSchedulerTransactions(
         for (const hook of hooks)
           if ((await hook(detach(context).changes[0])) === false) return false;
       }
-      if (!alive) return false;
+      if (!alive || ticket !== operation) return false;
       if (
         props.readonly ||
         props.disabled ||
-        props.loading ||
         dataRevision !== revision ||
         rules !==
           JSON.stringify([
@@ -322,7 +327,7 @@ export function useSchedulerTransactions(
       emit("transaction", copy(next), detach(context));
       return true;
     } catch (cause) {
-      if (alive) {
+      if (alive && ticket === operation) {
         error.value =
           cause instanceof SchedulerError
             ? cause
@@ -332,7 +337,7 @@ export function useSchedulerTransactions(
       }
       return false;
     } finally {
-      if (alive) pending.value = false;
+      if (alive && ticket === operation) pending.value = false;
     }
   }
   async function undo() {

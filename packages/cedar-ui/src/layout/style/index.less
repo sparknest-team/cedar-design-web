@@ -165,3 +165,6 @@
     right: 100%;
   }
 }
+
+// Sider placement=left/right is a physical side, independent of reading order.
+.c-layout-has-sider:dir(rtl) { flex-direction: row-reverse; }

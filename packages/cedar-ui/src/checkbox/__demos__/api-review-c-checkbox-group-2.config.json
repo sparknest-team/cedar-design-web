@@ -32,9 +32,9 @@
       "initial": "{}"
     },
     {
-      "name": "direction",
+      "name": "orientation",
       "description": "复选框的排列方向",
-      "type": "Direction",
+      "type": "Orientation",
       "defaultValue": "'horizontal'",
       "kind": "enum",
       "options": [

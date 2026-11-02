@@ -1,5 +1,5 @@
 <template>
-  <div :class="prefixCls">
+  <div :class="prefixCls" @keydown="onColumnsKeydown">
     <TimeColumn
       v-if="columns.includes('H') || columns.includes('h')"
       :value="selectedHour"
@@ -77,6 +77,7 @@
 </template>
 
 <script lang="ts">
+import { navigateTemporalColumns } from '../../_utils/temporal-keyboard'
 import {
   computed,
   defineComponent,
@@ -287,6 +288,7 @@ export default defineComponent({
     }
 
     return {
+      onColumnsKeydown: (event: KeyboardEvent) => navigateTemporalColumns(event, '[role=listbox]', '[role=option]'),
       prefixCls,
       t,
       hours,

@@ -1,5 +1,5 @@
 import { computed, inject, Ref, toRef } from 'vue'
-import { FormItemContext, formItemInjectionKey } from '../form/context'
+import { FormItemContext, formItemInjectionKey, formInjectionKey } from '../form/context'
 import { ComponentSize } from '../_utils/constant'
 import { resolveFormControlState } from '../_utils/form-control-context'
 
@@ -19,11 +19,13 @@ export const useFormItem = ({
 } = {}) => {
   const formItemCtx = !uninject ? inject(formItemInjectionKey, {} as FormItemContext) : ({} as FormItemContext)
 
-  const mergedSize = computed(() => resolveFormControlState(size?.value, formItemCtx.size, undefined, undefined))
+  const form = !uninject ? inject(formInjectionKey, undefined) : undefined
 
-  const mergedDisabled = computed(() => resolveFormControlState(disabled?.value, formItemCtx.disabled, undefined, false))
+  const mergedSize = computed(() => resolveFormControlState(size?.value, formItemCtx.size, form?.size, undefined))
 
-  const mergedReadonly = computed(() => resolveFormControlState(readonly?.value, formItemCtx.readonly, undefined, false))
+  const mergedDisabled = computed(() => resolveFormControlState(disabled?.value, formItemCtx.disabled, form?.disabled, false))
+
+  const mergedReadonly = computed(() => resolveFormControlState(readonly?.value, formItemCtx.readonly, form?.readonly, false))
 
   const mergedError = computed(() => resolveFormControlState(error?.value, formItemCtx.error, undefined, false))
 

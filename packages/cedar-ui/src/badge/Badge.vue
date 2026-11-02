@@ -2,13 +2,11 @@
 import { computed, useSlots, type CSSProperties } from 'vue'
 import { createNamespace } from '../_utils/global-config'
 import { badgeProps } from './props'
-import { useBadgeDirection } from './platform'
 
 defineOptions({ name: createNamespace('badge').name })
 const { n, classes } = createNamespace('badge')
 const props = defineProps(badgeProps)
 const slots = useSlots()
-const direction = useBadgeDirection()
 const computedMode = computed(() => !slots.default && !props.description ? 'inline' : props.mode)
 const dotComputed = computed(() => props.content === undefined || props.dot)
 const countValue = computed(() => typeof props.content === 'number' ? props.content : null)
@@ -61,7 +59,7 @@ const renderedContent = computed(() => {
 </script>
 
 <template>
-  <span :class="wrapperClass" :dir="direction">
+  <span :class="wrapperClass">
     <span :class="n('wrapper')">
       <template v-if="showValue">
         <span v-if="$slots.content" :class="classes(n('custom-dot'), n('content-wrapper'))" :style="contentWrapperStyle">

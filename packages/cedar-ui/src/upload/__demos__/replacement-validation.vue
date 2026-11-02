@@ -97,7 +97,9 @@ onDeactivated(cleanupThumbnails);
 
 <template>
   <div class="upload-read-demo">
-    <p class="thumbnail-pending">Pending thumbnails: {{ pendingThumbnails.length }}</p>
+    <p class="thumbnail-pending">
+      Pending thumbnails: {{ pendingThumbnails.length }}
+    </p>
     <c-button
       html-type="button"
       :disabled="!pendingThumbnails.length"
@@ -117,9 +119,16 @@ onDeactivated(cleanupThumbnails);
       @click="settleThumbnail(true)"
       >拒绝最早缩略图</c-button
     >
-    <c-checkbox v-model="readDataUrl">使用原生 FileReader 读取为 data-url</c-checkbox>
-    <c-checkbox v-model="readObjectUrl">使用原生 Blob/object-url（优先）</c-checkbox>
-    <output>Blob URLs: {{ files.filter((file) => file.url?.startsWith("blob:")).length }}</output>
+    <c-checkbox v-model="readDataUrl" edit-mode="direct"
+      >使用原生 FileReader 读取为 data-url</c-checkbox
+    >
+    <c-checkbox v-model="readObjectUrl" edit-mode="direct"
+      >使用原生 Blob/object-url（优先）</c-checkbox
+    >
+    <output
+      >Blob URLs:
+      {{ files.filter((file) => file.url?.startsWith("blob:")).length }}</output
+    >
     <p role="status">
       Data URLs:
       {{ files.filter((file) => file.url?.startsWith("data:")).length }} ·
@@ -136,7 +145,10 @@ onDeactivated(cleanupThumbnails);
       height="16"
       @load="decoded++"
     />
-    <p>仅接受图片；单文件 1 MiB、合计 2 MiB、最多 3 个。每个示例均经过 before-read。</p>
+    <p>
+      仅接受图片；单文件 1 MiB、合计 2 MiB、最多 3 个。每个示例均经过
+      before-read。
+    </p>
     <c-space wrap>
       <c-button @click="probe('valid')">加入小图片</c-button>
       <c-button @click="probe('type')">替换为文本</c-button>
@@ -144,8 +156,15 @@ onDeactivated(cleanupThumbnails);
       <c-button @click="probe('total')">加入 768 KiB 图片</c-button>
       <c-button @click="reset">重置队列</c-button>
     </c-space>
-    <c-checkbox v-model="pauseThumbnail">暂停本地缩略图 Promise</c-checkbox>
-    <c-upload v-model="files" :show-upload-button="false" :preview="false" />
+    <c-checkbox v-model="pauseThumbnail" edit-mode="direct"
+      >暂停本地缩略图 Promise</c-checkbox
+    >
+    <c-upload
+      v-model="files"
+      edit-mode="direct"
+      :show-upload-button="false"
+      :preview="false"
+    />
     <p>队列：{{ files.map((file) => file.name).join(", ") || "空" }}</p>
     <p>拒绝原因：{{ reasons.join(", ") || "无" }}</p>
   </div>

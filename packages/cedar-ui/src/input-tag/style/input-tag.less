@@ -39,16 +39,16 @@
   }
 
   &.@{cls}--has-tag {
-    padding-right: var(~"--c-input-tag-padding-x");
-    padding-left: var(~"--c-input-tag-padding-x");
+    padding-inline-end: var(~"--c-input-tag-padding-x");
+    padding-inline-start: var(~"--c-input-tag-padding-x");
   }
 
   &.@{cls}--has-prefix {
-    padding-left: var(~"--c-field-padding-horizontal");
+    padding-inline-start: var(~"--c-field-padding-horizontal");
   }
 
   &.@{cls}--has-suffix {
-    padding-right: var(~"--c-field-padding-horizontal");
+    padding-inline-end: var(~"--c-field-padding-horizontal");
   }
 
   .@{cls}__inner {
@@ -64,7 +64,7 @@
     .@{cls}__tag {
       display: inline-flex;
       align-items: center;
-      margin-right: var(~"--c-input-tag-tag-margin-right");
+      margin-inline-end: var(~"--c-input-tag-tag-margin-right");
       font-size: var(~"--c-input-tag-tag-font-size");
       white-space: pre-wrap;
       word-break: break-word;

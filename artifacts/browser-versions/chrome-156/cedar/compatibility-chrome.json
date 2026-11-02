@@ -1,0 +1,19 @@
+{
+  "library": "cedar",
+  "generatedAt": "2026-10-29T06:44:48.711Z",
+  "nativeDeviceAcceptance": false,
+  "latestTwoVersionsAccepted": false,
+  "completeEngineMatrix": false,
+  "evidenceOnly": false,
+  "results": [
+    {
+      "name": "chrome",
+      "startedAt": "2026-10-29T06:29:29.577Z",
+      "completedAt": "2026-10-29T06:44:48.711Z",
+      "passed": false,
+      "exitCode": 1,
+      "evidence": "/Users/shuaimeng/github_web/cedar-design-web/artifacts/browser-versions/chrome-156/cedar/chrome",
+      "error": "AssertionError [ERR_ASSERTION]: stale component source\n+ actual - expected\n\n+ 'fc194751dae328f72e33d35b73157a70ce59c2e0701c82d810e0497d04915caa'\n- 'e0bc7f6ff7016aba020721c0be68a3f43317ddc471fdc603981a31181a91d28f'"
+    }
+  ]
+}

@@ -6,13 +6,15 @@ permalink: /components/typography/
 
 用于展示标题、段落、文本内容。
 
-## 案例
+## 基础示例
 
 ### 基础用法
 
 排版组件用于展示标题、段落、文本内容，这里展示了排版的组合使用。
 
 <demo src="./__demos__/basic.vue"></demo>
+
+## 内容与展示
 
 ### 标题
 
@@ -32,30 +34,27 @@ permalink: /components/typography/
 
 <demo src="./__demos__/paragraph.vue"></demo>
 
-### 可交互
-
-提供复制、编辑文本等功能。
-
-<demo src="./__demos__/operations.vue"></demo>
-
 ### 省略
 
 在空间不足时省略多行文本内容。支持 JS 测量省略、CSS 省略、Tooltip / Popover 以及展开折叠。
 
 <demo src="./__demos__/ellipsis.vue"></demo>
 
+## 交互与控制
+
+### 可交互
+
+提供复制、编辑文本等功能。
+
+<demo src="./__demos__/operations.vue"></demo>
+
+## 生命周期与边界
+
 ### 测量与复制反馈生命周期
 
 <demo src="./__demos__/scheduler-lifecycle.vue"></demo>
 
 复制反馈使用现有 `copy-delay`（默认 3000ms），是交互反馈等待，不是 CSS 动效完成时间。重复复制替换旧等待；关闭复制、禁用或修改等待时长会清除当前反馈。停用／卸载取消反馈计时与省略测量 RAF，保留操作和旧回调不能继续写入；激活重新测量，不恢复旧任务。禁用态文字仍可测量省略，不允许复制／编辑／展开交互。省略关闭、展开或进入编辑会取消旧测量；完成后重放和测量重入不能覆盖新结果。
-
-<!-- api-review:start -->
-### 功能调试
-
-<demo src="./__demos__/api-review.vue"></demo>
-
-<!-- api-review:end -->
 
 ## API
 

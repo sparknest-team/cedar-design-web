@@ -29,7 +29,7 @@ class NotificationManger {
   private notificationCount = 0;
 
   constructor(config: _NotificationConfig, appContext?: AppContext) {
-    const { position = "topRight" } = config;
+    const { position = "top-right" } = config;
     this.container = getOverlay("notification");
     this.notificationIds = new Set();
     this.notifications = ref([]);
@@ -86,12 +86,10 @@ class NotificationManger {
       const item = this.notifications.value[i];
 
       if (item.id === id) {
-        if (isFunction(item.onClose)) {
-          item.onClose(id);
-        }
-
+        // Release this item before notification so reentrant callbacks may reuse its ID.
         this.notifications.value.splice(i, 1);
         this.notificationIds.delete(id);
+        if (isFunction(item.onClose)) return item.onClose(id);
         break;
       }
     }
@@ -113,10 +111,10 @@ class NotificationManger {
 }
 
 const notificationInstance: {
-  topLeft?: NotificationManger;
-  topRight?: NotificationManger;
-  bottomLeft?: NotificationManger;
-  bottomRight?: NotificationManger;
+  'top-left'?: NotificationManger;
+  'top-right'?: NotificationManger;
+  'bottom-left'?: NotificationManger;
+  'bottom-right'?: NotificationManger;
 } = {};
 
 const notification = MESSAGE_TYPES.reduce((pre, value) => {
@@ -126,7 +124,7 @@ const notification = MESSAGE_TYPES.reduce((pre, value) => {
     }
 
     const _config: _NotificationConfig = { type: value, ...config };
-    const { position = "topRight" } = _config;
+    const { position = "top-right" } = _config;
     if (!notificationInstance[position]) {
       notificationInstance[position] = new NotificationManger(
         _config,
@@ -173,6 +171,7 @@ export type {
   NotificationMethod,
   NotificationConfig,
   NotificationReturn,
+  NotificationPosition,
 } from "./types";
 export type { NotificationProps } from "./props";
 export type NotificationInstance = InstanceType<typeof _Notification>;

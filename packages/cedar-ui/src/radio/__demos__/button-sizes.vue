@@ -13,7 +13,7 @@ const options = [
       <c-radio-group variant="button" :size="size" default-value="week" :options="options" :aria-label="size" />
     </div>
     <p>纵向与只读</p>
-    <c-radio-group variant="button" direction="vertical" readonly default-value="day" :options="options" aria-label="只读周期" />
+    <c-radio-group variant="button" orientation="vertical" readonly default-value="day" :options="options" aria-label="只读周期" />
   </section>
 </template>
 <style scoped>

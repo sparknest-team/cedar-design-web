@@ -5,7 +5,7 @@
   position: fixed;
   z-index: var(~"--c-notification-z-index");
   margin: 0;
-  padding-left: 0;
+  padding-inline-start: 0;
 
   &-top-left {
     top: var(~"--c-notification-wrapper-margin-top");
@@ -112,7 +112,7 @@
   }
 
   &-left {
-    padding-right: var(~"--c-notification-icon-margin-right");
+    padding-inline-end: var(~"--c-notification-icon-margin-right");
   }
 
   &-right {
@@ -169,7 +169,7 @@
 
   &-footer {
     margin-top: var(~"--c-notification-footer-margin-top");
-    text-align: right;
+    text-align: end;
   }
 
   &-close-btn {
@@ -178,7 +178,7 @@
     background: transparent;
     position: absolute;
     top: var(~"--c-notification-close-icon-top");
-    right: var(~"--c-notification-close-icon-right");
+    inset-inline-end: var(~"--c-notification-close-icon-right");
     color: var(~"--c-notification-close-icon-color");
     font-size: var(~"--c-notification-close-icon-font-size");
     cursor: pointer;

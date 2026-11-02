@@ -1,18 +1,28 @@
-import type { PropType, StyleValue } from 'vue'
-import { fieldPresentationProps } from '../_components/field-presentation/props'
-import type { ComponentSize } from '../_utils/constant'
-import { componentSizes } from '../_utils/constant'
-import type { FormControlVariant } from '../_utils/form-control'
-import { formControlVariants } from '../_utils/form-control'
-import { popupContainerProp } from '../_utils/popup-container'
-import { fieldDecoratorProps } from '../field-decorator/props'
-import type { TimeRangePickerProps } from '../time/picker/props'
-import type { TimePanelPresentationProps, TimePopupPresentationProps } from '../time/presentation-props'
-import type { TriggerProps } from '../trigger/props'
+import { fieldLoadingProps } from '../field-decorator/props'
+import { openTriggerTargetProp } from "../_components/picker-field/open-trigger";
+import { emptyValueProp } from "../_utils/empty-value";
+import type { PropType, StyleValue } from "vue";
+import { fieldPresentationProps } from "../_components/field-presentation/props";
+import type { ComponentSize } from "../_utils/constant";
+import { componentSizes } from "../_utils/constant";
+import type { FormControlVariant } from "../_utils/form-control";
+import { formControlVariants } from "../_utils/form-control";
+import { popupContainerProp } from "../_utils/popup-container";
+import { fieldDecoratorProps } from "../field-decorator/props";
+import type { TimeRangePickerProps } from "../time/picker/props";
+import type {
+  TimePanelPresentationProps,
+  TimePopupPresentationProps,
+} from "../time/presentation-props";
+import type { TriggerProps } from "../trigger/props";
 
 /** Inclusive 24-hour clock bounds, independent of display format. */
 export const timeRangeProps = {
+  ...fieldLoadingProps,
+  openTriggerTarget: openTriggerTargetProp,
   ...fieldPresentationProps,
+  emptyValue: emptyValueProp<(string | number | Date)[] | undefined>(),
+  /** 清空动作产生的模型值；省略保留原默认值。 */
   /** 桌面字段允许键盘输入；移动端使用面板，不唤起软键盘。 */
   inputEditable: { type: Boolean, default: true },
   /** 本地浮层展示配置；展开状态与交互由字段管理。 */
@@ -21,7 +31,7 @@ export const timeRangeProps = {
     default: () => ({}),
   },
   /** 开始和结束时间之间的分隔文字，允许空字符串。 */
-  separator: { type: String, default: ' ~ ' },
+  separator: { type: String, default: " ~ " },
   /** 浮动提示；有 Form 外置标签时不启用。 */
   hint: fieldDecoratorProps.hint,
   /** 是否显示边框或底线。 */
@@ -37,7 +47,7 @@ export const timeRangeProps = {
   hideDisabledOptions: Boolean,
   popupContainer: popupContainerProp,
   modelValue: {
-    type: Array as PropType<Array<string | number | Date>>,
+    type: Array as PropType<Array<string | number | Date> | null>,
   },
   defaultValue: {
     type: Array as PropType<Array<string | number | Date>>,
@@ -65,8 +75,9 @@ export const timeRangeProps = {
    */
   variant: {
     type: String as PropType<FormControlVariant>,
-    default: 'filled',
-    validator: (value: FormControlVariant) => formControlVariants.includes(value),
+    default: "filled",
+    validator: (value: FormControlVariant) =>
+      formControlVariants.includes(value),
   },
   placeholder: {
     type: [String, Array] as PropType<string | string[]>,
@@ -75,9 +86,9 @@ export const timeRangeProps = {
   use12Hours: Boolean,
   step: {
     type: Object as PropType<{
-      hour?: number
-      minute?: number
-      second?: number
+      hour?: number;
+      minute?: number;
+      second?: number;
     }>,
   },
   disabledHours: {
@@ -87,17 +98,23 @@ export const timeRangeProps = {
     type: Function as PropType<(selectedHour?: number) => number[]>,
   },
   disabledSeconds: {
-    type: Function as PropType<(selectedHour?: number, selectedMinute?: number) => number[]>,
+    type: Function as PropType<
+      (selectedHour?: number, selectedMinute?: number) => number[]
+    >,
   },
   disableConfirm: Boolean,
   error: { type: Boolean, default: undefined },
   showNextDay: Boolean,
   timeRangePickerProps: {
     type: Object as PropType<
-      TimePanelPresentationProps<TimeRangePickerProps & { class?: unknown; style?: StyleValue }>
+      TimePanelPresentationProps<
+        TimeRangePickerProps & { class?: unknown; style?: StyleValue }
+      >
     >,
     default: () => ({}),
   },
-}
+};
 
-export type TimeRangeProps = import('vue').ExtractPublicPropTypes<typeof timeRangeProps>
+export type TimeRangeProps = import("vue").ExtractPublicPropTypes<
+  typeof timeRangeProps
+>;

@@ -1,3 +1,7 @@
+import { invokeBeforeCommit } from "../_components/field-presentation/context";
+import { resolveEmptyValue, useEmptyValues } from "../_utils/empty-value";
+import { useOptionRequest } from "../_hooks/use-option-request";
+import type { SelectOption } from "./types";
 import {
   computed,
   ref,
@@ -7,17 +11,20 @@ import {
   type ComponentPublicInstance,
   type ExtractPropTypes,
   type SetupContext,
-} from 'vue'
-import { useFieldPresentation } from '../_components/field-presentation/context'
-import { useFieldTexts } from '../_components/field-presentation/texts'
-import { useFieldSearch } from '../_components/field-presentation/use-field-search'
-import type { SelectionFieldItem } from '../_components/selection-field/props'
+} from "vue";
+import {
+  defaultSelectionPresentation,
+  useFieldPresentation,
+} from "../_components/field-presentation/context";
+import { useFieldTexts } from "../_components/field-presentation/texts";
+import { useFieldSearch } from "../_components/field-presentation/use-field-search";
+import type { SelectionFieldItem } from "../_components/selection-field/props";
 import {
   sameSelectionValue,
   useSelectionSession,
   type SelectionSession,
-} from '../_components/selection-field/use-selection-session'
-import { useTrigger } from '../_hooks/use-trigger'
+} from "../_components/selection-field/use-selection-session";
+import { useTrigger } from "../_hooks/use-trigger";
 import {
   isArray,
   isBoolean,
@@ -28,282 +35,359 @@ import {
   isObject,
   isString,
   isUndefined,
-} from '../_utils/is'
-import { useInputForm } from '../input/use-input-form'
-import { selectEmits } from './emits'
-import { useSelect } from './hooks/use-select'
-import { selectProps } from './props'
-import type { OptionValueWithKey, SelectOptionData } from './types'
-import { getKeyFromValue, hasEmptyStringKey } from './utils'
+} from "../_utils/is";
+import { useInputForm } from "../input/use-input-form";
+import { selectEmits } from "./emits";
+import { useSelect } from "./hooks/use-select";
+import { selectProps } from "./props";
+import type {
+  OptionValueWithKey,
+  SelectOptionData,
+  SelectValue,
+} from "./types";
+import { getKeyFromValue, hasEmptyStringKey } from "./utils";
 
 const DEFAULT_FIELD_NAMES = {
-  value: 'value',
-  label: 'label',
-  disabled: 'disabled',
-  tagProps: 'tagProps',
-  render: 'render',
-}
+  value: "value",
+  label: "label",
+  disabled: "disabled",
+  tagProps: "tagProps",
+  render: "render",
+};
 
 export function useSelectController(
   props: Readonly<ExtractPropTypes<typeof selectProps>>,
-  { emit }: Pick<SetupContext<typeof selectEmits>, 'emit'>,
+  { emit }: Pick<SetupContext<typeof selectEmits>, "emit">,
 ) {
-  const texts = useFieldTexts()
+  const texts = useFieldTexts();
   const presentationState = useFieldPresentation(
-    () => props.presentation,
+    () => props.editMode,
     () => props.readPretty,
-  )
-  const presentation = presentationState.presentation
-  const readPretty = presentationState.readPretty
+    defaultSelectionPresentation,
+  );
+  const editMode = presentationState.editMode;
+  const readPretty = presentationState.readPretty;
+  const emptyPolicy = useEmptyValues(
+    props,
+    [undefined, null],
+    Boolean(presentationState.item),
+  );
   // props
   const {
     size,
     variant,
     disabled,
     error,
-    options,
-    filterOption,
+    caseSensitive,
+    searchFields,
     multiple,
     open,
     defaultOpen,
     showExtraOptions,
     modelValue,
     fieldNames,
-    loading,
     defaultActiveFirstOption,
-  } = toRefs(props)
-  const { mergedSize, mergedDisabled, mergedReadonly, mergedError, feedback, eventHandlers, group, hasOuterLabel } =
-    useInputForm(props)
-  const mergedVariant = computed(() => props.variant ?? group?.variant.value ?? 'filled')
-  const mergedHint = computed(() => !hasOuterLabel.value && props.hint)
-  const component = computed(() => (props.virtualListProps ? 'div' : 'li'))
-  const retainInputValue = computed(() => isObject(props.filterable) && Boolean(props.filterable.retainInputValue))
+  } = toRefs(props);
+  const {
+    mergedSize,
+    mergedDisabled,
+    mergedReadonly,
+    mergedError,
+    feedback,
+    eventHandlers,
+    group,
+    hasOuterLabel,
+  } = useInputForm(props);
+  const source = useOptionRequest<SelectOption>(
+    () => props.options,
+    () => mergedDisabled.value || mergedReadonly.value || readPretty.value,
+    (error) => emit("load-error", error),
+  );
+  const options = source.options;
+  const loading = computed(() => props.loading || source.loading.value);
+  const filterOption = computed(
+    () => props.filterOption ?? !source.remote.value,
+  );
+  const mergedVariant = computed(
+    () => props.variant ?? group?.variant.value ?? "filled",
+  );
+  const mergedHint = computed(() => !hasOuterLabel.value && props.hint);
+  const component = computed(() => (props.virtualListProps ? "div" : "li"));
+  const retainInputValue = computed(
+    () =>
+      isObject(props.filterable) && Boolean(props.filterable.retainInputValue),
+  );
 
   // refs
-  const dropdownRef = ref<ComponentPublicInstance>()
-  const optionRefs = ref<Record<string, HTMLElement>>({})
-  const virtualListRef = ref()
+  const dropdownRef = ref<ComponentPublicInstance>();
+  const optionRefs = ref<Record<string, HTMLElement>>({});
+  const virtualListRef = ref();
 
   // trigger
-  const { computedOpen: requestedOpen, handleOpenChange: setOpen } = useTrigger({
-    open,
-    defaultOpen,
-    emit,
-  })
+  const { computedOpen: requestedOpen, handleOpenChange: setOpen } = useTrigger(
+    {
+      open,
+      defaultOpen,
+      emit,
+    },
+  );
 
   const computedOpen = computed(
-    () => !readPretty.value && !mergedDisabled.value && !mergedReadonly.value && requestedOpen.value,
-  )
+    () =>
+      !readPretty.value &&
+      !mergedDisabled.value &&
+      !mergedReadonly.value &&
+      requestedOpen.value,
+  );
   const handleOpenChange = (open: boolean) => {
-    if (open && (mergedDisabled.value || mergedReadonly.value || readPretty.value)) {
-      return
+    if (
+      open &&
+      (mergedDisabled.value || mergedReadonly.value || readPretty.value)
+    ) {
+      return;
     }
-    setOpen(open)
-  }
+    setOpen(open);
+  };
 
   // value and key
-  const _value = ref(props.defaultValue)
+  const _value = ref<SelectValue>(props.defaultValue);
 
   const mergedFieldNames = computed(() => ({
     ...DEFAULT_FIELD_NAMES,
     ...fieldNames?.value,
-  }))
+  }));
 
-  const committedValue = computed(() => props.modelValue ?? _value.value)
-  const deferred = computed(() => presentation.value !== 'inline')
-  const publish = (value: typeof props.defaultValue) => {
-    _value.value = value
-    emit('update:modelValue', value)
-    emit('change', value)
+  const committedValue = computed<SelectValue>(() =>
+    props.modelValue !== undefined ? props.modelValue : _value.value,
+  );
+  const deferred = computed(() => editMode.value !== "direct");
+  const publish = (value: SelectValue) => {
+    _value.value = value;
+    emit("update:modelValue", value);
+    emit("change", value);
     if (!deferred.value || !presentationState.item?.validate) {
-      eventHandlers.value?.onChange?.()
+      eventHandlers.value?.onChange?.();
     }
-  }
-  const session: SelectionSession<typeof committedValue.value> = useSelectionSession({
-    value: () => committedValue.value,
-    open: computedOpen,
-    deferred: () => deferred.value,
-    blocked: () => mergedDisabled.value || mergedReadonly.value || props.loading || readPretty.value,
-    clone: (value) => (Array.isArray(value) ? [...value] : value),
-    publish,
-    cancelOnExternalChange: true,
-    beforeCommit: async (next, signal) => {
-      if (presentationState.item?.validate && !(await presentationState.item.validate(next))) {
-        return false
-      }
-      if (signal.aborted) {
-        return false
-      }
-      if (!sameSelectionValue(next, committedValue.value)) {
-        return props.beforeCommit?.(next, { previousValue: committedValue.value, signal })
-      }
-    },
-    valid: () => canConfirm.value,
-    close: () => handleOpenChange(false),
-  })
+  };
+  const session: SelectionSession<typeof committedValue.value> =
+    useSelectionSession({
+      value: () => committedValue.value,
+      open: computedOpen,
+      deferred: () => deferred.value,
+      blocked: () =>
+        mergedDisabled.value ||
+        mergedReadonly.value ||
+        loading.value ||
+        readPretty.value,
+      clone: (value) => (Array.isArray(value) ? [...value] : value),
+      publish,
+      cancelOnExternalChange: true,
+      beforeCommit: async (next, signal) => {
+        if (
+          presentationState.item?.validate &&
+          !(await presentationState.item.validate(next))
+        ) {
+          return false;
+        }
+        if (signal.aborted) {
+          return false;
+        }
+        if (!sameSelectionValue(next, committedValue.value)) {
+          return invokeBeforeCommit(props.beforeCommit, next, {
+            previousValue: committedValue.value,
+            signal,
+          });
+        }
+      },
+      valid: () => canConfirm.value,
+      close: () => handleOpenChange(false),
+    });
   watch(
-    () => presentation.value,
+    () => editMode.value,
     () => {
-      session.cancel()
-      session.reset()
+      session.cancel();
+      session.reset();
     },
-  )
+  );
   watch(
-    [presentation, readPretty],
+    [editMode, readPretty],
     ([value]) => {
-      presentationState.item?.resolved?.(value, readPretty.value)
+      presentationState.item?.resolved?.(value, readPretty.value);
       if (readPretty.value && requestedOpen.value) {
-        setOpen(false)
+        setOpen(false);
       }
     },
-    { immediate: true, flush: 'sync' },
-  )
+    { immediate: true, flush: "sync" },
+  );
 
   watch(
-    [mergedDisabled, mergedReadonly, presentation, readPretty],
+    [mergedDisabled, mergedReadonly, editMode, readPretty],
     () => {
       if (mergedDisabled.value || mergedReadonly.value || readPretty.value) {
-        setOpen(false)
-        session.reset()
-        if (presentation.value !== 'inline' || deferred.value) {
-          presentationState.item?.resetValidation?.()
+        setOpen(false);
+        session.reset();
+        if (editMode.value !== "direct" || deferred.value) {
+          presentationState.item?.resetValidation?.();
         }
       }
     },
-    { flush: 'sync' },
-  )
+    { flush: "sync" },
+  );
   const committedValueObjects = computed<OptionValueWithKey[]>(() => {
-    const value = committedValue.value
-    const values = Array.isArray(value) ? value : value == null ? [] : [value]
-    return values.map((value) => ({ value, key: getKeyFromValue(value, mergedFieldNames.value.value) }))
-  })
+    const value = committedValue.value;
+    if (emptyPolicy.isEmpty(value)) {
+      return [];
+    }
+    const values = Array.isArray(value) ? value : value == null ? [] : [value];
+    return values.map((value) => ({
+      value,
+      key: getKeyFromValue(value, mergedFieldNames.value.value),
+    }));
+  });
 
   const computedValueObjects = computed<OptionValueWithKey[]>(() => {
-    const mergedValue = session.value.value
+    const mergedValue = session.value.value;
+    if (emptyPolicy.isEmpty(mergedValue)) {
+      return [];
+    }
     const valueArray = isArray(mergedValue)
       ? mergedValue
-      : mergedValue || isNumber(mergedValue) || isString(mergedValue) || isBoolean(mergedValue)
+      : mergedValue ||
+          isNumber(mergedValue) ||
+          isString(mergedValue) ||
+          isBoolean(mergedValue)
         ? [mergedValue]
-        : []
+        : [];
     return valueArray.map((value) => ({
       value,
       key: getKeyFromValue(value, mergedFieldNames.value.value),
-    }))
-  })
+    }));
+  });
   watch(
     () => props.modelValue,
     (value) => {
       if (isUndefined(value) || isNull(value)) {
-        _value.value = multiple.value ? [] : (value as any)
+        _value.value = multiple.value ? [] : (value as any);
       }
     },
-  )
+  );
 
-  const computedValueKeys = computed(() => computedValueObjects.value.map((obj) => obj.key))
+  const computedValueKeys = computed(() =>
+    computedValueObjects.value.map((obj) => obj.key),
+  );
 
   // selected option
-  const _selectedOption = ref()
+  const _selectedOption = ref();
   const getRawOptionFromValueKeys = (valueKeys: string[]) => {
-    const optionMap: Record<string, unknown> = {}
+    const optionMap: Record<string, unknown> = {};
 
     valueKeys.forEach((key) => {
-      optionMap[key] = optionInfoMap.get(key)
-    })
+      optionMap[key] = optionInfoMap.get(key);
+    });
 
-    return optionMap
-  }
+    return optionMap;
+  };
 
   const updateSelectedOption = (valueKeys: string[]) => {
-    _selectedOption.value = getRawOptionFromValueKeys(valueKeys)
-  }
+    _selectedOption.value = getRawOptionFromValueKeys(valueKeys);
+  };
 
   // extra value and option
-  const getFallBackOption = (value: string | number | boolean | Record<string, unknown>): SelectOptionData => {
+  const getFallBackOption = (
+    value: string | number | boolean | Record<string, unknown>,
+  ): SelectOptionData => {
     if (isFunction(props.fallbackOption)) {
-      return props.fallbackOption(value)
+      return props.fallbackOption(value);
     }
     return {
       [mergedFieldNames.value.value]: value,
-      [mergedFieldNames.value.label]: String(isObject(value) ? value[mergedFieldNames.value.value] : value),
-    }
-  }
+      [mergedFieldNames.value.label]: String(
+        isObject(value) ? value[mergedFieldNames.value.value] : value,
+      ),
+    };
+  };
 
   const getExtraValueData = (): OptionValueWithKey[] => {
-    const valueArray: OptionValueWithKey[] = []
-    const keyArray: string[] = []
+    const valueArray: OptionValueWithKey[] = [];
+    const keyArray: string[] = [];
 
     if (props.creatable || props.fallbackOption) {
       for (const item of computedValueObjects.value) {
-        if (!keyArray.includes(item.key) && item.value !== '') {
-          const optionInfo = optionInfoMap.get(item.key)
-          if (!optionInfo || optionInfo.origin === 'extraOptions') {
-            valueArray.push(item)
-            keyArray.push(item.key)
+        if (!keyArray.includes(item.key) && item.value !== "") {
+          const optionInfo = optionInfoMap.get(item.key);
+          if (!optionInfo || optionInfo.origin === "extraOptions") {
+            valueArray.push(item);
+            keyArray.push(item.key);
           }
         }
       }
     }
 
     if (props.creatable && computedInputValue.value) {
-      const key = getKeyFromValue(computedInputValue.value)
+      const key = getKeyFromValue(computedInputValue.value);
       if (!keyArray.includes(key)) {
-        const optionInfo = optionInfoMap.get(key)
-        if (!optionInfo || optionInfo.origin === 'extraOptions') {
+        const optionInfo = optionInfoMap.get(key);
+        if (!optionInfo || optionInfo.origin === "extraOptions") {
           valueArray.push({
             value: computedInputValue.value,
             key,
-          })
+          });
         }
       }
     }
-    return valueArray
-  }
+    return valueArray;
+  };
 
-  const extraValueObjects = ref<OptionValueWithKey[]>([])
+  const extraValueObjects = ref<OptionValueWithKey[]>([]);
   const extraOptions = computed(() =>
     extraValueObjects.value.map((obj) => {
-      let optionInfo = getFallBackOption(obj.value)
-      const extraOptionRawInfo = _selectedOption.value?.[obj.key]
-      if (!isUndefined(extraOptionRawInfo) && !isEmptyObject(extraOptionRawInfo)) {
-        optionInfo = { ...optionInfo, ...extraOptionRawInfo }
+      let optionInfo = getFallBackOption(obj.value);
+      const extraOptionRawInfo = _selectedOption.value?.[obj.key];
+      if (
+        !isUndefined(extraOptionRawInfo) &&
+        !isEmptyObject(extraOptionRawInfo)
+      ) {
+        optionInfo = { ...optionInfo, ...extraOptionRawInfo };
       }
-      return optionInfo
+      return optionInfo;
     }),
-  )
+  );
 
   // input value
-  const _inputValue = ref(props.defaultInputValue)
-  const computedInputValue = computed(() => props.inputValue ?? _inputValue.value)
+  const _inputValue = ref(props.defaultInputValue);
+  const computedInputValue = computed(
+    () => props.inputValue ?? _inputValue.value,
+  );
 
   // clear input value when close dropdown
   watch(computedOpen, (visible) => {
     if (!visible && !retainInputValue.value && computedInputValue.value) {
-      updateInputValue('')
+      updateInputValue("");
     }
-  })
+  });
 
   // update func
-  const getValueFromValueKeys = (valueKeys: string[]) => {
+  const getValueFromValueKeys = (valueKeys: string[]): SelectValue => {
     if (!props.multiple) {
       return (
         optionInfoMap.get(valueKeys[0])?.value ??
-        (hasEmptyStringKey(optionInfoMap) ? (undefined as unknown as string) : '')
-      )
+        (hasEmptyStringKey(optionInfoMap) ? undefined : "")
+      );
     }
-    return valueKeys.map((key) => optionInfoMap.get(key)?.value ?? '')
-  }
+    return valueKeys.map((key) => optionInfoMap.get(key)?.value ?? "");
+  };
 
   const updateValue = (valueKeys: string[]) => {
-    const value = getValueFromValueKeys(valueKeys)
-    session.update(value)
-    updateSelectedOption(valueKeys)
-  }
+    const value = getValueFromValueKeys(valueKeys);
+    session.update(value);
+    updateSelectedOption(valueKeys);
+  };
 
   const updateInputValue = (inputValue: string) => {
-    _inputValue.value = inputValue
-    emit('update:inputValue', inputValue)
-    emit('input-value-change', inputValue)
-  }
+    _inputValue.value = inputValue;
+    emit("update:inputValue", inputValue);
+    emit("input-value-change", inputValue);
+  };
 
   // events
   const handleSelect = (key: string, ev: Event) => {
@@ -312,47 +396,52 @@ export function useSelectController(
       mergedReadonly.value ||
       session.pending.value ||
       readPretty.value ||
-      props.loading ||
+      loading.value ||
       !enabledOptionKeys.value.includes(key)
     ) {
-      return
+      return;
     }
     if (props.multiple) {
       if (!computedValueKeys.value.includes(key)) {
         if (enabledOptionKeys.value.includes(key)) {
-          if (props.limit > 0 && computedValueKeys.value.length >= props.limit) {
-            const info = optionInfoMap.get(key)
-            session.error.value = `${texts.limit.value} ${props.limit}`
-            emit('exceed-limit', info?.value, ev)
+          if (
+            props.limit > 0 &&
+            computedValueKeys.value.length >= props.limit
+          ) {
+            const info = optionInfoMap.get(key);
+            session.error.value = `${texts.limit.value} ${props.limit}`;
+            emit("exceed-limit", info?.value, ev);
           } else {
-            const valueKeys = computedValueKeys.value.concat(key)
-            updateValue(valueKeys)
+            const valueKeys = computedValueKeys.value.concat(key);
+            updateValue(valueKeys);
           }
         }
       } else {
-        const valueKeys = computedValueKeys.value.filter((_key) => _key !== key)
-        updateValue(valueKeys)
+        const valueKeys = computedValueKeys.value.filter(
+          (_key) => _key !== key,
+        );
+        updateValue(valueKeys);
       }
       if (!retainInputValue.value) {
         // 点击一个选项时，清空输入框内容
-        updateInputValue('')
+        updateInputValue("");
       }
     } else {
       if (key !== computedValueKeys.value[0]) {
-        updateValue([key])
+        updateValue([key]);
       }
       if (retainInputValue.value) {
-        const optionInfo = optionInfoMap.get(key)
+        const optionInfo = optionInfoMap.get(key);
         if (optionInfo) {
-          updateInputValue(optionInfo.label)
+          updateInputValue(optionInfo.label);
         }
       }
 
       if (!deferred.value) {
-        handleOpenChange(false)
+        handleOpenChange(false);
       }
     }
-  }
+  };
 
   const handleSearch = useFieldSearch(
     () => props.searchDelay,
@@ -362,99 +451,133 @@ export function useSelectController(
       !mergedDisabled.value &&
       !mergedReadonly.value &&
       !session.pending.value,
-    (value) => emit('search', value),
-  )
+    (value) => {
+      emit("search", value);
+      void source.search(value);
+    },
+  );
 
   const handleInputValueChange = (inputValue: string) => {
-    if (readPretty.value || mergedDisabled.value || mergedReadonly.value || session.pending.value) {
-      return
+    if (
+      readPretty.value ||
+      mergedDisabled.value ||
+      mergedReadonly.value ||
+      session.pending.value
+    ) {
+      return;
     }
     if (inputValue !== computedInputValue.value) {
-      if (!computedOpen.value) {
-        handleOpenChange(true)
+      if (!computedOpen.value && props.openTriggerTarget !== "icon") {
+        handleOpenChange(true);
       }
 
-      updateInputValue(inputValue)
+      updateInputValue(inputValue);
 
       if (props.filterable) {
-        handleSearch(inputValue)
+        handleSearch(inputValue);
       }
     }
-  }
+  };
 
   const handleRemove = (key: string) => {
-    if (mergedDisabled.value || mergedReadonly.value || session.pending.value || optionInfoMap.get(key)?.disabled) {
-      return
+    if (
+      mergedDisabled.value ||
+      mergedReadonly.value ||
+      session.pending.value ||
+      optionInfoMap.get(key)?.disabled
+    ) {
+      return;
     }
-    const optionInfo = optionInfoMap.get(key)
+    const optionInfo = optionInfoMap.get(key);
     if (readPretty.value) {
-      return
+      return;
     }
     if (deferred.value && !computedOpen.value) {
-      handleOpenChange(true)
+      handleOpenChange(true);
     }
     if (deferred.value && !computedOpen.value) {
-      return
+      return;
     }
-    const newKeys = computedValueObjects.value.map((item) => item.key).filter((_key) => _key !== key)
-    session.update(getValueFromValueKeys(newKeys))
-    emit('remove', optionInfo?.value)
-  }
+    const newKeys = computedValueObjects.value
+      .map((item) => item.key)
+      .filter((_key) => _key !== key);
+    session.update(getValueFromValueKeys(newKeys));
+    emit("remove", optionInfo?.value);
+  };
 
   const clearSelection = (e: Event) => {
     if (mergedDisabled.value || mergedReadonly.value || session.pending.value) {
-      return
+      return;
     }
-    e?.stopPropagation()
+    e?.stopPropagation();
     if (readPretty.value) {
-      return
+      return;
     }
     if (deferred.value && !computedOpen.value) {
-      handleOpenChange(true)
+      handleOpenChange(true);
     }
     if (deferred.value && !computedOpen.value) {
-      return
+      return;
     }
-    const newKeys = computedValueObjects.value.map((item) => item.key).filter((key) => optionInfoMap.get(key)?.disabled)
-    session.update(getValueFromValueKeys(newKeys))
-    updateInputValue('')
+    const newKeys = computedValueObjects.value
+      .map((item) => item.key)
+      .filter((key) => optionInfoMap.get(key)?.disabled);
+    const fallback = getValueFromValueKeys(newKeys);
+    const clearedValue =
+      newKeys.length === 0 ? resolveEmptyValue(props, fallback) : fallback;
+    session.update(clearedValue);
+    updateInputValue("");
     if (!deferred.value) {
-      eventHandlers.value?.onClear?.()
+      eventHandlers.value?.onClear?.();
     }
-    emit('clear', e)
-  }
+    emit("clear", e);
+  };
 
   const handleClear = (e: Event) => {
     if (props.clearable) {
-      clearSelection(e)
+      clearSelection(e);
     }
-  }
+  };
   const selectedItems = computed(() =>
     computedValueObjects.value.map((item) => {
-      const option = optionInfoMap.get(item.key)
+      const option = optionInfoMap.get(item.key);
       return {
         key: item.key,
         value: item.value,
-        label: option?.label ?? String(isObject(item.value) ? item.value[mergedFieldNames.value.value] : item.value),
+        label:
+          option?.label ??
+          String(
+            isObject(item.value)
+              ? item.value[mergedFieldNames.value.value]
+              : item.value,
+          ),
         closable: !option?.disabled,
-      }
+      };
     }),
-  )
+  );
 
   const handleDropdownScroll = (e: Event) => {
-    emit('dropdown-scroll', e)
-  }
+    emit("dropdown-scroll", e);
+  };
 
   const handleDropdownReachBottom = (e: Event) => {
-    emit('dropdown-reach-bottom', e)
-  }
+    emit("dropdown-reach-bottom", e);
+  };
 
-  const { validOptions, optionInfoMap, validOptionInfos, enabledOptionKeys, handleKeyDown } = useSelect({
+  const {
+    validOptions,
+    optionInfoMap,
+    validOptionInfos,
+    enabledOptionKeys,
+    handleKeyDown,
+  } = useSelect({
     multiple,
     options,
     extraOptions,
     inputValue: computedInputValue,
     filterOption,
+    caseSensitive,
+    searchFields,
     showExtraOptions,
     component,
     fieldNames,
@@ -467,58 +590,69 @@ export function useSelectController(
     defaultActiveFirstOption,
     onSelect: handleSelect,
     onOpenChange: handleOpenChange,
-  })
+  });
 
   const canConfirm = computed<boolean>(() => {
-    const committed = new Set(committedValueObjects.value.map((item) => item.key))
+    const committed = new Set(
+      committedValueObjects.value.map((item) => item.key),
+    );
     return computedValueKeys.value.every(
       (key) =>
-        (committed.has(key) && optionInfoMap.has(key)) || (!optionInfoMap.get(key)?.disabled && optionInfoMap.has(key)),
-    )
-  })
+        (committed.has(key) && optionInfoMap.has(key)) ||
+        (!optionInfoMap.get(key)?.disabled && optionInfoMap.has(key)),
+    );
+  });
   const fieldItems = computed(() => {
-    const result: SelectionFieldItem[] = []
+    const result: SelectionFieldItem[] = [];
     for (const item of committedValueObjects.value) {
-      const optionInfo = optionInfoMap.get(item.key)
+      const optionInfo = optionInfoMap.get(item.key);
       if (optionInfo) {
         result.push({
           ...optionInfo,
           key: item.key,
           value: item.value,
           label:
-            optionInfo?.label ?? String(isObject(item.value) ? item.value[mergedFieldNames.value.value] : item.value),
+            optionInfo?.label ??
+            String(
+              isObject(item.value)
+                ? item.value[mergedFieldNames.value.value]
+                : item.value,
+            ),
           closable: !optionInfo?.disabled,
           tagProps: optionInfo?.tagProps,
-        })
+        });
       }
     }
-    return result
-  })
+    return result;
+  });
 
   watchEffect(() => {
-    const valueData = getExtraValueData()
+    const valueData = getExtraValueData();
     if (valueData.length !== extraValueObjects.value.length) {
-      extraValueObjects.value = valueData
+      extraValueObjects.value = valueData;
     } else if (valueData.length > 0) {
       for (let i = 0; i < valueData.length; i++) {
         if (valueData[i].key !== extraValueObjects.value[i]?.key) {
-          extraValueObjects.value = valueData
-          break
+          extraValueObjects.value = valueData;
+          break;
         }
       }
     }
-  })
+  });
   return {
     props,
+    loading,
+    refresh: source.refresh,
     registerPresentation: presentationState.register,
-    presentation,
+    editMode,
     presentationLabel: presentationState.label,
     readPretty: presentationState.readPretty,
+    emptyPolicy,
     nativeEditor: presentationState.nativeEditor,
     presentationError: computed(() => presentationState.item?.message?.value),
     cancelSession: () => {
-      session.cancel()
-      presentationState.item?.resetValidation?.()
+      session.cancel();
+      presentationState.item?.resetValidation?.();
     },
     committedValue,
     mergedSize,
@@ -552,6 +686,6 @@ export function useSelectController(
     session,
     deferred,
     canConfirm,
-  }
+  };
 }
-export type SelectController = ReturnType<typeof useSelectController>
+export type SelectController = ReturnType<typeof useSelectController>;

@@ -133,7 +133,7 @@ test("custom geometry reaches grid; focus raises the whole unit and blur restore
       wrapper.findAll(".c-scheduler__positioned-event--group-focused"),
     ).toHaveLength(0);
     await wrapper.setProps({ eventLayout: () => ({ left: NaN, width: 2 }) });
-    expect((cards[0].element as HTMLElement).style.left).toBe("0%");
+    expect((cards[0].element as HTMLElement).style.insetInlineStart).toBe("0%");
     expect((cards[0].element as HTMLElement).style.width).toBe("100%");
   } finally {
     wrapper.unmount();

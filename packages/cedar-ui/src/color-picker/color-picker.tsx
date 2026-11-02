@@ -30,6 +30,7 @@ export default defineComponent({
     'open-change': (visible: boolean, value: string) => true,
   },
   setup(props, { emit, slots }) {
+
     const prefixCls = getPrefixCls('color-picker')
     const mergeValue = computed(() => {
       return props.modelValue ?? props.defaultValue
@@ -113,6 +114,7 @@ export default defineComponent({
         >
           <div class={`${prefixCls}-preview`} style={{ backgroundColor: formatValue.value }} />
           {props.showText && <div class={`${prefixCls}-value`}>{formatValue.value}</div>}
+
           <input class={`${prefixCls}-input`} value={formatValue.value} disabled={props.disabled} />
         </div>
       )

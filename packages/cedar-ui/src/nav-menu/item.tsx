@@ -24,14 +24,15 @@ export default defineComponent({
     const localValue = ref(props.defaultValue), localOpen = ref(props.defaultOpen)
     const panel = ref<HTMLElement>()
     const reference = ref<HTMLElement>()
+    const suspendedState = ref(false), rendered = ref(false)
+    const hasPopup = () => !!slots.content || props.options.length > 0
     const value = computed(() => props.modelValue !== undefined ? props.modelValue : localValue.value)
     const disabled = computed(() => props.disabled || !!parent?.props.disabled)
-    const open = computed(() => !disabled.value && (props.open ?? localOpen.value))
+    const open = computed(() => !suspendedState.value && !disabled.value && hasPopup() && (props.open ?? localOpen.value))
     const tree = computed(() => createNavMenuTree(props.options, props.fieldNames))
     const selected = computed(() => value.value == null ? undefined : tree.value.byKey.get(value.value))
     const active = computed(() => props.name !== undefined && parent ? parent.activeItem.value === props.name : selected.value?.type === 'item')
     const highlighted = computed(() => props.highlight ?? active.value)
-    const hasPopup = () => !!slots.content || props.options.length > 0
     let suspended = false, disposed = false, bindingGeneration = 0, measurementOperation = 0, focusGeneration = 0
     let focusTask: { kind: 'open' | 'close' } | undefined
     const bindingRevision = ref(0)
@@ -80,14 +81,16 @@ export default defineComponent({
       }
     }, { flush: 'post', immediate: true })
     onBeforeUnmount(() => { disposed = true; cancelFocus(); clearBinding() })
-    const unregister = parent?.registerItem(itemId, () => setOpen(false), props.name)
+    const unregister = parent?.registerItem(itemId, (restoreFocus = false) => {
+      if (open.value) { if (restoreFocus) close(); else setOpen(false) }
+    }, () => props.name)
     onBeforeUnmount(() => unregister?.())
-    function activate() { if (available()) parent?.activateItem(itemId) }
-    watch(open, value => { if (value) activate() }, { immediate: true, flush: 'sync' })
+    function activate() { return available() && (parent?.activateItem(itemId) ?? true) }
+    watch(open, value => { if (value) { rendered.value = true; activate() } }, { immediate: true, flush: 'sync' })
     function requestOpen(next: boolean, deactivating = false) {
       if (!available() && !deactivating) return
       if (next && (disabled.value || !hasPopup())) return
-      if (next) activate()
+      if (next && !activate()) return
       if (!available() && !deactivating) return
       if (next === open.value) return
       if (props.open === undefined) localOpen.value = next
@@ -113,8 +116,8 @@ export default defineComponent({
     }
     function focusPanel() { queueFocus('open') }
     function close() { if (!available()) return; setOpen(false); queueFocus('close') }
-    onDeactivated(() => { suspended = true; cancelFocus(); clearBinding(); requestOpen(false, true) })
-    onActivated(() => { if (!disposed && suspended) { suspended = false; bindingRevision.value++ } })
+    onDeactivated(() => { suspended = true; cancelFocus(); clearBinding(); requestOpen(false, true); suspendedState.value = true })
+    onActivated(() => { if (!disposed && suspended) { suspended = false; suspendedState.value = false; bindingRevision.value++ } })
     function select(key: NavMenuKey | null, event?: Event) {
       const node = key == null ? undefined : tree.value.byKey.get(key)
       if (!available() || disabled.value || node?.disabled || (node && (node.type !== 'item' || node.children.length))) return
@@ -131,7 +134,7 @@ export default defineComponent({
     }
     expose({ close, select, setOpen })
     return () => h('li', { class: n('node'), role: 'none' }, [h(Trigger, {
-      trigger: props.trigger ?? 'click', open: open.value, disabled: disabled.value || !hasPopup(), unmountOnClose: true,
+      trigger: props.trigger ?? 'click', open: open.value, disabled: disabled.value || !hasPopup(), unmountOnClose: props.unmountOnClose,
       placement: props.placement, popupContainer: props.popupContainer ?? parent?.props.popupContainer,
       popupClass: props.popupClass ?? parent?.props.popupClass, popupOffset: 4,
       animationName: props.popupLayout === 'dropdown' ? 'fade-in' : '',
@@ -144,10 +147,9 @@ export default defineComponent({
       onClick: (event: MouseEvent) => {
         if (!available()) return
         if (disabled.value) { event.preventDefault(); return }
-        activate()
         // Opening a panel does not mean that it has produced a valid selection.
         // An entry without a panel is itself a leaf, so clicking it can activate it directly.
-        if (props.name !== undefined && !hasPopup()) parent?.selectItem(props.name)
+        if (!hasPopup() && activate() && props.name !== undefined) parent?.selectItem(props.name)
         emit('click', event)
       },
       onKeydown: (event: KeyboardEvent) => {
@@ -156,18 +158,19 @@ export default defineComponent({
         if (event.key === 'ArrowDown' && hasPopup()) { event.preventDefault(); event.stopPropagation(); setOpen(true); focusPanel() }
       },
     }), slots.default?.(context()) ?? [slots.icon?.(context()), h('span', { class: n('label') }, [slots.label?.(context()) ?? renderLabel()]), hasPopup() ? h(NavMenuArrow, { placement: props.placement, open: open.value }) : null]),
-    content: () => h('div', {
+    content: () => rendered.value ? h('div', {
       ref: panel,
+      inert: open.value ? undefined : '', 'aria-hidden': open.value ? undefined : 'true',
       role: slots.content ? 'dialog' : undefined, 'aria-label': typeof props.label === 'string' ? props.label : undefined,
       class: [n('popup'), n(`--${parent?.theme.value ?? 'light'}`), n(`--${parent?.props.size ?? 'md'}`), n(`panel--${props.popupLayout}`), { [n('panel--custom')]: !!slots.content }],
-      style: [props.popupLayout === 'full-width' ? { position: 'fixed', left: 0, right: 0, top: `${top.value}px`, maxHeight: `calc(100dvh - ${top.value}px)` } : props.popupLayout === 'full-height' ? { position: 'fixed', top: 0, bottom: 0, maxHeight: '100dvh', width: 'var(--c-nav-menu-panel-width)', ...fullHeightPosition.value } : {}, props.popupStyle],
+      style: [(props.popupLayout === 'full-width' || props.popupLayout === 'full') ? { position: 'fixed', left: 0, right: 0, top: `${top.value}px`, maxHeight: `calc(100dvh - ${top.value}px)`, height: props.popupLayout === 'full' ? `calc(100dvh - ${top.value}px)` : undefined } : props.popupLayout === 'full-height' ? { position: 'fixed', top: 0, bottom: 0, maxHeight: '100dvh', width: 'var(--c-nav-menu-panel-width)', ...fullHeightPosition.value } : {}, props.popupStyle],
       onKeydown: (event: KeyboardEvent) => { if (available() && !disabled.value && event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); close() } },
     }, slots.content?.(context()) ?? [h(NavMenu, {
       options: props.options, fieldNames: props.fieldNames, modelValue: value.value, mode: props.optionsMode,
       theme: parent?.theme.value as 'light' | 'dark' | undefined, size: parent?.props.size,
       popupContainer: props.popupContainer ?? parent?.props.popupContainer,
       onSelect: (key: NavMenuKey, _option: NavMenuOption, event: Event) => select(key, event),
-    }, { label: slots['option-label'], icon: slots['option-icon'], extra: slots['option-extra'] })]),
+    }, { label: slots['option-label'], icon: slots['option-icon'], extra: slots['option-extra'] })]) : null,
     })])
   },
 })

@@ -1,3 +1,6 @@
+import { provide } from 'vue'
+import { useDirection } from '@cedar-design/use'
+import { TreeKeyboardOwnerKey } from '../tree/context'
 import { computed, defineComponent, PropType, ref, toRefs, Slots, watch, useId, nextTick } from 'vue'
 import Tree from '../tree'
 import { isNodeSelectable } from '../tree/utils'
@@ -46,6 +49,8 @@ export default defineComponent({
   setup(props, { emit, expose }) {
     const { showCheckable, selectedValues, treeProps, scrollbar } = toRefs(props)
     const { displayScrollbar, scrollbarProps } = useScrollbar(scrollbar)
+    provide(TreeKeyboardOwnerKey, true)
+    const { isRtl } = useDirection()
     const prefixCls = getPrefixCls('tree-select')
     const refTree = ref()
 
@@ -120,10 +125,10 @@ export default defineComponent({
       }
       const node = nodes[index < 0 ? 0 : index]
       const expanded = refTree.value?.computedExpandedValues.includes(node.key)
-      if (event.key === 'ArrowRight') {
+      if (event.key === (isRtl.value ? 'ArrowLeft' : 'ArrowRight')) {
         if (!node.isLeaf && !expanded) expand(node, true, event)
         else moveTo(nodes.find((child) => child.parentKey === node.key)?.key ?? node.key)
-      } else if (event.key === 'ArrowLeft') {
+      } else if (event.key === (isRtl.value ? 'ArrowRight' : 'ArrowLeft')) {
         if (!node.isLeaf && expanded) expand(node, false, event)
         else if (nodes.some((parent) => parent.key === node.parentKey)) moveTo(node.parentKey)
       } else if (props.showCheckable ? isNodeCheckable(node) : isNodeSelectable(node)) {

@@ -4,6 +4,7 @@
       v-show="visible"
       v-bind="$attrs"
       type="button"
+      :dir="readingDirection"
       :class="
         classes(n(), formatElevation(elevation, 2), [visible, n('--active')], [popupContainer === false, n('--inline')])
       "
@@ -17,6 +18,8 @@
 </template>
 
 <script setup lang="ts">
+import { useAttrs } from 'vue'
+import { useDirection } from '../_utils/direction'
 import { IconToTop } from '@cedar-design/icons-vue'
 import { createNamespace, formatElevation } from '../_utils/global-config'
 import { toSizeUnit } from '../_utils/maple/elements'
@@ -26,6 +29,8 @@ import { useBackTop } from './use-back-top'
 
 defineOptions({ name: createNamespace('back-top').name, inheritAttrs: false })
 const props = defineProps(backTopProps)
+const directionAttrs = useAttrs()
+const { dir: readingDirection } = useDirection(undefined, () => directionAttrs.dir)
 const emit = defineEmits<{ click: [event: MouseEvent] }>()
 const { n, classes } = createNamespace('back-top')
 const popupTarget = usePopupContainer(() => props.popupContainer)

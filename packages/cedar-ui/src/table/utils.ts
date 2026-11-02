@@ -80,6 +80,7 @@ export const getGroupColumns = (
   columns: TableColumnData[],
   columnMap: Map<string, TableColumnData>,
   columnWidth: Record<string, number>,
+  dir: 'ltr' | 'rtl' = 'ltr',
 ) => {
   const totalHeaderRows = getTotalHeaderRows(columns)
 
@@ -90,6 +91,8 @@ export const getGroupColumns = (
   // For recording
   let lastLeftFixedIndex: number | undefined
   let firstRightFixedIndex: number | undefined
+  let firstLeftFixedIndex: number | undefined
+  let lastRightFixedIndex: number | undefined
 
   const travelColumns = (
     columns: TableColumnData[],
@@ -133,11 +136,13 @@ export const getGroupColumns = (
           cell.fixed = cell.fixed ?? fixed
           if (cell.fixed === 'left') {
             lastLeftFixedIndex = dataColumns.length
+            firstLeftFixedIndex ??= dataColumns.length
           } else if (isUndefined(firstRightFixedIndex)) {
             firstRightFixedIndex = dataColumns.length
           }
         }
 
+        if (cell.fixed === 'right') lastRightFixedIndex = dataColumns.length
         if (isUndefined(cell.dataIndex) || isNull(cell.dataIndex)) {
           cell.dataIndex = `__arco_data_index_${dataColumns.length}`
         }
@@ -156,6 +161,7 @@ export const getGroupColumns = (
 
   travelColumns(columns)
 
+  if (dir === 'rtl') { lastLeftFixedIndex = firstLeftFixedIndex; firstRightFixedIndex = lastRightFixedIndex }
   if (!isUndefined(lastLeftFixedIndex)) {
     dataColumns[lastLeftFixedIndex].isLastLeftFixed = true
     setParentFixed(dataColumns[lastLeftFixedIndex], 'left')
@@ -165,7 +171,27 @@ export const getGroupColumns = (
     setParentFixed(dataColumns[firstRightFixedIndex], 'right')
   }
 
-  return { dataColumns, groupColumns }
+  // A group that crosses physical frozen sides cannot remain one contiguous
+  // colspan after the RTL view is partitioned. Project it into one header cell
+  // per physical section, preserving leaf identity and business source indexes.
+  const visualGroups = dir === 'rtl' ? groupColumns.map(row => row.flatMap(cell => {
+    if (!cell.children?.length) return [cell]
+    const belongs = (leaf: TableColumnData) => {
+      let parent = leaf.parent
+      while (parent) { if (parent === cell) return true; parent = parent.parent }
+      return false
+    }
+    const leaves = dataColumns.filter(belongs)
+    return (['right', undefined, 'left'] as const).flatMap(side => {
+      const section = leaves.filter(leaf => leaf.fixed === side)
+      if (!section.length) return []
+      return [{ ...cell, children: section, colSpan: section.length, fixed: side,
+        isLastLeftFixed: side === 'left' && section.some(leaf => leaf.isLastLeftFixed),
+        isFirstRightFixed: side === 'right' && section.some(leaf => leaf.isFirstRightFixed),
+      }]
+    })
+  })) : groupColumns
+  return { dataColumns, groupColumns: visualGroups }
 }
 
 const getOperationColumnIndex = (operations: TableOperationColumn[], name: string) => {
@@ -198,7 +224,7 @@ const getFirstDataColumn = (column: TableColumnData): TableColumnData => {
 
 const getLastDataColumn = (column: TableColumnData): TableColumnData => {
   if (column.children && column.children.length > 0)
-    return getFirstDataColumn(column.children[column.children.length - 1])
+    return getLastDataColumn(column.children[column.children.length - 1])
   return column
 }
 
@@ -213,6 +239,7 @@ export const getFixedNumber = (
     operations: TableOperationColumn[]
   },
   tableLayout?: 'fixed' | 'auto',
+  dir: 'ltr' | 'rtl' = 'ltr',
 ) => {
   // auto 布局下浏览器按内容分配列宽，不执行拖拽写入的 _resizeWidth，
   // 偏移必须以渲染后测量回写的 _realWidth 为准，否则 sticky 错位
@@ -222,6 +249,12 @@ export const getFixedNumber = (
       : item._resizeWidth ?? item._realWidth ?? item.width ?? 0
 
   let count = 0
+  if (dir === 'rtl') {
+    const boundary = column.fixed === 'left' ? getLastDataColumn(column) : getFirstDataColumn(column)
+    const index = dataColumns.findIndex(item => item.dataIndex === boundary.dataIndex)
+    const outside = column.fixed === 'left' ? dataColumns.slice(index + 1) : dataColumns.slice(0, index)
+    return outside.filter(item => item.fixed === column.fixed).reduce((total, item) => total + widthOf(item), 0)
+  }
 
   if (column.fixed === 'left') {
     for (const item of operations) {
@@ -267,12 +300,13 @@ export const getOperationFixedCls = (prefixCls: string, column: TableOperationCo
 export const getFixedCls = (
   prefixCls: string,
   column: Pick<TableColumnData, 'fixed' | 'isLastLeftFixed' | 'isFirstRightFixed'>,
+  hideLeftBoundary = false,
 ): any[] => {
   if (column.fixed === 'left') {
     return [
       `${prefixCls}-col-fixed-left`,
       {
-        [`${prefixCls}-col-fixed-left-last`]: column.isLastLeftFixed,
+        [`${prefixCls}-col-fixed-left-last`]: column.isLastLeftFixed && !hideLeftBoundary,
       },
     ]
   }
@@ -297,9 +331,10 @@ export const getStyle = (
     operations: TableOperationColumn[]
   },
   tableLayout?: 'fixed' | 'auto',
+  dir: 'ltr' | 'rtl' = 'ltr',
 ): CSSProperties => {
   if (column.fixed) {
-    const offset = `${getFixedNumber(column, { dataColumns, operations }, tableLayout)}px`
+    const offset = `${getFixedNumber(column, { dataColumns, operations }, tableLayout, dir)}px`
     if (column.fixed === 'left') {
       return {
         left: offset,
@@ -312,10 +347,12 @@ export const getStyle = (
   return {}
 }
 
-export const getOperationStyle = (column: TableOperationColumn, operations: TableOperationColumn[]) => {
+export const getOperationStyle = (column: TableOperationColumn, operations: TableOperationColumn[], dir: 'ltr' | 'rtl' = 'ltr', dataColumns: TableColumnData[] = [], tableLayout?: 'fixed' | 'auto') => {
   if (column.fixed) {
     return {
-      left: `${getOperationFixedNumber(column, operations)}px`,
+      left: `${dir === 'rtl'
+        ? operations.slice(operations.indexOf(column) + 1).filter(item => item.fixed).reduce((sum, item) => sum + (item._realWidth ?? item.width ?? 40), 0) + dataColumns.filter(item => item.fixed === 'left').reduce((sum, item) => sum + (tableLayout === 'auto' ? item._realWidth ?? item.width ?? 0 : item._resizeWidth ?? item._realWidth ?? item.width ?? 0), 0)
+        : getOperationFixedNumber(column, operations)}px`,
     }
   }
   return {}

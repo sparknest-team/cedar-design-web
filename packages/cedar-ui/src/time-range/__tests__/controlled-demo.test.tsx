@@ -9,6 +9,7 @@ useDemoControls(demoTestConfig);
 
 it("controlled demo rejects proposals without mutating parent state, then accepts new requests", async () => {
   const wrapper = mount(Demo, {
+    attachTo: document.body,
     global: { components: { CTimeRange: TimeRange } },
   });
   const field = wrapper.findAllComponents(TimeRange)[1];

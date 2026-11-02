@@ -109,9 +109,10 @@
   }
 
   &-column-handle {
+    touch-action: none;
     position: absolute;
     top: 0;
-    right: var(~"--c-table-column-handle-right");
+    inset-inline-end: var(~"--c-table-column-handle-right");
     z-index: var(--c-z-index-local-raised);
     width: var(~"--c-table-column-handle-width");
     height: 100%;
@@ -134,7 +135,7 @@
     display: inline-flex;
     flex-shrink: 0;
     align-items: center;
-    margin-left: var(~"--c-table-header-cell-action-margin-left");
+    margin-inline-start: var(~"--c-table-header-cell-action-margin-left");
     color: var(~"--c-table-header-cell-action-color");
     vertical-align: middle;
     cursor: pointer;
@@ -163,7 +164,7 @@
     display: inline-flex;
     flex-shrink: 0;
     align-items: center;
-    margin-left: var(~"--c-table-th-actions-margin-left");
+    margin-inline-start: var(~"--c-table-th-actions-margin-left");
 
     .c-table-filters-align-left {
       margin-left: 0;
@@ -383,7 +384,7 @@
 
   &-cell-expand-icon &-cell-inline-icon {
     display: inline-flex;
-    margin-right: var(~"--c-table-expand-button-margin-right");
+    margin-inline-end: var(~"--c-table-expand-button-margin-right");
 
     .c-icon-loading {
       color: var(~"--c-table-expand-loading-icon-color");
@@ -394,7 +395,7 @@
     display: inline-block;
     width: var(~"--c-table-expand-button-size");
     height: var(~"--c-table-expand-button-size");
-    margin-right: var(~"--c-table-expand-button-margin-right");
+    margin-inline-end: var(~"--c-table-expand-button-margin-right");
   }
 
   &-tr-expand .c-table-td {
@@ -498,7 +499,7 @@
 
   &-sorter {
     display: inline-block;
-    margin-left: var(~"--c-table-header-sorter-icon-margin-left");
+    margin-inline-start: var(~"--c-table-header-sorter-icon-margin-left");
     vertical-align: -3px;
   }
 
@@ -577,7 +578,7 @@
     &-align-left {
       position: relative;
       width: auto;
-      margin-left: var(~"--c-table-header-sorter-icon-margin-left");
+      margin-inline-start: var(~"--c-table-header-sorter-icon-margin-left");
 
       svg {
         font-size: var(~"--c-table-header-sorter-icon-font-size");
@@ -723,7 +724,7 @@
         var(~"--c-table-border-color");
     }
 
-    .c-table-scroll-y {
+    .c-table-split {
       border-bottom: var(~"--c-table-border-width")
         var(~"--c-table-border-style") var(~"--c-table-border-color");
 
@@ -1005,3 +1006,36 @@
     cursor: pointer;
   }
 }
+
+.c-table-footer-sticky {
+  position: sticky;
+  bottom: 0;
+  z-index: var(--c-z-index-local-sticky);
+  background: var(--c-table-pagination-sticky-bg);
+  .c-table-pagination {
+    position: static;
+    margin-top: 0;
+    padding: var(--c-table-pagination-sticky-padding);
+  }
+}
+.c-table__sticky-scrollbar {
+  max-width: 100%;
+
+  &.c-table--scrollbar-active .c-scrollbar-thumb {
+    opacity: var(--c-table-sticky-scrollbar-opacity);
+  }
+}
+.c-table__sticky-scrollbar-viewport {
+  overflow-x: auto;
+  overflow-y: hidden;
+  height: var(--c-table-sticky-scrollbar-height);
+}
+.c-table__sticky-scrollbar-content {
+  height: var(--c-table-sticky-scrollbar-height);
+}
+
+// Explicit cell alignment is physical; omitted alignment follows reading start.
+.c-table-cell-align-left { text-align: left; justify-content: flex-start; }
+.c-table-cell-align-left:dir(rtl) { justify-content: flex-end; }
+.c-table-cell-align-right:dir(rtl) { justify-content: flex-start; }
+.c-table-cell-align-start { text-align: start; justify-content: flex-start; }

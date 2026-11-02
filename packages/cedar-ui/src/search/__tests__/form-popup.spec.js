@@ -1,11 +1,17 @@
 import { nextTick } from 'vue'
-import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { mount as rawMount } from '@vue/test-utils'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 import Search from '../index'
 import FieldSelect from '../FieldSelect.vue'
 import Select from '../../select'
 import { formItemInjectionKey } from '../../form/context'
-enableAutoUnmount(afterEach)
+const wrappers = []
+const mount = (...args) => {
+  const wrapper = rawMount(...args)
+  wrappers.push(wrapper)
+  return wrapper
+}
+afterEach(() => wrappers.splice(0).forEach(wrapper => { if (wrapper.exists()) wrapper.unmount() }))
 afterEach(() => { document.body.innerHTML = '' })
 function formContext(onChange) {
   return { [formItemInjectionKey]: { disabled: false, readonly: false, eventHandlers: { onChange } } }
@@ -24,7 +30,7 @@ describe('Search form and popup interaction', () => {
   })
   test('native inputAttrs and error reach outer and popup inputs', async () => {
     const wrapper = mount(Search, { attachTo: document.body, props: {
-      historyPopup: true, recentSearches: ['x'], error: true,
+      editMode: 'popup', recentSearches: ['x'], error: true,
       inputAttrs: { name: 'query', autocomplete: 'off', 'aria-describedby': 'query-help' },
     } })
     const outer = wrapper.get('input.c-input__inner')
@@ -41,7 +47,7 @@ describe('Search form and popup interaction', () => {
 
   test('typing, cancel, fields and history notify the Form once per committed action', async () => {
     const onChange = vi.fn()
-    const wrapper = mount(Search, { props: { defaultValue: 'before', showAction: true, fields: [{ value: 'name', label: 'Name' }, { value: 'id', label: 'ID' }], historyPopup: false },
+    const wrapper = mount(Search, { props: { defaultValue: 'before', showAction: true, fields: [{ value: 'name', label: 'Name' }, { value: 'id', label: 'ID' }], editMode: 'direct' },
       global: { provide: formContext(onChange) } })
     const state = wrapper.vm.$.setupState.state
     const input = wrapper.get('input.c-input__inner')
@@ -65,7 +71,7 @@ describe('Search form and popup interaction', () => {
   })
   test('popup Input is addressed by public focus/blur; inner cancel clears once', async () => {
     const onChange = vi.fn()
-    const wrapper = mount(Search, { attachTo: document.body, props: { defaultValue: 'before', historyPopup: true, recentSearches: ['before'] },
+    const wrapper = mount(Search, { attachTo: document.body, props: { defaultValue: 'before', editMode: 'popup', recentSearches: ['before'] },
       global: { provide: formContext(onChange) } })
     await wrapper.get('input.c-input__inner').trigger('focus')
     await nextTick()

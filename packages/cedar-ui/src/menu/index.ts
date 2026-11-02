@@ -9,7 +9,7 @@ const Menu = withInstall(_Menu, Object.assign(_Menu, {
 
 export type MenuInstance = InstanceType<typeof _Menu>
 export type MenuOptionInstance = InstanceType<typeof _MenuOption>
-export type { MenuProps, MenuPosition, MenuValue, MenuOptionData, MenuFieldNames, MenuContent, MenuRenderContext, MenuOptionLabel, MenuOptionLabelRender } from './types'
+export type { MenuProps, MenuPlacement, MenuValue, MenuOptionData, MenuFieldNames, MenuContent, MenuRenderContext, MenuOptionLabel, MenuOptionLabelRender } from './types'
 
 export {
   Menu,

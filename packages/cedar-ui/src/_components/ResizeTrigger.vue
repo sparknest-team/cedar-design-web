@@ -33,15 +33,15 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    direction: {
+    orientation: {
       type: String as PropType<'horizontal' | 'vertical'>,
       default: 'horizontal',
     },
   },
   emits: ['resize'],
   setup(props, { emit }) {
-    const { direction, prefixCls } = toRefs(props)
-    const isHorizontal = computed(() => direction?.value === 'horizontal')
+    const { orientation, prefixCls } = toRefs(props)
+    const isHorizontal = computed(() => orientation?.value === 'horizontal')
     const classNames = computed(() => [
       prefixCls.value,
       {

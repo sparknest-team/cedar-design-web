@@ -37,6 +37,7 @@ function fixture() {
   const timer = vi.spyOn(globalThis, "setTimeout");
   const open = ref<boolean | undefined>(true);
   const src = ref<string | undefined>("a");
+  const isRtl = ref(false);
   const interaction = ref<"auto" | "touch" | "desktop">("touch");
   const active = ref(true);
   const longPress = vi.fn();
@@ -57,6 +58,7 @@ function fixture() {
   const Child = defineComponent({
     setup() {
       api = usePreviewController({
+        isRtl,
         open,
         defaultOpen: false,
         src,
@@ -107,6 +109,7 @@ function fixture() {
       .at(-1)![0] as () => void;
   return {
     api,
+    isRtl,
     open,
     src,
     interaction,
@@ -325,4 +328,16 @@ describe("ImagePreview controller interaction lifecycle", () => {
     listener!();
     expect(f.api.isTouch.value).toBe(false);
   });
+});
+
+test("direction changes cancel a pending gesture and its delayed callbacks", () => {
+  const f = fixture();
+  f.down();
+  f.isRtl.value = true;
+  f.api.onPointerUp(f.event(80));
+  vi.advanceTimersByTime(600);
+  expect(f.longPress).not.toHaveBeenCalled();
+  expect(f.next).not.toHaveBeenCalled();
+  expect(f.api.moving.value).toBe(false);
+  expect(f.api.translateX.value).toBe(0);
 });

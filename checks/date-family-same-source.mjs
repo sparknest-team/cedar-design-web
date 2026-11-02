@@ -53,6 +53,7 @@ const files = [
 ]
 const normalize = (text) =>
   text
+    .replaceAll('../_utils/empty-value', '../utils/empty-value')
     .replaceAll('../_utils/global-config', '../utils/components')
     .replaceAll('{ dateProps as fieldProps }', '{ props as fieldProps }')
     .replaceAll('{ dateRangeProps as fieldProps }', '{ props as fieldProps }')

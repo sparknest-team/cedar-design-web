@@ -104,17 +104,17 @@
       "kind": "string"
     },
     {
-      "name": "presentation",
-      "type": "'inline' | 'click' | 'dblclick'",
+      "name": "edit-mode",
+      "type": "'direct' | 'click' | 'dblclick'",
       "defaultValue": "undefined",
-      "description": "字段编辑方式，字段 > FormItem > Form 继承；默认 inline。",
+      "description": "字段编辑方式，字段 > FormItem > Form 继承；默认 direct。",
       "kind": "enum",
       "options": [
-        "inline",
+        "direct",
         "click",
         "dblclick"
       ],
-      "initial": "inline"
+      "initial": "direct"
     },
     {
       "name": "read-pretty",
@@ -175,12 +175,12 @@
       "name": "default-value",
       "kind": "prop",
       "demos": [
-        "checkbox-group.vue",
+        "group-declaration-comparison.vue",
         "checked-custom.vue",
         "control-value.vue",
         "controlled-mode.vue",
         "custom-control.vue",
-        "disabled.vue",
+        "state-lab.vue",
         "group-state.vue",
         "max-checked.vue",
         "native-control.vue"
@@ -192,14 +192,13 @@
       "demos": [
         "basic.vue",
         "async-options.vue",
-        "checkbox-group-options.vue",
-        "checkbox-group.vue",
+        "group-declaration-comparison.vue",
         "checked-all-indeterminate.vue",
         "checked-custom.vue",
         "control-value.vue",
         "controlled-mode.vue",
         "custom-control.vue",
-        "disabled.vue",
+        "state-lab.vue",
         "grid.vue",
         "group-methods.vue",
         "group-state.vue",
@@ -219,14 +218,13 @@
       "demos": [
         "basic.vue",
         "async-options.vue",
-        "checkbox-group-options.vue",
-        "checkbox-group.vue",
+        "group-declaration-comparison.vue",
         "checked-all-indeterminate.vue",
         "checked-custom.vue",
         "control-value.vue",
         "controlled-mode.vue",
         "custom-control.vue",
-        "disabled.vue",
+        "state-lab.vue",
         "grid.vue",
         "group-methods.vue",
         "group-state.vue",
@@ -259,14 +257,13 @@
       "kind": "slot",
       "demos": [
         "basic.vue",
-        "checkbox-group-options.vue",
-        "checkbox-group.vue",
+        "group-declaration-comparison.vue",
         "checked-all-indeterminate.vue",
         "checked-custom.vue",
         "control-value.vue",
         "controlled-mode.vue",
         "custom-control.vue",
-        "disabled.vue",
+        "state-lab.vue",
         "grid.vue",
         "group-state.vue",
         "max-checked.vue",

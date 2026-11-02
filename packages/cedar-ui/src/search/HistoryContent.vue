@@ -6,7 +6,7 @@
         :model-value="state.computedField"
         :options="settings.fields"
         :style="settings.selectStyle"
-         :disabled="state.searchDisabled"
+        :disabled="state.searchDisabled"
         :class="n('select')"
         @change="state.handleFieldChange"
       />
@@ -14,10 +14,14 @@
         <slot name="label">{{ settings.label }}</slot>
       </div>
       <SearchInput
+        :loading="settings.loading && settings.loadingMode === 'line'" :loading-mode="settings.loadingMode"
         ref="inputRef"
+        edit-mode="direct"
         v-bind="inputOptions"
         :model-value="state.computedValue"
-        :input-attrs="settings.inputAttrs" :error="settings.error"
+        :empty-value="settings.emptyValue"
+        :input-attrs="settings.inputAttrs"
+        :error="settings.error"
         :placeholder="state.searchPlaceholder"
         :class="n('input')"
         autofocus
@@ -31,9 +35,16 @@
       >
         <template v-if="slots.prefix" #prefix><slot name="prefix" /></template>
         <template v-if="slots.suffix" #suffix><slot name="suffix" /></template>
-        <template v-if="slots['clear-icon']" #clear-icon="scope"><slot name="clear-icon" v-bind="scope" /></template>
+        <template v-if="slots['clear-icon']" #clear-icon="scope"
+          ><slot name="clear-icon" v-bind="scope"
+        /></template>
       </SearchInput>
-      <SearchButton :class="n('cancel')" variant="text" :disabled="state.searchDisabled" @click="state.handleCancel">
+      <SearchButton
+        :class="n('cancel')"
+        variant="text"
+        :disabled="state.searchDisabled"
+        @click="state.handleCancel"
+      >
         {{ state.cancelText }}
       </SearchButton>
     </div>
@@ -45,32 +56,61 @@
         :class="n('history-item')"
         :disabled="state.searchDisabled"
         @click="state.handleHistorySelect(item, $event)"
-      >{{ item }}</button>
+      >
+        {{ item }}
+      </button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref, watch } from 'vue'
-import type { UnwrapNestedRefs } from 'vue'
-import SearchInput from '../input'
-import SearchSelect from './FieldSelect.vue'
-import SearchButton from '../button'
-import { createNamespace } from '../_utils/global-config'
-import type { SearchResolvedProps } from './props'
-import type { SearchSlots } from './types'
-import type { SearchControl } from './use-search-control'
+import { computed, onBeforeUnmount, ref, watch } from "vue";
+import type { UnwrapNestedRefs } from "vue";
+import SearchInput from "../input";
+import SearchSelect from "./FieldSelect.vue";
+import SearchButton from "../button";
+import { createNamespace } from "../_utils/global-config";
+import type { SearchResolvedProps } from "./props";
+import type { SearchSlots } from "./types";
+import type { SearchControl } from "./use-search-control";
 
-const props = defineProps<{ settings: SearchResolvedProps; state: UnwrapNestedRefs<SearchControl> }>()
-const slots = defineSlots<SearchSlots>()
-const { n } = createNamespace('search')
-const inputRef = ref<InstanceType<typeof SearchInput>>()
-watch(inputRef, target => props.state.setPopupInput(target))
-onBeforeUnmount(() => props.state.setPopupInput(undefined))
+const props = defineProps<{
+  settings: SearchResolvedProps;
+  state: UnwrapNestedRefs<SearchControl>;
+}>();
+const slots = defineSlots<SearchSlots>();
+const { n } = createNamespace("search");
+const inputRef = ref<InstanceType<typeof SearchInput>>();
+watch(inputRef, (target) => props.state.setPopupInput(target));
+onBeforeUnmount(() => props.state.setPopupInput(undefined));
 const inputOptions = computed(() => {
-  const { modelModifiers, type, ariaLabel, maxLength, enterkeyhint,
-    textColor, focusColor, blurColor, size, variant, clearable } = props.settings
-  return { modelModifiers, type, ariaLabel, maxLength, readonly: props.state.mergedReadonly, disabled: props.state.mergedDisabled,
-    enterkeyhint: enterkeyhint || 'search', textColor, focusColor, blurColor, size, variant, clearable }
-})
+  const {
+    modelModifiers,
+    type,
+    ariaLabel,
+    maxLength,
+    enterkeyhint,
+    textColor,
+    focusColor,
+    blurColor,
+    size,
+    variant,
+    clearable,
+  } = props.settings;
+  return {
+    modelModifiers,
+    type,
+    ariaLabel,
+    maxLength,
+    readonly: props.state.mergedReadonly,
+    disabled: props.state.mergedDisabled,
+    enterkeyhint: enterkeyhint || "search",
+    textColor,
+    focusColor,
+    blurColor,
+    size,
+    variant,
+    clearable,
+  };
+});
 </script>

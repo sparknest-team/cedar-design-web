@@ -1,4 +1,4 @@
-@import "./token.less";
+@import './token.less';
 .c-picker-field {
   width: 100%;
   min-width: 0;
@@ -30,4 +30,19 @@
   &__separator {
     flex: none;
   }
+}
+
+.c-picker-field {
+  &__open-trigger {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    flex: none;
+  }
+  &__open-trigger:disabled { cursor: default; }
 }

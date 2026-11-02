@@ -1,12 +1,18 @@
 {
   "fields": [
     {
-      "name": "fetch",
-      "description": "需要主动传入发请求的fetch",
-      "type": "any",
-      "defaultValue": "undefined",
-      "kind": "json",
-      "initial": "null"
+      "name": "options",
+      "description": "外部人员候选数组",
+      "type": "readonly PeopleSelectOption[]",
+      "defaultValue": "[]",
+      "kind": "json"
+    },
+    {
+      "name": "loading",
+      "description": "外部加载状态",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
     },
     {
       "name": "model-value",
@@ -30,24 +36,17 @@
       "kind": "boolean"
     },
     {
-      "name": "url-type",
-      "description": "选人地址的url类型，默认有三种oss、ares",
-      "type": "string",
-      "defaultValue": "'ares'",
-      "kind": "string"
-    },
-    {
-      "name": "presentation",
-      "type": "'inline' | 'click' | 'dblclick'",
+      "name": "edit-mode",
+      "type": "'direct' | 'click' | 'dblclick'",
       "defaultValue": "undefined",
-      "description": "字段编辑方式，字段 > FormItem > Form 继承；默认 inline。",
+      "description": "字段编辑方式，字段 > FormItem > Form 继承；默认 direct。",
       "kind": "enum",
       "options": [
-        "inline",
+        "direct",
         "click",
         "dblclick"
       ],
-      "initial": "inline"
+      "initial": "direct"
     },
     {
       "name": "read-pretty",
@@ -110,7 +109,7 @@
       "name": "label",
       "type": "string",
       "defaultValue": "''",
-      "description": "// showMessage: { //   type: Boolean, //   default: true, // }, // showPhone: { //   type: Boolean, //   default: true, // },",
+      "description": "当前 ID 不在候选中时的反显文本",
       "kind": "string"
     },
     {
@@ -119,22 +118,31 @@
       "defaultValue": "undefined",
       "description": "源码公开属性 / Public source prop",
       "kind": "string"
+    },
+    {
+      "name": "case-sensitive",
+      "description": "内置本地过滤是否区分大小写；自定义过滤函数优先",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "search-fields",
+      "type": "readonly ('label' | 'value')[]",
+      "defaultValue": "['label']",
+      "description": "内置匹配字段，多字段 OR；默认 label",
+      "kind": "json",
+      "initial": "[\"label\"]"
     }
   ],
   "events": [
     "change",
     "clear",
     "update:modelValue",
-    "update:open"
+    "update:open",
+    "search"
   ],
   "scenarios": [
-    {
-      "name": "fetch",
-      "kind": "prop",
-      "demos": [
-        "basic.vue"
-      ]
-    },
     {
       "name": "before-commit",
       "kind": "prop",

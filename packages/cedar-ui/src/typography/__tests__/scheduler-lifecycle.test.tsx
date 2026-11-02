@@ -42,8 +42,8 @@ beforeEach(() => {
 })
 afterEach(() => {
   mounts.splice(0).forEach(root => root.unmount())
-  vi.useRealTimers()
   vi.restoreAllMocks()
+  vi.useRealTimers()
 })
 
 describe('Typography scheduler ownership', () => {
@@ -63,11 +63,19 @@ describe('Typography scheduler ownership', () => {
   })
   test('old copy completion cannot clear a newer feedback', async () => {
     const s = setup()
-    const timers = vi.spyOn(globalThis, 'setTimeout')
-    s.copy()
-    const old = timers.mock.calls.at(-1)![0] as () => void
-    s.copy(); old(); await nextTick()
-    expect(s.operations().props('isCopied')).toBe(true)
+    const schedule = globalThis.setTimeout
+    const timers = vi.fn(schedule)
+    globalThis.setTimeout = timers as typeof globalThis.setTimeout
+    try {
+      s.copy()
+      const old = timers.mock.calls.at(-1)![0] as () => void
+      s.copy(); old(); await nextTick()
+      expect(s.operations().props('isCopied')).toBe(true)
+    } finally {
+      // Restore while the fake clock is still installed. A global spy retained
+      // by the old runner can otherwise restore a disposed clock in later files.
+      globalThis.setTimeout = schedule
+    }
   })
   test('deactivation cancels feedback and retained copy stays inert', async () => {
     const s = setup()

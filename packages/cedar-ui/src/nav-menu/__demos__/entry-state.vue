@@ -19,13 +19,13 @@ const highlightText = () => highlight.value === undefined ? '跟随业务 active
       <c-button @click="value = 'missing'">设为未匹配值</c-button>
     </c-space>
     <p>独立入口主值：{{ JSON.stringify(value) }}；highlight：{{ highlightText() }}。</p>
-    <c-nav-menu mode="horizontal">
+    <c-nav-menu mode="horizontal" class="entry-state-menu">
       <c-nav-menu-item v-model="value" :options="options" :highlight="highlight">
         <template #label="{ active, open }">独立入口 active={{ active }} / open={{ open }}</template>
       </c-nav-menu-item>
     </c-nav-menu>
     <p>具名当前入口：{{ activeItem ?? '无' }}。只打开面板不会改变 activeItem；选择叶子项后才切换。</p>
-    <c-nav-menu v-model:active-item="activeItem" mode="horizontal">
+    <c-nav-menu v-model:active-item="activeItem" mode="horizontal" class="entry-state-menu">
       <c-nav-menu-item name="first" :options="options">
         <template #label="{ active, open }">入口一 active={{ active }} / open={{ open }}</template>
       </c-nav-menu-item>
@@ -35,3 +35,10 @@ const highlightText = () => highlight.value === undefined ? '跟随业务 active
     </c-nav-menu>
   </c-space>
 </template>
+
+<style scoped>
+.entry-state-menu {
+  width: 100%;
+  min-width: 0;
+}
+</style>

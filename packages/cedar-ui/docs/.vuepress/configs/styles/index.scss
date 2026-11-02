@@ -91,3 +91,15 @@ body {
 .theme-default-content > div > ul > li {
   margin: 4px 0;
 }
+
+// Markdown API tables scroll locally; component demo tables keep their own layout.
+@media (max-width: 719px) {
+  .theme-hope-content:not(.custom) > table,
+  .theme-default-content > table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+}
+
+pre, pre code { direction: ltr; text-align: left; unicode-bidi: isolate; }

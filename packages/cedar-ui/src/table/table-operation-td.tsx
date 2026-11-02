@@ -61,7 +61,7 @@ export default defineComponent({
   setup(props, { emit, slots }) {
     const prefixCls = getPrefixCls('table')
     const tableCtx = inject<Partial<TableContext>>(tableInjectionKey, {})
-    const style = computed(() => getOperationStyle(props.operationColumn, props.operations))
+    const style = computed(() => getOperationStyle(props.operationColumn, props.operations, tableCtx.readingDirection, tableCtx.physicalDataColumns, tableCtx.tableLayout))
 
     const cls = computed(() => [
       `${prefixCls}-td`,

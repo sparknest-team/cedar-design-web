@@ -236,6 +236,7 @@ export default defineComponent({
   emits: ["search"],
   setup(props, { emit }) {
     const prefixCls = getPrefixCls("transfer-view");
+    const itemPrefixCls = getPrefixCls("transfer-list-item");
     const filter = ref("");
     const transferCtx = inject(transferInjectionKey, undefined);
     const dragContainerRef = ref<HTMLElement>();
@@ -252,7 +253,7 @@ export default defineComponent({
     );
     const filteredValidValues = computed(() =>
       filteredData.value
-        .filter((item) => !item.disabled)
+        .filter((item) => !item.disabled && (props.type !== "source" || !item.required))
         .map((item) => item.value),
     );
     const filteredSelectedValues = computed(() =>
@@ -273,8 +274,9 @@ export default defineComponent({
     );
 
     const handleSelectAllChange = (
-      checked: boolean | (string | number | boolean)[],
+      checked: boolean | (string | number | boolean)[] | null,
     ) => {
+      if (props.disabled) return;
       const isChecked = Array.isArray(checked) ? checked.length > 0 : checked;
       if (isChecked) {
         transferCtx?.onSelect([
@@ -323,11 +325,13 @@ export default defineComponent({
       if (!dragContainerRef.value) return;
       sortable = Sortable.create(dragContainerRef.value, {
         animation: 150,
-        handle: `.${prefixCls}-drag-handle`,
+        handle: `.${itemPrefixCls}-drag-handle`,
         onEnd: ({ oldIndex, newIndex }) => {
           if (oldIndex == null || newIndex == null || oldIndex === newIndex)
             return;
           const items = [...filteredData.value];
+          if (oldIndex < 0 || newIndex < 0 || oldIndex >= items.length || newIndex >= items.length)
+            return;
           const oldValue = items[oldIndex];
           const newValue = items[newIndex];
           const [item] = items.splice(oldIndex, 1);

@@ -12,6 +12,28 @@ import _Loading from "./Loading.vue";
 import { loadingProps } from "./props";
 import type { LoadingSize, LoadingType } from "./props";
 
+const locks = new WeakMap<Document, { count: number; owned: boolean }>()
+
+function acquireBodyLock(document: Document) {
+  let state = locks.get(document)
+  if (!state) {
+    state = { count: 0, owned: !document.body.classList.contains('c-loading-parent--hidden') }
+    locks.set(document, state)
+  }
+  const lease = state
+  lease.count++
+  document.body.classList.add('c-loading-parent--hidden')
+  let released = false
+  return () => {
+    if (released) return
+    released = true
+    if (--lease.count === 0) {
+      if (lease.owned) document.body.classList.remove('c-loading-parent--hidden')
+      locks.delete(document)
+    }
+  }
+}
+
 const INSTANCE_KEY = Symbol("CedarLoading");
 
 export interface LoadingOptions {
@@ -33,6 +55,8 @@ export interface ElementLoading extends HTMLElement {
     container: HTMLElement;
     options: LoadingRenderOptions;
     restorePosition: boolean;
+    releaseLock?: () => void;
+    fullscreen: boolean;
   };
 }
 
@@ -62,6 +86,7 @@ const createInstance = (
   binding: DirectiveBinding<boolean | LoadingOptions>,
 ) => {
   const options = reactive<LoadingRenderOptions>(getOptions(binding.value));
+  const document = el.ownerDocument;
   const container = document.createElement("div");
   // The overlay is inside the host: consume clicks before they reach Card/ancestors.
   container.addEventListener(
@@ -74,7 +99,7 @@ const createInstance = (
   );
   const fullscreen = options.fullscreen === true;
   const restorePosition =
-    !fullscreen && getComputedStyle(el).position === "static";
+    !fullscreen && !el.classList.contains("c-loading-parent--relative") && document.defaultView?.getComputedStyle(el).position === "static";
   container.className = fullscreen
     ? "c-loading-directive c-loading-directive--fullscreen"
     : "c-loading-directive";
@@ -92,8 +117,8 @@ const createInstance = (
   )?.$?.appContext;
   render(vnode, container);
 
+  const releaseLock = fullscreen ? acquireBodyLock(document) : undefined;
   if (fullscreen) {
-    document.body.classList.add("c-loading-parent--hidden");
     document.body.appendChild(container);
   } else {
     if (restorePosition) el.classList.add("c-loading-parent--relative");
@@ -104,6 +129,8 @@ const createInstance = (
     options,
     container,
     restorePosition,
+    releaseLock,
+    fullscreen,
   };
 };
 
@@ -122,6 +149,7 @@ const updateOptions = (
 ) => {
   const instance = el[INSTANCE_KEY];
   if (instance) {
+    for (const key of Object.keys(instance.options)) delete instance.options[key as keyof LoadingRenderOptions];
     Object.assign(instance.options, newOptions);
   }
 };
@@ -134,7 +162,7 @@ const removeInstance = (el: ElementLoading) => {
   instance.container.remove();
   if (instance.restorePosition)
     el.classList.remove("c-loading-parent--relative");
-  document.body.classList.remove("c-loading-parent--hidden");
+  instance.releaseLock?.();
   el[INSTANCE_KEY] = undefined;
 };
 
@@ -149,12 +177,18 @@ export const vLoading: Directive<ElementLoading, boolean | LoadingOptions> = {
       createInstance(el, binding);
     } else if (!isLoading(binding.value)) {
       removeInstance(el);
-    } else if (typeof binding.value === "object" && el[INSTANCE_KEY]) {
-      updateOptions(el, getOptions(binding.value));
-      if (binding.value.background) {
+    } else if (el[INSTANCE_KEY]) {
+      const options = getOptions(binding.value);
+      if (el[INSTANCE_KEY].fullscreen !== (options.fullscreen === true)) {
+        removeInstance(el);
+        createInstance(el, binding);
+        return;
+      }
+      updateOptions(el, options);
+      if (options.background) {
         el[INSTANCE_KEY].container.style.setProperty(
           "--c-loading-overlay-background",
-          binding.value.background,
+          options.background,
         );
       } else {
         el[INSTANCE_KEY].container.style.removeProperty(

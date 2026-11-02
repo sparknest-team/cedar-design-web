@@ -13,23 +13,96 @@ CSS Grid columns, spans, gaps, collapse and suffix items. Use Row / Col for 24-c
 > - Row + Col: Use for 24-column Flex layouts that need horizontal/vertical alignment, wrapping control, fixed and flexible widths together, or responsive ordering. Row controls the row; Col controls width, offset and order.
 > - Space: Use for simple groups of buttons, tags or text that only need spacing, direction and alignment. Use native Flex for more flexible width allocation.
 
-## Examples
+## Basic examples
 
 ### Columns, spans and offsets
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### Collapsed rows and suffix slot
-
-<demo src="./__demos__/collapse.vue"></demo>
+## Layout and arrangement
 
 ### Responsive columns, gaps and spans
 
+<!-- demo-config-notes:start -->
+#### Configuration reference for this comparison
+
+| Configuration | Purpose | Related examples |
+| --- | --- | --- |
+| `cols` | Columns per row, minimum 1 | Responsive columns, gaps and spans |
+| `col-gap` | Column gap in px | Responsive columns, gaps and spans |
+| `row-gap` | Row gap in px | Responsive columns, gaps and spans |
+<!-- demo-config-notes:end -->
+
+
 <demo src="./__demos__/responsive.vue"></demo>
+
+## Customization and slots
+
+### Collapsed rows and suffix slot
+
+<!-- demo-config-notes:start -->
+#### Configuration reference for this comparison
+
+| Configuration | Purpose | Related examples |
+| --- | --- | --- |
+| `cols` | Columns per row, minimum 1 | Collapsed rows and suffix slot |
+| `col-gap` | Column gap in px | Collapsed rows and suffix slot |
+| `row-gap` | Row gap in px | Collapsed rows and suffix slot |
+| `collapsed` | Collapse overflowing rows | Collapsed rows and suffix slot |
+| `collapsed-rows` | Visible rows while collapsed, minimum 1 | Collapsed rows and suffix slot |
+<!-- demo-config-notes:end -->
+
+
+<demo src="./__demos__/collapse.vue"></demo>
+
+## Interaction and control
 
 ### Insert, remove and reorder
 
+<!-- demo-config-notes:start -->
+#### Configuration reference for this comparison
+
+| Configuration | Purpose | Related examples |
+| --- | --- | --- |
+| `cols` | Columns per row, minimum 1 | Insert, remove and reorder |
+| `col-gap` | Column gap in px | Insert, remove and reorder |
+| `row-gap` | Row gap in px | Insert, remove and reorder |
+| `collapsed` | Collapse overflowing rows | Insert, remove and reorder |
+<!-- demo-config-notes:end -->
+
+
 <demo src="./__demos__/dynamic.vue"></demo>
+
+<!-- same-source-api:start -->
+
+### Props
+
+| Prop | Description | Type | Default |
+| --- | --- | --- | --- |
+| cols | Columns per row, minimum 1 | `number / ResponsiveValue` | `24` |
+| row-gap | Row gap in px | `number / ResponsiveValue` | `0` |
+| col-gap | Column gap in px | `number / ResponsiveValue` | `0` |
+| collapsed | Collapse overflowing rows | `boolean` | `false` |
+| collapsed-rows | Visible rows while collapsed, minimum 1 | `number` | `1` |
+
+### Events
+
+| Event | Description |
+| --- | --- |
+
+### Slots
+
+| Slot | Description |
+| --- | --- |
+| default | Layout content |
+
+### Methods
+
+| Method | Description |
+| --- | --- |
+<!-- same-source-api:end -->
+
+## API
 
 <!-- same-source-api:start -->
 ### Props
@@ -59,9 +132,9 @@ CSS Grid columns, spans, gaps, collapse and suffix items. Use Row / Col for 24-c
 | --- | --- |
 <!-- same-source-api:end -->
 
-## Responsive behavior and accessibility
+## Responsiveness and accessibility
 
-Breakpoints use the viewport: xs is the baseline, sm ≥576, md ≥768, lg ≥992, xl ≥1200, xxl ≥1600px. Values cascade from the largest matching configured breakpoint. SSR uses xs; the viewport and Grid collapse/reordering are resolved after mount. These layout containers add no keyboard shortcuts; consumers provide semantic content and focusable controls. No public methods or dedicated theme tokens.
+Breakpoints use the browser viewport: xs is the base; sm ≥576, md ≥768, lg ≥992, xl ≥1200 and xxl ≥1600px. Configured values resolve downward from the largest matching breakpoint. SSR starts with xs and responds to the viewport after mounting. Grid collapsing and dynamic ordering are calculated after mounting. These layout containers add no keyboard shortcuts; callers supply content semantics and focusable elements. There are no public methods or dedicated theme tokens.
 
 ## GridItem
 
@@ -71,8 +144,8 @@ Breakpoints use the viewport: xs is the baseline, sm ≥576, md ≥768, lg ≥99
 | offset | Empty tracks before the item | number / ResponsiveValue | 0 |
 | suffix | Suffix at the end of the row | boolean | false |
 
-The default slot receives `{ overflow: boolean }`, indicating hidden items. No custom events or public methods.
+The default slot receives `{ overflow: boolean }`, indicating whether collapsing hides content. No custom events or public methods.
 
 ## Imports
 
-Grid only owns Grid.Item. Row and Col are standalone components with independent entries, styles, documentation, menus and demos. Grid.Row/Grid.Col, Grid re-exports of Row/Col and GridRowInstance/GridColInstance are removed. Import from the library root or standalone row/col entries. Installing Grid no longer registers Row/Col.
+Grid contains only Grid.Item. Row and Col are independent components with their own source, styles, navigation, documentation and demos. Grid.Row/Grid.Col, Row/Col re-exports from Grid and GridRowInstance/GridColInstance are removed. Import them from the library root or separate row/col entries. Installing Grid no longer registers Row/Col automatically.

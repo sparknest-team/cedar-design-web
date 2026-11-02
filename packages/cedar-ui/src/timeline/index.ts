@@ -21,3 +21,5 @@ export { timelineProps }
 
 export default Timeline
 export type TimelineProps = import('vue').ExtractPublicPropTypes<typeof import('./props').timelineProps>
+
+export type { TimelineItemContentPlacement } from './types'

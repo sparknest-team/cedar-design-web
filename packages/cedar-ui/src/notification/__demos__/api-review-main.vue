@@ -26,11 +26,11 @@ function run(action, bindings) {
     v-bind="defineReviewConfig(__apiReviewRawConfig)"
   >
     <p>修改选项后重新触发 / Trigger again to apply options.</p>
-    <div style="display: flex; flex-wrap: wrap; gap: 12px">
+    <c-space wrap size="12px">
       <c-button @click="run('info', __apiReview.bindings)">info</c-button>
       <c-button @click="run('success', __apiReview.bindings)">success</c-button>
       <c-button @click="run('warning', __apiReview.bindings)">warning</c-button>
       <c-button @click="run('error', __apiReview.bindings)">error</c-button>
-    </div>
+    </c-space>
   </DemoApiReviewPanel>
 </template>

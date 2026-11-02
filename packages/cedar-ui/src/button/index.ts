@@ -13,7 +13,7 @@ const Button = withInstall(
 
 export type ButtonInstance = InstanceType<typeof _Button>;
 export type ButtonGroupInstance = InstanceType<typeof _ButtonGroup>;
-export type { ButtonProps, ButtonGroupProps, ButtonVariant, ButtonLoadingMode, ButtonHandler } from "./props";
+export type { ButtonProps, ButtonGroupProps, ButtonVariant, ButtonLoadingMode } from "./props";
 
 export { buttonProps, buttonGroupProps };
 export { Button };

@@ -42,6 +42,7 @@ async function expectedFiles() {
   const seen = new Map()
   const icons = []
   const files = new Map()
+  files.set('../style.css', "svg.c-icon-spin {\n  animation: c-svg-icon-spin var(--c-icon-spin-duration, 1s) infinite linear;\n}\n\n@keyframes c-svg-icon-spin {\n  from { rotate: 0deg; }\n  to { rotate: 360deg; }\n}\n\n@media (prefers-reduced-motion: reduce) {\n  svg.c-icon-spin { animation: none; }\n}\n")
 
   for (const path of svgFiles) {
     // Public icon subpaths must always be lowercase kebab-case. Resolver names

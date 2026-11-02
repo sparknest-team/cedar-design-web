@@ -4,7 +4,7 @@ permalink: /components/overflow-list/
 
 # OverflowList
 
-## 案例
+## 基础示例
 
 ### 基础用法
 
@@ -12,18 +12,13 @@ permalink: /components/overflow-list/
 
 <demo src="./__demos__/basic.vue"></demo>
 
+## 布局与排列
+
 ### 折叠方向
 
 通过 `from` 属性可以设置折叠的方向。
 
 <demo src="./__demos__/from.vue"></demo>
-
-<!-- api-review:start -->
-### 功能调试
-
-<demo src="./__demos__/api-review.vue"></demo>
-
-<!-- api-review:end -->
 
 ## API
 

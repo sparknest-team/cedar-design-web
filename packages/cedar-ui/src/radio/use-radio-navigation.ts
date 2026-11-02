@@ -1,3 +1,4 @@
+import { resolveDirection } from '../_utils/direction'
 import { computed, onActivated, onDeactivated, onMounted, onScopeDispose, onUpdated, shallowRef } from 'vue'
 
 export interface RadioNavigationItem {
@@ -66,7 +67,11 @@ export function useRadioNavigation(hasSelection: () => boolean): RadioNavigation
       let to = from
       if (event.key === 'Home') to = 0
       else if (event.key === 'End') to = items.length - 1
-      else to = (from + (event.key === 'ArrowLeft' || event.key === 'ArrowUp' ? -1 : 1) + items.length) % items.length
+      else {
+        const rtl = resolveDirection(event.target as Element) === 'rtl'
+        const previous = event.key === 'ArrowUp' || event.key === (rtl ? 'ArrowRight' : 'ArrowLeft')
+        to = (from + (previous ? -1 : 1) + items.length) % items.length
+      }
       const item = items[to]
       item.element()?.focus()
       if (!item.readonly()) item.select(event)

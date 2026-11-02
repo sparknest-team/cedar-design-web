@@ -1,5 +1,5 @@
 import type { PropType } from 'vue'
-import { componentSizes, DIRECTIONS, type ComponentSize } from '../_utils/constant'
+import { componentSizes, orientations, type ComponentSize } from '../_utils/constant'
 import { popupContainerProp } from '../_utils/popup-container'
 import type { NavMenuOption, NavMenuKey, NavMenuMode, NavMenuTheme, NavMenuFieldNames, NavMenuRenderContext } from './types'
 export const navMenuProps = {
@@ -24,7 +24,7 @@ export const navMenuProps = {
   /** 同层只展开一个分支。 */
   accordion: Boolean,
   /** 纵向内联或横向浮层导航。 */
-  mode: { type: String as PropType<NavMenuMode>, default: 'vertical', validator: (value: NavMenuMode) => DIRECTIONS.includes(value) },
+  mode: { type: String as PropType<NavMenuMode>, default: 'vertical', validator: (value: NavMenuMode) => orientations.includes(value) },
   /** 折叠为图标导航；未指定时跟随 Sider。 */
   collapsed: { type: Boolean, default: undefined },
   /** 非受控折叠初始值。 */

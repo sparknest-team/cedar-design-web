@@ -1,11 +1,15 @@
 <script setup>
-import { ref } from 'vue'
+import { ref } from "vue";
 
-const value = ref(45)
+const value = ref(45);
 </script>
 <template>
-  <div style="display: grid; gap: 36px; padding: 32px 12px">
-    <c-slider v-model="value" show-tooltip="always" aria-label="Always visible" />
+  <c-space direction="column" size="36px" style="padding: 32px 12px">
+    <c-slider
+      v-model="value"
+      show-tooltip="always"
+      aria-label="Always visible"
+    />
     <c-slider
       v-model="value"
       :show-tooltip="false"
@@ -20,7 +24,7 @@ const value = ref(45)
         ><span class="slider-custom-handle">{{ currentValue }}</span></template
       ></c-slider
     >
-  </div>
+  </c-space>
 </template>
 <style scoped>
 .slider-custom-handle {

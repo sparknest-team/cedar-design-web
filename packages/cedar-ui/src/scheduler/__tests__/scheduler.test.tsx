@@ -135,7 +135,7 @@ describe("Scheduler", () => {
       });
     },
   );
-  test.each(["readonly", "disabled", "loading"])(
+  test.each(["readonly", "disabled"])(
     "template drop respects %s",
     async (flag) => {
       const wrapper = setup(
@@ -374,7 +374,7 @@ describe("Scheduler", () => {
     expect(wrapper.emitted("change-error")?.[0][0]).toMatchObject({
       code: "conflict",
     });
-    for (const flag of ["readonly", "disabled", "loading"]) {
+    for (const flag of ["readonly", "disabled"]) {
       await wrapper.setProps({ [flag]: true });
       expect(
         await wrapper.vm.change({ type: "remove", event: events[0] }),

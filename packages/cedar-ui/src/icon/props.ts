@@ -1,5 +1,3 @@
-import type { ExtractPropTypes } from 'vue'
-
 export const iconProps = {
   /**
    * 已显式注册到当前 Vue 应用的图标名称
@@ -22,7 +20,7 @@ export const iconProps = {
    */
   spin: Boolean,
   /**
-   * 动态名称切换动画时长
+   * 动态名称切换动画时长（毫秒，仅支持数值或数字字符串）
    */
   transition: {
     type: [Number, String],
@@ -32,8 +30,10 @@ export const iconProps = {
    * 自定义动态切换动画类名
    */
   animationClass: String,
-}
+};
 
-export type ComponentProps = import("vue").ExtractPublicPropTypes<typeof iconProps>
+export type IconProps = InstanceType<
+  (typeof import("./Icon.vue"))["default"]
+>["$props"];
 
-export const props = iconProps
+export const props = iconProps;

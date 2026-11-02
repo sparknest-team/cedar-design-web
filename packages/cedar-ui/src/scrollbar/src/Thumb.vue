@@ -2,7 +2,7 @@
   <transition>
     <div
       ref="trackRef"
-      :class="[`${prefixCls}-track`, `${prefixCls}-track-direction-${direction}`]"
+      :class="[`${prefixCls}-track`, `${prefixCls}-track-direction-${orientation}`]"
       @mousedown.self="handleTrackClick"
     >
       <div ref="thumbRef" :class="thumbCls" :style="thumbStyle" @mousedown="handleThumbMouseDown">
@@ -17,7 +17,7 @@ import { createNamespace } from '../../_utils/global-config'
 import { computed, defineComponent, onActivated, onBeforeUnmount, onDeactivated, type PropType, ref, watch } from 'vue'
 import type { ThumbData, ThumbMap } from './types'
 import { getPrefixCls } from '../../_utils/global-config'
-import { type Direction } from '../../_utils/constant'
+import { type Orientation } from '../../_utils/constant'
 
 export default defineComponent({
   name: createNamespace("thumb").name,
@@ -25,8 +25,8 @@ export default defineComponent({
     data: {
       type: Object as PropType<ThumbData>,
     },
-    direction: {
-      type: String as PropType<Direction>,
+    orientation: {
+      type: String as PropType<Orientation>,
       default: 'horizontal',
     },
     alwaysShow: {
@@ -47,7 +47,7 @@ export default defineComponent({
     const thumbRef = ref<HTMLElement>()
 
     const thumbMap = computed<ThumbMap>(() => {
-      if (props.direction === 'horizontal') {
+      if (props.orientation === 'horizontal') {
         return {
           size: 'width',
           direction: 'left',
@@ -182,7 +182,7 @@ export default defineComponent({
       if (available() && token === generation && !drag && next !== offset.value) { offset.value = next }
     }
     watch(
-      [() => props.direction, () => props.data?.max, () => props.data?.thumbSize, () => props.data?.ratio],
+      [() => props.orientation, () => props.data?.max, () => props.data?.thumbSize, () => props.data?.ratio],
       cancelDrag,
       { flush: 'sync' },
     )
@@ -194,7 +194,7 @@ export default defineComponent({
 
     const thumbCls = computed(() => [
       `${prefixCls}-thumb`,
-      `${prefixCls}-thumb-direction-${props.direction}`,
+      `${prefixCls}-thumb-direction-${props.orientation}`,
       {
         [`${prefixCls}-thumb-dragging`]: isDragging.value,
       },

@@ -6,36 +6,54 @@ permalink: /components/loading/
 
 用于页面、区块或容器的加载中状态。
 
-## 案例
+## 基础示例
 
-### 大小
+### 基础用法
 
-<demo src="./__demos__/size.vue"></demo>
+显示加载指示器与提示文字。包裹内容和指令用法见后续示例。
 
-### 类型
+<demo src="./__demos__/basic.vue"></demo>
 
-<demo src="./__demos__/type.vue"></demo>
+## 外观与状态
 
-### 颜色
+### 加载图形、尺寸与颜色
 
-<demo src="./__demos__/color.vue"></demo>
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `size` | 加载指示器的尺寸；数字表示 px | 加载图形、尺寸与颜色 |
+| `type` | 加载动画类型 | 加载图形、尺寸与颜色 |
+| `color` | 加载指示器和提示文案的颜色 | 加载图形、尺寸与颜色 |
+<!-- demo-config-notes:end -->
+
+对比相同加载状态的图形、尺寸和颜色；容器遮罩与指令用法保持独立。
+
+<demo src="./__demos__/appearance-comparison.vue"></demo>
+
+## 布局与排列
 
 ### 包裹内容
 
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `tip` | 提示文案 | 包裹内容 |
+| `loading` | 是否为加载中状态（仅在包裹内容时生效） | 包裹内容 |
+<!-- demo-config-notes:end -->
+
 <demo src="./__demos__/wrap.vue"></demo>
+
+## 内容与展示
 
 ### 加载指令
 
 两种指令示例分别维护加载状态，控件与宿主卡片通过 `Space direction="column"` 纵向排列；关闭一个不会影响另一个遮罩。
 
 <demo src="./__demos__/directive.vue"></demo>
-
-<!-- api-review:start -->
-### 功能调试
-
-<demo src="./__demos__/api-review.vue"></demo>
-
-<!-- api-review:end -->
 
 ## API
 
@@ -88,6 +106,8 @@ app.directive("c-loading", vLoading);
 | tip     | 自定义提示内容         |
 | icon    | 自定义加载指示器     |
 
+`icon` 插槽替换全部内置 `type` 动画；未提供时使用 ConfigProvider 的 `loading` 插槽，再回退到内置动画。`hide-icon=true` 隐藏所有指示器，提示内容仍可显示。
+
 ## 类型定义
 
 组件导出以下类型定义：
@@ -105,3 +125,5 @@ import type { LoadingProps } from "@cedar-design/ui";
 | `--c-loading-overlay-background` | 指令覆盖层背景色；background 选项可覆盖该值。 |
 
 内容覆盖层类名：`.c-loading__content-overlay`。
+
+指令每次更新都替换完整配置，省略的选项以及布尔值 `true` 使用默认值。加载中修改 `fullscreen` 会在宿主与所属文档的 body 之间迁移遮罩，宿主内容保持原位。多个全屏实例按数量持有滚动锁：关闭局部实例不会解除全屏锁，最后一个全屏实例结束时保留外部原有的锁类。

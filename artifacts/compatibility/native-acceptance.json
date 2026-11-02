@@ -1,0 +1,190 @@
+{
+  "library": "cedar",
+  "artifactSha256": "3700fc84abab19a07e2e321ca903fbc0aae9cd5cc347c30164ee4679c14a69a2",
+  "targets": [
+    {
+      "id": "chrome-current",
+      "requiredMinimumVersion": null,
+      "status": "pending",
+      "evidenceType": "native-browser-or-device",
+      "browserVersion": "",
+      "osVersion": "",
+      "device": "",
+      "tester": "",
+      "testedAt": "",
+      "versionSource": "",
+      "hostAppVersion": "",
+      "engineVersion": "",
+      "cases": {
+        "input-ime-autofill": "pending",
+        "keyboard-focus": "pending",
+        "popup-position-scroll-lock": "pending",
+        "date-selection": "pending",
+        "upload": "pending",
+        "light-dark-layout": "pending"
+      },
+      "evidence": []
+    },
+    {
+      "id": "chrome-previous",
+      "requiredMinimumVersion": null,
+      "status": "pending",
+      "evidenceType": "native-browser-or-device",
+      "browserVersion": "",
+      "osVersion": "",
+      "device": "",
+      "tester": "",
+      "testedAt": "",
+      "versionSource": "",
+      "hostAppVersion": "",
+      "engineVersion": "",
+      "cases": {
+        "input-ime-autofill": "pending",
+        "keyboard-focus": "pending",
+        "popup-position-scroll-lock": "pending",
+        "date-selection": "pending",
+        "upload": "pending",
+        "light-dark-layout": "pending"
+      },
+      "evidence": []
+    },
+    {
+      "id": "edge-current",
+      "requiredMinimumVersion": null,
+      "status": "pending",
+      "evidenceType": "native-browser-or-device",
+      "browserVersion": "",
+      "osVersion": "",
+      "device": "",
+      "tester": "",
+      "testedAt": "",
+      "versionSource": "",
+      "hostAppVersion": "",
+      "engineVersion": "",
+      "cases": {
+        "input-ime-autofill": "pending",
+        "keyboard-focus": "pending",
+        "popup-position-scroll-lock": "pending",
+        "date-selection": "pending",
+        "upload": "pending",
+        "light-dark-layout": "pending"
+      },
+      "evidence": []
+    },
+    {
+      "id": "edge-previous",
+      "requiredMinimumVersion": null,
+      "status": "pending",
+      "evidenceType": "native-browser-or-device",
+      "browserVersion": "",
+      "osVersion": "",
+      "device": "",
+      "tester": "",
+      "testedAt": "",
+      "versionSource": "",
+      "hostAppVersion": "",
+      "engineVersion": "",
+      "cases": {
+        "input-ime-autofill": "pending",
+        "keyboard-focus": "pending",
+        "popup-position-scroll-lock": "pending",
+        "date-selection": "pending",
+        "upload": "pending",
+        "light-dark-layout": "pending"
+      },
+      "evidence": []
+    },
+    {
+      "id": "firefox-current",
+      "requiredMinimumVersion": null,
+      "status": "pending",
+      "evidenceType": "native-browser-or-device",
+      "browserVersion": "",
+      "osVersion": "",
+      "device": "",
+      "tester": "",
+      "testedAt": "",
+      "versionSource": "",
+      "hostAppVersion": "",
+      "engineVersion": "",
+      "cases": {
+        "input-ime-autofill": "pending",
+        "keyboard-focus": "pending",
+        "popup-position-scroll-lock": "pending",
+        "date-selection": "pending",
+        "upload": "pending",
+        "light-dark-layout": "pending"
+      },
+      "evidence": []
+    },
+    {
+      "id": "firefox-previous",
+      "requiredMinimumVersion": null,
+      "status": "pending",
+      "evidenceType": "native-browser-or-device",
+      "browserVersion": "",
+      "osVersion": "",
+      "device": "",
+      "tester": "",
+      "testedAt": "",
+      "versionSource": "",
+      "hostAppVersion": "",
+      "engineVersion": "",
+      "cases": {
+        "input-ime-autofill": "pending",
+        "keyboard-focus": "pending",
+        "popup-position-scroll-lock": "pending",
+        "date-selection": "pending",
+        "upload": "pending",
+        "light-dark-layout": "pending"
+      },
+      "evidence": []
+    },
+    {
+      "id": "safari-current",
+      "requiredMinimumVersion": null,
+      "status": "pending",
+      "evidenceType": "native-browser-or-device",
+      "browserVersion": "",
+      "osVersion": "",
+      "device": "",
+      "tester": "",
+      "testedAt": "",
+      "versionSource": "",
+      "hostAppVersion": "",
+      "engineVersion": "",
+      "cases": {
+        "input-ime-autofill": "pending",
+        "keyboard-focus": "pending",
+        "popup-position-scroll-lock": "pending",
+        "date-selection": "pending",
+        "upload": "pending",
+        "light-dark-layout": "pending"
+      },
+      "evidence": []
+    },
+    {
+      "id": "safari-previous",
+      "requiredMinimumVersion": null,
+      "status": "pending",
+      "evidenceType": "native-browser-or-device",
+      "browserVersion": "",
+      "osVersion": "",
+      "device": "",
+      "tester": "",
+      "testedAt": "",
+      "versionSource": "",
+      "hostAppVersion": "",
+      "engineVersion": "",
+      "cases": {
+        "input-ime-autofill": "pending",
+        "keyboard-focus": "pending",
+        "popup-position-scroll-lock": "pending",
+        "date-selection": "pending",
+        "upload": "pending",
+        "light-dark-layout": "pending"
+      },
+      "evidence": []
+    }
+  ]
+}

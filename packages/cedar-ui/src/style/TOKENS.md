@@ -30,3 +30,5 @@ platform defaults may differ.
   `checks/style-vars-contract.mjs`.
 
 Run `pnpm check:style-vars` before submitting changes.
+
+品牌字体入口：`--c-sys-font-family`（默认 `initial`，未设置时保留原字体回退）。字体文件由业务通过 `@font-face` 配置，组件库不隐式请求品牌 CDN。

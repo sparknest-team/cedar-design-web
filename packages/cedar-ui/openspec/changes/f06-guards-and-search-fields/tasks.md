@@ -1,0 +1,5 @@
+- [x] 搜索字段配置与统一默认值，TreeSelect major 迁移。
+- [x] 两端共享 guard runner / Dialog 控制器；Cedar Drawer、Popconfirm 接入。
+- [x] 保留旧协议并补新旧优先级、异常、取消和重复操作测试。
+- [x] 补公开类型、Demo、文档与其他 done 回调盘点。
+- [x] 完成最终验证记录：相关回归 Cedar 273 / Maple 236 个用例；类型与发布声明、lint、同源、Demo、规范和浏览器交互检查通过，详见工作区 F06 验收报告。

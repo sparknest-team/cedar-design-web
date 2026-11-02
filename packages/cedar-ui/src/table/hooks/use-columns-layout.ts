@@ -5,7 +5,7 @@ export const DEFAULT_COLUMN_MIN_WIDTH = 80
 export const DEFAULT_OPERATION_WIDTH = 40
 
 export interface ColumnsLayoutResult {
-  scrollX: boolean
+  hasHorizontalOverflow: boolean
   bodyWidth: number
   columnRealWidth: Record<string, number>
 }
@@ -50,7 +50,7 @@ export const updateColumnsWidth = ({
       bodyMinWidth += width
     }
     return {
-      scrollX: false,
+      hasHorizontalOverflow: false,
       bodyWidth: bodyMinWidth,
       columnRealWidth,
     }
@@ -117,7 +117,7 @@ export const updateColumnsWidth = ({
       }
 
       return {
-        scrollX: false,
+        hasHorizontalOverflow: false,
         bodyWidth: Math.max(bodyMinWidth, containerWidth),
         columnRealWidth,
       }
@@ -138,7 +138,7 @@ export const updateColumnsWidth = ({
     }
 
     return {
-      scrollX: true,
+      hasHorizontalOverflow: true,
       bodyWidth: bodyMinWidth,
       columnRealWidth,
     }
@@ -187,7 +187,7 @@ export const updateColumnsWidth = ({
         column._realWidth = columnRealWidth[key]
       })
       return {
-        scrollX: false,
+        hasHorizontalOverflow: false,
         bodyWidth: containerWidth,
         columnRealWidth,
       }
@@ -195,7 +195,7 @@ export const updateColumnsWidth = ({
   }
 
   return {
-    scrollX: bodyMinWidth > containerWidth,
+    hasHorizontalOverflow: bodyMinWidth > containerWidth,
     bodyWidth: bodyMinWidth,
     columnRealWidth,
   }

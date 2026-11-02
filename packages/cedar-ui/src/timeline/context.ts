@@ -1,10 +1,10 @@
 import { InjectionKey } from 'vue'
-import { Direction } from '../_utils/constant'
+import { Orientation } from '../_utils/constant'
 import type { ModeType, LabelPositionType } from './types'
 
 export interface TimelineContext {
   items: number[]
-  orientation: Direction
+  orientation: Orientation
   reverse: boolean
   labelPosition: LabelPositionType
   mode: ModeType

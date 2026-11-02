@@ -1,0 +1,4 @@
+- [x] Add default group semantics and paired adjacency styling.
+- [x] Reuse enum validation and align provider types.
+- [x] Update paired documentation and existing demos.
+- [x] Verify focused behavior, real CSS, types and lint. See [implementation results](../../../../../../component-api-comparison-2026-10-29/02-button-group/实施结果.md).

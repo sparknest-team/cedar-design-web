@@ -1,0 +1,15 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+const busy = ref(true)
+const value = ref('加载时仍可编辑')
+</script>
+<template>
+  <c-space direction="column" :size="16" style="width: 100%">
+    <c-form layout="vertical">
+      <c-form-item label="加载状态 / Loading"><c-switch v-model="busy" /></c-form-item>
+      <c-form-item label="默认指示器 / Default"><c-input v-model="value" :loading="busy" placeholder="加载时仍可编辑 / Editable while loading" loading-mode="default" /></c-form-item>
+      <c-form-item label="底部加载线 / Line"><c-input v-model="value" :loading="busy" placeholder="加载时仍可编辑 / Editable while loading" loading-mode="line" /></c-form-item>
+    </c-form>
+    <p>切换加载状态；加载时仍可输入和清空。Loading keeps the input editable.</p>
+  </c-space>
+</template>

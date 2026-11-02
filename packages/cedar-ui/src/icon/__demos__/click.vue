@@ -2,12 +2,12 @@
 import { Message } from "@cedar-design/ui";
 </script>
 <template>
-  <c-icon
-    size="28"
-    color="rgb(var(--c-primary-6))"
-    style="cursor: pointer"
+  <c-button
+    variant="text"
+    round
+    aria-label="确认操作"
     @click="Message.success('点击成功')"
   >
-    <c-icon-check-circle />
-  </c-icon>
+    <template #icon><c-icon-check-circle /></template>
+  </c-button>
 </template>

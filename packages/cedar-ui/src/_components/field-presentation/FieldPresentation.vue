@@ -1,8 +1,8 @@
 <template>
-  <div v-if="readPretty" v-bind="$attrs" :class="n('read')">
-    <slot name="read">{{ text || "—" }}</slot>
-  </div>
-  <slot v-else-if="presentation === 'inline'" />
+  <div v-if="readPretty" v-bind="$attrs" :class="n('read')" :aria-busy="loading || undefined">
+    <slot name="read">{{ (empty ?? !text) ? (emptyText ?? "-") : text }}</slot>
+  <PendingFeedback :loading="loading" /></div>
+  <slot v-else-if="editMode === 'direct'" />
   <template v-else>
     <span
       ref="anchor"
@@ -13,11 +13,13 @@
         v-bind="$attrs"
         :id="open ? undefined : ($attrs.id as string | undefined)"
         ref="reference"
-        :presentation="presentation"
+        :edit-mode="editMode"
         :label="label || placeholder"
         :text="text"
         :placeholder="placeholder"
         :open="open"
+        :loading="loading || pending"
+        :open-trigger-target="openTriggerTarget"
         :disabled="disabled || readonly || pending"
         :aria-hidden="open || undefined"
         :tabindex="open ? -1 : undefined"
@@ -31,6 +33,7 @@
     >
       <div
         ref="overlay"
+        :dir="readingDirection"
         :class="n('overlay')"
         :style="[position, { zIndex }]"
         @keydown.capture="onKeydown"
@@ -44,6 +47,8 @@
           :intent="intent"
           :label="label"
           :pending="pending"
+          :clearable="clearable"
+          @clear="$emit('clear')"
           :disabled="disabled || readonly || confirmDisabled"
           :need-confirm="needConfirm"
           :error="error"
@@ -58,6 +63,7 @@
   </template>
 </template>
 <script setup lang="ts">
+import PendingFeedback from '../pending-feedback/PendingFeedback.vue'
 import {
   computed,
   nextTick,
@@ -69,16 +75,17 @@ import {
   watch,
   type CSSProperties,
 } from "vue";
+import { useDirection } from "../../_utils/direction";
 import { createNamespace } from "../../_utils/global-config";
-import { usePopupLayer } from "../../_utils/popup-layer";
-import { useZIndex } from "../../context/zIndex";
 import {
   usePopupContainer,
   type PopupContainer,
 } from "../../_utils/popup-container";
+import { usePopupLayer } from "../../_utils/popup-layer";
+import { useZIndex } from "../../context/zIndex";
 import { provideTriggerInteractionScope } from "../../trigger/interaction";
+import type { FieldEditMode } from "./context";
 import { claimEditing, editingOwner, withEditingTurn } from "./editing-owner";
-import type { FieldPresentation } from "./context";
 import EditorPanel from "./EditorPanel.vue";
 import FieldReference from "./FieldReference.vue";
 
@@ -87,9 +94,14 @@ defineOptions({
   inheritAttrs: false,
 });
 const props = defineProps<{
+  clearable?: boolean;
   commit?: () => unknown | Promise<unknown>;
-  presentation: FieldPresentation;
+  openTriggerTarget?: "field" | "icon";
+  editMode: FieldEditMode;
+  empty?: boolean;
+  emptyText?: string;
   readPretty?: boolean;
+  loading?: boolean;
   text?: string;
   placeholder?: string;
   intent?: "input" | "select";
@@ -105,11 +117,17 @@ const props = defineProps<{
   count?: number;
   limit?: number;
 }>();
-const emit = defineEmits<{ open: [value: boolean]; confirm: []; cancel: [] }>();
+const emit = defineEmits<{
+  open: [value: boolean];
+  confirm: [];
+  cancel: [];
+  clear: [];
+}>();
 const { n } = createNamespace("field-presentation");
 const target = usePopupContainer(() => props.popupContainer);
 const reference = ref<InstanceType<typeof FieldReference>>();
 const anchor = ref<HTMLElement>();
+const { dir: readingDirection, isRtl } = useDirection(() => anchor.value);
 const panel = ref<InstanceType<typeof EditorPanel>>();
 const position = ref<CSSProperties>();
 const overlay = ref<HTMLElement>();
@@ -122,7 +140,7 @@ const layerActive = () =>
     props.open &&
     active.value &&
     !props.readPretty &&
-    props.presentation !== "inline",
+    props.editMode !== "direct",
   );
 const { zIndex } = useZIndex(layerActive, 1);
 usePopupLayer(layerActive, zIndex, () => anchor.value?.ownerDocument);
@@ -278,7 +296,10 @@ function place() {
   const height = overlay.value?.getBoundingClientRect().height || rect.height;
   const left = Math.max(
     margin,
-    Math.min(rect.left, win.innerWidth - width - margin),
+    Math.min(
+      isRtl.value ? rect.right - width : rect.left,
+      win.innerWidth - width - margin,
+    ),
   );
   position.value = {
     left: `${left}px`,

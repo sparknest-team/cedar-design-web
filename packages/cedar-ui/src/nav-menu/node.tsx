@@ -11,6 +11,9 @@ const NavNode = defineComponent({
   props: { node: { type: Object as PropType<NavMenuNode>, required: true }, popup: Boolean },
   setup(props) {
     const api = inject(navMenuKey)!
+    const forward = computed(() => api.dir.value === 'rtl' ? 'ArrowLeft' : 'ArrowRight')
+    const backward = computed(() => api.dir.value === 'rtl' ? 'ArrowRight' : 'ArrowLeft')
+    const side = computed(() => api.dir.value === 'rtl' ? 'left-start' : 'right-start')
     const trigger = ref<TriggerInstance>()
     const element = ref<HTMLElement>()
     const panel = ref<HTMLElement>()
@@ -51,9 +54,9 @@ const NavNode = defineComponent({
     function onKeydown(event: KeyboardEvent) {
       const key = event.key
       if (!available() || disabled.value || event.defaultPrevented || event.target !== element.value) return
-      if (props.node.children.length && ((floating.value && key === (api.props.mode === 'horizontal' && !props.popup ? 'ArrowDown' : 'ArrowRight')) || (!floating.value && key === 'ArrowRight'))) {
+      if (props.node.children.length && ((floating.value && key === (api.props.mode === 'horizontal' && !props.popup ? 'ArrowDown' : forward.value)) || (!floating.value && key === forward.value))) {
         event.preventDefault(); event.stopPropagation(); void enter()
-      } else if (!floating.value && key === 'ArrowLeft' && open.value) {
+      } else if (!floating.value && key === backward.value && open.value) {
         event.preventDefault(); event.stopPropagation(); api.expand(props.node, false)
       } else if (key === 'Enter' || key === ' ') {
         event.preventDefault(); event.stopPropagation()
@@ -63,7 +66,7 @@ const NavNode = defineComponent({
     }
     function onPanelKeydown(event: KeyboardEvent) {
       if (!available() || disabled.value || event.defaultPrevented) return
-      if (event.key === 'Escape' || event.key === 'ArrowLeft') {
+      if (event.key === 'Escape' || event.key === backward.value) {
         const reference = element.value, originalTrigger = trigger.value
         const document = reference?.ownerDocument, origin = document?.activeElement ?? null
         event.preventDefault(); event.stopPropagation(); api.expand(props.node, false)
@@ -100,15 +103,15 @@ const NavNode = defineComponent({
         'aria-haspopup': node.children.length && floating.value ? 'menu' : undefined,
         onFocus: () => { if (available() && !disabled.value) api.focusKey.value = node.key }, onKeydown,
         onClick: (event: MouseEvent) => { if (!available()) return; if (disabled.value) { event.preventDefault(); event.stopPropagation(); return }; if (node.children.length) api.expand(node, !open.value); else api.select(node, event) },
-      }), [h('span', { class: n('icon') }, [content('icon')]), h('span', { class: n('label') }, [content('label')]), h('span', { class: n('extra') }, [content('extra')]), node.children.length ? h(NavMenuArrow, { open: open.value, inline: !floating.value, placement: api.props.mode === 'horizontal' && !props.popup ? 'bottom-start' : 'right-start' }) : null])
+      }), [h('span', { class: n('icon') }, [content('icon')]), h('span', { class: n('label') }, [content('label')]), h('span', { class: n('extra') }, [content('extra')]), node.children.length ? h(NavMenuArrow, { open: open.value, inline: !floating.value, placement: api.props.mode === 'horizontal' && !props.popup ? 'bottom-start' : side.value }) : null])
       let reference: VNodeChild
       if (node.children.length && floating.value) {
-        reference = h(Trigger, { ref: trigger, trigger: 'hover', open: open.value, disabled: disabled.value, escToClose: false, unmountOnClose: true,
+        reference = h(Trigger, { ref: trigger, dir: api.dir.value, trigger: 'hover', open: open.value, disabled: disabled.value, escToClose: false, unmountOnClose: true,
           popupContainer: api.props.popupContainer, popupClass: api.props.popupClass, popupOffset: 4, mouseEnterDelay: 100, mouseLeaveDelay: 100,
-          placement: api.props.mode === 'horizontal' && !props.popup ? 'bottom-start' : 'right-start',
+          placement: api.props.mode === 'horizontal' && !props.popup ? 'bottom-start' : side.value,
           onOpenChange: (value: boolean) => { if (available()) api.expand(node, value) },
-        }, { default: item, content: () => h('ul', { ref: panel, role: 'menu', 'data-nav-panel': '', class: [n('popup'), n(`--${api.theme.value}`), n(`--${api.props.size}`)], style: { '--c-nav-menu-icon-size': `${api.props.iconSize}px` }, onKeydown: onPanelKeydown }, children()) })
-      } else if (api.collapsed.value && !props.popup && !node.children.length) reference = h(Tooltip, { placement: 'right', disabled: disabled.value, popupContainer: api.props.popupContainer }, { default: item, content: () => content('label') })
+        }, { default: item, content: () => h('ul', { ref: panel, dir: api.dir.value, role: 'menu', 'data-nav-panel': '', class: [n('popup'), n(`--${api.theme.value}`), n(`--${api.props.size}`)], style: { '--c-nav-menu-icon-size': `${api.props.iconSize}px` }, onKeydown: onPanelKeydown }, children()) })
+      } else if (api.collapsed.value && !props.popup && !node.children.length) reference = h(Tooltip, { placement: api.dir.value === 'rtl' ? 'left' : 'right', disabled: disabled.value, popupContainer: api.props.popupContainer }, { default: item, content: () => content('label') })
       else reference = item()
       return h('li', { role: 'none', class: n('node') }, [reference, node.children.length && !floating.value && open.value ? h('ul', { ref: panel, role: 'group', class: n('list') }, children()) : null])
     }

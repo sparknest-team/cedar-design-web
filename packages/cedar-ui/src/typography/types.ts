@@ -31,7 +31,6 @@ export interface EllipsisConfig {
    * @zh 是否使用 CSS 省略（此模式暂不支持展开、自定义省略号和后缀）
    * @en Whether to use CSS ellipsis (expansion, custom ellipsis and suffix are not supported in this mode)
    * @default-value false
-   * @version 2.37.0
    * */
   css?: boolean
 }

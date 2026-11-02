@@ -42,11 +42,11 @@ export function getNumberPrecision(step: number, precision?: number) {
 }
 
 export function clampNumber(
-  value: number | undefined,
+  value: number | null | undefined,
   min: number,
   max: number,
 ) {
-  if (value === undefined || !Number.isFinite(value)) {
+  if (value == null || !Number.isFinite(value)) {
     return undefined;
   }
   return Math.min(max, Math.max(min, value));
@@ -54,10 +54,10 @@ export function clampNumber(
 
 /** Never show a rounded string that disagrees with a clamped business value. */
 export function formatNumberValue(
-  value: number | undefined,
+  value: number | null | undefined,
   precision?: number,
 ) {
-  if (value === undefined || !Number.isFinite(value)) {
+  if (value == null || !Number.isFinite(value)) {
     return "";
   }
   if (precision === undefined) {

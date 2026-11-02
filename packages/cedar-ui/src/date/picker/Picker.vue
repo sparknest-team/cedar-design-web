@@ -126,7 +126,6 @@ export default defineComponent({
    * @zh 输入框前缀
    * @en Input box prefix
    * @slot prefix
-   * @version 2.41.0
    */
   /**
    * @zh 输入框后缀图标

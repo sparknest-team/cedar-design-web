@@ -63,14 +63,10 @@
       "kind": "slot",
       "demos": [
         "basic.vue",
-        "403.vue",
-        "404.vue",
-        "500.vue",
+        "http-status-comparison.vue",
         "all.vue",
         "custom.vue",
-        "error.vue",
-        "success.vue",
-        "warning.vue"
+        "status-comparison.vue"
       ]
     },
     {
@@ -78,14 +74,10 @@
       "kind": "slot",
       "demos": [
         "basic.vue",
-        "403.vue",
-        "404.vue",
-        "500.vue",
+        "http-status-comparison.vue",
         "all.vue",
         "custom.vue",
-        "error.vue",
-        "success.vue",
-        "warning.vue"
+        "status-comparison.vue"
       ]
     },
     {
@@ -93,14 +85,10 @@
       "kind": "slot",
       "demos": [
         "basic.vue",
-        "403.vue",
-        "404.vue",
-        "500.vue",
+        "http-status-comparison.vue",
         "all.vue",
         "custom.vue",
-        "error.vue",
-        "success.vue",
-        "warning.vue"
+        "status-comparison.vue"
       ]
     },
     {

@@ -1,3 +1,4 @@
+import type { ReadingDirection } from '../_utils/direction';
 import {
   nextTick,
   onActivated,
@@ -40,6 +41,7 @@ interface PositionerOptions {
 }
 
 interface PositionerContext {
+  direction?: Readonly<Ref<ReadingDirection>>;
   reference: Readonly<Ref<HTMLElement | SVGElement | undefined>>;
   popup: Readonly<Ref<HTMLElement | undefined>>;
   visible: Readonly<Ref<boolean>>;
@@ -165,6 +167,7 @@ export function useTriggerPositioner(
       relativeReference,
       relativePopup,
       {
+        direction: context.direction?.value,
         origin: { left: space.x / space.scaleX, top: space.y / space.scaleY },
         scaleX: space.scaleX,
         scaleY: space.scaleY,
@@ -187,7 +190,7 @@ export function useTriggerPositioner(
         : {}),
     };
     wrapperStyle.value = options.autoFitTransformOrigin
-      ? { transformOrigin: getTransformOrigin(result.placement) }
+      ? { transformOrigin: getTransformOrigin(result.placement, context.direction?.value) }
       : {};
 
     if (options.showArrow) {
@@ -344,6 +347,7 @@ export function useTriggerPositioner(
       options.autoFitPosition,
       options.autoFitTransformOrigin,
       context.point.value,
+      context.direction?.value,
     ],
     () => nextTick(update),
     { deep: true },

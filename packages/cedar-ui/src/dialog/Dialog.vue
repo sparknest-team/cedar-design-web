@@ -7,6 +7,7 @@
       v-if="!unmountOnClose || transition.shouldRender.value"
       v-show="mergedOpen || transition.leaving.value"
       ref="dialogRoot"
+      :dir="readingDirection"
       :class="`${prefixCls}-container`"
       :style="{ zIndex: mergedZIndex }"
       v-bind="$attrs"
@@ -37,6 +38,7 @@
             ref="dialogRef"
             data-modal-focus-root
             role="dialog"
+            :aria-busy="dialog.pending.value || undefined"
             tabindex="-1"
             aria-modal="true"
             :aria-label="ariaLabel || (!$slots.title ? title : undefined)"
@@ -77,7 +79,7 @@
               :class="[`${prefixCls}-body`, bodyClass]"
               :style="[{ textAlign: messageAlign }, bodyStyle]"
             >
-              <slot>{{ message }}</slot>
+              <PendingFeedback :loading="dialog.pending.value && (dialog.pendingAction.value === 'close' || !showFooter || !!$slots.footer)" /><slot>{{ message }}</slot>
             </div>
             <div v-if="showFooter" :class="`${prefixCls}-footer`">
               <slot
@@ -116,6 +118,8 @@
 </template>
 
 <script setup lang="ts">
+import PendingFeedback from '../_components/pending-feedback/PendingFeedback.vue'
+import { useDirection } from '../_utils/direction'
 import { computed, ref, toRef, useSlots, type CSSProperties } from "vue";
 import { IconCheckCircleFill } from "@cedar-design/icons-vue/icon-check-circle-fill";
 import { IconClose } from "@cedar-design/icons-vue/icon-close";
@@ -139,7 +143,9 @@ import { useDialogDrag } from "./use-dialog-drag";
 defineOptions({ name: createNamespace("dialog").name, inheritAttrs: false });
 
 const props = defineProps(dialogProps);
+const { dir: readingDirection } = useDirection(undefined, () => props.dir)
 const emit = defineEmits<{
+  (event: "guard-error", error: unknown, action: DialogAction): void;
   (event: "update:open", value: boolean): void;
   (event: "open" | "opened" | "close" | "closed"): void;
   (event: "confirm" | "cancel", value: Event): void;
@@ -182,6 +188,7 @@ const {
 const dialog = useDialog({
   open: mergedOpen,
   beforeClose: () => props.beforeClose,
+  onGuardError: (error, action) => emit("guard-error", error, action),
   confirmButtonLoading: () =>
     props.confirmButtonLoading || Boolean(props.confirmButtonProps?.loading),
   cancelButtonLoading: () =>

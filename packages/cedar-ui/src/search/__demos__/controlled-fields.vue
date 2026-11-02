@@ -25,14 +25,14 @@ function search(next: SearchResult) {
 <template>
   <div class="search-demo">
     <c-checkbox v-model="accepted"
-      >接受模型更新（取消后演示受控拒绝）</c-checkbox
+      >接受输入与清空（关闭后父级拒绝更新）</c-checkbox
     >
     <c-search
       :model="model"
       :model-field="field"
       :fields="fields"
       :recent-searches="history"
-      :history-popup="false"
+      edit-mode="direct"
       search-button
       button-text="搜索"
       clearable
@@ -46,6 +46,9 @@ function search(next: SearchResult) {
       >外部替换模型</c-button
     >
     <div>已接受模型：{{ model }}</div>
+    <p v-if="!accepted" role="status">
+      父级正在拒绝输入和清空；打开上方开关后恢复。
+    </p>
     <pre v-if="result">{{ JSON.stringify(result, null, 2) }}</pre>
   </div>
 </template>

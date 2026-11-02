@@ -4,7 +4,7 @@ permalink: /components/scrollbar/
 
 # Scrollbar
 
-## 案例
+## 基础示例
 
 ### 基础用法
 
@@ -12,11 +12,15 @@ permalink: /components/scrollbar/
 
 <demo src="./__demos__/basic.vue"></demo>
 
+## 外观与状态
+
 ### 滚动条类型
 
 设置 `type` 属性改变滚动条类型，`track` 类型会显示滚动条轨道。
 
 <demo src="./__demos__/type.vue"></demo>
+
+## 生命周期与边界
 
 ### Thumb drag lifecycle / 滑块拖动生命周期
 
@@ -29,13 +33,6 @@ permalink: /components/scrollbar/
 scrollTo(0,0)／单轴0是合法坐标，不用真值判断；恢复零位置也同步thumb，不保留上次偏移。水平测量使用水平比例（旧代码误用了垂直比例）。零／无效视口用有限、非负thumb数据，不显示该零尺寸轴；正常最小thumb20px与track15px布局策略不变。禁用／隐藏轴的旧thumb命令无效，但禁用条不等于禁止内容或公开原生滚动。对象选项直接透传、不模拟JS动画；公开方法签名／样式变量不变。
 
 <demo src="./__demos__/lifecycle.vue"></demo>
-
-<!-- api-review:start -->
-### 功能调试
-
-<demo src="./__demos__/api-review.vue"></demo>
-
-<!-- api-review:end -->
 
 ## API
 

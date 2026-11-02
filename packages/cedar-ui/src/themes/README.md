@@ -22,6 +22,8 @@ Cedar 色板与 Maple 结构对齐：**RGB 通道色阶** + **语义色** + **�
 | 默认 | `Themes.default.light` / `Themes.default.dark` | 青绿色品牌色阶，提供亮暗模式 |
 | 枫叶 | `Themes.maple.light` / `Themes.maple.dark` | 枫叶红橙品牌色阶，提供亮暗模式 |
 
+## 基础示例
+
 ### StyleProvider 切换
 
 亮色对象会移除 `html[cedar-theme=dark]`，暗色对象会设置该属性。Cedar 与 Maple 使用相同的主题分组、颜色和值域。

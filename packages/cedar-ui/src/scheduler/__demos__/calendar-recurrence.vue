@@ -3,8 +3,16 @@
     <c-alert
       >按月、按年安排任务。无效日期可选择跳过或落到月底；“最后一个工作日”仅按周一至周五计算，不包含节假日调休。</c-alert
     >
-    <c-space wrap>
-      <c-select v-model="preset" :options="presets" aria-label="月年重复规则" />
+    <c-space direction="column" align="stretch" wrap>
+      <c-form-item layout="vertical" size="sm" label="月年重复规则">
+        <c-radio-group
+          v-model="preset"
+          aria-label="月年重复规则"
+          :options="presets"
+          variant="button"
+          size="sm"
+        />
+      </c-form-item>
       <c-input-number
         v-model="interval"
         :min="1"

@@ -15,7 +15,7 @@
   &-timepicker {
     display: flex;
     flex-direction: column;
-    border-left: 1px solid var(~'--c-date-picker-panel-border-color');
+    border-inline-start: 1px solid var(~'--c-date-picker-panel-border-color');
 
     &-title {
       width: 100%;
@@ -45,7 +45,7 @@
       }
 
       &-column:not(:last-child) {
-        border-right: 0;
+        border-inline-end: 0;
       }
 
       ul::after {
@@ -56,14 +56,14 @@
         width: var(~'--c-date-picker-panel-time-cell-width');
 
         &-inner {
-          padding-left: var(~'--c-date-picker-panel-time-padding-horizontal');
+          padding-inline-start: var(~'--c-date-picker-panel-time-padding-horizontal');
         }
       }
     }
   }
 
   &-footer {
-    border-right: 1px solid var(~'--c-date-picker-panel-border-color');
+    border-inline-end: 1px solid var(~'--c-date-picker-panel-border-color');
   }
 
   &-with-view-tabs {
@@ -85,7 +85,7 @@
           text-align: center;
 
           &-inner {
-            padding-left: 0;
+            padding-inline-start: 0;
           }
         }
       }
@@ -104,15 +104,15 @@
     font-size: var(~'--c-date-picker-view-tab-pane-font-size');
     line-height: var(~'--c-date-picker-view-tabs-height');
     text-align: center;
-    border-right: 1px solid var(~'--c-date-picker-panel-border-color');
+    border-inline-end: 1px solid var(~'--c-date-picker-panel-border-color');
     cursor: pointer;
 
     &:last-child {
-      border-right: none;
+      border-inline-end: none;
     }
 
     &-text {
-      margin-left: var(~'--c-date-picker-view-tab-pane-text-icon-spacing');
+      margin-inline-start: var(~'--c-date-picker-view-tab-pane-text-icon-spacing');
     }
 
     &-active {

@@ -1,5 +1,5 @@
 <template>
-  <div ref="refWrapper" :class="`${prefixCls}-column`">
+  <div ref="refWrapper" :class="`${prefixCls}-column`" @keydown="onColumnKeydown">
     <ul role="listbox" :aria-label="ariaLabel">
       <li
         v-for="item in list"
@@ -34,6 +34,7 @@
   </div>
 </template>
 <script lang="ts">
+import { navigateTemporalGrid } from '../../_utils/temporal-keyboard'
 import { defineComponent, nextTick, onActivated, onBeforeUnmount, onDeactivated, onMounted, PropType, ref, toRefs, watch } from 'vue'
 import { isUndefined } from '../../_utils/is'
 import { TimeList, TimeListItem } from './types'
@@ -149,6 +150,7 @@ export default defineComponent({
     })
 
     return {
+      onColumnKeydown: (event: KeyboardEvent) => navigateTemporalGrid(event, '[role=option]', 1, false),
       refWrapper,
       refMap,
       onItemRef(el: any, item: TimeListItem) {

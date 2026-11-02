@@ -44,3 +44,10 @@
   .c-progress__indeterminate > div { left: 30%; }
   .c-progress__indeterminate > div + div { display: none; }
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  .c-progress__bar--animated:dir(rtl)::after { animation-name: c-progress-shine-rtl; }
+  .c-progress__indeterminate:dir(rtl) > div { animation-name: c-progress-slide-rtl; }
+}
+@keyframes c-progress-shine-rtl { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
+@keyframes c-progress-slide-rtl { from { transform: translateX(100%); } to { transform: translateX(-350%); } }

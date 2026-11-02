@@ -1,7 +1,7 @@
 import { flushPromises, mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import AutoComplete from '../../../auto-complete'
-import type { FieldPresentation } from '../../field-presentation/context'
+import type { FieldEditMode } from '../../field-presentation/context'
 import { mobile } from '../platform'
 
 const p = mobile ? 'mp' : 'c'
@@ -19,11 +19,11 @@ const global = {
     teleport: true,
   },
 }
-for (const presentation of [mobile ? 'popup' : 'click', 'click'] as FieldPresentation[]) {
-  describe(`option field editor ${presentation}`, () => {
+for (const editMode of [mobile ? 'popup' : 'click', 'click'] as FieldEditMode[]) {
+  describe(`option field editor ${editMode}`, () => {
     it('renders suggestions directly and confirms only the final text', async () => {
       const wrapper = mount(AutoComplete, {
-        props: { presentation, defaultOpen: true, shouldOpen: () => true, options: ['Alpha', 'Beta'] },
+        props: { editMode, defaultOpen: true, shouldOpen: () => true, options: ['Alpha', 'Beta'] },
         global,
       })
       try {
@@ -50,7 +50,7 @@ for (const presentation of [mobile ? 'popup' : 'click', 'click'] as FieldPresent
     })
     it('keeps remote search and refreshed options in the same editor', async () => {
       const wrapper = mount(AutoComplete, {
-        props: { presentation, defaultOpen: true, shouldOpen: () => true, filterOption: false, options: [] },
+        props: { editMode, defaultOpen: true, shouldOpen: () => true, filterOption: false, options: [] },
         global,
       })
       try {

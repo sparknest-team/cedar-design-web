@@ -1,7 +1,7 @@
 import type { Component, PropType } from 'vue'
-import type { ComponentSize } from '../_utils/constant'
+import type { ComponentSize, Orientation } from '../_utils/constant'
 
-export type ProgressGroupOrientation = 'horizontal' | 'vertical'
+export type ProgressGroupOrientation = Orientation
 export type ProgressGroupMode = 'line' | 'circle'
 export interface ProgressGroupItem {
   label?: string

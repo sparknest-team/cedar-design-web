@@ -16,7 +16,7 @@ const gradient = ref(false);
     v-slot="__apiReview"
     v-bind="defineReviewConfig(__apiReviewRawConfig)"
   >
-    <div style="display: grid; gap: 16px">
+    <c-space direction="column" size="16px">
       <c-switch v-model="gradient" aria-label="Gradient" />
       <c-progress
         :percent="65"
@@ -40,7 +40,7 @@ const gradient = ref(false);
             :controls="__apiReview.controls"
             :record="__apiReview.record" /></template
       ></c-progress>
-      <div style="display: flex; gap: 24px">
+      <c-space wrap size="24px">
         <c-progress
           mode="circle"
           :percent="65"
@@ -83,7 +83,7 @@ const gradient = ref(false);
               :controls="__apiReview.controls"
               :record="__apiReview.record" /></template
         ></c-progress>
-      </div>
-    </div>
+      </c-space>
+    </c-space>
   </DemoApiReviewPanel>
 </template>

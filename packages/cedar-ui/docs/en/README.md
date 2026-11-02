@@ -1,4 +1,5 @@
 ---
+lang: en-US
 permalink: /en/
 home: true
 heroText: Cedar Design Web

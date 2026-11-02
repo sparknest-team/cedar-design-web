@@ -64,13 +64,13 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, useSlots, watch } from 'vue'
+import { computed, onActivated, onBeforeUnmount, onDeactivated, ref, useSlots, watch } from 'vue'
+import { isEqual } from 'lodash-es'
 import Form, { FormItem } from '../form'
 import Grid, { GridItem } from '../grid'
 import { useResponsiveState } from '../grid/hook/use-responsive-state'
 import type { ResponsiveValue } from '../grid/types'
 import { getValueByPath, setValueByPath } from '../_utils/get-value-by-path'
-import { debounce } from '../_utils/debounce'
 import { isString } from '../_utils/is'
 import { IconDownCircle, IconUpCircle } from '@cedar-design/icons-vue'
 import { useI18n } from '../locale'
@@ -108,9 +108,42 @@ const responsiveCols = useResponsiveState(
 
 const showSuffixItem = computed(() => props.collapsible || Boolean(slots.actions))
 
-const emitChange = debounce((value: Record<string, unknown>, field: string) => {
-  emit('change', value, field)
-}, props.changeDebounce)
+type PendingChange = { value: Record<string, unknown>; field: string }
+let pendingChange: PendingChange | undefined
+let changeTimer: ReturnType<typeof setTimeout> | undefined
+let active = true
+function cancelChange() {
+  if (changeTimer !== undefined) clearTimeout(changeTimer)
+  changeTimer = undefined
+  pendingChange = undefined
+}
+function emitChange(value: Record<string, unknown>, field: string) {
+  cancelChange()
+  if (!active) return
+  const current = { value, field }
+  pendingChange = current
+  const publish = () => {
+    if (!active || pendingChange !== current) return
+    pendingChange = undefined
+    changeTimer = undefined
+    emit('change', value, field)
+  }
+  const delay = Number.isFinite(props.changeDebounce) ? Math.max(0, props.changeDebounce) : 0
+  if (delay === 0) publish()
+  else changeTimer = setTimeout(publish, delay)
+}
+watch(() => props.changeDebounce, () => {
+  const current = pendingChange
+  if (current) emitChange(current.value, current.field)
+})
+watch(innerModel, value => {
+  // Accepted v-model echoes preserve ownership; a different model invalidates the snapshot.
+  if (pendingChange && !isEqual(value, pendingChange.value)) cancelChange()
+}, { deep: true, flush: 'sync' })
+const stopChange = () => { active = false; cancelChange() }
+onActivated(() => { active = true })
+onDeactivated(stopChange)
+onBeforeUnmount(stopChange)
 
 watch(
   () => props.modelValue,
@@ -186,6 +219,7 @@ function patchFieldValue(fieldPath: string, value: unknown) {
 }
 
 function onFieldValue(item: ResolvedField, value: unknown) {
+  if (!active) return
   patchFieldValue(item.field.field, value)
   if (item.field.autoEmitChange !== false) {
     emitChange(cloneModel(innerModel.value), item.field.field)
@@ -193,6 +227,8 @@ function onFieldValue(item: ResolvedField, value: unknown) {
 }
 
 function onFieldEnter(item: ResolvedField) {
+  if (!active) return
+  cancelChange()
   emit('change', cloneModel(innerModel.value), item.field.field)
 }
 

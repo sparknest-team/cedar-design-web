@@ -50,3 +50,19 @@ describe('Segmented', () => {
     expect(wrapper.classes()).not.toContain('c-segmented--disabled')
   })
 })
+
+
+test('changing orientation preserves the selected option', async () => {
+  const wrapper = mount(Segmented, { props: { options: ['a', 'b'], defaultValue: 'b' } })
+  try {
+    await wrapper.setProps({ orientation: 'vertical' })
+    expect(wrapper.classes()).toContain('c-segmented--direction-vertical')
+    expect(wrapper.find('input:checked').element.value).toBe('b')
+    await wrapper.setProps({ orientation: 'horizontal' })
+    expect(wrapper.classes()).toContain('c-segmented--direction-horizontal')
+    expect(wrapper.find('input:checked').element.value).toBe('b')
+    expect(wrapper.emitted('change')).toBeUndefined()
+  } finally {
+    wrapper.unmount()
+  }
+})

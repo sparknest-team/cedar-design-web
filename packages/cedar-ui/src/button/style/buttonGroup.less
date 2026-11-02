@@ -14,40 +14,37 @@
     }
   }
 
+  // The group owns joining edges; a child's local text direction must not move them.
   &--horizontal {
-    > .c-button {
-      &:first-child {
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
-      }
+    > .c-button { border-radius: 0; }
 
-      &:last-child {
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-      }
-
-      &:not(:first-child):not(:last-child) {
-        border-radius: 0;
-      }
+    &:dir(ltr) > .c-button:first-child {
+      border-top-left-radius: var(--c-button-border-radius);
+      border-bottom-left-radius: var(--c-button-border-radius);
+    }
+    &:dir(ltr) > .c-button:last-child {
+      border-top-right-radius: var(--c-button-border-radius);
+      border-bottom-right-radius: var(--c-button-border-radius);
+    }
+    &:dir(rtl) > .c-button:first-child {
+      border-top-right-radius: var(--c-button-border-radius);
+      border-bottom-right-radius: var(--c-button-border-radius);
+    }
+    &:dir(rtl) > .c-button:last-child {
+      border-top-left-radius: var(--c-button-border-radius);
+      border-bottom-left-radius: var(--c-button-border-radius);
     }
   }
 
-  &--horizontal&--variant-text {
-    > .c-button {
-      border-right: thin solid currentColor;
-
-      &:last-child {
-        border: none;
-      }
-    }
+  // Join effective child variants, independently of the group default.
+  &--horizontal:dir(ltr) {
+    > .c-button--variant-outline + .c-button--variant-outline { border-left: none; }
+    > .c-button--variant-text + .c-button--variant-text { border-left: thin solid currentColor; }
   }
 
-  &--horizontal&--variant-outline {
-    > .c-button {
-      &:not(:first-child) {
-        border-left: none;
-      }
-    }
+  &--horizontal:dir(rtl) {
+    > .c-button--variant-outline + .c-button--variant-outline { border-right: none; }
+    > .c-button--variant-text + .c-button--variant-text { border-right: thin solid currentColor; }
   }
 
   &--vertical {
@@ -60,13 +57,13 @@
 
     > .c-button {
       &:first-child {
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
+        border-end-start-radius: 0;
+        border-end-end-radius: 0;
       }
 
       &:last-child {
-        border-top-left-radius: 0;
-        border-top-right-radius: 0;
+        border-start-start-radius: 0;
+        border-start-end-radius: 0;
       }
 
       &:not(:first-child):not(:last-child) {
@@ -75,21 +72,10 @@
     }
   }
 
-  &--vertical&--variant-text {
-    > .c-button {
-      border-bottom: thin solid currentColor;
-
-      &:last-child {
-        border: none;
-      }
-    }
-  }
-
-  &--vertical&--variant-outline {
-    > .c-button {
-      &:not(:first-child) {
-        border-top: none;
-      }
-    }
+  &--vertical {
+    > .c-button--variant-outline + .c-button--variant-outline { border-top: none; }
+    > .c-button--variant-text + .c-button--variant-text { border-top: thin solid currentColor; }
   }
 }
+
+.c-button-group > .c-button:only-child { border-radius: var(--c-button-border-radius); }

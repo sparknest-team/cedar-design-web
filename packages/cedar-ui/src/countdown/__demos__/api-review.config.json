@@ -31,7 +31,7 @@
       "name": "default",
       "kind": "slot",
       "demos": [
-        "custom.vue"
+        "format-comparison.vue"
       ]
     },
     {

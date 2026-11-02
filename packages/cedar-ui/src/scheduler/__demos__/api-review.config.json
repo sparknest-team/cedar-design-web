@@ -273,13 +273,6 @@
       "kind": "boolean"
     },
     {
-      "name": "loading",
-      "description": "数据加载中，禁止修改",
-      "type": "boolean",
-      "defaultValue": "false",
-      "kind": "boolean"
-    },
-    {
       "name": "hidden-days",
       "description": "周、月、议程隐藏指定星期，0–6，不可全部隐藏",
       "type": "number[]",
@@ -530,7 +523,7 @@
         "custom-cards.vue",
         "custom-editor.vue",
         "custom-event.vue",
-        "date-working-hours.vue",
+        "working-hours-comparison.vue",
         "drag-feedback.vue",
         "duplicate-events.vue",
         "equipment.vue",
@@ -557,7 +550,6 @@
         "virtual-resources.vue",
         "without-resources.vue",
         "workbench-punches.vue",
-        "working-hours.vue",
         "zoned-recurrence.vue"
       ]
     },
@@ -576,7 +568,7 @@
         "calendar-recurrence.vue",
         "custom-editor.vue",
         "custom-event.vue",
-        "date-working-hours.vue",
+        "working-hours-comparison.vue",
         "drag-feedback.vue",
         "duplicate-events.vue",
         "equipment.vue",
@@ -599,7 +591,6 @@
         "timeline-groups.vue",
         "timeline.vue",
         "virtual-resources.vue",
-        "working-hours.vue",
         "zoned-recurrence.vue"
       ]
     },
@@ -620,7 +611,7 @@
         "custom-cards.vue",
         "custom-editor.vue",
         "custom-event.vue",
-        "date-working-hours.vue",
+        "working-hours-comparison.vue",
         "drag-feedback.vue",
         "duplicate-events.vue",
         "equipment.vue",
@@ -648,7 +639,6 @@
         "virtual-resources.vue",
         "without-resources.vue",
         "workbench-punches.vue",
-        "working-hours.vue",
         "zoned-recurrence.vue"
       ]
     },
@@ -668,7 +658,7 @@
         "custom-cards.vue",
         "custom-editor.vue",
         "custom-event.vue",
-        "date-working-hours.vue",
+        "working-hours-comparison.vue",
         "drag-feedback.vue",
         "duplicate-events.vue",
         "equipment.vue",
@@ -691,7 +681,6 @@
         "timeline.vue",
         "virtual-resources.vue",
         "without-resources.vue",
-        "working-hours.vue",
         "zoned-recurrence.vue"
       ]
     },
@@ -718,7 +707,7 @@
         "batch-history.vue",
         "custom-cards.vue",
         "custom-event.vue",
-        "date-working-hours.vue",
+        "working-hours-comparison.vue",
         "drag-feedback.vue",
         "duplicate-events.vue",
         "equipment.vue",
@@ -735,8 +724,7 @@
         "timeline-groups.vue",
         "timeline.vue",
         "virtual-resources.vue",
-        "workbench-punches.vue",
-        "working-hours.vue"
+        "workbench-punches.vue"
       ]
     },
     {
@@ -812,15 +800,14 @@
       "kind": "prop",
       "demos": [
         "business-calendar.vue",
-        "date-working-hours.vue",
-        "working-hours.vue"
+        "working-hours-comparison.vue"
       ]
     },
     {
       "name": "date-working-hours",
       "kind": "prop",
       "demos": [
-        "date-working-hours.vue"
+        "working-hours-comparison.vue"
       ]
     },
     {
@@ -862,7 +849,7 @@
         "custom-cards.vue",
         "custom-editor.vue",
         "custom-event.vue",
-        "date-working-hours.vue",
+        "working-hours-comparison.vue",
         "drag-feedback.vue",
         "duplicate-events.vue",
         "equipment.vue",
@@ -890,7 +877,6 @@
         "timeline.vue",
         "virtual-resources.vue",
         "without-resources.vue",
-        "working-hours.vue",
         "zoned-recurrence.vue"
       ]
     },
@@ -969,18 +955,6 @@
       ]
     },
     {
-      "name": "loading",
-      "kind": "slot",
-      "demos": [
-        "custom-editor.vue",
-        "custom-event.vue",
-        "event-details-example.vue",
-        "external-editor.vue",
-        "remote-events.vue",
-        "task-calendar-workbench.vue"
-      ]
-    },
-    {
       "name": "change",
       "kind": "method",
       "demos": [
@@ -1026,8 +1000,7 @@
     "column-background",
     "toolbar-extra",
     "editor",
-    "empty",
-    "loading"
+    "empty"
   ],
   "slotDefaults": {
     "event": false,
@@ -1038,8 +1011,7 @@
     "column-background": false,
     "toolbar-extra": false,
     "editor": false,
-    "empty": false,
-    "loading": false
+    "empty": false
   },
   "methodNames": [
     "change",

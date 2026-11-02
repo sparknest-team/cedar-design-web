@@ -1,94 +1,52 @@
-import { tableProps } from "./props";
-import type {
-  ComponentPublicInstance,
-  CSSProperties,
-  PropType,
-  Slot,
-} from "vue";
-import {
-  computed,
-  defineComponent,
-  inject,
-  onBeforeUnmount,
-  onMounted,
-  provide,
-  reactive,
-  ref,
-  toRefs,
-  watch,
-  watchEffect,
-  watchPostEffect,
-} from "vue";
-import { getPrefixCls, createNamespace } from "../_utils/global-config";
-import type { ComponentSize } from "../_utils/constant";
-import {
-  isArray,
-  isFunction,
-  isNull,
-  isNumber,
-  isObject,
-  isString,
-  isUndefined,
-} from "../_utils/is";
-import { debounce } from "../_utils/debounce";
-import type {
-  TableBorder,
-  TableChangeExtra,
-  TableColumnData,
-  TableComponents,
-  TableData,
-  TableDataWithRaw,
-  TableDraggable,
-  TableExpandable,
-  TableOperationColumn,
-  TablePagePosition,
-  TableRowSelection,
-} from "./types";
-import {
-  getGroupColumns,
-  mapArrayWithChildren,
-  mapRawTableData,
-} from "./utils";
-import { useRowSelection } from "./hooks/use-row-selection";
-import { useExpand } from "./hooks/use-expand";
-import { usePagination } from "./hooks/use-pagination";
-import { updateColumnsWidth } from "./hooks/use-columns-layout";
-import { IconPlus } from "@cedar-design/icons-vue/icon-plus";
-import { IconMinus } from "@cedar-design/icons-vue/icon-minus";
-import Loading from "../loading";
-import Pagination, { PaginationProps } from "../pagination";
-import Empty from "../empty";
-import ColGroup from "./TableColGroup.vue";
-import Thead from "./table-thead";
-import Tbody from "./table-tbody";
-import Tr from "./table-tr";
-import Th from "./table-th";
-import Td from "./table-td";
-import OperationTh from "./table-operation-th";
-import OperationTd from "./table-operation-td";
-import VirtualList from "../_components/virtual-list-v2";
-import ResizeObserver from "../_components/resize-observer";
-import { VirtualListProps } from "../_components/virtual-list-v2/interface";
-import { omit } from "../_utils/omit";
-import { configProviderInjectionKey } from "../config-provider/context";
-import { useDrag } from "./hooks/use-drag";
-import { useColumnResize } from "./hooks/use-column-resize";
-import { tableInjectionKey } from "./context";
-import { useFilter } from "./hooks/use-filter";
-import { useSorter } from "./hooks/use-sorter";
-import ClientOnly from "../_components/client-only";
-import { useSpan } from "./hooks/use-span";
-import { useChildrenComponents } from "../_hooks/use-children-components";
-import Scrollbar, { ScrollbarProps } from "../scrollbar";
-import { useComponentRef } from "../_hooks/use-component-ref";
-import type { BaseType } from "../_utils/types";
-import { useScrollbar } from "../_hooks/use-scrollbar";
-import { getValueByPath, setValueByPath } from "../_utils/get-value-by-path";
-import {
-  resolveExtraColumnConfig,
-  getExtraColumnWidth,
-  type TableExtraColumnConfig,
-} from "./extra-column";
+import { useElementResize } from '../_utils/resize-observer'
+import { physicalScrollLeft, inlineScrollLeft, setInlineScrollLeft, useDirection } from '../_utils/direction'
+import StickyScrollbar from './StickyScrollbar.vue'
+import type { TablePaginationScope, TablePaginationConfig } from './types'
+import { tableProps } from "./props"
+import type { ComponentPublicInstance, CSSProperties, PropType, Slot } from "vue"
+import { Teleport, computed, defineComponent, inject, onActivated, onBeforeUnmount, onDeactivated, onMounted, provide, reactive, ref, toRaw, toRefs, watch, watchEffect, watchPostEffect } from "vue"
+import { getPrefixCls, createNamespace } from "../_utils/global-config"
+import type { ComponentSize } from "../_utils/constant"
+import { isArray, isFunction, isNull, isNumber, isObject, isString, isUndefined } from "../_utils/is"
+import { debounce } from "../_utils/debounce"
+import type { TableBorder, TableChangeExtra, TableColumnData, TableComponents, TableData, TableDataWithRaw, TableDraggable, TableExpandable, TableOperationColumn, TablePagePosition, TableRowSelection } from "./types"
+import { getGroupColumns, mapArrayWithChildren, mapRawTableData } from "./utils"
+import { useRowSelection } from "./hooks/use-row-selection"
+import { useExpand } from "./hooks/use-expand"
+import { usePagination } from "./hooks/use-pagination"
+import { updateColumnsWidth } from "./hooks/use-columns-layout"
+import { IconPlus } from "@cedar-design/icons-vue/icon-plus"
+import { IconMinus } from "@cedar-design/icons-vue/icon-minus"
+import Loading from "../loading"
+import Pagination, { PaginationProps } from "../pagination"
+import Empty from "../empty"
+import ColGroup from "./TableColGroup.vue"
+import Thead from "./table-thead"
+import Tbody from "./table-tbody"
+import Tr from "./table-tr"
+import Th from "./table-th"
+import Td from "./table-td"
+import OperationTh from "./table-operation-th"
+import OperationTd from "./table-operation-td"
+import VirtualList from "../_components/virtual-list-v2"
+import ResizeObserver from "../_components/resize-observer"
+import { VirtualListProps } from "../_components/virtual-list-v2/interface"
+import { omit } from "../_utils/omit"
+import { configProviderInjectionKey } from "../config-provider/context"
+import { useDrag } from "./hooks/use-drag"
+import { useColumnResize } from "./hooks/use-column-resize"
+import { tableInjectionKey } from "./context"
+import { useFilter } from "./hooks/use-filter"
+import { useSorter } from "./hooks/use-sorter"
+import ClientOnly from "../_components/client-only"
+import { useSpan } from "./hooks/use-span"
+import { useChildrenComponents } from "../_hooks/use-children-components"
+import Scrollbar, { ScrollbarProps } from "../scrollbar"
+import { useComponentRef } from "../_hooks/use-component-ref"
+import type { BaseType } from "../_utils/types"
+import { useScrollbar } from "../_hooks/use-scrollbar"
+import { getValueByPath, setValueByPath } from "../_utils/get-value-by-path"
+import { resolveExtraColumnConfig, getExtraColumnWidth, type TableExtraColumnConfig } from "./extra-column"
 
 const DEFAULT_BORDERED = {
   wrapper: true,
@@ -175,7 +133,6 @@ export default defineComponent({
      * @param {TableData[]} data
      * @param {TableChangeExtra} extra
      * @param {TableData[]} currentData
-     * @version 2.40.0 增加 currentData
      */
     change: (
       data: TableData[],
@@ -227,7 +184,6 @@ export default defineComponent({
      * @en Triggered when column width is adjusted
      * @param {string} dataIndex
      * @param {number} width
-     * @version 2.28.0
      */
     "column-resize": (dataIndex: string, width: number) => true,
     /**
@@ -290,13 +246,11 @@ export default defineComponent({
    * @zh 拖拽锚点图标
    * @en Drag handle icon
    * @slot drag-handle-icon
-   * @version 2.16.0
    */
   /**
    * @zh 自定义 tbody 元素
    * @en Custom tbody element
    * @slot tbody
-   * @version 2.16.0
    */
   /**
    * @zh 自定义 tr 元素
@@ -304,7 +258,6 @@ export default defineComponent({
    * @slot tr
    * @binding {TableData} record
    * @binding {number} rowIndex
-   * @version 2.16.0
    */
   /**
    * @zh 自定义 td 元素
@@ -313,19 +266,22 @@ export default defineComponent({
    * @binding {TableColumnData} column
    * @binding {TableData} record
    * @binding {number} rowIndex
-   * @version 2.16.0
+   */
+  /**
+   * @zh 自定义完整分页内容，保留 Table 吸底与横向滚动布局
+   * @en Custom pagination content inside the managed sticky footer
+   * @slot pagination
+   * @binding {TablePaginationScope} scope
    */
   /**
    * @zh 分页器左侧内容
    * @en Content on the left side of the pagination
    * @slot pagination-left
-   * @version 2.18.0
    */
   /**
    * @zh 分页器右侧内容
    * @en Content on the right side of the pagination
    * @slot pagination-right
-   * @version 2.18.0
    */
   /**
    * @zh 总结行
@@ -334,7 +290,6 @@ export default defineComponent({
    * @binding {TableColumnData} column
    * @binding {TableData} record
    * @binding {number} rowIndex
-   * @version 2.23.0
    */
   /**
    * @zh 空白展示
@@ -345,14 +300,12 @@ export default defineComponent({
    * @zh 自定义 thead 元素
    * @en Custom thead element
    * @slot thead
-   * @version 2.26.0
    */
   /**
    * @zh 自定义 th 元素
    * @en Custom th element
    * @slot th
    * @binding {TableColumnData} column
-   * @version 2.26.0
    */
   /**
    * @zh 扩展列表头内容
@@ -410,15 +363,26 @@ export default defineComponent({
     const { displayScrollbar, scrollbarProps } = useScrollbar(scrollbar);
 
     const tableWidth = ref(0);
-    const scrollX = ref(false);
+    const tableHovered = ref(false);
+    const tableFocused = ref(false);
+    const tableInteractionEvents = {
+      onMouseenter: () => { tableHovered.value = true; },
+      onMouseleave: () => { tableHovered.value = false; },
+      onFocusin: () => { tableFocused.value = true; },
+      onFocusout: (event: FocusEvent) => {
+        tableFocused.value = event.relatedTarget instanceof Node &&
+          (event.currentTarget as HTMLElement).contains(event.relatedTarget);
+      },
+    };
+    const hasHorizontalOverflow = ref(false);
     const bodyWidth = ref(0);
+
     const columnRealWidth = reactive<Record<string, number>>({});
 
-    // whether to scroll
-    const isScroll = computed(() => {
-      const y = props.height != null || props.maxHeight != null;
-      return { x: scrollX.value, y };
-    });
+    // Height constraints split the header/body; horizontal overflow comes from column sizing.
+    const hasBodyHeightConstraint = computed(
+      () => props.height != null || props.maxHeight != null,
+    );
 
     // const theadRef = ref<HTMLElement>();
     const summaryRef = ref<HTMLElement>();
@@ -428,26 +392,23 @@ export default defineComponent({
       useComponentRef("containerRef");
     const { componentRef: tbodyComRef, elementRef: tbodyRef } =
       useComponentRef("containerRef");
-    const { componentRef: virtualComRef, elementRef: virtualRef } =
-      useComponentRef("viewportRef");
     const { componentRef: theadComRef, elementRef: theadRef } =
       useComponentRef("containerRef");
     const containerElement = computed(() => {
       if (splitTable.value) {
-        if (isVirtualList.value) {
-          return virtualRef.value;
-        }
         return tbodyRef.value;
       }
       return contentRef.value;
     });
 
+    const { dir: readingDirection } = useDirection(() => containerElement.value);
+
     const splitTable = computed(
       () =>
-        isScroll.value.y ||
-        props.stickyHeader ||
+        hasBodyHeightConstraint.value ||
+        (props.stickyHeader !== false) ||
         isVirtualList.value ||
-        (isScroll.value.x && flattenData.value.length === 0),
+        (hasHorizontalOverflow.value && flattenData.value.length === 0),
     );
 
     const toCssSize = (value: number | string) =>
@@ -560,7 +521,7 @@ export default defineComponent({
     const dataColumns = ref<TableColumnData[]>([]);
     const groupColumns = ref<TableColumnData[][]>([]);
 
-    const { resizingColumn, columnWidth, handleThMouseDown } = useColumnResize(
+    const { resizingColumn, columnWidth, handleThMouseDown, handleThMouseUp, handleThKeydown } = useColumnResize(
       thRefs,
       emit,
     );
@@ -572,6 +533,7 @@ export default defineComponent({
         columnWidth,
         () => extraColumnConfig.value,
         () => props.size,
+        readingDirection,
       ],
       ([columns, slotColumns]) => {
         const baseColumns = [...(slotColumns ?? columns ?? [])];
@@ -592,7 +554,7 @@ export default defineComponent({
             render: () => null,
           });
         }
-        const result = getGroupColumns(baseColumns, dataColumnMap, columnWidth);
+        const result = getGroupColumns(baseColumns, dataColumnMap, columnWidth, readingDirection.value);
         dataColumns.value = result.dataColumns;
         groupColumns.value = result.groupColumns;
       },
@@ -784,14 +746,41 @@ export default defineComponent({
       emit,
     });
 
-    const lazyLoadData = reactive<Record<string, TableData[]>>({});
-
-    const addLazyLoadData = (
-      children: TableData[] | undefined,
-      record: TableDataWithRaw,
-    ) => {
-      if (children) {
-        lazyLoadData[record.key] = children;
+    const lazyLoadRevision = ref(0);
+    let lazyLoadData = new WeakMap<TableData, { key: string; children: TableData[] }>();
+    let lazyActive = true;
+    onActivated(() => { lazyActive = true; });
+    onDeactivated(() => { lazyActive = false; });
+    onBeforeUnmount(() => { lazyActive = false; lazyLoadData = new WeakMap(); });
+    watch([() => props.loadMore, () => props.rowKey], () => {
+      lazyLoadData = new WeakMap();
+      lazyLoadRevision.value++;
+    }, { flush: 'sync' });
+    const getLazyChildren = (record: TableData) => {
+      const cached = lazyLoadData.get(toRaw(record));
+      return cached && cached.key === record[props.rowKey] ? cached.children : undefined;
+    };
+    const ownsLazyRecord = (record: TableDataWithRaw) => {
+      const expected = toRaw(record.raw);
+      if (expected[props.rowKey] !== record.key) return false;
+      const seen = new Set<TableData>();
+      const contains = (data: TableData[]): boolean => {
+        for (const item of data) {
+          const raw = toRaw(item);
+          if (seen.has(raw)) continue;
+          seen.add(raw);
+          if (raw === expected) return true;
+          const children = item.children ?? getLazyChildren(item);
+          if (children && contains(children)) return true;
+        }
+        return false;
+      };
+      return contains(props.data ?? []);
+    };
+    const addLazyLoadData = (children: TableData[] | undefined, record: TableDataWithRaw) => {
+      if (lazyActive && children && ownsLazyRecord(record)) {
+        lazyLoadData.set(toRaw(record.raw), { key: record.key, children });
+        lazyLoadRevision.value++;
       }
     };
 
@@ -821,6 +810,7 @@ export default defineComponent({
     } = useDrag(draggable);
 
     const processedData = computed(() => {
+      void lazyLoadRevision.value;
       const travel = (data: TableData[]) => {
         const result: TableDataWithRaw[] = [];
 
@@ -837,9 +827,8 @@ export default defineComponent({
             record.children = travel(_record.children);
           } else if (props.loadMore && !_record.isLeaf) {
             record.isLeaf = false;
-            if (lazyLoadData[record.key]) {
-              record.children = travel(lazyLoadData[record.key]);
-            }
+            const children = getLazyChildren(_record);
+            if (children) record.children = travel(children);
           } else {
             record.isLeaf = true;
           }
@@ -1028,6 +1017,7 @@ export default defineComponent({
     });
 
     const containerScrollLeft = ref(0);
+    let readingOffset = 0;
 
     const alignLeft = ref(true);
     const alignRight = ref(true);
@@ -1039,9 +1029,10 @@ export default defineComponent({
       const scrollContainer = containerElement.value;
 
       if (scrollContainer) {
-        _alignLeft = containerScrollLeft.value === 0;
+        const left = physicalScrollLeft(scrollContainer);
+        _alignLeft = left === 0;
         _alignRight =
-          Math.ceil(containerScrollLeft.value + scrollContainer.offsetWidth) >=
+          Math.ceil(left + scrollContainer.clientWidth) >=
           scrollContainer.scrollWidth;
       }
 
@@ -1052,6 +1043,12 @@ export default defineComponent({
         alignRight.value = _alignRight;
       }
     };
+    watch(readingDirection, () => {
+      const container = containerElement.value;
+      if (container) setInlineScrollLeft(container, readingOffset);
+      syncHorizontalPanels();
+      setAlignPosition();
+    }, { flush: 'post' });
 
     const getTableScrollCls = () => {
       if (alignLeft.value && alignRight.value) {
@@ -1083,18 +1080,20 @@ export default defineComponent({
       ) {
         containerScrollLeft.value = (e.target as HTMLDivElement).scrollLeft;
       }
+      if (containerElement.value) readingOffset = inlineScrollLeft(containerElement.value);
       setAlignPosition();
     };
 
-    const onTbodyScroll = (e: Event) => {
-      handleScroll(e);
-      const { scrollLeft } = e.target as HTMLDivElement;
-      if (theadRef.value) {
-        theadRef.value.scrollLeft = scrollLeft;
-      }
-      if (summaryRef.value) {
-        summaryRef.value.scrollLeft = scrollLeft;
-      }
+    function syncHorizontalPanels() {
+      const body = containerElement.value;
+      if (!body) return;
+      const offset = inlineScrollLeft(body);
+      if (theadRef.value) setInlineScrollLeft(theadRef.value, offset);
+      if (summaryRef.value) setInlineScrollLeft(summaryRef.value, offset);
+    }
+    const onTbodyScroll = (event: Event) => {
+      handleScroll(event);
+      syncHorizontalPanels();
     };
 
     const handleRowClick = (record: TableDataWithRaw, ev: Event) => {
@@ -1198,6 +1197,11 @@ export default defineComponent({
       ) {
         operations[operations.length - 1].isLastLeftFixed = true;
       }
+      if (readingDirection.value === 'rtl') {
+        operations.forEach(operation => { operation.isLastLeftFixed = false; });
+        const first = operations.find(operation => operation.fixed);
+        if (first) first.isLastLeftFixed = true;
+      }
       const operationsFn = props.components?.operations;
 
       return isFunction(operationsFn)
@@ -1211,6 +1215,8 @@ export default defineComponent({
       if (hasEllipsis.value) return "fixed";
       return props.tableLayout;
     });
+    watch([resolvedTableLayout, () => props.columnResizable], handleThMouseUp, { flush: 'sync' });
+
 
     const syncColumnsLayout = () => {
       // fixed 模式下宽度由引擎接管：清掉 auto 模式量宽回写到操作列的值，
@@ -1230,7 +1236,7 @@ export default defineComponent({
           ? [extraColumnConfig.value.dataIndex]
           : undefined,
       });
-      scrollX.value = result.scrollX;
+      hasHorizontalOverflow.value = result.hasHorizontalOverflow;
       bodyWidth.value = result.bodyWidth;
       Object.keys(columnRealWidth).forEach((key) => {
         if (!(key in result.columnRealWidth)) {
@@ -1354,6 +1360,9 @@ export default defineComponent({
     provide(
       tableInjectionKey,
       reactive({
+        readingDirection,
+        physicalDataColumns: dataColumns,
+        hasPhysicalLeftOperations: computed(() => operations.value.some(operation => operation.fixed)),
         loadMore,
         addLazyLoadData,
         slots,
@@ -1372,6 +1381,7 @@ export default defineComponent({
         onSorterChange: handleSorterChange,
         onFilterChange: handleFilterChange,
         onThMouseDown: handleThMouseDown,
+        onThKeydown: handleThKeydown,
         tableLayout: resolvedTableLayout,
         extraColumnDataIndex: computed(() =>
           extraColumnConfig.value.enabled
@@ -1399,7 +1409,7 @@ export default defineComponent({
         [`${prefixCls}-layout-fixed`]: resolvedTableLayout.value === "fixed",
         // sticky 依赖祖先可滚动且不能有 overflow:hidden；开启吸顶/吸底时放开裁剪
         [`${prefixCls}-scrollport-visible`]: Boolean(
-          props.stickyHeader || props.stickyPagination,
+          props.stickyHeader !== false || props.stickyPagination !== false,
         ),
       },
     ]);
@@ -1420,13 +1430,13 @@ export default defineComponent({
     const tableCls = computed(() => {
       const cls = getTableFixedCls();
 
-      if (isScroll.value.x) {
+      if (hasHorizontalOverflow.value) {
         cls.push(`${prefixCls}-scroll-x`);
         cls.push(getTableScrollCls());
       }
 
       if (splitTable.value) {
-        cls.push(`${prefixCls}-scroll-y`);
+        cls.push(`${prefixCls}-split`);
       }
 
       return cls;
@@ -1443,6 +1453,8 @@ export default defineComponent({
       }
       thWidth.value = width;
     };
+
+    useElementResize(() => Object.values(thRefs.value), () => isVirtualList.value, getThWidth);
 
     const hasScrollBar = ref(false);
 
@@ -1912,6 +1924,8 @@ export default defineComponent({
                   ref={(ins: ComponentPublicInstance) => {
                     if (ins?.$el && operation.name) {
                       thRefs.value[operation.name] = ins.$el;
+                    } else if (operation.name) {
+                      delete thRefs.value[operation.name];
                     }
                   }}
                   operationColumn={operation}
@@ -1940,6 +1954,8 @@ export default defineComponent({
                   ref={(ins: ComponentPublicInstance) => {
                     if (ins?.$el && column.dataIndex) {
                       thRefs.value[column.dataIndex] = ins.$el;
+                    } else if (column.dataIndex) {
+                      delete thRefs.value[column.dataIndex];
                     }
                   }}
                   v-slots={{ th: slots.th }}
@@ -1956,12 +1972,13 @@ export default defineComponent({
       </Thead>
     );
 
+    const managedStickyFooter = computed(() => props.pagination !== false && props.stickyPagination !== false);
     const renderContent = () => {
       if (splitTable.value) {
         const stickyTop = isNumber(props.stickyHeader)
           ? `${props.stickyHeader}px`
           : undefined;
-        const Component = displayScrollbar.value ? Scrollbar : "div";
+        const Component = displayScrollbar.value || managedStickyFooter.value ? Scrollbar : "div";
 
         const renderHeaderPanel = () => (
           <Component
@@ -1970,12 +1987,12 @@ export default defineComponent({
             style={{
               overflowY: hasScrollBar.value ? "scroll" : undefined,
             }}
-            {...(scrollbar.value
+            {...((scrollbar.value || managedStickyFooter.value)
               ? {
                   hide: flattenData.value.length !== 0,
                   disableVertical: true,
                   ...scrollbarProps.value,
-                  disableHorizontal: !isScroll.value.x,
+                  disableHorizontal: managedStickyFooter.value || !hasHorizontalOverflow.value,
                 }
               : undefined)}
           >
@@ -2000,7 +2017,7 @@ export default defineComponent({
         return (
           <>
             {props.showHeader &&
-              (props.stickyHeader ? (
+              (props.stickyHeader !== false ? (
                 // sticky 单独包一层，避免与 .c-scrollbar { position: relative } 互相覆盖
                 <div
                   class={`${prefixCls}-header-sticky`}
@@ -2023,9 +2040,7 @@ export default defineComponent({
                       index: number;
                     }) => renderRecord(item, index),
                   }}
-                  ref={(ins: any) => {
-                    if (ins?.$el) tbodyRef.value = ins.$el;
-                  }}
+                  ref={tbodyComRef}
                   class={`${prefixCls}-body`}
                   data={flattenData.value as any}
                   itemKey="_key"
@@ -2047,13 +2062,13 @@ export default defineComponent({
                   ref={tbodyComRef}
                   class={`${prefixCls}-body`}
                   style={{
-                    maxHeight: bodyMaxHeight.value ?? "100%",
+                    maxHeight: bodyMaxHeight.value,
                   }}
-                  {...(scrollbar.value
+                  {...((scrollbar.value || managedStickyFooter.value)
                     ? {
                         outerStyle: { display: "flex", minHeight: "0" },
                         ...scrollbarProps.value,
-                        disableHorizontal: !isScroll.value.x,
+                        disableHorizontal: managedStickyFooter.value || !hasHorizontalOverflow.value,
                       }
                     : undefined)}
                   onScroll={onTbodyScroll}
@@ -2133,7 +2148,7 @@ export default defineComponent({
     };
 
     const renderTable = (content?: Slot) => {
-      const Component = displayScrollbar.value ? Scrollbar : "div";
+      const Component = displayScrollbar.value || managedStickyFooter.value ? Scrollbar : "div";
 
       return (
         <>
@@ -2148,14 +2163,14 @@ export default defineComponent({
                 {
                   // 仅在确实需要横滚时开启，避免列宽铺满后的亚像素溢出一直露出滚动条
                   [`${prefixCls}-content-scroll-x`]:
-                    !splitTable.value && isScroll.value.x,
+                    !splitTable.value && hasHorizontalOverflow.value,
                 },
               ]}
-              {...(scrollbar.value
+              {...((scrollbar.value || managedStickyFooter.value)
                 ? {
                     outerStyle: { height: "100%" },
                     ...scrollbarProps.value,
-                    disableHorizontal: !isScroll.value.x,
+                    disableHorizontal: managedStickyFooter.value || !hasHorizontalOverflow.value,
                   }
                 : undefined)}
               onScroll={handleScroll}
@@ -2181,9 +2196,10 @@ export default defineComponent({
       );
     };
 
-    const renderPagination = () => {
-      const paginationProps = isObject(props.pagination)
+    const renderPagination = (inStickyFooter = false) => {
+      const paginationProps: Partial<TablePaginationConfig> = isObject(props.pagination)
         ? omit(props.pagination, [
+            "container",
             "modelValue",
             "pageSize",
             "defaultValue",
@@ -2197,36 +2213,56 @@ export default defineComponent({
         ? { bottom: `${props.stickyPagination}px` }
         : undefined;
 
+      const scope: TablePaginationScope = {
+        page: page.value,
+        pageSize: pageSize.value,
+        total: paginationProps.total ?? validData.value.length,
+        onChange: (next) => {
+          handlePageChange(next);
+          handleChange('pagination');
+        },
+        onPageSizeChange: (next) => {
+          handlePageSizeChange(next);
+          handleChange('pagination');
+        },
+      };
+
       return (
         <div
+          dir={readingDirection.value}
           class={[
             paginationCls.value,
             {
-              [`${prefixCls}-pagination-sticky`]: Boolean(
-                props.stickyPagination,
-              ),
+              [`${prefixCls}-pagination-sticky`]: props.stickyPagination !== false,
             },
           ]}
-          style={stickyStyle}
+          style={inStickyFooter ? undefined : stickyStyle}
         >
           {slots["pagination-left"]?.()}
-          <Pagination
-            total={validData.value.length}
-            modelValue={page.value}
-            pageSize={pageSize.value}
-            onChange={(page: number) => {
-              handlePageChange(page);
-              handleChange("pagination");
-            }}
-            onPage-size-change={(pageSize: number) => {
-              handlePageSizeChange(pageSize);
-              handleChange("pagination");
-            }}
-            {...paginationProps}
-          />
+          {slots.pagination ? slots.pagination(scope) : (
+            <Pagination
+              total={scope.total}
+              modelValue={scope.page}
+              pageSize={scope.pageSize}
+              onChange={scope.onChange}
+              onPage-size-change={scope.onPageSizeChange}
+              {...paginationProps}
+            />
+          )}
           {slots["pagination-right"]?.()}
         </div>
       );
+    };
+
+    const renderPaginationArea = () => {
+      const content = props.stickyPagination !== false ? (
+        <div dir={readingDirection.value} class={`${prefixCls}-footer-sticky`} style={isNumber(props.stickyPagination) ? { bottom: `${props.stickyPagination}px` } : undefined}>
+          <StickyScrollbar container={containerElement.value} active={tableHovered.value || tableFocused.value} />
+          {renderPagination(true)}
+        </div>
+      ) : renderPagination();
+      const target = isObject(props.pagination) ? props.pagination.container : undefined;
+      return target ? <Teleport to={target} defer>{content}</Teleport> : content;
     };
 
     const style = computed<CSSProperties | undefined>(() => {
@@ -2248,6 +2284,8 @@ export default defineComponent({
           <ResizeObserver onResize={handleTableResize}>
             <div
               class={cls.value}
+              aria-busy={loadingProps.value.loading || undefined}
+              {...tableInteractionEvents}
               // 该分支历来不应用 height，仅补宽度追逐时的 inline 钉宽
               style={
                 rootMaxWidth.value != null
@@ -2255,7 +2293,7 @@ export default defineComponent({
                   : undefined
               }
             >
-              {renderTable(slots.default)}
+              <Loading {...loadingProps.value}>{renderTable(slots.default)}</Loading>
             </div>
           </ResizeObserver>
         );
@@ -2264,18 +2302,18 @@ export default defineComponent({
       // fix #1724 sortedData.value.length > 0
       return (
         <ResizeObserver onResize={handleTableResize}>
-          <div class={cls.value} style={style.value}>
+          <div class={cls.value} style={style.value} aria-busy={loadingProps.value.loading || undefined} {...tableInteractionEvents}>
             {children.value}
             <Loading {...loadingProps.value}>
               {props.pagination !== false &&
                 (flattenData.value.length > 0 || sortedData.value.length > 0) &&
                 isPaginationTop.value &&
-                renderPagination()}
+                renderPaginationArea()}
               {renderTable()}
               {props.pagination !== false &&
                 (flattenData.value.length > 0 || sortedData.value.length > 0) &&
                 !isPaginationTop.value &&
-                renderPagination()}
+                renderPaginationArea()}
             </Loading>
           </div>
         </ResizeObserver>
@@ -2300,7 +2338,6 @@ export default defineComponent({
      * @en Set select all state
      * @param { boolean } checked
      * @public
-     * @version 2.22.0
      */
     selectAll(checked?: boolean) {
       return this.selfSelectAll(checked);
@@ -2311,7 +2348,6 @@ export default defineComponent({
      * @param { string | number | (string | number)[] } rowKey
      * @param { boolean } checked
      * @public
-     * @version 2.31.0
      */
     select(rowKey: string | number | (string | number)[], checked?: boolean) {
       return this.selfSelect(rowKey, checked);
@@ -2321,7 +2357,6 @@ export default defineComponent({
      * @en Set all expanded state
      * @param { boolean } checked
      * @public
-     * @version 2.31.0
      */
     expandAll(checked?: boolean) {
       return this.selfExpandAll(checked);
@@ -2332,7 +2367,6 @@ export default defineComponent({
      * @param { string | number | (string | number)[] } rowKey
      * @param { boolean } checked
      * @public
-     * @version 2.31.0
      */
     expand(rowKey: string | number | (string | number)[], checked?: boolean) {
       return this.selfExpand(rowKey, checked);
@@ -2342,7 +2376,6 @@ export default defineComponent({
      * @en Reset the filter for columns
      * @param { string | string[] } dataIndex
      * @public
-     * @version 2.31.0
      */
     resetFilters(dataIndex?: string | string[]) {
       return this.selfResetFilters(dataIndex);
@@ -2352,7 +2385,6 @@ export default defineComponent({
      * @en Clear the filter for columns
      * @param { string | string[] } dataIndex
      * @public
-     * @version 2.31.0
      */
     clearFilters(dataIndex?: string | string[]) {
       return this.selfClearFilters(dataIndex);
@@ -2361,7 +2393,6 @@ export default defineComponent({
      * @zh 重置列的排序
      * @en Reset the order of columns
      * @public
-     * @version 2.31.0
      */
     resetSorters() {
       return this.selfResetSorters();
@@ -2370,7 +2401,6 @@ export default defineComponent({
      * @zh 清空列的排序
      * @en Clear the order of columns
      * @public
-     * @version 2.31.0
      */
     clearSorters() {
       return this.selfClearSorters();

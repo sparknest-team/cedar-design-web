@@ -16,7 +16,29 @@ permalink: /components/date-range-picker/
 
 表单字段请使用 [`DateRange`](/components/date-range/)。单日期面板请使用 [`DatePicker`](/components/date-picker/)。
 
-## 案例
+## 基础示例
+
+### 基本用法
+
+<demo src="./__demos__/picker/basic.vue"></demo>
+
+## 日期视图与展示
+
+### 选择类型
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `type` | 面板类型 | 选择类型、窄屏与组合面板 |
+| `disable-confirm` | 选择后立即提交 | 窄屏与组合面板 |
+| `show-time` | 选择时间 | 窄屏与组合面板 |
+<!-- demo-config-notes:end -->
+
+通过 `type` 切换日 / 周 / 月 / 年 / 季度范围。
+
+<demo src="./__demos__/picker/mode.vue"></demo>
 
 ### 窄屏与组合面板
 
@@ -24,41 +46,33 @@ permalink: /components/date-range-picker/
 
 <demo src="../date/picker/__demos__/responsive-panels.vue"></demo>
 
-### 字段与嵌入式面板
+## 时间与选择规则
 
-字段管理输入与浮层，纯面板直接嵌入页面。日历周起点统一为 day-start-of-week（数字 0～6，0 为周日），动态修改立即生效。
+### 禁用部分日期
 
-本例通过 `actions` 插槽调用 `confirm`，并把 `disabled` 绑定到提交按钮。选择草稿不更新“已提交”，确认后才写回；动态收紧边界不会清除已有模型，但不合法草稿不能提交。双日历两侧的月份可能不同，请依据各自标题选择日期。仅占位而无导航回调的箭头禁用，并退出 Tab 顺序及无障碍树。
+<!-- demo-config-notes:start -->
+#### 本组配置对照
 
-<demo src="./__demos__/entry-boundary.vue"></demo>
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `disabled-date` | 禁用日期 | 禁用部分日期 |
+| `show-time` | 选择时间 | 带时间 |
+| `default-value` | 非受控初始值，仅初始化读取 | 带时间 |
+| `disable-confirm` | 选择后立即提交 | 端点锁定 |
+| `disabled` | 禁用 | 端点锁定 |
+<!-- demo-config-notes:end -->
 
-“禁用20日结束”动态改变 `disabled-date` 回调：先选10~20草稿，再启用禁用，提交不可用且已提交值不变；解除禁用只恢复确认资格，不自动提交。禁用只作用于结束端，不应误禁起点20日。
-
-The “disable day 20 as the end” switch changes `disabled-date` dynamically. A pending 10–20 range cannot commit while blocked; the committed model stays unchanged. Unblocking only restores confirmation eligibility, without committing. Day 20 remains valid as the start.
-
-### 基本用法
-
-<demo src="./__demos__/picker/basic.vue"></demo>
-
-### 选择类型
-
-通过 `type` 切换日 / 周 / 月 / 年 / 季度范围。
-
-<demo src="./__demos__/picker/mode.vue"></demo>
+<demo src="./__demos__/picker/disabled-parts.vue"></demo>
 
 ### 带时间
 
 <demo src="./__demos__/picker/show-time.vue"></demo>
 
-### 禁用部分日期
-
-<demo src="./__demos__/picker/disabled-parts.vue"></demo>
-
 ### 端点锁定
 
 双锁不拦截父级主动更新模型，但日期与确认保持禁用；外部更新后解锁起点，只恢复起点编辑，不自动提交。此时选择16并确认保留新终点22，不恢复旧终点15。
 
-点击“外部改为18~22”直接更新父模型：未确认的旧草稿随之同步，锁定端以新模型为基准；外部更新不增加选择或确认次数。之后选择24并确认，只提交18~24，不恢复旧起点。
+点击“外部改为18~~22”直接更新父模型：未确认的旧草稿随之同步，锁定端以新模型为基准；外部更新不增加选择或确认次数。之后选择24并确认，只提交18~~24，不恢复旧起点。
 
 先编辑草稿再锁定该端，不代表授权草稿覆盖已提交端点：只要锁定端草稿与模型不同，确认保持不可用。解除锁定保留草稿并恢复确认，但本身不提交，仍需显式确认。
 
@@ -70,36 +84,61 @@ The “disable day 20 as the end” switch changes `disabled-date` dynamically. 
 
 <demo src="./__demos__/picker/endpoint-lock.vue"></demo>
 
+## 快捷工具与定制
+
+### 字段与嵌入式面板
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `day-start-of-week` | 每周第一天（仅日历），整数 0～6 | 字段与嵌入式面板 |
+| `disable-confirm` | 选择后立即提交 | 字段与嵌入式面板 |
+| `disabled-date` | 禁用日期 | 字段与嵌入式面板 |
+<!-- demo-config-notes:end -->
+
+字段管理输入与浮层，纯面板直接嵌入页面。日历周起点统一为 day-start-of-week（数字 0～6，0 为周日），动态修改立即生效。
+
+本例通过 `actions` 插槽调用 `confirm`，并把 `disabled` 绑定到提交按钮。选择草稿不更新“已提交”，确认后才写回；动态收紧边界不会清除已有模型，但不合法草稿不能提交。双日历两侧的月份可能不同，请依据各自标题选择日期。仅占位而无导航回调的箭头禁用，并退出 Tab 顺序及无障碍树。
+
+<demo src="./__demos__/entry-boundary.vue"></demo>
+
+“禁用20日结束”动态改变 `disabled-date` 回调：先选10~20草稿，再启用禁用，提交不可用且已提交值不变；解除禁用只恢复确认资格，不自动提交。禁用只作用于结束端，不应误禁起点20日。
+
+The “disable day 20 as the end” switch changes `disabled-date` dynamically. A pending 10–20 range cannot commit while blocked; the committed model stays unchanged. Unblocking only restores confirmation eligibility, without committing. Day 20 remains valid as the start.
+
+## 阅读方向
+
+范围值始终保持 `[开始, 结束]`，切换阅读方向不会交换端点或提交草稿。日历范围连接线与边界圆角跟随阅读方向；分页网格的左右键按视觉方向移动焦点，上下键保持日期行序。Maple 的端点编辑和连续范围高亮是不同展示路径。显式 `shortcuts-position="left|right"` 保持物理侧；弹层继承字段来源方向。
+
 ## API
 
 ### Props
 
 纯面板不接收 open/default-open、popup-container、placement、trigger-props、placeholder、variant、clearable 等字段/浮层属性。浮层配置请使用 Date/DateRange 的 popup-props；输入可编辑性使用字段 input-editable。确认区只由 disable-confirm 控制，不再使用 show-confirm-btn。
 
-| 参数 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| `model-value` | 绑定值 | `(Date \| string \| number)[]` | `-` |
-| `type` | 面板类型 | `date \| week \| month \| year \| quarter` | `date` |
-| `format` | 展示格式 | `string` | `-` |
-| `day-start-of-week` | 每周第一天（仅日历），整数 0～6 | `DateWeekStart` | `0` |
-| `readonly` | 只读，不更改选择 | `boolean` | `false` |
-| `time-picker-props` | 本库时间面板展示选项 | `Partial<TimePickerProps>` | `-` |
-| `show-time` | 选择时间 | `boolean` | `false` |
-| `disabled` | 禁用 | `boolean \| boolean[]` | `-` |
-| `disabled-date` | 禁用日期 | `Function` | `-` |
-
+| 参数                | 说明                            | 类型                                       | 默认值  |
+| ------------------- | ------------------------------- | ------------------------------------------ | ------- |
+| `model-value`       | 绑定值                          | `(Date \| string \| number)[]`             | `-`     |
+| `type`              | 面板类型                        | `date \| week \| month \| year \| quarter` | `date`  |
+| `format`            | 展示格式                        | `string`                                   | `-`     |
+| `day-start-of-week` | 每周第一天（仅日历），整数 0～6 | `DateWeekStart`                            | `0`     |
+| `readonly`          | 只读，不更改选择                | `boolean`                                  | `false` |
+| `time-picker-props` | 本库时间面板展示选项            | `Partial<TimePickerProps>`                 | `-`     |
+| `show-time`         | 选择时间                        | `boolean`                                  | `false` |
+| `disabled`          | 禁用                            | `boolean \| boolean[]`                     | `-`     |
+| `disabled-date`     | 禁用日期                        | `Function`                                 | `-`     |
 
 ### 日期族统一契约
 
-| 参数 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| `default-value` | 非受控初始值，仅初始化读取 | DateValue / DateValue[] | — |
-| `value-format` | 模型与事件的格式，可为自定义日期格式、Date 或 timestamp | string | 随 type |
-| `use-seconds` | 默认时间精度；显式 format 优先 | boolean | true |
-| `min` / `max` | 包含端点的边界；字符串按 value-format 解析 | DateValue | — |
-| `disabled-time` | 当前日期、端点的时间禁用列表 | (date: Date, side: DateSide) => DateDisabledTime | — |
-| `disable-confirm` | 选择后立即提交 | boolean | true |
-
+| 参数              | 说明                                                    | 类型                                             | 默认值  |
+| ----------------- | ------------------------------------------------------- | ------------------------------------------------ | ------- |
+| `default-value`   | 非受控初始值，仅初始化读取                              | DateValue / DateValue[]                          | —       |
+| `value-format`    | 模型与事件的格式，可为自定义日期格式、Date 或 timestamp | string                                           | 随 type |
+| `min` / `max`     | 包含端点的边界；字符串按 value-format 解析              | DateValue                                        | —       |
+| `disabled-time`   | 当前日期、端点的时间禁用列表                            | (date: Date, side: DateSide) => DateDisabledTime | —       |
+| `disable-confirm` | 选择后立即提交                                          | boolean                                          | true    |
 
 `DateValue = Date | string | number`。单值清除为 undefined，范围清除为 []。
 `disabledDate(date, side)` 和 `disabledTime(date, side)` 的 date 始终为 Date，side 为 start/end。
@@ -109,12 +148,12 @@ The “disable day 20 as the end” switch changes `disabled-date` dynamically. 
 
 ### Events
 
-| 事件 | 说明 | 参数 |
-| --- | --- | --- |
-| `update:model-value` | 写入模型 | value |
-| `select` | 选择草稿，不等于提交 | value, date(s), formatted text(s) |
-| `change` | 有效值正式变化 | value, date(s), formatted text(s) |
-| `confirm` | 确认有效选择，不使用 ok | value, date(s), formatted text(s) |
+| 事件                 | 说明                    | 参数                              |
+| -------------------- | ----------------------- | --------------------------------- |
+| `update:model-value` | 写入模型                | value                             |
+| `select`             | 选择草稿，不等于提交    | value, date(s), formatted text(s) |
+| `change`             | 有效值正式变化          | value, date(s), formatted text(s) |
+| `confirm`            | 确认有效选择，不使用 ok | value, date(s), formatted text(s) |
 
 设置 `:disable-confirm="false"` 显示确认区；`actions` 插槽提供 `{ confirm, disabled }`，自定义操作仍须调用 confirm 完成校验。
 

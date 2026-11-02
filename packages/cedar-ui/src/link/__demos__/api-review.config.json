@@ -104,7 +104,7 @@
       "name": "default",
       "kind": "slot",
       "demos": [
-        "link-status.vue"
+        "appearance-comparison.vue"
       ]
     },
     {

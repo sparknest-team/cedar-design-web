@@ -52,7 +52,7 @@ describe("Scheduler external editing requests", () => {
   test("toolbar and cells produce unique complete drafts without opening the drawer or saving", async () => {
     const wrapper = setup();
     await wrapper
-      .get(".c-scheduler__toolbar button:last-child")
+      .findAll(".c-scheduler__toolbar button").find(button => button.text() === "新建日程")!
       .trigger("click");
     expect(requests(wrapper)[0]).toMatchObject({
       action: "create",

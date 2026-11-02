@@ -56,17 +56,17 @@
       "kind": "boolean"
     },
     {
-      "name": "presentation",
-      "type": "'inline' | 'click' | 'dblclick'",
+      "name": "edit-mode",
+      "type": "'direct' | 'click' | 'dblclick'",
       "defaultValue": "undefined",
-      "description": "字段编辑方式，字段 > FormItem > Form 继承；默认 inline。",
+      "description": "字段编辑方式，字段 > FormItem > Form 继承；默认 direct。",
       "kind": "enum",
       "options": [
-        "inline",
+        "direct",
         "click",
         "dblclick"
       ],
-      "initial": "inline"
+      "initial": "direct"
     },
     {
       "name": "read-pretty",
@@ -219,9 +219,8 @@
         "custom-radio.vue",
         "grid-layout.vue",
         "group-direction.vue",
-        "group-options.vue",
+        "group-declaration-comparison.vue",
         "group-state.vue",
-        "group.vue",
         "keyboard-navigation.vue",
         "native-control.vue",
         "option-data.vue"
@@ -253,9 +252,8 @@
         "custom-radio.vue",
         "grid-layout.vue",
         "group-direction.vue",
-        "group-options.vue",
+        "group-declaration-comparison.vue",
         "group-state.vue",
-        "group.vue",
         "keyboard-navigation.vue",
         "native-control.vue",
         "option-data.vue"

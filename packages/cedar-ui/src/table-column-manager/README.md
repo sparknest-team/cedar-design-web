@@ -10,19 +10,35 @@ permalink: /components/table-column-manager/
 - 传入 `inline` 可只渲染内联面板，用于放入自定义弹窗 / 容器。
 - 与 Table **解耦**：Table 只提供 `v-model:columns`、`extra-column`、`#header-cell-actions` 等扩展点；列管理 UI / 算法由外部组合。
 
-## 基础用法
+## 基础示例
+
+### 基础用法
 
 组件自身渲染抽屉；弹窗场景使用 `inline` 内联面板放入 `c-dialog`。
 
 <demo src="./__demos__/basic.vue"></demo>
 
-## 与 Table 组合：不分组
+## Table 组合与持久化
+
+### 与 Table 组合：不分组
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `open` | 抽屉是否可见（`v-model:open`） | 按钮切换抽屉 / 弹窗 |
+| `columns` | 当前表格列，确认时拼回完整列定义 | 按钮切换抽屉 / 弹窗 |
+| `options` | 左侧列定义 | 按钮切换抽屉 / 弹窗 |
+| `drawer-title` | 抽屉标题 | 按钮切换抽屉 / 弹窗 |
+| `inline` | 是否只渲染内联面板（不渲染抽屉） | 按钮切换抽屉 / 弹窗 |
+<!-- demo-config-notes:end -->
 
 普通数组形式的 `columnDefinitions`，覆盖必选列、左右冻结、列宽调整、插槽、重命名和表头快捷操作。
 
 <demo src="./__demos__/with-table-ungrouped.vue"></demo>
 
-## 与 Table 组合：分组与持久化
+### 与 Table 组合：分组与持久化
 
 配合 `useTableColumnManager` 组合式函数，一行接入：
 
@@ -34,24 +50,19 @@ permalink: /components/table-column-manager/
 
 <demo src="./__demos__/with-table-header-menu.vue"></demo>
 
-## 按钮切换抽屉 / 弹窗
+### 按钮切换抽屉 / 弹窗
 
 外部选择容器类型：抽屉模式直接用组件，弹窗模式传入 `inline`。
 
 <demo src="./__demos__/with-table.vue"></demo>
 
-## 异步目录与远程搜索
+## 异步目录与搜索
+
+### 异步目录与远程搜索
 
 `loadOptions` 加载全量目录，`remoteSearch` 驱动搜索。
 
 <demo src="./__demos__/remote.vue"></demo>
-
-<!-- api-review:start -->
-### 功能调试
-
-<demo src="./__demos__/api-review.vue"></demo>
-
-<!-- api-review:end -->
 
 ## API
 
@@ -219,3 +230,5 @@ const manager = useTableColumnManager({
 ### 工具函数（列管理包内）
 
 `buildColumnsResult` / `stateFromColumns` / `applyColumnEdit` / `applyColumnFixed` / `applyInsertToLayout` / `mapLeafColumns` 等用于外部组合时拼装、编辑分组、冻结重排。扁平叶子列表请在业务侧从 `columns` 自行遍历，不必依赖 Table 导出。
+
+目录加载、远程搜索分别持有等待状态，旧任务不能解除新任务的等待。loadOptions 在创建时、函数更换时以及显式 loadCatalog 调用时读取，不由普通通知事件返回的 Promise 驱动；手动调用拒绝仍向调用方传递，自动读取异常进入 Vue 错误通道。hook 目录读取/远程搜索使用最新目录代次，restore 有独立代次，更新的列编辑或卸载令旧恢复结果失效。

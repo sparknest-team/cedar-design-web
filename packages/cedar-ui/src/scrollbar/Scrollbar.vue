@@ -11,7 +11,7 @@
       v-if="!hide && hasHorizontalScrollbar"
       ref="horizontalThumbRef"
       :data="horizontalData"
-      direction="horizontal"
+      orientation="horizontal"
       :both="isBoth"
       @scroll="handleHorizontalScroll"
     />
@@ -19,7 +19,7 @@
       v-if="!hide && hasVerticalScrollbar"
       ref="verticalThumbRef"
       :data="verticalData"
-      direction="vertical"
+      orientation="vertical"
       :both="isBoth"
       @scroll="handleVerticalScroll"
     />
@@ -27,9 +27,11 @@
 </template>
 
 <script lang="ts">
+import { physicalScrollLeft, nativeScrollLeft, useDirection } from '../_utils/direction'
+
 import { scrollbarProps } from './props'
 import { createNamespace } from '../_utils/global-config'
-import { computed, CSSProperties, defineComponent, onActivated, onBeforeUnmount, onDeactivated, onMounted, PropType, ref, StyleValue } from 'vue'
+import { computed, CSSProperties, defineComponent, onActivated, onBeforeUnmount, onDeactivated, onMounted, PropType, ref, watch, StyleValue } from 'vue'
 import { ThumbData } from './types'
 import ResizeObserver from '../_components/resize-observer-v2'
 import Thumb from './Thumb.vue'
@@ -58,6 +60,7 @@ export default defineComponent({
     const prefixCls = getPrefixCls('scrollbar')
 
     const containerRef = ref<HTMLElement>()
+    const { dir } = useDirection(() => containerRef.value)
     const horizontalData = ref<ThumbData>()
     const verticalData = ref<ThumbData>()
     const horizontalThumbRef = ref()
@@ -109,7 +112,9 @@ export default defineComponent({
       // Zero is a real position; do not leave a stale thumb at the previous offset.
       verticalThumbRef.value?.setOffset(thumbOffset(scrollTop, vData))
       if (!current(token, element)) { return }
-      horizontalThumbRef.value?.setOffset(thumbOffset(scrollLeft, hData))
+      const horizontalOffset = physicalScrollLeft(element)
+      if (!current(token, element)) { return }
+      horizontalThumbRef.value?.setOffset(thumbOffset(horizontalOffset, hData))
     }
     const handleResize = computed(() => {
       const epoch = binding.value
@@ -124,7 +129,7 @@ export default defineComponent({
         if (!available() || epoch !== binding.value || !element) { return }
         const token = ++operation
         if (hasHorizontalScrollbar.value && horizontalData.value) {
-          const offset = thumbOffset(element.scrollLeft, horizontalData.value)
+          const offset = thumbOffset(physicalScrollLeft(element), horizontalData.value)
           if (!current(token, element)) { return }
           horizontalThumbRef.value?.setOffset(offset)
         }
@@ -141,8 +146,11 @@ export default defineComponent({
       const epoch = binding.value
       return (offset: number) => {
         if (available() && epoch === binding.value && !props.hide && hasHorizontalScrollbar.value) {
-          operation++
-          containerRef.value?.scrollTo({ left: offset * (horizontalData.value?.ratio ?? 1) })
+          const token = ++operation
+          const element = containerRef.value
+          if (!element) { return }
+          const left = nativeScrollLeft(element, offset * (horizontalData.value?.ratio ?? 1))
+          if (current(token, element)) { element.scrollTo({ left }) }
         }
       }
     })
@@ -175,6 +183,7 @@ export default defineComponent({
       operation++
       binding.value++
     }
+    watch(dir, getContainerSize, { flush: 'post' })
     onMounted(getContainerSize)
     onDeactivated(suspend)
     onBeforeUnmount(() => { disposed = true; suspend() })

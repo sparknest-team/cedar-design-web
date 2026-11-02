@@ -7,6 +7,8 @@
 > Cedar/Maple 共用的 API、Token、测试、可访问性、SSR 与版本规则以
 > `design-ui/standards/` 为准；本文只补充 Cedar 的目录和实现约定。
 
+> 新增 / 调整方向、位置或方位 API，必须先读共享 [API 命名规范](../../../../../design-ui/standards/api-design.md)，登记语义与值域，并运行仓库根目录 `pnpm check:api-naming`；既有待迁移项不能作为新组件命名先例。
+
 ---
 
 ## 1. 目录结构
@@ -97,7 +99,7 @@ app.component(componentPrefix + _Button.name, _Button);
 
 - **类型名**：标准 PascalCase，缩写也大写。`ButtonVariant`（**不是** `Buttonvariant`）。
 - **props 文件**：`props.ts`，导出 `xxxProps`（运行时定义）与 `XxxProps`（`ExtractPropTypes`）。
-- **demo 文件**：`__demos__/<kebab-case>.vue`，例如 `auto-loading.vue`、`button-group.vue`、`size-inset.vue`。**不允许 camelCase**。
+- **demo 文件**：`__demos__/<kebab-case>.vue`，例如 `controlled-loading.vue`、`button-group.vue`、`size-inset.vue`。**不允许 camelCase**。
 
 ---
 
@@ -152,7 +154,6 @@ export const buttonProps = {
     type: String as PropType<Status>,
   },
   // ...
-  onClick: defineListenerProp<(e: Event) => void | Promise<any>>(),
 };
 
 export type ButtonProps = ExtractPropTypes<typeof buttonProps>;
@@ -172,7 +173,7 @@ export type ButtonProps = ExtractPropTypes<typeof buttonProps>;
 
 ### 4.3 通用 prop 语义（必须遵守）
 
-Button 和 SplitButton 的 `onClick` 是消费 Promise 返回值以驱动 `autoLoading` 的控制回调例外，保留 `@click` 用法，不同时 emit click；SplitButton 直接透传两组点击回调给 Button。
+Button/SplitButton 的 click/touchstart 使用普通 Emits 通知，支持 async 监听器，但不使用监听器返回值驱动加载。业务通过 loading（SplitButton 通过 buttonProps.loading）控制等待，并在 finally 中恢复；错误处理使用正常的 Vue 事件错误链。基础 Button 不提供 action 或 autoLoading 任务入口。
 
 某些 prop 在多个组件中反复出现，**必须保持一致语义**，组件不得自行赋予不同含义：
 
@@ -185,7 +186,6 @@ Button 和 SplitButton 的 `onClick` 是消费 Promise 返回值以驱动 `autoL
 | `disabled`                             | `boolean`                                       | 禁用，子组件 `default: undefined` 用于继承父级                                                                                 |
 | `block`                                | `boolean`                                       | 是否撑满父容器宽度                                                                                                             |
 | `loading`                              | `boolean`                                       | 加载中态，禁止触发 click                                                                                                       |
-| `autoLoading`                          | `boolean`                                       | onClick 返回 Promise 时自动接管 loading 态                                                                                     |
 | `round`                                | `boolean`                                       | 圆形                                                                                                                           |
 | `color`                                | `string`                                        | 自定义背景色（透传到 CSS 变量或 inline style）                                                                                 |
 | `textColor`                            | `string`                                        | 自定义文字色                                                                                                                   |
@@ -341,12 +341,17 @@ permalink: /components/<component>/
 
 一句话简介。
 
-## 案例
+## 基础示例
 
 ### 基础用法
 
 <demo src="./__demos__/basic.vue"></demo>
-... 其他案例
+
+## 组件功能分组
+
+### 同类功能案例
+
+... 按组件能力由简单到复杂、由静态到动态分组
 
 ## API
 

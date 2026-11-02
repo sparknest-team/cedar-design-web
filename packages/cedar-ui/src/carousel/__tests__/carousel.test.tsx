@@ -19,7 +19,7 @@ describe('Carousel', () => {
 
     expect(Carousel.name).toBe('CCarousel')
     expect(CarouselItem.name).toBe('CCarouselItem')
-    expect(carouselProps.direction.default).toBe('horizontal')
+    expect(carouselProps.orientation.default).toBe('horizontal')
     expect(carouselProps.autoPlay.default).toBe(false)
     expect(carouselProps.indicatorType.default).toBe('dot')
     expect(carouselProps.showArrow.default).toBe('always')

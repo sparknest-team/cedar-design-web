@@ -5,6 +5,7 @@
   --c-checkbox-control-color-disabled: var(--c-sys-color-content-disabled);
   --c-checkbox-control-color-error: var(--c-sys-color-content-danger);
   --c-checkbox-control-size: 14px;
+  --c-checkbox-control-border-radius: 2px;
   --c-checkbox-label-text-color: var(--c-sys-color-content-primary);
   --c-checkbox-label-text-color-disabled: var(--c-sys-color-content-disabled);
   --c-checkbox-label-font-size: var(~"--c-font-size-body-3");
@@ -13,9 +14,10 @@
   --c-checkbox-group-gap: var(~"--c-spacing-7");
   --c-checkbox-animation-duration: var(~"--c-transition-duration-3");
 
+  --c-checkbox-mark-color: var(--c-sys-color-surface-default);
   // Independent copies of rendering details; platform defaults live above.
   --c-internal-checkbox-border-width: 1px;
-  --c-internal-checkbox-border-radius: 2px;
+  --c-internal-checkbox-border-radius: var(--c-checkbox-control-border-radius);
   --c-internal-checkbox-action-radius: 50%;
   --c-internal-checkbox-focus-width: 2px;
   --c-internal-checkbox-focus-offset: 2px;
@@ -25,5 +27,5 @@
   --c-internal-checkbox-mark-size: 75%;
   --c-internal-checkbox-mark-height: 2px;
   --c-internal-checkbox-mark-radius: 1px;
-  --c-internal-checkbox-mark-color: var(--c-sys-color-surface-default);
+  --c-internal-checkbox-mark-color: var(--c-checkbox-mark-color);
 }

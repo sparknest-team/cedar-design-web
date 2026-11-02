@@ -20,10 +20,11 @@ describe('Button', () => {
     wrapper.element.dispatchEvent(click)
     expect(wrapper.element.tagName).toBe('A')
     expect(wrapper.attributes()).toMatchObject({
-      href: '/danger',
+      role: 'link',
       'aria-disabled': 'true',
       tabindex: '-1',
     })
+    expect(wrapper.attributes('href')).toBeUndefined()
     expect(wrapper.attributes('disabled')).toBeUndefined()
     expect(wrapper.attributes('type')).toBeUndefined()
     expect(click.defaultPrevented).toBe(true)

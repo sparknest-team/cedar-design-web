@@ -10,7 +10,7 @@ const disabledHours = () => [0, 1, 2, 3, 4, 5, 6, 7];
 </script>
 
 <template>
-  <div style="display: flex; flex-direction: column; gap: 12px; width: 100%">
+  <c-space direction="column" size="12px" style="width: 100%">
     <c-checkbox v-model="immediate"> 跳过确认，选择即提交</c-checkbox>
     <c-checkbox v-model="hideDisabled"> 隐藏禁用小时（00–07）</c-checkbox>
     <c-checkbox v-model="readonly"> 只读（草稿不可提交）</c-checkbox>
@@ -33,5 +33,5 @@ const disabledHours = () => [0, 1, 2, 3, 4, 5, 6, 7];
     <span>有效确认次数: {{ confirmations }}</span>
     <span>已提交值: {{ value }}</span>
     <p>默认选择只修改草稿，点击确认后上方的已提交值才会更新。</p>
-  </div>
+  </c-space>
 </template>

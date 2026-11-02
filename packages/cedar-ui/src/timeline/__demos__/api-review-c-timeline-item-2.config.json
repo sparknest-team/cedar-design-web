@@ -49,9 +49,9 @@
       "kind": "string"
     },
     {
-      "name": "position",
+      "name": "contentPlacement",
       "description": "Item 位置",
-      "type": "PositionType",
+      "type": "TimelineItemContentPlacement",
       "defaultValue": "-",
       "kind": "scenario"
     }

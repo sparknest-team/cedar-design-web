@@ -1,7 +1,6 @@
 import type { PropType } from "vue";
 import { defineComponent, TransitionGroup } from "vue";
 import { getPrefixCls, createNamespace } from "../_utils/global-config";
-import { toKebabCase } from "../_utils/convert-case";
 import Notification from "./Notification.vue";
 import {
   NOTIFICATION_POSITION,
@@ -22,7 +21,7 @@ export default defineComponent({
     },
     position: {
       type: String as PropType<NotificationPosition>,
-      default: "topRight",
+      default: "top-right",
       validator: (value: any) => {
         return NOTIFICATION_POSITION.includes(value);
       },
@@ -42,10 +41,10 @@ export default defineComponent({
       return key;
     };
     const prefixCls = getPrefixCls("notification-list");
-    const kebabPosition = toKebabCase(props.position);
+    const kebabPosition = props.position;
     const { zIndex } = usePopupManager("message", { runOnMounted: true });
 
-    const isRight = props.position.includes("Right");
+    const isRight = props.position.endsWith("-right");
 
     return () => (
       <TransitionGroup

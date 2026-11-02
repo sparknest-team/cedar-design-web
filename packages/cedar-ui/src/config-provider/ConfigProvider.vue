@@ -1,9 +1,10 @@
 <template>
-  <slot />
+  <div :dir="$props.dir" style="display: contents"><slot /></div>
 </template>
 
 <script lang="ts">
-import { defineComponent, provide, reactive, toRefs, getCurrentInstance, watch } from 'vue'
+import { defineComponent, provide, reactive, toRefs, getCurrentInstance, watch, computed, inject } from 'vue'
+import { provideDirection, readingDirectionKey } from '@cedar-design/use'
 import { configProviderInjectionKey } from './context'
 import { createNamespace } from '../_utils/global-config'
 import { configProviderProps } from './props'
@@ -29,16 +30,18 @@ export default defineComponent({
    * @en Custom empty element
    * @slot empty
    * @binding {string} component
-   * @version 2.28.0
    */
   /**
    * @zh 自定义加载中元素
    * @en Custom loading element
    * @slot loading
-   * @version 2.28.0
    */
   setup(props, { slots }) {
-    const { prefixCls, locale, size, updateAtScroll, scrollToClose, rtl, theme } = toRefs(props)
+    const { prefixCls, locale, size, updateAtScroll, scrollToClose, dir, theme } = toRefs(props)
+
+    const parentDirection = inject(readingDirectionKey, undefined)
+    const direction = computed(() => props.dir ?? parentDirection?.value)
+    provideDirection(direction)
 
     const config = reactive({
       slots,
@@ -47,7 +50,7 @@ export default defineComponent({
       size,
       updateAtScroll,
       scrollToClose,
-      rtl,
+      dir,
       theme,
     })
 
@@ -63,10 +66,12 @@ export default defineComponent({
       const instance = getCurrentInstance()
       if (instance) {
         instance.appContext.app.provide(configProviderInjectionKey, config)
+        instance.appContext.app.provide(readingDirectionKey, direction)
       }
     } else {
       provide(configProviderInjectionKey, config)
     }
+    return { direction }
   },
 })
 </script>

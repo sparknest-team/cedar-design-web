@@ -3,18 +3,18 @@
     :class="
       classes(
         n(),
-        n(`--orientation-${orientation}`),
-        n(`--text-align-${textAlign}`),
-        n(`--type-${type}`),
+        n(`--orientation-${orientationValue}`),
+        n(`--text-align-${textAlignValue}`),
+        n(`--type-${typeValue}`),
         [withText(), n('--with-text')],
-        [withPresetInset, n(`--inset-${inset}`)],
-        [withPresetSpacing, n(`--spacing-${spacing}`)],
+        [withPresetInset, n(`--inset-${insetValue}`)],
+        [withPresetSpacing, n(`--spacing-${spacingValue}`)],
         [hairline, n('--hairline')],
       )
     "
     :style="rootStyle"
     role="separator"
-    :aria-orientation="orientation"
+    :aria-orientation="orientationValue"
   >
     <slot>
       <span v-if="description" :class="n('text')">{{ description }}</span>
@@ -23,73 +23,108 @@
 </template>
 
 <script setup lang="ts">
-import { computed, useSlots, type CSSProperties } from 'vue'
-import { createNamespace } from '../_utils/global-config'
-import { toSizeUnit } from '../_utils/maple/elements'
-import { dividerProps } from './props'
+import { computed, useSlots, type CSSProperties } from "vue";
+import { createNamespace } from "../_utils/global-config";
+import { toSizeUnit } from "../_utils/maple/elements";
+import { componentSizes, orientations } from "../_utils/constant";
+import {
+  dividerProps,
+  dividerTextAligns,
+  dividerTypes,
+  isValidDividerThickness,
+  isValidDividerOpacity,
+  resolveDividerSize,
+  type DividerSize,
+} from "./props";
 
-defineOptions({ name: createNamespace('divider').name })
-const { n, classes } = createNamespace('divider')
-const props = defineProps(dividerProps)
-const slots = useSlots()
-const SIZE_PRESETS = ['xs', 'sm', 'md', 'lg', 'xl'] as const
+defineOptions({ name: createNamespace("divider").name });
+const { n, classes } = createNamespace("divider");
+const props = defineProps(dividerProps);
+const slots = useSlots();
+const orientationValue = computed(() =>
+  orientations.includes(props.orientation) ? props.orientation : "horizontal",
+);
+const textAlignValue = computed(() =>
+  dividerTextAligns.includes(props.textAlign) ? props.textAlign : "center",
+);
+const typeValue = computed(() =>
+  dividerTypes.includes(props.type) ? props.type : "solid",
+);
+const insetValue = computed(() => resolveDividerSize(props.inset));
+const spacingValue = computed(() => resolveDividerSize(props.spacing, "md"));
 
-const withText = () => Boolean(slots.default || props.description)
+const withText = () => Boolean(slots.default || props.description);
 
-const withPresetInset = computed(() => SIZE_PRESETS.includes(props.inset as (typeof SIZE_PRESETS)[number]))
-const withPresetSpacing = computed(() => SIZE_PRESETS.includes(props.spacing as (typeof SIZE_PRESETS)[number]))
+const withPresetInset = computed(() =>
+  componentSizes.includes(insetValue.value as (typeof componentSizes)[number]),
+);
+const withPresetSpacing = computed(() =>
+  componentSizes.includes(
+    spacingValue.value as (typeof componentSizes)[number],
+  ),
+);
 
 const rootStyle = computed(() => {
-  const { inset, spacing, orientation, hairline } = props
-  const styles: CSSProperties & Record<string, string | number | undefined> = {}
+  const { hairline } = props;
+  const inset = insetValue.value,
+    spacing = spacingValue.value,
+    orientation = orientationValue.value;
+  const styles: CSSProperties & Record<string, string | number | undefined> =
+    {};
 
-  if (props.thickness && !hairline) {
-    styles['--c-divider-border-width'] = toSizeUnit(props.thickness)
+  if (isValidDividerThickness(props.thickness) && !hairline) {
+    styles["--c-divider-border-width"] = toSizeUnit(props.thickness);
   }
   if (props.color) {
-    styles['--c-divider-color'] = props.color
+    styles["--c-divider-color"] = props.color;
   }
-  if (props.opacity != null) {
-    styles['--c-divider-opacity'] = String(props.opacity)
-    styles.opacity = props.opacity
+  if (isValidDividerOpacity(props.opacity)) {
+    styles["--c-divider-opacity"] = String(props.opacity);
+    styles.opacity = props.opacity;
   }
 
   if (!withPresetInset.value && inset != null) {
-    const [start, end] = resolveSpacingPair(inset)
-    if (orientation === 'horizontal') {
-      styles.maxWidth = `calc(100% - ${start} - ${end})`
-      styles.marginInlineStart = start
-      styles.marginInlineEnd = end
+    const [start, end] = resolveSpacingPair(inset);
+    if (orientation === "horizontal") {
+      styles.maxWidth = `calc(100% - ${start} - ${end})`;
+      styles.marginInlineStart = start;
+      styles.marginInlineEnd = end;
     } else {
-      styles.maxHeight = `calc(100% - ${start} - ${end})`
-      styles.marginBlockStart = start
-      styles.marginBlockEnd = end
+      styles.maxHeight = `calc(100% - ${start} - ${end})`;
+      styles.marginBlockStart = start;
+      styles.marginBlockEnd = end;
     }
   }
 
   if (!withPresetSpacing.value && spacing != null) {
-    const [start, end] = resolveSpacingPair(spacing)
-    if (orientation === 'horizontal') {
-      styles.marginBlockStart = start
-      styles.marginBlockEnd = end
+    const [start, end] = resolveSpacingPair(spacing);
+    if (orientation === "horizontal") {
+      styles.marginBlockStart = start;
+      styles.marginBlockEnd = end;
     } else {
-      styles.marginInlineStart = start
-      styles.marginInlineEnd = end
+      styles.marginInlineStart = start;
+      styles.marginInlineEnd = end;
     }
   }
 
-  return styles
-})
+  return styles;
+});
 
-function resolveSpacingPair(size: number | string | Array<number | string>) {
+function resolveSpacingPair(size: DividerSize) {
+  const unit = (value: number | string) => {
+    const length = typeof value === "string" ? value.trim() : value;
+    return toSizeUnit(
+      typeof length === "string" && Number.isFinite(Number(length))
+        ? Number(length)
+        : length,
+    ) as string;
+  };
   if (Array.isArray(size)) {
-    const start = toSizeUnit(size[0]) as string
-    const end = toSizeUnit(size.length > 1 ? size[1] : size[0]) as string
-    return [start, end] as const
+    const start = unit(size[0]);
+    const end = unit(size[1] ?? size[0]);
+    return [start, end] as const;
   }
-  const value = toSizeUnit(size) as string
-  return [value, value] as const
+  const value = unit(size);
+  return [value, value] as const;
 }
-
-
 </script>

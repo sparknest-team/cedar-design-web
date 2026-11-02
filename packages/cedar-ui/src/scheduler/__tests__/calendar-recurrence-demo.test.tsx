@@ -1,9 +1,10 @@
+import { FormItem } from "../../form";
+import { RadioGroup } from "../../radio";
 import { expect, test } from "vitest";
 import { mount, flushPromises } from "@vue/test-utils";
 import Demo from "../__demos__/calendar-recurrence.vue";
 import Scheduler from "../index";
 import Button from "../../button";
-import Select from "../../select";
 import InputNumber from "../../input-number";
 import Checkbox from "../../checkbox";
 import Space from "../../space";
@@ -14,9 +15,10 @@ test("calendar rule demo previews skip/fallback dates and keeps navigation usabl
     global: {
       components: Object.fromEntries(
         [
+          RadioGroup,
+          FormItem,
           Scheduler,
           Button,
-          Select,
           InputNumber,
           Checkbox,
           Space,
@@ -44,7 +46,7 @@ test("calendar rule demo previews skip/fallback dates and keeps navigation usabl
       new Date("2026-02-28T09:00:00"),
     );
     const preset = wrapper
-      .findAllComponents(Select)
+      .findAllComponents(RadioGroup)
       .find((item) =>
         item.props("options")?.some((option) => option.value === "weekday"),
       )!;

@@ -3,6 +3,9 @@ import { BaseType } from '../_utils/types'
 import { Filters, Sorter, TableColumnData, TableData, TableDataWithRaw } from './types'
 
 export interface TableContext {
+  readingDirection?: 'ltr' | 'rtl'
+  hasPhysicalLeftOperations?: boolean
+  physicalDataColumns?: TableColumnData[]
   loadMore?: (record: TableData, done: (children?: TableData[]) => void) => void
   addLazyLoadData: (children: TableData[] | undefined, record: TableDataWithRaw) => void
   slots: Slots
@@ -21,6 +24,7 @@ export interface TableContext {
 
   onSorterChange: (dataIndex: string, direction: 'ascend' | 'descend' | '', ev: Event) => void
   onFilterChange: (dataIndex: string, filteredValues: string[], ev: Event) => void
+  onThKeydown?: (dataIndex: string, event: KeyboardEvent) => void
   onThMouseDown: (dataIndex: string, ev: MouseEvent) => void
 
   /** 末列扩展列 dataIndex（配合 #extra-column-header / #extra-column-cell） */

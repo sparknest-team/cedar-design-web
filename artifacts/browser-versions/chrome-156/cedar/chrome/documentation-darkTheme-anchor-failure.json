@@ -1,0 +1,70 @@
+{
+  "failures": [],
+  "diagnostic": {
+    "url": "http://127.0.0.1:57273/components/anchor/",
+    "text": "p 地图\n\n反馈与浮层\n\nAlert 警告提示 [已同源]\nMessage 消息 [逻辑已同源]\nNotification 通知提醒框\nResult 结果 [已同源]\nEmpty 空状态 [已同源]\nLoading 加载 [已同源]\nSkeleton 骨架屏 [已同源]\nProgress 进度条 [已同源]\nProgressGroup 分组进度 [已同源]\nTooltip 文字气泡 [已同源]\nPopover 气泡卡片 [已同源]\nPopconfirm 气泡确认框\nDialog 对话框 [逻辑已同源]\nDrawer 抽屉 [逻辑已同源]\nOverlay 背景层 [已同源]\n\n配置与交互基础\n\nConfigProvider 全局配置\nStyleProvider [已同源]\nFieldDecorator 字段外壳\nTrigger 浮层触发 [已同源]\nWatermark 水印 [已同源]\nRipple 水波指令 [已同源]\nHover 悬停反馈\nHomeComponentsAnchor\nAnchor\n孟帅、吴甲明\n2026年7月8日\n大约 3 分钟\n此页内容\n基础示例\n基础用法\n布局与排列\n固钉位置\n内容与展示\n无轴线模式\n是否改变hash\n生命周期与边界\n锚点滚动偏移量\n滚动消费者生命周期\nAPI\n<anchor> Props\n<anchor> Events\n<anchor-link> Props\n类型定义\n\n通过锚点可快速找到信息内容在当前页面的位置。\n\n基础示例\n基础用法\n\n锚点的基本用法\n\n基础用法\n无轴线模式\n固钉位置 Affix\nScroll Boundary\nScroll Boundary1\nHash mode1\n是否改变hash\n布局与排列\n固钉位置\n\n使用 affix 组件可以让锚点固定在页面之内。\n\nBasic\nShow Rail\nAffix\nScroll Boundary\nHash mode\n内容与展示\n无轴线模式\n本组配置对照\n配置\t作用\t相关示例\nshow-line\t是否显示左侧轴线\t无轴线模式\nchange-hash\t是否改变hash。设置为 false 时点击锚点不会改变页面的 hash\t是否改变hash\n\n当页面滚动或浏览器窗口改变时，元素向下滚动到距底部一定距离时固定。\n\nBasic\nShow Rail\nAffix\nScroll Boundary\nHash mode\n是否改变hash\n\n可以设置点击锚点而不改变浏览器历史。\n\nBasic\nShow Line\nAffix\nScroll Boundary\nHash mode\n生命周期与边界\n锚点滚动偏移量\n\n可以设置 boundary 来定制锚点滚动偏移量。\n\nBasic\nShow Rail\nAffix\nScroll Boundary\nHash mode\n滚动消费者生命周期\n切换 KeepAlive\n卸载／挂载\n\n切换链接后立即停用或卸载；激活后再次点击，检查旧滚动不会恢复。change 通知：1\n\n第一段\n第二段\n第一段内容\n第二段内容\n\n连续点击会取消上一次滚动；KeepAlive 停用、卸载、滚动容器或 boundary 改变会取消当前滚动与测量帧，移除原容器监听。激活只重新绑定和测量，不恢复旧动画。旧通知、旧滚动完成和重复帧不能覆盖新阶段；同一目标的重复点击仍保留一次有效的待发 change 通知。失效的保留点击不阻止默认导航，也不发 select。\n\n私有视觉滚动保留 300ms／quartOut；它不是 CSS transition 完成计时，不新增时长 Token。帧由目标所属窗口创建／取消，每帧检查当前减少动效偏好；已开启时直接定位，运行中开启则下一帧完成。取消停在当前位置，不跳到目标、不发完成通知。nextTick 通知只能逻辑失效，不能物理撤销已排队续体或回滚已执行滚动。\n\nAnchorLink 卸载及 href 变化会注销原节点；旧节点清理不会删除同 hash 的新注册。测量／几何读取后再次核对归属，防止停用、卸载或新请求重入后提交旧结果。公开 Props／Events、颜色和 CSS 变量保持不变；Maple 没有对应 Anchor 运行时。\n\nAPI\n<anchor> Props\n参数名\t描述\t类型\t默认值\nboundary\t滚动边界值，设置该值为数字后，将会在距离滚动容器 boundary 距离时停止滚动。\t'start' | 'end' | 'center' | 'nearest' | number\t'start'\nshow-line\t是否显示左侧轴线\tboolean\ttrue\nshow-background\t是否显示背景\tboolean\ttrue\nscroll-container\t滚动容器\tstring | HTMLElement | Window\t-\nchange-hash\t是否改变hash。设置为 false 时点击锚点不会改变页面的 hash\tboolean\ttrue\n<anchor> Events\n事件名\t描述\t参数\nselect\t用户点击链接时触发\thash: string | undefined\npreHash: string\nchange\t链接发生改变时触发\thash: string\n<anchor-link> Props\n参数名\t描述\t类型\t默认值\ntitle\t锚点链接的文本内容\tstring\t-\nhref\t锚点链接的地址\tstring\t-\n类型定义\n\n组件导出以下类型定义\n\nimport type { AnchorInstance } from '@cedar-design/ui'\n\n上次编辑于: 2026/10/24 20:08:01\n贡献者: shuai.meng,mengshuai",
+    "numericSteps": [],
+    "overflow": [],
+    "previews": [
+      "<div class=\"vmi-previewer-example\" style=\"\"><div class=\"c-anchor c-anchor--show-line c-anchor--active\"><div class=\"c-anchor__link-background\" style=\"top: 0px; height: 30px;\"></div><div class=\"c-anchor__line-slider\" style=\"top: 0px; height: 30px;\"></div><ul class=\"c-anchor__list c-anchor__list-root\"><li class=\"c-anchor__link c-anchor--link-active\"><a class=\"c-anchor__link-title\" href=\"#基础用法\">基础用法</a><!----></li><li class=\"c-anchor__link\"><a class=\"c-anchor__link-title\" href=\"#无轴线模式\">无轴线模式</a><!----></li><li class=\"c-anchor__link\"><a class=\"c-anchor__link-title\" href=\"#固钉位置\">固钉位置 Affix </a><ul class=\"c-anchor__list\"><li class=\"c-anchor__link\"><a class=\"c-anchor__link-title\" href=\"#boundary\">Scroll Boundary </a><ul class=\"c-anchor__list\"><li class=\"c-anchor__link\"><a class=\"c-anchor__link-title\" href=\"#boundary1\">Scroll Boundary1</a><!----></li><li class=\"c-anchor__link\"><a class=\"c-anchor__link-title\" href=\"#hash1\">Hash mode1</a><!----></li></ul></li><li class=\"c-anchor__link\"><a class=\"c-anchor__link-title\" href=\"#是否改变hash\">是否改变hash</a><!----></li></ul></li></ul></div></div>",
+      "<div class=\"vmi-previewer-example\" style=\"\"><div class=\"c-affix\" style=\"z-index: 10;\"><div class=\"c-affix__wrapper\" style=\"z-index: 10;\"><div class=\"c-anchor c-anchor--show-line c-anchor--show-background\" style=\"background-color: var(--color-bg-1);\"><div class=\"c-anchor__link-background\"></div><div class=\"c-anchor__line-slider\"></div><ul class=\"c-anchor__list c-anchor__list-root\"><li class=\"c-anchor__link\"><a class=\"c-anchor__link-title\" href=\"#basic\">Basic</a><!----></li><li class=\"c-anchor__link\"><a class=\"c-anchor__link-title\" href=\"#show-line\">Show Rail</a><!----></li><li class=\"c-anchor__link\"><a class=\"c-anchor__link-title\" href=\"#affix\"> Affix </a><ul class=\"c-anchor__list\"><li class=\"c-anchor__link\"><a class=\"c-anchor__link-title\" href=\"#boundary\">Scroll Boundary</a><!----></li><li class=\"c-anchor__link\"><a class=\"c-anchor__link-title\" href=\"#hash\">Hash mode</a><!----></li></ul></li></ul></div></div></div></div>"
+    ],
+    "controls": [
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "选择语言",
+        "class": "vp-dropdown-title"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "搜索",
+        "class": "slimsearch-button"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "切换到 RTL / Switch to right-to-left",
+        "class": "docs-direction-toggle"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "切换主题",
+        "class": "cedar-docs-theme__trigger"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "切换 KeepAlive",
+        "class": "c-button c-button--size-md c-button--status-default c-button--variant-default c-elevation--2"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "卸载／挂载",
+        "class": "c-button c-button--size-md c-button--status-default c-button--variant-default c-elevation--2"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "复制代码",
+        "class": "vp-copy-code-button"
+      }
+    ]
+  },
+  "error": "TimeoutError: locator.waitFor: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.vmi-previewer').first().locator('.vmi-previewer-sources pre').first() to be visible\u001b[22m\n"
+}

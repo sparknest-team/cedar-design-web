@@ -73,7 +73,7 @@
     {
       "name": "placement",
       "description": "弹出位置",
-      "type": "MenuPosition",
+      "type": "MenuPlacement",
       "defaultValue": "'bottom'",
       "kind": "scenario"
     },

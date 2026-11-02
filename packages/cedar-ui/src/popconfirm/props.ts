@@ -1,18 +1,39 @@
-import { popupContainerProp } from '../_utils/popup-container'
-import type { CSSProperties, ExtractPropTypes, PropType } from 'vue'
-import type { ButtonProps } from '../button'
-import type { MessageType, TriggerPosition } from '../_utils/constant'
-import { MESSAGE_TYPES, TRIGGER_POSITIONS } from '../_utils/constant'
-import type { ClassName } from '../_utils/types'
+import { triggerPlacements, type TriggerPlacement } from '../trigger/contract';
+import type {
+  BeforeHookDone,
+  BeforeHookResult,
+} from "../_hooks/use-action-guard";
+import { popupContainerProp } from "../_utils/popup-container";
+import type { CSSProperties, ExtractPropTypes, PropType } from "vue";
+import type { ButtonProps } from "../button";
+import type { MessageType } from "../_utils/constant";
+import { MESSAGE_TYPES } from "../_utils/constant";
+import type { ClassName } from "../_utils/types";
 
-export type PopconfirmBeforeConfirm = (done: (closed?: boolean) => void) => void | boolean | Promise<void | boolean>
+export type PopconfirmBeforeConfirm = (
+ payload: { action: 'confirm' }, done: BeforeHookDone,
+ context: { signal: AbortSignal; event?: Event },
+) => BeforeHookResult;
+export type PopconfirmBeforeCancel = (
+ payload: { action: 'cancel' }, done: BeforeHookDone,
+ context: { signal: AbortSignal; event?: Event },
+) => BeforeHookResult;
 
 export const popconfirmProps = {
   content: String,
-  placement: { type: String as PropType<TriggerPosition>, default: 'top', validator: (value: TriggerPosition) => TRIGGER_POSITIONS.includes(value) },
+  /** 浮层相对触发元素的首选方位，默认 top；启用默认的 auto-fit-position 时，空间不足会自动翻转并约束到可视区域，不保证最终停在该侧 */
+  placement: {
+    type: String as PropType<TriggerPlacement>,
+    default: "top",
+    validator: (value: TriggerPlacement) => triggerPlacements.includes(value),
+  },
   open: { type: Boolean, default: undefined },
   defaultOpen: Boolean,
-  type: { type: String as PropType<MessageType>, default: 'info', validator: (value: MessageType) => MESSAGE_TYPES.includes(value) },
+  type: {
+    type: String as PropType<MessageType>,
+    default: "info",
+    validator: (value: MessageType) => MESSAGE_TYPES.includes(value),
+  },
   confirmButtonText: String,
   cancelText: String,
   confirmButtonLoading: Boolean,
@@ -24,7 +45,9 @@ export const popconfirmProps = {
   arrowStyle: Object as PropType<CSSProperties>,
   popupContainer: popupContainerProp,
   beforeConfirm: Function as PropType<PopconfirmBeforeConfirm>,
-  beforeCancel: Function as PropType<() => boolean>,
-} 
+  beforeCancel: Function as PropType<PopconfirmBeforeCancel>,
+};
 
-export type PopconfirmProps = import("vue").ExtractPublicPropTypes<typeof popconfirmProps>
+export type PopconfirmProps = import("vue").ExtractPublicPropTypes<
+  typeof popconfirmProps
+>;

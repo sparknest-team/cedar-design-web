@@ -73,7 +73,7 @@ export default defineComponent({
       classes(
         n(),
         n(`--size-${mergedSize.value}`),
-        n(`--direction-${props.direction}`),
+        n(`--direction-${props.orientation}`),
         [props.block, n('--block')],
         [mergedDisabled.value, n('--disabled')],
       ),

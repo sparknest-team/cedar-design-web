@@ -1,16 +1,28 @@
-import { withInstall } from '../_utils/global-config'
-import _PeopleSelect from './presentation'
-import { peopleSelectProps } from './props'
+import { withInstall } from "../_utils/global-config";
+import _PeopleSelect from "./PeopleSelect";
+import { peopleSelectProps } from "./props";
 
-const PeopleSelect = withInstall(_PeopleSelect, Object.assign(_PeopleSelect, {
-}), { components: [_PeopleSelect] })
+const PeopleSelect = withInstall(
+  _PeopleSelect,
+  Object.assign(_PeopleSelect, {}),
+  { components: [_PeopleSelect] },
+);
 
-export type PeopleSelectInstance = InstanceType<typeof _PeopleSelect>
-export type { PeopleSelectProps } from './props'
+export type PeopleSelectInstance = InstanceType<typeof _PeopleSelect>;
+export type { PeopleSelectProps } from "./props";
 
-export { peopleSelectProps }
-export { PeopleSelect }
+export { peopleSelectProps };
+export { PeopleSelect };
 
-export const _PeopleSelectComponent = PeopleSelect
+export const _PeopleSelectComponent = PeopleSelect;
 
-export default PeopleSelect
+export default PeopleSelect;
+
+export type {
+  PeopleSelectOption,
+  PeopleSelectOptionsLoader,
+  PeopleSelectAction,
+  PeopleSelectFallbackOption,
+  PeopleSelectRenderActions,
+  PeopleSelectActionScope,
+} from "./types";

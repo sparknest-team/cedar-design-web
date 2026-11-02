@@ -23,7 +23,7 @@ const statuses = [
     v-slot="__apiReview"
     v-bind="defineReviewConfig(__apiReviewRawConfig)"
   >
-    <div style="display: flex; flex-wrap: wrap; gap: 12px">
+    <c-space wrap size="12px">
       <c-button
         v-for="status in statuses"
         :key="status"
@@ -38,6 +38,6 @@ const statuses = [
             :controls="__apiReview.controls"
             :record="__apiReview.record" /></template
       ></c-button>
-    </div>
+    </c-space>
   </DemoApiReviewPanel>
 </template>

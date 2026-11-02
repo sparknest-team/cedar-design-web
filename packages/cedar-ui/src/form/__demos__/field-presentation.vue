@@ -3,7 +3,7 @@ import ModelOutput from "../__demo-utils__/ModelOutput.vue";
 
 import { computed, ref } from "vue";
 
-const presentation = ref("inline");
+const editMode = ref("direct");
 const readPretty = ref(false);
 
 const options = ref([
@@ -19,27 +19,30 @@ const form = ref({
 });
 const status = ref("");
 
-const modeOptions = ["inline", "click", "dblclick"].map((value) => ({
+const modeOptions = ["direct", "click", "dblclick"].map((value) => ({
   label: value,
   value,
 }));
 const committed = computed(() => JSON.stringify(form.value));
 const presentationHint = computed(() =>
   readPretty.value
-    ? "只展示已保存的值；下方“单项覆盖 inline”通过 readPretty=false 保持可编辑。"
-    : presentation.value === "inline"
+    ? "只展示已保存的值；下方“单项覆盖 direct”通过 readPretty=false 保持可编辑。"
+    : editMode.value === "direct"
       ? "直接编辑，即时更新下方模型；选择设备无需额外确认。"
       : "按展示方式进入编辑；确认才更新下方模型，取消不保存本次修改。",
 );
 </script>
 <template>
-  <c-space direction="column" :size="16">
-    <c-select
-      v-model="presentation"
-      :options="modeOptions"
-      placeholder="Form 展示方式"
-      :clearable="false"
-    />
+  <c-space direction="column" align="stretch" :size="16">
+    <c-form-item layout="vertical" size="sm" label="Form 展示方式">
+      <c-radio-group
+        aria-label="Form 展示方式"
+        v-model="editMode"
+        :options="modeOptions"
+        variant="button"
+        size="sm"
+      />
+    </c-form-item>
     <c-space wrap>
       <c-checkbox v-model="readPretty">纯阅读 readPretty</c-checkbox>
     </c-space>
@@ -49,7 +52,7 @@ const presentationHint = computed(() =>
     </p>
     <c-form
       :model="form"
-      :presentation="presentation"
+      :edit-mode="editMode"
       :read-pretty="readPretty"
       @submit-success="status = '表单已提交'"
       @submit-failed="status = '请完成当前编辑或修正校验错误'"
@@ -77,8 +80,8 @@ const presentationHint = computed(() =>
       </c-form-item>
       <c-form-item
         field="note"
-        label="单项覆盖 inline"
-        presentation="inline"
+        label="单项覆盖 direct"
+        edit-mode="direct"
         :read-pretty="false"
       >
         <c-input v-model="form.note" />

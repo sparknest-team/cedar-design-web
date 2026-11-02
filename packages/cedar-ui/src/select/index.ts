@@ -1,13 +1,17 @@
 import { withInstall } from '../_utils/global-config'
-import _Select from './select'
-import _Option from './Option.vue'
 import _Optgroup from './Optgroup.vue'
+import _Option from './Option.vue'
 import { selectProps } from './props'
+import _Select from './select'
 
-const Select = withInstall(_Select, Object.assign(_Select, {
-  Option: _Option,
-  OptGroup: _Optgroup,
-}), { components: [_Select, _Option, _Optgroup] })
+const Select = withInstall(
+  _Select,
+  Object.assign(_Select, {
+    Option: _Option,
+    OptGroup: _Optgroup,
+  }),
+  { components: [_Select, _Option, _Optgroup] },
+)
 
 export type SelectInstance = InstanceType<typeof _Select>
 export type OptionInstance = InstanceType<typeof _Option>
@@ -18,6 +22,10 @@ export const optionProps = _Option.props
 export const optgroupProps = _Optgroup.props
 export { selectProps }
 export type {
+  SelectOptionsLoader,
+  SelectValue,
+  SelectEmptyValue,
+  OptionSearchField,
   SelectOption,
   SelectOptionData,
   SelectOptionGroup,
@@ -32,3 +40,7 @@ export const _OptionComponent = _Option
 export const _OptgroupComponent = _Optgroup
 
 export default Select
+
+export type { SelectEmits, SelectSlots, SelectExpose } from './types'
+
+export type { SelectTriggerOptions } from './trigger-options'

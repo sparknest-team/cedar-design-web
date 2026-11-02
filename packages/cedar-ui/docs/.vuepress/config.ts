@@ -1,4 +1,5 @@
 import vueJsx from '@vitejs/plugin-vue-jsx'
+import { browserTargets } from '@cedar-design/cli'
 import path from 'path'
 import { defineUserConfig } from 'vuepress'
 import { viteBundler } from '@vuepress/bundler-vite'
@@ -86,6 +87,7 @@ export default defineUserConfig({
     viteOptions: {
       root: path.resolve(docsTemp, 'vite-root'),
       configFile: false,
+      build: { target: [...browserTargets], cssTarget: [...browserTargets] },
       esbuild: {
         jsx: 'preserve',
       },
@@ -136,6 +138,7 @@ export default defineUserConfig({
       resolve: {
         dedupe: ['vue'],
         alias: [
+          { find: /^@cedar-design\/use$/, replacement: path.resolve(projRoot, '../cedar-use/src/index.ts') },
           {
             find: '@sparknest/ui-doc-preview',
             replacement: path.resolve(projRoot, '../../../design-ui/packages/ui-doc-preview/src/index.ts'),

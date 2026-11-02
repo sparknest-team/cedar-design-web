@@ -1,3 +1,4 @@
+import type { ReadingDirection } from '../_utils/direction'
 import type { TriggerPlacement } from './contract'
 
 export interface TriggerSize { width: number; height: number }
@@ -42,7 +43,7 @@ export function getTriggerPosition(placement: TriggerPlacement, x: number, y: nu
   }
 }
 
-export function getPlacementOffset(placement: TriggerPlacement, reference: { scrollLeft: number; scrollTop: number; width: number; height: number }, popup: TriggerSize, distance = 0, translate: readonly number[] = [0, 0]) {
+export function getPlacementOffset(placement: TriggerPlacement, reference: { scrollLeft: number; scrollTop: number; width: number; height: number }, popup: TriggerSize, distance = 0, translate: readonly number[] = [0, 0], direction: ReadingDirection = 'ltr') {
   const [side, alignment] = placement.split('-')
   const horizontal = side === 'left' || side === 'right'
   let left = reference.scrollLeft + (reference.width - popup.width) / 2
@@ -52,12 +53,15 @@ export function getPlacementOffset(placement: TriggerPlacement, reference: { scr
     if (alignment) top = reference.scrollTop + (alignment === 'end' ? reference.height - popup.height : 0)
   } else {
     top = side === 'top' ? reference.scrollTop - popup.height - distance : reference.scrollTop + reference.height + distance
-    if (alignment) left = reference.scrollLeft + (alignment === 'end' ? reference.width - popup.width : 0)
+    if (alignment) left = reference.scrollLeft + ((alignment === 'end') !== (direction === 'rtl') ? reference.width - popup.width : 0)
   }
   return { left: left + translate[0], top: top + translate[1] }
 }
 
-export function getTransformOrigin(position: TriggerPlacement) {
+export function getTransformOrigin(position: TriggerPlacement, direction: ReadingDirection = 'ltr') {
+  if (direction === 'rtl' && /^(top|bottom)-(start|end)$/.test(position)) {
+    position = position.replace(/(start|end)$/, (align) => align === 'start' ? 'end' : 'start') as TriggerPlacement
+  }
   const x = /^(top|bottom)$/.test(position) ? '50%' : /^(left|top-end|bottom-end)/.test(position) ? '100%' : '0'
   const y = /^(left|right)$/.test(position) ? '50%' : /^(top|left-end|right-end)/.test(position) ? '100%' : '0'
   return `${x} ${y}`

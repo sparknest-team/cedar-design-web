@@ -13,7 +13,10 @@ const maple = resolve(
 
 for (const file of ["props.ts", "__tests__/same-source.spec.ts"]) {
   assert.equal(
-    readFileSync(resolve(cedar, file), "utf8"),
+    readFileSync(resolve(cedar, file), "utf8").replaceAll(
+      "../_utils/empty-value",
+      "../utils/empty-value",
+    ),
     readFileSync(resolve(maple, file), "utf8"),
     `${file} differs`,
   );

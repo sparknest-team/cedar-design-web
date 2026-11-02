@@ -3,25 +3,29 @@
     :is="editor ? EditorContent : Trigger"
     :class="`${prefixCls}-trigger`"
     auto-fit-popup-min-width
-    trigger="click"
     placement="bottom-start"
     :popup-offset="4"
     animation-name="slide-dynamic-origin"
     :prevent-focus="true"
     v-bind="triggerProps"
+    :trigger="
+      openTriggerTarget === 'icon' ? 'click' : triggerProps?.trigger || 'click'
+    "
     :disabled="mergedDisabled || mergedReadonly"
     :open="panelVisible"
     :popup-container="popupContainer"
-    :close-on-click-reference="!allowSearch"
+    :close-on-click-reference="!searchEnabled"
     auto-fit-transform-origin
     @open-change="onVisibleChange"
   >
     <slot name="trigger">
       <SelectionField
+        :loading-mode="loadingMode"
         ref="refSelectionField"
+        :open-trigger-target="openTriggerTarget"
         :items="selectViewValue"
         :input-value="searchValue"
-        :searchable="Boolean(allowSearch)"
+        :searchable="searchEnabled"
         :clearable="clearable"
         :loading="loading"
         :size="mergedSize"
@@ -61,9 +65,9 @@
         @clear="onEditorClear"
       >
         <Input
-          v-if="editor && allowSearch"
+          v-if="editor && searchEnabled"
           :model-value="searchValue"
-          presentation="inline"
+          edit-mode="direct"
           variant="outline"
           :hint="false"
           :disabled="mergedDisabled || mergedReadonly"
@@ -106,7 +110,7 @@
               actionOnNodeClick: selectable === 'leaf' ? 'expand' : undefined,
               blockNode: true,
               ...treeProps,
-              data,
+              data: resolvedData,
               checkStrictly: treeCheckStrictly,
               checkedStrategy: treeCheckedStrategy,
               fieldNames,
@@ -133,6 +137,8 @@
   </component>
 </template>
 <script lang="ts">
+import { useOptionRequest } from "../_hooks/use-option-request";
+import { resolveEmptyValue, useEmptyValues } from "../_utils/empty-value";
 import Input from "../input";
 import SelectedOptions from "../_components/selected-options/SelectedOptions.vue";
 import { selectionEditorSurface } from "../_components/selected-options/context";
@@ -168,8 +174,9 @@ import {
   TreeNodeValue,
   Node,
 } from "../tree/types";
-import { isUndefined, isFunction, isObject } from "../_utils/is";
+import { isUndefined, isFunction } from "../_utils/is";
 import Empty from "../empty";
+import { matchesOptionText } from "../_utils/option-data";
 import useFilterTreeNode from "./hooks/use-filter-tree-node";
 import Loading from "../loading";
 import pickSubCompSlots from "../_utils/pick-sub-comp-slots";
@@ -210,6 +217,7 @@ export default defineComponent({
         | LabelValue
         | Array<string | number>
         | LabelValue[]
+        | null
         | undefined,
     ) => true,
     "update:modelValue": (
@@ -219,6 +227,7 @@ export default defineComponent({
         | LabelValue
         | Array<string | number>
         | LabelValue[]
+        | null
         | undefined,
     ) => true,
     "update:inputValue": (inputValue: string) => true,
@@ -234,6 +243,7 @@ export default defineComponent({
      * @en Triggered when the search value changes
      * @param {string} searchKey
      */
+    "load-error": (error: unknown) => true,
     search: (searchKey: string) => true,
     /**
      * @zh 点击清除时触发
@@ -244,7 +254,6 @@ export default defineComponent({
      * @zh 输入框的值发生改变时触发
      * @en Triggered when the value of the input changes
      * @param {string} inputValue
-     * @version 2.55.0
      */
     "input-value-change": (inputValue: string) => true,
   },
@@ -284,7 +293,6 @@ export default defineComponent({
    * @en Custom node icon for the tree component
    * @slot tree-slot-icon
    * @binding {TreeNodeData} node
-   * @version 2.18.0
    */
 
   /**
@@ -309,6 +317,7 @@ export default defineComponent({
    * @slot footer
    */
   setup(props, { emit, slots }) {
+    const searchEnabled = computed(() => props.filterable ?? props.multiple);
     const {
       defaultValue,
       modelValue,
@@ -317,7 +326,6 @@ export default defineComponent({
       defaultOpen,
       treeCheckable,
       treeCheckStrictly,
-      data,
       fieldNames,
       disabled,
       labelInValue,
@@ -341,6 +349,15 @@ export default defineComponent({
       error: computed(() => props.error),
       size: computed(() => props.size),
     });
+    const source = useOptionRequest<TreeNodeData>(
+      () => props.data,
+      () => mergedDisabled.value || mergedReadonly.value || !!props.readPretty,
+      (error) => emit("load-error", error),
+      () => 0,
+      treeSelectProps,
+    );
+    const data = source.options;
+    const loading = computed(() => props.loading || source.loading.value);
     const prefixCls = getPrefixCls("tree-select");
     const editor = inject(selectionEditorSurface, undefined);
     const texts = useFieldTexts();
@@ -348,6 +365,7 @@ export default defineComponent({
     const TreeSelectEmpty = configCtx?.slots.empty?.({
       component: "tree-select",
     })?.[0];
+    const emptyPolicy = useEmptyValues(props);
     const isMultiple = computed(() => multiple.value || treeCheckable.value);
     const isSelectable = (
       node: TreeNodeData,
@@ -360,11 +378,7 @@ export default defineComponent({
     const isCheckable = computed(() =>
       treeCheckable.value ? isSelectable : false,
     );
-    const retainInputValue = computed(
-      () =>
-        isObject(props.allowSearch) &&
-        Boolean(props.allowSearch.retainInputValue),
-    );
+    const retainInputValue = computed(() => props.retainInputValue);
     const { flattenTreeData, key2TreeNode } = useTreeData(
       reactive({
         treeData: data,
@@ -384,6 +398,7 @@ export default defineComponent({
       reactive({
         defaultValue,
         modelValue,
+        emptyValues: emptyPolicy.emptyValues,
         key2TreeNode,
         multiple,
         treeCheckable,
@@ -419,7 +434,22 @@ export default defineComponent({
       })) as SelectionFieldItem[];
     });
 
-    const setSelectedValues = (newVal: TreeNodeValue[]) => {
+    const setSelectedValues = (newVal: TreeNodeValue[], clearing = false) => {
+      let resolved = false;
+      let clearValue: TreeNodeValue | TreeNodeValue[] | null | undefined;
+      const clearResult = () => {
+        if (!resolved) {
+          clearValue = resolveEmptyValue<
+            TreeNodeValue | TreeNodeValue[] | undefined
+          >(props, undefined);
+          resolved = true;
+        }
+        return clearValue;
+      };
+      if (clearing && newVal.length === 0 && props.emptyValue !== undefined) {
+        const empty = clearResult();
+        newVal = empty == null ? [] : Array.isArray(empty) ? empty : [empty];
+      }
       setLocalSelectedValues(newVal);
 
       nextTick(() => {
@@ -428,7 +458,12 @@ export default defineComponent({
             ? localSelectedValue.value
             : localSelectedValues.value) || [];
 
-        const emitValue = isMultiple.value ? forEmitValue : forEmitValue[0];
+        const emitValue =
+          clearing && props.emptyValue !== undefined
+            ? clearResult()
+            : isMultiple.value
+              ? forEmitValue
+              : forEmitValue[0];
 
         emit("update:modelValue", emitValue);
         emit("change", emitValue);
@@ -450,9 +485,9 @@ export default defineComponent({
     const handleInputValueChange = (inputValue: string) => {
       if (mergedDisabled.value || mergedReadonly.value) return;
       if (inputValue !== computedInputValue.value) {
-        setPanelVisible(true);
+        if (props.openTriggerTarget !== "icon") setPanelVisible(true);
         updateInputValue(inputValue);
-        if (props.allowSearch) {
+        if (searchEnabled.value) {
           emit("search", inputValue);
         }
       }
@@ -492,9 +527,15 @@ export default defineComponent({
       useFilterTreeNode(
         reactive({
           searchValue: computedInputValue,
+          caseSensitive: computed(() => props.caseSensitive),
+          searchFields: computed(() => props.searchFields),
           flattenTreeData,
           filterMethod: filterTreeNode,
-          disableFilter,
+          disableFilter: computed(
+            () =>
+              disableFilter.value ||
+              (source.remote.value && !filterTreeNode.value),
+          ),
           fieldNames,
         }),
       );
@@ -505,14 +546,24 @@ export default defineComponent({
 
     const keyboardCandidateFilter = computed(() => {
       const query = computedInputValue.value;
-      if (!query || disableFilter.value) return undefined;
+      if (
+        !query ||
+        disableFilter.value ||
+        (source.remote.value && !filterTreeNode.value)
+      )
+        return undefined;
       return (node: TreeNodeData) =>
         filterTreeNode.value
           ? filterTreeNode.value(query, node)
-          : String(
-              node[(fieldNames.value?.value ?? "value") as keyof TreeNodeData] ??
-                "",
-            ).includes(query);
+          : props.searchFields.some((field) =>
+              matchesOptionText(
+                node[
+                  (fieldNames.value?.[field] ?? field) as keyof TreeNodeData
+                ],
+                query,
+                props.caseSensitive,
+              ),
+            );
     });
     const refSelectionField = ref();
     const panelRef = ref<TreeSelectPanelHandle>();
@@ -522,7 +573,7 @@ export default defineComponent({
         event.keyCode === 229 ||
         mergedDisabled.value ||
         mergedReadonly.value ||
-        props.loading
+        loading.value
       )
         return;
       if (
@@ -553,7 +604,9 @@ export default defineComponent({
     };
 
     return {
+      resolvedData: data,
       editor,
+      searchEnabled,
       texts,
       Trigger,
       SelectedOptions,
@@ -579,6 +632,8 @@ export default defineComponent({
       panelRef,
       onKeydown,
       prefixCls,
+      loading,
+      refresh: source.refresh,
       TreeSelectEmpty,
       selectedValue,
       selectedValues,
@@ -593,7 +648,11 @@ export default defineComponent({
       isMultiple,
       selectViewValue,
       computedDropdownStyle,
-      onSearchValueChange: handleInputValueChange,
+      onSearchValueChange: (next: string | null) => {
+        const value = next ?? "";
+        handleInputValueChange(value);
+        void source.search(value);
+      },
       onSelectChange(newVal: TreeNodeValue[]) {
         if (mergedDisabled.value || mergedReadonly.value) return;
         setSelectedValues(newVal);
@@ -614,6 +673,7 @@ export default defineComponent({
               (item) => item.key === key && item.closable === false,
             ),
           ),
+          true,
         );
         emit("clear");
       },
@@ -625,6 +685,7 @@ export default defineComponent({
               (item) => item.key === key && item.closable === false,
             ),
           ),
+          true,
         );
         emit("clear");
       },

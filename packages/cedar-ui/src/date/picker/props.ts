@@ -170,7 +170,6 @@ export const pickerProps = {
     /**
      * @zh 值的格式，对 `value` `defaultValue` `pickerValue` `defaultPickerValue` 以及事件中的返回值生效，支持设置为时间戳，Date 和字符串（参考[字符串解析格式](#字符串解析格式)）。如果没有指定，将格式化为字符串，格式同 `format`。
      * @en The format of the value, valid for `value` `defaultValue` `pickerValue` `defaultPickerValue` and the return value in the event, supports setting as timestamp, Date and string (refer to [String parsing format](#string-parsing-format) ). If not specified, it will be formatted as a string, in the same format as `format`.
-     * @version 2.16.0
      */
     valueFormat: {
       type: String as PropType<'timestamp' | 'Date' | string>,
@@ -178,7 +177,6 @@ export const pickerProps = {
     /**
      * @zh 是否要预览快捷选择的结果
      * @en Whether to preview the result of the shortcut
-     * @version 2.28.0
      */
     previewShortcut: {
       type: Boolean,
@@ -187,7 +185,6 @@ export const pickerProps = {
     /**
      * @zh 是否显示确认按钮，`showTime = true` 的时候始终显示。
      * @en Whether to show the confirm button, always show when `showTime = true`.
-     * @version 2.29.0
      */
     showConfirmBtn: {
       type: Boolean,
@@ -216,7 +213,6 @@ export const pickerProps = {
     /**
      * @zh 是否禁止键盘输入日期
      * @en Whether input is disabled with the keyboard.
-     * @version 2.43.0
      */
     disabledInput: {
       type: Boolean,
@@ -225,7 +221,6 @@ export const pickerProps = {
     /**
      * @zh 是否启用缩写
      * @en Whether to enable abbreviation
-     * @version 2.45.0
      */
     abbreviation: {
       type: Boolean,
@@ -301,7 +296,6 @@ export const dateRangePickerProps = {
     /**
      * @zh 值的格式，对 `value` `defaultValue` `pickerValue` `defaultPickerValue` 以及事件中的返回值生效，支持设置为时间戳，Date 和字符串（参考[字符串解析格式](#字符串解析格式)）。如果没有指定，将格式化为字符串，格式同 `format`。
      * @en The format of the value, valid for `value` `defaultValue` `pickerValue` `defaultPickerValue` and the return value in the event, supports setting as timestamp, Date and string (refer to [String parsing format](#string-parsing-format) ). If not specified, it will be formatted as a string, in the same format as `format`.
-     * @version 2.16.0
      */
     valueFormat: {
       type: String as PropType<'timestamp' | 'Date' | string>,
@@ -351,7 +345,6 @@ export const dateRangePickerProps = {
     /**
      * @zh 时间是否会交换，默认情况下时间会影响和参与开始和结束值的排序，如果要固定时间顺序，可将其关闭。
      * @en Whether the time will be exchanged, by default time will affect and participate in the ordering of start and end values, if you want to fix the time order, you can turn it off.
-     * @version 2.25.0
      * */
     exchangeTime: {
       type: Boolean,
@@ -418,7 +411,6 @@ export const dateRangePickerProps = {
     /**
      * @zh 是否禁止键盘输入日期
      * @en Whether input is disabled with the keyboard.
-     * @version 2.43.0
      */
     disabledInput: {
       type: Boolean,

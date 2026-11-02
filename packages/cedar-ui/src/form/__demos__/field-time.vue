@@ -1,8 +1,8 @@
 <script setup>
 import ModelOutput from "../__demo-utils__/ModelOutput.vue";
 import { ref } from "vue";
-const presentation = ref("inline");
-const presentations = ["inline", "click", "dblclick"].map((value) => ({
+const editMode = ref("direct");
+const presentations = ["direct", "click", "dblclick"].map((value) => ({
   value,
   label: value,
 }));
@@ -13,14 +13,17 @@ const model = ref({
 </script>
 
 <template>
-  <c-space direction="column" :size="16">
-    <c-select
-      v-model="presentation"
-      :options="presentations"
-      :clearable="false"
-      aria-label="字段展示方式"
-    />
-    <c-form :model="model" :presentation="presentation">
+  <c-space direction="column" align="stretch" :size="16">
+    <c-form-item layout="vertical" size="sm" label="字段展示方式">
+      <c-radio-group
+        v-model="editMode"
+        aria-label="字段展示方式"
+        :options="presentations"
+        variant="button"
+        size="sm"
+      />
+    </c-form-item>
+    <c-form :model="model" :edit-mode="editMode">
       <c-form-item field="time" label="时间"
         ><c-time v-model="model.time" format="HH:mm"
       /></c-form-item>

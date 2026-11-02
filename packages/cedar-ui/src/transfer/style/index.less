@@ -22,19 +22,19 @@
     border-radius: var(~'--c-transfer-border-radius');
 
     &-source {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
+      border-start-end-radius: 0;
+      border-end-end-radius: 0;
     }
 
     &-target {
-      margin-left: calc(var(~'--c-transfer-border-width') * -1);
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
+      margin-inline-start: calc(var(~'--c-transfer-border-width') * -1);
+      border-start-start-radius: 0;
+      border-end-start-radius: 0;
     }
 
     &-search {
-      padding: var(~'--c-transfer-search-padding-top') var(~'--c-transfer-search-padding-right') var(~'--c-transfer-search-padding-bottom')
-        var(~'--c-transfer-search-padding-left');
+      padding-block: var(~'--c-transfer-search-padding-top') var(~'--c-transfer-search-padding-bottom');
+      padding-inline: var(~'--c-transfer-search-padding-left') var(~'--c-transfer-search-padding-right');
     }
 
     &-list {
@@ -60,7 +60,7 @@
       .text-ellipsis();
 
       &:not(:last-child) {
-        margin-right: var(~'--c-transfer-header-title-margin-right');
+        margin-inline-end: var(~'--c-transfer-header-title-margin-right');
       }
     }
 
@@ -106,7 +106,7 @@
       }
 
       &-clear-text {
-        margin-left: auto;
+        margin-inline-start: auto;
         padding: 0;
         color: var(~'--c-transfer-clear-text-color');
         font: inherit;
@@ -121,12 +121,12 @@
       }
 
       &-selected-count {
-        margin-left: var(~'--c-transfer-header-selected-count-margin-left');
+        margin-inline-start: var(~'--c-transfer-header-selected-count-margin-left');
         font-weight: normal;
       }
 
       &-count {
-        margin-right: var(~'--c-transfer-header-count-margin-right');
+        margin-inline-end: var(~'--c-transfer-header-count-margin-right');
         color: var(~'--c-transfer-header-unit-text-color');
         font-weight: normal;
         font-size: var(~'--c-transfer-header-unit-font-size');
@@ -192,7 +192,7 @@
       .c-pagination {
         position: absolute;
         top: 50%;
-        right: var(~'--c-transfer-footer-padding-horizontal');
+        inset-inline-end: var(~'--c-transfer-footer-padding-horizontal');
         margin: 0;
         transform: translateY(-50%);
 
@@ -207,7 +207,7 @@
     }
 
     .c-checkbox {
-      padding-left: var(~'--c-transfer-checkbox-padding-left');
+      padding-inline-start: var(~'--c-transfer-checkbox-padding-left');
 
       &-wrapper {
         display: inline;
@@ -233,7 +233,7 @@
 
     &-drag-handle {
       flex: none;
-      margin-right: var(~'--c-transfer-item-drag-handle-margin-right');
+      margin-inline-end: var(~'--c-transfer-item-drag-handle-margin-right');
       cursor: grab;
     }
 
@@ -247,7 +247,7 @@
     &-tip {
       display: inline-flex;
       flex: none;
-      margin-left: var(~'--c-transfer-item-tip-margin-left');
+      margin-inline-start: var(~'--c-transfer-item-tip-margin-left');
       color: var(~'--c-color-text-3');
     }
 
@@ -290,7 +290,7 @@
 
     &-remove-btn,
     &-operation-btn {
-      margin-left: auto;
+      margin-inline-start: auto;
       color: var(~'--c-transfer-icon-color');
       font-size: var(~'--c-transfer-icon-font-size');
       cursor: pointer;
@@ -309,7 +309,7 @@
       button {
         padding: var(~'--c-transfer-operation-menu-button-padding-y') var(~'--c-transfer-operation-menu-button-padding-x');
         color: var(~'--c-color-text-1');
-        text-align: left;
+        text-align: start;
         background: transparent;
         border: 0;
         border-radius: var(~'--c-transfer-operation-menu-button-border-radius');
@@ -377,21 +377,21 @@
       .c-btn {
         width: 100%;
         padding: 0 var(~'--c-transfer-operation-words-button-padding-x');
-        text-align: left;
+        text-align: start;
       }
     }
   }
 
   &-simple {
     .c-transfer-view-source {
-      border-right: none;
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
+      border-inline-end: none;
+      border-start-end-radius: 0;
+      border-end-end-radius: 0;
     }
 
     .c-transfer-view-target {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
+      border-start-start-radius: 0;
+      border-end-start-radius: 0;
     }
   }
 
@@ -411,3 +411,6 @@
     background-color: transparent;
   }
 }
+
+.c-transfer-list-item-remove-btn { padding: 0; background: transparent; border: 0; }
+.c-transfer-list-item-remove-btn:disabled { cursor: not-allowed; }

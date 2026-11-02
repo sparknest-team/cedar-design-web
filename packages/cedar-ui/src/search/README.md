@@ -6,11 +6,38 @@ permalink: /components/search/
 
 搜索组件，支持基础搜索、按钮搜索、字段搜索和受控的最近搜索记录。组件内部不持久化搜索历史；开发者可以根据 `search` 事件返回的 `recentSearches` 自行缓存到本地、服务端或状态管理中，再通过 `recent-searches` 回传给组件。
 
-## 案例
+先看关键词与提交，再看字段模型，最后接入受控历史和自定义展示。组件不发业务请求，外部在 search 事件中处理异步任务并控制 loading。
+
+## 基础示例
 
 ### 基础用法
 
+输入关键词后按 Enter 提交；本例只展示一个关键词和提交结果。字段模型与历史记录在后续独立案例中说明。
+
 <demo src="./__demos__/basic.vue"></demo>
+
+## 数据与选项
+
+### 搜索按钮
+
+<!-- demo-config-notes:start -->
+
+#### 本组配置对照
+
+| 配置              | 作用                 | 相关示例                                   |
+| ----------------- | -------------------- | ------------------------------------------ |
+| `placeholder`     | 占位符               | 搜索按钮、带下拉字段选择、本地缓存搜索历史 |
+| `search-button`   | 是否显示公共搜索按钮 | 搜索按钮、带下拉字段选择                   |
+| `recent-searches` | 受控搜索历史         | 带下拉字段选择、本地缓存搜索历史           |
+| `button-text`     | 公共搜索按钮文字     | 搜索按钮                                   |
+| `fields`          | 搜索字段可选项       | 带下拉字段选择                             |
+| `select-style`    | 字段选择器样式       | 带下拉字段选择                             |
+
+<!-- demo-config-notes:end -->
+
+点击按钮提交与按 Enter 使用相同的 search 事件。
+
+<demo src="./__demos__/search-button.vue"></demo>
 
 ### 带下拉字段选择
 
@@ -20,6 +47,50 @@ permalink: /components/search/
 
 <demo src="./__demos__/local-storage.vue"></demo>
 
+## 自定义与插槽
+
+### 历史展示与插槽
+
+<!-- demo-config-notes:start -->
+
+#### 本组配置对照
+
+| 配置              | 作用                                              | 相关示例       |
+| ----------------- | ------------------------------------------------- | -------------- |
+| `edit-mode`       | 搜索编辑方式：direct 为直接搜索，popup 为弹层搜索 | 历史展示与插槽 |
+| `recent-searches` | 受控搜索历史                                      | 历史展示与插槽 |
+| `label`           | 搜索框左侧文本                                    | 历史展示与插槽 |
+| `placeholder`     | 占位符                                            | 历史展示与插槽 |
+| `clearable`       | 是否可清除                                        | 历史展示与插槽 |
+| `show-action`     | 是否显示操作按钮                                  | 历史展示与插槽 |
+
+<!-- demo-config-notes:end -->
+
+<demo src="./__demos__/presentation.vue"></demo>
+
+## 交互与控制
+
+### 交互状态切换
+
+<!-- demo-config-notes:start -->
+
+#### 本组配置对照
+
+| 配置            | 作用                             | 相关示例             |
+| --------------- | -------------------------------- | -------------------- |
+| `placeholder`   | 占位符                           | 交互状态切换、加载中 |
+| `loading`       | 是否处于加载状态；加载时禁止提交 | 交互状态切换、加载中 |
+| `readonly`      | 是否只读                         | 交互状态切换、加载中 |
+| `search-button` | 是否显示公共搜索按钮             | 加载中、受控字段模型 |
+| `disabled`      | 是否禁用                         | 交互状态切换         |
+| `default-value` | 非受控默认关键词                 | 加载中               |
+
+<!-- demo-config-notes:end -->
+
+适用于关键词输入与搜索提交。调整禁用、只读，用相同数据观察变化。控制区始终可用，可以随时恢复编辑；错误外观本身不会触发表单校验。
+
+<demo src="./__demos__/state-lab.vue"></demo>
+
 ### 加载中
 
 <demo src="./__demos__/loading.vue"></demo>
@@ -28,59 +99,53 @@ permalink: /components/search/
 
 <demo src="./__demos__/controlled-fields.vue"></demo>
 
-### 交互状态切换
-
-适用于关键词输入与搜索提交。调整禁用、只读，用相同数据观察变化。控制区始终可用，可以随时恢复编辑；错误外观本身不会触发表单校验。
-
-<demo src="./__demos__/state-lab.vue"></demo>
-
-### 历史展示与插槽
-
-<demo src="./__demos__/presentation.vue"></demo>
-
-<!-- api-review:start -->
-### 功能调试
-
-<demo src="./__demos__/api-review.vue"></demo>
-
-<!-- api-review:end -->
-
 ## API
+
+### 空值识别与阅读空文案
+
+`empty-values` 用于空值识别，`empty-value` 保留原清空输出；`empty-text` 仅在 `read-pretty` 空内容下展示，默认 `'-'`，字段 > FormItem > Form，自定义 read 插槽优先。显式配置 empty-values 后，内置 required 接入该策略，自定义校验仍收到原值。详见[统一说明](/guide/empty-values/)。
+
+| 参数         | 类型               | 缺省与范围                                            |
+| ------------ | ------------------ | ----------------------------------------------------- |
+| empty-values | readonly unknown[] | 字段 > FormItem > Form > 组件族默认；完整覆盖，不合并 |
+| empty-text   | string             | 字段 > FormItem > Form > '-'；显式 '' 有效            |
+
+以上是字段展示层 API；纯面板不因此新增阅读模式。Form 与 FormItem 提供继承配置。empty-value 的现有类型与默认输出仍按该组件原 API 执行。
 
 ### 属性
 
-| 参数                       | 说明                                            | 类型                      | 默认值     |
-| -------------------------- | ----------------------------------------------- | ------------------------- | ---------- |
-| `v-model`                  | 搜索关键词                                      | _string_                  | `-`        |
-| `default-value`            | 非受控默认关键词                                | _string_                  | `''`       |
-| `v-model:model-field`      | 当前搜索字段                                    | _string_                  | `-`        |
-| `default-field`            | 非受控默认字段                                  | _string_                  | `-`        |
-| `v-model:model`            | 字段搜索模式下按字段写入的对象                  | _Record<string, unknown>_ | `-`        |
-| `fields`                   | 搜索字段可选项                                  | _SearchField[]_           | `[]`       |
-| `select-style`             | 字段选择器样式                                  | _StyleValue_              | `-`        |
-| `recent-searches`          | 受控搜索历史                                    | _string[]_                | `[]`       |
-| `max-search-history-count` | 生成下一份历史时保留的最大数量                  | _number_                  | `5`        |
-| `history-popup`            | 是否使用全屏 Popup 展示历史                     | _boolean_                 | `false`    |
-| `search-button`            | 是否显示公共搜索按钮                            | _boolean_                 | `false`    |
-| `button-text`              | 公共搜索按钮文字                                | _string_                  | `-`        |
-| `button-props`             | 公共搜索按钮属性                                | _ButtonProps_             | `-`        |
-| `loading`                  | 是否处于加载状态；加载时禁止提交                | _boolean_                 | `false`    |
-| `clearable`                | 是否可清除                                      | _boolean_                 | `false`    |
-| `variant`                  | 输入框风格，可选 `filled` `outline` `standard`  | _string_                  | `outline`  |
-| `size` | 输入尺寸，继承 Form / ConfigProvider | `xs / sm / md / lg / xl` | `md` |
-| `placeholder`              | 占位符                                          | _string_                  | `-`        |
-| `disabled`                 | 是否禁用                                        | _boolean_                 | `false`    |
-| `readonly`                 | 是否只读                                        | _boolean_                 | `false`    |
-| `label`                    | 搜索框左侧文本                                  | _string_                  | `-`        |
-| `shape`                    | 内层搜索框形状，可选 `round` `square`           | _string_                  | `square`   |
-| `background`               | 外层背景色                                      | _string_                  | `-`        |
-| `input-background`         | 内层搜索框背景色                                | _string_                  | `-`        |
-| `show-action`              | 是否显示操作按钮                          | _boolean_                 | `false`    |
-| `action-text` | 操作按钮文字 | `string` | 跟随全局语言与 action-type |
-| `action-type`              | 操作类型，可选 `cancel` `search`          | _string_                  | `cancel`   |
-| `search-icon`              | 搜索图标名称                                    | _string_                  | `magnify`  |
-| `max-length`               | 最大长度                                        | _string \| number_        | `-`        |
-| `enterkeyhint`             | 虚拟键盘回车键提示                              | _string_                  | `search`   |
+| 参数                       | 说明                                              | 类型                      | 默认值                     |
+| -------------------------- | ------------------------------------------------- | ------------------------- | -------------------------- |
+| `v-model`                  | 搜索关键词                                        | _string_                  | `-`                        |
+| `default-value`            | 非受控默认关键词                                  | _string_                  | `''`                       |
+| `v-model:model-field`      | 当前搜索字段                                      | _string_                  | `-`                        |
+| `default-field`            | 非受控默认字段                                    | _string_                  | `-`                        |
+| `v-model:model`            | 字段搜索模式下按字段写入的对象                    | _Record<string, unknown>_ | `-`                        |
+| `fields`                   | 搜索字段可选项                                    | _SearchField[]_           | `[]`                       |
+| `select-style`             | 字段选择器样式                                    | _StyleValue_              | `-`                        |
+| `recent-searches`          | 受控搜索历史                                      | _string[]_                | `[]`                       |
+| `max-search-history-count` | 生成下一份历史时保留的最大数量                    | _number_                  | `5`                        |
+| `edit-mode`                | 搜索编辑方式：direct 为直接搜索，popup 为弹层搜索 | `'direct' \| 'popup'`     | `'direct'`                 |
+| `search-button`            | 是否显示公共搜索按钮                              | _boolean_                 | `false`                    |
+| `button-text`              | 公共搜索按钮文字                                  | _string_                  | `-`                        |
+| `button-props`             | 公共搜索按钮属性                                  | _ButtonProps_             | `-`                        |
+| `loading`                  | 是否处于加载状态；加载时禁止提交                  | _boolean_                 | `false`                    |
+| `clearable`                | 是否可清除                                        | _boolean_                 | `false`                    |
+| `variant`                  | 输入框风格，可选 `filled` `outline` `standard`    | _string_                  | `outline`                  |
+| `size`                     | 输入尺寸，继承 Form / ConfigProvider              | `xs / sm / md / lg / xl`  | `md`                       |
+| `placeholder`              | 占位符                                            | _string_                  | `-`                        |
+| `disabled`                 | 是否禁用                                          | _boolean_                 | `false`                    |
+| `readonly`                 | 是否只读                                          | _boolean_                 | `false`                    |
+| `label`                    | 搜索框左侧文本                                    | _string_                  | `-`                        |
+| `shape`                    | 内层搜索框形状，可选 `round` `square`             | _string_                  | `square`                   |
+| `background`               | 外层背景色                                        | _string_                  | `-`                        |
+| `input-background`         | 内层搜索框背景色                                  | _string_                  | `-`                        |
+| `show-action`              | 是否显示操作按钮                                  | _boolean_                 | `false`                    |
+| `action-text`              | 操作按钮文字                                      | `string`                  | 跟随全局语言与 action-type |
+| `action-type`              | 操作类型，可选 `cancel` `search`                  | _string_                  | `cancel`                   |
+| `search-icon`              | 搜索图标名称                                      | _string_                  | `magnify`                  |
+| `max-length`               | 最大长度                                          | _string \| number_        | `-`                        |
+| `enterkeyhint`             | 虚拟键盘回车键提示                                | _string_                  | `search`                   |
 
 ### 事件
 
@@ -107,7 +172,7 @@ permalink: /components/search/
 | `button-default` | 公共搜索按钮内容                     | `-`         |
 | `button-icon`    | 公共搜索按钮图标                     | `-`         |
 | `label`          | 左侧标签                             | `-`         |
-| `action`         | 操作按钮内容                   | `-`         |
+| `action`         | 操作按钮内容                         | `-`         |
 
 ### 方法
 
@@ -149,12 +214,20 @@ permalink: /components/search/
 
 ### 跨端边界
 
-双方控制器、公开 API 和历史内容独立同源。Cedar 默认 `historyPopup=false, shape=square`，Maple 默认 `historyPopup=true, shape=round`；显式开启后分别使用本地 Drawer / Popup，不共享实例。Cedar 保留 InputGroup，Maple 保留移动搜索条布局和触控间距。Input 支持 `xs/sm/md/lg/xl`，外层条高度/间距仍由 Search token 控制，并非整个条随 size 等比例缩放。
+双方控制器、公开 API 和历史内容独立同源。两端默认 `presentation=inline`；Cedar 默认 `shape=square`，Maple 默认 `shape=round`；显式开启后分别使用本地 Drawer / Popup，不共享实例。Cedar 保留 InputGroup，Maple 保留移动搜索条布局和触控间距。Input 支持 `xs/sm/md/lg/xl`，外层条高度/间距仍由 Search token 控制，并非整个条随 size 等比例缩放。
 
 ### 公开类型
 
-`SearchProps`, `SearchEmits`, `SearchSlots`, `SearchExpose`, `SearchField`, `SearchResult`.
+`SearchPresentation`、`SearchProps`, `SearchEmits`, `SearchSlots`, `SearchExpose`, `SearchField`, `SearchResult`.
 
 ### Input 属性透传
 
 显式支持 `modelModifiers`、`type`、`ariaLabel`、`placeholder`、`maxLength`、`readonly`、`disabled`、`autofocus`、`enterkeyhint`、`textColor`、`focusColor`、`blurColor`、`size`、`variant`、`clearable`、`inputAttrs`、`error`。`inputAttrs` 将原生 name/autocomplete/ARIA 等属性传给外侧和全屏内输入框；`error` 可覆盖继承的错误状态。搜索、弹层取消和弹层标签沿用全局多语言系统。取消、字段、历史程序更新各通知一次 Form change，原生编辑沿用 Input 事件链。
+
+## 配置清空后的值
+
+`empty-value` 指定当前组件已有清空动作的输出；省略时采用该组件默认返回。具体类型以组件 API 为准。它不改变 empty-values 的识别规则，也不改变 Form reset 的初始值。
+
+### 共享字段加载
+
+`loading-mode="line"` 使用 FieldDecorator 的共享加载线；默认模式保留本组件已有的加载展示。加载状态本身不隐式设置 disabled 或 readonly。

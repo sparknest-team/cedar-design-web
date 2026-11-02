@@ -8,34 +8,11 @@ permalink: /components/input/
 
 默认长度按 UTF-16 码元计算（emoji 通常占 2）；默认截断不会拆开有效的代理对，边界不足时舍去整个字符。若需按用户感知字符（字素簇）计数和裁剪，请配套提供 `word-length` 与 `word-slice`；自定义裁剪结果由业务负责。
 
-## 案例
+## 阅读方向
 
-### 默认值与双向绑定
+输入框继承页面或局部容器的 `dir`；前后缀、清除操作和输入框组按阅读顺序排列。运行时切换方向保留原生输入节点、焦点和选区；光标、选区、混合文字与输入法组合由浏览器处理，不交换左右编辑键。父级重绘时保留正在组合的原生文本；旧选区恢复任务不会覆盖新的组合缓冲。
 
-`modelValue` 是受控值，通过普通 `v-model` 绑定；父级提供的值优先，包括空字符串。`defaultValue` 是非受控初始值，仅在组件创建时读取；之后由组件内部保存用户输入。修改 `defaultValue` 不会重置现有文字，重新挂载才会重新读取，也不会在初始化时触发 `update:modelValue` 或写入父级表单。
-
-需要表单默认值时，直接初始化绑定字段，例如 `const text = ref('北京')`，然后使用 `<c-input v-model="text" />`。
-
-<demo src="./__demos__/default-value.vue"></demo>
-
-### 变体
-
-设置 `variant` 来调整不同风格的输入框。
-可选值为 `filled`、`outline` 和 `standard`。
-
-<demo src="./__demos__/variant.vue"></demo>
-
-### 尺寸
-
-输入框完整支持五种尺寸 `xs / sm / md / lg / xl`，默认 `md`。
-
-<demo src="./__demos__/size.vue"></demo>
-
-### 状态
-
-输入框可以设置禁用和错误状态。
-
-<demo src="./__demos__/state.vue"></demo>
+## 基础示例
 
 ### 表单控件尺寸对照
 
@@ -43,10 +20,96 @@ permalink: /components/input/
 
 <demo src="../field-decorator/__demos__/control-sizes.vue"></demo>
 
-
 输入框的基本用法。
 
 <demo src="./__demos__/basic.vue"></demo>
+
+## 外观与状态
+
+### 外观配置对比
+
+<!-- demo-config-notes:start -->
+
+#### 本组配置对照
+
+| 配置          | 作用               | 相关示例           |
+| ------------- | ------------------ | ------------------ |
+| `placeholder` | 提示文字           | 表单反馈、浮动提示 |
+| `hint`        | 提示文字是否浮起   | 表单反馈、浮动提示 |
+| `clearable`   | 是否允许清空输入框 | 表单反馈、浮动提示 |
+| `variant`     | 输入框变体         | 浮动提示           |
+
+<!-- demo-config-notes:end -->
+
+选择一个对比维度后，同屏展示它的全部可选值；其余配置和内容保持一致。可切换其他配置检查组合效果；输入类预览共享一个值。
+
+<details>
+<summary>配置说明与使用限制</summary>
+
+#### 变体
+
+设置 `variant` 来调整不同风格的输入框。
+可选值为 `filled`、`outline` 和 `standard`。
+
+#### 尺寸
+
+输入框完整支持五种尺寸 `xs / sm / md / lg / xl`，默认 `md`。
+
+#### 外观组合
+
+适用于表单中的单行文本输入。调整变体、尺寸，用相同数据观察变化。内容保持一致，便于比较不同设置的实际效果。
+
+</details>
+
+<demo src="./__demos__/appearance-lab.vue"></demo>
+
+### 表单反馈
+
+通过 FormItem 的 `feedback` 和 `validate-status` 展示校验反馈。有外置 FormItem 标签时，Input 自动关闭内部浮动提示，避免重复标签。
+
+<demo src="./__demos__/form-feedback.vue"></demo>
+
+### 浮动提示
+
+设置 `hint` 后，提示文字作为关联原生输入框的标签，在聚焦或输入非空值时浮起；`line` 控制描边或底线是否显示。桌面端默认不启用浮动提示，仍可使用普通 `placeholder`；移动端默认启用。`text-color`、`focus-color`、`blur-color` 可覆盖文字与提示颜色。
+
+<demo src="./__demos__/floating-hint.vue"></demo>
+
+## 输入内容与布局
+
+### 数字统计
+
+<!-- demo-config-notes:start -->
+
+#### 本组配置对照
+
+| 配置              | 作用                                                       | 相关示例                           |
+| ----------------- | ---------------------------------------------------------- | ---------------------------------- |
+| `placeholder`     | 提示文字                                                   | 数字统计、前缀、后缀、输入框组合   |
+| `clearable`       | 是否允许清空输入框                                         | 数字统计、前缀、后缀、组合状态继承 |
+| `max-length`      | 输入值的最大长度                                           | 数字统计                           |
+| `show-word-limit` | 是否显示字数统计                                           | 数字统计                           |
+| `default-value`   | 非受控初始值，仅创建时读取；后续修改不重置输入，不回写父级 | 组合状态继承                       |
+| `disabled`        | 是否禁用，可继承 Form                                      | 组合状态继承                       |
+
+<!-- demo-config-notes:end -->
+
+设置 max-length 可以限制最大字数，配合 show-word-limit 可以显示字数统计。
+超出长度时会截断，并通过 `update:model-value` 与 `input` 传出截断后的值。清空按 `clear → input → update:model-value → change` 通知，随后失焦不会补发 `change`。
+
+<demo src="./__demos__/word-limit.vue"></demo>
+
+### 密码输入框
+
+用于输入密码。
+
+<demo src="./__demos__/password.vue"></demo>
+
+### 前缀、后缀
+
+通过指定 prefix 和 suffix 插槽来在输入框内添加前缀和后缀。
+
+<demo src="./__demos__/prefix.vue"></demo>
 
 ### 输入框组合
 
@@ -60,36 +123,55 @@ permalink: /components/input/
 
 <demo src="./__demos__/group-state.vue"></demo>
 
-### 表单反馈
+## 值模型与交互
 
-通过 FormItem 的 `feedback` 和 `validate-status` 展示校验反馈。有外置 FormItem 标签时，Input 自动关闭内部浮动提示，避免重复标签。
+### 默认值与双向绑定
 
-<demo src="./__demos__/form-feedback.vue"></demo>
+<!-- demo-config-notes:start -->
 
-### 前缀、后缀
+#### 本组配置对照
 
-通过指定 prefix 和 suffix 插槽来在输入框内添加前缀和后缀。
+| 配置            | 作用                                                       | 相关示例                           |
+| --------------- | ---------------------------------------------------------- | ---------------------------------- |
+| `clearable`     | 是否允许清空输入框                                         | 主体与事件契约、清空按钮与手动删空 |
+| `default-value` | 非受控初始值，仅创建时读取；后续修改不重置输入，不回写父级 | 默认值与双向绑定                   |
+| `aria-label`    | 原生输入框的无障碍标签                                     | 默认值与双向绑定                   |
+| `disabled`      | 是否禁用，可继承 Form                                      | 交互状态对比                       |
+| `readonly`      | 是否只读，可继承 Form                                      | 交互状态对比                       |
+| `error`         | 是否为错误状态，可继承 FormItem                            | 交互状态对比                       |
 
-<demo src="./__demos__/prefix.vue"></demo>
+<!-- demo-config-notes:end -->
 
-### 浮动提示
+`modelValue` 是受控值，通过普通 `v-model` 绑定；父级提供的值优先，包括空字符串。`defaultValue` 是非受控初始值，仅在组件创建时读取；之后由组件内部保存用户输入。修改 `defaultValue` 不会重置现有文字，重新挂载才会重新读取，也不会在初始化时触发 `update:modelValue` 或写入父级表单。
 
-设置 `hint` 后，提示文字作为关联原生输入框的标签，在聚焦或输入非空值时浮起；`line` 控制描边或底线是否显示。桌面端默认不启用浮动提示，仍可使用普通 `placeholder`；移动端默认启用。`text-color`、`focus-color`、`blur-color` 可覆盖文字与提示颜色。
+需要表单默认值时，直接初始化绑定字段，例如 `const text = ref('北京')`，然后使用 `<c-input v-model="text" />`。
 
-<demo src="./__demos__/floating-hint.vue"></demo>
+<demo src="./__demos__/default-value.vue"></demo>
 
-### 数字统计
+### 清空按钮与手动删空
 
-设置 max-length 可以限制最大字数，配合 show-word-limit 可以显示字数统计。
-超出长度时会截断，并通过 `update:model-value` 与 `input` 传出截断后的值。清空按 `clear → input → update:model-value → change` 通知，随后失焦不会补发 `change`。
+将清空输出设为 null。先点击清空图标，观察模型为 null；恢复初值后用 Backspace 删光，观察模型为空字符串。普通输入不会自动套用 empty-value。
 
-<demo src="./__demos__/word-limit.vue"></demo>
+<demo src="./__demos__/empty-value.vue"></demo>
 
-### 密码输入框
+### 交互状态对比
 
-用于输入密码。
+在同一实例上切换禁用、只读和错误状态后再操作控件，比较可编辑性和交互反馈。恢复开关位于目标控件外；错误外观本身不会执行校验。
 
-<demo src="./__demos__/password.vue"></demo>
+<details>
+<summary>配置说明与使用限制</summary>
+
+#### 状态
+
+输入框可以设置禁用和错误状态。
+
+#### 交互状态切换
+
+适用于表单中的单行文本输入。调整禁用、只读、错误反馈，用相同数据观察变化。控制区始终可用，可以随时恢复编辑；错误外观本身不会触发表单校验。
+
+</details>
+
+<demo src="./__demos__/state-lab.vue"></demo>
 
 ### 主体与事件契约
 
@@ -97,67 +179,82 @@ permalink: /components/input/
 
 <demo src="./__demos__/event-pipeline.vue"></demo>
 
-### 外观组合
+### 提交前确认
 
-适用于表单中的单行文本输入。调整变体、尺寸，用相同数据观察变化。内容保持一致，便于比较不同设置的实际效果。
+字段提交也支持 `beforeCommit({ value, previousValue }, done, context)`：保留第二个 context 参数，第三个 done 可决定允许或拒绝；Promise 和 boolean 写法继续支持。声明 done 的回调必须调用完成函数，或返回 boolean/Promise。
 
-<demo src="./__demos__/appearance-lab.vue"></demo>
+守卫统一使用 `(payload, done, context)`：关闭 payload 为 `{ action }`，切换和提交为 `{ value, previousValue }`，Popup 为 `{ reason }`。context 提供 `signal` 和可选原始 `event`。返回 boolean/Promise，或调用 done()/done(false)；同步 void 等待 done，Promise&lt;void&gt; 放行。首次完成生效。等待期间自动管理 loading/disabled，取消后旧结果失效，不暴露内部按钮 refs。
 
-### 交互状态切换
+<demo src="./__demos__/commit-protocol.vue"></demo>
 
-适用于表单中的单行文本输入。调整禁用、只读、错误反馈，用相同数据观察变化。控制区始终可用，可以随时恢复编辑；错误外观本身不会触发表单校验。
+### 共享字段加载
 
-<demo src="./__demos__/state-lab.vue"></demo>
+`loading` 控制共享字段加载状态；`loading-mode` 为 `default`（指示器）或 `line`（底部不定进度线），默认 `default`。渲染统一由 FieldDecorator 负责，不隐式改变 disabled/readonly；需要禁止编辑时单独设置。
 
-<!-- api-review:start -->
-### 功能调试
+## 加载与等待
 
-<demo src="./__demos__/api-review.vue"></demo>
+### 加载状态
 
-<!-- api-review:end -->
+切换加载状态，对比默认指示器与底部加载线。加载期间仍可编辑输入；是否禁止编辑由 disabled / readonly 单独控制。
+
+<demo src="./__demos__/loading.vue"></demo>
 
 ## API
 
+### 空值识别与阅读空文案
+
+`empty-values` 用于空值识别，`empty-value` 保留原清空输出；`empty-text` 仅在 `read-pretty` 空内容下展示，默认 `'-'`，字段 > FormItem > Form，自定义 read 插槽优先。显式配置 empty-values 后，内置 required 接入该策略，自定义校验仍收到原值。详见[统一说明](/guide/empty-values/)。
+
+| 参数         | 类型               | 缺省与范围                                            |
+| ------------ | ------------------ | ----------------------------------------------------- |
+| empty-values | readonly unknown[] | 字段 > FormItem > Form > 组件族默认；完整覆盖，不合并 |
+| empty-text   | string             | 字段 > FormItem > Form > '-'；显式 '' 有效            |
+
+以上是字段展示层 API；纯面板不因此新增阅读模式。Form 与 FormItem 提供继承配置。empty-value 的现有类型与默认输出仍按该组件原 API 执行。
+
 ### `<Input>` Props
 
-| 参数名                    | 描述                                 | 类型                                                |   默认值    |
-| ------------------------- | ------------------------------------ | --------------------------------------------------- | :---------: |
-| model-value **(v-model)** | 绑定值                               | `string`                                            |     `-`     |
-| model-modifiers           | `v-model` 修饰符，支持 `trim`        | `{ trim?: boolean }`                                |    `{}`     |
-| default-value             | 非受控初始值，仅创建时读取；后续修改不重置输入，不回写父级                 | `string`                                            |    `''`     |
-| variant                   | 输入框变体                           | `'filled' \| 'outline' \| 'standard'`               | `'outline'` |
-| size                      | 输入框大小                           | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`              |   `'md'`    |
-| clearable                 | 是否允许清空输入框                   | `boolean`                                           |   `false`   |
-| disabled                  | 是否禁用，可继承 Form                | `boolean`                                           |     `-`     |
-| readonly                  | 是否只读，可继承 Form                | `boolean`                                           |     `-`     |
-| error                     | 是否为错误状态，可继承 FormItem      | `boolean`                                           |     `-`     |
-| placeholder               | 提示文字                             | `string`                                            |     `-`     |
-| hint                      | 提示文字是否浮起                     | `boolean`                                           |   `false`   |
-| line                      | 是否绘制边框或底线                   | `boolean`                                           |   `true`    |
-| text-color                | 输入文字颜色                         | `string`                                            |     `-`     |
-| focus-color               | 聚焦提示及支持的边框通道；不控制 caret | `string`                                            |     `-`     |
-| blur-color                | 未聚焦时提示颜色                     | `string`                                            |     `-`     |
-| aria-label                | 原生输入框的无障碍标签               | `string`                                            |     `-`     |
-| autofocus                 | 是否自动聚焦                         | `boolean`                                           |   `false`   |
-| enterkeyhint              | 移动端虚拟键盘回车键提示             | `string`                                            |     `-`     |
-| max-length                | 输入值的最大长度                     | `number \| { length: number; errorOnly?: boolean }` |     `0`     |
-| show-word-limit           | 是否显示字数统计                     | `boolean`                                           |   `false`   |
-| word-length               | 字符长度的计算方法                   | `(value: string) => number`                         |     `-`     |
-| word-slice                | 字符截取方法，同 wordLength 一起使用 | `(value: string, maxLength: number) => string`      |     `-`     |
-| input-attrs               | 内部 input 元素的属性                | `object`                                            |     `-`     |
+| 参数名                    | 描述                                                       | 类型                                                |   默认值    |
+| ------------------------- | ---------------------------------------------------------- | --------------------------------------------------- | :---------: |
+| model-value **(v-model)** | 绑定值                                                     | `string \| null`                                    |     `-`     |
+| `loading` | 加载展示；不隐式禁用输入 | `boolean` | `false` |
+| `loading-mode` | 加载布局：默认指示器或底部加载线 | `default / line` | `default` |
+| model-modifiers           | `v-model` 修饰符，支持 `trim`                              | `{ trim?: boolean }`                                |    `{}`     |
+| default-value             | 非受控初始值，仅创建时读取；后续修改不重置输入，不回写父级 | `string`                                            |    `''`     |
+| variant                   | 输入框变体                                                 | `'filled' \| 'outline' \| 'standard'`               | `'outline'` |
+| size                      | 输入框大小                                                 | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`              |   `'md'`    |
+| clearable                 | 是否允许清空输入框                                         | `boolean`                                           |   `false`   |
+| empty-value               | 清空输出；省略时清空返回空字符串，不影响手动删除           | `string \| null \| (() => string \| null)`          | `undefined` |
+| disabled                  | 是否禁用，可继承 Form                                      | `boolean`                                           |     `-`     |
+| readonly                  | 是否只读，可继承 Form                                      | `boolean`                                           |     `-`     |
+| error                     | 是否为错误状态，可继承 FormItem                            | `boolean`                                           |     `-`     |
+| placeholder               | 提示文字                                                   | `string`                                            |     `-`     |
+| hint                      | 提示文字是否浮起                                           | `boolean`                                           |   `false`   |
+| line                      | 是否绘制边框或底线                                         | `boolean`                                           |   `true`    |
+| text-color                | 输入文字颜色                                               | `string`                                            |     `-`     |
+| focus-color               | 聚焦提示及支持的边框通道；不控制 caret                     | `string`                                            |     `-`     |
+| blur-color                | 未聚焦时提示颜色                                           | `string`                                            |     `-`     |
+| aria-label                | 原生输入框的无障碍标签                                     | `string`                                            |     `-`     |
+| autofocus                 | 是否自动聚焦                                               | `boolean`                                           |   `false`   |
+| enterkeyhint              | 移动端虚拟键盘回车键提示                                   | `string`                                            |     `-`     |
+| max-length                | 输入值的最大长度                                           | `number \| { length: number; errorOnly?: boolean }` |     `0`     |
+| show-word-limit           | 是否显示字数统计                                           | `boolean`                                           |   `false`   |
+| word-length               | 字符长度的计算方法                                         | `(value: string) => number`                         |     `-`     |
+| word-slice                | 字符截取方法，同 wordLength 一起使用                       | `(value: string, maxLength: number) => string`      |     `-`     |
+| input-attrs               | 内部 input 元素的属性                                      | `object`                                            |     `-`     |
 
 `disabled / readonly / size` 按子项 → InputGroup → FormItem/Form → 库默认值继承；Cedar 的尺寸还支持 ConfigProvider。`clearable` 只对非空且可编辑的输入生效：PC 在悬浮或焦点进入时显示，触控设备与 Maple 常驻显示。原生 `name / id / aria-* / data-*` 会透传给 input；`class / style` 留在外壳，`input-attrs` 不能覆盖受控值、类型、禁用、只读和长度策略。
 
 ### `<Input>` Events
 
-| 事件名      | 描述                           | 参数                           |
-| ----------- | ------------------------------ | ------------------------------ |
-| input       | 用户输入时触发                 | value: `string`<br>ev: `Event` |
+| 事件名      | 描述                       | 参数                           |
+| ----------- | -------------------------- | ------------------------------ |
+| input       | 用户输入时触发             | value: `string`<br>ev: `Event` |
 | change      | 失焦、回车提交或清空时触发 | value: `string`<br>ev: `Event` |
-| press-enter | 用户按下回车时触发             | ev: `KeyboardEvent`            |
-| clear       | 用户点击清除按钮时触发         | ev: `MouseEvent`               |
-| focus       | 输入框获取焦点时触发           | ev: `FocusEvent`               |
-| blur        | 输入框失去焦点时触发           | ev: `FocusEvent`               |
+| press-enter | 用户按下回车时触发         | ev: `KeyboardEvent`            |
+| clear       | 用户点击清除按钮时触发     | ev: `MouseEvent`               |
+| focus       | 输入框获取焦点时触发       | ev: `FocusEvent`               |
+| blur        | 输入框失去焦点时触发       | ev: `FocusEvent`               |
 
 ### `<Input>` Methods
 
@@ -165,35 +262,35 @@ permalink: /components/input/
 | ------ | ---------------- | ---- | ------ |
 | focus  | 使输入框获取焦点 | -    | -      |
 | blur   | 使输入框失去焦点 | -    | -      |
-| select | 选中输入内容 | - | - |
+| select | 选中输入内容     | -    | -      |
 
 ### `<input>` Slots
 
-| 插槽名 |   描述   | 参数 |
-| ------ | :------: | ---- |
-| suffix | 后缀元素 | -    |
-| prefix | 前缀元素 | -    |
+| 插槽名     |      描述      | 参数                   |
+| ---------- | :------------: | ---------------------- |
+| suffix     |    后缀元素    | -                      |
+| prefix     |    前缀元素    | -                      |
 | clear-icon | 自定义清除按钮 | `clear(event?: Event)` |
 
 ### `<InputPassword>` Props
 
-| 参数名             | 描述                   | 类型      | 默认值  |
-| ------------------ | ---------------------- | --------- | :-----: |
-| visibility-toggle  | 是否显示密码可见性按钮 | `boolean` | `true`  |
-| default-visibility | 默认是否可见，非受控   | `boolean` | `false` |
-| visibility | 受控密码可见性，支持 v-model:visibility | `boolean` | `-` |
+| 参数名             | 描述                                    | 类型      | 默认值  |
+| ------------------ | --------------------------------------- | --------- | :-----: |
+| visibility-toggle  | 是否显示密码可见性按钮                  | `boolean` | `true`  |
+| default-visibility | 默认是否可见，非受控                    | `boolean` | `false` |
+| visibility         | 受控密码可见性，支持 v-model:visibility | `boolean` |   `-`   |
 
 InputPassword 支持所有 Input 属性、事件、插槽与方法。
 
 ### `<InputGroup>` Props
 
-| 参数名 | 描述 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| size | 组内默认尺寸 | `ComponentSize` | 继承 Form/ConfigProvider 或 `md` |
-| variant | 组内默认变体 | `filled \| outline \| standard` | `filled` |
-| disabled | 组内禁用状态 | `boolean` | 继承 Form 或 `false` |
-| readonly | 组内只读状态 | `boolean` | 继承 Form 或 `false` |
-| hint | 组内浮动提示 | `boolean` | 库默认值 |
+| 参数名   | 描述         | 类型                            | 默认值                           |
+| -------- | ------------ | ------------------------------- | -------------------------------- |
+| size     | 组内默认尺寸 | `ComponentSize`                 | 继承 Form/ConfigProvider 或 `md` |
+| variant  | 组内默认变体 | `filled \| outline \| standard` | `filled`                         |
+| disabled | 组内禁用状态 | `boolean`                       | 继承 Form 或 `false`             |
+| readonly | 组内只读状态 | `boolean`                       | 继承 Form 或 `false`             |
+| hint     | 组内浮动提示 | `boolean`                       | 库默认值                         |
 
 ### `<InputPassword>` Events
 
@@ -213,4 +310,12 @@ import type { InputProps } from "@cedar-design/ui";
 
 ### 表单展示继承
 
-支持 presentation：`inline / click / dblclick`，默认 inline。可继承 FormItem/Form；readPretty 以纯文本阅读，其他弹层默认确认后更新 v-model。可选 before-commit 在候选校验通过后拦截保存。使用方式与对比 Demo 统一见 Form 文档。
+支持 `edit-mode`：`direct / click / dblclick`。未设置时继承 FormItem/Form，独立使用时默认 direct；readPretty 以纯文本阅读，编辑浮层默认确认后更新 v-model。可选 before-commit 在候选校验通过后拦截保存。使用方式与对比 Demo 统一见 Form 文档。
+
+### 输入光标主题
+
+| CSS 变量                | 默认值         | 说明                             |
+| ----------------------- | -------------- | -------------------------------- |
+| `--c-input-caret-color` | `currentColor` | 输入光标颜色，可独立于文字色覆盖 |
+
+统一光标色通过 `--c-field-caret-color` 设置（默认 `currentColor`）；本组件可用 `--c-input-caret-color` 单独覆盖，默认 `var(--c-field-caret-color)`。

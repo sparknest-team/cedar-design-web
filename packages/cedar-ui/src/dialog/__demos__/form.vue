@@ -32,16 +32,13 @@ export default defineComponent({
       visible.value = true
     }
 
-    const handleBeforeClose = (action, done, refs) => {
+    const handleBeforeClose = ({ action }, done) => {
       if (action !== 'confirm') {
         done()
         return
       }
 
-      console.log(form)
-      refs.confirmButtonLoading.value = true
       window.setTimeout(() => {
-        refs.confirmButtonLoading.value = false
         done()
       }, 2000)
     }

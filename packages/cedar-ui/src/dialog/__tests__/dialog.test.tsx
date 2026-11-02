@@ -10,7 +10,7 @@ const mount = (...args: any[]) => {
 };
 import { createApp, createSSRApp, h, nextTick } from "vue";
 import { renderToString } from "@vue/server-renderer";
-import { mount as mountComponent } from "@vue/test-utils";
+import { mount as mountComponent, flushPromises } from "@vue/test-utils";
 import { afterEach, describe, expect, test, vi } from "vitest";
 import {
   Dialog,
@@ -77,7 +77,7 @@ describe("Dialog component contract", () => {
     await nextTick();
     await wrapper.get('button[aria-label="Close dialog"]').trigger("click");
     expect(beforeClose).toHaveBeenCalledWith(
-      "close",
+      { action: "close" },
       expect.any(Function),
       expect.any(Object),
     );
@@ -116,25 +116,31 @@ describe("Dialog component contract", () => {
     await wrapper.findAll(".c-dialog-footer button").at(-1)!.trigger("click");
     expect(wrapper.emitted("confirm")).toBeUndefined();
     done?.();
-    await nextTick();
+    await flushPromises();
     expect(wrapper.emitted("confirm")).toHaveLength(1);
     expect(wrapper.emitted("update:open")?.at(-1)).toEqual([false]);
   });
 
-  test("ignores stale async close completions", async () => {
+  test("deduplicates pending callback requests and ignores completions after external closure", async () => {
     const completions: Array<() => void> = [];
     const wrapper = mountDialog({
-      beforeClose: (_action, done) => completions.push(done),
+      beforeClose: (_action, done) => {
+        completions.push(done);
+      },
     });
     await nextTick();
     const confirm = wrapper.findAll(".c-dialog-footer button").at(-1)!;
     await confirm.trigger("click");
     await confirm.trigger("click");
+    expect(completions).toHaveLength(1);
+    await wrapper.setProps({ open: false });
+    await wrapper.setProps({ open: true });
     completions[0]();
-    await nextTick();
+    await flushPromises();
     expect(wrapper.emitted("confirm")).toBeUndefined();
+    await confirm.trigger("click");
     completions[1]();
-    await nextTick();
+    await flushPromises();
     expect(wrapper.emitted("confirm")).toHaveLength(1);
   });
 

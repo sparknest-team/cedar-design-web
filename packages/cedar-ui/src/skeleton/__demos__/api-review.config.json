@@ -92,7 +92,7 @@
       "name": "rows-width",
       "kind": "prop",
       "demos": [
-        "title-and-rows.vue"
+        "content-comparison.vue"
       ]
     },
     {
@@ -106,10 +106,9 @@
       "demos": [
         "basic.vue",
         "animation.vue",
-        "avatar-and-card.vue",
+        "content-comparison.vue",
         "custom-template.vue",
-        "fullscreen.vue",
-        "title-and-rows.vue"
+        "fullscreen.vue"
       ]
     }
   ],

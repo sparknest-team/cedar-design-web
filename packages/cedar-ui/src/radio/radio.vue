@@ -172,5 +172,6 @@ defineExpose<RadioMethods>({
         <span v-if="$slots.default" :class="n('label')"><slot :checked="checked" :disabled="disabled" /></span>
       </template>
     </slot>
+
   </label>
 </template>

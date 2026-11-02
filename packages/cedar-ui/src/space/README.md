@@ -6,11 +6,13 @@ permalink: /components/space/
 
 通过 flex gap 设置子元素间距，每个有效子节点外包裹一个 item 容器，支持 Fragment 展开与分隔符。
 
-## 案例
+## 基础示例
 
 ### 基础用法
 
 <demo src="./__demos__/basic.vue"></demo>
+
+## 外观与状态
 
 ### 尺寸
 
@@ -18,13 +20,21 @@ permalink: /components/space/
 
 <demo src="./__demos__/size.vue"></demo>
 
-### 动态布局
-
-切换方向、列间距和换行，添加/删除子项；行间距固定8px，列间距在8px/24px间切换。方向不会交换两个gap的几何轴含义。窄容器内未换行时可横向滚动。
-
-<demo src="./__demos__/interactive-layout.vue"></demo>
+## 布局与排列
 
 ### 垂直间距
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `direction` | 子元素的行列排列顺序，默认 row；column 表示按列排列，不使用 horizontal/vertical | 垂直间距、对齐、布局与对齐 |
+| `align` | 交叉轴排列方式 可选值为 `flex-start` `flex-end` `center` `stretch` `baseline`，未传时根据 `direction` 推断（`row` → `center`，`column` → `stretch`） | 对齐、布局与对齐 |
+| `wrap` | 是否超出换行 | 环绕、分隔符 |
+| `size` | 间距，可选值为 `xs` `sm` `md` `lg` `xl` 或 `[rowGap, columnGap]` (支持长度单位和简写方式) | 分隔符、布局与对齐 |
+| `justify` | 主轴排列方式 可选值为 `flex-start` `flex-end` `center` `space-around` `space-between` `space-evenly` | 布局与对齐 |
+<!-- demo-config-notes:end -->
 
 可以设置垂直方向排列的间距。
 
@@ -54,14 +64,46 @@ permalink: /components/space/
 
 <demo src="./__demos__/layout-lab.vue"></demo>
 
-<!-- api-review:start -->
-### 功能调试
+### 分隔换行与内容状态
 
-<demo src="./__demos__/api-review.vue"></demo>
+输入草稿后切换换行、方向或顺序。分隔符跟随前一项，可出现在行尾，不会独占一行。
 
-<!-- api-review:end -->
+<demo src="./__demos__/split-wrapping.vue"></demo>
+
+## 交互与控制
+
+### 动态布局
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `wrap` | 是否超出换行 | 动态布局 |
+| `size` | 间距，可选值为 `xs` `sm` `md` `lg` `xl` 或 `[rowGap, columnGap]` (支持长度单位和简写方式) | 动态布局 |
+| `direction` | 子元素的行列排列顺序，默认 row；column 表示按列排列，不使用 horizontal/vertical | 动态布局 |
+<!-- demo-config-notes:end -->
+
+切换方向、列间距和换行，添加/删除子项；行间距固定8px，列间距在8px/24px间切换。方向不会交换两个gap的几何轴含义。窄容器内未换行时可横向滚动。
+
+<demo src="./__demos__/interactive-layout.vue"></demo>
+
+## 阅读方向
+
+继承最近的 `dir="ltr|rtl"`。`direction="row"` 沿阅读顺序排列，`column` 保持从上到下；justify/align 的 flex-start、flex-end 跟随对应 flex 轴。`size=[rowGap,columnGap]` 始终分别表示行间距、列间距，不因 RTL 交换。换行与 split 插槽沿内容顺序排列，方向切换不反转数据或重建有稳定 key 的子节点。
 
 ## API
+
+### 子节点与尺寸边界
+
+带 key 的 Fragment 分组重排时保留局部子项身份。纯空白、空文本、注释和空 Fragment 不生成间距项；有意义的文字、数字 0 和空元素保留。空的 split 内容也不生成分隔项。
+
+wrap 与 split 组合时，分隔符跟随前一项，可以出现在行尾；不承诺隐藏每行边缘的分隔符。单项宽度超出可用行宽时仍可能溢出。未开启 wrap 时，保持原有 Flex gap 与 justify 分配规则。切换布局不会重建内容节点。
+
+block 将容器切换为 flex / inline-flex；align=stretch 拉伸内部 item 包装层，不保证其中的控件填满。需要撑满时使用子控件的 block 或 width:100%。
+
+非法 size 结构、负数/非有限数字、非二元组数组会回退 md，并在开发环境提示。数组项为长度，不接受预设名。仍支持 CSS var/calc 表达式，具体 CSS 语法与解析值由浏览器处理。
+
 
 ### Space Props
 
@@ -69,12 +111,12 @@ permalink: /components/space/
 
 | 参数      | 说明                                                                                                 | 类型                                                       | 默认值                 |
 | --------- | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | ---------------------- |
-| direction | 布局方向 可选值为 `row` `column`                                                                     | _string_                                                   | `row`                  |
+| direction | 子元素的行列排列顺序，默认 row；column 表示按列排列，不使用 horizontal/vertical | _string_                                                   | `row`                  |
 | justify   | 主轴排列方式 可选值为 `flex-start` `flex-end` `center` `space-around` `space-between` `space-evenly` | _string_                                                   | `flex-start`           |
 | align     | 交叉轴排列方式 可选值为 `flex-start` `flex-end` `center` `stretch` `baseline`，未传时根据 `direction` 推断（`row` → `center`，`column` → `stretch`） | _string_                                                   | `-`                    |
 | size      | 间距，可选值为 `xs` `sm` `md` `lg` `xl` 或 `[rowGap, columnGap]` (支持长度单位和简写方式)            | _string \| number \| [string \| number, string \| number]_ | `md`                   |
 | wrap      | 是否超出换行                                                                                         | _boolean_                                                  | `false`                |
-| block     | 是否为flex元素                                                                                       | _boolean_                                                  | `true`                 |
+| block     | 容器使用 flex（false 使用 inline-flex）                                                                                       | _boolean_                                                  | `true`                 |
 
 ### 插槽
 
@@ -82,6 +124,12 @@ permalink: /components/space/
 | --------- | ---------- | ---- |
 | `default` | Space 内容 | `-`  |
 | `split`   | 分隔符     | `-`  |
+
+### 类型定义
+
+```ts
+import type { SpaceProps, SpaceSize, SpaceDirection, SpaceAlign, SpaceJustify, SpaceInternalSize, SpaceInstance } from '@cedar-design/ui'
+```
 
 ### 样式变量
 

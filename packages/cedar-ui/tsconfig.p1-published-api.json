@@ -1,0 +1,19 @@
+{
+  "extends": "./tsconfig.contracts.json",
+  "include": [
+    "type-tests/p1-api.ts",
+    "type-tests/p2-api.ts",
+    "type-tests/f07-api.ts",
+    "type-tests/f08-table.tsx"
+  ],
+  "compilerOptions": {
+    "paths": {
+      "@cedar-design/ui": [
+        "./types/index.d.ts"
+      ],
+      "@cedar-design/ui/*": [
+        "./types/*/index.d.ts"
+      ]
+    }
+  }
+}

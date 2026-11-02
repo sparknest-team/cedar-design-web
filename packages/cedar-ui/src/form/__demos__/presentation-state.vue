@@ -4,7 +4,7 @@ import ModelOutput from "../__demo-utils__/ModelOutput.vue";
 import { computed, onBeforeUnmount, ref, shallowRef } from "vue";
 
 const form = ref();
-const presentation = ref("dblclick");
+const editMode = ref("dblclick");
 const disabled = ref(false);
 const readonly = ref(false);
 const model = ref({ title: "原名称", note: "原备注", department: "dev" });
@@ -75,13 +75,16 @@ function save(value, { signal }) {
 onBeforeUnmount(() => pending.value?.finish(false, true));
 </script>
 <template>
-  <c-space direction="column" :size="16">
-    <c-select
-      v-model="scenario"
-      :options="scenarios"
-      aria-label="异步保存场景"
-      :clearable="false"
-    />
+  <c-space direction="column" align="stretch" :size="16">
+    <c-form-item layout="vertical" size="sm" label="异步保存场景">
+      <c-radio-group
+        v-model="scenario"
+        aria-label="异步保存场景"
+        :options="scenarios"
+        variant="button"
+        size="sm"
+      />
+    </c-form-item>
     <c-checkbox v-model="disabled">禁用状态示例</c-checkbox>
     <c-checkbox v-model="readonly">只读状态示例</c-checkbox>
     <p>
@@ -91,7 +94,7 @@ onBeforeUnmount(() => pending.value?.finish(false, true));
     <c-form
       ref="form"
       :model="model"
-      :presentation="presentation"
+      :edit-mode="editMode"
       :disabled="disabled"
       :readonly="readonly"
       :rules="rules"

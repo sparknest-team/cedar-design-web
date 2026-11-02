@@ -1,0 +1,3 @@
+- [x] Reproduce native busy/indicator gaps and verify notification Promise independence.
+- [x] Wire current existing pending sources to FieldDecorator and native controls.
+- [x] Validate consumers, browser, demos, both-platform types/lint and evidence.

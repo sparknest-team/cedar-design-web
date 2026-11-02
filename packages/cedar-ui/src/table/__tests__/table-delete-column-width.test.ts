@@ -1,5 +1,5 @@
 import { mount, VueWrapper } from "@vue/test-utils";
-import { describe, test, expect, vi, beforeEach } from "vitest";
+import { describe, test, expect, vi, beforeEach, afterAll } from "vitest";
 import { nextTick } from "vue";
 import Table from "../table";
 
@@ -14,7 +14,16 @@ vi.mock("resize-observer-polyfill", () => ({
     disconnect() {}
   },
 }));
+const originalCallbacks = Object.getOwnPropertyDescriptor(globalThis, "__roCallbacks");
+const originalClientWidth = Object.getOwnPropertyDescriptor(HTMLElement.prototype, "clientWidth");
 (globalThis as any).__roCallbacks = [];
+
+afterAll(() => {
+  if (originalCallbacks) Object.defineProperty(globalThis, "__roCallbacks", originalCallbacks);
+  else Reflect.deleteProperty(globalThis, "__roCallbacks");
+  if (originalClientWidth) Object.defineProperty(HTMLElement.prototype, "clientWidth", originalClientWidth);
+  else Reflect.deleteProperty(HTMLElement.prototype, "clientWidth");
+});
 
 // jsdom 的 clientWidth 恒为 0，mock 成可调容器宽
 let containerWidth = 1000;
@@ -77,6 +86,7 @@ describe("删除列后表格宽度保持铺满容器（fit，对齐父元素 100
     const wrapper = mountTable();
     await nextTick();
     fireResize();
+    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
     await nextTick();
     // 初始：priority 120 + name 200+532=732 + status 120 + extra 28 = 1000
     expect(tableWidth(wrapper)).toContain("width: 1000px");
@@ -106,6 +116,7 @@ describe("删除列后表格宽度保持铺满容器（fit，对齐父元素 100
     const wrapper = mountTable();
     await nextTick();
     fireResize();
+    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
     await nextTick();
     expect(tableWidth(wrapper)).toContain("width: 1000px");
 

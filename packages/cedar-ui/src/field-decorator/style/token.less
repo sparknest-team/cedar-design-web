@@ -1,5 +1,10 @@
 /******** Field / Input CSS Variables *******/
 :root {
+  --c-field-loading-line-size: 2px;
+  --c-field-loading-duration: 1s;
+  --c-field-loading-color: var(--c-field-focus-color);
+
+  --c-field-caret-color: currentColor;
   // Shared text / icon
   --c-field-control-text-color: var(--c-sys-color-content-primary);
   --c-field-placeholder-text-color: var(--c-sys-color-content-tertiary);
@@ -47,6 +52,7 @@
   --c-field-variant-filled-background-error: var(~'--c-color-danger-light-1');
 
   // variant: outline
+  --c-field-variant-outline-background: transparent;
   --c-field-variant-outline-border-color: var(--c-sys-color-border-default);
   --c-field-variant-outline-border-color-hover: var(--c-sys-color-border-strong);
   --c-field-variant-outline-border-color-focus: var(--c-sys-color-action-primary);

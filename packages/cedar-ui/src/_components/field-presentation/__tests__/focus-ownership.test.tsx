@@ -6,31 +6,64 @@ import FieldPresentation from '../FieldPresentation.vue'
 const ticks: Array<() => void> = []
 vi.mock('vue', async () => {
   const actual = await vi.importActual<typeof import('vue')>('vue')
-  return { ...actual, nextTick: (callback?: () => void) => {
-    if (callback) { ticks.push(callback); return Promise.resolve() }
-    return actual.nextTick()
-  } }
+  return {
+    ...actual,
+    nextTick: (callback?: () => void) => {
+      if (callback) {
+        ticks.push(callback)
+        return Promise.resolve()
+      }
+      return actual.nextTick()
+    },
+  }
 })
 const owners: Array<ReturnType<typeof mount>> = []
 afterEach(() => {
-  owners.splice(0).forEach(owner => owner.unmount())
+  owners.splice(0).forEach((owner) => owner.unmount())
   ticks.length = 0
   vi.restoreAllMocks()
 })
 async function fixture() {
-  const focus = vi.fn(), editorFocus = vi.fn()
-  const props = reactive({ presentation: 'dblclick' as const, open: true })
+  const focus = vi.fn(),
+    editorFocus = vi.fn()
+  const props = reactive({ editMode: 'dblclick' as const, open: true })
   const active = ref(true)
-  const reference = defineComponent({ setup(_, { expose }) { expose({ focus }); return () => h('button') } })
-  const panel = defineComponent({ setup(_, { expose }) { expose({ focus: editorFocus }); return () => h('div') } })
-  const dialog = defineComponent({ name: 'AuditDialog', setup: (_, { slots }) => () => h('div', slots.default?.()) })
-  const Child = defineComponent({ setup: () => () => h(FieldPresentation, props) })
-  const owner = mount(defineComponent({ setup: () => () => h(KeepAlive, null, () => active.value ? h(Child) : null) }), {
-    global: { stubs: { FieldReference: reference, EditorPanel: panel, Dialog: dialog } },
+  const reference = defineComponent({
+    setup(_, { expose }) {
+      expose({ focus })
+      return () => h('button')
+    },
   })
+  const panel = defineComponent({
+    setup(_, { expose }) {
+      expose({ focus: editorFocus })
+      return () => h('div')
+    },
+  })
+  const dialog = defineComponent({
+    name: 'AuditDialog',
+    setup:
+      (_, { slots }) =>
+      () =>
+        h('div', slots.default?.()),
+  })
+  const Child = defineComponent({ setup: () => () => h(FieldPresentation, props) })
+  const owner = mount(
+    defineComponent({ setup: () => () => h(KeepAlive, null, () => (active.value ? h(Child) : null)) }),
+    {
+      global: { stubs: { FieldReference: reference, EditorPanel: panel, Dialog: dialog } },
+    },
+  )
   owners.push(owner)
-  const flush = async () => { await nextTick(); await nextTick() }
-  const close = async () => { props.open = false; await flush(); return ticks[ticks.length - 1] }
+  const flush = async () => {
+    await nextTick()
+    await nextTick()
+  }
+  const close = async () => {
+    props.open = false
+    await flush()
+    return ticks[ticks.length - 1]
+  }
   return { focus, editorFocus, props, active, owner, flush, close }
 }
 test('current closed editor restores its reference after render', async () => {
@@ -43,7 +76,8 @@ test('current closed editor restores its reference after render', async () => {
 test('a consumed close callback cannot focus twice', async () => {
   const f = await fixture()
   const restore = await f.close()
-  restore(); restore()
+  restore()
+  restore()
   expect(f.focus).toHaveBeenCalledTimes(1)
 })
 test('close callback cannot steal focus from a reopened editor', async () => {

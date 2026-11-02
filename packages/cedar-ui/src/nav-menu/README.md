@@ -10,16 +10,9 @@ permalink: /components/nav-menu/
 
 `scrollTo(key)` 展开路径后等待渲染，再以 nearest 对齐原生定位；返回 `Promise<void>`。连续调用只执行最新仍有效的请求。禁用、options／fieldNames／mode／responsive／折叠配置变化、KeepAlive 停用及卸载使旧请求失效；重新激活后请显式发起新请求，不会重放旧滚动。取消不回滚已经执行的浏览器滚动，不新增 CSS duration Token 或公共取消方法。
 
-## 案例
-
-<!-- api-review:start -->
-### 组合审查 / API review
-
-<demo src="./__demos__/api-review.vue"></demo>
-
-<!-- api-review:end -->
-
 NavMenu 有两种清晰的使用方式：导航树使用 `options`，业务筛选等独立入口使用 `NavMenu.Item`。下面先介绍常用导航，再逐步进入层级、响应式和高级定制。
+
+## 基础示例
 
 ### 基础导航
 
@@ -35,7 +28,41 @@ NavMenu 有两种清晰的使用方式：导航树使用 `options`，业务筛�
 
 <demo src="./__demos__/horizontal-sub-menu.vue" title="基础横向导航" desc="切换为 horizontal 模式，二级及更深层级在浮层中展开。"></demo>
 
+## 外观与布局
+
+### 外观
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `options` | 导航结构 | 外观 |
+| `size` | 尺寸 | 外观 |
+| `mode` | 导航方向 | 外观 |
+<!-- demo-config-notes:end -->
+
+#### 尺寸
+
+NavMenu 支持 `xs`、`sm`、`md`、`lg` 和 `xl` 五档组件尺寸。
+
+<demo src="./__demos__/size.vue" title="五种尺寸" desc="并排比较五档菜单高度和文字尺寸。"></demo>
+
+## 层级与响应式
+
 ### 层级与响应式
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `options` | 导航结构 | 层级与响应式 |
+| `accordion` | 同层只展开一个分支 | 层级与响应式 |
+| `default-value` | 非受控初始选中值 | 层级与响应式 |
+| `collapsed` | 折叠状态，支持 v-model:collapsed | 层级与响应式 |
+| `mode` | 导航方向 | 层级与响应式 |
+<!-- demo-config-notes:end -->
 
 #### 多级菜单与手风琴
 
@@ -55,7 +82,18 @@ NavMenu 有两种清晰的使用方式：导航树使用 `options`，业务筛�
 
 <demo src="./__demos__/breakpoint.vue" title="横向溢出收纳" desc="缩窄容器观察更多菜单；收纳后的选项仍支持选择和键盘导航。"></demo>
 
+## 导航入口与业务面板
+
 ### 独立入口与业务面板
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `mode` | 导航方向 | 独立入口与业务面板 |
+| `active-item` | 受控的具名 NavMenu.Item 激活项，支持 v-model:active-item | 独立入口与业务面板 |
+<!-- demo-config-notes:end -->
 
 `NavMenu.Item` 适合分类、地区和高级筛选等独立入口。它有自己的值和展开状态，不参与导航树的互斥选择。
 
@@ -63,7 +101,7 @@ NavMenu 有两种清晰的使用方式：导航树使用 `options`，业务筛�
 
 同时展示普通下拉、横向通栏选项和自定义筛选面板，是顶部业务导航的完整示例。
 
-<demo src="./__demos__/items-horizontal.vue" title="横向筛选栏" desc="分类使用普通下拉，地区使用通栏选项，高级筛选使用自定义内容。"></demo>
+<demo src="./__demos__/items-horizontal.vue" title="横向筛选栏" desc="分类使用普通下拉，地区使用通栏选项，更多筛选使用 full 面板与自定义内容。"></demo>
 
 #### 纵向工作台
 
@@ -93,13 +131,32 @@ Item 的标题默认跟随选中项，也可以通过 `#label` 保持固定标�
 
 <demo src="./__demos__/item-label-independent.vue" title="独立激活的筛选入口" desc="未具名 Item 各自维护标题和值，可以同时高亮；同一时间仍只展开一个面板。"></demo>
 
+## 数据与状态控制
+
 ### 数据与状态控制
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `options` | 导航结构 | 数据与状态控制 |
+| `model-value` | 当前选中 key，支持 v-model；null 表示无选中 | 数据与状态控制 |
+| `expanded-keys` | 受控展开分支 | 数据与状态控制 |
+| `field-names` | key/label/children/disabled 字段映射 | 数据与状态控制 |
+| `disabled` | 全局禁用选择和用户展开 | 数据与状态控制 |
+| `default-value` | 非受控初始选中值 | 数据与状态控制 |
+<!-- demo-config-notes:end -->
 
 #### 受控选择与展开
 
 受控属性始终以父级传入值为准。示例可切换是否接受更新请求，以观察选择与展开状态的区别。
 
 <demo src="./__demos__/controlled.vue" title="受控选择与展开" desc="更新事件只表达请求；只有父级接受后，受控状态才发生改变。"></demo>
+
+<demo src="./__demos__/item-controlled.vue" title="受控状态与禁用" desc="Item 独立控制选中值与展开状态，父级可以接受或拒绝更新。"></demo>
+
+<demo src="./__demos__/panel-state.vue" title="面板状态与关闭" desc="默认保留内部草稿，可通过 unmount-on-close 卸载，根 close 方法统一关闭。"></demo>
 
 #### 业务字段映射
 
@@ -112,14 +169,6 @@ Item 的标题默认跟随选中项，也可以通过 `#label` 保持固定标�
 作用域插槽负责统一定制节点内容，选项本身也可以提供 VNode 或渲染函数。
 
 <demo src="./__demos__/custom-content.vue" title="插槽与 VNode" desc="通过 label、extra 插槽和 option 图标定制节点，导航层级仍由 options 管理。"></demo>
-
-### 外观
-
-#### 尺寸
-
-NavMenu 支持 `xs`、`sm`、`md`、`lg` 和 `xl` 五档组件尺寸。
-
-<demo src="./__demos__/size.vue" title="五种尺寸" desc="并排比较五档菜单高度和文字尺寸。"></demo>
 
 ## NavMenu API
 
@@ -188,10 +237,31 @@ interface NavMenuOption {
 
 label/icon/extra 渲染函数、同名插槽及 nodeProps 均接收 `{ option, active, expanded, level }`。`active` 只表示当前节点自身匹配 modelValue，祖先路径强调留在内部；`expanded` 表示分支展开，level 从 0 开始。
 
+### 两端对应关系
+
+两端面板均在首次展开时创建，关闭或切换入口后默认保留挂载，内部草稿和分支展开状态继续保留。设置 `unmount-on-close` 后，在关闭过渡结束时卸载面板；再次展开会重新创建内部组件，但不会清空 Item 自身的选中值。草稿提交、重置和筛选生效时机由业务决定。
+
+根 `close()` 只请求关闭 Item 面板并恢复入口焦点，不改变选中值、active-item 或桌面导航树的 expanded-keys。受控 open 拒绝更新时仍保持展开。没有 options 且没有 content 插槽的入口不展开；异步 options 到达后按当前 open 状态展示。KeepAlive 停用期间隐藏面板并请求关闭，重新激活时仍以受控值为准。
+
+Item 的选中值、展开状态、事件、插槽上下文及 `select/close/setOpen` 方法保持一致。两端根菜单都提供 `close/resize/setActiveItem`。`name` 必须在当前菜单内唯一，动态修改后会释放旧名称；同一次更新允许交换名称或在重排时复用旧名称，以更新完成后的名称检查重复。纵向选项会在初始值、受控值或 options 更新时展开当前值的可用祖先路径；用户仍可手动收起分支。
+
+| 能力 | Cedar | Maple |
+| --- | --- | --- |
+| 根菜单 | options 导航树或 Item 入口；默认 vertical | 仅 Item 筛选栏；默认 horizontal |
+| popup-layout | dropdown（默认）/ full-width / full-height / full | full-width（默认）/ full |
+| 面板起点 | 当前入口底边 | 整个筛选栏底边；独立 Item 使用自身底边 |
+| 触发与定位 | trigger / placement | 固定点击向下展开 |
+| 遮罩与滚动 | 非模态，不锁背景滚动 | 根级 overlay / overlay-closable / lock-scroll / esc-to-close / z-index |
+| 主题 | theme 可覆盖 | 跟随全局主题，无 theme 属性 |
+| 导航树专用方法 | showOption / scrollTo / setCollapsed | — |
+
+两端 `NavMenuPopupLayout` 分别导出本端支持的值域；Maple 的 `NavMenuMode` 仅为 horizontal，`options-mode` 仍支持两个方向。入口 default 插槽替换入口内部内容，移动端位于原生按钮中，请使用文本、图标等非交互内容；表单和操作按钮放在 content 插槽。
+
 ### 方法
 
 | 方法 | 说明 |
 | --- | --- |
+| close() | 请求关闭所有 Item 面板并恢复入口焦点，不修改导航树展开状态 |
 | showOption(key?) | 展开指定项的祖先路径，默认当前选中项；不选择 |
 | scrollTo(key?) | 先展开，再滚动到该项；受控展开需父级接受 |
 | resize() | 手动重新计算横向溢出 |
@@ -212,7 +282,7 @@ label/icon/extra 渲染函数、同名插槽及 nodeProps 均接收 `{ option, a
 
 `v-model` 保存面板的选中值。插槽 `active` 只表示业务上的当前入口：提供 name 且处于根菜单中时，由根 activeItem 是否等于该 name 决定；独立入口则由主值是否匹配 options 中的普通选项决定（包括 0 和空字符串）。未知值、分组和分隔项不激活独立入口。`highlight` 仅覆盖视觉强调，true 强制强调、false 取消强调，省略时跟随 active；它不改变 active 或主值。打开面板不会激活入口。
 
-`CNavMenuItem`（也可写 `NavMenu.Item`）是自定义一级入口，不参与根菜单普通导航树的 `modelValue`。未提供 `name` 时，Item 根据自己的值独立高亮，适合分类、地区等多个筛选条件同时生效；提供唯一 `name` 后，由根菜单的 `activeItem/defaultActiveItem` 统一保持单选高亮。两种模式都只允许同一时间展开一个 Item 面板，且不会清空其他面板的内部值。普通一级导航仍使用根 NavMenu 的 `options + v-model`。每个入口通过自己的 `options` 定义菜单，或通过 `content` 插槽完全替换面板。默认插槽自定义入口本身，`label`、`icon` 插槽局部自定义入口，`option-label`、`option-icon`、`option-extra` 自定义选项。
+`CNavMenuItem`（也可写 `NavMenu.Item`）是自定义一级入口，不参与根菜单普通导航树的 `modelValue`。未提供 `name` 时，Item 根据自己的值独立高亮，适合分类、地区等多个筛选条件同时生效；提供唯一 `name` 后，由根菜单的 `activeItem/defaultActiveItem` 统一保持单选高亮。两种模式都只允许同一时间展开一个 Item 面板，且不会清空其他面板的内部值。普通一级导航仍使用根 NavMenu 的 `options + v-model`。每个入口通过自己的 `options` 定义菜单，或通过 `content` 插槽完全替换面板。默认插槽自定义入口内部内容，`label`、`icon` 插槽局部自定义入口，`option-label`、`option-icon`、`option-extra` 自定义选项。
 
 有默认插槽时，横向菜单使用滚动而不收入“更多”，避免复制包含表单的入口。纯 `options` 菜单继续支持自动溢出收纳。新 Item 不兼容旧的子组件收集协议。同一 NavMenu 下的 Item 面板互斥，点击其他入口会请求关闭已打开的面板；受控 open 需要业务接受 update:open。
 
@@ -221,17 +291,18 @@ label/icon/extra 渲染函数、同名插槽及 nodeProps 均接收 `{ option, a
 | name | 稳定且唯一的入口标识；提供后由根菜单 activeItem 互斥管理当前入口；视觉覆盖另用 highlight | — |
 | label | 未选中或选中值未匹配 options 时的入口标题，支持 VNode / 渲染函数 | — |
 | options / fieldNames | 与 NavMenu 相同的选项和字段映射 | `[]` |
-| modelValue / defaultValue | 独立受控值 / 初始值，支持字符串、数字和 null | `undefined` / `null` |
+| model-value / default-value | 独立受控值 / 初始值，支持字符串、数字和 null | `undefined` / `null` |
 | highlight | 入口视觉强调覆盖，不改变业务 active 或选中值；省略时跟随 active | — |
-| hideOnSelect | 调用 select 后关闭面板 | `true` |
-| open / defaultOpen | 受控 / 初始面板状态 | `undefined` / `false` |
-| disabled | 禁用入口（同时遵循父菜单 disabled） | `false` |
+| hide-on-select | 调用 select 后关闭面板 | `true` |
+| unmount-on-close | 关闭过渡结束后卸载面板；默认保留首次展开后的内容 | false |
+| open / default-open | 受控 / 初始面板状态 | `undefined` / `false` |
+| disabled | 禁用入口（同时遵循父菜单 disabled） | `undefined` |
 | trigger | Trigger 触发方式 | `click` |
 | placement | 普通下拉的位置；全高面板使用 right/left 系列时紧贴入口对应边缘 | `bottom-start` |
-| popupLayout | `dropdown` 普通下拉 / `full-width` 入口下方通栏 / `full-height` 右侧全高 | `dropdown` |
-| popupStyle | 面板 CSS，可覆盖全高面板宽度、方向和尺寸 | — |
-| popupContainer / popupClass | Trigger 挂载容器及浮层类名 | 跟随父菜单 |
-| optionsMode | 默认选项面板的横向 / 纵向排列 | `vertical` |
+| popup-layout | `dropdown` 普通下拉 / `full-width` 入口下方通栏 / `full-height` 右侧全高 / `full` 入口下方宽高铺满 | `dropdown` |
+| popup-style | 面板 CSS，可覆盖全高面板宽度、方向和尺寸 | — |
+| popup-container / popup-class | Trigger 挂载容器及浮层类名 | 跟随父菜单 |
+| options-mode | 默认选项面板的横向 / 纵向排列 | `vertical` |
 
 所有入口插槽和 `content` 插槽收到 `{ modelValue, selectedOption, active, open, select, close }`。`select(key, event?)` 发出 `update:modelValue` 和 `select(key, option, event)`；自定义面板可以选择 options 外的值，此时 option 为 undefined；独立入口 active 为 false，如需强调可显式设置 highlight。`close()` 关闭并恢复入口焦点。受控值只有父组件接受后才影响标题和业务 active。入口插槽的 active 表示入口状态；label 渲染函数的 active 则表示其上下文 option 自身是否匹配 Item 的主值，未匹配时为 false。`hideOnSelect` 独立于值是否被接受，需手动确认时设为 false。
 
@@ -294,3 +365,12 @@ Item 还发出 `update:open`、入口 `click`，暴露 `select`、`close`、`set
 | --c-nav-menu-popup-shadow | `0 6px 24px rgb(0 0 0 / 12%)` |
 | --c-nav-menu-motion-duration | `150ms` |
 | --c-nav-menu-panel-width | `min(400px, 100vw)` |
+
+`popup-layout="full"` 从入口底边开始，宽度占满视口，高度占满下方剩余视口区域。Maple 同名布局从整个筛选栏底边开始；移动端默认 full-width，桌面端默认 dropdown。
+
+
+## 阅读方向与键盘交互
+
+NavMenu 继承最近的原生 `dir` 并支持动态切换。横向菜单的左右键按阅读方向移动焦点；纵向上下键不反转。RTL 下左键展开/进入子级，右键收起/返回父级，LTR 相反；Escape 关闭浮层并返回触发项。
+
+数据菜单的嵌套浮层优先向阅读结束侧展开，空间不足时自动调整，浮层继承来源作用域。显式 `NavMenu.Item` 的物理 `placement` 保持原意。切换方向不会选中菜单或清空筛选值。

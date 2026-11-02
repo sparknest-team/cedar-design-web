@@ -1,3 +1,4 @@
+import type { ReadingDirection } from '@cedar-design/use'
 import { InjectionKey, Slots } from 'vue'
 import { CedarLang } from '../locale/types'
 import { ComponentSize } from '../_utils/constant'
@@ -10,7 +11,7 @@ export interface ConfigProvider {
   size?: ComponentSize
   updateAtScroll?: boolean
   scrollToClose?: boolean
-  rtl?: boolean
+  dir?: ReadingDirection
   theme?: CedarTheme
 }
 

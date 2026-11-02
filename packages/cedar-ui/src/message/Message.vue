@@ -8,6 +8,7 @@
     >
       <div
         v-if="open"
+      :dir="readingDirection"
         role="alert"
         :class="[
           prefixCls,
@@ -56,7 +57,8 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, onMounted, watch, type PropType } from "vue";
+import { useDirection } from '../_utils/direction'
+import { useAttrs, defineComponent, onMounted, watch, type PropType } from "vue";
 import { IconCheckCircleFill } from "@cedar-design/icons-vue/icon-check-circle-fill";
 import { IconClose } from "@cedar-design/icons-vue/icon-close";
 import { IconCloseCircleFill } from "@cedar-design/icons-vue/icon-close-circle-fill";
@@ -85,6 +87,8 @@ const DynamicContent = defineComponent({
     typeof props.value === "function" ? props.value() : props.value,
 });
 const props = defineProps(messageProps);
+const directionAttrs = useAttrs()
+const { dir: readingDirection } = useDirection(undefined, () => directionAttrs.dir)
 const emit = defineEmits<{
   (event: "update:open", value: boolean): void;
   (event: "open" | "opened" | "close" | "closed"): void;

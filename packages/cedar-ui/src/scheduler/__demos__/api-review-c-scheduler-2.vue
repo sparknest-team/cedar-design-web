@@ -4,14 +4,16 @@
     v-slot="__apiReview"
     v-bind="defineReviewConfig(__apiReviewRawConfig)"
   >
-    <c-space wrap>
-      <c-select
-        v-model="kind"
-        :options="[
-          { value: 'device', label: '设备接口' },
-          { value: 'person', label: '人员接口' },
-        ]"
-      />
+    <c-space direction="column" align="stretch" wrap>
+      <c-form-item layout="vertical" hide-label>
+        <c-select
+          v-model="kind"
+          :options="[
+            { value: 'device', label: '设备接口' },
+            { value: 'person', label: '人员接口' },
+          ]"
+        />
+      </c-form-item>
       <c-button @click="failNextSearch = true">下次搜索模拟失败</c-button>
       <c-button @click="retryHydration">模拟回显失败并重新加载</c-button>
       <c-button @click="useNextPage">切换可见资源页</c-button>

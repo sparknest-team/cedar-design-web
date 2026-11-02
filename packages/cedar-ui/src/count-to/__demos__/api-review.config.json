@@ -51,7 +51,7 @@
       "name": "timing-function",
       "kind": "prop",
       "demos": [
-        "timing-function.vue"
+        "number-format-comparison.vue"
       ]
     },
     {

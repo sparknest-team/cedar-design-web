@@ -321,6 +321,7 @@
 import { computed, ref, onBeforeUnmount, onMounted, onActivated, onDeactivated, watch } from "vue";
 import CButton from "../../button";
 import CPopover from "../../popover";
+import { useDirection } from "../../_utils/direction";
 import { createNamespace } from "../../_utils/global-config";
 import SchedulerEventCard from "./SchedulerEvent.vue";
 import {
@@ -394,6 +395,7 @@ defineSlots<{
   }): unknown;
 }>();
 const root = ref<HTMLElement>();
+const { dir: direction } = useDirection(() => root.value);
 function createFromEmptyAllDay(
   event: MouseEvent,
   column: (typeof props.columns)[number],
@@ -565,7 +567,7 @@ function clearRange() {
   ignoreClick = false;
 }
 watch(
-  () => [props.locked, props.disabled, props.columns, props.dragToCreate, props.step, props.snapDuration, props.startHour, props.endHour],
+  () => [direction.value, props.locked, props.disabled, props.columns, props.dragToCreate, props.step, props.snapDuration, props.startHour, props.endHour],
   clearRange,
   { deep: true, flush: "sync" },
 );
@@ -682,7 +684,7 @@ function overflowPosition(group: OverlapGroup) {
   return {
     top: `${((group.start - props.startHour * 60) / duration) * 100}%`,
     height: `${((group.end - group.start) / duration) * 100}%`,
-    left: `${(limit / group.columns) * 100}%`,
+    insetInlineStart: `${(limit / group.columns) * 100}%`,
     width: `${100 - (limit / group.columns) * 100}%`,
   };
 }
@@ -769,7 +771,7 @@ function position(item: SchedulerLayoutItem) {
   return {
     top: `${((item.start - props.startHour * 60) / duration) * 100}%`,
     height: `${((item.end - item.start) / duration) * 100}%`,
-    left: `${(valid ? custom.left : item.column / item.columns) * 100}%`,
+    ...(valid ? { left: `${custom.left * 100}%` } : { insetInlineStart: `${(item.column / item.columns) * 100}%` }),
     width: valid
       ? `${custom.width * 100}%`
       : stacked(item)

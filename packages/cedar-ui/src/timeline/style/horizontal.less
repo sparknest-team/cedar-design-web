@@ -9,8 +9,8 @@
 
 .c-timeline-item-dot-line-is-horizontal {
   top: 50%;
-  right: var(~'--c-timeline-horizontal-margin-line-right');
-  left: calc(var(~'--c-timeline-dot-size-width') + var(~'--c-timeline-horizontal-margin-line-left'));
+  inset-inline-end: var(~'--c-timeline-horizontal-margin-line-right');
+  inset-inline-start: calc(var(~'--c-timeline-dot-size-width') + var(~'--c-timeline-horizontal-margin-line-left'));
   width: unset;
   height: var(~'--c-timeline-size-line-width');
   border-top-width: var(~'--c-timeline-size-line-width');
@@ -85,3 +85,10 @@
     transform: translateY(50%);
   }
 }
+
+// The horizontal dot anchors at the reading start; vertical physical sides stay unchanged.
+.c-timeline-direction-horizontal .c-timeline-item-dot-wrapper {
+  left: auto;
+  inset-inline-start: 0;
+}
+.c-timeline-direction-horizontal .c-timeline-item-content-wrapper { margin-inline: 0; }

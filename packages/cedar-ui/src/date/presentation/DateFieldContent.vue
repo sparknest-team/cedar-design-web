@@ -9,13 +9,14 @@
   >
     <slot>
       <PickerField
+        :loading="fieldProps.loading" :loading-mode="fieldProps.loadingMode"
         v-bind="{ ...$attrs, ...state.controlProps.value }"
         ref="field"
         :aria-controls="state.open.value ? popupId : undefined"
         :class="rootClass"
         @commit="state.commitText"
         @clear="state.clear"
-        @click="state.click"
+        @click="click"
         @focus="state.focus"
         @blur="state.blur"
         @keydown="keydown"
@@ -52,7 +53,10 @@
           :range="range"
           @select="(value) => state.select(value)"
           @update:picker-value="emit('update:pickerValue', $event)"
-          @picker-value-change="(value, dates, texts) => emit('picker-value-change', value, dates, texts)"
+          @picker-value-change="
+            (value, dates, texts) =>
+              emit('picker-value-change', value, dates, texts)
+          "
           @select-shortcut="emit('select-shortcut', $event)"
           @confirm="(value) => state.confirm(value)"
         >
@@ -65,6 +69,7 @@
   </TemporalTrigger>
 </template>
 <script setup lang="ts">
+import { isFieldOpenClick } from "../../_components/picker-field/open-trigger";
 import { computed, ref, useId, useSlots } from "vue";
 import { IconCalendar } from "@cedar-design/icons-vue";
 import FeedbackIcon from "../../_components/FeedbackIcon.vue";
@@ -81,8 +86,12 @@ defineOptions({
   name: createNamespace("date-field-content").name,
   inheritAttrs: false,
 });
-const props = defineProps<DateFieldContentProps>()
-const emit = defineEmits(['update:pickerValue', 'picker-value-change', 'select-shortcut']);
+const props = defineProps<DateFieldContentProps>();
+const emit = defineEmits([
+  "update:pickerValue",
+  "picker-value-change",
+  "select-shortcut",
+]);
 const popupId = useId();
 const locale = useDateFieldLocale();
 const field = ref<InstanceType<typeof PickerField>>();
@@ -112,6 +121,16 @@ function keydown(event: KeyboardEvent) {
     event.preventDefault();
     props.state.setOpen(true);
   }
+}
+function click(event: Event) {
+  props.state.click(event);
+  if (
+    props.state.disabled.value ||
+    props.state.readonly.value ||
+    !isFieldOpenClick(event, props.fieldProps.openTriggerTarget)
+  )
+    return;
+  field.value?.commit(event);
 }
 const slots = useSlots();
 const fieldNames = ["prefix", "selected", "separator", "clear-icon"];

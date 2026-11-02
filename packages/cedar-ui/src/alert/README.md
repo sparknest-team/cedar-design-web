@@ -6,7 +6,7 @@ permalink: /components/alert/
 
 向用户显示警告的信息时，通过警告提示，展现需要关注的信息。
 
-## 案例
+## 基础示例
 
 ### 基础用法
 
@@ -14,35 +14,68 @@ permalink: /components/alert/
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### 视觉变体
+## 外观与状态
+
+### 外观配置对比
+
+选择一个对比维度后，同屏展示它的全部可选值；其余配置和内容保持一致。可切换其他配置检查组合效果；输入类预览共享一个值。
+
+<details>
+<summary>配置说明与使用限制</summary>
+
+#### 视觉变体
 
 `variant` 支持 `standard`（默认，浅色填充 + 描边）、`tonal`（浅色填充无描边）、`outline`（透明背景 + 描边）。
 
-<demo src="./__demos__/variant.vue"></demo>
+#### 外观组合
 
-### 提示类型
+适用于提示信息的强调程度。调整变体、状态，用相同数据观察变化。内容保持一致，便于比较不同设置的实际效果。
+
+#### 提示类型
 
 警告提示有 `info`、`success`、`warning`、`danger`、`default` 五种类型。`default` 类型下默认不展示图标，可通过 `#icon` 插槽自定义。
 
-<demo src="./__demos__/type.vue"></demo>
+</details>
 
-### 提示标题
+<demo src="./__demos__/appearance-lab.vue"></demo>
+
+## 内容与展示
+
+### 标题、对齐与通栏
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `title` | 警告提示的标题 | 标题、对齐与通栏、操作项 |
+| `status` | 警告提示的类型 | 标题、对齐与通栏、隐藏图标 |
+| `center` | 内容是否居中显示 | 标题、对齐与通栏 |
+| `banner` | 是否作为顶部公告使用（去除边框和圆角） | 标题、对齐与通栏 |
+| `show-icon` | 是否展示图标 | 隐藏图标 |
+| `closable` | 是否展示关闭按钮 | 操作项 |
+<!-- demo-config-notes:end -->
+
+比较标题层级、内容居中与通栏布局。通栏用于页面级提示；操作和关闭能力另见后续示例。
+
+<details>
+<summary>配置说明与使用限制</summary>
+
+#### 提示标题
 
 通过设置 `title` 可以给警告提示添加标题。
 
-<demo src="./__demos__/title.vue"></demo>
-
-### 居中
+#### 居中
 
 通过设置 `center`，内容居中显示。
 
-<demo src="./__demos__/center.vue"></demo>
-
-### 顶部公告
+#### 顶部公告
 
 通过设置 `banner`，可将警告提示作为顶部公告使用（去除边框和圆角）。
 
-<demo src="./__demos__/banner.vue"></demo>
+</details>
+
+<demo src="./__demos__/content-comparison.vue"></demo>
 
 ### 隐藏图标
 
@@ -50,44 +83,51 @@ permalink: /components/alert/
 
 <demo src="./__demos__/show-icon.vue"></demo>
 
-### 自定义图标
-
-通过 `#icon` 插槽自定义前置图标。
-
-<demo src="./__demos__/custom-icon.vue"></demo>
-
 ### 操作项
 
 通过 `#action` 插槽自定义操作按钮。
 
 <demo src="./__demos__/action.vue"></demo>
 
-### 可关闭
+## 自定义与插槽
+
+### 自定义图标
+
+通过 `#icon` 插槽自定义前置图标。
+
+<demo src="./__demos__/custom-icon.vue"></demo>
+
+## 交互与控制
+
+### 关闭入口与自定义图标
+
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `closable` | 是否展示关闭按钮 | 关闭入口与自定义图标 |
+| `status` | 警告提示的类型 | 关闭入口与自定义图标 |
+<!-- demo-config-notes:end -->
+
+分别操作默认与自定义关闭入口，比较相同关闭能力的呈现方式。
+
+<details>
+<summary>配置说明与使用限制</summary>
+
+#### 可关闭
 
 关闭按钮支持点击、Space 与 Enter。close 表示开始关闭，closed 在退出动画结束后触发；若业务在 close 中直接卸载组件，就不能继续观察该实例的动画结束。每个 Alert 独立关闭；需要重开时由业务以新实例重建，不代表旧实例的内部可见状态自动恢复。
 
 通过设置 `closable`，可开启关闭按钮。
 
-<demo src="./__demos__/closable.vue"></demo>
-
-### 自定义关闭图标
+#### 自定义关闭图标
 
 指定 `close-icon` slot，自定义关闭元素。
 
-<demo src="./__demos__/close-icon.vue"></demo>
+</details>
 
-### 外观组合
-
-适用于提示信息的强调程度。调整变体、状态，用相同数据观察变化。内容保持一致，便于比较不同设置的实际效果。
-
-<demo src="./__demos__/appearance-lab.vue"></demo>
-
-<!-- api-review:start -->
-### 功能调试
-
-<demo src="./__demos__/api-review.vue"></demo>
-
-<!-- api-review:end -->
+<demo src="./__demos__/dismiss-comparison.vue"></demo>
 
 ## API
 

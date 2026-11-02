@@ -6,7 +6,7 @@ permalink: /components/layout/
 
 页面的基础布局框架，常与组件嵌套使用，构建页面整体布局。
 
-## 案例
+## 基础示例
 
 ### 基本用法
 
@@ -14,17 +14,7 @@ permalink: /components/layout/
 
 <demo src="./__demos__/basic.vue"></demo>
 
-### 可伸缩侧边栏
-
-可以用鼠标进行拖拽放大缩小的侧边栏，需要用到的参数：resize-directions。
-
-<demo src="./__demos__/resize.vue"></demo>
-
-### 侧栏折叠
-
-通过 `v-model:collapsed` 控制折叠，也可以使用 `default-collapsed` 设置非受控初始状态。
-
-<demo src="./__demos__/collapse.vue"></demo>
+## 布局与排列
 
 ### 固定头尾与独立滚动
 
@@ -38,12 +28,23 @@ permalink: /components/layout/
 
 <demo src="./__demos__/sider-options.vue"></demo>
 
-<!-- api-review:start -->
-### 功能调试
+## 内容与展示
 
-<demo src="./__demos__/api-review.vue"></demo>
+### 可伸缩侧边栏
 
-<!-- api-review:end -->
+可以用鼠标进行拖拽放大缩小的侧边栏，需要用到的参数：resize-directions。
+
+<demo src="./__demos__/resize.vue"></demo>
+
+### 侧栏折叠
+
+通过 `v-model:collapsed` 控制折叠，也可以使用 `default-collapsed` 设置非受控初始状态。
+
+<demo src="./__demos__/collapse.vue"></demo>
+
+## 阅读方向
+
+继承最近的 `dir="ltr|rtl"`，支持运行时切换与局部覆盖。内容继承阅读方向。Sider 的 placement=left/right 保持物理侧，折叠和 ResizeBox 的物理手柄语义不反转；标题与内容本身可使用局部 dir。
 
 ## API
 

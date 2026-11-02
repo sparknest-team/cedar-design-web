@@ -10,13 +10,13 @@ permalink: /components/style/typography/
 - Properties 表示该 Class 设置的属性值
 - Effective CSS 表示该 Class 最终生效的 CSS 属性
 
-### 文本对齐
-
-<demo src="./__demos__/text-align.vue"></demo>
+## 基础示例
 
 ### 字阶
 
 <demo src="./__demos__/font.vue"></demo>
+
+## 字号与字形
 
 ### 字号
 
@@ -29,6 +29,12 @@ permalink: /components/style/typography/
 ### 字重
 
 <demo src="./__demos__/font-weight.vue"></demo>
+
+## 对齐与行高
+
+### 文本对齐
+
+<demo src="./__demos__/text-align.vue"></demo>
 
 ### 行高
 

@@ -20,13 +20,17 @@ permalink: /components/style/color/
 | `c-color-border-1` … `c-color-border-4` | `var(--c-color-border-1)` … `var(--c-color-border-4)`                     |
 | `c-bg-0` / `c-bg-1` / `c-bg-2`          | `var(--c-color-bg-white)` / `var(--c-color-bg-1)` / `var(--c-color-bg-2)` |
 
-### 边框颜色 Border
-
-<demo src="./__demos__/border.vue"></demo>
+## 基础示例
 
 ### 填充颜色 Fill
 
 <demo src="./__demos__/fill.vue"></demo>
+
+## 颜色应用
+
+### 边框颜色 Border
+
+<demo src="./__demos__/border.vue"></demo>
 
 ### 文字颜色 Text
 

@@ -1,15 +1,17 @@
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import DatePicker from '../DatePicker.vue'
 import DateRangePicker from '../../date-range/DateRangePicker.vue'
+import DatePicker from '../DatePicker.vue'
 
 afterEach(() => vi.useRealTimers())
 describe('date current renderer', () => {
   it('toggles current highlight independently from the current action', async () => {
     vi.useFakeTimers()
     vi.setSystemTime(new Date(2025, 0, 15, 9, 30, 12))
-    const wrapper = mount(DatePicker, { props: { modelValue: '2025-01-01', pickerValue: '2025-01-01', showNowButton: false,  } })
+    const wrapper = mount(DatePicker, {
+      props: { modelValue: '2025-01-01', pickerValue: '2025-01-01', showNowButton: false },
+    })
     await nextTick()
     const today = () => wrapper.findAll('.c-picker-cell-today')
     expect(today()).toHaveLength(1)
@@ -23,17 +25,22 @@ describe('date current renderer', () => {
     wrapper.unmount()
   })
   it.each([true, false])('applies exchangeTime=%s to real reversed calendar selections', async (exchangeTime) => {
-    const wrapper = mount(DateRangePicker, { props: {
-      modelValue: ['2025-01-05 09:00', '2025-01-10 18:00'], showTime: true, useSeconds: false, exchangeTime,
-      
-    } })
+    const wrapper = mount(DateRangePicker, {
+      props: {
+        modelValue: ['2025-01-05 09:00', '2025-01-10 18:00'],
+        showTime: true,
+        format: 'YYYY-MM-DD HH:mm',
+        valueFormat: 'YYYY-MM-DD HH:mm',
+        exchangeTime,
+      },
+    })
     await nextTick()
     const cell = (day: string) => wrapper.findAll('.c-picker-cell-in-view').find((item) => item.text() === day)!
     await cell('20').trigger('click')
     await cell('10').trigger('click')
-    expect(wrapper.emitted('update:modelValue')?.[0]).toEqual([exchangeTime
-      ? ['2025-01-10 18:00', '2025-01-20 09:00']
-      : ['2025-01-10 09:00', '2025-01-20 18:00']])
+    expect(wrapper.emitted('update:modelValue')?.[0]).toEqual([
+      exchangeTime ? ['2025-01-10 18:00', '2025-01-20 09:00'] : ['2025-01-10 09:00', '2025-01-20 18:00'],
+    ])
     wrapper.unmount()
   })
 })

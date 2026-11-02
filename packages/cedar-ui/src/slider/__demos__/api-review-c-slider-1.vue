@@ -17,7 +17,7 @@ const proposed = ref(50);
     v-slot="__apiReview"
     v-bind="defineReviewConfig(__apiReviewRawConfig)"
   >
-    <div style="display: grid; gap: 28px; padding: 24px 12px">
+    <c-space direction="column" size="28px" style="padding: 24px 12px">
       <c-slider
         v-model="accepted"
         range
@@ -48,6 +48,6 @@ const proposed = ref(50);
         v-bind="__apiReview.bindings"
         v-on="__apiReview.listeners"
       />
-    </div>
+    </c-space>
   </DemoApiReviewPanel>
 </template>

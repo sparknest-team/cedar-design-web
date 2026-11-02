@@ -3,9 +3,10 @@ import { describe, expect, it } from 'vitest'
 import Cascader from '../../../cascader'
 import Select from '../../../select'
 import SelectMenu from '../../../select/SelectMenu'
+import type { FieldEditMode } from '../../field-presentation/context'
 import EditorPanel from '../../field-presentation/EditorPanel.vue'
+import { selectionEditorSurface } from '../context'
 import { mobile } from '../platform'
-import type { FieldPresentation } from '../../field-presentation/context'
 import SelectedOptions from '../SelectedOptions.vue'
 
 const Surface = { template: '<div><slot /><slot name="content" /></div>' }
@@ -28,6 +29,7 @@ const dismissible = (wrapper: ReturnType<typeof mount>) =>
 describe('selected options presentation', () => {
   it('uses distinct keys for duplicate labels and keeps locked items', async () => {
     const wrapper = mount(SelectedOptions, {
+      global: { provide: { [selectionEditorSurface]: { mobile } } },
       props: {
         multiple: true,
         items: [
@@ -49,6 +51,7 @@ describe('selected options presentation', () => {
   })
   it('returns to options when an inline panel closes, without mutating the options slot', async () => {
     const wrapper = mount(SelectedOptions, {
+      global: { provide: { [selectionEditorSurface]: { mobile } } },
       props: { multiple: true, open: true, items: [] },
       slots: { default: '<input value="search" />' },
       attachTo: document.body,
@@ -65,12 +68,12 @@ describe('selected options presentation', () => {
   })
 })
 
-for (const presentation of [(mobile ? 'popup' : 'click') as FieldPresentation, 'click'] as const) {
-  describe(`multi selection ${presentation}`, () => {
+for (const editMode of [(mobile ? 'popup' : 'click') as FieldEditMode, 'click'] as const) {
+  describe(`multi selection ${editMode}`, () => {
     it('Select removes and clears the draft, preserves disabled values and commits once', async () => {
       const wrapper = mount(Select, {
         props: {
-          presentation,
+          editMode,
           multiple: true,
           defaultOpen: true,
           modelValue: [1, 2],
@@ -97,7 +100,8 @@ for (const presentation of [(mobile ? 'popup' : 'click') as FieldPresentation, '
       await flushPromises()
       expect(manager.props('items')).toHaveLength(1)
       const controller = wrapper.getComponent(SelectMenu).props('controller')
-      wrapper.getComponent(EditorPanel).vm.$emit('confirm'); await flushPromises()
+      wrapper.getComponent(EditorPanel).vm.$emit('confirm')
+      await flushPromises()
       expect(wrapper.emitted('update:modelValue')).toEqual([[[2]]])
       wrapper.unmount()
     })
@@ -105,7 +109,7 @@ for (const presentation of [(mobile ? 'popup' : 'click') as FieldPresentation, '
       let finish: (value: false) => void = () => {}
       const wrapper = mount(Select, {
         props: {
-          presentation,
+          editMode,
           multiple: true,
           defaultOpen: true,
           modelValue: [1, 2],
@@ -130,7 +134,9 @@ for (const presentation of [(mobile ? 'popup' : 'click') as FieldPresentation, '
       wrapper.getComponent(EditorPanel).vm.$emit('confirm')
       await flushPromises()
       expect(wrapper.getComponent(EditorPanel).attributes('aria-busy')).toBe('true')
-      expect(wrapper.findAll('input').filter(input => input.attributes('disabled') !== undefined).length).toBeGreaterThan(0)
+      expect(
+        wrapper.findAll('input').filter((input) => input.attributes('disabled') !== undefined).length,
+      ).toBeGreaterThan(0)
       finish(false)
       await flushPromises()
       await flushPromises()
@@ -146,7 +152,7 @@ for (const presentation of [(mobile ? 'popup' : 'click') as FieldPresentation, '
     it('Cascader clears only the editor draft and cancellation restores the selection', async () => {
       const wrapper = mount(Cascader, {
         props: {
-          presentation,
+          editMode,
           multiple: true,
           modelValue: ['a', 'b'],
           clearable: false,

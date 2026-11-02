@@ -16,7 +16,7 @@ describe('steps copied implementation contract', () => {
     const make = () => [h(Step, { title: 'one' }), h(Step, { title: 'two', disabled: true }), h(Step, { title: 'three' })]
     const a = mount(Component, { props: { modelValue: 1, changeable: true }, slots: { default: make } })
     const b = mount(Component, { props: { defaultValue: 1 }, slots: { default: make } })
-    const items = a.findAll('[role="listitem"]')
+    const items = a.findAll('[data-step-index]')
     await items[1].trigger('click')
     expect(a.emitted('change')).toBeUndefined()
     await items[2].trigger('click')

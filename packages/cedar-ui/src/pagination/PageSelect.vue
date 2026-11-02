@@ -1,19 +1,22 @@
 <script setup lang="ts">
-import type { ComponentSize } from '../_utils/constant'
-import type { PaginationPageSizeProps } from './types'
-import BaseSelect from '../select'
+import type { ComponentSize } from "../_utils/constant";
+import type { PaginationPageSizeProps } from "./types";
+import BaseSelect from "../select";
 defineProps<{
-  modelValue?: number
-  options: { value: number; label: string }[]
-  size?: ComponentSize
-  disabled?: boolean
-  label: string
-  config?: PaginationPageSizeProps
-}>()
-const emit = defineEmits<{ (event: 'update:modelValue', value: unknown): void }>()
+  modelValue?: number;
+  options: { value: number; label: string }[];
+  size?: ComponentSize;
+  disabled?: boolean;
+  label: string;
+  config?: PaginationPageSizeProps;
+}>();
+const emit = defineEmits<{
+  (event: "update:modelValue", value: unknown): void;
+}>();
 </script>
 <template>
   <BaseSelect
+    edit-mode="direct"
     :auto-fit-popup-width="false"
     :class="config?.class"
     :style="config?.style"
@@ -26,6 +29,7 @@ const emit = defineEmits<{ (event: 'update:modelValue', value: unknown): void }>
     :aria-label="label"
     variant="standard"
     :clearable="false"
+    :hint="false"
     @update:model-value="emit('update:modelValue', $event)"
   />
 </template>

@@ -5,13 +5,15 @@
       classes(n(), [disabled, n('--disabled')], [dragActive, n('--dragging')])
     "
     :aria-label="messages.title"
-    :aria-busy="loading || pending"
+    :aria-busy="pending"
     tabindex="-1"
     @focusin.capture="rememberEditorTrigger"
     @keydown.capture="navigateKeyboard"
     @dragover="previewPoint($event.clientX, $event.clientY)"
     @dragleave="leavePreview"
+    @scroll.capture="rememberTimelineOffset"
   >
+    <PendingFeedback :loading="pending" />
     <header :class="n('toolbar')">
       <slot
         name="toolbar"
@@ -27,7 +29,7 @@
             :disabled="disabled"
             :aria-label="messages.previous"
             @click="navigate(-1)"
-            >‹</CButton
+            ><span dir="ltr" aria-hidden="true">{{ isRtl ? "›" : "‹" }}</span></CButton
           >
           <CButton :disabled="disabled" @click="setDate(new Date())">{{
             messages.today
@@ -36,7 +38,7 @@
             :disabled="disabled"
             :aria-label="messages.next"
             @click="navigate(1)"
-            >›</CButton
+            ><span dir="ltr" aria-hidden="true">{{ isRtl ? "‹" : "›" }}</span></CButton
           >
           <strong :class="n('range-title')">{{ rangeTitle }}</strong>
         </div>
@@ -265,12 +267,7 @@
         </slot>
       </aside>
       <main ref="viewport" :class="n('main')">
-        <slot v-if="loading" name="loading"
-          ><div :class="n('loading')" role="status">
-            {{ messages.pending }}
-          </div></slot
-        >
-        <template v-else>
+
           <SchedulerTimeGrid
             v-if="timeMode && columns.length"
             :columns="columns"
@@ -536,7 +533,7 @@
                       :class="n('timeline-event')"
                       :data-scheduler-event-id="item.event.id"
                       :style="{
-                        left: `${item.start * 100}%`,
+                        insetInlineStart: `${item.start * 100}%`,
                         width: `${(item.end - item.start) * 100}%`,
                         '--c-scheduler-lane': item.column,
                       }"
@@ -547,6 +544,7 @@
                         :selection-mode="selectable && selectionMode"
                         :movable="!locked && !(selectable && selectionMode)"
                         :disabled="disabled"
+                        :resizable="scale === 'hour' && !locked && !(selectable && selectionMode) && !item.event.allDay"
                         compact
                         managed-pointer
                         @pointer-start="
@@ -584,7 +582,7 @@
                         n('event'),
                       ]"
                       :style="{
-                        left: `${item.start * 100}%`,
+                        insetInlineStart: `${item.start * 100}%`,
                         width: `${(item.end - item.start) * 100}%`,
                         '--c-scheduler-lane': item.column,
                       }"
@@ -637,7 +635,7 @@
           <slot v-else name="empty"
             ><CEmpty :description="messages.noResources"
           /></slot>
-        </template>
+
         <SchedulerDependencies
           v-if="mode === 'resource-timeline' && dependencies.length"
           :host="viewport"
@@ -660,7 +658,7 @@
       :resource-dimensions="resourceDimensions"
       :show-assignment-details="showAssignmentDetails"
       :request-resources="requestResources"
-      :readonly="readonly || disabled || loading || !!editorEvent.readonly"
+      :readonly="readonly || disabled || !!editorEvent.readonly"
       :pending="pending"
       :error="error"
       :error-message="error ? messages.errors[error.code] : undefined"
@@ -678,6 +676,7 @@
     <Teleport to="body">
       <div
         v-if="timelineGhost"
+        :dir="direction"
         :class="[n('event'), n('drag-ghost')]"
         :style="{
           position: 'fixed',
@@ -697,7 +696,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch, onMounted, nextTick } from "vue";
+import PendingFeedback from '../_components/pending-feedback/PendingFeedback.vue'
+import { computed, ref, watch, onMounted, onBeforeUnmount, onDeactivated, onActivated, nextTick } from "vue";
+import { useDirection, inlineScrollLeft, setInlineScrollLeft } from "../_utils/direction";
+import { schedulerPointerFraction } from "./coordinates";
 import { isValidSchedulerHiddenDays } from "./core/visible-days";
 import { useTimelinePointer } from "./use-timeline-pointer";
 import { useSchedulerNow } from "./use-now";
@@ -760,6 +762,8 @@ import type {
 
 defineOptions({ name: createNamespace("scheduler").name });
 const { n, classes } = createNamespace("scheduler");
+const root = ref<HTMLElement>();
+const { dir: direction, isRtl } = useDirection(() => root.value);
 const props = defineProps(schedulerProps);
 const emit = defineEmits<SchedulerEmits>();
 defineSlots<{
@@ -793,7 +797,6 @@ defineSlots<{
   "toolbar-extra"(props: { date: Date; mode: SchedulerMode }): unknown;
   editor(props: SchedulerEditorSlotProps): unknown;
   empty(): unknown;
-  loading(): unknown;
 }>();
 function resourceError(error: unknown, context: SchedulerResourceErrorContext) {
   emit("resource-error", error, context);
@@ -940,24 +943,38 @@ function setZoom(value: number) {
   emit("update:zoom", Math.max(0.5, Math.min(4, value)));
   clearDrag();
 }
-watch(zoom, async (next, previous) => {
-  const target =
-    root.value?.querySelector<HTMLElement>(".c-scheduler__virtual-rows") ??
-    viewport.value;
-  if (!target) return;
-  const width =
-    parseFloat(
-      getComputedStyle(root.value!).getPropertyValue(
-        "--c-scheduler-resource-width",
-      ),
-    ) || 0;
-  const left =
-    width +
-    ((target.scrollLeft + target.clientWidth / 2 - width) * next) / previous -
-    target.clientWidth / 2;
+let cancelTimelineZoom = () => {};
+watch(zoom, async (_, __, onCleanup) => {
+  cancelTimelineZoom();
+  if (!timelineActive) return;
+  const target = root.value?.querySelector<HTMLElement>(".c-scheduler__virtual-rows") ?? viewport.value;
+  const track = target?.querySelector<HTMLElement>(".c-scheduler__timeline-track");
+  if (!target || !track) return;
+  let current = true;
+  const view = target.ownerDocument.defaultView;
+  let frame: number | undefined;
+  const cancel = () => {
+    current = false;
+    if (frame !== undefined) view?.cancelAnimationFrame(frame);
+  };
+  cancelTimelineZoom = cancel;
+  onCleanup(cancel);
+  const gutter = parseFloat(getComputedStyle(root.value!).getPropertyValue("--c-scheduler-resource-width")) || 0;
+  const center = (target.clientWidth - gutter) / 2;
+  const position = (inlineScrollLeft(target) + center) / track.clientWidth;
+  const originalDirection = direction.value;
   await nextTick();
-  target.scrollLeft = Math.max(0, left);
-  target.dispatchEvent(new Event("scroll"));
+  if (!current || !view) return;
+  // Virtual rows may replace their viewport while restoring a resource anchor.
+  // Apply the time anchor after that layout transaction finishes its microtasks.
+  frame = view.requestAnimationFrame(() => {
+    if (!current || !timelineActive || direction.value !== originalDirection || mode.value !== "resource-timeline") return;
+    const container = timelineViewport();
+    const currentTrack = container?.querySelector<HTMLElement>(".c-scheduler__timeline-track");
+    if (!container || !currentTrack) return;
+    setInlineScrollLeft(container, position * currentTrack.clientWidth - center);
+    container.dispatchEvent(new Event("scroll"));
+  });
 });
 const dateHeaders = computed(() => {
   const groups: { key: string; label: string; count: number }[] = [];
@@ -1168,27 +1185,41 @@ async function focusInitialTime() {
     ((minute - firstMinute) / slotMinutes.value) * rowHeight;
   initialTimeFocused = true;
 }
-async function focusTimeline() {
-  await nextTick();
-  const container = viewport.value;
-  if (!container || mode.value !== "resource-timeline") return;
-  if (scale.value === "day") {
-    container.scrollLeft = 0;
-    return;
-  }
-  const target = new Date(range.value.start);
-  target.setHours(safeStart.value);
-  const track = container.querySelector<HTMLElement>(
-    ".c-scheduler__timeline-track",
-  );
-  if (track)
-    container.scrollLeft =
-      timelineAxis.value.position(target) * track.clientWidth;
+let timelineFocusVersion = 0;
+let timelineFocusFrame: { view: Window; id: number } | undefined;
+let timelineActive = true;
+function cancelTimelineFocus() {
+  timelineFocusVersion++;
+  if (timelineFocusFrame) timelineFocusFrame.view.cancelAnimationFrame(timelineFocusFrame.id);
+  timelineFocusFrame = undefined;
 }
+async function focusTimeline() {
+  cancelTimelineFocus();
+  cancelTimelineZoom();
+  const version = timelineFocusVersion;
+  await nextTick();
+  const view = root.value?.ownerDocument.defaultView;
+  if (!view || !timelineActive || version !== timelineFocusVersion) return;
+  timelineFocusFrame = { view, id: view.requestAnimationFrame(() => {
+    timelineFocusFrame = undefined;
+    if (!timelineActive || version !== timelineFocusVersion || mode.value !== "resource-timeline") return;
+    const container = timelineViewport();
+    if (!container) return;
+    const target = new Date(range.value.start);
+    target.setHours(safeStart.value);
+    const track = container.querySelector<HTMLElement>(".c-scheduler__timeline-track");
+    if (track) {
+      setInlineScrollLeft(container, scale.value === "day" ? 0 : timelineAxis.value.position(target) * track.clientWidth);
+      container.dispatchEvent(new Event("scroll"));
+    }
+  }) };
+}
+onDeactivated(() => { timelineActive = false; cancelTimelineFocus(); cancelTimelineZoom(); });
+onActivated(() => { timelineActive = true; });
+onBeforeUnmount(() => { timelineActive = false; cancelTimelineFocus(); cancelTimelineZoom(); });
 watch([scale, mode, () => +range.value.start], focusTimeline, {
   flush: "post",
 });
-const root = ref<HTMLElement>();
 const keyboardTargets = [
   ".c-scheduler__event-button",
   ".c-scheduler__time-cell",
@@ -1565,7 +1596,7 @@ function selectEvent(event: SchedulerEvent) {
       action: "edit",
       source: "event",
       event: cloneSchedulerEvent(event),
-      readonly: props.readonly || props.loading || !!event.readonly,
+      readonly: props.readonly || !!event.readonly,
     });
     return;
   }
@@ -1805,9 +1836,8 @@ function pointDate(target: HTMLElement, x: number, y: number) {
   if (!duration || target.dataset.schedulerAllDay === "true") return at;
   const rect = target.getBoundingClientRect();
   const horizontal = target.dataset.schedulerAxis === "horizontal";
-  const extent = horizontal ? rect.width : rect.height;
   const fraction =
-    extent > 0 ? (horizontal ? x - rect.left : y - rect.top) / extent : 0;
+    schedulerPointerFraction(rect, x, y, horizontal, direction.value);
   return getSchedulerCellDate(at, duration, fraction, snapMinutes.value);
 }
 function previewPoint(x: number, y: number) {
@@ -1936,7 +1966,25 @@ const timelinePointer = useTimelinePointer({
   end: clearDrag,
 });
 const timelineGhost = timelinePointer.ghost;
-watch([locked, mode, date, dimensionFilters], () => timelinePointer.cancel(), {
+let timelineOffset = 0;
+function timelineViewport() {
+  return root.value?.querySelector<HTMLElement>(".c-scheduler__virtual-rows") ?? viewport.value;
+}
+function rememberTimelineOffset(event: Event) {
+  const element = timelineViewport();
+  if (mode.value === "resource-timeline" && element && event.target === element)
+    timelineOffset = inlineScrollLeft(element);
+}
+watch(direction, async () => {
+  const offset = timelineOffset;
+  const element = timelineViewport();
+  await nextTick();
+  if (timelineActive && element && element === timelineViewport() && mode.value === "resource-timeline") {
+    setInlineScrollLeft(element, offset);
+    element.dispatchEvent(new Event("scroll"));
+  }
+});
+watch([locked, mode, date, dimensionFilters, direction, zoom, scale], () => { timelinePointer.cancel(); clearDrag(); }, {
   deep: true,
 });
 // Commands let an application use its own editor without depending on Vue internals.

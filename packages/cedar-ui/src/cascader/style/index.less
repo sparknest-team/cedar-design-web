@@ -48,7 +48,7 @@
     }
 
     &:not(:last-of-type) {
-      border-right: 1px solid var(~'--c-cascader-popup-color-border');
+      border-inline-end: 1px solid var(~'--c-cascader-popup-color-border');
     }
   }
 
@@ -88,16 +88,16 @@
     &-multiple,
     &-strictly {
       .c-cascader-option-label {
-        padding-left: 0;
+        padding-inline-start: 0;
       }
 
       .c-cascader-option {
-        padding-left: var(~'--c-cascader-padding-item-left');
+        padding-inline-start: var(~'--c-cascader-padding-item-left');
 
         .c-checkbox,
         .c-radio {
-          margin-right: var(~'--c-cascader-margin-checkbox-right');
-          padding-left: 0;
+          margin-inline-end: var(~'--c-cascader-margin-checkbox-right');
+          padding-inline-start: 0;
         }
       }
     }
@@ -105,14 +105,14 @@
 
   &-search-list&-list-multiple {
     .c-cascader-option-label {
-      padding-right: var(~'--c-cascader-padding-item-left');
+      padding-inline-end: var(~'--c-cascader-padding-item-left');
     }
   }
 
   &-list-footer {
     box-sizing: border-box;
     height: var(~'--c-cascader-size-item-height');
-    padding-left: var(~'--c-cascader-padding-item-left');
+    padding-inline-start: var(~'--c-cascader-padding-item-left');
     line-height: var(~'--c-cascader-size-item-height');
     border-top: 1px solid var(~'--c-cascader-popup-color-border');
   }
@@ -136,8 +136,8 @@
       align-items: center;
       flex-grow: 1;
       min-width: 0;
-      padding-right: var(--c-cascader-padding-item-right);
-      padding-left: var(--c-cascader-padding-item-left);
+      padding-inline-end: var(--c-cascader-padding-item-right);
+      padding-inline-start: var(--c-cascader-padding-item-left);
     }
 
     &-label-content {
@@ -177,8 +177,6 @@
         height: 100%;
       }
     }
-
-
   }
 
   &-option:hover,
@@ -240,10 +238,14 @@
 
 .c-cascader-slide-enter-from,
 .c-cascader-slide-leave-to {
-  margin-left: calc(-1 * var(~'--c-cascader-slide-margin'));
+  margin-inline-start: calc(-1 * var(~'--c-cascader-slide-margin'));
 }
 
 .c-cascader-slide-enter-to,
 .c-cascader-slide-leave-from {
-  margin-left: 0;
+  margin-inline-start: 0;
+}
+
+.c-cascader-option-expand-icon:dir(rtl) {
+  transform: rotate(180deg);
 }

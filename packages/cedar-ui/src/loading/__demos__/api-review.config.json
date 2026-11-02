@@ -65,7 +65,7 @@
       "name": "size",
       "kind": "prop",
       "demos": [
-        "size.vue"
+        "appearance-comparison.vue"
       ]
     },
     {

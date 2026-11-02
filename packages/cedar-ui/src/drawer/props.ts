@@ -1,20 +1,24 @@
-import type { CSSProperties, PropType, StyleValue } from 'vue'
-import { popupContainerProp } from '../_utils/popup-container'
-import type { ButtonProps } from '../button'
-import type { DrawerAction, DrawerBeforeCloseRefs } from './types'
+import { readingDirectionProp } from '../_utils/direction'
+import type { DrawerBeforeClose } from "./types";
+import type { CSSProperties, PropType, StyleValue } from "vue";
+import { popupContainerProp } from "../_utils/popup-container";
+import type { ButtonProps } from "../button";
 
-export const DRAWER_PLACEMENTS = ['top', 'right', 'bottom', 'left'] as const
-export type DrawerPlacement = (typeof DRAWER_PLACEMENTS)[number]
+export const DRAWER_PLACEMENTS = ["top", "right", "bottom", "left"] as const;
+export type DrawerPlacement = (typeof DRAWER_PLACEMENTS)[number];
 
 export const drawerProps = {
+  /** 阅读方向，省略时继承来源作用域。 */
+  dir: readingDirectionProp,
   /** 抽屉是否可见。 */
   open: { type: Boolean, default: undefined },
   /** 非受控模式下是否默认可见。 */
   defaultOpen: { type: Boolean, default: false },
   /** 抽屉出现的位置。 */
+  /** 抽屉面板在容器中的出现侧，默认 right；不是相对按钮的定位，不执行浮层避让翻转 */
   placement: {
     type: String as PropType<DrawerPlacement>,
-    default: 'right',
+    default: "right",
     validator: (value: DrawerPlacement) => DRAWER_PLACEMENTS.includes(value),
   },
   /** 标题。 */
@@ -62,11 +66,7 @@ export const drawerProps = {
   /** 内容区样式。 */
   bodyStyle: [String, Object, Array] as PropType<StyleValue>,
   /** 关闭前控制钩子。调用 done 后才提交关闭。 */
-  beforeClose: Function as PropType<(
-    action: DrawerAction,
-    done: () => void,
-    refs: DrawerBeforeCloseRefs,
-  ) => void>,
+  beforeClose: Function as PropType<DrawerBeforeClose>,
   /** 是否允许 ESC 关闭。 */
   escToClose: { type: Boolean, default: true },
   /** 是否锁定挂载容器滚动。 */
@@ -74,7 +74,7 @@ export const drawerProps = {
   /** 路由变化时是否关闭。 */
   closeOnRouteChange: { type: Boolean, default: false },
   /** 遮罩动画名称。 */
-  overlayAnimationName: { type: String, default: 'fade-drawer' },
+  overlayAnimationName: { type: String, default: "fade-drawer" },
   /** 是否显示头部。 */
   header: { type: Boolean, default: true },
   /** 是否显示底部。 */
@@ -84,9 +84,11 @@ export const drawerProps = {
   /** 抽屉无可见标题时的可访问名称。 */
   ariaLabel: String,
   /** 关闭按钮的可访问名称。 */
-  closeButtonAriaLabel: { type: String, default: 'Close drawer' },
+  closeButtonAriaLabel: { type: String, default: "Close drawer" },
   /** 自定义层级。 */
   zIndex: Number,
-}
+};
 
-export type DrawerProps = import('vue').ExtractPublicPropTypes<typeof drawerProps>
+export type DrawerProps = import("vue").ExtractPublicPropTypes<
+  typeof drawerProps
+>;

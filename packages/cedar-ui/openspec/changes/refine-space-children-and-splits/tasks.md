@@ -1,0 +1,4 @@
+- [x] Preserve scoped identities and omit empty nodes.
+- [x] Implement stable atomic split groups and paired demos/docs.
+- [x] Align validators, fallback and exports with type coverage.
+- [x] Verify unit, browser, types, lint and shared source/API/style gates.

@@ -9,6 +9,7 @@
 <script setup lang="ts">
 import { computed, inject, ref } from 'vue'
 import { useEventListener } from '@cedar-design/use'
+import { resolveDirection } from '../_utils/direction'
 import { createNamespace } from '../_utils/global-config'
 import MenuView from './view'
 import { props as optionProps } from './option-props'
@@ -47,9 +48,9 @@ function handleClick(event: MouseEvent) { if (!disabled.value) { emit('click', e
 function handleKeydown(event: KeyboardEvent) {
   if (event.defaultPrevented || disabled.value || !isFocusing.value) return
   if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
-    // A submenu's panel owns ArrowLeft; only references consume ArrowRight.
-    if (event.key === 'ArrowLeft' && level?.leave) { event.preventDefault(); level.leave() }
-    if (event.key === 'ArrowRight' && props.childrenTrigger) { event.preventDefault(); emit('key-arrow-x', event.key) }
+    const rtl = resolveDirection(root.value) === 'rtl'
+    if (event.key === (rtl ? 'ArrowRight' : 'ArrowLeft') && level?.leave) { event.preventDefault(); level.leave() }
+    if (event.key === (rtl ? 'ArrowLeft' : 'ArrowRight') && props.childrenTrigger) { event.preventDefault(); emit('key-arrow-x', event.key) }
     return
   }
   if (!isFocusing.value) return

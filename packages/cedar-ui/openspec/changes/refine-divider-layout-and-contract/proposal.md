@@ -1,0 +1,3 @@
+# Refine Divider layout and runtime contract
+
+Implement approved D01–D04 in Cedar and Maple. Horizontal content must occupy its real height. thickness accepts finite numbers >= 1; values below 1 or non-finite values warn in development and fall back to theme width. Existing hairline priority stays unchanged. Validate enum values, opacity and one/two-element margin pairs; retain negative margins and CSS expressions. Invalid inset uses no inset, invalid spacing uses md. Complete Maple named export, paired demos, public types and regression coverage. No new props/events/slots or platform token changes.

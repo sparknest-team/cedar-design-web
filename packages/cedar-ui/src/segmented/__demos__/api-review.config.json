@@ -45,7 +45,7 @@
       "kind": "boolean"
     },
     {
-      "name": "direction",
+      "name": "orientation",
       "description": "方向",
       "type": "\"horizontal\" | \"vertical\"",
       "defaultValue": "'horizontal'",
@@ -83,8 +83,7 @@
         "basic.vue",
         "block.vue",
         "controlled.vue",
-        "disabled.vue",
-        "size.vue"
+        "appearance-state-comparison.vue"
       ]
     },
     {
@@ -92,7 +91,7 @@
       "kind": "slot",
       "demos": [
         "controlled.vue",
-        "disabled.vue"
+        "appearance-state-comparison.vue"
       ]
     }
   ],

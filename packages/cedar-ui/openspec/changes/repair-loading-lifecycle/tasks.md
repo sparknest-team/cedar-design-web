@@ -1,0 +1,3 @@
+- [x] Reproduce lock, stale options and migration failures on both platforms.
+- [x] Implement instance-owned locks and full configuration updates.
+- [x] Verify both platforms, direct consumers and browser behavior; update docs.

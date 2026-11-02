@@ -1,26 +1,58 @@
-import type { ExtractPropTypes, PropType } from 'vue'
-import { fieldPresentationProps } from '../_components/field-presentation/props'
+import { fieldLoadingProps } from '../field-decorator/props'
+import { emptyValueProp } from "../_utils/empty-value";
+import type { PropType } from "vue";
+import type {
+  PeopleSelectRenderActions,
+  PeopleSelectOption,
+  PeopleSelectOptionsLoader,
+  PeopleSelectAction,
+  PeopleSelectFallbackOption,
+} from "./types";
+import { selectProps } from "../select/props";
+import { fieldPresentationProps } from "../_components/field-presentation/props";
 
 export const peopleSelectProps = {
+  ...fieldLoadingProps,
   ...fieldPresentationProps,
+  emptyValue: emptyValueProp<string>(),
+  /** Reactive display data for a selected value absent from options. */
+  fallbackOption: {
+    type: [Boolean, Function] as PropType<PeopleSelectFallbackOption>,
+    default: true,
+  },
+  renderActions: Function as PropType<PeopleSelectRenderActions>,
+  /** 阅读态显示电话图标；拨号行为交给 call。 */
+  showPhone: Boolean,
+  /** 阅读态显示聊天图标；聊天行为交给 chat。 */
+  showChat: Boolean,
+  /** 消费 Promise 管理等待态，不实现业务 SDK 或跳转。 */
+  call: Function as PropType<PeopleSelectAction>,
+  chat: Function as PropType<PeopleSelectAction>,
+  showAvatar: { type: Boolean, default: true },
   /** 禁用；未设置时继承 Form / FormItem。 */
   disabled: { type: Boolean, default: undefined },
   /** 只读；允许回显，不允许打开编辑、选择或清空。 */
   readonly: { type: Boolean, default: undefined },
-  /**
-   *
-   */
-  fetch: Object as PropType<{ get: any; post: any }>,
+  /** Candidate data; requests and response mapping belong to the caller. */
+  options: {
+    type: [Array, Function] as PropType<readonly PeopleSelectOption[] | PeopleSelectOptionsLoader>,
+    default: undefined,
+  },
+  filterable: { type: Boolean, default: true },
+  filterOption: { ...selectProps.filterOption, default: undefined },
+  caseSensitive: selectProps.caseSensitive,
+  searchFields: selectProps.searchFields,
+  searchDelay: selectProps.searchDelay,
   name: {
     type: String,
   },
   defaultText: {
     type: String,
-    default: '-',
+    default: "-",
   },
-  modelValue: { type: String, default: undefined },
+  modelValue: { type: String as PropType<string | null>, default: undefined },
   /** 非受控初始选中人员标识，仅创建时读取。 */
-  defaultValue: { type: String, default: '' },
+  defaultValue: { type: String, default: "" },
   isLabel: {
     type: Boolean,
     default: false,
@@ -29,25 +61,15 @@ export const peopleSelectProps = {
     type: Boolean,
     default: false,
   },
-  // showMessage: {
-  //   type: Boolean,
-  //   default: true,
-  // },
-  // showPhone: {
-  //   type: Boolean,
-  //   default: true,
-  // },
   label: {
     type: String,
-    default: '',
+    default: "",
   },
   placeholder: {
     type: String,
   },
-  urlType: {
-    type: String,
-    default: 'ares',
-  },
-}
+};
 
-export type PeopleSelectProps = import('vue').ExtractPublicPropTypes<typeof peopleSelectProps>
+export type PeopleSelectProps = import("vue").ExtractPublicPropTypes<
+  typeof peopleSelectProps
+>;

@@ -30,15 +30,15 @@ import { createNamespace } from '../_utils/global-config'
 import { defineComponent, getCurrentInstance, inject, computed, PropType } from 'vue'
 import { getPrefixCls } from '../_utils/global-config'
 import { TimelineContext, timelineInjectionKey } from './context'
-import { DotType, LineType, PositionType, ModeType } from './types'
-import { Direction } from '../_utils/constant'
+import { DotType, LineType, TimelineItemContentPlacement, ModeType } from './types'
+import { Orientation } from '../_utils/constant'
 
-const getDefaultPosition = (index: number, mode: ModeType, orientation: Direction, position?: string) => {
+const getDefaultPosition = (index: number, mode: ModeType, orientation: Orientation, contentPlacement?: TimelineItemContentPlacement) => {
   let map = ['left', 'right']
   if (orientation === 'horizontal') {
     map = ['top', 'bottom']
   }
-  const res = mode === 'alternate' ? position || map[index % 2] : mode
+  const res = mode === 'alternate' ? contentPlacement || map[index % 2] : mode
 
   return map.indexOf(res) > -1 ? res : map[0]
 }
@@ -86,11 +86,11 @@ export default defineComponent({
       type: String,
     },
     /**
-     * @zh Item 位置
-     * @en Item position
+     * @zh 正文相对时间轴节点的侧别，仅交替模式生效；受 orientation 约束
+     * @en Content side relative to the timeline
      */
-    position: {
-      type: String as PropType<PositionType>,
+    contentPlacement: {
+      type: String as PropType<TimelineItemContentPlacement>,
     },
   },
   /**
@@ -102,7 +102,6 @@ export default defineComponent({
    * @zh 自定义标签
    * @en Custom label
    * @slot label
-   * @version 2.50.0
    */
   setup(props) {
     const prefixCls = getPrefixCls('timeline-item')
@@ -122,7 +121,7 @@ export default defineComponent({
     const cls = computed(() => {
       const { items = [], reverse, labelPosition, mode = 'left' } = context
       const orientation = contextDirection.value
-      const computedPosition = getDefaultPosition(index.value, mode, orientation, props.position)
+      const computedPosition = getDefaultPosition(index.value, mode, orientation, props.contentPlacement)
       return [
         prefixCls,
         {

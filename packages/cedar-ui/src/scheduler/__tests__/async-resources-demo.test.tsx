@@ -1,3 +1,4 @@
+import { FormItem } from "../../form";
 import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { expect, test, vi } from "vitest";
@@ -12,6 +13,7 @@ test("resource demo clears stale failure feedback after retry and kind switch", 
   const wrapper = mount(Demo, {
     global: {
       components: {
+        CFormItem: FormItem,
         CScheduler: Scheduler,
         CButton: Button,
         CSelect: Select,
@@ -30,14 +32,11 @@ test("resource demo clears stale failure feedback after retry and kind switch", 
     });
     await nextTick();
     expect(feedback()).toContain("回显失败");
-    const resolve = scheduler.props("resolveResources")!(
-      ["device-12"],
-      { signal: new AbortController().signal },
-    );
+    const resolve = scheduler.props("resolveResources")!(["device-12"], {
+      signal: new AbortController().signal,
+    });
     vi.advanceTimersByTime(500);
-    expect(await resolve).toEqual([
-      { id: "device-12", label: "实验设备 12" },
-    ]);
+    expect(await resolve).toEqual([{ id: "device-12", label: "实验设备 12" }]);
     await nextTick();
     expect(feedback()).toContain("资源名称回显成功");
 

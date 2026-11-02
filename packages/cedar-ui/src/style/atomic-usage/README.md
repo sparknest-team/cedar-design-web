@@ -8,7 +8,9 @@ permalink: /components/style/atomic-usage/
 
 下方 Demo 使用局部等价 CSS 展示效果，不要求文档读者先安装生成器。源码里的演示类只用于展示；业务中使用表格列出的 preset 类。
 
-## 布局与组合
+## 基础示例
+
+### 布局与组合
 
 | 场景 | 类名示例 |
 | --- | --- |
@@ -19,19 +21,23 @@ permalink: /components/style/atomic-usage/
 
 <demo src="../atomic-css/__demos__/combined.vue"></demo>
 
-## 内外间距
+## 间距与响应式
+
+### 内外间距
 
 `p` / `m` 表示内 / 外间距，`x` / `y` 表示水平 / 垂直双轴，`t/r/b/l` 表示单侧。例如 `c-p-16`、`c-px-8`、`c-mt-16`。
 
 <demo src="../atomic-css/__demos__/spacing.vue"></demo>
 
-## 响应式布局
+### 响应式布局
 
 `sm:`、`md:`、`lg:`、`xl:` 在对应视口断点应用类；容器宽度与 viewport 不是同一概念。
 
 <demo src="../atomic-css/__demos__/breakpoints.vue"></demo>
 
-## 语义颜色与字号
+## 颜色与文字
+
+### 语义颜色与字号
 
 业务优先使用语义颜色，不在组件中硬编码品牌色。固定颜色工具类与 preset 类的能力范围不同，见 [颜色 Color](/components/style/color/) 与 [Utilities 总览](/components/style/utilities/)。
 

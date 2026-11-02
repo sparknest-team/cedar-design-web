@@ -21,7 +21,7 @@
     overflow: hidden;
 
     &:not(:last-child) {
-      border-right: 1px solid var(~'--c-time-picker-border-color');
+      border-inline-end: 1px solid var(~'--c-time-picker-border-color');
     }
 
     &:hover {
@@ -54,7 +54,7 @@
 
     &-inner {
       height: var(~'--c-time-picker-cell-height');
-      padding-left: var(~'--c-time-picker-cell-padding-left');
+      padding-inline-start: var(~'--c-time-picker-cell-padding-left');
       font-size: var(~'--c-time-picker-cell-font-size');
       line-height: var(~'--c-time-picker-cell-height');
     }
@@ -88,7 +88,7 @@
     border-top: 1px solid var(~'--c-time-picker-border-color');
 
     & :only-child {
-      margin-left: auto;
+      margin-inline-start: auto;
     }
   }
 

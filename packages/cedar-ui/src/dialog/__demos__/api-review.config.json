@@ -322,8 +322,8 @@
     },
     {
       "name": "before-close",
-      "description": "关闭前拦截",
-      "type": "(action, done, refs) => void",
+      "description": "before hook; synchronous void waits for done; first completion wins",
+      "type": "boolean | Promise<boolean | void> | done callback",
       "defaultValue": "undefined",
       "kind": "callback"
     },
@@ -395,10 +395,9 @@
         "custom-text.vue",
         "draggable.vue",
         "form.vue",
-        "fullscreen.vue",
+        "size-comparison.vue",
         "message.vue",
-        "no-padding.vue",
-        "width.vue"
+        "no-padding.vue"
       ]
     },
     {
@@ -414,13 +413,12 @@
         "custom-text.vue",
         "draggable.vue",
         "form.vue",
-        "fullscreen.vue",
+        "size-comparison.vue",
         "global.vue",
         "max-height.vue",
         "message.vue",
         "no-padding.vue",
-        "simple.vue",
-        "width.vue"
+        "simple.vue"
       ]
     },
     {

@@ -1,17 +1,17 @@
 <script setup>
-import { ref } from 'vue'
+import { ref } from "vue";
 
-const gradient = ref(false)
+const gradient = ref(false);
 </script>
 <template>
-  <div style="display: grid; gap: 16px">
+  <c-space direction="column" size="16px">
     <c-switch v-model="gradient" aria-label="Gradient" />
     <c-progress
       :percent="65"
       :color="gradient ? { '0%': '#722ed1', '100%': '#0fc6c2' } : '#722ed1'"
       buffer-color="#eee5ff"
     />
-    <div style="display: flex; gap: 24px">
+    <c-space wrap size="24px">
       <c-progress
         mode="circle"
         :percent="65"
@@ -19,8 +19,10 @@ const gradient = ref(false)
         :color="gradient ? { '0%': '#722ed1', '100%': '#0fc6c2' } : '#722ed1'"
       />
       <c-progress mode="circle" :percent="65" :track="false"
-        ><template #text="{ percent }">{{ percent }} / 100</template></c-progress
+        ><template #text="{ percent }"
+          >{{ percent }} / 100</template
+        ></c-progress
       >
-    </div>
-  </div>
+    </c-space>
+  </c-space>
 </template>

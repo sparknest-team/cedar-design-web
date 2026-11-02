@@ -1,7 +1,7 @@
 // These imports are shared by the docs shell and component demos. Include their
 // public spellings up front so Vite doesn't invalidate the module graph and
 // reload an already compiled page when it discovers a demo's Day.js imports.
-const plugins = ['advancedFormat', 'customParseFormat', 'isBetween', 'quarterOfYear', 'weekOfYear', 'weekYear']
+const plugins = ['utc', 'timezone', 'advancedFormat', 'customParseFormat', 'isBetween', 'quarterOfYear', 'weekOfYear', 'weekYear']
 const locales = ['zh-cn', 'zh-tw', 'zh-hk', 'ja', 'fa']
 export const docsDevDependencies = [
   'vue', 'vue-router', '@vueuse/core',

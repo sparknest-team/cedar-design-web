@@ -1,0 +1,3 @@
+- [x] Reproduce Affix, dynamic field geometry and Color drag ownership failures.
+- [x] Repair measurement generations, observation refs and drag owner view.
+- [x] Validate both platforms and all field/color consumers; finalize docs and evidence.

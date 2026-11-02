@@ -2,24 +2,16 @@
   <colgroup>
     <!-- 对齐 Element Plus：auto 模式下不渲染任何 col，完全交给浏览器按内容分配 -->
     <template v-if="tableLayout === 'fixed'">
-      <col
-        v-for="item of operations"
-        :key="`${prefixCls}-col-${item.name}`"
-        :class="`${prefixCls}-${item.name}-col`"
-        :width="item.width ?? DEFAULT_OPERATION_WIDTH"
-      />
-      <col
-        v-for="item of dataColumns"
-        :key="`${prefixCls}-col-${item.dataIndex}`"
-        :width="getColWidth(item)"
-      />
+      <col v-for="item of orderedColumns" :key="item.key" :class="item.class" :width="item.width" />
     </template>
   </colgroup>
 </template>
 
 <script lang="ts">
 import { createNamespace } from '../_utils/global-config'
-import { defineComponent, PropType } from "vue";
+import { defineComponent, PropType, computed, inject } from "vue";
+import { tableInjectionKey } from './context';
+import { orderPhysicalColumns } from './column-direction';
 import { TableColumnData, TableOperationColumn } from "./types";
 import { getPrefixCls } from "../_utils/global-config";
 import { DEFAULT_OPERATION_WIDTH } from "./hooks/use-columns-layout";
@@ -50,6 +42,7 @@ export default defineComponent({
     },
   },
   setup(props) {
+    const context = inject(tableInjectionKey, undefined);
     // 对齐 Element Plus：fixed 模式只写 width 属性（非 style）。
     // 列宽由 use-columns-layout 计算且总和等于 table 像素宽，
     // 不存在剩余空间分配，无需 min/max-width 兜底
@@ -65,7 +58,12 @@ export default defineComponent({
       );
     };
 
+    const orderedColumns = computed(() => orderPhysicalColumns([
+      ...props.operations.map(item => ({ key: `operation-${item.name}`, class: `${prefixCls}-${item.name}-col`, width: item.width ?? DEFAULT_OPERATION_WIDTH, fixed: item.fixed ? 'left' as const : undefined })),
+      ...props.dataColumns.map(item => ({ key: `data-${item.dataIndex}`, class: undefined, width: getColWidth(item), fixed: item.fixed })),
+    ], item => item.fixed, context?.readingDirection));
     return {
+      orderedColumns,
       getColWidth,
       prefixCls,
       DEFAULT_OPERATION_WIDTH,

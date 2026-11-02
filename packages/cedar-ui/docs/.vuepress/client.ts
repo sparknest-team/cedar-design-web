@@ -8,12 +8,16 @@ import { themeConfig } from './theme-config'
 import '../../src/style/index.less'
 import '../../src/loading/style'
 import '../../src/tooltip/style'
-import { onBeforeUnmount, onMounted } from 'vue'
+import { defineAsyncComponent, onBeforeUnmount, onMounted } from 'vue'
 import CedarThemeMenu from './components/CedarThemeMenu.vue'
+import ShowcaseOverview from './components/ShowcaseOverview.vue'
 
 export default defineClientConfig({
   rootComponents: [CedarThemeMenu],
   async enhance({ app, router }) {
+    app.component('ShowcaseOverview', ShowcaseOverview)
+    app.component('PlatformComparison', defineAsyncComponent(() => import('./components/PlatformComparison.vue')))
+    app.component('ComponentComparison', defineAsyncComponent(() => import('./components/ComponentComparison.vue')))
     connectComponentLanguage(router)
     app.directive('loading', vLoading)
     app.directive('tooltip', vTooltip)

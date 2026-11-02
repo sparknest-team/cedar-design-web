@@ -10,7 +10,7 @@
     <Input
       v-if="searchable"
       :model-value="controller.computedInputValue"
-      presentation="inline"
+      edit-mode="direct"
       :disabled="controller.mergedDisabled"
       :readonly="controller.mergedReadonly"
       :hint="false"
@@ -53,21 +53,33 @@
   </SelectedOptions>
 </template>
 <script setup lang="ts">
-import { inject, toRefs, type UnwrapNestedRefs } from 'vue'
-import { useFieldTexts } from '../_components/field-presentation/texts'
-import { selectionEditorSurface } from '../_components/selected-options/context'
-import SelectedOptions from '../_components/selected-options/SelectedOptions.vue'
-import Input from '../input'
-import { createNamespace } from '../_utils/global-config'
-import BaseCascaderPanel from './base-cascader-panel'
-import CascaderSearchPanel from './cascader-search-panel'
-import CascaderEditorPanel from './CascaderEditorPanel.vue'
-import type { CascaderController } from './use-cascader-controller'
+import { inject, toRefs, type UnwrapNestedRefs } from "vue";
+import { useFieldTexts } from "../_components/field-presentation/texts";
+import { selectionEditorSurface } from "../_components/selected-options/context";
+import SelectedOptions from "../_components/selected-options/SelectedOptions.vue";
+import Input from "../input";
+import { createNamespace } from "../_utils/global-config";
+import BaseCascaderPanel from "./base-cascader-panel";
+import CascaderSearchPanel from "./cascader-search-panel";
+import CascaderEditorPanel from "./CascaderEditorPanel.vue";
+import type { CascaderController } from "./use-cascader-controller";
 
-defineOptions({ name: createNamespace('cascader-menu').name })
-const texts = useFieldTexts()
-const editor = inject(selectionEditorSurface, undefined)
-const { controller } = defineProps<{ controller: UnwrapNestedRefs<CascaderController>; searchable?: boolean }>()
-const { showSearchPanel, filteredLeafOptions, activeKey, displayColumns, selectedPath, totalLevel } = toRefs(controller)
-const { multiple, checkStrictly, loading, searchOptionOnlyLabel, virtualListProps } = toRefs(controller.props)
+defineOptions({ name: createNamespace("cascader-menu").name });
+const texts = useFieldTexts();
+const editor = inject(selectionEditorSurface, undefined);
+const { controller } = defineProps<{
+  controller: UnwrapNestedRefs<CascaderController>;
+  searchable?: boolean;
+}>();
+const {
+  loading,
+  showSearchPanel,
+  filteredLeafOptions,
+  activeKey,
+  displayColumns,
+  selectedPath,
+  totalLevel,
+} = toRefs(controller);
+const { multiple, checkStrictly, searchOptionOnlyLabel, virtualListProps } =
+  toRefs(controller.props);
 </script>

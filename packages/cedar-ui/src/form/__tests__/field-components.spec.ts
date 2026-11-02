@@ -1,7 +1,6 @@
 import { h, nextTick, reactive } from 'vue'
 import { flushPromises, mount } from '@vue/test-utils'
 import { describe, expect, test, vi } from 'vitest'
-import Option from '../../select/Option.vue'
 import EditorPanel from '../../_components/field-presentation/EditorPanel.vue'
 import FieldReference from '../../_components/field-presentation/FieldReference.vue'
 import AutoComplete from '../../auto-complete'
@@ -19,11 +18,12 @@ import RawNumber from '../../input-number/InputNumber.vue'
 import Mention from '../../mention'
 import RawMention from '../../mention/mention'
 import PeopleSelect from '../../people-select'
-import RawPeopleSelect from '../../people-select/people-select'
+import PeopleSelectPresentation from '../../people-select/presentation'
 import { RadioGroup } from '../../radio'
 import RawRadioGroup from '../../radio/radio-group.vue'
 import Rate from '../../rate'
 import RawRate from '../../rate/rate-core'
+import Option from '../../select/Option.vue'
 import Slider from '../../slider'
 import RawSlider from '../../slider/Slider.vue'
 import Switch from '../../switch'
@@ -65,15 +65,10 @@ const cases: any[] = [
   [
     'PeopleSelect',
     PeopleSelect,
-    RawPeopleSelect,
+    (PeopleSelectPresentation as any).__fieldControl,
     '',
     'dev',
-    {
-      fetch: {
-        get: async () => ({ resultCode: 'success', data: { list: [], result_list: [] } }),
-        post: async () => ({ resultCode: 'success', data: { list: [], result_list: [] } }),
-      },
-    },
+    { options },
   ],
   ['Textarea', Textarea, RawTextarea, '原值', '新值', {}],
   ['InputNumber', InputNumber, RawNumber, 1, 5, {}],
@@ -104,7 +99,7 @@ const action = (panel: any, text: string[]) =>
 describe('all field presentation adapters', () => {
   test('AutoComplete candidate clicks stay in the draft and commit the full selected label', async () => {
     const wrapper = mount(AutoComplete, {
-      props: { modelValue: '研发', presentation: 'click', options: ['研发', '设计', '运营'] },
+      props: { modelValue: '研发', editMode: 'click', options: ['研发', '设计', '运营'] },
     })
     await wrapper.get('[aria-haspopup=dialog]').trigger('click')
     await flushPromises()
@@ -150,14 +145,14 @@ describe('all field presentation adapters', () => {
       wrapper.unmount()
     })
     test(name + ' has one confirmation boundary and cancels drafts', async () => {
-      const wrapper = mount(Field, { props: { modelValue: initial, presentation: 'click', ...extra } })
+      const wrapper = mount(Field, { props: { modelValue: initial, editMode: 'click', ...extra } })
       await wrapper.get('[aria-haspopup=dialog]').trigger('click')
       await flushPromises()
       let panel = wrapper.getComponent(EditorPanel)
       expect(panel.findAll('button').filter((button: any) => ['确定', '确认'].includes(button.text()))).toHaveLength(1)
       expect(panel.findAll('button').filter((button: any) => button.text() === '×')).toHaveLength(1)
       const event = 'update:modelValue'
-      ;panel.getComponent((Field as any).__fieldControl).vm.$emit(event, next)
+      panel.getComponent((Field as any).__fieldControl ?? Editor).vm.$emit(event, next)
       await nextTick()
       expect(wrapper.emitted('update:modelValue')).toBeUndefined()
       await action(panel, ['×']).trigger('click')
@@ -166,7 +161,7 @@ describe('all field presentation adapters', () => {
       await wrapper.get('[aria-haspopup=dialog]').trigger('click')
       await flushPromises()
       panel = wrapper.getComponent(EditorPanel)
-      ;panel.getComponent((Field as any).__fieldControl).vm.$emit(event, next)
+      panel.getComponent((Field as any).__fieldControl ?? Editor).vm.$emit(event, next)
       await action(panel, ['确定', '确认']).trigger('click')
       await flushPromises()
       expect(wrapper.emitted('update:modelValue')).toEqual([[next]])
@@ -186,7 +181,7 @@ describe('all field presentation adapters', () => {
       },
     ]
     const wrapper = mount(Form, {
-      props: { model, presentation: 'click' },
+      props: { model, editMode: 'click' },
       slots: {
         default: () =>
           h(FormItem, { field: 'value', label: '备注', rules }, () =>
@@ -225,8 +220,12 @@ describe('all field presentation adapters', () => {
       props: { readPretty: true, model: {} },
       slots: {
         default: () => [
-          h(FormItem, {}, () => h(CheckboxGroup, { presentation: 'inline', readPretty: false, options, modelValue: ['dev'] })),
-          h(FormItem, {}, () => h(AutoComplete, { presentation: 'inline', readPretty: false, options: ['研发'], modelValue: '研发' })),
+          h(FormItem, {}, () =>
+            h(CheckboxGroup, { editMode: 'direct', readPretty: false, options, modelValue: ['dev'] }),
+          ),
+          h(FormItem, {}, () =>
+            h(AutoComplete, { editMode: 'direct', readPretty: false, options: ['研发'], modelValue: '研发' }),
+          ),
         ],
       },
     })

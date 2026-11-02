@@ -6,44 +6,71 @@ permalink: /components/tooltip/
 
 用于补充说明按钮、图标或被截断的文字。默认同时响应鼠标悬停和键盘聚焦；需要承载可操作内容时使用 Popover。
 
-## 基础用法
+## 基础示例
+
+### 基础用法
 
 <demo src="./__demos__/basic.vue"></demo>
 
-## 尺寸
+## 外观与状态
 
-Tooltip 只实现 `md` 和 `xs` 两档，默认 `md`。
+### 主题色与自定义颜色
 
-<demo src="./__demos__/mini.vue"></demo>
+<!-- demo-config-notes:start -->
+#### 本组配置对照
 
-## 主题色与自定义颜色
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `content` | 提示内容 | 主题色与自定义颜色、外观配置对比 |
+| `color` | 自定义背景色 | 主题色与自定义颜色、外观配置对比 |
+| `status` | 面板主题 | 主题色与自定义颜色 |
+<!-- demo-config-notes:end -->
 
 `status` 表示主题意图；`color` 和 `text-color` 覆盖背景色与文字色。
 
 <demo src="./__demos__/status.vue"></demo>
 <demo src="./__demos__/color.vue"></demo>
 
-## 位置
+### 外观配置对比
 
-<demo src="./__demos__/placement.vue"></demo>
+选择一个对比维度后，同屏展示它的全部可选值；其余配置和内容保持一致。可切换其他配置检查组合效果；输入类预览共享一个值。
 
-## 指令与文本溢出
+<details>
+<summary>配置说明与使用限制</summary>
 
-<demo src="./__demos__/directive.vue"></demo>
-<demo src="./__demos__/text-ellipsis.vue"></demo>
+#### 尺寸
 
-### 外观组合
+Tooltip 只实现 `md` 和 `xs` 两档，默认 `md`。
+
+#### 外观组合
 
 适用于悬浮时的补充说明。调整状态、尺寸，用相同数据观察变化。内容保持一致，便于比较不同设置的实际效果。
 
+</details>
+
 <demo src="./__demos__/appearance-lab.vue"></demo>
 
-<!-- api-review:start -->
-### 功能调试
+## 布局与排列
 
-<demo src="./__demos__/api-review.vue"></demo>
+### 位置
 
-<!-- api-review:end -->
+<!-- demo-config-notes:start -->
+#### 本组配置对照
+
+| 配置 | 作用 | 相关示例 |
+| --- | --- | --- |
+| `content` | 提示内容 | 位置 |
+| `placement` | 浮层相对触发元素的首选方位，默认 top；启用默认的 auto-fit-position 时，空间不足会自动翻转并约束到可视区域，不保证最终停在该侧 | 位置 |
+<!-- demo-config-notes:end -->
+
+<demo src="./__demos__/placement.vue"></demo>
+
+## 内容与展示
+
+### 指令与文本溢出
+
+<demo src="./__demos__/directive.vue"></demo>
+<demo src="./__demos__/text-ellipsis.vue"></demo>
 
 ## API
 
@@ -57,7 +84,7 @@ Tooltip 继承 Trigger 的定位、容器、受控状态、关闭策略和公开
 | color | 自定义背景色 | `string` | — |
 | text-color | 自定义文字色 | `string` | — |
 | trigger | 触发方式 | `TriggerEvent \| TriggerEvent[]` | `['hover', 'focus']` |
-| placement | 首选方位 | `TriggerPlacement` | `top` |
+| placement | 浮层相对触发元素的首选方位，默认 top；启用默认的 auto-fit-position 时，空间不足会自动翻转并约束到可视区域，不保证最终停在该侧 | `TriggerPlacement` | `top` |
 | show-arrow | 是否显示箭头 | `boolean` | `true` |
 | popup-offset | 沿方位主轴的距离 | `number` | `10` |
 | unmount-on-close | 关闭后卸载内容 | `boolean` | `true` |

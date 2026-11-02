@@ -45,7 +45,8 @@ for (const [left, right] of [
   const normalize = (source) =>
     source
       .replaceAll('_utils/picker-data', 'utils/picker-data')
-      .replaceAll('_utils/global-config', 'utils/components')
+      .replaceAll('_utils/empty-value', 'utils/empty-value')
+  .replaceAll('_utils/global-config', 'utils/components')
       .replaceAll('{ props as timeProps }', '{ timeProps }')
       .replaceAll('{ props as timeRangeProps }', '{ timeRangeProps }')
       .replaceAll('../picker/TimePicker.vue', '../TimePicker.vue')

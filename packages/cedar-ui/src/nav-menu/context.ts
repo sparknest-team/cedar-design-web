@@ -1,6 +1,8 @@
 import type { ComputedRef, InjectionKey, Ref, Slots } from 'vue'
+import type { NavMenuItemName } from './item-names'
 import type { NavMenuKey, NavMenuNode, NavMenuProps, NavMenuRenderContext } from './types'
 export interface NavMenuContext {
+  dir: ComputedRef<'ltr' | 'rtl'>
   props: NavMenuProps
   selected: ComputedRef<NavMenuKey | null>
   activeItem: ComputedRef<NavMenuKey | null>
@@ -15,8 +17,8 @@ export interface NavMenuContext {
   expand(node: NavMenuNode, open: boolean): void
   register(node: NavMenuNode, element: HTMLElement | null): void
   focus(key: NavMenuKey): void
-  registerItem(id: symbol, close: () => void, name?: NavMenuKey): () => void
-  activateItem(id?: symbol): void
+  registerItem(id: symbol, close: (restoreFocus?: boolean) => void, name?: NavMenuItemName): () => void
+  activateItem(id?: symbol): boolean
   selectItem(name: NavMenuKey): void
   labelField: ComputedRef<string>
 }

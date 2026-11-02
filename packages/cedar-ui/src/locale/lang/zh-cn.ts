@@ -166,6 +166,8 @@ const lang: CedarLang = {
     goto: '切换到第 {index} 页',
   },
   upload: {
+    replace: '替换',
+    duration: '视频时长',
     download: '下载',
     close: '关闭',
     drag: '将文件拖拽到此处，或',

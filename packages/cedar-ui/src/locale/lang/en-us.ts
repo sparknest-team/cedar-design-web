@@ -173,6 +173,8 @@ const lang: CedarLang = {
     goto: 'Go to slide {index}',
   },
   upload: {
+    replace: 'Replace',
+    duration: 'Video duration',
     download: 'Download',
     close: 'Close',
     drag: 'Drag file to this area to upload or',

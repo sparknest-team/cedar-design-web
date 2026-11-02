@@ -7,10 +7,13 @@ import { createRequire } from 'node:module'
 const workspace = fileURLToPath(new URL('../../', import.meta.url))
 const cedar = resolve(workspace, 'cedar-design-web/packages/cedar-ui')
 const maple = resolve(workspace, 'maple-design-mobile/packages/maple-ui')
-const files = ["auto-complete.tsx","props.ts","index.ts","style/index.ts","style/index.less","style/token.less","__tests__/auto-complete.test.tsx"]
-const normalize = source => source.replaceAll('_utils/global-config', 'utils/components')
+const files = ["../_hooks/use-option-request.ts","auto-complete.tsx","props.ts","index.ts","style/index.ts","style/index.less","style/token.less","__tests__/auto-complete.test.tsx"]
+const normalize = source => source.replaceAll('@cedar-design/use', '@maple-design/use')
+    .replaceAll('_utils/empty-value', 'utils/empty-value')
+  .replaceAll('_utils/global-config', 'utils/components')
   .replaceAll('_utils/popup-container', 'utils/popup-container')
   .replaceAll('_utils/text-input-value', 'utils/text-input-value')
+  .replaceAll('_utils/option-data', 'utils/option-data')
   .replaceAll('--c-', '--mp-').replaceAll('.c-', '.mp-')
   .replaceAll('c-auto-complete-listbox', 'mp-auto-complete-listbox')
 for (const file of files) {
@@ -26,4 +29,4 @@ for (const [root, compiler] of [[cedar, 'node_modules/less/package.json'], [mapl
   assert.match(css, /auto-complete__dropdown/)
   assert.match(css, /select-popup-option-height/)
 }
-console.log('AutoComplete: 7 independent source/test pairs and both Less outputs verified.')
+console.log('AutoComplete and async request owner: 8 independent source/test pairs and both Less outputs verified.')

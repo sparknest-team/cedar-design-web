@@ -1,7 +1,8 @@
+import { emptyValueProp } from '../_utils/empty-value'
 import type { ExtractPublicPropTypes, InputHTMLAttributes, PropType } from 'vue'
 import { fieldPresentationProps } from '../_components/field-presentation/props'
 import { componentSizes } from '../_utils/constant'
-import type { ComponentSize, Direction } from '../_utils/constant'
+import type { ComponentSize, Orientation } from '../_utils/constant'
 import { choiceOptionsProps, radioGroupValueProps } from '../checkbox/choice-group-props'
 import { radioValueProps } from '../checkbox/choice-value-props'
 import { radioVariantProp } from './variant'
@@ -9,6 +10,7 @@ import { radioVariantProp } from './variant'
 export type RadioValue = import('../checkbox/choice-value-props').ChoiceValue
 export const radioProps = {
   ...fieldPresentationProps,
+  emptyValue: emptyValueProp<import('../checkbox/choice-value-props').RadioModel>(),
   ...radioValueProps,
   /** 外观，分组设置优先。 */
   variant: radioVariantProp,
@@ -33,6 +35,7 @@ export const radioProps = {
 }
 export const radioGroupProps = {
   ...fieldPresentationProps,
+  emptyValue: emptyValueProp<import('../checkbox/choice-value-props').RadioModel>(),
   ...radioGroupValueProps,
   ...choiceOptionsProps,
   ariaLabel: { type: String, default: '' },
@@ -42,7 +45,7 @@ export const radioGroupProps = {
     type: String as PropType<ComponentSize>,
     validator: (value: unknown) => componentSizes.includes(value as ComponentSize),
   },
-  direction: { type: String as PropType<Direction>, default: 'horizontal' },
+  orientation: { type: String as PropType<Orientation>, default: 'horizontal' },
   disabled: { type: Boolean, default: undefined },
   readonly: { type: Boolean, default: undefined },
   error: { type: Boolean, default: undefined },
