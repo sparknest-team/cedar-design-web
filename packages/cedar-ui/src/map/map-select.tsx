@@ -1,12 +1,11 @@
-import { ref, defineComponent, useAttrs, useSlots, onMounted, h, watch, getCurrentInstance, computed, toRaw } from 'vue'
+import { ref, reactive, defineComponent, useAttrs, onBeforeUnmount, onDeactivated, onActivated, onMounted, h, watch, mergeProps } from 'vue'
 import { setValueWithAlias, dataToScope, realTransformAlias } from '../utils/useSetValueWithAlias'
-import { mapProps, type PoiKeys } from './props'
-import { IconLocation, IconLoading } from '@cedar-design/icons-vue'
+import { mapSelectProps, type PoiKeys } from './props'
+import { IconLocation, IconLoading, IconCloseCircleFill } from '@cedar-design/icons-vue'
 import Input from '../input'
 import Dialog from '../dialog'
 import Map from './map'
 import { useI18n } from '../locale'
-import _ from 'lodash'
 import { useFetchGeocoder } from './utils'
 import { useFetch } from '../_utils/use-fetch'
 import { createNamespace } from '../_utils/global-config'
@@ -16,42 +15,20 @@ const { name } = createNamespace('map-select')
 
 export default defineComponent({
   name,
+  inheritAttrs: false,
 
-  props: {
-    ...mapProps,
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    clearable: {
-      type: Boolean,
-      default: false,
-    },
-    mapStyle: {
-      type: Object,
-      default: () => ({
-        height: '300px',
-      }),
-    },
-  },
+  props: mapSelectProps,
 
-  emits: ['change', 'init', 'clear', 'update:modelValue'],
+  emits: ['change', 'init', 'clear', 'error', 'update:modelValue'],
 
   setup(props, { emit }) {
     const { t } = useI18n()
     const attrs = useAttrs()
-    const slots = useSlots()
-    const { fetch } = useFetch(props.fetch)
-    const searchVal = ref('')
+    const { fetch: inheritedFetch } = useFetch()
     const show = ref(false)
     const value = ref<any>(props.modelValue)
     const value_ = ref<any>({})
-    const instance = getCurrentInstance()
-    const isUsingVModel = computed(() => {
-      // 判断是否传入了 `modelValue` prop 并且有 `update:modelValue` 事件监听器
-      return Boolean(instance?.vnode.props && instance.vnode.props['onUpdate:modelValue'])
-    })
-    const valueKeyAlias = ((): {
+    const valueKeyAlias = reactive(((): {
       [key in PoiKeys]: string
     } => {
       const defaultValueMap = {
@@ -65,13 +42,15 @@ export default defineComponent({
         country: 'country',
       }
       return { ...defaultValueMap, ...props.valueKeyAlias }
-    })()
+    })())
     const valueKeyScope = (() => {
       return ['longitude', 'latitude', 'address', 'name', 'adcode', 'countryCode', 'city', 'country'] as PoiKeys[]
     })()
     const confirmButtonLoading = ref(false)
     const address = ref('')
     const isLoading = ref(false)
+    let generation = 0
+    let active = false
 
     function updateModelValue() {
       const data = dataToScope({
@@ -79,57 +58,34 @@ export default defineComponent({
         scope: props.valueKeyScope,
         alias: valueKeyAlias,
       })
-      if (isUsingVModel.value) {
-        // 使用了VModel,但是为undefined的情况，不能通过对象引用去改值，需要触发emit
-        if (typeof props.modelValue === 'undefined') {
-          emit('update:modelValue', data)
-        } else {
-          // 这里不能用emit update:modelValue，因为会覆盖类型，通过setValueWithAlias内部直接改props，实现相同的效果
-          setValueWithAlias({
-            target: value,
-            origin: value_.value,
-            scope: props.valueKeyScope,
-            alias: valueKeyAlias,
-          })
-        }
-      }
-      emit('change', data, toRaw(value_.value))
+      emit('update:modelValue', { ...props.modelValue, ...data })
+      emit('change', { ...data }, { ...value_.value })
     }
 
-    const { fetchGeocoder } = useFetchGeocoder({
-      mapType: props.mapType,
-      basePath: props.basePath,
-      fetch,
-      geocoderHandler: props.geocoderHandler,
-    })
-    const fallback = async () => {
-      // 没有经纬度，不需要fallback，直接return
-      if (!value.value?.[valueKeyAlias.longitude] || !value.value?.[valueKeyAlias.latitude]) {
-        return
-      }
-      // 如果外面传了地址，并且有经纬度，则优先展示外面传的地址
-      if (value.value?.[valueKeyAlias.address]) {
-        address.value = value.value[valueKeyAlias.address]
-        return
-      }
+    const fallback = async (version: number) => {
+      const longitude = value.value?.[valueKeyAlias.longitude]
+      const latitude = value.value?.[valueKeyAlias.latitude]
+      address.value = value.value?.[valueKeyAlias.address] ?? ''
+      isLoading.value = false
+      if (address.value || longitude == null || latitude == null || longitude === '' || latitude === '' || !Number.isFinite(Number(longitude)) || !Number.isFinite(Number(latitude))) return
       // 如果没有地址，但是有经纬度，则调用地图接口获取地址，并且将数据同步到value_。如果使用了v-model，则同步到外部。
       isLoading.value = true
-      const parsedData = await fetchGeocoder(value.value[valueKeyAlias.latitude], value.value[valueKeyAlias.longitude])
-      isLoading.value = false
-      // 将PoiInfo 转换成别名
-      const parsedAliasData = realTransformAlias(parsedData, valueKeyAlias)
-      // 更新内部值
-      setValueWithAlias({
-        target: value_,
-        origin: parsedAliasData,
-        scope: valueKeyScope,
-        alias: valueKeyAlias,
-      })
-      address.value = parsedAliasData[valueKeyAlias.address]
-      updateModelValue()
+      try {
+        const { fetchGeocoder } = useFetchGeocoder({ mapType: props.mapType, basePath: props.basePath, geocoderUrl: props.geocoderUrl, fetch: props.fetch ?? inheritedFetch, geocoderHandler: props.geocoderHandler })
+        const parsedData = await fetchGeocoder(latitude, longitude)
+        if (!active || version !== generation || !parsedData) return
+        const parsedAliasData = realTransformAlias(parsedData, valueKeyAlias)
+        setValueWithAlias({ target: value_, origin: parsedAliasData, scope: valueKeyScope, alias: valueKeyAlias })
+        updateModelValue()
+      } catch (error) {
+        if (active && version === generation) emit('error', error)
+      } finally {
+        if (active && version === generation) isLoading.value = false
+      }
     }
 
     const handleConfirm = () => {
+      if (props.disabled || confirmButtonLoading.value) return false
       show.value = false
       updateModelValue()
       return true
@@ -152,21 +108,25 @@ export default defineComponent({
           value_.value[key] = value.value?.[key]
         })
       }
-      fallback()
+      void fallback(++generation)
     }
 
-    init()
-
-    onMounted(() => {
-      watch(
-        () => props.modelValue,
-        (v) => {
-          value.value = v
-          init()
-        },
-        { deep: true },
-      )
-    })
+    watch(() => props.modelValue, (v) => {
+      value.value = v
+      if (active) init()
+      else address.value = v?.[valueKeyAlias.address] ?? ''
+    }, { deep: true, immediate: true, flush: 'sync' })
+    watch(() => props.valueKeyAlias, (alias) => {
+      Object.assign(valueKeyAlias, { longitude: 'longitude', latitude: 'latitude', address: 'address', name: 'name', adcode: 'adcode', countryCode: 'countryCode', city: 'city', country: 'country' }, alias)
+      if (active) init()
+      else address.value = value.value?.[valueKeyAlias.address] ?? ''
+    }, { deep: true, flush: 'sync' })
+    watch(() => [props.mapType, props.basePath, props.geocoderUrl, props.geocoderHandler, props.fetch], () => { if (active) init() }, { flush: 'sync' })
+    watch(() => props.disabled, (disabled) => { if (disabled) show.value = false })
+    onMounted(() => { active = true; init() })
+    onDeactivated(() => { active = false; generation++; isLoading.value = false })
+    onActivated(() => { if (!active) { active = true; init() } })
+    onBeforeUnmount(() => { active = false; generation++ })
 
     const changeHandler = (v) => {
       setValueWithAlias({
@@ -176,42 +136,44 @@ export default defineComponent({
         alias: valueKeyAlias,
       })
     }
+    const openDialog = () => {
+      if (props.disabled || isLoading.value) return
+      value_.value = { ...value.value }
+      show.value = true
+    }
+    const clear = (event: Event) => {
+      event.stopPropagation()
+      if (props.disabled || isLoading.value) return
+      generation++
+      const data = {}
+      valueKeyScope.forEach((key) => { data[valueKeyAlias[key]] = undefined })
+      value_.value = data
+      updateModelValue()
+      emit('clear')
+    }
     return () => (
       <>
         <Input
+          {...mergeProps({ role: 'button', 'aria-label': t('common.placeholderSelect') }, attrs, {
+            'aria-haspopup': 'dialog',
+            'aria-expanded': show.value,
+            onClick: openDialog,
+            onKeydown: (event: KeyboardEvent) => {
+              if (!event.isComposing && (event.key === 'Enter' || event.key === ' ')) {
+                event.preventDefault()
+                openDialog()
+              }
+            },
+          })}
           class="map-select"
           modelValue={address.value}
           placeholder={t('common.placeholderSelect')}
-          clearable={props.clearable}
           disabled={props.disabled}
+          readonly
           v-slots={{
-            suffix: () => h(isLoading.value ? IconLoading : IconLocation),
-          }}
-          {...({
-            onClick: () => {
-            if (value.value) {
-              setValueWithAlias({
-                target: value_,
-                origin: value.value,
-                scope: valueKeyScope,
-                alias: valueKeyAlias,
-              })
-            }
-            if (!isLoading.value) {
-              show.value = true
-            }
-          },
-          } as any)}
-          onClear={(e: Event) => {
-            e.stopPropagation()
-            const data = {}
-            valueKeyScope.forEach((key) => {
-              data[valueKeyAlias[key]] = undefined
-            })
-            value_.value = data
-            address.value = ''
-            updateModelValue()
-            emit('clear')
+            suffix: () => props.clearable && address.value && !props.disabled && !isLoading.value
+              ? h('button', { type: 'button', class: 'map-select-clear', 'aria-label': t('common.clear'), onClick: clear }, h(IconCloseCircleFill, { 'aria-hidden': 'true' }))
+              : h(isLoading.value ? IconLoading : IconLocation, { 'aria-hidden': 'true' }),
           }}
         ></Input>
         <Dialog
@@ -250,7 +212,7 @@ export default defineComponent({
               valueKeyScope={valueKeyScope}
               valueKeyAlias={valueKeyAlias}
               enableGisSearch={props.enableGisSearch}
-              fetch={fetch}
+              fetch={props.fetch ?? inheritedFetch}
               onChange={changeHandler}
             ></Map>
           ) : (

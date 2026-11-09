@@ -1,0 +1,7 @@
+# Local StyleProvider theme
+
+Add theme=light|dark on both Vue StyleProviders. Omission inherits the parent theme; nested explicit themes override it. CSS token aliases are re-declared at theme boundaries through Less selector extensions in each existing token entry, preserving demand-loaded component styles. Only user overrides are merged through a computed injection context; real Teleport roots receive that context. No DOM scanning, computed-style copying or per-component theme watcher is required.
+
+Remove Cedar LayoutSider/NavMenu theme Props, the inherited Sider theme context and NavMenuTheme export. Maple has no LayoutSider and its NavMenu already follows global tokens. Remove Button touchstart Emits on both platforms; pointer/touch handlers with actual gesture or ripple behavior remain. Native listener fallthrough remains native Vue behavior. ConfigProvider.theme and StyleProvider.setStyleVars retain document-wide semantics. Programmatic services created outside a Provider have no implicit caller context.
+
+Performance: CSS selectors grow by one boundary selector per existing token rule; variable declarations are not duplicated. A theme change costs one Provider attribute patch plus affected popup patches and browser subtree style recomputation. User override merge cost is proportional to override keys per nesting boundary. Measure compiled CSS growth and browser switching cost, without treating a synthetic fixture as a production budget.

@@ -56,29 +56,47 @@ Preview configuration: `trigger="click"`, `:popup-offset="10"`, `show-arrow`.
 
 <demo src="./__demos__/controlled.vue"></demo>
 
+## Triggers and positioning
+
+### Popup placement
+
+placement is the preferred side; auto-fit-position defaults to true and can change the final side. It is not a position coordinate. top-start describes anchor placement and alignment, whereas top-left is a container corner. Top/bottom start and end mirror with reading direction; left/right remain physical, and vertical start/end remain top/bottom.
+
+## Usage notes
+
+### Configuration
+
+These are actual :root defaults. Prefer component variables for business customization; internal positioning variables are not public API.
+
+With Teleport, variables must be in the actual popup scope, for example through `popup-style`. Trigger-button variables do not automatically inherit into popups.
+
+### Reduced motion
+
+`allowClose()` restores the internal closing gate; there is no public counterpart to disable closing, and this method cannot prevent closure.
+
 ## API
 
-### `<Trigger>` Props
+### Trigger Props
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | dir | Reading direction; inherits the source scope when omitted. Physical left/right placements keep their meaning. | `ReadingDirection` (`ltr` / `rtl`) | — |
 | open | Controlled open state | `boolean` | `-` |
 | default-open | Initial uncontrolled state | `boolean` | `false` |
-| trigger | Trigger modes; may be combined | `hover \| click \| focus \| contextMenu \| manual \| TriggerEvent[]` | `hover` |
+| trigger | Trigger modes; may be combined | `hover \| click \| focus \| contextMenu \| manual \| TriggerEvent[]`<br>`TriggerEvent: 'manual' \| 'hover' \| 'click' \| 'focus' \| 'contextMenu'` | `hover` |
 | disabled | Prevent opening | `boolean` | `false` |
 | reference | External reference element; defaults to the first actual element in the default slot | `string \| HTMLElement \| SVGElement` | `-` |
-| placement | Preferred popup side relative to the trigger, default bottom. With the default auto-fit-position enabled, Trigger may flip and constrain it to the viewport when space is limited; this is not a fixed final position | `TriggerPlacement` | `bottom` |
+| placement | Preferred popup side relative to the trigger, default bottom. With the default auto-fit-position enabled, Trigger may flip and constrain it to the viewport when space is limited; this is not a fixed final position | `TriggerPlacement`<br>`'left' \| 'right' \| 'bottom' \| 'top' \| 'top-start' \| 'top-end' \| 'bottom-start' \| 'bottom-end' \| 'left-start' \| 'left-end' \| 'right-start' \| 'right-end'` | `bottom` |
 | strategy | Positioning strategy | `absolute \| fixed` | `absolute` |
 | cover | Cover the reference on the main axis | `boolean` | `false` |
 | popup-offset | Outward distance along placement's main axis | `number` | `0` |
-| popup-translate | Screen-axis offset, or per-placement offsets | `[number, number] \| Partial<Record<TriggerPlacement, [number, number]>>` | `-` |
+| popup-translate | Screen-axis offset, or per-placement offsets | `[number, number] \| Partial<Record<TriggerPlacement, [number, number]>>`<br>`TriggerPlacement: 'left' \| 'right' \| 'bottom' \| 'top' \| 'top-start' \| 'top-end' \| 'bottom-start' \| 'bottom-end' \| 'left-start' \| 'left-end' \| 'right-start' \| 'right-end'` | `-` |
 | align-point | Use pointer coordinates as a virtual reference | `boolean` | `false` |
 | popup-container | Mount container; `false` renders in place | `string \| HTMLElement \| false` | `body` |
 | auto-fit-position | Flip and constrain to the viewport when space is insufficient | `boolean` | `true` |
 | auto-fit-popup-width | Match popup width to the reference | `boolean` | `false` |
 | auto-fit-popup-min-width | Match minimum popup width to the reference | `boolean` | `false` |
-| auto-fix-position | Reposition automatically on size changes | `boolean` | `true` |
+| auto-fix-position | Observe reference element size changes; disabling this still observes the popup and positioning parent and responds to window changes | `boolean` | `true` |
 | update-at-scroll | Reposition while scrolling | `boolean` | `false` |
 | scroll-to-close | Close when scrolling exceeds the threshold | `boolean` | `false` |
 | scroll-to-close-distance | Close threshold | `number` | `0` |
@@ -89,7 +107,8 @@ Preview configuration: `trigger="click"`, `:popup-offset="10"`, `show-arrow`.
 | animation-name | Vue Transition name | `string` | `trigger-fade` |
 | duration | Transition duration | `number \| { enter: number; leave: number }` | `-` |
 | auto-fit-transform-origin | Derive transform origin from final placement | `boolean` | `false` |
-| opened-class | Class added to the first reference node while open | `ClassName` | `-` |
+| opened-class | Merge into the first default-slot node when open; external references do not receive this class | `ClassName` | `-` |
+| reference-attrs | Attributes applied to the actual reference or a function of open; original attributes are restored when removed, replaced or unmounted | `TriggerReferenceAttrs \| ((open: boolean) => TriggerReferenceAttrs)` | `-` |
 | popup-class / popup-style | Positioning-layer class/style | `ClassName / CSSProperties` | `-` |
 | content-class / content-style | Content-layer class/style | `ClassName / CSSProperties` | `-` |
 | arrow-class / arrow-style | Arrow class/style | `ClassName / CSSProperties` | `-` |
@@ -102,7 +121,7 @@ Preview configuration: `trigger="click"`, `:popup-offset="10"`, `show-arrow`.
 | esc-to-close | Close on Escape | `boolean` | `true` |
 | restore-focus | Restore reference focus after closing is accepted | `boolean` | `true` |
 
-### Events
+### Trigger Events
 
 | Event | Description | Arguments |
 | --- | --- | --- |
@@ -113,14 +132,14 @@ Preview configuration: `trigger="click"`, `:popup-offset="10"`, `show-arrow`.
 | click-outside | The topmost popup receives an outside click | `event: Event` |
 | resize | Reference size changes | `-` |
 
-### Slots
+### Trigger Slots
 
 | Slot | Description |
 | --- | --- |
 | default | Reference node |
 | content | Popup content |
 
-### Expose
+### Trigger Methods
 
 `open()`、`close()`、`resize()`、`allowClose()`、`getReference()`、`setReference(reference?)`、`focusReference()`、`isTopLayer(event?)`。
 
@@ -128,31 +147,46 @@ Preview configuration: `trigger="click"`, `:popup-offset="10"`, `show-arrow`.
 
 `trigger="focus"` supports keyboard focus. `esc-to-close` lets only the topmost popup handle Escape. Trigger does not assign `role`, `aria-describedby` or business labels; semantic wrappers such as Tooltip, Popover and Menu must supply them.
 
-## Public CSS variables
+## Native event modifiers on reference elements
 
-These are actual :root defaults. Prefer component variables for business customization; internal positioning variables are not public API.
+Native `click`, `mouseenter`, `mouseleave`, `focusin`, `focusout`, `contextmenu` listeners and `.once`, `.capture`, `.passive` modifiers bind to the actual reference element, not the popup. `.once` follows the native element's listener lifetime. Replacing a callback does not reactivate a consumed listener; replacing the reference or removing and readding a listener starts a new lifetime. Deactivation/unmount unbind listeners. Listeners only notify; returned Promises do not drive opening/loading, and errors enter Vue's event error chain.
 
-| Variable | Default | Meaning and use case |
-| --- | --- | --- |
-| `--c-trigger-arrow-background` | `var(--c-sys-color-surface-overlay)` | Standalone Trigger arrow background; wrappers use their own variables |
-| `--c-trigger-arrow-size` | `var(--c-sys-space-4)` | Arrow square size |
-| `--c-trigger-arrow-radius` | `var(--c-sys-radius-sm)` | Arrow border radius |
-| `--c-trigger-transition-duration` | `var(--c-sys-motion-duration-fast)` | Default Trigger fade duration |
-| `--c-trigger-transition-easing` | `var(--c-sys-motion-easing-standard)` | Default Trigger easing |
+`aria-describedby` from `reference-attrs` is merged and deduplicated with existing reference descriptions; cleanup or reference replacement restores the original attribute.
+
+Fixed positioning uses the actual `fixed` containing block when an ancestor has a transform, filter, perspective, or containing CSS property. Axis-aligned scaling is accounted for; rotated or skewed coordinate systems are not guaranteed. For accessible same-origin iframe references, the reference and popup documents share coordinate conversion and event handling; cross-origin or unrelated browsing contexts are not supported. With `update-at-scroll`, scrolling either document or a scrollable ancestor updates the popup.
+
+## CSS Variables
 
 Tooltip/Popover define arrow appearance themselves. Override their component variables rather than Trigger arrow-background.
 
-With Teleport, variables must be in the actual popup scope, for example through `popup-style`. Trigger-button variables do not automatically inherit into popups.
+<!-- component-css-variables:start -->
+
+Use these variables to customize the component. Defaults may vary by the selector condition shown. Each variable applies to the corresponding size, variant and interaction states.
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| Variable | Default / condition | Affected styles |
+| --- | --- | --- |
+| `--c-trigger-arrow-background` | `var(--c-sys-color-surface-overlay)` | `background-color` |
+| `--c-trigger-arrow-radius` | `var(--c-sys-radius-sm)` | `border-radius` |
+| `--c-trigger-arrow-size` | `var(--c-sys-space-4)` | `height`, `width` |
+| `--c-trigger-transition-duration` | `var(--c-sys-motion-duration-fast)` | `transition` |
+| `--c-trigger-transition-easing` | `var(--c-sys-motion-easing-standard)` | `transition` |
+
+</div>
+
+Apply overrides to the rendered component root or the actual popup ancestor. For example, add the following class to that element and replace the value as needed:
+
+```css
+.component-theme {
+  --c-trigger-arrow-background: var(--c-sys-color-surface-overlay);
+}
+```
+
+Explicit inline styles and props that write the same CSS property take precedence over stylesheet defaults. After Teleport, ordinary CSS variables inherit from the actual mount location. When using ThemeProvider, follow its local-theme and popup configuration rules. Override the component variable directly for local styling; root-level aliases are not recalculated merely because a descendant system variable changes. Internal variables are not public APIs.
+
+<!-- component-css-variables:end -->
 
 ### Reduced motion
 
 Built-in CSS transitions follow `prefers-reduced-motion: reduce`. Removing transitions does not change final visibility, selected/expanded state or event semantics. Applications control custom animations inside slots.
-
-
-### Placement semantics and configuration
-
-placement is a preferred side; final placement may change while auto-fit-position is true (the default). It is not a position coordinate. top-start is anchor-side alignment, whereas top-left denotes a container corner. Current Trigger start/end follows physical cross-axis geometry; automatic RTL mirroring is not promised.
-
-## Native event modifiers on the reference
-
-Native click, mouseenter, mouseleave, focusin, focusout and contextmenu listeners, including .once, .capture and .passive, belong to the actual reference element rather than the popup. Updating a consumed once callback does not rearm it; replacing the reference or removing and readding the listener starts a new native lifetime. Suspension and unmount detach listeners. Listener promises do not control opening or loading; errors follow Vue event error handling.

@@ -83,9 +83,15 @@ Preview configuration: `title="Active Users"`, `:from="0"`, `:to="125670"`, `:du
 
 <demo src="./__demos__/count-to.vue"></demo>
 
+## Animation duration boundaries
+
+Duration is finite nonnegative milliseconds. Zero reaches the target on the next frame. Negative, NaN and infinite values produce development prop diagnostics and safely behave as zero without continuing to request frames. Pausing or unmounting before that frame cancels completion. Changing animation-duration replays enabled numeric animation according to the existing rules.
+
 ## API
 
-### `<Statistic>` Props
+`precision` accepts integers from 0 to 100; invalid values fall back to 0. Numeric formatting uses JavaScript binary numbers and rounding and is not exact financial arithmetic. Very large values may use exponential notation; when the difference between animation endpoints overflows, the final value is shown directly. Numeric grouping follows en-US rules, `separator` replaces grouping commas, and the decimal point remains a dot; dates use local time. Non-finite numeric values produce a warning, display literally, and do not animate. An invalid animation start falls back to 0 and an invalid duration to 0 with completion on the next frame.
+
+### Statistic Props
 
 | Prop | Description | Type | Default |
 | ---------------------- | -------------------------------------------------------------- | ------------------------- | ------------ |
@@ -106,9 +112,9 @@ Preview configuration: `title="Active Users"`, `:from="0"`, `:to="125670"`, `:du
 | `placeholder` | Placeholder when `value` is `undefined` and the default slot is unused | `string` | - |
 | `value-style` | Custom style of the value | `CSSProperties` | - |
 
-### `<Statistic>` Slots
+### Statistic Slots
 
-| Slot | Description | Arguments |
+| Slot | Description | Prop |
 | --------- | ---------------------------------------- | ---- |
 | `default` | Custom `value`, used when `value` is not provided | `-` |
 | `title` | Title | `-` |
@@ -116,7 +122,7 @@ Preview configuration: `title="Active Users"`, `:from="0"`, `:to="125670"`, `:du
 | `suffix` | Suffix | `-` |
 | `extra` | Extra content | `-` |
 
-### Type definitions
+## Types
 
 The component exports the following types
 
@@ -124,29 +130,53 @@ The component exports the following types
 import type { StatisticProps } from '@cedar-design/ui'
 ```
 
-### Style variables
+## Usage notes
 
-| Variable | Default |
-| --- | --- |
-| `--c-statistic-title-color` | `var(--c-sys-color-content-secondary)` |
-| `--c-statistic-title-font-size` | `var(--c-font-size-body-3)` |
-| `--c-statistic-title-margin-bottom` | `var(--c-spacing-4)` |
-| `--c-statistic-value-color` | `var(--c-sys-color-content-primary)` |
-| `--c-statistic-value-font-size` | `26px` |
-| `--c-statistic-value-font-weight` | `var(--c-font-weight-500)` |
-| `--c-statistic-decimal-font-size` | `inherit` |
-| `--c-statistic-prefix-color` | `var(--c-sys-color-content-secondary)` |
-| `--c-statistic-prefix-font-size` | `14px` |
-| `--c-statistic-prefix-spacing` | `var(--c-spacing-1)` |
-| `--c-statistic-suffix-color` | `var(--c-sys-color-content-secondary)` |
-| `--c-statistic-suffix-font-size` | `14px` |
-| `--c-statistic-suffix-spacing` | `var(--c-spacing-1)` |
-| `--c-statistic-extra-color` | `var(--c-sys-color-content-secondary)` |
-| `--c-statistic-extra-font-size` | `var(--c-font-size-body-3)` |
-| `--c-statistic-extra-margin-top` | `var(--c-spacing-4)` |
 
-## Shared implementation and platform boundaries
-
-Each platform maintains a complete local implementation. They do not import a common core or share component instances or reactive state. Changes must update both implementations. Component bodies, props, key styles and paired tests have read-only source consistency checks; theme tokens and installation entries remain local to each library.
 
 Placeholder text updates when the default slot appears/disappears. Animation pauses on unmount/KeepAlive deactivation.
+
+### Animation configuration and lifecycle
+
+With `start=true`, dynamically enabling `animation` or changing the numeric target, `valueFrom` or `animationDuration` replays from the currently configured start. Formatting-only changes, such as precision or separators, do not replay. Disabling `animation` or switching to string/date immediately shows the target and stops frames. `start=false` pauses the current number; explicitly returning to `true` replays. Configuration changes while paused prepare a new start without scheduling frames. KeepAlive deactivation pauses; activation resumes unchanged configuration or resynchronizes changed configuration. Unmount releases frames.
+
+## CSS Variables
+
+<!-- component-css-variables:start -->
+
+Use these variables to customize the component. Defaults may vary by the selector condition shown. Each variable applies to the corresponding size, variant and interaction states.
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| Variable | Default / condition | Affected styles |
+| --- | --- | --- |
+| `--c-statistic-decimal-font-size` | `inherit` | `font-size` |
+| `--c-statistic-extra-color` | `var(--c-sys-color-content-secondary)` | `color` |
+| `--c-statistic-extra-font-size` | `var(--c-font-size-body-3)` | `font-size` |
+| `--c-statistic-extra-margin-top` | `var(--c-spacing-4)` | `margin-top` |
+| `--c-statistic-prefix-color` | `var(--c-sys-color-content-secondary)` | `color` |
+| `--c-statistic-prefix-font-size` | `14px` | `font-size` |
+| `--c-statistic-prefix-spacing` | `var(--c-spacing-1)` | `margin-inline-end` |
+| `--c-statistic-suffix-color` | `var(--c-sys-color-content-secondary)` | `color` |
+| `--c-statistic-suffix-font-size` | `14px` | `font-size` |
+| `--c-statistic-suffix-spacing` | `var(--c-spacing-1)` | `margin-inline-start` |
+| `--c-statistic-title-color` | `var(--c-sys-color-content-secondary)` | `color` |
+| `--c-statistic-title-font-size` | `var(--c-font-size-body-3)` | `font-size` |
+| `--c-statistic-title-margin-bottom` | `var(--c-spacing-4)` | `margin-bottom` |
+| `--c-statistic-value-color` | `var(--c-sys-color-content-primary)` | `color` |
+| `--c-statistic-value-font-size` | `26px` | `font-size` |
+| `--c-statistic-value-font-weight` | `var(--c-font-weight-500)` | `font-weight` |
+
+</div>
+
+Apply overrides to the rendered component root or the actual popup ancestor. For example, add the following class to that element and replace the value as needed:
+
+```css
+.component-theme {
+  --c-statistic-decimal-font-size: inherit;
+}
+```
+
+Explicit inline styles and props that write the same CSS property take precedence over stylesheet defaults. After Teleport, ordinary CSS variables inherit from the actual mount location. When using ThemeProvider, follow its local-theme and popup configuration rules. Override the component variable directly for local styling; root-level aliases are not recalculated merely because a descendant system variable changes. Internal variables are not public APIs.
+
+<!-- component-css-variables:end -->

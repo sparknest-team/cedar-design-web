@@ -1,0 +1,3 @@
+- [x] Reproduce normalized duplicate, unstable node and invalid count failures.
+- [x] Implement and verify stable value/occurrence contracts, folding and public types.
+- [x] Validate actual browser, affected consumers, API/docs/source/type/lint/spec gates.

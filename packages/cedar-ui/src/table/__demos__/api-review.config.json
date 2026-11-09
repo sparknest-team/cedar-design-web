@@ -316,27 +316,6 @@
       "initial": "{}"
     },
     {
-      "name": "empty-type",
-      "description": "空白状态类型",
-      "type": "default|network|unknown|success",
-      "defaultValue": "default",
-      "kind": "enum",
-      "options": [
-        "default",
-        "network",
-        "unknown",
-        "success"
-      ],
-      "initial": "default"
-    },
-    {
-      "name": "empty-text",
-      "description": "空白状态类型文案",
-      "type": "string",
-      "defaultValue": "-",
-      "kind": "string"
-    },
-    {
       "name": "components",
       "type": "TableComponents",
       "defaultValue": "undefined",
@@ -353,7 +332,7 @@
       "name": "row-number",
       "type": "[Boolean, Object]",
       "defaultValue": "undefined",
-      "description": "源码公开属性 / Public source prop",
+      "description": "保留属性，当前不生成行号 / Reserved; currently does not generate row numbers",
       "kind": "json",
       "initial": "{}"
     },

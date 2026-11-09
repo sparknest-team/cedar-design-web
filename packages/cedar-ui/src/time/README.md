@@ -99,7 +99,7 @@ Maple 的 pickerProps 可配置 optionHeight/optionCount 等外观，不可替�
 
 ### 独立步长示例
 
-十二小时显示与5小时步长组合：步长仍以24小时的0点为起点，合法小时为0/5/10/15/20，而不是在中午重新起算。AM候选12/05/10，PM候选03/08；显示为03 PM时提交模型仍为15:30:00（示例format保持HH:mm:ss）。切换规则不改旧09:30:00，取消也不提交候选对齐值；确认合法候选后才写回。可再开启“禁用15点”叠加disabled-hours回调，此时03 PM不可选而08 PM仍对应20点。“父级接受更新”关闭时只记录提议，不改业务值；重新接受后确认才回写。提议次数不是模型接受次数。其他非整除步长和物理触屏仍需单独验收。
+十二小时显示与 5 小时步长组合时，步长从 24 小时制的零点计算，合法小时为 0 / 5 / 10 / 15 / 20，不在中午重新起算。AM 显示 12 / 05 / 10，PM 显示 03 / 08；03 PM 对应模型 15:30:00。切换规则不修改已有值，确认合法候选后才提交，取消保留原值；禁用 15 点后，03 PM 不可选，08 PM 仍对应 20 点。
 
 With 12-hour display and a 5-hour step, hours remain anchored to midnight: 0/5/10/15/20, not restarted at noon. AM offers 12/05/10 and PM offers 03/08. Selecting 03 PM commits 15:30:00 because this Demo retains HH:mm:ss as its model format. Changing the rules preserves the old 09:30:00; cancellation does not commit aligned candidates. Only confirmation writes the selected value. Enable Disable 15:00 to combine disabled-hours with the step: 03 PM is unavailable while 08 PM still means 20:00. Turning off Accept controlled updates records proposals without changing the business value; re-enable it before confirming an accepted value. Proposal counts are not acceptance counts. Other non-dividing steps and physical touch remain separate coverage.
 
@@ -173,7 +173,7 @@ In the single-value bounds Demo, tightening the minimum retains committed 10:30:
 
 字段和纯面板提交时按当前格式、步长及禁用规则重新校验；Cedar 手动输入也遵守相同规则。规则变化不会自动改写已提交值。起止端点始终不自动交换；关闭 `show-next-day` 时倒序范围不能提交，开启后允许结束早于开始。清空仍提交 `undefined`，不受候选时间限制，但遵守只读/禁用状态。
 
-`select(value, date)` 表示用户选择草稿，`change(value, date)` 表示提交。单值和范围字段清除均返回 `undefined`，对应 Date 参数也为 `undefined`，`clear` 不带参数。Date 参数是本地时间表示（不自动进行次日日期运算）。字段默认确认后提交；`disable-confirm` 开启后仅有效选择立即提交并请求关闭，不允许次日时的倒序草稿仍不能提交。受控 `open` 仍需父级接受更新。独立纯面板同样默认确认后提交；开启 disable-confirm 后有效选择立即提交，但不会关闭面板。
+`select(value, date)` 表示用户选择草稿，`change(value, date)` 表示提交。未配置 empty-value 时，单值和范围字段清除返回 `undefined`，对应 Date 参数也为 `undefined`；显式配置时保留允许的清空输出，`clear` 不带参数。Date 参数是本地时间表示（不自动进行次日日期运算）。字段默认确认后提交；`disable-confirm` 开启后仅有效选择立即提交并请求关闭，不允许次日时的倒序草稿仍不能提交。受控 `open` 仍需父级接受更新。独立纯面板同样默认确认后提交；开启 disable-confirm 后有效选择立即提交，但不会关闭面板。
 
 <demo src="./__demos__/selection-events.vue"></demo>
 
@@ -222,46 +222,215 @@ open-trigger-target="icon" 时，输入区可以编辑或复制，只有右侧�
 
 字段图标插槽为 `suffix-icon`，参数为 `focus: boolean`、`popupOpen: boolean`。实例方法 `focus(index = 0)` 聚焦指定端点而不提交值；`blur()` 失焦并请求关闭。
 
-### Props
+### Time Props
 
-| 参数                    | 说明                                                                                   | 类型                                                | 默认值    |
-| ----------------------- | -------------------------------------------------------------------------------------- | --------------------------------------------------- | --------- |
-| `open-trigger-target`   | 打开面板的点击区域；field 为整个字段，icon 仅右侧选择按钮。不影响键盘展开及受控 open。 | `'field' \| 'icon'`                                 | `'field'` |
-| `model-value`           | 绑定值                                                                                 | `string \| number \| Date`                          | `-`       |
-| `open`                  | 弹层显隐                                                                               | `boolean`                                           | `-`       |
-| `popup-props`           | 本地 Trigger 的展示配置，不控制字段状态                                                | `TimePopupPresentationProps<Partial<TriggerProps>>` | `{}`      |
-| `input-editable`        | 允许桌面文本输入                                                                       | `boolean`                                           | `true`    |
-| `clearable`             | 可清除                                                                                 | `boolean`                                           | `true`    |
-| `disabled`              | 禁用                                                                                   | `boolean`                                           | `false`   |
-| `readonly`              | 只读                                                                                   | `boolean`                                           | `false`   |
-| `size`                  | 尺寸                                                                                   | `xs \| sm \| md \| lg \| xl`                        | `-`       |
-| `variant`               | 输入框变体                                                                             | `filled \| outline \| standard`                     | `filled`  |
-| `placeholder`           | 占位                                                                                   | `string`                                            | `-`       |
-| `format`                | 展示格式                                                                               | `string`                                            | `-`       |
-| `use12-hours`           | 12 小时制                                                                              | `boolean`                                           | `false`   |
-| `hide-disabled-options` | 隐藏禁用时间选项                                                                       | `boolean`                                           | `false`   |
-| `step`                  | 时分秒步长                                                                             | `object`                                            | `-`       |
-| `disable-confirm`       | 跳过确认                                                                               | `boolean`                                           | `false`   |
-| `time-picker-props`     | 透传给 TimePicker                                                                      | `object`                                            | `{}`      |
+| 参数 | 说明 | 类型 | 缺省说明 |
+| --- | --- | --- | --- |
+| `before-commit` | 显式字段保存守卫，使用 payload、done、context | `BeforeFieldCommit` | `undefined` |
+| `blur-color` | 失焦时的颜色 | `string` | 主题缺省 |
+| `clearable` | 允许清除；不会绕过禁用、只读或等待状态 | `boolean` | `true` |
+| `default-open` | 非受控初始开关，仅创建时读取 | `boolean` | `false` |
+| `default-value` | 非受控初始值，仅创建时读取 | `TimeValue` | `undefined` |
+| `disable-confirm` | 有效选择后立即提交；字段还请求关闭 | `boolean` | `false` |
+| `disabled` | 禁用交互；字段未设时继承 FormItem/Form | `boolean` | 继承，最终 false |
+| `disabled-hours` | 返回禁用小时，小时始终为 0–23 | `() => number[]` | `undefined` |
+| `disabled-minutes` | 按已选小时返回禁用分钟 | `(hour?: number) => number[]` | `undefined` |
+| `disabled-seconds` | 按已选小时和分钟返回禁用秒 | `(hour?: number, minute?: number) => number[]` | `undefined` |
+| `edit-mode` | 字段编辑模式；未设时继承 FormItem/Form | `FieldEditMode`<br>`'direct' \| 'click' \| 'dblclick'` | 继承，最终 direct |
+| `empty-text` | 纯阅读模式的空内容文字 | `string` | 继承，最终 '-' |
+| `empty-value` | 清空输出或工厂，不改变空值识别策略 | `TimeValue \| null \| (() => TimeValue \| null \| undefined)` | `undefined` |
+| `empty-values` | 空值识别列表，覆盖而不合并 | `readonly unknown[]` | 继承/组件族默认 |
+| `error` | 字段错误展示；未设时继承 | `boolean` | 继承，最终 false |
+| `focus-color` | 聚焦时的颜色 | `string` | 主题缺省 |
+| `format` | 字符串解析、显示及输出格式；十二小时缺省带 a | `string` | 按 use12Hours |
+| `hide-disabled-options` | 隐藏禁用时间选项；时钟保留刻度位置 | `boolean` | `false` |
+| `hint` | 浮动占位提示；存在 Form 外置标签时不浮动 | `boolean` | `true` |
+| `input-editable` | 允许手输；不影响面板选择入口 | `boolean` | `true` |
+| `line` | 显示外壳边框或底线 | `boolean` | `true` |
+| `loading` | 手动加载反馈，不从事件返回值推导 | `boolean` | `false` |
+| `loading-mode` | 字段加载展示模式 | `default \| line` | `default` |
+| `max` | 最大可选钟点，HH:mm 或 HH:mm:ss，包含端点 | `string` | `undefined` |
+| `min` | 最小可选钟点，HH:mm 或 HH:mm:ss，包含端点 | `string` | `undefined` |
+| `model-value` | 外部值；数值和 Date 保留原值，正常提交输出格式化字符串 | `TimeModelValue` | `undefined` |
+| `open` | 受控编辑层开关 | `boolean` | `undefined` |
+| `open-trigger-target` | 点击整个字段或仅图标打开；不限制键盘打开 | `field \| icon` | `field` |
+| `placeholder` | 占位文字；范围可使用起止数组 | `string` | `undefined` |
+| `popup-container` | 编辑层挂载容器，false 保持原位 | `PopupContainer` | 共享容器缺省 |
+| `popup-props` | 浮层展示配置，不接管模型、状态和事件 | `TimePopupPresentationProps` | `{}` |
+| `read-pretty` | 纯阅读展示，不渲染编辑器；独立于 readonly | `boolean` | 继承，最终 false |
+| `readonly` | 只读；字段可聚焦复制，不改值或展开编辑 | `boolean` | 继承，最终 false |
+| `size` | 五档尺寸；字段遵循表单继承 | `ComponentSize`<br>`'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | 继承，最终 md |
+| `step` | 以 0 点为起点的时分秒步长，无效步长回退为 1 | `TimeStep` | 有效步长均 1 |
+| `text-color` | 内容文字颜色 | `string` | 主题缺省 |
+| `time-picker-props` | 独立时间面板的展示配置，根拥有模型、规则和状态 | `TimePanelPresentationProps` | `{}` |
+| `use12-hours` | 十二小时面板；小时禁用回调仍用 0–23 | `boolean` | `false` |
+| `variant` | 字段外观 | `filled \| outline \| standard` | `filled` |
 
-### Form 字段展示与确认
+### 编辑与确认
 
-本组件支持 `edit-mode`，字段 > FormItem > Form 逐层继承；未指定时为 `direct`，保留原有交互。支持值：`direct / click / dblclick`。非 direct 编辑模式通过字段值入口打开编辑面板，并维护单份草稿；确认后才更新 v-model，取消、重置或启用 readPretty 时丢弃草稿。
+通过 `edit-mode` 配置编辑方式；未指定时依次继承 FormItem、Form，默认 `direct`。支持值：`direct / click / dblclick`。非 direct 编辑模式通过字段值入口打开编辑面板，并维护单份草稿；确认后才更新 v-model，取消、重置或启用 readPretty 时丢弃草稿。
 
 Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，Enter/F2 也可进入；取消/Escape 丢弃草稿，确认后提交。readPretty 为独立阅读属性，与 readonly、disabled 分开。
 
-`before-commit(value, { previousValue, signal })` 可拦截弹层保存；FormItem 先校验候选值，失败保持编辑。`open / default-open / update:open` 控制编辑层。`#read="{ value, text }"` 可自定义阅读内容。集中示例见 Form 的“各类字段统一展示”。
+`before-commit(payload, done, context)` 可拦截弹层保存；FormItem 先校验候选值，失败保持编辑。`open / default-open / update:open` 控制编辑层。`#read="{ value, text }"` 可自定义阅读内容。集中示例见 Form 的“各类字段统一展示”。
 
 日期／时间字段在 inline 下沿用原确认策略；在 click/dblclick 编辑展示中，内部纯面板隐藏确认工具栏，由编辑层提供唯一一组确认／取消。独立 DatePicker、DateRangePicker、TimePicker、TimeRangePicker 保留原有面板 API 和确认行为，不继承 Form 的字段展示。
 
 `read-pretty` 为独立布尔属性，与 `readonly`、`disabled` 同级；字段 > FormItem > Form 继承，显式 `false` 覆盖父级。默认 `false`。纯阅读不显示编辑器。
 
-### 透传配置边界核对（F07）
+### 透传配置边界
 
-现有 TimePopupPresentationProps 与运行时过滤保持；open/defaultOpen、disabled、trigger、closeOnClickReference、preventFocus 和对应展开更新归字段管理。顶层 popup-container 明确设置时优先，否则嵌套回退，popupClass 合并内部类。inline 展示层固定 popupOffset=4；Maple 还固定 unmountOnClose=true，这些旧类型中的字段不保证能控制最终值。本轮不收窄既有 Time 类型，也不改变运行行为。
+open/defaultOpen、disabled、trigger、closeOnClickReference、preventFocus 和对应展开更新由时间字段管理。顶层 popup-container 明确设置时优先，否则使用嵌套配置；popupClass 会合并。inline 展示层固定 popupOffset=4；Maple 还固定 unmountOnClose=true，因此嵌套配置中的这些字段不保证能控制最终值。
+
+### TimePicker Props
+
+| 参数 | 说明 | 类型 | 缺省说明 |
+| --- | --- | --- | --- |
+| `default-value` | 非受控初始值，仅创建时读取 | `TimeValue \| TimeValue[]` | `undefined` |
+| `disable-confirm` | 有效选择后立即提交；字段还请求关闭 | `boolean` | `false` |
+| `disabled` | 禁用面板选择和确认 | `boolean` | `false` |
+| `disabled-hours` | 返回禁用小时，小时始终为 0–23 | `() => number[]` | `undefined` |
+| `disabled-minutes` | 按已选小时返回禁用分钟 | `(hour?: number) => number[]` | `undefined` |
+| `disabled-seconds` | 按已选小时和分钟返回禁用秒 | `(hour?: number, minute?: number) => number[]` | `undefined` |
+| `format` | 字符串解析、显示及输出格式；十二小时缺省带 a | `string` | 按 use12Hours |
+| `hide-disabled-options` | 隐藏禁用时间选项；时钟保留刻度位置 | `boolean` | `false` |
+| `max` | 最大可选钟点，HH:mm 或 HH:mm:ss，包含端点 | `string` | `undefined` |
+| `min` | 最小可选钟点，HH:mm 或 HH:mm:ss，包含端点 | `string` | `undefined` |
+| `model-value` | 面板外部值，初始化草稿并响应后续变化 | `TimeValue \| TimeValue[]` | `undefined` |
+| `readonly` | 只读面板，不改草稿或确认 | `boolean` | `false` |
+| `show-next-day` | 仅范围：允许结束早于开始并显示次日，不交换起止 | `boolean` | `false` |
+| `step` | 以 0 点为起点的时分秒步长，无效步长回退为 1 | `TimeStep` | 有效步长均 1 |
+| `type` | 桌面通用面板的单选/范围模式 | `time \| time-range` | `time` |
+| `use12-hours` | 十二小时面板；小时禁用回调仍用 0–23 | `boolean` | `false` |
 
 ## 配置清空后的值
 
 `empty-value` 指定当前组件已有清空动作的输出；省略时采用该组件默认返回。具体类型以组件 API 为准。它不改变 empty-values 的识别规则，也不改变 Form reset 的初始值。
 
 `empty-value` 可显式设为 `null`（或 `() => null`），清空时原样提交 null；省略时保留组件原默认值。界面把 null 显示为空，不会把普通输入的空字符串自动转成 null。支持弹出编辑的字段中，清空先修改草稿，确认后提交，取消则保留原值。
+
+公共 focus/blur 从首次挂载即可调用。focus 会打开可编辑的延迟编辑器，等待其就绪后定位；禁用、只读或纯阅读时不因此打开。blur 只失焦当前目标，不重新打开。保存的方法不会绑定旧编辑器，关闭、切换模式、停用或卸载会取消排队调用。
+
+延迟编辑中，清空会保留配置的合法 empty-value，确认后提交该空值；例如 null 不会被重新替换成午夜。首次创建的空滚轮面板可以初始化可视候选，但这不是用户选择，也不提交模型；同一面板之后明确清空的草稿不再自动补候选。重新打开后取消不会额外提交。
+
+### 字段通知与公开类型
+
+字段 update:modelValue/change 使用 TimeModelValue（范围字段为 TimeRangeModelValue）：普通选择提交格式化字符串，显式清空可保留 null、时间戳、Date 或范围数组等属性允许的配置值。清空的辅助 Date 可以是 undefined；范围为空数组时辅助值也是空数组。清空不发送 select，select 仍表示用户选择的格式化草稿，范围选择可以暂时不完整。
+
+导出 TimeEmits、TimeModelValue、TimeReadScope、TimeSuffixIconScope、TimeSlots、TimeActionsScope、TimeExpose，以及对应的 TimeRangeEmits、TimeRangeModelValue、TimeRangeReadScope、TimeRangeSlots、TimeRangeActionsScope、TimeRangeExpose。根入口与各自子入口均可导入，实例关联公开 Expose。
+
+字段 read 接收 { value, text }，保留 nullable 模型；suffix-icon 接收 { focus, popupOpen }；clear-icon 接收受保护的 clear(event?)。范围字段还支持 separator。Cedar 的 direct 模式支持 default 自定义触发区，Maple 不支持该槽；两端尚未接通字段 loading-icon，不在类型中承诺。actions/extra 属于面板草稿：Cedar direct 转发，Maple direct 不转发、延迟编辑转发，不把内层 confirm 当作外层最终保存入口。
+
+<!-- time-contract:start -->
+
+### 属性缺省与格式
+
+属性表的继承、按格式或有效步长说明是有效缺省，原始 Props 可为 undefined。format 未设置时为 HH:mm:ss，use12Hours=true 时为 hh:mm:ss a。时间边界使用 24 小时钟点，不使用日期族的 valueFormat 或时区协议。
+
+### 字段事件与插槽参数类型
+
+事件只通知，不收集监听器 Promise。update:modelValue 与 change 包含当前清空策略允许的 null、0、Date 或范围数组；select 只表示格式化草稿，不把选择等同于保存。字段 update:open/open-change 表示开关请求，初始化不自动通知。
+
+| 事件 | 参数 |
+| --- | --- |
+| `update:modelValue` | `TimeModelValue` |
+| `change` | `TimeModelValue, Date \| undefined` |
+| `select` | `string \| undefined, Date \| undefined` |
+| `clear` | `()` |
+| `click` | `Event` |
+| `focus` | `()` |
+| `blur` | `()` |
+| `update:open` | `boolean` |
+| `open-change` | `boolean` |
+
+字段 focus(index?)、blur() 作用于真实输入或触发区，不改变模型。read 插槽接收 value、text；suffix-icon 接收 focus、popupOpen；clear-icon 接收受保护的 clear(event?)。prefix、selected、suffix 和 extra 无作用域参数，范围另有 separator。Cedar direct 模式支持 default 自定义触发区；Maple 不支持。
+
+actions 和 extra 属于面板草稿，Cedar direct 转发；Maple direct 不转发，延迟编辑转发。面板 confirm() 不是外层字段最终保存入口。纯面板只有 actions/extra 插槽，没有字段 read、clear-icon 或 loading-icon 插槽；独立面板没有公开 ref.confirm() 方法，定制确认使用 actions.confirm。
+
+### 面板事件参数类型
+
+参数为对应公开事件类型的元组；日期参数由格式化钟点解析，不承诺保留输入 Date 的原日期。
+
+| 事件 | 参数 |
+| --- | --- |
+| `update:modelValue` | `TimePickerEmits['update:modelValue']` |
+| `change` | `TimePickerEmits['change']` |
+| `select` | `TimePickerEmits['select']` |
+| `confirm` | `TimePickerEmits['confirm']` |
+
+### 面板事件
+
+纯面板业务事件为 update:modelValue、change、select、confirm。select 通知候选，确认有效后通知 confirm；值实际改变时才通知 update:modelValue 和 change。关闭、清空、焦点等字段事件不属于纯面板。
+
+面板 actions 的完整作用域如下；extra 无参数。
+
+```ts
+import type { TimeValue } from '@cedar-design/ui'
+type PanelActionsScope = { confirm: () => boolean; canConfirm: boolean; value: TimeValue | Array<TimeValue | undefined> | undefined }
+```
+
+### 显式保存守卫
+
+beforeCommit(payload, done, context) 仅属于字段保存。payload 含 value、previousValue，context 含 signal 和可选 event。返回 undefined 等待 done；返回 boolean 或 Promise 按结果结算。FormItem 先校验候选；失败保留草稿。普通 select、change、confirm 和 click 监听器返回值不会执行该任务协议。
+
+### 类型导入
+
+```ts
+import { Time, TimePicker, type TimeProps, type TimeEmits,
+  type TimeSlots, type TimeInstance, type TimePickerProps,
+  type TimePickerEmits, type TimePickerSlots } from '@cedar-design/ui'
+```
+
+<!-- time-contract:end -->
+
+## CSS Variables
+
+<!-- component-css-variables:start -->
+
+通过以下变量定制组件外观。默认值随表中注明的主题或选择器条件变化；变量仅在对应的尺寸、变体和交互状态下生效。
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| 变量 | 默认值／条件 | 影响的样式 |
+| --- | --- | --- |
+| `--c-time-picker-border-color` | `var(--c-color-neutral-3)` | `border`, `border-bottom`, `border-inline-end`, `border-top` |
+| `--c-time-picker-border-radius` | `var(--c-border-radius-md)` | `border-radius` |
+| `--c-time-picker-box-shadow` | `var(--c-shadow1-down)` | `box-shadow` |
+| `--c-time-picker-cell-bg-active` | `var(--c-color-fill-2)` | `background-color` |
+| `--c-time-picker-cell-bg-hover` | `var(--c-color-fill-2)` | `background-color` |
+| `--c-time-picker-cell-font-size` | `var(--c-font-size-body-3)` | `font-size` |
+| `--c-time-picker-cell-font-weight` | `var(--c-font-weight-500)` | `font-weight` |
+| `--c-time-picker-cell-font-weight-active` | `var(--c-font-weight-500)` | `font-weight` |
+| `--c-time-picker-cell-height` | `var(--c-size-6)` | `height`, `line-height` |
+| `--c-time-picker-cell-padding-left` | `var(--c-spacing-9)` | `padding-inline-start` |
+| `--c-time-picker-cell-spacing` | `var(--c-spacing-2)` | `height`, `padding` |
+| `--c-time-picker-cell-text-color` | `var(--c-color-text-1)` | `color` |
+| `--c-time-picker-cell-text-color-disabled` | `var(--c-color-text-4)` | `color` |
+| `--c-time-picker-column-height` | `224px` | `height` |
+| `--c-time-picker-column-width` | `var(--c-size-16)` | `width` |
+| `--c-time-picker-footer-extra-font-size` | `var(--c-font-size-body-1)` | `font-size` |
+| `--c-time-picker-footer-padding` | `var(--c-spacing-4)` | `padding` |
+| `--c-time-picker-popover-body-reserve` | `128px` | `height` |
+| `--c-time-picker-popover-column-max-height` | `224px` | `height` |
+| `--c-time-picker-popover-gap` | `32px` | `max-width` |
+| `--c-time-picker-range-gap` | `var(--c-spacing-6)` | `gap` |
+| `--c-time-picker-range-next-day-font-size` | `var(--c-font-size-body-1)` | `font-size` |
+| `--c-time-picker-range-panel-title-gap` | `var(--c-spacing-3)` | `gap` |
+| `--c-time-picker-range-panel-title-line-height` | `22px` | `line-height` |
+| `--c-time-picker-range-panel-title-padding-horizontal` | `var(--c-spacing-6)` | `padding` |
+| `--c-time-picker-range-panel-title-padding-vertical` | `var(--c-spacing-3)` | `padding` |
+| `--c-time-picker-range-wrapper-padding` | `var(--c-spacing-4)` | `padding` |
+
+</div>
+
+将覆盖设置在组件实际根节点或弹层真实挂载祖先上。例如给该元素添加下列 class，再按需替换变量值：
+
+```css
+.component-theme {
+  --c-time-picker-border-color: var(--c-color-neutral-3);
+}
+```
+
+显式行内样式及直接写入同一 CSS 属性的 Props 优先于样式表默认值。Teleport 后，普通 CSS 变量按实际挂载位置继承；使用 ThemeProvider 时，请遵循其局部主题与弹层配置规则。局部定制请直接覆盖组件变量；仅修改后代的 system 变量不会重新计算从根继承的组件别名。内部变量不属于公共 API。
+
+<!-- component-css-variables:end -->

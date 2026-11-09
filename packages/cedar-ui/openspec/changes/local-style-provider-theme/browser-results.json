@@ -1,0 +1,120 @@
+{
+  "cedar-design-web": {
+    "initial": {
+      "outside": {
+        "bg": "rgb(255, 255, 255)",
+        "color": "rgb(29, 33, 41)",
+        "scheme": "light"
+      },
+      "dark": {
+        "bg": "rgb(35, 35, 36)",
+        "color": "rgba(255, 255, 255, 0.9)",
+        "scheme": "dark",
+        "buttonBg": "rgb(35, 35, 36)"
+      },
+      "light": {
+        "bg": "rgb(255, 255, 255)",
+        "color": "rgb(29, 33, 41)",
+        "scheme": "light",
+        "buttonBg": "rgb(255, 255, 255)"
+      },
+      "popup": {
+        "bg": "rgb(35, 35, 36)",
+        "color": "rgba(255, 255, 255, 0.9)",
+        "scheme": "dark"
+      }
+    },
+    "globalDark": {
+      "outside": {
+        "bg": "rgb(35, 35, 36)",
+        "color": "rgba(255, 255, 255, 0.9)",
+        "scheme": "dark"
+      },
+      "dark": {
+        "bg": "rgb(35, 35, 36)",
+        "color": "rgba(255, 255, 255, 0.9)",
+        "scheme": "dark",
+        "buttonBg": "rgb(35, 35, 36)"
+      },
+      "light": {
+        "bg": "rgb(255, 255, 255)",
+        "color": "rgb(29, 33, 41)",
+        "scheme": "light",
+        "buttonBg": "rgb(255, 255, 255)"
+      },
+      "popup": {
+        "bg": "rgb(35, 35, 36)",
+        "color": "rgba(255, 255, 255, 0.9)",
+        "scheme": "dark"
+      }
+    },
+    "timings": {
+      "nodes": 1000,
+      "switches": 30,
+      "medianMs": 13.899999856948853,
+      "p95Ms": 16.200000047683716
+    },
+    "cssBytes": 63078,
+    "gzipBytes": 10050,
+    "selectorGzipDelta": 46
+  },
+  "maple-design-mobile": {
+    "initial": {
+      "outside": {
+        "bg": "rgb(255, 255, 255)",
+        "color": "rgb(29, 33, 41)",
+        "scheme": "light"
+      },
+      "dark": {
+        "bg": "rgb(35, 35, 36)",
+        "color": "rgba(255, 255, 255, 0.9)",
+        "scheme": "dark",
+        "buttonBg": "rgb(35, 35, 36)"
+      },
+      "light": {
+        "bg": "rgb(255, 255, 255)",
+        "color": "rgb(29, 33, 41)",
+        "scheme": "light",
+        "buttonBg": "rgb(255, 255, 255)"
+      },
+      "popup": {
+        "bg": "rgb(35, 35, 36)",
+        "color": "rgba(255, 255, 255, 0.9)",
+        "scheme": "dark"
+      }
+    },
+    "globalDark": {
+      "outside": {
+        "bg": "rgb(35, 35, 36)",
+        "color": "rgba(255, 255, 255, 0.9)",
+        "scheme": "dark"
+      },
+      "dark": {
+        "bg": "rgb(35, 35, 36)",
+        "color": "rgba(255, 255, 255, 0.9)",
+        "scheme": "dark",
+        "buttonBg": "rgb(35, 35, 36)"
+      },
+      "light": {
+        "bg": "rgb(255, 255, 255)",
+        "color": "rgb(29, 33, 41)",
+        "scheme": "light",
+        "buttonBg": "rgb(255, 255, 255)"
+      },
+      "popup": {
+        "bg": "rgb(35, 35, 36)",
+        "color": "rgba(255, 255, 255, 0.9)",
+        "scheme": "dark"
+      }
+    },
+    "timings": {
+      "nodes": 1000,
+      "switches": 30,
+      "medianMs": 11.5,
+      "p95Ms": 14.199999809265137
+    },
+    "cssBytes": 52747,
+    "gzipBytes": 8250,
+    "selectorGzipDelta": 47
+  }
+}

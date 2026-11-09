@@ -59,7 +59,7 @@ Preview configuration: `:rows="3"`, `:widths="['100%', '100%', '60%']"`, `shape=
 
 ## API
 
-### `<skeleton>` Props
+### Skeleton Props
 
 | Parameter | Description | Type | Default |
 | ------------------ | ---------------------------- | ------------------------- | :-----: |
@@ -70,36 +70,36 @@ Preview configuration: `:rows="3"`, `:widths="['100%', '100%', '60%']"`, `shape=
 | card | Whether to show a card placeholder | `boolean` | `false` |
 | rows | The paragraph number of rows | `number \| string` | `3` |
 | rows-width | Width of each row | `Array<number \| string>` | `[]` |
-| title-width | `50%` | `number \| string` | `-` |
-| avatar-size | `34px` | `number \| string` | `-` |
-| card-height | `160px` | `number \| string` | `-` |
+| title-width | Title placeholder width; falls back to the theme variable, `50%` by default | `number \| string` | `-` |
+| avatar-size | Avatar placeholder size; falls back to the theme variable, `34px` by default | `number \| string` | `-` |
+| card-height | Card placeholder height; falls back to the theme variable, `160px` by default | `number \| string` | `-` |
 | fullscreen | Whether to use a fullscreen placeholder | `boolean` | `false` |
 | fullscreen-z-index | Fullscreen placeholder stacking level | `number \| string` | `100` |
 
-### `<skeleton>` Slots
+### Skeleton Slots
 
 | Slot | Description |
 | -------- | -------------------- |
 | default | Actual content after loading |
 | template | Custom loading placeholder |
 
-### `<skeleton-line>` Props
+### SkeletonLine Props
 
 | Parameter | Description | Type | Default |
 | ------------ | ---------------- | ------------------------- | :----: |
-| rows | Displayed row count | `number` | `1` |
+| rows | Row count; non-finite and negative values become zero, fractions are rounded down | `number` | `1` |
 | widths | Line skeleton width | `Array<number \| string>` | `[]` |
 | line-height | Line skeleton height | `number` | `20` |
 | line-spacing | Line skeleton row spacing | `number` | `15` |
 
-### `<skeleton-shape>` Props
+### SkeletonShape Props
 
 | Parameter | Description | Type | Default |
 | ------ | -------------- | ---------------------- | :--------: |
 | shape | Graphic skeleton shape | `'square' \| 'circle'` | `'square'` |
 | size | Graphic skeleton size | `'sm' \| 'md' \| 'lg'` | `'md'` |
 
-### Type definitions
+## Types
 
 The component exports the following types
 
@@ -111,39 +111,69 @@ import type {
 } from "@cedar-design/ui";
 ```
 
-## Shared implementation and platform boundaries
+## Usage notes
 
-Each platform maintains a complete local implementation. They do not import a common core or share component instances or reactive state. Changes must update both implementations. Component bodies, props, key styles and paired tests have read-only source consistency checks; theme tokens and installation entries remain local to each library.
 
-Skeleton, SkeletonLine and SkeletonShape use independently copied source. Each library maintains its skeleton theme and size tokens.
 
-### Managed defaults
 
-| Token | Default |
-| --- | --- |
-| `--c-skeleton-content-padding` | `var(--c-sys-space-6)` |
-| `--c-skeleton-card-border-radius` | `var(--c-sys-radius-md)` |
-| `--c-skeleton-card-margin-bottom` | `var(--c-sys-space-6)` |
-| `--c-skeleton-card-background-color` | `var(--c-sys-color-state-hover)` |
-| `--c-skeleton-animation-background` | `linear-gradient(90deg, transparent, var(--c-sys-color-surface-default), transparent)` |
-| `--c-skeleton-avatar-border-radius` | `50%` |
-| `--c-skeleton-avatar-margin-right` | `var(--c-sys-space-6)` |
-| `--c-skeleton-avatar-background-color` | `var(--c-sys-color-state-hover)` |
-| `--c-skeleton-title-border-radius` | `10px` |
-| `--c-skeleton-title-background-color` | `var(--c-sys-color-state-hover)` |
-| `--c-skeleton-row-height` | `12px` |
-| `--c-skeleton-row-border-radius` | `10px` |
-| `--c-skeleton-row-margin-top` | `10px` |
-| `--c-skeleton-shape-size-sm` | `36px` |
-| `--c-skeleton-shape-size-md` | `48px` |
-| `--c-skeleton-shape-size-lg` | `60px` |
-| `--c-skeleton-shape-border-radius` | `var(--c-sys-radius-md)` |
 
-### Motion variables
+### Fullscreen coverage
 
-| Token | Default |
-| --- | --- |
-| `--c-skeleton-animation-duration` | `1s` |
-| `--c-skeleton-transition-duration` | `var(--c-sys-motion-duration-slow)` |
+`fullscreen` renders an inline `position: fixed` placeholder without automatically teleporting to body. It covers the viewport when no ancestor establishes a fixed positioning containing block. An ancestor with `transform`, a relevant `will-change`, or `contain` may limit coverage to that ancestor. To cover the viewport, place Skeleton outside those ancestors or arrange its position with Vue Teleport in the application. This loading placeholder does not manage modal focus. See [CSS Positioned Layout fixed containing blocks](https://www.w3.org/TR/css-position-3/#fixed-cb).
 
-Built-in motion follows prefers-reduced-motion: reduce, preserving content/state feedback while disabling decorative spinning, shimmer and ripples. Icon name changes skip waiting and cancel unfinished transitions. Ripple duration variables affect only CSS; the 250ms lifecycle timer remains unchanged, so each visual stage should not exceed 250ms. Callers must adapt custom animation classes.
+Omitted size props use their theme tokens. A `-` in the table means there is no Prop default, rather than no placeholder size. Both Line and the main component normalize non-finite and negative row counts to zero and round fractions down.
+
+### Motion
+
+Built-in Skeleton placeholders and standalone Line/Shape primitives default to `aria-hidden="true"`. The root exposes waiting through `aria-busy`. Custom `template` content and the loaded default content remain accessible and can supply business status messages.
+
+## CSS Variables
+
+<!-- component-css-variables:start -->
+
+Use these variables to customize the component. Defaults may vary by the selector condition shown. Each variable applies to the corresponding size, variant and interaction states.
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| Variable | Default / condition | Affected styles |
+| --- | --- | --- |
+| `--c-skeleton-animation-background` | `linear-gradient(90deg, transparent, var(--c-sys-color-surface-default), transparent)` | `background` |
+| `--c-skeleton-animation-duration` | `1s` | `animation` |
+| `--c-skeleton-avatar-background-color` | `var(--c-sys-color-state-hover)` | `background-color` |
+| `--c-skeleton-avatar-border-radius` | `50%` | `border-radius` |
+| `--c-skeleton-avatar-margin-right` | `var(--c-sys-space-6)` | `margin-inline-end` |
+| `--c-skeleton-avatar-size` | `34px` | `height`, `width` |
+| `--c-skeleton-card-background-color` | `var(--c-sys-color-state-hover)` | `background-color` |
+| `--c-skeleton-card-border-radius` | `var(--c-sys-radius-md)` | `border-radius` |
+| `--c-skeleton-card-height` | `160px` | `height` |
+| `--c-skeleton-card-margin-bottom` | `var(--c-sys-space-6)` | `margin-bottom` |
+| `--c-skeleton-content-padding` | `var(--c-sys-space-6)` | `padding` |
+| `--c-skeleton-row-border-radius` | `10px` | `border-radius` |
+| `--c-skeleton-row-height` | `12px` | `height` |
+| `--c-skeleton-row-margin-top` | `10px` | `margin-top` |
+| `--c-skeleton-shape-border-radius` | `var(--c-sys-radius-md)` | `border-radius` |
+| `--c-skeleton-shape-size-lg` | `60px` | `height`, `width` |
+| `--c-skeleton-shape-size-md` | `48px` | `height`, `width` |
+| `--c-skeleton-shape-size-sm` | `36px` | `height`, `width` |
+| `--c-skeleton-title-background-color` | `var(--c-sys-color-state-hover)` | `background-color` |
+| `--c-skeleton-title-border-radius` | `10px` | `border-radius` |
+| `--c-skeleton-title-width` | `50%` | `width` |
+| `--c-skeleton-transition-duration` | `var(--c-sys-motion-duration-slow)` | `transition` |
+
+</div>
+
+Apply overrides to the rendered component root or the actual popup ancestor. For example, add the following class to that element and replace the value as needed:
+
+```css
+.component-theme {
+  --c-skeleton-animation-background: linear-gradient(90deg, transparent, var(--c-sys-color-surface-default), transparent);
+}
+```
+
+Explicit inline styles and props that write the same CSS property take precedence over stylesheet defaults. After Teleport, ordinary CSS variables inherit from the actual mount location. When using ThemeProvider, follow its local-theme and popup configuration rules. Override the component variable directly for local styling; root-level aliases are not recalculated merely because a descendant system variable changes. Internal variables are not public APIs.
+
+<!-- component-css-variables:end -->
+
+### Motion
+
+Built-in motion respects `prefers-reduced-motion: reduce`, keeping content and state feedback while disabling decorative animations. Adapt custom animations to that preference in your application.

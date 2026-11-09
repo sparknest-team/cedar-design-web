@@ -14,4 +14,4 @@ export { Split }
 export { splitProps }
 
 export default Split
-export type SplitProps = import('vue').ExtractPublicPropTypes<typeof import('./props').splitProps>
+export type { SplitProps } from './types'

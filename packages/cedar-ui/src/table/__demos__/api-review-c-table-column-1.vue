@@ -14,7 +14,8 @@ const data = [
 ];
 const sortable = {
   sortDirections: ["ascend", "descend"],
-  sorter: (a, b) => a.score - b.score,
+  sorter: (a, b, { direction }) =>
+    (a.score - b.score) * (direction === "descend" ? -1 : 1),
 };
 const filterable = {
   filters: [

@@ -65,6 +65,11 @@ const calendarLang: CedarCalendarLang = {
 }
 
 const lang: CedarLang = {
+  tabs: { close: '关闭', add: '新增标签', previous: '上一组标签', next: '下一组标签' },
+  breadcrumb: { label: '面包屑导航', ellipsis: '省略的路径' },
+  navMenu: { more: '更多' },
+  splitButton: { moreActions: '更多操作' },
+  peopleSelect: { call: '拨打电话', chat: '聊天' },
   fieldPresentation: {
     clickEdit: '单击编辑',
     doubleClickEdit: '双击编辑',
@@ -75,7 +80,13 @@ const lang: CedarLang = {
  edit: '编辑', close: '关闭', search: '搜索选项', selected: '已选择', limit: '最多选择' },
   search: { search: '搜索', cancel: '取消', history: '搜索历史' },
   locale: 'zh-CN',
+  resizeBox: { left: '左边宽度', right: '右边宽度', top: '上边高度', bottom: '下边高度', valueText: '{0} 像素' },
+  loading: { text: '加载中' },
+  split: { resizeLabel: '调整面板大小' },
+  layout: { expandSider: '展开侧栏', collapseSider: '收起侧栏' },
   common: {
+    back: '返回',
+    close: '关闭',
     placeholderSelect: '请选择',
     placeholderInput: '请输入',
     placeholderStart: '开始日期',
@@ -219,9 +230,14 @@ const lang: CedarLang = {
     nextDay: '次日',
   },
   image: {
+    preview: '预览图片',
     loading: '加载中',
   },
   imagePreview: {
+    prev: '上一张图片',
+    next: '下一张图片',
+    download: '下载图片',
+    close: '关闭图片预览',
     fullScreen: '全屏',
     rotateRight: '向右旋转',
     rotateLeft: '向左旋转',
@@ -284,7 +300,12 @@ const lang: CedarLang = {
       },
     },
   },
+  transfer: { clear: '清空已选', actions: '选项操作' },
   colorPicker: {
+    trigger: '选择颜色',
+    hue: '色相', opacity: '不透明度', palette: '颜色饱和度和亮度',
+    saturation: '饱和度', brightness: '亮度', hex: '十六进制颜色',
+    red: '红色', green: '绿色', blue: '蓝色',
     history: '最近使用颜色',
     preset: '系统预设颜色',
     empty: '暂无',

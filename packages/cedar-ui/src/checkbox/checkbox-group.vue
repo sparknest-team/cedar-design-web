@@ -1,6 +1,8 @@
 <template>
   <div
-    :class="classes(n(), n(`--${orientation}`))"
+    v-bind="$attrs"
+    :aria-describedby="describeError($attrs['aria-describedby'])"
+    :class="classes(n(), n(`--${resolvedOrientation}`))"
     :aria-busy="source.loading.value || undefined"
     role="group"
     :aria-label="ariaLabel"
@@ -19,75 +21,72 @@
         <template #default="{ checked }">
           <slot name="label" :data="option" :checked="checked">
             <choice-label
-              :content="
-                typeof option.label === 'function'
-                  ? option.label(option, checked)
-                  : option.label
-              "
+              :content="typeof option.label === 'function' ? option.label(option, checked) : option.label"
             />
           </slot>
         </template>
       </checkbox>
     </template>
     <slot v-else />
-
   </div>
 </template>
 
 <script setup lang="ts">
-import { useOptionRequest } from "../_hooks/use-option-request";
-import { computed, provide, reactive, useSlots } from "vue";
-import { createNamespace } from "../_utils/global-config";
-import { ChoiceLabel } from "./choice-label";
-import { normalizeChoiceOptions } from "./choice-options";
-import type { ChoiceValue } from "./choice-value-props";
-import Checkbox from "./presentation";
-import { useChoiceState, choiceLimit } from "./choice-state";
-import { checkboxGroupProps } from "./props";
-import { checkboxGroupKey } from "./context";
-import { useCheckboxGroupMethods } from "./use-checkbox-group-methods";
-import { useChoiceForm } from "./use-choice-form";
+import { computed, provide, reactive, useSlots } from 'vue'
+import { useFormErrorDescription } from '../form/error-description'
+import { useOptionRequest } from '../_hooks/use-option-request'
+import { createNamespace } from '../_utils/global-config'
+import { ChoiceLabel } from './choice-label'
+import { normalizeChoiceOptions } from './choice-options'
+import { choiceLimit, useChoiceState } from './choice-state'
+import type { ChoiceValue } from './choice-value-props'
+import { checkboxGroupKey } from './context'
+import Checkbox from './presentation'
+import { checkboxGroupProps } from './props'
+import type { CheckboxGroupSlots } from './types'
+import { useCheckboxGroupMethods } from './use-checkbox-group-methods'
+import { useChoiceForm } from './use-choice-form'
 
-defineOptions({ name: createNamespace("checkbox-group").name });
-const { n, classes } = createNamespace("checkbox-group");
-const props = defineProps(checkboxGroupProps);
-const slots = useSlots();
+defineOptions({ name: createNamespace('checkbox-group').name, inheritAttrs: false })
+const { n, classes } = createNamespace('checkbox-group')
+const props = defineProps(checkboxGroupProps)
+const { errorId, describe: describeError } = useFormErrorDescription()
+const resolvedOrientation = computed(() => (props.orientation === 'vertical' ? 'vertical' : 'horizontal'))
+const slots = useSlots()
+defineSlots<CheckboxGroupSlots>()
 const emit = defineEmits<{
-  "load-error": [error: unknown];
-  "update:modelValue": [value: ChoiceValue[]];
-  change: [value: ChoiceValue[], event?: Event];
-}>();
-const { mergedDisabled, mergedReadonly, mergedError, eventHandlers } =
-  useChoiceForm(props);
+  'update:open': [open: boolean]
+  'open-change': [open: boolean]
+  'load-error': [error: unknown]
+  'update:modelValue': [value: ChoiceValue[] | null]
+  change: [value: ChoiceValue[] | null, event?: Event]
+}>()
+const { mergedDisabled, mergedReadonly, mergedError, eventHandlers } = useChoiceForm(props)
 const source = useOptionRequest(
   () => props.options,
   () => mergedDisabled.value || mergedReadonly.value || !!props.readPretty,
-  (error) => emit("load-error", error),
+  (error) => emit('load-error', error),
   () => 0,
   checkboxGroupProps,
-);
+)
 const { value: computedValue, commit: handleChange } = useChoiceState(
   () => (props.modelValue === null ? [] : props.modelValue),
   props.defaultValue,
   (value, event) => {
-    emit("update:modelValue", value);
-    emit("change", value, event);
-    eventHandlers.value?.onChange?.(event);
+    emit('update:modelValue', value)
+    emit('change', value, event)
+    eventHandlers.value?.onChange?.(event)
   },
   () => mergedDisabled.value || mergedReadonly.value,
-);
-const normalizedOptions = computed(() =>
-  normalizeChoiceOptions(source.options.value, props.fieldNames),
-);
-const isMaxed = computed(
-  () => computedValue.value.length >= choiceLimit(props.max),
-);
+)
+const normalizedOptions = computed(() => normalizeChoiceOptions(source.options.value, props.fieldNames))
+const isMaxed = computed(() => computedValue.value.length >= choiceLimit(props.max))
 const { register: registerChoice, methods } = useCheckboxGroupMethods(
   () => computedValue.value,
   handleChange,
   () => mergedDisabled.value || mergedReadonly.value,
   () => props.max,
-);
+)
 provide(
   checkboxGroupKey,
   reactive({
@@ -96,11 +95,12 @@ provide(
     disabled: mergedDisabled,
     readonly: mergedReadonly,
     error: mergedError,
+    formErrorId: errorId,
     isMaxed,
     name: computed(() => props.name),
     slots,
     handleChange,
   }),
-);
-defineExpose(methods);
+)
+defineExpose(methods)
 </script>

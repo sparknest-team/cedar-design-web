@@ -8,7 +8,7 @@ permalink: /components/nav-menu/
 
 ### 程序化滚动的生命周期
 
-`scrollTo(key)` 展开路径后等待渲染，再以 nearest 对齐原生定位；返回 `Promise<void>`。连续调用只执行最新仍有效的请求。禁用、options／fieldNames／mode／responsive／折叠配置变化、KeepAlive 停用及卸载使旧请求失效；重新激活后请显式发起新请求，不会重放旧滚动。取消不回滚已经执行的浏览器滚动，不新增 CSS duration Token 或公共取消方法。
+`scrollTo(key)` 展开路径后等待渲染，再以 nearest 对齐原生定位；返回 `Promise<void>`。连续调用只执行最新仍有效的请求。禁用、options／fieldNames／mode／responsive／折叠配置变化、KeepAlive 停用及卸载使旧请求失效；重新激活后请显式发起新请求，不会重放旧滚动。取消不回滚已经执行的浏览器滚动。
 
 NavMenu 有两种清晰的使用方式：导航树使用 `options`，业务筛选等独立入口使用 `NavMenu.Item`。下面先介绍常用导航，再逐步进入层级、响应式和高级定制。
 
@@ -170,7 +170,17 @@ Item 的标题默认跟随选中项，也可以通过 `#label` 保持固定标�
 
 <demo src="./__demos__/custom-content.vue" title="插槽与 VNode" desc="通过 label、extra 插槽和 option 图标定制节点，导航层级仍由 options 管理。"></demo>
 
-## NavMenu API
+## 使用说明
+
+### 配置说明
+
+`popup-layout="full"` 从入口底边开始，宽度占满视口，高度占满下方剩余视口区域。Maple 同名布局从整个筛选栏底边开始；移动端默认 full-width，桌面端默认 dropdown。
+
+局部亮暗主题统一由外层 `<c-theme-provider theme="dark">` 设置；本组件不再提供 theme 属性。嵌套区域可显式设置 theme="light"，库内弹层跟随所属 Provider。
+
+## API
+
+### NavMenu Props
 
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
@@ -187,7 +197,6 @@ Item 的标题默认跟随选中项，也可以通过 `#label` 保持固定标�
 | mode | 导航方向 | vertical / horizontal | vertical |
 | collapsed | 折叠状态，支持 v-model:collapsed | boolean | undefined |
 | default-collapsed | 非受控初始折叠 | boolean | false |
-| theme | 主题 | light / dark | 继承 Sider，否则 light |
 | size | 尺寸 | xs / sm / md / lg / xl | md |
 | disabled | 全局禁用选择和用户展开 | boolean | false |
 | field-names | key/label/children/disabled 字段映射 | NavMenuFieldNames | 默认同名 |
@@ -198,44 +207,10 @@ Item 的标题默认跟随选中项，也可以通过 `#label` 保持固定标�
 | icon-size | 图标尺寸（px） | number | 20 |
 | popup-container | 浮层挂载容器，false 为当前位置 | Trigger 对应类型 | 继承 Trigger 定义 |
 | popup-class | 浮层附加类名 | string / array / object | — |
-| overflow-label | 更多入口标签 | string | 更多 |
+| overflow-label | 更多入口标签；未设置时跟随当前语言 | string | 当前语言的更多 |
 | node-props | 节点 DOM 属性和事件；内部选择、禁用和键盘语义保留 | (context) => Record<string, unknown> | — |
 
 受控属性以传入值为准；更新事件只是请求。`default-*` 仅初始化，不跟随后续修改。单选值与展开状态相互独立，`showOption` 不会更改选中值。
-
-### NavMenuOption
-
-```ts
-interface NavMenuOption {
-  key?: string | number
-  type?: 'item' | 'group' | 'divider'
-  label?: VNodeChild | ((context: NavMenuRenderContext) => VNodeChild)
-  icon?: VNodeChild | ((context: NavMenuRenderContext) => VNodeChild)
-  extra?: VNodeChild | ((context: NavMenuRenderContext) => VNodeChild)
-  children?: NavMenuOption[]
-  disabled?: boolean
-  show?: boolean
-  props?: HTMLAttributes
-}
-```
-
-普通选项必须提供唯一且稳定的 key（自定义字段时使用映射后的 key）；数字 0 是合法 key。group/divider 可省略 key，但动态重排时建议显式提供。重复 key 或普通项缺失 key 会报错，避免选中路径混乱。show=false 的节点及其子树不渲染；禁用分支向下继承禁用。存在 children 的普通项负责展开，叶项负责选择。
-
-### 事件
-
-| 事件 | 参数 |
-| --- | --- |
-| update:model-value | key / null |
-| update:active-item | name / null |
-| update:expanded-keys | keys |
-| update:collapsed | collapsed |
-| select | key, 原始 option, 原始 Event |
-
-### 插槽
-
-默认插槽用于放置独立的 `CNavMenuItem`。存在默认插槽时，横向菜单使用滚动，`responsive` 不进行更多收纳。
-
-label/icon/extra 渲染函数、同名插槽及 nodeProps 均接收 `{ option, active, expanded, level }`。`active` 只表示当前节点自身匹配 modelValue，祖先路径强调留在内部；`expanded` 表示分支展开，level 从 0 开始。
 
 ### 两端对应关系
 
@@ -252,12 +227,36 @@ Item 的选中值、展开状态、事件、插槽上下文及 `select/close/set
 | 面板起点 | 当前入口底边 | 整个筛选栏底边；独立 Item 使用自身底边 |
 | 触发与定位 | trigger / placement | 固定点击向下展开 |
 | 遮罩与滚动 | 非模态，不锁背景滚动 | 根级 overlay / overlay-closable / lock-scroll / esc-to-close / z-index |
-| 主题 | theme 可覆盖 | 跟随全局主题，无 theme 属性 |
+| 主题 | 由 ThemeProvider 局部主题控制 | 跟随全局主题，无 theme 属性 |
 | 导航树专用方法 | showOption / scrollTo / setCollapsed | — |
 
 两端 `NavMenuPopupLayout` 分别导出本端支持的值域；Maple 的 `NavMenuMode` 仅为 horizontal，`options-mode` 仍支持两个方向。入口 default 插槽替换入口内部内容，移动端位于原生按钮中，请使用文本、图标等非交互内容；表单和操作按钮放在 content 插槽。
 
-### 方法
+### 箭头方向
+
+横向下拉入口收起朝下、展开朝上；纵向内联分支收起朝右、展开朝下；向右弹出的子菜单收起朝右、展开朝左。独立 Item 根据 placement 显示方向，展开后反向。箭头跟随实际 open 状态，受控状态未接受更新时不切换。
+
+### 键盘
+
+纵向 Up/Down 与横向 Left/Right 移动焦点，Home/End 到首尾；Right 展开纵向分支，Down 打开横向分支；Left 返回父级，弹出层 Escape 关闭当前层并恢复参考项焦点。Enter/空格激活节点。禁用项跳过；输入框保留原生按键。横向缩窄导致当前项进入“更多”时，焦点迁移至更多入口。
+
+### NavMenuOption Events
+
+| 事件 | 参数 |
+| --- | --- |
+| update:model-value | key / null |
+| update:active-item | name / null |
+| update:expanded-keys | keys |
+| update:collapsed | collapsed |
+| select | key, 原始 option, 原始 Event |
+
+### NavMenuOption Slots
+
+默认插槽用于放置独立的 `CNavMenuItem`。存在默认插槽时，横向菜单使用滚动，`responsive` 不进行更多收纳。
+
+label/icon/extra 渲染函数、同名插槽及 nodeProps 均接收 `{ option, active, expanded, level }`。`active` 只表示当前节点自身匹配 modelValue，祖先路径强调留在内部；`expanded` 表示分支展开，level 从 0 开始。
+
+### NavMenuOption Methods
 
 | 方法 | 说明 |
 | --- | --- |
@@ -268,23 +267,17 @@ Item 的选中值、展开状态、事件、插槽上下文及 `select/close/set
 | setCollapsed(value) | 更新非受控折叠或发出受控更新请求 |
 | setActiveItem(value) | 更新具名 Item 的非受控激活项或发出受控更新请求 |
 
-### 箭头方向
+### NavMenuItem Props
 
-横向下拉入口收起朝下、展开朝上；纵向内联分支收起朝右、展开朝下；向右弹出的子菜单收起朝右、展开朝左。独立 Item 根据 placement 显示方向，展开后反向。箭头跟随实际 open 状态，受控状态未接受更新时不切换。
+使用 content 插槽时，自定义面板的无障碍名称跟随入口的名称；入口可通过 aria-label 或 aria-labelledby 指定名称。请确保自定义入口具有有意义的名称。
 
-### 键盘
-
-纵向 Up/Down 与横向 Left/Right 移动焦点，Home/End 到首尾；Right 展开纵向分支，Down 打开横向分支；Left 返回父级，弹出层 Escape 关闭当前层并恢复参考项焦点。Enter/空格激活节点。禁用项跳过；输入框保留原生按键。横向缩窄导致当前项进入“更多”时，焦点迁移至更多入口。
-
-## NavMenu.Item API
-
-标题默认跟随匹配的选中选项。`label` 插槽优先级最高：固定标题可写 `<template #label>高级筛选</template>`；手动标题可绑定独立的响应式变量。原 `update-label` 已移除。
+标题默认跟随匹配的选中选项。`label` 插槽优先级最高：固定标题可写 `<template #label>高级筛选</template>`；手动标题可绑定独立的响应式变量。
 
 `v-model` 保存面板的选中值。插槽 `active` 只表示业务上的当前入口：提供 name 且处于根菜单中时，由根 activeItem 是否等于该 name 决定；独立入口则由主值是否匹配 options 中的普通选项决定（包括 0 和空字符串）。未知值、分组和分隔项不激活独立入口。`highlight` 仅覆盖视觉强调，true 强制强调、false 取消强调，省略时跟随 active；它不改变 active 或主值。打开面板不会激活入口。
 
 `CNavMenuItem`（也可写 `NavMenu.Item`）是自定义一级入口，不参与根菜单普通导航树的 `modelValue`。未提供 `name` 时，Item 根据自己的值独立高亮，适合分类、地区等多个筛选条件同时生效；提供唯一 `name` 后，由根菜单的 `activeItem/defaultActiveItem` 统一保持单选高亮。两种模式都只允许同一时间展开一个 Item 面板，且不会清空其他面板的内部值。普通一级导航仍使用根 NavMenu 的 `options + v-model`。每个入口通过自己的 `options` 定义菜单，或通过 `content` 插槽完全替换面板。默认插槽自定义入口内部内容，`label`、`icon` 插槽局部自定义入口，`option-label`、`option-icon`、`option-extra` 自定义选项。
 
-有默认插槽时，横向菜单使用滚动而不收入“更多”，避免复制包含表单的入口。纯 `options` 菜单继续支持自动溢出收纳。新 Item 不兼容旧的子组件收集协议。同一 NavMenu 下的 Item 面板互斥，点击其他入口会请求关闭已打开的面板；受控 open 需要业务接受 update:open。
+有默认插槽时，横向菜单使用滚动而不收入“更多”，避免复制包含表单的入口。纯 `options` 菜单继续支持自动溢出收纳。同一 NavMenu 下的 Item 面板互斥，点击其他入口会请求关闭已打开的面板；受控 open 需要业务接受 update:open。
 
 | Item 属性 | 说明 | 默认 |
 | --- | --- | --- |
@@ -308,69 +301,85 @@ Item 的选中值、展开状态、事件、插槽上下文及 `select/close/set
 
 Item 还发出 `update:open`、入口 `click`，暴露 `select`、`close`、`setOpen` 方法。通栏 / 全高是非模态浮层，不锁定页面滚动或限制焦点；默认挂载到 body，使用自定义容器时需避免祖先 transform 改变 fixed 定位基准。
 
-## 从旧版本迁移
+## Types
 
-旧子组件收集协议和状态别名已移除。新的 `NavMenu.Item` 是独立一级入口，与旧 Item 的用法不同。
+### NavMenuOption
 
-| 旧用法 | 新用法 |
-| --- | --- |
-| 旧 Item / SubMenu / ItemGroup 组件 | 导航树使用 options、children、type=group；自定义一级入口使用新的 NavMenu.Item |
-| selectedKeys/defaultSelectedKeys 数组 | modelValue/defaultValue 单个 key |
-| openKeys/defaultOpenKeys | expandedKeys/defaultExpandedKeys |
-| menu-item-click | select(key, option, event) |
-| pop / popButton 模式 | vertical + collapsed；横向仍用 horizontal |
-| 子组件 title/icon 插槽 | 根 label/icon/extra 作用域插槽或 option VNode |
-| 内置折叠按钮与 breakpoint | 外部按钮控制 collapsed；布局响应式交由容器 |
-| triggerProps/tooltipProps 全量透传 | 明确的 popupContainer/popupClass 属性 |
+```ts
+interface NavMenuOption {
+  key?: string | number
+  type?: 'item' | 'group' | 'divider'
+  label?: VNodeChild | ((context: NavMenuRenderContext) => VNodeChild)
+  icon?: VNodeChild | ((context: NavMenuRenderContext) => VNodeChild)
+  extra?: VNodeChild | ((context: NavMenuRenderContext) => VNodeChild)
+  children?: NavMenuOption[]
+  disabled?: boolean
+  show?: boolean
+  props?: HTMLAttributes
+}
+```
 
-所有库内演示、组件导出、全局类型和 resolver 均已迁移。样式改为 BEM `c-nav-menu__*` 与 `c-nav-menu--*`，旧选择器与未使用 token 不再保留。
+普通选项必须提供唯一且稳定的 key（自定义字段时使用映射后的 key）；数字 0 是合法 key。group/divider 可省略 key，但动态重排时建议显式提供。重复 key 或普通项缺失 key 会报错，避免选中路径混乱。show=false 的节点及其子树不渲染；禁用分支向下继承禁用。存在 children 的普通项负责展开，叶项负责选择。
 
 ## 设计参考
 
 参考工作区 Naive UI 2.44.1 Menu 的 options 树、祖先路径和内容渲染设计；未引入 Naive UI 或 TreeMate 运行时依赖。浮层由本库 Trigger 提供，公开 API 使用 Cedar 命名约定。
-
-## 样式变量
-
-| 变量 | 默认值 |
-| --- | --- |
-| --c-nav-menu-font-size | `var(~'--c-font-size-body-3')` |
-| --c-nav-menu-border-radius | `var(~'--c-border-radius-sm')` |
-| --c-nav-menu-light-bg | `var(~'--c-color-bg-2')` |
-| --c-nav-menu-light-item-bg-hover | `var(~'--c-color-fill-2')` |
-| --c-nav-menu-light-item-bg-selected | `var(~'--c-color-fill-2')` |
-| --c-nav-menu-light-item-text-color | `var(~'--c-color-text-2')` |
-| --c-nav-menu-light-item-text-color-selected | `rgb(var(~'--c-primary-6'))` |
-| --c-nav-menu-light-item-text-color-disabled | `var(~'--c-color-text-4')` |
-| --c-nav-menu-dark-bg | `var(~'--c-color-menu-dark-bg')` |
-| --c-nav-menu-dark-item-bg-hover | `var(~'--c-color-menu-dark-hover')` |
-| --c-nav-menu-dark-item-bg-selected | `var(~'--c-color-menu-dark-hover')` |
-| --c-nav-menu-dark-item-text-color | `var(~'--c-color-text-4')` |
-| --c-nav-menu-dark-item-text-color-selected | `var(~'--c-color-white')` |
-| --c-nav-menu-dark-item-text-color-disabled | `var(~'--c-color-text-2')` |
-| --c-nav-menu-row-height | `40px` |
-| --c-nav-menu-row-height-xs | `28px` |
-| --c-nav-menu-row-height-sm | `32px` |
-| --c-nav-menu-row-height-lg | `48px` |
-| --c-nav-menu-row-height-xl | `56px` |
-| --c-nav-menu-content-gap | `8px` |
-| --c-nav-menu-content-padding | `12px` |
-| --c-nav-menu-icon-size | `20px` |
-| --c-nav-menu-arrow-size | `12px` |
-| --c-nav-menu-focus-width | `2px` |
-| --c-nav-menu-focus-offset | `-2px` |
-| --c-nav-menu-divider-width | `1px` |
-| --c-nav-menu-divider-color | `var(--c-color-border-2)` |
-| --c-nav-menu-popup-min-width | `180px` |
-| --c-nav-menu-popup-max-height | `320px` |
-| --c-nav-menu-popup-shadow | `0 6px 24px rgb(0 0 0 / 12%)` |
-| --c-nav-menu-motion-duration | `150ms` |
-| --c-nav-menu-panel-width | `min(400px, 100vw)` |
-
-`popup-layout="full"` 从入口底边开始，宽度占满视口，高度占满下方剩余视口区域。Maple 同名布局从整个筛选栏底边开始；移动端默认 full-width，桌面端默认 dropdown。
-
 
 ## 阅读方向与键盘交互
 
 NavMenu 继承最近的原生 `dir` 并支持动态切换。横向菜单的左右键按阅读方向移动焦点；纵向上下键不反转。RTL 下左键展开/进入子级，右键收起/返回父级，LTR 相反；Escape 关闭浮层并返回触发项。
 
 数据菜单的嵌套浮层优先向阅读结束侧展开，空间不足时自动调整，浮层继承来源作用域。显式 `NavMenu.Item` 的物理 `placement` 保持原意。切换方向不会选中菜单或清空筛选值。
+
+## CSS Variables
+
+菜单与子菜单使用同一组主题变量。`--c-nav-menu-light-bg` 控制背景，`--c-nav-menu-light-item-bg-hover` 控制悬停背景，选中和禁用状态使用表中对应变量。名称带 `light` 的变量在亮色和暗色主题中均生效；使用 ThemeProvider 可为局部菜单和其弹层设置主题与覆盖值。
+
+<!-- component-css-variables:start -->
+
+通过以下变量定制组件外观。默认值随表中注明的主题或选择器条件变化；变量仅在对应的尺寸、变体和交互状态下生效。
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| 变量 | 默认值／条件 | 影响的样式 |
+| --- | --- | --- |
+| `--c-nav-menu-arrow-size` | `12px` | `width` |
+| `--c-nav-menu-border-radius` | `var(--c-border-radius-sm)` | `border-radius` |
+| `--c-nav-menu-content-gap` | `8px` | `gap`, `margin`, `padding` |
+| `--c-nav-menu-content-padding` | `12px` | `padding` |
+| `--c-nav-menu-divider-color` | `var(--c-color-border-2)` | `background`, `border` |
+| `--c-nav-menu-divider-width` | `1px` | `border`, `height`, `width` |
+| `--c-nav-menu-focus-offset` | `-2px` | `outline-offset` |
+| `--c-nav-menu-focus-width` | `2px` | `outline` |
+| `--c-nav-menu-font-size` | `var(--c-font-size-body-3)` | `font-size` |
+| `--c-nav-menu-icon-size` | `20px` | `font-size` |
+| `--c-nav-menu-light-bg` | `var(--c-color-bg-2)` | `background` |
+| `--c-nav-menu-light-item-bg-hover` | `var(--c-color-fill-2)` | `background` |
+| `--c-nav-menu-light-item-bg-selected` | `var(--c-color-fill-2)` | `background` |
+| `--c-nav-menu-light-item-text-color` | `var(--c-color-text-2)` | `color` |
+| `--c-nav-menu-light-item-text-color-disabled` | `var(--c-color-text-4)` | `color` |
+| `--c-nav-menu-light-item-text-color-selected` | `var(--c-sys-color-content-brand)` | `color`, `outline` |
+| `--c-nav-menu-motion-duration` | `150ms` | `transition` |
+| `--c-nav-menu-panel-width` | `min(400px, 100vw)` | 组件样式 |
+| `--c-nav-menu-popup-max-height` | `320px` | `max-height` |
+| `--c-nav-menu-popup-min-width` | `180px` | `min-width` |
+| `--c-nav-menu-popup-shadow` | `0 6px 24px rgba(0, 0, 0, 0.12)` | `box-shadow` |
+| `--c-nav-menu-row-height` | `40px` | `min-height` |
+| `--c-nav-menu-row-height-lg` | `48px` | `min-height` |
+| `--c-nav-menu-row-height-sm` | `32px` | `min-height` |
+| `--c-nav-menu-row-height-xl` | `56px` | `min-height` |
+| `--c-nav-menu-row-height-xs` | `28px` | `min-height` |
+
+</div>
+
+将覆盖设置在组件实际根节点或弹层真实挂载祖先上。例如给该元素添加下列 class，再按需替换变量值：
+
+```css
+.component-theme {
+  --c-nav-menu-arrow-size: 12px;
+}
+```
+
+显式行内样式及直接写入同一 CSS 属性的 Props 优先于样式表默认值。Teleport 后，普通 CSS 变量按实际挂载位置继承；使用 ThemeProvider 时，请遵循其局部主题与弹层配置规则。局部定制请直接覆盖组件变量；仅修改后代的 system 变量不会重新计算从根继承的组件别名。内部变量不属于公共 API。
+
+<!-- component-css-variables:end -->

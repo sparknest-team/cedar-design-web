@@ -11,6 +11,7 @@
       v-if="!hide && hasHorizontalScrollbar"
       ref="horizontalThumbRef"
       :data="horizontalData"
+      :style="horizontalTrackStyle"
       orientation="horizontal"
       :both="isBoth"
       @scroll="handleHorizontalScroll"
@@ -19,6 +20,7 @@
       v-if="!hide && hasVerticalScrollbar"
       ref="verticalThumbRef"
       :data="verticalData"
+      :style="verticalTrackStyle"
       orientation="vertical"
       :both="isBoth"
       @scroll="handleVerticalScroll"
@@ -29,9 +31,11 @@
 <script lang="ts">
 import { physicalScrollLeft, nativeScrollLeft, useDirection } from '../_utils/direction'
 
+import { useElementResize } from '../_utils/resize-observer'
+
 import { scrollbarProps } from './props'
 import { createNamespace } from '../_utils/global-config'
-import { computed, CSSProperties, defineComponent, onActivated, onBeforeUnmount, onDeactivated, onMounted, PropType, ref, watch, StyleValue } from 'vue'
+import { computed, CSSProperties, defineComponent, onActivated, onBeforeUnmount, onDeactivated, onMounted, onUpdated, PropType, ref, watch, StyleValue } from 'vue'
 import { ThumbData } from './types'
 import ResizeObserver from '../_components/resize-observer-v2'
 import Thumb from './Thumb.vue'
@@ -70,6 +74,20 @@ export default defineComponent({
     const hasHorizontalScrollbar = computed(() => _hasHorizontalScrollbar.value && !props.disableHorizontal)
     const hasVerticalScrollbar = computed(() => _hasVerticalScrollbar.value && !props.disableVertical)
     const isBoth = ref(false)
+    const trackSize = ref(TRACK_SIZE)
+    const viewport = ref({ left: 0, top: 0, width: 0, height: 0 })
+    const horizontalTrackStyle = computed(() => ({
+      left: `${viewport.value.left}px`,
+      top: `${viewport.value.top + Math.max(0, viewport.value.height - (props.type === 'embed' ? trackSize.value : 0))}px`,
+      width: `${(horizontalData.value?.thumbSize ?? 0) + (horizontalData.value?.max ?? 0)}px`,
+      right: 'auto', bottom: 'auto',
+    }))
+    const verticalTrackStyle = computed(() => ({
+      left: `${viewport.value.left + Math.max(0, viewport.value.width - (props.type === 'embed' ? trackSize.value : 0))}px`,
+      top: `${viewport.value.top}px`,
+      height: `${(verticalData.value?.thumbSize ?? 0) + (verticalData.value?.max ?? 0)}px`,
+      right: 'auto', bottom: 'auto',
+    }))
 
     let active = true
     let disposed = false
@@ -92,18 +110,28 @@ export default defineComponent({
       const element = containerRef.value
       if (!available() || !element) { return }
       const token = ++operation
-      const { clientWidth, clientHeight, offsetWidth, offsetHeight, scrollWidth, scrollHeight, scrollTop, scrollLeft } = element
+      const { clientWidth, clientHeight, offsetWidth, offsetHeight, scrollWidth, scrollHeight, scrollTop, scrollLeft, offsetLeft, offsetTop } = element
+      if (!current(token, element)) { return }
+      const track = horizontalThumbRef.value?.$el ?? verticalThumbRef.value?.$el
+      const axis = horizontalThumbRef.value ? 'height' : 'width'
+      const resolved = track?.ownerDocument.defaultView?.getComputedStyle(track)[axis]
+      const measuredTrackSize = Number.parseFloat(resolved ?? '')
+      const thickness = Number.isFinite(measuredTrackSize) && measuredTrackSize >= 0 ? measuredTrackSize : trackSize.value
       if (!current(token, element)) { return }
       const horizontal = clientWidth > 0 && offsetWidth > 0 && scrollWidth > clientWidth
       const vertical = clientHeight > 0 && offsetHeight > 0 && scrollHeight > clientHeight
       const both = horizontal && !props.disableHorizontal && vertical && !props.disableVertical
-      const hData = axisData(clientWidth, props.type === 'embed' && both ? offsetWidth - TRACK_SIZE : offsetWidth, scrollWidth)
-      const vData = axisData(clientHeight, props.type === 'embed' && both ? offsetHeight - TRACK_SIZE : offsetHeight, scrollHeight)
+      const hData = axisData(clientWidth, props.type === 'embed' && both ? offsetWidth - thickness : offsetWidth, scrollWidth)
+      const vData = axisData(clientHeight, props.type === 'embed' && both ? offsetHeight - thickness : offsetHeight, scrollHeight)
       _hasHorizontalScrollbar.value = horizontal
       if (!current(token, element)) { return }
       _hasVerticalScrollbar.value = vertical
       if (!current(token, element)) { return }
       isBoth.value = both
+      if (!current(token, element)) { return }
+      trackSize.value = thickness
+      if (!current(token, element)) { return }
+      viewport.value = { left: offsetLeft, top: offsetTop, width: offsetWidth, height: offsetHeight }
       if (!current(token, element)) { return }
       horizontalData.value = hData
       if (!current(token, element)) { return }
@@ -122,6 +150,7 @@ export default defineComponent({
         if (available() && epoch === binding.value) { getContainerSize() }
       }
     })
+    useElementResize(() => [horizontalThumbRef.value?.$el, verticalThumbRef.value?.$el], () => !props.hide, getContainerSize)
     const handleScroll = computed(() => {
       const epoch = binding.value
       return (event: Event) => {
@@ -163,7 +192,7 @@ export default defineComponent({
         }
       }
     })
-    function scrollTo(options?: number | { left?: number; top?: number }, y?: number) {
+    function scrollTo(options?: number | ScrollToOptions, y?: number) {
       if (!available()) { return }
       operation++
       if (isObject(options)) {
@@ -183,7 +212,14 @@ export default defineComponent({
       operation++
       binding.value++
     }
-    watch(dir, getContainerSize, { flush: 'post' })
+    onUpdated(() => {
+      const element = containerRef.value
+      if (available() && element && (element.offsetLeft !== viewport.value.left || element.offsetTop !== viewport.value.top)) {
+        getContainerSize()
+      }
+    })
+    watch([dir, () => props.type, () => props.disableHorizontal, () => props.disableVertical], getContainerSize, { flush: 'post' })
+    watch([hasHorizontalScrollbar, hasVerticalScrollbar], getContainerSize, { flush: 'post' })
     onMounted(getContainerSize)
     onDeactivated(suspend)
     onBeforeUnmount(() => { disposed = true; suspend() })
@@ -200,10 +236,10 @@ export default defineComponent({
       const style: CSSProperties = {}
       if (props.type === 'track') {
         if (hasHorizontalScrollbar.value) {
-          style.paddingBottom = `${TRACK_SIZE}px`
+          style.paddingBottom = 'var(--c-scrollbar-track-size)'
         }
         if (hasVerticalScrollbar.value) {
-          style.paddingRight = `${TRACK_SIZE}px`
+          style.paddingRight = 'var(--c-scrollbar-track-size)'
         }
       }
       return [style, props.outerStyle]
@@ -226,6 +262,8 @@ export default defineComponent({
       horizontalThumbRef,
       verticalThumbRef,
       horizontalData,
+      horizontalTrackStyle,
+      verticalTrackStyle,
       verticalData,
       isBoth,
       hasHorizontalScrollbar,

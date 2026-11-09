@@ -1,0 +1,3 @@
+- [x] Reproduce manual/source loading actions and deferred footer paths on both applicable platforms.
+- [x] Align visual actions, actual mutations and notifications without blocking search.
+- [x] Validate affected source consumers, text-field negative controls, full types, browsers and source/docs gates.

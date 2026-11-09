@@ -1,17 +1,6 @@
-import {
-  defineComponent,
-  PropType,
-  provide,
-  reactive,
-  computed,
-  toRefs,
-} from "vue";
-import { getPrefixCls, createNamespace } from "../_utils/global-config";
+import type { PropType } from "vue";
 import type { ModeType, LabelPositionType } from "./types";
-import { timelineInjectionKey } from "./context";
-import Item from "./Item.vue";
-import { Orientation } from "../_utils/constant";
-import { useChildrenComponents } from "../_hooks/use-children-components";
+import type { Orientation } from "../_utils/constant";
 
 export const timelineProps = {
   /**
@@ -29,6 +18,7 @@ export const timelineProps = {
   orientation: {
     type: String as PropType<Orientation>,
     default: "vertical",
+    validator: (value: Orientation) => ['vertical', 'horizontal'].includes(value),
   },
   /**
    * @zh 时间轴的展示类型：时间轴在左侧，时间轴在右侧, 交替出现。
@@ -38,10 +28,11 @@ export const timelineProps = {
   mode: {
     type: String as PropType<ModeType>,
     default: "left",
+    validator: (value: ModeType) => ['left', 'right', 'top', 'bottom', 'alternate'].includes(value),
   },
   /**
-   * @zh 是否展示幽灵节点，设置为 true 时候只展示幽灵节点。传入ReactNode时，会作为节点内容展示。
-   * @en Whether to display ghost nodes. When set to true, only ghost nodes are displayed. When passed to ReactNode, it will be displayed as node content
+   * @zh 追加待完成节点；true 无文案，字符串显示为节点内容。
+   * @en Append a pending item; true has no text, and a string is displayed as its content.
    */
   pending: {
     type: [Boolean, String],
@@ -54,5 +45,6 @@ export const timelineProps = {
   labelPosition: {
     type: String as PropType<LabelPositionType>,
     default: "same",
+    validator: (value: LabelPositionType) => ['relative', 'same'].includes(value),
   },
 };

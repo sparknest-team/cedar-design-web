@@ -1,0 +1,1 @@
+Share logical child/parent keyboard navigation between Cascader field and standalone panel. Resolve live inherited direction from event target, skip disabled children, preserve original path/value ordering and search input horizontal editing. No public API additions.

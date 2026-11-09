@@ -29,3 +29,5 @@ export type { CheckboxMethods, CheckboxModel } from './props'
 export type { ChoiceFieldNames } from './choice-options'
 
 export type { CheckboxGroupMethods } from './use-checkbox-group-methods'
+
+export type { CheckboxSlots, CheckboxGroupSlots } from './types'

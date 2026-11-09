@@ -1,0 +1,4 @@
+- [x] Reproduce cleanup, concurrent owners, nested priority and iframe failures.
+- [x] Implement document-owned theme lifetime and document the existing global semantics.
+- [x] Verify consumers, actual demo and browser lifecycle.
+- [x] Run lint, types, spec and cross-platform checks.

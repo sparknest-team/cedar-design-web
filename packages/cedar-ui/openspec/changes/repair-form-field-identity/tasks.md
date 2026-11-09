@@ -1,0 +1,3 @@
+- [x] Reproduce reset/registration/feedback failures and distinguish existing model defaults.
+- [x] Implement per-path initial values and field-set ownership, docs and demos.
+- [x] Verify both full consumers, real browser and all gates.

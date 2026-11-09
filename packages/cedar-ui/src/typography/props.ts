@@ -26,7 +26,7 @@ export const typographyBaseProps = {
   editText: String,
   copyable: Boolean,
   copyText: String,
-  copyDelay: { type: Number, default: 3000 },
+  copyDelay: { type: Number, default: 3000, validator: (value: number) => Number.isFinite(value) && value >= 0 && value <= 2147483647 },
   ellipsis: {
     type: [Boolean, Object] as PropType<boolean | EllipsisConfig>,
     default: false,

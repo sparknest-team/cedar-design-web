@@ -45,7 +45,7 @@ const invalidNavValue: NavMenuProps = { modelValue: ['leaf'] }
 void navProps; void navMethods; void invalidNavMode; void invalidNavValue
 
 import type { NavMenuItemProps, NavMenuItemInstance, NavMenuItemSlotContext } from '@cedar-design/ui/nav-menu'
-const independentItem: NavMenuItemProps = { options: navOptions, modelValue: 0, active: false, popupLayout: 'full-width' }
+const independentItem: NavMenuItemProps = { options: navOptions, modelValue: 0, highlight: false, popupLayout: 'full-width' }
 const itemMethods = (item: NavMenuItemInstance) => { item.close(); item.select(null); item.setOpen(true) }
 const itemSlot = (slot: NavMenuItemSlotContext) => { slot.select('custom'); slot.close() }
 // @ts-expect-error unknown panel layout

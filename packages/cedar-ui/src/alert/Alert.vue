@@ -42,7 +42,7 @@
         v-if="closable"
         tabindex="0"
         role="button"
-        aria-label="Close"
+        :aria-label="closeLabel"
         :class="n('close-btn')"
         @click="handleClose"
         @keydown.enter.prevent="handleKeyboardClose"
@@ -62,7 +62,7 @@
 import { computed, ref, useSlots, type CSSProperties } from 'vue'
 import { createNamespace, formatElevation } from '../_utils/global-config'
 import { alertProps } from './props'
-import { IconClose, IconInfoCircleFill, IconCheckCircleFill, IconExclamationCircleFill, IconCloseCircleFill, transitionName } from './platform'
+import { IconClose, IconInfoCircleFill, IconCheckCircleFill, IconExclamationCircleFill, IconCloseCircleFill, transitionName, useAlertLocale } from './platform'
 
 defineOptions({
   name: createNamespace('alert').name,
@@ -75,6 +75,7 @@ const emit = defineEmits<{
   (event: 'closed'): void
 }>()
 const slots = useSlots()
+const closeLabel = useAlertLocale()
 
 const visible = ref(true)
 

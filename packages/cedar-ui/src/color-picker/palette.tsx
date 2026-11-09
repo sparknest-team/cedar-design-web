@@ -3,6 +3,7 @@ import { getPrefixCls, createNamespace } from '../_utils/global-config'
 import { hsvToRgb } from '../_utils/color'
 import { Color } from './types'
 import { useControlBlock } from './hooks/use-control-block'
+import { useI18n } from '../locale'
 
 
 const { name } = createNamespace('palette')
@@ -15,9 +16,11 @@ export default defineComponent({
       required: true,
     },
     onChange: Function as PropType<(s: number, v: number) => void>,
+    disabled: Boolean,
   },
   setup(props) {
     const prefixCls = getPrefixCls('color-picker')
+    const { t } = useI18n()
     const hsv = computed(() => props.color.hsv)
 
     const { blockRef, handlerRef, onMouseDown } = useControlBlock({
@@ -34,13 +37,15 @@ export default defineComponent({
       <div
         ref={blockRef}
         role="application"
-        tabindex={0}
-        aria-label="Color saturation and brightness"
-        aria-valuetext={`Saturation ${Math.round(hsv.value.s * 100)}%, brightness ${Math.round(hsv.value.v * 100)}%`}
+        tabindex={props.disabled ? -1 : 0}
+        aria-disabled={props.disabled || undefined}
+        aria-label={t('colorPicker.palette')}
+        aria-valuetext={`${t('colorPicker.saturation')} ${Math.round(hsv.value.s * 100)}%, ${t('colorPicker.brightness')} ${Math.round(hsv.value.v * 100)}%`}
         class={`${prefixCls}-palette`}
         style={{ backgroundColor: hueColor.value }}
-        onMousedown={onMouseDown}
+        onMousedown={(event: MouseEvent) => { if (!props.disabled) onMouseDown(event) }}
         onKeydown={(event: KeyboardEvent) => {
+          if (props.disabled) return
           const step = event.shiftKey ? 0.1 : 0.01
           const nextS = Math.min(1, Math.max(0, hsv.value.s + (event.key === 'ArrowRight' ? step : event.key === 'ArrowLeft' ? -step : 0)))
           const nextV = Math.min(1, Math.max(0, hsv.value.v + (event.key === 'ArrowUp' ? step : event.key === 'ArrowDown' ? -step : 0)))

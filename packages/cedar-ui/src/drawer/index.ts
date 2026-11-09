@@ -7,6 +7,7 @@ import { omit } from "../_utils/omit";
 import { getSlotFunction } from "../_utils/vue-utils";
 import _Drawer from "./drawer.vue";
 import { drawerProps } from "./props";
+import { registerDrawerServiceTitle } from "./title-id";
 import type { DrawerConfig, DrawerMethod, DrawerUpdateConfig } from "./types";
 
 const open = (config: DrawerConfig, appContext?: AppContext) => {
@@ -108,6 +109,8 @@ const open = (config: DrawerConfig, appContext?: AppContext) => {
           : undefined,
     },
   );
+
+  registerDrawerServiceTitle(vm);
 
   if (appContext ?? Drawer._context) {
     vm.appContext = appContext ?? Drawer._context;

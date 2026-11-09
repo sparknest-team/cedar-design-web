@@ -31,7 +31,7 @@ test('ignores other packages, namespace imports, comments, strings and styleless
     "import * as Cedar from '@cedar-design/ui'",
     "// import { Message } from '@cedar-design/ui'",
     `const text = "import { Message } from '@cedar-design/ui'"`,
-    "import { Context, StyleProvider, messageProps } from '@cedar-design/ui'",
+    "import { Context, ThemeProvider, messageProps } from '@cedar-design/ui'",
   ]) assert.equal(transform(source), undefined)
 })
 test('supports disabling styles and skips non-script requests', () => {

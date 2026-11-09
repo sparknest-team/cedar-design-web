@@ -66,6 +66,11 @@ const calendarLang: CedarCalendarLang = {
 }
 
 const lang: CedarLang = {
+  tabs: { close: 'Close', add: 'Add tab', previous: 'Previous tabs', next: 'Next tabs' },
+  breadcrumb: { label: 'Breadcrumb', ellipsis: 'Omitted breadcrumb items' },
+  navMenu: { more: 'More' },
+  splitButton: { moreActions: 'More actions' },
+  peopleSelect: { call: 'Call', chat: 'Chat' },
   fieldPresentation: {
     clickEdit: 'Click to edit',
     doubleClickEdit: 'Double-click to edit',
@@ -82,7 +87,13 @@ const lang: CedarLang = {
   },
   search: { search: 'Search', cancel: 'Cancel', history: 'Search history' },
   locale: 'en-US',
+  resizeBox: { left: 'Left edge width', right: 'Right edge width', top: 'Top edge height', bottom: 'Bottom edge height', valueText: '{0} pixels' },
+  loading: { text: 'Loading' },
+  split: { resizeLabel: 'Resize panels' },
+  layout: { expandSider: 'Expand sidebar', collapseSider: 'Collapse sidebar' },
   common: {
+    back: 'Back',
+    close: 'Close',
     placeholderSelect: 'Please select',
     placeholderInput: 'Please input',
     placeholderStart: 'Start Time',
@@ -226,9 +237,14 @@ const lang: CedarLang = {
     nextDay: 'Next day',
   },
   image: {
+    preview: 'Preview image',
     loading: 'loading',
   },
   imagePreview: {
+    prev: 'Previous image',
+    next: 'Next image',
+    download: 'Download image',
+    close: 'Close image preview',
     fullScreen: 'Full Screen',
     rotateRight: 'Rotate Right',
     rotateLeft: 'Rotate Left',
@@ -246,7 +262,12 @@ const lang: CedarLang = {
   form: {
     validateMessages: DefaultValidateMessage,
   },
+  transfer: { clear: 'Clear selected', actions: 'Item actions' },
   colorPicker: {
+    trigger: 'Choose color',
+    hue: 'Hue', opacity: 'Opacity', palette: 'Color saturation and brightness',
+    saturation: 'Saturation', brightness: 'Brightness', hex: 'Hex color',
+    red: 'Red', green: 'Green', blue: 'Blue',
     history: 'History Colors',
     preset: 'Preset Colors',
     empty: 'Empty',

@@ -1,3 +1,4 @@
+import { useThemeScope } from '../theme-provider/context'
 import { defineComponent, h, mergeProps, Transition, vShow, withDirectives, type CSSProperties, type PropType, type VNodeRef } from 'vue'
 import { createNamespace } from '../_utils/global-config'
 import type { TriggerPlacement } from './contract'
@@ -31,10 +32,11 @@ export default defineComponent({
   inheritAttrs: false,
   props: { options: { type: Object as PropType<TriggerPopupOptions>, required: true } },
   setup(props, { slots }) {
+    const themeScope = useThemeScope()
     return () => {
       const o = props.options
       if (!o.rendered) return null
-      return h('div', mergeProps(o.attrs ?? {}, {
+      return h('div', mergeProps(themeScope.value, o.attrs ?? {}, {
         ref: o.setPopup,
         class: o.popupClass,
         style: [o.popupStyle, { display: o.displayed ? undefined : 'none', pointerEvents: o.animating ? 'none' : o.popupStyle?.pointerEvents }],

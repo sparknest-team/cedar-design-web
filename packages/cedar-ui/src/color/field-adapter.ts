@@ -3,7 +3,7 @@ import type { FieldPresentationAdapter } from '../_components/field-presentation
 import ColorPicker from '../color-picker'
 
 export const colorFieldAdapter: FieldPresentationAdapter = {
-  editor: ({ props, value, update, slots, disabled }) =>
+  editor: ({ props, value, update, slots, disabled, readonly }) =>
     h(
       ColorPicker,
       {
@@ -12,7 +12,7 @@ export const colorFieldAdapter: FieldPresentationAdapter = {
         modelValue: value,
         defaultValue: undefined,
         hideTrigger: true,
-        disabled,
+        disabled: disabled || readonly,
         'onUpdate:modelValue': update,
       },
       slots,

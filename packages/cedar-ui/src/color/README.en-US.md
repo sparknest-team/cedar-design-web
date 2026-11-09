@@ -7,6 +7,10 @@ permalink: /en/components/color/
 
 Start with the basic example, then compare related settings before moving to controlled, asynchronous or combined use cases.
 
+When disabled or readonly is omitted, Color inherits the corresponding FormItem and Form state. Explicit false overrides that inherited state. Disabled and readonly controls cannot open the color panel or change the color.
+
+The default trigger is a native button and supports Tab, Enter and Space. Provide a field name with `aria-label` or `aria-labelledby`; otherwise the localized “Choose color” label is used. Custom trigger slots must provide their own accessible name and keyboard interaction.
+
 ## Basic examples
 
 ### Basic usage
@@ -23,12 +27,13 @@ Start with the basic example, then compare related settings before moving to con
 
 #### Configuration reference for this comparison
 
-| Configuration | Purpose          | Related examples |
-| ------------- | ---------------- | ---------------- |
-| `size`        | Size             | Size             |
-| `show-text`   | Show color value | Size             |
+| Configuration | Purpose | Related examples |
+| ----------- | ---------- | -------- |
+| `size` | Size | Size |
+| `show-text` | Show color value | Size |
 
 <!-- demo-config-notes:end -->
+
 
 - `size`: ComponentSize
 - `show-text`: Show color value
@@ -39,32 +44,52 @@ Start with the basic example, then compare related settings before moving to con
 
 ### Empty values and reading placeholders
 
-`empty-values` recognizes empty data; `empty-value` keeps existing clear output. `empty-text` defaults to `'-'` under `read-pretty`, with Field > FormItem > Form precedence and custom read slots first. With explicit empty-values, built-in required uses the policy; custom validators receive original data. See the [shared guide](/en/guide/empty-values/).
+`empty-values` recognizes empty data; `empty-value` keeps existing clear output. `empty-text` defaults to `'-'` under `read-pretty`, with Field > FormItem > Form precedence and custom read slots first. With explicit `empty-values`, built-in required uses the policy; custom validators receive original data. See the [shared guide](/en/guide/empty-values/).
 
-| Prop         | Type               | Default and scope                                                           |
-| ------------ | ------------------ | --------------------------------------------------------------------------- |
+| Prop | Type | Default and scope |
+| ------------ | ------------------ | ----------------------------------------------------- |
 | empty-values | readonly unknown[] | Field > FormItem > Form > component-family default; replaces the whole list |
-| empty-text   | string             | Field > FormItem > Form > '-'; explicit '' is valid                         |
+| empty-text | string | Field > FormItem > Form > '-'; explicit '' is valid |
 
 These props belong to field presentation; pure panels do not gain reading mode. Form and FormItem provide inherited settings. The existing empty-value type and clear fallback remain component-specific.
 
-### Props
+### Color Props
 
-| Arguments            | Description              | Type                         | Default |
-| -------------------- | ------------------------ | ---------------------------- | ------- |
-| `model-value`        | Bound value              | `string`                     | `-`     |
-| `format`             | Color format             | `hex \| rgb`                 | `-`     |
-| `size`               | Size                     | `xs \| sm \| md \| lg \| xl` | `md`    |
-| `show-text`          | Show color value         | `boolean`                    | `false` |
-| `show-history`       | Show history colors      | `boolean`                    | `false` |
-| `show-preset`        | Show preset colors       | `boolean`                    | `false` |
-| `disabled`           | Disable interaction      | `boolean`                    | `false` |
-| `disabled-alpha`     | Disable alpha            | `boolean`                    | `false` |
-| `color-picker-props` | Forwarded to ColorPicker | `object`                     | `{}`    |
+| Prop | Description | Type | Default |
+| -------------------- | ------------------ | ---------------------------- | ------- |
+| `model-value` | Bound value | `string` | `-` |
+| `default-value` | Initial uncontrolled value | `string` | `undefined` |
+| `format` | Color format | `hex \| rgb` | `-` |
+| `size` | Size | `xs \| sm \| md \| lg \| xl` | `md` |
+| `show-text` | Show color value | `boolean` | `false` |
+| `show-history` | Show history colors | `boolean` | `false` |
+| `show-preset` | Show preset colors | `boolean` | `false` |
+| `disabled` | Disabled; inherits Form when omitted | `boolean` | `undefined` |
+| `readonly` | Readonly; inherits Form when omitted | `boolean` | `undefined` |
+| `disabled-alpha` | Disable alpha | `boolean` | `false` |
+| `history-colors` | History colors | `string[]` | `undefined` |
+| `preset-colors` | Preset colors | `string[]` | `undefined` |
+| `empty-value` | Clear value or factory | `string \| null \| (() => string \| null)` | `undefined` |
+| `color-picker-props` | Forwarded to ColorPicker | `Partial<ColorPickerProps>` | `{}` |
 
-### Form field presentation and confirmation
+### Color Events
 
-This component supports `edit-mode` with field > FormItem > Form precedence. When unset, it defaults to `direct` and preserves `direct` editing. Supported values: `direct / click / dblclick`. Non-`direct` modes open the editor through the field value trigger and keep one draft; v-model updates only after confirmation. Cancel, reset or enabling readPretty discards the draft.
+| Event | Description | Arguments |
+| --- | --- | --- |
+| `update:modelValue` | Update the field value | `(value)` |
+| `change` | Notify a color change | `(value: string)` |
+| `update:open` / `open-change` | Update or notify the field editor open state | `(open: boolean)` |
+
+### Color Slots
+
+| Slot | Description | Prop |
+| --- | --- | --- |
+| `default` | Custom color picker trigger | — |
+| `read` | Custom reading content | `{ value, text }` |
+
+### Editing and confirmation
+
+This component supports `edit-mode` with field > FormItem > Form precedence. When unset, it defaults to `direct` and preserves `direct` editing. Supported values: `direct / click / dblclick`. Non-direct modes open the editor through the field value trigger and keep one draft; v-model updates only after confirmation. Cancel, reset or enabling readPretty discards the draft.
 
 Cedar uses edit-mode="click" / "dblclick" to open an editor popup near the field. Enter/F2 also opens it; cancel/Escape discards the draft, and confirmation commits it. readPretty is an independent reading setting, separate from readonly and disabled.
 
@@ -72,4 +97,14 @@ Cedar uses edit-mode="click" / "dblclick" to open an editor popup near the field
 
 `read-pretty` is an independent boolean alongside `readonly` and `disabled`. It inherits from field to FormItem to Form; explicit `false` overrides the parent. The default is `false`. Reading mode renders no editor.
 
-Dragging uses the control owner view. KeepAlive deactivation or unmount ends the gesture and releases its listeners; a new activation requires a new gesture, and callbacks from old gestures cannot change its value.
+Drag listeners belong to the control's own view. KeepAlive deactivation or unmount ends the current gesture and releases listeners. Reactivation requires a new gesture; callbacks from the old gesture cannot change values.
+
+## CSS Variables
+
+<!-- component-css-variables:start -->
+
+This component declares no independent public CSS variables. Use the configuration and layout APIs documented on this page. The appearance of composed controls follows the public variables of `color-picker`; a shared variable can affect other controls in the same DOM subtree.
+
+Internal custom properties and measurement values are implementation details and are not customization APIs.
+
+<!-- component-css-variables:end -->

@@ -578,7 +578,12 @@
     "drag-end",
     "drag-over",
     "drag-leave",
-    "drop"
+    "drop",
+    "load-error",
+    "update:selectedValues",
+    "update:checkedValues",
+    "update:halfCheckedValues",
+    "update:expandedValues"
   ],
   "slotNames": [
     "label",

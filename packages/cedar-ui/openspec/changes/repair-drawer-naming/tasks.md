@@ -1,0 +1,3 @@
+- [x] Reproduce title-slot and service naming gaps
+- [x] Repair unique stable title references and public contract/guard fixtures
+- [x] Validate Cedar Drawer/consumers and Maple corresponding Popup

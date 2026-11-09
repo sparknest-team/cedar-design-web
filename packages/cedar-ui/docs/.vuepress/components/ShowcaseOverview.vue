@@ -56,7 +56,7 @@ const topics = [
     doc: "showcaseThemes",
     title: "主题与品牌",
     summary: "品牌、亮暗与局部主题覆盖。",
-    tags: "Token · StyleProvider · Popup",
+    tags: "Token · ThemeProvider · Popup",
     minutes: 1,
     steps: [
       "切换亮暗和品牌，观察文字、边框与背景。",

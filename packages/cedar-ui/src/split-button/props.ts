@@ -1,7 +1,10 @@
-import type { ExtractPublicPropTypes, PropType } from 'vue'
+import type { ButtonHTMLAttributes, ExtractPublicPropTypes, PropType } from 'vue'
 import { popupContainerProp } from '../_utils/popup-container'
 import { buttonGroupProps, buttonProps, type ButtonProps } from '../button'
 import { menuProps } from '../menu'
+
+/** Props and native attributes forwarded to either nested button. */
+export type SplitButtonButtonProps = Partial<ButtonProps> & Omit<ButtonHTMLAttributes, keyof ButtonProps | 'onClick'> & { onClick?: (event: MouseEvent) => void }
 
 export const splitButtonProps = {
   /** 菜单是否打开 */
@@ -11,9 +14,9 @@ export const splitButtonProps = {
   /** 是否禁用整个分裂按钮 */
   disabled: buttonGroupProps.disabled,
   /** 主按钮属性 */
-  buttonProps: Object as PropType<Partial<ButtonProps>>,
+  buttonProps: Object as PropType<SplitButtonButtonProps>,
   /** 菜单触发按钮属性 */
-  triggerButtonProps: Object as PropType<Partial<ButtonProps>>,
+  triggerButtonProps: Object as PropType<SplitButtonButtonProps>,
   /** 按钮组主题色 */
   status: buttonGroupProps.status,
   /** 按钮组尺寸 */

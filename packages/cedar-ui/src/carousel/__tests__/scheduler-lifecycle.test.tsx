@@ -25,7 +25,7 @@ afterEach(() => {
 })
 const flush = async () => { await nextTick(); await nextTick() }
 const deliver = () => ticks.splice(0).forEach((callback) => callback())
-async function fixture() {
+async function fixture(moveSpeed = 7) {
   patch(globalThis, '__VUE_DEVTOOLS_GLOBAL_HOOK__', { emit() {} })
   vi.useFakeTimers({toFake:['setTimeout','clearTimeout','Date']})
   const schedule = vi.spyOn(globalThis,'setTimeout')
@@ -36,7 +36,7 @@ async function fixture() {
   patch(globalThis,'ResizeObserver',class { constructor(callback){ observations.push(callback) } observe(){} disconnect(){} })
   patch(globalThis,'MutationObserver',class { observe(){} disconnect(){} })
   const active=ref(true), autoPlay=ref(false)
-  const Child=defineComponent({setup:()=>()=>h(Carousel,{autoPlay:autoPlay.value,moveSpeed:7,keyboard:true,mousewheel:true},{default:()=>[0,1,2].map(key=>h(Item,{key},()=>String(key)))})})
+  const Child=defineComponent({setup:()=>()=>h(Carousel,{autoPlay:autoPlay.value,moveSpeed,keyboard:true,mousewheel:true},{default:()=>[0,1,2].map(key=>h(Item,{key},()=>String(key)))})})
   const owner=mount(defineComponent({setup:()=>()=>h(KeepAlive,null,()=>active.value?h(Child):null)}),{attachTo:document.body})
   owners.push(owner)
   await flush(); deliver()
@@ -85,6 +85,21 @@ describe('Carousel scheduler ownership',()=>{
     f.active.value=false;await flush();f.active.value=true;await flush();deliver()
     const before=f.callbacks(100).length
     old();expect(f.callbacks(100)).toHaveLength(before)
+  })
+  test('non-finite moveSpeed uses the actual computed transition duration', async () => {
+    const f = await fixture(NaN)
+    const view = document.defaultView
+    const original = view.getComputedStyle.bind(view)
+    vi.spyOn(view, 'getComputedStyle').mockImplementation((element) => {
+      const style = original(element)
+      if (element.className?.includes?.('__track')) {
+        Object.defineProperty(style, 'transitionDuration', { configurable: true, value: '0.24s' })
+      }
+      return style
+    })
+    await f.navigate()
+    expect(f.callbacks(240)).toHaveLength(1)
+    expect(f.callbacks(0)).toHaveLength(0)
   })
   test('stale settle cannot override a newer transition',async()=>{
     const f=await fixture();await f.navigate()

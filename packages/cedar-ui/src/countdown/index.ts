@@ -5,7 +5,7 @@ import { countdownProps } from './props'
 const Countdown = withInstall(_Countdown)
 
 export type CountdownInstance = InstanceType<typeof _Countdown>
-export type { CountdownProps, TimeData } from './props'
+export type { CountdownProps, TimeData, CountdownSlots, CountdownEvents, CountdownExpose } from './props'
 
 export { countdownProps }
 export { Countdown }

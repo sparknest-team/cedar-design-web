@@ -47,37 +47,62 @@ Preview configuration: `map-type="google"`, `is-international`, `map-type="amaps
 
 | Prop | Description | Type | Default |
 | ----------------------- | -------------------------------------------- | -------------------------------------------- | ---------------- |
-| model-value(**v-model**) | Initial map value representing the selected location | `Object` | - |
+| model-value(**v-model**) | Controlled location model; the input object is not mutated | `Object` | - |
 | default-value | Default map center | `{ [key in valueKeyAlias[keys]]: any }` | - |
-| driver | Return value of `Fetch.genDriiver` | `Driver` | `-` |
-| fetch | Return value of `Fetch.genFetch` | `CoreService` | `-` |
+| driver | SDK driver object | `object` | `-` |
+| fetch | Service with get/post methods | `MapFetch` | `-` |
 | geocoder-url | Geocoder endpoint URL | `string` | `-` |
-| geocoder-handler | Processes geocoding-service responses | `(longitude: number, latitude: number)=>{})` | - |
+| geocoder-handler | Processes geocoding-service responses | `MapGeocoderHandler` | - |
 | base-path | Base URL for map data | `String` | `'/pe/powerpro'` |
 | is-international | Whether this is a Google map | `Boolean` | - |
+| popup-container | MapSelect dialog mount target; unused by Map itself | `PopupContainer` | Library default |
 | show-name | Whether to show the floating location name | `boolean` | `false` |
 | show-locate-me-button | Whether to show the current-location button | `boolean` | `false` |
 | show-edit-address-button | Whether to show the floating change-location button | `boolean` | `false` |
-| show-map-tips | Whether to show tips above the map | `boolean` | `false` |
-| map-type | Map type | `'qqmaps'\|'bmapGL'\|'amaps'` | `'amaps'` |
+| show-map-tips | Whether to show tips above the map | `boolean` | `true` |
+| map-type | Map type | `'qqmaps'\|'google'\|'amaps'` | `'qqmaps'` |
 | enable-gis-search | Whether to enable GIS search; `fetch` is required when enabled | `boolean` | `false` |
 | value-key-scope | String array of values displayed on the map | `Array` | `valueKeyScope` |
 | value-key-alias | Mapping from map keys to values | `Object` | `valueKeyAlias` |
 
+Programmatic map moves share an update guard, so an older cooldown cannot end a newer move. When locations are selected in succession, an older place-detail or lookup result cannot overwrite the later selection. For successive map moves, only the latest reverse-geocoding result can commit; a parent location change or unmount invalidates older requests. Unmounting during initialization prevents later map creation or processing of the initial geocoding result. Model updates during initialization do not create duplicate maps; the center synchronizes to the latest model when initialization completes.
+
 ### MapSelect Props
 
+Includes Map Props, plus:
+
+| Prop | Description | Type | Default |
+| --- | --- | --- | --- |
+| disabled | Disable opening and clearing | `boolean` | `false` |
+| clearable | Show the clear button | `boolean` | `false` |
 | map-style | Styles applied directly to the map; can set map height | `object` | `{ height: '300px'}` |
 
 ### Map Events
 
 | Event | Description | Arguments |
 | --------------- | -------------------------- | ------------------------- |
-| change | Emitted when the address changes | `(value: ModelValueType)` |
-| init | Emitted after map initialization | `(value: ModelValueType)` |
+| change | Position change notification | `(scopedValue, fullValue)` |
+| init | Emitted after map initialization | `(initialValue, completedValue)` |
 | loading:address | Emitted while resolving the selected location's address | `-` |
 | loaded:address | Emitted after resolving the selected location's address | `-` |
+| update:modelValue | Proposes a new location model | New model object |
 
-## Type definitions
+### MapSelect Events
+
+| Event | Description | Arguments |
+| --- | --- | --- |
+| `error` | Current reverse-geocoding request failed | Original cause `unknown` |
+| `clear` | Clear was requested | None |
+| `change` | Position change proposed | `(scopedValue, fullValue)` |
+| `init` | Map initialization forwarded | `(initialValue, completedValue)` |
+| `update:modelValue` | Proposed model preserving other existing fields | New model object |
+
+The parent owns `model-value`. Selection and geocoding propose a new object via `update:modelValue`; the display follows the accepted value. Results from obsolete requests or after deactivation or unmount do not commit.
+
+
+`geocoder-handler` receives numeric longitude and latitude and can synchronously or asynchronously return an object containing `address`, `poi`, `area_code`, `country_code`, `city`, and `country`; it takes precedence over `fetch`. Otherwise reverse geocoding uses `geocoder-url`, or derives a default from `map-type` and `base-path`; `fetch.get` must return a response with `isValid()` and `data`. MapSelect fallback uses updated aliases and service configuration for subsequent requests; zero is a valid coordinate. Runtime SDK service reconfiguration requires verification when the SDK is restored. The root and `map` entry export `MapProps`, `MapSelectProps`, `MapFetch`, `MapGeocoderHandler`, `MapGeocoderResult`, and component instance types. The map SDK is not included in the current build; map interaction is unavailable when it is not configured.
+
+## Types
 
 ### valueKeyAlias
 
@@ -122,3 +147,63 @@ The component exports the following types
 ```ts
 import type { MapProps } from '@cedar-design/ui'
 ```
+
+## CSS Variables
+
+<!-- component-css-variables:start -->
+
+Use these variables to customize the component. Defaults may vary by the selector condition shown. Each variable applies to the corresponding size, variant and interaction states.
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| Variable | Default / condition | Affected styles |
+| --- | --- | --- |
+| `--c-map-locate-me-bg` | `var(--c-color-bg-white)` | `background` |
+| `--c-map-locate-me-bottom` | `var(--c-spacing-10)` | `bottom` |
+| `--c-map-locate-me-icon-size` | `18px` | `height`, `width` |
+| `--c-map-locate-me-left` | `var(--c-spacing-6)` | `left` |
+| `--c-map-locate-me-shadow-blur` | `var(--c-spacing-2)` | `box-shadow` |
+| `--c-map-locate-me-shadow-color` | `rgb(var(--c-gray-10))` | `box-shadow` |
+| `--c-map-locate-me-size` | `var(--c-size-6)` | `height`, `width` |
+| `--c-map-poi-address-color` | `var(--c-color-text-3)` | `color`, `stroke` |
+| `--c-map-poi-address-font-size` | `var(--c-font-size-body-1)` | `font-size` |
+| `--c-map-poi-bg` | `rgb(var(--c-gray-10))` | `background-color` |
+| `--c-map-poi-border-radius` | `var(--c-size-25)` | `border-radius` |
+| `--c-map-poi-edit-margin-left` | `var(--c-spacing-2)` | `margin-inline-start` |
+| `--c-map-poi-name-color` | `var(--c-color-white)` | `color` |
+| `--c-map-poi-name-font-size` | `var(--c-font-size-body-3)` | `font-size` |
+| `--c-map-poi-padding-x` | `var(--c-spacing-9)` | `padding` |
+| `--c-map-poi-padding-y` | `var(--c-spacing-5)` | `padding` |
+| `--c-map-poi-translate-y` | `-7px` | `transform` |
+| `--c-map-position-current-right` | `var(--c-size-10)` | `right` |
+| `--c-map-position-current-size` | `var(--c-size-6)` | `height`, `width` |
+| `--c-map-position-current-top` | `var(--c-size-25)` | `top` |
+| `--c-map-position-dot-margin-left` | `calc(-1 * var(--c-spacing-6))` | `margin-left` |
+| `--c-map-position-dot-margin-top` | `calc(-1 * var(--c-size-6))` | `margin-top` |
+| `--c-map-position-dot-size` | `var(--c-size-6)` | `height`, `width` |
+| `--c-map-search-box-padding-x` | `var(--c-spacing-6)` | `padding` |
+| `--c-map-search-box-padding-y` | `7px` | `padding` |
+| `--c-map-search-empty-padding` | `var(--c-spacing-8)` | `padding` |
+| `--c-map-search-item-address-color` | `var(--c-color-text-3)` | `color` |
+| `--c-map-search-item-name-color` | `var(--c-color-text-1)` | `color` |
+| `--c-map-search-item-padding-x` | `var(--c-spacing-6)` | `padding` |
+| `--c-map-search-item-padding-y` | `var(--c-spacing-4)` | `padding` |
+| `--c-map-search-item-selected-bg` | `var(--c-color-fill-1)` | `background-color` |
+| `--c-map-search-margin` | `var(--c-spacing-9)` | `margin` |
+| `--c-map-search-width` | `230px` | `width` |
+| `--c-map-tips-color` | `var(--c-color-text-3)` | `color` |
+| `--c-map-tips-padding-y` | `var(--c-spacing-5)` | `padding` |
+
+</div>
+
+Apply overrides to the rendered component root or the actual popup ancestor. For example, add the following class to that element and replace the value as needed:
+
+```css
+.component-theme {
+  --c-map-locate-me-icon-size: 18px;
+}
+```
+
+Explicit inline styles and props that write the same CSS property take precedence over stylesheet defaults. After Teleport, ordinary CSS variables inherit from the actual mount location. When using ThemeProvider, follow its local-theme and popup configuration rules. Override the component variable directly for local styling; root-level aliases are not recalculated merely because a descendant system variable changes. Internal variables are not public APIs.
+
+<!-- component-css-variables:end -->

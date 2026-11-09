@@ -119,7 +119,17 @@ Preview configuration: `mode="horizontal"`, `label="分类"`, `:options="categor
 
 <demo src="./__demos__/custom-content.vue"></demo>
 
-## NavMenu API
+## Usage notes
+
+### Configuration
+
+`popup-layout="full"` starts at the bottom edge of the trigger, spans the viewport width and fills the remaining viewport height below it. On Maple, the same layout starts below the entire filter bar. Mobile defaults to full-width; desktop defaults to dropdown.
+
+Set a local mode with an outer `<c-theme-provider theme="dark">`. This component has no theme prop. Nest theme="light" for a light region; library popups follow their owning provider.
+
+## API
+
+### NavMenu Props
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -136,7 +146,6 @@ Preview configuration: `mode="horizontal"`, `label="分类"`, `:options="categor
 | mode | Navigation orientation | vertical / horizontal | vertical |
 | collapsed | Collapsed state; supports v-model:collapsed | boolean | undefined |
 | default-collapsed | Initial uncontrolled collapsed state | boolean | false |
-| theme | Code Theme | light / dark | Inherit Sider, otherwise light |
 | size | Size | xs / sm / md / lg / xl | md |
 | disabled | Globally disable selection/user expansion | boolean | false |
 | field-names | Field mapping for key/label/children/disabled | NavMenuFieldNames | Same-name fields by default |
@@ -147,30 +156,40 @@ Preview configuration: `mode="horizontal"`, `label="分类"`, `:options="categor
 | icon-size | Icon size in px | number | 20 |
 | popup-container | Popup mount container; false renders locally | Matching Trigger type | Inherits Trigger definition |
 | popup-class | Additional popup class | string / array / object | — |
-| overflow-label | Overflow-entry label | string | More |
+| overflow-label | Overflow entry label; follows the current locale when omitted | string | Localized More |
 | node-props | Node DOM attributes/events; internal selection, disabled and keyboard semantics remain | (context) => Record<string, unknown> | — |
 
 Controlled props follow supplied values; update events are requests only. `default-*` initializes once, not on later changes. Selection and expansion are independent. `showOption` does not select.
 
-### NavMenuOption
+### Platform correspondence
 
-```ts
-interface NavMenuOption {
-  key?: string | number
-  type?: 'item' | 'group' | 'divider'
-  label?: VNodeChild | ((context: NavMenuRenderContext) => VNodeChild)
-  icon?: VNodeChild | ((context: NavMenuRenderContext) => VNodeChild)
-  extra?: VNodeChild | ((context: NavMenuRenderContext) => VNodeChild)
-  children?: NavMenuOption[]
-  disabled?: boolean
-  show?: boolean
-  props?: HTMLAttributes
-}
-```
+On both platforms, a panel is created on first opening and remains mounted after closing or switching entries by default. Internal drafts and expanded branches are preserved. With `unmount-on-close`, content unmounts after the closing transition and is recreated on reopening, without clearing the Item's own selection. Business code defines draft commit, reset and filter application timing.
 
-Ordinary options require unique stable keys, using mapped keys when fieldNames is supplied. Numeric 0 is valid. Groups/dividers may omit keys, though explicit keys are recommended for dynamic reordering. Duplicate keys/missing ordinary-item keys throw to prevent ambiguous selection paths. show=false hides nodes/subtrees. Disabled branches propagate downward. Ordinary branches expand; leaves select.
+Root `close()` only requests closing Item panels and restores entry focus. It does not change selected values, active-item or desktop navigation-tree expanded-keys. A controlled open that rejects updates stays open. An entry with neither options nor a content slot does not open; arriving async options render according to current open state. KeepAlive deactivation hides panels and requests closing; reactivation still follows the controlled value.
 
-### Events
+Item selection, open state, events, slot contexts and `select/close/setOpen` methods are consistent. Both roots expose `close/resize/setActiveItem`. `name` must be unique in the current menu; changing it releases the old `name`. Names may swap or be reused during reordering in one update, with duplicates checked after the update. Vertical options expand the current value's available ancestor path on initialization or controlled value/options updates, while users can still collapse branches manually.
+
+| Capability | Cedar | Maple |
+| --- | --- | --- |
+| Root menu | Options navigation tree or Item entries; vertical by default | Item filter bar only; horizontal by default |
+| popup-layout | dropdown (default) / full-width / full-height / full | full-width (default) / full |
+| Panel origin | Below the current entry | Below the entire filter bar; a standalone Item uses its own lower edge |
+| Trigger and positioning | trigger / placement | Click to open downward |
+| Overlay and scrolling | Nonmodal; does not lock background scrolling | Root overlay / overlay-closable / lock-scroll / esc-to-close / z-index |
+| Code Theme | Controlled by the local ThemeProvider theme | Follows the global theme; no theme prop |
+| Navigation-tree methods only | showOption / scrollTo / setCollapsed | — |
+
+Each library exports `NavMenuPopupLayout` with its supported values. Maple's `NavMenuMode` is horizontal only; `options-mode` supports both orientations. The default entry slot replaces the entry's inner content. Maple renders it inside a native button: use non-interactive text/icons and place forms and action buttons in the content slot.
+
+### Arrow direction
+
+Horizontal dropdowns point down when closed/up when open. Vertical inline branches point right/down. Right-opening submenus point right/left. Independent Item arrows follow placement and reverse when open. Arrows follow actual open state, not unaccepted controlled proposals.
+
+### Keyboard
+
+Vertical Up/Down and horizontal Left/Right move focus; Home/End reach first/last. Right expands vertical branches, Down opens horizontal branches, Left returns to parents. Escape closes the current popup and restores reference focus. Enter/Space activates nodes. Disabled nodes are skipped; inputs retain native keys. If narrowing moves a focused item into overflow, focus moves to the overflow entry.
+
+### NavMenuOption Events
 
 | Event | Arguments |
 | --- | --- |
@@ -180,33 +199,13 @@ Ordinary options require unique stable keys, using mapped keys when fieldNames i
 | update:collapsed | collapsed |
 | select | key, original option, original Event |
 
-### Slots
+### NavMenuOption Slots
 
 The default slot contains independent `CNavMenuItem` entries. When present, horizontal menus scroll rather than using `responsive` overflow collection.
 
 label/icon/extra render functions, same-name slots and nodeProps receive `{ option, active, expanded, level }`. `active` means this node itself matches modelValue; ancestor-path emphasis is internal. `expanded` describes branch expansion; level starts at 0.
 
-### Cross-platform contract
-
-Both libraries create panel content on first open and retain it when closed or switched, including local drafts and expanded branches. With `unmount-on-close`, content is destroyed after the closing transition and recreated on the next open; the Item's own selected value remains intact. Applications own draft submission, resets and filter application.
-
-Root `close()` requests closing Item panels and restores entry focus without changing selected values, active-item or desktop tree expanded-keys. Controlled open values remain authoritative when closure is rejected. Entries with neither options nor a content slot never open; asynchronous options follow the current open state when they arrive. KeepAlive suspension hides panels and requests closure; controlled state remains authoritative on activation.
-
-Item values, open state, events, slot contexts and `select/close/setOpen` methods share the same contract. Both roots expose `close/resize/setActiveItem`. Names must be unique within the menu; changing a name releases the previous one. Batched swaps and insertions validate the final rendered names. Vertical options expand enabled ancestors of the selected value on initialization and value/options updates. Users can still collapse branches manually.
-
-| Capability | Cedar | Maple |
-| --- | --- | --- |
-| Root menu | options tree or Item entries; vertical by default | Item filter bar only; horizontal by default |
-| popup-layout | dropdown (default) / full-width / full-height / full | full-width (default) / full |
-| Panel origin | Individual entry bottom | Entire filter bar bottom; standalone Item uses its own bottom |
-| Trigger and placement | trigger / placement | Click to open downward |
-| Backdrop and scrolling | Non-modal; background scroll remains available | Root overlay / overlay-closable / lock-scroll / esc-to-close / z-index |
-| Theme | theme override | Global theme; no theme prop |
-| Tree-only methods | showOption / scrollTo / setCollapsed | — |
-
-Each library exports `NavMenuPopupLayout` with its supported values. Maple's `NavMenuMode` is horizontal only; `options-mode` supports both orientations. The default entry slot replaces the entry's inner content. Maple renders it inside a native button: use non-interactive text/icons and place forms and action buttons in the content slot.
-
-### Methods
+### NavMenuOption Methods
 
 | Method | Description |
 | --- | --- |
@@ -217,15 +216,9 @@ Each library exports `NavMenuPopupLayout` with its supported values. Maple's `Na
 | setCollapsed(value) | Update uncontrolled collapse or request a controlled update |
 | setActiveItem(value) | Update uncontrolled named-Item activation or request a controlled update |
 
-### Arrow direction
+### NavMenuItem Props
 
-Horizontal dropdowns point down when closed/up when open. Vertical inline branches point right/down. Right-opening submenus point right/left. Independent Item arrows follow placement and reverse when open. Arrows follow actual open state, not unaccepted controlled proposals.
-
-### Keyboard
-
-Vertical Up/Down and horizontal Left/Right move focus; Home/End reach first/last. Right expands vertical branches, Down opens horizontal branches, Left returns to parents. Escape closes the current popup and restores reference focus. Enter/Space activates nodes. Disabled nodes are skipped; inputs retain native keys. If narrowing moves a focused item into overflow, focus moves to the overflow entry.
-
-## NavMenu.Item API
+When using the content slot, the custom panel takes its accessible name from the entry. Set aria-label or aria-labelledby on the entry when needed. Ensure custom entries have a meaningful name.
 
 Titles follow matching selected options by default. `label` slots take highest precedence: use `<template #label>Advanced filters</template>` for fixed titles or bind a separate reactive variable for manual titles. `update-label` is removed.
 
@@ -233,7 +226,7 @@ Titles follow matching selected options by default. `label` slots take highest p
 
 `CNavMenuItem` (also `NavMenu.Item`) is an independent top-level entry outside root navigation-tree `modelValue`. Without `name`, each Item highlights from its own value, allowing simultaneous category/region filters. With unique names, root `activeItem/defaultActiveItem` maintains one highlighted entry. Both modes allow only one open Item panel without clearing other panels’ values. Ordinary root navigation uses `options + v-model`. Entries define their own `options` or replace panels through `content`. default customizes the entry; `label`/`icon` customize parts; `option-label`/`option-icon`/`option-extra` customize `options`.
 
-Horizontal menus with default slots scroll rather than collecting entries into overflow, avoiding cloned form content. Pure `options` menus retain automatic overflow collection. New Item does not support legacy child collection. Item panels within one NavMenu are mutually exclusive. Clicking another entry requests closing the previous one; controlled open requires parent acceptance.
+Horizontal menus with default slots scroll rather than collecting entries into overflow, avoiding cloned form content. Pure `options` menus retain automatic overflow collection.  Item panels within one NavMenu are mutually exclusive. Clicking another entry requests closing the previous one; controlled open requires parent acceptance.
 
 | Item prop | Description | Default |
 | --- | --- | --- |
@@ -257,67 +250,85 @@ Entry/`content` slots receive `{ modelValue, selectedOption, active, open, selec
 
 Item also emits `update:open`/entry `click` and exposes `select`/`close`/`setOpen`. Full-width/full-height popups are nonmodal without scroll locks/focus traps. They default to body; custom containers must avoid ancestor transforms changing the fixed-position reference.
 
-## Migrating from older versions
+## Types
 
-Legacy child collection and state aliases are removed. New `NavMenu.Item` is an independent top-level entry with different usage.
+### NavMenuOption
 
-| Previous usage | Current usage |
-| --- | --- |
-| Legacy Item/SubMenu/ItemGroup components | Use options/children/type=group for navigation trees; new NavMenu.Item for custom top-level entries |
-| selectedKeys/defaultSelectedKeys arrays | modelValue/defaultValue single key |
-| openKeys/defaultOpenKeys | expandedKeys/defaultExpandedKeys |
-| menu-item-click | select(key, option, event) |
-| pop/popButton mode | vertical + collapsed; horizontal remains horizontal |
-| Child title/icon slots | Root scoped label/icon/extra slots or option VNodes |
-| Built-in collapse button/breakpoint | External buttons control collapsed; containers handle responsive layout |
-| Unrestricted triggerProps/tooltipProps forwarding | Explicit popupContainer/popupClass props |
+```ts
+interface NavMenuOption {
+  key?: string | number
+  type?: 'item' | 'group' | 'divider'
+  label?: VNodeChild | ((context: NavMenuRenderContext) => VNodeChild)
+  icon?: VNodeChild | ((context: NavMenuRenderContext) => VNodeChild)
+  extra?: VNodeChild | ((context: NavMenuRenderContext) => VNodeChild)
+  children?: NavMenuOption[]
+  disabled?: boolean
+  show?: boolean
+  props?: HTMLAttributes
+}
+```
 
-All library demos, exports, global types and resolver entries are migrated. Styles use BEM `c-nav-menu__*` / `c-nav-menu--*`; old selectors and unused tokens are removed.
+Ordinary options require unique stable keys, using mapped keys when fieldNames is supplied. Numeric 0 is valid. Groups/dividers may omit keys, though explicit keys are recommended for dynamic reordering. Duplicate keys/missing ordinary-item keys throw to prevent ambiguous selection paths. show=false hides nodes/subtrees. Disabled branches propagate downward. Ordinary branches expand; leaves select.
 
 ## Design reference
 
 The workspace Naive UI 2.44.1 Menu informed option trees, ancestor paths and content rendering. No Naive UI/TreeMate runtime dependency is introduced. Local Trigger provides popups; public APIs follow Cedar names.
 
-## Style variables
-
-| Variable | Default |
-| --- | --- |
-| --c-nav-menu-font-size | `var(~'--c-font-size-body-3')` |
-| --c-nav-menu-border-radius | `var(~'--c-border-radius-sm')` |
-| --c-nav-menu-light-bg | `var(~'--c-color-bg-2')` |
-| --c-nav-menu-light-item-bg-hover | `var(~'--c-color-fill-2')` |
-| --c-nav-menu-light-item-bg-selected | `var(~'--c-color-fill-2')` |
-| --c-nav-menu-light-item-text-color | `var(~'--c-color-text-2')` |
-| --c-nav-menu-light-item-text-color-selected | `rgb(var(~'--c-primary-6'))` |
-| --c-nav-menu-light-item-text-color-disabled | `var(~'--c-color-text-4')` |
-| --c-nav-menu-dark-bg | `var(~'--c-color-menu-dark-bg')` |
-| --c-nav-menu-dark-item-bg-hover | `var(~'--c-color-menu-dark-hover')` |
-| --c-nav-menu-dark-item-bg-selected | `var(~'--c-color-menu-dark-hover')` |
-| --c-nav-menu-dark-item-text-color | `var(~'--c-color-text-4')` |
-| --c-nav-menu-dark-item-text-color-selected | `var(~'--c-color-white')` |
-| --c-nav-menu-dark-item-text-color-disabled | `var(~'--c-color-text-2')` |
-| --c-nav-menu-row-height | `40px` |
-| --c-nav-menu-row-height-xs | `28px` |
-| --c-nav-menu-row-height-sm | `32px` |
-| --c-nav-menu-row-height-lg | `48px` |
-| --c-nav-menu-row-height-xl | `56px` |
-| --c-nav-menu-content-gap | `8px` |
-| --c-nav-menu-content-padding | `12px` |
-| --c-nav-menu-icon-size | `20px` |
-| --c-nav-menu-arrow-size | `12px` |
-| --c-nav-menu-focus-width | `2px` |
-| --c-nav-menu-focus-offset | `-2px` |
-| --c-nav-menu-divider-width | `1px` |
-| --c-nav-menu-divider-color | `var(--c-color-border-2)` |
-| --c-nav-menu-popup-min-width | `180px` |
-| --c-nav-menu-popup-max-height | `320px` |
-| --c-nav-menu-popup-shadow | `0 6px 24px rgb(0 0 0 / 12%)` |
-| --c-nav-menu-motion-duration | `150ms` |
-| --c-nav-menu-panel-width | `min(400px, 100vw)` |
-
-`popup-layout="full"` starts at the bottom edge of the trigger, spans the viewport width and fills the remaining viewport height below it. On Maple, the same layout starts below the entire filter bar. Mobile defaults to full-width; desktop defaults to dropdown.
-
-
 ## Reading direction and keyboard interaction
 
-NavMenu inherits the nearest native `dir` and reacts to changes. Horizontal navigation follows reading direction; vertical up/down navigation stays unchanged. Data-menu branches mirror expand/parent keys and prefer the inline-end side for nested popups. Popups retain the source direction. Explicit Item placement remains physical; changing direction does not select an item or clear filters.
+NavMenu inherits the nearest native `dir` and supports runtime changes. Horizontal Left/Right navigation follows reading direction; vertical Up/Down does not reverse. In RTL, Left expands/enters a submenu and Right collapses/returns; LTR uses the opposite mapping. Escape closes the popover and returns focus to its trigger.
+
+Nested data-menu popovers prefer inline end and adjust when space is limited, inheriting their source scope. Explicit `NavMenu.Item` physical `placement` keeps its meaning. Direction changes do not select a menu item or clear filter values.
+
+## CSS Variables
+
+The menu and its submenus share theme variables. `--c-nav-menu-light-bg` controls the background and `--c-nav-menu-light-item-bg-hover` controls hover backgrounds; use the corresponding variables below for selected and disabled states. Variables whose names contain `light` apply in both light and dark themes. Use ThemeProvider to theme a local menu and its popups.
+
+<!-- component-css-variables:start -->
+
+Use these variables to customize the component. Defaults may vary by the selector condition shown. Each variable applies to the corresponding size, variant and interaction states.
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| Variable | Default / condition | Affected styles |
+| --- | --- | --- |
+| `--c-nav-menu-arrow-size` | `12px` | `width` |
+| `--c-nav-menu-border-radius` | `var(--c-border-radius-sm)` | `border-radius` |
+| `--c-nav-menu-content-gap` | `8px` | `gap`, `margin`, `padding` |
+| `--c-nav-menu-content-padding` | `12px` | `padding` |
+| `--c-nav-menu-divider-color` | `var(--c-color-border-2)` | `background`, `border` |
+| `--c-nav-menu-divider-width` | `1px` | `border`, `height`, `width` |
+| `--c-nav-menu-focus-offset` | `-2px` | `outline-offset` |
+| `--c-nav-menu-focus-width` | `2px` | `outline` |
+| `--c-nav-menu-font-size` | `var(--c-font-size-body-3)` | `font-size` |
+| `--c-nav-menu-icon-size` | `20px` | `font-size` |
+| `--c-nav-menu-light-bg` | `var(--c-color-bg-2)` | `background` |
+| `--c-nav-menu-light-item-bg-hover` | `var(--c-color-fill-2)` | `background` |
+| `--c-nav-menu-light-item-bg-selected` | `var(--c-color-fill-2)` | `background` |
+| `--c-nav-menu-light-item-text-color` | `var(--c-color-text-2)` | `color` |
+| `--c-nav-menu-light-item-text-color-disabled` | `var(--c-color-text-4)` | `color` |
+| `--c-nav-menu-light-item-text-color-selected` | `var(--c-sys-color-content-brand)` | `color`, `outline` |
+| `--c-nav-menu-motion-duration` | `150ms` | `transition` |
+| `--c-nav-menu-panel-width` | `min(400px, 100vw)` | Component styling |
+| `--c-nav-menu-popup-max-height` | `320px` | `max-height` |
+| `--c-nav-menu-popup-min-width` | `180px` | `min-width` |
+| `--c-nav-menu-popup-shadow` | `0 6px 24px rgba(0, 0, 0, 0.12)` | `box-shadow` |
+| `--c-nav-menu-row-height` | `40px` | `min-height` |
+| `--c-nav-menu-row-height-lg` | `48px` | `min-height` |
+| `--c-nav-menu-row-height-sm` | `32px` | `min-height` |
+| `--c-nav-menu-row-height-xl` | `56px` | `min-height` |
+| `--c-nav-menu-row-height-xs` | `28px` | `min-height` |
+
+</div>
+
+Apply overrides to the rendered component root or the actual popup ancestor. For example, add the following class to that element and replace the value as needed:
+
+```css
+.component-theme {
+  --c-nav-menu-arrow-size: 12px;
+}
+```
+
+Explicit inline styles and props that write the same CSS property take precedence over stylesheet defaults. After Teleport, ordinary CSS variables inherit from the actual mount location. When using ThemeProvider, follow its local-theme and popup configuration rules. Override the component variable directly for local styling; root-level aliases are not recalculated merely because a descendant system variable changes. Internal variables are not public APIs.
+
+<!-- component-css-variables:end -->

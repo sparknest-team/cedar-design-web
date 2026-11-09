@@ -82,9 +82,15 @@ permalink: /components/statistic/
 
 <demo src="./__demos__/count-to.vue"></demo>
 
+## 动画时长边界
+
+时长为有限非负毫秒数。0 在下一帧到达目标；负数、NaN 和无穷值会产生开发环境属性诊断，并安全地按 0 处理，不会持续请求动画帧。下一帧执行前暂停或卸载会取消本次完成。启用数值动画时，修改 animation-duration 按已有规则重新播放。
+
 ## API
 
-### `<Statistic>` Props
+`precision` 支持 0–100 的整数，无效值回退为 0。数值格式使用 JavaScript 二进制数和舍入，不能替代精确的财务计算；特别大的数可能以科学计数法显示，动画端点差值溢出时直接显示最终值。数值分组使用 en-US 规则，`separator` 可替换分组逗号，小数点固定为点；日期按本地时间格式化。非有限数值会提示且按原值显示，不参与动画；无效动画起点回退为 0，无效时长按 0 处理并在下一帧结束。
+
+### Statistic Props
 
 | 属性                   | 说明                                                           | 类型                      | 默认值       |
 | ---------------------- | -------------------------------------------------------------- | ------------------------- | ------------ |
@@ -105,7 +111,7 @@ permalink: /components/statistic/
 | `placeholder`          | 提示文字（当 `value` 为 `undefined` 且未使用默认插槽时显示）   | `string`                  | -            |
 | `value-style`          | 自定义显示值的样式                                             | `CSSProperties`           | -            |
 
-### `<Statistic>` Slots
+### Statistic Slots
 
 | 插槽名    | 说明                                     | 参数 |
 | --------- | ---------------------------------------- | ---- |
@@ -115,7 +121,7 @@ permalink: /components/statistic/
 | `suffix`  | 后缀                                     | `-`  |
 | `extra`   | 额外内容                                 | `-`  |
 
-### 类型定义
+## Types
 
 组件导出以下类型定义
 
@@ -123,29 +129,53 @@ permalink: /components/statistic/
 import type { StatisticProps } from '@cedar-design/ui'
 ```
 
-### 样式变量
+## 使用说明
 
-| 变量名 | 默认值 |
-| --- | --- |
-| `--c-statistic-title-color` | `var(--c-sys-color-content-secondary)` |
-| `--c-statistic-title-font-size` | `var(--c-font-size-body-3)` |
-| `--c-statistic-title-margin-bottom` | `var(--c-spacing-4)` |
-| `--c-statistic-value-color` | `var(--c-sys-color-content-primary)` |
-| `--c-statistic-value-font-size` | `26px` |
-| `--c-statistic-value-font-weight` | `var(--c-font-weight-500)` |
-| `--c-statistic-decimal-font-size` | `inherit` |
-| `--c-statistic-prefix-color` | `var(--c-sys-color-content-secondary)` |
-| `--c-statistic-prefix-font-size` | `14px` |
-| `--c-statistic-prefix-spacing` | `var(--c-spacing-1)` |
-| `--c-statistic-suffix-color` | `var(--c-sys-color-content-secondary)` |
-| `--c-statistic-suffix-font-size` | `14px` |
-| `--c-statistic-suffix-spacing` | `var(--c-spacing-1)` |
-| `--c-statistic-extra-color` | `var(--c-sys-color-content-secondary)` |
-| `--c-statistic-extra-font-size` | `var(--c-font-size-body-3)` |
-| `--c-statistic-extra-margin-top` | `var(--c-spacing-4)` |
 
-## 同源实现与平台边界
-
-两端各自保存完整源码，不引用公共核心，不共享组件实例或响应式状态；修改时同步维护两份实现。主体、Props、关键样式及配对测试纳入只读源码一致性检查，主题 token 和安装入口各自维护。
 
 默认插槽动态出现/消失时同步切换占位文字；动画在卸载及 KeepAlive 停用时暂停。
+
+### 动画配置与生命周期
+
+`start=true` 时，动态开启 `animation`、更改数字目标、`valueFrom` 或 `animationDuration` 会从当前配置的起点重播；只改精度、分隔符等格式不会重播。关闭动画或切换为字符串/日期立即展示目标值并停止调度帧。`start=false` 暂停当前数值，后续显式切回 `true` 重播；暂停时改配置只准备新起点，不调度帧。KeepAlive 停用暂停，配置未变则激活后续跑；配置改变则激活时重新同步。卸载释放调度帧。
+
+## CSS Variables
+
+<!-- component-css-variables:start -->
+
+通过以下变量定制组件外观。默认值随表中注明的主题或选择器条件变化；变量仅在对应的尺寸、变体和交互状态下生效。
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| 变量 | 默认值／条件 | 影响的样式 |
+| --- | --- | --- |
+| `--c-statistic-decimal-font-size` | `inherit` | `font-size` |
+| `--c-statistic-extra-color` | `var(--c-sys-color-content-secondary)` | `color` |
+| `--c-statistic-extra-font-size` | `var(--c-font-size-body-3)` | `font-size` |
+| `--c-statistic-extra-margin-top` | `var(--c-spacing-4)` | `margin-top` |
+| `--c-statistic-prefix-color` | `var(--c-sys-color-content-secondary)` | `color` |
+| `--c-statistic-prefix-font-size` | `14px` | `font-size` |
+| `--c-statistic-prefix-spacing` | `var(--c-spacing-1)` | `margin-inline-end` |
+| `--c-statistic-suffix-color` | `var(--c-sys-color-content-secondary)` | `color` |
+| `--c-statistic-suffix-font-size` | `14px` | `font-size` |
+| `--c-statistic-suffix-spacing` | `var(--c-spacing-1)` | `margin-inline-start` |
+| `--c-statistic-title-color` | `var(--c-sys-color-content-secondary)` | `color` |
+| `--c-statistic-title-font-size` | `var(--c-font-size-body-3)` | `font-size` |
+| `--c-statistic-title-margin-bottom` | `var(--c-spacing-4)` | `margin-bottom` |
+| `--c-statistic-value-color` | `var(--c-sys-color-content-primary)` | `color` |
+| `--c-statistic-value-font-size` | `26px` | `font-size` |
+| `--c-statistic-value-font-weight` | `var(--c-font-weight-500)` | `font-weight` |
+
+</div>
+
+将覆盖设置在组件实际根节点或弹层真实挂载祖先上。例如给该元素添加下列 class，再按需替换变量值：
+
+```css
+.component-theme {
+  --c-statistic-decimal-font-size: inherit;
+}
+```
+
+显式行内样式及直接写入同一 CSS 属性的 Props 优先于样式表默认值。Teleport 后，普通 CSS 变量按实际挂载位置继承；使用 ThemeProvider 时，请遵循其局部主题与弹层配置规则。局部定制请直接覆盖组件变量；仅修改后代的 system 变量不会重新计算从根继承的组件别名。内部变量不属于公共 API。
+
+<!-- component-css-variables:end -->

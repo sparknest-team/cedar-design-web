@@ -17,6 +17,7 @@ export interface PreviewControllerOptions {
   draggable: Ref<boolean>
   keepDragOffset: Ref<boolean>
   overlayClosable: Ref<boolean>
+  canHandleKeyboard?: (event: KeyboardEvent) => boolean
   onOpenChange: (open: boolean) => void
   onLongPress?: () => void
   onPrev?: () => void
@@ -25,7 +26,13 @@ export interface PreviewControllerOptions {
 
 export function usePreviewController(options: PreviewControllerOptions) {
   const localOpen = ref(options.defaultOpen)
-  const scale = ref(options.defaultScale.value)
+  const positive = (value: number, fallback: number) => Number.isFinite(value) && value > 0 ? value : fallback
+  const minScale = computed(() => positive(options.minScale.value, 0.5))
+  const maxScale = computed(() => Math.max(minScale.value, positive(options.maxScale.value, 8)))
+  const scaleStep = computed(() => positive(options.scaleStep.value, 0.5))
+  const clampScale = (value: number) => Math.min(maxScale.value, Math.max(minScale.value, value))
+  const defaultScale = computed(() => clampScale(positive(options.defaultScale.value, 1)))
+  const scale = ref(defaultScale.value)
   const rotate = ref(0)
   const translateX = ref(0)
   const translateY = ref(0)
@@ -50,19 +57,18 @@ export function usePreviewController(options: PreviewControllerOptions) {
   const mergedWheelZoom = computed(() => options.wheelZoom.value ?? isDesktop.value)
   const mergedKeyboard = computed(() => options.keyboard.value ?? isDesktop.value)
 
-  const clampScale = (value: number) => Math.min(options.maxScale.value, Math.max(options.minScale.value, value))
   function zoomTo(value: number) {
-    if (!available()) return
+    if (!available() || !Number.isFinite(value)) return
     scale.value = clampScale(value)
     if (scale.value <= 1 && !options.keepDragOffset.value) {
       resetOffset()
     }
   }
   function zoomIn() {
-    zoomTo(scale.value + options.scaleStep.value)
+    zoomTo(scale.value + scaleStep.value)
   }
   function zoomOut() {
-    zoomTo(scale.value - options.scaleStep.value)
+    zoomTo(scale.value - scaleStep.value)
   }
   function rotateLeft() {
     if (!available()) return
@@ -77,7 +83,7 @@ export function usePreviewController(options: PreviewControllerOptions) {
     translateY.value = 0
   }
   function resetState() {
-    scale.value = options.defaultScale.value
+    scale.value = defaultScale.value
     rotate.value = 0
     resetOffset()
   }
@@ -305,9 +311,11 @@ export function usePreviewController(options: PreviewControllerOptions) {
   }
 
   function onKeydown(event: KeyboardEvent) {
-    if (!available() || !mergedOpen.value || !mergedKeyboard.value) {
+    if (!available() || !mergedOpen.value || !mergedKeyboard.value || event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey || options.canHandleKeyboard?.(event) === false) {
       return
     }
+    const target = event.target as HTMLElement | null
+    if (isInteractiveTarget(target) || target?.closest?.('[contenteditable]:not([contenteditable="false"]), [role="textbox"], [role="slider"], [role="spinbutton"], [role="combobox"], [role="menuitem"]')) return
     if (event.key === (options.isRtl?.value ? 'ArrowRight' : 'ArrowLeft')) {
       options.onPrev?.()
     } else if (event.key === (options.isRtl?.value ? 'ArrowLeft' : 'ArrowRight')) {
@@ -324,6 +332,7 @@ export function usePreviewController(options: PreviewControllerOptions) {
     }
   }
 
+  watch([minScale, maxScale], () => zoomTo(scale.value), { flush: 'sync' })
   if (options.isRtl) {
     watch(options.isRtl, () => { cancelGesture(); if (scale.value <= 1) resetOffset() }, { flush: 'sync' })
   }

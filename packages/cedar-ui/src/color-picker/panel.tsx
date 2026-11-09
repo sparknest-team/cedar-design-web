@@ -1,6 +1,6 @@
 import { PropType, computed, defineComponent, ref } from 'vue'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
-import { hexToRgb, rgbToHsv } from '../_utils/color'
+import { formatInputToRgb, rgbToHsv } from '../_utils/color'
 import { Color, HSV } from './types'
 import { useI18n } from '../locale'
 import useState from '../_hooks/use-state'
@@ -34,6 +34,7 @@ export default defineComponent({
     presetColors: Array as PropType<string[]>,
     onAlphaChange: Function as PropType<(alpha: number) => void>,
     onHsvChange: Function as PropType<(hsv: HSV) => void>,
+    onColorChange: Function as PropType<(hsv: HSV, alpha: number) => void>,
   },
   setup(props) {
 
@@ -49,9 +50,10 @@ export default defineComponent({
     const showCopy = ref(false)
 
     const onHexInputChange = (value: string) => {
-      const _rgb = hexToRgb(value) || { r: 255, g: 0, b: 0 }
+      const _rgb = formatInputToRgb(value)
+      if (!_rgb || props.disabled) return
       const _hsv = rgbToHsv(_rgb.r, _rgb.g, _rgb.b)
-      props.onHsvChange?.(_hsv)
+      props.onColorChange?.(_hsv, _rgb.a ?? 1)
     }
 
     const renderInput = () => {
@@ -112,17 +114,19 @@ export default defineComponent({
 
     return () => (
       <div
+        aria-disabled={props.disabled || undefined}
         class={{
           [`${prefixCls}-panel`]: true,
           [`${prefixCls}-panel-disabled`]: props.disabled,
         }}
       >
-        <Palette color={props.color} onChange={(s, v) => props.onHsvChange?.({ h: hsv.value.h, s, v })} />
+        <Palette disabled={props.disabled} color={props.color} onChange={(s, v) => props.onHsvChange?.({ h: hsv.value.h, s, v })} />
         <div class={`${prefixCls}-panel-control`}>
           <div class={`${prefixCls}-control-wrapper`}>
             <div>
               <ControlBar
                 type="hue"
+                disabled={props.disabled}
                 x={hsv.value.h}
                 color={props.color}
                 colorString={props.colorString}
@@ -131,6 +135,7 @@ export default defineComponent({
               {!props.disabledAlpha && (
                 <ControlBar
                   type="alpha"
+                  disabled={props.disabled}
                   x={props.alpha}
                   color={props.color}
                   colorString={props.colorString}
@@ -142,6 +147,7 @@ export default defineComponent({
           </div>
           <div class={`${prefixCls}-input-wrapper`}>
             <Select
+              disabled={props.disabled}
               class={`${prefixCls}-select`}
               size="xs"
               trigger-props={{ class: `${prefixCls}-select-popup` }}

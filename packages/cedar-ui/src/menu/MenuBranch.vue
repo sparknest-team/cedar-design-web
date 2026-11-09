@@ -38,7 +38,7 @@ const keyboard = useMenuKeyboard({
   reference: () => triggerRef.value?.getReference?.(), panel: () => panel.value?.panel,
   visible: () => computedOpen.value, disabled: () => disabled.value,
   isTopLayer: event => triggerRef.value?.isTopLayer?.(event) ?? false,
-  restoreFocus: () => triggerRef.value?.focusReference?.(), openKey: 'ArrowRight', open, close,
+  restoreFocus: () => triggerRef.value?.focusReference?.(), openKey: 'ArrowRight', open, close, tab: () => menu?.closeMenu?.(),
 })
 // Under click, hovering must not collapse a sibling the user opened on purpose.
 function handleMouseenter() { if (trigger.value === 'hover') activate() }
@@ -61,6 +61,7 @@ const viewOptions = computed(() => {
       ...submenuTriggerAppearance(),
       strategy: menu?.strategy.value ?? 'absolute', open: computedOpen.value, trigger: trigger.value,
       placement: isRtl.value ? 'left-start' : 'right-start', unmountOnClose: true, disabled: disabled.value, escToClose: false,
+      referenceAttrs: { 'aria-haspopup': 'menu', 'aria-expanded': computedOpen.value },
       onOpenChange: (open: boolean) => { if (open) activate(); computedOpen.value = open },
     },
     reference: () => h(MenuOption, {

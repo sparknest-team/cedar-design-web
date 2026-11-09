@@ -33,6 +33,7 @@ const panel = ref<InstanceType<typeof MenuPanel>>()
 const { level } = useMenuLevel(computedOpen)
 function open() { if (!props.disabled) state.request(true) }
 function close() { state.request(false) }
+function closeForTab() { close(); if (!computedOpen.value) menu.value?.focusReference?.() }
 function resize() { menu.value?.resize?.() }
 function setReference(reference?: MenuReference) { menu.value?.setReference?.(reference as any) }
 const selection = useMenuSelection(props, (value, option, event, selectedValue) => {
@@ -44,17 +45,17 @@ const selection = useMenuSelection(props, (value, option, event, selectedValue) 
   }
 })
 provide(menuSelectionKey, selection)
-provide(menuInjectionKey, { strategy: computed(() => props.strategy), popupMaxHeight: computed(() => props.popupMaxHeight), modelValue: selection.modelValue, submenuTrigger: computed(() => props.submenuTrigger), onOptionClick: selection.select })
+provide(menuInjectionKey, { strategy: computed(() => props.strategy), popupMaxHeight: computed(() => props.popupMaxHeight), modelValue: selection.modelValue, submenuTrigger: computed(() => props.submenuTrigger), closeMenu: closeForTab, onOptionClick: selection.select })
 useMenuKeyboard({
   reference: () => menu.value?.getReference?.(), panel: () => panel.value?.panel,
   visible: () => computedOpen.value, disabled: () => props.disabled,
   isTopLayer: event => menu.value?.isTopLayer?.(event) ?? false,
-  restoreFocus: () => menu.value?.focusReference?.(), open, close, escape: () => emit('key-escape'),
+  restoreFocus: () => menu.value?.focusReference?.(), open, close, tab: closeForTab, escape: () => emit('key-escape'),
 })
 watch(() => [props.offsetX, props.offsetY], () => nextTick(() => { if (computedOpen.value) resize() }))
 const viewOptions = computed(() => ({
   kind: 'root', triggerComponent: Trigger, triggerRef: menu,
-  triggerProps: { ...rootTriggerAppearance(props), open: computedOpen.value, trigger: props.trigger, unmountOnClose: props.unmountOnClose, escToClose: false,
+  triggerProps: { ...rootTriggerAppearance(props), open: computedOpen.value, trigger: props.trigger, unmountOnClose: props.unmountOnClose, escToClose: false, referenceAttrs: { 'aria-haspopup': 'menu', 'aria-expanded': computedOpen.value },
     onOpenChange: state.request, onOpen: () => emit('open'), onOpened: () => emit('opened'), onClose: () => emit('close'), onClosed: () => emit('closed'), onClickOutside: (event: Event) => emit('click-outside', event) },
   panelComponent: MenuPanel, panelProps: { ref: panel, elevation: props.elevation },
   items: () => h(MenuOptions, { options: props.options, fieldNames: props.fieldNames }, {

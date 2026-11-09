@@ -2,10 +2,11 @@
   <c-card variant="outline" size="md">
     <c-page-header
       show-back
-      title="设计系统"
+      back-button-aria-label="返回项目列表"
       subtitle="项目概览"
       @back="onBack"
     >
+      <template #title><h2 style="margin: 0; font: inherit">设计系统</h2></template>
       <template #extra>
         <c-space size="sm" wrap>
           <c-button @click="onFollow">关注</c-button>

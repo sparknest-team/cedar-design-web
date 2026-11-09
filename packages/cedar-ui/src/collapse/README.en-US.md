@@ -129,14 +129,15 @@ Preview configuration: `title="Panel 1"`, `name="1"`, `title="Panel 2"`, `name="
 
 ## Reading direction
 
-Inherits the nearest `dir="ltr|rtl"` and supports runtime and nested overrides. Titles and expanded content inherit reading direction without changing expansion state. The left/right values of expand-icon-position remain physical sides. Custom expansion graphics are not additionally mirrored.
+Inherits the nearest `dir="ltr|rtl"`, including runtime changes and local overrides. Header and expanded content inherit reading direction; changing direction preserves expansion. expand-icon-position left/right remain physical sides. Custom expansion graphics are not mirrored automatically.
 
 ## API
 
 The main value uses ordinary `v-model`: `modelValue` is an array of expanded panel names, including in accordion mode. `defaultValue` initializes uncontrolled state only on creation; later changes do not reset it. Initialization does not emit `update:modelValue`. When `modelValue` is provided, the parent controls the state and its value is authoritative.
 
 <!-- same-source-api:start -->
-### Props
+
+### Collapse Props
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -150,20 +151,22 @@ The main value uses ordinary `v-model`: `modelValue` is an array of expanded pan
 | offset | Gap between expanded panels | `boolean` | `false` |
 | destroy-on-hide | Destroy content when hidden | `boolean` | `false` |
 
-### Events
+Panel content is mounted eagerly by default. When either the parent or an item enables `destroy-on-hide`, closed content is destroyed after the closing transition; reopening during the transition preserves it. Changing this setting while closed takes effect immediately. An explicit parent `show-expand-icon` overrides the item setting.
+
+### Collapse Events
 
 | Event | Description | Arguments |
 | --- | --- | --- |
 | update:model-value | Request an expanded-name update | `(string \| number)[]` |
 | change | Emitted when expanded panels change | `(string \| number)[]`, `Event` |
 
-### Slots
+### Collapse Slots
 
 | Slot | Description | Scope |
 | --- | --- | --- |
 | default | Panel list | `—` |
 
-### Methods
+### Collapse Methods
 
 | Method | Description |
 | --- | --- |
@@ -173,33 +176,37 @@ The main value uses ordinary `v-model`: `modelValue` is an array of expanded pan
 
 The parent `expand-icon` slot is forwarded to items that do not provide their own icon. Scope: `expanded`, `disabled`, `position`. It is not rendered on the root node.
 
-#### CollapseToggleAllOptions
-
-| Arguments | Description | Type | Default |
-| --- | --- | --- | --- |
-| expand | `'inverse'` toggles all; `boolean` expands or collapses all | `'inverse' \| boolean` | `—` |
-| skipDisabled | Skip disabled panels | `boolean` | `false` |
-
-### `<collapse-item>` Props
+### CollapseItem Props
 
 | Parameter | Description | Type | Default |
 | --- | --- | --- | --- |
 | name **(required)** | Unique panel identifier corresponding to a value in `modelValue` | `string \| number` | `—` |
 | title | Panel title | `string` | `—` |
+| heading-level | Heading level from 1 to 6, chosen for the page; omitted by default | `1–6` | `—` |
+| region | Whether content is a region landmark | `boolean` | `true` |
 | disabled | Whether disabled | `boolean` | `false` |
 | show-expand-icon | Whether to show an expansion icon | `boolean` | `true` |
 | destroy-on-hide | Destroy content when hidden | `boolean` | `false` |
 
-### `<collapse-item>` Slots
+Choose `heading-level` for the page structure; set `:region="false"` when many panels would create excessive region landmarks. `extra` sits outside the header button and can contain independent actions; avoid interactive controls in title and expand-icon slots. A right-side expand icon sits inside the header button, followed by `extra`.
 
-| Slot | Description | Arguments |
+### CollapseItem Slots
+
+| Slot | Description | Prop |
 | --- | --- | --- |
 | title | Panel title | `—` |
 | extra | Extra content | `—` |
 | expand-icon | Expand icon | expanded: `boolean`<br>disabled: `boolean`<br>position: `'left' \| 'right'` |
 | default | Panel content | `—` |
 
-### Type definitions
+## Types
+
+### CollapseToggleAllOptions
+
+| Prop | Description | Type | Default |
+| --- | --- | --- | --- |
+| expand | `'inverse'` toggles all; `boolean` expands or collapses all | `'inverse' \| boolean` | `—` |
+| skipDisabled | Skip disabled panels | `boolean` | `false` |
 
 The component exports the following types. `Collapse.Item` and `CollapseItem` refer to the same component.
 
@@ -207,7 +214,66 @@ The component exports the following types. `Collapse.Item` and `CollapseItem` re
 import type { CollapseInstance, CollapseToggleAllOptions, ExpandIconPosition } from '@cedar-design/ui'
 ```
 
-## Color variables
+## CSS Variables
+
+<!-- component-css-variables:start -->
+
+Use these variables to customize the component. Defaults may vary by the selector condition shown. Each variable applies to the corresponding size, variant and interaction states.
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| Variable | Default / condition | Affected styles |
+| --- | --- | --- |
+| `--c-collapse-border-color` | `var(--c-sys-color-border-default)` | `border` |
+| `--c-collapse-border-radius` | `var(--c-border-radius-md)` | `border-radius` |
+| `--c-collapse-border-width` | `var(--c-border-width-1)` | `border` |
+| `--c-collapse-content-bg` | `var(--c-sys-color-surface-muted)` | `background-color` |
+| `--c-collapse-content-font-size` | `var(--c-font-size-body-3)` | `font-size` |
+| `--c-collapse-content-padding-vertical` | `var(--c-spacing-4)` | `padding` |
+| `--c-collapse-content-text-color` | `var(--c-sys-color-content-primary)` | `color` |
+| `--c-collapse-content-text-color-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
+| `--c-collapse-expand-icon` | `var(--c-sys-color-content-secondary)` | `color` |
+| `--c-collapse-expand-icon-active-transform` | `rotate(90deg)` | `transform` |
+| `--c-collapse-expand-icon-right-active-transform` | `rotate(-90deg)` | `transform` |
+| `--c-collapse-expand-icon-right-transform` | `rotate(0deg)` | `transform` |
+| `--c-collapse-expand-icon-size` | `14px` | `font-size` |
+| `--c-collapse-expand-icon-spacing-text` | `5px` | `gap` |
+| `--c-collapse-expand-icon-transform` | `rotate(0deg)` | `transform` |
+| `--c-collapse-focus-color` | `currentColor` | `outline` |
+| `--c-collapse-focus-offset` | `-2px` | `outline-offset` |
+| `--c-collapse-focus-width` | `2px` | `outline` |
+| `--c-collapse-item-border-color` | `var(--c-sys-color-border-default)` | `border-bottom` |
+| `--c-collapse-item-border-width` | `var(--c-border-width-1)` | `border-bottom` |
+| `--c-collapse-item-margin-top` | `var(--c-spacing-4)` | `margin-top` |
+| `--c-collapse-line-height` | `1.5715` | `line-height` |
+| `--c-collapse-motion-duration` | `var(--c-transition-duration-2)` | `transition` |
+| `--c-collapse-motion-easing` | `var(--c-transition-timing-function-standard)` | `transition` |
+| `--c-collapse-title-bg` | `var(--c-sys-color-surface-default)` | `background`, `background-color` |
+| `--c-collapse-title-bg-active` | `var(--c-sys-color-surface-default)` | `background-color` |
+| `--c-collapse-title-bg-disabled` | `var(--c-sys-color-surface-default)` | `background-color` |
+| `--c-collapse-title-font-size` | `var(--c-font-size-body-3)` | `font-size` |
+| `--c-collapse-title-font-weight-active` | `var(--c-font-weight-500)` | `font-weight` |
+| `--c-collapse-title-line-height` | `24px` | `line-height` |
+| `--c-collapse-title-padding-horizontal` | `13px` | `padding` |
+| `--c-collapse-title-padding-vertical` | `var(--c-spacing-4)` | `padding` |
+| `--c-collapse-title-text-color` | `var(--c-sys-color-content-primary)` | `color` |
+| `--c-collapse-title-text-color-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
+
+</div>
+
+Apply overrides to the rendered component root or the actual popup ancestor. For example, add the following class to that element and replace the value as needed:
+
+```css
+.component-theme {
+  --c-collapse-border-color: var(--c-sys-color-border-default);
+}
+```
+
+Explicit inline styles and props that write the same CSS property take precedence over stylesheet defaults. After Teleport, ordinary CSS variables inherit from the actual mount location. When using ThemeProvider, follow its local-theme and popup configuration rules. Override the component variable directly for local styling; root-level aliases are not recalculated merely because a descendant system variable changes. Internal variables are not public APIs.
+
+<!-- component-css-variables:end -->
+
+### Colors
 
 Collapse public color variables default to system semantics consistently in Cedar and Maple:
 
@@ -225,6 +291,6 @@ Collapse public color variables default to system semantics consistently in Ceda
 | `--c-collapse-expand-icon` | `var(--c-sys-color-content-secondary)` |
 | `--c-collapse-item-border-color` | `--c-sys-color-border-default` |
 
-### Reduced motion
+#### Reduced motion
 
 Built-in CSS transitions follow `prefers-reduced-motion: reduce`. Removing transitions does not change final visibility, selected/expanded state or event semantics. Applications control custom animations inside slots.

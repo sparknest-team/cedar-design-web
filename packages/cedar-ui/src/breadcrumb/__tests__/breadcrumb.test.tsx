@@ -8,7 +8,7 @@ describe('Breadcrumb', () => {
     const wrapper = mount(Breadcrumb)
     await nextTick()
     expect(wrapper.attributes('role')).toBe('navigation')
-    expect(wrapper.attributes('aria-label')).toBe('Breadcrumb')
+    expect(wrapper.attributes('aria-label')).toBe('面包屑导航')
   })
 
   test('renders route paths as links', async () => {

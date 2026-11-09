@@ -95,7 +95,7 @@ Preview configuration: `:default-value="['22:00:00', '06:00:00']"`, `show-next-d
 
 ## Reading direction
 
-Range values remain `[start, end]`; direction changes preserve endpoint order, drafts and overnight semantics. Panels and time columns follow reading order, with visual Left/Right focus movement across endpoint columns. Cedar Up/Down moves focus and Enter/Space selects; Maple retains wheel selection with Up/Down. Existing confirmation settings control submission. Popovers inherit their source direction.
+Range values stay `[start, end]`. LTR/RTL changes affect layout without swapping endpoints or changing cross-day meaning. Time columns and start/end panels follow reading order. Left/Right moves focus visually, including across endpoints. Cedar Up/Down moves focus and Enter/Space selects; Maple Up/Down retains wheel selection semantics. Existing draft/confirmation configuration is preserved, and popovers inherit source field direction.
 
 ## API
 
@@ -111,12 +111,12 @@ The panel owns one draft/confirmation state, reused by its presentation. Example
 - `extra`: additional explanatory content.
 - `actions({ confirm, canConfirm, value })`: replace default tools. `value` is the draft; call `confirm()` to commit and disable buttons according to `canConfirm`.
 
-Single-time events carry formatted strings and Date objects; range events carry corresponding arrays. Pure panels no longer emit `open-change`, `update:open` or `clear`.
+Single-time events carry formatted strings and Date objects; range events carry corresponding arrays. Use field `open-change` and `update:open` to manage the popup, and field `clear` for clearing the value.
 
 
-### Props
+### TimeRangePicker Props
 
-| Arguments | Description | Type | Default |
+| Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `model-value` | Bound value | `(string \| number \| Date)[]` | `-` |
 | `format` | Display format | `string` | `-` |
@@ -126,3 +126,13 @@ Single-time events carry formatted strings and Date objects; range events carry 
 | `disable-confirm` | Skip confirmation | `boolean` | `false` |
 | `disabled` | Disable interaction | `boolean` | `false` |
 | `step` | Hour/minute/second steps | `object` | `-` |
+
+## CSS Variables
+
+<!-- component-css-variables:start -->
+
+This component declares no independent public CSS variables. Use the configuration and layout APIs documented on this page. The appearance of composed controls follows the public variables of `time`; a shared variable can affect other controls in the same DOM subtree.
+
+Internal custom properties and measurement values are implementation details and are not customization APIs.
+
+<!-- component-css-variables:end -->

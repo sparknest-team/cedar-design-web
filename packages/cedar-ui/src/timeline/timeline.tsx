@@ -1,18 +1,15 @@
 import { timelineProps } from "./props";
 import {
   defineComponent,
-  PropType,
   provide,
   reactive,
   computed,
   toRefs,
 } from "vue";
 import { getPrefixCls, createNamespace } from "../_utils/global-config";
-import type { ModeType, LabelPositionType } from "./types";
 import { timelineInjectionKey } from "./context";
 import Item from "./Item.vue";
 import Loading from "../loading";
-import { Orientation } from "../_utils/constant";
 import { useChildrenComponents } from "../_hooks/use-children-components";
 
 const { name } = createNamespace("timeline");
@@ -31,9 +28,6 @@ export default defineComponent({
    */
   setup(props, { slots }) {
     const prefixCls = getPrefixCls("timeline");
-    const hasPending = computed(() => {
-      return props.pending || slots.pending;
-    });
     const { children, components } = useChildrenComponents(Item.name!);
     const {
       reverse: reverseRef,
@@ -63,15 +57,15 @@ export default defineComponent({
     });
 
     return () => {
-      if (hasPending.value) {
-        children.value = slots.default?.().concat(
+      if (props.pending || slots.pending) {
+        children.value = (slots.default?.() ?? []).concat(
           <Item
             v-slots={{
               dot: () => slots.dot?.() ?? <Loading size={12} />,
             }}
             lineType="dashed"
           >
-            {props.pending !== true && <div>{props.pending}</div>}
+            {slots.pending ? slots.pending() : props.pending !== true && <div>{props.pending}</div>}
           </Item>,
         );
       } else {

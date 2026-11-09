@@ -8,6 +8,7 @@ const originals = globals.map((name) => Object.getOwnPropertyDescriptor(globalTh
 const owners: Array<ReturnType<typeof mount>> = []
 const InputStub = defineComponent({ render: () => h('input') })
 let cooldownCalls: () => number
+let timeoutDescriptor: PropertyDescriptor | undefined
 
 function setDependency(name: typeof globals[number], value: unknown) {
   Object.defineProperty(globalThis, name, { configurable: true, writable: true, value })
@@ -27,6 +28,7 @@ function expectNoMapWork(wrapper: ReturnType<typeof mount>) {
 }
 
 beforeEach(() => {
+  timeoutDescriptor = Object.getOwnPropertyDescriptor(globalThis, 'setTimeout')
   vi.useFakeTimers()
   // Runner/dependency timers are not Map's two cooldown policies.
   const timer = vi.spyOn(globalThis, 'setTimeout')
@@ -39,6 +41,7 @@ afterEach(() => {
   vi.clearAllTimers()
   vi.restoreAllMocks()
   vi.useRealTimers()
+  if (timeoutDescriptor) Object.defineProperty(globalThis, 'setTimeout', timeoutDescriptor)
   globals.forEach((name, index) => {
     const descriptor = originals[index]
     if (descriptor) Object.defineProperty(globalThis, name, descriptor)
@@ -90,6 +93,23 @@ describe('Map missing-SDK fallback (not SDK lifecycle acceptance)', () => {
     wrapper.unmount()
     vi.advanceTimersByTime(1000)
     await settle()
+    expectNoMapWork(wrapper)
+  })
+
+  test('reflects a replaced model when the SDK is unavailable', async () => {
+    const wrapper = mount(MapComponent, { props: { modelValue: { address: 'Old' } } })
+    owners.push(wrapper)
+    expect(wrapper.find('.poi-address span').text()).toBe('Old')
+    await wrapper.setProps({ modelValue: { address: 'New' } })
+    expect(wrapper.find('.poi-address span').text()).toBe('New')
+    expectNoMapWork(wrapper)
+  })
+
+  test('updates the address when aliases change in fallback mode', async () => {
+    const wrapper = mount(MapComponent, { props: { modelValue: { address: 'Old', label: 'New' } } })
+    owners.push(wrapper)
+    await wrapper.setProps({ valueKeyAlias: { address: 'label' } })
+    expect(wrapper.find('.poi-address span').text()).toBe('New')
     expectNoMapWork(wrapper)
   })
 

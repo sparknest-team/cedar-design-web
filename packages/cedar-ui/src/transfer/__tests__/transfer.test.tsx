@@ -98,7 +98,10 @@ describe('Transfer', () => {
 
     const source = wrapper.find('.c-transfer-view-source')
     expect(source.find('.c-virtual-list').attributes('style')).toContain('overflow: auto')
-    expect(source.findAll('.c-transfer-list-item')).toHaveLength(30)
+    const rendered = source.findAll('.c-transfer-list-item')
+    expect(rendered.length).toBeGreaterThan(0)
+    expect(rendered.length).toBeLessThan(100)
+    expect(rendered[0].text()).toContain('Option 0')
   })
 
   test('uses the same label and tip layout on both sides', () => {

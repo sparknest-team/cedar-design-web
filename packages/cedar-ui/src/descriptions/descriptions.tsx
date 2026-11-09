@@ -1,12 +1,12 @@
 import type { VNode, CSSProperties } from 'vue'
-import { computed, defineComponent, isVNode, toRefs } from 'vue'
+import { computed, defineComponent, isVNode, toRefs, useId } from 'vue'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
 import { isFunction, isObject } from '../_utils/is'
 import { DescData, RenderData } from './types'
 import { getAllElements, isSlotsChildren } from '../_utils/vue-utils'
 import { useResponsiveState } from '../grid/hook/use-responsive-state'
 import { useSize } from '../_hooks/use-size'
-import { descriptionsProps } from './props'
+import { descriptionsProps, isPositiveInteger } from './props'
 
 
 const { name } = createNamespace('descriptions')
@@ -40,7 +40,10 @@ export default defineComponent({
     const prefixCls = getPrefixCls('descriptions')
     const { mergedSize } = useSize(size)
 
-    const computedColumn = useResponsiveState(column, 3, true)
+    const safeColumn = computed(() => typeof column.value === 'number' || (column.value && typeof column.value === 'object') ? column.value : 3)
+    const responsiveColumn = useResponsiveState(safeColumn, 3, true)
+    const computedColumn = computed(() => isPositiveInteger(responsiveColumn.value) ? responsiveColumn.value : 3)
+    const titleId = `descriptions-title-${useId()}`
 
     const labelAlign = computed(() => (isObject(props.align) ? props.align.label : props.align) ?? 'left')
     const valueAlign = computed(() => (isObject(props.align) ? props.align.value : props.align) ?? 'left')
@@ -55,12 +58,14 @@ export default defineComponent({
       ...props.valueStyle,
     }))
 
-    const getItemSpan = (item: DescData | VNode) =>
-      Math.min((isVNode(item) ? item.props?.span : item.span) ?? 1, computedColumn.value)
+    const getItemSpan = (item: DescData | VNode) => {
+      const span = isVNode(item) ? item.props?.span : item.span
+      return Math.min(isPositiveInteger(span) ? span : 1, computedColumn.value)
+    }
 
     const getGroupedData = (data: (DescData | VNode)[]) => {
       if (props.layout === 'inline-auto') {
-        return [data.map((item) => ({ data: item, span: getItemSpan(item) }))]
+        return [data.map((item, index) => ({ data: item, span: getItemSpan(item), index }))]
       }
 
       const groupedData: RenderData[][] = []
@@ -76,7 +81,7 @@ export default defineComponent({
         }
       }
 
-      data.forEach((item) => {
+      data.forEach((item, index) => {
         const itemSpan = getItemSpan(item)
 
         // add item to new row
@@ -90,6 +95,7 @@ export default defineComponent({
         currentRow.push({
           data: item,
           span: itemSpan,
+          index,
         })
         currentSpan += itemSpan
       })
@@ -130,7 +136,7 @@ export default defineComponent({
               style={labelStyle.value}
               colspan={item.span}
             >
-              {renderLabel(item.data, index)}
+              {renderLabel(item.data, item.index)}
             </th>
           ))}
         </tr>
@@ -142,7 +148,7 @@ export default defineComponent({
               style={valueStyle.value}
               colspan={item.span}
             >
-              {renderValue(item.data, index)}
+              {renderValue(item.data, item.index)}
             </td>
           ))}
         </tr>
@@ -154,14 +160,14 @@ export default defineComponent({
         {data.map((item) => (
           <>
             <th scope="row" class={[`${prefixCls}-item-label`, `${prefixCls}-item-label-block`]} style={labelStyle.value}>
-              {renderLabel(item.data, index)}
+              {renderLabel(item.data, item.index)}
             </th>
             <td
               class={[`${prefixCls}-item-value`, `${prefixCls}-item-value-block`]}
               style={valueStyle.value}
               colspan={item.span * 2 - 1}
             >
-              {renderValue(item.data, index)}
+              {renderValue(item.data, item.index)}
             </td>
           </>
         ))}
@@ -173,10 +179,10 @@ export default defineComponent({
         {data.map((item, index) => (
           <td key={`item-${index}`} class={`${prefixCls}-item`} colspan={item.span}>
             <div class={[`${prefixCls}-item-label`, `${prefixCls}-item-label-inline`]} style={labelStyle.value}>
-              {renderLabel(item.data, index)}
+              {renderLabel(item.data, item.index)}
             </div>
             <div class={[`${prefixCls}-item-value`, `${prefixCls}-item-value-inline`]} style={valueStyle.value}>
-              {renderValue(item.data, index)}
+              {renderValue(item.data, item.index)}
             </div>
           </td>
         ))}
@@ -208,7 +214,7 @@ export default defineComponent({
     const renderTitle = () => {
       const title = slots.title?.() ?? props.title
       if (title) {
-        return <div class={`${prefixCls}-title`}>{title}</div>
+        return <div id={slots.title ? titleId : undefined} class={`${prefixCls}-title`}>{title}</div>
       }
       return null
     }
@@ -220,7 +226,7 @@ export default defineComponent({
         <div class={cls.value}>
           {renderTitle()}
           <div class={`${prefixCls}-body`}>
-            <table class={`${prefixCls}-table`} aria-label={props.ariaLabel ?? props.title}>
+            <table class={`${prefixCls}-table`} aria-label={props.ariaLabel ?? (slots.title ? undefined : props.title)} aria-labelledby={props.ariaLabel == null && slots.title ? titleId : undefined}>
               <tbody>{_groupedData.map((data, index) => renderItems(data, index))}</tbody>
             </table>
           </div>

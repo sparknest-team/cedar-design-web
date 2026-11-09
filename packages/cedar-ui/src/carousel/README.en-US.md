@@ -178,6 +178,22 @@ Preview configuration: `keyboard`.
 
 <demo src="./__demos__/scheduler-lifecycle.vue"></demo>
 
+## Usage notes
+
+### Looping and autoplay
+
+Each slide always has one component instance. Ordinary previous/next navigation recycles positions after the departing slide exits. Multi-slide or centered jumps that would require one slide in two positions settle immediately without animation, cloning interactive content or queuing unlimited transitions. Fewer items than visible slides are not cloned to fill space. Accessible names follow global Locale; explicit label props take precedence.
+
+Native root listeners such as `keydown`, `mouseenter`, `mouseleave`, `focusin` and `focusout` run alongside internal navigation and autoplay pause handling. Native `.once` listeners fire once for the root element lifetime.
+
+`space-between` also accepts valid CSS lengths such as percentages and `calc()`. Multi-slide layout uses unscaled CSS pixels, so ancestor scaling does not change the gap-to-slide proportion.
+
+If a focused slide becomes inaccessible through navigation or removal, focus moves to the carousel container. Focus in a still-visible slide or outside the carousel is preserved. The container is programmatically focusable but is not in the Tab order unless `keyboard` is enabled; an explicit `tabindex` remains under caller control.
+
+The autoplay example sets `auto-play=false` on focus entry and provides an external switch for an explicit restart. The component itself only pauses temporarily while focus is inside; playback resumes on blur. This differs from the WAI-ARIA APG recommendation to stop on focus until the user explicitly restarts, and is not a claim of full APG conformance; applications requiring that behavior should control playback state. Reduced motion disables transitions but does not by itself stop automatic navigation.
+
+Slide numbers start at 1; finite fractions are truncated toward zero and then wrapped or clamped according to `loop`. Finite `move-speed` values use non-negative milliseconds; non-finite values use the CSS transition duration. The root is a named region and default indicator buttons have localized slide names and current state; their container has no separate group name. `line` and `slider` share the same default bar dimensions; `slider` can grow into available container space and is not draggable.
+
 ## API
 
 ### Value and default value
@@ -223,19 +239,19 @@ loop moves existing children across boundaries without cloning component instanc
 
 auto-play=true uses 3000ms and pauses on hover; a number sets milliseconds without hover pausing; an object configures interval/hoverToPause. Focus within, dragging, hidden documents/ancestors and KeepAlive deactivation always pause playback. Reduced-motion preferences are respected. Interactive children such as inputs/buttons keep native behavior; mark custom interactive areas with data-carousel-no-drag. show-arrow=hover also shows arrows on keyboard focus.
 
-### Events
+### Carousel Events
 | Event | Arguments |
 | --- | --- |
 | update:model-value | slideNumber: number |
 | change | slideNumber: number, previousSlideNumber: number, isManual: boolean |
 
-### Slots
-| Slot | Arguments |
+### Carousel Slots
+| Slot | Prop |
 | --- | --- |
 | default | CarouselItem |
 | prev / next / indicator | { slideNumber, length, hovering, prev, next, to, resize } |
 
-### Methods
+### Carousel Methods
 | Method | Signature |
 | --- | --- |
 | prev / next | (options?: CarouselToOptions) => void |
@@ -244,42 +260,56 @@ auto-play=true uses 3000ms and pauses on hover; a number sets milliseconds witho
 
 CarouselItem has no own props, events or methods. Its default slot supplies slide content.
 
-### Types
+## Types
 CarouselProps, CarouselItemProps, CarouselInstance, CarouselItemInstance, CarouselEmits, CarouselSlots, CarouselItemSlots, CarouselExpose, CarouselSlotScope, CarouselToOptions, CarouselChangeData, CarouselOrientation, CarouselEffect, CarouselAutoPlayConfig, CarouselArrowType, CarouselIndicatorType, CarouselIndicatorPosition, CarouselTriggerEvent.
 
-### Style variables
+## CSS Variables
 
-| Token | Default |
-| --- | --- |
-| `--c-carousel-indicator-dot-size` | `8px` |
-| `--c-carousel-indicator-position` | `var(--c-sys-space-4)` |
-| `--c-carousel-indicator-gap` | `var(--c-sys-space-3)` |
-| `--c-carousel-indicator-color-default` | `rgb(255 255 255 / 35%)` |
-| `--c-carousel-indicator-color-active` | `var(--c-sys-color-content-on-dark)` |
-| `--c-carousel-indicator-outer-margin-bottom` | `var(--c-sys-space-8)` |
-| `--c-carousel-indicator-line-width` | `20px` |
-| `--c-carousel-indicator-line-height` | `3px` |
-| `--c-carousel-indicator-line-border-radius` | `var(--c-sys-radius-sm)` |
-| `--c-carousel-arrow-size` | `var(--c-sys-control-height-md)` |
-| `--c-carousel-arrow-font-size` | `var(--c-sys-font-size-xl)` |
-| `--c-carousel-arrow-margin` | `var(--c-sys-space-4)` |
-| `--c-carousel-arrow-color` | `var(--c-sys-color-content-on-dark)` |
-| `--c-carousel-arrow-background` | `rgb(0 0 0 / 35%)` |
-| `--c-carousel-arrow-background-hover` | `rgb(0 0 0 / 55%)` |
-| `--c-carousel-arrow-disabled-opacity` | `0.4` |
-| `--c-carousel-navigation-z-index` | `10` |
-| `--c-carousel-transition-duration` | `var(--c-sys-motion-duration-standard)` |
-| `--c-carousel-transition-timing-function` | `ease` |
-| `--c-carousel-fade-duration` | `var(--c-sys-motion-duration-standard)` |
-| `--c-carousel-card-duration` | `var(--c-sys-motion-duration-standard)` |
-| `--c-carousel-card-scale` | `0.85` |
-| `--c-carousel-card-opacity` | `0.6` |
-| `--c-carousel-focus-width` | `2px` |
-| `--c-carousel-focus-offset` | `2px` |
-| `--c-carousel-focus-color` | `var(--c-sys-color-content-brand)` |
+<!-- component-css-variables:start -->
 
-### Loop transition boundaries
+Use these variables to customize the component. Defaults may vary by the selector condition shown. Each variable applies to the corresponding size, variant and interaction states.
 
-Each slide always has one component instance. Ordinary previous/next navigation recycles positions after the departing slide exits. Multi-slide or centered jumps that would require one slide in two positions settle immediately without animation, cloning interactive content or queuing unlimited transitions. Fewer items than visible slides are not cloned to fill space. Accessible names follow global Locale; explicit label props take precedence.
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
-Native root listeners such as `keydown`, `mouseenter`, `mouseleave`, `focusin` and `focusout` run alongside internal navigation and autoplay pause handling. Native `.once` listeners fire once for the root element lifetime.
+| Variable | Default / condition | Affected styles |
+| --- | --- | --- |
+| `--c-carousel-arrow-background` | `rgb(0 0 0 / 35%)` | `background` |
+| `--c-carousel-arrow-background-hover` | `rgb(0 0 0 / 55%)` | `background` |
+| `--c-carousel-arrow-color` | `var(--c-sys-color-content-on-dark)` | `color` |
+| `--c-carousel-arrow-disabled-opacity` | `0.4` | `opacity` |
+| `--c-carousel-arrow-font-size` | `var(--c-sys-font-size-xl)` | `font-size` |
+| `--c-carousel-arrow-margin` | `var(--c-sys-space-4)` | `bottom`, `left`, `right`, `top` |
+| `--c-carousel-arrow-size` | `var(--c-sys-control-height-md)` | `height`, `width` |
+| `--c-carousel-card-duration` | `var(--c-sys-motion-duration-standard)` | `transition` |
+| `--c-carousel-card-opacity` | `0.6` | `opacity` |
+| `--c-carousel-card-scale` | `0.85` | `transform` |
+| `--c-carousel-fade-duration` | `var(--c-sys-motion-duration-standard)` | `transition` |
+| `--c-carousel-focus-color` | `var(--c-sys-color-content-brand)` | `outline` |
+| `--c-carousel-focus-offset` | `2px` | `outline-offset` |
+| `--c-carousel-focus-width` | `2px` | `outline` |
+| `--c-carousel-indicator-color-active` | `var(--c-sys-color-content-on-dark)` | `background` |
+| `--c-carousel-indicator-color-default` | `rgb(255 255 255 / 35%)` | `background` |
+| `--c-carousel-indicator-dot-size` | `8px` | `height`, `width` |
+| `--c-carousel-indicator-gap` | `var(--c-sys-space-3)` | `gap` |
+| `--c-carousel-indicator-line-border-radius` | `var(--c-sys-radius-sm)` | `border-radius` |
+| `--c-carousel-indicator-line-height` | `3px` | `height` |
+| `--c-carousel-indicator-line-width` | `20px` | `width` |
+| `--c-carousel-indicator-outer-margin-bottom` | `var(--c-sys-space-8)` | `padding-bottom` |
+| `--c-carousel-indicator-position` | `var(--c-sys-space-4)` | `bottom`, `left`, `right`, `top` |
+| `--c-carousel-navigation-z-index` | `10` | `z-index` |
+| `--c-carousel-transition-duration` | `var(--c-sys-motion-duration-standard)` | `transition` |
+| `--c-carousel-transition-timing-function` | `ease` | `transition` |
+
+</div>
+
+Apply overrides to the rendered component root or the actual popup ancestor. For example, add the following class to that element and replace the value as needed:
+
+```css
+.component-theme {
+  --c-carousel-arrow-background: rgb(0 0 0 / 35%);
+}
+```
+
+Explicit inline styles and props that write the same CSS property take precedence over stylesheet defaults. After Teleport, ordinary CSS variables inherit from the actual mount location. When using ThemeProvider, follow its local-theme and popup configuration rules. Override the component variable directly for local styling; root-level aliases are not recalculated merely because a descendant system variable changes. Internal variables are not public APIs.
+
+<!-- component-css-variables:end -->

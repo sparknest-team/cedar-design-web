@@ -7,7 +7,11 @@
   background-color: var(~'--c-menu-bg');
   border: 1px solid var(~'--c-menu-border-color');
   border-radius: var(~'--c-menu-border-radius');
-  box-shadow: var(~'--c-menu-box-shadow');
+  &:not(&-no-elevation):not(&-custom-elevation) {
+    box-shadow: var(~'--c-menu-box-shadow');
+  }
+
+  &-no-elevation { box-shadow: none; }
 
   &-list {
     margin-top: 0;
@@ -38,6 +42,11 @@
     text-align: start;
     background-color: var(~'--c-menu-option-bg');
     cursor: pointer;
+
+    &-size-xs { line-height: var(--c-size-6); font-size: var(--c-font-size-body-1); }
+    &-size-sm { line-height: var(--c-size-8); font-size: var(--c-font-size-body-2); }
+    &-size-lg { line-height: var(--c-size-10); font-size: var(--c-font-size-body-3); }
+    &-size-xl { line-height: var(--c-size-12); font-size: var(--c-font-size-title-1); }
 
     &-content {
       .text-ellipsis();

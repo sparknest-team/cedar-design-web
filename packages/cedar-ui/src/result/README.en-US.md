@@ -66,7 +66,7 @@ Preview configuration: `title="This is title content"`, `subtitle="This is subti
 
 ## API
 
-### `<result>` Props
+### Result Props
 
 | Parameter | Description | Type | Default |
 | -------- | ---------------- | -------------------------------------------------------------------------------- | :------: |
@@ -76,9 +76,9 @@ Preview configuration: `title="This is title content"`, `subtitle="This is subti
 | image-size | Status graphic size; numbers are px | `string \| number` | `-` |
 | animation | Whether status-graphic animation is enabled | `boolean` | `true` |
 
-### `<result>` Slots
+### Result Slots
 
-| Slot | Description | Arguments | Version |
+| Slot | Description | Prop | Version |
 | -------- | :------: | ---- | :---- |
 | icon | Custom status graphic | `{ size?: string }` |  |
 | title | Title | - |  |
@@ -86,10 +86,61 @@ Preview configuration: `title="This is title content"`, `subtitle="This is subti
 | extra | Actions | - | 2.8.0 |
 | default | Default slot | - | 2.8.0 |
 
-### Type definitions
+## Types
 
 The component exports the following types
 
 ```ts
 import type { ResultInstance } from '@cedar-design/ui'
 ```
+
+## CSS Variables
+
+<!-- component-css-variables:start -->
+
+Use these variables to customize the component. Defaults may vary by the selector condition shown. Each variable applies to the corresponding size, variant and interaction states.
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| Variable | Default / condition | Affected styles |
+| --- | --- | --- |
+| `--c-result-background` | `var(--c-color-bg-white)` | `background-color` |
+| `--c-result-border-radius` | `var(--c-border-radius-md)` | `border-radius` |
+| `--c-result-content-margin` | `var(--c-spacing-8) 0 0` | `margin` |
+| `--c-result-danger-border-color` | `var(--c-color-danger-light-3)` | `border-color` |
+| `--c-result-danger-color` | `var(--c-sys-color-content-danger)` | `fill` |
+| `--c-result-empty-border-color` | `rgb(var(--c-gray-2))` | `border-color` |
+| `--c-result-empty-color` | `rgb(var(--c-gray-5))` | `fill` |
+| `--c-result-extra-margin` | `var(--c-spacing-8) 0 0` | `margin` |
+| `--c-result-image-size` | `80px` | `border`, `height`, `width` |
+| `--c-result-info-border-color` | `var(--c-color-primary-light-3)` | `border-color` |
+| `--c-result-info-color` | `var(--c-color-info)` | `fill` |
+| `--c-result-padding` | `var(--c-spacing-10)` | `padding` |
+| `--c-result-question-border-color` | `rgb(var(--c-gray-2))` | `border-color` |
+| `--c-result-question-color` | `rgb(var(--c-gray-6))` | `fill` |
+| `--c-result-subtitle-color` | `var(--c-color-text-2)` | `color` |
+| `--c-result-subtitle-font-size` | `var(--c-font-size-body-3)` | `font-size` |
+| `--c-result-subtitle-line-height` | `1.5715` | `line-height` |
+| `--c-result-subtitle-margin` | `var(--c-spacing-4) 0 0` | `margin` |
+| `--c-result-success-border-color` | `var(--c-color-success-light-3)` | `border-color` |
+| `--c-result-success-color` | `var(--c-sys-color-content-success)` | `fill` |
+| `--c-result-title-color` | `var(--c-color-text-1)` | `color` |
+| `--c-result-title-font-size` | `var(--c-font-size-title-1)` | `font-size` |
+| `--c-result-title-font-weight` | `var(--c-font-weight-500)` | `font-weight` |
+| `--c-result-title-margin` | `var(--c-spacing-7) 0 0` | `margin` |
+| `--c-result-warning-border-color` | `var(--c-color-warning-light-3)` | `border-color` |
+| `--c-result-warning-color` | `var(--c-sys-color-content-warning)` | `fill` |
+
+</div>
+
+Apply overrides to the rendered component root or the actual popup ancestor. For example, add the following class to that element and replace the value as needed:
+
+```css
+.component-theme {
+  --c-result-background: var(--c-color-bg-white);
+}
+```
+
+Explicit inline styles and props that write the same CSS property take precedence over stylesheet defaults. After Teleport, ordinary CSS variables inherit from the actual mount location. When using ThemeProvider, follow its local-theme and popup configuration rules. Override the component variable directly for local styling; root-level aliases are not recalculated merely because a descendant system variable changes. Internal variables are not public APIs.
+
+<!-- component-css-variables:end -->

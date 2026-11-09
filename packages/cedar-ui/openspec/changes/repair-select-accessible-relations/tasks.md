@@ -1,0 +1,3 @@
+- [x] Reproduce missing relationships in both array, slot and virtual candidates.
+- [x] Add scoped IDs, native focus relationships and semantic groups.
+- [x] Verify all affected consumers, browsers, types, styles and source gates.

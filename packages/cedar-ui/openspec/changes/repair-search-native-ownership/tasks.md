@@ -1,0 +1,4 @@
+- [x] Reproduce identity, loading and label failures on both platforms.
+- [x] Implement shared private input ownership and existing notification contracts.
+- [x] Validate focused and all affected Input/Search consumers, public types and real browser form semantics.
+- [x] Reconcile same-source checks, examples, bilingual generation and required gates.

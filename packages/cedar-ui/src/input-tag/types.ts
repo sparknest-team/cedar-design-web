@@ -1,5 +1,5 @@
-import { TagProps } from '../tag'
 import { FieldString } from '../_utils/types'
+import { TagProps } from '../tag'
 
 export interface TagData {
   /**
@@ -33,4 +33,21 @@ export interface TagDataInfo extends TagData {
   value: string | number
   label: string
   closable: boolean
+}
+
+export type InputTagValue = (string | number | TagData)[] | null
+export type InputTagEmits = {
+  [Event in keyof typeof import('./emits').inputTagEmits]: Parameters<(typeof import('./emits').inputTagEmits)[Event]>
+}
+export interface InputTagSlots {
+  prefix?: () => import('vue').VNodeChild
+  suffix?: () => import('vue').VNodeChild
+  tag?: (scope: { data: TagData }) => import('vue').VNodeChild
+  'clear-icon'?: (scope: { clear(event?: Event): void }) => import('vue').VNodeChild
+  read?: (scope: { value: InputTagValue; text: string }) => import('vue').VNodeChild
+}
+export interface InputTagExpose {
+  inputRef: HTMLInputElement | undefined
+  focus(): void
+  blur(): void
 }

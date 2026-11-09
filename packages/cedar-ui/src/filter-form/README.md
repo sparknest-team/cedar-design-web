@@ -77,19 +77,56 @@ const fields: FilterFormField[] = [
 
 使用普通 `v-model`。`modelValue` 表示筛选字段对象；`defaultValue` 仅在创建时初始化非受控值，后续修改不会重置当前状态。显式绑定值优先，初始化不发出 `update:modelValue`。
 
+输入后先更新内部镜像，再通知父级。父级未接收更新时，界面仍保留本次输入；后续不同的外部模型会替换镜像。`collapsed` 同样先更新内部折叠状态再通知父级，并接受后续外部变化。需要业务拒绝输入时，应显式回写新的模型对象。
+
 ### FilterForm Props
 
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| model-value **(v-model)** | 表单值 | `Record<string, unknown>` | `{}` |
+| model-value **(v-model)** | 表单值；未传入时使用 default-value | `Record<string, unknown>` | `undefined` |
+| default-value | 仅创建时读取的初始值 | `Record<string, unknown>` | `{}` |
 | fields | 筛选项 schema | `FilterFormField[]` | `[]` |
 | field-map | 可选字段组件注册表 | `FilterFormFieldMap` | `{}` |
 | rules | 透传 Form 校验规则 | object | - |
 | collapsed **(v-model)** | 是否折叠多余项 | boolean | `true` |
 | collapsible | 是否启用展开/收起 | boolean | `true` |
 | cols | 响应式列数 | number \| object | `{ xs:1, sm:2, md:3, lg:3, xl:4, xxl:5 }` |
-| grid-props | Grid 其余属性 | object | - |
-| change-debounce | change 防抖毫秒 | number | `500` |
+| grid-props | 透传 Grid 属性，优先于容器给出的同名配置 | `Record<string, unknown>` | - |
+| change-debounce | change 防抖毫秒；0 立即通知，非有限数或负数回退 500 | number | `500` |
+
+### FilterFormFieldRegistration Events
+
+| 事件名 | 说明 | 参数 |
+| --- | --- | --- |
+| update:model-value | 输入时即时同步值快照 | `(value: Record<string, unknown>) => void` |
+| update:collapsed | 本地展开/收起通知 | `(collapsed: boolean) => void` |
+| change | 输入防抖、回车即时通知；autoEmitChange=false 时由失焦或回车通知 | `(value: Record<string, unknown>, field: string) => void` |
+
+事件仅作通知，不收集 Promise，也不驱动加载状态。
+
+### FilterFormFieldRegistration Slots
+
+| 插槽名 | 说明 |
+| --- | --- |
+| actions | 操作区（搜索 / 重置等），与展开收起同一行；没有作用域参数；collapsible=false 时仍可使用 |
+
+### FilterFormFieldRegistration Instance Properties
+
+| 属性 | 类型 | 说明 |
+| --- | --- | --- |
+| formRef | `FormInstance \| undefined` | 挂载后的内部 Form 实例，可调用 validate、clearValidate、resetFields 等 Form 方法 |
+
+`formRef` 是实例属性，不是方法。内部 Form 的 `resetFields` 恢复它记录的初始值，只影响内部模型，不发出 FilterForm 的 `update:modelValue` 或 `change`。整体重置筛选条件时，业务应替换绑定模型；例如：
+
+```ts
+const makeInitialModel = () => ({ keyword: '', createdAt: new Date() })
+const model = ref(makeInitialModel())
+const resetFilters = () => { model.value = makeInitialModel() }
+```
+
+在 `actions` 中使用 `type="button"` 的搜索或重置按钮，并在业务处理函数中操作模型、执行查询。容器没有额外的 reset/search 方法或任务执行入口。
+
+## Types
 
 ### FilterFormField
 
@@ -111,51 +148,15 @@ const fields: FilterFormField[] = [
 | component | 字段组件 | Component | - |
 | defaultProps | 默认 props | object | - |
 
-### Events
-
-| 事件名 | 说明 | 参数 |
-| --- | --- | --- |
-| update:model-value | v-model | `(value) => void` |
-| update:collapsed | 折叠状态变化 | `(collapsed) => void` |
-| change | 字段值变化（防抖） | `(value, field) => void` |
-
-### Slots
-
-| 插槽名 | 说明 |
-| --- | --- |
-| actions | 操作区（搜索 / 重置等），与展开收起同一行 |
-
-### Methods
-
-| 方法名 | 说明 |
-| --- | --- |
-| formRef | 内部 Form 实例 |
-
-## 样式变量
-
-| 变量名 | 默认值 |
-| --- | --- |
-| `--c-filter-form-border-radius` | `var(--c-border-radius-md)` |
-| `--c-filter-form-background-color` | `var(--c-sys-color-surface-default)` |
-| `--c-filter-form-padding` | `var(--c-sys-space-7)`（20px） |
-| `--c-filter-form-border-color` | `var(--c-sys-color-border-subtle)` |
-| `--c-filter-form-border-width` | `1px` |
-| `--c-filter-form-action-offset` | `calc(1em * var(--c-form-line-height) + var(--c-form-vertical-label-margin-bottom))` |
-| `--c-filter-form-item-margin-bottom` | `0px`（行距由Grid负责） |
-| `--c-filter-form-actions-gap` | `var(--c-sys-space-5)`（12px） |
-| `--c-filter-form-collapse-gap` | `4px` |
-| `--c-filter-form-collapse-color` | `var(--c-color-text-2)` |
-| `--c-filter-form-collapse-hover-color` | `var(--c-sys-color-content-brand)` |
-| `--c-filter-form-focus-width` | `2px` |
-| `--c-filter-form-focus-offset` | `3px` |
-
-2026-10-16 消费核验：真实 Less 编译与挂载 DOM 确认上述 13 项分别进入容器、FormItem、操作区和折叠按钮规则；静态样式入口同时导入 Form 样式。多列操作项的 `padding-top` 消费 action-offset，单列 stacked 状态覆盖为 `0`。根级派生别名不会保证随局部 Form 依赖覆盖重新计算，需要调整操作区对齐时直接在实际 FilterForm 根覆盖 `--c-filter-form-action-offset`。
-
-## 类型
+字段属性按注册表 `defaultProps`、字段 `props`、容器管理的 `modelValue` 顺序合并，后者优先。`gridItemProps` 直接透传 GridItem；`formItemProps` 可覆盖 FormItem 的 `field` 和 `label`，但不会改变模型写入使用的 schema `field` 路径。`grid-props` 也可覆盖 `cols`、`collapsed` 等同名 Grid 配置，配置时应避免与容器状态冲突。
 
 ```ts
 import type {
   FilterFormProps,
+  FilterFormInstance,
+  FilterFormEmits,
+  FilterFormSlots,
+  FilterFormExpose,
   FilterFormField,
   FilterFormFieldMap,
   FilterFormFieldRegistration,
@@ -165,3 +166,47 @@ import type {
 Grid 列间距通过 `grid-props.colGap`（数字 px）控制；没有同名 CSS 覆盖入口，以确保 Grid 的数值测量与实际间距一致。
 
 changeDebounce 改变时按新延迟重排待发送快照，0为立即通知。回车先取消待发送任务再通知当前值；外部重置或不同模型替换会取消旧快照，但正常接受 update:modelValue 的相同值回传不会取消 change。KeepAlive 停用与卸载取消待发送任务；重新激活后接受新输入。
+
+筛选模型使用与 Form 一致的数据快照复制策略。Date、普通对象和数组会独立复制；Map、Set、BigInt 和循环引用保留数据形态，不把日期转换成字符串或把集合变成空对象。事件接收方修改普通对象或 Date 快照，不会改动父模型或后续内部快照；Map 键等标识语义沿用现有 Form 策略。函数、DOM、WeakMap/WeakSet、Promise 和带私有状态的实例不属于可深隔离的筛选数据模型，不承诺复制其内部状态。
+
+field 支持与 FormItem 一致的点号及方括号路径。写入时自动创建缺失的中间对象，保留已有兄弟字段；需要数组型中间容器时，在 default-value 或 model-value 中预建数组。已有中间值须为对象或数组，不用输入操作覆盖不匹配的标量结构。模型同步及 change 的本地镜像、防抖和回传确认语义保持原有合同。
+
+## CSS Variables
+
+多列布局的操作区对齐可在 FilterForm 根节点覆盖 `--c-filter-form-action-offset`；单列 stacked 布局不增加顶部偏移。
+
+<!-- component-css-variables:start -->
+
+通过以下变量定制组件外观。默认值随表中注明的主题或选择器条件变化；变量仅在对应的尺寸、变体和交互状态下生效。
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| 变量 | 默认值／条件 | 影响的样式 |
+| --- | --- | --- |
+| `--c-filter-form-action-offset` | `calc(1em * var(--c-form-line-height) + var(--c-form-vertical-label-margin-bottom))` | `padding-top` |
+| `--c-filter-form-actions-gap` | `var(--c-sys-space-5)` | `gap` |
+| `--c-filter-form-background-color` | `var(--c-sys-color-surface-default)` | `background-color` |
+| `--c-filter-form-border-color` | `var(--c-sys-color-border-subtle)` | `border` |
+| `--c-filter-form-border-radius` | `var(--c-border-radius-md)` | `border-radius` |
+| `--c-filter-form-border-width` | `1px` | `border` |
+| `--c-filter-form-collapse-color` | `var(--c-color-text-2)` | `color` |
+| `--c-filter-form-collapse-gap` | `4px` | `gap` |
+| `--c-filter-form-collapse-hover-color` | `var(--c-sys-color-content-brand)` | `color`, `outline` |
+| `--c-filter-form-focus-offset` | `3px` | `outline-offset` |
+| `--c-filter-form-focus-width` | `2px` | `outline` |
+| `--c-filter-form-item-margin-bottom` | `0px` | `margin-bottom` |
+| `--c-filter-form-padding` | `var(--c-sys-space-7)` | `padding` |
+
+</div>
+
+将覆盖设置在组件实际根节点或弹层真实挂载祖先上。例如给该元素添加下列 class，再按需替换变量值：
+
+```css
+.component-theme {
+  --c-filter-form-actions-gap: var(--c-sys-space-5);
+}
+```
+
+显式行内样式及直接写入同一 CSS 属性的 Props 优先于样式表默认值。Teleport 后，普通 CSS 变量按实际挂载位置继承；使用 ThemeProvider 时，请遵循其局部主题与弹层配置规则。局部定制请直接覆盖组件变量；仅修改后代的 system 变量不会重新计算从根继承的组件别名。内部变量不属于公共 API。
+
+<!-- component-css-variables:end -->

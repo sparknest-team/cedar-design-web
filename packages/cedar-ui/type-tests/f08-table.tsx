@@ -1,6 +1,13 @@
 import Table, { defineTableConfig, type TypedTableColumn as SubColumn } from '@cedar-design/ui/table'
 import { defineTableConfig as rootDefineTableConfig } from '@cedar-design/ui'
-import type { TableProps, TableDataPath, TypedTableColumn, TypedTableConfig } from '@cedar-design/ui'
+import type { TableProps, TableDataPath, TypedTableColumn, TypedTableConfig, TableComponents, TableOperationColumn } from '@cedar-design/ui'
+import type { TableComponents as SubComponents, TableOperationColumn as SubOperationColumn } from '@cedar-design/ui/table'
+
+const operation: TableOperationColumn = { name: 'custom', render: row => String(row.key) }
+const operationFromSubpath: SubOperationColumn = operation
+const operations: TableComponents = { operations: ({ selection }) => selection ? [selection, operationFromSubpath] : [operation] }
+const operationsFromSubpath: SubComponents = operations
+void operationsFromSubpath
 
 interface User {
   id: string

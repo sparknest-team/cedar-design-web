@@ -110,6 +110,11 @@ export interface NotificationConfig {
    */
   closeIconElement?: RenderFunction
   /**
+   * @zh 关闭按钮的无障碍名称
+   * @en Accessible name for the close button
+   */
+  closeButtonAriaLabel?: string
+  /**
    * @zh 关闭时的回调函数
    * @en Callback function when closing
    * @param id
@@ -136,6 +141,7 @@ export interface NotificationItem {
   footer?: RenderFunction
   closeIcon?: RenderFunction
   closeIconElement?: RenderFunction
+  closeButtonAriaLabel?: string
   showIcon?: boolean
   closable?: boolean
   duration?: number

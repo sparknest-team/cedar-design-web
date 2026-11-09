@@ -1,0 +1,3 @@
+- [x] Reproduce explicit/default/update/cross-document container failures on both platforms.
+- [x] Remove the forced inline override and document the shared target contract.
+- [x] Verify both-platform tests, browser, actual demos and required gates.

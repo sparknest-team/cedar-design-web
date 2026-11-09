@@ -19,6 +19,7 @@ export default defineComponent({
       required: true,
     },
     active: Boolean,
+    expanded: Boolean,
     multiple: Boolean,
     checkStrictly: Boolean,
     searchOption: Boolean,
@@ -43,12 +44,25 @@ export default defineComponent({
       return task.finally(() => { if (token === request) isLoading.value = false })
     }
     const events = {
+      onFocusin: () => {
+        if (!props.option.disabled) cascaderCtx.setActiveKey?.(props.option.key)
+      },
       onMouseenter: (event: Event) => {
         if (props.option.disabled) return
         cascaderCtx.setActiveKey?.(props.option.key)
         if (cascaderCtx.expandTrigger === 'hover') return handlePathChange(event)
       },
-      onMouseleave: () => cascaderCtx.setActiveKey?.(),
+      onMouseleave: (event: MouseEvent) => {
+        const element = event.currentTarget as HTMLElement
+        const focused = element.ownerDocument.activeElement
+        const focusedOption = focused?.closest<HTMLElement>('[data-cascader-key]')
+        const panel = element.closest(`.${getPrefixCls('cascader')}-panel, .${getPrefixCls('cascader')}-editor-panel`)
+        if (focusedOption && (element.contains(focusedOption) || panel?.contains(focusedOption)) && focusedOption.getAttribute('aria-disabled') !== 'true') {
+          cascaderCtx.setActiveKey?.(focusedOption.dataset.cascaderKey)
+        } else {
+          cascaderCtx.setActiveKey?.()
+        }
+      },
       onClick: (event: Event) => {
         if (props.option.disabled) return
         const task = cascaderCtx.expandTrigger !== 'hover' || props.option.isLeaf || props.checkStrictly
@@ -105,9 +119,10 @@ export default defineComponent({
       <li
         tabindex="0"
         role="menuitem"
+        data-cascader-key={props.option.key}
         aria-disabled={props.option.disabled}
-        aria-haspopup={!props.option.isLeaf}
-        aria-expanded={!props.option.isLeaf && props.active}
+        aria-haspopup={!props.option.isLeaf && !props.searchOption ? 'menu' : undefined}
+        aria-expanded={!props.option.isLeaf && !props.searchOption ? props.expanded : undefined}
         title={props.option.label}
         class={cls.value}
         {...events}

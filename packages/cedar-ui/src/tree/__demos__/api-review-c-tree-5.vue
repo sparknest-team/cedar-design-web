@@ -91,7 +91,7 @@ const loadMore = (nodeData) => {
   return new Promise((resolve) => {
     setTimeout(() => {
       nodeData.children = [
-        { label: `leaf`, value: `${nodeData.key}-1`, isLeaf: true },
+        { label: `leaf`, value: `${nodeData.value}-1`, isLeaf: true },
       ];
       resolve();
     }, 1000);

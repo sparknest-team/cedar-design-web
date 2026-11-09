@@ -45,6 +45,48 @@ test('loadOptions and remote search share latest catalog ownership in the hook',
   f.searches[0].resolve({ items: [entry('old')] }); await old
   expect(f.manager.managerProps.value.options!.map((item: any) => item.dataIndex)).toEqual(['new'])
 })
+
+test('local catalog has precedence when a remote source is also supplied', async () => {
+  const search = vi.fn(async () => ({ items: [entry('remote')] }))
+  const resolve = vi.fn(async () => [entry('resolved')])
+  let manager!: ReturnType<typeof useTableColumnManager>
+  const owner = mount(defineComponent({ setup() {
+    manager = useTableColumnManager({ defaultColumns: [], columnDefinitions: [entry('local')], columnSource: { search, resolve } })
+    return () => h('div')
+  } })); owners.push(owner)
+  await manager.managerProps.value.loadOptions!()
+  await manager.managerProps.value.remoteSearch!('keyword')
+  expect(manager.managerProps.value.options).toEqual([entry('local')])
+  await manager.restore({ version: 2, items: [{ dataIndex: 'resolved' }] })
+  expect(resolve).toHaveBeenCalledWith(['resolved'])
+  expect(manager.managerProps.value.options).toEqual([entry('local'), entry('resolved')])
+})
+
+test('remote source search does not request additional cursor pages', async () => {
+  const search = vi.fn(async () => ({ items: [entry('first')], nextCursor: 'next', total: 2 }))
+  let manager!: ReturnType<typeof useTableColumnManager>
+  const owner = mount(defineComponent({ setup() {
+    manager = useTableColumnManager({ defaultColumns: [], columnSource: { search, resolve: async () => [] } })
+    return () => h('div')
+  } })); owners.push(owner)
+  await manager.managerProps.value.loadOptions!()
+  expect(search).toHaveBeenCalledTimes(1)
+  expect(search).toHaveBeenCalledWith({ keyword: '' })
+  expect(manager.managerProps.value.options).toEqual([entry('first')])
+})
+
+test('restore rejects a remote resolution failure without changing current columns', async () => {
+  const cause = new Error('resolve failed')
+  let manager!: ReturnType<typeof useTableColumnManager>
+  const owner = mount(defineComponent({ setup() {
+    manager = useTableColumnManager({ defaultColumns: [entry('original')], columnSource: {
+      search: async () => ({ items: [] }), resolve: async () => { throw cause },
+    } })
+    return () => h('div')
+  } })); owners.push(owner)
+  await expect(manager.restore({ version: 2, items: [{ dataIndex: 'missing' }] })).rejects.toBe(cause)
+  expect(manager.columns.value.map(column => column.dataIndex)).toEqual(['original'])
+})
 test('old restore resolution cannot replace a newer restored state', async () => {
   const f = harness(), old = f.manager.restore({ version: 2, items: [{ dataIndex: 'old' }] }), next = f.manager.restore({ version: 2, items: [{ dataIndex: 'new' }] })
   f.resolutions[1].resolve([entry('new')]); await next
@@ -92,9 +134,38 @@ test('rejected old loads cannot unlock current work and the current error remain
   const result = (owner.vm as any).loadCatalog().catch((error: Error) => error)
   const oldCause = new Error('old load'), cause = new Error('current load')
   rejectFirst(oldCause); await flushPromises()
-  expect(reported.mock.calls[0][0]).toBe(oldCause)
+  expect(reported).not.toHaveBeenCalled()
+  expect(owner.emitted('load-error')).toBeUndefined()
   expect(owner.findComponent(Transfer).props('disabled')).toBe(true)
   rejectSecond(cause); expect(await result).toBe(cause); await nextTick()
+  expect(owner.emitted('load-error')).toEqual([[cause, 'catalog']])
+  expect(owner.findComponent(Transfer).props('disabled')).toBe(false)
+})
+
+test('automatic catalog failure emits load-error and releases waiting state', async () => {
+  const cause = new Error('catalog failed')
+  const reported = vi.fn()
+  const owner = mount(Manager, { props: { inline: true, loadOptions: async () => { throw cause } }, global: { config: { errorHandler: reported } } }); owners.push(owner)
+  await flushPromises()
+  expect(owner.emitted('load-error')).toEqual([[cause, 'catalog']])
+  expect(owner.findComponent(Transfer).props('disabled')).toBe(false)
+  expect(reported).not.toHaveBeenCalled()
+})
+
+test('remote search reports only the latest failure and releases waiting state', async () => {
+  let rejectOld!: (error: Error) => void, rejectCurrent!: (error: Error) => void
+  const old = new Promise<void>((_, reject) => { rejectOld = reject })
+  const current = new Promise<void>((_, reject) => { rejectCurrent = reject })
+  const remoteSearch = vi.fn().mockReturnValueOnce(old).mockReturnValueOnce(current)
+  const owner = mount(Manager, { props: { inline: true, remoteSearch } }); owners.push(owner)
+  owner.findComponent(Transfer).vm.$emit('search', 'old', 'source')
+  owner.findComponent(Transfer).vm.$emit('search', 'new', 'source')
+  const cause = new Error('current search')
+  rejectOld(new Error('old search')); await flushPromises()
+  expect(owner.emitted('load-error')).toBeUndefined()
+  expect(owner.findComponent(Transfer).props('disabled')).toBe(true)
+  rejectCurrent(cause); await flushPromises()
+  expect(owner.emitted('load-error')).toEqual([[cause, 'search']])
   expect(owner.findComponent(Transfer).props('disabled')).toBe(false)
 })
 test('unmount prevents a catalog result or retained method from changing disposed state', async () => {

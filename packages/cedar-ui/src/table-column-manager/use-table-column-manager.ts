@@ -85,9 +85,9 @@ export const TableColumnManagerContextKey: InjectionKey<TableColumnManagerContex
 export interface UseTableColumnManagerOptions {
   /** Table 初次展示和重置使用的完整列。 */
   defaultColumns: MaybeRefOrGetter<ManagedTableColumn[]>
-  /** 本地弹窗候选列，与 columnSource 二选一；可以只包含 dataIndex/title。 */
+  /** 本地弹窗候选列；建议与 columnSource 二选一。同传时本地候选优先，远程 resolve 仍可用于恢复。 */
   columnDefinitions?: MaybeRefOrGetter<ColumnDefinitions | undefined>
-  /** 远程搜索与恢复反显数据源。 */
+  /** 远程搜索与恢复反显数据源；搜索每次仅读取一页，不自动消费 nextCursor。 */
   columnSource?: ColumnDefinitionSource
   /** 新添加普通列的默认 Table 属性。 */
   columnDefaults?: Partial<TableColumnData>

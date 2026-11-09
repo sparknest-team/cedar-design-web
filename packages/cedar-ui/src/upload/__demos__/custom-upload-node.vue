@@ -9,6 +9,6 @@ const files = ref<UploadFileItem[]>([
 
 <template>
   <c-upload v-model="files">
-    <template #trigger="{ chooseFile }"><c-button @click.stop="chooseFile">Choose documents</c-button></template>
+    <template #trigger="{ chooseFile, disabled }"><c-button :disabled="disabled" @click="chooseFile">Choose documents</c-button></template>
   </c-upload>
 </template>

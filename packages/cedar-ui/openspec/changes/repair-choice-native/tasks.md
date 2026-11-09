@@ -1,0 +1,3 @@
+- [x] Reproduce null slots, attrs/modifier ownership and keyboard/group cancellation on both platforms.
+- [x] Implement and verify native ownership with actual forms, labels, keyboard and controlled state.
+- [x] Validate both platforms, direct/deferred/group consumers, types/source/API/lint/spec/docs; keep remaining CB04/RA01 contract work pending.

@@ -106,7 +106,7 @@ permalink: /components/time-range-picker/
 单时间事件值为格式化字符串及 Date；范围事件值为对应数组。纯面板不再派发 `open-change`、`update:open` 或 `clear`。
 
 
-### Props
+### TimeRangePicker Props
 
 | 参数 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
@@ -118,3 +118,12 @@ permalink: /components/time-range-picker/
 | `disable-confirm` | 跳过确认 | `boolean` | `false` |
 | `disabled` | 禁用 | `boolean` | `false` |
 | `step` | 时分秒步长 | `object` | `-` |
+## CSS Variables
+
+<!-- component-css-variables:start -->
+
+本组件未声明独立的公共 CSS 变量。请使用本页公开的配置与布局入口。 组合控件的外观复用 `time` 的公共变量；共享变量可能同时影响同一 DOM 子树中的其他控件。
+
+内部自定义属性与测量中间值属于实现细节，不作为业务定制 API。
+
+<!-- component-css-variables:end -->

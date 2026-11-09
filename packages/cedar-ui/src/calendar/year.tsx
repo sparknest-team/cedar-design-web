@@ -6,6 +6,7 @@ import Month from './month'
 import useCellClassName from './hooks/useCellClassName'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
 import { useI18n } from '../locale'
+import { calendarKeyboardKey } from './keyboard'
 
 const MONTHS = [
   'January',
@@ -73,7 +74,8 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
+  setup(props, { slots }) {
+    const keyboard = inject(calendarKeyboardKey)
     // const {
     //   mergedPageShowDate,
     //   panel,
@@ -87,7 +89,7 @@ export default defineComponent({
       useCellClassName({
         prefixCls,
         mergedValue: props.value,
-        panel: false,
+        panel: props.panel,
         innerMode: props.mode,
         rangeValues: [],
         hoverRangeValues: [],
@@ -97,10 +99,10 @@ export default defineComponent({
     const { t } = useI18n()
     const showYear = computed(() => props.pageShowData.year())
 
-    const mg = props.panel ? monthGroupPanel : monthGroup
+    const mg = computed(() => props.panel ? monthGroupPanel : monthGroup)
     return () => (
       <div class={`${prefixCls}-year`}>
-        {mg.map((row, rowIndex) => (
+        {mg.value.map((row, rowIndex) => (
           <div class={`${prefixCls}-year-row`} key={rowIndex}>
             {row.map((col: any) => {
               const time = dayjs(`${showYear.value}-${padStart(col.value + 1, 2, '0')}-01`)
@@ -111,7 +113,7 @@ export default defineComponent({
               return (
                 <div key={col.value} class={getCellClassName.value({ ...col, time }, false)}>
                   {props.panel ? (
-                    <div class={`${prefixCls}-date`} {...divProps}>
+                    <div class={`${prefixCls}-date`} {...divProps} {...keyboard?.cell(time, 'month')}>
                       <div class={`${prefixCls}-date-value`}>{t(`calendar.month.short.${col.name}`)}</div>
                     </div>
                   ) : (
@@ -127,6 +129,7 @@ export default defineComponent({
                         current={col.value}
                         value={props.value}
                         mode={props.mode}
+                        v-slots={{ default: slots.default }}
                       />
                     </div>
                   )}

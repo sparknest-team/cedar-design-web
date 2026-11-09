@@ -2,7 +2,7 @@ import { withInstall } from '../_utils/global-config'
 import _Tree from './Tree.vue'
 import { treeProps } from './props'
 
-export type { TreeNodeData, TreeFieldNames, TreeNodeValue } from './types'
+export type { TreeNodeData, TreeFieldNames, TreeNodeValue, FilterTreeNode, CheckedStrategy, CheckableType, SelectableType, LoadMore, DropPosition } from './types'
 
 const Tree = withInstall(_Tree, Object.assign(_Tree, {
 }), { components: [_Tree] })

@@ -301,7 +301,7 @@ permalink: /components/select/
 
 <demo src="./__demos__/async-devices.vue"></demo>
 
-主体、控制器、选项算法与样式在两端独立维护；展示方式继承 Form/Item。完整对比示例集中在 Form 文档。
+编辑展示方式继承 Form / FormItem。完整对比示例见 Form 文档。
 
 未设置 disabled / error 时继承表单状态；显式 false 可以覆盖继承值。FieldDecorator 和 SelectionField 不重复注入表单上下文，focus / blur 由 Select 向表单分发一次。
 
@@ -335,7 +335,7 @@ permalink: /components/select/
 
 建议使用 `SelectTriggerOptions` 声明 trigger-props。open/defaultOpen、disabled 和展开更新归 Select 管理。popup-container 顶层明确传入时优先（包括 false），否则回退 triggerProps.popupContainer。其他属性保持现有顺序：Trigger 默认配置 → 顶层 auto-fit-popup-width / unmount-on-close → trigger-props；因此旧嵌套配置仍可覆盖后两项。此兼容阶段不改为“顶层永远优先”。内部展开监听继续执行，通知使用 Select 事件。
 
-本次仅新增可主动选用的专用类型，不收窄已发布的宽属性类型，不增加运行时过滤、不改变覆盖顺序；旧业务写法继续可编译。若直接使用旧宽属性，内部托管字段仍可能通过类型检查，但不代表能控制内部状态。
+建议使用本页列出的专用配置类型；展开状态、模型和事件由组件管理，不能通过嵌套配置接管。
 
 ```ts
 import type { SelectTriggerOptions } from "@cedar-design/ui";
@@ -372,63 +372,63 @@ open-trigger-target="icon" 时，输入区可以编辑或复制，只有右侧�
 
 单选和多选的已选行右侧均显示主色对勾；仅候选高亮时不显示对勾。click/dblclick 编辑面板内的对勾表示当前草稿选择，确认后才提交表单；禁用已选项保持禁用外观。
 
-### 清空值与 1.x 兼容性
+### 清空值
 
-`SelectValue` 包含 `undefined`。默认单选清空发出 `''`；当前候选中有 `value: ''` 时发出 `undefined`，用于区分清空与选中空字符串选项。此已发布行为保持不变，`change` 和 `update:modelValue` 均使用 `SelectValue` 类型。
+`SelectValue` 包含 `undefined`。默认单选清空发出 `''`；当前候选中有 `value: ''` 时发出 `undefined`，用于区分清空与选中空字符串选项。`change` 和 `update:modelValue` 均使用 `SelectValue` 类型。
 
 `empty-value` 指定清空输出；省略时保留原有默认值。单选可使用 `() => undefined` 明确返回 undefined；多选应返回符合模型形状的数组。存在不可清除的禁用选中项时，优先保留这些项，不执行清空覆盖。受控模式仍需父级接受更新。
 
 根入口与组件入口均导出 `SelectValue`、`SelectEmptyValue`。
 
-### Select 属性
+### Select Props
 
 分别使用 `v-model`、`v-model:open` 和 `v-model:input-value` 控制选中值、展开状态和搜索词。单选清空为 `''`，多选为 `[]`；Select 存在真实空字符串选项时，清空值为 `undefined`。
 
-| 属性                                          | 说明                                                                                                                    | 类型                                                        | 默认值                       |
+| 属性 | 说明 | 类型 | 默认值 |
 | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- | ---------------------------- |
-| `open-trigger-target`                         | 打开面板的点击区域；field 为整个字段，icon 仅右侧选择按钮。不影响键盘展开及受控 open。                                  | `'field' \| 'icon'`                                         | `'field'`                    |
-| `model-value / default-value`                 | 受控值 / 非受控初始值                                                                                                   | `Value`                                                     | `单选 ''，多选 []`           |
-| `open / default-open`                         | 受控展开 / 默认展开                                                                                                     | `boolean`                                                   | `undefined / false`          |
-| `input-value / default-input-value`           | 搜索文本，独立于选中值                                                                                                  | `string`                                                    | `undefined / ''`             |
-| `multiple`                                    | 多选；默认启用搜索                                                                                                      | `boolean`                                                   | `false`                      |
-| `size`                                        | 完整支持 xs、sm、md、lg、xl，未设置时继承分组与表单                                                                     | `ComponentSize`                                             | `md`                         |
-| `variant`                                     | filled、outline、standard；未设置时继承 InputGroup                                                                      | `FormControlVariant`                                        | `filled`                     |
-| `disabled / readonly / error`                 | 未设置时继承表单；显式 false 可覆盖                                                                                     | `boolean`                                                   | `undefined`                  |
-| `placeholder`                                 | 占位文本                                                                                                                | `string`                                                    | `—`                          |
-| `hint / line`                                 | 浮动提示 / standard 变体下划线                                                                                          | `boolean`                                                   | `true`                       |
-| `text-color / focus-color / blur-color`       | 字段颜色                                                                                                                | `string`                                                    | `—`                          |
-| `loading`                                     | 加载状态；禁止选择和确认                                                                                                | `boolean`                                                   | `false`                      |
+| `open-trigger-target` | 打开面板的点击区域；field 为整个字段，icon 仅右侧选择按钮。不影响键盘展开及受控 open。 | `'field' \| 'icon'` | `'field'` |
+| `model-value / default-value` | 受控值 / 非受控初始值 | `Value` | `单选 ''，多选 []` |
+| `open / default-open` | 受控展开 / 默认展开 | `boolean` | `undefined / false` |
+| `input-value / default-input-value` | 搜索文本，独立于选中值 | `string` | `undefined / ''` |
+| `multiple` | 多选；默认启用搜索 | `boolean` | `false` |
+| `size` | 完整支持 xs、sm、md、lg、xl，未设置时继承分组与表单 | `ComponentSize`<br>`'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `md` |
+| `variant` | filled、outline、standard；未设置时继承 InputGroup | `FormControlVariant`<br>`'standard' \| 'filled' \| 'outline'` | `filled` |
+| `disabled / readonly / error` | 未设置时继承表单；显式 false 可覆盖 | `boolean` | `undefined` |
+| `placeholder` | 占位文本 | `string` | `—` |
+| `hint / line` | 浮动提示 / standard 变体下划线 | `boolean` | `true` |
+| `text-color / focus-color / blur-color` | 字段颜色 | `string` | `—` |
+| `loading` | 加载时暂停选择、清空、标签移除与确认；保留已有值，搜索和关闭仍可用。 | `boolean` | `false` |
 | `loading-mode` | 加载布局：默认指示器或底部加载线 | `default / line` | `default` |
-| `show-tags`                                   | 多选值以标签展示；false 改用分隔文本                                                                                    | `boolean`                                                   | `true`                       |
-| `separator`                                   | show-tags=false 时的多选分隔符                                                                                          | `string`                                                    | `,`                          |
-| `text-align`                                  | 文字对齐 left / center / right；未设置时继承 FormItem 的 content-align，独立使用默认阅读起点 start                               | `'left' \| 'center' \| 'right'`                             | `-`                          |
-| `max-tag-count`                               | 标签数量上限，0 不限制                                                                                                  | `number`                                                    | `0`                          |
-| `tag-nowrap`                                  | 标签单行显示；长文字省略、删除图标保留，标签行可横向滚动；悬停、聚焦或点按省略正文查看全文                              | `boolean`                                                   | `false`                      |
-| `popup-container`                             | 选择器、元素、返回元素的函数或 false（原地渲染）                                                                        | `PopupContainer`                                            | `—`                          |
-| `trigger-props`                               | 可选的下拉浮层 Trigger 配置；placement 默认 bottom-start，空间不足时自动调整；字段拥有展开状态，不提供顶层 placement    | `TriggerProps`                                              | `—`                          |
-| `virtual-list-props`                          | Menu / List 的虚拟列表参数                                                                                              | `VirtualListProps`                                          | `—`                          |
-| `search-delay`                                | search 事件防抖时长（毫秒）                                                                                             | `number`                                                    | `500`                        |
-| `format-label`                                | 格式化已选标签；VNode 使用 label 插槽                                                                                   | `function`                                                  | `—`                          |
-| `clearable`                                   | 允许清除，保留禁用的已选项                                                                                              | `boolean`                                                   | `true`                       |
-| `empty-value`                                 | 清空输出覆盖；多选返回数组，保留不可清除项                                                                              | `SelectEmptyValue`                                          | `undefined`                  |
-| `options`                                     | 原始值、对象、分组均支持；三种展示使用同一数据源                                                                        | `SelectOption[]` / `(query, { signal }) => Array / Promise` | `undefined`                  |
-| `field-names`                                 | value、label、disabled、tagProps、render 字段映射；对象值须有唯一标识字段                                               | `SelectFieldNames`                                          | `—`                          |
-| `filterable`                                  | 开启搜索，可设置 retainInputValue                                                                                       | `boolean 或 { retainInputValue?: boolean }`                 | `单选 false / 多选 true`     |
-| case-sensitive                                | 内置本地过滤是否区分大小写，自定义过滤函数优先                                                                          | boolean                                                     | false                        |
-| `filter-option`                               | false 关闭本地过滤；函数接收搜索词和原始选项                                                                            | `boolean 或 (input, option) => boolean`                     | 自动：数组开启，加载函数关闭 |
-| `creatable`                                   | 允许创建不存在的选项                                                                                                    | `boolean`                                                   | `false`                      |
-| `fallback-option`                             | 异步选项未到达时反显值，或返回完整回退选项                                                                              | `boolean 或 (value) => SelectOptionData`                    | `true`                       |
-| `show-extra-options`                          | 菜单中展示回退/创建选项                                                                                                 | `boolean`                                                   | `true`                       |
-| `limit`                                       | 多选数量上限，0 不限制                                                                                                  | `number`                                                    | `0`                          |
-| `auto-fit-popup-width`                        | Menu 与字段等宽                                                                                                         | `boolean`                                                   | `true`                       |
-| `default-active-first-option`                 | 打开选项列表时，无有效选中项则默认激活首个可用候选；仅高亮，不更新 modelValue 或触发 change。已有有效选中项优先激活该项 | `boolean`                                                   | `true`                       |
-| `unmount-on-close`                            | 关闭 Menu 后销毁内容                                                                                                    | `boolean`                                                   | `false`                      |
-| `scrollbar`                                   | Menu / List 滚动条配置                                                                                                  | `boolean 或 ScrollbarProps`                                 | `true`                       |
-| `show-header-on-empty / show-footer-on-empty` | 空状态仍展示 header / footer                                                                                            | `boolean`                                                   | `false`                      |
-| `edit-mode`                                   | 字段展示；未指定时继承 FormItem/Form                                                                                    | `direct / click / dblclick`                                 | `direct`                     |
-| `before-commit`                               | 确认校验后可等待的保存拦截钩子                                                                                          | `(value, context) => void / false / Promise`                | —                            |
+| `show-tags` | 多选值以标签展示；false 改用分隔文本 | `boolean` | `true` |
+| `separator` | show-tags=false 时的多选分隔符 | `string` | `,` |
+| `text-align` | 文字对齐 left / center / right；未设置时继承 FormItem 的 content-align，独立使用默认阅读起点 start | `'left' \| 'center' \| 'right'` | `-` |
+| `max-tag-count` | 有限非负整数；0 不限制标签展示数量。 | `number` | `0` |
+| `tag-nowrap` | 标签单行显示；长文字省略、删除图标保留，标签行可横向滚动；悬停、聚焦或点按省略正文查看全文 | `boolean` | `false` |
+| `popup-container` | 选择器、元素、返回元素的函数或 false（原地渲染） | `PopupContainer` | `—` |
+| `trigger-props` | 可选的下拉浮层 Trigger 配置；placement 默认 bottom-start，空间不足时自动调整；字段拥有展开状态，不提供顶层 placement | `TriggerProps` | `—` |
+| `virtual-list-props` | Menu / List 的虚拟列表参数 | `VirtualListProps` | `—` |
+| `search-delay` | 有限非负搜索防抖毫秒数。 | `number` | `500` |
+| `format-label` | 格式化已选标签；VNode 使用 label 插槽 | `function` | `—` |
+| `clearable` | 允许清除，保留禁用的已选项 | `boolean` | `true` |
+| `empty-value` | 清空覆盖值；多选接受数组或已识别空值，非法标量回退为空数组；优先保留禁用选中项。 | `SelectEmptyValue` | `undefined` |
+| `options` | 原始值、对象、分组均支持；三种展示使用同一数据源 | `SelectOption[]` / `(query, { signal }) => Array / Promise` | `undefined` |
+| `field-names` | value、label、disabled、tagProps、render 字段映射；对象值须有唯一标识字段 | `SelectFieldNames` | `—` |
+| `filterable` | 开启搜索，可设置 retainInputValue | `boolean 或 { retainInputValue?: boolean }` | `单选 false / 多选 true` |
+| case-sensitive | 内置本地过滤是否区分大小写，自定义过滤函数优先 | boolean | false |
+| `filter-option` | false 关闭本地过滤；函数接收搜索词和原始选项 | `boolean 或 (input, option) => boolean` | 自动：数组开启，加载函数关闭 |
+| `creatable` | 允许创建不存在的选项 | `boolean` | `false` |
+| `fallback-option` | 异步选项未到达时反显值，或返回完整回退选项 | `boolean 或 (value) => SelectOptionData` | `true` |
+| `show-extra-options` | 菜单中展示回退/创建选项 | `boolean` | `true` |
+| `limit` | 有限非负整数；0 不限制多选数量。 | `number` | `0` |
+| `auto-fit-popup-width` | Menu 与字段等宽 | `boolean` | `true` |
+| `default-active-first-option` | 打开选项列表时，无有效选中项则默认激活首个可用候选；仅高亮，不更新 modelValue 或触发 change。已有有效选中项优先激活该项 | `boolean` | `true` |
+| `unmount-on-close` | 关闭 Menu 后销毁内容 | `boolean` | `false` |
+| `scrollbar` | Menu / List 滚动条配置 | `boolean 或 ScrollbarProps` | `true` |
+| `show-header-on-empty / show-footer-on-empty` | 空状态仍展示 header / footer | `boolean` | `false` |
+| `edit-mode` | 字段展示；未指定时继承 FormItem/Form | `direct / click / dblclick` | `direct` |
+| `before-commit` | 确认前调用 ({ value, previousValue }, done, { signal })；布尔、Promise 或 done 完成，同步 undefined 等待 done。 | `BeforeFieldCommit` | — |
 
-### 事件与方法
+### Select Events / Methods
 
 - `update:modelValue`、`change(value)`：提交时触发，编辑草稿不触发。
 - `update:open`、`open-change(open)`：请求改变展开状态。
@@ -446,19 +446,19 @@ Select 还提供 `remove(value)`、`exceed-limit(value, event)`、`dropdown-scro
 
 Select 还支持 `header`、`footer`、`trigger` 和默认插槽中的 `Option / Optgroup`。Option 属性为 `value`、`label`、`disabled`、`tagProps`、`index`；默认插槽提供 `selected`。分组数据为 `{ isGroup: true, label, options }`。所有编辑展示共用相同选项模型；read 插槽可自定义阅读内容。
 
-单选和多选选项统一使用 popup-option-padding-horizontal。组件没有隐式搜索高亮 DOM；自定义选项插槽负责其高亮片段样式。已删除无效的 multi-popup-option-padding-horizontal 与 popup-option-highlight-* 变量。
+单选和多选选项统一使用 popup-option-padding-horizontal。组件没有隐式搜索高亮 DOM；自定义选项插槽负责其高亮片段样式。
 
 `read-pretty` 为独立布尔属性，与 `readonly`、`disabled` 同级；字段 > FormItem > Form 继承，显式 `false` 覆盖父级。默认 `false`。纯阅读不显示编辑器。
 
 ### Option Props
 
-| 属性      | 说明                                  | 类型                                                   | 默认值    |
+| 属性 | 说明 | 类型 | 默认值 |
 | --------- | ------------------------------------- | ------------------------------------------------------ | --------- |
-| value     | 选项值，未传时取 label 或默认插槽文本 | string \| number \| boolean \| Record<string, unknown> | undefined |
-| label     | 搜索与已选标签使用的文本              | string                                                 | undefined |
-| disabled  | 禁止选择与移除                        | boolean                                                | false     |
-| tag-props | 已选标签属性                          | TagProps                                               | undefined |
-| index     | 手动指定选项顺序                      | number                                                 | undefined |
+| value | 选项值，未传时取 label 或默认插槽文本 | string \| number \| boolean \| Record<string, unknown> | undefined |
+| label | 搜索与已选标签使用的文本 | string | undefined |
+| disabled | 禁止选择与移除 | boolean | false |
+| tag-props | 已选标签属性 | TagProps | undefined |
+| index | 手动指定选项顺序 | number | undefined |
 
 ### Option Slots
 
@@ -470,7 +470,7 @@ Select 还支持 `header`、`footer`、`trigger` 和默认插槽中的 `Option /
 
 ### Optgroup Props
 
-| 属性  | 说明     | 类型   | 默认值    |
+| 属性 | 说明 | 类型 | 默认值 |
 | ----- | -------- | ------ | --------- |
 | label | 分组标题 | string | undefined |
 
@@ -527,19 +527,11 @@ Select 还支持 `header`、`footer`、`trigger` 和默认插槽中的 `Option /
 | focus | 聚焦实际字段     | -    |
 | blur  | 移出实际字段焦点 | -    |
 
-### 选中对勾样式变量
+### 类型导入
 
-| 变量                                  | 默认值                              |
-| ------------------------------------- | ----------------------------------- |
-| `--c-select-popup-option-check-color` | `var(--c-sys-color-action-primary)` |
-| `--c-select-popup-option-check-size`  | `var(--c-sys-font-size-md)`         |
-| `--c-select-popup-option-check-gap`   | `var(--c-sys-space-4)`              |
+根入口和组件入口均导出 `SelectEmits`、`SelectSlots`、`SelectExpose`，与 Props、Instance 配套。可通过实例调用 `focus()`、`blur()`。
 
-### 公开类型入口
-
-根入口和组件入口均导出 `SelectEmits`、`SelectSlots`、`SelectExpose`，与 Props、Instance 配套。Emits 为从运行时事件声明推导的参数元组映射；Expose 包含 focus/blur。
-
-### 内置搜索字段配置
+### 搜索字段
 
 `searchFields` / `search-fields` 是只读 `('label' | 'value')[]`，默认 `['label']`；多字段为 OR 匹配，大小写默认不敏感。配置 `['value', 'label']` 可同时搜索编码和名称，fieldNames 将语义字段映射到业务字段；空数组对非空查询不匹配任何项。value 采用字符串比较，不做对象深层搜索，对象值或拼音等复杂规则仍用自定义回调。自定义回调优先并自行决定大小写；远程结果使用原有关闭本地过滤协议。Cascader 保留路径语义，会检查路径各节点的配置字段。
 
@@ -556,3 +548,73 @@ filterable 表示允许输入搜索词。filterOption 只控制本地候选匹�
 `empty-value` 可显式设为 `null`（或 `() => null`），清空时原样提交 null；省略时保留组件原默认值。界面把 null 显示为空，不会把普通输入的空字符串自动转成 null。支持弹出编辑的字段中，清空先修改草稿，确认后提交，取消则保留原值。
 
 守卫统一使用 `(payload, done, context)`：关闭 payload 为 `{ action }`，切换和提交为 `{ value, previousValue }`，Popup 为 `{ reason }`。context 提供 `signal` 和可选原始 `event`。返回 boolean/Promise，或调用 done()/done(false)；同步 void 等待 done，Promise&lt;void&gt; 放行。首次完成生效。等待期间自动管理 loading/disabled，取消后旧结果失效，不暴露内部按钮 refs。
+
+focus() 在 direct 模式聚焦原生输入；延迟模式关闭时聚焦引用而不打开，打开后聚焦当前编辑器。blur() 使当前输入或编辑器失焦，不重新打开或模拟选择；缓存复用和重新挂载都查找当前目标。
+
+公开实例类型 SelectInstance/SelectExpose 与 PeopleSelectInstance/PeopleSelectExpose 对齐既有方法；PeopleSelectExpose 可从根入口及组件子入口导入。refresh() 返回 `Promise<void>`；选项为函数时按既有协议重读选项，不表示保存或业务动作完成。
+
+SelectEditMode 在根入口和 select 子入口一致导出，值沿用各端 edit-mode 的公开枚举。
+
+### 加载期间的选择动作
+
+手动 loading 或当前候选请求处于加载状态时，纯选择字段保留已有值，暂停新选择、清空与标签移除。被阻止的动作不发送业务通知，也不提交模型。字段搜索仍可输入，disabled/readonly 不因此改写；需要禁止搜索时单独设置。
+
+延迟编辑层的清空和确认在此期间不可用，仍可取消或关闭。手动标记和当前请求都结束后，操作按正常规则恢复，并继续尊重禁用选项。Input、AutoComplete 等自由文本字段的 loading 继续允许文本编辑与清空，不套用选择值的暂停规则。
+
+通过对象 `value` 或 `options` 传递业务数据。
+
+多选 empty-value 支持数组、null/undefined 和 empty-values 识别的空值；不接受其他标量。工厂仅在实际清空且无禁用保留项时执行，非法结果开发期提示并回退为 []，不向模型写入非法标量。
+
+## CSS Variables
+
+<!-- component-css-variables:start -->
+
+通过以下变量定制组件外观。默认值随表中注明的主题或选择器条件变化；变量仅在对应的尺寸、变体和交互状态下生效。
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| 变量 | 默认值／条件 | 影响的样式 |
+| --- | --- | --- |
+| `--c-select-popup-bg` | `var(--c-sys-color-surface-overlay)` | `background-color` |
+| `--c-select-popup-border-color` | `var(--c-sys-color-border-default)` | `border`, `border-bottom`, `border-top` |
+| `--c-select-popup-border-radius` | `var(--c-sys-radius-md)` | `border-radius` |
+| `--c-select-popup-box-shadow` | `0 4px 10px rgba(0, 0, 0, 0.1)` | `box-shadow` |
+| `--c-select-popup-font-size` | `var(--c-sys-font-size-md)` | `font-size` |
+| `--c-select-popup-group-title-font-size` | `var(--c-sys-font-size-xs)` | `font-size` |
+| `--c-select-popup-group-title-height` | `20px` | `line-height` |
+| `--c-select-popup-group-title-padding-horizontal` | `var(--c-select-popup-option-padding-horizontal)` | `padding` |
+| `--c-select-popup-group-title-padding-top` | `var(--c-sys-space-4)` | `margin-top` |
+| `--c-select-popup-group-title-text-color` | `var(--c-sys-color-content-secondary)` | `color` |
+| `--c-select-popup-loading-min-height` | `50px` | `min-height` |
+| `--c-select-popup-max-height` | `200px` | `max-height` |
+| `--c-select-popup-option-bg` | `var(--c-sys-color-surface-overlay)` | `background-color` |
+| `--c-select-popup-option-bg-disabled` | `var(--c-sys-color-surface-overlay)` | `background-color` |
+| `--c-select-popup-option-bg-hover` | `var(--c-sys-color-state-hover)` | `background-color` |
+| `--c-select-popup-option-bg-selected` | `var(--c-sys-color-surface-overlay)` | `background-color` |
+| `--c-select-popup-option-check-color` | `var(--c-sys-color-content-primary)` | `color` |
+| `--c-select-popup-option-check-gap` | `var(--c-sys-space-4)` | `margin-inline-start` |
+| `--c-select-popup-option-check-size` | `var(--c-sys-font-size-md)` | `height`, `width` |
+| `--c-select-popup-option-font-weight-selected` | `var(--c-sys-font-weight-medium)` | `font-weight` |
+| `--c-select-popup-option-height` | `36px` | `line-height` |
+| `--c-select-popup-option-icon-margin-right` | `var(--c-sys-space-4)` | `margin-inline-end` |
+| `--c-select-popup-option-padding-horizontal` | `var(--c-sys-space-5)` | `padding`, `padding-inline` |
+| `--c-select-popup-option-suffix-icon-margin-left` | `var(--c-sys-space-5)` | `margin-inline-start` |
+| `--c-select-popup-option-text-color` | `var(--c-sys-color-content-primary)` | `color` |
+| `--c-select-popup-option-text-color-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
+| `--c-select-popup-option-text-color-hover` | `var(--c-sys-color-content-primary)` | `color` |
+| `--c-select-popup-option-text-color-selected` | `var(--c-sys-color-content-primary)` | `color` |
+| `--c-select-popup-padding-vertical` | `var(--c-sys-space-2)` | `padding`, `padding-block` |
+
+</div>
+
+将覆盖设置在组件实际根节点或弹层真实挂载祖先上。例如给该元素添加下列 class，再按需替换变量值：
+
+```css
+.component-theme {
+  --c-select-popup-border-color: var(--c-sys-color-border-default);
+}
+```
+
+显式行内样式及直接写入同一 CSS 属性的 Props 优先于样式表默认值。Teleport 后，普通 CSS 变量按实际挂载位置继承；使用 ThemeProvider 时，请遵循其局部主题与弹层配置规则。局部定制请直接覆盖组件变量；仅修改后代的 system 变量不会重新计算从根继承的组件别名。内部变量不属于公共 API。
+
+<!-- component-css-variables:end -->

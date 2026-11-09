@@ -1,25 +1,28 @@
-import { onUnmounted, Ref, isRef, computed, onMounted } from 'vue'
-import ResponsiveObserve, { Breakpoint } from '../_utils/responsive-observe'
+import { onUnmounted, type Ref, isRef, computed, onMounted, watch } from 'vue'
+import ResponsiveObserve, { type Breakpoint } from '../_utils/responsive-observe'
 
 export function useResponsive(
   breakpoint: Breakpoint | undefined | Ref<Breakpoint | undefined>,
   callback: (checked: boolean) => void,
 ) {
   const resultBreakpoint = computed(() => (isRef(breakpoint) ? breakpoint.value : breakpoint))
-  // Subscription Responsive
   let subscribeToken = ''
+  let stopWatch: (() => void) | undefined
+  const unsubscribe = () => {
+    if (subscribeToken) ResponsiveObserve.unsubscribe(subscribeToken)
+    subscribeToken = ''
+  }
   onMounted(() => {
-    subscribeToken = ResponsiveObserve.subscribe((screens, breakpointChecked) => {
-      if (!resultBreakpoint.value) return
-      if (!breakpointChecked || breakpointChecked === resultBreakpoint.value) {
-        callback(!!screens[resultBreakpoint.value])
-      }
-    })
+    stopWatch = watch(resultBreakpoint, point => {
+      unsubscribe()
+      if (!point) return
+      subscribeToken = ResponsiveObserve.subscribe((screens, breakpointChecked) => {
+        if (!breakpointChecked || breakpointChecked === point) callback(!!screens[point])
+      })
+    }, { immediate: true })
   })
-  // Unsubscribe
   onUnmounted(() => {
-    if (subscribeToken) {
-      ResponsiveObserve.unsubscribe(subscribeToken)
-    }
+    stopWatch?.()
+    unsubscribe()
   })
 }

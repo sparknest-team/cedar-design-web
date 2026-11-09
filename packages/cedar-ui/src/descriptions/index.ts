@@ -11,7 +11,7 @@ export type DescriptionsInstance = InstanceType<typeof _Descriptions>
 export type DescriptionsItemInstance = InstanceType<typeof _DescriptionsItem>
 export type { DescriptionsAlign, DescriptionsItemProps, DescriptionsProps } from './props'
 
-export type { DescData } from './types'
+export type { DescData, DescLayout, DescriptionsSlotScope, DescriptionsSlots, DescriptionsItemSlots } from './types'
 export { Descriptions, descriptionsItemProps, descriptionsProps }
 export const _DescriptionsComponent = Descriptions
 export const _DescriptionsItemComponent = _DescriptionsItem

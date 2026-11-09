@@ -70,7 +70,7 @@
         ></c-timeline-item>
         <c-timeline-item
           label="2020-09-30"
-          content-placement="bottom"
+          content-placement="left"
           v-bind="__apiReview.bindings"
           v-on="__apiReview.listeners"
         >

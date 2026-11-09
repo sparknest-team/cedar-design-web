@@ -11,7 +11,7 @@ Cedar 提供两套能力：
 | 固定工具类 `c-*` | `@cedar-design/ui` 的 `style/utilities/index.less`            | 不接 Uno/TW 时使用               |
 | Uno / TW preset  | `@cedar-design/preset-unocss` / `@cedar-design/preset-tailwindcss` | 使用带 `c-` 前缀的完整原子化体系 |
 
-Preset **不是组件**，是构建期配置：装好后即可写 `c-flex`、`c-p-16`、`c-bg-primary`、`c-text-md` 等。主题切换（暗色 / StyleProvider）只改 CSS 变量，类名不变。日常分类速查见 [常用写法](/components/style/atomic-usage/)。
+Preset **不是组件**，是构建期配置：装好后即可写 `c-flex`、`c-p-16`、`c-bg-primary`、`c-text-md` 等。主题切换（暗色 / ThemeProvider）只改 CSS 变量，类名不变。日常分类速查见 [常用写法](/components/style/atomic-usage/)。
 
 Maple 也提供 UnoCSS / Tailwind CSS preset。`mp-` 是否生效取决于生成器配置，详见下方“Maple 对应配置”。
 

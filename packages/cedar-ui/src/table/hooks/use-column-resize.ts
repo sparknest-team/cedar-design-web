@@ -18,6 +18,7 @@ export const useColumnResize = (
     columnWidth[key] = next
     emit('column-resize', key, next)
   }
+  const clearResizeState = () => { resizingColumn.value = ''; cell = undefined }
   const gesture = useResizeGesture({
     element: () => cell,
     cursor: () => 'col-resize',
@@ -26,9 +27,10 @@ export const useColumnResize = (
       if (cell !== thRefs.value[resizingColumn.value]) { handleThMouseUp(); return }
       writeWidth(resizingColumn.value, initialWidth + (rtl ? -dx : dx))
     },
-    end: () => { resizingColumn.value = ''; cell = undefined },
+    end: clearResizeState,
+    cancel: clearResizeState,
   })
-  const handleThMouseUp = () => { gesture.cancel(); resizingColumn.value = ''; cell = undefined }
+  const handleThMouseUp = () => { gesture.cancel(); clearResizeState() }
   watch(dir, handleThMouseUp, { flush: 'sync' })
   const handleThMouseDown = (dataIndex: string, event: MouseEvent) => {
     if (event.type === 'mousedown' && 'PointerEvent' in window) return

@@ -7,6 +7,7 @@ export interface CheckboxGroupContext {
   disabled: boolean
   readonly: boolean
   error: boolean
+  formErrorId?: string
   isMaxed: boolean
   name?: string
   slots: Slots

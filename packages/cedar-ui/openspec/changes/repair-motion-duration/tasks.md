@@ -1,0 +1,3 @@
+- [x] Reproduce shared/UI invalid and zero duration cases.
+- [x] Repair both shared and composable sources and validate published ESM/CJS.
+- [x] Verify both CountTo/Statistic and consumers, demos, types, lint and cross-platform.

@@ -76,13 +76,13 @@ import Split from './split'
 import SplitButton from './split-button'
 import Statistic from './statistic'
 import Steps, { Step } from './steps'
-import StyleProvider from './style-provider'
 import Switch from './switch'
 import Table, { TableColumn, Tbody, Td, Th, Thead, Tr } from './table'
 import TableColumnManager from './table-column-manager'
 import Tabs, { TabItem, TabNav, TabPane, TabsItems, TabsNavs } from './tabs'
 import Tag from './tag'
 import Textarea from './textarea'
+import ThemeProvider from './theme-provider'
 import Time, { TimePicker } from './time'
 import TimeRange, { TimeRangePicker } from './time-range'
 import Timeline, { TimelineItem } from './timeline'
@@ -175,13 +175,13 @@ const components: Record<string, Plugin> = {
   SplitButton: SplitButton as Plugin,
   Statistic: Statistic as Plugin,
   Steps: Steps as Plugin,
-  StyleProvider: StyleProvider as Plugin,
   Switch: Switch as Plugin,
   Table: Table as Plugin,
   TableColumnManager: TableColumnManager as Plugin,
   Tabs: Tabs as Plugin,
   Tag: Tag as Plugin,
   Textarea: Textarea as Plugin,
+  ThemeProvider: ThemeProvider as Plugin,
   Time: Time as Plugin,
   TimeRange: TimeRange as Plugin,
   Timeline: Timeline as Plugin,

@@ -1,4 +1,4 @@
-import { defineComponent, toRefs, PropType } from 'vue'
+import { computed, defineComponent, toRefs, PropType } from 'vue'
 import type { Dayjs } from 'dayjs'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
 import { useI18n } from '../locale'
@@ -40,18 +40,19 @@ export default defineComponent({
     const { dayStartOfWeek, isWeek, panel, mode } = toRefs(props)
     const prefixCls = getPrefixCls('calendar-week-list')
     const { t } = useI18n()
-    const weekList = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
-    if (dayStartOfWeek.value === 0) {
-      weekList.unshift('sunday')
-    } else {
-      weekList.push('sunday')
-    }
-    if (isWeek.value) {
-      weekList.unshift('self')
-    }
+    const weekList = computed(() => {
+      const list = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+      if (dayStartOfWeek.value === 0) {
+        list.unshift('sunday')
+      } else {
+        list.push('sunday')
+      }
+      if (isWeek.value) list.unshift('self')
+      return list
+    })
     return () => (
       <div class={prefixCls}>
-        {weekList.map((w) => (
+        {weekList.value.map((w) => (
           <div class={`${prefixCls}-item`} key={w}>
             {t(`calendar.week.${panel.value || mode.value === 'year' ? 'short' : 'long'}.${w}`)}
           </div>

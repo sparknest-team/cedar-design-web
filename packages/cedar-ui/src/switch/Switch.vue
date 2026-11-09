@@ -1,8 +1,20 @@
 <template>
   <button
+    v-bind="$attrs"
+    :aria-describedby="describeError($attrs['aria-describedby'])"
     type="button"
     role="switch"
-    :class="classes(n(), n('--variant-' + variant), n('--size-' + platform.size.value), [checked, n('--checked')], [busy, n('--loading')], [platform.disabled.value, n('--disabled')], [platform.error.value, n('--error')])"
+    :class="
+      classes(
+        n(),
+        n('--variant-' + variant),
+        n('--size-' + platform.size.value),
+        [checked, n('--checked')],
+        [busy, n('--loading')],
+        [platform.disabled.value, n('--disabled')],
+        [platform.error.value, n('--error')],
+      )
+    "
     :style="style"
     :aria-checked="checked"
     :aria-busy="busy || undefined"
@@ -33,23 +45,25 @@
 
 <script setup lang="ts">
 import { computed, onActivated, onBeforeUnmount, onDeactivated, ref, watch, type CSSProperties } from 'vue'
-import { createNamespace } from '../_utils/global-config'
 import { invokeBeforeHook } from '../_hooks/use-action-guard'
-import { switchProps, type SwitchValue } from './props'
+import { createNamespace } from '../_utils/global-config'
+import { useFormErrorDescription } from '../form/error-description'
 import { useSwitchPlatform } from './platform'
+import { switchProps, type SwitchValue } from './props'
 
-defineOptions({ name: createNamespace('switch').name })
+defineOptions({ name: createNamespace('switch').name, inheritAttrs: false })
 const props = defineProps(switchProps)
+const { describe: describeError } = useFormErrorDescription()
 const emit = defineEmits<{
   (event: 'update:modelValue', value: SwitchValue | null): void
-  (event: 'change', value: SwitchValue | null, originalEvent: Event): void
+  (event: 'change', value: SwitchValue | null, originalEvent?: Event): void
   (event: 'click', originalEvent: Event): void
   (event: 'focus' | 'blur', originalEvent: FocusEvent): void
 }>()
 const { n, classes } = createNamespace('switch')
 const platform = useSwitchPlatform(props)
 const internal = ref<SwitchValue>(props.defaultValue !== undefined ? props.defaultValue : props.uncheckedValue)
-const current = computed(() => props.modelValue === undefined ? internal.value : props.modelValue)
+const current = computed(() => (props.modelValue === undefined ? internal.value : props.modelValue))
 const checked = computed(() => current.value === props.checkedValue)
 const pending = ref(false)
 const busy = computed(() => props.loading || pending.value)
@@ -57,11 +71,36 @@ const rippleKey = ref(0)
 let active = true
 let generation = 0
 let controller: AbortController | undefined
-function cancelPending() { generation++; controller?.abort(); controller = undefined; pending.value = false }
-onBeforeUnmount(() => { active = false; cancelPending() })
-onDeactivated(() => { active = false; cancelPending() })
-onActivated(() => { active = true })
-watch(() => [props.modelValue, props.checkedValue, props.uncheckedValue, props.beforeChange, props.loading, platform.disabled.value, platform.readonly.value], cancelPending, { flush: 'sync' })
+function cancelPending() {
+  generation++
+  controller?.abort()
+  controller = undefined
+  pending.value = false
+}
+onBeforeUnmount(() => {
+  active = false
+  cancelPending()
+})
+onDeactivated(() => {
+  active = false
+  cancelPending()
+})
+onActivated(() => {
+  active = true
+})
+watch(
+  () => [
+    props.modelValue,
+    props.checkedValue,
+    props.uncheckedValue,
+    props.beforeChange,
+    props.loading,
+    platform.disabled.value,
+    platform.readonly.value,
+  ],
+  cancelPending,
+  { flush: 'sync' },
+)
 
 async function toggle(event: Event) {
   if (!active || busy.value || platform.disabled.value) return
@@ -76,7 +115,18 @@ async function toggle(event: Event) {
       controller = new AbortController()
       pending.value = true
       const context = { signal: controller.signal, event }
-      const permitted = await invokeBeforeHook(done => hook({ value: next, previousValue: props.modelValue !== undefined ? props.modelValue : internal.value }, done, context), context)
+      const permitted = await invokeBeforeHook(
+        (done) =>
+          hook(
+            {
+              value: next,
+              previousValue: props.modelValue !== undefined ? props.modelValue : internal.value,
+            },
+            done,
+            context,
+          ),
+        context,
+      )
       if (!permitted) return
     }
     if (!active || version !== generation || props.loading || platform.disabled.value || platform.readonly.value) return
@@ -90,16 +140,31 @@ async function toggle(event: Event) {
     if (version === generation) pending.value = false
   }
 }
-function keyboardToggle(event: KeyboardEvent) { if (!event.repeat) void toggle(event) }
-function focus(event: FocusEvent) { emit('focus', event); platform.notify('onFocus', event) }
-function blur(event: FocusEvent) { emit('blur', event); platform.notify('onBlur', event) }
+function keyboardToggle(event: KeyboardEvent) {
+  if (!event.repeat) void toggle(event)
+}
+function focus(event: FocusEvent) {
+  emit('focus', event)
+  platform.notify('onFocus', event)
+}
+function blur(event: FocusEvent) {
+  emit('blur', event)
+  platform.notify('onBlur', event)
+}
 const style = computed<CSSProperties>(() => ({
   '--c-switch-current-track': checked.value ? props.checkedColor : props.uncheckedColor,
   '--c-switch-loading-color': props.loadingColor,
 }))
 const handleStyle = computed<CSSProperties>(() => {
   const value = props.handleElevation
-  const level = value === true ? 2 : typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.min(24, Math.trunc(value))) : 0
-  return { boxShadow: level ? '0 ' + level / 2 + 'px ' + (level + 1) + 'px var(--c-switch-shadow-color)' : 'none' }
+  const level =
+    value === true
+      ? 2
+      : typeof value === 'number' && Number.isFinite(value)
+        ? Math.max(0, Math.min(24, Math.trunc(value)))
+        : 0
+  return {
+    boxShadow: level ? '0 ' + level / 2 + 'px ' + (level + 1) + 'px var(--c-switch-shadow-color)' : 'none',
+  }
 })
 </script>

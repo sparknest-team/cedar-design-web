@@ -11,6 +11,7 @@ export interface RadioGroupContext {
   disabled: boolean
   readonly: boolean
   error: boolean
+  formErrorId?: string
   name?: string
   slots: Slots
   handleChange(value: ChoiceValue, event?: Event): void

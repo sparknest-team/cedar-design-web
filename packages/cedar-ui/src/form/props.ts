@@ -14,7 +14,6 @@ export type { FormLayout, FormLabelAlign } from "./layout-props";
 export const formProps = {
   /** 表单内字段的统一编辑模式；未设置时保留各字段默认值。 */
   editMode: fieldEditModeProp,
-  fieldEditModeProp,
   readPretty: readPrettyProp,
   /** 模型空值识别；不改变受控判定或清空输出。 */
   emptyValues: emptyValuesProp,

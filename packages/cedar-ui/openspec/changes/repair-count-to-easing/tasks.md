@@ -1,0 +1,3 @@
+- [x] Reproduce four context lifecycle failures on both platforms.
+- [x] Read current easing without changing the public composable API; update both docs and demos.
+- [x] Validate both consumers, browser and gates.

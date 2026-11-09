@@ -5,7 +5,7 @@ import { splitButtonProps } from './props'
 const SplitButton = withInstall(_SplitButton)
 
 export type SplitButtonInstance = InstanceType<typeof _SplitButton>
-export type { SplitButtonProps } from './props'
+export type { SplitButtonButtonProps, SplitButtonProps } from './props'
 export { splitButtonProps, SplitButton }
 export const _SplitButtonComponent = SplitButton
 

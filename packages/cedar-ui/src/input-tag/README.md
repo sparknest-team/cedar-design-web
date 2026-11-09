@@ -4,7 +4,7 @@ permalink: /components/input-tag/
 
 # InputTag
 
-用来输入标签。
+用来输入标签。FormItem 有错误消息时，输入框会关联错误描述，并保留已有的 `aria-describedby`。
 
 ## 阅读方向
 
@@ -88,6 +88,14 @@ permalink: /components/input-tag/
 
 <demo src="./__demos__/loading.vue"></demo>
 
+### 字段状态与原生输入
+
+`disabled`、`readonly`、`error` 未设置时继承 FormItem / Form；InputGroup 可提供禁用、只读、尺寸和变体，字段显式值优先，`false` 可覆盖父级。独立使用时默认变体仍为 `filled`。延迟编辑器遵守相同状态，编辑中禁用或只读会取消草稿。
+
+`id`、`name`、`aria-*`、`data-*`、原生约束和键盘监听器传给实际 input，`class` / `style` 保留在外壳。`name` 提交的是独立的输入草稿，不会序列化标签数组。`input-value` 控制输入草稿；与标签的 `model-value` 分开。组合输入只通知一次；被禁用、只读或关闭取消的组合输入不会在稍后提交。
+
+`loading` 由业务控制；`loading-mode="default"`（默认）或 `"line"` 只调整反馈形态，不禁止输入。默认清空入口为 `type="button"` 的命名按钮，支持 Tab / Enter / Space；`#clear-icon="{ clear }"` 可定制入口并调用原有清空动作。清空保留独立输入草稿，并按原有顺序通知 `update:modelValue`、`change`、`clear`。
+
 ## API
 
 ### 空值识别与阅读空文案
@@ -101,54 +109,80 @@ permalink: /components/input-tag/
 
 以上是字段展示层 API；纯面板不因此新增阅读模式。Form 与 FormItem 提供继承配置。empty-value 的现有类型与默认输出仍按该组件原 API 执行。
 
-### `<input-tag>` Props
+`unique-value` 按合并后的 `field-names.value` 判断对象与字符串标签的唯一性；数字 `1` 和字符串 `"1"` 不同。默认允许重复，每个出现项拥有独立稳定节点，折叠占位不占用任何业务值。数量限制只控制展示，不截断模型。
+
+公开 Props 不包含 `baseCls`、`focused`、`disabledInput`、`uninjectFormItemContext`；这些是内部组合入口。before-commit 同步返回 undefined 时等待 done；普通 change / press-enter 等事件不等待 Promise。延迟模式的 change 事件可没有原始 DOM 事件。清空默认输出 []，显式 empty-value=null 时保留 null。
+
+### InputTag Props
 
 | 参数名                    | 描述                               | 类型                                              |   默认值   |
 | ------------------------- | ---------------------------------- | ------------------------------------------------- | :--------: |
-| model-value **(v-model)** | 绑定值                             | `(string \| number \| TagData)[]`                 |    `-`     |
+| model-value **(v-model)** | 绑定值                             | `(string \| number \| TagData)[] \| null`         |    `-`     |
 | default-value             | 默认值（非受控状态）               | `(string \| number \| TagData)[]`                 |    `[]`    |
 | input-value **(v-model)** | 输入框的值                         | `string`                                          |    `-`     |
 | default-input-value       | 输入框的默认值（非受控状态）       | `string`                                          |    `''`    |
 | placeholder               | 占位符                             | `string`                                          |    `-`     |
-| disabled                  | 是否禁用                           | `boolean`                                         |  `false`   |
-| error                     | 是否为错误状态                     | `boolean`                                         |  `false`   |
-| readonly                  | 是否为只读模式                     | `boolean`                                         |  `false`   |
+| disabled                  | 是否禁用                           | `boolean`                                         |  `-`   |
+| error                     | 是否为错误状态                     | `boolean`                                         |  `-`   |
+| readonly                  | 是否为只读模式                     | `boolean`                                         |  `-`   |
 | clearable                 | 是否允许清空                       | `boolean`                                         |  `false`   |
 | size                      | 输入框的大小                       | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`            |   `'md'`   |
 | variant                   | 输入框的变体                       | `'filled' \| 'outline' \| 'standard'`             | `'filled'` |
-| max-tag-count             | 最多展示的标签个数，`0` 表示不限制 | `number`                                          |    `0`     |
+| max-tag-count             | 有限非负整数；0 不限，非法值诊断后按不限展示 | `number`                                          |    `0`     |
 | retain-input-value        | 是否保留输入框的内容               | `boolean \| { create?: boolean; blur?: boolean }` |  `false`   |
 | format-tag                | 格式化标签内容                     | `(data: TagData) => string`                       |    `-`     |
 | unique-value              | 是否仅创建唯一的值                 | `boolean`                                         |  `false`   |
 | field-names               | 自定义 `TagData` 中的字段          | `InputTagFieldNames`                              |    `-`     |
 | tag-nowrap                | 标签内容不换行                     | `boolean`                                         |  `false`   |
 
-### `<input-tag>` Events
+| loading | 业务控制的加载状态，不禁止输入 | `boolean` | `false` |
+| loading-mode | 共享字段反馈形态，不是 Loading 动画类型 | `'default' \| 'line'` | `'default'` |
+| empty-value | 清空输出；默认空数组，可显式配置 null | `InputTagValue \| (() => InputTagValue)` | `[]` |
+| empty-values | 空值识别策略，字段优先于 FormItem 和 Form | `readonly unknown[]` | `-` |
+| empty-text | 阅读空文案，显式空字符串有效 | `string` | `'-'` |
+| edit-mode | 编辑模式；字段优先于 FormItem 和 Form | `'direct' \| 'click' \| 'dblclick'` | `'direct'` |
+| read-pretty | 独立阅读状态，显式 false 覆盖父级 | `boolean` | `false` |
+| before-commit | 延迟编辑保存前守卫；返回布尔值、Promise 或通过 done 完成 | `(payload: { value: unknown; previousValue: unknown }, done: (allow?: boolean) => void, context: { signal: AbortSignal; event?: Event }) => void \| boolean \| Promise<void \| boolean>` | `-` |
+| open | 受控编辑层开关，不是内部原生输入焦点 | `boolean` | `-` |
+| default-open | 非受控编辑层初始开关 | `boolean` | `false` |
+| popup-container | 编辑层挂载容器 | `string \| HTMLElement \| false` | `-` |
+
+### InputTag Events
 
 | 事件名             | 描述                     | 参数                                                    |
 | ------------------ | ------------------------ | ------------------------------------------------------- |
-| change             | 值发生改变时触发         | value: `(string \| number \| TagData)[]`<br>ev: `Event` |
+| update:modelValue | 标签模型更新提案，确认模式在保存后通知 | value: `InputTagValue` |
+| update:inputValue | 独立输入草稿更新提案 | inputValue: `string` |
+| update:open | 编辑层受控开关更新 | open: `boolean` |
+| open-change | 编辑层实际开关变化 | open: `boolean` |
+| change             | 值发生改变时触发         | value: `InputTagValue`<br>ev?: `Event` |
 | input-value-change | 输入值发生改变时触发     | inputValue: `string`<br>ev: `Event`                     |
 | press-enter        | 按下回车键时触发         | inputValue: `string`<br>ev: `KeyboardEvent`             |
 | remove             | 点击标签的删除按钮时触发 | removed: `string \| number`<br>ev: `Event`              |
-| clear              | 点击清除按钮时触发       | ev: `MouseEvent`                                        |
+| clear              | 调用清除动作时触发       | ev: `Event`                                        |
 | focus              | 输入框获取焦点时触发     | ev: `FocusEvent`                                        |
 | blur               | 输入框失去焦点时触发     | ev: `FocusEvent`                                        |
 
-### `<input-tag>` Methods
+### InputTag Methods
 
 | 方法名 | 描述             | 参数 | 返回值 |
 | ------ | ---------------- | ---- | ------ |
-| focus  | 使输入框获取焦点 | -    | -      |
-| blur   | 使输入框失去焦点 | -    | -      |
+| focus  | 使当前编辑器获取焦点；延迟模式先打开允许编辑的面板 | -    | -      |
+| blur   | 使当前输入框失去焦点 | -    | -      |
 
-### `<input-tag>` Slots
+公开方法从组件首次挂载起保持可调用；保存下来的方法每次查找当前编辑器，关闭、重开、切换模式后不会操作旧输入。尚未挂载或已经关闭的原生输入引用为 undefined。
+
+### InputTag Slots
 
 | 插槽名 |         描述         | 参数            |
 | ------ | :------------------: | --------------- |
 | tag    | 输入框标签的显示内容 | data: `TagData` |
 | prefix |       前缀元素       | -               |
 | suffix |       后缀元素       | -               |
+| clear-icon | 自定义清空入口 | clear: `(event?: Event) => void` |
+| read | 自定义阅读内容，优先于 empty-text | value: `InputTagValue`<br>text: `string` |
+
+## Types
 
 ### TagData
 
@@ -159,73 +193,35 @@ permalink: /components/input-tag/
 | closable | 是否可关闭 | `boolean`          | `false` |
 | tagProps | 标签属性   | `TagProps`         |   `-`   |
 
-### 类型定义
-
 组件导出以下类型定义
 
 ```ts
-import type { InputTagInstance } from "@cedar-design/ui";
+import type { InputTagProps, InputTagValue, InputTagEmits, InputTagSlots, InputTagExpose, InputTagInstance, InputTagFieldNames, TagData } from "@cedar-design/ui";
 ```
 
-## InputTag 旧图标引用收尾
+## 标签与关闭按钮
 
-Cedar InputTag 实际嵌入 Tag 的 close-btn，不渲染旧 c-icon-hover 伪元素。本次移除旧 mixin 导入、默认／focus 的伪元素背景规则，以及重复的自定义 Tag 文字规则（文字由 Tag 自身负责）。关闭按钮的现有外观、点击删除和 readonly / disabled 行为不变；没有新增 hover 背景效果。
-
-同步删除两端 tag-custom-icon-bg-hover，以及 Cedar input-tag-tag-remove-icon-color-bg / input-tag-tag-remove-icon-color-bg-focus。旧变量没有替代项，业务中对此的无效覆盖可删除；不保留别名。Maple 没有 InputTag 组件，仅同步清理共享 Tag 变量。
-
-此前的跨组件保留项已关闭。check:token-consumers 现在检查 414 项 Badge / Tag 声明且无豁免，并编译 InputTag 防止旧图标选择器／变量回流；实际 DOM、关闭交互和自定义颜色由 InputTag 集成测试验证。553 项共享默认值数量不变：本次删除的共享变量此前仅登记名称。此阶段仍不代表 InputTag 全部 Token、浏览器视觉或键盘交互已完成治理。
+标签和关闭按钮的外观由 Tag 控制；禁用、只读及不可关闭的标签不能通过关闭按钮移除。
 
 ## InputTag 外壳与内容职责
 
-InputTag 的 outline / filled / standard 外壳由 FieldDecorator 管理。Form 不应重新设置其背景、边框或焦点阴影；本次删除了 Form 对旧 InputTag 状态类的重绘规则，保留校验提示职责。filled 的默认／hover／focus 继续走 FieldDecorator 的 fill-1 / fill-2 / fill-3 规则。
+InputTag 的 outline / filled / standard 外观使用 FieldDecorator 的变量。filled 的默认、悬停和聚焦背景分别使用 fill-1、fill-2、fill-3。Form 负责校验提示。
 
-InputTag 的内容密度、默认标签底色和禁用文字由 input-tag-* 控制。内容选择器现在匹配实际的 c-field-decorator--size-* / --focus / --disabled 类名，而非不存在的旧 InputTag 状态类；disabled 优先于 focus。五档 xs / sm / md / lg / xl 内容规则均已覆盖；xl 的标签高度为 32px、输入文字为 16px、垂直内边距为 4px。
+InputTag 的内容密度、默认标签底色和禁用文字由 input-tag-* 控制。禁用样式优先于聚焦样式。支持 xs / sm / md / lg / xl 五档尺寸；xl 的标签高度为 32px、输入文字为 16px、垂直内边距为 4px。
 
 移除 33 项没有实际 CSS 消费的旧外壳变量：size-{xs,sm,md,lg}-height；color-text-error；color-placeholder、color-icon-clear、color-icon-clear-bg-hover；color-border-{default,error,disabled}（及其 -hover / -focus）；color-bg-{default,error}（及其 -hover / -focus）、color-bg-disabled（及 -hover）；color-shadow-{default,error}-focus、size-shadow-{default,error}-focus；border-radius、border-width、size-icon-clear、size-icon-clear-hover。以上后缀均属于 --c-input-tag-。没有兼容别名。
 
-迁移时按职责选择实际入口：外壳背景用 field-variant-{variant}-background 系列，圆角用 field-border-radius，占位文字用 field-placeholder-text-color，清除图标用 field-clear-icon-color / field-clear-icon-size。几何优先使用 size 属性；不要覆盖 internal 变量。旧无消费变量不存在逐项等价替代；内容标签使用下列 InputTag 自身变量。
+外壳背景通过 field-variant-{variant}-background 定制，圆角使用 field-border-radius，占位文字使用 field-placeholder-text-color，清除图标使用 field-clear-icon-color 和 field-clear-icon-size。尺寸优先通过 `size` 设置，标签内容使用 InputTag 自身变量。
 
-InputTag 保留 27 项内容变量，已加入无消费检查；两端 Badge / Tag 加 Cedar InputTag 共检查 441 项声明，内容 size / focus / disabled 级联覆盖 80 组。共享默认值契约仍为 553 项；Cedar-only InputTag 不冒充跨端共享组件。默认文字、禁用文字、标签底色与焦点底色分别引用 content-primary、content-disabled、surface-default、state-hover。禁用状态只重绘中性标签，不覆盖显式 color / status；业务自定义颜色的可读性由业务负责。父级 disabled / readonly 优先于 tagProps.closable / checkable，loading 或显式不可关闭的标签也不能用 Backspace 删除。已完成 Cedar 浏览器五档布局、xl 输入与键盘删除、明暗模式以及禁用自定义色的抽验，不代表全组件视觉验收。
+默认文字、禁用文字、标签底色与焦点底色分别使用对应的系统语义色。禁用状态不会覆盖显式设置的 color / status；自定义颜色时需保证文字可读性。父级 disabled / readonly 优先于 tagProps.closable / checkable，loading 或显式不可关闭的标签不能用 Backspace 删除。
 
-### 当前内容变量
+### 编辑与确认
 
-| 变量                                      | 默认值                                |
-| ----------------------------------------- | ------------------------------------- |
-| `--c-input-tag-size-xs-tag-height`        | `20px`                                |
-| `--c-input-tag-size-sm-tag-height`        | `20px`                                |
-| `--c-input-tag-size-md-tag-height`        | `24px`                                |
-| `--c-input-tag-size-lg-tag-height`        | `28px`                                |
-| `--c-input-tag-size-xl-tag-height`        | `32px`                                |
-| `--c-input-tag-size-xs-font-size`         | `12px`                                |
-| `--c-input-tag-size-sm-font-size`         | `14px`                                |
-| `--c-input-tag-size-md-font-size`         | `14px`                                |
-| `--c-input-tag-size-lg-font-size`         | `14px`                                |
-| `--c-input-tag-size-xl-font-size`         | `16px`                                |
-| `--c-input-tag-color-text-default`        | `var(--c-sys-color-content-primary)`  |
-| `--c-input-tag-color-text-disabled`       | `var(--c-sys-color-content-disabled)` |
-| `--c-input-tag-tag-margin-right`          | `4px`                                 |
-| `--c-input-tag-tag-margin-y`              | `2px`                                 |
-| `--c-input-tag-padding-x`                 | `4px`                                 |
-| `--c-input-tag-size-xs-padding-y`         | `0px`                                 |
-| `--c-input-tag-size-sm-padding-y`         | `2px`                                 |
-| `--c-input-tag-size-md-padding-y`         | `2px`                                 |
-| `--c-input-tag-size-lg-padding-y`         | `2px`                                 |
-| `--c-input-tag-size-xl-padding-y`         | `4px`                                 |
-| `--c-input-tag-tag-font-size`             | `12px`                                |
-| `--c-input-tag-tag-color-bg`              | `var(--c-sys-color-surface-default)`  |
-| `--c-input-tag-tag-color-bg-focus`        | `var(--c-sys-color-state-hover)`      |
-| `--c-input-tag-tag-color-bg-disabled`     | `var(--c-sys-color-state-hover)`      |
-| `--c-input-tag-tag-color-border`          | `var(--c-color-fill-3)`               |
-| `--c-input-tag-tag-color-border-disabled` | `var(--c-color-fill-3)`               |
-| `--c-input-tag-tag-color-border-focus`    | `var(--c-sys-color-state-hover)`      |
-
-### Form 字段展示与确认
-
-本组件支持 `edit-mode`，字段 > FormItem > Form 逐层继承；未指定时为 `direct`，保留原有交互。支持值：`direct / click / dblclick`。非 direct 编辑模式通过字段值入口打开编辑面板，并维护单份草稿；确认后才更新 v-model，取消、重置或启用 readPretty 时丢弃草稿。
+通过 `edit-mode` 配置编辑方式；未指定时依次继承 FormItem、Form，默认 `direct`。支持值：`direct / click / dblclick`。非 direct 编辑模式通过字段值入口打开编辑面板，并维护单份草稿；确认后才更新 v-model，取消、重置或启用 readPretty 时丢弃草稿。
 
 Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，Enter/F2 也可进入；取消/Escape 丢弃草稿，确认后提交。readPretty 为独立阅读属性，与 readonly、disabled 分开。
 
-`before-commit(value, { previousValue, signal })` 可拦截弹层保存；FormItem 先校验候选值，失败保持编辑。`open / default-open / update:open` 控制编辑层。`#read="{ value, text }"` 可自定义阅读内容。集中示例见 Form 的“各类字段统一展示”。
+`before-commit(payload, done, context)` 可拦截弹层保存；FormItem 先校验候选值，失败保持编辑。`open / default-open / update:open` 控制编辑层。`#read="{ value, text }"` 可自定义阅读内容。集中示例见 Form 的“各类字段统一展示”。
 
 `read-pretty` 为独立布尔属性，与 `readonly`、`disabled` 同级；字段 > FormItem > Form 继承，显式 `false` 覆盖父级。默认 `false`。纯阅读不显示编辑器。
 
@@ -234,3 +230,55 @@ Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，
 `empty-value` 指定当前组件已有清空动作的输出；省略时采用该组件默认返回。具体类型以组件 API 为准。它不改变 empty-values 的识别规则，也不改变 Form reset 的初始值。
 
 `empty-value` 可显式设为 `null`（或 `() => null`），清空时原样提交 null；省略时保留组件原默认值。界面把 null 显示为空，不会把普通输入的空字符串自动转成 null。支持弹出编辑的字段中，清空先修改草稿，确认后提交，取消则保留原值。
+
+## CSS Variables
+
+<!-- component-css-variables:start -->
+
+通过以下变量定制组件外观。默认值随表中注明的主题或选择器条件变化；变量仅在对应的尺寸、变体和交互状态下生效。
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| 变量 | 默认值／条件 | 影响的样式 |
+| --- | --- | --- |
+| `--c-input-tag-color-text-default` | `var(--c-sys-color-content-primary)` | `color` |
+| `--c-input-tag-color-text-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
+| `--c-input-tag-padding-x` | `4px` | `padding-inline-end`, `padding-inline-start` |
+| `--c-input-tag-size-lg-font-size` | `14px` | `font-size` |
+| `--c-input-tag-size-lg-padding-y` | `2px` | `padding-bottom`, `padding-top` |
+| `--c-input-tag-size-lg-tag-height` | `28px` | `line-height`, `min-height` |
+| `--c-input-tag-size-md-font-size` | `14px` | `font-size` |
+| `--c-input-tag-size-md-padding-y` | `2px` | `padding-bottom`, `padding-top` |
+| `--c-input-tag-size-md-tag-height` | `24px` | `line-height`, `min-height` |
+| `--c-input-tag-size-sm-font-size` | `14px` | `font-size` |
+| `--c-input-tag-size-sm-padding-y` | `2px` | `padding-bottom`, `padding-top` |
+| `--c-input-tag-size-sm-tag-height` | `20px` | `line-height`, `min-height` |
+| `--c-input-tag-size-xl-font-size` | `16px` | `font-size` |
+| `--c-input-tag-size-xl-padding-y` | `4px` | `padding-bottom`, `padding-top` |
+| `--c-input-tag-size-xl-tag-height` | `32px` | `line-height`, `min-height` |
+| `--c-input-tag-size-xs-font-size` | `12px` | `font-size` |
+| `--c-input-tag-size-xs-padding-y` | `0px` | `padding-bottom`, `padding-top` |
+| `--c-input-tag-size-xs-tag-height` | `20px` | `line-height`, `min-height` |
+| `--c-input-tag-tag-color-bg` | `var(--c-sys-color-surface-default)` | `background-color` |
+| `--c-input-tag-tag-color-bg-disabled` | `var(--c-sys-color-state-hover)` | `background-color` |
+| `--c-input-tag-tag-color-bg-focus` | `var(--c-sys-color-state-hover)` | `background-color` |
+| `--c-input-tag-tag-color-border` | `var(--c-color-fill-3)` | `border-color` |
+| `--c-input-tag-tag-color-border-disabled` | `var(--c-color-fill-3)` | `border-color` |
+| `--c-input-tag-tag-color-border-focus` | `var(--c-sys-color-state-hover)` | `border-color` |
+| `--c-input-tag-tag-font-size` | `12px` | `font-size` |
+| `--c-input-tag-tag-margin-right` | `4px` | `margin-inline-end` |
+| `--c-input-tag-tag-margin-y` | `2px` | `margin-bottom`, `margin-top` |
+
+</div>
+
+将覆盖设置在组件实际根节点或弹层真实挂载祖先上。例如给该元素添加下列 class，再按需替换变量值：
+
+```css
+.component-theme {
+  --c-input-tag-color-text-default: var(--c-sys-color-content-primary);
+}
+```
+
+显式行内样式及直接写入同一 CSS 属性的 Props 优先于样式表默认值。Teleport 后，普通 CSS 变量按实际挂载位置继承；使用 ThemeProvider 时，请遵循其局部主题与弹层配置规则。局部定制请直接覆盖组件变量；仅修改后代的 system 变量不会重新计算从根继承的组件别名。内部变量不属于公共 API。
+
+<!-- component-css-variables:end -->

@@ -1,0 +1,3 @@
+- [x] Preserve slide focus ownership across visibility and removal changes on both platforms.
+- [x] Verify controlled rejection, fade, multiple visible slides, removal and outside focus in Chromium.
+- [x] Run affected tests and type checks and update bilingual documentation.

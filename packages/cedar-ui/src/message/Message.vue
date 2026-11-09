@@ -9,6 +9,7 @@
       <div
         v-if="open"
       :dir="readingDirection"
+        v-bind="mergeProps(themeScope, regionAttrs())"
         role="alert"
         :class="[
           prefixCls,
@@ -57,27 +58,32 @@
 </template>
 
 <script setup lang="ts">
+import { useThemeScope } from '../theme-provider/context'
 import { useDirection } from '../_utils/direction'
-import { useAttrs, defineComponent, onMounted, watch, type PropType } from "vue";
-import { IconCheckCircleFill } from "@cedar-design/icons-vue/icon-check-circle-fill";
-import { IconClose } from "@cedar-design/icons-vue/icon-close";
-import { IconCloseCircleFill } from "@cedar-design/icons-vue/icon-close-circle-fill";
-import { IconExclamationCircleFill } from "@cedar-design/icons-vue/icon-exclamation-circle-fill";
-import { IconInfoCircleFill } from "@cedar-design/icons-vue/icon-info-circle-fill";
-import { IconLoading } from "@cedar-design/icons-vue/icon-loading";
+import { mergeProps,  useAttrs, defineComponent, onMounted, watch, type PropType } from 'vue';
+import { IconCheckCircleFill } from '@cedar-design/icons-vue/icon-check-circle-fill';
+import { IconClose } from '@cedar-design/icons-vue/icon-close';
+import { IconCloseCircleFill } from '@cedar-design/icons-vue/icon-close-circle-fill';
+import { IconExclamationCircleFill } from '@cedar-design/icons-vue/icon-exclamation-circle-fill';
+import { IconInfoCircleFill } from '@cedar-design/icons-vue/icon-info-circle-fill';
+import { IconLoading } from '@cedar-design/icons-vue/icon-loading';
 import AIconHover from "../_components/IconHover.vue";
-import { createNamespace, getPrefixCls } from "../_utils/global-config";
-import { usePopupContainer } from "../_utils/popup-container";
-import { messageProps } from "./props";
+import { createNamespace, getPrefixCls } from '../_utils/global-config';
+import { usePopupContainer } from '../_utils/popup-container';
+import { messageProps } from './props';
 import type { MessageContent } from "./types";
-import { useMessageTimer } from "./use-message-timer";
+import { useMessageTimer } from './use-message-timer';
 
-defineOptions({ name: createNamespace("message").name });
+
+const themeScope = useThemeScope()
+
+defineOptions({ name: createNamespace("message").name, inheritAttrs: false });
 const DynamicContent = defineComponent({
   props: {
     value: [
       String,
       Number,
+      Boolean,
       Object,
       Array,
       Function,
@@ -87,8 +93,9 @@ const DynamicContent = defineComponent({
     typeof props.value === "function" ? props.value() : props.value,
 });
 const props = defineProps(messageProps);
-const directionAttrs = useAttrs()
-const { dir: readingDirection } = useDirection(undefined, () => directionAttrs.dir)
+const attrs = useAttrs()
+const regionAttrs = () => Object.fromEntries(Object.entries(attrs).filter(([key]) => key !== 'dir'))
+const { dir: readingDirection } = useDirection(undefined, () => attrs.dir)
 const emit = defineEmits<{
   (event: "update:open", value: boolean): void;
   (event: "open" | "opened" | "close" | "closed"): void;

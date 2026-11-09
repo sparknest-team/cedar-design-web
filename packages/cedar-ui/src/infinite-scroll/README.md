@@ -71,9 +71,11 @@ InfiniteScroll 负责检测接近滚动底部并驱动分页状态，不负责�
 
 <demo src="./__demos__/scheduler-lifecycle.vue"></demo>
 
+`target` 为选择器时，目标必须在绑定时已存在；`check()` 只检查当前绑定，不重新解析选择器。目标稍后出现时，请改传元素或变更 `target` 触发重新绑定。使用 `v-model:status` 接收组件发出的 `loading`，请求结束后再设为 `idle`、`error` 或 `finished`；仅重复赋值原来的 `idle` 不会解除请求锁。数字负阈值表示越过底部后才触发；字符串作为 CSS 宽度解析，负长度无效并回退 0，百分比按测量元素的 CSS 包含块宽度计算。
+
 ## API
 
-### `<infinite-scroll>` Props
+### InfiniteScroll Props
 
 | 参数名        | 描述                                               | 类型                                           | 默认值   |
 | ------------- | -------------------------------------------------- | ---------------------------------------------- | -------- |
@@ -83,7 +85,7 @@ InfiniteScroll 负责检测接近滚动底部并驱动分页状态，不负责�
 | disabled      | 是否暂停加载和重试                                 | `boolean`                                      | `false`  |
 | target        | 滚动容器；未传时使用最近滚动父级                   | `string \| HTMLElement`                        | `-`      |
 
-### `<infinite-scroll>` Events
+### InfiniteScroll Events
 
 | 事件名        | 描述                       | 参数      |
 | ------------- | -------------------------- | --------- |
@@ -93,14 +95,14 @@ InfiniteScroll 负责检测接近滚动底部并驱动分页状态，不负责�
 
 `retry` 不会同时触发 `load`。业务可让两个事件调用同一个请求函数。
 
-### `<infinite-scroll>` Methods
+### InfiniteScroll Methods
 
 | 方法名 | 描述                         |
 | ------ | ---------------------------- |
 | check  | 立即检查当前是否到达加载阈值 |
 | retry  | 在 `error` 状态下发起重试    |
 
-### `<infinite-scroll>` Slots
+### InfiniteScroll Slots
 
 | 插槽名   | 描述             | 参数                |
 | -------- | ---------------- | ------------------- |
@@ -111,7 +113,7 @@ InfiniteScroll 负责检测接近滚动底部并驱动分页状态，不负责�
 
 默认错误区域可点击重试。`finished` 是终态，只有外部将 `status` 重置为 `idle` 后才会恢复检测。
 
-### 类型定义
+## Types
 
 ```ts
 import type {
@@ -122,13 +124,33 @@ import type {
 } from "@cedar-design/ui";
 ```
 
-### 样式变量
+## CSS Variables
 
-| 变量名                                          | 默认值                  |
-| ----------------------------------------------- | ----------------------- |
-| `--c-infinite-scroll-status-min-height`         | `50px`                  |
-| `--c-infinite-scroll-status-padding`            | `12px 0`                |
-| `--c-infinite-scroll-status-color`              | `var(--c-color-text-3)` |
-| `--c-infinite-scroll-status-font-size`          | `var(--c-font-size-md)` |
-| `--c-infinite-scroll-loading-gap`               | `8px`                   |
-| `--c-infinite-scroll-error-color`               | `var(--c-color-danger)` |
+<!-- component-css-variables:start -->
+
+通过以下变量定制组件外观。默认值随表中注明的主题或选择器条件变化；变量仅在对应的尺寸、变体和交互状态下生效。
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| 变量 | 默认值／条件 | 影响的样式 |
+| --- | --- | --- |
+| `--c-infinite-scroll-error-color` | `var(--c-sys-color-content-danger)` | `color` |
+| `--c-infinite-scroll-loading-gap` | `8px` | `gap` |
+| `--c-infinite-scroll-status-color` | `var(--c-color-text-3)` | `color` |
+| `--c-infinite-scroll-status-font-size` | `var(--c-font-size-md)` | `font-size` |
+| `--c-infinite-scroll-status-min-height` | `50px` | `min-height` |
+| `--c-infinite-scroll-status-padding` | `12px 0` | `padding` |
+
+</div>
+
+将覆盖设置在组件实际根节点或弹层真实挂载祖先上。例如给该元素添加下列 class，再按需替换变量值：
+
+```css
+.component-theme {
+  --c-infinite-scroll-error-color: var(--c-sys-color-content-danger);
+}
+```
+
+显式行内样式及直接写入同一 CSS 属性的 Props 优先于样式表默认值。Teleport 后，普通 CSS 变量按实际挂载位置继承；使用 ThemeProvider 时，请遵循其局部主题与弹层配置规则。局部定制请直接覆盖组件变量；仅修改后代的 system 变量不会重新计算从根继承的组件别名。内部变量不属于公共 API。
+
+<!-- component-css-variables:end -->

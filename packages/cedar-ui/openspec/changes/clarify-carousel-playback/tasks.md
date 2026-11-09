@@ -1,0 +1,4 @@
+- [x] Align timing and public fractional index normalization on both platforms.
+- [x] Correct the demo page number and show persistent stop and explicit restart.
+- [x] Verify both platforms' autoplay, indicator, timing, tests and types.
+- [x] Document current accessibility behavior and its APG distinction in both languages.

@@ -1,5 +1,5 @@
 <template>
-  <div ref="root" v-bind="$attrs" :class="cls">
+  <div ref="root" v-bind="$attrs" :role="typeof $attrs.role === 'string' ? $attrs.role : (describeError($attrs['aria-describedby']) ? 'group' : undefined)" :aria-describedby="describeError($attrs['aria-describedby'])" :class="cls">
     <transfer-view
       type="source"
       :class="`${prefixCls}-view-source`"
@@ -70,6 +70,7 @@
 <script lang="ts">
 import { useDirection } from '@cedar-design/use'
 import { useOptionRequest } from '../_hooks/use-option-request'
+import { provideFormErrorDescriptionBoundary, useFormErrorDescription } from '../form/error-description'
 import { transferProps } from './props'
 import { createNamespace } from '../_utils/global-config'
 import { computed, defineComponent, PropType, provide, reactive, ref, toRef } from 'vue'
@@ -97,7 +98,7 @@ export default defineComponent({
     /**
      * @zh 目标选择框的值改变时触发
      * @en Triggered when the value of the target selection box changes
-     * @property {string[]} value
+   * @property {TransferTargetItem[]} value
      */
     change: (value: TransferTargetItem[] | null) => true,
     /**
@@ -115,7 +116,7 @@ export default defineComponent({
    * @zh 选项
    * @en Option
    * @slot item
-   * @binding {string} value
+   * @binding {TransferValue} value
    * @binding {string} label
    */
   /**
@@ -123,16 +124,16 @@ export default defineComponent({
    * @en Source content
    * @slot source
    * @binding {TransferItem[]} data
-   * @binding {string[]} selectedKeys
-   * @binding {(value: string[]) => void} onSelect
+   * @binding {TransferValue[]} selectedKeys
+   * @binding {(value: TransferValue[]) => void} onSelect
    */
   /**
    * @zh 目标面板
    * @en Target content
    * @slot target
    * @binding {TransferItem[]} data
-   * @binding {string[]} selectedKeys
-   * @binding {(value: string[]) => void} onSelect
+   * @binding {TransferValue[]} selectedKeys
+   * @binding {(value: TransferValue[]) => void} onSelect
    */
   /**
    * @zh 源标题插槽
@@ -158,21 +159,15 @@ export default defineComponent({
    * @binding {(checked:boolean) => void} onSelectAllChange
    * @binding {() => void} onClear
    */
-  /**
-   * @zh 移至源图标插槽
-   * @en To source icon slot
-   * @slot to-source-icon
-   */
-  /**
-   * @zh 移至目标图标插槽
-   * @en To target icon slot
-   * @slot to-target-icon
-   */
   setup(props, { emit, slots }) {
-    const { mergedDisabled, eventHandlers } = useFormItem({
+    const { describe: describeError } = useFormErrorDescription()
+    provideFormErrorDescriptionBoundary()
+    const { mergedDisabled: inheritedDisabled, mergedReadonly, eventHandlers } = useFormItem({
       disabled: toRef(props, 'disabled'),
+      readonly: toRef(props, 'readonly'),
     })
-    const source = useOptionRequest(() => props.data, () => mergedDisabled.value, error => emit('load-error', error), () => 0, transferProps)
+    const mergedDisabled = computed(() => inheritedDisabled.value || mergedReadonly.value)
+    const source = useOptionRequest(() => props.data, () => inheritedDisabled.value, error => emit('load-error', error), () => 0, transferProps)
     const data = source.options
     const root = ref<HTMLElement>()
     const { dir } = useDirection(() => root.value)
@@ -244,8 +239,7 @@ export default defineComponent({
 
       for (const targetItem of computedTarget.value) {
         const value = targetItem.value
-        const item = itemByValue.get(value)
-        if (!item) continue
+        const item = itemByValue.get(value) ?? { value, label: targetItem.label ?? String(value) }
         targetInfo.data.push(displayItem(item, true))
         if (!item.disabled && !item.required) targetInfo.allValidValues.push(value)
         targetInfo.selected.push(value)
@@ -306,6 +300,7 @@ export default defineComponent({
     }
 
     const updateTarget = (items: TransferTargetItem[]) => {
+      if (mergedDisabled.value) return
       const next = items.map((item) => ({ ...item }))
       _target.value = next
       emit('update:modelValue', next)
@@ -354,12 +349,14 @@ export default defineComponent({
     }
 
     const startRename = (item: TransferItem) => {
+      if (mergedDisabled.value) return
       renamingValue.value = item.value
       renameDraft.value = item.label
       renameVisible.value = true
     }
 
     const commitRename = () => {
+      if (mergedDisabled.value) return
       const label = renameDraft.value.trim()
       if (typeof renamingValue.value === 'undefined' || !label) return
       updateTarget(computedTarget.value.map((item) => (item.value === renamingValue.value ? { ...item, label } : item)))
@@ -368,6 +365,7 @@ export default defineComponent({
     }
 
     const handleTargetAction = (action: TransferTargetAction, item: TransferItem) => {
+      if (mergedDisabled.value) return
       emit('target-action', action.key, item)
     }
 
@@ -389,6 +387,7 @@ export default defineComponent({
     const cls = computed(() => [prefixCls, { [`${prefixCls}-disabled`]: mergedDisabled.value }])
 
     return {
+      describeError,
       root,
       dir,
       prefixCls,

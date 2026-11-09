@@ -6,6 +6,7 @@ const Calendar = withInstall(_Calendar, Object.assign(_Calendar, {
 }), { components: [_Calendar] })
 
 export type CalendarInstance = InstanceType<typeof _Calendar>
+export type { CalendarEmits, CalendarSlots } from './types'
 
 export const _CalendarComponent = Calendar
 

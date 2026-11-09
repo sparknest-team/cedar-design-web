@@ -108,7 +108,7 @@ permalink: /components/progress-group/
 
 线形与环形按数据顺序累计裁剪到 max；图例和提示仍保留每项原始占比。例如 70+50 时第二段实际显示 30%，图例仍为 50%。非有限值和负数归零，非法 max 回退 100。Tab 聚焦可见分段展示提示，Escape 关闭；鼠标离开不会关闭仍处于焦点的提示。用 aria-label 为整个分组命名。
 
-size 五档均实现，仅影响线形厚度（2/4/8/12/16px）；环形用 circle-size（支持 number/CSS长度）和 stroke-width。累计文本开关为 show-text，自定义插槽为 text，已删除旧布尔 status / status 插槽。
+size 五档均实现，仅影响线形厚度（2/4/8/12/16px）；环形用 circle-size（支持 number/CSS长度）和 stroke-width。累计文本开关为 show-text，自定义插槽为 text。
 
 使用 `text` 和 `item-trailing` 插槽自定义累计状态与图例尾部内容。
 
@@ -120,9 +120,19 @@ size 五档均实现，仅影响线形厚度（2/4/8/12/16px）；环形用 circ
 
 横向分段、高亮与提示使用同一逻辑起点；垂直进度仍从上到下，圆环保持原有角度与数据顺序。
 
+## 使用说明
+
+### 布局与动效
+内置动效遵循 `prefers-reduced-motion: reduce`。线形厚度同时适用于横向和纵向布局；环形尺寸通过属性配置。
+
+
+`orientation` 只控制线形布局，圆环的图例排列不随它变化。圆环 `stroke-width` 是 100×100 SVG 坐标中的数值，不是 CSS 长度。提供 `text` 插槽时，即使 `show-text=false` 也会显示该槽。设置 `item.slot` 后使用该前缀及其 `-leading`、`-label`、`-trailing` 槽；未提供的动态槽使用内置内容，不回退到通用 `item-*` 槽。
+
+提示支持鼠标移入和停留，离开后恢复焦点对应的提示；Escape 可关闭。提示内容用于说明，请勿放入可交互表单控件。
+
 ## API
 
-### Props
+### ProgressGroup Props
 
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
@@ -138,6 +148,16 @@ size 五档均实现，仅影响线形厚度（2/4/8/12/16px）；环形用 circ
 | tooltip | 是否启用分段悬浮/聚焦提示 | `boolean` | `true` |
 | orientation | 线形进度轨的横纵朝向，默认 horizontal；仅 mode=line 生效 | `'horizontal' \| 'vertical'` | `'horizontal'` |
 
+### ProgressGroup Slots
+
+| 名称 | 插槽参数 |
+| --- | --- |
+| text | `{ percent, value, max }` |
+| tooltip | `{ item, index, percent }` |
+| item / item-leading / item-label / item-trailing | `{ item, index, percent }` |
+
+## Types
+
 ### Item
 
 | 属性 | 说明 | 类型 |
@@ -147,50 +167,56 @@ size 五档均实现，仅影响线形厚度（2/4/8/12/16px）；环形用 circ
 | color | 分段颜色 | `string` |
 | icon | 图例图标组件 | `Component` |
 | slot | 自定义插槽名前缀 | `string` |
+| class | 图例项附加类名 | `string` |
 | tip | 自定义提示文案 | `string` |
 
-### Slots
-
-| 名称 | 插槽参数 |
-| --- | --- |
-| text | `{ percent, value, max }` |
-| tooltip | `{ item, index, percent }` |
-| item / item-leading / item-label / item-trailing | `{ item, index, percent }` |
-
-### 样式变量
-
-| 变量 | 默认值 |
-| --- | --- |
-| `--c-progress-group-gap` | `var(--c-sys-space-3)` |
-| `--c-progress-group-item-gap` | `var(--c-sys-space-2)` |
-| `--c-progress-group-dot-size` | `var(--c-sys-space-4)` |
-| `--c-progress-group-radius` | `9999px` |
-| `--c-progress-group-track-color` | `var(--c-sys-color-state-hover)` |
-| `--c-progress-group-text-color` | `var(--c-sys-color-content-primary)` |
-| `--c-progress-group-muted-color` | `var(--c-sys-color-content-secondary)` |
-| `--c-progress-group-font-size` | `var(--c-sys-font-size-sm)` |
-| `--c-progress-group-tooltip-bg` | `var(--c-sys-color-surface-tooltip)` |
-| `--c-progress-group-tooltip-color` | `var(--c-sys-color-content-on-dark)` |
+## CSS Variables
 
 图形标记默认使用 system content-brand。颜色优先级：item.color → 组件 color → 默认值。自定义颜色需自行验证对比度；几何 Token 保留平台差异。
 
-### Geometry and motion variables
+<!-- component-css-variables:start -->
 
-Built-in effects respect `prefers-reduced-motion: reduce`. Track thickness applies to both horizontal and vertical layouts; circle geometry remains prop-driven.
+通过以下变量定制组件外观。默认值随表中注明的主题或选择器条件变化；变量仅在对应的尺寸、变体和交互状态下生效。
 
-| Token | Default |
-| --- | --- |
-| `--c-progress-group-transition-duration` | `var(--c-sys-motion-duration-standard)` |
-| `--c-progress-group-tooltip-duration` | `var(--c-sys-motion-duration-fast)` |
-| `--c-progress-group-tooltip-max-width` | `240px` |
-| `--c-progress-group-tooltip-padding` | `5px var(--c-sys-space-4)` |
-| `--c-progress-group-tooltip-radius` | `var(--c-sys-radius-md)` |
-| `--c-progress-group-tooltip-font-size` | `var(--c-sys-font-size-xs)` |
-| `--c-progress-group-tooltip-line-height` | `1.4` |
-| `--c-progress-group-tooltip-offset` | `var(--c-sys-space-4)` |
-| `--c-progress-group-text-font-weight` | `var(--c-sys-font-weight-medium)` |
-| `--c-progress-group-size-xs-thickness` | `2px` |
-| `--c-progress-group-size-sm-thickness` | `4px` |
-| `--c-progress-group-size-md-thickness` | `8px` |
-| `--c-progress-group-size-lg-thickness` | `12px` |
-| `--c-progress-group-size-xl-thickness` | `16px` |
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| 变量 | 默认值／条件 | 影响的样式 |
+| --- | --- | --- |
+| `--c-progress-group-dot-size` | `var(--c-sys-space-4)` | `height`, `width` |
+| `--c-progress-group-font-size` | `var(--c-sys-font-size-sm)` | `font-size` |
+| `--c-progress-group-gap` | `var(--c-sys-space-3)` | `gap` |
+| `--c-progress-group-item-gap` | `var(--c-sys-space-2)` | `gap` |
+| `--c-progress-group-muted-color` | `var(--c-sys-color-content-secondary)` | `color` |
+| `--c-progress-group-radius` | `9999px` | `border-radius`, `clip-path` |
+| `--c-progress-group-size-lg-thickness` | `12px` | `height`, `width` |
+| `--c-progress-group-size-md-thickness` | `8px` | `height`, `width` |
+| `--c-progress-group-size-sm-thickness` | `4px` | `height`, `width` |
+| `--c-progress-group-size-xl-thickness` | `16px` | `height`, `width` |
+| `--c-progress-group-size-xs-thickness` | `2px` | `height`, `width` |
+| `--c-progress-group-text-color` | `var(--c-sys-color-content-primary)` | `color` |
+| `--c-progress-group-text-font-weight` | `var(--c-sys-font-weight-medium)` | `font-weight` |
+| `--c-progress-group-tooltip-bg` | `var(--c-sys-color-surface-tooltip)` | `background` |
+| `--c-progress-group-tooltip-color` | `var(--c-sys-color-content-on-dark)` | `color` |
+| `--c-progress-group-tooltip-duration` | `var(--c-sys-motion-duration-fast)` | `animation` |
+| `--c-progress-group-tooltip-font-size` | `var(--c-sys-font-size-xs)` | `font-size` |
+| `--c-progress-group-tooltip-line-height` | `1.4` | `line-height` |
+| `--c-progress-group-tooltip-max-width` | `240px` | `max-width` |
+| `--c-progress-group-tooltip-offset` | `var(--c-sys-space-4)` | `bottom`, `height`, `inset-inline-start`, `width` |
+| `--c-progress-group-tooltip-padding` | `5px var(--c-sys-space-4)` | `padding` |
+| `--c-progress-group-tooltip-radius` | `var(--c-sys-radius-md)` | `border-radius` |
+| `--c-progress-group-track-color` | `var(--c-sys-color-state-hover)` | `background`, `stroke` |
+| `--c-progress-group-transition-duration` | `var(--c-sys-motion-duration-standard)` | `animation`, `transition` |
+
+</div>
+
+将覆盖设置在组件实际根节点或弹层真实挂载祖先上。例如给该元素添加下列 class，再按需替换变量值：
+
+```css
+.component-theme {
+  --c-progress-group-dot-size: var(--c-sys-space-4);
+}
+```
+
+显式行内样式及直接写入同一 CSS 属性的 Props 优先于样式表默认值。Teleport 后，普通 CSS 变量按实际挂载位置继承；使用 ThemeProvider 时，请遵循其局部主题与弹层配置规则。局部定制请直接覆盖组件变量；仅修改后代的 system 变量不会重新计算从根继承的组件别名。内部变量不属于公共 API。
+
+<!-- component-css-variables:end -->

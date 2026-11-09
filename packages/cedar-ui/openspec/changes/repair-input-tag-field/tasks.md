@@ -1,0 +1,4 @@
+- [x] Reproduce the field inheritance/attrs/clear/composition failures and shared native modifier/cancel gaps.
+- [x] Implement existing field/form/native/composition contracts and explicit clear/loading interfaces.
+- [x] Validate actual keyboard, IME sequence, native form/label, controlled/deferred modes and all affected consumers on both applicable platforms.
+- [x] Reconcile public declarations/docs and pass required source/API/type/lint/spec gates; keep IT05–07 pending until their complete scope is verified.

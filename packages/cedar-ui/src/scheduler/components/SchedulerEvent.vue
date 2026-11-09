@@ -71,7 +71,7 @@
       @dragstart.stop="begin($event, 'start')"
     />
     <Teleport v-if="ghost" to="body">
-      <div
+      <div v-bind="themeScope"
         :class="[n('drag-ghost'), n('event')]"
         :dir="direction"
         :style="{
@@ -93,12 +93,16 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, onActivated, onDeactivated, ref, shallowRef, watch } from "vue";
+import { useThemeScope } from '../../theme-provider/context'
+import { computed, onBeforeUnmount, onMounted, onActivated, onDeactivated, ref, shallowRef, watch } from 'vue';
 import CButton from "../../button";
-import { useDirection } from "../../_utils/direction";
-import { createNamespace } from "../../_utils/global-config";
+import { useDirection } from '../../_utils/direction';
+import { createNamespace } from '../../_utils/global-config';
 import type { SchedulerEvent } from "../core";
 import type { SchedulerResize } from "../drag";
+
+
+const themeScope = useThemeScope()
 
 defineOptions({ name: createNamespace("scheduler-event").name });
 const { n, classes } = createNamespace("scheduler");

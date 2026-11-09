@@ -6,9 +6,9 @@ permalink: /components/time-picker/
 
 时间选择**面板**（默认无触发器）。
 
-### 列表滚动任务审计（2026-10-16）
+### 选择与滚动
 
-私有工具保留正时长线性滚动（列选择100ms）；零／负／非有限时长及owner减弱动态直接到位，动态reduce下一帧收束。同元素新请求取消旧任务，旧帧／重复帧不覆盖新偏移。工具取消保持当前偏移，不触发选择提交；无新增公开API或CSS Token。
+选择时间列会滚动到对应选项。启用减少动态效果时直接定位，不执行滚动动画；仅滚动定位不会提交选择。
 
 表单字段请使用 [`Time`](/components/time/)；时间范围字段请使用 [`TimeRange`](/components/time-range/)；范围面板请使用 [`TimeRangePicker`](/components/time-range-picker/)。
 
@@ -79,7 +79,7 @@ permalink: /components/time-picker/
 
 纯面板默认确认后提交：选择时仅发 select，确认后才更新模型并发 change；disable-confirm 开启后有效选择立即提交。hide-disabled-options 默认 false，开启后隐藏禁用项；时钟保留原刻度角度。字段和日期组件内部显式跳过子面板确认，由外层负责提交。外部模型替换会重置草稿，不主动派发事件。
 
-单值面板未确认草稿中打开只读、隐藏禁用小时或切立即提交，不会隐式提交旧草稿；解除只读也不提交，下一次有效选择才提交一次。Maple滚轮/时钟展示切换保留同一草稿，不回写父模型；鼠标/键盘验收不等于物理触屏惯性行为通过。
+在未确认的草稿中启用只读、隐藏禁用小时或切换立即提交，不会提交旧草稿；解除只读也不提交，下一次有效选择才提交。切换移动端滚轮或时钟展示会保留草稿，不改变父级模型。
 
 <demo src="./__demos__/panel-behavior.vue"></demo>
 
@@ -105,14 +105,99 @@ permalink: /components/time-picker/
 
 单时间事件值为格式化字符串及 Date；范围事件值为对应数组。纯面板不再派发 `open-change`、`update:open` 或 `clear`。
 
-### Props
+### TimePicker Props
 
-| 参数 | 说明 | 类型 | 默认值 |
+| 参数 | 说明 | 类型 | 缺省说明 |
 | --- | --- | --- | --- |
-| `model-value` | 绑定值 | `string \| number \| Date` | `-` |
-| `format` | 展示格式 | `string` | `-` |
-| `use12-hours` | 12 小时制 | `boolean` | `false` |
-| `hide-disabled-options` | 隐藏禁用时间选项 | `boolean` | `false` |
-| `disable-confirm` | 跳过确认 | `boolean` | `false` |
-| `disabled` | 禁用 | `boolean` | `false` |
-| `step` | 时分秒步长 | `object` | `-` |
+| `default-value` | 非受控初始值，仅创建时读取 | `TimeValue \| TimeValue[]` | `undefined` |
+| `disable-confirm` | 有效选择后立即提交；字段还请求关闭 | `boolean` | `false` |
+| `disabled` | 禁用面板选择和确认 | `boolean` | `false` |
+| `disabled-hours` | 返回禁用小时，小时始终为 0–23 | `() => number[]` | `undefined` |
+| `disabled-minutes` | 按已选小时返回禁用分钟 | `(hour?: number) => number[]` | `undefined` |
+| `disabled-seconds` | 按已选小时和分钟返回禁用秒 | `(hour?: number, minute?: number) => number[]` | `undefined` |
+| `format` | 字符串解析、显示及输出格式；十二小时缺省带 a | `string` | 按 use12Hours |
+| `hide-disabled-options` | 隐藏禁用时间选项；时钟保留刻度位置 | `boolean` | `false` |
+| `max` | 最大可选钟点，HH:mm 或 HH:mm:ss，包含端点 | `string` | `undefined` |
+| `min` | 最小可选钟点，HH:mm 或 HH:mm:ss，包含端点 | `string` | `undefined` |
+| `model-value` | 面板外部值，初始化草稿并响应后续变化 | `TimeValue \| TimeValue[]` | `undefined` |
+| `readonly` | 只读面板，不改草稿或确认 | `boolean` | `false` |
+| `show-next-day` | 仅范围：允许结束早于开始并显示次日，不交换起止 | `boolean` | `false` |
+| `step` | 以 0 点为起点的时分秒步长，无效步长回退为 1 | `TimeStep` | 有效步长均 1 |
+| `type` | 桌面通用面板的单选/范围模式 | `time \| time-range` | `time` |
+| `use12-hours` | 十二小时面板；小时禁用回调仍用 0–23 | `boolean` | `false` |
+
+### 完整独立面板合同
+
+完整属性、事件、插槽及实例边界与主字段文档的独立面板章节一致。
+
+[完整 API](/components/time/)
+
+### TimePicker Events
+
+| 事件 | 参数 |
+| --- | --- |
+| `update:modelValue` | `TimePickerEmits['update:modelValue']` |
+| `select` | `TimePickerEmits['select']` |
+| `change` | `TimePickerEmits['change']` |
+| `confirm` | `TimePickerEmits['confirm']` |
+
+### TimePicker Slots
+
+| 插槽 | 参数 |
+| --- | --- |
+| `extra` | `()` |
+| `actions` | `{ confirm: () => boolean; canConfirm: boolean; value: TimeValue \| Array<TimeValue \| undefined> \| undefined }` |
+
+公开面板业务事件类型不包含 draft-initialize；它仅用于 Maple 内部拥有者桥接。面板不接收字段的 beforeCommit 或 loading 属性。
+
+## CSS Variables
+
+<!-- component-css-variables:start -->
+
+通过以下变量定制组件外观。默认值随表中注明的主题或选择器条件变化；变量仅在对应的尺寸、变体和交互状态下生效。
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| 变量 | 默认值／条件 | 影响的样式 |
+| --- | --- | --- |
+| `--c-time-picker-border-color` | `var(--c-color-neutral-3)` | `border`, `border-bottom`, `border-inline-end`, `border-top` |
+| `--c-time-picker-border-radius` | `var(--c-border-radius-md)` | `border-radius` |
+| `--c-time-picker-box-shadow` | `var(--c-shadow1-down)` | `box-shadow` |
+| `--c-time-picker-cell-bg-active` | `var(--c-color-fill-2)` | `background-color` |
+| `--c-time-picker-cell-bg-hover` | `var(--c-color-fill-2)` | `background-color` |
+| `--c-time-picker-cell-font-size` | `var(--c-font-size-body-3)` | `font-size` |
+| `--c-time-picker-cell-font-weight` | `var(--c-font-weight-500)` | `font-weight` |
+| `--c-time-picker-cell-font-weight-active` | `var(--c-font-weight-500)` | `font-weight` |
+| `--c-time-picker-cell-height` | `var(--c-size-6)` | `height`, `line-height` |
+| `--c-time-picker-cell-padding-left` | `var(--c-spacing-9)` | `padding-inline-start` |
+| `--c-time-picker-cell-spacing` | `var(--c-spacing-2)` | `height`, `padding` |
+| `--c-time-picker-cell-text-color` | `var(--c-color-text-1)` | `color` |
+| `--c-time-picker-cell-text-color-disabled` | `var(--c-color-text-4)` | `color` |
+| `--c-time-picker-column-height` | `224px` | `height` |
+| `--c-time-picker-column-width` | `var(--c-size-16)` | `width` |
+| `--c-time-picker-footer-extra-font-size` | `var(--c-font-size-body-1)` | `font-size` |
+| `--c-time-picker-footer-padding` | `var(--c-spacing-4)` | `padding` |
+| `--c-time-picker-popover-body-reserve` | `128px` | `height` |
+| `--c-time-picker-popover-column-max-height` | `224px` | `height` |
+| `--c-time-picker-popover-gap` | `32px` | `max-width` |
+| `--c-time-picker-range-gap` | `var(--c-spacing-6)` | `gap` |
+| `--c-time-picker-range-next-day-font-size` | `var(--c-font-size-body-1)` | `font-size` |
+| `--c-time-picker-range-panel-title-gap` | `var(--c-spacing-3)` | `gap` |
+| `--c-time-picker-range-panel-title-line-height` | `22px` | `line-height` |
+| `--c-time-picker-range-panel-title-padding-horizontal` | `var(--c-spacing-6)` | `padding` |
+| `--c-time-picker-range-panel-title-padding-vertical` | `var(--c-spacing-3)` | `padding` |
+| `--c-time-picker-range-wrapper-padding` | `var(--c-spacing-4)` | `padding` |
+
+</div>
+
+将覆盖设置在组件实际根节点或弹层真实挂载祖先上。例如给该元素添加下列 class，再按需替换变量值：
+
+```css
+.component-theme {
+  --c-time-picker-border-color: var(--c-color-neutral-3);
+}
+```
+
+显式行内样式及直接写入同一 CSS 属性的 Props 优先于样式表默认值。Teleport 后，普通 CSS 变量按实际挂载位置继承；使用 ThemeProvider 时，请遵循其局部主题与弹层配置规则。局部定制请直接覆盖组件变量；仅修改后代的 system 变量不会重新计算从根继承的组件别名。内部变量不属于公共 API。
+
+<!-- component-css-variables:end -->

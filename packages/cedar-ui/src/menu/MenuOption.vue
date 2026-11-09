@@ -24,6 +24,7 @@ const slots = defineSlots<MenuOptionSlots>()
 const renderLevel = inject(menuRenderLevelKey, undefined)
 const root = ref<HTMLElement>()
 const isFocusing = ref(false)
+let pressedSpace = false
 const selection = props.uninjectContext ? undefined : inject(menuSelectionKey, undefined)
 const level = inject(menuLevelKey, undefined)
 const context = props.uninjectContext ? undefined : inject(menuInjectionKey, undefined)
@@ -54,16 +55,22 @@ function handleKeydown(event: KeyboardEvent) {
     return
   }
   if (!isFocusing.value) return
+  if (props.childrenTrigger && (event.key === 'Enter' || event.key === ' ')) {
+    event.preventDefault()
+    emit('key-arrow-x', resolveDirection(root.value) === 'rtl' ? 'ArrowLeft' : 'ArrowRight')
+    return
+  }
+  if (event.key === ' ') pressedSpace = true
   if (event.key === ' ' || event.key === 'Enter') event.preventDefault()
   if (event.key === 'Enter') root.value?.click()
 }
-function handleKeyup(event: KeyboardEvent) { if (!event.defaultPrevented && !disabled.value && isFocusing.value && event.key === ' ') { event.preventDefault(); root.value?.click() } }
+function handleKeyup(event: KeyboardEvent) { if (event.key === ' ') { const activate = pressedSpace; pressedSpace = false; if (activate && !event.defaultPrevented && !disabled.value && !props.childrenTrigger && isFocusing.value) { event.preventDefault(); root.value?.click() } } }
 useEventListener(() => root.value?.ownerDocument.defaultView, 'keydown', handleKeydown)
 useEventListener(() => root.value?.ownerDocument.defaultView, 'keyup', handleKeyup)
 const appearance = useOptionAppearance(props, { optionSelected, disabled, size, isFocusing, labelVNode }, slots)
 const viewOptions = computed(() => ({ kind: 'option', ...appearance.value, rootRef: root,
   selected: optionSelected.value, disabled: disabled.value,
-  onClick: handleClick, onFocus: () => { isFocusing.value = true }, onBlur: () => { isFocusing.value = false },
+  onClick: handleClick, onFocus: () => { isFocusing.value = true }, onBlur: () => { isFocusing.value = false; pressedSpace = false },
 }))
 defineExpose({ root, isFocusing, optionSelected, handleClick, handleSelect })
 </script>

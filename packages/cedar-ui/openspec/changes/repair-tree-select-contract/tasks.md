@@ -1,0 +1,3 @@
+- [x] Verify real direct/deferred default-slot behavior, reading values and search policy.
+- [x] Converge public types and forward shared field slots.
+- [x] Complete bilingual API and verify Cedar consumers, browser, types and global contracts.

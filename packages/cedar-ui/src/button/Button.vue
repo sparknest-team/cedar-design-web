@@ -14,9 +14,9 @@ defineOptions({ name: createNamespace("button").name, inheritAttrs: false });
 const props = defineProps(buttonProps);
 const attrs = useAttrs()
 const rootAttrs = () => Object.fromEntries(Object.entries(attrs).filter(([key]) => key !== 'class' && key !== 'style'));
-const emit = defineEmits<{ click: [event: MouseEvent]; touchstart: [event: TouchEvent] }>();
+const emit = defineEmits<{ click: [event: MouseEvent] }>();
 const { n, classes } = createNamespace("button");
-const { states, busy, blocked, computedStyle, handleClick, handleTouchstart } =
+const { states, busy, blocked, computedStyle, handleClick } =
   useButton(props, emit);
 const { hovering, handleHovering } = useHoverOverlay();
 const focusing = ref(false);
@@ -64,7 +64,6 @@ const indicatorSize = computed(() => {
     :tabindex="!focusable || (component === 'a' && blocked) ? -1 : attrs.tabindex"
     :autofocus="autofocus"
     @click="handleClick"
-    @touchstart="handleTouchstart"
     @focus="focusing = true"
     @blur="focusing = false"
   >

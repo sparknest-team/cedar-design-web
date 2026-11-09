@@ -73,6 +73,13 @@
       "kind": "boolean"
     },
     {
+      "name": "closeButtonAriaLabel",
+      "description": "关闭按钮的无障碍名称",
+      "type": "string",
+      "defaultValue": "Close notification",
+      "kind": "string"
+    },
+    {
       "name": "duration",
       "description": "显示的持续时间，单位为 ms",
       "type": "number",

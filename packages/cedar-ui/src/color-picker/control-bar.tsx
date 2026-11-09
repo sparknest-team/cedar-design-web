@@ -2,6 +2,7 @@ import { defineComponent, PropType, toRefs, computed } from 'vue'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
 import { Color } from './types'
 import { useControlBlock } from './hooks/use-control-block'
+import { useI18n } from '../locale'
 
 
 const { name } = createNamespace('control-bar')
@@ -19,10 +20,12 @@ export default defineComponent({
     },
     colorString: String,
     type: String as PropType<'hue' | 'alpha'>,
+    disabled: Boolean,
     onChange: Function as PropType<(x: number) => void>,
   },
   setup(props) {
     const prefixCls = getPrefixCls('color-picker')
+    const { t } = useI18n()
     const rgb = computed(() => props.color.rgb)
 
     const { blockRef, handlerRef, onMouseDown } = useControlBlock({
@@ -31,6 +34,12 @@ export default defineComponent({
     })
 
     const handleKeydown = (event: KeyboardEvent) => {
+      if (props.disabled) return
+      if (event.key === 'Home' || event.key === 'End') {
+        event.preventDefault()
+        props.onChange?.(event.key === 'Home' ? 0 : 1)
+        return
+      }
       const delta = event.key === 'ArrowRight' || event.key === 'ArrowUp'
         ? 0.01
         : event.key === 'ArrowLeft' || event.key === 'ArrowDown'
@@ -62,8 +71,9 @@ export default defineComponent({
             <div
               ref={blockRef}
               role="slider"
-              tabindex={0}
-              aria-label="Opacity"
+              tabindex={props.disabled ? -1 : 0}
+              aria-disabled={props.disabled || undefined}
+              aria-label={t('colorPicker.opacity')}
               aria-valuemin={0}
               aria-valuemax={100}
               aria-valuenow={Math.round(props.x * 100)}
@@ -71,7 +81,7 @@ export default defineComponent({
               style={{
                 background: `linear-gradient(to right, rgba(0, 0, 0, 0), rgb(${rgb.value.r}, ${rgb.value.g}, ${rgb.value.b}))`,
               }}
-              onMousedown={onMouseDown}
+              onMousedown={(event: MouseEvent) => { if (!props.disabled) onMouseDown(event) }}
               onKeydown={(event: KeyboardEvent) => handleKeydown(event)}
             >
               {renderHandler()}
@@ -83,13 +93,14 @@ export default defineComponent({
         <div
           ref={blockRef}
           role="slider"
-          tabindex={0}
-          aria-label="Hue"
+          tabindex={props.disabled ? -1 : 0}
+          aria-disabled={props.disabled || undefined}
+          aria-label={t('colorPicker.hue')}
           aria-valuemin={0}
           aria-valuemax={360}
           aria-valuenow={Math.round(props.x * 360)}
           class={[`${prefixCls}-control-bar`, `${prefixCls}-control-bar-hue`]}
-          onMousedown={onMouseDown}
+          onMousedown={(event: MouseEvent) => { if (!props.disabled) onMouseDown(event) }}
           onKeydown={(event: KeyboardEvent) => handleKeydown(event)}
         >
           {renderHandler()}

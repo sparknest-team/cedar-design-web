@@ -2,7 +2,7 @@ import type { PropType } from 'vue'
 import { isNumber } from '../_utils/is'
 
 const BOUNDARY_POSITIONS = ['start', 'end', 'center', 'nearest'] as const
-type BoundaryPosition = (typeof BOUNDARY_POSITIONS)[number]
+export type AnchorBoundaryPosition = (typeof BOUNDARY_POSITIONS)[number]
 
 export const anchorProps = {
     /**
@@ -11,10 +11,10 @@ export const anchorProps = {
      * @values 'start', 'end', 'center', 'nearest', number
      */
     boundary: {
-      type: [Number, String] as PropType<BoundaryPosition | number>,
+      type: [Number, String] as PropType<AnchorBoundaryPosition | number>,
       default: 'start',
       validator: (value: any) => {
-        return isNumber(value) || (BOUNDARY_POSITIONS as readonly string[]).includes(value)
+        return (isNumber(value) && Number.isFinite(value)) || (BOUNDARY_POSITIONS as readonly string[]).includes(value)
       },
     },
     /**

@@ -2,21 +2,22 @@
 import { computed, onMounted, onUpdated, provide, ref, shallowRef } from 'vue'
 import { createNamespace } from '../_utils/global-config'
 import { gridProps } from './props'
+import { normalizeGridResponsive, resolveGridCols, resolveGridRows } from './validation'
 import { GRID_CONTEXT_KEY, type GridRecord } from './context'
 import { useResponsiveState } from './hook/use-responsive-state'
 import { setItemVisible } from './utils'
 defineOptions({ name: createNamespace('grid').name })
 const props = defineProps(gridProps)
 const { n } = createNamespace('grid')
-const rawCols = useResponsiveState(computed(() => props.cols), 24)
-const cols = computed(() => Math.max(1, Math.floor(rawCols.value) || 1))
-const rawColGap = useResponsiveState(computed(() => props.colGap), 0)
-const rawRowGap = useResponsiveState(computed(() => props.rowGap), 0)
+const rawCols = useResponsiveState(computed(() => normalizeGridResponsive(props.cols, 24)), 24)
+const cols = computed(() => resolveGridCols(rawCols.value))
+const rawColGap = useResponsiveState(computed(() => normalizeGridResponsive(props.colGap, 0)), 0)
+const rawRowGap = useResponsiveState(computed(() => normalizeGridResponsive(props.rowGap, 0)), 0)
 const colGap = computed(() => Math.max(0, rawColGap.value))
 const records = shallowRef<GridRecord[]>([])
 const mounted = ref(false)
 const layout = computed(() => setItemVisible({ cols: cols.value, collapsed: props.collapsed,
-  collapsedRows: props.collapsedRows, itemDataList: records.value.map(record => record.data.value) }))
+  collapsedRows: resolveGridRows(props.collapsedRows), itemDataList: records.value.map(record => record.data.value) }))
 const reorder = () => {
   const sorted = [...records.value].sort((a, b) => {
     if (!a.element.value || !b.element.value) return 0

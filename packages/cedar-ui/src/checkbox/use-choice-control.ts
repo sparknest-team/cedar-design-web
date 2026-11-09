@@ -15,8 +15,10 @@ export function useCheckboxControl(
   group?: { value: () => ChoiceValue[]; change: (value: ChoiceValue[], event?: Event) => void },
 ) {
   const state = useChoiceState(() => props.modelValue, props.defaultValue, notify, blocked)
-  const value = computed(() => group ? group.value() : state.value.value)
-  const checked = computed(() => Array.isArray(value.value) ? value.value.includes(props.value) : value.value)
+  const value = computed(() => (group ? group.value() : state.value.value))
+  const checked = computed(() =>
+    Array.isArray(value.value) ? value.value.includes(props.value) : Boolean(value.value),
+  )
   function toggle(next = !checked.value, event?: Event) {
     if (blocked()) return
     const current = value.value
@@ -36,10 +38,15 @@ export function useRadioControl(
   blocked: () => boolean,
   group?: { value: () => RadioModel; change: (value: ChoiceValue, event?: Event) => void },
 ) {
-  const state = useChoiceState<RadioModel>(() => props.modelValue, props.defaultValue, (value, event) => {
-    if (value !== null) notify(value, event)
-  }, blocked)
-  const value = computed(() => group ? group.value() : state.value.value)
+  const state = useChoiceState<RadioModel>(
+    () => props.modelValue,
+    props.defaultValue,
+    (value, event) => {
+      if (value !== null) notify(value, event)
+    },
+    blocked,
+  )
+  const value = computed(() => (group ? group.value() : state.value.value))
   const checked = computed(() => Object.is(value.value, props.value))
   function select(event?: Event) {
     if (blocked() || checked.value) return

@@ -61,7 +61,31 @@ Preview configuration: `:to="123456"`, `:auto-start="false"`.
 
 <demo src="./__demos__/manual.vue"></demo>
 
+## Numeric and animation boundaries
+
+### Scientific notation and decimal floor
+
+Precision is an integer from -292 to 292. Fractional and nonfinite precision falls back to 0; out-of-range integers are clamped. Unsupported inputs produce a development prop warning. String precision keeps the existing parseFloat conversion. Negative precision rounds at tens/hundreds and larger decimal places. The result is a number rounded toward negative infinity, without trailing-zero padding, and may use scientific notation. Changing precision only reformats the current value. IEEE-754 representability still applies; animation values are not decimal accounting values.
+
+<demo src="./__demos__/decimal-floor.vue"></demo>
+
+### Zero duration and replay
+
+<demo src="./__demos__/zero-duration.vue"></demo>
+
+### Change easing and replay
+
+Changing timing-function affects the next reset, including resets caused by from, to or duration changes. It does not restart the current animation. Pause/start resumes the existing curve; reset creates a fresh playback using the latest function. Clearing the function restores linear easing. A curve may reach the target early, but end still reports completion of the configured duration.
+
+<demo src="./__demos__/easing-replay.vue"></demo>
+
+## Animation duration boundaries
+
+Duration is a finite nonnegative number of milliseconds. Zero reaches the target on the next frame. Negative, NaN and infinite values produce development prop diagnostics and safely behave as zero without continuing to request animation frames. Pausing or unmounting before that frame cancels completion. String durations retain parseFloat conversion. reset reads auto-start again. end remains a notification; its listener Promise is not awaited.
+
 ## API
+
+String `from`, `to`, `duration`, and `precision` values use parseFloat, so `10px` parses as 10. Invalid or non-finite endpoints produce a warning and use 0. If the difference between finite endpoints overflows, the animation completes on the next frame. `precision` floors the numeric result toward negative infinity without padding zeros and accepts integers in the range [-292, 292]. `auto-start` is read on mount or reset; calling start after completion does not replay until reset.
 
 ### CountTo Props
 
@@ -82,7 +106,7 @@ Preview configuration: `:to="123456"`, `:auto-start="false"`.
 
 ### CountTo Slots
 
-| Slot | Description | Arguments |
+| Slot | Description | Prop |
 | ------- | ---------- | ----------------- |
 | default | Custom content | `value: number` |
 
@@ -94,7 +118,7 @@ Preview configuration: `:to="123456"`, `:auto-start="false"`.
 | pause | Pause the animation | `-` | `-` |
 | reset | Reset the animation; when `auto-start` is `true`, playback starts automatically after reset | `-` | `-` |
 
-## Type definitions
+## Types
 
 The component exports the following types
 
@@ -102,15 +126,35 @@ The component exports the following types
 import type { CountToProps, CountToInstance } from '@cedar-design/ui'
 ```
 
-### Style variables
+## Usage notes
 
-| Variable | Default |
-| ----------------------------- | -------------------------- |
-| `--c-count-to-text-color` | `var(--c-sys-color-content-primary)` |
-| `--c-count-to-text-font-size` | `var(--c-font-size-lg)` |
 
-## Shared implementation and platform boundaries
-
-Each platform maintains a complete local implementation. They do not import a common core or share component instances or reactive state. Changes must update both implementations. Component bodies, props, key styles and paired tests have read-only source consistency checks; theme tokens and installation entries remain local to each library.
 
 Animation pauses on unmount and KeepAlive deactivation and resumes on reactivation. Each instance keeps independent values and animation state.
+
+## CSS Variables
+
+<!-- component-css-variables:start -->
+
+Use these variables to customize the component. Defaults may vary by the selector condition shown. Each variable applies to the corresponding size, variant and interaction states.
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| Variable | Default / condition | Affected styles |
+| --- | --- | --- |
+| `--c-count-to-text-color` | `var(--c-sys-color-content-primary)` | `color` |
+| `--c-count-to-text-font-size` | `var(--c-font-size-lg)` | `font-size` |
+
+</div>
+
+Apply overrides to the rendered component root or the actual popup ancestor. For example, add the following class to that element and replace the value as needed:
+
+```css
+.component-theme {
+  --c-count-to-text-color: var(--c-sys-color-content-primary);
+}
+```
+
+Explicit inline styles and props that write the same CSS property take precedence over stylesheet defaults. After Teleport, ordinary CSS variables inherit from the actual mount location. When using ThemeProvider, follow its local-theme and popup configuration rules. Override the component variable directly for local styling; root-level aliases are not recalculated merely because a descendant system variable changes. Internal variables are not public APIs.
+
+<!-- component-css-variables:end -->

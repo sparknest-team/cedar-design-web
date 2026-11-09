@@ -30,7 +30,7 @@ describe('InputNumber field contract', () => {
   })
 
   test('accepts controlled input echoes without losing commit changes', async () => {
-    const value = ref<number | undefined>(1)
+    const value = ref<number | null | undefined>(1)
     const change = vi.fn()
     const wrapper = render({
       render: () =>
@@ -39,7 +39,7 @@ describe('InputNumber field contract', () => {
           modelValue: value.value,
           modelEvent: 'input',
           clearable: true,
-          'onUpdate:modelValue': (next: number | undefined) => {
+          'onUpdate:modelValue': (next: number | null | undefined) => {
             value.value = next
           },
           onChange: change,
@@ -85,7 +85,7 @@ describe('InputNumber field contract', () => {
     })
     await wrapper.get('[aria-label="清空"]').trigger('click')
     await wrapper.get('input').trigger('blur')
-    expect(order).toEqual(['input', 'update', 'change', 'clear'])
+    expect(order).toEqual(['clear', 'input', 'update', 'change'])
   })
 
   test('commits a trailing dot but restores lone signs and invalid text', async () => {

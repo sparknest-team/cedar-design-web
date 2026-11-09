@@ -174,9 +174,17 @@ export const treeProps = {
     allowDrop: {
       type: Function as PropType<(options: { dropNode: TreeNodeData; dropPosition: -1 | 0 | 1 }) => boolean>,
     },
+    /**
+     * @zh 筛选节点；保留匹配节点的祖先，并遵循当前展开状态。
+     * @en Filter nodes; ancestors of matches are retained and current expansion is respected.
+     */
     filterTreeNode: {
       type: Function as PropType<FilterTreeNode>,
     },
+    /**
+     * @zh 按 label 不区分大小写搜索，保留祖先且不改变展开状态；可与 filterTreeNode 组合。
+     * @en Search labels case-insensitively, retaining ancestors without changing expansion; may be combined with filterTreeNode.
+     */
     searchValue: {
       type: String,
       default: '',

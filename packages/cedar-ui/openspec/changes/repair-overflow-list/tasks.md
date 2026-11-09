@@ -1,0 +1,3 @@
+- [x] Reproduce minimum/dynamic/cache/margin failures
+- [x] Implement one measured layout with identity/lifecycle ownership and bounded convergence
+- [x] Complete public types/docs and real browser/affected suites/gates

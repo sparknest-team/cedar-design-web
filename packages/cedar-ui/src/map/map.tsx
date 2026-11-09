@@ -1,5 +1,6 @@
 // TODO: 脱敏迁移 - 暂时注释 @maple-design/map-core，后续替换为公有包
 // import { LngLat, Map, MapService, PoiInfo, SearchResult, SearchService } from '@maple-design/map-core'
+import { createMapUpdateGuard } from './update-guard'
 type PoiInfo = Record<string, any>;
 type SearchResult<T> = { list: T[] };
 type MapCoreLngLat = { getLng: () => number; getLat: () => number };
@@ -18,11 +19,12 @@ declare const MapService: { init: (...args: any[]) => Promise<void> };
 declare const PoiInfo: new () => PoiInfo;
 declare const SearchService: new (...args: any[]) => any;
 import {
-  computed,
   defineComponent,
-  getCurrentInstance,
   h,
+  nextTick,
+  onBeforeUnmount,
   onMounted,
+  reactive,
   ref,
   toRaw,
   useAttrs,
@@ -66,14 +68,7 @@ export default defineComponent({
     const { t } = useI18n();
     const attrs = useAttrs();
     const slots = useSlots();
-    const instance = getCurrentInstance();
-    const isUsingVModel = computed(() => {
-      // 判断是否传入了 `modelValue` prop 并且有 `update:modelValue` 事件监听器
-      return Boolean(
-        instance?.vnode.props && instance.vnode.props["onUpdate:modelValue"],
-      );
-    });
-    const valueKeyAlias = ((): {
+    const valueKeyAlias = reactive(((): {
       [key in PoiKeys]: string;
     } => {
       const defaultValueMap = {
@@ -87,17 +82,14 @@ export default defineComponent({
         country: "country",
       };
       return { ...defaultValueMap, ...props.valueKeyAlias };
-    })();
-    const valueKeyScope = (() => {
-      return [...props.valueKeyScope];
-    })();
+    })());
+    const valueKeyScope = reactive([...props.valueKeyScope]);
     const show = ref(false);
     const isInited = ref<boolean>(false);
     const searchVal = ref("");
 
     const searchRes = ref<SearchResult<PoiInfo>>({ list: [] });
     const value_ = ref<any>({});
-    const value = ref<any>(props.modelValue);
     const valueModel_ = ref<any>({});
     const isInit = ref<boolean>(true);
     const isMapInit = ref<boolean>(false);
@@ -106,6 +98,29 @@ export default defineComponent({
     const map = ref<MapCoreMap>();
     let service: InstanceType<typeof SearchService>;
     const id = ref();
+    let proposalVersion = 0;
+    let geocodeVersion = 0;
+    let searchVersion = 0;
+    let alive = true;
+    let stopSdkModelWatch: (() => void) | undefined;
+    const invalidateGeocode = () => {
+      geocodeVersion++;
+      isLoading.value = false;
+    };
+    const updateGuard = createMapUpdateGuard((active) => {
+      if (active) invalidateGeocode();
+      isUpdating.value = active;
+    });
+    const hasCoordinate = (value: unknown) => value !== null && value !== undefined && value !== "" && Number.isFinite(Number(value));
+    onBeforeUnmount(() => {
+      alive = false;
+      proposalVersion++;
+      searchVersion++;
+      invalidateGeocode();
+      stopSdkModelWatch?.();
+      stopSdkModelWatch = undefined;
+      updateGuard.dispose();
+    });
 
     function init() {
       value_.value = {};
@@ -140,6 +155,12 @@ export default defineComponent({
           116.307503;
       }
     }
+    function syncCenter() {
+      if (!sdkAvailable || !map.value) return;
+      const token = updateGuard.begin();
+      map.value.setCenter(new LngLat(value_.value[valueKeyAlias.longitude], value_.value[valueKeyAlias.latitude]));
+      updateGuard.releaseAfter(token, 300);
+    }
     const { fetch } = useFetch(props.fetch);
 
     let suggestSearch: (params: {
@@ -150,6 +171,23 @@ export default defineComponent({
       suggestSearch = useSuggest(fetch, props.basePath).suggestSearch;
     }
     init();
+    watch(() => props.valueKeyAlias, (alias) => {
+      searchVersion++;
+      Object.assign(valueKeyAlias, { longitude: "longitude", latitude: "latitude", address: "address", name: "name", adcode: "adcode", countryCode: "countryCode", city: "city", country: "country" }, alias);
+      init();
+      syncCenter();
+    }, { deep: true, flush: "sync" });
+    watch(() => props.valueKeyScope, (scope) => {
+      searchVersion++;
+      valueKeyScope.splice(0, valueKeyScope.length, ...scope);
+      init();
+      syncCenter();
+    }, { deep: true, flush: "sync" });
+    watch(() => props.modelValue, () => {
+      searchVersion++;
+      invalidateGeocode();
+      if (!sdkAvailable || !isMapInit.value) init();
+    }, { deep: true, flush: "sync" });
 
     function updateModelValue() {
       const data = dataToScope({
@@ -157,23 +195,20 @@ export default defineComponent({
         scope: valueKeyScope,
         alias: valueKeyAlias,
       });
-      if (isUsingVModel.value) {
-        // 使用了VModel,但是为undefined的情况，不能通过对象引用去改值，需要触发emit
-        if (typeof props.modelValue === "undefined") {
-          emit("update:modelValue", data);
-        }
-        // 这里不能用emit update:modelValue，因为会覆盖类型，通过setValueWithAlias内部直接改props，实现相同的效果
-        setValueWithAlias({
-          target: value,
-          origin: value_.value,
-          scope: valueKeyScope,
-          alias: valueKeyAlias,
-        });
-      }
-      emit("change", data, toRaw(value_.value));
+      emit("update:modelValue", { ...props.modelValue, ...data });
+      emit("change", { ...data }, { ...value_.value });
+      const version = ++proposalVersion;
+      void nextTick(() => {
+        if (!alive || version !== proposalVersion) return;
+        const accepted = valueKeyScope.every((key) => props.modelValue?.[valueKeyAlias[key]] === data[valueKeyAlias[key]]);
+        if (accepted) return;
+        init();
+        syncCenter();
+      });
     }
 
-    const initMap = async () => {
+    let initTask: Promise<void> | undefined;
+    const performInitMap = async () => {
       if (
         typeof MapService === "undefined" ||
         typeof SearchService === "undefined" ||
@@ -196,6 +231,7 @@ export default defineComponent({
           await MapService.init("qqmaps", key);
         }
       }
+      if (!alive) return;
       map.value = new Map({
         zoom: 15,
         center: new LngLat(
@@ -214,6 +250,7 @@ export default defineComponent({
         geocoderHandler: props.geocoderHandler,
         map: map.value,
         complete: (results: SearchResult<PoiInfo>, status: any) => {
+          if (!alive) return;
           results.list = results.list.map((item) => ({
             label: item.address,
             value: item.name || item.address,
@@ -230,7 +267,8 @@ export default defineComponent({
         },
       });
 
-      watch(
+      stopSdkModelWatch?.();
+      stopSdkModelWatch = watch(
         () => props.modelValue,
         (v) => {
           let isChanged = false;
@@ -238,7 +276,7 @@ export default defineComponent({
           // 因为 modelValue 是对象，watch的时候，新旧值是一样的。所以我们需要自己备份。
           if (
             v?.[valueKeyAlias.longitude] !==
-              valueModel_.value?.[valueKeyAlias.longitude] &&
+              valueModel_.value?.[valueKeyAlias.longitude] ||
             v?.[valueKeyAlias.latitude] !==
               valueModel_.value?.[valueKeyAlias.latitude]
           ) {
@@ -267,16 +305,14 @@ export default defineComponent({
           }
           if (isLocationChanged) {
             if (isMapInit.value) {
-              isUpdating.value = true;
+              const token = updateGuard.begin();
               map.value?.setCenter(
                 new LngLat(
                   value_.value[valueKeyAlias.longitude],
                   value_.value[valueKeyAlias.latitude],
                 ),
               );
-              setTimeout(() => {
-                isUpdating.value = false;
-              }, 300);
+              updateGuard.releaseAfter(token, 300);
             }
           }
         },
@@ -285,42 +321,48 @@ export default defineComponent({
       map.value.on(
         "moveend",
         async () => {
-          isLoading.value = true;
-          // 选择地点/展示弹窗 的时候不触发逆地理解析
-          if (!isUpdating.value) {
-            if (map.value) {
-              const center = map.value?.getCenter();
-              const [lng, lat] = [center.getLng(), center.getLat()];
-              if (
-                value_.value?.[valueKeyAlias.longitude] !== lng ||
-                value_.value?.[valueKeyAlias.latitude] !== lat
-              ) {
-                emit("loading:address");
-                value_.value = await geocodeLatLng(
-                  new LngLat(center.getLng(), center.getLat()),
-                );
-                updateModelValue();
-                emit("loaded:address");
-              }
-            }
+          const token = ++geocodeVersion;
+          const owner = map.value;
+          if (!alive || isUpdating.value || !owner) {
+            isLoading.value = false;
+            return;
           }
-          isLoading.value = false;
+          const center = owner.getCenter();
+          const [lng, lat] = [center.getLng(), center.getLat()];
+          if (value_.value?.[valueKeyAlias.longitude] === lng && value_.value?.[valueKeyAlias.latitude] === lat) {
+            isLoading.value = false;
+            return;
+          }
+          isLoading.value = true;
+          try {
+            emit("loading:address");
+            if (!alive || token !== geocodeVersion || map.value !== owner || isUpdating.value) return;
+            const data = await geocodeLatLng(new LngLat(lng, lat));
+            if (!alive || token !== geocodeVersion || map.value !== owner || isUpdating.value) return;
+            value_.value = data;
+            updateModelValue();
+            if (alive) emit("loaded:address");
+          } finally {
+            if (alive && token === geocodeVersion) isLoading.value = false;
+          }
         },
         null,
       );
       if (
         map.value &&
-        (!value_.value?.[valueKeyAlias.latitude] ||
-          !value_.value?.[valueKeyAlias.longitude])
+        (!hasCoordinate(value_.value?.[valueKeyAlias.latitude]) ||
+          !hasCoordinate(value_.value?.[valueKeyAlias.longitude]))
       ) {
         const center = map.value?.getCenter();
+        const token = geocodeVersion;
         const data = await geocodeLatLng(
           new LngLat(center.getLng(), center.getLat()),
         );
-        if (
-          !value_.value?.[valueKeyAlias.latitude] ||
-          !value_.value?.[valueKeyAlias.longitude]
-        ) {
+        if (!alive) return;
+        if (token === geocodeVersion && (
+          !hasCoordinate(value_.value?.[valueKeyAlias.latitude]) ||
+          !hasCoordinate(value_.value?.[valueKeyAlias.longitude])
+        )) {
           value_.value = data;
           updateModelValue();
         }
@@ -329,7 +371,9 @@ export default defineComponent({
       // emit('init')
       // 返回的对象数据是完整的data，会自动补全其他值。
       async function fixInitData(latlng: InstanceType<typeof LngLat>) {
+        const token = geocodeVersion;
         const res = await service.geocoder(latlng.getLng(), latlng.getLat());
+        if (!alive || token !== geocodeVersion) return value_;
         const data = realTransformAlias(res, valueKeyAlias);
         Object.keys(data).forEach((key) => {
           if (
@@ -347,8 +391,8 @@ export default defineComponent({
 
       let newData = value_.value;
       if (
-        value_.value?.[valueKeyAlias.latitude] &&
-        value_.value?.[valueKeyAlias.longitude]
+        hasCoordinate(value_.value?.[valueKeyAlias.latitude]) &&
+        hasCoordinate(value_.value?.[valueKeyAlias.longitude])
       ) {
         newData = await fixInitData(
           new LngLat(
@@ -357,12 +401,30 @@ export default defineComponent({
           ),
         );
       }
+      if (!alive) return;
       isMapInit.value = true;
+      const currentCenter = map.value?.getCenter();
+      if (currentCenter && hasCoordinate(value_.value?.[valueKeyAlias.longitude]) && hasCoordinate(value_.value?.[valueKeyAlias.latitude]) &&
+          (currentCenter.getLng() !== value_.value[valueKeyAlias.longitude] || currentCenter.getLat() !== value_.value[valueKeyAlias.latitude])) {
+        syncCenter();
+      }
       emit("init", toRaw(value_.value), toRaw(newData.value));
+    };
+
+    const initMap = async () => {
+      if (initTask) return initTask;
+      const task = performInitMap();
+      initTask = task;
+      try {
+        await task;
+      } finally {
+        if (initTask === task) initTask = undefined;
+      }
     };
 
     async function geocodeLatLng(latlng: InstanceType<typeof LngLat>) {
       const res = await service.geocoder(latlng.getLng(), latlng.getLat());
+      if (!alive) return undefined;
       const data = realTransformAlias(res, valueKeyAlias);
       if (data) {
         data[valueKeyAlias.longitude] = latlng.getLng();
@@ -371,9 +433,10 @@ export default defineComponent({
       return data;
     }
 
-    const searchByLatLng = async (lat: string, lng: string) => {
+    const searchByLatLng = async (lat: string, lng: string, token: number) => {
       const latlng = new LngLat(Number(lng), Number(lat));
       const res = await service.geocoder(latlng.getLng(), latlng.getLat());
+      if (!alive || token !== searchVersion) return;
       value_.value = realTransformAlias(res, valueKeyAlias);
       // 经纬度必须用原始的，不能用gis返回的，否则有点地区会有偏差。
       if (value_.value) {
@@ -389,7 +452,9 @@ export default defineComponent({
     };
 
     const handleSearch = async (value: string) => {
+      const token = ++searchVersion;
       if (!value) {
+        searchRes.value.list = [];
         return;
       }
       // value中只包含数字、小数点和逗号，并且至少包含数字和逗号，并且逗号后面至少有一个数字
@@ -401,7 +466,7 @@ export default defineComponent({
       const lng = match?.[1];
       const lat = match?.[3];
       if (isLngLat && lat && lng) {
-        await searchByLatLng(lat, lng);
+        await searchByLatLng(lat, lng, token);
       } else {
         if (!props.isInternational && props.enableGisSearch) {
           //国内环境并且开启了使用gis推荐搜索
@@ -410,8 +475,8 @@ export default defineComponent({
               keywords: searchVal.value,
             };
           if (
-            value_.value?.[valueKeyAlias.latitude] &&
-            value_.value?.[valueKeyAlias.longitude]
+            hasCoordinate(value_.value?.[valueKeyAlias.latitude]) &&
+            hasCoordinate(value_.value?.[valueKeyAlias.longitude])
           ) {
             // 如果长度过长，要裁减
             params.location =
@@ -419,7 +484,9 @@ export default defineComponent({
               "," +
               value_.value?.[valueKeyAlias.latitude]?.toFixed?.(6);
           }
-          searchRes.value.list = await suggestSearch(params);
+          const results = await suggestSearch(params);
+          if (!alive || token !== searchVersion) return;
+          searchRes.value.list = results;
         } else {
           // 海外环境
           service.search(searchVal.value);
@@ -428,34 +495,41 @@ export default defineComponent({
     };
 
     async function getAddr(item: PoiInfo) {
-      isUpdating.value = true;
-      show.value = false;
-      if (item?.updatePlaceDetail) {
-        await item.updatePlaceDetail();
-      }
-      value_.value = realTransformAlias(item, valueKeyAlias);
-      const res = await service.geocoder(
-        value_.value?.[valueKeyAlias.longitude],
-        value_.value?.[valueKeyAlias.latitude],
-      );
-      setValueWithAlias({
-        target: value_,
-        origin: realTransformAlias(res, valueKeyAlias),
-        scope: valueKeyScope,
-        exclude: ["address", "name", "longitude", "latitude"],
-        alias: valueKeyAlias,
-      });
-      updateModelValue();
-      map.value?.setCenter(
-        new LngLat(
+      searchVersion++;
+      const token = updateGuard.begin();
+      try {
+        show.value = false;
+        if (item?.updatePlaceDetail) {
+          await item.updatePlaceDetail();
+          if (!updateGuard.current(token)) return;
+        }
+        value_.value = realTransformAlias(item, valueKeyAlias);
+        const res = await service.geocoder(
           value_.value?.[valueKeyAlias.longitude],
           value_.value?.[valueKeyAlias.latitude],
-        ),
-      );
-      setTimeout(() => {
-        // 先触发地图的 moveend，100毫秒左右动画可以结束，并且移动完成，防止触发逆地理解析函数
-        isUpdating.value = false;
-      }, 500);
+        );
+        if (!updateGuard.current(token)) return;
+        setValueWithAlias({
+          target: value_,
+          origin: realTransformAlias(res, valueKeyAlias),
+          scope: valueKeyScope,
+          exclude: ["address", "name", "longitude", "latitude"],
+          alias: valueKeyAlias,
+        });
+        updateModelValue();
+        if (!updateGuard.current(token)) return;
+        map.value?.setCenter(
+          new LngLat(
+            value_.value?.[valueKeyAlias.longitude],
+            value_.value?.[valueKeyAlias.latitude],
+          ),
+        );
+        // Keep the moveend suppression until the current programmatic move settles.
+        updateGuard.releaseAfter(token, 500);
+      } catch (error) {
+        updateGuard.finish(token);
+        throw error;
+      }
     }
 
     const getCurrentLocation = () => {

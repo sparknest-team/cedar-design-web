@@ -8,7 +8,6 @@ export interface LayoutSiderContext {
 export const LayoutSiderInjectionKey: InjectionKey<LayoutSiderContext> = Symbol('LayoutSiderInjectionKey')
 
 export interface SiderContext {
-  theme: string
   collapsed: boolean
   collapsedWidth: string | number
 }

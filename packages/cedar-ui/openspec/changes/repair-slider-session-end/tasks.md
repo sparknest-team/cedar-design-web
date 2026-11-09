@@ -1,0 +1,3 @@
+- [x] Reproduce cancellation gaps on both platforms.
+- [x] Centralize cleanup/end and preserve gesture values across config changes.
+- [x] Verify all affected consumers, real pointer demo, types/lint/spec and same-source evidence.

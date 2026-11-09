@@ -72,7 +72,7 @@ permalink: /components/link/
 
 <demo src="./__demos__/hoverable.vue"></demo>
 
-两端 Link 主体、Props、主样式和测试采用独立同源复制；仅组件前缀、本地图标与主题 token 适配不同，不共享核心或实例。
+
 
 禁用或加载时移除 href/target/rel，禁止导航和 click，并退出 Tab 顺序（即使传入 tabindex）。普通状态原样透传原生属性。加载图标优先于 icon 插槽；动态图标插槽会随渲染更新。
 
@@ -101,7 +101,7 @@ permalink: /components/link/
 加载示例首次激活时由业务准备报告，完成后再次激活交给浏览器原生下载；卸载时取消准备任务。
 
 
-### `<Link>` Props
+### Link Props
 
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
@@ -109,7 +109,7 @@ permalink: /components/link/
 | `href` | 原生链接地址 | string | - |
 | `target` | 原生打开目标 | string | - |
 | `rel` | 原生链接关系 | string | - |
-| `status` | 链接语义状态 | SemanticStatus | 'default' |
+| `status` | 链接语义状态 | `SemanticStatus`<br>`'default' \| 'primary' \| 'secondary' \| 'tertiary' \| 'info' \| 'success' \| 'warning' \| 'danger'` | 'default' |
 | `underline` | 下划线策略 | 'always' \| 'hover' \| 'none' | 'none' |
 | `hoverable` | 显示带内边距的悬浮/按下底色 | boolean | false |
 | `icon` | 显示默认前置图标；icon 插槽优先 | boolean | false |
@@ -117,20 +117,20 @@ permalink: /components/link/
 | `disabled` | 禁用链接 | boolean | false |
 
 
-### `<Link>` Events
+### Link Events
 
 | 事件名 | 说明           | 参数                          |
 | ------ | -------------- | ----------------------------- |
 | click  | 点击触发的事件 | `(event: MouseEvent) => void` |
 
-### Slots
+### Link Slots
 
 | 插槽 | 说明 |
 | --- | --- |
 | default | 链接内容 |
 | icon | 自定义图标，loading 时被加载图标替代 |
 
-### 类型定义
+## Types
 
 组件导出以下类型定义
 
@@ -138,9 +138,79 @@ permalink: /components/link/
 import type { LinkProps, LinkSize, LinkUnderline, LinkInstance } from '@cedar-design/ui'
 ```
 
-### 样式迁移
+## CSS Variables
 
-内部类名统一为 `c-link--status-*`、`c-link--underline-*`、`c-link--disabled`、`c-link--loading` 和 `c-link__icon`。请迁移旧的单连字符选择器，优先通过 `--c-link-*` CSS 变量定制。焦点支持 `--c-link-focus-width`（2px）、`--c-link-focus-offset`（2px）、`--c-link-focus-color`（currentColor）、`--c-link-focus-opacity`（0.8）。减少动态效果偏好下关闭加载旋转和过渡。
+<!-- component-css-variables:start -->
+
+通过以下变量定制组件外观。默认值随表中注明的主题或选择器条件变化；变量仅在对应的尺寸、变体和交互状态下生效。
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| 变量 | 默认值／条件 | 影响的样式 |
+| --- | --- | --- |
+| `--c-link-bg-active` | `var(--c-color-fill-3)` | `background-color` |
+| `--c-link-bg-hover` | `var(--c-color-fill-2)` | `background-color` |
+| `--c-link-border-radius` | `var(--c-sys-radius-sm)` | `border-radius` |
+| `--c-link-focus-color` | `currentColor` | `outline` |
+| `--c-link-focus-offset` | `2px` | `outline-offset` |
+| `--c-link-focus-opacity` | `0.8` | `opacity` |
+| `--c-link-focus-width` | `2px` | `outline` |
+| `--c-link-font-size` | `var(--c-sys-font-size-md)` | `font-size` |
+| `--c-link-line-height` | `var(--c-line-height)` | `line-height` |
+| `--c-link-margin-icon-right` | `var(--c-spacing-3)` | `margin-inline-end` |
+| `--c-link-padding-horizontal` | `var(--c-spacing-2)` | `padding` |
+| `--c-link-padding-vertical` | `1px` | `padding` |
+| `--c-link-size-icon` | `1em` | `font-size` |
+| `--c-link-size-lg-font-size` | `var(--c-sys-font-size-lg)` | `font-size` |
+| `--c-link-size-md-font-size` | `var(--c-link-font-size)` | `font-size` |
+| `--c-link-size-sm-font-size` | `var(--c-sys-font-size-sm)` | `font-size` |
+| `--c-link-size-xl-font-size` | `var(--c-sys-font-size-xl)` | `font-size` |
+| `--c-link-size-xs-font-size` | `var(--c-sys-font-size-xs)` | `font-size` |
+| `--c-link-spin-duration` | `1s` | `animation` |
+| `--c-link-text-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-link-text-color-active` | `var(--c-link-text-color)` | `color` |
+| `--c-link-text-color-default` | `var(--c-sys-color-content-primary)` | `color` |
+| `--c-link-text-color-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
+| `--c-link-text-color-error` | `var(--c-sys-color-content-danger)` | `color` |
+| `--c-link-text-color-error-active` | `var(--c-link-text-color-error)` | `color` |
+| `--c-link-text-color-error-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
+| `--c-link-text-color-error-hover` | `var(--c-link-text-color-error)` | `color` |
+| `--c-link-text-color-error-loading` | `var(--c-sys-color-content-disabled)` | `color` |
+| `--c-link-text-color-hover` | `var(--c-link-text-color)` | `color` |
+| `--c-link-text-color-info` | `var(--c-sys-color-content-info)` | `color` |
+| `--c-link-text-color-loading` | `var(--c-sys-color-content-disabled)` | `color` |
+| `--c-link-text-color-primary` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-link-text-color-secondary` | `var(--c-sys-color-content-secondary)` | `color` |
+| `--c-link-text-color-success` | `var(--c-sys-color-content-success)` | `color` |
+| `--c-link-text-color-success-active` | `var(--c-link-text-color-success)` | `color` |
+| `--c-link-text-color-success-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
+| `--c-link-text-color-success-hover` | `var(--c-link-text-color-success)` | `color` |
+| `--c-link-text-color-success-loading` | `var(--c-sys-color-content-disabled)` | `color` |
+| `--c-link-text-color-tertiary` | `var(--c-sys-color-content-secondary)` | `color` |
+| `--c-link-text-color-warning` | `var(--c-sys-color-content-warning)` | `color` |
+| `--c-link-text-color-warning-active` | `var(--c-link-text-color-warning)` | `color` |
+| `--c-link-text-color-warning-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
+| `--c-link-text-color-warning-hover` | `var(--c-link-text-color-warning)` | `color` |
+| `--c-link-text-color-warning-loading` | `var(--c-sys-color-content-disabled)` | `color` |
+| `--c-link-transition-duration` | `0.15s` | `transition` |
+
+</div>
+
+将覆盖设置在组件实际根节点或弹层真实挂载祖先上。例如给该元素添加下列 class，再按需替换变量值：
+
+```css
+.component-theme {
+  --c-link-border-radius: var(--c-sys-radius-sm);
+}
+```
+
+显式行内样式及直接写入同一 CSS 属性的 Props 优先于样式表默认值。Teleport 后，普通 CSS 变量按实际挂载位置继承；使用 ThemeProvider 时，请遵循其局部主题与弹层配置规则。局部定制请直接覆盖组件变量；仅修改后代的 system 变量不会重新计算从根继承的组件别名。内部变量不属于公共 API。
+
+<!-- component-css-variables:end -->
+
+### 样式定制
+
+优先通过 `--c-link-*` CSS 变量定制外观。键盘焦点支持 `--c-link-focus-width`（2px）、`--c-link-focus-offset`（2px）、`--c-link-focus-color`（currentColor）和 `--c-link-focus-opacity`（0.8）。启用减少动态效果时，关闭加载旋转和过渡。
 
 文字配色与 Button 的 text 变体一致：default 使用 content-primary，secondary / tertiary 使用 content-secondary，彩色状态使用对应 content 语义色，禁用和加载使用 content-disabled。两品牌明暗模式均继承这些规则。
 

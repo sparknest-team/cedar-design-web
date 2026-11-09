@@ -2,6 +2,7 @@ import { useDirection } from '@cedar-design/use'
 import { computed, mergeProps, defineComponent, h, inject, nextTick, onActivated, onBeforeUnmount, onDeactivated, provide, ref, watch, type VNodeChild } from 'vue'
 import { createNamespace } from '../_utils/global-config'
 import { useElementResize } from '../_utils/resize-observer'
+import { useI18n } from '../locale'
 import { SiderInjectionKey } from '../layout/context'
 import { useNavMenuItemNames } from './item-names'
 import { navMenuProps } from './props'
@@ -24,6 +25,12 @@ export default defineComponent({
   },
   setup(props, { emit, slots, attrs, expose }) {
     const sider = inject(SiderInjectionKey, undefined)
+    const { t } = useI18n()
+    const overflowLabel = computed(() => {
+      if (props.overflowLabel !== undefined) return props.overflowLabel
+      const label = t('navMenu.more')
+      return label === 'navMenu.more' ? 'More' : label
+    })
     const root = ref<HTMLElement>()
     const { dir, isRtl } = useDirection(() => root.value)
     const measure = ref<HTMLElement>()
@@ -35,7 +42,6 @@ export default defineComponent({
     const activeItem = computed(() => props.activeItem !== undefined ? props.activeItem : localActiveItem.value)
     const expanded = computed(() => props.expandedKeys !== undefined ? props.expandedKeys : localExpanded.value)
     const collapsed = computed(() => props.mode !== 'horizontal' && (props.collapsed ?? sider?.collapsed ?? localCollapsed.value))
-    const theme = computed(() => props.theme ?? sider?.theme ?? 'light')
     const tree = computed(() => createNavMenuTree(props.options, props.fieldNames))
     let scrollGeneration = 0
     let scrollAvailable = true
@@ -92,7 +98,7 @@ export default defineComponent({
     const focusKey = ref<NavMenuKey>()
     const visibleCount = ref(Infinity)
     const overflowKey = computed(() => { let key = '__nav_more'; while (tree.value.byKey.has(key)) key += '_'; return key })
-    const overflow = computed<NavMenuNode>(() => ({ key: overflowKey.value, option: { label: props.overflowLabel }, children: tree.value.roots.slice(visibleCount.value), level: 0, disabled: false, type: 'item' }))
+    const overflow = computed<NavMenuNode>(() => ({ key: overflowKey.value, option: { label: overflowLabel.value }, children: tree.value.roots.slice(visibleCount.value), level: 0, disabled: false, type: 'item' }))
     const activePath = computed(() => {
       const keys = new Set(tree.value.ancestors(selected.value).map(node => node.key))
       if (overflow.value.children.some(node => node.key === selected.value || keys.has(node.key))) keys.add(overflowKey.value)
@@ -166,7 +172,7 @@ export default defineComponent({
       },
       activateItem,
       selectItem: setActiveItem,
-      dir, props, selected, activeItem, expanded, collapsed, theme, activePath, focusKey, slots, labelField: computed(() => tree.value.names.label),
+      dir, props, selected, activeItem, expanded, collapsed, activePath, focusKey, slots, labelField: computed(() => tree.value.names.label),
       context(node) { return { option: node.option, active: node.type === 'item' && selected.value === node.key, expanded: expanded.value.includes(node.key), level: node.level } },
       select(node, event) {
         if (!available() || props.disabled || node.disabled || node.type !== 'item' || node.children.length) return
@@ -197,7 +203,7 @@ export default defineComponent({
     }
     provide(navMenuKey, api)
     if (props.defaultExpandAll && props.expandedKeys === undefined) localExpanded.value = [...tree.value.byKey.values()].filter(node => node.type === 'item' && node.children.length).map(node => node.key)
-    if (props.autoExpandSelected && props.mode === 'vertical' && !collapsed.value && props.expandedKeys === undefined) localExpanded.value = [...new Set([...localExpanded.value, ...tree.value.ancestors(selected.value).map(node => node.key)])]
+    if (props.autoExpandSelected && props.mode === 'vertical' && !collapsed.value && props.expandedKeys === undefined) localExpanded.value = [...new Set([...localExpanded.value, ...tree.value.ancestors(selected.value).filter(node => !node.disabled).map(node => node.key)])]
     watch([selected, tree], () => {
       let valid = expanded.value.filter(key => key === overflowKey.value || tree.value.byKey.has(key))
       if (props.autoExpandSelected && props.mode === 'vertical' && !collapsed.value) {
@@ -241,7 +247,7 @@ export default defineComponent({
       setVisibleCount(count)
     }
     useElementResize(() => [root.value, measure.value, ...Array.from(measure.value?.children ?? [])], () => props.mode === 'horizontal' && props.responsive && !slots.default, resize)
-    watch(() => [props.options, props.mode, props.responsive, props.size], () => afterRender(resize), { deep: true })
+    watch(() => [props.options, props.mode, props.responsive, props.size, overflowLabel.value], () => afterRender(resize), { deep: true })
     const visibleNodes = computed(() => props.mode === 'horizontal' && props.responsive && !slots.default ? tree.value.roots.slice(0, visibleCount.value) : tree.value.roots)
     function ownedRows() {
       return Array.from(root.value?.querySelectorAll<HTMLElement>('[data-nav-item]:not([aria-disabled="true"])') ?? []).filter(row => row.closest(`.${n()}`) === root.value && !row.closest('[inert],[aria-hidden="true"]'))
@@ -279,7 +285,7 @@ export default defineComponent({
       const render = (kind: 'label' | 'icon' | 'extra') => { const value = node.option[kind === 'label' ? tree.value.names.label : kind] as NavMenuContent; return slots[kind]?.(context) ?? (typeof value === 'function' ? value(context) : value) }
       return [h('span', { class: n('icon') }, [render('icon')]), h('span', { class: n('label') }, [render('label')]), h('span', { class: n('extra') }, [render('extra')]), node.children.length ? h(NavMenuArrow, { placement: 'bottom-start' }) : null]
     }
-    return () => h('nav', mergeProps(attrs, { ref: root, class: classes(n(), n(`--${props.mode}`), n(`--${props.size}`), n(`--${theme.value}`), [!!slots.default, n('--custom-items')], [collapsed.value, n('--collapsed')]),
+    return () => h('nav', mergeProps(attrs, { ref: root, class: classes(n(), n(`--${props.mode}`), n(`--${props.size}`), [!!slots.default, n('--custom-items')], [collapsed.value, n('--collapsed')]),
       style: { '--c-nav-menu-icon-size': `${props.iconSize}px`, ...(collapsed.value ? { width: `${props.collapsedWidth}px` } : {}) }, onKeydown,
     }), [h('ul', { role: props.mode === 'horizontal' ? 'menubar' : 'menu', class: n('list') }, [
       ...(slots.default?.() ?? []),

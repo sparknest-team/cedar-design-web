@@ -1,6 +1,7 @@
 import { computed, Ref, ref } from 'vue'
 import type { TableData, TableExpandable } from '../types'
 import type { BaseType, EmitFn2 } from '../../_utils/types'
+import { union } from '../../_utils/array'
 
 export const useExpand = ({
   expandedKeys,
@@ -53,9 +54,7 @@ export const useExpand = ({
 
   const expand = (rowKey: BaseType | BaseType[], expanded = true) => {
     const _rowKeys = ([] as BaseType[]).concat(rowKey)
-    const newExpandedRowKeys = expanded
-      ? expandedRowKeys.value.concat(_rowKeys)
-      : expandedRowKeys.value.filter((key) => !_rowKeys.includes(key))
+    const newExpandedRowKeys = union(expandedRowKeys.value, _rowKeys, !expanded)
     _expandedRowKeys.value = newExpandedRowKeys
     emit('expanded-change', newExpandedRowKeys)
     emit('update:expandedKeys', newExpandedRowKeys)

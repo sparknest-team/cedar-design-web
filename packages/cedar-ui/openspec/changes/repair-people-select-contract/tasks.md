@@ -1,0 +1,3 @@
+- [x] Reproduce reading-scope mismatch and verify existing read-data strategy.
+- [x] Unify scope, public types, event validators and localized names.
+- [x] Complete bilingual API docs and verify both platforms, browsers, types, consumers and source gates.

@@ -1,10 +1,11 @@
-import { defineComponent, toRefs, PropType, computed } from 'vue'
+import { defineComponent, toRefs, PropType, computed, inject } from 'vue'
 import type { Dayjs } from 'dayjs'
 import { dayjs, methods } from '../_utils/date'
 import { padStart } from '../_utils/pad'
 import Week from './week'
 import useCellClassName from './hooks/useCellClassName'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
+import { calendarKeyboardKey } from './keyboard'
 
 const allDaysInOnePage = 6 * 7
 
@@ -120,14 +121,14 @@ export default defineComponent({
     // }
   },
   setup(props, { slots }) {
+    const keyboard = inject(calendarKeyboardKey)
     const { pageData } = toRefs(props)
     const prefixCls = getPrefixCls('calendar')
-    const pageShowDateYear = props.pageShowDate.year()
     const getCellClassName = computed(() =>
       useCellClassName({
         prefixCls,
         mergedValue: props.value,
-        panel: false,
+        panel: props.panel,
         innerMode: props.mode,
         rangeValues: [],
         hoverRangeValues: [],
@@ -147,7 +148,7 @@ export default defineComponent({
 
           return (
             <div key={index} class={getCellClassName.value(col, false)} {...tdProps}>
-              <div class={`${prefixCls}-date`} {...tdDivProps}>
+              <div class={`${prefixCls}-date`} {...tdDivProps} {...keyboard?.cell(col.time, 'day', col.time.month() === (props.current ?? props.pageShowDate.month()))}>
                 <div class={`${prefixCls}-date-value`}>
                   {props.panel ? col.date : <div class={`${prefixCls}-date-circle`}>{col.date}</div>}
                 </div>
@@ -190,13 +191,15 @@ export default defineComponent({
       })
     }
 
-    let pd = pageData.value
-    if (typeof props.current === 'number') {
-      pd = getAllDaysByTime(dayjs(`${pageShowDateYear}-${padStart(props.current + 1, 2, '0')}-01`), {
-        dayStartOfWeek: props.dayStartOfWeek,
-        isWeek: props.isWeek,
-      })
-    }
+    const pd = computed(() => {
+      if (typeof props.current === 'number') {
+        return getAllDaysByTime(dayjs(`${props.pageShowDate.year()}-${padStart(props.current + 1, 2, '0')}-01`), {
+          dayStartOfWeek: props.dayStartOfWeek,
+          isWeek: props.isWeek,
+        })
+      }
+      return pageData.value
+    })
 
     return () => (
       <div class={props.cell ? `${prefixCls}-month-cell` : `${prefixCls}-month`}>
@@ -211,7 +214,7 @@ export default defineComponent({
           pageData={props.pageData}
         />
         <div class={`${prefixCls}-month-cell-body`}>
-          {pd?.map((row, index) => (
+          {pd.value?.map((row, index) => (
             <div
               key={index}
               class={[

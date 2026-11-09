@@ -1,0 +1,3 @@
+- [x] Reproduce Escape/arrow reopening failures in both platforms.
+- [x] Repair keyboard behavior and public slot declarations, clarify all API tables.
+- [x] Validate affected consumers, public types, browsers and source/docs gates on both platforms.

@@ -2,7 +2,6 @@ import type { ReadingDirection } from '@cedar-design/use'
 import { InjectionKey, Slots } from 'vue'
 import { CedarLang } from '../locale/types'
 import { ComponentSize } from '../_utils/constant'
-import type { CedarTheme } from './props'
 
 export interface ConfigProvider {
   slots: Slots
@@ -12,7 +11,6 @@ export interface ConfigProvider {
   updateAtScroll?: boolean
   scrollToClose?: boolean
   dir?: ReadingDirection
-  theme?: CedarTheme
 }
 
 export const configProviderInjectionKey: InjectionKey<ConfigProvider> = Symbol('CedarConfigProvider')

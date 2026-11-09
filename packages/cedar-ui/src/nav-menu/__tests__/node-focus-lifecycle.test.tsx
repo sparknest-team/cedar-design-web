@@ -23,7 +23,7 @@ async function create() {
   const focusReference = vi.fn()
   const expand = vi.fn((entry, open) => { expanded.value = open ? [entry.key] : [] })
   const api = {
-    dir: computed(() => 'ltr'), props, expanded, collapsed: computed(() => false), theme: computed(() => 'light'), selected: computed(() => null),
+    dir: computed(() => 'ltr'), props, expanded, collapsed: computed(() => false), selected: computed(() => null),
     activePath: computed(() => new Set()), focusKey: ref(), labelField: computed(() => 'label'), slots: {},
     context: (entry: any) => ({ option: entry.option }), expand, register: vi.fn(), select: vi.fn(),
   } as unknown as NavMenuContext

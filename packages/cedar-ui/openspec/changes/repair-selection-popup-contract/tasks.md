@@ -1,0 +1,3 @@
+- [x] Reproduce popup metadata mismatch and verify missing Cedar type export.
+- [x] Align open button existing metadata and public type export without new props.
+- [x] Validate both platforms actual consumers, types, browser, source, docs and specification.

@@ -1,7 +1,7 @@
 <template>
   <c-space align="flex-end" :size="32" wrap>
     <c-space direction="column" align="center" :size="8">
-      <c-avatar image-url="/cat.jpg" alt="编辑头像" :size="56" @click="onClick('button')">
+      <c-avatar image-url="/cat.jpg" alt="头像" trigger-aria-label="编辑头像" :size="56" @click="onClick('button')">
         <template #trigger-icon>+</template>
       </c-avatar>
       <span class="label">{{ last === 'button' ? 'click · button' : 'trigger-type="button"' }}</span>
@@ -10,7 +10,7 @@
     <c-space direction="column" align="center" :size="8">
       <c-avatar
         image-url="/cat2.jpg"
-        alt="更换头像"
+        alt="头像" trigger-aria-label="更换头像"
         :size="56"
         trigger-type="overlay"
         @click="onClick('overlay')"

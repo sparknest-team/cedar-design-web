@@ -2,9 +2,12 @@ import type { ExtractPropTypes, PropType } from 'vue'
 import { fieldPresentationProps } from '../_components/field-presentation/props'
 import type { ComponentSize } from '../_utils/constant'
 import { componentSizes } from '../_utils/constant'
+import { emptyValueProp } from '../_utils/empty-value'
+import type { ColorPickerProps } from '../color-picker'
 
 export const colorProps = {
   ...fieldPresentationProps,
+  emptyValue: emptyValueProp<string>(),
   readonly: { type: Boolean, default: undefined },
   /**
    * @zh 绑定值
@@ -79,7 +82,7 @@ export const colorProps = {
    * @en Extra props passed to ColorPicker
    */
   colorPickerProps: {
-    type: Object as PropType<Record<string, unknown>>,
+    type: Object as PropType<Partial<ColorPickerProps>>,
     default: () => ({}),
   },
 }

@@ -3,11 +3,11 @@
     :is="componentTag"
     :class="classNames"
     :style="{ width: siderWidth }"
-    v-bind="resizeDirections ? { directions: resizeDirections } : {}"
+    v-bind="normalizedResizeDirections !== undefined ? { directions: resizeBoxDirections, width: resizeBoxWidth, 'onUpdate:width': onResizeWidth } : {}"
   >
     <div
       :class="`${prefixCls}__viewport`"
-      :inert="localCollapsed && collapsedWidth === 0 ? true : undefined"
+      :inert="localCollapsed && effectiveCollapsedWidth === 0 ? true : undefined"
     >
       <div
         ref="scrollRef"
@@ -23,7 +23,7 @@
       type="button"
       v-if="showTrigger"
       :aria-expanded="!localCollapsed"
-      :aria-label="localCollapsed ? '展开侧栏' : '收起侧栏'"
+      :aria-label="triggerLabel"
       :class="triggerClassNames"
       @click="toggleTrigger"
     >
@@ -56,6 +56,7 @@ import {
   Ref,
   ref,
   toRefs,
+  watch,
 } from "vue";
 import { IconRight } from "@cedar-design/icons-vue/icon-right";
 import { IconLeft } from "@cedar-design/icons-vue/icon-left";
@@ -64,6 +65,9 @@ import { isNumber } from "../_utils/is";
 import useMergeState from "../_hooks/use-merge-state";
 import { LayoutSiderInjectionKey, SiderInjectionKey } from "./context";
 import ResizeBox from "../resize-box";
+import { useI18n } from '../locale'
+import { isResizeBoxDirections, isResizeBoxSize, normalizeResizeBoxDirections, type ResizeBoxDirection } from '../resize-box/validation'
+import { isSiderPlacement, isSiderCollapseMode, isSiderBreakpoint, isSiderWidth } from './sider-validation'
 import { useResponsive } from "../_hooks/use-responsive";
 
 const generateId = (() => {
@@ -83,18 +87,11 @@ export default defineComponent({
   },
   props: {
     bordered: Boolean,
-    placement: { type: String as PropType<"left" | "right">, default: "left" },
+    placement: { type: String as PropType<"left" | "right">, default: "left", validator: process.env.NODE_ENV !== 'production' ? isSiderPlacement : undefined },
     collapseMode: {
       type: String as PropType<"width" | "transform">,
       default: "width",
-    },
-    /**
-     * @zh 主题颜色
-     * @en Theme
-     */
-    theme: {
-      type: String as PropType<"dark" | "light">,
-      default: "light",
+      validator: process.env.NODE_ENV !== 'production' ? isSiderCollapseMode : undefined,
     },
     /**
      * @zh 当前收起状态
@@ -125,6 +122,7 @@ export default defineComponent({
     width: {
       type: [Number, String],
       default: 200,
+      validator: process.env.NODE_ENV !== 'production' ? isSiderWidth : undefined,
     },
     /**
      * @zh 收缩宽度
@@ -133,6 +131,7 @@ export default defineComponent({
     collapsedWidth: {
       type: Number,
       default: 48,
+      validator: process.env.NODE_ENV !== 'production' ? isResizeBoxSize : undefined,
     },
     /**
      * @zh 翻转折叠提示箭头的方向，当 Sider 在右边时可以使用
@@ -147,14 +146,16 @@ export default defineComponent({
      */
     breakpoint: {
       type: String as PropType<"xxl" | "xl" | "lg" | "md" | "sm" | "xs">,
+      validator: process.env.NODE_ENV !== 'production' ? isSiderBreakpoint : undefined,
     },
     /**
-     * @zh 可以用 ResizeBox 替换原生的 `aside` 标签，这个参数即 ResizeBox的 `directions` 参数。详情请看 [ResizeBox](/vue/component/resize-box)。
-     * @en Can replace the native `aside` tag with ResizeBox. This is the `directions` parameter of ResizeBox. For details, please see [ResizeBox](/vue/component/resize-box)
+     * @zh 可以用 ResizeBox 替换原生的 `div` 标签，这个参数即 ResizeBox的 `directions` 参数。详情请看 [ResizeBox](/vue/component/resize-box)。
+     * @en Can replace the native `div` tag with ResizeBox. This is the `directions` parameter of ResizeBox. For details, please see [ResizeBox](/vue/component/resize-box)
      */
     resizeDirections: {
-      type: Array as PropType<Array<"left" | "right" | "top" | "bottom">>,
+      type: Array as PropType<ResizeBoxDirection[]>,
       default: undefined,
+      validator: process.env.NODE_ENV !== 'production' ? isResizeBoxDirections : undefined,
     },
     /**
      * @zh 隐藏底部折叠触发器
@@ -164,23 +165,12 @@ export default defineComponent({
       type: Boolean,
     },
   },
-  emits: [
-    "scroll",
-    /**
-     * @zh 展开-收起时的事件，有点击 trigger 以及响应式反馈两种方式可以触发
-     * @en Events on expand/collapse. There are two ways to trigger click trigger and responsive feedback
-     * @param {boolean} collapsed
-     * @param {'clickTrigger'|'responsive'} type
-     */
-    "collapse",
-    "update:collapsed",
-    /**
-     * @zh 触发响应式布局断点时的事件
-     * @en Events when a responsive layout breakpoint is triggered
-     * @param {boolean} collapsed
-     */
-    "breakpoint",
-  ],
+  emits: {
+    scroll: (event: Event) => true,
+    collapse: (collapsed: boolean, type: 'clickTrigger' | 'responsive') => true,
+    'update:collapsed': (collapsed: boolean) => true,
+    breakpoint: (collapsed: boolean) => true,
+  },
   /**
    * @zh 自定义底部折叠触发器
    * @en Custom bottom folding trigger
@@ -189,32 +179,38 @@ export default defineComponent({
    */
   setup(props, { emit, expose }) {
     const { scrollRef, scrollTo } = useLayoutScroll();
+    const { t } = useI18n()
+    const effectivePlacement = computed(() => isSiderPlacement(props.placement) ? props.placement : 'left')
+    const effectiveCollapsedWidth = computed(() => isResizeBoxSize(props.collapsedWidth) ? props.collapsedWidth : 48)
+    const normalizedWidth = computed(() => isSiderWidth(props.width) ? props.width : 200)
+    const effectiveBreakpoint = computed(() => isSiderBreakpoint(props.breakpoint) ? props.breakpoint : undefined)
+
     expose({ scrollTo });
     const arrowReversed = computed(
-      () => props.reverseArrow || props.placement === "right",
+      () => props.reverseArrow || effectivePlacement.value === "right",
     );
+    const resizedWidth = ref<number>()
+    const expandedWidth = computed(() => resizedWidth.value ?? normalizedWidth.value)
+    watch(() => props.width, () => { resizedWidth.value = undefined })
     const contentStyles = computed(() =>
       props.collapseMode === "transform"
         ? {
             width:
-              typeof props.width === "number"
-                ? `${props.width}px`
-                : props.width,
+              typeof expandedWidth.value === "number"
+                ? `${expandedWidth.value}px`
+                : expandedWidth.value,
             transform:
-              localCollapsed.value && props.placement === "left"
-                ? `translateX(calc(${props.collapsedWidth}px - ${typeof props.width === "number" ? `${props.width}px` : props.width}))`
+              localCollapsed.value && effectivePlacement.value === "left"
+                ? `translateX(calc(${effectiveCollapsedWidth.value}px - ${typeof expandedWidth.value === "number" ? `${expandedWidth.value}px` : expandedWidth.value}))`
                 : undefined,
           }
         : undefined,
     );
     const {
-      theme,
       collapsed,
       defaultCollapsed,
       collapsible,
       hideTrigger,
-      breakpoint,
-      collapsedWidth,
       resizeDirections,
     } = toRefs(props);
 
@@ -225,9 +221,8 @@ export default defineComponent({
       }),
     );
 
-    const componentTag = computed(() =>
-      resizeDirections.value ? "ResizeBox" : "div",
-    );
+    const normalizedResizeDirections = computed(() => resizeDirections.value === undefined ? undefined : normalizeResizeBoxDirections(resizeDirections.value))
+    const componentTag = computed(() => normalizedResizeDirections.value === undefined ? 'div' : 'ResizeBox');
 
     const showTrigger = computed(() => collapsible.value && !hideTrigger.value);
 
@@ -237,10 +232,9 @@ export default defineComponent({
       prefixCls,
       {
         [`${prefixCls}--bordered`]: props.bordered,
-        [`${prefixCls}--right`]: props.placement === "right",
+        [`${prefixCls}--right`]: effectivePlacement.value === "right",
         [`${prefixCls}--zero`]:
-          localCollapsed.value && props.collapsedWidth === 0,
-        [`${prefixCls}-light`]: theme.value === "light",
+          localCollapsed.value && effectiveCollapsedWidth.value === 0,
         [`${prefixCls}-has-trigger`]: showTrigger.value,
         [`${prefixCls}-collapsed`]: localCollapsed.value,
       },
@@ -248,16 +242,23 @@ export default defineComponent({
 
     // Width calculation
     const siderWidth = computed(() => {
-      const { width, collapsedWidth } = props;
-      const rawWidth = localCollapsed.value ? collapsedWidth : width;
+      const rawWidth = localCollapsed.value ? effectiveCollapsedWidth.value : expandedWidth.value;
       return isNumber(rawWidth) ? `${rawWidth}px` : String(rawWidth);
     });
+
+    const resizeBoxWidth = computed(() => {
+      const value = localCollapsed.value ? effectiveCollapsedWidth.value : expandedWidth.value
+      return typeof value === 'number' ? value : undefined
+    })
+    const resizeBoxDirections = computed(() => localCollapsed.value ? [] : normalizedResizeDirections.value)
+    const onResizeWidth = (value: number) => {
+      if (!localCollapsed.value && Number.isFinite(value) && value >= 0) resizedWidth.value = value
+    }
 
     // trigger classNames
     const triggerClassNames = computed(() => [
       `${prefixCls}-trigger`,
       {
-        [`${prefixCls}-trigger-light`]: theme.value === "light",
       },
     ]);
 
@@ -269,14 +270,14 @@ export default defineComponent({
     };
 
     // Subscription Responsive
-    useResponsive(breakpoint, (checked) => {
-      const newCollapsed = !checked;
+    useResponsive(effectiveBreakpoint, (checked) => {
+      const newCollapsed = effectiveBreakpoint.value === "xs" ? checked : !checked;
       if (newCollapsed !== localCollapsed.value) {
         setLocalCollapsed(newCollapsed);
         emit("update:collapsed", newCollapsed);
         emit("collapse", newCollapsed, "responsive");
-        emit("breakpoint", newCollapsed);
       }
+      emit("breakpoint", newCollapsed);
     });
 
     const uniqueId = generateId("__arco_layout_sider");
@@ -291,14 +292,14 @@ export default defineComponent({
     // 提供 context
     provide(
       SiderInjectionKey,
-      reactive({
-        theme,
-        collapsed: localCollapsed as Ref<boolean>,
-        collapsedWidth,
-      }),
+      reactive({ collapsed: localCollapsed as Ref<boolean>, collapsedWidth: effectiveCollapsedWidth }),
     );
 
+    const triggerLabel = computed(() => t(localCollapsed.value ? 'layout.expandSider' : 'layout.collapseSider'))
     return {
+      triggerLabel,
+      effectiveCollapsedWidth,
+      normalizedResizeDirections,
       scrollRef,
       scrollTo,
       contentStyles,
@@ -309,6 +310,9 @@ export default defineComponent({
       triggerClassNames,
       localCollapsed,
       siderWidth,
+      resizeBoxWidth,
+      resizeBoxDirections,
+      onResizeWidth,
       showTrigger,
       toggleTrigger,
     };

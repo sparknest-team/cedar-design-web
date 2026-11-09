@@ -1,3 +1,4 @@
+import { h, KeepAlive, reactive, ref } from 'vue'
 import { flushPromises, mount } from '@vue/test-utils'
 import { afterEach, expect, test, vi } from 'vitest'
 import Cascader from '..'
@@ -50,6 +51,23 @@ for (const [kind, Component] of [['field', Cascader], ['panel', Panel]] as const
     const { owner, errors, click } = await fixture(load)
     await click(); expect(errors).toEqual([cause]); expect(owner.find('[class$="-loading-icon"]').exists()).toBe(false)
     await click(); expect(owner.text()).toContain('Recovered')
+  })
+  test(`${kind}: deep source replacement invalidates a pending node`, async () => {
+    const callbacks: ((value?: any[]) => void)[] = [], source = reactive(roots())
+    const { owner, click } = await fixture((_option, done) => { callbacks.push(done) }, { options: source })
+    await click(); source.splice(0, 1, roots()[0]); await flushPromises()
+    callbacks[0](children('Removed node')); await flushPromises(); expect(owner.text()).not.toContain('Removed node')
+    await click(); expect(callbacks).toHaveLength(2); callbacks[1](children('Replacement')); await flushPromises(); expect(owner.text()).toContain('Replacement')
+  })
+  test(`${kind}: KeepAlive cancellation cannot reappear after activation`, async () => {
+    const visible = ref(true), callbacks: ((value?: any[]) => void)[] = []
+    const load = vi.fn((_option, done) => { callbacks.push(done) })
+    const owner = mount({ render: () => h(KeepAlive, null, () => visible.value ? h(Component as any, { key: 'owner', options: roots(), loadMore: load, ...(kind === 'field' ? { editMode: 'direct', defaultOpen: true, popupContainer: false } : {}) }) : h('div')) }, { attachTo: document.body })
+    owners.push(owner); await flushPromises(); await owner.get('li[title="Root"]').trigger('click'); await flushPromises()
+    visible.value = false; await flushPromises(); callbacks[0](children('Inactive')); await flushPromises()
+    visible.value = true; await flushPromises(); expect(owner.text()).not.toContain('Inactive')
+    await owner.get('li[title="Root"]').trigger('click'); await flushPromises(); expect(load).toHaveBeenCalledTimes(2)
+    callbacks[1](children('Active')); await flushPromises(); expect(owner.text()).toContain('Active')
   })
   test(`${kind}: unmount invalidates callbacks without changing the source`, async () => {
     let done!: (value?: any[]) => void

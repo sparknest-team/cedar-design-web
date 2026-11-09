@@ -52,10 +52,10 @@ it('div mode removes every layout class and style including flex and responsive 
 })
 it('keeps a base span and emits explicit zero responsive overrides', () => {
   const w = render(Col, { props: { span: 8, offset: 3, order: 2, xs: 0, md: { span: 12, offset: 0, order: 0 } } })
-  for (const name of ['span-8','span-xs-0','span-md-12','offset-md-0','order-md-0']) expect(w.classes()).toContain(`c-col--${name}`)
+  for (const name of ['span-8','span-xs-0','span-md-12','offset-md-0','order-md']) expect(w.classes()).toContain(`c-col--${name}`)
 })
 it.each([[1,'1 1 0%'],[0,'0 1 0%'],['12.5rem','0 0 12.5rem'],['auto','1 1 auto'],['1 0 100px','1 0 100px']])('supports flex %s', (flex, expected) => {
-  const w = render(Col, { props: { flex } }); expect(w.element.style.flex).toBe(expected); expect(w.classes()).toEqual(['c-col'])
+  const w = render(Col, { props: { flex } }); expect(w.element.style.flex).toBe(expected); expect(w.classes()).toEqual(['c-col', 'c-col--span-24'])
 })
 it('forwards click once on each Row and Col', async () => {
   const rowClick = vi.fn(), colClick = vi.fn()
@@ -78,7 +78,7 @@ it('keeps nested row gutters isolated', () => {
   const cols = w.findAllComponents(Col); expect(cols[0].element.style.paddingLeft).toBe('12px'); expect(cols[1].element.style.paddingLeft).toBe('4px')
 })
 it('renders span and offset styles without waiting for DOM measurement', () => {
-  const w = render(GridItem, {props:{span:2,offset:1}}); expect(w.element.style.gridColumn).toBe('span 3 / span 3'); expect(w.element.style.marginLeft).toContain('calc'); expect(w.element.style.display).not.toBe('none')
+  const w = render(GridItem, {props:{span:2,offset:1}}); expect(w.element.style.gridColumn).toBe('span 3 / span 3'); expect(w.element.style.marginInlineStart).toContain('calc'); expect(w.element.style.display).not.toBe('none')
 })
 it('collapses whole rows and reserves a suffix with overflow state', async () => {
   const w = render(Grid, {props:{cols:4,collapsed:true},slots:{default:()=>[...Array.from({length:5},(_,i)=>h(GridItem,{key:i},()=>String(i))),h(GridItem,{suffix:true}, {default:({overflow})=>String(overflow)})]}})

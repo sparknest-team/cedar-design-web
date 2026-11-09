@@ -22,4 +22,15 @@ export { timelineProps }
 export default Timeline
 export type TimelineProps = import('vue').ExtractPublicPropTypes<typeof import('./props').timelineProps>
 
-export type { TimelineItemContentPlacement } from './types'
+export type { TimelineItemContentPlacement, ModeType as TimelineMode, LabelPositionType as TimelineLabelPosition, DotType as TimelineDotType, LineType as TimelineLineType } from './types'
+export type TimelineItemProps = InstanceType<typeof _TimelineItem>['$props']
+export interface TimelineSlots {
+  default?: () => import('vue').VNodeChild
+  dot?: () => import('vue').VNodeChild
+  pending?: () => import('vue').VNodeChild
+}
+export interface TimelineItemSlots {
+  default?: () => import('vue').VNodeChild
+  dot?: () => import('vue').VNodeChild
+  label?: () => import('vue').VNodeChild
+}

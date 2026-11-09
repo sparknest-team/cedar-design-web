@@ -38,7 +38,12 @@ const getDefaultPosition = (index: number, mode: ModeType, orientation: Orientat
   if (orientation === 'horizontal') {
     map = ['top', 'bottom']
   }
-  const res = mode === 'alternate' ? contentPlacement || map[index % 2] : mode
+  // CSS classes describe the axis side; contentPlacement describes the content side.
+  const res = mode === 'alternate'
+    ? contentPlacement
+      ? map.includes(contentPlacement) ? map[1 - map.indexOf(contentPlacement)] : map[0]
+      : map[index % 2]
+    : mode
 
   return map.indexOf(res) > -1 ? res : map[0]
 }
@@ -61,6 +66,7 @@ export default defineComponent({
     dotType: {
       type: String as PropType<DotType>,
       default: 'solid',
+      validator: (value: DotType) => ['solid', 'hollow'].includes(value),
     },
     /**
      * @zh 时间轴类型：实线/虚线/点状线
@@ -70,6 +76,7 @@ export default defineComponent({
     lineType: {
       type: String as PropType<LineType>,
       default: 'solid',
+      validator: (value: LineType) => ['solid', 'dashed', 'dotted'].includes(value),
     },
     /**
      * @zh 时间轴颜色
@@ -91,6 +98,7 @@ export default defineComponent({
      */
     contentPlacement: {
       type: String as PropType<TimelineItemContentPlacement>,
+      validator: (value: TimelineItemContentPlacement) => ['left', 'right', 'top', 'bottom'].includes(value),
     },
   },
   /**

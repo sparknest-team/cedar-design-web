@@ -1,0 +1,3 @@
+- [x] Reproduce strict selection and late-label failures.
+- [x] Repair field/panel dependencies and label precedence.
+- [x] Verify both affected platforms, consumers, types and source gates.

@@ -1,14 +1,18 @@
-@import './token.less';
+@import "./token.less";
 .c-auto-complete {
   position: relative;
   display: inline-flex;
   box-sizing: border-box;
   width: 100%;
 }
-.c-auto-complete__dropdown {
+.c-auto-complete--native-editor {
+  flex-direction: column;
+  align-items: stretch;
+}
+.c-select-dropdown.c-auto-complete__dropdown {
   padding-block: var(--c-auto-complete-popup-padding-vertical);
   background-color: var(--c-auto-complete-popup-bg);
-  border-color: var(--c-auto-complete-popup-border-color);
+  border: 1px solid var(--c-auto-complete-popup-border-color);
   border-radius: var(--c-auto-complete-popup-border-radius);
   box-shadow: var(--c-auto-complete-popup-box-shadow);
 

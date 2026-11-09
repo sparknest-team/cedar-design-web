@@ -1,7 +1,7 @@
 import { withInstall } from '../_utils/global-config'
 import _Map from './map'
 import _MapSelect from './map-select'
-import { mapProps } from './props'
+import { mapProps, mapSelectProps } from './props'
 
 const Map = withInstall(_Map, Object.assign(_Map, {
   Select: _MapSelect,
@@ -9,9 +9,9 @@ const Map = withInstall(_Map, Object.assign(_Map, {
 
 export type MapInstance = InstanceType<typeof _Map>
 export type MapSelectInstance = InstanceType<typeof _MapSelect>
-export type { MapProps, ModelValueType, PoiKeys } from './props'
+export type { MapProps, MapSelectProps, MapFetch, MapGeocoderHandler, MapGeocoderResult, ModelValueType, PoiKeys } from './props'
 
-export { mapProps }
+export { mapProps, mapSelectProps }
 export { Map }
 export { _MapSelect as MapSelect }
 

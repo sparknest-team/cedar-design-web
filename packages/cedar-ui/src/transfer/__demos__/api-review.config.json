@@ -28,7 +28,14 @@
       "name": "disabled",
       "description": "是否禁用",
       "type": "boolean",
-      "defaultValue": "false",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "readonly",
+      "description": "Read only; inherits form",
+      "type": "boolean",
+      "defaultValue": "undefined",
       "kind": "boolean"
     },
     {
@@ -295,7 +302,8 @@
     "rename",
     "target-action",
     "update:modelValue",
-    "update:open"
+    "update:open",
+    "load-error"
   ],
   "scenarios": [
     {
@@ -381,16 +389,6 @@
       ]
     },
     {
-      "name": "to-target-icon",
-      "kind": "slot",
-      "demos": []
-    },
-    {
-      "name": "to-source-icon",
-      "kind": "slot",
-      "demos": []
-    },
-    {
       "name": "target",
       "kind": "slot",
       "demos": [
@@ -419,8 +417,6 @@
   "slotNames": [
     "source",
     "source-title",
-    "to-target-icon",
-    "to-source-icon",
     "target",
     "target-title",
     "item"
@@ -428,8 +424,6 @@
   "slotDefaults": {
     "source": false,
     "source-title": false,
-    "to-target-icon": false,
-    "to-source-icon": false,
     "target": false,
     "target-title": false,
     "item": false

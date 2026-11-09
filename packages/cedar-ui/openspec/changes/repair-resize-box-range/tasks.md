@@ -1,0 +1,3 @@
+- [x] Reproduce range/keyboard contract
+- [x] Implement coherent unbounded numeric controls and locale/docs
+- [x] Verify all ResizeBox/Layout and locale consumers, full types and browser/gates

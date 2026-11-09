@@ -10,7 +10,7 @@
       :dir="readingDirection"
       :class="`${prefixCls}-container`"
       :style="containerStyle"
-      v-bind="$attrs"
+      v-bind="mergeProps(themeScope, $attrs)"
     >
       <transition :name="overlayAnimationName" appear>
         <div
@@ -38,12 +38,13 @@
             :aria-busy="dialog.pending.value || undefined"
           aria-modal="true"
           :aria-label="ariaLabel || (!$slots.title ? title : undefined)"
+          :aria-labelledby="titleLabelledby()"
           :class="[prefixCls, drawerClass]"
           :style="panelStyle"
         >
           <div v-if="header" :class="`${prefixCls}-header`">
             <slot name="header">
-              <div v-if="$slots.title || title" :class="`${prefixCls}-title`">
+              <div v-if="$slots.title || title" :id="titleLabelledby()" :class="`${prefixCls}-title`">
                 <slot name="title">{{ title }}</slot>
               </div>
               <button
@@ -94,22 +95,27 @@
 </template>
 
 <script setup lang="ts">
+import { useThemeScope } from '../theme-provider/context'
 import PendingFeedback from '../_components/pending-feedback/PendingFeedback.vue'
 import { useDirection } from '../_utils/direction'
-import { computed, ref, type CSSProperties } from "vue";
-import { IconClose } from "@cedar-design/icons-vue/icon-close";
-import { createNamespace, getPrefixCls } from "../_utils/global-config";
-import { isNumber } from "../_utils/is";
+import { computed, mergeProps, ref, useSlots, type CSSProperties } from 'vue';
+import { IconClose } from '@cedar-design/icons-vue/icon-close';
+import { createNamespace, getPrefixCls } from '../_utils/global-config';
+import { isNumber } from '../_utils/is';
 import {
   useModalSurface,
   type ModalSurfaceCloseRequest,
-} from "../_utils/modal-surface";
+} from '../_utils/modal-surface';
 import Button from "../button";
 import IconHover from "../_components/IconHover.vue";
-import { useI18n } from "../locale";
-import { useDialog } from "../dialog/use-dialog";
-import { drawerProps } from "./props";
+import { useI18n } from '../locale';
+import { useDialog } from '../dialog/use-dialog';
+import { drawerProps } from './props';
 import type { DrawerAction } from "./types";
+import { useDrawerTitleId } from './title-id';
+
+
+const themeScope = useThemeScope()
 
 defineOptions({
   name: createNamespace("drawer").name,
@@ -128,6 +134,9 @@ const emit = defineEmits<{
 }>();
 
 const prefixCls = getPrefixCls("drawer");
+const slots = useSlots();
+const titleId = useDrawerTitleId(prefixCls);
+const titleLabelledby = () => !props.ariaLabel && props.header && !slots.header && slots.title ? titleId : undefined;
 const { t } = useI18n();
 const drawerRoot = ref<HTMLElement>();
 const drawerRef = ref<HTMLElement>();

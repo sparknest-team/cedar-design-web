@@ -4,9 +4,11 @@ permalink: /components/table/
 
 # Table
 
-跨端边界：本组件与 Maple Table 独立维护，菜单保留“独立”。Maple 的轻量插槽表格/本地分页示例不提供本组件的排序、行选择或远程数据 API；两端有交互记录不等于 API 同源或全部配置已验收。
+Cedar Table 支持排序、行选择和远程数据等功能；Maple Table 是轻量级原生表格展示容器，不提供相同的数据和交互 API。
 
 用于数据收集展示、分析整理、操作处理。
+
+当前排序列的表头通过 `aria-sort` 标示升序或降序；自定义表头内的输入及按钮保留自己的键盘和点击操作。
 
 ## 基础示例
 
@@ -15,12 +17,6 @@ permalink: /components/table/
 传入 `columns` 和 `data` 即可展示表格；默认铺满容器，列宽超出时自动横向滚动。
 
 <demo src="./__demos__/basic.vue"></demo>
-
-### 手动加载与原生插槽
-
-布尔值或对象 loading 同时适用于数据模式与原生插槽模式；对象需要显式 loading: true。切换加载时保留行、草稿与焦点，通知事件不负责自动执行加载任务。
-
-<demo src="./__demos__/loading.vue"></demo>
 
 ### 空数据
 
@@ -46,6 +42,8 @@ permalink: /components/table/
 <!-- demo-config-notes:end -->
 
 表格宽度和列宽是两层配置：`style="width: 100%"` 或 `style="width: 480px"` 控制外层容器，`columns` 中的 `width` / `minWidth` 控制各列。无需设置 `scroll.x` 或 `scroll.y`。
+
+横向滚动需要表格外层有可确定的可用宽度；在 flex 或 grid 布局中，必要时给包含表格的项目设置 `min-width: 0` 或明确宽度，避免内容将祖先撑宽。
 
 先用下面七种组合比较不指定列宽、全部最小宽、定宽与弹性混合、全部定宽、横向溢出、左右固定列，以及选择列/扩展列。切换 100%、480px、360px 可以直接观察重算和横向滚动。
 
@@ -340,7 +338,9 @@ Table **不内置**列管理。通过扩展点与外部 `TableColumnManager` 组
 ### 自定义渲染
 
 通过 `#columns` 插槽和 `<c-table-column>` 组件可以使用模板的方法自定义列渲染。
-注意：在使用 `#columns` 插槽后，将会屏蔽 `columns` 属性
+至少一个 `<c-table-column>` 注册后，声明式列替代 `columns` 属性；没有注册列时继续使用 `columns`。
+
+列标题依次使用 `titleSlotName` 指向的 Table 具名插槽、列的 `title` 插槽、`title` 值。单元格依次使用列的 `cell` 插槽、`render`、`slotName` 指向的 Table 具名插槽、`dataIndex` 对应数据。建议每处只配置一种内容来源。
 
 <demo src="./__demos__/custom-rendering.vue"></demo>
 
@@ -421,9 +421,19 @@ Table **不内置**列管理。通过扩展点与外部 `TableColumnManager` 组
 
 <demo src="./__demos__/form-attribute.vue"></demo>
 
+## 加载与等待
+
+### 手动加载与原生插槽
+
+布尔值或对象 loading 同时适用于数据模式与原生插槽模式；对象需要显式 loading: true。切换加载时保留行、草稿与焦点，通知事件不负责自动执行加载任务。
+
+使用默认插槽时，表格渲染插槽提供的原生表格内容和 `footer`，不再根据 `data` / `columns` 生成表头、数据行或内置分页；排序、筛选及选择等数据模式功能也不接管这些原生内容。需要这些功能时使用数据模式。
+
+<demo src="./__demos__/loading.vue"></demo>
+
 ## API
 
-### `<Table>` Props
+### Table Props
 
 | 参数名                      | 描述                                                                                       | 类型                                                                                                                                                                          |   默认值    |
 | --------------------------- | ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------: |
@@ -448,6 +458,8 @@ Table **不内置**列管理。通过扩展点与外部 `TableColumnManager` 组
 | virtual-list-props          | 传递虚拟列表属性，传入此参数以开启虚拟滚动 [VirtualListProps](#virtuallistprops)           | `VirtualListProps`                                                                                                                                                            |     `-`     |
 | span-method                 | 单元格合并方法（索引从数据项开始计数）                                                     | `(data: {  record: TableData;  column: TableColumnData \| TableOperationColumn;  rowIndex: number;  columnIndex: number;}) => { rowspan?: number; colspan?: number } \| void` |     `-`     |
 | span-all                    | 是否让合并方法的索引包含所有                                                               | `boolean`                                                                                                                                                                     |   `false`   |
+| components                  | 配置操作列，详见 TableComponents                                                           | `TableComponents`                                                                                                                                                             |     `-`     |
+| row-number                  | 保留属性；当前不生成行号                                                                   | `boolean \| object`                                                                                                                                                           |     `-`     |
 | load-more                   | 数据懒加载函数，传入时开启懒加载功能                                                       | `(record: TableData, done: (children?: TableData[]) => void) => void`                                                                                                         |     `-`     |
 | filter-icon-align-left      | 筛选图标是否左对齐                                                                         | `boolean`                                                                                                                                                                     |   `false`   |
 | hide-expand-button-on-empty | 是否在子树为空时隐藏展开按钮                                                               | `boolean`                                                                                                                                                                     |   `false`   |
@@ -467,16 +479,14 @@ Table **不内置**列管理。通过扩展点与外部 `TableColumnManager` 组
 | scrollbar                   | 是否开启虚拟滚动条                                                                         | `boolean \| ScrollbarProps`                                                                                                                                                   |   `true`    |
 | show-empty-tree             | 是否展示空子树                                                                             | `boolean`                                                                                                                                                                     |   `false`   |
 | extra-column                | 在表格末尾插入扩展列（如设置按钮）；内容由插槽提供                                         | `boolean \| TableExtraColumnConfig`                                                                                                                                           |   `false`   |
-| empty-type                   | 空白状态类型                                                                               | <br/>`default`\|`network`\|`unknown`\|`success` <br/> <br/>                                                                                                                   |  `default`  |
-| empty-text                   | 空白状态类型文案                                                                           | <br/>`string` <br/> <br/>                                                                                                                                                     |     `-`     |
 
-### `<Table>` Events
+### Table Events
 
 | 事件名           | 描述                           | 参数                                                                               |
 | ---------------- | ------------------------------ | ---------------------------------------------------------------------------------- |
 | expand           | 点击展开行时触发               | rowKey: `string \| number`<br>record: `TableData`                                  |
 | expanded-change  | 已展开的数据行发生改变时触发   | rowKeys: `(string \| number)[]`                                                    |
-| select           | 点击行选择器时触发             | rowKeys: `string \| number[]`<br>rowKey: `string \| number`<br>record: `TableData` |
+| select           | 点击行选择器时触发             | rowKeys: `(string \| number)[]`<br>rowKey: `string \| number`<br>record: `TableData` |
 | select-all       | 点击全选选择器时触发           | checked: `boolean`                                                                 |
 | selection-change | 已选择的数据行发生改变时触发   | rowKeys: `(string \| number)[]`                                                    |
 | sorter-change    | 排序规则发生改变时触发         | dataIndex: `string`<br>direction: `string`                                         |
@@ -496,7 +506,7 @@ Table **不内置**列管理。通过扩展点与外部 `TableColumnManager` 组
 | row-contextmenu  | 右击行数据时触发               | record: `TableData`<br>ev: `Event`                                                 |
 | cell-contextmenu | 右击单元格时触发               | record: `TableData`column: `TableColumnData`<br>ev: `Event`                        |
 
-### `<Table>` Methods
+### Table Methods
 
 | 方法名       | 描述             | 参数                                                                     | 返回值 |
 | ------------ | ---------------- | ------------------------------------------------------------------------ | ------ |
@@ -509,7 +519,13 @@ Table **不内置**列管理。通过扩展点与外部 `TableColumnManager` 组
 | resetSorters | 重置列的排序     | -                                                                        | -      |
 | clearSorters | 清空列的排序     | -                                                                        | -      |
 
-### `<Table>` Slots
+`clearFilters` 和 `resetFilters` 指定列时保留其他列的筛选状态；省略参数或传空数组时处理全部可筛选列。受控列的实际值仍由父组件决定。
+
+单选模式下，`select(keys, true)` 只选择传入的第一个键，空数组不操作；`select(keys, false)` 移除指定的键。`selectAll(true)` 不操作；`selectAll(false)` 移除当前页可选行的键。受控选择仍须由父组件接收并更新 `selectedKeys`。
+
+`select`、`selectAll`、`expand` 和 `expandAll` 的状态参数省略时为 `true`。`expand` 接收一个或多个键，重复展开不会重复添加键；`expandAll` 处理所有数据行。`resetSorters` 恢复列的默认排序，`clearSorters` 清除排序；受控排序仍由父组件决定。
+
+### Table Slots
 
 | 插槽名           |                 描述                  | 参数                                                                   |
 | ---------------- | :-----------------------------------: | ---------------------------------------------------------------------- |
@@ -531,7 +547,7 @@ Table **不内置**列管理。通过扩展点与外部 `TableColumnManager` 组
 | extra-column-cell | 末列扩展列单元格内容 | record / rowIndex 等 |
 | header-cell-actions | 表头右侧操作区（叶子列）；内容由外部完全控制 | column / dataIndex |
 
-### `<TableColumn>` Props
+### TableColumn Props
 
 | 参数名             | 描述                                | 类型                                                      | 默认值  |
 | ------------------ | ----------------------------------- | --------------------------------------------------------- | :-----: |
@@ -555,14 +571,47 @@ Table **不内置**列管理。通过扩展点与外部 `TableColumnManager` 组
 | index              | 用于手动指定选项的 index。          | `number`                                                  |   `-`   |
 | tooltip            | 在省略时是否显示文字提示            | `boolean\|object`                                         | `false` |
 
-### `<TableColumn>` Slots
+### TableColumn Slots
 
 | 插槽名         |         描述         | 参数                                                                                                                                                                         |
 | -------------- | :------------------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | filter-icon    |     筛选按钮图标     | -                                                                                                                                                                            |
 | filter-content | 自定义筛选弹出框内容 | filterValue: `string[]`<br>setFilterValue: `(filterValue: string[]) => void`<br>handleFilterConfirm: `(event: Event) => void`<br>handleFilterReset: `(event: Event) => void` |
+| default        | 声明分组表头的子列 | - |
 | title          |         标题         | -                                                                                                                                                                            |
 | cell           |        单元格        | record: `TableData`<br>column: `TableColumnData`<br>rowIndex: `number`                                                                                                       |
+
+### 表格结构子组件
+
+`Thead` 和 `Tbody` 分别渲染表头和表体，默认插槽提供内容；同名插槽可定制对应元素。`Tr`、`Th` 和 `Td` 是依赖 Table 上下文的底层渲染器，不是独立的数据表格。通常通过 Table 的 `tr`、`th`、`td` 插槽定制元素。
+
+`Tr` 的 `expand`、`empty`、`checked` 表示行状态，`rowIndex` 和 `record` 提供行上下文。`Th` 接收 `column`、`operations`、`dataColumns` 和 `resizable`。`Td` 接收 `rowIndex`、`record`、`column`、`type`、`operations`、`dataColumns`、`colSpan`、`rowSpan`、`isFixedExpand`、`containerWidth`、`showExpandBtn`、`indentSize`、`renderExpandBtn` 和 `summary`，这些字段用于 Table 内部布局及渲染。
+
+### TableComponents
+
+`components.operations` 接收当前的 `dragHandle`、`expand` 和 `selection` 操作列（未启用时相应值为空），返回要渲染的操作列数组。它用于调整操作列，不是任意表格元素的替换接口。
+
+### TableOperationColumn Props
+
+| 字段 | 说明 | 类型 |
+| --- | --- | --- |
+| name | 操作列标识 | `string` |
+| title | 列标题 | `string \| RenderFunction` |
+| width | 列宽 | `number` |
+| fixed | 是否固定 | `boolean` |
+| render | 自定义操作单元格内容 | `(record: TableData) => VNodeChild` |
+
+`isLastLeftFixed` 和 `_realWidth` 用于表格布局计算，业务代码通常无需设置。`TableComponents` 与 `TableOperationColumn` 类型可从根入口或 table 入口导入。
+
+### 分页配置类型
+
+`TablePaginationConfig = Omit<PaginationProps, 'total'> & { total?: number }`。表格省略 `pagination.total` 时由有效数据条数推导；远程分页可继续显式传入总数。原 `PaginationProps` 对象仍可直接传给表格，独立 `Pagination` 的 `total` 必填要求不变。根入口与 table 入口均导出 `TablePaginationConfig`。
+
+### 透传配置优先级
+
+列 filterable.triggerProps 中的嵌套 open 等字段可以覆盖筛选浮层状态。需要由业务控制筛选浮层时，应同时管理其打开状态与筛选条件。
+
+## Types
 
 ### TableData
 
@@ -575,6 +624,8 @@ Table **不内置**列管理。通过扩展点与外部 `TableColumnManager` 组
 | isLeaf   | 是否是叶子节点   | `boolean`                  | `false` |
 
 ### TableSortable
+
+自定义 `sorter(a, b, { direction })` 需自行根据 `direction` 返回升序或降序结果，Table 不会再次反转；`sorter: true` 关闭内部排序。未提供函数时使用内置比较，相同值保留原顺序。
 
 | 参数名           | 描述                                     | 类型                                                                                                                                                 | 默认值 |
 | ---------------- | ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | :----: |
@@ -592,6 +643,8 @@ Table **不内置**列管理。通过扩展点与外部 `TableColumnManager` 组
 
 ### TableFilterable
 
+筛选内容依次使用列的 `filter-content` 插槽、`slotName` 指向且实际存在的 Table 具名插槽、`renderContent`，最后使用 `filters` 内置选项。指定的具名插槽不存在时会继续使用后续内容。
+
 | 参数名               | 描述                                      | 类型                                                                                                                                                                                                     | 默认值  |
 | -------------------- | ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-----: |
 | filters              | 筛选数据                                  | `TableFilterData[]`                                                                                                                                                                                      |   `-`   |
@@ -603,6 +656,7 @@ Table **不内置**列管理。通过扩展点与外部 `TableColumnManager` 组
 | icon                 | 筛选按钮的图标                            | `RenderFunction`                                                                                                                                                                                         |   `-`   |
 | triggerProps         | 筛选框的弹出框配置                        | `TriggerProps`                                                                                                                                                                                           |   `-`   |
 | alignLeft            | 筛选图标是否左对齐                        | `boolean`                                                                                                                                                                                                | `false` |
+| slotName             | Table 上自定义筛选内容的具名插槽           | `string`                                                                                                                                                                                                 | `-` |
 
 ### TableColumnData
 
@@ -707,17 +761,7 @@ Table **不内置**列管理。通过扩展点与外部 `TableColumnManager` 组
 | align | 对齐 | `'left' \| 'center' \| 'right'` | `'center'` |
 | dataIndex | 列标识 | `string` | `__cedar_table_extra__` |
 
-### 分页配置类型
-
-`TablePaginationConfig = Omit<PaginationProps, 'total'> & { total?: number }`。表格省略 `pagination.total` 时由有效数据条数推导；远程分页可继续显式传入总数。原 `PaginationProps` 对象仍可直接传给表格，独立 `Pagination` 的 `total` 必填要求不变。根入口与 table 入口均导出 `TablePaginationConfig`。
-
-
-### 透传配置的现有优先级（F07）
-
-列 filterable.triggerProps 在内部 Trigger 配置之后展开，嵌套 open 等字段目前可以覆盖筛选浮层状态。F07 兼容阶段保留该顺序和类型，不自动禁止这些旧能力；如未来收紧，需单独评估筛选状态与浮层状态的迁移。
-
-
-## 可选的业务行类型配置（F08-A）
+## 可选的业务行类型配置
 
 ```ts
 import { defineTableConfig } from '@cedar-design/ui'
@@ -748,8 +792,7 @@ const config = defineTableConfig<User>({
 
 自动合计行可能包含文本、总数和缺失字段，不能让 render(record: User) 假定其完整。需要自动合计或异构树行时继续使用原宽配置；采用自定义合计的新入口需提供完整业务行。两种入口的原 Table 行为都不改变。
 
-跨端范围：Maple Table 是原生表格展示容器，没有 data/columns API，本次不增加关联配置入口；两端 Select/Cascader 类型关联留待分别确认。
-
+Maple Table 是原生表格展示容器，不提供 data / columns 配置。
 
 ## 阅读方向与滚动
 
@@ -762,3 +805,155 @@ Table 继承最近的原生 `dir`。普通列按阅读方向排列；显式 `fix
 懒加载子节点缓存归属于源节点对象及其行 key，不因复用同一 key 而继承旧节点缓存。替换节点、行 key 或加载函数会使旧任务/缓存失效；停用或卸载会使待完成的单元格回调失效。done() 表示未取得子节点，结束等待并允许重试；done([]) 接受空结果，同一次任务只接受首次完成。同步加载异常释放等待后仍进入 Vue 错误通道。保持 load-more 的 done 回调协议，不将通知事件返回的 Promise 当作任务入口。
 
 回调式加载函数若返回 Promise，其拒绝会释放等待并进入 Vue 错误通道；完成值会被忽略，不能代替 done。这是显式加载属性的异常处理，不会收集 expand 等通知事件的 Promise。
+
+## CSS Variables
+
+<!-- component-css-variables:start -->
+
+通过以下变量定制组件外观。默认值随表中注明的主题或选择器条件变化；变量仅在对应的尺寸、变体和交互状态下生效。
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| 变量 | 默认值／条件 | 影响的样式 |
+| --- | --- | --- |
+| `--c-table-body-bg` | `var(--c-color-bg-2)` | `background-color` |
+| `--c-table-body-cell-bg` | `var(--c-color-bg-2)` | `background-color` |
+| `--c-table-body-cell-text-color` | `rgb(var(--c-gray-10))` | `color` |
+| `--c-table-body-min-height` | `40px` | `min-height` |
+| `--c-table-body-row-active-bg` | `var(--c-color-fill-1)` | `background-color` |
+| `--c-table-body-row-active-dark-bg` | `var(--c-color-neutral-2)` | `background-color` |
+| `--c-table-body-row-hover-bg` | `var(--c-color-fill-1)` | `background-color` |
+| `--c-table-body-sorted-cell-bg` | `var(--c-color-fill-1)` | `background-color` |
+| `--c-table-body-stripe-row-bg` | `var(--c-color-fill-1)` | `background-color` |
+| `--c-table-border-color` | `var(--c-color-neutral-3)` | `border`, `border-bottom`, `border-left`, `border-right`, `border-top`, `box-shadow` |
+| `--c-table-border-radius` | `var(--c-border-radius-md)` | `border-radius`, `border-top-left-radius`, `border-top-right-radius` |
+| `--c-table-border-style` | `solid` | `border`, `border-bottom`, `border-left`, `border-right`, `border-top` |
+| `--c-table-border-width` | `var(--c-border-width-1)` | `border`, `border-bottom`, `border-left`, `border-right`, `border-top`, `bottom`, `box-shadow`, `margin` |
+| `--c-table-column-handle-right` | `-4px` | `inset-inline-end` |
+| `--c-table-column-handle-width` | `8px` | `width` |
+| `--c-table-column-insert-empty-font-size` | `14px` | `font-size` |
+| `--c-table-column-insert-empty-line-height` | `22px` | `line-height` |
+| `--c-table-column-insert-empty-text-color` | `var(--c-color-text-3)` | `color` |
+| `--c-table-column-insert-group-margin-top` | `16px` | `margin-top` |
+| `--c-table-column-insert-group-title-font-size` | `12px` | `font-size` |
+| `--c-table-column-insert-group-title-line-height` | `20px` | `line-height` |
+| `--c-table-column-insert-group-title-margin-bottom` | `8px` | `margin-bottom` |
+| `--c-table-column-insert-group-title-text-color` | `var(--c-color-text-3)` | `color` |
+| `--c-table-column-insert-item-min-height` | `32px` | `min-height` |
+| `--c-table-column-insert-max-height` | `calc(100vh - 160px)` | `max-height` |
+| `--c-table-column-insert-padding` | `16px 20px` | `padding` |
+| `--c-table-drag-handle-col-width` | `40px` | `max-width`, `min-width`, `width` |
+| `--c-table-editable-body-cell-border-color` | `var(--c-color-white)` | `border` |
+| `--c-table-expand-button-border-radius` | `2px` | `border-radius` |
+| `--c-table-expand-button-font-size` | `12px` | `font-size` |
+| `--c-table-expand-button-margin-right` | `var(--c-spacing-2)` | `margin-inline-end` |
+| `--c-table-expand-button-size` | `14px` | `height`, `line-height`, `width` |
+| `--c-table-expand-content-bg` | `var(--c-color-fill-1)` | `background-color` |
+| `--c-table-expand-content-hover-bg` | `var(--c-color-fill-1)` | `background-color` |
+| `--c-table-expand-icon-bg` | `var(--c-color-neutral-3)` | `background-color` |
+| `--c-table-expand-icon-border-color` | `transparent` | `border` |
+| `--c-table-expand-icon-border-width` | `var(--c-border-width-1)` | `border` |
+| `--c-table-expand-icon-col-width` | `40px` | `max-width`, `min-width`, `width` |
+| `--c-table-expand-icon-color` | `var(--c-color-text-2)` | `color` |
+| `--c-table-expand-icon-hover-bg` | `var(--c-color-neutral-4)` | `background-color` |
+| `--c-table-expand-icon-hover-border-color` | `transparent` | `border-color` |
+| `--c-table-expand-icon-hover-color` | `var(--c-color-text-1)` | `color` |
+| `--c-table-expand-loading-icon-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-table-extra-column-icon-color` | `var(--c-color-text-2)` | `color` |
+| `--c-table-extra-column-icon-hover-color` | `var(--c-color-text-1)` | `color` |
+| `--c-table-filters-bottom-gap` | `8px` | `margin-inline-end` |
+| `--c-table-filters-bottom-height` | `38px` | `height` |
+| `--c-table-filters-bottom-line-height` | `38px` | `line-height` |
+| `--c-table-filters-bottom-padding` | `0 12px` | `padding` |
+| `--c-table-filters-icon-font-size` | `16px` | `font-size` |
+| `--c-table-filters-icon-hover-bg` | `var(--c-color-fill-4)` | `background` |
+| `--c-table-filters-item-font-size` | `14px` | `font-size` |
+| `--c-table-filters-item-height` | `32px` | `height` |
+| `--c-table-filters-item-line-height` | `32px` | `line-height` |
+| `--c-table-filters-item-padding` | `0 12px` | `padding` |
+| `--c-table-filters-list-padding` | `4px 0` | `padding` |
+| `--c-table-filters-popup-bg` | `var(--c-color-bg-5)` | `background` |
+| `--c-table-filters-popup-border-color` | `var(--c-color-neutral-3)` | `border` |
+| `--c-table-filters-popup-border-radius` | `var(--c-border-radius-md)` | `border-radius` |
+| `--c-table-filters-popup-box-shadow` | `var(--c-shadow1-down)` | `box-shadow` |
+| `--c-table-filters-popup-max-height` | `200px` | `max-height` |
+| `--c-table-filters-popup-min-width` | `100px` | `min-width` |
+| `--c-table-filters-text-height` | `34px` | `height` |
+| `--c-table-filters-text-line-height` | `32px` | `line-height` |
+| `--c-table-filters-text-max-width` | `160px` | `max-width` |
+| `--c-table-filters-text-padding-left` | `10px` | `padding-inline-start` |
+| `--c-table-filters-width` | `24px` | `width` |
+| `--c-table-header-cell-action-color` | `var(--c-color-text-3)` | `color` |
+| `--c-table-header-cell-action-hover-color` | `var(--c-color-text-1)` | `color` |
+| `--c-table-header-cell-action-margin-left` | `2px` | `margin-inline-start` |
+| `--c-table-header-cell-bg` | `var(--c-color-neutral-2)` | `background-color` |
+| `--c-table-header-cell-text-color` | `rgb(var(--c-gray-10))` | `color` |
+| `--c-table-header-filters-icon-active-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-table-header-filters-icon-color` | `var(--c-color-text-2)` | `color` |
+| `--c-table-header-filters-icon-hover-bg` | `var(--c-color-neutral-4)` | `background-color` |
+| `--c-table-header-sorted-cell-bg` | `var(--c-color-neutral-3)` | `background-color` |
+| `--c-table-header-sorted-cell-hover-bg` | `rgba(var(--c-gray-4), 0.5)` | `background-color` |
+| `--c-table-header-sorter-icon-active-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-table-header-sorter-icon-color` | `var(--c-color-neutral-5)` | `color` |
+| `--c-table-header-sorter-icon-down-top` | `-3px` | `top` |
+| `--c-table-header-sorter-icon-font-size` | `12px` | `font-size` |
+| `--c-table-header-sorter-icon-height` | `8px` | `height`, `line-height` |
+| `--c-table-header-sorter-icon-left` | `1px` | `left` |
+| `--c-table-header-sorter-icon-margin-left` | `var(--c-spacing-4)` | `margin-inline-start` |
+| `--c-table-header-sorter-icon-next-color` | `var(--c-color-neutral-6)` | `color` |
+| `--c-table-header-sorter-icon-up-top` | `-2px` | `top` |
+| `--c-table-header-sorter-icon-width` | `14px` | `width` |
+| `--c-table-header-text-font-weight` | `var(--c-font-weight-500)` | `font-weight` |
+| `--c-table-line-height` | `var(--c-line-height)` | `line-height` |
+| `--c-table-pagination-margin` | `var(--c-spacing-6)` | `margin-bottom`, `margin-top` |
+| `--c-table-pagination-sticky-bg` | `var(--c-color-bg-1)` | `background`, `background-color` |
+| `--c-table-pagination-sticky-padding` | `12px 0` | `padding` |
+| `--c-table-resizing-border-color` | `var(--c-sys-color-content-brand)` | `border-right-color` |
+| `--c-table-selection-col-width` | `40px` | `max-width`, `min-width`, `width` |
+| `--c-table-shadow-left` | `inset 6px 0 8px -3px rgba(0, 0, 0, 0.15)` | `box-shadow` |
+| `--c-table-shadow-right` | `inset -6px 0 8px -3px rgba(0, 0, 0, 0.15)` | `box-shadow` |
+| `--c-table-shadow-wrapper-width` | `10px` | `width` |
+| `--c-table-size-lg-extra-icon-font-size` | `16px` | `font-size` |
+| `--c-table-size-lg-extra-padding-horizontal` | `var(--c-spacing-2)` | `padding` |
+| `--c-table-size-lg-font-size` | `var(--c-table-size-md-font-size)` | `font-size` |
+| `--c-table-size-lg-header-font-size` | `var(--c-table-size-md-header-font-size)` | `font-size` |
+| `--c-table-size-lg-padding-horizontal` | `var(--c-table-size-md-padding-horizontal)` | `margin`, `padding` |
+| `--c-table-size-lg-padding-vertical` | `var(--c-table-size-md-padding-vertical)` | `margin`, `padding` |
+| `--c-table-size-md-extra-icon-font-size` | `16px` | `font-size` |
+| `--c-table-size-md-extra-padding-horizontal` | `var(--c-spacing-2)` | `padding` |
+| `--c-table-size-md-font-size` | `var(--c-font-size-body-3)` | `font-size` |
+| `--c-table-size-md-header-font-size` | `var(--c-font-size-body-3)` | `font-size` |
+| `--c-table-size-md-padding-horizontal` | `var(--c-spacing-7)` | `margin`, `padding` |
+| `--c-table-size-md-padding-vertical` | `9px` | `margin`, `padding` |
+| `--c-table-size-sm-extra-icon-font-size` | `14px` | `font-size` |
+| `--c-table-size-sm-extra-padding-horizontal` | `var(--c-spacing-1)` | `padding` |
+| `--c-table-size-sm-font-size` | `var(--c-font-size-body-3)` | `font-size` |
+| `--c-table-size-sm-header-font-size` | `var(--c-font-size-body-3)` | `font-size` |
+| `--c-table-size-sm-padding-horizontal` | `var(--c-spacing-7)` | `margin`, `padding` |
+| `--c-table-size-sm-padding-vertical` | `5px` | `margin`, `padding` |
+| `--c-table-size-xs-extra-icon-font-size` | `14px` | `font-size` |
+| `--c-table-size-xs-extra-padding-horizontal` | `var(--c-spacing-1)` | `padding` |
+| `--c-table-size-xs-font-size` | `var(--c-font-size-body-1)` | `font-size` |
+| `--c-table-size-xs-header-font-size` | `var(--c-font-size-body-1)` | `font-size` |
+| `--c-table-size-xs-padding-horizontal` | `var(--c-spacing-7)` | `margin`, `padding` |
+| `--c-table-size-xs-padding-vertical` | `2px` | `margin`, `padding` |
+| `--c-table-sticky-scrollbar-height` | `16px` | `height` |
+| `--c-table-sticky-scrollbar-opacity` | `0.8` | `opacity` |
+| `--c-table-tfoot-bg` | `var(--c-color-neutral-2)` | `background-color` |
+| `--c-table-th-actions-margin-left` | `8px` | `margin-inline-start` |
+| `--c-table-transition-duration` | `var(--c-transition-duration-1)` | `transition` |
+| `--c-table-transition-timing-function` | `var(--c-transition-timing-function-linear)` | `transition` |
+
+</div>
+
+将覆盖设置在组件实际根节点或弹层真实挂载祖先上。例如给该元素添加下列 class，再按需替换变量值：
+
+```css
+.component-theme {
+  --c-table-body-cell-text-color: rgb(var(--c-gray-10));
+}
+```
+
+显式行内样式及直接写入同一 CSS 属性的 Props 优先于样式表默认值。Teleport 后，普通 CSS 变量按实际挂载位置继承；使用 ThemeProvider 时，请遵循其局部主题与弹层配置规则。局部定制请直接覆盖组件变量；仅修改后代的 system 变量不会重新计算从根继承的组件别名。内部变量不属于公共 API。
+
+<!-- component-css-variables:end -->

@@ -1,0 +1,3 @@
+- [x] Reproduce tiny-step keyboard loss and unblurred composite inputs on both platforms.
+- [x] Repair grid andfocus boundaries,public slots/enums/instance types.
+- [x] Verify numerical edges,interaction sessions,consumers,browsers,types,docs andsource gates.

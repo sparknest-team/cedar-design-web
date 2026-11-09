@@ -2,6 +2,8 @@
   <c-space direction="column" :size="10">
     <c-typography-text>Cedar Design</c-typography-text>
     <c-typography-text status="secondary">Secondary</c-typography-text>
+    <c-typography-text status="tertiary">Tertiary</c-typography-text>
+    <c-typography-text status="info">Info</c-typography-text>
     <c-typography-text status="primary">Primary</c-typography-text>
     <c-typography-text status="success">Success</c-typography-text>
     <c-typography-text status="warning">Warning</c-typography-text>

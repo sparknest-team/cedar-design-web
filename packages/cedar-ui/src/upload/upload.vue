@@ -2,6 +2,7 @@
   <div :class="classes(n(), n('--' + listType))" :aria-busy="uploader.guardPending.value || undefined">
     <input
       ref="inputRef"
+      :aria-describedby="describeError($attrs['aria-describedby'])"
       :class="n('input')"
       type="file"
       :accept="accept"
@@ -16,7 +17,8 @@
       <PendingFeedback :loading="uploader.guardPending.value" />
       <div
         v-if="showUploadButton && !maxReached"
-        v-ripple="{ disabled: disabledState || !ripple }"
+        ref="triggerRef"
+        v-ripple="{ disabled: disabledState || hasInteractiveTrigger || !ripple }"
         :class="
           classes(
             n('trigger'),
@@ -25,10 +27,12 @@
             [dragOver, n('trigger--dragover')],
           )
         "
-        role="button"
-        :tabindex="disabledState ? undefined : 0"
+        :role="hasInteractiveTrigger ? (describeError($attrs['aria-describedby']) ? 'group' : undefined) : 'button'"
+        :aria-describedby="describeError($attrs['aria-describedby'])"
+        :tabindex="disabledState || hasInteractiveTrigger ? undefined : 0"
         :aria-disabled="disabledState"
-        @click="choose"
+        @click.capture="captureClick"
+        @click="choose($event)"
         @keydown="handleKeydown"
         @dragover="draggable && handleDragOver($event)"
         @dragleave="handleDragLeave"
@@ -86,6 +90,7 @@
                   v-if="showDownloadButton && file.url"
                   :class="n('action')"
                   :href="mergedDisabled ? undefined : file.url"
+                  :role="mergedDisabled ? 'link' : undefined"
                   :tabindex="mergedDisabled ? -1 : undefined"
                   :aria-disabled="mergedDisabled || undefined"
                   :download="file.name"
@@ -144,15 +149,18 @@ import type { ImagePreviewHandle } from '../image/api'
 import { previewImage } from '../image/preview-api'
 import Ripple from '../ripple'
 import { useUploader } from './composables/use-uploader'
+import { useFormErrorDescription } from '../form/error-description'
 import { useUploadForm } from './form-adapter'
 import type { UploadEmits, UploadExpose, UploadFileItem, UploadSlots } from './interfaces'
 import PreviewPresentation from './preview-presentation.vue'
 import { uploadProps } from './props'
 import { useUploadLocale } from './use-upload-locale'
+import { useUploadTrigger } from './use-trigger'
 import { isVideo, formatVideoDuration } from './utils/video-duration'
 
 defineOptions({ name: createNamespace('upload').name })
 const props = defineProps(uploadProps)
+const { describe: describeError } = useFormErrorDescription()
 const emit = defineEmits<UploadEmits>()
 defineSlots<UploadSlots>()
 const vRipple = Ripple
@@ -255,7 +263,7 @@ const {
   disabled: disabledState,
   inputRef,
   dragOver,
-  chooseFile,
+  chooseFile: chooseNativeFile,
   replacementTarget,
   cancelChoose,
   handleInputChange,
@@ -263,6 +271,10 @@ const {
   handleDragLeave,
   handleDrop,
 } = uploader
+const { triggerRef, hasInteractiveTrigger, captureClick, claim, chooser, isClaimed } = useUploadTrigger()
+function chooseFile() {
+  return claim() ? chooseNativeFile() : Promise.resolve()
+}
 function closePreview() {
   if (videoRelease) {
     closedVideos.push(videoRelease)
@@ -285,20 +297,20 @@ function itemScope(file: UploadFileItem, index: number) {
 async function chooseReplacement(file: UploadFileItem, event: Event) {
   if (disabledState.value) return
   try {
-    const choose = () => { void uploader.replace(file) }
+    const choose = chooser(() => uploader.replace(file), event)
     if (props.requestChoose) await props.requestChoose(choose, event)
-    else choose()
+    else await choose()
   } catch { /* A rejected chooser preserves the previous attachment. */ }
 }
-async function choose(event: Event) {
-  if (disabledState.value) {
+async function choose(event: Event, ownKeydown = false) {
+  if (disabledState.value || isClaimed(event) || (!ownKeydown && event.defaultPrevented)) {
     return
   }
   try {
     if (props.requestChoose) {
-      await props.requestChoose(chooseFile, event)
+      await props.requestChoose(chooser(chooseNativeFile, event), event)
     } else {
-      chooseFile()
+      await chooser(chooseNativeFile, event)()
     }
   } catch {
     /* A rejected chooser does not open the native picker. */
@@ -313,12 +325,12 @@ function isImage(file: UploadFileItem) {
   )
 }
 function handleKeydown(event: KeyboardEvent) {
-  if (event.target !== event.currentTarget) {
+  if (event.defaultPrevented || hasInteractiveTrigger.value || event.target !== event.currentTarget) {
     return
   }
   if (event.key === 'Enter' || event.key === ' ') {
     event.preventDefault()
-    void choose(event)
+    void choose(event, true)
   }
 }
 function formatSize(size?: number) {

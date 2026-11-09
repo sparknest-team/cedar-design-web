@@ -19,11 +19,7 @@
         :key="`${item.field.field}-${index}`"
         v-bind="item.field.gridItemProps"
       >
-        <FormItem
-          :field="item.field.field"
-          :label="item.field.label"
-          v-bind="item.field.formItemProps"
-        >
+        <FormItem :field="item.field.field" :label="item.field.label" v-bind="item.field.formItemProps">
           <component
             :is="item.registration.component"
             v-bind="getFieldBind(item)"
@@ -34,12 +30,7 @@
         </FormItem>
       </GridItem>
 
-      <GridItem
-        v-if="showSuffixItem"
-        #="{ overflow }"
-        suffix
-        :span="2"
-      >
+      <GridItem v-if="showSuffixItem" #="{ overflow }" suffix :span="2">
         <FormItem hide-label :class="classes(n('action-item'))">
           <div :class="classes(n('actions'))">
             <button
@@ -64,22 +55,24 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onActivated, onBeforeUnmount, onDeactivated, ref, useSlots, watch } from 'vue'
-import { isEqual } from 'lodash-es'
-import Form, { FormItem } from '../form'
+import { computed, onActivated, onBeforeUnmount, onDeactivated, ref, watch } from 'vue'
+import { IconDownCircle, IconUpCircle } from '@cedar-design/icons-vue'
+import { cloneDeep, isEqual } from 'lodash-es'
+import { getValueByPath, setValueByPath } from '../_utils/get-value-by-path'
+import { createNamespace } from '../_utils/global-config'
+import { isString } from '../_utils/is'
+import Form, { FormItem, type FormInstance } from '../form'
 import Grid, { GridItem } from '../grid'
 import { useResponsiveState } from '../grid/hook/use-responsive-state'
 import type { ResponsiveValue } from '../grid/types'
-import { getValueByPath, setValueByPath } from '../_utils/get-value-by-path'
-import { isString } from '../_utils/is'
-import { IconDownCircle, IconUpCircle } from '@cedar-design/icons-vue'
 import { useI18n } from '../locale'
-import { createNamespace } from '../_utils/global-config'
 import { filterFormProps } from './props'
 import {
   normalizeFieldRegistration,
+  type FilterFormEmits,
   type FilterFormField,
   type FilterFormFieldRegistration,
+  type FilterFormSlots,
 } from './types'
 
 defineOptions({
@@ -88,15 +81,10 @@ defineOptions({
 
 const { n, classes } = createNamespace('filter-form')
 const props = defineProps(filterFormProps)
-const emit = defineEmits<{
-  'update:modelValue': [value: Record<string, unknown>]
-  'update:collapsed': [collapsed: boolean]
-  change: [value: Record<string, unknown>, field: string]
-}>()
-
+const emit = defineEmits<FilterFormEmits>()
 const { t } = useI18n()
-const slots = useSlots()
-const formRef = ref()
+const slots = defineSlots<FilterFormSlots>()
+const formRef = ref<FormInstance>()
 const innerModel = ref<Record<string, unknown>>(cloneModel(props.defaultValue))
 const collapsed_ = ref(props.collapsed)
 /** Grid measures numeric gaps; callers customize this with gridProps.colGap. */
@@ -132,16 +120,28 @@ function emitChange(value: Record<string, unknown>, field: string) {
   if (delay === 0) publish()
   else changeTimer = setTimeout(publish, delay)
 }
-watch(() => props.changeDebounce, () => {
-  const current = pendingChange
-  if (current) emitChange(current.value, current.field)
+watch(
+  () => props.changeDebounce,
+  () => {
+    const current = pendingChange
+    if (current) emitChange(current.value, current.field)
+  },
+)
+watch(
+  innerModel,
+  (value) => {
+    // Accepted v-model echoes preserve ownership; a different model invalidates the snapshot.
+    if (pendingChange && !isEqual(value, pendingChange.value)) cancelChange()
+  },
+  { deep: true, flush: 'sync' },
+)
+const stopChange = () => {
+  active = false
+  cancelChange()
+}
+onActivated(() => {
+  active = true
 })
-watch(innerModel, value => {
-  // Accepted v-model echoes preserve ownership; a different model invalidates the snapshot.
-  if (pendingChange && !isEqual(value, pendingChange.value)) cancelChange()
-}, { deep: true, flush: 'sync' })
-const stopChange = () => { active = false; cancelChange() }
-onActivated(() => { active = true })
 onDeactivated(stopChange)
 onBeforeUnmount(stopChange)
 
@@ -160,15 +160,9 @@ watch(
   },
 )
 
-function cloneModel(value: Record<string, unknown> | undefined) {
-  if (!value) {
-    return {}
-  }
-  try {
-    return structuredClone(value)
-  } catch {
-    return JSON.parse(JSON.stringify(value)) as Record<string, unknown>
-  }
+/** Match Form's data snapshot policy, including reactive models and Date values. */
+function cloneModel(value: Record<string, unknown> | undefined): Record<string, unknown> {
+  return cloneDeep(value ?? {})
 }
 
 function emitModel() {
@@ -214,7 +208,7 @@ function getFieldBind(item: ResolvedField) {
 }
 
 function patchFieldValue(fieldPath: string, value: unknown) {
-  setValueByPath(innerModel.value, fieldPath, value)
+  setValueByPath(innerModel.value, fieldPath, value, { addPath: true })
   emitModel()
 }
 

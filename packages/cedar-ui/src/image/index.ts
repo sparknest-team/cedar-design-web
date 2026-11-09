@@ -47,6 +47,11 @@ export const _ImagePreviewActionComponent = _ImagePreviewAction
 export { Image }
 
 export type {
+  ImageSlots,
+  ImagePreviewImageSlotProps,
+  ImagePreviewSlots,
+  ImagePreviewGroupSlots,
+  ImagePreviewActionSlots,
   ImageFit,
   ImageInteraction,
   ImagePreviewActionName,

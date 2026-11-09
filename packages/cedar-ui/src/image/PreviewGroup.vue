@@ -46,10 +46,9 @@
         >
           <img
             v-bind="previewedImgProps"
-            role="img"
             data-image-preview-image
             :src="image"
-            :alt="previewedImgProps?.alt || image"
+            :alt="previewedImgProps?.alt ?? image"
             :class="[
               previewedImgProps?.class,
               n('image'),
@@ -78,7 +77,7 @@
         data-image-preview-arrow-left
         data-image-preview-interactive
         :disabled="!loop && mergedCurrent === 0"
-        aria-label="Previous image"
+        :aria-label="actionLabels.prev"
         @click="prev"
       >
         ‹
@@ -90,7 +89,7 @@
         data-image-preview-arrow-right
         data-image-preview-interactive
         :disabled="!loop && mergedCurrent === previewImages.length - 1"
-        aria-label="Next image"
+        :aria-label="actionLabels.next"
         @click="next"
       >
         ›
@@ -115,6 +114,8 @@
 </template>
 
 <script lang="ts">
+import type { SlotsType } from 'vue'
+import type { ImagePreviewGroupSlots } from './api'
 import { useDirection } from '../_utils/direction'
 import {
   computed,
@@ -122,6 +123,7 @@ import {
   nextTick,
   onActivated,
   onBeforeUnmount,
+  onUpdated,
   onDeactivated,
   provide,
   ref,
@@ -131,6 +133,7 @@ import {
 import { createNamespace } from "../_utils/global-config";
 import type { ImagePreviewInstance } from "./api";
 import { useImagePreviewGroupState } from "./composables/useImagePreviewGroup";
+import { useActionLabels } from './platform'
 import { PreviewGroupInjectionKey } from "./context";
 import { imagePreviewGroupProps } from "./groupProps";
 import ImagePreview from "./Preview.vue";
@@ -139,6 +142,7 @@ const { name, n } = createNamespace("image-preview");
 
 export default defineComponent({
   name: createNamespace("image-preview-group").name,
+  slots: Object as SlotsType<ImagePreviewGroupSlots>,
   components: { ImagePreview },
   inheritAttrs: false,
   props: imagePreviewGroupProps,
@@ -155,6 +159,7 @@ export default defineComponent({
     "long-press",
   ],
   setup(props, { emit }) {
+    const actionLabels = useActionLabels()
     const previousImageNumber = ref(props.modelValue ?? props.defaultValue);
     const group = useImagePreviewGroupState({
       images: toRef(props, "images"),
@@ -177,6 +182,7 @@ export default defineComponent({
       if (value !== undefined) previousImageNumber.value = value
     }, { flush: 'sync' })
     const previewRef = ref<ImagePreviewInstance>();
+    onUpdated(() => group.refreshOrder())
     const currentUrl = computed(
       () => group.previewImages.value[group.mergedCurrent.value],
     );
@@ -219,6 +225,8 @@ export default defineComponent({
 
     provide(PreviewGroupInjectionKey, {
       registerImageUrl: group.registerImageUrl,
+      canPreviewImage: () => !group.isDataMode.value,
+      refreshOrder: group.refreshOrder,
       preview: (id: number) => {
         if (available()) group.previewByImageId(id);
       },
@@ -533,11 +541,12 @@ export default defineComponent({
     }
     function toggleFullscreen() {
       if (!available()) return;
-      previewRef.value?.toggleFullscreen();
+      return previewRef.value?.toggleFullscreen();
     }
 
     return {
       n,
+      actionLabels,
       trackRef,
       ...group,
       previewRef,

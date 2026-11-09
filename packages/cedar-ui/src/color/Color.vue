@@ -8,7 +8,7 @@
     :show-text="showText"
     :show-history="showHistory"
     :show-preset="showPreset"
-    :disabled="disabled"
+    :disabled="blocked"
     :disabled-alpha="disabledAlpha"
     :history-colors="historyColors"
     :preset-colors="presetColors"
@@ -23,10 +23,11 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, toRefs } from 'vue'
 import ColorPicker from '../color-picker'
 import { createNamespace } from '../_utils/global-config'
 import { colorProps } from './props'
+import { useFormItem } from '../_hooks/use-form-item'
 
 const { name } = createNamespace('color')
 
@@ -47,11 +48,15 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const pickerProps = computed(() => props.colorPickerProps || {})
+    const { disabled, readonly } = toRefs(props)
+    const form = useFormItem({ disabled, readonly })
+    const blocked = computed(() => form.mergedDisabled.value || form.mergedReadonly.value)
 
     return {
       pickerProps,
-      onUpdateModelValue: (value: string | undefined) => emit('update:modelValue', value),
-      onChange: (value: string) => emit('change', value),
+      blocked,
+      onUpdateModelValue: (value: string | undefined) => { if (!blocked.value) emit('update:modelValue', value) },
+      onChange: (value: string) => { if (!blocked.value) emit('change', value) },
     }
   },
 })

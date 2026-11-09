@@ -378,17 +378,34 @@ Preview configuration: `:editable="false"`, `:resources="resources"`, `default-d
 
 <demo src="./__demos__/task-calendar-workbench.vue"></demo>
 
+## Reading direction
+
+Inherits `dir` from the page, local container or ConfigProvider, including the documentation's live LTR/RTL controls. Month/week/resource columns and horizontal timelines start at inline start; vertical time stays top to bottom. Direction changes preserve date, events, selection and horizontal reading distance while canceling active dragging/resizing.
+
+Hourly resource timelines support moving events and resizing both start and end, respecting `snapDuration`, readonly state, milestones and event `resizable`. Zoom preserves the date at the center of the visible time area. Resource labels stick to inline start; virtual rows and their heading scroll together.
+
+Default overlap layouts use inline start. A custom `eventLayout` return value keeps the physical meaning of `left`; callers control that geometry. RTL does not reverse dates, time zones, dependencies or source resource order.
+
+## Usage notes
+
+### Async operation feedback
+
+Awaited before-* hooks show loading feedback and aria-busy. Rejection or failure restores interaction; repeated input does not start the same operation again. Ordinary event return Promises do not participate in loading.
+### Configuration
+
+All variables are defined in `style/token.less` and support light/dark theme overrides.
+
 ## API
 
-### `<c-scheduler>` Props
+### Scheduler Props
 
 | Prop | Description | Type | Default |
 | -------------------------- | ----------------------------------------------------------------------- | ----------------------------------------------- | ------------ |
 | model-value | Schedule data; supports v-model and becomes controlled when provided | SchedulerEvent[] | — |
 | preview-event | Unsaved new-event placeholders; visual only | SchedulerEvent | — |
 | default-value | Initial uncontrolled data | SchedulerEvent[] | [] |
-| mode | Current view; supports v-model:mode | SchedulerMode | — |
-| default-mode | Default uncontrolled view | SchedulerMode | week |
+| mode | Current view; supports v-model:mode | SchedulerMode<br>`'month' \| 'week' \| 'day' \| 'agenda' \| 'resource-day' \| 'resource-timeline'` | — |
+| default-mode | Default uncontrolled view | SchedulerMode<br>`'month' \| 'week' \| 'day' \| 'agenda' \| 'resource-day' \| 'resource-timeline'` | week |
 | date | Navigation date; supports v-model:date | Date / string / number | — |
 | default-date | Initial navigation date | Date / string / number | Current date |
 | resource-dimensions | Dimension definitions: `{ id, label }[]` | SchedulerResourceDimension[] | [] |
@@ -400,7 +417,7 @@ Preview configuration: `:editable="false"`, `:resources="resources"`, `default-d
 | resource-label | Resource field name, such as equipment or meeting room | string | Localized resource label |
 | request-resources | Query resource candidates by keyword and cursor | SchedulerRequestResources | — |
 | resolve-resources | Batch-resolve resource names by ID | SchedulerResolveResources | — |
-| modes | Views available for switching | SchedulerMode[] | All six views |
+| modes | Views available for switching | SchedulerMode[]<br>`SchedulerMode: 'month' \| 'week' \| 'day' \| 'agenda' \| 'resource-day' \| 'resource-timeline'` | All six views |
 | first-day-of-week | Week start: 0 Sunday to 6 Saturday | number | 1 |
 | start-hour | Time-grid start hour, 0–23 | number | 8 |
 | end-hour | Time-grid end hour; greater than start and at most 24 | number | 20 |
@@ -427,12 +444,25 @@ Preview configuration: `:editable="false"`, `:resources="resources"`, `default-d
 | allow-overlap | Allow overlapping times for the same resource | boolean | true |
 | editable | Enable the built-in editor; false delegates through editor-request | boolean | true |
 | before-change | Return false to cancel; supports asynchronous interception and save APIs | SchedulerBeforeChange / SchedulerBeforeChange[] | — |
+| selectable | Enable multi-selection | boolean | false |
+| selected-keys / default-selected-keys | Controlled event IDs / initial uncontrolled selection | string[] | — / [] |
+| history | Enable undo and redo for accepted changes | boolean | false |
+| history-limit | Positive history capacity; invalid values fall back to 20 | number | 20 |
+| before-transaction | Transaction guard; replaces before-change when provided | SchedulerBeforeTransaction / SchedulerBeforeTransaction[] | — |
+| working-hours | Weekly working hours; omitted means unrestricted, empty forbids timed events | SchedulerWorkingHours[] | — |
+| date-working-hours | Date-specific working-hour overrides | SchedulerDateWorkingHours[] | [] |
+| disabled-ranges | Unavailable intervals, optionally scoped to resources | SchedulerDisabledRange[] | [] |
+| scale / default-scale | Controlled / uncontrolled resource timeline scale | 'hour' / 'day' | — / day |
+| virtual-list-props | Enables virtual resource timeline scrolling when provided | SchedulerVirtualListProps | — |
+| resource-group-dimensions | Cross-group in dimension order, with at least two distinct dimensions | string[] | [] |
+| resource-group-by | Map a resource to a stable group key | (resource: SchedulerResource) => string | — |
+| expanded-keys / default-expanded-keys | Controlled / uncontrolled expanded group keys; omitted defaults to all expanded | string[] | — / — |
 
 mode is `day | week | month | agenda | resource-day | resource-timeline`. Agenda/resource-timeline navigate by week. Events outside time-grid hours remain visible in month/agenda/timeline.
 
 With controlled model-value, the component proposes data and waits for parent acceptance before changing the UI; it does not move first and roll back after request failure. Input arrays/objects are not mutated. before-change receives detached copies; editing them does not alter the committed proposal.
 
-### `<c-scheduler>` Events
+### Scheduler Events
 
 | Event | Description | Arguments |
 | ------------------------ | ---------------------------------------------------------------- | ------------------------------------ |
@@ -450,10 +480,15 @@ With controlled model-value, the component proposes data and waits for parent ac
 | range-change | Initial and actual visible-date-range changes | SchedulerRange |
 | resource-error | Resource search/display resolution fails without changing schedule data | error, SchedulerResourceErrorContext |
 | editor-request | Only with editable=false: request external creation or viewing/editing | SchedulerEditorRequest |
+| update:selectedKeys | Selected event IDs changed | string[] |
+| update:scale | Timeline scale changed | 'hour' / 'day' |
+| update:expandedKeys | Expanded group keys changed | string[] |
+| transaction | Proposed value after a single or batch transaction succeeds | SchedulerEvent[], SchedulerTransactionContext |
+| transaction-error | Transaction failed; preserves the original cause | unknown, SchedulerTransactionContext |
 
-### `<c-scheduler>` Slots
+### Scheduler Slots
 
-| Slot | Arguments | Description |
+| Slot | Prop | Description |
 | ----------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
 | event | { event } | Event-button content |
 | sidebar | { startDrag, cancelDrag, disabled, unscheduled } | Replace the entire sidebar, e.g. with a resource tree/task pool; hidden when show-sidebar=false |
@@ -462,18 +497,21 @@ With controlled model-value, the component proposes data and waits for parent ac
 | toolbar | { date, mode, navigate, create } | Replace the toolbar; navigate(-1/1) changes range, create() follows toolbar creation |
 | column-background | { date, resource? } | Background for day/week/resource-day columns without intercepting pointers; useful for soft warnings/heatmaps |
 | toolbar-extra | { date, mode } | Toolbar extension |
-| editor | SchedulerEditorSlotProps | Custom drawer content: action, event, error, errorMessage, save, remove, close, readonly, pending |
+| editor | SchedulerEditorSlotProps | Custom drawer content: action, event, error, errorMessage, save, remove, duplicate, close, readonly, pending |
 | empty | — | Empty state |
 
-### Instance methods
+### Scheduler Methods
 
 | Method | Description |
 | ---------------------------------- | -------------------------------------------------------------- |
 | `change(change): Promise<boolean>` | Execute create/update/remove/move/resize with all validation/hooks |
 | duplicateEvent(id: string) | Open a separately copied draft or request custom creation; returns boolean without automatically saving |
 | goToDate(date: Date) | Navigate to a date; respects controlled models |
+| `transaction(changes): Promise<boolean>` | Execute a batch with the same rules and transaction guard |
+| `undo(): Promise<boolean>` / `redo(): Promise<boolean>` | Undo / redo accepted history through the transaction guard |
+| `canUndo` / `canRedo` | Read-only state indicating whether undo / redo is available |
 
-## Type definitions
+## Types
 
 ```ts
 import type {
@@ -485,6 +523,8 @@ import type {
   SchedulerChange,
   SchedulerChangeContext,
   SchedulerBeforeChange,
+  SchedulerBeforeTransaction,
+  SchedulerTransactionContext,
   SchedulerEventTemplate,
   SchedulerRequestResources,
   SchedulerResolveResources,
@@ -554,12 +594,12 @@ type SchedulerResolveResources = (
   context: { signal: AbortSignal },
 ) => SchedulerResource[] | Promise<SchedulerResource[]>;
 type SchedulerResourceErrorContext =
-  | { type: "search"; query: string; cursor?: string }
+  | { type: "search"; query: string; cursor?: string; dimensionId?: string }
   | { type: "resolve"; ids: string[] };
 
 type SchedulerEditorAction = "create" | "edit";
 type SchedulerEditorRequest = { event: SchedulerEvent; readonly: boolean } & (
-  | { action: "create"; source: "toolbar" | "cell" | "drop" }
+  | { action: "create"; source: "toolbar" | "cell" | "drop" | "duplicate" }
   | { action: "edit"; source: "event" }
 );
 interface SchedulerEditorSlotProps {
@@ -571,6 +611,7 @@ interface SchedulerEditorSlotProps {
   pending: boolean;
   save: (event?: SchedulerEvent) => void;
   remove: () => void;
+  duplicate: () => void;
   close: () => void;
 }
 ```
@@ -579,9 +620,14 @@ Every event id must be unique. Omitting both start/end means unscheduled; otherw
 
 Display currently uses the runtime's local zone; timed events should use ISO instants. Arbitrary IANA display zones are not promised. Cross-zone RRULE, ICS and version synchronization come from separate adapters; business code must connect real external accounts. Configure virtual resource rows with virtual-list-props. See examples for local undo and range-based remote loading. Pointer drag supports moving/resizing; Escape cancels. Keyboard/touch users can also schedule/assign through the editor. Disabled resource options prevent new assignments/drops while existing associations may remain or be removed.
 
+
+`before-transaction` takes precedence over `before-change` for both single and batch transactions. A batch with only `before-change` is rejected with `transaction-hook-required` to avoid partial persistence. Guard arrays run in order; false cancels and void allows. Data and rules are checked again after waiting; stale proposals are not committed. The first argument of `change-error` and `transaction-error` preserves the original cause (`unknown`); editor display uses a normalized `SchedulerError`. In controlled mode history records only changes accepted by the parent. Promises returned by ordinary events do not participate in transactions.
+
+`useSchedulerDataSource` is exported from the root. It accepts `requestEvents`, range, resource IDs, `enabled`, cache duration and capacity, and returns `events`, `loading`, `error`, `loadedRange`, `refresh`, `cancel`, and `invalidate`. It is an independent data source: `loading` is returned state, not a Scheduler prop. Requests use AbortSignal and stale results are discarded.
+
 ## Independent core
 
-`src/scheduler/core` imports no Vue, DOM or external calendar library. It can be tested independently and later extracted as scheduler-core. The published pure-core subentry avoids importing component runtime:
+Use the Vue- and DOM-independent scheduling utilities through `@cedar-design/ui/scheduler/core`:
 
 ```ts
 import {
@@ -593,28 +639,86 @@ import {
 
 Other date/timeline utilities are exported from this entry too. The core computes and applies immutable changes; it does not handle networking, authorization or database transactions.
 
-### Style variables
+## CSS Variables
 
-All variables are defined in `style/token.less` and support light/dark theme overrides.
+<!-- component-css-variables:start -->
 
-| Variable | Default |
-| -------------------------------- | ------------------------------ |
-| --c-scheduler-background | var(--c-color-bg-2) |
-| --c-scheduler-color | var(--c-color-text-1) |
-| --c-scheduler-border-color | var(--c-color-border) |
-| --c-scheduler-sidebar-width | 220px |
-| --c-scheduler-slot-height | 36px |
-| --c-scheduler-column-min-width | 120px |
-| --c-scheduler-max-height | 720px |
-| --c-scheduler-event-color | rgb(var(--c-primary-6)) |
-| --c-scheduler-event-accent-color | var(--c-scheduler-event-color) |
-| --c-scheduler-event-background | var(--c-color-primary-light-1) |
-| --c-scheduler-lane-height | 38px |
-| --c-scheduler-ghost-opacity | 0.75 |
-| --c-scheduler-preview-opacity | 0.85 |
-| --c-scheduler-preview-duration | 100ms |
-| --c-scheduler-ghost-z-index | 2000 |
+Use these variables to customize the component. Defaults may vary by the selector condition shown. Each variable applies to the corresponding size, variant and interaction states.
 
-### Before-hook waiting feedback
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
-Before-hook waits show visible feedback and aria-busy. Rejected or failed operations recover; duplicate submissions do not start another copy. Notification event Promises never drive loading.
+| Variable | Default / condition | Affected styles |
+| --- | --- | --- |
+| `--c-scheduler-axis-cell-width` | `96px` | `min-width` |
+| `--c-scheduler-background` | `var(--c-color-bg-2)` | `background` |
+| `--c-scheduler-border-color` | `var(--c-color-border)` | `border`, `border-bottom`, `border-inline-end`, `border-inline-start`, `border-top` |
+| `--c-scheduler-border-width` | `1px` | `border`, `border-bottom`, `border-inline-end`, `border-inline-start`, `border-top`, `height`, `width` |
+| `--c-scheduler-color` | `var(--c-color-text-1)` | `color` |
+| `--c-scheduler-column-min-width` | `120px` | `grid-template-columns`, `min-width` |
+| `--c-scheduler-dependency-width` | `2px` | `stroke-width` |
+| `--c-scheduler-dragging-opacity` | `0.3` | `opacity` |
+| `--c-scheduler-editor-width` | `440px` | Component styling |
+| `--c-scheduler-event-accent-color` | `var(--c-scheduler-event-color)` | `border-inline-start` |
+| `--c-scheduler-event-accent-width` | `3px` | `border-inline-start` |
+| `--c-scheduler-event-background` | `var(--c-color-primary-light-1)` | `background`, `background-color`, `background-image` |
+| `--c-scheduler-event-background-image` | `linear-gradient(var(--c-scheduler-event-background), var(--c-scheduler-event-background))` | `background-image` |
+| `--c-scheduler-event-color` | `rgb(var(--c-primary-6))` | `background-image`, `border-inline-start`, `color` |
+| `--c-scheduler-event-font-size` | `12px` | `font-size` |
+| `--c-scheduler-event-gap` | `2px` | `gap`, `height`, `margin-bottom`, `padding`, `top` |
+| `--c-scheduler-event-min-height` | `20px` | `min-height`, `min-width` |
+| `--c-scheduler-event-padding` | `4px` | `padding` |
+| `--c-scheduler-event-radius` | `4px` | `border-radius` |
+| `--c-scheduler-focus-color` | `var(--c-sys-color-content-brand)` | `outline` |
+| `--c-scheduler-focus-width` | `2px` | `outline`, `outline-offset` |
+| `--c-scheduler-font-size` | `14px` | `font-size` |
+| `--c-scheduler-gap` | `12px` | `gap`, `margin-bottom`, `padding` |
+| `--c-scheduler-ghost-opacity` | `0.96` | `opacity` |
+| `--c-scheduler-ghost-padding` | `8px 12px` | `padding` |
+| `--c-scheduler-ghost-z-index` | `2000` | `z-index` |
+| `--c-scheduler-gutter-width` | `64px` | `grid-template-columns`, `min-width` |
+| `--c-scheduler-header-z-index` | `4` | `z-index` |
+| `--c-scheduler-heading-height` | `44px` | `min-height` |
+| `--c-scheduler-lane-height` | `38px` | `height`, `top` |
+| `--c-scheduler-line-height` | `1.5` | `line-height` |
+| `--c-scheduler-max-height` | `720px` | `max-height` |
+| `--c-scheduler-min-height` | `560px` | `min-height` |
+| `--c-scheduler-mode-width` | `150px` | `width` |
+| `--c-scheduler-month-cell-height` | `124px` | `height`, `min-height` |
+| `--c-scheduler-muted-color` | `var(--c-color-text-3)` | `color` |
+| `--c-scheduler-now-color` | `var(--c-sys-color-content-danger)` | `border-top`, `color` |
+| `--c-scheduler-now-width` | `2px` | `border-top` |
+| `--c-scheduler-now-z-index` | `3` | `z-index` |
+| `--c-scheduler-padding` | `16px` | `margin-bottom`, `padding` |
+| `--c-scheduler-preview-duration` | `0ms` | `transition` |
+| `--c-scheduler-preview-opacity` | `0.65` | `opacity` |
+| `--c-scheduler-preview-shadow` | `0 4px 16px rgba(0, 0, 0, 0.15)` | `box-shadow` |
+| `--c-scheduler-preview-z-index` | `3` | `z-index` |
+| `--c-scheduler-radius` | `8px` | `border-radius` |
+| `--c-scheduler-resize-height` | `6px` | `height`, `width` |
+| `--c-scheduler-resource-width` | `150px` | `grid-template-columns`, `min-width`, `width` |
+| `--c-scheduler-resource-z-index` | `2` | `z-index` |
+| `--c-scheduler-selected-background` | `var(--c-color-primary-light-1)` | `background` |
+| `--c-scheduler-sidebar-width` | `220px` | `width` |
+| `--c-scheduler-slot-height` | `36px` | `height` |
+| `--c-scheduler-stack-focus-step` | `1` | `z-index` |
+| `--c-scheduler-subtle-background` | `var(--c-color-fill-1)` | `background` |
+| `--c-scheduler-timeline-min-width` | `1000px` | `min-width` |
+| `--c-scheduler-today-background` | `var(--c-color-primary-light-1)` | `background` |
+| `--c-scheduler-today-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-scheduler-unavailable-background` | `var(--c-color-fill-2)` | `background` |
+| `--c-scheduler-virtual-height` | `480px` | Component styling |
+| `--c-scheduler-weekday-count` | `7` | `grid-template-columns` |
+
+</div>
+
+Apply overrides to the rendered component root or the actual popup ancestor. For example, add the following class to that element and replace the value as needed:
+
+```css
+.component-theme {
+  --c-scheduler-background: var(--c-color-bg-2);
+}
+```
+
+Explicit inline styles and props that write the same CSS property take precedence over stylesheet defaults. After Teleport, ordinary CSS variables inherit from the actual mount location. When using ThemeProvider, follow its local-theme and popup configuration rules. Override the component variable directly for local styling; root-level aliases are not recalculated merely because a descendant system variable changes. Internal variables are not public APIs.
+
+<!-- component-css-variables:end -->

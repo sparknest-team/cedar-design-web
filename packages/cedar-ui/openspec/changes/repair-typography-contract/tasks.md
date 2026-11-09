@@ -1,0 +1,5 @@
+- [x] Verify and repair rendered content ownership, copy outcomes and accessible measurement.
+- [x] Repair CSS ellipsis controls, editing focus, names and controlled model forwarding.
+- [x] Complete events, slots, type exports, semantic colors and numeric boundaries.
+- [x] Verify affected components, generated declarations, contract types and Chromium behavior.
+- [x] Update Chinese and English API documentation and status example.

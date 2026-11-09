@@ -1,9 +1,16 @@
+import type { SelectOptionInfo } from './types';
+import { selectNativeEditorOwner } from './native-editor-owner';
 import { invokeBeforeCommit } from "../_components/field-presentation/context";
 import { resolveEmptyValue, useEmptyValues } from "../_utils/empty-value";
 import { useOptionRequest } from "../_hooks/use-option-request";
 import type { SelectOption } from "./types";
 import {
   computed,
+  shallowReactive,
+  inject,
+  warn,
+  useId,
+  provide,
   ref,
   toRefs,
   watch,
@@ -59,6 +66,10 @@ export function useSelectController(
   props: Readonly<ExtractPropTypes<typeof selectProps>>,
   { emit }: Pick<SetupContext<typeof selectEmits>, "emit">,
 ) {
+  const nativeOwner = inject(selectNativeEditorOwner, undefined);
+  provide(selectNativeEditorOwner, undefined);
+  const listboxId = `select-listbox-${useId()}`;
+  const getOptionId = (key: string) => `${listboxId}-option-${encodeURIComponent(key)}`;
   const texts = useFieldTexts();
   const presentationState = useFieldPresentation(
     () => props.editMode,
@@ -72,6 +83,12 @@ export function useSelectController(
     [undefined, null],
     Boolean(presentationState.item),
   );
+  const invalidMultipleEmpty = (value: unknown) => value != null && !Array.isArray(value) && !emptyPolicy.isEmpty(value);
+  watch([() => props.multiple, () => props.emptyValue, () => emptyPolicy.emptyValues.value], () => {
+    if (process.env.NODE_ENV !== 'production' && props.multiple && typeof props.emptyValue !== 'function' && invalidMultipleEmpty(props.emptyValue)) {
+      warn('[Select] multiple emptyValue must be an array or a recognized empty value; invalid scalars fall back to [].');
+    }
+  }, {immediate:true});
   // props
   const {
     size,
@@ -98,9 +115,9 @@ export function useSelectController(
     group,
     hasOuterLabel,
   } = useInputForm(props);
-  const source = useOptionRequest<SelectOption>(
+  const source = nativeOwner?.source ?? useOptionRequest<SelectOption>(
     () => props.options,
-    () => mergedDisabled.value || mergedReadonly.value || readPretty.value,
+    () => mergedDisabled.value || readPretty.value,
     (error) => emit("load-error", error),
   );
   const options = source.options;
@@ -277,9 +294,9 @@ export function useSelectController(
   );
 
   // selected option
-  const _selectedOption = ref();
+  const _selectedOption = nativeOwner?.selectedOptions ?? ref();
   const getRawOptionFromValueKeys = (valueKeys: string[]) => {
-    const optionMap: Record<string, unknown> = {};
+    const optionMap: Record<string, SelectOptionInfo | undefined> = {};
 
     valueKeys.forEach((key) => {
       optionMap[key] = optionInfoMap.get(key);
@@ -482,7 +499,7 @@ export function useSelectController(
   const handleRemove = (key: string) => {
     if (
       mergedDisabled.value ||
-      mergedReadonly.value ||
+      mergedReadonly.value || loading.value ||
       session.pending.value ||
       optionInfoMap.get(key)?.disabled
     ) {
@@ -506,7 +523,7 @@ export function useSelectController(
   };
 
   const clearSelection = (e: Event) => {
-    if (mergedDisabled.value || mergedReadonly.value || session.pending.value) {
+    if (mergedDisabled.value || mergedReadonly.value || loading.value || session.pending.value) {
       return;
     }
     e?.stopPropagation();
@@ -523,8 +540,12 @@ export function useSelectController(
       .map((item) => item.key)
       .filter((key) => optionInfoMap.get(key)?.disabled);
     const fallback = getValueFromValueKeys(newKeys);
-    const clearedValue =
+    let clearedValue =
       newKeys.length === 0 ? resolveEmptyValue(props, fallback) : fallback;
+    if (props.multiple && invalidMultipleEmpty(clearedValue)) {
+      if (process.env.NODE_ENV !== 'production' && typeof props.emptyValue === 'function') warn('[Select] multiple emptyValue factory must return an array or a recognized empty value; falling back to [].');
+      clearedValue = [];
+    }
     session.update(clearedValue);
     updateInputValue("");
     if (!deferred.value) {
@@ -551,7 +572,7 @@ export function useSelectController(
               ? item.value[mergedFieldNames.value.value]
               : item.value,
           ),
-        closable: !option?.disabled,
+        closable: !loading.value && !option?.disabled,
       };
     }),
   );
@@ -569,8 +590,10 @@ export function useSelectController(
     optionInfoMap,
     validOptionInfos,
     enabledOptionKeys,
+    activeKey,
     handleKeyDown,
   } = useSelect({
+    getOptionId,
     multiple,
     options,
     extraOptions,
@@ -618,7 +641,7 @@ export function useSelectController(
                 ? item.value[mergedFieldNames.value.value]
                 : item.value,
             ),
-          closable: !optionInfo?.disabled,
+          closable: !loading.value && !optionInfo?.disabled,
           tagProps: optionInfo?.tagProps,
         });
       }
@@ -640,7 +663,11 @@ export function useSelectController(
     }
   });
   return {
-    props,
+    // Vue props are shallow; preserve that boundary through reactive controller transport.
+    props: shallowReactive(props),
+    listboxId,
+    activeDescendant: computed(() => computedOpen.value && !loading.value && activeKey.value && enabledOptionKeys.value.includes(activeKey.value) && (optionRefs.value[activeKey.value] || (!props.virtualListProps && optionInfoMap.get(activeKey.value)?.ref)) ? getOptionId(activeKey.value) : undefined),
+    provideNativeEditorOwner: () => provide(selectNativeEditorOwner, { source, selectedOptions: _selectedOption }),
     loading,
     refresh: source.refresh,
     registerPresentation: presentationState.register,

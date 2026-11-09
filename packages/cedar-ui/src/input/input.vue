@@ -8,6 +8,7 @@
     <FieldPresentation
       :id="inputId"
       ref="presentationRef"
+      :aria-describedby="nativeAttrs['aria-describedby']"
       :loading="loading"
       intent="input"
       :edit-mode="editMode"
@@ -55,10 +56,9 @@
         <template v-if="$slots.prefix" #prefix><slot name="prefix" /></template>
         <input
           v-bind="nativeAttrs"
-          :id="inputId"
+          :id="editMode === 'direct' || editorOpen ? inputId : undefined"
           ref="inputRef"
-          :aria-busy="loading || inputSession.pending.value || undefined"
-
+          :aria-busy="loading || inputSession.pending.value || nativeAttrs['aria-busy'] || undefined"
           :autocomplete="oneTimeCode && nativeAttrs.autocomplete === 'one-time-code' ? 'one-time-code' : 'off'"
           :class="n('inner')"
           :value="composition.isComposing.value ? inputRef?.value : value"
@@ -68,6 +68,7 @@
           :maxlength="undefined"
           :placeholder="mergedHint ? undefined : placeholder"
           :aria-label="ariaLabel ?? nativeAttrs['aria-label']"
+          :aria-describedby="describeError(nativeAttrs['aria-describedby'])"
           :aria-invalid="mergedError || nativeAttrs['aria-invalid'] || undefined"
           :autofocus="autofocus"
           :enterkeyhint="enterkeyhint"
@@ -95,20 +96,22 @@ import { computed, inject, nextTick, onMounted, ref, useAttrs, useId, watch, typ
 import { invokeBeforeCommit, useFieldPresentation } from '../_components/field-presentation/context'
 import FieldPresentation from '../_components/field-presentation/FieldPresentation.vue'
 import { useSelectionSession } from '../_components/selection-field/use-selection-session'
-import FieldDecorator, { fieldDecoratorProps } from '../field-decorator'
-import { createNamespace } from '../_utils/global-config'
 import { useEmptyValues } from '../_utils/empty-value'
+import { createNamespace } from '../_utils/global-config'
 import { useInputComposition } from '../_utils/input-composition'
+import FieldDecorator, { fieldDecoratorProps } from '../field-decorator'
 import { oneTimeCodeKey } from './context'
 import InputFeedback from './InputFeedback.vue'
 import { captureInputSelection, splitInputAttrs } from './native-attrs'
 import { inputProps } from './props'
 import type { InputEmits, InputSlots } from './types'
 import { useInputForm } from './use-input-form'
+import { useFormErrorDescription } from '../form/error-description'
 import { useInputValue } from './use-input-value'
 
 defineOptions({ name: createNamespace('input').name, inheritAttrs: false })
 const props = defineProps(inputProps)
+const { describe: describeError } = useFormErrorDescription()
 const emit = defineEmits<InputEmits>()
 defineSlots<InputSlots>()
 const { n, classes } = createNamespace('input')
@@ -118,7 +121,11 @@ const inputRef = ref<HTMLInputElement>()
 const generatedId = useId()
 const splitAttrs = computed(() => splitInputAttrs(attrs))
 const nativeAttrs = computed(
-  () => ({ ...splitAttrs.value.native, ...props.inputAttrs }) as InputHTMLAttributes & Record<string, unknown>,
+  () =>
+    ({
+      ...splitAttrs.value.native,
+      ...props.inputAttrs,
+    }) as InputHTMLAttributes & Record<string, unknown>,
 )
 const inputId = computed(() => String(nativeAttrs.value.id ?? generatedId))
 const {
@@ -171,10 +178,14 @@ const inputSession = useSelectionSession({
   deferred: () => editMode.value !== 'direct',
   blocked: () => mergedDisabled.value || mergedReadonly.value || readPretty.value,
   clone: (value) => value,
-  publish: (next) => {
+  publish: (next, event) => {
     localCommittedValue.value = next
     emit('update:modelValue', next)
-    emit('change', next, new Event('change'))
+    if (event) {
+      emit('change', next, event)
+    } else {
+      emit('change', next)
+    }
     if (!presentationItem?.validate) {
       eventHandlers.value?.onChange?.()
     }
@@ -189,7 +200,10 @@ const inputSession = useSelectionSession({
       return false
     }
     if (next !== committedValue.value) {
-      return invokeBeforeCommit(props.beforeCommit, next, { previousValue: committedValue.value, signal })
+      return invokeBeforeCommit(props.beforeCommit, next, {
+        previousValue: committedValue.value,
+        signal,
+      })
     }
   },
 })
@@ -197,18 +211,18 @@ function cancelEditor() {
   inputSession.cancel()
   presentationItem?.resetValidation?.()
 }
-function confirmEditor() {
+function confirmEditor(event?: Event) {
   if (composition.isComposing.value) {
     return
   }
-  commitValue(new Event('change'))
-  return inputSession.commit()
+  commitValue(event ?? new Event('change'))
+  return inputSession.commit(event)
 }
 watch(
   [editMode, readPretty],
   ([next, pretty], previous) => {
     presentationItem?.resolved?.(next, readPretty.value)
-    if (previous && (next !== previous[0] || pretty !== previous[1])) {
+    if (previous && previous.length > 0 && (next !== previous[0] || pretty !== previous[1])) {
       setEditorOpen(false)
       inputSession.reset()
       presentationItem?.resetValidation?.()
@@ -244,12 +258,14 @@ const valueProps = new Proxy(props, {
 const composition = useInputComposition()
 const { value, focused, maxLength, errorOnly, valueLength, updateValue, commitValue, clearValue } = useInputValue(
   valueProps,
-  (nextValue) => {
+  (nextValue, notifyModel = true) => {
     if (editorOpen.value) {
       inputSession.update(nextValue)
     } else {
       localCommittedValue.value = nextValue
-      emit('update:modelValue', nextValue)
+      if (notifyModel) {
+        emit('update:modelValue', nextValue)
+      }
     }
   },
   (nextValue, event) => {
@@ -270,13 +286,14 @@ function processInput(event: Event) {
   }
   const input = event.target as HTMLInputElement
   const restore = captureInputSelection(input)
+  const isCurrent = composition.capture()
   updateValue(input.value, (nextValue) => {
     emit('input', nextValue ?? '', event)
     !editorOpen.value && eventHandlers.value?.onInput?.(event)
   })
   nextTick(() => {
-    // A later composition owns the DOM buffer; an older edit cannot restore over it.
-    if (!composition.isComposing.value) {
+    // Only the current edit may normalize its native buffer and selection.
+    if (isCurrent() && inputRef.value === input) {
       restore(value.value)
     }
   })

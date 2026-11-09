@@ -1,0 +1,4 @@
+- [x] Reproduce both platform failures with actual asynchronous validator protocols.
+- [x] Add model/rule/field ownership invalidation without public task API.
+- [x] Verify both full affected consumers and actual browser/demos; update cross-field expectations and docs.
+- [x] Run full lint/types/spec/cross-platform/foundations.

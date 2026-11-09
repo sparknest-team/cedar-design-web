@@ -110,7 +110,7 @@ const NavNode = defineComponent({
           popupContainer: api.props.popupContainer, popupClass: api.props.popupClass, popupOffset: 4, mouseEnterDelay: 100, mouseLeaveDelay: 100,
           placement: api.props.mode === 'horizontal' && !props.popup ? 'bottom-start' : side.value,
           onOpenChange: (value: boolean) => { if (available()) api.expand(node, value) },
-        }, { default: item, content: () => h('ul', { ref: panel, dir: api.dir.value, role: 'menu', 'data-nav-panel': '', class: [n('popup'), n(`--${api.theme.value}`), n(`--${api.props.size}`)], style: { '--c-nav-menu-icon-size': `${api.props.iconSize}px` }, onKeydown: onPanelKeydown }, children()) })
+        }, { default: item, content: () => h('ul', { ref: panel, dir: api.dir.value, role: 'menu', 'data-nav-panel': '', class: [n('popup'), n(`--${api.props.size}`)], style: { '--c-nav-menu-icon-size': `${api.props.iconSize}px` }, onKeydown: onPanelKeydown }, children()) })
       } else if (api.collapsed.value && !props.popup && !node.children.length) reference = h(Tooltip, { placement: api.dir.value === 'rtl' ? 'left' : 'right', disabled: disabled.value, popupContainer: api.props.popupContainer }, { default: item, content: () => content('label') })
       else reference = item()
       return h('li', { role: 'none', class: n('node') }, [reference, node.children.length && !floating.value && open.value ? h('ul', { ref: panel, role: 'group', class: n('list') }, children()) : null])

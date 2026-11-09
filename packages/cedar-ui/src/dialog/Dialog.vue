@@ -10,7 +10,7 @@
       :dir="readingDirection"
       :class="`${prefixCls}-container`"
       :style="{ zIndex: mergedZIndex }"
-      v-bind="$attrs"
+      v-bind="mergeProps(themeScope, $attrs)"
     >
       <transition :name="overlayAnimationName" appear>
         <div
@@ -118,27 +118,31 @@
 </template>
 
 <script setup lang="ts">
+import { useThemeScope } from '../theme-provider/context'
 import PendingFeedback from '../_components/pending-feedback/PendingFeedback.vue'
 import { useDirection } from '../_utils/direction'
-import { computed, ref, toRef, useSlots, type CSSProperties } from "vue";
-import { IconCheckCircleFill } from "@cedar-design/icons-vue/icon-check-circle-fill";
-import { IconClose } from "@cedar-design/icons-vue/icon-close";
-import { IconCloseCircleFill } from "@cedar-design/icons-vue/icon-close-circle-fill";
-import { IconExclamationCircleFill } from "@cedar-design/icons-vue/icon-exclamation-circle-fill";
-import { IconInfoCircleFill } from "@cedar-design/icons-vue/icon-info-circle-fill";
+import { mergeProps,  computed, ref, toRef, useSlots, type CSSProperties } from 'vue';
+import { IconCheckCircleFill } from '@cedar-design/icons-vue/icon-check-circle-fill';
+import { IconClose } from '@cedar-design/icons-vue/icon-close';
+import { IconCloseCircleFill } from '@cedar-design/icons-vue/icon-close-circle-fill';
+import { IconExclamationCircleFill } from '@cedar-design/icons-vue/icon-exclamation-circle-fill';
+import { IconInfoCircleFill } from '@cedar-design/icons-vue/icon-info-circle-fill';
 import IconHover from "../_components/IconHover.vue";
-import { createNamespace, getPrefixCls } from "../_utils/global-config";
-import { isNumber } from "../_utils/is";
+import { createNamespace, getPrefixCls } from '../_utils/global-config';
+import { isNumber } from '../_utils/is';
 import {
   useModalSurface,
   type ModalSurfaceCloseRequest,
-} from "../_utils/modal-surface";
+} from '../_utils/modal-surface';
 import Button from "../button";
-import { useI18n } from "../locale";
-import { dialogProps } from "./props";
+import { useI18n } from '../locale';
+import { dialogProps } from './props';
 import type { DialogAction } from "./types";
-import { useDialog } from "./use-dialog";
-import { useDialogDrag } from "./use-dialog-drag";
+import { useDialog } from './use-dialog';
+import { useDialogDrag } from './use-dialog-drag';
+
+
+const themeScope = useThemeScope()
 
 defineOptions({ name: createNamespace("dialog").name, inheritAttrs: false });
 
@@ -220,7 +224,7 @@ const {
 
 const draggable = computed(() => props.draggable && !props.fullscreen);
 const drag = useDialogDrag({
-  enabled: draggable,
+  enabled: computed(() => draggable.value && mergedOpen.value),
   fullscreen: toRef(props, "fullscreen"),
 });
 const showFooter = computed(
@@ -254,7 +258,7 @@ const mergedDialogStyle = computed<CSSProperties>(() => ({
         : props.width
       : undefined,
   top:
-    !props.alignCenter && props.top
+    !props.alignCenter && props.top != null
       ? isNumber(props.top)
         ? `${props.top}px`
         : props.top

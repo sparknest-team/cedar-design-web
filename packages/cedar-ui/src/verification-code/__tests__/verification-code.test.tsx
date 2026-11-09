@@ -54,7 +54,7 @@ describe('VerificationCode', () => {
     })
     const firstInput = wrapper.findAll('input')[0]
 
-    await firstInput.trigger('focus')
+    firstInput.element.focus()
     await nextTick()
 
     expect(firstInput.element.selectionStart).toBe(0)

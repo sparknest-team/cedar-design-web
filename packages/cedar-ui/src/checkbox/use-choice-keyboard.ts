@@ -3,9 +3,11 @@ import { onDeactivated, onScopeDispose } from 'vue'
 /** Per-instance keyboard state, bound to the focusable control rather than window. */
 export function useChoiceKeyboard(activate: () => void, blocked: () => boolean) {
   let spacePressed = false
-  const reset = () => { spacePressed = false }
+  const reset = () => {
+    spacePressed = false
+  }
   function keydown(event: KeyboardEvent) {
-    if (blocked() || event.altKey || event.ctrlKey || event.metaKey) {
+    if (event.defaultPrevented || blocked() || event.altKey || event.ctrlKey || event.metaKey) {
       reset()
       return
     }
@@ -15,6 +17,10 @@ export function useChoiceKeyboard(activate: () => void, blocked: () => boolean) 
   }
   function keyup(event: KeyboardEvent) {
     if (event.key !== ' ') return
+    if (event.defaultPrevented) {
+      reset()
+      return
+    }
     event.preventDefault()
     const active = spacePressed && !blocked() && !event.altKey && !event.ctrlKey && !event.metaKey
     reset()

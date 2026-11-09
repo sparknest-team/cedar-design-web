@@ -1,4 +1,5 @@
 import { base64ToString } from '../utils'
+import type { MapFetch, MapGeocoderHandler } from './props'
 
 export const getMapInitData = (
   mapType: 'amaps' | 'google' | 'qqmaps',
@@ -26,8 +27,8 @@ export const getMapInitData = (
 export const parseRgeoData = (
   data: any,
   location: {
-    latitude: string
-    longitude: string
+    latitude: string | number
+    longitude: string | number
   },
 ) => {
   return {
@@ -43,21 +44,19 @@ export const parseRgeoData = (
   }
 }
 const fetchGeocoder = async (params: {
-  latitude: string
-  longitude: string
+  latitude: string | number
+  longitude: string | number
   mapType: 'amaps' | 'google' | 'qqmaps'
   basePath: string
-  fetch?: { get: any; post: any }
-  geocoderHandler?: any
+  geocoderUrl?: string
+  fetch?: MapFetch
+  geocoderHandler?: MapGeocoderHandler
 }) => {
-  const { mapType, basePath, fetch, latitude, longitude, geocoderHandler } = params
+  const { mapType, basePath, geocoderUrl, fetch, latitude, longitude, geocoderHandler } = params
   const { key, geoUrl } = getMapInitData(mapType, basePath)
   let data: any = {}
   if (geocoderHandler) {
-    try {
-      // 如果外面传了逆地理解析方法，则直接调用
-      data = await geocoderHandler(longitude, latitude)
-    } catch {}
+    data = await geocoderHandler(Number(longitude), Number(latitude))
   } else {
     // 如果外面没有传逆地理解析方法，则调用默认的逆地理解析接口
     const params = {
@@ -65,15 +64,12 @@ const fetchGeocoder = async (params: {
       latitude,
       longitude,
     }
-    try {
-      const res = await fetch?.get?.(geoUrl, {
-        params,
-      })
-      if (res?.isValid?.()) {
-        data = res.data
-      }
-    } catch {}
+    if (!fetch?.get) return undefined
+    const res = await fetch.get(geocoderUrl || geoUrl, { params })
+    if (!res?.isValid?.()) throw new Error('Reverse geocoding failed')
+    data = res.data
   }
+  if (data == null || typeof data !== 'object') throw new Error('Invalid reverse geocoding response')
   // 解析数据，将接口数据转换成PoiInfo
   return parseRgeoData(data, {
     latitude,
@@ -83,17 +79,19 @@ const fetchGeocoder = async (params: {
 export const useFetchGeocoder = (params: {
   mapType: 'amaps' | 'google' | 'qqmaps'
   basePath: string
-  fetch?: { get: any; post: any }
-  geocoderHandler?: any
+  geocoderUrl?: string
+  fetch?: MapFetch
+  geocoderHandler?: MapGeocoderHandler
 }) => {
-  const { mapType, basePath, fetch, geocoderHandler } = params
+  const { mapType, basePath, geocoderUrl, fetch, geocoderHandler } = params
   return {
-    fetchGeocoder: async (latitude: string, longitude: string) => {
+    fetchGeocoder: async (latitude: string | number, longitude: string | number) => {
       return fetchGeocoder({
         latitude,
         longitude,
         mapType,
         basePath,
+        geocoderUrl,
         fetch,
         geocoderHandler,
       })

@@ -1,6 +1,6 @@
 <template>
   <c-space wrap>
-    <c-tag closable>Tag</c-tag>
+    <c-tag closable close-button-aria-label="Remove Tag">Tag</c-tag>
     <c-tag closable>
       <template #icon>
         <c-icon-star />

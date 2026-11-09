@@ -11,7 +11,7 @@
     <c-breadcrumb :routes="maxRoutes" :max-count="3" @click.prevent>
       <template #more-icon="{ omittedItems }">
         <c-tooltip :trigger="['hover', 'focus', 'click']" :content="omittedItems.map((item) => item.label).join(' / ')">
-          <c-icon-more />
+          <button type="button" class="more-trigger" aria-label="查看隐藏路径"><c-icon-more aria-hidden="true" /></button>
         </c-tooltip>
       </template>
     </c-breadcrumb>
@@ -33,3 +33,18 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.more-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+</style>

@@ -1,0 +1,3 @@
+- [x] Reproduce direct publishing and skipped guards.
+- [x] Share draft clear and empty change validity without changing notification semantics.
+- [x] Verify both-platform consumers, actual demo, browser and required gates.

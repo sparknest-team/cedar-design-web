@@ -1,3 +1,4 @@
+import {validSelectionCount,validSearchDelay} from '../_utils/selection-validation'
 import { fieldLoadingProps } from '../field-decorator/props'
 import type { PropType } from 'vue'
 import { fieldPresentationProps } from '../_components/field-presentation/props'
@@ -205,6 +206,7 @@ export const cascaderProps = {
    */
   maxTagCount: {
     type: Number,
+    validator: validSelectionCount,
     default: 0,
   },
   /**
@@ -251,6 +253,7 @@ export const cascaderProps = {
    */
   searchDelay: {
     type: Number,
+    validator: validSearchDelay,
     default: 500,
   },
   /**

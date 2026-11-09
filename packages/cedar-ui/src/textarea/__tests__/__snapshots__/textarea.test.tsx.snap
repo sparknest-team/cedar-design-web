@@ -3,7 +3,7 @@
 exports[`Textarea > renders the shared defaults 1`] = `
 "<div class=\\"c-textarea\\">
   <div class=\\"c-field-decorator c-field-decorator--size-md c-field-decorator--variant-outline c-field-decorator--multiline\\">
-    <!--v-if--><span class=\\"c-field-decorator__middle\\"><!--v-if--><textarea id=\\"v-0\\" class=\\"c-textarea__inner\\" style=\\"resize: vertical;\\" value=\\"\\"></textarea></span>
+    <!--v-if--><span class=\\"c-field-decorator__middle\\"><!--v-if--><textarea id=\\"v-0\\" autocomplete=\\"off\\" class=\\"c-textarea__inner\\" style=\\"resize: vertical;\\" value=\\"\\"></textarea></span>
     <!--v-if-->
     <!--v-if-->
     <!--v-if--><span class=\\"c-field-decorator__border\\" aria-hidden=\\"true\\"></span><span class=\\"c-field-decorator__border-state\\" aria-hidden=\\"true\\"></span>

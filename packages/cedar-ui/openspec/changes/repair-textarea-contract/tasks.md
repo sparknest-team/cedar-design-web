@@ -1,0 +1,4 @@
+- [x] Reproduce invalid rows and auto-size policy failures on both platforms.
+- [x] Normalize supported policies and represent existing wrapper event/read types.
+- [x] Verify consumers, mandatory Vue template type fixtures and actual browser guard/event flow.
+- [x] Complete bilingual API tables and required gates.

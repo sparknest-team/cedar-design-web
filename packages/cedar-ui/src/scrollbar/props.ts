@@ -1,10 +1,5 @@
-import { createNamespace } from '../_utils/global-config'
-import { computed, CSSProperties, defineComponent, onMounted, PropType, ref, StyleValue } from 'vue'
-import { ThumbData } from './types'
-import ResizeObserver from '../_components/resize-observer-v2'
-import Thumb from './Thumb.vue'
-import { getPrefixCls } from '../_utils/global-config'
-import { isNumber, isObject } from '../_utils/is'
+import type { PropType, StyleValue } from 'vue'
+import type { ClassName } from '../_utils/types'
 
 export const scrollbarProps = {
     /**
@@ -19,13 +14,15 @@ export const scrollbarProps = {
      * @zh 外层的类名
      * @en Outer class
      */
-    outerClass: [String, Object, Array],
+    outerClass: [String, Object, Array] as PropType<ClassName>,
     /**
      * @zh 外层的样式
      * @en Outer style
      */
     outerStyle: {
-      type: [String, Object, Array] as PropType<StyleValue>,
+      type: [String, Object, Array, Boolean] as PropType<StyleValue>,
+      default: undefined,
+      validator: (value: unknown) => value !== true,
     },
     // private
     hide: {

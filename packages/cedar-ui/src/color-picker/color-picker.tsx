@@ -1,4 +1,4 @@
-import { defineComponent, computed, watch } from 'vue'
+import { defineComponent, computed, nextTick, watch } from 'vue'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
 import { HSV } from './types'
 import Panel from './panel'
@@ -6,12 +6,15 @@ import Trigger from '../trigger'
 import useState from '../_hooks/use-state'
 import { formatInputToHSVA, hsvToRgb, rgbaToHex, rgbToHex } from '../_utils/color'
 import { colorPickerProps } from './props'
+import { useI18n } from '../locale'
+import { provideFormErrorDescriptionBoundary, useFormErrorDescription } from '../form/error-description'
 
 
 const { name } = createNamespace('color-picker')
 
 export default defineComponent({
   name,
+  inheritAttrs: false,
   props: colorPickerProps,
   emits: {
     'update:modelValue': (value: string) => true,
@@ -29,37 +32,30 @@ export default defineComponent({
      */
     'open-change': (visible: boolean, value: string) => true,
   },
-  setup(props, { emit, slots }) {
+  setup(props, { attrs, emit, slots }) {
+    const { describe: describeError } = useFormErrorDescription()
+    provideFormErrorDescriptionBoundary()
 
     const prefixCls = getPrefixCls('color-picker')
-    const mergeValue = computed(() => {
-      return props.modelValue ?? props.defaultValue
+    const { t } = useI18n()
+    const initial = formatInputToHSVA(props.modelValue ?? props.defaultValue ?? '')
+    const [alpha, setAlpha] = useState(initial.a)
+    const [hsv, setHsv] = useState({ h: initial.h, s: initial.s, v: initial.v })
+    const syncModel = (value: string) => {
+      const next = formatInputToHSVA(value)
+      setAlpha(next.a)
+      setHsv({ h: next.h, s: next.s, v: next.v })
+    }
+    const matchesModel = (value: string) => {
+      const next = formatInputToHSVA(value)
+      const expected = hsvToRgb(next.h, next.s, next.v)
+      const current = hsvToRgb(hsv.value.h, hsv.value.s, hsv.value.v)
+      return expected.r === current.r && expected.g === current.g && expected.b === current.b &&
+        (props.disabledAlpha || Math.round(next.a * 255) === Math.round(alpha.value * 255))
+    }
+    watch(() => props.modelValue, value => {
+      if (value !== undefined && !matchesModel(value)) syncModel(value)
     })
-
-    const formatInput = computed(() => {
-      return formatInputToHSVA(mergeValue.value || '')
-    })
-
-    const [alpha, setAlpha] = useState(formatInput.value.a)
-    const [hsv, setHsv] = useState({
-      h: formatInput.value.h,
-      s: formatInput.value.s,
-      v: formatInput.value.v,
-    })
-
-    watch(
-      () => formatInput.value,
-      (value) => {
-        if (mergeValue.value !== formatValue.value) {
-          setAlpha(value.a)
-          setHsv({
-            h: value.h,
-            s: value.s,
-            v: value.v,
-          })
-        }
-      },
-    )
 
     const color = computed(() => {
       const rgb = hsvToRgb(hsv.value.h, hsv.value.s, hsv.value.v)
@@ -86,18 +82,25 @@ export default defineComponent({
       return alpha.value < 1 && !props.disabledAlpha ? `#${rgbaToHex(r, g, b, alpha.value)}` : `#${rgbToHex(r, g, b)}`
     })
 
-    watch(formatValue, (value) => {
-      emit('update:modelValue', value)
-      emit('change', value)
-    })
-
-    const onHsvChange = (_value: HSV) => {
-      !props.disabled && setHsv(_value)
+    const propose = (value: HSV, nextAlpha: number) => {
+      if (props.disabled) return
+      const previous = formatValue.value
+      setHsv(value)
+      setAlpha(nextAlpha)
+      const proposed = formatValue.value
+      if (proposed !== previous) {
+        emit('update:modelValue', proposed)
+        emit('change', proposed)
+      }
+      if (props.modelValue !== undefined) {
+        nextTick(() => {
+          if (props.modelValue !== undefined && !matchesModel(props.modelValue)) syncModel(props.modelValue)
+        })
+      }
     }
-
-    const onAlphaChange = (_value: number) => {
-      !props.disabled && setAlpha(_value)
-    }
+    const onHsvChange = (value: HSV) => propose(value, alpha.value)
+    const onAlphaChange = (value: number) => propose(hsv.value, value)
+    const onColorChange = (value: HSV, nextAlpha: number) => propose(value, nextAlpha)
 
     const handleOpenChange = (open: boolean) => {
       emit('open-change', open, formatValue.value)
@@ -105,7 +108,12 @@ export default defineComponent({
 
     const renderInput = () => {
       return (
-        <div
+        <button
+          type="button"
+          disabled={props.disabled}
+          aria-label={attrs['aria-label'] as string || t('colorPicker.trigger')}
+          aria-labelledby={attrs['aria-labelledby'] as string | undefined}
+          aria-describedby={describeError(attrs['aria-describedby'])}
           class={{
             [prefixCls]: true,
             [`${prefixCls}-size-${props.size}`]: props.size,
@@ -115,14 +123,18 @@ export default defineComponent({
           <div class={`${prefixCls}-preview`} style={{ backgroundColor: formatValue.value }} />
           {props.showText && <div class={`${prefixCls}-value`}>{formatValue.value}</div>}
 
-          <input class={`${prefixCls}-input`} value={formatValue.value} disabled={props.disabled} />
-        </div>
+        </button>
       )
     }
 
     const renderPanel = () => {
       return (
         <Panel
+          {...(props.hideTrigger ? {
+            ...attrs,
+            role: typeof attrs.role === 'string' ? attrs.role : describeError(attrs['aria-describedby']) ? 'group' : undefined,
+            'aria-describedby': describeError(attrs['aria-describedby']),
+          } : {})}
           color={color.value}
           alpha={alpha.value}
           colorString={colorString.value}
@@ -135,6 +147,7 @@ export default defineComponent({
           format={props.format}
           onHsvChange={onHsvChange}
           onAlphaChange={onAlphaChange}
+          onColorChange={onColorChange}
         />
       )
     }
@@ -152,6 +165,7 @@ export default defineComponent({
           disabled={props.disabled}
           onUpdate:open={handleOpenChange}
           {...props.triggerProps}
+          {...attrs}
         >
           {slots.default ? slots.default() : renderInput()}
         </Trigger>

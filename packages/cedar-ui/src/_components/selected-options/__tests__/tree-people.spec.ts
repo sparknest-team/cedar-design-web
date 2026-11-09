@@ -45,7 +45,7 @@ for (const editMode of ['click'] as const) {
         const editor = wrapper.get('.c-field-presentation__body')
         expect(editor.find('.c-tree-select-trigger').exists()).toBe(true)
         expect(editor.findAll('input:not([type=checkbox])')).toHaveLength(1)
-        await editor.get('[role="button"][aria-label="IconClose"]').trigger('click')
+        await editor.get('[role="button"][aria-label="关闭"]').trigger('click')
         await flushPromises()
         expect(wrapper.emitted('update:modelValue')).toBeUndefined()
         await wrapper.get('.c-field-presentation__footer').findAll('button').find(button => ['确定', '确认'].includes(button.text()))!.trigger('click')

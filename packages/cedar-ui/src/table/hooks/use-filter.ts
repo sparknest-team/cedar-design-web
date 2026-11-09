@@ -34,7 +34,7 @@ export const useFilter = ({
   const resetFilters = (dataIndex?: string | string[]) => {
     const _dataIndex = dataIndex ? ([] as string[]).concat(dataIndex) : []
 
-    const filters: Filters = {}
+    const filters: Filters = _dataIndex.length ? { ..._filters.value } : {}
     for (const item of columns.value) {
       if (item.dataIndex && item.filterable) {
         if (_dataIndex.length === 0 || _dataIndex.includes(item.dataIndex)) {
@@ -50,7 +50,7 @@ export const useFilter = ({
   const clearFilters = (dataIndex?: string | string[]) => {
     const _dataIndex = dataIndex ? ([] as string[]).concat(dataIndex) : []
 
-    const filters: Filters = {}
+    const filters: Filters = _dataIndex.length ? { ..._filters.value } : {}
     for (const item of columns.value) {
       if (item.dataIndex && item.filterable) {
         if (_dataIndex.length === 0 || _dataIndex.includes(item.dataIndex)) {

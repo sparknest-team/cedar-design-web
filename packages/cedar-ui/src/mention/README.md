@@ -39,7 +39,7 @@ permalink: /components/mention/
 
 <demo src="./__demos__/mirror-lifecycle.vue"></demo>
 
-样式从当前 textarea 所属窗口读取，旧观察器不能跨停用／激活提交；几何及样式读取返回后再次核对，防止重入卸载。停用／卸载的保留输入、弹层事件和 focus／blur 命令无效；禁用时不接受输入或 focus，活动实例仍允许 blur。公开方法签名、颜色和 CSS 变量不变。Maple 无对应 Mention 运行时，不新增移动端副本。
+停用或卸载 Mention 后，保留的输入、弹层事件及 focus / blur 调用不再生效；重新激活后会重新测量输入位置。禁用时不接受输入或 focus，活动实例仍允许调用 blur。
 
 ## 加载与等待
 
@@ -67,54 +67,75 @@ permalink: /components/mention/
 
 以上是字段展示层 API；纯面板不因此新增阅读模式。Form 与 FormItem 提供继承配置。empty-value 的现有类型与默认输出仍按该组件原 API 执行。
 
-### `<mention>` Props
+### Mention Props
 
-| 参数名                    | 描述                 | 类型                                                                                                       |   默认值    | 版本   |
-| ------------------------- | -------------------- | ---------------------------------------------------------------------------------------------------------- | :---------: | :----- |
-| model-value **(v-model)** | 绑定值               | `string`                                                                                                   |     `-`     |        |
-| default-value             | 默认值（非受控状态） | `string`                                                                                                   |    `''`     |        |
-| data                      | 用于自动补全的数据   | `(string \| number \| SelectOptionData \| SelectOptionGroup)[]` / `(query, { signal }) => Array / Promise` | `undefined` |        |
-| prefix                    | 触发自动补全的关键字 | `string \| string[]`                                                                                       |    `'@'`    |        |
-| split                     | 选中项的前后分隔符   | `string`                                                                                                   |    `' '`    |        |
-| type                      | 输入框或文本域       | `'input' \| 'textarea'`                                                                                    |  `'input'`  |        |
-| disabled                  | 是否禁用             | `boolean`                                                                                                  |   `false`   |        |
-| clearable                 | 是否允许清空输入框   | `boolean`                                                                                                  |   `false`   | 2.23.0 |
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| model-value (v-model) | 受控文本；null 显示为空 | string \| null | undefined |
+| default-value | 非受控初始文本 | string | '' |
+| data | 候选数组或显式加载函数，支持嵌套分组 | readonly (string \| number \| SelectOptionData \| SelectOptionGroup)[] \| ((query: string, context: { signal: AbortSignal }) => Array \| `Promise<Array>`) | undefined |
+| prefix | 触发前缀；支持多字符和多个前缀 | string \| string[] | '@' |
+| split | 提及前后的分隔符 | string | ' ' |
+| type | 输入形态 | input \| textarea | input |
+| disabled | 未设置时继承 Form，显式 false 覆盖 | boolean | undefined |
+| readonly | 未设置时继承 Form，显式 false 覆盖 | boolean | undefined |
+| clearable | 允许清空文本或编辑草稿 | boolean | false |
+| loading | 手动等待反馈，不隐式禁用文本编辑 | boolean | false |
+| edit-mode | 编辑模式，继承 FormItem 和 Form | `'direct' \| 'click' \| 'dblclick'` | `'direct'` |
+| read-pretty | 独立阅读状态，显式 false 覆盖父级 | `boolean` | `false` |
+| empty-value | 清空输出；显式 null 原样提交 | `string \| null \| (() => string \| null)` | `''` |
+| empty-values | 空值识别策略，字段优先于 FormItem 和 Form | `readonly unknown[]` | `-` |
+| empty-text | 阅读空文案，显式空字符串有效 | `string` | `'-'` |
+| before-commit | 延迟编辑保存前守卫；返回布尔值、Promise 或通过 done 完成 | `(payload: { value: unknown; previousValue: unknown }, done: (allow?: boolean) => void, context: { signal: AbortSignal; event?: Event }) => void \| boolean \| Promise<void \| boolean>` | `-` |
+| open | 受控编辑层开关，不是内部原生输入焦点 | `boolean` | `-` |
+| default-open | 非受控编辑层初始开关 | `boolean` | `false` |
+| popup-container | 编辑层挂载容器 | `string \| HTMLElement \| false` | `-` |
 
-### `<mention>` Events
+### Mention Events
 
-| 事件名 | 描述                                        | 参数                                                          | 版本   |
-| ------ | ------------------------------------------- | ------------------------------------------------------------- | :----- |
-| change | 值发生改变时触发                            | value: `string`                                               |        |
-| search | 动态搜索时触发，2.47.0 版本增加 prefix 参数 | value: `string`<br>prefix: `string`                           |        |
-| select | 选择下拉选项时触发                          | value: `string \| number \| Record<string, any> \| undefined` |        |
-| clear  | 用户点击清除按钮时触发                      | -                                                             | 2.23.0 |
-| focus  | 文本框获取焦点时触发                        | ev: `FocusEvent`                                              | 2.42.0 |
-| blur   | 文本框失去焦点时触发                        | ev: `FocusEvent`                                              | 2.42.0 |
+| 事件 | 说明与参数 |
+| --- | --- |
+| update:modelValue | value: string \| null |
+| change | value: string \| null；不附带原生 Event |
+| search | query: string, prefix: string |
+| select | value: SelectOptionValue \| undefined；来自实际叶子候选 |
+| clear | event: Event |
+| focus / blur | event: FocusEvent |
+| load-error | error: unknown；保留加载源原始错误 |
+| update:open / open-change | open: boolean；仅字段编辑层 |
 
-### `<mention>` Methods
+data 是显式数据加载入口；search、change、select 和 load-error 都是通知，不采集监听器返回的 Promise。直接输入按 update:modelValue / change 通知，选择按 select / update:modelValue / change 通知；延迟编辑中先修改草稿，确认后才提交最终模型。
 
-| 方法名 | 描述             | 参数 | 返回值 | 版本   |
-| ------ | ---------------- | ---- | ------ | :----- |
-| focus  | 使输入框获取焦点 | -    | -      | 2.24.0 |
-| blur   | 使输入框失去焦点 | -    | -      | 2.24.0 |
+### Mention Methods
 
-### `<mention>` Slots
+| 方法 | 说明 | 返回值 |
+| --- | --- | --- |
+| focus | 聚焦当前目标；延迟模式按字段编辑协议打开 | void |
+| blur | 失焦当前目标，不打开编辑器 | void |
+| refresh | 重试当前 data 查询，沿用取消与失败协议，不打开编辑器；静态数组不发请求 | `Promise<void>` |
 
-| 插槽名 |   描述   | 参数               | 版本   |
-| ------ | :------: | ------------------ | :----- |
-| option | 选项内容 | data: `OptionInfo` | 2.13.0 |
+### Mention Slots
 
-### 类型定义
+| 插槽 | 说明与参数 |
+| --- | --- |
+| option | 两种输入形态的候选内容；data: SelectOptionInfo，含 key、raw、value、label |
+| read | 两种输入形态的阅读内容；value: string \| null, text: string |
+| prefix / suffix | 仅 type=input 的输入框前后缀 |
+| clear-icon | 两种输入形态的清空节点；clear(event?: Event): void |
+
+clear-icon 替换整个清空节点，自定义节点需要调用 clear，并自行提供可访问的按钮。没有 default 输入替换、empty 或加载错误专用插槽；option 不替换字段输入本体。
+
+## Types
 
 组件导出以下类型定义
 
 ```ts
-import type { MentionInstance } from "@cedar-design/ui";
+import type { MentionProps, MentionInstance, MentionEmits, MentionSlots, MentionExpose } from "@cedar-design/ui";
 ```
 
 Mention 复用 Input／Textarea 的排版和间距，测量镜像复制原生输入框计算样式。自定义请覆盖对应输入组件变量；不再提供无效的 mention-font-size、mention-line-height 或 mention-padding-*。
 
-### Form 字段展示与确认
+### 编辑与确认
 
 Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，Enter/F2 也可进入；取消/Escape 丢弃草稿，确认后提交。readPretty 为独立阅读属性，与 readonly、disabled 分开。
 
@@ -127,3 +148,31 @@ Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，
 候选属性 `data` 支持数组或 `(query, { signal }) => 数组/Promise`。加载、取消、过期结果隔离由组件内部处理，失败触发 load-error。单选/多选分组初始化以空字符串查询，搜索型字段在查询变化时调用；树形字段根数据与原有 load-more 子节点懒加载独立。
 
 input 与 textarea 都显示手动 loading 和当前显式 data 加载函数的等待。等待显示不会隐式禁用编辑；search 通知返回 Promise 不启动任务。旧数据请求不会清理新请求的指示器，load-error 保留原始错误。
+
+公共 focus/blur 从首次挂载即可调用。focus 会打开可编辑的延迟编辑器，等待其就绪后定位；禁用、只读或纯阅读时不因此打开。blur 只失焦当前目标，不重新打开。保存的方法不会绑定旧编辑器，关闭、切换模式、停用或卸载会取消排队调用。
+
+### 提及范围与分组选项
+
+prefix 支持单字符、多字符及字符串数组。选择时只替换光标前已匹配的前缀和查询文本，保留光标后内容；textarea 镜像使用实际命中的前缀。data 中的嵌套分组只展示标题，只有叶子选项可选；禁用叶子不提交。option 插槽接收规范化候选，数值 0 和空字符串也是有效身份，不跳过定制。
+
+### 候选反馈与实例边界
+
+显式 data 加载的等待统一显示在当前 Input/Textarea 字段，原生输入声明 aria-busy；手动 loading 与数据请求的等待合并，文本仍可编辑。没有可用候选时不打开提及菜单。失败结束当前等待并通知原始 load-error，业务决定错误展示；不会把异常字符串自动插进候选或文本。refresh 等待一次读取结束，失败通过 load-error 通知，不等待错误监听器的 Promise。
+
+disabled/readonly 会暂停数据请求，停用、卸载和过期响应不能继续更新；refresh 在关闭的编辑层也可读取数据而不自动打开。候选菜单仍属于内部输入，公开 open/default-open 只控制延迟字段编辑层。MentionProps、MentionEmits、MentionSlots、MentionExpose 在根入口和 mention 子入口一致导出；MeasureInfo 为内部测量状态。
+
+Mention 仅在 Cedar 提供。
+
+### 输入与候选关联
+
+input 使用 combobox，textarea 保留支持多行的 textbox；两者都以 aria-autocomplete、aria-controls 和 aria-activedescendant 关联实际 listbox 与活动候选。候选关闭或字段只读后撤下活动关联；方向键移动候选时原生输入保留 DOM 焦点。这里验证的是 DOM 关系和键盘行为，不代表已完成所有读屏软件和真机组合的认证。
+
+## CSS Variables
+
+<!-- component-css-variables:start -->
+
+本组件未声明独立的公共 CSS 变量。请使用本页公开的配置与布局入口。 组合控件的外观复用 `input`、`select`、`textarea` 的公共变量；共享变量可能同时影响同一 DOM 子树中的其他控件。
+
+内部自定义属性与测量中间值属于实现细节，不作为业务定制 API。
+
+<!-- component-css-variables:end -->

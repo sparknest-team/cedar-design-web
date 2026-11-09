@@ -1,0 +1,3 @@
+- [x] Prove Cedar accepts the accidental key while Maple rejects it using standard compiler fixtures.
+- [x] Remove Cedar declarations, preserve canonical editMode and document the contract.
+- [x] Run both mandatory typechecks, affected consumers and API/full cross-platform gates.

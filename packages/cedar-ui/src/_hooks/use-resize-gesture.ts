@@ -7,6 +7,7 @@ export function useResizeGesture(options: {
   start: (event: MouseEvent) => boolean | void
   move: (dx: number, dy: number, event: MouseEvent) => void
   end?: (event: MouseEvent) => void
+  cancel?: (event: MouseEvent) => void
 }) {
   let available = true
   let transaction: { event: MouseEvent; pointerId?: number; win: Window; body: HTMLElement; cursor: string; ownCursor: string } | undefined
@@ -17,6 +18,11 @@ export function useResizeGesture(options: {
     for (const type of ['mousemove', 'pointermove']) old.win.removeEventListener(type, move as EventListener)
     for (const type of ['mouseup', 'pointerup', 'pointercancel', 'contextmenu', 'blur']) old.win.removeEventListener(type, end as EventListener)
     if (old.body.style.cursor === old.ownCursor) old.body.style.cursor = old.cursor
+  }
+  function cancel() {
+    const current = transaction
+    detach()
+    if (current) options.cancel?.(current.event)
   }
   function matches(event: Event) {
     return transaction && (!event.type.startsWith('pointer') || (event as PointerEvent).pointerId === transaction.pointerId)
@@ -48,8 +54,8 @@ export function useResizeGesture(options: {
     for (const type of ['mouseup', 'pointerup', 'pointercancel', 'contextmenu', 'blur']) win.addEventListener(type, end as EventListener)
     return true
   }
-  onDeactivated(() => { available = false; detach() })
+  onDeactivated(() => { available = false; cancel() })
   onActivated(() => { available = true })
-  onBeforeUnmount(() => { available = false; detach() })
-  return { begin, cancel: detach, active: () => !!transaction }
+  onBeforeUnmount(() => { available = false; cancel() })
+  return { begin, cancel, active: () => !!transaction }
 }

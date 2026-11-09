@@ -170,7 +170,7 @@ createApp(App).use(Cedar).mount("#app");
 每个组件都提供 `setPropsDefaults`，用于统一修改之后创建的声明式组件默认值。请在应用挂载前调用：
 
 ```ts
-import { Button, StyleProvider } from "@cedar-design/ui";
+import { Button, ThemeProvider } from "@cedar-design/ui";
 
 Button.setPropsDefaults({
   status: "primary",
@@ -179,7 +179,7 @@ Button.setPropsDefaults({
 });
 
 // 其他组件使用相同方式
-StyleProvider.setPropsDefaults({
+ThemeProvider.setPropsDefaults({
   tag: "section",
 });
 ```
@@ -203,3 +203,9 @@ Resolver 默认自动引入组件样式。如项目已完整引入 Cedar 样式�
 ```ts
 CedarResolver({ importStyle: false });
 ```
+
+## 全局 Context
+
+从 `@cedar-design/ui/context` 默认导入响应式对象；Cedar 根入口没有名为 `Context` 的导出。对象包含 `zIndex`（默认 2000）和 `enableRipple`（默认 true）。调整 `zIndex` 影响之后分配的层级，不改变已经打开的层；关闭波纹只阻止创建新波纹，不禁用宿主交互。
+
+该对象是模块单例，同一模块实例的多个应用和服务端请求共享；不要在 SSR 请求中直接修改它来实现请求隔离。SSR 首次渲染层级使用 2000，挂载后才按当前配置分配；test 环境不递增层级，不同打包副本各自独立。它不是组件，没有 Props、事件、插槽或实例方法。

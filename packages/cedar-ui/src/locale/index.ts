@@ -4,6 +4,9 @@ import { configProviderInjectionKey } from '../config-provider/context'
 import type { CedarI18nMessages, CedarLang } from './types'
 import zhCN from './lang/zh-cn'
 
+export { default as cedarZhCN } from './lang/zh-cn'
+export { default as cedarEnUS } from './lang/en-us'
+
 const LOCALE = ref('zh-CN')
 const I18N_MESSAGES = reactive<CedarI18nMessages>({
   'zh-CN': zhCN,

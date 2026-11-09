@@ -1,5 +1,5 @@
 <template>
-  <component :is="component" ref="wrapperRef" :class="classNames" v-bind="$attrs" :style="styles">
+  <component :is="componentTag" ref="wrapperRef" :class="classNames" v-bind="$attrs" :style="styles">
     <slot />
     <ResizeTrigger
       v-for="direction in allowDirections"
@@ -7,12 +7,12 @@
       :prefix-cls="`${prefixCls}-trigger`"
       :class="`${prefixCls}-direction-${direction}`"
       :orientation="isHorizontal(direction) ? 'horizontal' : 'vertical'"
-      role="separator"
+      role="spinbutton"
       tabindex="0"
-      :aria-label="`Resize ${direction} edge`"
-      :aria-orientation="isHorizontal(direction) ? 'horizontal' : 'vertical'"
+      :aria-label="t(`resizeBox.${direction}`)"
       :aria-valuemin="0"
-      :aria-valuenow="isHorizontal(direction) ? (height ?? measuredHeight) : (width ?? measuredWidth)"
+      :aria-valuenow="handleValue(direction)"
+      :aria-valuetext="t('resizeBox.valueText', handleValue(direction))"
       @keydown="onKeydown(direction, $event)"
       @pointerdown="onMoveStart(direction, $event)"
       @mousedown="onMoveStart(direction, $event)"
@@ -31,9 +31,11 @@
 </template>
 <script lang="ts">
 import { useDirection } from '@cedar-design/use'
+import { useI18n } from '../locale'
 import { useElementResize } from '../_utils/resize-observer'
 import { useResizeGesture } from '../_hooks/use-resize-gesture'
 import { resizeBoxProps } from './props'
+import { isResizeBoxSize, isResizeBoxTag, normalizeResizeBoxDirections, resizeBoxDirections as allDirections, type ResizeBoxDirection } from './validation'
 import { createNamespace } from '../_utils/global-config'
 import { computed, defineComponent, PropType, toRefs, ref, reactive, watch } from 'vue'
 import ResizeTrigger from '../_components/ResizeTrigger.vue'
@@ -41,26 +43,27 @@ import useMergeState from '../_hooks/use-merge-state'
 import { getPrefixCls } from '../_utils/global-config'
 import { isNumber } from '../_utils/is'
 
-export type DirectionType = 'left' | 'right' | 'top' | 'bottom'
 
 type PaddingCSSProperties = 'padding-left' | 'padding-right' | 'padding-top' | 'padding-bottom'
 
-const DIRECTION_LEFT = 'left'
-const DIRECTION_RIGHT = 'right'
-const DIRECTION_TOP = 'top'
-const DIRECTION_BOTTOM = 'bottom'
-
-const allDirections: DirectionType[] = [DIRECTION_LEFT, DIRECTION_RIGHT, DIRECTION_TOP, DIRECTION_BOTTOM]
-
-function getRealSize(pageSize: number, padding: number) {
-  if (pageSize === 0) return 0
-
-  const res = pageSize - padding
-  return res <= 0 ? 0 : res
+// Read the CSS dimension that width/height will write back under the current box model.
+function readCssSize(element: HTMLElement | undefined, axis: 'width' | 'height'): number {
+  if (!element) return 0
+  const style = element.ownerDocument.defaultView?.getComputedStyle(element)
+  const cssValue = style?.[axis]
+  const size = Number.parseFloat(cssValue ?? '')
+  if (cssValue?.endsWith('px') && Number.isFinite(size)) return Math.max(0, size)
+  const horizontal = axis === 'width'
+  const sides = horizontal ? ['left', 'right'] : ['top', 'bottom']
+  const read = (property: string) => Number.parseFloat(style?.getPropertyValue(property) ?? '') || 0
+  const padding = sides.reduce((total, side) => total + read(`padding-${side}`), 0)
+  const border = sides.reduce((total, side) => total + read(`border-${side}-width`), 0)
+  const client = horizontal ? element.clientWidth : element.clientHeight
+  return Math.max(0, style?.boxSizing === 'border-box' ? client + border : client - padding)
 }
 
-function isHorizontal(direction: DirectionType) {
-  return [DIRECTION_TOP, DIRECTION_BOTTOM].indexOf(direction) > -1
+function isHorizontal(direction: ResizeBoxDirection) {
+  return direction === 'top' || direction === 'bottom'
 }
 
 export default defineComponent({
@@ -106,19 +109,22 @@ export default defineComponent({
    * @binding {'left' | 'right' | 'top' | 'bottom'} direction
    */
   setup(props, { emit }) {
+    const { t } = useI18n()
     const { height: propHeight, width: propWidth, directions } = toRefs(props)
 
+    const validWidth = computed(() => isResizeBoxSize(propWidth.value) ? propWidth.value : undefined)
+    const validHeight = computed(() => isResizeBoxSize(propHeight.value) ? propHeight.value : undefined)
     const [width, setWidth] = useMergeState<number | null>(
       null,
       reactive({
-        value: propWidth,
+        value: validWidth,
       }),
     )
 
     const [height, setHeight] = useMergeState<number | null>(
       null,
       reactive({
-        value: propHeight,
+        value: validHeight,
       }),
     )
 
@@ -129,6 +135,7 @@ export default defineComponent({
 
     const prefixCls = getPrefixCls('resizebox')
     const classNames = computed(() => [prefixCls])
+    const componentTag = computed(() => isResizeBoxTag(props.component) ? props.component.trim() : 'div')
     const styles = computed(() => {
       return {
         ...(isNumber(width.value) ? { width: `${width.value}px` } : {}),
@@ -136,7 +143,7 @@ export default defineComponent({
         ...paddingStyles,
       }
     })
-    const allowDirections = computed(() => directions.value.filter((direction) => allDirections.includes(direction)))
+    const allowDirections = computed(() => normalizeResizeBoxDirections(directions.value))
 
     const record = {
       direction: '',
@@ -145,15 +152,9 @@ export default defineComponent({
       startWidth: 0,
       startHeight: 0,
       moving: false,
-      padding: {
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0,
-      },
     }
 
-    function applyDelta(direction: DirectionType, dx: number, dy: number, initialWidth: number, initialHeight: number, event?: MouseEvent) {
+    function applyDelta(direction: ResizeBoxDirection, dx: number, dy: number, initialWidth: number, initialHeight: number, event?: MouseEvent) {
       const horizontal = direction === 'left' || direction === 'right'
       const value = Math.max(0, horizontal ? initialWidth + (direction === 'left' ? -dx : dx) : initialHeight + (direction === 'top' ? -dy : dy))
       if (horizontal) { setWidth(value); emit('update:width', value) }
@@ -162,58 +163,68 @@ export default defineComponent({
     }
     const measuredWidth = ref(0), measuredHeight = ref(0)
     function measure() {
-      const { left, right, top, bottom } = record.padding
-      record.startWidth = getRealSize(wrapperRef.value?.clientWidth || 0, left + right)
-      record.startHeight = getRealSize(wrapperRef.value?.clientHeight || 0, top + bottom)
+      record.startWidth = readCssSize(wrapperRef.value, 'width')
+      record.startHeight = readCssSize(wrapperRef.value, 'height')
     }
     useElementResize(() => [wrapperRef.value], () => true, () => {
-      const { left, right, top, bottom } = record.padding
-      measuredWidth.value = getRealSize(wrapperRef.value?.clientWidth || 0, left + right)
-      measuredHeight.value = getRealSize(wrapperRef.value?.clientHeight || 0, top + bottom)
+      measuredWidth.value = readCssSize(wrapperRef.value, 'width')
+      measuredHeight.value = readCssSize(wrapperRef.value, 'height')
     })
     const gesture = useResizeGesture({
       element: () => wrapperRef.value,
-      cursor: () => isHorizontal(record.direction as DirectionType) ? 'row-resize' : 'col-resize',
+      cursor: () => isHorizontal(record.direction as ResizeBoxDirection) ? 'row-resize' : 'col-resize',
       start(event) { measure(); emit('moving-start', event) },
-      move: (dx, dy, event) => applyDelta(record.direction as DirectionType, dx, dy, record.startWidth, record.startHeight, event),
+      move: (dx, dy, event) => applyDelta(record.direction as ResizeBoxDirection, dx, dy, record.startWidth, record.startHeight, event),
       end: event => emit('moving-end', event),
+      cancel: event => emit('moving-end', event),
     })
-    function onMoveStart(direction: DirectionType, event: MouseEvent) {
+    function onMoveStart(direction: ResizeBoxDirection, event: MouseEvent) {
       if (gesture.active() || !allowDirections.value.includes(direction)) return
       // Do not replace the active edge on a compatibility mouse event.
       if (event.type === 'mousedown' && 'PointerEvent' in window) return
       record.direction = direction
       gesture.begin(event)
     }
-    function onKeydown(direction: DirectionType, event: KeyboardEvent) {
-      if (event.target !== event.currentTarget || !allowDirections.value.includes(direction)) return
+    function handleValue(direction: ResizeBoxDirection) {
+      return isHorizontal(direction) ? height.value ?? measuredHeight.value : width.value ?? measuredWidth.value
+    }
+    function onKeydown(direction: ResizeBoxDirection, event: KeyboardEvent) {
+      if (event.target !== event.currentTarget || !allowDirections.value.includes(direction) || event.altKey || event.ctrlKey || event.metaKey) return
       const vertical = isHorizontal(direction)
-      if (!(vertical ? ['ArrowUp', 'ArrowDown'] : ['ArrowLeft', 'ArrowRight']).includes(event.key)) return
+      const numericKeys = ['ArrowUp', 'ArrowDown', 'Home', 'PageUp', 'PageDown']
+      const physical = !vertical && ['ArrowLeft', 'ArrowRight'].includes(event.key)
+      if (!numericKeys.includes(event.key) && !physical) return
       event.preventDefault()
       measure()
-      const step = (event.shiftKey ? 50 : 10) * (event.key === 'ArrowRight' || event.key === 'ArrowDown' ? 1 : -1)
-      applyDelta(direction, vertical ? 0 : step, vertical ? step : 0, record.startWidth, record.startHeight)
+      const sign = direction === 'left' || direction === 'top' ? -1 : 1
+      const step = event.shiftKey || event.key.startsWith('Page') ? 50 : 10
+      const delta = event.key === 'Home' ? -(vertical ? record.startHeight : record.startWidth)
+        : physical ? step * (event.key === 'ArrowRight' ? 1 : -1) * sign
+          : step * (event.key === 'ArrowUp' || event.key === 'PageUp' ? 1 : -1)
+      applyDelta(direction, vertical ? 0 : delta * sign, vertical ? delta * sign : 0, record.startWidth, record.startHeight)
     }
     watch([dir, allowDirections], () => {
       gesture.cancel()
-      for (const direction of allDirections) if (!allowDirections.value.includes(direction)) { delete paddingStyles[`padding-${direction}`]; record.padding[direction] = 0 }
+      for (const direction of allDirections) if (!allowDirections.value.includes(direction)) { delete paddingStyles[`padding-${direction}`] }
     }, { flush: 'sync' })
 
-    function onTiggerResize(direction: DirectionType, entry: ResizeObserverEntry) {
+    function onTiggerResize(direction: ResizeBoxDirection, entry: ResizeObserverEntry) {
       const { width, height } = entry.contentRect
       const size = isHorizontal(direction) ? height : width
-      record.padding[direction] = size
       paddingStyles[`padding-${direction}` as PaddingCSSProperties] = `${size}px`
     }
 
     return {
       prefixCls,
+      t,
+      handleValue,
       width,
       height,
       measuredWidth,
       measuredHeight,
       onKeydown,
       classNames,
+      componentTag,
       styles,
       wrapperRef,
       onMoveStart,

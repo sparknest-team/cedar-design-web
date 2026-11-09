@@ -1,3 +1,4 @@
+import { useThemeScope } from '../theme-provider/context'
 import { useElementResize } from '../_utils/resize-observer'
 import { physicalScrollLeft, inlineScrollLeft, setInlineScrollLeft, useDirection } from '../_utils/direction'
 import StickyScrollbar from './StickyScrollbar.vue'
@@ -326,6 +327,7 @@ export default defineComponent({
    * @binding {string} dataIndex
    */
   setup(props, { emit, slots }) {
+    const themeScope = useThemeScope()
     const {
       columns,
       rowKey,
@@ -886,7 +888,7 @@ export default defineComponent({
                 });
               }
 
-              const result = valueA > valueB ? 1 : -1;
+              const result = valueA > valueB ? 1 : valueA < valueB ? -1 : 0;
               return direction === "descend" ? -result : result;
             });
           }
@@ -2229,6 +2231,7 @@ export default defineComponent({
 
       return (
         <div
+          {...themeScope.value}
           dir={readingDirection.value}
           class={[
             paginationCls.value,
@@ -2236,7 +2239,7 @@ export default defineComponent({
               [`${prefixCls}-pagination-sticky`]: props.stickyPagination !== false,
             },
           ]}
-          style={inStickyFooter ? undefined : stickyStyle}
+          style={[themeScope.value.style, inStickyFooter ? undefined : stickyStyle]}
         >
           {slots["pagination-left"]?.()}
           {slots.pagination ? slots.pagination(scope) : (
@@ -2256,7 +2259,7 @@ export default defineComponent({
 
     const renderPaginationArea = () => {
       const content = props.stickyPagination !== false ? (
-        <div dir={readingDirection.value} class={`${prefixCls}-footer-sticky`} style={isNumber(props.stickyPagination) ? { bottom: `${props.stickyPagination}px` } : undefined}>
+        <div {...themeScope.value} dir={readingDirection.value} class={`${prefixCls}-footer-sticky`} style={[themeScope.value.style, isNumber(props.stickyPagination) ? { bottom: `${props.stickyPagination}px` } : undefined]}>
           <StickyScrollbar container={containerElement.value} active={tableHovered.value || tableFocused.value} />
           {renderPagination(true)}
         </div>

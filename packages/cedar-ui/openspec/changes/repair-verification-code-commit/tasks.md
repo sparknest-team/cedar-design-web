@@ -1,0 +1,3 @@
+- [x] Reproduce completion timing and nullable/public contract gaps on both platforms.
+- [x] Apply shared final-notification ownership and component type/enum/export changes.
+- [x] Validate both browsers and every affected wrapper/input/Form consumer; complete required API/source/type/lint/spec/docs gates.

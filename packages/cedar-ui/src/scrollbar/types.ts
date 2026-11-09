@@ -1,4 +1,5 @@
-import { StyleValue } from 'vue'
+import type { StyleValue } from 'vue'
+import type { ClassName } from '../_utils/types'
 
 export interface ThumbData {
   ratio: number
@@ -13,8 +14,10 @@ export interface ThumbMap {
   client: 'clientX' | 'clientY'
 }
 
+/** Keep the public surface small for deeply reactive composition consumers. */
 export interface ScrollbarProps {
-  type: 'track' | 'embed'
-  outerClass: any
-  outerStyle: any
+  type?: 'track' | 'embed'
+  outerClass?: ClassName
+  outerStyle?: StyleValue
+  onScroll?: (event: Event) => void
 }

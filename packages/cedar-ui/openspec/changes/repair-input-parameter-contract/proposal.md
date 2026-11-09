@@ -1,0 +1,3 @@
+# Input length parameters and Password event inference
+
+Validate finite nonnegative number/object maxLength policies through Vue prop validators and share a safe no-limit fallback across Input, Textarea, Search and AutoComplete selection. Keep zero unlimited, optional null safe, errorOnly semantics and custom length/slice behavior. Explicitly declare and forward Password's already-public base events so type consumers receive actual payloads. Preserve once, synchronous cancellation and standard Vue error handling without collecting notification Promises. Clarify GroupLabel as an attached span and explain native label association.

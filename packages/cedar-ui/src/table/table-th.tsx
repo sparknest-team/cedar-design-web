@@ -115,7 +115,7 @@ export default defineComponent({
         });
       }
 
-      if (filterable?.slotName) {
+      if (filterable?.slotName && tableCtx.slots?.[filterable.slotName]) {
         return tableCtx?.slots?.[filterable?.slotName]?.({
           filterValue: columnFilterValue.value,
           setFilterValue,
@@ -353,6 +353,13 @@ export default defineComponent({
       );
     };
 
+    const isNestedInteractive = (event: Event) => {
+      const target = event.target as HTMLElement | null
+      const current = event.currentTarget as HTMLElement | null
+      const interactive = target?.closest?.('input,textarea,select,button,a[href],[contenteditable]:not([contenteditable="false"]),[role="button"]')
+      return Boolean(interactive && current && interactive !== current && current.contains(interactive))
+    }
+
     const renderCell = () => {
       if (isExtraColumn.value) {
         const extraHeader =
@@ -371,11 +378,11 @@ export default defineComponent({
           class={cellCls.value}
           role={hasSorter.value ? 'button' : undefined}
           tabindex={hasSorter.value ? 0 : undefined}
-          onClick={hasSorter.value ? handleClickSorter : undefined}
+          onClick={hasSorter.value ? (event: MouseEvent) => { if (!event.defaultPrevented && !isNestedInteractive(event)) handleClickSorter(event) } : undefined}
           onKeydown={
             hasSorter.value
               ? (event: KeyboardEvent) => {
-                  if (event.key === 'Enter' || event.key === ' ') {
+                  if (!event.defaultPrevented && !isNestedInteractive(event) && (event.key === 'Enter' || event.key === ' ')) {
                     event.preventDefault()
                     handleClickSorter(event as unknown as MouseEvent)
                   }
@@ -450,6 +457,7 @@ export default defineComponent({
           style: style.value,
           colspan: colSpan > 1 ? colSpan : undefined,
           rowspan: rowSpan > 1 ? rowSpan : undefined,
+          'aria-sort': sortOrder.value === 'ascend' ? 'ascending' : sortOrder.value === 'descend' ? 'descending' : undefined,
           // auto 布局下渲染后按此 key 量宽回写，修正冻结列 sticky 偏移
           "data-column-key": props.column.dataIndex,
         },

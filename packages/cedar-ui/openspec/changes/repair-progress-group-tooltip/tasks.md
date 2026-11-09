@@ -1,0 +1,3 @@
+- [x] Implement pointer transfer, tooltip hover, Escape and lifecycle cleanup on both platforms.
+- [x] Restrict orientation to linear layout and document item/slot semantics.
+- [x] Verify both platforms with unit tests, type checks and real browser pointer paths.

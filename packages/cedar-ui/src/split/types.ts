@@ -1,9 +1,2 @@
-export interface SplitProps {
-  component: string
-  orientation: 'horizontal' | 'vertical'
-  size: number | string | undefined
-  defaultSize: number | string
-  min: number | string | undefined
-  max: number | string | undefined
-  disabled: boolean
-}
+/** Public attributes and typed listeners derive from the actual component. */
+export type SplitProps = InstanceType<typeof import('./Split.vue')['default']>['$props']

@@ -40,3 +40,26 @@ export interface EllipsisInternalConfig extends Required<EllipsisConfig> {
   TooltipComponent: any
   tooltipProps: { [key: string]: any }
 }
+import type { Slot } from 'vue'
+
+export interface TypographySlots {
+  default?: Slot
+}
+
+export interface TypographyContentSlots extends TypographySlots {
+  'copy-icon'?: Slot<{ copied: boolean }>
+  'copy-tooltip'?: Slot<{ copied: boolean }>
+  'expand-node'?: Slot<{ expanded: boolean }>
+}
+
+export interface TypographyEmits {
+  'edit-start': []
+  change: [text: string]
+  'update:editText': [text: string]
+  'edit-end': []
+  'update:editing': [editing: boolean]
+  copy: [text: string]
+  ellipsis: [isEllipsis: boolean]
+  expand: [expanded: boolean]
+}
+

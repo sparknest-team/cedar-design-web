@@ -20,3 +20,5 @@ export type {
 export const _InputNumberComponent = InputNumber
 
 export default InputNumber
+
+export type { InputNumberEmits, InputNumberSlots, InputNumberExpose } from './types'

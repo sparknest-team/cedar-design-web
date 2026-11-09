@@ -7,6 +7,7 @@ import { formatTimeValue, parseTimeValue } from './time-value'
 
 export function timeFieldAdapter(range: boolean): FieldPresentationAdapter {
   return {
+    methods: ['focus', 'blur'],
     text: (value, props) =>
       (Array.isArray(value) ? value : [value])
         .map((part) => formatTimeValue(part, props))

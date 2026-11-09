@@ -1,0 +1,3 @@
+- [x] Reproduce parameter diagnostics and Maple async ARIA gaps against Cedar.
+- [x] Apply parameter fallback and public type/slot/event alignment.
+- [x] Verify both platforms and actual consumers, browser, source/type/API/lint/spec/docs; preserve the independent Radio style follow-up.

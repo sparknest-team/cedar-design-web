@@ -2,103 +2,41 @@
 permalink: /themes/
 ---
 
-# 主题定制
+# 主题预设
 
-### 介绍
+使用 ThemeProvider 统一管理应用根部和局部区域的主题。theme 控制 light/dark，style-vars 接收品牌预设或自定义变量；不修改 html。
 
-Cedar 色板与 Maple 结构对齐：**RGB 通道色阶** + **语义色** + **组件 token**。
+## 内置主题
 
-- 色阶：`--c-primary-6: r, g, b`，用法 `rgb(var(--c-primary-6))` / `rgba(var(--c-primary-6), 0.12)`
-- 语义：`--c-color-text-1`、`--c-color-bg-*`、`--c-color-fill-*` 等
-- 暗色：根节点属性 `cedar-theme="dark"` 整表覆盖（CSS `:root[cedar-theme=dark]`）
-- 覆盖 / 多主题包：用 [StyleProvider](/components/style-provider/) + `Themes`
-
-设计 token：`style/theme/css-variables.less`、`style/color/css-variables.less`。
-
-### 内置主题包
-
-| 主题名称 | 主题包 | 说明 |
+| 品牌 | 亮色 | 暗色 |
 | --- | --- | --- |
-| 默认 | `Themes.default.light` / `Themes.default.dark` | 青绿色品牌色阶，提供亮暗模式 |
-| 枫叶 | `Themes.maple.light` / `Themes.maple.dark` | 枫叶红橙品牌色阶，提供亮暗模式 |
+| 默认青绿色 | Themes.default.light | Themes.default.dark |
+| 枫叶 | Themes.maple.light | Themes.maple.dark |
 
 ## 基础示例
 
-### StyleProvider 切换
-
-亮色对象会移除 `html[cedar-theme=dark]`，暗色对象会设置该属性。Cedar 与 Maple 使用相同的主题分组、颜色和值域。
-
-```vue
-<template>
-  <c-space>
-    <c-button status="primary" @click="StyleProvider.setStyleVars(Themes.default.light)">默认亮色</c-button>
-    <c-button status="primary" @click="StyleProvider.setStyleVars(Themes.default.dark)">默认暗色</c-button>
-    <c-button status="primary" @click="StyleProvider.setStyleVars(Themes.maple.light)">枫叶亮色</c-button>
-    <c-button status="primary" @click="StyleProvider.setStyleVars(Themes.maple.dark)">枫叶暗色</c-button>
-  </c-space>
-</template>
-
-<script setup>
-import { StyleProvider, Themes } from '@cedar-design/ui'
-</script>
-```
+### 预设切换
 
 <demo src="./__demos__/toggle.vue"></demo>
 
-### ConfigProvider 切换
+## 使用
 
 ```vue
-<template>
-  <c-config-provider :theme="theme">
-    <App />
-  </c-config-provider>
-</template>
-
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
-
-const theme = ref('light') // 'light' | 'dark'
+import { Themes } from '@cedar-design/ui'
+const mode = ref<'light' | 'dark'>('dark')
 </script>
+<template>
+  <c-theme-provider :theme="Themes.maple[mode]">
+    <App />
+  </c-theme-provider>
+</template>
 ```
 
-`theme` 同步到根节点 `cedar-theme`（`light` 时移除）。取值可用 `cedarThemes`：`['light', 'dark']`。
+省略 style-vars 时使用默认色板，省略 theme 时继承外层。显式变量覆盖的优先级高于模式默认值。局部与嵌套、弹层、SSR 及变量规则见 [ThemeProvider](/components/theme-provider/)。
 
-### DOM 切换暗色
-
-```ts
-document.documentElement.setAttribute('cedar-theme', 'dark')
-document.documentElement.removeAttribute('cedar-theme')
-```
-
-### 设置 body
-
-```css
-body {
-  transition: background-color 0.25s, color 0.25s;
-  color: var(--c-color-text);
-  background-color: var(--c-color-body);
-  color-scheme: var(--c-color-scheme);
-}
-```
-
-### 主题定制
-
-```ts
-import { StyleProvider, Themes } from '@cedar-design/ui'
-
-const customTheme = {
-  ...Themes.maple.light,
-  '--c-brand-6': '255, 0, 0',
-}
-
-StyleProvider.setStyleVars(customTheme)
-```
-
-### 与文档站同步
-
-文档站监听 `html[data-theme]`，并映射到 `cedar-theme`，切换 VuePress 主题时组件预览会一并切换。
-
-### 通用样式变量（节选）
+## CSS Variables
 
 | 变量名 | 说明 |
 | --- | --- |
@@ -113,3 +51,11 @@ StyleProvider.setStyleVars(customTheme)
 | `--c-color-scheme` / `--c-color-body` / `--c-color-text` | 主题切换 / body |
 
 完整色阶见 [色板 Palette](/components/palette/)，语义工具类见 [颜色 Color](/components/style/color/)。
+
+<!-- component-css-variables:start -->
+
+本组件未声明独立的公共 CSS 变量。请使用本页公开的配置与布局入口。
+
+内部自定义属性与测量中间值属于实现细节，不作为业务定制 API。
+
+<!-- component-css-variables:end -->

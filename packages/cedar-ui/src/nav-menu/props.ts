@@ -1,7 +1,7 @@
 import type { PropType } from 'vue'
 import { componentSizes, orientations, type ComponentSize } from '../_utils/constant'
 import { popupContainerProp } from '../_utils/popup-container'
-import type { NavMenuOption, NavMenuKey, NavMenuMode, NavMenuTheme, NavMenuFieldNames, NavMenuRenderContext } from './types'
+import type { NavMenuOption, NavMenuKey, NavMenuMode, NavMenuFieldNames, NavMenuRenderContext } from './types'
 export const navMenuProps = {
   /** 数据驱动的导航结构；独立入口使用默认插槽。 */
   options: { type: Array as PropType<NavMenuOption[]>, default: () => [] },
@@ -29,8 +29,6 @@ export const navMenuProps = {
   collapsed: { type: Boolean, default: undefined },
   /** 非受控折叠初始值。 */
   defaultCollapsed: Boolean,
-  /** 主题；未指定时跟随 Sider。 */
-  theme: { type: String as PropType<NavMenuTheme>, default: undefined },
   /** 组件尺寸。 */
   size: { type: String as PropType<ComponentSize>, default: 'md', validator: (v: ComponentSize) => componentSizes.includes(v) },
   /** 全局禁用。 */
@@ -52,7 +50,7 @@ export const navMenuProps = {
   /** 浮层附加类名。 */
   popupClass: [String, Array, Object],
   /** 更多入口文字。 */
-  overflowLabel: { type: String, default: '更多' },
+  overflowLabel: String,
   /** 菜单项 DOM 属性。 */
   nodeProps: Function as PropType<(context: NavMenuRenderContext) => Record<string, unknown>>,
 }

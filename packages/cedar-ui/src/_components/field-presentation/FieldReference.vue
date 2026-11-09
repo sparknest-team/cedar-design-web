@@ -12,6 +12,7 @@
       :class="n('reference')"
       :disabled="disabled"
       :aria-label="label"
+      :aria-describedby="describeError($attrs['aria-describedby'])"
       :aria-expanded="open"
       aria-haspopup="dialog"
       @click="editMode === 'click' && activate($event)"
@@ -27,6 +28,7 @@
       type="button"
       :class="n('edit')"
       :aria-label="label ? `${editText}：${label}` : editText"
+      :aria-describedby="describeError($attrs['aria-describedby'])"
       :title="editText"
       @click.stop="$emit('open')"
       @dblclick.stop
@@ -37,6 +39,7 @@
 </template>
 <script setup lang="ts">
 import PendingFeedback from '../pending-feedback/PendingFeedback.vue'
+import { useFormErrorDescription } from '../../form/error-description'
 import { computed, ref } from 'vue'
 import { IconEdit } from '@cedar-design/icons-vue/icon-edit'
 import { createNamespace } from '../../_utils/global-config'
@@ -60,6 +63,7 @@ const props = defineProps<{
 }>()
 const emit = defineEmits<{ open: [] }>()
 const { n } = createNamespace('field-presentation')
+const { describe: describeError } = useFormErrorDescription()
 const button = ref<HTMLButtonElement>()
 const { t } = useI18n()
 const editText = computed(() => t('fieldPresentation.edit'))

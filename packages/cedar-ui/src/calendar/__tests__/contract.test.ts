@@ -27,4 +27,17 @@ describe("calendar public contract", () => {
     );
     wrapper.unmount();
   });
+
+  it("renders and selects custom date content in the full year view", async () => {
+    const wrapper = mount(Calendar, {
+      props: { modelValue: new Date(2026, 8, 16), mode: 'year' },
+      slots: { default: ({ year, month, date }: { year: number; month: number; date: number }) => `${year}/${month}/${date}` },
+    });
+    try {
+      const cell = wrapper.findAll('[data-calendar-cell="2026-09-17"][data-calendar-current]')[0];
+      expect(cell.text()).toContain('2026/9/17');
+      await cell.trigger('click');
+      expect(wrapper.emitted('update:modelValue')?.[0][0]).toEqual(new Date(2026, 8, 17));
+    } finally { wrapper.unmount(); }
+  });
 });

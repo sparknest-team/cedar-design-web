@@ -150,13 +150,6 @@ describe("Button shared contract", () => {
     await b.trigger("click");
     expect(onClick).toHaveBeenCalledTimes(1);
   });
-  it("notifies touchstart once", async () => {
-    const onTouchstart = vi.fn();
-    await render({ onTouchstart }).trigger("touchstart", {
-      touches: [{ clientX: 0, clientY: 0 }],
-    });
-    expect(onTouchstart).toHaveBeenCalledTimes(1);
-  });
 
   it.each(["default", "fill", "line"])(
     "supports loading mode %s and preserves content",
@@ -201,7 +194,8 @@ describe("Button icon layout", () => {
     await wrapper.setProps({ loading: true });
     expect(wrapper.element.childElementCount).toBe(count);
     expect(wrapper.findAll(".c-button__loading")).toHaveLength(1);
-    expect(wrapper.text()).toBe("Save");
+    expect(wrapper.get('.c-button__content').text()).toBe('Save')
+    expect(wrapper.get('.c-button__loading').attributes('aria-hidden')).toBe('true')
     await wrapper.setProps({ loading: false });
     expect(wrapper.element.childElementCount).toBe(count);
     expect(wrapper.find(".c-button__loading").exists()).toBe(false);

@@ -294,14 +294,14 @@
     "change",
     "search",
     "rename",
-    "target-action"
+    "target-action",
+    "load-error",
+    "update:modelValue"
   ],
   "slotNames": [
     "source-title",
     "target-title",
     "source",
-    "to-target-icon",
-    "to-source-icon",
     "target",
     "item"
   ],
@@ -309,8 +309,6 @@
     "source-title": true,
     "target-title": true,
     "source": false,
-    "to-target-icon": false,
-    "to-source-icon": false,
     "target": false,
     "item": false
   },

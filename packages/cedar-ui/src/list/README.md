@@ -99,6 +99,8 @@ permalink: /components/list/
 
 ## API
 
+虚拟列表先覆盖视口，再按 `buffer` 在前后预渲染；`buffer=0` 合法，`estimatedSize` 必须是有限正数（包括小于 1 的值），无效值回退 30px。`fixedSize` 可动态切换；可变高度使用已测量值和估计值，行在挂载及卸载时测量，已挂载行异步高度变化不会持续监听。`item` 插槽接收原始索引和 unknown 数据，应返回单个可测量根节点并提供稳定的 `itemKey`。需要向辅助技术表达完整集合时，可在业务行上按实际数据提供 `aria-setsize` 和 `aria-posinset`。
+
 ### List Props
 
 | 属性 | 说明 | 类型 | 默认值 |
@@ -118,56 +120,76 @@ ListVirtualListProps 支持 height、threshold、fixedSize、estimatedSize、buf
 
 ListScrollbarProps 支持 type: 'track'|'embed'、outerClass、outerStyle、hide、disableHorizontal、disableVertical。属性作为 JavaScript 对象字段使用 camelCase。
 
-### Events / Methods
+### List Events / Methods
 
 - scroll(event: Event)：真实滚动事件，一次滚动通知一次。
 - scrollIntoView({ index?, key?, align })：虚拟列表定位，index 优先；align 为 top/bottom/auto。auto 在项目已完整可见时不滚动，否则最小滚动使其可见。无效目标、非虚拟模式不操作。
 
-### Slots
+### List Slots
 
 List：default（优先于data）、item({ item, index })、header、footer、empty。空态仅无默认插槽、无数据、非加载时渲染。ListItem：prefix、default、suffix，保持列表项语义，不管理按钮/业务交互。
 
-### 类型
+## Types
 
 ListProps、ListSize、ListVirtualListProps、ListScrollbarProps、ListExpose、ListSlots、ListEmits、ListInstance、ListItemInstance。
 
 List 与 InfiniteScroll 分工独立：List管理展示与可选虚拟视口；无限分页应组合 InfiniteScroll 的 status/target 交互，不在 List 中重复维护加载状态机。
 
-## 样式变量
+## CSS Variables
 
-| Token | Default |
-| --- | --- |
-| `--c-list-background` | `transparent` |
-| `--c-list-empty-padding` | `16px` |
-| `--c-list-empty-color` | `var(--c-list-text-color)` |
-| `--c-list-loading-padding` | `0px` |
-| `--c-list-border-width` | `1px` |
-| `--c-list-border-color` | `var(--c-color-neutral-3)` |
-| `--c-list-border-radius` | `var(--c-border-radius-md)` |
-| `--c-list-text-color` | `var(--c-color-text-1)` |
-| `--c-list-font-size` | `var(--c-font-size-body-3)` |
-| `--c-list-line-height` | `var(--c-line-height)` |
-| `--c-list-text-color-header` | `var(--c-color-text-1)` |
-| `--c-list-font-size-header` | `var(--c-font-size-title-1)` |
-| `--c-list-font-weight-header` | `var(--c-font-weight-500)` |
-| `--c-list-line-height-header` | `1.5` |
-| `--c-list-size-sm-padding-vertical-header` | `var(--c-spacing-4)` |
-| `--c-list-size-sm-padding-horizontal-header` | `var(--c-spacing-8)` |
-| `--c-list-size-sm-padding-vertical-item` | `9px` |
-| `--c-list-size-sm-padding-horizontal-item` | `var(--c-spacing-8)` |
-| `--c-list-size-md-padding-vertical-header` | `var(--c-spacing-6)` |
-| `--c-list-size-md-padding-horizontal-header` | `var(--c-spacing-8)` |
-| `--c-list-size-md-padding-vertical-item` | `13px` |
-| `--c-list-size-md-padding-horizontal-item` | `var(--c-spacing-8)` |
-| `--c-list-size-lg-padding-vertical-header` | `var(--c-spacing-7)` |
-| `--c-list-size-lg-padding-horizontal-header` | `var(--c-spacing-8)` |
-| `--c-list-size-lg-padding-vertical-item` | `17px` |
-| `--c-list-size-lg-padding-horizontal-item` | `var(--c-spacing-8)` |
-| `--c-list-item-prefix-margin-right` | `var(--c-spacing-8)` |
-| `--c-list-item-suffix-margin-left` | `var(--c-spacing-8)` |
-| `--c-list-size-sm-padding-vertical-footer` | `var(--c-list-size-sm-padding-vertical-item)` |
-| `--c-list-size-sm-padding-horizontal-footer` | `var(--c-list-size-sm-padding-horizontal-item)` |
-| `--c-list-size-md-padding-vertical-footer` | `var(--c-list-size-md-padding-vertical-item)` |
-| `--c-list-size-md-padding-horizontal-footer` | `var(--c-list-size-md-padding-horizontal-item)` |
-| `--c-list-size-lg-padding-vertical-footer` | `var(--c-list-size-lg-padding-vertical-item)` |
-| `--c-list-size-lg-padding-horizontal-footer` | `var(--c-list-size-lg-padding-horizontal-item)` |
+<!-- component-css-variables:start -->
+
+通过以下变量定制组件外观。默认值随表中注明的主题或选择器条件变化；变量仅在对应的尺寸、变体和交互状态下生效。
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| 变量 | 默认值／条件 | 影响的样式 |
+| --- | --- | --- |
+| `--c-list-background` | `transparent` | `background` |
+| `--c-list-border-color` | `var(--c-color-neutral-3)` | `border`, `border-bottom`, `border-top` |
+| `--c-list-border-radius` | `var(--c-border-radius-md)` | `border-radius` |
+| `--c-list-border-width` | `1px` | `border`, `border-bottom`, `border-top` |
+| `--c-list-empty-color` | `var(--c-list-text-color)` | `color` |
+| `--c-list-empty-padding` | `16px` | `padding` |
+| `--c-list-font-size` | `var(--c-font-size-body-3)` | `font-size` |
+| `--c-list-font-size-header` | `var(--c-font-size-title-1)` | `font-size` |
+| `--c-list-font-weight-header` | `var(--c-font-weight-500)` | `font-weight` |
+| `--c-list-item-prefix-margin-right` | `var(--c-spacing-8)` | `margin-inline-end` |
+| `--c-list-item-suffix-margin-left` | `var(--c-spacing-8)` | `margin-inline-start` |
+| `--c-list-line-height` | `var(--c-line-height)` | `line-height` |
+| `--c-list-line-height-header` | `1.5` | `line-height` |
+| `--c-list-loading-padding` | `0px` | `padding` |
+| `--c-list-size-lg-padding-horizontal-footer` | `var(--c-list-size-lg-padding-horizontal-item)` | `padding` |
+| `--c-list-size-lg-padding-horizontal-header` | `var(--c-spacing-8)` | `padding` |
+| `--c-list-size-lg-padding-horizontal-item` | `var(--c-spacing-8)` | `padding` |
+| `--c-list-size-lg-padding-vertical-footer` | `var(--c-list-size-lg-padding-vertical-item)` | `padding` |
+| `--c-list-size-lg-padding-vertical-header` | `var(--c-spacing-7)` | `padding` |
+| `--c-list-size-lg-padding-vertical-item` | `17px` | `padding` |
+| `--c-list-size-md-padding-horizontal-footer` | `var(--c-list-size-md-padding-horizontal-item)` | `padding` |
+| `--c-list-size-md-padding-horizontal-header` | `var(--c-spacing-8)` | `padding` |
+| `--c-list-size-md-padding-horizontal-item` | `var(--c-spacing-8)` | `padding` |
+| `--c-list-size-md-padding-vertical-footer` | `var(--c-list-size-md-padding-vertical-item)` | `padding` |
+| `--c-list-size-md-padding-vertical-header` | `var(--c-spacing-6)` | `padding` |
+| `--c-list-size-md-padding-vertical-item` | `13px` | `padding` |
+| `--c-list-size-sm-padding-horizontal-footer` | `var(--c-list-size-sm-padding-horizontal-item)` | `padding` |
+| `--c-list-size-sm-padding-horizontal-header` | `var(--c-spacing-8)` | `padding` |
+| `--c-list-size-sm-padding-horizontal-item` | `var(--c-spacing-8)` | `padding` |
+| `--c-list-size-sm-padding-vertical-footer` | `var(--c-list-size-sm-padding-vertical-item)` | `padding` |
+| `--c-list-size-sm-padding-vertical-header` | `var(--c-spacing-4)` | `padding` |
+| `--c-list-size-sm-padding-vertical-item` | `9px` | `padding` |
+| `--c-list-text-color` | `var(--c-color-text-1)` | `color` |
+| `--c-list-text-color-header` | `var(--c-color-text-1)` | `color` |
+
+</div>
+
+将覆盖设置在组件实际根节点或弹层真实挂载祖先上。例如给该元素添加下列 class，再按需替换变量值：
+
+```css
+.component-theme {
+  --c-list-background: transparent;
+}
+```
+
+显式行内样式及直接写入同一 CSS 属性的 Props 优先于样式表默认值。Teleport 后，普通 CSS 变量按实际挂载位置继承；使用 ThemeProvider 时，请遵循其局部主题与弹层配置规则。局部定制请直接覆盖组件变量；仅修改后代的 system 变量不会重新计算从根继承的组件别名。内部变量不属于公共 API。
+
+<!-- component-css-variables:end -->

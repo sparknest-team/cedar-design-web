@@ -8,7 +8,7 @@ const PeopleSelect = withInstall(
   { components: [_PeopleSelect] },
 );
 
-export type PeopleSelectInstance = InstanceType<typeof _PeopleSelect>;
+export type PeopleSelectInstance = InstanceType<typeof _PeopleSelect> & import('./types').PeopleSelectExpose;
 export type { PeopleSelectProps } from "./props";
 
 export { peopleSelectProps };
@@ -19,6 +19,10 @@ export const _PeopleSelectComponent = PeopleSelect;
 export default PeopleSelect;
 
 export type {
+  PeopleSelectReadScope,
+  PeopleSelectSlots,
+  PeopleSelectEmits,
+  PeopleSelectExpose,
   PeopleSelectOption,
   PeopleSelectOptionsLoader,
   PeopleSelectAction,

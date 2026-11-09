@@ -84,7 +84,7 @@ export const realTransformAlias = (data: Record<string, any> | undefined, aliasM
   const aliasRealKeyValueEntries = Object.entries(aliasMap)
   const result = {}
   aliasRealKeyValueEntries.forEach(([realKey, aliasKey]) => {
-    if (data[realKey]) {
+    if (data[realKey] !== undefined && data[realKey] !== null) {
       result[aliasKey] = data[realKey]
     }
   })

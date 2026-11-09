@@ -8,6 +8,7 @@ import { dateFieldPanelOptions } from "./field-panel-options";
 
 export function dateFieldAdapter(range: boolean): FieldPresentationAdapter {
   return {
+    methods: ['focus', 'blur'],
     text: (value, props) =>
       (Array.isArray(value) ? value : [value])
         .map((part) => formatDateValue(part, props))

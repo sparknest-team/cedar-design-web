@@ -1,6 +1,6 @@
 <template>
   <li ref="linkRef" :class="cls">
-    <a :class="classes(n('link-title'))" :href="href" @click="handleClick">
+    <a :class="classes(n('link-title'))" :href="href" :aria-current="isCurrent ? 'location' : undefined" @click="handleClick">
       <slot>{{ title }}</slot>
     </a>
     <ul v-if="$slots.sublist" :class="classes(n('list'))">
@@ -13,21 +13,11 @@
 import { computed, defineComponent, inject, ref, watch } from 'vue'
 import { createNamespace } from '../_utils/global-config'
 import { anchorInjectionKey } from './context'
+import { anchorLinkProps } from './link-props'
 
 export default defineComponent({
   name: createNamespace('anchor-link').name,
-  props: {
-    /**
-     * @zh 锚点链接的文本内容
-     * @en The text content of the anchor link
-     */
-    title: String,
-    /**
-     * @zh 锚点链接的地址
-     * @en The address of the anchor link
-     */
-    href: String,
-  },
+  props: anchorLinkProps,
   setup(props) {
     const { n, classes } = createNamespace('anchor')
     const linkRef = ref<HTMLElement>()
@@ -40,7 +30,8 @@ export default defineComponent({
       cleanup(() => context?.removeLink(hash, node))
     }, { flush: 'post', immediate: true })
 
-    const cls = computed(() => classes(n('link'), [context?.currentLink === props.href, n('--link-active')]))
+    const isCurrent = computed(() => !!props.href && context?.currentLink === props.href)
+    const cls = computed(() => classes(n('link'), [isCurrent.value, n('--link-active')]))
 
     const handleClick = (e: MouseEvent) => context?.handleClick(e, props.href)
 
@@ -48,6 +39,7 @@ export default defineComponent({
       n,
       classes,
       cls,
+      isCurrent,
       linkRef,
       handleClick,
     }

@@ -8,7 +8,7 @@
       :dir="readingDirection"
         :class="n()"
         :style="{ zIndex: mergedZIndex }"
-        v-bind="$attrs"
+        v-bind="mergeProps(themeScope, $attrs)"
       >
         <div
           :class="n('backdrop')"
@@ -25,8 +25,9 @@
 </template>
 
 <script setup lang="ts">
+import { useThemeScope } from '../theme-provider/context'
 import { useDirection } from '../_utils/direction'
-import { useAttrs, computed, onActivated, onDeactivated, ref } from 'vue'
+import { mergeProps,  useAttrs, computed, onActivated, onDeactivated, ref } from 'vue'
 import { useEventListener } from '@cedar-design/use'
 import { createNamespace } from '../_utils/global-config'
 import { usePopupContainer } from '../_utils/popup-container'
@@ -35,6 +36,9 @@ import { usePopupTransition } from '../_utils/popup-transition'
 import { useScrollLock } from '../_utils/scroll-lock'
 import { useZIndex } from '../context/zIndex'
 import { overlayProps } from './props'
+
+
+const themeScope = useThemeScope()
 
 defineOptions({
   name: createNamespace('overlay').name,
@@ -92,6 +96,9 @@ const { onStackTop } = usePopupLayer(
   mergedZIndex,
   () => overlayRoot.value?.ownerDocument ?? popupDocument.value,
 )
+
+// Private ownership query for components that delegate keyboard shortcuts to this layer.
+defineExpose({ _isTopLayer: onStackTop })
 
 useScrollLock(
   () => scrollLockTarget.value,

@@ -12,9 +12,9 @@ vi.mock('vue', async () => {
   } }
 })
 vi.mock('../../select/hooks/use-select', async () => {
-  const { computed } = await vi.importActual<any>('vue')
+  const { computed, ref } = await vi.importActual<any>('vue')
   return { useSelect: (options: any) => ({
-    validOptions: computed(() => []), optionInfoMap: new Map(),
+    validOptions: computed(() => []), optionInfoMap: new Map(), activeKey: ref(undefined),
     validOptionInfos: computed(() => options.options.value), handleKeyDown: vi.fn(),
   }) }
 })

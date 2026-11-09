@@ -82,7 +82,7 @@ const state: ColumnManagerState = {
 }
 ```
 
-这是大版本破坏性调整，不再读取旧的 `keys`、`fixedMap`、`titleMap` 结构。
+
 
 ```ts
 const { state, restore } = useTableColumnManager({ defaultColumns, columnDefinitions })
@@ -155,13 +155,20 @@ const manager = useTableColumnManager({
 - `createColumn` 用于少数需要特殊宽度、插槽或渲染的候选列。
 - 远程场景使用 `columnSource.search` 搜索、`columnSource.resolve` 恢复未知的已选列；此时 `restore()` 返回 Promise。
 
-### `<TableColumnManager>` Props
+建议只传 `columnDefinitions` 或 `columnSource` 其中一个。兼容旧调用时若两者同时存在，本地定义作为候选目录；远程搜索仍会调用，但搜索结果不会替换本地定义，恢复未知列仍可调用远程 `resolve`。远程 `search` 每次只请求一页，当前不会根据 `nextCursor` 自动加载更多，也不使用 `total` 分页。需要全部候选项时由业务数据源返回完整结果。
+
+`restore()` 始终返回 Promise；远程 `resolve` 失败时拒绝，由调用方处理。状态只保存版本、叶子列和可选布局，`render` 等函数应保留在 `defaultColumns` 或业务列注册表中。打开面板会从当前列建立草稿，关闭不应用草稿；确认后才更新表格列。`required` 默认列不能删除，恢复时缺失会补回，`resetToDefault()` 恢复默认列。
+
+### TableColumnManager Props
 
 | 参数名        | 描述                               | 类型                                                    | 默认值     |
 | ------------- | ---------------------------------- | ------------------------------------------------------- | ---------- |
 | model-value   | 已选列完整状态（顺序、标题、冻结） | `ColumnManagerItem[]`                                   | `-`        |
 | default-value | 非受控初始已选状态                 | `ColumnManagerItem[]`                                   | `-`        |
 | columns       | 当前表格列，确认时拼回完整列定义   | `TableColumnData[]`                                     | `[]`       |
+| registry-columns | 隐藏默认列的完整注册表，恢复时保留渲染配置 | `TableColumnData[]` | `-` |
+| column-defaults | 新增普通列的默认配置 | `Partial<TableColumnData>` | `-` |
+| create-column | 根据候选定义构造新列 | `(definition: ColumnCatalogItem) => TableColumnData` | `-` |
 | options       | 左侧列定义                         | `ColumnDefinitions`                                     | `[]`       |
 | load-options  | 异步加载列定义                     | `() => Promise<ColumnDefinitions>`                      | `-`        |
 | remote-search | 远程搜索（有值时隐藏顶栏全选）     | `(keyword: string) => Promise<void>`                    | `-`        |
@@ -173,7 +180,7 @@ const manager = useTableColumnManager({
 | inline        | 是否只渲染内联面板（不渲染抽屉）   | `boolean`                                               | `false`    |
 | placeholder   | 搜索框占位                         | `string`                                                | `-`        |
 
-### Events
+### TableColumnManager Events
 
 | 事件名            | 描述                            | 参数                  |
 | ----------------- | ------------------------------- | --------------------- |
@@ -181,13 +188,15 @@ const manager = useTableColumnManager({
 | update:open       | 抽屉可见性变更                  | `boolean`             |
 | confirm           | 点击抽屉/弹窗确认后返回组装结果 | `ColumnManagerResult` |
 | change            | 选择、排序、冻结或标题变化      | `ColumnManagerItem[]` |
+| load-error        | 当前目录加载或远程搜索失败 | `error: unknown, source: 'catalog' \| 'search'` |
 
-### Methods
+### TableColumnManager Methods
 
 | 方法名      | 描述                     | 返回值                |
 | ----------- | ------------------------ | --------------------- |
 | getResult   | 按当前选择组装表格列结果 | `ColumnManagerResult` |
 | loadCatalog | 手动触发 `loadOptions`   | `Promise<void>`       |
+| resetInitialKeys | 以当前选择重置新增列判断的基准 | `void` |
 
 ### `useTableColumnManager`
 
@@ -201,6 +210,21 @@ const manager = useTableColumnManager({
 ```
 
 可通过 `headerActions` 配置要展示的表头操作 key，默认全部展示。
+
+返回成员如下，`Ref` / `ComputedRef` 在脚本中通过 `.value` 读取：
+
+| 成员 | 作用 |
+| --- | --- |
+| `columns`、`leafColumns`、`state` | 当前表格列、叶子列摘要和可持久化状态 |
+| `managerVisible`、`managerRef`、`managerProps` | 面板显示状态、实例引用和预绑定属性/事件 |
+| `open`、`close`、`confirm` | 打开并建立草稿、关闭、确认应用 |
+| `insertColumns`、`getInsertableItems` | 按锚点插入列、获取当前可插入的候选 |
+| `getEditInitialValues`、`applyEdit` | 获取编辑初值、应用标题及分组修改 |
+| `freezeColumn`、`removeColumn` | 冻结或取消冻结、删除可删除列 |
+| `resetToDefault`、`restore`、`handleColumnResize` | 重置、恢复持久化状态、保存列宽变更 |
+| `headerActions`、`columnActions`、`HeaderAction` | 可用表头操作、预绑定操作和表头按钮组件 |
+| `openInsert`、`insertVisible`、`insertSide`、`insertableItems`、`insertSelected`、`handleInsertConfirm` | 插入弹窗的入口、状态和确认方法 |
+| `openEdit`、`editVisible`、`editGroupTitle`、`editColumnTitle`、`handleEditConfirm` | 编辑弹窗的入口、状态和确认方法 |
 
 表头操作行为：
 
@@ -231,4 +255,14 @@ const manager = useTableColumnManager({
 
 `buildColumnsResult` / `stateFromColumns` / `applyColumnEdit` / `applyColumnFixed` / `applyInsertToLayout` / `mapLeafColumns` 等用于外部组合时拼装、编辑分组、冻结重排。扁平叶子列表请在业务侧从 `columns` 自行遍历，不必依赖 Table 导出。
 
-目录加载、远程搜索分别持有等待状态，旧任务不能解除新任务的等待。loadOptions 在创建时、函数更换时以及显式 loadCatalog 调用时读取，不由普通通知事件返回的 Promise 驱动；手动调用拒绝仍向调用方传递，自动读取异常进入 Vue 错误通道。hook 目录读取/远程搜索使用最新目录代次，restore 有独立代次，更新的列编辑或卸载令旧恢复结果失效。
+目录加载、远程搜索分别持有等待状态，旧任务不能解除新任务的等待。`loadOptions` 在创建时、函数更换时以及显式 `loadCatalog` 调用时读取；当前请求失败通过 `load-error` 通知，`source` 区分目录和搜索，失效请求不再通知。手动调用 `loadCatalog` 的 Promise 仍会拒绝，由调用方处理；自动加载和搜索的错误由事件报告。普通通知事件返回的 Promise 不驱动加载。hook 目录读取/远程搜索使用最新目录代次，restore 有独立代次，更新的列编辑或卸载令旧恢复结果失效。
+
+## CSS Variables
+
+<!-- component-css-variables:start -->
+
+本组件未声明独立的公共 CSS 变量。请使用本页公开的配置与布局入口。 组合控件的外观复用 `checkbox`、`dialog`、`drawer`、`input`、`menu`、`transfer` 的公共变量；共享变量可能同时影响同一 DOM 子树中的其他控件。
+
+内部自定义属性与测量中间值属于实现细节，不作为业务定制 API。
+
+<!-- component-css-variables:end -->

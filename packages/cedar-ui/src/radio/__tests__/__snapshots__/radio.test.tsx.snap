@@ -1,7 +1,7 @@
 // Vitest Snapshot v1
 
 exports[`Radio > render 1`] = `
-"<label class=\\"c-radio\\"><input class=\\"c-radio__input\\" type=\\"radio\\" tabindex=\\"0\\" aria-checked=\\"false\\" value=\\"true\\"><span class=\\"c-radio__control\\" aria-hidden=\\"true\\"><span class=\\"c-radio__icon\\"></span></span>
+"<label class=\\"c-radio\\"><input id=\\"v-0\\" class=\\"c-radio__input\\" type=\\"radio\\" tabindex=\\"0\\" aria-checked=\\"false\\" value=\\"true\\"><span class=\\"c-radio__control\\" aria-hidden=\\"true\\"><span class=\\"c-radio__icon\\"></span></span>
   <!--v-if-->
 </label>"
 `;

@@ -1,5 +1,7 @@
 <template>
   <trigger
+    ref="triggerRef"
+    :reference-attrs="referenceAttrs"
     :class="prefixCls"
     trigger="click"
     :placement="placement"
@@ -17,6 +19,7 @@
   >
     <slot />
     <template #content>
+      <div ref="dialogRef" :id="dialogId" role="dialog" tabindex="-1" :aria-label="confirmButtonText || t('popconfirm.confirmButtonText')" :aria-describedby="contentId">
       <div :class="`${prefixCls}-body`" :aria-busy="guardPending || mergedConfirmButtonLoading || cancelButtonProps?.loading || undefined">
         <span :class="`${prefixCls}-icon`">
           <slot name="icon">
@@ -26,7 +29,7 @@
             <icon-close-circle-fill v-else-if="type === 'error'" />
           </slot>
         </span>
-        <span :class="`${prefixCls}-content`">
+        <span :id="contentId" :class="`${prefixCls}-content`">
           <slot name="content">{{ content }}</slot>
         </span>
       </div>
@@ -51,12 +54,13 @@
           {{ confirmButtonText || t("popconfirm.confirmButtonText") }}
         </Button>
       </div>
+      </div>
     </template>
   </trigger>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref, watch } from "vue";
+import { computed, defineComponent, nextTick, onMounted, ref, useId, watch } from "vue";
 import { createNamespace, getPrefixCls } from "../_utils/global-config";
 import { IconInfoCircleFill } from "@cedar-design/icons-vue/icon-info-circle-fill";
 import { IconCheckCircleFill } from "@cedar-design/icons-vue/icon-check-circle-fill";
@@ -84,8 +88,8 @@ export default defineComponent({
     "guard-error": (error: unknown, action: "confirm" | "cancel") => true,
     "update:open": (visible: boolean) => true,
     /**
-     * @zh 气泡确认框的显隐状态改变时触发
-     * @en Triggered when the visible or hidden state of the bubble confirmation box changes
+     * @zh 请求更新气泡确认框的显隐状态时触发；受控父组件可能不接受
+     * @en Emitted when a visibility update is requested; a controlled parent may decline it
      * @param {boolean} visible
      */
     "open-change": (visible: boolean) => true,
@@ -113,9 +117,30 @@ export default defineComponent({
   setup(props, { emit }) {
     const prefixCls = getPrefixCls("popconfirm");
     const { t } = useI18n();
+    const dialogId = `c-popconfirm-${useId()}`;
+    const contentId = `${dialogId}-content`;
+    const dialogRef = ref<HTMLElement>();
+    const triggerRef = ref<{ getReference: () => HTMLElement | undefined }>();
 
     const _open = ref(props.defaultOpen);
     const computedOpen = computed(() => props.open ?? _open.value);
+    const referenceAttrs = computed(() => ({
+      "aria-haspopup": "dialog",
+      "aria-expanded": String(computedOpen.value),
+      "aria-controls": dialogId,
+    }));
+    const focusDialog = async () => {
+      await nextTick();
+      if (computedOpen.value) dialogRef.value?.focus({ preventScroll: true });
+    };
+    onMounted(() => { if (computedOpen.value) void focusDialog(); });
+    watch(computedOpen, (open, previous) => {
+      if (open) void focusDialog();
+      else if (previous && dialogRef.value?.contains(dialogRef.value.ownerDocument.activeElement)) {
+        const reference = triggerRef.value?.getReference();
+        if (reference?.isConnected) reference.focus({ preventScroll: true });
+      }
+    }, { flush: "sync" });
     const guard = useActionGuard();
     const pendingAction = ref<"confirm" | "cancel">();
     const mergedConfirmButtonLoading = computed(
@@ -204,6 +229,11 @@ export default defineComponent({
 
     return {
       prefixCls,
+      triggerRef,
+      dialogRef,
+      dialogId,
+      contentId,
+      referenceAttrs,
       guardPending: guard.pending,
       pendingAction,
       contentCls,

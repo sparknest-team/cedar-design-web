@@ -15,7 +15,22 @@
           <c-input placeholder="继承全局尺寸" />
           <c-button>继承尺寸</c-button>
         </c-space>
-      </c-config-provider>
+        <template v-if="__apiReview.slotEnabled['empty']" #empty="__reviewSlot"
+          ><DemoReviewSlot
+            name="empty"
+            :context="__reviewSlot"
+            :controls="__apiReview.controls"
+            :record="__apiReview.record"
+        /></template>
+        <template
+          v-if="__apiReview.slotEnabled['loading']"
+          #loading="__reviewSlot"
+          ><DemoReviewSlot
+            name="loading"
+            :context="__reviewSlot"
+            :controls="__apiReview.controls"
+            :record="__apiReview.record" /></template
+      ></c-config-provider>
       <p role="status">当前尺寸：{{ large ? "lg" : "sm" }}</p>
     </c-space>
   </DemoApiReviewPanel>

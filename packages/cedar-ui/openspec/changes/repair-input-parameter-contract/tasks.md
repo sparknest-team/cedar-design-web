@@ -1,0 +1,4 @@
+- [x] Reproduce invalid length crashes, negative slicing and missing diagnostics on both platforms.
+- [x] Add shared policy resolution and explicitly typed Password event forwarding.
+- [x] Verify all affected consumers, public type fixtures and real browser events.
+- [x] Reconcile bilingual docs, GroupLabel explanation and required gates.

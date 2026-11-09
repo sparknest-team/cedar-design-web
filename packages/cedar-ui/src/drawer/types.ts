@@ -1,3 +1,4 @@
+import type { ReadingDirection } from "@cedar-design/use";
 import type {
   BeforeHookDone,
   BeforeHookResult,
@@ -17,6 +18,7 @@ export type DrawerAction = "confirm" | "cancel" | "close";
 
 
 export interface DrawerConfig {
+  dir?: ReadingDirection;
   onGuardError?: (error: unknown, action: DrawerAction) => void;
 
   placement?: DrawerPlacement;

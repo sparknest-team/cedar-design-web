@@ -2,7 +2,7 @@
   <Teleport :to="popupTarget" :disabled="!mounted || popupContainer === false">
     <button
       v-show="visible"
-      v-bind="$attrs"
+      v-bind="mergeProps(themeScope, $attrs)"
       type="button"
       :dir="readingDirection"
       :class="
@@ -18,7 +18,8 @@
 </template>
 
 <script setup lang="ts">
-import { useAttrs } from 'vue'
+import { useThemeScope } from '../theme-provider/context'
+import { mergeProps, useAttrs } from 'vue'
 import { useDirection } from '../_utils/direction'
 import { IconToTop } from '@cedar-design/icons-vue'
 import { createNamespace, formatElevation } from '../_utils/global-config'
@@ -26,6 +27,9 @@ import { toSizeUnit } from '../_utils/maple/elements'
 import { usePopupContainer } from '../_utils/popup-container'
 import { backTopProps } from './props'
 import { useBackTop } from './use-back-top'
+
+
+const themeScope = useThemeScope()
 
 defineOptions({ name: createNamespace('back-top').name, inheritAttrs: false })
 const props = defineProps(backTopProps)

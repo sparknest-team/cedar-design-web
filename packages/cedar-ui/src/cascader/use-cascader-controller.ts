@@ -1,5 +1,4 @@
 import { useLazyOptions } from './use-lazy-options'
-import { resolveDirection } from "../_utils/direction";
 import {
   computed,
   provide,
@@ -44,7 +43,6 @@ export function useCascaderController(
 ) {
   const {
     checkStrictly,
-    loadMore,
     formatLabel,
     modelValue,
     disabled,
@@ -70,7 +68,7 @@ export function useCascaderController(
   } = useInputForm(props);
   const source = useOptionRequest<CascaderOption>(
     () => props.options,
-    () => mergedDisabled.value || mergedReadonly.value || !!props.readPretty,
+    () => mergedDisabled.value || !!props.readPretty,
     (error) => emit("load-error", error),
     () => 0,
     cascaderProps,
@@ -135,10 +133,6 @@ export function useCascaderController(
 
   const lazyLoadOptions = reactive<Record<string, CascaderOption[]>>({});
 
-  const addLazyLoadOptions = (children: CascaderOption[], key: string) => {
-    lazyLoadOptions[key] = children;
-  };
-
   const DEFAULT_FIELD_NAMES = {
     value: "value",
     label: "label",
@@ -168,7 +162,7 @@ export function useCascaderController(
   }
 
   watch(
-    [options, lazyLoadOptions, mergedFieldNames],
+    [options, lazyLoadOptions, mergedFieldNames, checkStrictly, () => props.loadMore],
     ([_options, _lazyLoadOptions, _fieldNames]) => {
       optionMap.clear();
       leafOptionMap.clear();
@@ -294,7 +288,7 @@ export function useCascaderController(
     const key = String(itemKey);
     if (
       mergedDisabled.value ||
-      mergedReadonly.value ||
+      mergedReadonly.value || loading.value || session.pending.value ||
       leafOptionMap.get(key)?.disabled ||
       !props.multiple
     ) {
@@ -441,7 +435,7 @@ export function useCascaderController(
   });
 
   const clearSelection = (e: Event) => {
-    if (mergedDisabled.value || mergedReadonly.value) {
+    if (mergedDisabled.value || mergedReadonly.value || loading.value || session.pending.value) {
       return;
     }
     e.stopPropagation();
@@ -491,7 +485,7 @@ export function useCascaderController(
     displayColumns,
     setActiveKey,
     setSelectedPath,
-    getNextActiveNode,
+    getNextActiveNode, navigateLevel,
   } = useSelectedPath(optionInfos, {
     optionMap,
     filteredLeafOptions,
@@ -505,33 +499,13 @@ export function useCascaderController(
       onClickOption: handleClickOption,
       setActiveKey,
       setSelectedPath,
-      loadMore,
       expandTrigger,
-      addLazyLoadOptions,
       expandOption,
       formatLabel,
       slots,
       valueMap: computedValueMap,
     }),
   );
-
-  // Screen left/right keys map to logical child/parent navigation without
-  // rewriting the original keyboard event or changing path/value order.
-  const navigateLevel = (event: Event, physicalRight: boolean) => {
-    if (showSearchPanel.value) return;
-    event.preventDefault();
-    const forward = physicalRight !== (resolveDirection(event.target as Element) === 'rtl');
-    const node = activeOption.value;
-    if (!node || node.disabled) return;
-    if (forward && node.children) {
-      setSelectedPath(node.key);
-      const child = node.children.find(option => !option.disabled);
-      if (child) setActiveKey(child.key);
-    } else if (!forward && node.parent) {
-      setSelectedPath(node.parent.key);
-      setActiveKey(node.parent.key);
-    }
-  };
 
   const dispatchKeyDown = getKeyDownHandler(
     new Map([
@@ -661,7 +635,7 @@ export function useCascaderController(
           label:
             props.formatLabel?.(option.path.map((item) => item.raw)) ??
             getOptionLabel(option),
-          closable: !option.disabled,
+          closable: !loading.value && !option.disabled,
           tagProps: option.tagProps,
         });
       } else if (props.fallbackOption) {
@@ -674,7 +648,7 @@ export function useCascaderController(
           key,
           value,
           label,
-          closable: true,
+          closable: !loading.value,
         });
       }
     });
@@ -696,7 +670,6 @@ export function useCascaderController(
     computedValueMap,
     setSelectedPath,
     setActiveKey,
-    addLazyLoadOptions,
     expandOption,
     optionInfos,
     filteredLeafOptions,

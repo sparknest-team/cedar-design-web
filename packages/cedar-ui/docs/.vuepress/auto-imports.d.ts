@@ -11,7 +11,7 @@ declare global {
   const ImagePreviewFn: typeof import('@cedar-design/ui').ImagePreviewFn
   const Message: typeof import('@cedar-design/ui').Message
   const Notification: typeof import('@cedar-design/ui').Notification
-  const StyleProvider: typeof import('@cedar-design/ui').StyleProvider
+  const ThemeProvider: typeof import('@cedar-design/ui').ThemeProvider
   const imagePreview: typeof import('@cedar-design/ui').imagePreview
   const previewImage: typeof import('@cedar-design/ui').previewImage
 }

@@ -6,7 +6,7 @@ const VerificationCode = withInstall(_VerificationCode, Object.assign(_Verificat
   components: [_VerificationCode],
 })
 
-export type VerificationCodeInstance = InstanceType<typeof _VerificationCode>
+export type VerificationCodeInstance = InstanceType<typeof _VerificationCode> & import('./types').VerificationCodeExpose
 export { VerificationCode, verificationCodeProps }
 export type {
   VerificationCodeAlign,

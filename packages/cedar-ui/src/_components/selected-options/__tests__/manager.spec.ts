@@ -150,39 +150,39 @@ for (const editMode of [(mobile ? 'popup' : 'click') as FieldEditMode, 'click'] 
       wrapper.unmount()
     })
     it('Cascader clears only the editor draft and cancellation restores the selection', async () => {
+      const host = document.createElement('div')
+      document.body.append(host)
       const wrapper = mount(Cascader, {
+        attachTo: host,
         props: {
           editMode,
           multiple: true,
           modelValue: ['a', 'b'],
-          clearable: false,
-          options: [
-            {
-              value: 'p',
-              label: 'Parent',
-              children: [
-                { value: 'a', label: 'A' },
-                { value: 'b', label: 'B' },
-              ],
-            },
-          ],
+          clearable: !mobile,
+          options: [{ value: 'p', label: 'Parent', children: [{ value: 'a', label: 'A' }, { value: 'b', label: 'B' }] }],
         },
         global,
       })
-      await wrapper.get('[aria-haspopup="dialog"]').trigger('click')
-      await flushPromises()
-      const manager = wrapper.getComponent(SelectedOptions)
-      expect(manager.props('items')).toHaveLength(2)
-      manager.vm.$emit('clear', new MouseEvent('click'))
-      await flushPromises()
-      expect(manager.props('items')).toHaveLength(0)
-      expect(wrapper.emitted('update:modelValue')).toBeUndefined()
-      await wrapper.get('[aria-label=关闭]').trigger('click')
-      await flushPromises()
-      await wrapper.get('[aria-haspopup="dialog"]').trigger('click')
-      await flushPromises()
-      expect(wrapper.getComponent(SelectedOptions).props('items')).toHaveLength(2)
-      wrapper.unmount()
+      try {
+        await wrapper.get('[aria-haspopup="dialog"]').trigger('click')
+        await flushPromises()
+        const panel = () => wrapper.getComponent(EditorPanel)
+        const selected = () => panel().getComponent(SelectedOptions)
+        expect(selected().props('items')).toHaveLength(2)
+        if (mobile) await selected().get('button.mp-selected-options__clear').trigger('click')
+        else await panel().get('.c-field-presentation__footer button').trigger('click')
+        await flushPromises()
+        expect(selected().props('items')).toHaveLength(0)
+        expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+        await panel().get('[aria-label=关闭]').trigger('click')
+        await flushPromises()
+        await wrapper.get('[aria-haspopup="dialog"]').trigger('click')
+        await flushPromises()
+        expect(selected().props('items')).toHaveLength(2)
+      } finally {
+        wrapper.unmount()
+        host.remove()
+      }
     })
   })
 }

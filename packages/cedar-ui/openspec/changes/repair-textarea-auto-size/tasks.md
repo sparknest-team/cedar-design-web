@@ -1,0 +1,4 @@
+- [x] Reproduce both box models, unequal borders and theme-minimum failures on both platforms.
+- [x] Correct measurement conversion and explicit row-bound precedence.
+- [x] Verify all direct and composed consumers, types, styles and browser behavior on both platforms.
+- [x] Reconcile real demos, bilingual docs and required gates.

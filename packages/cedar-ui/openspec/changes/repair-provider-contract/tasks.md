@@ -1,0 +1,5 @@
+- [x] Correct docs and slot/export/template contracts
+- [x] Repair EM01/EM02 local content priority and replacement click with recursion protection
+- [x] Verify all Cedar consumers and actual native interactions
+- [x] Validate both types and Maple Empty/Loading/LocaleProvider/StyleProvider
+- [x] Verify docs,source gates and repair stale Switch foreground assertion against registered contract

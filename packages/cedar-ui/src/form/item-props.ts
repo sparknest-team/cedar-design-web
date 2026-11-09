@@ -13,7 +13,6 @@ import type { FieldRule, ValidateStatus, ValidateTrigger } from "./types";
 export const formItemProps = {
   /** 编辑模式；未设置时继承 Form，字段可单独覆盖。 */
   editMode: fieldEditModeProp,
-  fieldEditModeProp,
   readPretty: readPrettyProp,
   /** 模型空值识别；不改变受控判定或清空输出。 */
   emptyValues: emptyValuesProp,

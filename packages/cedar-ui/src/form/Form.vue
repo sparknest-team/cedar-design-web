@@ -11,6 +11,8 @@
 </template>
 
 <script lang="ts">
+import type { SlotsType } from "vue";
+import type { FormSlots } from "./types";
 import { provideEmptyValues } from "../_utils/empty-value";
 import {
   computed,
@@ -41,7 +43,7 @@ import {
   type FormValidateErrors,
 } from "./form-controller";
 import { formProps } from "./props";
-import { FieldData, FieldRule, ValidatedError } from "./types";
+import { FieldData, FieldRule, ValidatedError, FormSubmitError } from "./types";
 import { useFormLabelWidths } from "./use-form-label-width";
 import { getFormElementId } from "./utils";
 
@@ -51,6 +53,7 @@ type FormLayout = (typeof FORM_LAYOUTS)[number];
 export default defineComponent({
   name: createNamespace("form").name,
   props: formProps,
+  slots: Object as SlotsType<FormSlots>,
   emits: {
     /**
      * @zh 表单提交时触发
@@ -81,7 +84,7 @@ export default defineComponent({
     "submit-failed": (
       data: {
         values: Record<string, any>;
-        errors: Record<string, ValidatedError>;
+        errors: Record<string, FormSubmitError>;
       },
       ev: Event,
     ) => true,
@@ -259,19 +262,34 @@ export default defineComponent({
     const unregisterFields = new WeakMap<FormItemInfo, () => void>();
     const addField = (formItemInfo: FormItemInfo) => {
       if (unregisterFields.has(formItemInfo)) return;
+      invalidateSubmitInputs();
       unregisterFields.set(
         formItemInfo,
         controller.registerField(formItemInfo),
       );
     };
     const removeField = (formItemInfo: FormItemInfo) => {
+      if (unregisterFields.has(formItemInfo)) invalidateSubmitInputs();
       unregisterFields.get(formItemInfo)?.();
       unregisterFields.delete(formItemInfo);
     };
     let submitEpoch = 0;
+    let pendingSubmitEpoch: number | undefined;
     const invalidateSubmit = () => {
       submitEpoch++;
+      pendingSubmitEpoch = undefined;
     };
+    function invalidateSubmitInputs() {
+      if (pendingSubmitEpoch === undefined) return;
+      invalidateSubmit();
+      controller.invalidate();
+      invalidateScroll();
+    }
+    watch(
+      [() => props.model, () => props.rules],
+      invalidateSubmitInputs,
+      { deep: true, flush: 'sync' },
+    );
     const validate = (
       callback?: (errors: FormValidateErrors<ValidatedError>) => void,
     ) => {
@@ -304,6 +322,8 @@ export default defineComponent({
       controller.setFields(data);
     };
     const handleSubmit = (e: Event) => {
+      invalidateSubmitInputs();
+      invalidateSubmit();
       if (presentationState.blocked()) {
         emit(
           "submit-failed",
@@ -318,14 +338,18 @@ export default defineComponent({
         return;
       }
       const epoch = ++submitEpoch;
-      controller.validate().then((errors) => {
+      pendingSubmitEpoch = epoch;
+      return controller.validate().then((errors) => {
         if (epoch !== submitEpoch) return;
+        pendingSubmitEpoch = undefined;
         if (errors) {
           emit("submit-failed", { values: model.value ?? {}, errors }, e);
         } else {
           emit("submit-success", model.value ?? {}, e);
         }
         emit("submit", { values: model.value ?? {}, errors }, e);
+      }).finally(() => {
+        if (pendingSubmitEpoch === epoch) pendingSubmitEpoch = undefined;
       });
     };
     const handleReset = (e: Event) => {
@@ -354,6 +378,7 @@ export default defineComponent({
         touchedFields,
         addField,
         removeField,
+        invalidateSubmitInputs,
         validateField,
         setLabelWidth,
         removeLabelWidth,

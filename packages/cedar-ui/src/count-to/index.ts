@@ -6,7 +6,7 @@ const CountTo = withInstall(_CountTo, Object.assign(_CountTo, {
 }), { components: [_CountTo] })
 
 export type CountToInstance = InstanceType<typeof _CountTo>
-export type { CountToProps } from './props'
+export type { CountToProps, CountToSlots, CountToEmits, CountToExpose } from './props'
 
 export { countToProps }
 export { CountTo }

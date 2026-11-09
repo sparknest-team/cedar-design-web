@@ -21,3 +21,6 @@ export { anchorProps }
 
 export default Anchor
 export type AnchorProps = import('vue').ExtractPublicPropTypes<typeof import('./props').anchorProps>
+
+export type { AnchorLinkProps } from './link-props'
+export type { AnchorBoundaryPosition } from './props'

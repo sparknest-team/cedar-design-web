@@ -1,4 +1,5 @@
-import { computed, defineComponent, h, markRaw, ref, toRaw, watch, withDirectives, type Component } from 'vue'
+import { useFormErrorDescription } from '../form/error-description'
+import { computed, defineComponent, h, markRaw, mergeProps, ref, toRaw, watch, withDirectives, type Component } from 'vue'
 import { IconFaceFrownFill } from '@cedar-design/icons-vue/icon-face-frown-fill'
 import { IconFaceMehFill } from '@cedar-design/icons-vue/icon-face-meh-fill'
 import { IconFaceSmileFill } from '@cedar-design/icons-vue/icon-face-smile-fill'
@@ -7,12 +8,13 @@ import { IconStarFill } from '@cedar-design/icons-vue/icon-star-fill'
 import { IconStarHalfFull } from '@cedar-design/icons-vue/icon-star-half-full'
 import { resolveEmptyValue } from '../_utils/empty-value'
 import { createNamespace } from '../_utils/global-config'
-import { positiveLength } from '../_utils/size-length'
+import { positiveLength, nonnegativeLength } from '../_utils/size-length'
 import Icon from '../icon'
 import Ripple from '../ripple'
 import { useDirection } from '../_utils/direction'
 import { rateProps, type RateColor, type RateIcon as RateIconValue } from './props'
 import { useRateForm } from './use-rate-form'
+import { normalizeRateCount } from './count'
 
 const { n, classes } = createNamespace('rate')
 const defaultIcons = {
@@ -27,8 +29,10 @@ const defaultIcons = {
 export default defineComponent({
   name: createNamespace('rate').name,
   props: rateProps,
+  inheritAttrs: false,
   emits: ['change', 'hover-change', 'update:modelValue'],
-  setup(props, { emit, slots, expose }) {
+  setup(props, { emit, slots, expose, attrs }) {
+    const { describe: describeError } = useFormErrorDescription()
     const root = ref<HTMLElement>()
     const { isRtl } = useDirection(() => root.value)
     expose({
@@ -38,13 +42,7 @@ export default defineComponent({
     const innerValue = ref<number | null>(props.defaultValue)
     const hoverValue = ref(0)
     const animation = ref(false)
-    const count = computed(() =>
-      props.grading
-        ? 5
-        : Number.isFinite(Number(props.count)) && Number(props.count) > 0
-          ? Math.max(1, Math.floor(Number(props.count)))
-          : 5,
-    )
+    const count = computed(() => props.grading ? 5 : normalizeRateCount(props.count))
     const value = computed(() => normalize((props.modelValue !== undefined ? props.modelValue : innerValue.value) ?? 0))
     const displayValue = computed(() => normalize(hoverValue.value || value.value))
     const { mergedDisabled, mergedReadonly, mergedError, eventHandlers } = useRateForm(props)
@@ -185,13 +183,14 @@ export default defineComponent({
       } else {
         return
       }
+      resetHover()
       event.preventDefault()
     }
 
     return () =>
       h(
         'div',
-        {
+        mergeProps({
           ref: root,
           class: classes(
             n(),
@@ -216,7 +215,7 @@ export default defineComponent({
           },
           onKeydown: keydown,
           onMouseleave: resetHover,
-        },
+        }, attrs, { 'aria-describedby': describeError(attrs['aria-describedby']) }),
         Array.from({ length: props.grading ? 5 : count.value }, (_, offset) => {
           const index = offset + 1
           const half = props.allowHalf && index - 0.5 === displayValue.value
@@ -238,7 +237,7 @@ export default defineComponent({
                 ],
                 style: {
                   color: active || half ? selectedColor : emptyColor,
-                  marginInlineEnd: index < count.value ? positiveLength(props.gap, '') : undefined,
+                  marginInlineEnd: index < count.value ? nonnegativeLength(props.gap, '') : undefined,
                 },
                 onMousemove: (event: MouseEvent) => hover(index, event),
                 onClick: (event: MouseEvent) => {

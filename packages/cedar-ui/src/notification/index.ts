@@ -119,6 +119,9 @@ const notificationInstance: {
 
 const notification = MESSAGE_TYPES.reduce((pre, value) => {
   pre[value] = (config, appContext?: AppContext) => {
+    if (typeof document === "undefined" || !document.body) {
+      return { close: () => {} };
+    }
     if (isString(config)) {
       config = { content: config };
     }
@@ -155,6 +158,7 @@ const Notification = {
   install: (app: App) => {
     const _notification = {
       clear: notification.clear,
+      remove: notification.remove,
     } as NotificationMethod;
 
     for (const key of MESSAGE_TYPES) {

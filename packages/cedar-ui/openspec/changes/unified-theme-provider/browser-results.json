@@ -1,0 +1,52 @@
+{
+  "cedar-design-web": {
+    "initial": {
+      "documentTheme": null,
+      "colors": {
+        "root": "rgb(18, 52, 86)",
+        "nested": "rgb(255, 255, 255)",
+        "root-popup": "rgb(18, 52, 86)",
+        "nested-popup": "rgb(255, 255, 255)",
+        "other-root": "rgb(255, 255, 255)"
+      },
+      "inheritedOverride": "teal"
+    },
+    "updated": {
+      "documentTheme": null,
+      "colors": {
+        "root": "rgb(255, 255, 255)",
+        "nested": "rgb(255, 255, 255)",
+        "root-popup": "rgb(255, 255, 255)",
+        "nested-popup": "rgb(255, 255, 255)",
+        "other-root": "rgb(255, 255, 255)"
+      },
+      "inheritedOverride": "teal"
+    },
+    "pageErrors": []
+  },
+  "maple-design-mobile": {
+    "initial": {
+      "documentTheme": null,
+      "colors": {
+        "root": "rgb(18, 52, 86)",
+        "nested": "rgb(255, 255, 255)",
+        "root-popup": "rgb(18, 52, 86)",
+        "nested-popup": "rgb(255, 255, 255)",
+        "other-root": "rgb(255, 255, 255)"
+      },
+      "inheritedOverride": "teal"
+    },
+    "updated": {
+      "documentTheme": null,
+      "colors": {
+        "root": "rgb(255, 255, 255)",
+        "nested": "rgb(255, 255, 255)",
+        "root-popup": "rgb(255, 255, 255)",
+        "nested-popup": "rgb(255, 255, 255)",
+        "other-root": "rgb(255, 255, 255)"
+      },
+      "inheritedOverride": "teal"
+    },
+    "pageErrors": []
+  }
+}

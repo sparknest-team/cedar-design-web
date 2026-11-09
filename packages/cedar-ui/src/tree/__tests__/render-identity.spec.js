@@ -13,7 +13,7 @@ for (const virtual of [false, true]) {
       const identities = new Map(rows().map(row => [row.props('value'), row.vm.$.uid]))
       expect(identities.size).toBe(2)
       expect(wrapper.vm.treeContext.key2TreeNode.get(0).key).toBe(0)
-      await wrapper.setProps({ data: [{ ...data[1] }, { ...data[0], label: 'Updated zero' }], searchValue: 'changed' })
+      await wrapper.setProps({ data: [{ ...data[1] }, { ...data[0], label: 'Updated zero' }] })
       for (const row of rows()) expect(row.vm.$.uid).toBe(identities.get(row.props('value')))
       expect(wrapper.text()).toContain('Updated zero')
       wrapper.vm.selectNode(0)

@@ -12,6 +12,12 @@ permalink: /components/form/
 
 Form 与 FormItem 的 content-align 支持 start、end、left、center、right，label-align 支持 start、end、left、right；默认内容 start、标签 end。默认 LTR 位置保持不变，RTL 按阅读方向排列；显式 left/right 均为物理对齐。字段覆盖优先于 Form，逐实例标签列样式保持最高优先级。切换方向不重置业务值、校验结果或只读/禁用状态。
 
+组件导出以下类型定义
+
+```ts
+import type { FormProps } from "@cedar-design/ui";
+```
+
 ## 基础示例
 
 ### 基础用法
@@ -43,7 +49,7 @@ Form 与 FormItem 的 content-align 支持 start、end、left、center、right�
 
 ### 表单布局
 
-`edit-mode` 表示编辑模式：`direct` 始终显示控件；`click` / `dblclick` 保留当前在字段附近展开编辑浮层的行为。`readPretty` 是独立布尔属性。FormItem 和字段未设置时继承上层。字段旧 `presentation` 属性已移除，使用 `edit-mode` 配置编辑模式。`presentation="inline"` 迁移为 `edit-mode="direct"`，`layout="inline"` 不变。
+`edit-mode` 表示编辑模式：`direct` 始终显示控件；`click` / `dblclick` 保留当前在字段附近展开编辑浮层的行为。`readPretty` 是独立布尔属性。FormItem 和字段未设置时继承上层。
 
 表单支持三种布局方式： horizontal - 水平排列（默认，标签在左、控件在右）， vertical - 垂直排列（标签在上、控件在下）， inline - 行内排列。
 
@@ -162,7 +168,7 @@ FormItem 显式配置优先于 Form。Col 参数与 style 对象整项覆盖，�
 
 Pause cross-field validation holds the local confirmation rule until Resolve cross-field result. Completion compares its confirmation value with the current source. Native reset settles pending tasks, clears the model and submitted snapshot, retains the history count and prevents late submission. This is not remote cancellation or exhaustive dependency-race coverage.
 
-“暂停跨字段校验”将确认规则挂起到“返回跨字段结果”，返回时比较本次确认值与当前源代码（不是远端接口或提交开始时的源快照）。匹配值提交后等待中修改源代码，会返回依赖错误；修正确认值并Enter重试后通过。等待中原生重置会结清本地任务、清空模型与提交快照、保留历史计数，不产生迟到提交；停用/卸载也清理等待。不代表异步循环依赖或多请求顺序均已覆盖。
+“暂停跨字段校验”示例通过手动返回结果模拟异步校验。提交等待期间修改依赖字段、重置表单或卸载组件，会使该次提交失效；确认当前输入后可重新提交。
 
 未暂停时确认规则立即比较当前源代码。先匹配通过，再修改源代码，主动只校验确认值或重新提交会显示依赖错误；改正确认值后可按 Enter 或提交按钮提交。原生重置清空模型、反馈和上次提交值，提交次数累计不清零。依赖由业务主动复验，单纯编辑不保证已有成功态仍有效；本地示例不等于任意异步提交竞争或外部持久化。
 
@@ -250,6 +256,10 @@ Form、FormItem、Input 和 Select 支持 edit-mode 继承，优先级为字段 
 
 <demo src="./__demos__/scroll-assign.vue"></demo>
 
+### 确认事件来源
+
+<demo src="./__demos__/change-source.vue"></demo>
+
 ## 动态与异步字段
 
 ### 动态表单
@@ -281,15 +291,15 @@ Form、FormItem、Input 和 Select 支持 edit-mode 继承，优先级为字段 
 
 ### 多字段异步聚合
 
-State-command addendum: public `clearValidate()` and `setFields()` also invalidate a pending native submission, including field-scoped calls. Old completion cannot append submit events after a clear or explicit error; a fresh native submission still validates normally. The earlier exclusion below now applies only to editing without revalidation. The Demo keeps old tasks available for manual settlement; this does not cancel real requests.
+State-command addendum: public `clearValidate()` and `setFields()` also invalidate a pending native submission, including field-scoped calls. Old completion cannot append submit events after a clear or explicit error; a fresh native submission still validates normally. Editing model values or changing rules while waiting also invalidates the pending submission. The Demo keeps old tasks available for manual settlement; this does not cancel real requests.
 
-显式调用validate()或validateField()会使等待中的旧原生submit失效：命令校验有自己的结果，不应让旧submit在完成后把旧错误或成功与当前模型混发。此后新的原生submit仍正常等待自己的字段校验并通知一次。该规则仅逻辑失效、不取消真实请求，不清空历史提交计数；既有方法签名不变，不保留旧的混发行为。仅编辑但未重新校验的快照协议仍未覆盖。
+显式调用validate()或validateField()会使等待中的旧原生submit失效：命令校验有自己的结果，不应让旧submit在完成后把旧错误或成功与当前模型混发。此后新的原生submit仍正常等待自己的字段校验并通知一次。该规则仅逻辑失效、不取消真实请求，不清空历史提交计数。等待中修改模型或规则也会使本次提交失效，需重新提交校验。
 
-Explicit validate() or validateField() invalidates a pending older native submit. The imperative result is independent: an older submit must not later combine stale errors or success with the current model. A fresh native submit still waits for its own fields and notifies once. This is logical invalidation, not request cancellation, and retains submission history. Method signatures are unchanged; stale mixed notifications are not retained for compatibility. This does not define editing-only snapshot behavior.
+Explicit validate() or validateField() invalidates a pending older native submit. The imperative result is independent: an older submit must not later combine stale errors or success with the current model. A fresh native submit still waits for its own fields and notifies once. This is logical invalidation, not request cancellation, and retains submission history. Method signatures are unchanged; stale mixed notifications are not retained for compatibility. Changing model values or validation rules while waiting also invalidates that submission; submit again to validate the new inputs.
 
 “返回最新用户名结果 / 返回最新代码结果”优先结清对应字段最新任务，可让新submit先完成、旧结果最后返回。新成功后旧失败不追加提交或恢复错误；新失败后旧成功不追加提交或清除新错误。仍须等最新提交的两个字段都返回，单个字段返回不提交；默认“返回用户名/代码结果”继续返回最早任务。
 
-原生submit采用最新提交生效：旧提交仍等待时再次提交，使旧提交的submit/submit-success/submit-failed续体失效。用guest/bad提交后改为admin/1234再提交；先返回旧两个结果，原生提交计数应仍0，新提交仍等自己的两个结果。反向旧成功/新失败同理，旧成功不能提前报通过。这个规则不取消真实请求，也不处理仅编辑但没有再次提交的业务快照。
+原生submit采用最新提交生效：旧提交仍等待时再次提交，使旧提交的submit/submit-success/submit-failed续体失效。用guest/bad提交后改为admin/1234再提交；先返回旧两个结果，原生提交计数应仍0，新提交仍等自己的两个结果。反向旧成功/新失败同理，旧成功不能提前报通过。这个规则不取消真实请求；等待中修改模型或规则同样使旧提交失效。
 
 原生submit等待中调用resetFields（含原生reset）会使该提交失效；旧Promise结清后不得再发submit、submit-success或submit-failed。停用/卸载同样使旧提交失效，后续新提交仍正常校验。此为逻辑失效，不是取消远端请求；并发submit和跨字段异步依赖不在这个重置协议内。
 
@@ -329,6 +339,36 @@ Explicit validate() or validateField() invalidates a pending older native submit
 
 <demo src="./__demos__/field-range-boundaries.vue"></demo>
 
+### 异步提交的输入归属
+
+原生提交只接受本次校验期间保持有效的响应式模型和规则。等待中修改任意模型字段（包括其他字段或改后恢复）、替换模型/规则、修改 FormItem 的规则/required/field，或增删已注册字段，会使本次提交失效。旧校验成功或失败都不再触发 submit、submit-success、submit-failed，也不触发自动错误滚动；需重新提交校验最新输入。这是逻辑失效，不取消请求、不自动重试，也不改变命令式 validate 的返回约定；已有提交历史保留。业务模型应使用响应式状态，让 Vue 能观察到输入变化。普通事件监听器返回的 Promise 不被收集。
+
+<demo src="./__demos__/submit-inputs.vue"></demo>
+
+### 动态字段与重置初值
+
+复用同一个 FormItem 时，field 变化会自动释放旧字段注册，并注册新的非空字段；清空 field 会取消注册。每个字段路径在该实例内保留首次可用初值，重访字段不会用当前编辑值覆盖初值。reset 按字段克隆初值，0、false、null 和缺失的 undefined 都保留。切换身份会取消旧编辑器、清理旧反馈，并使旧字段集合的校验回调失效；已经启动的命令式校验 Promise 仍独立结算，调用方管理自己的结果文案。
+
+已有模型对象中的缺失属性会记录为 undefined；替换模型或规则不重新建立已缓存初值。异步数据若应作为初值，可在数据就绪后绑定 field 或渲染 FormItem；重新创建实例会建立新的初值基线。
+
+<demo src="./__demos__/field-identity.vue"></demo>
+
+### 五档密度与项目间距
+
+xs/sm/md/lg/xl 均通过 size 类选择对应几何。项目下间距和验证文案预留高度共同使用 size-*-item-margin-bottom；inline 使用独立 inline-item-margin-bottom，error/help 不重复添加项目下间距。
+
+| 变量                                  | 默认值                      |
+| ------------------------------------- | --------------------------- |
+| `--c-form-size-xl-height`             | `var(--c-size-xl)`          |
+| `--c-form-size-xl-label-font-size`    | `var(--c-sys-font-size-lg)` |
+| `--c-form-size-xl-item-margin-bottom` | `var(--c-spacing-8)`        |
+
+### edit-mode 继承规则
+
+Form 支持 `direct / click / dblclick`；未设置时保留字段各自的默认值，FormItem 和字段继承上层显式设置的值，字段显式值优先。readPretty 是阅读属性，与 readonly/disabled 分开。确认编辑未结束时整表提交会失败并保留草稿；reset 取消编辑。原有默认插槽与 v-model 保持不变，不需要 editor 插槽。
+
+`read-pretty` 为独立布尔属性，与 `readonly`、`disabled` 同级；字段 > FormItem > Form 继承，显式 `false` 覆盖父级。默认 `false`。纯阅读不显示编辑器。
+
 ## 业务流程
 
 ### 巡检任务完整流程
@@ -350,6 +390,9 @@ Explicit validate() or validateField() invalidates a pending older native submit
 
 ## API
 
+通过 edit-mode 设置编辑方式，通过 read-pretty 设置阅读状态。内部描述符名称 fieldEditModeProp 不是 Form 或 FormItem 的公开属性。
+
+
 ### 空值识别与阅读空文案
 
 Form / FormItem 通过 `empty-values` 提供空值识别策略；字段自己的 `empty-value` 决定清空输出。`empty-text` 仅在 `read-pretty` 空内容下展示，默认 `'-'`，字段 > FormItem > Form，自定义 read 插槽优先。显式配置 empty-values 后，内置 required 接入该策略，自定义校验仍收到原值。详见[统一说明](/guide/empty-values/)。
@@ -361,7 +404,7 @@ Form / FormItem 通过 `empty-values` 提供空值识别策略；字段自己的
 
 以上是字段展示层 API；纯面板不因此新增阅读模式。Form 与 FormItem 提供继承配置。empty-value 的现有类型与默认输出仍按该组件原 API 执行。
 
-### `<Form>` Props
+### Form Props
 
 | 参数名            | 描述                                                                                                    | 类型                                       |        默认值         |
 | ----------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------ | :-------------------: |
@@ -384,16 +427,16 @@ Form / FormItem 通过 `empty-values` 提供空值识别策略；字段自己的
 | id                | 表单控件`id`的前缀                                                                                      | `string`                                   |          `-`          |
 | scroll-to-error   | 验证失败后滚动到页面顺序的第一个（start）或最后一个（end）错误字段；不是视口对齐方式                    | `'start' \| 'end'`                         |        不滚动         |
 
-### `<Form>` Events
+### Form Events
 
 | 事件名         | 描述                                   | 参数                                                                                                      |
 | -------------- | -------------------------------------- | --------------------------------------------------------------------------------------------------------- |
 | submit         | 表单提交时触发                         | data: `{values: Record<string, any>; errors: Record<string, ValidatedError> \| undefined}`<br>ev: `Event` |
 | submit-success | 验证成功时触发                         | values: `Record<string, any>`<br>ev: `Event`                                                              |
-| submit-failed  | 验证失败时触发                         | data: `{values: Record<string, any>; errors: Record<string, ValidatedError>}`<br>ev: `Event`              |
+| submit-failed  | 验证失败时触发                         | data: `{values: Record<string, any>; errors: Record<string, FormSubmitError>}`<br>ev: `Event`              |
 | reset          | 原生重置时触发，并重置字段值与校验状态 | ev: `Event`                                                                                               |
 
-### `<form>` Methods
+### Form Methods
 
 | 方法名        | 描述                 | 参数                                                                                                     | 返回值                                               |
 | ------------- | -------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
@@ -404,7 +447,7 @@ Form / FormItem 通过 `empty-values` 提供空值识别策略；字段自己的
 | setFields     | 设置表单项的值和状态 | data: `Record<string, FieldData>`                                                                        | -                                                    |
 | scrollToField | 滚动到指定表单项     | `field: string`                                                                                          | `-`                                                  |
 
-### `<FormItem>` Props
+### FormItem Props
 
 未传布局、标签/内容栅格、样式、对齐和 flex 时继承 Form；显式值覆盖。
 
@@ -445,7 +488,7 @@ Form / FormItem 通过 `empty-values` 提供空值识别策略；字段自己的
 | label-component   | 表单项标签渲染的元素                                                                                    | `string`                                              |    `'label'`     |
 | label-attrs       | 标签原生属性；for 指向控件真实 id                                                                       | `object`                                              |       `-`        |
 
-### `<FormItem>` Slots
+### FormItem Slots
 
 | 插槽名 |   描述   | 参数 |
 | ------ | :------: | ---- |
@@ -453,7 +496,7 @@ Form / FormItem 通过 `empty-values` 提供空值识别策略；字段自己的
 | help   | 帮助信息 | -    |
 | extra  | 额外内容 | -    |
 
-## Type
+## Types
 
 ### FieldRule
 
@@ -479,14 +522,14 @@ Form / FormItem 通过 `empty-values` 提供空值识别策略；字段自己的
 | deepEqual | 数组元素是否相等（array）         | `any`                                                                                                       |   `-`   |
 | empty     | 是否为空（object）                | `boolean`                                                                                                   | `false` |
 | hasKeys   | 对象是否包含给定属性（object）    | `string[]`                                                                                                  |   `-`   |
-| validator | 自定义校验规则                    | `(    value: FieldValue \| undefined,    callback: (error?: string) => void  ) => void`                     |   `-`   |
+| validator | 自定义校验；context 含 model/field；异步必须返回 Promise | `(value, callback, context?) => void \| Promise<void>` | `-` |
 
 ### FieldData
 
 | 参数名  | 描述           | 类型             | 默认值 |
 | ------- | -------------- | ---------------- | :----: |
 | value   | 字段的值       | `any`            |  `-`   |
-| status  | 字段的状态     | `ValidateStatus` |  `-`   |
+| status  | 字段的状态     | `ValidateStatus`<br>`'error' \| 'success' \| 'warning' \| 'validating'` |  `-`   |
 | message | 字段的错误信息 | `string`         |  `-`   |
 
 ### ValidatedError
@@ -525,26 +568,142 @@ const useFormItem = (data: {
 };
 ```
 
-## 类型定义
+### Cedar 规则协议
 
-组件导出以下类型定义
+FieldRule 保留对象规则及 callback 错误通路：调用 callback(message) 表示业务不通过，异步规则必须返回 Promise，正常完成且没有错误回调才表示通过。仅稍后调用 callback 却不返回 Promise 不在等待合同内；返回 false 或错误字符串不会替代 callback。
+
+意外 throw 或 Promise 拒绝会让公开 validate 拒绝，调用方用 try/catch 处理；最新任务释放 validating 并恢复之前的业务错误，不合成业务校验失败。旧任务异常不会清除新任务的等待状态。
 
 ```ts
-import type { FormProps } from "@cedar-design/ui";
+import type { FieldRule } from '@cedar-design/ui'
+const nameRule: FieldRule<string> = {
+  validator: async (value, callback, context) => {
+    await Promise.resolve()
+    if (!value) callback(`${context?.field} is required`)
+  },
+}
 ```
 
-### 五档密度与项目间距
+### 公开校验与通知合同
 
-xs/sm/md/lg/xl 均通过 size 类选择对应几何。项目下间距和验证文案预留高度共同使用 size-*-item-margin-bottom；inline 使用独立 inline-item-margin-bottom，error/help 不重复添加项目下间距。
+Form 与 FormItem 的默认插槽没有作用域参数；FormItem 还提供 label、help、extra 插槽，均不通过参数操作模型。Form 使用 model 对象及字段路径管理状态，不以插槽参数替代业务模型。
 
-| 变量                                  | 默认值                      |
-| ------------------------------------- | --------------------------- |
-| `--c-form-size-xl-height`             | `var(--c-size-xl)`          |
-| `--c-form-size-xl-label-font-size`    | `var(--c-sys-font-size-lg)` |
-| `--c-form-size-xl-item-margin-bottom` | `var(--c-spacing-8)`        |
+`validate(callback?)` 和 `validateField(fields, callback?)` 等待对应规则，成功返回 undefined，业务失败返回按字段聚合的错误对象；回调只通知当前有效任务。错误记录包含 field、message、label、value、type、isRequiredError。value 保留原字段值，不先转换成显示文字。
 
-### edit-mode 继承规则
+submit-success 先于 submit 通知，业务校验失败时 submit-failed 先于 submit。编辑会话未完成的阻止分支只通知 submit-failed，其 errors.editing 只有 field="editing" 与 message，不伪造字段校验信息；公开类型 FormSubmitError 区分该提示与完整 ValidatedError。
 
-Form 支持 `direct / click / dblclick`；未设置时保留字段各自的默认值，FormItem 和字段继承上层显式设置的值，字段显式值优先。readPretty 是阅读属性，与 readonly/disabled 分开。确认编辑未结束时整表提交会失败并保留草稿；reset 取消编辑。原有默认插槽与 v-model 保持不变，不需要 editor 插槽。
+这些事件是通知，不等待监听器 Promise，也不自动执行请求或切换 loading。业务异步保存自行控制 loading。原生 reset 会阻止默认行为、执行 resetFields 后通知 reset；Form 的 resetFields 会写回 model，与 FilterForm 内部 Form 的职责不同。
 
-`read-pretty` 为独立布尔属性，与 `readonly`、`disabled` 同级；字段 > FormItem > Form 继承，显式 `false` 覆盖父级。默认 `false`。纯阅读不显示编辑器。
+`beforeCommit` 属于支持编辑事务的字段组件，签名为 `(payload, done, context) => void | boolean | Promise<void | boolean>`；payload 含 value、previousValue，context 含 signal 和可选 event。返回 undefined 表示等待 done；返回布尔或 Promise 按结果结算。它不是 Form 的 submit 事件或通用加载入口。
+
+```ts
+import type {
+  FormProps, FormItemProps, FormInstance, FormItemInstance,
+  ValidatedError, FormValidateErrors, FieldData,
+  FormEmits, FormSlots, FormItemSlots, FormSubmitError,
+  BeforeFieldCommit,
+} from '@cedar-design/ui'
+```
+自定义表单控件可在 `setup` 中调用 `useFormErrorDescription()`，将返回的 `describe(existingIds)` 绑定到实际交互元素的 `aria-describedby`。它会保留已有描述，并在 FormItem 显示或清除错误时同步添加或移除错误 ID；控件不在 FormItem 内时仅保留已有描述。
+
+## CSS Variables
+
+<!-- component-css-variables:start -->
+
+通过以下变量定制组件外观。默认值随表中注明的主题或选择器条件变化；变量仅在对应的尺寸、变体和交互状态下生效。
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| 变量 | 默认值／条件 | 影响的样式 |
+| --- | --- | --- |
+| `--c-form-error-text-font-size` | `var(--c-font-size-body-1)` | `font-size` |
+| `--c-form-extra-margin-bottom` | `var(--c-spacing-2)` | `margin-bottom` |
+| `--c-form-extra-margin-top` | `var(--c-spacing-2)` | `margin-top` |
+| `--c-form-extra-text-color` | `var(--c-sys-color-content-secondary)` | `color` |
+| `--c-form-extra-text-font-size` | `var(--c-font-size-body-1)` | `font-size` |
+| `--c-form-feedback-icon-font-size` | `14px` | `font-size` |
+| `--c-form-feedback-icon-right` | `9px` | `inset-inline-end` |
+| `--c-form-feedback-loading-font-size` | `12px` | `font-size` |
+| `--c-form-has-feedback-control-padding-right` | `28px` | `padding-inline-end` |
+| `--c-form-inline-item-margin-bottom` | `var(--c-spacing-4)` | `margin-bottom` |
+| `--c-form-inline-item-margin-right` | `var(--c-spacing-9)` | `margin-inline-end` |
+| `--c-form-label-margin-right` | `var(--c-spacing-7)` | `padding-inline-end` |
+| `--c-form-label-text-color` | `var(--c-sys-color-content-primary)` | `color` |
+| `--c-form-line-height` | `var(--c-line-height)` | `line-height`, `padding-top` |
+| `--c-form-required-symbol-color` | `var(--c-sys-color-content-danger)` | `color` |
+| `--c-form-required-symbol-font-size` | `var(--c-font-size-body-1)` | `font-size` |
+| `--c-form-size-lg-height` | `var(--c-size-lg)` | `line-height`, `min-height` |
+| `--c-form-size-lg-item-margin-bottom` | `var(--c-spacing-8)` | `line-height`, `margin-bottom`, `min-height` |
+| `--c-form-size-lg-label-font-size` | `var(--c-font-size-body-3)` | `font-size` |
+| `--c-form-size-md-height` | `var(--c-size-md)` | `line-height`, `min-height` |
+| `--c-form-size-md-item-margin-bottom` | `var(--c-spacing-8)` | `line-height`, `margin-bottom`, `min-height` |
+| `--c-form-size-md-label-font-size` | `var(--c-font-size-body-3)` | `font-size` |
+| `--c-form-size-sm-height` | `var(--c-size-sm)` | `line-height`, `min-height` |
+| `--c-form-size-sm-item-margin-bottom` | `var(--c-spacing-8)` | `line-height`, `margin-bottom`, `min-height` |
+| `--c-form-size-sm-label-font-size` | `var(--c-font-size-body-3)` | `font-size` |
+| `--c-form-size-xl-height` | `var(--c-size-xl)` | `line-height`, `min-height` |
+| `--c-form-size-xl-item-margin-bottom` | `var(--c-spacing-8)` | `line-height`, `margin-bottom`, `min-height` |
+| `--c-form-size-xl-label-font-size` | `var(--c-sys-font-size-lg)` | `font-size` |
+| `--c-form-size-xs-height` | `var(--c-size-xs)` | `line-height`, `min-height` |
+| `--c-form-size-xs-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height` |
+| `--c-form-size-xs-label-font-size` | `var(--c-font-size-body-1)` | `font-size` |
+| `--c-form-status-error-bg` | `var(--c-color-danger-light-1)` | `background-color` |
+| `--c-form-status-error-border-color` | `transparent` | `border-color` |
+| `--c-form-status-error-focus-bg` | `var(--c-color-bg-2)` | `background-color` |
+| `--c-form-status-error-focus-border-color` | `var(--c-sys-color-content-danger)` | `border-color` |
+| `--c-form-status-error-focus-shadow-color` | `var(--c-color-danger-light-2)` | `box-shadow` |
+| `--c-form-status-error-focus-shadow-size` | `var(--c-shadow-distance-none)` | `box-shadow` |
+| `--c-form-status-error-hover-bg` | `var(--c-color-danger-light-2)` | `background-color` |
+| `--c-form-status-error-hover-border-color` | `transparent` | `border-color` |
+| `--c-form-status-error-tip-icon-color` | `var(--c-sys-color-content-danger)` | `color` |
+| `--c-form-status-error-tip-text-color` | `var(--c-sys-color-content-danger)` | `color` |
+| `--c-form-status-success-bg` | `var(--c-color-fill-2)` | `background-color` |
+| `--c-form-status-success-border-color` | `transparent` | `border-color` |
+| `--c-form-status-success-focus-bg` | `var(--c-color-bg-2)` | `background-color` |
+| `--c-form-status-success-focus-border-color` | `var(--c-sys-color-content-success)` | `border-color` |
+| `--c-form-status-success-focus-shadow-color` | `var(--c-color-success-light-2)` | `box-shadow` |
+| `--c-form-status-success-focus-shadow-size` | `var(--c-shadow-distance-none)` | `box-shadow` |
+| `--c-form-status-success-hover-bg` | `var(--c-color-fill-3)` | `background-color` |
+| `--c-form-status-success-hover-border-color` | `transparent` | `border-color` |
+| `--c-form-status-success-tip-icon-color` | `var(--c-sys-color-content-success)` | `color` |
+| `--c-form-status-success-tip-text-color` | `var(--c-sys-color-content-success)` | `color` |
+| `--c-form-status-validating-bg` | `var(--c-color-fill-2)` | `background-color` |
+| `--c-form-status-validating-border-color` | `transparent` | `border-color` |
+| `--c-form-status-validating-focus-bg` | `var(--c-color-bg-2)` | `background-color` |
+| `--c-form-status-validating-focus-border-color` | `var(--c-sys-color-content-brand)` | `border-color` |
+| `--c-form-status-validating-focus-shadow-color` | `var(--c-color-primary-light-2)` | `box-shadow` |
+| `--c-form-status-validating-focus-shadow-size` | `var(--c-shadow-distance-none)` | `box-shadow` |
+| `--c-form-status-validating-hover-bg` | `var(--c-color-fill-3)` | `background-color` |
+| `--c-form-status-validating-hover-border-color` | `transparent` | `border-color` |
+| `--c-form-status-validating-tip-icon-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-form-status-validating-tip-text-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-form-status-warning-bg` | `var(--c-color-warning-light-1)` | `background-color` |
+| `--c-form-status-warning-border-color` | `transparent` | `border-color` |
+| `--c-form-status-warning-focus-bg` | `var(--c-color-bg-2)` | `background-color` |
+| `--c-form-status-warning-focus-border-color` | `var(--c-sys-color-content-warning)` | `border-color` |
+| `--c-form-status-warning-focus-shadow-color` | `var(--c-color-warning-light-2)` | `box-shadow` |
+| `--c-form-status-warning-focus-shadow-size` | `var(--c-shadow-distance-none)` | `box-shadow` |
+| `--c-form-status-warning-hover-bg` | `var(--c-color-warning-light-2)` | `background-color` |
+| `--c-form-status-warning-hover-border-color` | `transparent` | `border-color` |
+| `--c-form-status-warning-tip-icon-color` | `var(--c-sys-color-content-warning)` | `color` |
+| `--c-form-status-warning-tip-text-color` | `var(--c-sys-color-content-warning)` | `color` |
+| `--c-form-tooltip-margin-left` | `var(--c-sys-space-2)` | `margin-inline-start` |
+| `--c-form-tooltip-text-color` | `var(--c-sys-color-content-secondary)` | `color` |
+| `--c-form-transition-duration-3` | `var(--c-transition-duration-3)` | `transition` |
+| `--c-form-transition-duration-5` | `var(--c-transition-duration-5)` | `animation` |
+| `--c-form-transition-timing-function-linear` | `var(--c-transition-timing-function-linear)` | `animation`, `transition` |
+| `--c-form-vertical-label-margin-bottom` | `var(--c-spacing-4)` | `margin-bottom`, `padding-top` |
+
+</div>
+
+将覆盖设置在组件实际根节点或弹层真实挂载祖先上。例如给该元素添加下列 class，再按需替换变量值：
+
+```css
+.component-theme {
+  --c-form-error-text-font-size: var(--c-font-size-body-1);
+}
+```
+
+显式行内样式及直接写入同一 CSS 属性的 Props 优先于样式表默认值。Teleport 后，普通 CSS 变量按实际挂载位置继承；使用 ThemeProvider 时，请遵循其局部主题与弹层配置规则。局部定制请直接覆盖组件变量；仅修改后代的 system 变量不会重新计算从根继承的组件别名。内部变量不属于公共 API。
+
+<!-- component-css-variables:end -->

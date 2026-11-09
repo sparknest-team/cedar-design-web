@@ -1,0 +1,1 @@
+Adopt normalized typed tag uniqueness, stable private occurrence keys, safe finite integer folding, public-only Props and complete existing API documentation. Preserve legal duplicates, separate drafts, existing events and manual shared loading contracts. No Maple InputTag is introduced.

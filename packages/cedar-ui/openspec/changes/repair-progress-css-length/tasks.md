@@ -1,0 +1,3 @@
+- [x] Resolve relative CSS lengths and layout-space diameter on both platforms.
+- [x] Verify dynamic styles, mode changes, lifecycle cleanup and transformed ancestors.
+- [x] Run affected tests, type checks and browser verification; update bilingual documentation.

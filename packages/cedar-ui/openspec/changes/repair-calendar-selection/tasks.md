@@ -1,0 +1,1 @@
+- [x] Verify month and year selection, Today and navigation in tests and Chromium

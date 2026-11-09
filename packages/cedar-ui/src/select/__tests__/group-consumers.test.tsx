@@ -4,7 +4,7 @@ import { expect, test } from 'vitest'
 import Select from '..'
 import SelectMenu from '../SelectMenu'
 
-test('SelectMenu renders flat heading/option siblings for the group-title spacing consumers', () => {
+test('SelectMenu groups titles and options with independent accessible labels', () => {
   const wrapper = mount(Select, {
     props: { defaultOpen: true, options: [
       { isGroup: true, label: 'First group', options: [{ value: 'a', label: 'A' }] },
@@ -16,11 +16,14 @@ test('SelectMenu renders flat heading/option siblings for the group-title spacin
     const menu = wrapper.findComponent(SelectMenu)
     const headings = menu.findAll('.c-select-group-title')
     expect(headings.map(node => node.text())).toEqual(['First group', 'Second group'])
-    expect(headings[0].element.matches(':first-child')).toBe(true)
-    expect(headings[1].element.matches(':first-child')).toBe(false)
-    expect(headings[0].element.parentElement).toBe(headings[1].element.parentElement)
-    expect(headings[0].element.nextElementSibling?.getAttribute('role')).toBe('option')
-    expect(menu.find('.c-select-group').exists()).toBe(false)
+    const groups=menu.findAll('[role="group"]')
+    expect(groups).toHaveLength(2)
+    expect(groups[0].attributes('aria-labelledby')).toBe(headings[0].attributes('id'))
+    expect(groups[1].attributes('aria-labelledby')).toBe(headings[1].attributes('id'))
+    expect(groups[0].element.matches(':first-child')).toBe(true)
+    expect(groups[1].element.matches(':first-child')).toBe(false)
+    expect(groups[0].findAll('[role="option"]')).toHaveLength(1)
+
   } finally {
     wrapper.unmount()
   }

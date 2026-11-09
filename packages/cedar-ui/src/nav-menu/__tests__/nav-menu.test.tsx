@@ -165,3 +165,37 @@ test('hovering branches moved into More preserves the overflow ancestor', async 
   expect(row(w, 'parent').attributes('aria-expanded')).toBe('false')
   expect(row(w, 'second').attributes('aria-expanded')).toBe('true')
 })
+
+
+test('initial auto expansion skips disabled ancestors while preserving explicit expansion', async () => {
+  const branches = [{ key: 'enabled', label: 'Enabled', children: [{ key: 'blocked', label: 'Blocked', disabled: true, children: [{ key: 'leaf', label: 'Leaf' }] }] }]
+  const automatic = await create({ options: branches, defaultValue: 'leaf' })
+  expect(row(automatic, 'enabled').attributes('aria-expanded')).toBe('true')
+  expect(row(automatic, 'blocked').attributes('aria-expanded')).toBe('false')
+  expect(row(automatic, 'leaf').exists()).toBe(false)
+  const explicit = await create({ options: branches, defaultValue: 'leaf', defaultExpandedKeys: ['blocked'] })
+  expect(row(explicit, 'blocked').attributes('aria-expanded')).toBe('true')
+  expect(row(explicit, 'leaf').exists()).toBe(true)
+  const controlled = await create({ options: branches, modelValue: 'leaf', expandedKeys: ['enabled', 'blocked'] })
+  expect(row(controlled, 'leaf').exists()).toBe(true)
+})
+
+test('localizes the overflow entry and preserves a caller supplied label', async () => {
+  const { addI18nMessages, useLocale } = await import('../../locale')
+  const { default: english } = await import('../../locale/lang/en-us')
+  addI18nMessages({ 'en-US': english })
+  const w = await create({ options, mode: 'horizontal' })
+  const root = w.find('nav').element
+  Object.defineProperty(root, 'clientWidth', { configurable: true, value: 100 })
+  for (const el of Array.from(w.find('.c-nav-menu__measure').element.children)) el.getBoundingClientRect = () => ({ width: 90 } as DOMRect)
+  ;(w.vm as any).resize(); await settle()
+  try {
+    expect(row(w, '__nav_more').text()).toContain('更多')
+    useLocale('en-US'); await settle()
+    expect(row(w, '__nav_more').text()).toContain('More')
+    await w.setProps({ overflowLabel: 'Extras' }); await settle()
+    expect(row(w, '__nav_more').text()).toContain('Extras')
+    useLocale('zh-CN'); await settle()
+    expect(row(w, '__nav_more').text()).toContain('Extras')
+  } finally { useLocale('zh-CN') }
+})

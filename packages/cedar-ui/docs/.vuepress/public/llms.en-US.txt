@@ -87,7 +87,6 @@ Documentation language: en-US.
 - [Split](./llms/en-US/components/split.md): /en/components/split/
 - [Statistic](./llms/en-US/components/statistic.md): /en/components/statistic/
 - [Steps](./llms/en-US/components/steps.md): /en/components/steps/
-- [Style Provider](./llms/en-US/components/style-provider.md): /en/components/style-provider/
 - [Style Atomic Css](./llms/en-US/components/style/atomic-css.md): /en/components/style/atomic-css/
 - [Style Atomic Usage](./llms/en-US/components/style/atomic-usage.md): /en/components/style/atomic-usage/
 - [Style Color](./llms/en-US/components/style/color.md): /en/components/style/color/
@@ -100,6 +99,7 @@ Documentation language: en-US.
 - [Tabs](./llms/en-US/components/tabs.md): /en/components/tabs/
 - [Tag](./llms/en-US/components/tag.md): /en/components/tag/
 - [Textarea](./llms/en-US/components/textarea.md): /en/components/textarea/
+- [ThemeProvider](./llms/en-US/components/theme-provider.md): /en/components/theme-provider/
 - [Time Picker](./llms/en-US/components/time-picker.md): /en/components/time-picker/
 - [TimeRange](./llms/en-US/components/time-range.md): /en/components/time-range/
 - [Time](./llms/en-US/components/time.md): /en/components/time/
@@ -118,4 +118,4 @@ Documentation language: en-US.
 - [LLM documentation](./llms/en-US/guide/llms.md): /en/guide/llms/
 - [Cedar Design Web](./llms/en-US/index.md): /en/
 - [Loading and waiting](./llms/en-US/showcase/loading.md): /en/showcase/loading/
-- [Themes](./llms/en-US/themes.md): /en/themes/
+- [Theme presets](./llms/en-US/themes.md): /en/themes/

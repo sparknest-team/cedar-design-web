@@ -55,8 +55,9 @@ export interface ElementLoading extends HTMLElement {
     container: HTMLElement;
     options: LoadingRenderOptions;
     restorePosition: boolean;
-    releaseLock?: () => void;
+    releaseBodyLock?: () => void;
     fullscreen: boolean;
+    previousBusy: string | null;
   };
 }
 
@@ -117,7 +118,7 @@ const createInstance = (
   )?.$?.appContext;
   render(vnode, container);
 
-  const releaseLock = fullscreen ? acquireBodyLock(document) : undefined;
+  const releaseBodyLock = fullscreen ? acquireBodyLock(document) : undefined;
   if (fullscreen) {
     document.body.appendChild(container);
   } else {
@@ -125,11 +126,14 @@ const createInstance = (
     el.appendChild(container);
   }
 
+  const previousBusy = el.getAttribute("aria-busy");
+  el.setAttribute("aria-busy", "true");
   el[INSTANCE_KEY] = {
+    previousBusy,
     options,
     container,
     restorePosition,
-    releaseLock,
+    releaseBodyLock,
     fullscreen,
   };
 };
@@ -162,7 +166,11 @@ const removeInstance = (el: ElementLoading) => {
   instance.container.remove();
   if (instance.restorePosition)
     el.classList.remove("c-loading-parent--relative");
-  instance.releaseLock?.();
+  instance.releaseBodyLock?.();
+  if (el.getAttribute("aria-busy") === "true") {
+    if (instance.previousBusy == null) el.removeAttribute("aria-busy");
+    else el.setAttribute("aria-busy", instance.previousBusy);
+  }
   el[INSTANCE_KEY] = undefined;
 };
 

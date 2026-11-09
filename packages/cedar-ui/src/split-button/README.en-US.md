@@ -94,27 +94,37 @@ click is a normal emitted event and supports async handlers. Business state cont
 
 ## Reading direction
 
-The primary action sits at reading start and the menu button at reading end. Direction changes neither swap actions nor select a value. Enter/Space retains native button behavior. Up/Down opens the menu and skips disabled items; Home/End focuses boundaries, Enter selects and Escape closes and restores focus. Popovers inherit the reference direction; start/end alignment follows reading direction while explicit left/right remains physical. Downward slot graphics are not mirrored.
+The main button sits at inline start and the menu button at inline end. LTR/RTL changes do not swap business actions or emit extra selections. Enter/Space retain native button behavior. The menu button opens via Up/Down and skips disabled options; Home/End reaches boundaries, Enter selects, and Escape closes and restores focus. Popovers inherit trigger direction; start/end alignment follows direction while explicit left/right stays physical. Custom downward icons are not mirrored automatically.
+
+## Menu button name
+
+The menu trigger defaults to a localized “More actions” name. Override it with `aria-label` or `aria-labelledby` through `trigger-button-props`.
+
+## Triggers and positioning
+
+### Popup placement
+
+Use `placement` to position the extra-actions menu. See `MenuPlacement` for the available values.
 
 ## API
 
-### `<split-button>` Props
+### SplitButton Props
 
 | Parameter | Description | Type | Default |
 | -------------------- | ----------------------------------------- | ------------------------------------------------ | :-------: |
 | open **(v-model)** | Whether the menu is open | `boolean` | `-` |
 | default-open | Default menu open state in uncontrolled mode | `boolean` | `false` |
 | disabled | Whether the entire split button is disabled | `boolean` | `false` |
-| status | Button group semantic status | `SemanticStatus` | `default` |
-| variant | Button group variant | `ButtonVariant` | `default` |
-| size | Button group size | `ComponentSize` | `md` |
-| color | Background color | `string` | `''` |
+| status | Button group semantic status | `SemanticStatus`<br>`'default' \| 'primary' \| 'secondary' \| 'tertiary' \| 'info' \| 'success' \| 'warning' \| 'danger'` | `default` |
+| variant | Button group variant | `ButtonVariant`<br>`'text' \| 'default' \| 'outline' \| 'tonal'` | `default` |
+| size | Button group size; does not affect menu item size | `ComponentSize`<br>`'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `md` |
+| color | Background color | `string` | `undefined` |
 | text-color | Custom text color | `string` | `''` |
 | elevation | Button group elevation | `boolean \| number` | `true` |
-| button-props | Props for the primary button | `Partial<ButtonProps>` | `-` |
-| trigger-button-props | Props for the menu trigger button | `Partial<ButtonProps>` | `-` |
+| button-props | Primary button props, including native attributes and events | `SplitButtonButtonProps` | `-` |
+| trigger-button-props | Menu trigger button props, including native attributes and events | `SplitButtonButtonProps` | `-` |
 | trigger | Menu trigger method | `'hover' \| 'click' \| 'focus' \| 'contextMenu'` | `click` |
-| placement | Preferred popup side relative to the trigger, default bottom. With the default auto-fit-position enabled, Trigger may flip and constrain it to the viewport when space is limited; this is not a fixed final position | `MenuPlacement`: the standard twelve placements | `bottom` |
+| placement | Preferred popup side relative to the trigger, default bottom. With the default auto-fit-position enabled, Trigger may flip and constrain it to the viewport when space is limited; this is not a fixed final position | `MenuPlacement`<br>`'left' \| 'right' \| 'bottom' \| 'top' \| 'top-start' \| 'top-end' \| 'bottom-start' \| 'bottom-end' \| 'left-start' \| 'left-end' \| 'right-start' \| 'right-end'` | `bottom` |
 | popup-container | Menu mount container | `PopupContainer` | `-` |
 | popup-max-height | Maximum menu height | `boolean \| number` | `true` |
 | popup-class | Menu popup class | `string \| array \| object` | `-` |
@@ -122,24 +132,24 @@ The primary action sits at reading start and the menu button at reading end. Dir
 | offset-y | Screen-vertical offset; numbers are px, strings are converted as lengths | `string \| number` | `0` |
 | hide-on-select | Close the menu after selection | `boolean` | `true` |
 
-### `<split-button>` Events
+### SplitButton Events
 
 | Event | Description | Arguments |
 | ----------- | -------------------------- | -------------------- |
 | update:open | Emitted when an open-state update is requested | open: `boolean` |
-| open-change | Emitted when the menu open state changes | open: `boolean` |
+| open-change | Emitted when an open-state update is requested | open: `boolean` |
 | click | Emitted when the primary button is clicked | event: `MouseEvent` |
 | select | Emitted when a menu option is selected | value, option, event |
 
-### `<split-button>` Slots
+### SplitButton Slots
 
-| Slot | Description | Arguments |
+| Slot | Description | Prop |
 | ------- | ---------------- | --------------- |
 | default | Primary button content | - |
 | icon | Menu trigger button icon | open: `boolean` |
 | content | Menu content | - |
 
-### Instance methods
+### SplitButton Methods
 
 | Method | Description |
 | -------- | -------------------------- |
@@ -149,17 +159,20 @@ The primary action sits at reading start and the menu button at reading end. Dir
 
 Controlled `open` emits update requests only; callers must update it. Main-button clicks bubble normally without opening the menu.
 
-Like Button, `click` is a Promise-consuming `onClick` callback prop supporting `@click`, not a second emitted notification. If `button-props.onClick` is also supplied, each handler runs once.
+`click`, like Button's event, is a notification and does not await its listener result. Business code controls main-button loading through `button-props.loading`.
 
-Both platforms independently copy bodies, props, style dependency entries and contract tests. Cedar adapts positioning through Menu without shared instances/runtime.
-
-## Type definitions
+## Types
 
 ```ts
 import type { SplitButtonInstance, SplitButtonProps } from '@cedar-design/ui'
 ```
 
+## CSS Variables
 
-### Placement semantics and configuration
+<!-- component-css-variables:start -->
 
-The menu side passes through the internal Menu placement to Trigger and uses MenuPlacement, without a second positioning entry.
+This component declares no independent public CSS variables. Use the configuration and layout APIs documented on this page. The appearance of composed controls follows the public variables of `button`, `menu`; a shared variable can affect other controls in the same DOM subtree.
+
+Internal custom properties and measurement values are implementation details and are not customization APIs.
+
+<!-- component-css-variables:end -->

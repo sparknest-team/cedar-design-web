@@ -45,7 +45,7 @@ export default defineComponent({
       default: true,
     },
   },
-  emits: ['change'],
+  emits: ['change', 'load-error'],
   setup(props, { emit, expose }) {
     const { showCheckable, selectedValues, treeProps, scrollbar } = toRefs(props)
     const { displayScrollbar, scrollbarProps } = useScrollbar(scrollbar)
@@ -173,6 +173,7 @@ export default defineComponent({
           // @ts-ignore
           onSelect={onSelect}
           onCheck={onCheck}
+          onLoadError={(error: unknown, node: TreeNodeData) => emit('load-error', error, node)}
           v-slots={{
             ...props.treeSlots,
             label: (node: TreeNodeData, status: any) => {
@@ -182,7 +183,8 @@ export default defineComponent({
                   id={nodeId(key)}
                   role="treeitem"
                   aria-selected={status.selected}
-                  aria-checked={props.showCheckable ? status.checked : undefined}
+                  aria-checked={props.showCheckable ? (status.indeterminate ? 'mixed' : status.checked) : undefined}
+                  aria-busy={status.loading || undefined}
                   aria-disabled={visibleNodeMap.value.get(key)?.disabled}
                   aria-expanded={status.isLeaf ? undefined : status.expanded}
                   class={[`${prefixCls}-option`, { [`${prefixCls}-option-active`]: key === activeKey.value }]}

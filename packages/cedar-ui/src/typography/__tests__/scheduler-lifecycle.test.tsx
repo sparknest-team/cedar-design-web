@@ -7,11 +7,12 @@ import { clipboard } from '../../_utils/clipboard'
 import measure from '../utils/measure'
 import { raf, caf } from '../../_utils/raf'
 
-vi.mock('../../_utils/clipboard', () => ({ clipboard: vi.fn() }))
+vi.mock('../../_utils/clipboard', () => ({ clipboard: vi.fn().mockResolvedValue(true) }))
 vi.mock('../utils/measure', () => ({ default: vi.fn(() => ({ ellipsis: true, text: 'short' })) }))
 vi.mock('../../_utils/raf', () => ({ raf: vi.fn(), caf: vi.fn() }))
 
 const Observer = defineComponent({ emits: ['resize'], setup: (_, { slots }) => () => slots.default?.() })
+const TooltipStub = defineComponent({ props: { open: Boolean }, setup: (_, { slots }) => () => slots.default?.() })
 const mounts: ReturnType<typeof mount>[] = []
 const frames: (() => void)[] = []
 
@@ -22,11 +23,11 @@ function setup(props: Record<string, unknown> = {}, onCopy?: () => void) {
     setup: () => () => h(KeepAlive, null, {
       default: () => active.value ? h(Base, { component: 'span', copyable: true, ...config, onCopy }, { default: () => 'long content' }) : null,
     }),
-  }), { global: { stubs: { CResizeObserver: Observer, CTypographyOperations: true, CTooltip: true } } })
+  }), { global: { stubs: { CResizeObserver: Observer, CTypographyOperations: true, CTooltip: TooltipStub } } })
   mounts.push(root)
   const base = root.findComponent(Base)
   const operations = () => base.findComponent(Operations)
-  const copy = operations().exists() ? operations().vm.$.vnode.props!.onCopy as () => void : () => {}
+  const copy = operations().exists() ? operations().vm.$.vnode.props!.onCopy as () => Promise<void> : async () => {}
   const resize = () => base.findComponent(Observer).vm.$emit('resize')
   return { root, base, active, config, operations, copy, resize }
 }
@@ -34,6 +35,7 @@ function setup(props: Record<string, unknown> = {}, onCopy?: () => void) {
 beforeEach(() => {
   vi.useFakeTimers()
   vi.clearAllMocks()
+  vi.mocked(clipboard).mockReset().mockResolvedValue(true)
   frames.length = 0
   vi.mocked(raf).mockImplementation((callback: FrameRequestCallback) => {
     frames.push(() => callback(0))
@@ -47,18 +49,67 @@ afterEach(() => {
 })
 
 describe('Typography scheduler ownership', () => {
+  test.each([NaN, -1, Infinity, 2147483648])('invalid copy delay %s falls back to the normal feedback duration', async (copyDelay) => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const s = setup({ copyDelay })
+    await s.copy(); await nextTick()
+    vi.advanceTimersByTime(2999); await nextTick()
+    expect(s.operations().props('isCopied')).toBe(true)
+    vi.advanceTimersByTime(1); await nextTick()
+    expect(s.operations().props('isCopied')).toBe(false)
+  })
+  test('zero copy delay remains valid', async () => {
+    const s = setup({ copyDelay: 0 })
+    await s.copy(); await nextTick()
+    expect(s.operations().props('isCopied')).toBe(true)
+    vi.advanceTimersByTime(0); await nextTick()
+    expect(s.operations().props('isCopied')).toBe(false)
+  })
+  test('copy feedback and notification wait for a successful write', async () => {
+    let resolve!: (value: boolean) => void
+    vi.mocked(clipboard).mockReturnValueOnce(new Promise((done) => { resolve = done }))
+    const s = setup()
+    const pending = s.copy()
+    await nextTick()
+    expect(s.operations().props('isCopied')).toBe(false)
+    expect(s.base.emitted('copy')).toBeUndefined()
+    resolve(true); await pending; await nextTick()
+    expect(s.operations().props('isCopied')).toBe(true)
+    expect(s.base.emitted('copy')).toHaveLength(1)
+  })
+  test('failed and superseded writes never report copied', async () => {
+    let resolve!: (value: boolean) => void
+    vi.mocked(clipboard).mockReturnValueOnce(new Promise((done) => { resolve = done })).mockResolvedValueOnce(false)
+    const s = setup()
+    const old = s.copy()
+    await s.copy()
+    resolve(true); await old; await nextTick()
+    expect(s.operations().props('isCopied')).toBe(false)
+    expect(s.base.emitted('copy')).toBeUndefined()
+    expect(vi.getTimerCount()).toBe(0)
+  })
+  test('write completion after deactivation cannot report copied', async () => {
+    let resolve!: (value: boolean) => void
+    vi.mocked(clipboard).mockReturnValueOnce(new Promise((done) => { resolve = done }))
+    const s = setup()
+    const pending = s.copy()
+    s.active.value = false; await nextTick()
+    resolve(true); await pending
+    expect(s.base.emitted('copy')).toBeUndefined()
+    expect(vi.getTimerCount()).toBe(0)
+  })
   test('current copy feedback uses the existing 3000ms delay', async () => {
     const s = setup()
-    s.copy(); await nextTick()
+    await s.copy(); await nextTick()
     expect(s.operations().props('isCopied')).toBe(true)
     vi.advanceTimersByTime(2999); await nextTick()
     expect(s.operations().props('isCopied')).toBe(true)
     vi.advanceTimersByTime(1); await nextTick()
     expect(s.operations().props('isCopied')).toBe(false)
   })
-  test('replacement copy cancels its previous timer', () => {
+  test('replacement copy cancels its previous timer', async () => {
     const s = setup()
-    s.copy(); s.copy()
+    await s.copy(); await s.copy()
     expect(vi.getTimerCount()).toBe(1)
   })
   test('old copy completion cannot clear a newer feedback', async () => {
@@ -67,9 +118,9 @@ describe('Typography scheduler ownership', () => {
     const timers = vi.fn(schedule)
     globalThis.setTimeout = timers as typeof globalThis.setTimeout
     try {
-      s.copy()
+      await s.copy()
       const old = timers.mock.calls.at(-1)![0] as () => void
-      s.copy(); old(); await nextTick()
+      await s.copy(); old(); await nextTick()
       expect(s.operations().props('isCopied')).toBe(true)
     } finally {
       // Restore while the fake clock is still installed. A global spy retained
@@ -91,11 +142,11 @@ describe('Typography scheduler ownership', () => {
     expect(clipboard).not.toHaveBeenCalled()
     expect(vi.getTimerCount()).toBe(0)
   })
-  test('reentrant copy listener disposal cannot schedule work', () => {
+  test('reentrant copy listener disposal cannot schedule work', async () => {
     let dispose = () => {}
     const s = setup({}, () => dispose())
     dispose = () => s.root.unmount()
-    s.copy()
+    await s.copy()
     expect(vi.getTimerCount()).toBe(0)
   })
   test('disabled copy does not write clipboard', () => {
@@ -161,7 +212,7 @@ describe('Typography scheduler ownership', () => {
     s.copy(); s.config.copyDelay = 10; await nextTick()
     expect(vi.getTimerCount()).toBe(0)
     expect(s.operations().props('isCopied')).toBe(false)
-    s.copy(); vi.advanceTimersByTime(10); await nextTick()
+    await s.copy(); vi.advanceTimersByTime(10); await nextTick()
     expect(s.operations().props('isCopied')).toBe(false)
   })
   test('copyable off cancels pending feedback and retained copy', async () => {
@@ -199,11 +250,12 @@ describe('Typography scheduler ownership', () => {
     expand(); await nextTick(); old()
     expect(measure).not.toHaveBeenCalled()
   })
-  test('reentrant copy event keeps only the newest feedback timer', () => {
+  test('reentrant copy event keeps only the newest feedback timer', async () => {
     let repeat = () => {}
+    let repeated: Promise<void> | undefined
     const s = setup({}, () => repeat())
-    repeat = () => { repeat = () => {}; s.copy() }
-    s.copy()
+    repeat = () => { repeat = () => {}; repeated = s.copy() }
+    await s.copy(); await repeated
     expect(clipboard).toHaveBeenCalledTimes(2)
     expect(vi.getTimerCount()).toBe(1)
   })
@@ -220,7 +272,7 @@ describe('Typography scheduler ownership', () => {
   test('CSS ellipsis observer is inert while inactive and rebinds on activation', async () => {
     const s = setup({ ellipsis: { css: true } })
     const wrapper = s.base.get('span').element
-    const content = wrapper.querySelector('span')!
+    const content = wrapper.querySelector('span')!.querySelector('span')!
     const descriptor = Object.getOwnPropertyDescriptor(content, 'offsetHeight')
     let reads = 0
     Object.defineProperty(content, 'offsetHeight', { configurable: true, get: () => { reads++; return 20 } })

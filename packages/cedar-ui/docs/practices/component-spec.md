@@ -7,7 +7,7 @@
 > Cedar/Maple 共用的 API、Token、测试、可访问性、SSR 与版本规则以
 > `design-ui/standards/` 为准；本文只补充 Cedar 的目录和实现约定。
 
-> 新增 / 调整方向、位置或方位 API，必须先读共享 [API 命名规范](../../../../../design-ui/standards/api-design.md)，登记语义与值域，并运行仓库根目录 `pnpm check:api-naming`；既有待迁移项不能作为新组件命名先例。
+> 新增 / 调整方向、位置或方位 API，必须先读共享 API 命名规范（工作区文件 `design-ui/standards/api-design.md`），登记语义与值域，并运行仓库根目录 `pnpm check:api-naming`；既有待迁移项不能作为新组件命名先例。
 
 ---
 
@@ -173,7 +173,7 @@ export type ButtonProps = ExtractPropTypes<typeof buttonProps>;
 
 ### 4.3 通用 prop 语义（必须遵守）
 
-Button/SplitButton 的 click/touchstart 使用普通 Emits 通知，支持 async 监听器，但不使用监听器返回值驱动加载。业务通过 loading（SplitButton 通过 buttonProps.loading）控制等待，并在 finally 中恢复；错误处理使用正常的 Vue 事件错误链。基础 Button 不提供 action 或 autoLoading 任务入口。
+Button/SplitButton 的 click 使用普通 Emits 通知，支持 async 监听器，但不使用监听器返回值驱动加载。业务通过 loading（SplitButton 通过 buttonProps.loading）控制等待，并在 finally 中恢复；错误处理使用正常的 Vue 事件错误链。基础 Button 不提供 action 或 autoLoading 任务入口。
 
 某些 prop 在多个组件中反复出现，**必须保持一致语义**，组件不得自行赋予不同含义：
 
@@ -328,6 +328,8 @@ export function useXxxGroup() {
 
 ## 8. 文档规范（README.md）
 
+API 标题遵守共享 组件结构规范（工作区文件 `design-ui/standards/component-anatomy.md` 的「API 文档标题」章节），中英文均采用 `ComponentName Props / Events / Slots / Methods`，组件名不加尖括号或反引号。每页只保留一个 API 入口，子组件分类平级排列；共享属性按实际组件完整展示，配置类型归入 Types。
+
 示例分组遵守 `design-ui/standards/demo-design.md`：同类功能放在一起，每张案例最多组合三个相关维度，基础案例在前，功能调试在后；两端同步案例名称、说明和源码引用。
 
 固定段落顺序：
@@ -355,17 +357,17 @@ permalink: /components/<component>/
 
 ## API
 
-### `<Component>` Props
+### ComponentName Props
 
 | 属性 | 说明 | 类型 | 默认值 |
 
-### `<Component>` Events
+### ComponentName Events
 
-### `<Component>` Slots
+### ComponentName Slots
 
-### `<ComponentGroup>` Props // 如有
+### ComponentGroup Props // 如有
 
-## 类型定义
+## Types
 
 组件导出以下类型定义
 
@@ -374,7 +376,7 @@ import type { ComponentProps } from "@cedar-design/ui";
 ```
 ````
 
-### 样式变量
+## CSS Variables
 
 | 变量名 | 默认值 |
 

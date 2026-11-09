@@ -46,17 +46,33 @@ export const calendarProps = {
       type: Array as PropType<('month' | 'year')[]>,
       default: () => ['month', 'year'],
     },
+    /**
+     * @zh 是否允许选择日期
+     * @en Whether date selection is allowed
+     */
     allowSelect: {
       type: Boolean,
       default: true,
     },
+    /**
+     * @zh 是否使用紧凑面板
+     * @en Whether to use the compact panel
+     */
     panel: {
       type: Boolean,
       default: false,
     },
+    /**
+     * @zh 面板宽度，单位为像素
+     * @en Panel width in pixels
+     */
     panelWidth: {
       type: Number,
     },
+    /**
+     * @zh 是否显示面板底部的今天按钮
+     * @en Whether to show the panel footer Today button
+     */
     panelTodayBtn: {
       type: Boolean,
       default: false,

@@ -14,4 +14,4 @@ export { ResizeBox }
 export { resizeBoxProps }
 
 export default ResizeBox
-export type ResizeBoxProps = import('vue').ExtractPublicPropTypes<typeof import('./props').resizeBoxProps>
+export type { ResizeBoxProps, ResizeBoxDirection } from './props'

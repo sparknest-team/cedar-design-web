@@ -1,22 +1,16 @@
+import type { CSSProperties, PropType } from 'vue'
+import { fieldPresentationProps } from '../_components/field-presentation/props'
+import { openTriggerTargetProp } from '../_components/picker-field/open-trigger'
+import type { OptionsLoader } from '../_hooks/use-option-request'
+import type { ComponentSize } from '../_utils/constant'
+import { emptyValueProp } from '../_utils/empty-value'
+import type { OptionSearchField } from '../_utils/option-data'
+import { popupContainerProp } from '../_utils/popup-container'
 import { fieldLoadingProps } from '../field-decorator/props'
-import { openTriggerTargetProp } from "../_components/picker-field/open-trigger";
-import type { OptionsLoader } from "../_hooks/use-option-request";
-import { emptyValueProp } from "../_utils/empty-value";
-import type { OptionSearchField } from "../_utils/option-data";
-import type { CSSProperties, PropType } from "vue";
-import { fieldPresentationProps } from "../_components/field-presentation/props";
-import type { VirtualListProps } from "../_components/virtual-list-v2/interface";
-import type { ComponentSize } from "../_utils/constant";
-import { popupContainerProp } from "../_utils/popup-container";
-import type { ScrollbarProps } from "../scrollbar";
-import type {
-  TreeFieldNames,
-  TreeNodeData,
-  TreeNodeValue,
-  TreeProps,
-} from "../tree/types";
-import type { TriggerProps } from "../trigger";
-import type { LabelValue } from "./types";
+import type { ScrollbarProps } from '../scrollbar'
+import type { TreeFieldNames, TreeNodeData, TreeNodeValue, TreeProps } from '../tree/types'
+import type { TriggerProps } from '../trigger'
+import type { TreeSelectValue } from './types'
 
 export const treeSelectProps = {
   ...fieldLoadingProps,
@@ -25,7 +19,7 @@ export const treeSelectProps = {
   caseSensitive: { type: Boolean, default: false },
   searchFields: {
     type: Array as PropType<readonly OptionSearchField[]>,
-    default: () => ["label"],
+    default: () => ['label'],
   },
   ...fieldPresentationProps,
   emptyValue: emptyValueProp<TreeNodeValue | TreeNodeValue[] | undefined>(),
@@ -110,18 +104,14 @@ export const treeSelectProps = {
    * @en Default value
    * */
   defaultValue: {
-    type: [String, Number, Array, Object] as PropType<
-      string | number | Array<string | number> | LabelValue | LabelValue[]
-    >,
+    type: [String, Number, Array, Object] as PropType<TreeSelectValue>,
   },
   /**
    * @zh 绑定值
    * @en Value
    * */
   modelValue: {
-    type: [String, Number, Array, Object] as PropType<
-      string | number | Array<string | number> | LabelValue | LabelValue[]
-    >,
+    type: [String, Number, Array, Object] as PropType<TreeSelectValue>,
   },
   /**
    * @zh 指定节点数据中的字段名
@@ -135,9 +125,7 @@ export const treeSelectProps = {
    * @en Data
    * */
   data: {
-    type: [Array, Function] as PropType<
-      readonly TreeNodeData[] | OptionsLoader<TreeNodeData>
-    >,
+    type: [Array, Function] as PropType<readonly TreeNodeData[] | OptionsLoader<TreeNodeData>>,
     default: undefined,
   },
   /**
@@ -166,8 +154,8 @@ export const treeSelectProps = {
    * @en Customized echo method
    * */
   treeCheckedStrategy: {
-    type: String as PropType<"all" | "parent" | "child">,
-    default: "all",
+    type: String as PropType<'all' | 'parent' | 'child'>,
+    default: 'all',
   },
   /**
    * @zh 可以接受所有 [Tree](/vue/component/tree) 组件的Props
@@ -218,9 +206,7 @@ export const treeSelectProps = {
    * @en Custom node filter function
    * */
   filterTreeNode: {
-    type: Function as PropType<
-      (searchKey: string, nodeData: TreeNodeData) => boolean
-    >,
+    type: Function as PropType<(searchKey: string, nodeData: TreeNodeData) => boolean>,
   },
   /**
    * @zh 动态加载数据
@@ -246,9 +232,7 @@ export const treeSelectProps = {
    * @en Customize node data for keys that do not match options
    */
   fallbackOption: {
-    type: [Boolean, Function] as PropType<
-      boolean | ((value: number | string) => TreeNodeData | boolean)
-    >,
+    type: [Boolean, Function] as PropType<boolean | ((value: number | string) => TreeNodeData | boolean)>,
     default: true,
   },
   /**
@@ -257,12 +241,7 @@ export const treeSelectProps = {
    */
   selectable: {
     type: [Boolean, String, Function] as PropType<
-      | boolean
-      | "leaf"
-      | ((
-          node: TreeNodeData,
-          info: { isLeaf: boolean; level: number },
-        ) => boolean)
+      boolean | 'leaf' | ((node: TreeNodeData, info: { isLeaf: boolean; level: number }) => boolean)
     >,
     default: true,
   },
@@ -304,6 +283,6 @@ export const treeSelectProps = {
    */
   defaultInputValue: {
     type: String,
-    default: "",
+    default: '',
   },
-};
+}

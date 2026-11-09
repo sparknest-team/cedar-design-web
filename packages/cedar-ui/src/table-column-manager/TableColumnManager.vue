@@ -78,6 +78,7 @@ const emit = defineEmits<{
   (e: 'update:open', value: boolean): void
   (e: 'confirm', result: ColumnManagerResult): void
   (e: 'change', value: ColumnManagerItem[]): void
+  (e: 'load-error', error: unknown, source: 'catalog' | 'search'): void
 }>()
 
 const prefixCls = getPrefixCls('table-column-manager')
@@ -207,6 +208,9 @@ const loadCatalog = async () => {
   try {
     const result = await loader()
     if (isCurrent()) innerCatalog.value = cloneDeep(result)
+  } catch (error) {
+    if (isCurrent()) emit('load-error', error, 'catalog')
+    throw error
   } finally {
     if (isCurrent()) catalogPending.value = false
   }
@@ -220,11 +224,13 @@ const handleSearch = async (value: string, type: 'source' | 'target') => {
   searchPending.value = true
   try {
     await search(value)
+  } catch (error) {
+    if (isCurrent()) emit('load-error', error, 'search')
   } finally {
     if (isCurrent()) searchPending.value = false
   }
 }
-watch(() => props.loadOptions, () => loadCatalog(), { immediate: true })
+watch(() => props.loadOptions, () => { void loadCatalog().catch(() => {}) }, { immediate: true })
 watch(() => props.remoteSearch, () => { searchRequest.invalidate(); searchPending.value = false })
 
 const insertVisible = computed({

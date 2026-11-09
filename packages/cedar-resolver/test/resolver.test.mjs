@@ -209,7 +209,7 @@ test("every component exposed by CedarVue has a resolver alias", () => {
 });
 
 test("resolves components without styles with no side effects", () => {
-  for (const name of ["CContext", "CStyleProvider"]) {
+  for (const name of ["CContext", "CThemeProvider"]) {
     assert.deepEqual(components.resolve(name), {
       from: "@cedar-design/ui",
       name: `_${name.slice(1)}Component`,
@@ -247,9 +247,9 @@ test("resolves programmatic APIs and directives", () => {
       `@cedar-design/ui/${style}/style`,
     ]);
   }
-  assert.deepEqual(autoImports.resolve("StyleProvider"), {
+  assert.deepEqual(autoImports.resolve("ThemeProvider"), {
     from: "@cedar-design/ui",
-    name: "StyleProvider",
+    name: "ThemeProvider",
     sideEffects: undefined,
   });
   assert.deepEqual(directives.resolve("CLoading"), {

@@ -72,7 +72,7 @@ permalink: /components/radio/
 
 ### 分组状态与只读
 
-`model-value !== undefined` 表示受控，父级不回写时保留原值；`default-value` 只初始化非受控值。分组内只由 Group 发出 `update:model-value → change(value, event?)`，并通知 FormItem 一次，子项不重复发值变化事件。
+`model-value !== undefined` 表示受控，父级不回写时保留原值；`default-value` 只初始化非受控值。分组内只由 Group 发出 `update:modelValue → change(value, event?)`，并通知 FormItem 一次，子项不重复发值变化事件。
 原生输入的选中值、ARIA 状态和选中样式与模型保持一致。受控分组拒绝选择时，同时恢复原选中项和被点击项；标签、Enter 和空格激活各只提出一次更新。
 Group 的 `disabled`、`readonly`、`error` 未设置时继承表单，显式 `false` 可以覆盖表单；子项不能绕过 Group 的禁用或只读限制。
 
@@ -102,7 +102,7 @@ Group 的 `disabled`、`readonly`、`error` 未设置时继承表单，显式 `f
 <!-- demo-config-notes:end -->
 
 Radio 的值为 string / number / boolean 或 null，null 表示未选中；重复点击已选项不会取消，父级可写 null 清空。
-两端统一使用 `default-value` 初始化非受控值；受控提议被拒绝时保持原值。用户选择按 `update:model-value → change(value, event?)` 通知，命令式调用的 event 为 undefined。
+两端统一使用 `default-value` 初始化非受控值；受控提议被拒绝时保持原值。用户选择按 `update:modelValue → change(value, event?)` 通知，命令式调用的 event 为 undefined。
 提供 `select()`、`focus(options?)`、`blur()`。禁用禁止选择和聚焦，只读允许聚焦、禁止改值。Enter 按下与空格释放激活当前控件，长按不重复激活，失焦/停用会取消待处理的空格操作。
 
 <demo src="./__demos__/control-value.vue"></demo>
@@ -188,7 +188,27 @@ Tab 进入已选项（没有已选项时进入第一个可用项）；方向键�
 
 <demo src="./__demos__/async-options.vue"></demo>
 
+## 原生输入属性与键盘拦截
+
+`id`、`form`、`required`、其他原生约束、`aria-*`、`data-*` 和键盘监听器传给实际 input；`class` / `style` 和其他外壳属性保留在 label。未提供 id 时生成稳定且唯一的原生 id；外部 label[for] 可以关联显式 id。HTML required 参与浏览器原生表单验证，与 Form 的业务校验规则分开。
+
+原生监听的 Once / Capture / Passive 修饰符保留在 input，不会因插槽中嵌套按钮而错误触发。原生键盘监听 preventDefault() 可以阻止 Enter / Space 的组件激活及 RadioGroup 方向键导航；被取消的 Space 不留下延迟释放动作。组件仍管理 checked、disabled、输入类型及分组的 Tab 焦点规则。
+
+input-attrs 保留原生属性别名；与顶层原生属性重叠时别名优先，但不能覆盖组件管理的状态。Radio 的 tabindex 继续由组件管理；组内仍遵守单一 Tab 入口。
+
 ## API
+
+### 参数、展示清空与挂载边界
+
+orientation 仅接受 horizontal / vertical，非法值诊断后按 horizontal 展示。max 仅用于 CheckboxGroup：合法值为有限非负整数，0 表示不能新增选择，省略为不限；不裁剪已有外部模型。非法 JS 值诊断后保留既有归一化：负数按 0、小数向下取整、NaN 按不限，Infinity 仍按不限处理。
+
+icon-size 接受正长度，数值和纯数字字符串按 px，允许 0.5 这样的正小数；无效、非正或非有限数值诊断并回退主题，不套用 Divider 的最小 1。CSS 表达式的最终解析值由业务样式负责。
+
+uninject-group-context 在挂载时决定是否接入分组；运行中修改不会重新注入，需改变 key 或重新挂载，脱离分组后仍参与 Form。clearable / empty-value 只控制延迟展示层的显式清空；原生取消勾选仍输出 false 或从数组移除该值，不会使用 empty-value。普通事件返回 Promise 不参与等待；before-commit 仅在延迟保存时按 payload / done / context 协议执行。
+
+显式 options 加载期间，两端分组通过 aria-busy 通知等待，失败发一次 load-error；不增加 loading 属性或额外图形，也不因加载或失败提议新模型。
+
+普通圆形 Radio 的图标不随 Group.size 缩放；size 五档用于 button 外观，圆形尺寸使用 icon-size 或主题。radio 插槽替换圆形的完整可见内容，原生 input 保留；button 外观使用 default 标签，不使用 radio 插槽。
 
 ### 空值识别与阅读空文案
 
@@ -201,28 +221,49 @@ Tab 进入已选项（没有已选项时进入第一个可用项）；方向键�
 
 以上是字段展示层 API；纯面板不因此新增阅读模式。Form 与 FormItem 提供继承配置。empty-value 的现有类型与默认输出仍按该组件原 API 执行。
 
-`ChoiceValue = string | number | boolean`；`CheckboxModel = boolean | ChoiceValue[]`；`RadioModel = ChoiceValue | null`。
+`ChoiceValue = string | number | boolean`；`CheckboxModel = boolean | ChoiceValue[] | null`；`RadioModel = ChoiceValue | null`。
 
 ### Radio Props
 
 | 属性                  | 说明                            | 类型                      | 默认值    |
 | --------------------- | ------------------------------- | ------------------------- | --------- |
-| model-value (v-model) | 受控值                          | ChoiceValue \| null       | undefined |
+| model-value (v-model) | 受控值 | RadioModel | undefined |
 | default-value         | 非受控初始值                    | ChoiceValue \| null       | null      |
 | value                 | 选项的`value`                   | `string\|number\|boolean` | `true`    |
 | variant               | 单选的类型                      | `'radio'\|'button'`       | `'radio'` |
 | disabled              | 是否禁用；未设置时继承表单/分组 | boolean                   | undefined |
 | readonly              | 是否只读；未设置时继承表单/分组 | boolean                   | undefined |
 | error                 | 错误态；未设置时继承表单/分组   | boolean                   | undefined |
+| edit-mode | 编辑模式，继承 FormItem 和 Form | `'direct' \| 'click' \| 'dblclick'` | `'direct'` |
+| read-pretty | 独立阅读状态，显式 false 覆盖父级 | `boolean` | `false` |
+| clearable | 延迟编辑层清空操作，不改变原生取消选择 | `boolean` | `false` |
+| empty-value | 展示层显式清空输出，不控制原生取消勾选 | `RadioModel \| (() => RadioModel)` | `null` |
+| empty-values | 空值识别策略，字段优先于 FormItem 和 Form | `readonly unknown[]` | `-` |
+| empty-text | 阅读空文案，显式空字符串有效 | `string` | `'-'` |
+| before-commit | 延迟编辑保存前守卫；返回布尔值、Promise 或通过 done 完成 | `(payload: { value: unknown; previousValue: unknown }, done: (allow?: boolean) => void, context: { signal: AbortSignal; event?: Event }) => void \| boolean \| Promise<void \| boolean>` | `-` |
+| open | 受控编辑层开关，不是内部原生输入焦点 | `boolean` | `-` |
+| default-open | 非受控编辑层初始开关 | `boolean` | `false` |
+| popup-container | 编辑层挂载容器 | `string \| HTMLElement \| false` | `-` |
+| checked-color | 实例选中颜色；错误和禁用优先 | string | undefined |
+| unchecked-color | 实例未选中颜色 | string | undefined |
+| icon-size | 正长度；非法值诊断并回退主题 | number \| string | undefined |
+| ripple | 是否启用波纹 | boolean | true |
+| name | 原生字段名，未设置时继承 Group | string | undefined |
+| input-attrs | 原生属性别名，不能覆盖组件管理的状态 | InputHTMLAttributes | undefined |
+| aria-label | 无可见标签时的无障碍名称 | string | undefined |
+| uninject-group-context | 挂载时决定是否脱离分组，仍参与 Form | boolean | false |
 
 ### Radio Events
 
 | 事件名             | 说明     | 参数                              |
 | ------------------ | -------- | --------------------------------- |
-| update:model-value | 提议新值 | value: ChoiceValue                |
-| change             | 值变化   | value: ChoiceValue, event?: Event |
+| update:modelValue | 提议新值 | value: RadioModel |
+| change | 值变化提案 | value: RadioModel, event?: Event |
 | focus              | 聚焦     | event: FocusEvent                 |
 | blur               | 失焦     | event: FocusEvent                 |
+| update:open | 编辑层受控开关更新 | open: boolean |
+| open-change | 编辑层实际开关变化 | open: boolean |
+| click | 点击；禁用不触发 | event: MouseEvent |
 
 ### Radio Methods
 
@@ -237,12 +278,16 @@ Tab 进入已选项（没有已选项时进入第一个可用项）；方向键�
 | 插槽名 | 说明         | 参数                                     |
 | ------ | ------------ | ---------------------------------------- |
 | radio  | 自定义单选框 | `checked:boolean`<br/>`disabled:boolean` |
+| read | 自定义阅读内容，优先于 empty-text | value: RadioModel, text: string |
+| default | button 标签或默认圆形标签 | checked: boolean, disabled: boolean |
+| checked-icon | 默认圆形选中图标 | - |
+| unchecked-icon | 默认圆形未选中图标 | - |
 
 ### RadioGroup Props
 
 | 属性                  | 说明                                                        | 类型                                                                                                    | 默认值         |
 | --------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | -------------- |
-| model-value (v-model) | 受控值                                                      | RadioModel                                                                                              | undefined      |
+| model-value (v-model) | 受控值 | RadioModel | undefined |
 | default-value         | 非受控初始值                                                | RadioModel                                                                                              | null           |
 | variant               | 单选框组的类型                                              | `'radio'\|'button'`                                                                                     | `'radio'`      |
 | size                  | 单选框组的尺寸                                              | `'xs'\|'sm'\|'md'\|'lg'\|'xl'`                                                                          | `-`            |
@@ -253,13 +298,27 @@ Tab 进入已选项（没有已选项时进入第一个可用项）；方向键�
 | error                 | 错误态；未设置时继承表单/分组                               | boolean                                                                                                 | undefined      |
 | field-names           | 选项字段映射                                                | ChoiceFieldNames                                                                                        | undefined      |
 | aria-label            | 分组的无障碍名称                                            | string                                                                                                  | ''             |
+| edit-mode | 编辑模式，继承 FormItem 和 Form | `'direct' \| 'click' \| 'dblclick'` | `'direct'` |
+| read-pretty | 独立阅读状态，显式 false 覆盖父级 | `boolean` | `false` |
+| clearable | 延迟编辑层清空操作，不改变原生取消选择 | `boolean` | `false` |
+| empty-value | 展示层显式清空输出，不控制原生取消勾选 | `RadioModel \| (() => RadioModel)` | `null` |
+| empty-values | 空值识别策略，字段优先于 FormItem 和 Form | `readonly unknown[]` | `-` |
+| empty-text | 阅读空文案，显式空字符串有效 | `string` | `'-'` |
+| before-commit | 延迟编辑保存前守卫；返回布尔值、Promise 或通过 done 完成 | `(payload: { value: unknown; previousValue: unknown }, done: (allow?: boolean) => void, context: { signal: AbortSignal; event?: Event }) => void \| boolean \| Promise<void \| boolean>` | `-` |
+| open | 受控编辑层开关，不是内部原生输入焦点 | `boolean` | `-` |
+| default-open | 非受控编辑层初始开关 | `boolean` | `false` |
+| popup-container | 编辑层挂载容器 | `string \| HTMLElement \| false` | `-` |
+| name | 组内原生输入字段名 | string | undefined |
 
 ### RadioGroup Events
 
 | 事件名             | 说明                        | 参数                                           |
 | ------------------ | --------------------------- | ---------------------------------------------- |
-| update:model-value | 提议新值                    | value: string \| number \| boolean             |
-| change             | 值变化，只由 Group 通知一次 | value: string \| number \| boolean, ev?: Event |
+| update:modelValue | 提议新值 | value: RadioModel |
+| change | 值变化提案 | value: RadioModel, event?: Event |
+| update:open | 编辑层受控开关更新 | open: boolean |
+| open-change | 编辑层实际开关变化 | open: boolean |
+| load-error | 显式选项加载失败，不改变模型 | error: unknown |
 
 ### RadioGroup Slots
 
@@ -267,6 +326,10 @@ Tab 进入已选项（没有已选项时进入第一个可用项）；方向键�
 | ------ | ------------- | ---------------------------------------- |
 | radio  | 自定义单选框  | `checked:boolean`<br/>`disabled:boolean` |
 | label  | radio文案内容 | `data: RadioOption, checked: boolean`    |
+| read | 自定义阅读内容，优先于 empty-text | value: RadioModel, text: string |
+| default | 未提供 options 时的原生子选项 | - |
+
+## Types
 
 ### RadioOption
 
@@ -277,12 +340,10 @@ Tab 进入已选项（没有已选项时进入第一个可用项）；方向键�
 | disabled | 禁用           | boolean                                                           |
 | readonly | 只读           | boolean                                                           |
 
-## 类型定义
-
 组件导出以下类型定义
 
 ```ts
-import type { RadioProps } from "@cedar-design/ui";
+import type { RadioProps, RadioGroupProps, RadioEmits, RadioGroupEmits, RadioSlots, RadioGroupSlots } from "@cedar-design/ui";
 ```
 
 ### ChoiceFieldNames
@@ -306,16 +367,55 @@ import type { RadioProps } from "@cedar-design/ui";
 
 checked-icon、unchecked-icon 在两端都可用。default 接收 { checked, disabled }；radio 接收 { checked, disabled }。click 只发出一次原始 MouseEvent；disabled 不发 click，只读可发 click，但不改变值。
 
-### Form 字段展示与确认
+### 编辑与确认
 
-本组件支持 `edit-mode`，字段 > FormItem > Form 逐层继承；未指定时为 `direct`，保留原有交互。支持值：`direct / click / dblclick`。非 direct 编辑模式通过字段值入口打开编辑面板，并维护单份草稿；确认后才更新 v-model，取消、重置或启用 readPretty 时丢弃草稿。
+通过 `edit-mode` 配置编辑方式；未指定时依次继承 FormItem、Form，默认 `direct`。支持值：`direct / click / dblclick`。非 direct 编辑模式通过字段值入口打开编辑面板，并维护单份草稿；确认后才更新 v-model，取消、重置或启用 readPretty 时丢弃草稿。
 
 Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，Enter/F2 也可进入；取消/Escape 丢弃草稿，确认后提交。readPretty 为独立阅读属性，与 readonly、disabled 分开。
 
-`before-commit(value, { previousValue, signal })` 可拦截弹层保存；FormItem 先校验候选值，失败保持编辑。`open / default-open / update:open` 控制编辑层。`#read="{ value, text }"` 可自定义阅读内容。集中示例见 Form 的“各类字段统一展示”。
+`before-commit(payload, done, context)` 可拦截弹层保存；FormItem 先校验候选值，失败保持编辑。`open / default-open / update:open` 控制编辑层。`#read="{ value, text }"` 可自定义阅读内容。集中示例见 Form 的“各类字段统一展示”。
 
 `read-pretty` 为独立布尔属性，与 `readonly`、`disabled` 同级；字段 > FormItem > Form 继承，显式 `false` 覆盖父级。默认 `false`。纯阅读不显示编辑器。
 
 `empty-value` 可显式设为 `null`（或 `() => null`），清空时原样提交 null；省略时保留组件原默认值。界面把 null 显示为空，不会把普通输入的空字符串自动转成 null。支持弹出编辑的字段中，清空先修改草稿，确认后提交，取消则保留原值。
 
 候选属性 `options` 支持数组或 `(query, { signal }) => 数组/Promise`。加载、取消、过期结果隔离由组件内部处理，失败触发 load-error。单选/多选分组初始化以空字符串查询，搜索型字段在查询变化时调用；树形字段根数据与原有 load-more 子节点懒加载独立。
+
+公共 focus/blur 从首次挂载即可调用。focus 会打开可编辑的延迟编辑器，等待其就绪后定位；禁用、只读或纯阅读时不因此打开。blur 只失焦当前目标，不重新打开。保存的方法不会绑定旧编辑器，关闭、切换模式、停用或卸载会取消排队调用。
+
+## CSS Variables
+
+<!-- component-css-variables:start -->
+
+通过以下变量定制组件外观。默认值随表中注明的主题或选择器条件变化；变量仅在对应的尺寸、变体和交互状态下生效。
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| 变量 | 默认值／条件 | 影响的样式 |
+| --- | --- | --- |
+| `--c-radio-action-padding` | `calc((var(--c-internal-radio-mask-height) / 2) - (var(--c-radio-control-size) / 2))` | `padding` |
+| `--c-radio-animation-duration` | `var(--c-transition-duration-3)` | `transition` |
+| `--c-radio-control-color` | `var(--c-sys-color-content-secondary)` | `color` |
+| `--c-radio-control-color-checked` | `var(--c-sys-color-content-brand)` | `color`, `outline` |
+| `--c-radio-control-color-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
+| `--c-radio-control-color-error` | `var(--c-sys-color-content-danger)` | `box-shadow`, `color` |
+| `--c-radio-control-size` | `14px` | `font-size`, `height`, `padding`, `width` |
+| `--c-radio-group-gap` | `var(--c-spacing-8)` | `gap` |
+| `--c-radio-label-font-size` | `var(--c-font-size-body-3)` | `font-size` |
+| `--c-radio-label-gap` | `var(--c-spacing-4)` | `margin-inline-start` |
+| `--c-radio-label-text-color` | `var(--c-sys-color-content-primary)` | `color` |
+| `--c-radio-label-text-color-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
+
+</div>
+
+将覆盖设置在组件实际根节点或弹层真实挂载祖先上。例如给该元素添加下列 class，再按需替换变量值：
+
+```css
+.component-theme {
+  --c-radio-action-padding: calc((var(--c-internal-radio-mask-height) / 2) - (var(--c-radio-control-size) / 2));
+}
+```
+
+显式行内样式及直接写入同一 CSS 属性的 Props 优先于样式表默认值。Teleport 后，普通 CSS 变量按实际挂载位置继承；使用 ThemeProvider 时，请遵循其局部主题与弹层配置规则。局部定制请直接覆盖组件变量；仅修改后代的 system 变量不会重新计算从根继承的组件别名。内部变量不属于公共 API。
+
+<!-- component-css-variables:end -->

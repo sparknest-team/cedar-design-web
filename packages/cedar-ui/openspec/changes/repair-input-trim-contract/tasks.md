@@ -1,0 +1,4 @@
+- [x] Reproduce duplicate trim proposals with actual model listeners on both platforms.
+- [x] Separate private local synchronization from model notification during commit.
+- [x] Verify consumers, native browser behavior and required gates on both platforms.
+- [x] Reconcile bilingual docs, examples and inherited hint default.

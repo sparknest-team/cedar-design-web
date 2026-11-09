@@ -1,0 +1,3 @@
+- [x] Record mandatory public type and conditional-style baselines
+- [x] Align optional public props/native methods and complete API docs
+- [x] Verify both copies, all desktop consumers and final gates

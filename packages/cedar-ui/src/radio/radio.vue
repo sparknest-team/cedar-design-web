@@ -1,30 +1,39 @@
 <script setup lang="ts">
 import { computed, inject, nextTick, ref, watch } from 'vue'
 import type { CSSProperties } from 'vue'
+import { createNamespace } from '../_utils/global-config'
+import { positiveLength } from '../_utils/size-length'
 import { ChoiceLabel } from '../checkbox/choice-label'
 import { useRadioControl } from '../checkbox/use-choice-control'
 import { useChoiceKeyboard } from '../checkbox/use-choice-keyboard'
+import { useFormErrorDescription } from '../form/error-description'
+import { useChoiceNativeAttrs } from '../checkbox/use-choice-native-attrs'
 import Ripple from '../ripple'
-import { createNamespace } from '../_utils/global-config'
 import { radioGroupKey } from './context'
 import { useRadioForm } from './form-adapter'
 import { radioProps } from './props'
-import type { RadioMethods, RadioValue } from './props'
+import type { RadioMethods, RadioModel } from './props'
+import type { RadioSlots } from './types'
 import { useRadioRegistration } from './use-radio-navigation'
 
-defineOptions({ name: createNamespace('radio').name })
+defineOptions({ name: createNamespace('radio').name, inheritAttrs: false })
 const { n, classes } = createNamespace('radio')
 const vRipple = Ripple
 const props = defineProps(radioProps)
+defineSlots<RadioSlots>()
 const emit = defineEmits<{
-  'update:modelValue': [value: RadioValue]
-  change: [value: RadioValue, event?: Event]
+  'update:open': [open: boolean]
+  'open-change': [open: boolean]
+  'update:modelValue': [value: RadioModel]
+  change: [value: RadioModel, event?: Event]
   click: [event: MouseEvent]
   focus: [event: FocusEvent]
   blur: [event: FocusEvent]
 }>()
 const group = props.uninjectGroupContext ? undefined : inject(radioGroupKey, undefined)
+const { errorId, describe: describeError } = useFormErrorDescription()
 const input = ref<HTMLInputElement>()
+const { nativeAttrs, rootAttrs } = useChoiceNativeAttrs(() => props.inputAttrs)
 const form = useRadioForm({
   get disabled() {
     return props.disabled ?? group?.disabled
@@ -67,7 +76,7 @@ const customStyle = computed(
     ({
       '--c-internal-radio-instance-checked': props.checkedColor,
       '--c-internal-radio-instance-unchecked': props.uncheckedColor,
-      '--c-internal-radio-instance-size': typeof props.iconSize === 'number' ? props.iconSize + 'px' : props.iconSize,
+      '--c-internal-radio-instance-size': positiveLength(props.iconSize, '') || undefined,
     }) as CSSProperties,
 )
 function restore() {
@@ -128,6 +137,7 @@ defineExpose<RadioMethods>({
 </script>
 <template>
   <label
+    v-bind="rootAttrs"
     :class="
       classes(
         n(),
@@ -143,18 +153,19 @@ defineExpose<RadioMethods>({
   >
     <input
       ref="input"
-      v-bind="inputAttrs"
+      v-bind="nativeAttrs"
       :class="n('input')"
       type="radio"
-      :name="name ?? group?.name ?? inputAttrs?.name"
+      :name="name ?? group?.name ?? nativeAttrs.name"
       :value="value"
       :checked="checked"
       :disabled="disabled"
       :tabindex="tabIndex"
-      :aria-label="ariaLabel ?? inputAttrs?.['aria-label']"
+      :aria-label="ariaLabel ?? nativeAttrs['aria-label']"
       :aria-checked="checked"
       :aria-readonly="readonly || undefined"
-      :aria-invalid="error || undefined"
+      :aria-describedby="group?.formErrorId === errorId ? nativeAttrs['aria-describedby'] : describeError(nativeAttrs['aria-describedby'])"
+      :aria-invalid="error || nativeAttrs['aria-invalid'] || undefined"
       @change="handleChange"
       @keydown="keyboard.keydown"
       @keyup="keyboard.keyup"
@@ -172,6 +183,5 @@ defineExpose<RadioMethods>({
         <span v-if="$slots.default" :class="n('label')"><slot :checked="checked" :disabled="disabled" /></span>
       </template>
     </slot>
-
   </label>
 </template>

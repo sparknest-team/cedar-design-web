@@ -1,0 +1,4 @@
+- [x] Reproduce missing entry, invalid range and clear-order/changed-value issues on both platforms.
+- [x] Normalize effective bounds/ARIA and approved clear notifications; publish existing type contracts.
+- [x] Validate all affected consumers, public type fixtures, actual browser approvals and cancellation.
+- [x] Reconcile bilingual APIs, demos, same-source and required gates.

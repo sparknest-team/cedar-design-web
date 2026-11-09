@@ -1,5 +1,5 @@
 <template>
-  <div :id="nodeId" :class="classNames" :data-level="level" :data-key="nodekey" :data-focused="focused" :role="externallyManaged ? undefined : 'treeitem'" :aria-level="externallyManaged ? undefined : level + 1" :aria-expanded="externallyManaged || isLeaf ? undefined : expanded" :aria-selected="externallyManaged ? undefined : selected" :aria-checked="!externallyManaged && checkable ? (indeterminate ? 'mixed' : checked) : undefined" :aria-disabled="disabled || undefined">
+  <div :id="nodeId" :class="classNames" :data-level="level" :data-key="nodekey" :data-focused="focused" :role="externallyManaged ? undefined : 'treeitem'" :aria-level="externallyManaged ? undefined : level + 1" :aria-expanded="externallyManaged || isLeaf ? undefined : expanded" :aria-selected="externallyManaged ? undefined : selected" :aria-checked="!externallyManaged && checkable ? (indeterminate ? 'mixed' : checked) : undefined" :aria-busy="!externallyManaged && loading ? true : undefined" :aria-disabled="disabled || undefined">
     <!-- 缩进 -->
     <span :class="`${prefixCls}-indent`">
       <span
@@ -45,14 +45,16 @@
       </NodeSwitcher>
     </span>
     <!-- checkbox -->
-    <Checkbox
-      v-if="checkable"
-      :disabled="disableCheckbox || disabled"
-      :model-value="checked"
-      :indeterminate="indeterminate"
-      uninject-group-context
-      @change="onCheckboxChange"
-    />
+    <span v-if="checkable" aria-hidden="true" @mousedown.prevent @click.capture.stop.prevent="onCheckboxPointerClick">
+      <Checkbox
+        :disabled="disableCheckbox || disabled"
+        :model-value="checked"
+        :indeterminate="indeterminate"
+        tabindex="-1"
+        uninject-group-context
+        @change="onCheckboxChange"
+      />
+    </span>
 
     <!-- 内容 -->
     <span
@@ -297,6 +299,11 @@ export default defineComponent({
           return
         }
         treeContext.onCheck?.(Boolean(checked), key.value, e)
+      },
+      onCheckboxPointerClick(e: Event) {
+        if (disableCheckbox.value || disabled.value) return
+        treeContext.focusNode?.(key.value)
+        treeContext.onCheck?.(!checked.value, key.value, e)
       },
       onTitleClick(e: Event) {
         if (!disabled.value) treeContext.focusNode?.(key.value)

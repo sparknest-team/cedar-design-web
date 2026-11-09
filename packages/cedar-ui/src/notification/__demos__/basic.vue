@@ -10,6 +10,8 @@ const handleNotification = () => {
   Notification.info({
     title: 'Notification',
     content: 'This is a notification!',
+    closable: true,
+    closeButtonAriaLabel: 'Dismiss notification',
   })
 }
 </script>

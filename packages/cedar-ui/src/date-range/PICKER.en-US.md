@@ -95,15 +95,15 @@ Preview configuration: `show-time`, `:default-value="['2019-08-01 09:00:00', '20
 
 ## Reading direction
 
-Range values remain `[start, end]` across direction changes; switching direction neither swaps endpoints nor commits drafts. Range ribbons and boundary corners follow reading order. Paged calendar grids use visual Left/Right focus movement and chronological rows. Maple endpoint editing and continuous range highlighting are separate presentations. Explicit shortcut positions `left/right` remain physical, and popovers inherit their source direction.
+Range values remain `[start, end]`; changing reading direction does not swap endpoints or commit drafts. Calendar range connections and boundary radii follow reading direction. In paged grids, Left/Right moves focus visually and Up/Down preserves date-row order. Maple endpoint editing and continuous range highlighting use different rendering paths. Explicit `shortcuts-position="left|right"` remains physical; popovers inherit the field's source direction.
 
 ## API
 
-### Props
+### DateRangePicker Props
 
-Pure panels do not accept field/popup props such as open/default-open, popup-container, placement, trigger-props, placeholder, variant or clearable. Configure popups through Date/DateRange popup-props, and typing through input-editable. disable-confirm alone controls confirmation tools; show-confirm-btn is removed.
+Pure panels do not accept field/popup props such as open/default-open, popup-container, placement, trigger-props, placeholder, variant or clearable. Configure popups through Date/DateRange popup-props, and typing through input-editable. disable-confirm alone controls confirmation tools; 
 
-| Arguments | Description | Type | Default |
+| Prop | Description | Type | Default |
 | ------------------- | ------------------------------- | ------------------------------------------ | ------- |
 | `model-value` | Bound value | `(Date \| string \| number)[]` | `-` |
 | `type` | Panel type | `date \| week \| month \| year \| quarter` | `date` |
@@ -117,7 +117,7 @@ Pure panels do not accept field/popup props such as open/default-open, popup-con
 
 ### Shared date-family contract
 
-| Arguments | Description | Type | Default |
+| Prop | Description | Type | Default |
 | ----------------- | ------------------------------------------------------- | ------------------------------------------------ | ------- |
 | `default-value` | Uncontrolled initial value, read once | DateValue / DateValue[] | — |
 | `value-format` | Model and event value format: a date format string, Date, or timestamp | string | Follows type |
@@ -131,7 +131,7 @@ Time callbacks return numeric lists from `disabledHours()`, `disabledMinutes(hou
 Invalid dates and incomplete/reversed ranges cannot be committed. Confirmation revalidates dynamic disabling rules. Locked range endpoints cannot be cleared or changed.
 Nested panel props configure presentation only; they must not override top-level model-value, format, bounds, disabling rules or control events.
 
-### Events
+### DateRangePicker Events
 
 | Event | Description | Arguments |
 | -------------------- | ----------------------- | --------------------------------- |
@@ -150,7 +150,7 @@ Both support shortcuts/shortcuts-position, picker-value/default-picker-value, pr
 
 ## Shortcuts and viewport
 
-Uses the same independently copied shortcut/viewport controller as DatePicker. Range values/picker-value contain two dates. Shortcuts cannot overwrite locked endpoints. See [Shortcuts and calendar viewport](/en/components/date-picker/#shortcuts-and-calendar-viewport).
+Range values and picker-value each contain two dates. Shortcuts cannot overwrite locked endpoints. See [Shortcuts and calendar viewport](/en/components/date-picker/#shortcuts-and-calendar-viewport).
 
 ### Interactive time exchange
 
@@ -158,7 +158,7 @@ exchange-time defaults to true: reversed interactive selection swaps complete da
 
 ### Locale and nested calendar options
 
-Date labels, titles and actions use each library's global Locale/Provider. Cedar removes component-level `locale` without dictionary overrides/aliases. Locale changes neither select nor commit dates.
+Date labels, headers and action buttons use the global Locale and Provider settings. Changing language does not select or submit a date.
 
 ### Embedded time and wheel presentation
 
@@ -170,8 +170,18 @@ Embedded time columns and date columns share one draft transaction. By default, 
 
 ### Per-instance date locale isolation
 
-Date owners read local global Locale/Provider. Each instance controls week start through `day-start-of-week`. They do not change host Dayjs default locale/base language settings; date metadata is registered under library namespaces. Neither instances nor sources are shared across libraries.
+Date components use the current library Locale/Provider configuration. Each instance controls its first weekday through `day-start-of-week`, without changing the application Dayjs default locale or base locale configuration.
 
 `value-format` is a stable English date protocol, including month-name tokens. `format` display/typed text uses the UI language. Locale changes do not rewrite models or invalidate English-month models. Numeric protocols, Date objects and timestamps remain unchanged. Chinese core/Maple locale data is integrated; other formats prefer registered Dayjs locale data and safely fall back to English when unavailable.
 
 Week numbers/comparisons no longer depend on global week-start settings; equal week numbers across years are not mistaken for the same week. Mounting/updating/unmounting instances with different week starts is isolated.
+
+## CSS Variables
+
+<!-- component-css-variables:start -->
+
+This component declares no independent public CSS variables. Use the configuration and layout APIs documented on this page. The appearance of composed controls follows the public variables of `date`; a shared variable can affect other controls in the same DOM subtree.
+
+Internal custom properties and measurement values are implementation details and are not customization APIs.
+
+<!-- component-css-variables:end -->

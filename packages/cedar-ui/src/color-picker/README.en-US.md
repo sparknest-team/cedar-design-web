@@ -7,6 +7,8 @@ permalink: /en/components/color-picker/
 
 Start with the basic example, then compare related settings before moving to controlled, asynchronous or combined use cases.
 
+FormItem errors describe the inline panel or built-in trigger while preserving any existing `aria-describedby`. When providing a custom trigger, callers should associate any necessary accessible descriptions with it.
+
 ## Basic examples
 
 ### Basic usage
@@ -57,6 +59,12 @@ Start with the basic example, then compare related settings before moving to con
 - `default-value`: Default value (uncontrolled state)
 - `history-colors`: Color array of historical colors
 - `show-history`: Show history colors
+
+History and presets accept HEX, HEX with alpha, RGB and RGBA. Selecting one updates both color and opacity; invalid entries leave the current color unchanged. Percentage RGB channels are converted and clamped to their valid ranges.
+
+Use parenthesized RGB / RGBA functions with comma- or space-separated channels. Incomplete input and extra text are invalid. An invalid initial model falls back to opaque red.
+
+`default-value` initializes the picker once. The parent owns a controlled `model-value`: selection proposes an update, and a rejected proposal restores the controlled color. External model synchronization does not emit `change`.
 - `show-preset`: Show preset colors
 
 <demo src="./__demos__/colors.vue"></demo>
@@ -84,9 +92,13 @@ Start with the basic example, then compare related settings before moving to con
 
 <demo src="./__demos__/format.vue"></demo>
 
+When disabled, the palette and sliders leave the Tab order, and the inputs and format selector cannot be operated. Hue and opacity sliders support arrow keys and Home / End; color channels have localized accessible names.
+
+`format` controls the output color format and initializes the panel's input mode. The panel selector changes the input mode independently. Later `format` changes affect output without resetting that mode or emitting change by themselves.
+
 ## API
 
-### `<ColorPicker>` Props
+### ColorPicker Props
 
 | Parameter | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -104,8 +116,83 @@ Start with the basic example, then compare related settings before moving to con
 | preset-colors | Preset colors | `string[]` | `-` |
 
 
-### Existing precedence of forwarded configuration (F07)
+### Forwarded configuration precedence
 
-Existing triggerProps are spread after some internal Trigger settings, so nested fields such as disabled can currently override internal values. F07 preserves this order and type for compatibility; it does not apply AutoComplete managed-field rules, promise a new safe subset or automatically prohibit these existing capabilities.
+Nested triggerProps fields such as disabled can override the corresponding popup settings supplied by ColorPicker. To disable the entire component, check both top-level props and nested configuration.
 
-Dragging uses the control owner view. KeepAlive deactivation or unmount ends the gesture and releases its listeners; a new activation requires a new gesture, and callbacks from old gestures cannot change its value.
+Drag listeners belong to the control's own view. KeepAlive deactivation or unmount ends the current gesture and releases listeners. Reactivation requires a new gesture; callbacks from the old gesture cannot change values.
+
+## CSS Variables
+
+<!-- component-css-variables:start -->
+
+Use these variables to customize the component. Defaults may vary by the selector condition shown. Each variable applies to the corresponding size, variant and interaction states.
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| Variable | Default / condition | Affected styles |
+| --- | --- | --- |
+| `--c-color-picker-control-bar-alpha-margin-top` | `var(--c-spacing-9)` | `margin-top` |
+| `--c-color-picker-control-bar-border-radius` | `10px` | `border-radius` |
+| `--c-color-picker-control-bar-handle-inner-offset` | `var(--c-spacing-4)` | `height`, `width` |
+| `--c-color-picker-control-bar-handle-size` | `var(--c-size-4)` | `height`, `width` |
+| `--c-color-picker-control-bar-height` | `14px` | `height` |
+| `--c-color-picker-control-bar-width` | `182px` | `width` |
+| `--c-color-picker-input-bg-color` | `var(--c-color-fill-2)` | `background-color` |
+| `--c-color-picker-input-border-radius` | `var(--c-border-radius-sm)` | `border-radius` |
+| `--c-color-picker-input-size-lg-padding` | `calc((var(--c-field-size-lg-height) - var(--c-color-picker-preview-size-lg)) / 2) var(--c-spacing-3)` | `padding` |
+| `--c-color-picker-input-size-md-padding` | `calc((var(--c-field-size-md-height) - var(--c-color-picker-preview-size-md)) / 2) var(--c-spacing-2)` | `padding` |
+| `--c-color-picker-input-size-sm-padding` | `calc((var(--c-field-size-sm-height) - var(--c-color-picker-preview-size-sm)) / 2) var(--c-spacing-2)` | `padding` |
+| `--c-color-picker-input-size-xs-padding` | `calc((var(--c-field-size-xs-height) - var(--c-color-picker-preview-size-xs)) / 2) var(--c-spacing-2)` | `padding` |
+| `--c-color-picker-palette-handle-border-size` | `var(--c-border-width-2)` | `border` |
+| `--c-color-picker-palette-handle-size` | `var(--c-size-4)` | `height`, `width` |
+| `--c-color-picker-palette-height` | `178px` | `height` |
+| `--c-color-picker-panel-affix-font-size` | `var(--c-font-size-body-1)` | `font-size` |
+| `--c-color-picker-panel-alpha-input-width` | `52px` | `width` |
+| `--c-color-picker-panel-bg-color` | `var(--c-color-bg-1)` | `background-color` |
+| `--c-color-picker-panel-block-border-radius` | `var(--c-border-radius-sm)` | `border-radius` |
+| `--c-color-picker-panel-block-margin` | `var(--c-spacing-6)` | `margin` |
+| `--c-color-picker-panel-block-size` | `var(--c-size-4)` | `height`, `width` |
+| `--c-color-picker-panel-border-color` | `var(--c-color-border-2)` | `border`, `border-inline-end`, `border-inline-start`, `border-top` |
+| `--c-color-picker-panel-border-radius` | `var(--c-border-radius-sm)` | `border-radius` |
+| `--c-color-picker-panel-box-shadow` | `var(--c-shadow2-down)` | `box-shadow` |
+| `--c-color-picker-panel-checker-size` | `var(--c-spacing-4)` | `background-size` |
+| `--c-color-picker-panel-colors-empty-margin-y` | `var(--c-spacing-9)` | `margin` |
+| `--c-color-picker-panel-colors-list-margin` | `calc(-1 * var(--c-spacing-4)) calc(-1 * var(--c-spacing-2)) 0` | `margin` |
+| `--c-color-picker-panel-colors-section-margin-top` | `var(--c-spacing-9)` | `margin-top` |
+| `--c-color-picker-panel-colors-wrapper-margin-top` | `var(--c-spacing-7)` | `margin-top` |
+| `--c-color-picker-panel-empty-font-size` | `var(--c-font-size-body-3)` | `font-size` |
+| `--c-color-picker-panel-format-padding-left` | `var(--c-spacing-4)` | `padding-inline-start` |
+| `--c-color-picker-panel-format-select-width` | `58px` | `width` |
+| `--c-color-picker-panel-input-group-margin-left` | `var(--c-spacing-9)` | `margin-inline-start` |
+| `--c-color-picker-panel-input-margin-top` | `var(--c-spacing-9)` | `margin-top` |
+| `--c-color-picker-panel-input-padding-x` | `var(--c-spacing-6)` | `padding` |
+| `--c-color-picker-panel-padding` | `var(--c-spacing-9)` | `padding` |
+| `--c-color-picker-panel-preview-size` | `var(--c-size-10)` | `font-size`, `height`, `width` |
+| `--c-color-picker-panel-section-title-font-size` | `var(--c-font-size-body-1)` | `font-size` |
+| `--c-color-picker-panel-section-title-font-weight` | `var(--c-font-weight-400)` | `font-weight` |
+| `--c-color-picker-panel-width` | `260px` | `width` |
+| `--c-color-picker-preview-border-color` | `var(--c-color-border-2)` | `border` |
+| `--c-color-picker-preview-border-size` | `var(--c-border-width-1)` | `border` |
+| `--c-color-picker-preview-size-lg` | `26px` | `height`, `padding`, `width` |
+| `--c-color-picker-preview-size-md` | `var(--c-size-6)` | `height`, `padding`, `width` |
+| `--c-color-picker-preview-size-sm` | `22px` | `height`, `padding`, `width` |
+| `--c-color-picker-preview-size-xs` | `var(--c-size-4)` | `height`, `padding`, `width` |
+| `--c-color-picker-value-font-color` | `var(--c-color-text-1)` | `color` |
+| `--c-color-picker-value-font-color-disabled` | `var(--c-color-text-4)` | `color` |
+| `--c-color-picker-value-font-size` | `var(--c-field-size-md-font-size)` | `font-size` |
+| `--c-color-picker-value-margin-left` | `var(--c-spacing-2)` | `margin-inline-start` |
+
+</div>
+
+Apply overrides to the rendered component root or the actual popup ancestor. For example, add the following class to that element and replace the value as needed:
+
+```css
+.component-theme {
+  --c-color-picker-control-bar-alpha-margin-top: var(--c-spacing-9);
+}
+```
+
+Explicit inline styles and props that write the same CSS property take precedence over stylesheet defaults. After Teleport, ordinary CSS variables inherit from the actual mount location. When using ThemeProvider, follow its local-theme and popup configuration rules. Override the component variable directly for local styling; root-level aliases are not recalculated merely because a descendant system variable changes. Internal variables are not public APIs.
+
+<!-- component-css-variables:end -->

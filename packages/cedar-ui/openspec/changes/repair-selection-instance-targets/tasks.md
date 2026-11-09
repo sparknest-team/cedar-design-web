@@ -1,0 +1,4 @@
+- [x] Reproduce four actual target failures on each platform and preserve working direct/closed Select behavior.
+- [x] Connect current targets and type the existing public instance methods.
+- [x] Validate actual browser, modes, reopen, lifecycle, state restrictions and all affected method consumers on both platforms.
+- [x] Update bilingual contracts and required source/API/type/lint/spec checks.

@@ -12,7 +12,7 @@ permalink: /components/date-range-picker/
 
 离开快捷项后的100ms是交互宽限，不是CSS动画结束时间，不提交模型。新预览／单元格选择／配置或模型变化、停用卸载会使旧等待失效；旧回调不能清新预览或输入草稿。表头渲染等待按原预览归属一次消费，离开后的宽限期仍可正常显示预览表头；激活不恢复旧任务。
 
-21项受控范围专项通过；其余分层回归见证据。此审计不认证所有select／confirm／input命令、非快捷表头调用方或原生hover／OS，API／CSS Token／100ms默认值保持。证据：design-ui/audits/evidence/date-range-shortcut-preview-2026-10-16/results.json。
+
 
 表单字段请使用 [`DateRange`](/components/date-range/)。单日期面板请使用 [`DatePicker`](/components/date-picker/)。
 
@@ -114,7 +114,7 @@ The “disable day 20 as the end” switch changes `disabled-date` dynamically. 
 
 ## API
 
-### Props
+### DateRangePicker Props
 
 纯面板不接收 open/default-open、popup-container、placement、trigger-props、placeholder、variant、clearable 等字段/浮层属性。浮层配置请使用 Date/DateRange 的 popup-props；输入可编辑性使用字段 input-editable。确认区只由 disable-confirm 控制，不再使用 show-confirm-btn。
 
@@ -146,7 +146,7 @@ The “disable day 20 as the end” switch changes `disabled-date` dynamically. 
 非法日期、不完整或逆序范围不能提交；确认时重新验证动态禁用规则。范围锁定端点不能被清除或改动。
 嵌套面板 props 只配置展示，不得覆盖顶层 model-value、格式、边界、禁用规则或控制事件。
 
-### Events
+### DateRangePicker Events
 
 | 事件                 | 说明                    | 参数                              |
 | -------------------- | ----------------------- | --------------------------------- |
@@ -165,7 +165,7 @@ The “disable day 20 as the end” switch changes `disabled-date` dynamically. 
 
 ## 快捷选项与视口
 
-与 DatePicker 使用同一份独立复制的快捷项与视口控制器；范围值及 picker-value 均包含两个日期，锁定端点不能被快捷项改写。详见 [快捷选项与日历视口](/components/date-picker/#快捷选项与日历视口)。
+范围值及 picker-value 均包含两个日期，锁定端点不能被快捷项改写。详见 [快捷选项与日历视口](/components/date-picker/#快捷选项与日历视口)。
 
 ### 交互时间交换
 
@@ -173,7 +173,7 @@ exchange-time 默认 true，反序交互交换整个日期时间端点；false �
 
 ### 语言与嵌套日历参数
 
-日期标签、标题和动作接入各库的全局 Locale 与既有 Provider。Cedar 删除日期组件级 `locale`，不保留覆盖字典或兼容别名。切换语言不会选择或提交日期。
+日期标签、标题和操作按钮的语言由全局 Locale 和 Provider 配置。切换语言不会选择或提交日期。
 
 ### 内嵌时间与滚轮展示
 
@@ -185,8 +185,18 @@ Embedded time columns and date columns share one draft transaction. By default, 
 
 ### 日期语言的实例隔离
 
-日期所有者读取本库全局 Locale/Provider，周起始日由各实例 `day-start-of-week` 管理。不切换宿主 Dayjs 默认语言，也不覆盖宿主基础语言配置；只在各库命名空间下注册日期语言元数据，组件实例与源码不跨库共享。
+日期组件使用当前库的 Locale/Provider 配置，周起始日由各实例的 `day-start-of-week` 控制，不会修改应用中 Dayjs 的默认语言或基础语言配置。
 
 `value-format` 是稳定英文日期协议（包括月份名称 token），`format` 的显示及手输文本使用界面语言。切换语言不会改写模型，也不会令英文月份名称模型失效。默认数字协议、Date 对象、时间戳不变。中文核心语言与 Maple 内置语言数据已接入；其他日期格式优先使用已注册 Dayjs 语言数据，未加载的语言安全回退英文。
 
 周号和周比较不再依赖全局周起始设置，跨年同周号不能被误判成同一周。两个不同周起始实例的挂载、更新和卸载互不影响。
+
+## CSS Variables
+
+<!-- component-css-variables:start -->
+
+本组件未声明独立的公共 CSS 变量。请使用本页公开的配置与布局入口。 组合控件的外观复用 `date` 的公共变量；共享变量可能同时影响同一 DOM 子树中的其他控件。
+
+内部自定义属性与测量中间值属于实现细节，不作为业务定制 API。
+
+<!-- component-css-variables:end -->

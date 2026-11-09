@@ -60,6 +60,8 @@ Compare unit formats, milliseconds and custom time fragments, independently of p
 
 ## API
 
+`time` is a duration rather than an absolute deadline; the remaining duration freezes while paused or deactivated by KeepAlive. The default slot receives the five fields days, hours, minutes, seconds, and milliseconds directly. `change` fires on reset and animation frames and may be frequent. `auto-start` is read on mount or reset; changing it alone does not start or pause. Repeated format tokens are all replaced. Omitted larger units accumulate into smaller units, so `SSS` alone can exceed three digits.
+
 ### Countdown Props
 
 | Prop | Description | Type | Default |
@@ -89,9 +91,19 @@ Compare unit formats, milliseconds and custom time fragments, independently of p
 
 ### Countdown Slots
 
-| Slot | Description | Arguments |
+| Slot | Description | Prop |
 | --------- | ---------- | --------------------- |
 | `default` | Custom content | `timeData: TimeData` |
+
+### Countdown Methods
+
+| Method | Description | Arguments | Returns |
+| ------- | ----------------------------------------------------------------- | ---- | ------ |
+| `start` | Start countdown | `-` | `-` |
+| `pause` | Pause countdown | `-` | `-` |
+| `reset` | Reset the countdown; when `auto-start` is `true`, it starts automatically after reset | `-` | `-` |
+
+## Types
 
 ### TimeData
 
@@ -103,31 +115,41 @@ Compare unit formats, milliseconds and custom time fragments, independently of p
 | `seconds` | Remaining seconds | `number` |
 | `milliseconds` | Remain milliseconds | `number` |
 
-### Countdown Methods
-
-| Method | Description | Arguments | Returns |
-| ------- | ----------------------------------------------------------------- | ---- | ------ |
-| `start` | Start countdown | `-` | `-` |
-| `pause` | Pause countdown | `-` | `-` |
-| `reset` | Reset the countdown; when `auto-start` is `true`, it starts automatically after reset | `-` | `-` |
-
-## Type definitions
-
 The component exports the following types
 
 ```ts
 import type { CountdownProps, CountdownInstance, TimeData } from '@cedar-design/ui'
 ```
 
-### Style variables
+## Usage notes
 
-| Variable | Default |
-| ------------------------------- | -------------------------- |
-| `--c-countdown-text-color` | `var(--c-sys-color-content-primary)` |
-| `--c-countdown-text-font-size` | `var(--c-font-size-lg)` |
 
-## Shared implementation and platform boundaries
-
-Each platform maintains a complete local implementation. They do not import a common core or share component instances or reactive state. Changes must update both implementations. Component bodies, props, key styles and paired tests have read-only source consistency checks; theme tokens and installation entries remain local to each library.
 
 SSR renders the initial formatted time. Changing format while paused updates the display. The finish event fires once per round; reset starts another round. Unmounting cleans up animation frames.
+
+## CSS Variables
+
+<!-- component-css-variables:start -->
+
+Use these variables to customize the component. Defaults may vary by the selector condition shown. Each variable applies to the corresponding size, variant and interaction states.
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| Variable | Default / condition | Affected styles |
+| --- | --- | --- |
+| `--c-countdown-text-color` | `var(--c-sys-color-content-primary)` | `color` |
+| `--c-countdown-text-font-size` | `var(--c-font-size-lg)` | `font-size` |
+
+</div>
+
+Apply overrides to the rendered component root or the actual popup ancestor. For example, add the following class to that element and replace the value as needed:
+
+```css
+.component-theme {
+  --c-countdown-text-color: var(--c-sys-color-content-primary);
+}
+```
+
+Explicit inline styles and props that write the same CSS property take precedence over stylesheet defaults. After Teleport, ordinary CSS variables inherit from the actual mount location. When using ThemeProvider, follow its local-theme and popup configuration rules. Override the component variable directly for local styling; root-level aliases are not recalculated merely because a descendant system variable changes. Internal variables are not public APIs.
+
+<!-- component-css-variables:end -->

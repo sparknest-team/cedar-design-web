@@ -1,3 +1,4 @@
+import { useButtonDefaultSize } from './platform'
 import {
   computed,
   onBeforeUnmount,
@@ -10,9 +11,10 @@ import { useButtonGroup } from "./provide";
 import type { ButtonProps } from "./props";
 
 /** Shared state and event contract; group registration stays platform-local. */
-export function useButton(props: Readonly<ButtonProps>, emit: { (event: "click", value: MouseEvent): void; (event: "touchstart", value: TouchEvent): void }) {
+export function useButton(props: Readonly<ButtonProps>, emit: { (event: "click", value: MouseEvent): void }) {
   const { n } = createNamespace("button");
   const { buttonGroup: group } = useButtonGroup();
+  const defaultSize = useButtonDefaultSize()
   let active = true
   let invoking = false
   onBeforeUnmount(() => { active = false })
@@ -21,7 +23,7 @@ export function useButton(props: Readonly<ButtonProps>, emit: { (event: "click",
   const states = computed(() => ({
     status: props.status ?? group?.status.value ?? "default",
     variant: props.variant ?? group?.variant.value ?? "default",
-    size: props.size ?? group?.size.value ?? "md",
+    size: props.size ?? group?.size.value ?? defaultSize.value,
     color: props.color ?? group?.color.value,
     textColor: props.textColor ?? group?.textColor.value,
     disabled: props.disabled ?? group?.disabled.value ?? false,
@@ -66,9 +68,6 @@ export function useButton(props: Readonly<ButtonProps>, emit: { (event: "click",
       invoking = false;
     }
   }
-  function handleTouchstart(event: TouchEvent) {
-    if (!blocked.value && active) emit('touchstart', event);
-  }
 
   return {
     states,
@@ -76,6 +75,5 @@ export function useButton(props: Readonly<ButtonProps>, emit: { (event: "click",
     blocked,
     computedStyle,
     handleClick,
-    handleTouchstart,
   };
 }

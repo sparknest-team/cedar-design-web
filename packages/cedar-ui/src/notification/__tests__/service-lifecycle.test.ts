@@ -1,4 +1,4 @@
-import { nextTick } from "vue";
+import { createApp, nextTick } from "vue";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import Notification from "../index";
 
@@ -16,6 +16,28 @@ afterEach(async () => {
   vi.useRealTimers();
 });
 describe("Notification service ID ownership", () => {
+  test("installed service exposes remove and removes the matching notification", async () => {
+    const app = createApp({});
+    app.use(Notification);
+    const service = app.config.globalProperties.$notification;
+    expect(Object.keys(service).sort()).toEqual(["clear", "error", "info", "remove", "success", "warning"]);
+    service.info({ id: "plugin-id", content: "plugin notice", duration: 0 });
+    await nextTick();
+    expect(document.body.textContent).toContain("plugin notice");
+    service.remove("plugin-id");
+    await nextTick();
+    vi.advanceTimersByTime(500);
+    await nextTick();
+    expect(document.body.textContent).not.toContain("plugin notice");
+  });
+  test("service forwards a custom close button accessible name", async () => {
+    Notification.info({ id: "named-close", content: "notice", closable: true, duration: 0, closeButtonAriaLabel: "Dismiss alert" });
+    await nextTick();
+    expect(document.querySelector('.c-notification button')?.getAttribute('aria-label')).toBe('Dismiss alert');
+    Notification.info({ id: "named-close", content: "updated", closable: true, closeButtonAriaLabel: "关闭通知" });
+    await nextTick();
+    expect(document.querySelector('.c-notification button')?.getAttribute('aria-label')).toBe('关闭通知');
+  });
   test("updating a still-active ID retains its component identity", async () => {
     Notification.info({
       id: "active-update",

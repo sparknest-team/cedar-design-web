@@ -22,14 +22,6 @@ permalink: /components/scheduler/
 
 <demo src="./__demos__/basic.vue"></demo>
 
-## 阅读方向
-
-继承页面、局部容器或 ConfigProvider 的 `dir`，可沿用文档导航的 LTR/RTL 按钮实时切换。月/周/资源列和横向时间轴从阅读起点排列；纵向时间仍从上向下。切换方向保留日期、日程数据、选择和横向阅读距离，并取消正在进行的拖动或拉伸。
-
-小时级资源时间线支持日程移动和开始/结束两端拉伸，遵守 `snapDuration`、只读状态、里程碑和日程的 `resizable` 限制。时间轴缩放保留可视时间区域中心的日期；资源标签固定在阅读起点，虚拟行与表头同步滚动。
-
-默认重叠布局使用逻辑起点；自定义 `eventLayout` 返回的 `left` 保持屏幕物理左侧语义，由调用方按业务需要提供几何位置。日期、时区、依赖关系和资源顺序不会因 RTL 而反转。
-
 ## 视图与布局
 
 ### 布局分组与自定义宽度
@@ -57,7 +49,7 @@ permalink: /components/scheduler/
 
 组件只认识日程、资源、时间和通用展示属性。出勤单、任务类型、休息状态、业务权限、表单和服务端 DTO 映射放在 Demo/应用中，通过 `metadata`、插槽、`before-change`、`before-transaction` 接入。复制日程不继承 `layoutGroupId`，避免意外加入原布局组。
 
-本次 API 调整：移除 Event/Template 的 `taskId`，改为 `metadata.taskId`；`createSchedulerTaskEvents`、`SchedulerTask`、`SchedulerTaskAssignment` 移至 Demo，不再从核心导出。`layoutGroupId` 不是任务 ID 的替代字段，只在需要分组布局时由应用映射。
+业务任务信息保存在日程的 `metadata` 中，例如 `metadata.taskId`。`layoutGroupId` 仅用于布局分组，应按业务需要设置。
 
 ### 不关联资源的计划
 
@@ -307,7 +299,7 @@ const disabledRanges: SchedulerDisabledRange[] = [
 
 ### 资源并发容量
 
-时间线示例可把容量降至1后，将样品甲移出与样品乙的重叠时段，再拖入冲突区观察容量拒绝；拒绝保留原排期，下一次合法移动仍可保存。结束恰等于另一项开始的相邻区间不重叠。当前资源时间线卡片没有拉伸手柄，不能把移动路径当作水平拉伸验收；持按取消、触屏和其他视图需分别验证。
+将容量降至 1，把任务移出重叠时段后可保存，再拖入冲突区会拒绝修改并保留原排期。结束时间恰等于另一项开始时间时不算重叠。当前资源时间线卡片只支持移动，不提供拉伸手柄。
 
 <demo src="./__demos__/resource-capacity.vue"></demo>
 
@@ -395,7 +387,7 @@ exceptions = setSchedulerRecurrenceException(exceptions, occurrences[0], {
 
 开始日期只作为下界：每周所选星期不含起点星期时，第一次是之后的第一个匹配日。count 不会因为翻页或取消重新计数。until 表示时间点；日期字符串代表当地零点，定时会议若要包含当天需传入相应开始时刻。
 
-全天系列保留日期字符串与日历天数；定时系列在运行环境本地日历上重复，保持原始时分及实际经过时长。夏令时不存在的时刻遵循 JavaScript Date 的归一化，随后日期恢复起点时分。本轮不支持任意 IANA 时区或完整 RRULE；前后端须统一时区，不能依赖实例 ID 跨时区不变。
+全天系列保留日期字符串与日历天数；定时系列在运行环境本地日历上重复，保持原始时分及实际经过时长。夏令时不存在的时刻遵循 JavaScript Date 的归一化，随后日期恢复起点时分。不支持任意 IANA 时区或完整 RRULE；前后端须统一时区，不能依赖实例 ID 跨时区不变。
 
 例外始终引用原始发生时间，移动后仍可继续修改同一次。移出当前窗口的实例不再显示，移入窗口的例外正常出现。孤立例外或已不属于当前规则的发生时间不会生成实例；修改系列规则时，业务须明确保留、迁移或清理策略。
 
@@ -481,7 +473,7 @@ isSchedulerWorkingDate("2026-02-28", businessCalendar); // true
 
 可见范围生成的禁用区间只保证该范围；demo 还在 `before-transaction` 中为提案完整时间段生成区间，避免编辑至视图外漏校验。生产接口仍需按完整资源、时区、权限和版本做服务端校验。日历没有配置的日期继续按 workingDays 判断，因此业务需提供所需年份的休假/补班数据。
 
-修改工作日历可能改变“最后工作日”的原始发生时间，已有例外不能自动迁移；请沿用系列规则变更的显式清理或迁移策略。本轮不包含地区节假日下载、调休规则推算、按资源选择多个企业日历或工作小时的日期级覆盖。
+修改工作日历可能改变“最后工作日”的原始发生时间，已有例外不能自动迁移；需显式保留、清理或迁移。示例不提供节假日下载、调休推算、按资源选择多个企业日历或工作小时的日期级覆盖。
 
 ### 修改本次及以后
 
@@ -663,7 +655,7 @@ const proposal = splitSchedulerRecurrence(
 
 新增 `transaction(value, context)` 与 `transaction-error(error, context)` 事件；context 包含 `action`（change/undo/redo）、`changes`、`previousValue` 和 `value`。原单条 `change` / `change-error` 事件仅在事务含一条变更时触发，多条变更不会逐条触发这些事件。
 
-**保存钩子约定：**设置 `before-transaction` 后，它统一接管单条、批量、撤销和重做，替代 `before-change`，避免同一操作保存两次。只有 `before-change` 的旧应用保持单条行为；执行多条事务会明确返回 `transaction-hook-required`，请迁移到一次性的原子保存接口。前端原子提交不能替代后端数据库事务。
+**保存钩子：**通过 `before-transaction` 原子保存单条、批量、撤销和重做操作。仅配置 `before-change` 时只能处理单条操作，批量事务会返回 `transaction-hook-required`。服务端仍需使用数据库事务保证保存的一致性。
 
 ```ts
 import type { SchedulerBeforeTransaction } from "@cedar-design/ui";
@@ -885,17 +877,34 @@ before-change 返回 false 取消，抛错或拒绝 Promise 会触发 change-err
 
 交互取舍：详情统一用 Dialog；全天表单允许填写日期范围；任务级实际打卡时间尚无独立来源时，闭单后的任务块按标准工时比例分布在整单真实打卡区间，详情保留原始记录。原生拖放合并的目标为任务卡片内容区，键盘操作使用“加入已勾选任务”；不向核心增加出勤单 drop-target 协议。
 
+## 阅读方向
+
+继承页面、局部容器或 ConfigProvider 的 `dir`，可沿用文档导航的 LTR/RTL 按钮实时切换。月/周/资源列和横向时间轴从阅读起点排列；纵向时间仍从上向下。切换方向保留日期、日程数据、选择和横向阅读距离，并取消正在进行的拖动或拉伸。
+
+小时级资源时间线支持日程移动和开始/结束两端拉伸，遵守 `snapDuration`、只读状态、里程碑和日程的 `resizable` 限制。时间轴缩放保留可视时间区域中心的日期；资源标签固定在阅读起点，虚拟行与表头同步滚动。
+
+默认重叠布局使用逻辑起点；自定义 `eventLayout` 返回的 `left` 保持屏幕物理左侧语义，由调用方按业务需要提供几何位置。日期、时区、依赖关系和资源顺序不会因 RTL 而反转。
+
+## 使用说明
+
+### 异步操作反馈
+
+before-* 等待期间显示加载反馈并标记 aria-busy；拒绝或失败后恢复，重复提交不再启动同一操作。普通事件返回的 Promise 不参与加载。
+### 配置说明
+
+所有变量集中于 `style/token.less`，支持亮暗主题覆盖。
+
 ## API
 
-### `<c-scheduler>` Props
+### Scheduler Props
 
 | 属性                       | 说明                                                                    | 类型                                            | 默认值       |
 | -------------------------- | ----------------------------------------------------------------------- | ----------------------------------------------- | ------------ |
 | model-value                | 日程数据，支持 v-model；传入时受控                                      | SchedulerEvent[]                                | —            |
 | preview-event              | 尚未保存的新增日程占位，只参与视觉展示                                  | SchedulerEvent                                  | —            |
 | default-value              | 非受控初始数据                                                          | SchedulerEvent[]                                | []           |
-| mode                       | 当前视图，支持 v-model:mode                                             | SchedulerMode                                   | —            |
-| default-mode               | 非受控默认视图                                                          | SchedulerMode                                   | week         |
+| mode                       | 当前视图，支持 v-model:mode                                             | SchedulerMode<br>`'month' \| 'week' \| 'day' \| 'agenda' \| 'resource-day' \| 'resource-timeline'` | —            |
+| default-mode               | 非受控默认视图                                                          | SchedulerMode<br>`'month' \| 'week' \| 'day' \| 'agenda' \| 'resource-day' \| 'resource-timeline'` | week         |
 | date                       | 定位日期，支持 v-model:date                                             | Date / string / number                          | —            |
 | default-date               | 初始定位日期                                                            | Date / string / number                          | 当前日期     |
 | resource-dimensions        | 维度定义 `{ id, label }[]`                                              | SchedulerResourceDimension[]                    | []           |
@@ -907,7 +916,7 @@ before-change 返回 false 取消，抛错或拒绝 Promise 会触发 change-err
 | resource-label             | 资源字段名称，如设备、会议室                                            | string                                          | 语言包“资源” |
 | request-resources          | 按关键词和游标查询候选资源                                              | SchedulerRequestResources                       | —            |
 | resolve-resources          | 按 ID 批量补全名称                                                      | SchedulerResolveResources                       | —            |
-| modes                      | 允许切换的视图                                                          | SchedulerMode[]                                 | 全部六种     |
+| modes                      | 允许切换的视图                                                          | SchedulerMode[]<br>`SchedulerMode: 'month' \| 'week' \| 'day' \| 'agenda' \| 'resource-day' \| 'resource-timeline'` | 全部六种     |
 | first-day-of-week          | 周起始，0 周日至 6 周六                                                 | number                                          | 1            |
 | start-hour                 | 时间网格起始小时，0–23                                                  | number                                          | 8            |
 | end-hour                   | 时间网格结束小时，必须大于起始，最多 24                                 | number                                          | 20           |
@@ -934,12 +943,25 @@ before-change 返回 false 取消，抛错或拒绝 Promise 会触发 change-err
 | allow-overlap              | 允许同资源时间重叠                                                      | boolean                                         | true         |
 | editable                   | 启用内置编辑器；false 通过 editor-request 接管                          | boolean                                         | true         |
 | before-change              | 返回 false 取消；异步拦截、保存接口                                     | SchedulerBeforeChange / SchedulerBeforeChange[] | —            |
+| selectable | 启用多选操作 | boolean | false |
+| selected-keys / default-selected-keys | 受控选中日程 ID / 非受控初始选中 ID | string[] | — / [] |
+| history | 对已接受的变更启用撤销与重做 | boolean | false |
+| history-limit | 历史记录数量，正整数；无效值回退 20 | number | 20 |
+| before-transaction | 事务保存守卫，设置后替代 before-change | SchedulerBeforeTransaction / SchedulerBeforeTransaction[] | — |
+| working-hours | 每周工作时间；省略不限制，空数组禁止定时日程 | SchedulerWorkingHours[] | — |
+| date-working-hours | 按日期覆盖工作时间 | SchedulerDateWorkingHours[] | [] |
+| disabled-ranges | 禁用时间区间，可限定资源 | SchedulerDisabledRange[] | [] |
+| scale / default-scale | 受控 / 非受控资源时间线刻度 | 'hour' / 'day' | — / day |
+| virtual-list-props | 配置后启用资源时间线虚拟滚动 | SchedulerVirtualListProps | — |
+| resource-group-dimensions | 按维度顺序交叉分组，至少两个不同维度 | string[] | [] |
+| resource-group-by | 资源到稳定分组键的映射 | (resource: SchedulerResource) => string | — |
+| expanded-keys / default-expanded-keys | 受控 / 非受控分组展开键；省略默认全部展开 | string[] | — / — |
 
 mode 为 `day | week | month | agenda | resource-day | resource-timeline`。agenda 与资源时间线按周导航。超出时间网格小时范围的日程仍可在月/议程/时间线查看。
 
 model-value 受控时，组件只提出新值，由父组件接受后更新界面；不会在接口失败后先移动再回滚。组件不修改输入数组或对象。before-change 得到分离副本，修改副本不会修改提交值。
 
-### `<c-scheduler>` Events
+### Scheduler Events
 
 | 事件                     | 说明                                                             | 参数                                 |
 | ------------------------ | ---------------------------------------------------------------- | ------------------------------------ |
@@ -957,8 +979,13 @@ model-value 受控时，组件只提出新值，由父组件接受后更新界�
 | range-change             | 首次与实际可见日期范围变化                                       | SchedulerRange                       |
 | resource-error           | 资源搜索或回显失败，不修改日程数据                               | error, SchedulerResourceErrorContext |
 | editor-request           | 仅 editable=false：请求外部新建或查看/编辑                       | SchedulerEditorRequest               |
+| update:selectedKeys | 选中日程 ID 变更 | string[] |
+| update:scale | 时间线刻度变更 | 'hour' / 'day' |
+| update:expandedKeys | 分组展开键变更 | string[] |
+| transaction | 单项或批量事务通过后提出新值 | SchedulerEvent[], SchedulerTransactionContext |
+| transaction-error | 事务失败，保留原始原因 | unknown, SchedulerTransactionContext |
 
-### `<c-scheduler>` Slots
+### Scheduler Slots
 
 | 插槽              | 参数                                             | 说明                                                                                                               |
 | ----------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
@@ -969,18 +996,21 @@ model-value 受控时，组件只提出新值，由父组件接受后更新界�
 | toolbar           | { date, mode, navigate, create }                 | 替换工具栏；navigate(-1/1) 切换范围，create() 走工具栏新增流程                                                     |
 | column-background | { date, resource? }                              | 日/周/资源日程列背景，不接管指针；用于业务软提示、热力背景等                                                       |
 | toolbar-extra     | { date, mode }                                   | 工具栏扩展                                                                                                         |
-| editor            | SchedulerEditorSlotProps                         | 自定义抽屉内容：action、event、error、errorMessage、save、remove、close、readonly、pending                         |
+| editor            | SchedulerEditorSlotProps                         | 自定义抽屉内容：action、event、error、errorMessage、save、remove、duplicate、close、readonly、pending                         |
 | empty             | —                                                | 空状态                                                                                                             |
 
-### 实例方法
+### Scheduler Methods
 
 | 方法                               | 说明                                                           |
 | ---------------------------------- | -------------------------------------------------------------- |
 | `change(change): Promise<boolean>` | 执行 create/update/remove/move/resize，复用全部校验与钩子      |
 | duplicateEvent(id: string)         | 打开独立复制草稿或发出自定义创建请求，返回 boolean，不自动保存 |
 | goToDate(date: Date)               | 定位日期；遵循受控模型                                         |
+| `transaction(changes): Promise<boolean>` | 执行批量事务，应用同一套规则与事务守卫 |
+| `undo(): Promise<boolean>` / `redo(): Promise<boolean>` | 撤销 / 重做已接受的历史，仍经过事务守卫 |
+| `canUndo` / `canRedo` | 只读状态，表示当前是否可撤销 / 重做 |
 
-## 类型定义
+## Types
 
 ```ts
 import type {
@@ -992,6 +1022,8 @@ import type {
   SchedulerChange,
   SchedulerChangeContext,
   SchedulerBeforeChange,
+  SchedulerBeforeTransaction,
+  SchedulerTransactionContext,
   SchedulerEventTemplate,
   SchedulerRequestResources,
   SchedulerResolveResources,
@@ -1061,12 +1093,12 @@ type SchedulerResolveResources = (
   context: { signal: AbortSignal },
 ) => SchedulerResource[] | Promise<SchedulerResource[]>;
 type SchedulerResourceErrorContext =
-  | { type: "search"; query: string; cursor?: string }
+  | { type: "search"; query: string; cursor?: string; dimensionId?: string }
   | { type: "resolve"; ids: string[] };
 
 type SchedulerEditorAction = "create" | "edit";
 type SchedulerEditorRequest = { event: SchedulerEvent; readonly: boolean } & (
-  | { action: "create"; source: "toolbar" | "cell" | "drop" }
+  | { action: "create"; source: "toolbar" | "cell" | "drop" | "duplicate" }
   | { action: "edit"; source: "event" }
 );
 interface SchedulerEditorSlotProps {
@@ -1078,6 +1110,7 @@ interface SchedulerEditorSlotProps {
   pending: boolean;
   save: (event?: SchedulerEvent) => void;
   remove: () => void;
+  duplicate: () => void;
   close: () => void;
 }
 ```
@@ -1086,9 +1119,14 @@ interface SchedulerEditorSlotProps {
 
 当前按运行环境本地时区显示，定时日程建议传 ISO 时间点；没有任意 IANA 显示时区的承诺。跨时区 RRULE、ICS 与版本同步从独立 adapters 入口提供，真实外部账号连接需业务实现；虚拟资源行通过 virtual-list-props 配置。本地历史撤销与按范围远程加载见上方示例。指针拖拽支持移动与拉伸，Escape 取消；键盘与触屏也可通过编辑表单完成排期/分配修改。资源选项的 disabled 禁止新增分配与拖入，已存在的关联可保留或移除。
 
+
+`before-transaction` 优先于 `before-change`，单项或批量事务只执行事务守卫；仅配置 `before-change` 时批量事务会以 `transaction-hook-required` 拒绝，避免部分保存。守卫数组按顺序执行，返回 false 取消，void 允许。等待结束后会重新检查数据和规则；过期提案不会提交。`change-error` 和 `transaction-error` 的第一个参数保留原始 cause（`unknown`），编辑器展示使用归一化的 `SchedulerError`。受控模式中，历史只记录父组件接受的变更；普通事件返回的 Promise 不参与事务。
+
+`useSchedulerDataSource` 从根入口导出，接受 `requestEvents`、范围、资源 ID、`enabled`、缓存时长和容量；返回 `events`、`loading`、`error`、`loadedRange`、`refresh`、`cancel`、`invalidate`。它是独立数据源，`loading` 是返回的状态而不是 Scheduler 属性；请求使用 AbortSignal，并丢弃过期结果。
+
 ## 独立核心
 
-源码 `src/scheduler/core` 不导入 Vue、DOM 或外部日历库，可单独测试及后续提取为 scheduler-core 包。发布后可直接使用纯核心子入口，避免导入组件运行时：
+可通过 `@cedar-design/ui/scheduler/core` 使用不依赖 Vue 或 DOM 的日程计算工具：
 
 ```ts
 import {
@@ -1100,28 +1138,86 @@ import {
 
 其余日期与时间线工具也从该入口导出。核心提供计算与不可变变更，不承担网络、权限认证或数据库事务。
 
-### 样式变量
+## CSS Variables
 
-所有变量集中于 `style/token.less`，支持亮暗主题覆盖。
+<!-- component-css-variables:start -->
 
-| 变量名                           | 默认值                         |
-| -------------------------------- | ------------------------------ |
-| --c-scheduler-background         | var(--c-color-bg-2)            |
-| --c-scheduler-color              | var(--c-color-text-1)          |
-| --c-scheduler-border-color       | var(--c-color-border)          |
-| --c-scheduler-sidebar-width      | 220px                          |
-| --c-scheduler-slot-height        | 36px                           |
-| --c-scheduler-column-min-width   | 120px                          |
-| --c-scheduler-max-height         | 720px                          |
-| --c-scheduler-event-color        | rgb(var(--c-primary-6))        |
-| --c-scheduler-event-accent-color | var(--c-scheduler-event-color) |
-| --c-scheduler-event-background   | var(--c-color-primary-light-1) |
-| --c-scheduler-lane-height        | 38px                           |
-| --c-scheduler-ghost-opacity      | 0.75                           |
-| --c-scheduler-preview-opacity    | 0.85                           |
-| --c-scheduler-preview-duration   | 100ms                          |
-| --c-scheduler-ghost-z-index      | 2000                           |
+通过以下变量定制组件外观。默认值随表中注明的主题或选择器条件变化；变量仅在对应的尺寸、变体和交互状态下生效。
 
-### 守卫等待反馈
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
-before-* 等待期间显示加载反馈并标记 aria-busy；拒绝或失败后恢复，重复提交不再启动同一操作。普通事件返回的 Promise 不参与加载。
+| 变量 | 默认值／条件 | 影响的样式 |
+| --- | --- | --- |
+| `--c-scheduler-axis-cell-width` | `96px` | `min-width` |
+| `--c-scheduler-background` | `var(--c-color-bg-2)` | `background` |
+| `--c-scheduler-border-color` | `var(--c-color-border)` | `border`, `border-bottom`, `border-inline-end`, `border-inline-start`, `border-top` |
+| `--c-scheduler-border-width` | `1px` | `border`, `border-bottom`, `border-inline-end`, `border-inline-start`, `border-top`, `height`, `width` |
+| `--c-scheduler-color` | `var(--c-color-text-1)` | `color` |
+| `--c-scheduler-column-min-width` | `120px` | `grid-template-columns`, `min-width` |
+| `--c-scheduler-dependency-width` | `2px` | `stroke-width` |
+| `--c-scheduler-dragging-opacity` | `0.3` | `opacity` |
+| `--c-scheduler-editor-width` | `440px` | 组件样式 |
+| `--c-scheduler-event-accent-color` | `var(--c-scheduler-event-color)` | `border-inline-start` |
+| `--c-scheduler-event-accent-width` | `3px` | `border-inline-start` |
+| `--c-scheduler-event-background` | `var(--c-color-primary-light-1)` | `background`, `background-color`, `background-image` |
+| `--c-scheduler-event-background-image` | `linear-gradient(var(--c-scheduler-event-background), var(--c-scheduler-event-background))` | `background-image` |
+| `--c-scheduler-event-color` | `rgb(var(--c-primary-6))` | `background-image`, `border-inline-start`, `color` |
+| `--c-scheduler-event-font-size` | `12px` | `font-size` |
+| `--c-scheduler-event-gap` | `2px` | `gap`, `height`, `margin-bottom`, `padding`, `top` |
+| `--c-scheduler-event-min-height` | `20px` | `min-height`, `min-width` |
+| `--c-scheduler-event-padding` | `4px` | `padding` |
+| `--c-scheduler-event-radius` | `4px` | `border-radius` |
+| `--c-scheduler-focus-color` | `var(--c-sys-color-content-brand)` | `outline` |
+| `--c-scheduler-focus-width` | `2px` | `outline`, `outline-offset` |
+| `--c-scheduler-font-size` | `14px` | `font-size` |
+| `--c-scheduler-gap` | `12px` | `gap`, `margin-bottom`, `padding` |
+| `--c-scheduler-ghost-opacity` | `0.96` | `opacity` |
+| `--c-scheduler-ghost-padding` | `8px 12px` | `padding` |
+| `--c-scheduler-ghost-z-index` | `2000` | `z-index` |
+| `--c-scheduler-gutter-width` | `64px` | `grid-template-columns`, `min-width` |
+| `--c-scheduler-header-z-index` | `4` | `z-index` |
+| `--c-scheduler-heading-height` | `44px` | `min-height` |
+| `--c-scheduler-lane-height` | `38px` | `height`, `top` |
+| `--c-scheduler-line-height` | `1.5` | `line-height` |
+| `--c-scheduler-max-height` | `720px` | `max-height` |
+| `--c-scheduler-min-height` | `560px` | `min-height` |
+| `--c-scheduler-mode-width` | `150px` | `width` |
+| `--c-scheduler-month-cell-height` | `124px` | `height`, `min-height` |
+| `--c-scheduler-muted-color` | `var(--c-color-text-3)` | `color` |
+| `--c-scheduler-now-color` | `var(--c-sys-color-content-danger)` | `border-top`, `color` |
+| `--c-scheduler-now-width` | `2px` | `border-top` |
+| `--c-scheduler-now-z-index` | `3` | `z-index` |
+| `--c-scheduler-padding` | `16px` | `margin-bottom`, `padding` |
+| `--c-scheduler-preview-duration` | `0ms` | `transition` |
+| `--c-scheduler-preview-opacity` | `0.65` | `opacity` |
+| `--c-scheduler-preview-shadow` | `0 4px 16px rgba(0, 0, 0, 0.15)` | `box-shadow` |
+| `--c-scheduler-preview-z-index` | `3` | `z-index` |
+| `--c-scheduler-radius` | `8px` | `border-radius` |
+| `--c-scheduler-resize-height` | `6px` | `height`, `width` |
+| `--c-scheduler-resource-width` | `150px` | `grid-template-columns`, `min-width`, `width` |
+| `--c-scheduler-resource-z-index` | `2` | `z-index` |
+| `--c-scheduler-selected-background` | `var(--c-color-primary-light-1)` | `background` |
+| `--c-scheduler-sidebar-width` | `220px` | `width` |
+| `--c-scheduler-slot-height` | `36px` | `height` |
+| `--c-scheduler-stack-focus-step` | `1` | `z-index` |
+| `--c-scheduler-subtle-background` | `var(--c-color-fill-1)` | `background` |
+| `--c-scheduler-timeline-min-width` | `1000px` | `min-width` |
+| `--c-scheduler-today-background` | `var(--c-color-primary-light-1)` | `background` |
+| `--c-scheduler-today-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-scheduler-unavailable-background` | `var(--c-color-fill-2)` | `background` |
+| `--c-scheduler-virtual-height` | `480px` | 组件样式 |
+| `--c-scheduler-weekday-count` | `7` | `grid-template-columns` |
+
+</div>
+
+将覆盖设置在组件实际根节点或弹层真实挂载祖先上。例如给该元素添加下列 class，再按需替换变量值：
+
+```css
+.component-theme {
+  --c-scheduler-background: var(--c-color-bg-2);
+}
+```
+
+显式行内样式及直接写入同一 CSS 属性的 Props 优先于样式表默认值。Teleport 后，普通 CSS 变量按实际挂载位置继承；使用 ThemeProvider 时，请遵循其局部主题与弹层配置规则。局部定制请直接覆盖组件变量；仅修改后代的 system 变量不会重新计算从根继承的组件别名。内部变量不属于公共 API。
+
+<!-- component-css-variables:end -->

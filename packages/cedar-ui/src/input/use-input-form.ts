@@ -6,17 +6,24 @@ import { inputGroupKey } from './context'
 import type { InputProps } from './props'
 
 /** Connect field controls to Cedar's existing Form / ConfigProvider system. */
-export function useInputForm(props: Readonly<Pick<InputProps, 'size' | 'disabled' | 'readonly' | 'error'>>) {
+export function useInputForm(
+  props: Readonly<Pick<InputProps, 'size' | 'disabled' | 'readonly' | 'error'>>,
+  options: { uninject?: boolean } = {},
+) {
   const boundary = inject(fieldEditorBoundary, false)
   const ownFormEvents = inject(fieldControlFormEvents, undefined)
-  const notifyForm = computed(() => !boundary || ownFormEvents?.value === true)
-  provide(fieldControlFormEvents, computed(() => false))
+  const notifyForm = computed(() => !options.uninject && (!boundary || ownFormEvents?.value === true))
+  provide(
+    fieldControlFormEvents,
+    computed(() => false),
+  )
   const group = inject(inputGroupKey, undefined)
   const form = useFormItem({
     size: computed(() => props.size ?? group?.size.value),
     disabled: computed(() => props.disabled ?? group?.disabled.value),
     readonly: computed(() => props.readonly ?? group?.readonly.value),
     error: toRef(props, 'error'),
+    uninject: options.uninject,
   })
   return {
     ...form,

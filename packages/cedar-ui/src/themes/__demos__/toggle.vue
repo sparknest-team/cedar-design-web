@@ -1,4 +1,5 @@
 <template>
+  <c-theme-provider :theme="currentTheme">
   <c-space direction="column" fill>
     <c-space wrap>
       <c-button status="primary" @click="apply(Themes.default.light)">默认亮色</c-button>
@@ -9,7 +10,7 @@
 
     <div class="preview c-rounded-md c-p-16">
       <div class="c-text-1 c-mb-8">主题预览</div>
-      <div class="c-text-3 c-mb-16">主色按钮与语义文字会随 StyleProvider / cedar-theme 变化。</div>
+      <div class="c-text-3 c-mb-16">主色按钮与语义文字会随 ThemeProvider 变化。</div>
       <c-space>
         <c-button status="primary">Primary</c-button>
         <c-button>Default</c-button>
@@ -19,13 +20,18 @@
       </c-space>
     </div>
   </c-space>
+  </c-theme-provider>
 </template>
 
 <script lang="ts" setup>
-import { StyleProvider, Themes, type StyleVars } from '@cedar-design/ui'
+import { ref } from 'vue'
 
-function apply(theme: StyleVars | null) {
-  StyleProvider.setStyleVars(theme)
+import { Themes, type StyleVars } from '@cedar-design/ui'
+
+const currentTheme = ref<StyleVars>(Themes.default.light)
+
+function apply(theme: StyleVars) {
+  currentTheme.value = theme
 }
 </script>
 

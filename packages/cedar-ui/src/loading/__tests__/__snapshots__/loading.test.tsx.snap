@@ -1,7 +1,7 @@
 // Vitest Snapshot v1
 
 exports[`Loading > render 1`] = `
-"<div class=\\"c-loading\\" role=\\"status\\" aria-live=\\"polite\\">
+"<div class=\\"c-loading\\" role=\\"status\\" aria-live=\\"polite\\" aria-atomic=\\"true\\"><span class=\\"c-loading__sr-only\\">加载中</span>
   <!--v-if-->
   <div class=\\"c-loading__body\\">
     <div class=\\"c-loading__circle\\" aria-hidden=\\"true\\"><span class=\\"c-loading__circle-block c-loading__circle-block--md\\"><svg viewBox=\\"25 25 50 50\\" aria-hidden=\\"true\\"><circle cx=\\"50\\" cy=\\"50\\" r=\\"20\\" fill=\\"none\\"></circle></svg></span></div>

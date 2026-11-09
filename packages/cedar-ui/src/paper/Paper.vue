@@ -3,7 +3,7 @@
     v-ripple="{ disabled: !ripple }"
     :class="classes(n(), formatElevation(elevation, 2), [bordered, n('--bordered')],
       [round, n('--round')], [inline, n('--inline')], [ripple, n('--interactive')])"
-    :style="{ width: toSizeUnit(width), height: toSizeUnit(height), borderRadius: toSizeUnit(radius) }"
+    :style="{ width: toPaperSize(width), height: toPaperSize(height), borderRadius: toPaperSize(radius) }"
     @click="emit('click', $event)"
   >
     <slot />
@@ -13,8 +13,7 @@
 <script setup lang="ts">
 import vRipple from '../ripple'
 import { createNamespace, formatElevation } from '../_utils/global-config'
-import { toSizeUnit } from '../_utils/maple/elements'
-import { paperProps } from './props'
+import { paperProps, toPaperSize } from './props'
 
 defineOptions({ name: createNamespace('paper').name })
 defineProps(paperProps)

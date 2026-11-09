@@ -49,15 +49,20 @@ export const DefaultLoader = defineComponent({
 export function useActionLabels() {
   const { t } = useI18n()
   return computed<Record<ImagePreviewActionName, string>>(() => ({
-    prev: '‹',
-    next: '›',
+    prev: t('imagePreview.prev') === 'imagePreview.prev' ? 'Previous image' : t('imagePreview.prev'),
+    next: t('imagePreview.next') === 'imagePreview.next' ? 'Next image' : t('imagePreview.next'),
     fullScreen: t('imagePreview.fullScreen'),
     rotateLeft: t('imagePreview.rotateLeft'),
     rotateRight: t('imagePreview.rotateRight'),
     originalSize: t('imagePreview.originalSize'),
     zoomOut: t('imagePreview.zoomOut'),
     zoomIn: t('imagePreview.zoomIn'),
-    download: 'Download',
-    close: 'Close',
+    download: t('imagePreview.download') === 'imagePreview.download' ? 'Download image' : t('imagePreview.download'),
+    close: t('imagePreview.close') === 'imagePreview.close' ? 'Close image preview' : t('imagePreview.close'),
   }))
+}
+
+export function useImagePreviewLabel() {
+  const { t } = useI18n()
+  return computed(() => { const label = t('image.preview'); return label === 'image.preview' ? 'Preview image' : label })
 }

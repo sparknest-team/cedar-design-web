@@ -41,14 +41,16 @@
         >
           {{ clearText }}
         </button>
-        <icon-hover
+        <button
           v-else-if="clearable"
-          :disabled="disabled"
+          type="button"
+          :disabled="disabled || dataInfo.data.length === 0"
+          :aria-label="t('transfer.clear')"
           :class="`${prefixCls}-header-clear-btn`"
           @click="handleClear"
         >
-          <icon-delete />
-        </icon-hover>
+          <icon-hover><icon-delete /></icon-hover>
+        </button>
         <span v-else-if="!simple" :class="`${prefixCls}-header-count`">
           {{ dataInfo.selected.length }} / {{ dataInfo.data.length }}
         </span>
@@ -156,9 +158,7 @@ import {
   computed,
   defineComponent,
   inject,
-  nextTick,
   onBeforeUnmount,
-  onMounted,
   PropType,
   ref,
   watch,
@@ -180,6 +180,7 @@ import type {
 import { transferInjectionKey } from "./context";
 import Scrollbar from "../scrollbar";
 import Empty from "../empty";
+import { useI18n } from "../locale";
 import VirtualList from "../_components/virtual-list-v2";
 
 export default defineComponent({
@@ -235,6 +236,7 @@ export default defineComponent({
   },
   emits: ["search"],
   setup(props, { emit }) {
+    const { t } = useI18n();
     const prefixCls = getPrefixCls("transfer-view");
     const itemPrefixCls = getPrefixCls("transfer-list-item");
     const filter = ref("");
@@ -318,13 +320,13 @@ export default defineComponent({
       sortable = undefined;
     };
 
-    const initSortable = async () => {
+    const initSortable = () => {
       destroySortable();
       if (!props.targetDraggable || props.type !== "target") return;
-      await nextTick();
       if (!dragContainerRef.value) return;
       sortable = Sortable.create(dragContainerRef.value, {
         animation: 150,
+        disabled: props.disabled,
         handle: `.${itemPrefixCls}-drag-handle`,
         onEnd: ({ oldIndex, newIndex }) => {
           if (oldIndex == null || newIndex == null || oldIndex === newIndex)
@@ -341,11 +343,12 @@ export default defineComponent({
       });
     };
 
-    onMounted(initSortable);
-    watch(() => [props.targetDraggable, props.type], initSortable);
+    watch([dragContainerRef, () => props.targetDraggable, () => props.type], initSortable, { immediate: true, flush: 'post' });
+    watch(() => props.disabled, (disabled) => sortable?.option('disabled', disabled));
     onBeforeUnmount(destroySortable);
 
     return {
+      t,
       prefixCls,
       filteredData,
       filter,

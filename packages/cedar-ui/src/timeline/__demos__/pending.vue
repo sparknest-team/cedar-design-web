@@ -1,6 +1,6 @@
 <template>
   <c-row align="center" :style="{ marginBottom: '24px' }">
-    <c-checkbox :checked="!!pendingProps.orientation" @change="(v) => onChange({ orientation: v ? 'horizontal' : '' })">
+    <c-checkbox :checked="pendingProps.orientation === 'horizontal'" @change="(v) => onChange({ orientation: v ? 'horizontal' : 'vertical' })">
       horizontal &nbsp; &nbsp;
     </c-checkbox>
     <c-checkbox :checked="!!pendingProps.reverse" @change="(v) => onChange({ reverse: v })">
@@ -23,6 +23,9 @@
     <c-timeline-item label="2017-03-10" dotColor="#52C419"> The first milestone </c-timeline-item>
     <c-timeline-item label="2018-05-12" dotColor="#F5222D"> The second milestone </c-timeline-item>
     <c-timeline-item label="2020-09-30">The third milestone</c-timeline-item>
+  </c-timeline>
+  <c-timeline>
+    <template #pending>Waiting for the next milestone</template>
   </c-timeline>
 </template>
 

@@ -1,4 +1,4 @@
-import { computed, inject, provide, type ComputedRef } from 'vue'
+import { computed, inject, provide, type Ref } from 'vue'
 import { IconEmpty as DefaultEmptyIcon } from '@cedar-design/icons-vue/icon-empty'
 import { configProviderInjectionKey } from '../config-provider/context'
 import { useI18n } from '../locale'
@@ -12,7 +12,7 @@ export function useDefaultDescription() {
   return computed(() => t('empty.description'))
 }
 
-export function useConfigEmpty(hasCustomContent: ComputedRef<boolean>) {
+export function useConfigEmpty(hasCustomContent: Readonly<Ref<boolean>>) {
   const config = inject(configProviderInjectionKey, undefined)
   const skip = inject(skipConfigEmptyKey, false)
   return computed(() => {

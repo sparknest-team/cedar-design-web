@@ -13,6 +13,7 @@ import {
   onMounted,
   onUpdated,
 } from 'vue'
+import type { CSSProperties } from 'vue'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
 import { isObject } from '../_utils/is'
 import type { EllipsisConfig, EllipsisInternalConfig } from './types'
@@ -23,10 +24,10 @@ import { omit } from '../_utils/omit'
 import useMergeState from '../_hooks/use-merge-state'
 import measure from './utils/measure'
 import { clipboard } from '../_utils/clipboard'
-import getInnerText from './utils/getInnerText'
 import { caf, raf } from '../_utils/raf'
 import Tooltip from '../tooltip'
 import Popover from '../popover'
+import { useI18n } from '../locale'
 import { typographyBaseInternalProps } from './props'
 import type { TypographyBaseProps } from './props'
 
@@ -74,12 +75,12 @@ function normalizeEllipsisConfig(config: EllipsisConfig): EllipsisInternalConfig
   const tooltipProps = (isObject(config.showTooltip) && config.showTooltip.props) || {}
 
   return {
-    rows: 1,
     suffix: '',
     ellipsisStr: '...',
     expandable: false,
     css: false,
     ...omit(config, ['showTooltip']),
+    rows: Number.isSafeInteger(config.rows) && config.rows! > 0 ? config.rows! : 1,
     showTooltip,
     TooltipComponent,
     tooltipProps,
@@ -168,6 +169,7 @@ export default defineComponent({
     } = toRefs(props)
 
     const prefixCls = getPrefixCls('typography')
+    const { t } = useI18n()
     const classNames = computed(() => [
       prefixCls,
       {
@@ -177,7 +179,11 @@ export default defineComponent({
     ])
 
     const wrapperRef = ref()
+    const rootRef = ref<HTMLElement>()
+    const contentRef = ref<HTMLElement>()
     const fullText = ref('')
+    let contentObserver: MutationObserver | undefined
+    let observedContent: HTMLElement | undefined
     let active = true
     let disposed = false
     const lifecycleEpoch = ref(0)
@@ -191,9 +197,12 @@ export default defineComponent({
       }),
     )
     const mergeEditing = computed(() => editable.value && editing.value)
+    let cancelFocusRestore = () => {}
 
     function onEditStart() {
       if (!available() || props.disabled) return
+      cancelFocusRestore()
+      updateFullText()
       emit('update:editing', true)
       emit('edit-start')
       setEditing(true)
@@ -205,8 +214,32 @@ export default defineComponent({
       emit('change', text)
     }
 
-    function onEditEnd() {
+    function onEditEnd(reason: 'enter' | 'blur') {
       if (!available() || !editing.value) return
+      const doc = rootRef.value?.ownerDocument
+      const previousFocus = doc?.activeElement
+      const shouldRestore = reason === 'enter' && !!previousFocus && !!rootRef.value?.contains(previousFocus)
+      cancelFocusRestore()
+      if (shouldRestore && doc) {
+        let timer: ReturnType<typeof setTimeout> | undefined
+        const cleanup = () => {
+          doc.removeEventListener('keyup', onKeyup, true)
+          if (timer !== undefined) clearTimeout(timer)
+        }
+        const onKeyup = (event: KeyboardEvent) => {
+          if (event.key !== 'Enter') return
+          doc.removeEventListener('keyup', onKeyup, true)
+          timer = setTimeout(() => {
+            cleanup()
+            if (!available() || mergeEditing.value || !rootRef.value?.isConnected) return
+            if (doc.activeElement !== doc.body && doc.activeElement !== doc.documentElement && doc.activeElement !== previousFocus) return
+            const button = rootRef.value.querySelector<HTMLButtonElement>(`.${prefixCls}-operation-edit`)
+            if (button && !button.disabled) button.focus()
+          }, 0)
+        }
+        cancelFocusRestore = cleanup
+        doc.addEventListener('keyup', onKeyup, true)
+      }
       emit('update:editing', false)
       emit('edit-end')
       setEditing(false)
@@ -224,15 +257,16 @@ export default defineComponent({
       isCopied.value = false
     }
 
-    function onCopyClick() {
+    async function onCopyClick() {
       if (!available() || props.disabled || !copyable.value) return
       cancelCopy()
       const generation = copyGeneration
       const current = () => available() && !props.disabled && copyable.value && generation === copyGeneration
+      updateFullText()
       const text = copyText.value ?? fullText.value
 
-      clipboard(text || '')
-      if (!current()) return
+      const succeeded = await clipboard(text || '', current)
+      if (!succeeded || !current()) return
 
       isCopied.value = true
 
@@ -244,7 +278,7 @@ export default defineComponent({
         copyGeneration++
         copyTimer = null
         isCopied.value = false
-      }, copyDelay.value)
+      }, Number.isFinite(copyDelay.value) && copyDelay.value >= 0 && copyDelay.value <= 2147483647 ? copyDelay.value : 3000)
     }
 
     watch([copyable, copyDelay, () => props.disabled], cancelCopy, { flush: 'sync' })
@@ -277,12 +311,13 @@ export default defineComponent({
         return (
           <Operations
             editable={editable.value}
+            disabled={props.disabled}
             copyable={copyable.value}
-            expandable={ellipsisConfig.value.expandable}
+            expandable={false}
             isCopied={isCopied.value}
             isEllipsis={showCSSTooltip.value}
             expanded={expanded.value}
-            forceRenderExpand={forceRenderExpand || expanded.value}
+            forceRenderExpand={false}
             editTooltipProps={props.editTooltipProps}
             copyTooltipProps={props.copyTooltipProps}
             onEdit={onEditStart}
@@ -300,6 +335,7 @@ export default defineComponent({
       return (
         <Operations
           editable={editable.value}
+          disabled={props.disabled}
           copyable={copyable.value}
           expandable={ellipsisConfig.value.expandable}
           isCopied={isCopied.value}
@@ -367,17 +403,24 @@ export default defineComponent({
       lifecycleEpoch.value++
       cancelCopy()
       cancelMeasurement()
+      cancelFocusRestore()
+      contentObserver?.disconnect()
     })
     onDeactivated(() => {
       active = false
       lifecycleEpoch.value++
       cancelCopy()
       cancelMeasurement()
+      cancelFocusRestore()
+      contentObserver?.disconnect()
+      observedContent = undefined
     })
     onActivated(() => {
       if (active || disposed) return
       active = true
       lifecycleEpoch.value++
+      observeContent()
+      updateFullText()
       if (ellipsisConfig.value.css) calTooltip()
       else resizeOnNextFrame()
     })
@@ -401,8 +444,8 @@ export default defineComponent({
     let children: VNode[] = []
 
     const updateFullText = () => {
-      if (ellipsis.value || copyable.value || editable.value) {
-        const _fullText = getInnerText(children)
+      if (contentRef.value && (ellipsis.value || copyable.value || editable.value)) {
+        const _fullText = contentRef.value.innerText ?? contentRef.value.textContent ?? ''
 
         if (_fullText !== fullText.value) {
           fullText.value = _fullText
@@ -411,10 +454,20 @@ export default defineComponent({
       }
     }
 
-    onMounted(updateFullText)
-    onUpdated(updateFullText)
+    const observeContent = () => {
+      const element = contentRef.value
+      if (observedContent === element) return
+      contentObserver?.disconnect()
+      observedContent = element
+      const Observer = element?.ownerDocument.defaultView?.MutationObserver
+      if (element && Observer && available()) {
+        contentObserver = new Observer(updateFullText)
+        contentObserver.observe(element, { subtree: true, childList: true, characterData: true })
+      }
+    }
 
-    const contentRef = ref<HTMLElement>()
+    onMounted(() => { observeContent(); updateFullText() })
+    onUpdated(() => { observeContent(); updateFullText() })
     const showCSSTooltip = ref(false)
 
     const calTooltip = () => {
@@ -439,7 +492,7 @@ export default defineComponent({
       }
     }
 
-    const ellipsisStyle = computed(() => {
+    const ellipsisStyle = computed<CSSProperties>(() => {
       if (expanded.value) {
         return {}
       }
@@ -459,10 +512,21 @@ export default defineComponent({
       // 编辑中
       if (mergeEditing.value) {
         const _editText = editText.value ?? fullText.value
+        const Component = component.value as keyof HTMLElementTagNameMap
+        const label = attrs['aria-label']
+        const labelledby = attrs['aria-labelledby']
+        const inputAttrs = {
+          'aria-label': typeof label === 'string' ? label : labelledby ? undefined : t('typography.edit'),
+          'aria-labelledby': labelledby,
+          'aria-describedby': attrs['aria-describedby'],
+        }
 
         return (
+          <Component ref={rootRef} class={classNames.value} {...attrs}>
+          <span ref={contentRef} aria-hidden="true" inert={true} style={{ position: 'fixed', top: '-100000px', left: '-100000px', pointerEvents: 'none' }}>{children}</span>
           <EditContent
             text={_editText}
+            inputAttrs={inputAttrs}
             onChange={(text: string) => {
               if (text !== _editText) {
                 onEditChange(text)
@@ -470,6 +534,7 @@ export default defineComponent({
             }}
             onEnd={onEditEnd}
           />
+          </Component>
         )
       }
 
@@ -481,40 +546,39 @@ export default defineComponent({
 
       if (ellipsisConfig.value.css) {
         const Content = Wrap(props as BaseInternalProps, children)
-        const Outer = (
-          <Component class={classNames.value} ref={wrapperRef} style={ellipsisStyle.value} {...titleAttrs} {...attrs}>
+        const ClampedContent = (
+          <span ref={wrapperRef} style={ellipsisStyle.value}>
             <span ref={contentRef}>{Content}</span>
-          </Component>
+          </span>
         )
-
-        if (showCSSTooltip.value) {
-          return (
-            <TooltipComponent
-              {...tooltipProps}
-              onResize={createResizeHandler(true)}
-              v-slots={{
-                content: () => fullText.value,
-              }}
-            >
-              {Outer}
-            </TooltipComponent>
-          )
-        }
-
         return (
-          <ResizeObserver
-            onResize={createResizeHandler(true)}
-          >
-            {Outer}
+          <ResizeObserver onResize={createResizeHandler(true)}>
+            <Component ref={rootRef} class={classNames.value} {...titleAttrs} {...attrs}>
+              <TooltipComponent
+                {...tooltipProps}
+                {...(showCSSTooltip.value ? {} : { open: false })}
+                v-slots={{ content: () => fullText.value }}
+              >
+                {ClampedContent}
+              </TooltipComponent>
+              {renderOperations()}
+            </Component>
           </ResizeObserver>
         )
       }
 
-      const Content = Wrap(props as BaseInternalProps, showEllipsis ? ellipsisText.value : children)
+      const Content = Wrap(props as BaseInternalProps, children)
+      const Truncated = Wrap(props as BaseInternalProps, ellipsisText.value)
 
       return (
         <ResizeObserver onResize={createResizeHandler()}>
-          <Component class={classNames.value} ref={wrapperRef} {...titleAttrs} {...attrs}>
+          <Component class={classNames.value} ref={(element) => { rootRef.value = element as HTMLElement; wrapperRef.value = element }} {...titleAttrs} {...attrs}>
+            <span
+              ref={contentRef}
+              aria-hidden={showEllipsis ? 'true' : undefined}
+              inert={showEllipsis ? true : undefined}
+              style={showEllipsis ? { position: 'fixed', top: '-100000px', left: '-100000px', pointerEvents: 'none' } : undefined}
+            >{Content}</span>
             {showEllipsis && showTooltip ? (
               <TooltipComponent
                 {...tooltipProps}
@@ -522,11 +586,9 @@ export default defineComponent({
                   content: () => fullText.value,
                 }}
               >
-                <span>{Content}</span>
+                <span>{Truncated}</span>
               </TooltipComponent>
-            ) : (
-              Content
-            )}
+            ) : showEllipsis ? Truncated : null}
             {showEllipsis ? ellipsisStr : null}
             {suffix}
             {renderOperations()}

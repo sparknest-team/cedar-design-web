@@ -1,0 +1,3 @@
+# Textarea parameter and public API contract
+
+Validate native rows as finite positive integers (including convertible numeric strings), and auto-size as boolean or positive finite row budgets with ordered bounds. Invalid values use Vue prop diagnostics and restore native sizing instead of leaving unsafe measurement or DOM rows. Preserve valid fractional auto row-height budgets. Add the existing wrapper open-change event and value/text reading scope to the actual public component types; reconcile complete bilingual props/events/slots/instance documentation and the established payload/done/context commit guard.

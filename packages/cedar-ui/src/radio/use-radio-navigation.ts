@@ -1,5 +1,5 @@
-import { resolveDirection } from '../_utils/direction'
 import { computed, onActivated, onDeactivated, onMounted, onScopeDispose, onUpdated, shallowRef } from 'vue'
+import { resolveDirection } from '../_utils/direction'
 
 export interface RadioNavigationItem {
   element(): HTMLElement | null | undefined
@@ -24,7 +24,8 @@ export function useRadioNavigation(hasSelection: () => boolean): RadioNavigation
   function refresh() {
     if (disposed) return
     const next = [...members].sort((a, b) => {
-      const left = a.element(), right = b.element()
+      const left = a.element(),
+        right = b.element()
       if (!left || !right || left === right) return 0
       const position = left.compareDocumentPosition(right)
       if (position & 1) return 0
@@ -32,16 +33,26 @@ export function useRadioNavigation(hasSelection: () => boolean): RadioNavigation
     })
     if (next.length !== ordered.value.length || next.some((item, i) => item !== ordered.value[i])) ordered.value = next
   }
-  const enabled = computed(() => ordered.value.filter(item => !item.disabled()))
-  const entry = computed(() => enabled.value.find(item => item.checked()) ?? enabled.value[0])
+  const enabled = computed(() => ordered.value.filter((item) => !item.disabled()))
+  const entry = computed(() => enabled.value.find((item) => item.checked()) ?? enabled.value[0])
   const register = (item: RadioNavigationItem) => {
     if (!disposed) members.add(item)
     refresh()
-    return () => { members.delete(item); refresh() }
+    return () => {
+      members.delete(item)
+      refresh()
+    }
   }
-  onMounted(() => { mounted.value = true; refresh() })
+  onMounted(() => {
+    mounted.value = true
+    refresh()
+  })
   onUpdated(refresh)
-  onScopeDispose(() => { disposed = true; members.clear(); ordered.value = [] })
+  onScopeDispose(() => {
+    disposed = true
+    members.clear()
+    ordered.value = []
+  })
   return {
     restore() {
       // Native activation also unchecks the previous same-name member, even
@@ -54,13 +65,20 @@ export function useRadioNavigation(hasSelection: () => boolean): RadioNavigation
       }
     },
     register,
-    tabIndex: item => item.disabled() ? undefined : !mounted.value && hasSelection() && !item.checked() ? -1 : item === entry.value ? 0 : -1,
+    tabIndex: (item) =>
+      item.disabled()
+        ? undefined
+        : !mounted.value && hasSelection() && !item.checked()
+          ? -1
+          : item === entry.value
+            ? 0
+            : -1,
     keydown(event) {
-      if (disposed || event.altKey || event.ctrlKey || event.metaKey || event.repeat) return
+      if (event.defaultPrevented || disposed || event.altKey || event.ctrlKey || event.metaKey || event.repeat) return
       if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key)) return
       refresh()
       const items = enabled.value
-      const from = items.findIndex(item => item.element() === event.target)
+      const from = items.findIndex((item) => item.element() === event.target)
       if (from < 0) return
       event.preventDefault()
       event.stopPropagation()
@@ -81,9 +99,15 @@ export function useRadioNavigation(hasSelection: () => boolean): RadioNavigation
 
 export function useRadioRegistration(navigation: RadioNavigation | undefined, item: RadioNavigationItem) {
   let remove = navigation?.register(item)
-  const stop = () => { remove?.(); remove = undefined }
-  onActivated(() => { stop(); remove = navigation?.register(item) })
+  const stop = () => {
+    remove?.()
+    remove = undefined
+  }
+  onActivated(() => {
+    stop()
+    remove = navigation?.register(item)
+  })
   onDeactivated(stop)
   onScopeDispose(stop)
-  return computed(() => navigation ? navigation.tabIndex(item) : item.disabled() ? undefined : 0)
+  return computed(() => (navigation ? navigation.tabIndex(item) : item.disabled() ? undefined : 0))
 }

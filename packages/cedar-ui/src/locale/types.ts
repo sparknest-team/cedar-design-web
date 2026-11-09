@@ -110,11 +110,22 @@ export interface ValidateMessage {
 }
 
 export interface CedarLang {
+  layout: { expandSider: string; collapseSider: string }
+  resizeBox: { left: string; right: string; top: string; bottom: string; valueText: string }
+  loading: { text: string }
+  split: { resizeLabel: string }
+  splitButton?: { moreActions: string }
+  navMenu?: { more: string }
+  breadcrumb?: { label: string; ellipsis: string }
+  tabs?: { close: string; add: string; previous: string; next: string }
+  peopleSelect?: {call:string;chat:string}
   fieldPresentation?: { clickEdit?: string; doubleClickEdit?: string; edit: string; close: string; search: string; selected: string; limit: string; selectionCount: string; selectionRemove: string; selectionBack: string; selectionEmpty: string }
 
   search: { search: string; cancel: string; history: string }
   locale: string
   common: {
+    close: string
+    back?: string
     placeholderSelect: string
     placeholderInput: string
     placeholderStart: string
@@ -257,9 +268,14 @@ export interface CedarLang {
     nextDay: string
   }
   image: {
+    preview?: string
     loading: string
   }
   imagePreview: {
+    prev?: string
+    next?: string
+    download?: string
+    close?: string
     fullScreen: string
     rotateRight: string
     rotateLeft: string
@@ -278,7 +294,18 @@ export interface CedarLang {
   form?: {
     validateMessages: ValidateMessage
   }
+  transfer: { clear: string; actions: string }
   colorPicker: {
+    trigger: string
+    hue: string
+    opacity: string
+    palette: string
+    saturation: string
+    brightness: string
+    hex: string
+    red: string
+    green: string
+    blue: string
     history: string
     preset: string
     empty: string

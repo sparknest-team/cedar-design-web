@@ -99,7 +99,7 @@ Next status 循环六种本地结果状态并更新标题/图形，Reset status 
 
 ## API
 
-### `<result>` Props
+### Result Props
 
 | 参数名   | 描述             | 类型                                                                             |  默认值  |
 | -------- | ---------------- | -------------------------------------------------------------------------------- | :------: |
@@ -109,7 +109,7 @@ Next status 循环六种本地结果状态并更新标题/图形，Reset status 
 | image-size | 状态图形尺寸，数字表示 px | `string \| number` | `-` |
 | animation | 是否启用状态图形动画 | `boolean` | `true` |
 
-### `<result>` Slots
+### Result Slots
 
 | 插槽名   |   描述   | 参数 | 版本  |
 | -------- | :------: | ---- | :---- |
@@ -119,10 +119,61 @@ Next status 循环六种本地结果状态并更新标题/图形，Reset status 
 | extra    |  操作区  | -    | 2.8.0 |
 | default  | 默认插槽 | -    | 2.8.0 |
 
-### 类型定义
+## Types
 
 组件导出以下类型定义
 
 ```ts
 import type { ResultInstance } from '@cedar-design/ui'
 ```
+
+## CSS Variables
+
+<!-- component-css-variables:start -->
+
+通过以下变量定制组件外观。默认值随表中注明的主题或选择器条件变化；变量仅在对应的尺寸、变体和交互状态下生效。
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| 变量 | 默认值／条件 | 影响的样式 |
+| --- | --- | --- |
+| `--c-result-background` | `var(--c-color-bg-white)` | `background-color` |
+| `--c-result-border-radius` | `var(--c-border-radius-md)` | `border-radius` |
+| `--c-result-content-margin` | `var(--c-spacing-8) 0 0` | `margin` |
+| `--c-result-danger-border-color` | `var(--c-color-danger-light-3)` | `border-color` |
+| `--c-result-danger-color` | `var(--c-sys-color-content-danger)` | `fill` |
+| `--c-result-empty-border-color` | `rgb(var(--c-gray-2))` | `border-color` |
+| `--c-result-empty-color` | `rgb(var(--c-gray-5))` | `fill` |
+| `--c-result-extra-margin` | `var(--c-spacing-8) 0 0` | `margin` |
+| `--c-result-image-size` | `80px` | `border`, `height`, `width` |
+| `--c-result-info-border-color` | `var(--c-color-primary-light-3)` | `border-color` |
+| `--c-result-info-color` | `var(--c-color-info)` | `fill` |
+| `--c-result-padding` | `var(--c-spacing-10)` | `padding` |
+| `--c-result-question-border-color` | `rgb(var(--c-gray-2))` | `border-color` |
+| `--c-result-question-color` | `rgb(var(--c-gray-6))` | `fill` |
+| `--c-result-subtitle-color` | `var(--c-color-text-2)` | `color` |
+| `--c-result-subtitle-font-size` | `var(--c-font-size-body-3)` | `font-size` |
+| `--c-result-subtitle-line-height` | `1.5715` | `line-height` |
+| `--c-result-subtitle-margin` | `var(--c-spacing-4) 0 0` | `margin` |
+| `--c-result-success-border-color` | `var(--c-color-success-light-3)` | `border-color` |
+| `--c-result-success-color` | `var(--c-sys-color-content-success)` | `fill` |
+| `--c-result-title-color` | `var(--c-color-text-1)` | `color` |
+| `--c-result-title-font-size` | `var(--c-font-size-title-1)` | `font-size` |
+| `--c-result-title-font-weight` | `var(--c-font-weight-500)` | `font-weight` |
+| `--c-result-title-margin` | `var(--c-spacing-7) 0 0` | `margin` |
+| `--c-result-warning-border-color` | `var(--c-color-warning-light-3)` | `border-color` |
+| `--c-result-warning-color` | `var(--c-sys-color-content-warning)` | `fill` |
+
+</div>
+
+将覆盖设置在组件实际根节点或弹层真实挂载祖先上。例如给该元素添加下列 class，再按需替换变量值：
+
+```css
+.component-theme {
+  --c-result-background: var(--c-color-bg-white);
+}
+```
+
+显式行内样式及直接写入同一 CSS 属性的 Props 优先于样式表默认值。Teleport 后，普通 CSS 变量按实际挂载位置继承；使用 ThemeProvider 时，请遵循其局部主题与弹层配置规则。局部定制请直接覆盖组件变量；仅修改后代的 system 变量不会重新计算从根继承的组件别名。内部变量不属于公共 API。
+
+<!-- component-css-variables:end -->

@@ -1,15 +1,16 @@
 import type { ExtractPublicPropTypes, InputHTMLAttributes, PropType } from 'vue'
 import { beforeFieldCommitProp, fieldEditModeProp, readPrettyProp } from '../_components/field-presentation/context'
-import { fieldLoadingProps, fieldVariants, type FieldDecoratorVariant } from '../field-decorator/props'
 import { componentSizes, type ComponentSize } from '../_utils/constant'
 import { emptyTextProp, emptyValueProp, emptyValuesProp } from '../_utils/empty-value'
 import { popupContainerProp } from '../_utils/popup-container'
+import { isValidTextInputMaxLength, type TextInputMaxLength } from '../_utils/text-input-value'
+import { fieldLoadingProps, fieldVariants, type FieldDecoratorVariant } from '../field-decorator/props'
 
 export const inputTypes = ['text', 'password', 'number', 'tel', 'email'] as const
 export const inputVariants = fieldVariants
 export type InputType = (typeof inputTypes)[number]
 export type InputVariant = FieldDecoratorVariant
-export type InputMaxLength = number | { length: number; errorOnly?: boolean }
+export type InputMaxLength = TextInputMaxLength
 export type WordLength = (value: string) => number
 export type WordSlice = (value: string, maxLength: number) => string
 
@@ -30,7 +31,7 @@ export const inputProps = {
   defaultOpen: Boolean,
   /** 受控输入值，通过 v-model 绑定；包括空字符串在内均优先于 defaultValue。 */
   modelValue: String as PropType<string | null>,
-  /** v-model 修饰符，trim 在提交时生效。 */
+  /** v-model 修饰符；trim 遵循 Vue 模型事件规则，本地显示在提交时归一化。 */
   modelModifiers: { type: Object as PropType<{ trim?: boolean }>, default: () => ({}) },
   /** 非受控初始值，仅创建时读取；后续修改不重置输入，也不回写父级。 */
   defaultValue: { type: String, default: '' },
@@ -77,7 +78,7 @@ export const inputProps = {
   /** 虚拟键盘回车提示。 */
   enterkeyhint: String as PropType<InputHTMLAttributes['enterKeyHint']>,
   /** 最大长度或超限错误策略。 */
-  maxLength: { type: [Number, Object] as PropType<InputMaxLength>, default: 0 },
+  maxLength: { type: [Number, Object] as PropType<InputMaxLength>, default: 0, validator: isValidTextInputMaxLength },
   /** 显示字数统计。 */
   showWordLimit: { type: Boolean, default: false },
   /** 自定义计数。 */

@@ -5,17 +5,13 @@ permalink: /en/components/table/
 
 # Table
 
+The active sorted column exposes ascending or descending order through `aria-sort`. Inputs and buttons inside custom headers retain their own keyboard and click behavior.
+
 ## Basic examples
 
 ### Basic usage
 
 <demo src="./__demos__/basic.vue"></demo>
-
-### Manual loading
-
-Boolean/object loading applies to both data and native-slot modes. Object options require `loading: true`. Rows and drafts remain mounted; notifications do not manage loading.
-
-<demo src="./__demos__/loading.vue"></demo>
 
 ### Empty State
 
@@ -44,6 +40,8 @@ Boolean/object loading applies to both data and native-slot modes. Object option
 
 
 Container width and column width are separate settings. Use `style="width: 100%"` or `style="width: 480px"` for the container, and `columns[].width` / `minWidth` for individual columns. No `scroll.x` or `scroll.y` configuration is required.
+
+Horizontal scrolling needs a definite available width around the table. In flex or grid layouts, set `min-width: 0` or an explicit width on the item containing the table when needed to prevent its content from expanding ancestors.
 
 Compare seven combinations and switch between 100%, 480px and 360px to observe recalculation and horizontal overflow.
 
@@ -364,6 +362,10 @@ Sticky pagination suppresses the internal horizontal thumb/native scrollbar and 
 - `columns`: Column info of the table
 - `data`: Table data
 
+Once at least one `<c-table-column>` is registered, declared columns replace the `columns` prop. Without registered columns, the `columns` prop remains in use.
+
+Column headings use the Table named slot identified by `titleSlotName`, then the column `title` slot, then the `title` value. Cells use the column `cell` slot, then `render`, then the Table named slot identified by `slotName`, then the data at `dataIndex`. Prefer one content source per location.
+
 <demo src="./__demos__/custom-rendering.vue"></demo>
 
 ### Customize Table Elements
@@ -453,9 +455,19 @@ Sticky pagination suppresses the internal horizontal thumb/native scrollbar and 
 
 <demo src="./__demos__/form-attribute.vue"></demo>
 
+## Loading and waiting
+
+### Manual loading
+
+Boolean/object loading applies to both data and native-slot modes. Object options require `loading: true`. Rows and drafts remain mounted; notifications do not manage loading.
+
+With the default slot, Table renders the supplied native table content and `footer`; it does not generate headers, rows, or built-in pagination from `data` / `columns`. Data-mode features such as sorting, filtering, and selection do not manage that native content. Use data mode when those features are needed.
+
+<demo src="./__demos__/loading.vue"></demo>
+
 ## API
 
-### `<Table>` Props
+### Table Props
 
 | Parameter | Description | Type | Default |
 | --------------------------- | ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------: |
@@ -480,6 +492,8 @@ Sticky pagination suppresses the internal horizontal thumb/native scrollbar and 
 | virtual-list-props | Virtual-list props; providing them enables virtual scrolling. See VirtualListProps | `VirtualListProps` | `-` |
 | span-method | Cell merge method (The index starts counting from the data item) | `(data: {  record: TableData;  column: TableColumnData \| TableOperationColumn;  rowIndex: number;  columnIndex: number;}) => { rowspan?: number; colspan?: number } \| void` | `-` |
 | span-all | Whether to make the index of the span method contain all | `boolean` | `false` |
+| components | Configure operation columns; see TableComponents | `TableComponents` | `-` |
+| row-number | Reserved prop; currently does not generate row numbers | `boolean \| object` | `-` |
 | load-more | Load children asynchronously; call done(children), or done() to allow retry | `(record: TableData, done: (children?: TableData[]) => void) => void` | `-` |
 | filter-icon-align-left | Whether the filter icon is aligned to the left | `boolean` | `false` |
 | hide-expand-button-on-empty | Whether to hide expand button when subtree is empty | `boolean` | `false` |
@@ -499,16 +513,14 @@ Sticky pagination suppresses the internal horizontal thumb/native scrollbar and 
 | scrollbar | Whether to enable virtual scroll bar | `boolean \| ScrollbarProps` | `true` |
 | show-empty-tree | Whether to display empty subtrees | `boolean` | `false` |
 | extra-column | Append an extra final column, e.g. settings; slots supply its content | `boolean \| TableExtraColumnConfig` | `false` |
-| empty-type | Empty-state type | <br/>`default`\|`network`\|`unknown`\|`success` <br/> <br/> | `default` |
-| empty-text | Empty-state text | <br/>`string` <br/> <br/> | `-` |
 
-### `<Table>` Events
+### Table Events
 
 | Event | Description | Arguments |
 | ---------------- | ------------------------------ | ---------------------------------------------------------------------------------- |
 | expand | Emitted when an expandable row is clicked | rowKey: `string \| number`<br>record: `TableData` |
 | expanded-change | Emitted when expanded rows change | rowKeys: `(string \| number)[]` |
-| select | Emitted when a row selector is clicked | rowKeys: `string \| number[]`<br>rowKey: `string \| number`<br>record: `TableData` |
+| select | Emitted when a row selector is clicked | rowKeys: `(string \| number)[]`<br>rowKey: `string \| number`<br>record: `TableData` |
 | select-all | Emitted when the select-all control is clicked | checked: `boolean` |
 | selection-change | Emitted when selected rows change | rowKeys: `(string \| number)[]` |
 | sorter-change | Emitted when sorting changes | dataIndex: `string`<br>direction: `string` |
@@ -528,7 +540,7 @@ Sticky pagination suppresses the internal horizontal thumb/native scrollbar and 
 | row-contextmenu | Emitted when a row is right-clicked | record: `TableData`<br>ev: `Event` |
 | cell-contextmenu | Emitted when a cell is right-clicked | record: `TableData`column: `TableColumnData`<br>ev: `Event` |
 
-### `<Table>` Methods
+### Table Methods
 
 | Method | Description | Arguments | Returns |
 | ------------ | ---------------- | ------------------------------------------------------------------------ | ------ |
@@ -541,9 +553,15 @@ Sticky pagination suppresses the internal horizontal thumb/native scrollbar and 
 | resetSorters | Reset column sorting | - | - |
 | clearSorters | Clear column sorting | - | - |
 
-### `<Table>` Slots
+When columns are specified, `clearFilters` and `resetFilters` preserve other columns' filter state. Omitting the argument or passing an empty array applies to all filterable columns. The parent continues to own controlled filter values.
 
-| Slot | Description | Arguments |
+In radio mode, `select(keys, true)` selects only the first supplied key; an empty array does nothing. `select(keys, false)` removes the specified keys. `selectAll(true)` does nothing; `selectAll(false)` removes the keys of enabled rows on the current page. For controlled selection, the parent must receive and update `selectedKeys`.
+
+The state argument of `select`, `selectAll`, `expand`, and `expandAll` defaults to `true`. `expand` accepts one or more keys and does not add duplicates when called repeatedly; `expandAll` applies to all data rows. `resetSorters` restores column defaults and `clearSorters` clears sorting; the parent continues to own controlled sorting.
+
+### Table Slots
+
+| Slot | Description | Prop |
 | ---------------- | :-----------------------------------: | ---------------------------------------------------------------------- |
 | th | Custom th element | column: `TableColumnData` |
 | thead | Custom thead element | - |
@@ -563,7 +581,7 @@ Sticky pagination suppresses the internal horizontal thumb/native scrollbar and 
 | extra-column-cell | Extra final-column cell content | record / rowIndex, etc. |
 | header-cell-actions | Header-side actions for leaf columns; entirely controlled by the caller | column / dataIndex |
 
-### `<TableColumn>` Props
+### TableColumn Props
 
 | Parameter | Description | Type | Default |
 | ------------------ | ----------------------------------- | --------------------------------------------------------- | :-----: |
@@ -587,14 +605,47 @@ Sticky pagination suppresses the internal horizontal thumb/native scrollbar and 
 | index | Manually specify the option index | `number` | `-` |
 | tooltip | Whether to show a text tooltip when truncated | `boolean\|object` | `false` |
 
-### `<TableColumn>` Slots
+### TableColumn Slots
 
-| Slot | Description | Arguments |
+| Slot | Description | Prop |
 | -------------- | :------------------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | filter-icon | Filter-button icon | - |
 | filter-content | Custom filter-popup content | filterValue: `string[]`<br>setFilterValue: `(filterValue: string[]) => void`<br>handleFilterConfirm: `(event: Event) => void`<br>handleFilterReset: `(event: Event) => void` |
+| default | Declare child columns for a grouped header | - |
 | title | Title | - |
 | cell | Cell | record: `TableData`<br>column: `TableColumnData`<br>rowIndex: `number` |
+
+### Table structure components
+
+`Thead` and `Tbody` render the header and body, respectively, with content from the default slot; their named slots customize the corresponding elements. `Tr`, `Th`, and `Td` are low-level renderers that depend on Table context, not standalone data tables. Usually, customize elements through the Table `tr`, `th`, and `td` slots.
+
+For `Tr`, `expand`, `empty`, and `checked` describe row state; `rowIndex` and `record` provide row context. `Th` accepts `column`, `operations`, `dataColumns`, and `resizable`. `Td` accepts `rowIndex`, `record`, `column`, `type`, `operations`, `dataColumns`, `colSpan`, `rowSpan`, `isFixedExpand`, `containerWidth`, `showExpandBtn`, `indentSize`, `renderExpandBtn`, and `summary`; these fields support Table layout and rendering.
+
+### TableComponents
+
+`components.operations` receives the current `dragHandle`, `expand`, and `selection` operation columns (undefined when disabled) and returns the operation columns to render. It configures operation columns rather than replacing arbitrary table elements.
+
+### TableOperationColumn Props
+
+| Field | Description | Type |
+| --- | --- | --- |
+| name | Operation column identifier | `string` |
+| title | Column title | `string \| RenderFunction` |
+| width | Column width | `number` |
+| fixed | Whether fixed | `boolean` |
+| render | Custom operation cell content | `(record: TableData) => VNodeChild` |
+
+`isLastLeftFixed` and `_realWidth` are used for table layout and normally need not be set by application code. Import `TableComponents` and `TableOperationColumn` from the root or table entry.
+
+### Pagination configuration type
+
+`TablePaginationConfig = Omit<PaginationProps, 'total'> & { total?: number }`. When `pagination.total` is omitted, Table derives it from the effective data count. Remote pagination can still provide `total` explicitly. Existing `PaginationProps` objects remain accepted by Table; standalone `Pagination` still requires `total`. `TablePaginationConfig` is exported from root/table entries.
+
+### Forwarded configuration precedence
+
+Nested fields such as open in column filterable.triggerProps can override the filter popup state. Manage both popup visibility and filter conditions when controlling it from the application.
+
+## Types
 
 ### TableData
 
@@ -607,6 +658,8 @@ Sticky pagination suppresses the internal horizontal thumb/native scrollbar and 
 | isLeaf | Whether this is a leaf node | `boolean` | `false` |
 
 ### TableSortable
+
+A custom `sorter(a, b, { direction })` must return ascending or descending results according to `direction`; Table does not reverse the result again. `sorter: true` disables internal sorting. Without a function, the built-in comparison preserves the original order of equal values.
 
 | Parameter | Description | Type | Default |
 | ---------------- | ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | :----: |
@@ -624,6 +677,8 @@ Sticky pagination suppresses the internal horizontal thumb/native scrollbar and 
 
 ### TableFilterable
 
+Filter content uses the column `filter-content` slot first, then the Table named slot identified by `slotName` when present, then `renderContent`, and finally the built-in `filters` options. If the named slot does not exist, the next source is used.
+
 | Parameter | Description | Type | Default |
 | -------------------- | ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-----: |
 | filters | Filter data | `TableFilterData[]` | `-` |
@@ -635,6 +690,7 @@ Sticky pagination suppresses the internal horizontal thumb/native scrollbar and 
 | icon | Filter-button icon | `RenderFunction` | `-` |
 | triggerProps | Filter-popup configuration | `TriggerProps` | `-` |
 | alignLeft | Whether the filter icon is aligned to the left | `boolean` | `false` |
+| slotName | Named Table slot for custom filter content | `string` | `-` |
 
 ### TableColumnData
 
@@ -739,17 +795,7 @@ Sticky pagination suppresses the internal horizontal thumb/native scrollbar and 
 | align | Alignment | `'left' \| 'center' \| 'right'` | `'center'` |
 | dataIndex | Column identifier | `string` | `__cedar_table_extra__` |
 
-### Pagination configuration type
-
-`TablePaginationConfig = Omit<PaginationProps, 'total'> & { total?: number }`. When `pagination.total` is omitted, Table derives it from the effective data count. Remote pagination can still provide `total` explicitly. Existing `PaginationProps` objects remain accepted by Table; standalone `Pagination` still requires `total`. `TablePaginationConfig` is exported from root/table entries.
-
-
-### Existing precedence of forwarded configuration (F07)
-
-Column filterable.triggerProps is spread after internal Trigger settings, so nested fields such as open can currently override filter-popup state. F07 preserves this order/type for compatibility without automatically forbidding existing capabilities. Future restrictions require separate migration assessment of filter/popup states.
-
-
-## Optional business-row type configuration (F08-A)
+## Optional business-row type configuration
 
 ```ts
 import { defineTableConfig } from '@cedar-design/ui'
@@ -780,13 +826,168 @@ Type association covers only this configuration. Component template slots/events
 
 Automatic summary rows may contain text, totals and missing fields; render(record: User) must not assume a complete User. Keep the old broad configuration for automatic summaries or heterogeneous tree rows. The new custom-summary entry requires a complete business row. Neither entry changes Table runtime behavior.
 
-Platform scope: Maple Table is a native-table display container without data/columns API, so no associated-config entry is added there. Select/Cascader type associations require separate assessment.
+Maple Table is a native-table presentation container without data / columns configuration.
 
+## Reading direction and scrolling
 
-## Reading direction and interaction
+Table inherits the nearest native `dir`. Ordinary columns follow reading order; explicit `fixed: left/right` stays physical. Internal stable partitioning into frozen regions does not mutate supplied columns, data or business indices. Group headers crossing frozen regions split into aligned segments. Omitted align uses inline start; explicit left/right remains physical.
 
-Table inherits native reading direction. Normal columns follow reading order; explicit fixed left/right sides stay physical through stable visual partitions. Mixed frozen group headers are projected into matching physical sections without mutating source columns or business indexes. Default cell alignment follows reading start; explicit left/right alignment stays physical. Header/body/summary/sticky rail share a normalized nonnegative inline scroll distance, including native negative RTL scrollLeft. Virtual row positioning preserves horizontal distance. Teleported footers retain source direction. Resize handles support directional pointer and keyboard input; sticky rails support arrows and Home/End. Direction switches preserve business state and cancel stale resize gestures.
+Header, body, summary and sticky scrollbar synchronize using a nonnegative distance from inline start, adapting native negative RTL scrollLeft. Direction changes preserve that distance and clamp it to the new viewport range. Vertical virtual-row positioning does not change horizontal distance. Teleported pagination and sticky areas inherit the source table direction.
 
-Lazy children belong to the source node identity and row key, rather than to a reused key alone. Replacing the node, row key or loader invalidates old work/cache. Deactivation or unmount invalidates pending cell callbacks. `done()` releases pending for retry; `done([])` accepts an empty result. Only the first completion is accepted. Synchronous loader exceptions release pending and remain observable through Vue. Keep the callback-based `load-more` protocol; returned notification Promises do not control this work.
+Column handles support direction-aware mouse/touch dragging and Left/Right keyboard resizing in 10px steps, or 50px with Shift. Home reaches the 40px minimum. The existing fixed-layout requirement remains. The sticky scrollbar supports Left/Right and Home/End; measurements are batched by frame and cleaned up on deactivation/unmount. Direction changes do not modify selection, sorting, filters or pagination or emit width events.
 
-If a callback-style loader returns a Promise, its rejection releases pending and reaches the Vue error path; a fulfilled return value is ignored and does not replace `done`. This is error reporting for an explicit loader Prop, not Promise collection from `expand` or other notification events.
+Lazy child caches belong to the source node object and row key; reusing a key does not transfer an old node's cache. Replacing nodes, row keys or loaders invalidates old tasks/caches. Deactivation/unmount invalidates pending cell callbacks. done() ends waiting without children and allows retry; done([]) accepts an empty result. Only the first completion per task is accepted. Synchronous loader errors release waiting and still reach Vue's error channel. load-more keeps its done callback contract; notification return Promises are not task inputs.
+
+If a callback loader returns a Promise, rejection releases waiting and reaches Vue's error channel. Fulfillment values are ignored and cannot replace done. This handles errors from an explicit loader prop; it does not collect Promises returned by notifications such as expand.
+
+## CSS Variables
+
+<!-- component-css-variables:start -->
+
+Use these variables to customize the component. Defaults may vary by the selector condition shown. Each variable applies to the corresponding size, variant and interaction states.
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| Variable | Default / condition | Affected styles |
+| --- | --- | --- |
+| `--c-table-body-bg` | `var(--c-color-bg-2)` | `background-color` |
+| `--c-table-body-cell-bg` | `var(--c-color-bg-2)` | `background-color` |
+| `--c-table-body-cell-text-color` | `rgb(var(--c-gray-10))` | `color` |
+| `--c-table-body-min-height` | `40px` | `min-height` |
+| `--c-table-body-row-active-bg` | `var(--c-color-fill-1)` | `background-color` |
+| `--c-table-body-row-active-dark-bg` | `var(--c-color-neutral-2)` | `background-color` |
+| `--c-table-body-row-hover-bg` | `var(--c-color-fill-1)` | `background-color` |
+| `--c-table-body-sorted-cell-bg` | `var(--c-color-fill-1)` | `background-color` |
+| `--c-table-body-stripe-row-bg` | `var(--c-color-fill-1)` | `background-color` |
+| `--c-table-border-color` | `var(--c-color-neutral-3)` | `border`, `border-bottom`, `border-left`, `border-right`, `border-top`, `box-shadow` |
+| `--c-table-border-radius` | `var(--c-border-radius-md)` | `border-radius`, `border-top-left-radius`, `border-top-right-radius` |
+| `--c-table-border-style` | `solid` | `border`, `border-bottom`, `border-left`, `border-right`, `border-top` |
+| `--c-table-border-width` | `var(--c-border-width-1)` | `border`, `border-bottom`, `border-left`, `border-right`, `border-top`, `bottom`, `box-shadow`, `margin` |
+| `--c-table-column-handle-right` | `-4px` | `inset-inline-end` |
+| `--c-table-column-handle-width` | `8px` | `width` |
+| `--c-table-column-insert-empty-font-size` | `14px` | `font-size` |
+| `--c-table-column-insert-empty-line-height` | `22px` | `line-height` |
+| `--c-table-column-insert-empty-text-color` | `var(--c-color-text-3)` | `color` |
+| `--c-table-column-insert-group-margin-top` | `16px` | `margin-top` |
+| `--c-table-column-insert-group-title-font-size` | `12px` | `font-size` |
+| `--c-table-column-insert-group-title-line-height` | `20px` | `line-height` |
+| `--c-table-column-insert-group-title-margin-bottom` | `8px` | `margin-bottom` |
+| `--c-table-column-insert-group-title-text-color` | `var(--c-color-text-3)` | `color` |
+| `--c-table-column-insert-item-min-height` | `32px` | `min-height` |
+| `--c-table-column-insert-max-height` | `calc(100vh - 160px)` | `max-height` |
+| `--c-table-column-insert-padding` | `16px 20px` | `padding` |
+| `--c-table-drag-handle-col-width` | `40px` | `max-width`, `min-width`, `width` |
+| `--c-table-editable-body-cell-border-color` | `var(--c-color-white)` | `border` |
+| `--c-table-expand-button-border-radius` | `2px` | `border-radius` |
+| `--c-table-expand-button-font-size` | `12px` | `font-size` |
+| `--c-table-expand-button-margin-right` | `var(--c-spacing-2)` | `margin-inline-end` |
+| `--c-table-expand-button-size` | `14px` | `height`, `line-height`, `width` |
+| `--c-table-expand-content-bg` | `var(--c-color-fill-1)` | `background-color` |
+| `--c-table-expand-content-hover-bg` | `var(--c-color-fill-1)` | `background-color` |
+| `--c-table-expand-icon-bg` | `var(--c-color-neutral-3)` | `background-color` |
+| `--c-table-expand-icon-border-color` | `transparent` | `border` |
+| `--c-table-expand-icon-border-width` | `var(--c-border-width-1)` | `border` |
+| `--c-table-expand-icon-col-width` | `40px` | `max-width`, `min-width`, `width` |
+| `--c-table-expand-icon-color` | `var(--c-color-text-2)` | `color` |
+| `--c-table-expand-icon-hover-bg` | `var(--c-color-neutral-4)` | `background-color` |
+| `--c-table-expand-icon-hover-border-color` | `transparent` | `border-color` |
+| `--c-table-expand-icon-hover-color` | `var(--c-color-text-1)` | `color` |
+| `--c-table-expand-loading-icon-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-table-extra-column-icon-color` | `var(--c-color-text-2)` | `color` |
+| `--c-table-extra-column-icon-hover-color` | `var(--c-color-text-1)` | `color` |
+| `--c-table-filters-bottom-gap` | `8px` | `margin-inline-end` |
+| `--c-table-filters-bottom-height` | `38px` | `height` |
+| `--c-table-filters-bottom-line-height` | `38px` | `line-height` |
+| `--c-table-filters-bottom-padding` | `0 12px` | `padding` |
+| `--c-table-filters-icon-font-size` | `16px` | `font-size` |
+| `--c-table-filters-icon-hover-bg` | `var(--c-color-fill-4)` | `background` |
+| `--c-table-filters-item-font-size` | `14px` | `font-size` |
+| `--c-table-filters-item-height` | `32px` | `height` |
+| `--c-table-filters-item-line-height` | `32px` | `line-height` |
+| `--c-table-filters-item-padding` | `0 12px` | `padding` |
+| `--c-table-filters-list-padding` | `4px 0` | `padding` |
+| `--c-table-filters-popup-bg` | `var(--c-color-bg-5)` | `background` |
+| `--c-table-filters-popup-border-color` | `var(--c-color-neutral-3)` | `border` |
+| `--c-table-filters-popup-border-radius` | `var(--c-border-radius-md)` | `border-radius` |
+| `--c-table-filters-popup-box-shadow` | `var(--c-shadow1-down)` | `box-shadow` |
+| `--c-table-filters-popup-max-height` | `200px` | `max-height` |
+| `--c-table-filters-popup-min-width` | `100px` | `min-width` |
+| `--c-table-filters-text-height` | `34px` | `height` |
+| `--c-table-filters-text-line-height` | `32px` | `line-height` |
+| `--c-table-filters-text-max-width` | `160px` | `max-width` |
+| `--c-table-filters-text-padding-left` | `10px` | `padding-inline-start` |
+| `--c-table-filters-width` | `24px` | `width` |
+| `--c-table-header-cell-action-color` | `var(--c-color-text-3)` | `color` |
+| `--c-table-header-cell-action-hover-color` | `var(--c-color-text-1)` | `color` |
+| `--c-table-header-cell-action-margin-left` | `2px` | `margin-inline-start` |
+| `--c-table-header-cell-bg` | `var(--c-color-neutral-2)` | `background-color` |
+| `--c-table-header-cell-text-color` | `rgb(var(--c-gray-10))` | `color` |
+| `--c-table-header-filters-icon-active-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-table-header-filters-icon-color` | `var(--c-color-text-2)` | `color` |
+| `--c-table-header-filters-icon-hover-bg` | `var(--c-color-neutral-4)` | `background-color` |
+| `--c-table-header-sorted-cell-bg` | `var(--c-color-neutral-3)` | `background-color` |
+| `--c-table-header-sorted-cell-hover-bg` | `rgba(var(--c-gray-4), 0.5)` | `background-color` |
+| `--c-table-header-sorter-icon-active-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-table-header-sorter-icon-color` | `var(--c-color-neutral-5)` | `color` |
+| `--c-table-header-sorter-icon-down-top` | `-3px` | `top` |
+| `--c-table-header-sorter-icon-font-size` | `12px` | `font-size` |
+| `--c-table-header-sorter-icon-height` | `8px` | `height`, `line-height` |
+| `--c-table-header-sorter-icon-left` | `1px` | `left` |
+| `--c-table-header-sorter-icon-margin-left` | `var(--c-spacing-4)` | `margin-inline-start` |
+| `--c-table-header-sorter-icon-next-color` | `var(--c-color-neutral-6)` | `color` |
+| `--c-table-header-sorter-icon-up-top` | `-2px` | `top` |
+| `--c-table-header-sorter-icon-width` | `14px` | `width` |
+| `--c-table-header-text-font-weight` | `var(--c-font-weight-500)` | `font-weight` |
+| `--c-table-line-height` | `var(--c-line-height)` | `line-height` |
+| `--c-table-pagination-margin` | `var(--c-spacing-6)` | `margin-bottom`, `margin-top` |
+| `--c-table-pagination-sticky-bg` | `var(--c-color-bg-1)` | `background`, `background-color` |
+| `--c-table-pagination-sticky-padding` | `12px 0` | `padding` |
+| `--c-table-resizing-border-color` | `var(--c-sys-color-content-brand)` | `border-right-color` |
+| `--c-table-selection-col-width` | `40px` | `max-width`, `min-width`, `width` |
+| `--c-table-shadow-left` | `inset 6px 0 8px -3px rgba(0, 0, 0, 0.15)` | `box-shadow` |
+| `--c-table-shadow-right` | `inset -6px 0 8px -3px rgba(0, 0, 0, 0.15)` | `box-shadow` |
+| `--c-table-shadow-wrapper-width` | `10px` | `width` |
+| `--c-table-size-lg-extra-icon-font-size` | `16px` | `font-size` |
+| `--c-table-size-lg-extra-padding-horizontal` | `var(--c-spacing-2)` | `padding` |
+| `--c-table-size-lg-font-size` | `var(--c-table-size-md-font-size)` | `font-size` |
+| `--c-table-size-lg-header-font-size` | `var(--c-table-size-md-header-font-size)` | `font-size` |
+| `--c-table-size-lg-padding-horizontal` | `var(--c-table-size-md-padding-horizontal)` | `margin`, `padding` |
+| `--c-table-size-lg-padding-vertical` | `var(--c-table-size-md-padding-vertical)` | `margin`, `padding` |
+| `--c-table-size-md-extra-icon-font-size` | `16px` | `font-size` |
+| `--c-table-size-md-extra-padding-horizontal` | `var(--c-spacing-2)` | `padding` |
+| `--c-table-size-md-font-size` | `var(--c-font-size-body-3)` | `font-size` |
+| `--c-table-size-md-header-font-size` | `var(--c-font-size-body-3)` | `font-size` |
+| `--c-table-size-md-padding-horizontal` | `var(--c-spacing-7)` | `margin`, `padding` |
+| `--c-table-size-md-padding-vertical` | `9px` | `margin`, `padding` |
+| `--c-table-size-sm-extra-icon-font-size` | `14px` | `font-size` |
+| `--c-table-size-sm-extra-padding-horizontal` | `var(--c-spacing-1)` | `padding` |
+| `--c-table-size-sm-font-size` | `var(--c-font-size-body-3)` | `font-size` |
+| `--c-table-size-sm-header-font-size` | `var(--c-font-size-body-3)` | `font-size` |
+| `--c-table-size-sm-padding-horizontal` | `var(--c-spacing-7)` | `margin`, `padding` |
+| `--c-table-size-sm-padding-vertical` | `5px` | `margin`, `padding` |
+| `--c-table-size-xs-extra-icon-font-size` | `14px` | `font-size` |
+| `--c-table-size-xs-extra-padding-horizontal` | `var(--c-spacing-1)` | `padding` |
+| `--c-table-size-xs-font-size` | `var(--c-font-size-body-1)` | `font-size` |
+| `--c-table-size-xs-header-font-size` | `var(--c-font-size-body-1)` | `font-size` |
+| `--c-table-size-xs-padding-horizontal` | `var(--c-spacing-7)` | `margin`, `padding` |
+| `--c-table-size-xs-padding-vertical` | `2px` | `margin`, `padding` |
+| `--c-table-sticky-scrollbar-height` | `16px` | `height` |
+| `--c-table-sticky-scrollbar-opacity` | `0.8` | `opacity` |
+| `--c-table-tfoot-bg` | `var(--c-color-neutral-2)` | `background-color` |
+| `--c-table-th-actions-margin-left` | `8px` | `margin-inline-start` |
+| `--c-table-transition-duration` | `var(--c-transition-duration-1)` | `transition` |
+| `--c-table-transition-timing-function` | `var(--c-transition-timing-function-linear)` | `transition` |
+
+</div>
+
+Apply overrides to the rendered component root or the actual popup ancestor. For example, add the following class to that element and replace the value as needed:
+
+```css
+.component-theme {
+  --c-table-body-cell-text-color: rgb(var(--c-gray-10));
+}
+```
+
+Explicit inline styles and props that write the same CSS property take precedence over stylesheet defaults. After Teleport, ordinary CSS variables inherit from the actual mount location. When using ThemeProvider, follow its local-theme and popup configuration rules. Override the component variable directly for local styling; root-level aliases are not recalculated merely because a descendant system variable changes. Internal variables are not public APIs.
+
+<!-- component-css-variables:end -->

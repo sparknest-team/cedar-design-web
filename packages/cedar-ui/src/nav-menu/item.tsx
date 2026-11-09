@@ -1,4 +1,4 @@
-import { computed, defineComponent, h, inject, mergeProps, nextTick, onActivated, onBeforeUnmount, onDeactivated, ref, watch } from 'vue'
+import { computed, defineComponent, h, inject, mergeProps, nextTick, onActivated, onBeforeUnmount, onDeactivated, ref, useId, watch } from 'vue'
 import { createNamespace } from '../_utils/global-config'
 import Trigger from '../trigger'
 import { useElementResize } from '../_utils/resize-observer'
@@ -21,6 +21,9 @@ export default defineComponent({
   setup(props, { slots, emit, attrs, expose }) {
     const parent = inject(navMenuKey, undefined)
     const itemId = Symbol('NavMenuItem')
+    const generatedEntryId = `nav-menu-entry-${useId()}`
+    const entryId = () => typeof attrs.id === 'string' && attrs.id ? attrs.id : generatedEntryId
+    const panelLabelledBy = () => typeof attrs['aria-labelledby'] === 'string' && attrs['aria-labelledby'].trim() ? attrs['aria-labelledby'] : entryId()
     const localValue = ref(props.defaultValue), localOpen = ref(props.defaultOpen)
     const panel = ref<HTMLElement>()
     const reference = ref<HTMLElement>()
@@ -140,7 +143,7 @@ export default defineComponent({
       animationName: props.popupLayout === 'dropdown' ? 'fade-in' : '',
       onOpenChange: setOpen,
     }, { default: () => h('div', mergeProps(attrs, {
-      ref: reference, role: 'menuitem', tabindex: disabled.value ? -1 : 0, 'data-nav-item': '',
+      ref: reference, id: slots.content ? entryId() : attrs.id, role: 'menuitem', tabindex: disabled.value ? -1 : 0, 'data-nav-item': '',
       'aria-disabled': disabled.value || undefined, 'aria-expanded': hasPopup() ? open.value : undefined,
       'aria-haspopup': hasPopup() ? (slots.content ? 'dialog' : 'menu') : undefined,
       class: [n('item'), { [n('--active')]: highlighted.value, [n('--disabled')]: disabled.value }],
@@ -161,13 +164,13 @@ export default defineComponent({
     content: () => rendered.value ? h('div', {
       ref: panel,
       inert: open.value ? undefined : '', 'aria-hidden': open.value ? undefined : 'true',
-      role: slots.content ? 'dialog' : undefined, 'aria-label': typeof props.label === 'string' ? props.label : undefined,
-      class: [n('popup'), n(`--${parent?.theme.value ?? 'light'}`), n(`--${parent?.props.size ?? 'md'}`), n(`panel--${props.popupLayout}`), { [n('panel--custom')]: !!slots.content }],
+      role: slots.content ? 'dialog' : undefined, 'aria-labelledby': slots.content ? panelLabelledBy() : undefined,
+      class: [n('popup'), n(`--${parent?.props.size ?? 'md'}`), n(`panel--${props.popupLayout}`), { [n('panel--custom')]: !!slots.content }],
       style: [(props.popupLayout === 'full-width' || props.popupLayout === 'full') ? { position: 'fixed', left: 0, right: 0, top: `${top.value}px`, maxHeight: `calc(100dvh - ${top.value}px)`, height: props.popupLayout === 'full' ? `calc(100dvh - ${top.value}px)` : undefined } : props.popupLayout === 'full-height' ? { position: 'fixed', top: 0, bottom: 0, maxHeight: '100dvh', width: 'var(--c-nav-menu-panel-width)', ...fullHeightPosition.value } : {}, props.popupStyle],
       onKeydown: (event: KeyboardEvent) => { if (available() && !disabled.value && event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); close() } },
     }, slots.content?.(context()) ?? [h(NavMenu, {
       options: props.options, fieldNames: props.fieldNames, modelValue: value.value, mode: props.optionsMode,
-      theme: parent?.theme.value as 'light' | 'dark' | undefined, size: parent?.props.size,
+      size: parent?.props.size,
       popupContainer: props.popupContainer ?? parent?.props.popupContainer,
       onSelect: (key: NavMenuKey, _option: NavMenuOption, event: Event) => select(key, event),
     }, { label: slots['option-label'], icon: slots['option-icon'], extra: slots['option-extra'] })]) : null,

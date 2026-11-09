@@ -121,20 +121,25 @@ Choose a dimension to compare all its values side by side while keeping other se
 <!-- demo-config-notes:end -->
 
 
-500ms ripple wait is interaction policy; floating-duration defaults to250ms for collapse and transition. DoubleRaf settles layout; cancellation rejects stale continuation writes, not underlying frames. Public API and CSS variables are unchanged. Full Card Cedar21/Maple44 and scoped15 each are controlled tests, not native browser/OS certification.
-
 <demo src="./__demos__/scheduler-lifecycle.vue"></demo>
 
 The same scenarios, parameters and interactions as Cedar. Only component prefixes differ; themes and site shells remain independent.
 
 ## Reading direction
 
-Headings, content and actions follow reading order. Default floating actions sit at reading end without mirroring images or custom slots.
+Title, content and actions follow reading order. Default floating actions sit at inline end; images and custom slots are not mirrored.
 
 ## API
 
 <!-- same-source-api:start -->
-### Props
+
+`row-reverse` reverses the horizontal cover and body order, with reading direction still following the container. Collapsed `floating-content` keeps its nodes and state but is inert to keyboard and assistive technology; it becomes interactive when expanded. Floating is available only in column direction.
+
+The floating layer remains at the Card’s original DOM location. An ancestor’s transform or similar property may change the fixed-position containing block, and ancestor clipping may obscure the layer, so viewport coverage is not guaranteed. The layer does not currently provide modal focus management or Escape-to-close; use Dialog when modal interaction is required.
+
+The default close button uses the current locale’s close text and can be overridden with `close-button-aria-label`. `floating-duration` is a finite nonnegative duration in milliseconds; 0 means no delay and invalid values fall back to 250.
+
+### Card Props
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -157,17 +162,18 @@ Headings, content and actions follow reading order. Default floating actions sit
 | ripple | Click ripple | `boolean` | `false` |
 | floating | Fullscreen state; supports v-model:floating | `boolean` | `false` |
 | floating-duration | Fullscreen transition duration in ms | `number` | `250` |
+| close-button-aria-label | Accessible name of the default close button | `string` | `—` |
 
-### Events
+### Card Events
 
 | Event | Arguments and timing |
 | --- | --- |
 | click | `(event: Event)`, emitted when the card is clicked |
 | update:floating | `(value: boolean)`, emits false when the built-in close button requests closing; expansion is controlled by the parent |
 
-### Slots
+### Card Slots
 
-| Slot | Description | Arguments |
+| Slot | Description | Prop |
 | --- | --- | --- |
 | default | Body | — |
 | cover | Cover; overrides src | — |
@@ -180,70 +186,17 @@ Headings, content and actions follow reading order. Default floating actions sit
 | floating-content | Expanded content; column layout only | — |
 | close-button | Custom close button; update floating yourself | — |
 
-### Methods
+### Card Methods
 
 No public methods.
 
-### Platform notes
+### Usage notes
 
 Props, event arguments and slots match. Cedar inherits the global size when size is omitted: xs/sm map to sm, all others to md. Maple falls back to md. Pass size explicitly for identical density. Themes and CSS prefixes remain platform-specific.
 Card no longer has a loading prop. Compose a loading overlay with the Loading directive.
 <!-- same-source-api:end -->
 
-### `<Card>` CSS variables
-
-| Variable | Default |
-| --- | --- |
-| `--c-card-hover-shadow` | `0 4px 12px rgb(0 0 0 / 12%)` |
-| `--c-card-size-sm-title-font-size` | `16px` |
-| `--c-card-size-sm-section-margin` | `8px 0 0` |
-| `--c-card-size-sm-section-padding` | `0 12px` |
-| `--c-card-padding` | `0 0 15px 0` |
-| `--c-card-background` | `var(--c-sys-color-surface-default)` |
-| `--c-card-filled-background` | `var(--c-sys-color-surface-muted)` |
-| `--c-card-outline-color` | `var(--c-sys-color-border-default)` |
-| `--c-card-border-radius` | `4px` |
-| `--c-card-image-width` | `100%` |
-| `--c-card-row-image-width` | `140px` |
-| `--c-card-image-height` | `200px` |
-| `--c-card-row-height` | `140px` |
-| `--c-card-title-color` | `var(--c-sys-color-content-primary)` |
-| `--c-card-title-font-size` | `20px` |
-| `--c-card-title-padding` | `0 12px` |
-| `--c-card-title-margin` | `15px 0 0 0` |
-| `--c-card-title-row-margin` | `12px 0` |
-| `--c-card-content-padding` | `0 16px` |
-| `--c-card-content-margin` | `16px 0 0 0` |
-| `--c-card-content-color` | `var(--c-sys-color-content-tertiary)` |
-| `--c-card-content-font-size` | `14px` |
-| `--c-card-content-row-margin` | `16px 0 0 0` |
-| `--c-card-subtitle-color` | `var(--c-sys-color-content-secondary)` |
-| `--c-card-subtitle-font-size` | `14px` |
-| `--c-card-subtitle-padding` | `0 12px` |
-| `--c-card-subtitle-margin` | `10px 0 0 0` |
-| `--c-card-subtitle-row-margin` | `-8px 0 0 0` |
-| `--c-card-description-color` | `var(--c-sys-color-content-secondary)` |
-| `--c-card-description-font-size` | `14px` |
-| `--c-card-description-margin` | `20px 0 0 0` |
-| `--c-card-description-padding` | `0 13px` |
-| `--c-card-footer-padding` | `0 12px` |
-| `--c-card-footer-right` | `13px` |
-| `--c-card-footer-bottom` | `9px` |
-| `--c-card-footer-margin` | `30px 0 0 0` |
-| `--c-card-line-height` | `22px` |
-| `--c-card-row-line-height` | `1.5` |
-| `--c-card-floating-buttons-bottom` | `16px` |
-| `--c-card-floating-buttons-right` | `16px` |
-| `--c-card-floating-buttons-color` | `var(--c-sys-color-content-primary)` |
-| `--c-card-close-button-icon-size` | `24px` |
-| `--c-card-close-button-size` | `56px` |
-| `--c-card-close-button-background` | `#212121` |
-| `--c-card-close-button-text-color` | `var(--c-sys-color-content-on-dark)` |
-| `--c-card-close-button-border-radius` | `50%` |
-
-Card colors follow system semantics: regular/filled backgrounds and borders use `surface-default`, `surface-muted` and `border-default`. Titles, body text and secondary text use `content-primary`, `content-tertiary` and `content-secondary`. Expanded floating-button containers sit on the card surface and use `content-primary`; text/icons on dark close buttons use `content-on-dark`. The `#212121` close-button background is Card-specific, not the global primary-action color. See the Design Token specification for old variable mappings.
-
-### Type definitions
+## Types
 
 The component exports the following types
 
@@ -251,8 +204,83 @@ The component exports the following types
 import type { CardProps } from '@cedar-design/ui'
 ```
 
-See `API-MIGRATION.md` at the repository root for size and cross-platform migration rules. Only the documented sizes are supported, not every ComponentSize.
+Only the documented size presets are supported, rather than every ComponentSize value.
 
-### Variable consumption rules
+## CSS Variables
 
-Row content consumes `--c-card-content-row-margin`, independently from the title margin. Card intentionally exposes only sm/md density, not all five control sizes. Motion uses `--c-card-animation-duration` (`var(--c-sys-motion-duration-slow)`) and `--c-card-animation-easing` (`var(--c-sys-motion-easing-standard)`). Reduced motion disables transitions on every animated Card section.
+Regular/filled backgrounds and borders use `surface-default`, `surface-muted` and `border-default`. Titles, body and secondary text use `content-primary`, `content-tertiary` and `content-secondary`. Expanded floating buttons use `content-primary`; text and icons on dark close buttons use `content-on-dark`.
+
+<!-- component-css-variables:start -->
+
+Use these variables to customize the component. Defaults may vary by the selector condition shown. Each variable applies to the corresponding size, variant and interaction states.
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| Variable | Default / condition | Affected styles |
+| --- | --- | --- |
+| `--c-card-animation-duration` | `var(--c-sys-motion-duration-slow)` | `transition` |
+| `--c-card-animation-easing` | `var(--c-sys-motion-easing-standard)` | `transition-timing-function` |
+| `--c-card-background` | `var(--c-sys-color-surface-default)` | `background` |
+| `--c-card-border-radius` | `4px` | `border-radius` |
+| `--c-card-close-button-background` | `#212121` | `background-color` |
+| `--c-card-close-button-border-radius` | `50%` | `border-radius` |
+| `--c-card-close-button-icon-size` | `24px` | `font-size` |
+| `--c-card-close-button-size` | `56px` | `height`, `width` |
+| `--c-card-close-button-text-color` | `var(--c-sys-color-content-on-dark)` | `color` |
+| `--c-card-content-color` | `var(--c-sys-color-content-tertiary)` | `color` |
+| `--c-card-content-font-size` | `14px` | `font-size` |
+| `--c-card-content-margin` | `16px 0 0 0` | `margin` |
+| `--c-card-content-padding` | `0 16px` | `padding` |
+| `--c-card-content-row-margin` | `16px 0 0 0` | `margin` |
+| `--c-card-description-color` | `var(--c-sys-color-content-secondary)` | `color` |
+| `--c-card-description-font-size` | `14px` | `font-size` |
+| `--c-card-description-margin` | `20px 0 0 0` | `margin` |
+| `--c-card-description-padding` | `0 13px` | `padding` |
+| `--c-card-filled-background` | `var(--c-sys-color-surface-muted)` | `background-color` |
+| `--c-card-floating-buttons-bottom` | `16px` | `bottom` |
+| `--c-card-floating-buttons-color` | `var(--c-sys-color-content-primary)` | `color` |
+| `--c-card-floating-buttons-right` | `16px` | `inset-inline-end` |
+| `--c-card-footer-bottom` | `9px` | `bottom` |
+| `--c-card-footer-margin` | `30px 0 0 0` | `margin` |
+| `--c-card-footer-padding` | `0 12px` | `padding` |
+| `--c-card-footer-right` | `13px` | `inset-inline-end` |
+| `--c-card-hover-shadow` | `0 4px 12px rgba(0, 0, 0, 0.12)` | `box-shadow` |
+| `--c-card-image-height` | `200px` | `height` |
+| `--c-card-image-width` | `100%` | `width` |
+| `--c-card-line-height` | `22px` | `line-height` |
+| `--c-card-outline-color` | `var(--c-sys-color-border-default)` | `border` |
+| `--c-card-padding` | `0 0 15px 0` | `padding` |
+| `--c-card-row-height` | `140px` | `min-height` |
+| `--c-card-row-image-width` | `140px` | `width` |
+| `--c-card-row-line-height` | `1.5` | `line-height` |
+| `--c-card-size-sm-section-margin` | `8px 0 0` | `margin` |
+| `--c-card-size-sm-section-padding` | `0 12px` | `padding` |
+| `--c-card-size-sm-title-font-size` | `16px` | `font-size` |
+| `--c-card-subtitle-color` | `var(--c-sys-color-content-secondary)` | `color` |
+| `--c-card-subtitle-font-size` | `14px` | `font-size` |
+| `--c-card-subtitle-margin` | `10px 0 0 0` | `margin` |
+| `--c-card-subtitle-padding` | `0 12px` | `padding` |
+| `--c-card-subtitle-row-margin` | `-8px 0 0 0` | `margin` |
+| `--c-card-title-color` | `var(--c-sys-color-content-primary)` | `color` |
+| `--c-card-title-font-size` | `20px` | `font-size` |
+| `--c-card-title-margin` | `15px 0 0 0` | `margin` |
+| `--c-card-title-padding` | `0 12px` | `padding` |
+| `--c-card-title-row-margin` | `12px 0` | `margin` |
+
+</div>
+
+Apply overrides to the rendered component root or the actual popup ancestor. For example, add the following class to that element and replace the value as needed:
+
+```css
+.component-theme {
+  --c-card-background: var(--c-sys-color-surface-default);
+}
+```
+
+Explicit inline styles and props that write the same CSS property take precedence over stylesheet defaults. After Teleport, ordinary CSS variables inherit from the actual mount location. When using ThemeProvider, follow its local-theme and popup configuration rules. Override the component variable directly for local styling; root-level aliases are not recalculated merely because a descendant system variable changes. Internal variables are not public APIs.
+
+<!-- component-css-variables:end -->
+
+### Sizing and motion
+
+Use `--c-card-content-row-margin` for horizontal content spacing. Card supports only sm / md sizes. `--c-card-animation-duration` defaults to `var(--c-sys-motion-duration-slow)` and `--c-card-animation-easing` to `var(--c-sys-motion-easing-standard)`. Reduced motion disables Card transitions.

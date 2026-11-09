@@ -307,6 +307,7 @@ describe("infinite-scroll public contract", () => {
   it("discovers the nearest scroll parent", () => {
     const parent = document.createElement("div");
     parent.style.overflowY = "auto";
+    Object.defineProperty(parent, "clientHeight", { value: 100 });
     document.body.appendChild(parent);
     vi.spyOn(parent, "getBoundingClientRect").mockReturnValue(rect(0, 100));
     const wrapper = mount(InfiniteScroll, {

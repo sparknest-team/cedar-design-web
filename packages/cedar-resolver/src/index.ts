@@ -21,7 +21,7 @@ const cedarFunctions = [
   "imagePreview",
   "Message",
   "Notification",
-  "StyleProvider",
+  "ThemeProvider",
   "previewImage",
 ];
 const cedarDirectives: Record<string, string> = {
@@ -96,7 +96,7 @@ const styleDirAliases: Record<string, string> = {
 /** Components without a style directory; resolve without style side effects. */
 const noStyleComponents = new Set([
   "Context",
-  "StyleProvider",
+  "ThemeProvider",
 ]);
 
 function getStyleSideEffects(name: string, importStyle = true) {

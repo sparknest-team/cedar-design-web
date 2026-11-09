@@ -1,4 +1,7 @@
-import { inject } from 'vue'
+import { computed, inject } from 'vue'
 import { configProviderInjectionKey } from '../../config-provider/context'
-/** Resolve the library's existing global empty slot; local slots take precedence. */
-export function useEmptySlot() { return inject(configProviderInjectionKey, undefined)?.slots.empty }
+/** Resolve the current provider slot; local slots take precedence. */
+export function useEmptySlot() {
+  const config = inject(configProviderInjectionKey, undefined)
+  return computed(() => config?.slots.empty)
+}

@@ -1,13 +1,26 @@
 import { popupContainerProp } from '../_utils/popup-container'
-import type { ExtractPropTypes, PropType } from 'vue'
+import type { CSSProperties, PropType } from 'vue'
 
 export type PoiKeys = 'longitude' | 'latitude' | 'address' | 'name' | 'adcode' | 'countryCode' | 'city' | 'country'
+export interface MapGeocoderResult {
+  address?: string
+  poi?: string
+  area_code?: string
+  country_code?: string
+  city?: string
+  country?: string
+}
+export type MapGeocoderHandler = (longitude: number, latitude: number) => MapGeocoderResult | Promise<MapGeocoderResult>
+export interface MapFetch {
+  get: (...args: any[]) => any
+  post: (...args: any[]) => any
+}
 export const mapProps = {
   geocoderUrl: String,
-  geocoderHandler: Function,
+  geocoderHandler: Function as PropType<MapGeocoderHandler>,
   isInternational: Boolean,
   driver: Object,
-  fetch: Object as PropType<{ get: any; post: any }>,
+  fetch: Object as PropType<MapFetch>,
   popupContainer: popupContainerProp,
   showName: {
     type: Boolean,
@@ -35,7 +48,7 @@ export const mapProps = {
   },
   defaultValue: {
     type: Object as PropType<{
-      [key in PoiKeys]?: string
+      [key in PoiKeys]?: string | number
     }>,
   },
   enableGisSearch: {
@@ -67,7 +80,15 @@ export const mapProps = {
   },
 }
 
+export const mapSelectProps = {
+  ...mapProps,
+  disabled: { type: Boolean, default: false },
+  clearable: { type: Boolean, default: false },
+  mapStyle: { type: Object as PropType<CSSProperties>, default: () => ({ height: '300px' }) },
+}
+
 export type MapProps = import("vue").ExtractPublicPropTypes<typeof mapProps>
+export type MapSelectProps = import("vue").ExtractPublicPropTypes<typeof mapSelectProps>
 
 export interface ModelValueType {
   adcode?: string

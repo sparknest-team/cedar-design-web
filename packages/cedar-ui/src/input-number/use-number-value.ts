@@ -1,301 +1,251 @@
-import { invokeBeforeCommit } from "../_components/field-presentation/context";
-import {
-  computed,
-  nextTick,
-  onDeactivated,
-  onScopeDispose,
-  ref,
-  watch,
-  type Ref,
-} from "vue";
-import { useActionGuard } from "../_hooks/use-action-guard";
-import { resolveEmptyValue, useEmptyValues } from "../_utils/empty-value";
-import { roundNumber, stepNumber, type StepMethod } from "./number-arithmetic";
+import { computed, nextTick, onDeactivated, onScopeDispose, ref, watch, type Ref } from 'vue'
+import { invokeBeforeCommit } from '../_components/field-presentation/context'
+import { useActionGuard } from '../_hooks/use-action-guard'
+import { resolveEmptyValue, useEmptyValues } from '../_utils/empty-value'
+import { roundNumber, stepNumber, type StepMethod } from './number-arithmetic'
 import {
   clampNumber,
   formatNumberValue,
   getNumberPrecision,
   parseNumberInput,
-} from "./number-value";
-import type { InputNumberProps } from "./props";
+  resolveNumberBounds,
+} from './number-value'
+import type { InputNumberProps } from './props'
 
 export interface NumberEvents {
-  update: (value: number | null | undefined) => void;
-  input: (value: number | null | undefined, text: string, event: Event) => void;
-  change: (value: number | null | undefined, event: Event) => void;
-  clear: (event: Event) => void;
-  step?: (value: number, direction: StepMethod, event: Event) => void;
-  commitError?: (error: unknown) => void;
+  update: (value: number | null | undefined) => void
+  input: (value: number | null | undefined, text: string, event: Event) => void
+  change: (value: number | null | undefined, event: Event) => void
+  clear: (event: Event) => void
+  step?: (value: number, direction: StepMethod, event: Event) => void
+  commitError?: (error: unknown) => void
 }
 
-export function useNumberValue(
-  props: Readonly<InputNumberProps>,
-  blocked: Ref<boolean>,
-  events: NumberEvents,
-) {
-  const guard = useActionGuard();
-  let queuedCommit: Event | undefined;
-  let requestGeneration = 0;
-  const finite = (
-    value: number | null | undefined,
-  ): number | null | undefined =>
-    value === null ? null : clampNumber(value, -Infinity, Infinity);
-  const local = ref(finite(props.defaultValue));
-  const controlled = computed(() => props.modelValue !== undefined);
-  const model = computed(() =>
-    controlled.value ? finite(props.modelValue) : local.value,
-  );
-  const emptyPolicy = useEmptyValues(props, [undefined, null]);
-  const precision = computed(() =>
-    getNumberPrecision(props.step ?? 1, props.precision),
-  );
+export function useNumberValue(props: Readonly<InputNumberProps>, blocked: Ref<boolean>, events: NumberEvents) {
+  const guard = useActionGuard()
+  const bounds = computed(() => resolveNumberBounds(props.min, props.max))
+  let queuedCommit: Event | undefined
+  let requestGeneration = 0
+  const finite = (value: number | null | undefined): number | null | undefined =>
+    value === null ? null : clampNumber(value, -Infinity, Infinity)
+  const local = ref(finite(props.defaultValue))
+  const controlled = computed(() => props.modelValue !== undefined)
+  const model = computed(() => (controlled.value ? finite(props.modelValue) : local.value))
+  const emptyPolicy = useEmptyValues(props, [undefined, null])
+  const precision = computed(() => getNumberPrecision(props.step ?? 1, props.precision))
   const format = (value: number | null | undefined) => {
-    const text = formatNumberValue(
-      emptyPolicy.isEmpty(value) ? undefined : value,
-      precision.value,
-    );
-    return text === "" ? "" : (props.formatter?.(text) ?? text);
-  };
-  const text = ref(format(model.value));
-  const number = ref(model.value);
-  let raw = model.value == null ? "" : String(model.value);
-  let dirty = false;
-  let lastCommitted = model.value;
-  let pending = false;
-  let pendingValue: number | null | undefined;
-  let revision = 0;
+    const text = formatNumberValue(emptyPolicy.isEmpty(value) ? undefined : value, precision.value)
+    return text === '' ? '' : (props.formatter?.(text) ?? text)
+  }
+  const text = ref(format(model.value))
+  const number = ref(model.value)
+  let raw = model.value == null ? '' : String(model.value)
+  let dirty = false
+  let lastCommitted = model.value
+  let pending = false
+  let pendingValue: number | null | undefined
+  let revision = 0
 
   function restore() {
-    text.value = format(model.value);
-    number.value = model.value;
-    raw = model.value == null ? "" : String(model.value);
-    lastCommitted = model.value;
-    dirty = false;
+    text.value = format(model.value)
+    number.value = model.value
+    raw = model.value == null ? '' : String(model.value)
+    lastCommitted = model.value
+    dirty = false
   }
   function update(value: number | null | undefined) {
-    pending = true;
-    pendingValue = value;
+    pending = true
+    pendingValue = value
     if (!controlled.value) {
-      local.value = value;
+      local.value = value
     }
-    events.update(value);
+    events.update(value)
   }
   function restoreAfterCommit() {
-    const current = ++revision;
+    const current = ++revision
     nextTick(() => {
       if (current === revision) {
-        restore();
-        pending = false;
+        restore()
+        pending = false
       }
-    });
+    })
   }
   function legal(value: number | null | undefined) {
-    const clamped = clampNumber(
-      value ?? undefined,
-      props.min ?? -Infinity,
-      props.max ?? Infinity,
-    );
+    const clamped = clampNumber(value ?? undefined, bounds.value.min, bounds.value.max)
     return clamped === undefined
       ? undefined
-      : clampNumber(
-          roundNumber(clamped, precision.value),
-          props.min ?? -Infinity,
-          props.max ?? Infinity,
-        );
+      : clampNumber(roundNumber(clamped, precision.value), bounds.value.min, bounds.value.max)
   }
   function edit(value: string, event: Event) {
     if (blocked.value || props.disableInput || guard.pending.value) {
-      return;
+      return
     }
-    const parsed = parseNumberInput(value, props.parser);
+    const parsed = parseNumberInput(value, props.parser)
     if (!parsed.intermediate && parsed.number === undefined) {
-      return;
+      return
     }
-    revision += 1;
-    dirty = true;
-    raw = parsed.text;
-    text.value = raw === "" ? "" : (props.formatter?.(raw) ?? raw);
-    number.value = parsed.number;
-    events.input(parsed.number, text.value, event);
-    if (props.modelEvent === "input" && (raw === "" || !parsed.intermediate)) {
+    revision += 1
+    dirty = true
+    raw = parsed.text
+    text.value = raw === '' ? '' : (props.formatter?.(raw) ?? raw)
+    number.value = parsed.number
+    events.input(parsed.number, text.value, event)
+    if (props.modelEvent === 'input' && (raw === '' || !parsed.intermediate)) {
       request(parsed.number, event, () => {
-        update(parsed.number);
+        update(parsed.number)
         if (queuedCommit && Object.is(legal(parsed.number), parsed.number)) {
-          const commitEvent = queuedCommit;
-          queuedCommit = undefined;
-          submit(parsed.number, commitEvent);
+          const commitEvent = queuedCommit
+          queuedCommit = undefined
+          submit(parsed.number, commitEvent)
         }
-        return true;
-      });
+        return true
+      })
     }
   }
-  function request(
-    value: number | null | undefined,
-    event: Event,
-    publish: () => boolean,
-  ) {
-    if (guard.pending.value) return false;
-    if (!props.beforeCommit || Object.is(value, model.value)) return publish();
-    const previousValue = model.value;
-    const hook = props.beforeCommit;
-    const generation = requestGeneration;
+  function request(value: number | null | undefined, event: Event, publish: () => boolean) {
+    if (guard.pending.value) return false
+    if (!props.beforeCommit || Object.is(value, model.value)) return publish()
+    const previousValue = model.value
+    const hook = props.beforeCommit
+    const generation = requestGeneration
     void guard
-      .run(
-        value,
-        (next, { signal }) =>
-          invokeBeforeCommit(hook, next, { previousValue, signal }),
-        event,
-      )
+      .run(value, (next, { signal }) => invokeBeforeCommit(hook, next, { previousValue, signal }), event)
       .then((outcome) => {
-        if (generation !== requestGeneration || blocked.value) return;
-        if (outcome.status === "allowed") {
-          publish();
+        if (generation !== requestGeneration || blocked.value) return
+        if (outcome.status === 'allowed') {
+          publish()
           if (queuedCommit) {
-            const commitEvent = queuedCommit;
-            queuedCommit = undefined;
-            commit(commitEvent);
+            const commitEvent = queuedCommit
+            queuedCommit = undefined
+            commit(commitEvent)
           }
-        } else if (
-          outcome.status === "rejected" ||
-          outcome.status === "error"
-        ) {
-          queuedCommit = undefined;
-          restore();
-          if (outcome.status === "error") events.commitError?.(outcome.error);
+        } else if (outcome.status === 'rejected' || outcome.status === 'error') {
+          queuedCommit = undefined
+          restore()
+          if (outcome.status === 'error') events.commitError?.(outcome.error)
         }
-      });
-    return false;
+      })
+    return false
   }
   function cancelCommit() {
-    requestGeneration += 1;
-    queuedCommit = undefined;
-    guard.cancel();
+    requestGeneration += 1
+    queuedCommit = undefined
+    guard.cancel()
   }
-  onScopeDispose(cancelCommit);
+  onScopeDispose(cancelCommit)
   onDeactivated(() => {
-    cancelCommit();
-    restore();
-  });
+    cancelCommit()
+    restore()
+  })
   function submit(value: number | null | undefined, event: Event) {
-    const changed = !Object.is(value, lastCommitted);
-    text.value = format(value);
-    number.value = value;
-    raw = value === undefined ? "" : String(value);
-    dirty = false;
+    const changed = !Object.is(value, lastCommitted)
+    text.value = format(value)
+    number.value = value
+    raw = value === undefined ? '' : String(value)
+    dirty = false
     if (!Object.is(value, model.value)) {
-      update(value);
+      update(value)
     }
-    lastCommitted = value;
+    lastCommitted = value
     if (changed) {
-      events.change(value, event);
+      events.change(value, event)
     }
-    restoreAfterCommit();
-    return changed;
+    restoreAfterCommit()
+    return changed
   }
   function commit(event: Event) {
     if (guard.pending.value) {
-      queuedCommit = event;
-      return;
+      queuedCommit = event
+      return
     }
     if (blocked.value) {
-      restore();
-      return;
+      restore()
+      return
     }
     if (!dirty) {
-      restore();
-      return;
+      restore()
+      return
     }
     // A trailing decimal point is a valid completed number; a lone sign/dot isn't.
-    const value = raw === "" ? undefined : Number(raw);
-    if (value !== undefined && (!Number.isFinite(value) || raw.trim() === "")) {
-      restore();
-      return;
+    const value = raw === '' ? undefined : Number(raw)
+    if (value !== undefined && (!Number.isFinite(value) || raw.trim() === '')) {
+      restore()
+      return
     }
-    const candidate = legal(value);
-    request(candidate, event, () => submit(candidate, event));
+    const candidate = legal(value)
+    request(candidate, event, () => submit(candidate, event))
   }
-  const isMin = computed(
-    () => number.value != null && number.value <= (props.min ?? -Infinity),
-  );
-  const isMax = computed(
-    () => number.value != null && number.value >= (props.max ?? Infinity),
-  );
+  const isMin = computed(() => number.value != null && number.value <= bounds.value.min)
+  const isMax = computed(() => number.value != null && number.value >= bounds.value.max)
   function step(method: StepMethod, event: Event) {
-    const amount = props.step ?? 1;
+    const amount = props.step ?? 1
     const unavailable =
-      method === "plus"
+      method === 'plus'
         ? props.disableIncrement || props.incrementButton === false
-        : props.disableDecrement || props.decrementButton === false;
+        : props.disableDecrement || props.decrementButton === false
     if (
       blocked.value ||
       guard.pending.value ||
       unavailable ||
       !Number.isFinite(amount) ||
       amount <= 0 ||
-      (method === "plus" ? isMax.value : isMin.value)
+      (method === 'plus' ? isMax.value : isMin.value)
     ) {
-      return false;
+      return false
     }
-    const start = emptyPolicy.isEmpty(number.value) ? undefined : number.value;
+    const start = emptyPolicy.isEmpty(number.value) ? undefined : number.value
     const candidate =
       start == null
-        ? legal(
-            props.min === undefined || props.min === -Infinity ? 0 : props.min,
-          )
-        : legal(stepNumber(start, amount, method));
+        ? legal(bounds.value.min === -Infinity ? 0 : bounds.value.min)
+        : legal(stepNumber(start, amount, method))
     if (candidate === undefined) {
-      return false;
+      return false
     }
     return request(candidate, event, () => {
-      const changed = submit(candidate, event);
-      if (changed) events.step?.(candidate, method, event);
-      return changed;
-    });
+      const changed = submit(candidate, event)
+      if (changed) events.step?.(candidate, method, event)
+      return changed
+    })
   }
   function clear(event: Event) {
-    if (
-      blocked.value ||
-      guard.pending.value ||
-      props.disableInput ||
-      !props.clearable ||
-      text.value === ""
-    ) {
-      return;
+    if (blocked.value || guard.pending.value || props.disableInput || !props.clearable || text.value === '') {
+      return
     }
-    const cleared = resolveEmptyValue(props, undefined);
+    const cleared = resolveEmptyValue(props, undefined)
     request(cleared, event, () => {
-      revision += 1;
-      dirty = false;
-      raw = cleared === undefined ? "" : String(cleared);
-      text.value = format(cleared);
-      number.value = cleared;
-      events.input(cleared, text.value, event);
-      update(cleared);
-      events.change(cleared, event);
-      lastCommitted = cleared;
-      events.clear(event);
-      restoreAfterCommit();
-      return true;
-    });
+      events.clear(event)
+      const changed = !Object.is(cleared, model.value)
+      revision += 1
+      dirty = false
+      raw = cleared === undefined ? '' : String(cleared)
+      text.value = format(cleared)
+      number.value = cleared
+      events.input(cleared, text.value, event)
+      update(cleared)
+      if (changed) events.change(cleared, event)
+      lastCommitted = cleared
+      restoreAfterCommit()
+      return true
+    })
   }
   watch(
     () => props.modelValue,
     (value) => {
       if (value === undefined) {
-        local.value = undefined;
+        local.value = undefined
       }
       if (pending && Object.is(value, pendingValue)) {
-        pending = false;
+        pending = false
         if (dirty) {
-          return;
+          return
         }
       }
-      cancelCommit();
-      revision += 1;
-      restore();
+      cancelCommit()
+      revision += 1
+      restore()
     },
-    { flush: "sync" },
-  );
+    { flush: 'sync' },
+  )
   watch(
     () => [
       props.min,
@@ -315,28 +265,29 @@ export function useNumberValue(
       props.decrementButton,
     ],
     () => {
-      const wasPending = guard.pending.value;
-      cancelCommit();
-      if (wasPending) restore();
+      const wasPending = guard.pending.value
+      cancelCommit()
+      if (wasPending) restore()
       // Configuration changes are not user edits and never write back to a form.
       if (!dirty) {
-        restore();
+        restore()
       }
     },
-    { flush: "sync" },
-  );
+    { flush: 'sync' },
+  )
   watch(
     blocked,
     (value) => {
       if (value) {
-        cancelCommit();
-        revision += 1;
-        restore();
+        cancelCommit()
+        revision += 1
+        restore()
       }
     },
-    { flush: "sync" },
-  );
+    { flush: 'sync' },
+  )
   return {
+    bounds,
     text,
     number,
     isMin,
@@ -346,5 +297,5 @@ export function useNumberValue(
     step,
     clear,
     commitPending: guard.pending,
-  };
+  }
 }

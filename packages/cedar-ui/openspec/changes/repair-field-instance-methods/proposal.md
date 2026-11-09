@@ -1,0 +1,3 @@
+# Preserve existing public methods across field presentation lifecycles
+
+InputTag Options API methods disappear at the public wrapper. Script/setup exposed methods are missing until a deferred editor first mounts, and stored functions or references retain disposed children after closing/reopening. Preserve existing public signatures and explicit capability inventories, provide stable methods at mount, resolve the current child on each call, and invalidate deferred calls after closure/deactivation/unmount. Focus opens an allowed deferred editor and preserves explicit indices; VerificationCode reset starts an empty draft requiring normal final approval. No ordinary event Promise collection or excluded loading props.

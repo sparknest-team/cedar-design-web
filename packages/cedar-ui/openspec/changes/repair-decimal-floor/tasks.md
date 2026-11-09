@@ -1,0 +1,3 @@
+- [x] Reproduce published shared and both CountTo failures.
+- [x] Implement decimal digit truncation, diagnostics and documentation.
+- [x] Validate both consumer suites, actual demos/browser, lint/types/spec and foundations.

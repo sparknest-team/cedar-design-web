@@ -674,7 +674,7 @@
       /></template>
     </SchedulerEditor>
     <Teleport to="body">
-      <div
+      <div v-bind="themeScope"
         v-if="timelineGhost"
         :dir="direction"
         :class="[n('event'), n('drag-ghost')]"
@@ -696,17 +696,18 @@
 </template>
 
 <script setup lang="ts">
+import { useThemeScope } from '../theme-provider/context'
 import PendingFeedback from '../_components/pending-feedback/PendingFeedback.vue'
-import { computed, ref, watch, onMounted, onBeforeUnmount, onDeactivated, onActivated, nextTick } from "vue";
-import { useDirection, inlineScrollLeft, setInlineScrollLeft } from "../_utils/direction";
-import { schedulerPointerFraction } from "./coordinates";
-import { isValidSchedulerHiddenDays } from "./core/visible-days";
-import { useTimelinePointer } from "./use-timeline-pointer";
-import { useSchedulerNow } from "./use-now";
-import { projectSchedulerDrag } from "./drag";
+import { computed, ref, watch, onMounted, onBeforeUnmount, onDeactivated, onActivated, nextTick } from 'vue';
+import { useDirection, inlineScrollLeft, setInlineScrollLeft } from '../_utils/direction';
+import { schedulerPointerFraction } from './coordinates';
+import { isValidSchedulerHiddenDays } from './core/visible-days';
+import { useTimelinePointer } from './use-timeline-pointer';
+import { useSchedulerNow } from './use-now';
+import { projectSchedulerDrag } from './drag';
 import type { SchedulerResize } from "./drag";
 import CProgress from "../progress";
-import { getSchedulerVisibleDays } from "./core/visible-days";
+import { getSchedulerVisibleDays } from './core/visible-days';
 import SchedulerMonthView from "./components/SchedulerMonthView.vue";
 import CButton from "../button";
 import CCheckbox from "../checkbox";
@@ -715,16 +716,16 @@ import CInput from "../input";
 import CTag from "../tag";
 import CEmpty from "../empty";
 import CAlert from "../alert";
-import { createNamespace } from "../_utils/global-config";
-import { useI18n } from "../locale";
-import { schedulerProps } from "./props";
+import { createNamespace } from '../_utils/global-config';
+import { useI18n } from '../locale';
+import { schedulerProps } from './props';
 import type { SchedulerEventTemplate } from "./props";
 import type { SchedulerEditorSlotProps } from "./props";
-import { useScheduler } from "./use-scheduler";
-import { useSchedulerResources } from "./use-resources";
+import { useScheduler } from './use-scheduler';
+import { useSchedulerResources } from './use-resources';
 import type { SchedulerResourceErrorContext } from "./props";
 import type { SchedulerEmits } from "./use-scheduler";
-import { schedulerMessages } from "./locale";
+import { schedulerMessages } from './locale';
 import SchedulerEventCard from "./components/SchedulerEvent.vue";
 import SchedulerDependencies from "./components/SchedulerDependencies.vue";
 import SchedulerTimelineRows from "./components/SchedulerTimelineRows.vue";
@@ -752,13 +753,16 @@ import {
   cloneSchedulerEvent,
   layoutSchedulerTimeline,
   SchedulerError,
-} from "./core";
+} from './core';
 import type {
   SchedulerEvent,
   SchedulerMode,
   SchedulerResource,
   SchedulerChange,
 } from "./core";
+
+
+const themeScope = useThemeScope()
 
 defineOptions({ name: createNamespace("scheduler").name });
 const { n, classes } = createNamespace("scheduler");

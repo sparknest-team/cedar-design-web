@@ -15,3 +15,5 @@ export { Tag }
 export const _TagComponent = Tag
 
 export default Tag
+
+export type { TagSlots, TagEmits } from './types'

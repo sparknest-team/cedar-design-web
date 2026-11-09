@@ -3,6 +3,7 @@
     <Tooltip :content="t('typography.edit')" v-bind="editTooltipProps">
       <button
         type="button"
+        :disabled="disabled"
         :class="`${prefixCls}-operation-edit`"
         :aria-label="t('typography.edit')"
         @click.stop="onEditClick"
@@ -20,6 +21,7 @@
       </template>
       <button
         type="button"
+        :disabled="disabled"
         :class="{
           [`${prefixCls}-operation-copied`]: isCopied,
           [`${prefixCls}-operation-copy`]: !isCopied,
@@ -37,6 +39,7 @@
   <button
     v-if="showExpand"
     type="button"
+    :disabled="disabled"
     :class="`${prefixCls}-operation-expand`"
     :aria-expanded="expanded"
     @click.stop="onExpandClick"
@@ -65,6 +68,7 @@ export default defineComponent({
   },
   props: {
     editable: Boolean,
+    disabled: Boolean,
     copyable: Boolean,
     expandable: Boolean,
     isCopied: Boolean,

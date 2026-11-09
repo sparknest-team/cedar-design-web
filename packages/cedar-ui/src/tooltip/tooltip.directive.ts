@@ -1,9 +1,10 @@
-import { createApp, defineComponent, h, type App, type Directive, type DirectiveBinding } from 'vue'
+import { createApp, defineComponent, h, nextTick, type App, type Directive, type DirectiveBinding } from 'vue'
 import type { TriggerPlacement } from '../trigger'
 import Tooltip from './Tooltip.vue'
 import { isPureTextElement, isTextOverflow } from './utils'
 
 const TOOLTIP_KEY = Symbol('CedarTooltip')
+let nextDirectiveId = 0
 type TooltipDirectiveArg = TriggerPlacement | 'ellipsis'
 
 export interface TooltipOptions {
@@ -17,7 +18,8 @@ interface TooltipState {
   value: string | TooltipOptions
   arg?: TooltipDirectiveArg
   enter: () => void
-  leave: () => void
+  visible: boolean
+  ownsEllipsisClass: boolean
 }
 
 interface ElementWithTooltip extends HTMLElement {
@@ -25,13 +27,13 @@ interface ElementWithTooltip extends HTMLElement {
 }
 
 const TooltipComponent = defineComponent({
-  props: ['options', 'reference'],
+  props: ['options', 'reference', 'onVisibility'],
   setup(props) {
     return () => h(Tooltip, {
       ...props.options,
       reference: props.reference,
-      open: true,
-      trigger: 'manual',
+      defaultOpen: true,
+      'onUpdate:open': props.onVisibility,
     })
   },
 })
@@ -59,7 +61,14 @@ function open(el: ElementWithTooltip, state: TooltipState) {
   if (!options?.content) return
   const container = document.createElement('div')
   document.body.append(container)
-  const app = createApp(TooltipComponent, { options, reference: el })
+  state.visible = true
+  const app = createApp(TooltipComponent, { options, reference: el, onVisibility: (visible: boolean) => {
+    state.visible = visible
+    if (!visible) void nextTick(() => {
+      if (state.app === app && !state.visible) close(state)
+    })
+  } })
+  app.config.idPrefix = `cedar-tooltip-directive-${nextDirectiveId++}`
   state.container = container
   state.app = app
   app.mount(container)
@@ -68,24 +77,33 @@ function open(el: ElementWithTooltip, state: TooltipState) {
 export const vTooltip: Directive<HTMLElement, string | TooltipOptions> = {
   mounted(el, binding: DirectiveBinding<string | TooltipOptions, any, TooltipDirectiveArg>) {
     const target = el as ElementWithTooltip
-    if (binding.arg === 'ellipsis') target.classList.add('text-ellipsis')
+    const ownsEllipsisClass = binding.arg === 'ellipsis' && !target.classList.contains('text-ellipsis')
+    if (ownsEllipsisClass) target.classList.add('text-ellipsis')
     const state: TooltipState = {
       value: binding.value,
       arg: binding.arg,
       enter: () => open(target, state),
-      leave: () => close(state),
+      visible: false,
+      ownsEllipsisClass,
     }
     target[TOOLTIP_KEY] = state
     target.addEventListener('mouseenter', state.enter)
-    target.addEventListener('mouseleave', state.leave)
     target.addEventListener('focusin', state.enter)
-    target.addEventListener('focusout', state.leave)
   },
   updated(el, binding: DirectiveBinding<string | TooltipOptions, any, TooltipDirectiveArg>) {
     const target = el as ElementWithTooltip
     const state = target[TOOLTIP_KEY]
     if (!state) return
     const active = Boolean(state.app)
+    if (binding.arg !== state.arg) {
+      if (state.ownsEllipsisClass) target.classList.remove('text-ellipsis')
+      state.ownsEllipsisClass = binding.arg === 'ellipsis' && !target.classList.contains('text-ellipsis')
+      if (state.ownsEllipsisClass) target.classList.add('text-ellipsis')
+    }
+    if (binding.arg === 'ellipsis' && !target.classList.contains('text-ellipsis')) {
+      target.classList.add('text-ellipsis')
+      state.ownsEllipsisClass = true
+    }
     state.value = binding.value
     state.arg = binding.arg
     if (active) {
@@ -98,10 +116,9 @@ export const vTooltip: Directive<HTMLElement, string | TooltipOptions> = {
     const state = target[TOOLTIP_KEY]
     if (!state) return
     target.removeEventListener('mouseenter', state.enter)
-    target.removeEventListener('mouseleave', state.leave)
     target.removeEventListener('focusin', state.enter)
-    target.removeEventListener('focusout', state.leave)
     close(state)
+    if (state.ownsEllipsisClass) target.classList.remove('text-ellipsis')
     delete target[TOOLTIP_KEY]
   },
   getSSRProps(binding) {

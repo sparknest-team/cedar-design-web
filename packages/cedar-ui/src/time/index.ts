@@ -17,7 +17,7 @@ const Time = withInstall(
   { components: [_Time, TimePicker] },
 )
 
-export type TimeInstance = InstanceType<typeof _Time>
+export type TimeInstance = InstanceType<typeof _Time> & import('./public-types').TimeExpose
 export type TimePickerInstance = InstanceType<typeof _TimePicker>
 
 export { Time, TimePicker, timeProps, timePickerProps }
@@ -33,3 +33,8 @@ export type {
   TimePopupPresentationProps,
   TimeWheelPresentationProps,
 } from './presentation-props'
+
+export type { TimeModelValue, TimeEmits, TimeReadScope, TimeSuffixIconScope, TimeActionsScope, TimeExpose } from './public-types'
+export type { TimeSlots } from './slots'
+
+export type { TimePickerEmits, TimePickerSlots } from './picker-contract'

@@ -1,0 +1,1 @@
+Own one async source and selected raw-option cache per public Select across native editor mount/unmount. Scope ownership to the native child and consume it before rendering user option content; preserve independent nested fields. No public API changes or event Promise collection.

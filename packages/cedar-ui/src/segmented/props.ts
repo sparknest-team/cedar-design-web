@@ -1,4 +1,4 @@
-import type { ExtractPropTypes, PropType, VNodeChild } from 'vue'
+import type { PropType, VNodeChild } from 'vue'
 import { componentSizes, orientations } from '../_utils/constant'
 import type { ComponentSize, Orientation } from '../_utils/constant'
 
@@ -33,7 +33,7 @@ export const segmentedProps = {
    * @en Options
    */
   options: {
-    type: Array as PropType<Array<SegmentedValue | SegmentedOption>>,
+    type: Array as PropType<ReadonlyArray<SegmentedValue | SegmentedOption>>,
     default: () => [],
   },
   /**
@@ -42,7 +42,7 @@ export const segmentedProps = {
    */
   size: {
     type: String as PropType<ComponentSize>,
-    default: 'md',
+    default: undefined,
     validator: (value: unknown): value is ComponentSize =>
       componentSizes.includes(value as ComponentSize),
   },
@@ -52,8 +52,13 @@ export const segmentedProps = {
    */
   disabled: {
     type: Boolean,
-    default: false,
+    default: undefined,
   },
+  /**
+   * @zh 只读；未设置时继承表单
+   * @en Readonly; inherits the form when omitted
+   */
+  readonly: { type: Boolean, default: undefined },
   /**
    * @zh 是否撑满父容器宽度
    * @en Fit parent width

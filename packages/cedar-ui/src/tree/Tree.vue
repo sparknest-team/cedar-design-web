@@ -21,6 +21,7 @@
 import { useDirection } from '@cedar-design/use'
 import { treeProps } from './props'
 import { createNamespace } from '../_utils/global-config'
+import { matchesOptionText } from '../_utils/option-data'
 import { defineComponent, computed, provide, reactive, PropType, toRefs, ref, onBeforeUnmount, onDeactivated, onActivated, watch, nextTick, useId, inject } from 'vue'
 import { getPrefixCls } from '../_utils/global-config'
 import { TreeInjectionKey, TreeKeyboardOwnerKey } from './context'
@@ -52,6 +53,7 @@ export default defineComponent({
   },
   props: treeProps,
   emits: {
+    'load-error': (_error: unknown, _node: TreeNodeData) => true,
     /**
      * @zh 点击树节点时触发
      * @en Triggered when the tree node is clicked
@@ -91,7 +93,7 @@ export default defineComponent({
      * @zh 展开/关闭
      * @en Expand/close
      * @param {Array<string | number>} expandKeys
-     * @param {{ expanded?: boolean; expandNodes: TreeNodeData[]; node?: TreeNodeData; e?: Event; }} data
+     * @param {{ expanded?: boolean; expandedNodes: TreeNodeData[]; node?: TreeNodeData; e?: Event; }} data
      */
     expand: (
       expandKeys: (string | number)[],
@@ -192,6 +194,7 @@ export default defineComponent({
       size,
       defaultExpandAll,
       filterTreeNode,
+      searchValue,
       draggable,
       allowDrop,
       defaultExpandSelected,
@@ -305,12 +308,29 @@ export default defineComponent({
 
     const currentExpandKeys = ref<TreeNodeValue[]>([])
 
+    const filteredNodeKeys = computed(() => {
+      const predicate = filterTreeNode.value
+      const query = externallyManaged ? '' : searchValue.value
+      if (externallyManaged || (!predicate && !query)) return undefined
+      const keys = new Set<TreeNodeValue>()
+      const labelField = fieldNames.value?.label ?? 'label'
+      for (const node of flattenTreeData.value) {
+        if (predicate && !predicate(node.treeNodeData)) continue
+        if (query && !matchesOptionText(node.treeNodeData[labelField], query)) continue
+        keys.add(node.key)
+        node.pathParentKeys.forEach(key => keys.add(key))
+      }
+      return keys
+    })
+
     const visibleTreeNodeList = computed(() => {
       const expandedValuesSet = new Set(expandedValues.value)
       const currentExpandKeysSet = new Set(currentExpandKeys.value)
 
       return flattenTreeData.value.filter((node) => {
-        const passFilter = !filterTreeNode || !filterTreeNode.value || filterTreeNode?.value(node.treeNodeData)
+        const passFilter = externallyManaged
+          ? !filterTreeNode.value || filterTreeNode.value(node.treeNodeData)
+          : !filteredNodeKeys.value || filteredNodeKeys.value.has(node.key)
 
         if (!passFilter) return false
 
@@ -665,8 +685,7 @@ export default defineComponent({
               if (!loadActive || epoch !== loadEpoch || loadOwners.get(key) !== treeNodeData) return
               loadOwners.delete(key)
               loadingKeys.value = loadingKeys.value.filter((v) => v !== key)
-              // eslint-disable-next-line no-console
-              console.error('[tree]load data error: ', err)
+              emit('load-error', err, treeNodeData)
             }
           }
         : undefined,

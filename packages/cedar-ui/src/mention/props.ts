@@ -1,9 +1,9 @@
-import { fieldLoadingProps } from '../field-decorator/props'
+import type { PropType } from 'vue'
+import { fieldPresentationProps } from '../_components/field-presentation/props'
 import type { OptionsLoader } from '../_hooks/use-option-request'
-import { emptyValueProp } from "../_utils/empty-value";
-import type { PropType } from "vue";
-import { fieldPresentationProps } from "../_components/field-presentation/props";
-import type { SelectOptionData, SelectOptionGroup } from "../select/types";
+import { emptyValueProp } from '../_utils/empty-value'
+import { fieldLoadingProps } from '../field-decorator/props'
+import type { SelectOptionData, SelectOptionGroup } from '../select/types'
 
 export const mentionProps = {
   readonly: { type: Boolean, default: undefined },
@@ -22,14 +22,17 @@ export const mentionProps = {
    */
   defaultValue: {
     type: String,
-    default: "",
+    default: '',
   },
   /**
    * @zh 用于自动补全的数据
    * @en Data for automatic completion
    */
   data: {
-    type: [Array, Function] as PropType<readonly (string | number | SelectOptionData | SelectOptionGroup)[] | OptionsLoader<string | number | SelectOptionData | SelectOptionGroup>>,
+    type: [Array, Function] as PropType<
+      | readonly (string | number | SelectOptionData | SelectOptionGroup)[]
+      | OptionsLoader<string | number | SelectOptionData | SelectOptionGroup>
+    >,
     default: undefined,
   },
   /**
@@ -38,7 +41,7 @@ export const mentionProps = {
    */
   prefix: {
     type: [String, Array] as PropType<string | string[]>,
-    default: "@",
+    default: '@',
   },
   /**
    * @zh 选中项的前后分隔符
@@ -46,15 +49,15 @@ export const mentionProps = {
    */
   split: {
     type: String,
-    default: " ",
+    default: ' ',
   },
   /**
    * @zh 输入框或文本域
    * @en default input or textarea
    */
   type: {
-    type: String as PropType<"input" | "textarea">,
-    default: "input",
+    type: String as PropType<'input' | 'textarea'>,
+    default: 'input',
   },
   /**
    * @zh 是否禁用
@@ -62,7 +65,7 @@ export const mentionProps = {
    */
   disabled: {
     type: Boolean,
-    default: false,
+    default: undefined,
   },
   /**
    * @zh 是否允许清空输入框
@@ -72,4 +75,4 @@ export const mentionProps = {
     type: Boolean,
     default: false,
   },
-};
+}

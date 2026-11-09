@@ -1,0 +1,1 @@
+Preserve representable tiny/exponent step values with an isolated decimal grid calculation, retaining min anchoring, endpoints,range constraints and Number output. Whole Slider blur targets the actually focused owned element,including showInput fields,without touching external focus. Publish read slot andenum diagnostics,complete shared presentation docs. No loading props added.

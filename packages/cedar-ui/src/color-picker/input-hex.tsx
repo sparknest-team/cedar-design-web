@@ -5,6 +5,7 @@ import { hexToRgb, rgbToHsv } from '../_utils/color'
 import useState from '../_hooks/use-state'
 import Input, { InputGroup } from '../input'
 import InputAlpha from './input-alpha'
+import { useI18n } from '../locale'
 
 
 const { name } = createNamespace('input-hex')
@@ -27,6 +28,7 @@ export default defineComponent({
   },
   setup(props) {
     const prefixCls = getPrefixCls('color-picker')
+    const { t } = useI18n()
     const { color } = toRefs(props)
     const [hex, setHex] = useState(color.value.hex)
 
@@ -62,6 +64,7 @@ export default defineComponent({
     return () => (
       <InputGroup class={`${prefixCls}-input-group`}>
         <Input
+          inputAttrs={{ 'aria-label': t('colorPicker.hex') }}
           class={`${prefixCls}-input-hex`}
           v-slots={{ prefix: () => '#' }}
           size="xs"

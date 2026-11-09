@@ -96,11 +96,14 @@
       }
 
       &-clear-btn {
+        padding: 0;
+        border: 0;
+        background: transparent;
         color: var(~'--c-transfer-icon-color');
         font-size: var(~'--c-transfer-icon-font-size');
         cursor: pointer;
 
-        &:hover::before {
+        &:hover .c-icon-hover::before {
           background-color: var(~'--c-transfer-icon-bg');
         }
       }
@@ -290,12 +293,15 @@
 
     &-remove-btn,
     &-operation-btn {
+      padding: 0;
+      border: 0;
+      background: transparent;
       margin-inline-start: auto;
       color: var(~'--c-transfer-icon-color');
       font-size: var(~'--c-transfer-icon-font-size');
       cursor: pointer;
 
-      &:hover::before {
+      &:hover .c-icon-hover::before {
         background-color: var(~'--c-transfer-icon-bg');
       }
     }

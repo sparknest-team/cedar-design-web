@@ -1,4 +1,5 @@
-import { Ref } from 'vue'
+import type { VNodeChild } from 'vue'
+import type { FormFieldError, FormValidateErrors as ControllerErrors } from './form-controller'
 import { ComponentSize } from '../_utils/constant'
 
 export const VALIDATE_STATUSES = ['success', 'warning', 'error', 'validating'] as const
@@ -115,7 +116,7 @@ export interface FieldRule<FieldValue = any> {
    * @param value
    * @param callback
    */
-  validator?: (value: FieldValue | undefined, callback: (error?: string) => void, context?: { model: Readonly<Record<string, unknown>>; field: string }) => void
+  validator?: (value: FieldValue | undefined, callback: (error?: string) => void, context?: { model: Readonly<Record<string, unknown>>; field: string }) => void | Promise<void>
 }
 
 export interface FieldData {
@@ -193,3 +194,25 @@ export interface FormItemEventHandler {
   /** @zh 清空时触发校验；仅在 validateTrigger 包含 clear 时调用。 */
   onClear?: (ev?: Event) => void
 }
+
+/** 阻止提交时的编辑会话提示，不伪装成字段规则错误。 */
+export interface FormEditingError {
+  field: 'editing'
+  message: string
+}
+export type FormSubmitError = ValidatedError | FormEditingError
+export interface FormEmits {
+  submit: [data: { values: Record<string, unknown>; errors: Record<string, ValidatedError> | undefined }, event: Event]
+  'submit-success': [values: Record<string, unknown>, event: Event]
+  'submit-failed': [data: { values: Record<string, unknown>; errors: Record<string, FormSubmitError> }, event: Event]
+  reset: [event: Event]
+}
+export interface FormSlots { default?: () => VNodeChild }
+export interface FormItemSlots {
+  default?: () => VNodeChild
+  label?: () => VNodeChild
+  help?: () => VNodeChild
+  extra?: () => VNodeChild
+}
+
+export type FormValidateErrors<Error extends FormFieldError = ValidatedError> = ControllerErrors<Error>

@@ -50,9 +50,9 @@ permalink: /components/popconfirm/
 
 ## 内容与展示
 
-### before 钩子与 done 兼容
+### 关闭守卫
 
-`beforeConfirm(done) / beforeCancel(done)` 为统一入口，不新增另一套命名。
+`beforeConfirm(payload, done, context)` 和 `beforeCancel(payload, done, context)` 分别接收确认或取消的 action、完成回调与上下文。
 
 
 只记录日志的同步钩子应显式 return true；同步 undefined 表示仍在等待回调。注意：以前返回 `Promise<void>` 却不调用 done 的异步钩子，现在会在 Promise 完成后放行。
@@ -84,13 +84,23 @@ Promise 与 done 共用一次完成状态：`false` / `done(false)` 阻止，`tr
 
 <demo src="./__demos__/custom.vue"></demo>
 
+## 键盘与焦点
+
+默认插槽应提供可聚焦的触发元素。打开后焦点进入非模态确认对话框；Tab 可进入按钮，Escape 请求关闭。关闭时若焦点仍在确认框内则返回触发元素；点击外部并把焦点移走时不会抢回焦点。受控模式下父组件未接受关闭请求，焦点保持在确认框中。
+
 ## 阅读方向
 
 继承最近的 `dir="ltr|rtl"`，支持运行时切换与局部覆盖。内容与动作采用逻辑对齐，确认与取消顺序按阅读方向排列；方向切换不触发确认或取消，显式弹出方位仍沿用原有物理/逻辑约定。
 
+## 触发与定位
+
+### 弹层位置
+
+placement 直接使用 TriggerPlacement / triggerPlacements。
+
 ## API
 
-### `<popconfirm>` Props
+### Popconfirm Props
 
 | 参数名                      | 描述                                                                                      | 类型                                                                                                     |  默认值  |
 | --------------------------- | ----------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | :------: |
@@ -110,36 +120,82 @@ Promise 与 done 共用一次完成状态：`false` / `done(false)` 阻止，`tr
 | arrow-style                 | 弹出框箭头的样式                                                                          | `CSSProperties`                                                                                          |   `-`    |
 | popup-container             | 弹出框的挂载点                                                                            | `string \| HTMLElement \| false`                                                                                  |   `-`    |
 | `before-confirm` | 返回 boolean/Promise 或调用 done；首次完成生效 | `PopconfirmBeforeConfirm` | — |
-| `before-cancel` | 返回 boolean/Promise 或调用 done；首次完成生效 | `PopconfirmBeforeConfirm` | — |
+| `before-cancel` | 返回 boolean/Promise 或调用 done；首次完成生效 | `PopconfirmBeforeCancel` | — |
 
-### `<popconfirm>` Events
+### Popconfirm Events
 
 | 事件名               | 描述                           | 参数               |
 | -------------------- | ------------------------------ | ------------------ |
-| open-change | 气泡确认框的显隐状态改变时触发 | open: `boolean` |
+| update:open | 请求更新显示状态 | open: `boolean` |
+| open-change | 显示状态更新请求通知；受控时父组件可能不接受 | open: `boolean` |
+| guard-error | 守卫抛错或拒绝 Promise | error: `unknown`, action: `'confirm' \| 'cancel'` |
 | confirm              | 点击确认按钮时触发             | -                  |
 | cancel               | 点击取消按钮时触发             | -                  |
 
-### `<popconfirm>` Slots
+### Popconfirm Slots
 
 | 插槽名  | 描述 | 参数 |
 | ------- | :--: | ---- |
+| default | 触发确认框的参考元素 | - |
 | icon    | 图标 | -    |
 | content | 内容 | -    |
 
-### 类型定义
+## Types
 
 组件导出以下类型定义
 
 ```ts
-import type { PopconfirmInstance } from '@cedar-design/ui'
+import type { PopconfirmInstance, PopconfirmProps, PopconfirmBeforeConfirm, PopconfirmBeforeCancel } from '@cedar-design/ui'
 ```
 
 
-### 方位语义与配置入口
+组件没有承诺公开的专用实例操作方法；内部 Trigger 方法和按钮引用不属于 Popconfirm 公共契约。
 
-placement 直接复用 TriggerPlacement / triggerPlacements；旧 TriggerPosition / TRIGGER_POSITIONS 别名已删除，方位值域不变。
-
-### 守卫等待反馈
+### 异步操作反馈
 
 before-* 等待期间显示加载反馈并标记 aria-busy；拒绝或失败后恢复，重复提交不再启动同一操作。普通事件返回的 Promise 不参与加载。
+
+## CSS Variables
+
+<!-- component-css-variables:start -->
+
+通过以下变量定制组件外观。默认值随表中注明的主题或选择器条件变化；变量仅在对应的尺寸、变体和交互状态下生效。
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| 变量 | 默认值／条件 | 影响的样式 |
+| --- | --- | --- |
+| `--c-popconfirm-border-color` | `var(--c-color-neutral-3)` | `border` |
+| `--c-popconfirm-border-radius` | `var(--c-border-radius-md)` | `border-radius` |
+| `--c-popconfirm-border-width` | `var(--c-border-width-1)` | `border` |
+| `--c-popconfirm-box-shadow` | `var(--c-shadow2-down)` | `box-shadow` |
+| `--c-popconfirm-button-margin-left` | `var(--c-spacing-4)` | `margin-inline-start` |
+| `--c-popconfirm-content-bg` | `var(--c-color-bg-popup)` | `background-color` |
+| `--c-popconfirm-content-text-color` | `var(--c-color-text-2)` | `color` |
+| `--c-popconfirm-font-size` | `var(--c-font-size-body-3)` | `font-size` |
+| `--c-popconfirm-icon-margin-right` | `var(--c-spacing-4)` | `margin-inline-end` |
+| `--c-popconfirm-line-height` | `var(--c-line-height)` | `height`, `line-height` |
+| `--c-popconfirm-padding-horizontal` | `var(--c-spacing-7)` | `padding` |
+| `--c-popconfirm-padding-vertical` | `var(--c-spacing-7)` | `padding` |
+| `--c-popconfirm-status-danger-title-icon-color` | `var(--c-sys-color-content-danger)` | `color` |
+| `--c-popconfirm-status-info-title-icon-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-popconfirm-status-success-title-icon-color` | `var(--c-sys-color-content-success)` | `color` |
+| `--c-popconfirm-title-font-size` | `var(--c-font-size-body-3)` | `font-size`, `height` |
+| `--c-popconfirm-title-icon-color` | `var(--c-sys-color-content-warning)` | `color` |
+| `--c-popconfirm-title-icon-size` | `18px` | `font-size` |
+| `--c-popconfirm-title-margin-bottom` | `var(--c-spacing-7)` | `margin-bottom` |
+| `--c-popconfirm-title-text-color` | `var(--c-color-text-1)` | `color` |
+
+</div>
+
+将覆盖设置在组件实际根节点或弹层真实挂载祖先上。例如给该元素添加下列 class，再按需替换变量值：
+
+```css
+.component-theme {
+  --c-popconfirm-border-color: var(--c-color-neutral-3);
+}
+```
+
+显式行内样式及直接写入同一 CSS 属性的 Props 优先于样式表默认值。Teleport 后，普通 CSS 变量按实际挂载位置继承；使用 ThemeProvider 时，请遵循其局部主题与弹层配置规则。局部定制请直接覆盖组件变量；仅修改后代的 system 变量不会重新计算从根继承的组件别名。内部变量不属于公共 API。
+
+<!-- component-css-variables:end -->

@@ -10,7 +10,8 @@ import {
   typographyTitleProps,
 } from './props'
 
-export type { EllipsisConfig } from './types'
+export type { EllipsisConfig, TypographySlots, TypographyContentSlots, TypographyEmits } from './types'
+export { typographyEmits } from './emits'
 
 const Typography = withInstall(_Typography, Object.assign(_Typography, {
   Paragraph: _TypographyParagraph,

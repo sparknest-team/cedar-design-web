@@ -251,7 +251,7 @@ return { mode, pos, onLabelPositionChange, onModeChange }
         <c-timeline :mode="scene3.mode" :labelPosition="scene3.pos">
           <c-timeline-item label="2017-03-10" dotColor="#52C419"> The first milestone </c-timeline-item>
           <c-timeline-item label="2018-05-12" dotColor="#F5222D" labelPosition="same"> The second milestone </c-timeline-item>
-          <c-timeline-item label="2020-09-30" content-placement="bottom"> The third milestone </c-timeline-item>
+          <c-timeline-item label="2020-09-30" content-placement="left"> The third milestone </c-timeline-item>
         </c-timeline>
       </div>
   </section>

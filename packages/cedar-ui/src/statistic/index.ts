@@ -5,7 +5,7 @@ import { statisticProps } from './props'
 const Statistic = withInstall(_Statistic)
 
 export type StatisticInstance = InstanceType<typeof _Statistic>
-export type { StatisticProps } from './props'
+export type { StatisticProps, StatisticSlots } from './props'
 
 export { statisticProps }
 export { Statistic }

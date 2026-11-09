@@ -1,0 +1,4 @@
+- [x] Reproduce empty nested provider shadowing and dynamic consumer slot failures
+- [x] Merge omitted fields/consumer slots without inheriting default subtree or theme ownership
+- [x] Document global setup-only application lifetime and reactive field updates
+- [x] Verify full Cedar library/types/native inheritance and Maple provider counterparts

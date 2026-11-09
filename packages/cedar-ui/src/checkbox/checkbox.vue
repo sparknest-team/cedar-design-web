@@ -1,12 +1,23 @@
 <template>
   <label
-    :class="classes(n(), [checked, n('--checked')], [indeterminate, n('--indeterminate')], [mergedDisabled, n('--disabled')], [mergedReadonly, n('--readonly')], [mergedError, n('--error')])"
+    v-bind="rootAttrs"
+    :class="
+      classes(
+        n(),
+        [checked, n('--checked')],
+        [indeterminate, n('--indeterminate')],
+        [mergedDisabled, n('--disabled')],
+        [mergedReadonly, n('--readonly')],
+        [mergedError, n('--error')],
+      )
+    "
     :style="controlStyle"
     :aria-disabled="mergedDisabled || undefined"
     @click="handleClick"
   >
     <input
       ref="input"
+      v-bind="nativeAttrs"
       :class="n('input')"
       type="checkbox"
       :name="name ?? group?.name"
@@ -14,52 +25,68 @@
       :checked="checked"
       :indeterminate="indeterminate"
       :disabled="mergedDisabled"
-      :aria-label="ariaLabel"
+      :aria-label="ariaLabel ?? nativeAttrs['aria-label']"
       :aria-checked="indeterminate ? 'mixed' : checked"
       :aria-readonly="mergedReadonly || undefined"
-      :aria-invalid="mergedError || undefined"
+      :aria-describedby="group?.formErrorId === errorId ? nativeAttrs['aria-describedby'] : describeError(nativeAttrs['aria-describedby'])"
+      :aria-invalid="mergedError || nativeAttrs['aria-invalid'] || undefined"
       @change="handleChange"
       @keydown="keyboard.keydown"
       @keyup="keyboard.keyup"
       @focus="handleFocus"
       @blur="handleBlur"
     />
-    <span v-ripple="{ disabled: mergedDisabled || mergedReadonly || !ripple }" :class="n('control')" :aria-hidden="customControl ? undefined : true">
-      <choice-label v-if="customControl" :content="customControl({ checked, disabled: mergedDisabled, indeterminate })" />
+    <span
+      v-ripple="{ disabled: mergedDisabled || mergedReadonly || !ripple }"
+      :class="n('control')"
+      :aria-hidden="customControl ? undefined : true"
+    >
+      <choice-label
+        v-if="customControl"
+        :content="customControl({ checked, disabled: mergedDisabled, indeterminate })"
+      />
       <template v-else>
         <slot v-if="indeterminate" name="indeterminate-icon">
           <span :class="n('icon')"><span :class="n('mark')" /></span>
         </slot>
         <slot v-else-if="checked" name="checked-icon">
           <span :class="n('icon')">
-            <svg :class="n('check')" viewBox="0 0 12 12" focusable="false"><path d="M2 6l2.5 2.5L10 3" fill="none" stroke="currentColor" stroke-width="2" /></svg>
+            <svg :class="n('check')" viewBox="0 0 12 12" focusable="false">
+              <path d="M2 6l2.5 2.5L10 3" fill="none" stroke="currentColor" stroke-width="2" />
+            </svg>
           </span>
         </slot>
         <slot v-else name="unchecked-icon"><span :class="n('icon')" /></slot>
       </template>
     </span>
     <span v-if="$slots.default" :class="n('label')"><slot :checked="checked" /></span>
-
   </label>
 </template>
 
 <script setup lang="ts">
 import { computed, inject, nextTick, ref, useSlots, watch, type CSSProperties } from 'vue'
 import { createNamespace } from '../_utils/global-config'
+import { positiveLength } from '../_utils/size-length'
 import vRipple from '../ripple'
 import { ChoiceLabel } from './choice-label'
-import { checkboxProps } from './props'
-import { checkboxGroupKey } from './context'
-import { useChoiceForm } from './use-choice-form'
-import { useCheckboxControl } from './use-choice-control'
-import { useChoiceKeyboard } from './use-choice-keyboard'
-import { useChoiceRegistration } from './use-checkbox-group-methods'
 import type { CheckboxModel } from './choice-value-props'
+import { checkboxGroupKey } from './context'
+import { checkboxProps } from './props'
+import type { CheckboxSlots } from './types'
+import { useChoiceRegistration } from './use-checkbox-group-methods'
+import { useCheckboxControl } from './use-choice-control'
+import { useChoiceForm } from './use-choice-form'
+import { useChoiceKeyboard } from './use-choice-keyboard'
+import { useFormErrorDescription } from '../form/error-description'
+import { useChoiceNativeAttrs } from './use-choice-native-attrs'
 
-defineOptions({ name: createNamespace('checkbox').name })
+defineOptions({ name: createNamespace('checkbox').name, inheritAttrs: false })
 const { n, classes } = createNamespace('checkbox')
 const props = defineProps(checkboxProps)
+defineSlots<CheckboxSlots>()
 const emit = defineEmits<{
+  'update:open': [open: boolean]
+  'open-change': [open: boolean]
   'update:modelValue': [value: CheckboxModel]
   change: [value: CheckboxModel, event?: Event]
   click: [event: MouseEvent]
@@ -68,13 +95,23 @@ const emit = defineEmits<{
 }>()
 const slots = useSlots()
 const group = !props.uninjectGroupContext ? inject(checkboxGroupKey, undefined) : undefined
+const { errorId, describe: describeError } = useFormErrorDescription()
 const input = ref<HTMLInputElement>()
+const { nativeAttrs, rootAttrs } = useChoiceNativeAttrs()
 const state = useChoiceForm({
-  get disabled() { return props.disabled ?? group?.disabled },
-  get readonly() { return props.readonly ?? group?.readonly },
-  get error() { return props.error ?? group?.error },
+  get disabled() {
+    return props.disabled ?? group?.disabled
+  },
+  get readonly() {
+    return props.readonly ?? group?.readonly
+  },
+  get error() {
+    return props.error ?? group?.error
+  },
 })
-const mergedDisabled = computed(() => Boolean(group?.disabled || state.mergedDisabled.value || (!checked.value && group?.isMaxed)))
+const mergedDisabled = computed(() =>
+  Boolean(group?.disabled || state.mergedDisabled.value || (!checked.value && group?.isMaxed)),
+)
 const mergedReadonly = computed(() => Boolean(group?.readonly || state.mergedReadonly.value))
 const mergedError = computed(() => Boolean(group?.error || state.mergedError.value))
 const { checked, toggle } = useCheckboxControl(
@@ -97,9 +134,12 @@ const customControl = computed(() => slots.checkbox ?? group?.slots.checkbox)
 const controlStyle = computed<CSSProperties>(() => ({
   '--c-internal-checkbox-instance-checked-color': props.checkedColor,
   '--c-internal-checkbox-instance-unchecked-color': props.uncheckedColor,
-  '--c-internal-checkbox-instance-size': typeof props.iconSize === 'number' ? `${props.iconSize}px` : props.iconSize,
+  '--c-internal-checkbox-instance-size': positiveLength(props.iconSize, '') || undefined,
 }))
-const keyboard = useChoiceKeyboard(() => input.value?.click(), () => mergedDisabled.value || mergedReadonly.value)
+const keyboard = useChoiceKeyboard(
+  () => input.value?.click(),
+  () => mergedDisabled.value || mergedReadonly.value,
+)
 function handleClick(event: MouseEvent) {
   if (mergedDisabled.value || mergedReadonly.value) {
     event.preventDefault()
@@ -120,7 +160,12 @@ function handleClick(event: MouseEvent) {
 }
 function handleChange(event: Event) {
   if (!mergedDisabled.value && !mergedReadonly.value) toggle((event.target as HTMLInputElement).checked, event)
-  nextTick(() => { if (input.value) { input.value.checked = checked.value; input.value.indeterminate = props.indeterminate } })
+  nextTick(() => {
+    if (input.value) {
+      input.value.checked = checked.value
+      input.value.indeterminate = props.indeterminate
+    }
+  })
 }
 function handleFocus(event: FocusEvent) {
   emit('focus', event)
@@ -131,10 +176,16 @@ function handleBlur(event: FocusEvent) {
   emit('blur', event)
   state.eventHandlers.value?.onBlur?.(event)
 }
-watch(checked, (value) => { if (input.value) input.value.checked = value })
+watch(checked, (value) => {
+  if (input.value) input.value.checked = value
+})
 defineExpose({
   toggle,
-  focus(options?: FocusOptions) { if (!mergedDisabled.value) input.value?.focus(options) },
-  blur() { input.value?.blur() },
+  focus(options?: FocusOptions) {
+    if (!mergedDisabled.value) input.value?.focus(options)
+  },
+  blur() {
+    input.value?.blur()
+  },
 })
 </script>

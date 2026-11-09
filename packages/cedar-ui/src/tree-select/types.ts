@@ -1,14 +1,12 @@
-import { CSSProperties } from 'vue'
-import { TreeFieldNames, TreeNodeData, TreeProps, TreeNodeValue, LoadMore, CheckedStrategy } from '../tree/types'
-import { TriggerProps } from '../trigger'
-import { ComponentSize } from '../_utils/constant'
+import type { VNodeChild } from 'vue'
+import type { TreeNodeData, TreeNodeValue } from '../tree/types'
 
-export interface LabelValue {
+export interface TreeSelectLabelValue {
   value: TreeNodeValue
   label: string | number
 }
 
-export type TreeSelectValue = null | TreeNodeValue | TreeNodeValue[] | LabelValue | LabelValue[]
+export type TreeSelectValue = null | TreeNodeValue | TreeNodeValue[] | TreeSelectLabelValue | TreeSelectLabelValue[]
 
 export type FilterTreeNode = (searchKey: string, nodeData: TreeNodeData) => boolean
 
@@ -22,37 +20,45 @@ export type SearchHandler = (searchKey: string) => void
 
 export type ClearHandler = () => void
 
-export interface TreeSelectProps {
-  disabled: boolean
+export type TreeSelectProps = import('vue').ExtractPublicPropTypes<typeof import('./props').treeSelectProps>
+export interface TreeSelectReadScope {
+  value: TreeSelectValue | undefined
+  text: string
+}
+export interface TreeSelectNodeStatus {
   loading: boolean
-  error: boolean
-  size: ComponentSize
-  border: boolean
-  filterable: boolean
-  clearable: boolean
-  placeholder: string | undefined
-  retainInputValue: boolean
-  maxTagCount: number | undefined
-  defaultValue: TreeSelectValue | undefined
-  modelValue: TreeSelectValue | undefined
-  multiple: boolean
-  fieldNames: TreeFieldNames | undefined
-  data: TreeNodeData[]
-  labelInValue: boolean
-  treeCheckable: boolean
-  treeCheckStrictly: boolean
-  treeCheckedStrategy: CheckedStrategy
-  treeProps: Partial<TreeProps> | undefined
-  triggerProps: Partial<TriggerProps> | undefined
-  open: boolean | undefined
-  defaultOpen: boolean
-  dropdownStyle: CSSProperties | undefined
-  dropdownClassName: string | string[] | undefined
-  filterTreeNode: FilterTreeNode | undefined
-  loadMore: LoadMore | undefined
-  disableFilter: boolean
-  popupContainer?: string | HTMLElement
-  fallbackOption: FallbackOption
-  showHeaderOnEmpty?: boolean
-  showFooterOnEmpty?: boolean
+  checked: boolean
+  selected: boolean
+  indeterminate: boolean
+  expanded: boolean
+  isLeaf: boolean
+}
+export type TreeSelectEmits = {
+  [Event in keyof typeof import('./emits').treeSelectEmits]: Parameters<
+    (typeof import('./emits').treeSelectEmits)[Event]
+  >
+}
+export interface TreeSelectSlots {
+  read?(scope: TreeSelectReadScope): VNodeChild
+  trigger?(): VNodeChild
+  prefix?(): VNodeChild
+  suffix?(): VNodeChild
+  selected?(): VNodeChild
+  label?(scope: { data: import('../_components/selection-field/props').SelectionFieldItem }): VNodeChild
+  header?(): VNodeChild
+  footer?(): VNodeChild
+  empty?(): VNodeChild
+  loader?(): VNodeChild
+  'clear-icon'?(scope: { clear(event?: Event): void }): VNodeChild
+  'arrow-icon'?(scope: { focus: boolean; menuOpen: boolean }): VNodeChild
+  'loading-icon'?(): VNodeChild
+  'search-icon'?(): VNodeChild
+  'tree-slot-label'?(node: TreeNodeData, status: TreeSelectNodeStatus): VNodeChild
+  'tree-slot-extra'?(node: TreeNodeData, status: TreeSelectNodeStatus): VNodeChild
+  [name: `tree-slot-${string}`]: ((...args: any[]) => VNodeChild) | undefined
+}
+export interface TreeSelectExpose {
+  refresh(): Promise<void>
+  focus(): void
+  blur(): void
 }

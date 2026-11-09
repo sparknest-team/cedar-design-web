@@ -15,7 +15,7 @@ const Form = withInstall(
 export type FormInstance = InstanceType<typeof _Form>
 export type FormItemInstance = InstanceType<typeof _FormItem>
 export type { ValidateStatus, ValidateTrigger, ValidatedError, FieldRule, FormItemEventHandler } from './types'
-export type { FormValidateErrors } from './form-controller'
+export type { FormValidateErrors } from './types'
 
 export { _FormItem as FormItem }
 
@@ -25,6 +25,7 @@ export const _FormItemComponent = _FormItem
 export { Form }
 
 export { formProps, formItemProps }
+export { useFormErrorDescription } from './error-description'
 
 export default Form
 export type FormProps = import('vue').ExtractPublicPropTypes<typeof import('./props').formProps>
@@ -35,3 +36,5 @@ export type { FormItemProps } from './item-props'
 export type { FormItemAsteriskPosition, FormItemValidateStatus } from './item-decoration'
 
 export type { FieldEditMode, BeforeFieldCommit } from '../_components/field-presentation/context'
+
+export type { FieldData, FormEmits, FormSlots, FormItemSlots, FormEditingError, FormSubmitError } from './types'

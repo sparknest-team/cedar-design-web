@@ -87,7 +87,7 @@ export default defineComponent({
       return value ?? {}
     })
     useTriggerReferenceAttrs(reference, referenceAttrs)
-    const platform = useTriggerPlatform(visible)
+    const platform = useTriggerPlatform(visible, () => popup.value?.ownerDocument ?? reference.value?.ownerDocument)
     const popupTarget = usePopupContainer(() => props.popupContainer)
     const renderState = useTriggerRender(visible, () => props.unmountOnClose, (event) => {
       if (event === 'open') emit('open')

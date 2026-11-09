@@ -16,7 +16,7 @@ test('reordering filtered target rows retains hidden required rows and target me
   const wrapper = mount(Transfer, { props: {
     data: [{ value: 'a', label: 'A' }, { value: 'b', label: 'B', required: true }, { value: 'c', label: 'C' }],
     modelValue: model, targetDraggable: true, targetFilterable: true,
-    filter: (_query, item) => item.value !== 'b',
+    filter: (_query, item) => item.value !== 'b' && item.value !== 'unknown',
   } })
   try {
     const target = wrapper.get('.c-transfer-view-target')

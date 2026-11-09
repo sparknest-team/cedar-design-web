@@ -1,0 +1,4 @@
+- [x] Reproduce Options/direct and first-closed setup/exposed failures on both shared wrappers.
+- [x] Implement stable current-instance proxies and lifecycle retirement with explicit existing capabilities.
+- [x] Validate actual affected field instances, first open, reopen, cancellation, controlled refusal and read/disabled modes on both platforms.
+- [x] Reconcile public method documentation/types and required consumer/source/API gates.

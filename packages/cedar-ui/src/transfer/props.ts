@@ -52,8 +52,9 @@ export const transferProps = {
    */
   disabled: {
     type: Boolean,
-    default: false,
+    default: undefined,
   },
+  readonly: { type: Boolean, default: undefined },
   /** 是否启用虚拟滚动，适用于大数据。 */
   virtualScroll: Boolean,
   /** 是否允许拖拽调整右侧已选项顺序。 */

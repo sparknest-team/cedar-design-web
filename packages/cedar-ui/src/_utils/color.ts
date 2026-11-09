@@ -61,15 +61,13 @@ const CSS_NUMBER = '[-\\+]?\\d*\\.\\d+%?'
 // Allow positive/negative integer/number.  Don't capture the either/or, just the entire outcome.
 const CSS_UNIT = `(?:${CSS_NUMBER})|(?:${CSS_INTEGER})`
 
-// Actual matching.
-// Parentheses and commas are optional, but not required.
-// Whitespace can take the place of commas or opening paren
-const PERMISSIVE_MATCH3 = `[\\s|\\(]+(${CSS_UNIT})[,|\\s]+(${CSS_UNIT})[,|\\s]+(${CSS_UNIT})\\s*\\)?`
-const PERMISSIVE_MATCH4 = `[\\s|\\(]+(${CSS_UNIT})[,|\\s]+(${CSS_UNIT})[,|\\s]+(${CSS_UNIT})[,|\\s]+(${CSS_UNIT})\\s*\\)?`
+// Accept a single parenthesized function with comma- or space-separated channels.
+const RGB_SEPARATOR = '(?:\\s*,\\s*|\\s+)'
+const rgbChannels = (count: number) => Array(count).fill(`(${CSS_UNIT})`).join(RGB_SEPARATOR)
 
 const matchers = {
-  rgb: new RegExp(`rgb${PERMISSIVE_MATCH3}`),
-  rgba: new RegExp(`rgba${PERMISSIVE_MATCH4}`),
+  rgb: new RegExp(`^rgb\\(\\s*${rgbChannels(3)}\\s*\\)$`),
+  rgba: new RegExp(`^rgba\\(\\s*${rgbChannels(4)}\\s*\\)$`),
   hex3: /^#?([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})$/,
   hex6: /^#?([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/,
   hex4: /^#?([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})$/,
@@ -84,23 +82,29 @@ export const convertHexToDecimal = (h: string): number => {
   return parseIntFromHex(h) / 255
 }
 
+const parseChannel = (value: string, max: number) => {
+  const parsed = parseFloat(value)
+  return Math.min(max, Math.max(0, value.endsWith('%') ? parsed * max / 100 : parsed))
+}
+
 export const formatInputToRgb = (color: string): { r: number; g: number; b: number; a?: number } | false => {
+  color = color.trim().toLowerCase()
   let match = matchers.rgb.exec(color)
   if (match) {
     return {
-      r: parseInt(match[1], 10),
-      g: parseInt(match[2], 10),
-      b: parseInt(match[3], 10),
+      r: parseChannel(match[1], 255),
+      g: parseChannel(match[2], 255),
+      b: parseChannel(match[3], 255),
     }
   }
 
   match = matchers.rgba.exec(color)
   if (match) {
     return {
-      r: parseInt(match[1], 10),
-      g: parseInt(match[2], 10),
-      b: parseInt(match[3], 10),
-      a: parseFloat(match[4]),
+      r: parseChannel(match[1], 255),
+      g: parseChannel(match[2], 255),
+      b: parseChannel(match[3], 255),
+      a: parseChannel(match[4], 1),
     }
   }
 

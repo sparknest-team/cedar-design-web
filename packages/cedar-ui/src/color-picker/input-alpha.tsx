@@ -1,6 +1,7 @@
 import { defineComponent, PropType } from 'vue'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
 import InputNumber from '../input-number'
+import { useI18n } from '../locale'
 
 
 const { name } = createNamespace('input-alpha')
@@ -17,9 +18,11 @@ export default defineComponent({
   },
   setup(props) {
     const prefixCls = getPrefixCls('color-picker')
+    const { t } = useI18n()
 
     return () => (
       <InputNumber
+        inputAttrs={{ 'aria-label': t('colorPicker.opacity') }}
         class={`${prefixCls}-input-alpha`}
         size="xs"
         v-slots={{ suffix: () => '%' }}

@@ -297,6 +297,21 @@ References: [Vue and Web Components](https://vuejs.org/guide/extras/web-componen
 
 ## API
 
+### Standalone icon styles and usage boundaries
+
+Resolver auto-imports include the lightweight rotation styles for standalone icons. With `importStyle: false`, applications must import those styles. The UI Icon style entry also includes them; loading every icon is unnecessary.
+
+When manually importing standalone SVG components, import this stylesheet once in your application entry when using `spin`:
+
+```ts
+import '@cedar-design/icons-vue/style.css'
+```
+
+`rotate` and `spin` can be combined; built-in rotation respects reduced motion. `transition` controls registered-name changes only, using milliseconds as a number or numeric string, such as `200` / `"200"`; it does not parse `"200ms"` / `"1s"`. The default slot owns content and skips name-`transition` animation. Removing it immediately shows the latest name. Custom `animation-class` should avoid overriding the `transform` used for continuous rotation and should implement reduced-motion behavior.
+
+`name` only resolves icons explicitly registered in the current application before rendering; it does not download resources. Registration after mount does not refresh an existing icon automatically. The container's native `title` is not forwarded to its SVG. Set `title` on standalone icons for image naming, and use an accessibly named Button for actions. `click` is a notification supporting Vue `.once`; listener Promises do not manage waiting. `stroke-*` affects strokes only; filled or fixed multicolor artwork may not respond.
+
+
 ### Icon Props
 
 | Prop | Description | Type | Default |
@@ -309,7 +324,7 @@ References: [Vue and Web Components](https://vuejs.org/guide/extras/web-componen
 | transition | Name-change animation duration in ms | number \| string | 0 |
 | animation-class | Custom transition animation class | string | - |
 
-### Icon-xxx Props
+### IconXxx Props
 
 | Prop | Description | Type | Default |
 | --------------- | ---------- | ------------------------------------------ | ------- |
@@ -334,26 +349,49 @@ References: [Vue and Web Components](https://vuejs.org/guide/extras/web-componen
 | ------- | -------------- |
 | default | Custom default content |
 
-### Type definitions
+## Types
 
 The component exports the following types
 
 ```ts
-import type { IconProps } from "@cedar-design/ui";
+import type { IconProps, IconInstance } from "@cedar-design/ui";
 ```
 
-## Shared implementation and platform boundaries
+## Usage notes
 
-Each platform maintains a complete local implementation. They do not import a common core or share component instances or reactive state. Changes must update both implementations. Component bodies, props, key styles and paired tests have read-only source consistency checks; theme tokens and installation entries remain local to each library.
 
-Only icons registered in the current application are resolved. Repeated name changes cancel stale timers; no changes run after unmount. Each library locally adapts its registration prefix and legacy spin class; icon resources are not imported across libraries.
+
+Only resolves icons registered in the current application. Repeated name changes display the latest requested icon, and unmounting stops pending switches.
 
 Icons inherit the host font size on both platforms. For a fixed 20px icon, set size="20" or icon-size explicitly. The size prop overrides the variable; color inherits from the host by default.
 
-### Motion variables
+## CSS Variables
 
-| Token | Default |
-| --- | --- |
-| `--c-icon-spin-duration` | `1s` |
+<!-- component-css-variables:start -->
+
+Use these variables to customize the component. Defaults may vary by the selector condition shown. Each variable applies to the corresponding size, variant and interaction states.
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| Variable | Default / condition | Affected styles |
+| --- | --- | --- |
+| `--c-icon-size` | `inherit` | `font-size` |
+| `--c-icon-spin-duration` | `1s` | `animation` |
+
+</div>
+
+Apply overrides to the rendered component root or the actual popup ancestor. For example, add the following class to that element and replace the value as needed:
+
+```css
+.component-theme {
+  --c-icon-size: inherit;
+}
+```
+
+Explicit inline styles and props that write the same CSS property take precedence over stylesheet defaults. After Teleport, ordinary CSS variables inherit from the actual mount location. When using ThemeProvider, follow its local-theme and popup configuration rules. Override the component variable directly for local styling; root-level aliases are not recalculated merely because a descendant system variable changes. Internal variables are not public APIs.
+
+<!-- component-css-variables:end -->
+
+### Motion
 
 Built-in motion follows prefers-reduced-motion: reduce: content and state feedback remain, while decorative spinning, shimmer and ripples stop. Icon name changes display the latest value immediately and cancel unfinished phases, keeping CSS and JS durations aligned. Callers must adapt custom animation classes. Ripple duration/cleanup follows Ripple documentation; its historical 250ms rule is not an Icon duration limit.

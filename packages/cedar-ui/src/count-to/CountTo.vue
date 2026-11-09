@@ -9,7 +9,7 @@ import { computed, onMounted, onUnmounted, onActivated, onDeactivated, watch } f
 import { floor, toNumber } from '@cedar-design/shared'
 import { useMotion } from '@cedar-design/use'
 import { createNamespace } from '../_utils/global-config'
-import { countToProps } from './props'
+import { countToProps, type CountToSlots, type CountToEmits, type CountToExpose } from './props'
 
 defineOptions({
   name: createNamespace('count-to').name,
@@ -17,7 +17,13 @@ defineOptions({
 
 const { n } = createNamespace('count-to')
 const props = defineProps(countToProps)
-const emit = defineEmits<{ (event: 'end'): void }>()
+const emit = defineEmits<CountToEmits>()
+defineSlots<CountToSlots>()
+
+function finiteNumber(value: string | number) {
+  const parsed = toNumber(value)
+  return Number.isFinite(parsed) ? parsed : 0
+}
 
 const {
   value: motionValue,
@@ -26,10 +32,12 @@ const {
   start,
   pause,
 } = useMotion({
-  from: () => toNumber(props.from),
-  to: () => toNumber(props.to),
-  duration: () => toNumber(props.duration),
-  timingFunction: props.timingFunction,
+  from: () => finiteNumber(props.from),
+  to: () => finiteNumber(props.to),
+  duration: () => Number.isFinite(finiteNumber(props.to) - finiteNumber(props.from)) ? toNumber(props.duration) : 0,
+  get timingFunction() {
+    return props.timingFunction
+  },
   onFinished() {
     emit('end')
   },
@@ -51,7 +59,7 @@ onDeactivated(() => { resumeOnActivate = motionState.value === 'running'; pause(
 onActivated(() => { if (resumeOnActivate) { resumeOnActivate = false; start() } })
 onUnmounted(pause)
 
-defineExpose({
+defineExpose<CountToExpose>({
   start,
   pause,
   reset,

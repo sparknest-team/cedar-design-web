@@ -35,7 +35,7 @@ Preview configuration: `label="2017-03-10"`, `lineType="dashed"`, `type="seconda
 | `mode` | The display mode of Timeline | Timeline direction and labels |
 | `label-position` | Position of label text | Timeline direction and labels |
 | `orientation` | Horizontal/vertical axis of the timeline line, default vertical; constrains valid item sides | Timeline direction and labels |
-| `pending` | Whether to display ghost nodes. When set to true, only ghost nodes are displayed. When passed to ReactNode, it will be displayed as node content | Timeline direction and labels |
+| `pending` | Append a pending item; true has no text, and a string is displayed as its content. | Timeline direction and labels |
 <!-- demo-config-notes:end -->
 
 
@@ -47,7 +47,7 @@ Compare orientation, sequence and label placement independently of pending state
 
 ### Pending
 
-Preview configuration: `align="center"`, `:checked="!!pendingProps.orientation"`, `:checked="!!pendingProps.reverse"`, `:checked="!!pendingProps.pending"`.
+Preview configuration: `align="center"`, `orientation="horizontal"`, `:checked="!!pendingProps.reverse"`, `:checked="!!pendingProps.pending"`.
 
 <demo src="./__demos__/pending.vue"></demo>
 
@@ -77,23 +77,25 @@ Preview configuration: `label="2020-04-12"`, `dotColor="#00B42A"`, `label="2020-
 
 ## API
 
-### `<timeline>` Props
+### Timeline Props
 
 | Parameter | Description | Type | Default |
 | -------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------- | :----------: |
 | reverse | Whether reverse order | `boolean` | `false` |
 | orientation | Horizontal/vertical axis of the timeline line, default vertical; constrains valid item sides | `'horizontal' \| 'vertical'` | `'vertical'` |
 | mode | The display mode of Timeline | `'left' \| 'right' \| 'top' \| 'bottom' \| 'alternate'` | `'left'` |
-| pending | Whether to display ghost nodes. When set to true, only ghost nodes are displayed. When passed to ReactNode, it will be displayed as node content | `boolean\|string` | `-` |
+| pending | Append a pending item; true has no text, and a string is displayed as its content. | `boolean\|string` | `-` |
 | label-position | Position of label text | `'relative' \| 'same'` | `'same'` |
 
-### `<timeline>` Slots
+### Timeline Slots
 
-| Slot | Description | Arguments |
+| Slot | Description | Prop |
 | ------ | :------: | ---- |
-| dot | Ghost node | - |
+| default | Timeline items | - |
+| dot | Pending item icon | - |
+| pending | Pending item content; adding this slot appends an item and takes precedence over the pending prop text | - |
 
-### `<timeline-item>` Props
+### TimelineItem Props
 
 | Parameter | Description | Type | Default |
 | ---------- | ---------------------------- | --------------------------------- | :-------: |
@@ -102,24 +104,77 @@ Preview configuration: `label="2020-04-12"`, `dotColor="#00B42A"`, `label="2020-
 | line-type | Timeline line style: solid/dashed/dotted | `'solid' \| 'dashed' \| 'dotted'` | `'solid'` |
 | line-color | Timeline color | `string` | `-` |
 | label | Label text | `string` | `-` |
-| content-placement | Current per-item side relative to the timeline in alternate mode: left/right for vertical and top/bottom for horizontal. Constrained by mode and orientation | `TimelineItemContentPlacement` | `-` |
+| content-placement | Current per-item side relative to the timeline in alternate mode: left/right for vertical and top/bottom for horizontal. Constrained by mode and orientation | `TimelineItemContentPlacement`<br>`'left' \| 'right' \| 'bottom' \| 'top'` | `-` |
 
-### `<timeline-item>` Slots
+Use `content-placement` for the physical side of the content: top/bottom in horizontal layouts and left/right in vertical layouts. `mode` controls the arrangement.
 
-| Slot | Description | Arguments | Version |
+### TimelineItem Slots
+
+| Slot | Description | Prop | Version |
 | ------ | :--------: | ---- | :----- |
+| default | Item content | - |  |
 | dot | Custom node | - |  |
 | label | Custom label | - | 2.50.0 |
 
-### Type definitions
+## Types
 
 The component exports the following types
 
 ```ts
-import type { MentionInstance } from '@cedar-design/ui'
+import type { TimelineProps, TimelineItemProps, TimelineSlots, TimelineItemSlots, TimelineMode, TimelineLabelPosition, TimelineDotType, TimelineLineType, TimelineItemContentPlacement, TimelineInstance, TimelineItemInstance } from '@cedar-design/ui'
 ```
-
 
 ## Reading direction and keyboard interaction
 
-Horizontal timelines follow the inherited reading direction, including connecting lines. `reverse` independently controls visual reversal; switching direction does not reorder the data. Explicit vertical `left`/`right` sides retain their physical meaning.
+Timeline inherits its container's reading direction. Horizontal nodes and connectors follow LTR/RTL. `reverse` independently controls visual reversal; direction changes do not mutate node data or automatically change `reverse`.
+
+Explicit vertical `mode="left"` / `mode="right"` and item physical sides retain their meaning; `alternate` continues alternating. Labels and custom content inherit text direction normally.
+
+## CSS Variables
+
+<!-- component-css-variables:start -->
+
+Use these variables to customize the component. Defaults may vary by the selector condition shown. Each variable applies to the corresponding size, variant and interaction states.
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| Variable | Default / condition | Affected styles |
+| --- | --- | --- |
+| `--c-timeline-alternate-horizontal-min-height` | `var(--c-size-50)` | `min-height` |
+| `--c-timeline-content-text-color` | `var(--c-color-text-1)` | `color` |
+| `--c-timeline-dot-bg` | `rgb(var(--c-primary-6))` | `background-color`, `border`, `color` |
+| `--c-timeline-dot-bg-hollow` | `var(--c-color-bg-2)` | `background-color` |
+| `--c-timeline-dot-border-radius` | `var(--c-border-radius-circle)` | `border-radius` |
+| `--c-timeline-dot-border-width-hollow` | `var(--c-border-width-2)` | `border` |
+| `--c-timeline-dot-size-width` | `var(--c-spacing-3)` | `bottom`, `height`, `inset-inline-start`, `left`, `margin-left`, `margin-top`, `padding-bottom`, `padding-left`, `padding-right`, `padding-top`, `top`, `width` |
+| `--c-timeline-font-content-size` | `var(--c-font-size-body-3)` | `bottom`, `font-size`, `height`, `line-height`, `top` |
+| `--c-timeline-font-label-size` | `var(--c-font-size-body-1)` | `font-size` |
+| `--c-timeline-horizontal-dot-content-height` | `var(--c-spacing-3)` | `height`, `line-height` |
+| `--c-timeline-horizontal-margin-content-spacing` | `var(--c-spacing-7)` | `margin-bottom`, `margin-top`, `padding-bottom`, `padding-top` |
+| `--c-timeline-horizontal-margin-line-left` | `var(--c-spacing-3)` | `inset-inline-start` |
+| `--c-timeline-horizontal-margin-line-right` | `var(--c-spacing-2)` | `inset-inline-end` |
+| `--c-timeline-item-min-height` | `78px` | `min-height` |
+| `--c-timeline-label-relative-horizontal-margin` | `var(--c-size-13)` | `margin-bottom`, `margin-top` |
+| `--c-timeline-label-relative-margin` | `var(--c-size-25)` | `margin-left`, `margin-right` |
+| `--c-timeline-label-relative-max-width` | `var(--c-size-25)` | `max-width` |
+| `--c-timeline-label-text-color` | `var(--c-color-text-3)` | `color` |
+| `--c-timeline-line-bg` | `var(--c-color-neutral-3)` | `border-color` |
+| `--c-timeline-size-line-width` | `var(--c-border-width-1)` | `border-left-width`, `border-top-width`, `height`, `width` |
+| `--c-timeline-vertical-margin-content-bottom` | `var(--c-spacing-2)` | `margin-bottom` |
+| `--c-timeline-vertical-margin-content-left` | `var(--c-spacing-7)` | `margin-left`, `margin-right`, `padding-left`, `padding-right` |
+| `--c-timeline-vertical-margin-line-bottom` | `var(--c-spacing-2)` | `bottom` |
+| `--c-timeline-vertical-margin-line-top` | `var(--c-spacing-2)` | `top` |
+
+</div>
+
+Apply overrides to the rendered component root or the actual popup ancestor. For example, add the following class to that element and replace the value as needed:
+
+```css
+.component-theme {
+  --c-timeline-content-text-color: var(--c-color-text-1);
+}
+```
+
+Explicit inline styles and props that write the same CSS property take precedence over stylesheet defaults. After Teleport, ordinary CSS variables inherit from the actual mount location. When using ThemeProvider, follow its local-theme and popup configuration rules. Override the component variable directly for local styling; root-level aliases are not recalculated merely because a descendant system variable changes. Internal variables are not public APIs.
+
+<!-- component-css-variables:end -->

@@ -6,13 +6,13 @@
     <template v-if="loading">
       <div
         v-if="fullscreen"
-        :class="n('fullscreen')"
+        :class="n('fullscreen')" aria-hidden="true"
         :style="{ zIndex: toNumber(fullscreenZIndex) }"
       >
         <span :class="n('shimmer')" />
       </div>
       <slot v-else name="template">
-        <div :class="n('content')">
+        <div :class="n('content')" aria-hidden="true">
           <div
             v-if="card"
             :class="n('card')"

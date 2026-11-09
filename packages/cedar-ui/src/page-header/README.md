@@ -6,7 +6,7 @@ permalink: /components/page-header/
 
 返回按钮只派发 `back` 事件，不自动调用路由或浏览器历史。示例通过 Message 显示通知；真实返回目的地由调用方处理。原生按钮支持点击、Enter 和空格。
 
-展示当前页面的标题、上下文和相关操作。API 参照 Naive UI；组件不负责固定定位、背景等业务布局与皮肤能力，可通过 `class` / `style` 实现。
+展示当前页面的标题、上下文和相关操作。组件不负责固定定位、背景等业务布局与皮肤能力，可通过 `class` / `style` 实现。
 
 ## 基础示例
 
@@ -57,13 +57,22 @@ permalink: /components/page-header/
 
 继承最近的 `dir="ltr|rtl"`，支持运行时切换与局部覆盖。返回按钮位于阅读起点，默认返回图形在 RTL 下指向右侧。标题、副标题与扩展区沿阅读顺序排列；自定义返回插槽不自动镜像。
 
+## 使用说明
+
+### 配置说明
+
+返回按钮在支持悬停的鼠标指针和键盘聚焦时显示圆形反馈，反馈圆不影响标题布局。
+
 ## API
+
+返回按钮默认使用当前语言的返回文案，可通过 `back-button-aria-label` 指定更具体的名称。标题插槽可按页面结构放置合适层级的标题元素；返回事件只通知，不自动导航。
 
 ### PageHeader Props
 
 | 属性     | 说明             | 类型      | 默认值  |
 | -------- | ---------------- | --------- | ------- |
 | show-back | 是否显示返回按钮 | `boolean` | `false` |
+| back-button-aria-label | 返回按钮的可访问名称 | `string` | 当前语言返回文案 |
 | title    | 页头的主标题     | `string`  | `-`     |
 | subtitle | 页头的次标题     | `string`  | `-`     |
 | extra    | 右侧附加内容     | `string`  | `-`     |
@@ -72,7 +81,7 @@ permalink: /components/page-header/
 
 | 事件名 | 说明               | 参数           |
 | ------ | ------------------ | -------------- |
-| back   | 点击返回按钮时触发 | event: `Event` |
+| back   | 点击返回按钮时触发 | event: `MouseEvent` |
 
 ### PageHeader Slots
 
@@ -87,18 +96,46 @@ permalink: /components/page-header/
 | default  | 页头正文内容   | -    |
 | footer   | 页头底部内容   | -    |
 
-## 类型定义
+## Types
 
 ```ts
 import type { PageHeaderProps } from '@cedar-design/ui'
 ```
 
-## 同源实现与平台边界
+## CSS Variables
 
-两端各自保存完整源码，不引用公共核心，不共享组件实例或响应式状态；修改时同步维护两份实现。主体、Props、关键样式及配对测试纳入只读源码一致性检查，主题 token 和安装入口各自维护。
+<!-- component-css-variables:start -->
 
-返回按钮统一使用原生 button，支持键盘触发并派发 back(MouseEvent)。Cedar 内部类名由 c-page-header-xxx 调整为 c-page-header__xxx；图标资源仍由本库提供。
+通过以下变量定制组件外观。默认值随表中注明的主题或选择器条件变化；变量仅在对应的尺寸、变体和交互状态下生效。
 
-### 返回交互变量
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
-`--c-page-header-back-hover-size`（30px）控制反馈圆尺寸，不推动标题布局；`--c-page-header-back-hover-bg`（`var(--c-sys-color-state-hover)`）控制反馈背景。hover 仅应用于支持悬停的精细指针，所有输入模式均保留键盘 focus-visible 反馈。
+| 变量 | 默认值／条件 | 影响的样式 |
+| --- | --- | --- |
+| `--c-page-header-back-color` | `var(--c-color-text-2)` | `color` |
+| `--c-page-header-back-hover-bg` | `var(--c-sys-color-state-hover)` | `background` |
+| `--c-page-header-back-hover-size` | `30px` | `height`, `width` |
+| `--c-page-header-back-size` | `var(--c-font-size-body-3)` | `font-size` |
+| `--c-page-header-content-margin-top` | `var(--c-spacing-8)` | `margin-top` |
+| `--c-page-header-font-size` | `var(--c-font-size-body-3)` | `font-size` |
+| `--c-page-header-footer-margin-top` | `var(--c-spacing-8)` | `margin-top` |
+| `--c-page-header-item-gap` | `var(--c-spacing-6)` | `margin-inline-start` |
+| `--c-page-header-row-gap` | `var(--c-spacing-6)` | `margin-bottom` |
+| `--c-page-header-subtitle-color` | `var(--c-color-text-3)` | `color` |
+| `--c-page-header-title-color` | `var(--c-color-text-1)` | `color` |
+| `--c-page-header-title-font-size` | `var(--c-font-size-title-2)` | `font-size` |
+| `--c-page-header-title-font-weight` | `600` | `font-weight` |
+
+</div>
+
+将覆盖设置在组件实际根节点或弹层真实挂载祖先上。例如给该元素添加下列 class，再按需替换变量值：
+
+```css
+.component-theme {
+  --c-page-header-back-color: var(--c-color-text-2);
+}
+```
+
+显式行内样式及直接写入同一 CSS 属性的 Props 优先于样式表默认值。Teleport 后，普通 CSS 变量按实际挂载位置继承；使用 ThemeProvider 时，请遵循其局部主题与弹层配置规则。局部定制请直接覆盖组件变量；仅修改后代的 system 变量不会重新计算从根继承的组件别名。内部变量不属于公共 API。
+
+<!-- component-css-variables:end -->

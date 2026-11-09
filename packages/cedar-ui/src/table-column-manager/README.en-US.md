@@ -74,7 +74,7 @@ const state: ColumnManagerState = {
 }
 ```
 
-This is a major breaking change: legacy `keys`, `fixedMap` and `titleMap` structures are no longer read.
+
 
 ```ts
 const { state, restore } = useTableColumnManager({ defaultColumns, columnDefinitions })
@@ -147,13 +147,20 @@ const manager = useTableColumnManager({
 - `createColumn` handles a few candidates requiring special width, slots or rendering.
 - For remote data, `columnSource.search` searches and `columnSource.resolve` restores unknown selected columns. `restore()` then returns a Promise.
 
-### `<TableColumnManager>` Props
+Prefer passing either `columnDefinitions` or `columnSource`. For compatibility, if both are supplied, local definitions take precedence for the catalog; remote `search` still runs but does not replace local definitions, while remote `resolve` can still restore unknown columns. Remote `search` requests one page at a time; it does not automatically use `nextCursor` or paginate using `total`. Return the complete catalog from the application source when all candidates are needed.
+
+`restore()` always returns a Promise and rejects if remote `resolve` fails; the caller handles that failure. State stores only the version, leaf columns, and optional layout; keep functions such as `render` in `defaultColumns` or an application registry. Opening the panel creates a draft from the current columns, closing discards the draft, and confirming applies it. A `required` default column cannot be removed and is restored if missing; `resetToDefault()` restores default columns.
+
+### TableColumnManager Props
 
 | Parameter | Description | Type | Default |
 | ------------- | ---------------------------------- | ------------------------------------------------------- | ---------- |
 | model-value | Complete ordered selected-column state, including titles/fixed positions | `ColumnManagerItem[]` | `-` |
 | default-value | Initial uncontrolled selected state | `ColumnManagerItem[]` | `-` |
 | columns | Current Table columns; assembled back into full definitions on confirmation | `TableColumnData[]` | `[]` |
+| registry-columns | Full registry of hidden default columns, preserving render configuration when restored | `TableColumnData[]` | `-` |
+| column-defaults | Default configuration for newly added ordinary columns | `Partial<TableColumnData>` | `-` |
+| create-column | Construct a new column from its catalog definition | `(definition: ColumnCatalogItem) => TableColumnData` | `-` |
 | options | Left-side column definitions | `ColumnDefinitions` | `[]` |
 | load-options | Asynchronously load column definitions | `() => Promise<ColumnDefinitions>` | `-` |
 | remote-search | Remote search; hides top select-all when provided | `(keyword: string) => Promise<void>` | `-` |
@@ -165,7 +172,7 @@ const manager = useTableColumnManager({
 | inline | Render only the inline panel without a drawer | `boolean` | `false` |
 | placeholder | Search placeholder | `string` | `-` |
 
-### Events
+### TableColumnManager Events
 
 | Event | Description | Arguments |
 | ----------------- | ------------------------------- | --------------------- |
@@ -173,13 +180,15 @@ const manager = useTableColumnManager({
 | update:open | Drawer visibility changes | `boolean` |
 | confirm | Assembled result after drawer/dialog confirmation | `ColumnManagerResult` |
 | change | Selection, order, fixed-position or title changes | `ColumnManagerItem[]` |
+| load-error | Current catalog load or remote search failed | `error: unknown, source: 'catalog' \| 'search'` |
 
-### Methods
+### TableColumnManager Methods
 
 | Method | Description | Returns |
 | ----------- | ------------------------ | --------------------- |
 | getResult | Assemble Table columns from current selection | `ColumnManagerResult` |
 | loadCatalog | Manually invoke `loadOptions` | `Promise<void>` |
+| resetInitialKeys | Reset the baseline for identifying new columns to the current selection | `void` |
 
 ### `useTableColumnManager`
 
@@ -193,6 +202,21 @@ Recommended with `c-table`. Returns `columns`, `state`, `restore`, `managerProps
 ```
 
 `headerActions` configures visible header-action keys; all are shown by default.
+
+The following members are returned; read `Ref` / `ComputedRef` via `.value` in scripts:
+
+| Member | Purpose |
+| --- | --- |
+| `columns`、`leafColumns`、`state` | Current table columns, leaf-column summary, and persistable state |
+| `managerVisible`、`managerRef`、`managerProps` | Panel visibility, instance reference, and pre-bound props/events |
+| `open`、`close`、`confirm` | Open and create a draft, close, and confirm changes |
+| `insertColumns`、`getInsertableItems` | Insert columns at an anchor and retrieve available candidates |
+| `getEditInitialValues`、`applyEdit` | Get initial edit values and apply title/group changes |
+| `freezeColumn`、`removeColumn` | Freeze or unfreeze columns and remove removable columns |
+| `resetToDefault`、`restore`、`handleColumnResize` | Reset, restore persisted state, and save width changes |
+| `headerActions`、`columnActions`、`HeaderAction` | Available header actions, pre-bound actions, and header button component |
+| `openInsert`、`insertVisible`、`insertSide`、`insertableItems`、`insertSelected`、`handleInsertConfirm` | Insert dialog entry, state, and confirmation method |
+| `openEdit`、`editVisible`、`editGroupTitle`、`editColumnTitle`、`handleEditConfirm` | Edit dialog entry, state, and confirmation method |
 
 Header-action behavior:
 
@@ -223,4 +247,14 @@ Required rules need declaration only in `defaultColumns`. Transfer, clearing and
 
 `buildColumnsResult` / `stateFromColumns` / `applyColumnEdit` / `applyColumnFixed` / `applyInsertToLayout` / `mapLeafColumns` support external assembly, group editing, fixed reordering and insertion. Traverse `columns` in business code for flat leaf lists; Table exports are unnecessary.
 
-Catalog loading and remote searching own independent pending state; older completion cannot unlock newer work. loadOptions runs at creation, loader replacement and explicit loadCatalog calls. Manual calls retain Promise rejection; automatic reads use the Vue error path. Hook catalog/search jobs share current catalog ownership, restore has its own ownership, and newer column edits or disposal invalidate older restore results.
+Catalog loading and remote search have separate pending states; an older task cannot release a newer wait. `loadOptions` runs on creation, loader replacement, and explicit `loadCatalog` calls. Current failures emit `load-error` with `source` identifying catalog or search; superseded requests do not emit. A manual `loadCatalog` call still rejects for the caller to handle; automatic loading and search report failures through the event. Notification listener Promises do not drive loading. Hook catalog loading and remote search use the latest catalog generation; restore has its own generation and newer column edits or unmount invalidate older results.
+
+## CSS Variables
+
+<!-- component-css-variables:start -->
+
+This component declares no independent public CSS variables. Use the configuration and layout APIs documented on this page. The appearance of composed controls follows the public variables of `checkbox`, `dialog`, `drawer`, `input`, `menu`, `transfer`; a shared variable can affect other controls in the same DOM subtree.
+
+Internal custom properties and measurement values are implementation details and are not customization APIs.
+
+<!-- component-css-variables:end -->

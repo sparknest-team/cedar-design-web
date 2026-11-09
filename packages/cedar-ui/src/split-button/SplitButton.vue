@@ -32,10 +32,11 @@
         :disabled="triggerDisabled"
         :aria-expanded="computedOpen"
         aria-haspopup="menu"
+        :aria-label="triggerLabel"
       >
         <template #icon>
           <slot name="icon" :open="computedOpen">
-            <IconMenuDown />
+            <IconMenuDown aria-hidden="true" />
           </slot>
         </template>
       </Button>
@@ -53,6 +54,7 @@ import { IconMenuDown } from '@cedar-design/icons-vue'
 import { createNamespace } from '../_utils/global-config'
 import Button, { ButtonGroup } from '../button'
 import Menu, { type MenuInstance } from '../menu'
+import { useI18n } from '../locale'
 import { splitButtonProps } from './props'
 
 defineOptions({
@@ -64,6 +66,14 @@ const emit = defineEmits(['update:open', 'open-change', 'select', 'click'])
 
 const { n } = createNamespace('split-button')
 const menuRef = ref<MenuInstance>()
+const { t } = useI18n()
+const triggerLabel = computed(() => {
+  const attrs = props.triggerButtonProps
+  if (attrs?.['aria-label'] != null) return String(attrs['aria-label'])
+  if (attrs?.['aria-labelledby'] != null) return undefined
+  const value = t('splitButton.moreActions')
+  return value === 'splitButton.moreActions' ? 'More actions' : value
+})
 const actionDisabled = computed(() => !!(props.disabled || props.buttonProps?.disabled))
 const triggerDisabled = computed(() => !!(props.disabled || props.triggerButtonProps?.disabled))
 

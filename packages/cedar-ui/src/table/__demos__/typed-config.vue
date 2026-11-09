@@ -19,7 +19,7 @@ const config = computed(() => defineTableConfig<User>({
     { title: '姓名', dataIndex: 'name', render: ({ record }) => record.name.toUpperCase() },
     { title: '城市', dataIndex: 'profile.city' },
     { title: '年龄', dataIndex: 'age',
-      sortable: { sortDirections: ['ascend', 'descend'], sorter: (a, b) => a.age - b.age },
+      sortable: { sortDirections: ['ascend', 'descend'], sorter: (a, b, { direction }) => (a.age - b.age) * (direction === 'descend' ? -1 : 1) },
       filterable: { filters: [{ text: '仅成年人', value: 'adult' }], filter: (values, record) => !values.length || !values.includes('adult') || record.age >= 18 },
     },
   ],

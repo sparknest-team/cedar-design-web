@@ -13,6 +13,7 @@ export interface FormContext extends FormLayoutOptions {
   rules?: Record<string, FieldRule | FieldRule[]>
   fields: FormItemInfo[]
   touchedFields: FormItemInfo[]
+  invalidateSubmitInputs?: () => void
   addField: (field: FormItemInfo) => void
   removeField: (field: FormItemInfo) => void
   validateField: (

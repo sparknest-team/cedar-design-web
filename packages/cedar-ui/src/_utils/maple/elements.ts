@@ -15,7 +15,7 @@ import {
 } from '@cedar-design/shared'
 export type StyleVars = Record<string, string>
 
-// import { type StyleVars } from '../style-provider'
+// import { type StyleVars } from '../theme-provider'
 
 export function getLeft(element: HTMLElement): number {
   const { left } = getRect(element)

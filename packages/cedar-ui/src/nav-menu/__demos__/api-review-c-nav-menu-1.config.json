@@ -100,18 +100,6 @@
       "kind": "boolean"
     },
     {
-      "name": "theme",
-      "description": "主题",
-      "type": "'light' | 'dark'",
-      "defaultValue": "undefined",
-      "kind": "enum",
-      "options": [
-        "light",
-        "dark"
-      ],
-      "initial": "light"
-    },
-    {
       "name": "size",
       "description": "尺寸",
       "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",

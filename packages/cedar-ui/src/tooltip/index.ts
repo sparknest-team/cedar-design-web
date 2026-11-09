@@ -13,6 +13,7 @@ const Tooltip = withInstall(_Tooltip, Object.assign(_Tooltip, {
 
 export type TooltipInstance = InstanceType<typeof _Tooltip>
 export type { TooltipProps, TooltipSize, TooltipStatus } from './props'
+export type { TooltipOptions } from './tooltip.directive'
 export { Tooltip, tooltipProps, vTooltip }
 export const _TooltipComponent = Tooltip
 

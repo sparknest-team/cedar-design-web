@@ -1,0 +1,3 @@
+- [x] Verify current public refresh and reproduce missing textarea custom clear/API coverage.
+- [x] Align public types/docs/clear slot and actual popup accessibility relationships.
+- [x] Verify actual browser and affected Cedar composition, public types, lint, spec, API and docs gates.

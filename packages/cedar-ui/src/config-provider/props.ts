@@ -4,28 +4,25 @@ import type { CedarLang } from '../locale/types'
 import type { ComponentSize } from '../_utils/constant'
 import { componentSizes } from '../_utils/constant'
 
-export const cedarThemes = ['light', 'dark'] as const
-export type CedarTheme = (typeof cedarThemes)[number]
-
 export const configProviderProps = {
     /**
-     * @zh 组件类名前缀
-     * @en Component classname prefix
+     * @zh 组件类名前缀；省略继承父配置，根回退 c，需要匹配构建样式
+     * @en Class prefix; inherits the parent when omitted, with c at the root and matching built styles required
      */
     prefixCls: {
       type: String,
-      default: 'c',
+      default: undefined,
     },
     /**
-     * @zh 配置语言包
-     * @en Configure language pack
+     * @zh 完整语言包；省略继承父配置，否则使用当前全局语言
+     * @en Complete language pack; inherits the parent when omitted, otherwise uses the current global locale
      */
     locale: {
       type: Object as PropType<CedarLang>,
     },
     /**
-     * @zh 大小
-     * @en ComponentSize
+     * @zh 后代默认尺寸；省略继承父配置，组件自身 size 优先
+     * @en Default descendant size; inherits the parent when omitted, with component size taking precedence
      */
     size: {
       type: String as PropType<ComponentSize>,
@@ -40,34 +37,27 @@ export const configProviderProps = {
       default: false,
     },
     /**
-     * @zh 是否在容器滚动时更新弹出框的位置
-     * @us Whether to update the position of the popup when the container is scrolled
+     * @zh 容器滚动时更新弹层的位置；省略继承父配置，根回退 false
+     * @en Update popups on container scrolling; inherits the parent when omitted and falls back to false at the root
      */
     updateAtScroll: {
       type: Boolean,
-      default: false,
+      default: undefined,
     },
     /**
-     * @zh 是否在滚动时关闭弹出框
-     * @en Whether to close the popover when scrolling
+     * @zh 滚动时关闭弹层；省略继承父配置，根回退 false
+     * @en Close popups on scrolling; inherits the parent when omitted and falls back to false at the root
      */
     scrollToClose: {
       type: Boolean,
-      default: false,
+      default: undefined,
     },
     /**
      * @zh 阅读方向；未指定时继承父作用域或原生 DOM dir
      * @en Reading direction; inherits the parent scope or native DOM dir when omitted
      */
     dir: { type: String as PropType<ReadingDirection> },
-    /**
-     * @zh 全局主题：`light` 亮色，`dark` 暗色
-     * @en Global theme: `light` or `dark`
-     */
-    theme: {
-      type: String as PropType<CedarTheme>,
-      validator: (value: CedarTheme) => cedarThemes.includes(value),
-    },
+
 } 
 
 export type ConfigProviderProps = import("vue").ExtractPublicPropTypes<typeof configProviderProps>

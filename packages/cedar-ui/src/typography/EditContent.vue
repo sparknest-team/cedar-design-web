@@ -1,11 +1,11 @@
 <template>
   <div :class="classNames">
-    <Input ref="inputRef" auto-size :model-value="text" @blur="onBlur" @input="onChange" @keydown.enter="onEnd" />
+    <Input ref="inputRef" auto-size :model-value="text" :input-attrs="inputAttrs" @blur="onBlur" @input="onChange" @press-enter="onPressEnter" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, nextTick, onMounted, ref } from 'vue'
 import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import Input from '../input'
 
@@ -19,6 +19,7 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    inputAttrs: { type: Object, default: () => ({}) },
   },
   emits: ['change', 'end', 'update:text'],
   setup(_, { emit }) {
@@ -31,8 +32,12 @@ export default defineComponent({
       emit('change', value)
     }
 
-    function onEnd() {
-      emit('end')
+    let ending = false
+    function onEnd(reason: 'enter' | 'blur') {
+      if (ending) return
+      ending = true
+      emit('end', reason)
+      nextTick(() => { ending = false })
     }
 
     onMounted(() => {
@@ -50,9 +55,9 @@ export default defineComponent({
     return {
       classNames,
       inputRef,
-      onBlur: onEnd,
+      onBlur: () => onEnd('blur'),
       onChange,
-      onEnd,
+      onPressEnter: () => onEnd('enter'),
     }
   },
 })

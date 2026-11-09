@@ -39,8 +39,8 @@ describe('Select 1.x clear-value compatibility', () => {
     await clear(wrapper)
     expect(wrapper.emitted('change')).toEqual([[typeof emptyValue === 'function' ? emptyValue() : emptyValue]])
   })
-  test('multiple clear ignores the single-select override and preserves disabled items', async () => {
-    const wrapper = render({ multiple: true, emptyValue: 'ignored', defaultValue: ['a', 'locked'], options: [{ value: 'a', label: 'Alpha' }, { value: 'locked', label: 'Locked', disabled: true }] })
+  test('multiple clear preserves disabled items ahead of a configured array override', async () => {
+    const wrapper = render({ multiple: true, emptyValue: ['replacement'], defaultValue: ['a', 'locked'], options: [{ value: 'a', label: 'Alpha' }, { value: 'locked', label: 'Locked', disabled: true }] })
     await clear(wrapper)
     expect(wrapper.emitted('change')).toEqual([[['locked']]])
   })

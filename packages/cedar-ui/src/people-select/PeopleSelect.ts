@@ -1,3 +1,4 @@
+import { peopleSelectEmits } from './emits'
 import { useEmptyValues } from "../_utils/empty-value";
 import {
   computed,
@@ -21,16 +22,7 @@ export default defineComponent({
   name: createNamespace("people-select").name,
   inheritAttrs: false,
   props: peopleSelectProps,
-  emits: [
-    "update:modelValue",
-    "update:open",
-    "open-change",
-    "change",
-    "clear",
-    "search",
-    "load-error",
-    "action-error",
-  ],
+  emits: peopleSelectEmits,
   setup(props, { attrs, slots, emit, expose }) {
     const form = usePresentationForm({
       disabled: computed(() => props.disabled),
@@ -99,6 +91,11 @@ export default defineComponent({
             : props.label || value.value || props.defaultText,
       };
     });
+    const readScope = computed(() => ({
+      value: value.value,
+      text: emptyPolicy.isEmpty(value.value) ? emptyPolicy.emptyText.value : selected.value.label,
+      person: selected.value,
+    }));
     const childOptions = options;
     async function load(query: string) {
       if (!remote.value || typeof props.options !== "function") return;
@@ -153,7 +150,7 @@ export default defineComponent({
           showChat: props.showChat,
           call: props.call,
           chat: props.chat,
-          onActionError: (error: unknown, action: string) =>
+          onActionError: (error: unknown, action: 'call' | 'chat') =>
             emit("action-error", error, action),
         },
         actions == null ? undefined : { default: () => actions },
@@ -169,7 +166,7 @@ export default defineComponent({
         slots.label ??
         (({ data }: { data: PeopleSelectOption }) =>
           h(Person, { person: data, showAvatar: props.showAvatar })),
-      read: slots.read ?? renderReadPerson,
+      read: slots.read ? () => slots.read?.(readScope.value) : renderReadPerson,
     });
     const control = ref<InstanceType<typeof Presented>>();
     expose({
@@ -179,7 +176,7 @@ export default defineComponent({
     });
     return () =>
       props.isLabel
-        ? (slots.read?.({ value: value.value, person: selected.value }) ??
+        ? (slots.read?.(readScope.value) ??
           personSlots().read!())
         : h(
             Presented,

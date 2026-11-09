@@ -76,7 +76,7 @@ Reload 只更新本地刷新次数和描述，不请求服务；真实业务请�
 
 ## API
 
-### `<Empty>` Props
+### Empty Props
 
 | 属性               | 说明                         | 类型                                                     | 默认值  |
 | ------------------ | ---------------------------- | -------------------------------------------------------- | ------- |
@@ -87,13 +87,13 @@ Reload 只更新本地刷新次数和描述，不请求服务；真实业务请�
 | show-icon        | 是否显示图标                   | `boolean`                                                  | `true` |
 | show-description | 是否显示描述                   | `boolean`                                                  | `true` |
 
-### `<Empty>` Events
+### Empty Events
 
 | 事件名 | 说明     | 参数                  |
 | ------ | -------- | --------------------- |
 | click  | 点击回调 | `(ev: MouseEvent)`    |
 
-### `<Empty>` Slots
+### Empty Slots
 
 | 插槽名  | 说明      | 参数 |
 | ------- | --------- | ---- |
@@ -101,7 +101,7 @@ Reload 只更新本地刷新次数和描述，不请求服务；真实业务请�
 | default | 描述内容  | -    |
 | extra   | 额外操作  | -    |
 
-### 类型定义
+## Types
 
 组件导出以下类型定义
 
@@ -111,17 +111,43 @@ import type { EmptyImageSize, EmptyProps } from '@cedar-design/ui'
 
 ConfigProvider 的 `empty` 插槽可以替换未自定义内容的 Empty，不作为 Empty 的公开 Prop。
 
-### 样式变量
+本地 default、image、extra 插槽，或非空 image-url、description 优先于全局替换；动态添加或移除内容也遵守此规则。全局替换接管整个 Empty 内容，show-icon、show-description、image-size 等只控制本地模板，不会改写提供者的节点。替换节点的冒泡点击仍触发 Empty 的 click 一次；多根节点与嵌套 Empty 保留相同行为，并避免递归套用全局替换。
 
-| 变量 | 默认值 | 用途 |
-| --- | --- | --- |
-| `--c-empty-description-color` | `var(--c-sys-color-content-tertiary)` | 低强调的空状态说明文字 |
-| `--c-empty-icon-color` | `var(--c-sys-color-content-decorative)` | 非文字装饰图标；不用于需要阅读的文字 |
-| `--c-empty-padding` | `var(--c-spacing-5) 0` | 容器留白 |
-| `--c-empty-image-margin-bottom` | `var(--c-spacing-2)` | 图标与说明的间距 |
-| `--c-empty-description-font-size` | `var(--c-font-size-body-3)` | 说明文字字号 |
-| `--c-empty-description-line-height` | `var(--c-line-height)` | 说明文字行高 |
-| `--c-empty-extra-margin-top` | `var(--c-spacing-5)` | 额外操作上方间距 |
-| `--c-empty-size-xs/sm/md/lg/xl` | `var(--c-size-15/20/25/35/45)` | 默认图标／图片的尺寸档位 |
+## CSS Variables
 
 描述是文字，必须按文本对比度检查；装饰图标可以更弱。自定义图片或插槽可能有自己的颜色，不会被 `icon-color` 强制重染。尺寸与间距按桌面／移动布局分别维护，但同名变量职责一致。
+
+<!-- component-css-variables:start -->
+
+通过以下变量定制组件外观。默认值随表中注明的主题或选择器条件变化；变量仅在对应的尺寸、变体和交互状态下生效。
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| 变量 | 默认值／条件 | 影响的样式 |
+| --- | --- | --- |
+| `--c-empty-description-color` | `var(--c-sys-color-content-tertiary)` | `color` |
+| `--c-empty-description-font-size` | `var(--c-font-size-body-3)` | `font-size` |
+| `--c-empty-description-line-height` | `var(--c-line-height)` | `line-height` |
+| `--c-empty-extra-margin-top` | `var(--c-spacing-5)` | `margin-top` |
+| `--c-empty-icon-color` | `var(--c-sys-color-content-decorative)` | `color` |
+| `--c-empty-image-margin-bottom` | `var(--c-spacing-2)` | `margin-bottom` |
+| `--c-empty-padding` | `var(--c-spacing-5) 0` | `padding` |
+| `--c-empty-size-lg` | `var(--c-size-35)` | `font-size`, `height`, `width` |
+| `--c-empty-size-md` | `var(--c-size-25)` | `font-size`, `height`, `width` |
+| `--c-empty-size-sm` | `var(--c-size-20)` | `font-size`, `height`, `width` |
+| `--c-empty-size-xl` | `var(--c-size-45)` | `font-size`, `height`, `width` |
+| `--c-empty-size-xs` | `var(--c-size-15)` | `font-size`, `height`, `width` |
+
+</div>
+
+将覆盖设置在组件实际根节点或弹层真实挂载祖先上。例如给该元素添加下列 class，再按需替换变量值：
+
+```css
+.component-theme {
+  --c-empty-description-color: var(--c-sys-color-content-tertiary);
+}
+```
+
+显式行内样式及直接写入同一 CSS 属性的 Props 优先于样式表默认值。Teleport 后，普通 CSS 变量按实际挂载位置继承；使用 ThemeProvider 时，请遵循其局部主题与弹层配置规则。局部定制请直接覆盖组件变量；仅修改后代的 system 变量不会重新计算从根继承的组件别名。内部变量不属于公共 API。
+
+<!-- component-css-variables:end -->

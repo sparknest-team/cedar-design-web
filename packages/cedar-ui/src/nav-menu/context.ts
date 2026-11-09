@@ -8,7 +8,6 @@ export interface NavMenuContext {
   activeItem: ComputedRef<NavMenuKey | null>
   expanded: ComputedRef<NavMenuKey[]>
   collapsed: ComputedRef<boolean>
-  theme: ComputedRef<string>
   activePath: ComputedRef<Set<NavMenuKey>>
   focusKey: Ref<NavMenuKey | undefined>
   slots: Slots

@@ -33,7 +33,7 @@ Cedar 的特点既体现在单个组件，也体现在跨组件的约定和业�
 
 演示方法：切换品牌和亮暗，再比较默认按钮与局部覆盖按钮，随后打开字段弹层。
 
-[打开对应示例](/themes/) · 相关组件：[ConfigProvider 全局配置](/components/config-provider/)、[StyleProvider](/components/style-provider/)、[Button 按钮](/components/button/)、[FieldDecorator 字段外壳](/components/field-decorator/)
+[打开对应示例](/themes/) · 相关组件：[ConfigProvider 全局配置](/components/config-provider/)、[ThemeProvider](/components/theme-provider/)、[Button 按钮](/components/button/)、[FieldDecorator 字段外壳](/components/field-decorator/)
 
 ### 跨控件保持字段外观与几何一致
 

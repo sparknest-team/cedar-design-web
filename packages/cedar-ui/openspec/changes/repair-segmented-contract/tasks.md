@@ -1,0 +1,3 @@
+- [x] Reproduce controlled native,field,SSR,typed-key and label failures
+- [x] Repair the existing Segmented contract and update types,docs and review fixture
+- [x] Verify Cedar consumers and Maple RadioGroup counterpart,complete types/gates and real native keyboard/SSR behavior

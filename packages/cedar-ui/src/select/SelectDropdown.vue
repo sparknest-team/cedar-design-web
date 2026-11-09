@@ -6,10 +6,12 @@
     <loading v-if="loading" :class="`${prefixCls}-loading`" />
     <div v-else-if="empty" :class="`${prefixCls}-empty`">
       <slot name="empty">
-        <component :is="SelectEmpty ? SelectEmpty : 'Empty'" />
+        <component :is="SelectEmpty" />
       </slot>
     </div>
-    <slot v-if="virtualList && !loading && !empty" name="virtual-list" />
+    <div v-if="virtualList && !loading && !empty" :id="listboxId" :role="listboxId ? 'listbox' : undefined" :aria-multiselectable="listboxId ? multiple : undefined">
+      <slot name="virtual-list" />
+    </div>
     <component
       :is="displayScrollbar ? 'ScrollbarComponent' : 'div'"
       v-if="!virtualList"
@@ -19,7 +21,7 @@
       v-bind="scrollbarProps"
       @scroll="handleScroll"
     >
-      <ul :class="`${prefixCls}-list`">
+      <ul :id="listboxId" :role="listboxId ? 'listbox' : undefined" :aria-multiselectable="listboxId ? multiple : undefined" :class="`${prefixCls}-list`">
         <slot />
       </ul>
     </component>
@@ -31,7 +33,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue'
-import { computed, defineComponent, inject, toRefs } from 'vue'
+import { computed, defineComponent, h, inject, toRefs } from 'vue'
 import { useEmptySlot } from '../_components/selection-field/empty-slot'
 import { useComponentRef } from '../_hooks/use-component-ref'
 import { useScrollbar } from '../_hooks/use-scrollbar'
@@ -51,6 +53,8 @@ export default defineComponent({
     Loading,
   },
   props: {
+    listboxId: String,
+    multiple: Boolean,
     loading: Boolean,
     empty: Boolean,
     virtualList: Boolean,
@@ -82,7 +86,7 @@ export default defineComponent({
     const { scrollbar } = toRefs(props)
     const prefixCls = getPrefixCls('select-dropdown')
     const emptySlot = useEmptySlot()
-    const SelectEmpty = emptySlot?.({ component: 'select' })?.[0]
+    const SelectEmpty = () => emptySlot.value?.({ component: 'select' }) ?? h(Empty)
 
     const { componentRef: wrapperComRef, elementRef: wrapperRef } = useComponentRef('containerRef')
     const { displayScrollbar, scrollbarProps } = useScrollbar(scrollbar)

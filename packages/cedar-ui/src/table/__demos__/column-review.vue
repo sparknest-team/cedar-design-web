@@ -4,7 +4,7 @@ const data = [
   { key: '2', name: 'Lin', score: 85 },
   { key: '3', name: 'Grace', score: 97 },
 ]
-const sortable = { sortDirections: ['ascend', 'descend'], sorter: (a, b) => a.score - b.score }
+const sortable = { sortDirections: ['ascend', 'descend'], sorter: (a, b, { direction }) => (a.score - b.score) * (direction === 'descend' ? -1 : 1) }
 const filterable = {
   filters: [{ text: 'Ada', value: 'Ada' }, { text: 'Lin', value: 'Lin' }],
   filter: (values, record) => values.includes(record.name),

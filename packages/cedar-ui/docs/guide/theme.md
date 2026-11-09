@@ -4,12 +4,19 @@ permalink: /guide/theme/
 
 # 主题定制
 
-文档已迁移至 [主题定制 /themes](/themes/)。
+使用 [ThemeProvider](/components/theme-provider/) 统一管理应用根部和局部主题；ConfigProvider 不提供 theme。
 
-Cedar 与 Maple 对齐：
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+import { Themes } from '@cedar-design/ui'
+const mode = ref<'light' | 'dark'>('dark')
+</script>
+<template>
+  <c-theme-provider :theme="Themes.maple[mode]">
+    <App />
+  </c-theme-provider>
+</template>
+```
 
-- `import { StyleProvider, Themes } from '@cedar-design/ui'`
-- `StyleProvider.setStyleVars(Themes.default.dark)` 使用默认青绿色暗色主题
-- `StyleProvider.setStyleVars(Themes.maple.light)` 使用枫叶亮色主题
-- 两套主题都提供 `light` / `dark`
-- 亦可用 `ConfigProvider` 的 `theme` 或直接改 DOM 属性
+只切换默认亮暗模式时传入 theme="light" 或 theme="dark"。品牌预设传给 theme，额外定制放在 style-vars。嵌套 Provider 可替换主题，库内弹层继承所属 Provider，不需要修改 html。内置预设见[主题预设](/themes/)。

@@ -566,7 +566,11 @@
     "drag-over",
     "drag-leave",
     "drop",
-    "update:expandedValues"
+    "update:expandedValues",
+    "load-error",
+    "update:selectedValues",
+    "update:checkedValues",
+    "update:halfCheckedValues"
   ],
   "scenarios": [
     {

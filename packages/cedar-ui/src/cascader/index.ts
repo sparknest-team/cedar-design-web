@@ -11,7 +11,7 @@ const Cascader = withInstall(
   { components: [_Cascader, _CascaderPanel] },
 )
 
-export type CascaderInstance = InstanceType<typeof _Cascader>
+export type CascaderInstance = InstanceType<typeof _Cascader> & import('./types').CascaderExpose
 export type CascaderPanelInstance = InstanceType<typeof _CascaderPanel>
 export type CascaderPanelProps = import('vue').ExtractPublicPropTypes<typeof _CascaderPanel.props>
 export const cascaderPanelProps = _CascaderPanel.props
@@ -29,3 +29,7 @@ export default Cascader
 export type CascaderProps = import('vue').ExtractPublicPropTypes<typeof import('./props').cascaderProps>
 
 export type { CascaderTriggerOptions } from './trigger-options'
+
+export type { CascaderEditMode } from './props'
+
+export type {CascaderBaseValue,CascaderOptionInfo,CascaderReadScope,CascaderEmits,CascaderSlots,CascaderExpose} from './types'

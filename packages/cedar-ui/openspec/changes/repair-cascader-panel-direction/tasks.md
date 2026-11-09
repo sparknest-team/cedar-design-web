@@ -1,0 +1,3 @@
+- [x] Reproduce standalone LTR disabled-child and RTL direction failures on both platforms.
+- [x] Reuse selected-path logical navigation in both controllers.
+- [x] Verify field/panel consumers, live direction changes, values, browser, types and source parity.

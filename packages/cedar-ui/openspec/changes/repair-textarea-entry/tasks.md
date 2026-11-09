@@ -1,0 +1,3 @@
+- [x] Reproduce missing Maple named export while Cedar passes.
+- [x] Export the existing installed component and add mandatory consumer type fixtures.
+- [x] Verify both Textarea families and required gates.

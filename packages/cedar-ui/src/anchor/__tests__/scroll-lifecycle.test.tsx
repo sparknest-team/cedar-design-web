@@ -9,6 +9,7 @@ const ticks: (() => void)[] = []
 const completions: (() => void)[] = []
 const cancellations: ReturnType<typeof vi.fn>[] = []
 let scrollTarget: HTMLElement
+let secondScrollTarget: HTMLElement | undefined
 vi.mock('vue', async () => {
   const actual = await vi.importActual<any>('vue')
   return { ...actual, nextTick: (callback?: () => void) => {
@@ -16,7 +17,7 @@ vi.mock('vue', async () => {
     return actual.nextTick()
   } }
 })
-vi.mock('compute-scroll-into-view', () => ({ compute: () => [{ el: scrollTarget, top: 80 }] }))
+vi.mock('compute-scroll-into-view', () => ({ compute: () => [{ el: scrollTarget, top: 80 }, ...(secondScrollTarget ? [{ el: secondScrollTarget, top: 120 }] : [])] }))
 vi.mock('../utils', () => ({ slide: (_el: HTMLElement, _top: number, done: () => void) => {
   completions.push(done)
   const cancel = vi.fn(); cancellations.push(cancel); return cancel
@@ -33,6 +34,7 @@ afterEach(() => {
   nodes.splice(0).forEach(node => node.remove())
   vi.restoreAllMocks()
   ticks.length = completions.length = cancellations.length = 0
+  secondScrollTarget = undefined
 })
 async function fixture() {
   const frames: FrameRequestCallback[] = []
@@ -69,12 +71,32 @@ describe('Anchor scroll consumer ownership', () => {
     const f = await fixture(); f.click(); await flush()
     ticks.splice(0).forEach(callback => callback())
     expect(f.context.currentLink).toBe('#anchor-b')
-    expect(f.anchor.emitted('select')).toHaveLength(1)
+    expect(f.anchor.emitted('select')).toEqual([['#anchor-b', '#anchor-a']])
     expect(f.anchor.emitted('change')!.at(-1)).toEqual(['#anchor-b'])
+    f.click('#anchor-a')
+    expect(f.anchor.emitted('select')).toEqual([['#anchor-b', '#anchor-a'], ['#anchor-a', '#anchor-b']])
   })
   test('replacement click cancels the previous tween', async () => {
     const f = await fixture(); f.click(); f.click('#anchor-a')
     expect(cancellations[0]).toHaveBeenCalledTimes(1)
+  })
+  test('replacing a nested scroll cancels every active tween', async () => {
+    const f = await fixture()
+    secondScrollTarget = f.container
+    f.click()
+    expect(completions).toHaveLength(2)
+    f.click('#anchor-a')
+    expect(cancellations[0]).toHaveBeenCalledTimes(1)
+    expect(cancellations[1]).toHaveBeenCalledTimes(1)
+  })
+  test('does not scroll an unrelated declared container', async () => {
+    const f = await fixture()
+    const unrelated = document.createElement('div')
+    document.body.append(unrelated); nodes.push(unrelated)
+    f.target.value = unrelated; await flush()
+    f.click()
+    expect(completions).toHaveLength(0)
+    expect(f.anchor.emitted('select')?.at(-1)?.[0]).toBe('#anchor-b')
   })
   test('deactivation cancels tween and pending measurement frame', async () => {
     const f = await fixture(); f.click(); f.active.value = false; await flush()
@@ -83,6 +105,14 @@ describe('Anchor scroll consumer ownership', () => {
   test('unmount cancels tween', async () => {
     const f = await fixture(); f.click(); f.owner.unmount()
     expect(cancellations[0]).toHaveBeenCalledTimes(1)
+  })
+  test('non-hash links retain native navigation even when hash updates are disabled', async () => {
+    const f = await fixture()
+    const event = new MouseEvent('click', { cancelable: true })
+    f.context.handleClick(event, 'https://example.com/page')
+    expect(event.defaultPrevented).toBe(false)
+    expect(completions).toHaveLength(0)
+    expect(f.anchor.emitted('select')?.at(-1)).toEqual(['https://example.com/page', '#anchor-a'])
   })
   test('retained inactive click is inert without preventing navigation', async () => {
     const f = await fixture(); f.active.value = false; await flush()

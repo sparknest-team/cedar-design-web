@@ -1,0 +1,3 @@
+- [x] Reproduce all four defects using actual Input/Textarea/Select composition.
+- [x] Repair prefix, nested groups, valid falsy values and Form inheritance.
+- [x] Verify affected Cedar consumers, browser, public types, specification and documentation; record Maple non-applicability.

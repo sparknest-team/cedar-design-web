@@ -117,14 +117,21 @@ Compare total labels, page-size selection and page jumpers. Change the available
 
 ## Reading direction
 
-Inherits the nearest `dir="ltr|rtl"` and supports runtime and nested overrides. Page numbers and previous/next semantics remain unchanged. Default navigation icons follow reading direction; page input, disabled boundaries and selection are preserved. Custom icon slots own their direction.
+Inherits the nearest `dir="ltr|rtl"`, including runtime changes and local overrides. Page numbers and previous/next meanings remain unchanged; default navigation icons follow reading direction. Page entry, disabled boundaries and selection do not change. Business code controls direction for custom icon slots.
+
+## Triggers and positioning
+
+### Popup placement
+
+Use `page-size-props.placement` for the page-size selector popup, defaulting to `bottom-start`. The position adjusts when space is limited. This option does not change pagination layout.
 
 ## API
 
 Use ordinary `v-model`: `modelValue` is the current page, starting at 1; pageSize independently controls items per page. `defaultValue` initializes uncontrolled state once without later resets or initialization `update:modelValue`. When `modelValue` is supplied, the parent value controls the display.
 
 <!-- same-source-api:start -->
-### Props
+
+### Pagination Props
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -152,7 +159,15 @@ Use ordinary `v-model`: `modelValue` is the current page, starting at 1; pageSiz
 | compact-breakpoint | Maximum container width for compact mode, in px | `number` | `480` |
 | auto-adjust | Preserve first record on size change; clamp after total shrinks | `boolean` | `true` |
 
-### Events
+Totals, page numbers and page sizes use JavaScript safe integers. Finite positive values above the safe range are capped at the maximum safe integer and produce a development warning. To bound rendered page controls, base-size is capped at 201 and buffer-size at 100; out-of-range values produce a development warning.
+
+Responsive switches between full and simple layouts preserve the page-jump draft without submitting it. Focus is preserved when both layouts display a jump input. Press Enter or leave the input to submit.
+
+After a keyboard quick jump, if the ellipsis button disappears and the target page is accepted, focus moves to the current page button. Rejected controlled updates or focus moved elsewhere do not steal focus.
+
+auto-adjust requests an adjustment only when total or page-size changes after creation; it does not clamp the initial default-value or controlled model-value to the page count. A controlled parent may reject the request.
+
+### Pagination Events
 
 | Event | Description | Arguments |
 | --- | --- | --- |
@@ -161,7 +176,7 @@ Use ordinary `v-model`: `modelValue` is the current page, starting at 1; pageSiz
 | update:page-size | Request page size update | `number` |
 | page-size-change | Committed size change; paired with update:page-size | `number` |
 
-### Slots
+### Pagination Slots
 
 | Slot | Description | Scope |
 | --- | --- | --- |
@@ -172,12 +187,18 @@ Use ordinary `v-model`: `modelValue` is the current page, starting at 1; pageSiz
 | jumper-prepend | Separate jumper prefix | `—` |
 | jumper-append | Separate jumper suffix | `—` |
 
-### Methods
+### Pagination Methods
 
 | Method | Description |
 | --- | --- |
 
 <!-- same-source-api:end -->
+
+## Types
+
+```ts
+import type { PaginationProps, PaginationInstance, PaginationPageSizeProps } from '@cedar-design/ui'
+```
 
 ## Behavior
 
@@ -197,45 +218,54 @@ The page-size selector fits its selected text and arrow with only item spacing b
 
 Both platforms support `disabled?: boolean`, `placement?: 'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end'`, `popupContainer?: string | HTMLElement | false`, `class?: string` and `style?: CSSProperties`. Outer disabled takes precedence. Default placement is bottom-start.
 
-This configuration no longer forwards arbitrary SelectProps/MenuProps. page-size, page-size-options and size control the pagination value, options and dimensions.
+Use the documented page-size selector options. page-size, page-size-options and size control the pagination value, options and dimensions.
 
-## Type definitions
+## CSS Variables
 
-```ts
-import type { PaginationProps, PaginationInstance, PaginationPageSizeProps } from '@cedar-design/ui'
+<!-- component-css-variables:start -->
+
+Use these variables to customize the component. Defaults may vary by the selector condition shown. Each variable applies to the corresponding size, variant and interaction states.
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| Variable | Default / condition | Affected styles |
+| --- | --- | --- |
+| `--c-pagination-active-background` | `var(--c-color-primary-light-1)` | `background` |
+| `--c-pagination-active-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-pagination-disabled-background` | `var(--c-color-fill-1)` | `background` |
+| `--c-pagination-disabled-color` | `var(--c-color-text-4)` | `color` |
+| `--c-pagination-focus-color` | `var(--c-sys-color-content-brand)` | `outline` |
+| `--c-pagination-focus-offset` | `1px` | `outline-offset` |
+| `--c-pagination-focus-space` | `3px` | `padding` |
+| `--c-pagination-focus-width` | `2px` | `outline` |
+| `--c-pagination-font-size` | `var(--c-sys-font-size-md)` | `font-size` |
+| `--c-pagination-gap` | `var(--c-sys-space-5)` | `gap` |
+| `--c-pagination-hover-background` | `var(--c-color-fill-1)` | `background` |
+| `--c-pagination-icon-size` | `16px` | `height`, `width` |
+| `--c-pagination-input-width` | `32px` | `width` |
+| `--c-pagination-item-background` | `transparent` | `background` |
+| `--c-pagination-item-border-radius` | `var(--c-sys-radius-md)` | `border-radius` |
+| `--c-pagination-item-gap` | `var(--c-sys-space-2)` | `gap`, `padding-inline-start` |
+| `--c-pagination-item-padding` | `var(--c-sys-space-4)` | `padding` |
+| `--c-pagination-select-width` | `max-content` | `width` |
+| `--c-pagination-size-lg` | `44px` | `height`, `min-height`, `min-width` |
+| `--c-pagination-size-md` | `36px` | `height`, `min-height`, `min-width` |
+| `--c-pagination-size-sm` | `28px` | `height`, `min-height`, `min-width` |
+| `--c-pagination-size-xl` | `52px` | `height`, `min-height`, `min-width` |
+| `--c-pagination-size-xs` | `24px` | `height`, `min-height`, `min-width` |
+| `--c-pagination-text-color` | `var(--c-color-text-1)` | `color` |
+| `--c-pagination-touch-size` | `44px` | `height`, `min-height` |
+
+</div>
+
+Apply overrides to the rendered component root or the actual popup ancestor. For example, add the following class to that element and replace the value as needed:
+
+```css
+.component-theme {
+  --c-pagination-active-background: var(--c-color-primary-light-1);
+}
 ```
 
-## Style variables
+Explicit inline styles and props that write the same CSS property take precedence over stylesheet defaults. After Teleport, ordinary CSS variables inherit from the actual mount location. When using ThemeProvider, follow its local-theme and popup configuration rules. Override the component variable directly for local styling; root-level aliases are not recalculated merely because a descendant system variable changes. Internal variables are not public APIs.
 
-| Token | Default |
-| --- | --- |
-| `--c-pagination-text-color` | `var(--c-color-text-1)` |
-| `--c-pagination-font-size` | `var(--c-sys-font-size-md)` |
-| `--c-pagination-gap` | `var(--c-sys-space-5)` |
-| `--c-pagination-item-gap` | `var(--c-sys-space-2)` |
-| `--c-pagination-focus-space` | `3px` |
-| `--c-pagination-size-xs` | `24px` |
-| `--c-pagination-size-sm` | `28px` |
-| `--c-pagination-size-md` | `36px` |
-| `--c-pagination-size-lg` | `44px` |
-| `--c-pagination-size-xl` | `52px` |
-| `--c-pagination-item-padding` | `var(--c-sys-space-4)` |
-| `--c-pagination-item-border-radius` | `var(--c-sys-radius-md)` |
-| `--c-pagination-icon-size` | `16px` |
-| `--c-pagination-input-width` | `32px` |
-| `--c-pagination-select-width` | `max-content` |
-| `--c-pagination-touch-size` | `44px` |
-| `--c-pagination-focus-width` | `2px` |
-| `--c-pagination-focus-offset` | `1px` |
-| `--c-pagination-focus-color` | `var(--c-color-primary)` |
-| `--c-pagination-item-background` | `transparent` |
-| `--c-pagination-hover-background` | `var(--c-color-fill-1)` |
-| `--c-pagination-active-background` | `var(--c-color-primary-light-1)` |
-| `--c-pagination-active-color` | `var(--c-color-primary)` |
-| `--c-pagination-disabled-color` | `var(--c-color-text-4)` |
-| `--c-pagination-disabled-background` | `var(--c-color-fill-1)` |
-
-
-### Placement semantics and configuration
-
-No placement configuration is required for normal use: bottom-start is preferred and the underlying Trigger automatically flips/constrains the popup. pageSizeProps.placement is only a restricted override for the page-size Select: Pagination → Select.triggerProps.placement → Trigger. It does not position the pagination itself.
+<!-- component-css-variables:end -->

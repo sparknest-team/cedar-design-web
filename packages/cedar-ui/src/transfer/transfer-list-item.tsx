@@ -11,6 +11,7 @@ import { IconClose } from '@cedar-design/icons-vue/icon-close'
 import type { TransferTargetAction } from './types'
 import type { TransferItem, TransferValue } from './types'
 import { transferInjectionKey } from './context'
+import { useI18n } from '../locale'
 
 const { name } = createNamespace('transfer-list-item')
 
@@ -41,6 +42,7 @@ export default defineComponent({
   },
   setup(props) {
     const prefixCls = getPrefixCls('transfer-list-item')
+    const { t } = useI18n()
     const transferCtx = inject(transferInjectionKey, undefined)
 
     const handleClick = (_ev?: Event) => {
@@ -113,9 +115,9 @@ export default defineComponent({
     return () => (
       <div
         class={cls.value}
-        role="button"
-        tabindex={props.disabled ? -1 : 0}
-        aria-disabled={props.disabled}
+        role={props.simple ? 'button' : undefined}
+        tabindex={props.simple ? (props.disabled ? -1 : 0) : undefined}
+        aria-disabled={props.simple ? props.disabled : undefined}
         onClick={handleClick}
         onKeydown={(event: KeyboardEvent) => {
           if (event.target === event.currentTarget && (event.key === 'Enter' || event.key === ' ')) {
@@ -169,9 +171,9 @@ export default defineComponent({
         )}
         {props.clearable && !props.disabled && props.operationMode === 'menu' && (
           <Popover trigger="click" placement="bottom-start" v-slots={{ content: operationMenu }}>
-            <IconHover class={`${prefixCls}-operation-btn`}>
-              <IconMore />
-            </IconHover>
+            <button type="button" class={`${prefixCls}-operation-btn`} aria-label={t('transfer.actions')}>
+              <IconHover><IconMore /></IconHover>
+            </button>
           </Popover>
         )}
       </div>

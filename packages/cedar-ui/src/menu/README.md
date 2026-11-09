@@ -67,6 +67,10 @@ permalink: /components/menu/
 
 <demo src="./__demos__/active-rendering.vue"></demo>
 
+### 选项值
+
+动态增删或调整选项顺序时，为每个命令设置稳定且唯一的 `value`。数字 `0`、字符串 `'0'` 和布尔值 `false` 是不同的选项值。
+
 ## 触发与定位
 
 ### 右键菜单
@@ -97,6 +101,7 @@ SplitButton 已封装按钮与下拉命令菜单的组合，并通过 `MenuOptio
 <demo src="./__demos__/trigger.vue"></demo>
 
 ### 弹出方向
+使用 `placement` 设置菜单相对触发元素的首选方位，可选值见 Menu Props。空间不足时允许自动调整，最终位置可能与首选方位不同。
 
 <demo src="./__demos__/placement.vue"></demo>
 
@@ -109,6 +114,10 @@ SplitButton 已封装按钮与下拉命令菜单的组合，并通过 `MenuOptio
 ### 高度限制
 
 <demo src="./__demos__/popup-height.vue"></demo>
+
+### 切换触发元素
+
+点击另一个由悬停打开的同级触发元素时，会关闭原菜单；点击子菜单内部不会关闭父菜单。
 
 ## 状态与内容定制
 
@@ -130,13 +139,21 @@ SplitButton 已封装按钮与下拉命令菜单的组合，并通过 `MenuOptio
 
 继承最近的 `dir="ltr|rtl"`，支持运行时切换与局部覆盖。子级沿阅读方向展开；进入子级与返回父级的左右键跟随当前方向，上下键与首尾定位保持顺序并跳过禁用项。挂载到外部容器的菜单继承来源方向，切换方向不改变选中值。
 
+## 尺寸与阴影
+
+`size` 控制选项的行高与字号，`md` 保持默认主题；`elevation=true` 使用菜单默认阴影，`false` 取消阴影，数字使用对应的全局阴影层级。
+
+## 键盘操作
+
+在触发元素上按 Enter、Space 或方向键进入菜单。菜单内使用上下键、Home/End 在可用选项间移动，Enter 或 Space 激活选项。前进方向键进入子菜单，后退方向键返回，方向随阅读方向变化。Escape 请求关闭最上层菜单，关闭后焦点返回触发元素。Tab 请求关闭并继续浏览器焦点导航；可编辑输入保留文本编辑按键。
+
 ## API
 
 ### 主值与默认值
 
 使用普通 `v-model`。`modelValue` 表示选中选项的 value；`defaultValue` 仅在创建时初始化非受控值，后续修改不会重置当前状态。显式绑定值优先，初始化不发出 `update:modelValue`。
 
-### `<Menu>` Props
+### Menu Props
 
 | 参数名 | 描述 | 类型 | 默认值 |
 | --- | --- | --- | :---: |
@@ -145,9 +162,9 @@ SplitButton 已封装按钮与下拉命令菜单的组合，并通过 `MenuOptio
 | model-value **(v-model)** | 当前激活值，用于受控高亮 | `MenuValue` | `-` |
 | open **(v-model)** | 浮层是否可见 | `boolean` | `-` |
 | default-open | 非受控默认可见状态 | `boolean` | `false` |
-| trigger | 根菜单触发方式 | `'hover' \| 'click' \| 'focus' \| 'contextMenu'` | `'click'` |
+| trigger | 根菜单触发方式 | `'hover' \| 'click' \| 'focus' \| 'contextMenu'` 或数组 | `'click'` |
 | submenu-trigger | 各级子菜单的展开方式，对所有层级统一生效 | `'hover' \| 'click'` | `'hover'` |
-| placement | 浮层相对触发元素的首选方位，默认 bottom；启用默认的 auto-fit-position 时，空间不足会自动翻转并约束到可视区域，不保证最终停在该侧 | `MenuPlacement` | `'bottom'` |
+| placement | 浮层相对触发元素的首选方位，默认 bottom；启用默认的 auto-fit-position 时，空间不足会自动翻转并约束到可视区域，不保证最终停在该侧 | `MenuPlacement`<br>`'left' \| 'right' \| 'bottom' \| 'top' \| 'top-start' \| 'top-end' \| 'bottom-start' \| 'bottom-end' \| 'left-start' \| 'left-end' \| 'right-start' \| 'right-end'` | `'bottom'` |
 | `strategy` | 根菜单及全部子菜单的定位策略 | `'absolute' \| 'fixed'` | `'absolute'` |
 | popup-container | 浮层挂载容器 | `string \| HTMLElement \| false` | `-` |
 | popup-max-height | 默认限制、自定义像素高度或不限高 | `boolean \| number` | `true` |
@@ -155,6 +172,16 @@ SplitButton 已封装按钮与下拉命令菜单的组合，并通过 `MenuOptio
 | auto-fit-popup-width | 浮层宽度跟随触发器 | `boolean` | `false` |
 | disabled | 禁用菜单 | `boolean` | `false` |
 | align-point | 按触发时的鼠标坐标定位；打开后保持该位置，再次右键时更新 | `boolean` | `false` |
+| default-value | 非受控初始选中值 | `MenuValue` | `-` |
+| size | 菜单项尺寸 | `MenuSize` | `md` |
+| unmount-on-close | 关闭后是否卸载面板 | `boolean` | `true` |
+| reference | 外部触发元素或选择器 | `MenuReference` | `-` |
+| popup-class | 定位层类名 | `string / array / object` | `-` |
+| offset-x / offset-y | 相对触发器偏移 | `string / number` | `0` |
+| mouse-enter-delay / mouse-leave-delay | 根菜单悬停打开 / 关闭延迟，毫秒 | `number` | `100` |
+| close-on-click-reference | 再次点击触发器是否关闭 | `boolean` | `true` |
+| cover | 浮层是否覆盖触发器 | `boolean` | `false` |
+| elevation | 默认阴影、关闭阴影或指定层级 | `boolean / number` | `true` |
 
 ### `MenuOptionData`
 
@@ -168,20 +195,25 @@ SplitButton 已封装按钮与下拉命令菜单的组合，并通过 `MenuOptio
 | children | 子命令；普通项带 children 时成为子菜单 | `MenuOptionData[]` |
 | disabled | 禁用当前项及其后代 | `boolean` |
 | show | 是否渲染 | `boolean` |
-| ripple | 是否显示点击波纹 | `boolean` |
+| ripple | 点击波纹配置（Cedar 不渲染波纹） | `boolean` |
 | props | 透传给命令行元素的 HTML 属性 | `HTMLAttributes` |
 
 渲染上下文为 `{ option, active, level }`。`type: 'group'` 只负责视觉分组，不增加子项层级；`type: 'divider'` 不可聚焦或激活。
 
-### Events
+### Menu Events
 
 | 事件名 | 描述 | 参数 |
 | --- | --- | --- |
 | update:model-value | 当前选中值更新请求 | `value: MenuValue` |
 | open-change | 浮层显示状态更新请求 | `open: boolean` |
 | select | 用户激活菜单项 | `value, option, event` |
+| update:open | 打开状态更新请求 | `open: boolean` |
+| key-escape | 根菜单处理 Escape | 无 |
+| open / opened | 打开开始 / 完成 | 无 |
+| close / closed | 关闭开始 / 完成 | 无 |
+| click-outside | 顶层外部点击 | `event: Event` |
 
-### Slots
+### Menu Slots
 
 | 插槽名 | 描述 | 参数 |
 | --- | --- | --- |
@@ -194,27 +226,65 @@ SplitButton 已封装按钮与下拉命令菜单的组合，并通过 `MenuOptio
 
 ### `<MenuOption>`
 
-保留给 SplitButton 和少量手写 `content` 场景。Props 包含 `label`、`value`、`disabled`、`ripple`、`highlight`；`label` 渲染函数及 `default`、`icon`、`suffix` 插槽统一接收 `{ option, active, level }`；点击时触发 `click`。`highlight` 只控制视觉强调，不提交选中值。分组和子菜单只通过 `options` 描述，不再导出 `MenuGroup`、`MenuSubmenu`。
-
-### 实例与键盘
-
-实例提供 `open()`、`close()`、`resize()`、`setReference(reference?)`。根菜单支持上下键、Home/End、Enter；子菜单通过右键进入、左键或 Escape 返回，Escape 每次只关闭最上层并恢复焦点。
-
-样式类、CSS 变量与内部 DOM 标记统一使用 `c-menu-*` / `--c-menu-*` / `data-menu-*`。
-
-### 状态与时长变量
-
-禁用优先于选中、指针 hover 和键盘焦点。选中后的 hover 使用独立角色，默认继承选中背景；可单独覆盖以增加 hover 反馈。两端的选中背景都直接绘制在选项上。
-
-| Token | Default |
-| --- | --- |
-| `--c-menu-option-bg-selected-hover` | `var(--c-menu-option-bg-selected)` |
-
-### 数据身份与触发器切换
-
-可重排的数据项应提供稳定、唯一的 `value`，内部 Vue key 由业务值生成；数字 `0`、字符串 `'0'`、布尔值 `false` 保持不同身份。没有显式 value 的分组、分隔符或展示项按原始选项对象维持渲染身份，不新增公开 key 别名。点击另一个已经因 hover 打开的同级触发按钮，会关闭原先的菜单；点击子菜单内部不会误关父级。
+使用 MenuOption 编排 SplitButton 的附加操作，或在 `content` 中手写菜单项。通过 `label`、`value`、`disabled`、`ripple` 和 `highlight` 配置选项；`label` 渲染函数及 `default`、`icon`、`suffix` 插槽接收 `{ option, active, level }`，点击时触发 `click`。`highlight` 只控制视觉强调，不提交选中值。分组和子菜单通过 `options` 配置。
 
 
-### 方位语义与配置入口
 
-MenuPlacement 复用 TriggerPlacement 的十二方位值域；属性和类型均表达浮层相对触发器的首选方位。旧 MenuPosition 已删除。
+### Menu Methods
+
+通过 `open()` 打开菜单、`close()` 关闭菜单、`resize()` 更新定位、`setReference(reference?)` 更换触发元素。
+
+## CSS Variables
+
+<!-- component-css-variables:start -->
+
+通过以下变量定制组件外观。默认值随表中注明的主题或选择器条件变化；变量仅在对应的尺寸、变体和交互状态下生效。
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| 变量 | 默认值／条件 | 影响的样式 |
+| --- | --- | --- |
+| `--c-menu-bg` | `var(--c-color-bg-popup)` | `background-color` |
+| `--c-menu-border-color` | `var(--c-color-fill-3)` | `background-color`, `border`, `border-top` |
+| `--c-menu-border-radius` | `var(--c-border-radius-md)` | `border-radius` |
+| `--c-menu-box-shadow` | `var(--c-shadow2-down)` | `box-shadow` |
+| `--c-menu-font-size` | `var(--c-font-size-body-3)` | `font-size` |
+| `--c-menu-group-title-font-size` | `var(--c-font-size-body-1)` | `font-size` |
+| `--c-menu-group-title-height` | `var(--c-size-5)` | `line-height` |
+| `--c-menu-group-title-margin-top` | `var(--c-spacing-4)` | `margin-top` |
+| `--c-menu-group-title-padding-horizontal` | `var(--c-spacing-6)` | `padding` |
+| `--c-menu-group-title-text-color` | `var(--c-color-text-3)` | `color` |
+| `--c-menu-max-height` | `var(--c-size-50)` | `max-height` |
+| `--c-menu-option-bg` | `transparent` | `background-color` |
+| `--c-menu-option-bg-disabled` | `transparent` | `background-color` |
+| `--c-menu-option-bg-hover` | `var(--c-color-fill-2)` | `background-color` |
+| `--c-menu-option-bg-selected` | `var(--c-color-fill-2)` | `background-color` |
+| `--c-menu-option-bg-selected-hover` | `var(--c-menu-option-bg-selected)` | `background-color` |
+| `--c-menu-option-font-weight-selected` | `var(--c-font-weight-500)` | `font-weight` |
+| `--c-menu-option-height` | `var(--c-size-9)` | `line-height` |
+| `--c-menu-option-icon-margin-right` | `var(--c-spacing-4)` | `margin-inline-end` |
+| `--c-menu-option-padding-horizontal` | `var(--c-spacing-6)` | `padding` |
+| `--c-menu-option-suffix-icon-margin-left` | `var(--c-spacing-6)` | `margin-inline-start` |
+| `--c-menu-option-text-color` | `var(--c-color-text-2)` | `color` |
+| `--c-menu-option-text-color-disabled` | `var(--c-color-text-4)` | `color` |
+| `--c-menu-option-text-color-hover` | `var(--c-color-text-1)` | `color` |
+| `--c-menu-option-text-color-selected` | `var(--c-color-text-1)` | `color` |
+| `--c-menu-padding-vertical` | `var(--c-spacing-2)` | `margin`, `margin-top`, `padding` |
+
+</div>
+
+将覆盖设置在组件实际根节点或弹层真实挂载祖先上。例如给该元素添加下列 class，再按需替换变量值：
+
+```css
+.component-theme {
+  --c-menu-border-color: var(--c-color-fill-3);
+}
+```
+
+显式行内样式及直接写入同一 CSS 属性的 Props 优先于样式表默认值。Teleport 后，普通 CSS 变量按实际挂载位置继承；使用 ThemeProvider 时，请遵循其局部主题与弹层配置规则。局部定制请直接覆盖组件变量；仅修改后代的 system 变量不会重新计算从根继承的组件别名。内部变量不属于公共 API。
+
+<!-- component-css-variables:end -->
+
+### 选项状态颜色
+
+通过 `--c-menu-option-bg-selected` 设置选中背景，`--c-menu-option-bg-selected-hover` 设置选中后的悬停背景。禁用样式优先于选中、悬停和聚焦样式。

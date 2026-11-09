@@ -11,7 +11,7 @@ permalink: /guide/roadmap/
 | 项                         | 状态   | 说明                                                                             |
 | -------------------------- | ------ | -------------------------------------------------------------------------------- |
 | 公开 Roadmap               | ✅     | 本文档                                                                           |
-| 一等 Dark Theme            | ✅     | `Themes` + `StyleProvider` / `ConfigProvider` + [主题定制](/themes/)             |
+| 一等 Dark Theme            | ✅     | `Themes` + `ThemeProvider` + [主题定制](/themes/)             |
 | 样式按需引入               | ✅     | Resolver 默认引入 CSS；组件样式与基础主题拆分                                    |
 | Segmented                  | ✅     | [Segmented](/components/segmented/)                                              |
 | Menu               | ✅     | [Menu 下拉命令菜单](/components/menu/)（Trigger + MenuOption） |

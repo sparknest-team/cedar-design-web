@@ -1,0 +1,3 @@
+# Adopt the existing field contract in InputTag
+
+The Cedar-only InputTag still uses false Boolean defaults, legacy attr/composition splitting and an inaccessible clear span. Adopt the existing input form adapter, native attribute/ID protocol, composition ownership and FieldDecorator clear path. Keep standalone filled and allow Group inheritance/explicit overrides; retain private uninject behavior. Publish shared manual loading-mode and clear-icon contracts, existing wrapper notifications and native instance/slot types without adding tasks or collecting ordinary listener Promises. Unique identities, maxTagCount and full API reconciliation remain IT05–IT07.

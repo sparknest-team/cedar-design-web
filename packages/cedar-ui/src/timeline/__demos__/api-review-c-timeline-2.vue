@@ -6,8 +6,8 @@
   >
     <c-row align="center" :style="{ marginBottom: '24px' }">
       <c-checkbox
-        :checked="!!pendingProps.orientation"
-        @change="(v) => onChange({ orientation: v ? 'horizontal' : '' })"
+        :checked="pendingProps.orientation === 'horizontal'"
+        @change="(v) => onChange({ orientation: v ? 'horizontal' : 'vertical' })"
       >
         horizontal &nbsp; &nbsp;
       </c-checkbox>

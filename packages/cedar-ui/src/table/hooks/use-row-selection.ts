@@ -62,13 +62,17 @@ export const useRowSelection = ({
 
   const select = (rowKey: BaseType | BaseType[], checked = true) => {
     const _rowKeys = ([] as BaseType[]).concat(rowKey)
-    const newSelectedRowKeys = isRadio.value ? _rowKeys : union(selectedRowKeys.value, _rowKeys, !checked)
+    if (isRadio.value && checked && _rowKeys.length === 0) return
+    const newSelectedRowKeys = isRadio.value && checked
+      ? _rowKeys.slice(0, 1)
+      : union(selectedRowKeys.value, _rowKeys, !checked)
     _selectedRowKeys.value = newSelectedRowKeys
     emit('selection-change', newSelectedRowKeys)
     emit('update:selectedKeys', newSelectedRowKeys)
   }
 
   const selectAll = (checked = true) => {
+    if (isRadio.value && checked) return
     const newKeys = union(selectedRowKeys.value, currentAllEnabledRowKeys.value, !checked)
     _selectedRowKeys.value = newKeys
 

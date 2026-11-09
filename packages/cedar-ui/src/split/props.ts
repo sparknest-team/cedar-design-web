@@ -1,13 +1,13 @@
-import { createNamespace } from '../_utils/global-config'
-import { computed, defineComponent, PropType, reactive, ref, toRefs, onMounted, nextTick } from 'vue'
-import ResizeTrigger from '../_components/ResizeTrigger.vue'
-import useMergeState from '../_hooks/use-merge-state'
-import { getPrefixCls } from '../_utils/global-config'
-import { off, on } from '../_utils/dom'
-import { isNumber, isString } from '../_utils/is'
-import { SplitProps } from './types'
+import type { PropType } from 'vue'
+import { orientations, type Orientation } from '../_utils/constant'
+import { isSplitSize } from './sizing'
 
 export const splitProps = {
+    /**
+     * @zh 分隔手柄的可访问名称；空白时使用当前语言的默认名称
+     * @en Accessible name of the separator handle; blank values use the current locale default
+     */
+    ariaLabel: String,
     /**
      * @zh 分割框的 html 标签
      * @en The html tag of the split box
@@ -21,8 +21,9 @@ export const splitProps = {
      * @en Direction of division
      */
     orientation: {
-      type: String as PropType<'horizontal' | 'vertical'>,
+      type: String as PropType<Orientation>,
       default: 'horizontal',
+      validator: (value: string) => orientations.includes(value as Orientation),
     },
     /**
      * @zh 分割的大小，可以是 0~1 代表百分比，或具体数值的像素，如 300px
@@ -31,6 +32,7 @@ export const splitProps = {
      */
     size: {
       type: [Number, String],
+      validator: isSplitSize,
       default: undefined,
     },
     /**
@@ -39,6 +41,7 @@ export const splitProps = {
      */
     defaultSize: {
       type: [Number, String],
+      validator: isSplitSize,
       default: 0.5,
     },
     /**
@@ -47,6 +50,7 @@ export const splitProps = {
      */
     min: {
       type: [Number, String],
+      validator: isSplitSize,
     },
     /**
      * @zh 最大阈值，可以是 0~1 代表百分比，或具体数值的像素，如 300px
@@ -54,6 +58,7 @@ export const splitProps = {
      * */
     max: {
       type: [Number, String],
+      validator: isSplitSize,
     },
     /**
      * @zh 是否禁用

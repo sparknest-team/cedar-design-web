@@ -16,8 +16,9 @@ import {
   getPositioningSpace,
   getRelativeRect,
   getTransformOrigin,
+  translateRectBetweenDocuments,
 } from "./geometry";
-import { calculatePopupPosition, getScrollElements } from "./position";
+import { calculatePopupPosition, getScrollElements, getScrollViews } from "./position";
 import { useTriggerResize } from "./resize";
 import type { TriggerPopupTranslate, TriggerStrategy } from "./types";
 
@@ -117,8 +118,8 @@ export function useTriggerPositioner(
   let suspended = false;
   let scrollElements: HTMLElement[] = [];
   let scrollPositions = new WeakMap<Element, [number, number]>();
-  let windowPosition: [number, number] | undefined;
-  let scrollView: Window | null | undefined;
+  let windowPositions = new WeakMap<Document, [number, number]>();
+  let scrollViews: Window[] = [];
 
   function update() {
     const reference = context.reference.value;
@@ -126,10 +127,7 @@ export function useTriggerPositioner(
     if (!reference || !popup || !context.visible.value || suspended) return;
 
     const view = popup.ownerDocument.defaultView;
-    const space =
-      options.strategy === "fixed"
-        ? { x: 0, y: 0, scaleX: 1, scaleY: 1 }
-        : getPositioningSpace(popup);
+    const space = getPositioningSpace(popup, options.strategy);
     const point = context.point.value;
     const referenceRect = point
       ? {
@@ -141,7 +139,9 @@ export function useTriggerPositioner(
           height: 0,
         }
       : reference.getBoundingClientRect();
-    const relativeReference = getRelativeRect(referenceRect, space);
+    const translatedReference = translateRectBetweenDocuments(referenceRect, reference.ownerDocument, popup.ownerDocument);
+    if (!translatedReference) return;
+    const relativeReference = getRelativeRect(translatedReference, space);
     const relativePopup = getRelativeRect(popup.getBoundingClientRect(), space);
     referenceSize.value = {
       width: relativeReference.width,
@@ -201,11 +201,8 @@ export function useTriggerPositioner(
           !context.visible.value
         )
           return;
-        const currentSpace =
-          options.strategy === "fixed"
-            ? { x: 0, y: 0, scaleX: 1, scaleY: 1 }
-            : getPositioningSpace(context.popup.value);
-        const currentReference = getRelativeRect(referenceRect, currentSpace);
+        const currentSpace = getPositioningSpace(context.popup.value, options.strategy);
+        const currentReference = getRelativeRect(translatedReference, currentSpace);
         const currentPopup = getRelativeRect(
           context.popup.value.getBoundingClientRect(),
           currentSpace,
@@ -250,40 +247,43 @@ export function useTriggerPositioner(
     () => context.popup.value?.ownerDocument.defaultView,
   );
 
+  const pendingWindowDocuments = new Set<Document>();
   const windowScrolling = rafThrottle(
     () => {
-      const popup = context.popup.value;
-      const root =
-        popup?.ownerDocument.scrollingElement ??
-        popup?.ownerDocument.documentElement;
-      if (!root) return;
+      for (const document of pendingWindowDocuments) {
+      const root = document.scrollingElement ?? document.documentElement;
       const current: [number, number] = [root.scrollTop, root.scrollLeft];
-      windowPosition ??= current;
-      if (
-        (options.scrollToClose || context.globalScrollToClose.value) &&
-        (Math.abs(current[0] - windowPosition[0]) >=
-          options.scrollToCloseDistance ||
-          Math.abs(current[1] - windowPosition[1]) >=
-            options.scrollToCloseDistance)
-      ) {
+      const previous = windowPositions.get(document) ?? current;
+      if ((options.scrollToClose || context.globalScrollToClose.value) &&
+        (Math.abs(current[0] - previous[0]) >= options.scrollToCloseDistance || Math.abs(current[1] - previous[1]) >= options.scrollToCloseDistance)) {
+        pendingWindowDocuments.clear();
         context.requestClose();
         return;
       }
+      }
+      pendingWindowDocuments.clear();
       update();
     },
     () => context.popup.value?.ownerDocument.defaultView,
   );
 
+  function onWindowScroll(event: Event) {
+    const view = event.currentTarget as Window | null;
+    if (view?.document) pendingWindowDocuments.add(view.document);
+    windowScrolling(event);
+  }
+
   function unbindScroll() {
     scrolling.cancel();
     windowScrolling.cancel();
+    pendingWindowDocuments.clear();
     for (const element of scrollElements)
       element.removeEventListener("scroll", scrolling);
-    scrollView?.removeEventListener("scroll", windowScrolling);
-    scrollView = undefined;
+    for (const view of scrollViews) view.removeEventListener("scroll", onWindowScroll);
+    scrollViews = [];
     scrollElements = [];
     scrollPositions = new WeakMap();
-    windowPosition = undefined;
+    windowPositions = new WeakMap();
   }
 
   function bindScroll() {
@@ -307,12 +307,12 @@ export function useTriggerPositioner(
       scrollPositions.set(element, [element.scrollTop, element.scrollLeft]);
       element.addEventListener("scroll", scrolling, { passive: true });
     }
-    const root =
-      popup.ownerDocument.scrollingElement ??
-      popup.ownerDocument.documentElement;
-    windowPosition = [root.scrollTop, root.scrollLeft];
-    scrollView = popup.ownerDocument.defaultView;
-    scrollView?.addEventListener("scroll", windowScrolling, { passive: true });
+    scrollViews = [...new Set([...getScrollViews(reference), ...getScrollViews(popup)])];
+    for (const view of scrollViews) {
+      const root = view.document.scrollingElement ?? view.document.documentElement;
+      windowPositions.set(view.document, [root.scrollTop, root.scrollLeft]);
+      view.addEventListener("scroll", onWindowScroll, { passive: true });
+    }
   }
 
   watch(

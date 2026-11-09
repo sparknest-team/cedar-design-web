@@ -1,4 +1,4 @@
-import type { StyleVars } from '../style-provider'
+import type { StyleVars } from '../theme-provider'
 import defaultDark from './dark'
 import mapleDark from './maple-dark'
 import mapleLight from './maple-light'
@@ -34,6 +34,6 @@ const Themes = {
   maple: { light: mapleLight, dark: mapleDark },
 }
 
-export type { StyleVars } from '../style-provider'
+export type { StyleVars } from '../theme-provider'
 export { Themes }
 export default Themes

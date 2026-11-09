@@ -73,6 +73,7 @@ export default defineComponent({
               class={item.class}
               duration={item.duration}
               closable={item.closable}
+              closeButtonAriaLabel={item.closeButtonAriaLabel}
               showIcon={item.showIcon}
               resetOnUpdate={item.resetOnUpdate}
               v-slots={slots}

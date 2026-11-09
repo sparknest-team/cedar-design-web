@@ -1,0 +1,1 @@
+Connect Select combobox to its listbox and rendered active option using stable per-instance IDs. Distinguish keyboard activation from selected values. Model array/slot/virtual groups with named group owners, preserve layout and existing AutoComplete/Mention consumers. No public API changes.

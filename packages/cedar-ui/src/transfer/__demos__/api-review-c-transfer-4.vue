@@ -31,24 +31,6 @@
           :controls="__apiReview.controls"
           :record="__apiReview.record"
       /></template>
-      <template
-        v-if="__apiReview.slotEnabled['to-target-icon']"
-        #to-target-icon="__reviewSlot"
-        ><DemoReviewSlot
-          name="to-target-icon"
-          :context="__reviewSlot"
-          :controls="__apiReview.controls"
-          :record="__apiReview.record"
-      /></template>
-      <template
-        v-if="__apiReview.slotEnabled['to-source-icon']"
-        #to-source-icon="__reviewSlot"
-        ><DemoReviewSlot
-          name="to-source-icon"
-          :context="__reviewSlot"
-          :controls="__apiReview.controls"
-          :record="__apiReview.record"
-      /></template>
       <template v-if="__apiReview.slotEnabled['target']" #target="__reviewSlot"
         ><DemoReviewSlot
           name="target"

@@ -309,7 +309,7 @@ import '@cedar-design/icons-vue/style.css'
 | transition      | 名称切换动画时长（ms） | number \| string | 0      |
 | animation-class | 自定义切换动画类名     | string           | -      |
 
-### Icon-xxx Props
+### IconXxx Props
 
 | 属性            | 说明       | 类型                                       | 默认值  |
 | --------------- | ---------- | ------------------------------------------ | ------- |
@@ -334,7 +334,7 @@ import '@cedar-design/icons-vue/style.css'
 | ------- | -------------- |
 | default | 自定义默认内容 |
 
-### 类型定义
+## Types
 
 组件导出以下类型定义
 
@@ -342,18 +342,41 @@ import '@cedar-design/icons-vue/style.css'
 import type { IconProps, IconInstance } from "@cedar-design/ui";
 ```
 
-## 同源实现与平台边界
+## 使用说明
 
-两端各自保存完整源码，不引用公共核心，不共享组件实例或响应式状态；修改时同步维护两份实现。主体、Props、关键样式及配对测试纳入只读源码一致性检查，主题 token 和安装入口各自维护。
 
-只解析本应用已注册的图标；连续切换 name 会取消过期定时器，卸载后不再执行切换。各库注册前缀和历史 spin 类由本地适配保留，图标资源不跨库引用。
+
+只解析当前应用已注册的图标。连续切换 name 时只展示最新请求的图标，卸载后停止切换。
 
 两端 Icon 默认继承宿主字号。需要固定 20px 的场景请显式设置 size="20" 或 icon-size 变量；size 属性优先于变量，颜色默认继承宿主。
 
-### 动效变量
+## CSS Variables
 
-| Token | Default |
-| --- | --- |
-| `--c-icon-spin-duration` | `1s` |
+<!-- component-css-variables:start -->
 
-内置动效遵循 prefers-reduced-motion: reduce：保留内容与状态反馈，关闭装饰性旋转、扫光和波纹。Icon 名称切换直接显示最新值并取消未结束阶段，CSS与JS时长保持一致；自定义动画类由调用方负责适配。Ripple的时长与清理策略以Ripple组件文档为准，不将其历史250ms规则当作Icon的时长上限。
+通过以下变量定制组件外观。默认值随表中注明的主题或选择器条件变化；变量仅在对应的尺寸、变体和交互状态下生效。
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| 变量 | 默认值／条件 | 影响的样式 |
+| --- | --- | --- |
+| `--c-icon-size` | `inherit` | `font-size` |
+| `--c-icon-spin-duration` | `1s` | `animation` |
+
+</div>
+
+将覆盖设置在组件实际根节点或弹层真实挂载祖先上。例如给该元素添加下列 class，再按需替换变量值：
+
+```css
+.component-theme {
+  --c-icon-size: inherit;
+}
+```
+
+显式行内样式及直接写入同一 CSS 属性的 Props 优先于样式表默认值。Teleport 后，普通 CSS 变量按实际挂载位置继承；使用 ThemeProvider 时，请遵循其局部主题与弹层配置规则。局部定制请直接覆盖组件变量；仅修改后代的 system 变量不会重新计算从根继承的组件别名。内部变量不属于公共 API。
+
+<!-- component-css-variables:end -->
+
+### 动效
+
+内置动效遵循 prefers-reduced-motion: reduce：保留内容与状态反馈，关闭装饰性旋转、扫光和波纹。Icon 名称切换直接显示最新值并取消未结束阶段，CSS与JS时长保持一致；自定义动画类由调用方负责适配。自定义动画应遵循用户的减少动态效果偏好。

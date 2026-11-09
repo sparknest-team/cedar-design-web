@@ -37,6 +37,8 @@ export type {
   TableRowSelection,
   TableExpandable,
   TableDraggable,
+  TableComponents,
+  TableOperationColumn,
   TableChangeExtra,
 } from './types'
 export type { TableExtraColumnConfig } from './extra-column'

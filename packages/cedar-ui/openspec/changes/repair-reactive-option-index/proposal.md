@@ -1,0 +1,1 @@
+Rebuild Cascader field/panel option indices when strictness or loader changes. Refresh uncontrolled TreeSelect labels on node updates, preserve explicit labels for local and controlled values, without publishing model events. No new public API.

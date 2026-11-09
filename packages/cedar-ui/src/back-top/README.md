@@ -73,9 +73,15 @@ permalink: /components/back-top/
 
 <demo src="./__demos__/scheduler-lifecycle.vue"></demo>
 
+## 使用说明
+
+### 缓动与异常
+
+duration 必须是有限非负毫秒数；0 立即回顶。非法时长在开发环境由 Vue 属性校验提示，运行时沿用立即完成回退。easing 内置值只有 linear、quartOut、easeInOutCubic，非法名称提示后回退 quartOut。自定义函数输入为 0–1 进度：有限返回值夹取到 0–1，非有限或非数字返回值使用当前线性进度；不等待 Promise。函数抛出的错误原样交给调用环境报告，该帧不再安排后续动画，可以再次调用 scrollToTop 重试；不会伪造 click 成功或新增错误事件。
+
 ## API
 
-### Props
+### BackTop Props
 
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
@@ -91,35 +97,65 @@ permalink: /components/back-top/
 
 `popup-container=false` 时按钮绝对定位，父级需 `position: relative`。重复点击替换前次动画；切换目标、KeepAlive 停用和卸载都会清理监听与动画。系统开启减少动态效果时立即回顶，不改变横向滚动位置。
 
-### 事件 / 插槽 / 方法
+### BackTop Events / Slots / Methods
 
 - `click(event: MouseEvent)`：每次激活通知一次。
 - 默认插槽：文字、图标等非交互内容；根节点已是原生 button，不再嵌套 Button 或链接。
 - `scrollToTop()`：滚动当前目标，不额外触发 click。
 - 键盘：Tab 聚焦可见按钮，Enter / Space 激活；隐藏时不可聚焦。
 
-### 类型
+## Types
 
 ```ts
 import type { BackTopProps, BackTopInstance, BackTopTarget, BackTopEasing } from '@cedar-design/ui'
 ```
 
-### 样式变量
+### 导入与事件类型
 
-| Token | 默认值 |
-| --- | --- |
-| `--c-back-top-right` | `40px` |
-| `--c-back-top-bottom` | `40px` |
-| `--c-back-top-button-size` | `var(--c-sys-control-touch-target)` |
-| `--c-back-top-button-border-radius` | `50%` |
-| `--c-back-top-font-size` | `var(--c-sys-font-size-md)` |
-| `--c-back-top-icon-size` | `20px` |
-| `--c-back-top-background` | `var(--c-sys-color-surface-raised)` |
-| `--c-back-top-text-color` | `var(--c-sys-color-content-brand)` |
-| `--c-back-top-hover-background` | `var(--c-sys-color-state-hover)` |
-| `--c-back-top-focus-color` | `var(--c-sys-color-content-brand)` |
-| `--c-back-top-focus-width` | `2px` |
-| `--c-back-top-focus-offset` | `2px` |
-| `--c-back-top-z-index` | `var(--c-z-index-local-sticky)` |
+子入口的默认组件与子入口、根入口的命名组件是同一组件。Props 类型包含实际事件监听参数；事件仍是通知，不等待监听器返回的 Promise。仅使用文档列出的实例方法。
 
-预发布迁移：Cedar 的 `margin-right/bottom` → `right/bottom`、`button-size-width` → `button-size`、`button-size-font/icon` → `font-size/icon-size`、`button-bg/bg-hover/text-color` → `background/hover-background/text-color`（均带组件前缀）。Maple 默认动画改为 200ms，默认目标为页面。旧 BTween 任意曲线字符串改用上述枚举或函数；不保留兼容别名。
+```ts
+import BackTop, { BackTop as NamedBackTop } from '@cedar-design/ui/back-top'
+import { BackTop as RootBackTop } from '@cedar-design/ui'
+import type { BackTopProps, BackTopInstance } from '@cedar-design/ui'
+import type { BackTopProps as SubBackTopProps } from '@cedar-design/ui/back-top'
+const options: BackTopProps = { onClick: (event: MouseEvent) => event.preventDefault() }
+```
+
+## CSS Variables
+
+<!-- component-css-variables:start -->
+
+通过以下变量定制组件外观。默认值随表中注明的主题或选择器条件变化；变量仅在对应的尺寸、变体和交互状态下生效。
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| 变量 | 默认值／条件 | 影响的样式 |
+| --- | --- | --- |
+| `--c-back-top-background` | `var(--c-sys-color-surface-raised)` | `background` |
+| `--c-back-top-bottom` | `40px` | `bottom` |
+| `--c-back-top-button-border-radius` | `50%` | `border-radius` |
+| `--c-back-top-button-size` | `var(--c-sys-control-touch-target)` | `height`, `width` |
+| `--c-back-top-focus-color` | `var(--c-sys-color-content-brand)` | `outline` |
+| `--c-back-top-focus-offset` | `2px` | `outline-offset` |
+| `--c-back-top-focus-width` | `2px` | `outline` |
+| `--c-back-top-font-size` | `var(--c-sys-font-size-md)` | `font-size` |
+| `--c-back-top-hover-background` | `var(--c-sys-color-state-hover)` | `background` |
+| `--c-back-top-icon-size` | `20px` | `height`, `width` |
+| `--c-back-top-right` | `40px` | `right` |
+| `--c-back-top-text-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-back-top-z-index` | `var(--c-z-index-local-sticky)` | `z-index` |
+
+</div>
+
+将覆盖设置在组件实际根节点或弹层真实挂载祖先上。例如给该元素添加下列 class，再按需替换变量值：
+
+```css
+.component-theme {
+  --c-back-top-background: var(--c-sys-color-surface-raised);
+}
+```
+
+显式行内样式及直接写入同一 CSS 属性的 Props 优先于样式表默认值。Teleport 后，普通 CSS 变量按实际挂载位置继承；使用 ThemeProvider 时，请遵循其局部主题与弹层配置规则。局部定制请直接覆盖组件变量；仅修改后代的 system 变量不会重新计算从根继承的组件别名。内部变量不属于公共 API。
+
+<!-- component-css-variables:end -->

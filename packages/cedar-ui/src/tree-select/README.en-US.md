@@ -11,19 +11,11 @@ A tree-backed selection field with explicit search fields and controlled selecti
 
 Inherits source dir. Horizontal keys expand, enter children, return or collapse according to reading direction; vertical keys and Home/End keep logical order. Search uses the actual active match. Values and multiple-value arrays are not reversed. Portaled content retains source direction in custom containers.
 
-## Search migration
-
-filterable replaces allowSearch. The old object retainInputValue option is now the independent retain-input-value boolean. filterable enables search; retain-input-value only retains query text after selecting. Default single selection disables search and multiple selection enables it.
-
-Default local matching now searches label and ignores case. Restore the previous matching with search-fields=['value'] and case-sensitive=true. Multiple configured fields use OR matching. Custom filter-tree-node owns its matching rules. disableFilter bypasses built-in filtering.
-
 ## Basic examples
 
 ### Basic
 
 <demo src="./__demos__/basic.vue"></demo>
-
-### Api Review
 
 ## Data and options
 
@@ -33,15 +25,16 @@ Default local matching now searches label and ignores case. Restore the previous
 
 #### Configuration reference for this comparison
 
-| Configuration        | Purpose                                    | Related examples                                  |
-| -------------------- | ------------------------------------------ | ------------------------------------------------- |
-| `data`               | Data                                       | Search Matching, Retain the query after selecting |
-| `filterable`         | Whether to allow searching                 | Search Matching, Retain the query after selecting |
-| `case-sensitive`     | Case-sensitive built-in search             | Search Matching                                   |
-| `multiple`           | Whether to support multiple selection      | Retain the query after selecting                  |
-| `retain-input-value` | Keep search text after selecting an option | Retain the query after selecting                  |
+| Configuration | Purpose | Related examples |
+| -------------------- | ---------------------- | ------------------------------------------------ |
+| `data` | Data | Search Matching, Retain the query after selecting |
+| `filterable` | Whether to allow searching | Search Matching, Retain the query after selecting |
+| `case-sensitive` | Case-sensitive built-in search | Search Matching |
+| `multiple` | Whether to support multiple selection | Retain the query after selecting |
+| `retain-input-value` | Keep search text after selecting an option | Retain the query after selecting |
 
 <!-- demo-config-notes:end -->
+
 
 <demo src="./__demos__/search-matching.vue"></demo>
 
@@ -61,14 +54,15 @@ The candidate `data` prop accepts an array or `(query, { signal }) => array/Prom
 
 #### Configuration reference for this comparison
 
-| Configuration         | Purpose                                                                                                                          | Related examples    |
-| --------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| `data`                | Data                                                                                                                             | Passthrough Options |
-| `tree-props`          | Can accept Props of all [Tree](/vue/component/tree) components                                                                   | Passthrough Options |
+| Configuration | Purpose | Related examples |
+| --------------------- | -------------------------------------------------------------------------------------- | -------------------- |
+| `data` | Data | Passthrough Options |
+| `tree-props` | Can accept Props of all [Tree](/vue/component/tree) components | Passthrough Options |
 | `open-trigger-target` | Pointer opening target: the whole field or only the suffix icon. Explicit keyboard opening and controlled open remain available. | Copying and editing |
-| `filterable`          | Whether to allow searching                                                                                                       | Copying and editing |
+| `filterable` | Whether to allow searching | Copying and editing |
 
 <!-- demo-config-notes:end -->
+
 
 <demo src="./__demos__/passthrough-options.vue"></demo>
 
@@ -78,96 +72,109 @@ With open-trigger-target="icon", use the input area to edit or copy and the suff
 
 <demo src="./__demos__/open-trigger-target.en-US.vue"></demo>
 
-### TreeSelect Props
-
-| Prop                  | Description                                                                                                                      | Type                                                      | Default                       |
-| --------------------- | -------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- | ----------------------------- |
-| `open-trigger-target` | Pointer opening target: the whole field or only the suffix icon. Explicit keyboard opening and controlled open remain available. | `'field' \| 'icon'`                                       | `'field'`                     |
-| model-value           | Value                                                                                                                            | string / number / array                                   | undefined                     |
-| data                  | Data                                                                                                                             | TreeNodeData[] / `(query, { signal }) => Array / Promise` | `undefined`                   |
-| multiple              | Whether to support multiple selection                                                                                            | boolean                                                   | false                         |
-| filterable            | Whether to allow searching                                                                                                       | boolean                                                   | Single: false; multiple: true |
-| retain-input-value    | Keep search text after selecting an option                                                                                       | boolean                                                   | false                         |
-| case-sensitive        | Case-sensitive built-in search                                                                                                   | boolean                                                   | false                         |
-| filter-tree-node      | Custom node filter function                                                                                                      | Function                                                  | undefined                     |
-| tree-props            | Can accept Props of all [Tree](/vue/component/tree) components                                                                   | TreeProps                                                 | undefined                     |
-
-### TreeSelect Events
-
-| Event                                  | Description                              | Arguments     |
-| -------------------------------------- | ---------------------------------------- | ------------- |
-| update:modelValue                      | Request a selected business value update | value         |
-| change                                 | Committed selected value changes         | value         |
-| search                                 | Search text changes                      | text: string  |
-| update:inputValue / input-value-change | Request input text update                | text: string  |
-| update:open / open-change              | Panel visibility changes                 | open: boolean |
-| clear                                  | Clear selection                          | None          |
-
-### TreeSelect Slots
-
-| Slot    | Description            |
-| ------- | ---------------------- |
-| default | Custom default content |
-
-### Shared field loading
-
-`loading` displays the shared field indicator. `loading-mode` is `default` (indicator) or `line` (an indeterminate bottom line); it defaults to `default`. Rendering belongs to FieldDecorator. Loading does not implicitly disable editing or change readonly. Set those states separately.
-
 ## API
 
 ### Empty values and reading placeholders
 
-`empty-values` recognizes empty data; `empty-value` keeps existing clear output. `empty-text` defaults to `'-'` under `read-pretty`, with Field > FormItem > Form precedence and custom read slots first. With explicit empty-values, built-in required uses the policy; custom validators receive original data. See the [shared guide](/en/guide/empty-values/).
+`empty-values` recognizes empty data; `empty-value` keeps existing clear output. `empty-text` defaults to `'-'` under `read-pretty`, with Field > FormItem > Form precedence and custom read slots first. With explicit `empty-values`, built-in required uses the policy; custom validators receive original data. See the [shared guide](/en/guide/empty-values/).
 
-| Prop         | Type               | Default and scope                                                           |
-| ------------ | ------------------ | --------------------------------------------------------------------------- |
+| Prop | Type | Default and scope |
+| ------------ | ------------------ | ----------------------------------------------------- |
 | empty-values | readonly unknown[] | Field > FormItem > Form > component-family default; replaces the whole list |
-| empty-text   | string             | Field > FormItem > Form > '-'; explicit '' is valid                         |
+| empty-text | string | Field > FormItem > Form > '-'; explicit '' is valid |
 
 These props belong to field presentation; pure panels do not gain reading mode. Form and FormItem provide inherited settings. The existing empty-value type and clear fallback remain component-specific.
 
 ### TreeSelect Props
 
-| Prop                  | Description                                                                                                                      | Type                                                      | Default                       |
-| --------------------- | -------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- | ----------------------------- |
-| `open-trigger-target` | Pointer opening target: the whole field or only the suffix icon. Explicit keyboard opening and controlled open remain available. | `'field' \| 'icon'`                                       | `'field'`                     |
-| model-value           | Value                                                                                                                            | string / number / array                                   | undefined                     |
-| data                  | Data                                                                                                                             | TreeNodeData[] / `(query, { signal }) => Array / Promise` | `undefined`                   |
-| multiple              | Whether to support multiple selection                                                                                            | boolean                                                   | false                         |
-| filterable            | Whether to allow searching                                                                                                       | boolean                                                   | Single: false; multiple: true |
-| retain-input-value    | Keep search text after selecting an option                                                                                       | boolean                                                   | false                         |
-| case-sensitive        | Case-sensitive built-in search                                                                                                   | boolean                                                   | false                         |
-| filter-tree-node      | Custom node filter function                                                                                                      | Function                                                  | undefined                     |
-| tree-props            | Can accept Props of all [Tree](/vue/component/tree) components                                                                   | TreeProps                                                 | undefined                     |
-
-`disabled`/`readonly` accept explicit field values and Form/FormItem inheritance. Confirmation locks editing. Failed validation preserves drafts; reset closes the popup and discards unfinished commits.
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| model-value | TreeSelectValue | undefined | Controlled value: node identity, label value, homogeneous arrays or null. |
+| default-value | TreeSelectValue | undefined | Uncontrolled initial value, read only at creation. |
+| data | readonly TreeNodeData[] / `OptionsLoader<TreeNodeData>` | undefined | Root candidate array or (query, { signal }) loader. |
+| multiple | boolean | false | Enable multiple selection and determine default searching when filterable is omitted. |
+| label-in-value | boolean | false | Publish label-value objects; an explicit label takes precedence over the candidate name. |
+| tree-checkable | boolean | false | Use tree checkboxes and a multiple-value model; this flag alone does not enable searching. |
+| tree-check-strictly | boolean | false | Check parent and child nodes independently. |
+| tree-checked-strategy | 'all' / 'parent' / 'child' | 'all' | Display strategy for linked checks, following Tree rules. |
+| filterable | boolean | undefined | Explicit values take precedence; the default follows multiple, not tree-checkable. |
+| retain-input-value | boolean | false | Retain search text after selection. |
+| input-value | string | undefined | Controlled search text, independent of the selected value. |
+| default-input-value | string | '' | Initial uncontrolled search text. |
+| case-sensitive | boolean | false | Case-sensitive built-in node searching; custom callbacks take precedence. |
+| search-fields | readonly OptionSearchField[]<br>`OptionSearchField: 'label' \| 'value'` | ['label'] | Built-in search fields, mapped through field-names. |
+| filter-tree-node | (searchKey, nodeData) => boolean | undefined | Custom node filtering callback. |
+| disable-filter | boolean | false | Disable internal node filtering for data already filtered by the application. |
+| field-names | TreeFieldNames | undefined | Business node field mapping; identities must be unique across the tree. |
+| load-more | (nodeData) => `Promise<void>` | undefined | Lazy node loading using the Tree loading protocol. |
+| fallback-option | boolean / function | true | Synchronous node fallback for missing candidates; false hides unmatched values. |
+| selectable | boolean / leaf / function | true | Node selection policy; leaf allows only leaf nodes. |
+| tree-props | `Partial<TreeProps>` | undefined | Internal tree configuration; managed top-level fields take precedence; TreeSelectTreeOptions checks the boundary. |
+| trigger-props | `Partial<TriggerProps>` | undefined | Candidate popup configuration; top-level opening and mounting policies take precedence. |
+| dropdown-style | CSSProperties | undefined | Candidate content style. |
+| dropdown-class-name | string / string[] | undefined | Additional candidate content classes. |
+| scrollbar | boolean / ScrollbarProps | true | Candidate-area scrollbar configuration. |
+| show-header-on-empty | boolean | false | Retain header content when candidates are empty. |
+| show-footer-on-empty | boolean | false | Retain footer content when candidates are empty. |
+| placeholder | string | undefined | Placeholder for the default selection field. |
+| size | ComponentSize<br>`'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | undefined | Selection field size, inherited from group and form when omitted. |
+| border | boolean | true | The default field uses filled; false switches to standard. |
+| max-tag-count | number | undefined | Maximum displayed selected tags; omission or 0 leaves the count unlimited. |
+| disabled | boolean | undefined | Disable editing; inherited from the form when omitted. |
+| readonly | boolean | undefined | Readonly, inherited from the form when omitted; distinct from pure reading. |
+| error | boolean | undefined | Error state, inherited from the form when omitted. |
+| loading | boolean | false | Field and candidate waiting feedback; pauses selection, clearing, removal and confirmation while retaining search and closing. |
+| loading-mode | 'default' / 'line' | 'default' | Field indicator or bottom loading line; does not change the popup loader scope. |
+| clearable | boolean | false | Allow clearing; deferred modes first update the draft. |
+| empty-value | TreeSelectProps['emptyValue'] | undefined | Clear result override: node value, array, null or factory; omission preserves existing rules. |
+| empty-values | readonly unknown[] | undefined | Empty-value recognition, inherited through field, FormItem and Form. |
+| empty-text | string | undefined | Default empty reading text; defaults to a dash after inheritance; custom read takes precedence. |
+| read-pretty | boolean | undefined | Common pure-reading state, inherited from the form when omitted. |
+| edit-mode | direct / click / dblclick | undefined | Editing entry, inherited from the form when omitted, otherwise direct. |
+| before-commit | BeforeFieldCommit | undefined | Before confirmation, calls ({ value, previousValue }, done, { signal }); complete with a boolean, Promise or done; synchronous undefined waits for done. |
+| open | boolean | undefined | Controlled candidate popup or deferred editor state. |
+| default-open | boolean | false | Initial uncontrolled open state. |
+| popup-container | PopupContainer | undefined | Top-level mount target: selector, HTMLElement or false. |
+| open-trigger-target | 'field' / 'icon' | 'field' | Open editing from the field or only its icon; keyboard entry remains available. |
 
 ### TreeSelect Events
 
-| Event                                  | Description                              | Arguments     |
-| -------------------------------------- | ---------------------------------------- | ------------- |
-| update:modelValue                      | Request a selected business value update | value         |
-| change                                 | Committed selected value changes         | value         |
-| search                                 | Search text changes                      | text: string  |
-| update:inputValue / input-value-change | Request input text update                | text: string  |
-| update:open / open-change              | Panel visibility changes                 | open: boolean |
-| clear                                  | Clear selection                          | None          |
+| Event | Arguments | Description |
+| --- | --- | --- |
+| update:modelValue / change | TreeSelectValue / undefined | Selected value publication; deferred drafts do not trigger it. |
+| update:inputValue / input-value-change / search | string | Input text and search notifications. |
+| update:open / open-change | boolean | Candidate popup or editor open notifications. |
+| clear | — | Clear action notification; deferred modes still require confirmation. |
+| load-error | error: unknown, node?: TreeNodeData | The current root data source or node loadMore failed; node failures include the original node. Listener Promises are not awaited. |
 
 ### TreeSelect Slots
 
-| Slot    | Description            |
-| ------- | ---------------------- |
-| default | Custom default content |
+| Slot | Prop | Description |
+| --- | --- | --- |
+| trigger | — | Replace the default field trigger content. |
+| read | TreeSelectReadScope | Common reading { value, text }; text is the formatted value and is empty for empty values; empty-text affects default reading only. |
+| label | { data: SelectionFieldItem } | Selected item content in the default field. |
+| selected / prefix / suffix | — | Selected area, prefix and suffix of the default field, consistent with Select. |
+| clear-icon | { clear(event?) } | Custom clear node; call clear for the standard clear action. |
+| arrow-icon | { focus, menuOpen } | Default field arrow with real focus and open state. |
+| loading-icon / search-icon | — | Default field loading or search icon; line mode does not show a loading icon. |
+| header / footer | — | Candidate content header and footer; corresponding props control visibility when empty. |
+| loader / empty | — | Candidate panel waiting and empty content; loader is separate from the field loading-icon. |
+| tree-slot-label / tree-slot-extra | node: TreeNodeData, status: TreeSelectNodeStatus | Forward Tree node label and extra content; node data is the first argument and status the second. |
+| tree-slot-* | Parameters of the corresponding Tree slot | Other Tree slots are forwarded using the corresponding protocol. |
 
-## Type definitions
+### TreeSelect Methods
 
-The component exports the following types
+| Method | Returns | Description |
+| --- | --- | --- |
+| refresh() | `Promise<void>` | Reload the current data source without opening the editor. |
+| focus() / blur() | void | Operate the current default field input; deferred modes use the common editing entry. |
 
-```ts
-import type { TreeSelectProps } from "@cedar-design/ui";
-```
+### Public types
 
-### Form field presentation and confirmation
+TreeSelectProps is inferred from actual props. TreeSelectValue, TreeSelectLabelValue, TreeSelectReadScope, TreeSelectNodeStatus, TreeSelectEmits, TreeSelectSlots and TreeSelectExpose are available from the root and tree-select entry points. There is no default editor replacement slot; use tree-slot-label for node content.
+
+### Editing and confirmation
 
 Cedar uses edit-mode="click" / "dblclick" to open an editor popup near the field. Enter/F2 also opens it; cancel/Escape discards the draft, and confirmation commits it. readPretty is an independent reading setting, separate from readonly and disabled.
 
@@ -176,6 +183,8 @@ Cedar uses edit-mode="click" / "dblclick" to open an editor popup near the field
 `click`/`dblclick` use Form's editing inheritance. Hover/focus shows an edit icon that opens editing directly. disabled, readonly and readPretty hide edit entries. Panel clicks change only the draft.
 
 While open, arrows navigate visible enabled nodes; Left/Right collapse/expand or move to parents/children; Home/End reach first/last nodes. Enter selects/checks the current node, or toggles an unselectable branch. Search prioritizes matching nodes; multiple selection uses Tree checking rules. Esc first closes the panel, retaining the draft and restoring input focus. With the panel closed, Enter saves and Esc cancels editing. Compare AutoComplete/PeopleSelect in Form's unified field-presentation examples.
+
+Checkboxes in a multiple-selection tree do not create separate Tab stops. Pointer selection retains input focus, and nodes expose checked and mixed states through `aria-checked`.
 
 Duplicate expansion requests for the same asynchronously loaded node are merged. Replacing nodes, closing editors or resetting Form invalidates old requests so they cannot expand/check nodes. Arrows can enter loaded children immediately. Query/candidate changes clear old filters before Enter can choose stale options. Field confirmation still validates before asynchronous commit.
 
@@ -187,14 +196,57 @@ Independent Tree state uses `selectedValues/defaultSelectedValues`, `checkedValu
 
 ### Search configuration
 
-Use `filterable` to enable search: single defaults false, multiple true. `retain-input-value` separately controls whether selection retains the search query, default false.
+Use `filterable` for searching; omission follows only `multiple`. Enabling `tree-checkable` alone creates a `multiple`-value model without enabling searching; set `filterable` explicitly. `retain-input-value` independently retains search text after selection and defaults to false.
 
-Migration: `allow-search` becomes `filterable`; `{ retainInputValue: true }` becomes `filterable` plus `retain-input-value`. Old entries are removed without compatibility aliases and require a major release.
+Replace the old `allow-search` with `filterable`. Replace `{ retainInputValue: true }` with `filterable` plus `retain-input-value`.
 
-### Built-in search fields
+### Search fields
 
 `searchFields` / `search-fields` is a readonly `('label' | 'value')[]`, defaulting to `['label']`. Multiple fields use OR matching, case-insensitive by default. `['value', 'label']` searches codes and names; fieldNames maps semantic fields to business fields. An empty array matches no items for a nonempty query. Values are compared as strings; object traversal, object values and pinyin matching require a custom callback. A custom callback takes precedence and decides case handling itself. Remote results use the existing protocol for disabling local filtering. Cascader retains path semantics and checks the configured fields on each path node.
 
 ## Configuring the cleared value
 
-`empty-value` / `emptyValue` sets the model value produced by clearing. It accepts a value in the component model type or a zero-argument factory. Omission preserves the existing default; use `() => undefined` to distinguish omission from returning undefined. Arrays are shallow-copied on every clear; selected items that cannot be cleared remain. It does not redefine emptiness, alter Form reset defaults or treat 0/false as universally empty.
+`empty-value` defines the output of an existing clear action. Omission preserves the component fallback; supported types remain component-specific. It does not change empty-values recognition or Form reset defaults.
+
+Refresh can retry the component-owned asynchronous option source before the editor opens, using the existing AbortSignal, loading, and load-error protocol without opening the editor; static arrays do not create extra requests.
+
+### Input and open button
+
+The native combobox and separate open button both announce aria-haspopup=tree. While the panel is visible, the same aria-controls points to the actual tree. Expanded state stays synchronized; disabled/readonly and open-trigger-target rules remain in force.
+
+### Selection actions during loading
+
+While manual loading or the current candidate request is active, selection fields preserve existing values and pause selection, clearing and tag removal. Blocked actions neither notify nor submit a model. Search text remains editable and disabled/readonly are not changed; set them separately to prevent searching.
+
+Deferred editor clearing and confirmation are unavailable while loading; cancellation and closing remain available. Actions return to their normal state after both the manual flag and current request finish, still respecting disabled options. Loading on free-text fields such as Input and AutoComplete continues to allow text editing and clearing.
+
+## CSS Variables
+
+<!-- component-css-variables:start -->
+
+Use these variables to customize the component. Defaults may vary by the selector condition shown. Each variable applies to the corresponding size, variant and interaction states.
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| Variable | Default / condition | Affected styles |
+| --- | --- | --- |
+| `--c-tree-select-highlight-font-weight` | `var(--c-font-weight-500)` | `font-weight` |
+| `--c-tree-select-option-active-background` | `var(--c-color-fill-2)` | `background` |
+| `--c-tree-select-option-radius` | `var(--c-sys-radius-sm)` | `border-radius` |
+| `--c-tree-select-popup-padding-left` | `var(--c-spacing-5)` | `padding-inline-start` |
+| `--c-tree-select-popup-padding-right` | `var(--c-spacing-2)` | `padding-inline-end` |
+| `--c-tree-select-popup-padding-vertical` | `var(--c-spacing-2)` | `padding` |
+
+</div>
+
+Apply overrides to the rendered component root or the actual popup ancestor. For example, add the following class to that element and replace the value as needed:
+
+```css
+.component-theme {
+  --c-tree-select-option-active-background: var(--c-color-fill-2);
+}
+```
+
+Explicit inline styles and props that write the same CSS property take precedence over stylesheet defaults. After Teleport, ordinary CSS variables inherit from the actual mount location. When using ThemeProvider, follow its local-theme and popup configuration rules. Override the component variable directly for local styling; root-level aliases are not recalculated merely because a descendant system variable changes. Internal variables are not public APIs.
+
+<!-- component-css-variables:end -->

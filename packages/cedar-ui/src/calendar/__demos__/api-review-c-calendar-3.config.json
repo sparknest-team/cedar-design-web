@@ -99,7 +99,8 @@
   "methodNames": [],
   "events": [
     "change",
-    "panel-change"
+    "panel-change",
+    "update:mode"
   ],
   "slotNames": [
     "header"

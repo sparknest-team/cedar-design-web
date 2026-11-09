@@ -1,0 +1,4 @@
+- [x] Reproduce deferred source loss and initial open reset in both platforms.
+- [x] Propagate private source and update public optional Event types.
+- [x] Add value-only/custom tuple, async ownership and initial state tests.
+- [x] Validate consumers, public types, docs, browser and all required gates.

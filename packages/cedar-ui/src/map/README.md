@@ -8,7 +8,7 @@ permalink: /components/map/
 
 ### 基础用法
 
-无需登录或配置密钥即可运行。点击按钮更新本地位置模型；未接入 SDK 时显示降级提示并禁用搜索，不请求定位权限。真实地图的选点与搜索需要应用接入 SDK 适配器后再验收。
+无需登录或配置密钥即可运行示例。点击按钮更新本地位置模型；未接入可用 SDK 时显示降级提示并禁用搜索，不请求定位权限。
 
 <demo src="./__demos__/basic.vue"></demo>
 
@@ -16,9 +16,9 @@ permalink: /components/map/
 
 ### 特殊说明
 
-地图SDK正在迁移：当前源码未提供原map-core运行时导入；MapService、SearchService、LngLat的类型声明不等于可用依赖，缺任一依赖时初始化会进入降级显示，不代表真实地图初始化成功。恢复正式适配器／第三方生命周期契约前，不将降级渲染测试当地图服务验收。
+当前未提供原 `map-core` 运行时依赖；缺少 MapService、SearchService 或 LngLat 的可用实现时，组件显示降级状态。对应类型声明不能替代运行时依赖。
 
-内部300ms中心更新和500ms选点等待用于抑制程序化moveend反向解析，不是CSS动画完成时长或公开CSS变量；不应通过覆盖视觉duration Token控制它们。真实SDK下的计时取消、停用／卸载、旧回调／异步结果及监听释放尚待独立验证；MapSelect地址回填和定位也不由缺SDK测试覆盖。
+地图交互的业务等待不通过 CSS 动效变量控制。
 
 <demo src="./__demos__/auth.vue"></demo>
 
@@ -49,37 +49,62 @@ permalink: /components/map/
 
 | 属性                    | 说明                                         | 类型                                         | 默认值           |
 | ----------------------- | -------------------------------------------- | -------------------------------------------- | ---------------- |
-| model-value(**v-model**) | 地图的初始值，表示所选位置的信息。           | `Object`                                     | -                |
+| model-value(**v-model**) | 受控位置模型，组件不修改传入对象。           | `Object`                                     | -                |
 | default-value            | 用来设置默认地图中心点                       | `{ [key in valueKeyAlias[keys]]: any }`      | -                |
-| driver                  | `Fetch.genDriiver`的返回值                   | `Driver`                                     | `-`              |
-| fetch                   | `Fetch.genFetch`的返回值                     | `CoreService`                                | `-`              |
+| driver                  | SDK 驱动对象                   | `object`                                     | `-`              |
+| fetch                   | 带 get/post 的服务对象                     | `MapFetch`                                | `-`              |
 | geocoder-url             | geocoderUrl接口路径                          | `string`                                     | `-`              |
-| geocoder-handler         | 用于处理地图编码服务的响应。                 | `(longitude: number, latitude: number)=>{})` | -                |
+| geocoder-handler         | 用于处理地图编码服务的响应。                 | `MapGeocoderHandler` | -                |
 | base-path                | 地图的基础路径，配置获取地图数据的基础 URL。 | `String`                                     | `'/pe/powerpro'` |
 | is-international         | 指示地图是否为谷歌地图。                     | `Boolean`                                    | -                |
+| popup-container | MapSelect 对话框挂载容器；Map 本身不使用 | `PopupContainer` | 库默认 |
 | show-name                | 是否展示悬浮框名称                           | `boolean`                                    | `false`          |
 | show-locate-me-button      | 是否展示定位到当前位置按钮                   | `boolean`                                    | `false`          |
 | show-edit-address-button   | 是否展示修改地点悬浮按钮                     | `boolean`                                    | `false`          |
-| show-map-tips             | 是否展示地图上方tips                         | `boolean`                                    | `false`          |
-| map-type                 | 要显示的地图类型。                           | `'qqmaps'\|'bmapGL'\|'amaps'`                | `'amaps'`        |
+| show-map-tips             | 是否展示地图上方tips                         | `boolean`                                    | `true`          |
+| map-type                 | 要显示的地图类型。                           | `'qqmaps'\|'google'\|'amaps'`                | `'qqmaps'`        |
 | enable-gis-search         | 是否启用gis搜索(**开启时`fetch`为必传**)     | `boolean`                                    | `false`          |
 | value-key-scope           | 一个字符串数组，表示要在地图上显示的值列表。 | `Array`                                      | `valueKeyScope`  |
 | value-key-alias           | 一个对象，表示地图键到值的映射关系。         | `Object`                                     | `valueKeyAlias`  |
 
+地图程序性移动共用更新保护；较早的保护计时不会提前结束较新的移动。连续选择地点时，较早的地点详情或解析结果不会覆盖后一次选择。 连续移动地图时，仅最新的逆地址解析结果可以提交；父组件更改位置或卸载会使旧解析失效。 初始化等待期间卸载后不会继续创建地图或处理初始化解析结果。 初始化未完成时的模型更新不会重复创建地图，完成后地图中心同步最新模型。
+
 ### MapSelect Props
 
+继承 Map Props，另有：
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| disabled | 禁用触发和清空 | `boolean` | `false` |
+| clearable | 显示清空按钮 | `boolean` | `false` |
 | map-style | 直接设置到地图上面的style，可以设置地图的高度。 | `object` | `{ height: '300px'}` |
 
 ### Map Events
 
 | 事件名          | 说明                       | 参数                      |
 | --------------- | -------------------------- | ------------------------- |
-| change          | 当地址发生变化时触发       | `(value: ModelValueType)` |
-| init            | 初始化地图完成时触发       | `(value: ModelValueType)` |
+| change          | 位置变更通知 | `(scopedValue, fullValue)` |
+| init            | 初始化地图完成时触发 | `(initialValue, completedValue)` |
 | loading:address | 选择地点，地址解析中触发   | `-`                       |
 | loaded:address  | 选择地点，地址解析完成触发 | `-`                       |
+| update:modelValue | 提出新的位置模型 | 新模型对象 |
 
-## 类型定义
+### MapSelect Events
+
+| 事件名 | 说明 | 参数 |
+| --- | --- | --- |
+| `error` | 当前逆地址解析请求失败 | 原始错误 `unknown` |
+| `clear` | 请求清空位置 | 无 |
+| `change` | 提出位置变化 | `(scopedValue, fullValue)` |
+| `init` | 转发地图初始化 | `(initialValue, completedValue)` |
+| `update:modelValue` | 提出包含现有其他字段的新模型 | 新模型对象 |
+
+`model-value` 由父组件持有；选择或解析结果通过 `update:modelValue` 提出新对象，父组件接受后更新显示。旧请求、停用或卸载后的结果不会提交。
+
+
+`geocoder-handler` 接收数字经度、纬度，可同步或异步返回含 `address`、`poi`、`area_code`、`country_code`、`city`、`country` 的对象；它优先于 `fetch`。否则逆地址请求使用 `geocoder-url`，未指定时根据 `map-type` 和 `base-path` 生成默认路径；`fetch.get` 应返回含 `isValid()` 和 `data` 的响应。MapSelect 的降级解析会响应别名和服务配置变化；0 是有效坐标。SDK 内部服务运行时重配置仍需在 SDK 恢复后验证。根入口和 `map` 子入口导出 `MapProps`、`MapSelectProps`、`MapFetch`、`MapGeocoderHandler`、`MapGeocoderResult` 及组件实例类型。地图 SDK 不随当前构建提供，未配置时地图交互不可用。
+
+## Types
 
 ### valueKeyAlias
 
@@ -124,3 +149,63 @@ interface ModelValueType {
 ```ts
 import type { MapProps } from '@cedar-design/ui'
 ```
+
+## CSS Variables
+
+<!-- component-css-variables:start -->
+
+通过以下变量定制组件外观。默认值随表中注明的主题或选择器条件变化；变量仅在对应的尺寸、变体和交互状态下生效。
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| 变量 | 默认值／条件 | 影响的样式 |
+| --- | --- | --- |
+| `--c-map-locate-me-bg` | `var(--c-color-bg-white)` | `background` |
+| `--c-map-locate-me-bottom` | `var(--c-spacing-10)` | `bottom` |
+| `--c-map-locate-me-icon-size` | `18px` | `height`, `width` |
+| `--c-map-locate-me-left` | `var(--c-spacing-6)` | `left` |
+| `--c-map-locate-me-shadow-blur` | `var(--c-spacing-2)` | `box-shadow` |
+| `--c-map-locate-me-shadow-color` | `rgb(var(--c-gray-10))` | `box-shadow` |
+| `--c-map-locate-me-size` | `var(--c-size-6)` | `height`, `width` |
+| `--c-map-poi-address-color` | `var(--c-color-text-3)` | `color`, `stroke` |
+| `--c-map-poi-address-font-size` | `var(--c-font-size-body-1)` | `font-size` |
+| `--c-map-poi-bg` | `rgb(var(--c-gray-10))` | `background-color` |
+| `--c-map-poi-border-radius` | `var(--c-size-25)` | `border-radius` |
+| `--c-map-poi-edit-margin-left` | `var(--c-spacing-2)` | `margin-inline-start` |
+| `--c-map-poi-name-color` | `var(--c-color-white)` | `color` |
+| `--c-map-poi-name-font-size` | `var(--c-font-size-body-3)` | `font-size` |
+| `--c-map-poi-padding-x` | `var(--c-spacing-9)` | `padding` |
+| `--c-map-poi-padding-y` | `var(--c-spacing-5)` | `padding` |
+| `--c-map-poi-translate-y` | `-7px` | `transform` |
+| `--c-map-position-current-right` | `var(--c-size-10)` | `right` |
+| `--c-map-position-current-size` | `var(--c-size-6)` | `height`, `width` |
+| `--c-map-position-current-top` | `var(--c-size-25)` | `top` |
+| `--c-map-position-dot-margin-left` | `calc(-1 * var(--c-spacing-6))` | `margin-left` |
+| `--c-map-position-dot-margin-top` | `calc(-1 * var(--c-size-6))` | `margin-top` |
+| `--c-map-position-dot-size` | `var(--c-size-6)` | `height`, `width` |
+| `--c-map-search-box-padding-x` | `var(--c-spacing-6)` | `padding` |
+| `--c-map-search-box-padding-y` | `7px` | `padding` |
+| `--c-map-search-empty-padding` | `var(--c-spacing-8)` | `padding` |
+| `--c-map-search-item-address-color` | `var(--c-color-text-3)` | `color` |
+| `--c-map-search-item-name-color` | `var(--c-color-text-1)` | `color` |
+| `--c-map-search-item-padding-x` | `var(--c-spacing-6)` | `padding` |
+| `--c-map-search-item-padding-y` | `var(--c-spacing-4)` | `padding` |
+| `--c-map-search-item-selected-bg` | `var(--c-color-fill-1)` | `background-color` |
+| `--c-map-search-margin` | `var(--c-spacing-9)` | `margin` |
+| `--c-map-search-width` | `230px` | `width` |
+| `--c-map-tips-color` | `var(--c-color-text-3)` | `color` |
+| `--c-map-tips-padding-y` | `var(--c-spacing-5)` | `padding` |
+
+</div>
+
+将覆盖设置在组件实际根节点或弹层真实挂载祖先上。例如给该元素添加下列 class，再按需替换变量值：
+
+```css
+.component-theme {
+  --c-map-locate-me-icon-size: 18px;
+}
+```
+
+显式行内样式及直接写入同一 CSS 属性的 Props 优先于样式表默认值。Teleport 后，普通 CSS 变量按实际挂载位置继承；使用 ThemeProvider 时，请遵循其局部主题与弹层配置规则。局部定制请直接覆盖组件变量；仅修改后代的 system 变量不会重新计算从根继承的组件别名。内部变量不属于公共 API。
+
+<!-- component-css-variables:end -->

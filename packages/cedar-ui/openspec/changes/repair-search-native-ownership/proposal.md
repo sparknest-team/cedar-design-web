@@ -1,0 +1,3 @@
+# Search native ownership and loading
+
+Keep one accessible keyword editor and one successful named native form control across cached fullscreen history. Real active input IDs and visible label associations follow the editor; the reference retains native form values and becomes readonly while popup editing. Explicit form metadata associates popup constraints with that form. Render manual loading in direct/read presentations without collecting notification Promises. Restore Maple named Search entry; reconcile types/docs and private same-source presentation. Preserve platform layouts and standard native metadata. Input accepts forwarded aria-busy when no internal busy state overrides it; no additional indicator is implied by metadata alone.

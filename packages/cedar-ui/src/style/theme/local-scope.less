@@ -1,0 +1,5 @@
+// Re-evaluate token aliases at explicit theme boundaries, including Teleport roots.
+:where([data-c-theme]) { &:extend(:root); }
+:where([data-c-theme="dark"]) { &:extend(:root[cedar-theme="dark"]); }
+
+:where([data-c-theme]) { color-scheme: var(--c-color-scheme); }

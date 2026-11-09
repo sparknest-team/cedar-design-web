@@ -1,0 +1,3 @@
+- [x] Reproduce invalid empty model writes, missing diagnostics and dropped arrow scope on both brands.
+- [x] Repair boundaries and public types without changing valid selection/loading contracts.
+- [x] Correct both API tables and verify affected consumers, browser, types and source parity.

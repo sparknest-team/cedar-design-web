@@ -1,4 +1,5 @@
-import { StyleProvider, Themes } from '@cedar-design/ui'
+import { ref } from 'vue'
+export const docsTheme = ref<'light' | 'dark'>('light')
 
 export type CedarDocsTheme = 'lightTheme' | 'darkTheme'
 
@@ -8,10 +9,6 @@ const THEME_NAMES: readonly CedarDocsTheme[] = [
   'darkTheme',
 ]
 
-const themeMap = {
-  lightTheme: Themes.default.light,
-  darkTheme: Themes.default.dark,
-} satisfies Record<CedarDocsTheme, typeof Themes.default.light>
 
 function isDocsTheme(value: string | null): value is CedarDocsTheme {
   return value !== null && THEME_NAMES.includes(value as CedarDocsTheme)
@@ -28,7 +25,7 @@ export function getDocsTheme(): CedarDocsTheme {
 }
 
 export function setDocsTheme(theme: CedarDocsTheme, syncColorMode = true) {
-  StyleProvider.setStyleVars(themeMap[theme])
+  docsTheme.value = isDark(theme) ? 'dark' : 'light'
   window.localStorage.setItem(STORAGE_KEY, theme)
   document.documentElement.dataset.cedarDocsTheme = theme
 

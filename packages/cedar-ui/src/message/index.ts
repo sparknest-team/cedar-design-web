@@ -1,16 +1,10 @@
-import type { App, AppContext } from "vue";
-import {
-  createVNode,
-  defineComponent,
-  h,
-  nextTick,
-  reactive,
-  render,
-} from "vue";
-import { getPrefixCls } from "../_utils/global-config";
-import { resolvePopupContainer } from "../_utils/popup-container";
-import MessageComponentSource from "./Message.vue";
-import { messageProps } from "./props";
+import type { App, AppContext } from 'vue'
+import { createVNode, defineComponent, h, nextTick, render, shallowReactive } from 'vue'
+import { getPrefixCls } from '../_utils/global-config'
+import { resolvePopupContainer } from '../_utils/popup-container'
+import MessageContextRoot from './context-root'
+import MessageComponentSource from './Message.vue'
+import { messageProps } from './props'
 import type {
   MessageContent,
   MessageItem,
@@ -19,168 +13,156 @@ import type {
   MessagePosition,
   MessageReturn,
   MessageStatus,
-} from "./types";
+} from './types'
 
 const baseOptions: MessageOptions = {
-  variant: "neutral",
-  status: "default",
-  position: "top",
+  variant: 'neutral',
+  status: 'default',
+  position: 'top',
   duration: 3000,
   showIcon: true,
   closable: false,
   pauseOnHover: false,
   resetOnUpdate: false,
-  closeButtonAriaLabel: "Close message",
-};
+  closeButtonAriaLabel: 'Close message',
+}
 
-let defaultOptions = { ...baseOptions };
-let defaultAppContext: AppContext | null = null;
-let seed = 0;
-const managers = new Set<MessageManager>();
+let defaultOptions = { ...baseOptions }
+let defaultAppContext: AppContext | null = null
+let seed = 0
+const managers = new Set<MessageManager>()
 
-function renderContent(content: MessageContent | undefined): any {
-  return typeof content === "function" ? content() : content;
+function renderContent(content: MessageContent | undefined): import('vue').VNodeChild {
+  return typeof content === 'function' ? content() : content
 }
 
 class MessageManager {
-  readonly items = reactive<MessageItem[]>([]);
-  readonly host: HTMLElement;
-  readonly position: MessagePosition;
-  private destroyed = false;
-  private readonly instances = new Map<
-    string | number,
-    { restartTimer?: () => void }
-  >();
+  // Keep Vue content/VNodes intact while tracking queue and item field updates.
+  readonly items = shallowReactive<MessageItem[]>([])
+  readonly host: HTMLElement
+  readonly position: MessagePosition
+  private readonly contexts = new WeakMap<MessageItem, { appContext: AppContext | null; key: symbol }>()
+  private destroyed = false
+  private readonly instances = new Map<string | number, { restartTimer?: () => void }>()
 
-  constructor(
-    target: HTMLElement,
-    position: MessagePosition,
-    appContext?: AppContext,
-  ) {
-    this.position = position;
-    this.host = target.ownerDocument.createElement("div");
-    target.appendChild(this.host);
+  constructor(target: HTMLElement, position: MessagePosition, appContext?: AppContext) {
+    this.position = position
+    this.host = target.ownerDocument.createElement('div')
+    target.appendChild(this.host)
 
     const Host = defineComponent({
       setup: () => () =>
         h(
-          "div",
+          'div',
           {
-            class: [
-              getPrefixCls("message-list"),
-              `${getPrefixCls("message-list")}-${position}`,
-            ],
+            class: [getPrefixCls('message-list'), `${getPrefixCls('message-list')}-${position}`],
           },
           this.items.map((item) => {
-            const {
-              id,
-              revision,
-              content,
-              icon,
-              action,
-              onOpen,
-              onOpened,
-              onClose,
-              onClosed,
-              ...componentProps
-            } = item;
-            void revision;
-            void onClosed;
-            return h(
-              MessageComponentSource as any,
-              {
-                ...componentProps,
-                key: id,
-                ref: (instance: { restartTimer?: () => void } | null) => {
-                  if (instance) {
-                    this.instances.set(id, instance);
-                  } else {
-                    this.instances.delete(id);
-                  }
-                },
-                popupContainer: false,
-                "onUpdate:open": (open: boolean) => {
-                  if (!open) {
-                    this.close(item.id);
-                  }
-                },
-                onOpen,
-                onOpened,
-                onClose: () => onClose?.(item.id),
-                onClosed: () => this.finishClose(item),
-              } as any,
-              {
-                default: () => renderContent(content),
-                icon: icon == null ? undefined : () => renderContent(icon),
-                action:
-                  action == null ? undefined : () => renderContent(action),
-              } as any,
-            );
+            const { id, revision, content, icon, action, onOpen, onOpened, onClose, onClosed, ...componentProps } = item
+            void revision
+            void onClosed
+            return h(MessageContextRoot, {
+              key: this.contexts.get(item)!.key,
+              appContext: this.contexts.get(item)!.appContext,
+              renderVNode: () =>
+                h(
+                  MessageComponentSource as any,
+                  {
+                    ...componentProps,
+                    key: id,
+                    ref: (instance: { restartTimer?: () => void } | null) => {
+                      if (instance) {
+                        this.instances.set(id, instance)
+                      } else {
+                        this.instances.delete(id)
+                      }
+                    },
+                    popupContainer: false,
+                    'onUpdate:open': (open: boolean) => {
+                      if (!open) {
+                        this.close(item)
+                      }
+                    },
+                    onOpen,
+                    onOpened,
+                    onClose: () => onClose?.(item.id),
+                    onClosed: () => this.finishClose(item),
+                  } as any,
+                  {
+                    default: () => renderContent(content),
+                    icon: icon == null ? undefined : () => renderContent(icon),
+                    action: action == null ? undefined : () => renderContent(action),
+                  } as any,
+                ),
+            })
           }),
         ),
-    });
-    const vnode = createVNode(Host);
-    vnode.appContext = appContext ?? defaultAppContext;
-    render(vnode, this.host);
+    })
+    const vnode = createVNode(Host)
+    vnode.appContext = appContext ?? defaultAppContext
+    render(vnode, this.host)
   }
 
-  add(options: MessageOptions): MessageReturn {
-    const id = options.id ?? `__message_${++seed}`;
-    const existing = this.items.find((item) => item.id === id);
+  add(options: MessageOptions, appContext: AppContext | null): MessageReturn {
+    const id = options.id ?? `__message_${++seed}`
+    const existing = this.items.find((item) => item.id === id)
     if (existing) {
-      Object.assign(existing, options, {
-        id,
-        open: true,
-        revision: existing.revision + 1,
-      });
-      if (existing.resetOnUpdate) {
-        nextTick(() => this.instances.get(id)?.restartTimer?.());
+      if (appContext && this.contexts.get(existing)?.appContext !== appContext) {
+        this.contexts.set(existing, { appContext, key: Symbol('message-render-scope') })
       }
-      return this.handle(id);
+      Object.assign(existing, options, { id, open: true, revision: existing.revision + 1 })
+      if (existing.resetOnUpdate) {
+        nextTick(() => {
+          if (this.items.includes(existing)) {
+            this.instances.get(id)?.restartTimer?.()
+          }
+        })
+      }
+      return this.handle(existing)
     }
-    this.items.push(
-      reactive({ ...options, id, open: true, revision: 0 }) as MessageItem,
-    );
-    return this.handle(id);
+    const item = shallowReactive({ ...options, id, open: true, revision: 0 }) as MessageItem
+    this.contexts.set(item, { appContext, key: Symbol('message-render-scope') })
+    this.items.push(item)
+    return this.handle(item)
   }
 
-  close(id: string | number) {
-    const item = this.items.find((candidate) => candidate.id === id);
-    if (!item?.open) {
-      return;
+  private close(item: MessageItem) {
+    if (!item.open || !this.items.includes(item)) {
+      return
     }
-    item.open = false;
-    if (!this.instances.has(id)) {
-      this.finishClose(item);
+    item.open = false
+    if (!this.instances.has(item.id)) {
+      this.finishClose(item)
     }
   }
 
   clear() {
-    [...this.items].forEach((item) => this.close(item.id));
+    [...this.items].forEach((item) => this.close(item))
   }
 
-  private handle(id: string | number): MessageReturn {
-    let closed = false;
+  private handle(item: MessageItem): MessageReturn {
+    let closed = false
     return {
       close: () => {
         if (closed) {
-          return;
+          return
         }
-        closed = true;
-        this.close(id);
+        closed = true
+        this.close(item)
       },
-    };
+    }
   }
 
   private finishClose(item: MessageItem) {
     if (item.open) {
-      return;
+      return
     }
-    const index = this.items.indexOf(item);
+    const index = this.items.indexOf(item)
     if (index < 0) {
-      return;
+      return
     }
-    this.items.splice(index, 1);
+    this.items.splice(index, 1)
+    this.contexts.delete(item)
     try {
       return item.onClosed?.(item.id)
     } finally {
@@ -190,100 +172,85 @@ class MessageManager {
 
   private destroyIfEmpty() {
     if (this.items.length || this.destroyed) {
-      return;
+      return
     }
-    this.destroyed = true;
-    render(null, this.host);
-    this.host.remove();
-    managers.delete(this);
+    this.destroyed = true
+    render(null, this.host)
+    this.host.remove()
+    managers.delete(this)
   }
 }
 
 function resolveTarget(options: MessageOptions): HTMLElement | undefined {
-  if (typeof document === "undefined") {
-    return undefined;
+  if (typeof document === 'undefined') {
+    return undefined
   }
-  const target = resolvePopupContainer(options.popupContainer);
-  return typeof target === "string"
-    ? (document.querySelector<HTMLElement>(target) ?? document.body)
-    : target;
+  const target = resolvePopupContainer(options.popupContainer)
+  return typeof target === 'string' ? (document.querySelector<HTMLElement>(target) ?? document.body) : target
 }
 
-function findManager(
-  target: HTMLElement,
-  position: MessagePosition,
-  appContext?: AppContext,
-) {
+function findManager(target: HTMLElement, position: MessagePosition, appContext?: AppContext) {
   const existing = [...managers].find(
-    (manager) =>
-      manager.host.parentElement === target && manager.position === position,
-  );
+    (manager) => manager.host.parentElement === target && manager.position === position,
+  )
   if (existing) {
-    return existing;
+    return existing
   }
-  const manager = new MessageManager(target, position, appContext);
-  managers.add(manager);
-  return manager;
+  const manager = new MessageManager(target, position, appContext)
+  managers.add(manager)
+  return manager
 }
 
-function normalizeOptions(
-  options: MessageOptions | string = {},
-): MessageOptions {
-  return typeof options === "string" ? { content: options } : { ...options };
+function normalizeOptions(options: MessageOptions | string = {}): MessageOptions {
+  return typeof options === 'string' ? { content: options } : { ...options }
 }
 
-const Message = ((
-  options: MessageOptions | string = {},
-  appContext?: AppContext,
-) => {
-  const resolved = { ...defaultOptions, ...normalizeOptions(options) };
-  const target = resolveTarget(resolved);
+const Message = ((options: MessageOptions | string = {}, appContext?: AppContext) => {
+  const resolved = { ...defaultOptions, ...normalizeOptions(options) }
+  const target = resolveTarget(resolved)
   if (!target) {
-    return { close: () => {} };
+    return { close: () => {} }
   }
-  return findManager(target, resolved.position ?? "top", appContext).add(
-    resolved,
-  );
-}) as MessageMethod;
+  const context = appContext ?? defaultAppContext
+  return findManager(target, resolved.position ?? 'top', context ?? undefined).add(resolved, context)
+}) as MessageMethod
 
 function createStatusMethod(status: MessageStatus, loading = false) {
   return (options: MessageOptions | string, appContext?: AppContext) => {
-    const resolved = { ...normalizeOptions(options), status };
+    const resolved = { ...normalizeOptions(options), status }
     if (loading && resolved.duration == null) {
-      resolved.duration = 0;
+      resolved.duration = 0
     }
-    return Message(resolved, appContext);
-  };
+    return Message(resolved, appContext)
+  }
 }
 
-Message.info = createStatusMethod("info");
-Message.success = createStatusMethod("success");
-Message.warning = createStatusMethod("warning");
-Message.error = createStatusMethod("danger");
-Message.loading = createStatusMethod("loading", true);
+Message.info = createStatusMethod('info')
+Message.success = createStatusMethod('success')
+Message.warning = createStatusMethod('warning')
+Message.error = createStatusMethod('danger')
+Message.loading = createStatusMethod('loading', true)
 Message.clear = (position?: MessagePosition) => {
-  [...managers]
-    .filter((manager) => !position || manager.position === position)
-    .forEach((manager) => manager.clear());
-};
+  [...managers].filter((manager) => !position || manager.position === position).forEach((manager) => manager.clear())
+}
 Message.setDefaultOptions = (options: MessageOptions) => {
-  defaultOptions = { ...baseOptions, ...options };
-};
+  defaultOptions = { ...baseOptions, ...options }
+}
 Message.resetDefaultOptions = () => {
-  defaultOptions = { ...baseOptions };
-};
+  defaultOptions = { ...baseOptions }
+}
 
 const MessageComponent = Object.assign(MessageComponentSource, {
   install(app: App) {
-    app.component(MessageComponentSource.name!, MessageComponentSource);
+    app.component(MessageComponentSource.name!, MessageComponentSource)
   },
-});
-Message.Component = MessageComponent;
+})
+Message.Component = MessageComponent
 Message.install = (app: App) => {
-  defaultAppContext = app._context;
-  app.component(MessageComponentSource.name!, MessageComponentSource);
-  app.config.globalProperties.$message = Message;
-};
+  defaultAppContext = app._context
+  app.component(MessageComponentSource.name!, MessageComponentSource)
+  app.config.globalProperties.$message = Message
+}
 
 export type {
   MessageVariant,
@@ -295,10 +262,10 @@ export type {
   MessagePosition,
   MessageReturn,
   MessageStatus,
-} from "./types";
-export type { MessageProps } from "./props";
-export { messageProps };
-export const _MessageComponent = MessageComponent;
-export type MessageInstance = InstanceType<typeof MessageComponentSource>;
-export { Message };
-export default Message;
+} from './types'
+export type { MessageProps } from './props'
+export { messageProps }
+export const _MessageComponent = MessageComponent
+export type MessageInstance = InstanceType<typeof MessageComponentSource>
+export { Message }
+export default Message

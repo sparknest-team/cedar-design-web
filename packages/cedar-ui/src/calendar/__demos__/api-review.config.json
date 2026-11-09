@@ -99,7 +99,8 @@
   "events": [
     "change",
     "panel-change",
-    "update:modelValue"
+    "update:modelValue",
+    "update:mode"
   ],
   "scenarios": [
     {

@@ -1,0 +1,3 @@
+# InputNumber entry, bounds, clear ordering and public contract
+
+Reuse the installed Maple InputNumber through its missing named sub-entry export. Validate usable numeric bounds through Vue props, allowing finite values and the appropriate unbounded defaults; normalize invalid and reversed ranges consistently for commit, stepping and ARIA. Make an approved clear notify its action before input/model/change, without inventing numeric changes for an empty-model draft, retaining veto/pending semantics. Extract and export the existing event/slot/instance contracts, including wrapper visibility and nullable reading values. Reconcile complete bilingual APIs and the established payload/done/context approval protocol; no task is collected from ordinary listener Promises.

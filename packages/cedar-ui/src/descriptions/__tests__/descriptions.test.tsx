@@ -1,4 +1,4 @@
-import { nextTick } from 'vue'
+import { h, nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 import { beforeAll, describe, test, expect, vi } from 'vitest'
 import { Descriptions, DescriptionsItem, descriptionsProps } from '../index'
@@ -12,6 +12,46 @@ beforeAll(() => {
 })
 
 describe('Descriptions', () => {
+  test('provides the original data index in every layout and after regrouping', async () => {
+    const data = Array.from({ length: 5 }, (_, i) => ({ label: `L${i}`, value: `V${i}`, span: i === 1 ? 2 : 1 }))
+    const wrapper = mount(Descriptions, {
+      props: { data, column: 3 },
+      slots: {
+        label: ({ index }: { index: number }) => h('span', { class: 'label-index' }, String(index)),
+        value: ({ index }: { index: number }) => h('span', { class: 'value-index' }, String(index)),
+      },
+    })
+    for (const layout of ['horizontal', 'vertical', 'inline-horizontal', 'inline-vertical', 'inline-auto'] as const) {
+      await wrapper.setProps({ layout, column: 2 })
+      expect(wrapper.findAll('.label-index').map((el) => el.text())).toEqual(['0', '1', '2', '3', '4'])
+      expect(wrapper.findAll('.value-index').map((el) => el.text())).toEqual(['0', '1', '2', '3', '4'])
+      await wrapper.setProps({ column: 3 })
+      expect(wrapper.findAll('.value-index').map((el) => el.text())).toEqual(['0', '1', '2', '3', '4'])
+    }
+    wrapper.unmount()
+  })
+
+  test('names the table from a title slot and normalizes invalid grid numbers', async () => {
+    const warnings = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const wrapper = mount(Descriptions, {
+      props: { column: { xs: 0 }, data: [{ label: 'Owner', value: 'Ada', span: -1 }] },
+      slots: { title: () => 'Account details' },
+    })
+    const table = wrapper.get('table')
+    const titleId = table.attributes('aria-labelledby')
+    expect(titleId).toBeTruthy()
+    expect(wrapper.get(`#${titleId}`).text()).toBe('Account details')
+    expect(table.get('td').attributes('colspan')).toBe('5')
+    expect(warnings).toHaveBeenCalled()
+    await wrapper.setProps({ ariaLabel: 'Custom name' })
+    expect(table.attributes('aria-label')).toBe('Custom name')
+    expect(table.attributes('aria-labelledby')).toBeUndefined()
+    expect(descriptionsProps.column.validator({ xs: 1, md: Infinity })).toBe(false)
+    expect(descriptionsProps.column.validator(1.5)).toBe(false)
+    wrapper.unmount()
+    warnings.mockRestore()
+  })
+
   test('render', async () => {
     const wrapper = mount(Descriptions, {
       props: {

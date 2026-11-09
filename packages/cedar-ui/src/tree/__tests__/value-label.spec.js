@@ -29,7 +29,7 @@ test('fieldNames maps business id/text and search redraws do not change node ide
   })
   try {
     expect(wrapper.text()).toContain('Zero')
-    await wrapper.setProps({ searchValue: 'changed' })
+    await wrapper.setProps({ searchValue: 'zero' })
     const label = wrapper.findAll('span').find((span) => span.classes().includes('c-tree-node-title-text') && span.text() === 'Zero')
     await label.trigger('click')
     expect(wrapper.emitted('select').at(-1)[0]).toEqual([0])

@@ -1,6 +1,7 @@
 <template>
   <c-space direction="column">
-    <c-breadcrumb :routes="routes" @click.prevent />
+    <c-breadcrumb :routes="routes" @click.prevent @select="handleSelect" />
+    <span v-if="selectedPath">Selected: {{ selectedPath }}</span>
     <c-breadcrumb>
       <c-breadcrumb-item>Home</c-breadcrumb-item>
       <c-breadcrumb-item :droplist="droplist"> Channel </c-breadcrumb-item>
@@ -22,8 +23,12 @@
 </template>
 
 <script lang="ts">
+import { ref } from 'vue'
+
 export default {
   setup() {
+    const selectedPath = ref('')
+    const handleSelect = (route: { path: string }) => { selectedPath.value = route.path }
     const routes = [
       {
         path: '/',
@@ -52,7 +57,7 @@ export default {
         label: 'Wallet',
       },
     ]
-    return { routes, droplist }
+    return { routes, droplist, selectedPath, handleSelect }
   },
 }
 </script>

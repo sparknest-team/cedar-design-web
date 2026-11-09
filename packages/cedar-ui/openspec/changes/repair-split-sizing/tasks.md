@@ -1,0 +1,3 @@
+- [x] Reproduce dynamic constraints, direction measurement, disabled compensation and parsing failures
+- [x] Implement a shared legal size calculation and document ownership/units
+- [x] Verify affected consumers, types, specifications, API and native browser

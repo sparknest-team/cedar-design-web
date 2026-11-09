@@ -1,0 +1,4 @@
+- [x] Reproduce both IME restore races and frozen Textarea policies with actual numeric model-event semantics.
+- [x] Add shared private ownership guard and reactive Textarea prop view.
+- [x] Verify direct/deferred targeted tests and update docs/example.
+- [x] Run affected consumer matrix, lint/types/spec/parity and qualified browser verification.

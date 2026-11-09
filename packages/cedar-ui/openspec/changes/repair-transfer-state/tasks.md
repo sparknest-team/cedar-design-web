@@ -1,0 +1,2 @@
+- [x] Verify inherited states, custom callbacks and explicit overrides
+- [x] Verify target container lifecycle, filtered reorder and native Sortable creation

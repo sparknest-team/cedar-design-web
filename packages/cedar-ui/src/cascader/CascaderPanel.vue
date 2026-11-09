@@ -1,5 +1,6 @@
 <template>
   <base-cascader-panel
+    ref="panelRef"
     :display-columns="displayColumns"
     :selected-path="selectedPath"
     :active-key="activeKey"
@@ -15,7 +16,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, provide, reactive, ref, toRefs, watch } from 'vue'
+import { computed, defineComponent, nextTick, PropType, provide, reactive, ref, toRefs, watch } from 'vue'
 import { createNamespace } from '../_utils/global-config'
 import { isNull, isUndefined } from '../_utils/is'
 import { getKeyDownHandler, KEYBOARD_KEY } from '../_utils/keyboard'
@@ -160,7 +161,7 @@ export default defineComponent({
    * @slot empty
    */
   setup(props, { emit, slots }) {
-    const { options, checkStrictly, loadMore, modelValue, expandChild, expandTrigger } = toRefs(props)
+    const { options, checkStrictly, modelValue, expandChild, expandTrigger } = toRefs(props)
     const _value = ref<CascaderBaseValue | undefined>(props.defaultValue)
 
     watch(
@@ -198,7 +199,7 @@ export default defineComponent({
     }))
 
     watch(
-      [options, lazyLoadOptions, mergedFieldNames],
+      [options, lazyLoadOptions, mergedFieldNames, checkStrictly, () => props.loadMore],
       ([_options, _lazyLoadOptions, _fieldNames]) => {
         optionMap.clear()
         leafOptionMap.clear()
@@ -219,6 +220,7 @@ export default defineComponent({
       },
       {
         immediate: true,
+        deep: true,
       },
     )
 
@@ -293,7 +295,7 @@ export default defineComponent({
       }
     }
 
-    const { activeKey, activeOption, selectedPath, displayColumns, setActiveKey, setSelectedPath, getNextActiveNode } =
+    const { activeKey, activeOption, selectedPath, displayColumns, setActiveKey, setSelectedPath, getNextActiveNode, navigateLevel } =
       useSelectedPath(optionInfos, {
         optionMap,
         filteredLeafOptions,
@@ -308,7 +310,9 @@ export default defineComponent({
       cache: lazyLoadOptions,
     })
     const expandOption = (option: CascaderOptionInfo): Promise<void> => {
-      if (option.disabled) return Promise.resolve()
+      if (option.disabled) {
+        return Promise.resolve()
+      }
       setSelectedPath(option.key)
       return loadLazyOption(option)
     }
@@ -319,7 +323,6 @@ export default defineComponent({
         onClickOption: handleClickOption,
         setActiveKey,
         setSelectedPath,
-        loadMore,
         expandOption,
         slots,
         valueMap: computedValueMap,
@@ -327,7 +330,7 @@ export default defineComponent({
       }),
     )
 
-    const handleKeyDown = getKeyDownHandler(
+    const dispatchKeyDown = getKeyDownHandler(
       new Map([
         [
           KEYBOARD_KEY.ENTER,
@@ -360,30 +363,32 @@ export default defineComponent({
             setActiveKey(activeNode?.key)
           },
         ],
-        [
-          KEYBOARD_KEY.ARROW_RIGHT,
-          (ev: Event) => {
-            ev.preventDefault()
-            if (activeOption.value?.children) {
-              setSelectedPath(activeOption.value.key)
-              setActiveKey(activeOption.value.children[0]?.key)
-            }
-          },
-        ],
-        [
-          KEYBOARD_KEY.ARROW_LEFT,
-          (ev: Event) => {
-            ev.preventDefault()
-            if (activeOption.value?.parent) {
-              setSelectedPath(activeOption.value.parent.key)
-              setActiveKey(activeOption.value.parent.key)
-            }
-          },
-        ],
+        [KEYBOARD_KEY.ARROW_RIGHT, (event: Event) => navigateLevel(event, true)],
+        [KEYBOARD_KEY.ARROW_LEFT, (event: Event) => navigateLevel(event, false)],
       ]),
     )
 
+    const panelRef = ref<{ $el: HTMLElement }>()
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const target = event.target as Element | null
+      const option = target?.closest?.('[role="menuitem"]')
+      // Nested inputs and buttons own their own keyboard interaction.
+      if (option && target !== option) return
+      dispatchKeyDown(event)
+      if (!option || !['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight'].includes(event.key)) return
+      const key = activeKey.value
+      if (!key) return
+      nextTick(() => {
+        const root = panelRef.value?.$el
+        if (!root || root.ownerDocument.activeElement !== option || activeKey.value !== key) return
+        const next = Array.from(root.querySelectorAll<HTMLElement>('[data-cascader-key]'))
+          .find((element) => element.dataset.cascaderKey === key)
+        next?.focus()
+      })
+    }
+
     return {
+      panelRef,
       optionInfos,
       filteredLeafOptions,
       selectedPath,

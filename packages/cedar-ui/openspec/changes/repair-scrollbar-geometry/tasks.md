@@ -1,0 +1,3 @@
+- [x] Reproduce mismatched track positions and live axis/type state
+- [x] Use one viewport/track measurement and preserve lifecycle ownership
+- [x] Verify both copies, all consumers, types, gates and native geometry

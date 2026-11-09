@@ -1,7 +1,6 @@
 import type { CSSProperties, HTMLAttributes, VNodeChild } from 'vue'
 export type NavMenuKey = string | number
 export type NavMenuMode = import('../_utils/constant').Orientation
-export type NavMenuTheme = 'light' | 'dark'
 export type NavMenuPopupLayout = 'dropdown' | 'full-width' | 'full-height' | 'full'
 export interface NavMenuRenderContext {
   option: NavMenuOption

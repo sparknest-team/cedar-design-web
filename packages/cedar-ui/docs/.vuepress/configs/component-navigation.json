@@ -638,10 +638,10 @@
       "route": "/components/config-provider/"
     },
     {
-      "id": "style-provider",
-      "name": "StyleProvider",
+      "id": "theme-provider",
+      "name": "ThemeProvider",
       "group": "other",
-      "route": "/components/style-provider/"
+      "route": "/components/theme-provider/"
     }
   ]
 }

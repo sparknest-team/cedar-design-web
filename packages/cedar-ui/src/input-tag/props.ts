@@ -1,14 +1,14 @@
+import type { ExtractPublicPropTypes, PropType } from 'vue'
+import { fieldPresentationProps } from '../_components/field-presentation/props'
+import type { ComponentSize } from '../_utils/constant'
+import { componentSizes } from '../_utils/constant'
+import { emptyValueProp } from '../_utils/empty-value'
 import { fieldLoadingProps } from '../field-decorator/props'
-import { emptyValueProp } from "../_utils/empty-value";
-import type { ExtractPropTypes, PropType } from "vue";
-import { fieldPresentationProps } from "../_components/field-presentation/props";
-import type { ComponentSize } from "../_utils/constant";
-import { componentSizes } from "../_utils/constant";
-import type { InputTagFieldNames, TagData } from "./types";
+import type { InputTagFieldNames, TagData } from './types'
 
 export const inputTagProps = {
   ...fieldPresentationProps,
-  loading: fieldLoadingProps.loading,
+  ...fieldLoadingProps,
   emptyValue: emptyValueProp<(string | number | TagData)[]>(),
   baseCls: String,
   /**
@@ -39,7 +39,7 @@ export const inputTagProps = {
    */
   defaultInputValue: {
     type: String,
-    default: "",
+    default: '',
   },
   /**
    * @zh 占位符
@@ -52,7 +52,7 @@ export const inputTagProps = {
    */
   disabled: {
     type: Boolean,
-    default: false,
+    default: undefined,
   },
   /**
    * @zh 是否为错误状态
@@ -60,7 +60,7 @@ export const inputTagProps = {
    */
   error: {
     type: Boolean,
-    default: false,
+    default: undefined,
   },
   /**
    * @zh 是否为只读模式
@@ -68,7 +68,7 @@ export const inputTagProps = {
    */
   readonly: {
     type: Boolean,
-    default: false,
+    default: undefined,
   },
   /**
    * @zh 是否允许清空
@@ -95,10 +95,9 @@ export const inputTagProps = {
    * @default-value 'filled'
    */
   variant: {
-    type: String as PropType<"filled" | "outline" | "standard">,
-    default: "filled",
-    validator: (value: string) =>
-      ["filled", "outline", "standard"].includes(value),
+    type: String as PropType<'filled' | 'outline' | 'standard'>,
+    default: undefined,
+    validator: (value: string) => ['filled', 'outline', 'standard'].includes(value),
   },
   /**
    * @zh 最多展示的标签个数，`0` 表示不限制
@@ -107,16 +106,14 @@ export const inputTagProps = {
   maxTagCount: {
     type: Number,
     default: 0,
-    validator: (value: number) => value >= 0,
+    validator: (value: number) => Number.isFinite(value) && Number.isInteger(value) && value >= 0,
   },
   /**
    * @zh 是否保留输入框的内容
    * @en Whether to keep the content of the input box
    */
   retainInputValue: {
-    type: [Boolean, Object] as PropType<
-      boolean | { create?: boolean; blur?: boolean }
-    >,
+    type: [Boolean, Object] as PropType<boolean | { create?: boolean; blur?: boolean }>,
     default: false,
   },
   /**
@@ -153,9 +150,9 @@ export const inputTagProps = {
   focused: Boolean,
   disabledInput: Boolean,
   uninjectFormItemContext: Boolean,
-};
+}
 
 export type InputTagProps = Omit<
-  Partial<ExtractPropTypes<typeof inputTagProps>>,
-  "baseCls" | "focused" | "disabledInput" | "uninjectFormItemContext"
->;
+  ExtractPublicPropTypes<typeof inputTagProps>,
+  'baseCls' | 'focused' | 'disabledInput' | 'uninjectFormItemContext'
+>

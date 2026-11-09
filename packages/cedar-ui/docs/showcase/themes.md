@@ -21,9 +21,9 @@ title: 主题与品牌
 
 ## 同一个页面中的局部主题
 
-观察 StyleProvider 覆盖范围内与范围外的组件，展开源码确认主题变量如何局部传递。先修改局部，再切全局，检查两个层级的组合。
+观察 ThemeProvider 覆盖范围内与范围外的组件，展开源码确认主题变量如何局部传递。先修改局部，再切全局，检查两个层级的组合。
 
-<demo src="../../src/style-provider/__demos__/basic.vue"></demo>
+<demo src="../../src/theme-provider/__demos__/basic.vue"></demo>
 
 ## 与其他实现对照什么
 

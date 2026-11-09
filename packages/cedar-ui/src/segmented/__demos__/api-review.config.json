@@ -10,7 +10,7 @@
     {
       "name": "options",
       "description": "选项列表",
-      "type": "(string | number | SegmentedOption)[]",
+      "type": "ReadonlyArray<string | number | SegmentedOption>",
       "defaultValue": "() => []",
       "kind": "json",
       "initial": "[]"
@@ -19,7 +19,7 @@
       "name": "size",
       "description": "尺寸",
       "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
-      "defaultValue": "'md'",
+      "defaultValue": "undefined",
       "kind": "enum",
       "options": [
         "xs",
@@ -34,7 +34,14 @@
       "name": "disabled",
       "description": "禁用",
       "type": "boolean",
-      "defaultValue": "false",
+      "defaultValue": "undefined",
+      "kind": "boolean"
+    },
+    {
+      "name": "readonly",
+      "description": "只读；未设置时继承表单",
+      "type": "boolean",
+      "defaultValue": "undefined",
       "kind": "boolean"
     },
     {

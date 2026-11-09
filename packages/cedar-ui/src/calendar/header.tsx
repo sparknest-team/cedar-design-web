@@ -16,6 +16,7 @@ const { name } = createNamespace('header')
 export default defineComponent({
   name,
   props: {
+    allowSelect: { type: Boolean, default: true },
     mode: {
       type: String as PropType<'day' | 'week' | 'month' | 'year'>,
     },
@@ -78,12 +79,12 @@ export default defineComponent({
     // const getKeyboardEvents = useKeyboardEvent();
     const prefixCls = getPrefixCls('calendar')
     const { t } = useI18n()
-    const modesOptions = isArray(props.modes)
+    const modesOptions = computed(() => isArray(props.modes)
       ? props.modes.map((m) => ({
           label: t(`datePicker.view.${m}`),
           value: m,
         }))
-      : []
+      : [])
 
     const isSelectHeaderType = props.headerType === 'select'
 
@@ -127,14 +128,14 @@ export default defineComponent({
             </>
           ) : (
             <>
-              <div
+              <button
+                type="button"
                 class={`${prefixCls}-header-icon`}
-                role="button"
-                tabindex={0}
+                aria-label={t(props.mode === 'year' ? 'datePicker.previousYear' : 'datePicker.previousMonth')}
                 onClick={() => props.changePageShowDate('prev', props.mode)}
               >
                 <IconLeft />
-              </div>
+              </button>
               <div class={`${prefixCls}-header-value`}>
                 {slots.default
                   ? slots.default({
@@ -143,17 +144,17 @@ export default defineComponent({
                     })
                   : props.pageShowData.format(props.headerValueFormat)}
               </div>
-              <div
-                role="button"
-                tabindex={0}
+              <button
+                type="button"
+                aria-label={t(props.mode === 'year' ? 'datePicker.nextYear' : 'datePicker.nextMonth')}
                 class={`${prefixCls}-header-icon`}
                 onClick={() => props.changePageShowDate('next', props.mode)}
               >
                 <IconRight />
-              </div>
+              </button>
             </>
           )}
-          <Button size="sm" onClick={() => props.move(getNow())}>
+          <Button size="sm" disabled={!props.allowSelect} onClick={() => props.move(getNow())}>
             {t(`datePicker.today`)}
           </Button>
         </div>
@@ -161,7 +162,7 @@ export default defineComponent({
           <Radio.Group
             size="sm"
             variant="button"
-            options={modesOptions}
+            options={modesOptions.value}
             onChange={props.onModeChange}
             modelValue={props.mode}
           />

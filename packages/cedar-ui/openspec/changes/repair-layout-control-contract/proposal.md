@@ -1,0 +1,3 @@
+# Layout/ResizeBox诊断与公开合同
+
+统一有限非负宽高/方向数组校验与运行时规范化，Layout枚举默认和断点保护；保留0语义。公开Props由实际组件提取，补监听参数与ResizeBoxDirection，Sider事件改为严格参数声明。默认触发器名称接入既有locale/ConfigProvider，补齐22项实际属性及插槽/实例说明，修正Layout链接。Maple无对应组件，不扩展移动API。

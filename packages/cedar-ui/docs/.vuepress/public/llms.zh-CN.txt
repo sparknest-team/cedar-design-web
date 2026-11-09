@@ -87,7 +87,6 @@ Documentation language: zh-CN.
 - [Split](./llms/zh-CN/components/split.md): /components/split/
 - [Statistic 统计数值](./llms/zh-CN/components/statistic.md): /components/statistic/
 - [Steps](./llms/zh-CN/components/steps.md): /components/steps/
-- [StyleProvider 样式定制](./llms/zh-CN/components/style-provider.md): /components/style-provider/
 - [原子化 CSS](./llms/zh-CN/components/style/atomic-css.md): /components/style/atomic-css/
 - [常用写法](./llms/zh-CN/components/style/atomic-usage.md): /components/style/atomic-usage/
 - [颜色 Color](./llms/zh-CN/components/style/color.md): /components/style/color/
@@ -100,6 +99,7 @@ Documentation language: zh-CN.
 - [Tabs 标签页](./llms/zh-CN/components/tabs.md): /components/tabs/
 - [Tag](./llms/zh-CN/components/tag.md): /components/tag/
 - [Textarea](./llms/zh-CN/components/textarea.md): /components/textarea/
+- [ThemeProvider 主题](./llms/zh-CN/components/theme-provider.md): /components/theme-provider/
 - [TimePicker](./llms/zh-CN/components/time-picker.md): /components/time-picker/
 - [TimeRange](./llms/zh-CN/components/time-range.md): /components/time-range/
 - [Time](./llms/zh-CN/components/time.md): /components/time/
@@ -144,4 +144,4 @@ Documentation language: zh-CN.
 - [资源排期](./llms/zh-CN/showcase/scheduling.md): /showcase/scheduling/
 - [核心特点](./llms/zh-CN/showcase/strengths.md): /showcase/strengths/
 - [主题与品牌](./llms/zh-CN/showcase/themes.md): /showcase/themes/
-- [主题定制](./llms/zh-CN/themes.md): /themes/
+- [主题预设](./llms/zh-CN/themes.md): /themes/

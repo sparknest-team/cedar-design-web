@@ -1,42 +1,27 @@
-import { createNamespace } from '../_utils/global-config'
-import { computed, defineComponent, PropType, toRefs, ref, reactive } from 'vue'
-import ResizeTrigger from '../_components/ResizeTrigger.vue'
-import useMergeState from '../_hooks/use-merge-state'
-import { getPrefixCls } from '../_utils/global-config'
-import { isNumber } from '../_utils/is'
-import { off, on } from '../_utils/dom'
+import type { PropType } from 'vue'
+import { isResizeBoxDirections, isResizeBoxSize, isResizeBoxTag, type ResizeBoxDirection } from './validation'
+export type { ResizeBoxDirection } from './validation'
 
 export const resizeBoxProps = {
-    /**
-     * @zh 宽度
-     * @en Width
-     * @v-model
-     */
-    width: {
-      type: Number,
-    },
-    /**
-     * @zh 高度
-     * @en Height
-     * @v-model
-     */
-    height: {
-      type: Number,
-    },
-    /**
-     * @zh 伸缩框的 html 标签
-     * @en The html tag of the telescopic box
-     */
-    component: {
-      type: String,
-      default: 'div',
-    },
-    /**
-     * @zh 可以进行伸缩的边，有上、下、左、右可以使用
-     * @en Can be stretched side, there are up, down, left and right can be used
-     * */
-    directions: {
-      type: Array as PropType<('left' | 'right' | 'top' | 'bottom')[]>,
-      default: () => ['right'],
-    },
-  } 
+  /**
+   * @zh 当前盒模型下的 CSS 宽度（px）
+   * @en CSS width in pixels under the current box model
+   * @v-model
+   */
+  width: { type: Number, validator: process.env.NODE_ENV !== 'production' ? isResizeBoxSize : undefined },
+  /**
+   * @zh 当前盒模型下的 CSS 高度（px）
+   * @en CSS height in pixels under the current box model
+   * @v-model
+   */
+  height: { type: Number, validator: process.env.NODE_ENV !== 'production' ? isResizeBoxSize : undefined },
+  /** Root HTML tag. */
+  component: { type: String, default: 'div', validator: process.env.NODE_ENV !== 'production' ? isResizeBoxTag : undefined },
+  /** Enabled physical edges; an empty list disables all handles. */
+  directions: {
+    type: Array as PropType<ResizeBoxDirection[]>,
+    default: (): ResizeBoxDirection[] => ['right'],
+    validator: process.env.NODE_ENV !== 'production' ? isResizeBoxDirections : undefined,
+  },
+}
+export type ResizeBoxProps = InstanceType<(typeof import('./ResizeBox.vue'))['default']>['$props']

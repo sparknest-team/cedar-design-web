@@ -5,6 +5,7 @@ import { rgbToHsv } from "../_utils/color";
 import { InputGroup } from "../input";
 import InputNumber from "../input-number";
 import InputAlpha from "./input-alpha";
+import { useI18n } from '../locale'
 
 const { name } = createNamespace("input-rgb");
 
@@ -26,6 +27,7 @@ export default defineComponent({
   },
   setup(props) {
     const prefixCls = getPrefixCls("color-picker");
+    const { t } = useI18n()
     const { color } = toRefs(props);
 
     const handleChange = (value: Partial<RGB>) => {
@@ -38,6 +40,7 @@ export default defineComponent({
       <InputGroup class={`${prefixCls}-input-group`}>
         {(["r", "g", "b"] as Array<keyof RGB>).map((channel) => (
           <InputNumber
+            inputAttrs={{ 'aria-label': t(`colorPicker.${{ r: 'red', g: 'green', b: 'blue' }[channel]}`) }}
             key={channel}
             size="xs"
             min={0}

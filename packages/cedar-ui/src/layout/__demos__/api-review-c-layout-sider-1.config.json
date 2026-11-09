@@ -1,18 +1,6 @@
 {
   "fields": [
     {
-      "name": "theme",
-      "description": "主题颜色",
-      "type": "'dark' | 'light'",
-      "defaultValue": "'light'",
-      "kind": "enum",
-      "options": [
-        "dark",
-        "light"
-      ],
-      "initial": "light"
-    },
-    {
       "name": "collapsed",
       "description": "当前收起状态",
       "type": "boolean",

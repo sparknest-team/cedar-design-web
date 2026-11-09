@@ -20,6 +20,7 @@ export const _MenuComponent = Menu
 export const _MenuOptionComponent = _MenuOption
 
 export { menuProps }
+export type { MenuSize } from './props'
 
 export default Menu
 

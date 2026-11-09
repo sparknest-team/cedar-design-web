@@ -29,7 +29,7 @@ test('typed grouped columns render original business records and nested/array pa
 })
 test('typed comparator sorts actual rows without reordering the caller data array', async () => {
   const rows = [user('a', 'Alice', 28), user('b', 'Bob', 16)]
-  const sorter = vi.fn((a: User, b: User) => a.age - b.age)
+  const sorter = vi.fn((a: User, b: User, { direction }: { direction: 'ascend' | 'descend' }) => (a.age - b.age) * (direction === 'descend' ? -1 : 1))
   const owner = mountTable({ props: defineTableConfig<User>({ rowKey: 'id', data: rows, pagination: false,
     columns: [{ dataIndex: 'name' }, { title: 'Age', dataIndex: 'age', sortable: { sortDirections: ['ascend', 'descend'], sorter } }],
   }) })
@@ -39,6 +39,9 @@ test('typed comparator sorts actual rows without reordering the caller data arra
   expect(rows.map(row => row.name)).toEqual(['Alice', 'Bob'])
   expect(sorter.mock.calls.some(([a, b]) => rows.includes(toRaw(a)) && rows.includes(toRaw(b)))).toBe(true)
   expect(owner.emitted('sorter-change')).toEqual([['age', 'ascend']])
+  await owner.get('.c-table-cell-with-sorter').trigger('click')
+  await flushPromises()
+  expect(owner.findAll('tbody tr').map(row => row.findAll('td')[0].text())).toEqual(['Alice', 'Bob'])
 })
 test('typed filtering still uses the original filter menu and business-row predicate', async () => {
   const rows = [user('a', 'Alice', 28), user('b', 'Bob', 16)]

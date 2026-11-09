@@ -1,0 +1,3 @@
+- [x] Reproduce Cedar duplicate initial request and lost selected label; check Maple baseline.
+- [x] Scope shared source/cache to the actual native editor.
+- [x] Verify both platforms, error ownership, nested independence, browsers, consumers and types.

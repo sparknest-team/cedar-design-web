@@ -19,6 +19,9 @@
     "type-tests/form-layout.ts",
     "type-tests/date-panel-api.ts",
     "type-tests/p1-api.ts",
-    "type-tests/p2-api.ts"
+    "type-tests/p2-api.ts",
+    "type-tests/image-slots-contract.ts",
+    "type-tests/ripple-contract.ts",
+    "type-tests/typography-contract.ts"
   ]
 }

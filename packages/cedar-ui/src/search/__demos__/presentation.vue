@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import type { SearchResult } from "@cedar-design/ui";
-const keyword = ref("");
-const popup = ref(false);
-const history = ref(["项目 A", "设备 B"]);
-const lastAction = ref("尚未搜索");
+import { ref } from 'vue'
+import type { SearchResult } from '@cedar-design/ui'
+
+const keyword = ref('')
+const popup = ref(false)
+const history = ref(['项目 A', '设备 B'])
+const lastAction = ref('尚未搜索')
 function recordSearch(result: SearchResult) {
-  history.value = result.recentSearches;
-  lastAction.value = result.modelValue;
+  history.value = result.recentSearches
+  lastAction.value = result.modelValue ?? ''
 }
 function recordAction(result: SearchResult) {
-  lastAction.value = result.modelValue;
+  lastAction.value = result.modelValue ?? ''
 }
 </script>
 <template>

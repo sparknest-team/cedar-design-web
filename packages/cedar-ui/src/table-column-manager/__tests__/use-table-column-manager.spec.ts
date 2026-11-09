@@ -24,6 +24,27 @@ function createManagerHarness(catalog: ColumnCatalog, defaultColumns: ManagedTab
   )
 }
 
+it('discards panel drafts on close and restores the default columns on reset', () => {
+  const wrapper = createManagerHarness(
+    [{ dataIndex: 'id', title: 'ID' }, { dataIndex: 'name', title: 'Name' }],
+    [{ dataIndex: 'id', title: 'ID', manager: { required: true } }, { dataIndex: 'name', title: 'Name' }],
+  )
+  try {
+    const manager = wrapper.vm.manager
+    manager.open()
+    manager.managerProps.value['onUpdate:modelValue']([{ dataIndex: 'id' }])
+    manager.close()
+    expect(flattenTableColumns(manager.columns.value).map(column => column.dataIndex)).toEqual(['id', 'name'])
+    manager.open()
+    expect(manager.managerProps.value.modelValue?.map(item => item.dataIndex)).toEqual(['id', 'name'])
+    manager.removeColumn('id')
+    manager.removeColumn('name')
+    expect(flattenTableColumns(manager.columns.value).map(column => column.dataIndex)).toEqual(['id'])
+    manager.resetToDefault()
+    expect(flattenTableColumns(manager.columns.value).map(column => column.dataIndex)).toEqual(['id', 'name'])
+  } finally { wrapper.unmount() }
+})
+
 describe('useTableColumnManager insert frozen inheritance', () => {
   it('new columns inherit anchor fixed position via insertColumns', async () => {
     const catalog: ColumnCatalog = [

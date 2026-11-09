@@ -9,16 +9,16 @@
 </template>
 
 <script lang="ts">
-import { anchorProps } from './props'
+import { anchorProps, type AnchorBoundaryPosition } from './props'
 import { computed, defineComponent, nextTick, onActivated, onBeforeUnmount, onDeactivated, onMounted, provide, reactive, ref, watch } from 'vue'
 import { compute as computeScrollIntoView } from 'compute-scroll-into-view'
 import { createNamespace } from '../_utils/global-config'
 import { isNumber } from '../_utils/is'
 import { getElement, off, on } from '../_utils/dom'
+import { useElementResize } from '../_utils/resize-observer'
 import { slide } from './utils'
 import { anchorInjectionKey } from './context'
 
-type BoundaryPosition = 'start' | 'end' | 'center' | 'nearest'
 type Binding = { target: HTMLElement | Window; container: HTMLElement; view: Window; listener: () => void; cancelFrame: () => void }
 const isView = (value: unknown): value is Window => !!value && typeof value === 'object' && (value as Window).window === value
 
@@ -38,6 +38,11 @@ export default defineComponent({
     const linkBackgroundRef = ref<HTMLElement>()
     const links = reactive<Record<string, HTMLElement>>({})
     const currentLink = ref('')
+    const effectiveBoundary = computed(() => {
+      const value = props.boundary
+      if (isNumber(value)) return Number.isFinite(value) ? value : 'start'
+      return ['start', 'end', 'center', 'nearest'].includes(value) ? value : 'start'
+    })
     let active = true, disposed = false, operation = 0, changeGeneration = 0
     let binding: Binding | undefined
     let cancelScroll: (() => void) | undefined
@@ -98,41 +103,56 @@ export default defineComponent({
       try {
         const element = findTarget(hash)
         if (!element || !current()) return
-        const block: BoundaryPosition = isNumber(props.boundary) ? 'start' : props.boundary
-        const diff = isNumber(props.boundary) ? props.boundary : 0
-        const actions = computeScrollIntoView(element, { block })
+        const block: AnchorBoundaryPosition = isNumber(effectiveBoundary.value) ? 'start' : effectiveBoundary.value
+        const diff = isNumber(effectiveBoundary.value) ? effectiveBoundary.value : 0
+        const target = binding?.target
+        if (props.scrollContainer && !target) return
+        const container = target && !isView(target) ? target : undefined
+        // A declared element is the outermost scroll boundary, not permission to move the page.
+        if (container && !container.contains(element)) return
+        const actions = computeScrollIntoView(element, { block, boundary: container })
+          .filter(action => Number.isFinite(action.top))
         if (!current() || !actions.length) return
-        const { el, top } = actions[0]
+        const last = actions.length - 1
+        const cancellations: Array<() => void> = []
+        let pending = actions.length
         isScrolling = true
-        const cancel = slide(el as HTMLElement, top - diff, () => {
-          if (!current()) return
-          isScrolling = false
-          cancelScroll = undefined
-        }, current)
-        if (current() && isScrolling) cancelScroll = cancel
-        else cancel()
+        const cancelAll = () => cancellations.forEach(cancel => cancel())
+        cancelScroll = cancelAll
+        for (const [index, action] of actions.entries()) {
+          if (!current()) break
+          // The numeric offset applies at the outer boundary only.
+          const cancel = slide(action.el as HTMLElement, action.top - (index === last ? diff : 0), () => {
+            if (!current()) return
+            if (--pending === 0) { isScrolling = false; cancelScroll = undefined }
+          }, current)
+          cancellations.push(cancel)
+        }
+        if (!current()) cancelAll()
       } catch (error) {
-        if (current()) { isScrolling = false; cancelScroll = undefined }
+        if (current()) { cancelScroll?.(); isScrolling = false; cancelScroll = undefined }
         // eslint-disable-next-line no-console
         console.error(error)
       }
     }
     const handleClick = (event: MouseEvent, hash?: string) => {
       if (!available()) return
-      if (!props.changeHash) event.preventDefault()
-      if (hash) {
+      const isHash = !!hash && hash.startsWith('#') && hash.length > 1
+      if (isHash && !props.changeHash) event.preventDefault()
+      const previousHash = currentLink.value
+      if (isHash && hash) {
         scrollIntoView(hash)
         if (!available()) return
         handleAnchorChange(hash)
       }
-      if (available()) emit('select', hash, currentLink.value)
+      if (available()) emit('select', hash, previousHash)
     }
 
     const updateIndicator = () => {
       if (!available()) return
       const link = links[currentLink.value], slider = lineSliderRef.value, background = linkBackgroundRef.value
       const request = operation
-      if (!props.showLine || !link) return
+      if (!link || (!props.showLine && !props.showBackground)) return
       const top = link.offsetTop
       const height = link.children[0]?.clientHeight ?? 0
       if (!available() || request !== operation || links[currentLink.value] !== link) return
@@ -141,11 +161,16 @@ export default defineComponent({
         if (node) { node.style.top = `${top}px`; node.style.height = `${height}px` }
       }
     }
-    watch(currentLink, updateIndicator, { flush: 'post' })
+    watch([currentLink, () => props.showLine, () => props.showBackground], updateIndicator, { flush: 'post' })
+    useElementResize(
+      () => [anchorRef.value, ...Object.values(links).flatMap(link => [link, link.firstElementChild])],
+      () => props.showLine || props.showBackground,
+      updateIndicator,
+    )
 
     const getFirstInViewportEle = (bound: Binding, current: () => boolean): HTMLElement | undefined => {
       if (!current()) return
-      const boundary = isNumber(props.boundary) ? props.boundary : 0
+      const boundary = isNumber(effectiveBoundary.value) ? effectiveBoundary.value : 0
       const rect = bound.container.getBoundingClientRect()
       if (!current()) return
       for (const hash of Object.keys(links)) {

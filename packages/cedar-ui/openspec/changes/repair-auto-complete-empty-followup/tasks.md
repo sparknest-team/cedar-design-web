@@ -1,0 +1,3 @@
+- [x] Reproduce lost standalone empty slot and native empty coverage on both copies.
+- [x] Restore existing slot, support native editor rendering and correct earlier claims.
+- [x] Verify public editors, stable composing input, both complete types, consumers and source/docs gates.
