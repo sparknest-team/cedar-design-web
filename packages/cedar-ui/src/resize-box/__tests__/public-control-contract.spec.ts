@@ -36,10 +36,11 @@ describe('layout/resize diagnostics and public controls', () => {
   })
   it('validates sider enums, CSS widths, nonnegative collapse width and resize arrays', () => {
     const props = (Sider as any).props
-    for (const [key, valid, invalid] of [['placement', 'left', 'start'], ['theme', 'light', 'custom'], ['collapseMode', 'transform', 'other'], ['breakpoint', 'md', 'medium']]) {
+    for (const [key, valid, invalid] of [['placement', 'left', 'start'], ['collapseMode', 'transform', 'other'], ['breakpoint', 'md', 'medium']]) {
       expect(props[key as string].validator(valid)).toBe(true)
       expect(props[key as string].validator(invalid)).toBe(false)
     }
+    expect(props).not.toHaveProperty('theme')
     expect(props.width.validator('40%')).toBe(true)
     expect(props.width.validator(-1)).toBe(false)
     expect(props.collapsedWidth.validator(0)).toBe(true)
@@ -48,9 +49,9 @@ describe('layout/resize diagnostics and public controls', () => {
   })
   it('uses safe sider defaults and omits an invalid breakpoint subscription', () => {
     vi.spyOn(console, 'warn').mockImplementation(() => {})
-    const owner = render(Sider, { props: { width: NaN, collapsedWidth: Infinity, placement: 'bad', theme: 'bad', collapseMode: 'bad', breakpoint: 'medium', resizeDirections: ['right', 'right', 'bad'] } })
+    const owner = render(Sider, { props: { width: NaN, collapsedWidth: Infinity, placement: 'bad', collapseMode: 'bad', breakpoint: 'medium', resizeDirections: ['right', 'right', 'bad'] } })
     expect(owner.element.style.width).toBe('200px')
-    expect(owner.classes()).toContain('c-layout-sider-light')
+    expect(owner.classes()).toContain('c-layout-sider')
     expect(owner.findAll('.c-resizebox-direction-right')).toHaveLength(1)
     expect(owner.emitted('breakpoint')).toBeUndefined()
     expect(owner.html()).not.toMatch(/NaN|Infinity/)
@@ -68,13 +69,13 @@ describe('layout/resize diagnostics and public controls', () => {
     await global.vm.$nextTick()
     expect(global.find('button').attributes('aria-label')).toBe('展开侧栏')
   })
-  it('preserves normalized theme and collapse width in the existing sider context', async () => {
+  it('preserves normalized collapse width in the existing sider context', async () => {
     vi.spyOn(console, 'warn').mockImplementation(() => {})
-    const Reader = defineComponent({ setup() { const context = inject(SiderInjectionKey)!; return () => h('span', { id: 'context' }, `${context.theme}:${context.collapsedWidth}`) } })
-    const owner = render(Sider, { props: { theme: 'dark', collapsedWidth: 0 }, slots: { default: () => h(Reader) } })
-    expect(owner.find('#context').text()).toBe('dark:0')
-    await owner.setProps({ theme: 'bad', collapsedWidth: NaN })
-    expect(owner.find('#context').text()).toBe('light:48')
+    const Reader = defineComponent({ setup() { const context = inject(SiderInjectionKey)!; expect(context).not.toHaveProperty('theme'); return () => h('span', { id: 'context' }, String(context.collapsedWidth)) } })
+    const owner = render(Sider, { props: { collapsedWidth: 0 }, slots: { default: () => h(Reader) } })
+    expect(owner.find('#context').text()).toBe('0')
+    await owner.setProps({ collapsedWidth: NaN })
+    expect(owner.find('#context').text()).toBe('48')
   })
 
 })
