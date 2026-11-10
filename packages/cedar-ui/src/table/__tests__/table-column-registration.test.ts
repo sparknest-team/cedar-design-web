@@ -60,3 +60,38 @@ it('keeps a column filter reference clickable and filters actual table rows', as
   expect(wrapper.find('tbody').text()).not.toContain('Lin')
   wrapper.unmount()
 })
+
+it('updates conditional column filter slots and restores their fallbacks', async () => {
+  const show = ref(true)
+  const Fixture = defineComponent({
+    setup: () => () => h(Table, { data: [{ key: 'a', name: 'Ada' }], pagination: false }, {
+      columns: () => h(TableColumn, {
+        title: 'Name', dataIndex: 'name', filterable: {
+          icon: () => h('b', { class: 'fallback-icon' }, 'Default icon'),
+          renderContent: () => h('div', { class: 'fallback-content' }, 'Default content'),
+          filter: () => true,
+        },
+      }, show.value ? {
+        'filter-icon': () => h('b', { class: 'custom-icon' }, 'Custom icon'),
+        'filter-content': () => h('div', { class: 'custom-content' }, 'Custom content'),
+      } : {}),
+    }),
+  })
+  const wrapper = mount(Fixture, { attachTo: document.body })
+  try {
+    await flushPromises()
+    expect(wrapper.find('.custom-icon').exists()).toBe(true)
+    await wrapper.get('.c-table-filters').trigger('click')
+    await flushPromises()
+    expect(document.querySelector('.custom-content')).not.toBeNull()
+    show.value = false
+    await flushPromises()
+    expect(wrapper.find('.custom-icon').exists()).toBe(false)
+    expect(wrapper.find('.fallback-icon').exists()).toBe(true)
+    expect(document.querySelector('.fallback-content')).not.toBeNull()
+    show.value = true
+    await flushPromises()
+    expect(wrapper.find('.custom-icon').exists()).toBe(true)
+    expect(document.querySelector('.custom-content')).not.toBeNull()
+  } finally { wrapper.unmount() }
+})

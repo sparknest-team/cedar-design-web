@@ -46,7 +46,7 @@
         :aria-orientation="orientation"
         :aria-disabled="isDisabled || undefined"
         :aria-readonly="mergedReadonly || undefined"
-        :aria-invalid="mergedError || undefined"
+        :aria-invalid="mergedError ? true : ($attrs['aria-invalid'] as HTMLAttributes['aria-invalid'])"
         :aria-describedby="describeError([typeof $attrs['aria-describedby'] === 'string' ? $attrs['aria-describedby'] : '', tooltipVisible(index) ? `${tooltipId}-${index}` : ''].filter(Boolean).join(' '))"
         @pointerdown.stop="pointerDown($event, index)"
         @keydown="keydown($event, index)"
@@ -72,6 +72,7 @@
       :readonly="mergedReadonly"
       :error="mergedError"
       :aria-label="ariaLabel"
+      :aria-invalid="($attrs['aria-invalid'] as HTMLAttributes['aria-invalid'])"
       @change="inputChange"
       @focus="eventHandlers?.onFocus?.()"
       @blur="eventHandlers?.onBlur?.()"
@@ -81,7 +82,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onDeactivated, ref, useId, watch } from 'vue'
+import { computed, onBeforeUnmount, onDeactivated, ref, useId, watch, type HTMLAttributes } from 'vue'
 import { useDirection } from '../_utils/direction'
 import { createNamespace } from '../_utils/global-config'
 import { positiveLength } from '../_utils/size-length'

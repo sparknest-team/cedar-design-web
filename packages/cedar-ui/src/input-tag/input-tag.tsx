@@ -425,7 +425,7 @@ export default defineComponent({
                   id={inputId.value}
                   value={isComposition.value ? inputRef.value?.value : computedInputValue.value}
                   aria-busy={props.loading || nativeAttrs.value['aria-busy'] || undefined}
-                  aria-invalid={mergedError.value || nativeAttrs.value['aria-invalid'] || undefined}
+                  aria-invalid={mergedError.value ? true : nativeAttrs.value['aria-invalid']}
                   aria-describedby={describeError(nativeAttrs.value['aria-describedby'])}
                   ref={inputRef}
                   key={`${prefix}-input`}

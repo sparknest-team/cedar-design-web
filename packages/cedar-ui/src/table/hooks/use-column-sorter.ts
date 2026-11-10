@@ -2,6 +2,7 @@ import type { Ref } from 'vue'
 import { computed } from 'vue'
 import type { TableColumnData } from '../types'
 import type { TableContext } from '../context'
+import { isTableExtraColumn } from '../extra-column'
 
 export const useColumnSorter = ({
   column,
@@ -11,6 +12,7 @@ export const useColumnSorter = ({
   tableCtx: Partial<TableContext>
 }) => {
   const sortOrder = computed(() => {
+    if (isTableExtraColumn(column.value)) return undefined
     if (column.value.dataIndex && column.value.dataIndex === tableCtx.sorter?.field) {
       return tableCtx.sorter.direction
     }

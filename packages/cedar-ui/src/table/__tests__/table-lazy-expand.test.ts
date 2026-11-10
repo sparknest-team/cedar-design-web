@@ -15,7 +15,7 @@ describe('Table lazy tree expand control', () => {
       },
     })
     await flushPromises()
-    const button = wrapper.get('button[aria-label="切换展开状态"]')
+    const button = wrapper.get('button[aria-expanded]')
     expect(button.attributes('aria-expanded')).toBe('false')
     expect(button.element.parentElement?.hasAttribute('role')).toBe(false)
     await button.trigger('click')
@@ -26,7 +26,7 @@ describe('Table lazy tree expand control', () => {
     finish([{ key: 'child', name: 'Loaded child', isLeaf: true }])
     await flushPromises()
     expect(wrapper.find('tbody').text()).toContain('Loaded child')
-    const loaded = wrapper.get('button[aria-label="切换展开状态"]')
+    const loaded = wrapper.get('button[aria-expanded]')
     expect(loaded.attributes('aria-expanded')).toBe('true')
     await loaded.trigger('click')
     await flushPromises()

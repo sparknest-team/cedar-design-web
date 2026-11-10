@@ -101,6 +101,8 @@ const lang: CedarLang = {
     },
   },
   map: {
+    initError: '地图初始化失败',
+    retry: '重试',
     searchPlaceholder: '搜索地址',
     title: '地址选择',
     noData: '暂无数据',
@@ -141,6 +143,11 @@ const lang: CedarLang = {
     total: '共 {0} 条',
   },
   table: {
+    expandRow: '展开行',
+    collapseRow: '收起行',
+    resizeColumn: '调整 {0} 列宽',
+    selectRow: '选择行 {0}',
+    selectionColumn: '选择',
     confirmButtonText: '确定',
     resetText: '重置',
     customColumnsConfig: '列管理',

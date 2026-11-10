@@ -32,11 +32,7 @@
         :show-colon="showColon"
         :asterisk-position="asteriskPosition"
         :component="labelComponent"
-        :attrs="
-          presentationState.readPretty.value
-            ? { ...labelAttrs, for: undefined }
-            : labelAttrs
-        "
+        :attrs="resolvedLabelAttrs"
         :tooltip="tooltip"
       >
         <slot v-if="$slots.label || label" name="label">{{ label }}</slot>
@@ -116,6 +112,7 @@ import {
 import FormItemLabel from "./FormItemLabel.vue";
 import FormItemMessage from "./FormItemMessage.vue";
 import { provideFormErrorDescription } from "./error-description";
+import { provideFormItemLabel } from "./label-context";
 import { resolveFormItemStatus } from "./item-decoration";
 import { formItemProps } from "./item-props";
 import {
@@ -231,7 +228,19 @@ export default defineComponent({
       resolveFormItemStatus(props.validateStatus, finalStatus.value),
     );
     const isError = computed(() => computedValidateStatus.value === "error");
-    provideFormErrorDescription(() => !presentationState.readPretty.value && isError.value && finalMessage.value.length > 0, () => props.noStyle);
+    const { labelId } = provideFormErrorDescription(() => !presentationState.readPretty.value && isError.value && finalMessage.value.length > 0, () => props.noStyle);
+    const labelContext = provideFormItemLabel({
+      generated: labelId,
+      noStyle: () => props.noStyle,
+      visible: () => !props.hideLabel && Boolean(props.label || slots.label),
+      attributes: () => props.labelAttrs,
+    });
+    const resolvedLabelAttrs = computed(() => ({
+      ...props.labelAttrs,
+      ...(labelContext.ownId.value ? { id: labelContext.ownId.value } : {}),
+      ...(presentationState.readPretty.value ? { for: undefined } : {}),
+    }));
+
 
     const mergedRules = computed(() => {
       const baseRules = ([] as FieldRule[]).concat(
@@ -562,6 +571,7 @@ export default defineComponent({
 
     return {
       presentationState,
+      resolvedLabelAttrs,
       prefixCls,
       contentStyle,
       labelRegistry:

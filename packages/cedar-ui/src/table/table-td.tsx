@@ -7,6 +7,9 @@ import { IconLoading } from '@cedar-design/icons-vue/icon-loading'
 import { isFunction, isObject } from "../_utils/is"
 import { TableContext, tableInjectionKey } from "./context"
 import AutoTooltip from "../_components/auto-tooltip/auto-tooltip"
+import TableSlot from "./TableSlot.vue"
+import { forwardTableColumnSlot, forwardTableSlot } from "./forward-table-slot"
+import { getColumnLayoutKey, isTableExtraColumn } from "./extra-column"
 
 const TD_TYPES = [
   "normal",
@@ -22,6 +25,7 @@ const { name } = createNamespace("td");
 export default defineComponent({
   name,
   props: {
+    headers: String,
     rowIndex: Number,
     record: {
       type: Object as PropType<TableDataWithRaw>,
@@ -170,16 +174,23 @@ export default defineComponent({
         rowIndex: props.rowIndex ?? -1,
       };
       if (slots.cell) {
-        return slots.cell(data);
+        return <TableSlot slotProps={data} v-slots={forwardTableSlot(slots.cell)} />;
       }
       if (props.column.slots?.cell) {
-        return props.column.slots.cell(data);
+        return <TableSlot slotProps={data} v-slots={forwardTableColumnSlot(props.column.slots.cell)} />;
+      }
+      if (
+        isTableExtraColumn(props.column) &&
+        props.column.slotName &&
+        tableCtx.slots?.[props.column.slotName]
+      ) {
+        return <TableSlot slotProps={data} v-slots={forwardTableSlot(tableCtx.slots[props.column.slotName])} />;
       }
       if (props.column.render) {
         return props.column.render(data);
       }
       if (props.column.slotName && tableCtx.slots?.[props.column.slotName]) {
-        return tableCtx.slots[props.column.slotName]?.(data);
+        return <TableSlot slotProps={data} v-slots={forwardTableSlot(tableCtx.slots[props.column.slotName])} />;
       }
       return String(
         getValueByPath(props.record?.raw, props.column.dataIndex) ?? "",
@@ -277,19 +288,25 @@ export default defineComponent({
     };
 
     return () => {
+      const customCell = slots.td?.({
+        record: props.record?.raw,
+        column: props.column,
+        rowIndex: props.rowIndex ?? -1,
+      })[0];
+      const customHeaders = customCell?.props && Object.prototype.hasOwnProperty.call(customCell.props, 'headers') && customCell.props.headers !== undefined
+        ? customCell.props.headers
+        : props.headers;
       return createVNode(
-        slots.td?.({
-          record: props.record?.raw,
-          column: props.column,
-          rowIndex: props.rowIndex ?? -1,
-        })[0] ?? "td",
+        customCell ?? "td",
         {
           class: cls.value,
           style: style.value,
           rowspan: props.rowSpan > 1 ? props.rowSpan : undefined,
           colspan: props.colSpan > 1 ? props.colSpan : undefined,
+          headers: customHeaders,
           // auto 布局下渲染后按此 key 量宽回写，修正冻结列 sticky 偏移
           "data-column-key": props.column?.dataIndex,
+          "data-column-layout-key": getColumnLayoutKey(props.column) !== props.column.dataIndex ? getColumnLayoutKey(props.column) : undefined,
         },
         {
           default: () => [renderCell()],

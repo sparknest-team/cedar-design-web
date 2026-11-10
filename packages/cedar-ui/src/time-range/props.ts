@@ -1,3 +1,4 @@
+import { rangeInputAttrsProp } from '../_components/picker-field/props'
 import { fieldLoadingProps } from '../field-decorator/props'
 import { openTriggerTargetProp } from "../_components/picker-field/open-trigger";
 import { emptyValueProp } from "../_utils/empty-value";
@@ -19,6 +20,7 @@ import type { TriggerProps } from "../trigger/props";
 /** Inclusive 24-hour clock bounds, independent of display format. */
 export const timeRangeProps = {
   ...fieldLoadingProps,
+  inputAttrs: rangeInputAttrsProp,
   openTriggerTarget: openTriggerTargetProp,
   ...fieldPresentationProps,
   emptyValue: emptyValueProp<(string | number | Date)[] | undefined>(),

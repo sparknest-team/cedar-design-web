@@ -29,7 +29,7 @@ const types = ["circle", "wave", "cube", "rect", "disappear"];
         />
       </c-form-item>
     </c-form>
-    <label><input v-model="stacked" type="checkbox" />图文堆叠（stacked）</label>
+    <c-checkbox v-model="stacked">图文堆叠（stacked）</c-checkbox>
     <p v-if="mode === 'line'">
       line 使用底部进度线，loading-type 和 loading-size 不适用；可通过
       loading-color 调整颜色。

@@ -179,7 +179,8 @@ export default defineComponent({
     function cancelPreviewKey() { spacePressed = false }
     watch(canPreview, (enabled) => { if (!enabled) cancelPreviewKey() })
     function handlePreviewKeydown(event: KeyboardEvent) {
-      if (!canPreview.value || event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey) return
+      if (event.isComposing || event.keyCode === 229) { cancelPreviewKey(); return }
+      if (!canPreview.value || event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey) return
       if (event.key === 'Enter' && !event.repeat) {
         event.preventDefault()
         ;(event.currentTarget as HTMLElement).click()
@@ -191,7 +192,7 @@ export default defineComponent({
     function handlePreviewKeyup(event: KeyboardEvent) {
       if (event.key !== ' ' || !spacePressed) return
       spacePressed = false
-      if (event.defaultPrevented || event.isComposing) return
+      if (event.defaultPrevented || event.isComposing || event.keyCode === 229) return
       event.preventDefault()
       if (canPreview.value && event.currentTarget === (event.currentTarget as HTMLElement).ownerDocument.activeElement) {
         ;(event.currentTarget as HTMLElement).click()

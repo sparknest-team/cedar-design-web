@@ -21,6 +21,12 @@ export function createMapUpdateGuard(setUpdating: (active: boolean) => void) {
       clear()
       setUpdating(false)
     },
+    cancel() {
+      if (disposed) return
+      generation++
+      clear()
+      setUpdating(false)
+    },
     releaseAfter(token: number, delay: number) {
       if (!current(token)) return
       clear()

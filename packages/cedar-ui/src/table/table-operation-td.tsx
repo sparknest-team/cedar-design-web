@@ -8,7 +8,10 @@ import { IconPlus } from '@cedar-design/icons-vue/icon-plus'
 import { IconMinus } from '@cedar-design/icons-vue/icon-minus'
 import { IconDragDotVertical } from '@cedar-design/icons-vue/icon-drag-dot-vertical'
 import { TableContext, tableInjectionKey } from './context'
+import { useI18n } from '../locale'
 import { BaseType } from '../_utils/types'
+import TableSlot from './TableSlot.vue'
+import { forwardTableSlot } from './forward-table-slot'
 
 
 const { name } = createNamespace('operation-td')
@@ -22,6 +25,7 @@ export default defineComponent({
     IconMinus,
   },
   props: {
+    headers: String,
     operationColumn: {
       type: Object as PropType<TableOperationColumn>,
       required: true,
@@ -61,6 +65,11 @@ export default defineComponent({
   setup(props, { emit, slots }) {
     const prefixCls = getPrefixCls('table')
     const tableCtx = inject<Partial<TableContext>>(tableInjectionKey, {})
+    const { t } = useI18n()
+    const selectionLabel = () => {
+      const translated = t('table.selectRow', String(props.record.key))
+      return translated === 'table.selectRow' ? `Select row ${props.record.key}` : translated
+    }
     const style = computed(() => getOperationStyle(props.operationColumn, props.operations, tableCtx.readingDirection, tableCtx.physicalDataColumns, tableCtx.tableLayout))
 
     const cls = computed(() => [
@@ -92,6 +101,7 @@ export default defineComponent({
         if (!tableCtx.checkStrictly && !props.record.isLeaf) {
           return (
             <Checkbox
+              ariaLabel={selectionLabel()}
               modelValue={selectionStatus.value.checked}
               indeterminate={selectionStatus.value.indeterminate}
               disabled={Boolean(props.record.disabled)}
@@ -105,6 +115,7 @@ export default defineComponent({
 
         return (
           <Checkbox
+            ariaLabel={selectionLabel()}
             modelValue={props.selectedRowKeys?.includes(value) ?? false}
             disabled={Boolean(props.record.disabled)}
             uninjectGroupContext
@@ -118,6 +129,7 @@ export default defineComponent({
         const value = props.record.key
         return (
           <Radio
+            ariaLabel={selectionLabel()}
             modelValue={props.selectedRowKeys?.includes(value) ?? false}
             disabled={Boolean(props.record.disabled)}
             uninjectGroupContext
@@ -134,7 +146,9 @@ export default defineComponent({
         return null
       }
       if (props.operationColumn.name === 'drag-handle') {
-        return slots['drag-handle-icon']?.() ?? <IconDragDotVertical />
+        return slots['drag-handle-icon']
+          ? <TableSlot v-slots={forwardTableSlot(slots['drag-handle-icon'])} />
+          : <IconDragDotVertical />
       }
       return null
     }
@@ -145,6 +159,7 @@ export default defineComponent({
         style={style.value}
         rowspan={props.rowSpan > 1 ? props.rowSpan : undefined}
         colspan={props.colSpan > 1 ? props.colSpan : undefined}
+        headers={props.headers}
         data-operation-key={props.operationColumn.name}
       >
         <span class={`${prefixCls}-cell`}>{renderContent()}</span>

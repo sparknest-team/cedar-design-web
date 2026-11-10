@@ -1,5 +1,6 @@
 import { popupContainerProp } from '../_utils/popup-container'
 import type { CSSProperties, PropType } from 'vue'
+import type { MapSdk } from './sdk'
 
 export type PoiKeys = 'longitude' | 'latitude' | 'address' | 'name' | 'adcode' | 'countryCode' | 'city' | 'country'
 export interface MapGeocoderResult {
@@ -16,6 +17,7 @@ export interface MapFetch {
   post: (...args: any[]) => any
 }
 export const mapProps = {
+  sdk: Object as PropType<MapSdk>,
   geocoderUrl: String,
   geocoderHandler: Function as PropType<MapGeocoderHandler>,
   isInternational: Boolean,

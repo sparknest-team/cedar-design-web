@@ -86,3 +86,25 @@ test("queued timeline zoom and positioning release their frames on unmount", asy
   retained.forEach(callback => callback(0));
   expect(document.querySelector(".c-scheduler")).toBeNull();
 });
+
+test("a stale timeline positioning callback cannot discard the current frame", async () => {
+  const callbacks = new Map<number, FrameRequestCallback>();
+  let sequence = 0;
+  const view = document.defaultView!;
+  vi.spyOn(view, "requestAnimationFrame").mockImplementation(callback => { callbacks.set(++sequence, callback); return sequence; });
+  const cancel = vi.spyOn(view, "cancelAnimationFrame").mockImplementation(id => { callbacks.delete(id); });
+  const owner = mount(Scheduler, { attachTo: document.body, props: {
+    defaultDate: "2026-09-22", defaultMode: "resource-timeline", scale: "hour", resources: [{ id: "r", label: "Resource" }],
+  } });
+  owners.push(owner);
+  await flushPromises();
+  const previous = [...callbacks.values()].at(-1)!;
+  expect(previous).toBeTypeOf("function");
+  await owner.setProps({ scale: "day" });
+  await flushPromises();
+  const current = [...callbacks.keys()].at(-1)!;
+  expect(current).toBeGreaterThan(0);
+  previous(0);
+  owner.unmount(); owners.splice(owners.indexOf(owner), 1);
+  expect(cancel).toHaveBeenCalledWith(current);
+});

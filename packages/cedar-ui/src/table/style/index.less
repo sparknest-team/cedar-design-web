@@ -1040,3 +1040,12 @@
 .c-table-cell-align-left:dir(rtl) { justify-content: flex-end; }
 .c-table-cell-align-right:dir(rtl) { justify-content: flex-start; }
 .c-table-cell-align-start { text-align: start; justify-content: flex-start; }
+
+@media (prefers-reduced-motion: reduce) {
+  .c-table-col-fixed-left-last::after,
+  .c-table-col-fixed-right-first::after,
+  .c-table-container::before,
+  .c-table-container::after {
+    transition: none;
+  }
+}

@@ -2,6 +2,7 @@
 import { defineComponent, getCurrentInstance, h, onBeforeUnmount, ref, shallowRef } from 'vue'
 import Dialog from '..'
 import Button from '../../button'
+import Input from '../../input'
 const first = ref<HTMLElement>()
 const second = ref<HTMLElement>()
 const active = shallowRef<ReturnType<typeof Dialog.open>>()
@@ -18,7 +19,7 @@ function openSample() {
     }
     return () => h('div', [
       h('p', '当前挂载区域 / Current target: ' + location.value),
-      h('input', { 'aria-label': '服务草稿 / Service draft', value: draft.value, onInput: (event: Event) => { draft.value = (event.target as HTMLInputElement).value } }),
+      h(Input, { 'aria-label': '服务草稿 / Service draft', editMode: 'direct', modelValue: draft.value, 'onUpdate:modelValue': (value: string) => { draft.value = value } }),
       h('p', '切换挂载区域后，输入草稿仍保留。Moving the same dialog preserves its draft.'),
       h(Button, { onClick: () => move('A') }, () => '移动到 A / Move to A'),
       h(Button, { onClick: () => move('B') }, () => '移动到 B / Move to B'),

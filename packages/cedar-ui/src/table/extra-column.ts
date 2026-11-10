@@ -2,6 +2,24 @@ import type { ComponentSize } from "../_utils/constant";
 
 /** 末列扩展列（如设置按钮）的默认 dataIndex */
 export const TABLE_EXTRA_COLUMN_KEY = "__cedar_table_extra__";
+export const TABLE_EXTRA_COLUMN_MARKER = Symbol('table-extra-column');
+const TABLE_EXTRA_COLUMN_LAYOUT_KEY = Symbol('table-extra-column-layout-key');
+
+export function markTableExtraColumn<T extends object>(column: T): T {
+  return Object.assign(column, { [TABLE_EXTRA_COLUMN_MARKER]: true });
+}
+
+export function isTableExtraColumn(column: object | undefined): boolean {
+  return Boolean((column as { [TABLE_EXTRA_COLUMN_MARKER]?: boolean } | undefined)?.[TABLE_EXTRA_COLUMN_MARKER]);
+}
+
+export function setExtraColumnLayoutKey(column: object, key: string): void {
+  Object.assign(column, { [TABLE_EXTRA_COLUMN_LAYOUT_KEY]: key });
+}
+
+export function getColumnLayoutKey(column: { dataIndex?: string }): string | undefined {
+  return (column as { [TABLE_EXTRA_COLUMN_LAYOUT_KEY]?: string })[TABLE_EXTRA_COLUMN_LAYOUT_KEY] ?? column.dataIndex;
+}
 
 export type TableExtraColumnConfig = {
   /** 列宽。未传时默认 28px */

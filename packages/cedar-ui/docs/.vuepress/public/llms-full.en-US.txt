@@ -763,9 +763,9 @@ import type {
 } from '@cedar-design/ui'
 ```
 
-`type="default"` renders no built-in icon. Use `#icon` when an icon is needed.
-
 ## Usage notes
+
+`type="default"` renders no built-in icon. Use `#icon` when an icon is needed.
 
 
 
@@ -1797,6 +1797,7 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 
 | Event | Arguments |
 | --- | --- |
+| keydown | event: KeyboardEvent |
 | update:modelValue | value: string \| null |
 | input | value: string, event: Event |
 | search | value: string, event: Event |
@@ -1807,6 +1808,9 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 | dropdown-scroll / dropdown-reach-bottom | event: Event |
 | load-error | error: unknown |
 | update:open / open-change | open: boolean |
+
+`keydown` notifies before the internal keyboard action; call `preventDefault()` to suppress it.
+When suggestions are embedded in the editor, Escape closes the editor. When suggestions are a separate popup, Escape closes that popup first.
 
 Typing: `input → update:modelValue → search`; selection: `update:modelValue → select → change`; clear: `clear → input → update:modelValue → change`. Selecting the same value emits only select. change is a commit on blur, Enter or selection. Input owns typing/focus/clear Form notifications; AutoComplete notifies Form once for suggestion commits. Selection applies maxLength; select.value is the committed string, while option.value retains the original suggestion. clear receives an event, not a string.
 
@@ -1833,7 +1837,7 @@ default does not replace the input. option customizes candidates, read customize
 | blur | - | void |
 | refresh | - | `Promise<void>` |
 
-Arrow keys reopen after Escape: ArrowDown activates the first enabled candidate and ArrowUp the last, without submitting a model; Enter selects. Composition, canceled keyboard events, readonly/disabled and should-open remain respected. Tab retains native focus navigation. Vue useId keeps SSR identifiers stable.
+Arrow keys reopen after Escape: ArrowDown activates the first enabled candidate and ArrowUp the last, without submitting a model; Enter selects. Composition, canceled keyboard events, readonly/disabled and should-open remain respected. Tab retains native focus navigation. Vue useId keeps SSR identifiers stable. The input references the listbox through aria-controls while suggestions are open; the reference is removed when closed. When virtualization unmounts the active option, its active-descendant reference is removed until it mounts again.
 
 ## Types
 
@@ -3759,7 +3763,7 @@ Example source: src/breadcrumb/__demos__/max-count.vue
     <c-breadcrumb :routes="maxRoutes" :max-count="3" @click.prevent>
       <template #more-icon="{ omittedItems }">
         <c-tooltip :trigger="['hover', 'focus', 'click']" :content="omittedItems.map((item) => item.label).join(' / ')">
-          <button type="button" class="more-trigger" aria-label="查看隐藏路径"><c-icon-more aria-hidden="true" /></button>
+          <c-button html-type="button" variant="text" class="more-trigger" aria-label="查看隐藏路径"><c-icon-more aria-hidden="true" /></c-button>
         </c-tooltip>
       </template>
     </c-breadcrumb>
@@ -4859,7 +4863,7 @@ const types = ["circle", "wave", "cube", "rect", "disappear"];
         />
       </c-form-item>
     </c-form>
-    <label><input v-model="stacked" type="checkbox" />图文堆叠（stacked）</label>
+    <c-checkbox v-model="stacked">图文堆叠（stacked）</c-checkbox>
     <p v-if="mode === 'line'">
       line 使用底部进度线，loading-type 和 loading-size 不适用；可通过
       loading-color 调整颜色。
@@ -4924,7 +4928,7 @@ const elevation = ref(2);
 </template>
 ```
 
-### Sync, async and rejection recovery
+### Controlled loading and failure recovery
 
 Example source: src/button/__demos__/controlled-loading.vue
 
@@ -5965,7 +5969,9 @@ Title, content and actions follow reading order. Default floating actions sit at
 
 `row-reverse` reverses the horizontal cover and body order, with reading direction still following the container. Collapsed `floating-content` keeps its nodes and state but is inert to keyboard and assistive technology; it becomes interactive when expanded. Floating is available only in column direction.
 
-The floating layer remains at the Card’s original DOM location. An ancestor’s transform or similar property may change the fixed-position containing block, and ancestor clipping may obscure the layer, so viewport coverage is not guaranteed. The layer does not currently provide modal focus management or Escape-to-close; use Dialog when modal interaction is required.
+The floating layer remains at the Card’s original DOM location. An ancestor’s transform or similar property may change the fixed-position containing block, and ancestor clipping may obscure the layer, so viewport coverage is not guaranteed. When focus is inside an expanded Card, Escape requests closing unless an inner control has already handled the key; a nested topmost popup handles Escape first. The layer does not provide modal focus management; use Dialog when modal interaction is required.
+
+When focus is still inside the floating content or close controls, closing attempts to return focus to the element focused before expansion. If focus has moved elsewhere, it is left unchanged.
 
 The default close button uses the current locale’s close text and can be overridden with `close-button-aria-label`. `floating-duration` is a finite nonnegative duration in milliseconds; 0 means no delay and invalid values fall back to 250.
 
@@ -5999,7 +6005,7 @@ The default close button uses the current locale’s close text and can be overr
 | Event | Arguments and timing |
 | --- | --- |
 | click | `(event: Event)`, emitted when the card is clicked |
-| update:floating | `(value: boolean)`, emits false when the built-in close button requests closing; expansion is controlled by the parent |
+| update:floating | `(value: boolean)`, emits false when the built-in close button or Escape requests closing; expansion is controlled by the parent |
 
 ### Card Slots
 
@@ -6023,7 +6029,7 @@ No public methods.
 ### Usage notes
 
 Props, event arguments and slots match. Cedar inherits the global size when size is omitted: xs/sm map to sm, all others to md. Maple falls back to md. Pass size explicitly for identical density. Themes and CSS prefixes remain platform-specific.
-Card no longer has a loading prop. Compose a loading overlay with the Loading directive.
+Use the Loading directive to compose a loading overlay on Card.
 <!-- same-source-api:end -->
 
 ## Types
@@ -8489,7 +8495,7 @@ async function load() {
 
 ## API
 
-A panel branch’s `aria-expanded` indicates whether its child column is actually visible; focus or hover does not mark it expanded before that column opens. Leaf options have no `aria-expanded`. Search results do not advertise submenus that are not displayed.
+A panel branch’s `aria-expanded` indicates whether its child column is actually visible; focus or hover does not mark it expanded before that column opens. Leaf options have no `aria-expanded`. Search results do not advertise submenus that are not displayed. Direct single-select search uses a `listbox` with `option` elements, and the input references the popup and active option. Editor single-select search uses `menuitemradio` with `aria-checked` and one Tab stop. Multiple-select search retains its checkboxes. In direct single-select search, the popup icon is excluded from the Tab sequence; click the icon or press Arrow Down in the input to open it.
 
 ### Empty values and reading placeholders
 
@@ -8552,6 +8558,12 @@ Use `v-model`, `v-model:open` and `v-model:input-value` for controlled state. Cl
 | `edit-mode` | Field presentation; inherits FormItem / Form when omitted. | `direct / click / dblclick` | `direct` |
 
 ### Cascader Events / Methods
+
+In direct mode, Arrow Down requests opening when the field is closed. Once opened, the first enabled option becomes active if no option is already active and focus remains in the field, including when options arrive asynchronously. Losing focus, closing, or interacting again cancels the pending activation. A controlled `open` changes only when the parent accepts the request.
+
+When a menu option has focus, Enter or Space activates it. Search inputs and nested checkboxes keep their own keyboard behavior.
+
+- `keydown(event)`: keyboard event from the field, candidate menu, or editor panel; `preventDefault()` suppresses internal keyboard handling.
 
 - `update:modelValue`, `change(value)`: emitted on commit, not while editing a draft.
 - `update:open`, `open-change(open)`: request an expanded-state change.
@@ -8638,6 +8650,8 @@ Field editing uses edit-mode: Cedar supports direct/click/dblclick, and Maple su
 The `options` prop accepts an array or `(query, { signal }) => array/Promise`. The component manages loading, cancellation and stale-result isolation; failures emit load-error. Single/multiple groups initialize with an empty-string query, searchable fields reload when the query changes, and root loading for tree fields remains independent of existing load-more child loading.
 
 ### Lazy-loading completion and errors
+
+When an expandable option has unloaded children, Enter, Space, or the forward arrow starts lazy loading and displays its pending state. The forward arrow moves into children only if focus remains on the input or option that received the key. Search results do not expand children.
 
 `loadMore(option, done)` keeps a callback-only contract in the field and standalone panel. Call `done(children)` to accept children or `done()` to end waiting and allow retry. Only the first callback is accepted; return values, including a resolved Promise, do not replace `done`. A synchronous loader exception releases waiting and reaches Vue's `errorCaptured` / application `errorHandler`. The `load-error` event remains specific to the `options` data source; it does not report `loadMore` exceptions. Handle asynchronous callback-based request failures in business code and call `done()`.
 
@@ -13030,6 +13044,8 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 
 ### DateRange Props
 
+`input-attrs` applies to the two direct input elements. For example, `:input-attrs="[{ 'aria-label': 'Departure' }, { 'aria-label': 'Return' }]"` names each endpoint. The field owns its value, disabled, readonly, placeholder, role and popup state; shared descriptions, per-input descriptions and form errors are merged for each input. Component errors take precedence; otherwise each input retains its `aria-invalid`. `RangeInputAttributes` is exported from the component and root entries and includes native attributes and `Once` event types.
+
 | Prop | Description | Type | Default behavior |
 | --- | --- | --- | --- |
 | `before-commit` | Explicit field-save guard using payload, done and context | `BeforeFieldCommit` | `undefined` |
@@ -13051,6 +13067,7 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 | `format` | Display/text-input format; a function only formats without reverse text parsing | `string \| ((date: Date) => string)` | From precision/time settings |
 | `hint` | Floating placeholder hint, suppressed by an outer Form label | `boolean` | `true` |
 | `input-editable` | Allow text input without removing panel selection | `boolean` | `true` |
+| `input-attrs` | Native attributes for the start and end inputs, in order; per-input names override shared names | `RangeInputAttributes[]` | `undefined` |
 | `line` | Show the field border or underline | `boolean` | `true` |
 | `loading` | Manual loading feedback, independent of event return values | `boolean` | `false` |
 | `loading-mode` | Field loading presentation mode | `default \| line` | default |
@@ -15283,6 +15300,7 @@ Example source: src/dialog/__demos__/service-container.vue
 import { defineComponent, getCurrentInstance, h, onBeforeUnmount, ref, shallowRef } from 'vue'
 import Dialog from '..'
 import Button from '../../button'
+import Input from '../../input'
 const first = ref<HTMLElement>()
 const second = ref<HTMLElement>()
 const active = shallowRef<ReturnType<typeof Dialog.open>>()
@@ -15299,7 +15317,7 @@ function openSample() {
     }
     return () => h('div', [
       h('p', '当前挂载区域 / Current target: ' + location.value),
-      h('input', { 'aria-label': '服务草稿 / Service draft', value: draft.value, onInput: (event: Event) => { draft.value = (event.target as HTMLInputElement).value } }),
+      h(Input, { 'aria-label': '服务草稿 / Service draft', editMode: 'direct', modelValue: draft.value, 'onUpdate:modelValue': (value: string) => { draft.value = value } }),
       h('p', '切换挂载区域后，输入草稿仍保留。Moving the same dialog preserves its draft.'),
       h(Button, { onClick: () => move('A') }, () => '移动到 A / Move to A'),
       h(Button, { onClick: () => move('B') }, () => '移动到 B / Move to B'),
@@ -16053,7 +16071,7 @@ import type {
 
 Dialog public color variables have the same meanings as Maple: `--c-dialog-background` is the raised panel background (`surface-raised`); `--c-dialog-overlay-background` is the scrim; `--c-dialog-title-text-color` and `--c-dialog-content-text-color` are primary content; `--c-dialog-close-button-color` is the secondary action. `--c-dialog-status-{info|success|warning|danger}-color` uses readable content-info/success/warning/danger, not status fills. Business themes should override these component variables; shared themes should override the corresponding system variables. Borders, widths, spacing and layout retain desktop specifications.
 
-The backdrop consumes `sys-color-scrim` through the Dialog component variable. Maple no longer uses Popup colors for Dialog. Set a per-instance backdrop variable via `overlay-style`; a variable on the panel (`dialog-style`) does not inherit to its sibling backdrop. Explicit `overlay-style.backgroundColor` wins. Teleported content needs variables on its actual DOM ancestors. Dark themes inherit the same semantic colors; geometry remains platform-specific. Status icons use readable content colors.
+The backdrop consumes `sys-color-scrim` through the Dialog component variable. Dialog uses its own backdrop variables. Set a per-instance backdrop variable via `overlay-style`; a variable on the panel (`dialog-style`) does not inherit to its sibling backdrop. Explicit `overlay-style.backgroundColor` wins. Teleported content needs variables on its actual DOM ancestors. Dark themes inherit the same semantic colors; geometry remains platform-specific. Status icons use readable content colors.
 
 Variables are grouped by purpose: background/overlay-background for panel/scrim; border-* for panel/divider borders; title-* for title typography; content-* for body typography; actions-* for actions; close-button-* for the close button; status-* for semantic icons; simple-*/fullscreen-* for mode dimensions; animation-* for enter/leave motion. width/margin-top control ordinary panel layout. Internal drag/position variables are not public customization points.
 
@@ -17167,7 +17185,7 @@ Built-in fade and four-direction slide disable transitions and initial displacem
 
 Panel bg uses surface-raised; overlay-bg uses sys-color-scrim; header-text-color/content-text-color use content-primary, with the close button inheriting header-text-color; border-color uses border-default. Drawer keeps its existing geometry, motion and stacking defaults. Drawer is a Cedar component; Maple does not define empty same-name variables.
 
-overlay-style sets instance scrim variables; drawer-style sets panel variables. These sibling nodes do not inherit variables from one another. Set global system theme variables on a real common ancestor. Explicit background props take precedence over variable consumption. 
+overlay-style sets instance scrim variables; drawer-style sets panel variables. These sibling nodes do not inherit variables from one another. Set global system theme variables on a real common ancestor. Explicit background props take precedence over variable consumption.
 
 <!-- component-css-variables:start -->
 
@@ -18573,6 +18591,10 @@ Document: llms/en-US/components/form.md
 
 # Form
 
+## Field names
+
+In direct edit mode, for a visible label on a single field, match FormItem `label-attrs.for` to the control `id`. The native inputs in selection, date and time fields do not let their placeholder override an associated label. An explicit `aria-label` or `aria-labelledby` retains its native accessible-name precedence. Placeholder is only a fallback when no label is supplied; provide clear labels. Date and time range fields in FormItem associate the form label with their group; use `input-attrs` to give the endpoints distinct names. If `label-attrs.for` targets another control, the label is not associated with the range group. The `tooltip` button is independently focusable and its name is not added to the field label.
+
 Start with the basic example, then compare related settings before moving to controlled, asynchronous or combined use cases.
 
 ## Reading direction
@@ -18686,17 +18708,18 @@ Example source: src/form/__demos__/decoration.vue
 
 ```vue
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, useId } from 'vue'
+const demoId = useId()
 const model = reactive({ name: '', notes: '' })
 </script>
 
 <template>
   <c-form :model="model" layout="vertical">
-    <c-form-item field="name" label="公开名称" required show-colon tooltip="名称将展示在个人主页。" :label-attrs="{ for: 'decorated-name' }">
-      <c-input id="decorated-name" v-model="model.name" placeholder="输入公开名称" />
+    <c-form-item field="name" label="公开名称" required show-colon tooltip="名称将展示在个人主页。" :label-attrs="{ for: `${demoId}-name` }">
+      <c-input :id="`${demoId}-name`" v-model="model.name" placeholder="输入公开名称" />
     </c-form-item>
-    <c-form-item field="notes" label="备注" label-component="div" :content-flex="false" content-class="decoration-grid">
-      <c-input v-model="model.notes" placeholder="支持自定义内容布局" />
+    <c-form-item field="notes" label="备注" label-component="div" :label-attrs="{ id: `${demoId}-notes-label` }" :content-flex="false" content-class="decoration-grid">
+      <c-input :aria-labelledby="`${demoId}-notes-label`" v-model="model.notes" placeholder="支持自定义内容布局" />
       <small>content-flex=false 后由业务自行布局。</small>
     </c-form-item>
   </c-form>
@@ -26285,7 +26308,7 @@ const variant = ref('filled')
 </script>
 ```
 
-`InputGroupLabel` renders a span for content attached outside the input. Associate a visible field name with the native input through FormItem, a native label with for/id, or `aria-label`.
+`InputGroupLabel` renders a span for content attached outside the input. Associate a visible name by matching FormItem `label-attrs.for` to the Input `id`, or use a native label with for/id. You can also provide `aria-label` explicitly.
 
 ### Group State
 
@@ -28399,6 +28422,10 @@ function reset() { location.value = { longitude: 116.397, latitude: 39.908, addr
 
 ### Auth
 
+The original `map-core` runtime dependency is not included. Applications can provide an explicit `MapSdk` adapter through `sdk`, containing `Map`, `LngLat`, `MapService`, and `SearchService`; a fallback is shown when no valid implementation is available. Legacy global integration remains supported, but the explicit adapter takes precedence and does not require replacing the native browser `Map`. The adapter must handle initialization, authorization, and resource disposal for its map service.
+
+`MapSdk`, `MapSdkMapOptions`, `MapSdkSearchOptions`, `MapSdkSearchCompletion`, `MapSdkMap`, `MapSdkLngLat`, and `MapSdkSearchService` are exported from both the root and `map` entry. An explicit adapter must call the supplied completion callback for that specific `search(query, complete)` request; stale and duplicate callbacks are ignored. `MapSdkSearchOptions.complete` exists for legacy global SDK compatibility and cannot submit results for explicit adapters. Map and search services may provide `off` and `destroy` for cleanup; the application owns vendor adaptation and authorization.
+
 Example source: src/map/__demos__/auth.vue
 
 ```vue
@@ -28424,6 +28451,8 @@ Example source: src/map/__demos__/auth.vue
 
 
 Preview configuration: `map-type="google"`, `is-international`, `map-type="amaps"`.
+
+When `is-international` is enabled, the effective map type is `google`; otherwise it is `map-type`. SDK initialization and the default reverse geocoder use the same effective type; an explicit `geocoder-url` takes precedence.
 
 Example source: src/map/__demos__/google.vue
 
@@ -28460,10 +28489,15 @@ const location = ref({ longitude: 116.397, latitude: 39.908, address: '北京示
 
 ### Map Props
 
+GIS search uses the current `enable-gis-search`, `base-path`, and `fetch` on the next input. Changing these settings or `is-international` clears old results and ignores earlier GIS search responses.
+
+When the SDK is available, changing `sdk`, `map-type`, `is-international`, `base-path`, `driver`, `fetch`, `geocoder-url`, or `geocoder-handler` retires the old instance and initializes a new one. Objects and functions are compared by reference. Changes in the same update are coalesced, and stale results cannot update the new instance. Actual resource disposal depends on the SDK adapter.
+
 | Prop | Description | Type | Default |
 | ----------------------- | -------------------------------------------- | -------------------------------------------- | ---------------- |
 | model-value(**v-model**) | Controlled location model; the input object is not mutated | `Object` | - |
 | default-value | Default map center | `{ [key in valueKeyAlias[keys]]: any }` | - |
+| sdk | Explicit map SDK adapter; replacement or removal reinitializes the map | `MapSdk` | `-` |
 | driver | SDK driver object | `object` | `-` |
 | fetch | Service with get/post methods | `MapFetch` | `-` |
 | geocoder-url | Geocoder endpoint URL | `string` | `-` |
@@ -28480,7 +28514,7 @@ const location = ref({ longitude: 116.397, latitude: 39.908, address: '北京示
 | value-key-scope | String array of values displayed on the map | `Array` | `valueKeyScope` |
 | value-key-alias | Mapping from map keys to values | `Object` | `valueKeyAlias` |
 
-Programmatic map moves share an update guard, so an older cooldown cannot end a newer move. When locations are selected in succession, an older place-detail or lookup result cannot overwrite the later selection.
+Programmatic map moves share an update guard, so an older cooldown cannot end a newer move. When locations are selected in succession, an older place-detail or lookup result cannot overwrite the later selection. For successive map moves, only the latest reverse-geocoding result can commit; a parent location change or unmount invalidates older requests. Unmounting during initialization prevents later map creation or processing of the initial geocoding result. Model updates during initialization do not create duplicate maps; the center synchronizes to the latest model when initialization completes.
 
 ### MapSelect Props
 
@@ -28492,21 +28526,24 @@ Includes Map Props, plus:
 | clearable | Show the clear button | `boolean` | `false` |
 | map-style | Styles applied directly to the map; can set map height | `object` | `{ height: '300px'}` |
 
+SDK initialization failures report the original error and show a retry button. Deactivation during initialization retires the old instance and restarts initialization after activation. The application must still provide a usable map SDK runtime.
+
 ### Map Events
 
 | Event | Description | Arguments |
 | --------------- | -------------------------- | ------------------------- |
+| error | SDK initialization, search, place selection, geolocation, or reverse geocoding after a map move failed | Original cause `unknown` |
 | change | Position change notification | `(scopedValue, fullValue)` |
 | init | Emitted after map initialization | `(initialValue, completedValue)` |
 | loading:address | Emitted while resolving the selected location's address | `-` |
-| loaded:address | Emitted after resolving the selected location's address | `-` |
+| loaded:address | Emitted when address resolution settles, including failure or cancellation; failures also emit error | `-` |
 | update:modelValue | Proposes a new location model | New model object |
 
 ### MapSelect Events
 
 | Event | Description | Arguments |
 | --- | --- | --- |
-| `error` | Current reverse-geocoding request failed | Original cause `unknown` |
+| `error` | Current reverse geocoding, map SDK initialization, search, place selection, geolocation, or move geocoding failed | Original cause `unknown` |
 | `clear` | Clear was requested | None |
 | `change` | Position change proposed | `(scopedValue, fullValue)` |
 | `init` | Map initialization forwarded | `(initialValue, completedValue)` |
@@ -28518,6 +28555,9 @@ The parent owns `model-value`. Selection and geocoding propose a new object via 
 `geocoder-handler` receives numeric longitude and latitude and can synchronously or asynchronously return an object containing `address`, `poi`, `area_code`, `country_code`, `city`, and `country`; it takes precedence over `fetch`. Otherwise reverse geocoding uses `geocoder-url`, or derives a default from `map-type` and `base-path`; `fetch.get` must return a response with `isValid()` and `data`. MapSelect fallback uses updated aliases and service configuration for subsequent requests; zero is a valid coordinate. Runtime SDK service reconfiguration requires verification when the SDK is restored. The root and `map` entry export `MapProps`, `MapSelectProps`, `MapFetch`, `MapGeocoderHandler`, `MapGeocoderResult`, and component instance types. The map SDK is not included in the current build; map interaction is unavailable when it is not configured.
 
 ## Types
+
+`MapEmits` and `MapSelectEmits` are available from the root and `map` entry.
+
 
 ### valueKeyAlias
 
@@ -30170,7 +30210,7 @@ Function options additionally accept `onOpen / onOpened / onClose / onClosed`. C
 
 ### Message Events
 
-`update:open`, `open`, `opened`, `close`, and `closed`, emitted once per visibility cycle.
+`update:open`, `open`, `opened`, `close`, and `closed`, emitted once per visibility cycle. When an initially open message hydrates, it skips the initial enter animation and emits `opened` after `open` on mount.
 
 ### Message Methods
 
@@ -31207,7 +31247,7 @@ label/icon/extra render functions, same-name slots and nodeProps receive `{ opti
 
 When using the content slot, the custom panel takes its accessible name from the entry. Set aria-label or aria-labelledby on the entry when needed. Ensure custom entries have a meaningful name.
 
-Titles follow matching selected options by default. `label` slots take highest precedence: use `<template #label>Advanced filters</template>` for fixed titles or bind a separate reactive variable for manual titles. `update-label` is removed.
+Titles follow matching selected options by default. `label` slots take highest precedence: use `<template #label>Advanced filters</template>` for fixed titles or bind a separate reactive variable for manual titles.
 
 `v-model` stores panel selection. Slot `active` indicates business entry state: named entries in a root menu compare root activeItem with name; independent entries match their main value against ordinary options, including 0/empty string. Unknown values/groups/dividers do not activate independent entries. `highlight` overrides emphasis only: true forces it, false removes it, omission follows `active`. It changes neither `active` nor value. Opening a panel does not activate the entry.
 
@@ -31444,7 +31484,7 @@ import type { NotificationInstance, NotificationConfig, NotificationReturn } fro
 
 ## CSS Variables
 
-Panels use surface-overlay; body/title use content-primary; close buttons use content-secondary; borders use border-default. Status icons use readable status content colors: info no longer uses brand fills, and loading uses content-brand. Colors are grouped by status. Custom backgrounds require checking content/icon/close contrast. Plain-text actions/footers inherit panel content color; applications own independently styled slots.
+Panels use surface-overlay; body/title use content-primary; close buttons use content-secondary; borders use border-default. Status icons use readable status content colors; loading uses content-brand. Colors are grouped by status. Custom backgrounds require checking content/icon/close contrast. Plain-text actions/footers inherit panel content color; applications own independently styled slots.
 
 wrapper-* controls list position/spacing; padding-*/margin-* control panel layout; icon-*/title-*/content-* control typography; close-* controls close buttons; border-*/box-shadow control borders/shadows; transition-* controls motion; z-index controls stacking. Existing geometry/motion defaults remain. The table lists actual declarations, not a claim that every historical geometry variable has verified consumers.
 
@@ -32501,7 +32541,7 @@ import type { PaginationProps, PaginationInstance, PaginationPageSizeProps } fro
 
 ## Behavior
 
-Containers at or below `compact-breakpoint` automatically use compact mode, consistently in desktop sidebars and mobile. Totals/page-size selectors remain; auxiliary controls wrap. Previous/next sizes follow size without forced narrow-screen enlargement (formerly 36px). `responsive=false` retains full page numbers; extremely narrow page lists scroll internally without widening the page.
+Containers at or below `compact-breakpoint` automatically use compact mode, consistently in desktop sidebars and mobile. Totals/page-size selectors remain; auxiliary controls wrap. Previous and next buttons follow the configured size. `responsive=false` retains full page numbers; extremely narrow page lists scroll internally without widening the page.
 
 The compact current-page input also serves as the jumper, so no duplicate jumper appears. `page-item`, `page-item-ellipsis`, `jumper-prepend` and `jumper-append` render only in their full-mode controls.
 
@@ -45602,6 +45642,7 @@ Single/multiple options both use popup-option-padding-horizontal. There is no im
 | search | Triggered when the user searches | text |
 | focus | Field gains focus | event |
 | blur | Field loses focus | event |
+| keydown | Field or editor search key; `preventDefault()` suppresses internal keyboard handling | event: KeyboardEvent |
 | clear | Triggered when the value of the input changes | event |
 | remove | Triggered when the delete button of the label is clicked | value |
 | exceed-limit | Selection would exceed the multiple-selection limit | value, event |
@@ -46812,7 +46853,7 @@ const items = ref(['A', 'B', 'C'])
       <template v-for="item in items" :key="item">
         <label class="space-split-field">
           <span>Item {{ item }}</span>
-          <input :aria-label="'Draft ' + item" placeholder="草稿 / Draft" />
+          <c-input edit-mode="direct" :aria-label="'Draft ' + item" placeholder="草稿 / Draft" />
         </label>
       </template>
       <template #split><span aria-hidden="true">/</span></template>
@@ -46827,7 +46868,7 @@ const items = ref(['A', 'B', 'C'])
   gap: 4px;
   width: 110px;
 }
-.space-split-field input {
+.space-split-field :deep(input) {
   min-width: 0;
   width: 100%;
   box-sizing: border-box;
@@ -49419,7 +49460,7 @@ presetCedar({
 });
 ```
 
-`false` disables the corresponding Cedar theme mapping. Generator-native utilities may still exist but no longer bind Cedar variables.
+`false` disables the corresponding Cedar theme mapping. Generator-native utilities may still exist but are independent of Cedar variables.
 
 ---
 
@@ -52438,6 +52479,10 @@ Document: llms/en-US/components/table.md
 
 The active sorted column exposes ascending or descending order through `aria-sort`. Inputs and buttons inside custom headers retain their own keyboard and click behavior.
 
+Default row selection controls use the row key in their accessible names, and the select-all control uses a localized name. An explicit selection column title takes precedence.
+
+When a height constraint, sticky header, or virtual list splits the table into multiple native tables, the data and summary tables include semantic headers in the same table, associated with cells through `headers`. An explicit `headers` on the `td` slot takes precedence; the caller is responsible for referencing valid headers in the same table. Screen-reader and complex custom-header acceptance is still pending; verify the target environment and provide accessible alternatives where needed.
+
 ## Basic examples
 
 ### Basic usage
@@ -53728,7 +53773,7 @@ const columns = [{ title: 'Name', dataIndex: 'name', width: 200 }, { title: 'Cit
 
 sticky-header and sticky-pagination follow the page or outer scroll container. A numeric zero enables the feature with zero offset. This differs from using height/max-height to constrain internal body scrolling. Avoid an extra overflow:hidden ancestor that interrupts sticky positioning.
 
-Built-in sticky pagination keeps a synchronized horizontal rail above the pagination in the same sticky footer. The rail follows body scroll in both directions, and is omitted when content fits. Pagination no longer obscures the only reachable horizontal scroll control.
+Built-in sticky pagination keeps a synchronized horizontal rail above the pagination in the same sticky footer. The rail follows body scroll in both directions, and is omitted when content fits. The horizontal rail remains reachable above sticky pagination.
 
 | Property | Behavior |
 | --- | --- |
@@ -55841,7 +55886,7 @@ Example source: src/table/__demos__/loading.vue
       <tbody>
         <tr>
           <td>切换加载不会重建行</td>
-          <td><input v-model="draft" aria-label="表格草稿" /></td>
+          <td><c-input v-model="draft" edit-mode="direct" aria-label="表格草稿" /></td>
         </tr>
       </tbody>
     </c-table>
@@ -56011,6 +56056,12 @@ The state argument of `select`, `selectAll`, `expand`, and `expandAll` defaults 
 
 `Thead` and `Tbody` render the header and body, respectively, with content from the default slot; their named slots customize the corresponding elements. `Tr`, `Th`, and `Td` are low-level renderers that depend on Table context, not standalone data tables. Usually, customize elements through the Table `tr`, `th`, and `td` slots.
 
+Title and cell named slots, column `title`, `cell`, `filter-icon` and `filter-content`, `empty`, `footer`, `expand-row`, `expand-icon`, pagination slots, `summary-cell`, `drag-handle-icon`, extra-column header/cell slots, and `header-cell-actions` support `v-for` with `v-memo` in their content.
+
+Currently, combining `v-for` and `v-memo` inside the `thead`, `tbody`, `tr`, `th`, or `td` structure slots causes server rendering to fail. Remove `v-memo` from these slots when server rendering is required.
+
+`TableColumn` entries declared in `#columns`, including grouped and dynamic columns, render their headers and data cells on the server. Columns can also be defined with the `columns` prop.
+
 For `Tr`, `expand`, `empty`, and `checked` describe row state; `rowIndex` and `record` provide row context. `Th` accepts `column`, `operations`, `dataColumns`, and `resizable`. `Td` accepts `rowIndex`, `record`, `column`, `type`, `operations`, `dataColumns`, `colSpan`, `rowSpan`, `isFixedExpand`, `containerWidth`, `showExpandBtn`, `indentSize`, `renderExpandBtn`, and `summary`; these fields support Table layout and rendering.
 
 ### TableComponents
@@ -56173,7 +56224,6 @@ Filter content uses the column `filter-content` slot first, then the Table named
 | :----------------- | ------------------------------------------------------------------ | ------------------ | :-----: |
 | height | Viewport height | `number \| string` | `-` |
 | threshold | Item-count threshold for virtual scrolling; counts below it do not enable virtualization | `number` | `-` |
-| isStaticItemHeight | Removed: use `fixedSize` instead of the old fixed-height flag | `boolean` | `false` |
 | fixedSize | Whether item heights are fixed | `boolean` | `false` |
 | estimatedSize | Estimated item height when heights vary | `number` | `-` |
 | buffer | Number of items premounted beyond viewport boundaries | `number` | `10` |
@@ -56222,7 +56272,7 @@ Maple Table is a native-table presentation container without data / columns conf
 
 ## Reading direction and scrolling
 
-Table inherits the nearest native `dir`. Ordinary columns follow reading order; explicit `fixed: left/right` stays physical. Internal stable partitioning into frozen regions does not mutate supplied columns, data or business indices. Group headers crossing frozen regions split into aligned segments. Omitted align uses inline start; explicit left/right remains physical.
+Table inherits the nearest native `dir`. An explicitly supplied `dir` applies during the initial server render. Changing direction preserves the nodes and input state of cells that remain present. Ordinary columns follow reading order; explicit `fixed: left/right` stays physical. Internal stable partitioning into frozen regions does not mutate supplied columns, data or business indices. Group headers crossing frozen regions split into aligned segments. Omitted align uses inline start; explicit left/right remains physical.
 
 Header, body, summary and sticky scrollbar synchronize using a nonnegative distance from inline start, adapting native negative RTL scrollLeft. Direction changes preserve that distance and clamp it to the new viewport range. Vertical virtual-row positioning does not change horizontal distance. Teleported pagination and sticky areas inherit the source table direction.
 
@@ -58460,112 +58510,7 @@ Document: llms/en-US/components/theme-provider.md
 
 # ThemeProvider
 
-One theme boundary for the entire application or a subtree. A provider around the application is its global theme; nesting creates local overrides with the same rules. Providers never mutate html or other application roots.
-
-## Basic examples
-
-### Variable overrides
-
-Example source: src/theme-provider/__demos__/basic.vue
-
-```vue
-<script setup lang="ts">
-import { ref } from 'vue'
-
-const active = ref(true)
-</script>
-
-<template>
-  <div>
-    <c-button variant="outline" @click="active = !active">切换局部变量 / Toggle local variables</c-button>
-    <c-theme-provider tag="section" :style-vars="active ? { '--c-demo-color': 'teal' } : null">
-      <p style="color: var(--c-demo-color, currentColor)">局部颜色 / Local color</p>
-      <c-theme-provider :style-vars="{ '--c-demo-color': 'coral' }">
-        <p style="color: var(--c-demo-color)">嵌套覆盖 / Nested override</p>
-      </c-theme-provider>
-    </c-theme-provider>
-    <p>外部不受影响 / Outside remains unchanged</p>
-  </div>
-</template>
-```
-
-## Local themes
-
-### Application roots and nesting
-
-Example source: src/theme-provider/__demos__/local-theme.vue
-
-```vue
-<script setup lang="ts">
-import { ref } from 'vue'
-const theme = ref<'light' | 'dark'>('dark')
-</script>
-<template>
-  <div>
-    <c-button @click="theme = theme === 'dark' ? 'light' : 'dark'">切换局部主题 / Toggle local theme</c-button>
-    <c-theme-provider :theme="theme" class="theme-region">
-      <p>外层主题 / Outer: {{ theme }}</p>
-      <c-button status="primary">主题按钮 / Themed button</c-button>
-      <c-select :options="[{ label: 'Body popup inherits theme', value: 1 }]" placeholder="打开弹层 / Open popup" />
-      <c-theme-provider theme="light" class="theme-region">
-        <p>嵌套亮色 / Nested light</p>
-        <c-button variant="outline">亮色按钮 / Light button</c-button>
-      </c-theme-provider>
-    </c-theme-provider>
-    <p>外部保持原主题 / Outside is unchanged</p>
-  </div>
-</template>
-<style scoped>
-.theme-region { margin-top: 16px; padding: 16px; color: var(--c-color-text-1); background: var(--c-color-bg-2); border: 1px solid var(--c-color-border-2); }
-</style>
-```
-
-```vue
-<c-theme-provider :theme="mode">
-  <App />
-  <c-theme-provider theme="light"><Preview /></c-theme-provider>
-</c-theme-provider>
-```
-
-Omit theme to inherit. Use light/dark or a Themes preset object for an explicit boundary. Explicit themes replace inherited presets while style-vars overrides continue to inherit. style-vars overrides defaults, inner keys win, and null clears this layer. Explicit boundaries re-evaluate loaded component aliases. tag changes the wrapper; use a suitable layout host or display: contents where necessary.
-
-Library declarative popups inherit their owning Vue provider with body, custom popup-container and inline targets. Services created outside a provider need a popup-container inside the themed region. Third-party Teleports need an explicit theme host; foreign documents must load the library styles.
-
-## Theme presets
-
-```vue
-<c-theme-provider :theme="Themes.maple.dark">
-  <App />
-</c-theme-provider>
-```
-
-Import Themes from the library root. Update presets and custom variables through reactive props; no static method mutates the document root. Explicit style-vars take precedence over theme defaults, and fixed color overrides are inherited by descendants.
-
-## Installation and defaults
-
-```ts
-import { ThemeProvider } from '@cedar-design/ui'
-app.use(ThemeProvider)
-ThemeProvider.setPropsDefaults({ theme: 'light', tag: 'section', styleVars: () => ({}) })
-```
-
-Defaults apply to subsequently created instances; explicit props take precedence. Variable objects are copied for each instance. SSR renders the same theme boundary as the client, without retaining theme state across requests.
-
-## API
-
-### ThemeProvider Props
-
-| Prop | Description | Type | Default |
-| --- | --- | --- | --- |
-| theme | Light or dark theme; inherit when omitted | `ThemeProviderTheme` | — |
-| style-vars | CSS variables for this boundary; null clears the overrides | `StyleVars \| null` | `{}` |
-| tag | Wrapper element tag | `string` | `'div'` |
-
-The default slot supplies component content. No events.
-
-## Types
-
-Exports ThemeProvider, themeProviderProps, ThemeProviderProps, ThemeProviderInstance, ThemeProviderDefaults, ThemeProviderTheme, ThemeProviderMode, StyleVarName and StyleVars. Variables accept full --c- names or camelCase names with the library prefix; values are CSS strings and dimensions require units.
+See [Theme Customization](llms/en-US/themes.md) for presets, local themes, popup inheritance and the complete ThemeProvider API.
 
 ## CSS Variables
 
@@ -59531,7 +59476,7 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 
 ### Popup configuration and field notifications
 
-`popup-props` configures local Trigger positioning/appearance, e.g. `{ placement: 'top-start' }`, without overriding field open, disabled, trigger or other state/interaction. Top-level `popup-container`, including false, takes precedence. `input-editable` defaults to true and can disable desktop typing. `time-range-picker-props`, including class/style, controls panel appearance. Undeclared attrs no longer supply panel/popup configuration; id/aria-* fall through to the field.
+`popup-props` configures local Trigger positioning/appearance, e.g. `{ placement: 'top-start' }`, without overriding field open, disabled, trigger or other state/interaction. Top-level `popup-container`, including false, takes precedence. `input-editable` defaults to true and can disable desktop typing. `time-range-picker-props`, including class/style, controls panel appearance. Panel and popup configuration uses the declared props; id/aria-* fall through to the field.
 
 `click(event)` notifies only clicks on non-disabled fields. Readonly may notify without expanding. Closing consistently listens to `open-change(false)`, a close request that controlled open still requires the parent to accept. Neither platform has a field close event; a close request is not a value commit.
 
@@ -59540,6 +59485,8 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 A `placeholder` string applies to both endpoints; arrays provide start/end text, with missing entries empty. Explicit empty strings do not fall back to default text.
 
 ### TimeRange Props
+
+`input-attrs` applies to the two direct input elements. For example, `:input-attrs="[{ 'aria-label': 'Departure' }, { 'aria-label': 'Return' }]"` names each endpoint. The field owns its value, disabled, readonly, placeholder, role and popup state; shared descriptions, per-input descriptions and form errors are merged for each input. Component errors take precedence; otherwise each input retains its `aria-invalid`. `RangeInputAttributes` is exported from the component and root entries and includes native attributes and `Once` event types.
 
 | Prop | Description | Type | Default behavior |
 | --- | --- | --- | --- |
@@ -59563,6 +59510,7 @@ A `placeholder` string applies to both endpoints; arrays provide start/end text,
 | `hide-disabled-options` | Hide disabled time options; clocks retain tick positions | `boolean` | `false` |
 | `hint` | Floating placeholder hint, suppressed by an outer Form label | `boolean` | `true` |
 | `input-editable` | Allow text input without removing panel selection | `boolean` | `true` |
+| `input-attrs` | Native attributes for the start and end inputs, in order; per-input names override shared names | `RangeInputAttributes[]` | `undefined` |
 | `line` | Show the field border or underline | `boolean` | `true` |
 | `loading` | Manual loading feedback, independent of event return values | `boolean` | `false` |
 | `loading-mode` | Field loading presentation mode | `default \| line` | `default` |
@@ -60593,7 +60541,7 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 
 ### Popup configuration and field notifications
 
-`popup-props` configures local Trigger positioning/appearance, e.g. `{ placement: 'top-start' }`, without overriding field state/interaction such as open, disabled or trigger. Top-level `popup-container`, including false, takes precedence. `input-editable` defaults to true and can disable desktop typing. `time-picker-props`, including class/style, controls panel appearance. Undeclared attrs no longer supply panel/popup configuration; id/aria-* fall through to the field.
+`popup-props` configures local Trigger positioning/appearance, e.g. `{ placement: 'top-start' }`, without overriding field state/interaction such as open, disabled or trigger. Top-level `popup-container`, including false, takes precedence. `input-editable` defaults to true and can disable desktop typing. `time-picker-props`, including class/style, controls panel appearance. Panel and popup configuration uses the declared props; id/aria-* fall through to the field.
 
 `click(event)` notifies only clicks on non-disabled fields. Readonly may notify without expanding. Closing consistently listens to `open-change(false)`, a close request that controlled open still requires the parent to accept. Neither platform has a field close event; a close request is not a value commit.
 
@@ -62795,6 +62743,7 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 | update:modelValue / change | TreeSelectValue / undefined | Selected value publication; deferred drafts do not trigger it. |
 | update:inputValue / input-value-change / search | string | Input text and search notifications. |
 | update:open / open-change | boolean | Candidate popup or editor open notifications. |
+| keydown | KeyboardEvent | Field keyboard event; `preventDefault()` suppresses internal keyboard handling. |
 | clear | — | Clear action notification; deferred modes still require confirmation. |
 | load-error | error: unknown, node?: TreeNodeData | The current root data source or node loadMore failed; node failures include the original node. Listener Promises are not awaited. |
 
@@ -62843,7 +62792,7 @@ Duplicate expansion requests for the same asynchronously loaded node are merged.
 
 Nodes default to `{ value, label, children }`. `value` is a tree-wide unique string/number, including `0`; `label` is display content. Map other backend fields with `fieldNames: { value: 'id', label: 'text', children: 'items' }` without changing backend data. Declarative child `name`, Vue `:key` and Table `rowKey` retain separate meanings.
 
-Independent Tree state uses `selectedValues/defaultSelectedValues`, `checkedValues/defaultCheckedValues`, `halfCheckedValues` and `expandedValues/defaultExpandedValues`, updated through corresponding named v-models. `check` event indeterminate sets use `halfCheckedValues`. Node content uses `label`; TreeSelect forwards `tree-slot-label`. `scrollIntoView({ value })` locates business values; explicit `index` remains a zero-based virtual-list array `index`.
+Independent Tree state uses `selectedValues/defaultSelectedValues`, `checkedValues/defaultCheckedValues`, `halfCheckedValues` and `expandedValues/defaultExpandedValues`, updated through corresponding named v-models. `check` event indeterminate sets use `halfCheckedValues`. Node content uses `label`; TreeSelect forwards `tree-slot-label`. `scrollIntoView({ value })` locates business values; explicit `index` remains a zero-based virtual-list array `index`. When opening a virtual list, the active item is scrolled into view. Its active-descendant reference is removed while the node is unmounted and restored when it mounts again.
 
 ### Search configuration
 
@@ -64251,7 +64200,6 @@ Template slots `label`, `extra`, `switcher-icon`, and `loading-icon` receive the
 | ------------------ | ------------------------------------------------------------------ | ------------------ | :-----: |
 | height | Viewport height | `number \| string` | `-` |
 | threshold | Item-count threshold for virtual scrolling; counts below it do not enable virtualization | `number` | `-` |
-| isStaticItemHeight | Removed fixed-height flag; use `fixedSize` | `boolean` | `false` |
 | fixedSize | Whether item heights are fixed | `boolean` | `false` |
 | estimatedSize | Estimated item height when heights vary | `number` | `-` |
 | buffer | Number of items premounted beyond viewport boundaries | `number` | `10` |
@@ -64292,7 +64240,7 @@ Independent Tree state uses `selectedValues/defaultSelectedValues`, `checkedValu
 
 Tree inherits container direction; indentation, connectors and expansion arrows follow it. Keyboard focus is independent of selection. Up/Down moves through available visible nodes and Home/End reaches boundaries. In LTR, Right expands/enters children and Left collapses/returns; RTL swaps the horizontal keys. Enter selects. Space checks a checkable node, otherwise selects it.
 
-Keyboard navigation skips disabled nodes. The root identifies focus with `aria-activedescendant` and retains root focus during virtual scrolling. Expansion, filtering and node deletion repair the active node. Before/inside/after drop positions still follow vertical position without RTL reversal. TreeSelect's combobox manages focus when embedding Tree.
+Keyboard navigation skips disabled nodes. The root identifies focus with `aria-activedescendant` and retains root focus during virtual scrolling. The reference is removed while the active node is unmounted and restored when it mounts again. Expansion, filtering and node deletion repair the active node. Before/inside/after drop positions still follow vertical position without RTL reversal. TreeSelect's combobox manages focus when embedding Tree.
 
 Checkboxes visually represent node state and do not create separate Tab stops. Press Space to toggle the active node; pointer clicks also toggle it while retaining tree focus. The node `aria-checked` indicates checked, unchecked, or mixed state.
 
@@ -65257,13 +65205,6 @@ Apply overrides to the rendered component root or the actual popup ancestor. For
 Explicit inline styles and props that write the same CSS property take precedence over stylesheet defaults. After Teleport, ordinary CSS variables inherit from the actual mount location. When using ThemeProvider, follow its local-theme and popup configuration rules. Override the component variable directly for local styling; root-level aliases are not recalculated merely because a descendant system variable changes. Internal variables are not public APIs.
 
 <!-- component-css-variables:end -->
-
-### Semantic text colors
-
-| Variable | Default |
-| --- | --- |
-| `--c-typography-text-color-info` | `var(--c-sys-color-content-info)` |
-| `--c-typography-text-color-tertiary` | `var(--c-sys-color-content-tertiary)` |
 
 ---
 
@@ -68274,6 +68215,16 @@ Files are regenerated during each documentation site build and deployed with the
 
 ---
 
+Document: llms/en-US/guide/theme.md
+
+<!-- Source: docs/guide/theme.en-US.md; locale: en-US; page: /en/guide/theme/ -->
+
+# Theme Customization
+
+See [Theme Customization](llms/en-US/themes.md) for presets, variable overrides, local themes and the ThemeProvider API.
+
+---
+
 Document: llms/en-US/index.md
 
 <!-- Source: docs/en/README.md; locale: en-US; page: /en/ -->
@@ -68663,9 +68614,11 @@ Document: llms/en-US/themes.md
 
 <!-- Source: src/themes/README.en-US.md; locale: en-US; page: /en/themes/ -->
 
-# Theme presets
+# Theme Customization
 
-Use ThemeProvider at application roots and in subtrees. theme selects light/dark and style-vars accepts brand presets or custom overrides. Providers do not mutate html.
+Use ThemeProvider at application roots and in subtrees. theme accepts light/dark or a brand preset; style-vars accepts custom overrides. Providers do not mutate html.
+
+One theme boundary for the entire application or a subtree. A provider around the application is its global theme; nesting creates local overrides with the same rules. Providers never mutate html or other application roots.
 
 ## Built-in presets
 
@@ -68738,22 +68691,112 @@ function apply(theme: StyleVars) {
 </style>
 ```
 
-## Usage
+### Variable overrides
+
+Example source: src/theme-provider/__demos__/basic.vue
 
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Themes } from '@cedar-design/ui'
-const mode = ref<'light' | 'dark'>('dark')
+
+const active = ref(true)
 </script>
+
 <template>
-  <c-theme-provider :theme="Themes.maple[mode]">
-    <App />
-  </c-theme-provider>
+  <div>
+    <c-button variant="outline" @click="active = !active">切换局部变量 / Toggle local variables</c-button>
+    <c-theme-provider tag="section" :style-vars="active ? { '--c-demo-color': 'teal' } : null">
+      <p style="color: var(--c-demo-color, currentColor)">局部颜色 / Local color</p>
+      <c-theme-provider :style-vars="{ '--c-demo-color': 'coral' }">
+        <p style="color: var(--c-demo-color)">嵌套覆盖 / Nested override</p>
+      </c-theme-provider>
+    </c-theme-provider>
+    <p>外部不受影响 / Outside remains unchanged</p>
+  </div>
 </template>
 ```
 
-Omit style-vars to use the default palette and theme to inherit the outer mode. Explicit variable overrides take precedence over mode defaults. See [ThemeProvider](llms/en-US/components/theme-provider.md) for local and nested themes, popups, SSR and variable rules.
+## Local themes
+
+### Application roots and nesting
+
+Example source: src/theme-provider/__demos__/local-theme.vue
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+const theme = ref<'light' | 'dark'>('dark')
+</script>
+<template>
+  <div>
+    <c-button @click="theme = theme === 'dark' ? 'light' : 'dark'">切换局部主题 / Toggle local theme</c-button>
+    <c-theme-provider :theme="theme" class="theme-region">
+      <p>外层主题 / Outer: {{ theme }}</p>
+      <c-button status="primary">主题按钮 / Themed button</c-button>
+      <c-select :options="[{ label: 'Body popup inherits theme', value: 1 }]" placeholder="打开弹层 / Open popup" />
+      <c-theme-provider theme="light" class="theme-region">
+        <p>嵌套亮色 / Nested light</p>
+        <c-button variant="outline">亮色按钮 / Light button</c-button>
+      </c-theme-provider>
+    </c-theme-provider>
+    <p>外部保持原主题 / Outside is unchanged</p>
+  </div>
+</template>
+<style scoped>
+.theme-region { margin-top: 16px; padding: 16px; color: var(--c-color-text-1); background: var(--c-color-bg-2); border: 1px solid var(--c-color-border-2); }
+</style>
+```
+
+```vue
+<c-theme-provider :theme="mode">
+  <App />
+  <c-theme-provider theme="light"><Preview /></c-theme-provider>
+</c-theme-provider>
+```
+
+Omit theme to inherit. Use light/dark or a Themes preset object for an explicit boundary. Explicit themes replace inherited presets while style-vars overrides continue to inherit. style-vars overrides defaults, inner keys win, and null clears this layer. Explicit boundaries re-evaluate loaded component aliases. tag changes the wrapper; use a suitable layout host or display: contents where necessary.
+
+Library declarative popups inherit their owning Vue provider with body, custom popup-container and inline targets. Services created outside a provider need a popup-container inside the themed region. Third-party Teleports need an explicit theme host; foreign documents must load the library styles.
+
+## Theme presets
+
+```vue
+<script setup lang="ts">
+import { Themes } from '@cedar-design/ui'
+</script>
+
+<c-theme-provider :theme="Themes.maple.dark">
+  <App />
+</c-theme-provider>
+```
+
+Import Themes from the library root. Update presets and custom variables through reactive props; no static method mutates the document root. Explicit style-vars take precedence over theme defaults, and fixed color overrides are inherited by descendants.
+
+## Installation and defaults
+
+```ts
+import { ThemeProvider } from '@cedar-design/ui'
+app.use(ThemeProvider)
+ThemeProvider.setPropsDefaults({ theme: 'light', tag: 'section', styleVars: () => ({}) })
+```
+
+Defaults apply to subsequently created instances; explicit props take precedence. Variable objects are copied for each instance. SSR renders the same theme boundary as the client, without retaining theme state across requests.
+
+## API
+
+### ThemeProvider Props
+
+| Prop | Description | Type | Default |
+| --- | --- | --- | --- |
+| theme | Light/dark mode or preset; inherit when omitted | `ThemeProviderTheme` | — |
+| style-vars | CSS variables for this boundary; null clears the overrides | `StyleVars \| null` | `{}` |
+| tag | Wrapper element tag | `string` | `'div'` |
+
+The default slot supplies component content. No events.
+
+## Types
+
+Exports ThemeProvider, themeProviderProps, ThemeProviderProps, ThemeProviderInstance, ThemeProviderDefaults, ThemeProviderTheme, ThemeProviderMode, StyleVarName and StyleVars. Variables accept full --c- names or camelCase names with the library prefix; values are CSS strings and dimensions require units.
 
 ## CSS Variables
 

@@ -71,14 +71,25 @@ export default defineComponent({
     const visibleNodeMap = computed(() => new Map(visibleNodes.value.map((node) => [node.key, node])))
     const enabledNodes = computed(() => visibleNodes.value.filter((node) => !node.disabled))
     const nodeId = (key: TreeNodeValue) => `${treeId}-${typeof key}-${encodeURIComponent(String(key))}`
-    const activeId = computed(() => (activeKey.value === undefined ? undefined : nodeId(activeKey.value)))
+    const activeId = computed(() => {
+      const key = activeKey.value
+      if (key === undefined || (treeProps.value.virtualListProps && !refTree.value?.treeContext.isVirtualNodeMounted(key))) return undefined
+      return nodeId(key)
+    })
     const resetActive = () => {
       const matches = props.candidateFilter
         ? enabledNodes.value.filter((node) => props.candidateFilter?.(node.treeNodeData))
         : enabledNodes.value
       const candidates = matches.length ? matches : enabledNodes.value
       const selected = props.selectedValues?.find((key) => candidates.some((node) => node.key === key))
-      activeKey.value = selected ?? candidates[0]?.key
+      const key = selected ?? candidates[0]?.key
+      activeKey.value = key
+      const tree = refTree.value
+      if (key !== undefined && tree && treeProps.value.virtualListProps) {
+        nextTick(() => {
+          if (activeKey.value === key && refTree.value === tree) tree.scrollIntoView({ value: key, align: 'auto' })
+        })
+      }
     }
     watch(
       enabledNodes,
@@ -98,7 +109,7 @@ export default defineComponent({
     watch(() => props.candidateFilter, resetActive)
     const moveTo = (key?: TreeNodeValue) => {
       activeKey.value = key
-      if (key !== undefined) refTree.value?.scrollIntoView({ key, align: 'auto' })
+      if (key !== undefined) refTree.value?.scrollIntoView({ value: key, align: 'auto' })
     }
     const expand = (node: Node, expanded: boolean, event: KeyboardEvent) => {
       const tree = refTree.value

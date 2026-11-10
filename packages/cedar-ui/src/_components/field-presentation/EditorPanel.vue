@@ -4,7 +4,7 @@
     ref="panelElement"
     :aria-label="label"
     :aria-busy="pending || undefined"
-    @keydown.esc.stop="!pending && $emit('cancel')"
+    @keydown="handleKeydown"
   >
     <header v-if="!compact" :class="n('toolbar')">
       <span role="heading" aria-level="2">{{
@@ -70,7 +70,7 @@ import { computed, provide, ref, shallowRef } from 'vue'
 import { createNamespace } from '../../_utils/global-config'
 import Button from '../../button'
 import { useI18n } from '../../locale'
-import { fieldEditorBoundary, fieldEditorPanel } from './context'
+import { fieldEditorBoundary, fieldEditorEnterSubmits, fieldEditorPanel } from './context'
 import { editorAuxiliaryActions } from './editor-actions'
 import { isolateEditorForm } from './form-bridge'
 import { useFieldTexts } from './texts'
@@ -78,6 +78,7 @@ import { useFieldTexts } from './texts'
 const props = defineProps<{
   clearable?: boolean
   compact?: boolean
+  deferEscape?: boolean
   title?: string
   intent?: 'input' | 'select'
   label?: string
@@ -88,7 +89,19 @@ const props = defineProps<{
   count?: number
   limit?: number
 }>()
-defineEmits<{ confirm: [event?: Event]; cancel: []; clear: [] }>()
+const emit = defineEmits<{ confirm: [event?: Event]; cancel: []; clear: [] }>()
+function handleKeydown(event: KeyboardEvent) {
+  if (event.key !== 'Escape') {
+    return
+  }
+  if (event.defaultPrevented || event.isComposing || event.keyCode === 229 || props.pending) {
+    event.stopPropagation()
+    return
+  }
+  if (props.deferEscape) return
+  event.stopPropagation()
+  emit('cancel')
+}
 defineOptions({ name: createNamespace('field-editor-panel').name })
 const { n } = createNamespace('field-presentation')
 const auxiliaryActions = shallowRef<() => import('vue').VNodeChild>()
@@ -96,6 +109,7 @@ const auxiliaryActions = shallowRef<() => import('vue').VNodeChild>()
 if (!props.compact) provide(editorAuxiliaryActions, auxiliaryActions)
 provide(fieldEditorBoundary, true)
 provide(fieldEditorPanel, true)
+provide(fieldEditorEnterSubmits, computed(() => !!props.compact))
 isolateEditorForm()
 const { i18nMessage } = useI18n()
 const confirmText = computed(() => i18nMessage.value.dialog.confirmButtonText)

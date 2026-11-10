@@ -1,5 +1,8 @@
 <template>
+  <!-- Keep an inline Teleport inside a fragment for Vue 3.2 hydration. -->
+  <template v-if="false" />
   <teleport :to="popupContainerTarget" :disabled="popupContainer === false || teleportDisabled">
+    <template v-if="true">
     <transition :name="n('--fade')" @after-enter="transition.opened" @after-leave="transition.closed">
       <div
         v-if="shouldRender"
@@ -21,6 +24,8 @@
         </div>
       </div>
     </transition>
+    <template v-if="false" />
+    </template>
   </teleport>
 </template>
 

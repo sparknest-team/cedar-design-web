@@ -7,8 +7,26 @@ const require = createRequire(
 const ts = require("typescript");
 const prettier = require("prettier");
 
+/** Map only the known platform-specific empty-value import, never literals. */
+export function normalizeSelectionEmptyValueImports(source, vue = false) {
+  if (vue) {
+    return source.replace(/(<script\b[^>]*>)([\s\S]*?)(<\/script>)/g,
+      (_, start, script, end) => start + normalizeSelectionEmptyValueImports(script) + end)
+  }
+  const file = ts.createSourceFile('source.tsx', source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX)
+  const replacements = []
+  for (const node of file.statements) {
+    if (!ts.isImportDeclaration(node) || !ts.isStringLiteral(node.moduleSpecifier)) continue
+    const specifier = node.moduleSpecifier
+    const mapped = specifier.text.replace(/^((?:\.\.\/)+)_utils\/empty-value$/, '$1utils/empty-value')
+    if (mapped !== specifier.text) replacements.push({ start: specifier.getStart(file) + 1, end: specifier.end - 1, mapped })
+  }
+  for (const { start, end, mapped } of replacements.reverse()) source = source.slice(0, start) + mapped + source.slice(end)
+  return source
+}
+
 /** Canonicalize formatter-only differences; retain literals, operators and control flow. */
-export async function normalizeTypeScript(source) {
+export async function normalizeTypeScript(source, { sortBoundImports = true } = {}) {
   let file = ts.createSourceFile(
     "source.tsx",
     source,
@@ -60,7 +78,7 @@ export async function normalizeTypeScript(source) {
       printWidth: 100,
       objectWrap: "collapse",
     });
-    return normalizeBoundImports(formatted);
+    return sortBoundImports ? normalizeBoundImports(formatted) : formatted;
   } finally {
     result.dispose();
   }
@@ -73,4 +91,17 @@ export async function normalizeLessSource(source) {
 
 export async function normalizeVueSource(source) {
   return normalizeBoundImports(await prettier.format(source, { parser: 'vue', singleQuote: true, semi: false, printWidth: 100, objectWrap: 'collapse' }))
+}
+
+/** Canonicalize SFC script syntax while retaining the formatted template. */
+export async function normalizeVueSyntaxSource(source, options = {}) {
+  const formatted = await prettier.format(source, { parser: 'vue', singleQuote: true, semi: false, printWidth: 100, objectWrap: 'collapse' })
+  const pattern = /(<script\b[^>]*>)([\s\S]*?)(<\/script>)/g
+  const matches = [...formatted.matchAll(pattern)]
+  let result = formatted
+  for (const match of matches.reverse()) {
+    const script = await normalizeTypeScript(match[2], options)
+    result = result.slice(0, match.index) + match[1] + script + match[3] + result.slice(match.index + match[0].length)
+  }
+  return result
 }

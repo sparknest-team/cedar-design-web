@@ -174,7 +174,7 @@ Date components use the current library Locale/Provider configuration. Each inst
 
 `value-format` is a stable English date protocol, including month-name tokens. `format` display/typed text uses the UI language. Locale changes do not rewrite models or invalidate English-month models. Numeric protocols, Date objects and timestamps remain unchanged. Chinese core/Maple locale data is integrated; other formats prefer registered Dayjs locale data and safely fall back to English when unavailable.
 
-Week numbers/comparisons no longer depend on global week-start settings; equal week numbers across years are not mistaken for the same week. Mounting/updating/unmounting instances with different week starts is isolated.
+Week numbers and comparisons use each instance's week-start setting; equal week numbers across years are not mistaken for the same week. Mounting/updating/unmounting instances with different week starts is isolated.
 
 ## CSS Variables
 

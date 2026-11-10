@@ -29,14 +29,17 @@
         :dir="readingDirection"
         :class="n('overlay')"
         :style="[position, { zIndex }]"
-        @keydown.capture="onKeydown"
+        @keydown.capture="onKeydownCapture"
+        @keydown="onEditorKeydown"
         role="dialog"
-        :aria-label="label || placeholder"
+        :aria-label="dialogLabel"
+        :aria-labelledby="typeof $attrs['aria-labelledby'] === 'string' ? $attrs['aria-labelledby'] : undefined"
         aria-modal="false"
       >
         <EditorPanel
           ref="panel"
           compact
+          defer-escape
           :intent="intent"
           :label="label"
           :pending="pending"
@@ -79,6 +82,7 @@ import type { FieldEditMode } from './context'
 import { claimEditing, editingOwner, withEditingTurn } from './editing-owner'
 import EditorPanel from './EditorPanel.vue'
 import FieldReference from './FieldReference.vue'
+import { useFieldTexts } from './texts'
 
 
 const themeScope = useThemeScope()
@@ -119,6 +123,11 @@ const emit = defineEmits<{
   'editor-ready': []
 }>()
 const { n } = createNamespace('field-presentation')
+const texts = useFieldTexts()
+const dialogLabel = computed(() =>
+  [props.label, props.placeholder, props.intent === 'input' ? texts.input.value : texts.select.value, 'Edit']
+    .find((value) => typeof value === 'string' && value.trim()),
+)
 const target = usePopupContainer(() => props.popupContainer)
 const reference = ref<InstanceType<typeof FieldReference>>()
 const anchor = ref<HTMLElement>()
@@ -202,14 +211,24 @@ function onOutside(event: Event) {
   if (!layerActive() || interaction.contains(event)) return
   void save(true, event)
 }
+function onKeydownCapture(event: KeyboardEvent) {
+  if (props.pending) onKeydown(event)
+}
+function onEditorKeydown(event: KeyboardEvent) {
+  if (event.key === 'Escape' || event.key === 'Enter') onKeydown(event)
+}
 function onKeydown(event: KeyboardEvent) {
   if (event.defaultPrevented || event.isComposing || event.keyCode === 229) return
   if (event.key === 'Escape') {
-    event.preventDefault()
-    event.stopPropagation()
-    if (props.pending) return
+    if (props.pending) {
+      event.preventDefault()
+      event.stopPropagation()
+      return
+    }
     if (interaction.hasOpenPopup()) {
       interaction.escapePopup(event)
+      event.preventDefault()
+      event.stopPropagation()
       const current = generation
       nextTick(async () => {
         if (disposed || current !== generation || !props.open || interaction.hasOpenPopup()) return
@@ -219,6 +238,8 @@ function onKeydown(event: KeyboardEvent) {
       })
       return
     }
+    event.preventDefault()
+    event.stopPropagation()
     emit('cancel')
     return
   }
@@ -340,7 +361,7 @@ onMounted(() => {
   document = anchor.value?.ownerDocument ?? (typeof window !== 'undefined' ? window.document : undefined)
   document?.addEventListener('click', onOutside, true)
   document?.addEventListener('focusin', onOutside)
-  document?.addEventListener('keydown', onOwnedKeydown, true)
+  document?.addEventListener('keydown', onOwnedKeydown)
   if (props.open) place()
 })
 onActivated(() => {
@@ -355,7 +376,7 @@ onBeforeUnmount(() => {
   releaseOwner?.()
   document?.removeEventListener('click', onOutside, true)
   document?.removeEventListener('focusin', onOutside)
-  document?.removeEventListener('keydown', onOwnedKeydown, true)
+  document?.removeEventListener('keydown', onOwnedKeydown)
   cleanup()
 })
 defineExpose({

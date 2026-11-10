@@ -252,7 +252,7 @@ With open-trigger-target="icon", use the input area to edit or copy and the suff
 
 ## API
 
-A panel branch’s `aria-expanded` indicates whether its child column is actually visible; focus or hover does not mark it expanded before that column opens. Leaf options have no `aria-expanded`. Search results do not advertise submenus that are not displayed.
+A panel branch’s `aria-expanded` indicates whether its child column is actually visible; focus or hover does not mark it expanded before that column opens. Leaf options have no `aria-expanded`. Search results do not advertise submenus that are not displayed. Direct single-select search uses a `listbox` with `option` elements, and the input references the popup and active option. Editor single-select search uses `menuitemradio` with `aria-checked` and one Tab stop. Multiple-select search retains its checkboxes. In direct single-select search, the popup icon is excluded from the Tab sequence; click the icon or press Arrow Down in the input to open it.
 
 ### Empty values and reading placeholders
 
@@ -315,6 +315,12 @@ Use `v-model`, `v-model:open` and `v-model:input-value` for controlled state. Cl
 | `edit-mode` | Field presentation; inherits FormItem / Form when omitted. | `direct / click / dblclick` | `direct` |
 
 ### Cascader Events / Methods
+
+In direct mode, Arrow Down requests opening when the field is closed. Once opened, the first enabled option becomes active if no option is already active and focus remains in the field, including when options arrive asynchronously. Losing focus, closing, or interacting again cancels the pending activation. A controlled `open` changes only when the parent accepts the request.
+
+When a menu option has focus, Enter or Space activates it. Search inputs and nested checkboxes keep their own keyboard behavior.
+
+- `keydown(event)`: keyboard event from the field, candidate menu, or editor panel; `preventDefault()` suppresses internal keyboard handling.
 
 - `update:modelValue`, `change(value)`: emitted on commit, not while editing a draft.
 - `update:open`, `open-change(open)`: request an expanded-state change.
@@ -401,6 +407,8 @@ Field editing uses edit-mode: Cedar supports direct/click/dblclick, and Maple su
 The `options` prop accepts an array or `(query, { signal }) => array/Promise`. The component manages loading, cancellation and stale-result isolation; failures emit load-error. Single/multiple groups initialize with an empty-string query, searchable fields reload when the query changes, and root loading for tree fields remains independent of existing load-more child loading.
 
 ### Lazy-loading completion and errors
+
+When an expandable option has unloaded children, Enter, Space, or the forward arrow starts lazy loading and displays its pending state. The forward arrow moves into children only if focus remains on the input or option that received the key. Search results do not expand children.
 
 `loadMore(option, done)` keeps a callback-only contract in the field and standalone panel. Call `done(children)` to accept children or `done()` to end waiting and allow retry. Only the first callback is accepted; return values, including a resolved Promise, do not replace `done`. A synchronous loader exception releases waiting and reaches Vue's `errorCaptured` / application `errorHandler`. The `load-error` event remains specific to the `options` data source; it does not report `loadMore` exceptions. Handle asynchronous callback-based request failures in business code and call `done()`.
 

@@ -168,8 +168,14 @@ export function usePreviewController(options: PreviewControllerOptions) {
     originY = translateY.value
     moved = false
     pointerStartedOnImage = Boolean((event.target as HTMLElement | null)?.closest?.('[data-image-preview-image]'))
+    const gestureGeneration = longPressGeneration
+    const gestureElement = pointerElement
+    const currentGesture = () => available() && mergedOpen.value && options.draggable.value &&
+      longPressGeneration === gestureGeneration && pointerId === event.pointerId && pointerElement === gestureElement
     moving.value = true
-    ;(event.currentTarget as HTMLElement).setPointerCapture?.(event.pointerId)
+    if (!currentGesture()) return
+    gestureElement.setPointerCapture?.(event.pointerId)
+    if (!currentGesture()) return
     if (event.pointerType === 'touch') {
       const generation = ++longPressGeneration
       const id = pointerId
@@ -311,7 +317,7 @@ export function usePreviewController(options: PreviewControllerOptions) {
   }
 
   function onKeydown(event: KeyboardEvent) {
-    if (!available() || !mergedOpen.value || !mergedKeyboard.value || event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey || options.canHandleKeyboard?.(event) === false) {
+    if (!available() || !mergedOpen.value || !mergedKeyboard.value || event.defaultPrevented || event.isComposing || event.keyCode === 229 || event.altKey || event.ctrlKey || event.metaKey || options.canHandleKeyboard?.(event) === false) {
       return
     }
     const target = event.target as HTMLElement | null

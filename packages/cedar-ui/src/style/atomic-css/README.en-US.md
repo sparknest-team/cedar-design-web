@@ -146,7 +146,7 @@ presetCedar({
 });
 ```
 
-`false` disables the corresponding Cedar theme mapping. Generator-native utilities may still exist but no longer bind Cedar variables.
+`false` disables the corresponding Cedar theme mapping. Generator-native utilities may still exist but are independent of Cedar variables.
 
 ---
 

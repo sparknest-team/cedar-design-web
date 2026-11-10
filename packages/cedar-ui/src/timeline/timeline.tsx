@@ -9,7 +9,7 @@ import {
 import { getPrefixCls, createNamespace } from "../_utils/global-config";
 import { timelineInjectionKey } from "./context";
 import Item from "./Item.vue";
-import Loading from "../loading";
+import Loading from "../loading/Loading.vue";
 import { useChildrenComponents } from "../_hooks/use-children-components";
 
 const { name } = createNamespace("timeline");

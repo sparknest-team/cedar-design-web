@@ -186,7 +186,7 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 
 ### Popup configuration and field notifications
 
-`popup-props` configures local Trigger positioning/appearance, e.g. `{ placement: 'top-start' }`, without overriding field state/interaction such as open, disabled or trigger. Top-level `popup-container`, including false, takes precedence. `input-editable` defaults to true and can disable desktop typing. `time-picker-props`, including class/style, controls panel appearance. Undeclared attrs no longer supply panel/popup configuration; id/aria-* fall through to the field.
+`popup-props` configures local Trigger positioning/appearance, e.g. `{ placement: 'top-start' }`, without overriding field state/interaction such as open, disabled or trigger. Top-level `popup-container`, including false, takes precedence. `input-editable` defaults to true and can disable desktop typing. `time-picker-props`, including class/style, controls panel appearance. Panel and popup configuration uses the declared props; id/aria-* fall through to the field.
 
 `click(event)` notifies only clicks on non-disabled fields. Readonly may notify without expanding. Closing consistently listens to `open-change(false)`, a close request that controlled open still requires the parent to accept. Neither platform has a field close event; a close request is not a value commit.
 

@@ -6,6 +6,17 @@ import AnchorLink from '../AnchorLink.vue'
 
 let target: HTMLElement
 vi.mock('compute-scroll-into-view', () => ({ compute: () => [{ el: target, top: 80 }] }))
+test('malformed URL fragments do not prevent mounting', () => {
+  const previous = window.location.href
+  window.history.replaceState(null, '', '#%E0%A4%A')
+  try {
+    const owner = mount(Anchor, { attachTo: document.body })
+    expect(owner.exists()).toBe(true)
+    owner.unmount()
+  } finally {
+    window.history.replaceState(null, '', previous)
+  }
+})
 test('actual Anchor/Link/slide composition settles immediate reduced scroll then resumes measurement', async () => {
   const container = document.createElement('div')
   container.innerHTML = '<section id="integration-a"></section><section id="integration-b"></section>'

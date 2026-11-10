@@ -1,3 +1,4 @@
+import { useI18n } from '../locale'
 import { useThemeScope } from '../theme-provider/context'
 import { useElementResize } from '../_utils/resize-observer'
 import { physicalScrollLeft, inlineScrollLeft, setInlineScrollLeft, useDirection } from '../_utils/direction'
@@ -5,7 +6,7 @@ import StickyScrollbar from './StickyScrollbar.vue'
 import type { TablePaginationScope, TablePaginationConfig } from './types'
 import { tableProps } from "./props"
 import type { ComponentPublicInstance, CSSProperties, PropType, Slot } from "vue"
-import { Teleport, computed, defineComponent, inject, onActivated, onBeforeUnmount, onDeactivated, onMounted, provide, reactive, ref, toRaw, toRefs, watch, watchEffect, watchPostEffect } from "vue"
+import { Fragment, Teleport, computed, defineComponent, inject, onActivated, onBeforeUnmount, onDeactivated, onMounted, provide, reactive, ref, toRaw, toRefs, useId, watch, watchEffect, watchPostEffect } from "vue"
 import { getPrefixCls, createNamespace } from "../_utils/global-config"
 import type { ComponentSize } from "../_utils/constant"
 import { isArray, isFunction, isNull, isNumber, isObject, isString, isUndefined } from "../_utils/is"
@@ -18,10 +19,13 @@ import { usePagination } from "./hooks/use-pagination"
 import { updateColumnsWidth } from "./hooks/use-columns-layout"
 import { IconPlus } from "@cedar-design/icons-vue/icon-plus"
 import { IconMinus } from "@cedar-design/icons-vue/icon-minus"
-import Loading from "../loading"
+import Loading from "../loading/Loading.vue"
 import Pagination, { PaginationProps } from "../pagination"
 import Empty from "../empty"
 import ColGroup from "./TableColGroup.vue"
+import TableSlot from "./TableSlot.vue"
+import TableColumnSlot from "./TableColumnSlot.vue"
+import { forwardTableSlot } from "./forward-table-slot"
 import Thead from "./table-thead"
 import Tbody from "./table-tbody"
 import Tr from "./table-tr"
@@ -47,7 +51,8 @@ import { useComponentRef } from "../_hooks/use-component-ref"
 import type { BaseType } from "../_utils/types"
 import { useScrollbar } from "../_hooks/use-scrollbar"
 import { getValueByPath, setValueByPath } from "../_utils/get-value-by-path"
-import { resolveExtraColumnConfig, getExtraColumnWidth, type TableExtraColumnConfig } from "./extra-column"
+import { resolveExtraColumnConfig, getExtraColumnWidth, getColumnLayoutKey, markTableExtraColumn, type TableExtraColumnConfig } from "./extra-column"
+import { buildHeaderAssociations } from './header-association'
 
 const DEFAULT_BORDERED = {
   wrapper: true,
@@ -326,8 +331,9 @@ export default defineComponent({
    * @binding {TableColumnData} column
    * @binding {string} dataIndex
    */
-  setup(props, { emit, slots }) {
+  setup(props, { attrs, emit, slots }) {
     const themeScope = useThemeScope()
+    const { i18nMessage } = useI18n()
     const {
       columns,
       rowKey,
@@ -357,7 +363,7 @@ export default defineComponent({
       }
       return { ...DEFAULT_BORDERED, wrapper: props.bordered };
     });
-    const { children, components } = useChildrenComponents(createNamespace("table-column").name);
+    const { children, components, getComponents } = useChildrenComponents(createNamespace("table-column").name);
     const checkStrictly = computed(
       () => rowSelection.value?.checkStrictly ?? true,
     );
@@ -403,7 +409,7 @@ export default defineComponent({
       return contentRef.value;
     });
 
-    const { dir: readingDirection } = useDirection(() => containerElement.value);
+    const { dir: readingDirection } = useDirection(() => containerElement.value, () => attrs.dir);
 
     const splitTable = computed(
       () =>
@@ -506,7 +512,9 @@ export default defineComponent({
     const slotColumns = ref<TableColumnData[]>();
 
     watch([components, slotColumnMap], ([components, slotColumnMap]) => {
-      if (components.length > 0) {
+      if (components.length === 0 && slotColumnMap.size > 0) {
+        slotColumns.value = [...slotColumnMap.values()];
+      } else if (components.length > 0) {
         const columns: TableColumnData[] = [];
         components.forEach((id) => {
           const column = slotColumnMap.get(id);
@@ -516,7 +524,7 @@ export default defineComponent({
       } else {
         slotColumns.value = undefined;
       }
-    });
+    }, { flush: "sync" });
 
     // 拆解分组后的数据表头信息
     const dataColumnMap = new Map<string, TableColumnData>();
@@ -541,7 +549,7 @@ export default defineComponent({
         const baseColumns = [...(slotColumns ?? columns ?? [])];
         if (extraColumnConfig.value.enabled) {
           const extraCls = `${prefixCls}-extra-column-cell`;
-          baseColumns.push({
+          baseColumns.push(markTableExtraColumn({
             dataIndex: extraColumnConfig.value.dataIndex,
             title: "",
             width: getExtraColumnWidth(
@@ -554,13 +562,13 @@ export default defineComponent({
             cellClass: extraCls,
             slotName: "extra-column-cell",
             render: () => null,
-          });
+          }));
         }
         const result = getGroupColumns(baseColumns, dataColumnMap, columnWidth, readingDirection.value);
         dataColumns.value = result.dataColumns;
         groupColumns.value = result.groupColumns;
       },
-      { immediate: true, deep: true },
+      { immediate: true, deep: true, flush: "sync" },
     );
 
     const isPaginationTop = computed(() =>
@@ -1293,10 +1301,10 @@ export default defineComponent({
       }
       if (cells.length > 0) {
         const columnByKey = new Map(
-          dataColumns.value.map((column) => [column.dataIndex, column]),
+          dataColumns.value.map((column) => [getColumnLayoutKey(column), column]),
         );
         for (const cell of cells) {
-          const key = cell.getAttribute("data-column-key");
+          const key = cell.getAttribute("data-column-layout-key") ?? cell.getAttribute("data-column-key");
           const column = key ? columnByKey.get(key) : undefined;
           if (!column) continue;
           const width = cell.getBoundingClientRect().width;
@@ -1489,7 +1497,7 @@ export default defineComponent({
       return (
         <Tr empty>
           <Td colSpan={dataColumns.value.length + operations.value.length}>
-            {slots.empty?.() ??
+            {slots.empty ? <TableSlot v-slots={forwardTableSlot(slots.empty)} /> :
               configCtx?.slots.empty?.({ component: "table" }) ?? <Empty />}
           </Td>
         </Tr>
@@ -1501,7 +1509,7 @@ export default defineComponent({
         return isFunction(record.expand) ? record.expand() : record.expand;
       }
       if (slots["expand-row"]) {
-        return slots["expand-row"]({ record: record.raw });
+        return <TableSlot slotProps={{ record: record.raw }} v-slots={forwardTableSlot(slots["expand-row"])} />;
       }
       if (props.expandable?.expandedRowRender) {
         return props.expandable.expandedRowRender(record.raw);
@@ -1515,6 +1523,44 @@ export default defineComponent({
         operations.value,
         dataColumns.value,
       ),
+    );
+
+    const semanticId = `c-table-header-${useId()}`;
+    const visibleHeaderId = (row: number, index: number) => `${semanticId}-visible-${row}-${index}`;
+    const visibleOperationId = (index: number) => `${semanticId}-visible-operation-${index}`;
+    const customHeaders = computed(() => groupColumns.value.map(row => row.map(column => slots.th?.({ column })?.[0])));
+    const explicitHeaderName = (value: unknown) => typeof value === 'string' && value.trim() ? value : undefined;
+    const semanticRows = (surface: 'body' | 'summary') => groupColumns.value.map((row, rowIndex) => [
+      ...(rowIndex === 0 ? operations.value.map((_, index) => ({
+        id: `${semanticId}-${surface}-operation-${index}`,
+        source: visibleOperationId(index),
+        colSpan: undefined,
+        rowSpan: groupColumns.value.length,
+      })) : []),
+      ...row.map((column, index) => ({
+        id: `${semanticId}-${surface}-${rowIndex}-${index}`,
+        source: visibleHeaderId(rowIndex, index),
+        label: explicitHeaderName(customHeaders.value[rowIndex]?.[index]?.props?.['aria-label']),
+        labelledby: explicitHeaderName(customHeaders.value[rowIndex]?.[index]?.props?.['aria-labelledby']),
+        colSpan: column.colSpan,
+        rowSpan: column.rowSpan,
+      })),
+    ]);
+    const bodyHeaderMap = computed(() => buildHeaderAssociations(semanticRows('body')));
+    const summaryHeaderMap = computed(() => buildHeaderAssociations(semanticRows('summary')));
+    const cellHeaders = (surface: 'body' | 'summary', start: number, span: number) => {
+      if (!splitTable.value || !props.showHeader) return undefined;
+      const map = surface === 'body' ? bodyHeaderMap.value : summaryHeaderMap.value;
+      return map.headersForSpan(start, span).join(' ') || undefined;
+    };
+    const renderSemanticHeader = (surface: 'body' | 'summary') => props.showHeader && (
+      <thead style={{ position: 'absolute', width: '1px', height: '1px', overflow: 'hidden', clipPath: 'inset(50%)' }}>
+        {semanticRows(surface).map((row, rowIndex) => (
+          <tr key={rowIndex}>
+            {row.map(cell => <th key={cell.id} id={cell.id} aria-label={'label' in cell && cell.labelledby ? undefined : 'label' in cell && cell.label ? cell.label : undefined} aria-labelledby={'labelledby' in cell && cell.labelledby ? cell.labelledby : 'label' in cell && cell.label ? undefined : cell.source} colspan={cell.colSpan || undefined} rowspan={cell.rowSpan || undefined} />)}
+          </tr>
+        ))}
+      </thead>
     );
 
     const spanColumns = computed(() =>
@@ -1570,6 +1616,7 @@ export default defineComponent({
 
             return (
               <OperationTd
+                headers={cellHeaders('summary', index, colspan)}
                 style={style}
                 operationColumn={operation}
                 operations={operations.value}
@@ -1588,13 +1635,16 @@ export default defineComponent({
               return null;
             }
 
-            const style = getVirtualColumnStyle(column.dataIndex);
+            const style = getVirtualColumnStyle(getColumnLayoutKey(column));
 
             return (
               <Td
+                headers={cellHeaders('summary', operations.value.length + index, colspan)}
                 v-slots={{
                   td: slots.td,
                   cell: slots["summary-cell"],
+                  // Preserve the compiled SSR slot while forwarding it to Td.
+                  _: 2,
                 }}
                 key={`td-${cellId}`}
                 style={style}
@@ -1651,7 +1701,9 @@ export default defineComponent({
         <button
           type="button"
           class={`${prefixCls}-expand-btn`}
-          aria-label="切换展开状态"
+          aria-label={expanded
+            ? i18nMessage.value.table?.collapseRow ?? i18nMessage.value.filterForm?.collapseMore
+            : i18nMessage.value.table?.expandRow ?? i18nMessage.value.filterForm?.expandMore}
           aria-expanded={expanded}
           onClick={(ev: Event) => {
             handleExpand(currentKey, record.raw);
@@ -1660,9 +1712,9 @@ export default defineComponent({
             }
           }}
         >
-          {slots["expand-icon"]?.({ expanded, record: record.raw }) ??
-            props.expandable?.icon?.(expanded, record.raw) ??
-            (expanded ? <IconMinus /> : <IconPlus />)}
+          {slots["expand-icon"] ?
+            <TableSlot slotProps={{ expanded, record: record.raw }} v-slots={forwardTableSlot(slots["expand-icon"])} /> :
+            props.expandable?.icon?.(expanded, record.raw) ?? (expanded ? <IconMinus /> : <IconPlus />)}
         </button>
       );
     };
@@ -1769,7 +1821,7 @@ export default defineComponent({
         : {};
 
       return (
-        <>
+        <Fragment key={currentKey}>
           <Tr
             v-slots={{
               tr: slots.tr,
@@ -1810,8 +1862,11 @@ export default defineComponent({
 
               return (
                 <OperationTd
+                  headers={cellHeaders('body', index, colspan)}
                   v-slots={{
                     "drag-handle-icon": slots["drag-handle-icon"],
+                    // Preserve the compiled SSR slot while forwarding it to OperationTd.
+                    _: 2,
                   }}
                   key={`operation-td-${index}`}
                   style={style}
@@ -1845,10 +1900,11 @@ export default defineComponent({
                     }
                   : {};
 
-              const style = getVirtualColumnStyle(column.dataIndex);
+              const style = getVirtualColumnStyle(getColumnLayoutKey(column));
 
               return (
                 <Td
+                  headers={cellHeaders('body', operations.value.length + index, colspan)}
                   v-slots={{
                     td: slots.td,
                   }}
@@ -1888,7 +1944,7 @@ export default defineComponent({
               allowDrag: allowDrag && !isDragTarget,
               expandContent,
             })}
-        </>
+        </Fragment>
       );
     };
 
@@ -1916,12 +1972,13 @@ export default defineComponent({
 
     const renderHeader = () => (
       <Thead v-slots={{ thead: slots.thead }}>
-        {groupColumns.value.map((row, index) => (
-          <Tr key={`header-row-${index}`}>
-            {index === 0 &&
+        {groupColumns.value.map((row, rowIndex) => (
+          <Tr key={`header-row-${rowIndex}`}>
+            {rowIndex === 0 &&
               operations.value.map((operation, index) => (
                 <OperationTh
                   key={`operation-th-${index}`}
+                  id={splitTable.value ? visibleOperationId(index) : undefined}
                   // @ts-ignore
                   ref={(ins: ComponentPublicInstance) => {
                     if (ins?.$el && operation.name) {
@@ -1940,6 +1997,7 @@ export default defineComponent({
                 />
               ))}
             {row.map((column, index) => {
+              const layoutKey = getColumnLayoutKey(column);
               // 仅 fixed 布局允许拖拽调宽：auto 布局下 colgroup 不渲染 col，
               // 列宽由浏览器按内容分配，拖拽写入的 _resizeWidth 到不了 DOM，
               // 还会在冻结偏移计算中优先于测量回写值导致 sticky 错位
@@ -1952,15 +2010,16 @@ export default defineComponent({
               return (
                 <Th
                   key={`th-${index}`}
+                  semanticLabelId={splitTable.value ? visibleHeaderId(rowIndex, index) : undefined}
                   // @ts-ignore
                   ref={(ins: ComponentPublicInstance) => {
-                    if (ins?.$el && column.dataIndex) {
-                      thRefs.value[column.dataIndex] = ins.$el;
-                    } else if (column.dataIndex) {
-                      delete thRefs.value[column.dataIndex];
+                    if (ins?.$el && layoutKey) {
+                      thRefs.value[layoutKey] = ins.$el;
+                    } else if (layoutKey) {
+                      delete thRefs.value[layoutKey];
                     }
                   }}
-                  v-slots={{ th: slots.th }}
+                  customHeader={customHeaders.value[rowIndex]?.[index]}
                   column={column}
                   operations={operations.value}
                   dataColumns={dataColumns.value}
@@ -2034,6 +2093,7 @@ export default defineComponent({
               {isVirtualList.value && flattenData.value.length ? (
                 <VirtualList
                   v-slots={{
+                    'list-prefix': () => renderSemanticHeader('body'),
                     item: ({
                       item,
                       index,
@@ -2090,6 +2150,7 @@ export default defineComponent({
                         tableLayout={resolvedTableLayout.value}
                       />
                     )}
+                    {renderSemanticHeader('body')}
                     {renderBody()}
                   </table>
                 </Component>
@@ -2116,6 +2177,7 @@ export default defineComponent({
                     columnRealWidth={columnRealWidth}
                     tableLayout={resolvedTableLayout.value}
                   />
+                  {renderSemanticHeader('summary')}
                   {renderSummary()}
                 </table>
               </div>
@@ -2192,7 +2254,7 @@ export default defineComponent({
             </Component>
           </div>
           {slots.footer && (
-            <div class={`${prefixCls}-footer`}>{slots.footer()}</div>
+            <div class={`${prefixCls}-footer`}><TableSlot v-slots={forwardTableSlot(slots.footer)} /></div>
           )}
         </>
       );
@@ -2241,8 +2303,8 @@ export default defineComponent({
           ]}
           style={[themeScope.value.style, inStickyFooter ? undefined : stickyStyle]}
         >
-          {slots["pagination-left"]?.()}
-          {slots.pagination ? slots.pagination(scope) : (
+          {slots["pagination-left"] && <TableSlot v-slots={forwardTableSlot(slots["pagination-left"])} />}
+          {slots.pagination ? <TableSlot slotProps={{ ...scope }} v-slots={forwardTableSlot(slots.pagination)} /> : (
             <Pagination
               total={scope.total}
               modelValue={scope.page}
@@ -2252,7 +2314,7 @@ export default defineComponent({
               {...paginationProps}
             />
           )}
-          {slots["pagination-right"]?.()}
+          {slots["pagination-right"] && <TableSlot v-slots={forwardTableSlot(slots["pagination-right"])} />}
         </div>
       );
     };
@@ -2281,6 +2343,8 @@ export default defineComponent({
       return Object.keys(result).length > 0 ? result : undefined;
     });
 
+    const DeferredTable = defineComponent({ setup: () => () => renderTable() });
+
     const render = () => {
       if (slots.default) {
         return (
@@ -2301,7 +2365,7 @@ export default defineComponent({
           </ResizeObserver>
         );
       }
-      children.value = slots.columns?.();
+      children.value = slots.columns ? [<TableColumnSlot onChanged={getComponents} v-slots={forwardTableSlot(slots.columns)} />] : undefined;
       // fix #1724 sortedData.value.length > 0
       return (
         <ResizeObserver onResize={handleTableResize}>
@@ -2312,7 +2376,7 @@ export default defineComponent({
                 (flattenData.value.length > 0 || sortedData.value.length > 0) &&
                 isPaginationTop.value &&
                 renderPaginationArea()}
-              {renderTable()}
+              <DeferredTable />
               {props.pagination !== false &&
                 (flattenData.value.length > 0 || sortedData.value.length > 0) &&
                 !isPaginationTop.value &&

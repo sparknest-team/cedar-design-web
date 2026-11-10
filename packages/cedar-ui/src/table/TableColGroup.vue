@@ -15,6 +15,7 @@ import { orderPhysicalColumns } from './column-direction';
 import { TableColumnData, TableOperationColumn } from "./types";
 import { getPrefixCls } from "../_utils/global-config";
 import { DEFAULT_OPERATION_WIDTH } from "./hooks/use-columns-layout";
+import { getColumnLayoutKey } from './extra-column';
 
 const prefixCls = getPrefixCls("table");
 
@@ -47,11 +48,12 @@ export default defineComponent({
     // 列宽由 use-columns-layout 计算且总和等于 table 像素宽，
     // 不存在剩余空间分配，无需 min/max-width 兜底
     const getColWidth = (item: TableColumnData) => {
+      const key = getColumnLayoutKey(item);
       const resized =
-        (item.dataIndex && props.columnWidth?.[item.dataIndex]) ??
+        (key && props.columnWidth?.[key]) ??
         item._resizeWidth;
       return (
-        (item.dataIndex && props.columnRealWidth?.[item.dataIndex]) ||
+        (key && props.columnRealWidth?.[key]) ||
         resized ||
         item._realWidth ||
         item.width
@@ -60,7 +62,7 @@ export default defineComponent({
 
     const orderedColumns = computed(() => orderPhysicalColumns([
       ...props.operations.map(item => ({ key: `operation-${item.name}`, class: `${prefixCls}-${item.name}-col`, width: item.width ?? DEFAULT_OPERATION_WIDTH, fixed: item.fixed ? 'left' as const : undefined })),
-      ...props.dataColumns.map(item => ({ key: `data-${item.dataIndex}`, class: undefined, width: getColWidth(item), fixed: item.fixed })),
+      ...props.dataColumns.map(item => ({ key: `data-${getColumnLayoutKey(item)}`, class: undefined, width: getColWidth(item), fixed: item.fixed })),
     ], item => item.fixed, context?.readingDirection));
     return {
       orderedColumns,

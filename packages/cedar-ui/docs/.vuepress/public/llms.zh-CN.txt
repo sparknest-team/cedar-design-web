@@ -99,7 +99,7 @@ Documentation language: zh-CN.
 - [Tabs 标签页](./llms/zh-CN/components/tabs.md): /components/tabs/
 - [Tag](./llms/zh-CN/components/tag.md): /components/tag/
 - [Textarea](./llms/zh-CN/components/textarea.md): /components/textarea/
-- [ThemeProvider 主题](./llms/zh-CN/components/theme-provider.md): /components/theme-provider/
+- [ThemeProvider](./llms/zh-CN/components/theme-provider.md): /components/theme-provider/
 - [TimePicker](./llms/zh-CN/components/time-picker.md): /components/time-picker/
 - [TimeRange](./llms/zh-CN/components/time-range.md): /components/time-range/
 - [Time](./llms/zh-CN/components/time.md): /components/time/
@@ -144,4 +144,4 @@ Documentation language: zh-CN.
 - [资源排期](./llms/zh-CN/showcase/scheduling.md): /showcase/scheduling/
 - [核心特点](./llms/zh-CN/showcase/strengths.md): /showcase/strengths/
 - [主题与品牌](./llms/zh-CN/showcase/themes.md): /showcase/themes/
-- [主题预设](./llms/zh-CN/themes.md): /themes/
+- [主题定制](./llms/zh-CN/themes.md): /themes/

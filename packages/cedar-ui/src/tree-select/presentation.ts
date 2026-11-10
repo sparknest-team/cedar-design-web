@@ -17,6 +17,7 @@ export default withFieldPresentation(Base, {
           editMode: "direct",
           disabled: disabled || readonly,
           "onUpdate:modelValue": update,
+          onKeydown: (event: KeyboardEvent) => emit("keydown", event),
           onSearch: (query: string) => emit("search", query),
           onClear: () => emit("clear"),
           "onUpdate:inputValue": (query: string) =>

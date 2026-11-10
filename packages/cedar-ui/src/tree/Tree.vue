@@ -8,7 +8,7 @@
       item-key="key"
     >
       <template #item="{ item: node }">
-        <TreeNode :key="node.key" v-bind="node.treeNodeProps" />
+        <TreeNode :key="node.key" :ref="(instance) => setVirtualNode(node.key, instance)" v-bind="node.treeNodeProps" />
       </template>
     </VirtualList>
     <template v-else>
@@ -345,7 +345,17 @@ export default defineComponent({
     })
 
     const focusableNodes = computed(() => visibleTreeNodeList.value.filter(node => !node.disabled))
-    const activeDescendant = computed(() => focusedValue.value === undefined ? undefined : nodeId(focusedValue.value))
+    const mountedVirtualNodes = reactive(new Set<TreeNodeValue>())
+    function setVirtualNode(key: TreeNodeValue, instance: unknown) {
+      if (instance) mountedVirtualNodes.add(key)
+      else mountedVirtualNodes.delete(key)
+    }
+    const isVirtualNodeMounted = (key: TreeNodeValue) => mountedVirtualNodes.has(key)
+    const activeDescendant = computed(() =>
+      focusedValue.value === undefined || (props.virtualListProps && !mountedVirtualNodes.has(focusedValue.value))
+        ? undefined
+        : nodeId(focusedValue.value),
+    )
     function focusNode(key: TreeNodeValue) {
       if (externallyManaged) return
       if (!focusableNodes.value.some(node => node.key === key)) return
@@ -368,7 +378,7 @@ export default defineComponent({
       focusedValue.value = [...(old?.pathParentKeys ?? [])].reverse().find(key => nodes.some(node => node.key === key)) ?? nodes[0]?.key
     })
     function onKeydown(event: KeyboardEvent) {
-      if (externallyManaged || event.isComposing || event.defaultPrevented || event.target !== root.value || event.altKey || event.ctrlKey || event.metaKey) return
+      if (externallyManaged || event.isComposing || event.keyCode === 229 || event.defaultPrevented || event.target !== root.value || event.altKey || event.ctrlKey || event.metaKey) return
       const nodes = focusableNodes.value
       const index = nodes.findIndex(node => node.key === focusedValue.value)
       const node = nodes[index < 0 ? 0 : index]
@@ -697,6 +707,7 @@ export default defineComponent({
       focusedValue,
       nodeId,
       focusNode,
+      isVirtualNodeMounted,
       switcherIcon,
       loadingIcon,
       dragIcon,
@@ -777,6 +788,7 @@ export default defineComponent({
       root,
       externallyManaged,
       activeDescendant,
+      setVirtualNode,
       onKeydown,
       onTreeFocus,
       classNames,

@@ -35,6 +35,7 @@ function harness(keepAlive = false, autoStart = true) {
   );
   return {
     frames,
+    clockSpy: now,
     cancel,
     props,
     show,
@@ -56,6 +57,20 @@ function harness(keepAlive = false, autoStart = true) {
 }
 
 describe("Countdown business-clock callback ownership", () => {
+  test('unmount during a clock read does not emit stale changes', () => {
+    const p = harness()
+    try {
+      p.emit.mockClear()
+      let invoked = false
+      p.clockSpy.mockImplementation(() => {
+        if (!invoked) { invoked = true; p.wrapper.unmount() }
+        return 100
+      })
+      p.frames[0](100)
+      expect(p.emit).not.toHaveBeenCalled()
+    } finally { p.cleanup() }
+  })
+
   test("pre-pause frame cannot consume a restarted frame", () => {
     const p = harness();
     try {

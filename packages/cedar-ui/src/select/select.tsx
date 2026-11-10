@@ -69,6 +69,13 @@ const Select = defineComponent({
     };
 
     const editor = inject(selectionEditorSurface, undefined);
+    const handleFieldKeydown = (event: KeyboardEvent) => {
+      emit('keydown', event)
+      if (!event.defaultPrevented) {
+        controller.handleKeyDown(event)
+      }
+    }
+
     const renderEditor = () => (
       <SelectedOptions
         open={controller.computedOpen}
@@ -102,7 +109,7 @@ const Select = defineComponent({
             onUpdate:modelValue={(value: string | null) =>
               controller.handleInputValueChange(value ?? "")
             }
-            onKeydown={controller.handleKeyDown}
+            onKeydown={handleFieldKeydown}
           />
         )}
         <SelectMenu controller={controller} v-slots={slots} />
@@ -184,6 +191,7 @@ const Select = defineComponent({
                         controller.mergedDisabled || controller.session.pending,
                       readonly: controller.mergedReadonly,
                       "onUpdate:modelValue": controller.session.update,
+                      onKeydown: (event: KeyboardEvent) => emit('keydown', event),
                       onSearch: (...args: any[]) =>
                         (emit as any)("search", ...args),
                       onChange: () => {},
@@ -275,8 +283,8 @@ const Select = defineComponent({
                     onUpdate:inputValue={controller.handleInputValueChange}
                     onRemove={(key) => controller.handleRemove(String(key))}
                     onClear={controller.handleClear}
-                    onKeydown={controller.handleKeyDown}
                     {...restAttrs}
+                    onKeydown={handleFieldKeydown}
                     aria-controls={controller.computedOpen ? controller.listboxId : undefined}
                     aria-activedescendant={controller.activeDescendant}
                     onFocus={(event) => {

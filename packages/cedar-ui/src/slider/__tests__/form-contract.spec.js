@@ -10,7 +10,7 @@ describe('Slider Form integration', () => {
     const handlers = { onChange: vi.fn(), onFocus: vi.fn(), onBlur: vi.fn() }
     const context = reactive({
       get disabled() { return state.disabled }, get readonly() { return state.readonly }, get error() { return state.error },
-      size: 'md', feedback: undefined, eventHandlers: handlers, updateValidateState: vi.fn(),
+      size: 'md', feedback: undefined, eventHandlers: computed(() => handlers), updateValidateState: vi.fn(),
     })
     const wrapper = mount({ setup() {
       provide(formItemInjectionKey, context)
@@ -37,7 +37,7 @@ describe('Slider Form integration', () => {
     wrapper.unmount()
   })
   test('internal InputNumber validates and reports focus only once', async () => {
-    const { wrapper, handlers } = create({ showInput: true, step: 5 })
+    const { wrapper, handlers, state } = create({ showInput: true, step: 5 })
     const input = wrapper.get('input')
     await input.trigger('focus')
     expect(handlers.onFocus).toHaveBeenCalledTimes(1)
@@ -47,6 +47,11 @@ describe('Slider Form integration', () => {
     expect(wrapper.get('[role="slider"]').attributes('aria-valuenow')).toBe('40')
     await input.trigger('blur')
     expect(handlers.onBlur).toHaveBeenCalledTimes(1)
+    state.disabled = true
+    state.error = true
+    await wrapper.vm.$nextTick()
+    expect(input.element.disabled).toBe(true)
+    expect(input.attributes('aria-invalid')).toBe('true')
     wrapper.unmount()
   })
 })

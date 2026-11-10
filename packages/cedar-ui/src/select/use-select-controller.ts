@@ -592,6 +592,7 @@ export function useSelectController(
     enabledOptionKeys,
     activeKey,
     handleKeyDown,
+    cancelPendingInitialScroll,
   } = useSelect({
     getOptionId,
     multiple,
@@ -708,6 +709,7 @@ export function useSelectController(
     handleClear,
     handleInputValueChange,
     handleKeyDown,
+    cancelPendingInitialScroll,
     handleDropdownScroll,
     handleDropdownReachBottom,
     session,

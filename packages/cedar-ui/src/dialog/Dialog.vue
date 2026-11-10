@@ -12,7 +12,7 @@
       :style="{ zIndex: mergedZIndex }"
       v-bind="mergeProps(themeScope, $attrs)"
     >
-      <transition :name="overlayAnimationName" appear>
+      <component :is="Transition" :name="overlayAnimationName" appear>
         <div
           v-if="overlay"
           v-show="mergedOpen"
@@ -20,14 +20,16 @@
           :style="overlayStyle"
           role="presentation"
         />
-      </transition>
+      </component>
       <div
         ref="wrapperRef"
         :class="wrapperCls"
         @pointerdown.self="handleOverlayPointerDown"
         @click.self="handleOverlayClick"
       >
-        <transition
+        <component
+          :is="Transition"
+          persisted
           :name="dialogAnimationName"
           appear
           @after-enter="opened"
@@ -111,7 +113,7 @@
               </slot>
             </div>
           </div>
-        </transition>
+        </component>
       </div>
     </div>
   </teleport>
@@ -121,7 +123,7 @@
 import { useThemeScope } from '../theme-provider/context'
 import PendingFeedback from '../_components/pending-feedback/PendingFeedback.vue'
 import { useDirection } from '../_utils/direction'
-import { mergeProps,  computed, ref, toRef, useSlots, type CSSProperties } from 'vue';
+import { Transition, mergeProps,  computed, ref, toRef, useSlots, type CSSProperties } from 'vue';
 import { IconCheckCircleFill } from '@cedar-design/icons-vue/icon-check-circle-fill';
 import { IconClose } from '@cedar-design/icons-vue/icon-close';
 import { IconCloseCircleFill } from '@cedar-design/icons-vue/icon-close-circle-fill';

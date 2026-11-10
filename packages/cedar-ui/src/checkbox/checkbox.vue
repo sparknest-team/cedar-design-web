@@ -29,7 +29,7 @@
       :aria-checked="indeterminate ? 'mixed' : checked"
       :aria-readonly="mergedReadonly || undefined"
       :aria-describedby="group?.formErrorId === errorId ? nativeAttrs['aria-describedby'] : describeError(nativeAttrs['aria-describedby'])"
-      :aria-invalid="mergedError || nativeAttrs['aria-invalid'] || undefined"
+      :aria-invalid="mergedError ? true : nativeAttrs['aria-invalid']"
       @change="handleChange"
       @keydown="keyboard.keydown"
       @keyup="keyboard.keyup"

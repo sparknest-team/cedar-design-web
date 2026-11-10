@@ -144,7 +144,7 @@ export const componentSideBar: SidebarArrayOptions = markReuse([
   ...catalog.groups.map((group) => ({
     text: group.label,
     children: catalog.components
-      .filter((component) => component.group === group.id)
+      .filter((component) => component.group === group.id && component.id !== "theme-provider")
       .map((component) => ({ text: component.name, link: component.route })),
   })),
 ]);

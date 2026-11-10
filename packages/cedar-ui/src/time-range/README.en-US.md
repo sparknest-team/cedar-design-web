@@ -176,7 +176,7 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 
 ### Popup configuration and field notifications
 
-`popup-props` configures local Trigger positioning/appearance, e.g. `{ placement: 'top-start' }`, without overriding field open, disabled, trigger or other state/interaction. Top-level `popup-container`, including false, takes precedence. `input-editable` defaults to true and can disable desktop typing. `time-range-picker-props`, including class/style, controls panel appearance. Undeclared attrs no longer supply panel/popup configuration; id/aria-* fall through to the field.
+`popup-props` configures local Trigger positioning/appearance, e.g. `{ placement: 'top-start' }`, without overriding field open, disabled, trigger or other state/interaction. Top-level `popup-container`, including false, takes precedence. `input-editable` defaults to true and can disable desktop typing. `time-range-picker-props`, including class/style, controls panel appearance. Panel and popup configuration uses the declared props; id/aria-* fall through to the field.
 
 `click(event)` notifies only clicks on non-disabled fields. Readonly may notify without expanding. Closing consistently listens to `open-change(false)`, a close request that controlled open still requires the parent to accept. Neither platform has a field close event; a close request is not a value commit.
 
@@ -185,6 +185,8 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 A `placeholder` string applies to both endpoints; arrays provide start/end text, with missing entries empty. Explicit empty strings do not fall back to default text.
 
 ### TimeRange Props
+
+`input-attrs` applies to the two direct input elements. For example, `:input-attrs="[{ 'aria-label': 'Departure' }, { 'aria-label': 'Return' }]"` names each endpoint. The field owns its value, disabled, readonly, placeholder, role and popup state; shared descriptions, per-input descriptions and form errors are merged for each input. Component errors take precedence; otherwise each input retains its `aria-invalid`. `RangeInputAttributes` is exported from the component and root entries and includes native attributes and `Once` event types.
 
 | Prop | Description | Type | Default behavior |
 | --- | --- | --- | --- |
@@ -208,6 +210,7 @@ A `placeholder` string applies to both endpoints; arrays provide start/end text,
 | `hide-disabled-options` | Hide disabled time options; clocks retain tick positions | `boolean` | `false` |
 | `hint` | Floating placeholder hint, suppressed by an outer Form label | `boolean` | `true` |
 | `input-editable` | Allow text input without removing panel selection | `boolean` | `true` |
+| `input-attrs` | Native attributes for the start and end inputs, in order; per-input names override shared names | `RangeInputAttributes[]` | `undefined` |
 | `line` | Show the field border or underline | `boolean` | `true` |
 | `loading` | Manual loading feedback, independent of event return values | `boolean` | `false` |
 | `loading-mode` | Field loading presentation mode | `default \| line` | `default` |

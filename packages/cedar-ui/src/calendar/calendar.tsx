@@ -104,7 +104,7 @@ export default defineComponent({
           tabindex: current && focusedDate.value.format(pattern) === value ? 0 : -1,
           onFocus: () => { focusedDate.value = time },
           onKeydown: (event: KeyboardEvent) => {
-            if (event.target !== event.currentTarget || event.altKey || event.ctrlKey || event.metaKey || event.isComposing) return
+            if (event.defaultPrevented || event.target !== event.currentTarget || event.altKey || event.ctrlKey || event.metaKey || event.isComposing || event.keyCode === 229) return
             if (event.key === 'Enter' || event.key === ' ') {
               event.preventDefault()
               if (props.allowSelect) (event.currentTarget as HTMLElement).click()

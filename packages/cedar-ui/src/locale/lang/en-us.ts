@@ -108,6 +108,8 @@ const lang: CedarLang = {
     },
   },
   map: {
+    initError: 'Map initialization failed',
+    retry: 'Retry',
     searchPlaceholder: 'please search address',
     title: 'Address Select',
     noData: 'No Data',
@@ -148,6 +150,11 @@ const lang: CedarLang = {
     total: 'Total: {0}',
   },
   table: {
+    expandRow: 'Expand row',
+    collapseRow: 'Collapse row',
+    resizeColumn: 'Resize {0} column',
+    selectRow: 'Select row {0}',
+    selectionColumn: 'Selection',
     confirmButtonText: 'Ok',
     resetText: 'Reset',
     customColumnsConfig: 'Column Manager',

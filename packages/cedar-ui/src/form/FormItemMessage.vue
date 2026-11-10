@@ -1,25 +1,25 @@
 <template>
   <div v-if="error.length > 0" :id="errorId" data-form-errors>
     <template v-for="item of error" :key="item">
-      <transition name="form-blink" appear>
+      <component :is="Transition" name="form-blink" appear>
         <div role="alert" :class="[prefixCls]">
           {{ item }}
         </div>
-      </transition>
+      </component>
     </template>
   </div>
-  <transition v-else-if="help || $slots.help" name="form-blink" appear>
+  <component :is="Transition" v-else-if="help || $slots.help" name="form-blink" appear>
     <div :class="[prefixCls, `${prefixCls}-help`]">
       <slot name="help">
         {{ help }}
       </slot>
     </div>
-  </transition>
+  </component>
 </template>
 
 <script lang="ts">
 import { createNamespace } from '../_utils/global-config'
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, PropType, Transition } from 'vue'
 import { getPrefixCls } from '../_utils/global-config'
 import { useFormErrorDescription } from './error-description'
 
@@ -36,6 +36,7 @@ export default defineComponent({
     const prefixCls = getPrefixCls('form-item-message')
 
     return {
+      Transition,
       prefixCls,
       errorId: useFormErrorDescription().errorId,
     }

@@ -41,8 +41,10 @@ export default defineComponent({
         if (frame !== undefined) return
         // Consumers can change the observed layout. Leave the observer's
         // delivery cycle before emitting, and coalesce repeated notifications.
+        let pendingFrame = true
         frame = view.requestAnimationFrame(() => {
-          if (binding !== generation) return
+          if (!pendingFrame || binding !== generation) return
+          pendingFrame = false
           frame = undefined
           const entry = pending
           pending = undefined

@@ -32,12 +32,14 @@ test('coordinate search ignores results from an older query or a cleared input',
   Object.defineProperty(globalThis, 'MapService', { configurable: true, writable: true, value: { init: async () => {} } })
   Object.defineProperty(globalThis, 'SearchService', { configurable: true, writable: true, value: FakeSearch })
   Object.defineProperty(globalThis, 'LngLat', { configurable: true, writable: true, value: FakeLngLat })
-  Object.defineProperty(globalThis, 'PoiInfo', { configurable: true, writable: true, value: class {} })
+  // A geocoder result is data; the optional SDK must not supply a global PoiInfo constructor.
+  Object.defineProperty(globalThis, 'PoiInfo', { configurable: true, writable: true, value: undefined })
   const updates = vi.fn()
   let wrapper: ReturnType<typeof mount> | undefined
   try {
-    wrapper = mount(MapComponent, { props: { modelValue: { longitude: 1, latitude: 2, address: 'Initial' }, enableGisSearch: true, fetch: { get: () => new Promise((resolve) => suggestions.push(resolve)), post: vi.fn() }, 'onUpdate:modelValue': updates } })
+    wrapper = mount(MapComponent, { props: { modelValue: { longitude: 1, latitude: 2, address: 'Initial' }, enableGisSearch: false, fetch: { get: () => new Promise((resolve) => suggestions.push(resolve)), post: vi.fn() }, 'onUpdate:modelValue': updates } })
     await flushPromises()
+    await wrapper.setProps({ enableGisSearch: true })
     defer = true
     const input = wrapper.get('input')
     await input.setValue('3,4')
@@ -68,6 +70,21 @@ test('coordinate search ignores results from an older query or a cleared input',
     suggestions[2]({ data: [{ name: 'Cleared suggestion' }] })
     await flushPromises()
     expect(wrapper.text()).not.toContain('Cleared suggestion')
+    await input.setValue('pending before configuration change')
+    await wrapper.setProps({ enableGisSearch: false })
+    const newGet = vi.fn(async () => ({ data: [{ name: 'New provider' }] }))
+    await wrapper.setProps({ enableGisSearch: true, basePath: '/new', fetch: { get: newGet, post: vi.fn() } })
+    // Reconfiguration creates a new service whose initial geocode must settle.
+    await flushPromises()
+    pending.splice(3, 1)[0]({})
+    await flushPromises()
+    suggestions[3]({ data: [{ name: 'Old provider' }] })
+    await flushPromises()
+    expect(wrapper.text()).not.toContain('Old provider')
+    await input.setValue('new provider query')
+    await flushPromises()
+    expect(newGet).toHaveBeenCalledWith('/new/gis/v2/in/map/suggest', expect.anything())
+    expect(wrapper.text()).toContain('New provider')
     await input.setValue('9,10')
     await wrapper.setProps({ modelValue: { longitude: 11, latitude: 12, address: 'Parent' } })
     pending[3]({ address: 'Superseded' })

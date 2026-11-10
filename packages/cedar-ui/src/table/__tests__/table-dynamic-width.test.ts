@@ -228,4 +228,58 @@ describe("table dynamic width (对齐 element：根节点 100%，表格宽度按
 
     wrapper.unmount();
   });
+  test.each([true, false])('same-key extra column remains 28px as its container changes (fit=%s)', async (fit) => {
+    const wrapper = mount(Table, {
+      props: {
+        columns: [{ title: 'Name', dataIndex: 'name' }],
+        data: [{ key: 'a', name: 'Ada' }],
+        pagination: false,
+        extraColumn: { dataIndex: 'name' },
+        fit,
+      },
+      global: { plugins: [{ install(app: any) { app.provide(Symbol.for('v-scx'), { modules: new Set() }) } }] },
+    })
+    const settle = async () => {
+      await nextTick()
+      fireResize()
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
+      await nextTick()
+    }
+    try {
+      await settle()
+      expect(wrapper.findAll('colgroup col').map(col => col.attributes('width'))).toEqual(['972', '28'])
+      containerWidth = 600
+      await settle()
+      expect(wrapper.findAll('colgroup col').map(col => col.attributes('width'))).toEqual(['572', '28'])
+      containerWidth = 50
+      await settle()
+      expect(wrapper.findAll('colgroup col').map(col => col.attributes('width'))).toEqual(['80', '28'])
+    } finally { wrapper.unmount() }
+  })
+
+  test('resizing a same-key business column does not resize the extra column', async () => {
+    const wrapper = mount(Table, {
+      props: {
+        columns: [{ title: 'Name', dataIndex: 'name' }],
+        data: [{ key: 'a', name: 'Ada' }],
+        pagination: false,
+        extraColumn: { dataIndex: 'name' },
+        columnResizable: true,
+      },
+      global: { plugins: [{ install(app: any) { app.provide(Symbol.for('v-scx'), { modules: new Set() }) } }] },
+    })
+    try {
+      await nextTick()
+      fireResize()
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
+      await nextTick()
+      const header = wrapper.findAll('thead th')[0].element
+      vi.spyOn(header, 'getBoundingClientRect').mockReturnValue({ width: 972 } as DOMRect)
+      await wrapper.get('[role="separator"]').trigger('keydown', { key: 'ArrowRight' })
+      await nextTick()
+      expect(wrapper.emitted('column-resize')?.at(-1)).toEqual(['name', 982])
+      expect(wrapper.findAll('colgroup col').map(col => col.attributes('width'))).toEqual(['982', '28'])
+    } finally { wrapper.unmount() }
+  })
+
 });

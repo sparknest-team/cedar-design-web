@@ -1,12 +1,13 @@
 import { ref, reactive, defineComponent, useAttrs, onBeforeUnmount, onDeactivated, onActivated, onMounted, h, watch, mergeProps } from 'vue'
 import { setValueWithAlias, dataToScope, realTransformAlias } from '../utils/useSetValueWithAlias'
 import { mapSelectProps, type PoiKeys } from './props'
+import { mapSelectEmits } from './emits'
 import { IconLocation, IconLoading, IconCloseCircleFill } from '@cedar-design/icons-vue'
 import Input from '../input'
 import Dialog from '../dialog'
 import Map from './map'
 import { useI18n } from '../locale'
-import { useFetchGeocoder } from './utils'
+import { resolveMapType, useFetchGeocoder } from './utils'
 import { useFetch } from '../_utils/use-fetch'
 import { createNamespace } from '../_utils/global-config'
 
@@ -19,7 +20,7 @@ export default defineComponent({
 
   props: mapSelectProps,
 
-  emits: ['change', 'init', 'clear', 'error', 'update:modelValue'],
+  emits: mapSelectEmits,
 
   setup(props, { emit }) {
     const { t } = useI18n()
@@ -47,6 +48,7 @@ export default defineComponent({
       return ['longitude', 'latitude', 'address', 'name', 'adcode', 'countryCode', 'city', 'country'] as PoiKeys[]
     })()
     const confirmButtonLoading = ref(false)
+    watch(show, (open) => { if (!open) confirmButtonLoading.value = false }, { flush: 'sync' })
     const address = ref('')
     const isLoading = ref(false)
     let generation = 0
@@ -71,7 +73,7 @@ export default defineComponent({
       // 如果没有地址，但是有经纬度，则调用地图接口获取地址，并且将数据同步到value_。如果使用了v-model，则同步到外部。
       isLoading.value = true
       try {
-        const { fetchGeocoder } = useFetchGeocoder({ mapType: props.mapType, basePath: props.basePath, geocoderUrl: props.geocoderUrl, fetch: props.fetch ?? inheritedFetch, geocoderHandler: props.geocoderHandler })
+        const { fetchGeocoder } = useFetchGeocoder({ mapType: resolveMapType(props.mapType, props.isInternational), basePath: props.basePath, geocoderUrl: props.geocoderUrl, fetch: props.fetch ?? inheritedFetch, geocoderHandler: props.geocoderHandler })
         const parsedData = await fetchGeocoder(latitude, longitude)
         if (!active || version !== generation || !parsedData) return
         const parsedAliasData = realTransformAlias(parsedData, valueKeyAlias)
@@ -121,10 +123,10 @@ export default defineComponent({
       if (active) init()
       else address.value = value.value?.[valueKeyAlias.address] ?? ''
     }, { deep: true, flush: 'sync' })
-    watch(() => [props.mapType, props.basePath, props.geocoderUrl, props.geocoderHandler, props.fetch], () => { if (active) init() }, { flush: 'sync' })
+    watch(() => [props.mapType, props.isInternational, props.basePath, props.geocoderUrl, props.geocoderHandler, props.fetch], () => { if (active) init() }, { flush: 'sync' })
     watch(() => props.disabled, (disabled) => { if (disabled) show.value = false })
     onMounted(() => { active = true; init() })
-    onDeactivated(() => { active = false; generation++; isLoading.value = false })
+    onDeactivated(() => { active = false; generation++; isLoading.value = false; confirmButtonLoading.value = false })
     onActivated(() => { if (!active) { active = true; init() } })
     onBeforeUnmount(() => { active = false; generation++ })
 
@@ -159,7 +161,7 @@ export default defineComponent({
             'aria-expanded': show.value,
             onClick: openDialog,
             onKeydown: (event: KeyboardEvent) => {
-              if (!event.isComposing && (event.key === 'Enter' || event.key === ' ')) {
+              if (!event.defaultPrevented && !event.isComposing && event.keyCode !== 229 && (event.key === 'Enter' || event.key === ' ')) {
                 event.preventDefault()
                 openDialog()
               }
@@ -208,6 +210,7 @@ export default defineComponent({
               }}
               onLoaded:address={() => (confirmButtonLoading.value = false)}
               onInit={initHandler}
+              onError={(error: unknown) => emit('error', error)}
               style={props.mapStyle}
               valueKeyScope={valueKeyScope}
               valueKeyAlias={valueKeyAlias}

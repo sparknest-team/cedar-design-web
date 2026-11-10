@@ -4,6 +4,7 @@ import { expect, test, vi } from 'vitest'
 import ProgressGroup from '..'
 
 test.each(['line', 'circle'] as const)('%s tooltip remains over pointer and returns to focused item', async (mode) => {
+  const timerDescriptors = (['setTimeout', 'clearTimeout'] as const).map((key) => [key, Object.getOwnPropertyDescriptor(globalThis, key)] as const)
   vi.useFakeTimers()
   const schedule = vi.spyOn(globalThis, 'setTimeout')
   const cancel = vi.spyOn(globalThis, 'clearTimeout')
@@ -31,8 +32,13 @@ test.each(['line', 'circle'] as const)('%s tooltip remains over pointer and retu
     expect(cancel).toHaveBeenCalledWith(pending)
   } finally {
     wrapper.unmount()
-    vi.restoreAllMocks()
+    schedule.mockRestore()
+    cancel.mockRestore()
     vi.useRealTimers()
+    timerDescriptors.forEach(([key, descriptor]) => {
+      if (descriptor) Object.defineProperty(globalThis, key, descriptor)
+      else Reflect.deleteProperty(globalThis, key)
+    })
   }
 })
 
@@ -84,5 +90,29 @@ test('KeepAlive deactivation cancels pending hover and clears stale focus', asyn
   } finally {
     wrapper.unmount()
     vi.useRealTimers()
+  }
+})
+
+
+test('a cancelled hover timeout cannot hide a newer tooltip', async () => {
+  const callbacks: Array<() => void> = []
+  const original = globalThis.setTimeout
+  const schedule = vi.spyOn(globalThis, 'setTimeout').mockImplementation(((callback: TimerHandler, delay?: number, ...args: unknown[]) => {
+    if (delay === 250) callbacks.push(callback as () => void)
+    return original(callback, delay, ...args)
+  }) as typeof setTimeout)
+  const wrapper = mount(ProgressGroup, { props: { items: [{ label: 'A', value: 30 }, { label: 'B', value: 30 }] } })
+  try {
+    const segments = wrapper.findAll('[role="progressbar"]')
+    await segments[0].trigger('mouseenter')
+    await segments[0].trigger('mouseleave')
+    expect(callbacks).toHaveLength(1)
+    await segments[1].trigger('mouseenter')
+    callbacks[0]()
+    await nextTick()
+    expect(wrapper.get('[role="tooltip"]').text()).toContain('B:')
+  } finally {
+    wrapper.unmount()
+    schedule.mockRestore()
   }
 })

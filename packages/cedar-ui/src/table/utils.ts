@@ -3,6 +3,7 @@ import { TableColumnData, TableDataWithRaw, TableOperationColumn } from './types
 import { isArray, isNull, isUndefined } from '../_utils/is'
 import { resolveProps, isNamedComponent, isSlotsChildren, isArrayChildren } from '../_utils/vue-utils'
 import { BaseType } from '../_utils/types'
+import { getColumnLayoutKey, isTableExtraColumn, setExtraColumnLayoutKey } from './extra-column'
 
 const getDataColumnsNumber = (columns: TableColumnData[]): number => {
   let count = 0
@@ -147,12 +148,20 @@ export const getGroupColumns = (
           cell.dataIndex = `__arco_data_index_${dataColumns.length}`
         }
 
-        if (columnWidth[cell.dataIndex]) {
-          cell._resizeWidth = columnWidth[cell.dataIndex]
+        if (isTableExtraColumn(cell) && columnMap.has(cell.dataIndex)) {
+          let layoutKey = `@cedar-extra:${cell.dataIndex}`
+          while (columnMap.has(layoutKey)) layoutKey += '@'
+          setExtraColumnLayoutKey(cell, layoutKey)
+        }
+        const layoutKey = getColumnLayoutKey(cell)!
+        if (columnWidth[layoutKey]) {
+          cell._resizeWidth = columnWidth[layoutKey]
         }
 
         // dataColumns和groupColumns公用一个cell的引用
-        columnMap.set(cell.dataIndex, cell)
+        if (!isTableExtraColumn(cell) || !columnMap.has(cell.dataIndex)) {
+          columnMap.set(cell.dataIndex, cell)
+        }
         dataColumns.push(cell)
         groupColumns[level].push(cell)
       }
@@ -251,7 +260,7 @@ export const getFixedNumber = (
   let count = 0
   if (dir === 'rtl') {
     const boundary = column.fixed === 'left' ? getLastDataColumn(column) : getFirstDataColumn(column)
-    const index = dataColumns.findIndex(item => item.dataIndex === boundary.dataIndex)
+    const index = dataColumns.findIndex(item => getColumnLayoutKey(item) === getColumnLayoutKey(boundary))
     const outside = column.fixed === 'left' ? dataColumns.slice(index + 1) : dataColumns.slice(0, index)
     return outside.filter(item => item.fixed === column.fixed).reduce((total, item) => total + widthOf(item), 0)
   }
@@ -263,7 +272,7 @@ export const getFixedNumber = (
     }
     const first = getFirstDataColumn(column)
     for (const item of dataColumns) {
-      if (first.dataIndex === item.dataIndex) {
+      if (getColumnLayoutKey(first) === getColumnLayoutKey(item)) {
         break
       }
       count += widthOf(item)
@@ -274,7 +283,7 @@ export const getFixedNumber = (
   const last = getLastDataColumn(column)
   for (let i = dataColumns.length - 1; i >= 0; i--) {
     const item = dataColumns[i]
-    if (last.dataIndex === item.dataIndex) {
+    if (getColumnLayoutKey(last) === getColumnLayoutKey(item)) {
       break
     }
 

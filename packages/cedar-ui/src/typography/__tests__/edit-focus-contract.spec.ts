@@ -70,6 +70,34 @@ test('a focus change before Enter keyup is respected', async () => {
   wrapper.unmount(); outside.remove()
 })
 
+test('a cancelled focus restoration cannot affect a later editing session', async () => {
+  const wrapper = mount(TypographyParagraph, { props: { editable: true, defaultEditing: true, editText: 'draft' }, slots: { default: 'text' }, attachTo: document.body })
+  let oldCallback: (() => void) | undefined
+  const original = globalThis.setTimeout
+  const timer = vi.spyOn(globalThis, 'setTimeout').mockImplementation(((callback: TimerHandler, delay?: number, ...args: unknown[]) => {
+    if (delay === 0 && !oldCallback) {
+      oldCallback = callback as () => void
+      return 123456 as unknown as ReturnType<typeof setTimeout>
+    }
+    return original(callback, delay, ...args)
+  }) as typeof setTimeout)
+  try {
+    await wrapper.get('input').trigger('keydown', { key: 'Enter' })
+    document.dispatchEvent(new KeyboardEvent('keyup', { key: 'Enter', bubbles: true }))
+    expect(oldCallback).toBeTypeOf('function')
+    await wrapper.get('.c-typography-operation-edit').trigger('click')
+    const input = wrapper.get('input').element as HTMLInputElement
+    input.blur()
+    await nextTick()
+    expect(wrapper.find('input').exists()).toBe(false)
+    oldCallback!()
+    expect(document.activeElement).not.toBe(wrapper.get('.c-typography-operation-edit').element)
+  } finally {
+    wrapper.unmount()
+    timer.mockRestore()
+  }
+})
+
 test.each([TypographyText, TypographyTitle, TypographyParagraph])('forwards both controlled model updates', async (component) => {
   const editing = ref(true), text = ref('old')
   const wrapper = mount(defineComponent({

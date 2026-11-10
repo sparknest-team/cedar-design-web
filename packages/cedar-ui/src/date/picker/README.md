@@ -59,7 +59,7 @@ permalink: /components/date-picker/
 
 `value-format` 是稳定英文日期协议（包括月份名称 token），`format` 的显示及手输文本使用界面语言。切换语言不会改写模型，也不会令英文月份名称模型失效。默认数字协议、Date 对象、时间戳不变。中文核心语言与 Maple 内置语言数据已接入；其他日期格式优先使用已注册 Dayjs 语言数据，未加载的语言安全回退英文。
 
-周号和周比较不再依赖全局周起始设置，跨年同周号不能被误判成同一周。两个不同周起始实例的挂载、更新和卸载互不影响。
+周号和周比较使用各实例的周起始设置，跨年同周号不能被误判成同一周。两个不同周起始实例的挂载、更新和卸载互不影响。
 
 <demo src="./__demos__/locale-isolation.vue"></demo>
 
@@ -163,7 +163,7 @@ DateRangePicker 的 `exchange-time` 默认 true。反序交互日期在 true 时
 
 ### DatePicker Props
 
-纯面板不接收 open/default-open、popup-container、placement、trigger-props、placeholder、variant、clearable 等字段/浮层属性。浮层配置请使用 Date/DateRange 的 popup-props；输入可编辑性使用字段 input-editable。确认区只由 disable-confirm 控制，不再使用 show-confirm-btn。
+纯面板不接收 open/default-open、popup-container、placement、trigger-props、placeholder、variant、clearable 等字段/浮层属性。浮层配置请使用 Date/DateRange 的 popup-props；输入可编辑性使用字段 input-editable。确认区只由 disable-confirm 控制。
 
 | 参数 | 说明 | 类型 | 缺省说明 |
 | --- | --- | --- | --- |

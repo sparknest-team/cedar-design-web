@@ -3,6 +3,7 @@ import { mount } from "@vue/test-utils";
 import { afterEach, describe, expect, test, vi } from "vitest";
 import Group from "../PreviewGroup.vue";
 
+const timerDescriptors = new Map(['setTimeout', 'clearTimeout', 'Date'].map((name) => [name, Object.getOwnPropertyDescriptor(globalThis, name)]));
 const ticks: Array<() => void> = [];
 vi.mock("vue", async () => {
   const actual = await vi.importActual<typeof import("vue")>("vue");
@@ -68,6 +69,11 @@ afterEach(() => {
     .splice(0)
     .reverse()
     .forEach((restore) => restore());
+  timerDescriptors.forEach((descriptor, name) => {
+    if (descriptor) Object.defineProperty(globalThis, name, descriptor)
+    else Reflect.deleteProperty(globalThis, name)
+  })
+  expect(typeof globalThis.setTimeout).toBe('function')
   frames.length = ticks.length = 0;
 });
 async function fixture(
@@ -170,6 +176,22 @@ async function fixture(
   };
 }
 describe("PreviewGroup track scheduler ownership", () => {
+  test('unmount during transition measurement does not schedule a recenter timer', async () => {
+    const f = await fixture()
+    const view = f.track().ownerDocument.defaultView
+    f.vm.next()
+    f.vm.next()
+    await flush()
+    const timer = vi.spyOn(view, 'setTimeout')
+    timer.mockClear()
+    vi.spyOn(view, 'getComputedStyle').mockImplementation(() => {
+      f.owner.unmount()
+      return { transitionProperty: 'transform', transitionDuration: '0.24s', transitionDelay: '0s' } as any
+    })
+    deliverTicks()
+    expect(timer).not.toHaveBeenCalled()
+  })
+
   test("current instant mode releases on the second frame", async () => {
     const f = await fixture();
     deliverTicks();

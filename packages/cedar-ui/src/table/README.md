@@ -10,6 +10,10 @@ Cedar Table 支持排序、行选择和远程数据等功能；Maple Table 是�
 
 当前排序列的表头通过 `aria-sort` 标示升序或降序；自定义表头内的输入及按钮保留自己的键盘和点击操作。
 
+默认行选择控件使用行键生成可访问名称，全选控件使用本地化名称；显式选择列标题优先。
+
+当设置高度、启用粘性表头或虚拟列表导致表格分为多个原生表格时，数据表和汇总表会生成同表语义列头，并通过 `headers` 关联数据单元格。`td` 插槽显式设置的 `headers` 优先，由调用方负责引用有效的同表列头。实际屏幕阅读器及复杂自定义表头的验收尚未完成；依赖读屏识别列头的场景应验证目标环境，必要时提供可访问的替代内容。
+
 ## 基础示例
 
 ### 基础用法
@@ -193,7 +197,7 @@ Cedar Table 支持排序、行选择和远程数据等功能；Maple Table 是�
 
 sticky-header 与 sticky-pagination 相对页面或外层滚动容器定位。数值 0 表示启用且偏移为 0。与 height/max-height 限制表格内部滚动是两种不同场景。祖先应保留实际滚动布局，不要额外套 overflow:hidden 阻断粘性定位。
 
-内置分页吸底时，将同步横向滚动条放在分页上方并一起吸底。表体与该滚动条双向同步，分页不再盖住唯一可用的横向滚动入口；没有横向溢出时不显示这条滚动条。
+内置分页吸底时，将同步横向滚动条放在分页上方并一起吸底。表体与该滚动条双向同步，横向滚动入口保持可见并可操作；没有横向溢出时不显示这条滚动条。
 
 需要完全自定义布局时传 pagination=false，分页和当前页数据由业务控制。示例可以切换这种模式。此时 Table 不进行内置分页切片；后端分页传当前页，前端分页由业务先 slice。pagination 对象里的 total 仅控制分页总数，不会自动发请求。
 
@@ -585,6 +589,12 @@ Table **不内置**列管理。通过扩展点与外部 `TableColumnManager` 组
 
 `Thead` 和 `Tbody` 分别渲染表头和表体，默认插槽提供内容；同名插槽可定制对应元素。`Tr`、`Th` 和 `Td` 是依赖 Table 上下文的底层渲染器，不是独立的数据表格。通常通过 Table 的 `tr`、`th`、`td` 插槽定制元素。
 
+标题和单元格具名插槽、列级 `title`、`cell`、`filter-icon` 和 `filter-content`、`empty`、`footer`、`expand-row`、`expand-icon`、分页插槽、`summary-cell`、`drag-handle-icon`、扩展列表头/单元格及 `header-cell-actions` 支持在内容中组合 `v-for` 与 `v-memo`。
+
+目前在服务端渲染时，`thead`、`tbody`、`tr`、`th`、`td` 自定义结构插槽内组合使用 `v-for` 和 `v-memo` 会导致渲染报错。需要 SSR 时，请暂时移除这些插槽中的 `v-memo`。
+
+通过 `#columns` 声明的 `TableColumn` 支持服务端输出表头与数据单元格，包括分组列和动态列；也可以通过 `columns` 属性定义列。
+
 `Tr` 的 `expand`、`empty`、`checked` 表示行状态，`rowIndex` 和 `record` 提供行上下文。`Th` 接收 `column`、`operations`、`dataColumns` 和 `resizable`。`Td` 接收 `rowIndex`、`record`、`column`、`type`、`operations`、`dataColumns`、`colSpan`、`rowSpan`、`isFixedExpand`、`containerWidth`、`showExpandBtn`、`indentSize`、`renderExpandBtn` 和 `summary`，这些字段用于 Table 内部布局及渲染。
 
 ### TableComponents
@@ -747,7 +757,6 @@ Table **不内置**列管理。通过扩展点与外部 `TableColumnManager` 组
 | :----------------- | ------------------------------------------------------------------ | ------------------ | :-----: |
 | height             | 可视区域高度                                                       | `number \| string` |   `-`   |
 | threshold          | 开启虚拟滚动的元素数量阈值，当数据数量小于阈值时不会开启虚拟滚动。 | `number`           |   `-`   |
-| isStaticItemHeight | （已废除）元素高度是否是固定的，请使用 `fixedSize`                 | `boolean`          | `false` |
 | fixedSize          | 元素高度是否是固定的。                                             | `boolean`          | `false` |
 | estimatedSize      | 元素高度不固定时的预估高度。                                       | `number`           |   `-`   |
 | buffer             | 视口边界外提前挂载的元素数量。                                     | `number`           |  `10`   |
@@ -796,7 +805,7 @@ Maple Table 是原生表格展示容器，不提供 data / columns 配置。
 
 ## 阅读方向与滚动
 
-Table 继承最近的原生 `dir`。普通列按阅读方向排列；显式 `fixed: left/right` 保持物理侧，内部按冻结区稳定分区，不修改传入的列、数据或业务索引。跨冻结区的多级分组表头会分段显示，保持每段与正文列对齐。省略 align 时按阅读起点对齐，显式 left/right 保持物理对齐。
+Table 继承最近的原生 `dir`；直接传入 `dir` 时，服务端首屏即使用指定方向。动态切换方向时，保留仍然存在的单元格节点和输入状态。普通列按阅读方向排列；显式 `fixed: left/right` 保持物理侧，内部按冻结区稳定分区，不修改传入的列、数据或业务索引。跨冻结区的多级分组表头会分段显示，保持每段与正文列对齐。省略 align 时按阅读起点对齐，显式 left/right 保持物理对齐。
 
 表头、正文、汇总和吸底滚动条以非负的“距阅读起点距离”同步，适配原生 RTL 的负 scrollLeft。切换方向保留该距离并按新视口范围钳制；虚拟行的纵向定位不改变横向距离。Teleport 分页/吸底区域继承来源表格方向。
 

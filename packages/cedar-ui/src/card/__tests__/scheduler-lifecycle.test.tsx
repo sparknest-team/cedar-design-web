@@ -2,6 +2,7 @@ import { defineComponent, h, KeepAlive, nextTick, ref } from 'vue'
 import { mount } from '@vue/test-utils'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 import Card from '../Card.vue'
+const timerDescriptors = new Map(['setTimeout', 'clearTimeout'].map((name) => [name, Object.getOwnPropertyDescriptor(globalThis, name)]))
 const ticks = []
 const paints = []
 vi.mock('vue', async () => {
@@ -27,6 +28,12 @@ afterEach(() => {
   vi.restoreAllMocks()
   vi.useRealTimers()
   restores.splice(0).reverse().forEach((restore) => restore())
+  timerDescriptors.forEach((descriptor, name) => {
+    if (descriptor) Object.defineProperty(globalThis, name, descriptor)
+    else Reflect.deleteProperty(globalThis, name)
+  })
+  expect(typeof globalThis.setTimeout).toBe('function')
+  expect(typeof globalThis.clearTimeout).toBe('function')
   ticks.length = paints.length = 0
 })
 const flush = async () => { await nextTick(); await nextTick() }

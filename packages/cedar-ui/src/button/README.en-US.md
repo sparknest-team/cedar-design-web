@@ -158,7 +158,7 @@ Use built-in icons to compare icon-only, inline and stacked labels across four v
 
 <demo src="./__demos__/feedback.vue"></demo>
 
-### Sync, async and rejection recovery
+### Controlled loading and failure recovery
 
 <demo src="./__demos__/controlled-loading.vue"></demo>
 

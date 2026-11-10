@@ -4,6 +4,7 @@ import {
   defineComponent,
   inject,
   PropType,
+  VNode,
   toRefs,
 } from "vue";
 import { getPrefixCls, createNamespace } from "../_utils/global-config";
@@ -22,14 +23,19 @@ import { isBoolean, isFunction, isObject } from "../_utils/is";
 import { TableContext, tableInjectionKey } from "./context";
 import AutoTooltip from "../_components/auto-tooltip/auto-tooltip";
 import IconHover from "../_components/IconHover.vue";
-import { TABLE_EXTRA_COLUMN_KEY } from "./extra-column";
+import { getColumnLayoutKey, isTableExtraColumn } from "./extra-column";
 import { useI18n } from "../locale";
+import TableSlot from "./TableSlot.vue";
+import { forwardTableColumnSlot, forwardTableSlot } from "./forward-table-slot";
+import { isComponentColumn } from "./column-slot-source";
 
 const { name } = createNamespace("th");
 
 export default defineComponent({
   name,
   props: {
+    semanticLabelId: String,
+    customHeader: Object as PropType<VNode>,
     column: {
       type: Object as PropType<TableColumnData>,
       default: () => ({}),
@@ -107,21 +113,11 @@ export default defineComponent({
       const { filterable } = props.column;
 
       if (props.column.slots?.["filter-content"]) {
-        return props.column.slots?.["filter-content"]({
-          filterValue: columnFilterValue.value,
-          setFilterValue,
-          handleFilterConfirm,
-          handleFilterReset,
-        });
+        return <TableSlot slotProps={{ filterValue: columnFilterValue.value, setFilterValue, handleFilterConfirm, handleFilterReset }} v-slots={forwardTableColumnSlot(props.column.slots["filter-content"])} />;
       }
 
       if (filterable?.slotName && tableCtx.slots?.[filterable.slotName]) {
-        return tableCtx?.slots?.[filterable?.slotName]?.({
-          filterValue: columnFilterValue.value,
-          setFilterValue,
-          handleFilterConfirm,
-          handleFilterReset,
-        });
+        return <TableSlot slotProps={{ filterValue: columnFilterValue.value, setFilterValue, handleFilterConfirm, handleFilterReset }} v-slots={forwardTableSlot(tableCtx.slots[filterable.slotName])} />;
       }
 
       if (filterable?.renderContent) {
@@ -183,6 +179,11 @@ export default defineComponent({
         return null;
       }
 
+      const iconSlot = props.column.slots?.["filter-icon"];
+      const icon = iconSlot && isComponentColumn(props.column)
+        ? <TableSlot v-slots={forwardTableColumnSlot(iconSlot)} />
+        : iconSlot?.() ?? filterable.icon?.() ?? <IconFilter />;
+
       return (
         <Trigger
           v-slots={{ content: renderFilterContent }}
@@ -205,9 +206,7 @@ export default defineComponent({
             // @ts-ignore
             onClick={(ev: Event) => ev.stopPropagation()}
           >
-            {props.column.slots?.["filter-icon"]?.() ?? filterable.icon?.() ?? (
-              <IconFilter />
-            )}
+            {icon}
           </IconHover>
         </Trigger>
       );
@@ -245,12 +244,10 @@ export default defineComponent({
         props.column?.titleSlotName &&
         tableCtx.slots?.[props.column.titleSlotName]
       ) {
-        return tableCtx.slots[props.column.titleSlotName]?.({
-          column: props.column,
-        });
+        return <TableSlot slotProps={{ column: props.column }} v-slots={forwardTableSlot(tableCtx.slots[props.column.titleSlotName])} />;
       }
       if (props.column?.slots?.title) {
-        return props.column.slots.title();
+        return <TableSlot v-slots={forwardTableColumnSlot(props.column.slots.title)} />;
       }
       if (isFunction(props.column.title)) {
         return props.column.title();
@@ -259,8 +256,7 @@ export default defineComponent({
     };
 
     const isExtraColumn = computed(() => {
-      const key = tableCtx.extraColumnDataIndex ?? TABLE_EXTRA_COLUMN_KEY;
-      return props.column?.dataIndex === key;
+      return isTableExtraColumn(props.column);
     });
 
     /** 叶子列且外部提供了 #header-cell-actions 时展示操作区（插槽在 render 时再调用） */
@@ -277,10 +273,7 @@ export default defineComponent({
 
     const renderHeaderActions = () => {
       if (!showHeaderActions.value || !props.column?.dataIndex) return null;
-      return tableCtx.slots?.["header-cell-actions"]?.({
-        column: props.column,
-        dataIndex: props.column.dataIndex,
-      });
+      return <TableSlot slotProps={{ column: props.column, dataIndex: props.column.dataIndex }} v-slots={forwardTableSlot(tableCtx.slots?.["header-cell-actions"])} />;
     };
 
     // 表头操作区（筛选 + 外部 actions）固定在右侧；显式 alignLeft 时筛选仍跟在标题旁
@@ -303,12 +296,13 @@ export default defineComponent({
             class={`${prefixCls}-th-title`}
             tooltipProps={tooltipProps.value}
           >
-            {renderTitle()}
+            {props.semanticLabelId ? <span id={props.semanticLabelId}>{renderTitle()}</span> : renderTitle()}
           </AutoTooltip>
         );
       }
       return (
         <span
+          id={props.semanticLabelId}
           class={[
             `${prefixCls}-th-title`,
             { [`${prefixCls}-text-ellipsis`]: props.column?.ellipsis },
@@ -362,12 +356,11 @@ export default defineComponent({
 
     const renderCell = () => {
       if (isExtraColumn.value) {
-        const extraHeader =
-          tableCtx.slots?.["extra-column-header"]?.({
-            column: props.column,
-          }) ?? renderTitle();
+        const extraHeader = tableCtx.slots?.["extra-column-header"]
+          ? <TableSlot slotProps={{ column: props.column }} v-slots={forwardTableSlot(tableCtx.slots["extra-column-header"])} />
+          : renderTitle();
         return (
-          <span class={[`${prefixCls}-cell`, `${prefixCls}-cell-align-center`]}>
+          <span id={props.semanticLabelId} class={[`${prefixCls}-cell`, `${prefixCls}-cell-align-center`]}>
             {extraHeader}
           </span>
         );
@@ -447,11 +440,12 @@ export default defineComponent({
     return () => {
       const colSpan = props.column.colSpan ?? 1;
       const rowSpan = props.column.rowSpan ?? 1;
+      const resizeColumnName = typeof props.column.title === 'string' ? props.column.title : props.column.dataIndex;
+      const translatedResizeLabel = t('table.resizeColumn', resizeColumnName);
+      const customHeader = props.customHeader ?? slots.th?.({ column: props.column })[0];
 
       return createVNode(
-        slots.th?.({
-          column: props.column,
-        })[0] ?? "th",
+        customHeader ?? "th",
         {
           class: cls.value,
           style: style.value,
@@ -460,6 +454,7 @@ export default defineComponent({
           'aria-sort': sortOrder.value === 'ascend' ? 'ascending' : sortOrder.value === 'descend' ? 'descending' : undefined,
           // auto 布局下渲染后按此 key 量宽回写，修正冻结列 sticky 偏移
           "data-column-key": props.column.dataIndex,
+          "data-column-layout-key": getColumnLayoutKey(props.column) !== props.column.dataIndex ? getColumnLayoutKey(props.column) : undefined,
         },
         {
           default: () => [
@@ -470,7 +465,7 @@ export default defineComponent({
                 class={`${prefixCls}-column-handle`}
                 role="separator"
                 tabindex={0}
-                aria-label={`Resize ${typeof props.column.title === 'string' ? props.column.title : props.column.dataIndex} column`}
+                aria-label={translatedResizeLabel === 'table.resizeColumn' ? `Resize ${resizeColumnName} column` : translatedResizeLabel}
                 aria-orientation="vertical"
                 aria-valuemin={40}
                 aria-valuenow={props.column._resizeWidth ?? props.column._realWidth ?? props.column.width}

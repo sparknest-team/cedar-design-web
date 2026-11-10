@@ -7,6 +7,10 @@ permalink: /en/components/table/
 
 The active sorted column exposes ascending or descending order through `aria-sort`. Inputs and buttons inside custom headers retain their own keyboard and click behavior.
 
+Default row selection controls use the row key in their accessible names, and the select-all control uses a localized name. An explicit selection column title takes precedence.
+
+When a height constraint, sticky header, or virtual list splits the table into multiple native tables, the data and summary tables include semantic headers in the same table, associated with cells through `headers`. An explicit `headers` on the `td` slot takes precedence; the caller is responsible for referencing valid headers in the same table. Screen-reader and complex custom-header acceptance is still pending; verify the target environment and provide accessible alternatives where needed.
+
 ## Basic examples
 
 ### Basic usage
@@ -207,7 +211,7 @@ See the next group for height, header and pagination combinations.
 
 sticky-header and sticky-pagination follow the page or outer scroll container. A numeric zero enables the feature with zero offset. This differs from using height/max-height to constrain internal body scrolling. Avoid an extra overflow:hidden ancestor that interrupts sticky positioning.
 
-Built-in sticky pagination keeps a synchronized horizontal rail above the pagination in the same sticky footer. The rail follows body scroll in both directions, and is omitted when content fits. Pagination no longer obscures the only reachable horizontal scroll control.
+Built-in sticky pagination keeps a synchronized horizontal rail above the pagination in the same sticky footer. The rail follows body scroll in both directions, and is omitted when content fits. The horizontal rail remains reachable above sticky pagination.
 
 | Property | Behavior |
 | --- | --- |
@@ -619,6 +623,12 @@ The state argument of `select`, `selectAll`, `expand`, and `expandAll` defaults 
 
 `Thead` and `Tbody` render the header and body, respectively, with content from the default slot; their named slots customize the corresponding elements. `Tr`, `Th`, and `Td` are low-level renderers that depend on Table context, not standalone data tables. Usually, customize elements through the Table `tr`, `th`, and `td` slots.
 
+Title and cell named slots, column `title`, `cell`, `filter-icon` and `filter-content`, `empty`, `footer`, `expand-row`, `expand-icon`, pagination slots, `summary-cell`, `drag-handle-icon`, extra-column header/cell slots, and `header-cell-actions` support `v-for` with `v-memo` in their content.
+
+Currently, combining `v-for` and `v-memo` inside the `thead`, `tbody`, `tr`, `th`, or `td` structure slots causes server rendering to fail. Remove `v-memo` from these slots when server rendering is required.
+
+`TableColumn` entries declared in `#columns`, including grouped and dynamic columns, render their headers and data cells on the server. Columns can also be defined with the `columns` prop.
+
 For `Tr`, `expand`, `empty`, and `checked` describe row state; `rowIndex` and `record` provide row context. `Th` accepts `column`, `operations`, `dataColumns`, and `resizable`. `Td` accepts `rowIndex`, `record`, `column`, `type`, `operations`, `dataColumns`, `colSpan`, `rowSpan`, `isFixedExpand`, `containerWidth`, `showExpandBtn`, `indentSize`, `renderExpandBtn`, and `summary`; these fields support Table layout and rendering.
 
 ### TableComponents
@@ -781,7 +791,6 @@ Filter content uses the column `filter-content` slot first, then the Table named
 | :----------------- | ------------------------------------------------------------------ | ------------------ | :-----: |
 | height | Viewport height | `number \| string` | `-` |
 | threshold | Item-count threshold for virtual scrolling; counts below it do not enable virtualization | `number` | `-` |
-| isStaticItemHeight | Removed: use `fixedSize` instead of the old fixed-height flag | `boolean` | `false` |
 | fixedSize | Whether item heights are fixed | `boolean` | `false` |
 | estimatedSize | Estimated item height when heights vary | `number` | `-` |
 | buffer | Number of items premounted beyond viewport boundaries | `number` | `10` |
@@ -830,7 +839,7 @@ Maple Table is a native-table presentation container without data / columns conf
 
 ## Reading direction and scrolling
 
-Table inherits the nearest native `dir`. Ordinary columns follow reading order; explicit `fixed: left/right` stays physical. Internal stable partitioning into frozen regions does not mutate supplied columns, data or business indices. Group headers crossing frozen regions split into aligned segments. Omitted align uses inline start; explicit left/right remains physical.
+Table inherits the nearest native `dir`. An explicitly supplied `dir` applies during the initial server render. Changing direction preserves the nodes and input state of cells that remain present. Ordinary columns follow reading order; explicit `fixed: left/right` stays physical. Internal stable partitioning into frozen regions does not mutate supplied columns, data or business indices. Group headers crossing frozen regions split into aligned segments. Omitted align uses inline start; explicit left/right remains physical.
 
 Header, body, summary and sticky scrollbar synchronize using a nonnegative distance from inline start, adapting native negative RTL scrollLeft. Direction changes preserve that distance and clamp it to the new viewport range. Vertical virtual-row positioning does not change horizontal distance. Teleported pagination and sticky areas inherit the source table direction.
 

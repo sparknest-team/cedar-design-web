@@ -101,7 +101,7 @@ import type { NotificationInstance, NotificationConfig, NotificationReturn } fro
 
 ## CSS Variables
 
-Panels use surface-overlay; body/title use content-primary; close buttons use content-secondary; borders use border-default. Status icons use readable status content colors: info no longer uses brand fills, and loading uses content-brand. Colors are grouped by status. Custom backgrounds require checking content/icon/close contrast. Plain-text actions/footers inherit panel content color; applications own independently styled slots.
+Panels use surface-overlay; body/title use content-primary; close buttons use content-secondary; borders use border-default. Status icons use readable status content colors; loading uses content-brand. Colors are grouped by status. Custom backgrounds require checking content/icon/close contrast. Plain-text actions/footers inherit panel content color; applications own independently styled slots.
 
 wrapper-* controls list position/spacing; padding-*/margin-* control panel layout; icon-*/title-*/content-* control typography; close-* controls close buttons; border-*/box-shadow control borders/shadows; transition-* controls motion; z-index controls stacking. Existing geometry/motion defaults remain. The table lists actual declarations, not a claim that every historical geometry variable has verified consumers.
 

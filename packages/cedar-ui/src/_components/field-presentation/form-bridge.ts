@@ -1,9 +1,11 @@
 import { inject, provide } from 'vue'
+import { isolateFormItemLabel } from '../../form/label-context'
 import { useFormItem } from '../../_hooks/use-form-item'
 import { formItemInjectionKey } from '../../form/context'
 
 export const usePresentationForm = useFormItem
 export function isolateEditorForm() {
+  isolateFormItemLabel()
   const parent = inject(formItemInjectionKey, undefined)
   if (parent)
     provide(

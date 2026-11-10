@@ -92,7 +92,7 @@ When `hint` is omitted it inherits InputGroup; the standalone library default is
 
 <demo src="./__demos__/group.vue"></demo>
 
-`InputGroupLabel` renders a span for content attached outside the input. Associate a visible field name with the native input through FormItem, a native label with for/id, or `aria-label`.
+`InputGroupLabel` renders a span for content attached outside the input. Associate a visible name by matching FormItem `label-attrs.for` to the Input `id`, or use a native label with for/id. You can also provide `aria-label` explicitly.
 
 ### Group State
 

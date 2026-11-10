@@ -1,6 +1,9 @@
 import { base64ToString } from '../utils'
 import type { MapFetch, MapGeocoderHandler } from './props'
 
+export const resolveMapType = (mapType: 'amaps' | 'google' | 'qqmaps', isInternational: boolean) =>
+  isInternational ? 'google' : mapType
+
 export const getMapInitData = (
   mapType: 'amaps' | 'google' | 'qqmaps',
   baseUrl: string,

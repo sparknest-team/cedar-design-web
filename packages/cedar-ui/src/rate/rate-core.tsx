@@ -206,7 +206,6 @@ export default defineComponent({
           'aria-valuenow': value.value,
           'aria-disabled': mergedDisabled.value || undefined,
           'aria-readonly': mergedReadonly.value || undefined,
-          'aria-invalid': mergedError.value || undefined,
           'aria-label': props.ariaLabel || undefined,
           onFocus: () => eventHandlers.value?.onFocus?.(),
           onBlur: () => {
@@ -215,7 +214,7 @@ export default defineComponent({
           },
           onKeydown: keydown,
           onMouseleave: resetHover,
-        }, attrs, { 'aria-describedby': describeError(attrs['aria-describedby']) }),
+        }, attrs, { 'aria-describedby': describeError(attrs['aria-describedby']), 'aria-invalid': mergedError.value ? true : attrs['aria-invalid'] }),
         Array.from({ length: props.grading ? 5 : count.value }, (_, offset) => {
           const index = offset + 1
           const half = props.allowHalf && index - 0.5 === displayValue.value

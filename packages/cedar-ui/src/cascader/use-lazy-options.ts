@@ -1,4 +1,4 @@
-import { onActivated, onBeforeUnmount, onDeactivated, watch } from 'vue'
+import { onActivated, onBeforeUnmount, onDeactivated, shallowReactive, watch } from 'vue'
 import type { CascaderFieldNames, CascaderOption, CascaderOptionInfo } from './types'
 
 type LazyLoader = (option: CascaderOption, done: (children?: CascaderOption[]) => void) => void
@@ -10,7 +10,7 @@ export function useLazyOptions(config: {
   blocked: () => boolean
   cache: Record<string, CascaderOption[]>
 }) {
-  const pending = new Map<string, { task: Promise<void>; cancel: () => void }>()
+  const pending = shallowReactive(new Map<string, { task: Promise<void>; cancel: () => void }>())
   let active = true
   function invalidate(clearCache = false) {
     const entries = [...pending.values()]
@@ -23,7 +23,7 @@ export function useLazyOptions(config: {
   onActivated(() => { active = true })
   onDeactivated(() => { active = false; invalidate() })
   onBeforeUnmount(() => { active = false; invalidate(true) })
-  return (option: CascaderOptionInfo): Promise<void> => {
+  const load = (option: CascaderOptionInfo): Promise<void> => {
     const loader = config.loader()
     if (!active || config.blocked() || option.disabled || option.isLeaf || option.children || !loader) return Promise.resolve()
     const existing = pending.get(option.key)
@@ -54,5 +54,6 @@ export function useLazyOptions(config: {
       }
     }
     return task
-  }
+    }
+  return Object.assign(load, { isPending: (key: string) => pending.has(key) })
 }

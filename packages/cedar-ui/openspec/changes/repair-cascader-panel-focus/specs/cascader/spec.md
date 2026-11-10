@@ -20,3 +20,15 @@ An enabled focused Cascader option SHALL become the active option, and leaving i
 - **WHEN** an option retains focus while the pointer enters and leaves another option in the same panel
 - **THEN** the focused option becomes active again
 - **AND** focus in a different Cascader panel is not adopted
+
+#### Scenario: A key is already consumed or belongs to input composition
+
+- **WHEN** a panel receives a prevented keydown or an input composition keydown, including legacy keyCode 229
+- **THEN** it does not navigate or select an option
+- **AND** ordinary arrow and Enter keys continue to navigate and select
+
+#### Scenario: A virtual option mounts after navigation
+
+- **WHEN** keyboard navigation targets an option that must first be mounted by a virtual list
+- **THEN** the standalone panel and editor move focus to that option after it mounts
+- **AND** a later focus change, pointer action, deactivation or unmount cancels the pending transfer

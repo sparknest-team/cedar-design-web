@@ -4,6 +4,7 @@ import {
   getCurrentInstance,
   inject,
   onBeforeUnmount,
+  onUpdated,
   PropType,
   provide,
   reactive,
@@ -18,6 +19,9 @@ import { useChildrenComponents } from '../_hooks/use-children-components'
 import { usePureProp } from '../_hooks/use-pure-prop'
 import { ClassName } from '../_utils/types'
 import { createNamespace } from '../_utils/global-config'
+import TableColumnSlot from './TableColumnSlot.vue'
+import { forwardTableSlot } from './forward-table-slot'
+import { TABLE_COLUMN_COMPONENT } from './column-slot-source'
 
 
 const { name } = createNamespace('table-column')
@@ -199,7 +203,7 @@ export default defineComponent({
     const instance = getCurrentInstance()
     const tableCtx = inject<Partial<TableContext>>(tableInjectionKey, {})
     const tableColumnCtx = inject(tableColumnInjectionKey, undefined)
-    const { children, components } = useChildrenComponents(name)
+    const { children, components, getComponents } = useChildrenComponents(name)
 
     const childrenColumnMap = reactive(new Map<number, TableColumnData>())
 
@@ -218,7 +222,9 @@ export default defineComponent({
 
     const childrenColumns = ref<TableColumnData[]>()
     watch([components, childrenColumnMap], ([components, childrenColumnMap]) => {
-      if (components.length > 0) {
+      if (components.length === 0 && childrenColumnMap.size > 0) {
+        childrenColumns.value = [...childrenColumnMap.values()]
+      } else if (components.length > 0) {
         const columns: TableColumnData[] = []
         components.forEach((id) => {
           const column = childrenColumnMap.get(id)
@@ -228,9 +234,10 @@ export default defineComponent({
       } else {
         childrenColumns.value = undefined
       }
-    })
+    }, { flush: "sync" })
 
     const column = reactive({
+      [TABLE_COLUMN_COMPONENT]: true,
       dataIndex,
       title,
       width,
@@ -254,6 +261,10 @@ export default defineComponent({
       slots,
     })
 
+    onUpdated(() => {
+      column.slots = { ...slots }
+    })
+
     if (instance) {
       if (tableColumnCtx) {
         // @ts-ignore
@@ -274,7 +285,7 @@ export default defineComponent({
     })
 
     return () => {
-      children.value = slots.default?.()
+      children.value = slots.default ? [<TableColumnSlot onChanged={getComponents} v-slots={forwardTableSlot(slots.default)} />] : undefined
       return children.value
     }
   },

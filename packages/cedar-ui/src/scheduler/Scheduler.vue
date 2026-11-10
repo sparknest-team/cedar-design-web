@@ -1205,8 +1205,9 @@ async function focusTimeline() {
   const view = root.value?.ownerDocument.defaultView;
   if (!view || !timelineActive || version !== timelineFocusVersion) return;
   timelineFocusFrame = { view, id: view.requestAnimationFrame(() => {
-    timelineFocusFrame = undefined;
     if (!timelineActive || version !== timelineFocusVersion || mode.value !== "resource-timeline") return;
+    timelineFocusVersion++;
+    timelineFocusFrame = undefined;
     const container = timelineViewport();
     if (!container) return;
     const target = new Date(range.value.start);

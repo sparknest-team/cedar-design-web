@@ -59,16 +59,22 @@ export default function useFilterTreeNode(props: {
       // Retire old results immediately; pending timers cannot resurrect removed nodes.
       filteredKeysSet.value = undefined
       if (disabled || !keyword) return
+      let current = true
       const timer = setTimeout(() => {
+        if (!current) return
         const keys = new Set<TreeNodeValue>()
         for (const node of treeData) {
-          if (!method(keyword, node.treeNodeData)) continue
+          const matches = method(keyword, node.treeNodeData)
+          if (!current) return
+          if (!matches) continue
           keys.add(node.key)
           node.pathParentKeys.forEach((key) => keys.add(key))
         }
+        if (!current) return
+        current = false
         filteredKeysSet.value = keys
       }, 100)
-      cleanup(() => clearTimeout(timer))
+      cleanup(() => { current = false; clearTimeout(timer) })
     },
     { immediate: true, flush: 'sync' },
   )

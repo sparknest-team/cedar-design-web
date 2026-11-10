@@ -47,9 +47,10 @@ export default defineComponent({
         { class: cls.value },
         {
           default: () => {
-            if (context?.readingDirection !== 'rtl') return slots.default?.()
-            const flatten = (nodes: any[]): any[] => nodes.flatMap(node => Array.isArray(node) ? flatten(node) : isVNode(node) && node.type === Fragment && Array.isArray(node.children) ? flatten(node.children) : [node])
-            return orderPhysicalColumns(flatten(slots.default?.() ?? []), node => {
+            const flatten = (nodes: any[]): any[] => nodes.flatMap(node => Array.isArray(node) ? flatten(node) : isVNode(node) && node.type === Fragment && node.key == null && Array.isArray(node.children) ? flatten(node.children) : [node])
+            const children = flatten(slots.default?.() ?? [])
+            if (context?.readingDirection !== 'rtl') return children
+            return orderPhysicalColumns(children, node => {
               if (!isVNode(node)) return undefined
               return node.props?.column?.fixed ?? (node.props?.operationColumn?.fixed ? 'left' : undefined)
             }, context.readingDirection)

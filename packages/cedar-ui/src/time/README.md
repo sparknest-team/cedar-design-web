@@ -216,7 +216,7 @@ open-trigger-target="icon" 时，输入区可以编辑或复制，只有右侧�
 
 ### 浮层配置与字段通知
 
-`popup-props` 显式配置本地 Trigger 的定位和外观，例如 `{ placement: 'top-start' }`；不能覆盖 open、disabled、trigger 等字段状态或交互。顶层 `popup-container`（包括 false）优先。`input-editable` 默认 true，可关闭桌面文本输入。面板外观使用 `time-picker-props`（支持 class/style），不再从未声明的 attrs 读取面板/浮层参数；id、aria-* 等属性透传给字段。
+`popup-props` 显式配置本地 Trigger 的定位和外观，例如 `{ placement: 'top-start' }`；不能覆盖 open、disabled、trigger 等字段状态或交互。顶层 `popup-container`（包括 false）优先。`input-editable` 默认 true，可关闭桌面文本输入。面板外观使用 `time-picker-props`（支持 class/style），面板/浮层参数通过上述显式属性配置；id、aria-* 等属性透传给字段。
 
 `click(event)` 只通知非禁用字段的点击；只读字段可通知但不展开。关闭统一监听 `open-change(false)`，它表示关闭请求，受控 open 仍需父级接受。两端不提供字段 close 事件；不要把关闭请求当作值提交。
 

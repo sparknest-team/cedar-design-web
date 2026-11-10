@@ -1,3 +1,4 @@
+import { rangeInputAttrsProp } from '../_components/picker-field/props'
 import { fieldLoadingProps } from '../field-decorator/props'
 import { openTriggerTargetProp } from "../_components/picker-field/open-trigger";
 import type { PropType } from "vue";
@@ -13,6 +14,7 @@ import type { DateRangePickerOptions } from "./picker-props";
 
 export const dateRangeProps = {
   ...fieldLoadingProps,
+  inputAttrs: rangeInputAttrsProp,
   openTriggerTarget: openTriggerTargetProp,
   ...fieldPresentationProps,
   ...dateRuleProps,

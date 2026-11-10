@@ -92,7 +92,9 @@ export function useCountdown(
       return;
     handle = undefined;
     const currentGeneration = ++generation;
-    remaining = Math.max(0, deadline - performance.now());
+    const now = performance.now();
+    if (currentGeneration !== generation || !running || suspended || !mounted) return;
+    remaining = Math.max(0, deadline - now);
     display();
     // A change listener can pause/reset/start another run.
     if (currentGeneration !== generation || !running || suspended || !mounted)

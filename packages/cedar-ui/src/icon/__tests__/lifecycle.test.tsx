@@ -4,19 +4,30 @@ import { afterEach, describe, expect, test, vi } from "vitest";
 import Icon from "../Icon.vue";
 
 const cleanups: (() => void)[] = [];
+let restoreTimers: (() => void) | undefined;
 afterEach(() => {
   cleanups
     .splice(0)
     .reverse()
     .forEach((cleanup) => cleanup());
-  vi.restoreAllMocks();
   vi.useRealTimers();
+  restoreTimers?.();
+  restoreTimers = undefined;
 });
 async function harness(cached = false, iframe = false) {
+  const descriptors = (["setTimeout", "clearTimeout"] as const).map(
+    (key) => [key, Object.getOwnPropertyDescriptor(globalThis, key)] as const,
+  );
+  restoreTimers = () => {
+    descriptors.forEach(([key, descriptor]) => {
+      if (descriptor) Object.defineProperty(globalThis, key, descriptor);
+      else Reflect.deleteProperty(globalThis, key);
+    });
+  };
   vi.useFakeTimers();
   const callbacks: (() => void)[] = [];
   const original = globalThis.setTimeout;
-  vi.spyOn(globalThis, "setTimeout").mockImplementation((...args) => {
+  const timeoutSpy = vi.spyOn(globalThis, "setTimeout").mockImplementation((...args) => {
     if (args[1] === 120) {
       callbacks.push(args[0] as () => void);
     }
@@ -50,7 +61,7 @@ async function harness(cached = false, iframe = false) {
       ...(frame ? [frame.contentWindow!] : []),
     ]),
   ];
-  const descriptors = views.map(
+  const mediaDescriptors = views.map(
     (view) =>
       [view, Object.getOwnPropertyDescriptor(view, "matchMedia")] as const,
   );
@@ -94,7 +105,7 @@ async function harness(cached = false, iframe = false) {
       wrapper.unmount();
     }
     wrapper.element.remove();
-    descriptors.forEach(([view, descriptor]) => {
+    mediaDescriptors.forEach(([view, descriptor]) => {
       if (descriptor) {
         Object.defineProperty(view, "matchMedia", descriptor);
       } else {
@@ -102,6 +113,7 @@ async function harness(cached = false, iframe = false) {
       }
     });
     frame?.remove();
+    timeoutSpy.mockRestore();
   });
   await nextTick();
   const icon = wrapper.findComponent(Icon);
@@ -239,8 +251,18 @@ describe("Icon visual-delay lifecycle ownership", () => {
     const p = await harness();
     await p.setName("two");
     const clear = vi.spyOn(globalThis, "clearTimeout");
-    p.unmount();
-    expect(clear).toHaveBeenCalled();
-    expect(p.hostListeners.size).toBe(0);
+    try {
+      p.unmount();
+      expect(clear).toHaveBeenCalled();
+      expect(p.hostListeners.size).toBe(0);
+    } finally {
+      clear.mockRestore();
+    }
+  });
+  test("restores timer functions for subsequent tests", () => {
+    expect(typeof globalThis.setTimeout).toBe("function");
+    expect(typeof globalThis.clearTimeout).toBe("function");
+    const id = setTimeout(() => {}, 0);
+    clearTimeout(id);
   });
 });

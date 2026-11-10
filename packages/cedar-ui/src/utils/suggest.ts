@@ -28,8 +28,8 @@ export const useSuggest = (fetch?: { get: any; post: any }, basePath?: string) =
       if (item.area_code) poiInfo.adcode = item.area_code
       if (item.city) poiInfo.city = item.city
       if (item.name) poiInfo.name = item.name
-      if (item.lng) poiInfo.longitude = item.lng
-      if (item.lat) poiInfo.latitude = item.lat
+      if (item.lng || item.lng === 0) poiInfo.longitude = item.lng
+      if (item.lat || item.lat === 0) poiInfo.latitude = item.lat
       result.push(poiInfo)
     })
     return result

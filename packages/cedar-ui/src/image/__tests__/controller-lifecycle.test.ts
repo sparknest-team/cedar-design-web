@@ -3,6 +3,7 @@ import { mount } from "@vue/test-utils";
 import { afterEach, describe, expect, test, vi } from "vitest";
 import { usePreviewController } from "../composables/usePreviewController";
 
+const timerDescriptors = new Map(['setTimeout', 'clearTimeout', 'Date'].map((name) => [name, Object.getOwnPropertyDescriptor(globalThis, name)]));
 const owners: Array<ReturnType<typeof mount>> = [];
 const nodes: HTMLElement[] = [];
 const hookDescriptor = Object.getOwnPropertyDescriptor(
@@ -19,6 +20,11 @@ afterEach(() => {
   nodes.splice(0).forEach((node) => node.remove());
   vi.restoreAllMocks();
   vi.useRealTimers();
+  timerDescriptors.forEach((descriptor, name) => {
+    if (descriptor) Object.defineProperty(globalThis, name, descriptor)
+    else Reflect.deleteProperty(globalThis, name)
+  })
+  expect(typeof globalThis.setTimeout).toBe('function')
   for (const [object, name, descriptor] of [
     [globalThis, "__VUE_DEVTOOLS_GLOBAL_HOOK__", hookDescriptor],
     [window, "matchMedia", mediaDescriptor],
@@ -125,6 +131,28 @@ function fixture() {
   };
 }
 describe("ImagePreview controller interaction lifecycle", () => {
+  test('reentrant replacement owns the only long press timer', () => {
+    const f = fixture()
+    const element = f.event().currentTarget as HTMLElement
+    let entered = false
+    element.setPointerCapture = () => {
+      if (!entered) { entered = true; f.down() }
+    }
+    const timer = vi.spyOn(globalThis, 'setTimeout')
+    timer.mockClear()
+    f.down()
+    expect(timer.mock.calls.filter((call) => call[1] === 500)).toHaveLength(1)
+  })
+  test('unmount during pointer capture does not create long press work', () => {
+    const f = fixture()
+    const element = f.event().currentTarget as HTMLElement
+    element.setPointerCapture = () => f.owner.unmount()
+    const timer = vi.spyOn(globalThis, 'setTimeout')
+    timer.mockClear()
+    f.down()
+    expect(timer).not.toHaveBeenCalled()
+  })
+
   test("current long press fires at500ms not499ms", () => {
     const f = fixture();
     f.down();

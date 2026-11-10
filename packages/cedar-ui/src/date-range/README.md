@@ -109,7 +109,7 @@ Cedar 字段使用桌面日历，通过 `date-picker-props` 或 `date-range-pick
 
 `value-format` 是稳定英文日期协议（包括月份名称 token），`format` 的显示及手输文本使用界面语言。切换语言不会改写模型，也不会令英文月份名称模型失效。默认数字协议、Date 对象、时间戳不变。中文核心语言与 Maple 内置语言数据已接入；其他日期格式优先使用已注册 Dayjs 语言数据，未加载的语言安全回退英文。
 
-周号和周比较不再依赖全局周起始设置，跨年同周号不能被误判成同一周。两个不同周起始实例的挂载、更新和卸载互不影响。
+周号和周比较使用各实例的周起始设置，跨年同周号不能被误判成同一周。两个不同周起始实例的挂载、更新和卸载互不影响。
 
 ### 周与季度手输
 
@@ -282,6 +282,8 @@ open-trigger-target="icon" 时，输入区可以编辑或复制，只有右侧�
 
 ### DateRange Props
 
+`input-attrs` 作用于两个直接输入框。例如 `:input-attrs="[{ 'aria-label': '出发' }, { 'aria-label': '返回' }]"` 可分别命名起止输入。值、禁用、只读、占位符、角色和弹层状态由组件管理；公共描述、单项描述和表单错误会合并到对应输入中；组件报错时优先标记无效，否则保留单项 `aria-invalid`。`RangeInputAttributes` 从组件子入口及库根入口导出，包含原生属性和 `Once` 事件类型。
+
 | 参数 | 说明 | 类型 | 缺省说明 |
 | --- | --- | --- | --- |
 | `before-commit` | 显式字段保存守卫，使用 payload、done、context | `BeforeFieldCommit` | `undefined` |
@@ -303,6 +305,7 @@ open-trigger-target="icon" 时，输入区可以编辑或复制，只有右侧�
 | `format` | 显示与手输格式；函数只展示，无反向手输解析 | `string \| ((date: Date) => string)` | 按精度/时间配置 |
 | `hint` | 浮动占位提示；存在 Form 外置标签时不浮动 | `boolean` | `true` |
 | `input-editable` | 允许手输；不影响面板选择入口 | `boolean` | `true` |
+| `input-attrs` | 按顺序设置起点、终点原生输入属性；单项名称优先于公共名称 | `RangeInputAttributes[]` | `undefined` |
 | `line` | 显示外壳边框或底线 | `boolean` | `true` |
 | `loading` | 手动加载反馈，不从事件返回值推导 | `boolean` | `false` |
 | `loading-mode` | 字段加载展示模式 | `default \| line` | default |

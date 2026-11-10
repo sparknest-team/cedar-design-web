@@ -444,6 +444,7 @@ Single/multiple options both use popup-option-padding-horizontal. There is no im
 | search | Triggered when the user searches | text |
 | focus | Field gains focus | event |
 | blur | Field loses focus | event |
+| keydown | Field or editor search key; `preventDefault()` suppresses internal keyboard handling | event: KeyboardEvent |
 | clear | Triggered when the value of the input changes | event |
 | remove | Triggered when the delete button of the label is clicked | value |
 | exceed-limit | Selection would exceed the multiple-selection limit | value, event |

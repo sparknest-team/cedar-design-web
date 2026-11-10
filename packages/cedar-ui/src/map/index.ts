@@ -10,6 +10,8 @@ const Map = withInstall(_Map, Object.assign(_Map, {
 export type MapInstance = InstanceType<typeof _Map>
 export type MapSelectInstance = InstanceType<typeof _MapSelect>
 export type { MapProps, MapSelectProps, MapFetch, MapGeocoderHandler, MapGeocoderResult, ModelValueType, PoiKeys } from './props'
+export type { MapEmits, MapSelectEmits } from './emits'
+export type { MapSdk, MapSdkLngLat, MapSdkMap, MapSdkMapOptions, MapSdkSearchCompletion, MapSdkSearchOptions, MapSdkSearchService } from './sdk'
 
 export { mapProps, mapSelectProps }
 export { Map }

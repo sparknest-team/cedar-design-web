@@ -8,6 +8,7 @@ export type TreeContext = Readonly<{
   focusedValue?: TreeNodeValue
   nodeId?: (key: TreeNodeValue) => string
   focusNode?: (key: TreeNodeValue) => void
+  isVirtualNodeMounted?: (key: TreeNodeValue) => boolean
   treeProps: TreeProps
   switcherIcon?: Slot
   loadingIcon?: Slot

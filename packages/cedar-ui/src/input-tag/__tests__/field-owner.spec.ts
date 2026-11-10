@@ -2,7 +2,26 @@ import { h, reactive } from 'vue'
 import { flushPromises, mount } from '@vue/test-utils'
 import { expect, test, vi } from 'vitest'
 import InputTag from '..'
+import Form from '../../form/Form.vue'
+import FormItem from '../../form/FormItem.vue'
 import { formHost } from '../../input-number/__tests__/form-host'
+
+test('form errors override and then restore explicit boolean aria-invalid', async () => {
+  const owner = mount(Form, {
+    props: { editMode: 'direct', model: { value: [] } },
+    slots: { default: () => h(FormItem, { field: 'value', label: 'Value' }, () => h(InputTag, { editMode: 'direct', 'aria-invalid': false })) },
+  })
+  try {
+    const input = owner.getComponent(InputTag).get('input')
+    expect(input.attributes('aria-invalid')).toBe('false')
+    ;(owner.vm as any).setFields({ value: { message: 'Invalid value' } })
+    await flushPromises()
+    expect(input.attributes('aria-invalid')).toBe('true')
+    ;(owner.vm as any).clearValidate()
+    await flushPromises()
+    expect(input.attributes('aria-invalid')).toBe('false')
+  } finally { owner.unmount() }
+})
 
 test('private uninject still excludes Form state and callbacks', async () => {
   const handlers = { onChange: vi.fn(), onClear: vi.fn() }

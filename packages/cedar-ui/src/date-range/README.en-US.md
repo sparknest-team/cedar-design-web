@@ -194,6 +194,8 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 
 ### DateRange Props
 
+`input-attrs` applies to the two direct input elements. For example, `:input-attrs="[{ 'aria-label': 'Departure' }, { 'aria-label': 'Return' }]"` names each endpoint. The field owns its value, disabled, readonly, placeholder, role and popup state; shared descriptions, per-input descriptions and form errors are merged for each input. Component errors take precedence; otherwise each input retains its `aria-invalid`. `RangeInputAttributes` is exported from the component and root entries and includes native attributes and `Once` event types.
+
 | Prop | Description | Type | Default behavior |
 | --- | --- | --- | --- |
 | `before-commit` | Explicit field-save guard using payload, done and context | `BeforeFieldCommit` | `undefined` |
@@ -215,6 +217,7 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 | `format` | Display/text-input format; a function only formats without reverse text parsing | `string \| ((date: Date) => string)` | From precision/time settings |
 | `hint` | Floating placeholder hint, suppressed by an outer Form label | `boolean` | `true` |
 | `input-editable` | Allow text input without removing panel selection | `boolean` | `true` |
+| `input-attrs` | Native attributes for the start and end inputs, in order; per-input names override shared names | `RangeInputAttributes[]` | `undefined` |
 | `line` | Show the field border or underline | `boolean` | `true` |
 | `loading` | Manual loading feedback, independent of event return values | `boolean` | `false` |
 | `loading-mode` | Field loading presentation mode | `default \| line` | default |

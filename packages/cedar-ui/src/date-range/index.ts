@@ -36,3 +36,5 @@ export type { DateRangeEmits, DateRangePickerEmits } from '../date/events'
 export type { DateTimePickerOptions } from '../date/time-picker-options'
 
 export type { DateRangePopupOptions } from './popup-options'
+
+export type { RangeInputAttributes } from '../_components/picker-field/props'

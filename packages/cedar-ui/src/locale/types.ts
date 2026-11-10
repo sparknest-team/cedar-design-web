@@ -140,6 +140,8 @@ export interface CedarLang {
     }
   }
   map: {
+    initError?: string
+    retry?: string
     searchPlaceholder: string
     title: string
     noData: string
@@ -180,6 +182,11 @@ export interface CedarLang {
     total: string
   }
   table: {
+    expandRow?: string
+    collapseRow?: string
+    resizeColumn?: string
+    selectRow?: string
+    selectionColumn?: string
     confirmButtonText: string
     resetText: string
     customColumnsConfig: string

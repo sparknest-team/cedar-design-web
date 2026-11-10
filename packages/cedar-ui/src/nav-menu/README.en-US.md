@@ -220,7 +220,7 @@ label/icon/extra render functions, same-name slots and nodeProps receive `{ opti
 
 When using the content slot, the custom panel takes its accessible name from the entry. Set aria-label or aria-labelledby on the entry when needed. Ensure custom entries have a meaningful name.
 
-Titles follow matching selected options by default. `label` slots take highest precedence: use `<template #label>Advanced filters</template>` for fixed titles or bind a separate reactive variable for manual titles. `update-label` is removed.
+Titles follow matching selected options by default. `label` slots take highest precedence: use `<template #label>Advanced filters</template>` for fixed titles or bind a separate reactive variable for manual titles.
 
 `v-model` stores panel selection. Slot `active` indicates business entry state: named entries in a root menu compare root activeItem with name; independent entries match their main value against ordinary options, including 0/empty string. Unknown values/groups/dividers do not activate independent entries. `highlight` overrides emphasis only: true forces it, false removes it, omission follows `active`. It changes neither `active` nor value. Opening a panel does not activate the entry.
 

@@ -228,7 +228,9 @@ export default defineComponent({
     }
     onMounted(() => {
       bind()
-      const hash = decodeURIComponent(ownerDocument()?.defaultView?.location.hash ?? '')
+      const rawHash = ownerDocument()?.defaultView?.location.hash ?? ''
+      let hash = rawHash
+      try { hash = decodeURIComponent(rawHash) } catch { /* Preserve literal malformed fragments. */ }
       if (hash) { scrollIntoView(hash); handleAnchorChange(hash) }
       setDefaultLink()
     })

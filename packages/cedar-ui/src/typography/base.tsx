@@ -222,14 +222,17 @@ export default defineComponent({
       cancelFocusRestore()
       if (shouldRestore && doc) {
         let timer: ReturnType<typeof setTimeout> | undefined
+        let cancelled = false
         const cleanup = () => {
+          cancelled = true
           doc.removeEventListener('keyup', onKeyup, true)
           if (timer !== undefined) clearTimeout(timer)
         }
         const onKeyup = (event: KeyboardEvent) => {
-          if (event.key !== 'Enter') return
+          if (cancelled || timer !== undefined || event.key !== 'Enter') return
           doc.removeEventListener('keyup', onKeyup, true)
           timer = setTimeout(() => {
+            if (cancelled) return
             cleanup()
             if (!available() || mergeEditing.value || !rootRef.value?.isConnected) return
             if (doc.activeElement !== doc.body && doc.activeElement !== doc.documentElement && doc.activeElement !== previousFocus) return

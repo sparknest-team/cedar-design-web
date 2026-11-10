@@ -1,4 +1,4 @@
-import { normalizeBoundImports } from './normalize-bound-imports.mjs'
+import { normalizeLessSource, normalizeSelectionEmptyValueImports, normalizeTypeScript, normalizeVueSyntaxSource } from './normalize-source.mjs'
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
@@ -25,7 +25,9 @@ const files = [
   "select/emits.ts",
   "cascader/utils.ts",
   "cascader/use-cascader-controller.ts",
+  "cascader/use-cascader-focus.ts",
   "cascader/cascader-column.tsx",
+  "cascader/CascaderEditorPanel.vue",
   "cascader/CascaderMenu.vue",
   "cascader/Cascader.vue",
   "cascader/cascader-option.tsx",
@@ -56,7 +58,8 @@ const toMaple = source => source
 for (const file of files) {
   const c = readFileSync(resolve(cedar, file), 'utf8')
   const m = readFileSync(resolve(maple, file), 'utf8')
-  assert.equal(normalizeBoundImports(toMaple(c)), normalizeBoundImports(m), file + ' differs: copy Cedar and adjust local imports/prefixes')
+  const canonical = file.endsWith('.vue') ? normalizeVueSyntaxSource : file.endsWith('.less') ? normalizeLessSource : normalizeTypeScript
+  assert.equal(await canonical(normalizeSelectionEmptyValueImports(toMaple(c), file.endsWith('.vue'))), await canonical(m), file + ' differs: copy Cedar and adjust local imports/prefixes')
   assert.doesNotMatch(m, /from ['"][^'"]*(?:cedar-design|@cedar-design\/ui|platform)/)
 }
 for (const [root, compiler] of [[cedar, '../node_modules/less/package.json'], [maple, '../../maple-cli/node_modules/less/package.json']]) {

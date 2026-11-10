@@ -100,5 +100,6 @@ test('native once/capture/passive options are preserved and async failures use V
     expect(add).toHaveBeenCalledWith('click', expect.any(Function), { once: true, capture: true, passive: true })
     reference.value.click(); await flushPromises()
     expect(onError.mock.calls[0][0]).toBe(error)
+    expect(onError.mock.calls[0][2]).toBe('native event handler')
   } finally { owner.unmount(); add.mockRestore() }
 })

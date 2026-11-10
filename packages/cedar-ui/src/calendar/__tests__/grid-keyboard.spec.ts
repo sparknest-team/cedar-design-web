@@ -58,3 +58,33 @@ test('keyboard events from custom slot controls are not intercepted', async () =
     expect(event.defaultPrevented).toBe(false)
   } finally { w.unmount() }
 })
+
+test('calendar leaves composing and previously prevented keys untouched', async () => {
+  const w = mount(Calendar, { attachTo: document.body, props: { modelValue: new Date(2026, 8, 16) } })
+  try {
+    const cell = w.get('[data-calendar-cell][tabindex="0"]').element as HTMLElement
+    cell.focus()
+    const composing = new KeyboardEvent('keydown', { key: 'ArrowRight', keyCode: 229, bubbles: true, cancelable: true })
+    cell.dispatchEvent(composing)
+    await nextTick()
+    expect(composing.defaultPrevented).toBe(false)
+    expect(document.activeElement).toBe(cell)
+    const consumed = new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true })
+    consumed.preventDefault()
+    cell.dispatchEvent(consumed)
+    expect(w.emitted('update:modelValue')).toBeUndefined()
+    cell.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }))
+    expect(w.emitted('update:modelValue')).toHaveLength(1)
+  } finally { w.unmount() }
+})
+
+test('calendar does not select on an already prevented Enter', () => {
+  const w = mount(Calendar, { props: { modelValue: new Date(2026, 8, 16) } })
+  try {
+    const cell = w.get('[data-calendar-cell][tabindex="0"]').element
+    const event = new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true })
+    event.preventDefault()
+    cell.dispatchEvent(event)
+    expect(w.emitted('update:modelValue')).toBeUndefined()
+  } finally { w.unmount() }
+})

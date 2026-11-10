@@ -1,3 +1,4 @@
+import type { SelectEmits as SelectEntryEmits } from "@cedar-design/ui/select";
 import type {
   AutoCompleteEmits,
   AutoCompleteSlots,
@@ -140,3 +141,23 @@ const nullableSlider: NullableSliderProps = { modelValue: null, emptyValue: null
 // @ts-expect-error Candidate loading is an options function; there is no standalone request prop.
 const separateRequest: SelectProps = { request: async () => [] }
 void [nullableInput, nullableSelect, nullableSwitch, nullableCheckbox, nullableUpload, nullableSlider, separateRequest]
+
+const selectKeyboard: SelectEmits["keydown"] = [new KeyboardEvent("keydown")];
+const selectEntryKeyboard: SelectEntryEmits["keydown"] = selectKeyboard;
+// @ts-expect-error Keydown listeners receive a KeyboardEvent, not a key string.
+const invalidSelectKeyboard: SelectEmits["keydown"] = ["Enter"];
+void [selectKeyboard, selectEntryKeyboard, invalidSelectKeyboard];
+
+const cascaderKeyboard: import('@cedar-design/ui/cascader').CascaderEmits['keydown'] = [new KeyboardEvent('keydown')];
+const treeSelectKeyboard: import('@cedar-design/ui/tree-select').TreeSelectEmits['keydown'] = [new KeyboardEvent('keydown')];
+// @ts-expect-error keydown emits the original keyboard event
+const invalidCascaderKeyboard: import('@cedar-design/ui/cascader').CascaderEmits['keydown'] = ['Enter'];
+void [cascaderKeyboard, treeSelectKeyboard, invalidCascaderKeyboard];
+const cascaderRootKeyboard: import('@cedar-design/ui').CascaderEmits['keydown'] = [new KeyboardEvent('keydown')];
+const treeSelectRootKeyboard: import('@cedar-design/ui').TreeSelectEmits['keydown'] = [new KeyboardEvent('keydown')];
+void [cascaderRootKeyboard, treeSelectRootKeyboard];
+const autoCompleteKeyboard: import('@cedar-design/ui/auto-complete').AutoCompleteEmits['keydown'] = [new KeyboardEvent('keydown')];
+const autoCompleteRootKeyboard: import('@cedar-design/ui').AutoCompleteEmits['keydown'] = [new KeyboardEvent('keydown')];
+// @ts-expect-error keydown emits the original keyboard event
+const invalidAutoCompleteKeyboard: import('@cedar-design/ui').AutoCompleteEmits['keydown'] = ['ArrowDown'];
+void [autoCompleteKeyboard, autoCompleteRootKeyboard, invalidAutoCompleteKeyboard];

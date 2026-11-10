@@ -119,7 +119,7 @@ permalink: /components/input/
 
 <demo src="./__demos__/group.vue"></demo>
 
-`InputGroupLabel` 的根节点为 span，用于输入框外侧的附加内容。可见字段名与原生输入的关联由 FormItem、原生 label 的 for/id 或 `aria-label` 提供。
+`InputGroupLabel` 的根节点为 span，用于输入框外侧的附加内容。可使用 FormItem 的 `label-attrs.for` 对应 Input 的 `id`，或使用原生 label 的 for/id 关联可见字段名；也可显式提供 `aria-label`。
 
 ### 组合状态继承
 

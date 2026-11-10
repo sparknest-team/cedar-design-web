@@ -165,7 +165,7 @@ defineExpose<RadioMethods>({
       :aria-checked="checked"
       :aria-readonly="readonly || undefined"
       :aria-describedby="group?.formErrorId === errorId ? nativeAttrs['aria-describedby'] : describeError(nativeAttrs['aria-describedby'])"
-      :aria-invalid="error || nativeAttrs['aria-invalid'] || undefined"
+      :aria-invalid="error ? true : nativeAttrs['aria-invalid']"
       @change="handleChange"
       @keydown="keyboard.keydown"
       @keyup="keyboard.keyup"

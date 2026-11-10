@@ -1,31 +1,26 @@
 // TODO: 脱敏迁移 - 暂时注释 @maple-design/map-core，后续替换为公有包
 // import { LngLat, Map, MapService, PoiInfo, SearchResult, SearchService } from '@maple-design/map-core'
 import { createMapUpdateGuard } from './update-guard'
+import { mapEmits } from './emits'
 type PoiInfo = Record<string, any>;
 type SearchResult<T> = { list: T[] };
-type MapCoreLngLat = { getLng: () => number; getLat: () => number };
-type MapCoreMap = {
-  setCenter: (lngLat: MapCoreLngLat) => void;
-  getCenter: () => MapCoreLngLat;
-  on: (
-    event: string,
-    handler: (...args: any[]) => void,
-    ...rest: any[]
-  ) => void;
-};
-declare const LngLat: new (...args: any[]) => MapCoreLngLat;
-declare const Map: new (options: Record<string, any>) => MapCoreMap;
-declare const MapService: { init: (...args: any[]) => Promise<void> };
-declare const PoiInfo: new () => PoiInfo;
-declare const SearchService: new (...args: any[]) => any;
+import type { MapSdk, MapSdkLngLat, MapSdkMap, MapSdkSearchService } from './sdk';
+declare const LngLat: MapSdk['LngLat'];
+declare const Map: MapSdk['Map'];
+declare const MapService: MapSdk['MapService'];
+declare const SearchService: MapSdk['SearchService'];
 import {
+  computed,
   defineComponent,
   h,
   nextTick,
+  onActivated,
   onBeforeUnmount,
+  onDeactivated,
   onMounted,
   reactive,
   ref,
+  shallowRef,
   toRaw,
   useAttrs,
   useSlots,
@@ -35,16 +30,18 @@ import { IconEdit, IconSearch } from "@cedar-design/icons-vue";
 import Input from "../input";
 import { useI18n } from "../locale";
 import Popconfirm from "../popconfirm";
-import Loading from "../loading";
+import Loading from "../loading/Loading.vue";
 import Textarea from "../textarea";
 import { useSuggest } from "../utils/suggest";
+import { isolateEditorForm } from "../_components/field-presentation/form-bridge";
+import { provideFormErrorDescriptionBoundary } from "../form/error-description";
 import {
   dataToScope,
   realTransformAlias,
   setValueWithAlias,
 } from "../utils/useSetValueWithAlias";
 import { mapProps, type PoiKeys } from "./props";
-import { getMapInitData } from "./utils";
+import { getMapInitData, resolveMapType } from "./utils";
 import { useFetch } from "../_utils/use-fetch";
 import { createNamespace } from "../_utils/global-config";
 
@@ -55,16 +52,24 @@ export default defineComponent({
 
   props: mapProps,
 
-  emits: [
-    "change",
-    "init",
-    "loading:address",
-    "loaded:address",
-    "update:modelValue",
-  ],
+  emits: mapEmits,
 
   setup(props, { emit }) {
-    const sdkAvailable = typeof MapService !== "undefined" && typeof SearchService !== "undefined" && typeof LngLat !== "undefined";
+    isolateEditorForm();
+    provideFormErrorDescriptionBoundary();
+    // Retain legacy globals for existing integrations; an explicit adapter takes precedence.
+    const legacySdk: MapSdk | undefined = typeof MapService !== "undefined" && typeof SearchService !== "undefined" && typeof LngLat !== "undefined"
+      ? { Map, MapService, SearchService, LngLat } : undefined;
+    const sdk = computed(() => props.sdk ? toRaw(props.sdk) : legacySdk);
+    const sdkAvailable = computed(() => {
+      const value = sdk.value;
+      return Boolean(value && typeof value.Map === "function" && typeof value.LngLat === "function" &&
+        typeof value.SearchService === "function" && typeof value.MapService?.init === "function");
+    });
+    const requireSdk = (): MapSdk => {
+      if (!sdkAvailable.value || !sdk.value) throw new Error("Map SDK is unavailable");
+      return sdk.value;
+    };
     const { t } = useI18n();
     const attrs = useAttrs();
     const slots = useSlots();
@@ -93,33 +98,92 @@ export default defineComponent({
     const valueModel_ = ref<any>({});
     const isInit = ref<boolean>(true);
     const isMapInit = ref<boolean>(false);
+    const sdkFailed = ref(false);
+    const sdkInitializing = ref(false);
+    let sdkVersion = 0;
     const isUpdating = ref(false);
     const isLoading = ref(false);
-    const map = ref<MapCoreMap>();
-    let service: InstanceType<typeof SearchService>;
+    const map = shallowRef<MapSdkMap>();
+    let service: MapSdkSearchService | undefined;
+    const requireService = (): MapSdkSearchService => {
+      if (!service) throw new Error("Map search service is unavailable");
+      return service;
+    };
     const id = ref();
     let proposalVersion = 0;
     let geocodeVersion = 0;
     let searchVersion = 0;
     let alive = true;
+    let locationActive = true;
+    let mounted = false;
+    let configVersion = 0;
+    let locationVersion = 0;
+    const isLocating = ref(false);
+    onDeactivated(() => {
+      locationActive = false;
+      locationVersion++;
+      proposalVersion++;
+      searchVersion++;
+      isLocating.value = false;
+      invalidateGeocode(false);
+      updateGuard.cancel();
+      pendingSelection = undefined;
+      if (sdkInitializing.value && !isMapInit.value) {
+        sdkFailed.value = false;
+        try { releaseSdk(); } catch (error) { if (alive) emit("error", error); }
+        finally { initTask = undefined; sdkInitializing.value = false; }
+      }
+    });
+    onActivated(() => {
+      locationActive = true;
+      if (sdkAvailable.value && !isMapInit.value && !sdkFailed.value && !initTask) void initMap();
+    });
     let stopSdkModelWatch: (() => void) | undefined;
-    const invalidateGeocode = () => {
+    let detachSdkListener: (() => void) | undefined;
+    const invalidateGeocode = (notify = true) => {
+      const wasLoading = isLoading.value;
       geocodeVersion++;
       isLoading.value = false;
+      if (wasLoading && alive && notify) emit("loaded:address");
     };
     const updateGuard = createMapUpdateGuard((active) => {
       if (active) invalidateGeocode();
       isUpdating.value = active;
     });
+    let pendingSelection: number | undefined;
+    const cancelPendingSelection = () => {
+      if (pendingSelection !== undefined) updateGuard.finish(pendingSelection);
+      pendingSelection = undefined;
+    };
     const hasCoordinate = (value: unknown) => value !== null && value !== undefined && value !== "" && Number.isFinite(Number(value));
+    function releaseSdk() {
+      sdkVersion++;
+      stopSdkModelWatch?.();
+      stopSdkModelWatch = undefined;
+      const owner = map.value;
+      const previousService = service;
+      map.value = undefined;
+      service = undefined;
+      isMapInit.value = false;
+      searchRes.value = { list: [] };
+      show.value = false;
+      try {
+        detachSdkListener?.();
+      } finally {
+        detachSdkListener = undefined;
+        try { previousService?.destroy?.(); } finally { owner?.destroy?.(); }
+      }
+    }
     onBeforeUnmount(() => {
       alive = false;
+      mounted = false;
+      configVersion++;
+      locationVersion++;
       proposalVersion++;
       searchVersion++;
       invalidateGeocode();
-      stopSdkModelWatch?.();
-      stopSdkModelWatch = undefined;
       updateGuard.dispose();
+      releaseSdk();
     });
 
     function init() {
@@ -156,37 +220,37 @@ export default defineComponent({
       }
     }
     function syncCenter() {
-      if (!sdkAvailable || !map.value) return;
+      if (!sdkAvailable.value || !map.value) return;
       const token = updateGuard.begin();
-      map.value.setCenter(new LngLat(value_.value[valueKeyAlias.longitude], value_.value[valueKeyAlias.latitude]));
+      map.value.setCenter(new (requireSdk().LngLat)(value_.value[valueKeyAlias.longitude], value_.value[valueKeyAlias.latitude]));
       updateGuard.releaseAfter(token, 300);
     }
-    const { fetch } = useFetch(props.fetch);
-
-    let suggestSearch: (params: {
-      keywords: string;
-      location?: string;
-    }) => Promise<PoiInfo[]> = async () => [];
-    if (props.enableGisSearch) {
-      suggestSearch = useSuggest(fetch, props.basePath).suggestSearch;
-    }
+    const { fetch: inheritedFetch } = useFetch();
+    watch(() => [props.enableGisSearch, props.isInternational, props.basePath, props.fetch] as const, () => {
+      searchVersion++;
+      cancelPendingSelection();
+      searchRes.value.list = [];
+    }, { flush: "sync" });
     init();
     watch(() => props.valueKeyAlias, (alias) => {
       searchVersion++;
+      cancelPendingSelection();
       Object.assign(valueKeyAlias, { longitude: "longitude", latitude: "latitude", address: "address", name: "name", adcode: "adcode", countryCode: "countryCode", city: "city", country: "country" }, alias);
       init();
       syncCenter();
     }, { deep: true, flush: "sync" });
     watch(() => props.valueKeyScope, (scope) => {
       searchVersion++;
+      cancelPendingSelection();
       valueKeyScope.splice(0, valueKeyScope.length, ...scope);
       init();
       syncCenter();
     }, { deep: true, flush: "sync" });
     watch(() => props.modelValue, () => {
       searchVersion++;
+      cancelPendingSelection();
       invalidateGeocode();
-      if (!sdkAvailable || !isMapInit.value) init();
+      if (!sdkAvailable.value || !isMapInit.value) init();
     }, { deep: true, flush: "sync" });
 
     function updateModelValue() {
@@ -208,33 +272,34 @@ export default defineComponent({
     }
 
     let initTask: Promise<void> | undefined;
-    const performInitMap = async () => {
-      if (
-        typeof MapService === "undefined" ||
-        typeof SearchService === "undefined" ||
-        typeof LngLat === "undefined"
-      ) {
+    function publishSearchResult(results: SearchResult<PoiInfo>, status: unknown, current: () => boolean) {
+      const next = status === "success"
+        ? { ...results, list: results.list.map((item) => ({ label: item.address, value: item.name || item.address, ...item })) }
+        : { list: [] };
+      if (!current()) return;
+      searchRes.value = next;
+      isInited.value = true;
+      show.value = true;
+    }
+    const performInitMap = async (token: number) => {
+      if (!sdkAvailable.value) {
         isInited.value = true;
         return;
       }
-      const { key, geoUrl } = getMapInitData(props.mapType, props.basePath);
+      const currentSdk = requireSdk();
+      const initializer = toRaw(currentSdk.MapService);
+      const scopedSearch = props.sdk != null;
+      const mapType = resolveMapType(props.mapType, props.isInternational);
+      const { key, geoUrl } = getMapInitData(mapType, props.basePath);
       if (props.modelValue?.[valueKeyAlias.address]) {
         value_.value[valueKeyAlias.address] =
           props.modelValue[valueKeyAlias.address];
       }
-      if (props.isInternational) {
-        await MapService.init("google", key);
-      } else {
-        if (props.mapType === "amaps") {
-          await MapService.init("amaps", key);
-        } else {
-          await MapService.init("qqmaps", key);
-        }
-      }
-      if (!alive) return;
-      map.value = new Map({
+      await initializer.init(mapType, key);
+      if (!alive || token !== sdkVersion) return;
+      map.value = new currentSdk.Map({
         zoom: 15,
-        center: new LngLat(
+        center: new (requireSdk().LngLat)(
           value_.value?.[valueKeyAlias.longitude],
           value_.value?.[valueKeyAlias.latitude],
         ),
@@ -243,27 +308,15 @@ export default defineComponent({
         zoomEnable: true,
         zoomControlPosition: "RB",
       });
-      service = new SearchService({
+      service = new currentSdk.SearchService({
         driver: props.driver as any, // TODO: 类型
         fetch: props.fetch,
         geocoderUrl: props.geocoderUrl || geoUrl,
         geocoderHandler: props.geocoderHandler,
         map: map.value,
         complete: (results: SearchResult<PoiInfo>, status: any) => {
-          if (!alive) return;
-          results.list = results.list.map((item) => ({
-            label: item.address,
-            value: item.name || item.address,
-            ...item,
-          }));
-          if (status === "success") {
-            searchRes.value.list = [];
-            searchRes.value = results;
-          } else {
-            searchRes.value.list = [];
-          }
-          isInited.value = true;
-          show.value = true;
+          if (scopedSearch || !alive || token !== sdkVersion) return;
+          publishSearchResult(results, status, () => alive && token === sdkVersion);
         },
       });
 
@@ -307,7 +360,7 @@ export default defineComponent({
             if (isMapInit.value) {
               const token = updateGuard.begin();
               map.value?.setCenter(
-                new LngLat(
+                new (requireSdk().LngLat)(
                   value_.value[valueKeyAlias.longitude],
                   value_.value[valueKeyAlias.latitude],
                 ),
@@ -318,12 +371,13 @@ export default defineComponent({
         },
         { deep: true },
       );
-      map.value.on(
-        "moveend",
-        async () => {
+      const listenerOwner = map.value;
+      const listenerVersion = token;
+      const onMoveEnd = async () => {
+          if (!alive || !locationActive || map.value !== listenerOwner || listenerVersion !== sdkVersion) return;
           const token = ++geocodeVersion;
           const owner = map.value;
-          if (!alive || isUpdating.value || !owner) {
+          if (!alive || !locationActive || isUpdating.value || !owner) {
             isLoading.value = false;
             return;
           }
@@ -337,17 +391,21 @@ export default defineComponent({
           try {
             emit("loading:address");
             if (!alive || token !== geocodeVersion || map.value !== owner || isUpdating.value) return;
-            const data = await geocodeLatLng(new LngLat(lng, lat));
+            const data = await geocodeLatLng(new (requireSdk().LngLat)(lng, lat));
             if (!alive || token !== geocodeVersion || map.value !== owner || isUpdating.value) return;
             value_.value = data;
             updateModelValue();
-            if (alive) emit("loaded:address");
+          } catch (error) {
+            if (alive && token === geocodeVersion && map.value === owner && !isUpdating.value) emit("error", error);
           } finally {
-            if (alive && token === geocodeVersion) isLoading.value = false;
+            if (alive && token === geocodeVersion) {
+              isLoading.value = false;
+              emit("loaded:address");
+            }
           }
-        },
-        null,
-      );
+      };
+      listenerOwner.on("moveend", onMoveEnd, null);
+      detachSdkListener = () => listenerOwner.off?.("moveend", onMoveEnd, null);
       if (
         map.value &&
         (!hasCoordinate(value_.value?.[valueKeyAlias.latitude]) ||
@@ -356,7 +414,7 @@ export default defineComponent({
         const center = map.value?.getCenter();
         const token = geocodeVersion;
         const data = await geocodeLatLng(
-          new LngLat(center.getLng(), center.getLat()),
+          new (requireSdk().LngLat)(center.getLng(), center.getLat()),
         );
         if (!alive) return;
         if (token === geocodeVersion && (
@@ -370,9 +428,9 @@ export default defineComponent({
       // updateModelValue()
       // emit('init')
       // 返回的对象数据是完整的data，会自动补全其他值。
-      async function fixInitData(latlng: InstanceType<typeof LngLat>) {
+      async function fixInitData(latlng: MapSdkLngLat) {
         const token = geocodeVersion;
-        const res = await service.geocoder(latlng.getLng(), latlng.getLat());
+        const res = await requireService().geocoder(latlng.getLng(), latlng.getLat());
         if (!alive || token !== geocodeVersion) return value_;
         const data = realTransformAlias(res, valueKeyAlias);
         Object.keys(data).forEach((key) => {
@@ -395,13 +453,13 @@ export default defineComponent({
         hasCoordinate(value_.value?.[valueKeyAlias.longitude])
       ) {
         newData = await fixInitData(
-          new LngLat(
+          new (requireSdk().LngLat)(
             value_.value?.[valueKeyAlias.longitude],
             value_.value?.[valueKeyAlias.latitude],
           ),
         );
       }
-      if (!alive) return;
+      if (!alive || token !== sdkVersion) return;
       isMapInit.value = true;
       const currentCenter = map.value?.getCenter();
       if (currentCenter && hasCoordinate(value_.value?.[valueKeyAlias.longitude]) && hasCoordinate(value_.value?.[valueKeyAlias.latitude]) &&
@@ -411,19 +469,58 @@ export default defineComponent({
       emit("init", toRaw(value_.value), toRaw(newData.value));
     };
 
-    const initMap = async () => {
+    const initMap = () => {
       if (initTask) return initTask;
-      const task = performInitMap();
+      const token = ++sdkVersion;
+      sdkInitializing.value = true;
+      const task = performInitMap(token).then(() => {
+        if (alive && token === sdkVersion) sdkFailed.value = false;
+      }, (error: unknown) => {
+        if (alive && token === sdkVersion) {
+          try { releaseSdk(); } catch (cleanupError) { emit("error", cleanupError); }
+          sdkFailed.value = true;
+          isInited.value = true;
+          emit("error", error);
+        }
+      }).finally(() => {
+        if (initTask === task) {
+          initTask = undefined;
+          sdkInitializing.value = false;
+        }
+      });
       initTask = task;
-      try {
-        await task;
-      } finally {
-        if (initTask === task) initTask = undefined;
-      }
+      return task;
     };
 
-    async function geocodeLatLng(latlng: InstanceType<typeof LngLat>) {
-      const res = await service.geocoder(latlng.getLng(), latlng.getLat());
+    watch(
+      () => [props.sdk, props.mapType, props.isInternational, props.basePath, props.driver, props.fetch, props.geocoderUrl, props.geocoderHandler] as const,
+      () => {
+        if (!mounted || !alive) return;
+        const version = ++configVersion;
+        proposalVersion++;
+        searchVersion++;
+        locationVersion++;
+        isLocating.value = false;
+        invalidateGeocode();
+        if (!alive || version !== configVersion) return;
+        updateGuard.cancel();
+        pendingSelection = undefined;
+        try { releaseSdk(); } catch (error) { if (alive) emit("error", error); }
+        if (!alive || version !== configVersion) return;
+        initTask = undefined;
+        sdkInitializing.value = false;
+        sdkFailed.value = false;
+        isInited.value = !sdkAvailable.value;
+        init();
+        void nextTick(() => {
+          if (alive && mounted && locationActive && sdkAvailable.value && version === configVersion) void initMap();
+        });
+      },
+      { flush: "sync" },
+    );
+
+    async function geocodeLatLng(latlng: MapSdkLngLat) {
+      const res = await requireService().geocoder(latlng.getLng(), latlng.getLat());
       if (!alive) return undefined;
       const data = realTransformAlias(res, valueKeyAlias);
       if (data) {
@@ -434,8 +531,8 @@ export default defineComponent({
     }
 
     const searchByLatLng = async (lat: string, lng: string, token: number) => {
-      const latlng = new LngLat(Number(lng), Number(lat));
-      const res = await service.geocoder(latlng.getLng(), latlng.getLat());
+      const latlng = new (requireSdk().LngLat)(Number(lng), Number(lat));
+      const res = await requireService().geocoder(latlng.getLng(), latlng.getLat());
       if (!alive || token !== searchVersion) return;
       value_.value = realTransformAlias(res, valueKeyAlias);
       // 经纬度必须用原始的，不能用gis返回的，否则有点地区会有偏差。
@@ -443,15 +540,13 @@ export default defineComponent({
         value_.value[valueKeyAlias.longitude] = latlng.getLng();
         value_.value[valueKeyAlias.latitude] = latlng.getLat();
       }
-      const p = new PoiInfo();
-      Object.keys(res).forEach((key) => {
-        p[key] = res[key];
-      });
+      const p: PoiInfo = { ...res };
       searchRes.value.list = [p];
       updateModelValue();
     };
 
     const handleSearch = async (value: string) => {
+      cancelPendingSelection();
       const token = ++searchVersion;
       if (!value) {
         searchRes.value.list = [];
@@ -465,105 +560,135 @@ export default defineComponent({
       // match[1] 是经度，match[3] 是纬度
       const lng = match?.[1];
       const lat = match?.[3];
-      if (isLngLat && lat && lng) {
-        await searchByLatLng(lat, lng, token);
-      } else {
-        if (!props.isInternational && props.enableGisSearch) {
-          //国内环境并且开启了使用gis推荐搜索
-          const params: { keywords: string; city?: string; location?: string } =
-            {
-              keywords: searchVal.value,
-            };
-          if (
-            hasCoordinate(value_.value?.[valueKeyAlias.latitude]) &&
-            hasCoordinate(value_.value?.[valueKeyAlias.longitude])
-          ) {
-            // 如果长度过长，要裁减
-            params.location =
-              value_.value?.[valueKeyAlias.longitude]?.toFixed?.(6) +
-              "," +
-              value_.value?.[valueKeyAlias.latitude]?.toFixed?.(6);
-          }
-          const results = await suggestSearch(params);
-          if (!alive || token !== searchVersion) return;
-          searchRes.value.list = results;
+      try {
+        if (isLngLat && lat && lng) {
+          await searchByLatLng(lat, lng, token);
         } else {
-          // 海外环境
-          service.search(searchVal.value);
+          if (!props.isInternational && props.enableGisSearch) {
+            //国内环境并且开启了使用gis推荐搜索
+            const params: { keywords: string; city?: string; location?: string } =
+              {
+                keywords: searchVal.value,
+              };
+            if (
+              hasCoordinate(value_.value?.[valueKeyAlias.latitude]) &&
+              hasCoordinate(value_.value?.[valueKeyAlias.longitude])
+            ) {
+              // 如果长度过长，要裁减
+              params.location =
+                value_.value?.[valueKeyAlias.longitude]?.toFixed?.(6) +
+                "," +
+                value_.value?.[valueKeyAlias.latitude]?.toFixed?.(6);
+            }
+            const results = await useSuggest(props.fetch ?? inheritedFetch, props.basePath).suggestSearch(params);
+            if (!alive || token !== searchVersion) return;
+            searchRes.value.list = results;
+          } else {
+            // 海外环境
+            const owner = requireService();
+            const generation = sdkVersion;
+            if (props.sdk != null) {
+              let consumed = false;
+              await owner.search(value, (results, status) => {
+                if (consumed || !alive || !locationActive || token !== searchVersion || generation !== sdkVersion || owner !== service) return;
+                consumed = true;
+                publishSearchResult(results, status, () => alive && locationActive && token === searchVersion && generation === sdkVersion && owner === service);
+              });
+            } else {
+              // Legacy SDKs use their constructor callback and have no request identity.
+              await (owner.search as (query: string) => void | Promise<void>)(value);
+            }
+          }
+        }
+      } catch (error) {
+        if (alive && locationActive && token === searchVersion) {
+          searchRes.value.list = [];
+          emit("error", error);
         }
       }
     };
 
     async function getAddr(item: PoiInfo) {
-      searchVersion++;
+      const searchToken = ++searchVersion;
       const token = updateGuard.begin();
+      pendingSelection = token;
+      const current = () => alive && locationActive && searchToken === searchVersion && updateGuard.current(token);
+      let keepSuppression = false;
       try {
         show.value = false;
         if (item?.updatePlaceDetail) {
           await item.updatePlaceDetail();
-          if (!updateGuard.current(token)) return;
+          if (!current()) return;
         }
-        value_.value = realTransformAlias(item, valueKeyAlias);
-        const res = await service.geocoder(
-          value_.value?.[valueKeyAlias.longitude],
-          value_.value?.[valueKeyAlias.latitude],
+        const candidate = ref(realTransformAlias(item, valueKeyAlias));
+        const res = await requireService().geocoder(
+          candidate.value?.[valueKeyAlias.longitude],
+          candidate.value?.[valueKeyAlias.latitude],
         );
-        if (!updateGuard.current(token)) return;
+        if (!current()) return;
         setValueWithAlias({
-          target: value_,
+          target: candidate,
           origin: realTransformAlias(res, valueKeyAlias),
           scope: valueKeyScope,
           exclude: ["address", "name", "longitude", "latitude"],
           alias: valueKeyAlias,
         });
+        value_.value = candidate.value;
+        pendingSelection = undefined;
         updateModelValue();
         if (!updateGuard.current(token)) return;
         map.value?.setCenter(
-          new LngLat(
+          new (requireSdk().LngLat)(
             value_.value?.[valueKeyAlias.longitude],
             value_.value?.[valueKeyAlias.latitude],
           ),
         );
         // Keep the moveend suppression until the current programmatic move settles.
         updateGuard.releaseAfter(token, 500);
+        keepSuppression = true;
       } catch (error) {
-        updateGuard.finish(token);
-        throw error;
+        if (current()) emit("error", error);
+      } finally {
+        if (pendingSelection === token) pendingSelection = undefined;
+        if (!keepSuppression) updateGuard.finish(token);
       }
     }
 
     const getCurrentLocation = () => {
-      return new Promise<{ latitude: number; readonly longitude: number }>(
-        (resolve) => {
-          navigator.geolocation?.getCurrentPosition((position) => {
-            if (position && position.coords) {
-              resolve(position.coords);
-            }
-          });
-        },
-      );
+      return new Promise<GeolocationCoordinates>((resolve, reject) => {
+        if (typeof navigator === "undefined" || !navigator.geolocation) {
+          reject(new Error("Geolocation is unavailable"));
+          return;
+        }
+        navigator.geolocation.getCurrentPosition(
+          (position) => position?.coords ? resolve(position.coords) : reject(new Error("Geolocation returned no coordinates")),
+          reject,
+        );
+      });
     };
 
-    const isLocating = ref(false);
     const locateMe = async () => {
-      if (!sdkAvailable) return;
-      if (isLocating.value) {
-        return;
-      }
+      if (!sdkAvailable.value || sdkFailed.value || !isMapInit.value || !alive || !locationActive || isLocating.value) return;
+      const token = ++locationVersion;
+      const currentLocation = () => alive && locationActive && token === locationVersion;
       isLocating.value = true;
-      const coords = await getCurrentLocation();
-      if (coords) {
-        const center = { lng: coords.longitude, lat: coords.latitude };
-        const lngLat = new LngLat(center.lng, center.lat);
-        geocodeLatLng(lngLat);
+      try {
+        const coords = await getCurrentLocation();
+        if (!currentLocation()) return;
+        const lngLat = new (requireSdk().LngLat)(coords.longitude, coords.latitude);
+        void geocodeLatLng(lngLat).catch((error) => { if (currentLocation()) emit("error", error); });
         map.value?.setCenter(lngLat);
+      } catch (error) {
+        if (currentLocation()) emit("error", error);
+      } finally {
+        if (currentLocation()) isLocating.value = false;
       }
-      isLocating.value = false;
     };
 
     const newAddress = ref("");
 
     onMounted(async () => {
+      mounted = true;
       await initMap();
     });
 
@@ -577,7 +702,7 @@ export default defineComponent({
         <div class="map-wrapper">
           <div class="map-search">
             <Input
-              disabled={!sdkAvailable}
+              disabled={!sdkAvailable.value || sdkFailed.value || !isMapInit.value}
               class="map-search-input"
               modelValue={searchVal.value}
               onUpdate:modelValue={(next: string | null) => {
@@ -616,8 +741,15 @@ export default defineComponent({
                   </div>
                 ))}
               </div>
+            ) : sdkFailed.value ? (
+              <div class="map-search-box-empty" role="status">
+                {t("map.initError") === "map.initError" ? "Map initialization failed" : t("map.initError")}
+                <button type="button" data-map-retry disabled={sdkInitializing.value} onClick={() => void initMap()}>
+                  {t("map.retry") === "map.retry" ? "Retry" : t("map.retry")}
+                </button>
+              </div>
             ) : isInited.value ? (
-              <div class="map-search-box-empty" role="status">{sdkAvailable ? t("map.noData") : "Map SDK unavailable / 地图服务未配置"}</div>
+              <div class="map-search-box-empty" role="status">{sdkAvailable.value ? t("map.noData") : "Map SDK unavailable / 地图服务未配置"}</div>
             ) : (
               ""
             )}
@@ -629,11 +761,12 @@ export default defineComponent({
             <div
               class="locate-me-btn"
               role="button"
-              tabindex={0}
+              tabindex={!sdkAvailable.value || sdkFailed.value || !isMapInit.value ? -1 : 0}
+              aria-disabled={!sdkAvailable.value || sdkFailed.value || !isMapInit.value || undefined}
               aria-label="定位到当前位置"
               onClick={() => locateMe()}
               onKeydown={(event: KeyboardEvent) => {
-                if (event.key === "Enter" || event.key === " ") {
+                if (!event.defaultPrevented && !event.isComposing && event.keyCode !== 229 && (event.key === "Enter" || event.key === " ")) {
                   event.preventDefault();
                   locateMe();
                 }

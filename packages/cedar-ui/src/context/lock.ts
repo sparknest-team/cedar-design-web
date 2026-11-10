@@ -3,9 +3,9 @@ import { createNamespace } from '../_utils/global-config'
 
 const { n } = createNamespace('')
 
-export function useLock(source: () => boolean, useSource: () => boolean = () => true) {
+export function useLock(source: () => boolean, useSource: () => boolean = () => true, target: () => HTMLElement | undefined = () => typeof document === 'undefined' ? undefined : document.body) {
   useScrollLock(
-    () => typeof document === 'undefined' ? undefined : document.body,
+    target,
     () => source() && useSource(),
     { className: n('$--lock'), reserveScrollBar: true },
   )

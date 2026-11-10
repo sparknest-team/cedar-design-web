@@ -36,6 +36,9 @@ test('layout-changing resize consumers run in the next frame; unmount cancels pe
     expect(resize).toHaveBeenCalledTimes(1)
     expect(resize).toHaveBeenLastCalledWith(latest)
     notify([first])
+    frame(0)
+    expect(resize).toHaveBeenCalledTimes(1)
+    expect(frames.size).toBe(1)
     const stale = [...frames.values()][0]
     wrapper.unmount()
     expect(frames.size).toBe(0)

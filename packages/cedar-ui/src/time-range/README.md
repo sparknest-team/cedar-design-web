@@ -206,7 +206,7 @@ open-trigger-target="icon" 时，输入区可以编辑或复制，只有右侧�
 
 ### 浮层配置与字段通知
 
-`popup-props` 显式配置本地 Trigger 的定位和外观，例如 `{ placement: 'top-start' }`；不能覆盖 open、disabled、trigger 等字段状态或交互。顶层 `popup-container`（包括 false）优先。`input-editable` 默认 true，可关闭桌面文本输入。面板外观使用 `time-range-picker-props`（支持 class/style），不再从未声明的 attrs 读取面板/浮层参数；id、aria-* 等属性透传给字段。
+`popup-props` 显式配置本地 Trigger 的定位和外观，例如 `{ placement: 'top-start' }`；不能覆盖 open、disabled、trigger 等字段状态或交互。顶层 `popup-container`（包括 false）优先。`input-editable` 默认 true，可关闭桌面文本输入。面板外观使用 `time-range-picker-props`（支持 class/style），面板/浮层参数通过上述显式属性配置；id、aria-* 等属性透传给字段。
 
 `click(event)` 只通知非禁用字段的点击；只读字段可通知但不展开。关闭统一监听 `open-change(false)`，它表示关闭请求，受控 open 仍需父级接受。两端不提供字段 close 事件；不要把关闭请求当作值提交。
 
@@ -215,6 +215,8 @@ open-trigger-target="icon" 时，输入区可以编辑或复制，只有右侧�
 `placeholder` 字符串用于两端；数组分别指定起止文案，缺项为空；显式空字符串不会回退默认文案。
 
 ### TimeRange Props
+
+`input-attrs` 作用于两个直接输入框。例如 `:input-attrs="[{ 'aria-label': '出发' }, { 'aria-label': '返回' }]"` 可分别命名起止输入。值、禁用、只读、占位符、角色和弹层状态由组件管理；公共描述、单项描述和表单错误会合并到对应输入中；组件报错时优先标记无效，否则保留单项 `aria-invalid`。`RangeInputAttributes` 从组件子入口及库根入口导出，包含原生属性和 `Once` 事件类型。
 
 | 参数 | 说明 | 类型 | 缺省说明 |
 | --- | --- | --- | --- |
@@ -238,6 +240,7 @@ open-trigger-target="icon" 时，输入区可以编辑或复制，只有右侧�
 | `hide-disabled-options` | 隐藏禁用时间选项；时钟保留刻度位置 | `boolean` | `false` |
 | `hint` | 浮动占位提示；存在 Form 外置标签时不浮动 | `boolean` | `true` |
 | `input-editable` | 允许手输；不影响面板选择入口 | `boolean` | `true` |
+| `input-attrs` | 按顺序设置起点、终点原生输入属性；单项名称优先于公共名称 | `RangeInputAttributes[]` | `undefined` |
 | `line` | 显示外壳边框或底线 | `boolean` | `true` |
 | `loading` | 手动加载反馈，不从事件返回值推导 | `boolean` | `false` |
 | `loading-mode` | 字段加载展示模式 | `default \| line` | `default` |

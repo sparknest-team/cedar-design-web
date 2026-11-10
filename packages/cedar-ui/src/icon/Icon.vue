@@ -132,7 +132,7 @@ const innerStyle = computed(() => {
   if (props.color) {
     styles.color = props.color;
   }
-  styles.transitionDuration = `${transitionDuration.value}ms`;
+  if (transitionDuration.value > 0) styles.transitionDuration = `${transitionDuration.value}ms`;
   return styles;
 });
 

@@ -2,6 +2,7 @@ import { defineComponent, h, ref, nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 import { expect, test, vi } from 'vitest'
 import { useColumnResize } from '../hooks/use-column-resize'
+import Table from '../table'
 
 test('column resizing measures from the inline start and preserves physical pixel widths', () => {
   const cell = document.createElement('th')
@@ -80,5 +81,30 @@ test('direction/width column rebuilds retain uncontrolled filter and sort state 
     await nextTick()
     expect(filters._filters.value).toEqual({ amount: ['default'] })
     expect(sorter._sorter.value).toEqual({ field: 'amount', direction: 'ascend' })
+  } finally { wrapper.unmount() }
+})
+
+test('explicit direction updates the table without recreating an extra-column cell', async () => {
+  const direction = ref<'ltr' | 'rtl'>('ltr')
+  const wrapper = mount({
+    render: () => h(Table, {
+      dir: direction.value,
+      columns: [{ title: 'Name', dataIndex: 'name', fixed: 'right' }],
+      data: [{ key: 'a', name: 'Ada' }], pagination: false,
+      extraColumn: { dataIndex: 'name' },
+    }, { 'extra-column-cell': () => h('input', { 'data-draft': '' }) }),
+  })
+  try {
+    const input = wrapper.get('[data-draft]').element as HTMLInputElement
+    input.value = 'draft'
+    direction.value = 'rtl'
+    await nextTick()
+    expect(wrapper.get('[data-draft]').element).toBe(input)
+    expect(input.value).toBe('draft')
+    expect(wrapper.get('.c-table').attributes('dir')).toBe('rtl')
+    direction.value = 'ltr'
+    await nextTick()
+    expect(wrapper.get('[data-draft]').element).toBe(input)
+    expect(input.value).toBe('draft')
   } finally { wrapper.unmount() }
 })

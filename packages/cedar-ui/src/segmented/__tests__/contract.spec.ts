@@ -82,6 +82,20 @@ test('FormItem error presentation marks the group and native controls invalid wi
   expect(w.findAll('input').every(n => n.attributes('aria-invalid') === 'true')).toBe(true)
 })
 
+test('form errors take precedence over caller invalid state and restore it when cleared', async () => {
+  const error = ref(false)
+  const invalid = ref<boolean | string>(false)
+  const w = keep(mount({ render: () => h(Form, { model: { pick: 'a' } }, () => h(FormItem, { field: 'pick', validateStatus: error.value ? 'error' : undefined }, () => h(Segmented, { options: ['a', 'b'], 'aria-invalid': invalid.value }))) }))
+  const group = () => w.get('[role="radiogroup"]')
+  expect(group().attributes('aria-invalid')).toBe('false')
+  error.value = true; await flushPromises()
+  expect(group().attributes('aria-invalid')).toBe('true')
+  expect(w.findAll('input').every(n => n.attributes('aria-invalid') === 'true')).toBe(true)
+  invalid.value = 'grammar'; error.value = false; await flushPromises()
+  expect(group().attributes('aria-invalid')).toBe('grammar')
+  expect(w.findAll('input').every(n => n.attributes('aria-invalid') === undefined)).toBe(true)
+})
+
 test('explicit name is preserved and disabled options never propose changes', async () => {
   const w = keep(mount(Segmented, { props: { name: 'billing', options: [{ value: 'a' }, { value: 'b', disabled: true }], defaultValue: 'a' } }))
   expect(w.findAll('input').every(n => n.attributes('name') === 'billing')).toBe(true)

@@ -1,6 +1,11 @@
+import { useCascaderFocus } from './use-cascader-focus'
+import { useArrowOpenActivation } from './use-arrow-open-activation'
+import { getPrefixCls } from '../_utils/global-config'
 import { useLazyOptions } from './use-lazy-options'
+import { startKeyboardLazy } from './use-keyboard-lazy'
 import {
   computed,
+  inject,
   provide,
   reactive,
   ref,
@@ -9,6 +14,7 @@ import {
   type ExtractPropTypes,
   type SetupContext,
 } from "vue";
+import { fieldEditorEnterSubmits, fieldEditorPanel } from "../_components/field-presentation/context";
 import { useFieldSearch } from "../_components/field-presentation/use-field-search";
 import { useSelectionSession } from "../_components/selection-field/use-selection-session";
 import { useOptionRequest } from "../_hooks/use-option-request";
@@ -51,6 +57,8 @@ export function useCascaderController(
     pathMode,
     multiple,
   } = toRefs(props);
+  const insideFieldEditor = inject(fieldEditorPanel, false)
+  const editorEnterSubmits = inject(fieldEditorEnterSubmits, undefined)
   const emptyPolicy = useEmptyValues(props);
   const _value = ref<CascaderBaseValue | undefined>(props.defaultValue);
   const _inputValue = ref(props.defaultInputValue);
@@ -357,6 +365,7 @@ export function useCascaderController(
       mergedReadonly.value ||
       loading.value ||
       option.disabled ||
+      (props.multiple && option.selectionDisabled) ||
       (!props.multiple && !props.checkStrictly && !option.isLeaf)
     ) {
       return;
@@ -501,36 +510,43 @@ export function useCascaderController(
       setSelectedPath,
       expandTrigger,
       expandOption,
+      isOptionLoading: loadLazyOption.isPending,
       formatLabel,
       slots,
       valueMap: computedValueMap,
     }),
   );
 
+  const activateKeyDown = (ev: Event) => {
+    ev.preventDefault();
+    if (computedOpen.value) {
+      if (activeOption.value) {
+        let checked: boolean;
+        if (props.checkStrictly || activeOption.value.isLeaf) {
+          checked = !computedValueMap.value.has(activeOption.value.key);
+        } else {
+          checked = !getCheckedStatus(
+            activeOption.value,
+            computedValueMap.value,
+          ).checked;
+        }
+        setSelectedPath(activeOption.value.key);
+        handleClickOption(activeOption.value, checked);
+      }
+    } else {
+      handleOpenChange(true);
+    }
+  }
+
   const dispatchKeyDown = getKeyDownHandler(
     new Map([
       [
         KEYBOARD_KEY.ENTER,
-        (ev: Event) => {
-          ev.preventDefault();
-          if (computedOpen.value) {
-            if (activeOption.value) {
-              let checked: boolean;
-              if (props.checkStrictly || activeOption.value.isLeaf) {
-                checked = !computedValueMap.value.has(activeOption.value.key);
-              } else {
-                checked = !getCheckedStatus(
-                  activeOption.value,
-                  computedValueMap.value,
-                ).checked;
-              }
-              setSelectedPath(activeOption.value.key);
-              handleClickOption(activeOption.value, checked);
-            }
-          } else {
-            handleOpenChange(true);
-          }
-        },
+        activateKeyDown,
+      ],
+      [
+        KEYBOARD_KEY.SPACE,
+        activateKeyDown,
       ],
       [
         KEYBOARD_KEY.ESC,
@@ -542,7 +558,7 @@ export function useCascaderController(
         KEYBOARD_KEY.ARROW_DOWN,
         (ev: Event) => {
           ev.preventDefault();
-          const activeNode = getNextActiveNode("next");
+          const activeNode = getNextActiveNode("next", (ev.target as Element | null)?.closest?.('[data-cascader-key]')?.getAttribute('data-cascader-key') ?? undefined);
           setActiveKey(activeNode?.key);
         },
       ],
@@ -550,7 +566,7 @@ export function useCascaderController(
         KEYBOARD_KEY.ARROW_UP,
         (ev: Event) => {
           ev.preventDefault();
-          const activeNode = getNextActiveNode("preview");
+          const activeNode = getNextActiveNode("preview", (ev.target as Element | null)?.closest?.('[data-cascader-key]')?.getAttribute('data-cascader-key') ?? undefined);
           setActiveKey(activeNode?.key);
         },
       ],
@@ -559,7 +575,36 @@ export function useCascaderController(
     ]),
   );
 
+  const focusOption = useCascaderFocus(activeKey)
+
+  const arrowOpenActivation = useArrowOpenActivation({
+    open: computedOpen, candidates: optionInfos, activeKey, loading,
+    blocked: () => mergedDisabled.value || mergedReadonly.value || session.pending.value,
+    firstKey: () => getNextActiveNode('next')?.key,
+    activate: setActiveKey,
+  })
+
   const handleKeyDown = (event: KeyboardEvent) => {
+    arrowOpenActivation.cancel()
+    if (event.defaultPrevented || event.isComposing || event.keyCode === 229) {
+      return
+    }
+    if (insideFieldEditor && !computedOpen.value && (event.key === 'Escape' || (event.key === 'Enter' && editorEnterSubmits?.value))) {
+      return
+    }
+    const target = event.target as Element | null
+    const option = target?.closest?.('[role="menuitem"], [role="menuitemradio"], [role="option"][data-cascader-key]')
+    if (event.key === ' ' && !option) return
+    const panelSelector = `.${getPrefixCls('cascader')}-panel, .${getPrefixCls('cascader')}-editor-panel`
+    const originPanel = option?.closest(panelSelector)
+    const parentPanel = originPanel?.parentElement?.closest(panelSelector)
+    if (parentPanel && (event.currentTarget as HTMLElement | null)?.contains(parentPanel)) return
+    if (option && target !== option) return
+    if (option?.getAttribute('aria-disabled') === 'true' && ['Enter', ' ', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+      event.preventDefault()
+      return
+    }
+
     if (
       mergedDisabled.value ||
       mergedReadonly.value ||
@@ -569,7 +614,22 @@ export function useCascaderController(
     ) {
       return;
     }
+    if (!insideFieldEditor && !computedOpen.value && event.key === 'ArrowDown' && target?.matches('input[role="combobox"]')) {
+      event.preventDefault()
+      arrowOpenActivation.begin(target, () => handleOpenChange(true))
+      return
+    }
+    const root = event.currentTarget as HTMLElement | null
+    const lazyTask = startKeyboardLazy(
+      event, activeOption.value, Boolean(props.loadMore) && computedOpen.value, showSearchPanel.value, expandOption,
+      (key) => activeKey.value === key && selectedPath.value.includes(key), navigateLevel,
+      () => { if (root && option) focusOption(root, option, originPanel, panelSelector) },
+    )
     dispatchKeyDown(event);
+    if (option && ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+      if (root) focusOption(root, option, originPanel, panelSelector)
+    }
+    return lazyTask
   };
 
   const canConfirm = computed<boolean>(() => {

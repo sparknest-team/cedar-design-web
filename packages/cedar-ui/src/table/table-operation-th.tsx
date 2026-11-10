@@ -5,6 +5,7 @@ import Checkbox from '../checkbox'
 import { TableOperationColumn } from './types'
 import { isFunction } from '../_utils/is'
 import { TableContext, tableInjectionKey } from './context'
+import { useI18n } from '../locale'
 
 
 const { name } = createNamespace('operation-th')
@@ -33,6 +34,13 @@ export default defineComponent({
   setup(props) {
     const prefixCls = getPrefixCls('table')
     const tableCtx = inject<Partial<TableContext>>(tableInjectionKey, {})
+    const { t } = useI18n()
+    const selectionHeaderLabel = () => {
+      if (props.operationColumn.title || !['selection-checkbox', 'selection-radio'].includes(props.operationColumn.name)) return undefined
+      if (props.selectAll) return t('table.selectAll')
+      const label = t('table.selectionColumn')
+      return label === 'table.selectionColumn' ? 'Selection' : label
+    }
 
     const checkboxStatus = computed(() => {
       let checked = false
@@ -60,11 +68,12 @@ export default defineComponent({
       if (props.selectAll) {
         return (
           <Checkbox
-            v-slots={{
-              default: isFunction(props.operationColumn.title)
+            v-slots={props.operationColumn.title ? {
+              default: () => isFunction(props.operationColumn.title)
                 ? props.operationColumn.title()
                 : props.operationColumn.title,
-            }}
+            } : {}}
+            ariaLabel={props.operationColumn.title ? undefined : t('table.selectAll')}
             modelValue={checkboxStatus.value.checked}
             indeterminate={checkboxStatus.value.indeterminate}
             uninjectGroupContext
@@ -93,6 +102,7 @@ export default defineComponent({
 
     return () => (
       <th
+        aria-label={selectionHeaderLabel()}
         class={cls.value}
         style={style.value}
         rowspan={props.rowSpan > 1 ? props.rowSpan : undefined}

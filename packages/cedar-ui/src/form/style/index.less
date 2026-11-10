@@ -93,7 +93,8 @@
   &-size-xs &-item-label-col {
     line-height: var(~"--c-form-size-xs-height");
 
-    > .c-form-item-label {
+    > .c-form-item-label,
+    > .c-form-item-label-tooltip {
       font-size: var(~"--c-form-size-xs-label-font-size");
     }
   }
@@ -109,7 +110,8 @@
   &-size-sm &-item-label-col {
     line-height: var(~"--c-form-size-sm-height");
 
-    > .c-form-item-label {
+    > .c-form-item-label,
+    > .c-form-item-label-tooltip {
       font-size: var(~"--c-form-size-sm-label-font-size");
     }
   }
@@ -125,7 +127,8 @@
   &-size-lg &-item-label-col {
     line-height: var(~"--c-form-size-lg-height");
 
-    > .c-form-item-label {
+    > .c-form-item-label,
+    > .c-form-item-label-tooltip {
       font-size: var(~"--c-form-size-lg-label-font-size");
     }
   }
@@ -141,7 +144,8 @@
   &-size-xl &-item-label-col {
     line-height: var(~"--c-form-size-xl-height");
 
-    > .c-form-item-label {
+    > .c-form-item-label,
+    > .c-form-item-label-tooltip {
       font-size: var(~"--c-form-size-xl-label-font-size");
     }
   }
@@ -194,6 +198,10 @@
       color: var(~"--c-form-label-text-color");
       font-size: var(~"--c-form-size-md-label-font-size");
       white-space: normal;
+    }
+
+    > .c-form-item-label-tooltip {
+      font-size: var(~"--c-form-size-md-label-font-size");
     }
 
     &&-flex {
@@ -274,7 +282,7 @@
     background: transparent;
     font: inherit;
     cursor: pointer;
-    margin-inline-start: var(~"--c-form-tooltip-margin-left");
+    padding-inline-start: var(~"--c-form-tooltip-margin-left");
     color: var(~"--c-form-tooltip-text-color");
   }
 }

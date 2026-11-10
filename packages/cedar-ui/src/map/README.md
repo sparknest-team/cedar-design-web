@@ -16,9 +16,11 @@ permalink: /components/map/
 
 ### 特殊说明
 
-当前未提供原 `map-core` 运行时依赖；缺少 MapService、SearchService 或 LngLat 的可用实现时，组件显示降级状态。对应类型声明不能替代运行时依赖。
+当前未提供原 `map-core` 运行时依赖。应用可通过 `sdk` 显式传入 `MapSdk` 适配对象，包含 `Map`、`LngLat`、`MapService` 与 `SearchService`；未提供有效实现时显示降级状态。旧的全局接入仍可用，但显式适配器优先，不需要覆盖浏览器原生 `Map`。适配器需要按自身地图服务完成初始化、授权和资源释放。
 
 地图交互的业务等待不通过 CSS 动效变量控制。
+
+`MapSdk` 及其 `MapSdkMapOptions`、`MapSdkSearchOptions`、`MapSdkSearchCompletion`、`MapSdkMap`、`MapSdkLngLat` 和 `MapSdkSearchService` 类型从根入口和 `map` 子入口导出。显式适配器的 `search(query, complete)` 必须对该次请求调用传入的完成回调；组件忽略过期请求和重复回调。`MapSdkSearchOptions.complete` 仅供旧全局 SDK 兼容，显式适配器不能用它提交搜索结果。地图与搜索服务可提供 `off`、`destroy` 用于释放资源；供应商适配及授权由应用负责。
 
 <demo src="./__demos__/auth.vue"></demo>
 
@@ -37,6 +39,8 @@ permalink: /components/map/
 
 通过 `map-type="google"` 和 `is-international` 配置国际地图；未接入 SDK 时保留同样的降级展示。
 
+启用 `is-international` 时实际地图类型为 `google`；否则使用 `map-type`。SDK 初始化和默认逆地址服务使用同一实际类型；显式 `geocoder-url` 优先。
+
 <demo src="./__demos__/google.vue"></demo>
 
 [//]: # '### v-model'
@@ -47,10 +51,15 @@ permalink: /components/map/
 
 ### Map Props
 
+GIS 搜索在下一次输入时使用当前的 `enable-gis-search`、`base-path` 和 `fetch`；这些配置或 `is-international` 改变时会清除旧搜索结果并忽略旧的 GIS 搜索响应。
+
+SDK 可用时，`sdk`、`map-type`、`is-international`、`base-path`、`driver`、`fetch`、`geocoder-url` 或 `geocoder-handler` 变化会释放旧实例并重新初始化；对象和函数按引用变化检测。同一轮的配置更改合并处理，旧请求结果不会应用到新实例。真实 SDK 的资源释放能力仍取决于适配器实现。
+
 | 属性                    | 说明                                         | 类型                                         | 默认值           |
 | ----------------------- | -------------------------------------------- | -------------------------------------------- | ---------------- |
 | model-value(**v-model**) | 受控位置模型，组件不修改传入对象。           | `Object`                                     | -                |
 | default-value            | 用来设置默认地图中心点                       | `{ [key in valueKeyAlias[keys]]: any }`      | -                |
+| sdk                     | 显式地图 SDK 适配器；替换或移除时重新初始化 | `MapSdk` | `-` |
 | driver                  | SDK 驱动对象                   | `object`                                     | `-`              |
 | fetch                   | 带 get/post 的服务对象                     | `MapFetch`                                | `-`              |
 | geocoder-url             | geocoderUrl接口路径                          | `string`                                     | `-`              |
@@ -79,21 +88,24 @@ permalink: /components/map/
 | clearable | 显示清空按钮 | `boolean` | `false` |
 | map-style | 直接设置到地图上面的style，可以设置地图的高度。 | `object` | `{ height: '300px'}` |
 
+SDK 初始化失败时会报告原始错误并显示重试按钮；初始化期间缓存停用会取消旧实例，恢复后重新初始化。地图 SDK 仍需应用提供可用的运行时实现。
+
 ### Map Events
 
 | 事件名          | 说明                       | 参数                      |
 | --------------- | -------------------------- | ------------------------- |
+| error | SDK 初始化、搜索、地点选择、定位或地图移动后的逆地址解析失败 | 原始错误 `unknown` |
 | change          | 位置变更通知 | `(scopedValue, fullValue)` |
 | init            | 初始化地图完成时触发 | `(initialValue, completedValue)` |
 | loading:address | 选择地点，地址解析中触发   | `-`                       |
-| loaded:address  | 选择地点，地址解析完成触发 | `-`                       |
+| loaded:address  | 地址解析结束（含失败或取消）；失败通过 error 通知 | `-`                       |
 | update:modelValue | 提出新的位置模型 | 新模型对象 |
 
 ### MapSelect Events
 
 | 事件名 | 说明 | 参数 |
 | --- | --- | --- |
-| `error` | 当前逆地址解析请求失败 | 原始错误 `unknown` |
+| `error` | 当前逆地址解析、地图 SDK 初始化、搜索、地点选择、定位或地图移动后的解析失败 | 原始错误 `unknown` |
 | `clear` | 请求清空位置 | 无 |
 | `change` | 提出位置变化 | `(scopedValue, fullValue)` |
 | `init` | 转发地图初始化 | `(initialValue, completedValue)` |
@@ -105,6 +117,9 @@ permalink: /components/map/
 `geocoder-handler` 接收数字经度、纬度，可同步或异步返回含 `address`、`poi`、`area_code`、`country_code`、`city`、`country` 的对象；它优先于 `fetch`。否则逆地址请求使用 `geocoder-url`，未指定时根据 `map-type` 和 `base-path` 生成默认路径；`fetch.get` 应返回含 `isValid()` 和 `data` 的响应。MapSelect 的降级解析会响应别名和服务配置变化；0 是有效坐标。SDK 内部服务运行时重配置仍需在 SDK 恢复后验证。根入口和 `map` 子入口导出 `MapProps`、`MapSelectProps`、`MapFetch`、`MapGeocoderHandler`、`MapGeocoderResult` 及组件实例类型。地图 SDK 不随当前构建提供，未配置时地图交互不可用。
 
 ## Types
+
+根入口和 `map` 子入口提供 `MapEmits` 和 `MapSelectEmits` 事件类型。
+
 
 ### valueKeyAlias
 

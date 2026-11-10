@@ -95,9 +95,9 @@ export default defineComponent({
 
     return () => (
       <div {...mergeProps(
-        { class: cls.value, role: 'radiogroup', 'aria-disabled': mergedDisabled.value || undefined, 'aria-readonly': mergedReadonly.value || undefined, 'aria-invalid': mergedError.value || undefined },
+        { class: cls.value, role: 'radiogroup', 'aria-disabled': mergedDisabled.value || undefined, 'aria-readonly': mergedReadonly.value || undefined },
         attrs,
-        { 'aria-describedby': describeError(attrs['aria-describedby']) },
+        { 'aria-describedby': describeError(attrs['aria-describedby']), 'aria-invalid': mergedError.value ? true : attrs['aria-invalid'] },
       )}>
         <div class={n('group')}>
           {normalizedOptions.value.map((option) => {

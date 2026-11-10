@@ -144,6 +144,7 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 | update:modelValue / change | TreeSelectValue / undefined | Selected value publication; deferred drafts do not trigger it. |
 | update:inputValue / input-value-change / search | string | Input text and search notifications. |
 | update:open / open-change | boolean | Candidate popup or editor open notifications. |
+| keydown | KeyboardEvent | Field keyboard event; `preventDefault()` suppresses internal keyboard handling. |
 | clear | — | Clear action notification; deferred modes still require confirmation. |
 | load-error | error: unknown, node?: TreeNodeData | The current root data source or node loadMore failed; node failures include the original node. Listener Promises are not awaited. |
 
@@ -192,7 +193,7 @@ Duplicate expansion requests for the same asynchronously loaded node are merged.
 
 Nodes default to `{ value, label, children }`. `value` is a tree-wide unique string/number, including `0`; `label` is display content. Map other backend fields with `fieldNames: { value: 'id', label: 'text', children: 'items' }` without changing backend data. Declarative child `name`, Vue `:key` and Table `rowKey` retain separate meanings.
 
-Independent Tree state uses `selectedValues/defaultSelectedValues`, `checkedValues/defaultCheckedValues`, `halfCheckedValues` and `expandedValues/defaultExpandedValues`, updated through corresponding named v-models. `check` event indeterminate sets use `halfCheckedValues`. Node content uses `label`; TreeSelect forwards `tree-slot-label`. `scrollIntoView({ value })` locates business values; explicit `index` remains a zero-based virtual-list array `index`.
+Independent Tree state uses `selectedValues/defaultSelectedValues`, `checkedValues/defaultCheckedValues`, `halfCheckedValues` and `expandedValues/defaultExpandedValues`, updated through corresponding named v-models. `check` event indeterminate sets use `halfCheckedValues`. Node content uses `label`; TreeSelect forwards `tree-slot-label`. `scrollIntoView({ value })` locates business values; explicit `index` remains a zero-based virtual-list array `index`. When opening a virtual list, the active item is scrolled into view. Its active-descendant reference is removed while the node is unmounted and restored when it mounts again.
 
 ### Search configuration
 

@@ -19,6 +19,10 @@ Preview configuration: `map-type="amaps"`.
 
 ### Auth
 
+The original `map-core` runtime dependency is not included. Applications can provide an explicit `MapSdk` adapter through `sdk`, containing `Map`, `LngLat`, `MapService`, and `SearchService`; a fallback is shown when no valid implementation is available. Legacy global integration remains supported, but the explicit adapter takes precedence and does not require replacing the native browser `Map`. The adapter must handle initialization, authorization, and resource disposal for its map service.
+
+`MapSdk`, `MapSdkMapOptions`, `MapSdkSearchOptions`, `MapSdkSearchCompletion`, `MapSdkMap`, `MapSdkLngLat`, and `MapSdkSearchService` are exported from both the root and `map` entry. An explicit adapter must call the supplied completion callback for that specific `search(query, complete)` request; stale and duplicate callbacks are ignored. `MapSdkSearchOptions.complete` exists for legacy global SDK compatibility and cannot submit results for explicit adapters. Map and search services may provide `off` and `destroy` for cleanup; the application owns vendor adaptation and authorization.
+
 <demo src="./__demos__/auth.vue"></demo>
 
 ## Data and options
@@ -37,6 +41,8 @@ Preview configuration: `map-type="amaps"`.
 
 Preview configuration: `map-type="google"`, `is-international`, `map-type="amaps"`.
 
+When `is-international` is enabled, the effective map type is `google`; otherwise it is `map-type`. SDK initialization and the default reverse geocoder use the same effective type; an explicit `geocoder-url` takes precedence.
+
 <demo src="./__demos__/google.vue"></demo>
 
 <demo src="./__demos__/use-vmodel.vue"></demo>
@@ -45,10 +51,15 @@ Preview configuration: `map-type="google"`, `is-international`, `map-type="amaps
 
 ### Map Props
 
+GIS search uses the current `enable-gis-search`, `base-path`, and `fetch` on the next input. Changing these settings or `is-international` clears old results and ignores earlier GIS search responses.
+
+When the SDK is available, changing `sdk`, `map-type`, `is-international`, `base-path`, `driver`, `fetch`, `geocoder-url`, or `geocoder-handler` retires the old instance and initializes a new one. Objects and functions are compared by reference. Changes in the same update are coalesced, and stale results cannot update the new instance. Actual resource disposal depends on the SDK adapter.
+
 | Prop | Description | Type | Default |
 | ----------------------- | -------------------------------------------- | -------------------------------------------- | ---------------- |
 | model-value(**v-model**) | Controlled location model; the input object is not mutated | `Object` | - |
 | default-value | Default map center | `{ [key in valueKeyAlias[keys]]: any }` | - |
+| sdk | Explicit map SDK adapter; replacement or removal reinitializes the map | `MapSdk` | `-` |
 | driver | SDK driver object | `object` | `-` |
 | fetch | Service with get/post methods | `MapFetch` | `-` |
 | geocoder-url | Geocoder endpoint URL | `string` | `-` |
@@ -77,21 +88,24 @@ Includes Map Props, plus:
 | clearable | Show the clear button | `boolean` | `false` |
 | map-style | Styles applied directly to the map; can set map height | `object` | `{ height: '300px'}` |
 
+SDK initialization failures report the original error and show a retry button. Deactivation during initialization retires the old instance and restarts initialization after activation. The application must still provide a usable map SDK runtime.
+
 ### Map Events
 
 | Event | Description | Arguments |
 | --------------- | -------------------------- | ------------------------- |
+| error | SDK initialization, search, place selection, geolocation, or reverse geocoding after a map move failed | Original cause `unknown` |
 | change | Position change notification | `(scopedValue, fullValue)` |
 | init | Emitted after map initialization | `(initialValue, completedValue)` |
 | loading:address | Emitted while resolving the selected location's address | `-` |
-| loaded:address | Emitted after resolving the selected location's address | `-` |
+| loaded:address | Emitted when address resolution settles, including failure or cancellation; failures also emit error | `-` |
 | update:modelValue | Proposes a new location model | New model object |
 
 ### MapSelect Events
 
 | Event | Description | Arguments |
 | --- | --- | --- |
-| `error` | Current reverse-geocoding request failed | Original cause `unknown` |
+| `error` | Current reverse geocoding, map SDK initialization, search, place selection, geolocation, or move geocoding failed | Original cause `unknown` |
 | `clear` | Clear was requested | None |
 | `change` | Position change proposed | `(scopedValue, fullValue)` |
 | `init` | Map initialization forwarded | `(initialValue, completedValue)` |
@@ -103,6 +117,9 @@ The parent owns `model-value`. Selection and geocoding propose a new object via 
 `geocoder-handler` receives numeric longitude and latitude and can synchronously or asynchronously return an object containing `address`, `poi`, `area_code`, `country_code`, `city`, and `country`; it takes precedence over `fetch`. Otherwise reverse geocoding uses `geocoder-url`, or derives a default from `map-type` and `base-path`; `fetch.get` must return a response with `isValid()` and `data`. MapSelect fallback uses updated aliases and service configuration for subsequent requests; zero is a valid coordinate. Runtime SDK service reconfiguration requires verification when the SDK is restored. The root and `map` entry export `MapProps`, `MapSelectProps`, `MapFetch`, `MapGeocoderHandler`, `MapGeocoderResult`, and component instance types. The map SDK is not included in the current build; map interaction is unavailable when it is not configured.
 
 ## Types
+
+`MapEmits` and `MapSelectEmits` are available from the root and `map` entry.
+
 
 ### valueKeyAlias
 

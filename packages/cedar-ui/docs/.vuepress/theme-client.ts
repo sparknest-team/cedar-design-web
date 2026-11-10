@@ -1,4 +1,5 @@
 import { createRequire } from 'node:module'
+import { randomUUID } from 'node:crypto'
 import { dirname, basename, resolve } from 'node:path'
 import type { Plugin } from 'vite'
 
@@ -9,6 +10,13 @@ export function bundleThemeClient(): Plugin {
   const require = createRequire(import.meta.url)
   const client = resolve(dirname(require.resolve('vuepress-theme-hope/package.json')), 'lib/client')
   const entries = ['components/HopeIcon.js', 'layouts/Layout.js', 'layouts/NotFound.js'].map(file => resolve(client, file))
+  const generation = randomUUID()
+  const entryFile = (id: string) => {
+    const file = id.split('?')[0]
+    if (entries.includes(file)) return file
+    const relative = file.replace(/^(?:vuepress-theme-hope|@theme-hope)\//, '')
+    return entries.find(entry => entry === resolve(client, relative))
+  }
   const virtual = '\0cedar-theme-client/'
   const publicId = 'virtual:cedar-theme-client/'
   let pending: Promise<Map<string, string>> | undefined
@@ -38,8 +46,28 @@ export function bundleThemeClient(): Plugin {
           ? `${from}${quote}@vueuse/core${quote}` : original)
       if (rewritten !== code) return { code: rewritten, map: null }
     },
-    configureServer(value) { server = value },
-    resolveId(id) { if (id.startsWith(publicId)) return virtual + id.slice(publicId.length) },
+    configureServer(value) {
+      server = value
+      server.middlewares.use((request: any, response: any, next: () => void) => {
+        const url = request.url || ''
+        if (url.includes('cedar-theme-build=') || url.includes('cedar-theme-client/')) {
+          const setHeader = response.setHeader
+          response.setHeader = function (name: string, content: any) {
+            return setHeader.call(this, name, name.toLowerCase() === 'cache-control' ? 'no-cache' : content)
+          }
+        }
+        next()
+      })
+    },
+    resolveId(id) {
+      if (id.startsWith(publicId)) return virtual + id.slice(publicId.length)
+      if (/[?&](?:raw|url|worker|sharedworker)(?:&|$)/.test(id)) return
+      const entry = entryFile(id)
+      if (entry && !/[?&]cedar-theme-build=/.test(id)) {
+        const query = id.includes('?') ? `${id.slice(id.indexOf('?'))}&` : '?'
+        return `${entry}${query}cedar-theme-build=${generation}`
+      }
+    },
     async load(id) {
       if (/[?&](?:raw|url|worker|sharedworker)(?:&|$)/.test(id)) return
       const file = id.split('?')[0]

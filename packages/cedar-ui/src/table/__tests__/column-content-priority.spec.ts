@@ -40,3 +40,47 @@ test('registered column components replace columns prop and their slots render',
     expect(wrapper.find('tbody td').text()).toBe('component cell slot')
   } finally { wrapper.unmount() }
 })
+
+test('data-defined column slots accept single values', async () => {
+  const wrapper = mount(Table, {
+    attachTo: document.body,
+    props: { pagination: false, data: [{ key: '1', name: 'Ada' }], columns: [{
+      dataIndex: 'name', title: 'Fallback', filterable: { filter: () => true },
+      slots: {
+        title: () => 'Raw title',
+        cell: () => h('strong', 'Raw cell'),
+        'filter-icon': () => 'Raw icon',
+        'filter-content': () => 'Raw filter',
+      },
+    }] },
+  })
+  try {
+    expect(wrapper.get('th').text()).toContain('Raw title')
+    expect(wrapper.get('td').text()).toContain('Raw cell')
+    expect(wrapper.get('.c-table-filters').text()).toContain('Raw icon')
+    await wrapper.get('.c-table-filters').trigger('click')
+    expect(document.body.textContent).toContain('Raw filter')
+  } finally { wrapper.unmount() }
+})
+
+test('an empty data-defined filter icon slot falls back to the configured icon', () => {
+  const wrapper = mount(Table, { props: {
+    pagination: false, data: [{ key: '1', name: 'Ada' }], columns: [{
+      dataIndex: 'name', title: 'Name', filterable: { filter: () => true, icon: () => h('b', { class: 'fallback-icon' }, 'Fallback') },
+      slots: { 'filter-icon': () => undefined },
+    }],
+  } })
+  try { expect(wrapper.find('.fallback-icon').exists()).toBe(true) } finally { wrapper.unmount() }
+})
+
+test('empty data-defined title and cell slots render without error', () => {
+  const wrapper = mount(Table, { props: {
+    pagination: false, data: [{ key: '1', name: 'Ada' }], columns: [{
+      dataIndex: 'name', title: 'Name', slots: { title: () => null, cell: () => undefined },
+    }],
+  } })
+  try {
+    expect(wrapper.get('th').text()).toBe('')
+    expect(wrapper.get('td').text()).toBe('')
+  } finally { wrapper.unmount() }
+})

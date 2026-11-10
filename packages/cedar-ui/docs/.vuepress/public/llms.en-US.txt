@@ -116,6 +116,7 @@ Documentation language: en-US.
 - [Controlled state, defaults and clear values: learn by interaction](./llms/en-US/guide/controlled-uncontrolled.md): /en/guide/controlled-uncontrolled/
 - [Empty recognition, clear output and reading placeholders](./llms/en-US/guide/empty-values.md): /en/guide/empty-values/
 - [LLM documentation](./llms/en-US/guide/llms.md): /en/guide/llms/
+- [Theme Customization](./llms/en-US/guide/theme.md): /en/guide/theme/
 - [Cedar Design Web](./llms/en-US/index.md): /en/
 - [Loading and waiting](./llms/en-US/showcase/loading.md): /en/showcase/loading/
-- [Theme presets](./llms/en-US/themes.md): /en/themes/
+- [Theme Customization](./llms/en-US/themes.md): /en/themes/

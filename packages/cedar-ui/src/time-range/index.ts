@@ -30,3 +30,5 @@ export type { TimeRangeModelValue, TimeRangeEmits, TimeRangeReadScope, TimeRange
 export type { TimeRangeSlots } from './slots'
 
 export type { TimeRangePickerEmits, TimeRangePickerSlots } from '../time/picker-contract'
+
+export type { RangeInputAttributes } from '../_components/picker-field/props'

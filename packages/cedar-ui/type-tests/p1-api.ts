@@ -115,3 +115,13 @@ const hoverHelpers = useHoverOverlay()
 hoverHelpers.handleHovering(true)
 const hoverState: boolean = hoverHelpers.hovering.value
 void [hoverOverlayConfig, hoverOverlayProps, hoverState]
+
+import type { RangeInputAttributes, DateRangeProps, TimeRangeProps } from '@cedar-design/ui'
+import type { RangeInputAttributes as DateRangeInputAttributes } from '@cedar-design/ui/date-range'
+import type { RangeInputAttributes as TimeRangeInputAttributes } from '@cedar-design/ui/time-range'
+const rangeInput: RangeInputAttributes = { 'aria-label': 'Start', onKeydownOnce: (event: KeyboardEvent) => event.preventDefault() }
+const dateRangeInput: DateRangeInputAttributes = rangeInput
+const timeRangeInput: TimeRangeInputAttributes = rangeInput
+const dateRangeProps: DateRangeProps = { inputAttrs: [dateRangeInput] }
+const timeRangeProps: TimeRangeProps = { inputAttrs: [timeRangeInput] }
+void [dateRangeProps, timeRangeProps]

@@ -12,7 +12,7 @@
       :style="containerStyle"
       v-bind="mergeProps(themeScope, $attrs)"
     >
-      <transition :name="overlayAnimationName" appear>
+      <component :is="Transition" :name="overlayAnimationName" appear>
         <div
           v-if="overlay"
           v-show="mergedOpen"
@@ -22,8 +22,10 @@
           @pointerdown="handleOverlayPointerDown"
           @click="handleOverlayClick"
         />
-      </transition>
-      <transition
+      </component>
+      <component
+        :is="Transition"
+        persisted
         :name="`slide-${placement}-drawer`"
         appear
         @after-enter="opened"
@@ -89,7 +91,7 @@
             </slot>
           </div>
         </div>
-      </transition>
+      </component>
     </div>
   </teleport>
 </template>
@@ -98,7 +100,7 @@
 import { useThemeScope } from '../theme-provider/context'
 import PendingFeedback from '../_components/pending-feedback/PendingFeedback.vue'
 import { useDirection } from '../_utils/direction'
-import { computed, mergeProps, ref, useSlots, type CSSProperties } from 'vue';
+import { Transition, computed, mergeProps, ref, useSlots, type CSSProperties } from 'vue';
 import { IconClose } from '@cedar-design/icons-vue/icon-close';
 import { createNamespace, getPrefixCls } from '../_utils/global-config';
 import { isNumber } from '../_utils/is';

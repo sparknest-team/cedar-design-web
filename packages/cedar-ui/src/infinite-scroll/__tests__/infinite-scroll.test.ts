@@ -357,13 +357,13 @@ describe("infinite-scroll public contract", () => {
 
     await wrapper.setProps({ target: second });
     await nextTick();
-    expect(firstRemove).toHaveBeenCalledWith("scroll", expect.any(Function));
+    expect(firstRemove).toHaveBeenCalledWith("scroll", firstAdd.mock.calls.find(([type]) => type === "scroll")![1]);
     expect(secondAdd).toHaveBeenCalledWith("scroll", expect.any(Function), {
       passive: true,
     });
 
     wrapper.unmount();
-    expect(secondRemove).toHaveBeenCalledWith("scroll", expect.any(Function));
+    expect(secondRemove).toHaveBeenCalledWith("scroll", secondAdd.mock.calls.find(([type]) => type === "scroll")![1]);
   });
 
   it("supports a descendant virtual scroll target", async () => {

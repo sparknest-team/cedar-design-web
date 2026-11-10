@@ -4,7 +4,7 @@ import vHover, {
   HoverOverlay as BaseHoverOverlay,
   useHoverOverlay,
 } from "../hover";
-import BaseLoading from "../loading";
+import BaseLoading from "../loading/Loading.vue";
 import vRipple from "../ripple";
 import { createNamespace } from "../_utils/global-config";
 import { buttonProps } from "./props";

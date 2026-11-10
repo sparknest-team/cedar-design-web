@@ -140,3 +140,35 @@ describe('MapSelect model and geocoding', () => {
     wrapper.unmount()
   })
 })
+
+test('keyboard entry ignores composing and previously prevented events', async () => {
+  const wrapper = mount(MapSelect, { props: { modelValue: {} } })
+  try {
+    const input = wrapper.get('input').element as HTMLInputElement
+    const composition = new KeyboardEvent('keydown', { key: 'Enter', keyCode: 229, bubbles: true, cancelable: true })
+    input.dispatchEvent(composition)
+    await nextTick()
+    expect(composition.defaultPrevented).toBe(false)
+    expect(input.getAttribute('aria-expanded')).toBe('false')
+    const consumed = new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true })
+    consumed.preventDefault()
+    input.dispatchEvent(consumed)
+    await nextTick()
+    expect(input.getAttribute('aria-expanded')).toBe('false')
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }))
+    await nextTick()
+    expect(input.getAttribute('aria-expanded')).toBe('true')
+  } finally { wrapper.unmount() }
+})
+
+test('map entry does not open on an already prevented Enter', async () => {
+  const wrapper = mount(MapSelect, { props: { modelValue: {} } })
+  try {
+    const input = wrapper.get('input').element as HTMLInputElement
+    const event = new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true })
+    event.preventDefault()
+    input.dispatchEvent(event)
+    await nextTick()
+    expect(input.getAttribute('aria-expanded')).toBe('false')
+  } finally { wrapper.unmount() }
+})

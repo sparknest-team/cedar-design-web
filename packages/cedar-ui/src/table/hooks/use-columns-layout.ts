@@ -1,5 +1,6 @@
 import { isNumber } from '../../_utils/is'
 import type { TableColumnData, TableOperationColumn } from '../types'
+import { getColumnLayoutKey, isTableExtraColumn } from '../extra-column'
 
 export const DEFAULT_COLUMN_MIN_WIDTH = 80
 export const DEFAULT_OPERATION_WIDTH = 40
@@ -42,7 +43,7 @@ export const updateColumnsWidth = ({
   if (!containerWidth || dataColumns.length === 0) {
     let bodyMinWidth = operationsWidth
     for (const column of dataColumns) {
-      const dataIndex = column.dataIndex
+      const dataIndex = getColumnLayoutKey(column)
       if (!dataIndex) continue
       const width = column._resizeWidth ?? column.width ?? column.minWidth ?? DEFAULT_COLUMN_MIN_WIDTH
       columnRealWidth[dataIndex] = width
@@ -79,8 +80,8 @@ export const updateColumnsWidth = ({
         const column = flexColumns[0]
         const minWidth = Number(column.minWidth || DEFAULT_COLUMN_MIN_WIDTH)
         if (column.dataIndex) {
-          columnRealWidth[column.dataIndex] = minWidth + totalFlexWidth
-          column._realWidth = columnRealWidth[column.dataIndex]
+          columnRealWidth[getColumnLayoutKey(column)!] = minWidth + totalFlexWidth
+          column._realWidth = columnRealWidth[getColumnLayoutKey(column)!]
         }
       } else {
         const allColumnsWidth = flexColumns.reduce(
@@ -96,23 +97,23 @@ export const updateColumnsWidth = ({
           const flexWidth = Math.floor(minWidth * flexWidthPerPixel)
           noneFirstWidth += flexWidth
           if (column.dataIndex) {
-            columnRealWidth[column.dataIndex] = minWidth + flexWidth
-            column._realWidth = columnRealWidth[column.dataIndex]
+            columnRealWidth[getColumnLayoutKey(column)!] = minWidth + flexWidth
+            column._realWidth = columnRealWidth[getColumnLayoutKey(column)!]
           }
         })
 
         const first = flexColumns[0]
         const firstMinWidth = Number(first.minWidth || DEFAULT_COLUMN_MIN_WIDTH)
         if (first.dataIndex) {
-          columnRealWidth[first.dataIndex] = firstMinWidth + totalFlexWidth - noneFirstWidth
-          first._realWidth = columnRealWidth[first.dataIndex]
+          columnRealWidth[getColumnLayoutKey(first)!] = firstMinWidth + totalFlexWidth - noneFirstWidth
+          first._realWidth = columnRealWidth[getColumnLayoutKey(first)!]
         }
       }
 
       for (const column of dataColumns) {
-        if (!column.dataIndex || columnRealWidth[column.dataIndex]) continue
+        if (!column.dataIndex || columnRealWidth[getColumnLayoutKey(column)!]) continue
         const width = column._resizeWidth ?? column.width!
-        columnRealWidth[column.dataIndex] = width
+        columnRealWidth[getColumnLayoutKey(column)!] = width
         column._realWidth = width
       }
 
@@ -126,14 +127,14 @@ export const updateColumnsWidth = ({
     for (const column of flexColumns) {
       const width = Number(column.minWidth || DEFAULT_COLUMN_MIN_WIDTH)
       if (column.dataIndex) {
-        columnRealWidth[column.dataIndex] = width
+        columnRealWidth[getColumnLayoutKey(column)!] = width
         column._realWidth = width
       }
     }
     for (const column of dataColumns) {
-      if (!column.dataIndex || columnRealWidth[column.dataIndex]) continue
+      if (!column.dataIndex || columnRealWidth[getColumnLayoutKey(column)!]) continue
       const width = column._resizeWidth ?? column.width!
-      columnRealWidth[column.dataIndex] = width
+      columnRealWidth[getColumnLayoutKey(column)!] = width
       column._realWidth = width
     }
 
@@ -154,7 +155,7 @@ export const updateColumnsWidth = ({
       width = Number(column.width || column.minWidth)
     }
     if (column.dataIndex) {
-      columnRealWidth[column.dataIndex] = width
+      columnRealWidth[getColumnLayoutKey(column)!] = width
       column._realWidth = width
     }
     bodyMinWidth += width
@@ -166,17 +167,18 @@ export const updateColumnsWidth = ({
   // element 在 fit=false 时表格缩为列宽之和，cedar 按业务要求不缩。
   if (bodyMinWidth < containerWidth) {
     const scalable = dataColumns.filter(
-      (column) => column.dataIndex && !exactDataIndexes?.includes(column.dataIndex),
+      (column) => column.dataIndex && !isTableExtraColumn(column) &&
+        (!exactDataIndexes?.includes(column.dataIndex) || dataColumns.some(other => isTableExtraColumn(other) && other.dataIndex === column.dataIndex)),
     )
     const totalBase = scalable.reduce(
-      (prev, column) => prev + columnRealWidth[column.dataIndex!],
+      (prev, column) => prev + columnRealWidth[getColumnLayoutKey(column)!],
       0,
     )
     if (scalable.length > 0 && totalBase > 0) {
       const leftover = containerWidth - bodyMinWidth
       let assigned = 0
       scalable.forEach((column, index) => {
-        const key = column.dataIndex!
+        const key = getColumnLayoutKey(column)!
         if (index === scalable.length - 1) {
           columnRealWidth[key] += leftover - assigned
         } else {

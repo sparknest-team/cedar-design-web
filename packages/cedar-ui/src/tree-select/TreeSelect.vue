@@ -150,6 +150,7 @@ import {
   toRefs,
   watch,
 } from 'vue'
+import { fieldEditorEnterSubmits } from '../_components/field-presentation/context'
 import { useFieldTexts } from '../_components/field-presentation/texts'
 import { selectionEditorSurface } from '../_components/selected-options/context'
 import SelectedOptions from '../_components/selected-options/SelectedOptions.vue'
@@ -168,7 +169,7 @@ import { Data } from '../_utils/types'
 import { useEmptySlot } from '../_components/selection-field/empty-slot'
 import Empty from '../empty'
 import Input from '../input'
-import Loading from '../loading'
+import Loading from '../loading/Loading.vue'
 import { ScrollbarProps } from '../scrollbar'
 import useTreeData from '../tree/hooks/use-tree-data'
 import { Node, TreeFieldNames, TreeNodeData, TreeNodeValue, TreeProps } from '../tree/types'
@@ -292,6 +293,7 @@ export default defineComponent({
     const loading = computed(() => props.loading || source.loading.value)
     const prefixCls = getPrefixCls('tree-select')
     const editor = inject(selectionEditorSurface, undefined)
+    const editorEnterSubmits = inject(fieldEditorEnterSubmits, undefined)
     const texts = useFieldTexts()
     const globalEmptySlot = useEmptySlot()
     const TreeSelectEmpty = () => globalEmptySlot.value?.({ component: 'tree-select' }) ?? h(Empty)
@@ -458,8 +460,10 @@ export default defineComponent({
     const refSelectionField = ref()
     const panelRef = ref<TreeSelectPanelHandle>()
     const onKeydown = (event: KeyboardEvent) => {
-      if (event.isComposing || event.keyCode === 229 || mergedDisabled.value || mergedReadonly.value || loading.value)
+      emit('keydown', event)
+      if (event.defaultPrevented || event.isComposing || event.keyCode === 229 || mergedDisabled.value || mergedReadonly.value || loading.value)
         return
+      if (!panelVisible.value && event.key === 'Enter' && editorEnterSubmits?.value) return
       if (!panelVisible.value && ['Enter', 'ArrowDown', 'ArrowUp'].includes(event.key)) {
         event.preventDefault()
         event.stopPropagation()

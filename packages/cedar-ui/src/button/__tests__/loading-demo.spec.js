@@ -3,6 +3,7 @@ import { expect, test } from "vitest";
 import Button from "..";
 import Form, { FormItem } from "../../form";
 import { RadioGroup } from "../../radio";
+import Checkbox from "../../checkbox";
 import Space from "../../space";
 import LoadingDemo from "../__demos__/loading.vue";
 
@@ -15,12 +16,15 @@ test("loading demo exposes its few options and disables only the inapplicable si
         CRadioGroup: RadioGroup,
         CSpace: Space,
         CButton: Button,
+        CCheckbox: Checkbox,
       },
     },
   });
   try {
     expect(wrapper.findAll('[role="radiogroup"]')).toHaveLength(2);
     expect(wrapper.find('[role="combobox"]').exists()).toBe(false);
+    await wrapper.get('input[type="checkbox"]').setValue(true);
+    expect(wrapper.findAllComponents(Button).every((button) => button.props("stacked"))).toBe(true);
     await wrapper
       .get('[aria-label="Loading mode"] input[value="line"]')
       .setValue(true);

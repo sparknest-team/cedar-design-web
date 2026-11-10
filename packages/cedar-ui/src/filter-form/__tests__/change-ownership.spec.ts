@@ -9,11 +9,21 @@ const Control = defineComponent({
 const fields = [{ component: Control, field: 'query' }]
 const owners: ReturnType<typeof mount>[] = []
 const previousMatchMedia = globalThis.matchMedia
+let timerDescriptors: Array<readonly [string, PropertyDescriptor | undefined]>
 beforeEach(() => {
+  timerDescriptors = ['setTimeout', 'clearTimeout'].map(key => [key, Object.getOwnPropertyDescriptor(globalThis, key)] as const)
   vi.useFakeTimers()
   vi.stubGlobal('matchMedia', () => ({ matches: false, addEventListener: vi.fn(), removeEventListener: vi.fn() }))
 })
-afterEach(() => { owners.splice(0).forEach(owner => owner.unmount()); vi.useRealTimers(); vi.stubGlobal('matchMedia', previousMatchMedia) })
+afterEach(() => {
+  owners.splice(0).forEach(owner => owner.unmount())
+  vi.useRealTimers()
+  timerDescriptors.forEach(([key, descriptor]) => {
+    if (descriptor) Object.defineProperty(globalThis, key, descriptor)
+    else Reflect.deleteProperty(globalThis, key)
+  })
+  vi.stubGlobal('matchMedia', previousMatchMedia)
+})
 function fixture(props = {}) {
   const owner = mount(FilterForm, { props: { fields, cols: 1, collapsible: false, changeDebounce: 150, ...props } })
   owners.push(owner); return owner

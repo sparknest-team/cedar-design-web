@@ -164,6 +164,7 @@ open-trigger-target="icon" 时，输入区可以编辑或复制，只有右侧�
 | update:modelValue / change | TreeSelectValue / undefined | 业务选中提交；延迟编辑的草稿不触发。 |
 | update:inputValue / input-value-change / search | string | 输入文本与搜索通知。 |
 | update:open / open-change | boolean | 候选层或编辑层展开通知。 |
+| keydown | KeyboardEvent | 字段按键事件；调用 `preventDefault()` 可阻止内部键盘处理。 |
 | clear | — | 清空动作通知，延迟模式仍需确认。 |
 | load-error | error: unknown, node?: TreeNodeData | 当前 data 根候选源或节点 loadMore 失败；节点加载失败时提供原始节点，不等待监听器 Promise。 |
 
@@ -212,7 +213,7 @@ Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，
 
 节点默认使用 `{ value, label, children }`，`value` 是全树唯一的字符串或数字（支持 `0`），`label` 是展示内容。后端使用其他字段时可配置 `fieldNames: { value: 'id', label: 'text', children: 'items' }`，无需修改后端数据。声明式组件子项的 `name`、Vue 的 `:key` 和 Table 的 `rowKey` 保持各自含义。
 
-Tree 的独立状态采用 `selectedValues/defaultSelectedValues`、`checkedValues/defaultCheckedValues`、`halfCheckedValues`、`expandedValues/defaultExpandedValues`，分别通过同名具名 v-model 更新；`check` 事件数据中的半选集合为 `halfCheckedValues`。节点内容插槽为 `label`，TreeSelect 对应透传插槽为 `tree-slot-label`。`scrollIntoView({ value })` 按业务值定位；显式 `index` 仍表示虚拟列表从 0 开始的数组下标。
+Tree 的独立状态采用 `selectedValues/defaultSelectedValues`、`checkedValues/defaultCheckedValues`、`halfCheckedValues`、`expandedValues/defaultExpandedValues`，分别通过同名具名 v-model 更新；`check` 事件数据中的半选集合为 `halfCheckedValues`。节点内容插槽为 `label`，TreeSelect 对应透传插槽为 `tree-slot-label`。`scrollIntoView({ value })` 按业务值定位；显式 `index` 仍表示虚拟列表从 0 开始的数组下标。 虚拟列表打开时会滚到当前活动项；活动节点未挂载时暂不暴露活动项引用，重新挂载后恢复。
 
 ### 搜索开关
 

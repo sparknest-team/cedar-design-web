@@ -2,6 +2,8 @@ import type { TreeSelectValue } from './types'
 import type { TreeNodeData } from '../tree/types'
 
 export const treeSelectEmits = {
+  /** @zh 字段按键事件 @en Keyboard event from the field */
+  keydown: (_event: KeyboardEvent) => true,
   change: (_value: TreeSelectValue | undefined) => true,
   'update:modelValue': (_value: TreeSelectValue | undefined) => true,
   'update:inputValue': (_inputValue: string) => true,

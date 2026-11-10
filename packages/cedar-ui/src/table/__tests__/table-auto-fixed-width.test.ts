@@ -52,7 +52,7 @@ Object.defineProperty(HTMLElement.prototype, "getBoundingClientRect", {
     const key =
       this.getAttribute?.("data-column-key") ??
       this.getAttribute?.("data-operation-key");
-    const width = (key && measuredWidths[key]) || 50;
+    const width = this.hasAttribute?.("data-column-layout-key") ? 36 : (key && measuredWidths[key]) || 50;
     return {
       width,
       height: 20,
@@ -226,4 +226,25 @@ describe("table-layout=auto 下冻结列：渲染后量宽回写修正 sticky �
 
     wrapper.unmount();
   });
+  test('auto layout measures same-key business and extra columns separately', async () => {
+    const wrapper = mount(Table, {
+      props: {
+        columns: [{ dataIndex: 'name', title: 'Name', fixed: 'right' }, { dataIndex: 'status', title: 'Status', fixed: 'right' }],
+        data: [{ key: 'a', name: 'Ada', status: 'Ready' }], pagination: false,
+        extraColumn: { dataIndex: 'status' }, tableLayout: 'auto',
+      },
+      global: { plugins: [ssrShim] },
+    })
+    try {
+      await nextTick()
+      fireResize()
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
+      await settle()
+      expect(wrapper.get('th[data-column-key="name"]').attributes('style')).toContain('right: 146px')
+      const statusHeaders = wrapper.findAll('th[data-column-key="status"]')
+      expect(statusHeaders[0].attributes('style')).toContain('right: 36px')
+      expect(statusHeaders[1].attributes('style')).toContain('right: 0px')
+    } finally { wrapper.unmount() }
+  })
+
 });

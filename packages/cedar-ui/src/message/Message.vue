@@ -1,8 +1,9 @@
 <template>
   <Teleport :to="popupTarget" :disabled="popupContainer === false">
-    <Transition
+    <component
+      :is="Transition"
       name="fade-message"
-      appear
+      :appear="!hydrating"
       @after-enter="emit('opened')"
       @after-leave="emit('closed')"
     >
@@ -53,14 +54,14 @@
           <a-icon-hover :prefix="prefixCls"><icon-close /></a-icon-hover>
         </button>
       </div>
-    </Transition>
+    </component>
   </Teleport>
 </template>
 
 <script setup lang="ts">
 import { useThemeScope } from '../theme-provider/context'
 import { useDirection } from '../_utils/direction'
-import { mergeProps,  useAttrs, defineComponent, onMounted, watch, type PropType } from 'vue';
+import { mergeProps, useAttrs, defineComponent, getCurrentInstance, onMounted, Transition, watch, type PropType } from 'vue';
 import { IconCheckCircleFill } from '@cedar-design/icons-vue/icon-check-circle-fill';
 import { IconClose } from '@cedar-design/icons-vue/icon-close';
 import { IconCloseCircleFill } from '@cedar-design/icons-vue/icon-close-circle-fill';
@@ -76,6 +77,7 @@ import { useMessageTimer } from './use-message-timer';
 
 
 const themeScope = useThemeScope()
+const hydrating = !!getCurrentInstance()?.vnode.el
 
 defineOptions({ name: createNamespace("message").name, inheritAttrs: false });
 const DynamicContent = defineComponent({
@@ -113,7 +115,10 @@ const { pause, resume, restart } = useMessageTimer({
 defineExpose({ restartTimer: restart });
 
 onMounted(() => {
-  if (props.open) emit("open");
+  if (props.open) {
+    emit("open");
+    if (hydrating) emit("opened");
+  }
 });
 watch(
   () => props.open,

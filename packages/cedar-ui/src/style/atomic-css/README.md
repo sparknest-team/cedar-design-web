@@ -260,7 +260,7 @@ presetCedar({
 });
 ```
 
-设为 `false` 会关闭 Cedar 对应的主题映射。生成器自身的默认 utility 仍可能存在，但不再绑定 Cedar CSS 变量。
+设为 `false` 会关闭 Cedar 对应的主题映射。生成器自身的默认 utility 仍可能存在，但与 Cedar CSS 变量相互独立。
 
 ---
 

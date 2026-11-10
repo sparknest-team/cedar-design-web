@@ -22,6 +22,7 @@
   >
     <div
       ref="cardFloater"
+      @keydown="handleFloatingKeydown"
       :class="n('floater')"
       :style="{
         width: floaterWidth,
@@ -128,6 +129,7 @@ import { useZIndex } from '../context/zIndex'
 import BaseIcon from '../icon'
 import vRipple from '../ripple'
 import { createNamespace, formatElevation } from '../_utils/global-config'
+import { usePopupLayer } from '../_utils/popup-layer'
 import { toSizeUnit } from '../_utils/maple/elements'
 import { cardProps } from './props'
 import BaseDivider from '../divider'
@@ -169,9 +171,28 @@ let disposed = false
     useLock(
       () => props.floating,
       () => !isRow.value,
+      () => card.value?.ownerDocument.body,
     )
 
+let returnFocus: HTMLElement | null = null
+function updateReturnFocus(open: boolean) {
+  const document = card.value?.ownerDocument ?? (typeof globalThis.document === 'undefined' ? undefined : globalThis.document)
+  if (!document) return
+  const focused = document.activeElement as HTMLElement | null
+  if (open) {
+    returnFocus = focused && focused !== document.body && focused !== document.documentElement ? focused : null
+    return
+  }
+  const target = returnFocus
+  returnFocus = null
+  const hiddenArea = focused?.closest(`.${n('floating-content')}, .${n('floating-buttons')}`)
+  if (hiddenArea && cardFloater.value?.contains(hiddenArea) && target?.isConnected && !target.closest('[inert]')) {
+    target.focus({ preventScroll: true })
+  }
+}
+
 const wantsFloating = () => props.floating && !isRow.value
+const { onStackTop } = usePopupLayer(wantsFloating, zIndex, () => card.value?.ownerDocument, true)
 const available = () => active && !disposed
 function current(token: number, element: HTMLElement | null) {
   return available() && token === generation && card.value === element
@@ -181,6 +202,7 @@ watch(
   wantsFloating,
   (value) => {
     const token = ++generation
+    updateReturnFocus(value)
     let consumed = false
     nextTick(() => {
       if (!available() || token !== generation || consumed || value !== wantsFloating()) {
@@ -293,6 +315,12 @@ function dropdown() {
     floaterPosition.value = undefined
     floated.value = false
   }, duration.value)
+}
+function handleFloatingKeydown(event: KeyboardEvent) {
+  if (!available() || !wantsFloating() || event.key !== 'Escape' || event.isComposing || event.keyCode === 229 || event.defaultPrevented || !onStackTop(event)) return
+  event.preventDefault()
+  event.stopPropagation()
+  close()
 }
 function close() {
   if (available()) {

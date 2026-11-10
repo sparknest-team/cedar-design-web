@@ -59,8 +59,9 @@
   </TemporalTrigger>
 </template>
 <script setup lang="ts">
+import { fieldEditorPanel } from "../../_components/field-presentation/context";
 import { isFieldOpenClick } from "../../_components/picker-field/open-trigger";
-import { computed, ref, useId, useSlots } from "vue";
+import { computed, inject, ref, useId, useSlots } from "vue";
 import { IconClockCircle } from "@cedar-design/icons-vue";
 import FeedbackIcon from "../../_components/FeedbackIcon.vue";
 import PickerField from "../../_components/picker-field/PickerField.vue";
@@ -80,6 +81,7 @@ defineOptions({
   name: createNamespace("time-field-content").name,
   inheritAttrs: false,
 });
+const insideFieldEditor = inject(fieldEditorPanel, false);
 const props = defineProps<TimeFieldContentProps>();
 const popupId = useId();
 const locale = useTimeFieldLocale();
@@ -114,7 +116,7 @@ const panelProps = computed(() => {
   };
 });
 function keydown(event: KeyboardEvent) {
-  if (event.key === "Escape") {
+  if (event.key === "Escape" && (!insideFieldEditor || props.state.open.value)) {
     props.state.cancel();
     event.stopPropagation();
   }

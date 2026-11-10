@@ -21,7 +21,7 @@
       <tbody>
         <tr>
           <td>切换加载不会重建行</td>
-          <td><input v-model="draft" aria-label="表格草稿" /></td>
+          <td><c-input v-model="draft" edit-mode="direct" aria-label="表格草稿" /></td>
         </tr>
       </tbody>
     </c-table>

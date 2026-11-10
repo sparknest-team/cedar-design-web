@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, useSlots } from 'vue'
-import Loading from '../loading'
+import Loading from '../loading/Loading.vue'
 import Empty from '../empty'
 import VirtualList from '../_components/virtual-list-v2'
 import type { VirtualListRef, ScrollIntoViewOptions } from '../_components/virtual-list-v2/interface'

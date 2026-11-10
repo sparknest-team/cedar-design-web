@@ -2,6 +2,7 @@ import { h, nextTick, KeepAlive, ref } from 'vue'
 import { mount } from '@vue/test-utils'
 import { afterEach, beforeEach, expect, test, vi } from 'vitest'
 import OverflowList from '..'
+const mutationDescriptor = Object.getOwnPropertyDescriptor(document.defaultView!, 'MutationObserver')
 const owners: ReturnType<typeof mount>[] = []
 const hosts: HTMLElement[] = []
 function host() { const node = document.createElement('div'); document.body.append(node); hosts.push(node); return node }
@@ -10,7 +11,13 @@ beforeEach(() => {
   vi.spyOn(HTMLElement.prototype, 'clientWidth', 'get').mockImplementation(function (this: HTMLElement) { return parseFloat(this.style.width) || 0 })
   vi.spyOn(HTMLElement.prototype, 'getClientRects').mockImplementation(() => [new DOMRect(0, 0, 221, 20)] as unknown as DOMRectList)
 })
-afterEach(() => { owners.splice(0).forEach(w => w.unmount()); hosts.splice(0).forEach(node => node.remove()); vi.restoreAllMocks() })
+afterEach(() => {
+  owners.splice(0).forEach(w => w.unmount())
+  hosts.splice(0).forEach(node => node.remove())
+  vi.restoreAllMocks()
+  if (mutationDescriptor) Object.defineProperty(document.defaultView!, 'MutationObserver', mutationDescriptor)
+  else Reflect.deleteProperty(document.defaultView!, 'MutationObserver')
+})
 async function settled() { for (let i = 0; i < 8; i++) await nextTick() }
 async function fixture(props: Record<string, unknown> = {}, widths = [60, 60, 60, 60]) {
   const w = mount(OverflowList, { attachTo: host(), props, attrs: { style: { width: '221px' } }, slots: { default: () => widths.map((width, index) => h('span', { key: index, 'data-item': index, style: { width: width + 'px', marginRight: '3px' } }, String(index))) } }); owners.push(w); await settled(); return w

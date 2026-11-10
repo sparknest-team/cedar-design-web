@@ -68,7 +68,7 @@ test('typed lazy loading retains the existing done(children) protocol', async ()
   const owner = mountTable({ props: defineTableConfig<User>({ rowKey: 'id', data: [parent], pagination: false,
     columns: [{ dataIndex: 'name' }], loadMore,
   }) })
-  await owner.get('button[aria-label="切换展开状态"]').trigger('click')
+  await owner.get('button[aria-expanded]').trigger('click')
   expect(toRaw(loadMore.mock.calls[0][0])).toBe(parent)
   done([child])
   await flushPromises()
