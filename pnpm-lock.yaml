@@ -19,20 +19,26 @@ catalogs:
       specifier: 3.5.13
       version: 3.5.13
 
+overrides:
+  '@sparknest/ui-build-vue': link:../design-ui/packages/ui-build
+  '@sparknest/ui-doc-preview-vue': link:../design-ui/packages/ui-doc-preview
+  '@sparknest/ui-icons-vue': link:../design-ui/packages/ui-icons
+  '@sparknest/theme-contract-vue': link:../design-ui/packages/theme-contract
+
 importers:
 
   .:
     devDependencies:
-      '@cedar-design/cli':
+      '@cedar-design/cli-vue':
         specifier: workspace:*
-        version: link:packages/cedar-cli
+        version: link:packages/cli
       '@changesets/changelog-github':
         specifier: ^0.5.1
         version: 0.5.2
       '@changesets/cli':
         specifier: ^2.29.7
         version: 2.31.0(@types/node@24.13.2)
-      '@sparknest/theme-contract':
+      '@sparknest/theme-contract-vue':
         specifier: link:../design-ui/packages/theme-contract
         version: link:../design-ui/packages/theme-contract
       nanospinner:
@@ -45,14 +51,14 @@ importers:
         specifier: npm:tinyexec@^0.3.0
         version: 0.3.2
 
-  packages/cedar-cli:
+  packages/cli:
     dependencies:
       '@inquirer/prompts':
         specifier: ^6.0.1
         version: 6.0.1
-      '@sparknest/ui-build':
-        specifier: ^1.0.0
-        version: 1.0.0(@types/node@24.13.2)(sass-embedded@1.100.0)(sass@1.101.0)(typescript@5.6.3)(vue-tsc@2.2.12(typescript@5.6.3))(vue@3.5.39(typescript@5.6.3))
+      '@sparknest/ui-build-vue':
+        specifier: link:../../../design-ui/packages/ui-build
+        version: link:../../../design-ui/packages/ui-build
       conventional-changelog:
         specifier: ^5.1.0
         version: 5.1.0
@@ -72,7 +78,7 @@ importers:
         specifier: npm:tinyexec@^0.3.0
         version: 0.3.2
 
-  packages/cedar-icons-vue:
+  packages/icons:
     devDependencies:
       '@vitejs/plugin-vue':
         specifier: ^5.0.4
@@ -93,7 +99,7 @@ importers:
         specifier: ^2.0.29
         version: 2.2.12(typescript@5.3.3)
 
-  packages/cedar-preset-tailwindcss:
+  packages/preset-tailwindcss:
     devDependencies:
       '@types/node':
         specifier: 'catalog:'
@@ -108,7 +114,7 @@ importers:
         specifier: 'catalog:'
         version: 5.3.3
 
-  packages/cedar-preset-unocss:
+  packages/preset-unocss:
     devDependencies:
       '@types/node':
         specifier: 'catalog:'
@@ -123,11 +129,11 @@ importers:
         specifier: ^0.58.5
         version: 0.58.9(postcss@8.5.16)(rollup@4.62.2)(vite@5.4.21(@types/node@18.19.130)(less@4.6.7)(sass-embedded@1.100.0)(sass@1.101.0))
 
-  packages/cedar-resolver:
+  packages/resolver:
     dependencies:
-      '@cedar-design/shared':
+      '@cedar-design/shared-vue':
         specifier: workspace:*
-        version: link:../cedar-shared
+        version: link:../shared
     devDependencies:
       '@types/node':
         specifier: 'catalog:'
@@ -139,7 +145,7 @@ importers:
         specifier: 'catalog:'
         version: 5.3.3
 
-  packages/cedar-shared:
+  packages/shared:
     devDependencies:
       '@types/node':
         specifier: 'catalog:'
@@ -151,17 +157,17 @@ importers:
         specifier: 'catalog:'
         version: 5.3.3
 
-  packages/cedar-ui:
+  packages/ui:
     dependencies:
       '@cedar-design/icons-vue':
         specifier: workspace:*
-        version: link:../cedar-icons-vue
-      '@cedar-design/shared':
+        version: link:../icons
+      '@cedar-design/shared-vue':
         specifier: workspace:*
-        version: link:../cedar-shared
-      '@cedar-design/use':
+        version: link:../shared
+      '@cedar-design/use-vue':
         specifier: workspace:*
-        version: link:../cedar-use
+        version: link:../use
       '@js-temporal/polyfill':
         specifier: ^0.5.1
         version: 0.5.1
@@ -211,15 +217,12 @@ importers:
         specifier: ^4.1.12
         version: 4.4.3
     devDependencies:
-      '@cedar-design/cli':
+      '@cedar-design/cli-vue':
         specifier: workspace:*
-        version: link:../cedar-cli
-      '@cedar-design/resolver':
+        version: link:../cli
+      '@cedar-design/resolver-vue':
         specifier: workspace:*
-        version: link:../cedar-resolver
-      '@cedar-design/ui':
-        specifier: workspace:*
-        version: 'link:'
+        version: link:../resolver
       '@changesets/changelog-github':
         specifier: ^0.4.8
         version: 0.4.8
@@ -446,11 +449,11 @@ importers:
         specifier: 2.0.0-rc.61
         version: 2.0.0-rc.61(4g7yykfjdn73srlv4lhry2tcwe)
 
-  packages/cedar-use:
+  packages/use:
     dependencies:
-      '@cedar-design/shared':
+      '@cedar-design/shared-vue':
         specifier: workspace:*
-        version: link:../cedar-shared
+        version: link:../shared
     devDependencies:
       '@types/node':
         specifier: 'catalog:'
@@ -1892,15 +1895,6 @@ packages:
   '@sindresorhus/merge-streams@4.0.0':
     resolution: {integrity: sha512-tlqY9xq5ukxTUZBmoOp+m61cqwQD5pHJtFY3Mn8CA8ps6yghLH/Hw8UPdqg4OLmFW3IFlcXnQNmo/dh8HzXYIQ==}
     engines: {node: '>=18'}
-
-  '@sparknest/ui-build@1.0.0':
-    resolution: {integrity: sha512-8D/M6OliI7HKhjkxqgTlkVCFCPOKTtjfxMMEAMuQ4+8lQX/TDkRVy+O6Hg44W/FMChNZ7TniIC14MNfXVAasxQ==}
-    engines: {node: '>=20'}
-    hasBin: true
-    peerDependencies:
-      typescript: '>=5'
-      vue: '>=3.2'
-      vue-tsc: '>=2'
 
   '@stackblitz/sdk@1.11.1':
     resolution: {integrity: sha512-5wl1j3IhtmE7POTl2W9VGQdbQyBQrRsF3jcYBK+0V353AuO8H2GFZkiFNyTRxL+TDY3HIFCHc3G983Osmg76Lg==}
@@ -7710,7 +7704,7 @@ snapshots:
       '@types/node': 20.5.1
       chalk: 4.1.2
       cosmiconfig: 8.3.6(typescript@5.6.3)
-      cosmiconfig-typescript-loader: 4.4.0(@types/node@20.5.1)(cosmiconfig@8.3.6(typescript@5.6.3))(ts-node@10.9.2(@types/node@20.19.43)(typescript@5.6.3))(typescript@5.6.3)
+      cosmiconfig-typescript-loader: 4.4.0(@types/node@20.5.1)(cosmiconfig@8.3.6(typescript@5.6.3))(ts-node@10.9.2(@types/node@20.5.1)(typescript@5.6.3))(typescript@5.6.3)
       lodash.isplainobject: 4.0.6
       lodash.merge: 4.6.2
       lodash.uniq: 4.5.0
@@ -8686,25 +8680,6 @@ snapshots:
 
   '@sindresorhus/merge-streams@4.0.0': {}
 
-  '@sparknest/ui-build@1.0.0(@types/node@24.13.2)(sass-embedded@1.100.0)(sass@1.101.0)(typescript@5.6.3)(vue-tsc@2.2.12(typescript@5.6.3))(vue@3.5.39(typescript@5.6.3))':
-    dependencies:
-      '@vitejs/plugin-vue': 5.2.4(vite@5.4.21(@types/node@24.13.2)(less@4.6.7)(sass-embedded@1.100.0)(sass@1.101.0))(vue@3.5.39(typescript@5.6.3))
-      '@vitejs/plugin-vue-jsx': 3.1.0(vite@5.4.21(@types/node@24.13.2)(less@4.6.7)(sass-embedded@1.100.0)(sass@1.101.0))(vue@3.5.39(typescript@5.6.3))
-      less: 4.6.7
-      typescript: 5.6.3
-      vite: 5.4.21(@types/node@24.13.2)(less@4.6.7)(sass-embedded@1.100.0)(sass@1.101.0)
-      vue: 3.5.39(typescript@5.6.3)
-      vue-tsc: 2.2.12(typescript@5.6.3)
-    transitivePeerDependencies:
-      - '@types/node'
-      - lightningcss
-      - sass
-      - sass-embedded
-      - stylus
-      - sugarss
-      - supports-color
-      - terser
-
   '@stackblitz/sdk@1.11.1': {}
 
   '@stitches/core@1.2.8': {}
@@ -9110,16 +9085,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@vitejs/plugin-vue-jsx@3.1.0(vite@5.4.21(@types/node@24.13.2)(less@4.6.7)(sass-embedded@1.100.0)(sass@1.101.0))(vue@3.5.39(typescript@5.6.3))':
-    dependencies:
-      '@babel/core': 7.29.7
-      '@babel/plugin-transform-typescript': 7.29.7(@babel/core@7.29.7)
-      '@vue/babel-plugin-jsx': 1.5.0(@babel/core@7.29.7)
-      vite: 5.4.21(@types/node@24.13.2)(less@4.6.7)(sass-embedded@1.100.0)(sass@1.101.0)
-      vue: 3.5.39(typescript@5.6.3)
-    transitivePeerDependencies:
-      - supports-color
-
   '@vitejs/plugin-vue@5.2.4(vite@5.4.21(@types/node@20.19.43)(less@4.6.7)(sass-embedded@1.100.0)(sass@1.101.0))(vue@3.5.39(typescript@5.6.3))':
     dependencies:
       vite: 5.4.21(@types/node@20.19.43)(less@4.6.7)(sass-embedded@1.100.0)(sass@1.101.0)
@@ -9129,11 +9094,6 @@ snapshots:
     dependencies:
       vite: 5.4.21(@types/node@24.13.2)(less@4.6.7)(sass-embedded@1.100.0)(sass@1.101.0)
       vue: 3.5.13(typescript@5.3.3)
-
-  '@vitejs/plugin-vue@5.2.4(vite@5.4.21(@types/node@24.13.2)(less@4.6.7)(sass-embedded@1.100.0)(sass@1.101.0))(vue@3.5.39(typescript@5.6.3))':
-    dependencies:
-      vite: 5.4.21(@types/node@24.13.2)(less@4.6.7)(sass-embedded@1.100.0)(sass@1.101.0)
-      vue: 3.5.39(typescript@5.6.3)
 
   '@vitest/coverage-c8@0.22.1(@vitest/ui@1.6.1(vitest@0.22.1))(happy-dom@6.0.4)(jsdom@24.1.3)(less@4.6.7)(sass@1.101.0)':
     dependencies:
@@ -10749,7 +10709,7 @@ snapshots:
 
   core-util-is@1.0.3: {}
 
-  cosmiconfig-typescript-loader@4.4.0(@types/node@20.5.1)(cosmiconfig@8.3.6(typescript@5.6.3))(ts-node@10.9.2(@types/node@20.19.43)(typescript@5.6.3))(typescript@5.6.3):
+  cosmiconfig-typescript-loader@4.4.0(@types/node@20.5.1)(cosmiconfig@8.3.6(typescript@5.6.3))(ts-node@10.9.2(@types/node@20.5.1)(typescript@5.6.3))(typescript@5.6.3):
     dependencies:
       '@types/node': 20.5.1
       cosmiconfig: 8.3.6(typescript@5.6.3)

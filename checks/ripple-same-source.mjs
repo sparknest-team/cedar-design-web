@@ -8,11 +8,11 @@ import { fileURLToPath } from "node:url";
 const workspace = fileURLToPath(new URL("../../", import.meta.url));
 const cedar = resolve(
   workspace,
-  "cedar-design-web/packages/cedar-ui/src/ripple",
+  "cedar-design-web/packages/ui/src/ripple",
 );
 const maple = resolve(
   workspace,
-  "maple-design-mobile/packages/maple-ui/src/ripple",
+  "maple-design-mobile/packages/ui/src/ripple",
 );
 const implementation = async (root) => {
   const source = readFileSync(resolve(root, "index.ts"), "utf8");
@@ -49,7 +49,7 @@ assert.equal(
 );
 for (const [root, compiler, prefix] of [
   [cedar, "node_modules/less/package.json", "c"],
-  [maple, "../maple-cli/node_modules/less/package.json", "mp"],
+  [maple, "../cli/node_modules/less/package.json", "mp"],
 ]) {
   const less = createRequire(resolve(root, "../..", compiler))("./");
   const filename = resolve(root, "style/index.less");

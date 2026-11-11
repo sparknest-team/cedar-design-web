@@ -4,11 +4,11 @@ import { after, before, test } from 'node:test'
 import { fileURLToPath } from 'node:url'
 import { chromium } from 'playwright'
 
-const require = createRequire(new URL('../../packages/cedar-ui/package.json', import.meta.url))
+const require = createRequire(new URL('../../packages/ui/package.json', import.meta.url))
 const { createServer } = await import(new URL('./dist/node/index.js', 'file://' + require.resolve('vite/package.json')).href)
 const { default: vue } = await import(require.resolve('@vitejs/plugin-vue'))
 const { default: jsx } = await import(require.resolve('@vitejs/plugin-vue-jsx'))
-const root = fileURLToPath(new URL('../../packages/cedar-ui/', import.meta.url))
+const root = fileURLToPath(new URL('../../packages/ui/', import.meta.url))
 let server, browser
 const fixture = `<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><div id="app"></div><script type="module">
 import { createApp, h } from 'vue'

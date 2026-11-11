@@ -13,6 +13,6 @@ else
   process.exitCode =
     spawnSync(
       process.execPath,
-      [tool, "--package", "packages/cedar-ui", "--max-kb", "50000"],
+      [tool, "--package", "packages/ui", "--max-kb", "50000"],
       { cwd: root, stdio: "inherit" },
     ).status ?? 1;

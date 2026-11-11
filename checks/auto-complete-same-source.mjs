@@ -5,10 +5,10 @@ import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createRequire } from 'node:module'
 const workspace = fileURLToPath(new URL('../../', import.meta.url))
-const cedar = resolve(workspace, 'cedar-design-web/packages/cedar-ui')
-const maple = resolve(workspace, 'maple-design-mobile/packages/maple-ui')
+const cedar = resolve(workspace, 'cedar-design-web/packages/ui')
+const maple = resolve(workspace, 'maple-design-mobile/packages/ui')
 const files = ["../_hooks/use-option-request.ts","auto-complete.tsx","props.ts","index.ts","style/index.ts","style/index.less","style/token.less","__tests__/auto-complete.test.tsx"]
-const normalize = source => source.replaceAll('@cedar-design/use', '@maple-design/use')
+const normalize = source => source.replaceAll('@cedar-design/use-vue', '@maple-design/use-vue')
     .replaceAll('_utils/empty-value', 'utils/empty-value')
   .replaceAll('_utils/global-config', 'utils/components')
   .replaceAll('_utils/popup-container', 'utils/popup-container')
@@ -22,7 +22,7 @@ for (const file of files) {
   assert.equal(normalizeBoundImports(normalize(c)), normalizeBoundImports(m), file + ' differs')
   assert.doesNotMatch(m, /from ['"][^'"]*(?:@cedar-design|cedar-design|platform)/)
 }
-for (const [root, compiler] of [[cedar, 'node_modules/less/package.json'], [maple, '../maple-cli/node_modules/less/package.json']]) {
+for (const [root, compiler] of [[cedar, 'node_modules/less/package.json'], [maple, '../cli/node_modules/less/package.json']]) {
   const less = createRequire(resolve(root, compiler))('./')
   const filename = resolve(root, 'src/auto-complete/style/index.less')
   const { css } = await less.render(readFileSync(filename, 'utf8'), { filename })

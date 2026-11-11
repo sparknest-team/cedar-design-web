@@ -9,9 +9,9 @@ Cedar 与 Maple 使用相同的命令名称。建议在各自仓库根目录执�
 | `pnpm build` | 先构建 npm 包，再构建文档；包构建失败时不会继续构建文档 |
 | `pnpm dev` | 启动文档开发服务 |
 
-在 `packages/cedar-ui` 内同样支持这三个构建命令，但包构建仅处理当前 UI 包，不预先构建工作区依赖；首次构建优先使用根目录命令。没有额外的构建别名。
+在 `packages/ui` 内同样支持这三个构建命令，但包构建仅处理当前 UI 包，不预先构建工作区依赖；首次构建优先使用根目录命令。没有额外的构建别名。
 
-文档继续使用 VuePress，产物位于 `packages/cedar-ui/dist`。npm 包继续使用 Cedar CLI。命令统一不代表两端共用构建实现。辅助包的专用构建、发布命令保持原有职责。
+文档继续使用 VuePress，产物位于 `packages/ui/dist`。npm 包继续使用 Cedar CLI。命令统一不代表两端共用构建实现。辅助包的专用构建、发布命令保持原有职责。
 
 ## 文档开发与性能
 
@@ -27,7 +27,7 @@ Cedar 与 Maple 使用相同的命令名称。建议在各自仓库根目录执�
 - 生产构建使用 `.temp-build`，与 dev 的 `.temp` 隔离，避免同时运行时互相覆盖页面文件。
 - 非 iframe 交互示例通过 VuePress `ClientOnly` 在浏览器挂载，不在静态生成时执行交互组件；说明正文保持静态输出。这不是组件库通用 SSR 能力的验证。
 - 中英文页面仍完整生成。根目录只收录 README 和 CHANGELOG，不将 AGENTS 工作指令作为网站页面。
-- 针对性回归：`pnpm --filter @cedar-design/ui exec vitest run --config vitest.docs.config.ts`。
+- 针对性回归：`pnpm --filter @cedar-design/ui-vue exec vitest run --config vitest.docs.config.ts`。
 
 上述优化不等于已证明所有内存溢出问题解决；完整文档构建的结果需单独验证。
 

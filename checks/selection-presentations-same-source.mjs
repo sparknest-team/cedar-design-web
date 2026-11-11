@@ -5,8 +5,8 @@ import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createRequire } from 'node:module'
 const workspace = fileURLToPath(new URL('../../', import.meta.url))
-const cedar = resolve(workspace, 'cedar-design-web/packages/cedar-ui/src')
-const maple = resolve(workspace, 'maple-design-mobile/packages/maple-ui/src')
+const cedar = resolve(workspace, 'cedar-design-web/packages/ui/src')
+const maple = resolve(workspace, 'maple-design-mobile/packages/ui/src')
 const files = [
   '_components/field-presentation/with-field-presentation.ts',
   '_components/field-presentation/use-field-search.ts',
@@ -60,9 +60,9 @@ for (const file of files) {
   const m = readFileSync(resolve(maple, file), 'utf8')
   const canonical = file.endsWith('.vue') ? normalizeVueSyntaxSource : file.endsWith('.less') ? normalizeLessSource : normalizeTypeScript
   assert.equal(await canonical(normalizeSelectionEmptyValueImports(toMaple(c), file.endsWith('.vue'))), await canonical(m), file + ' differs: copy Cedar and adjust local imports/prefixes')
-  assert.doesNotMatch(m, /from ['"][^'"]*(?:cedar-design|@cedar-design\/ui|platform)/)
+  assert.doesNotMatch(m, /from ['"][^'"]*(?:cedar-design|@cedar-design\/ui-vue|platform)/)
 }
-for (const [root, compiler] of [[cedar, '../node_modules/less/package.json'], [maple, '../../maple-cli/node_modules/less/package.json']]) {
+for (const [root, compiler] of [[cedar, '../node_modules/less/package.json'], [maple, '../../cli/node_modules/less/package.json']]) {
   const less = createRequire(resolve(root, compiler))('./')
   for (const component of ['select', 'cascader']) {
     const filename = resolve(root, component, 'style/index.less')

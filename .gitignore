@@ -45,6 +45,6 @@ lib
 **/.cache
 
 # Generated LLM documentation
-packages/cedar-ui/docs/.vuepress/public/llms/
-packages/cedar-ui/docs/.vuepress/public/llms.txt
-packages/cedar-ui/docs/.vuepress/public/llms-full.txt
+packages/ui/docs/.vuepress/public/llms/
+packages/ui/docs/.vuepress/public/llms.txt
+packages/ui/docs/.vuepress/public/llms-full.txt

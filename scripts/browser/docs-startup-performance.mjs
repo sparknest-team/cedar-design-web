@@ -10,7 +10,7 @@ import { verifySourceUpdates } from './docs-source-update-smoke.mjs'
 import { verifySchedulerExamples } from './docs-scheduler-smoke.mjs'
 
 const root = fileURLToPath(new URL('../../', import.meta.url))
-const ui = resolve(root, 'packages/cedar-ui')
+const ui = resolve(root, 'packages/ui')
 const requireUi = createRequire(join(ui, 'package.json'))
 const { loadUserConfig, transformUserConfigToPlugin, watchPageFiles, watchUserConfigFile } = await import(requireUi.resolve('@vuepress/cli'))
 const core = await import(requireUi.resolve('@vuepress/core'))

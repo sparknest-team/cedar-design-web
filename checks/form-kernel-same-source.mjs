@@ -5,8 +5,8 @@ import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const workspace = fileURLToPath(new URL('../../', import.meta.url))
-const cedar = resolve(workspace, 'cedar-design-web/packages/cedar-ui/src/form')
-const maple = resolve(workspace, 'maple-design-mobile/packages/maple-ui/src/form')
+const cedar = resolve(workspace, 'cedar-design-web/packages/ui/src/form')
+const maple = resolve(workspace, 'maple-design-mobile/packages/ui/src/form')
 const read = (root, file) => readFileSync(resolve(root, file), 'utf8')
 const normalize = (source) => source.replace(/["';,]/g, '').replace(/\s+/g, '')
 

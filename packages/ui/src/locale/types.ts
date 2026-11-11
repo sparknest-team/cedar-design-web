@@ -1,0 +1,322 @@
+export interface CedarCalendarLang {
+  formatYear: string
+  formatMonth: string
+  today: string
+  view: {
+    month: string
+    year: string
+    week: string
+    day: string
+  }
+  month: {
+    long: {
+      January: string
+      February: string
+      March: string
+      April: string
+      May: string
+      June: string
+      July: string
+      August: string
+      September: string
+      October: string
+      November: string
+      December: string
+    }
+    short: {
+      January: string
+      February: string
+      March: string
+      April: string
+      May: string
+      June: string
+      July: string
+      August: string
+      September: string
+      October: string
+      November: string
+      December: string
+    }
+  }
+  week: {
+    long: {
+      self: string
+      monday: string
+      tuesday: string
+      wednesday: string
+      thursday: string
+      friday: string
+      saturday: string
+      sunday: string
+    }
+    short: {
+      self: string
+      monday: string
+      tuesday: string
+      wednesday: string
+      thursday: string
+      friday: string
+      saturday: string
+      sunday: string
+    }
+  }
+}
+
+export interface ValidateMessage {
+  required: string
+  type: {
+    string: string
+    number: string
+    boolean: string
+    array: string
+    object: string
+    url: string
+    email: string
+    ip: string
+  }
+  number: {
+    min: string
+    max: string
+    equal: string
+    range: string
+    positive: string
+    negative: string
+  }
+  array: {
+    length: string
+    minLength: string
+    maxLength: string
+    includes: string
+    deepEqual: string
+    empty: string
+  }
+  string: {
+    minLength: string
+    maxLength: string
+    length: string
+    match: string
+    uppercase: string
+    lowercase: string
+  }
+  object: {
+    deepEqual: string
+    hasKeys: string
+    empty: string
+  }
+  boolean: {
+    true: string
+    false: string
+  }
+}
+
+export interface CedarLang {
+  layout: { expandSider: string; collapseSider: string }
+  resizeBox: { left: string; right: string; top: string; bottom: string; valueText: string }
+  loading: { text: string }
+  split: { resizeLabel: string }
+  splitButton?: { moreActions: string }
+  navMenu?: { more: string }
+  breadcrumb?: { label: string; ellipsis: string }
+  tabs?: { close: string; add: string; previous: string; next: string }
+  peopleSelect?: {call:string;chat:string}
+  fieldPresentation?: { rangeStart?: string; rangeEnd?: string; clickEdit?: string; doubleClickEdit?: string; edit: string; close: string; search: string; selected: string; limit: string; selectionCount: string; selectionRemove: string; selectionBack: string; selectionEmpty: string }
+
+  search: { search: string; cancel: string; history: string }
+  locale: string
+  common: {
+    close: string
+    back?: string
+    placeholderSelect: string
+    placeholderInput: string
+    placeholderStart: string
+    placeholderEnd: string
+    clear: string
+    increase: string
+    decrease: string
+    showPassword: string
+    hidePassword: string
+    dateFormat: {
+      datetime: string
+    }
+  }
+  map: {
+    initError?: string
+    retry?: string
+    searchPlaceholder: string
+    title: string
+    noData: string
+    dragAndSelectTips: string
+  }
+  filterForm: {
+    expandMore: string
+    collapseMore: string
+  }
+  empty: {
+    description: string
+  }
+  infiniteScroll: {
+    loading: string
+    error: string
+    finished: string
+  }
+  calendar: CedarCalendarLang
+  drawer: {
+    confirmButtonText: string
+    cancelText: string
+  }
+  popconfirm: {
+    confirmButtonText: string
+    cancelText: string
+  }
+  dialog: {
+    confirmButtonText: string
+    cancelButtonText: string
+  }
+  pagination: {
+    navigation?: string
+    previous?: string
+    next?: string
+    goto: string
+    page: string
+    countPerPage: string
+    total: string
+  }
+  table: {
+    expandRow?: string
+    collapseRow?: string
+    resizeColumn?: string
+    selectRow?: string
+    selectionColumn?: string
+    confirmButtonText: string
+    resetText: string
+    customColumnsConfig: string
+    selectAll: string
+    selected: string
+    placeholderInputKeyword: string
+    clear: string
+    columnManager: {
+      freezeToLeft: string
+      freezeToRight: string
+      unfreeze: string
+      deleteItem: string
+      renameColumn: string
+      insertLeft: string
+      insertRight: string
+      insertColumn: string
+      freezeColumn: string
+      unfreezeColumn: string
+      editColumn: string
+      deleteColumn: string
+      noInsertableColumns: string
+      groupTitle: string
+      groupTitlePlaceholder: string
+      groupTitleHint: string
+      columnTitle: string
+      columnTitlePlaceholder: string
+    }
+  }
+  carousel: {
+    label: string
+    previous: string
+    next: string
+    slide: string
+    goto: string
+  }
+  upload: {
+    replace: string;
+    duration: string;
+    download: string
+    close: string
+    start: string
+    cancel: string
+    delete: string
+    retry: string
+    buttonText: string
+    preview: string
+    drag: string
+    dragHover: string
+    error: string
+    // new
+    click: string
+  }
+  datePicker: {
+    previousMonth: string
+    nextMonth: string
+    previousYear: string
+    nextYear: string
+    previousPeriod: string
+    nextPeriod: string
+    view: CedarCalendarLang['view']
+    month: CedarCalendarLang['month']
+    week: CedarCalendarLang['week']
+    placeholder: {
+      date: string
+      week: string
+      month: string
+      year: string
+      quarter: string
+      time: string
+    }
+    rangePlaceholder: {
+      date: [string, string]
+      week: [string, string]
+      month: [string, string]
+      year: [string, string]
+      quarter: [string, string]
+      time: [string, string]
+    }
+    selectTime: string
+    today: string
+    now: string
+    confirmButtonText: string
+    startTime: string
+    endTime: string
+    rangeSeparator: string
+    nextDay: string
+  }
+  image: {
+    preview?: string
+    loading: string
+  }
+  imagePreview: {
+    prev?: string
+    next?: string
+    download?: string
+    close?: string
+    fullScreen: string
+    rotateRight: string
+    rotateLeft: string
+    zoomIn: string
+    zoomOut: string
+    originalSize: string
+  }
+  typography: {
+    copied: string
+    copy: string
+    expand: string
+    collapse: string
+    edit: string
+  }
+
+  form?: {
+    validateMessages: ValidateMessage
+  }
+  transfer: { clear: string; actions: string }
+  colorPicker: {
+    trigger: string
+    hue: string
+    opacity: string
+    palette: string
+    saturation: string
+    brightness: string
+    hex: string
+    red: string
+    green: string
+    blue: string
+    history: string
+    preset: string
+    empty: string
+  }
+}
+
+export type CedarI18nMessages = Record<string, CedarLang>

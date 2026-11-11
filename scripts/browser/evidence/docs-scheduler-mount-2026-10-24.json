@@ -3046,13 +3046,13 @@
     }
   ],
   "sourceSha256": {
-    "packages/cedar-ui/src/ripple/index.ts": "43b659fccc067b441887231acb707763e32520a25a73e6f16afc787b96c4b396",
-    "packages/cedar-ui/src/scheduler/Scheduler.vue": "d5cb796f892b10d1caa94b1fd9068abd7c9e13522c4d6f7ba88e894f3d3286a3",
-    "packages/cedar-ui/src/scheduler/components/SchedulerMonthView.vue": "61c1229cc8ea332a11f5a995ada8bef5fcc57dc418ff6232fca668135a8cb49c",
-    "packages/cedar-ui/docs/.vuepress/client.ts": "b7bcd890a3b78197d808e06916aae4066708549ad4d79263373d2f096ea6611f",
-    "packages/cedar-ui/docs/.vuepress/theme-client.ts": "a3e877572d80da121176dca249cb106c47b15343f94e3aa1cb93ca7f432d8f24",
-    "packages/cedar-ui/docs/.vuepress/style-imports.ts": "cb222190ac5fe2d9081a6e37dfe74368f72c364c0f3da8b0bd2bfdcb503e5030",
-    "packages/cedar-ui/docs/.vuepress/config.ts": "11224993f9e9a89b485b14fca49fd415454421c51e7348dc122eca94a766f1a8",
+    "packages/ui/src/ripple/index.ts": "43b659fccc067b441887231acb707763e32520a25a73e6f16afc787b96c4b396",
+    "packages/ui/src/scheduler/Scheduler.vue": "d5cb796f892b10d1caa94b1fd9068abd7c9e13522c4d6f7ba88e894f3d3286a3",
+    "packages/ui/src/scheduler/components/SchedulerMonthView.vue": "61c1229cc8ea332a11f5a995ada8bef5fcc57dc418ff6232fca668135a8cb49c",
+    "packages/ui/docs/.vuepress/client.ts": "b7bcd890a3b78197d808e06916aae4066708549ad4d79263373d2f096ea6611f",
+    "packages/ui/docs/.vuepress/theme-client.ts": "a3e877572d80da121176dca249cb106c47b15343f94e3aa1cb93ca7f432d8f24",
+    "packages/ui/docs/.vuepress/style-imports.ts": "cb222190ac5fe2d9081a6e37dfe74368f72c364c0f3da8b0bd2bfdcb503e5030",
+    "packages/ui/docs/.vuepress/config.ts": "11224993f9e9a89b485b14fca49fd415454421c51e7348dc122eca94a766f1a8",
     "scripts/browser/docs-startup-performance.mjs": "d4dc467161082c627b742fce02eefd5cbc6ed77697f0600cbb2f533defbca1f7",
     "scripts/browser/docs-cold-series.mjs": "8ae9b412868308851f67edabaf496e22e1e7be046b3468d4a94a341819819890",
     "scripts/browser/docs-scheduler-smoke.mjs": "790e46b5db9523612be367c70c0162c07bec455776a485c141917af26931b771"

@@ -10,14 +10,14 @@ const { chromium } = createRequire(base + "/cedar-design-web/package.json")(
   const report = {};
   const browser = await chromium.launch({ headless: true });
   for (const [lib, pkg, prefix, attr] of [
-    ["cedar-design-web", "cedar-ui", "c", "cedar-theme"],
-    ["maple-design-mobile", "maple-ui", "mp", "maple-theme"],
+    ["cedar-design-web", "ui", "c", "cedar-theme"],
+    ["maple-design-mobile", "ui", "mp", "maple-theme"],
   ]) {
     const src = path.join(base, lib, "packages", pkg, "src");
     const localLess = createRequire(
       path.join(
         src,
-        prefix === "mp" ? "../../maple-cli/package.json" : "../package.json",
+        prefix === "mp" ? "../../cli/package.json" : "../package.json",
       ),
     )("less");
     const inputs = [

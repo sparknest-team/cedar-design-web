@@ -1,0 +1,35 @@
+{
+  "name": "@cedar-design/cli-vue",
+  "version": "1.1.0",
+  "description": "Cedar build and development CLI",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "cedar-cli": "./bin/cli.mjs"
+  },
+  "exports": {
+    ".": "./src/index.mjs",
+    "./generate-library-entry": "./src/generateLibraryEntry.mjs"
+  },
+  "files": [
+    "bin",
+    "src"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "@inquirer/prompts": "^6.0.1",
+    "@sparknest/ui-build-vue": "^1.0.0",
+    "conventional-changelog": "^5.1.0",
+    "fs-extra": "^11.2.0",
+    "nanospinner": "^1.2.2",
+    "picocolors": "^1.1.1",
+    "semver": "^7.7.2",
+    "tinyexec": "npm:tinyexec@^0.3.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}

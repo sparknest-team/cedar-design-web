@@ -10,7 +10,7 @@ import { copyProductionSnapshot } from "../../../design-ui/browser/snapshot.mjs"
 import { navigateWithDiagnostics } from "../../../design-ui/browser/navigation.mjs";
 
 const root = fileURLToPath(new URL("../../", import.meta.url));
-const ui = resolve(root, "packages/cedar-ui");
+const ui = resolve(root, "packages/ui");
 const themes = [
   { value: "lightTheme", label: "默认亮色", dark: false },
   { value: "darkTheme", label: "默认暗色", dark: true },

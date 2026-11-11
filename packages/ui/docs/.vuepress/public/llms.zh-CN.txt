@@ -1,0 +1,147 @@
+# Cedar Design Web
+
+> Vue 3 component library. Package: @cedar-design/ui-vue. Component prefix: C / c-.
+
+Read the quick start and the relevant component page before generating code. Follow the documented props, events, slots, imports and styles. Do not substitute APIs from another component library.
+
+Documentation language: zh-CN.
+
+- [Full documentation](./llms-full.zh-CN.txt)
+- [Affix](./llms/zh-CN/components/affix.md): /components/affix/
+- [Alert](./llms/zh-CN/components/alert.md): /components/alert/
+- [Anchor](./llms/zh-CN/components/anchor.md): /components/anchor/
+- [AutoComplete 自动补全](./llms/zh-CN/components/auto-complete.md): /components/auto-complete/
+- [Avatar 头像](./llms/zh-CN/components/avatar.md): /components/avatar/
+- [BackTop 回到顶部](./llms/zh-CN/components/back-top.md): /components/back-top/
+- [Badge](./llms/zh-CN/components/badge.md): /components/badge/
+- [Breadcrumb](./llms/zh-CN/components/breadcrumb.md): /components/breadcrumb/
+- [Button](./llms/zh-CN/components/button.md): /components/button/
+- [Calendar](./llms/zh-CN/components/calendar.md): /components/calendar/
+- [Card](./llms/zh-CN/components/card.md): /components/card/
+- [Carousel](./llms/zh-CN/components/carousel.md): /components/carousel/
+- [Cascader](./llms/zh-CN/components/cascader.md): /components/cascader/
+- [Checkbox](./llms/zh-CN/components/checkbox.md): /components/checkbox/
+- [Col](./llms/zh-CN/components/col.md): /components/col/
+- [Collapse](./llms/zh-CN/components/collapse.md): /components/collapse/
+- [ColorPicker](./llms/zh-CN/components/color-picker.md): /components/color-picker/
+- [Color](./llms/zh-CN/components/color.md): /components/color/
+- [ConfigProvider](./llms/zh-CN/components/config-provider.md): /components/config-provider/
+- [CountTo 数字动画](./llms/zh-CN/components/count-to.md): /components/count-to/
+- [Countdown 倒计时](./llms/zh-CN/components/countdown.md): /components/countdown/
+- [DatePicker](./llms/zh-CN/components/date-picker.md): /components/date-picker/
+- [DateRange](./llms/zh-CN/components/date-range.md): /components/date-range/
+- [Date](./llms/zh-CN/components/date.md): /components/date/
+- [Descriptions](./llms/zh-CN/components/descriptions.md): /components/descriptions/
+- [Dialog](./llms/zh-CN/components/dialog.md): /components/dialog/
+- [Divider 分割线](./llms/zh-CN/components/divider.md): /components/divider/
+- [Drawer](./llms/zh-CN/components/drawer.md): /components/drawer/
+- [Ellipsis 文本省略](./llms/zh-CN/components/ellipsis.md): /components/ellipsis/
+- [Empty](./llms/zh-CN/components/empty.md): /components/empty/
+- [FieldDecorator 字段装饰器](./llms/zh-CN/components/field-decorator.md): /components/field-decorator/
+- [FilterForm](./llms/zh-CN/components/filter-form.md): /components/filter-form/
+- [Form](./llms/zh-CN/components/form.md): /components/form/
+- [Grid](./llms/zh-CN/components/grid.md): /components/grid/
+- [Hover 悬停反馈](./llms/zh-CN/components/hover.md): /components/hover/
+- [Icon](./llms/zh-CN/components/icon.md): /components/icon/
+- [Image](./llms/zh-CN/components/image.md): /components/image/
+- [InfiniteScroll](./llms/zh-CN/components/infinite-scroll.md): /components/infinite-scroll/
+- [InputNumber](./llms/zh-CN/components/input-number.md): /components/input-number/
+- [InputTag](./llms/zh-CN/components/input-tag.md): /components/input-tag/
+- [Input](./llms/zh-CN/components/input.md): /components/input/
+- [Layout](./llms/zh-CN/components/layout.md): /components/layout/
+- [Link](./llms/zh-CN/components/link.md): /components/link/
+- [List](./llms/zh-CN/components/list.md): /components/list/
+- [Loading](./llms/zh-CN/components/loading.md): /components/loading/
+- [Map](./llms/zh-CN/components/map.md): /components/map/
+- [Mention](./llms/zh-CN/components/mention.md): /components/mention/
+- [Menu 菜单](./llms/zh-CN/components/menu.md): /components/menu/
+- [Message 全局提示](./llms/zh-CN/components/message.md): /components/message/
+- [NavMenu 导航菜单](./llms/zh-CN/components/nav-menu.md): /components/nav-menu/
+- [Notification 通知提醒框](./llms/zh-CN/components/notification.md): /components/notification/
+- [OverflowList](./llms/zh-CN/components/overflow-list.md): /components/overflow-list/
+- [Overlay 背景层](./llms/zh-CN/components/overlay.md): /components/overlay/
+- [PageHeader 页头](./llms/zh-CN/components/page-header.md): /components/page-header/
+- [Pagination](./llms/zh-CN/components/pagination.md): /components/pagination/
+- [色板 Palette](./llms/zh-CN/components/palette.md): /components/palette/
+- [Paper 基础表面](./llms/zh-CN/components/paper.md): /components/paper/
+- [PeopleSelect 人员选择](./llms/zh-CN/components/people-select.md): /components/people-select/
+- [Popconfirm](./llms/zh-CN/components/popconfirm.md): /components/popconfirm/
+- [Popover 气泡卡片](./llms/zh-CN/components/popover.md): /components/popover/
+- [ProgressGroup 分段进度条](./llms/zh-CN/components/progress-group.md): /components/progress-group/
+- [Progress 进度条](./llms/zh-CN/components/progress.md): /components/progress/
+- [Radio](./llms/zh-CN/components/radio.md): /components/radio/
+- [Rate](./llms/zh-CN/components/rate.md): /components/rate/
+- [ResizeBox](./llms/zh-CN/components/resize-box.md): /components/resize-box/
+- [Result](./llms/zh-CN/components/result.md): /components/result/
+- [Ripple 水波指令](./llms/zh-CN/components/ripple.md): /components/ripple/
+- [Row](./llms/zh-CN/components/row.md): /components/row/
+- [Scheduler 日程调度](./llms/zh-CN/components/scheduler.md): /components/scheduler/
+- [Scrollbar](./llms/zh-CN/components/scrollbar.md): /components/scrollbar/
+- [Search](./llms/zh-CN/components/search.md): /components/search/
+- [Segmented 分段控制器](./llms/zh-CN/components/segmented.md): /components/segmented/
+- [Select](./llms/zh-CN/components/select.md): /components/select/
+- [Skeleton](./llms/zh-CN/components/skeleton.md): /components/skeleton/
+- [Slider 滑块](./llms/zh-CN/components/slider.md): /components/slider/
+- [Space](./llms/zh-CN/components/space.md): /components/space/
+- [SplitButton 分裂按钮](./llms/zh-CN/components/split-button.md): /components/split-button/
+- [Split](./llms/zh-CN/components/split.md): /components/split/
+- [Statistic 统计数值](./llms/zh-CN/components/statistic.md): /components/statistic/
+- [Steps](./llms/zh-CN/components/steps.md): /components/steps/
+- [原子化 CSS](./llms/zh-CN/components/style/atomic-css.md): /components/style/atomic-css/
+- [常用写法](./llms/zh-CN/components/style/atomic-usage.md): /components/style/atomic-usage/
+- [颜色 Color](./llms/zh-CN/components/style/color.md): /components/style/color/
+- [海拔 Elevation](./llms/zh-CN/components/style/elevation.md): /components/style/elevation/
+- [字体排版 Typography](./llms/zh-CN/components/style/typography.md): /components/style/typography/
+- [Utilities 工具类总览](./llms/zh-CN/components/style/utilities.md): /components/style/utilities/
+- [Switch](./llms/zh-CN/components/switch.md): /components/switch/
+- [TableColumnManager 表格列管理](./llms/zh-CN/components/table-column-manager.md): /components/table-column-manager/
+- [Table](./llms/zh-CN/components/table.md): /components/table/
+- [Tabs 标签页](./llms/zh-CN/components/tabs.md): /components/tabs/
+- [Tag](./llms/zh-CN/components/tag.md): /components/tag/
+- [Textarea](./llms/zh-CN/components/textarea.md): /components/textarea/
+- [ThemeProvider](./llms/zh-CN/components/theme-provider.md): /components/theme-provider/
+- [TimePicker](./llms/zh-CN/components/time-picker.md): /components/time-picker/
+- [TimeRange](./llms/zh-CN/components/time-range.md): /components/time-range/
+- [Time](./llms/zh-CN/components/time.md): /components/time/
+- [Timeline](./llms/zh-CN/components/timeline.md): /components/timeline/
+- [Tooltip 文字气泡](./llms/zh-CN/components/tooltip.md): /components/tooltip/
+- [Transfer](./llms/zh-CN/components/transfer.md): /components/transfer/
+- [TreeSelect](./llms/zh-CN/components/tree-select.md): /components/tree-select/
+- [Tree](./llms/zh-CN/components/tree.md): /components/tree/
+- [Trigger](./llms/zh-CN/components/trigger.md): /components/trigger/
+- [排版 Typography](./llms/zh-CN/components/typography.md): /components/typography/
+- [Upload 上传](./llms/zh-CN/components/upload.md): /components/upload/
+- [VerificationCode 验证码](./llms/zh-CN/components/verification-code.md): /components/verification-code/
+- [Watermark](./llms/zh-CN/components/watermark.md): /components/watermark/
+- [task-calendar](./llms/zh-CN/examples/task-calendar.md): /examples/task-calendar/
+- [Cedar / Maple 跨端代码复用调研](./llms/zh-CN/guide/component-reuse.md): /guide/component-reuse/
+- [受控、非受控与清空值：从操作结果理解](./llms/zh-CN/guide/controlled-uncontrolled.md): /guide/controlled-uncontrolled/
+- [Cedar 组件 CSS 变量参考](./llms/zh-CN/guide/design-token-reference.md): /guide/design-token-reference/
+- [Design Token 与 CSS 变量分层](./llms/zh-CN/guide/design-tokens.md): /guide/design-tokens/
+- [空值识别、清空输出与阅读空文案](./llms/zh-CN/guide/empty-values.md): /guide/empty-values/
+- [i18n](./llms/zh-CN/guide/i18n.md): /guide/i18n/
+- [LLM 文档](./llms/zh-CN/guide/llms.md): /guide/llms/
+- [questions](./llms/zh-CN/guide/questions.md): /guide/questions/
+- [快速开始](./llms/zh-CN/guide/quickstart.md): /guide/quickstart/
+- [Roadmap](./llms/zh-CN/guide/roadmap.md): /guide/roadmap/
+- [主题定制](./llms/zh-CN/guide/theme.md): /guide/theme/
+- [最佳实践](./llms/zh-CN/practices.md): /practices/
+- [项目卡片页](./llms/zh-CN/practices/card.md): /practices/card/
+- [团队工作台](./llms/zh-CN/practices/dashboard.md): /practices/dashboard/
+- [详情信息组织](./llms/zh-CN/practices/description.md): /practices/description/
+- [业务详情页](./llms/zh-CN/practices/detail.md): /practices/detail/
+- [分步表单页](./llms/zh-CN/practices/form.md): /practices/form/
+- [查询列表页](./llms/zh-CN/practices/list.md): /practices/list/
+- [结果与异常页](./llms/zh-CN/practices/result.md): /practices/result/
+- [Utility 工具类规范（Cedar / Maple 共用）](./llms/zh-CN/practices/utility-spec.md): /practices/utility-spec/
+- [showcase](./llms/zh-CN/showcase.md): /showcase/
+- [异步数据选择](./llms/zh-CN/showcase/async-selection.md): /showcase/async-selection/
+- [逐组件对照](./llms/zh-CN/showcase/components.md): /showcase/components/
+- [桌面与移动](./llms/zh-CN/showcase/cross-platform.md): /showcase/cross-platform/
+- [数据工作台](./llms/zh-CN/showcase/data-workbench.md): /showcase/data-workbench/
+- [一致的表单体验](./llms/zh-CN/showcase/forms.md): /showcase/forms/
+- [加载与等待](./llms/zh-CN/showcase/loading.md): /showcase/loading/
+- [资源排期](./llms/zh-CN/showcase/scheduling.md): /showcase/scheduling/
+- [核心特点](./llms/zh-CN/showcase/strengths.md): /showcase/strengths/
+- [主题与品牌](./llms/zh-CN/showcase/themes.md): /showcase/themes/
+- [主题定制](./llms/zh-CN/themes.md): /themes/

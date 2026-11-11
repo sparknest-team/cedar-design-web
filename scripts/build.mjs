@@ -21,19 +21,19 @@ export async function runTask(taskName, task) {
   }
 }
 
-export const buildShared = createTask(resolve(CWD, './packages/cedar-shared'))
+export const buildShared = createTask(resolve(CWD, './packages/shared'))
 
-export const buildPresetUnocss = createTask(resolve(CWD, './packages/cedar-preset-unocss'))
+export const buildPresetUnocss = createTask(resolve(CWD, './packages/preset-unocss'))
 
-export const buildPresetTailwindcss = createTask(resolve(CWD, './packages/cedar-preset-tailwindcss'))
+export const buildPresetTailwindcss = createTask(resolve(CWD, './packages/preset-tailwindcss'))
 
-export const buildResolver = createTask(resolve(CWD, './packages/cedar-resolver'))
+export const buildResolver = createTask(resolve(CWD, './packages/resolver'))
 
-export const buildUse = createTask(resolve(CWD, './packages/cedar-use'))
+export const buildUse = createTask(resolve(CWD, './packages/use'))
 
-export const buildIcons = createTask(resolve(CWD, './packages/cedar-icons-vue'))
+export const buildIcons = createTask(resolve(CWD, './packages/icons'))
 
-export const buildUI = createTask(resolve(CWD, './packages/cedar-ui'), 'build:lib')
+export const buildUI = createTask(resolve(CWD, './packages/ui'), 'build:lib')
 
 export async function runTaskQueue() {
   const start = performance.now()

@@ -1,0 +1,290 @@
+import {
+  Comment,
+  createApp,
+  defineComponent,
+  Fragment,
+  h,
+  onActivated,
+  onDeactivated,
+  ref,
+  type App,
+  type Component,
+  type ComponentPublicInstance,
+  type ExtractPropTypes,
+  type Plugin,
+  type PropType,
+  type Ref,
+  type VNode,
+} from 'vue'
+import {
+  createNamespaceFn,
+  hasOwn,
+  isArray,
+  isFunction,
+  isPlainObject,
+  isString,
+  normalizeToArray,
+} from '@cedar-design/shared-vue'
+import { useEventListener } from '@cedar-design/use-vue'
+import type { ZodSafeParseResult, ZodType } from 'zod'
+
+export type ListenerProp<F> = F | F[]
+
+export interface MountInstance {
+  instance: ComponentPublicInstance
+  unmount: () => void
+}
+
+export type ExtractPublicPropTypes<P> = Partial<ExtractPropTypes<P>>
+
+export function pickProps<T, U extends keyof T>(props: T, propsKey: U): T[U]
+export function pickProps<T, U extends keyof T>(props: T, propsKey: U[]): Pick<T, U>
+export function pickProps(props: any, propsKey: any): any {
+  return isArray(propsKey)
+    ? propsKey.reduce((pickedProps: any, key) => {
+        pickedProps[key] = props[key]
+        return pickedProps
+      }, {})
+    : props[propsKey]
+}
+
+export type ComponentWithInstall<T> = T &
+  Plugin & {
+    setPropsDefaults: (defaults: Record<string, any>) => void
+  }
+
+export interface WithInstallOptions<InstallOptions = unknown> {
+  components?: Component[]
+  resolveName?: (component: Component, options?: InstallOptions) => string | undefined
+  setup?: (app: App, options?: InstallOptions) => void
+}
+
+export function withInstall<T extends Component, InstallOptions = unknown>(
+  component: T,
+  target?: undefined,
+  options?: WithInstallOptions<InstallOptions>,
+): ComponentWithInstall<T>
+export function withInstall<T, InstallOptions = unknown>(
+  component: Component,
+  target: T,
+  options?: WithInstallOptions<InstallOptions>,
+): ComponentWithInstall<T>
+export function withInstall<T = Component, InstallOptions = unknown>(
+  component: Component,
+  target?: T,
+  options: WithInstallOptions<InstallOptions> = {},
+): ComponentWithInstall<T> {
+  const componentWithInstall = target ?? component
+  const components = options.components ?? [component]
+
+  withPropsDefaultsSetter(componentWithInstall, (component as any).props ?? {})
+  for (const item of components) {
+    if (item !== componentWithInstall) {
+      withPropsDefaultsSetter(item, (item as any).props ?? {})
+    }
+  }
+
+  ;(componentWithInstall as ComponentWithInstall<T>).install = function (app: App, installOptions?: InstallOptions) {
+    for (const item of components) {
+      const name = options.resolveName?.(item, installOptions) ?? item.name
+      if (name) {
+        app.component(name, item)
+      }
+    }
+    options.setup?.(app, installOptions)
+  }
+
+  return componentWithInstall as ComponentWithInstall<T>
+}
+
+export function withPropsDefaultsSetter<T>(
+  target: T,
+  props: Record<string, any>,
+): T & {
+  setPropsDefaults: (defaults: Record<string, any>) => void
+} {
+  ;(target as any).setPropsDefaults = function (defaults: Record<string, any>) {
+    Object.entries(defaults).forEach(([key, value]) => {
+      const prop = props[key]
+
+      if (prop == null) {
+        return
+      }
+
+      const type = isPlainObject(prop) ? prop.type : prop
+      const types = isArray(type) ? type : [type]
+      const defaultValue =
+        types.includes(Function) && typeof value === 'function' && type !== Function
+          ? () => value
+          : types.includes(Object) && (value === null || isPlainObject(value))
+          ? () => (value === null ? null : { ...value })
+          : types.includes(Array) && (value === null || isArray(value))
+            ? () => (value === null ? null : [...value])
+            : value
+
+      if (isPlainObject(prop)) {
+        // e.g. { type: String }
+        props[key] = {
+          ...prop,
+          default: defaultValue,
+        }
+        return
+      }
+
+      props[key] = {
+        type: prop,
+        default: defaultValue,
+      }
+    })
+  }
+
+  return target as T & { setPropsDefaults: (defaults: Record<string, any>) => void }
+}
+
+export function mount(component: Component): MountInstance {
+  const app = createApp(component)
+  const host = document.createElement('div')
+  document.body.appendChild(host)
+
+  return {
+    instance: app.mount(host),
+    unmount() {
+      app.unmount()
+      if (host.parentNode) {
+        document.body.removeChild(host)
+      }
+    },
+  }
+}
+
+export function mountInstance(
+  component: any,
+  props: Record<string, any> = {},
+  eventListener: Record<string, any> = {},
+): {
+  unmountInstance: () => void
+} {
+  const Host = {
+    setup() {
+      return () =>
+        h(component, {
+          ...props,
+          ...eventListener,
+        })
+    },
+  }
+
+  const { unmount } = mount(Host)
+  return { unmountInstance: unmount }
+}
+
+export function isZodRule(rule: unknown): rule is ZodType {
+  return isPlainObject(rule) && isFunction(rule.safeParseAsync)
+}
+
+export function isZodResult(result: unknown): result is ZodSafeParseResult<any> {
+  return isPlainObject(result) && hasOwn(result, 'success')
+}
+
+export function useValidation() {
+  const errorMessage: Ref<string> = ref('')
+
+  const validate = async (ruleOrRules: any | any[], value: any, apis?: any): Promise<boolean> => {
+    const rules = normalizeToArray(ruleOrRules).filter((rule) => isZodRule(rule) || isFunction(rule))
+
+    const results = await Promise.all(
+      rules.map((rule) => (isZodRule(rule) ? rule.safeParseAsync(value) : rule(value, apis))),
+    )
+
+    resetValidation()
+
+    return !results.some((result) => {
+      if (isZodResult(result)) {
+        if (result.success === false) {
+          errorMessage.value = result.error.issues[0].message
+          return true
+        }
+      } else if (result !== true) {
+        errorMessage.value = String(result)
+        return true
+      }
+
+      return false
+    })
+  }
+
+  const resetValidation = () => {
+    errorMessage.value = ''
+  }
+
+  const validateWithTrigger = async <T>(validateTrigger: T[], trigger: T, rules: any, value: any, apis?: any) => {
+    if (validateTrigger.includes(trigger)) {
+      ;(await validate(rules, value, apis)) && (errorMessage.value = '')
+    }
+  }
+
+  return {
+    errorMessage,
+    validate,
+    resetValidation,
+    validateWithTrigger,
+  }
+}
+
+export function useRouteListener(listener: () => void) {
+  useEventListener(() => window, 'hashchange', listener)
+  useEventListener(() => window, 'popstate', listener)
+}
+
+export function useTeleport() {
+  const disabled: Ref<boolean> = ref(false)
+
+  onActivated(() => {
+    disabled.value = false
+  })
+
+  onDeactivated(() => {
+    disabled.value = true
+  })
+
+  return {
+    disabled,
+  }
+}
+
+export const createNamespace = createNamespaceFn('mp')
+
+export function defineListenerProp<F>(fallback?: any) {
+  return {
+    type: [Function, Array] as PropType<F | F[]>,
+    default: fallback,
+  }
+}
+
+export function formatElevation(elevation: number | boolean | string, defaultLevel?: number) {
+  if (elevation === false) {
+    return null
+  }
+
+  if (elevation === true && defaultLevel) {
+    elevation = defaultLevel
+  }
+
+  return `c-elevation--${elevation}`
+}
+
+export const MaybeVNode = defineComponent({
+  props: {
+    is: {
+      type: [String, Object] as PropType<string | VNode>,
+    },
+
+    tag: {
+      type: String,
+      default: 'span',
+    },
+  },
+  setup(props) {
+    return () => (isString(props.is) ? h(props.tag, props.is) : props.is)
+  },
+})

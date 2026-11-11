@@ -5,10 +5,10 @@ import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const workspace = fileURLToPath(new URL("../../", import.meta.url));
-const cedar = resolve(workspace, "cedar-design-web/packages/cedar-ui/src/rate");
+const cedar = resolve(workspace, "cedar-design-web/packages/ui/src/rate");
 const maple = resolve(
   workspace,
-  "maple-design-mobile/packages/maple-ui/src/rate",
+  "maple-design-mobile/packages/ui/src/rate",
 );
 
 for (const file of ["props.ts", "__tests__/same-source.spec.ts"]) {

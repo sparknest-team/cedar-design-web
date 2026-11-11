@@ -9,8 +9,8 @@ const { transformSync } = createRequire(new URL('../../maple-design-mobile/node_
 const canonical = source => normalizeCopiedTypeScript(normalizeCopiedSource(source), transformSync, 'ts');
 
 const workspace = fileURLToPath(new URL('../../', import.meta.url));
-const cedar = resolve(workspace, 'cedar-design-web/packages/cedar-ui/src');
-const maple = resolve(workspace, 'maple-design-mobile/packages/maple-ui/src');
+const cedar = resolve(workspace, 'cedar-design-web/packages/ui/src');
+const maple = resolve(workspace, 'maple-design-mobile/packages/ui/src');
 const read = (root, file) => readFileSync(resolve(root, file), 'utf8');
 const normalize = source => source
   .replaceAll('`c${Capitalize<string>}`', '`mp${Capitalize<string>}`')

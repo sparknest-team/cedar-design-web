@@ -1,0 +1,172 @@
+<template>
+  <c-space direction="column" align="stretch" wrap>
+    <c-form-item layout="vertical" hide-label>
+      <c-select
+        v-model="kind"
+        :options="[
+          { value: 'device', label: '设备接口' },
+          { value: 'person', label: '人员接口' },
+        ]"
+      />
+    </c-form-item>
+    <c-button @click="failNextSearch = true">下次搜索模拟失败</c-button>
+    <c-button @click="retryHydration">模拟回显失败并重新加载</c-button>
+    <c-button @click="useNextPage">切换可见资源页</c-button>
+  </c-space>
+  <p>
+    当前仅提供 {{ visibleResources.length }} 条可见资源。已有日程关联第 12
+    条，不在本页，仍通过 ID 接口回显名称。进入编辑器，搜索“12”或滚动加载更多。
+  </p>
+  <p role="status">{{ feedback }}</p>
+  <c-scheduler
+    :key="`${kind}-${revision}`"
+    v-model="events"
+    :resources="visibleResources"
+    :resource-label="kind === 'device' ? '设备' : '人员'"
+    :request-resources="requestResources"
+    :resolve-resources="resolveResources"
+    :before-change="beforeChange"
+    default-mode="agenda"
+    default-date="2026-09-09"
+    @resource-error="resourceError"
+  />
+</template>
+<script setup lang="ts">
+import { computed, onScopeDispose, ref, watch } from "vue";
+import type {
+  SchedulerEvent,
+  SchedulerRequestResources,
+  SchedulerResolveResources,
+  SchedulerBeforeChange,
+  SchedulerResourceErrorContext,
+} from "@cedar-design/ui-vue";
+
+const kind = ref<"device" | "person">("device");
+// 业务接口字段在接入层适配，Scheduler 始终只认识 id / label。
+const devices = Array.from({ length: 24 }, (_, index) => ({
+  deviceId: `device-${index + 1}`,
+  deviceName: `实验设备 ${index + 1}`,
+}));
+const people = Array.from({ length: 24 }, (_, index) => ({
+  userId: `person-${index + 1}`,
+  displayName: `工程师 ${index + 1}`,
+}));
+const directory = computed(() =>
+  kind.value === "device"
+    ? devices.map((item) => ({ id: item.deviceId, label: item.deviceName }))
+    : people.map((item) => ({ id: item.userId, label: item.displayName })),
+);
+const page = ref(0);
+const revision = ref(0);
+const visibleResources = computed(() =>
+  directory.value.slice(page.value * 4, page.value * 4 + 4),
+);
+const events = ref<SchedulerEvent[]>([]);
+const feedback = ref("打开详情查看名称回显，或在资源下拉框搜索。");
+const failNextSearch = ref(false);
+const failNextResolve = ref(false);
+const failedOperation = ref<"search" | "resolve">();
+watch(
+  kind,
+  () => {
+    failedOperation.value = undefined;
+    feedback.value = "打开详情查看名称回显，或在资源下拉框搜索。";
+    page.value = 0;
+    events.value = [
+      {
+        id: `${kind.value}-job`,
+        title: "已有排期：关联不在本页的资源",
+        start: "2026-09-09T09:00:00",
+        end: "2026-09-09T10:00:00",
+        resourceIds: [`${kind.value}-12`],
+      },
+    ];
+  },
+  { immediate: true, flush: "sync" },
+);
+
+const lifetime = new AbortController();
+onScopeDispose(() => lifetime.abort());
+// 模拟接口延时；真实接入时直接 fetch(url, { signal })。
+function delay(signal: AbortSignal) {
+  return new Promise<void>((resolve, reject) => {
+    if (signal.aborted) {
+      reject(new Error("Aborted"));
+      return;
+    }
+    const abort = () => {
+      clearTimeout(timer);
+      signal.removeEventListener("abort", abort);
+      reject(new Error("Aborted"));
+    };
+    const timer = setTimeout(() => {
+      signal.removeEventListener("abort", abort);
+      resolve();
+    }, 500);
+    signal.addEventListener("abort", abort, { once: true });
+  });
+}
+const requestResources: SchedulerRequestResources = async ({
+  query,
+  cursor,
+  signal,
+}) => {
+  const data = directory.value;
+  const fail = failNextSearch.value;
+  failNextSearch.value = false;
+  await delay(signal);
+  if (fail) throw new Error("模拟搜索网络错误");
+  const matches = data.filter(
+    (item) => item.label.includes(query) || item.id.includes(query),
+  );
+  const offset = Number(cursor ?? 0);
+  if (failedOperation.value === "search") {
+    failedOperation.value = undefined;
+    feedback.value = "搜索重试成功，可继续选择资源。";
+  }
+  return {
+    items: matches.slice(offset, offset + 4),
+    nextCursor: offset + 4 < matches.length ? String(offset + 4) : undefined,
+  };
+};
+const resolveResources: SchedulerResolveResources = async (ids, { signal }) => {
+  const data = directory.value;
+  const fail = failNextResolve.value;
+  failNextResolve.value = false;
+  await delay(signal);
+  if (fail) throw new Error("模拟回显网络错误");
+  if (failedOperation.value === "resolve") {
+    failedOperation.value = undefined;
+    feedback.value = "资源名称回显成功，关联 ID 保持不变。";
+  }
+  return data.filter((item) => ids.includes(item.id));
+};
+const beforeChange: SchedulerBeforeChange = async ({ event, type }) => {
+  const data = directory.value;
+  await delay(lifetime.signal);
+  // 演示服务端校验；生产环境还应验证权限、版本和全量时段冲突。
+  if (
+    type !== "remove" &&
+    event.resourceIds?.some((id) => !data.some((item) => item.id === id))
+  )
+    throw new Error("资源不存在");
+  feedback.value = "模拟接口保存成功，日程只保存 resourceIds，不保存显示名称。";
+};
+function resourceError(
+  _error: unknown,
+  context: SchedulerResourceErrorContext,
+) {
+  failedOperation.value = context.type;
+  feedback.value =
+    context.type === "resolve"
+      ? "回显失败：ID 仍保留，点击日程内的重试按钮。"
+      : "搜索失败：可在下拉框内重试。";
+}
+function retryHydration() {
+  failNextResolve.value = true;
+  revision.value++;
+}
+function useNextPage() {
+  page.value = (page.value + 1) % 6;
+}
+</script>

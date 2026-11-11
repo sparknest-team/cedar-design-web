@@ -1,11 +1,11 @@
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { checkThemeContract } from "@sparknest/theme-contract/checker";
+import { checkThemeContract } from "@sparknest/theme-contract-vue/checker";
 
 const workspace = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const result = checkThemeContract({
-  cedarSource: resolve(workspace, "cedar-design-web/packages/cedar-ui/src"),
-  mapleSource: resolve(workspace, "maple-design-mobile/packages/maple-ui/src"),
+  cedarSource: resolve(workspace, "cedar-design-web/packages/ui/src"),
+  mapleSource: resolve(workspace, "maple-design-mobile/packages/ui/src"),
 });
 
 console.log(

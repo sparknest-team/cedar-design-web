@@ -2,14 +2,14 @@ import assert from 'node:assert/strict'
 import { writeFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 import { chromium } from 'playwright'
-import { createServer, jsx, vue } from '../../maple-design-mobile/packages/maple-cli/test-utils/browser-vite.mjs'
+import { createServer, jsx, vue } from '../../maple-design-mobile/packages/cli/test-utils/browser-vite.mjs'
 
 const results = {}
 const browser = await chromium.launch({ headless: true })
 try {
   for (const [repo, pkg, prefix, globalAttribute] of [
-    ['cedar-design-web', 'cedar-ui', 'c', 'cedar-theme'],
-    ['maple-design-mobile', 'maple-ui', 'mp', 'maple-theme'],
+    ['cedar-design-web', 'ui', 'c', 'cedar-theme'],
+    ['maple-design-mobile', 'ui', 'mp', 'maple-theme'],
   ]) {
     const root = fileURLToPath(new URL(`../../${repo}/packages/${pkg}/`, import.meta.url))
     const fixture = `<!doctype html><html><body><div id="app"></div><div id="other"></div><script type="module">
