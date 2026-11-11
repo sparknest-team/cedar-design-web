@@ -125,6 +125,8 @@ Cedar uses edit-mode="click" / "dblclick" to open an editor popup near the field
 
 `read-pretty` is an independent boolean alongside `readonly` and `disabled`. It inherits from field to FormItem to Form; explicit `false` overrides the parent. The default is `false`. Reading mode renders no editor.
 
+In FormItem, when `label-attrs.for` matches the Rate `id`, the form label supplies its accessible name. Explicit `aria-label` or `aria-labelledby` takes precedence. Rate is not a native form control, so clicking the label does not automatically focus it.
+
 ## API
 
 ### Empty values and reading placeholders

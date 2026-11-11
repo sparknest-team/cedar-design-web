@@ -1,4 +1,5 @@
 import { useFormErrorDescription } from '../form/error-description'
+import { useFormItemLabel } from '../form/label-context'
 import { computed, defineComponent, h, markRaw, mergeProps, ref, toRaw, watch, withDirectives, type Component } from 'vue'
 import { IconFaceFrownFill } from '@cedar-design/icons-vue/icon-face-frown-fill'
 import { IconFaceMehFill } from '@cedar-design/icons-vue/icon-face-meh-fill'
@@ -33,6 +34,13 @@ export default defineComponent({
   emits: ['change', 'hover-change', 'update:modelValue'],
   setup(props, { emit, slots, expose, attrs }) {
     const { describe: describeError } = useFormErrorDescription()
+    const formLabel = useFormItemLabel()
+    const labelledBy = computed(() => {
+      if (attrs['aria-labelledby'] != null) return attrs['aria-labelledby']
+      const label = formLabel?.value
+      if (props.ariaLabel != null || !label?.target || label.target !== attrs.id || (attrs.role && attrs.role !== 'slider')) return undefined
+      return label.id
+    })
     const root = ref<HTMLElement>()
     const { isRtl } = useDirection(() => root.value)
     expose({
@@ -214,7 +222,7 @@ export default defineComponent({
           },
           onKeydown: keydown,
           onMouseleave: resetHover,
-        }, attrs, { 'aria-describedby': describeError(attrs['aria-describedby']), 'aria-invalid': mergedError.value ? true : attrs['aria-invalid'] }),
+        }, attrs, { 'aria-labelledby': labelledBy.value, 'aria-describedby': describeError(attrs['aria-describedby']), 'aria-invalid': mergedError.value ? true : attrs['aria-invalid'] }),
         Array.from({ length: props.grading ? 5 : count.value }, (_, offset) => {
           const index = offset + 1
           const half = props.allowHalf && index - 0.5 === displayValue.value
