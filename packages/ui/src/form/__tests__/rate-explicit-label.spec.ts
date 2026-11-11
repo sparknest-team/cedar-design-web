@@ -5,6 +5,14 @@ import FormItem from '../FormItem.vue'
 import Rate from '../../rate'
 
 describe('Rate explicit FormItem label', () => {
+  it('does not guess a label target for a mixed field or an overridden role', () => {
+    const untargeted = mount(FormItem, { props: { label: 'Mixed' }, slots: { default: () => [h(Rate, { id: 'rating' }), h('input')] } })
+    const overridden = mount(FormItem, { props: { label: 'Rating', labelAttrs: { for: 'rating' } }, slots: { default: () => h(Rate, { id: 'rating', role: 'presentation' }) } })
+    try {
+      expect(untargeted.get('[role="slider"]').attributes('aria-labelledby')).toBeUndefined()
+      expect(overridden.get('[role="presentation"]').attributes('aria-labelledby')).toBeUndefined()
+    } finally { untargeted.unmount(); overridden.unmount() }
+  })
   it('only associates a matching target and respects explicit names', async () => {
     const id = ref('rating')
     const labelFor = ref('rating')
