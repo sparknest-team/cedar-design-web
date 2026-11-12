@@ -136,7 +136,7 @@ import {
   useModalSurface,
   type ModalSurfaceCloseRequest,
 } from '../_utils/modal-surface';
-import Button from "../button";
+import Button from "../button/base";
 import { useI18n } from '../locale';
 import { dialogProps } from './props';
 import type { DialogAction } from "./types";

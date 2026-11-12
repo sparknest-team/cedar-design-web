@@ -89,6 +89,12 @@ permalink: /components/select/
 
 <demo src="./__demos__/multiple.vue"></demo>
 
+### 单选确认方式
+
+仅弹出编辑模式生效。单选默认点选即提交并关闭，设为 true 时先编辑草稿、再点确认；多选默认保留确认。提交仍执行表单校验和 before-commit，拒绝时不关闭。
+
+<demo src="./__demos__/confirmation.vue"></demo>
+
 ### 同名选项
 
 标签展示允许同名，但每个选项的值必须唯一。删除第二个“设备”只移除 ID 2，不会误删 ID 1；搜索文字与已选值分别管理。
@@ -370,7 +376,7 @@ open-trigger-target="icon" 时，输入区可以编辑或复制，只有右侧�
 
 以上是字段展示层 API；纯面板不因此新增阅读模式。Form 与 FormItem 提供继承配置。empty-value 的现有类型与默认输出仍按该组件原 API 执行。
 
-单选和多选的已选行右侧均显示主色对勾；仅候选高亮时不显示对勾。click/dblclick 编辑面板内的对勾表示当前草稿选择，确认后才提交表单；禁用已选项保持禁用外观。
+单选和多选的已选行右侧均显示主色对勾；仅候选高亮时不显示对勾。确认式编辑面板内的对勾表示当前草稿选择，确认后提交表单；禁用已选项保持禁用外观。
 
 ### 清空值
 
@@ -386,17 +392,26 @@ open-trigger-target="icon" 时，输入区可以编辑或复制，只有右侧�
 
 | 属性 | 说明 | 类型 | 默认值 |
 | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- | ---------------------------- |
+| need-confirm | 仅弹出编辑模式生效。单选默认点选即提交并关闭，设为 true 时先编辑草稿、再点确认；多选默认保留确认。提交仍执行表单校验和 before-commit，拒绝时不关闭。 | `boolean` | 单选 `false`；多选 `true` |
 | `open-trigger-target` | 打开面板的点击区域；field 为整个字段，icon 仅右侧选择按钮。不影响键盘展开及受控 open。 | `'field' \| 'icon'` | `'field'` |
-| `model-value / default-value` | 受控值 / 非受控初始值 | `Value` | `单选 ''，多选 []` |
-| `open / default-open` | 受控展开 / 默认展开 | `boolean` | `undefined / false` |
-| `input-value / default-input-value` | 搜索文本，独立于选中值 | `string` | `undefined / ''` |
+| `model-value` | 受控选中值，支持 v-model | `Value \| null` | `undefined` |
+| `default-value` | 非受控初始选中值，仅初始化时读取 | `Value` | 单选：`''`；多选：`[]` |
+| `open` | 受控展开状态，支持 v-model:open | `boolean` | `undefined` |
+| `default-open` | 非受控初始展开状态，仅初始化时读取 | `boolean` | `false` |
+| `input-value` | 受控搜索文本，独立于选中值，支持 v-model:input-value | `string` | `undefined` |
+| `default-input-value` | 非受控初始搜索文本，独立于选中值，仅初始化时读取 | `string` | `''` |
 | `multiple` | 多选；默认启用搜索 | `boolean` | `false` |
 | `size` | 完整支持 xs、sm、md、lg、xl，未设置时继承分组与表单 | `ComponentSize`<br>`'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `md` |
 | `variant` | filled、outline、standard；未设置时继承 InputGroup | `FormControlVariant`<br>`'standard' \| 'filled' \| 'outline'` | `filled` |
-| `disabled / readonly / error` | 未设置时继承表单；显式 false 可覆盖 | `boolean` | `undefined` |
+| `disabled` | 禁用状态；显式值优先于继承的 Form / Group 状态 | `boolean` | `undefined` |
+| `readonly` | 只读状态；显式值优先于继承的 Form / Group 状态 | `boolean` | `undefined` |
+| `error` | 错误状态；显式值优先于继承的 Form / Group 状态 | `boolean` | `undefined` |
 | `placeholder` | 占位文本 | `string` | `—` |
-| `hint / line` | 浮动提示 / standard 变体下划线 | `boolean` | `true` |
-| `text-color / focus-color / blur-color` | 字段颜色 | `string` | `—` |
+| `hint` | 是否启用浮动提示 | `boolean` | `true` |
+| `line` | 是否显示 standard 变体的下划线 | `boolean` | `true` |
+| `text-color` | 逐实例自定义文字颜色；静态主题优先使用 token | `string` | `—` |
+| `focus-color` | 逐实例自定义聚焦颜色；静态主题优先使用 token | `string` | `—` |
+| `blur-color` | 逐实例自定义未聚焦颜色；静态主题优先使用 token | `string` | `—` |
 | `loading` | 加载时暂停选择、清空、标签移除与确认；保留已有值，搜索和关闭仍可用。 | `boolean` | `false` |
 | `loading-mode` | 加载布局：默认指示器或底部加载线 | `default / line` | `default` |
 | `show-tags` | 多选值以标签展示；false 改用分隔文本 | `boolean` | `true` |
@@ -424,7 +439,8 @@ open-trigger-target="icon" 时，输入区可以编辑或复制，只有右侧�
 | `default-active-first-option` | 打开选项列表时，无有效选中项则默认激活首个可用候选；仅高亮，不更新 modelValue 或触发 change。已有有效选中项优先激活该项 | `boolean` | `true` |
 | `unmount-on-close` | 关闭 Menu 后销毁内容 | `boolean` | `false` |
 | `scrollbar` | Menu / List 滚动条配置 | `boolean 或 ScrollbarProps` | `true` |
-| `show-header-on-empty / show-footer-on-empty` | 空状态仍展示 header / footer | `boolean` | `false` |
+| `show-header-on-empty` | 空状态下仍显示 header | `boolean` | `false` |
+| `show-footer-on-empty` | 空状态下仍显示 footer | `boolean` | `false` |
 | `edit-mode` | 字段展示；未指定时继承 FormItem/Form | `direct / click / dblclick` | `direct` |
 | `before-commit` | 确认前调用 ({ value, previousValue }, done, { signal })；布尔、Promise 或 done 完成，同步 undefined 等待 done。 | `BeforeFieldCommit` | — |
 
@@ -546,7 +562,7 @@ filterable 表示允许输入搜索词。filterOption 只控制本地候选匹�
 <c-select v-model="value" :options="loadOptions" filterable />
 ```
 
-`empty-value` 可显式设为 `null`（或 `() => null`），清空时原样提交 null；省略时保留组件原默认值。界面把 null 显示为空，不会把普通输入的空字符串自动转成 null。支持弹出编辑的字段中，清空先修改草稿，确认后提交，取消则保留原值。
+`empty-value` 可显式设为 `null`（或 `() => null`），清空时原样提交 null；省略时保留组件原默认值。界面把 null 显示为空，不会把普通输入的空字符串自动转成 null。确认式弹出编辑中，清空先修改草稿并在确认后提交；无需确认时清空会直接提交。
 
 守卫统一使用 `(payload, done, context)`：关闭 payload 为 `{ action }`，切换和提交为 `{ value, previousValue }`，Popup 为 `{ reason }`。context 提供 `signal` 和可选原始 `event`。返回 boolean/Promise，或调用 done()/done(false)；同步 void 等待 done，Promise&lt;void&gt; 放行。首次完成生效。等待期间自动管理 loading/disabled，取消后旧结果失效，不暴露内部按钮 refs。
 
@@ -577,9 +593,9 @@ SelectEditMode 在根入口和 select 子入口一致导出，值沿用各端 ed
 | 变量 | 默认值／条件 | 影响的样式 |
 | --- | --- | --- |
 | `--c-select-popup-bg` | `var(--c-sys-color-surface-overlay)` | `background-color` |
-| `--c-select-popup-border-color` | `var(--c-sys-color-border-default)` | `border`, `border-bottom`, `border-top` |
-| `--c-select-popup-border-radius` | `var(--c-sys-radius-md)` | `border-radius` |
-| `--c-select-popup-box-shadow` | `0 4px 10px rgba(0, 0, 0, 0.1)` | `box-shadow` |
+| `--c-select-popup-border-color` | `var(--c-sys-color-border-subtle)` | `border`, `border-bottom`, `border-top` |
+| `--c-select-popup-border-radius` | `var(--c-sys-radius-lg)` | `border-radius` |
+| `--c-select-popup-box-shadow` | `0 8px 24px rgba(0, 0, 0, 0.08)` | `box-shadow` |
 | `--c-select-popup-font-size` | `var(--c-sys-font-size-md)` | `font-size` |
 | `--c-select-popup-group-title-font-size` | `var(--c-sys-font-size-xs)` | `font-size` |
 | `--c-select-popup-group-title-height` | `20px` | `line-height` |
@@ -588,22 +604,25 @@ SelectEditMode 在根入口和 select 子入口一致导出，值沿用各端 ed
 | `--c-select-popup-group-title-text-color` | `var(--c-sys-color-content-secondary)` | `color` |
 | `--c-select-popup-loading-min-height` | `50px` | `min-height` |
 | `--c-select-popup-max-height` | `200px` | `max-height` |
-| `--c-select-popup-option-bg` | `var(--c-sys-color-surface-overlay)` | `background-color` |
-| `--c-select-popup-option-bg-disabled` | `var(--c-sys-color-surface-overlay)` | `background-color` |
-| `--c-select-popup-option-bg-hover` | `var(--c-sys-color-state-hover)` | `background-color` |
-| `--c-select-popup-option-bg-selected` | `var(--c-sys-color-surface-overlay)` | `background-color` |
-| `--c-select-popup-option-check-color` | `var(--c-sys-color-content-primary)` | `color` |
+| `--c-select-popup-option-bg` | `transparent` | `background-color` |
+| `--c-select-popup-option-bg-disabled` | `transparent` | `background-color` |
+| `--c-select-popup-option-bg-hover` | `var(--c-sys-color-state-hover)` | `background`, `background-color` |
+| `--c-select-popup-option-bg-selected` | `transparent` | `background`, `background-color` |
+| `--c-select-popup-option-bg-selected-hover` | `var(--c-select-popup-option-bg-hover)` | `background`, `background-color` |
+| `--c-select-popup-option-border-radius` | `var(--c-sys-radius-lg)` | `border-radius` |
+| `--c-select-popup-option-check-color` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-select-popup-option-check-gap` | `var(--c-sys-space-4)` | `margin-inline-start` |
 | `--c-select-popup-option-check-size` | `var(--c-sys-font-size-md)` | `height`, `width` |
 | `--c-select-popup-option-font-weight-selected` | `var(--c-sys-font-weight-medium)` | `font-weight` |
-| `--c-select-popup-option-height` | `36px` | `line-height` |
+| `--c-select-popup-option-height` | `36px` | `line-height`, `min-height` |
 | `--c-select-popup-option-icon-margin-right` | `var(--c-sys-space-4)` | `margin-inline-end` |
-| `--c-select-popup-option-padding-horizontal` | `var(--c-sys-space-5)` | `padding`, `padding-inline` |
+| `--c-select-popup-option-padding-horizontal` | `var(--c-sys-space-4)` | `padding`, `padding-inline` |
 | `--c-select-popup-option-suffix-icon-margin-left` | `var(--c-sys-space-5)` | `margin-inline-start` |
 | `--c-select-popup-option-text-color` | `var(--c-sys-color-content-primary)` | `color` |
 | `--c-select-popup-option-text-color-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
 | `--c-select-popup-option-text-color-hover` | `var(--c-sys-color-content-primary)` | `color` |
-| `--c-select-popup-option-text-color-selected` | `var(--c-sys-color-content-primary)` | `color` |
+| `--c-select-popup-option-text-color-selected` | `var(--c-sys-color-action-primary)` | `color`, `outline`, `outline-color` |
+| `--c-select-popup-padding-horizontal` | `var(--c-sys-space-3)` | `padding-inline`, `padding-inline-end`, `padding-inline-start` |
 | `--c-select-popup-padding-vertical` | `var(--c-sys-space-2)` | `padding`, `padding-block` |
 
 </div>
@@ -612,7 +631,7 @@ SelectEditMode 在根入口和 select 子入口一致导出，值沿用各端 ed
 
 ```css
 .component-theme {
-  --c-select-popup-border-color: var(--c-sys-color-border-default);
+  --c-select-popup-border-color: var(--c-sys-color-border-subtle);
 }
 ```
 

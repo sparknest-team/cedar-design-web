@@ -7,7 +7,7 @@ permalink: /en/components/color-picker/
 
 Start with the basic example, then compare related settings before moving to controlled, asynchronous or combined use cases.
 
-FormItem errors describe the inline panel or built-in trigger while preserving any existing `aria-describedby`. A custom trigger can bind the default slot’s `describedBy` value to its interactive element’s `aria-describedby`.
+FormItem errors describe the inline panel or built-in trigger while preserving any existing `aria-describedby`. A custom trigger can bind the default slot’s `describedBy` value to its interactive element’s `aria-describedby`. Put the label’s `for` target ID on the interactive element itself. In custom-trigger mode, a ColorPicker `id` belongs to the popup; if supplied, use a different value to avoid duplicate IDs when it opens.
 
 ```vue
 <ColorPicker :hide-trigger="false">

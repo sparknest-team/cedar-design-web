@@ -53,7 +53,7 @@ for (const [name, Field, value, extra] of fields) {
   test(`${name}: owned panel clicks never save; first Escape closes the panel, second cancels editing`, async () => {
     const owner = mount(Field as any, {
       attachTo: document.body,
-      props: { editMode: 'click', modelValue: value, ...extra },
+      props: { ...('needConfirm' in ((Field as any).props ?? {}) ? { needConfirm: true } : {}),  editMode: 'click', modelValue: value, ...extra },
     })
     owners.push(owner)
     await owner.get('[aria-haspopup=dialog]').trigger('click')
@@ -88,7 +88,7 @@ for (const [name, Field, value, extra] of fields) {
 test('Select Enter selects a candidate without saving; the next Enter saves after its panel closes', async () => {
   const owner = mount(Select, {
     attachTo: document.body,
-    props: {
+    props: { needConfirm: true,
       editMode: 'click',
       modelValue: 'old',
       options: [
@@ -140,7 +140,7 @@ test.each([
 ] as const)(
   '%s: Enter in a native option updates only the draft, then Enter in the closed control saves',
   async (_name, Field, value, selector, label, selected) => {
-    const owner = mount(Field as any, { attachTo: document.body, props: { editMode: 'click', modelValue: value } })
+    const owner = mount(Field as any, { attachTo: document.body, props: { ...('needConfirm' in ((Field as any).props ?? {}) ? { needConfirm: true } : {}),  editMode: 'click', modelValue: value } })
     owners.push(owner)
     await owner.get('[aria-haspopup=dialog]').trigger('click')
     await flushPromises()
@@ -167,7 +167,7 @@ test.each([
 test('closing a multiple Select panel with Escape preserves its selected draft for the outer Enter save', async () => {
   const owner = mount(Select, {
     attachTo: document.body,
-    props: {
+    props: { needConfirm: true,
       editMode: 'click',
       multiple: true,
       modelValue: ['old'],

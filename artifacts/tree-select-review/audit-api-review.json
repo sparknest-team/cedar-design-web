@@ -1,0 +1,4 @@
+{
+  "rows": [],
+  "text": "TreeSelect · api-review\nc-tree-select · 组合属性\n功能调试 / Feature playground\n重新挂载 / Remount\n重置 / Reset\n\n选择一类功能后调整相关属性。切换功能会清除上一次覆盖，恢复案例原有绑定。 default-* 等初始属性修改后，点击“重新挂载”验证。\n\nExplore one feature at a time. Changing the topic removes previous overrides.\n\n输入与校验 / Input and validation (1/2)\n筛选属性 / Filter\n输入与校验 / Input and validation (1/2)（3）\n案例插槽 / Fixture slots\n选择部门\n\n当前部门：未选择\n\n当前覆盖值 / Active overrides\n事件 / Events（0）\n专项 API 定位 / Scenario API index\nc-tree-select · 组合属性"
+}

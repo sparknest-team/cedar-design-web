@@ -35,7 +35,7 @@ export interface FormItemContext {
   error: boolean
   feedback: string | undefined
   hasOuterLabel?: boolean
-  updateValidateState: (field: string, { status, message }: { status: ValidateStatus | ''; message: string }) => void
+  updateValidateState: (field: string, { status, message }: { status: ValidateStatus | ''; message: string }, owner?: symbol) => void
 }
 
 export interface FormItemInfo {

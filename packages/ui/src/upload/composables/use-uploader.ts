@@ -68,6 +68,7 @@ export interface UseUploaderOptions {
 
 export function useUploader(options: UseUploaderOptions) {
   const feedback = usePendingFeedback()
+  const preparation = usePendingFeedback()
   let active = true
   let inactive = false
   let generation = 0
@@ -86,6 +87,7 @@ export function useUploader(options: UseUploaderOptions) {
     defaultValue: options.defaultValue,
     onChange: options.onChange,
     onUpdateModelValue: options.onUpdateModelValue,
+    isActive: () => active && !inactive,
   })
   const replacementTarget = ref<UploadFileItem>()
   const metadataVersion = ref(0)
@@ -235,7 +237,7 @@ export function useUploader(options: UseUploaderOptions) {
   }
   function enqueue(files: File[], rejected: UploadRejectedFile[], previous?: UploadFileItem) {
     const epoch = generation
-    adding = adding.then(() => prepareFiles(files, rejected, epoch, previous)).catch(() => {})
+    adding = preparation.track(() => adding.then(() => prepareFiles(files, rejected, epoch, previous)).catch(() => {}))
     return adding
   }
   async function prepareFiles(files: File[], initialRejected: UploadRejectedFile[], epoch: number, previous?: UploadFileItem) {
@@ -247,7 +249,9 @@ export function useUploader(options: UseUploaderOptions) {
         candidates = await feedback.track(() => options.beforeAdd!(files))
         for (const file of files) if (!candidates.includes(file)) rejected.push({ file, reason: 'before-add' })
       } catch {
-        reject([...rejected, ...files.map((file) => ({ file, reason: 'before-add' as const }))])
+        if (valid(epoch)) {
+          reject([...rejected, ...files.map((file) => ({ file, reason: 'before-add' as const }))])
+        }
         return
       }
     }
@@ -318,7 +322,15 @@ export function useUploader(options: UseUploaderOptions) {
       return
     }
     reject(rejected)
+    if (!valid(epoch)) {
+      items.forEach((item) => release(item.uid))
+      return
+    }
     if (rejected.some((file) => file.reason === 'max-files')) options.onExceed?.(candidates, queue.fileList.value)
+    if (!valid(epoch)) {
+      items.forEach((item) => release(item.uid))
+      return
+    }
     if (!items.length) return
     if (previous) {
       if (!sameTarget(previous)) {
@@ -338,9 +350,13 @@ export function useUploader(options: UseUploaderOptions) {
     items.forEach((file) => pendingAuto.add(file.uid))
     if (previous) {
       queue.replace(previous, items[0])
+      if (!valid(epoch)) return
       options.onReplace?.(items[0], previous)
     } else queue.append(items)
-    items.forEach((file) => options.onRead?.(reactive(file)))
+    for (const file of items) {
+      if (!valid(epoch)) return
+      options.onRead?.(reactive(file))
+    }
     await nextTick()
 
   }
@@ -353,6 +369,7 @@ export function useUploader(options: UseUploaderOptions) {
   }
   async function uploadFile(file: UploadFileItem) {
     if (attempts.has(file.uid)) return
+    const epoch = generation
     const attempt: {
       request?: UploadRequest
       resolvedFile?: File
@@ -419,7 +436,7 @@ export function useUploader(options: UseUploaderOptions) {
           status: changed.status,
           percent: changed.percent,
         })
-        options.onProgress?.(changed, event)
+        if (valid(epoch) && current()) options.onProgress?.(changed, event)
       }
       const handleSuccess = (response?: unknown) => {
         if (!current()) return
@@ -435,7 +452,7 @@ export function useUploader(options: UseUploaderOptions) {
           percent: changed.percent,
           response,
         })
-        options.onSuccess?.(changed)
+        if (valid(epoch)) options.onSuccess?.(changed)
       }
       const handleError = (error?: unknown) => {
         if (!current()) return
@@ -451,7 +468,7 @@ export function useUploader(options: UseUploaderOptions) {
           percent: changed.percent,
           error,
         })
-        options.onError?.(changed)
+        if (valid(epoch)) options.onError?.(changed)
       }
       const requestOptions = {
         action: options.action?.(),
@@ -483,7 +500,7 @@ export function useUploader(options: UseUploaderOptions) {
       attempts.delete(file.uid)
       const changed = { ...item, status: 'error' as const, percent: 0, error }
       queue.patch(file.uid, changed)
-      options.onError?.(changed)
+      if (valid(epoch)) options.onError?.(changed)
     }
   }
   function abort(file?: UploadFileItem) {
@@ -516,7 +533,7 @@ export function useUploader(options: UseUploaderOptions) {
       cancelAttempt(file.uid)
       pendingAuto.delete(file.uid)
       queue.remove(file)
-      options.onRemove?.(file)
+      if (valid(epoch)) options.onRemove?.(file)
     } catch {
       /* Rejected removal leaves the accepted list intact. */
     } finally {
@@ -540,8 +557,9 @@ export function useUploader(options: UseUploaderOptions) {
     })
   }
   function reset() {
-    feedback.cancel()
     if (disabled.value) return
+    feedback.cancel()
+    preparation.cancel()
     generation++
     replacementTarget.value = undefined
     adding = Promise.resolve()
@@ -582,6 +600,8 @@ export function useUploader(options: UseUploaderOptions) {
   })
   return {
     guardPending: feedback.pending,
+    /** @internal Coordinates deferred field confirmation with file preparation. */
+    editorPending: computed(() => feedback.pending.value || preparation.pending.value),
     fileList: queue.fileList,
     maxReached,
     disabled,

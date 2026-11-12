@@ -16,7 +16,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import Button from '../button'
+import Button from '../button/base'
 import { createNamespace } from '../_utils/global-config'
 import { usePanelActionsLocale } from './presentation/use-panel-actions-locale'
 

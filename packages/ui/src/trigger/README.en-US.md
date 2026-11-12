@@ -5,6 +5,8 @@ permalink: /en/components/trigger/
 
 # Trigger
 
+SSR limitation: a trigger or `content` slot node using both `v-for` and `v-memo` can make server rendering fail. The trigger slot can fail even while the popup is closed; the `content` slot can fail when the popup is open or `unmount-on-close=false`. Remove `v-memo` from that slot node when rendering on the server; ordinary `v-for` remains supported.
+
 Start with the basic example, then compare related settings before moving to controlled, asynchronous or combined use cases.
 
 ## Basic examples
@@ -92,7 +94,7 @@ With Teleport, variables must be in the actual popup scope, for example through 
 | popup-offset | Outward distance along placement's main axis | `number` | `0` |
 | popup-translate | Screen-axis offset, or per-placement offsets | `[number, number] \| Partial<Record<TriggerPlacement, [number, number]>>`<br>`TriggerPlacement: 'left' \| 'right' \| 'bottom' \| 'top' \| 'top-start' \| 'top-end' \| 'bottom-start' \| 'bottom-end' \| 'left-start' \| 'left-end' \| 'right-start' \| 'right-end'` | `-` |
 | align-point | Use pointer coordinates as a virtual reference | `boolean` | `false` |
-| popup-container | Mount container; `false` renders in place. Moves within a document or between accessible same-origin frames attempt to restore unchanged focus on native inputs, buttons and similar elements, including inside open shadow roots; opaque potential closed-shadow hosts are not refocused. | `string \| HTMLElement \| false` | `body` |
+| popup-container | Mount container; `false` renders in place. When switching within a document or between accessible same-origin iframes, focus restoration is attempted for native inputs and buttons that have not been transferred, including equivalent elements in open Shadow DOM. Opaque hosts that may contain closed Shadow DOM are not restored automatically. | `string \| HTMLElement \| false` | `body` |
 | auto-fit-position | Flip and constrain to the viewport when space is insufficient | `boolean` | `true` |
 | auto-fit-popup-width | Match popup width to the reference | `boolean` | `false` |
 | auto-fit-popup-min-width | Match minimum popup width to the reference | `boolean` | `false` |
@@ -101,7 +103,7 @@ With Teleport, variables must be in the actual popup scope, for example through 
 | scroll-to-close | Close when scrolling exceeds the threshold | `boolean` | `false` |
 | scroll-to-close-distance | Close threshold | `number` | `0` |
 | show-arrow | Render a decorative arrow | `boolean` | `false` |
-| hide-empty | Do not render when content is empty | `boolean` | `false` |
+| hide-empty | Skip a directly empty content slot; a component node counts as nonempty even if it renders nothing | `boolean` | `false` |
 | prevent-focus | Prevent popup mousedown from taking focus | `boolean` | `false` |
 | unmount-on-close | Unmount content after the leave transition | `boolean` | `true` |
 | animation-name | Vue Transition name | `string` | `trigger-fade` |
@@ -109,10 +111,14 @@ With Teleport, variables must be in the actual popup scope, for example through 
 | auto-fit-transform-origin | Derive transform origin from final placement | `boolean` | `false` |
 | opened-class | Merge into the first default-slot node when open; external references do not receive this class | `ClassName` | `-` |
 | reference-attrs | Attributes applied to the actual reference or a function of open; original attributes are restored when removed, replaced or unmounted | `TriggerReferenceAttrs \| ((open: boolean) => TriggerReferenceAttrs)` | `-` |
-| popup-class / popup-style | Positioning-layer class/style | `ClassName / CSSProperties` | `-` |
-| content-class / content-style | Content-layer class/style | `ClassName / CSSProperties` | `-` |
-| arrow-class / arrow-style | Arrow class/style | `ClassName / CSSProperties` | `-` |
-| mouse-enter-delay / mouse-leave-delay | Hover open/close delay in ms | `number` | `100 / 100` |
+| popup-class | Custom positioning-layer classes | `ClassName` | `-` |
+| popup-style | Custom positioning layer styles | `CSSProperties` | `-` |
+| content-class | Custom content layer classes | `ClassName` | `-` |
+| content-style | Custom content layer styles | `CSSProperties` | `-` |
+| arrow-class | Custom arrow classes | `ClassName` | `-` |
+| arrow-style | Custom arrow styles | `CSSProperties` | `-` |
+| mouse-enter-delay | Hover-open delay in milliseconds | `number` | `100` |
+| mouse-leave-delay | Hover-close delay in milliseconds | `number` | `100` |
 | focus-delay | Focus-open delay in ms | `number` | `0` |
 | popup-hover-stay | Keep open when the pointer enters the popup | `boolean` | `true` |
 | blur-to-close | Close on blur | `boolean` | `true` |
@@ -154,6 +160,10 @@ Native `click`, `mouseenter`, `mouseleave`, `focusin`, `focusout`, `contextmenu`
 `aria-describedby` from `reference-attrs` is merged and deduplicated with existing reference descriptions; cleanup or reference replacement restores the original attribute.
 
 Fixed positioning uses the actual `fixed` containing block when an ancestor has a transform, filter, perspective, or containing CSS property. Axis-aligned scaling is accounted for; rotated or skewed coordinate systems are not guaranteed. For accessible same-origin iframe references, the reference and popup documents share coordinate conversion and event handling; cross-origin or unrelated browsing contexts are not supported. With `update-at-scroll`, scrolling either document or a scrollable ancestor updates the popup.
+
+When a reference is slotted into a scroll container inside a closed ShadowRoot, the outer Trigger cannot access the slot or container and cannot listen to its scrolling automatically. The closed component can call the Trigger instance's `resize()` on internal scroll or slot changes. For scroll-to-close behavior, call `close()` internally using an application-specific threshold, and remove listeners on unmount.
+
+A popup mounted inside an iframe remains clipped by that iframe's viewport. Content outside the iframe is invisible even when cross-document coordinate conversion is correct.
 
 ## CSS Variables
 

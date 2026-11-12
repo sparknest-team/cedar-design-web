@@ -68,7 +68,7 @@
 <script setup lang="ts">
 import { computed, provide, ref, shallowRef } from 'vue'
 import { createNamespace } from '../../_utils/global-config'
-import Button from '../../button'
+import Button from '../../button/base'
 import { useI18n } from '../../locale'
 import { fieldEditorBoundary, fieldEditorEnterSubmits, fieldEditorPanel } from './context'
 import { editorAuxiliaryActions } from './editor-actions'

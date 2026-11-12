@@ -101,11 +101,13 @@ permalink: /components/scheduler/
 
 | 属性                                  | 说明                                                      | 默认值   |
 | ------------------------------------- | --------------------------------------------------------- | -------- |
-| scale / default-scale                 | `hour` 或 `day`，支持 `v-model:scale`                     | `day`    |
+| scale | 受控资源时间线刻度，支持 v-model:scale | `undefined` |
+| default-scale | 非受控资源时间线初始刻度 | `'day'` |
 | virtual-list-props                    | 资源时间线虚拟列表配置 `SchedulerVirtualListProps`        | —        |
 | resource-group-dimensions             | 交叉分组维度顺序，资源时间线有效                          | []       |
 | resource-group-by                     | `(resource: SchedulerResource) => string`，返回稳定分组键 | —        |
-| expanded-keys / default-expanded-keys | 展开的分组键，支持 `v-model:expanded-keys`                | 全部展开 |
+| expanded-keys | 受控展开分组键，支持 v-model:expanded-keys；省略时默认全部展开 | `undefined` |
+| default-expanded-keys | 非受控初始展开分组键；省略时默认全部展开 | `undefined` |
 
 资源较多时可先折叠不关注的分组。小时刻度按真实经过小时构建，夏令时切换日可能有 23 或 25 个小时；表头带时区缩写用于辨别重复小时。当前运行环境时区仍决定显示日期。
 
@@ -641,7 +643,8 @@ const proposal = splitSchedulerRecurrence(
 | 属性                                  | 说明                                                        | 默认值 |
 | ------------------------------------- | ----------------------------------------------------------- | ------ |
 | selectable                            | 展示多选模式开关；开启模式后点击卡片切换选中，暂停卡片拖拽  | false  |
-| selected-keys / default-selected-keys | 选中日程 ID，支持 `v-model:selected-keys`；共享日程只计一次 | 空数组 |
+| selected-keys | 受控选中日程 ID，支持 v-model:selected-keys；共享日程只计一次 | `undefined` |
+| default-selected-keys | 非受控初始选中日程 ID；共享日程只计一次 | `[]` |
 | history                               | 开启本地撤销/重做，展示工具栏                               | false  |
 | history-limit                         | 最多保留历史条数，正整数                                    | 20     |
 | before-transaction                    | 一次性校验或保存整笔事务；返回 false 取消，异常保留数据     | —      |
@@ -928,7 +931,8 @@ before-* 等待期间显示加载反馈并标记 aria-busy；拒绝或失败后�
 | drag-to-create             | 日/周/资源日程空白时段拖选                                              | boolean                                         | false        |
 | month-event-limit          | 月视图每日直接展示上限，超出通过 Popover 查看                           | number                                          | 3            |
 | overlap-event-limit        | 时间网格重叠组直接展示上限，超出通过 Popover 查看                       | number                                          | —            |
-| zoom / default-zoom        | 时间线缩放，0.5–4                                                       | number                                          | 1            |
+| zoom | 受控时间线缩放倍数，范围 0.5–4，支持 v-model:zoom | number | `undefined` |
+| default-zoom | 非受控时间线初始缩放倍数，范围 0.5–4 | number | `1` |
 | show-date-header           | 时间线日期分层表头                                                      | boolean                                         | true         |
 | show-assignment-details    | 编辑资源占用量与角色                                                    | boolean                                         | false        |
 | show-resource-load         | 资源峰值、容量及范围利用率                                              | boolean                                         | false        |
@@ -944,18 +948,21 @@ before-* 等待期间显示加载反馈并标记 aria-busy；拒绝或失败后�
 | editable                   | 启用内置编辑器；false 通过 editor-request 接管                          | boolean                                         | true         |
 | before-change              | 返回 false 取消；异步拦截、保存接口                                     | SchedulerBeforeChange / SchedulerBeforeChange[] | —            |
 | selectable | 启用多选操作 | boolean | false |
-| selected-keys / default-selected-keys | 受控选中日程 ID / 非受控初始选中 ID | string[] | — / [] |
+| selected-keys | 受控选中日程 ID，支持 v-model:selected-keys；共享日程只计一次 | string[] | `undefined` |
+| default-selected-keys | 非受控初始选中日程 ID；共享日程只计一次 | string[] | `[]` |
 | history | 对已接受的变更启用撤销与重做 | boolean | false |
 | history-limit | 历史记录数量，正整数；无效值回退 20 | number | 20 |
 | before-transaction | 事务保存守卫，设置后替代 before-change | SchedulerBeforeTransaction / SchedulerBeforeTransaction[] | — |
 | working-hours | 每周工作时间；省略不限制，空数组禁止定时日程 | SchedulerWorkingHours[] | — |
 | date-working-hours | 按日期覆盖工作时间 | SchedulerDateWorkingHours[] | [] |
 | disabled-ranges | 禁用时间区间，可限定资源 | SchedulerDisabledRange[] | [] |
-| scale / default-scale | 受控 / 非受控资源时间线刻度 | 'hour' / 'day' | — / day |
+| scale | 受控资源时间线刻度，支持 v-model:scale | `'hour' \| 'day'` | `undefined` |
+| default-scale | 非受控资源时间线初始刻度 | `'hour' \| 'day'` | `'day'` |
 | virtual-list-props | 配置后启用资源时间线虚拟滚动 | SchedulerVirtualListProps | — |
 | resource-group-dimensions | 按维度顺序交叉分组，至少两个不同维度 | string[] | [] |
 | resource-group-by | 资源到稳定分组键的映射 | (resource: SchedulerResource) => string | — |
-| expanded-keys / default-expanded-keys | 受控 / 非受控分组展开键；省略默认全部展开 | string[] | — / — |
+| expanded-keys | 受控展开分组键，支持 v-model:expanded-keys；省略时默认全部展开 | string[] | `undefined` |
+| default-expanded-keys | 非受控初始展开分组键；省略时默认全部展开 | string[] | `undefined` |
 
 mode 为 `day | week | month | agenda | resource-day | resource-timeline`。agenda 与资源时间线按周导航。超出时间网格小时范围的日程仍可在月/议程/时间线查看。
 
@@ -1167,7 +1174,7 @@ import {
 | `--c-scheduler-event-min-height` | `20px` | `min-height`, `min-width` |
 | `--c-scheduler-event-padding` | `4px` | `padding` |
 | `--c-scheduler-event-radius` | `4px` | `border-radius` |
-| `--c-scheduler-focus-color` | `var(--c-sys-color-content-brand)` | `outline` |
+| `--c-scheduler-focus-color` | `var(--c-sys-color-action-primary)` | `outline` |
 | `--c-scheduler-focus-width` | `2px` | `outline`, `outline-offset` |
 | `--c-scheduler-font-size` | `14px` | `font-size` |
 | `--c-scheduler-gap` | `12px` | `gap`, `margin-bottom`, `padding` |

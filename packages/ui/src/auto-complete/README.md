@@ -18,6 +18,12 @@ shouldOpen 控制是否允许展开，filterOption 控制逐项过滤；它们�
 
 <demo src="./__demos__/basic.vue"></demo>
 
+### 自定义文本提交
+
+选择候选项立即提交；输入自定义文本后点击确认。
+
+<demo src="./__demos__/custom-draft.vue"></demo>
+
 ## 外观与状态
 
 ### 外观配置对比
@@ -183,7 +189,7 @@ import type { AutoCompleteTriggerOptions } from "@cedar-design/ui-vue";
 
 ### 编辑与确认
 
-通过 `edit-mode` 配置编辑方式；未指定时依次继承 FormItem、Form，默认 `direct`。支持值：`direct / click / dblclick`。非 direct 编辑模式通过字段值入口打开编辑面板，并维护单份草稿；确认后才更新 v-model，取消、重置或启用 readPretty 时丢弃草稿。
+通过 `edit-mode` 配置编辑方式；未指定时依次继承 FormItem、Form，默认 `direct`。支持值：`direct / click / dblclick`。非 direct 编辑模式通过字段值入口打开编辑面板。默认选中候选项即提交；自定义文本通过确认提交。设置 need-confirm 时选择也先编辑草稿并确认。取消、重置或启用 readPretty 时丢弃未提交的草稿。
 
 Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，Enter/F2 也可进入；取消/Escape 丢弃草稿，确认后提交。readPretty 为独立阅读属性，与 readonly、disabled 分开。
 
@@ -218,6 +224,7 @@ Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，
 
 | 属性                 | 说明                                                | 类型                                                                                     | 默认值                       |
 | -------------------- | --------------------------------------------------- | ---------------------------------------------------------------------------------------- | ---------------------------- |
+| need-confirm | 仅弹出编辑模式生效。默认选中候选项即提交并关闭，设为 true 时先编辑草稿、再点确认。提交仍执行表单校验和 before-commit，拒绝时不关闭。AutoComplete 输入文字不会自动提交；文字草稿改变时可点击确认，选中候选项则立即提交。 | `boolean` | `false` |
 | `model-value`        | 受控文本值                                          | `string \| null`                                                                                 | `—`                          |
 | `default-value`      | 非受控初始文本                                      | `string`                                                                                 | `''`                         |
 | `options`            | 候选；支持分组，value 唯一，选择后转为字符串        | `(AutoCompleteOption \| SelectOptionGroup)[]` / `(query, { signal }) => Array / Promise` | `undefined`                  |
@@ -340,7 +347,7 @@ AutoComplete 的文本输入始终可搜索；filter-option 只控制本地候�
 <c-auto-complete v-model="text" :options="loadSuggestions" />
 ```
 
-`empty-value` 可显式设为 `null`（或 `() => null`），清空时原样提交 null；省略时保留组件原默认值。界面把 null 显示为空，不会把普通输入的空字符串自动转成 null。支持弹出编辑的字段中，清空先修改草稿，确认后提交，取消则保留原值。
+`empty-value` 可显式设为 `null`（或 `() => null`），清空时原样提交 null；省略时保留组件原默认值。界面把 null 显示为空，不会把普通输入的空字符串自动转成 null。确认式弹出编辑中，清空先修改草稿并在确认后提交；无需确认时清空会直接提交。
 
 公共 focus/blur 从首次挂载即可调用。focus 会打开可编辑的延迟编辑器，等待其就绪后定位；禁用、只读或纯阅读时不因此打开。blur 只失焦当前目标，不重新打开。保存的方法不会绑定旧编辑器，关闭、切换模式、停用或卸载会取消排队调用。
 

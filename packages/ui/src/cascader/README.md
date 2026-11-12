@@ -274,17 +274,26 @@ load-more 属性有提供 done 函数进行回调，可以在回调中传入懒�
 
 | 属性 | 说明 | 类型 | 默认值 |
 | --------------------------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------- | ------------------------ |
+| need-confirm | 仅弹出编辑模式生效。单选默认点选即提交并关闭，设为 true 时先编辑草稿、再点确认；多选默认保留确认。提交仍执行表单校验和 before-commit，拒绝时不关闭。 | `boolean` | 单选 `false`；多选 `true` |
 | `open-trigger-target` | 打开面板的点击区域；field 为整个字段，icon 仅右侧选择按钮。不影响键盘展开及受控 open。 | `'field' \| 'icon'` | `'field'` |
-| `model-value / default-value` | 受控值 / 非受控初始值 | `CascaderBaseValue` | `单选 ''，多选 []` |
-| `open / default-open` | 受控展开 / 默认展开 | `boolean` | `undefined / false` |
-| `input-value / default-input-value` | 搜索文本，独立于选中值 | `string` | `undefined / ''` |
+| `model-value` | 受控选中值，支持 v-model | `CascaderBaseValue` | `undefined` |
+| `default-value` | 非受控初始选中值，仅初始化时读取 | `CascaderBaseValue` | 单选：path-mode 时为 `undefined`，否则为 `''`；多选：`[]` |
+| `open` | 受控展开状态，支持 v-model:open | `boolean` | `undefined` |
+| `default-open` | 非受控初始展开状态，仅初始化时读取 | `boolean` | `false` |
+| `input-value` | 受控搜索文本，独立于选中值，支持 v-model:input-value | `string` | `undefined` |
+| `default-input-value` | 非受控初始搜索文本，独立于选中值，仅初始化时读取 | `string` | `''` |
 | `multiple` | 多选；默认启用搜索 | `boolean` | `false` |
 | `size` | 完整支持 xs、sm、md、lg、xl，未设置时继承分组与表单 | `ComponentSize`<br>`'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `md` |
 | `variant` | filled、outline、standard；未设置时继承 InputGroup | `FormControlVariant`<br>`'standard' \| 'filled' \| 'outline'` | `filled` |
-| `disabled / readonly / error` | 未设置时继承表单；显式 false 可覆盖 | `boolean` | `undefined` |
+| `disabled` | 禁用状态；显式值优先于继承的 Form / Group 状态 | `boolean` | `undefined` |
+| `readonly` | 只读状态；显式值优先于继承的 Form / Group 状态 | `boolean` | `undefined` |
+| `error` | 错误状态；显式值优先于继承的 Form / Group 状态 | `boolean` | `undefined` |
 | `placeholder` | 占位文本 | `string` | `—` |
-| `hint / line` | 浮动提示 / standard 变体下划线 | `boolean` | `true` |
-| `text-color / focus-color / blur-color` | 字段颜色 | `string` | `—` |
+| `hint` | 是否启用浮动提示 | `boolean` | `true` |
+| `line` | 是否显示 standard 变体的下划线 | `boolean` | `true` |
+| `text-color` | 逐实例自定义文字颜色；静态主题优先使用 token | `string` | `—` |
+| `focus-color` | 逐实例自定义聚焦颜色；静态主题优先使用 token | `string` | `—` |
+| `blur-color` | 逐实例自定义未聚焦颜色；静态主题优先使用 token | `string` | `—` |
 | `loading` | 加载时暂停选择、清空、标签移除与确认；保留已有值，搜索和关闭仍可用。 | `boolean` | `false` |
 | `loading-mode` | 字段加载展示：默认指示器或底部不定进度线。 | `default / line` | `default` |
 | `search-fields` | 内置路径搜索字段，默认 label；自定义过滤回调优先。 | `readonly OptionSearchField[]`<br>`OptionSearchField: 'label' \| 'value'` | `['label']` |
@@ -338,7 +347,7 @@ load-more 属性有提供 done 函数进行回调，可以在回调中传入懒�
 
 选项 `label` 是用于搜索的纯文本；自定义选项内容使用 `render` 或 `option` 插槽，自定义反显使用 `format-label` 或 `label` 插槽。以 value 而非 label 识别选项。选项的 `disabled` 禁止选择和删除，`tagProps` 可定制已选标签。
 
-自定义选项中的按钮、链接、输入控件、列表选项、树节点、网格单元格和嵌套 Cascader 管理各自的点击，不会选择外层选项；普通内容仍可点击选择。已调用 `preventDefault` 的点击不会触发选项动作，事件继续按 DOM 规则冒泡。
+自定义选项中的按钮、链接、输入控件、列表选项、树节点、网格单元格、非负 tabindex 元素、带 controls 的音视频和嵌套 Cascader 管理各自的点击，不会选择外层选项；普通内容仍可点击选择。多个 `role` 词元按组件支持的首个有效角色判断。 独立面板放在 Shadow DOM 内时，方向键按面板所在根节点移动选项焦点。已调用 `preventDefault` 的点击不会触发选项动作，事件继续按 DOM 规则冒泡。
 
 ### CascaderPanel Props
 
@@ -389,7 +398,7 @@ import type { CascaderProps } from "@cedar-design/ui-vue";
 
 ### 编辑与确认
 
-通过 `edit-mode` 配置编辑方式；未指定时依次继承 FormItem、Form，默认 `direct`。支持值：`direct / click / dblclick`。非 direct 编辑模式通过字段值入口打开编辑面板，并维护单份草稿；确认后才更新 v-model，取消、重置或启用 readPretty 时丢弃草稿。
+通过 `edit-mode` 配置编辑方式；未指定时依次继承 FormItem、Form，默认 `direct`。支持值：`direct / click / dblclick`。非 direct 编辑模式通过字段值入口打开编辑面板。单选默认选中即提交；设置 need-confirm 时先编辑草稿并确认，多选默认需要确认。取消、重置或启用 readPretty 时丢弃未提交的草稿。
 
 Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，Enter/F2 也可进入；取消/Escape 丢弃草稿，确认后提交。readPretty 为独立阅读属性，与 readonly、disabled 分开。
 
@@ -407,7 +416,7 @@ Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，
 
 `empty-value` 指定当前组件已有清空动作的输出；省略时采用该组件默认返回。具体类型以组件 API 为准。它不改变 empty-values 的识别规则，也不改变 Form reset 的初始值。
 
-`empty-value` 可显式设为 `null`（或 `() => null`），清空时原样提交 null；省略时保留组件原默认值。界面把 null 显示为空，不会把普通输入的空字符串自动转成 null。支持弹出编辑的字段中，清空先修改草稿，确认后提交，取消则保留原值。
+`empty-value` 可显式设为 `null`（或 `() => null`），清空时原样提交 null；省略时保留组件原默认值。界面把 null 显示为空，不会把普通输入的空字符串自动转成 null。确认式弹出编辑中，清空先修改草稿并在确认后提交；无需确认时清空会直接提交。
 
 候选属性 `options` 支持数组或 `(query, { signal }) => 数组/Promise`。加载、取消、过期结果隔离由组件内部处理，失败触发 load-error。单选/多选分组初始化以空字符串查询，搜索型字段在查询变化时调用；树形字段根数据与原有 load-more 子节点懒加载独立。
 
@@ -447,15 +456,15 @@ option({ data }) 接收规范化 CascaderOptionInfo，data.raw 是原始选项�
 | --- | --- | --- |
 | `--c-cascader-checkbox-bg-hover` | `var(--c-color-fill-3)` | `background-color` |
 | `--c-cascader-font-item-size` | `var(--c-sys-font-size-md)` | `font-size` |
-| `--c-cascader-item-bg-active` | `var(--c-color-fill-2)` | `background-color` |
+| `--c-cascader-item-bg-active` | `transparent` | `background`, `background-color` |
 | `--c-cascader-item-bg-disabled` | `transparent` | `background-color` |
 | `--c-cascader-item-bg-disabled-active` | `var(--c-color-fill-2)` | `background-color` |
-| `--c-cascader-item-bg-hover` | `var(--c-cascader-item-bg-active)` | `background-color` |
-| `--c-cascader-item-check-color` | `var(--c-sys-color-content-primary)` | `color` |
+| `--c-cascader-item-bg-hover` | `var(--c-color-fill-2)` | `background`, `background-color` |
+| `--c-cascader-item-check-color` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-cascader-item-check-size` | `var(--c-sys-font-size-md)` | `height`, `width` |
 | `--c-cascader-item-icon-color` | `var(--c-sys-color-content-secondary)` | `color` |
 | `--c-cascader-item-text-color` | `var(--c-sys-color-content-primary)` | `color` |
-| `--c-cascader-item-text-color-active` | `var(--c-cascader-item-text-color)` | `color` |
+| `--c-cascader-item-text-color-active` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-cascader-item-text-color-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
 | `--c-cascader-item-text-color-disabled-active` | `var(--c-sys-color-content-disabled)` | `color` |
 | `--c-cascader-item-text-color-hover` | `var(--c-cascader-item-text-color)` | `color` |

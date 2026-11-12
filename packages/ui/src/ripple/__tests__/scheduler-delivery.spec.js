@@ -1,6 +1,7 @@
 import { mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 import Ripple from '../index'
+import context from '../../context'
 
 const Wrapper = { directives: { Ripple }, data: () => ({ disabled: false }), template: '<button v-ripple="{ disabled }">Ripple</button>' }
 const wrappers = []
@@ -24,6 +25,46 @@ beforeEach(() => {
 afterEach(() => { wrappers.splice(0).reverse().forEach(wrapper => wrapper.unmount()); vi.restoreAllMocks() })
 
 describe('Ripple cancelled and consumed scheduler delivery', () => {
+  test('global disable during geometry releases the migration observer', () => {
+    const wrapper = create(), element = wrapper.element, enabled = context.enableRipple
+    try {
+      key(element)
+      vi.spyOn(element, 'getBoundingClientRect').mockImplementation(() => {
+        context.enableRipple = false
+        return { top: 0, left: 0, width: 10, height: 10 }
+      })
+      invoke(tasks.find((task) => task.delay === 30))
+      expect(element.children).toHaveLength(0)
+      expect(element._ripple.migrationObserver).toBeUndefined()
+    } finally { context.enableRipple = enabled }
+  })
+  test('global disable during style lookup restores styles and releases the observer', () => {
+    const wrapper = create(), element = wrapper.element, enabled = context.enableRipple
+    try {
+      key(element)
+      const original = element.style.setProperty.bind(element.style)
+      vi.spyOn(element.style, 'setProperty').mockImplementation((...args) => {
+        original(...args)
+        context.enableRipple = false
+      })
+      invoke(tasks.find((task) => task.delay === 30))
+      expect(element.children).toHaveLength(0)
+      expect(element.style.overflowX).toBe('')
+      expect(element._ripple.migrationObserver).toBeUndefined()
+    } finally { context.enableRipple = enabled }
+  })
+  test('global disable before activation removes the wave and observer', () => {
+    const wrapper = create(), element = wrapper.element, enabled = context.enableRipple
+    try {
+      key(element)
+      invoke(tasks.find((task) => task.delay === 30))
+      expect(element.children).toHaveLength(1)
+      context.enableRipple = false
+      invoke(tasks.find((task) => task.delay === 20))
+      expect(element.children).toHaveLength(0)
+      expect(element._ripple.migrationObserver).toBeUndefined()
+    } finally { context.enableRipple = enabled }
+  })
   test('disabled pending creation rejects a dequeued callback', async () => {
     const wrapper = create()
     key(wrapper.element)

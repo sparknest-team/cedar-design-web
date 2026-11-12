@@ -79,6 +79,12 @@ Set loading explicitly to display feedback. Ordinary event return values do not 
 
 <demo src="./__demos__/loading.vue"></demo>
 
+### Paste a link and fetch its title
+
+Paste a URL or type one and press Enter to simulate fetching its title. The input displays a loading state while waiting. The tag's `label` displays the title, its `value` retains the original URL, and `closable` enables removal. Submit displays the URL data without sending a request.
+
+<demo src="./__demos__/link-title.vue"></demo>
+
 ### Field state and native input
 
 Unset disabled, readonly and error inherit from FormItem / Form. InputGroup supplies disabled, readonly, size and variant; explicit field values, including false, take precedence. The standalone variant remains filled. Deferred editors follow the same state and discard their draft when disabled or readonly.

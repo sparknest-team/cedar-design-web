@@ -66,7 +66,7 @@ import { isolateEditorForm } from "../_components/field-presentation/form-bridge
 import { provideFormErrorDescriptionBoundary } from "../form/error-description";
 import { selectionEditorSurface } from "../_components/selected-options/context";
 import SelectedOptions from "../_components/selected-options/SelectedOptions.vue";
-import Input from "../input";
+import Input from "../input/base";
 import { createNamespace } from "../_utils/global-config";
 import BaseCascaderPanel from "./base-cascader-panel";
 import CascaderSearchPanel from "./cascader-search-panel";

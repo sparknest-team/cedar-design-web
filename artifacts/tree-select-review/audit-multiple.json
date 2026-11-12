@@ -1,0 +1,47 @@
+{
+  "rows": [
+    {
+      "text": "产品中心",
+      "border": "0px",
+      "height": 32.399993896484375,
+      "width": 826,
+      "highlightWidth": "826px"
+    },
+    {
+      "text": "设计部",
+      "border": "0px",
+      "height": 32.399993896484375,
+      "width": 826,
+      "highlightWidth": "826px"
+    },
+    {
+      "text": "研发部",
+      "border": "0px",
+      "height": 32.4000244140625,
+      "width": 826,
+      "highlightWidth": "826px"
+    },
+    {
+      "text": "运营中心",
+      "border": "0px",
+      "height": 32.39996337890625,
+      "width": 826,
+      "highlightWidth": "826px"
+    },
+    {
+      "text": "客户服务部",
+      "border": "0px",
+      "height": 32.4000244140625,
+      "width": 826,
+      "highlightWidth": "826px"
+    },
+    {
+      "text": "归档部门（禁用）",
+      "border": "0px",
+      "height": 32.399993896484375,
+      "width": 826,
+      "highlightWidth": "826px"
+    }
+  ],
+  "text": "TreeSelect · multiple\n设计部\n选择多个部门\n\n已选部门：design\n\n设计部\n产品中心\n设计部\n研发部\n运营中心\n客户服务部\n归档部门（禁用）"
+}

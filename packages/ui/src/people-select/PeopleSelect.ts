@@ -16,7 +16,8 @@ import { createNamespace } from "../_utils/global-config";
 import Person from "./Person.vue";
 import Presented from "./presentation";
 import { peopleSelectProps } from "./props";
-import type { PeopleSelectOption } from "./types";
+import { useSelectedPeople } from "./selection";
+import type { PeopleSelectValue, PeopleSelectOption } from "./types";
 
 export default defineComponent({
   name: createNamespace("people-select").name,
@@ -28,7 +29,7 @@ export default defineComponent({
       disabled: computed(() => props.disabled),
       readonly: computed(() => props.readonly),
     });
-    const localValue = ref<string | null>(props.defaultValue);
+    const localValue = ref<PeopleSelectValue>(props.defaultValue);
     const value = computed(() =>
       props.modelValue !== undefined ? props.modelValue : localValue.value,
     );
@@ -51,51 +52,16 @@ export default defineComponent({
     const options = computed(() =>
       Array.isArray(props.options) ? props.options : source.data.value,
     );
-    const selectedCache = ref<PeopleSelectOption>();
-    watch(
-      [options, value],
-      () => {
-        const person = options.value.find(
-          (person) => person.value === value.value,
-        );
-        if (person) selectedCache.value = person;
-        else if (selectedCache.value?.value !== value.value)
-          selectedCache.value = undefined;
-      },
-      { immediate: true },
-    );
-    const selected = computed<PeopleSelectOption>(() => {
-      const current = options.value.find(
-        (person) => person.value === value.value,
-      );
-      if (current) return current;
-      if (typeof props.fallbackOption === "function" && value.value != null) {
-        return props.fallbackOption(value.value);
-      }
-      if (props.fallbackOption !== false && props.label)
-        return {
-          ...selectedCache.value,
-          value: value.value ?? "",
-          label: props.label,
-        };
-      if (
-        props.fallbackOption !== false &&
-        selectedCache.value?.value === value.value
-      )
-        return selectedCache.value;
-      return {
-        value: value.value ?? "",
-        label:
-          props.fallbackOption === false
-            ? props.defaultText
-            : props.label || value.value || props.defaultText,
-      };
-    });
+    const selection = useSelectedPeople(props, value, options)
+    const selected = computed<PeopleSelectOption>(() => selection.people.value[0] ?? {
+      value: '', label: props.label || props.defaultText,
+    })
     const readScope = computed(() => ({
       value: value.value,
-      text: emptyPolicy.isEmpty(value.value) ? emptyPolicy.emptyText.value : selected.value.label,
+      text: emptyPolicy.isEmpty(value.value) ? emptyPolicy.emptyText.value : selection.people.value.map((person) => person.label).join(', '),
       person: selected.value,
-    }));
+      ...(props.multiple ? { people: selection.people.value } : {}),
+    }))
     const childOptions = options;
     async function load(query: string) {
       if (!remote.value || typeof props.options !== "function") return;
@@ -122,7 +88,7 @@ export default defineComponent({
     onBeforeUnmount(() => {
       mounted.value = false;
     });
-    function update(next: string | null) {
+    function update(next: PeopleSelectValue) {
       localValue.value = next;
       emit("update:modelValue", next);
     }
@@ -130,32 +96,28 @@ export default defineComponent({
       if (emptyPolicy.isEmpty(value.value)) {
         return emptyPolicy.emptyText.value;
       }
-      const scope = {
-        person: selected.value,
-        disabled:
-          form.mergedDisabled.value ||
-          !value.value ||
-          !!selected.value.disabled,
-      };
-      const actions = slots.actions
-        ? slots.actions(scope)
-        : props.renderActions?.(scope);
-      return h(
-        Person,
-        {
-          person: selected.value,
+      const renderPerson = (person: PeopleSelectOption) => {
+        const scope = {
+          person,
+          disabled: form.mergedDisabled.value || !person.value || !!person.disabled,
+        }
+        const actions = slots.actions ? slots.actions(scope) : props.renderActions?.(scope)
+        return h(Person, {
+          key: person.value,
+          person,
           showAvatar: props.showAvatar,
           disabled: scope.disabled,
           showPhone: props.showPhone,
           showChat: props.showChat,
           call: props.call,
           chat: props.chat,
-          onActionError: (error: unknown, action: 'call' | 'chat') =>
-            emit("action-error", error, action),
-        },
-        actions == null ? undefined : { default: () => actions },
-      );
-    };
+          onActionError: (error: unknown, action: 'call' | 'chat') => emit('action-error', error, action),
+        }, actions == null ? undefined : { default: () => actions })
+      }
+      return props.multiple
+        ? h('span', { class: 'c-people-select-people' }, selection.people.value.map(renderPerson))
+        : renderPerson(selected.value)
+    }
     const personSlots = () => ({
       ...slots,
       option:
@@ -186,15 +148,15 @@ export default defineComponent({
               ref: control,
               modelValue: value.value,
               options: childOptions.value,
-              label: selected.value.label,
+              label: props.multiple ? '' : selected.value.label,
               fallbackOption:
-                props.fallbackOption === false ? false : () => selected.value,
+                props.fallbackOption === false ? false : selection.resolve,
               loading: props.loading || source.loading.value,
               filterOption: props.filterOption ?? !remote.value,
               "onUpdate:modelValue": update,
               "onUpdate:open": (open: boolean) => emit("update:open", open),
               "onOpen-change": (open: boolean) => emit("open-change", open),
-              onChange: (next: string | null) => emit("change", next),
+              onChange: (next: PeopleSelectValue) => emit("change", next),
               onClear: () => emit("clear"),
               onSearch: (query: string) => {
                 emit("search", query);

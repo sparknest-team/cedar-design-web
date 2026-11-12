@@ -67,7 +67,7 @@ import Panel from "./Panel.vue";
 import { isValidRangeValue, isTimeRangeNextDay } from "./utils";
 import { createNamespace, getPrefixCls } from "../../_utils/global-config";
 import { useI18n } from "../../locale";
-import Button from "../../button";
+import Button from "../../button/base";
 
 const { name } = createNamespace("time-picker-range-panel");
 const panelIndexes = [0, 1];

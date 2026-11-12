@@ -37,3 +37,28 @@ test('internal and external pagination share state, events, row slicing and stic
   expect(owner.getComponent(Pagination).props('modelValue')).toBe(3)
  } finally { owner.unmount(); target.remove() }
 })
+
+test('external controlled pagination waits for the parent and retains ownership when the target changes', async () => {
+ const first = document.createElement('div'); const second = document.createElement('div'); document.body.append(first, second)
+ const data = Array.from({ length: 5 }, (_, key) => ({ key, name: `User ${key}` }))
+ const owner = mount(Table, { props: { columns: [{ title: 'Name', dataIndex: 'name' }], data, pagination: { pageSize: 2, modelValue: 1, container: first } }, attachTo: document.body })
+ try {
+  await flushPromises()
+  expect(first.querySelector('.c-pagination')).toBeTruthy()
+  owner.getComponent(Pagination).vm.$emit('change', 2); await flushPromises()
+  expect(owner.emitted('page-change')).toEqual([[2]])
+  expect(owner.getComponent(Pagination).props('modelValue')).toBe(1)
+  expect(owner.text()).toContain('User 0'); expect(owner.text()).not.toContain('User 2')
+  await owner.setProps({ pagination: { pageSize: 2, modelValue: 2, container: first } }); await flushPromises()
+  expect(owner.getComponent(Pagination).props('modelValue')).toBe(2)
+  expect(owner.text()).toContain('User 2'); expect(owner.text()).not.toContain('User 0')
+  await owner.setProps({ pagination: { pageSize: 2, modelValue: 2, container: second } }); await flushPromises()
+  expect(first.querySelector('.c-pagination')).toBeNull()
+  expect(second.querySelector('.c-pagination')).toBeTruthy()
+  owner.getComponent(Pagination).vm.$emit('change', 3); await flushPromises()
+  expect(owner.emitted('page-change')).toEqual([[2], [3]])
+  expect(owner.text()).toContain('User 2'); expect(owner.text()).not.toContain('User 4')
+  await owner.setProps({ pagination: { pageSize: 2, modelValue: 3, container: second } }); await flushPromises()
+  expect(owner.text()).toContain('User 4'); expect(owner.text()).not.toContain('User 2')
+ } finally { owner.unmount(); first.remove(); second.remove() }
+})

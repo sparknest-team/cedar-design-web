@@ -8,6 +8,7 @@ import {
   toRefs,
 } from "vue";
 import { getPrefixCls, createNamespace } from "../_utils/global-config";
+import { firstStructuralNode } from './structural-slot'
 import Checkbox from "../checkbox";
 import Radio from "../radio";
 import Button from "../button";
@@ -442,7 +443,7 @@ export default defineComponent({
       const rowSpan = props.column.rowSpan ?? 1;
       const resizeColumnName = typeof props.column.title === 'string' ? props.column.title : props.column.dataIndex;
       const translatedResizeLabel = t('table.resizeColumn', resizeColumnName);
-      const customHeader = props.customHeader ?? slots.th?.({ column: props.column })[0];
+      const customHeader = firstStructuralNode([props.customHeader]) ?? firstStructuralNode(slots.th?.({ column: props.column }));
 
       return createVNode(
         customHeader ?? "th",

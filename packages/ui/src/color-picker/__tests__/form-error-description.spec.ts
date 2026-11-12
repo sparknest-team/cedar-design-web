@@ -127,3 +127,21 @@ test('inline color panel uses its FormItem label without overriding explicit nam
     expect(panel().attributes('aria-labelledby')).toBeUndefined()
   } finally { wrapper.unmount() }
 })
+
+test('custom trigger owns its label target while the popup has a distinct id', async () => {
+  const wrapper = mount(Form, {
+    attachTo: document.body,
+    props: { model: { color: '#ffffff' } },
+    slots: { default: () => h(FormItem, { field: 'color', label: 'Color', labelAttrs: { for: 'pick-color' } }, () => h(ColorPicker,
+      { hideTrigger: false, id: 'color-popup', triggerProps: { popupContainer: false, animationName: '' } },
+      { default: () => h('button', { id: 'pick-color', type: 'button' }, 'Pick color') },
+    )) },
+  })
+  try {
+    await wrapper.get('button#pick-color').trigger('click')
+    await nextTick()
+    expect(document.querySelectorAll('#pick-color')).toHaveLength(1)
+    expect(document.querySelectorAll('#color-popup')).toHaveLength(1)
+    expect((wrapper.get('label').element as HTMLLabelElement).control).toBe(wrapper.get('button#pick-color').element)
+  } finally { wrapper.unmount() }
+})

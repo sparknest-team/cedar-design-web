@@ -201,7 +201,8 @@ DateRangePicker 的 `exchange-time` 默认 true。反序交互日期在 true 时
 | ----------------- | ------------------------------------------------------- | ------------------------------------------------ | ------- |
 | `default-value`   | 非受控初始值，仅初始化读取                              | DateValue / DateValue[]                          | —       |
 | `value-format`    | 模型与事件的格式，可为自定义日期格式、Date 或 timestamp | string                                           | 随 type |
-| `min` / `max`     | 包含端点的边界；字符串按 value-format 解析              | DateValue                                        | —       |
+| `min` | 最小日期，包含端点；字符串按 value-format 解析 | DateValue | — |
+| `max` | 最大日期，包含端点；字符串按 value-format 解析 | DateValue | — |
 | `disabled-time`   | 当前日期、端点的时间禁用列表                            | (date: Date, side: DateSide) => DateDisabledTime<br>`DateSide: 'end' \| 'start'` | —       |
 | `disable-confirm` | 选择后立即提交                                          | boolean                                          | true    |
 
@@ -310,7 +311,7 @@ DateRangePicker 的 `exchange-time` 默认 true。反序交互日期在 true 时
 | `--c-date-picker-range-panel-min-width` | `224px` | `min-width` |
 | `--c-date-picker-range-popover-width` | `calc(var(--c-date-picker-panel-date-width) * 2 + 2px)` | `flex`, `width` |
 | `--c-date-picker-row-padding-vertical` | `var(--c-spacing-1)` | `padding` |
-| `--c-date-picker-shortcuts-active-text-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-date-picker-shortcuts-active-text-color` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-date-picker-shortcuts-column-width` | `128px` | `flex`, `width` |
 | `--c-date-picker-shortcuts-inline-item-margin-right` | `var(--c-spacing-5)` | `margin-inline` |
 | `--c-date-picker-shortcuts-inline-item-margin-vertical` | `5px` | `margin-block` |

@@ -283,18 +283,22 @@ label/icon/extra 渲染函数、同名插槽及 nodeProps 均接收 `{ option, a
 | --- | --- | --- |
 | name | 稳定且唯一的入口标识；提供后由根菜单 activeItem 互斥管理当前入口；视觉覆盖另用 highlight | — |
 | label | 未选中或选中值未匹配 options 时的入口标题，支持 VNode / 渲染函数 | — |
-| options / fieldNames | 与 NavMenu 相同的选项和字段映射 | `[]` |
-| model-value / default-value | 独立受控值 / 初始值，支持字符串、数字和 null | `undefined` / `null` |
+| options | 菜单选项，结构与 NavMenu 一致 | `[]` |
+| field-names | 选项字段映射，与 NavMenu 一致 | `undefined` |
+| model-value | 受控选中 key，支持字符串、数字和 null，支持 v-model | `undefined` |
+| default-value | 非受控初始选中 key，支持字符串、数字和 null，仅初始化时读取 | `null` |
 | highlight | 入口视觉强调覆盖，不改变业务 active 或选中值；省略时跟随 active | — |
 | hide-on-select | 调用 select 后关闭面板 | `true` |
 | unmount-on-close | 关闭过渡结束后卸载面板；默认保留首次展开后的内容 | false |
-| open / default-open | 受控 / 初始面板状态 | `undefined` / `false` |
+| open | 受控展开状态，支持 v-model:open | `undefined` |
+| default-open | 非受控初始展开状态，仅初始化时读取 | `false` |
 | disabled | 禁用入口（同时遵循父菜单 disabled） | `undefined` |
 | trigger | Trigger 触发方式 | `click` |
 | placement | 普通下拉的位置；全高面板使用 right/left 系列时紧贴入口对应边缘 | `bottom-start` |
 | popup-layout | `dropdown` 普通下拉 / `full-width` 入口下方通栏 / `full-height` 右侧全高 / `full` 入口下方宽高铺满 | `dropdown` |
 | popup-style | 面板 CSS，可覆盖全高面板宽度、方向和尺寸 | — |
-| popup-container / popup-class | Trigger 挂载容器及浮层类名 | 跟随父菜单 |
+| popup-container | 浮层挂载容器；省略时跟随父菜单 | 跟随父菜单 |
+| popup-class | 浮层附加类名；省略时跟随父菜单 | 跟随父菜单 |
 | options-mode | 默认选项面板的横向 / 纵向排列 | `vertical` |
 
 所有入口插槽和 `content` 插槽收到 `{ modelValue, selectedOption, active, open, select, close }`。`select(key, event?)` 发出 `update:modelValue` 和 `select(key, option, event)`；自定义面板可以选择 options 外的值，此时 option 为 undefined；独立入口 active 为 false，如需强调可显式设置 highlight。`close()` 关闭并恢复入口焦点。受控值只有父组件接受后才影响标题和业务 active。入口插槽的 active 表示入口状态；label 渲染函数的 active 则表示其上下文 option 自身是否匹配 Item 的主值，未匹配时为 false。`hideOnSelect` 独立于值是否被接受，需手动确认时设为 false。
@@ -358,7 +362,7 @@ NavMenu 继承最近的原生 `dir` 并支持动态切换。横向菜单的左�
 | `--c-nav-menu-light-item-bg-selected` | `var(--c-color-fill-2)` | `background` |
 | `--c-nav-menu-light-item-text-color` | `var(--c-color-text-2)` | `color` |
 | `--c-nav-menu-light-item-text-color-disabled` | `var(--c-color-text-4)` | `color` |
-| `--c-nav-menu-light-item-text-color-selected` | `var(--c-sys-color-content-brand)` | `color`, `outline` |
+| `--c-nav-menu-light-item-text-color-selected` | `var(--c-sys-color-action-primary)` | `color`, `outline` |
 | `--c-nav-menu-motion-duration` | `150ms` | `transition` |
 | `--c-nav-menu-panel-width` | `min(400px, 100vw)` | 组件样式 |
 | `--c-nav-menu-popup-max-height` | `320px` | `max-height` |

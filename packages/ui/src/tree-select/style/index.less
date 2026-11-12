@@ -2,6 +2,7 @@
 
 .c-tree-select {
   &-popup {
+    --c-tree-title-text-color-active: var(--c-select-popup-option-text-color-selected);
     box-sizing: border-box;
     padding: var(~'--c-tree-select-popup-padding-vertical') 0;
     background-color: var(~'--c-color-bg-popup');
@@ -18,7 +19,35 @@
     }
 
     .c-tree-node {
-      padding-inline-start: 0;
+      isolation: isolate;
+      box-sizing: border-box;
+      min-height: var(--c-select-popup-option-height);
+      padding-inline: var(--c-select-popup-option-padding-horizontal);
+      border-bottom: 0;
+      border-radius: var(--c-tree-select-option-radius);
+    }
+
+    .c-tree-node-title,
+    .c-tree-node-selected .c-tree-node-title {
+      position: static;
+      min-width: 0;
+      min-height: inherit;
+      margin: 0;
+      padding: 0;
+      background: transparent;
+    }
+
+    .c-tree-node-title-text {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .c-tree-node:hover .c-tree-select-option:not(.c-tree-select-option-selected):not(.c-tree-select-option-disabled)::before {
+      background: var(--c-tree-select-option-active-background);
+    }
+
+    .c-tree-node:hover .c-tree-select-option-selected:not(.c-tree-select-option-disabled)::before {
+      background: var(--c-select-popup-option-bg-selected-hover);
     }
   }
 
@@ -43,8 +72,32 @@
   }
 }
 
-.c-tree-select-option { display: block; }
-.c-tree-select-option-active {
-  background: var(--c-tree-select-option-active-background);
-  border-radius: var(--c-tree-select-option-radius);
+.c-tree-select-option {
+  display: block;
+  overflow-wrap: anywhere;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: var(--c-tree-select-option-radius);
+    pointer-events: none;
+  }
+
+  &-active:not(&-selected):not(&-disabled)::before {
+    background: var(--c-tree-select-option-active-background);
+  }
+
+  &-selected:not(&-disabled) {
+    color: var(--c-select-popup-option-text-color-selected);
+
+    &::before {
+      background: var(--c-select-popup-option-bg-selected);
+    }
+  }
+
+  &-active&-selected:not(&-disabled)::before {
+    background: var(--c-select-popup-option-bg-selected-hover);
+  }
 }

@@ -1,6 +1,6 @@
 import { withInstall } from '../_utils/global-config'
 import _CheckboxGroup from './group-presentation'
-import _Checkbox from './presentation'
+import _Checkbox from './base'
 import { checkboxGroupProps, checkboxProps } from './props'
 
 const Checkbox = withInstall(

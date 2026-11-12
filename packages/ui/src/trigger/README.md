@@ -4,6 +4,8 @@ permalink: /components/trigger/
 
 # Trigger
 
+SSR 限制：触发插槽或 `content` 插槽内的同一节点同时使用 `v-for` 和 `v-memo` 时，服务端渲染可能报错。触发插槽即使在浮层关闭时也可能报错；`content` 插槽在浮层打开或设置 `unmount-on-close=false` 时可能报错。服务端渲染时请移除该插槽节点上的 `v-memo`；普通 `v-for` 仍可使用。
+
 
 
 更换或清空浮层引用，以及卸载组件时，会移除旧窗口的滚动监听。
@@ -106,7 +108,7 @@ placement 是首选方位，auto-fit-position 默认 true 时最终方位可能�
 | scroll-to-close | 滚动超过阈值时关闭 | `boolean` | `false` |
 | scroll-to-close-distance | 滚动关闭阈值 | `number` | `0` |
 | show-arrow | 渲染装饰箭头 | `boolean` | `false` |
-| hide-empty | content 为空时不渲染浮层 | `boolean` | `false` |
+| hide-empty | content 插槽直接返回空内容时不渲染浮层；组件节点即使最终渲染为空也视为非空 | `boolean` | `false` |
 | prevent-focus | 阻止定位层 mousedown 抢占焦点 | `boolean` | `false` |
 | unmount-on-close | 离场结束后卸载内容 | `boolean` | `true` |
 | animation-name | Vue Transition 名称 | `string` | `trigger-fade` |
@@ -114,10 +116,14 @@ placement 是首选方位，auto-fit-position 默认 true 时最终方位可能�
 | auto-fit-transform-origin | 根据最终方位设置动画原点 | `boolean` | `false` |
 | opened-class | 打开时合并给默认插槽的首个节点；外部 reference 不添加该类 | `ClassName` | `-` |
 | reference-attrs | 写入实际参考元素的属性，或接收 open 的函数；属性撤销、引用替换或卸载时恢复原属性 | `TriggerReferenceAttrs \| ((open: boolean) => TriggerReferenceAttrs)` | `-` |
-| popup-class / popup-style | 定位层类名和样式 | `ClassName / CSSProperties` | `-` |
-| content-class / content-style | 内容层类名和样式 | `ClassName / CSSProperties` | `-` |
-| arrow-class / arrow-style | 箭头类名和样式 | `ClassName / CSSProperties` | `-` |
-| mouse-enter-delay / mouse-leave-delay | hover 打开和关闭延迟，毫秒 | `number` | `100 / 100` |
+| popup-class | 定位层自定义类名 | `ClassName` | `-` |
+| popup-style | 定位层的自定义样式 | `CSSProperties` | `-` |
+| content-class | 内容层的自定义类名 | `ClassName` | `-` |
+| content-style | 内容层的自定义样式 | `CSSProperties` | `-` |
+| arrow-class | 箭头的自定义类名 | `ClassName` | `-` |
+| arrow-style | 箭头的自定义样式 | `CSSProperties` | `-` |
+| mouse-enter-delay | 悬停打开延迟，单位毫秒 | `number` | `100` |
+| mouse-leave-delay | 悬停关闭延迟，单位毫秒 | `number` | `100` |
 | focus-delay | focus 打开延迟，毫秒 | `number` | `0` |
 | popup-hover-stay | 指针进入浮层后保持打开 | `boolean` | `true` |
 | blur-to-close | 失焦时关闭 | `boolean` | `true` |
@@ -159,6 +165,10 @@ placement 是首选方位，auto-fit-position 默认 true 时最终方位可能�
 `reference-attrs` 的 `aria-describedby` 与参考元素已有描述 ID 合并去重；清理或更换引用时恢复原始属性。
 
 `fixed` 定位会识别 transform、filter、perspective 等形成的固定定位包含块，并处理轴向缩放；不保证旋转或倾斜坐标系精确。可访问的同源 iframe 引用与弹层之间会换算坐标并绑定各自文档事件；不支持跨源或无共同祖先的浏览上下文。启用 `update-at-scroll` 时，两端文档及可滚动祖先的滚动都会更新位置。
+
+当引用通过插槽进入封闭 ShadowRoot 内的滚动容器时，外部 Trigger 无法访问该插槽及容器，不能自动监听其滚动。封闭组件可在内部滚动或插槽变化时调用 Trigger 实例的 `resize()`；需要滚动关闭时，可在内部按业务阈值调用 `close()`，并在卸载时清理监听。
+
+弹层挂载到 iframe 内时，显示区域仍受该 iframe 视口裁剪；即使跨文档坐标换算正确，iframe 范围外的弹层内容也不可见。
 
 ## CSS Variables
 

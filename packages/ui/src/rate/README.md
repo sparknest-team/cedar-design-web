@@ -139,7 +139,7 @@ Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，
 
 `read-pretty` 为独立布尔属性，与 `readonly`、`disabled` 同级；字段 > FormItem > Form 继承，显式 `false` 覆盖父级。默认 `false`。纯阅读不显示编辑器。
 
-在 FormItem 中，`label-attrs.for` 与 Rate 的 `id` 匹配时，评分控件会使用表单标签作为无障碍名称；显式 `aria-label` 或 `aria-labelledby` 优先。Rate 不是原生表单控件，点击标签不会自动聚焦评分控件。
+在 FormItem 中，`label-attrs.for` 与 Rate 的 `id` 匹配时，评分控件会使用表单标签作为无障碍名称；显式 `aria-label` 或 `aria-labelledby` 优先。默认的原生标签可在点击后聚焦未禁用的评分控件；阻止标签点击默认行为可取消该聚焦。
 
 ## API
 
@@ -238,7 +238,7 @@ Cedar 默认使用金色星形与紧凑间距；Maple 默认使用主题主色�
 | `--c-rate-disabled-color` | `var(--c-sys-color-content-disabled)` | `color` |
 | `--c-rate-empty-color` | `var(--c-color-fill-3)` | `color` |
 | `--c-rate-error-color` | `var(--c-sys-color-content-danger)` | `color` |
-| `--c-rate-focus-color` | `var(--c-sys-color-content-brand)` | `outline` |
+| `--c-rate-focus-color` | `var(--c-sys-color-action-primary)` | `outline` |
 | `--c-rate-focus-offset` | `2px` | `outline-offset` |
 | `--c-rate-focus-width` | `2px` | `outline` |
 | `--c-rate-gap` | `var(--c-spacing-4)` | `margin-inline-end` |

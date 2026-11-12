@@ -13,7 +13,7 @@
       edit-mode="direct"
       :open-trigger-target="target"
       :filterable="editable"
-      :options="[
+      :data="[
         { value: 'a', label: 'Alpha' },
         { value: 'b', label: 'Beta' },
       ]"

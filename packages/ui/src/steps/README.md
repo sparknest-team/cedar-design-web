@@ -238,7 +238,7 @@ Steps 继承最近的 `dir="ltr"` 或 `dir="rtl"`，支持运行时切换。横�
 | --- | --- | --- |
 | `--c-steps-arrow-item-bg-error` | `var(--c-sys-color-content-danger)` | `background-color`, `border-inline-start` |
 | `--c-steps-arrow-item-bg-finish` | `var(--c-sys-color-state-selected)` | `background-color`, `border-inline-start` |
-| `--c-steps-arrow-item-bg-process` | `var(--c-sys-color-content-brand)` | `background-color`, `border-inline-start` |
+| `--c-steps-arrow-item-bg-process` | `var(--c-sys-color-action-primary)` | `background-color`, `border-inline-start` |
 | `--c-steps-arrow-item-bg-wait` | `var(--c-sys-color-surface-muted)` | `background-color`, `border-inline-start` |
 | `--c-steps-arrow-item-description-color-error` | `var(--c-sys-color-surface-default)` | `color` |
 | `--c-steps-arrow-item-description-color-finish` | `var(--c-sys-color-content-secondary)` | `color` |
@@ -257,7 +257,7 @@ Steps 继承最近的 `dir="ltr"` 或 `dir="rtl"`，支持运行时切换。横�
 | `--c-steps-circle-horizontal-item-description-margin-top` | `var(--c-spacing-1)` | `margin-top` |
 | `--c-steps-circle-item-bg-error` | `var(--c-sys-color-content-danger)` | `background-color` |
 | `--c-steps-circle-item-bg-finish` | `var(--c-sys-color-state-selected)` | `background-color` |
-| `--c-steps-circle-item-bg-process` | `var(--c-sys-color-content-brand)` | `background-color` |
+| `--c-steps-circle-item-bg-process` | `var(--c-sys-color-action-primary)` | `background-color` |
 | `--c-steps-circle-item-bg-wait` | `var(--c-sys-color-surface-muted)` | `background-color` |
 | `--c-steps-circle-item-border-color-error` | `transparent` | `border` |
 | `--c-steps-circle-item-border-color-finish` | `transparent` | `border` |
@@ -270,11 +270,11 @@ Steps 继承最近的 `dir="ltr"` 或 `dir="rtl"`，支持运行时切换。横�
 | `--c-steps-circle-item-icon-border-radius` | `var(--c-border-radius-circle)` | `border-radius` |
 | `--c-steps-circle-item-icon-gap` | `var(--c-spacing-6)` | `inset-inline-start`, `margin-inline-end`, `padding-inline-end` |
 | `--c-steps-circle-item-icon-text-color-error` | `var(--c-sys-color-surface-default)` | `color` |
-| `--c-steps-circle-item-icon-text-color-finish` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-steps-circle-item-icon-text-color-finish` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-steps-circle-item-icon-text-color-process` | `var(--c-sys-color-surface-default)` | `color` |
 | `--c-steps-circle-item-icon-text-color-wait` | `var(--c-sys-color-content-secondary)` | `color` |
 | `--c-steps-circle-item-tail-color-error` | `var(--c-sys-color-content-danger)` | `background-color` |
-| `--c-steps-circle-item-tail-color-process` | `var(--c-sys-color-content-brand)` | `background-color` |
+| `--c-steps-circle-item-tail-color-process` | `var(--c-sys-color-action-primary)` | `background-color` |
 | `--c-steps-circle-item-tail-color-wait` | `var(--c-sys-color-border-default)` | `background-color` |
 | `--c-steps-circle-item-tail-size` | `var(--c-border-width-1)` | `height`, `inset-inline-start`, `top`, `width` |
 | `--c-steps-circle-item-title-color-error` | `var(--c-sys-color-content-primary)` | `color` |
@@ -289,12 +289,12 @@ Steps 继承最近的 `dir="ltr"` 或 `dir="rtl"`，支持运行时切换。横�
 | `--c-steps-dot-horizontal-item-description-margin-top` | `var(--c-spacing-2)` | `margin-top` |
 | `--c-steps-dot-horizontal-item-title-margin-top` | `var(--c-spacing-2)` | `margin-top` |
 | `--c-steps-dot-item-bg-error` | `var(--c-sys-color-content-danger)` | `background-color` |
-| `--c-steps-dot-item-bg-finish` | `var(--c-sys-color-content-brand)` | `background-color` |
-| `--c-steps-dot-item-bg-process` | `var(--c-sys-color-content-brand)` | `background-color` |
+| `--c-steps-dot-item-bg-finish` | `var(--c-sys-color-action-primary)` | `background-color` |
+| `--c-steps-dot-item-bg-process` | `var(--c-sys-color-action-primary)` | `background-color` |
 | `--c-steps-dot-item-bg-wait` | `var(--c-sys-color-content-secondary)` | `background-color` |
 | `--c-steps-dot-item-border-color-error` | `var(--c-sys-color-content-danger)` | `border-color` |
-| `--c-steps-dot-item-border-color-finish` | `var(--c-sys-color-content-brand)` | `border-color` |
-| `--c-steps-dot-item-border-color-process` | `var(--c-sys-color-content-brand)` | `border-color` |
+| `--c-steps-dot-item-border-color-finish` | `var(--c-sys-color-action-primary)` | `border-color` |
+| `--c-steps-dot-item-border-color-process` | `var(--c-sys-color-action-primary)` | `border-color` |
 | `--c-steps-dot-item-border-color-wait` | `var(--c-sys-color-content-secondary)` | `border-color` |
 | `--c-steps-dot-item-description-color-error` | `var(--c-sys-color-content-secondary)` | `color` |
 | `--c-steps-dot-item-description-color-finish` | `var(--c-sys-color-content-secondary)` | `color` |
@@ -306,7 +306,7 @@ Steps 继承最近的 `dir="ltr"` 或 `dir="rtl"`，支持运行时切换。横�
 | `--c-steps-dot-item-icon-size` | `var(--c-size-2)` | `height`, `inset-inline-start`, `margin-inline-end`, `margin-inline-start`, `margin-top`, `padding-top`, `top`, `width` |
 | `--c-steps-dot-item-icon-size-active` | `var(--c-spacing-5)` | `height`, `margin-inline-start`, `margin-top`, `width` |
 | `--c-steps-dot-item-tail-color-error` | `var(--c-sys-color-content-danger)` | `background-color` |
-| `--c-steps-dot-item-tail-color-process` | `var(--c-sys-color-content-brand)` | `background-color` |
+| `--c-steps-dot-item-tail-color-process` | `var(--c-sys-color-action-primary)` | `background-color` |
 | `--c-steps-dot-item-tail-color-wait` | `var(--c-sys-color-border-default)` | `background-color` |
 | `--c-steps-dot-item-tail-size` | `var(--c-border-width-1)` | `height`, `top` |
 | `--c-steps-dot-item-title-color-error` | `var(--c-sys-color-content-primary)` | `color` |
@@ -329,7 +329,7 @@ Steps 继承最近的 `dir="ltr"` 或 `dir="rtl"`，支持运行时切换。横�
 | `--c-steps-navigation-arrow-top` | `var(--c-spacing-5)` | `top` |
 | `--c-steps-navigation-content-margin-bottom` | `var(--c-spacing-8)` | `margin-bottom` |
 | `--c-steps-navigation-description-padding-right` | `var(--c-spacing-8)` | `padding-inline-end` |
-| `--c-steps-navigation-ink-bg` | `var(--c-sys-color-content-brand)` | `background-color` |
+| `--c-steps-navigation-ink-bg` | `var(--c-sys-color-action-primary)` | `background-color` |
 | `--c-steps-navigation-ink-height` | `var(--c-border-width-2)` | `height` |
 | `--c-steps-navigation-ink-spacing-left` | `var(--c-spacing-none)` | `inset-inline-start` |
 | `--c-steps-navigation-ink-spacing-right` | `30px` | `inset-inline-end` |

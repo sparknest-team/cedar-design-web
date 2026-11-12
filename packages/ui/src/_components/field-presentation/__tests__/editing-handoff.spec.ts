@@ -22,7 +22,7 @@ function fixture(extra: Record<string, unknown> = {}, rules?: any, first: any = 
     slots: {
       default: () => [
         h(FormItem, { field: 'first', label: 'First', rules }, () =>
-          h(first, {
+          h(first, { ...('needConfirm' in ((first as any).props ?? {}) ? { needConfirm: true } : {}),
             modelValue: model.first,
             ...extra,
             'onUpdate:modelValue': (value: string) => {

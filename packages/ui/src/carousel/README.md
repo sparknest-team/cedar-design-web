@@ -327,7 +327,7 @@ CarouselProps, CarouselItemProps, CarouselInstance, CarouselItemInstance, Carous
 | `--c-carousel-card-opacity` | `0.6` | `opacity` |
 | `--c-carousel-card-scale` | `0.85` | `transform` |
 | `--c-carousel-fade-duration` | `var(--c-sys-motion-duration-standard)` | `transition` |
-| `--c-carousel-focus-color` | `var(--c-sys-color-content-brand)` | `outline` |
+| `--c-carousel-focus-color` | `var(--c-sys-color-action-primary)` | `outline` |
 | `--c-carousel-focus-offset` | `2px` | `outline-offset` |
 | `--c-carousel-focus-width` | `2px` | `outline` |
 | `--c-carousel-indicator-color-active` | `var(--c-sys-color-content-on-dark)` | `background` |

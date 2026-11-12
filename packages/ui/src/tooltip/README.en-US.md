@@ -5,6 +5,8 @@ permalink: /en/components/tooltip/
 
 # Tooltip
 
+SSR limitation: a trigger slot node using both `v-for` and `v-memo` can make server rendering fail. Remove `v-memo` from that slot node when rendering on the server; ordinary `v-for` remains supported. The same limitation can affect the `content` slot; remove `v-memo` there for server rendering.
+
 Start with the basic example, then compare related settings before moving to controlled, asynchronous or combined use cases.
 
 ## Basic examples
@@ -79,7 +81,7 @@ The directive opens on hover or focus and allows the pointer to enter the toolti
 
 ### Tooltip Props
 
-Tooltip inherits Trigger positioning, container, controlled state, and `close` policies. Its defaults are `hide-empty=true` and `auto-fit-transform-origin=true`; an omitted `animation-name` uses the Tooltip animation. Empty content hides only the tooltip and does not change `open`; component nodes count as content. The instance exposes seven methods: `open`, `close`, `resize`, `allowClose`, `getReference`, `focusReference`, and `setReference`.
+Tooltip inherits Trigger positioning, container, controlled state, and `close` policies. Its defaults are `hide-empty=true` and `auto-fit-transform-origin=true`; an omitted `animation-name` uses the Tooltip animation. Empty content hides only the tooltip and does not change `open`; component nodes count as content even when they render no content, producing an empty tooltip and description relationship. Conditionally render the component node in the slot when its content may be empty. The instance exposes seven methods: `open`, `close`, `resize`, `allowClose`, `getReference`, `focusReference`, and `setReference`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |

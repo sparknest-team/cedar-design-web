@@ -62,6 +62,8 @@ Compare unit formats, milliseconds and custom time fragments, independently of p
 
 `time` is a duration rather than an absolute deadline; the remaining duration freezes while paused or deactivated by KeepAlive. The default slot receives the five fields days, hours, minutes, seconds, and milliseconds directly. `change` fires on reset and animation frames and may be frequent. `auto-start` is read on mount or reset; changing it alone does not start or pause. Repeated format tokens are all replaced. Omitted larger units accumulate into smaller units, so `SSS` alone can exceed three digits.
 
+Pause and deactivation synchronize the displayed and slot values with the frozen remaining time without emitting another `change`. If the deadline has passed before the next frame, pausing displays zero and resuming emits `end` once.
+
 ### Countdown Props
 
 | Prop | Description | Type | Default |

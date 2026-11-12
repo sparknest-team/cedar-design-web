@@ -136,7 +136,7 @@ const options: BackTopProps = { onClick: (event: MouseEvent) => event.preventDef
 | `--c-back-top-bottom` | `40px` | `bottom` |
 | `--c-back-top-button-border-radius` | `50%` | `border-radius` |
 | `--c-back-top-button-size` | `var(--c-sys-control-touch-target)` | `height`, `width` |
-| `--c-back-top-focus-color` | `var(--c-sys-color-content-brand)` | `outline` |
+| `--c-back-top-focus-color` | `var(--c-sys-color-action-primary)` | `outline` |
 | `--c-back-top-focus-offset` | `2px` | `outline-offset` |
 | `--c-back-top-focus-width` | `2px` | `outline` |
 | `--c-back-top-font-size` | `var(--c-sys-font-size-md)` | `font-size` |

@@ -84,14 +84,13 @@ import FieldDecorator from '../../field-decorator/FieldDecorator.vue'
 import { fieldDecoratorProps } from '../../field-decorator/props'
 import { useFormErrorDescription } from '../../form/error-description'
 import { useFormItemLabel } from '../../form/label-context'
-import { useI18n } from '../../locale'
-import defaultLocale from '../../locale/lang/zh-cn'
 import { splitInputAttrs } from '../../input/native-attrs'
 import { createNamespace } from '../../_utils/global-config'
 import { useFieldTexts } from '../field-presentation/texts'
 import { blockFieldOpenClick, isFieldOpenClick } from '../picker-field/open-trigger'
 import { pickerFieldProps } from './props'
 import { useRangeFieldIndex } from './range-field-context'
+import { usePickerRangeLabels } from './range-labels'
 
 defineOptions({
   name: createNamespace('picker-field').name,
@@ -104,7 +103,9 @@ const attrs = useAttrs()
 function inputAttributes(index: number): InputHTMLAttributes & Record<string, unknown> {
   const part = { ...(props.inputAttrs?.[index] ?? {}) }
   for (const key of ['aria-label', 'aria-labelledby'] as const) {
-    if (part[key] === undefined || part[key] === null) delete part[key]
+    if (part[key] === undefined || part[key] === null) {
+      delete part[key]
+    }
   }
   const common = splitInputAttrs(attrs).native
   const merged = mergeProps(common, part as Record<string, unknown>)
@@ -120,7 +121,11 @@ function inputAttributes(index: number): InputHTMLAttributes & Record<string, un
   if ('aria-labelledby' in part && !('aria-label' in part)) {
     delete merged['aria-label']
   }
-  if (explicitRangeLabel.value && (merged['aria-label'] === undefined || merged['aria-label'] === null) && (merged['aria-labelledby'] === undefined || merged['aria-labelledby'] === null)) {
+  if (
+    explicitRangeLabel.value &&
+    (merged['aria-label'] === undefined || merged['aria-label'] === null) &&
+    (merged['aria-labelledby'] === undefined || merged['aria-labelledby'] === null)
+  ) {
     merged['aria-labelledby'] = `${explicitRangeLabel.value} ${endpointLabelId(index)}`
   }
   return merged as InputHTMLAttributes & Record<string, unknown>
@@ -152,16 +157,9 @@ const groupLabelId = computed(() => {
   const ids = [props.inputAttrs?.[0]?.id ?? controlId.value, props.inputAttrs?.[1]?.id ?? `${controlId.value}-1`]
   return !label.target || ids.includes(label.target) ? label.id : undefined
 })
-const explicitRangeLabel = computed(() => props.range && formLabel?.value?.target ? groupLabelId.value : undefined)
+const explicitRangeLabel = computed(() => (props.range && formLabel?.value?.target ? groupLabelId.value : undefined))
 const endpointLabelId = (index: number) => `${generatedId}-range-endpoint-${index}`
-const { i18nMessage } = useI18n()
-const endpointLabels = computed(() => {
-  const legacy = i18nMessage.value.datePicker?.rangePlaceholder?.[props.kind] ?? defaultLocale.datePicker.rangePlaceholder[props.kind]
-  return [
-    i18nMessage.value.fieldPresentation?.rangeStart ?? legacy[0],
-    i18nMessage.value.fieldPresentation?.rangeEnd ?? legacy[1],
-  ]
-})
+const endpointLabels = usePickerRangeLabels(() => props.kind)
 const inputs: (HTMLInputElement | undefined)[] = []
 const activeIndex = useRangeFieldIndex(() => props.disabledParts)
 const active = ref(false)

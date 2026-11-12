@@ -1,0 +1,64 @@
+{
+  "apiRows": [
+    "产品中心",
+    "设计部",
+    "研发部",
+    "运营中心",
+    "客户服务部",
+    "归档部门（禁用）"
+  ],
+  "rows": [
+    {
+      "text": "产品中心",
+      "selected": true,
+      "width": 826,
+      "backgroundWidth": "826px",
+      "border": "0px",
+      "height": 36
+    },
+    {
+      "text": "设计部",
+      "selected": true,
+      "width": 826,
+      "backgroundWidth": "826px",
+      "border": "0px",
+      "height": 36
+    },
+    {
+      "text": "研发部",
+      "selected": true,
+      "width": 826,
+      "backgroundWidth": "826px",
+      "border": "0px",
+      "height": 36
+    },
+    {
+      "text": "运营中心",
+      "selected": false,
+      "width": 826,
+      "backgroundWidth": "826px",
+      "border": "0px",
+      "height": 36
+    },
+    {
+      "text": "客户服务部",
+      "selected": false,
+      "width": 826,
+      "backgroundWidth": "826px",
+      "border": "0px",
+      "height": 36
+    },
+    {
+      "text": "归档部门（禁用）",
+      "selected": false,
+      "width": 826,
+      "backgroundWidth": "826px",
+      "border": "0px",
+      "height": 36
+    }
+  ],
+  "cascaderCheckboxAtStart": {
+    "cedar": true,
+    "maple": true
+  }
+}

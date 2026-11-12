@@ -226,10 +226,10 @@ import type { PaginationProps, PaginationInstance, PaginationPageSizeProps } fro
 | 变量 | 默认值／条件 | 影响的样式 |
 | --- | --- | --- |
 | `--c-pagination-active-background` | `var(--c-color-primary-light-1)` | `background` |
-| `--c-pagination-active-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-pagination-active-color` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-pagination-disabled-background` | `var(--c-color-fill-1)` | `background` |
 | `--c-pagination-disabled-color` | `var(--c-color-text-4)` | `color` |
-| `--c-pagination-focus-color` | `var(--c-sys-color-content-brand)` | `outline` |
+| `--c-pagination-focus-color` | `var(--c-sys-color-action-primary)` | `outline` |
 | `--c-pagination-focus-offset` | `1px` | `outline-offset` |
 | `--c-pagination-focus-space` | `3px` | `padding` |
 | `--c-pagination-focus-width` | `2px` | `outline` |

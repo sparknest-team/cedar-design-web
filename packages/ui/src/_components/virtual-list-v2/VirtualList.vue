@@ -146,6 +146,8 @@ export default defineComponent({
     watch(height, async () => { await nextTick(); updateViewport() })
     onActivated(async () => { await nextTick(); updateViewport() })
 
+    let retainedInlineOffset: number | undefined
+    let retainedScrollTop: number | undefined
     let scrollRequest = 0
     let commandedScroll: { top: number; correct: () => void } | undefined
     let mounted = false
@@ -155,8 +157,23 @@ export default defineComponent({
     const isCurrent = (request: number, element: HTMLElement) =>
       available() && request === scrollRequest && containerRef.value === element
     onMounted(() => { mounted = true })
-    onActivated(() => { if (!disposed) active = true })
-    onDeactivated(() => { active = false; scrollRequest++; commandedScroll = undefined })
+    onActivated(async () => {
+      if (disposed) return
+      active = true
+      const element = containerRef.value
+      const request = scrollRequest
+      const retained = retainedScrollTop
+      const retainedInline = retainedInlineOffset
+      retainedScrollTop = undefined
+      retainedInlineOffset = undefined
+      if (element && retainedInline !== undefined && isCurrent(request, element) && inlineScrollLeft(element) === 0) setInlineScrollLeft(element, retainedInline)
+      await nextTick()
+      if (element && retained !== undefined && isCurrent(request, element) && element.scrollTop === 0) {
+        element.scrollTop = retained
+        if (virtualEnabled.value) setStart(getStartByScroll(element.scrollTop))
+      }
+    })
+    onDeactivated(() => { retainedScrollTop = scrollOffset.value; retainedInlineOffset = readingOffset; active = false; scrollRequest++; commandedScroll = undefined })
     onBeforeUnmount(() => { disposed = true; mounted = active = false; scrollRequest++; commandedScroll = undefined })
 
     watch(dir, () => {
@@ -267,6 +284,7 @@ export default defineComponent({
       if (isNumber(options)) {
         if (Number.isFinite(options)) {
           element.scrollTop = Math.max(0, options)
+          scrollOffset.value = element.scrollTop
           if (virtualEnabled.value) setStart(getStartByScroll(element.scrollTop))
         }
         return

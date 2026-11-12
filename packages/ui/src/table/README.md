@@ -12,7 +12,7 @@ Cedar Table 支持排序、行选择和远程数据等功能；Maple Table 是�
 
 默认行选择控件使用行键生成可访问名称，全选控件使用本地化名称；显式选择列标题优先。
 
-当设置高度、启用粘性表头或虚拟列表导致表格分为多个原生表格时，数据表和汇总表会生成同表语义列头，并通过 `headers` 关联数据单元格。数据表的语义列头同步当前排序状态；汇总表使用独立汇总数据，不声明数据行的排序状态。`td` 插槽显式设置的 `headers` 优先，由调用方负责引用有效的同表列头。实际屏幕阅读器及复杂自定义表头的验收尚未完成；依赖读屏识别列头的场景应验证目标环境，必要时提供可访问的替代内容。
+当设置高度、启用粘性表头或虚拟列表导致表格分为多个原生表格时，数据表和汇总表会生成同表语义列头，并通过 `headers` 关联数据单元格。数据表的语义列头同步当前排序状态；汇总表使用独立汇总数据，不声明数据行的排序状态。`td` 插槽显式设置的 `headers` 优先，由调用方负责引用有效的同表列头。 动态增删或替换 `thead`、`tbody`、`tr`、`th`、`td` 结构插槽时，表格同步更新；`th` 的关联语义表头也会同步。 空状态、页脚、汇总单元格及具名列插槽等内容插槽也支持动态增删和替换。实际屏幕阅读器及复杂自定义表头的验收尚未完成；依赖读屏识别列头的场景应验证目标环境，必要时提供可访问的替代内容。
 
 ## 基础示例
 
@@ -217,7 +217,7 @@ sticky-header 与 sticky-pagination 相对页面或外层滚动容器定位。�
 
 ### 分页挂载到外部容器
 
-`pagination.container` 接收 CSS 选择器或 HTMLElement，省略时分页仍在表格内部。只是改变挂载位置，页码、数据切片、事件和粘性底部仍由同一个 Table 管理，无需插槽或另一套分页状态。使用同一个滚动容器时，外部宿主可设为 display: contents，让粘性分页与横向滚动条共享滚动上下文。指定目标必须实际存在；Vue 3.5 defer 支持同一渲染批次内创建的目标。SSR 由宿主框架处理 Teleport 输出。`pagination=false` 仍表示完全关闭 Table 分页及数据切片。
+`pagination.container` 接收 CSS 选择器或 HTMLElement，省略时分页仍在表格内部。只是改变挂载位置，页码、数据切片、事件和粘性底部仍由同一个 Table 管理，无需插槽或另一套分页状态。使用同一个滚动容器时，外部宿主可设为 display: contents，让粘性分页与横向滚动条共享滚动上下文。指定目标必须实际存在；Vue 3.5 defer 支持同一渲染批次内创建的目标。SSR 由宿主框架处理 Teleport 输出。多个异步表格应使用各自独立的分页目标，并由宿主将每个目标对应的 Teleport 内容注入该目标；共享目标在服务端和客户端异步接管顺序不同时可能发生内容或事件归属错位。`pagination=false` 仍表示完全关闭 Table 分页及数据切片。
 
 ```vue
 <c-table
@@ -591,7 +591,7 @@ Table **不内置**列管理。通过扩展点与外部 `TableColumnManager` 组
 
 标题和单元格具名插槽、列级 `title`、`cell`、`filter-icon` 和 `filter-content`、`empty`、`footer`、`expand-row`、`expand-icon`、分页插槽、`summary-cell`、`drag-handle-icon`、扩展列表头/单元格及 `header-cell-actions` 支持在内容中组合 `v-for` 与 `v-memo`。
 
-目前在服务端渲染时，`thead`、`tbody`、`tr`、`th`、`td` 自定义结构插槽内组合使用 `v-for` 和 `v-memo` 会导致渲染报错。即使循环数组为空也会报错。需要 SSR 时，请暂时移除这些插槽中的 `v-memo`。
+目前在服务端渲染时，`thead`、`tbody`、`tr`、`th`、`td` 自定义结构插槽内组合使用 `v-for` 和 `v-memo` 会导致渲染报错。即使循环数组为空也会报错。Vue 3.5.12 和 3.5.39 的普通组件插槽也可复现这一问题；需要 SSR 时，请暂时移除这些插槽中的 `v-memo`。
 
 通过 `#columns` 声明的 `TableColumn` 支持服务端输出表头与数据单元格，包括分组列和动态列；也可以通过 `columns` 属性定义列。
 
@@ -897,12 +897,12 @@ Table 继承最近的原生 `dir`；直接传入 `dir` 时，服务端首屏即�
 | `--c-table-header-cell-action-margin-left` | `2px` | `margin-inline-start` |
 | `--c-table-header-cell-bg` | `var(--c-color-neutral-2)` | `background-color` |
 | `--c-table-header-cell-text-color` | `rgb(var(--c-gray-10))` | `color` |
-| `--c-table-header-filters-icon-active-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-table-header-filters-icon-active-color` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-table-header-filters-icon-color` | `var(--c-color-text-2)` | `color` |
 | `--c-table-header-filters-icon-hover-bg` | `var(--c-color-neutral-4)` | `background-color` |
 | `--c-table-header-sorted-cell-bg` | `var(--c-color-neutral-3)` | `background-color` |
 | `--c-table-header-sorted-cell-hover-bg` | `rgba(var(--c-gray-4), 0.5)` | `background-color` |
-| `--c-table-header-sorter-icon-active-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-table-header-sorter-icon-active-color` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-table-header-sorter-icon-color` | `var(--c-color-neutral-5)` | `color` |
 | `--c-table-header-sorter-icon-down-top` | `-3px` | `top` |
 | `--c-table-header-sorter-icon-font-size` | `12px` | `font-size` |

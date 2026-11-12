@@ -30,7 +30,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import Link from "../../../link";
-import Button from "../../../button";
+import Button from "../../../button/base";
 import useInjectDatePickerTransform from "../hooks/use-inject-datepicker-transform";
 import { createNamespace } from "../../../_utils/global-config";
 

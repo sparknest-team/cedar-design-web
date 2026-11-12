@@ -1,0 +1,19 @@
+{
+  "rows": [
+    {
+      "text": "Alpha",
+      "border": "0px",
+      "height": 32.399993896484375,
+      "width": 826,
+      "highlightWidth": "826px"
+    },
+    {
+      "text": "Beta",
+      "border": "0px",
+      "height": 32.399993896484375,
+      "width": 826,
+      "highlightWidth": "826px"
+    }
+  ],
+  "text": "TreeSelect · open-trigger-target\n整个字段\n仅右侧图标\n 允许编辑 / 搜索\nAlpha\n\n关闭编辑后，可以复制已有文本；仅图标模式下编辑不会展开。\n\nAlpha\nBeta"
+}

@@ -158,7 +158,7 @@ Use ordinary `v-model`. `modelValue` is the actual switch value and matches chec
 | ripple | Click ripple | boolean | true |
 | handle-elevation | Thumb elevation: true means level 2; numbers are integer-clamped to 0–24 | boolean / number | true |
 
-before-change uses (payload, done, context). Return true, call done(), or fulfill a Promise with a non-false result to allow switching. Return false, call done(false), throw, fulfill with false or reject to cancel. Synchronous void waits for done; fulfilled `Promise<void>` allows. Waiting automatically shows loading and blocks duplicate input. Exceptions cancel permission without adding an error event.
+before-change uses (payload, done, context). Return true, call done(), or fulfill a Promise with a non-false result to allow switching. Return false, call done(false), throw, fulfill with false or reject to cancel. Synchronous void waits for done; fulfilled `Promise<void>` allows. Waiting automatically shows loading and blocks duplicate input. In deferred editing, confirmation is disabled while waiting; closing the editor still cancels the operation. Exceptions cancel permission without adding an error event.
 Pending results become stale after unmount, KeepAlive deactivation, external value updates or changes to disabled/readonly/loading.
 Controlled mode only requests updates. Selection changes after the parent updates model-value. Without model-value, internal state is used.
 
@@ -262,7 +262,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-switch-tonal-text-color` | `var(--c-sys-color-content-secondary)` | `color` |
 | `--c-switch-tonal-track-background` | `var(--c-sys-color-surface-muted)` | `background` |
 | `--c-switch-tonal-width` | `52px` | `min-width` |
-| `--c-switch-track-active-background` | `var(--c-sys-color-content-brand)` | `background`, `outline` |
+| `--c-switch-track-active-background` | `var(--c-sys-color-action-primary)` | `background`, `outline` |
 | `--c-switch-track-background` | `var(--c-sys-color-content-secondary)` | `background` |
 | `--c-switch-track-error-background` | `var(--c-sys-color-content-danger)` | `background`, `border-color` |
 | `--c-switch-width` | `40px` | `min-width` |

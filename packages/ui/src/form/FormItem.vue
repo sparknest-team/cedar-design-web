@@ -116,6 +116,7 @@ import { provideFormItemLabel } from "./label-context";
 import { resolveFormItemStatus } from "./item-decoration";
 import { formItemProps } from "./item-props";
 import {
+  VALIDATE_STATUSES,
   FieldData,
   FieldRule,
   ValidatedError,
@@ -264,21 +265,50 @@ export default defineComponent({
       mergedRules.value.some((item) => item.required),
     );
 
-    const formItemCtx = props.noStyle
-      ? inject(formItemInjectionKey, undefined)
-      : undefined;
+    const formItemCtx = inject(formItemInjectionKey, undefined);
+    const feedbackOwner = Symbol('form-item-feedback');
+    const feedbackSources = new Map<string, Map<symbol, { status: ValidateStatus | ""; message: string }>>();
 
     const updateValidateState = (
       field: string,
       { status, message }: { status: ValidateStatus | ""; message: string },
+      owner = feedbackOwner,
     ) => {
-      validateStatus[field] = status;
-      validateMessage[field] = message;
+      let sources = feedbackSources.get(field);
+      if (!sources) {
+        sources = new Map();
+        feedbackSources.set(field, sources);
+      }
+      if (status || message) {
+        sources.delete(owner);
+        sources.set(owner, { status, message });
+      }
+      else sources.delete(owner);
+      let effective: { status: ValidateStatus | ""; message: string } = { status: "", message: "" };
+      for (const candidate of sources.values()) {
+        const rank = candidate.status ? VALIDATE_STATUSES.indexOf(candidate.status) : -1;
+        const currentRank = effective.status ? VALIDATE_STATUSES.indexOf(effective.status) : -1;
+        if (rank >= currentRank) effective = candidate;
+      }
+      if (!sources.size) feedbackSources.delete(field);
+      validateStatus[field] = effective.status;
+      validateMessage[field] = effective.message;
 
       if (props.noStyle) {
-        formItemCtx?.updateValidateState(field, { status, message });
+        formItemCtx?.updateValidateState(field, effective, feedbackOwner);
       }
     };
+
+    // A no-style item delegates feedback to its parent. Keep the parent in
+    // sync when that ownership changes after an error has already been set.
+    watch(() => props.noStyle, (noStyle) => {
+      if (!formItemCtx) return;
+      for (const name of Object.keys(validateStatus)) {
+        formItemCtx.updateValidateState(name, noStyle
+          ? { status: validateStatus[name], message: validateMessage[name] ?? '' }
+          : { status: '', message: '' }, feedbackOwner);
+      }
+    }, { flush: 'sync' });
 
     const computedFeedback = computed(() =>
       props.feedback && computedValidateStatus.value
@@ -523,8 +553,6 @@ export default defineComponent({
       validateDisabled.value = false;
       for (const name of Object.keys(validateStatus)) {
         updateValidateState(name, { status: '', message: '' });
-        delete validateStatus[name];
-        delete validateMessage[name];
       }
       captureInitialValue();
       registerCurrentField();
@@ -538,6 +566,11 @@ export default defineComponent({
       active = false;
       fieldMounted = false;
       validation.invalidate();
+      if (props.noStyle && formItemCtx) {
+        for (const name of Object.keys(validateStatus)) {
+          formItemCtx.updateValidateState(name, { status: '', message: '' }, feedbackOwner);
+        }
+      }
       unregisterCurrentField();
     });
 

@@ -2,6 +2,9 @@ import { computed, defineComponent, inject, ref } from "vue";
 import { selectionEditorSurface } from "../_components/selected-options/context";
 import { useFormItem } from "../_hooks/use-form-item";
 import Select, { type SelectInstance } from "../select";
+import { peopleSelectEmits } from "./emits";
+import { peopleText } from "./selection";
+import type { PeopleSelectValue } from "./types";
 import { peopleSelectProps } from "./props";
 import { createNamespace } from "../_utils/global-config";
 
@@ -11,16 +14,11 @@ export default defineComponent({
   name,
   inheritAttrs: false,
   props: peopleSelectProps,
-  emits: {
-    "update:modelValue": (value: string | null) => value === null || typeof value === "string",
-    change: (value: string | null) => value === null || typeof value === "string",
-    clear: () => true,
-    search: (query: string) => typeof query === "string",
-  },
+  emits: peopleSelectEmits,
   setup(props, { emit, attrs, slots, expose }) {
     const select = ref<SelectInstance>()
     expose({ focus: () => select.value?.focus(), blur: () => select.value?.blur() })
-    const localValue = ref<string | null>(props.defaultValue);
+    const localValue = ref<PeopleSelectValue>(props.defaultValue);
     const value = computed(() =>
       props.modelValue !== undefined ? props.modelValue : localValue.value,
     );
@@ -34,18 +32,14 @@ export default defineComponent({
     );
     const blocked = () =>
       mergedDisabled.value || mergedReadonly.value || props.loading;
-    const label = computed(
-      () =>
-        (Array.isArray(props.options) ? props.options : []).find((option) => option.value === value.value)
-          ?.label ||
-        props.label ||
-        value.value ||
-        props.defaultText,
-    );
+    const label = computed(() => peopleText(value.value, props))
     const commit = (next: unknown) => {
       if (blocked()) return;
-      // PeopleSelect has one string identity; clearing keeps the published empty string.
-      const text = next === null ? null : typeof next === "string" ? next : "";
+      const text: PeopleSelectValue = next === null
+        ? null
+        : props.multiple
+          ? Array.isArray(next) ? next.filter((id): id is string => typeof id === 'string') : []
+          : typeof next === 'string' ? next : ''
       if (props.modelValue === undefined) localValue.value = text;
       emit("update:modelValue", text);
       emit("change", text);
@@ -59,6 +53,7 @@ export default defineComponent({
           {...attrs}
           {...{ name: props.name }}
           placeholder={props.placeholder}
+          multiple={props.multiple}
           clearable={props.clearable}
           emptyValue={props.emptyValue}
           filterable={props.filterable}

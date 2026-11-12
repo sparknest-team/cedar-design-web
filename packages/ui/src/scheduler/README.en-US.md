@@ -429,7 +429,8 @@ All variables are defined in `style/token.less` and support light/dark theme ove
 | drag-to-create | Drag-select empty slots in day/week/resource-day views | boolean | false |
 | month-event-limit | Maximum directly displayed events per month-view day; extra events use Popover | number | 3 |
 | overlap-event-limit | Maximum directly displayed events per overlapping time-grid group; extra events use Popover | number | — |
-| zoom / default-zoom | Timeline zoom, 0.5–4 | number | 1 |
+| zoom | Controlled timeline zoom, 0.5–4; supports v-model:zoom | number | `undefined` |
+| default-zoom | Initial uncontrolled timeline zoom, 0.5–4 | number | `1` |
 | show-date-header | Tiered timeline date headers | boolean | true |
 | show-assignment-details | Edit resource occupancy and roles | boolean | false |
 | show-resource-load | Resource peak load, capacity and utilization within the range | boolean | false |
@@ -445,18 +446,21 @@ All variables are defined in `style/token.less` and support light/dark theme ove
 | editable | Enable the built-in editor; false delegates through editor-request | boolean | true |
 | before-change | Return false to cancel; supports asynchronous interception and save APIs | SchedulerBeforeChange / SchedulerBeforeChange[] | — |
 | selectable | Enable multi-selection | boolean | false |
-| selected-keys / default-selected-keys | Controlled event IDs / initial uncontrolled selection | string[] | — / [] |
+| selected-keys | Controlled selected event IDs; supports v-model:selected-keys; shared events count once | string[] | `undefined` |
+| default-selected-keys | Initial uncontrolled selected event IDs; shared events count once | string[] | `[]` |
 | history | Enable undo and redo for accepted changes | boolean | false |
 | history-limit | Positive history capacity; invalid values fall back to 20 | number | 20 |
 | before-transaction | Transaction guard; replaces before-change when provided | SchedulerBeforeTransaction / SchedulerBeforeTransaction[] | — |
 | working-hours | Weekly working hours; omitted means unrestricted, empty forbids timed events | SchedulerWorkingHours[] | — |
 | date-working-hours | Date-specific working-hour overrides | SchedulerDateWorkingHours[] | [] |
 | disabled-ranges | Unavailable intervals, optionally scoped to resources | SchedulerDisabledRange[] | [] |
-| scale / default-scale | Controlled / uncontrolled resource timeline scale | 'hour' / 'day' | — / day |
+| scale | Controlled resource timeline scale; supports v-model:scale | `'hour' \| 'day'` | `undefined` |
+| default-scale | Initial uncontrolled resource timeline scale | `'hour' \| 'day'` | `'day'` |
 | virtual-list-props | Enables virtual resource timeline scrolling when provided | SchedulerVirtualListProps | — |
 | resource-group-dimensions | Cross-group in dimension order, with at least two distinct dimensions | string[] | [] |
 | resource-group-by | Map a resource to a stable group key | (resource: SchedulerResource) => string | — |
-| expanded-keys / default-expanded-keys | Controlled / uncontrolled expanded group keys; omitted defaults to all expanded | string[] | — / — |
+| expanded-keys | Controlled expanded group keys; supports v-model:expanded-keys; all groups expand when omitted | string[] | `undefined` |
+| default-expanded-keys | Initial uncontrolled expanded group keys; all groups expand when omitted | string[] | `undefined` |
 
 mode is `day | week | month | agenda | resource-day | resource-timeline`. Agenda/resource-timeline navigate by week. Events outside time-grid hours remain visible in month/agenda/timeline.
 
@@ -668,7 +672,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-scheduler-event-min-height` | `20px` | `min-height`, `min-width` |
 | `--c-scheduler-event-padding` | `4px` | `padding` |
 | `--c-scheduler-event-radius` | `4px` | `border-radius` |
-| `--c-scheduler-focus-color` | `var(--c-sys-color-content-brand)` | `outline` |
+| `--c-scheduler-focus-color` | `var(--c-sys-color-action-primary)` | `outline` |
 | `--c-scheduler-focus-width` | `2px` | `outline`, `outline-offset` |
 | `--c-scheduler-font-size` | `14px` | `font-size` |
 | `--c-scheduler-gap` | `12px` | `gap`, `margin-bottom`, `padding` |

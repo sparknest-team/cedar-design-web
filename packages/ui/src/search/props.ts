@@ -7,7 +7,7 @@ import type {
   StyleValue,
 } from "vue";
 import type { ButtonProps } from "../button";
-import { inputProps } from "../input";
+import { inputProps } from "../input/props";
 
 export type SearchShape = "square" | "round";
 export type SearchEditMode = "direct" | "popup";

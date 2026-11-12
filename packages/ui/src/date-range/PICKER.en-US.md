@@ -121,7 +121,8 @@ Pure panels do not accept field/popup props such as open/default-open, popup-con
 | ----------------- | ------------------------------------------------------- | ------------------------------------------------ | ------- |
 | `default-value` | Uncontrolled initial value, read once | DateValue / DateValue[] | — |
 | `value-format` | Model and event value format: a date format string, Date, or timestamp | string | Follows type |
-| `min` / `max` | Inclusive bounds; string bounds use value-format | DateValue | — |
+| `min` | Inclusive minimum date; string bounds use value-format | DateValue | — |
+| `max` | Inclusive maximum date; string bounds use value-format | DateValue | — |
 | `disabled-time` | Disabled times for the current date and endpoint | (date: Date, side: DateSide) => DateDisabledTime | — |
 | `disable-confirm` | Commit immediately | boolean | true |
 

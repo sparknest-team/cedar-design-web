@@ -125,7 +125,7 @@ Cedar uses edit-mode="click" / "dblclick" to open an editor popup near the field
 
 `read-pretty` is an independent boolean alongside `readonly` and `disabled`. It inherits from field to FormItem to Form; explicit `false` overrides the parent. The default is `false`. Reading mode renders no editor.
 
-In FormItem, when `label-attrs.for` matches the Rate `id`, the form label supplies its accessible name. Explicit `aria-label` or `aria-labelledby` takes precedence. Rate is not a native form control, so clicking the label does not automatically focus it.
+Inside FormItem, when `label-attrs.for` matches Rate's `id`, the rating control uses the form label as its accessible name; explicit `aria-label` or `aria-labelledby` takes precedence. Clicking the default native label focuses an enabled rating control; preventing the label click default cancels that focus.
 
 ## API
 
@@ -224,7 +224,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-rate-disabled-color` | `var(--c-sys-color-content-disabled)` | `color` |
 | `--c-rate-empty-color` | `var(--c-color-fill-3)` | `color` |
 | `--c-rate-error-color` | `var(--c-sys-color-content-danger)` | `color` |
-| `--c-rate-focus-color` | `var(--c-sys-color-content-brand)` | `outline` |
+| `--c-rate-focus-color` | `var(--c-sys-color-action-primary)` | `outline` |
 | `--c-rate-focus-offset` | `2px` | `outline-offset` |
 | `--c-rate-focus-width` | `2px` | `outline` |
 | `--c-rate-gap` | `var(--c-spacing-4)` | `margin-inline-end` |

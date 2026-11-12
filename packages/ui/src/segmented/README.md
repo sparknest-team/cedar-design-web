@@ -71,7 +71,7 @@ permalink: /components/segmented/
 
 | 参数 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| model-value / v-model | 当前值 | `string \| number` | — |
+| model-value | 当前值 支持 `v-model`。 | `string \| number` | `—` |
 | default-value | 非受控默认值 | `string \| number` | — |
 | options | 选项列表，支持只读数组 | `ReadonlyArray<string \| number \| SegmentedOption>` | `[]` |
 | size | 尺寸；未设置时继承表单和全局配置，最终回退 md | `xs \| sm \| md \| lg \| xl` | `undefined` |

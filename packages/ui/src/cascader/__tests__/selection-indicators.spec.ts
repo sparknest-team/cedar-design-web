@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, test } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { nextTick } from 'vue'
+import Checkbox from '../../checkbox'
 import Cascader from '../index'
 import CascaderMenu from '../CascaderMenu.vue'
 import CascaderOption from '../cascader-option'
@@ -23,6 +24,28 @@ function row(wrapper: ReturnType<typeof mount>, value: string) {
 }
 
 describe('Cascader selection indicators', () => {
+  for (const checkStrictly of [false, true]) {
+    test(`checkbox toggles selection without opening the child menu (${checkStrictly})`, async () => {
+      const wrapper = create({ multiple: true, checkStrictly })
+      await nextTick()
+      const parent = row(wrapper, 'group')
+      expect(parent.findComponent(Checkbox).exists()).toBe(true)
+      const checkbox = parent.get('input[type="checkbox"]')
+      ;(checkbox.element as HTMLInputElement).click()
+      await nextTick()
+      expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([checkStrictly ? ['group'] : ['a', 'b']])
+      expect(parent.attributes('aria-expanded')).toBe('false')
+      expect(wrapper.findAll('.c-cascader-panel-column')).toHaveLength(1)
+      ;(checkbox.element as HTMLInputElement).click()
+      await nextTick()
+      expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([[]])
+      expect(wrapper.findAll('.c-cascader-panel-column')).toHaveLength(1)
+      await parent.get('.c-cascader-option-label').trigger('click')
+      expect(parent.attributes('aria-expanded')).toBe('true')
+      expect(wrapper.findAll('.c-cascader-panel-column')).toHaveLength(2)
+    })
+  }
+
   test('multiple parent is unchecked, mixed, then checked; disabled leaves do not block select-all', async () => {
     const wrapper = create({ multiple: true, modelValue: [] })
     await nextTick()

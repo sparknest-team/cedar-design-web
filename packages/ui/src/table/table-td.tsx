@@ -10,6 +10,7 @@ import AutoTooltip from "../_components/auto-tooltip/auto-tooltip"
 import TableSlot from "./TableSlot.vue"
 import { forwardTableColumnSlot, forwardTableSlot } from "./forward-table-slot"
 import { getColumnLayoutKey, isTableExtraColumn } from "./extra-column"
+import { firstStructuralNode } from './structural-slot'
 
 const TD_TYPES = [
   "normal",
@@ -288,11 +289,11 @@ export default defineComponent({
     };
 
     return () => {
-      const customCell = slots.td?.({
+      const customCell = firstStructuralNode(slots.td?.({
         record: props.record?.raw,
         column: props.column,
         rowIndex: props.rowIndex ?? -1,
-      })[0];
+      }));
       const customHeaders = customCell?.props && Object.prototype.hasOwnProperty.call(customCell.props, 'headers') && customCell.props.headers !== undefined
         ? customCell.props.headers
         : props.headers;

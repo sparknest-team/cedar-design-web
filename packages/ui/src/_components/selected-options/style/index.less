@@ -28,7 +28,7 @@
       cursor: default;
     }
     &:focus-visible {
-      outline: 2px solid var(--c-sys-color-content-brand);
+      outline: 2px solid var(--c-sys-color-action-primary);
       outline-offset: 1px;
     }
   }
@@ -168,10 +168,14 @@
     overflow-wrap: anywhere;
   }
 
-  .c-select-option.c-select-option-selected,
-  .c-select-option.c-select-option-selected:hover {
-    background: var(--c-selection-editor-selected-background);
-    color: var(--c-selection-editor-accent);
+  .c-select-option.c-select-option-selected:not(.c-select-option-disabled) {
+    background: var(--c-select-popup-option-bg-selected);
+    color: var(--c-select-popup-option-text-color-selected);
+
+    &:hover,
+    &.c-select-option-active {
+      background: var(--c-select-popup-option-bg-selected-hover);
+    }
   }
   .c-select-option-disabled {
     opacity: var(--c-selected-options-disabled-opacity);
@@ -199,9 +203,14 @@
     white-space: normal;
     overflow-wrap: anywhere;
   }
-  .c-cascader-option > span:first-child {
-    order: 2;
-    margin-inline-start: var(--c-selection-editor-gap);
+  .c-cascader-option .c-cascader-option-checkbox {
+    order: -1;
+    flex: none;
+    margin-inline-end: var(--c-selection-editor-gap);
+
+    .c-checkbox {
+      margin-inline-end: 0;
+    }
   }
   .c-selection-indicator {
     margin: 0;
@@ -209,11 +218,14 @@
     height: var(--c-selection-editor-check-size);
     border-radius: var(--c-selection-editor-radius);
   }
-  .c-cascader-option.c-cascader-option-selected,
-  .c-cascader-option.c-cascader-option-selected:hover,
-  .c-cascader-option-active {
-    background: var(--c-selection-editor-selected-background);
-    color: var(--c-selection-editor-accent);
+  .c-cascader-option.c-cascader-option-selected:not(.c-cascader-option-disabled) {
+    background: var(--c-cascader-item-bg-active);
+    color: var(--c-cascader-item-text-color-active);
+
+    &:hover,
+    &.c-cascader-option-active {
+      background: var(--c-cascader-item-bg-hover);
+    }
   }
   &--mobile {
     width: 100%;
@@ -227,8 +239,6 @@
     .c-select-dropdown .c-select-option,
     .c-cascader-option {
       min-height: var(--c-selection-editor-touch-height);
-      border-radius: 0;
-      border-bottom: 1px solid var(--c-selection-editor-border);
       font-size: var(--c-selection-editor-touch-font-size);
     }
     .c-selection-indicator {
@@ -359,5 +369,17 @@
   }
   &--mobile .c-tree-node {
     min-height: var(--c-selection-editor-touch-height);
+  }
+}
+
+.c-selection-editor--select,
+.c-selection-editor--auto-complete,
+.c-selection-editor--people-select {
+  .c-select-dropdown .c-select-dropdown-list-wrapper {
+    padding-inline: var(--c-select-popup-padding-horizontal);
+  }
+  &.c-selection-editor--mobile .c-select-dropdown .c-select-option {
+    border-radius: var(--c-select-popup-option-border-radius);
+    border-bottom: 0;
   }
 }

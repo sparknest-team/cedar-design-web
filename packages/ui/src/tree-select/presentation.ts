@@ -5,6 +5,7 @@ import { withFieldPresentation } from "../_components/field-presentation/with-fi
 import Base from "./TreeSelect.vue"
 
 export default withFieldPresentation(Base, {
+  selectionConfirmation: 'update',
   pauseSelectionWhileLoading: true,
   editor: ({ props, attrs, value, update, emit, slots, disabled, readonly }) =>
     h(SelectionEditor, { kind: "tree-select" }, () =>

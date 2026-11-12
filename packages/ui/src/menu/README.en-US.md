@@ -163,8 +163,10 @@ Use ordinary `v-model`. `modelValue` is the selected option value; `defaultValue
 | unmount-on-close | Unmount the panel after closing | `boolean` | `true` |
 | reference | External trigger element or selector | `MenuReference` | `-` |
 | popup-class | Positioning-layer class | `string / array / object` | `-` |
-| offset-x / offset-y | Offset relative to the trigger | `string / number` | `0` |
-| mouse-enter-delay / mouse-leave-delay | Root menu hover-open / hover-close delay in milliseconds | `number` | `100` |
+| offset-x | Horizontal offset relative to the trigger | `string / number` | `0` |
+| offset-y | Vertical offset relative to the trigger | `string / number` | `0` |
+| mouse-enter-delay | Hover-open delay in milliseconds | `number` | `100` |
+| mouse-leave-delay | Hover-close delay in milliseconds | `number` | `100` |
 | close-on-click-reference | Close when the trigger is clicked again | `boolean` | `true` |
 | cover | Whether the popup covers its trigger | `boolean` | `false` |
 | elevation | Default shadow, no shadow, or a specific elevation level | `boolean / number` | `true` |

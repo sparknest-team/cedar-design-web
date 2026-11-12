@@ -30,7 +30,7 @@ function formField(Field: any, extra: any, initial: any = 'old', rules?: any) {
     slots: {
       default: () =>
         h(FormItem, { field: 'value', label: 'Field', rules }, () =>
-          h(Field, {
+          h(Field, { needConfirm: true,
             ...extra,
             modelValue: model.value,
             'onUpdate:modelValue': (value: any) => {
@@ -64,7 +64,7 @@ function remotePeople(load: (query: string) => Promise<ReturnType<typeof option>
     setup() {
       source = useAsyncData(() => load(''), { initialData: [] as ReturnType<typeof option>[], debounce })
       return () =>
-        h(PeopleSelect, {
+        h(PeopleSelect, { needConfirm: true,
           options: source.data.value,
           loading: source.loading.value,
           label: 'old（old）',

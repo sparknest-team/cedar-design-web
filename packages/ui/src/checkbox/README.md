@@ -419,7 +419,7 @@ import type { CheckboxProps } from "@cedar-design/ui-vue";
 | `--c-checkbox-animation-duration` | `var(--c-transition-duration-3)` | `transition` |
 | `--c-checkbox-control-border-radius` | `2px` | `border-radius` |
 | `--c-checkbox-control-color` | `var(--c-sys-color-content-secondary)` | `color` |
-| `--c-checkbox-control-color-checked` | `var(--c-sys-color-content-brand)` | `color`, `outline` |
+| `--c-checkbox-control-color-checked` | `var(--c-sys-color-action-primary)` | `color`, `outline` |
 | `--c-checkbox-control-color-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
 | `--c-checkbox-control-color-error` | `var(--c-sys-color-content-danger)` | `color` |
 | `--c-checkbox-control-size` | `14px` | `height`, `width` |

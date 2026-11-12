@@ -14,6 +14,8 @@ import type { TreeSelectValue } from './types'
 
 export const treeSelectProps = {
   ...fieldLoadingProps,
+  /** 弹出编辑是否需要确认；未设置时单选即提交，多选保留确认。 */
+  needConfirm: { type: Boolean, default: undefined },
   openTriggerTarget: openTriggerTargetProp,
   /** 内置字段匹配是否区分大小写。 */
   caseSensitive: { type: Boolean, default: false },

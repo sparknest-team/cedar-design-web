@@ -9,7 +9,7 @@ import EditorPanel from '../../_components/field-presentation/EditorPanel.vue'
 
 const options = [{ value: 'a', label: 'Alpha' }, { value: 'b', label: 'Beta' }]
 test('Cascader field keeps its error description without assigning it to option checkboxes', async () => {
-  const wrapper = mount(Form, { props: { editMode: 'direct', model: { value: [] } }, slots: { default: () => h(FormItem, { field: 'value', label: 'Value' }, () => h(Cascader, { multiple: true, editMode: 'direct', defaultOpen: true, popupContainer: false, options, 'aria-describedby': 'external' })) } })
+  const wrapper = mount(Form, { props: { editMode: 'direct', model: { value: [] } }, slots: { default: () => h(FormItem, { field: 'value', label: 'Value' }, () => h(Cascader, { needConfirm: true,  multiple: true, editMode: 'direct', defaultOpen: true, popupContainer: false, options, 'aria-describedby': 'external' })) } })
   try {
     ;(wrapper.vm as any).setFields({ value: { message: 'Invalid selection' } })
     await flushPromises()
@@ -29,7 +29,7 @@ test('Cascader field keeps its error description without assigning it to option 
 })
 
 test('editor field keeps the error while option checkboxes do not inherit it', async () => {
-  const wrapper = mount(Form, { attachTo: document.body, props: { editMode: 'direct', model: { value: [] } }, slots: { default: () => h(FormItem, { field: 'value', label: 'Value' }, () => h(Cascader, { multiple: true, editMode: 'click', popupContainer: false, options, 'aria-describedby': 'external' })) } })
+  const wrapper = mount(Form, { attachTo: document.body, props: { editMode: 'direct', model: { value: [] } }, slots: { default: () => h(FormItem, { field: 'value', label: 'Value' }, () => h(Cascader, { needConfirm: true,  multiple: true, editMode: 'click', popupContainer: false, options, 'aria-describedby': 'external' })) } })
   try {
     ;(wrapper.vm as any).setFields({ value: { message: 'Invalid selection' } })
     await nextTick()
@@ -48,7 +48,7 @@ test('editor field keeps the error while option checkboxes do not inherit it', a
 })
 
 test('an independently nested FormItem inside an option keeps its own error', async () => {
-  const wrapper = mount(Form, { props: { editMode: 'direct', model: { value: [], child: '' } }, slots: { default: () => h(FormItem, { field: 'value', label: 'Value' }, () => h(Cascader, { multiple: true, editMode: 'direct', defaultOpen: true, popupContainer: false, options: [options[0]] }, { option: () => h(FormItem, { field: 'child', label: 'Child' }, () => h(Input, { 'aria-label': 'Inner' })) })) } })
+  const wrapper = mount(Form, { props: { editMode: 'direct', model: { value: [], child: '' } }, slots: { default: () => h(FormItem, { field: 'value', label: 'Value' }, () => h(Cascader, { needConfirm: true,  multiple: true, editMode: 'direct', defaultOpen: true, popupContainer: false, options: [options[0]] }, { option: () => h(FormItem, { field: 'child', label: 'Child' }, () => h(Input, { 'aria-label': 'Inner' })) })) } })
   try {
     ;(wrapper.vm as any).setFields({ value: { message: 'Selection error' }, child: { message: 'Child error' } })
     await flushPromises()

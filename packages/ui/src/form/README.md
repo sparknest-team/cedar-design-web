@@ -6,11 +6,28 @@ permalink: /components/form/
 
 ## 字段名称
 
-直接编辑模式下，为单个字段设置可见标签时，可将 FormItem 的 `label-attrs` 中的 `for` 与控件的 `id` 对应；选择、日期和时间字段的原生输入不会用 placeholder 覆盖已关联的标签。显式 `aria-label` 或 `aria-labelledby` 仍按原生无障碍名称规则优先。placeholder 只是未提供标签时的回退，不能替代清晰的字段标签。日期和时间范围字段在 FormItem 中会将表单标签关联到范围分组；仍需通过 `input-attrs` 分别提供能够区分起止端点的名称。若 `label-attrs.for` 指向其他控件，不会将该标签误关联到范围分组。 `tooltip` 提示按钮可单独聚焦，其名称不会合并到字段标签中。
+在 Shadow DOM 中使用延迟编辑 Slider 时，若弹层传送到 `body`，浏览器可能无法通过 ID 将弹层内控件与 Shadow DOM 中的提示或错误关联。可设置 `:popup-container="false"`，使弹层留在同一根节点；仍需为控件提供清晰名称。
+
+直接编辑模式下，为单个字段设置可见标签时，可将 FormItem 的 `label-attrs` 中的 `for` 与控件的 `id` 对应；选择、日期和时间字段的原生输入不会用 placeholder 覆盖已关联的标签。显式 `aria-label` 或 `aria-labelledby` 仍按原生无障碍名称规则优先。placeholder 只是未提供标签时的回退，不能替代清晰的字段标签。日期和时间范围字段在 FormItem 中会将表单标签关联到范围分组；仍需通过 `input-attrs` 分别提供能够区分起止端点的名称。若 `label-attrs.for` 指向其他控件，不会将该标签误关联到范围分组。 当前未设置 `for` 时，范围控件会引用最近的 FormItem 标签，即使同一表单项还有其他控件。混合字段请将范围控件放在独立的有样式 FormItem 中并分别命名，或通过明确的 `for` 指向实际目标并为其他控件提供独立名称。单值 Slider 在 `for` 匹配组件 `id` 时为滑块及可选数字输入关联该标签；点击默认原生标签可聚焦未禁用的滑块；阻止标签点击默认行为可取消该聚焦。范围 Slider 的 `id` 与 `for` 匹配时，表单标签命名整个分组；仍应使用 `aria-label` 数组分别命名两个端点。 `tooltip` 提示按钮可单独聚焦，其名称不会合并到字段标签中。
+
+Transfer 在未设置 `for` 时也会引用最近的 FormItem 标签，即使同一项内有其他字段。混合使用时可将 Transfer 放入单独的 FormItem，或为它提供明确名称，并为其他字段分别关联标签。
 
 具有数据收集、校验和提交功能的表单，包含复选框、单选框、输入框、下拉选择框等元素。
 
 标签一律由 `FormItem` 的 `label`（或 label 插槽）负责渲染；控件本身只提供 `placeholder` 等占位文案，不承担字段标签。
+
+### 同一标签下的多个控件
+
+混合使用多个控件时，为可见标签设置唯一 ID，并用它显式命名分组；每个控件也需要自己的名称。每个 FormItem 实例应使用不同的 ID。
+
+```vue
+<c-form-item label="Contact" label-component="span" :label-attrs="{ id: 'contact-label' }">
+  <div role="group" aria-labelledby="contact-label">
+    <c-input aria-label="Email" />
+    <input aria-label="Phone" />
+  </div>
+</c-form-item>
+```
 
 ## 阅读方向
 
@@ -220,7 +237,7 @@ Pause cross-field validation holds the local confirmation rule until Resolve cro
 
 ### 字段展示与确认提交
 
-Form、FormItem、Input 和 Select 支持 edit-mode 继承，优先级为字段 > FormItem > Form。默认 direct；Cedar 支持 click/dblclick。普通 v-model 不变，弹层默认确认后提交。readPretty 不显示编辑器和搜索。direct 即时更新，弹层确认后更新；搜索框按展示位置自动排列。
+Form、FormItem、Input 和 Select 支持 edit-mode 继承，优先级为字段 > FormItem > Form。默认 direct；Cedar 支持 click/dblclick。普通 v-model 不变，选择字段单选默认即选即提交，多选默认确认；其他字段保留各自确认方式。readPretty 不显示编辑器和搜索。direct 即时更新，确认模式在确认后更新；搜索框按展示位置自动排列。
 
 <demo src="./__demos__/field-presentation.vue"></demo>
 
@@ -674,7 +691,7 @@ import type {
 | `--c-form-status-validating-bg` | `var(--c-color-fill-2)` | `background-color` |
 | `--c-form-status-validating-border-color` | `transparent` | `border-color` |
 | `--c-form-status-validating-focus-bg` | `var(--c-color-bg-2)` | `background-color` |
-| `--c-form-status-validating-focus-border-color` | `var(--c-sys-color-content-brand)` | `border-color` |
+| `--c-form-status-validating-focus-border-color` | `var(--c-sys-color-action-primary)` | `border-color` |
 | `--c-form-status-validating-focus-shadow-color` | `var(--c-color-primary-light-2)` | `box-shadow` |
 | `--c-form-status-validating-focus-shadow-size` | `var(--c-shadow-distance-none)` | `box-shadow` |
 | `--c-form-status-validating-hover-bg` | `var(--c-color-fill-3)` | `background-color` |
@@ -691,7 +708,7 @@ import type {
 | `--c-form-status-warning-hover-border-color` | `transparent` | `border-color` |
 | `--c-form-status-warning-tip-icon-color` | `var(--c-sys-color-content-warning)` | `color` |
 | `--c-form-status-warning-tip-text-color` | `var(--c-sys-color-content-warning)` | `color` |
-| `--c-form-tooltip-margin-left` | `var(--c-sys-space-2)` | `margin-inline-start` |
+| `--c-form-tooltip-margin-left` | `var(--c-sys-space-2)` | `padding-inline-start` |
 | `--c-form-tooltip-text-color` | `var(--c-sys-color-content-secondary)` | `color` |
 | `--c-form-transition-duration-3` | `var(--c-transition-duration-3)` | `transition` |
 | `--c-form-transition-duration-5` | `var(--c-transition-duration-5)` | `animation` |

@@ -147,11 +147,11 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | --- | --- | --- |
 | `--c-progress-animation-duration` | `1.5s` | `animation`, `animation-delay` |
 | `--c-progress-danger-color` | `var(--c-sys-color-content-danger)` | `color` |
-| `--c-progress-default-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-progress-default-color` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-progress-font-size` | `var(--c-sys-font-size-sm)` | `font-size` |
 | `--c-progress-info-color` | `var(--c-sys-color-content-info)` | `color` |
 | `--c-progress-line-border-radius` | `9999px` | `border-radius` |
-| `--c-progress-primary-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-progress-primary-color` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-progress-secondary-color` | `var(--c-sys-color-content-secondary)` | `color` |
 | `--c-progress-steps-gap` | `var(--c-sys-space-2)` | `gap` |
 | `--c-progress-success-color` | `var(--c-sys-color-content-success)` | `color` |

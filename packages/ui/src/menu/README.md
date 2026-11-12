@@ -177,8 +177,10 @@ SplitButton 已封装按钮与下拉命令菜单的组合，并通过 `MenuOptio
 | unmount-on-close | 关闭后是否卸载面板 | `boolean` | `true` |
 | reference | 外部触发元素或选择器 | `MenuReference` | `-` |
 | popup-class | 定位层类名 | `string / array / object` | `-` |
-| offset-x / offset-y | 相对触发器偏移 | `string / number` | `0` |
-| mouse-enter-delay / mouse-leave-delay | 根菜单悬停打开 / 关闭延迟，毫秒 | `number` | `100` |
+| offset-x | 相对触发器的横向偏移 | `string / number` | `0` |
+| offset-y | 相对触发器的纵向偏移 | `string / number` | `0` |
+| mouse-enter-delay | 悬停打开延迟，单位毫秒 | `number` | `100` |
+| mouse-leave-delay | 悬停关闭延迟，单位毫秒 | `number` | `100` |
 | close-on-click-reference | 再次点击触发器是否关闭 | `boolean` | `true` |
 | cover | 浮层是否覆盖触发器 | `boolean` | `false` |
 | elevation | 默认阴影、关闭阴影或指定层级 | `boolean / number` | `true` |

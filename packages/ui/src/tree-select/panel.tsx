@@ -198,7 +198,11 @@ export default defineComponent({
                   aria-busy={status.loading || undefined}
                   aria-disabled={visibleNodeMap.value.get(key)?.disabled}
                   aria-expanded={status.isLeaf ? undefined : status.expanded}
-                  class={[`${prefixCls}-option`, { [`${prefixCls}-option-active`]: key === activeKey.value }]}
+                  class={[`${prefixCls}-option`, {
+                    [`${prefixCls}-option-active`]: key === activeKey.value,
+                    [`${prefixCls}-option-selected`]: status.selected || status.checked,
+                    [`${prefixCls}-option-disabled`]: visibleNodeMap.value.get(key)?.disabled,
+                  }]}
                   onMouseenter={() => {
                     if (visibleNodeMap.value.has(key) && !visibleNodeMap.value.get(key)?.disabled) activeKey.value = key
                   }}

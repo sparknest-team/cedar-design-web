@@ -1,0 +1,47 @@
+{
+  "rows": [
+    {
+      "text": "Product",
+      "border": "0px",
+      "height": 32.399993896484375,
+      "width": 826,
+      "highlightWidth": "826px"
+    },
+    {
+      "text": "Design",
+      "border": "0px",
+      "height": 32.399993896484375,
+      "width": 826,
+      "highlightWidth": "826px"
+    },
+    {
+      "text": "Engineering",
+      "border": "0px",
+      "height": 32.4000244140625,
+      "width": 826,
+      "highlightWidth": "826px"
+    },
+    {
+      "text": "Operations",
+      "border": "0px",
+      "height": 32.39996337890625,
+      "width": 826,
+      "highlightWidth": "826px"
+    },
+    {
+      "text": "Support",
+      "border": "0px",
+      "height": 32.4000244140625,
+      "width": 826,
+      "highlightWidth": "826px"
+    },
+    {
+      "text": "Archived department (disabled)",
+      "border": "0px",
+      "height": 32.399993896484375,
+      "width": 826,
+      "highlightWidth": "826px"
+    }
+  ],
+  "text": "TreeSelect · multiple.en-US\nDesign\nSelect departments\n\nSelected departments: design\n\nDesign\nProduct\nDesign\nEngineering\nOperations\nSupport\nArchived department (disabled)"
+}

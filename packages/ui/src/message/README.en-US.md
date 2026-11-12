@@ -119,7 +119,7 @@ Exceptions from close/closed notification callbacks do not retain closed entries
 
 | Prop | Description | Type | Default |
 | --------------------- | -------------------------------------- | ------------------------------------------------------------ | --------------- |
-| open / `v-model:open` | Controlled visibility | `boolean` | `false` |
+| `open` | Controlled visibility Supports `v-model:open`. | `boolean` | `false` |
 | id | Unique queue identifier; the same id updates the existing instance | `string \| number` | Automatically generated |
 | status | Semantic status | `default \| info \| success \| warning \| danger \| loading` | `default` |
 | variant | Visual emphasis | `neutral \| tonal \| solid` | `neutral` |

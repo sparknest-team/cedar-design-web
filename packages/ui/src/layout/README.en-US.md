@@ -163,7 +163,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | Variable | Default / condition | Affected styles |
 | --- | --- | --- |
 | `--c-layout-border-color` | `var(--c-color-border-2)` | `border-bottom`, `border-left`, `border-right`, `border-top` |
-| `--c-layout-focus-color` | `var(--c-sys-color-content-brand)` | `outline` |
+| `--c-layout-focus-color` | `var(--c-sys-color-action-primary)` | `outline` |
 | `--c-layout-font-color` | `var(--c-color-text-1)` | `color` |
 | `--c-layout-sider-background-light` | `var(--c-color-bg-2)` | `background` |
 | `--c-layout-sider-light-box-shadow` | `0 2px 5px 0 rgba(0, 0, 0, 0.08)` | `box-shadow` |

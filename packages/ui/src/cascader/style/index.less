@@ -211,20 +211,31 @@
     }
   }
 
-  &-option {
+  &-option,
+  &-search-option {
     &-active {
+      color: var(~'--c-cascader-item-text-color-hover');
+      background-color: var(~'--c-cascader-item-bg-hover');
+      transition: all var(~'--c-sys-motion-duration-standard') var(~'--c-sys-motion-easing-standard');
+    }
+
+    &-selected {
       color: var(~'--c-cascader-item-text-color-active');
       background-color: var(~'--c-cascader-item-bg-active');
-      transition: all var(~'--c-sys-motion-duration-standard') var(~'--c-sys-motion-easing-standard');
 
-      &:hover {
+      &:hover,
+      &.c-cascader-option-active,
+      &.c-cascader-search-option-active,
+      &.c-cascader-search-option-hover {
         color: var(~'--c-cascader-item-text-color-active');
-        background-color: var(~'--c-cascader-item-bg-active');
+        background-color: var(~'--c-cascader-item-bg-hover');
       }
     }
 
     &-active&-disabled,
-    &-active&-disabled:hover {
+    &-active&-disabled:hover,
+    &-selected&-disabled,
+    &-selected&-disabled:hover {
       color: var(~'--c-cascader-item-text-color-disabled-active');
       background-color: var(~'--c-cascader-item-bg-disabled-active');
     }

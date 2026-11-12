@@ -24,7 +24,7 @@ for (const editMode of [mobile ? 'popup' : 'click', 'click'] as FieldEditMode[])
   describe(`selection editor ${editMode}`, () => {
     it('uses a full list without inline checkboxes and commits the draft only on confirmation', async () => {
       const wrapper = mount(Select, {
-        props: {
+        props: { needConfirm: true,
           editMode,
           defaultOpen: true,
           multiple: true,
@@ -60,15 +60,14 @@ for (const editMode of [mobile ? 'popup' : 'click', 'click'] as FieldEditMode[])
           children: [{ value: 'zhejiang', label: '浙江', children: [{ value: 'ningbo', label: '宁波' }] }],
         },
       ]
-      const wrapper = mount(Cascader, { props: { editMode, options }, global })
+      const wrapper = mount(Cascader, { props: { editMode, options, needConfirm: true }, global })
       try {
         await wrapper.get('[aria-haspopup=dialog]').trigger('click')
         await flushPromises()
         const choose = async (label: string) => {
-          await wrapper
-            .findAll('[role=menuitem]')
-            .find((option) => option.text() === label)!
-            .trigger('click')
+          const option = wrapper.findAll('[role=menuitem], [role=menuitemradio]').find((item) => item.text() === label)
+          expect(option?.attributes('role')).toBe(label === '宁波' ? 'menuitemradio' : 'menuitem')
+          await option!.trigger('click')
           await flushPromises()
         }
         await choose('华东')

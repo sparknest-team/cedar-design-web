@@ -17,6 +17,12 @@ Inherits source dir. Horizontal keys expand, enter children, return or collapse 
 
 <demo src="./__demos__/basic.vue"></demo>
 
+### Checkbox multiple selection
+
+Select a parent to check its available children. `tree-checked-strategy="child"` publishes leaf identities; disabled nodes remain unavailable.
+
+<demo src="./__demos__/en-US/multiple.vue"></demo>
+
 ## Data and options
 
 ### Search Matching
@@ -89,6 +95,7 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
+| need-confirm | `boolean` | Single `false`; multiple `true` | Applies only to overlay editing. Single selection commits and closes on choice by default; true keeps a draft until confirmation. Multiple selection defaults to confirmation. Submission still runs form validation and before-commit; rejection keeps the editor open. |
 | model-value | TreeSelectValue | undefined | Controlled value: node identity, label value, homogeneous arrays or null. |
 | default-value | TreeSelectValue | undefined | Uncontrolled initial value, read only at creation. |
 | data | readonly TreeNodeData[] / `OptionsLoader<TreeNodeData>` | undefined | Root candidate array or (query, { signal }) loader. |
@@ -193,7 +200,7 @@ Duplicate expansion requests for the same asynchronously loaded node are merged.
 
 Nodes default to `{ value, label, children }`. `value` is a tree-wide unique string/number, including `0`; `label` is display content. Map other backend fields with `fieldNames: { value: 'id', label: 'text', children: 'items' }` without changing backend data. Declarative child `name`, Vue `:key` and Table `rowKey` retain separate meanings.
 
-Independent Tree state uses `selectedValues/defaultSelectedValues`, `checkedValues/defaultCheckedValues`, `halfCheckedValues` and `expandedValues/defaultExpandedValues`, updated through corresponding named v-models. `check` event indeterminate sets use `halfCheckedValues`. Node content uses `label`; TreeSelect forwards `tree-slot-label`. `scrollIntoView({ value })` locates business values; explicit `index` remains a zero-based virtual-list array `index`. When opening a virtual list, the active item is scrolled into view. Its active-descendant reference is removed while the node is unmounted and restored when it mounts again.
+Tree's standalone state uses `selectedValues/defaultSelectedValues`, `checkedValues/defaultCheckedValues`, `halfCheckedValues` and `expandedValues/defaultExpandedValues`, updated through the matching named v-models. The half-checked collection in the `check` event is `halfCheckedValues`. The node content slot is `label`; TreeSelect forwards it as `tree-slot-label`. `scrollIntoView({ value })` locates a node by business value, while an explicit `index` remains the virtual list's zero-based array index. Opening the virtual list scrolls to the active item; its reference is not exposed while it is unmounted and is restored after remounting.
 
 ### Search configuration
 
@@ -233,10 +240,10 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | --- | --- | --- |
 | `--c-tree-select-highlight-font-weight` | `var(--c-font-weight-500)` | `font-weight` |
 | `--c-tree-select-option-active-background` | `var(--c-color-fill-2)` | `background` |
-| `--c-tree-select-option-radius` | `var(--c-sys-radius-sm)` | `border-radius` |
-| `--c-tree-select-popup-padding-left` | `var(--c-spacing-5)` | `padding-inline-start` |
-| `--c-tree-select-popup-padding-right` | `var(--c-spacing-2)` | `padding-inline-end` |
-| `--c-tree-select-popup-padding-vertical` | `var(--c-spacing-2)` | `padding` |
+| `--c-tree-select-option-radius` | `var(--c-select-popup-option-border-radius)` | `border-radius` |
+| `--c-tree-select-popup-padding-left` | `var(--c-select-popup-padding-horizontal)` | `padding-inline-start` |
+| `--c-tree-select-popup-padding-right` | `var(--c-select-popup-padding-horizontal)` | `padding-inline-end` |
+| `--c-tree-select-popup-padding-vertical` | `var(--c-select-popup-padding-vertical)` | `padding` |
 
 </div>
 

@@ -359,7 +359,7 @@ Independent Tree state uses `selectedValues/defaultSelectedValues`, `checkedValu
 
 Tree inherits container direction; indentation, connectors and expansion arrows follow it. Keyboard focus is independent of selection. Up/Down moves through available visible nodes and Home/End reaches boundaries. In LTR, Right expands/enters children and Left collapses/returns; RTL swaps the horizontal keys. Enter selects. Space checks a checkable node, otherwise selects it.
 
-Keyboard navigation skips disabled nodes. The root identifies focus with `aria-activedescendant` and retains root focus during virtual scrolling. The reference is removed while the active node is unmounted and restored when it mounts again. Expansion, filtering and node deletion repair the active node. Before/inside/after drop positions still follow vertical position without RTL reversal. TreeSelect's combobox manages focus when embedding Tree.
+Keyboard navigation skips disabled nodes. The root identifies the focused node through `aria-activedescendant` and retains focus during virtualization. If the active node is unmounted, its reference is temporarily removed and restored after remounting. Expanding, filtering or removing nodes corrects the active node. Before/inside/after drop positions remain determined by vertical position and are not reversed in RTL. When embedded in TreeSelect, the combobox manages focus.
 
 Checkboxes visually represent node state and do not create separate Tab stops. Press Space to toggle the active node; pointer clicks also toggle it while retaining tree focus. The node `aria-checked` indicates checked, unchecked, or mixed state.
 
@@ -420,7 +420,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-tree-title-bg-hover` | `var(--c-color-fill-2)` | `background-color` |
 | `--c-tree-title-padding-horizontal` | `var(--c-spacing-2)` | `margin-inline-start`, `padding-inline-end`, `padding-inline-start` |
 | `--c-tree-title-text-color` | `var(--c-color-text-1)` | `color` |
-| `--c-tree-title-text-color-active` | `var(--c-sys-color-content-brand)` | `color`, `outline`, `outline-color` |
+| `--c-tree-title-text-color-active` | `var(--c-sys-color-action-primary)` | `color`, `outline`, `outline-color` |
 | `--c-tree-title-text-color-active-disabled` | `var(--c-color-primary-light-3)` | `color` |
 | `--c-tree-title-text-color-disabled` | `var(--c-color-text-4)` | `color` |
 | `--c-tree-title-text-color-dragging` | `var(--c-color-text-4)` | `color` |

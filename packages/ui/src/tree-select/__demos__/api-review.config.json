@@ -1,13 +1,6 @@
 {
   "fields": [
     {
-      "name": "type",
-      "description": "参数类型",
-      "type": "string",
-      "defaultValue": "-",
-      "kind": "string"
-    },
-    {
       "name": "edit-mode",
       "type": "'direct' | 'click' | 'dblclick'",
       "defaultValue": "undefined",
@@ -104,8 +97,7 @@
       "type": "boolean",
       "defaultValue": "undefined",
       "description": "是否启用搜索；省略时单选关闭、多选开启",
-      "kind": "boolean",
-      "initial": "{}"
+      "kind": "boolean"
     },
     {
       "name": "clearable",
@@ -325,6 +317,65 @@
       "description": "内置匹配字段，多字段 OR；默认 label",
       "kind": "json",
       "initial": "[\"label\"]"
+    },
+    {
+      "name": "loading-mode",
+      "type": "\"default\" | \"line\"",
+      "defaultValue": "'default'",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "enum",
+      "options": [
+        "default",
+        "line"
+      ],
+      "initial": "default"
+    },
+    {
+      "name": "need-confirm",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "弹出编辑是否需要确认；未设置时单选即提交，多选保留确认。",
+      "kind": "boolean"
+    },
+    {
+      "name": "open-trigger-target",
+      "type": "'field' | 'icon'",
+      "defaultValue": "'field' as const",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "enum",
+      "options": [
+        "field",
+        "icon"
+      ],
+      "initial": "field"
+    },
+    {
+      "name": "empty-value",
+      "type": "emptyValueProp<TreeNodeValue | TreeNodeValue[] | undefined>()",
+      "defaultValue": "undefined",
+      "description": "源码公开属性 / Public source prop",
+      "kind": "scenario"
+    },
+    {
+      "name": "empty-values",
+      "type": "readonly unknown[]",
+      "defaultValue": "undefined",
+      "description": "模型空值识别；不改变受控判定或清空输出。",
+      "kind": "scenario"
+    },
+    {
+      "name": "empty-text",
+      "type": "string",
+      "defaultValue": "undefined",
+      "description": "纯阅读空值文案；字段 > FormItem > Form，缺省为 '-'。",
+      "kind": "string"
+    },
+    {
+      "name": "readonly",
+      "type": "boolean",
+      "defaultValue": "undefined",
+      "description": "清空动作产生的模型值；省略保留原默认值。 只读；未设置时继承 Form / FormItem。",
+      "kind": "boolean"
     }
   ],
   "events": [
@@ -402,18 +453,47 @@
       "name": "scrollbar",
       "kind": "prop",
       "demos": []
-    },
-    {
-      "name": "default",
-      "kind": "slot",
-      "demos": []
     }
   ],
   "slotNames": [
-    "default"
+    "read",
+    "trigger",
+    "prefix",
+    "suffix",
+    "selected",
+    "label",
+    "header",
+    "footer",
+    "empty",
+    "loader",
+    "clear-icon",
+    "arrow-icon",
+    "loading-icon",
+    "search-icon",
+    "tree-slot-switcher-icon",
+    "tree-slot-icon",
+    "tree-slot-label",
+    "tree-slot-extra"
   ],
   "slotDefaults": {
-    "default": false
+    "read": false,
+    "trigger": false,
+    "prefix": false,
+    "suffix": false,
+    "selected": false,
+    "label": false,
+    "header": false,
+    "footer": false,
+    "empty": false,
+    "loader": false,
+    "clear-icon": false,
+    "arrow-icon": false,
+    "loading-icon": false,
+    "search-icon": false,
+    "tree-slot-switcher-icon": false,
+    "tree-slot-icon": false,
+    "tree-slot-label": false,
+    "tree-slot-extra": false
   },
   "methodNames": []
 }

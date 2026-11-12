@@ -18,7 +18,7 @@ for (const editMode of ['click'] as const) {
   describe(`${editMode} option editors`, () => {
     it('reuses the tree field and its removable tags before confirming', async () => {
       const wrapper = mount(TreeSelect, {
-        props: {
+        props: { needConfirm: true,
           editMode,
           defaultOpen: true,
           multiple: true,
@@ -61,7 +61,7 @@ for (const editMode of ['click'] as const) {
         { value: 'chen', label: '陈晨' },
       ]
       const wrapper = mount(PeopleSelect, {
-        props: { editMode, defaultOpen: true, options },
+        props: { needConfirm: true,  editMode, defaultOpen: true, options },
         global,
       })
       try {
@@ -91,7 +91,7 @@ for (const editMode of ['click'] as const) {
 
 it('replaces externally supplied people candidates without resetting the model', async () => {
   const wrapper = mount(PeopleSelect, {
-    props: { editMode: 'click', options: [{ value: 'lin', label: '林晓' }] },
+    props: { needConfirm: true,  editMode: 'click', options: [{ value: 'lin', label: '林晓' }] },
     global,
   })
   try {
@@ -109,7 +109,7 @@ it('replaces externally supplied people candidates without resetting the model',
 
 it('clears removable tree selections while retaining disabled selections', async () => {
   const wrapper = mount(TreeSelect, {
-    props: {
+    props: { needConfirm: true,
       editMode: 'click',
       multiple: true,
       clearable: true,

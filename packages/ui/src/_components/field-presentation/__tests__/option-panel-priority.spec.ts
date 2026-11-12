@@ -17,7 +17,7 @@ const cases = [
 ] as const
 function fixture(Field: any, extra: any, editMode = 'click', initial: unknown = 'old') {
   const model = reactive({ value: initial })
-  const wrapper = mount(Form, { attachTo: document.body, props: { model, editMode }, slots: { default: () => h(FormItem, { field: 'value', label: 'Field' }, () => h(Field, { ...extra, modelValue: model.value, 'onUpdate:modelValue': (value: unknown) => { model.value = value } })) } })
+  const wrapper = mount(Form, { attachTo: document.body, props: { model, editMode }, slots: { default: () => h(FormItem, { field: 'value', label: 'Field' }, () => h(Field, { ...('needConfirm' in ((Field as any).props ?? {}) ? { needConfirm: true } : {}),  ...extra, modelValue: model.value, 'onUpdate:modelValue': (value: unknown) => { model.value = value } })) } })
   owners.push(wrapper)
   const panel = () => wrapper.getComponent(EditorPanel)
   const open = async () => { await wrapper.get('.c-field-presentation__edit').trigger('click'); await flushPromises(); if (panel().get('input').attributes('aria-expanded') !== 'true') { await panel().get('input').trigger('click'); await flushPromises() } }

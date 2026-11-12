@@ -19,6 +19,7 @@ export const _PeopleSelectComponent = PeopleSelect;
 export default PeopleSelect;
 
 export type {
+  PeopleSelectValue,
   PeopleSelectReadScope,
   PeopleSelectSlots,
   PeopleSelectEmits,

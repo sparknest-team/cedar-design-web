@@ -172,7 +172,7 @@ Native `id`, `form`, `required`, constraints, aria/data attributes and keyboard 
 
 Once / Capture / Passive native listener modifiers stay on the input rather than firing from interactive slot children. Native preventDefault can veto Enter / Space activation and RadioGroup arrow navigation; canceled Space leaves no delayed release action. Checked, disabled, input type and group Tab navigation remain component-managed.
 
-input-attrs remains a native alias and takes precedence over overlapping top-level native attrs, while managed state remains authoritative. Radio uses the native `checked` state and ignores a supplied `aria-checked`; tabindex stays component-managed, and groups keep their single Tab entry.
+input-attrs preserves native attribute aliases. An alias overrides a matching top-level native attribute, but cannot override component-managed state. Radio's checked state is managed through native `checked`; supplied `aria-checked` does not override it. The component still manages tabindex, retaining one Tab entry per RadioGroup.
 
 ## API
 
@@ -337,7 +337,8 @@ Exported types：`RadioOption`、`ChoiceFieldNames`。
 | Radio / RadioGroup | name | Native field name; child overrides group | string | undefined |
 | Radio | aria-label | Native control accessible name | string | undefined |
 | Radio | input-attrs | Native input attributes | InputHTMLAttributes | undefined |
-| Radio | checked-color / unchecked-color | Instance checked/unchecked colors; error/disabled take precedence | string | undefined |
+| Radio | checked-color | Instance checked color; error / disabled state takes precedence | string | undefined |
+| Radio | unchecked-color | Instance unchecked color; error / disabled state takes precedence | string | undefined |
 | Radio | icon-size | Icon dimension; numbers are px, strings are CSS lengths | number \| string | undefined |
 | Radio | ripple | Touch ripple feedback | boolean | true |
 
@@ -374,7 +375,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-radio-action-padding` | `calc((var(--c-internal-radio-mask-height) / 2) - (var(--c-radio-control-size) / 2))` | `padding` |
 | `--c-radio-animation-duration` | `var(--c-transition-duration-3)` | `transition` |
 | `--c-radio-control-color` | `var(--c-sys-color-content-secondary)` | `color` |
-| `--c-radio-control-color-checked` | `var(--c-sys-color-content-brand)` | `color`, `outline` |
+| `--c-radio-control-color-checked` | `var(--c-sys-color-action-primary)` | `color`, `outline` |
 | `--c-radio-control-color-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
 | `--c-radio-control-color-error` | `var(--c-sys-color-content-danger)` | `box-shadow`, `color` |
 | `--c-radio-control-size` | `14px` | `font-size`, `height`, `padding`, `width` |

@@ -1,5 +1,6 @@
 import { expect, test, vi } from 'vitest'
 import Ripple from '../index'
+import context from '../../context'
 
 const hooks = Ripple as any
 const binding = (disabled: boolean) => ({ value: { disabled } })
@@ -55,4 +56,37 @@ test('each owner document has an independent release group', () => {
     hooks.unmounted(second)
     vi.restoreAllMocks()
   }
+})
+
+test('an updated adopted host moves its release listener to the current document', () => {
+  const other = document.implementation.createHTMLDocument()
+  const element = document.createElement('button') as any
+  try {
+    Ripple.mounted!(element, binding(false) as any, {} as any, {} as any)
+    const release = vi.spyOn(element._ripple, 'removeRipple')
+    other.adoptNode(element)
+    Ripple.updated!(element, binding(false) as any, {} as any, {} as any)
+    document.dispatchEvent(new Event('mouseup'))
+    expect(release).not.toHaveBeenCalled()
+    other.dispatchEvent(new Event('mouseup'))
+    expect(release).toHaveBeenCalledTimes(1)
+  } finally { Ripple.unmounted!(element, binding(false) as any, {} as any, {} as any); vi.restoreAllMocks() }
+})
+
+test('an adopted host rebinds on its next activation without an update', () => {
+  const other = document.implementation.createHTMLDocument()
+  const element = document.createElement('button') as any
+  const enabled = context.enableRipple
+  try {
+    Ripple.mounted!(element, binding(false) as any, {} as any, {} as any)
+    const release = vi.spyOn(element._ripple, 'removeRipple')
+    other.adoptNode(element)
+    context.enableRipple = false
+    element.dispatchEvent(new MouseEvent('mousedown', { button: 0 }))
+    release.mockClear()
+    document.dispatchEvent(new Event('mouseup'))
+    expect(release).not.toHaveBeenCalled()
+    other.dispatchEvent(new Event('mouseup'))
+    expect(release).toHaveBeenCalledTimes(1)
+  } finally { context.enableRipple = enabled; Ripple.unmounted!(element, binding(false) as any, {} as any, {} as any); vi.restoreAllMocks() }
 })

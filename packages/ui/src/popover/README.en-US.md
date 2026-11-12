@@ -5,6 +5,8 @@ permalink: /en/components/popover/
 
 # Popover
 
+SSR limitation: a trigger slot node using both `v-for` and `v-memo` can make server rendering fail. Remove `v-memo` from that slot node when rendering on the server; ordinary `v-for` remains supported. The same limitation can affect the `content` slot; remove `v-memo` there for server rendering.
+
 Start with the basic example, then compare related settings before moving to controlled, asynchronous or combined use cases.
 
 ## Basic examples

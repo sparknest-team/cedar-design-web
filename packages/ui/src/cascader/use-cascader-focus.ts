@@ -9,9 +9,11 @@ export function useCascaderFocus(activeKey: Readonly<Ref<string | undefined>>) {
 
   return (root: HTMLElement, option: Element, originPanel: Element | null | undefined, panelSelector: string) => {
     const key = activeKey.value
-    if (!key || !root.contains(option) || root.ownerDocument.activeElement !== option) return
-    cancelPendingFocus?.()
     const document = root.ownerDocument
+    const nodeRoot = root.getRootNode()
+    const focusRoot = 'activeElement' in nodeRoot ? nodeRoot as Document | ShadowRoot : document
+    if (!key || !root.contains(option) || focusRoot.activeElement !== option) return
+    cancelPendingFocus?.()
     const view = document.defaultView
     if (!view) return
     let observer: MutationObserver | undefined
@@ -26,12 +28,13 @@ export function useCascaderFocus(activeKey: Readonly<Ref<string | undefined>>) {
       document.removeEventListener('pointerdown', cleanup, true)
       if (cancelPendingFocus === cleanup) cancelPendingFocus = undefined
     }
-    const onFocus = (next: FocusEvent) => { if (next.target !== option) cleanup() }
+    const onFocus = (next: FocusEvent) => { if (next.target !== option && !next.composedPath().includes(option)) cleanup() }
     const attempt = () => {
       if (done) return
-      const focused = document.activeElement
-      const lostToRemoval = !option.isConnected && (focused === document.body || focused === document.documentElement)
-      if (!root.isConnected || activeKey.value !== key || (focused !== option && !lostToRemoval)) { cleanup(); return }
+      const focused = focusRoot.activeElement
+      const docFocus = document.activeElement
+      const lostToRemoval = !option.isConnected && (docFocus === document.body || docFocus === document.documentElement) && (focused === null || focused === document.body || focused === document.documentElement)
+      if (!root.isConnected || root.getRootNode() !== nodeRoot || activeKey.value !== key || (focused !== option && !lostToRemoval)) { cleanup(); return }
       const next = Array.from(root.querySelectorAll<HTMLElement>('[data-cascader-key]')).find(
         (element) => element.dataset.cascaderKey === key && element.closest(panelSelector) === originPanel,
       )

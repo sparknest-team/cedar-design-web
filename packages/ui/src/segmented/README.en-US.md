@@ -82,7 +82,7 @@ Compare density at each size and disabled-option behavior.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| model-value / v-model | Current value | `string \| number` | — |
+| model-value | Current value Supports `v-model`. | `string \| number` | `—` |
 | default-value | Uncontrolled default value | `string \| number` | — |
 | options | Options; accepts readonly arrays | `ReadonlyArray<string \| number \| SegmentedOption>` | `[]` |
 | size | Size; inherits form and global configuration when omitted, falling back to md | `xs \| sm \| md \| lg \| xl` | `undefined` |

@@ -232,18 +232,22 @@ Horizontal menus with default slots scroll rather than collecting entries into o
 | --- | --- | --- |
 | name | Stable unique entry identifier; root activeItem makes named entries mutually exclusive. highlight separately overrides appearance | — |
 | label | Entry title when unselected or selection does not match options; supports VNode/render functions | — |
-| options / fieldNames | Same options/field mappings as NavMenu | `[]` |
-| model-value / default-value | Independent controlled/initial value; string, number or null | `undefined` / `null` |
+| options | Menu options, using the same structure as NavMenu | `[]` |
+| field-names | Option field mapping, consistent with NavMenu | `undefined` |
+| model-value | Controlled selected key (string, number or null); supports v-model | `undefined` |
+| default-value | Initial uncontrolled selected key (string, number or null); read only at initialization | `null` |
 | highlight | Visual emphasis override without changing active/selection; defaults to active | — |
 | hide-on-select | Close the panel after select | `true` |
 | unmount-on-close | Destroy panel content after the closing transition; retain it by default | false |
-| open / default-open | Controlled / initial panel state | `undefined` / `false` |
+| open | Controlled open state; supports v-model:open | `undefined` |
+| default-open | Initial uncontrolled open state; read only at initialization | `false` |
 | disabled | Disable the entry, also respecting parent menu disabled | `undefined` |
 | trigger | Trigger mode | `click` |
 | placement | Ordinary dropdown placement; full-height right/left placements align to the corresponding entry edge | `bottom-start` |
 | popup-layout | `dropdown`: standard `dropdown` / `full-width`: `full` width below the trigger / `full-height`: `full` height on the right / `full`: fills the available width and height below the trigger | `dropdown` |
 | popup-style | Panel CSS; may override full-height width/direction/dimensions | — |
-| popup-container / popup-class | Trigger container and popup class | Follow parent menu |
+| popup-container | Popup mount container; inherits the parent menu when omitted | Follow parent menu |
+| popup-class | Additional popup classes; inherits the parent menu when omitted | Follow parent menu |
 | options-mode | Horizontal/vertical default options-panel layout | `vertical` |
 
 Entry/`content` slots receive `{ modelValue, selectedOption, active, open, select, close }`. select(key,event?) emits `update:modelValue` and select(key,option,event). Custom panels may select outside options, making option undefined and independent active false; use highlight if emphasis is needed. `close()` closes/restores entry focus. Controlled values affect titles/active only after acceptance. Entry-slot active is entry state, while label-render active compares its context option with the Item value. `hideOnSelect` is independent of acceptance; set false for manual confirmation.
@@ -307,7 +311,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-nav-menu-light-item-bg-selected` | `var(--c-color-fill-2)` | `background` |
 | `--c-nav-menu-light-item-text-color` | `var(--c-color-text-2)` | `color` |
 | `--c-nav-menu-light-item-text-color-disabled` | `var(--c-color-text-4)` | `color` |
-| `--c-nav-menu-light-item-text-color-selected` | `var(--c-sys-color-content-brand)` | `color`, `outline` |
+| `--c-nav-menu-light-item-text-color-selected` | `var(--c-sys-color-action-primary)` | `color`, `outline` |
 | `--c-nav-menu-motion-duration` | `150ms` | `transition` |
 | `--c-nav-menu-panel-width` | `min(400px, 100vw)` | Component styling |
 | `--c-nav-menu-popup-max-height` | `320px` | `max-height` |

@@ -111,27 +111,37 @@ Awaited before-* hooks show loading feedback and aria-busy. Rejection or failure
 | placement | Side of the containing area where the drawer appears, default right. It is not anchored to a button and does not perform popup collision flipping | `'top' \| 'right' \| 'bottom' \| 'left'` | `'right'` |
 | title | Title | `string` | - |
 | overlay | Show the overlay | `boolean` | `true` |
-| overlay-class / overlay-style | Overlay class and style | `string / CSSProperties` | - |
+| overlay-class | Custom overlay classes | `string` | - |
+| overlay-style | Custom overlay styles | `CSSProperties` | - |
 | overlay-closable | Request closure on overlay click | `boolean` | `true` |
 | aria-label | Explicit dialog name; takes precedence over the automatic title name | `string` | - |
 | close-button-aria-label | Accessible name for the close button | `string` | `Close drawer` |
 | overlay-animation-name | Overlay animation name | `string` | `fade-drawer` |
 | closable | Show the close button | `boolean` | `true` |
-| confirm-button-text / cancel-button-text | Action button text | `string` | - |
-| confirm-button-loading / cancel-button-loading | Action button loading state | `boolean` | `false` |
-| confirm-button-disabled / cancel-button-disabled | Action button disabled state | `boolean` | `false` |
-| confirm-button-props / cancel-button-props | Action button props | `ButtonProps` | - |
+| confirm-button-text | Confirm button text | `string` | - |
+| cancel-button-text | Cancel button text | `string` | - |
+| confirm-button-loading | Confirm button loading state | `boolean` | `false` |
+| cancel-button-loading | Cancel button loading state | `boolean` | `false` |
+| confirm-button-disabled | Confirm button disabled state | `boolean` | `false` |
+| cancel-button-disabled | Cancel button disabled state | `boolean` | `false` |
+| confirm-button-props | Confirm button props | `ButtonProps` | - |
+| cancel-button-props | Cancel button props | `ButtonProps` | - |
 | unmount-on-close | Unmount content after the closing transition | `boolean` | `false` |
-| width / height | Width for left/right placement; height for top/bottom placement | `number \| string` | `250` |
+| width | Drawer width for left / right placement | `number \| string` | `250` |
+| height | Drawer height for top / bottom placement | `number \| string` | `250` |
 | popup-container | Portal container | `string \| HTMLElement \| false` | `'body'` |
-| drawer-class / drawer-style | Panel class and style | `string \| any[] / CSSProperties` | - |
-| body-class / body-style | Body class and style | `string \| any[] / StyleValue` | - |
+| drawer-class | Custom drawer panel classes | `string \| any[]` | - |
+| drawer-style | Custom drawer panel styles | `CSSProperties` | - |
+| body-class | Custom body classes | `string \| any[]` | - |
+| body-style | Custom body styles | `StyleValue` | - |
 | `before-close` | Return a boolean/Promise or call done; the first completion wins | `DrawerBeforeClose` | — |
 | esc-to-close | Request closure on Escape | `boolean` | `true` |
 | lock-scroll | Lock scrolling on the host | `boolean` | `true` |
 | close-on-route-change | Request closure on route changes | `boolean` | `false` |
 | z-index | Custom z-index | `number` | Automatically distributed |
-| header / footer / cancel-button | Show the corresponding region | `boolean` | `true` |
+| header | Show the header region | `boolean` | `true` |
+| footer | Show the footer region | `boolean` | `true` |
+| cancel-button | Show the cancel button | `boolean` | `true` |
 
 
 ### Drawer Events

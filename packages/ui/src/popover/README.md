@@ -4,6 +4,8 @@ permalink: /components/popover/
 
 # Popover 气泡卡片
 
+SSR 限制：触发插槽内的同一节点同时使用 `v-for` 和 `v-memo` 时，服务端渲染可能报错。服务端渲染时请移除该插槽节点上的 `v-memo`；普通 `v-for` 仍可使用。 `content` 插槽也可能出现同样问题；服务端渲染时请移除该插槽节点上的 `v-memo`。
+
 点击触发元素后展示结构化内容。Popover 可以包含按钮、表单和其他交互元素；纯文字说明使用 Tooltip。
 
 ## 基础示例

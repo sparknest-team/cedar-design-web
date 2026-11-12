@@ -6,7 +6,7 @@ import StickyScrollbar from './StickyScrollbar.vue'
 import type { TablePaginationScope, TablePaginationConfig } from './types'
 import { tableProps } from "./props"
 import type { ComponentPublicInstance, CSSProperties, PropType, Slot } from "vue"
-import { Fragment, Teleport, computed, defineComponent, inject, onActivated, onBeforeUnmount, onDeactivated, onMounted, provide, reactive, ref, toRaw, toRefs, useId, watch, watchEffect, watchPostEffect } from "vue"
+import { Fragment, Teleport, computed, defineComponent, getCurrentInstance, inject, onActivated, onBeforeUnmount, onDeactivated, onMounted, provide, reactive, ref, shallowRef, toRaw, toRefs, useId, watch, watchEffect, watchPostEffect } from "vue"
 import { getPrefixCls, createNamespace } from "../_utils/global-config"
 import type { ComponentSize } from "../_utils/constant"
 import { isArray, isFunction, isNull, isNumber, isObject, isString, isUndefined } from "../_utils/is"
@@ -27,6 +27,7 @@ import TableSlot from "./TableSlot.vue"
 import TableColumnSlot from "./TableColumnSlot.vue"
 import { forwardTableSlot } from "./forward-table-slot"
 import Thead from "./table-thead"
+import { firstStructuralNode } from './structural-slot'
 import Tbody from "./table-tbody"
 import Tr from "./table-tr"
 import Th from "./table-th"
@@ -1528,7 +1529,8 @@ export default defineComponent({
     const semanticId = `c-table-header-${useId()}`;
     const visibleHeaderId = (row: number, index: number) => `${semanticId}-visible-${row}-${index}`;
     const visibleOperationId = (index: number) => `${semanticId}-visible-operation-${index}`;
-    const customHeaders = computed(() => groupColumns.value.map(row => row.map(column => slots.th?.({ column })?.[0])));
+    const activeHeaderSlot = shallowRef(slots.th);
+    const customHeaders = computed(() => groupColumns.value.map(row => row.map(column => firstStructuralNode(activeHeaderSlot.value?.({ column })))));
     const explicitHeaderName = (value: unknown) => typeof value === 'string' && value.trim() ? value : undefined;
     const semanticRows = (surface: 'body' | 'summary') => groupColumns.value.map((row, rowIndex) => [
       ...(rowIndex === 0 ? operations.value.map((_, index) => ({
@@ -2389,12 +2391,28 @@ export default defineComponent({
       return Object.keys(result).length > 0 ? result : undefined;
     });
 
+    // Vue may recreate normalized slot wrappers even for unchanged input slots.
+    // Compare the incoming slot values so unrelated renders retain the snapshot.
+    const tableInstance = getCurrentInstance()!;
+    let slotSnapshot: unknown[] = [];
+    const currentSlotSnapshot = () => {
+      const incoming = tableInstance.vnode.children;
+      const raw = incoming && !Array.isArray(incoming) && typeof incoming === 'object'
+        ? incoming as Record<string, unknown> : {};
+      const next = Object.keys(raw).filter(key => key !== '_' && key !== '$stable').sort().flatMap(key => [key, raw[key]]);
+      if (next.length !== slotSnapshot.length || next.some((value, index) => value !== slotSnapshot[index])) {
+        slotSnapshot = next;
+        activeHeaderSlot.value = slots.th;
+      }
+      return slotSnapshot;
+    };
     const DeferredTable = defineComponent({
-      props: { rowSlotState: Number },
+      props: { rowSlotState: Number, slotSnapshot: Array },
       setup: () => () => renderTable(),
     });
 
     const render = () => {
+      const snapshot = currentSlotSnapshot();
       if (slots.default) {
         return (
           <ResizeObserver onResize={handleTableResize}>
@@ -2425,7 +2443,8 @@ export default defineComponent({
                 (flattenData.value.length > 0 || sortedData.value.length > 0) &&
                 isPaginationTop.value &&
                 renderPaginationArea()}
-              <DeferredTable rowSlotState={(slots.tr ? 1 : 0) | (slots['expand-row'] ? 2 : 0)} />
+              <DeferredTable rowSlotState={(slots.tr ? 1 : 0) | (slots['expand-row'] ? 2 : 0)}
+                slotSnapshot={snapshot} />
               {props.pagination !== false &&
                 (flattenData.value.length > 0 || sortedData.value.length > 0) &&
                 !isPaginationTop.value &&

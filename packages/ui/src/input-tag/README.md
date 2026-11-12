@@ -88,6 +88,12 @@ permalink: /components/input-tag/
 
 <demo src="./__demos__/loading.vue"></demo>
 
+### 粘贴链接并获取标题
+
+粘贴链接或输入链接后按回车，模拟异步获取标题，等待期间展示加载状态。标签的 `label` 显示标题，`value` 保留原始链接；设置 `closable` 后可以删除。点击提交可查看链接数据，示例不发送请求。
+
+<demo src="./__demos__/link-title.vue"></demo>
+
 ### 字段状态与原生输入
 
 `disabled`、`readonly`、`error` 未设置时继承 FormItem / Form；InputGroup 可提供禁用、只读、尺寸和变体，字段显式值优先，`false` 可覆盖父级。独立使用时默认变体仍为 `filled`。延迟编辑器遵守相同状态，编辑中禁用或只读会取消草稿。

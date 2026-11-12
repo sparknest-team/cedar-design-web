@@ -102,7 +102,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 
 | Variable | Default / condition | Affected styles |
 | --- | --- | --- |
-| `--c-ellipsis-focus-color` | `var(--c-sys-color-content-brand)` | `outline` |
+| `--c-ellipsis-focus-color` | `var(--c-sys-color-action-primary)` | `outline` |
 | `--c-ellipsis-focus-offset` | `2px` | `outline-offset` |
 | `--c-ellipsis-focus-width` | `2px` | `outline` |
 
@@ -112,7 +112,7 @@ Apply overrides to the rendered component root or the actual popup ancestor. For
 
 ```css
 .component-theme {
-  --c-ellipsis-focus-color: var(--c-sys-color-content-brand);
+  --c-ellipsis-focus-color: var(--c-sys-color-action-primary);
 }
 ```
 

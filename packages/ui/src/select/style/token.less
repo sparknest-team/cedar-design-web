@@ -4,12 +4,12 @@
    * Popup Box
    **********************************************/
   --c-select-popup-max-height: 200px;
-  --c-select-popup-border-radius: var(~'--c-sys-radius-md');
+  --c-select-popup-border-radius: var(--c-sys-radius-lg);
   --c-select-popup-padding-vertical: var(--c-sys-space-2);
   --c-select-popup-font-size: var(~'--c-sys-font-size-md');
   --c-select-popup-bg: var(~'--c-sys-color-surface-overlay');
-  --c-select-popup-border-color: var(~'--c-sys-color-border-default');
-  --c-select-popup-box-shadow: 0 4px 10px rgb(0 0 0 / 10%);
+  --c-select-popup-border-color: var(--c-sys-color-border-subtle);
+  --c-select-popup-box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 
   /**********************************************
    * Popup Options
@@ -17,19 +17,22 @@
    **********************************************/
   --c-select-popup-option-height: 36px;
   --c-select-popup-option-font-weight-selected: var(~'--c-sys-font-weight-medium');
-  --c-select-popup-option-padding-horizontal: var(--c-sys-space-5);
+  --c-select-popup-option-padding-horizontal: var(--c-sys-space-4);
+  --c-select-popup-padding-horizontal: var(--c-sys-space-3);
+  --c-select-popup-option-border-radius: var(--c-sys-radius-lg);
 
-  --c-select-popup-option-bg: var(~'--c-sys-color-surface-overlay');
+  --c-select-popup-option-bg: transparent;
   --c-select-popup-option-bg-hover: var(~'--c-sys-color-state-hover');
-  --c-select-popup-option-bg-selected: var(~'--c-sys-color-surface-overlay');
-  --c-select-popup-option-bg-disabled: var(~'--c-sys-color-surface-overlay');
+  --c-select-popup-option-bg-selected: transparent;
+  --c-select-popup-option-bg-selected-hover: var(--c-select-popup-option-bg-hover);
+  --c-select-popup-option-bg-disabled: transparent;
 
   --c-select-popup-option-text-color: var(~'--c-sys-color-content-primary');
   --c-select-popup-option-text-color-hover: var(~'--c-sys-color-content-primary');
-  --c-select-popup-option-text-color-selected: var(~'--c-sys-color-content-primary');
+  --c-select-popup-option-text-color-selected: var(--c-sys-color-action-primary);
   --c-select-popup-option-text-color-disabled: var(~'--c-sys-color-content-disabled');
 
-  --c-select-popup-option-check-color: var(--c-sys-color-content-primary);
+  --c-select-popup-option-check-color: var(--c-sys-color-action-primary);
   --c-select-popup-option-check-size: var(--c-sys-font-size-md);
   --c-select-popup-option-check-gap: var(--c-sys-space-4);
 

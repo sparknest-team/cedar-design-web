@@ -3,6 +3,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "composite": false,
+    "emitDeclarationOnly": false,
     "noEmit": true,
     "types": []
   },

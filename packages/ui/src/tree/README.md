@@ -414,7 +414,7 @@ Tree 继承容器阅读方向，缩进、连接线和展开箭头随方向显示
 | `--c-tree-title-bg-hover` | `var(--c-color-fill-2)` | `background-color` |
 | `--c-tree-title-padding-horizontal` | `var(--c-spacing-2)` | `margin-inline-start`, `padding-inline-end`, `padding-inline-start` |
 | `--c-tree-title-text-color` | `var(--c-color-text-1)` | `color` |
-| `--c-tree-title-text-color-active` | `var(--c-sys-color-content-brand)` | `color`, `outline`, `outline-color` |
+| `--c-tree-title-text-color-active` | `var(--c-sys-color-action-primary)` | `color`, `outline`, `outline-color` |
 | `--c-tree-title-text-color-active-disabled` | `var(--c-color-primary-light-3)` | `color` |
 | `--c-tree-title-text-color-disabled` | `var(--c-color-text-4)` | `color` |
 | `--c-tree-title-text-color-dragging` | `var(--c-color-text-4)` | `color` |

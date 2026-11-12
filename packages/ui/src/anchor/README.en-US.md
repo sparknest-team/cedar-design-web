@@ -118,7 +118,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-anchor-color-bg-line-active` | `rgb(var(--c-primary-6))` | `background-color` |
 | `--c-anchor-color-bg-title-hover` | `var(--c-color-fill-2)` | `background-color` |
 | `--c-anchor-color-title` | `var(--c-color-text-2)` | `color` |
-| `--c-anchor-color-title-active` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-anchor-color-title-active` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-anchor-color-title-hover` | `rgb(var(--c-primary-5))` | `color` |
 | `--c-anchor-font-size-title` | `14px` | `font-size` |
 | `--c-anchor-font-weight-title-active` | `var(--c-font-weight-500)` | `font-weight` |

@@ -6,7 +6,7 @@
       :class="n('input')"
       type="file"
       :accept="accept"
-      :capture="capture"
+      :capture="(capture === false ? undefined : capture === true ? '' : capture) as UploadCapture"
       :multiple="!replacementTarget && (multiple || directory)"
       :disabled="disabledState"
       :webkitdirectory="(!replacementTarget && directory) || undefined"
@@ -140,7 +140,8 @@
 </template>
 <script setup lang="ts">
 import PendingFeedback from '../_components/pending-feedback/PendingFeedback.vue'
-import { onBeforeUnmount, ref, watch } from 'vue'
+import { inject, onBeforeUnmount, ref, watch } from 'vue'
+import { fieldEditorControlPending } from '../_components/field-presentation/editor-pending'
 import { IconClose, IconDownload, IconEye, IconRefresh } from '@cedar-design/icons-vue'
 import { createNamespace, formatElevation } from '../_utils/global-config'
 // Keep preview types erased from runtime dependencies.
@@ -151,7 +152,8 @@ import Ripple from '../ripple'
 import { useUploader } from './composables/use-uploader'
 import { useFormErrorDescription } from '../form/error-description'
 import { useUploadForm } from './form-adapter'
-import type { UploadEmits, UploadExpose, UploadFileItem, UploadSlots } from './interfaces'
+// Vue's input type omits the empty-attribute form used for capture=true.
+import type { UploadCapture, UploadEmits, UploadExpose, UploadFileItem, UploadSlots } from './interfaces'
 import PreviewPresentation from './preview-presentation.vue'
 import { uploadProps } from './props'
 import { useUploadLocale } from './use-upload-locale'
@@ -256,6 +258,13 @@ const uploader = useUploader({
       }
     }
   },
+})
+const editorPending = inject(fieldEditorControlPending, undefined)
+watch(uploader.editorPending, (value) => {
+  if (editorPending) editorPending.value = value
+}, { flush: 'sync' })
+onBeforeUnmount(() => {
+  if (editorPending) editorPending.value = false
 })
 const {
   fileList,

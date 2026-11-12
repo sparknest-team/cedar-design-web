@@ -1,5 +1,5 @@
 import { withInstall } from '../_utils/global-config'
-import _Input from './input.vue'
+import _Input from './base'
 import _InputGroup from './InputGroup.vue'
 import _InputGroupLabel from './InputGroupLabel.vue'
 import _InputPassword from './InputPassword.vue'

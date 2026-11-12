@@ -111,7 +111,7 @@ function reset() {
         <c-select
           :key="`panel-${generation}`"
           v-model="form.panelCity"
-          edit-mode="click"
+          edit-mode="click" need-confirm
           :options="options"
           :default-active-first-option="autoFirst"
           :placeholder="

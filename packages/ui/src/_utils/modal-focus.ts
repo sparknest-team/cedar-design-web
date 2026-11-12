@@ -67,6 +67,14 @@ export function useModalFocus(root: () => HTMLElement | undefined, active: () =>
     element = target
     if (!target.contains(target.ownerDocument.activeElement)) target.focus({ preventScroll: true })
   }
+  function focusAfterEnter() {
+    const doc = root()?.ownerDocument
+    const current = doc?.activeElement
+    // The user may move focus while the opening transition is running.
+    if (!current || current === doc?.body || current === doc?.documentElement || previous.includes(current as HTMLElement)) {
+      focus()
+    }
+  }
   function restore() {
     const focused = owner?.activeElement
     const target = previous.find(restorable)
@@ -148,11 +156,11 @@ export function useModalFocus(root: () => HTMLElement | undefined, active: () =>
   watch([active, root, () => ownerDocument?.() ?? root()?.ownerDocument], ([value]) => {
     if (!mounted || suspended) return
     if (root()?.ownerDocument !== owner) { unbind(); bind() }
-    if (value) capture()
+    if (value && (!captured || root() !== element)) capture()
   }, { flush: 'post' })
   onMounted(() => { mounted = true; bind(); if (active()) capture() })
   onActivated(() => { suspended = false; unbind(); bind(); if (active()) capture() })
   onDeactivated(() => { suspended = true; unbind(); restore() })
   onBeforeUnmount(() => { mounted = false; unbind(); restore() })
-  return { focus, restore, trap }
+  return { focus, focusAfterEnter, restore, trap }
 }

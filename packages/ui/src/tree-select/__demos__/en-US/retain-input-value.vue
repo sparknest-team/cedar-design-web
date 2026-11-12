@@ -4,7 +4,7 @@ const cleared = ref<string[]>([])
 const retained = ref<string[]>([])
 const clearQuery = ref('')
 const retainedQuery = ref('')
-const data = [{ key: 'alice', title: 'Alice' }, { key: 'alan', title: 'Alan' }, { key: 'bob', title: 'Bob' }]
+const data = [{ value: 'alice', label: 'Alice' }, { value: 'alan', label: 'Alan' }, { value: 'bob', label: 'Bob' }]
 </script>
 <template>
   <c-space direction="column">

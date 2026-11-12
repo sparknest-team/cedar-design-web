@@ -193,7 +193,8 @@ Desktop calendar capabilities, including shortcuts, footer and cell slots, remai
 | ----------------- | ------------------------------------------------------- | ------------------------------------------------ | ------- |
 | `default-value` | Uncontrolled initial value, read once | DateValue / DateValue[] | — |
 | `value-format` | Model and event value format: a date format string, Date, or timestamp | string | Follows type |
-| `min` / `max` | Inclusive bounds; string bounds use value-format | DateValue | — |
+| `min` | Inclusive minimum date; string bounds use value-format | DateValue | — |
+| `max` | Inclusive maximum date; string bounds use value-format | DateValue | — |
 | `disabled-time` | Disabled times for the current date and endpoint | (date: Date, side: DateSide) => DateDisabledTime<br>`DateSide: 'end' \| 'start'` | — |
 | `disable-confirm` | Commit immediately | boolean | true |
 
@@ -302,7 +303,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-date-picker-range-panel-min-width` | `224px` | `min-width` |
 | `--c-date-picker-range-popover-width` | `calc(var(--c-date-picker-panel-date-width) * 2 + 2px)` | `flex`, `width` |
 | `--c-date-picker-row-padding-vertical` | `var(--c-spacing-1)` | `padding` |
-| `--c-date-picker-shortcuts-active-text-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-date-picker-shortcuts-active-text-color` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-date-picker-shortcuts-column-width` | `128px` | `flex`, `width` |
 | `--c-date-picker-shortcuts-inline-item-margin-right` | `var(--c-spacing-5)` | `margin-inline` |
 | `--c-date-picker-shortcuts-inline-item-margin-vertical` | `5px` | `margin-block` |

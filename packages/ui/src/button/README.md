@@ -287,7 +287,7 @@ Button 保留 58 个外观变量。`{status}-color` 控制实心背景，`{statu
 | `--c-button-disabled-color` | `var(--c-color-fill-2)` | `background-color` |
 | `--c-button-disabled-solid-text-color` | `var(--c-sys-color-content-on-dark)`<br>`rgba(255, 255, 255, 0.3)` (`:root[cedar-theme="dark"]`) | `color` |
 | `--c-button-disabled-text-color` | `var(--c-sys-color-content-disabled)` | `color` |
-| `--c-button-focus-color` | `var(--c-sys-color-content-brand)` | `outline` |
+| `--c-button-focus-color` | `var(--c-sys-color-action-primary)` | `outline` |
 | `--c-button-info-color` | `var(--c-sys-color-status-info)` | `background-color` |
 | `--c-button-info-disabled-color` | `rgb(var(--c-blue-3))`<br>`rgba(var(--c-blue-6), 0.5)` (`:root[cedar-theme="dark"]`) | `background-color`, `color` |
 | `--c-button-info-foreground-color` | `var(--c-sys-color-content-info)` | `color` |

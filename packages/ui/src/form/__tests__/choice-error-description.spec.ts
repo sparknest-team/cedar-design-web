@@ -1,5 +1,5 @@
-import { h, nextTick } from 'vue'
-import { mount } from '@vue/test-utils'
+import { h, nextTick, ref } from 'vue'
+import { flushPromises, mount } from '@vue/test-utils'
 import { expect, test } from 'vitest'
 import Form from '../Form.vue'
 import FormItem from '../FormItem.vue'
@@ -145,13 +145,14 @@ test.each([false, true])('slider with numeric inputs associates and clears error
     expect(inputs).toHaveLength(range ? 2 : 1)
     for (const target of [...thumbs, ...inputs]) {
       expect(target.attributes('aria-describedby')?.split(/\s+/)).toContain(errorId)
+      expect(target.attributes('aria-describedby')?.split(/\s+/)).toContain('external')
     }
     ;(wrapper.vm as any).clearValidate()
     await nextTick()
     for (const target of [...thumbs, ...inputs]) {
       expect(target.attributes('aria-describedby')?.split(/\s+/) ?? []).not.toContain(errorId)
     }
-    for (const thumb of thumbs) expect(thumb.attributes('aria-describedby')?.split(/\s+/)).toContain('external')
+    for (const target of [...thumbs, ...inputs]) expect(target.attributes('aria-describedby')?.split(/\s+/)).toContain('external')
   } finally { wrapper.unmount() }
 })
 
@@ -201,5 +202,82 @@ test('slider preserves an explicit false invalid state on its thumb and numeric 
     const targets = wrapper.findAll('[role=slider], input')
     expect(targets).toHaveLength(2)
     targets.forEach(target => expect(target.attributes('aria-invalid')).toBe('false'))
+  } finally { wrapper.unmount() }
+})
+
+
+test.each([false, true])('slider numeric descriptions follow caller changes: range=%s', async (range) => {
+  const description = ref<string | undefined>('first-help')
+  const wrapper = mount({
+    setup: () => () => h(Slider, { editMode: 'direct', range, showInput: true, 'aria-describedby': description.value }),
+  })
+  try {
+    const inputs = wrapper.findAll('input')
+    expect(inputs).toHaveLength(range ? 2 : 1)
+    inputs.forEach(input => expect(input.attributes('aria-describedby')).toBe('first-help'))
+    description.value = 'second-help'
+    await nextTick()
+    inputs.forEach(input => expect(input.attributes('aria-describedby')).toBe('second-help'))
+    description.value = undefined
+    await nextTick()
+    inputs.forEach(input => expect(input.attributes('aria-describedby')).toBeUndefined())
+  } finally { wrapper.unmount() }
+})
+
+
+test.each([false, true])('slider descriptions survive absent-attribute cycles and active errors: range=%s', async (range) => {
+  const description = ref<string | undefined>()
+  const wrapper = mount(Form, {
+    props: { editMode: 'direct', model: { value: range ? [20, 60] : 20 } },
+    slots: { default: () => h(FormItem, { field: 'value', label: 'Value' }, () =>
+      h(Slider, { range, showInput: true, editMode: 'direct', ...(description.value ? { 'aria-describedby': description.value } : {}) })) },
+  })
+  try {
+    const inputs = wrapper.findAll('input')
+    expect(inputs).toHaveLength(range ? 2 : 1)
+    inputs.forEach(input => expect(input.attributes('aria-describedby')).toBeUndefined())
+    description.value = 'first-help'
+    await nextTick()
+    inputs.forEach(input => expect(input.attributes('aria-describedby')).toBe('first-help'))
+    ;(wrapper.vm as any).setFields({ value: { message: 'Invalid value' } })
+    await nextTick()
+    const errorId = wrapper.get('[role=alert]').element.closest('[id]')!.id
+    inputs.forEach(input => expect(input.attributes('aria-describedby')?.split(/\s+/)).toEqual(['first-help', errorId]))
+    description.value = undefined
+    await nextTick()
+    inputs.forEach(input => expect(input.attributes('aria-describedby')).toBe(errorId))
+    description.value = 'second-help'
+    await nextTick()
+    inputs.forEach(input => expect(input.attributes('aria-describedby')?.split(/\s+/)).toEqual(['second-help', errorId]))
+    ;(wrapper.vm as any).clearValidate()
+    await nextTick()
+    inputs.forEach(input => expect(input.attributes('aria-describedby')).toBe('second-help'))
+  } finally { wrapper.unmount() }
+})
+
+
+test.each([[false, false], [true, false], [false, true], [true, true]])('deferred slider descriptions: range=%s teleported=%s', async (range, teleported) => {
+  const description = ref('first-help')
+  const wrapper = mount(Form, {
+    attachTo: document.body,
+    props: { model: { value: range ? [20, 60] : 20 } },
+    slots: { default: () => h(FormItem, { field: 'value', label: 'Value' }, () =>
+      h(Slider, { range, showInput: true, editMode: 'click', popupContainer: teleported ? document.body : false, 'aria-describedby': description.value })) },
+  })
+  try {
+    ;(wrapper.vm as any).setFields({ value: { message: 'Invalid value' } })
+    await nextTick()
+    const errorId = wrapper.get('[role=alert]').element.closest('[id]')!.id
+    await wrapper.get('[aria-haspopup=dialog]').trigger('click')
+    await flushPromises()
+    const inputs = Array.from(document.querySelectorAll('.c-slider__inputs input'))
+    expect(inputs).toHaveLength(range ? 2 : 1)
+    inputs.forEach(input => expect(input.getAttribute('aria-describedby')?.split(/\s+/)).toEqual(['first-help', errorId]))
+    description.value = 'second-help'
+    await nextTick()
+    inputs.forEach(input => expect(input.getAttribute('aria-describedby')?.split(/\s+/)).toEqual(['second-help', errorId]))
+    ;(wrapper.vm as any).clearValidate()
+    await nextTick()
+    inputs.forEach(input => expect(input.getAttribute('aria-describedby')).toBe('second-help'))
   } finally { wrapper.unmount() }
 })

@@ -2,6 +2,7 @@ import { computed, defineComponent, createVNode, PropType, inject, isVNode, Frag
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
 import { tableInjectionKey } from './context'
 import { orderPhysicalColumns } from './column-direction'
+import { firstStructuralNode } from './structural-slot'
 import { TableDataWithRaw } from './types'
 
 
@@ -40,10 +41,10 @@ export default defineComponent({
 
     return () => {
       return createVNode(
-        slots.tr?.({
+        firstStructuralNode(slots.tr?.({
           rowIndex: props.rowIndex,
           record: props.record?.raw,
-        })[0] ?? 'tr',
+        })) ?? 'tr',
         { class: cls.value },
         {
           default: () => {

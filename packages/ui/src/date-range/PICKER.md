@@ -136,7 +136,8 @@ The “disable day 20 as the end” switch changes `disabled-date` dynamically. 
 | ----------------- | ------------------------------------------------------- | ------------------------------------------------ | ------- |
 | `default-value`   | 非受控初始值，仅初始化读取                              | DateValue / DateValue[]                          | —       |
 | `value-format`    | 模型与事件的格式，可为自定义日期格式、Date 或 timestamp | string                                           | 随 type |
-| `min` / `max`     | 包含端点的边界；字符串按 value-format 解析              | DateValue                                        | —       |
+| `min` | 最小日期，包含端点；字符串按 value-format 解析 | DateValue | — |
+| `max` | 最大日期，包含端点；字符串按 value-format 解析 | DateValue | — |
 | `disabled-time`   | 当前日期、端点的时间禁用列表                            | (date: Date, side: DateSide) => DateDisabledTime | —       |
 | `disable-confirm` | 选择后立即提交                                          | boolean                                          | true    |
 

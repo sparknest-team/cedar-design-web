@@ -359,7 +359,8 @@ import type { RadioProps, RadioGroupProps, RadioEmits, RadioGroupEmits, RadioSlo
 | Radio / RadioGroup | name                            | 原生字段名，子项覆盖分组                   | string              | undefined |
 | Radio              | aria-label                      | 原生控件的无障碍名称                       | string              | undefined |
 | Radio              | input-attrs                     | 原生 input 属性                            | InputHTMLAttributes | undefined |
-| Radio              | checked-color / unchecked-color | 实例选中/未选中色；错误/禁用状态优先       | string              | undefined |
+| Radio | checked-color | 实例选中色；错误 / 禁用状态优先 | string | undefined |
+| Radio | unchecked-color | 实例未选中色；错误 / 禁用状态优先 | string | undefined |
 | Radio              | icon-size                       | 图标长度，number 为 px；string 为 CSS 长度 | number \| string    | undefined |
 | Radio              | ripple                          | 触控水波纹                                 | boolean             | true      |
 
@@ -396,7 +397,7 @@ Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，
 | `--c-radio-action-padding` | `calc((var(--c-internal-radio-mask-height) / 2) - (var(--c-radio-control-size) / 2))` | `padding` |
 | `--c-radio-animation-duration` | `var(--c-transition-duration-3)` | `transition` |
 | `--c-radio-control-color` | `var(--c-sys-color-content-secondary)` | `color` |
-| `--c-radio-control-color-checked` | `var(--c-sys-color-content-brand)` | `color`, `outline` |
+| `--c-radio-control-color-checked` | `var(--c-sys-color-action-primary)` | `color`, `outline` |
 | `--c-radio-control-color-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
 | `--c-radio-control-color-error` | `var(--c-sys-color-content-danger)` | `box-shadow`, `color` |
 | `--c-radio-control-size` | `14px` | `font-size`, `height`, `padding`, `width` |

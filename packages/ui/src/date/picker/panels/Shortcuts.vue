@@ -23,7 +23,7 @@
 import { createNamespace } from '../../../_utils/global-config'
 import { defineComponent, PropType } from 'vue'
 import { ShortcutType } from '../types'
-import Button from '../../../button'
+import Button from '../../../button/base'
 import RenderFunction from '../../../_components/render-function'
 import { isFunction } from '../../../_utils/is'
 import useInjectDatePickerTransform from '../hooks/use-inject-datepicker-transform'

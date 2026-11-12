@@ -151,16 +151,50 @@ export function getScrollElements(element: HTMLElement | SVGElement | undefined)
   const visited = new Set<Document>()
   while (root && !visited.has(root.ownerDocument)) {
     visited.add(root.ownerDocument)
-    let current = root.parentElement
+    const parent = (node: Element): Element | null => {
+      if (node.assignedSlot) return node.assignedSlot
+      if (node.parentElement) return node.parentElement
+      const tree = node.getRootNode()
+      return tree.nodeType === 11 && 'host' in tree ? (tree as ShadowRoot).host : null
+    }
+    let current = parent(root)
+    const ancestors = new Set<Element>()
     while (current && current !== current.ownerDocument.documentElement) {
+      if (ancestors.has(current)) break
+      ancestors.add(current)
       const style = current.ownerDocument.defaultView?.getComputedStyle(current)
       const overflow = `${style?.overflow ?? ''}${style?.overflowX ?? ''}${style?.overflowY ?? ''}`
-      if (/(auto|scroll|overlay)/.test(overflow)) result.push(current)
-      current = current.parentElement
+      if (/(auto|scroll|overlay)/.test(overflow)) result.push(current as HTMLElement)
+      current = parent(current)
     }
     try { root = root.ownerDocument.defaultView?.frameElement ?? undefined } catch { root = undefined }
   }
   return result
+}
+
+export function getSlotChangeRoots(element: Element | undefined) {
+  const roots: ShadowRoot[] = []
+  const visited = new Set<Element>()
+  let current: Element | null | undefined = element
+  while (current && !visited.has(current)) {
+    visited.add(current)
+    const parentShadow = current.parentElement?.shadowRoot
+    if (parentShadow) roots.push(parentShadow)
+    if (current.assignedSlot) {
+      current = current.assignedSlot
+    } else if (current.parentElement) {
+      current = current.parentElement
+    } else {
+      const tree = current.getRootNode()
+      if (tree.nodeType === 11 && 'host' in tree) {
+        roots.push(tree as ShadowRoot)
+        current = (tree as ShadowRoot).host
+      } else {
+        try { current = current.ownerDocument.defaultView?.frameElement } catch { current = undefined }
+      }
+    }
+  }
+  return roots
 }
 
 export function getScrollViews(element: Element | undefined) {

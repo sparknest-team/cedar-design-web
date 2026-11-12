@@ -34,7 +34,7 @@ function iconVue(name, componentName, svg) {
 
 function componentIndex(name, componentName) {
   const exportName = `Icon${componentName}`
-  return `import type { App } from 'vue'\nimport _${exportName} from './${name}.vue'\n\nexport const ${exportName} = Object.assign(_${exportName}, {\n  install(app: App) { app.component(_${exportName}.name, _${exportName}) },\n})\n`
+  return `import type { App } from 'vue'\nimport _${exportName} from './${name}.vue'\n\nexport const ${exportName} = Object.assign(_${exportName}, {\n  install(app: App) { app.component(_${exportName}.name!, _${exportName}) },\n})\n`
 }
 
 async function expectedFiles() {

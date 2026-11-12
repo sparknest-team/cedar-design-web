@@ -61,3 +61,22 @@ test('the transfer group can use its FormItem label without overriding explicit 
     expect(group().attributes('aria-labelledby')).toBeUndefined()
   } finally { wrapper.unmount() }
 })
+
+test('a mixed native input and transfer follows explicit label target changes', async () => {
+  const attrs = ref<Record<string, string>>({})
+  const wrapper = mount(FormItem, {
+    props: { label: 'Items', editMode: 'direct' },
+    slots: { default: () => [h('input', { id: 'other' }), h(Transfer, { data: [], editMode: 'direct' })] },
+  })
+  try {
+    const group = () => wrapper.get('.c-transfer')
+    const labelId = wrapper.get('label').attributes('id')
+    expect(group().attributes('aria-labelledby')).toBe(labelId)
+    attrs.value = { for: 'other' }
+    await wrapper.setProps({ labelAttrs: attrs.value })
+    expect(wrapper.get('label').attributes('for')).toBe('other')
+    expect(group().attributes('aria-labelledby')).toBeUndefined()
+    await wrapper.setProps({ labelAttrs: {} })
+    expect(group().attributes('aria-labelledby')).toBe(labelId)
+  } finally { wrapper.unmount() }
+})

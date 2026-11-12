@@ -20,6 +20,12 @@ permalink: /components/tree-select/
 
 <demo src="./__demos__/basic.vue"></demo>
 
+### 复选多选
+
+勾选父节点可关联选择可用子节点；`tree-checked-strategy="child"` 输出叶子节点 ID，禁用项不可选。
+
+<demo src="./__demos__/multiple.vue"></demo>
+
 ## 数据与选项
 
 ### 搜索大小写与匹配字段
@@ -109,6 +115,7 @@ open-trigger-target="icon" 时，输入区可以编辑或复制，只有右侧�
 
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
+| need-confirm | `boolean` | 单选 `false`；多选 `true` | 仅弹出编辑模式生效。单选默认点选即提交并关闭，设为 true 时先编辑草稿、再点确认；多选默认保留确认。提交仍执行表单校验和 before-commit，拒绝时不关闭。 |
 | model-value | TreeSelectValue | undefined | 受控业务值；支持节点标识、标签值、同类数组及 null。 |
 | default-value | TreeSelectValue | undefined | 仅创建时读取的非受控初始值。 |
 | data | readonly TreeNodeData[] / `OptionsLoader<TreeNodeData>` | undefined | 根候选数组或 (query, { signal }) 加载函数。 |
@@ -253,10 +260,10 @@ refresh 可在编辑器未打开时重试组件自有的异步选项读取，沿
 | --- | --- | --- |
 | `--c-tree-select-highlight-font-weight` | `var(--c-font-weight-500)` | `font-weight` |
 | `--c-tree-select-option-active-background` | `var(--c-color-fill-2)` | `background` |
-| `--c-tree-select-option-radius` | `var(--c-sys-radius-sm)` | `border-radius` |
-| `--c-tree-select-popup-padding-left` | `var(--c-spacing-5)` | `padding-inline-start` |
-| `--c-tree-select-popup-padding-right` | `var(--c-spacing-2)` | `padding-inline-end` |
-| `--c-tree-select-popup-padding-vertical` | `var(--c-spacing-2)` | `padding` |
+| `--c-tree-select-option-radius` | `var(--c-select-popup-option-border-radius)` | `border-radius` |
+| `--c-tree-select-popup-padding-left` | `var(--c-select-popup-padding-horizontal)` | `padding-inline-start` |
+| `--c-tree-select-popup-padding-right` | `var(--c-select-popup-padding-horizontal)` | `padding-inline-end` |
+| `--c-tree-select-popup-padding-vertical` | `var(--c-select-popup-padding-vertical)` | `padding` |
 
 </div>
 

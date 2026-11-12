@@ -102,27 +102,37 @@ before-* 等待期间显示加载反馈并标记 aria-busy；拒绝或失败后�
 | placement | 抽屉面板在容器中的出现侧，默认 right；不是相对按钮的定位，不执行浮层避让翻转 | `'top' \| 'right' \| 'bottom' \| 'left'` | `'right'` |
 | title | 标题 | `string` | - |
 | overlay | 是否显示遮罩 | `boolean` | `true` |
-| overlay-class / overlay-style | 遮罩类名 / 样式 | `string / CSSProperties` | - |
+| overlay-class | 遮罩的自定义类名 | `string` | - |
+| overlay-style | 遮罩的自定义样式 | `CSSProperties` | - |
 | overlay-closable | 点击遮罩是否请求关闭 | `boolean` | `true` |
 | aria-label | 显式对话框名称，优先于自动标题名称 | `string` | - |
 | close-button-aria-label | 关闭按钮的可访问名称 | `string` | `Close drawer` |
 | overlay-animation-name | 遮罩动画名称 | `string` | `fade-drawer` |
 | closable | 是否显示关闭按钮 | `boolean` | `true` |
-| confirm-button-text / cancel-button-text | 操作按钮文字 | `string` | - |
-| confirm-button-loading / cancel-button-loading | 操作按钮加载状态 | `boolean` | `false` |
-| confirm-button-disabled / cancel-button-disabled | 操作按钮禁用状态 | `boolean` | `false` |
-| confirm-button-props / cancel-button-props | 操作按钮属性 | `ButtonProps` | - |
+| confirm-button-text | 确认按钮的文字 | `string` | - |
+| cancel-button-text | 取消按钮的文字 | `string` | - |
+| confirm-button-loading | 确认按钮的加载状态 | `boolean` | `false` |
+| cancel-button-loading | 取消按钮的加载状态 | `boolean` | `false` |
+| confirm-button-disabled | 确认按钮的禁用状态 | `boolean` | `false` |
+| cancel-button-disabled | 取消按钮的禁用状态 | `boolean` | `false` |
+| confirm-button-props | 确认按钮的属性配置 | `ButtonProps` | - |
+| cancel-button-props | 取消按钮的属性配置 | `ButtonProps` | - |
 | unmount-on-close | 关闭动画后是否卸载内容 | `boolean` | `false` |
-| width / height | 左右宽度 / 上下高度 | `number \| string` | `250` |
+| width | 左右抽屉的宽度 | `number \| string` | `250` |
+| height | 上下抽屉的高度 | `number \| string` | `250` |
 | popup-container | 挂载容器 | `string \| HTMLElement \| false` | `'body'` |
-| drawer-class / drawer-style | 面板类名 / 样式 | `string \| any[] / CSSProperties` | - |
-| body-class / body-style | 内容区类名 / 样式 | `string \| any[] / StyleValue` | - |
+| drawer-class | 抽屉面板的自定义类名 | `string \| any[]` | - |
+| drawer-style | 抽屉面板的自定义样式 | `CSSProperties` | - |
+| body-class | 内容区的自定义类名 | `string \| any[]` | - |
+| body-style | 内容区的自定义样式 | `StyleValue` | - |
 | `before-close` | 返回 boolean/Promise 或调用 done；首次完成生效 | `DrawerBeforeClose` | — |
 | esc-to-close | ESC 是否请求关闭 | `boolean` | `true` |
 | lock-scroll | 是否锁定挂载容器滚动 | `boolean` | `true` |
 | close-on-route-change | 路由变化时是否请求关闭 | `boolean` | `false` |
 | z-index | 自定义层级 | `number` | 自动分配 |
-| header / footer / cancel-button | 是否显示对应区域 | `boolean` | `true` |
+| header | 是否显示头部区域 | `boolean` | `true` |
+| footer | 是否显示底部区域 | `boolean` | `true` |
+| cancel-button | 是否显示取消按钮 | `boolean` | `true` |
 
 
 ### Drawer Events

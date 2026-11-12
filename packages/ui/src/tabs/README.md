@@ -300,7 +300,7 @@ TabNav 与 TabItem 使用相同的 `name` 建立对应关系；`name` 在同组�
 | `--c-tabs-size-xs-tab-padding` | `var(--c-sys-space-2) var(--c-sys-space-4)` | `padding` |
 | `--c-tabs-tab-gap` | `var(--c-sys-space-2)` | `gap` |
 | `--c-tabs-title-text-color` | `var(--c-sys-color-content-secondary)` | `color` |
-| `--c-tabs-title-text-color-active` | `var(--c-sys-color-content-brand)` | `background`, `color`, `outline` |
+| `--c-tabs-title-text-color-active` | `var(--c-sys-color-action-primary)` | `background`, `color`, `outline` |
 | `--c-tabs-title-text-color-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
 | `--c-tabs-touch-target` | `var(--c-sys-control-touch-target)` | `min-height`, `min-width` |
 

@@ -8,7 +8,7 @@ permalink: /components/color-picker/
 
 表单字段请使用 [`Color`](/components/color/)。
 
-FormItem 的错误描述会关联到内嵌面板或内置触发按钮，并保留已有 `aria-describedby`。自定义触发内容可通过默认插槽参数 `describedBy` 获取合并后的描述 ID，并将其绑定到实际交互元素的 `aria-describedby`。
+FormItem 的错误描述会关联到内嵌面板或内置触发按钮，并保留已有 `aria-describedby`。自定义触发内容可通过默认插槽参数 `describedBy` 获取合并后的描述 ID，并将其绑定到实际交互元素的 `aria-describedby`。 自定义触发时，请把标签 `for` 对应的 ID 设置在实际交互元素上；ColorPicker 本身的 `id` 用于弹层，若也需要设置，请使用不同的值，避免弹层打开时出现重复 ID。
 
 ```vue
 <ColorPicker :hide-trigger="false">

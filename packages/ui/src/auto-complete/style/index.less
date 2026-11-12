@@ -31,9 +31,14 @@
       color: var(--c-auto-complete-option-text-color-selected);
       background-color: var(--c-auto-complete-option-bg-selected);
     }
-    &-active,
-    &:not(&-disabled):hover {
+    &-active:not(.c-select-option-selected):not(.c-select-option-disabled),
+    &:not(.c-select-option-selected):not(.c-select-option-disabled):hover {
       color: var(--c-auto-complete-option-text-color-hover);
+      background-color: var(--c-auto-complete-option-bg-hover);
+    }
+    &-selected.c-select-option-active:not(.c-select-option-disabled),
+    &-selected:not(.c-select-option-disabled):hover {
+      color: var(--c-auto-complete-option-text-color-selected);
       background-color: var(--c-auto-complete-option-bg-hover);
     }
     &-disabled {

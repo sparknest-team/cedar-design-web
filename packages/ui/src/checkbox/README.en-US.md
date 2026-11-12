@@ -178,7 +178,7 @@ Native `id`, `form`, `required`, constraints, aria/data attributes and keyboard 
 
 Once / Capture / Passive native listener modifiers stay on the input rather than firing from interactive slot children. Native preventDefault can veto Enter / Space activation and RadioGroup arrow navigation; canceled Space leaves no delayed release action. Checked, disabled, input type and group Tab navigation remain component-managed.
 
-The nullable Checkbox model is preserved. checked in default / checkbox slots is always boolean, with null shown as false; rendering alone never proposes a new model. The native input exposes an indeterminate state through its `indeterminate` property after hydration; the component manages the native checked state and ignores a supplied `aria-checked`. The server-rendered first view cannot guarantee that assistive technologies receive the mixed state.
+The nullable Checkbox model is preserved. checked in default / checkbox slots is always boolean, with null shown as false; rendering alone never proposes a new model.
 
 ## Usage notes
 
@@ -381,7 +381,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-checkbox-animation-duration` | `var(--c-transition-duration-3)` | `transition` |
 | `--c-checkbox-control-border-radius` | `2px` | `border-radius` |
 | `--c-checkbox-control-color` | `var(--c-sys-color-content-secondary)` | `color` |
-| `--c-checkbox-control-color-checked` | `var(--c-sys-color-content-brand)` | `color`, `outline` |
+| `--c-checkbox-control-color-checked` | `var(--c-sys-color-action-primary)` | `color`, `outline` |
 | `--c-checkbox-control-color-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
 | `--c-checkbox-control-color-error` | `var(--c-sys-color-content-danger)` | `color` |
 | `--c-checkbox-control-size` | `14px` | `height`, `width` |

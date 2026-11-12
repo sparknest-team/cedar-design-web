@@ -99,7 +99,7 @@ const action = (panel: any, text: string[]) =>
 describe('all field presentation adapters', () => {
   test('AutoComplete candidate clicks stay in the draft and commit the full selected label', async () => {
     const wrapper = mount(AutoComplete, {
-      props: { modelValue: '研发', editMode: 'click', options: ['研发', '设计', '运营'] },
+      props: { modelValue: '研发', editMode: 'click', needConfirm: true, options: ['研发', '设计', '运营'] },
     })
     await wrapper.get('[aria-haspopup=dialog]').trigger('click')
     await flushPromises()
@@ -145,7 +145,7 @@ describe('all field presentation adapters', () => {
       wrapper.unmount()
     })
     test(name + ' has one confirmation boundary and cancels drafts', async () => {
-      const wrapper = mount(Field, { props: { modelValue: initial, editMode: 'click', ...extra } })
+      const wrapper = mount(Field, { props: { modelValue: initial, editMode: 'click', ...(['TreeSelect', 'PeopleSelect', 'Cascader', 'AutoComplete'].includes(name) ? { needConfirm: true } : {}), ...extra } })
       await wrapper.get('[aria-haspopup=dialog]').trigger('click')
       await flushPromises()
       let panel = wrapper.getComponent(EditorPanel)
