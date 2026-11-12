@@ -30,7 +30,7 @@ const value = ref("第一行\n第二行\n第三行\n@al");
         v-model="value"
         type="textarea"
         :disabled="disabled"
-        :data="['alice', 'alex']"
+        :options="['alice', 'alex']"
         :rows="3"
         @search="searches++"
       />

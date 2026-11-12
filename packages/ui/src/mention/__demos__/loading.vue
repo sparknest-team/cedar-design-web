@@ -28,11 +28,11 @@ onBeforeUnmount(() => settle())
   <c-space direction="column" style="width: 100%" :size="16">
     <h4>业务控制 / Manual loading</h4>
     <c-switch v-model="loading" aria-label="业务加载状态 / Manual loading" />
-    <c-mention edit-mode="direct" :loading="loading" :data="['Alice', 'Bob']" placeholder="单行输入 @ / Single line" />
-    <c-mention edit-mode="direct" type="textarea" :loading="loading" :data="['Alice', 'Bob']" placeholder="多行输入 @ / Multiple lines" />
+    <c-mention edit-mode="direct" :loading="loading" :options="['Alice', 'Bob']" placeholder="单行输入 @ / Single line" />
+    <c-mention edit-mode="direct" type="textarea" :loading="loading" :options="['Alice', 'Bob']" placeholder="多行输入 @ / Multiple lines" />
     <p>loading 只控制显示，两种输入框均可继续编辑。普通事件返回 Promise 不会触发等待。Loading does not disable editing or await notification handlers.</p>
     <h4>数据源等待 / Remote candidates</h4>
-    <c-mention edit-mode="direct" :data="load" placeholder="输入 @a，手动返回候选数据 / Type @a" @load-error="() => {}" />
+    <c-mention edit-mode="direct" :options="load" placeholder="输入 @a，手动返回候选数据 / Type @a" @load-error="() => {}" />
     <c-space>
       <c-button :disabled="!pending" @click="settle()">返回数据 / Resolve</c-button>
       <c-button :disabled="!pending" @click="settle(true)">模拟失败 / Reject</c-button>

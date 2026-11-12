@@ -62,7 +62,7 @@ export interface UseUploaderOptions {
   onError?: (file: UploadFileItem) => void
   onReplace?: (file: UploadFileItem, previous: UploadFileItem) => void
   onRemove?: (file: UploadFileItem) => void
-  onPreview?: (file: UploadFileItem, event: import('../interfaces').UploadPreviewEvent) => void
+  onPreview?: (file: UploadFileItem, event: import('../interfaces').UploadPreviewEvent, isCurrent: () => boolean) => void
   listType?: () => UploadListType
 }
 
@@ -72,6 +72,7 @@ export function useUploader(options: UseUploaderOptions) {
   let active = true
   let inactive = false
   let generation = 0
+  let previewRevision = 0
   let adding = Promise.resolve()
   const owned = new Map<string, string>()
   const leases = new Map<string, number>()
@@ -545,6 +546,8 @@ export function useUploader(options: UseUploaderOptions) {
   }
   function preview(file: UploadFileItem, originalEvent?: MouseEvent) {
     if (!active || options.disabled?.()) return
+    const epoch = generation
+    const revision = ++previewRevision
     let prevented = false
     options.onPreview?.(file, {
       originalEvent,
@@ -554,7 +557,7 @@ export function useUploader(options: UseUploaderOptions) {
       preventDefault() {
         prevented = true
       },
-    })
+    }, () => active && generation === epoch && previewRevision === revision && !options.disabled?.())
   }
   function reset() {
     if (disabled.value) return

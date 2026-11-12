@@ -36,7 +36,9 @@ import { useSize } from "../_hooks/use-size";
 import { ComponentSize } from "../_utils/constant";
 import { createNamespace, getPrefixCls } from "../_utils/global-config";
 import { toPxNum } from "../_utils/maple/elements";
-import { FormContext, formInjectionKey, FormItemInfo } from "./context";
+import { FormContext, formInjectionKey, formItemInjectionKey, FormItemInfo } from "./context";
+import { provideFormErrorDescriptionBoundary } from "./error-description";
+import { isolateFormItemLabel } from "./label-context";
 import {
   createFormController,
   type FormFieldController,
@@ -92,6 +94,9 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     provideEmptyValues(props);
+    provideFormErrorDescriptionBoundary();
+    isolateFormItemLabel();
+    provide(formItemInjectionKey, undefined!);
     const presentationState = provideFormPresentation(
       () => props.editMode,
       () => props.readPretty,

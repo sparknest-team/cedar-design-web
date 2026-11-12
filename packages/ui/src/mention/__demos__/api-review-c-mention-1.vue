@@ -14,7 +14,7 @@ import __apiReviewRawConfig from "./api-review-c-mention-1.config.json";
   >
     <c-space direction="column" size="lg" style="width: 100%">
       <c-mention
-        :data="['Bytedance', 'Bytedesign', 'Bytenumner']"
+        :options="['Bytedance', 'Bytedesign', 'Bytenumner']"
         placeholder="input @"
         v-bind="__apiReview.bindings"
         v-on="__apiReview.listeners"
@@ -28,7 +28,7 @@ import __apiReviewRawConfig from "./api-review-c-mention-1.config.json";
             :record="__apiReview.record" /></template
       ></c-mention>
       <c-mention
-        :data="['Bytedance', 'Bytedesign', 'Bytenumner']"
+        :options="['Bytedance', 'Bytedesign', 'Bytenumner']"
         prefix="#"
         placeholder="input #"
         v-bind="__apiReview.bindings"
@@ -43,7 +43,7 @@ import __apiReviewRawConfig from "./api-review-c-mention-1.config.json";
             :record="__apiReview.record" /></template
       ></c-mention>
       <c-mention
-        :data="['Bytedance', 'Bytedesign', 'Bytenumner']"
+        :options="['Bytedance', 'Bytedesign', 'Bytenumner']"
         prefix="$"
         placeholder="input $"
         v-bind="__apiReview.bindings"

@@ -1,4 +1,4 @@
-import { createApp, h, nextTick } from 'vue'
+import { createApp, h, nextTick, reactive } from 'vue'
 import { mount } from '@vue/test-utils'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 import Select, { Option } from '..'
@@ -198,5 +198,37 @@ describe('Select public contract', () => {
     await settle()
     expect(wrapper.text()).toContain('remote')
     expect(wrapper.find('button[class*="clear-btn"]').exists()).toBe(true)
+  })
+  test('reactive fallback takes precedence over cached options after options disappear', async () => {
+    const labels = reactive({ name: 'Fallback' })
+    const wrapper = mountSelect({
+      options: [{ value: 'a', label: 'Option' }],
+      fallbackOption: (value) => ({ value, label: labels.name }),
+    })
+    await settle()
+    choose(wrapper, 'a')
+    await settle()
+    await wrapper.setProps({ options: [] })
+    await settle()
+    expect(wrapper.text()).toContain('Fallback')
+    labels.name = 'Updated'
+    await settle()
+    expect(wrapper.text()).toContain('Updated')
+    expect(wrapper.emitted('update:modelValue')).toEqual([['a']])
+  })
+  test('selected label remains available when switching between edit and readPretty', async () => {
+    const wrapper = mountSelect({ options: [{ value: 'a', label: '姓名' }], creatable: true })
+    await settle()
+    choose(wrapper, 'a')
+    await settle()
+    await wrapper.setProps({ options: [] })
+    await settle()
+    expect(wrapper.text()).toContain('姓名')
+    await wrapper.setProps({ readPretty: true })
+    await settle()
+    expect(wrapper.text()).toContain('姓名')
+    await wrapper.setProps({ readPretty: false })
+    await settle()
+    expect(wrapper.text()).toContain('姓名')
   })
 })

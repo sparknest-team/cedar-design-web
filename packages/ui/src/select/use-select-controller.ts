@@ -365,7 +365,9 @@ export function useSelectController(
         !isUndefined(extraOptionRawInfo) &&
         !isEmptyObject(extraOptionRawInfo)
       ) {
-        optionInfo = { ...optionInfo, ...extraOptionRawInfo };
+        optionInfo = isFunction(props.fallbackOption)
+          ? { ...extraOptionRawInfo, ...optionInfo }
+          : { ...optionInfo, ...extraOptionRawInfo };
       }
       return optionInfo;
     }),

@@ -25,6 +25,11 @@ overrides:
   '@sparknest/ui-icons-vue': link:../design-ui/packages/ui-icons
   '@sparknest/theme-contract-vue': link:../design-ui/packages/theme-contract
 
+patchedDependencies:
+  vitest@0.22.1:
+    hash: pygoxkmosmrrhkdvos7au63f24
+    path: patches/vitest@0.22.1.patch
+
 importers:
 
   .:
@@ -429,7 +434,7 @@ importers:
         version: 5.4.21(@types/node@20.19.43)(less@4.6.7)(sass-embedded@1.100.0)(sass@1.101.0)
       vitest:
         specifier: ^0.22.1
-        version: 0.22.1(@vitest/ui@1.6.1)(happy-dom@6.0.4)(jsdom@24.1.3)(less@4.6.7)(sass@1.101.0)
+        version: 0.22.1(patch_hash=pygoxkmosmrrhkdvos7au63f24)(@vitest/ui@1.6.1)(happy-dom@6.0.4)(jsdom@24.1.3)(less@4.6.7)(sass@1.101.0)
       vue:
         specifier: ^3.5.12
         version: 3.5.39(typescript@5.6.3)
@@ -9098,7 +9103,7 @@ snapshots:
   '@vitest/coverage-c8@0.22.1(@vitest/ui@1.6.1(vitest@0.22.1))(happy-dom@6.0.4)(jsdom@24.1.3)(less@4.6.7)(sass@1.101.0)':
     dependencies:
       c8: 7.14.0
-      vitest: 0.22.1(@vitest/ui@1.6.1)(happy-dom@6.0.4)(jsdom@24.1.3)(less@4.6.7)(sass@1.101.0)
+      vitest: 0.22.1(patch_hash=pygoxkmosmrrhkdvos7au63f24)(@vitest/ui@1.6.1)(happy-dom@6.0.4)(jsdom@24.1.3)(less@4.6.7)(sass@1.101.0)
     transitivePeerDependencies:
       - '@edge-runtime/vm'
       - '@vitest/browser'
@@ -9121,7 +9126,7 @@ snapshots:
       pathe: 1.1.2
       picocolors: 1.1.1
       sirv: 2.0.4
-      vitest: 0.22.1(@vitest/ui@1.6.1)(happy-dom@6.0.4)(jsdom@24.1.3)(less@4.6.7)(sass@1.101.0)
+      vitest: 0.22.1(patch_hash=pygoxkmosmrrhkdvos7au63f24)(@vitest/ui@1.6.1)(happy-dom@6.0.4)(jsdom@24.1.3)(less@4.6.7)(sass@1.101.0)
 
   '@vitest/utils@1.6.1':
     dependencies:
@@ -14205,7 +14210,7 @@ snapshots:
       sass: 1.101.0
       sass-embedded: 1.100.0
 
-  vitest@0.22.1(@vitest/ui@1.6.1)(happy-dom@6.0.4)(jsdom@24.1.3)(less@4.6.7)(sass@1.101.0):
+  vitest@0.22.1(patch_hash=pygoxkmosmrrhkdvos7au63f24)(@vitest/ui@1.6.1)(happy-dom@6.0.4)(jsdom@24.1.3)(less@4.6.7)(sass@1.101.0):
     dependencies:
       '@types/chai': 4.3.20
       '@types/chai-subset': 1.3.6(@types/chai@4.3.20)

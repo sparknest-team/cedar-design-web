@@ -1220,6 +1220,11 @@ export default defineComponent({
         : operations;
     });
 
+    // Operation columns still need a header row when all data columns are hidden.
+    const displayHeaderRows = computed<TableColumnData[][]>(() =>
+      groupColumns.value.length ? groupColumns.value : operations.value.length ? [[]] : [],
+    );
+
     // 与 Element 一致：默认 fixed；仅 max-height（以及 ellipsis）会强制 fixed
     const resolvedTableLayout = computed<"fixed" | "auto">(() => {
       if (props.maxHeight != null) return "fixed";
@@ -1530,20 +1535,21 @@ export default defineComponent({
     const visibleHeaderId = (row: number, index: number) => `${semanticId}-visible-${row}-${index}`;
     const visibleOperationId = (index: number) => `${semanticId}-visible-operation-${index}`;
     const activeHeaderSlot = shallowRef(slots.th);
-    const customHeaders = computed(() => groupColumns.value.map(row => row.map(column => firstStructuralNode(activeHeaderSlot.value?.({ column })))));
+    const customHeaders = computed(() => displayHeaderRows.value.map(row => row.map(column => firstStructuralNode(activeHeaderSlot.value?.({ column })))));
     const explicitHeaderName = (value: unknown) => typeof value === 'string' && value.trim() ? value : undefined;
-    const semanticRows = (surface: 'body' | 'summary') => groupColumns.value.map((row, rowIndex) => [
+    const explicitHeaderReference = (value: unknown) => typeof value === 'string' && /[^ \t\n\f\r]/.test(value) ? value : undefined;
+    const semanticRows = (surface: 'body' | 'summary') => displayHeaderRows.value.map((row, rowIndex) => [
       ...(rowIndex === 0 ? operations.value.map((_, index) => ({
         id: `${semanticId}-${surface}-operation-${index}`,
         source: visibleOperationId(index),
         colSpan: undefined,
-        rowSpan: groupColumns.value.length,
+        rowSpan: displayHeaderRows.value.length,
       })) : []),
       ...row.map((column, index) => ({
         id: `${semanticId}-${surface}-${rowIndex}-${index}`,
         source: visibleHeaderId(rowIndex, index),
         label: explicitHeaderName(customHeaders.value[rowIndex]?.[index]?.props?.['aria-label']),
-        labelledby: explicitHeaderName(customHeaders.value[rowIndex]?.[index]?.props?.['aria-labelledby']),
+        labelledby: explicitHeaderReference(customHeaders.value[rowIndex]?.[index]?.props?.['aria-labelledby']),
         sortOrder: surface === 'body' && !isTableExtraColumn(column) && column.dataIndex && column.dataIndex === computedSorter.value?.field ? computedSorter.value.direction : undefined,
         colSpan: column.colSpan,
         rowSpan: column.rowSpan,
@@ -1562,7 +1568,7 @@ export default defineComponent({
       if (!virtual || !flattenData.value.length || slots.tr ||
         virtual.data !== undefined || virtual.component !== undefined || virtual.listAttrs !== undefined ||
         (virtual.threshold && flattenData.value.length <= virtual.threshold)) return undefined;
-      const headerRows = props.showHeader ? groupColumns.value.length : 0;
+      const headerRows = props.showHeader ? displayHeaderRows.value.length : 0;
       const expanded = new Set(expandedRowKeys.value);
       // Server rendering may recompute normalized record objects between
       // virtual items, so use their stable keys rather than object identity.
@@ -2016,7 +2022,7 @@ export default defineComponent({
 
     const renderHeader = () => (
       <Thead v-slots={{ thead: slots.thead }}>
-        {groupColumns.value.map((row, rowIndex) => (
+        {displayHeaderRows.value.map((row, rowIndex) => (
           <Tr key={`header-row-${rowIndex}`}>
             {rowIndex === 0 &&
               operations.value.map((operation, index) => (
@@ -2037,7 +2043,7 @@ export default defineComponent({
                     operation.name === "selection-checkbox" &&
                     props.rowSelection?.showCheckedAll,
                   )}
-                  rowSpan={groupColumns.value.length}
+                  rowSpan={displayHeaderRows.value.length}
                 />
               ))}
             {row.map((column, index) => {

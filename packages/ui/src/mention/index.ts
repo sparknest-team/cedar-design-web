@@ -16,3 +16,4 @@ export { mentionProps }
 export default Mention
 export type MentionProps = import('vue').ExtractPublicPropTypes<typeof import('./props').mentionProps>
 export type { MentionEmits, MentionSlots, MentionExpose } from './types'
+export type { MentionTokenValue } from './token-codec'

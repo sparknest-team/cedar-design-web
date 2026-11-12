@@ -81,7 +81,7 @@ Set loading explicitly to display feedback. Ordinary event return values do not 
 
 ### Paste a link and fetch its title
 
-Paste a URL or type one and press Enter to simulate fetching its title. The input displays a loading state while waiting. The tag's `label` displays the title, its `value` retains the original URL, and `closable` enables removal. Submit displays the URL data without sending a request.
+Paste a URL or type one and press Enter to simulate fetching its title. The input displays a loading state while waiting. The model contains only URLs; `fallback-option` reads titles from reactive application data. Submit displays the URL data without sending a request.
 
 <demo src="./__demos__/link-title.vue"></demo>
 
@@ -92,6 +92,18 @@ Unset disabled, readonly and error inherit from FormItem / Form. InputGroup supp
 Native id, name, aria/data attributes, constraints and keyboard listeners belong to the actual input; class/style stay on the shell. The name submits the separate input draft, not the tag array. Controlled input drafts restore the accepted value. Composition publishes once and canceled sessions cannot publish later.
 
 Manual loading supports loading-mode="default" (default) or "line" and keeps the input editable. The default clear control is a named native button. The clear-icon slot receives clear(event?) for a custom control. Clearing tags preserves the separate input draft and retains the update:modelValue, change, clear notification order. The clear event accepts Event, including custom control events; a programmatic deferred change may omit its source event.
+
+### Display labels for primitive values
+
+Use `fallback-option` to synchronously read application-managed display data. The model contains only URLs; clicking the button simulates labels arriving without changing the model.
+
+<demo src="./__demos__/fallback-option.vue"></demo>
+
+### Restore saved values asynchronously
+
+This example simulates saving the ID array in memory, remounts the component, then loads names asynchronously. IDs appear while loading; the synchronous `fallback-option` resolves names when data arrives without changing the saved values. Applications own persistence and fetching display data by ID.
+
+<demo src="./__demos__/async-fallback-restore.vue"></demo>
 
 ## API
 
@@ -128,6 +140,7 @@ Public Props exclude the internal composition controls `baseCls`, `focused`, `di
 | max-tag-count | Finite nonnegative integer; 0 is unlimited, invalid values diagnose and fall back to unlimited display | `number` | `0` |
 | retain-input-value | Whether to keep the content of the input box | `boolean \| { create?: boolean; blur?: boolean }` | `false` |
 | format-tag | Format tag content | `(data: TagData) => string` | `-` |
+| fallback-option | Synchronously resolve display data for primitive values; show the value when unresolved | `(value: string \| number) => TagData \| null \| undefined` | `-` |
 | unique-value | Whether to create only unique values | `boolean` | `false` |
 | field-names | Customize fields in `TagData` | `InputTagFieldNames` | `-` |
 | tag-nowrap | Tag content does not wrap | `boolean` | `false` |

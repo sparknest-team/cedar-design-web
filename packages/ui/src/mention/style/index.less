@@ -17,3 +17,43 @@
     pointer-events: none;
   }
 }
+
+.c-mention-atomic {
+  position: relative;
+  width: 100%;
+
+  &--overlay {
+    .c-input__inner, .c-textarea__inner {
+      color: transparent !important;
+      caret-color: var(--c-sys-color-content-primary);
+    }
+  }
+
+  &-overlay {
+    position: absolute;
+    box-sizing: border-box;
+    overflow: hidden;
+    pointer-events: none;
+    color: var(--c-sys-color-content-primary);
+    overflow-wrap: break-word;
+  }
+
+  &-token {
+    color: var(--c-mention-token-color);
+  }
+
+  &--disabled &-overlay {
+    color: var(--c-sys-color-content-disabled);
+  }
+
+  &--disabled &-token {
+    opacity: 0.6;
+  }
+}
+
+@media (forced-colors: active) {
+  .c-mention-atomic--overlay {
+    .c-input__inner, .c-textarea__inner { color: CanvasText !important; }
+    .c-mention-atomic-overlay { display: none; }
+  }
+}

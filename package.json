@@ -76,6 +76,9 @@
       "@sparknest/ui-doc-preview-vue": "link:../design-ui/packages/ui-doc-preview",
       "@sparknest/ui-icons-vue": "link:../design-ui/packages/ui-icons",
       "@sparknest/theme-contract-vue": "link:../design-ui/packages/theme-contract"
+    },
+    "patchedDependencies": {
+      "vitest@0.22.1": "patches/vitest@0.22.1.patch"
     }
   }
 }

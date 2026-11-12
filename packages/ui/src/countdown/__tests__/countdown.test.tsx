@@ -1,8 +1,10 @@
-import { createApp } from 'vue'
+import { createApp, nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
-import { describe, expect, test, vi } from 'vitest'
+import { afterEach, describe, expect, test, vi } from 'vitest'
 import Countdown from '../index'
 import { delay } from '../../_utils/maple/test'
+
+afterEach(() => vi.restoreAllMocks())
 
 describe('Countdown', () => {
   test('plugin', () => {
@@ -97,6 +99,7 @@ describe('Countdown', () => {
     expect(wrapper.text()).not.toBe(initial)
 
     wrapper.vm.pause()
+    await nextTick()
     const paused = wrapper.text()
     await delay(50)
     expect(wrapper.text()).toBe(paused)

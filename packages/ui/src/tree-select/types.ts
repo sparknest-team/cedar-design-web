@@ -10,7 +10,7 @@ export type TreeSelectValue = null | TreeNodeValue | TreeNodeValue[] | TreeSelec
 
 export type FilterTreeNode = (searchKey: string, nodeData: TreeNodeData) => boolean
 
-export type FallbackOption = boolean | ((value: TreeNodeValue) => TreeNodeData | boolean)
+export type FallbackOption = boolean | ((value: TreeNodeValue) => TreeNodeData)
 
 export type ChangeHandler = (selectedValue: TreeSelectValue | undefined) => void
 

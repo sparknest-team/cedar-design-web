@@ -74,7 +74,7 @@ export default function useSelectedState(props: {
           ...(isLabelValue(item) ? item : {}),
           ...(originValueItem || {}),
           value: key,
-          label: getLabel(item) ?? node?.label ?? originValueItem?.label ?? fallbackNodeData?.[nodeDataTitle] ?? key,
+          label: getLabel(item) ?? node?.label ?? fallbackNodeData?.[nodeDataTitle] ?? originValueItem?.label ?? key,
         })
       })
     }

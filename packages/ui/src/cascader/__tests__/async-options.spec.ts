@@ -12,7 +12,7 @@ for (const [name, Component, key, data] of [
   ['TreeSelect', TreeSelect, 'data', [{ key: 'a', title: 'Alice' }]],
   ['CheckboxGroup', CheckboxGroup, 'options', [{ value: 'a', label: 'Alice' }]],
   ['RadioGroup', RadioGroup, 'options', [{ value: 'a', label: 'Alice' }]],
-  ['Mention', Mention, 'data', [{ value: 'a', label: 'Alice' }]],
+  ['Mention', Mention, 'options', [{ value: 'a', label: 'Alice' }]],
   ['Transfer', Transfer, 'data', [{ value: 'a', label: 'Alice' }]],
 ] as const) {
   test(`${name} loads its candidate prop and can switch back to static data`, async () => {

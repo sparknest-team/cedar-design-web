@@ -45,7 +45,7 @@ afterEach(() => {
 })
 async function fixture() {
   const active = ref(true)
-  const props = reactive({ type: 'textarea', data: ['alice'], disabled: false })
+  const props = reactive({ type: 'textarea', options: ['alice'], disabled: false })
   const owner = mount(defineComponent({ setup: () => () => h(KeepAlive, null, () => active.value ? h(Mention, props) : null) }), {
     global: { stubs: { CTextarea: Textarea, CInput: true, CResizeObserver: Observer, CTrigger: Trigger } },
   })
@@ -147,7 +147,7 @@ describe('Mention mirror scheduler ownership', () => {
     expect(style).not.toHaveBeenCalled()
   })
   test('empty options cancel pending relocation', async () => {
-    const f = await fixture(); f.props.data = []; await flush(); f.callback()
+    const f = await fixture(); f.props.options = []; await flush(); f.callback()
     expect(f.scroll).not.toHaveBeenCalled()
   })
   test('input mode cancels a previous textarea task', async () => {

@@ -234,7 +234,7 @@ export const treeSelectProps = {
    * @en Customize node data for keys that do not match options
    */
   fallbackOption: {
-    type: [Boolean, Function] as PropType<boolean | ((value: number | string) => TreeNodeData | boolean)>,
+    type: [Boolean, Function] as PropType<boolean | ((value: number | string) => TreeNodeData)>,
     default: true,
   },
   /**

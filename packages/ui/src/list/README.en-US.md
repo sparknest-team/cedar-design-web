@@ -84,8 +84,6 @@ Preview configuration: `shape="square"`.
 
 ### Virtual Lifecycle
 
-On KeepAlive reactivation, the virtual list restores its last recorded vertical and horizontal scroll positions within the current scrollable range. A new scroll command issued during reactivation takes precedence.
-
 <!-- demo-config-notes:start -->
 #### Configuration reference for this comparison
 
@@ -94,6 +92,8 @@ On KeepAlive reactivation, the virtual list restores its last recorded vertical 
 | `data` | Data consumed by item slot | Virtual Lifecycle |
 | `virtual-list-props` | Data virtualization; ignored when default slot exists | Virtual Lifecycle |
 <!-- demo-config-notes:end -->
+
+On KeepAlive reactivation, the virtual list restores its last recorded vertical and horizontal scroll positions within the current scrollable range. A new scroll command issued during reactivation takes precedence.
 
 
 - `data`: Supplies the example data.

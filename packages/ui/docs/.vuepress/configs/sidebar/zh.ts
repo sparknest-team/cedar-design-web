@@ -57,38 +57,28 @@ export const componentSideBar: SidebarArrayOptions = markReuse([
     text: "开发指南",
     link: "/guide/quickstart/",
     children: [
-      {
-        text: "跨端复用标记说明",
-        link: "/guide/component-reuse/",
-      },
-      {
-        text: "快速上手",
-        link: "/guide/quickstart/",
-      },
-      {
-        text: "空值与阅读空文案",
-        link: "/guide/empty-values/",
-      },
-      {
-        text: "受控与非受控",
-        link: "/guide/controlled-uncontrolled/",
-      },
-      {
-        text: "LLM 文档",
-        link: "/guide/llms/",
-      },
-      {
-        text: "国际化",
-        link: "/guide/i18n/",
-      },
-      {
-        text: "Roadmap",
-        link: "/guide/roadmap/",
-      },
-      {
-        text: "更新日志",
-        link: "/changelog/",
-      },
+      { text: "快速开始", link: "/guide/quickstart/" },
+      { text: "按需引入", link: "/guide/import-on-demand/" },
+      { text: "跨端复用标记说明", link: "/guide/component-reuse/" },
+    ],
+  },
+  {
+    text: "配置与约定",
+    link: "/guide/configuration/",
+    children: [
+      { text: "默认值与全局配置", link: "/guide/configuration/" },
+      { text: "受控与非受控", link: "/guide/controlled-uncontrolled/" },
+      { text: "空值与阅读空文案", link: "/guide/empty-values/" },
+      { text: "国际化", link: "/guide/i18n/" },
+    ],
+  },
+  {
+    text: "工程与工具",
+    link: "/guide/llms/",
+    children: [
+      { text: "LLM 文档", link: "/guide/llms/" },
+      { text: "Roadmap", link: "/guide/roadmap/" },
+      { text: "更新日志", link: "/changelog/" },
     ],
   },
   {

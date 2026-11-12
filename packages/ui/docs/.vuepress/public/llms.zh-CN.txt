@@ -115,11 +115,13 @@ Documentation language: zh-CN.
 - [Watermark](./llms/zh-CN/components/watermark.md): /components/watermark/
 - [task-calendar](./llms/zh-CN/examples/task-calendar.md): /examples/task-calendar/
 - [Cedar / Maple 跨端代码复用调研](./llms/zh-CN/guide/component-reuse.md): /guide/component-reuse/
+- [默认值与全局配置](./llms/zh-CN/guide/configuration.md): /guide/configuration/
 - [受控、非受控与清空值：从操作结果理解](./llms/zh-CN/guide/controlled-uncontrolled.md): /guide/controlled-uncontrolled/
 - [Cedar 组件 CSS 变量参考](./llms/zh-CN/guide/design-token-reference.md): /guide/design-token-reference/
 - [Design Token 与 CSS 变量分层](./llms/zh-CN/guide/design-tokens.md): /guide/design-tokens/
 - [空值识别、清空输出与阅读空文案](./llms/zh-CN/guide/empty-values.md): /guide/empty-values/
 - [i18n](./llms/zh-CN/guide/i18n.md): /guide/i18n/
+- [按需引入](./llms/zh-CN/guide/import-on-demand.md): /guide/import-on-demand/
 - [LLM 文档](./llms/zh-CN/guide/llms.md): /guide/llms/
 - [questions](./llms/zh-CN/guide/questions.md): /guide/questions/
 - [快速开始](./llms/zh-CN/guide/quickstart.md): /guide/quickstart/

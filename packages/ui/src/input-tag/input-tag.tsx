@@ -201,7 +201,7 @@ export default defineComponent({
     }
     const resolveTagKeys = createTagKeyResolver()
     const valueData = computed(() => {
-      const items = getValueData(computedValue.value, mergedFieldNames.value)
+      const items = getValueData(computedValue.value, mergedFieldNames.value, props.fallbackOption)
       const keys = resolveTagKeys(computedValue.value, items)
       return items.map((item, index) => ({ ...item, key: keys[index] }))
     })

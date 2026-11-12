@@ -25,8 +25,8 @@ async function type(owner: ReturnType<typeof mount>, kind: string, text: string,
 const options = () => Array.from(document.querySelectorAll<HTMLElement>('[role="option"]'))
 for (const kind of ['input', 'textarea'] as const) {
   for (const [prefix, text, caret, result] of [
-    ['@', 'Note @al', 8, 'Note @alice'],
-    ['##', 'Note ##al', 9, 'Note ##alice'],
+    ['@', 'Note @al', 8, 'Note @alice '],
+    ['##', 'Note ##al', 9, 'Note ##alice '],
     [['@', '##'], 'Note ##al suffix', 9, 'Note ##alice suffix'],
   ] as const) {
     test(`${kind} replaces the complete ${JSON.stringify(prefix)} prefix/search range`, async () => {
@@ -36,7 +36,7 @@ for (const kind of ['input', 'textarea'] as const) {
           editMode: 'direct',
           type: kind,
           prefix: Array.isArray(prefix) ? [...prefix] : prefix,
-          data: ['alice'],
+          options: ['alice'],
         },
       })
       owners.push(owner)
@@ -55,7 +55,7 @@ for (const kind of ['input', 'textarea'] as const) {
       props: {
         editMode: 'direct',
         type: kind,
-        data: [
+        options: [
           {
             isGroup: true,
             label: 'Team',
@@ -87,7 +87,7 @@ for (const kind of ['input', 'textarea'] as const) {
     options()[0].click()
     await flushPromises()
     expect(owner.emitted('select')).toEqual([['alice']])
-    expect((owner.get(kind).element as HTMLInputElement).value).toBe('@alice')
+    expect((owner.get(kind).element as HTMLInputElement).value).toBe('@alice ')
   })
   test(`${kind} custom option receives zero and empty-string identities`, async () => {
     const renderOption = vi.fn(({ data }) => h('b', 'custom:' + String(data.value)))
@@ -96,7 +96,7 @@ for (const kind of ['input', 'textarea'] as const) {
       props: {
         editMode: 'direct',
         type: kind,
-        data: [
+        options: [
           { value: 0, label: 'Zero' },
           { value: '', label: 'Empty' },
         ],
@@ -110,7 +110,7 @@ for (const kind of ['input', 'textarea'] as const) {
     options()[0].click()
     await flushPromises()
     expect(owner.emitted('select')).toEqual([[0]])
-    expect((owner.get(kind).element as HTMLInputElement).value).toBe('@0')
+    expect((owner.get(kind).element as HTMLInputElement).value).toBe('@0 ')
   })
   test(`${kind} inherits Form disabled and only explicit false overrides it`, async () => {
     const disabled = ref(true),
@@ -120,7 +120,7 @@ for (const kind of ['input', 'textarea'] as const) {
       {
         render: () =>
           h(Form, { disabled: disabled.value }, () =>
-            h(Mention, { editMode: 'direct', type: kind, disabled: override.value, data: source }),
+            h(Mention, { editMode: 'direct', type: kind, disabled: override.value, options: source }),
           ),
       },
       { attachTo: document.body },

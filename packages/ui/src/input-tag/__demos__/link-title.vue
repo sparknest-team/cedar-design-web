@@ -1,13 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 
-interface LinkTag {
-  value: string
-  label: string
-  closable: boolean
-}
-
-const links = ref<LinkTag[]>([])
+const links = ref<string[]>([])
+const titles = reactive<Record<string, string>>({})
+const fallbackOption = (value: string | number) => ({ value, label: titles[String(value)] ?? String(value) })
 const inputValue = ref('')
 const loading = ref(false)
 const error = ref('')
@@ -45,14 +41,15 @@ async function addLink(url: string) {
     error.value = '请粘贴完整的 http 或 https 链接 / Paste a valid http or https URL.'
     return
   }
-  if (links.value.some(item => item.value === url)) {
+  if (links.value.includes(url)) {
     error.value = '链接已添加 / This URL has already been added.'
     return
   }
   loading.value = true
   try {
     const title = await fetchTitle(url)
-    links.value.push({ value: url, label: title, closable: true })
+    titles[url] = title
+    links.value.push(url)
     inputValue.value = ''
   } catch {
     error.value = '获取标题失败，请重试 / Could not fetch the title. Try again.'
@@ -62,7 +59,7 @@ async function addLink(url: string) {
 }
 
 function submit() {
-  submitted.value = links.value.map(item => item.value)
+  submitted.value = [...links.value]
 }
 </script>
 
@@ -72,6 +69,7 @@ function submit() {
     <div @paste.capture.prevent="handlePaste" @keydown.capture="handleKeydown">
       <c-input-tag
         v-model="links"
+        :fallback-option="fallbackOption"
         v-model:input-value="inputValue"
         :retain-input-value="true"
         :loading="loading"

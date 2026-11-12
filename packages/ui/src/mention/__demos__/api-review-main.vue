@@ -7,7 +7,7 @@
     <c-space direction="column" size="lg" style="width: 100%">
       <c-mention
         v-model="value"
-        :data="['Bytedance', 'Bytedesign', 'Bytenumner']"
+        :options="['Bytedance', 'Bytedesign', 'Bytenumner']"
         placeholder="enter something"
         v-bind="__apiReview.bindings"
         v-on="__apiReview.listeners"
@@ -22,7 +22,7 @@
       ></c-mention>
       <c-mention
         v-model="text"
-        :data="['Bytedance', 'Bytedesign', 'Bytenumner']"
+        :options="['Bytedance', 'Bytedesign', 'Bytenumner']"
         type="textarea"
         placeholder="enter something"
         v-bind="__apiReview.bindings"

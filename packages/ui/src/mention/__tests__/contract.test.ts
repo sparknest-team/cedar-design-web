@@ -13,7 +13,7 @@ describe("mention public contract", () => {
       props: {
         type: "textarea",
         modelValue: "@al",
-        data: ["alice"],
+        options: ["alice"],
       },
     });
     const textarea = wrapper.get("textarea");

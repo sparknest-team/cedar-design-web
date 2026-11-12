@@ -82,6 +82,8 @@ Countdown 的 RAF 刷新业务剩余时间，不是视觉插值；CSS duration�
 
 `time` 是持续时长而非绝对到期时间；暂停和 KeepAlive 停用时剩余时长冻结。默认插槽直接接收 days、hours、minutes、seconds、milliseconds 五个字段；`change` 在重置及动画帧更新时触发，可能高频调用。`auto-start` 在挂载或 reset 时读取，单独切换不会启动或暂停。格式中的重复 token 均会替换；省略较大单位时会累计到较小单位，因此单独使用 `SSS` 可超过三位。
 
+暂停或停用时展示和插槽数据同步到冻结的剩余时间，不额外触发 change。若暂停时已到期但动画帧尚未执行，展示为零，恢复运行时触发一次 end。
+
 ### Countdown Props
 
 | 属性          | 说明                                       | 类型                 | 默认值       |

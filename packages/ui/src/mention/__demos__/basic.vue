@@ -1,9 +1,9 @@
 <template>
   <c-space direction="column" size="lg" style="width: 100%">
-    <c-mention v-model="value" :data="['Bytedance', 'Bytedesign', 'Bytenumner']" placeholder="enter something" />
+    <c-mention v-model="value" :options="['Bytedance', 'Bytedesign', 'Bytenumner']" placeholder="enter something" />
     <c-mention
       v-model="text"
-      :data="['Bytedance', 'Bytedesign', 'Bytenumner']"
+      :options="['Bytedance', 'Bytedesign', 'Bytenumner']"
       type="textarea"
       placeholder="enter something" />
   </c-space>

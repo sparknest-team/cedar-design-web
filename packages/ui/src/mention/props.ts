@@ -4,6 +4,7 @@ import type { OptionsLoader } from '../_hooks/use-option-request'
 import { emptyValueProp } from '../_utils/empty-value'
 import { fieldLoadingProps } from '../field-decorator/props'
 import type { SelectOptionData, SelectOptionGroup } from '../select/types'
+import type { MentionTokenValue } from './token-codec'
 
 export const mentionProps = {
   readonly: { type: Boolean, default: undefined },
@@ -24,11 +25,17 @@ export const mentionProps = {
     type: String,
     default: '',
   },
+  /** Enable encoded, indivisible @ mentions instead of plain text insertion. */
+  atomic: { type: Boolean, default: false },
+  /** Resolve a missing mention's display data synchronously. */
+  fallbackOption: {
+    type: Function as PropType<(value: MentionTokenValue) => SelectOptionData | null | undefined>,
+  },
   /**
    * @zh 用于自动补全的数据
    * @en Data for automatic completion
    */
-  data: {
+  options: {
     type: [Array, Function] as PropType<
       | readonly (string | number | SelectOptionData | SelectOptionGroup)[]
       | OptionsLoader<string | number | SelectOptionData | SelectOptionGroup>

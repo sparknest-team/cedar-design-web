@@ -61,7 +61,7 @@ const cases: any[] = [
       ],
     },
   ],
-  ['Mention', Mention, RawMention, '@a', '@b', { data: ['a', 'b'] }],
+  ['Mention', Mention, RawMention, '@a', '@b', { options: ['a', 'b'] }],
   [
     'PeopleSelect',
     PeopleSelect,

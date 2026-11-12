@@ -15,6 +15,10 @@ Transfer also references the nearest FormItem label when `for` is absent, includ
 
 Start with the basic example, then compare related settings before moving to controlled, asynchronous or combined use cases.
 
+### Switching no-style dynamically
+
+Fields can be edited and validated when `no-style` stays unchanged for the lifetime of a FormItem. Currently, changing it dynamically remounts descendant fields, which can lose focus, uncommitted internal drafts and validation state, and can change their reset baseline. To preserve these states, keep the property stable and adjust the layout outside the field; you can also commit or save drafts before switching.
+
 ### Multiple controls under one label
 
 For mixed controls, give the visible label a unique ID and explicitly name a group with it. Give each control its own name as well. Use a unique ID for each FormItem instance.

@@ -12,7 +12,7 @@ test('actual Mention/Textarea/Select composition follows text and zero scroll or
       if (this.classList.contains('c-mention-measure')) calls.push([left, top])
     },
   })
-  const owner = mount(Mention, { attachTo: document.body, props: { type: 'textarea', data: ['alice'] } })
+  const owner = mount(Mention, { attachTo: document.body, props: { type: 'textarea', options: ['alice'] } })
   try {
     const input = owner.get('textarea')
     const element = input.element as HTMLTextAreaElement

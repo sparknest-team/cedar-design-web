@@ -87,6 +87,25 @@ describe('virtual table row positions', () => {
     wrapper.unmount()
   })
 
+  it('updates row-position availability when detail changes between a callback and static content', async () => {
+    const records = (expand: string | (() => null)) => [{ key: 'a', name: 'One', expand }, { key: 'b', name: 'Two' }]
+    const wrapper = mount(Table, { props: { ...props, data: records(() => null), expandedKeys: ['a'] } })
+    try {
+      await flushPromises()
+      const table = wrapper.get('.c-table-body table')
+      expect(table.attributes('aria-rowcount')).toBeUndefined()
+      expect(table.findAll('tr').every(row => row.attributes('aria-rowindex') === undefined)).toBe(true)
+      await wrapper.setProps({ data: records('Details') })
+      expect(table.attributes('aria-rowcount')).toBe('5')
+      expect(table.findAll('tbody tr').map(row => row.attributes('aria-rowindex'))).toEqual(['3', '4', '5'])
+      expect(table.text()).toContain('Details')
+      await wrapper.setProps({ data: records(() => null) })
+      expect(table.attributes('aria-rowcount')).toBeUndefined()
+      expect(table.findAll('tr').every(row => row.attributes('aria-rowindex') === undefined)).toBe(true)
+      expect(table.text()).not.toContain('Details')
+    } finally { wrapper.unmount() }
+  })
+
   it('exposes the same positions during server rendering', async () => {
     const html = await renderToString(createSSRApp({ render: () => h(Table, props) }))
     expect(html).toContain('aria-rowcount="32"')

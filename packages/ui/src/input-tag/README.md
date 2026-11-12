@@ -90,7 +90,7 @@ permalink: /components/input-tag/
 
 ### 粘贴链接并获取标题
 
-粘贴链接或输入链接后按回车，模拟异步获取标题，等待期间展示加载状态。标签的 `label` 显示标题，`value` 保留原始链接；设置 `closable` 后可以删除。点击提交可查看链接数据，示例不发送请求。
+粘贴链接或输入链接后按回车，模拟异步获取标题，等待期间展示加载状态。模型只保存原始链接；`fallback-option` 从业务维护的响应式数据中读取标题。点击提交可查看链接数据，示例不发送请求。
 
 <demo src="./__demos__/link-title.vue"></demo>
 
@@ -101,6 +101,18 @@ permalink: /components/input-tag/
 `id`、`name`、`aria-*`、`data-*`、原生约束和键盘监听器传给实际 input，`class` / `style` 保留在外壳。`name` 提交的是独立的输入草稿，不会序列化标签数组。`input-value` 控制输入草稿；与标签的 `model-value` 分开。组合输入只通知一次；被禁用、只读或关闭取消的组合输入不会在稍后提交。
 
 `loading` 由业务控制；`loading-mode="default"`（默认）或 `"line"` 只调整反馈形态，不禁止输入。默认清空入口为 `type="button"` 的命名按钮，支持 Tab / Enter / Space；`#clear-icon="{ clear }"` 可定制入口并调用原有清空动作。清空保留独立输入草稿，并按原有顺序通知 `update:modelValue`、`change`、`clear`。
+
+### 原始值反显
+
+使用 `fallback-option` 同步读取业务维护的展示数据。初始值只包含链接，点击按钮模拟业务数据到达；标题更新不会修改模型。
+
+<demo src="./__demos__/fallback-option.vue"></demo>
+
+### 保存后异步反显
+
+示例在内存中模拟保存 ID 数组，重新挂载组件后异步获取姓名。加载期间显示 ID，数据返回后通过同步 `fallback-option` 反显姓名，保存值不变。实际业务需要自行保存数组并根据 ID 请求展示数据。
+
+<demo src="./__demos__/async-fallback-restore.vue"></demo>
 
 ## API
 
@@ -137,6 +149,7 @@ permalink: /components/input-tag/
 | max-tag-count             | 有限非负整数；0 不限，非法值诊断后按不限展示 | `number`                                          |    `0`     |
 | retain-input-value        | 是否保留输入框的内容               | `boolean \| { create?: boolean; blur?: boolean }` |  `false`   |
 | format-tag                | 格式化标签内容                     | `(data: TagData) => string`                       |    `-`     |
+| fallback-option | 同步解析原始值的展示数据；不返回结果时显示原始值 | `(value: string \| number) => TagData \| null \| undefined` | `-` |
 | unique-value              | 是否仅创建唯一的值                 | `boolean`                                         |  `false`   |
 | field-names               | 自定义 `TagData` 中的字段          | `InputTagFieldNames`                              |    `-`     |
 | tag-nowrap                | 标签内容不换行                     | `boolean`                                         |  `false`   |

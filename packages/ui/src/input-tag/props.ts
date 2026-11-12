@@ -123,6 +123,10 @@ export const inputTagProps = {
   formatTag: {
     type: Function as PropType<(data: TagData) => string>,
   },
+  /** Synchronously resolves display data for a primitive tag value. */
+  fallbackOption: {
+    type: Function as PropType<(value: string | number) => TagData | null | undefined>,
+  },
   /**
    * @zh 是否仅创建唯一的值
    * @en Whether to create only unique values

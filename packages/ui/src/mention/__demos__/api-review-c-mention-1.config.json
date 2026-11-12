@@ -15,7 +15,7 @@
       "kind": "string"
     },
     {
-      "name": "data",
+      "name": "options",
       "description": "用于自动补全的数据",
       "type": "(string | number | SelectOptionData | SelectOptionGroup)[]",
       "defaultValue": "() => []",

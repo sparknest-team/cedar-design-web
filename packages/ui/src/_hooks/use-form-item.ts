@@ -17,7 +17,7 @@ export const useFormItem = ({
   // private
   uninject?: boolean
 } = {}) => {
-  const formItemCtx = !uninject ? inject(formItemInjectionKey, {} as FormItemContext) : ({} as FormItemContext)
+  const formItemCtx = (!uninject ? inject(formItemInjectionKey, undefined) : undefined) ?? ({} as FormItemContext)
 
   const form = !uninject ? inject(formInjectionKey, undefined) : undefined
 

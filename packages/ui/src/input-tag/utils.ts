@@ -4,6 +4,7 @@ import { InputTagFieldNames, TagData, TagDataInfo } from './types'
 export const getValueData = (
   value: Array<string | number | TagData>,
   fieldNames: Required<InputTagFieldNames>,
+  fallbackOption?: (value: string | number) => TagData | null | undefined,
 ): TagDataInfo[] => {
   const result: TagDataInfo[] = []
   for (const item of value) {
@@ -16,9 +17,11 @@ export const getValueData = (
         tagProps: item[fieldNames.tagProps],
       })
     } else if (value || isNumber(value)) {
+      const fallback = fallbackOption?.(item)
       const raw = {
+        ...fallback,
         value: item,
-        label: String(item),
+        label: fallback?.[fieldNames.label] ?? String(item),
         closable: true,
       }
       result.push({
