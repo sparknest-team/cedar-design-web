@@ -1225,7 +1225,7 @@ import type { AnchorProps, AnchorLinkProps, AnchorBoundaryPosition, AnchorInstan
 | `--c-anchor-color-bg-line-active` | `rgb(var(--c-primary-6))` | `background-color` |
 | `--c-anchor-color-bg-title-hover` | `var(--c-color-fill-2)` | `background-color` |
 | `--c-anchor-color-title` | `var(--c-color-text-2)` | `color` |
-| `--c-anchor-color-title-active` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-anchor-color-title-active` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-anchor-color-title-hover` | `rgb(var(--c-primary-5))` | `color` |
 | `--c-anchor-font-size-title` | `14px` | `font-size` |
 | `--c-anchor-font-weight-title-active` | `var(--c-font-weight-500)` | `font-weight` |
@@ -1296,6 +1296,29 @@ const options = [
   { value: 'wuhan', label: 'Wuhan', disabled: true },
 ]
 </script>
+```
+
+### 自定义文本提交
+
+选择候选项立即提交；输入自定义文本后点击确认。
+
+Example source: src/auto-complete/__demos__/custom-draft.vue
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const value = ref('')
+const options = ['Design', 'Engineering', 'Operations']
+</script>
+
+<template>
+  <div>
+    <p>选择候选项会立即提交；输入自定义内容后点击确认。</p>
+    <c-auto-complete v-model="value" edit-mode="click" :options="options" />
+    <p>已提交: {{ value || '—' }}</p>
+  </div>
+</template>
 ```
 
 ## 外观与状态
@@ -1788,7 +1811,7 @@ const options = [
 
 ### 编辑与确认
 
-通过 `edit-mode` 配置编辑方式；未指定时依次继承 FormItem、Form，默认 `direct`。支持值：`direct / click / dblclick`。非 direct 编辑模式通过字段值入口打开编辑面板，并维护单份草稿；确认后才更新 v-model，取消、重置或启用 readPretty 时丢弃草稿。
+通过 `edit-mode` 配置编辑方式；未指定时依次继承 FormItem、Form，默认 `direct`。支持值：`direct / click / dblclick`。非 direct 编辑模式通过字段值入口打开编辑面板。默认选中候选项即提交；自定义文本通过确认提交。设置 need-confirm 时选择也先编辑草稿并确认。取消、重置或启用 readPretty 时丢弃未提交的草稿。
 
 Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，Enter/F2 也可进入；取消/Escape 丢弃草稿，确认后提交。readPretty 为独立阅读属性，与 readonly、disabled 分开。
 
@@ -1823,6 +1846,7 @@ Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，
 
 | 属性                 | 说明                                                | 类型                                                                                     | 默认值                       |
 | -------------------- | --------------------------------------------------- | ---------------------------------------------------------------------------------------- | ---------------------------- |
+| need-confirm | 仅弹出编辑模式生效。默认选中候选项即提交并关闭，设为 true 时先编辑草稿、再点确认。提交仍执行表单校验和 before-commit，拒绝时不关闭。AutoComplete 输入文字不会自动提交；文字草稿改变时可点击确认，选中候选项则立即提交。 | `boolean` | `false` |
 | `model-value`        | 受控文本值                                          | `string \| null`                                                                                 | `—`                          |
 | `default-value`      | 非受控初始文本                                      | `string`                                                                                 | `''`                         |
 | `options`            | 候选；支持分组，value 唯一，选择后转为字符串        | `(AutoCompleteOption \| SelectOptionGroup)[]` / `(query, { signal }) => Array / Promise` | `undefined`                  |
@@ -1945,7 +1969,7 @@ AutoComplete 的文本输入始终可搜索；filter-option 只控制本地候�
 <c-auto-complete v-model="text" :options="loadSuggestions" />
 ```
 
-`empty-value` 可显式设为 `null`（或 `() => null`），清空时原样提交 null；省略时保留组件原默认值。界面把 null 显示为空，不会把普通输入的空字符串自动转成 null。支持弹出编辑的字段中，清空先修改草稿，确认后提交，取消则保留原值。
+`empty-value` 可显式设为 `null`（或 `() => null`），清空时原样提交 null；省略时保留组件原默认值。界面把 null 显示为空，不会把普通输入的空字符串自动转成 null。确认式弹出编辑中，清空先修改草稿并在确认后提交；无需确认时清空会直接提交。
 
 公共 focus/blur 从首次挂载即可调用。focus 会打开可编辑的延迟编辑器，等待其就绪后定位；禁用、只读或纯阅读时不因此打开。blur 只失焦当前目标，不重新打开。保存的方法不会绑定旧编辑器，关闭、切换模式、停用或卸载会取消排队调用。
 
@@ -3062,7 +3086,7 @@ const options: BackTopProps = { onClick: (event: MouseEvent) => event.preventDef
 | `--c-back-top-bottom` | `40px` | `bottom` |
 | `--c-back-top-button-border-radius` | `50%` | `border-radius` |
 | `--c-back-top-button-size` | `var(--c-sys-control-touch-target)` | `height`, `width` |
-| `--c-back-top-focus-color` | `var(--c-sys-color-content-brand)` | `outline` |
+| `--c-back-top-focus-color` | `var(--c-sys-color-action-primary)` | `outline` |
 | `--c-back-top-focus-offset` | `2px` | `outline-offset` |
 | `--c-back-top-focus-width` | `2px` | `outline` |
 | `--c-back-top-font-size` | `var(--c-sys-font-size-md)` | `font-size` |
@@ -5189,7 +5213,7 @@ Button 保留 58 个外观变量。`{status}-color` 控制实心背景，`{statu
 | `--c-button-disabled-color` | `var(--c-color-fill-2)` | `background-color` |
 | `--c-button-disabled-solid-text-color` | `var(--c-sys-color-content-on-dark)`<br>`rgba(255, 255, 255, 0.3)` (`:root[cedar-theme="dark"]`) | `color` |
 | `--c-button-disabled-text-color` | `var(--c-sys-color-content-disabled)` | `color` |
-| `--c-button-focus-color` | `var(--c-sys-color-content-brand)` | `outline` |
+| `--c-button-focus-color` | `var(--c-sys-color-action-primary)` | `outline` |
 | `--c-button-info-color` | `var(--c-sys-color-status-info)` | `background-color` |
 | `--c-button-info-disabled-color` | `rgb(var(--c-blue-3))`<br>`rgba(var(--c-blue-6), 0.5)` (`:root[cedar-theme="dark"]`) | `background-color`, `color` |
 | `--c-button-info-foreground-color` | `var(--c-sys-color-content-info)` | `color` |
@@ -7309,7 +7333,7 @@ CarouselProps, CarouselItemProps, CarouselInstance, CarouselItemInstance, Carous
 | `--c-carousel-card-opacity` | `0.6` | `opacity` |
 | `--c-carousel-card-scale` | `0.85` | `transform` |
 | `--c-carousel-fade-duration` | `var(--c-sys-motion-duration-standard)` | `transition` |
-| `--c-carousel-focus-color` | `var(--c-sys-color-content-brand)` | `outline` |
+| `--c-carousel-focus-color` | `var(--c-sys-color-action-primary)` | `outline` |
 | `--c-carousel-focus-offset` | `2px` | `outline-offset` |
 | `--c-carousel-focus-width` | `2px` | `outline` |
 | `--c-carousel-indicator-color-active` | `var(--c-sys-color-content-on-dark)` | `background` |
@@ -8670,17 +8694,26 @@ async function load() {
 
 | 属性 | 说明 | 类型 | 默认值 |
 | --------------------------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------- | ------------------------ |
+| need-confirm | 仅弹出编辑模式生效。单选默认点选即提交并关闭，设为 true 时先编辑草稿、再点确认；多选默认保留确认。提交仍执行表单校验和 before-commit，拒绝时不关闭。 | `boolean` | 单选 `false`；多选 `true` |
 | `open-trigger-target` | 打开面板的点击区域；field 为整个字段，icon 仅右侧选择按钮。不影响键盘展开及受控 open。 | `'field' \| 'icon'` | `'field'` |
-| `model-value / default-value` | 受控值 / 非受控初始值 | `CascaderBaseValue` | `单选 ''，多选 []` |
-| `open / default-open` | 受控展开 / 默认展开 | `boolean` | `undefined / false` |
-| `input-value / default-input-value` | 搜索文本，独立于选中值 | `string` | `undefined / ''` |
+| `model-value` | 受控选中值，支持 v-model | `CascaderBaseValue` | `undefined` |
+| `default-value` | 非受控初始选中值，仅初始化时读取 | `CascaderBaseValue` | 单选：path-mode 时为 `undefined`，否则为 `''`；多选：`[]` |
+| `open` | 受控展开状态，支持 v-model:open | `boolean` | `undefined` |
+| `default-open` | 非受控初始展开状态，仅初始化时读取 | `boolean` | `false` |
+| `input-value` | 受控搜索文本，独立于选中值，支持 v-model:input-value | `string` | `undefined` |
+| `default-input-value` | 非受控初始搜索文本，独立于选中值，仅初始化时读取 | `string` | `''` |
 | `multiple` | 多选；默认启用搜索 | `boolean` | `false` |
 | `size` | 完整支持 xs、sm、md、lg、xl，未设置时继承分组与表单 | `ComponentSize`<br>`'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `md` |
 | `variant` | filled、outline、standard；未设置时继承 InputGroup | `FormControlVariant`<br>`'standard' \| 'filled' \| 'outline'` | `filled` |
-| `disabled / readonly / error` | 未设置时继承表单；显式 false 可覆盖 | `boolean` | `undefined` |
+| `disabled` | 禁用状态；显式值优先于继承的 Form / Group 状态 | `boolean` | `undefined` |
+| `readonly` | 只读状态；显式值优先于继承的 Form / Group 状态 | `boolean` | `undefined` |
+| `error` | 错误状态；显式值优先于继承的 Form / Group 状态 | `boolean` | `undefined` |
 | `placeholder` | 占位文本 | `string` | `—` |
-| `hint / line` | 浮动提示 / standard 变体下划线 | `boolean` | `true` |
-| `text-color / focus-color / blur-color` | 字段颜色 | `string` | `—` |
+| `hint` | 是否启用浮动提示 | `boolean` | `true` |
+| `line` | 是否显示 standard 变体的下划线 | `boolean` | `true` |
+| `text-color` | 逐实例自定义文字颜色；静态主题优先使用 token | `string` | `—` |
+| `focus-color` | 逐实例自定义聚焦颜色；静态主题优先使用 token | `string` | `—` |
+| `blur-color` | 逐实例自定义未聚焦颜色；静态主题优先使用 token | `string` | `—` |
 | `loading` | 加载时暂停选择、清空、标签移除与确认；保留已有值，搜索和关闭仍可用。 | `boolean` | `false` |
 | `loading-mode` | 字段加载展示：默认指示器或底部不定进度线。 | `default / line` | `default` |
 | `search-fields` | 内置路径搜索字段，默认 label；自定义过滤回调优先。 | `readonly OptionSearchField[]`<br>`OptionSearchField: 'label' \| 'value'` | `['label']` |
@@ -8734,7 +8767,7 @@ async function load() {
 
 选项 `label` 是用于搜索的纯文本；自定义选项内容使用 `render` 或 `option` 插槽，自定义反显使用 `format-label` 或 `label` 插槽。以 value 而非 label 识别选项。选项的 `disabled` 禁止选择和删除，`tagProps` 可定制已选标签。
 
-自定义选项中的按钮、链接、输入控件、列表选项、树节点、网格单元格和嵌套 Cascader 管理各自的点击，不会选择外层选项；普通内容仍可点击选择。已调用 `preventDefault` 的点击不会触发选项动作，事件继续按 DOM 规则冒泡。
+自定义选项中的按钮、链接、输入控件、列表选项、树节点、网格单元格、非负 tabindex 元素、带 controls 的音视频和嵌套 Cascader 管理各自的点击，不会选择外层选项；普通内容仍可点击选择。多个 `role` 词元按组件支持的首个有效角色判断。 独立面板放在 Shadow DOM 内时，方向键按面板所在根节点移动选项焦点。已调用 `preventDefault` 的点击不会触发选项动作，事件继续按 DOM 规则冒泡。
 
 ### CascaderPanel Props
 
@@ -8785,7 +8818,7 @@ import type { CascaderProps } from "@cedar-design/ui-vue";
 
 ### 编辑与确认
 
-通过 `edit-mode` 配置编辑方式；未指定时依次继承 FormItem、Form，默认 `direct`。支持值：`direct / click / dblclick`。非 direct 编辑模式通过字段值入口打开编辑面板，并维护单份草稿；确认后才更新 v-model，取消、重置或启用 readPretty 时丢弃草稿。
+通过 `edit-mode` 配置编辑方式；未指定时依次继承 FormItem、Form，默认 `direct`。支持值：`direct / click / dblclick`。非 direct 编辑模式通过字段值入口打开编辑面板。单选默认选中即提交；设置 need-confirm 时先编辑草稿并确认，多选默认需要确认。取消、重置或启用 readPretty 时丢弃未提交的草稿。
 
 Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，Enter/F2 也可进入；取消/Escape 丢弃草稿，确认后提交。readPretty 为独立阅读属性，与 readonly、disabled 分开。
 
@@ -8803,7 +8836,7 @@ Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，
 
 `empty-value` 指定当前组件已有清空动作的输出；省略时采用该组件默认返回。具体类型以组件 API 为准。它不改变 empty-values 的识别规则，也不改变 Form reset 的初始值。
 
-`empty-value` 可显式设为 `null`（或 `() => null`），清空时原样提交 null；省略时保留组件原默认值。界面把 null 显示为空，不会把普通输入的空字符串自动转成 null。支持弹出编辑的字段中，清空先修改草稿，确认后提交，取消则保留原值。
+`empty-value` 可显式设为 `null`（或 `() => null`），清空时原样提交 null；省略时保留组件原默认值。界面把 null 显示为空，不会把普通输入的空字符串自动转成 null。确认式弹出编辑中，清空先修改草稿并在确认后提交；无需确认时清空会直接提交。
 
 候选属性 `options` 支持数组或 `(query, { signal }) => 数组/Promise`。加载、取消、过期结果隔离由组件内部处理，失败触发 load-error。单选/多选分组初始化以空字符串查询，搜索型字段在查询变化时调用；树形字段根数据与原有 load-more 子节点懒加载独立。
 
@@ -8843,15 +8876,15 @@ option({ data }) 接收规范化 CascaderOptionInfo，data.raw 是原始选项�
 | --- | --- | --- |
 | `--c-cascader-checkbox-bg-hover` | `var(--c-color-fill-3)` | `background-color` |
 | `--c-cascader-font-item-size` | `var(--c-sys-font-size-md)` | `font-size` |
-| `--c-cascader-item-bg-active` | `var(--c-color-fill-2)` | `background-color` |
+| `--c-cascader-item-bg-active` | `transparent` | `background`, `background-color` |
 | `--c-cascader-item-bg-disabled` | `transparent` | `background-color` |
 | `--c-cascader-item-bg-disabled-active` | `var(--c-color-fill-2)` | `background-color` |
-| `--c-cascader-item-bg-hover` | `var(--c-cascader-item-bg-active)` | `background-color` |
-| `--c-cascader-item-check-color` | `var(--c-sys-color-content-primary)` | `color` |
+| `--c-cascader-item-bg-hover` | `var(--c-color-fill-2)` | `background`, `background-color` |
+| `--c-cascader-item-check-color` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-cascader-item-check-size` | `var(--c-sys-font-size-md)` | `height`, `width` |
 | `--c-cascader-item-icon-color` | `var(--c-sys-color-content-secondary)` | `color` |
 | `--c-cascader-item-text-color` | `var(--c-sys-color-content-primary)` | `color` |
-| `--c-cascader-item-text-color-active` | `var(--c-cascader-item-text-color)` | `color` |
+| `--c-cascader-item-text-color-active` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-cascader-item-text-color-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
 | `--c-cascader-item-text-color-disabled-active` | `var(--c-sys-color-content-disabled)` | `color` |
 | `--c-cascader-item-text-color-hover` | `var(--c-cascader-item-text-color)` | `color` |
@@ -9943,7 +9976,7 @@ import type { CheckboxProps } from "@cedar-design/ui-vue";
 | `--c-checkbox-animation-duration` | `var(--c-transition-duration-3)` | `transition` |
 | `--c-checkbox-control-border-radius` | `2px` | `border-radius` |
 | `--c-checkbox-control-color` | `var(--c-sys-color-content-secondary)` | `color` |
-| `--c-checkbox-control-color-checked` | `var(--c-sys-color-content-brand)` | `color`, `outline` |
+| `--c-checkbox-control-color-checked` | `var(--c-sys-color-action-primary)` | `color`, `outline` |
 | `--c-checkbox-control-color-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
 | `--c-checkbox-control-color-error` | `var(--c-sys-color-content-danger)` | `color` |
 | `--c-checkbox-control-size` | `14px` | `height`, `width` |
@@ -10806,7 +10839,7 @@ Document: llms/zh-CN/components/color-picker.md
 
 表单字段请使用 [`Color`](llms/zh-CN/components/color.md)。
 
-FormItem 的错误描述会关联到内嵌面板或内置触发按钮，并保留已有 `aria-describedby`。自定义触发内容可通过默认插槽参数 `describedBy` 获取合并后的描述 ID，并将其绑定到实际交互元素的 `aria-describedby`。
+FormItem 的错误描述会关联到内嵌面板或内置触发按钮，并保留已有 `aria-describedby`。自定义触发内容可通过默认插槽参数 `describedBy` 获取合并后的描述 ID，并将其绑定到实际交互元素的 `aria-describedby`。 自定义触发时，请把标签 `for` 对应的 ID 设置在实际交互元素上；ColorPicker 本身的 `id` 用于弹层，若也需要设置，请使用不同的值，避免弹层打开时出现重复 ID。
 
 ```vue
 <ColorPicker :hide-trigger="false">
@@ -11639,6 +11672,8 @@ Document: llms/zh-CN/components/countdown.md
 ### Countdown 业务时钟与停用边界
 
 Countdown 的 RAF 刷新业务剩余时间，不是视觉插值；CSS duration／减少动效不能改变业务计时。暂停与 KeepAlive 停用冻结剩余时间，重新激活按冻结值续跑，不把停用期间计入消耗。停用时更新 time／reset 可更新剩余数据及 change 通知，但不申请 RAF；auto-start 的启动延后到激活，手动 pause 取消待恢复。停用期间直接 start 被忽略，卸载后的 start／reset 不再通知或调度。
+
+暂停或停用时展示和插槽数据同步到冻结的剩余时间，不额外触发 change。若暂停时已到期但动画帧尚未执行，展示为零，恢复运行时触发一次 end。
 
 实时展示剩余时长，支持暂停、重置与毫秒精度。
 
@@ -12495,7 +12530,8 @@ const week = ref<0 | 1 | 6>(1);
 | ----------------- | ------------------------------------------------------- | ------------------------------------------------ | ------- |
 | `default-value`   | 非受控初始值，仅初始化读取                              | DateValue / DateValue[]                          | —       |
 | `value-format`    | 模型与事件的格式，可为自定义日期格式、Date 或 timestamp | string                                           | 随 type |
-| `min` / `max`     | 包含端点的边界；字符串按 value-format 解析              | DateValue                                        | —       |
+| `min` | 最小日期，包含端点；字符串按 value-format 解析 | DateValue | — |
+| `max` | 最大日期，包含端点；字符串按 value-format 解析 | DateValue | — |
 | `disabled-time`   | 当前日期、端点的时间禁用列表                            | (date: Date, side: DateSide) => DateDisabledTime<br>`DateSide: 'end' \| 'start'` | —       |
 | `disable-confirm` | 选择后立即提交                                          | boolean                                          | true    |
 
@@ -12604,7 +12640,7 @@ const week = ref<0 | 1 | 6>(1);
 | `--c-date-picker-range-panel-min-width` | `224px` | `min-width` |
 | `--c-date-picker-range-popover-width` | `calc(var(--c-date-picker-panel-date-width) * 2 + 2px)` | `flex`, `width` |
 | `--c-date-picker-row-padding-vertical` | `var(--c-spacing-1)` | `padding` |
-| `--c-date-picker-shortcuts-active-text-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-date-picker-shortcuts-active-text-color` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-date-picker-shortcuts-column-width` | `128px` | `flex`, `width` |
 | `--c-date-picker-shortcuts-inline-item-margin-right` | `var(--c-spacing-5)` | `margin-inline` |
 | `--c-date-picker-shortcuts-inline-item-margin-vertical` | `5px` | `margin-block` |
@@ -13424,7 +13460,8 @@ const value = ref(["2026-10-27", "2026-10-28"]);
 | ----------------- | ------------------------------------------------------- | -------------------------------------------------- | ------- |
 | `default-value`   | 非受控初始值，仅初始化读取                              | DateValue / DateValue[]                            | —       |
 | `value-format`    | 模型与事件的格式，可为自定义日期格式、Date 或 timestamp | string                                             | 随 type |
-| `min` / `max`     | 包含端点的边界；字符串按 value-format 解析              | DateValue                                          | —       |
+| `min` | 最小日期，包含端点；字符串按 value-format 解析 | DateValue | — |
+| `max` | 最大日期，包含端点；字符串按 value-format 解析 | DateValue | — |
 | `disabled-time`   | 当前日期、端点的时间禁用列表                            | (date: Date, side: DateSide) => DateDisabledTime<br>`DateSide: 'end' \| 'start'` | —       |
 | `disable-confirm` | 选择后立即提交                                          | boolean                                            | false   |
 | `default-open`    | 非受控初始展开                                          | boolean                                            | false   |
@@ -14686,7 +14723,8 @@ Date 字段默认从输入框下方 bottom-start 打开。需要时通过 popupP
 | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- | ------- |
 | `default-value`   | 非受控初始值，仅初始化读取                                                                                                                     | DateValue / DateValue[]                            | —       |
 | `value-format`    | 模型与事件的格式，可为自定义日期格式、Date 或 timestamp                                                                                        | string                                             | 随 type |
-| `min` / `max`     | 包含端点的边界；字符串按 value-format 解析                                                                                                     | DateValue                                          | —       |
+| `min` | 最小日期，包含端点；字符串按 value-format 解析 | DateValue | — |
+| `max` | 最大日期，包含端点；字符串按 value-format 解析 | DateValue | — |
 | `disabled-time`   | 当前日期、端点的时间禁用列表                                                                                                                   | (date: Date, side: DateSide) => DateDisabledTime<br>`DateSide: 'end' \| 'start'` | —       |
 | `disable-confirm` | 选择后立即提交                                                                                                                                 | boolean                                            | false   |
 | `default-open`    | 非受控初始展开                                                                                                                                 | boolean                                            | false   |
@@ -14887,7 +14925,7 @@ import { Date as DateField, DatePicker, type DateProps, type DatePickerProps,
 | `--c-date-picker-range-panel-min-width` | `224px` | `min-width` |
 | `--c-date-picker-range-popover-width` | `calc(var(--c-date-picker-panel-date-width) * 2 + 2px)` | `flex`, `width` |
 | `--c-date-picker-row-padding-vertical` | `var(--c-spacing-1)` | `padding` |
-| `--c-date-picker-shortcuts-active-text-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-date-picker-shortcuts-active-text-color` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-date-picker-shortcuts-column-width` | `128px` | `flex`, `width` |
 | `--c-date-picker-shortcuts-inline-item-margin-right` | `var(--c-spacing-5)` | `margin-inline` |
 | `--c-date-picker-shortcuts-inline-item-margin-vertical` | `5px` | `margin-block` |
@@ -17498,27 +17536,37 @@ before-* 等待期间显示加载反馈并标记 aria-busy；拒绝或失败后�
 | placement | 抽屉面板在容器中的出现侧，默认 right；不是相对按钮的定位，不执行浮层避让翻转 | `'top' \| 'right' \| 'bottom' \| 'left'` | `'right'` |
 | title | 标题 | `string` | - |
 | overlay | 是否显示遮罩 | `boolean` | `true` |
-| overlay-class / overlay-style | 遮罩类名 / 样式 | `string / CSSProperties` | - |
+| overlay-class | 遮罩的自定义类名 | `string` | - |
+| overlay-style | 遮罩的自定义样式 | `CSSProperties` | - |
 | overlay-closable | 点击遮罩是否请求关闭 | `boolean` | `true` |
 | aria-label | 显式对话框名称，优先于自动标题名称 | `string` | - |
 | close-button-aria-label | 关闭按钮的可访问名称 | `string` | `Close drawer` |
 | overlay-animation-name | 遮罩动画名称 | `string` | `fade-drawer` |
 | closable | 是否显示关闭按钮 | `boolean` | `true` |
-| confirm-button-text / cancel-button-text | 操作按钮文字 | `string` | - |
-| confirm-button-loading / cancel-button-loading | 操作按钮加载状态 | `boolean` | `false` |
-| confirm-button-disabled / cancel-button-disabled | 操作按钮禁用状态 | `boolean` | `false` |
-| confirm-button-props / cancel-button-props | 操作按钮属性 | `ButtonProps` | - |
+| confirm-button-text | 确认按钮的文字 | `string` | - |
+| cancel-button-text | 取消按钮的文字 | `string` | - |
+| confirm-button-loading | 确认按钮的加载状态 | `boolean` | `false` |
+| cancel-button-loading | 取消按钮的加载状态 | `boolean` | `false` |
+| confirm-button-disabled | 确认按钮的禁用状态 | `boolean` | `false` |
+| cancel-button-disabled | 取消按钮的禁用状态 | `boolean` | `false` |
+| confirm-button-props | 确认按钮的属性配置 | `ButtonProps` | - |
+| cancel-button-props | 取消按钮的属性配置 | `ButtonProps` | - |
 | unmount-on-close | 关闭动画后是否卸载内容 | `boolean` | `false` |
-| width / height | 左右宽度 / 上下高度 | `number \| string` | `250` |
+| width | 左右抽屉的宽度 | `number \| string` | `250` |
+| height | 上下抽屉的高度 | `number \| string` | `250` |
 | popup-container | 挂载容器 | `string \| HTMLElement \| false` | `'body'` |
-| drawer-class / drawer-style | 面板类名 / 样式 | `string \| any[] / CSSProperties` | - |
-| body-class / body-style | 内容区类名 / 样式 | `string \| any[] / StyleValue` | - |
+| drawer-class | 抽屉面板的自定义类名 | `string \| any[]` | - |
+| drawer-style | 抽屉面板的自定义样式 | `CSSProperties` | - |
+| body-class | 内容区的自定义类名 | `string \| any[]` | - |
+| body-style | 内容区的自定义样式 | `StyleValue` | - |
 | `before-close` | 返回 boolean/Promise 或调用 done；首次完成生效 | `DrawerBeforeClose` | — |
 | esc-to-close | ESC 是否请求关闭 | `boolean` | `true` |
 | lock-scroll | 是否锁定挂载容器滚动 | `boolean` | `true` |
 | close-on-route-change | 路由变化时是否请求关闭 | `boolean` | `false` |
 | z-index | 自定义层级 | `number` | 自动分配 |
-| header / footer / cancel-button | 是否显示对应区域 | `boolean` | `true` |
+| header | 是否显示头部区域 | `boolean` | `true` |
+| footer | 是否显示底部区域 | `boolean` | `true` |
+| cancel-button | 是否显示取消按钮 | `boolean` | `true` |
 
 
 ### Drawer Events
@@ -17804,7 +17852,7 @@ const options: EllipsisProps = { 'onUpdate:expand': (expanded: boolean) => Strin
 
 | 变量 | 默认值／条件 | 影响的样式 |
 | --- | --- | --- |
-| `--c-ellipsis-focus-color` | `var(--c-sys-color-content-brand)` | `outline` |
+| `--c-ellipsis-focus-color` | `var(--c-sys-color-action-primary)` | `outline` |
 | `--c-ellipsis-focus-offset` | `2px` | `outline-offset` |
 | `--c-ellipsis-focus-width` | `2px` | `outline` |
 
@@ -17814,7 +17862,7 @@ const options: EllipsisProps = { 'onUpdate:expand': (expanded: boolean) => Strin
 
 ```css
 .component-theme {
-  --c-ellipsis-focus-color: var(--c-sys-color-content-brand);
+  --c-ellipsis-focus-color: var(--c-sys-color-action-primary);
 }
 ```
 
@@ -18421,9 +18469,13 @@ const text = ref('加载时仍可编辑')
 | `line` | `boolean` | `true`，是否显示边框或底线 |
 | `focused` | `boolean` | 消费者传入焦点状态 |
 | `composing` | `boolean` | 输入法组合期间保持标签浮起 |
-| `disabled` / `readonly` / `error` | `boolean` | 消费者合并 Form / Group 后传入 |
+| `disabled` | `boolean` | 消费者合并 Form / Group 后传入的禁用状态 |
+| `readonly` | `boolean` | 消费者合并 Form / Group 后传入的只读状态 |
+| `error` | `boolean` | 消费者合并 Form / Group 后传入的错误状态 |
 | `clearable` | `boolean` | `false`，是否允许清除 |
-| `text-color` / `focus-color` / `blur-color` | `string` | 自定义文字、焦点和非焦点颜色 |
+| `text-color` | `string` | 逐实例自定义文字颜色；静态主题优先使用 token |
+| `focus-color` | `string` | 逐实例自定义聚焦颜色；静态主题优先使用 token |
+| `blur-color` | `string` | 逐实例自定义未聚焦颜色；静态主题优先使用 token |
 | `cursor` | `string` | 自定义光标 |
 
 ### FieldDecorator Slots / Events
@@ -19006,11 +19058,28 @@ Document: llms/zh-CN/components/form.md
 
 ## 字段名称
 
-直接编辑模式下，为单个字段设置可见标签时，可将 FormItem 的 `label-attrs` 中的 `for` 与控件的 `id` 对应；选择、日期和时间字段的原生输入不会用 placeholder 覆盖已关联的标签。显式 `aria-label` 或 `aria-labelledby` 仍按原生无障碍名称规则优先。placeholder 只是未提供标签时的回退，不能替代清晰的字段标签。日期和时间范围字段在 FormItem 中会将表单标签关联到范围分组；仍需通过 `input-attrs` 分别提供能够区分起止端点的名称。若 `label-attrs.for` 指向其他控件，不会将该标签误关联到范围分组。 `tooltip` 提示按钮可单独聚焦，其名称不会合并到字段标签中。
+在 Shadow DOM 中使用延迟编辑 Slider 时，若弹层传送到 `body`，浏览器可能无法通过 ID 将弹层内控件与 Shadow DOM 中的提示或错误关联。可设置 `:popup-container="false"`，使弹层留在同一根节点；仍需为控件提供清晰名称。
+
+直接编辑模式下，为单个字段设置可见标签时，可将 FormItem 的 `label-attrs` 中的 `for` 与控件的 `id` 对应；选择、日期和时间字段的原生输入不会用 placeholder 覆盖已关联的标签。显式 `aria-label` 或 `aria-labelledby` 仍按原生无障碍名称规则优先。placeholder 只是未提供标签时的回退，不能替代清晰的字段标签。日期和时间范围字段在 FormItem 中会将表单标签关联到范围分组；仍需通过 `input-attrs` 分别提供能够区分起止端点的名称。若 `label-attrs.for` 指向其他控件，不会将该标签误关联到范围分组。 当前未设置 `for` 时，范围控件会引用最近的 FormItem 标签，即使同一表单项还有其他控件。混合字段请将范围控件放在独立的有样式 FormItem 中并分别命名，或通过明确的 `for` 指向实际目标并为其他控件提供独立名称。单值 Slider 在 `for` 匹配组件 `id` 时为滑块及可选数字输入关联该标签；点击默认原生标签可聚焦未禁用的滑块；阻止标签点击默认行为可取消该聚焦。范围 Slider 的 `id` 与 `for` 匹配时，表单标签命名整个分组；仍应使用 `aria-label` 数组分别命名两个端点。 `tooltip` 提示按钮可单独聚焦，其名称不会合并到字段标签中。
+
+Transfer 在未设置 `for` 时也会引用最近的 FormItem 标签，即使同一项内有其他字段。混合使用时可将 Transfer 放入单独的 FormItem，或为它提供明确名称，并为其他字段分别关联标签。
 
 具有数据收集、校验和提交功能的表单，包含复选框、单选框、输入框、下拉选择框等元素。
 
 标签一律由 `FormItem` 的 `label`（或 label 插槽）负责渲染；控件本身只提供 `placeholder` 等占位文案，不承担字段标签。
+
+### 同一标签下的多个控件
+
+混合使用多个控件时，为可见标签设置唯一 ID，并用它显式命名分组；每个控件也需要自己的名称。每个 FormItem 实例应使用不同的 ID。
+
+```vue
+<c-form-item label="Contact" label-component="span" :label-attrs="{ id: 'contact-label' }">
+  <div role="group" aria-labelledby="contact-label">
+    <c-input aria-label="Email" />
+    <input aria-label="Phone" />
+  </div>
+</c-form-item>
+```
 
 ## 阅读方向
 
@@ -20561,7 +20630,7 @@ const __demoState = __demoReactive({ disabled: false, readonly: false });
 
 ### 字段展示与确认提交
 
-Form、FormItem、Input 和 Select 支持 edit-mode 继承，优先级为字段 > FormItem > Form。默认 direct；Cedar 支持 click/dblclick。普通 v-model 不变，弹层默认确认后提交。readPretty 不显示编辑器和搜索。direct 即时更新，弹层确认后更新；搜索框按展示位置自动排列。
+Form、FormItem、Input 和 Select 支持 edit-mode 继承，优先级为字段 > FormItem > Form。默认 direct；Cedar 支持 click/dblclick。普通 v-model 不变，选择字段单选默认即选即提交，多选默认确认；其他字段保留各自确认方式。readPretty 不显示编辑器和搜索。direct 即时更新，确认模式在确认后更新；搜索框按展示位置自动排列。
 
 Example source: src/form/__demos__/field-presentation.vue
 
@@ -22330,7 +22399,7 @@ import type {
 | `--c-form-status-validating-bg` | `var(--c-color-fill-2)` | `background-color` |
 | `--c-form-status-validating-border-color` | `transparent` | `border-color` |
 | `--c-form-status-validating-focus-bg` | `var(--c-color-bg-2)` | `background-color` |
-| `--c-form-status-validating-focus-border-color` | `var(--c-sys-color-content-brand)` | `border-color` |
+| `--c-form-status-validating-focus-border-color` | `var(--c-sys-color-action-primary)` | `border-color` |
 | `--c-form-status-validating-focus-shadow-color` | `var(--c-color-primary-light-2)` | `box-shadow` |
 | `--c-form-status-validating-focus-shadow-size` | `var(--c-shadow-distance-none)` | `box-shadow` |
 | `--c-form-status-validating-hover-bg` | `var(--c-color-fill-3)` | `background-color` |
@@ -22347,7 +22416,7 @@ import type {
 | `--c-form-status-warning-hover-border-color` | `transparent` | `border-color` |
 | `--c-form-status-warning-tip-icon-color` | `var(--c-sys-color-content-warning)` | `color` |
 | `--c-form-status-warning-tip-text-color` | `var(--c-sys-color-content-warning)` | `color` |
-| `--c-form-tooltip-margin-left` | `var(--c-sys-space-2)` | `margin-inline-start` |
+| `--c-form-tooltip-margin-left` | `var(--c-sys-space-2)` | `padding-inline-start` |
 | `--c-form-tooltip-text-color` | `var(--c-sys-color-content-secondary)` | `color` |
 | `--c-form-transition-duration-3` | `var(--c-transition-duration-3)` | `transition` |
 | `--c-form-transition-duration-5` | `var(--c-transition-duration-5)` | `animation` |
@@ -24179,7 +24248,7 @@ const switchSource = () => {
 | ripple | boolean | false | 启用水波 |
 | block | boolean | true | 块级布局 |
 | preview-disabled | boolean | false | 禁用预览 |
-| open / v-model:open | boolean | - | 单图受控预览状态 |
+| open | boolean | `-` | 单图受控预览状态 支持 `v-model:open`。 |
 | default-open | boolean | false | 单图非受控初始状态 |
 | preview-props | `Partial<ImagePreviewProps>` | - | 单图预览配置 |
 | popup-container | string \| HTMLElement \| false | body | 预览挂载目标 |
@@ -24210,7 +24279,7 @@ const switchSource = () => {
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | src | string | - | 预览图片地址 |
-| open / v-model:open | boolean | - | 受控预览状态 |
+| open | boolean | `-` | 受控预览状态 支持 `v-model:open`。 |
 | default-open | boolean | false | 非受控初始状态 |
 | interaction | 'auto' \| 'desktop' \| 'touch' | auto | 交互模式 |
 | popup-container | string \| HTMLElement \| false | body | 预览挂载目标 |
@@ -24265,7 +24334,7 @@ const switchSource = () => {
 
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| open / v-model:open | boolean | - | 受控预览状态 |
+| open | boolean | `-` | 受控预览状态 支持 `v-model:open`。 |
 | default-open | boolean | false | 非受控初始状态 |
 | interaction | 'auto' \| 'desktop' \| 'touch' | auto | 交互模式 |
 | popup-container | string \| HTMLElement \| false | body | 预览挂载目标 |
@@ -24285,7 +24354,7 @@ const switchSource = () => {
 | show-toolbar | boolean | true | 显示工具栏及 actions 插槽 |
 | actions-layout | ImagePreviewActionName[] | desktop defaults / touch [] | 工具栏动作顺序 |
 | images | string[] | - | 显式图片数组；undefined 收集子项，[] 为空 |
-| model-value / v-model | number | - | 受控图片序号，从 1 开始 |
+| model-value | number | `-` | 受控图片序号，从 1 开始 支持 `v-model`。 |
 | default-value | number | 1 | 初始图片序号，从 1 开始 |
 | loop | boolean | false | 切换时循环 |
 
@@ -26163,6 +26232,103 @@ const loading = ref(true)
 </template>
 ```
 
+### 粘贴链接并获取标题
+
+粘贴链接或输入链接后按回车，模拟异步获取标题，等待期间展示加载状态。标签的 `label` 显示标题，`value` 保留原始链接；设置 `closable` 后可以删除。点击提交可查看链接数据，示例不发送请求。
+
+Example source: src/input-tag/__demos__/link-title.vue
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+
+interface LinkTag {
+  value: string
+  label: string
+  closable: boolean
+}
+
+const links = ref<LinkTag[]>([])
+const inputValue = ref('')
+const loading = ref(false)
+const error = ref('')
+const submitted = ref<string[] | null>(null)
+
+// 模拟接口：延迟返回标题，实际使用时替换为业务请求。
+function fetchTitle(url: string): Promise<string> {
+  const titles: Record<string, string> = {
+    'vuejs.org': 'Vue.js',
+    'github.com': 'GitHub',
+  }
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(titles[new URL(url).hostname] || new URL(url).hostname), 1200)
+  })
+}
+
+async function handlePaste(event: ClipboardEvent) {
+  const url = event.clipboardData?.getData('text/plain').trim()
+  if (url) await addLink(url)
+}
+
+function handleKeydown(event: KeyboardEvent) {
+  if (event.key !== 'Enter' || event.isComposing || event.keyCode === 229) return
+  event.preventDefault()
+  void addLink(inputValue.value.trim())
+}
+
+async function addLink(url: string) {
+  if (loading.value || !url) return
+  error.value = ''
+  try {
+    const parsed = new URL(url)
+    if (!['http:', 'https:'].includes(parsed.protocol)) throw new Error()
+  } catch {
+    error.value = '请粘贴完整的 http 或 https 链接 / Paste a valid http or https URL.'
+    return
+  }
+  if (links.value.some(item => item.value === url)) {
+    error.value = '链接已添加 / This URL has already been added.'
+    return
+  }
+  loading.value = true
+  try {
+    const title = await fetchTitle(url)
+    links.value.push({ value: url, label: title, closable: true })
+    inputValue.value = ''
+  } catch {
+    error.value = '获取标题失败，请重试 / Could not fetch the title. Try again.'
+  } finally {
+    loading.value = false
+  }
+}
+
+function submit() {
+  submitted.value = links.value.map(item => item.value)
+}
+</script>
+
+<template>
+  <c-space direction="column" style="width: 100%" :size="12">
+    <p>粘贴链接，或输入链接后按回车，例如 https://vuejs.org / Paste a URL or type one and press Enter.</p>
+    <div @paste.capture.prevent="handlePaste" @keydown.capture="handleKeydown">
+      <c-input-tag
+        v-model="links"
+        v-model:input-value="inputValue"
+        :retain-input-value="true"
+        :loading="loading"
+        :disabled="loading"
+        placeholder="粘贴或输入链接 / Paste or type a URL"
+        aria-label="粘贴或输入链接 / Paste or type a URL"
+        clearable
+      />
+    </div>
+    <p v-if="error" role="alert">{{ error }}</p>
+    <c-button :disabled="loading || !links.length" @click="submit">提交 / Submit</c-button>
+    <pre v-if="submitted !== null" aria-live="polite">{{ JSON.stringify({ links: submitted }, null, 2) }}</pre>
+  </c-space>
+</template>
+```
+
 ### 字段状态与原生输入
 
 `disabled`、`readonly`、`error` 未设置时继承 FormItem / Form；InputGroup 可提供禁用、只读、尺寸和变体，字段显式值优先，`false` 可覆盖父级。独立使用时默认变体仍为 `filled`。延迟编辑器遵守相同状态，编辑中禁用或只读会取消草稿。
@@ -27914,7 +28080,7 @@ const sider: SiderProps = { resizeDirections: ['right'], onCollapse: (collapsed,
 | 变量 | 默认值／条件 | 影响的样式 |
 | --- | --- | --- |
 | `--c-layout-border-color` | `var(--c-color-border-2)` | `border-bottom`, `border-left`, `border-right`, `border-top` |
-| `--c-layout-focus-color` | `var(--c-sys-color-content-brand)` | `outline` |
+| `--c-layout-focus-color` | `var(--c-sys-color-action-primary)` | `outline` |
 | `--c-layout-font-color` | `var(--c-color-text-1)` | `color` |
 | `--c-layout-sider-background-light` | `var(--c-color-bg-2)` | `background` |
 | `--c-layout-sider-light-box-shadow` | `0 2px 5px 0 rgba(0, 0, 0, 0.08)` | `box-shadow` |
@@ -28631,6 +28797,8 @@ const rows = Array.from({ length: 1000 }, (_, id) => ({ id, name: '记录 ' + (i
 ## 生命周期
 
 ### 保留命令与 KeepAlive 生命周期
+
+KeepAlive 重新激活时，虚拟列表恢复最近记录的纵向和横向滚动位置；内容或容器尺寸变化时，位置受当前可滚动范围限制。重新激活时发出的新滚动命令优先。
 
 <!-- demo-config-notes:start -->
 #### 本组配置对照
@@ -30224,8 +30392,10 @@ Example source: src/menu/__demos__/footer.vue
 | unmount-on-close | 关闭后是否卸载面板 | `boolean` | `true` |
 | reference | 外部触发元素或选择器 | `MenuReference` | `-` |
 | popup-class | 定位层类名 | `string / array / object` | `-` |
-| offset-x / offset-y | 相对触发器偏移 | `string / number` | `0` |
-| mouse-enter-delay / mouse-leave-delay | 根菜单悬停打开 / 关闭延迟，毫秒 | `number` | `100` |
+| offset-x | 相对触发器的横向偏移 | `string / number` | `0` |
+| offset-y | 相对触发器的纵向偏移 | `string / number` | `0` |
+| mouse-enter-delay | 悬停打开延迟，单位毫秒 | `number` | `100` |
+| mouse-leave-delay | 悬停关闭延迟，单位毫秒 | `number` | `100` |
 | close-on-click-reference | 再次点击触发器是否关闭 | `boolean` | `true` |
 | cover | 浮层是否覆盖触发器 | `boolean` | `false` |
 | elevation | 默认阴影、关闭阴影或指定层级 | `boolean / number` | `true` |
@@ -30920,7 +31090,7 @@ close/closed 通知回调抛错不会保留已关闭项目或空管理器宿主�
 
 | 属性                  | 说明                                   | 类型                                                         | 默认值          |
 | --------------------- | -------------------------------------- | ------------------------------------------------------------ | --------------- |
-| open / `v-model:open` | 是否显示（组件）                       | `boolean`                                                    | `false`         |
+| `open` | 是否显示（组件） 支持 `v-model:open`。 | `boolean` | `false` |
 | id                    | 队列内唯一标识，相同 id 更新原实例     | `string \| number`                                           | 自动生成        |
 | status                | 语义状态                               | `default \| info \| success \| warning \| danger \| loading` | `default`       |
 | variant | 视觉强调层级 | `neutral \| tonal \| solid` | `neutral` |
@@ -32041,18 +32211,22 @@ label/icon/extra 渲染函数、同名插槽及 nodeProps 均接收 `{ option, a
 | --- | --- | --- |
 | name | 稳定且唯一的入口标识；提供后由根菜单 activeItem 互斥管理当前入口；视觉覆盖另用 highlight | — |
 | label | 未选中或选中值未匹配 options 时的入口标题，支持 VNode / 渲染函数 | — |
-| options / fieldNames | 与 NavMenu 相同的选项和字段映射 | `[]` |
-| model-value / default-value | 独立受控值 / 初始值，支持字符串、数字和 null | `undefined` / `null` |
+| options | 菜单选项，结构与 NavMenu 一致 | `[]` |
+| field-names | 选项字段映射，与 NavMenu 一致 | `undefined` |
+| model-value | 受控选中 key，支持字符串、数字和 null，支持 v-model | `undefined` |
+| default-value | 非受控初始选中 key，支持字符串、数字和 null，仅初始化时读取 | `null` |
 | highlight | 入口视觉强调覆盖，不改变业务 active 或选中值；省略时跟随 active | — |
 | hide-on-select | 调用 select 后关闭面板 | `true` |
 | unmount-on-close | 关闭过渡结束后卸载面板；默认保留首次展开后的内容 | false |
-| open / default-open | 受控 / 初始面板状态 | `undefined` / `false` |
+| open | 受控展开状态，支持 v-model:open | `undefined` |
+| default-open | 非受控初始展开状态，仅初始化时读取 | `false` |
 | disabled | 禁用入口（同时遵循父菜单 disabled） | `undefined` |
 | trigger | Trigger 触发方式 | `click` |
 | placement | 普通下拉的位置；全高面板使用 right/left 系列时紧贴入口对应边缘 | `bottom-start` |
 | popup-layout | `dropdown` 普通下拉 / `full-width` 入口下方通栏 / `full-height` 右侧全高 / `full` 入口下方宽高铺满 | `dropdown` |
 | popup-style | 面板 CSS，可覆盖全高面板宽度、方向和尺寸 | — |
-| popup-container / popup-class | Trigger 挂载容器及浮层类名 | 跟随父菜单 |
+| popup-container | 浮层挂载容器；省略时跟随父菜单 | 跟随父菜单 |
+| popup-class | 浮层附加类名；省略时跟随父菜单 | 跟随父菜单 |
 | options-mode | 默认选项面板的横向 / 纵向排列 | `vertical` |
 
 所有入口插槽和 `content` 插槽收到 `{ modelValue, selectedOption, active, open, select, close }`。`select(key, event?)` 发出 `update:modelValue` 和 `select(key, option, event)`；自定义面板可以选择 options 外的值，此时 option 为 undefined；独立入口 active 为 false，如需强调可显式设置 highlight。`close()` 关闭并恢复入口焦点。受控值只有父组件接受后才影响标题和业务 active。入口插槽的 active 表示入口状态；label 渲染函数的 active 则表示其上下文 option 自身是否匹配 Item 的主值，未匹配时为 false。`hideOnSelect` 独立于值是否被接受，需手动确认时设为 false。
@@ -32116,7 +32290,7 @@ NavMenu 继承最近的原生 `dir` 并支持动态切换。横向菜单的左�
 | `--c-nav-menu-light-item-bg-selected` | `var(--c-color-fill-2)` | `background` |
 | `--c-nav-menu-light-item-text-color` | `var(--c-color-text-2)` | `color` |
 | `--c-nav-menu-light-item-text-color-disabled` | `var(--c-color-text-4)` | `color` |
-| `--c-nav-menu-light-item-text-color-selected` | `var(--c-sys-color-content-brand)` | `color`, `outline` |
+| `--c-nav-menu-light-item-text-color-selected` | `var(--c-sys-color-action-primary)` | `color`, `outline` |
 | `--c-nav-menu-motion-duration` | `150ms` | `transition` |
 | `--c-nav-menu-panel-width` | `min(400px, 100vw)` | 组件样式 |
 | `--c-nav-menu-popup-max-height` | `320px` | `max-height` |
@@ -33356,10 +33530,10 @@ import type { PaginationProps, PaginationInstance, PaginationPageSizeProps } fro
 | 变量 | 默认值／条件 | 影响的样式 |
 | --- | --- | --- |
 | `--c-pagination-active-background` | `var(--c-color-primary-light-1)` | `background` |
-| `--c-pagination-active-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-pagination-active-color` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-pagination-disabled-background` | `var(--c-color-fill-1)` | `background` |
 | `--c-pagination-disabled-color` | `var(--c-color-text-4)` | `color` |
-| `--c-pagination-focus-color` | `var(--c-sys-color-content-brand)` | `outline` |
+| `--c-pagination-focus-color` | `var(--c-sys-color-action-primary)` | `outline` |
 | `--c-pagination-focus-offset` | `1px` | `outline-offset` |
 | `--c-pagination-focus-space` | `3px` | `padding` |
 | `--c-pagination-focus-width` | `2px` | `outline` |
@@ -33836,6 +34010,99 @@ setPropsDefaults 在挂载前配置一次，修改组件定义的默认属性；
 
 ## 基础示例
 
+### 单选与多选
+
+默认单选，值为 `string | null`；设置 `multiple` 后使用按选择顺序排列的 `string[]`。多选未设置 `default-value` 时初始为 `[]`，默认清空也提交 `[]`，可用 `empty-value` 覆盖（包括 `null`）。异步搜索保留已选人员姓名；缺失人员可用 `fallback-option(id)` 逐人补全，`label` 仅用于单选回显。
+
+Example source: src/people-select/__demos__/multiple.vue
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+import type { PeopleSelectOption, PeopleSelectOptionsLoader } from '@cedar-design/ui-vue'
+
+const personId = ref<string | null>('alice')
+const personIds = ref<string[]>(['alice', 'bob'])
+const people: readonly PeopleSelectOption[] = [
+  { value: 'alice', label: 'Alice' },
+  { value: 'bob', label: 'Bob' },
+  { value: 'carol', label: 'Carol' },
+  { value: 'david', label: 'David', disabled: true },
+]
+const loadPeople: PeopleSelectOptionsLoader = async (query, { signal }) => {
+  await new Promise<void>((resolve) => setTimeout(resolve, 200))
+  if (signal.aborted) {
+    return []
+  }
+  return people.filter((person) => person.label.toLowerCase().includes(query.toLowerCase()))
+}
+</script>
+
+<template>
+  <c-space direction="column">
+    <p>单选人员</p>
+    <c-people-select v-model="personId" :options="people" clearable :empty-value="null" />
+    <p>多选人员（异步搜索）</p>
+    <c-people-select v-model="personIds" :options="loadPeople" multiple clearable />
+    <p role="status">IDs: {{ personIds.join(', ') || '—' }}</p>
+    <c-people-select v-model="personIds" :options="people" multiple read-pretty />
+  </c-space>
+</template>
+```
+
+## 异步数据
+
+### options 加载函数
+
+通过 `:options="loadPeople"` 传入带类型的加载函数。下面模拟异步请求，无需后端即可运行；输入 Alice 或 Bob 可搜索，组件自动管理 loading。
+
+Example source: src/people-select/__demos__/options-loader.vue
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+import type { PeopleSelectOption, PeopleSelectOptionsLoader } from '@cedar-design/ui-vue'
+
+const personId = ref<string | null>(null)
+const errorText = ref('')
+const people: readonly PeopleSelectOption[] = [
+  { value: 'alice', label: 'Alice', mobile: '13800000000' },
+  { value: 'bob', label: 'Bob', mobile: '13900000000' },
+  { value: 'carol', label: 'Carol', disabled: true },
+]
+
+// 模拟请求；实际业务应将 signal 传给 fetch 等请求库。
+const loadPeople: PeopleSelectOptionsLoader = async (query, { signal }) => {
+  errorText.value = ''
+  await new Promise<void>((resolve) => setTimeout(resolve, 400))
+  if (signal.aborted) return []
+  return people.filter((person) => person.label.toLowerCase().includes(query.toLowerCase()))
+}
+
+function onLoadError(error: unknown) {
+  errorText.value = error instanceof Error ? error.message : String(error)
+}
+</script>
+
+<template>
+  <c-space direction="column">
+    <c-people-select
+      v-model="personId"
+      :options="loadPeople"
+      :search-delay="300"
+      placeholder="Alice / Bob"
+      clearable
+      :empty-value="null"
+      @load-error="onLoadError"
+    />
+    <p role="status">ID: {{ personId ?? '—' }}</p>
+    <p v-if="errorText" role="alert">{{ errorText }}</p>
+  </c-space>
+</template>
+```
+
+## 业务组合
+
 ### 完整业务示例
 
 Example source: src/people-select/__demos__/injected-services.vue
@@ -33887,8 +34154,10 @@ async function chat(person: { value: string }) { log.value = `Chat: ${person.val
 
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| model-value / v-model | string / null | undefined | 受控人员标识；显式 null 保持为空。 |
-| default-value | string | '' | 仅创建时读取的非受控初始标识。 |
+| need-confirm | `boolean` | 单选 `false`；多选 `true` | 仅弹出编辑模式生效。单选默认点选即提交并关闭，设为 true 时先编辑草稿、再点确认；多选默认保留确认。提交仍执行表单校验和 before-commit，拒绝时不关闭。 |
+| multiple | boolean | false | 启用人员多选，使用 string[] 模型。 |
+| model-value | PeopleSelectValue | `undefined` | 单选为人员 ID，多选为 ID 数组；显式 null 保持为空。 支持 `v-model`。 |
+| default-value | string / string[] | '' / [] | 仅创建时读取的非受控初始标识。 |
 | options | readonly PeopleSelectOption[] / PeopleSelectOptionsLoader | undefined | 候选数组或 (query, { signal }) 加载函数；显式数组优先。 |
 | fallback-option | PeopleSelectFallbackOption | true | 同步回显回退；可返回人员对象，false 关闭未匹配回显。 |
 | label | string | '' | 候选缺失时的响应式回显姓名。 |
@@ -33911,8 +34180,8 @@ async function chat(person: { value: string }) { log.value = `Chat: ${person.val
 | case-sensitive | boolean | false | 内置本地搜索区分大小写。 |
 | search-fields | readonly OptionSearchField[]<br>`OptionSearchField: 'label' \| 'value'` | ['label'] | 内置本地搜索使用的候选字段，默认 label。 |
 | search-delay | number | 500 | 搜索通知与请求的防抖毫秒数。 |
-| clearable | boolean | false | 允许可编辑字段清空；延迟模式先清草稿，确认后提交。 |
-| empty-value | string / null / function | '' | 清空提交值；显式 null 原样保留，省略时使用空字符串。 |
+| clearable | boolean | false | 允许可编辑字段清空；确认模式先清草稿再提交；无需确认时清空直接提交。 |
+| empty-value | string / string[] / null / function | '' / [] | 清空提交值；单选默认 ''，多选默认 []，显式 null 原样保留。 |
 | empty-values | readonly unknown[] | undefined | 空值识别策略；字段、FormItem、Form 逐级继承。 |
 | empty-text | string | undefined | 纯阅读空文案，继承后缺省为短横线。 |
 | loading | boolean | false | 编辑字段的手动等待展示，暂停选择与清空；不覆盖人员阅读内容。 |
@@ -33922,19 +34191,51 @@ async function chat(person: { value: string }) { log.value = `Chat: ${person.val
 | default-open | boolean | false | 非受控延迟编辑层初始打开状态。 |
 | popup-container | PopupContainer | undefined | 编辑弹层挂载目标；选择器、HTMLElement 或 false。 |
 
+### PeopleSelectValue / PeopleSelectOptionsLoader 类型说明
+
+```ts
+import type { AsyncDataContext } from '@cedar-design/use-vue'
+
+// UI 包已导出以下类型，无需在业务中重复定义。
+interface PeopleSelectOption {
+  value: string
+  label: string
+  avatar?: string
+  mobile?: string
+  disabled?: boolean
+}
+
+type PeopleSelectValue = string | string[] | null
+
+type PeopleSelectOptionsLoader = (
+  query: string,
+  context: AsyncDataContext, // { signal: AbortSignal }
+) => readonly PeopleSelectOption[] | Promise<readonly PeopleSelectOption[]>
+```
+
+- `query` 为搜索文本。初次挂载、更换加载函数及 `refresh()` 均使用空字符串 `''`；搜索按 `search-delay` 防抖，默认 500 毫秒。
+- 可同步返回数组，也可返回数组的 Promise。业务接口字段应映射为 `value`（人员 ID）和 `label`（姓名），无匹配项返回 `[]`；不能直接把 Promise 传给 `options`。
+- 将 `context.signal` 透传给请求库。新请求、更换加载函数及卸载会取消旧任务；即使请求未响应取消，旧结果也不会覆盖当前结果。
+- 组件自动管理 loading，当前请求失败触发 `load-error(error, 'options')`。函数结果默认不再本地过滤，无需另用 `@search` 重复发请求。
+- `is-label` / `read-pretty` 不调用加载函数，阅读回显可使用 `label`、`fallback-option` 或数组。局部数组（包括 `[]`）覆盖全局默认加载函数。
+
+`PeopleSelectOption`、`PeopleSelectOptionsLoader` 可从 UI 包根入口或 `people-select` 子入口导入；`AsyncDataContext` 从 use 包导入。
+
 ### PeopleSelect Events
 
 | 事件 | 参数 | 说明 |
 | --- | --- | --- |
-| update:model-value | value: string / null | 提交人员标识，不收集监听器返回值。 |
-| change | value: string / null | 人员值变更通知。 |
+| update:model-value | value: PeopleSelectValue | 提交人员标识，不收集监听器返回值。 |
+| change | value: PeopleSelectValue | 人员值变更通知。 |
 | update:open / open-change | open: boolean | 延迟编辑层打开状态通知。 |
-| clear | — | 清空动作通知；延迟模式仍需确认草稿。 |
+| clear | — | 清空动作通知；确认模式先更新草稿；无需确认时直接提交。 |
 | search | query: string | 搜索通知；请求由 options 显式函数管理。 |
 | load-error | error: unknown, source: 'options' | 当前候选读取失败通知。 |
 | action-error | error: unknown, action: 'call' / 'chat' | 显式电话或聊天任务失败通知，不等待错误监听器。 |
 
 ### PeopleSelect Slots
+
+多选时，`read` 插槽还会收到按模型顺序排列的 `people`，`person` 为首位人员。默认阅读内容展示所有已选人员，`actions` / `render-actions` 及电话、聊天操作按人员分别生效。
 
 | 插槽 | 参数 | 说明 |
 | --- | --- | --- |
@@ -33962,7 +34263,7 @@ signal 可选地传给 fetch 取消过期请求；不是 HTTP 参数，也不会
 
 公开类型包含 PeopleSelectReadScope、PeopleSelectSlots、PeopleSelectEmits 及既有数据、任务和实例类型，可从根入口及 people-select 子入口导入。
 
-`empty-value` 可显式设为 `null`（或 `() => null`），清空时原样提交 null；省略时保留组件原默认值。界面把 null 显示为空，不会把普通输入的空字符串自动转成 null。支持弹出编辑的字段中，清空先修改草稿，确认后提交，取消则保留原值。
+`empty-value` 可显式设为 `null`（或 `() => null`），清空时原样提交 null；省略时保留组件原默认值。界面把 null 显示为空，不会把普通输入的空字符串自动转成 null。确认式弹出编辑中，清空先修改草稿并在确认后提交；无需确认时清空会直接提交。
 
 `fallback-option` 与候选 options 独立，不返回 Promise、不主动发请求。回显优先使用当前候选项，不存在时读取 fallback；传入 false 关闭未匹配值的回显。
 
@@ -34392,6 +34693,8 @@ Document: llms/zh-CN/components/popover.md
 <!-- Source: src/popover/README.md; locale: zh-CN; page: /components/popover/ -->
 
 # Popover 气泡卡片
+
+SSR 限制：触发插槽内的同一节点同时使用 `v-for` 和 `v-memo` 时，服务端渲染可能报错。服务端渲染时请移除该插槽节点上的 `v-memo`；普通 `v-for` 仍可使用。 `content` 插槽也可能出现同样问题；服务端渲染时请移除该插槽节点上的 `v-memo`。
 
 点击触发元素后展示结构化内容。Popover 可以包含按钮、表单和其他交互元素；纯文字说明使用 Tooltip。
 
@@ -35241,11 +35544,11 @@ const gradient = ref(false);
 | --- | --- | --- |
 | `--c-progress-animation-duration` | `1.5s` | `animation`, `animation-delay` |
 | `--c-progress-danger-color` | `var(--c-sys-color-content-danger)` | `color` |
-| `--c-progress-default-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-progress-default-color` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-progress-font-size` | `var(--c-sys-font-size-sm)` | `font-size` |
 | `--c-progress-info-color` | `var(--c-sys-color-content-info)` | `color` |
 | `--c-progress-line-border-radius` | `9999px` | `border-radius` |
-| `--c-progress-primary-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-progress-primary-color` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-progress-secondary-color` | `var(--c-sys-color-content-secondary)` | `color` |
 | `--c-progress-steps-gap` | `var(--c-sys-space-2)` | `gap` |
 | `--c-progress-success-color` | `var(--c-sys-color-content-success)` | `color` |
@@ -36215,7 +36518,8 @@ import type { RadioProps, RadioGroupProps, RadioEmits, RadioGroupEmits, RadioSlo
 | Radio / RadioGroup | name                            | 原生字段名，子项覆盖分组                   | string              | undefined |
 | Radio              | aria-label                      | 原生控件的无障碍名称                       | string              | undefined |
 | Radio              | input-attrs                     | 原生 input 属性                            | InputHTMLAttributes | undefined |
-| Radio              | checked-color / unchecked-color | 实例选中/未选中色；错误/禁用状态优先       | string              | undefined |
+| Radio | checked-color | 实例选中色；错误 / 禁用状态优先 | string | undefined |
+| Radio | unchecked-color | 实例未选中色；错误 / 禁用状态优先 | string | undefined |
 | Radio              | icon-size                       | 图标长度，number 为 px；string 为 CSS 长度 | number \| string    | undefined |
 | Radio              | ripple                          | 触控水波纹                                 | boolean             | true      |
 
@@ -36252,7 +36556,7 @@ Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，
 | `--c-radio-action-padding` | `calc((var(--c-internal-radio-mask-height) / 2) - (var(--c-radio-control-size) / 2))` | `padding` |
 | `--c-radio-animation-duration` | `var(--c-transition-duration-3)` | `transition` |
 | `--c-radio-control-color` | `var(--c-sys-color-content-secondary)` | `color` |
-| `--c-radio-control-color-checked` | `var(--c-sys-color-content-brand)` | `color`, `outline` |
+| `--c-radio-control-color-checked` | `var(--c-sys-color-action-primary)` | `color`, `outline` |
 | `--c-radio-control-color-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
 | `--c-radio-control-color-error` | `var(--c-sys-color-content-danger)` | `box-shadow`, `color` |
 | `--c-radio-control-size` | `14px` | `font-size`, `height`, `padding`, `width` |
@@ -36564,6 +36868,8 @@ Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，
 
 `read-pretty` 为独立布尔属性，与 `readonly`、`disabled` 同级；字段 > FormItem > Form 继承，显式 `false` 覆盖父级。默认 `false`。纯阅读不显示编辑器。
 
+在 FormItem 中，`label-attrs.for` 与 Rate 的 `id` 匹配时，评分控件会使用表单标签作为无障碍名称；显式 `aria-label` 或 `aria-labelledby` 优先。默认的原生标签可在点击后聚焦未禁用的评分控件；阻止标签点击默认行为可取消该聚焦。
+
 ## API
 
 ### 空值识别与阅读空文案
@@ -36661,7 +36967,7 @@ Cedar 默认使用金色星形与紧凑间距；Maple 默认使用主题主色�
 | `--c-rate-disabled-color` | `var(--c-sys-color-content-disabled)` | `color` |
 | `--c-rate-empty-color` | `var(--c-color-fill-3)` | `color` |
 | `--c-rate-error-color` | `var(--c-sys-color-content-danger)` | `color` |
-| `--c-rate-focus-color` | `var(--c-sys-color-content-brand)` | `outline` |
+| `--c-rate-focus-color` | `var(--c-sys-color-action-primary)` | `outline` |
 | `--c-rate-focus-offset` | `2px` | `outline-offset` |
 | `--c-rate-focus-width` | `2px` | `outline` |
 | `--c-rate-gap` | `var(--c-spacing-4)` | `margin-inline-end` |
@@ -38121,11 +38427,13 @@ const groupBy = (resource: SchedulerResource) =>
 
 | 属性                                  | 说明                                                      | 默认值   |
 | ------------------------------------- | --------------------------------------------------------- | -------- |
-| scale / default-scale                 | `hour` 或 `day`，支持 `v-model:scale`                     | `day`    |
+| scale | 受控资源时间线刻度，支持 v-model:scale | `undefined` |
+| default-scale | 非受控资源时间线初始刻度 | `'day'` |
 | virtual-list-props                    | 资源时间线虚拟列表配置 `SchedulerVirtualListProps`        | —        |
 | resource-group-dimensions             | 交叉分组维度顺序，资源时间线有效                          | []       |
 | resource-group-by                     | `(resource: SchedulerResource) => string`，返回稳定分组键 | —        |
-| expanded-keys / default-expanded-keys | 展开的分组键，支持 `v-model:expanded-keys`                | 全部展开 |
+| expanded-keys | 受控展开分组键，支持 v-model:expanded-keys；省略时默认全部展开 | `undefined` |
+| default-expanded-keys | 非受控初始展开分组键；省略时默认全部展开 | `undefined` |
 
 资源较多时可先折叠不关注的分组。小时刻度按真实经过小时构建，夏令时切换日可能有 23 或 25 个小时；表头带时区缩写用于辨别重复小时。当前运行环境时区仍决定显示日期。
 
@@ -41038,7 +41346,8 @@ async function swap() {
 | 属性                                  | 说明                                                        | 默认值 |
 | ------------------------------------- | ----------------------------------------------------------- | ------ |
 | selectable                            | 展示多选模式开关；开启模式后点击卡片切换选中，暂停卡片拖拽  | false  |
-| selected-keys / default-selected-keys | 选中日程 ID，支持 `v-model:selected-keys`；共享日程只计一次 | 空数组 |
+| selected-keys | 受控选中日程 ID，支持 v-model:selected-keys；共享日程只计一次 | `undefined` |
+| default-selected-keys | 非受控初始选中日程 ID；共享日程只计一次 | `[]` |
 | history                               | 开启本地撤销/重做，展示工具栏                               | false  |
 | history-limit                         | 最多保留历史条数，正整数                                    | 20     |
 | before-transaction                    | 一次性校验或保存整笔事务；返回 false 取消，异常保留数据     | —      |
@@ -43577,7 +43886,8 @@ before-* 等待期间显示加载反馈并标记 aria-busy；拒绝或失败后�
 | drag-to-create             | 日/周/资源日程空白时段拖选                                              | boolean                                         | false        |
 | month-event-limit          | 月视图每日直接展示上限，超出通过 Popover 查看                           | number                                          | 3            |
 | overlap-event-limit        | 时间网格重叠组直接展示上限，超出通过 Popover 查看                       | number                                          | —            |
-| zoom / default-zoom        | 时间线缩放，0.5–4                                                       | number                                          | 1            |
+| zoom | 受控时间线缩放倍数，范围 0.5–4，支持 v-model:zoom | number | `undefined` |
+| default-zoom | 非受控时间线初始缩放倍数，范围 0.5–4 | number | `1` |
 | show-date-header           | 时间线日期分层表头                                                      | boolean                                         | true         |
 | show-assignment-details    | 编辑资源占用量与角色                                                    | boolean                                         | false        |
 | show-resource-load         | 资源峰值、容量及范围利用率                                              | boolean                                         | false        |
@@ -43593,18 +43903,21 @@ before-* 等待期间显示加载反馈并标记 aria-busy；拒绝或失败后�
 | editable                   | 启用内置编辑器；false 通过 editor-request 接管                          | boolean                                         | true         |
 | before-change              | 返回 false 取消；异步拦截、保存接口                                     | SchedulerBeforeChange / SchedulerBeforeChange[] | —            |
 | selectable | 启用多选操作 | boolean | false |
-| selected-keys / default-selected-keys | 受控选中日程 ID / 非受控初始选中 ID | string[] | — / [] |
+| selected-keys | 受控选中日程 ID，支持 v-model:selected-keys；共享日程只计一次 | string[] | `undefined` |
+| default-selected-keys | 非受控初始选中日程 ID；共享日程只计一次 | string[] | `[]` |
 | history | 对已接受的变更启用撤销与重做 | boolean | false |
 | history-limit | 历史记录数量，正整数；无效值回退 20 | number | 20 |
 | before-transaction | 事务保存守卫，设置后替代 before-change | SchedulerBeforeTransaction / SchedulerBeforeTransaction[] | — |
 | working-hours | 每周工作时间；省略不限制，空数组禁止定时日程 | SchedulerWorkingHours[] | — |
 | date-working-hours | 按日期覆盖工作时间 | SchedulerDateWorkingHours[] | [] |
 | disabled-ranges | 禁用时间区间，可限定资源 | SchedulerDisabledRange[] | [] |
-| scale / default-scale | 受控 / 非受控资源时间线刻度 | 'hour' / 'day' | — / day |
+| scale | 受控资源时间线刻度，支持 v-model:scale | `'hour' \| 'day'` | `undefined` |
+| default-scale | 非受控资源时间线初始刻度 | `'hour' \| 'day'` | `'day'` |
 | virtual-list-props | 配置后启用资源时间线虚拟滚动 | SchedulerVirtualListProps | — |
 | resource-group-dimensions | 按维度顺序交叉分组，至少两个不同维度 | string[] | [] |
 | resource-group-by | 资源到稳定分组键的映射 | (resource: SchedulerResource) => string | — |
-| expanded-keys / default-expanded-keys | 受控 / 非受控分组展开键；省略默认全部展开 | string[] | — / — |
+| expanded-keys | 受控展开分组键，支持 v-model:expanded-keys；省略时默认全部展开 | string[] | `undefined` |
+| default-expanded-keys | 非受控初始展开分组键；省略时默认全部展开 | string[] | `undefined` |
 
 mode 为 `day | week | month | agenda | resource-day | resource-timeline`。agenda 与资源时间线按周导航。超出时间网格小时范围的日程仍可在月/议程/时间线查看。
 
@@ -43816,7 +44129,7 @@ import {
 | `--c-scheduler-event-min-height` | `20px` | `min-height`, `min-width` |
 | `--c-scheduler-event-padding` | `4px` | `padding` |
 | `--c-scheduler-event-radius` | `4px` | `border-radius` |
-| `--c-scheduler-focus-color` | `var(--c-sys-color-content-brand)` | `outline` |
+| `--c-scheduler-focus-color` | `var(--c-sys-color-action-primary)` | `outline` |
 | `--c-scheduler-focus-width` | `2px` | `outline`, `outline-offset` |
 | `--c-scheduler-font-size` | `14px` | `font-size` |
 | `--c-scheduler-gap` | `12px` | `gap`, `margin-bottom`, `padding` |
@@ -44937,7 +45250,7 @@ const onChange = (next) => {
 
 | 参数 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| model-value / v-model | 当前值 | `string \| number` | — |
+| model-value | 当前值 支持 `v-model`。 | `string \| number` | `—` |
 | default-value | 非受控默认值 | `string \| number` | — |
 | options | 选项列表，支持只读数组 | `ReadonlyArray<string \| number \| SegmentedOption>` | `[]` |
 | size | 尺寸；未设置时继承表单和全局配置，最终回退 md | `xs \| sm \| md \| lg \| xl` | `undefined` |
@@ -45527,6 +45840,29 @@ export default defineComponent({
   },
 })
 </script>
+```
+
+### 单选确认方式
+
+仅弹出编辑模式生效。单选默认点选即提交并关闭，设为 true 时先编辑草稿、再点确认；多选默认保留确认。提交仍执行表单校验和 before-commit，拒绝时不关闭。
+
+Example source: src/select/__demos__/confirmation.vue
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+const immediate = ref('a')
+const confirmed = ref('a')
+const options = [{ value: 'a', label: 'Alpha' }, { value: 'b', label: 'Beta' }]
+</script>
+<template>
+  <c-space direction="column">
+    <p>单选即生效: {{ immediate }}</p>
+    <c-select v-model="immediate" :options="options" edit-mode="click" />
+    <p>确认后生效: {{ confirmed }}</p>
+    <c-select v-model="confirmed" :options="options" edit-mode="click" need-confirm />
+  </c-space>
+</template>
 ```
 
 ### 同名选项
@@ -46374,7 +46710,7 @@ function reset() {
         <c-select
           :key="`panel-${generation}`"
           v-model="form.panelCity"
-          edit-mode="click"
+          edit-mode="click" need-confirm
           :options="options"
           :default-active-first-option="autoFirst"
           :placeholder="
@@ -46977,7 +47313,7 @@ const value = ref("a");
 
 以上是字段展示层 API；纯面板不因此新增阅读模式。Form 与 FormItem 提供继承配置。empty-value 的现有类型与默认输出仍按该组件原 API 执行。
 
-单选和多选的已选行右侧均显示主色对勾；仅候选高亮时不显示对勾。click/dblclick 编辑面板内的对勾表示当前草稿选择，确认后才提交表单；禁用已选项保持禁用外观。
+单选和多选的已选行右侧均显示主色对勾；仅候选高亮时不显示对勾。确认式编辑面板内的对勾表示当前草稿选择，确认后提交表单；禁用已选项保持禁用外观。
 
 ### 清空值
 
@@ -46993,17 +47329,26 @@ const value = ref("a");
 
 | 属性 | 说明 | 类型 | 默认值 |
 | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- | ---------------------------- |
+| need-confirm | 仅弹出编辑模式生效。单选默认点选即提交并关闭，设为 true 时先编辑草稿、再点确认；多选默认保留确认。提交仍执行表单校验和 before-commit，拒绝时不关闭。 | `boolean` | 单选 `false`；多选 `true` |
 | `open-trigger-target` | 打开面板的点击区域；field 为整个字段，icon 仅右侧选择按钮。不影响键盘展开及受控 open。 | `'field' \| 'icon'` | `'field'` |
-| `model-value / default-value` | 受控值 / 非受控初始值 | `Value` | `单选 ''，多选 []` |
-| `open / default-open` | 受控展开 / 默认展开 | `boolean` | `undefined / false` |
-| `input-value / default-input-value` | 搜索文本，独立于选中值 | `string` | `undefined / ''` |
+| `model-value` | 受控选中值，支持 v-model | `Value \| null` | `undefined` |
+| `default-value` | 非受控初始选中值，仅初始化时读取 | `Value` | 单选：`''`；多选：`[]` |
+| `open` | 受控展开状态，支持 v-model:open | `boolean` | `undefined` |
+| `default-open` | 非受控初始展开状态，仅初始化时读取 | `boolean` | `false` |
+| `input-value` | 受控搜索文本，独立于选中值，支持 v-model:input-value | `string` | `undefined` |
+| `default-input-value` | 非受控初始搜索文本，独立于选中值，仅初始化时读取 | `string` | `''` |
 | `multiple` | 多选；默认启用搜索 | `boolean` | `false` |
 | `size` | 完整支持 xs、sm、md、lg、xl，未设置时继承分组与表单 | `ComponentSize`<br>`'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `md` |
 | `variant` | filled、outline、standard；未设置时继承 InputGroup | `FormControlVariant`<br>`'standard' \| 'filled' \| 'outline'` | `filled` |
-| `disabled / readonly / error` | 未设置时继承表单；显式 false 可覆盖 | `boolean` | `undefined` |
+| `disabled` | 禁用状态；显式值优先于继承的 Form / Group 状态 | `boolean` | `undefined` |
+| `readonly` | 只读状态；显式值优先于继承的 Form / Group 状态 | `boolean` | `undefined` |
+| `error` | 错误状态；显式值优先于继承的 Form / Group 状态 | `boolean` | `undefined` |
 | `placeholder` | 占位文本 | `string` | `—` |
-| `hint / line` | 浮动提示 / standard 变体下划线 | `boolean` | `true` |
-| `text-color / focus-color / blur-color` | 字段颜色 | `string` | `—` |
+| `hint` | 是否启用浮动提示 | `boolean` | `true` |
+| `line` | 是否显示 standard 变体的下划线 | `boolean` | `true` |
+| `text-color` | 逐实例自定义文字颜色；静态主题优先使用 token | `string` | `—` |
+| `focus-color` | 逐实例自定义聚焦颜色；静态主题优先使用 token | `string` | `—` |
+| `blur-color` | 逐实例自定义未聚焦颜色；静态主题优先使用 token | `string` | `—` |
 | `loading` | 加载时暂停选择、清空、标签移除与确认；保留已有值，搜索和关闭仍可用。 | `boolean` | `false` |
 | `loading-mode` | 加载布局：默认指示器或底部加载线 | `default / line` | `default` |
 | `show-tags` | 多选值以标签展示；false 改用分隔文本 | `boolean` | `true` |
@@ -47031,7 +47376,8 @@ const value = ref("a");
 | `default-active-first-option` | 打开选项列表时，无有效选中项则默认激活首个可用候选；仅高亮，不更新 modelValue 或触发 change。已有有效选中项优先激活该项 | `boolean` | `true` |
 | `unmount-on-close` | 关闭 Menu 后销毁内容 | `boolean` | `false` |
 | `scrollbar` | Menu / List 滚动条配置 | `boolean 或 ScrollbarProps` | `true` |
-| `show-header-on-empty / show-footer-on-empty` | 空状态仍展示 header / footer | `boolean` | `false` |
+| `show-header-on-empty` | 空状态下仍显示 header | `boolean` | `false` |
+| `show-footer-on-empty` | 空状态下仍显示 footer | `boolean` | `false` |
 | `edit-mode` | 字段展示；未指定时继承 FormItem/Form | `direct / click / dblclick` | `direct` |
 | `before-commit` | 确认前调用 ({ value, previousValue }, done, { signal })；布尔、Promise 或 done 完成，同步 undefined 等待 done。 | `BeforeFieldCommit` | — |
 
@@ -47153,7 +47499,7 @@ filterable 表示允许输入搜索词。filterOption 只控制本地候选匹�
 <c-select v-model="value" :options="loadOptions" filterable />
 ```
 
-`empty-value` 可显式设为 `null`（或 `() => null`），清空时原样提交 null；省略时保留组件原默认值。界面把 null 显示为空，不会把普通输入的空字符串自动转成 null。支持弹出编辑的字段中，清空先修改草稿，确认后提交，取消则保留原值。
+`empty-value` 可显式设为 `null`（或 `() => null`），清空时原样提交 null；省略时保留组件原默认值。界面把 null 显示为空，不会把普通输入的空字符串自动转成 null。确认式弹出编辑中，清空先修改草稿并在确认后提交；无需确认时清空会直接提交。
 
 守卫统一使用 `(payload, done, context)`：关闭 payload 为 `{ action }`，切换和提交为 `{ value, previousValue }`，Popup 为 `{ reason }`。context 提供 `signal` 和可选原始 `event`。返回 boolean/Promise，或调用 done()/done(false)；同步 void 等待 done，Promise&lt;void&gt; 放行。首次完成生效。等待期间自动管理 loading/disabled，取消后旧结果失效，不暴露内部按钮 refs。
 
@@ -47184,9 +47530,9 @@ SelectEditMode 在根入口和 select 子入口一致导出，值沿用各端 ed
 | 变量 | 默认值／条件 | 影响的样式 |
 | --- | --- | --- |
 | `--c-select-popup-bg` | `var(--c-sys-color-surface-overlay)` | `background-color` |
-| `--c-select-popup-border-color` | `var(--c-sys-color-border-default)` | `border`, `border-bottom`, `border-top` |
-| `--c-select-popup-border-radius` | `var(--c-sys-radius-md)` | `border-radius` |
-| `--c-select-popup-box-shadow` | `0 4px 10px rgba(0, 0, 0, 0.1)` | `box-shadow` |
+| `--c-select-popup-border-color` | `var(--c-sys-color-border-subtle)` | `border`, `border-bottom`, `border-top` |
+| `--c-select-popup-border-radius` | `var(--c-sys-radius-lg)` | `border-radius` |
+| `--c-select-popup-box-shadow` | `0 8px 24px rgba(0, 0, 0, 0.08)` | `box-shadow` |
 | `--c-select-popup-font-size` | `var(--c-sys-font-size-md)` | `font-size` |
 | `--c-select-popup-group-title-font-size` | `var(--c-sys-font-size-xs)` | `font-size` |
 | `--c-select-popup-group-title-height` | `20px` | `line-height` |
@@ -47195,22 +47541,25 @@ SelectEditMode 在根入口和 select 子入口一致导出，值沿用各端 ed
 | `--c-select-popup-group-title-text-color` | `var(--c-sys-color-content-secondary)` | `color` |
 | `--c-select-popup-loading-min-height` | `50px` | `min-height` |
 | `--c-select-popup-max-height` | `200px` | `max-height` |
-| `--c-select-popup-option-bg` | `var(--c-sys-color-surface-overlay)` | `background-color` |
-| `--c-select-popup-option-bg-disabled` | `var(--c-sys-color-surface-overlay)` | `background-color` |
-| `--c-select-popup-option-bg-hover` | `var(--c-sys-color-state-hover)` | `background-color` |
-| `--c-select-popup-option-bg-selected` | `var(--c-sys-color-surface-overlay)` | `background-color` |
-| `--c-select-popup-option-check-color` | `var(--c-sys-color-content-primary)` | `color` |
+| `--c-select-popup-option-bg` | `transparent` | `background-color` |
+| `--c-select-popup-option-bg-disabled` | `transparent` | `background-color` |
+| `--c-select-popup-option-bg-hover` | `var(--c-sys-color-state-hover)` | `background`, `background-color` |
+| `--c-select-popup-option-bg-selected` | `transparent` | `background`, `background-color` |
+| `--c-select-popup-option-bg-selected-hover` | `var(--c-select-popup-option-bg-hover)` | `background`, `background-color` |
+| `--c-select-popup-option-border-radius` | `var(--c-sys-radius-lg)` | `border-radius` |
+| `--c-select-popup-option-check-color` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-select-popup-option-check-gap` | `var(--c-sys-space-4)` | `margin-inline-start` |
 | `--c-select-popup-option-check-size` | `var(--c-sys-font-size-md)` | `height`, `width` |
 | `--c-select-popup-option-font-weight-selected` | `var(--c-sys-font-weight-medium)` | `font-weight` |
-| `--c-select-popup-option-height` | `36px` | `line-height` |
+| `--c-select-popup-option-height` | `36px` | `line-height`, `min-height` |
 | `--c-select-popup-option-icon-margin-right` | `var(--c-sys-space-4)` | `margin-inline-end` |
-| `--c-select-popup-option-padding-horizontal` | `var(--c-sys-space-5)` | `padding`, `padding-inline` |
+| `--c-select-popup-option-padding-horizontal` | `var(--c-sys-space-4)` | `padding`, `padding-inline` |
 | `--c-select-popup-option-suffix-icon-margin-left` | `var(--c-sys-space-5)` | `margin-inline-start` |
 | `--c-select-popup-option-text-color` | `var(--c-sys-color-content-primary)` | `color` |
 | `--c-select-popup-option-text-color-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
 | `--c-select-popup-option-text-color-hover` | `var(--c-sys-color-content-primary)` | `color` |
-| `--c-select-popup-option-text-color-selected` | `var(--c-sys-color-content-primary)` | `color` |
+| `--c-select-popup-option-text-color-selected` | `var(--c-sys-color-action-primary)` | `color`, `outline`, `outline-color` |
+| `--c-select-popup-padding-horizontal` | `var(--c-sys-space-3)` | `padding-inline`, `padding-inline-end`, `padding-inline-start` |
 | `--c-select-popup-padding-vertical` | `var(--c-sys-space-2)` | `padding`, `padding-block` |
 
 </div>
@@ -47219,7 +47568,7 @@ SelectEditMode 在根入口和 select 子入口一致导出，值沿用各端 ed
 
 ```css
 .component-theme {
-  --c-select-popup-border-color: var(--c-sys-color-border-default);
+  --c-select-popup-border-color: var(--c-sys-color-border-subtle);
 }
 ```
 
@@ -47847,7 +48196,7 @@ Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，
 | error | boolean | undefined | 错误外观，省略时继承表单。 |
 | marks | Record<number, string> | undefined | 范围内位置的文字标记。 |
 | show-ticks | boolean | false | 显示步长刻度，最多 1000 个。 |
-| show-input | boolean | false | 显示附带 InputNumber；范围模式显示两个。 |
+| show-input | boolean | false | 显示附带 InputNumber；范围模式显示两个。滑块的 aria-describedby 也用于数字输入，并与表单错误说明合并。 |
 | show-tooltip | boolean / 'always' | true | true 在悬浮、聚焦、拖动时显示；false 隐藏；always 常驻。 |
 | format-tooltip | SliderTooltipFormatter | undefined | 格式化提示及 aria-valuetext，不改变模型。 |
 | aria-label | string / [string, string] | undefined | 单拇指名称或范围两个拇指的名称。 |
@@ -47868,6 +48217,8 @@ Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，
 | empty-value | SliderProps['emptyValue'] | undefined | 清空提交覆盖值，可显式返回 null。 |
 | empty-values | readonly unknown[] | undefined | 空值识别策略，按字段、FormItem、Form 继承。 |
 | empty-text | string | undefined | 默认纯阅读空文案，继承后缺省为短横线。 |
+
+范围模式可通过 `aria-labelledby` 指向范围组名称；`aria-label` 的数组仍分别命名两个滑块。显式设置的 `role` 优先。
 
 ### 行为与键盘
 
@@ -47902,7 +48253,7 @@ button 插槽接收 { currentValue, index }；自定义内容保留键盘、ARIA
 
 | 变量 | 默认值／条件 | 影响的样式 |
 | --- | --- | --- |
-| `--c-slider-active-color` | `var(--c-sys-color-content-brand)` | `background`, `outline` |
+| `--c-slider-active-color` | `var(--c-sys-color-action-primary)` | `background`, `outline` |
 | `--c-slider-control-height` | `var(--c-sys-control-height-md)` | `height`, `min-height`, `padding-bottom`, `padding-inline-end`, `width` |
 | `--c-slider-disabled-color` | `var(--c-sys-color-content-disabled)` | `background`, `border-color` |
 | `--c-slider-error-color` | `var(--c-sys-color-content-danger)` | `background`, `border-color` |
@@ -47911,7 +48262,7 @@ button 插槽接收 { currentValue, index }；自定义内容保留键盘、ARIA
 | `--c-slider-input-width` | `80px` | `width` |
 | `--c-slider-radius` | `var(--c-sys-radius-md)` | `border-radius` |
 | `--c-slider-text-color` | `var(--c-sys-color-content-secondary)` | `color` |
-| `--c-slider-thumb-border-color` | `var(--c-sys-color-content-brand)` | `border` |
+| `--c-slider-thumb-border-color` | `var(--c-sys-color-action-primary)` | `border` |
 | `--c-slider-thumb-color` | `var(--c-sys-color-surface-default)` | `background` |
 | `--c-slider-thumb-size` | `16px` | `height`, `width` |
 | `--c-slider-tooltip-background` | `var(--c-sys-color-surface-tooltip)` | `background` |
@@ -47926,7 +48277,7 @@ button 插槽接收 { currentValue, index }；自定义内容保留键盘、ARIA
 
 ```css
 .component-theme {
-  --c-slider-active-color: var(--c-sys-color-content-brand);
+  --c-slider-active-color: var(--c-sys-color-action-primary);
 }
 ```
 
@@ -50091,7 +50442,7 @@ Steps 继承最近的 `dir="ltr"` 或 `dir="rtl"`，支持运行时切换。横�
 | --- | --- | --- |
 | `--c-steps-arrow-item-bg-error` | `var(--c-sys-color-content-danger)` | `background-color`, `border-inline-start` |
 | `--c-steps-arrow-item-bg-finish` | `var(--c-sys-color-state-selected)` | `background-color`, `border-inline-start` |
-| `--c-steps-arrow-item-bg-process` | `var(--c-sys-color-content-brand)` | `background-color`, `border-inline-start` |
+| `--c-steps-arrow-item-bg-process` | `var(--c-sys-color-action-primary)` | `background-color`, `border-inline-start` |
 | `--c-steps-arrow-item-bg-wait` | `var(--c-sys-color-surface-muted)` | `background-color`, `border-inline-start` |
 | `--c-steps-arrow-item-description-color-error` | `var(--c-sys-color-surface-default)` | `color` |
 | `--c-steps-arrow-item-description-color-finish` | `var(--c-sys-color-content-secondary)` | `color` |
@@ -50110,7 +50461,7 @@ Steps 继承最近的 `dir="ltr"` 或 `dir="rtl"`，支持运行时切换。横�
 | `--c-steps-circle-horizontal-item-description-margin-top` | `var(--c-spacing-1)` | `margin-top` |
 | `--c-steps-circle-item-bg-error` | `var(--c-sys-color-content-danger)` | `background-color` |
 | `--c-steps-circle-item-bg-finish` | `var(--c-sys-color-state-selected)` | `background-color` |
-| `--c-steps-circle-item-bg-process` | `var(--c-sys-color-content-brand)` | `background-color` |
+| `--c-steps-circle-item-bg-process` | `var(--c-sys-color-action-primary)` | `background-color` |
 | `--c-steps-circle-item-bg-wait` | `var(--c-sys-color-surface-muted)` | `background-color` |
 | `--c-steps-circle-item-border-color-error` | `transparent` | `border` |
 | `--c-steps-circle-item-border-color-finish` | `transparent` | `border` |
@@ -50123,11 +50474,11 @@ Steps 继承最近的 `dir="ltr"` 或 `dir="rtl"`，支持运行时切换。横�
 | `--c-steps-circle-item-icon-border-radius` | `var(--c-border-radius-circle)` | `border-radius` |
 | `--c-steps-circle-item-icon-gap` | `var(--c-spacing-6)` | `inset-inline-start`, `margin-inline-end`, `padding-inline-end` |
 | `--c-steps-circle-item-icon-text-color-error` | `var(--c-sys-color-surface-default)` | `color` |
-| `--c-steps-circle-item-icon-text-color-finish` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-steps-circle-item-icon-text-color-finish` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-steps-circle-item-icon-text-color-process` | `var(--c-sys-color-surface-default)` | `color` |
 | `--c-steps-circle-item-icon-text-color-wait` | `var(--c-sys-color-content-secondary)` | `color` |
 | `--c-steps-circle-item-tail-color-error` | `var(--c-sys-color-content-danger)` | `background-color` |
-| `--c-steps-circle-item-tail-color-process` | `var(--c-sys-color-content-brand)` | `background-color` |
+| `--c-steps-circle-item-tail-color-process` | `var(--c-sys-color-action-primary)` | `background-color` |
 | `--c-steps-circle-item-tail-color-wait` | `var(--c-sys-color-border-default)` | `background-color` |
 | `--c-steps-circle-item-tail-size` | `var(--c-border-width-1)` | `height`, `inset-inline-start`, `top`, `width` |
 | `--c-steps-circle-item-title-color-error` | `var(--c-sys-color-content-primary)` | `color` |
@@ -50142,12 +50493,12 @@ Steps 继承最近的 `dir="ltr"` 或 `dir="rtl"`，支持运行时切换。横�
 | `--c-steps-dot-horizontal-item-description-margin-top` | `var(--c-spacing-2)` | `margin-top` |
 | `--c-steps-dot-horizontal-item-title-margin-top` | `var(--c-spacing-2)` | `margin-top` |
 | `--c-steps-dot-item-bg-error` | `var(--c-sys-color-content-danger)` | `background-color` |
-| `--c-steps-dot-item-bg-finish` | `var(--c-sys-color-content-brand)` | `background-color` |
-| `--c-steps-dot-item-bg-process` | `var(--c-sys-color-content-brand)` | `background-color` |
+| `--c-steps-dot-item-bg-finish` | `var(--c-sys-color-action-primary)` | `background-color` |
+| `--c-steps-dot-item-bg-process` | `var(--c-sys-color-action-primary)` | `background-color` |
 | `--c-steps-dot-item-bg-wait` | `var(--c-sys-color-content-secondary)` | `background-color` |
 | `--c-steps-dot-item-border-color-error` | `var(--c-sys-color-content-danger)` | `border-color` |
-| `--c-steps-dot-item-border-color-finish` | `var(--c-sys-color-content-brand)` | `border-color` |
-| `--c-steps-dot-item-border-color-process` | `var(--c-sys-color-content-brand)` | `border-color` |
+| `--c-steps-dot-item-border-color-finish` | `var(--c-sys-color-action-primary)` | `border-color` |
+| `--c-steps-dot-item-border-color-process` | `var(--c-sys-color-action-primary)` | `border-color` |
 | `--c-steps-dot-item-border-color-wait` | `var(--c-sys-color-content-secondary)` | `border-color` |
 | `--c-steps-dot-item-description-color-error` | `var(--c-sys-color-content-secondary)` | `color` |
 | `--c-steps-dot-item-description-color-finish` | `var(--c-sys-color-content-secondary)` | `color` |
@@ -50159,7 +50510,7 @@ Steps 继承最近的 `dir="ltr"` 或 `dir="rtl"`，支持运行时切换。横�
 | `--c-steps-dot-item-icon-size` | `var(--c-size-2)` | `height`, `inset-inline-start`, `margin-inline-end`, `margin-inline-start`, `margin-top`, `padding-top`, `top`, `width` |
 | `--c-steps-dot-item-icon-size-active` | `var(--c-spacing-5)` | `height`, `margin-inline-start`, `margin-top`, `width` |
 | `--c-steps-dot-item-tail-color-error` | `var(--c-sys-color-content-danger)` | `background-color` |
-| `--c-steps-dot-item-tail-color-process` | `var(--c-sys-color-content-brand)` | `background-color` |
+| `--c-steps-dot-item-tail-color-process` | `var(--c-sys-color-action-primary)` | `background-color` |
 | `--c-steps-dot-item-tail-color-wait` | `var(--c-sys-color-border-default)` | `background-color` |
 | `--c-steps-dot-item-tail-size` | `var(--c-border-width-1)` | `height`, `top` |
 | `--c-steps-dot-item-title-color-error` | `var(--c-sys-color-content-primary)` | `color` |
@@ -50182,7 +50533,7 @@ Steps 继承最近的 `dir="ltr"` 或 `dir="rtl"`，支持运行时切换。横�
 | `--c-steps-navigation-arrow-top` | `var(--c-spacing-5)` | `top` |
 | `--c-steps-navigation-content-margin-bottom` | `var(--c-spacing-8)` | `margin-bottom` |
 | `--c-steps-navigation-description-padding-right` | `var(--c-spacing-8)` | `padding-inline-end` |
-| `--c-steps-navigation-ink-bg` | `var(--c-sys-color-content-brand)` | `background-color` |
+| `--c-steps-navigation-ink-bg` | `var(--c-sys-color-action-primary)` | `background-color` |
 | `--c-steps-navigation-ink-height` | `var(--c-border-width-2)` | `height` |
 | `--c-steps-navigation-ink-spacing-left` | `var(--c-spacing-none)` | `inset-inline-start` |
 | `--c-steps-navigation-ink-spacing-right` | `30px` | `inset-inline-end` |
@@ -52918,7 +53269,7 @@ async function reject() {
 | ripple           | 点击波纹                                                     | boolean                                                              | true      |
 | handle-elevation | 滑块阴影，true 等级 2，数字取整数并限制 0～24                | boolean / number                                                     | true      |
 
-before-change 使用 (payload, done, context)。返回 true、调用 done() 或 Promise 兑现为非 false 结果时允许切换；返回 false、done(false)、抛错、Promise 兑现为 false 或拒绝均取消。同步 void 等待 done，`Promise<void>` 正常完成允许。等待期间自动 loading，重复输入被阻止；异常按许可取消处理，不新增报错事件。
+before-change 使用 (payload, done, context)。返回 true、调用 done() 或 Promise 兑现为非 false 结果时允许切换；返回 false、done(false)、抛错、Promise 兑现为 false 或拒绝均取消。同步 void 等待 done，`Promise<void>` 正常完成允许。等待期间自动 loading，重复输入被阻止；延迟编辑模式下确认按钮也会禁用，仍可关闭编辑器取消操作。异常按许可取消处理，不新增报错事件。
 等待期间卸载、KeepAlive 停用、值被外部更新、禁用/只读/loading 状态改变时，旧结果失效。
 受控模式仅发送更新请求；父级更新 model-value 后才改变选中状态。省略 model-value 时使用内部状态。
 
@@ -53022,7 +53373,7 @@ before-* 等待期间显示加载反馈并标记 aria-busy；拒绝或失败后�
 | `--c-switch-tonal-text-color` | `var(--c-sys-color-content-secondary)` | `color` |
 | `--c-switch-tonal-track-background` | `var(--c-sys-color-surface-muted)` | `background` |
 | `--c-switch-tonal-width` | `52px` | `min-width` |
-| `--c-switch-track-active-background` | `var(--c-sys-color-content-brand)` | `background`, `outline` |
+| `--c-switch-track-active-background` | `var(--c-sys-color-action-primary)` | `background`, `outline` |
 | `--c-switch-track-background` | `var(--c-sys-color-content-secondary)` | `background` |
 | `--c-switch-track-error-background` | `var(--c-sys-color-content-danger)` | `background`, `border-color` |
 | `--c-switch-width` | `40px` | `min-width` |
@@ -54129,7 +54480,7 @@ Cedar Table 支持排序、行选择和远程数据等功能；Maple Table 是�
 
 默认行选择控件使用行键生成可访问名称，全选控件使用本地化名称；显式选择列标题优先。
 
-当设置高度、启用粘性表头或虚拟列表导致表格分为多个原生表格时，数据表和汇总表会生成同表语义列头，并通过 `headers` 关联数据单元格。数据表的语义列头同步当前排序状态；汇总表使用独立汇总数据，不声明数据行的排序状态。`td` 插槽显式设置的 `headers` 优先，由调用方负责引用有效的同表列头。实际屏幕阅读器及复杂自定义表头的验收尚未完成；依赖读屏识别列头的场景应验证目标环境，必要时提供可访问的替代内容。
+当设置高度、启用粘性表头或虚拟列表导致表格分为多个原生表格时，数据表和汇总表会生成同表语义列头，并通过 `headers` 关联数据单元格。数据表的语义列头同步当前排序状态；汇总表使用独立汇总数据，不声明数据行的排序状态。`td` 插槽显式设置的 `headers` 优先，由调用方负责引用有效的同表列头。 动态增删或替换 `thead`、`tbody`、`tr`、`th`、`td` 结构插槽时，表格同步更新；`th` 的关联语义表头也会同步。 空状态、页脚、汇总单元格及具名列插槽等内容插槽也支持动态增删和替换。实际屏幕阅读器及复杂自定义表头的验收尚未完成；依赖读屏识别列头的场景应验证目标环境，必要时提供可访问的替代内容。
 
 ## 基础示例
 
@@ -55475,7 +55826,7 @@ sticky-header 与 sticky-pagination 相对页面或外层滚动容器定位。�
 
 ### 分页挂载到外部容器
 
-`pagination.container` 接收 CSS 选择器或 HTMLElement，省略时分页仍在表格内部。只是改变挂载位置，页码、数据切片、事件和粘性底部仍由同一个 Table 管理，无需插槽或另一套分页状态。使用同一个滚动容器时，外部宿主可设为 display: contents，让粘性分页与横向滚动条共享滚动上下文。指定目标必须实际存在；Vue 3.5 defer 支持同一渲染批次内创建的目标。SSR 由宿主框架处理 Teleport 输出。`pagination=false` 仍表示完全关闭 Table 分页及数据切片。
+`pagination.container` 接收 CSS 选择器或 HTMLElement，省略时分页仍在表格内部。只是改变挂载位置，页码、数据切片、事件和粘性底部仍由同一个 Table 管理，无需插槽或另一套分页状态。使用同一个滚动容器时，外部宿主可设为 display: contents，让粘性分页与横向滚动条共享滚动上下文。指定目标必须实际存在；Vue 3.5 defer 支持同一渲染批次内创建的目标。SSR 由宿主框架处理 Teleport 输出。多个异步表格应使用各自独立的分页目标，并由宿主将每个目标对应的 Teleport 内容注入该目标；共享目标在服务端和客户端异步接管顺序不同时可能发生内容或事件归属错位。`pagination=false` 仍表示完全关闭 Table 分页及数据切片。
 
 ```vue
 <c-table
@@ -57720,7 +58071,7 @@ const data = [{ key: "row", name: "与原生插槽使用相同的 loading 合同
 
 标题和单元格具名插槽、列级 `title`、`cell`、`filter-icon` 和 `filter-content`、`empty`、`footer`、`expand-row`、`expand-icon`、分页插槽、`summary-cell`、`drag-handle-icon`、扩展列表头/单元格及 `header-cell-actions` 支持在内容中组合 `v-for` 与 `v-memo`。
 
-目前在服务端渲染时，`thead`、`tbody`、`tr`、`th`、`td` 自定义结构插槽内组合使用 `v-for` 和 `v-memo` 会导致渲染报错。即使循环数组为空也会报错。需要 SSR 时，请暂时移除这些插槽中的 `v-memo`。
+目前在服务端渲染时，`thead`、`tbody`、`tr`、`th`、`td` 自定义结构插槽内组合使用 `v-for` 和 `v-memo` 会导致渲染报错。即使循环数组为空也会报错。Vue 3.5.12 和 3.5.39 的普通组件插槽也可复现这一问题；需要 SSR 时，请暂时移除这些插槽中的 `v-memo`。
 
 通过 `#columns` 声明的 `TableColumn` 支持服务端输出表头与数据单元格，包括分组列和动态列；也可以通过 `columns` 属性定义列。
 
@@ -58026,12 +58377,12 @@ Table 继承最近的原生 `dir`；直接传入 `dir` 时，服务端首屏即�
 | `--c-table-header-cell-action-margin-left` | `2px` | `margin-inline-start` |
 | `--c-table-header-cell-bg` | `var(--c-color-neutral-2)` | `background-color` |
 | `--c-table-header-cell-text-color` | `rgb(var(--c-gray-10))` | `color` |
-| `--c-table-header-filters-icon-active-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-table-header-filters-icon-active-color` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-table-header-filters-icon-color` | `var(--c-color-text-2)` | `color` |
 | `--c-table-header-filters-icon-hover-bg` | `var(--c-color-neutral-4)` | `background-color` |
 | `--c-table-header-sorted-cell-bg` | `var(--c-color-neutral-3)` | `background-color` |
 | `--c-table-header-sorted-cell-hover-bg` | `rgba(var(--c-gray-4), 0.5)` | `background-color` |
-| `--c-table-header-sorter-icon-active-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-table-header-sorter-icon-active-color` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-table-header-sorter-icon-color` | `var(--c-color-neutral-5)` | `color` |
 | `--c-table-header-sorter-icon-down-top` | `-3px` | `top` |
 | `--c-table-header-sorter-icon-font-size` | `12px` | `font-size` |
@@ -58875,7 +59226,7 @@ TabNav 与 TabItem 使用相同的 `name` 建立对应关系；`name` 在同组�
 | `--c-tabs-size-xs-tab-padding` | `var(--c-sys-space-2) var(--c-sys-space-4)` | `padding` |
 | `--c-tabs-tab-gap` | `var(--c-sys-space-2)` | `gap` |
 | `--c-tabs-title-text-color` | `var(--c-sys-color-content-secondary)` | `color` |
-| `--c-tabs-title-text-color-active` | `var(--c-sys-color-content-brand)` | `background`, `color`, `outline` |
+| `--c-tabs-title-text-color-active` | `var(--c-sys-color-action-primary)` | `background`, `color`, `outline` |
 | `--c-tabs-title-text-color-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
 | `--c-tabs-touch-target` | `var(--c-sys-control-touch-target)` | `min-height`, `min-width` |
 
@@ -63203,6 +63554,8 @@ Document: llms/zh-CN/components/tooltip.md
 
 # Tooltip 文字气泡
 
+SSR 限制：触发插槽内的同一节点同时使用 `v-for` 和 `v-memo` 时，服务端渲染可能报错。服务端渲染时请移除该插槽节点上的 `v-memo`；普通 `v-for` 仍可使用。 `content` 插槽也可能出现同样问题；服务端渲染时请移除该插槽节点上的 `v-memo`。
+
 用于补充说明按钮、图标或被截断的文字。默认同时响应鼠标悬停和键盘聚焦；需要承载可操作内容时使用 Popover。
 
 ## 基础示例
@@ -63546,7 +63899,7 @@ Example source: src/tooltip/__demos__/text-ellipsis.vue
 
 ### Tooltip Props
 
-Tooltip 继承 Trigger 的定位、容器、受控状态和关闭策略。默认 `hide-empty=true`、`auto-fit-transform-origin=true`，未传 `animation-name` 时使用 Tooltip 自身动画。空内容只隐藏提示，不改变 open；组件节点视为有内容。实例提供 `open`、`close`、`resize`、`allowClose`、`getReference`、`focusReference` 和 `setReference` 七个方法。
+Tooltip 继承 Trigger 的定位、容器、受控状态和关闭策略。默认 `hide-empty=true`、`auto-fit-transform-origin=true`，未传 `animation-name` 时使用 Tooltip 自身动画。空内容只隐藏提示，不改变 open；组件节点视为有内容，即使其最终不渲染任何内容也会生成空提示及描述关联。内容可能为空时，请在插槽中有条件地渲染组件节点。实例提供 `open`、`close`、`resize`、`allowClose`、`getReference`、`focusReference` 和 `setReference` 七个方法。
 
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
@@ -64229,7 +64582,7 @@ Example source: src/tree-select/__demos__/basic.vue
 ```vue
 <template>
   <c-space direction="column">
-    <c-tree-select v-model="value" :data="data" selectable placeholder="选择部门" />
+    <c-tree-select v-model="value" :data="data" :tree-props="{ defaultExpandAll: true }" selectable="leaf" clearable placeholder="选择部门" />
     <p role="status">当前部门：{{ value || '未选择' }}</p>
   </c-space>
 </template>
@@ -64237,10 +64590,48 @@ Example source: src/tree-select/__demos__/basic.vue
 import { ref } from 'vue'
 const value = ref<string>()
 const data = [
-  { value: 'design', label: '设计部' },
-  { value: 'engineering', label: '研发部' },
+  { value: 'product', label: '产品中心', children: [
+    { value: 'design', label: '设计部' },
+    { value: 'engineering', label: '研发部' },
+  ] },
+  { value: 'operations', label: '运营中心', children: [
+    { value: 'support', label: '客户服务部' },
+    { value: 'locked', label: '归档部门（禁用）', disabled: true },
+  ] },
 ]
 </script>
+```
+
+### 复选多选
+
+勾选父节点可关联选择可用子节点；`tree-checked-strategy="child"` 输出叶子节点 ID，禁用项不可选。
+
+Example source: src/tree-select/__demos__/multiple.vue
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+import type { TreeNodeData } from '@cedar-design/ui-vue'
+
+const value = ref<string[]>(['design'])
+const data: TreeNodeData[] = [
+  { value: 'product', label: '产品中心', children: [
+    { value: 'design', label: '设计部' },
+    { value: 'engineering', label: '研发部' },
+  ] },
+  { value: 'operations', label: '运营中心', children: [
+    { value: 'support', label: '客户服务部' },
+    { value: 'locked', label: '归档部门（禁用）', disabled: true },
+  ] },
+]
+</script>
+<template>
+  <c-space direction="column" fill>
+    <c-tree-select v-model="value" :data="data" :tree-props="{ defaultExpandAll: true }" multiple tree-checkable tree-checked-strategy="child" clearable placeholder="选择多个部门" />
+    <p role="status">已选部门：{{ value.join(', ') || '未选择' }}</p>
+    <c-tree-select v-model="value" :data="data" multiple tree-checkable read-pretty />
+  </c-space>
+</template>
 ```
 
 ## 数据与选项
@@ -64328,15 +64719,15 @@ const cleared = ref<string[]>([])
 const retained = ref<string[]>([])
 const clearQuery = ref('')
 const retainedQuery = ref('')
-const data = [{ key: 'alice', title: 'Alice' }, { key: 'alan', title: 'Alan' }, { key: 'bob', title: 'Bob' }]
+const data = [{ value: 'alice', label: 'Alice' }, { value: 'alan', label: 'Alan' }, { value: 'bob', label: 'Bob' }]
 </script>
 <template>
   <c-space direction="column">
-    <p>Type Al and select Alice. Both fields select Alice; only the remaining query text differs.</p>
-    <c-tree-select v-model="cleared" v-model:input-value="clearQuery" :data="data" filterable multiple placeholder="Clear query after selecting" />
-    <output>Selected: {{ cleared }}; query: {{ JSON.stringify(clearQuery) }}</output>
-    <c-tree-select v-model="retained" v-model:input-value="retainedQuery" :data="data" filterable multiple retain-input-value placeholder="Keep query after selecting" />
-    <output>Selected: {{ retained }}; query: {{ JSON.stringify(retainedQuery) }}</output>
+    <p>输入 Al 后选择 Alice：两个字段都会选中 Alice，区别是是否保留搜索词。</p>
+    <c-tree-select v-model="cleared" v-model:input-value="clearQuery" :data="data" filterable multiple placeholder="选择后清空搜索词" />
+    <output>已选： {{ cleared }}；搜索词： {{ JSON.stringify(clearQuery) }}</output>
+    <c-tree-select v-model="retained" v-model:input-value="retainedQuery" :data="data" filterable multiple retain-input-value placeholder="选择后保留搜索词" />
+    <output>已选： {{ retained }}；搜索词： {{ JSON.stringify(retainedQuery) }}</output>
   </c-space>
 </template>
 ```
@@ -64437,7 +64828,7 @@ Example source: src/tree-select/__demos__/open-trigger-target.vue
       edit-mode="direct"
       :open-trigger-target="target"
       :filterable="editable"
-      :options="[
+      :data="[
         { value: 'a', label: 'Alpha' },
         { value: 'b', label: 'Beta' },
       ]"
@@ -64474,6 +64865,7 @@ const value = ref("a");
 
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
+| need-confirm | `boolean` | 单选 `false`；多选 `true` | 仅弹出编辑模式生效。单选默认点选即提交并关闭，设为 true 时先编辑草稿、再点确认；多选默认保留确认。提交仍执行表单校验和 before-commit，拒绝时不关闭。 |
 | model-value | TreeSelectValue | undefined | 受控业务值；支持节点标识、标签值、同类数组及 null。 |
 | default-value | TreeSelectValue | undefined | 仅创建时读取的非受控初始值。 |
 | data | readonly TreeNodeData[] / `OptionsLoader<TreeNodeData>` | undefined | 根候选数组或 (query, { signal }) 加载函数。 |
@@ -64618,10 +65010,10 @@ refresh 可在编辑器未打开时重试组件自有的异步选项读取，沿
 | --- | --- | --- |
 | `--c-tree-select-highlight-font-weight` | `var(--c-font-weight-500)` | `font-weight` |
 | `--c-tree-select-option-active-background` | `var(--c-color-fill-2)` | `background` |
-| `--c-tree-select-option-radius` | `var(--c-sys-radius-sm)` | `border-radius` |
-| `--c-tree-select-popup-padding-left` | `var(--c-spacing-5)` | `padding-inline-start` |
-| `--c-tree-select-popup-padding-right` | `var(--c-spacing-2)` | `padding-inline-end` |
-| `--c-tree-select-popup-padding-vertical` | `var(--c-spacing-2)` | `padding` |
+| `--c-tree-select-option-radius` | `var(--c-select-popup-option-border-radius)` | `border-radius` |
+| `--c-tree-select-popup-padding-left` | `var(--c-select-popup-padding-horizontal)` | `padding-inline-start` |
+| `--c-tree-select-popup-padding-right` | `var(--c-select-popup-padding-horizontal)` | `padding-inline-end` |
+| `--c-tree-select-popup-padding-vertical` | `var(--c-select-popup-padding-vertical)` | `padding` |
 
 </div>
 
@@ -66106,7 +66498,7 @@ Tree 继承容器阅读方向，缩进、连接线和展开箭头随方向显示
 | `--c-tree-title-bg-hover` | `var(--c-color-fill-2)` | `background-color` |
 | `--c-tree-title-padding-horizontal` | `var(--c-spacing-2)` | `margin-inline-start`, `padding-inline-end`, `padding-inline-start` |
 | `--c-tree-title-text-color` | `var(--c-color-text-1)` | `color` |
-| `--c-tree-title-text-color-active` | `var(--c-sys-color-content-brand)` | `color`, `outline`, `outline-color` |
+| `--c-tree-title-text-color-active` | `var(--c-sys-color-action-primary)` | `color`, `outline`, `outline-color` |
 | `--c-tree-title-text-color-active-disabled` | `var(--c-color-primary-light-3)` | `color` |
 | `--c-tree-title-text-color-disabled` | `var(--c-color-text-4)` | `color` |
 | `--c-tree-title-text-color-dragging` | `var(--c-color-text-4)` | `color` |
@@ -66134,6 +66526,8 @@ Document: llms/zh-CN/components/trigger.md
 <!-- Source: src/trigger/README.md; locale: zh-CN; page: /components/trigger/ -->
 
 # Trigger
+
+SSR 限制：触发插槽或 `content` 插槽内的同一节点同时使用 `v-for` 和 `v-memo` 时，服务端渲染可能报错。触发插槽即使在浮层关闭时也可能报错；`content` 插槽在浮层打开或设置 `unmount-on-close=false` 时可能报错。服务端渲染时请移除该插槽节点上的 `v-memo`；普通 `v-for` 仍可使用。
 
 
 
@@ -66329,7 +66723,7 @@ placement 是首选方位，auto-fit-position 默认 true 时最终方位可能�
 | popup-offset | 沿 placement 主轴向外的距离 | `number` | `0` |
 | popup-translate | 屏幕轴平移，或按 placement 配置平移 | `[number, number] \| Partial<Record<TriggerPlacement, [number, number]>>`<br>`TriggerPlacement: 'left' \| 'right' \| 'bottom' \| 'top' \| 'top-start' \| 'top-end' \| 'bottom-start' \| 'bottom-end' \| 'left-start' \| 'left-end' \| 'right-start' \| 'right-end'` | `-` |
 | align-point | 以鼠标坐标作为虚拟参考点 | `boolean` | `false` |
-| popup-container | 挂载容器；`false` 表示原地渲染 | `string \| HTMLElement \| false` | `body` |
+| popup-container | 挂载容器；`false` 表示原地渲染。同文档或可访问的同源 iframe 之间切换时，会尝试恢复未转移的原生输入、按钮等焦点，包括开放 Shadow DOM 中的同类元素；可能承载封闭 Shadow DOM 的不透明宿主不会自动恢复。 | `string \| HTMLElement \| false` | `body` |
 | auto-fit-position | 空间不足时翻转并限制到可视区域 | `boolean` | `true` |
 | auto-fit-popup-width | 浮层宽度等于参考元素宽度 | `boolean` | `false` |
 | auto-fit-popup-min-width | 浮层最小宽度等于参考元素宽度 | `boolean` | `false` |
@@ -66338,7 +66732,7 @@ placement 是首选方位，auto-fit-position 默认 true 时最终方位可能�
 | scroll-to-close | 滚动超过阈值时关闭 | `boolean` | `false` |
 | scroll-to-close-distance | 滚动关闭阈值 | `number` | `0` |
 | show-arrow | 渲染装饰箭头 | `boolean` | `false` |
-| hide-empty | content 为空时不渲染浮层 | `boolean` | `false` |
+| hide-empty | content 插槽直接返回空内容时不渲染浮层；组件节点即使最终渲染为空也视为非空 | `boolean` | `false` |
 | prevent-focus | 阻止定位层 mousedown 抢占焦点 | `boolean` | `false` |
 | unmount-on-close | 离场结束后卸载内容 | `boolean` | `true` |
 | animation-name | Vue Transition 名称 | `string` | `trigger-fade` |
@@ -66346,10 +66740,14 @@ placement 是首选方位，auto-fit-position 默认 true 时最终方位可能�
 | auto-fit-transform-origin | 根据最终方位设置动画原点 | `boolean` | `false` |
 | opened-class | 打开时合并给默认插槽的首个节点；外部 reference 不添加该类 | `ClassName` | `-` |
 | reference-attrs | 写入实际参考元素的属性，或接收 open 的函数；属性撤销、引用替换或卸载时恢复原属性 | `TriggerReferenceAttrs \| ((open: boolean) => TriggerReferenceAttrs)` | `-` |
-| popup-class / popup-style | 定位层类名和样式 | `ClassName / CSSProperties` | `-` |
-| content-class / content-style | 内容层类名和样式 | `ClassName / CSSProperties` | `-` |
-| arrow-class / arrow-style | 箭头类名和样式 | `ClassName / CSSProperties` | `-` |
-| mouse-enter-delay / mouse-leave-delay | hover 打开和关闭延迟，毫秒 | `number` | `100 / 100` |
+| popup-class | 定位层自定义类名 | `ClassName` | `-` |
+| popup-style | 定位层的自定义样式 | `CSSProperties` | `-` |
+| content-class | 内容层的自定义类名 | `ClassName` | `-` |
+| content-style | 内容层的自定义样式 | `CSSProperties` | `-` |
+| arrow-class | 箭头的自定义类名 | `ClassName` | `-` |
+| arrow-style | 箭头的自定义样式 | `CSSProperties` | `-` |
+| mouse-enter-delay | 悬停打开延迟，单位毫秒 | `number` | `100` |
+| mouse-leave-delay | 悬停关闭延迟，单位毫秒 | `number` | `100` |
 | focus-delay | focus 打开延迟，毫秒 | `number` | `0` |
 | popup-hover-stay | 指针进入浮层后保持打开 | `boolean` | `true` |
 | blur-to-close | 失焦时关闭 | `boolean` | `true` |
@@ -66391,6 +66789,10 @@ placement 是首选方位，auto-fit-position 默认 true 时最终方位可能�
 `reference-attrs` 的 `aria-describedby` 与参考元素已有描述 ID 合并去重；清理或更换引用时恢复原始属性。
 
 `fixed` 定位会识别 transform、filter、perspective 等形成的固定定位包含块，并处理轴向缩放；不保证旋转或倾斜坐标系精确。可访问的同源 iframe 引用与弹层之间会换算坐标并绑定各自文档事件；不支持跨源或无共同祖先的浏览上下文。启用 `update-at-scroll` 时，两端文档及可滚动祖先的滚动都会更新位置。
+
+当引用通过插槽进入封闭 ShadowRoot 内的滚动容器时，外部 Trigger 无法访问该插槽及容器，不能自动监听其滚动。封闭组件可在内部滚动或插槽变化时调用 Trigger 实例的 `resize()`；需要滚动关闭时，可在内部按业务阈值调用 `close()`，并在卸载时清理监听。
+
+弹层挂载到 iframe 内时，显示区域仍受该 iframe 视口裁剪；即使跨文档坐标换算正确，iframe 范围外的弹层内容也不可见。
 
 ## CSS Variables
 
@@ -67019,6 +67421,8 @@ Document: llms/zh-CN/components/upload.md
 <!-- Source: src/upload/README.md; locale: zh-CN; page: /components/upload/ -->
 
 # Upload 上传
+
+选择照片时设置 `accept="image/*"`，不设置 `capture` 或设置 `:capture="false"`，保留系统文件 / 相册选择入口。仅在需要直接拍照时设置 `capture` 为 `true`、`'user'` 或 `'environment'`。具体可选入口由设备和浏览器决定。
 
 禁用下载与 Link/Button 的链接模式一致：移除 href，同时保留链接角色、`aria-disabled` 和 `tabindex=-1`，点击不执行默认下载。`readonly` 不禁用下载；恢复非禁用状态后保留原文件地址及下载文件名。
 
@@ -68162,34 +68566,49 @@ Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，
 
 ### Upload Props
 
-| 属性                                                         | 类型                                                     | 默认值/说明                                       |
-| ------------------------------------------------------------ | -------------------------------------------------------- | ------------------------------------------------- |
-| model-value / default-value                                  | UploadFileItem[]                                         | 受控值 / 非受控初值[]                             |
-| accept / capture                                             | `string / UploadCapture`<br>`UploadCapture: boolean \| 'user' \| 'environment' \| undefined` | 未指定                                            |
-| multiple / directory / draggable                             | boolean                                                  | false                                             |
-| disabled / readonly                                          | boolean                                                  | undefined，继承Form，显式false优先                |
-| action / method                                              | string                                                   | 无 / post                                         |
-| headers / data                                               | object 或 async(file) => object                          | 请求准备阶段仍可取消                              |
-| name                                                         | string / (file) => string                                | file                                              |
-| with-credentials                                             | boolean                                                  | false                                             |
-| custom-request                                               | (UploadRequestOptions) => UploadRequest / Promise / void | 自定义transport，可返回abort                      |
-| auto-upload                                                  | boolean                                                  | true；必须同时有action或custom-request才启动      |
-| max-files / max-file-size / max-total-size                   | number                                                   | 未指定；大小单位字节，max-files>0生效             |
-| resolve-type                                                 | file / data-url / object-url                             | object-url；所有文件生成url，图片生成thumbnailUrl |
-| create-thumbnail-url                                         | (options) => string / Promise                            | 自定义URL归调用方所有，不自动回收                 |
-| before-add                                                   | async(files) => File[]                                   | 批次筛选/替换                                     |
-| before-read                                                  | async(file) => boolean / File                            | false/reject拒绝；替换后重新校验                  |
-| before-upload                                                | async(item) => boolean / File / Blob                     | false 保留 ready；抛错/reject 进入 error；替换后重新校验              |
-| before-remove                                                | async(item,list) => boolean                              | false/reject不删除                                |
-| is-success-response                                          | (xhr,item) => boolean                                    | 默认HTTP2xx                                       |
-| request-choose                                               | (chooseFile,event) => void / Promise                     | 接管选择入口，异常不会自动打开文件框              |
-| list-type                                                    | text / picture / picture-card                            | text，两端均支持                                  |
-| image-fit                                                    | fill / contain / cover / none / scale-down               | cover；item.fit优先                               |
-| preview                                                      | boolean                                                  | true                                              |
-| show-file-list / show-upload-button / show-remove-button     | boolean                                                  | true                                              |
-| show-retry-button / show-cancel-button / show-preview-button | boolean                                                  | true                                              |
-| show-download-button                                         | boolean                                                  | false；禁用时不可操作                             |
-| elevation / ripple                                           | boolean或number / boolean                                | false / true                                      |
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| model-value | `UploadFileItem[] \| null` | `undefined` | 受控文件列表，配合 v-model 使用 |
+| default-value | `UploadFileItem[]` | `[]` | 非受控文件列表的初始值 |
+| accept | `string` | `undefined` | 允许选择的文件类型，例如 image/* |
+| capture | `boolean \| 'user' \| 'environment'` | `false` | false 或未设置时保留相册选择；true 启用采集，user / environment 指定前 / 后摄像头，具体支持由设备和浏览器决定 |
+| multiple | `boolean` | `false` | 允许多选文件 |
+| reupload | `boolean` | `false` | 允许替换已选择的文件 |
+| directory | `boolean` | `false` | 选择文件夹；不支持的设备可使用 multiple 作为回退 |
+| draggable | `boolean` | `false` | 启用拖拽上传 |
+| disabled | `boolean` | `undefined` | 禁用交互；继承 Form，显式 false 优先 |
+| readonly | `boolean` | `undefined` | 只读；继承 Form，显式 false 优先 |
+| action | `string` | `undefined` | 上传请求地址 |
+| method | `string` | `'post'` | 上传请求方法 |
+| headers | `UploadHeaders` | `undefined` | 请求头对象或异步函数；请求准备阶段仍可取消 |
+| data | `UploadData` | `undefined` | 附加请求数据对象或异步函数；请求准备阶段仍可取消 |
+| name | `string \| ((file: UploadFileItem) => string)` | `'file'` | 上传文件的表单字段名 |
+| with-credentials | `boolean` | `false` | 跨域请求是否携带凭据 |
+| custom-request | `UploadCustomRequest` | `undefined` | 自定义上传请求，可返回含 abort 的对象 |
+| auto-upload | `boolean` | `true` | 选取后自动上传；必须同时配置 action 或 custom-request |
+| max-files | `number` | `undefined` | 最多文件数量；大于 0 时生效 |
+| max-file-size | `number` | `undefined` | 单个文件的大小上限，单位字节 |
+| max-total-size | `number` | `undefined` | 文件总大小上限，单位字节 |
+| resolve-type | `'file' \| 'data-url' \| 'object-url'` | `'object-url'` | 文件读取方式；object-url 为文件生成 url，为图片生成 thumbnailUrl |
+| create-thumbnail-url | `UploadCreateThumbnailUrl` | `undefined` | 自定义缩略图地址；URL 归调用方所有，组件不自动回收 |
+| before-add | `(files: File[]) => File[] \| Promise<File[]>` | `undefined` | 批次筛选或替换待添加文件 |
+| before-read | `UploadBeforeRead` | `undefined` | 读取前校验；false / reject 拒绝，替换后重新校验 |
+| before-upload | `UploadBeforeUpload` | `undefined` | 上传前校验；false 保留 ready，抛错 / reject 进入 error，替换后重新校验 |
+| before-remove | `UploadBeforeRemove` | `undefined` | 删除前校验；false / reject 阻止删除 |
+| is-success-response | `UploadIsSuccessResponse` | `undefined` | 自定义响应成功判断；默认 HTTP 2xx 为成功 |
+| request-choose | `UploadRequestChoose` | `undefined` | 接管选择入口；异常不会自动打开文件框 |
+| list-type | `'text' \| 'picture' \| 'picture-card'` | `'text'` | 文件列表展示方式；两端均支持 |
+| image-fit | `'fill' \| 'contain' \| 'cover' \| 'none' \| 'scale-down'` | `'cover'` | 缩略图填充方式；文件项 fit 优先 |
+| preview | `boolean` | `true` | 启用内建图片 / 视频预览 |
+| show-file-list | `boolean` | `true` | 显示文件列表 |
+| show-upload-button | `boolean` | `true` | 显示文件选择按钮 |
+| show-remove-button | `boolean` | `true` | 显示删除按钮 |
+| show-retry-button | `boolean` | `true` | 显示重试按钮 |
+| show-cancel-button | `boolean` | `true` | 显示取消按钮 |
+| show-preview-button | `boolean` | `true` | 显示预览按钮 |
+| show-download-button | `boolean` | `false` | 显示下载按钮；禁用时不可操作 |
+| elevation | `boolean \| number` | `false` | 上传入口的阴影层级 |
+| ripple | `boolean` | `true` | 启用上传入口的涟漪效果 |
 
 UploadFileItem 的 uid、status、percent 必填，name/size/type/file/url/thumbnailUrl/fit/response/error 可选。status为ready/reading/uploading/success/error/canceled/removed。
 
@@ -68206,6 +68625,8 @@ UploadFileItem 的 uid、status、percent 必填，name/size/type/file/url/thumb
 ### Upload Slots
 
 - trigger({chooseFile,dragOver,disabled,describedBy})：自定义选择入口。
+
+SSR 首屏暂不能识别插槽内的交互元素：若插槽包含按钮，接管前外层仍会作为可聚焦按钮。需要避免首屏嵌套交互语义时，可使用纯展示内容作为插槽，让外层承担选择操作；接管后组件会识别交互式内容并调整外层角色。
 
 纯展示内容由外层提供按钮角色和 Enter/Space 入口；包含按钮、链接等交互内容时，外层不再增加按钮角色或 Tab 停靠点。自定义按钮应绑定插槽的 disabled，并负责自己的键盘行为。 需要将表单错误及 Upload 的 aria-describedby 关联到该按钮时，可将插槽的 describedBy 绑定到按钮的 aria-describedby；它随错误出现和清除更新。点击时直接调用 chooseFile 即可，无需 .stop；同次点击的冒泡不会再次选择，也不会额外调用 requestChoose。依赖默认冒泡的自定义按钮仍可使用 requestChoose。
 
@@ -68254,6 +68675,10 @@ UploadProps、UploadEmits、UploadSlots、UploadExpose、UploadPublicMethods、U
 before-* 等待期间显示加载反馈并标记 aria-busy；拒绝或失败后恢复，重复提交不再启动同一操作。普通事件返回的 Promise 不参与加载。不同文件保持并发，加载反馈汇总所有当前守卫任务，不把普通 change/progress 事件当成任务。
 
 `useUploader()` 提供只读 `guardPending`，汇总当前 before 钩子的等待状态；它不代表文件上传进度。
+
+禁用或只读状态下调用 `reset()` 不执行重置，也不会清除仍未完成的钩子等待状态。 已被 reset、停用或卸载取消的 `beforeAdd` 迟到异常不会再发出拒绝通知；若异常在禁用或只读期间返回，也不会发出拒绝通知。 若 `rejected` 或 `exceed` 回调同步重置，当前批次不再继续提交已准备的文件。 若列表更新、change 或 read 回调同步重置，已失效操作的后续通知将停止。
+
+使用字段确认模式时，文件准备或 before 钩子尚未完成期间不能确认；关闭编辑器仍可取消当前编辑。
 
 ### 准备否决与异常
 
@@ -68627,7 +69052,9 @@ initial 表示未指定公开覆盖，实际 CSS 在组件元素处读取尺寸 
 | `type`                                  | `字符集合`                                                                | `digit / text / alphanumeric`                   | `digit`          |
 | `size`                                  | `五档外壳尺寸`                                                            | `xs / sm / md / lg / xl`                        | `继承 / md`      |
 | `variant`                               | `输入外观`                                                                | `filled / outline / standard`                   | `继承 / outline` |
-| `disabled / readonly / error`           | `状态，显式值优先于 Form`                                                 | `boolean`                                       | `undefined`      |
+| `disabled` | 禁用状态；显式值优先于继承的 Form / Group 状态 | `boolean` | `undefined` |
+| `readonly` | 只读状态；显式值优先于继承的 Form / Group 状态 | `boolean` | `undefined` |
+| `error` | 错误状态；显式值优先于继承的 Form / Group 状态 | `boolean` | `undefined` |
 | `masked`                                | `仅视觉隐藏字符，不是加密`                                                | `boolean`                                       | `false`          |
 | `mask-symbol`                           | `取首个 Unicode 码点`                                                     | `string`                                        | `•`              |
 | `autofocus`                             | `挂载后聚焦首个空格`                                                      | `boolean`                                       | `false`          |
@@ -68638,7 +69065,9 @@ initial 表示未指定公开覆盖，实际 CSS 在组件元素处读取尺寸 
 | `formatter`                             | `逐字符格式化，false 拒绝，true/undefined 保持；返回字符串取首个合法码点` | `(character, index, value) => string / boolean` | `undefined`      |
 | `separator`                             | `非最后格后面的分隔内容`                                                  | `(index, character) => VNodeChild`              | `undefined`      |
 | `aria-label`                            | `组名和每格的序号名称`                                                    | `string`                                        | `undefined`      |
-| `text-color / focus-color / blur-color` | `逐实例动态颜色，静态主题优先 token`                                      | `string`                                        | `undefined`      |
+| `text-color` | 逐实例自定义文字颜色；静态主题优先使用 token | `string` | `undefined` |
+| `focus-color` | 逐实例自定义聚焦颜色；静态主题优先使用 token | `string` | `undefined` |
+| `blur-color` | 逐实例自定义未聚焦颜色；静态主题优先使用 token | `string` | `undefined` |
 
 | `empty-value` | 展示层清空输出，默认空字符串，可显式配置 null | `string \| null \| (() => string \| null)` | `''` |
 | `clearable` | 延迟编辑层清空操作，不改变每格输入 | `boolean` | `false` |

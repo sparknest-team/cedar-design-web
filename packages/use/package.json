@@ -1,6 +1,6 @@
 {
   "name": "@cedar-design/use-vue",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "composable utilities of Cedar",
   "keywords": [
     "composable",

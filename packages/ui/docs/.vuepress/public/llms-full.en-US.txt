@@ -1167,7 +1167,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-anchor-color-bg-line-active` | `rgb(var(--c-primary-6))` | `background-color` |
 | `--c-anchor-color-bg-title-hover` | `var(--c-color-fill-2)` | `background-color` |
 | `--c-anchor-color-title` | `var(--c-color-text-2)` | `color` |
-| `--c-anchor-color-title-active` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-anchor-color-title-active` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-anchor-color-title-hover` | `rgb(var(--c-primary-5))` | `color` |
 | `--c-anchor-font-size-title` | `14px` | `font-size` |
 | `--c-anchor-font-weight-title-active` | `var(--c-font-weight-500)` | `font-weight` |
@@ -1248,6 +1248,29 @@ Toggle disabled, read-only and error states, then interact with the same instanc
 
 <details>
 <summary>Configuration details and limits</summary>
+
+### Custom text submission
+
+Choose a suggestion to commit immediately, or confirm custom text.
+
+Example source: src/auto-complete/__demos__/en-US/custom-draft.vue
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const value = ref('')
+const options = ['Design', 'Engineering', 'Operations']
+</script>
+
+<template>
+  <div>
+    <p>Choose a suggestion to commit immediately, or confirm custom text.</p>
+    <c-auto-complete v-model="value" edit-mode="click" :options="options" />
+    <p>Committed value: {{ value || '—' }}</p>
+  </div>
+</template>
+```
 
 ## Appearance and states
 
@@ -1716,7 +1739,7 @@ const options = [
 
 ### Editing and confirmation
 
-This component supports `edit-mode` with field > FormItem > Form precedence. When unset, it defaults to `direct` and preserves `direct` editing. Supported values: `direct / click / dblclick`. Non-direct modes open the editor through the field value trigger and keep one draft; v-model updates only after confirmation. Cancel, reset or enabling readPretty discards the draft.
+Use `edit-mode` to configure editing; field > FormItem > Form precedence applies, defaulting to `direct`. Supported values: `direct / click / dblclick`. Non-direct modes open an editor through the field value. Choosing a suggestion commits immediately by default; custom text uses confirmation. With need-confirm, suggestions also remain drafts until confirmation. Cancel, reset or enabling readPretty discards an uncommitted draft.
 
 Cedar uses edit-mode="click" / "dblclick" to open an editor popup near the field. Enter/F2 also opens it; cancel/Escape discards the draft, and confirmation commits it. readPretty is an independent reading setting, separate from readonly and disabled.
 
@@ -1751,6 +1774,7 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 
 | Prop | Description | Type | Default |
 | -------------------- | --------------------------------------------------- | ---------------------------------------------------------------------------------------- | ---------------------------- |
+| need-confirm | Applies only to overlay editing. Choosing a suggestion commits and closes by default; true keeps a draft until confirmation. Submission still runs form validation and before-commit; rejection keeps the editor open. AutoComplete typing does not auto-submit; a changed text draft provides a confirmation button, while choosing a suggestion completes selection immediately. | `boolean` | `false` |
 | `model-value` | Controlled text | `string \| null` | `—` |
 | `default-value` | Initial uncontrolled text | `string` | `''` |
 | `options` | Suggestions, including groups; unique values become strings on selection | `(AutoCompleteOption \| SelectOptionGroup)[]` / `(query, { signal }) => Array / Promise` | `undefined` |
@@ -1837,7 +1861,7 @@ default does not replace the input. option customizes candidates, read customize
 | blur | - | void |
 | refresh | - | `Promise<void>` |
 
-Arrow keys reopen after Escape: ArrowDown activates the first enabled candidate and ArrowUp the last, without submitting a model; Enter selects. Composition, canceled keyboard events, readonly/disabled and should-open remain respected. Tab retains native focus navigation. Vue useId keeps SSR identifiers stable. The input references the listbox through aria-controls while suggestions are open; the reference is removed when closed. When virtualization unmounts the active option, its active-descendant reference is removed until it mounts again.
+Arrow keys reopen the popup after Escape closes it: ArrowDown activates the first enabled candidate and ArrowUp the last, without committing the model; Enter selects. Composition, canceled keyboard events, readonly/disabled and should-open conditions are respected; Tab retains native focus navigation. Vue useId provides stable SSR identifiers. While candidates are open, aria-controls links the input to the list; the reference is removed on close. When virtualization unmounts the active item, its reference is temporarily removed and restored after remounting.
 
 ## Types
 
@@ -1873,7 +1897,7 @@ AutoComplete text input always supports searching; filter-option only controls l
 <c-auto-complete v-model="text" :options="loadSuggestions" />
 ```
 
-`empty-value` accepts explicit `null` (or `() => null`). Clearing publishes `null` unchanged; omitted values preserve the existing default. Editors render `null` as blank without converting ordinary empty-string input to `null`. In popup editing, clearing changes the draft; confirm commits it and cancel preserves the original model.
+`empty-value` accepts explicit `null` (or `() => null`). Clearing publishes `null` unchanged; omission preserves the existing default. The UI displays null as blank without converting ordinary empty-string input to null. In confirmation mode, clearing changes the draft and confirm commits it; without confirmation, clearing commits directly.
 
 Public focus/blur methods are callable from initial mount. Focus opens an editable deferred editor and targets it after readiness; disabled, readonly, or reading fields do not open. Blur only blurs the current target without reopening. Stored methods never bind an old editor; closure, mode changes, deactivation, or unmount cancel queued calls.
 
@@ -2973,7 +2997,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-back-top-bottom` | `40px` | `bottom` |
 | `--c-back-top-button-border-radius` | `50%` | `border-radius` |
 | `--c-back-top-button-size` | `var(--c-sys-control-touch-target)` | `height`, `width` |
-| `--c-back-top-focus-color` | `var(--c-sys-color-content-brand)` | `outline` |
+| `--c-back-top-focus-color` | `var(--c-sys-color-action-primary)` | `outline` |
 | `--c-back-top-focus-offset` | `2px` | `outline-offset` |
 | `--c-back-top-focus-width` | `2px` | `outline` |
 | `--c-back-top-font-size` | `var(--c-sys-font-size-md)` | `font-size` |
@@ -5004,7 +5028,7 @@ Inherits the nearest `dir="ltr|rtl"`, including runtime changes and local overri
 | ---------- | ------------------------------------------- |
 | click | `(event: MouseEvent) => void` |
 
-`click` is a notification event. The component does not process listener return values or automatically change its loading state. Business code controls `loading`; for asynchronous operations, reset it in `finally`. Disabled or loading links have no effective `href`.
+`click` is a notification event. The component does not process listener return values or switch loading automatically. Business code controls `loading` and should restore it in `finally` after asynchronous work. Disabled or loading links have their effective `href` removed.
 
 ### Button Slots
 
@@ -5086,7 +5110,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-button-disabled-color` | `var(--c-color-fill-2)` | `background-color` |
 | `--c-button-disabled-solid-text-color` | `var(--c-sys-color-content-on-dark)`<br>`rgba(255, 255, 255, 0.3)` (`:root[cedar-theme="dark"]`) | `color` |
 | `--c-button-disabled-text-color` | `var(--c-sys-color-content-disabled)` | `color` |
-| `--c-button-focus-color` | `var(--c-sys-color-content-brand)` | `outline` |
+| `--c-button-focus-color` | `var(--c-sys-color-action-primary)` | `outline` |
 | `--c-button-info-color` | `var(--c-sys-color-status-info)` | `background-color` |
 | `--c-button-info-disabled-color` | `rgb(var(--c-blue-3))`<br>`rgba(var(--c-blue-6), 0.5)` (`:root[cedar-theme="dark"]`) | `background-color`, `color` |
 | `--c-button-info-foreground-color` | `var(--c-sys-color-content-info)` | `color` |
@@ -5973,7 +5997,7 @@ The floating layer remains at the Card’s original DOM location. An ancestor’
 
 When focus is still inside the floating content or close controls, closing attempts to return focus to the element focused before expansion. If focus has moved elsewhere, it is left unchanged.
 
-The default close button uses the current locale’s close text and can be overridden with `close-button-aria-label`. `floating-duration` is a finite nonnegative duration in milliseconds; 0 means no delay and invalid values fall back to 250. When reduced motion is enabled, opening and closing skip the ripple and transition waits, including when the preference changes during a transition.
+The default close button uses the current locale's close label; override it with `close-button-aria-label`. `floating-duration` is a finite nonnegative number of milliseconds; 0 disables the delay and invalid values fall back to 250. With reduced motion enabled, opening and closing do not wait for ripple or transition animations; changing the preference during an animation also takes effect.
 
 ### Card Props
 
@@ -7154,7 +7178,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-carousel-card-opacity` | `0.6` | `opacity` |
 | `--c-carousel-card-scale` | `0.85` | `transform` |
 | `--c-carousel-fade-duration` | `var(--c-sys-motion-duration-standard)` | `transition` |
-| `--c-carousel-focus-color` | `var(--c-sys-color-content-brand)` | `outline` |
+| `--c-carousel-focus-color` | `var(--c-sys-color-action-primary)` | `outline` |
 | `--c-carousel-focus-offset` | `2px` | `outline-offset` |
 | `--c-carousel-focus-width` | `2px` | `outline` |
 | `--c-carousel-indicator-color-active` | `var(--c-sys-color-content-on-dark)` | `background` |
@@ -7200,7 +7224,7 @@ When cascading multiple selections, toggling a parent affects only selectable de
 import type { CascaderProps, CascaderInstance } from "@cedar-design/ui-vue";
 ```
 
-`empty-value` accepts explicit `null` (or `() => null`). Clearing publishes null unchanged; omitted values preserve the existing default. Editors render null as blank without converting ordinary empty-string input to null. In popup editing, clearing changes the draft; confirm commits it and cancel preserves the original model.
+`empty-value` accepts explicit `null` (or `() => null`). Clearing publishes null unchanged; omitted values preserve the existing default. Editors render null as blank without converting ordinary empty-string input to null. In confirmation mode, clearing changes the draft; confirm commits it and cancel preserves the original model. Without confirmation, clearing commits directly.
 
 The candidate `options` prop accepts an array or `(query, { signal }) => array/Promise`. Components own loading, cancellation and stale results, and emit load-error on failure. Choice groups initialize with an empty query; searchable fields load when queries change. Root tree loaders remain independent of existing load-more child loading.
 
@@ -8497,9 +8521,9 @@ async function load() {
 
 ## API
 
-A panel branch’s `aria-expanded` indicates whether its child column is actually visible; focus or hover does not mark it expanded before that column opens. Leaf options have no `aria-expanded`. In hierarchical single-select menus, selectable leaves and selectable strict-mode branches use `menuitemradio` with `aria-checked`; expansion-only branches remain `menuitem`, and multiple selection continues to use checkboxes. Hierarchical single-select panels provide one Tab entry across their menu items; arrow keys navigate options and columns, while Tab or Shift+Tab leaves the menu. With virtual scrolling the entry stays among rendered options; interactive controls in custom option slots manage their own focus. Search results do not advertise submenus that are not displayed. Direct single-select search uses a `listbox` with `option` elements, and the input references the popup and active option. Editor single-select search uses `menuitemradio` with `aria-checked` and one Tab stop; hovering another option does not move that entry while an option has focus. Multiple-select search retains its checkboxes. In direct single-select search, the popup icon is excluded from the Tab sequence; click the icon or press Arrow Down in the input to open it.
+A panel branch's `aria-expanded` reflects whether its child column is actually displayed; focus or hover alone does not mark it expanded. Leaves have no `aria-expanded`. Selectable leaves and selectable strict-mode branches in a single-select hierarchical menu use `menuitemradio` and `aria-checked`; expansion-only branches remain `menuitem`, and multiple selection retains checkboxes. Single-select hierarchical panels have one Tab entry; arrow keys move between columns and options, while Tab or Shift+Tab leaves the menu. With virtualization, the entry remains among rendered options; custom interactive controls in option slots manage their own focus. Search results do not declare hidden submenus. Direct single-select search uses `listbox` and `option`, with the input referencing the popup and active item; editor single-select search uses `menuitemradio` and `aria-checked`, with one Tab entry. Hovering another option does not move that entry while an option owns focus. Multiple-select search retains checkboxes. In direct single-select search, the popup icon adds no Tab stop; click it or press ArrowDown in the input to open.
 
-In a virtual column, appending or removing other options at the end preserves the nodes and focus of options that remain rendered; switching parent does not reuse the previous column’s scroll position. Options may unmount when removed or scrolled out of the virtual window, so keep persistent slot input state in application data.
+When options are added or removed at the end of a virtual column, options still within the rendered range retain their nodes and focus. Switching parents does not reuse the previous column's scroll position. Options can unmount when removed or outside the virtual window; business code should retain any long-lived input state used by slots.
 
 ### Empty values and reading placeholders
 
@@ -8518,17 +8542,26 @@ Use `v-model`, `v-model:open` and `v-model:input-value` for controlled state. Cl
 
 | Prop | Description | Type | Default |
 | --------------------------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------- | ------------------------ |
+| need-confirm | Applies only to overlay editing. Single selection commits and closes on choice by default; true keeps a draft until confirmation. Multiple selection defaults to confirmation. Submission still runs form validation and before-commit; rejection keeps the editor open. | `boolean` | Single `false`; multiple `true` |
 | `open-trigger-target` | Pointer opening target: the whole field or only the suffix icon. Explicit keyboard opening and controlled open remain available. | `'field' \| 'icon'` | `'field'` |
-| `model-value / default-value` | Controlled value / uncontrolled initial value | `CascaderBaseValue` | `Single: ''; multiple: []` |
-| `open / default-open` | Controlled / initial open state | `boolean` | `undefined / false` |
-| `input-value / default-input-value` | Search text, independent of selected values | `string` | `undefined / ''` |
+| `model-value` | Controlled selected value; supports v-model | `CascaderBaseValue` | `undefined` |
+| `default-value` | Initial uncontrolled selection; read once | `CascaderBaseValue` | Single: `undefined` with path-mode, otherwise `''`; multiple: `[]` |
+| `open` | Controlled open state; supports v-model:open | `boolean` | `undefined` |
+| `default-open` | Initial uncontrolled open state; read only at initialization | `boolean` | `false` |
+| `input-value` | Controlled search text, independent of selection; supports v-model:input-value | `string` | `undefined` |
+| `default-input-value` | Initial uncontrolled search text, independent of selection; read only at initialization | `string` | `''` |
 | `multiple` | Multiple selection; enables search by default | `boolean` | `false` |
 | `size` | Supports all five sizes; inherits group/form settings | `ComponentSize`<br>`'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `md` |
 | `variant` | filled, outline, standard; inherits InputGroup | `FormControlVariant`<br>`'standard' \| 'filled' \| 'outline'` | `filled` |
-| `disabled / readonly / error` | Inherits form state unless explicitly overridden | `boolean` | `undefined` |
+| `disabled` | Disabled state; explicit values override inherited Form / Group state | `boolean` | `undefined` |
+| `readonly` | Read-only state; explicit values override inherited Form / Group state | `boolean` | `undefined` |
+| `error` | Error state; explicit values override inherited Form / Group state | `boolean` | `undefined` |
 | `placeholder` | Placeholder | `string` | `—` |
-| `hint / line` | Floating hint / standard variant underline | `boolean` | `true` |
-| `text-color / focus-color / blur-color` | Field colors | `string` | `—` |
+| `hint` | Enable the floating hint | `boolean` | `true` |
+| `line` | Show the underline in the standard variant | `boolean` | `true` |
+| `text-color` | Custom per-instance text color; prefer tokens for static themes | `string` | `—` |
+| `focus-color` | Custom per-instance focused color; prefer tokens for static themes | `string` | `—` |
+| `blur-color` | Custom per-instance unfocused color; prefer tokens for static themes | `string` | `—` |
 | `loading` | Loading pauses selection, clearing, tag removal and confirmation; retains values while search and closing remain available. | `boolean` | `false` |
 | `loading-mode` | Field loading presentation: default indicator or bottom indeterminate line. | `default / line` | `default` |
 | `search-fields` | Fields used by built-in path search; defaults to label; custom filtering callbacks take precedence. | `readonly OptionSearchField[]`<br>`OptionSearchField: 'label' \| 'value'` | `['label']` |
@@ -8582,7 +8615,7 @@ Use `label({ data })` for custom `selected` labels; `selected` replaces the whol
 
 Option `label` is searchable plain text. Use `render` or the `option` slot for custom `option` content, and `format-label` or `label` slot for selected content. Values identify selections; labels never do. `disabled` blocks selection/removal, and `tagProps` customizes selected tags.
 
-Buttons, links, inputs, list options, tree items, grid cells, and nested Cascaders inside custom option content own their clicks without selecting the outer option; ordinary content still selects it. A click canceled with `preventDefault` does not activate the option, and events continue to bubble normally.
+Buttons, links, input controls, list options, tree nodes, grid cells, elements with non-negative tabindex, audio/video with controls and nested Cascaders inside custom options manage their own clicks without selecting the outer option; ordinary content remains selectable. When `role` contains multiple tokens, the first role supported by the component determines click ownership. A standalone panel inside Shadow DOM moves option focus within its own root when using arrow keys. A click canceled with `preventDefault` does not trigger an option action, and continues to bubble according to DOM rules.
 
 ### CascaderPanel Props
 
@@ -8633,7 +8666,7 @@ import type { CascaderProps } from "@cedar-design/ui-vue";
 
 ### Editing and confirmation
 
-This component supports `edit-mode` with field > FormItem > Form precedence. When unset, it defaults to `direct` and preserves `direct` editing. Supported values: `direct / click / dblclick`. Non-direct modes open the editor through the field value trigger and keep one draft; v-model updates only after confirmation. Cancel, reset or enabling readPretty discards the draft.
+Use `edit-mode` to configure editing; field > FormItem > Form precedence applies, defaulting to `direct`. Supported values: `direct / click / dblclick`. Non-direct modes open an editor through the field value. Single selection commits on choice by default; need-confirm enables a draft and confirmation. Multiple selection defaults to confirmation. Cancel, reset or enabling readPretty discards an uncommitted draft.
 
 Cedar uses edit-mode="click" / "dblclick" to open an editor popup near the field. Enter/F2 also opens it; cancel/Escape discards the draft, and confirmation commits it. readPretty is an independent reading setting, separate from readonly and disabled.
 
@@ -8651,7 +8684,7 @@ Field editing uses edit-mode: Cedar supports direct/click/dblclick, and Maple su
 
 `empty-value` defines the output of an existing clear action. Omission preserves the component fallback; supported types remain component-specific. It does not change empty-values recognition or Form reset defaults.
 
-`empty-value` accepts explicit `null` (or `() => null`). Clearing publishes `null` unchanged; omitted values preserve the existing default. Editors render `null` as blank without converting ordinary empty-string input to `null`. In popup editing, clearing changes the draft; confirm commits it and cancel preserves the original model.
+`empty-value` accepts explicit `null` (or `() => null`). Clearing publishes `null` unchanged; omission preserves the existing default. The UI displays null as blank without converting ordinary empty-string input to null. In confirmation mode, clearing changes the draft and confirm commits it; without confirmation, clearing commits directly.
 
 The `options` prop accepts an array or `(query, { signal }) => array/Promise`. The component manages loading, cancellation and stale-result isolation; failures emit load-error. Single/multiple groups initialize with an empty-string query, searchable fields reload when the query changes, and root loading for tree fields remains independent of existing load-more child loading.
 
@@ -8691,15 +8724,15 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | --- | --- | --- |
 | `--c-cascader-checkbox-bg-hover` | `var(--c-color-fill-3)` | `background-color` |
 | `--c-cascader-font-item-size` | `var(--c-sys-font-size-md)` | `font-size` |
-| `--c-cascader-item-bg-active` | `var(--c-color-fill-2)` | `background-color` |
+| `--c-cascader-item-bg-active` | `transparent` | `background`, `background-color` |
 | `--c-cascader-item-bg-disabled` | `transparent` | `background-color` |
 | `--c-cascader-item-bg-disabled-active` | `var(--c-color-fill-2)` | `background-color` |
-| `--c-cascader-item-bg-hover` | `var(--c-cascader-item-bg-active)` | `background-color` |
-| `--c-cascader-item-check-color` | `var(--c-sys-color-content-primary)` | `color` |
+| `--c-cascader-item-bg-hover` | `var(--c-color-fill-2)` | `background`, `background-color` |
+| `--c-cascader-item-check-color` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-cascader-item-check-size` | `var(--c-sys-font-size-md)` | `height`, `width` |
 | `--c-cascader-item-icon-color` | `var(--c-sys-color-content-secondary)` | `color` |
 | `--c-cascader-item-text-color` | `var(--c-sys-color-content-primary)` | `color` |
-| `--c-cascader-item-text-color-active` | `var(--c-cascader-item-text-color)` | `color` |
+| `--c-cascader-item-text-color-active` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-cascader-item-text-color-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
 | `--c-cascader-item-text-color-disabled-active` | `var(--c-sys-color-content-disabled)` | `color` |
 | `--c-cascader-item-text-color-hover` | `var(--c-cascader-item-text-color)` | `color` |
@@ -9549,7 +9582,7 @@ Native `id`, `form`, `required`, constraints, aria/data attributes and keyboard 
 
 Once / Capture / Passive native listener modifiers stay on the input rather than firing from interactive slot children. Native preventDefault can veto Enter / Space activation and RadioGroup arrow navigation; canceled Space leaves no delayed release action. Checked, disabled, input type and group Tab navigation remain component-managed.
 
-The nullable Checkbox model is preserved. checked in default / checkbox slots is always boolean, with null shown as false; rendering alone never proposes a new model. The native input exposes an indeterminate state through its `indeterminate` property after hydration; the component manages the native checked state and ignores a supplied `aria-checked`. The server-rendered first view cannot guarantee that assistive technologies receive the mixed state.
+The nullable Checkbox model is preserved. checked in default / checkbox slots is always boolean, with null shown as false; rendering alone never proposes a new model.
 
 ## Usage notes
 
@@ -9752,7 +9785,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-checkbox-animation-duration` | `var(--c-transition-duration-3)` | `transition` |
 | `--c-checkbox-control-border-radius` | `2px` | `border-radius` |
 | `--c-checkbox-control-color` | `var(--c-sys-color-content-secondary)` | `color` |
-| `--c-checkbox-control-color-checked` | `var(--c-sys-color-content-brand)` | `color`, `outline` |
+| `--c-checkbox-control-color-checked` | `var(--c-sys-color-action-primary)` | `color`, `outline` |
 | `--c-checkbox-control-color-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
 | `--c-checkbox-control-color-error` | `var(--c-sys-color-content-danger)` | `color` |
 | `--c-checkbox-control-size` | `14px` | `height`, `width` |
@@ -10608,7 +10641,7 @@ Document: llms/en-US/components/color-picker.md
 
 Start with the basic example, then compare related settings before moving to controlled, asynchronous or combined use cases.
 
-FormItem errors describe the inline panel or built-in trigger while preserving any existing `aria-describedby`. A custom trigger can bind the default slot’s `describedBy` value to its interactive element’s `aria-describedby`.
+FormItem errors describe the inline panel or built-in trigger while preserving any existing `aria-describedby`. A custom trigger can bind the default slot’s `describedBy` value to its interactive element’s `aria-describedby`. Put the label’s `for` target ID on the interactive element itself. In custom-trigger mode, a ColorPicker `id` belongs to the popup; if supplied, use a different value to avoid duplicate IDs when it opens.
 
 ```vue
 <ColorPicker :hide-trigger="false">
@@ -11609,6 +11642,8 @@ const handleEnd = () => {
 
 `time` is a duration rather than an absolute deadline; the remaining duration freezes while paused or deactivated by KeepAlive. The default slot receives the five fields days, hours, minutes, seconds, and milliseconds directly. `change` fires on reset and animation frames and may be frequent. `auto-start` is read on mount or reset; changing it alone does not start or pause. Repeated format tokens are all replaced. Omitted larger units accumulate into smaller units, so `SSS` alone can exceed three digits.
 
+Pause and deactivation synchronize the displayed and slot values with the frozen remaining time without emitting another `change`. If the deadline has passed before the next frame, pausing displays zero and resuming emits `end` once.
+
 ### Countdown Props
 
 | Prop | Description | Type | Default |
@@ -12272,7 +12307,8 @@ Desktop calendar capabilities, including shortcuts, footer and cell slots, remai
 | ----------------- | ------------------------------------------------------- | ------------------------------------------------ | ------- |
 | `default-value` | Uncontrolled initial value, read once | DateValue / DateValue[] | — |
 | `value-format` | Model and event value format: a date format string, Date, or timestamp | string | Follows type |
-| `min` / `max` | Inclusive bounds; string bounds use value-format | DateValue | — |
+| `min` | Inclusive minimum date; string bounds use value-format | DateValue | — |
+| `max` | Inclusive maximum date; string bounds use value-format | DateValue | — |
 | `disabled-time` | Disabled times for the current date and endpoint | (date: Date, side: DateSide) => DateDisabledTime<br>`DateSide: 'end' \| 'start'` | — |
 | `disable-confirm` | Commit immediately | boolean | true |
 
@@ -12381,7 +12417,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-date-picker-range-panel-min-width` | `224px` | `min-width` |
 | `--c-date-picker-range-popover-width` | `calc(var(--c-date-picker-panel-date-width) * 2 + 2px)` | `flex`, `width` |
 | `--c-date-picker-row-padding-vertical` | `var(--c-spacing-1)` | `padding` |
-| `--c-date-picker-shortcuts-active-text-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-date-picker-shortcuts-active-text-color` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-date-picker-shortcuts-column-width` | `128px` | `flex`, `width` |
 | `--c-date-picker-shortcuts-inline-item-margin-right` | `var(--c-spacing-5)` | `margin-inline` |
 | `--c-date-picker-shortcuts-inline-item-margin-vertical` | `5px` | `margin-block` |
@@ -13064,7 +13100,7 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 
 `input-attrs` applies to the two direct input elements. For example, `:input-attrs="[{ 'aria-label': 'Departure' }, { 'aria-label': 'Return' }]"` names each endpoint. The field owns its value, disabled, readonly, placeholder, role and popup state; shared descriptions, per-input descriptions and form errors are merged for each input. Component errors take precedence; otherwise each input retains its `aria-invalid`. `RangeInputAttributes` is exported from the component and root entries and includes native attributes and `Once` event types.
 
-When FormItem `label-attrs.for` explicitly targets one endpoint, each otherwise unnamed endpoint uses the form label and a localized start or end name. Explicit accessible names on `input-attrs` or the field take precedence. Older custom locales can provide `fieldPresentation.rangeStart` and `fieldPresentation.rangeEnd`; otherwise the existing date or time endpoint text is used.
+When FormItem's `label-attrs.for` explicitly targets one input, unnamed range endpoints use the form label together with localized start/end names. Explicit accessible names supplied through `input-attrs` or the field take precedence. Older custom locales can provide `fieldPresentation.rangeStart` and `fieldPresentation.rangeEnd`; when absent, the existing date or time start/end labels are used.
 
 | Prop | Description | Type | Default behavior |
 | --- | --- | --- | --- |
@@ -13117,7 +13153,8 @@ When FormItem `label-attrs.for` explicitly targets one endpoint, each otherwise 
 | ----------------- | ------------------------------------------------------- | -------------------------------------------------- | ------- |
 | `default-value` | Uncontrolled initial value, read once | DateValue / DateValue[] | — |
 | `value-format` | Model and event value format: a date format string, Date, or timestamp | string | Follows type |
-| `min` / `max` | Inclusive bounds; string bounds use value-format | DateValue | — |
+| `min` | Inclusive minimum date; string bounds use value-format | DateValue | — |
+| `max` | Inclusive maximum date; string bounds use value-format | DateValue | — |
 | `disabled-time` | Disabled times for the current date and endpoint | (date: Date, side: DateSide) => DateDisabledTime<br>`DateSide: 'end' \| 'start'` | — |
 | `disable-confirm` | Commit immediately | boolean | false |
 | `default-open` | Uncontrolled initial open state | boolean | false |
@@ -14309,7 +14346,8 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- | ------- |
 | `default-value` | Uncontrolled initial value, read once | DateValue / DateValue[] | — |
 | `value-format` | Model and event value format: a date format string, Date, or timestamp | string | Follows type |
-| `min` / `max` | Inclusive bounds; string bounds use value-format | DateValue | — |
+| `min` | Inclusive minimum date; string bounds use value-format | DateValue | — |
+| `max` | Inclusive maximum date; string bounds use value-format | DateValue | — |
 | `disabled-time` | Disabled times for the current date and endpoint | (date: Date, side: DateSide) => DateDisabledTime<br>`DateSide: 'end' \| 'start'` | — |
 | `disable-confirm` | Commit immediately | boolean | false |
 | `default-open` | Uncontrolled initial open state | boolean | false |
@@ -14510,7 +14548,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-date-picker-range-panel-min-width` | `224px` | `min-width` |
 | `--c-date-picker-range-popover-width` | `calc(var(--c-date-picker-panel-date-width) * 2 + 2px)` | `flex`, `width` |
 | `--c-date-picker-row-padding-vertical` | `var(--c-spacing-1)` | `padding` |
-| `--c-date-picker-shortcuts-active-text-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-date-picker-shortcuts-active-text-color` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-date-picker-shortcuts-column-width` | `128px` | `flex`, `width` |
 | `--c-date-picker-shortcuts-inline-item-margin-right` | `var(--c-spacing-5)` | `margin-inline` |
 | `--c-date-picker-shortcuts-inline-item-margin-vertical` | `5px` | `margin-block` |
@@ -17148,27 +17186,37 @@ Awaited before-* hooks show loading feedback and aria-busy. Rejection or failure
 | placement | Side of the containing area where the drawer appears, default right. It is not anchored to a button and does not perform popup collision flipping | `'top' \| 'right' \| 'bottom' \| 'left'` | `'right'` |
 | title | Title | `string` | - |
 | overlay | Show the overlay | `boolean` | `true` |
-| overlay-class / overlay-style | Overlay class and style | `string / CSSProperties` | - |
+| overlay-class | Custom overlay classes | `string` | - |
+| overlay-style | Custom overlay styles | `CSSProperties` | - |
 | overlay-closable | Request closure on overlay click | `boolean` | `true` |
 | aria-label | Explicit dialog name; takes precedence over the automatic title name | `string` | - |
 | close-button-aria-label | Accessible name for the close button | `string` | `Close drawer` |
 | overlay-animation-name | Overlay animation name | `string` | `fade-drawer` |
 | closable | Show the close button | `boolean` | `true` |
-| confirm-button-text / cancel-button-text | Action button text | `string` | - |
-| confirm-button-loading / cancel-button-loading | Action button loading state | `boolean` | `false` |
-| confirm-button-disabled / cancel-button-disabled | Action button disabled state | `boolean` | `false` |
-| confirm-button-props / cancel-button-props | Action button props | `ButtonProps` | - |
+| confirm-button-text | Confirm button text | `string` | - |
+| cancel-button-text | Cancel button text | `string` | - |
+| confirm-button-loading | Confirm button loading state | `boolean` | `false` |
+| cancel-button-loading | Cancel button loading state | `boolean` | `false` |
+| confirm-button-disabled | Confirm button disabled state | `boolean` | `false` |
+| cancel-button-disabled | Cancel button disabled state | `boolean` | `false` |
+| confirm-button-props | Confirm button props | `ButtonProps` | - |
+| cancel-button-props | Cancel button props | `ButtonProps` | - |
 | unmount-on-close | Unmount content after the closing transition | `boolean` | `false` |
-| width / height | Width for left/right placement; height for top/bottom placement | `number \| string` | `250` |
+| width | Drawer width for left / right placement | `number \| string` | `250` |
+| height | Drawer height for top / bottom placement | `number \| string` | `250` |
 | popup-container | Portal container | `string \| HTMLElement \| false` | `'body'` |
-| drawer-class / drawer-style | Panel class and style | `string \| any[] / CSSProperties` | - |
-| body-class / body-style | Body class and style | `string \| any[] / StyleValue` | - |
+| drawer-class | Custom drawer panel classes | `string \| any[]` | - |
+| drawer-style | Custom drawer panel styles | `CSSProperties` | - |
+| body-class | Custom body classes | `string \| any[]` | - |
+| body-style | Custom body styles | `StyleValue` | - |
 | `before-close` | Return a boolean/Promise or call done; the first completion wins | `DrawerBeforeClose` | — |
 | esc-to-close | Request closure on Escape | `boolean` | `true` |
 | lock-scroll | Lock scrolling on the host | `boolean` | `true` |
 | close-on-route-change | Request closure on route changes | `boolean` | `false` |
 | z-index | Custom z-index | `number` | Automatically distributed |
-| header / footer / cancel-button | Show the corresponding region | `boolean` | `true` |
+| header | Show the header region | `boolean` | `true` |
+| footer | Show the footer region | `boolean` | `true` |
+| cancel-button | Show the cancel button | `boolean` | `true` |
 
 
 ### Drawer Events
@@ -17455,7 +17503,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 
 | Variable | Default / condition | Affected styles |
 | --- | --- | --- |
-| `--c-ellipsis-focus-color` | `var(--c-sys-color-content-brand)` | `outline` |
+| `--c-ellipsis-focus-color` | `var(--c-sys-color-action-primary)` | `outline` |
 | `--c-ellipsis-focus-offset` | `2px` | `outline-offset` |
 | `--c-ellipsis-focus-width` | `2px` | `outline` |
 
@@ -17465,7 +17513,7 @@ Apply overrides to the rendered component root or the actual popup ancestor. For
 
 ```css
 .component-theme {
-  --c-ellipsis-focus-color: var(--c-sys-color-content-brand);
+  --c-ellipsis-focus-color: var(--c-sys-color-action-primary);
 }
 ```
 
@@ -18048,9 +18096,13 @@ The floating hint leaves a gap in the outline, aligned with the content column. 
 | `line` | `boolean` | `true`; whether to show a border or underline |
 | `focused` | `boolean` | Consumer-supplied focus state |
 | `composing` | `boolean` | Keep the label floated during IME composition |
-| `disabled` / `readonly` / `error` | `boolean` | Provided by the consumer after merging Form / Group state |
+| `disabled` | `boolean` | Consumer-supplied disabled state after merging Form / Group state |
+| `readonly` | `boolean` | Consumer-supplied read-only state after merging Form / Group state |
+| `error` | `boolean` | Consumer-supplied error state after merging Form / Group state |
 | `clearable` | `boolean` | `false`; whether clearing is allowed |
-| `text-color` / `focus-color` / `blur-color` | `string` | Custom text, focused and unfocused colors |
+| `text-color` | `string` | Custom per-instance text color; prefer tokens for static themes |
+| `focus-color` | `string` | Custom per-instance focused color; prefer tokens for static themes |
+| `blur-color` | `string` | Custom per-instance unfocused color; prefer tokens for static themes |
 | `cursor` | `string` | Custom caret |
 
 ### FieldDecorator Slots / Events
@@ -18613,9 +18665,26 @@ Document: llms/en-US/components/form.md
 
 ## Field names
 
-In direct edit mode, for a visible label on a single field, match FormItem `label-attrs.for` to the control `id`. The native inputs in selection, date and time fields do not let their placeholder override an associated label. An explicit `aria-label` or `aria-labelledby` retains its native accessible-name precedence. Placeholder is only a fallback when no label is supplied; provide clear labels. Date and time range fields in FormItem associate the form label with their group; use `input-attrs` to give the endpoints distinct names. If `label-attrs.for` targets another control, the label is not associated with the range group. The `tooltip` button is independently focusable and its name is not added to the field label.
+For a deferred Slider inside Shadow DOM, a popup teleported to `body` may not resolve ID references to hints or errors inside the shadow root. Set `:popup-container="false"` to keep the popup in the same root, and provide clear control names.
+
+In direct edit mode, for a visible label on a single field, match FormItem `label-attrs.for` to the control `id`. The native inputs in selection, date and time fields do not let their placeholder override an associated label. An explicit `aria-label` or `aria-labelledby` retains its native accessible-name precedence. Placeholder is only a fallback when no label is supplied; provide clear labels. Date and time range fields in FormItem associate the form label with their group; use `input-attrs` to give the endpoints distinct names. If `label-attrs.for` targets another control, the label is not associated with the range group. Without `for`, the range currently references the nearest FormItem label even when that item contains other controls. For mixed fields, put the range in a separate styled FormItem with its own name, or explicitly target the intended control with `for` and name the other controls separately. When `for` matches a single-value Slider’s `id`, its thumb and optional numeric input use the label; clicking the default native label focuses the enabled thumb; preventing the label click default cancels that focus. When `for` matches a range Slider’s `id`, the form label names the group; use an `aria-label` array to name the endpoints separately. The `tooltip` button is independently focusable and its name is not added to the field label.
+
+Transfer also references the nearest FormItem label when `for` is absent, including when the item contains other fields. For mixed fields, place Transfer in a separate FormItem, or give it an explicit name and associate labels with the other fields separately.
 
 Start with the basic example, then compare related settings before moving to controlled, asynchronous or combined use cases.
+
+### Multiple controls under one label
+
+For mixed controls, give the visible label a unique ID and explicitly name a group with it. Give each control its own name as well. Use a unique ID for each FormItem instance.
+
+```vue
+<c-form-item label="Contact" label-component="span" :label-attrs="{ id: 'contact-label' }">
+  <div role="group" aria-labelledby="contact-label">
+    <c-input aria-label="Email" />
+    <input aria-label="Phone" />
+  </div>
+</c-form-item>
+```
 
 ## Reading direction
 
@@ -21700,7 +21769,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-form-status-validating-bg` | `var(--c-color-fill-2)` | `background-color` |
 | `--c-form-status-validating-border-color` | `transparent` | `border-color` |
 | `--c-form-status-validating-focus-bg` | `var(--c-color-bg-2)` | `background-color` |
-| `--c-form-status-validating-focus-border-color` | `var(--c-sys-color-content-brand)` | `border-color` |
+| `--c-form-status-validating-focus-border-color` | `var(--c-sys-color-action-primary)` | `border-color` |
 | `--c-form-status-validating-focus-shadow-color` | `var(--c-color-primary-light-2)` | `box-shadow` |
 | `--c-form-status-validating-focus-shadow-size` | `var(--c-shadow-distance-none)` | `box-shadow` |
 | `--c-form-status-validating-hover-bg` | `var(--c-color-fill-3)` | `background-color` |
@@ -21717,7 +21786,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-form-status-warning-hover-border-color` | `transparent` | `border-color` |
 | `--c-form-status-warning-tip-icon-color` | `var(--c-sys-color-content-warning)` | `color` |
 | `--c-form-status-warning-tip-text-color` | `var(--c-sys-color-content-warning)` | `color` |
-| `--c-form-tooltip-margin-left` | `var(--c-sys-space-2)` | `margin-inline-start` |
+| `--c-form-tooltip-margin-left` | `var(--c-sys-space-2)` | `padding-inline-start` |
 | `--c-form-tooltip-text-color` | `var(--c-sys-color-content-secondary)` | `color` |
 | `--c-form-transition-duration-3` | `var(--c-transition-duration-3)` | `transition` |
 | `--c-form-transition-duration-5` | `var(--c-transition-duration-5)` | `animation` |
@@ -23570,7 +23639,7 @@ ImagePreviewGroup binds a one-based image number through ordinary `v-model`; `de
 | ripple | boolean | false | Enable ripple |
 | block | boolean | true | Render block layout |
 | preview-disabled | boolean | false | Disable image preview |
-| open / v-model:open | boolean | - | Controlled standalone preview state |
+| open | boolean | `-` | Controlled standalone preview state Supports `v-model:open`. |
 | default-open | boolean | false | Initial uncontrolled preview state |
 | preview-props | `Partial<ImagePreviewProps>` | - | Standalone preview options |
 | popup-container | string \| HTMLElement \| false | body | Preview mount target |
@@ -23601,7 +23670,7 @@ ImagePreviewGroup binds a one-based image number through ordinary `v-model`; `de
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | src | string | - | Preview image URL |
-| open / v-model:open | boolean | - | Controlled preview state |
+| open | boolean | `-` | Controlled preview state Supports `v-model:open`. |
 | default-open | boolean | false | Initial uncontrolled state |
 | interaction | 'auto' \| 'desktop' \| 'touch' | auto | Interaction mode |
 | popup-container | string \| HTMLElement \| false | body | Preview mount target |
@@ -23656,7 +23725,7 @@ When keyboard shortcuts are enabled, only the topmost preview handles arrow keys
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| open / v-model:open | boolean | - | Controlled preview state |
+| open | boolean | `-` | Controlled preview state Supports `v-model:open`. |
 | default-open | boolean | false | Initial uncontrolled state |
 | interaction | 'auto' \| 'desktop' \| 'touch' | auto | Interaction mode |
 | popup-container | string \| HTMLElement \| false | body | Preview mount target |
@@ -23676,7 +23745,7 @@ When keyboard shortcuts are enabled, only the topmost preview handles arrow keys
 | show-toolbar | boolean | true | Show toolbar and its actions slot |
 | actions-layout | ImagePreviewActionName[] | desktop defaults / touch [] | Ordered toolbar actions |
 | images | string[] | - | Explicit images; undefined collects children, [] is empty |
-| model-value / v-model | number | - | Controlled image number, starting at 1 |
+| model-value | number | `-` | Controlled image number, starting at 1 Supports `v-model`. |
 | default-value | number | 1 | Initial image number, starting at 1 |
 | loop | boolean | false | Wrap when navigating |
 
@@ -25554,6 +25623,103 @@ const loading = ref(true)
 </template>
 ```
 
+### Paste a link and fetch its title
+
+Paste a URL or type one and press Enter to simulate fetching its title. The input displays a loading state while waiting. The tag's `label` displays the title, its `value` retains the original URL, and `closable` enables removal. Submit displays the URL data without sending a request.
+
+Example source: src/input-tag/__demos__/link-title.vue
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+
+interface LinkTag {
+  value: string
+  label: string
+  closable: boolean
+}
+
+const links = ref<LinkTag[]>([])
+const inputValue = ref('')
+const loading = ref(false)
+const error = ref('')
+const submitted = ref<string[] | null>(null)
+
+// 模拟接口：延迟返回标题，实际使用时替换为业务请求。
+function fetchTitle(url: string): Promise<string> {
+  const titles: Record<string, string> = {
+    'vuejs.org': 'Vue.js',
+    'github.com': 'GitHub',
+  }
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(titles[new URL(url).hostname] || new URL(url).hostname), 1200)
+  })
+}
+
+async function handlePaste(event: ClipboardEvent) {
+  const url = event.clipboardData?.getData('text/plain').trim()
+  if (url) await addLink(url)
+}
+
+function handleKeydown(event: KeyboardEvent) {
+  if (event.key !== 'Enter' || event.isComposing || event.keyCode === 229) return
+  event.preventDefault()
+  void addLink(inputValue.value.trim())
+}
+
+async function addLink(url: string) {
+  if (loading.value || !url) return
+  error.value = ''
+  try {
+    const parsed = new URL(url)
+    if (!['http:', 'https:'].includes(parsed.protocol)) throw new Error()
+  } catch {
+    error.value = '请粘贴完整的 http 或 https 链接 / Paste a valid http or https URL.'
+    return
+  }
+  if (links.value.some(item => item.value === url)) {
+    error.value = '链接已添加 / This URL has already been added.'
+    return
+  }
+  loading.value = true
+  try {
+    const title = await fetchTitle(url)
+    links.value.push({ value: url, label: title, closable: true })
+    inputValue.value = ''
+  } catch {
+    error.value = '获取标题失败，请重试 / Could not fetch the title. Try again.'
+  } finally {
+    loading.value = false
+  }
+}
+
+function submit() {
+  submitted.value = links.value.map(item => item.value)
+}
+</script>
+
+<template>
+  <c-space direction="column" style="width: 100%" :size="12">
+    <p>粘贴链接，或输入链接后按回车，例如 https://vuejs.org / Paste a URL or type one and press Enter.</p>
+    <div @paste.capture.prevent="handlePaste" @keydown.capture="handleKeydown">
+      <c-input-tag
+        v-model="links"
+        v-model:input-value="inputValue"
+        :retain-input-value="true"
+        :loading="loading"
+        :disabled="loading"
+        placeholder="粘贴或输入链接 / Paste or type a URL"
+        aria-label="粘贴或输入链接 / Paste or type a URL"
+        clearable
+      />
+    </div>
+    <p v-if="error" role="alert">{{ error }}</p>
+    <c-button :disabled="loading || !links.length" @click="submit">提交 / Submit</c-button>
+    <pre v-if="submitted !== null" aria-live="polite">{{ JSON.stringify({ links: submitted }, null, 2) }}</pre>
+  </c-space>
+</template>
+```
+
 ### Field state and native input
 
 Unset disabled, readonly and error inherit from FormItem / Form. InputGroup supplies disabled, readonly, size and variant; explicit field values, including false, take precedence. The standalone variant remains filled. Deferred editors follow the same state and discard their draft when disabled or readonly.
@@ -27258,7 +27424,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | Variable | Default / condition | Affected styles |
 | --- | --- | --- |
 | `--c-layout-border-color` | `var(--c-color-border-2)` | `border-bottom`, `border-left`, `border-right`, `border-top` |
-| `--c-layout-focus-color` | `var(--c-sys-color-content-brand)` | `outline` |
+| `--c-layout-focus-color` | `var(--c-sys-color-action-primary)` | `outline` |
 | `--c-layout-font-color` | `var(--c-color-text-1)` | `color` |
 | `--c-layout-sider-background-light` | `var(--c-color-bg-2)` | `background` |
 | `--c-layout-sider-light-box-shadow` | `0 2px 5px 0 rgba(0, 0, 0, 0.08)` | `box-shadow` |
@@ -27955,6 +28121,8 @@ const rows = Array.from({ length: 1000 }, (_, id) => ({ id, name: '记录 ' + (i
 
 ### Virtual Lifecycle
 
+On KeepAlive reactivation, the virtual list restores its last recorded vertical and horizontal scroll positions within the current scrollable range. A new scroll command issued during reactivation takes precedence.
+
 <!-- demo-config-notes:start -->
 #### Configuration reference for this comparison
 
@@ -28015,9 +28183,9 @@ const jump = () => retained?.scrollIntoView({ key: 50, align: "top" });
 
 ## API
 
-The virtual list covers the viewport first and renders `buffer` items beyond it on each side. `buffer=0` is valid. `estimatedSize` must be finite and positive, including values below 1; invalid values fall back to 30px. `fixedSize` can change dynamically. Variable-height mode uses measured and estimated heights and observes mounted measurable roots when `ResizeObserver` is available. The `item` slot receives the original index and unknown data; it may return multiple measurable roots, whose combined bounds are measured as one item. Provide a stable `itemKey`. To convey the complete collection to assistive technology, provide `aria-setsize` and `aria-posinset` on application rows as appropriate.
+The virtual list covers the viewport before prerendering additional items on either side according to `buffer`; `buffer=0` is valid. `estimatedSize` must be finite and positive, including values below 1; invalid values fall back to 30px. `fixedSize` can change dynamically. Variable-height mode uses measured and estimated sizes and, when available, `ResizeObserver` to watch measurable mounted roots. The `item` slot receives the original index and unknown data, may return multiple measurable root nodes, and should provide a stable `itemKey`; measurement uses the combined root bounds for each item. To expose the complete collection to assistive technology, business rows can supply `aria-setsize` and `aria-posinset` using the actual data.
 
-Server rendering currently fails when `v-for` and `v-memo` occur on the same node inside the `default`, `header`, `footer`, `empty` or `item` slot, with or without virtualization in data mode. As a temporary workaround, remove `v-memo` from that node and verify the update behavior.
+Server rendering currently fails when the same node combines `v-for` and `v-memo` inside the `default`, `header`, `footer`, `empty` or `item` slot. Data mode is affected with or without virtualization. Temporarily remove `v-memo` from that node and verify update behavior.
 
 ### List Props
 
@@ -29536,8 +29704,10 @@ Use ordinary `v-model`. `modelValue` is the selected option value; `defaultValue
 | unmount-on-close | Unmount the panel after closing | `boolean` | `true` |
 | reference | External trigger element or selector | `MenuReference` | `-` |
 | popup-class | Positioning-layer class | `string / array / object` | `-` |
-| offset-x / offset-y | Offset relative to the trigger | `string / number` | `0` |
-| mouse-enter-delay / mouse-leave-delay | Root menu hover-open / hover-close delay in milliseconds | `number` | `100` |
+| offset-x | Horizontal offset relative to the trigger | `string / number` | `0` |
+| offset-y | Vertical offset relative to the trigger | `string / number` | `0` |
+| mouse-enter-delay | Hover-open delay in milliseconds | `number` | `100` |
+| mouse-leave-delay | Hover-close delay in milliseconds | `number` | `100` |
 | close-on-click-reference | Close when the trigger is clicked again | `boolean` | `true` |
 | cover | Whether the popup covers its trigger | `boolean` | `false` |
 | elevation | Default shadow, no shadow, or a specific elevation level | `boolean / number` | `true` |
@@ -30212,7 +30382,7 @@ Exceptions from close/closed notification callbacks do not retain closed entries
 
 | Prop | Description | Type | Default |
 | --------------------- | -------------------------------------- | ------------------------------------------------------------ | --------------- |
-| open / `v-model:open` | Controlled visibility | `boolean` | `false` |
+| `open` | Controlled visibility Supports `v-model:open`. | `boolean` | `false` |
 | id | Unique queue identifier; the same id updates the existing instance | `string \| number` | Automatically generated |
 | status | Semantic status | `default \| info \| success \| warning \| danger \| loading` | `default` |
 | variant | Visual emphasis | `neutral \| tonal \| solid` | `neutral` |
@@ -31281,18 +31451,22 @@ Horizontal menus with default slots scroll rather than collecting entries into o
 | --- | --- | --- |
 | name | Stable unique entry identifier; root activeItem makes named entries mutually exclusive. highlight separately overrides appearance | — |
 | label | Entry title when unselected or selection does not match options; supports VNode/render functions | — |
-| options / fieldNames | Same options/field mappings as NavMenu | `[]` |
-| model-value / default-value | Independent controlled/initial value; string, number or null | `undefined` / `null` |
+| options | Menu options, using the same structure as NavMenu | `[]` |
+| field-names | Option field mapping, consistent with NavMenu | `undefined` |
+| model-value | Controlled selected key (string, number or null); supports v-model | `undefined` |
+| default-value | Initial uncontrolled selected key (string, number or null); read only at initialization | `null` |
 | highlight | Visual emphasis override without changing active/selection; defaults to active | — |
 | hide-on-select | Close the panel after select | `true` |
 | unmount-on-close | Destroy panel content after the closing transition; retain it by default | false |
-| open / default-open | Controlled / initial panel state | `undefined` / `false` |
+| open | Controlled open state; supports v-model:open | `undefined` |
+| default-open | Initial uncontrolled open state; read only at initialization | `false` |
 | disabled | Disable the entry, also respecting parent menu disabled | `undefined` |
 | trigger | Trigger mode | `click` |
 | placement | Ordinary dropdown placement; full-height right/left placements align to the corresponding entry edge | `bottom-start` |
 | popup-layout | `dropdown`: standard `dropdown` / `full-width`: `full` width below the trigger / `full-height`: `full` height on the right / `full`: fills the available width and height below the trigger | `dropdown` |
 | popup-style | Panel CSS; may override full-height width/direction/dimensions | — |
-| popup-container / popup-class | Trigger container and popup class | Follow parent menu |
+| popup-container | Popup mount container; inherits the parent menu when omitted | Follow parent menu |
+| popup-class | Additional popup classes; inherits the parent menu when omitted | Follow parent menu |
 | options-mode | Horizontal/vertical default options-panel layout | `vertical` |
 
 Entry/`content` slots receive `{ modelValue, selectedOption, active, open, select, close }`. select(key,event?) emits `update:modelValue` and select(key,option,event). Custom panels may select outside options, making option undefined and independent active false; use highlight if emphasis is needed. `close()` closes/restores entry focus. Controlled values affect titles/active only after acceptance. Entry-slot active is entry state, while label-render active compares its context option with the Item value. `hideOnSelect` is independent of acceptance; set false for manual confirmation.
@@ -31356,7 +31530,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-nav-menu-light-item-bg-selected` | `var(--c-color-fill-2)` | `background` |
 | `--c-nav-menu-light-item-text-color` | `var(--c-color-text-2)` | `color` |
 | `--c-nav-menu-light-item-text-color-disabled` | `var(--c-color-text-4)` | `color` |
-| `--c-nav-menu-light-item-text-color-selected` | `var(--c-sys-color-content-brand)` | `color`, `outline` |
+| `--c-nav-menu-light-item-text-color-selected` | `var(--c-sys-color-action-primary)` | `color`, `outline` |
 | `--c-nav-menu-motion-duration` | `150ms` | `transition` |
 | `--c-nav-menu-panel-width` | `min(400px, 100vw)` | Component styling |
 | `--c-nav-menu-popup-max-height` | `320px` | `max-height` |
@@ -32592,10 +32766,10 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | Variable | Default / condition | Affected styles |
 | --- | --- | --- |
 | `--c-pagination-active-background` | `var(--c-color-primary-light-1)` | `background` |
-| `--c-pagination-active-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-pagination-active-color` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-pagination-disabled-background` | `var(--c-color-fill-1)` | `background` |
 | `--c-pagination-disabled-color` | `var(--c-color-text-4)` | `color` |
-| `--c-pagination-focus-color` | `var(--c-sys-color-content-brand)` | `outline` |
+| `--c-pagination-focus-color` | `var(--c-sys-color-action-primary)` | `outline` |
 | `--c-pagination-focus-offset` | `1px` | `outline-offset` |
 | `--c-pagination-focus-space` | `3px` | `padding` |
 | `--c-pagination-focus-width` | `2px` | `outline` |
@@ -33030,6 +33204,99 @@ Priority: actions slot → render-actions → built-in phone/chat buttons. Actio
 
 ## Basic examples
 
+### Single and multiple selection
+
+Single selection uses `string | null`. Set `multiple` for an ordered `string[]`; omitted `default-value` and clearing default to `[]` in multiple mode. `empty-value` may override clearing (including `null`). Each selected person retains its name across remote searches. Use `fallback-option(id)` for missing identities; `label` is a single-selection fallback.
+
+Example source: src/people-select/__demos__/en-US/multiple.vue
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+import type { PeopleSelectOption, PeopleSelectOptionsLoader } from '@cedar-design/ui-vue'
+
+const personId = ref<string | null>('alice')
+const personIds = ref<string[]>(['alice', 'bob'])
+const people: readonly PeopleSelectOption[] = [
+  { value: 'alice', label: 'Alice' },
+  { value: 'bob', label: 'Bob' },
+  { value: 'carol', label: 'Carol' },
+  { value: 'david', label: 'David', disabled: true },
+]
+const loadPeople: PeopleSelectOptionsLoader = async (query, { signal }) => {
+  await new Promise<void>((resolve) => setTimeout(resolve, 200))
+  if (signal.aborted) {
+    return []
+  }
+  return people.filter((person) => person.label.toLowerCase().includes(query.toLowerCase()))
+}
+</script>
+
+<template>
+  <c-space direction="column">
+    <p>Single person</p>
+    <c-people-select v-model="personId" :options="people" clearable :empty-value="null" />
+    <p>Multiple people (async search)</p>
+    <c-people-select v-model="personIds" :options="loadPeople" multiple clearable />
+    <p role="status">IDs: {{ personIds.join(', ') || '—' }}</p>
+    <c-people-select v-model="personIds" :options="people" multiple read-pretty />
+  </c-space>
+</template>
+```
+
+## Async data
+
+### Load candidates through options
+
+Pass a typed loader to `:options="loadPeople"`. This example simulates a request without a backend; type Alice or Bob to search. Loading is managed by the component.
+
+Example source: src/people-select/__demos__/en-US/options-loader.vue
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+import type { PeopleSelectOption, PeopleSelectOptionsLoader } from '@cedar-design/ui-vue'
+
+const personId = ref<string | null>(null)
+const errorText = ref('')
+const people: readonly PeopleSelectOption[] = [
+  { value: 'alice', label: 'Alice', mobile: '13800000000' },
+  { value: 'bob', label: 'Bob', mobile: '13900000000' },
+  { value: 'carol', label: 'Carol', disabled: true },
+]
+
+// Simulate a request; pass signal to fetch in a real service.
+const loadPeople: PeopleSelectOptionsLoader = async (query, { signal }) => {
+  errorText.value = ''
+  await new Promise<void>((resolve) => setTimeout(resolve, 400))
+  if (signal.aborted) return []
+  return people.filter((person) => person.label.toLowerCase().includes(query.toLowerCase()))
+}
+
+function onLoadError(error: unknown) {
+  errorText.value = error instanceof Error ? error.message : String(error)
+}
+</script>
+
+<template>
+  <c-space direction="column">
+    <c-people-select
+      v-model="personId"
+      :options="loadPeople"
+      :search-delay="300"
+      placeholder="Alice / Bob"
+      clearable
+      :empty-value="null"
+      @load-error="onLoadError"
+    />
+    <p role="status">ID: {{ personId ?? '—' }}</p>
+    <p v-if="errorText" role="alert">{{ errorText }}</p>
+  </c-space>
+</template>
+```
+
+## Business composition
+
 ### Complete example
 
 Example source: src/people-select/__demos__/en-US/injected-services.vue
@@ -33081,8 +33348,10 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| model-value / v-model | string / null | undefined | Controlled person identity; explicit null remains empty. |
-| default-value | string | '' | Uncontrolled initial identity, read only at creation. |
+| need-confirm | `boolean` | Single `false`; multiple `true` | Applies only to overlay editing. Single selection commits and closes on choice by default; true keeps a draft until confirmation. Multiple selection defaults to confirmation. Submission still runs form validation and before-commit; rejection keeps the editor open. |
+| multiple | boolean | false | Enable multiple person selection using a string[] model. |
+| model-value | PeopleSelectValue | `undefined` | A person ID in single mode or an ID array in multiple mode; explicit null remains empty. Supports `v-model`. |
+| default-value | string / string[] | '' / [] | Uncontrolled initial identity, read only at creation. |
 | options | readonly PeopleSelectOption[] / PeopleSelectOptionsLoader | undefined | Candidate array or (query, { signal }) loader; explicit arrays take precedence. |
 | fallback-option | PeopleSelectFallbackOption | true | Synchronous display fallback; may return a person object; false hides unmatched values. |
 | label | string | '' | Reactive display name when the candidate is absent. |
@@ -33105,8 +33374,8 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 | case-sensitive | boolean | false | Use case-sensitive built-in local search. |
 | search-fields | readonly OptionSearchField[]<br>`OptionSearchField: 'label' \| 'value'` | ['label'] | Candidate fields used by built-in local search; defaults to label. |
 | search-delay | number | 500 | Debounce delay in milliseconds for search notifications and requests. |
-| clearable | boolean | false | Allow clearing an editable field; deferred modes clear the draft and publish after confirmation. |
-| empty-value | string / null / function | '' | Published clear value; explicit null is retained; omission uses an empty string. |
+| clearable | boolean | false | Allow clearing an editable field; confirmation mode clears the draft and publishes after confirmation; immediate mode clears and commits directly. |
+| empty-value | string / string[] / null / function | '' / [] | Value emitted when clearing; defaults to '' in single mode and [] in multiple mode. Explicit null is preserved. |
 | empty-values | readonly unknown[] | undefined | Empty-value recognition, inherited through field, FormItem and Form. |
 | empty-text | string | undefined | Empty reading text; defaults to a dash after inheritance. |
 | loading | boolean | false | Manual waiting feedback for the editor field; pauses selection and clearing without covering person reading content. |
@@ -33116,19 +33385,51 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 | default-open | boolean | false | Initial uncontrolled open state of the deferred editor. |
 | popup-container | PopupContainer | undefined | Editor popup mount target: selector, HTMLElement or false. |
 
+### PeopleSelectValue / PeopleSelectOptionsLoader types
+
+```ts
+import type { AsyncDataContext } from '@cedar-design/use-vue'
+
+// The UI package exports these types; do not redefine them in business code.
+interface PeopleSelectOption {
+  value: string
+  label: string
+  avatar?: string
+  mobile?: string
+  disabled?: boolean
+}
+
+type PeopleSelectValue = string | string[] | null
+
+type PeopleSelectOptionsLoader = (
+  query: string,
+  context: AsyncDataContext, // { signal: AbortSignal }
+) => readonly PeopleSelectOption[] | Promise<readonly PeopleSelectOption[]>
+```
+
+- `query` is the search text. Initial mounting, replacing the loader and `refresh()` use an empty string `''`; search is debounced by `search-delay`, which defaults to 500 milliseconds.
+- Return an array synchronously or a Promise of an array. Map service fields to `value` (person ID) and `label` (name), and return `[]` when nothing matches. Do not pass a Promise directly to `options`.
+- Forward `context.signal` to the request library. A new request, loader replacement or unmount cancels the previous task. Even if cancellation is ignored by the request, stale results cannot overwrite current results.
+- The component manages loading automatically. A current request failure emits `load-error(error, 'options')`. Loader results are not filtered locally by default; there is no need to send a duplicate request through `@search`.
+- `is-label` / `read-pretty` does not invoke the loader. Use `label`, `fallback-option` or an array for read-mode display. A local array, including `[]`, overrides a global default loader.
+
+Import `PeopleSelectOption` and `PeopleSelectOptionsLoader` from the UI package root or the `people-select` entry; import `AsyncDataContext` from the use package.
+
 ### PeopleSelect Events
 
 | Event | Arguments | Description |
 | --- | --- | --- |
-| update:model-value | value: string / null | Publish the person identity without collecting listener return values. |
-| change | value: string / null | Person value change notification. |
+| update:model-value | value: PeopleSelectValue | Publish the person identity without collecting listener return values. |
+| change | value: PeopleSelectValue | Person value change notification. |
 | update:open / open-change | open: boolean | Deferred editor open-state notifications. |
-| clear | — | Clear action notification; deferred modes still require draft confirmation. |
+| clear | — | Clear action notification; confirmation mode updates the draft; immediate mode commits directly. |
 | search | query: string | Search notification; options explicitly supplies the loader. |
 | load-error | error: unknown, source: 'options' | Current candidate read failure notification. |
 | action-error | error: unknown, action: 'call' / 'chat' | Explicit phone or chat task failure notification; error listeners are not awaited. |
 
 ### PeopleSelect Slots
+
+In multiple mode, the `read` slot also receives `people` in model order; `person` is the first person. Default read content displays all selected people. `actions` / `render-actions` and phone/chat operations apply to each person individually.
 
 | Slot | Prop | Description |
 | --- | --- | --- |
@@ -33156,7 +33457,7 @@ Optionally pass signal to fetch to cancel stale requests. It is not an HTTP para
 
 Public types include PeopleSelectReadScope, PeopleSelectSlots, PeopleSelectEmits and existing data, task and instance types, available from the root and people-select entry points.
 
-`empty-value` accepts explicit `null` (or `() => null`). Clearing publishes `null` unchanged; omitted values preserve the existing default. Editors render `null` as blank without converting ordinary empty-string input to `null`. In popup editing, clearing changes the draft; confirm commits it and cancel preserves the original model.
+`empty-value` accepts explicit `null` (or `() => null`). Clearing publishes `null` unchanged; omission preserves the existing default. The UI displays null as blank without converting ordinary empty-string input to null. In confirmation mode, clearing changes the draft and confirm commits it; without confirmation, clearing commits directly.
 
 `fallback-option` is independent of options, returns no Promise and sends no requests. Display prefers a current option, then fallback; false disables display of unmatched values.
 
@@ -33574,6 +33875,8 @@ Document: llms/en-US/components/popover.md
 <!-- Source: src/popover/README.en-US.md; locale: en-US; page: /en/components/popover/ -->
 
 # Popover
+
+SSR limitation: a trigger slot node using both `v-for` and `v-memo` can make server rendering fail. Remove `v-memo` from that slot node when rendering on the server; ordinary `v-for` remains supported. The same limitation can affect the `content` slot; remove `v-memo` there for server rendering.
 
 Start with the basic example, then compare related settings before moving to controlled, asynchronous or combined use cases.
 
@@ -34423,11 +34726,11 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | --- | --- | --- |
 | `--c-progress-animation-duration` | `1.5s` | `animation`, `animation-delay` |
 | `--c-progress-danger-color` | `var(--c-sys-color-content-danger)` | `color` |
-| `--c-progress-default-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-progress-default-color` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-progress-font-size` | `var(--c-sys-font-size-sm)` | `font-size` |
 | `--c-progress-info-color` | `var(--c-sys-color-content-info)` | `color` |
 | `--c-progress-line-border-radius` | `9999px` | `border-radius` |
-| `--c-progress-primary-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-progress-primary-color` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-progress-secondary-color` | `var(--c-sys-color-content-secondary)` | `color` |
 | `--c-progress-steps-gap` | `var(--c-sys-space-2)` | `gap` |
 | `--c-progress-success-color` | `var(--c-sys-color-content-success)` | `color` |
@@ -35209,7 +35512,7 @@ Native `id`, `form`, `required`, constraints, aria/data attributes and keyboard 
 
 Once / Capture / Passive native listener modifiers stay on the input rather than firing from interactive slot children. Native preventDefault can veto Enter / Space activation and RadioGroup arrow navigation; canceled Space leaves no delayed release action. Checked, disabled, input type and group Tab navigation remain component-managed.
 
-input-attrs remains a native alias and takes precedence over overlapping top-level native attrs, while managed state remains authoritative. Radio uses the native `checked` state and ignores a supplied `aria-checked`; tabindex stays component-managed, and groups keep their single Tab entry.
+input-attrs preserves native attribute aliases. An alias overrides a matching top-level native attribute, but cannot override component-managed state. Radio's checked state is managed through native `checked`; supplied `aria-checked` does not override it. The component still manages tabindex, retaining one Tab entry per RadioGroup.
 
 ## API
 
@@ -35374,7 +35677,8 @@ Exported types：`RadioOption`、`ChoiceFieldNames`。
 | Radio / RadioGroup | name | Native field name; child overrides group | string | undefined |
 | Radio | aria-label | Native control accessible name | string | undefined |
 | Radio | input-attrs | Native input attributes | InputHTMLAttributes | undefined |
-| Radio | checked-color / unchecked-color | Instance checked/unchecked colors; error/disabled take precedence | string | undefined |
+| Radio | checked-color | Instance checked color; error / disabled state takes precedence | string | undefined |
+| Radio | unchecked-color | Instance unchecked color; error / disabled state takes precedence | string | undefined |
 | Radio | icon-size | Icon dimension; numbers are px, strings are CSS lengths | number \| string | undefined |
 | Radio | ripple | Touch ripple feedback | boolean | true |
 
@@ -35411,7 +35715,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-radio-action-padding` | `calc((var(--c-internal-radio-mask-height) / 2) - (var(--c-radio-control-size) / 2))` | `padding` |
 | `--c-radio-animation-duration` | `var(--c-transition-duration-3)` | `transition` |
 | `--c-radio-control-color` | `var(--c-sys-color-content-secondary)` | `color` |
-| `--c-radio-control-color-checked` | `var(--c-sys-color-content-brand)` | `color`, `outline` |
+| `--c-radio-control-color-checked` | `var(--c-sys-color-action-primary)` | `color`, `outline` |
 | `--c-radio-control-color-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
 | `--c-radio-control-color-error` | `var(--c-sys-color-content-danger)` | `box-shadow`, `color` |
 | `--c-radio-control-size` | `14px` | `font-size`, `height`, `padding`, `width` |
@@ -35708,6 +36012,8 @@ Cedar uses edit-mode="click" / "dblclick" to open an editor popup near the field
 
 `read-pretty` is an independent boolean alongside `readonly` and `disabled`. It inherits from field to FormItem to Form; explicit `false` overrides the parent. The default is `false`. Reading mode renders no editor.
 
+Inside FormItem, when `label-attrs.for` matches Rate's `id`, the rating control uses the form label as its accessible name; explicit `aria-label` or `aria-labelledby` takes precedence. Clicking the default native label focuses an enabled rating control; preventing the label click default cancels that focus.
+
 ## API
 
 ### Empty values and reading placeholders
@@ -35805,7 +36111,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-rate-disabled-color` | `var(--c-sys-color-content-disabled)` | `color` |
 | `--c-rate-empty-color` | `var(--c-color-fill-3)` | `color` |
 | `--c-rate-error-color` | `var(--c-sys-color-content-danger)` | `color` |
-| `--c-rate-focus-color` | `var(--c-sys-color-content-brand)` | `outline` |
+| `--c-rate-focus-color` | `var(--c-sys-color-action-primary)` | `outline` |
 | `--c-rate-focus-offset` | `2px` | `outline-offset` |
 | `--c-rate-focus-width` | `2px` | `outline` |
 | `--c-rate-gap` | `var(--c-spacing-4)` | `margin-inline-end` |
@@ -42191,7 +42497,8 @@ All variables are defined in `style/token.less` and support light/dark theme ove
 | drag-to-create | Drag-select empty slots in day/week/resource-day views | boolean | false |
 | month-event-limit | Maximum directly displayed events per month-view day; extra events use Popover | number | 3 |
 | overlap-event-limit | Maximum directly displayed events per overlapping time-grid group; extra events use Popover | number | — |
-| zoom / default-zoom | Timeline zoom, 0.5–4 | number | 1 |
+| zoom | Controlled timeline zoom, 0.5–4; supports v-model:zoom | number | `undefined` |
+| default-zoom | Initial uncontrolled timeline zoom, 0.5–4 | number | `1` |
 | show-date-header | Tiered timeline date headers | boolean | true |
 | show-assignment-details | Edit resource occupancy and roles | boolean | false |
 | show-resource-load | Resource peak load, capacity and utilization within the range | boolean | false |
@@ -42207,18 +42514,21 @@ All variables are defined in `style/token.less` and support light/dark theme ove
 | editable | Enable the built-in editor; false delegates through editor-request | boolean | true |
 | before-change | Return false to cancel; supports asynchronous interception and save APIs | SchedulerBeforeChange / SchedulerBeforeChange[] | — |
 | selectable | Enable multi-selection | boolean | false |
-| selected-keys / default-selected-keys | Controlled event IDs / initial uncontrolled selection | string[] | — / [] |
+| selected-keys | Controlled selected event IDs; supports v-model:selected-keys; shared events count once | string[] | `undefined` |
+| default-selected-keys | Initial uncontrolled selected event IDs; shared events count once | string[] | `[]` |
 | history | Enable undo and redo for accepted changes | boolean | false |
 | history-limit | Positive history capacity; invalid values fall back to 20 | number | 20 |
 | before-transaction | Transaction guard; replaces before-change when provided | SchedulerBeforeTransaction / SchedulerBeforeTransaction[] | — |
 | working-hours | Weekly working hours; omitted means unrestricted, empty forbids timed events | SchedulerWorkingHours[] | — |
 | date-working-hours | Date-specific working-hour overrides | SchedulerDateWorkingHours[] | [] |
 | disabled-ranges | Unavailable intervals, optionally scoped to resources | SchedulerDisabledRange[] | [] |
-| scale / default-scale | Controlled / uncontrolled resource timeline scale | 'hour' / 'day' | — / day |
+| scale | Controlled resource timeline scale; supports v-model:scale | `'hour' \| 'day'` | `undefined` |
+| default-scale | Initial uncontrolled resource timeline scale | `'hour' \| 'day'` | `'day'` |
 | virtual-list-props | Enables virtual resource timeline scrolling when provided | SchedulerVirtualListProps | — |
 | resource-group-dimensions | Cross-group in dimension order, with at least two distinct dimensions | string[] | [] |
 | resource-group-by | Map a resource to a stable group key | (resource: SchedulerResource) => string | — |
-| expanded-keys / default-expanded-keys | Controlled / uncontrolled expanded group keys; omitted defaults to all expanded | string[] | — / — |
+| expanded-keys | Controlled expanded group keys; supports v-model:expanded-keys; all groups expand when omitted | string[] | `undefined` |
+| default-expanded-keys | Initial uncontrolled expanded group keys; all groups expand when omitted | string[] | `undefined` |
 
 mode is `day | week | month | agenda | resource-day | resource-timeline`. Agenda/resource-timeline navigate by week. Events outside time-grid hours remain visible in month/agenda/timeline.
 
@@ -42430,7 +42740,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-scheduler-event-min-height` | `20px` | `min-height`, `min-width` |
 | `--c-scheduler-event-padding` | `4px` | `padding` |
 | `--c-scheduler-event-radius` | `4px` | `border-radius` |
-| `--c-scheduler-focus-color` | `var(--c-sys-color-content-brand)` | `outline` |
+| `--c-scheduler-focus-color` | `var(--c-sys-color-action-primary)` | `outline` |
 | `--c-scheduler-focus-width` | `2px` | `outline`, `outline-offset` |
 | `--c-scheduler-font-size` | `14px` | `font-size` |
 | `--c-scheduler-gap` | `12px` | `gap`, `margin-bottom`, `padding` |
@@ -43546,7 +43856,7 @@ const onChange = (next) => {
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| model-value / v-model | Current value | `string \| number` | — |
+| model-value | Current value Supports `v-model`. | `string \| number` | `—` |
 | default-value | Uncontrolled default value | `string \| number` | — |
 | options | Options; accepts readonly arrays | `ReadonlyArray<string \| number \| SegmentedOption>` | `[]` |
 | size | Size; inherits form and global configuration when omitted, falling back to md | `xs \| sm \| md \| lg \| xl` | `undefined` |
@@ -44127,6 +44437,29 @@ export default defineComponent({
   },
 })
 </script>
+```
+
+### Single-selection confirmation
+
+Applies only to overlay editing. Single selection commits and closes on choice by default; true keeps a draft until confirmation. Multiple selection defaults to confirmation. Submission still runs form validation and before-commit; rejection keeps the editor open.
+
+Example source: src/select/__demos__/en-US/confirmation.vue
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+const immediate = ref('a')
+const confirmed = ref('a')
+const options = [{ value: 'a', label: 'Alpha' }, { value: 'b', label: 'Beta' }]
+</script>
+<template>
+  <c-space direction="column">
+    <p>Choose and apply: {{ immediate }}</p>
+    <c-select v-model="immediate" :options="options" edit-mode="click" />
+    <p>Confirm before applying: {{ confirmed }}</p>
+    <c-select v-model="confirmed" :options="options" edit-mode="click" need-confirm />
+  </c-space>
+</template>
 ```
 
 ### Same Label
@@ -44943,7 +45276,7 @@ function reset() {
         <c-select
           :key="`panel-${generation}`"
           v-model="form.panelCity"
-          edit-mode="click"
+          edit-mode="click" need-confirm
           :options="options"
           :default-active-first-option="autoFirst"
           :placeholder="
@@ -45520,7 +45853,7 @@ const value = ref("a");
 
 These props belong to field presentation; pure panels do not gain reading mode. Form and FormItem provide inherited settings. The existing empty-value type and clear fallback remain component-specific.
 
-Selected rows show a primary-colored right-side checkmark in both single/multiple modes; candidate highlighting alone does not. In click/dblclick editors, checkmarks reflect draft selection, committed to Form only on confirmation. Disabled selected items retain disabled appearance.
+Selected rows show a primary-colored right-side checkmark in both single/multiple modes; candidate highlighting alone does not. In confirmation editors, checkmarks reflect draft selection, committed to Form on confirmation. Disabled selected items retain disabled appearance.
 
 ### Clear values
 
@@ -45536,17 +45869,26 @@ Use `v-model`, `v-model:open` and `v-model:input-value` for controlled state. Cl
 
 | Prop | Description | Type | Default |
 | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- | ---------------------------- |
+| need-confirm | Applies only to overlay editing. Single selection commits and closes on choice by default; true keeps a draft until confirmation. Multiple selection defaults to confirmation. Submission still runs form validation and before-commit; rejection keeps the editor open. | `boolean` | Single `false`; multiple `true` |
 | `open-trigger-target` | Pointer opening target: the whole field or only the suffix icon. Explicit keyboard opening and controlled open remain available. | `'field' \| 'icon'` | `'field'` |
-| `model-value / default-value` | Controlled value / uncontrolled initial value | `Value` | `Single: ''; multiple: []` |
-| `open / default-open` | Controlled / initial open state | `boolean` | `undefined / false` |
-| `input-value / default-input-value` | Search text, independent of selected values | `string` | `undefined / ''` |
+| `model-value` | Controlled selected value; supports v-model | `Value \| null` | `undefined` |
+| `default-value` | Initial uncontrolled selection; read once | `Value` | Single: `''`; multiple: `[]` |
+| `open` | Controlled open state; supports v-model:open | `boolean` | `undefined` |
+| `default-open` | Initial uncontrolled open state; read only at initialization | `boolean` | `false` |
+| `input-value` | Controlled search text, independent of selection; supports v-model:input-value | `string` | `undefined` |
+| `default-input-value` | Initial uncontrolled search text, independent of selection; read only at initialization | `string` | `''` |
 | `multiple` | Multiple selection; enables search by default | `boolean` | `false` |
 | `size` | Supports all five sizes; inherits group/form settings | `ComponentSize`<br>`'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `md` |
 | `variant` | filled, outline, standard; inherits InputGroup | `FormControlVariant`<br>`'standard' \| 'filled' \| 'outline'` | `filled` |
-| `disabled / readonly / error` | Inherits form state unless explicitly overridden | `boolean` | `undefined` |
+| `disabled` | Disabled state; explicit values override inherited Form / Group state | `boolean` | `undefined` |
+| `readonly` | Read-only state; explicit values override inherited Form / Group state | `boolean` | `undefined` |
+| `error` | Error state; explicit values override inherited Form / Group state | `boolean` | `undefined` |
 | `placeholder` | Placeholder | `string` | `—` |
-| `hint / line` | Floating hint / standard variant underline | `boolean` | `true` |
-| `text-color / focus-color / blur-color` | Field colors | `string` | `—` |
+| `hint` | Enable the floating hint | `boolean` | `true` |
+| `line` | Show the underline in the standard variant | `boolean` | `true` |
+| `text-color` | Custom per-instance text color; prefer tokens for static themes | `string` | `—` |
+| `focus-color` | Custom per-instance focused color; prefer tokens for static themes | `string` | `—` |
+| `blur-color` | Custom per-instance unfocused color; prefer tokens for static themes | `string` | `—` |
 | `loading` | Loading pauses selection, clearing, tag removal and confirmation; retains values while search and closing remain available. | `boolean` | `false` |
 | `loading-mode` | Loading layout: default indicator or bottom line | `default / line` | `default` |
 | `show-tags` | Show tags; false displays separated text | `boolean` | `true` |
@@ -45574,7 +45916,8 @@ Use `v-model`, `v-model:open` and `v-model:input-value` for controlled state. Cl
 | `default-active-first-option` | On opening, activate the first enabled candidate if no valid selected option exists. Highlighting does not update modelValue or emit change; an existing valid selection takes priority | `boolean` | `true` |
 | `unmount-on-close` | Unmount Menu content when closed | `boolean` | `false` |
 | `scrollbar` | Whether to enable virtual scroll bar | `boolean or ScrollbarProps` | `true` |
-| `show-header-on-empty / show-footer-on-empty` | Display header/footer in empty state | `boolean` | `false` |
+| `show-header-on-empty` | Show the header in the empty state | `boolean` | `false` |
+| `show-footer-on-empty` | Show the footer in the empty state | `boolean` | `false` |
 | `edit-mode` | Field presentation; inherits FormItem/Form when omitted | `direct / click / dblclick` | `direct` |
 | `before-commit` | Before confirmation, calls ({ value, previousValue }, done, { signal }); complete with a boolean, Promise or done; synchronous undefined waits for done. | `BeforeFieldCommit` | — |
 
@@ -45696,7 +46039,7 @@ filterable enables entering a search query. filterOption controls only local mat
 <c-select v-model="value" :options="loadOptions" filterable />
 ```
 
-`empty-value` accepts explicit `null` (or `() => null`). Clearing publishes `null` unchanged; omitted values preserve the existing default. Editors render `null` as blank without converting ordinary empty-string input to `null`. In popup editing, clearing changes the draft; confirm commits it and cancel preserves the original model.
+`empty-value` accepts explicit `null` (or `() => null`). Clearing publishes `null` unchanged; omission preserves the existing default. The UI displays null as blank without converting ordinary empty-string input to null. In confirmation mode, clearing changes the draft and confirm commits it; without confirmation, clearing commits directly.
 
 Cancellable hooks use `(payload, done, context)`: closure payloads contain `{ action }`, change/commit payloads contain `{ value, previousValue }`, and Popup uses `{ reason }`. Context provides `signal` and an optional original `event`. Return a boolean/Promise, or call done()/done(false). Synchronous void waits for done; Promise&lt;void&gt; allows the operation. First completion wins. Pending state controls loading/disabled automatically. Cancellation invalidates stale results. Button refs are not exposed.
 
@@ -45727,9 +46070,9 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | Variable | Default / condition | Affected styles |
 | --- | --- | --- |
 | `--c-select-popup-bg` | `var(--c-sys-color-surface-overlay)` | `background-color` |
-| `--c-select-popup-border-color` | `var(--c-sys-color-border-default)` | `border`, `border-bottom`, `border-top` |
-| `--c-select-popup-border-radius` | `var(--c-sys-radius-md)` | `border-radius` |
-| `--c-select-popup-box-shadow` | `0 4px 10px rgba(0, 0, 0, 0.1)` | `box-shadow` |
+| `--c-select-popup-border-color` | `var(--c-sys-color-border-subtle)` | `border`, `border-bottom`, `border-top` |
+| `--c-select-popup-border-radius` | `var(--c-sys-radius-lg)` | `border-radius` |
+| `--c-select-popup-box-shadow` | `0 8px 24px rgba(0, 0, 0, 0.08)` | `box-shadow` |
 | `--c-select-popup-font-size` | `var(--c-sys-font-size-md)` | `font-size` |
 | `--c-select-popup-group-title-font-size` | `var(--c-sys-font-size-xs)` | `font-size` |
 | `--c-select-popup-group-title-height` | `20px` | `line-height` |
@@ -45738,22 +46081,25 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-select-popup-group-title-text-color` | `var(--c-sys-color-content-secondary)` | `color` |
 | `--c-select-popup-loading-min-height` | `50px` | `min-height` |
 | `--c-select-popup-max-height` | `200px` | `max-height` |
-| `--c-select-popup-option-bg` | `var(--c-sys-color-surface-overlay)` | `background-color` |
-| `--c-select-popup-option-bg-disabled` | `var(--c-sys-color-surface-overlay)` | `background-color` |
-| `--c-select-popup-option-bg-hover` | `var(--c-sys-color-state-hover)` | `background-color` |
-| `--c-select-popup-option-bg-selected` | `var(--c-sys-color-surface-overlay)` | `background-color` |
-| `--c-select-popup-option-check-color` | `var(--c-sys-color-content-primary)` | `color` |
+| `--c-select-popup-option-bg` | `transparent` | `background-color` |
+| `--c-select-popup-option-bg-disabled` | `transparent` | `background-color` |
+| `--c-select-popup-option-bg-hover` | `var(--c-sys-color-state-hover)` | `background`, `background-color` |
+| `--c-select-popup-option-bg-selected` | `transparent` | `background`, `background-color` |
+| `--c-select-popup-option-bg-selected-hover` | `var(--c-select-popup-option-bg-hover)` | `background`, `background-color` |
+| `--c-select-popup-option-border-radius` | `var(--c-sys-radius-lg)` | `border-radius` |
+| `--c-select-popup-option-check-color` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-select-popup-option-check-gap` | `var(--c-sys-space-4)` | `margin-inline-start` |
 | `--c-select-popup-option-check-size` | `var(--c-sys-font-size-md)` | `height`, `width` |
 | `--c-select-popup-option-font-weight-selected` | `var(--c-sys-font-weight-medium)` | `font-weight` |
-| `--c-select-popup-option-height` | `36px` | `line-height` |
+| `--c-select-popup-option-height` | `36px` | `line-height`, `min-height` |
 | `--c-select-popup-option-icon-margin-right` | `var(--c-sys-space-4)` | `margin-inline-end` |
-| `--c-select-popup-option-padding-horizontal` | `var(--c-sys-space-5)` | `padding`, `padding-inline` |
+| `--c-select-popup-option-padding-horizontal` | `var(--c-sys-space-4)` | `padding`, `padding-inline` |
 | `--c-select-popup-option-suffix-icon-margin-left` | `var(--c-sys-space-5)` | `margin-inline-start` |
 | `--c-select-popup-option-text-color` | `var(--c-sys-color-content-primary)` | `color` |
 | `--c-select-popup-option-text-color-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
 | `--c-select-popup-option-text-color-hover` | `var(--c-sys-color-content-primary)` | `color` |
-| `--c-select-popup-option-text-color-selected` | `var(--c-sys-color-content-primary)` | `color` |
+| `--c-select-popup-option-text-color-selected` | `var(--c-sys-color-action-primary)` | `color`, `outline`, `outline-color` |
+| `--c-select-popup-padding-horizontal` | `var(--c-sys-space-3)` | `padding-inline`, `padding-inline-end`, `padding-inline-start` |
 | `--c-select-popup-padding-vertical` | `var(--c-sys-space-2)` | `padding`, `padding-block` |
 
 </div>
@@ -45762,7 +46108,7 @@ Apply overrides to the rendered component root or the actual popup ancestor. For
 
 ```css
 .component-theme {
-  --c-select-popup-border-color: var(--c-sys-color-border-default);
+  --c-select-popup-border-color: var(--c-sys-color-border-subtle);
 }
 ```
 
@@ -46403,7 +46749,7 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 | error | boolean | undefined | Error appearance, inherited from the form when omitted. |
 | marks | Record<number, string> | undefined | Text marks at positions within the range. |
 | show-ticks | boolean | false | Display step ticks, capped at 1000. |
-| show-input | boolean | false | Show attached InputNumber controls, two in range mode. |
+| show-input | boolean | false | Show attached InputNumber controls, two in range mode. The slider aria-describedby is also applied to the numeric inputs and combined with form error descriptions. |
 | show-tooltip | boolean / 'always' | true | True shows on hover, focus or drag; false hides; always remains visible. |
 | format-tooltip | SliderTooltipFormatter | undefined | Format tooltips and aria-valuetext without changing the model. |
 | aria-label | string / [string, string] | undefined | Single-thumb name or names for the two range thumbs. |
@@ -46424,6 +46770,8 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 | empty-value | SliderProps['emptyValue'] | undefined | Published clear override, including explicit null. |
 | empty-values | readonly unknown[] | undefined | Empty-value recognition inherited through field, FormItem and Form. |
 | empty-text | string | undefined | Default empty reading text; defaults to a dash after inheritance. |
+
+In range mode, `aria-labelledby` names the range group; an `aria-label` array still names the two thumbs. An explicit `role` takes precedence.
 
 ### Behavior and keyboard
 
@@ -46458,7 +46806,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 
 | Variable | Default / condition | Affected styles |
 | --- | --- | --- |
-| `--c-slider-active-color` | `var(--c-sys-color-content-brand)` | `background`, `outline` |
+| `--c-slider-active-color` | `var(--c-sys-color-action-primary)` | `background`, `outline` |
 | `--c-slider-control-height` | `var(--c-sys-control-height-md)` | `height`, `min-height`, `padding-bottom`, `padding-inline-end`, `width` |
 | `--c-slider-disabled-color` | `var(--c-sys-color-content-disabled)` | `background`, `border-color` |
 | `--c-slider-error-color` | `var(--c-sys-color-content-danger)` | `background`, `border-color` |
@@ -46467,7 +46815,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-slider-input-width` | `80px` | `width` |
 | `--c-slider-radius` | `var(--c-sys-radius-md)` | `border-radius` |
 | `--c-slider-text-color` | `var(--c-sys-color-content-secondary)` | `color` |
-| `--c-slider-thumb-border-color` | `var(--c-sys-color-content-brand)` | `border` |
+| `--c-slider-thumb-border-color` | `var(--c-sys-color-action-primary)` | `border` |
 | `--c-slider-thumb-color` | `var(--c-sys-color-surface-default)` | `background` |
 | `--c-slider-thumb-size` | `16px` | `height`, `width` |
 | `--c-slider-tooltip-background` | `var(--c-sys-color-surface-tooltip)` | `background` |
@@ -46482,7 +46830,7 @@ Apply overrides to the rendered component root or the actual popup ancestor. For
 
 ```css
 .component-theme {
-  --c-slider-active-color: var(--c-sys-color-content-brand);
+  --c-slider-active-color: var(--c-sys-color-action-primary);
 }
 ```
 
@@ -48638,7 +48986,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | --- | --- | --- |
 | `--c-steps-arrow-item-bg-error` | `var(--c-sys-color-content-danger)` | `background-color`, `border-inline-start` |
 | `--c-steps-arrow-item-bg-finish` | `var(--c-sys-color-state-selected)` | `background-color`, `border-inline-start` |
-| `--c-steps-arrow-item-bg-process` | `var(--c-sys-color-content-brand)` | `background-color`, `border-inline-start` |
+| `--c-steps-arrow-item-bg-process` | `var(--c-sys-color-action-primary)` | `background-color`, `border-inline-start` |
 | `--c-steps-arrow-item-bg-wait` | `var(--c-sys-color-surface-muted)` | `background-color`, `border-inline-start` |
 | `--c-steps-arrow-item-description-color-error` | `var(--c-sys-color-surface-default)` | `color` |
 | `--c-steps-arrow-item-description-color-finish` | `var(--c-sys-color-content-secondary)` | `color` |
@@ -48657,7 +49005,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-steps-circle-horizontal-item-description-margin-top` | `var(--c-spacing-1)` | `margin-top` |
 | `--c-steps-circle-item-bg-error` | `var(--c-sys-color-content-danger)` | `background-color` |
 | `--c-steps-circle-item-bg-finish` | `var(--c-sys-color-state-selected)` | `background-color` |
-| `--c-steps-circle-item-bg-process` | `var(--c-sys-color-content-brand)` | `background-color` |
+| `--c-steps-circle-item-bg-process` | `var(--c-sys-color-action-primary)` | `background-color` |
 | `--c-steps-circle-item-bg-wait` | `var(--c-sys-color-surface-muted)` | `background-color` |
 | `--c-steps-circle-item-border-color-error` | `transparent` | `border` |
 | `--c-steps-circle-item-border-color-finish` | `transparent` | `border` |
@@ -48670,11 +49018,11 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-steps-circle-item-icon-border-radius` | `var(--c-border-radius-circle)` | `border-radius` |
 | `--c-steps-circle-item-icon-gap` | `var(--c-spacing-6)` | `inset-inline-start`, `margin-inline-end`, `padding-inline-end` |
 | `--c-steps-circle-item-icon-text-color-error` | `var(--c-sys-color-surface-default)` | `color` |
-| `--c-steps-circle-item-icon-text-color-finish` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-steps-circle-item-icon-text-color-finish` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-steps-circle-item-icon-text-color-process` | `var(--c-sys-color-surface-default)` | `color` |
 | `--c-steps-circle-item-icon-text-color-wait` | `var(--c-sys-color-content-secondary)` | `color` |
 | `--c-steps-circle-item-tail-color-error` | `var(--c-sys-color-content-danger)` | `background-color` |
-| `--c-steps-circle-item-tail-color-process` | `var(--c-sys-color-content-brand)` | `background-color` |
+| `--c-steps-circle-item-tail-color-process` | `var(--c-sys-color-action-primary)` | `background-color` |
 | `--c-steps-circle-item-tail-color-wait` | `var(--c-sys-color-border-default)` | `background-color` |
 | `--c-steps-circle-item-tail-size` | `var(--c-border-width-1)` | `height`, `inset-inline-start`, `top`, `width` |
 | `--c-steps-circle-item-title-color-error` | `var(--c-sys-color-content-primary)` | `color` |
@@ -48689,12 +49037,12 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-steps-dot-horizontal-item-description-margin-top` | `var(--c-spacing-2)` | `margin-top` |
 | `--c-steps-dot-horizontal-item-title-margin-top` | `var(--c-spacing-2)` | `margin-top` |
 | `--c-steps-dot-item-bg-error` | `var(--c-sys-color-content-danger)` | `background-color` |
-| `--c-steps-dot-item-bg-finish` | `var(--c-sys-color-content-brand)` | `background-color` |
-| `--c-steps-dot-item-bg-process` | `var(--c-sys-color-content-brand)` | `background-color` |
+| `--c-steps-dot-item-bg-finish` | `var(--c-sys-color-action-primary)` | `background-color` |
+| `--c-steps-dot-item-bg-process` | `var(--c-sys-color-action-primary)` | `background-color` |
 | `--c-steps-dot-item-bg-wait` | `var(--c-sys-color-content-secondary)` | `background-color` |
 | `--c-steps-dot-item-border-color-error` | `var(--c-sys-color-content-danger)` | `border-color` |
-| `--c-steps-dot-item-border-color-finish` | `var(--c-sys-color-content-brand)` | `border-color` |
-| `--c-steps-dot-item-border-color-process` | `var(--c-sys-color-content-brand)` | `border-color` |
+| `--c-steps-dot-item-border-color-finish` | `var(--c-sys-color-action-primary)` | `border-color` |
+| `--c-steps-dot-item-border-color-process` | `var(--c-sys-color-action-primary)` | `border-color` |
 | `--c-steps-dot-item-border-color-wait` | `var(--c-sys-color-content-secondary)` | `border-color` |
 | `--c-steps-dot-item-description-color-error` | `var(--c-sys-color-content-secondary)` | `color` |
 | `--c-steps-dot-item-description-color-finish` | `var(--c-sys-color-content-secondary)` | `color` |
@@ -48706,7 +49054,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-steps-dot-item-icon-size` | `var(--c-size-2)` | `height`, `inset-inline-start`, `margin-inline-end`, `margin-inline-start`, `margin-top`, `padding-top`, `top`, `width` |
 | `--c-steps-dot-item-icon-size-active` | `var(--c-spacing-5)` | `height`, `margin-inline-start`, `margin-top`, `width` |
 | `--c-steps-dot-item-tail-color-error` | `var(--c-sys-color-content-danger)` | `background-color` |
-| `--c-steps-dot-item-tail-color-process` | `var(--c-sys-color-content-brand)` | `background-color` |
+| `--c-steps-dot-item-tail-color-process` | `var(--c-sys-color-action-primary)` | `background-color` |
 | `--c-steps-dot-item-tail-color-wait` | `var(--c-sys-color-border-default)` | `background-color` |
 | `--c-steps-dot-item-tail-size` | `var(--c-border-width-1)` | `height`, `top` |
 | `--c-steps-dot-item-title-color-error` | `var(--c-sys-color-content-primary)` | `color` |
@@ -48729,7 +49077,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-steps-navigation-arrow-top` | `var(--c-spacing-5)` | `top` |
 | `--c-steps-navigation-content-margin-bottom` | `var(--c-spacing-8)` | `margin-bottom` |
 | `--c-steps-navigation-description-padding-right` | `var(--c-spacing-8)` | `padding-inline-end` |
-| `--c-steps-navigation-ink-bg` | `var(--c-sys-color-content-brand)` | `background-color` |
+| `--c-steps-navigation-ink-bg` | `var(--c-sys-color-action-primary)` | `background-color` |
 | `--c-steps-navigation-ink-height` | `var(--c-border-width-2)` | `height` |
 | `--c-steps-navigation-ink-spacing-left` | `var(--c-spacing-none)` | `inset-inline-start` |
 | `--c-steps-navigation-ink-spacing-right` | `30px` | `inset-inline-end` |
@@ -51305,7 +51653,7 @@ Use ordinary `v-model`. `modelValue` is the actual switch value and matches chec
 | ripple | Click ripple | boolean | true |
 | handle-elevation | Thumb elevation: true means level 2; numbers are integer-clamped to 0–24 | boolean / number | true |
 
-before-change uses (payload, done, context). Return true, call done(), or fulfill a Promise with a non-false result to allow switching. Return false, call done(false), throw, fulfill with false or reject to cancel. Synchronous void waits for done; fulfilled `Promise<void>` allows. Waiting automatically shows loading and blocks duplicate input. Exceptions cancel permission without adding an error event.
+before-change uses (payload, done, context). Return true, call done(), or fulfill a Promise with a non-false result to allow switching. Return false, call done(false), throw, fulfill with false or reject to cancel. Synchronous void waits for done; fulfilled `Promise<void>` allows. Waiting automatically shows loading and blocks duplicate input. In deferred editing, confirmation is disabled while waiting; closing the editor still cancels the operation. Exceptions cancel permission without adding an error event.
 Pending results become stale after unmount, KeepAlive deactivation, external value updates or changes to disabled/readonly/loading.
 Controlled mode only requests updates. Selection changes after the parent updates model-value. Without model-value, internal state is used.
 
@@ -51409,7 +51757,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-switch-tonal-text-color` | `var(--c-sys-color-content-secondary)` | `color` |
 | `--c-switch-tonal-track-background` | `var(--c-sys-color-surface-muted)` | `background` |
 | `--c-switch-tonal-width` | `52px` | `min-width` |
-| `--c-switch-track-active-background` | `var(--c-sys-color-content-brand)` | `background`, `outline` |
+| `--c-switch-track-active-background` | `var(--c-sys-color-action-primary)` | `background`, `outline` |
 | `--c-switch-track-background` | `var(--c-sys-color-content-secondary)` | `background` |
 | `--c-switch-track-error-background` | `var(--c-sys-color-content-danger)` | `background`, `border-color` |
 | `--c-switch-width` | `40px` | `min-width` |
@@ -52503,7 +52851,7 @@ The active sorted column exposes ascending or descending order through `aria-sor
 
 Default row selection controls use the row key in their accessible names, and the select-all control uses a localized name. An explicit selection column title takes precedence.
 
-When a height constraint, sticky header, or virtual list splits the table into multiple native tables, the data and summary tables include semantic headers in the same table, associated with cells through `headers`. The data table’s semantic header reflects the current sort; the summary table uses separate summary data and does not claim that its rows are sorted. An explicit `headers` on the `td` slot takes precedence; the caller is responsible for referencing valid headers in the same table. Screen-reader and complex custom-header acceptance is still pending; verify the target environment and provide accessible alternatives where needed.
+When a height constraint, sticky header, or virtual list splits the table into multiple native tables, the data and summary tables include semantic headers in the same table, associated with cells through `headers`. The data table’s semantic header reflects the current sort; the summary table uses separate summary data and does not claim that its rows are sorted. An explicit `headers` on the `td` slot takes precedence; the caller is responsible for referencing valid headers in the same table. Adding, removing, or replacing structural `thead`, `tbody`, `tr`, `th`, and `td` slots updates the table; associated semantic headers also follow `th` changes. Content slots such as empty state, footer, summary cells, and named columns also support dynamic insertion, removal, and replacement. Screen-reader and complex custom-header acceptance is still pending; verify the target environment and provide accessible alternatives where needed.
 
 ## Basic examples
 
@@ -53816,7 +54164,7 @@ The pagination slot receives { page, pageSize, total, onChange, onPageSizeChange
 
 ### Mount pagination externally
 
-`pagination.container` accepts a CSS selector or HTMLElement. Omitting it keeps the footer inside Table. Only placement changes: page state, slicing, events and the sticky horizontal rail remain managed by Table. No slot or separate pager state is required. Keep the host in the same scroll context and use display: contents when needed. The target must exist; Vue 3.5 defer supports targets created in the same render batch. SSR hosts must handle Teleport output. pagination=false still disables Table pagination and slicing entirely.
+`pagination.container` accepts a CSS selector or HTMLElement. Omitting it keeps the footer inside Table. Only placement changes: page state, slicing, events and the sticky horizontal rail remain managed by Table. No slot or separate pager state is required. Keep the host in the same scroll context and use display: contents when needed. The target must exist; Vue 3.5 defer supports targets created in the same render batch. SSR hosts must handle Teleport output. Give asynchronously loaded tables separate pagination targets and inject each target’s Teleport content into its corresponding host. A shared target can misassociate content or events when the server and client hydrate async branches in different orders. pagination=false still disables Table pagination and slicing entirely.
 
 ```vue
 <c-table
@@ -56080,7 +56428,7 @@ The state argument of `select`, `selectAll`, `expand`, and `expandAll` defaults 
 
 Title and cell named slots, column `title`, `cell`, `filter-icon` and `filter-content`, `empty`, `footer`, `expand-row`, `expand-icon`, pagination slots, `summary-cell`, `drag-handle-icon`, extra-column header/cell slots, and `header-cell-actions` support `v-for` with `v-memo` in their content.
 
-Currently, combining `v-for` and `v-memo` inside the `thead`, `tbody`, `tr`, `th`, or `td` structure slots causes server rendering to fail. This also fails when the loop is empty. Remove `v-memo` from these slots when server rendering is required.
+Server rendering currently fails when `v-for` and `v-memo` are combined inside custom `thead`, `tbody`, `tr`, `th` or `td` structural slots, even when the loop array is empty. The same issue is reproducible in ordinary component slots with Vue 3.5.12 and 3.5.39. Temporarily remove `v-memo` from these slots when SSR is required.
 
 `TableColumn` entries declared in `#columns`, including grouped and dynamic columns, render their headers and data cells on the server. Columns can also be defined with the `columns` prop.
 
@@ -56386,12 +56734,12 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-table-header-cell-action-margin-left` | `2px` | `margin-inline-start` |
 | `--c-table-header-cell-bg` | `var(--c-color-neutral-2)` | `background-color` |
 | `--c-table-header-cell-text-color` | `rgb(var(--c-gray-10))` | `color` |
-| `--c-table-header-filters-icon-active-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-table-header-filters-icon-active-color` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-table-header-filters-icon-color` | `var(--c-color-text-2)` | `color` |
 | `--c-table-header-filters-icon-hover-bg` | `var(--c-color-neutral-4)` | `background-color` |
 | `--c-table-header-sorted-cell-bg` | `var(--c-color-neutral-3)` | `background-color` |
 | `--c-table-header-sorted-cell-hover-bg` | `rgba(var(--c-gray-4), 0.5)` | `background-color` |
-| `--c-table-header-sorter-icon-active-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-table-header-sorter-icon-active-color` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-table-header-sorter-icon-color` | `var(--c-color-neutral-5)` | `color` |
 | `--c-table-header-sorter-icon-down-top` | `-3px` | `top` |
 | `--c-table-header-sorter-icon-font-size` | `12px` | `font-size` |
@@ -57236,7 +57584,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-tabs-size-xs-tab-padding` | `var(--c-sys-space-2) var(--c-sys-space-4)` | `padding` |
 | `--c-tabs-tab-gap` | `var(--c-sys-space-2)` | `gap` |
 | `--c-tabs-title-text-color` | `var(--c-sys-color-content-secondary)` | `color` |
-| `--c-tabs-title-text-color-active` | `var(--c-sys-color-content-brand)` | `background`, `color`, `outline` |
+| `--c-tabs-title-text-color-active` | `var(--c-sys-color-action-primary)` | `background`, `color`, `outline` |
 | `--c-tabs-title-text-color-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
 | `--c-tabs-touch-target` | `var(--c-sys-control-touch-target)` | `min-height`, `min-width` |
 
@@ -59510,7 +59858,7 @@ A `placeholder` string applies to both endpoints; arrays provide start/end text,
 
 `input-attrs` applies to the two direct input elements. For example, `:input-attrs="[{ 'aria-label': 'Departure' }, { 'aria-label': 'Return' }]"` names each endpoint. The field owns its value, disabled, readonly, placeholder, role and popup state; shared descriptions, per-input descriptions and form errors are merged for each input. Component errors take precedence; otherwise each input retains its `aria-invalid`. `RangeInputAttributes` is exported from the component and root entries and includes native attributes and `Once` event types.
 
-When FormItem `label-attrs.for` explicitly targets one endpoint, each otherwise unnamed endpoint uses the form label and a localized start or end name. Explicit accessible names on `input-attrs` or the field take precedence. Older custom locales can provide `fieldPresentation.rangeStart` and `fieldPresentation.rangeEnd`; otherwise the existing date or time endpoint text is used.
+When FormItem's `label-attrs.for` explicitly targets one input, unnamed range endpoints use the form label together with localized start/end names. Explicit accessible names supplied through `input-attrs` or the field take precedence. Older custom locales can provide `fieldPresentation.rangeStart` and `fieldPresentation.rangeEnd`; when absent, the existing date or time start/end labels are used.
 
 | Prop | Description | Type | Default behavior |
 | --- | --- | --- | --- |
@@ -61466,6 +61814,8 @@ Document: llms/en-US/components/tooltip.md
 
 # Tooltip
 
+SSR limitation: a trigger slot node using both `v-for` and `v-memo` can make server rendering fail. Remove `v-memo` from that slot node when rendering on the server; ordinary `v-for` remains supported. The same limitation can affect the `content` slot; remove `v-memo` there for server rendering.
+
 Start with the basic example, then compare related settings before moving to controlled, asynchronous or combined use cases.
 
 ## Basic examples
@@ -61805,7 +62155,7 @@ Example source: src/tooltip/__demos__/text-ellipsis.vue
 
 ### Tooltip Props
 
-Tooltip inherits Trigger positioning, container, controlled state, and `close` policies. Its defaults are `hide-empty=true` and `auto-fit-transform-origin=true`; an omitted `animation-name` uses the Tooltip animation. Empty content hides only the tooltip and does not change `open`; component nodes count as content. The instance exposes seven methods: `open`, `close`, `resize`, `allowClose`, `getReference`, `focusReference`, and `setReference`.
+Tooltip inherits Trigger positioning, container, controlled state, and `close` policies. Its defaults are `hide-empty=true` and `auto-fit-transform-origin=true`; an omitted `animation-name` uses the Tooltip animation. Empty content hides only the tooltip and does not change `open`; component nodes count as content even when they render no content, producing an empty tooltip and description relationship. Conditionally render the component node in the slot when its content may be empty. The instance exposes seven methods: `open`, `close`, `resize`, `allowClose`, `getReference`, `focusReference`, and `setReference`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -62481,7 +62831,7 @@ Example source: src/tree-select/__demos__/basic.vue
 ```vue
 <template>
   <c-space direction="column">
-    <c-tree-select v-model="value" :data="data" selectable placeholder="选择部门" />
+    <c-tree-select v-model="value" :data="data" :tree-props="{ defaultExpandAll: true }" selectable="leaf" clearable placeholder="选择部门" />
     <p role="status">当前部门：{{ value || '未选择' }}</p>
   </c-space>
 </template>
@@ -62489,10 +62839,48 @@ Example source: src/tree-select/__demos__/basic.vue
 import { ref } from 'vue'
 const value = ref<string>()
 const data = [
-  { value: 'design', label: '设计部' },
-  { value: 'engineering', label: '研发部' },
+  { value: 'product', label: '产品中心', children: [
+    { value: 'design', label: '设计部' },
+    { value: 'engineering', label: '研发部' },
+  ] },
+  { value: 'operations', label: '运营中心', children: [
+    { value: 'support', label: '客户服务部' },
+    { value: 'locked', label: '归档部门（禁用）', disabled: true },
+  ] },
 ]
 </script>
+```
+
+### Checkbox multiple selection
+
+Select a parent to check its available children. `tree-checked-strategy="child"` publishes leaf identities; disabled nodes remain unavailable.
+
+Example source: src/tree-select/__demos__/en-US/multiple.vue
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+import type { TreeNodeData } from '@cedar-design/ui-vue'
+
+const value = ref<string[]>(['design'])
+const data: TreeNodeData[] = [
+  { value: 'product', label: 'Product', children: [
+    { value: 'design', label: 'Design' },
+    { value: 'engineering', label: 'Engineering' },
+  ] },
+  { value: 'operations', label: 'Operations', children: [
+    { value: 'support', label: 'Support' },
+    { value: 'locked', label: 'Archived department (disabled)', disabled: true },
+  ] },
+]
+</script>
+<template>
+  <c-space direction="column" fill>
+    <c-tree-select v-model="value" :data="data" :tree-props="{ defaultExpandAll: true }" multiple tree-checkable tree-checked-strategy="child" clearable placeholder="Select departments" />
+    <p role="status">Selected departments: {{ value.join(', ') || 'None' }}</p>
+    <c-tree-select v-model="value" :data="data" multiple tree-checkable read-pretty />
+  </c-space>
+</template>
 ```
 
 ## Data and options
@@ -62577,7 +62965,7 @@ const cleared = ref<string[]>([])
 const retained = ref<string[]>([])
 const clearQuery = ref('')
 const retainedQuery = ref('')
-const data = [{ key: 'alice', title: 'Alice' }, { key: 'alan', title: 'Alan' }, { key: 'bob', title: 'Bob' }]
+const data = [{ value: 'alice', label: 'Alice' }, { value: 'alan', label: 'Alan' }, { value: 'bob', label: 'Bob' }]
 </script>
 <template>
   <c-space direction="column">
@@ -62676,7 +63064,7 @@ Example source: src/tree-select/__demos__/open-trigger-target.en-US.vue
       edit-mode="direct"
       :open-trigger-target="target"
       :filterable="editable"
-      :options="[
+      :data="[
         { value: 'a', label: 'Alpha' },
         { value: 'b', label: 'Beta' },
       ]"
@@ -62712,6 +63100,7 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
+| need-confirm | `boolean` | Single `false`; multiple `true` | Applies only to overlay editing. Single selection commits and closes on choice by default; true keeps a draft until confirmation. Multiple selection defaults to confirmation. Submission still runs form validation and before-commit; rejection keeps the editor open. |
 | model-value | TreeSelectValue | undefined | Controlled value: node identity, label value, homogeneous arrays or null. |
 | default-value | TreeSelectValue | undefined | Uncontrolled initial value, read only at creation. |
 | data | readonly TreeNodeData[] / `OptionsLoader<TreeNodeData>` | undefined | Root candidate array or (query, { signal }) loader. |
@@ -62816,7 +63205,7 @@ Duplicate expansion requests for the same asynchronously loaded node are merged.
 
 Nodes default to `{ value, label, children }`. `value` is a tree-wide unique string/number, including `0`; `label` is display content. Map other backend fields with `fieldNames: { value: 'id', label: 'text', children: 'items' }` without changing backend data. Declarative child `name`, Vue `:key` and Table `rowKey` retain separate meanings.
 
-Independent Tree state uses `selectedValues/defaultSelectedValues`, `checkedValues/defaultCheckedValues`, `halfCheckedValues` and `expandedValues/defaultExpandedValues`, updated through corresponding named v-models. `check` event indeterminate sets use `halfCheckedValues`. Node content uses `label`; TreeSelect forwards `tree-slot-label`. `scrollIntoView({ value })` locates business values; explicit `index` remains a zero-based virtual-list array `index`. When opening a virtual list, the active item is scrolled into view. Its active-descendant reference is removed while the node is unmounted and restored when it mounts again.
+Tree's standalone state uses `selectedValues/defaultSelectedValues`, `checkedValues/defaultCheckedValues`, `halfCheckedValues` and `expandedValues/defaultExpandedValues`, updated through the matching named v-models. The half-checked collection in the `check` event is `halfCheckedValues`. The node content slot is `label`; TreeSelect forwards it as `tree-slot-label`. `scrollIntoView({ value })` locates a node by business value, while an explicit `index` remains the virtual list's zero-based array index. Opening the virtual list scrolls to the active item; its reference is not exposed while it is unmounted and is restored after remounting.
 
 ### Search configuration
 
@@ -62856,10 +63245,10 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | --- | --- | --- |
 | `--c-tree-select-highlight-font-weight` | `var(--c-font-weight-500)` | `font-weight` |
 | `--c-tree-select-option-active-background` | `var(--c-color-fill-2)` | `background` |
-| `--c-tree-select-option-radius` | `var(--c-sys-radius-sm)` | `border-radius` |
-| `--c-tree-select-popup-padding-left` | `var(--c-spacing-5)` | `padding-inline-start` |
-| `--c-tree-select-popup-padding-right` | `var(--c-spacing-2)` | `padding-inline-end` |
-| `--c-tree-select-popup-padding-vertical` | `var(--c-spacing-2)` | `padding` |
+| `--c-tree-select-option-radius` | `var(--c-select-popup-option-border-radius)` | `border-radius` |
+| `--c-tree-select-popup-padding-left` | `var(--c-select-popup-padding-horizontal)` | `padding-inline-start` |
+| `--c-tree-select-popup-padding-right` | `var(--c-select-popup-padding-horizontal)` | `padding-inline-end` |
+| `--c-tree-select-popup-padding-vertical` | `var(--c-select-popup-padding-vertical)` | `padding` |
 
 </div>
 
@@ -64264,7 +64653,7 @@ Independent Tree state uses `selectedValues/defaultSelectedValues`, `checkedValu
 
 Tree inherits container direction; indentation, connectors and expansion arrows follow it. Keyboard focus is independent of selection. Up/Down moves through available visible nodes and Home/End reaches boundaries. In LTR, Right expands/enters children and Left collapses/returns; RTL swaps the horizontal keys. Enter selects. Space checks a checkable node, otherwise selects it.
 
-Keyboard navigation skips disabled nodes. The root identifies focus with `aria-activedescendant` and retains root focus during virtual scrolling. The reference is removed while the active node is unmounted and restored when it mounts again. Expansion, filtering and node deletion repair the active node. Before/inside/after drop positions still follow vertical position without RTL reversal. TreeSelect's combobox manages focus when embedding Tree.
+Keyboard navigation skips disabled nodes. The root identifies the focused node through `aria-activedescendant` and retains focus during virtualization. If the active node is unmounted, its reference is temporarily removed and restored after remounting. Expanding, filtering or removing nodes corrects the active node. Before/inside/after drop positions remain determined by vertical position and are not reversed in RTL. When embedded in TreeSelect, the combobox manages focus.
 
 Checkboxes visually represent node state and do not create separate Tab stops. Press Space to toggle the active node; pointer clicks also toggle it while retaining tree focus. The node `aria-checked` indicates checked, unchecked, or mixed state.
 
@@ -64325,7 +64714,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-tree-title-bg-hover` | `var(--c-color-fill-2)` | `background-color` |
 | `--c-tree-title-padding-horizontal` | `var(--c-spacing-2)` | `margin-inline-start`, `padding-inline-end`, `padding-inline-start` |
 | `--c-tree-title-text-color` | `var(--c-color-text-1)` | `color` |
-| `--c-tree-title-text-color-active` | `var(--c-sys-color-content-brand)` | `color`, `outline`, `outline-color` |
+| `--c-tree-title-text-color-active` | `var(--c-sys-color-action-primary)` | `color`, `outline`, `outline-color` |
 | `--c-tree-title-text-color-active-disabled` | `var(--c-color-primary-light-3)` | `color` |
 | `--c-tree-title-text-color-disabled` | `var(--c-color-text-4)` | `color` |
 | `--c-tree-title-text-color-dragging` | `var(--c-color-text-4)` | `color` |
@@ -64353,6 +64742,8 @@ Document: llms/en-US/components/trigger.md
 <!-- Source: src/trigger/README.en-US.md; locale: en-US; page: /en/components/trigger/ -->
 
 # Trigger
+
+SSR limitation: a trigger or `content` slot node using both `v-for` and `v-memo` can make server rendering fail. The trigger slot can fail even while the popup is closed; the `content` slot can fail when the popup is open or `unmount-on-close=false`. Remove `v-memo` from that slot node when rendering on the server; ordinary `v-for` remains supported.
 
 Start with the basic example, then compare related settings before moving to controlled, asynchronous or combined use cases.
 
@@ -64542,7 +64933,7 @@ With Teleport, variables must be in the actual popup scope, for example through 
 | popup-offset | Outward distance along placement's main axis | `number` | `0` |
 | popup-translate | Screen-axis offset, or per-placement offsets | `[number, number] \| Partial<Record<TriggerPlacement, [number, number]>>`<br>`TriggerPlacement: 'left' \| 'right' \| 'bottom' \| 'top' \| 'top-start' \| 'top-end' \| 'bottom-start' \| 'bottom-end' \| 'left-start' \| 'left-end' \| 'right-start' \| 'right-end'` | `-` |
 | align-point | Use pointer coordinates as a virtual reference | `boolean` | `false` |
-| popup-container | Mount container; `false` renders in place | `string \| HTMLElement \| false` | `body` |
+| popup-container | Mount container; `false` renders in place. When switching within a document or between accessible same-origin iframes, focus restoration is attempted for native inputs and buttons that have not been transferred, including equivalent elements in open Shadow DOM. Opaque hosts that may contain closed Shadow DOM are not restored automatically. | `string \| HTMLElement \| false` | `body` |
 | auto-fit-position | Flip and constrain to the viewport when space is insufficient | `boolean` | `true` |
 | auto-fit-popup-width | Match popup width to the reference | `boolean` | `false` |
 | auto-fit-popup-min-width | Match minimum popup width to the reference | `boolean` | `false` |
@@ -64551,7 +64942,7 @@ With Teleport, variables must be in the actual popup scope, for example through 
 | scroll-to-close | Close when scrolling exceeds the threshold | `boolean` | `false` |
 | scroll-to-close-distance | Close threshold | `number` | `0` |
 | show-arrow | Render a decorative arrow | `boolean` | `false` |
-| hide-empty | Do not render when content is empty | `boolean` | `false` |
+| hide-empty | Skip a directly empty content slot; a component node counts as nonempty even if it renders nothing | `boolean` | `false` |
 | prevent-focus | Prevent popup mousedown from taking focus | `boolean` | `false` |
 | unmount-on-close | Unmount content after the leave transition | `boolean` | `true` |
 | animation-name | Vue Transition name | `string` | `trigger-fade` |
@@ -64559,10 +64950,14 @@ With Teleport, variables must be in the actual popup scope, for example through 
 | auto-fit-transform-origin | Derive transform origin from final placement | `boolean` | `false` |
 | opened-class | Merge into the first default-slot node when open; external references do not receive this class | `ClassName` | `-` |
 | reference-attrs | Attributes applied to the actual reference or a function of open; original attributes are restored when removed, replaced or unmounted | `TriggerReferenceAttrs \| ((open: boolean) => TriggerReferenceAttrs)` | `-` |
-| popup-class / popup-style | Positioning-layer class/style | `ClassName / CSSProperties` | `-` |
-| content-class / content-style | Content-layer class/style | `ClassName / CSSProperties` | `-` |
-| arrow-class / arrow-style | Arrow class/style | `ClassName / CSSProperties` | `-` |
-| mouse-enter-delay / mouse-leave-delay | Hover open/close delay in ms | `number` | `100 / 100` |
+| popup-class | Custom positioning-layer classes | `ClassName` | `-` |
+| popup-style | Custom positioning layer styles | `CSSProperties` | `-` |
+| content-class | Custom content layer classes | `ClassName` | `-` |
+| content-style | Custom content layer styles | `CSSProperties` | `-` |
+| arrow-class | Custom arrow classes | `ClassName` | `-` |
+| arrow-style | Custom arrow styles | `CSSProperties` | `-` |
+| mouse-enter-delay | Hover-open delay in milliseconds | `number` | `100` |
+| mouse-leave-delay | Hover-close delay in milliseconds | `number` | `100` |
 | focus-delay | Focus-open delay in ms | `number` | `0` |
 | popup-hover-stay | Keep open when the pointer enters the popup | `boolean` | `true` |
 | blur-to-close | Close on blur | `boolean` | `true` |
@@ -64604,6 +64999,10 @@ Native `click`, `mouseenter`, `mouseleave`, `focusin`, `focusout`, `contextmenu`
 `aria-describedby` from `reference-attrs` is merged and deduplicated with existing reference descriptions; cleanup or reference replacement restores the original attribute.
 
 Fixed positioning uses the actual `fixed` containing block when an ancestor has a transform, filter, perspective, or containing CSS property. Axis-aligned scaling is accounted for; rotated or skewed coordinate systems are not guaranteed. For accessible same-origin iframe references, the reference and popup documents share coordinate conversion and event handling; cross-origin or unrelated browsing contexts are not supported. With `update-at-scroll`, scrolling either document or a scrollable ancestor updates the popup.
+
+When a reference is slotted into a scroll container inside a closed ShadowRoot, the outer Trigger cannot access the slot or container and cannot listen to its scrolling automatically. The closed component can call the Trigger instance's `resize()` on internal scroll or slot changes. For scroll-to-close behavior, call `close()` internally using an application-specific threshold, and remove listeners on unmount.
+
+A popup mounted inside an iframe remains clipped by that iframe's viewport. Content outside the iframe is invisible even when cross-document coordinate conversion is correct.
 
 ## CSS Variables
 
@@ -65237,6 +65636,8 @@ Document: llms/en-US/components/upload.md
 <!-- Source: src/upload/README.en-US.md; locale: en-US; page: /en/components/upload/ -->
 
 # Upload
+
+For photos, set `accept="image/*"`. Leaving `capture` unset or setting `:capture="false"` keeps the system file/photo picker available. Only set `capture` to `true`, `'user'` or `'environment'` when camera capture is intended. Available choices depend on the device and browser.
 
 Disabled downloads match Link/Button link mode: remove href while retaining the link role, `aria-disabled` and `tabindex=-1`, and cancel the default click action. `readonly` still allows downloading. Re-enabling restores the original file URL and download filename.
 
@@ -66367,34 +66768,49 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 
 ### Upload Props
 
-| Prop | Type | Default / description |
-| ------------------------------------------------------------ | -------------------------------------------------------- | ------------------------------------------------- |
-| model-value / default-value | UploadFileItem[] | Controlled value / uncontrolled initial [] |
-| accept / capture | `string / UploadCapture`<br>`UploadCapture: boolean \| 'user' \| 'environment' \| undefined` | Unspecified |
-| multiple / directory / draggable | boolean | false |
-| disabled / readonly | boolean | undefined inherits Form; explicit false overrides |
-| action / method | string | None / post |
-| headers / data | object or async(file) => object | Cancelable during request preparation |
-| name | string / (file) => string | file |
-| with-credentials | boolean | false |
-| custom-request | (UploadRequestOptions) => UploadRequest / Promise / void | Custom transport; may return abort |
-| auto-upload | boolean | true; requires action or custom-request to start |
-| max-files / max-file-size / max-total-size | number | Unspecified; sizes use bytes, max-files applies when >0 |
-| resolve-type | file / data-url / object-url | object-url; all files get url, images also get thumbnailUrl |
-| create-thumbnail-url | (options) => string / Promise | Custom URLs belong to callers and are not automatically revoked |
-| before-add | async(files) => File[] | Batch filtering/replacement |
-| before-read | async(file) => boolean / File | false/rejection rejects; replacements are revalidated |
-| before-upload | async(item) => boolean / File / Blob | false keeps ready; throw/rejection reports error; replacements are revalidated |
-| before-remove | async(item,list) => boolean | false/rejection prevents removal |
-| is-success-response | (xhr,item) => boolean | HTTP 2xx by default |
-| request-choose | (chooseFile,event) => void / Promise | Own the selection entry; exceptions do not automatically open a file chooser |
-| list-type | text / picture / picture-card | text; supported on both platforms |
-| image-fit | fill / contain / cover / none / scale-down | cover; item.fit overrides |
-| preview | boolean | true |
-| show-file-list / show-upload-button / show-remove-button | boolean | true |
-| show-retry-button / show-cancel-button / show-preview-button | boolean | true |
-| show-download-button | boolean | false; disabled prevents interaction |
-| elevation / ripple | boolean or number / boolean | false / true |
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| model-value | `UploadFileItem[] \| null` | `undefined` | Controlled file list; use with v-model |
+| default-value | `UploadFileItem[]` | `[]` | Initial uncontrolled file list |
+| accept | `string` | `undefined` | Accepted file types, e.g. image/* |
+| capture | `boolean \| 'user' \| 'environment'` | `false` | False or omitted preserves photo selection; true requests capture, user / environment requests the front / rear camera; device and browser support varies |
+| multiple | `boolean` | `false` | Allow multiple files |
+| reupload | `boolean` | `false` | Allow replacing a selected file |
+| directory | `boolean` | `false` | Select a directory; multiple provides an alternative on unsupported devices |
+| draggable | `boolean` | `false` | Enable drag and drop |
+| disabled | `boolean` | `undefined` | Disable interaction; inherits Form, explicit false overrides |
+| readonly | `boolean` | `undefined` | Read-only; inherits Form, explicit false overrides |
+| action | `string` | `undefined` | Upload request URL |
+| method | `string` | `'post'` | Upload request method |
+| headers | `UploadHeaders` | `undefined` | Request headers object or async function; preparation remains cancelable |
+| data | `UploadData` | `undefined` | Additional request data object or async function; preparation remains cancelable |
+| name | `string \| ((file: UploadFileItem) => string)` | `'file'` | Form field name for the uploaded file |
+| with-credentials | `boolean` | `false` | Include credentials in cross-origin requests |
+| custom-request | `UploadCustomRequest` | `undefined` | Custom transport; may return an object with abort |
+| auto-upload | `boolean` | `true` | Upload automatically after selection; requires action or custom-request |
+| max-files | `number` | `undefined` | Maximum file count; applies when greater than 0 |
+| max-file-size | `number` | `undefined` | Maximum size per file in bytes |
+| max-total-size | `number` | `undefined` | Maximum total file size in bytes |
+| resolve-type | `'file' \| 'data-url' \| 'object-url'` | `'object-url'` | File reading mode; object-url generates url for files and thumbnailUrl for images |
+| create-thumbnail-url | `UploadCreateThumbnailUrl` | `undefined` | Custom thumbnail URL; caller owns the URL and its cleanup |
+| before-add | `(files: File[]) => File[] \| Promise<File[]>` | `undefined` | Filter or replace a batch of incoming files |
+| before-read | `UploadBeforeRead` | `undefined` | Validate before reading; false / rejection rejects, replacements are revalidated |
+| before-upload | `UploadBeforeUpload` | `undefined` | Validate before upload; false keeps ready, throw / rejection reports error, replacements are revalidated |
+| before-remove | `UploadBeforeRemove` | `undefined` | Validate before removal; false / rejection prevents removal |
+| is-success-response | `UploadIsSuccessResponse` | `undefined` | Custom success predicate; defaults to HTTP 2xx |
+| request-choose | `UploadRequestChoose` | `undefined` | Own the selection entry; exceptions do not automatically open a file chooser |
+| list-type | `'text' \| 'picture' \| 'picture-card'` | `'text'` | File list appearance; supported on both platforms |
+| image-fit | `'fill' \| 'contain' \| 'cover' \| 'none' \| 'scale-down'` | `'cover'` | Thumbnail fit; item.fit overrides |
+| preview | `boolean` | `true` | Enable built-in image / video preview |
+| show-file-list | `boolean` | `true` | Show the file list |
+| show-upload-button | `boolean` | `true` | Show the file selection button |
+| show-remove-button | `boolean` | `true` | Show the remove button |
+| show-retry-button | `boolean` | `true` | Show the retry button |
+| show-cancel-button | `boolean` | `true` | Show the cancel button |
+| show-preview-button | `boolean` | `true` | Show the preview button |
+| show-download-button | `boolean` | `false` | Show the download button; disabled prevents interaction |
+| elevation | `boolean \| number` | `false` | Elevation of the upload trigger |
+| ripple | `boolean` | `true` | Enable the upload trigger ripple |
 
 UploadFileItem requires uid, status and percent. name/size/type/file/url/thumbnailUrl/fit/response/error are optional. status is ready/reading/uploading/success/error/canceled/removed.
 
@@ -66412,15 +66828,17 @@ UploadFileItem requires uid, status and percent. name/size/type/file/url/thumbna
 
 - trigger({chooseFile,dragOver,disabled,describedBy}): custom selection entry.
 
-Display-only content uses the wrapper button role and Enter/Space entry. Interactive custom content owns its keyboard behavior; the wrapper adds no button role or Tab stop. Bind the slot disabled value to your button. To associate the button itself with form errors and Upload’s aria-describedby, bind the slot’s describedBy to the button’s aria-describedby; it updates as errors appear and clear. Calling chooseFile directly needs no .stop: bubbling does not choose again or also invoke requestChoose. Custom buttons relying on bubbling can still use requestChoose.
+During SSR, interactive elements inside the trigger slot are not detected until hydration. If the slot contains a button, its outer wrapper is initially also a focusable button. To avoid nested interactive semantics in the initial HTML, use decorative slot content and let the wrapper open the file picker. After hydration, the component detects interactive content and adjusts the wrapper role.
+
+Display-only content uses the wrapper button role and Enter/Space entry. Interactive custom content owns its keyboard behavior; the wrapper adds no button role or Tab stop. Bind the slot disabled value to your button. To associate the button itself with form errors and Upload's aria-describedby, bind the slot's describedBy to the button's aria-describedby; it updates as errors appear and clear. Calling chooseFile directly needs no .stop: bubbling does not choose again or also invoke requestChoose. Custom buttons relying on bubbling can still use requestChoose.
 
 ```vue
 <c-upload aria-describedby="upload-hint">
   <template #trigger="{ chooseFile, disabled, describedBy }">
-    <button type="button" :disabled="disabled" :aria-describedby="describedBy" @click="chooseFile">Choose file</button>
+    <button type="button" :disabled="disabled" :aria-describedby="describedBy" @click="chooseFile">Choose files</button>
   </template>
 </c-upload>
-<p id="upload-hint">Choose a file</p>
+<p id="upload-hint">Choose files</p>
 ```
 
 Use requestChoose for asynchronous decisions, or synchronously call event.preventDefault() before awaiting and invoking chooseFile yourself. Click listener Promises are not collected. Each requestChoose callback selects at most once and expires on unmount or KeepAlive deactivation, even after reopening.
@@ -66459,6 +66877,10 @@ Duration-badge variables: `--c-upload-duration-background: var(--c-sys-color-sur
 Awaited before-* hooks show loading feedback and aria-busy. Rejection/failure restores interaction, and repeated input does not restart the same operation. Ordinary event return Promises do not participate. Files remain concurrent; feedback aggregates all current guard tasks without treating change/progress notifications as tasks.
 
 `useUploader()` exposes readonly `guardPending`, aggregating currently awaited before hooks. It does not represent upload progress.
+
+Calling `reset()` while disabled or readonly is a no-op and does not clear the pending state of an unfinished hook. A late `beforeAdd` error from work cancelled by reset, deactivation, or unmount does not emit a rejection; an error settling while disabled or readonly also does not emit one. If a `rejected` or `exceed` callback synchronously resets the uploader, prepared files from that batch are not committed. If a list update, change, or read callback resets synchronously, superseded notifications from that operation are stopped.
+
+In field confirmation mode, confirmation waits for file preparation and before hooks; closing the editor still cancels the current edit.
 
 ### Preparation vetoes and exceptions
 
@@ -66845,7 +67267,9 @@ In deferred mode input / paste describe editing, while finish describes the fina
 | `type` | Character set | `digit / text / alphanumeric` | `digit` |
 | `size` | Five wrapper sizes | `xs / sm / md / lg / xl` | Inherited / md |
 | `variant` | Input variant | `filled / outline / standard` | Inherited / outline |
-| `disabled / readonly / error` | State; explicit values override Form | `boolean` | `undefined` |
+| `disabled` | Disabled state; explicit values override inherited Form / Group state | `boolean` | `undefined` |
+| `readonly` | Read-only state; explicit values override inherited Form / Group state | `boolean` | `undefined` |
+| `error` | Error state; explicit values override inherited Form / Group state | `boolean` | `undefined` |
 | `masked` | Visual character masking only, not encryption | `boolean` | `false` |
 | `mask-symbol` | Use the first Unicode code point | `string` | `•` |
 | `autofocus` | Focus the first empty cell after mounting | `boolean` | `false` |
@@ -66856,7 +67280,9 @@ In deferred mode input / paste describe editing, while finish describes the fina
 | `formatter` | Per-character formatting: false rejects; true/undefined retains. A returned string contributes its first valid code point | `(character, index, value) => string / boolean` | `undefined` |
 | `separator` | Separator after each nonfinal cell | `(index, character) => VNodeChild` | `undefined` |
 | `aria-label` | Group name and numbered cell labels | `string` | `undefined` |
-| `text-color / focus-color / blur-color` | Dynamic instance colors; prefer tokens for static themes | `string` | `undefined` |
+| `text-color` | Custom per-instance text color; prefer tokens for static themes | `string` | `undefined` |
+| `focus-color` | Custom per-instance focused color; prefer tokens for static themes | `string` | `undefined` |
+| `blur-color` | Custom per-instance unfocused color; prefer tokens for static themes | `string` | `undefined` |
 
 | `empty-value` | Presentation clear output; defaults to an empty string and accepts explicit null | `string \| null \| (() => string \| null)` | `''` |
 | `clearable` | Deferred editor clearing; does not change individual input cells | `boolean` | `false` |
@@ -66906,7 +67332,7 @@ Public methods remain callable from initial component mount. Stored methods reso
 
 Left/Right move between cells. Backspace removes the current character, or the previous one when empty. Delete removes the current character; following characters shift forward. IME composition does not trim, delete or move focus. Each native input has an SSR-stable id. Cell 1 uses autocomplete=one-time-code, others off. Provide aria-label.
 
-Caller-provided `aria-invalid` is forwarded to every input. A component or form error marks the inputs invalid, and clearing the error restores the caller value. The group preserves explicitly provided attributes without adding an automatic invalid state.
+A supplied `aria-invalid` is forwarded to each input. Component or form errors take precedence and mark inputs invalid; when errors clear, the supplied value is restored. The group retains explicit caller attributes and does not add an error state automatically.
 
 InputGroup/Form state is inherited, with explicit disabled/readonly/error/size taking precedence. Internal cell Inputs do not duplicate Form notifications; the complete control notifies input/change once per edit. Both platforms implement three variants/five sizes using local FieldDecorator tokens.
 
