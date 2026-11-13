@@ -50,6 +50,12 @@ Open each drawer separately to compare placement and occupied space. Nesting, co
 
 <demo src="./__demos__/custom-node.vue"></demo>
 
+### Header and footer dividers
+
+Open the panel and toggle the two switches independently. Both dividers start off.
+
+<demo src="./__demos__/dividers.vue"></demo>
+
 ### Function Call
 
 <demo src="./__demos__/function-call.vue"></demo>
@@ -103,8 +109,12 @@ Awaited before-* hooks show loading feedback and aria-busy. Rejection or failure
 
 ### Drawer Props
 
+Both dividers default to off, matching Card. Enable `top-divider` and `bottom-divider` independently. A divider is only shown when its header or footer exists. Function calls use `topDivider` / `bottomDivider`.
+
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
+| top-divider | Divider between the header and content | `boolean` | `false` |
+| bottom-divider | Divider between content and footer | `boolean` | `false` |
 | dir | Reading direction; inherits the source scope when omitted. Physical left/right placements keep their meaning. | `ReadingDirection` (`ltr` / `rtl`) | — |
 | open **(v-model)** | Controlled visibility | `boolean` | - |
 | default-open | Initial uncontrolled visibility | `boolean` | `false` |

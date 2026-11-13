@@ -1,3 +1,4 @@
+import { useFeedbackZIndex } from '../context/zIndex'
 import type { App, AppContext } from 'vue'
 import { createVNode, defineComponent, h, nextTick, render, shallowReactive } from 'vue'
 import { getPrefixCls } from '../_utils/global-config'
@@ -51,10 +52,12 @@ class MessageManager {
     target.appendChild(this.host)
 
     const Host = defineComponent({
-      setup: () => () =>
-        h(
+      setup: () => {
+        const zIndex = useFeedbackZIndex(() => target.ownerDocument)
+        return () => h(
           'div',
           {
+            style: { '--c-internal-message-z-index': zIndex.value },
             class: [getPrefixCls('message-list'), `${getPrefixCls('message-list')}-${position}`],
           },
           this.items.map((item) => {
@@ -96,7 +99,8 @@ class MessageManager {
                 ),
             })
           }),
-        ),
+        )
+      },
     })
     const vnode = createVNode(Host)
     vnode.appContext = appContext ?? defaultAppContext

@@ -1,0 +1,4 @@
+- [x] Implement and register the shared API and public type.
+- [x] Preserve keyed DOM nodes and verify all list types, slots and visibility rules.
+- [x] Add bilingual demos, phone gallery entries and API documentation.
+- [x] Run behavior, type, naming, lint and browser checks.

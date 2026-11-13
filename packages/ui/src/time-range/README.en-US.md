@@ -210,7 +210,7 @@ When FormItem's `label-attrs.for` explicitly targets one input, unnamed range en
 | `focus-color` | Color while focused | `string` | Theme default |
 | `format` | String parsing, display and output format; 12-hour defaults include a | `string` | From use12Hours |
 | `hide-disabled-options` | Hide disabled time options; clocks retain tick positions | `boolean` | `false` |
-| `hint` | Floating placeholder hint, suppressed by an outer Form label | `boolean` | `true` |
+| `hint` | Floating placeholder hint, suppressed by an outer Form label | `boolean` | `false` |
 | `input-editable` | Allow text input without removing panel selection | `boolean` | `true` |
 | `input-attrs` | Native attributes for the start and end inputs, in order; per-input names override shared names | `RangeInputAttributes[]` | `undefined` |
 | `line` | Show the field border or underline | `boolean` | `true` |

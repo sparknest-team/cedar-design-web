@@ -1,0 +1,2 @@
+- [x] Update both defaults, documentation, demo initial state and existing regression expectations.
+- [x] Run Button tests and targeted lint checks (Cedar 59 tests; Maple 86 tests, including the updated snapshot rerun). Maple full lint remains blocked by unrelated Upload formatting errors.

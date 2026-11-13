@@ -102,7 +102,6 @@ Choose a dimension to compare all its values side by side while keeping other se
 | `placeholder` | Placeholder or floating hint text | Footer, Decorator |
 | `field-names` | Map value, label, disabled and other fields | Footer |
 | `variant` | Input variant; inherits Group when unset | Decorator |
-| `hint` | Enable Input floating hint | Decorator |
 | `clearable` | Allow clearing a nonempty editable value | Decorator |
 
 <!-- demo-config-notes:end -->

@@ -6,7 +6,8 @@
   --c-dialog-border-width: 1px;
   --c-dialog-border-radius: var(--c-sys-radius-md);
   --c-dialog-width: 520px;
-  --c-dialog-margin-top: 100px;
+  --c-dialog-margin-top: min(100px, 5vh);
+  --c-dialog-max-height: 90vh;
   --c-dialog-title-text-color: var(--c-sys-color-content-primary);
   --c-dialog-title-font-size: var(--c-sys-font-size-lg);
   --c-dialog-title-font-weight: var(--c-sys-font-weight-medium);
@@ -38,4 +39,12 @@
   --c-dialog-fullscreen-height: 100vh;
   --c-dialog-animation-duration: var(--c-sys-motion-duration-slow);
   --c-dialog-animation-easing: var(--c-sys-motion-easing-standard);
+}
+
+@supports (height: 100dvh) {
+  :root {
+    --c-dialog-margin-top: min(100px, 5dvh);
+    --c-dialog-max-height: 90dvh;
+    --c-dialog-fullscreen-height: 100dvh;
+  }
 }

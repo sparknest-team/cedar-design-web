@@ -11,6 +11,7 @@
         v-if="open"
       :dir="readingDirection"
         v-bind="mergeProps(themeScope, regionAttrs())"
+        :style="{ '--c-internal-message-z-index': feedbackZIndex }"
         role="alert"
         :class="[
           prefixCls,
@@ -59,6 +60,7 @@
 </template>
 
 <script setup lang="ts">
+import { useFeedbackZIndex } from '../context/zIndex'
 import { useThemeScope } from '../theme-provider/context'
 import { useDirection } from '../_utils/direction'
 import { mergeProps, useAttrs, defineComponent, getCurrentInstance, onMounted, Transition, watch, type PropType } from 'vue';
@@ -104,6 +106,12 @@ const emit = defineEmits<{
 }>();
 const prefixCls = getPrefixCls("message");
 const popupTarget = usePopupContainer(() => props.popupContainer);
+const feedbackZIndex = useFeedbackZIndex(() => {
+  const target = popupTarget.value
+  return typeof target === 'string'
+    ? (typeof document === 'undefined' ? undefined : document)
+    : target.ownerDocument
+})
 const requestClose = () => emit("update:open", false);
 const { pause, resume, restart } = useMessageTimer({
   open: () => props.open,

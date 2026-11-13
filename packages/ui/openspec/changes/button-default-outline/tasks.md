@@ -1,0 +1,3 @@
+- [x] 同步两端 Button 与 ButtonGroup 默认变体
+- [x] 更新中英文文档与默认行为规范
+- [x] 验证 Button 与 Cedar Dialog 测试、静态检查（Cedar 77 项、Maple 85 项；Cedar ESLint/spec:check 与 Maple lint:check 通过）

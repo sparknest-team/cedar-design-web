@@ -205,7 +205,7 @@ Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，
 | placeholder | 提示文字 | `string` | `-` |
 | size | 输入框大小 | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` |
 | variant | 输入框变体 | `'filled' \| 'outline' \| 'standard'` | `'outline'` |
-| hint | 提示文字是否浮起 | `boolean` | 未设置时继承；独立默认 `true` |
+| hint | 提示文字是否浮起 | `boolean` | 未设置时继承；独立默认 `false` |
 | clearable | 是否允许清空输入框 | `boolean` | `false` |
 | model-event | 模型通知时机；change 始终表示提交 | `'change' \| 'input'` | `'change'` |
 | readonly | 是否只读，可继承 Form | `boolean` | `-` |

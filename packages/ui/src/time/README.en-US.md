@@ -214,7 +214,7 @@ The field icon slot is `suffix-icon` with `focus: boolean` and `popupOpen: boole
 | `focus-color` | Color while focused | `string` | Theme default |
 | `format` | String parsing, display and output format; 12-hour defaults include a | `string` | From use12Hours |
 | `hide-disabled-options` | Hide disabled time options; clocks retain tick positions | `boolean` | `false` |
-| `hint` | Floating placeholder hint, suppressed by an outer Form label | `boolean` | `true` |
+| `hint` | Floating placeholder hint, suppressed by an outer Form label | `boolean` | `false` |
 | `input-editable` | Allow text input without removing panel selection | `boolean` | `true` |
 | `line` | Show the field border or underline | `boolean` | `true` |
 | `loading` | Manual loading feedback, independent of event return values | `boolean` | `false` |

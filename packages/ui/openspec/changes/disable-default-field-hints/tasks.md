@@ -1,0 +1,3 @@
+- [x] Change both shared defaults and bilingual documentation.
+- [x] Add default, opt-in, and nested group inheritance regressions.
+- [x] Run affected tests and required lint checks (Cedar: 108 tests; Maple: 105 tests; Cedar targeted lint and Maple lint:check).

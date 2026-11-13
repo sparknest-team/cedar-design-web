@@ -10,7 +10,7 @@ TBD - created by archiving change align-button-spec. Update Purpose after archiv
 #### Scenario: 默认渲染 native button
 
 - **WHEN** 使用方写 `<Button>提交</Button>`，未传任何 prop
-- **THEN** 渲染 `<button type="button">` 根元素，`status` 默认 `default`，`variant` 默认 `default`，`size` 默认 `md`
+- **THEN** 渲染 `<button type="button">` 根元素，`status` 默认 `default`，`variant` 默认 `outline`，`size` 默认 `md`
 - **AND** 不渲染 loading 节点（`loading` 默认 `false`）
 - **AND** 不附带 `disabled` 属性（`disabled` 默认 `undefined`，由父 group 决定）
 

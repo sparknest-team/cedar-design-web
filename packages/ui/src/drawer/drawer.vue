@@ -44,7 +44,7 @@
           :class="[prefixCls, drawerClass]"
           :style="panelStyle"
         >
-          <div v-if="header" :class="`${prefixCls}-header`">
+          <div v-if="header" :class="[`${prefixCls}-header`, { [`${prefixCls}-header--divider`]: topDivider }]">
             <slot name="header">
               <div v-if="$slots.title || title" :id="titleLabelledby()" :class="`${prefixCls}-title`">
                 <slot name="title">{{ title }}</slot>
@@ -63,7 +63,7 @@
           <div :class="[`${prefixCls}-body`, bodyClass]" :style="bodyStyle">
             <PendingFeedback :loading="dialog.pending.value && (dialog.pendingAction.value === 'close' || !footer || !!$slots.footer)" /><slot />
           </div>
-          <div v-if="footer" :class="`${prefixCls}-footer`">
+          <div v-if="footer" :class="[`${prefixCls}-footer`, { [`${prefixCls}-footer--divider`]: bottomDivider }]">
             <slot
               name="footer"
               :cancel="handleCancel"

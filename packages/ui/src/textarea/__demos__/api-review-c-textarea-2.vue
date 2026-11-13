@@ -22,7 +22,6 @@ const record = (name: string) => {
     <div class="textarea-body-demo">
       <c-textarea
         v-model="value"
-        hint
         clearable
         placeholder="工作备注"
         :auto-size="{ minRows: 2, maxRows: 5 }"
@@ -63,8 +62,7 @@ const record = (name: string) => {
       ></c-textarea>
       <c-textarea
         :line="false"
-        hint
-        placeholder="无边框提示"
+        placeholder="无边框输入"
         focus-color="#137547"
         :rows="2"
         v-bind="__apiReview.bindings"

@@ -1,0 +1,5 @@
+- [x] 调整 Cedar Dialog 确认按钮及覆盖测试
+- [x] 同步两端 Button/Group 轻阴影、文档与测试
+- [x] 验证受影响测试（Cedar 79 项、Maple 86 项）与静态检查；Maple 全库检查发现的一处测试格式问题已修正，受影响文件 ESLint 及 API 命名复查通过，Cedar ESLint/spec:check 通过
+- [x] 同步 Maple Dialog 确认按钮 primary + default、取消按钮 outline，更新文档及覆盖测试
+- [x] 验证 Maple Dialog：87 项测试通过；确认 Upload basic-usage.vue 完整迁至 regressions，修正 Upload 六处格式问题后，全库 lint:check（ESLint + API 命名检查）通过

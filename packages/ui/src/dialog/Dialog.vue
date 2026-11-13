@@ -49,7 +49,7 @@
           >
             <div
               v-if="!hideTitle && ($slots.title || title || closable)"
-              :class="`${prefixCls}-header`"
+              :class="[`${prefixCls}-header`, { [`${prefixCls}-header--divider`]: topDivider }]"
               @pointerdown="drag.handlePointerDown"
             >
               <div
@@ -83,7 +83,7 @@
             >
               <PendingFeedback :loading="dialog.pending.value && (dialog.pendingAction.value === 'close' || !showFooter || !!$slots.footer)" /><slot>{{ message }}</slot>
             </div>
-            <div v-if="showFooter" :class="`${prefixCls}-footer`">
+            <div v-if="showFooter" :class="[`${prefixCls}-footer`, { [`${prefixCls}-footer--divider`]: bottomDivider }]">
               <slot
                 name="footer"
                 :cancel="handleCancel"
@@ -92,7 +92,6 @@
               >
                 <Button
                   v-if="cancelButton"
-                  variant="text"
                   v-bind="cancelButtonProps"
                   :loading="mergedCancelButtonLoading"
                   :disabled="mergedCancelButtonDisabled"
@@ -102,7 +101,8 @@
                 </Button>
                 <Button
                   v-if="confirmButton"
-                  variant="text"
+                  status="primary"
+                  variant="default"
                   v-bind="confirmButtonProps"
                   :loading="mergedConfirmButtonLoading"
                   :disabled="mergedConfirmButtonDisabled"

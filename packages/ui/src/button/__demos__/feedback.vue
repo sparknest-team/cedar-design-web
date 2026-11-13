@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 const ripple = ref(true);
-const elevation = ref(2);
+const elevation = ref(0);
 </script>
 <template>
   <c-space direction="column" :size="16">
@@ -15,7 +15,7 @@ const elevation = ref(2);
           aria-label="Button elevation"
       /></label>
     </c-space>
-    <c-button :ripple="ripple" :elevation="elevation"
+    <c-button variant="default" :ripple="ripple" :elevation="elevation"
       >Click to compare feedback</c-button
     >
   </c-space>

@@ -8,10 +8,10 @@ const mount = (...args: any[]) => {
   mountedWrappers.push(wrapper);
   return wrapper;
 };
-import { createApp, createSSRApp, h, nextTick } from "vue";
+import { createApp, createSSRApp, h, nextTick, transformVNodeArgs } from "vue";
 import { renderToString } from "@vue/server-renderer";
 import { mount as mountComponent, flushPromises } from "@vue/test-utils";
-import { afterEach, describe, expect, test, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import {
   Dialog,
   _DialogComponent as DialogComponent,
@@ -25,13 +25,11 @@ function mountDialog(props = {}, slots = {}) {
   });
 }
 
-const delay = (time: number) =>
-  new Promise((resolve) => setTimeout(resolve, time));
-
 afterEach(async () => {
   Dialog.close();
   Dialog.resetDefaultOptions();
-  await delay(350);
+  transformVNodeArgs(null);
+  await nextTick();
 });
 
 describe("Dialog component contract", () => {
@@ -94,16 +92,26 @@ describe("Dialog component contract", () => {
     expect(overlayWrapper.emitted("cancel")).toBeUndefined();
   });
 
-  test("uses text buttons by default and supports Button prop overrides", async () => {
+  test("uses a primary solid confirm button and an outlined cancel button", async () => {
+    const wrapper = mountDialog();
+    await nextTick();
+    const [cancelButton, confirmButton] = wrapper.findAll(".c-dialog-footer button");
+    expect(cancelButton.classes()).toContain("c-button--variant-outline");
+    expect(confirmButton.classes()).toContain("c-button--variant-default");
+    expect(confirmButton.classes()).toContain("c-button--status-primary");
+    expect(confirmButton.classes().some((name) => /elevation--\d/.test(name))).toBe(false);
+  });
+
+  test("uses Button defaults and supports Button prop overrides", async () => {
     const wrapper = mountDialog({
-      confirmButtonProps: { variant: "default", status: "danger" },
+      confirmButtonProps: { variant: "text", status: "danger" },
     });
     await nextTick();
     const [cancelButton, confirmButton] = wrapper.findAll(
       ".c-dialog-footer button",
     );
-    expect(cancelButton.classes()).toContain("c-button--variant-text");
-    expect(confirmButton.classes()).toContain("c-button--variant-default");
+    expect(cancelButton.classes()).toContain("c-button--variant-outline");
+    expect(confirmButton.classes()).toContain("c-button--variant-text");
     expect(confirmButton.classes()).toContain("c-button--status-danger");
   });
 
@@ -195,6 +203,27 @@ describe("Dialog component contract", () => {
 });
 
 describe("Dialog functional contract", () => {
+  beforeEach(() => {
+    // Component mount() tests leave a global Transition stub transformer behind.
+    transformVNodeArgs(null);
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    vi.spyOn(globalThis, "requestAnimationFrame").mockImplementation(
+      (callback) => setTimeout(() => callback(performance.now()), 16) as unknown as number,
+    );
+    vi.spyOn(globalThis, "cancelAnimationFrame").mockImplementation((id) => clearTimeout(id));
+  });
+  afterEach(async () => {
+    try {
+      Dialog.close();
+      await nextTick();
+      vi.runAllTimers();
+      await flushPromises();
+    } finally {
+      vi.restoreAllMocks();
+      vi.useRealTimers();
+    }
+  });
+
   test("uses explicit methods and supports string plus update handles", async () => {
     expect(Dialog).not.toBeTypeOf("function");
     for (const method of [

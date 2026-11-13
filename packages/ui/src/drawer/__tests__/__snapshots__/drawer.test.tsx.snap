@@ -14,7 +14,7 @@ exports[`Drawer > render 1`] = `
       <div class=\\"c-drawer-body\\">
         <!--v-if-->
       </div>
-      <div class=\\"c-drawer-footer\\"><button class=\\"c-button c-button--size-md c-button--status-default c-button--variant-default c-elevation--2\\" type=\\"button\\">
+      <div class=\\"c-drawer-footer\\"><button class=\\"c-button c-button--size-md c-button--status-default c-button--variant-outline\\" type=\\"button\\">
           <!--v-if-->
           <!--v-if--><span class=\\"c-button__content\\">取消</span>
           <div class=\\"c-hover-overlay\\"></div>

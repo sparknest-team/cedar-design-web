@@ -1,0 +1,8 @@
+- [x] 两端高度 token、正文滚动和固定操作区
+- [x] Cedar 顶部偏移和全屏处理
+- [x] 同步共享契约与中英文文档
+- [x] 实际浏览器验证：两端 × 三种视口 × 八种布局，共 48 组通过；另通过真实滚轮验证标题和自定义 footer 不随正文移动
+- [x] 组件测试：Cedar 76 项（首轮 3 项关闭时序断言失败，单独复跑相关 7 项全部通过），Maple 93 项；全库 Maple lint:check、受影响文件 ESLint、Cedar spec:check、共享样式契约与 Dialog token 消费/文档引用验证通过
+- [x] 后续修复 Cedar 服务测试隔离：清除 VTU 遗留 VNode/Transition stub，移除固定 350/360ms 等待，使用逐测试恢复的虚拟计时器/RAF 推进真实离场流程；新增前置 mount 与延迟帧回归。最终容器 11 项 × 20 轮随机复跑、全 Dialog 80 项 × 5 轮随机复跑及两文件 ESLint 全通过
+- [x] 同步 Maple 测试隔离：服务容器、函数式调用及 divider 测试移除固定时长等待，统一真实离场流程的虚拟计时器/RAF，组件实例逐测试卸载，异步关闭使用可控 Promise；新增同类四项回归。按项目默认文件隔离配置，容器 11 项 × 10 轮、全 Dialog 97 项 × 5 轮随机复跑及全库 lint:check 全通过
+- [x] 修复 Maple 非隔离运行的跨 jsdom 问题：Vue 缓存 document 与逐文件重建环境不一致，导致节点原型无法通过当前 Element 判断。CLI 在实际 pool isolation=false 时自动使用 singleFork/singleThread 同批次环境；默认隔离保留并行。真实 CLI 三文件回归覆盖默认 forks、非隔离 forks/threads，保持请求的隔离开关；完整 Dialog 非隔离两种 pool 各 3 轮及默认隔离 1 轮（每轮 97 项）、CLI build:node、check:test-collection 和全库 lint:check 全通过。

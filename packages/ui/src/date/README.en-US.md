@@ -245,7 +245,7 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 | `error` | Field error presentation, inherited when unset | `boolean` | Inherited, finally false |
 | `focus-color` | Color while focused | `string` | Theme default |
 | `format` | Display/text-input format; a function only formats without reverse text parsing | `string \| ((date: Date) => string)` | From precision/time settings |
-| `hint` | Floating placeholder hint, suppressed by an outer Form label | `boolean` | `true` |
+| `hint` | Floating placeholder hint, suppressed by an outer Form label | `boolean` | `false` |
 | `input-editable` | Allow text input without removing panel selection | `boolean` | `true` |
 | `line` | Show the field border or underline | `boolean` | `true` |
 | `loading` | Manual loading feedback, independent of event return values | `boolean` | `false` |

@@ -9,6 +9,10 @@ export const DRAWER_PLACEMENTS = ["top", "right", "bottom", "left"] as const;
 export type DrawerPlacement = (typeof DRAWER_PLACEMENTS)[number];
 
 export const drawerProps = {
+  /** 标题与内容之间的分割线，默认关闭。 */
+  topDivider: { type: Boolean, default: false },
+  /** 内容与底部之间的分割线，默认关闭。 */
+  bottomDivider: { type: Boolean, default: false },
   /** 阅读方向，省略时继承来源作用域。 */
   dir: readingDirectionProp,
   /** 抽屉是否可见。 */

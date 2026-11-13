@@ -50,7 +50,7 @@ Choose an axis to compare its available values with the same content and model. 
 
 ### Floating Hint
 
-When `hint` is omitted it inherits InputGroup; the standalone library default is `true`. An outer FormItem label suppresses the floating hint. Explicit `false` uses the native placeholder; explicit `true` remains subject to outer-label suppression. `text-color`, `focus-color`, and `blur-color` override text and hint colors.
+When `hint` is omitted it inherits InputGroup; the standalone library default is `false`. An outer FormItem label suppresses the floating hint. Explicit `false` uses the native placeholder; explicit `true` remains subject to outer-label suppression. `text-color`, `focus-color`, and `blur-color` override text and hint colors.
 
 - `variant`: Selects the visual variant.
 
@@ -195,7 +195,7 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 | readonly | Readonly state; can inherit from Form | `boolean` | `-` |
 | error | Error state; can inherit from FormItem | `boolean` | `-` |
 | placeholder | Hint text | `string` | `-` |
-| hint | Whether hint text floats | `boolean` | Inherited when omitted; standalone default `true` |
+| hint | Whether hint text floats | `boolean` | Inherited when omitted; standalone default `false` |
 | line | Whether to draw a border or underline | `boolean` | `true` |
 | text-color | Input text color | `string` | `-` |
 | focus-color | Focused hint and supported border colors; does not control the caret | `string` | `-` |

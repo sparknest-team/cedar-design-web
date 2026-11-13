@@ -10,7 +10,7 @@ import __apiReviewRawConfig from "./api-review-c-time-range-2.config.json";
 import { ref } from "vue";
 
 const value = ref(["09:00", "18:00"]);
-const hint = ref(true);
+const hint = ref(false);
 const error = ref(false);
 const line = ref(true);
 </script>

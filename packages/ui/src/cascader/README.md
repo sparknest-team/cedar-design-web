@@ -289,7 +289,7 @@ load-more 属性有提供 done 函数进行回调，可以在回调中传入懒�
 | `readonly` | 只读状态；显式值优先于继承的 Form / Group 状态 | `boolean` | `undefined` |
 | `error` | 错误状态；显式值优先于继承的 Form / Group 状态 | `boolean` | `undefined` |
 | `placeholder` | 占位文本 | `string` | `—` |
-| `hint` | 是否启用浮动提示 | `boolean` | `true` |
+| `hint` | 是否启用浮动提示 | `boolean` | `false` |
 | `line` | 是否显示 standard 变体的下划线 | `boolean` | `true` |
 | `text-color` | 逐实例自定义文字颜色；静态主题优先使用 token | `string` | `—` |
 | `focus-color` | 逐实例自定义聚焦颜色；静态主题优先使用 token | `string` | `—` |

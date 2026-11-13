@@ -125,6 +125,12 @@ permalink: /components/dialog/
 
 <demo src="./__demos__/custom-footer.vue"></demo>
 
+### 上下分割线
+
+打开面板后，分别切换两个开关，对比上、下分割线。初始均关闭。
+
+<demo src="./__demos__/dividers.vue"></demo>
+
 ### 定制按钮文字
 
 <demo src="./__demos__/custom-text.vue"></demo>
@@ -185,8 +191,12 @@ before-* 等待期间显示加载反馈并标记 aria-busy；拒绝或失败后�
 
 ### Dialog Props
 
+分割线与 Card 保持一致，默认均关闭；可通过 `top-divider`、`bottom-divider` 分别开启，仅在对应头部或底部区域存在时显示。Dialog 的简洁模式与函数式调用同样支持，函数式参数使用 `topDivider`、`bottomDivider`。
+
 | 参数名                    | 描述                                         | 类型                             | 默认值       |
 | ------------------------- | -------------------------------------------- | -------------------------------- | ------------ |
+| top-divider | 标题与内容之间的分割线 | `boolean` | `false` |
+| bottom-divider | 内容与底部之间的分割线 | `boolean` | `false` |
 | dir | 阅读方向；省略时继承来源作用域。物理 left/right 方位保持原意。 | `ReadingDirection` (`ltr` / `rtl`) | — |
 | `open` **(v-model)**      | 是否显示                                     | `boolean`                        | `-`          |
 | `default-open`            | 非受控默认显示                               | `boolean`                        | `false`      |
@@ -216,7 +226,7 @@ before-* 等待期间显示加载反馈并标记 aria-busy；拒绝或失败后�
 | `cancel-button-loading`   | 取消按钮 loading                             | `boolean`                        | `false`      |
 | `confirm-button-disabled` | 确认按钮 disabled                            | `boolean`                        | `false`      |
 | `cancel-button-disabled`  | 取消按钮 disabled                            | `boolean`                        | `false`      |
-| `confirm-button-props`    | 确认按钮 props                               | `ButtonProps`                    | `-`          |
+| `confirm-button-props`    | 确认按钮 props；默认 primary + default，可覆盖                               | `ButtonProps`                    | `-`          |
 | `cancel-button-props`     | 取消按钮 props                               | `ButtonProps`                    | `-`          |
 | `footer`                  | 是否展示 footer 区域                         | `boolean`                        | `true`       |
 | `dialog-class`            | 对话框 class                                 | `string \| any[]`                | `-`          |
@@ -315,6 +325,8 @@ import type {
 
 ## CSS Variables
 
+普通和简洁模式随内容自然撑开，最大高度为 `90dvh`（不支持时回退 `90vh`）。超出时仅正文滚动，标题和操作区保持可见。通过 `--c-dialog-max-height` 或 `dialogStyle.maxHeight` 覆盖；全屏模式使用完整视口高度。非居中模式的默认顶部偏移限制在 `5dvh`（回退 `5vh`）以内；显式 `top` 仍由使用方控制。
+
 Dialog 的公开颜色变量与 Maple 同义：`--c-dialog-background` 表示浮层背景（`surface-raised`），`--c-dialog-overlay-background` 表示遮罩，`--c-dialog-title-text-color` 和 `--c-dialog-content-text-color` 表示主要内容，`--c-dialog-close-button-color` 表示次要操作；`--c-dialog-status-{info|success|warning|danger}-color` 对应可读状态内容色（content-info/success/warning/danger），不是状态填充色。业务主题优先覆盖这些组件变量，跨组件主题则覆盖相应的 system 变量。边框、宽度、间距和布局仍遵循桌面端规格。
 
 遮罩通过 Dialog 组件变量消费 `sys-color-scrim`；Dialog 的遮罩颜色由自身变量控制。实例遮罩变量可放在 `overlay-style` 上；放在面板 `dialog-style` 上的变量不会继承给兄弟遮罩节点。显式 `overlay-style.backgroundColor` 优先。Teleport 场景需要在实际 DOM 祖先作用域设置变量。暗色主题继承同一套颜色语义；几何保留平台差异。状态图标使用可读的 content 状态色。
@@ -345,9 +357,10 @@ Dialog 的公开颜色变量与 Maple 同义：`--c-dialog-background` 表示浮
 | `--c-dialog-content-line-height` | `var(--c-line-height)` | `line-height` |
 | `--c-dialog-content-padding` | `28px var(--c-sys-space-8)` | `padding` |
 | `--c-dialog-content-text-color` | `var(--c-sys-color-content-primary)` | `color` |
-| `--c-dialog-fullscreen-height` | `100vh` | `height` |
+| `--c-dialog-fullscreen-height` | `100vh`<br>`100dvh` | `height` |
 | `--c-dialog-fullscreen-width` | `100vw` | `width` |
-| `--c-dialog-margin-top` | `100px` | `top` |
+| `--c-dialog-margin-top` | `min(100px, 5vh)`<br>`min(100px, 5dvh)` | `top` |
+| `--c-dialog-max-height` | `90vh`<br>`90dvh` | `max-height` |
 | `--c-dialog-overlay-background` | `var(--c-sys-color-scrim)` | `background-color` |
 | `--c-dialog-simple-actions-gap` | `32px` | `margin-top` |
 | `--c-dialog-simple-border-radius` | `var(--c-sys-radius-md)` | `border-radius` |

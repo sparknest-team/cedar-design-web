@@ -1,7 +1,7 @@
 <template>
   <c-form :model="model">
     <c-form-item field="account" label="账户" feedback :validate-status="status" :help="status === 'error' ? '请输入账户后重试' : undefined">
-      <c-input v-model="model.account" placeholder="外置标签会关闭内部浮动提示" hint clearable />
+      <c-input v-model="model.account" placeholder="请输入账户" clearable />
     </c-form-item>
     <c-button status="primary" :loading="status === 'validating'" @click="validate">模拟异步校验</c-button>
   </c-form>

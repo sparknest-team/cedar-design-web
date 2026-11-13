@@ -1,0 +1,3 @@
+- [x] Add props, function-call types, conditional styles and bilingual documentation.
+- [x] Add example controls and behavior/style regressions.
+- [x] Run affected checks and browser verification (Cedar Dialog/Drawer 96 tests in isolated workers; Maple Dialog regressions and updated component tests; type checks; targeted Cedar lint and full Maple lint; demo grouping and API naming; browser verification of defaults, independent toggles, simple mode, custom footers and hidden regions).

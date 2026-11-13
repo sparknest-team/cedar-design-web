@@ -169,6 +169,9 @@ duration must be finite and nonnegative. Negative values, NaN and Infinity do no
 
 `default`、`icon`、`action`。
 
+
+Messages automatically stay above active popup layers in their document, including newly opened popups and changes to explicit `zIndex` values, without taking over modal focus or Escape handling. `--c-message-z-index` sets a minimum layer. Custom containers must still avoid ancestor stacking contexts and clipping.
+
 ## CSS Variables
 
 Colors use `--c-message-{variant}-{status}-{bg|content-color|icon-color|border-color|close-color}`. bg sets the panel background; content-color sets body/action text unless separately styled; icon-color sets status icons; border-color sets borders; close-color sets close controls. With a custom background, verify all three foregrounds. Geometry retains platform density rather than forcing equal defaults. Variables must affect actual Teleport-container ancestors.

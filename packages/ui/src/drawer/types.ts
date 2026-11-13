@@ -19,6 +19,8 @@ export type DrawerAction = "confirm" | "cancel" | "close";
 
 
 export interface DrawerConfig {
+  topDivider?: boolean
+  bottomDivider?: boolean
   dir?: ReadingDirection;
   onGuardError?: (error: unknown, action: DrawerAction) => void;
 

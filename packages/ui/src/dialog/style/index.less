@@ -63,8 +63,12 @@
 .c-dialog {
   position: relative;
   top: var(~'--c-dialog-margin-top');
-  display: inline-block;
+  display: inline-flex;
+  flex-direction: column;
+  box-sizing: border-box;
   width: var(~'--c-dialog-width');
+  max-height: var(--c-dialog-max-height);
+  overflow: hidden;
   margin: 0 auto;
   line-height: var(--c-dialog-content-line-height);
   white-space: initial;
@@ -87,7 +91,9 @@
     width: 100%;
     min-height: var(--c-dialog-title-min-height);
     padding: var(--c-dialog-title-padding);
-    border-bottom: var(~'--c-dialog-border-width') solid var(~'--c-dialog-border-color');
+    &--divider {
+      border-bottom: var(~'--c-dialog-border-width') solid var(~'--c-dialog-border-color');
+    }
 
     .c-dialog-title {
       display: flex;
@@ -107,6 +113,8 @@
 
   &-body {
     position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
     padding: var(--c-dialog-content-padding);
     overflow: auto;
     color: var(~'--c-dialog-content-text-color');
@@ -119,7 +127,9 @@
     width: 100%;
     padding: var(--c-dialog-actions-padding);
     text-align: end;
-    border-top: var(~'--c-dialog-border-width') solid var(~'--c-dialog-border-color');
+    &--divider {
+      border-top: var(~'--c-dialog-border-width') solid var(~'--c-dialog-border-color');
+    }
 
     > .c-button:not(:nth-child(1)) {
       margin-inline-start: var(--c-dialog-actions-button-gap);
@@ -190,7 +200,6 @@
   .c-dialog-footer {
     height: unset;
     padding: 0;
-    border: none;
   }
 
   .c-dialog-header {
@@ -226,6 +235,7 @@
   box-sizing: border-box;
   width: var(--c-dialog-fullscreen-width);
   height: var(--c-dialog-fullscreen-height);
+  max-height: none;
 
   .c-dialog-footer {
     margin-top: auto;

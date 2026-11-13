@@ -1,6 +1,6 @@
-import { createApp, defineComponent, h, inject, nextTick, ref, type AppContext } from 'vue'
-import { flushPromises } from '@vue/test-utils'
-import { afterEach, expect, test, vi } from 'vitest'
+import { createApp, defineComponent, h, inject, nextTick, ref, transformVNodeArgs, Transition, type AppContext } from 'vue'
+import { flushPromises, mount } from '@vue/test-utils'
+import { afterEach, beforeEach, expect, test, vi } from 'vitest'
 import Dialog from '..'
 const handles: ReturnType<typeof Dialog.open>[] = []
 const nodes: HTMLElement[] = []
@@ -9,12 +9,51 @@ function target(doc = document) {
   const node = doc.createElement('div'); node.id = 'dialog-service-target-' + ++serial; doc.body.append(node); nodes.push(node); return node
 }
 function open(config: Parameters<typeof Dialog.open>[0], context?: AppContext) {
+  // mount() leaves VTU's global VNode transformer installed, even after unmount().
+  // Services use Vue render() directly and need real leave hooks, not transition-stub.
+  transformVNodeArgs(null)
   const handle = Dialog.open(config, context); handles.push(handle); return handle
 }
+beforeEach(() => {
+  vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
+  // Keep RAF mocks scoped to the current jsdom window instead of the worker's fake-clock snapshot.
+  vi.spyOn(globalThis, 'requestAnimationFrame').mockImplementation(callback =>
+    setTimeout(() => callback(performance.now()), 16) as unknown as number,
+  )
+  vi.spyOn(globalThis, 'cancelAnimationFrame').mockImplementation(id => clearTimeout(id))
+})
+async function finishTransitions() {
+  // close() settles the action immediately; DOM disposal follows Vue's two-frame leave hook.
+  await nextTick()
+  vi.runAllTimers()
+  await flushPromises()
+}
 afterEach(async () => {
-  handles.splice(0).forEach(handle => handle.close())
-  await new Promise(resolve => setTimeout(resolve, 360)); await flushPromises()
-  nodes.splice(0).forEach(node => node.remove()); Dialog.resetDefaultOptions(); vi.restoreAllMocks()
+  try {
+    handles.splice(0).forEach(handle => handle.close())
+    await finishTransitions()
+  } finally {
+    nodes.splice(0).forEach(node => node.remove())
+    Dialog.resetDefaultOptions()
+    transformVNodeArgs(null)
+    vi.restoreAllMocks()
+    vi.useRealTimers()
+  }
+})
+
+test('uses real service transitions after a previous mount installed transition stubs', async () => {
+  const mounted = mount({ render: () => h(Transition, null, () => h('span', 'Mounted fixture')) })
+  expect(mounted.find('transition-stub').exists()).toBe(true)
+  mounted.unmount()
+  const container = target(), onClosed = vi.fn()
+  const handle = open({ popupContainer: container, title: 'Real service transition', onClosed })
+  await flushPromises()
+  expect(container.querySelector('[role="dialog"]')).not.toBeNull()
+  expect(container.querySelector('transition-stub')).toBeNull()
+  handle.close()
+  await finishTransitions()
+  expect(container.childNodes.length).toBe(0)
+  expect(onClosed).toHaveBeenCalledTimes(1)
 })
 for (const kind of ['selector', 'element'] as const) {
   test(`service respects its explicit ${kind} popup container and removes all teleported content`, async () => {
@@ -22,7 +61,7 @@ for (const kind of ['selector', 'element'] as const) {
     const handle = open({ title: 'Owned dialog', message: 'Content', popupContainer: kind === 'selector' ? '#' + container.id : container, onClosed })
     await flushPromises(); expect(container.querySelector('[role="dialog"]')).not.toBeNull()
     handle.close(); expect(await handle).toBe('close')
-    await new Promise(resolve => setTimeout(resolve, 360)); await flushPromises()
+    await finishTransitions()
     expect(container.childNodes.length).toBe(0); expect(onClosed).toHaveBeenCalledTimes(1)
   })
 }
@@ -61,6 +100,34 @@ test('an element in another document owns the service content and cleanup', asyn
   const handle = open({ popupContainer: container, title: 'Other document' }); await flushPromises()
   const dialog = container.querySelector('[role="dialog"]')!
   expect(dialog).not.toBeNull(); expect(dialog.ownerDocument).toBe(iframe.contentDocument)
-  handle.close(); await new Promise(resolve => setTimeout(resolve, 360)); await flushPromises()
+  handle.close(); await finishTransitions()
   expect(container.childNodes.length).toBe(0)
+})
+
+test.each(['selector', 'element', 'iframe'] as const)('cleans up the %s container when animation frames take longer than 360ms', async (kind) => {
+  // Model a busy frame scheduler without waiting for wall-clock time or disabling Transition.
+  vi.spyOn(globalThis, 'requestAnimationFrame').mockImplementation(callback =>
+    setTimeout(() => callback(performance.now()), 250) as unknown as number,
+  )
+  vi.spyOn(globalThis, 'cancelAnimationFrame').mockImplementation(id => clearTimeout(id))
+  let doc = document
+  if (kind === 'iframe') {
+    const iframe = document.createElement('iframe')
+    document.body.append(iframe)
+    nodes.push(iframe)
+    doc = iframe.contentDocument!
+  }
+  const container = target(doc), onClosed = vi.fn()
+  const handle = open({ popupContainer: kind === 'selector' ? '#' + container.id : container, title: 'Delayed frames', onClosed })
+  await flushPromises()
+  handle.close()
+  expect(await handle).toBe('close')
+  await nextTick()
+  vi.advanceTimersByTime(360)
+  await flushPromises()
+  expect(container.querySelector('[role="dialog"]')).not.toBeNull()
+  expect(onClosed).not.toHaveBeenCalled()
+  await finishTransitions()
+  expect(container.childNodes.length).toBe(0)
+  expect(onClosed).toHaveBeenCalledTimes(1)
 })

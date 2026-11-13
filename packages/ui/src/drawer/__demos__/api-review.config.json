@@ -266,6 +266,20 @@
       "defaultValue": "'Close drawer'",
       "description": "关闭按钮的可访问名称。",
       "kind": "string"
+    },
+    {
+      "name": "top-divider",
+      "description": "标题与内容之间的分割线",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "bottom-divider",
+      "description": "内容与底部之间的分割线",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
     }
   ],
   "events": [

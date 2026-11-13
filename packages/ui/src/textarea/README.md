@@ -232,7 +232,7 @@ FormItem 先校验候选值，失败时保持编辑；通过后再执行 before-
 | aria-label | 原生输入框的无障碍标签 | `string` | `-` |
 | autofocus | 是否自动聚焦 | `boolean` | `false` |
 | enterkeyhint | 移动端虚拟键盘回车键提示 | `string` | `-` |
-| hint | 提示文字是否浮起 | `boolean` | 未设置时继承；独立默认 `true` |
+| hint | 提示文字是否浮起 | `boolean` | 未设置时继承；独立默认 `false` |
 | line | 是否绘制边框或底线 | `boolean` | `true` |
 | text-color | 输入文字颜色 | `string` | `-` |
 | focus-color | 聚焦提示及支持的边框通道；不控制 caret | `string` | `-` |

@@ -1,7 +1,7 @@
 // Vitest Snapshot v1
 
 exports[`Button > render 1`] = `
-"<button class=\\"c-button c-button--size-md c-button--status-default c-button--variant-default c-elevation--2\\" type=\\"button\\">
+"<button class=\\"c-button c-button--size-md c-button--status-default c-button--variant-outline\\" type=\\"button\\">
   <!--v-if-->
   <!--v-if-->
   <!--v-if-->

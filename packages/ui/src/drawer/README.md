@@ -59,6 +59,12 @@ Drawer 不提供离散 `size` 枚举；左右位置使用 `width`，上下位置
 
 <demo src="./__demos__/custom-node.vue"></demo>
 
+### 上下分割线
+
+打开面板后，分别切换两个开关，对比上、下分割线。初始均关闭。
+
+<demo src="./__demos__/dividers.vue"></demo>
+
 ### 函数调用
 
 <demo src="./__demos__/function-call.vue"></demo>
@@ -94,8 +100,12 @@ before-* 等待期间显示加载反馈并标记 aria-busy；拒绝或失败后�
 
 ### Drawer Props
 
+分割线与 Card 保持一致，默认均关闭；可通过 `top-divider`、`bottom-divider` 分别开启，仅在对应头部或底部区域存在时显示。函数式调用同样支持，参数使用 `topDivider`、`bottomDivider`。
+
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
+| top-divider | 标题与内容之间的分割线 | `boolean` | `false` |
+| bottom-divider | 内容与底部之间的分割线 | `boolean` | `false` |
 | dir | 阅读方向；省略时继承来源作用域。物理 left/right 方位保持原意。 | `ReadingDirection` (`ltr` / `rtl`) | — |
 | open **(v-model)** | 是否可见 | `boolean` | - |
 | default-open | 非受控模式下是否默认可见 | `boolean` | `false` |

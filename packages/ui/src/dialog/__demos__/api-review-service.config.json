@@ -375,6 +375,20 @@
       "type": "() => void",
       "defaultValue": "",
       "kind": "callback"
+    },
+    {
+      "name": "top-divider",
+      "description": "标题与内容之间的分割线",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
+    },
+    {
+      "name": "bottom-divider",
+      "description": "内容与底部之间的分割线",
+      "type": "boolean",
+      "defaultValue": "false",
+      "kind": "boolean"
     }
   ],
   "methodNames": [

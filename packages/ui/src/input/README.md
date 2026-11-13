@@ -71,7 +71,7 @@ permalink: /components/input/
 
 ### 浮动提示
 
-`hint` 未设置时继承 InputGroup；独立使用的库默认值为 `true`，有外置 FormItem 标签时关闭浮动提示。显式设置 `false` 使用原生 placeholder，显式设置 `true` 仍受外置标签抑制。`text-color`、`focus-color`、`blur-color` 可覆盖文字与提示颜色。
+`hint` 未设置时继承 InputGroup；独立使用的库默认值为 `false`，有外置 FormItem 标签时关闭浮动提示。显式设置 `false` 使用原生 placeholder，显式设置 `true` 仍受外置标签抑制。`text-color`、`focus-color`、`blur-color` 可覆盖文字与提示颜色。
 
 <demo src="./__demos__/floating-hint.vue"></demo>
 
@@ -239,7 +239,7 @@ permalink: /components/input/
 | readonly                  | 是否只读，可继承 Form                                      | `boolean`                                           |     `-`     |
 | error                     | 是否为错误状态，可继承 FormItem                            | `boolean`                                           |     `-`     |
 | placeholder               | 提示文字                                                   | `string`                                            |     `-`     |
-| hint                      | 提示文字是否浮起                                           | `boolean`                                           | 未设置时继承；独立默认 `true` |
+| hint                      | 提示文字是否浮起                                           | `boolean`                                           | 未设置时继承；独立默认 `false` |
 | line                      | 是否绘制边框或底线                                         | `boolean`                                           |   `true`    |
 | text-color                | 输入文字颜色                                               | `string`                                            |     `-`     |
 | focus-color               | 聚焦提示及支持的边框通道；不控制 caret                     | `string`                                            |     `-`     |

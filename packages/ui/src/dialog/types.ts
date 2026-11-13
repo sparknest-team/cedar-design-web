@@ -27,6 +27,8 @@ export type DialogRenderContent =
 
 
 export interface DialogConfig {
+  topDivider?: boolean
+  bottomDivider?: boolean
   /** 阅读方向；省略时使用调用上下文或文档方向。 */
   dir?: ReadingDirection
   onGuardError?: (error: unknown, action: DialogAction) => void;

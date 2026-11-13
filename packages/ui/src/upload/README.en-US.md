@@ -1,108 +1,122 @@
 ---
-lang: en-US
 permalink: /en/components/upload/
 ---
 
 # Upload
 
-For photos, set `accept="image/*"`. Leaving `capture` unset or setting `:capture="false"` keeps the system file/photo picker available. Only set `capture` to `true`, `'user'` or `'environment'` when camera capture is intended. Available choices depend on the device and browser.
-
-Disabled downloads match Link/Button link mode: remove href while retaining the link role, `aria-disabled` and `tabindex=-1`, and cancel the default click action. `readonly` still allows downloading. Re-enabling restores the original file URL and download filename.
-
-Upload UI and a headless useUploader composable. The application owns transport and server file deletion.
-
-## Replacement and video metadata
-
-Enable reupload for per-item replacement, or call replace(file, replacementFile). Validation and beforeRemove rejection preserve the original item. An accepted replacement occupies the same position with a new UID and emits replace/change, not remove. A failed new upload can be retried; it does not automatically restore the old server file or delete it.
-
-Video duration is expressed in seconds and rendered as mm:ss or h:mm:ss. Local files are inspected; remote echoes provide duration from application metadata. Temporary resources are released on success, error, cancellation and disposal.
-
-| Variable | Default |
-| --------------------------------------- | ---------------------------------------- |
-| --c-upload-gap | var(--c-sys-space-4) |
-| --c-upload-trigger-min-height | var(--c-sys-control-height-md) |
-| --c-upload-trigger-padding-horizontal | var(--c-sys-space-6) |
-| --c-upload-trigger-draggable-min-height | calc(var(--c-sys-control-height-md) * 2) |
-| --c-upload-card-size | calc(var(--c-sys-control-height-md) * 2) |
-| --c-upload-item-min-height | var(--c-sys-control-height-md) |
-| --c-upload-item-padding | var(--c-sys-space-4) |
-| --c-upload-thumb-size | var(--c-sys-control-height-lg) |
-| --c-upload-border-radius | var(--c-sys-radius-md) |
-| --c-upload-border-color | var(--c-sys-color-border-default) |
-| --c-upload-background | var(--c-sys-color-surface-default) |
-| --c-upload-text-color | var(--c-sys-color-content-primary) |
-| --c-upload-secondary-text-color | var(--c-sys-color-content-secondary) |
-| --c-upload-hover-background | var(--c-sys-color-state-hover) |
-| --c-upload-active-color | var(--c-sys-color-action-primary) |
-| --c-upload-error-color | var(--c-sys-color-content-danger) |
-| --c-upload-action-size | var(--c-sys-control-touch-target) |
-| --c-upload-progress-height | var(--c-sys-space-2) |
-| --c-upload-disabled-opacity | .56 |
-| --c-upload-font-size | var(--c-sys-font-size-md) |
+Select files by clicking or dragging, with image lists, previews and controlled uploads. Examples use local files and simulated requests.
 
 ## Basic examples
 
-### Read Only
+### Basic usage
 
-<demo src="./__demos__/read-only.vue"></demo>
+Choose one or more local files and remove them from the list. Without action / custom-request, files are read locally without requests.
 
-## Appearance and states
+<demo src="./__demos__/en-US/read-only.vue"></demo>
 
-### State Controls
+### List types
 
-<demo src="./__demos__/state-controls.vue"></demo>
+Switch between text, picture and picture-card using the same file list. Add or remove files, then switch layouts without losing the selection.
 
-### State Lab
+<demo src="./__demos__/en-US/list-type.vue"></demo>
 
-<demo src="./__demos__/state-lab.vue"></demo>
+### Upload trigger position
 
-### Custom Surface
+Switch the entry between before and after the file list, then compare the three list types. The default places the entry after the list. Switching position keeps the selected files and their order.
 
-<demo src="./__demos__/custom-surface.vue"></demo>
+<demo src="./__demos__/en-US/trigger-position.vue"></demo>
 
-## File sources and validation
+## Selection and validation
 
-### Directory
+### Drag and drop
 
-<demo src="./__demos__/directory.vue"></demo>
+Click the drop zone or drag images into it, then click a thumbnail to preview. Touch devices can use the file picker.
 
-### Clipboard
+<demo src="./__demos__/en-US/draggable-picture.vue"></demo>
 
-<demo src="./__demos__/clipboard.vue"></demo>
+### File validation
 
-### Replacement Validation
+Accept images only, up to 3 files and 2 MiB per image. Rejections show a reason; remove an image to make room for another.
 
-<demo src="./__demos__/replacement-validation.vue"></demo>
+<demo src="./__demos__/en-US/picture-limits.vue"></demo>
 
-## Queues and progress
+### Single file and replacement
 
-### External State
+Use max-files="1" with reupload. Click the replacement action to choose a new image; the list keeps one file.
 
-<demo src="./__demos__/external-state.vue"></demo>
+<demo src="./__demos__/en-US/replacement.vue"></demo>
 
-### Queue Request
+### Select a directory
 
-<demo src="./__demos__/queue-request.vue"></demo>
+Select a folder to list its files. Use ordinary multiple selection on browsers or devices without directory support.
 
-## Async hooks and requests
+<demo src="./__demos__/en-US/directory.vue"></demo>
 
-### Before Remove
+## Preview and states
 
-<demo src="./__demos__/before-remove.vue"></demo>
+### Image and video preview
 
-### Prepare Request
+Preview the included image, or select a local video and click its thumbnail to play it. Turn preview off to disable the built-in viewer.
 
-<demo src="./__demos__/prepare-request.vue"></demo>
+<demo src="./__demos__/en-US/preview.vue"></demo>
 
-### Metadata Request
+### Readonly, disabled and reading mode
 
-<demo src="./__demos__/metadata-request.vue"></demo>
+Switch the same data between editable, readonly, disabled and reading modes. Readonly keeps preview; disabled blocks interaction; reading mode shows the value without the upload editor.
 
-### Late Request
+<demo src="./__demos__/en-US/states.vue"></demo>
 
-<demo src="./__demos__/late-request.vue"></demo>
+### Custom trigger and preview
+
+Customize the trigger and remove action with slots, and use the preview event to open a custom preview Dialog.
+
+<demo src="./__demos__/en-US/custom-surface.vue"></demo>
+
+## Upload workflow
+
+### Manual upload, progress and retry
+
+Choose files or add a sample, then start uploading. Cancel active uploads and retry a simulated first failure. A local timer simulates requests without sending files.
+
+<demo src="./__demos__/en-US/manual-upload.vue"></demo>
+
+### Confirm before removing
+
+Removing a file opens a confirmation Dialog. Cancel keeps the file; confirm removes it.
+
+<demo src="./__demos__/en-US/remove-confirm.vue"></demo>
+
+### Externally managed upload state
+
+Manage progress and results through the read event. Add a sample and complete it to see the controlled list update; no built-in request is used.
+
+<demo src="./__demos__/en-US/external-state.vue"></demo>
+
+## Composed examples
+
+### External upload button
+
+Hide the built-in trigger and call chooseFile() from an external button. Place the button before or after the list without changing the files.
+
+<demo src="./__demos__/en-US/external-trigger.vue"></demo>
+
+### Upload in a Dialog
+
+Open a Dialog to select or drop images and preview them. Closing keeps the selection so you can continue next time.
+
+<demo src="./__demos__/en-US/dialog-upload.vue"></demo>
+
+### Paste clipboard images
+
+Paste images into the input area and use useUploader.addFiles to reuse reading and validation. Ordinary text keeps its native input behavior.
+
+<demo src="./__demos__/en-US/clipboard.vue"></demo>
 
 ## Usage notes
+
+### File selection and device support
+
+For photos, use `accept="image/*"`. Leave `capture` unset or set `:capture="false"` to keep the system file/photo picker. Use `capture` only for direct camera capture; available choices depend on the browser and device.
 
 ### Editing and confirmation
 
@@ -117,6 +131,8 @@ Attachment confirmation commits file-list relationships; it cannot undo complete
 `read-pretty` is an independent boolean alongside `readonly` and `disabled`. It inherits from field to FormItem to Form; explicit `false` overrides the parent. The default is `false`. Reading mode renders no editor.
 
 ### Configuration
+
+Use `trigger-position="before"` or `trigger-position="after"` to place the built-in entry before or after the file list; the default is after. This also applies to the `trigger` slot and drag-and-drop entry. Values describe DOM order and are not rewritten in RTL. For fully external buttons, set `:show-upload-button="false"` and call the instance method `chooseFile()`.
 
 Public variable suffixes match across platforms; all defaults appear below with c/mp prefixes respectively.
 
@@ -147,6 +163,7 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 | draggable | `boolean` | `false` | Enable drag and drop |
 | disabled | `boolean` | `undefined` | Disable interaction; inherits Form, explicit false overrides |
 | readonly | `boolean` | `undefined` | Read-only; inherits Form, explicit false overrides |
+| read-pretty | `boolean` | `undefined` | Pure reading mode: hides the editor and shows the field value. Inherits from FormItem / Form; explicit false overrides inheritance. Resolves to false when unset. |
 | action | `string` | `undefined` | Upload request URL |
 | method | `string` | `'post'` | Upload request method |
 | headers | `UploadHeaders` | `undefined` | Request headers object or async function; preparation remains cancelable |
@@ -167,6 +184,7 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 | is-success-response | `UploadIsSuccessResponse` | `undefined` | Custom success predicate; defaults to HTTP 2xx |
 | request-choose | `UploadRequestChoose` | `undefined` | Own the selection entry; exceptions do not automatically open a file chooser |
 | list-type | `'text' \| 'picture' \| 'picture-card'` | `'text'` | File list appearance; supported on both platforms |
+| trigger-position | `'before' \| 'after'` | `'after'` | Place the upload entry before or after the file list; applies to every list-type, custom trigger slots and drag-and-drop entries. Values describe DOM order and are not rewritten in RTL. |
 | image-fit | `'fill' \| 'contain' \| 'cover' \| 'none' \| 'scale-down'` | `'cover'` | Thumbnail fit; item.fit overrides |
 | preview | `boolean` | `true` | Enable built-in image / video preview |
 | show-file-list | `boolean` | `true` | Show the file list |
@@ -229,7 +247,7 @@ Cancellation covers before-upload, asynchronous headers/data/name and asynchrono
 
 ## Types
 
-UploadProps、UploadEmits、UploadSlots、UploadExpose、UploadPublicMethods、UploadFileItem、UploadStatus、UploadListType、UploadResolveType、UploadImageFit、UploadCapture、UploadRejectedFile、UploadRejectedReason、UploadRequestOptions、UploadRequest、UploadCustomRequest、UploadProgressEvent、UploadData、UploadHeaders、UploadBeforeRead、UploadBeforeUpload、UploadBeforeRemove、UploadCreateThumbnailUrl、UploadIsSuccessResponse、UploadRequestChoose、UploadPreviewEvent、UseUploaderOptions、UploadInstance。
+UploadProps、UploadEmits、UploadSlots、UploadExpose、UploadPublicMethods、UploadFileItem、UploadStatus、UploadListType、UploadTriggerPosition、UploadResolveType、UploadImageFit、UploadCapture、UploadRejectedFile、UploadRejectedReason、UploadRequestOptions、UploadRequest、UploadCustomRequest、UploadProgressEvent、UploadData、UploadHeaders、UploadBeforeRead、UploadBeforeUpload、UploadBeforeRemove、UploadCreateThumbnailUrl、UploadIsSuccessResponse、UploadRequestChoose、UploadPreviewEvent、UseUploaderOptions、UploadInstance。
 
 ## Cover attachments and video duration
 

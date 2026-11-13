@@ -3,7 +3,7 @@
 
 .c-message-list {
   position: fixed;
-  z-index: var(~"--c-message-z-index");
+  z-index: max(var(--c-message-z-index), var(--c-internal-message-z-index, 0));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -50,7 +50,7 @@
 
   &-standalone {
     position: fixed;
-    z-index: var(~"--c-message-z-index");
+    z-index: max(var(--c-message-z-index), var(--c-internal-message-z-index, 0));
     left: 50%;
     margin-bottom: 0;
     transform: translateX(-50%);

@@ -1,5 +1,6 @@
-import { onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import context from './index'
+import { getHighestPopupZIndex } from '../_utils/popup-layer'
 
 export function useZIndex(source: () => boolean, count: number) {
   // SSR and the first hydration render must not depend on earlier client popups.
@@ -16,4 +17,13 @@ export function useZIndex(source: () => boolean, count: number) {
     else zIndex.value = context.zIndex
   })
   return { zIndex }
+}
+
+/** Feedback stays above active popups without becoming a modal interaction layer. */
+export function useFeedbackZIndex(ownerDocument: () => Document | undefined) {
+  const mounted = ref(false)
+  onMounted(() => { mounted.value = true })
+  return computed(() => mounted.value
+    ? Math.max(context.zIndex, getHighestPopupZIndex(ownerDocument())) + 1
+    : 2000)
 }
