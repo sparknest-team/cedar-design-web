@@ -214,7 +214,7 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 | placeholder | Hint text | `string` | `-` |
 | size | Input size | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` |
 | variant | Field appearance | `'filled' \| 'outline' \| 'standard'` | `'outline'` |
-| hint | Whether hint text floats | `boolean` | Inherited when omitted; standalone default `false` |
+| hint | Whether hint text floats | `boolean` | Inherits when unset; defaults to `false` when used independently |
 | clearable | Whether to allow the input to be cleared | `boolean` | `false` |
 | model-event | Model notification timing; change always denotes a commit | `'change' \| 'input'` | `'change'` |
 | readonly | Readonly state; can inherit from Form | `boolean` | `-` |

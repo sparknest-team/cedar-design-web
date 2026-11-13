@@ -195,7 +195,7 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 | readonly | Readonly state; can inherit from Form | `boolean` | `-` |
 | error | Error state; can inherit from FormItem | `boolean` | `-` |
 | placeholder | Hint text | `string` | `-` |
-| hint | Whether hint text floats | `boolean` | Inherited when omitted; standalone default `false` |
+| hint | Whether hint text floats | `boolean` | Inherits when unset; defaults to `false` when used independently |
 | line | Whether to draw a border or underline | `boolean` | `true` |
 | text-color | Input text color | `string` | `-` |
 | focus-color | Focused hint and supported border colors; does not control the caret | `string` | `-` |

@@ -202,12 +202,12 @@ Title dragging is controlled only by the initiating primary pointer. Disabling `
 
 ### Dialog Props
 
-Both dividers default to off, matching Card. Enable `top-divider` and `bottom-divider` independently. A divider is only shown when its header or footer exists. Dialog also supports these options in simple mode and function calls (`topDivider` / `bottomDivider`).
+Dividers follow Card and are disabled by default. Enable them separately with `top-divider` and `bottom-divider`; each appears only when its corresponding header or footer exists. Dialog also supports these options in simple mode and service calls, using `topDivider` and `bottomDivider` in service configuration.
 
 | Parameter | Description | Type | Default |
 | ------------------------- | -------------------------------------------- | -------------------------------- | ------------ |
-| top-divider | Divider between the header and content | `boolean` | `false` |
-| bottom-divider | Divider between content and footer | `boolean` | `false` |
+| top-divider | Divider between the title and content | `boolean` | `false` |
+| bottom-divider | Divider between the content and footer | `boolean` | `false` |
 | dir | Reading direction; inherits the source scope when omitted. Physical left/right placements keep their meaning. | `ReadingDirection` (`ltr` / `rtl`) | — |
 | `open` **(v-model)** | Visible state | `boolean` | `-` |
 | `default-open` | Initial uncontrolled state | `boolean` | `false` |
@@ -237,7 +237,7 @@ Both dividers default to off, matching Card. Enable `top-divider` and `bottom-di
 | `cancel-button-loading` | Cancel button loading state | `boolean` | `false` |
 | `confirm-button-disabled` | Disable the confirm button | `boolean` | `false` |
 | `cancel-button-disabled` | Disable the cancel button | `boolean` | `false` |
-| `confirm-button-props` | Confirm button props; defaults to primary + default, overridable | `ButtonProps` | `-` |
+| `confirm-button-props` | Confirm button props; defaults to primary + default and can be overridden | `ButtonProps` | `-` |
 | `cancel-button-props` | Cancel button props | `ButtonProps` | `-` |
 | `footer` | Whether to show the footer | `boolean` | `true` |
 | `dialog-class` | Dialog class | `string \| any[]` | `-` |
@@ -336,7 +336,7 @@ import type {
 
 ## CSS Variables
 
-Normal and simple dialogs grow with their content up to `90dvh` (`90vh` fallback). Only the body scrolls; the title and footer remain visible. Customize `--c-dialog-max-height` or `dialogStyle.maxHeight`; fullscreen dialogs use the full viewport height. The default non-centered top offset is capped at `5dvh` (`5vh` fallback); explicit `top` values remain author-controlled.
+Normal and simple modes grow with their content up to `90dvh`, falling back to `90vh` when unsupported. Beyond this height, only the body scrolls; the title and actions remain visible. Override the limit with `--c-dialog-max-height` or `dialogStyle.maxHeight`; fullscreen mode uses the full viewport height. In non-centered mode, the default top offset is capped at `5dvh`, falling back to `5vh`; an explicit `top` remains application-controlled.
 
 Dialog public color variables have the same meanings as Maple: `--c-dialog-background` is the raised panel background (`surface-raised`); `--c-dialog-overlay-background` is the scrim; `--c-dialog-title-text-color` and `--c-dialog-content-text-color` are primary content; `--c-dialog-close-button-color` is the secondary action. `--c-dialog-status-{info|success|warning|danger}-color` uses readable content-info/success/warning/danger, not status fills. Business themes should override these component variables; shared themes should override the corresponding system variables. Borders, widths, spacing and layout retain desktop specifications.
 

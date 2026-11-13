@@ -217,7 +217,7 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 | aria-label | Native input accessible label | `string` | `-` |
 | autofocus | Focus automatically after mount | `boolean` | `false` |
 | enterkeyhint | Mobile virtual-keyboard enter-key hint | `string` | `-` |
-| hint | Whether hint text floats | `boolean` | Inherited when omitted; standalone default `false` |
+| hint | Whether hint text floats | `boolean` | Inherits when unset; defaults to `false` when used independently |
 | line | Whether to draw a border or underline | `boolean` | `true` |
 | text-color | Input text color | `string` | `-` |
 | focus-color | Focused hint and supported border colors; does not control the caret | `string` | `-` |

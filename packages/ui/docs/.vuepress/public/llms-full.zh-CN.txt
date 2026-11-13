@@ -1557,12 +1557,11 @@ const options = Array.from({ length: 500 }, (_, index) => ({ value: `device-${in
 
 | 配置          | 作用                                         | 相关示例                         |
 | ------------- | -------------------------------------------- | -------------------------------- |
-| `options`     | 候选；支持分组，value 唯一，选择后转为字符串 | 自定义字段与内容、外观与浮动提示 |
-| `placeholder` | 占位文字或浮动提示内容                       | 自定义字段与内容、外观与浮动提示 |
+| `options`     | 候选；支持分组，value 唯一，选择后转为字符串 | 自定义字段与内容、外观与颜色 |
+| `placeholder` | 占位文字或浮动提示内容                       | 自定义字段与内容、外观与颜色 |
 | `field-names` | 映射 value、label、disabled 等字段           | 自定义字段与内容                 |
-| `variant`     | 输入外观；未设置时继承 Group                 | 外观与浮动提示                   |
-| `hint`        | 启用 Input 的浮动提示                        | 外观与浮动提示                   |
-| `clearable`   | 允许清除可编辑的非空值                       | 外观与浮动提示                   |
+| `variant`     | 输入外观；未设置时继承 Group                 | 外观与颜色                   |
+| `clearable`   | 允许清除可编辑的非空值                       | 外观与颜色                   |
 
 <!-- demo-config-notes:end -->
 
@@ -1596,7 +1595,7 @@ const options = [
 </script>
 ```
 
-### 外观与浮动提示
+### 外观与颜色
 
 Example source: src/auto-complete/__demos__/decorator.vue
 
@@ -1609,8 +1608,8 @@ const options = ['Cedar', 'Maple']
 <template>
   <c-space direction="column" size="md">
     <c-auto-complete v-for="variant in (['filled', 'outline', 'standard'] as const)" :key="variant"
-      v-model="value" :options="options" :variant="variant" :placeholder="variant" hint clearable />
-    <c-auto-complete v-model="value" :options="options" hint placeholder="自定义颜色"
+      v-model="value" :options="options" :variant="variant" :placeholder="variant" clearable />
+    <c-auto-complete v-model="value" :options="options" placeholder="自定义颜色"
       focus-color="#6750a4" text-color="#386a20" enterkeyhint="search">
       <template #prefix>@</template><template #suffix>.com</template>
     </c-auto-complete>
@@ -1974,6 +1973,8 @@ AutoComplete 的文本输入始终可搜索；filter-option 只控制本地候�
 公共 focus/blur 从首次挂载即可调用。focus 会打开可编辑的延迟编辑器，等待其就绪后定位；禁用、只读或纯阅读时不因此打开。blur 只失焦当前目标，不重新打开。保存的方法不会绑定旧编辑器，关闭、切换模式、停用或卸载会取消排队调用。
 
 refresh 可在编辑器未打开时重试组件自有的异步选项读取，沿用既有 AbortSignal、loading 和 load-error 协议，不自动打开编辑器；静态数组不产生额外请求。
+
+后续验收（尚未完成）：使用真实读屏器（如 VoiceOver、NVDA）及受支持的浏览器，检查输入框名称、候选加载与导航、选择、关闭及表单错误的实际播报。
 
 ## CSS Variables
 
@@ -4127,8 +4128,8 @@ import type { BreadcrumbProps, BreadcrumbItemProps, BreadcrumbRoute } from '@ced
 | `--c-breadcrumb-dropdown-icon` | `var(--c-color-text-2)` | `color` |
 | `--c-breadcrumb-font-weight-active` | `var(--c-font-weight-400)` | `font-weight` |
 | `--c-breadcrumb-icon-color` | `var(--c-color-text-3)` | `color` |
-| `--c-breadcrumb-link-text-color` | `rgb(var(--c-primary-8))` | `color` |
-| `--c-breadcrumb-link-text-color-hover` | `rgb(var(--c-primary-9))` | `color` |
+| `--c-breadcrumb-link-text-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-breadcrumb-link-text-color-hover` | `var(--c-sys-color-content-brand)` | `color` |
 | `--c-breadcrumb-margin-dropdown-icon-left` | `var(--c-spacing-2)` | `margin-inline-start` |
 | `--c-breadcrumb-margin-separator-horizontal` | `var(--c-spacing-2)` | `margin` |
 | `--c-breadcrumb-padding-text-horizontal` | `var(--c-spacing-2)` | `margin`, `padding` |
@@ -4167,7 +4168,7 @@ Button 的禁用配色按变体区分：彩色实心使用淡化状态背景；t
 
 # Button
 
-两端使用同一份实现和示例，组件前缀、主题基础变量与注册入口各自保留。
+两端使用同一份实现和示例，组件前缀、主题基础变量与注册入口各自保留。Button 和 ButtonGroup 默认不加阴影；需要时可显式设置 elevation。
 
 ## 基础示例
 
@@ -4206,7 +4207,7 @@ const statuses = [
 
 | 配置 | 作用 | 相关示例 |
 | --- | --- | --- |
-| `variant` | 外观；省略时继承按钮组，否则 default | 变体、状态与尺寸、自定义颜色 |
+| `variant` | 外观；省略时继承按钮组，否则 outline | 变体、状态与尺寸、自定义颜色 |
 | `size` | 尺寸；依次采用自身、按钮组、ConfigProvider，最后为 md | 变体、状态与尺寸、五档尺寸 |
 | `status` | 主题色；省略时继承按钮组，否则 default | 变体、状态与尺寸 |
 | `disabled` | 禁用；省略时继承按钮组，显式 false 可覆盖 | 禁用与链接拦截 |
@@ -4388,7 +4389,7 @@ Example source: src/button/__demos__/custom-color.vue
 | 配置 | 作用 | 相关示例 |
 | --- | --- | --- |
 | `status` | 主题色；省略时继承按钮组，否则 default | 图标与图文布局 |
-| `variant` | 外观；省略时继承按钮组，否则 default | 图标与图文布局 |
+| `variant` | 外观；省略时继承按钮组，否则 outline | 图标与图文布局 |
 | `size` | 尺寸；依次采用自身、按钮组、ConfigProvider，最后为 md | 图标与图文布局 |
 | `stacked` | 图标文字纵向排列；省略时继承按钮组 | 图标与图文布局 |
 | `round` | 圆形按钮 | 图标与图文布局 |
@@ -4645,7 +4646,7 @@ const loading = ref(false);
 | 配置 | 作用 | 相关示例 |
 | --- | --- | --- |
 | `size` | 尺寸；依次采用自身、按钮组、ConfigProvider，最后为 md | 表单控件尺寸对照 |
-| `variant` | 外观；省略时继承按钮组，否则 default | 表单控件尺寸对照 |
+| `variant` | 外观；省略时继承按钮组，否则 outline | 表单控件尺寸对照 |
 | `html-type` | 原生按钮类型 | 原生表单、焦点与触摸事件 |
 | `focusable` | 允许 Tab 顺序聚焦；不影响通过代码聚焦 | 原生表单、焦点与触摸事件 |
 <!-- demo-config-notes:end -->
@@ -5034,7 +5035,7 @@ Example source: src/button/__demos__/feedback.vue
 <script setup lang="ts">
 import { ref } from "vue";
 const ripple = ref(true);
-const elevation = ref(2);
+const elevation = ref(0);
 </script>
 <template>
   <c-space direction="column" :size="16">
@@ -5048,7 +5049,7 @@ const elevation = ref(2);
           aria-label="Button elevation"
       /></label>
     </c-space>
-    <c-button :ripple="ripple" :elevation="elevation"
+    <c-button variant="default" :ripple="ripple" :elevation="elevation"
       >Click to compare feedback</c-button
     >
   </c-space>
@@ -5105,7 +5106,7 @@ async function recover() {
 | 属性          | 说明                                                                                             | 类型                                      | 默认值         |
 | ------------- | ------------------------------------------------------------------------------------------------ | ----------------------------------------- | -------------- |
 | status        | 主题色；省略时继承按钮组，否则 default                                                           | `SemanticStatus`<br>`'default' \| 'primary' \| 'secondary' \| 'tertiary' \| 'info' \| 'success' \| 'warning' \| 'danger'` | `undefined`    |
-| variant       | 外观；省略时继承按钮组，否则 default                                                             | `default / text / outline / tonal`        | `undefined`    |
+| variant       | 外观；省略时继承按钮组，否则 outline                                                             | `default / text / outline / tonal`        | `undefined`    |
 | size          | 尺寸；依次采用自身、按钮组、ConfigProvider，最后为 md                                                                  | `xs / sm / md / lg / xl`                  | `undefined`    |
 | html-type     | 原生按钮类型                                                                                     | `button / submit / reset`                 | `button`       |
 | component     | 根标签，链接属性通过 attrs 传入                                                                  | `button / a`                              | `button`       |
@@ -5122,7 +5123,7 @@ async function recover() {
 | autofocus     | 原生自动聚焦                                                                                     | `boolean`                                 | `false`        |
 | text-color    | 自定义文字色                                                                                     | `string`                                  | `undefined`    |
 | color         | 自定义背景／变体基色                                                                             | `string`                                  | `undefined`    |
-| elevation     | default 变体阴影；true 为 2，false 关闭，数字四舍五入并限制 0～24；组内由组控制                  | `boolean / number`                        | `true`         |
+| elevation     | default 变体阴影；true 为 1，false 关闭，数字四舍五入并限制 0～24；组内由组控制                  | `boolean / number`                        | `false`         |
 | stacked       | 图标文字纵向排列；省略时继承按钮组                                                               | `boolean`                                 | `undefined`    |
 
 ### Button Events
@@ -5151,13 +5152,13 @@ async function recover() {
 | --- | --- | --- | --- |
 | status | 子按钮默认语义状态；子按钮可覆盖 | `SemanticStatus`<br>`'default' \| 'primary' \| 'secondary' \| 'tertiary' \| 'info' \| 'success' \| 'warning' \| 'danger'` | default |
 | size | 子按钮默认尺寸；子按钮可覆盖 | xs / sm / md / lg / xl | undefined |
-| variant | 子按钮默认外观；相邻按钮按生效变体拼接，允许混合 | default / text / outline / tonal | default |
+| variant | 子按钮默认外观；相邻按钮按生效变体拼接，允许混合 | default / text / outline / tonal | outline |
 | color | 子按钮默认自定义色；子按钮可覆盖 | string | undefined |
 | text-color | 子按钮默认文字色；子按钮可覆盖 | string | undefined |
 | disabled | 子按钮默认禁用状态；显式 false 可覆盖组 true | boolean | false |
 | stacked | 默认图文纵排；子按钮可显式 false 覆盖 | boolean | false |
 | vertical | 按钮组纵向排列，独立于按钮内部 stacked | boolean | false |
-| elevation | 组整体阴影；true 为 2，数值归一化到 0–24；仅 default 变体且组未禁用时生效 | boolean / number | true |
+| elevation | 组整体阴影；true 为 1，数值归一化到 0–24；仅 default 变体且组未禁用时生效 | boolean / number | false |
 
 根元素默认 `role="group"`；使用 `aria-label` 或 `aria-labelledby` 为需要命名的操作组提供名称。原生属性可覆盖 role，普通按钮组仍使用 Tab / Enter / Space，不自动接管方向键。
 
@@ -5203,9 +5204,9 @@ Button 保留 58 个外观变量。`{status}-color` 控制实心背景，`{statu
 | --- | --- | --- |
 | `--c-button-border-radius` | `var(--c-sys-radius-md)` | `border-bottom-left-radius`, `border-bottom-right-radius`, `border-radius`, `border-top-left-radius`, `border-top-right-radius` |
 | `--c-button-content-gap` | `var(--c-sys-space-3)` | `gap` |
-| `--c-button-danger-color` | `var(--c-sys-color-status-danger)` | `background-color` |
+| `--c-button-danger-color` | `var(--c-sys-color-status-danger)` | `background-color`, `color` |
 | `--c-button-danger-disabled-color` | `rgb(var(--c-danger-3))`<br>`rgba(var(--c-danger-6), 0.5)` (`:root[cedar-theme="dark"]`) | `background-color`, `color` |
-| `--c-button-danger-foreground-color` | `var(--c-sys-color-content-danger)` | `color` |
+| `--c-button-danger-foreground-color` | `var(--c-button-danger-color)` | `color` |
 | `--c-button-danger-tonal-color` | `rgb(var(--c-danger-1))` | `background-color` |
 | `--c-button-default-color` | `var(--c-sys-color-surface-default)` | `background-color` |
 | `--c-button-default-foreground-color` | `var(--c-sys-color-content-primary)` | `background-color`, `color` |
@@ -5214,9 +5215,9 @@ Button 保留 58 个外观变量。`{status}-color` 控制实心背景，`{statu
 | `--c-button-disabled-solid-text-color` | `var(--c-sys-color-content-on-dark)`<br>`rgba(255, 255, 255, 0.3)` (`:root[cedar-theme="dark"]`) | `color` |
 | `--c-button-disabled-text-color` | `var(--c-sys-color-content-disabled)` | `color` |
 | `--c-button-focus-color` | `var(--c-sys-color-action-primary)` | `outline` |
-| `--c-button-info-color` | `var(--c-sys-color-status-info)` | `background-color` |
+| `--c-button-info-color` | `var(--c-sys-color-status-info)` | `background-color`, `color` |
 | `--c-button-info-disabled-color` | `rgb(var(--c-blue-3))`<br>`rgba(var(--c-blue-6), 0.5)` (`:root[cedar-theme="dark"]`) | `background-color`, `color` |
-| `--c-button-info-foreground-color` | `var(--c-sys-color-content-info)` | `color` |
+| `--c-button-info-foreground-color` | `var(--c-button-info-color)` | `color` |
 | `--c-button-info-tonal-color` | `rgb(var(--c-blue-1))` | `background-color` |
 | `--c-button-lg-height` | `36px` | `height`, `min-width`, `width` |
 | `--c-button-lg-padding` | `0 var(--c-sys-space-7)` | `padding` |
@@ -5226,9 +5227,9 @@ Button 保留 58 个外观变量。`{status}-color` 控制实心背景，`{statu
 | `--c-button-md-padding` | `0 var(--c-sys-space-6)` | `padding` |
 | `--c-button-plain-state-opacity-active` | `1` | `opacity` |
 | `--c-button-plain-state-opacity-hover` | `0.5` | `opacity` |
-| `--c-button-primary-color` | `var(--c-sys-color-action-primary)` | `background-color` |
+| `--c-button-primary-color` | `var(--c-sys-color-action-primary)` | `background-color`, `color` |
 | `--c-button-primary-disabled-color` | `rgb(var(--c-primary-3))`<br>`rgba(var(--c-primary-6), 0.5)` (`:root[cedar-theme="dark"]`) | `background-color`, `color` |
-| `--c-button-primary-foreground-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-button-primary-foreground-color` | `var(--c-button-primary-color)` | `color` |
 | `--c-button-primary-state-layer-color` | `var(--c-button-solid-state-layer-color)` | `background-color` |
 | `--c-button-primary-tonal-color` | `rgb(var(--c-primary-1))` | `background-color` |
 | `--c-button-secondary-color` | `rgb(var(--c-gray-6))` | `background-color` |
@@ -5242,18 +5243,18 @@ Button 保留 58 个外观变量。`{status}-color` 控制实心背景，`{statu
 | `--c-button-state-layer-color` | `var(--c-sys-color-surface-page)` | `background-color` |
 | `--c-button-state-opacity-active` | `0.12` | `opacity` |
 | `--c-button-state-opacity-hover` | `0.08` | `opacity` |
-| `--c-button-success-color` | `var(--c-sys-color-status-success)` | `background-color` |
+| `--c-button-success-color` | `var(--c-sys-color-status-success)` | `background-color`, `color` |
 | `--c-button-success-disabled-color` | `rgb(var(--c-success-3))`<br>`rgba(var(--c-success-6), 0.5)` (`:root[cedar-theme="dark"]`) | `background-color`, `color` |
-| `--c-button-success-foreground-color` | `var(--c-sys-color-content-success)` | `color` |
+| `--c-button-success-foreground-color` | `var(--c-button-success-color)` | `color` |
 | `--c-button-success-tonal-color` | `rgb(var(--c-success-1))` | `background-color` |
 | `--c-button-tertiary-color` | `rgb(var(--c-gray-7))` | `background-color` |
 | `--c-button-tertiary-foreground-color` | `var(--c-sys-color-content-secondary)` | `color` |
 | `--c-button-tertiary-state-layer-color` | `var(--c-sys-color-content-on-bright)`<br>`var(--c-sys-color-content-on-dark)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-button-tertiary-text-color` | `var(--c-sys-color-content-on-dark)`<br>`var(--c-sys-color-content-on-bright)` (`:root[cedar-theme="dark"]`) | `color` |
 | `--c-button-tertiary-tonal-color` | `rgb(var(--c-gray-1))` | `background-color` |
-| `--c-button-warning-color` | `var(--c-sys-color-status-warning)` | `background-color` |
+| `--c-button-warning-color` | `var(--c-sys-color-status-warning)` | `background-color`, `color` |
 | `--c-button-warning-disabled-color` | `rgb(var(--c-warning-3))`<br>`rgba(var(--c-warning-6), 0.5)` (`:root[cedar-theme="dark"]`) | `background-color`, `color` |
-| `--c-button-warning-foreground-color` | `var(--c-sys-color-content-warning)` | `color` |
+| `--c-button-warning-foreground-color` | `var(--c-button-warning-color)` | `color` |
 | `--c-button-warning-tonal-color` | `rgb(var(--c-warning-1))` | `background-color` |
 | `--c-button-xl-height` | `44px` | `height`, `min-width`, `width` |
 | `--c-button-xl-padding` | `0 var(--c-sys-space-8)` | `padding` |
@@ -5637,7 +5638,7 @@ import type { CalendarInstance } from "@cedar-design/ui-vue";
 | `--c-calendar-cell-text-in-view` | `var(--c-color-text-1)` | `color` |
 | `--c-calendar-cell-text-not-in-view` | `var(--c-color-text-4)` | `color` |
 | `--c-calendar-cell-text-selected` | `var(--c-color-white)` | `color` |
-| `--c-calendar-cell-today-border-color` | `var(--c-sys-color-content-brand)` | `border` |
+| `--c-calendar-cell-today-border-color` | `var(--c-sys-color-action-primary)` | `border` |
 | `--c-calendar-date-circle-border-radius` | `var(--c-border-radius-circle)` | `border-radius` |
 | `--c-calendar-date-circle-size` | `var(--c-size-7)` | `height`, `width` |
 | `--c-calendar-date-content-height` | `70px` | `height` |
@@ -6106,7 +6107,7 @@ const duration = ref(250)
 
 当前浮层仍位于 Card 原有 DOM 位置。祖先的 transform 等属性可能改变 fixed 定位参照，祖先裁剪也可能遮挡浮层，因此不能保证覆盖整个视口。焦点在展开的 Card 内时，按 Escape 会请求关闭；内部控件已处理的 Escape 不会关闭 Card；内嵌弹层处于最上层时优先处理 Escape。浮层不提供模态焦点管理，需要模态交互时请使用 Dialog。
 
-当展开内容或关闭按钮内仍有焦点时，关闭会尝试将焦点返回展开前的控件；如果焦点已经移到其他位置，则不会抢回焦点。
+当展开内容或关闭按钮内仍有焦点时，关闭会尝试将焦点返回展开前的控件；如果焦点已经移到其他位置，则不会抢回焦点。 展开等待期间，如果焦点进入展开内容，内容会立即显示，不等待淡入动画。 等待期间尚未显示且未获得焦点的展开内容和关闭按钮不会出现在无障碍树中；焦点进入任一处时立即显示。
 
 若打开控件位于外部的封闭 Shadow Root，Card 无法直接取得内部控件；宿主需自行提供焦点委托或由应用处理焦点恢复。`delegatesFocus` 可将宿主焦点委托给内部控件，但不保证在有多个控件时返回原控件。
 
@@ -8706,12 +8707,12 @@ async function load() {
 | `default-input-value` | 非受控初始搜索文本，独立于选中值，仅初始化时读取 | `string` | `''` |
 | `multiple` | 多选；默认启用搜索 | `boolean` | `false` |
 | `size` | 完整支持 xs、sm、md、lg、xl，未设置时继承分组与表单 | `ComponentSize`<br>`'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `md` |
-| `variant` | filled、outline、standard；未设置时继承 InputGroup | `FormControlVariant`<br>`'standard' \| 'filled' \| 'outline'` | `filled` |
+| `variant` | filled、outline、standard；未设置时继承 InputGroup | `FormControlVariant`<br>`'standard' \| 'filled' \| 'outline'` | `outline` |
 | `disabled` | 禁用状态；显式值优先于继承的 Form / Group 状态 | `boolean` | `undefined` |
 | `readonly` | 只读状态；显式值优先于继承的 Form / Group 状态 | `boolean` | `undefined` |
 | `error` | 错误状态；显式值优先于继承的 Form / Group 状态 | `boolean` | `undefined` |
 | `placeholder` | 占位文本 | `string` | `—` |
-| `hint` | 是否启用浮动提示 | `boolean` | `true` |
+| `hint` | 是否启用浮动提示 | `boolean` | `false` |
 | `line` | 是否显示 standard 变体的下划线 | `boolean` | `true` |
 | `text-color` | 逐实例自定义文字颜色；静态主题优先使用 token | `string` | `—` |
 | `focus-color` | 逐实例自定义聚焦颜色；静态主题优先使用 token | `string` | `—` |
@@ -8866,6 +8867,8 @@ option({ data }) 接收规范化 CascaderOptionInfo，data.raw 是原始选项�
 
 公开类型包含 CascaderBaseValue、CascaderOptionInfo、CascaderReadScope、CascaderEmits、CascaderSlots、CascaderExpose，可从根入口及 cascader 子入口导入。纯 CascaderPanel 只接收选项数组，不接管根候选加载函数。
 
+后续验收（尚未完成）：使用真实读屏器（如 VoiceOver、NVDA）及受支持的浏览器，检查字段名称、层级导航与展开状态、搜索与选择、单选和多选、虚拟列表及表单错误的实际播报。
+
 ## CSS Variables
 
 <!-- component-css-variables:start -->
@@ -8901,7 +8904,7 @@ option({ data }) 接收规范化 CascaderOptionInfo，data.raw 是原始选项�
 | `--c-cascader-popup-box-shadow` | `0 4px 10px rgba(0, 0, 0, 0.1)` | `box-shadow` |
 | `--c-cascader-popup-color-border` | `var(--c-color-fill-3)` | `border`, `border-inline-end`, `border-top` |
 | `--c-cascader-popup-max-height` | `200px` | `height` |
-| `--c-cascader-popup-padding-vertical` | `var(--c-sys-space-2)` | `padding` |
+| `--c-cascader-popup-padding-vertical` | `var(--c-sys-space-2)` | `padding`, `padding-block-end` |
 | `--c-cascader-size-item-height` | `36px` | `height`, `line-height` |
 | `--c-cascader-size-item-icon` | `12px` | `height`, `width` |
 | `--c-cascader-slide-margin` | `120px` | `margin-inline-start` |
@@ -9978,7 +9981,7 @@ import type { CheckboxProps } from "@cedar-design/ui-vue";
 | `--c-checkbox-animation-duration` | `var(--c-transition-duration-3)` | `transition` |
 | `--c-checkbox-control-border-radius` | `2px` | `border-radius` |
 | `--c-checkbox-control-color` | `var(--c-sys-color-content-secondary)` | `color` |
-| `--c-checkbox-control-color-checked` | `var(--c-sys-color-action-primary)` | `color`, `outline` |
+| `--c-checkbox-control-color-checked` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-checkbox-control-color-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
 | `--c-checkbox-control-color-error` | `var(--c-sys-color-content-danger)` | `color` |
 | `--c-checkbox-control-size` | `14px` | `height`, `width` |
@@ -13432,7 +13435,7 @@ const value = ref(["2026-10-27", "2026-10-28"]);
 | `error` | 字段错误展示；未设时继承 | `boolean` | 继承，最终 false |
 | `focus-color` | 聚焦时的颜色 | `string` | 主题缺省 |
 | `format` | 显示与手输格式；函数只展示，无反向手输解析 | `string \| ((date: Date) => string)` | 按精度/时间配置 |
-| `hint` | 浮动占位提示；存在 Form 外置标签时不浮动 | `boolean` | `true` |
+| `hint` | 浮动占位提示；存在 Form 外置标签时不浮动 | `boolean` | `false` |
 | `input-editable` | 允许手输；不影响面板选择入口 | `boolean` | `true` |
 | `input-attrs` | 按顺序设置起点、终点原生输入属性；单项名称优先于公共名称 | `RangeInputAttributes[]` | `undefined` |
 | `line` | 显示外壳边框或底线 | `boolean` | `true` |
@@ -13456,7 +13459,7 @@ const value = ref(["2026-10-27", "2026-10-28"]);
 | `time-zone` | IANA 时区；无效时区不会回退成有效可选值 | `string` | 系统本地时区 |
 | `type` | 日期精度；Cedar 支持周/季度，Maple 支持日期/月/年 | `date \| month \| year \| week \| quarter` | `date` |
 | `value-format` | 序列化模型格式，支持 Date、timestamp 或格式字符串；独立于 format | `string` | 按精度/时间配置 |
-| `variant` | 字段外观 | `filled \| outline \| standard` | `filled` |
+| `variant` | 字段外观 | `filled \| outline \| standard` | `outline` |
 
 ### 日期族统一契约
 
@@ -14696,7 +14699,7 @@ Date 字段默认从输入框下方 bottom-start 打开。需要时通过 popupP
 | `error` | 字段错误展示；未设时继承 | `boolean` | 继承，最终 false |
 | `focus-color` | 聚焦时的颜色 | `string` | 主题缺省 |
 | `format` | 显示与手输格式；函数只展示，无反向手输解析 | `string \| ((date: Date) => string)` | 按精度/时间配置 |
-| `hint` | 浮动占位提示；存在 Form 外置标签时不浮动 | `boolean` | `true` |
+| `hint` | 浮动占位提示；存在 Form 外置标签时不浮动 | `boolean` | `false` |
 | `input-editable` | 允许手输；不影响面板选择入口 | `boolean` | `true` |
 | `line` | 显示外壳边框或底线 | `boolean` | `true` |
 | `loading` | 手动加载反馈，不从事件返回值推导 | `boolean` | `false` |
@@ -14719,7 +14722,7 @@ Date 字段默认从输入框下方 bottom-start 打开。需要时通过 popupP
 | `time-zone` | IANA 时区；无效时区不会回退成有效可选值 | `string` | 系统本地时区 |
 | `type` | 日期精度；Cedar 支持周/季度，Maple 支持日期/月/年 | `date \| month \| year \| week \| quarter` | `date` |
 | `value-format` | 序列化模型格式，支持 Date、timestamp 或格式字符串；独立于 format | `string` | 按精度/时间配置 |
-| `variant` | 字段外观 | `filled \| outline \| standard` | `filled` |
+| `variant` | 字段外观 | `filled \| outline \| standard` | `outline` |
 
 ### 日期族统一契约
 
@@ -16091,6 +16094,33 @@ const open = ref(false);
 </script>
 ```
 
+### 上下分割线
+
+打开面板后，分别切换两个开关，对比上、下分割线。初始均关闭。
+
+Example source: src/dialog/__demos__/dividers.vue
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const open = ref(false)
+const topDivider = ref(false)
+const bottomDivider = ref(false)
+</script>
+
+<template>
+  <c-button @click="open = true">分割线 / Dividers</c-button>
+  <c-dialog v-model:open="open" title="分割线 / Dividers" :top-divider="topDivider" :bottom-divider="bottomDivider">
+    <c-space direction="column">
+      <c-checkbox v-model="topDivider">top-divider</c-checkbox>
+      <c-checkbox v-model="bottomDivider">bottom-divider</c-checkbox>
+      <p>分割线默认关闭，可分别开启。 / Dividers are off by default and can be enabled independently.</p>
+    </c-space>
+  </c-dialog>
+</template>
+```
+
 ### 定制按钮文字
 
 Example source: src/dialog/__demos__/custom-text.vue
@@ -16363,8 +16393,12 @@ before-* 等待期间显示加载反馈并标记 aria-busy；拒绝或失败后�
 
 ### Dialog Props
 
+分割线与 Card 保持一致，默认均关闭；可通过 `top-divider`、`bottom-divider` 分别开启，仅在对应头部或底部区域存在时显示。Dialog 的简洁模式与函数式调用同样支持，函数式参数使用 `topDivider`、`bottomDivider`。
+
 | 参数名                    | 描述                                         | 类型                             | 默认值       |
 | ------------------------- | -------------------------------------------- | -------------------------------- | ------------ |
+| top-divider | 标题与内容之间的分割线 | `boolean` | `false` |
+| bottom-divider | 内容与底部之间的分割线 | `boolean` | `false` |
 | dir | 阅读方向；省略时继承来源作用域。物理 left/right 方位保持原意。 | `ReadingDirection` (`ltr` / `rtl`) | — |
 | `open` **(v-model)**      | 是否显示                                     | `boolean`                        | `-`          |
 | `default-open`            | 非受控默认显示                               | `boolean`                        | `false`      |
@@ -16394,7 +16428,7 @@ before-* 等待期间显示加载反馈并标记 aria-busy；拒绝或失败后�
 | `cancel-button-loading`   | 取消按钮 loading                             | `boolean`                        | `false`      |
 | `confirm-button-disabled` | 确认按钮 disabled                            | `boolean`                        | `false`      |
 | `cancel-button-disabled`  | 取消按钮 disabled                            | `boolean`                        | `false`      |
-| `confirm-button-props`    | 确认按钮 props                               | `ButtonProps`                    | `-`          |
+| `confirm-button-props`    | 确认按钮 props；默认 primary + default，可覆盖                               | `ButtonProps`                    | `-`          |
 | `cancel-button-props`     | 取消按钮 props                               | `ButtonProps`                    | `-`          |
 | `footer`                  | 是否展示 footer 区域                         | `boolean`                        | `true`       |
 | `dialog-class`            | 对话框 class                                 | `string \| any[]`                | `-`          |
@@ -16493,6 +16527,8 @@ import type {
 
 ## CSS Variables
 
+普通和简洁模式随内容自然撑开，最大高度为 `90dvh`（不支持时回退 `90vh`）。超出时仅正文滚动，标题和操作区保持可见。通过 `--c-dialog-max-height` 或 `dialogStyle.maxHeight` 覆盖；全屏模式使用完整视口高度。非居中模式的默认顶部偏移限制在 `5dvh`（回退 `5vh`）以内；显式 `top` 仍由使用方控制。
+
 Dialog 的公开颜色变量与 Maple 同义：`--c-dialog-background` 表示浮层背景（`surface-raised`），`--c-dialog-overlay-background` 表示遮罩，`--c-dialog-title-text-color` 和 `--c-dialog-content-text-color` 表示主要内容，`--c-dialog-close-button-color` 表示次要操作；`--c-dialog-status-{info|success|warning|danger}-color` 对应可读状态内容色（content-info/success/warning/danger），不是状态填充色。业务主题优先覆盖这些组件变量，跨组件主题则覆盖相应的 system 变量。边框、宽度、间距和布局仍遵循桌面端规格。
 
 遮罩通过 Dialog 组件变量消费 `sys-color-scrim`；Dialog 的遮罩颜色由自身变量控制。实例遮罩变量可放在 `overlay-style` 上；放在面板 `dialog-style` 上的变量不会继承给兄弟遮罩节点。显式 `overlay-style.backgroundColor` 优先。Teleport 场景需要在实际 DOM 祖先作用域设置变量。暗色主题继承同一套颜色语义；几何保留平台差异。状态图标使用可读的 content 状态色。
@@ -16523,9 +16559,10 @@ Dialog 的公开颜色变量与 Maple 同义：`--c-dialog-background` 表示浮
 | `--c-dialog-content-line-height` | `var(--c-line-height)` | `line-height` |
 | `--c-dialog-content-padding` | `28px var(--c-sys-space-8)` | `padding` |
 | `--c-dialog-content-text-color` | `var(--c-sys-color-content-primary)` | `color` |
-| `--c-dialog-fullscreen-height` | `100vh` | `height` |
+| `--c-dialog-fullscreen-height` | `100vh`<br>`100dvh` | `height` |
 | `--c-dialog-fullscreen-width` | `100vw` | `width` |
-| `--c-dialog-margin-top` | `100px` | `top` |
+| `--c-dialog-margin-top` | `min(100px, 5vh)`<br>`min(100px, 5dvh)` | `top` |
+| `--c-dialog-max-height` | `90vh`<br>`90dvh` | `max-height` |
 | `--c-dialog-overlay-background` | `var(--c-sys-color-scrim)` | `background-color` |
 | `--c-dialog-simple-actions-gap` | `32px` | `margin-top` |
 | `--c-dialog-simple-border-radius` | `var(--c-sys-radius-md)` | `border-radius` |
@@ -17420,6 +17457,33 @@ const handleCancel = () => {
 </script>
 ```
 
+### 上下分割线
+
+打开面板后，分别切换两个开关，对比上、下分割线。初始均关闭。
+
+Example source: src/drawer/__demos__/dividers.vue
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const open = ref(false)
+const topDivider = ref(false)
+const bottomDivider = ref(false)
+</script>
+
+<template>
+  <c-button @click="open = true">分割线 / Dividers</c-button>
+  <c-drawer v-model:open="open" title="分割线 / Dividers" :top-divider="topDivider" :bottom-divider="bottomDivider">
+    <c-space direction="column">
+      <c-checkbox v-model="topDivider">top-divider</c-checkbox>
+      <c-checkbox v-model="bottomDivider">bottom-divider</c-checkbox>
+      <p>分割线默认关闭，可分别开启。 / Dividers are off by default and can be enabled independently.</p>
+    </c-space>
+  </c-drawer>
+</template>
+```
+
 ### 函数调用
 
 Example source: src/drawer/__demos__/function-call.vue
@@ -17532,8 +17596,12 @@ before-* 等待期间显示加载反馈并标记 aria-busy；拒绝或失败后�
 
 ### Drawer Props
 
+分割线与 Card 保持一致，默认均关闭；可通过 `top-divider`、`bottom-divider` 分别开启，仅在对应头部或底部区域存在时显示。函数式调用同样支持，参数使用 `topDivider`、`bottomDivider`。
+
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
+| top-divider | 标题与内容之间的分割线 | `boolean` | `false` |
+| bottom-divider | 内容与底部之间的分割线 | `boolean` | `false` |
 | dir | 阅读方向；省略时继承来源作用域。物理 left/right 方位保持原意。 | `ReadingDirection` (`ltr` / `rtl`) | — |
 | open **(v-model)** | 是否可见 | `boolean` | - |
 | default-open | 非受控模式下是否默认可见 | `boolean` | `false` |
@@ -18136,7 +18204,7 @@ FieldDecorator 是 Input、Textarea、Select 与日期时间控件的展示外�
 
 - 三种变体：`outline`（默认）、`filled`、`standard`。消费者可以显式选择自己的默认变体。
 - 五种尺寸：`xs / sm / md / lg / xl`，默认 `md`；具体高度使用各端 token。
-- `hint` 在两端默认均为 `true`；Input 在 FormItem 已有外部标签时关闭浮动提示。
+- `hint` 在两端默认均为 `false`；Input 在 FormItem 已有外部标签时关闭浮动提示。
 - 有内容且可编辑时才渲染清除按钮；`0` 算非空，`[]` 算空。Cedar 在 hover/focus 时显示，Maple 常驻；触屏媒体条件下 Cedar 也常驻。
 - 默认按钮通过各端全局语言系统读取无障碍文案，不维护组件私有词典。
 - 内容列尺寸使用 ResizeObserver 观察，支持前缀变化及隐藏容器重新显示；卸载时清理监听。
@@ -18468,7 +18536,7 @@ const text = ref('加载时仍可编辑')
 | `size` | `ComponentSize`<br>`'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `md`，实现全部五档尺寸 |
 | `variant` | `'outline' \| 'filled' \| 'standard'` | `outline` |
 | `placeholder` | `string` | 浮动标签文本 |
-| `hint` | `boolean` | `true` |
+| `hint` | `boolean` | `false` |
 | `hint-center` | `boolean` | `true`；多行控件设为 false |
 | `line` | `boolean` | `true`，是否显示边框或底线 |
 | `focused` | `boolean` | 消费者传入焦点状态 |
@@ -18525,7 +18593,7 @@ const text = ref('加载时仍可编辑')
 | `--c-field-loading-color` | `var(--c-field-focus-color)` | `color` |
 | `--c-field-loading-duration` | `1s` | `animation` |
 | `--c-field-loading-line-size` | `2px` | `height` |
-| `--c-field-padding-horizontal` | `12px` | `inset-inline-start`, `margin-inline-end`, `margin-inline-start`, `max-width`, `padding`, `padding-inline-end`, `padding-inline-start` |
+| `--c-field-padding-horizontal` | `12px` | `inset-inline-start`, `margin-inline-end`, `margin-inline-start`, `max-width`, `padding`, `padding-inline-end`, `padding-inline-start`, `width` |
 | `--c-field-placeholder-text-color` | `var(--c-sys-color-content-tertiary)` | `color` |
 | `--c-field-prefix-text-color` | `var(--c-sys-color-content-secondary)` | `color` |
 | `--c-field-size-lg-font-size` | `14px` | `font-size` |
@@ -18595,9 +18663,9 @@ Document: llms/zh-CN/components/filter-form.md
 
 在 `fields` 中直接传入组件并配置字段。宽屏会自动多列展示，超出时可展开/收起。
 
-筛选容器使用主题表面色（亮色为白色、暗色随主题适配）、轻描边与20px内边距，不再使用输入控件的浅填充背景。操作区预留两列并与字段控件顶边对齐；单列时按可用列数收敛。单列/双列折叠默认保留一行字段和独立操作行，避免只剩按钮。展开/收起为原生按钮，支持Tab聚焦、Enter/空格操作并提供aria-expanded。行间距默认16px，可由grid-props.rowGap覆盖。
+筛选容器使用主题表面色（亮色为白色、暗色随主题适配）、轻描边与20px内边距，不再使用输入控件的浅填充背景。操作区按按钮实际宽度自适应预留列数，展开/收起与操作按钮始终保持一行，并与字段控件顶边对齐。收起时操作区位于首行右侧；展开后字段使用完整列布局，操作区位于最后一行右侧，末行空间不足时另起一行靠右。容器或按钮宽度变化时自动重新计算预留空间。单列/双列折叠默认保留一行字段和独立操作行，避免只剩按钮。展开/收起为原生按钮，支持Tab聚焦、Enter/空格操作并提供aria-expanded。行间距默认16px，可由grid-props.rowGap覆盖。
 
-The filter uses the theme surface with a subtle border and 20px inset, rather than an input-fill background. Actions align with the fields and reserve two columns, clamped to the available column count. One- and two-column collapse retain a row of fields above the actions by default. Expand/collapse is a native keyboard-accessible button with aria-expanded. The default 16px row gap can be overridden through grid-props.rowGap.
+The filter uses the theme surface with a subtle border and 20px inset, rather than an input-fill background. Actions reserve columns according to their actual width, with the expand/collapse control and action buttons kept on one line. Collapsed actions sit at the right of the first row. Expanded fields use the full column layout, with actions at the right of the last row, or on a new row when there is insufficient space. Resizing the container or changing button widths recalculates the reservation. One- and two-column collapse retain a row of fields above the actions by default. Expand/collapse is a native keyboard-accessible button with aria-expanded. The default 16px row gap can be overridden through grid-props.rowGap.
 
 Example source: src/filter-form/__demos__/basic.vue
 
@@ -19060,13 +19128,18 @@ Document: llms/zh-CN/components/form.md
 
 # Form
 
+
+横向表单项默认不使用 Row 的栅格 gutter，字段之间保留默认 16px 间距；通过 `row-props.gutter` 显式配置时以业务设置为准。表单输入和选择字段默认使用 `outline`，仍可显式指定 `filled` 或 `standard`。
+
 ## 字段名称
 
-在 Shadow DOM 中使用延迟编辑 Slider 时，若弹层传送到 `body`，浏览器可能无法通过 ID 将弹层内控件与 Shadow DOM 中的提示或错误关联。可设置 `:popup-container="false"`，使弹层留在同一根节点；仍需为控件提供清晰名称。
+显式 `validate-status="error"` 且没有自动校验错误时，字段会通过 `aria-describedby` 关联可见的 `help` 文案或插槽；业务已有的描述会保留。自动错误出现时优先关联自动错误。
+
+在 Shadow DOM 中使用延迟编辑 Slider 时，若弹层传送到 `body`，浏览器可能无法通过 ID 将弹层内控件与 Shadow DOM 中的提示或错误关联。可设置 `:popup-container="false"`，或将 `popup-container` 设为同一 ShadowRoot 内的元素，使弹层与提示留在同一根节点；仍需为控件提供清晰名称。容器元素需要由应用提供，并考虑样式、定位和裁剪。
 
 直接编辑模式下，为单个字段设置可见标签时，可将 FormItem 的 `label-attrs` 中的 `for` 与控件的 `id` 对应；选择、日期和时间字段的原生输入不会用 placeholder 覆盖已关联的标签。显式 `aria-label` 或 `aria-labelledby` 仍按原生无障碍名称规则优先。placeholder 只是未提供标签时的回退，不能替代清晰的字段标签。日期和时间范围字段在 FormItem 中会将表单标签关联到范围分组；仍需通过 `input-attrs` 分别提供能够区分起止端点的名称。若 `label-attrs.for` 指向其他控件，不会将该标签误关联到范围分组。 当前未设置 `for` 时，范围控件会引用最近的 FormItem 标签，即使同一表单项还有其他控件。混合字段请将范围控件放在独立的有样式 FormItem 中并分别命名，或通过明确的 `for` 指向实际目标并为其他控件提供独立名称。单值 Slider 在 `for` 匹配组件 `id` 时为滑块及可选数字输入关联该标签；点击默认原生标签可聚焦未禁用的滑块；阻止标签点击默认行为可取消该聚焦。范围 Slider 的 `id` 与 `for` 匹配时，表单标签命名整个分组；仍应使用 `aria-label` 数组分别命名两个端点。 `tooltip` 提示按钮可单独聚焦，其名称不会合并到字段标签中。
 
-Transfer 在未设置 `for` 时也会引用最近的 FormItem 标签，即使同一项内有其他字段。混合使用时可将 Transfer 放入单独的 FormItem，或为它提供明确名称，并为其他字段分别关联标签。
+Transfer 和 ColorPicker 在未设置 `for` 且未提供明确名称时也会引用最近的 FormItem 标签，即使同一项内有其他字段。混合使用时可将它们分别放入单独的 FormItem，或为每个控件提供明确名称，并为其他字段分别关联标签。
 
 具有数据收集、校验和提交功能的表单，包含复选框、单选框、输入框、下拉选择框等元素。
 
@@ -21876,13 +21949,13 @@ function submitted(data) { submissions.value++; result.value = data.errors ? 'in
 
 ### 五档密度与项目间距
 
-xs/sm/md/lg/xl 均通过 size 类选择对应几何。项目下间距和验证文案预留高度共同使用 size-*-item-margin-bottom；inline 使用独立 inline-item-margin-bottom，error/help 不重复添加项目下间距。
+xs/sm/md/lg/xl 均通过 size 类选择对应几何；所有尺寸的项目下间距默认均为 16px，控件高度和标签字号仍随 size 变化。项目下间距和验证文案预留高度共同使用 size-*-item-margin-bottom；inline 使用独立 inline-item-margin-bottom，error/help 不重复添加项目下间距。
 
 | 变量                                  | 默认值                      |
 | ------------------------------------- | --------------------------- |
 | `--c-form-size-xl-height`             | `var(--c-size-xl)`          |
 | `--c-form-size-xl-label-font-size`    | `var(--c-sys-font-size-lg)` |
-| `--c-form-size-xl-item-margin-bottom` | `var(--c-spacing-8)`        |
+| `--c-form-size-xl-item-margin-bottom` | `var(--c-spacing-7)`        |
 
 ### edit-mode 继承规则
 
@@ -22370,16 +22443,16 @@ import type {
 | `--c-form-required-symbol-color` | `var(--c-sys-color-content-danger)` | `color` |
 | `--c-form-required-symbol-font-size` | `var(--c-font-size-body-1)` | `font-size` |
 | `--c-form-size-lg-height` | `var(--c-size-lg)` | `line-height`, `min-height` |
-| `--c-form-size-lg-item-margin-bottom` | `var(--c-spacing-8)` | `line-height`, `margin-bottom`, `min-height` |
+| `--c-form-size-lg-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height` |
 | `--c-form-size-lg-label-font-size` | `var(--c-font-size-body-3)` | `font-size` |
 | `--c-form-size-md-height` | `var(--c-size-md)` | `line-height`, `min-height` |
-| `--c-form-size-md-item-margin-bottom` | `var(--c-spacing-8)` | `line-height`, `margin-bottom`, `min-height` |
+| `--c-form-size-md-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height` |
 | `--c-form-size-md-label-font-size` | `var(--c-font-size-body-3)` | `font-size` |
 | `--c-form-size-sm-height` | `var(--c-size-sm)` | `line-height`, `min-height` |
-| `--c-form-size-sm-item-margin-bottom` | `var(--c-spacing-8)` | `line-height`, `margin-bottom`, `min-height` |
+| `--c-form-size-sm-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height` |
 | `--c-form-size-sm-label-font-size` | `var(--c-font-size-body-3)` | `font-size` |
 | `--c-form-size-xl-height` | `var(--c-size-xl)` | `line-height`, `min-height` |
-| `--c-form-size-xl-item-margin-bottom` | `var(--c-spacing-8)` | `line-height`, `margin-bottom`, `min-height` |
+| `--c-form-size-xl-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height` |
 | `--c-form-size-xl-label-font-size` | `var(--c-sys-font-size-lg)` | `font-size` |
 | `--c-form-size-xs-height` | `var(--c-size-xs)` | `line-height`, `min-height` |
 | `--c-form-size-xs-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height` |
@@ -25438,7 +25511,7 @@ const variants = ['outline', 'filled', 'standard'] as const
 <template>
   <div class="number-demo">
     <label v-for="size in sizes" :key="size">{{ size }}<c-input-number :size="size" :default-value="12" /></label>
-    <label v-for="variant in variants" :key="variant">{{ variant }}<c-input-number :variant="variant" hint placeholder="金额" :default-value="12" /></label>
+    <label v-for="variant in variants" :key="variant">{{ variant }}<c-input-number :variant="variant" placeholder="金额" :default-value="12" /></label>
   </div>
 </template>
 <style scoped>
@@ -25941,7 +26014,7 @@ Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，
 | placeholder | 提示文字 | `string` | `-` |
 | size | 输入框大小 | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` |
 | variant | 输入框变体 | `'filled' \| 'outline' \| 'standard'` | `'outline'` |
-| hint | 提示文字是否浮起 | `boolean` | 未设置时继承；独立默认 `true` |
+| hint | 提示文字是否浮起 | `boolean` | 未设置时继承；独立默认 `false` |
 | clearable | 是否允许清空输入框 | `boolean` | `false` |
 | model-event | 模型通知时机；change 始终表示提交 | `'change' \| 'input'` | `'change'` |
 | readonly | 是否只读，可继承 Form | `boolean` | `-` |
@@ -26337,7 +26410,7 @@ function submit() {
 
 ### 字段状态与原生输入
 
-`disabled`、`readonly`、`error` 未设置时继承 FormItem / Form；InputGroup 可提供禁用、只读、尺寸和变体，字段显式值优先，`false` 可覆盖父级。独立使用时默认变体仍为 `filled`。延迟编辑器遵守相同状态，编辑中禁用或只读会取消草稿。
+`disabled`、`readonly`、`error` 未设置时继承 FormItem / Form；InputGroup 可提供禁用、只读、尺寸和变体，字段显式值优先，`false` 可覆盖父级。独立使用时默认变体为 `outline`。延迟编辑器遵守相同状态，编辑中禁用或只读会取消草稿。
 
 `id`、`name`、`aria-*`、`data-*`、原生约束和键盘监听器传给实际 input，`class` / `style` 保留在外壳。`name` 提交的是独立的输入草稿，不会序列化标签数组。`input-value` 控制输入草稿；与标签的 `model-value` 分开。组合输入只通知一次；被禁用、只读或关闭取消的组合输入不会在稍后提交。
 
@@ -26428,6 +26501,12 @@ onBeforeUnmount(() => { if (timer) clearTimeout(timer) })
 </template>
 ```
 
+## 使用说明
+
+### 键盘操作
+
+后续验收（尚未完成）：使用真实读屏器（如 VoiceOver、NVDA）及受支持的浏览器，检查输入框名称、标签名称、创建与删除、键盘操作以及表单错误提示的实际播报。
+
 ## API
 
 ### 空值识别与阅读空文案
@@ -26459,7 +26538,7 @@ onBeforeUnmount(() => { if (timer) clearTimeout(timer) })
 | readonly                  | 是否为只读模式                     | `boolean`                                         |  `-`   |
 | clearable                 | 是否允许清空                       | `boolean`                                         |  `false`   |
 | size                      | 输入框的大小                       | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`            |   `'md'`   |
-| variant                   | 输入框的变体                       | `'filled' \| 'outline' \| 'standard'`             | `'filled'` |
+| variant                   | 输入框的变体                       | `'filled' \| 'outline' \| 'standard'`             | `'outline'` |
 | max-tag-count             | 有限非负整数；0 不限，非法值诊断后按不限展示 | `number`                                          |    `0`     |
 | retain-input-value        | 是否保留输入框的内容               | `boolean \| { create?: boolean; blur?: boolean }` |  `false`   |
 | format-tag                | 格式化标签内容                     | `(data: TagData) => string`                       |    `-`     |
@@ -27028,7 +27107,7 @@ Example source: src/input/__demos__/form-feedback.vue
 <template>
   <c-form :model="model">
     <c-form-item field="account" label="账户" feedback :validate-status="status" :help="status === 'error' ? '请输入账户后重试' : undefined">
-      <c-input v-model="model.account" placeholder="外置标签会关闭内部浮动提示" hint clearable />
+      <c-input v-model="model.account" placeholder="请输入账户" clearable />
     </c-form-item>
     <c-button status="primary" :loading="status === 'validating'" @click="validate">模拟异步校验</c-button>
   </c-form>
@@ -27052,7 +27131,7 @@ async function validate() {
 
 ### 浮动提示
 
-`hint` 未设置时继承 InputGroup；独立使用的库默认值为 `true`，有外置 FormItem 标签时关闭浮动提示。显式设置 `false` 使用原生 placeholder，显式设置 `true` 仍受外置标签抑制。`text-color`、`focus-color`、`blur-color` 可覆盖文字与提示颜色。
+`hint` 未设置时继承 InputGroup；独立使用的库默认值为 `false`，有外置 FormItem 标签时关闭浮动提示。显式设置 `false` 使用原生 placeholder，显式设置 `true` 仍受外置标签抑制。`text-color`、`focus-color`、`blur-color` 可覆盖文字与提示颜色。
 
 Example source: src/input/__demos__/floating-hint.vue
 
@@ -27578,7 +27657,7 @@ const value = ref('加载时仍可编辑')
 | readonly                  | 是否只读，可继承 Form                                      | `boolean`                                           |     `-`     |
 | error                     | 是否为错误状态，可继承 FormItem                            | `boolean`                                           |     `-`     |
 | placeholder               | 提示文字                                                   | `string`                                            |     `-`     |
-| hint                      | 提示文字是否浮起                                           | `boolean`                                           | 未设置时继承；独立默认 `true` |
+| hint                      | 提示文字是否浮起                                           | `boolean`                                           | 未设置时继承；独立默认 `false` |
 | line                      | 是否绘制边框或底线                                         | `boolean`                                           |   `true`    |
 | text-color                | 输入文字颜色                                               | `string`                                            |     `-`     |
 | focus-color               | 聚焦提示及支持的边框通道；不控制 caret                     | `string`                                            |     `-`     |
@@ -27648,7 +27727,7 @@ InputPassword 支持所有 Input 属性、事件、插槽与方法。
 | 参数名   | 描述         | 类型                            | 默认值                           |
 | -------- | ------------ | ------------------------------- | -------------------------------- |
 | size     | 组内默认尺寸 | `ComponentSize`<br>`'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | 继承 Form/ConfigProvider 或 `md` |
-| variant  | 组内默认变体 | `filled \| outline \| standard` | `filled`                         |
+| variant  | 组内默认变体 | `filled \| outline \| standard` | `outline` |
 | disabled | 组内禁用状态 | `boolean`                       | 继承 Form 或 `false`             |
 | readonly | 组内只读状态 | `boolean`                       | 继承 Form 或 `false`             |
 | hint     | 组内浮动提示 | `boolean`                       | 库默认值                         |
@@ -28953,6 +29032,8 @@ const jump = () => retained?.scrollIntoView({ key: 50, align: "top" });
 
 虚拟列表先覆盖视口，再按 `buffer` 在前后预渲染；`buffer=0` 合法，`estimatedSize` 必须是有限正数（包括小于 1 的值），无效值回退 30px。`fixedSize` 可动态切换；可变高度使用已测量值和估计值，支持 `ResizeObserver` 时会监听已挂载的可测量根节点尺寸变化。`item` 插槽接收原始索引和 unknown 数据，可返回多个可测量根节点，并应提供稳定的 `itemKey`；测量按同一项目的根节点整体边界计算。需要向辅助技术表达完整集合时，可在业务行上按实际数据提供 `aria-setsize` 和 `aria-posinset`。
 
+虚拟列表目前不能可靠测量或定位直接作为项目返回的多根子组件。临时方案是在插槽中用一个实际 DOM 元素包住该组件，或让子组件自身返回单个实际 DOM 根；根据列表语义选择合适的元素。该限制不影响插槽直接返回的多个可测量元素。
+
 服务端渲染时，`default`、`header`、`footer`、`empty` 或 `item` 插槽中同一节点同时使用 `v-for` 和 `v-memo` 当前会报错；数据模式是否启用虚拟化均受影响。可暂时移除该节点的 `v-memo` 并验证更新行为。
 
 ### List Props
@@ -30117,6 +30198,8 @@ Mention 仅在 Cedar 提供。
 ### 输入与候选关联
 
 input 使用 combobox，textarea 保留支持多行的 textbox；两者都以 aria-autocomplete、aria-controls 和 aria-activedescendant 关联实际 listbox 与活动候选。候选关闭或字段只读后撤下活动关联；方向键移动候选时原生输入保留 DOM 焦点。这里验证的是 DOM 关系和键盘行为，不代表已完成所有读屏软件和真机组合的认证。
+
+后续验收（尚未完成）：使用真实读屏器（如 VoiceOver、NVDA）及受支持的浏览器，检查原子提及初始化姓名、候选导航与选择、编辑和整体删除时的实际播报。
 
 ## CSS Variables
 
@@ -31458,6 +31541,9 @@ duration 应为有限非负数；负数、NaN、Infinity 等非法值不调度�
 ### Message Slots
 
 `default`、`icon`、`action`。
+
+
+消息层级会自动保持在当前文档内活动的弹层之上，也会跟随新打开的弹层和显式 `zIndex` 的变化。消息不会接管弹窗焦点或 Esc 处理。`--c-message-z-index` 用于设置消息层级下限；自定义挂载容器仍需避免被祖先的层叠上下文或裁剪限制。
 
 ## CSS Variables
 
@@ -34627,6 +34713,8 @@ focus()/blur() 通过当前 Select 引用操作真实输入；允许编辑的延
 
 编辑入口枚举保留端侧差异：Cedar 为 direct / click / dblclick，Maple 为 direct / popup。
 
+后续验收（尚未完成）：使用真实读屏器（如 VoiceOver、NVDA）及受支持的浏览器，检查字段名称、异步加载与错误、单选和多选、键盘导航、已选人员名称以及电话和聊天操作的实际播报。
+
 ## CSS Variables
 
 <!-- component-css-variables:start -->
@@ -36875,7 +36963,7 @@ Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，
 | `--c-radio-action-padding` | `calc((var(--c-internal-radio-mask-height) / 2) - (var(--c-radio-control-size) / 2))` | `padding` |
 | `--c-radio-animation-duration` | `var(--c-transition-duration-3)` | `transition` |
 | `--c-radio-control-color` | `var(--c-sys-color-content-secondary)` | `color` |
-| `--c-radio-control-color-checked` | `var(--c-sys-color-action-primary)` | `color`, `outline` |
+| `--c-radio-control-color-checked` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-radio-control-color-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
 | `--c-radio-control-color-error` | `var(--c-sys-color-content-danger)` | `box-shadow`, `color` |
 | `--c-radio-control-size` | `14px` | `font-size`, `height`, `padding`, `width` |
@@ -47658,12 +47746,12 @@ const value = ref("a");
 | `default-input-value` | 非受控初始搜索文本，独立于选中值，仅初始化时读取 | `string` | `''` |
 | `multiple` | 多选；默认启用搜索 | `boolean` | `false` |
 | `size` | 完整支持 xs、sm、md、lg、xl，未设置时继承分组与表单 | `ComponentSize`<br>`'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `md` |
-| `variant` | filled、outline、standard；未设置时继承 InputGroup | `FormControlVariant`<br>`'standard' \| 'filled' \| 'outline'` | `filled` |
+| `variant` | filled、outline、standard；未设置时继承 InputGroup | `FormControlVariant`<br>`'standard' \| 'filled' \| 'outline'` | `outline` |
 | `disabled` | 禁用状态；显式值优先于继承的 Form / Group 状态 | `boolean` | `undefined` |
 | `readonly` | 只读状态；显式值优先于继承的 Form / Group 状态 | `boolean` | `undefined` |
 | `error` | 错误状态；显式值优先于继承的 Form / Group 状态 | `boolean` | `undefined` |
 | `placeholder` | 占位文本 | `string` | `—` |
-| `hint` | 是否启用浮动提示 | `boolean` | `true` |
+| `hint` | 是否启用浮动提示 | `boolean` | `false` |
 | `line` | 是否显示 standard 变体的下划线 | `boolean` | `true` |
 | `text-color` | 逐实例自定义文字颜色；静态主题优先使用 token | `string` | `—` |
 | `focus-color` | 逐实例自定义聚焦颜色；静态主题优先使用 token | `string` | `—` |
@@ -47714,7 +47802,7 @@ Select 还提供 `remove(value)`、`exceed-limit(value, event)`、`dropdown-scro
 
 使用 `label({ data })` 自定义已选标签，`selected` 替换整个已选区域。还支持 `prefix`、`suffix`、`clear-icon({ clear })`、`arrow-icon`、`loading-icon`、`search-icon`、`empty`、`option({ data })`。
 
-选项 `label` 是用于搜索的纯文本；自定义选项内容使用 `render` 或 `option` 插槽，自定义反显使用 `format-label` 或 `label` 插槽。以 value 而非 label 识别选项。选项的 `disabled` 禁止选择和删除，`tagProps` 可定制已选标签。
+选项 `label` 是用于搜索的纯文本；自定义选项内容使用 `render` 或 `option` 插槽，自定义反显使用 `format-label` 或 `label` 插槽。以 value 而非 label 识别选项。选项的 `disabled` 禁止选择和删除，`tagProps` 可定制已选标签。 它支持 `style` 和 `onClose` 等监听；标签的显示和可移除状态由 Select 根据当前状态控制，关闭事件同时参与 Select 的移除流程。
 
 Select 还支持 `header`、`footer`、`trigger` 和默认插槽中的 `Option / Optgroup`。Option 属性为 `value`、`label`、`disabled`、`tagProps`、`index`；默认插槽提供 `selected`。分组数据为 `{ isGroup: true, label, options }`。所有编辑展示共用相同选项模型；read 插槽可自定义阅读内容。
 
@@ -47729,7 +47817,7 @@ Select 还支持 `header`、`footer`、`trigger` 和默认插槽中的 `Option /
 | value | 选项值，未传时取 label 或默认插槽文本 | string \| number \| boolean \| Record<string, unknown> | undefined |
 | label | 搜索与已选标签使用的文本 | string | undefined |
 | disabled | 禁止选择与移除 | boolean | false |
-| tag-props | 已选标签属性 | TagProps | undefined |
+| tag-props | 已选标签属性、原生属性和 Tag 事件监听 | SelectOptionTagProps | undefined |
 | index | 手动指定选项顺序 | number | undefined |
 
 ### Option Slots
@@ -47838,6 +47926,8 @@ SelectEditMode 在根入口和 select 子入口一致导出，值沿用各端 ed
 
 多选 empty-value 支持数组、null/undefined 和 empty-values 识别的空值；不接受其他标量。工厂仅在实际清空且无禁用保留项时执行，非法结果开发期提示并回退为 []，不向模型写入非法标量。
 
+后续验收（尚未完成）：使用真实读屏器（如 VoiceOver、NVDA）及受支持的浏览器，检查字段名称、单选与多选、分组和虚拟列表、键盘导航、加载及表单错误的实际播报。
+
 ## CSS Variables
 
 <!-- component-css-variables:start -->
@@ -47865,7 +47955,7 @@ SelectEditMode 在根入口和 select 子入口一致导出，值沿用各端 ed
 | `--c-select-popup-option-bg-hover` | `var(--c-sys-color-state-hover)` | `background`, `background-color` |
 | `--c-select-popup-option-bg-selected` | `transparent` | `background`, `background-color` |
 | `--c-select-popup-option-bg-selected-hover` | `var(--c-select-popup-option-bg-hover)` | `background`, `background-color` |
-| `--c-select-popup-option-border-radius` | `var(--c-sys-radius-lg)` | `border-radius` |
+| `--c-select-popup-option-border-radius` | `0` | `border-radius` |
 | `--c-select-popup-option-check-color` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-select-popup-option-check-gap` | `var(--c-sys-space-4)` | `margin-inline-start` |
 | `--c-select-popup-option-check-size` | `var(--c-sys-font-size-md)` | `height`, `width` |
@@ -47878,8 +47968,8 @@ SelectEditMode 在根入口和 select 子入口一致导出，值沿用各端 ed
 | `--c-select-popup-option-text-color-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
 | `--c-select-popup-option-text-color-hover` | `var(--c-sys-color-content-primary)` | `color` |
 | `--c-select-popup-option-text-color-selected` | `var(--c-sys-color-action-primary)` | `color`, `outline`, `outline-color` |
-| `--c-select-popup-padding-horizontal` | `var(--c-sys-space-3)` | `padding-inline`, `padding-inline-end`, `padding-inline-start` |
-| `--c-select-popup-padding-vertical` | `var(--c-sys-space-2)` | `padding`, `padding-block` |
+| `--c-select-popup-padding-horizontal` | `0` | `padding-inline`, `padding-inline-end`, `padding-inline-start` |
+| `--c-select-popup-padding-vertical` | `var(--c-sys-space-2)` | `padding`, `padding-block`, `padding-block-end`, `padding-block-start` |
 
 </div>
 
@@ -48515,7 +48605,7 @@ Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，
 | error | boolean | undefined | 错误外观，省略时继承表单。 |
 | marks | Record<number, string> | undefined | 范围内位置的文字标记。 |
 | show-ticks | boolean | false | 显示步长刻度，最多 1000 个。 |
-| show-input | boolean | false | 显示附带 InputNumber；范围模式显示两个。滑块的 aria-describedby 也用于数字输入，并与表单错误说明合并。 |
+| show-input | boolean | false | 显示附带 InputNumber；范围模式显示两个。滑块的 aria-describedby 也用于数字输入，并与表单错误说明合并。显式 aria-description 会透传给滑块及数字输入；浏览器优先使用可解析的 aria-describedby，两者不一定合并。 |
 | show-tooltip | boolean / 'always' | true | true 在悬浮、聚焦、拖动时显示；false 隐藏；always 常驻。 |
 | format-tooltip | SliderTooltipFormatter | undefined | 格式化提示及 aria-valuetext，不改变模型。 |
 | aria-label | string / [string, string] | undefined | 单拇指名称或范围两个拇指的名称。 |
@@ -53665,7 +53755,7 @@ before-* 等待期间显示加载反馈并标记 aria-busy；拒绝或失败后�
 | `--c-switch-checked-text-color` | `var(--c-switch-text-color)` | `color` |
 | `--c-switch-disabled-opacity` | `0.5` | `opacity` |
 | `--c-switch-duration` | `var(--c-sys-motion-duration-standard)` | `transition` |
-| `--c-switch-focus-width` | `2px` | `outline`, `outline-offset` |
+| `--c-switch-focus-width` | `2px` | `box-shadow` |
 | `--c-switch-font-size` | `var(--c-sys-font-size-xs)` | `font-size` |
 | `--c-switch-gap` | `var(--c-sys-space-2)` | `inset-inline-start`, `padding-inline` |
 | `--c-switch-handle-background` | `var(--c-sys-color-surface-default)` | `background` |
@@ -53692,7 +53782,7 @@ before-* 等待期间显示加载反馈并标记 aria-busy；拒绝或失败后�
 | `--c-switch-tonal-text-color` | `var(--c-sys-color-content-secondary)` | `color` |
 | `--c-switch-tonal-track-background` | `var(--c-sys-color-surface-muted)` | `background` |
 | `--c-switch-tonal-width` | `52px` | `min-width` |
-| `--c-switch-track-active-background` | `var(--c-sys-color-action-primary)` | `background`, `outline` |
+| `--c-switch-track-active-background` | `var(--c-sys-color-action-primary)` | `background` |
 | `--c-switch-track-background` | `var(--c-sys-color-content-secondary)` | `background` |
 | `--c-switch-track-error-background` | `var(--c-sys-color-content-danger)` | `background`, `border-color` |
 | `--c-switch-width` | `40px` | `min-width` |
@@ -58716,7 +58806,7 @@ Table 继承最近的原生 `dir`；直接传入 `dir` 时，服务端首屏即�
 | `--c-table-pagination-margin` | `var(--c-spacing-6)` | `margin-bottom`, `margin-top` |
 | `--c-table-pagination-sticky-bg` | `var(--c-color-bg-1)` | `background`, `background-color` |
 | `--c-table-pagination-sticky-padding` | `12px 0` | `padding` |
-| `--c-table-resizing-border-color` | `var(--c-sys-color-content-brand)` | `border-right-color` |
+| `--c-table-resizing-border-color` | `var(--c-sys-color-action-primary)` | `border-right-color` |
 | `--c-table-selection-col-width` | `40px` | `max-width`, `min-width`, `width` |
 | `--c-table-shadow-left` | `inset 6px 0 8px -3px rgba(0, 0, 0, 0.15)` | `box-shadow` |
 | `--c-table-shadow-right` | `inset -6px 0 8px -3px rgba(0, 0, 0, 0.15)` | `box-shadow` |
@@ -60058,8 +60148,8 @@ show / checked 为受控值时由调用方更新。隐藏时保留淡出效果�
 | `--c-tag-blue-bg-hover` | `rgb(var(--c-blue-2))`<br>`rgba(var(--c-blue-6), 0.35)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-blue-border-color` | `transparent` | `border` |
 | `--c-tag-blue-border-color-hover` | `transparent` | `border-color` |
-| `--c-tag-blue-icon-color` | `rgb(var(--c-blue-9))` | `color` |
-| `--c-tag-blue-text-color` | `rgb(var(--c-blue-9))` | `border-color`, `color` |
+| `--c-tag-blue-icon-color` | `rgb(var(--c-blue-6))` | `color` |
+| `--c-tag-blue-text-color` | `rgb(var(--c-blue-6))` | `border-color`, `color` |
 | `--c-tag-border-radius` | `var(--c-sys-radius-sm)` | `border-radius` |
 | `--c-tag-border-type` | `solid` | `border` |
 | `--c-tag-border-width` | `1px` | `border`, `line-height` |
@@ -60067,8 +60157,8 @@ show / checked 为受控值时由调用方更新。隐藏时保留淡出效果�
 | `--c-tag-brand-bg-hover` | `rgb(var(--c-brand-2))`<br>`rgba(var(--c-brand-6), 0.35)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-brand-border-color` | `transparent` | `border` |
 | `--c-tag-brand-border-color-hover` | `transparent` | `border-color` |
-| `--c-tag-brand-icon-color` | `rgb(var(--c-brand-9))` | `color` |
-| `--c-tag-brand-text-color` | `rgb(var(--c-brand-9))` | `border-color`, `color` |
+| `--c-tag-brand-icon-color` | `rgb(var(--c-brand-6))` | `color` |
+| `--c-tag-brand-text-color` | `rgb(var(--c-brand-6))` | `border-color`, `color` |
 | `--c-tag-close-font-size` | `var(--c-sys-font-size-xs)` | `font-size` |
 | `--c-tag-close-margin-left` | `var(--c-spacing-2)` | `margin-left`, `margin-right` |
 | `--c-tag-custom-text-color` | `var(--c-sys-color-content-on-dark)` | `color` |
@@ -60076,8 +60166,8 @@ show / checked 为受控值时由调用方更新。隐藏时保留淡出效果�
 | `--c-tag-cyan-bg-hover` | `rgb(var(--c-cyan-2))`<br>`rgba(var(--c-cyan-6), 0.35)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-cyan-border-color` | `transparent` | `border` |
 | `--c-tag-cyan-border-color-hover` | `transparent` | `border-color` |
-| `--c-tag-cyan-icon-color` | `rgb(var(--c-cyan-9))` | `color` |
-| `--c-tag-cyan-text-color` | `rgb(var(--c-cyan-9))` | `border-color`, `color` |
+| `--c-tag-cyan-icon-color` | `rgb(var(--c-cyan-6))` | `color` |
+| `--c-tag-cyan-text-color` | `rgb(var(--c-cyan-6))` | `border-color`, `color` |
 | `--c-tag-default-bg` | `var(--c-sys-color-state-hover)` | `background-color` |
 | `--c-tag-default-bg-hover` | `var(--c-color-fill-3)` | `background-color` |
 | `--c-tag-default-border-color` | `transparent` | `border-color` |
@@ -60089,8 +60179,8 @@ show / checked 为受控值时由调用方更新。隐藏时保留淡出效果�
 | `--c-tag-gold-bg-hover` | `rgb(var(--c-gold-2))`<br>`rgba(var(--c-gold-6), 0.35)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-gold-border-color` | `transparent` | `border` |
 | `--c-tag-gold-border-color-hover` | `transparent` | `border-color` |
-| `--c-tag-gold-icon-color` | `rgb(var(--c-gold-9))` | `color` |
-| `--c-tag-gold-text-color` | `rgb(var(--c-gold-9))` | `border-color`, `color` |
+| `--c-tag-gold-icon-color` | `rgb(var(--c-gold-6))` | `color` |
+| `--c-tag-gold-text-color` | `rgb(var(--c-gold-6))` | `border-color`, `color` |
 | `--c-tag-gray-bg` | `rgb(var(--c-gray-2))`<br>`rgba(var(--c-gray-6), 0.2)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-gray-bg-hover` | `rgb(var(--c-gray-3))`<br>`rgba(var(--c-gray-6), 0.35)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-gray-border-color` | `transparent` | `border` |
@@ -60101,53 +60191,53 @@ show / checked 为受控值时由调用方更新。隐藏时保留淡出效果�
 | `--c-tag-green-bg-hover` | `rgb(var(--c-green-2))`<br>`rgba(var(--c-green-6), 0.35)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-green-border-color` | `transparent` | `border` |
 | `--c-tag-green-border-color-hover` | `transparent` | `border-color` |
-| `--c-tag-green-icon-color` | `rgb(var(--c-green-9))` | `color` |
-| `--c-tag-green-text-color` | `rgb(var(--c-green-9))` | `border-color`, `color` |
+| `--c-tag-green-icon-color` | `rgb(var(--c-green-6))` | `color` |
+| `--c-tag-green-text-color` | `rgb(var(--c-green-6))` | `border-color`, `color` |
 | `--c-tag-icon-margin-right` | `var(--c-spacing-2)` | `margin-left`, `margin-right` |
 | `--c-tag-lime-bg` | `rgb(var(--c-lime-1))`<br>`rgba(var(--c-lime-6), 0.2)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-lime-bg-hover` | `rgb(var(--c-lime-2))`<br>`rgba(var(--c-lime-6), 0.35)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-lime-border-color` | `transparent` | `border` |
 | `--c-tag-lime-border-color-hover` | `transparent` | `border-color` |
-| `--c-tag-lime-icon-color` | `rgb(var(--c-lime-9))` | `color` |
-| `--c-tag-lime-text-color` | `rgb(var(--c-lime-9))` | `border-color`, `color` |
+| `--c-tag-lime-icon-color` | `rgb(var(--c-lime-6))` | `color` |
+| `--c-tag-lime-text-color` | `rgb(var(--c-lime-6))` | `border-color`, `color` |
 | `--c-tag-magenta-bg` | `rgb(var(--c-magenta-1))`<br>`rgba(var(--c-magenta-6), 0.2)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-magenta-bg-hover` | `rgb(var(--c-magenta-2))`<br>`rgba(var(--c-magenta-6), 0.35)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-magenta-border-color` | `transparent` | `border` |
 | `--c-tag-magenta-border-color-hover` | `transparent` | `border-color` |
-| `--c-tag-magenta-icon-color` | `rgb(var(--c-magenta-9))` | `color` |
-| `--c-tag-magenta-text-color` | `rgb(var(--c-magenta-9))` | `border-color`, `color` |
+| `--c-tag-magenta-icon-color` | `rgb(var(--c-magenta-6))` | `color` |
+| `--c-tag-magenta-text-color` | `rgb(var(--c-magenta-6))` | `border-color`, `color` |
 | `--c-tag-orange-bg` | `rgb(var(--c-orange-1))`<br>`rgba(var(--c-orange-6), 0.2)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-orange-bg-hover` | `rgb(var(--c-orange-2))`<br>`rgba(var(--c-orange-6), 0.35)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-orange-border-color` | `transparent` | `border` |
 | `--c-tag-orange-border-color-hover` | `transparent` | `border-color` |
-| `--c-tag-orange-icon-color` | `rgb(var(--c-orange-9))` | `color` |
-| `--c-tag-orange-text-color` | `rgb(var(--c-orange-9))` | `border-color`, `color` |
+| `--c-tag-orange-icon-color` | `rgb(var(--c-orange-6))` | `color` |
+| `--c-tag-orange-text-color` | `rgb(var(--c-orange-6))` | `border-color`, `color` |
 | `--c-tag-orangered-bg` | `rgb(var(--c-orangered-1))`<br>`rgba(var(--c-orangered-6), 0.2)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-orangered-bg-hover` | `rgb(var(--c-orangered-2))`<br>`rgba(var(--c-orangered-6), 0.35)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-orangered-border-color` | `transparent` | `border` |
 | `--c-tag-orangered-border-color-hover` | `transparent` | `border-color` |
-| `--c-tag-orangered-icon-color` | `rgb(var(--c-orangered-9))` | `color` |
-| `--c-tag-orangered-text-color` | `rgb(var(--c-orangered-9))` | `border-color`, `color` |
+| `--c-tag-orangered-icon-color` | `rgb(var(--c-orangered-6))` | `color` |
+| `--c-tag-orangered-text-color` | `rgb(var(--c-orangered-6))` | `border-color`, `color` |
 | `--c-tag-padding-horizontal` | `var(--c-spacing-4)` | `padding` |
 | `--c-tag-padding-vertical` | `0` | `line-height`, `padding` |
 | `--c-tag-pinkpurple-bg` | `rgb(var(--c-pinkpurple-1))`<br>`rgba(var(--c-pinkpurple-6), 0.2)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-pinkpurple-bg-hover` | `rgb(var(--c-pinkpurple-2))`<br>`rgba(var(--c-pinkpurple-6), 0.35)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-pinkpurple-border-color` | `transparent` | `border` |
 | `--c-tag-pinkpurple-border-color-hover` | `transparent` | `border-color` |
-| `--c-tag-pinkpurple-icon-color` | `rgb(var(--c-pinkpurple-9))` | `color` |
-| `--c-tag-pinkpurple-text-color` | `rgb(var(--c-pinkpurple-9))` | `border-color`, `color` |
+| `--c-tag-pinkpurple-icon-color` | `rgb(var(--c-pinkpurple-6))` | `color` |
+| `--c-tag-pinkpurple-text-color` | `rgb(var(--c-pinkpurple-6))` | `border-color`, `color` |
 | `--c-tag-purple-bg` | `rgb(var(--c-purple-1))`<br>`rgba(var(--c-purple-6), 0.2)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-purple-bg-hover` | `rgb(var(--c-purple-2))`<br>`rgba(var(--c-purple-6), 0.35)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-purple-border-color` | `transparent` | `border` |
 | `--c-tag-purple-border-color-hover` | `transparent` | `border-color` |
-| `--c-tag-purple-icon-color` | `rgb(var(--c-purple-9))` | `color` |
-| `--c-tag-purple-text-color` | `rgb(var(--c-purple-9))` | `border-color`, `color` |
+| `--c-tag-purple-icon-color` | `rgb(var(--c-purple-6))` | `color` |
+| `--c-tag-purple-text-color` | `rgb(var(--c-purple-6))` | `border-color`, `color` |
 | `--c-tag-red-bg` | `rgb(var(--c-red-1))`<br>`rgba(var(--c-red-6), 0.2)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-red-bg-hover` | `rgb(var(--c-red-2))`<br>`rgba(var(--c-red-6), 0.35)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-red-border-color` | `transparent` | `border` |
 | `--c-tag-red-border-color-hover` | `transparent` | `border-color` |
-| `--c-tag-red-icon-color` | `rgb(var(--c-red-9))` | `color` |
-| `--c-tag-red-text-color` | `rgb(var(--c-red-9))` | `border-color`, `color` |
+| `--c-tag-red-icon-color` | `rgb(var(--c-red-6))` | `color` |
+| `--c-tag-red-text-color` | `rgb(var(--c-red-6))` | `border-color`, `color` |
 | `--c-tag-round-radius` | `100px` | `border-radius` |
 | `--c-tag-size-lg` | `var(--c-size-7)` | `height`, `line-height` |
 | `--c-tag-size-lg-font-size` | `var(--c-sys-font-size-md)` | `font-size` |
@@ -60620,8 +60710,8 @@ const record = (name: string) => { events.value = [...events.value.slice(-7), na
 </script>
 <template>
   <div class="textarea-body-demo">
-    <c-textarea v-model="value" hint clearable placeholder="工作备注" :auto-size="{ minRows: 2, maxRows: 5 }" :max-length="100" show-word-limit @clear="record('clear')" @input="record('input')" @update:model-value="record('update:modelValue')" @change="record('change')" />
-    <c-textarea :line="false" hint placeholder="无边框提示" focus-color="#137547" :rows="2" />
+    <c-textarea v-model="value" clearable placeholder="工作备注" :auto-size="{ minRows: 2, maxRows: 5 }" :max-length="100" show-word-limit @clear="record('clear')" @input="record('input')" @update:model-value="record('update:modelValue')" @change="record('change')" />
+    <c-textarea :line="false" placeholder="无边框输入" focus-color="#137547" :rows="2" />
     <p>Enter 保持换行；失焦提交 change；清空完整通知一次。</p>
     <output>{{ events.join(' → ') || '等待操作' }}</output>
   </div>
@@ -60743,7 +60833,7 @@ FormItem 先校验候选值，失败时保持编辑；通过后再执行 before-
 | aria-label | 原生输入框的无障碍标签 | `string` | `-` |
 | autofocus | 是否自动聚焦 | `boolean` | `false` |
 | enterkeyhint | 移动端虚拟键盘回车键提示 | `string` | `-` |
-| hint | 提示文字是否浮起 | `boolean` | 未设置时继承；独立默认 `true` |
+| hint | 提示文字是否浮起 | `boolean` | 未设置时继承；独立默认 `false` |
 | line | 是否绘制边框或底线 | `boolean` | `true` |
 | text-color | 输入文字颜色 | `string` | `-` |
 | focus-color | 聚焦提示及支持的边框通道；不控制 caret | `string` | `-` |
@@ -60845,7 +60935,7 @@ import type {
 | `--c-textarea-height` | `auto` | `height` |
 | `--c-textarea-line-height` | `var(--c-line-height)` | `line-height` |
 | `--c-textarea-min-height` | `var(--c-sys-control-height-xl)` | `min-height` |
-| `--c-textarea-padding-horizontal` | `var(--c-sys-space-3)` | `padding` |
+| `--c-textarea-padding-horizontal` | `var(--c-sys-space-3)` | `padding`, `padding-inline-end` |
 | `--c-textarea-padding-vertical` | `var(--c-sys-space-1)` | `padding` |
 | `--c-textarea-placeholder-color` | `var(--c-sys-color-content-secondary)` | `color` |
 
@@ -61280,7 +61370,7 @@ Example source: src/time-range/__demos__/size.vue
 
 ### 字段外壳与配置边界
 
-`hint` 控制浮动提示（Cedar 默认 false，Maple 默认 true），有 Form 外置标签时不启用。`line` 默认 true；`text-color / focus-color / blur-color` 为可选颜色字符串。`error` 未设置时继承 Form，显式 false 覆盖错误态。TimeRange 的 `separator` 默认 `~`，允许空字符串。默认 variant 保留 Cedar filled、Maple standard，可显式指定同一变体。
+`hint` 控制浮动提示（Cedar 与 Maple 默认均为 false），有 Form 外置标签时不启用。`line` 默认 true；`text-color / focus-color / blur-color` 为可选颜色字符串。`error` 未设置时继承 Form，显式 false 覆盖错误态。TimeRange 的 `separator` 默认 `~`，允许空字符串。Cedar 与 Maple 的字段默认均为 outline；可显式指定 filled 或 standard。
 
 字段顶层负责值、默认值、展开、格式、步长、边界、禁用规则和只读/禁用状态。请直接在字段上设置这些属性，不放进 timePickerProps/timeRangePickerProps。嵌套配置只允许对应面板的展示属性；不能通过模型/确认/选择事件替换字段流程。类型会拒绝此类配置，运行时也过滤，且不会把嵌套规则作为顶层未设置时的回退。
 
@@ -61293,7 +61383,7 @@ Example source: src/time-range/__demos__/field-appearance.vue
 import { ref } from "vue";
 
 const value = ref(["09:00", "18:00"]);
-const hint = ref(true);
+const hint = ref(false);
 const error = ref(false);
 const line = ref(true);
 </script>
@@ -61896,7 +61986,7 @@ const value = ref(["09:30:00", "10:30:00"]);
 | `focus-color` | 聚焦时的颜色 | `string` | 主题缺省 |
 | `format` | 字符串解析、显示及输出格式；十二小时缺省带 a | `string` | 按 use12Hours |
 | `hide-disabled-options` | 隐藏禁用时间选项；时钟保留刻度位置 | `boolean` | `false` |
-| `hint` | 浮动占位提示；存在 Form 外置标签时不浮动 | `boolean` | `true` |
+| `hint` | 浮动占位提示；存在 Form 外置标签时不浮动 | `boolean` | `false` |
 | `input-editable` | 允许手输；不影响面板选择入口 | `boolean` | `true` |
 | `input-attrs` | 按顺序设置起点、终点原生输入属性；单项名称优先于公共名称 | `RangeInputAttributes[]` | `undefined` |
 | `line` | 显示外壳边框或底线 | `boolean` | `true` |
@@ -61919,7 +62009,7 @@ const value = ref(["09:30:00", "10:30:00"]);
 | `text-color` | 内容文字颜色 | `string` | 主题缺省 |
 | `time-range-picker-props` | 范围面板展示配置，根拥有模型、规则和状态 | `TimePanelPresentationProps` | `{}` |
 | `use12-hours` | 十二小时面板；小时禁用回调仍用 0–23 | `boolean` | `false` |
-| `variant` | 字段外观 | `filled \| outline \| standard` | `filled` |
+| `variant` | 字段外观 | `filled \| outline \| standard` | `outline` |
 
 ### 编辑与确认
 
@@ -62381,7 +62471,7 @@ function resetSelections() {
 
 ### 字段外壳与配置边界
 
-`hint` 控制浮动提示（Cedar 默认 false，Maple 默认 true），有 Form 外置标签时不启用。`line` 默认 true；`text-color / focus-color / blur-color` 为可选颜色字符串。`error` 未设置时继承 Form，显式 false 覆盖错误态。TimeRange 的 `separator` 默认 `~`，允许空字符串。默认 variant 保留 Cedar filled、Maple standard，可显式指定同一变体。
+`hint` 控制浮动提示（Cedar 与 Maple 默认均为 false），有 Form 外置标签时不启用。`line` 默认 true；`text-color / focus-color / blur-color` 为可选颜色字符串。`error` 未设置时继承 Form，显式 false 覆盖错误态。TimeRange 的 `separator` 默认 `~`，允许空字符串。Cedar 与 Maple 的字段默认均为 outline；可显式指定 filled 或 standard。
 
 字段顶层负责值、默认值、展开、格式、步长、边界、禁用规则和只读/禁用状态。请直接在字段上设置这些属性，不放进 timePickerProps/timeRangePickerProps。嵌套配置只允许对应面板的展示属性；不能通过模型/确认/选择事件替换字段流程。类型会拒绝此类配置，运行时也过滤，且不会把嵌套规则作为顶层未设置时的回退。
 
@@ -62394,7 +62484,7 @@ Example source: src/time/__demos__/field-appearance.vue
 import { ref } from "vue";
 
 const value = ref("09:00");
-const hint = ref(true);
+const hint = ref(false);
 const error = ref(false);
 const line = ref(true);
 </script>
@@ -62983,7 +63073,7 @@ const value = ref("09:30:00");
 | `focus-color` | 聚焦时的颜色 | `string` | 主题缺省 |
 | `format` | 字符串解析、显示及输出格式；十二小时缺省带 a | `string` | 按 use12Hours |
 | `hide-disabled-options` | 隐藏禁用时间选项；时钟保留刻度位置 | `boolean` | `false` |
-| `hint` | 浮动占位提示；存在 Form 外置标签时不浮动 | `boolean` | `true` |
+| `hint` | 浮动占位提示；存在 Form 外置标签时不浮动 | `boolean` | `false` |
 | `input-editable` | 允许手输；不影响面板选择入口 | `boolean` | `true` |
 | `line` | 显示外壳边框或底线 | `boolean` | `true` |
 | `loading` | 手动加载反馈，不从事件返回值推导 | `boolean` | `false` |
@@ -63003,7 +63093,7 @@ const value = ref("09:30:00");
 | `text-color` | 内容文字颜色 | `string` | 主题缺省 |
 | `time-picker-props` | 独立时间面板的展示配置，根拥有模型、规则和状态 | `TimePanelPresentationProps` | `{}` |
 | `use12-hours` | 十二小时面板；小时禁用回调仍用 0–23 | `boolean` | `false` |
-| `variant` | 字段外观 | `filled \| outline \| standard` | `filled` |
+| `variant` | 字段外观 | `filled \| outline \| standard` | `outline` |
 
 ### 编辑与确认
 
@@ -65332,7 +65422,7 @@ refresh 可在编辑器未打开时重试组件自有的异步选项读取，沿
 | `--c-tree-select-option-radius` | `var(--c-select-popup-option-border-radius)` | `border-radius` |
 | `--c-tree-select-popup-padding-left` | `var(--c-select-popup-padding-horizontal)` | `padding-inline-start` |
 | `--c-tree-select-popup-padding-right` | `var(--c-select-popup-padding-horizontal)` | `padding-inline-end` |
-| `--c-tree-select-popup-padding-vertical` | `var(--c-select-popup-padding-vertical)` | `padding` |
+| `--c-tree-select-popup-padding-vertical` | `var(--c-select-popup-padding-vertical)` | `padding`, `padding-block-end`, `padding-block-start` |
 
 </div>
 
@@ -67109,6 +67199,8 @@ placement 是首选方位，auto-fit-position 默认 true 时最终方位可能�
 
 `fixed` 定位会识别 transform、filter、perspective 等形成的固定定位包含块，并处理轴向缩放；不保证旋转或倾斜坐标系精确。可访问的同源 iframe 引用与弹层之间会换算坐标并绑定各自文档事件；不支持跨源或无共同祖先的浏览上下文。启用 `update-at-scroll` 时，两端文档及可滚动祖先的滚动都会更新位置。
 
+当引用元素位于主文档（ShadowRoot 外）、弹层挂载到封闭 ShadowRoot 内的元素时，当前版本可能把弹层内部点击误判为外部点击并请求关闭。这种同文档场景可考虑将 `popup-container` 指向 `body` 或开放 ShadowRoot 内可访问的元素；更换容器后请检查主题、样式继承和定位。封闭根内的自动判断仍待修复。
+
 当引用通过插槽进入封闭 ShadowRoot 内的滚动容器时，外部 Trigger 无法访问该插槽及容器，不能自动监听其滚动。封闭组件可在内部滚动或插槽变化时调用 Trigger 实例的 `resize()`；需要滚动关闭时，可在内部按业务阈值调用 `close()`，并在卸载时清理监听。
 
 弹层挂载到 iframe 内时，显示区域仍受该 iframe 视口裁剪；即使跨文档坐标换算正确，iframe 范围外的弹层内容也不可见。
@@ -67741,147 +67833,301 @@ Document: llms/zh-CN/components/upload.md
 
 # Upload 上传
 
-选择照片时设置 `accept="image/*"`，不设置 `capture` 或设置 `:capture="false"`，保留系统文件 / 相册选择入口。仅在需要直接拍照时设置 `capture` 为 `true`、`'user'` 或 `'environment'`。具体可选入口由设备和浏览器决定。
-
-禁用下载与 Link/Button 的链接模式一致：移除 href，同时保留链接角色、`aria-disabled` 和 `tabindex=-1`，点击不执行默认下载。`readonly` 不禁用下载；恢复非禁用状态后保留原文件地址及下载文件名。
-
-未配置 action / custom-request 时，组件仅读取文件，进度和结果由业务管理。
+通过点击或拖拽选择文件，支持图片列表、预览和受控上传。示例默认使用本地文件与模拟请求。
 
 ## 基础示例
 
 ### 基础用法
 
-选择本地文件后显示文件列表；未配置 action/custom-request 时仅读取，不发送请求。
+选择一个或多个本地文件，列表会随添加和删除更新。未配置 action / custom-request 时仅读取文件，不发送请求。
 
 Example source: src/upload/__demos__/read-only.vue
 
 ```vue
-<script setup>
-import { ref } from 'vue'
-const files = ref([])
-const last = ref('')
-</script>
-<template><div><p>不配置 action/custom-request：只读取文件，不发送请求。</p><c-upload v-model="files" multiple list-type="picture" @read="file => last = file.name" /><p>最近读取：{{ last }}</p></div></template>
-```
-
-## 外观与状态
-
-### 动态只读与禁用
-
-预置本地合成图片，启用 readPrettyonly 与 disabled，比较预览、删除和选择入口的行为。选择按钮只记录 request-choose 次数，不调用原生文件框或请求接口。只读保留预览，禁用同时阻止预览；解除限制后可重新操作。恢复示例由父级更新模型，不是 Upload 的公开重置方法。
-
-Example source: src/upload/__demos__/state-controls.vue
-
-```vue
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
+import type { UploadFileItem } from "@cedar-design/ui-vue";
 
-const readonly = ref(false);
-const disabled = ref(false);
-const chooseCount = ref(0);
-const previewCount = ref(0);
-const initialFile = {
-  uid: "state-image",
-  name: "state-example.svg",
-  type: "image/svg+xml",
-  url: "data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%22120%22%3E%3Crect width=%22120%22 height=%22120%22 fill=%22%236750a4%22/%3E%3C/svg%3E",
-  status: "success",
-  percent: 100,
-};
-const files = ref([{ ...initialFile }]);
-function choose() {
-  chooseCount.value++;
-}
-function restore() {
-  files.value = [{ ...initialFile }];
-}
+const files = ref<UploadFileItem[]>([]);
 </script>
 
 <template>
-  <section class="upload-state-demo">
-    <div class="controls">
-      <c-checkbox v-model="readonly"> Readonly upload</c-checkbox>
-      <c-checkbox v-model="disabled"> Disabled upload</c-checkbox>
-      <c-button html-type="button" @click="restore">Restore sample</c-button>
-    </div>
-    <p>Local selection callback only; no file chooser or network request.</p>
+  <c-upload v-model="files" multiple />
+</template>
+```
+
+### 列表展示方式
+
+切换 text、picture 和 picture-card，对比同一份文件列表的三种布局。添加或删除文件后再切换，已选文件保持不变。
+
+Example source: src/upload/__demos__/list-type.vue
+
+```vue
+<script setup lang="ts">
+import { ref } from "vue";
+import type { UploadFileItem, UploadListType } from "@cedar-design/ui-vue";
+
+const files = ref<UploadFileItem[]>([
+  {
+    uid: "sample-image",
+    name: "landscape.svg",
+    type: "image/svg+xml",
+    url:
+      "data:image/svg+xml," +
+      encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="240" height="160" viewBox="0 0 240 160"><rect width="240" height="160" fill="#e0e7ff"/><circle cx="180" cy="42" r="20" fill="#fbbf24"/><path d="M0 160L80 50L150 140L190 90L240 160Z" fill="#6750a4"/></svg>',
+      ),
+    status: "success",
+    percent: 100,
+  },
+]);
+const listType = ref<UploadListType>("picture");
+</script>
+
+<template>
+  <c-space class="upload-list-type-demo" direction="column">
+    <c-form>
+      <c-form-item label="列表类型">
+        <c-radio-group v-model="listType" aria-label="列表类型">
+          <c-radio value="text">text</c-radio>
+          <c-radio value="picture">picture</c-radio>
+          <c-radio value="picture-card">picture-card</c-radio>
+        </c-radio-group>
+      </c-form-item>
+    </c-form>
+    <p>
+      切换列表类型时保留同一份文件列表。可添加、删除图片后再次切换，预览功能保持可用。
+    </p>
     <c-upload
       v-model="files"
-      data-testid="state-upload"
-      :readonly="readonly"
-      :disabled="disabled"
-      :request-choose="choose"
-      @preview="previewCount++"
+      :list-type="listType"
+      accept="image/*"
+      multiple
+      image-fit="contain"
     />
-    <p role="status">
-      Files: {{ files.length }}; choose: {{ chooseCount }}; preview:
-      {{ previewCount }}
-    </p>
-  </section>
-</template>
-
-<style scoped>
-.controls {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
-}
-.controls label {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-</style>
-```
-
-### 交互状态切换
-
-适用于附件列表展示与本地选取。调整禁用、只读，用相同数据观察变化。控制区始终可用，可以随时恢复编辑；错误外观本身不会触发表单校验。
-
-Example source: src/upload/__demos__/state-lab.vue
-
-```vue
-<script setup>
-import { reactive as __demoReactive } from "vue";
-import { ref } from "vue";
-const value = ref([]);
-const __demoState = __demoReactive({ disabled: false, readonly: false });
-</script>
-<template>
-  <c-space direction="column" :size="16">
-    <c-space wrap>
-      <c-checkbox v-model="__demoState['disabled']">disabled</c-checkbox>
-      <c-checkbox v-model="__demoState['readonly']">readonly</c-checkbox>
-    </c-space>
-    <c-upload
-      v-model="value"
-      :auto-upload="false"
-      v-bind="__demoState"
-    ></c-upload>
+    <p role="status">已选图片: {{ files.length }}</p>
   </c-space>
 </template>
 ```
 
-### 图卡、插槽与自定义预览
+### 上传入口位置
 
-Example source: src/upload/__demos__/custom-surface.vue
+切换上传入口位于文件列表之前或之后，再对比三种列表类型。默认入口位于列表之后；切换入口位置时，已选文件和文件顺序保持不变。
+
+Example source: src/upload/__demos__/trigger-position.vue
 
 ```vue
-<script setup>
-import { ref } from 'vue'
-const files = ref([])
-const message = ref('')
-const preview = (file, event) => { event.preventDefault(); message.value = file.name }
+<script setup lang="ts">
+import { ref } from "vue";
+import type {
+  UploadFileItem,
+  UploadListType,
+  UploadTriggerPosition,
+} from "@cedar-design/ui-vue";
+
+const files = ref<UploadFileItem[]>([
+  {
+    uid: "sample-image",
+    name: "landscape.svg",
+    type: "image/svg+xml",
+    url:
+      "data:image/svg+xml," +
+      encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="240" height="160" viewBox="0 0 240 160"><rect width="240" height="160" fill="#e0e7ff"/><circle cx="180" cy="42" r="20" fill="#fbbf24"/><path d="M0 160L80 50L150 140L190 90L240 160Z" fill="#6750a4"/></svg>',
+      ),
+    status: "success",
+    percent: 100,
+  },
+]);
+const listType = ref<UploadListType>("picture");
+const triggerPosition = ref<UploadTriggerPosition>("after");
 </script>
-<template><div><c-upload v-model="files" list-type="picture-card" multiple @preview="preview"><template #trigger><span>选择图片</span></template><template #remove-button="{ remove }"><c-button variant="text" @click="remove">删除</c-button></template></c-upload><p>自定义预览：{{ message }}</p></div></template>
+
+<template>
+  <c-space class="upload-trigger-position-demo" direction="column">
+    <c-form>
+      <c-form-item label="入口位置">
+        <c-radio-group v-model="triggerPosition" aria-label="入口位置">
+          <c-radio value="before">文件列表之前</c-radio>
+          <c-radio value="after">文件列表之后</c-radio>
+        </c-radio-group>
+      </c-form-item>
+      <c-form-item label="列表类型">
+        <c-radio-group v-model="listType" aria-label="列表类型">
+          <c-radio value="text">text</c-radio>
+          <c-radio value="picture">picture</c-radio>
+          <c-radio value="picture-card">picture-card</c-radio>
+        </c-radio-group>
+      </c-form-item>
+    </c-form>
+    <c-upload
+      v-model="files"
+      :trigger-position="triggerPosition"
+      :list-type="listType"
+      accept="image/*"
+      multiple
+    />
+    <p role="status">已选文件: {{ files.length }}</p>
+  </c-space>
+</template>
 ```
 
-## 文件来源与约束
+## 选择与校验
 
-### 目录选择与多文件回退
+### 拖拽上传
 
-使用 directory 选择文件夹，普通多选入口可作为移动设备的替代路径。
+点击区域选择图片，或将图片拖入区域；添加后点击缩略图预览。触屏设备可使用点击选择。
+
+Example source: src/upload/__demos__/draggable-picture.vue
+
+```vue
+<script setup lang="ts">
+import { ref } from "vue";
+import type { UploadFileItem } from "@cedar-design/ui-vue";
+
+const files = ref<UploadFileItem[]>([
+  {
+    uid: "sample-image",
+    name: "landscape.svg",
+    type: "image/svg+xml",
+    url:
+      "data:image/svg+xml," +
+      encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="240" height="160" viewBox="0 0 240 160"><rect width="240" height="160" fill="#e0e7ff"/><circle cx="180" cy="42" r="20" fill="#fbbf24"/><path d="M0 160L80 50L150 140L190 90L240 160Z" fill="#6750a4"/></svg>',
+      ),
+    status: "success",
+    percent: 100,
+  },
+]);
+</script>
+
+<template>
+  <c-upload
+    v-model="files"
+    list-type="picture"
+    accept="image/*"
+    multiple
+    draggable
+  >
+    <template #trigger="{ dragOver }">
+      <div class="upload-dropzone">
+        <c-icon-upload class="upload-dropzone__icon" aria-hidden="true" />
+        <strong>{{
+          dragOver ? "松开以添加图片" : "点击或者拖动图片到该区域来添加"
+        }}</strong>
+        <p>仅在本地读取，点击缩略图可预览。请勿添加敏感文件。</p>
+      </div>
+    </template>
+  </c-upload>
+</template>
+<style scoped>
+.upload-dropzone {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  padding: 32px 0;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.upload-dropzone__icon {
+  font-size: 40px;
+  color: var(--c-sys-color-content-secondary);
+}
+.upload-dropzone strong {
+  color: var(--c-sys-color-content-secondary);
+}
+.upload-dropzone p {
+  margin: 0;
+  color: var(--c-sys-color-content-secondary);
+}
+</style>
+```
+
+### 文件类型、数量与大小
+
+仅接受图片，最多 3 张、每张不超过 2 MiB。拒绝时显示原因；满额后删除一张即可继续添加。
+
+Example source: src/upload/__demos__/picture-limits.vue
+
+```vue
+<script setup lang="ts">
+import { ref } from "vue";
+import type { UploadFileItem, UploadRejectedFile } from "@cedar-design/ui-vue";
+
+const files = ref<UploadFileItem[]>([]);
+const feedback = ref("");
+const reasons: Record<string, string> = {
+  accept: "仅支持图片",
+  "max-files": "最多选择 3 张图片",
+  "max-file-size": "每张图片不能超过 2 MiB",
+};
+function handleRejected(items: UploadRejectedFile[]) {
+  feedback.value = items
+    .map((item) => `${item.file.name}: ${reasons[item.reason] || item.reason}`)
+    .join("; ");
+}
+</script>
+
+<template>
+  <c-space direction="column">
+    <p>
+      最多选择 3 张图片，每张不超过 2 MiB；达到数量上限后，可删除一张再添加。
+    </p>
+    <c-upload
+      v-model="files"
+      list-type="picture"
+      accept="image/*"
+      multiple
+      :max-files="3"
+      :max-file-size="2 * 1024 * 1024"
+      @rejected="handleRejected"
+    />
+    <p role="status">{{ feedback }}</p>
+  </c-space>
+</template>
+```
+
+### 单文件与替换
+
+设置 max-files="1" 与 reupload，点击文件上的替换按钮更换图片。替换成功后仍只有一个文件。
+
+Example source: src/upload/__demos__/replacement.vue
+
+```vue
+<script setup lang="ts">
+import { ref } from "vue";
+import type { UploadFileItem } from "@cedar-design/ui-vue";
+
+const files = ref<UploadFileItem[]>([
+  {
+    uid: "sample-image",
+    name: "landscape.svg",
+    type: "image/svg+xml",
+    url:
+      "data:image/svg+xml," +
+      encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="240" height="160" viewBox="0 0 240 160"><rect width="240" height="160" fill="#e0e7ff"/><circle cx="180" cy="42" r="20" fill="#fbbf24"/><path d="M0 160L80 50L150 140L190 90L240 160Z" fill="#6750a4"/></svg>',
+      ),
+    status: "success",
+    percent: 100,
+  },
+]);
+</script>
+
+<template>
+  <c-upload
+    v-model="files"
+    list-type="picture-card"
+    accept="image/*"
+    :max-files="1"
+    reupload
+  />
+</template>
+```
+
+### 选择文件夹
+
+选择文件夹后查看其中的文件；普通多选入口用于不支持文件夹选择的浏览器或移动设备。
 
 Example source: src/upload/__demos__/directory.vue
 
@@ -67902,244 +68148,352 @@ const files = ref<UploadFileItem[]>([])
 </template>
 ```
 
-### 剪贴板图片与读取校验
+## 预览与状态
 
-通过现有 useUploader.addFiles 接入 paste 事件，复用数量、大小和类型限制。这是应用层组合，不新增 Upload 的 paste 属性。
+### 图片与视频预览
 
-Example source: src/upload/__demos__/clipboard.vue
+预置图片可直接预览；选择本地视频后点击缩略图播放。关闭预览开关可禁止内置预览。
+
+Example source: src/upload/__demos__/preview.vue
 
 ```vue
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useUploader, type UploadFileItem } from '@cedar-design/ui-vue'
-const files = ref<UploadFileItem[]>([])
-const message = ref('')
-const rejectionMessages: Record<string, string> = { 'max-files': '最多接收 3 张图片', 'max-file-size': '单张图片不能超过 1 MiB', accept: '仅支持图片文件' }
-const uploader = useUploader({
-  modelValue: () => files.value,
-  onUpdateModelValue: value => { files.value = value },
-  accept: () => 'image/*',
-  maxFiles: () => 3,
-  maxFileSize: () => 1024 * 1024,
-  autoUpload: () => false,
-  onRejected: rejected => { message.value = rejected.map(item => rejectionMessages[item.reason] ?? '文件未能读取，请重新选择').join(', ') },
-})
-function paste(event: ClipboardEvent) {
-  const incoming = Array.from(event.clipboardData?.files ?? [])
-  if (!incoming.length) return
-  event.preventDefault()
-  message.value = ''
-  uploader.addFiles(incoming)
-}
-function addExample() {
-  message.value = ''
-  uploader.addFiles([new File(['<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"/>'], 'local-example.svg', { type: 'image/svg+xml' })])
-}
-function reset() { uploader.reset(); message.value = '' }
+import { ref } from "vue";
+import type { UploadFileItem } from "@cedar-design/ui-vue";
+
+const files = ref<UploadFileItem[]>([
+  {
+    uid: "sample-image",
+    name: "landscape.svg",
+    type: "image/svg+xml",
+    url:
+      "data:image/svg+xml," +
+      encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="240" height="160" viewBox="0 0 240 160"><rect width="240" height="160" fill="#e0e7ff"/><circle cx="180" cy="42" r="20" fill="#fbbf24"/><path d="M0 160L80 50L150 140L190 90L240 160Z" fill="#6750a4"/></svg>',
+      ),
+    status: "success",
+    percent: 100,
+  },
+]);
+const enabled = ref(true);
 </script>
+
 <template>
   <c-space direction="column">
-    <p>将剪贴板图片粘贴到输入区。最多 3 张，每张不超过 1 MiB；只读取文件，不上传。普通文本粘贴仍按原生输入处理。</p>
-    <c-textarea placeholder="在这里粘贴图片或文本" @paste="paste" />
-    <c-space wrap>
-      <c-button @click="addExample">加入本地示例图片</c-button>
-      <c-button @click="reset">清空列表</c-button>
-    </c-space>
-    <p role="status">已接收 {{ files.length }} 个文件。{{ message }}</p>
-    <ul><li v-for="file in files" :key="file.uid">{{ file.name }}</li></ul>
+    <c-checkbox v-model="enabled">启用内置预览</c-checkbox>
+    <c-upload
+      v-model="files"
+      list-type="picture"
+      accept="image/*,video/*"
+      multiple
+      :preview="enabled"
+    />
   </c-space>
 </template>
 ```
 
-### 替换后的约束校验
+### 只读、禁用与纯阅读
 
-反向返回顺序：旧任务等待时重置并加入新文件，先点“返回最新缩略图”接受新项，再“拒绝最早缩略图”。旧失败只结清旧任务，不能再显示read-error、删除新项或增加解码数；最后重置清空列表和计数。这仍是本地回调竞争，不是原生读取器异常。
+在同一份数据上切换可编辑、只读、禁用和纯阅读。只读保留预览，禁用阻止交互；纯阅读展示文件值而不显示上传编辑器。
 
-开启 FileReader / data-url 后，接受的 File 会读取为 data URL。Data URLs 显示当前 data-url 项目数，Decoded images 显示重置以来累计的 load 次数。删除项目不会减少累计次数；重置清零两者，类型拒绝发生在读取之前。
-
-开关仅影响后续新增项，不会重新读取既有项目；可按 file/data-url/file 顺序混合加入三项。满额后再加入会报告 max-files，图片和解码计数不变；删除 data-url 项后重新加入会读取新文件，累计解码数继续增加，重置清空整个混合队列。
-
-Example source: src/upload/__demos__/replacement-validation.vue
+Example source: src/upload/__demos__/states.vue
 
 ```vue
-<script setup>
-import { onBeforeUnmount, onDeactivated, ref, shallowRef } from "vue";
-import { useUploader } from "@cedar-design/ui-vue";
+<script setup lang="ts">
+import { ref } from "vue";
+import type { UploadFileItem } from "@cedar-design/ui-vue";
 
-const files = ref([]);
-const readDataUrl = ref(false);
-const readObjectUrl = ref(false);
-const pauseThumbnail = ref(false);
-const pendingThumbnails = shallowRef([]);
-const decoded = ref(0);
-const reasons = ref([]);
-const replacements = new WeakMap();
-const maxFileSize = 1048576;
-const maxTotalSize = 2097152;
-const maxFiles = 3;
-const svg =
-  '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><rect width="16" height="16" fill="#4caf50"/></svg>';
-let sequence = 0;
-
-function replace(file) {
-  const mode = replacements.get(file);
-  if (mode === "type") {
-    return new File(["text replacement"], file.name.replace(".svg", ".txt"), {
-      type: "text/plain",
-    });
-  }
-  if (mode === "size") {
-    return new File([new Uint8Array(maxFileSize + 1)], file.name, {
-      type: file.type,
-    });
-  }
-  return new File([file], file.name, { type: file.type });
-}
-
-const uploader = useUploader({
-  modelValue: () => files.value,
-  onUpdateModelValue: (value) => {
-    files.value = value;
-  },
-  accept: () => "image/*",
-  maxFiles: () => maxFiles,
-  createThumbnailUrl: () =>
-    pauseThumbnail.value
-      ? () =>
-          new Promise((resolve, reject) => {
-            pendingThumbnails.value = [
-              ...pendingThumbnails.value,
-              { resolve, reject },
-            ];
-          })
-      : undefined,
-  maxFileSize: () => maxFileSize,
-  maxTotalSize: () => maxTotalSize,
-  resolveType: () =>
-    readObjectUrl.value
-      ? "object-url"
-      : readDataUrl.value
-        ? "data-url"
-        : "file",
-  beforeRead: () => replace,
-  onRejected: (items) => {
-    reasons.value = items.map((item) => item.reason);
-  },
-});
-
-function probe(mode) {
-  reasons.value = [];
-  const payload = mode === "total" ? svg.padEnd(786432, " ") : svg;
-  const file = new File([payload], `sample-${++sequence}.svg`, {
+const files = ref<UploadFileItem[]>([
+  {
+    uid: "sample-image",
+    name: "landscape.svg",
     type: "image/svg+xml",
-  });
-  replacements.set(file, mode);
-  return uploader.addFiles([file]);
-}
-
-function reset() {
-  uploader.reset();
-  decoded.value = 0;
-  reasons.value = [];
-}
-function settleThumbnail(fail = false, latest = false) {
-  const tasks = [...pendingThumbnails.value];
-  const task = latest ? tasks.pop() : tasks.shift();
-  if (!task) return;
-  pendingThumbnails.value = tasks;
-  if (fail) task.reject(new Error("Local thumbnail failure"));
-  else task.resolve("data:image/svg+xml," + encodeURIComponent(svg));
-}
-function cleanupThumbnails() {
-  const tasks = pendingThumbnails.value;
-  pendingThumbnails.value = [];
-  tasks.forEach((task) => task.resolve(undefined));
-}
-onBeforeUnmount(cleanupThumbnails);
-onDeactivated(cleanupThumbnails);
+    url:
+      "data:image/svg+xml," +
+      encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="240" height="160" viewBox="0 0 240 160"><rect width="240" height="160" fill="#e0e7ff"/><circle cx="180" cy="42" r="20" fill="#fbbf24"/><path d="M0 160L80 50L150 140L190 90L240 160Z" fill="#6750a4"/></svg>',
+      ),
+    status: "success",
+    percent: 100,
+  },
+]);
+const state = ref("editable");
 </script>
 
 <template>
-  <div class="upload-read-demo">
-    <p class="thumbnail-pending">
-      Pending thumbnails: {{ pendingThumbnails.length }}
-    </p>
-    <c-button
-      html-type="button"
-      :disabled="!pendingThumbnails.length"
-      @click="settleThumbnail(false, true)"
-    >
-      返回最新缩略图
-    </c-button>
-    <c-button
-      html-type="button"
-      :disabled="!pendingThumbnails.length"
-      @click="settleThumbnail()"
-      >返回最早缩略图</c-button
-    >
-    <c-button
-      html-type="button"
-      :disabled="!pendingThumbnails.length"
-      @click="settleThumbnail(true)"
-      >拒绝最早缩略图</c-button
-    >
-    <c-checkbox v-model="readDataUrl" edit-mode="direct"
-      >使用原生 FileReader 读取为 data-url</c-checkbox
-    >
-    <c-checkbox v-model="readObjectUrl" edit-mode="direct"
-      >使用原生 Blob/object-url（优先）</c-checkbox
-    >
-    <output
-      >Blob URLs:
-      {{ files.filter((file) => file.url?.startsWith("blob:")).length }}</output
-    >
-    <p role="status">
-      Data URLs:
-      {{ files.filter((file) => file.url?.startsWith("data:")).length }} ·
-      Decoded images: {{ decoded }}
-    </p>
-    <img
-      v-for="file in files.filter((file) =>
-        /^(data:|blob:)/.test(file.thumbnailUrl || ''),
-      )"
-      :key="file.uid"
-      :src="file.thumbnailUrl"
-      :alt="file.name"
-      width="16"
-      height="16"
-      @load="decoded++"
-    />
-    <p>
-      仅接受图片；单文件 1 MiB、合计 2 MiB、最多 3 个。每个示例均经过
-      before-read。
-    </p>
-    <c-space wrap>
-      <c-button @click="probe('valid')">加入小图片</c-button>
-      <c-button @click="probe('type')">替换为文本</c-button>
-      <c-button @click="probe('size')">替换为超大图片</c-button>
-      <c-button @click="probe('total')">加入 768 KiB 图片</c-button>
-      <c-button @click="reset">重置队列</c-button>
-    </c-space>
-    <c-checkbox v-model="pauseThumbnail" edit-mode="direct"
-      >暂停本地缩略图 Promise</c-checkbox
+  <c-space direction="column">
+    <c-form
+      ><c-form-item label="交互状态">
+        <c-radio-group v-model="state" aria-label="交互状态">
+          <c-radio value="editable">可编辑</c-radio>
+          <c-radio value="readonly">只读</c-radio>
+          <c-radio value="disabled">禁用</c-radio>
+          <c-radio value="reading">纯阅读</c-radio>
+        </c-radio-group>
+      </c-form-item></c-form
     >
     <c-upload
       v-model="files"
-      edit-mode="direct"
-      :show-upload-button="false"
-      :preview="false"
+      list-type="picture"
+      accept="image/*"
+      multiple
+      :readonly="state === 'readonly'"
+      :disabled="state === 'disabled'"
+      :read-pretty="state === 'reading'"
     />
-    <p>队列：{{ files.map((file) => file.name).join(", ") || "空" }}</p>
-    <p>拒绝原因：{{ reasons.join(", ") || "无" }}</p>
-  </div>
+    <p role="status">已选文件: {{ files.length }}</p>
+  </c-space>
 </template>
 ```
 
-## 队列与进度
+### 自定义入口与预览
 
-### 外部管理进度
+用 trigger 和 remove-button 插槽定制入口与删除操作，通过 preview 事件打开自定义预览 Dialog。
 
-可直接加入本地示例项观察 40% 的外部进度，再模拟完成。完成操作只更新仍在上传的项；取消项保持 canceled，已删除的项不会重新出现。外部托管模式隐藏内置请求重试按钮，使用“模拟外部重试”恢复取消或失败项，再由业务端完成。示例不发送网络请求。
+Example source: src/upload/__demos__/custom-surface.vue
+
+```vue
+<script setup lang="ts">
+import { ref } from "vue";
+import type { UploadFileItem, UploadPreviewEvent } from "@cedar-design/ui-vue";
+
+const files = ref<UploadFileItem[]>([
+  {
+    uid: "sample-image",
+    name: "landscape.svg",
+    type: "image/svg+xml",
+    url:
+      "data:image/svg+xml," +
+      encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="240" height="160" viewBox="0 0 240 160"><rect width="240" height="160" fill="#e0e7ff"/><circle cx="180" cy="42" r="20" fill="#fbbf24"/><path d="M0 160L80 50L150 140L190 90L240 160Z" fill="#6750a4"/></svg>',
+      ),
+    status: "success",
+    percent: 100,
+  },
+]);
+const open = ref(false);
+const selected = ref<UploadFileItem>();
+function preview(file: UploadFileItem, event: UploadPreviewEvent) {
+  event.preventDefault();
+  selected.value = file;
+  open.value = true;
+}
+</script>
+
+<template>
+  <c-upload
+    v-model="files"
+    list-type="picture-card"
+    accept="image/*"
+    multiple
+    @preview="preview"
+  >
+    <template #trigger><span>选择图片</span></template>
+    <template #remove-button="{ remove }"
+      ><c-button variant="text" @click="remove">移除</c-button></template
+    >
+  </c-upload>
+  <c-dialog
+    v-model:open="open"
+    :title="selected?.name"
+    :cancel-button="false"
+    confirm-button-text="关闭"
+  >
+    <img
+      v-if="selected"
+      class="custom-preview-image"
+      :src="selected.url"
+      :alt="selected.name"
+    />
+  </c-dialog>
+</template>
+<style scoped>
+.custom-preview-image {
+  display: block;
+  max-width: 100%;
+  max-height: 60vh;
+  margin: auto;
+}
+</style>
+```
+
+## 上传流程
+
+### 手动上传、进度与重试
+
+选择文件或加入示例文件，再点击开始上传。上传中可取消；开启模拟失败后，首次失败可通过重试恢复。本例使用本地定时器模拟请求。
+
+Example source: src/upload/__demos__/manual-upload.vue
+
+```vue
+<script setup lang="ts">
+import { computed, onBeforeUnmount, onDeactivated, ref } from "vue";
+import type {
+  UploadCustomRequest,
+  UploadFileItem,
+  UploadInstance,
+  UploadProgressEvent,
+} from "@cedar-design/ui-vue";
+
+const files = ref<UploadFileItem[]>([]);
+const uploader = ref<UploadInstance>();
+const failOnce = ref(false);
+const timers = new Set<ReturnType<typeof setInterval>>();
+const attempts = new Map<string, number>();
+const pending = computed(() =>
+  files.value.some((file) =>
+    ["ready", "error", "canceled"].includes(file.status),
+  ),
+);
+let sequence = 0;
+function addSample() {
+  const file = new File(
+    ["Local upload example."],
+    `example-${++sequence}.txt`,
+    { type: "text/plain" },
+  );
+  files.value = [
+    ...files.value,
+    {
+      uid: `sample-${sequence}`,
+      name: file.name,
+      size: file.size,
+      type: file.type,
+      file,
+      status: "ready",
+      percent: 0,
+    },
+  ];
+}
+const request: UploadCustomRequest = ({
+  file,
+  onProgress,
+  onSuccess,
+  onError,
+}) => {
+  const attempt = (attempts.get(file.uid) ?? 0) + 1;
+  attempts.set(file.uid, attempt);
+  const reject = failOnce.value && attempt === 1;
+  let percent = 0;
+  const stop = () => {
+    clearInterval(timer);
+    timers.delete(timer);
+  };
+  const timer = setInterval(() => {
+    percent += 10;
+    onProgress({ percent } as UploadProgressEvent);
+    if (percent >= 100) {
+      stop();
+      if (reject) {
+        onError(new Error("模拟上传失败，请重试"));
+      } else {
+        onSuccess({ ok: true });
+      }
+    }
+  }, 150);
+  timers.add(timer);
+  return { abort: stop };
+};
+function cleanup() {
+  uploader.value?.abort();
+  timers.forEach((timer) => clearInterval(timer));
+  timers.clear();
+}
+onBeforeUnmount(cleanup);
+onDeactivated(cleanup);
+</script>
+
+<template>
+  <c-space direction="column">
+    <c-checkbox v-model="failOnce">模拟首次失败</c-checkbox>
+    <c-upload
+      ref="uploader"
+      v-model="files"
+      multiple
+      :auto-upload="false"
+      :custom-request="request"
+    />
+    <c-space wrap>
+      <c-button @click="addSample">加入示例文件</c-button>
+      <c-button :disabled="!pending" @click="uploader?.submit()"
+        >开始上传</c-button
+      >
+    </c-space>
+    <p role="status">
+      已完成: {{ files.filter((file) => file.status === "success").length }} /
+      {{ files.length }}
+    </p>
+  </c-space>
+</template>
+```
+
+### 删除前确认
+
+点击删除先打开确认框，取消会保留文件，确认后才从列表移除。
+
+Example source: src/upload/__demos__/remove-confirm.vue
+
+```vue
+<script setup lang="ts">
+import { onBeforeUnmount, ref } from "vue";
+import type { UploadFileItem } from "@cedar-design/ui-vue";
+
+const files = ref<UploadFileItem[]>([
+  {
+    uid: "sample-image",
+    name: "landscape.svg",
+    type: "image/svg+xml",
+    url:
+      "data:image/svg+xml," +
+      encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="240" height="160" viewBox="0 0 240 160"><rect width="240" height="160" fill="#e0e7ff"/><circle cx="180" cy="42" r="20" fill="#fbbf24"/><path d="M0 160L80 50L150 140L190 90L240 160Z" fill="#6750a4"/></svg>',
+      ),
+    status: "success",
+    percent: 100,
+  },
+]);
+const open = ref(false);
+const name = ref("");
+let resolveRemoval: ((allow: boolean) => void) | undefined;
+function beforeRemove(file: UploadFileItem) {
+  name.value = file.name || "";
+  open.value = true;
+  return new Promise<boolean>((resolve) => {
+    resolveRemoval = resolve;
+  });
+}
+function finish(allow: boolean) {
+  const resolve = resolveRemoval;
+  resolveRemoval = undefined;
+  open.value = false;
+  resolve?.(allow);
+}
+onBeforeUnmount(() => finish(false));
+</script>
+
+<template>
+  <c-upload
+    v-model="files"
+    list-type="picture"
+    accept="image/*"
+    multiple
+    :before-remove="beforeRemove"
+  />
+  <c-dialog
+    v-model:open="open"
+    title="确认删除"
+    @confirm="finish(true)"
+    @cancel="finish(false)"
+    @closed="finish(false)"
+  >
+    <p>确认移除文件 {{ name }}?</p>
+  </c-dialog>
+</template>
+```
+
+### 由业务管理上传状态
+
+通过 read 事件接管进度和结果。加入示例文件、模拟完成，观察受控列表变化；本例不使用内置请求。
 
 Example source: src/upload/__demos__/external-state.vue
 
@@ -68224,635 +68578,205 @@ function retry() {
 </template>
 ```
 
-### 手动队列和可取消请求
+## 业务组合
 
-可直接“加入示例文件”，也可选择本地文件；两种方式均不访问网络。点击提交后观察进度，取消会停止活动请求，重试会重新上传。开启“首次请求失败”时，同一文件首次失败、重试成功。活动请求数在完成、取消、失败及离开 Demo 后清零。
+### 外置上传按钮
 
-Example source: src/upload/__demos__/queue-request.vue
+隐藏内置入口，由外部按钮调用 chooseFile()。切换按钮位于列表之前或之后，不改变文件列表。
 
-```vue
-<script setup lang="ts">
-import { onBeforeUnmount, onDeactivated, ref } from "vue";
-import type {
-  UploadFileItem,
-  UploadInstance,
-  UploadProgressEvent,
-  UploadRequestOptions,
-} from "@cedar-design/ui-vue";
-
-const files = ref<UploadFileItem[]>([]);
-const uploader = ref<UploadInstance>();
-const failOnce = ref(false);
-const activeRequests = ref(0);
-const timers = new Set<ReturnType<typeof setInterval>>();
-const attempts = new Map<string, number>();
-const exampleUrls = new Set<string>();
-let sequence = 0;
-
-function addExample() {
-  const file = new File(
-    ["Local upload demo; no network."],
-    `example-${++sequence}.txt`,
-    { type: "text/plain" },
-  );
-  const url = URL.createObjectURL(file);
-  exampleUrls.add(url);
-  files.value = [
-    ...files.value,
-    {
-      uid: `demo-queue-${sequence}`,
-      name: file.name,
-      size: file.size,
-      type: file.type,
-      file,
-      url,
-      status: "ready",
-      percent: 0,
-    },
-  ];
-}
-
-function request({
-  file,
-  onProgress,
-  onSuccess,
-  onError,
-}: UploadRequestOptions) {
-  const attempt = (attempts.get(file.uid) ?? 0) + 1;
-  attempts.set(file.uid, attempt);
-  const reject = failOnce.value && attempt === 1;
-  let percent = 0;
-  const stop = () => {
-    clearInterval(timer);
-    timers.delete(timer);
-    activeRequests.value = timers.size;
-  };
-  const timer = setInterval(() => {
-    percent += 10;
-    onProgress({ percent } as UploadProgressEvent);
-    if (percent >= 100) {
-      stop();
-      if (reject) {
-        onError(new Error("Simulated first-attempt failure"));
-      } else {
-        onSuccess({ ok: true, attempt });
-      }
-    }
-  }, 200);
-  timers.add(timer);
-  activeRequests.value = timers.size;
-  return { abort: stop };
-}
-
-function cleanup() {
-  uploader.value?.abort();
-  timers.forEach((timer) => clearInterval(timer));
-  timers.clear();
-  activeRequests.value = 0;
-}
-onBeforeUnmount(() => {
-  cleanup();
-  exampleUrls.forEach((url) => URL.revokeObjectURL(url));
-  exampleUrls.clear();
-});
-onDeactivated(cleanup);
-</script>
-
-<template>
-  <div>
-    <p>本地模拟请求；支持取消、重试和手动提交，不访问网络。</p>
-    <c-checkbox v-model="failOnce" edit-mode="direct"
-      >首次请求失败（重试成功）</c-checkbox
-    >
-    <c-space wrap>
-      <c-button @click="addExample">加入示例文件</c-button>
-      <c-button @click="uploader?.submit()">提交队列</c-button>
-    </c-space>
-    <c-upload
-      ref="uploader"
-      v-model="files"
-      edit-mode="direct"
-      multiple
-      :auto-upload="false"
-      :custom-request="request"
-    />
-    <p>
-      队列状态：{{
-        files
-          .map((file) => `${file.name}: ${file.status} (${file.percent}%)`)
-          .join("；") || "空"
-      }}
-    </p>
-    <p>活动请求：{{ activeRequests }}</p>
-  </div>
-</template>
-```
-
-## 异步钩子与请求
-
-### 删除前确认
-
-未勾选时，`before-remove` 拒绝移除并保留文件；勾选后再次删除才更新队列。示例使用本地预置数据，不访问网络。
-
-开启“手动异步确认”后忽略同步允许开关，删除等待“确认删除 / 取消删除”。同一文件等待时重复点击不会新增钩子；取消保留文件，等待中禁用后再确认也不会删除，解除禁用后需重新发起。计数核对列表、等待任务、钩子和 remove 通知；停用或卸载结清本地等待。
-
-With manual async confirmation enabled, the synchronous allow switch is ignored. Repeated removal of a pending file invokes one hook. Cancel keeps the file; resolving after disabling also keeps it, and a fresh removal is required after re-enabling. Counters expose the list, pending tasks, hook calls and remove notifications. Deactivation/unmount settles local tasks without network requests.
-
-新增操作均不访问网络：“异常拒绝删除”拒绝本地Promise，文件保留且后续可重试；“替换同 UID 文件”生成新的本地File，旧删除确认不得移除替换项。“重置上传队列”调用公开reset，旧确认不再产生remove；“激活上传组件”通过KeepAlive停用/恢复Upload，等待任务保留在外层Demo用于手动返回，旧结果不得影响恢复后的实例。停用Upload不等于取消外部业务Promise；离开整个Demo才结清其本地等待。
-
-All extra controls are local. Reject removal rejects the pending Promise, keeps the file and allows a fresh attempt. Replace same UID file creates a new local File; an old confirmation must not remove that replacement. Reset upload queue invokes public reset without a late remove notification. Activate upload suspends/restores Upload through KeepAlive; the outer Demo keeps pending jobs for manual completion, whose old results must stay invalid after activation. Suspending Upload does not physically cancel external business Promises; leaving the whole Demo settles its local jobs.
-
-Example source: src/upload/__demos__/before-remove.vue
+Example source: src/upload/__demos__/external-trigger.vue
 
 ```vue
 <script setup lang="ts">
-import { onBeforeUnmount, onDeactivated, ref, shallowRef } from "vue";
-import type { UploadFileItem } from "@cedar-design/ui-vue";
+import { ref } from "vue";
+import type { UploadFileItem, UploadInstance } from "@cedar-design/ui-vue";
 
 const files = ref<UploadFileItem[]>([
   {
-    uid: "sample",
-    name: "sample.txt",
-    type: "text/plain",
+    uid: "sample-image",
+    name: "landscape.svg",
+    type: "image/svg+xml",
+    url:
+      "data:image/svg+xml," +
+      encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="240" height="160" viewBox="0 0 240 160"><rect width="240" height="160" fill="#e0e7ff"/><circle cx="180" cy="42" r="20" fill="#fbbf24"/><path d="M0 160L80 50L150 140L190 90L240 160Z" fill="#6750a4"/></svg>',
+      ),
     status: "success",
     percent: 100,
   },
 ]);
-const allow = ref(false);
-const manual = ref(false);
-const blocked = ref(false);
-const attempts = ref(0);
-const removed = ref(0);
-const uploadRef = ref();
-const mounted = ref(true);
-const pending = shallowRef<
-  Array<{
-    resolve: (accepted: boolean) => void;
-    reject: (error: Error) => void;
-  }>
->([]);
-const beforeRemove = () => {
-  attempts.value++;
-  if (!manual.value) return allow.value;
-  return new Promise<boolean>((resolve, reject) => {
-    pending.value = [...pending.value, { resolve, reject }];
-  });
-};
-function settle(accepted: boolean | "reject") {
-  const jobs = pending.value;
-  pending.value = [];
-  jobs.forEach((job) =>
-    accepted === "reject"
-      ? job.reject(new Error("Local removal rejection"))
-      : job.resolve(accepted),
-  );
-}
-function replace() {
-  files.value = files.value.map((item) => ({
-    ...item,
-    name: "replacement.txt",
-    type: "text/plain",
-    file: new File(["local replacement"], "replacement.txt", {
-      type: "text/plain",
-    }),
-  }));
-}
-function restore() {
-  files.value = [
-    {
-      uid: "sample",
-      name: "restored.txt",
-      type: "text/plain",
-      status: "success",
-      percent: 100,
-      file: new File(["local sample"], "restored.txt", { type: "text/plain" }),
-    },
-  ];
-}
-onBeforeUnmount(() => settle(false));
-onDeactivated(() => settle(false));
+const uploader = ref<UploadInstance>();
+const position = ref("before");
 </script>
 
 <template>
-  <section class="remove-confirm-demo">
-    <c-checkbox v-model="allow"> 允许此操作</c-checkbox>
-    <c-checkbox v-model="manual"> 手动异步确认</c-checkbox>
-    <c-checkbox v-model="blocked"> 禁用上传组件</c-checkbox>
-    <c-button
-      html-type="button"
-      :disabled="!pending.length"
-      @click="settle(true)"
-      >确认删除</c-button
+  <c-space direction="column">
+    <c-form
+      ><c-form-item label="按钮位置">
+        <c-radio-group v-model="position" aria-label="按钮位置">
+          <c-radio value="before">列表之前</c-radio>
+          <c-radio value="after">列表之后</c-radio>
+        </c-radio-group>
+      </c-form-item></c-form
     >
-    <c-button
-      html-type="button"
-      :disabled="!pending.length"
-      @click="settle(false)"
-      >取消删除</c-button
+    <c-button v-if="position === 'before'" @click="uploader?.chooseFile()"
+      >选择文件</c-button
     >
-    <c-button
-      html-type="button"
-      :disabled="!pending.length"
-      @click="settle('reject')"
-      >异常拒绝删除</c-button
-    >
-    <c-button html-type="button" :disabled="!files.length" @click="replace"
-      >替换同 UID 文件</c-button
-    >
-    <c-button html-type="button" @click="uploadRef?.reset()"
-      >重置上传队列</c-button
-    >
-    <c-button html-type="button" @click="restore">恢复示例文件</c-button>
-    <c-checkbox v-model="mounted"> 激活上传组件</c-checkbox>
-    <KeepAlive>
-      <c-upload
-        v-if="mounted"
-        ref="uploadRef"
-        v-model="files"
-        :before-remove="beforeRemove"
-        :disabled="blocked"
-        @remove="removed++"
-      />
-    </KeepAlive>
-    <p role="status">
-      文件：{{ files.length }}；等待：{{ pending.length }}；钩子：{{
-        attempts
-      }}；删除：{{ removed }}
-    </p>
-  </section>
-</template>
-```
-
-### 上传前准备与取消竞争
-
-取消后重试合计大小组合：双项进入准备后取消，再次提交会保留四个待返回任务（含两次已失效尝试）。统一返回时仍只启动一次有效请求；超限项保留取消前的原文件和 `canceled` 状态，不误算为新失败或自动恢复为 ready。删除成功项后可再次提交剩余项并成功；旧准备结果不占用额外容量。
-
-合计大小组合：空队列选择“每项替换600B，合计上限1024B”，连续加入两个62B合成图片，再准备并统一完成。每项均满足单文件1024B限制，但两项替换后总量超限，因此只有一项发起本地请求，另一项保留ready原文件并报告max-total-size。删除成功项后，再准备剩余项可成功；重置清空队列、等待和请求计数。此处验证本地before-upload替换，不涉及原生文件选择或真实网络上传。
-
-点击“准备并提交”后，`before-upload` 保持等待；重复提交不会重复创建同一尝试。取消准备后可以再次提交，再点击“完成准备”同时返回旧、新结果，只有当前有效尝试能发起请求。选择文本或超大图片替换时会再次检查类型和 1 KiB 大小限制，拒绝后保持 ready，可改为有效副本后重试。本示例使用公开 useUploader 和本地即时请求，不访问网络；重置、停用和卸载会释放等待任务。
-
-Example source: src/upload/__demos__/prepare-request.vue
-
-```vue
-<script setup>
-import { onBeforeUnmount, onDeactivated, ref } from 'vue'
-import { useUploader } from '@cedar-design/ui-vue'
-
-const files = ref([])
-const reasons = ref([])
-const mode = ref('valid')
-const preparing = ref(0)
-const requestCount = ref(0)
-const pending = new Set()
-const modes = [
-  { label: '有效副本', value: 'valid' },
-  { label: '替换为文本', value: 'type' },
-  { label: '替换为超大图片', value: 'size' },
-  { label: '每项替换600B，合计上限1024B', value: 'total' },
-]
-let sequence = 0
-
-function beforeUpload(file) {
-  return new Promise((resolve) => {
-    pending.add({ file, resolve })
-    preparing.value = pending.size
-  })
-}
-
-const uploader = useUploader({
-  modelValue: () => files.value,
-  onUpdateModelValue: (value) => {
-    files.value = value
-  },
-  accept: () => 'image/*',
-  maxFileSize: () => 1024,
-  maxFiles: () => mode.value === 'total' ? 2 : 1,
-  maxTotalSize: () => 1024,
-  resolveType: () => 'file',
-  autoUpload: () => false,
-  beforeUpload: () => beforeUpload,
-  customRequest:
-    () =>
-    ({ onSuccess }) => {
-      requestCount.value++
-      onSuccess({ ok: true })
-    },
-  onRejected: (items) => {
-    reasons.value = items.map((item) => item.reason)
-  },
-})
-
-function add() {
-  const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"/>'
-  return uploader.addFiles([new File([svg], `prepare-${++sequence}.svg`, { type: 'image/svg+xml' })])
-}
-
-function submit() {
-  reasons.value = []
-  return uploader.submit()
-}
-
-function finish() {
-  const jobs = [...pending]
-  pending.clear()
-  preparing.value = 0
-  jobs.forEach(({ file, resolve }) => {
-    const raw = file.file
-    if (mode.value === 'type') {
-      resolve(new File(['text'], 'replacement.txt', { type: 'text/plain' }))
-    } else if (mode.value === 'size') {
-      resolve(new File([new Uint8Array(1025)], raw.name, { type: raw.type }))
-    } else if (mode.value === 'total') {
-      resolve(new File([new Uint8Array(600)], raw.name, { type: raw.type }))
-    } else {
-      resolve(new File([raw], raw.name, { type: raw.type }))
-    }
-  })
-}
-
-function cleanup() {
-  uploader.abort()
-  pending.forEach(({ resolve }) => resolve(false))
-  pending.clear()
-  preparing.value = 0
-}
-
-function reset() {
-  cleanup()
-  uploader.reset()
-  reasons.value = []
-  requestCount.value = 0
-}
-onBeforeUnmount(cleanup)
-onDeactivated(cleanup)
-</script>
-
-<template>
-  <div class="upload-prepare-demo">
-    <p>提交后暂停 before-upload；可取消后再次提交，再统一完成准备，只有当前有效尝试可以发起本地请求。</p>
-    <c-radio-group v-model="mode" :options="modes" />
-    <c-space wrap>
-      <c-button :disabled="files.length >= (mode === 'total' ? 2 : 1)" @click="add">加入示例图片</c-button>
-      <c-button :disabled="!files.some((file) => ['ready', 'error', 'canceled'].includes(file.status))" @click="submit"
-        >准备并提交</c-button
-      >
-      <c-button :disabled="preparing === 0" @click="uploader.abort()">取消准备</c-button>
-      <c-button :disabled="preparing === 0" @click="finish">完成准备</c-button>
-      <c-button @click="reset">重置队列</c-button>
-    </c-space>
-    <c-upload v-model="files" :show-upload-button="false" :show-retry-button="false" :preview="false" />
-    <p>待返回准备任务：{{ preparing }}</p>
-    <p>请求次数：{{ requestCount }}</p>
-    <p>队列状态：{{ files.map((file) => `${file.status} (${file.percent}%)`).join(', ') || '空' }}</p>
-    <p>队列字节：{{ files.map((file) => file.size).join(', ') || '0' }}</p>
-    <p>拒绝原因：{{ reasons.join(', ') || '无' }}</p>
-  </div>
-</template>
-```
-
-### 异步请求元数据
-
-填写你控制的本地接收接口后，分别手动返回 headers 和 data，观察默认 XHR 的准备与取消。只返回一项时仍不发送；取消后再返回另一项不得启动请求。成功响应显示在示例下方，可由接收端核对 `X-Demo-Upload`、`auditMarker` 和 `attachment` 文件字段。接口地址默认留空，不预设外部上传服务；接收器必须允许文档站来源的 CORS。本例仅使用生成的合成文本，不选择真实文件。
-
-使用“拒绝 headers / 拒绝 data”模拟准备失败，当前尝试只进入一次 error。可在另一项旧 Promise 未结清时重试，观察旧结果不会覆盖新尝试；取消后再拒绝不增加错误计数。返回/拒绝按钮会结清该类所有等待任务（包括旧尝试），便于验证竞争；重置会释放等待任务。准备失败不等同 HTTP 错误。
-
-Example source: src/upload/__demos__/metadata-request.vue
-
-```vue
-<script setup>
-import { onBeforeUnmount, onDeactivated, ref, shallowRef } from "vue";
-import { useUploader } from "@cedar-design/ui-vue";
-const endpoint = ref("");
-const files = ref([]);
-const headers = shallowRef([]);
-const data = shallowRef([]);
-const successes = ref(0);
-const errors = ref(0);
-const response = ref(null);
-let sequence = 0;
-function wait(queue, file) {
-  return new Promise((resolve, reject) => {
-    queue.value = [...queue.value, { file, resolve, reject }];
-  });
-}
-function finish(queue, kind) {
-  const jobs = queue.value;
-  queue.value = [];
-  jobs.forEach((job) =>
-    job.resolve(
-      kind === "headers"
-        ? { "X-Demo-Upload": job.file.name }
-        : { auditMarker: "audit-local" },
-    ),
-  );
-}
-const uploader = useUploader({
-  modelValue: () => files.value,
-  onUpdateModelValue: (value) => {
-    files.value = value;
-  },
-  action: () => endpoint.value,
-  headers: () => (file) => wait(headers, file),
-  data: () => (file) => wait(data, file),
-  name: () => "attachment",
-  autoUpload: () => false,
-  resolveType: () => "file",
-  onSuccess: (file) => {
-    successes.value++;
-    response.value = file.response;
-  },
-  onError: () => {
-    errors.value++;
-  },
-});
-function add() {
-  return uploader.addFiles([
-    new File(["Synthetic upload audit only."], `metadata-${++sequence}.txt`, {
-      type: "text/plain",
-    }),
-  ]);
-}
-function cleanup() {
-  uploader.abort();
-  finish(headers, "headers");
-  finish(data, "data");
-}
-function finishHeaders() {
-  finish(headers, "headers");
-}
-function finishData() {
-  finish(data, "data");
-}
-function rejectHeaders() {
-  rejectPending(headers, "headers");
-}
-function rejectData() {
-  rejectPending(data, "data");
-}
-function rejectPending(queue, kind) {
-  const jobs = queue.value;
-  queue.value = [];
-  jobs.forEach((job) => job.reject(new Error(`Synthetic ${kind} rejection`)));
-}
-function reset() {
-  cleanup();
-  uploader.reset();
-  successes.value = 0;
-  errors.value = 0;
-  response.value = null;
-}
-onBeforeUnmount(cleanup);
-onDeactivated(cleanup);
-</script>
-<template>
-  <section class="metadata-upload-demo">
-    <p>
-      默认 XHR 请求；先配置你控制的本地接口。headers 与 data
-      分别等待手动返回，默认不访问任何地址。
-    </p>
-    <label
-      >Local upload endpoint
-      <c-input v-model="endpoint" placeholder="http://127.0.0.1:4197/upload"
-    /></label>
-    <c-space wrap>
-      <c-button :disabled="files.length > 0" @click="add"
-        >加入合成文件</c-button
-      >
-      <c-button
-        :disabled="
-          !endpoint ||
-          !files.some((file) =>
-            ['ready', 'error', 'canceled'].includes(file.status),
-          )
-        "
-        @click="uploader.submit()"
-        >提交元数据请求</c-button
-      >
-      <c-button
-        :disabled="!files.some((file) => file.status === 'uploading')"
-        @click="uploader.abort()"
-        >取消元数据请求</c-button
-      >
-      <c-button :disabled="!headers.length" @click="finishHeaders"
-        >返回 headers</c-button
-      >
-      <c-button :disabled="!data.length" @click="finishData"
-        >返回 data</c-button
-      >
-      <c-button :disabled="!headers.length" @click="rejectHeaders"
-        >拒绝 headers</c-button
-      >
-      <c-button :disabled="!data.length" @click="rejectData"
-        >拒绝 data</c-button
-      >
-      <c-button @click="reset">重置元数据示例</c-button>
-    </c-space>
     <c-upload
+      ref="uploader"
+      key="files"
       v-model="files"
+      list-type="picture"
+      multiple
       :show-upload-button="false"
-      :show-retry-button="false"
-      :preview="false"
     />
-    <p role="status">
-      headers 等待：{{ headers.length }}；data 等待：{{ data.length }}；成功：{{
-        successes
-      }}；错误：{{ errors }}
-    </p>
-    <p>
-      模型：{{
-        files.map((file) => file.name + ": " + file.status).join(", ") || "空"
-      }}
-    </p>
-    <pre>{{ response }}</pre>
-  </section>
+    <c-button v-if="position === 'after'" @click="uploader?.chooseFile()"
+      >选择文件</c-button
+    >
+  </c-space>
 </template>
 ```
 
-### 请求句柄迟到与取消
+### Dialog 中上传
 
-本地模拟 custom-request 返回 Promise。取消后再返回旧句柄会立即调用其 abort；返回旧成功回调不会恢复已取消项。取消后再次发起、统一返回句柄和成功回调时，只接受当前尝试一次。计数展示回调是否被内核接受，不代表真实传输；本例不访问网络，重置/停用/卸载释放本地等待。
+点击按钮打开 Dialog，在弹窗内选择或拖入图片并预览。关闭后保留已选文件，再次打开可以继续操作。
 
-Example source: src/upload/__demos__/late-request.vue
+Example source: src/upload/__demos__/dialog-upload.vue
 
 ```vue
-<script setup>
-import { onBeforeUnmount, onDeactivated, ref, shallowRef } from 'vue'
-import { useUploader } from '@cedar-design/ui-vue'
+<script setup lang="ts">
+import { ref } from "vue";
+import type { UploadFileItem } from "@cedar-design/ui-vue";
 
-const files = ref([])
-const handles = shallowRef([])
-const callbacks = shallowRef([])
-const requests = ref(0)
-const aborts = ref(0)
-const accepted = ref(0)
-let sequence = 0
-let generation = 0
+const files = ref<UploadFileItem[]>([
+  {
+    uid: "sample-image",
+    name: "landscape.svg",
+    type: "image/svg+xml",
+    url:
+      "data:image/svg+xml," +
+      encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="240" height="160" viewBox="0 0 240 160"><rect width="240" height="160" fill="#e0e7ff"/><circle cx="180" cy="42" r="20" fill="#fbbf24"/><path d="M0 160L80 50L150 140L190 90L240 160Z" fill="#6750a4"/></svg>',
+      ),
+    status: "success",
+    percent: 100,
+  },
+]);
+const open = ref(false);
+</script>
+
+<template>
+  <c-space direction="column">
+    <c-button @click="open = true">打开上传弹窗</c-button>
+    <p>
+      已选图片：{{
+        files.length
+      }}。关闭后保留已选文件，再次打开可继续添加和预览。
+    </p>
+    <c-dialog
+      v-model:open="open"
+      title="上传图片"
+      width="min(640px, calc(100vw - 32px))"
+      :cancel-button="false"
+      confirm-button-text="完成"
+    >
+      <c-upload
+        v-model="files"
+        list-type="picture"
+        accept="image/*"
+        multiple
+        draggable
+      >
+        <template #trigger="{ dragOver }">
+          <div class="upload-dropzone">
+            <c-icon-upload class="upload-dropzone__icon" aria-hidden="true" />
+            <strong>{{
+              dragOver ? "松开以添加图片" : "点击或者拖动图片到该区域来添加"
+            }}</strong>
+            <p>仅在本地读取，点击缩略图可预览。请勿添加敏感文件。</p>
+          </div>
+        </template>
+      </c-upload>
+    </c-dialog>
+  </c-space>
+</template>
+<style scoped>
+.upload-dropzone {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  padding: 32px 0;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.upload-dropzone__icon {
+  font-size: 40px;
+  color: var(--c-sys-color-content-secondary);
+}
+.upload-dropzone strong {
+  color: var(--c-sys-color-content-secondary);
+}
+.upload-dropzone p {
+  margin: 0;
+  color: var(--c-sys-color-content-secondary);
+}
+</style>
+```
+
+### 接入剪贴板图片
+
+将图片粘贴到输入区域，通过 useUploader.addFiles 复用文件读取与校验；普通文本仍按原生输入处理。
+
+Example source: src/upload/__demos__/clipboard.vue
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useUploader, type UploadFileItem } from '@cedar-design/ui-vue'
+const files = ref<UploadFileItem[]>([])
+const message = ref('')
+const rejectionMessages: Record<string, string> = { 'max-files': '最多接收 3 张图片', 'max-file-size': '单张图片不能超过 1 MiB', accept: '仅支持图片文件' }
 const uploader = useUploader({
   modelValue: () => files.value,
   onUpdateModelValue: value => { files.value = value },
-  resolveType: () => 'file',
+  accept: () => 'image/*',
+  maxFiles: () => 3,
+  maxFileSize: () => 1024 * 1024,
   autoUpload: () => false,
-  customRequest: () => options => {
-    const current = generation
-    requests.value++
-    callbacks.value = [...callbacks.value, options]
-    return new Promise(resolve => {
-      handles.value = [...handles.value, {
-        resolve: () => resolve({ abort: () => { if (current === generation) aborts.value++ } }),
-      }]
-    })
-  },
-  onSuccess: () => { accepted.value++ },
+  onRejected: rejected => { message.value = rejected.map(item => rejectionMessages[item.reason] ?? '文件未能读取，请重新选择').join(', ') },
 })
-function add() {
-  return uploader.addFiles([new File(['Local delayed transport; no network.'], `late-${++sequence}.txt`, { type: 'text/plain' })])
+function paste(event: ClipboardEvent) {
+  const incoming = Array.from(event.clipboardData?.files ?? [])
+  if (!incoming.length) return
+  event.preventDefault()
+  message.value = ''
+  uploader.addFiles(incoming)
 }
-function release() {
-  const pending = handles.value
-  handles.value = []
-  pending.forEach(job => job.resolve())
+function addExample() {
+  message.value = ''
+  uploader.addFiles([new File(['<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"/>'], 'local-example.svg', { type: 'image/svg+xml' })])
 }
-function complete() {
-  const pending = callbacks.value
-  callbacks.value = []
-  pending.forEach(options => options.onSuccess({ local: true }))
-}
-function cleanup() {
-  generation++
-  uploader.abort()
-  release()
-  callbacks.value = []
-}
-function reset() {
-  cleanup()
-  uploader.reset()
-  requests.value = 0
-  aborts.value = 0
-  accepted.value = 0
-}
-onBeforeUnmount(cleanup)
-onDeactivated(cleanup)
+function reset() { uploader.reset(); message.value = '' }
 </script>
-
 <template>
-  <section class="late-upload-demo">
-    <p>请求句柄延迟返回；先取消再返回句柄，旧句柄应立即 abort，迟到成功回调不能恢复取消项。不访问网络。</p>
+  <c-space direction="column">
+    <p>将剪贴板图片粘贴到输入区。最多 3 张，每张不超过 1 MiB；只读取文件，不上传。普通文本粘贴仍按原生输入处理。</p>
+    <c-textarea placeholder="在这里粘贴图片或文本" @paste="paste" />
     <c-space wrap>
-      <c-button :disabled="files.length > 0" @click="add">加入本地文件</c-button>
-      <c-button :disabled="!files.some(file => ['ready', 'error', 'canceled'].includes(file.status))" @click="uploader.submit()">发起模拟请求</c-button>
-      <c-button :disabled="!files.some(file => file.status === 'uploading')" @click="uploader.abort()">取消模拟请求</c-button>
-      <c-button :disabled="!handles.length" @click="release">返回所有句柄</c-button>
-      <c-button :disabled="!callbacks.length" @click="complete">返回所有成功回调</c-button>
-      <c-button @click="reset">重置模拟</c-button>
+      <c-button @click="addExample">加入本地示例图片</c-button>
+      <c-button @click="reset">清空列表</c-button>
     </c-space>
-    <c-upload v-model="files" :show-upload-button="false" :show-retry-button="false" :preview="false" />
-    <p role="status">句柄等待：{{ handles.length }}；发起：{{ requests }}；abort：{{ aborts }}；有效成功：{{ accepted }}</p>
-    <p>模型：{{ files.map(file => file.name + ': ' + file.status).join(', ') || '空' }}</p>
-  </section>
+    <p role="status">已接收 {{ files.length }} 个文件。{{ message }}</p>
+    <ul><li v-for="file in files" :key="file.uid">{{ file.name }}</li></ul>
+  </c-space>
 </template>
 ```
 
 ## 使用说明
+
+### 文件选择与设备支持
+
+选择照片时设置 `accept="image/*"`；不设置 `capture` 或设置 `:capture="false"` 可保留系统文件 / 相册入口。仅在需要直接拍照时使用 `capture`，具体可用入口由设备和浏览器决定。
 
 ### 编辑与确认
 
@@ -68867,6 +68791,8 @@ Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，
 `read-pretty` 为独立布尔属性，与 `readonly`、`disabled` 同级；字段 > FormItem > Form 继承，显式 `false` 覆盖父级。默认 `false`。纯阅读不显示编辑器。
 
 ### 配置说明
+
+通过 `trigger-position="before"` 或 `trigger-position="after"` 将内置上传入口放在文件列表之前或之后，默认 after。该配置同样适用于 `trigger` 插槽和拖拽入口；前后表示 DOM 顺序，不因 RTL 改写。完全外置的按钮仍可设置 `:show-upload-button="false"`，再调用实例方法 `chooseFile()`。
 
 两端公共后缀一致，所有默认值见下表（前缀分别为c/mp）。
 
@@ -68897,6 +68823,7 @@ Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，
 | draggable | `boolean` | `false` | 启用拖拽上传 |
 | disabled | `boolean` | `undefined` | 禁用交互；继承 Form，显式 false 优先 |
 | readonly | `boolean` | `undefined` | 只读；继承 Form，显式 false 优先 |
+| read-pretty | `boolean` | `undefined` | 纯阅读模式：隐藏上传编辑器并展示字段值；继承 FormItem / Form，显式 false 覆盖父级，未配置时最终为 false |
 | action | `string` | `undefined` | 上传请求地址 |
 | method | `string` | `'post'` | 上传请求方法 |
 | headers | `UploadHeaders` | `undefined` | 请求头对象或异步函数；请求准备阶段仍可取消 |
@@ -68917,6 +68844,7 @@ Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，
 | is-success-response | `UploadIsSuccessResponse` | `undefined` | 自定义响应成功判断；默认 HTTP 2xx 为成功 |
 | request-choose | `UploadRequestChoose` | `undefined` | 接管选择入口；异常不会自动打开文件框 |
 | list-type | `'text' \| 'picture' \| 'picture-card'` | `'text'` | 文件列表展示方式；两端均支持 |
+| trigger-position | `'before' \| 'after'` | `'after'` | 上传入口在文件列表之前或之后；适用于所有 list-type、自定义 trigger 插槽和拖拽入口；前后按 DOM 顺序解释，不因 RTL 改写 |
 | image-fit | `'fill' \| 'contain' \| 'cover' \| 'none' \| 'scale-down'` | `'cover'` | 缩略图填充方式；文件项 fit 优先 |
 | preview | `boolean` | `true` | 启用内建图片 / 视频预览 |
 | show-file-list | `boolean` | `true` | 显示文件列表 |
@@ -68979,7 +68907,7 @@ chooseFile、replace、submit、retry、remove 返回 `Promise<void>`，保留�
 
 ## Types
 
-UploadProps、UploadEmits、UploadSlots、UploadExpose、UploadPublicMethods、UploadFileItem、UploadStatus、UploadListType、UploadResolveType、UploadImageFit、UploadCapture、UploadRejectedFile、UploadRejectedReason、UploadRequestOptions、UploadRequest、UploadCustomRequest、UploadProgressEvent、UploadData、UploadHeaders、UploadBeforeRead、UploadBeforeUpload、UploadBeforeRemove、UploadCreateThumbnailUrl、UploadIsSuccessResponse、UploadRequestChoose、UploadPreviewEvent、UseUploaderOptions、UploadInstance。
+UploadProps、UploadEmits、UploadSlots、UploadExpose、UploadPublicMethods、UploadFileItem、UploadStatus、UploadListType、UploadTriggerPosition、UploadResolveType、UploadImageFit、UploadCapture、UploadRejectedFile、UploadRejectedReason、UploadRequestOptions、UploadRequest、UploadCustomRequest、UploadProgressEvent、UploadData、UploadHeaders、UploadBeforeRead、UploadBeforeUpload、UploadBeforeRemove、UploadCreateThumbnailUrl、UploadIsSuccessResponse、UploadRequestChoose、UploadPreviewEvent、UseUploaderOptions、UploadInstance。
 
 ## 覆盖附件和视频时长
 

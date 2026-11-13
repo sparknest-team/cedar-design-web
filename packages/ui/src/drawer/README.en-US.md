@@ -109,12 +109,12 @@ Awaited before-* hooks show loading feedback and aria-busy. Rejection or failure
 
 ### Drawer Props
 
-Both dividers default to off, matching Card. Enable `top-divider` and `bottom-divider` independently. A divider is only shown when its header or footer exists. Function calls use `topDivider` / `bottomDivider`.
+Dividers follow Card and are disabled by default. Enable them separately with `top-divider` and `bottom-divider`; each appears only when its corresponding header or footer exists. Service calls also support these options as `topDivider` and `bottomDivider`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| top-divider | Divider between the header and content | `boolean` | `false` |
-| bottom-divider | Divider between content and footer | `boolean` | `false` |
+| top-divider | Divider between the title and content | `boolean` | `false` |
+| bottom-divider | Divider between the content and footer | `boolean` | `false` |
 | dir | Reading direction; inherits the source scope when omitted. Physical left/right placements keep their meaning. | `ReadingDirection` (`ltr` / `rtl`) | — |
 | open **(v-model)** | Controlled visibility | `boolean` | - |
 | default-open | Initial uncontrolled visibility | `boolean` | `false` |

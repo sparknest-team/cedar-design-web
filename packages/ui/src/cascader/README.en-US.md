@@ -445,7 +445,7 @@ option({ data }) receives normalized CascaderOptionInfo; data.raw is the origina
 
 Public types include CascaderBaseValue, CascaderOptionInfo, CascaderReadScope, CascaderEmits, CascaderSlots and CascaderExpose from the root and cascader entry points. Standalone CascaderPanel accepts option arrays and does not own a root candidate loader.
 
-Pending acceptance: verify actual screen-reader announcements with supported browsers (such as VoiceOver and NVDA), including field naming, hierarchical navigation and expanded state, search and selection, single and multiple modes, virtualized options, and form errors. This acceptance has not yet been completed.
+Follow-up acceptance testing (not yet completed): use real screen readers, such as VoiceOver and NVDA, with supported browsers to verify spoken field names, hierarchical navigation and expansion state, search and selection, single and multiple selection, virtual lists, and form errors.
 
 ## CSS Variables
 
