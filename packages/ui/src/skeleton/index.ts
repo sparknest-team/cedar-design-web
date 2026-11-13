@@ -4,7 +4,7 @@ import _SkeletonLine from './Line.vue'
 import _SkeletonShape from './Shape.vue'
 import { skeletonLineProps, skeletonProps, skeletonShapeProps } from './props'
 
-const Skeleton = withInstall(_Skeleton, Object.assign(_Skeleton, {
+const Skeleton: import('../_utils/global-config').CedarComponentWithInstall<typeof _Skeleton & { Line: typeof _SkeletonLine; Shape: typeof _SkeletonShape }> = withInstall(_Skeleton, Object.assign(_Skeleton, {
   Line: _SkeletonLine,
   Shape: _SkeletonShape,
 }), { components: [_Skeleton, _SkeletonLine, _SkeletonShape] })
@@ -24,8 +24,8 @@ export type {
 export { Skeleton }
 export { _SkeletonLine as SkeletonLine, _SkeletonShape as SkeletonShape }
 
-export const _SkeletonComponent = Skeleton
-export const _SkeletonLineComponent = _SkeletonLine
-export const _SkeletonShapeComponent = _SkeletonShape
+export const _SkeletonComponent: typeof Skeleton = Skeleton
+export const _SkeletonLineComponent: typeof _SkeletonLine = _SkeletonLine
+export const _SkeletonShapeComponent: typeof _SkeletonShape = _SkeletonShape
 
 export default Skeleton

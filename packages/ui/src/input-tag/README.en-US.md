@@ -87,7 +87,7 @@ Paste a URL or type one and press Enter to simulate fetching its title. The inpu
 
 ### Field state and native input
 
-Unset disabled, readonly and error inherit from FormItem / Form. InputGroup supplies disabled, readonly, size and variant; explicit field values, including false, take precedence. The standalone variant remains filled. Deferred editors follow the same state and discard their draft when disabled or readonly.
+Unset disabled, readonly and error inherit from FormItem / Form. InputGroup supplies disabled, readonly, size and variant; explicit field values, including false, take precedence. The standalone variant defaults to outline. Deferred editors follow the same state and discard their draft when disabled or readonly.
 
 Native id, name, aria/data attributes, constraints and keyboard listeners belong to the actual input; class/style stay on the shell. The name submits the separate input draft, not the tag array. Controlled input drafts restore the accepted value. Composition publishes once and canceled sessions cannot publish later.
 
@@ -136,7 +136,7 @@ Public Props exclude the internal composition controls `baseCls`, `focused`, `di
 | readonly | Whether it is read-only mode | `boolean` | `-` |
 | clearable | Enables the clear action | `boolean` | `false` |
 | size | The size of the input | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` |
-| variant | The variant of the input | `'filled' \| 'outline' \| 'standard'` | `'filled'` |
+| variant | The variant of the input | `'filled' \| 'outline' \| 'standard'` | `'outline'` |
 | max-tag-count | Finite nonnegative integer; 0 is unlimited, invalid values diagnose and fall back to unlimited display | `number` | `0` |
 | retain-input-value | Whether to keep the content of the input box | `boolean \| { create?: boolean; blur?: boolean }` | `false` |
 | format-tag | Format tag content | `(data: TagData) => string` | `-` |
@@ -212,6 +212,8 @@ import type { InputTagProps, InputTagValue, InputTagEmits, InputTagSlots, InputT
 ## Tags and close buttons
 
 Tag controls tag and close-button appearance. Disabled, readonly and nonclosable tags cannot be removed with the close button.
+
+The accessible name of each close button combines the localized close action with the displayed tag label. For custom tag slots that do not render plain text, the item label is used; set `tagProps.closeButtonAriaLabel` to provide the full name explicitly.
 
 ## InputTag wrapper and content responsibilities
 
@@ -290,3 +292,5 @@ Apply overrides to the rendered component root or the actual popup ancestor. For
 Explicit inline styles and props that write the same CSS property take precedence over stylesheet defaults. After Teleport, ordinary CSS variables inherit from the actual mount location. When using ThemeProvider, follow its local-theme and popup configuration rules. Override the component variable directly for local styling; root-level aliases are not recalculated merely because a descendant system variable changes. Internal variables are not public APIs.
 
 <!-- component-css-variables:end -->
+
+Pending acceptance: use actual screen readers (such as VoiceOver and NVDA) with supported browsers to verify input naming, tag names, creation and removal, keyboard operation, and form error announcements. This acceptance has not yet been completed.

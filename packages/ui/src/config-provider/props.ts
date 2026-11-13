@@ -60,4 +60,4 @@ export const configProviderProps = {
 
 } 
 
-export type ConfigProviderProps = import("vue").ExtractPublicPropTypes<typeof configProviderProps>
+export type ConfigProviderProps = import('../_utils/public-props').CompatiblePublicProps<typeof configProviderProps>

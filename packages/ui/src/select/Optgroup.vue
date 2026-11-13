@@ -9,20 +9,13 @@
 
 <script lang="ts">
 import { defineComponent, useId } from 'vue'
+import { optgroupProps } from './optgroup-props'
 import { createNamespace, getPrefixCls } from '../_utils/global-config'
 
 const { name, n, classes } = createNamespace('optgroup')
 export default defineComponent({
   name,
-  props: {
-    /**
-     * @zh 选项组的标题
-     * @en Title of option group
-     */
-    label: {
-      type: String,
-    },
-  },
+  props: optgroupProps,
   /**
    * @zh 选项组的标题
    * @en Title of option group

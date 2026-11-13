@@ -3,11 +3,13 @@ import {
   onScopeDispose,
   ref,
   shallowRef,
-  toValue,
   unref,
   watch,
 } from "vue";
-import type { MaybeRef, MaybeRefOrGetter } from "vue";
+import type { Ref } from "vue";
+import type { CompatibleMaybeRef as MaybeRef, CompatibleMaybeRefOrGetter as MaybeRefOrGetter } from '../_utils/maybe-ref'
+import { resolveMaybeRefOrGetter as toValue } from '../_utils/maybe-ref'
+import type { CompatibleShallowRef } from '../_utils/compatible-shallow-ref'
 import { cloneSchedulerEvent, validateSchedulerEvent } from "./core";
 import type { SchedulerEvent, SchedulerRange } from "./core";
 
@@ -28,12 +30,22 @@ export interface SchedulerDataSourceOptions {
   maxCacheEntries?: number;
 }
 
+export interface SchedulerDataSource {
+  events: Ref<SchedulerEvent[]>;
+  loading: CompatibleShallowRef<boolean>;
+  error: CompatibleShallowRef<unknown>;
+  loadedRange: CompatibleShallowRef<SchedulerRange | undefined>;
+  refresh: () => Promise<boolean>;
+  cancel: () => void;
+  invalidate: () => void;
+}
+
 /** Range loading only; persistence remains owned by the application. */
-export function useSchedulerDataSource(options: SchedulerDataSourceOptions) {
+export function useSchedulerDataSource(options: SchedulerDataSourceOptions): SchedulerDataSource {
   const events = ref<SchedulerEvent[]>([]);
-  const loading = shallowRef(false);
-  const error = shallowRef<unknown>();
-  const loadedRange = shallowRef<SchedulerRange>();
+  const loading: CompatibleShallowRef<boolean> = shallowRef(false);
+  const error: CompatibleShallowRef<unknown> = shallowRef<unknown>();
+  const loadedRange: CompatibleShallowRef<SchedulerRange | undefined> = shallowRef<SchedulerRange>();
   const cache = new Map<
     string,
     { expires: number; events: SchedulerEvent[] }
@@ -183,4 +195,3 @@ export function useSchedulerDataSource(options: SchedulerDataSourceOptions) {
     invalidate,
   };
 }
-export type SchedulerDataSource = ReturnType<typeof useSchedulerDataSource>;

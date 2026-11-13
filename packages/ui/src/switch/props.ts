@@ -1,6 +1,7 @@
 import { emptyValueProp } from '../_utils/empty-value'
 import type { BeforeHookDone } from '../_hooks/use-action-guard'
-import type { ExtractPublicPropTypes, PropType } from 'vue'
+import type { PropType } from 'vue'
+import type { CompatiblePublicProps as ExtractPublicPropTypes } from '../_utils/public-props'
 import { fieldPresentationProps } from '../_components/field-presentation/props'
 import type { ComponentSize } from '../_utils/constant'
 

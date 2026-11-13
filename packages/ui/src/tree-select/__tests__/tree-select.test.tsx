@@ -15,7 +15,7 @@ describe('TreeSelect', () => {
 
     const field = wrapper.find('.c-field-decorator')
     expect(field.exists()).toBe(true)
-    expect(field.classes()).toContain('c-field-decorator--variant-filled')
+    expect(field.classes()).toContain('c-field-decorator--variant-outline')
     expect(wrapper.find('input').attributes('readonly')).toBeDefined()
     expect(wrapper.text()).toContain('Beijing')
   })

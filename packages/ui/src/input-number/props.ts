@@ -1,4 +1,5 @@
-import type { ExtractPublicPropTypes, PropType } from 'vue'
+import type { PropType } from 'vue'
+import type { CompatiblePublicProps as ExtractPublicPropTypes } from '../_utils/public-props'
 import { fieldPresentationProps } from '../_components/field-presentation/props'
 import type { ComponentSize } from '../_utils/constant'
 import { emptyValueProp } from '../_utils/empty-value'

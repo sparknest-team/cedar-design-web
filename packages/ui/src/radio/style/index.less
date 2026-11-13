@@ -61,9 +61,8 @@
     color: var(--c-radio-label-text-color);
   }
   &--disabled &__label { color: var(--c-radio-label-text-color-disabled); }
-  &__input:focus-visible ~ &__control {
-    outline: var(--c-internal-radio-focus-width) solid var(--c-radio-control-color-checked);
-    outline-offset: var(--c-internal-radio-focus-offset);
+  &__input:focus-visible ~ &__control &__icon {
+    box-shadow: inset 0 0 0 var(--c-internal-radio-focus-width) var(--c-sys-color-content-primary);
   }
 }
 @media (hover: hover) {

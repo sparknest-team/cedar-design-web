@@ -285,7 +285,7 @@ Use `v-model`, `v-model:open` and `v-model:input-value` for controlled state. Cl
 | `default-input-value` | Initial uncontrolled search text, independent of selection; read only at initialization | `string` | `''` |
 | `multiple` | Multiple selection; enables search by default | `boolean` | `false` |
 | `size` | Supports all five sizes; inherits group/form settings | `ComponentSize`<br>`'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `md` |
-| `variant` | filled, outline, standard; inherits InputGroup | `FormControlVariant`<br>`'standard' \| 'filled' \| 'outline'` | `filled` |
+| `variant` | filled, outline, standard; inherits InputGroup | `FormControlVariant`<br>`'standard' \| 'filled' \| 'outline'` | `outline` |
 | `disabled` | Disabled state; explicit values override inherited Form / Group state | `boolean` | `undefined` |
 | `readonly` | Read-only state; explicit values override inherited Form / Group state | `boolean` | `undefined` |
 | `error` | Error state; explicit values override inherited Form / Group state | `boolean` | `undefined` |
@@ -445,6 +445,8 @@ option({ data }) receives normalized CascaderOptionInfo; data.raw is the origina
 
 Public types include CascaderBaseValue, CascaderOptionInfo, CascaderReadScope, CascaderEmits, CascaderSlots and CascaderExpose from the root and cascader entry points. Standalone CascaderPanel accepts option arrays and does not own a root candidate loader.
 
+Pending acceptance: verify actual screen-reader announcements with supported browsers (such as VoiceOver and NVDA), including field naming, hierarchical navigation and expanded state, search and selection, single and multiple modes, virtualized options, and form errors. This acceptance has not yet been completed.
+
 ## CSS Variables
 
 <!-- component-css-variables:start -->
@@ -480,7 +482,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-cascader-popup-box-shadow` | `0 4px 10px rgba(0, 0, 0, 0.1)` | `box-shadow` |
 | `--c-cascader-popup-color-border` | `var(--c-color-fill-3)` | `border`, `border-inline-end`, `border-top` |
 | `--c-cascader-popup-max-height` | `200px` | `height` |
-| `--c-cascader-popup-padding-vertical` | `var(--c-sys-space-2)` | `padding` |
+| `--c-cascader-popup-padding-vertical` | `var(--c-sys-space-2)` | `padding`, `padding-block-end` |
 | `--c-cascader-size-item-height` | `36px` | `height`, `line-height` |
 | `--c-cascader-size-item-icon` | `12px` | `height`, `width` |
 | `--c-cascader-slide-margin` | `120px` | `margin-inline-start` |

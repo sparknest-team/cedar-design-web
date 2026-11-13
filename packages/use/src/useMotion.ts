@@ -1,3 +1,4 @@
+import type { Ref } from 'vue'
 import { ref } from 'vue'
 import { isFunction, motion } from '@cedar-design/shared-vue'
 import type { MotionState } from '@cedar-design/shared-vue'
@@ -10,7 +11,7 @@ export interface UseMotionOptions {
   onFinished?: (value: number) => void
 }
 
-export function useMotion(options: UseMotionOptions) {
+export function useMotion(options: UseMotionOptions): { value: Ref<number>; state: Ref<MotionState>; start: () => void; pause: () => void; reset: () => void } {
   const value = ref(getter(options.from))
   const state = ref<MotionState>('pending')
 

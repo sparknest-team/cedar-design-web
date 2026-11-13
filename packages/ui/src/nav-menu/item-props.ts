@@ -25,7 +25,7 @@ export const navMenuItemProps = {
   popupStyle: Object as PropType<CSSProperties>,
   optionsMode: navMenuProps.mode,
 }
-export type NavMenuItemProps = import('vue').ExtractPublicPropTypes<typeof navMenuItemProps>
+export type NavMenuItemProps = import('../_utils/public-props').CompatiblePublicProps<typeof navMenuItemProps>
 export interface NavMenuItemSlotContext {
   modelValue: import('./types').NavMenuKey | null
   selectedOption: import('./types').NavMenuOption | undefined

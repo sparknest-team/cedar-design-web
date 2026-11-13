@@ -2,7 +2,7 @@ import { withInstall } from '../_utils/global-config'
 import _Divider from './Divider.vue'
 import { dividerProps } from './props'
 
-const Divider = withInstall(_Divider, Object.assign(_Divider, {
+const Divider: import('../_utils/global-config').ComponentWithInstall<typeof _Divider> = withInstall(_Divider, Object.assign(_Divider, {
 }), { components: [_Divider] })
 
 export type DividerInstance = InstanceType<typeof _Divider>
@@ -11,6 +11,6 @@ export type { DividerProps, DividerOrientation, DividerTextAlign, DividerType, D
 export { dividerProps }
 export { Divider }
 
-export const _DividerComponent = Divider
+export const _DividerComponent: typeof Divider = Divider
 
 export default Divider

@@ -34,7 +34,8 @@ import { physicalScrollLeft, nativeScrollLeft, useDirection } from '../../_utils
 import { useElementResize } from '../../_utils/resize-observer'
 
 import { createNamespace } from '../../_utils/global-config'
-import { computed, type CSSProperties, defineComponent, onActivated, onBeforeUnmount, onDeactivated, onMounted, onUpdated, type PropType, ref, watch, type StyleValue } from 'vue'
+import type { CompatibleStyleValue as StyleValue } from '../../_utils/style-value'
+import { computed, type CSSProperties, defineComponent, onActivated, onBeforeUnmount, onDeactivated, onMounted, onUpdated, type PropType, ref, watch } from 'vue'
 import type { ThumbData } from './types'
 import type { ClassName } from '../../_utils/types'
 import ResizeObserver from '../../_components/resize-observer-v2'

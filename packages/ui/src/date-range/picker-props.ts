@@ -9,6 +9,6 @@ export const props = {
   ...dateRangeValueProps,
   disabled: { type: [Boolean, Array] as PropType<boolean | boolean[]>, default: false },
 }
-export type DateRangePickerProps = import('vue').ExtractPublicPropTypes<typeof props>
+export type DateRangePickerProps = import('../_utils/public-props').CompatiblePublicProps<typeof props>
 export type DateRangePickerType = NonNullable<DateRangePickerProps['type']>
 export type DateRangePickerOptions = Omit<DateRangePickerProps, keyof typeof dateRuleProps | 'modelValue' | 'defaultValue' | 'disabled' | 'readonly'>

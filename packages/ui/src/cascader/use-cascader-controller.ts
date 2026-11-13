@@ -84,7 +84,7 @@ export function useCascaderController(
   const options = source.options;
   const loading = computed(() => props.loading || source.loading.value);
   const mergedVariant = computed(
-    () => props.variant ?? group?.variant.value ?? "filled",
+    () => props.variant ?? group?.variant.value ?? "outline",
   );
   const mergedHint = computed(() => !hasOuterLabel.value && props.hint);
   const computedOpen = computed(() => props.open ?? _open.value);

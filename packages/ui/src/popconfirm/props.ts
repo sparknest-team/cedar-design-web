@@ -48,6 +48,6 @@ export const popconfirmProps = {
   beforeCancel: Function as PropType<PopconfirmBeforeCancel>,
 };
 
-export type PopconfirmProps = import("vue").ExtractPublicPropTypes<
+export type PopconfirmProps = import('../_utils/public-props').CompatiblePublicProps<
   typeof popconfirmProps
 >;

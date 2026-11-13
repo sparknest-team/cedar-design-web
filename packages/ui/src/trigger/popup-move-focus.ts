@@ -12,18 +12,18 @@ function mayHideShadow(element: HTMLElement): boolean {
   return !element.shadowRoot && (element.localName.includes('-') || shadowHostNames.has(element.localName))
 }
 
-function documentChain(start: Document, allowPartial = false): { documents: Document[]; frames: Element[] } | undefined {
+function documentChain(start: Document): { documents: Document[]; frames: Element[] } {
   const documents = [start], frames: Element[] = []
   let current = start
   try {
     while (current.defaultView && current.defaultView.parent !== current.defaultView) {
       const frame = current.defaultView.frameElement
-      if (!frame) return allowPartial ? { documents, frames } : undefined
+      if (!frame) return { documents, frames }
       frames.push(frame)
       current = frame.ownerDocument
       documents.push(current)
     }
-  } catch { return allowPartial ? { documents, frames } : undefined }
+  } catch { return { documents, frames } }
   return { documents, frames }
 }
 
@@ -34,8 +34,7 @@ function canRestore(owner: Document, destination: Document, anchor: HTMLElement,
       (current !== anchor || deepestActive(anchor) === focused)
   }
   // A shared accessible document is sufficient even when an ancestor is cross-origin.
-  const from = documentChain(owner, true), to = documentChain(destination, true)
-  if (!from || !to) return false
+  const from = documentChain(owner), to = documentChain(destination)
   const common = from.documents.find(doc => to.documents.includes(doc))
   if (!common || !common.hasFocus()) return false
   const frames = new Set([...from.frames, ...to.frames])
@@ -81,8 +80,8 @@ export function usePopupMoveFocus(
   return (event: Event) => {
     if (!moving || moving !== event.target || (event as FocusEvent).relatedTarget) return false
     const owner = moving.ownerDocument
-    const chain = documentChain(owner, true)
-    if (!chain || !chain.documents[chain.documents.length - 1].hasFocus()) return false
+    const chain = documentChain(owner)
+    if (!chain.documents[chain.documents.length - 1].hasFocus()) return false
     return chain.documents.every(doc => {
       const current = doc.activeElement
       return !current || current === doc.body || current === doc.documentElement || current === moving || chain.frames.includes(current)

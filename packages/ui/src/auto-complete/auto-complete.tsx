@@ -1,4 +1,5 @@
-import type { StyleValue, VNode } from 'vue'
+import type { CompatibleStyleValue as StyleValue } from '../_utils/style-value'
+import type { VNode } from 'vue'
 import { computed, defineComponent, inject, nextTick, ref, toRefs, useId, watch } from 'vue'
 import { fieldEditorPanel } from '../_components/field-presentation/context'
 import { selectionEditorSurface } from '../_components/selected-options/context'

@@ -3,7 +3,7 @@ import _Button from "./base";
 import _ButtonGroup from "./ButtonGroup.vue";
 import { buttonProps, buttonGroupProps } from "./props";
 
-const Button = withInstall(
+const Button: import('../_utils/global-config').CedarComponentWithInstall<typeof _Button & { Group: typeof _ButtonGroup }> = withInstall(
   _Button,
   Object.assign(_Button, {
     Group: _ButtonGroup,
@@ -19,7 +19,7 @@ export { buttonProps, buttonGroupProps };
 export { Button };
 export { _ButtonGroup as ButtonGroup };
 
-export const _ButtonComponent = Button;
-export const _ButtonGroupComponent = _ButtonGroup;
+export const _ButtonComponent: typeof Button = Button;
+export const _ButtonGroupComponent: typeof _ButtonGroup = _ButtonGroup;
 
 export default Button;

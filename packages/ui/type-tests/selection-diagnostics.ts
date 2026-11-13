@@ -1,13 +1,21 @@
-import { optionProps } from '@cedar-design/ui-vue'
+import type { ExtractPublicPropTypes, StyleValue } from 'vue'
+import type { CompatiblePublicProps } from '../src/_utils/public-props'
+import type { CompatibleStyleValue } from '../src/_utils/style-value'
+import { optionProps, tagProps } from '@cedar-design/ui-vue'
 import type {
+  ColorPickerSlots,
+  ColorPickerTriggerSlotProps,
   CascaderEmits,
   CascaderExpose,
   CascaderOptionInfo,
   CascaderReadScope,
   CascaderSlots,
   OptionProps,
+  TagProps,
+  SelectOptionTagProps,
 } from '@cedar-design/ui-vue'
 import type { CascaderSlots as SubSlots } from '@cedar-design/ui-vue/cascader'
+import type { SelectOptionTagProps as SubTagProps } from '@cedar-design/ui-vue/select'
 
 type Assert<T extends true> = T
 export type NoPrivate = Assert<'internal' extends keyof typeof optionProps ? false : true>
@@ -33,3 +41,99 @@ export function expose(instance: CascaderExpose) {
 export function objectValue(node: CascaderOptionInfo) {
   return node.value
 }
+
+export const optionTagAttributes: OptionProps = {
+  value: 'tag',
+  tagProps: {
+    style: { maxWidth: '12rem' },
+    title: 'Device',
+    onClose: (event: MouseEvent) => event.preventDefault(),
+    onCloseOnce: (event: MouseEvent) => event.preventDefault(),
+  },
+}
+
+export const forwardedTag: SelectOptionTagProps = {
+  class: ['custom'],
+  'data-device': 'sensor',
+  style: { maxWidth: '12rem' },
+  onClose: (event) => { const mouse: MouseEvent = event; mouse.preventDefault() },
+  onCloseOnce: (event) => event.preventDefault(),
+}
+// @ts-expect-error A close listener receives a MouseEvent, not a string.
+export const badTagListener: SelectOptionTagProps = { onClose: (event: string) => event.length }
+
+export const subTag: SubTagProps = forwardedTag
+// @ts-expect-error An unknown Tag option is not part of the forwarded contract.
+export const unknownTag: SelectOptionTagProps = { inventedTagSetting: true }
+
+export const colorTrigger: ColorPickerTriggerSlotProps = { describedBy: 'help' }
+export const colorPickerSlots: ColorPickerSlots = { default: ({ describedBy }) => describedBy }
+
+type Same<A, B> = (<T>() => T extends A ? 1 : 2) extends (<T>() => T extends B ? 1 : 2) ? true : false
+type DifferentFields<A, B> = { [K in keyof A]-?: K extends keyof B ? Same<A[K], B[K]> extends true ? never : K : K }[keyof A]
+export type OptionFieldsMatch = Assert<DifferentFields<ExtractPublicPropTypes<typeof optionProps>, OptionProps> extends never ? true : false>
+export type TagFieldsMatch = Assert<DifferentFields<ExtractPublicPropTypes<typeof tagProps>, TagProps> extends never ? true : false>
+type RequiredExample = CompatiblePublicProps<{ name: { type: StringConstructor; required: true }; active: { type: BooleanConstructor; default: false } }>
+export const requiredExample: RequiredExample = { name: 'device' }
+// @ts-expect-error Required props remain required.
+export const missingRequired: RequiredExample = {}
+
+export type CompatibleStyleMatchesVue = Assert<Same<CompatibleStyleValue, StyleValue>>
+
+import { checkboxProps, checkboxGroupProps } from '../src/checkbox/props'
+import { radioProps, radioGroupProps } from '../src/radio/props'
+import { tabsProps, tabNavProps, tabItemProps, tabPaneProps, tabsNavsProps, tabsItemsProps } from '../src/tabs/props'
+import { searchProps } from '../src/search/props'
+import { inputNumberProps } from '../src/input-number/props'
+
+type PublicShapeMatches<P> = Same<keyof ExtractPublicPropTypes<P>, keyof CompatiblePublicProps<P>> extends true
+  ? DifferentFields<ExtractPublicPropTypes<P>, CompatiblePublicProps<P>> extends never
+    ? [ExtractPublicPropTypes<P>] extends [CompatiblePublicProps<P>]
+      ? [CompatiblePublicProps<P>] extends [ExtractPublicPropTypes<P>] ? true : false
+      : false
+    : false
+  : false
+export type PublicPropsCompatibility0 = Assert<PublicShapeMatches<typeof checkboxProps>>
+export type PublicPropsCompatibility1 = Assert<PublicShapeMatches<typeof checkboxGroupProps>>
+export type PublicPropsCompatibility2 = Assert<PublicShapeMatches<typeof radioProps>>
+export type PublicPropsCompatibility3 = Assert<PublicShapeMatches<typeof radioGroupProps>>
+export type PublicPropsCompatibility4 = Assert<PublicShapeMatches<typeof tabsProps>>
+export type PublicPropsCompatibility5 = Assert<PublicShapeMatches<typeof tabNavProps>>
+export type PublicPropsCompatibility6 = Assert<PublicShapeMatches<typeof tabItemProps>>
+export type PublicPropsCompatibility7 = Assert<PublicShapeMatches<typeof tabPaneProps>>
+export type PublicPropsCompatibility8 = Assert<PublicShapeMatches<typeof tabsNavsProps>>
+export type PublicPropsCompatibility9 = Assert<PublicShapeMatches<typeof tabsItemsProps>>
+export type PublicPropsCompatibility10 = Assert<PublicShapeMatches<typeof searchProps>>
+export type PublicPropsCompatibility11 = Assert<PublicShapeMatches<typeof inputNumberProps>>
+
+import { inputProps, inputGroupProps, inputPasswordProps } from '../src/input/props'
+import { textareaProps } from '../src/textarea/props'
+import { inputTagProps } from '../src/input-tag/props'
+import { autoCompleteProps } from '../src/auto-complete/props'
+import { cascaderProps } from '../src/cascader/props'
+import { peopleSelectProps } from '../src/people-select/props'
+import { selectProps } from '../src/select/props'
+import { mentionProps } from '../src/mention/props'
+import { cascaderPanelProps } from '../src/cascader'
+import { optgroupProps } from '../src/select'
+export type FieldPropsCompatibility0 = Assert<PublicShapeMatches<typeof inputProps>>
+export type FieldPropsCompatibility1 = Assert<PublicShapeMatches<typeof inputGroupProps>>
+export type FieldPropsCompatibility2 = Assert<PublicShapeMatches<typeof inputPasswordProps>>
+export type FieldPropsCompatibility3 = Assert<PublicShapeMatches<typeof textareaProps>>
+export type FieldPropsCompatibility4 = Assert<PublicShapeMatches<typeof inputTagProps>>
+export type FieldPropsCompatibility5 = Assert<PublicShapeMatches<typeof autoCompleteProps>>
+export type FieldPropsCompatibility6 = Assert<PublicShapeMatches<typeof cascaderProps>>
+export type FieldPropsCompatibility7 = Assert<PublicShapeMatches<typeof peopleSelectProps>>
+export type FieldPropsCompatibility8 = Assert<PublicShapeMatches<typeof selectProps>>
+export type FieldPropsCompatibility9 = Assert<PublicShapeMatches<typeof mentionProps>>
+export type FieldPropsCompatibility10 = Assert<PublicShapeMatches<typeof cascaderPanelProps>>
+export type FieldPropsCompatibility11 = Assert<PublicShapeMatches<typeof optgroupProps>>
+
+import type { CascaderPanelProps } from '@cedar-design/ui-vue/cascader'
+import type { OptgroupProps } from '@cedar-design/ui-vue/select'
+export const validCascaderPanel: CascaderPanelProps = { multiple: true }
+export const validOptgroup: OptgroupProps = { label: 'Group' }
+// @ts-expect-error Cascader panel multiple is boolean.
+export const badCascaderPanel: CascaderPanelProps = { multiple: 'yes' }
+// @ts-expect-error Optgroup label is a string.
+export const badOptgroup: OptgroupProps = { label: 99 }

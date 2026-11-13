@@ -3,7 +3,7 @@ import _List from "./list.vue";
 import _ListItem from "./list-item.vue";
 import { listProps } from "./props";
 
-const List = withInstall(
+const List: import('../_utils/global-config').ComponentWithInstall<typeof _List & { Item: typeof _ListItem }> = withInstall(
   _List,
   Object.assign(_List, {
     Item: _ListItem,
@@ -17,8 +17,8 @@ export type { ListProps, ListSize, ListVirtualListProps, ListScrollbarProps, Lis
 
 export { _ListItem as ListItem };
 
-export const _ListComponent = List;
-export const _ListItemComponent = _ListItem;
+export const _ListComponent: typeof List = List;
+export const _ListItemComponent: typeof _ListItem = _ListItem;
 
 export { List };
 

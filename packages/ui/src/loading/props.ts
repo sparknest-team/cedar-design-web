@@ -41,6 +41,6 @@ export const loadingProps = {
   hideIcon: Boolean,
 };
 
-export type LoadingProps = import("vue").ExtractPublicPropTypes<
+export type LoadingProps = import('../_utils/public-props').CompatiblePublicProps<
   typeof loadingProps
 >;

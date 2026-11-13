@@ -8,8 +8,12 @@ export const mentionKey = (value: MentionTokenValue) => serializeMentionParts([{
 export function syncMentionLabels(labels: Map<string, string>, model: string, options: Parameters<typeof findMentionLabel>[1], preservedModel = '') {
   const values = parseMentionParts(model).filter((part): part is Extract<MentionPart, { type: 'mention' }> => part.type === 'mention')
   const keys = new Set(values.map(part => mentionKey(part.value)))
-  for (const part of parseMentionParts(preservedModel)) if (part.type === 'mention') keys.add(mentionKey(part.value))
-  for (const key of labels.keys()) if (!keys.has(key)) labels.delete(key)
+  for (const part of parseMentionParts(preservedModel)) {
+    if (part.type === 'mention') keys.add(mentionKey(part.value))
+  }
+  for (const key of labels.keys()) {
+    if (!keys.has(key)) labels.delete(key)
+  }
   for (const part of values) {
     const label = findMentionLabel(part.value, options)
     if (label !== undefined) labels.set(mentionKey(part.value), label)

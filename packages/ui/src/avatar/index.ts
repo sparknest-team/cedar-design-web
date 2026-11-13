@@ -3,7 +3,7 @@ import _Avatar from './Avatar.vue'
 import _AvatarGroup from './AvatarGroup.vue'
 import { avatarGroupProps, avatarProps } from './props'
 
-const Avatar = withInstall(
+const Avatar: import('../_utils/global-config').CedarComponentWithInstall<typeof _Avatar & { Group: typeof _AvatarGroup }> = withInstall(
   _Avatar,
   Object.assign(_Avatar, {
     Group: _AvatarGroup,
@@ -18,7 +18,7 @@ export type { AvatarGroupProps, AvatarObjectFit, AvatarProps, AvatarShape, Avata
 export { Avatar }
 export { _AvatarGroup as AvatarGroup }
 
-export const _AvatarComponent = Avatar
+export const _AvatarComponent: typeof Avatar = Avatar
 export const _AvatarGroupComponent = _AvatarGroup
 
 export default Avatar

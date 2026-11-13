@@ -263,7 +263,7 @@ refresh 可在编辑器未打开时重试组件自有的异步选项读取，沿
 | `--c-tree-select-option-radius` | `var(--c-select-popup-option-border-radius)` | `border-radius` |
 | `--c-tree-select-popup-padding-left` | `var(--c-select-popup-padding-horizontal)` | `padding-inline-start` |
 | `--c-tree-select-popup-padding-right` | `var(--c-select-popup-padding-horizontal)` | `padding-inline-end` |
-| `--c-tree-select-popup-padding-vertical` | `var(--c-select-popup-padding-vertical)` | `padding` |
+| `--c-tree-select-popup-padding-vertical` | `var(--c-select-popup-padding-vertical)` | `padding`, `padding-block-end`, `padding-block-start` |
 
 </div>
 

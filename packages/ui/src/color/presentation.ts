@@ -2,4 +2,6 @@ import { withFieldPresentation } from '../_components/field-presentation/with-fi
 import Base from './Color.vue'
 import { colorFieldAdapter } from './field-adapter'
 
-export default withFieldPresentation(Base, colorFieldAdapter)
+const Presented: typeof Base = withFieldPresentation(Base, colorFieldAdapter)
+
+export default Presented

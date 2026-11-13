@@ -6001,10 +6001,10 @@ Example source: src/card/__demos__/slots.vue
 
 | 配置 | 作用 | 相关示例 |
 | --- | --- | --- |
-| `title` | 标题 | 水波与点击事件、全屏展开与关闭 |
+| `title` | 标题 | 水波与点击事件、浮动展开与关闭 |
 | `ripple` | 点击水波 | 水波与点击事件 |
-| `floating` | 全屏展开状态，支持 v-model:floating | 全屏展开与关闭 |
-| `floating-duration` | 全屏展开与关闭动画时长，单位 ms | 全屏展开与关闭 |
+| `floating` | 浮动展开状态，支持 v-model:floating | 浮动展开与关闭 |
+| `floating-duration` | 浮动展开与关闭动画时长，单位 ms | 浮动展开与关闭 |
 <!-- demo-config-notes:end -->
 
 Example source: src/card/__demos__/ripple.vue
@@ -6022,7 +6022,7 @@ const clicks = ref(0)
 </template>
 ```
 
-### 全屏展开与关闭
+### 浮动展开与关闭
 
 Example source: src/card/__demos__/floating.vue
 
@@ -6055,9 +6055,9 @@ const floating = ref(false)
 
 | 配置 | 作用 | 相关示例 |
 | --- | --- | --- |
-| `floating` | 全屏展开状态，支持 v-model:floating | Floating scheduler lifecycle / 浮起调度生命周期 |
+| `floating` | 浮动展开状态，支持 v-model:floating | Floating scheduler lifecycle / 浮起调度生命周期 |
 | `ripple` | 点击水波 | Floating scheduler lifecycle / 浮起调度生命周期 |
-| `floating-duration` | 全屏展开与关闭动画时长，单位 ms | Floating scheduler lifecycle / 浮起调度生命周期 |
+| `floating-duration` | 浮动展开与关闭动画时长，单位 ms | Floating scheduler lifecycle / 浮起调度生命周期 |
 | `title` | 标题 | Floating scheduler lifecycle / 浮起调度生命周期 |
 <!-- demo-config-notes:end -->
 
@@ -6133,8 +6133,8 @@ const duration = ref(250)
 | alt | 封面图片替代文本 | `string` | `undefined` |
 | elevation | default 变体阴影；true 为等级 1，false 为无阴影，数字范围 0～24 | `boolean / number` | `true` |
 | ripple | 点击水波 | `boolean` | `false` |
-| floating | 全屏展开状态，支持 v-model:floating | `boolean` | `false` |
-| floating-duration | 全屏展开与关闭动画时长，单位 ms | `number` | `250` |
+| floating | 浮动展开状态，支持 v-model:floating | `boolean` | `false` |
+| floating-duration | 浮动展开与关闭动画时长，单位 ms | `number` | `250` |
 | close-button-aria-label | 默认关闭按钮的可访问名称 | `string` | `—` |
 
 ### Card Events
@@ -6156,7 +6156,7 @@ const duration = ref(250)
 | subtitle | 副标题 | `{ slotClass: string }` |
 | description | 描述 | `{ slotClass: string }` |
 | footer | 底部操作 | — |
-| floating-content | 全屏扩展内容，仅 column 布局渲染 | — |
+| floating-content | 浮动展开内容，仅 column 布局渲染 | — |
 | close-button | 自定义关闭按钮；需自行更新 floating | — |
 
 ### Card Methods
@@ -26535,6 +26535,8 @@ import type { InputTagProps, InputTagValue, InputTagEmits, InputTagSlots, InputT
 ## 标签与关闭按钮
 
 标签和关闭按钮的外观由 Tag 控制；禁用、只读及不可关闭的标签不能通过关闭按钮移除。
+
+标签关闭按钮的无障碍名称由本地化的关闭文字和标签显示名称组成，例如“关闭 小明”。自定义标签插槽的显示内容无法提取为纯文本时使用标签的 label；可通过对应项的 `tagProps.closeButtonAriaLabel` 指定完整名称。
 
 ## InputTag 外壳与内容职责
 

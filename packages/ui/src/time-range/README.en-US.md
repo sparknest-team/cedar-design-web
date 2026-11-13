@@ -233,7 +233,7 @@ When FormItem's `label-attrs.for` explicitly targets one input, unnamed range en
 | `text-color` | Content text color | `string` | Theme default |
 | `time-range-picker-props` | Range-panel presentation options; model, rules and state remain owned by the field | `TimePanelPresentationProps` | `{}` |
 | `use12-hours` | 12-hour panel; disabled-hour callbacks still use 0–23 | `boolean` | `false` |
-| `variant` | Field appearance | `filled \| outline \| standard` | `filled` |
+| `variant` | Field appearance | `filled \| outline \| standard` | `outline` |
 
 ### Editing and confirmation
 

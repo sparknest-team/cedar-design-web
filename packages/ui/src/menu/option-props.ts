@@ -12,4 +12,4 @@ export const props = {
   uninjectContext: Boolean,
 }
 export const menuOptionProps = props
-export type MenuOptionProps = import('vue').ExtractPublicPropTypes<typeof props>
+export type MenuOptionProps = import('../_utils/public-props').CompatiblePublicProps<typeof props>

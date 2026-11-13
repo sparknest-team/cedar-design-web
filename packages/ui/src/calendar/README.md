@@ -135,7 +135,7 @@ import type { CalendarInstance } from "@cedar-design/ui-vue";
 | `--c-calendar-cell-text-in-view` | `var(--c-color-text-1)` | `color` |
 | `--c-calendar-cell-text-not-in-view` | `var(--c-color-text-4)` | `color` |
 | `--c-calendar-cell-text-selected` | `var(--c-color-white)` | `color` |
-| `--c-calendar-cell-today-border-color` | `var(--c-sys-color-content-brand)` | `border` |
+| `--c-calendar-cell-today-border-color` | `var(--c-sys-color-action-primary)` | `border` |
 | `--c-calendar-date-circle-border-radius` | `var(--c-border-radius-circle)` | `border-radius` |
 | `--c-calendar-date-circle-size` | `var(--c-size-7)` | `height`, `width` |
 | `--c-calendar-date-content-height` | `70px` | `height` |

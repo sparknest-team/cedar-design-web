@@ -4,7 +4,7 @@ import Base from './upload.vue'
 
 const asynchronousMethods = new Set(['chooseFile', 'replace', 'submit', 'retry', 'remove'])
 
-export default withFieldPresentation(Base, {
+const Presented: typeof Base = withFieldPresentation(Base, {
   methods: ['chooseFile', 'replace', 'submit', 'abort', 'retry', 'remove', 'reset', 'clearSuccess', 'clearError', 'getFiles', 'preview', 'closePreview'],
   inactiveMethod: (name, value, args) => {
     if (name === 'getFiles') {
@@ -14,3 +14,5 @@ export default withFieldPresentation(Base, {
     if (asynchronousMethods.has(name)) return Promise.resolve()
   },
 })
+
+export default Presented

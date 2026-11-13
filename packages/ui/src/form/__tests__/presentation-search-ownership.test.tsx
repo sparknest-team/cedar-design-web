@@ -6,6 +6,8 @@ import SelectMenu from '../../select/SelectMenu'
 import Form from '../Form.vue'
 import FormItem from '../FormItem.vue'
 
+const timerDescriptor = Object.getOwnPropertyDescriptor(globalThis, 'setTimeout')
+
 async function fixture() {
   const model = reactive({ device: 'a' })
   const queue: Array<() => void> = []
@@ -60,6 +62,7 @@ test('matching Form reset retires the real Select search across reopening withou
     f?.owner.unmount()
     vi.restoreAllMocks()
     vi.useRealTimers()
+    if (timerDescriptor) Object.defineProperty(globalThis, 'setTimeout', timerDescriptor)
   }
 })
 test('unrelated reset preserves the editor and current search deadline', async () => {
@@ -78,6 +81,7 @@ test('unrelated reset preserves the editor and current search deadline', async (
     f?.owner.unmount()
     vi.restoreAllMocks()
     vi.useRealTimers()
+    if (timerDescriptor) Object.defineProperty(globalThis, 'setTimeout', timerDescriptor)
   }
 })
 test('Form submit while the Select editor is active preserves editing failure semantics', async () => {
@@ -95,5 +99,10 @@ test('Form submit while the Select editor is active preserves editing failure se
     f?.owner.unmount()
     vi.restoreAllMocks()
     vi.useRealTimers()
+    if (timerDescriptor) Object.defineProperty(globalThis, 'setTimeout', timerDescriptor)
   }
+})
+
+test('restores the global timer after the ownership tests', () => {
+  expect(typeof globalThis.setTimeout).toBe('function')
 })

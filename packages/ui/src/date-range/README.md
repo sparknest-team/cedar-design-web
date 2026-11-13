@@ -329,7 +329,7 @@ open-trigger-target="icon" 时，输入区可以编辑或复制，只有右侧�
 | `time-zone` | IANA 时区；无效时区不会回退成有效可选值 | `string` | 系统本地时区 |
 | `type` | 日期精度；Cedar 支持周/季度，Maple 支持日期/月/年 | `date \| month \| year \| week \| quarter` | `date` |
 | `value-format` | 序列化模型格式，支持 Date、timestamp 或格式字符串；独立于 format | `string` | 按精度/时间配置 |
-| `variant` | 字段外观 | `filled \| outline \| standard` | `filled` |
+| `variant` | 字段外观 | `filled \| outline \| standard` | `outline` |
 
 ### 日期族统一契约
 

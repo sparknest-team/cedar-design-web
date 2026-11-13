@@ -1,7 +1,8 @@
 import { buttonVariants, type ButtonVariant } from './variant'
 export { buttonVariants } from './variant'
 export type { ButtonVariant } from './variant'
-import type { ExtractPublicPropTypes, PropType } from "vue";
+import type { PropType } from "vue";
+import type { CompatiblePublicProps as ExtractPublicPropTypes } from '../_utils/public-props'
 import { componentSizes, semanticStatuses } from "../_utils/constant";
 import type { ComponentSize, SemanticStatus } from "../_utils/constant";
 import type { LoadingType, LoadingSize } from "../loading/props";

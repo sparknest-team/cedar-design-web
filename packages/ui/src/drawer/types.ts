@@ -3,7 +3,8 @@ import type {
   BeforeHookDone,
   BeforeHookResult,
 } from "../_hooks/use-action-guard";
-import type { AppContext, CSSProperties, StyleValue } from "vue";
+import type { CompatibleStyleValue as StyleValue } from '../_utils/style-value'
+import type { AppContext, CSSProperties } from "vue";
 import type { RenderContent } from "../_utils/types";
 import type { ButtonProps } from "../button";
 import type { DrawerPlacement } from "./props";

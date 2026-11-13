@@ -45,6 +45,6 @@ export const formItemProps = {
   feedback: Boolean,
 };
 
-export type FormItemProps = import("vue").ExtractPublicPropTypes<
+export type FormItemProps = import('../_utils/public-props').CompatiblePublicProps<
   typeof formItemProps
 >;

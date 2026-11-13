@@ -180,7 +180,7 @@ Choose a dimension to compare all its values side by side while keeping other se
 | `disabled` | Disable interaction | `boolean` | `false` |
 | `readonly` | Read-only interaction | `boolean` | `false` |
 | `size` | Component size | `xs \| sm \| md \| lg \| xl` | `-` |
-| `variant` | Field appearance | `filled \| outline \| standard` | `filled` |
+| `variant` | Field appearance | `filled \| outline \| standard` | `outline` |
 | `placeholder` | Placeholder | `string` | `-` |
 | `disabled-date` | Return true to disable a date | `Function` | `-` |
 | `format` | Display format | `string \| Function` | Depends on type |
@@ -268,7 +268,7 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 | `time-zone` | IANA time zone; an invalid zone does not fall back to a valid selectable value | `string` | System local time zone |
 | `type` | Date precision; Cedar includes week/quarter, while Maple supports date/month/year | `date \| month \| year \| week \| quarter` | `date` |
 | `value-format` | Serialized model format: Date, timestamp or format tokens, independent of display format | `string` | From precision/time settings |
-| `variant` | Field appearance | `filled \| outline \| standard` | `filled` |
+| `variant` | Field appearance | `filled \| outline \| standard` | `outline` |
 
 ### Shared date-family contract
 

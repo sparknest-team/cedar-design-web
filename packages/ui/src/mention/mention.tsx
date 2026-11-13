@@ -267,7 +267,9 @@ export default defineComponent({
       if (!entry) return
       target.push({ value: computedValue.value, caret: activeInput?.selectionStart ?? 0, labels: [...selectedLabels] })
       applyAtomicValue(entry.value, entry.caret, false)
-      for (const [key, label] of entry.labels) selectedLabels.set(key, label)
+      for (const [key, label] of entry.labels) {
+        selectedLabels.set(key, label)
+      }
       nextTick(syncSelectedLabels)
       updateAtomicSearch(parseMentionParts(entry.value), entry.caret)
     }

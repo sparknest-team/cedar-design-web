@@ -126,7 +126,7 @@ export function useSelectController(
     () => props.filterOption ?? !source.remote.value,
   );
   const mergedVariant = computed(
-    () => props.variant ?? group?.variant.value ?? "filled",
+    () => props.variant ?? group?.variant.value ?? "outline",
   );
   const mergedHint = computed(() => !hasOuterLabel.value && props.hint);
   const component = computed(() => (props.virtualListProps ? "div" : "li"));

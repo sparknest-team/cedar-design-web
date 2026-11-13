@@ -951,7 +951,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-table-pagination-margin` | `var(--c-spacing-6)` | `margin-bottom`, `margin-top` |
 | `--c-table-pagination-sticky-bg` | `var(--c-color-bg-1)` | `background`, `background-color` |
 | `--c-table-pagination-sticky-padding` | `12px 0` | `padding` |
-| `--c-table-resizing-border-color` | `var(--c-sys-color-content-brand)` | `border-right-color` |
+| `--c-table-resizing-border-color` | `var(--c-sys-color-action-primary)` | `border-right-color` |
 | `--c-table-selection-col-width` | `40px` | `max-width`, `min-width`, `width` |
 | `--c-table-shadow-left` | `inset 6px 0 8px -3px rgba(0, 0, 0, 0.15)` | `box-shadow` |
 | `--c-table-shadow-right` | `inset -6px 0 8px -3px rgba(0, 0, 0, 0.15)` | `box-shadow` |

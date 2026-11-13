@@ -2,7 +2,7 @@
 
 exports[`PeopleSelect > render 1`] = `
 "<div class=\\"c-select\\">
-  <div class=\\"c-field-decorator c-field-decorator--size-md c-field-decorator--variant-filled c-selection-field\\">
+  <div class=\\"c-field-decorator c-field-decorator--size-md c-field-decorator--variant-outline c-selection-field\\">
     <!--v-if--><span class=\\"c-field-decorator__middle\\"><span class=\\"c-selection-field__content\\"><!--v-if--><input id=\\"v-1\\" class=\\"c-selection-field__input\\" aria-expanded=\\"false\\" aria-autocomplete=\\"list\\" role=\\"combobox\\" autocomplete=\\"off\\" value=\\"\\"></span></span>
     <!--v-if--><span class=\\"c-field-decorator__suffix\\"><!--v-if--><!--v-if--><button type=\\"button\\" data-field-open-trigger=\\"\\" aria-label=\\"请选择\\" aria-expanded=\\"false\\" aria-haspopup=\\"listbox\\" class=\\"c-selection-field__icon\\"><svg xmlns=\\"http://www.w3.org/2000/svg\\" fill=\\"none\\" stroke=\\"currentColor\\" viewBox=\\"0 0 48 48\\" width=\\"1em\\" height=\\"1em\\" class=\\"c-icon c-icon-down\\" stroke-width=\\"4\\" stroke-linecap=\\"butt\\" stroke-linejoin=\\"miter\\" aria-hidden=\\"true\\" role=\\"img\\"><!--v-if--><path d=\\"M39.6 17.443 24.043 33 8.487 17.443\\"></path></svg></button></span>
     <!--v-if--><span class=\\"c-field-decorator__border\\" aria-hidden=\\"true\\"></span><span class=\\"c-field-decorator__border-state\\" aria-hidden=\\"true\\"></span>

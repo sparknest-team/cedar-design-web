@@ -139,7 +139,8 @@
 </template>
 <script setup lang="ts">
 import { computed, reactive, ref, useAttrs, watch } from 'vue'
-import type { StyleValue } from 'vue'
+import type { CompatibleStyleValue as StyleValue } from '../_utils/style-value'
+
 import { IconLoading } from '@cedar-design/icons-vue/icon-loading'
 import { IconSearch } from '@cedar-design/icons-vue/icon-search'
 import { useFieldPresentation } from '../_components/field-presentation/context'

@@ -32,3 +32,11 @@ platform defaults may differ.
 Run `pnpm check:style-vars` before submitting changes.
 
 品牌字体入口：`--c-sys-font-family`（默认 `initial`，未设置时保留原字体回退）。字体文件由业务通过 `@font-face` 配置，组件库不隐式请求品牌 CDN。
+
+## Semantic content colors
+
+Colored content uses the corresponding action or status color by default.
+`content-brand` follows `action-primary`; `content-info`, `content-success`,
+`content-warning` and `content-danger` follow their `status-*` roles. Button
+text, outline and tonal foregrounds follow the matching solid fill. Named Tag
+colors use palette step 6. Neutral body text and disabled text keep their own roles.

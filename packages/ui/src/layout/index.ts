@@ -6,8 +6,7 @@ import _LayoutFooter from "./Footer.vue";
 import _LayoutSider from "./Sider.vue";
 import { layoutProps } from "./props";
 
-const Layout = withInstall(
-  _Layout,
+const Layout: import('../_utils/global-config').ComponentWithInstall<typeof _Layout & { Header: typeof _LayoutHeader; Content: typeof _LayoutContent; Footer: typeof _LayoutFooter; Sider: typeof _LayoutSider }> = withInstall(_Layout,
   Object.assign(_Layout, {
     Header: _LayoutHeader,
     Content: _LayoutContent,
@@ -46,11 +45,11 @@ export {
   _LayoutSider as LayoutSider,
 };
 
-export const _LayoutComponent = Layout;
-export const _LayoutHeaderComponent = _LayoutHeader;
-export const _LayoutContentComponent = _LayoutContent;
-export const _LayoutFooterComponent = _LayoutFooter;
-export const _LayoutSiderComponent = _LayoutSider;
+export const _LayoutComponent: typeof Layout = Layout;
+export const _LayoutHeaderComponent: typeof _LayoutHeader = _LayoutHeader;
+export const _LayoutContentComponent: typeof _LayoutContent = _LayoutContent;
+export const _LayoutFooterComponent: typeof _LayoutFooter = _LayoutFooter;
+export const _LayoutSiderComponent: typeof _LayoutSider = _LayoutSider;
 
 export { Layout };
 

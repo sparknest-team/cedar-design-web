@@ -1,6 +1,6 @@
 import { onActivated, onBeforeUnmount, onDeactivated, onMounted, ref, watch } from 'vue'
 import type { BackTopEasing, backTopProps } from './props'
-import type { ExtractPublicPropTypes } from 'vue'
+import type { CompatiblePublicProps as ExtractPublicPropTypes } from '../_utils/public-props'
 
 export function useBackTop(props: ExtractPublicPropTypes<typeof backTopProps>) {
   const visible = ref(false)

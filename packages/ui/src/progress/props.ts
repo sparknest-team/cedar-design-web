@@ -1,4 +1,5 @@
-import type { ExtractPublicPropTypes, PropType } from 'vue'
+import type { PropType } from 'vue'
+import type { CompatiblePublicProps as ExtractPublicPropTypes } from '../_utils/public-props'
 import { semanticStatuses } from '../_utils/constant'
 import type { SemanticStatus } from '../_utils/constant'
 import type { ProgressSize } from './size'

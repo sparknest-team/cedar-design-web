@@ -5,13 +5,18 @@ permalink: /en/components/form/
 
 # Form
 
+
+Horizontal form items use zero Row gutter by default, preserving the standard 16px item spacing. Explicit `row-props.gutter` overrides remain available. Input and selection fields default to `outline`; `filled` and `standard` remain explicit options.
+
 ## Field names
 
-For a deferred Slider inside Shadow DOM, a popup teleported to `body` may not resolve ID references to hints or errors inside the shadow root. Set `:popup-container="false"` to keep the popup in the same root, and provide clear control names.
+When `validate-status="error"` has no automatic validation error, the field associates visible `help` text or slot content through `aria-describedby`, preserving any supplied description. An automatic error takes precedence.
+
+For a deferred Slider inside Shadow DOM, a popup teleported to `body` may not resolve ID references to hints or errors inside the shadow root. Set `:popup-container="false"`, or pass an element within the same ShadowRoot as `popup-container`, to keep the popup and hints in the same root. Provide clear control names, and account for the container’s styling, positioning, and clipping.
 
 In direct edit mode, for a visible label on a single field, match FormItem `label-attrs.for` to the control `id`. The native inputs in selection, date and time fields do not let their placeholder override an associated label. An explicit `aria-label` or `aria-labelledby` retains its native accessible-name precedence. Placeholder is only a fallback when no label is supplied; provide clear labels. Date and time range fields in FormItem associate the form label with their group; use `input-attrs` to give the endpoints distinct names. If `label-attrs.for` targets another control, the label is not associated with the range group. Without `for`, the range currently references the nearest FormItem label even when that item contains other controls. For mixed fields, put the range in a separate styled FormItem with its own name, or explicitly target the intended control with `for` and name the other controls separately. When `for` matches a single-value Slider’s `id`, its thumb and optional numeric input use the label; clicking the default native label focuses the enabled thumb; preventing the label click default cancels that focus. When `for` matches a range Slider’s `id`, the form label names the group; use an `aria-label` array to name the endpoints separately. The `tooltip` button is independently focusable and its name is not added to the field label.
 
-Transfer also references the nearest FormItem label when `for` is absent, including when the item contains other fields. For mixed fields, place Transfer in a separate FormItem, or give it an explicit name and associate labels with the other fields separately.
+Transfer and ColorPicker also reference the nearest FormItem label when `for` and an explicit name are absent, including when the item contains other fields. For mixed fields, place each in a separate FormItem, or give each control an explicit name and associate labels with the other fields separately.
 
 Start with the basic example, then compare related settings before moving to controlled, asynchronous or combined use cases.
 
@@ -346,13 +351,13 @@ An existing model object with a missing property captures undefined. Model/rule 
 
 ### Five density levels and item spacing
 
-xs/sm/md/lg/xl select geometry through size classes. Item bottom spacing and reserved validation-message height both use size-*-item-margin-bottom. Inline layout uses inline-item-margin-bottom; error/help do not add item bottom spacing again.
+xs/sm/md/lg/xl select geometry through size classes. All sizes default to 16px item spacing; control height and label font size still follow size. Item bottom spacing and reserved validation-message height both use size-*-item-margin-bottom. Inline layout uses inline-item-margin-bottom; error/help do not add item bottom spacing again.
 
 | Variable | Default |
 | ------------------------------------- | --------------------------- |
 | `--c-form-size-xl-height` | `var(--c-size-xl)` |
 | `--c-form-size-xl-label-font-size` | `var(--c-sys-font-size-lg)` |
-| `--c-form-size-xl-item-margin-bottom` | `var(--c-spacing-8)` |
+| `--c-form-size-xl-item-margin-bottom` | `var(--c-spacing-7)` |
 
 ### edit-mode inheritance
 
@@ -626,16 +631,16 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-form-required-symbol-color` | `var(--c-sys-color-content-danger)` | `color` |
 | `--c-form-required-symbol-font-size` | `var(--c-font-size-body-1)` | `font-size` |
 | `--c-form-size-lg-height` | `var(--c-size-lg)` | `line-height`, `min-height` |
-| `--c-form-size-lg-item-margin-bottom` | `var(--c-spacing-8)` | `line-height`, `margin-bottom`, `min-height` |
+| `--c-form-size-lg-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height` |
 | `--c-form-size-lg-label-font-size` | `var(--c-font-size-body-3)` | `font-size` |
 | `--c-form-size-md-height` | `var(--c-size-md)` | `line-height`, `min-height` |
-| `--c-form-size-md-item-margin-bottom` | `var(--c-spacing-8)` | `line-height`, `margin-bottom`, `min-height` |
+| `--c-form-size-md-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height` |
 | `--c-form-size-md-label-font-size` | `var(--c-font-size-body-3)` | `font-size` |
 | `--c-form-size-sm-height` | `var(--c-size-sm)` | `line-height`, `min-height` |
-| `--c-form-size-sm-item-margin-bottom` | `var(--c-spacing-8)` | `line-height`, `margin-bottom`, `min-height` |
+| `--c-form-size-sm-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height` |
 | `--c-form-size-sm-label-font-size` | `var(--c-font-size-body-3)` | `font-size` |
 | `--c-form-size-xl-height` | `var(--c-size-xl)` | `line-height`, `min-height` |
-| `--c-form-size-xl-item-margin-bottom` | `var(--c-spacing-8)` | `line-height`, `margin-bottom`, `min-height` |
+| `--c-form-size-xl-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height` |
 | `--c-form-size-xl-label-font-size` | `var(--c-sys-font-size-lg)` | `font-size` |
 | `--c-form-size-xs-height` | `var(--c-size-xs)` | `line-height`, `min-height` |
 | `--c-form-size-xs-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height` |

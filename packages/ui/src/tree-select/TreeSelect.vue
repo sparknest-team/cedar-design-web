@@ -32,7 +32,7 @@
         :readonly="mergedReadonly"
         :open="panelVisible"
         :error="mergedError"
-        :variant="border ? 'filled' : 'standard'"
+        :variant="border ? 'outline' : 'standard'"
         :placeholder="placeholder"
         :multiple="isMultiple"
         v-bind="$attrs"
@@ -136,6 +136,7 @@
   </component>
 </template>
 <script lang="ts">
+import type { CompatibleStyleValue as StyleValue } from '../_utils/style-value'
 import {
   computed,
   CSSProperties,
@@ -146,7 +147,6 @@ import {
   PropType,
   reactive,
   ref,
-  StyleValue,
   toRefs,
   watch,
 } from 'vue'

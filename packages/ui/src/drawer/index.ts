@@ -125,8 +125,7 @@ const open = (config: DrawerConfig, appContext?: AppContext) => {
   };
 };
 
-const Drawer = withInstall(
-  _Drawer,
+const Drawer: import('../_utils/global-config').ComponentWithInstall<typeof _Drawer & { open: typeof open; _context: AppContext | null }> = withInstall(_Drawer,
   Object.assign(_Drawer, {
     open,
     _context: null as AppContext | null,
@@ -152,7 +151,7 @@ export type {
 export type DrawerInstance = InstanceType<typeof _Drawer>;
 export type { DrawerPlacement, DrawerProps } from "./props";
 export { Drawer, drawerProps };
-export const _DrawerComponent = Drawer;
+export const _DrawerComponent: typeof Drawer = Drawer;
 
 export default Drawer;
 

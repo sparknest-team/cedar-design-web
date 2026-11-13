@@ -2,7 +2,7 @@ import { withInstall } from '../_utils/global-config'
 import _Trigger from './trigger'
 import { triggerProps } from './props'
 
-const Trigger = withInstall(_Trigger, Object.assign(_Trigger, {
+const Trigger: import('../_utils/global-config').ComponentWithInstall<typeof _Trigger> = withInstall(_Trigger, Object.assign(_Trigger, {
 }), { components: [_Trigger] })
 
 export interface TriggerExposed {
@@ -23,7 +23,7 @@ export type { TriggerProps, TriggerReferenceAttrs } from './props'
 export type { TriggerPopupTranslate, TriggerStrategy } from './types'
 export { Trigger }
 
-export const _TriggerComponent = Trigger
+export const _TriggerComponent: typeof Trigger = Trigger
 
 export { triggerProps }
 

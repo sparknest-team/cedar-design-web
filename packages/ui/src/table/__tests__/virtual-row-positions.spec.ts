@@ -1,7 +1,7 @@
 import { flushPromises, mount } from '@vue/test-utils'
 import { createSSRApp, defineComponent, h, nextTick, ref } from 'vue'
 import { renderToString } from '@vue/server-renderer'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import Table from '../table'
 
 const data = Array.from({ length: 30 }, (_, key) => ({ key, name: `Row ${key}` }))
@@ -60,6 +60,33 @@ describe('virtual table row positions', () => {
     expect(table.attributes('aria-rowcount')).toBeUndefined()
     expect(table.findAll('tr').every(row => row.attributes('aria-rowindex') === undefined)).toBe(true)
     wrapper.unmount()
+  })
+
+  it('does not execute offscreen detail callbacks to calculate virtual row positions', async () => {
+    const expandedRowRender = vi.fn(() => null)
+    const rows = Array.from({ length: 200 }, (_, key) => ({ key, name: `Row ${key}` }))
+    const wrapper = mount(Table, {
+      props: { ...props, data: rows, expandedKeys: [199], expandable: { expandedRowRender } },
+    })
+    try {
+      await flushPromises()
+      const table = wrapper.get('.c-table-body table')
+      expect(table.attributes('aria-rowcount')).toBeUndefined()
+      expect(table.text()).not.toContain('Row 199')
+      expect(expandedRowRender).toHaveBeenCalled()
+      expect(expandedRowRender).not.toHaveBeenCalledWith(expect.objectContaining({ key: 199 }))
+    } finally { wrapper.unmount() }
+  })
+
+  it('does not execute an offscreen detail callback while rendering virtual rows on the server', async () => {
+    const expandedRowRender = vi.fn(() => null)
+    const rows = Array.from({ length: 200 }, (_, key) => ({ key, name: `Row ${key}` }))
+    const html = await renderToString(createSSRApp({ render: () => h(Table, {
+      ...props, data: rows, expandedKeys: [199], expandable: { expandedRowRender },
+    }) }))
+    expect(html).not.toContain('aria-rowcount=')
+    expect(html).not.toContain('Row 199')
+    expect(expandedRowRender).not.toHaveBeenCalledWith(expect.objectContaining({ key: 199 }))
   })
 
   it('counts an expanded empty tree placeholder', async () => {

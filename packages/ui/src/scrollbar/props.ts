@@ -1,4 +1,5 @@
-import type { PropType, StyleValue } from 'vue'
+import type { CompatibleStyleValue as StyleValue } from '../_utils/style-value'
+import type { PropType } from 'vue'
 import type { ClassName } from '../_utils/types'
 
 export const scrollbarProps = {

@@ -1,4 +1,4 @@
-import type { ExtractPublicPropTypes } from 'vue'
+import type { CompatiblePublicProps as ExtractPublicPropTypes } from '../_utils/public-props'
 
 export const anchorLinkProps = {
   /** Text shown when the default slot is empty. */

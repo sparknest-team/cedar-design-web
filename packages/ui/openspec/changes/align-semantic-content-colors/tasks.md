@@ -1,0 +1,5 @@
+- [x] Update shared semantic roles and component exceptions in both libraries.
+- [x] Update brand overrides, documentation and theme assertions.
+- [x] Verify 60 browser theme/status combinations across both platforms, including component colors and disabled states.
+- [x] Run component tests, shared theme contract, lint and mobile type checks.
+- [x] Identify pre-existing Maple geometry snapshot drift separately from color behavior.

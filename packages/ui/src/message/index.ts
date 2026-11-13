@@ -240,7 +240,7 @@ Message.resetDefaultOptions = () => {
   defaultOptions = { ...baseOptions }
 }
 
-const MessageComponent = Object.assign(MessageComponentSource, {
+const MessageComponent: typeof MessageComponentSource & { install: (app: App) => void } = Object.assign(MessageComponentSource, {
   install(app: App) {
     app.component(MessageComponentSource.name!, MessageComponentSource)
   },
@@ -265,7 +265,7 @@ export type {
 } from './types'
 export type { MessageProps } from './props'
 export { messageProps }
-export const _MessageComponent = MessageComponent
+export const _MessageComponent: typeof MessageComponent = MessageComponent
 export type MessageInstance = InstanceType<typeof MessageComponentSource>
 export { Message }
 export default Message

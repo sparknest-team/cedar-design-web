@@ -2,7 +2,7 @@ import { withInstall } from '../_utils/global-config'
 import { searchProps } from './props'
 import _Search from './search.vue'
 
-const Search = withInstall(_Search, Object.assign(_Search, {}), {
+const Search: import('../_utils/global-config').ComponentWithInstall<typeof _Search> = withInstall(_Search, Object.assign(_Search, {}), {
   components: [_Search],
 })
 
@@ -13,7 +13,7 @@ export type SearchInstance = InstanceType<typeof _Search>
 
 export { Search, searchProps }
 
-export const _SearchComponent = Search
+export const _SearchComponent: typeof Search = Search
 
 export default Search
 

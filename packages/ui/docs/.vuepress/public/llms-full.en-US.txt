@@ -5890,8 +5890,8 @@ Example source: src/card/__demos__/slots.vue
 | --- | --- | --- |
 | `title` | Title | Ripple and click, Floating and close |
 | `ripple` | Click ripple | Ripple and click |
-| `floating` | Fullscreen state; supports v-model:floating | Floating and close |
-| `floating-duration` | Fullscreen transition duration in ms | Floating and close |
+| `floating` | Floating expansion state; supports v-model:floating | Floating and close |
+| `floating-duration` | Floating expansion transition duration in ms | Floating and close |
 <!-- demo-config-notes:end -->
 
 
@@ -5941,9 +5941,9 @@ const floating = ref(false)
 
 | Configuration | Purpose | Related examples |
 | --- | --- | --- |
-| `floating` | Fullscreen state; supports v-model:floating | Floating scheduler lifecycle |
+| `floating` | Floating expansion state; supports v-model:floating | Floating scheduler lifecycle |
 | `ripple` | Click ripple | Floating scheduler lifecycle |
-| `floating-duration` | Fullscreen transition duration in ms | Floating scheduler lifecycle |
+| `floating-duration` | Floating expansion transition duration in ms | Floating scheduler lifecycle |
 | `title` | Title | Floating scheduler lifecycle |
 <!-- demo-config-notes:end -->
 
@@ -6022,8 +6022,8 @@ The default close button uses the current locale's close label; override it with
 | alt | Image alternative text | `string` | `undefined` |
 | elevation | Shadow for default variant; true means level 1, false disables it, numeric levels 0–24 | `boolean / number` | `true` |
 | ripple | Click ripple | `boolean` | `false` |
-| floating | Fullscreen state; supports v-model:floating | `boolean` | `false` |
-| floating-duration | Fullscreen transition duration in ms | `number` | `250` |
+| floating | Floating expansion state; supports v-model:floating | `boolean` | `false` |
+| floating-duration | Floating expansion transition duration in ms | `number` | `250` |
 | close-button-aria-label | Accessible name of the default close button | `string` | `—` |
 
 ### Card Events
@@ -25924,6 +25924,8 @@ import type { InputTagProps, InputTagValue, InputTagEmits, InputTagSlots, InputT
 ## Tags and close buttons
 
 Tag controls tag and close-button appearance. Disabled, readonly and nonclosable tags cannot be removed with the close button.
+
+The accessible name of each close button combines the localized close action with the displayed tag label. For custom tag slots that do not render plain text, the item label is used; set `tagProps.closeButtonAriaLabel` to provide the full name explicitly.
 
 ## InputTag wrapper and content responsibilities
 

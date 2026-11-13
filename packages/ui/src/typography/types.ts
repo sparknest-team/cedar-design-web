@@ -40,16 +40,18 @@ export interface EllipsisInternalConfig extends Required<EllipsisConfig> {
   TooltipComponent: any
   tooltipProps: { [key: string]: any }
 }
-import type { Slot } from 'vue'
+import type { Slot, VNode } from 'vue'
+
+type ScopedSlot<T> = (props: T) => VNode[]
 
 export interface TypographySlots {
   default?: Slot
 }
 
 export interface TypographyContentSlots extends TypographySlots {
-  'copy-icon'?: Slot<{ copied: boolean }>
-  'copy-tooltip'?: Slot<{ copied: boolean }>
-  'expand-node'?: Slot<{ expanded: boolean }>
+  'copy-icon'?: ScopedSlot<{ copied: boolean }>
+  'copy-tooltip'?: ScopedSlot<{ copied: boolean }>
+  'expand-node'?: ScopedSlot<{ expanded: boolean }>
 }
 
 export interface TypographyEmits {

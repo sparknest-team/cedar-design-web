@@ -9,10 +9,10 @@ import { imagePreviewGroupProps } from './groupProps'
 import { imagePreviewProps } from './previewProps'
 import { imageProps } from './props'
 
-const ImagePreview = withInstall(_ImagePreview)
-const ImagePreviewGroup = withInstall(_ImagePreviewGroup)
+const ImagePreview: import('../_utils/global-config').ComponentWithInstall<typeof _ImagePreview> = withInstall(_ImagePreview)
+const ImagePreviewGroup: import('../_utils/global-config').ComponentWithInstall<typeof _ImagePreviewGroup> = withInstall(_ImagePreviewGroup)
 
-const Image = withInstall(
+const Image: import('../_utils/global-config').ComponentWithInstall<typeof _Image & { Preview: typeof ImagePreview; PreviewGroup: typeof ImagePreviewGroup; preview: typeof previewImage }> = withInstall(
   _Image,
   Object.assign(_Image, {
     Preview: ImagePreview,
@@ -39,10 +39,10 @@ export {
   previewImage as ImagePreviewFn,
 }
 
-export const _ImageComponent = Image
-export const _ImagePreviewComponent = ImagePreview
-export const _ImagePreviewGroupComponent = ImagePreviewGroup
-export const _ImagePreviewActionComponent = _ImagePreviewAction
+export const _ImageComponent: typeof Image = Image
+export const _ImagePreviewComponent: typeof ImagePreview = ImagePreview
+export const _ImagePreviewGroupComponent: typeof ImagePreviewGroup = ImagePreviewGroup
+export const _ImagePreviewActionComponent: typeof _ImagePreviewAction = _ImagePreviewAction
 
 export { Image }
 

@@ -24,7 +24,7 @@ export interface NavMenuOption {
 }
 export interface NavMenuFieldNames { key?: string; label?: string; children?: string; disabled?: string }
 export interface NavMenuNode { key: NavMenuKey; option: NavMenuOption; children: NavMenuNode[]; parent?: NavMenuNode; level: number; disabled: boolean; type: 'item' | 'group' | 'divider' }
-export type NavMenuProps = import('vue').ExtractPublicPropTypes<typeof import('./props').navMenuProps>
+export type NavMenuProps = import('../_utils/public-props').CompatiblePublicProps<typeof import('./props').navMenuProps>
 
 export interface NavMenuExposed {
   close(): void

@@ -1,6 +1,7 @@
 import { readingDirectionProp } from '../_utils/direction'
 import type { DrawerBeforeClose } from "./types";
-import type { CSSProperties, PropType, StyleValue } from "vue";
+import type { CompatibleStyleValue as StyleValue } from '../_utils/style-value'
+import type { CSSProperties, PropType } from "vue";
 import { popupContainerProp } from "../_utils/popup-container";
 import type { ButtonProps } from "../button";
 
@@ -89,6 +90,6 @@ export const drawerProps = {
   zIndex: Number,
 };
 
-export type DrawerProps = import("vue").ExtractPublicPropTypes<
+export type DrawerProps = import("../_utils/public-props").CompatiblePublicProps<
   typeof drawerProps
 >;

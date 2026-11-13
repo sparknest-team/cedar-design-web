@@ -47,6 +47,8 @@ export type CedarComponentWithInstall<T> = T &
     setPropsDefaults: (defaults: Record<string, any>) => void
   }
 
+export type ComponentWithInstall<T> = CedarComponentWithInstall<T>
+
 export interface WithInstallOptions<InstallOptions = CedarOptions> {
   components?: Component[]
   resolveName?: (component: Component, options?: InstallOptions) => string | undefined

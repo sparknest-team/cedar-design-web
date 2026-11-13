@@ -3,7 +3,7 @@ import _Map from './map'
 import _MapSelect from './map-select'
 import { mapProps, mapSelectProps } from './props'
 
-const Map = withInstall(_Map, Object.assign(_Map, {
+const Map: import('../_utils/global-config').ComponentWithInstall<typeof _Map & { Select: typeof _MapSelect }> = withInstall(_Map, Object.assign(_Map, {
   Select: _MapSelect,
 }), { components: [_Map, _MapSelect] })
 
@@ -17,7 +17,7 @@ export { mapProps, mapSelectProps }
 export { Map }
 export { _MapSelect as MapSelect }
 
-export const _MapComponent = Map
-export const _MapSelectComponent = _MapSelect
+export const _MapComponent: typeof Map = Map
+export const _MapSelectComponent: typeof _MapSelect = _MapSelect
 
 export default Map

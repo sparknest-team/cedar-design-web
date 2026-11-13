@@ -1,10 +1,12 @@
+import type { CompatiblePublicProps } from '../_utils/public-props'
 import { withInstall } from '../_utils/global-config'
 import _Optgroup from './Optgroup.vue'
 import _Option from './Option.vue'
 import { selectProps, optionProps } from './props'
+import { optgroupProps } from './optgroup-props'
 import _Select from './select'
 
-const Select = withInstall(
+const Select: import('../_utils/global-config').ComponentWithInstall<typeof _Select & { Option: typeof _Option; OptGroup: typeof _Optgroup }> = withInstall(
   _Select,
   Object.assign(_Select, {
     Option: _Option,
@@ -16,10 +18,10 @@ const Select = withInstall(
 export type SelectInstance = InstanceType<typeof _Select> & import('./types').SelectExpose
 export type OptionInstance = InstanceType<typeof _Option>
 export type OptgroupInstance = InstanceType<typeof _Optgroup>
-export type OptionProps = import('vue').ExtractPublicPropTypes<typeof optionProps>
-export type OptgroupProps = import('vue').ExtractPublicPropTypes<typeof _Optgroup.props>
+export type OptionProps = CompatiblePublicProps<typeof optionProps>
+export type OptgroupProps = CompatiblePublicProps<typeof optgroupProps>
 
-export const optgroupProps = _Optgroup.props
+export { optgroupProps }
 export { selectProps, optionProps }
 export type {
   SelectOptionsLoader,
@@ -28,6 +30,7 @@ export type {
   OptionSearchField,
   SelectOption,
   SelectOptionData,
+  SelectOptionTagProps,
   SelectOptionGroup,
   SelectFieldNames,
   FilterOption,
@@ -35,7 +38,7 @@ export type {
 export type { SelectProps, SelectEditMode } from './props'
 
 export { Select, _Option as Option, _Optgroup as Optgroup }
-export const _SelectComponent = Select
+export const _SelectComponent: typeof Select = Select
 export const _OptionComponent = _Option
 export const _OptgroupComponent = _Optgroup
 

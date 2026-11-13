@@ -3,10 +3,10 @@ import type {
   BeforeHookDone,
   BeforeHookResult,
 } from "../_hooks/use-action-guard";
+import type { CompatibleStyleValue as StyleValue } from '../_utils/style-value'
 import type {
   AppContext,
   CSSProperties,
-  StyleValue,
   VNode,
   VNodeChild,
 } from "vue";

@@ -1,0 +1,24 @@
+.c-textarea {
+  // Keep the native resize grip at the field edge while retaining text padding.
+  .c-field-decorator &__inner {
+    flex: none;
+    width: calc(100% + var(--c-field-padding-horizontal));
+    margin-inline-end: calc(-1 * var(--c-field-padding-horizontal));
+    padding-inline-end: calc(var(--c-textarea-padding-horizontal) + var(--c-field-padding-horizontal));
+  }
+  .c-field-decorator:has(.c-field-decorator__suffix) {
+    container-type: inline-size;
+  }
+  .c-field-decorator:has(.c-field-decorator__suffix) &__inner {
+    // The middle column excludes the suffix; its measured offset includes any prefix.
+    width: calc(100cqw + 2 * var(--c-field-padding-horizontal) - var(--c-internal-field-content-offset, var(--c-field-padding-horizontal)));
+    margin-inline-end: calc(100% - 100cqw - 2 * var(--c-field-padding-horizontal) + var(--c-internal-field-content-offset, var(--c-field-padding-horizontal)));
+    padding-inline-end: calc(var(--c-textarea-padding-horizontal) + 100cqw - 100% + 2 * var(--c-field-padding-horizontal) - var(--c-internal-field-content-offset, var(--c-field-padding-horizontal)));
+  }
+  .c-field-decorator:has(.c-field-decorator__suffix) .c-field-decorator__suffix {
+    position: relative;
+    z-index: 1;
+    pointer-events: none;
+    > * { pointer-events: auto; }
+  }
+}

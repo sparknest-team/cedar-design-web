@@ -51,6 +51,7 @@
         :aria-disabled="isDisabled || undefined"
         :aria-readonly="mergedReadonly || undefined"
         :aria-invalid="mergedError ? true : ($attrs['aria-invalid'] as HTMLAttributes['aria-invalid'])"
+        :aria-description="typeof $attrs['aria-description'] === 'string' ? $attrs['aria-description'] : undefined"
         :aria-describedby="describeError([typeof $attrs['aria-describedby'] === 'string' ? $attrs['aria-describedby'] : '', tooltipVisible(index) ? `${tooltipId}-${index}` : ''].filter(Boolean).join(' '))"
         @pointerdown.stop="pointerDown($event, index)"
         @keydown="keydown($event, index)"
@@ -78,6 +79,7 @@
       :aria-label="ariaLabel"
       :aria-labelledby="singleLabelledBy"
       :aria-describedby="($attrs['aria-describedby'] as HTMLAttributes['aria-describedby'])"
+      :aria-description="typeof $attrs['aria-description'] === 'string' ? $attrs['aria-description'] : undefined"
       :aria-invalid="($attrs['aria-invalid'] as HTMLAttributes['aria-invalid'])"
       @change="inputChange"
       @focus="eventHandlers?.onFocus?.()"
@@ -112,8 +114,12 @@ const rangeGroupLabel = computed(() => {
     : undefined
 })
 const singleLabelledBy = computed(() => {
-  if (props.range) return undefined
-  if (attrs['aria-labelledby'] != null) return attrs['aria-labelledby'] as string
+  if (props.range) {
+    return undefined
+  }
+  if (attrs['aria-labelledby'] != null) {
+    return attrs['aria-labelledby'] as string
+  }
   const label = formLabel?.value
   return props.ariaLabel == null && label?.target && label.target === attrs.id ? label.id : undefined
 })

@@ -7,9 +7,9 @@ import { timeProps } from './props'
 export type { TimeProps } from './props'
 export type { TimePickerProps } from './picker/props'
 
-const TimePicker = withInstall(_TimePicker)
+const TimePicker: import('../_utils/global-config').ComponentWithInstall<typeof _TimePicker> = withInstall(_TimePicker)
 
-const Time = withInstall(
+const Time: import('../_utils/global-config').ComponentWithInstall<typeof _Time & { Picker: typeof TimePicker }> = withInstall(
   _Time,
   Object.assign(_Time, {
     Picker: TimePicker,
@@ -21,8 +21,8 @@ export type TimeInstance = InstanceType<typeof _Time> & import('./public-types')
 export type TimePickerInstance = InstanceType<typeof _TimePicker>
 
 export { Time, TimePicker, timeProps, timePickerProps }
-export const _TimeComponent = Time
-export const _TimePickerComponent = TimePicker
+export const _TimeComponent: typeof Time = Time
+export const _TimePickerComponent: typeof TimePicker = TimePicker
 
 export default Time
 

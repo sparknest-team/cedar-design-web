@@ -273,9 +273,9 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | --- | --- | --- |
 | `--c-button-border-radius` | `var(--c-sys-radius-md)` | `border-bottom-left-radius`, `border-bottom-right-radius`, `border-radius`, `border-top-left-radius`, `border-top-right-radius` |
 | `--c-button-content-gap` | `var(--c-sys-space-3)` | `gap` |
-| `--c-button-danger-color` | `var(--c-sys-color-status-danger)` | `background-color` |
+| `--c-button-danger-color` | `var(--c-sys-color-status-danger)` | `background-color`, `color` |
 | `--c-button-danger-disabled-color` | `rgb(var(--c-danger-3))`<br>`rgba(var(--c-danger-6), 0.5)` (`:root[cedar-theme="dark"]`) | `background-color`, `color` |
-| `--c-button-danger-foreground-color` | `var(--c-sys-color-content-danger)` | `color` |
+| `--c-button-danger-foreground-color` | `var(--c-button-danger-color)` | `color` |
 | `--c-button-danger-tonal-color` | `rgb(var(--c-danger-1))` | `background-color` |
 | `--c-button-default-color` | `var(--c-sys-color-surface-default)` | `background-color` |
 | `--c-button-default-foreground-color` | `var(--c-sys-color-content-primary)` | `background-color`, `color` |
@@ -284,9 +284,9 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-button-disabled-solid-text-color` | `var(--c-sys-color-content-on-dark)`<br>`rgba(255, 255, 255, 0.3)` (`:root[cedar-theme="dark"]`) | `color` |
 | `--c-button-disabled-text-color` | `var(--c-sys-color-content-disabled)` | `color` |
 | `--c-button-focus-color` | `var(--c-sys-color-action-primary)` | `outline` |
-| `--c-button-info-color` | `var(--c-sys-color-status-info)` | `background-color` |
+| `--c-button-info-color` | `var(--c-sys-color-status-info)` | `background-color`, `color` |
 | `--c-button-info-disabled-color` | `rgb(var(--c-blue-3))`<br>`rgba(var(--c-blue-6), 0.5)` (`:root[cedar-theme="dark"]`) | `background-color`, `color` |
-| `--c-button-info-foreground-color` | `var(--c-sys-color-content-info)` | `color` |
+| `--c-button-info-foreground-color` | `var(--c-button-info-color)` | `color` |
 | `--c-button-info-tonal-color` | `rgb(var(--c-blue-1))` | `background-color` |
 | `--c-button-lg-height` | `36px` | `height`, `min-width`, `width` |
 | `--c-button-lg-padding` | `0 var(--c-sys-space-7)` | `padding` |
@@ -296,9 +296,9 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-button-md-padding` | `0 var(--c-sys-space-6)` | `padding` |
 | `--c-button-plain-state-opacity-active` | `1` | `opacity` |
 | `--c-button-plain-state-opacity-hover` | `0.5` | `opacity` |
-| `--c-button-primary-color` | `var(--c-sys-color-action-primary)` | `background-color` |
+| `--c-button-primary-color` | `var(--c-sys-color-action-primary)` | `background-color`, `color` |
 | `--c-button-primary-disabled-color` | `rgb(var(--c-primary-3))`<br>`rgba(var(--c-primary-6), 0.5)` (`:root[cedar-theme="dark"]`) | `background-color`, `color` |
-| `--c-button-primary-foreground-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-button-primary-foreground-color` | `var(--c-button-primary-color)` | `color` |
 | `--c-button-primary-state-layer-color` | `var(--c-button-solid-state-layer-color)` | `background-color` |
 | `--c-button-primary-tonal-color` | `rgb(var(--c-primary-1))` | `background-color` |
 | `--c-button-secondary-color` | `rgb(var(--c-gray-6))` | `background-color` |
@@ -312,18 +312,18 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-button-state-layer-color` | `var(--c-sys-color-surface-page)` | `background-color` |
 | `--c-button-state-opacity-active` | `0.12` | `opacity` |
 | `--c-button-state-opacity-hover` | `0.08` | `opacity` |
-| `--c-button-success-color` | `var(--c-sys-color-status-success)` | `background-color` |
+| `--c-button-success-color` | `var(--c-sys-color-status-success)` | `background-color`, `color` |
 | `--c-button-success-disabled-color` | `rgb(var(--c-success-3))`<br>`rgba(var(--c-success-6), 0.5)` (`:root[cedar-theme="dark"]`) | `background-color`, `color` |
-| `--c-button-success-foreground-color` | `var(--c-sys-color-content-success)` | `color` |
+| `--c-button-success-foreground-color` | `var(--c-button-success-color)` | `color` |
 | `--c-button-success-tonal-color` | `rgb(var(--c-success-1))` | `background-color` |
 | `--c-button-tertiary-color` | `rgb(var(--c-gray-7))` | `background-color` |
 | `--c-button-tertiary-foreground-color` | `var(--c-sys-color-content-secondary)` | `color` |
 | `--c-button-tertiary-state-layer-color` | `var(--c-sys-color-content-on-bright)`<br>`var(--c-sys-color-content-on-dark)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-button-tertiary-text-color` | `var(--c-sys-color-content-on-dark)`<br>`var(--c-sys-color-content-on-bright)` (`:root[cedar-theme="dark"]`) | `color` |
 | `--c-button-tertiary-tonal-color` | `rgb(var(--c-gray-1))` | `background-color` |
-| `--c-button-warning-color` | `var(--c-sys-color-status-warning)` | `background-color` |
+| `--c-button-warning-color` | `var(--c-sys-color-status-warning)` | `background-color`, `color` |
 | `--c-button-warning-disabled-color` | `rgb(var(--c-warning-3))`<br>`rgba(var(--c-warning-6), 0.5)` (`:root[cedar-theme="dark"]`) | `background-color`, `color` |
-| `--c-button-warning-foreground-color` | `var(--c-sys-color-content-warning)` | `color` |
+| `--c-button-warning-foreground-color` | `var(--c-button-warning-color)` | `color` |
 | `--c-button-warning-tonal-color` | `rgb(var(--c-warning-1))` | `background-color` |
 | `--c-button-xl-height` | `44px` | `height`, `min-width`, `width` |
 | `--c-button-xl-padding` | `0 var(--c-sys-space-8)` | `padding` |

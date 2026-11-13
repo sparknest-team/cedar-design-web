@@ -14,9 +14,9 @@ permalink: /components/filter-form/
 
 在 `fields` 中直接传入组件并配置字段。宽屏会自动多列展示，超出时可展开/收起。
 
-筛选容器使用主题表面色（亮色为白色、暗色随主题适配）、轻描边与20px内边距，不再使用输入控件的浅填充背景。操作区预留两列并与字段控件顶边对齐；单列时按可用列数收敛。单列/双列折叠默认保留一行字段和独立操作行，避免只剩按钮。展开/收起为原生按钮，支持Tab聚焦、Enter/空格操作并提供aria-expanded。行间距默认16px，可由grid-props.rowGap覆盖。
+筛选容器使用主题表面色（亮色为白色、暗色随主题适配）、轻描边与20px内边距，不再使用输入控件的浅填充背景。操作区按按钮实际宽度自适应预留列数，展开/收起与操作按钮始终保持一行，并与字段控件顶边对齐。收起时操作区位于首行右侧；展开后字段使用完整列布局，操作区位于最后一行右侧，末行空间不足时另起一行靠右。容器或按钮宽度变化时自动重新计算预留空间。单列/双列折叠默认保留一行字段和独立操作行，避免只剩按钮。展开/收起为原生按钮，支持Tab聚焦、Enter/空格操作并提供aria-expanded。行间距默认16px，可由grid-props.rowGap覆盖。
 
-The filter uses the theme surface with a subtle border and 20px inset, rather than an input-fill background. Actions align with the fields and reserve two columns, clamped to the available column count. One- and two-column collapse retain a row of fields above the actions by default. Expand/collapse is a native keyboard-accessible button with aria-expanded. The default 16px row gap can be overridden through grid-props.rowGap.
+The filter uses the theme surface with a subtle border and 20px inset, rather than an input-fill background. Actions reserve columns according to their actual width, with the expand/collapse control and action buttons kept on one line. Collapsed actions sit at the right of the first row. Expanded fields use the full column layout, with actions at the right of the last row, or on a new row when there is insufficient space. Resizing the container or changing button widths recalculates the reservation. One- and two-column collapse retain a row of fields above the actions by default. Expand/collapse is a native keyboard-accessible button with aria-expanded. The default 16px row gap can be overridden through grid-props.rowGap.
 
 <demo src="./__demos__/basic.vue"></demo>
 

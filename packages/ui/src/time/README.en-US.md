@@ -234,7 +234,7 @@ The field icon slot is `suffix-icon` with `focus: boolean` and `popupOpen: boole
 | `text-color` | Content text color | `string` | Theme default |
 | `time-picker-props` | Time-panel presentation options; model, rules and state remain owned by the field | `TimePanelPresentationProps` | `{}` |
 | `use12-hours` | 12-hour panel; disabled-hour callbacks still use 0–23 | `boolean` | `false` |
-| `variant` | Field appearance | `filled \| outline \| standard` | `filled` |
+| `variant` | Field appearance | `filled \| outline \| standard` | `outline` |
 
 ### Editing and confirmation
 

@@ -157,8 +157,8 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-breadcrumb-dropdown-icon` | `var(--c-color-text-2)` | `color` |
 | `--c-breadcrumb-font-weight-active` | `var(--c-font-weight-400)` | `font-weight` |
 | `--c-breadcrumb-icon-color` | `var(--c-color-text-3)` | `color` |
-| `--c-breadcrumb-link-text-color` | `rgb(var(--c-primary-8))` | `color` |
-| `--c-breadcrumb-link-text-color-hover` | `rgb(var(--c-primary-9))` | `color` |
+| `--c-breadcrumb-link-text-color` | `var(--c-sys-color-content-brand)` | `color` |
+| `--c-breadcrumb-link-text-color-hover` | `var(--c-sys-color-content-brand)` | `color` |
 | `--c-breadcrumb-margin-dropdown-icon-left` | `var(--c-spacing-2)` | `margin-inline-start` |
 | `--c-breadcrumb-margin-separator-horizontal` | `var(--c-spacing-2)` | `margin` |
 | `--c-breadcrumb-padding-text-horizontal` | `var(--c-spacing-2)` | `margin`, `padding` |

@@ -1,3 +1,6 @@
+import { resolveMaybeRefOrGetter as toValue } from '../_utils/maybe-ref'
+import type { CompatibleMaybeRefOrGetter as MaybeRefOrGetter } from '../_utils/maybe-ref'
+import type { CompatibleShallowRef as ShallowRef } from '../_utils/compatible-shallow-ref'
 import { createNamespace } from '../_utils/global-config'
 import { createRequestGuard } from '../_utils/async-request'
 import {
@@ -5,21 +8,17 @@ import {
   onScopeDispose,
   type Ref,
   type ComputedRef,
-  type MaybeRefOrGetter,
   computed,
   defineComponent,
   h,
   type PropType,
   ref,
-  toRef,
-  toValue,
   watch,
   triggerRef,
   shallowRef,
   provide,
   inject,
   type InjectionKey,
-  type ShallowRef,
 } from 'vue'
 import type { TableColumnData } from '../table/types'
 import Menu, { MenuOption } from '../menu'

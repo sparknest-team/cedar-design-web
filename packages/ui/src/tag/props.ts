@@ -1,3 +1,4 @@
+import type { CompatiblePublicProps } from '../_utils/public-props'
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ComponentSize, SemanticStatus } from '../_utils/constant'
 import type { TagColor, TagVariant } from './types'
@@ -26,7 +27,7 @@ export const tagProps = {
   textColor: String,
 }
 
-export type TagProps = import("vue").ExtractPublicPropTypes<typeof tagProps>
+export type TagProps = CompatiblePublicProps<typeof tagProps>
 
 export { TAG_COLORS } from './types'
 export type { TagColor, TagVariant } from './types'

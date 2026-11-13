@@ -180,7 +180,7 @@ export type {
 export type { NotificationProps } from "./props";
 export type NotificationInstance = InstanceType<typeof _Notification>;
 export { notificationProps };
-export const _NotificationComponent = _Notification;
+export const _NotificationComponent: typeof _Notification = _Notification;
 
 export { Notification };
 

@@ -1,7 +1,8 @@
 import { fieldLoadingProps } from '../field-decorator/props'
 import { openTriggerTargetProp } from "../_components/picker-field/open-trigger";
 import { emptyValueProp } from "../_utils/empty-value";
-import type { PropType, StyleValue } from "vue";
+import type { CompatibleStyleValue as StyleValue } from '../_utils/style-value'
+import type { PropType } from "vue";
 import { fieldPresentationProps } from "../_components/field-presentation/props";
 import type { ComponentSize } from "../_utils/constant";
 import { componentSizes } from "../_utils/constant";
@@ -69,11 +70,11 @@ export const timeProps = {
    * @zh 输入框变体
    * @en Input variant
    * @values 'filled','outline','standard'
-   * @default-value 'filled'
+   * @default-value 'outline'
    */
   variant: {
     type: String as PropType<FormControlVariant>,
-    default: "filled",
+    default: "outline",
     validator: (value: FormControlVariant) =>
       formControlVariants.includes(value),
   },
@@ -110,4 +111,4 @@ export const timeProps = {
   },
 };
 
-export type TimeProps = import("vue").ExtractPublicPropTypes<typeof timeProps>;
+export type TimeProps = import('../_utils/public-props').CompatiblePublicProps<typeof timeProps>;

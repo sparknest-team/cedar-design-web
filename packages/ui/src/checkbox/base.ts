@@ -1,4 +1,6 @@
 import { withPropsDefaultsSetter } from '../_utils/maple/components'
 import Checkbox from './presentation'
 
-export default withPropsDefaultsSetter(Checkbox, Checkbox.props)
+const Component: typeof Checkbox & { setPropsDefaults: (defaults: Record<string, any>) => void } = withPropsDefaultsSetter(Checkbox, Checkbox.props)
+
+export default Component

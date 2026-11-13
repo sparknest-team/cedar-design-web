@@ -265,7 +265,7 @@ InputPassword supports all Input props, events, slots and methods.
 | Parameter | Description | Type | Default |
 | -------- | ------------ | ------------------------------- | -------------------------------- |
 | size | Default size within the group | `ComponentSize`<br>`'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | Inherited from Form/ConfigProvider, or `md` |
-| variant | Default variant within the group | `filled \| outline \| standard` | `filled` |
+| variant | Default variant within the group | `filled \| outline \| standard` | `outline` |
 | disabled | Group disabled state | `boolean` | Inherited from Form, or `false` |
 | readonly | Group readonly state | `boolean` | Inherited from Form, or `false` |
 | hint | Group floating hint | `boolean` | Library default |

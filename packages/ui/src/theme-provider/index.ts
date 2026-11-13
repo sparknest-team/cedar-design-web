@@ -2,9 +2,9 @@ import { withInstall } from '../_utils/maple/components'
 import { themeProviderProps } from './props'
 import _ThemeProvider from './ThemeProvider.vue'
 
-const ThemeProvider = withInstall(_ThemeProvider)
+const ThemeProvider: import('../_utils/maple/components').ComponentWithInstall<typeof _ThemeProvider> = withInstall(_ThemeProvider)
 export type ThemeProviderInstance = InstanceType<typeof _ThemeProvider>
 export type { ThemeProviderProps, ThemeProviderDefaults, StyleVarName, StyleVars, ThemeProviderTheme, ThemeProviderMode } from './props'
 export { ThemeProvider, themeProviderProps }
-export const _ThemeProviderComponent = ThemeProvider
+export const _ThemeProviderComponent: typeof ThemeProvider = ThemeProvider
 export default ThemeProvider

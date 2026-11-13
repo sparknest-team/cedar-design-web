@@ -213,7 +213,7 @@ export const vLoading: Directive<ElementLoading, boolean | LoadingOptions> = {
   },
 };
 
-const Loading = withInstall(_Loading, undefined, {
+const Loading: import('../_utils/global-config').ComponentWithInstall<typeof _Loading> = withInstall(_Loading, undefined, {
   setup(app) {
     app.directive("c-loading", vLoading);
   },
@@ -222,6 +222,6 @@ const Loading = withInstall(_Loading, undefined, {
 export type LoadingInstance = InstanceType<typeof _Loading>;
 export type { LoadingProps, LoadingSize, LoadingType } from "./props";
 export { Loading, loadingProps };
-export const _LoadingComponent = Loading;
+export const _LoadingComponent: typeof Loading = Loading;
 
 export default Loading;

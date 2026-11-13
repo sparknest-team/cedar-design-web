@@ -1,5 +1,5 @@
 import { computed, ref } from "vue";
-import type { ExtractPropTypes } from "vue";
+import type { ComputedRef, ExtractPropTypes, Ref } from "vue";
 import type { schedulerProps } from "./props";
 import type {
   SchedulerResourceErrorContext,
@@ -52,13 +52,32 @@ export type SchedulerEmit = <K extends keyof SchedulerEmits>(
   ...args: SchedulerEmits[K]
 ) => void;
 
+export interface SchedulerController {
+  value: ComputedRef<SchedulerEvent[]>;
+  mode: ComputedRef<SchedulerMode>;
+  date: ComputedRef<Date>;
+  pending: Ref<boolean>;
+  warnings: Ref<SchedulerError[]>;
+  error: Ref<SchedulerError | undefined>;
+  locked: ComputedRef<boolean>;
+  commit: (change: SchedulerChange) => Promise<boolean>;
+  transaction: (changes: SchedulerChange[]) => Promise<boolean>;
+  undo: () => Promise<boolean>;
+  redo: () => Promise<boolean>;
+  canUndo: ComputedRef<boolean>;
+  canRedo: ComputedRef<boolean>;
+  clearHistory: () => void;
+  setMode: (next: SchedulerMode) => void;
+  setDate: (next: Date) => void;
+}
+
 export function useScheduler(
   props: Readonly<ExtractPropTypes<typeof schedulerProps>>,
   emit: SchedulerEmit,
   getResource: (id: string) => SchedulerResource | undefined = (id) =>
     props.resources.find((item) => item.id === id),
   getUntitled: () => string = () => "无主题",
-) {
+): SchedulerController {
   const localValue = ref(props.defaultValue.map(cloneSchedulerEvent));
   const localMode = ref<SchedulerMode>(props.defaultMode);
   const localDate = ref(schedulerDate(props.defaultDate));

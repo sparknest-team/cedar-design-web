@@ -2,7 +2,7 @@ import { withInstall } from '../_utils/global-config'
 import _VerificationCode from './presentation'
 import { verificationCodeProps } from './props'
 
-const VerificationCode = withInstall(_VerificationCode, Object.assign(_VerificationCode, {}), {
+const VerificationCode: import('../_utils/global-config').ComponentWithInstall<typeof _VerificationCode> = withInstall(_VerificationCode, Object.assign(_VerificationCode, {}), {
   components: [_VerificationCode],
 })
 
@@ -17,6 +17,6 @@ export type {
   VerificationCodeSeparator,
 } from './props'
 export type { VerificationCodeEmits, VerificationCodeSlots, VerificationCodeExpose } from './types'
-export const _VerificationCodeComponent = VerificationCode
+export const _VerificationCodeComponent: typeof VerificationCode = VerificationCode
 
 export default VerificationCode

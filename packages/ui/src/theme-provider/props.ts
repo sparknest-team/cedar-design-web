@@ -1,4 +1,5 @@
-import type { ExtractPublicPropTypes, PropType } from 'vue'
+import type { CompatiblePublicProps as ExtractPublicPropTypes } from '../_utils/public-props'
+import type { PropType } from 'vue'
 
 export type StyleVarName = `--c-${string}` | `c${Capitalize<string>}`
 export type StyleVars = Record<StyleVarName, string>

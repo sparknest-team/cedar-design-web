@@ -10,3 +10,21 @@ for(const type of ['input','textarea'] as const)test(`${type} controls its actua
  const listbox=document.getElementById(input.attributes('aria-controls')!);expect(listbox?.getAttribute('role')).toBe('listbox');const current=()=>document.getElementById(input.attributes('aria-activedescendant')!);expect(current()?.textContent).toContain('Alice');expect(current()?.getAttribute('aria-selected')).toBe('true');await input.trigger('keydown',{key:'ArrowDown'});await flushPromises();expect(current()?.textContent).toContain('Bob');expect(listbox?.contains(current())).toBe(true);expect(document.activeElement).toBe(input.element);
  const id=input.attributes('aria-activedescendant');await input.trigger('keydown',{key:'ArrowDown',isComposing:true});expect(input.attributes('aria-activedescendant')).toBe(id);await owner.setProps({readonly:true});expect(input.attributes('aria-activedescendant')).toBeUndefined();expect(input.attributes('aria-controls')).toBeUndefined();if(type==='input')expect(input.attributes('aria-expanded')).toBe('false')
 })
+
+for (const type of ['input', 'textarea'] as const) {
+  test(`${type} exposes the resolved atomic mention once through the editable value`, async () => {
+    const owner = mount(Mention, { attachTo: document.body, props: {
+      type, atomic: true, modelValue: '联系 @[alice]', options: [{ value: 'alice', label: '艾丽丝' }],
+      'aria-label': '提及人员',
+    } })
+    owners.push(owner)
+    const input = owner.get(type)
+    expect(input.attributes('aria-label')).toBe('提及人员')
+    expect((input.element as HTMLInputElement).value).toBe('联系 @艾丽丝')
+    const overlay = owner.get('.c-mention-atomic-overlay[aria-hidden=true]')
+    expect(overlay.text()).toContain('@艾丽丝')
+    await owner.setProps({ options: [{ value: 'alice', label: '新姓名' }] })
+    expect((input.element as HTMLInputElement).value).toBe('联系 @新姓名')
+    expect(owner.emitted('update:modelValue')).toBeUndefined()
+  })
+}

@@ -33,7 +33,7 @@
     "generate": "node scripts/generate.mjs",
     "generate:check": "node scripts/generate.mjs --check",
     "build": "pnpm generate:check && node scripts/build.mjs",
-    "typecheck": "vue-tsc --noEmit -p tsconfig.json"
+    "typecheck": "vue-tsc --noEmit -p tsconfig.contract.json"
   },
   "peerDependencies": {
     "vue": "^3.2.0"

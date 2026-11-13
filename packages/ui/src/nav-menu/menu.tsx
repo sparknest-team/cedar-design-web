@@ -262,7 +262,7 @@ export default defineComponent({
     watch([visibleNodes, expanded, () => props.disabled], () => afterRender(updateRovingFocus), { immediate: true })
     onDeactivated(() => { if (props.mode === 'horizontal' || collapsed.value) updateExpanded([]) })
     function onKeydown(event: KeyboardEvent) {
-      if (!available() || event.defaultPrevented || props.disabled || (event.target as HTMLElement)?.closest('input,textarea,[contenteditable="true"]')) return
+      if (!available() || event.defaultPrevented || event.isComposing || event.keyCode === 229 || props.disabled || (event.target as HTMLElement)?.closest('input,textarea,[contenteditable="true"]')) return
       const horizontal = props.mode === 'horizontal'
       const next = horizontal ? (isRtl.value ? 'ArrowLeft' : 'ArrowRight') : 'ArrowDown', previous = horizontal ? (isRtl.value ? 'ArrowRight' : 'ArrowLeft') : 'ArrowUp'
       const rows = ownedRows()

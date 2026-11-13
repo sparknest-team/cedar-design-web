@@ -28,6 +28,7 @@ import { useFormErrorDescription } from '../form/error-description'
 import { splitInputAttrs } from '../input/native-attrs'
 import { useInputForm } from '../input/use-input-form'
 import Tag from '../tag'
+import { useTagCloseLabel } from '../tag/platform'
 import { inputTagEmits } from './emits'
 import { inputTagProps } from './props'
 import { createTagKeyResolver } from './tag-keys'
@@ -66,6 +67,7 @@ export default defineComponent({
   setup(props, { emit, slots, attrs }) {
     const { prefix, n, classes } = createNamespace(props.baseCls ?? 'input-tag')
 
+    const closeLabel = useTagCloseLabel()
     const { modelValue } = toRefs(props)
     const { describe: describeError } = useFormErrorDescription()
     const inputRef = ref<HTMLInputElement>()
@@ -78,7 +80,7 @@ export default defineComponent({
       props,
       { uninject: props.uninjectFormItemContext },
     )
-    const mergedVariant = computed(() => props.variant ?? group?.variant.value ?? 'filled')
+    const mergedVariant = computed(() => props.variant ?? group?.variant.value ?? 'outline')
     const active = ref(true)
     const blocked = computed(() => !active.value || mergedDisabled.value || mergedReadonly.value)
     const mergedFieldNames = computed(() => ({
@@ -406,20 +408,26 @@ export default defineComponent({
                 // @ts-ignore
                 class={classes(n('inner'), [props.tagNowrap, n('--nowrap')])}
               >
-                {tags.value.map((item, index) => (
-                  <Tag
-                    class={classes(n('tag'))}
-                    show
-                    nowrap={props.tagNowrap}
-                    {...item.tagProps}
-                    key={item.key}
-                    closable={isTagClosable(item)}
-                    checkable={!mergedDisabled.value && !mergedReadonly.value && item.tagProps?.checkable}
-                    onClose={(ev: MouseEvent) => handleRemove(item.value, index, ev)}
-                  >
-                    {slots.tag?.({ data: item.raw }) ?? props.formatTag?.(item.raw) ?? item.label}
-                  </Tag>
-                ))}
+                {tags.value.map((item, index) => {
+                  const content = slots.tag?.({ data: item.raw }) ?? props.formatTag?.(item.raw) ?? item.label
+                  const visibleLabel = typeof content === 'string' || typeof content === 'number' ? String(content).trim() : ''
+                  const label = visibleLabel || String(item.label ?? item.value)
+                  return (
+                    <Tag
+                      class={classes(n('tag'))}
+                      show
+                      nowrap={props.tagNowrap}
+                      {...item.tagProps}
+                      key={item.key}
+                      closable={isTagClosable(item)}
+                      closeButtonAriaLabel={item.tagProps?.closeButtonAriaLabel ?? `${closeLabel.value} ${label}`}
+                      checkable={!mergedDisabled.value && !mergedReadonly.value && item.tagProps?.checkable}
+                      onClose={(ev: MouseEvent) => handleRemove(item.value, index, ev)}
+                    >
+                      {content}
+                    </Tag>
+                  )
+                })}
                 <input
                   {...nativeAttrs.value}
                   id={inputId.value}

@@ -150,6 +150,10 @@ let releaseOwner: (() => void) | undefined
 let saving: Promise<boolean> | undefined
 let opening = false
 const interaction = provideTriggerInteractionScope(computed(layerActive), (event) => {
+  if ('composedPath' in event) {
+    const path = event.composedPath()
+    if ((overlay.value && path.includes(overlay.value)) || (anchor.value && path.includes(anchor.value))) return true
+  }
   const node = 'composedPath' in event ? (event.target as Node | null) : event
   return Boolean(node && (overlay.value?.contains(node) || anchor.value?.contains(node)))
 })
@@ -209,8 +213,45 @@ function save(outside: boolean, event?: Event): Promise<boolean> {
   })()
   return saving
 }
+const shadowInsideEvents = new WeakSet<Event>()
+let shadowRoots: ShadowRoot[] = []
+function markShadowInside(event: Event) {
+  if (interaction.contains(event)) shadowInsideEvents.add(event)
+}
+function refreshShadowRoots() {
+  for (const root of shadowRoots) {
+    root.removeEventListener('click', markShadowInside, true)
+    root.removeEventListener('focusin', markShadowInside, true)
+  }
+  const roots = new Set<ShadowRoot>()
+  for (const element of [anchor.value, overlay.value]) {
+    let root = element?.getRootNode()
+    while (root && root.nodeType === 11 && 'host' in root) {
+      const shadow = root as ShadowRoot
+      roots.add(shadow)
+      root = shadow.host.getRootNode()
+    }
+  }
+  shadowRoots = [...roots]
+  for (const root of shadowRoots) {
+    root.addEventListener('click', markShadowInside, true)
+    root.addEventListener('focusin', markShadowInside, true)
+  }
+}
+watch([anchor, overlay], refreshShadowRoots, { flush: 'sync' })
+// Teleport can move an existing overlay without changing its template ref.
+watch([target, () => props.popupContainer], refreshShadowRoots, { flush: 'post' })
 function onOutside(event: Event) {
   if (!layerActive() || interaction.contains(event)) return
+  // A document listener cannot see a closed shadow root's internal event path.
+  // Let its capture listener classify the event before treating it as outside.
+  if (shadowRoots.some((root) => event.composedPath().includes(root.host))) {
+    const current = generation
+    setTimeout(() => {
+      if (!disposed && current === generation && layerActive() && !shadowInsideEvents.has(event)) void save(true, event)
+    }, 0)
+    return
+  }
   void save(true, event)
 }
 function onKeydownCapture(event: KeyboardEvent) {
@@ -375,6 +416,11 @@ onDeactivated(() => {
 })
 onBeforeUnmount(() => {
   disposed = true
+  for (const root of shadowRoots) {
+    root.removeEventListener('click', markShadowInside, true)
+    root.removeEventListener('focusin', markShadowInside, true)
+  }
+  shadowRoots = []
   releaseOwner?.()
   document?.removeEventListener('click', onOutside, true)
   document?.removeEventListener('focusin', onOutside)

@@ -32,7 +32,7 @@
         :aria-controls="searchListVisible && allowAutomaticOwnership ? searchListId : undefined"
         :aria-haspopup="searchListVisible ? 'listbox' : undefined"
         :aria-activedescendant="searchActiveId"
-        v-bind="$attrs"
+        v-bind="forwardedAttrs()"
         @update:input-value="handleInputValueChange"
         @clear="handleClear"
         @focus="handleFocus"
@@ -64,7 +64,7 @@
         </template>
       </SelectionField>
     </template>
-    <CascaderMenu :controller="controller" :keyboard-handler="handleFieldKeydown" :listbox-id="searchListMode ? searchListId : undefined">
+    <CascaderMenu :controller="controller" :focus-fallback="() => fieldRef?.focus()" :keyboard-handler="handleFieldKeydown" :listbox-id="searchListMode ? searchListId : undefined">
       <template v-for="(_, slotName) in $slots" #[slotName]="scope"
         ><slot :name="slotName" v-bind="scope || {}"
       /></template>
@@ -109,13 +109,20 @@ const {
   handleKeyDown,
 } = toRefs(controller);
 const attrs = useAttrs()
+const forwardedAttrs = () => {
+  const result = { ...attrs }
+  for (const key of ['aria-haspopup', 'aria-controls', 'aria-activedescendant']) {
+    if (result[key] === undefined) delete result[key]
+  }
+  return result
+}
 const searchListId = `cascader-search-list-${useId()}`
 const searchListMode = computed(() => !props.multiple && showSearchPanel.value)
 const searchListVisible = computed(() => searchListMode.value && computedOpen.value)
 const allowAutomaticOwnership = computed(() => attrs['aria-haspopup'] == null || attrs['aria-haspopup'] === 'listbox')
 const searchActiveId = computed(() => {
   if (!searchListVisible.value || loading.value) return undefined
-  if (Object.prototype.hasOwnProperty.call(attrs, 'aria-controls') && attrs['aria-controls'] !== searchListId) return undefined
+  if (attrs['aria-controls'] !== undefined && attrs['aria-controls'] !== searchListId) return undefined
   if (!allowAutomaticOwnership.value) return undefined
   const index = filteredLeafOptions.value.findIndex(item => item.key === activeKey.value && !item.disabled)
   return index < 0 ? undefined : `${searchListId}-option-${index}`

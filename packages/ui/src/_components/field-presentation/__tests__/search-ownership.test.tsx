@@ -3,11 +3,15 @@ import { mount } from '@vue/test-utils'
 import { afterEach, expect, test, vi } from 'vitest'
 import { useFieldSearch } from '../use-field-search'
 
+const timerDescriptors = new Map(['setTimeout', 'clearTimeout'].map(name => [name, Object.getOwnPropertyDescriptor(globalThis, name)]))
 const owners: Array<ReturnType<typeof mount>> = []
 afterEach(() => {
   owners.splice(0).forEach(owner => owner.unmount())
   vi.restoreAllMocks()
   vi.useRealTimers()
+  timerDescriptors.forEach((descriptor, name) => {
+    if (descriptor) Object.defineProperty(globalThis, name, descriptor)
+  })
 })
 function fixture(delay = () => 50) {
   vi.useFakeTimers()
@@ -117,4 +121,9 @@ test('dispatch reentry keeps the newly scheduled handle owned and cancellable', 
   expect(f.cleared).toHaveBeenCalled()
   vi.advanceTimersByTime(50)
   expect(f.dispatch.mock.calls).toEqual([['old']])
+})
+
+test('restores global timers after the search ownership tests', () => {
+  expect(typeof globalThis.setTimeout).toBe('function')
+  expect(typeof globalThis.clearTimeout).toBe('function')
 })

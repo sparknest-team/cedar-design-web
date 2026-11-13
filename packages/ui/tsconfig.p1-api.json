@@ -21,6 +21,8 @@
     }
   },
   "include": [
+    "type-tests/entry-alias-equivalence.ts",
+    "type-tests/scheduler-ref-compat.ts",
     "type-tests/map-contract.ts",
     "type-tests/menu-size.ts",
     "type-tests/p1-api.ts",
@@ -31,6 +33,7 @@
     "type-tests/f08-table.vue",
     "type-tests/api-naming.ts",
     "type-tests/button-group.ts",
+    "type-tests/install-contract.ts",
     "type-tests/icon.ts",
     "type-tests/link.ts",
     "type-tests/space.ts",
@@ -56,6 +59,7 @@
     "type-tests/selection-popup-contract.ts",
     "type-tests/people-select-contract.ts",
     "type-tests/selection-diagnostics.ts",
+    "type-tests/public-props-compat.ts",
     "type-tests/tree-select-contract.ts",
     "type-tests/slider-contract.ts",
     "type-tests/rate-contract.ts",

@@ -34,7 +34,7 @@ function iconVue(name, componentName, svg) {
 
 function componentIndex(name, componentName) {
   const exportName = `Icon${componentName}`
-  return `import type { App } from 'vue'\nimport _${exportName} from './${name}.vue'\n\nexport const ${exportName} = Object.assign(_${exportName}, {\n  install(app: App) { app.component(_${exportName}.name!, _${exportName}) },\n})\n`
+  return `import type { App } from 'vue'\nimport type { IconComponent } from '../_utils/icon-component'\nimport _${exportName} from './${name}.vue'\n\nexport const ${exportName}: IconComponent = Object.assign(_${exportName}, {\n  install(app: App) { app.component(_${exportName}.name!, _${exportName}) },\n})\n`
 }
 
 async function expectedFiles() {
@@ -42,6 +42,33 @@ async function expectedFiles() {
   const seen = new Map()
   const icons = []
   const files = new Map()
+  files.set('_utils/icon-component.ts', `import type { AllowedComponentProps, App, ComponentCustomProps, ComponentOptionsMixin, DefineComponent, VNodeProps } from 'vue'
+
+export interface IconProps {
+  size?: string | number
+  color?: string
+  title?: string
+  strokeWidth?: number
+  strokeLinecap?: 'butt' | 'round' | 'square'
+  strokeLinejoin?: 'bevel' | 'inherit' | 'miter' | 'round'
+  rotate?: number
+  spin?: boolean
+}
+
+type IconEmits = { click: (event: MouseEvent) => any }
+type IconDefaults = {
+  strokeWidth: number
+  strokeLinecap: NonNullable<IconProps['strokeLinecap']>
+  strokeLinejoin: NonNullable<IconProps['strokeLinejoin']>
+}
+
+export type IconComponent = DefineComponent<
+  IconProps, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, IconEmits, string,
+  VNodeProps & AllowedComponentProps & ComponentCustomProps,
+  Readonly<IconProps> & Readonly<{ onClick?: (event: MouseEvent) => any }>,
+  IconDefaults
+> & { install(app: App): void }
+`)
   files.set('../style.css', "svg.c-icon-spin {\n  animation: c-svg-icon-spin var(--c-icon-spin-duration, 1s) infinite linear;\n}\n\n@keyframes c-svg-icon-spin {\n  from { rotate: 0deg; }\n  to { rotate: 360deg; }\n}\n\n@media (prefers-reduced-motion: reduce) {\n  svg.c-icon-spin { animation: none; }\n}\n")
 
   for (const path of svgFiles) {
@@ -82,7 +109,7 @@ async function expectedFiles() {
   const exports = icons.map(({ name, componentName }) => `export { Icon${componentName} } from './${name}'`).join('\n')
   files.set('cedar-vue-icon.ts', `import type { App } from 'vue'\n${imports}\n\nconst icons = {\n${members}\n}\n\nexport default {\n  ...icons,\n  install(app: App) {\n    Object.values(icons).forEach((icon) => app.use(icon))\n  },\n}\n`)
   const iconNames = icons.map(({ name }) => name.slice('icon-'.length))
-  files.set('index.ts', `export { default } from './cedar-vue-icon'\nexport const iconNames = ${JSON.stringify(iconNames)} as const\n${exports}\n`)
+  files.set('index.ts', `export { default } from './cedar-vue-icon'\nexport type { IconComponent, IconProps } from './_utils/icon-component'\nexport const iconNames = ${JSON.stringify(iconNames)} as const\n${exports}\n`)
   files.set('icons.json', `${JSON.stringify(icons, null, 2)}\n`)
   files.set('icon-components.ts', `// @ts-nocheck\n\ndeclare module 'vue' {\n  export interface GlobalComponents {\n${icons.map(({ componentName }) => `    Icon${componentName}: typeof import('./index')['Icon${componentName}'];`).join('\n')}\n  }\n}\n\nexport {}\n`)
   return files

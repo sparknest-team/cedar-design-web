@@ -3,7 +3,7 @@ import _CheckboxGroup from './group-presentation'
 import _Checkbox from './base'
 import { checkboxGroupProps, checkboxProps } from './props'
 
-const Checkbox = withInstall(
+const Checkbox: import('../_utils/global-config').CedarComponentWithInstall<typeof _Checkbox & { Group: typeof _CheckboxGroup }> = withInstall(
   _Checkbox,
   Object.assign(_Checkbox, {
     Group: _CheckboxGroup,
@@ -19,8 +19,8 @@ export type { CheckboxGroupProps, CheckboxProps, CheckboxValue } from './props'
 export type { CheckboxOption } from './types'
 
 export { Checkbox, _CheckboxGroup as CheckboxGroup }
-export const _CheckboxComponent = Checkbox
-export const _CheckboxGroupComponent = _CheckboxGroup
+export const _CheckboxComponent: typeof Checkbox = Checkbox
+export const _CheckboxGroupComponent: typeof _CheckboxGroup = _CheckboxGroup
 
 export default Checkbox
 

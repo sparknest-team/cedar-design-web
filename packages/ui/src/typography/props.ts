@@ -72,8 +72,8 @@ export const typographyParagraphProps = {
   },
 } 
 
-export type TypographyProps = import("vue").ExtractPublicPropTypes<typeof typographyProps>
-export type TypographyBaseProps = import("vue").ExtractPublicPropTypes<typeof typographyBaseProps>
-export type TypographyTitleProps = import("vue").ExtractPublicPropTypes<typeof typographyTitleProps>
-export type TypographyTextProps = import("vue").ExtractPublicPropTypes<typeof typographyTextProps>
-export type TypographyParagraphProps = import("vue").ExtractPublicPropTypes<typeof typographyParagraphProps>
+export type TypographyProps = import('../_utils/public-props').CompatiblePublicProps<typeof typographyProps>
+export type TypographyBaseProps = import('../_utils/public-props').CompatiblePublicProps<typeof typographyBaseProps>
+export type TypographyTitleProps = import('../_utils/public-props').CompatiblePublicProps<typeof typographyTitleProps>
+export type TypographyTextProps = import('../_utils/public-props').CompatiblePublicProps<typeof typographyTextProps>
+export type TypographyParagraphProps = import('../_utils/public-props').CompatiblePublicProps<typeof typographyParagraphProps>

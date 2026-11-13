@@ -1,9 +1,11 @@
 import { withFieldPresentation } from '../_components/field-presentation/with-field-presentation'
 import Base from './verification-code.vue'
 
-export default withFieldPresentation(Base, {
+const Presented: typeof Base = withFieldPresentation(Base, {
   commitEvents: { finish: ([completed], accepted) => completed === accepted },
   methods: ['focus', 'blur', 'reset'],
   openMethods: ['reset'],
   intent: 'input',
 })
+
+export default Presented

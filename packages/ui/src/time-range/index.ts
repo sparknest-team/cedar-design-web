@@ -7,9 +7,9 @@ import { timeRangeProps } from './props'
 export type { TimeRangeProps } from './props'
 export type { TimeRangePickerProps } from '../time/picker/props'
 
-const TimeRangePicker = withInstall(_TimeRangePicker)
+const TimeRangePicker: import('../_utils/global-config').ComponentWithInstall<typeof _TimeRangePicker> = withInstall(_TimeRangePicker)
 
-const TimeRange = withInstall(
+const TimeRange: import('../_utils/global-config').ComponentWithInstall<typeof _TimeRange & { Picker: typeof TimeRangePicker }> = withInstall(
   _TimeRange,
   Object.assign(_TimeRange, {
     Picker: TimeRangePicker,
@@ -21,8 +21,8 @@ export type TimeRangeInstance = InstanceType<typeof _TimeRange> & import('../tim
 export type TimeRangePickerInstance = InstanceType<typeof _TimeRangePicker>
 
 export { TimeRange, TimeRangePicker, timeRangeProps, timeRangePickerProps }
-export const _TimeRangeComponent = TimeRange
-export const _TimeRangePickerComponent = TimeRangePicker
+export const _TimeRangeComponent: typeof TimeRange = TimeRange
+export const _TimeRangePickerComponent: typeof TimeRangePicker = TimeRangePicker
 
 export default TimeRange
 

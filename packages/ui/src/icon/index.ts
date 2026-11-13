@@ -2,12 +2,12 @@ import { withInstall } from "../_utils/global-config";
 import _Icon from "./Icon.vue";
 import { iconProps } from "./props";
 
-const Icon = withInstall(_Icon);
+const Icon: import('../_utils/global-config').ComponentWithInstall<typeof _Icon> = withInstall(_Icon);
 
 export type IconInstance = InstanceType<typeof _Icon>;
 export type { IconProps } from "./props";
 
-export const _IconComponent = Icon;
+export const _IconComponent: typeof Icon = Icon;
 
 export { Icon };
 

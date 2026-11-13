@@ -95,7 +95,10 @@ test.each([
 
 test('input tag retains the error through deferred editing and removes it in read mode', async () => {
   const { default: InputTag } = await import('../../input-tag')
-  const wrapper = mount(Form, { attachTo: document.body, props: { editMode: 'click', model: { value: ['one'] } }, slots: { default: () => h(FormItem, { field: 'value', label: 'Tags' }, () => h(InputTag, { editMode: 'click', 'aria-describedby': 'external' })) } })
+  const unrelated = document.createElement('input')
+  const popupTarget = document.createElement('div')
+  document.body.append(unrelated, popupTarget)
+  const wrapper = mount(Form, { attachTo: document.body, props: { editMode: 'click', model: { value: ['one'] } }, slots: { default: () => h(FormItem, { field: 'value', label: 'Tags' }, () => h(InputTag, { editMode: 'click', popupContainer: popupTarget, 'aria-describedby': 'external' })) } })
   try {
     const errorId = await setError(wrapper)
     const button = wrapper.findAll('button').find(node => node.attributes('aria-describedby')?.split(/\s+/).includes(errorId))
@@ -103,10 +106,11 @@ test('input tag retains the error through deferred editing and removes it in rea
     expect(button!.attributes('aria-describedby')?.split(/\s+/)).toContain('external')
     await button!.trigger('click')
     await flushPromises()
-    const input = document.body.querySelector('input')
+    const input = popupTarget.querySelector('input')
     expect(input?.getAttribute('aria-describedby')?.split(/\s+/)).toEqual(['external', errorId])
     await wrapper.setProps({ readPretty: true })
     expect(wrapper.find('[role=alert]').exists()).toBe(false)
-    expect(Array.from(document.body.querySelectorAll('[aria-describedby]')).every(node => !node.getAttribute('aria-describedby')?.split(/\s+/).includes(errorId))).toBe(true)
-  } finally { wrapper.unmount() }
+    expect(wrapper.findAll('[aria-describedby]').every(node => !node.attributes('aria-describedby')?.split(/\s+/).includes(errorId))).toBe(true)
+    expect(Array.from(popupTarget.querySelectorAll('[aria-describedby]')).every(node => !node.getAttribute('aria-describedby')?.split(/\s+/).includes(errorId))).toBe(true)
+  } finally { wrapper.unmount(); unrelated.remove(); popupTarget.remove() }
 })

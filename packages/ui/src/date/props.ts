@@ -46,12 +46,12 @@ export const dateProps = {
   placeholder: String,
   separator: { type: String, default: ", " },
   size: fieldDecoratorProps.size,
-  variant: { ...fieldDecoratorProps.variant, default: "filled" },
+  variant: { ...fieldDecoratorProps.variant, default: "outline" },
   hint: fieldDecoratorProps.hint,
   line: fieldDecoratorProps.line,
   textColor: fieldDecoratorProps.textColor,
   focusColor: fieldDecoratorProps.focusColor,
   blurColor: fieldDecoratorProps.blurColor,
 };
-export type DateProps = import("vue").ExtractPublicPropTypes<typeof dateProps>;
+export type DateProps = import('../_utils/public-props').CompatiblePublicProps<typeof dateProps>;
 export type DateType = NonNullable<DateProps["type"]>;

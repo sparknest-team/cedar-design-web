@@ -117,7 +117,7 @@ FieldDecorator 是 Input、Textarea、Select 与日期时间控件的展示外�
 | `--c-field-loading-color` | `var(--c-field-focus-color)` | `color` |
 | `--c-field-loading-duration` | `1s` | `animation` |
 | `--c-field-loading-line-size` | `2px` | `height` |
-| `--c-field-padding-horizontal` | `12px` | `inset-inline-start`, `margin-inline-end`, `margin-inline-start`, `max-width`, `padding`, `padding-inline-end`, `padding-inline-start` |
+| `--c-field-padding-horizontal` | `12px` | `inset-inline-start`, `margin-inline-end`, `margin-inline-start`, `max-width`, `padding`, `padding-inline-end`, `padding-inline-start`, `width` |
 | `--c-field-placeholder-text-color` | `var(--c-sys-color-content-tertiary)` | `color` |
 | `--c-field-prefix-text-color` | `var(--c-sys-color-content-secondary)` | `color` |
 | `--c-field-size-lg-font-size` | `14px` | `font-size` |

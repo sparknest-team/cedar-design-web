@@ -1,4 +1,4 @@
-import type { ExtractPublicPropTypes } from 'vue'
+import type { CompatiblePublicProps as ExtractPublicPropTypes } from '../_utils/public-props'
 import { popupContainerProp } from '../_utils/popup-container'
 
 export const overlayProps = {

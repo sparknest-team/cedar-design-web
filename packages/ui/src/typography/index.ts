@@ -13,7 +13,7 @@ import {
 export type { EllipsisConfig, TypographySlots, TypographyContentSlots, TypographyEmits } from './types'
 export { typographyEmits } from './emits'
 
-const Typography = withInstall(_Typography, Object.assign(_Typography, {
+const Typography: import('../_utils/global-config').ComponentWithInstall<typeof _Typography & { Paragraph: typeof _TypographyParagraph; Title: typeof _TypographyTitle; Text: typeof _TypographyText }> = withInstall(_Typography, Object.assign(_Typography, {
   Paragraph: _TypographyParagraph,
   Title: _TypographyTitle,
   Text: _TypographyText,
@@ -41,9 +41,9 @@ export {
   _TypographyText as TypographyText,
 }
 
-export const _TypographyComponent = Typography
-export const _TypographyParagraphComponent = _TypographyParagraph
-export const _TypographyTitleComponent = _TypographyTitle
-export const _TypographyTextComponent = _TypographyText
+export const _TypographyComponent: typeof Typography = Typography
+export const _TypographyParagraphComponent: typeof _TypographyParagraph = _TypographyParagraph
+export const _TypographyTitleComponent: typeof _TypographyTitle = _TypographyTitle
+export const _TypographyTextComponent: typeof _TypographyText = _TypographyText
 
 export default Typography

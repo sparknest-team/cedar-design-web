@@ -33,5 +33,5 @@ export const descriptionsItemProps = {
   label: String,
 } 
 
-export type DescriptionsProps = import("vue").ExtractPublicPropTypes<typeof descriptionsProps>
-export type DescriptionsItemProps = import("vue").ExtractPublicPropTypes<typeof descriptionsItemProps>
+export type DescriptionsProps = import('../_utils/public-props').CompatiblePublicProps<typeof descriptionsProps>
+export type DescriptionsItemProps = import('../_utils/public-props').CompatiblePublicProps<typeof descriptionsItemProps>

@@ -3,7 +3,7 @@ import _Steps from './Steps'
 import _StepsStep from './Step.vue'
 import { stepsProps, stepProps } from './props'
 
-const Steps = withInstall(_Steps, Object.assign(_Steps, {
+const Steps: import('../_utils/global-config').CedarComponentWithInstall<typeof _Steps & { Step: typeof _StepsStep }> = withInstall(_Steps, Object.assign(_Steps, {
   Step: _StepsStep,
 }), { components: [_Steps, _StepsStep] })
 
@@ -22,7 +22,7 @@ export type {
 export { stepsProps, stepProps }
 export { _StepsStep as Step }
 
-export const _StepsComponent = Steps
+export const _StepsComponent: typeof Steps = Steps
 export const _StepComponent = _StepsStep
 
 export { Steps }

@@ -1,3 +1,4 @@
+import type { CompatibleStyleValue as StyleValue } from '../_utils/style-value'
 import NativeEditorOwner from './native-editor-owner';
 import {
   defineComponent,
@@ -5,7 +6,6 @@ import {
   inject,
   reactive,
   ref,
-  type StyleValue,
 } from "vue";
 import FieldPresentation from "../_components/field-presentation/FieldPresentation.vue";
 import { useFieldTexts } from "../_components/field-presentation/texts";
@@ -121,6 +121,18 @@ const Select = defineComponent({
         return renderEditor();
       }
       const { class: className, style, ...restAttrs } = attrs;
+      const explicitControls = restAttrs['aria-controls']
+      const explicitActive = restAttrs['aria-activedescendant']
+      const popupRole = restAttrs['aria-haspopup']
+      const ownsListbox = (popupRole == null || popupRole === 'listbox') &&
+        (explicitControls === undefined || explicitControls === controller.listboxId)
+      const controls = explicitControls === undefined
+        ? (ownsListbox && controller.computedOpen ? controller.listboxId : undefined)
+        : explicitControls
+      const activeDescendant = explicitActive === undefined
+        ? (ownsListbox ? controller.activeDescendant : undefined)
+        : explicitActive
+
 
       const Presentation = MenuPresentation;
       const text = controller.fieldItems
@@ -291,8 +303,8 @@ const Select = defineComponent({
                     onClear={controller.handleClear}
                     {...restAttrs}
                     onKeydown={handleFieldKeydown}
-                    aria-controls={controller.computedOpen ? controller.listboxId : undefined}
-                    aria-activedescendant={controller.activeDescendant}
+                    aria-controls={controls as string | undefined}
+                    aria-activedescendant={activeDescendant as string | undefined}
                     onFocus={(event) => {
                       emit("focus", event);
                       controller.eventHandlers?.onFocus?.(event);

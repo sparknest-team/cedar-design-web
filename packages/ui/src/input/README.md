@@ -309,7 +309,7 @@ InputPassword 支持所有 Input 属性、事件、插槽与方法。
 | 参数名   | 描述         | 类型                            | 默认值                           |
 | -------- | ------------ | ------------------------------- | -------------------------------- |
 | size     | 组内默认尺寸 | `ComponentSize`<br>`'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | 继承 Form/ConfigProvider 或 `md` |
-| variant  | 组内默认变体 | `filled \| outline \| standard` | `filled`                         |
+| variant  | 组内默认变体 | `filled \| outline \| standard` | `outline` |
 | disabled | 组内禁用状态 | `boolean`                       | 继承 Form 或 `false`             |
 | readonly | 组内只读状态 | `boolean`                       | 继承 Form 或 `false`             |
 | hint     | 组内浮动提示 | `boolean`                       | 库默认值                         |

@@ -87,4 +87,4 @@ export const colorProps = {
   },
 }
 
-export type ColorProps = import('vue').ExtractPublicPropTypes<typeof colorProps>
+export type ColorProps = import('../_utils/public-props').CompatiblePublicProps<typeof colorProps>

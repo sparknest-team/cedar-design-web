@@ -3,7 +3,7 @@ import _Menu from './Menu.vue'
 import _MenuOption from './MenuOption.vue'
 import { menuProps } from './props'
 
-const Menu = withInstall(_Menu, Object.assign(_Menu, {
+const Menu: import('../_utils/global-config').CedarComponentWithInstall<typeof _Menu & { Option: typeof _MenuOption }> = withInstall(_Menu, Object.assign(_Menu, {
   Option: _MenuOption,
 }), { components: [_Menu, _MenuOption] })
 
@@ -16,8 +16,8 @@ export {
   _MenuOption as MenuOption,
 }
 
-export const _MenuComponent = Menu
-export const _MenuOptionComponent = _MenuOption
+export const _MenuComponent: typeof Menu = Menu
+export const _MenuOptionComponent: typeof _MenuOption = _MenuOption
 
 export { menuProps }
 export type { MenuSize } from './props'

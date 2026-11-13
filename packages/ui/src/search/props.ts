@@ -1,11 +1,11 @@
+import type { CompatibleStyleValue as StyleValue } from '../_utils/style-value'
 import { fieldLoadingProps } from '../field-decorator/props'
 import { emptyValueProp } from "../_utils/empty-value";
 import type {
   ExtractPropTypes,
-  ExtractPublicPropTypes,
   PropType,
-  StyleValue,
 } from "vue";
+import type { CompatiblePublicProps as ExtractPublicPropTypes } from '../_utils/public-props'
 import type { ButtonProps } from "../button";
 import { inputProps } from "../input/props";
 

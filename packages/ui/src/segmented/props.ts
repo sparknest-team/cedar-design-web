@@ -83,4 +83,4 @@ export const segmentedProps = {
   name: String,
 }
 
-export type SegmentedProps = import("vue").ExtractPublicPropTypes<typeof segmentedProps>
+export type SegmentedProps = import('../_utils/public-props').CompatiblePublicProps<typeof segmentedProps>

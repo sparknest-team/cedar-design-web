@@ -1,4 +1,5 @@
-import type { ExtractPublicPropTypes, InputHTMLAttributes, PropType } from 'vue'
+import type { InputHTMLAttributes, PropType } from 'vue'
+import type { CompatiblePublicProps as ExtractPublicPropTypes } from '../_utils/public-props'
 import { fieldPresentationProps } from '../_components/field-presentation/props'
 import { componentSizes } from '../_utils/constant'
 import type { ComponentSize } from '../_utils/constant'

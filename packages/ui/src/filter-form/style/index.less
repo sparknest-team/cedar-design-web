@@ -29,7 +29,8 @@
     justify-content: flex-end;
     align-items: center;
     gap: var(~'--c-filter-form-actions-gap');
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    white-space: nowrap;
     min-width: 0;
     min-height: var(--c-form-size-md-height);
   }
@@ -44,9 +45,14 @@
 
   &__action-slot {
     display: flex;
+    flex-wrap: nowrap;
     align-items: center;
     gap: var(--c-filter-form-actions-gap);
     flex: 0 0 auto;
+
+    > * {
+      flex-shrink: 0;
+    }
   }
 
   &__collapse {

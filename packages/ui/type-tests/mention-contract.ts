@@ -20,7 +20,7 @@ export const props: MentionProps = {
   modelValue: null,
   emptyValue: null,
   disabled: undefined,
-  data: async (query, { signal }) => (signal.aborted ? [] : [query]),
+  options: async (query, { signal }) => (signal.aborted ? [] : [query]),
 }
 declare const instance: MentionInstance
 export const retry: Promise<void> = instance.refresh()

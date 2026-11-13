@@ -49,14 +49,14 @@ export const dateRangeProps = {
   placeholder: [String, Array] as PropType<string | string[]>,
   separator: { type: String, default: " ~ " },
   size: fieldDecoratorProps.size,
-  variant: { ...fieldDecoratorProps.variant, default: "filled" },
+  variant: { ...fieldDecoratorProps.variant, default: "outline" },
   hint: fieldDecoratorProps.hint,
   line: fieldDecoratorProps.line,
   textColor: fieldDecoratorProps.textColor,
   focusColor: fieldDecoratorProps.focusColor,
   blurColor: fieldDecoratorProps.blurColor,
 };
-export type DateRangeProps = import("vue").ExtractPublicPropTypes<
+export type DateRangeProps = import('../_utils/public-props').CompatiblePublicProps<
   typeof dateRangeProps
 >;
 export type DateRangeType = NonNullable<DateRangeProps["type"]>;

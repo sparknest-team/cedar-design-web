@@ -4,7 +4,7 @@ import SelectionEditor from '../_components/selected-options/SelectionEditor.vue
 import Base from './people-select'
 import { peopleText } from './selection'
 
-export default withFieldPresentation(Base, {
+const Presented: typeof Base = withFieldPresentation(Base, {
   selectionConfirmation: 'update',
   methods: ['focus', 'blur'],
   text: peopleText,
@@ -27,3 +27,5 @@ export default withFieldPresentation(Base, {
       ),
     ),
 })
+
+export default Presented

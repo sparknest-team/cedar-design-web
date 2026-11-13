@@ -20,7 +20,7 @@ export type SearchHandler = (searchKey: string) => void
 
 export type ClearHandler = () => void
 
-export type TreeSelectProps = import('vue').ExtractPublicPropTypes<typeof import('./props').treeSelectProps>
+export type TreeSelectProps = import('../_utils/public-props').CompatiblePublicProps<typeof import('./props').treeSelectProps>
 export interface TreeSelectReadScope {
   value: TreeSelectValue | undefined
   text: string

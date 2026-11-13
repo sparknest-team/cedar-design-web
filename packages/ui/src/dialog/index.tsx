@@ -12,7 +12,15 @@ import {
 } from "./service";
 import type { DialogConfig, DialogMethod, DialogService } from "./types";
 
-const Dialog = Object.assign(_Dialog, {
+type DialogExtension = typeof dialogMethods & {
+  close: typeof closeLatestDialog;
+  setDefaultOptions: typeof setDialogDefaultOptions;
+  resetDefaultOptions: typeof resetDialogDefaultOptions;
+  install: (app: App, options?: CedarOptions) => void;
+  _context: AppContext | null;
+};
+
+const Dialog: typeof _Dialog & DialogExtension = Object.assign(_Dialog, {
   ...dialogMethods,
   close: closeLatestDialog,
   setDefaultOptions: setDialogDefaultOptions,
@@ -61,7 +69,7 @@ export type {
 export type { DialogProps } from "./props";
 export type DialogInstance = InstanceType<typeof _Dialog>;
 export { Dialog, dialogProps };
-export const _DialogComponent = Dialog;
+export const _DialogComponent: typeof Dialog = Dialog;
 
 export default Dialog;
 

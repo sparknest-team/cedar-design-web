@@ -1,9 +1,9 @@
+import type { CompatibleReactive as UnwrapNestedRefs } from '../_utils/compatible-reactive'
 import {
   defineComponent,
   type ComponentPublicInstance,
   type DefineComponent,
   type PropType,
-  type UnwrapNestedRefs,
 } from 'vue'
 import VirtualList from '../_components/virtual-list-v2'
 import { createNamespace } from '../_utils/global-config'

@@ -53,7 +53,7 @@ const NavNode = defineComponent({
     }
     function onKeydown(event: KeyboardEvent) {
       const key = event.key
-      if (!available() || disabled.value || event.defaultPrevented || event.target !== element.value) return
+      if (!available() || disabled.value || event.defaultPrevented || event.isComposing || event.keyCode === 229 || event.target !== element.value) return
       if (props.node.children.length && ((floating.value && key === (api.props.mode === 'horizontal' && !props.popup ? 'ArrowDown' : forward.value)) || (!floating.value && key === forward.value))) {
         event.preventDefault(); event.stopPropagation(); void enter()
       } else if (!floating.value && key === backward.value && open.value) {
@@ -65,7 +65,7 @@ const NavNode = defineComponent({
       }
     }
     function onPanelKeydown(event: KeyboardEvent) {
-      if (!available() || disabled.value || event.defaultPrevented) return
+      if (!available() || disabled.value || event.defaultPrevented || event.isComposing || event.keyCode === 229) return
       if (event.key === 'Escape' || event.key === backward.value) {
         const reference = element.value, originalTrigger = trigger.value
         const document = reference?.ownerDocument, origin = document?.activeElement ?? null

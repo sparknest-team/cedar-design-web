@@ -50,11 +50,11 @@ export const pickerProps = {
      * @zh 输入框变体
      * @en Input variant
      * @values 'filled','outline','standard'
-     * @default-value 'filled'
+     * @default-value 'outline'
      */
     variant: {
       type: String as PropType<FormControlVariant>,
-      default: 'filled',
+      default: 'outline',
       validator: (value: FormControlVariant) => formControlVariants.includes(value),
     },
     /**
@@ -369,11 +369,11 @@ export const dateRangePickerProps = {
      * @zh 输入框变体
      * @en Input variant
      * @values 'filled','outline','standard'
-     * @default-value 'filled'
+     * @default-value 'outline'
      */
     variant: {
       type: String as PropType<FormControlVariant>,
-      default: 'filled',
+      default: 'outline',
       validator: (value: FormControlVariant) => formControlVariants.includes(value),
     },
     shortcuts: {
@@ -516,6 +516,6 @@ export const datePickerProps = {
      */
 } 
 
-export type DatePickerProps = import("vue").ExtractPublicPropTypes<typeof datePickerProps>
-export type PickerProps = import("vue").ExtractPublicPropTypes<typeof pickerProps>
-export type DateRangePickerProps = import("vue").ExtractPublicPropTypes<typeof dateRangePickerProps>
+export type DatePickerProps = import('../../_utils/public-props').CompatiblePublicProps<typeof datePickerProps>
+export type PickerProps = import('../../_utils/public-props').CompatiblePublicProps<typeof pickerProps>
+export type DateRangePickerProps = import('../../_utils/public-props').CompatiblePublicProps<typeof dateRangePickerProps>

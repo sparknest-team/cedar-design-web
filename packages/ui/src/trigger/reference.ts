@@ -1,3 +1,4 @@
+import type { CompatibleShallowRef } from '../_utils/compatible-shallow-ref'
 import { isVNode, onActivated, onBeforeUnmount, onDeactivated, onMounted, onUpdated, shallowRef, watch, type Ref, type VNode } from 'vue'
 import type { TriggerReferenceAttrs } from './props'
 
@@ -18,7 +19,10 @@ export function getTriggerElement(nodes: VNode | VNode[] | null | undefined): Tr
   return Array.isArray(nodes.children) ? getTriggerElement(nodes.children as VNode[]) : undefined
 }
 
-export function useTriggerReference(onChange?: (element?: TriggerElement) => void) {
+export function useTriggerReference(onChange?: (element?: TriggerElement) => void): {
+  nodes: { value: VNode[] }
+  element: CompatibleShallowRef<TriggerElement | undefined>
+} {
   // Rendered VNodes stay non-reactive; only the resolved DOM target is reactive.
   const nodes: { value: VNode[] } = { value: [] }
   const element = shallowRef<TriggerElement>()
@@ -83,7 +87,11 @@ export function useTriggerReferenceAttrs(
 }
 
 /** Resolve both slot roots and external references with one lifecycle contract. */
-export function useTriggerTarget(slotElement: Readonly<Ref<TriggerElement | undefined>>, reference: () => Reference | undefined) {
+export function useTriggerTarget(slotElement: Readonly<Ref<TriggerElement | undefined>>, reference: () => Reference | undefined): {
+  element: CompatibleShallowRef<TriggerElement | undefined>
+  getReference: () => TriggerElement | undefined
+  setReference: (target?: Reference) => void
+} {
   const element = shallowRef<TriggerElement>()
   let override: Reference | undefined
   let mounted = false

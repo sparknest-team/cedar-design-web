@@ -1,6 +1,6 @@
 import { choiceIconSizeProp, choiceOrientationProp } from './choice-appearance-props'
 import { emptyValueProp } from '../_utils/empty-value'
-import type { ExtractPublicPropTypes } from 'vue'
+import type { CompatiblePublicProps as ExtractPublicPropTypes } from '../_utils/public-props'
 import { fieldPresentationProps } from '../_components/field-presentation/props'
 import { checkboxGroupValueProps, choiceOptionsProps } from './choice-group-props'
 import { checkboxValueProps } from './choice-value-props'

@@ -5,7 +5,7 @@ import _InputGroupLabel from './InputGroupLabel.vue'
 import _InputPassword from './InputPassword.vue'
 import { inputProps } from './props'
 
-const Input = withInstall(
+const Input: import('../_utils/global-config').CedarComponentWithInstall<typeof _Input & { Password: typeof _InputPassword; Group: typeof _InputGroup; GroupLabel: typeof _InputGroupLabel }> = withInstall(
   _Input,
   Object.assign(_Input, {
     Password: _InputPassword,
@@ -34,10 +34,10 @@ export type InputGroupLabelInstance = InstanceType<typeof _InputGroupLabel>
 
 export { Input, _InputPassword as InputPassword, _InputGroup as InputGroup, _InputGroupLabel as InputGroupLabel }
 
-export const _InputComponent = Input
-export const _InputPasswordComponent = _InputPassword
-export const _InputGroupComponent = _InputGroup
-export const _InputGroupLabelComponent = _InputGroupLabel
+export const _InputComponent: typeof Input = Input
+export const _InputPasswordComponent: typeof _InputPassword = _InputPassword
+export const _InputGroupComponent: typeof _InputGroup = _InputGroup
+export const _InputGroupLabelComponent: typeof _InputGroupLabel = _InputGroupLabel
 
 export default Input
 

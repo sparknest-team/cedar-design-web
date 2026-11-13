@@ -11,12 +11,16 @@ describe('Cascader', () => {
         modelValue: 'beijing',
       },
     })
-    await nextTick()
+    try {
+      await nextTick()
 
-    const field = wrapper.find('.c-field-decorator')
-    expect(field.exists()).toBe(true)
-    expect(field.classes()).toContain('c-field-decorator--variant-filled')
-    expect(wrapper.find('input').attributes('readonly')).toBeDefined()
-    expect(wrapper.text()).toContain('Beijing')
+      const field = wrapper.find('.c-field-decorator')
+      expect(field.exists()).toBe(true)
+      expect(field.classes()).toContain('c-field-decorator--variant-outline')
+      expect(wrapper.find('input').attributes('readonly')).toBeDefined()
+      expect(wrapper.text()).toContain('Beijing')
+    } finally {
+      wrapper.unmount()
+    }
   })
 })

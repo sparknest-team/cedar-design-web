@@ -89,8 +89,8 @@ export const mapSelectProps = {
   mapStyle: { type: Object as PropType<CSSProperties>, default: () => ({ height: '300px' }) },
 }
 
-export type MapProps = import("vue").ExtractPublicPropTypes<typeof mapProps>
-export type MapSelectProps = import("vue").ExtractPublicPropTypes<typeof mapSelectProps>
+export type MapProps = import('../_utils/public-props').CompatiblePublicProps<typeof mapProps>
+export type MapSelectProps = import('../_utils/public-props').CompatiblePublicProps<typeof mapSelectProps>
 
 export interface ModelValueType {
   adcode?: string

@@ -35,6 +35,6 @@ export const resultProps = {
   },
 };
 
-export type ResultProps = import("vue").ExtractPublicPropTypes<
+export type ResultProps = import('../_utils/public-props').CompatiblePublicProps<
   typeof resultProps
 >;

@@ -1,4 +1,5 @@
-import type { ExtractPublicPropTypes, PropType } from 'vue'
+import type { PropType } from 'vue'
+import type { CompatiblePublicProps as ExtractPublicPropTypes } from '../_utils/public-props'
 import { componentSizes, semanticStatuses } from '../_utils/constant'
 import type { ComponentSize, SemanticStatus } from '../_utils/constant'
 

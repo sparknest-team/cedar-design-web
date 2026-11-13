@@ -1,7 +1,7 @@
 import { withInstall } from "../_utils/global-config";
 import _FieldDecorator from "./FieldDecorator.vue";
 
-const FieldDecorator = withInstall(_FieldDecorator);
+const FieldDecorator: import('../_utils/global-config').ComponentWithInstall<typeof _FieldDecorator> = withInstall(_FieldDecorator);
 
 export { FieldDecorator };
 export { fieldDecoratorProps } from "./props";
@@ -11,7 +11,7 @@ export type {
   FieldDecoratorVariant,
 } from "./props";
 export type FieldDecoratorInstance = InstanceType<typeof FieldDecorator>;
-export const _FieldDecoratorComponent = FieldDecorator;
+export const _FieldDecoratorComponent: typeof FieldDecorator = FieldDecorator;
 export default FieldDecorator;
 
 export type { OpenTriggerTarget } from "../_components/picker-field/open-trigger";

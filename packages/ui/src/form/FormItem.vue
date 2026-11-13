@@ -10,6 +10,7 @@
     ]"
     :wrap="layoutWrap"
     :div="layout !== 'horizontal' || hideLabel"
+    :gutter="0"
     v-bind="rowProps"
     :data-presentation="
       presentationState.resolved.value === 'direct'
@@ -85,6 +86,7 @@ import {
   inject,
   nextTick,
   onBeforeUnmount,
+  onBeforeUpdate,
   onMounted,
   provide,
   reactive,
@@ -158,6 +160,8 @@ export default defineComponent({
    * @slot extra
    */
   setup(props, { slots }) {
+    const hasHelpSlot = ref(Boolean(slots.help));
+    onBeforeUpdate(() => { hasHelpSlot.value = Boolean(slots.help); });
     const prefixCls = getPrefixCls("form-item");
     const { field } = toRefs(props);
     const formCtx = inject<Partial<FormContext>>(formInjectionKey, {});
@@ -229,7 +233,11 @@ export default defineComponent({
       resolveFormItemStatus(props.validateStatus, finalStatus.value),
     );
     const isError = computed(() => computedValidateStatus.value === "error");
-    const { labelId } = provideFormErrorDescription(() => !presentationState.readPretty.value && isError.value && finalMessage.value.length > 0, () => props.noStyle);
+    const { labelId } = provideFormErrorDescription(
+      () => !presentationState.readPretty.value && isError.value && finalMessage.value.length > 0,
+      () => props.noStyle,
+      () => !presentationState.readPretty.value && isError.value && finalMessage.value.length === 0 && Boolean(props.help || hasHelpSlot.value),
+    );
     const labelContext = provideFormItemLabel({
       generated: labelId,
       noStyle: () => props.noStyle,

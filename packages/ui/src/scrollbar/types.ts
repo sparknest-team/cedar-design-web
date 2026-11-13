@@ -1,4 +1,5 @@
-import type { StyleValue } from 'vue'
+import type { CompatibleStyleValue as StyleValue } from '../_utils/style-value'
+
 import type { ClassName } from '../_utils/types'
 
 export interface ThumbData {

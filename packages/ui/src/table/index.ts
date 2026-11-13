@@ -8,7 +8,7 @@ import _Td from './table-td'
 import _Column from './table-column'
 import { tableProps } from './props'
 
-const Table = withInstall(_Table, Object.assign(_Table, {
+const Table: import('../_utils/global-config').ComponentWithInstall<typeof _Table & { Thead: typeof _Thead; Tbody: typeof _Tbody; Tr: typeof _Tr; Th: typeof _Th; Td: typeof _Td; Column: typeof _Column }> = withInstall(_Table, Object.assign(_Table, {
   Thead: _Thead,
   Tbody: _Tbody,
   Tr: _Tr,
@@ -46,20 +46,20 @@ export { TABLE_EXTRA_COLUMN_KEY, resolveExtraColumnConfig, getExtraColumnWidth, 
 
 export { _Thead as Thead, _Tbody as Tbody, _Tr as Tr, _Th as Th, _Td as Td, _Column as TableColumn }
 
-export const _TableComponent = Table
-export const _TheadComponent = _Thead
-export const _TbodyComponent = _Tbody
-export const _TrComponent = _Tr
-export const _ThComponent = _Th
-export const _TdComponent = _Td
-export const _TableColumnComponent = _Column
+export const _TableComponent: typeof Table = Table
+export const _TheadComponent: typeof _Thead = _Thead
+export const _TbodyComponent: typeof _Tbody = _Tbody
+export const _TrComponent: typeof _Tr = _Tr
+export const _ThComponent: typeof _Th = _Th
+export const _TdComponent: typeof _Td = _Td
+export const _TableColumnComponent: typeof _Column = _Column
 
 export { Table }
 
 export { tableProps }
 
 export default Table
-export type TableProps = import('vue').ExtractPublicPropTypes<typeof import('./props').tableProps>
+export type TableProps = import('../_utils/public-props').CompatiblePublicProps<typeof import('./props').tableProps>
 
 export { defineTableConfig } from './typed-config'
 export type { TableDataPath, TypedTableRow, TypedTableRowKey, TypedTableColumn, TypedTableSortable, TypedTableFilterable, TypedTableExpandable, TypedTableConfig } from './typed-config'

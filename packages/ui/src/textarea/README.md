@@ -334,7 +334,7 @@ import type {
 | `--c-textarea-height` | `auto` | `height` |
 | `--c-textarea-line-height` | `var(--c-line-height)` | `line-height` |
 | `--c-textarea-min-height` | `var(--c-sys-control-height-xl)` | `min-height` |
-| `--c-textarea-padding-horizontal` | `var(--c-sys-space-3)` | `padding` |
+| `--c-textarea-padding-horizontal` | `var(--c-sys-space-3)` | `padding`, `padding-inline-end` |
 | `--c-textarea-padding-vertical` | `var(--c-sys-space-1)` | `padding` |
 | `--c-textarea-placeholder-color` | `var(--c-sys-color-content-secondary)` | `color` |
 

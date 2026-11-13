@@ -4,7 +4,7 @@ import { optionValueText } from "../_components/field-presentation/option-labels
 import { withFieldPresentation } from "../_components/field-presentation/with-field-presentation"
 import Base from "./TreeSelect.vue"
 
-export default withFieldPresentation(Base, {
+const Presented: typeof Base = withFieldPresentation(Base, {
   selectionConfirmation: 'update',
   pauseSelectionWhileLoading: true,
   editor: ({ props, attrs, value, update, emit, slots, disabled, readonly }) =>
@@ -39,3 +39,5 @@ export default withFieldPresentation(Base, {
       },
     }),
 });
+
+export default Presented

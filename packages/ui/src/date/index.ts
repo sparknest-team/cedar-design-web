@@ -8,9 +8,9 @@ export type { ShortcutType } from './picker/types'
 export type { DatePickerProps } from './picker-props'
 export type { DateProps } from './props'
 
-const DatePicker = withInstall(_DatePicker)
+const DatePicker: import('../_utils/global-config').ComponentWithInstall<typeof _DatePicker> = withInstall(_DatePicker)
 
-const Date = withInstall(
+const Date: import('../_utils/global-config').ComponentWithInstall<typeof _Date & { Picker: typeof DatePicker }> = withInstall(
   _Date,
   Object.assign(_Date, {
     Picker: DatePicker,
@@ -22,8 +22,8 @@ export type DateInstance = InstanceType<typeof _Date>
 export type DatePickerInstance = InstanceType<typeof _DatePicker>
 
 export { Date, DatePicker, dateProps, datePickerProps }
-export const _DateComponent = Date
-export const _DatePickerComponent = DatePicker
+export const _DateComponent: typeof Date = Date
+export const _DatePickerComponent: typeof DatePicker = DatePicker
 
 export default Date
 

@@ -1,7 +1,7 @@
 import { withInstall } from "../_utils/global-config";
 import _Scheduler from "./Scheduler.vue";
 
-const Scheduler = withInstall(_Scheduler);
+const Scheduler: import('../_utils/global-config').ComponentWithInstall<typeof _Scheduler> = withInstall(_Scheduler);
 export { Scheduler };
 export { schedulerProps } from "./props";
 export type {
@@ -22,7 +22,7 @@ export type {
 export type { SchedulerEmits } from "./use-scheduler";
 export type SchedulerInstance = InstanceType<typeof _Scheduler>;
 export * from "./core";
-export const _SchedulerComponent = Scheduler;
+export const _SchedulerComponent: typeof Scheduler = Scheduler;
 export default Scheduler;
 
 export { useSchedulerDataSource } from "./use-data-source";

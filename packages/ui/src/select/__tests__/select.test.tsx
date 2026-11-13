@@ -15,7 +15,11 @@ describe('Select', () => {
       props: { options: ['Alpha', 'Beta'], placeholder: 'Choose' },
     })
 
-    expect(wrapper.find('.c-select').exists()).toBe(true)
+    try {
+      expect(wrapper.find('.c-select').exists()).toBe(true)
+    } finally {
+      wrapper.unmount()
+    }
   })
 
   test('passes option tagProps to selected tags in multiple mode', () => {
@@ -34,9 +38,13 @@ describe('Select', () => {
       },
     })
 
-    const tags = wrapper.findAll('.c-tag')
-    expect(tags[0].classes()).toContain('c-tag--red')
-    expect(tags[1].classes()).toContain('c-tag--nowrap')
-    expect((tags[1].element as HTMLElement).style.maxWidth).toBe('160px')
+    try {
+      const tags = wrapper.findAll('.c-tag')
+      expect(tags[0].classes()).toContain('c-tag--red')
+      expect(tags[1].classes()).toContain('c-tag--nowrap')
+      expect((tags[1].element as HTMLElement).style.maxWidth).toBe('160px')
+    } finally {
+      wrapper.unmount()
+    }
   })
 })

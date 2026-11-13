@@ -1,7 +1,17 @@
-import { computed, inject, Ref, toRef } from 'vue'
+import { computed, inject, Ref, toRef, type ComputedRef } from 'vue'
 import { FormItemContext, formItemInjectionKey, formInjectionKey } from '../form/context'
 import { ComponentSize } from '../_utils/constant'
 import { resolveFormControlState } from '../_utils/form-control-context'
+
+export interface FormItemResolvedState {
+  formItemCtx: FormItemContext
+  mergedSize: ComputedRef<ComponentSize | undefined>
+  mergedDisabled: ComputedRef<boolean>
+  mergedReadonly: ComputedRef<boolean>
+  mergedError: ComputedRef<boolean>
+  feedback: Ref<FormItemContext['feedback']>
+  eventHandlers: Ref<FormItemContext['eventHandlers']>
+}
 
 export const useFormItem = ({
   size,
@@ -16,7 +26,7 @@ export const useFormItem = ({
   error?: Ref<boolean | undefined>
   // private
   uninject?: boolean
-} = {}) => {
+} = {}): FormItemResolvedState => {
   const formItemCtx = (!uninject ? inject(formItemInjectionKey, undefined) : undefined) ?? ({} as FormItemContext)
 
   const form = !uninject ? inject(formInjectionKey, undefined) : undefined
@@ -29,8 +39,8 @@ export const useFormItem = ({
 
   const mergedError = computed(() => resolveFormControlState(error?.value, formItemCtx.error, undefined, false))
 
-  const feedback = toRef(formItemCtx, 'feedback')
-  const eventHandlers = toRef(formItemCtx, 'eventHandlers')
+  const feedback: Ref<FormItemContext['feedback']> = toRef(formItemCtx, 'feedback')
+  const eventHandlers: Ref<FormItemContext['eventHandlers']> = toRef(formItemCtx, 'eventHandlers')
 
   return {
     formItemCtx,

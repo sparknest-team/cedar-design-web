@@ -186,7 +186,12 @@ export function isZodResult(result: unknown): result is ZodSafeParseResult<any> 
   return isPlainObject(result) && hasOwn(result, 'success')
 }
 
-export function useValidation() {
+export function useValidation(): {
+  errorMessage: Ref<string>
+  validate: (ruleOrRules: any | any[], value: any, apis?: any) => Promise<boolean>
+  resetValidation: () => void
+  validateWithTrigger: <T>(validateTrigger: T[], trigger: T, rules: any, value: any, apis?: any) => Promise<void>
+} {
   const errorMessage: Ref<string> = ref('')
 
   const validate = async (ruleOrRules: any | any[], value: any, apis?: any): Promise<boolean> => {
@@ -236,7 +241,7 @@ export function useRouteListener(listener: () => void) {
   useEventListener(() => window, 'popstate', listener)
 }
 
-export function useTeleport() {
+export function useTeleport(): { disabled: Ref<boolean> } {
   const disabled: Ref<boolean> = ref(false)
 
   onActivated(() => {

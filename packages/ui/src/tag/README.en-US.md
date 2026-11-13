@@ -182,8 +182,8 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-tag-blue-bg-hover` | `rgb(var(--c-blue-2))`<br>`rgba(var(--c-blue-6), 0.35)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-blue-border-color` | `transparent` | `border` |
 | `--c-tag-blue-border-color-hover` | `transparent` | `border-color` |
-| `--c-tag-blue-icon-color` | `rgb(var(--c-blue-9))` | `color` |
-| `--c-tag-blue-text-color` | `rgb(var(--c-blue-9))` | `border-color`, `color` |
+| `--c-tag-blue-icon-color` | `rgb(var(--c-blue-6))` | `color` |
+| `--c-tag-blue-text-color` | `rgb(var(--c-blue-6))` | `border-color`, `color` |
 | `--c-tag-border-radius` | `var(--c-sys-radius-sm)` | `border-radius` |
 | `--c-tag-border-type` | `solid` | `border` |
 | `--c-tag-border-width` | `1px` | `border`, `line-height` |
@@ -191,8 +191,8 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-tag-brand-bg-hover` | `rgb(var(--c-brand-2))`<br>`rgba(var(--c-brand-6), 0.35)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-brand-border-color` | `transparent` | `border` |
 | `--c-tag-brand-border-color-hover` | `transparent` | `border-color` |
-| `--c-tag-brand-icon-color` | `rgb(var(--c-brand-9))` | `color` |
-| `--c-tag-brand-text-color` | `rgb(var(--c-brand-9))` | `border-color`, `color` |
+| `--c-tag-brand-icon-color` | `rgb(var(--c-brand-6))` | `color` |
+| `--c-tag-brand-text-color` | `rgb(var(--c-brand-6))` | `border-color`, `color` |
 | `--c-tag-close-font-size` | `var(--c-sys-font-size-xs)` | `font-size` |
 | `--c-tag-close-margin-left` | `var(--c-spacing-2)` | `margin-left`, `margin-right` |
 | `--c-tag-custom-text-color` | `var(--c-sys-color-content-on-dark)` | `color` |
@@ -200,8 +200,8 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-tag-cyan-bg-hover` | `rgb(var(--c-cyan-2))`<br>`rgba(var(--c-cyan-6), 0.35)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-cyan-border-color` | `transparent` | `border` |
 | `--c-tag-cyan-border-color-hover` | `transparent` | `border-color` |
-| `--c-tag-cyan-icon-color` | `rgb(var(--c-cyan-9))` | `color` |
-| `--c-tag-cyan-text-color` | `rgb(var(--c-cyan-9))` | `border-color`, `color` |
+| `--c-tag-cyan-icon-color` | `rgb(var(--c-cyan-6))` | `color` |
+| `--c-tag-cyan-text-color` | `rgb(var(--c-cyan-6))` | `border-color`, `color` |
 | `--c-tag-default-bg` | `var(--c-sys-color-state-hover)` | `background-color` |
 | `--c-tag-default-bg-hover` | `var(--c-color-fill-3)` | `background-color` |
 | `--c-tag-default-border-color` | `transparent` | `border-color` |
@@ -213,8 +213,8 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-tag-gold-bg-hover` | `rgb(var(--c-gold-2))`<br>`rgba(var(--c-gold-6), 0.35)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-gold-border-color` | `transparent` | `border` |
 | `--c-tag-gold-border-color-hover` | `transparent` | `border-color` |
-| `--c-tag-gold-icon-color` | `rgb(var(--c-gold-9))` | `color` |
-| `--c-tag-gold-text-color` | `rgb(var(--c-gold-9))` | `border-color`, `color` |
+| `--c-tag-gold-icon-color` | `rgb(var(--c-gold-6))` | `color` |
+| `--c-tag-gold-text-color` | `rgb(var(--c-gold-6))` | `border-color`, `color` |
 | `--c-tag-gray-bg` | `rgb(var(--c-gray-2))`<br>`rgba(var(--c-gray-6), 0.2)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-gray-bg-hover` | `rgb(var(--c-gray-3))`<br>`rgba(var(--c-gray-6), 0.35)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-gray-border-color` | `transparent` | `border` |
@@ -225,53 +225,53 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-tag-green-bg-hover` | `rgb(var(--c-green-2))`<br>`rgba(var(--c-green-6), 0.35)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-green-border-color` | `transparent` | `border` |
 | `--c-tag-green-border-color-hover` | `transparent` | `border-color` |
-| `--c-tag-green-icon-color` | `rgb(var(--c-green-9))` | `color` |
-| `--c-tag-green-text-color` | `rgb(var(--c-green-9))` | `border-color`, `color` |
+| `--c-tag-green-icon-color` | `rgb(var(--c-green-6))` | `color` |
+| `--c-tag-green-text-color` | `rgb(var(--c-green-6))` | `border-color`, `color` |
 | `--c-tag-icon-margin-right` | `var(--c-spacing-2)` | `margin-left`, `margin-right` |
 | `--c-tag-lime-bg` | `rgb(var(--c-lime-1))`<br>`rgba(var(--c-lime-6), 0.2)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-lime-bg-hover` | `rgb(var(--c-lime-2))`<br>`rgba(var(--c-lime-6), 0.35)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-lime-border-color` | `transparent` | `border` |
 | `--c-tag-lime-border-color-hover` | `transparent` | `border-color` |
-| `--c-tag-lime-icon-color` | `rgb(var(--c-lime-9))` | `color` |
-| `--c-tag-lime-text-color` | `rgb(var(--c-lime-9))` | `border-color`, `color` |
+| `--c-tag-lime-icon-color` | `rgb(var(--c-lime-6))` | `color` |
+| `--c-tag-lime-text-color` | `rgb(var(--c-lime-6))` | `border-color`, `color` |
 | `--c-tag-magenta-bg` | `rgb(var(--c-magenta-1))`<br>`rgba(var(--c-magenta-6), 0.2)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-magenta-bg-hover` | `rgb(var(--c-magenta-2))`<br>`rgba(var(--c-magenta-6), 0.35)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-magenta-border-color` | `transparent` | `border` |
 | `--c-tag-magenta-border-color-hover` | `transparent` | `border-color` |
-| `--c-tag-magenta-icon-color` | `rgb(var(--c-magenta-9))` | `color` |
-| `--c-tag-magenta-text-color` | `rgb(var(--c-magenta-9))` | `border-color`, `color` |
+| `--c-tag-magenta-icon-color` | `rgb(var(--c-magenta-6))` | `color` |
+| `--c-tag-magenta-text-color` | `rgb(var(--c-magenta-6))` | `border-color`, `color` |
 | `--c-tag-orange-bg` | `rgb(var(--c-orange-1))`<br>`rgba(var(--c-orange-6), 0.2)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-orange-bg-hover` | `rgb(var(--c-orange-2))`<br>`rgba(var(--c-orange-6), 0.35)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-orange-border-color` | `transparent` | `border` |
 | `--c-tag-orange-border-color-hover` | `transparent` | `border-color` |
-| `--c-tag-orange-icon-color` | `rgb(var(--c-orange-9))` | `color` |
-| `--c-tag-orange-text-color` | `rgb(var(--c-orange-9))` | `border-color`, `color` |
+| `--c-tag-orange-icon-color` | `rgb(var(--c-orange-6))` | `color` |
+| `--c-tag-orange-text-color` | `rgb(var(--c-orange-6))` | `border-color`, `color` |
 | `--c-tag-orangered-bg` | `rgb(var(--c-orangered-1))`<br>`rgba(var(--c-orangered-6), 0.2)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-orangered-bg-hover` | `rgb(var(--c-orangered-2))`<br>`rgba(var(--c-orangered-6), 0.35)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-orangered-border-color` | `transparent` | `border` |
 | `--c-tag-orangered-border-color-hover` | `transparent` | `border-color` |
-| `--c-tag-orangered-icon-color` | `rgb(var(--c-orangered-9))` | `color` |
-| `--c-tag-orangered-text-color` | `rgb(var(--c-orangered-9))` | `border-color`, `color` |
+| `--c-tag-orangered-icon-color` | `rgb(var(--c-orangered-6))` | `color` |
+| `--c-tag-orangered-text-color` | `rgb(var(--c-orangered-6))` | `border-color`, `color` |
 | `--c-tag-padding-horizontal` | `var(--c-spacing-4)` | `padding` |
 | `--c-tag-padding-vertical` | `0` | `line-height`, `padding` |
 | `--c-tag-pinkpurple-bg` | `rgb(var(--c-pinkpurple-1))`<br>`rgba(var(--c-pinkpurple-6), 0.2)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-pinkpurple-bg-hover` | `rgb(var(--c-pinkpurple-2))`<br>`rgba(var(--c-pinkpurple-6), 0.35)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-pinkpurple-border-color` | `transparent` | `border` |
 | `--c-tag-pinkpurple-border-color-hover` | `transparent` | `border-color` |
-| `--c-tag-pinkpurple-icon-color` | `rgb(var(--c-pinkpurple-9))` | `color` |
-| `--c-tag-pinkpurple-text-color` | `rgb(var(--c-pinkpurple-9))` | `border-color`, `color` |
+| `--c-tag-pinkpurple-icon-color` | `rgb(var(--c-pinkpurple-6))` | `color` |
+| `--c-tag-pinkpurple-text-color` | `rgb(var(--c-pinkpurple-6))` | `border-color`, `color` |
 | `--c-tag-purple-bg` | `rgb(var(--c-purple-1))`<br>`rgba(var(--c-purple-6), 0.2)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-purple-bg-hover` | `rgb(var(--c-purple-2))`<br>`rgba(var(--c-purple-6), 0.35)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-purple-border-color` | `transparent` | `border` |
 | `--c-tag-purple-border-color-hover` | `transparent` | `border-color` |
-| `--c-tag-purple-icon-color` | `rgb(var(--c-purple-9))` | `color` |
-| `--c-tag-purple-text-color` | `rgb(var(--c-purple-9))` | `border-color`, `color` |
+| `--c-tag-purple-icon-color` | `rgb(var(--c-purple-6))` | `color` |
+| `--c-tag-purple-text-color` | `rgb(var(--c-purple-6))` | `border-color`, `color` |
 | `--c-tag-red-bg` | `rgb(var(--c-red-1))`<br>`rgba(var(--c-red-6), 0.2)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-red-bg-hover` | `rgb(var(--c-red-2))`<br>`rgba(var(--c-red-6), 0.35)` (`:root[cedar-theme="dark"]`) | `background-color` |
 | `--c-tag-red-border-color` | `transparent` | `border` |
 | `--c-tag-red-border-color-hover` | `transparent` | `border-color` |
-| `--c-tag-red-icon-color` | `rgb(var(--c-red-9))` | `color` |
-| `--c-tag-red-text-color` | `rgb(var(--c-red-9))` | `border-color`, `color` |
+| `--c-tag-red-icon-color` | `rgb(var(--c-red-6))` | `color` |
+| `--c-tag-red-text-color` | `rgb(var(--c-red-6))` | `border-color`, `color` |
 | `--c-tag-round-radius` | `100px` | `border-radius` |
 | `--c-tag-size-lg` | `var(--c-size-7)` | `height`, `line-height` |
 | `--c-tag-size-lg-font-size` | `var(--c-sys-font-size-md)` | `font-size` |

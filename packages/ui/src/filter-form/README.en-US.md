@@ -11,6 +11,8 @@ Start with the basic example, then compare related settings before moving to con
 
 ### Basic usage
 
+Actions reserve space according to their actual width and keep the expand/collapse control and action buttons on one line. When collapsed, actions sit at the right of the first row. When expanded, fields use the full column layout and actions sit at the right of the last row, moving to a new row if needed. One- and two-column layouts retain a separate action row.
+
 Preview configuration: `v-model:collapsed="collapsed"`, `:fields="fields"`, `:rules="rules"`.
 
 <demo src="./__demos__/basic.vue"></demo>

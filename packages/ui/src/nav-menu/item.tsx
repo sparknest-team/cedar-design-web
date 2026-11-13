@@ -156,7 +156,7 @@ export default defineComponent({
         emit('click', event)
       },
       onKeydown: (event: KeyboardEvent) => {
-        if (!available() || event.target !== event.currentTarget || disabled.value) return
+        if (!available() || event.defaultPrevented || event.isComposing || event.keyCode === 229 || event.target !== event.currentTarget || disabled.value) return
         if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); event.stopPropagation(); if (hasPopup()) setOpen(!open.value); else reference.value?.click() }
         if (event.key === 'ArrowDown' && hasPopup()) { event.preventDefault(); event.stopPropagation(); setOpen(true); focusPanel() }
       },
@@ -167,7 +167,7 @@ export default defineComponent({
       role: slots.content ? 'dialog' : undefined, 'aria-labelledby': slots.content ? panelLabelledBy() : undefined,
       class: [n('popup'), n(`--${parent?.props.size ?? 'md'}`), n(`panel--${props.popupLayout}`), { [n('panel--custom')]: !!slots.content }],
       style: [(props.popupLayout === 'full-width' || props.popupLayout === 'full') ? { position: 'fixed', left: 0, right: 0, top: `${top.value}px`, maxHeight: `calc(100dvh - ${top.value}px)`, height: props.popupLayout === 'full' ? `calc(100dvh - ${top.value}px)` : undefined } : props.popupLayout === 'full-height' ? { position: 'fixed', top: 0, bottom: 0, maxHeight: '100dvh', width: 'var(--c-nav-menu-panel-width)', ...fullHeightPosition.value } : {}, props.popupStyle],
-      onKeydown: (event: KeyboardEvent) => { if (available() && !disabled.value && event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); close() } },
+      onKeydown: (event: KeyboardEvent) => { if (available() && !disabled.value && !event.defaultPrevented && !event.isComposing && event.keyCode !== 229 && event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); close() } },
     }, slots.content?.(context()) ?? [h(NavMenu, {
       options: props.options, fieldNames: props.fieldNames, modelValue: value.value, mode: props.optionsMode,
       size: parent?.props.size,

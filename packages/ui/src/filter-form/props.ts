@@ -77,4 +77,4 @@ export const filterFormProps = {
   },
 }
 
-export type FilterFormProps = import("vue").ExtractPublicPropTypes<typeof filterFormProps>
+export type FilterFormProps = import('../_utils/public-props').CompatiblePublicProps<typeof filterFormProps>

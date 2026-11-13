@@ -1,6 +1,8 @@
 import type { StyleVars } from '../../theme-provider'
 
 const mapleLight: StyleVars = {
+  '--c-select-popup-option-border-radius': 'var(--c-sys-radius-lg)',
+  '--c-selection-editor-option-radius': 'var(--c-selection-editor-radius)',
   '--c-color-scheme': 'light',
   '--c-color-body': 'var(--c-color-bg-1)',
   '--c-color-text': 'var(--c-color-text-1)',

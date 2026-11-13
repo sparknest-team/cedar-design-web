@@ -2,11 +2,11 @@ import { withInstall } from '../_utils/global-config'
 import _TreeSelect from './presentation'
 import { treeSelectProps } from './props'
 
-const TreeSelect = withInstall(_TreeSelect, Object.assign(_TreeSelect, {}), { components: [_TreeSelect] })
+const TreeSelect: import('../_utils/global-config').ComponentWithInstall<typeof _TreeSelect> = withInstall(_TreeSelect, Object.assign(_TreeSelect, {}), { components: [_TreeSelect] })
 
 export type TreeSelectInstance = InstanceType<typeof _TreeSelect> & import('./types').TreeSelectExpose
 
-export const _TreeSelectComponent = TreeSelect
+export const _TreeSelectComponent: typeof TreeSelect = TreeSelect
 
 export { TreeSelect }
 

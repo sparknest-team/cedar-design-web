@@ -51,7 +51,9 @@ export function replaceMentionRange(
 /** Find the single contiguous change reported by a native input event. */
 export function diffMentionText(previous: string, next: string) {
   let start = 0
-  while (start < previous.length && start < next.length && previous[start] === next[start]) start++
+  while (start < previous.length && start < next.length && previous[start] === next[start]) {
+    start++
+  }
   let oldEnd = previous.length
   let newEnd = next.length
   while (oldEnd > start && newEnd > start && previous[oldEnd - 1] === next[newEnd - 1]) {

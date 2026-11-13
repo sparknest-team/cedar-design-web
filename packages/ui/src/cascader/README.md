@@ -284,7 +284,7 @@ load-more 属性有提供 done 函数进行回调，可以在回调中传入懒�
 | `default-input-value` | 非受控初始搜索文本，独立于选中值，仅初始化时读取 | `string` | `''` |
 | `multiple` | 多选；默认启用搜索 | `boolean` | `false` |
 | `size` | 完整支持 xs、sm、md、lg、xl，未设置时继承分组与表单 | `ComponentSize`<br>`'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `md` |
-| `variant` | filled、outline、standard；未设置时继承 InputGroup | `FormControlVariant`<br>`'standard' \| 'filled' \| 'outline'` | `filled` |
+| `variant` | filled、outline、standard；未设置时继承 InputGroup | `FormControlVariant`<br>`'standard' \| 'filled' \| 'outline'` | `outline` |
 | `disabled` | 禁用状态；显式值优先于继承的 Form / Group 状态 | `boolean` | `undefined` |
 | `readonly` | 只读状态；显式值优先于继承的 Form / Group 状态 | `boolean` | `undefined` |
 | `error` | 错误状态；显式值优先于继承的 Form / Group 状态 | `boolean` | `undefined` |
@@ -444,6 +444,8 @@ option({ data }) 接收规范化 CascaderOptionInfo，data.raw 是原始选项�
 
 公开类型包含 CascaderBaseValue、CascaderOptionInfo、CascaderReadScope、CascaderEmits、CascaderSlots、CascaderExpose，可从根入口及 cascader 子入口导入。纯 CascaderPanel 只接收选项数组，不接管根候选加载函数。
 
+后续验收（尚未完成）：使用真实读屏器（如 VoiceOver、NVDA）及受支持的浏览器，检查字段名称、层级导航与展开状态、搜索与选择、单选和多选、虚拟列表及表单错误的实际播报。
+
 ## CSS Variables
 
 <!-- component-css-variables:start -->
@@ -479,7 +481,7 @@ option({ data }) 接收规范化 CascaderOptionInfo，data.raw 是原始选项�
 | `--c-cascader-popup-box-shadow` | `0 4px 10px rgba(0, 0, 0, 0.1)` | `box-shadow` |
 | `--c-cascader-popup-color-border` | `var(--c-color-fill-3)` | `border`, `border-inline-end`, `border-top` |
 | `--c-cascader-popup-max-height` | `200px` | `height` |
-| `--c-cascader-popup-padding-vertical` | `var(--c-sys-space-2)` | `padding` |
+| `--c-cascader-popup-padding-vertical` | `var(--c-sys-space-2)` | `padding`, `padding-block-end` |
 | `--c-cascader-size-item-height` | `36px` | `height`, `line-height` |
 | `--c-cascader-size-item-icon` | `12px` | `height`, `width` |
 | `--c-cascader-slide-margin` | `120px` | `margin-inline-start` |

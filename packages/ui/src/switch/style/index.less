@@ -26,7 +26,10 @@
     position: absolute;
     inset: calc(-1 * var(--c-switch-hit-area));
   }
-  &:focus-visible { outline: var(--c-switch-focus-width) solid var(--c-switch-track-active-background); outline-offset: var(--c-switch-focus-width); }
+  &:focus { outline: none; }
+  &:focus-visible &__track {
+    box-shadow: inset 0 0 0 1px #fff, inset 0 0 0 var(--c-switch-focus-width) #000;
+  }
   &--size-sm { --c-switch-scale: var(--c-switch-size-sm-scale); }
   &--size-lg { --c-switch-scale: var(--c-switch-size-lg-scale); }
   &--disabled, &--loading { opacity: var(--c-switch-disabled-opacity); cursor: not-allowed; }

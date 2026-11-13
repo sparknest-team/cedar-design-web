@@ -4,13 +4,18 @@ permalink: /components/form/
 
 # Form
 
+
+横向表单项默认不使用 Row 的栅格 gutter，字段之间保留默认 16px 间距；通过 `row-props.gutter` 显式配置时以业务设置为准。表单输入和选择字段默认使用 `outline`，仍可显式指定 `filled` 或 `standard`。
+
 ## 字段名称
 
-在 Shadow DOM 中使用延迟编辑 Slider 时，若弹层传送到 `body`，浏览器可能无法通过 ID 将弹层内控件与 Shadow DOM 中的提示或错误关联。可设置 `:popup-container="false"`，使弹层留在同一根节点；仍需为控件提供清晰名称。
+显式 `validate-status="error"` 且没有自动校验错误时，字段会通过 `aria-describedby` 关联可见的 `help` 文案或插槽；业务已有的描述会保留。自动错误出现时优先关联自动错误。
+
+在 Shadow DOM 中使用延迟编辑 Slider 时，若弹层传送到 `body`，浏览器可能无法通过 ID 将弹层内控件与 Shadow DOM 中的提示或错误关联。可设置 `:popup-container="false"`，或将 `popup-container` 设为同一 ShadowRoot 内的元素，使弹层与提示留在同一根节点；仍需为控件提供清晰名称。容器元素需要由应用提供，并考虑样式、定位和裁剪。
 
 直接编辑模式下，为单个字段设置可见标签时，可将 FormItem 的 `label-attrs` 中的 `for` 与控件的 `id` 对应；选择、日期和时间字段的原生输入不会用 placeholder 覆盖已关联的标签。显式 `aria-label` 或 `aria-labelledby` 仍按原生无障碍名称规则优先。placeholder 只是未提供标签时的回退，不能替代清晰的字段标签。日期和时间范围字段在 FormItem 中会将表单标签关联到范围分组；仍需通过 `input-attrs` 分别提供能够区分起止端点的名称。若 `label-attrs.for` 指向其他控件，不会将该标签误关联到范围分组。 当前未设置 `for` 时，范围控件会引用最近的 FormItem 标签，即使同一表单项还有其他控件。混合字段请将范围控件放在独立的有样式 FormItem 中并分别命名，或通过明确的 `for` 指向实际目标并为其他控件提供独立名称。单值 Slider 在 `for` 匹配组件 `id` 时为滑块及可选数字输入关联该标签；点击默认原生标签可聚焦未禁用的滑块；阻止标签点击默认行为可取消该聚焦。范围 Slider 的 `id` 与 `for` 匹配时，表单标签命名整个分组；仍应使用 `aria-label` 数组分别命名两个端点。 `tooltip` 提示按钮可单独聚焦，其名称不会合并到字段标签中。
 
-Transfer 在未设置 `for` 时也会引用最近的 FormItem 标签，即使同一项内有其他字段。混合使用时可将 Transfer 放入单独的 FormItem，或为它提供明确名称，并为其他字段分别关联标签。
+Transfer 和 ColorPicker 在未设置 `for` 且未提供明确名称时也会引用最近的 FormItem 标签，即使同一项内有其他字段。混合使用时可将它们分别放入单独的 FormItem，或为每个控件提供明确名称，并为其他字段分别关联标签。
 
 具有数据收集、校验和提交功能的表单，包含复选框、单选框、输入框、下拉选择框等元素。
 
@@ -380,13 +385,13 @@ Explicit validate() or validateField() invalidates a pending older native submit
 
 ### 五档密度与项目间距
 
-xs/sm/md/lg/xl 均通过 size 类选择对应几何。项目下间距和验证文案预留高度共同使用 size-*-item-margin-bottom；inline 使用独立 inline-item-margin-bottom，error/help 不重复添加项目下间距。
+xs/sm/md/lg/xl 均通过 size 类选择对应几何；所有尺寸的项目下间距默认均为 16px，控件高度和标签字号仍随 size 变化。项目下间距和验证文案预留高度共同使用 size-*-item-margin-bottom；inline 使用独立 inline-item-margin-bottom，error/help 不重复添加项目下间距。
 
 | 变量                                  | 默认值                      |
 | ------------------------------------- | --------------------------- |
 | `--c-form-size-xl-height`             | `var(--c-size-xl)`          |
 | `--c-form-size-xl-label-font-size`    | `var(--c-sys-font-size-lg)` |
-| `--c-form-size-xl-item-margin-bottom` | `var(--c-spacing-8)`        |
+| `--c-form-size-xl-item-margin-bottom` | `var(--c-spacing-7)`        |
 
 ### edit-mode 继承规则
 
@@ -658,16 +663,16 @@ import type {
 | `--c-form-required-symbol-color` | `var(--c-sys-color-content-danger)` | `color` |
 | `--c-form-required-symbol-font-size` | `var(--c-font-size-body-1)` | `font-size` |
 | `--c-form-size-lg-height` | `var(--c-size-lg)` | `line-height`, `min-height` |
-| `--c-form-size-lg-item-margin-bottom` | `var(--c-spacing-8)` | `line-height`, `margin-bottom`, `min-height` |
+| `--c-form-size-lg-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height` |
 | `--c-form-size-lg-label-font-size` | `var(--c-font-size-body-3)` | `font-size` |
 | `--c-form-size-md-height` | `var(--c-size-md)` | `line-height`, `min-height` |
-| `--c-form-size-md-item-margin-bottom` | `var(--c-spacing-8)` | `line-height`, `margin-bottom`, `min-height` |
+| `--c-form-size-md-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height` |
 | `--c-form-size-md-label-font-size` | `var(--c-font-size-body-3)` | `font-size` |
 | `--c-form-size-sm-height` | `var(--c-size-sm)` | `line-height`, `min-height` |
-| `--c-form-size-sm-item-margin-bottom` | `var(--c-spacing-8)` | `line-height`, `margin-bottom`, `min-height` |
+| `--c-form-size-sm-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height` |
 | `--c-form-size-sm-label-font-size` | `var(--c-font-size-body-3)` | `font-size` |
 | `--c-form-size-xl-height` | `var(--c-size-xl)` | `line-height`, `min-height` |
-| `--c-form-size-xl-item-margin-bottom` | `var(--c-spacing-8)` | `line-height`, `margin-bottom`, `min-height` |
+| `--c-form-size-xl-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height` |
 | `--c-form-size-xl-label-font-size` | `var(--c-sys-font-size-lg)` | `font-size` |
 | `--c-form-size-xs-height` | `var(--c-size-xs)` | `line-height`, `min-height` |
 | `--c-form-size-xs-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height` |

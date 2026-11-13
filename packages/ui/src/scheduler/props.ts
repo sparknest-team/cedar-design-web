@@ -3,7 +3,8 @@ export type SchedulerVirtualListProps = Pick<
   VirtualListProps,
   "height" | "estimatedSize" | "buffer"
 >;
-import type { ExtractPublicPropTypes, PropType } from "vue";
+import type { PropType } from "vue";
+import type { CompatiblePublicProps as ExtractPublicPropTypes } from '../_utils/public-props'
 import { defineListenerProp } from "../_utils/components";
 import { isValidSchedulerHiddenDays } from "./core/visible-days";
 import { schedulerModes } from "./core";

@@ -7,9 +7,9 @@ import { dateRangeProps } from './props'
 export type { DateRangeProps } from './props'
 export type { DateRangePickerProps } from './picker-props'
 
-const DateRangePicker = withInstall(_DateRangePicker)
+const DateRangePicker: import('../_utils/global-config').ComponentWithInstall<typeof _DateRangePicker> = withInstall(_DateRangePicker)
 
-const DateRange = withInstall(
+const DateRange: import('../_utils/global-config').ComponentWithInstall<typeof _DateRange & { Picker: typeof DateRangePicker }> = withInstall(
   _DateRange,
   Object.assign(_DateRange, {
     Picker: DateRangePicker,
@@ -21,8 +21,8 @@ export type DateRangeInstance = InstanceType<typeof _DateRange>
 export type DateRangePickerInstance = InstanceType<typeof _DateRangePicker>
 
 export { DateRange, DateRangePicker, dateRangeProps, dateRangePickerProps }
-export const _DateRangeComponent = DateRange
-export const _DateRangePickerComponent = DateRangePicker
+export const _DateRangeComponent: typeof DateRange = DateRange
+export const _DateRangePickerComponent: typeof DateRangePicker = DateRangePicker
 
 export default DateRange
 

@@ -1,3 +1,4 @@
+import type { SelectOptionTagProps } from './types'
 import {validSelectionCount,validSearchDelay} from '../_utils/selection-validation'
 import type {TagProps} from '../tag'
 import { fieldLoadingProps } from '../field-decorator/props'
@@ -128,7 +129,7 @@ export const selectProps = {
    * @zh 选择框的变体
    * @en The variant of the select
    * @values 'filled', 'outline', 'standard'
-   * @default-value 'filled'
+   * @default-value 'outline'
    */
   variant: {
     type: String as PropType<FormControlVariant>,
@@ -369,7 +370,7 @@ export const selectProps = {
   },
 };
 
-export type SelectProps = import("vue").ExtractPublicPropTypes<
+export type SelectProps = import('../_utils/public-props').CompatiblePublicProps<
   typeof selectProps
 >;
 
@@ -397,7 +398,7 @@ export const optionProps = {
      * @en Displayed tag attributes
      */
     tagProps: {
-      type: Object as PropType<TagProps>,
+      type: Object as PropType<SelectOptionTagProps>,
     },
     /**
      * @zh 用于手动指定选项的 index

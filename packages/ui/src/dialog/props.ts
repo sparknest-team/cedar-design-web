@@ -1,3 +1,4 @@
+import type { CompatibleStyleValue as StyleValue } from '../_utils/style-value'
 import { readingDirectionProp } from '../_utils/direction'
 import type { DialogBeforeClose } from "./types";
 import { popupContainerProp } from "../_utils/popup-container";
@@ -5,7 +6,6 @@ import type {
   CSSProperties,
   ExtractPropTypes,
   PropType,
-  StyleValue,
 } from "vue";
 import type { ButtonProps } from "../button";
 import type { DialogAction, DialogType } from "./types";
@@ -165,6 +165,6 @@ export const dialogProps = {
   zIndex: Number,
 };
 
-export type DialogProps = import("vue").ExtractPublicPropTypes<
+export type DialogProps = import("../_utils/public-props").CompatiblePublicProps<
   typeof dialogProps
 >;

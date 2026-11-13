@@ -6,7 +6,7 @@ import { projectMentionParts } from './token-edit'
 import { resolveMentionLabel } from './token-label'
 import { mentionKey, mentionLabelsKey, syncMentionLabels } from './selected-labels'
 
-export default withFieldPresentation(Base, {
+const Presented: typeof Base = withFieldPresentation(Base, {
   methods: ['focus', 'blur'], intent: 'input',
   setup: ({ props, value, options, editorActive, draftActive }) => {
     const labels = reactive(new Map<string, string>())
@@ -26,3 +26,5 @@ export default withFieldPresentation(Base, {
     ? projectMentionParts(parseMentionParts(value ?? ''), id => resolveMentionLabel(id, Array.isArray(props.options) ? props.options : [], props.fallbackOption, labels.get(mentionKey(id)))).map(span => span.text).join('')
     : String(value ?? ''),
 })
+
+export default Presented

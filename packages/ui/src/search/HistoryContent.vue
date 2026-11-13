@@ -65,7 +65,7 @@
 
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
-import type { UnwrapNestedRefs } from 'vue'
+import type { CompatibleReactive as UnwrapNestedRefs } from '../_utils/compatible-reactive'
 import { createNamespace } from '../_utils/global-config'
 import SearchButton from '../button/base'
 import SearchInput from '../input/base'

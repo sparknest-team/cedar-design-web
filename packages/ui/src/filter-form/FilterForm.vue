@@ -30,9 +30,9 @@
         </FormItem>
       </GridItem>
 
-      <GridItem v-if="showSuffixItem" #="{ overflow }" suffix :span="2">
+      <GridItem v-if="showSuffixItem" #="{ overflow }" suffix :span="responsiveCols <= 2 ? 2 : actionSpan">
         <FormItem hide-label :class="classes(n('action-item'))">
-          <div :class="classes(n('actions'))">
+          <div ref="actionsRef" :class="classes(n('actions'))">
             <button
               v-if="collapsible && (overflow || !collapsed_)"
               type="button"
@@ -61,10 +61,12 @@ import { cloneDeep, isEqual } from 'lodash-es'
 import { getValueByPath, setValueByPath } from '../_utils/get-value-by-path'
 import { createNamespace } from '../_utils/global-config'
 import { isString } from '../_utils/is'
+import { useElementResize } from '../_utils/resize-observer'
 import Form, { FormItem, type FormInstance } from '../form'
 import Grid, { GridItem } from '../grid'
 import { useResponsiveState } from '../grid/hook/use-responsive-state'
 import type { ResponsiveValue } from '../grid/types'
+import { resolveGridCols } from '../grid/validation'
 import { useI18n } from '../locale'
 import { filterFormProps } from './props'
 import {
@@ -95,6 +97,48 @@ const responsiveCols = useResponsiveState(
 )
 
 const showSuffixItem = computed(() => props.collapsible || Boolean(slots.actions))
+
+const actionsRef = ref<HTMLElement>()
+const actionSpan = ref(1)
+
+function measureActions() {
+  const actions = actionsRef.value
+  const grid = actions?.closest<HTMLElement>('.c-grid')
+  const view = grid?.ownerDocument.defaultView
+  if (!actions || !grid || !view) return
+  const width = grid.getBoundingClientRect().width
+  if (width <= 0) return
+  const cols = resolveGridCols(responsiveCols.value)
+  const colGap = parseFloat(view.getComputedStyle(grid).columnGap) || 0
+  const actionGap = parseFloat(view.getComputedStyle(actions).columnGap) || 0
+  const children = Array.from(actions.children)
+  const requiredWidth =
+    children.reduce(
+      (width, child) => width + child.getBoundingClientRect().width,
+      0,
+    ) +
+    Math.max(0, children.length - 1) * actionGap
+  const columnWidth = (width - (cols - 1) * colGap) / cols
+  // Include internal column gaps and tolerate subpixel layout rounding.
+  actionSpan.value = Math.min(
+    cols,
+    Math.max(
+      1,
+      Math.ceil((requiredWidth + colGap - 0.5) / (columnWidth + colGap)),
+    ),
+  )
+}
+
+useElementResize(
+  () => [
+    actionsRef.value?.closest('.c-grid'),
+    actionsRef.value,
+    ...Array.from(actionsRef.value?.children ?? []),
+  ],
+  () => showSuffixItem.value,
+  measureActions,
+)
+watch(responsiveCols, measureActions, { flush: 'post' })
 
 type PendingChange = { value: Record<string, unknown>; field: string }
 let pendingChange: PendingChange | undefined

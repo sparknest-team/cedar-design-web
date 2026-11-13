@@ -2,7 +2,7 @@ import { withInstall } from '../_utils/global-config'
 import _Space from './space'
 import { spaceProps } from './props'
 
-const Space = withInstall(_Space, Object.assign(_Space, {
+const Space: import('../_utils/global-config').ComponentWithInstall<typeof _Space> = withInstall(_Space, Object.assign(_Space, {
 }), { components: [_Space] })
 
 export type SpaceInstance = InstanceType<typeof _Space>
@@ -18,6 +18,6 @@ export type {
 export { spaceProps }
 export { Space }
 
-export const _SpaceComponent = Space
+export const _SpaceComponent: typeof Space = Space
 
 export default Space

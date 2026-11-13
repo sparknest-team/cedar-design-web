@@ -2,12 +2,12 @@ import { withInstall } from '../_utils/global-config'
 import _BackTop from './BackTop.vue'
 import { backTopProps } from './props'
 
-const BackTop = withInstall(_BackTop, Object.assign(_BackTop, {
+const BackTop: import('../_utils/global-config').CedarComponentWithInstall<typeof _BackTop> = withInstall(_BackTop, Object.assign(_BackTop, {
 }), { components: [_BackTop] })
 
 export type BackTopInstance = InstanceType<typeof _BackTop>
 export type { BackTopProps, BackTopTarget, BackTopEasing } from './props'
 export { BackTop, backTopProps }
-export const _BackTopComponent = BackTop
+export const _BackTopComponent: typeof BackTop = BackTop
 
 export default BackTop
