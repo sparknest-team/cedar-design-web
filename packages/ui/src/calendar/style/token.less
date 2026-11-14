@@ -84,8 +84,8 @@
   --c-calendar-panel-text-color-cell-selected: var(~'--c-color-white');
   --c-calendar-panel-bg-cell-selected: rgb(var(~'--c-primary-6'));
   --c-calendar-panel-color-current-time-dot: rgb(var(~'--c-primary-6'));
-  --c-calendar-panel-cell-boundary-border-radius: (
-  (var(~'--c-calendar-panel-date-cell-circle-height') + var(~'--c-calendar-panel-date-cell-padding-vertical') * 2) / 2
-);
+  --c-calendar-panel-cell-boundary-border-radius: calc(
+    (var(--c-calendar-panel-date-cell-circle-height) + var(--c-calendar-panel-date-cell-padding-vertical) * 2) / 2
+  );
   --c-calendar-box-shadow: var(~'--c-color-primary-light-3');
 }
