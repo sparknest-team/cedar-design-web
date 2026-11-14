@@ -56,6 +56,14 @@ Choose a dimension to compare all its values side by side while keeping other se
 
 <demo src="./__demos__/image.vue"></demo>
 
+### Composing Tabs and nested cards
+
+Group headings use TypographyTitle.
+
+Compose Card, Tabs and vertical Space. Compact outlined cards group each panel; wide tables scroll within their own container on small screens. The industry panel uses section headings without extra cards.
+
+<demo src="./__demos__/nested-tabs.vue"></demo>
+
 ## Content and presentation
 
 ### Long title and tooltip

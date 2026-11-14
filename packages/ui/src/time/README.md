@@ -1,6 +1,6 @@
 ---
 title: Time 时间
-description: "表单时间字段。面板请使用 TimePicker。"
+description: "Time 时间字段与 TimePicker 时间面板的用法及对照。"
 permalink: /components/time/
 ---
 
@@ -10,9 +10,7 @@ permalink: /components/time/
 
 展开时，原生 combobox 通过 `aria-controls` 关联当前实例的命名弹层；关闭后同步更新状态并移除关联。`aria-label`、`aria-describedby` 可传递给原生控件。自定义 selected/触发插槽需自行保留可访问名称、键盘操作和状态关联。
 
-表单时间字段（带触发器）。内部使用 `TimePicker`。
-
-纯面板请使用 [`TimePicker`](/components/time-picker/)（默认无触发器）。时间范围字段请使用 [`TimeRange`](/components/time-range/)。
+`Time` 是带输入框和弹层的时间字段，`TimePicker` 是可直接嵌入页面的纯面板。本页集中展示两者及其共有配置：表单录入使用字段，自定义布局使用面板。时间范围字段请使用 [`TimeRange`](/components/time-range/)。
 
 ## 基础示例
 
@@ -196,6 +194,28 @@ open-trigger-target="icon" 时，输入区可以编辑或复制，只有右侧�
 ### 共享字段加载
 
 `loading` 控制共享字段加载状态；`loading-mode` 为 `default`（指示器）或 `line`（底部不定进度线），默认 `default`。渲染统一由 FieldDecorator 负责，不隐式改变 disabled/readonly；需要禁止编辑时单独设置。
+
+## TimePicker 嵌入式面板
+
+上方示例对照共有的格式、步长和边界；本节展示面板独有的选择与确认交互。输入、清空和弹层控制属于 `Time`，纯面板独立管理草稿。
+
+### 基础面板
+
+<demo src="./picker/__demos__/basic.vue"></demo>
+
+### 禁用部分时间选项
+
+禁用小时回调始终使用 0–23，十二小时显示也不改变回调参数。
+
+<demo src="./picker/__demos__/disabled-parts.vue"></demo>
+
+### 面板确认与隐藏选项
+
+选择先修改草稿，确认才提交。开启 `disable-confirm` 后有效选择立即提交，开启 `hide-disabled-options` 隐藏禁用选项；修改规则不会提交已有草稿。
+
+<demo src="./picker/__demos__/panel-behavior.vue"></demo>
+
+面板属性在下方 **TimePicker Props** 单独列出；完整事件与插槽见 [TimePicker 独立面板参考](/components/time-picker/#timepicker-events)。
 
 ## 阅读方向
 

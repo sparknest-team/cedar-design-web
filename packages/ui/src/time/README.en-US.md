@@ -5,6 +5,9 @@ permalink: /en/components/time/
 
 # Time
 
+`Time` is a time field with an input and popup; `TimePicker` is an embedded panel without a trigger. This page demonstrates both with shared values and rules. Use the field in forms and the panel in custom layouts. Range selection uses [`TimeRange`](/en/components/time-range/).
+
+
 A time field with a separate draft and confirmation step.
 
 ```ts
@@ -166,6 +169,28 @@ With open-trigger-target="icon", use the input area to edit or copy and the suff
 ### Shared field loading
 
 `loading` displays the shared field indicator. `loading-mode` is `default` (indicator) or `line` (an indeterminate bottom line); it defaults to `default`. Rendering belongs to FieldDecorator. Loading does not implicitly disable editing or change readonly. Set those states separately.
+
+## TimePicker embedded panel
+
+The examples above compare shared formats, steps and bounds. The following examples focus on panel selection and confirmation. Input, clearing and popup controls belong to `Time`; the panel manages its own draft.
+
+### Basic panel
+
+<demo src="./picker/__demos__/basic.vue"></demo>
+
+### Disabled time options
+
+Disabled-hour callbacks always receive hours from 0 to 23, including in twelve-hour mode.
+
+<demo src="./picker/__demos__/disabled-parts.vue"></demo>
+
+### Panel confirmation and hidden options
+
+Select a draft, then confirm to commit it. Enable `disable-confirm` to commit valid selections immediately, or `hide-disabled-options` to hide disabled options. Changing rules does not submit an existing draft.
+
+<demo src="./picker/__demos__/panel-behavior.vue"></demo>
+
+Panel attributes are listed separately under **TimePicker Props** below. See [TimePicker events and slots](/en/components/time-picker/#timepicker-events) for the standalone panel reference.
 
 ## Reading direction
 

@@ -60,6 +60,14 @@ permalink: /components/card/
 
 <demo src="./__demos__/image.vue"></demo>
 
+### 组合 Tabs 与嵌套卡片
+
+分组标题复用 TypographyTitle，通过 heading 设置标题层级。
+
+通过 Card、Tabs 和纵向 Space 组合内容。内层使用紧凑描边卡片，宽表格在自己的容器内横向滚动；产业链面板使用普通分组标题，避免额外嵌套卡片。
+
+<demo src="./__demos__/nested-tabs.vue"></demo>
+
 ## 内容与展示
 
 ### 长标题与提示

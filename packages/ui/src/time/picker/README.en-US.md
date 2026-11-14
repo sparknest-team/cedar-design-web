@@ -5,6 +5,8 @@ permalink: /en/components/time-picker/
 
 # Time Picker
 
+For field and panel demos together, see [Time and TimePicker](/en/components/time/). This page retains the standalone panel reference.
+
 Start with the basic example, then compare related settings before moving to controlled, asynchronous or combined use cases.
 
 ## Basic examples

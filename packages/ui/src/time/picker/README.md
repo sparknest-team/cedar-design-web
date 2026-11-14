@@ -4,6 +4,8 @@ permalink: /components/time-picker/
 
 # TimePicker
 
+字段与面板的合并示例请看 [Time 与 TimePicker](/components/time/)。本页保留独立面板参考，便于直接查阅。
+
 时间选择**面板**（默认无触发器）。
 
 ### 选择与滚动
