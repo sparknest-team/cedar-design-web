@@ -7,6 +7,12 @@ import type { SelectOptionData, SelectOptionGroup } from '../select/types'
 import type { MentionTokenValue } from './token-codec'
 
 export const mentionProps = {
+  /** Minimum number of characters after the prefix required to search. */
+  minSearchLength: { type: Number, default: 0, validator: (value: number) => Number.isInteger(value) && value >= 0 },
+  /** Debounce remote searches in milliseconds. */
+  searchDelay: { type: Number, default: 0, validator: (value: number) => Number.isFinite(value) && value >= 0 },
+  /** Commit the only enabled result after a search completes. */
+  autoCommitSingle: { type: Boolean, default: false },
   readonly: { type: Boolean, default: undefined },
   ...fieldPresentationProps,
   loading: fieldLoadingProps.loading,

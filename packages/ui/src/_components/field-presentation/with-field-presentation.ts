@@ -40,6 +40,8 @@ export interface FieldEditorContext {
   readonly: boolean
 }
 export interface FieldPresentationAdapter {
+  /** Component-specific clear value when an editor has no explicit emptyValue. */
+  clearFallback?: (props: Record<string, any>) => unknown
   /** Selection editors commit on a completed choice when confirmation is disabled. */
   selectionConfirmation?: 'update' | 'select'
   /** Pause selection mutations during loading while leaving search text editable. */
@@ -236,9 +238,10 @@ export function withFieldPresentation<T extends Component>(Base: T, adapter: Fie
             () => form.mergedDisabled.value || state.readPretty.value,
             (error) => emit('load-error', error),
             // AutoComplete debounces here; Cascader already debounces its search events.
-            () => (base.name.endsWith('AutoComplete') ? (props.searchDelay ?? 0) : 0),
+            () => (base.name.endsWith('AutoComplete') || base.name.endsWith('InputTag') || base.name.endsWith('Mention') ? (props.searchDelay ?? 0) : 0),
             base.props,
             true,
+            () => props.minSearchLength ?? 0,
           )
         : undefined
       if (source) {
@@ -378,7 +381,7 @@ export function withFieldPresentation<T extends Component>(Base: T, adapter: Fie
           return
         }
         const fallback =
-          'uncheckedValue' in props
+          adapter.clearFallback ? adapter.clearFallback(props) : 'uncheckedValue' in props
             ? props.uncheckedValue
             : typeof props.defaultValue === 'boolean'
               ? false

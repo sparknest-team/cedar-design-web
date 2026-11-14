@@ -1,7 +1,7 @@
 import { onActivated, onBeforeUnmount, onDeactivated, watch } from 'vue'
 
 /** Search requests belong to one active editor and are consumed before notifying. */
-export function useFieldSearch(delay: () => number, available: () => boolean, dispatch: (query: string) => void) {
+export function useFieldSearch(delay: () => number, available: () => boolean, dispatch: (query: string) => void, onPendingChange?: (pending: boolean) => void) {
   let active = true
   let disposed = false
   let generation = 0
@@ -15,6 +15,7 @@ export function useFieldSearch(delay: () => number, available: () => boolean, di
       if (previous.id !== undefined) {
         clearTimeout(previous.id)
       }
+      onPendingChange?.(false)
     }
   }
   const eligible = () => active && !disposed && available() && active && !disposed
@@ -30,6 +31,7 @@ export function useFieldSearch(delay: () => number, available: () => boolean, di
     }
     const ticket: NonNullable<typeof task> = { pending: true }
     task = ticket
+    onPendingChange?.(true)
     ticket.id = setTimeout(() => {
       if (task !== ticket || !ticket.pending) {
         return
@@ -40,7 +42,7 @@ export function useFieldSearch(delay: () => number, available: () => boolean, di
       }
       ticket.pending = false
       task = undefined
-      dispatch(query)
+      try { dispatch(query) } finally { if (!task) onPendingChange?.(false) }
     }, ms)
     if (task !== ticket || !ticket.pending || !active || disposed) {
       clearTimeout(ticket.id)

@@ -6,7 +6,7 @@ const InputTag: import('../_utils/global-config').ComponentWithInstall<typeof _I
 
 export type InputTagInstance = InstanceType<typeof _InputTag> & import('./types').InputTagExpose
 export type { InputTagProps } from './props'
-export type { TagData, InputTagFieldNames } from './types'
+export type { TagData, InputTagFieldNames, InputTagOption, InputTagOptionGroup, InputTagItem } from './types'
 export { InputTag, inputTagProps }
 export const _InputTagComponent: typeof InputTag = InputTag
 

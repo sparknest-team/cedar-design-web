@@ -51,6 +51,10 @@ const openUpdate: Equal<InputTagEmits['update:open'], [open: boolean]> = true
 const openChanged: Equal<InputTagEmits['open-change'], [open: boolean]> = true
 // @ts-expect-error popupContainer accepts elements, selectors or false, not resolver functions
 const badContainer: InputTagProps = { popupContainer: () => document.body }
-// @ts-expect-error tag model values cannot become a string scalar
-const scalarModel: InputTagProps = { modelValue: 'tag' }
-void [sameProps, noPrivateProps, emptyProps, nullableClear, guard, tagUpdate, draftUpdate, openUpdate, openChanged, badContainer, scalarModel]
+const scalarModel: InputTagProps = { multiple: false, modelValue: 'tag', formatLabel: data => String(data.label) }
+const labelSlot: NonNullable<InputTagSlots['label']> = ({ data }) => String(data.label)
+// @ts-expect-error The previous formatter name was removed.
+const oldFormatter: InputTagProps = { formatTag: () => 'old' }
+// @ts-expect-error The previous selected-content slot was removed.
+type OldSlot = InputTagSlots['tag']
+void [sameProps, noPrivateProps, emptyProps, nullableClear, guard, tagUpdate, draftUpdate, openUpdate, openChanged, badContainer, scalarModel, labelSlot, oldFormatter]

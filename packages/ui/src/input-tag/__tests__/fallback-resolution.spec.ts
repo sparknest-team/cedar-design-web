@@ -75,12 +75,12 @@ test('primitive fallback updates without changing values and explicit objects ke
   } finally { owner.unmount() }
 })
 
-test('custom fields and format-tag compose with fallback without replacing the identity', async () => {
+test('custom fields and format-label compose with fallback without replacing the identity', async () => {
   const name = reactive({ title: '旧标题' })
   const owner = mount(InputTag, { props: {
     modelValue: ['original'], fieldNames: { value: 'id', label: 'name' },
     fallbackOption: value => ({ id: 'different', name: name.title }),
-    formatTag: data => `标题：${data.name}`,
+    formatLabel: data => `标题：${data.name}`,
   } })
   try {
     expect(owner.text()).toContain('标题：旧标题')

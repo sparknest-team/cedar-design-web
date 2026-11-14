@@ -101,6 +101,8 @@ permalink: /components/mention/
 
 ### Mention Props
 
+`min-search-length` 按前缀之后的搜索词计算；`auto-commit-single` 会在只有一个可选结果时自动提交。
+
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
 | model-value (v-model) | 受控文本；null 显示为空 | string \| null | undefined |
@@ -108,6 +110,9 @@ permalink: /components/mention/
 | fallback-option | 同步返回未匹配 ID 的展示选项 | `(value: string \| number \| boolean) => SelectOptionData \| null \| undefined` | undefined |
 | default-value | 非受控初始文本 | string | '' |
 | options | 候选数组或显式加载函数，支持嵌套分组 | readonly (string \| number \| SelectOptionData \| SelectOptionGroup)[] \| ((query: string, context: { signal: AbortSignal }) => Array \| `Promise<Array>`) | undefined |
+| min-search-length | 开始搜索所需的最少字符数 | number | 0 |
+| search-delay | 远程搜索防抖时间（毫秒） | number | 0 |
+| auto-commit-single | 自动提交唯一可选结果 | boolean | false |
 | prefix | 触发前缀；支持多字符和多个前缀 | string \| string[] | '@' |
 | split | 提及前后的分隔符 | string | ' ' |
 | type | 输入形态 | input \| textarea | input |

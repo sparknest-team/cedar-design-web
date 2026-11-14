@@ -18,9 +18,9 @@ import __apiReviewRawConfig from "./api-review.config.json";
       clearable
       v-bind="__apiReview.bindings"
       v-on="__apiReview.listeners"
-      ><template v-if="__apiReview.slotEnabled['tag']" #tag="__reviewSlot"
+      ><template v-if="__apiReview.slotEnabled['label']" #label="__reviewSlot"
         ><DemoReviewSlot
-          name="tag"
+          name="label"
           :context="__reviewSlot"
           :controls="__apiReview.controls"
           :record="__apiReview.record"

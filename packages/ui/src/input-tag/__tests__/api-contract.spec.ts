@@ -15,6 +15,6 @@ test('public Props, every event and existing slot have explicit API rows', () =>
     expect(props, name).toMatch(new RegExp('\\|\\s*' + name + '(?:\\s|\\*)'))
   }
   for (const event of Object.keys(inputTagEmits)) expect(table('Events'), event).toContain(`| ${event}`)
-  for (const slot of ['prefix', 'suffix', 'tag', 'clear-icon', 'read'])
+  for (const slot of ['prefix', 'suffix', 'label', 'clear-icon', 'read'])
     expect(table('Slots'), slot).toMatch(new RegExp('\\|\\s*' + slot + '\\s*\\|'))
 })

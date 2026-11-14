@@ -109,7 +109,7 @@
       "initial": "{}"
     },
     {
-      "name": "format-tag",
+      "name": "format-label",
       "description": "格式化标签内容",
       "type": "(data: TagData) => string",
       "defaultValue": "undefined",
@@ -296,7 +296,7 @@
       "demos": []
     },
     {
-      "name": "format-tag",
+      "name": "format-label",
       "kind": "prop",
       "demos": []
     },
@@ -311,7 +311,7 @@
       "demos": []
     },
     {
-      "name": "tag",
+      "name": "label",
       "kind": "slot",
       "demos": [
         "basic.vue",
@@ -341,12 +341,12 @@
     }
   ],
   "slotNames": [
-    "tag",
+    "label",
     "prefix",
     "suffix"
   ],
   "slotDefaults": {
-    "tag": false,
+    "label": false,
     "prefix": false,
     "suffix": false
   },
