@@ -33,14 +33,14 @@
       "import": "./es/scheduler/core/index.mjs",
       "require": "./lib/scheduler/core/index.js"
     },
-    "./reset.css": "./reset.css"
+    "./reset.css": "./reset/index.css"
   },
   "files": [
     "es",
     "lib",
     "types",
     "umd",
-    "reset.css"
+    "reset"
   ],
   "sideEffects": [
     "src/**/style/*",
