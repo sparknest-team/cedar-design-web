@@ -12,7 +12,7 @@ export type CardFit = 'fill' | 'contain' | 'cover' | 'none' | 'scale-down'
 
 export const cardProps = {
   /** 视觉变体 */
-  variant: { type: String as PropType<CardVariant>, default: 'default', validator: (v: CardVariant) => cardVariants.includes(v) },
+  variant: { type: String as PropType<CardVariant>, default: 'outline', validator: (v: CardVariant) => cardVariants.includes(v) },
   /** 内容密度；仅实现 sm/md */
   size: { type: String as PropType<CardSize>, validator: (v: CardSize) => cardSizes.includes(v) },
   /** 封面与正文排列 */
@@ -24,12 +24,12 @@ export const cardProps = {
   description: String,
   topDivider: Boolean,
   bottomDivider: Boolean,
-  src: String,
-  fit: { type: String as PropType<CardFit>, default: 'cover' },
+  imageSrc: String,
+  imageFit: { type: String as PropType<CardFit>, default: 'cover' },
   imageHeight: [String, Number],
   imageWidth: [String, Number],
-  alt: String,
-  elevation: { type: [Boolean, Number] as PropType<boolean | number>, default: true },
+  imageAlt: String,
+  elevation: { type: [Boolean, Number] as PropType<boolean | number>, default: 0 },
   ripple: Boolean,
   floating: Boolean,
   floatingDuration: { type: Number, default: 250, validator: (value: number) => Number.isFinite(value) && value >= 0 },

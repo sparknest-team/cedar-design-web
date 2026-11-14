@@ -17,7 +17,7 @@ describe('Card shared contract', () => {
     a.unmount(); b.unmount()
   })
   test('cover wins over src; body, footer and click stay available', async () => {
-    const wrapper = mount(Card, { props: { src: '/unused.png' }, slots: { cover: 'cover', footer: 'footer', default: 'body' } })
+    const wrapper = mount(Card, { props: { imageSrc: '/unused.png' }, slots: { cover: 'cover', footer: 'footer', default: 'body' } })
     expect(wrapper.find('img').exists()).toBe(false)
     expect(wrapper.text()).toContain('cover')
     expect(wrapper.text()).toContain('footer')

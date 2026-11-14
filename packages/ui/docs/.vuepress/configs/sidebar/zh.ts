@@ -25,8 +25,8 @@ export const showcaseSideBar: SidebarArrayOptions = [
     text: "特色与场景",
     link: "/showcase/",
     children: [
-      { text: "专栏总览", link: "/showcase/" },
-      { text: "核心特点", link: "/showcase/strengths/" },
+      { text: "全部能力与场景", link: "/showcase/" },
+      { text: "体系特色", link: "/showcase/strengths/" },
       { text: "桌面与移动", link: "/showcase/cross-platform/" },
       { text: "一致的表单体验", link: "/showcase/forms/" },
       { text: "主题与品牌", link: "/showcase/themes/" },
@@ -38,7 +38,7 @@ export const showcaseSideBar: SidebarArrayOptions = [
     ],
   },
   {
-    text: "最佳实践",
+    text: "业务场景",
     link: "/practices/",
     children: [
       { text: "页面总览", link: "/practices/" },
@@ -53,15 +53,21 @@ export const showcaseSideBar: SidebarArrayOptions = [
 ];
 
 export const componentSideBar: SidebarArrayOptions = markReuse([
-  {
-    text: "开发指南",
-    link: "/guide/quickstart/",
-    children: [
-      { text: "快速开始", link: "/guide/quickstart/" },
-      { text: "按需引入", link: "/guide/import-on-demand/" },
-      { text: "跨端复用标记说明", link: "/guide/component-reuse/" },
-    ],
-  },
+  ...catalog.groups.map((group) => ({
+    text: group.label,
+    children: catalog.components
+      .filter((component) => component.group === group.id && component.id !== "theme-provider")
+      .map((component) => ({ text: component.name, link: component.route })),
+  })),
+]);
+
+export const startSideBar: SidebarArrayOptions = [
+  { text: "开始使用", children: [
+    { text: "安装与快速开始", link: "/guide/quickstart/" },
+    { text: "平台选择与兼容性", link: "/guide/platform/" },
+    { text: "按需引入", link: "/guide/import-on-demand/" },
+    { text: "跨端复用标记说明", link: "/guide/component-reuse/" },
+  ] },
   {
     text: "配置与约定",
     link: "/guide/configuration/",
@@ -70,15 +76,6 @@ export const componentSideBar: SidebarArrayOptions = markReuse([
       { text: "受控与非受控", link: "/guide/controlled-uncontrolled/" },
       { text: "空值与阅读空文案", link: "/guide/empty-values/" },
       { text: "国际化", link: "/guide/i18n/" },
-    ],
-  },
-  {
-    text: "工程与工具",
-    link: "/guide/llms/",
-    children: [
-      { text: "LLM 文档", link: "/guide/llms/" },
-      { text: "Roadmap", link: "/guide/roadmap/" },
-      { text: "更新日志", link: "/changelog/" },
     ],
   },
   {
@@ -131,14 +128,20 @@ export const componentSideBar: SidebarArrayOptions = markReuse([
       },
     ],
   },
-  ...catalog.groups.map((group) => ({
-    text: group.label,
-    children: catalog.components
-      .filter((component) => component.group === group.id && component.id !== "theme-provider")
-      .map((component) => ({ text: component.name, link: component.route })),
-  })),
-]);
-
+];
+export const aiSideBar: SidebarArrayOptions = [{ text: "AI 与工具", children: [
+  { text: "AI 快速开始", link: "/guide/ai/" },
+  { text: "MCP 接入与故障排查", link: "/guide/mcp/" },
+  { text: "CLI 与方案获取", link: "/guide/solutions/" },
+  { text: "Skill 与团队规则", link: "/guide/skills/" },
+  { text: "工具和内容参考", link: "/guide/tools/" },
+  { text: "LLM 文档", link: "/guide/llms/" },
+]}];
+export const updatesSideBar: SidebarArrayOptions = [{ text: "更新与迁移", children: [
+  { text: "更新与迁移", link: "/guide/updates/" },
+  { text: "更新日志", link: "/changelog/" },
+  { text: "Roadmap", link: "/guide/roadmap/" },
+]}];
 export const zhSideBar: SidebarOptions = {
   "/showcase/": showcaseSideBar,
   "/practices/": showcaseSideBar,
@@ -148,5 +151,16 @@ export const zhSideBar: SidebarOptions = {
   "/practices/component-spec.html": componentSideBar,
   "/practices/token-spec.html": componentSideBar,
 
+  "/guide/": startSideBar,
+  "/themes/": startSideBar,
+  "/guide/ai/": aiSideBar,
+  "/guide/mcp/": aiSideBar,
+  "/guide/solutions/": aiSideBar,
+  "/guide/skills/": aiSideBar,
+  "/guide/tools/": aiSideBar,
+  "/guide/llms/": aiSideBar,
+  "/guide/updates/": updatesSideBar,
+  "/guide/roadmap/": updatesSideBar,
+  "/changelog/": updatesSideBar,
   "/": componentSideBar,
 };

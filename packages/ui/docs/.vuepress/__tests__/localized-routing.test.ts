@@ -49,7 +49,7 @@ test('English fallbacks preserve Chinese routes and aliases during initializatio
 })
 
 test('canonical navigation and translated prefixes remain stable across repeated use', () => {
-  expect(zhNavBar).toContainEqual(expect.objectContaining({ text: '组件', link: '/guide/quickstart/' }))
+  expect(zhNavBar).toContainEqual(expect.objectContaining({ text: '组件', link: '/components/button/' }))
   const input = [{ text: '特色与场景', link: '/showcase/', children: ['/showcase/forms/', '/en/showcase/themes/', '//example.com'] }]
   const translated = translateNavigation(input)
   expect(translated[0].link).toBe('/en/showcase/')

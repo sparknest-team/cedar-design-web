@@ -5912,6 +5912,84 @@ const directions = ['column', 'row', 'row-reverse'] as const
 </template>
 ```
 
+### 组合 Tabs 与嵌套卡片
+
+分组标题复用 TypographyTitle，通过 heading 设置标题层级。
+
+通过 Card、Tabs 和纵向 Space 组合内容。内层使用紧凑描边卡片，宽表格在自己的容器内横向滚动；产业链面板使用普通分组标题，避免额外嵌套卡片。
+
+Example source: src/card/__demos__/nested-tabs.vue
+
+```vue
+<script setup lang="ts">
+const rows = [
+  ['2025 Q4', '26.25', '+64.2%', '26.5%', '-0.03'],
+  ['2026 Q1', '18.12', '-31.0%', '24.6%', '0.82'],
+  ['2026 Q2', '16.77', '-7.4%', '25.1%', '-0.12'],
+]
+const columns = [
+  { title: '单季', dataIndex: 'quarter', width: 120 },
+  { title: '营收(亿)', dataIndex: 'revenue', width: 100 },
+  { title: '环比', dataIndex: 'growth', width: 100 },
+  { title: '毛利率', dataIndex: 'margin', width: 100 },
+  { title: '净利(亿)', dataIndex: 'profit', width: 100 },
+]
+const data = rows.map(([quarter, revenue, growth, margin, profit]) => ({
+  key: quarter, quarter, revenue, growth, margin, profit,
+}))
+</script>
+
+<template>
+  <c-card title="三季报前瞻" class="nested-card-demo" :elevation="false">
+    <template #title-action><span class="report-date">2026-08</span></template>
+    <c-tabs default-value="performance" :item-style="{ padding: '16px 0 0' }" tab-list-aria-label="分析维度">
+      <c-tab-pane name="industry" title="产业链">
+        <c-card title="产业链观察" size="sm" variant="outline" :elevation="false">
+          <c-space direction="column" size="lg">
+            <section>
+              <c-typography-title :heading="5" class="group-title">上游 · 原材料</c-typography-title>
+              <p>关注铜、钢材与塑料采购成本变化。</p>
+            </section>
+            <section>
+              <c-typography-title :heading="5" class="group-title">下游 · 终端渠道</c-typography-title>
+              <p>关注渠道库存、促销节奏与新品销售表现。</p>
+            </section>
+          </c-space>
+        </c-card>
+      </c-tab-pane>
+      <c-tab-pane name="performance" title="业绩">
+        <c-space direction="column" size="lg">
+          <c-card title="单季还原（累计相减）" size="sm" variant="outline" :elevation="false">
+            <c-table :columns="columns" :data="data" :pagination="false" />
+            <p class="report-note">示例数据 · 单位：亿元</p>
+          </c-card>
+          <c-card title="经营摘要" size="sm" variant="outline" :elevation="false">
+            <p>本季营收 16.77 亿元，毛利率 25.1%。</p>
+          </c-card>
+        </c-space>
+      </c-tab-pane>
+      <c-tab-pane name="capital" title="筹码·资金">
+        <c-card title="资金观察" size="sm" variant="outline" :elevation="false">本期机构持仓数据尚未披露。</c-card>
+      </c-tab-pane>
+      <c-tab-pane name="technical" title="技术">
+        <c-card title="技术观察" size="sm" variant="outline" :elevation="false">暂无技术分析数据。</c-card>
+      </c-tab-pane>
+    </c-tabs>
+  </c-card>
+</template>
+
+<style scoped>
+.nested-card-demo { inline-size: 100%; min-inline-size: 0; }
+.group-title {
+  --c-typography-font-size-h5: var(--c-font-size-body-3);
+  --c-typography-heading-margin-bottom: 8px;
+}
+.report-date { white-space: nowrap; font-size: 12px; }
+.report-note { margin-block-start: 8px; }
+p { margin: 0; }
+</style>
+```
+
 ## 内容与展示
 
 ### 长标题与提示
@@ -61035,6 +61113,8 @@ Document: llms/zh-CN/components/time-picker.md
 
 # TimePicker
 
+字段与面板的合并示例请看 [Time 与 TimePicker](llms/zh-CN/components/time.md)。本页保留独立面板参考，便于直接查阅。
+
 时间选择**面板**（默认无触发器）。
 
 ### 选择与滚动
@@ -62203,9 +62283,7 @@ Document: llms/zh-CN/components/time.md
 
 展开时，原生 combobox 通过 `aria-controls` 关联当前实例的命名弹层；关闭后同步更新状态并移除关联。`aria-label`、`aria-describedby` 可传递给原生控件。自定义 selected/触发插槽需自行保留可访问名称、键盘操作和状态关联。
 
-表单时间字段（带触发器）。内部使用 `TimePicker`。
-
-纯面板请使用 [`TimePicker`](llms/zh-CN/components/time-picker.md)（默认无触发器）。时间范围字段请使用 [`TimeRange`](llms/zh-CN/components/time-range.md)。
+`Time` 是带输入框和弹层的时间字段，`TimePicker` 是可直接嵌入页面的纯面板。本页集中展示两者及其共有配置：表单录入使用字段，自定义布局使用面板。时间范围字段请使用 [`TimeRange`](llms/zh-CN/components/time-range.md)。
 
 ## 基础示例
 
@@ -62215,13 +62293,23 @@ Example source: src/time/__demos__/basic.vue
 
 ```vue
 <template>
-  <c-time v-model="value" style="width: 200px" />
+  <c-space wrap align="start" :size="24">
+    <section>
+      <h4>Time</h4>
+      <c-time v-model="value" format="HH:mm:ss" style="width: 200px" />
+    </section>
+    <section>
+      <h4>TimePicker</h4>
+      <c-time-picker v-model="value" format="HH:mm:ss" />
+    </section>
+  </c-space>
+  <p><code>modelValue: {{ value }}</code></p>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 
-const value = ref()
+const value = ref('09:30:00')
 </script>
 ```
 
@@ -63079,6 +63167,88 @@ const value = ref("09:30:00");
 ### 共享字段加载
 
 `loading` 控制共享字段加载状态；`loading-mode` 为 `default`（指示器）或 `line`（底部不定进度线），默认 `default`。渲染统一由 FieldDecorator 负责，不隐式改变 disabled/readonly；需要禁止编辑时单独设置。
+
+## TimePicker 嵌入式面板
+
+上方示例对照共有的格式、步长和边界；本节展示面板独有的选择与确认交互。输入、清空和弹层控制属于 `Time`，纯面板独立管理草稿。
+
+### 基础面板
+
+Example source: src/time/picker/__demos__/basic.vue
+
+```vue
+<template>
+  <c-time-picker default-value="09:09:06" />
+</template>
+```
+
+### 禁用部分时间选项
+
+禁用小时回调始终使用 0–23，十二小时显示也不改变回调参数。
+
+Example source: src/time/picker/__demos__/disabled-parts.vue
+
+```vue
+<template>
+  <p>12 小时显示；禁用回调始终使用 0–23 小时。下午 1 点禁用，下午 2 点的第 30 分钟禁用。</p>
+  <c-time-picker
+    default-value="02:20:00 pm"
+    format="hh:mm:ss a"
+    use12-hours
+    :disabled-hours="() => [0, 13]"
+    :disabled-minutes="(hour) => hour === 14 ? [30] : []"
+    :disabled-seconds="(hour, minute) => hour === 14 && minute === 20 ? [15, 30, 45] : []"
+  />
+</template>
+```
+
+### 面板确认与隐藏选项
+
+选择先修改草稿，确认才提交。开启 `disable-confirm` 后有效选择立即提交，开启 `hide-disabled-options` 隐藏禁用选项；修改规则不会提交已有草稿。
+
+Example source: src/time/picker/__demos__/panel-behavior.vue
+
+```vue
+<script setup>
+import { ref } from "vue";
+
+const value = ref("09:30");
+const immediate = ref(false);
+const confirmations = ref(0);
+const hideDisabled = ref(false);
+const readonly = ref(false);
+const disabledHours = () => [0, 1, 2, 3, 4, 5, 6, 7];
+</script>
+
+<template>
+  <c-space direction="column" size="12px" style="width: 100%">
+    <c-checkbox v-model="immediate"> 跳过确认，选择即提交</c-checkbox>
+    <c-checkbox v-model="hideDisabled"> 隐藏禁用小时（00–07）</c-checkbox>
+    <c-checkbox v-model="readonly"> 只读（包括确认）</c-checkbox>
+    <c-button variant="outline" @click="value = '13:45'"
+      >外部更新为 13:45，覆盖未提交草稿</c-button
+    >
+    <c-time-picker
+      v-model="value"
+      @confirm="confirmations++"
+      format="HH:mm"
+      :disable-confirm="immediate"
+      :hide-disabled-options="hideDisabled"
+      :readonly="readonly"
+      :disabled-hours="disabledHours"
+    >
+      <template #extra
+        ><p>附加说明使用 extra 插槽；选择草稿后点击确认提交。</p></template
+      >
+    </c-time-picker>
+    <span>有效确认次数: {{ confirmations }}</span>
+    <span>已提交值: {{ value }}</span>
+    <p>默认选择只修改草稿，点击确认后上方的已提交值才会更新。</p>
+  </c-space>
+</template>
+```
+
+面板属性在下方 **TimePicker Props** 单独列出；完整事件与插槽见 [TimePicker 独立面板参考](llms/zh-CN/components/time-picker.md#timepicker-events)。
 
 ## 阅读方向
 

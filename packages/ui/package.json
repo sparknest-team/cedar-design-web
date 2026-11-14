@@ -32,13 +32,15 @@
       "types": "./types/scheduler/core/index.d.ts",
       "import": "./es/scheduler/core/index.mjs",
       "require": "./lib/scheduler/core/index.js"
-    }
+    },
+    "./reset.css": "./reset.css"
   },
   "files": [
     "es",
     "lib",
     "types",
-    "umd"
+    "umd",
+    "reset.css"
   ],
   "sideEffects": [
     "src/**/style/*",

@@ -1,4 +1,18 @@
 const labels: Record<string, string> = {
+  "平台选择与兼容性": "Platforms and compatibility",
+  "AI 快速开始": "AI quick start",
+  "MCP 接入与故障排查": "MCP setup and troubleshooting",
+  "CLI 与方案获取": "CLI and solution access",
+  "Skill 与团队规则": "Skills and team rules",
+  "工具和内容参考": "Tools and content reference",
+  "更新与迁移": "Updates and migration",
+  "开始使用": "Getting started",
+  "AI 与工具": "AI and tools",
+  "安装与快速开始": "Installation and quick start",
+  "全部能力与场景": "All features and scenarios",
+  "体系特色": "System features",
+  "业务场景": "Business scenarios",
+
   页面总览: "Page templates",
   团队工作台: "Team workspace",
   查询列表页: "Query list",

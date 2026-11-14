@@ -174,3 +174,13 @@ Resolver 默认自动引入组件样式。如项目已完整引入 Cedar 样式�
 ```ts
 CedarResolver({ importStyle: false });
 ```
+
+### 可选的全局重置
+
+组件样式默认不重置页面元素，也不设置 `body` 字体。需要 normalize.css 时，可在应用入口显式引入：
+
+```ts
+import '@cedar-design/ui-vue/reset.css';
+```
+
+字体、页面背景和全局盒模型由应用自行配置。
