@@ -1,6 +1,6 @@
 {
   "name": "@cedar-design/icons-vue",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "SVG icon components for Cedar",
   "license": "MIT",
   "type": "module",
