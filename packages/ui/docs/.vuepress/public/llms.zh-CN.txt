@@ -114,6 +114,7 @@ Documentation language: zh-CN.
 - [VerificationCode 验证码](./llms/zh-CN/components/verification-code.md): /components/verification-code/
 - [Watermark](./llms/zh-CN/components/watermark.md): /components/watermark/
 - [task-calendar](./llms/zh-CN/examples/task-calendar.md): /examples/task-calendar/
+- [AI 快速开始](./llms/zh-CN/guide/ai.md): /guide/ai/
 - [Cedar / Maple 跨端代码复用调研](./llms/zh-CN/guide/component-reuse.md): /guide/component-reuse/
 - [默认值与全局配置](./llms/zh-CN/guide/configuration.md): /guide/configuration/
 - [受控、非受控与清空值：从操作结果理解](./llms/zh-CN/guide/controlled-uncontrolled.md): /guide/controlled-uncontrolled/
@@ -123,10 +124,16 @@ Documentation language: zh-CN.
 - [i18n](./llms/zh-CN/guide/i18n.md): /guide/i18n/
 - [按需引入](./llms/zh-CN/guide/import-on-demand.md): /guide/import-on-demand/
 - [LLM 文档](./llms/zh-CN/guide/llms.md): /guide/llms/
+- [MCP 接入与故障排查](./llms/zh-CN/guide/mcp.md): /guide/mcp/
+- [平台选择与兼容性](./llms/zh-CN/guide/platform.md): /guide/platform/
 - [questions](./llms/zh-CN/guide/questions.md): /guide/questions/
 - [快速开始](./llms/zh-CN/guide/quickstart.md): /guide/quickstart/
 - [Roadmap](./llms/zh-CN/guide/roadmap.md): /guide/roadmap/
+- [Skill 与团队规则](./llms/zh-CN/guide/skills.md): /guide/skills/
+- [CLI 与方案获取](./llms/zh-CN/guide/solutions.md): /guide/solutions/
 - [主题定制](./llms/zh-CN/guide/theme.md): /guide/theme/
+- [工具和内容参考](./llms/zh-CN/guide/tools.md): /guide/tools/
+- [更新与迁移](./llms/zh-CN/guide/updates.md): /guide/updates/
 - [最佳实践](./llms/zh-CN/practices.md): /practices/
 - [项目卡片页](./llms/zh-CN/practices/card.md): /practices/card/
 - [团队工作台](./llms/zh-CN/practices/dashboard.md): /practices/dashboard/

@@ -113,13 +113,20 @@ Documentation language: en-US.
 - [Upload](./llms/en-US/components/upload.md): /en/components/upload/
 - [Verification Code](./llms/en-US/components/verification-code.md): /en/components/verification-code/
 - [Watermark](./llms/en-US/components/watermark.md): /en/components/watermark/
+- [AI quick start](./llms/en-US/guide/ai.md): /en/guide/ai/
 - [Defaults and global configuration](./llms/en-US/guide/configuration.md): /en/guide/configuration/
 - [Controlled state, defaults and clear values: learn by interaction](./llms/en-US/guide/controlled-uncontrolled.md): /en/guide/controlled-uncontrolled/
 - [Empty recognition, clear output and reading placeholders](./llms/en-US/guide/empty-values.md): /en/guide/empty-values/
 - [Import on demand](./llms/en-US/guide/import-on-demand.md): /en/guide/import-on-demand/
 - [LLM documentation](./llms/en-US/guide/llms.md): /en/guide/llms/
+- [MCP setup and troubleshooting](./llms/en-US/guide/mcp.md): /en/guide/mcp/
+- [Platforms and compatibility](./llms/en-US/guide/platform.md): /en/guide/platform/
 - [Quick start](./llms/en-US/guide/quickstart.md): /en/guide/quickstart/
+- [Skills and team rules](./llms/en-US/guide/skills.md): /en/guide/skills/
+- [CLI and solution access](./llms/en-US/guide/solutions.md): /en/guide/solutions/
 - [Theme Customization](./llms/en-US/guide/theme.md): /en/guide/theme/
+- [Tools and content reference](./llms/en-US/guide/tools.md): /en/guide/tools/
+- [Updates and migration](./llms/en-US/guide/updates.md): /en/guide/updates/
 - [Cedar Design Web](./llms/en-US/index.md): /en/
 - [Loading and waiting](./llms/en-US/showcase/loading.md): /en/showcase/loading/
 - [Theme Customization](./llms/en-US/themes.md): /en/themes/

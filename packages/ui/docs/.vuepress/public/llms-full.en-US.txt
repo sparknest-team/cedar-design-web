@@ -5757,8 +5757,9 @@ Example source: src/card/__demos__/hoverable.vue
 | --- | --- | --- |
 | `direction` | Order of cover and body, default column; supports row, column and row-reverse. Does not position the card itself | Images and directions |
 | `title` | Title | Images and directions |
-| `src` | Cover image URL; cover slot takes precedence | Images and directions |
-| `alt` | Image alternative text | Images and directions |
+| `image-src` | Cover image URL; cover slot takes precedence | Images and directions |
+| `image-alt` | Image alternative text | Images and directions |
+| `image-fit` | Cover image fit, default cover | Images and directions |
 | `image-height` | Image height; numbers use px | Images and directions |
 | `image-width` | Image width; numbers use px | Images and directions |
 <!-- demo-config-notes:end -->
@@ -5779,7 +5780,7 @@ const directions = ['column', 'row', 'row-reverse'] as const
       :key="direction"
       :direction="direction"
       :title="direction"
-      :src="imageSrc"
+      :image-src="imageSrc"
       alt="Cat"
       :image-height="120"
       :image-width="direction === 'column' ? '100%' : 100"
@@ -6081,7 +6082,7 @@ The default close button uses the current locale's close label; override it with
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| variant | Appearance | `default / outline / tonal` | `default` |
+| variant | Appearance | `default / outline / tonal` | `outline` |
 | size | Density; omitted value follows platform rules below | `sm / md` | `undefined` |
 | direction | Order of cover and body, default column; supports row, column and row-reverse. Does not position the card itself | `row / column / row-reverse` | `column` |
 | hoverable | Hover styling | `boolean` | `false` |
@@ -6091,12 +6092,12 @@ The default close button uses the current locale's close label; override it with
 | description | Description | `string` | `undefined` |
 | top-divider | Top divider | `boolean` | `false` |
 | bottom-divider | Bottom divider | `boolean` | `false` |
-| src | Cover image URL; cover slot takes precedence | `string` | `undefined` |
-| fit | Cover image fit | `fill / contain / cover / none / scale-down` | `cover` |
+| image-src | Cover image URL; cover slot takes precedence | `string` | `undefined` |
+| image-fit | Cover image fit | `fill / contain / cover / none / scale-down` | `cover` |
 | image-height | Image height; numbers use px | `string / number` | `undefined` |
 | image-width | Image width; numbers use px | `string / number` | `undefined` |
-| alt | Image alternative text | `string` | `undefined` |
-| elevation | Shadow for default variant; true means level 1, false disables it, numeric levels 0–24 | `boolean / number` | `true` |
+| image-alt | Image alternative text | `string` | `undefined` |
+| elevation | Shadow for default variant; true means level 1, false disables it, numeric levels 0–24 | `boolean / number` | `0` |
 | ripple | Click ripple | `boolean` | `false` |
 | floating | Floating expansion state; supports v-model:floating | `boolean` | `false` |
 | floating-duration | Floating expansion transition duration in ms | `number` | `250` |
@@ -6114,7 +6115,7 @@ The default close button uses the current locale's close label; override it with
 | Slot | Description | Prop |
 | --- | --- | --- |
 | default | Body | — |
-| cover | Cover; overrides src | — |
+| cover | Cover; overrides image-src | — |
 | header | Entire header; overrides title, title-action and subtitle | — |
 | title | Title | `{ slotClass: string }` |
 | title-action | Title action | — |
@@ -68286,6 +68287,18 @@ Explicit inline styles and props that write the same CSS property take precedenc
 
 ---
 
+Document: llms/en-US/guide/ai.md
+
+<!-- Source: docs/guide/ai.en-US.md; locale: en-US; page: /en/guide/ai/ -->
+
+# AI quick start
+
+Give your assistant the official llms.txt index, target platform, installed version and task. Ask it to read relevant component and scenario documentation, check real APIs and verify success, empty, error and recovery states.
+
+[LLM documentation](llms/en-US/guide/llms.md) · [Cedar](https://cedar.show) · [Maple](https://maple.show)
+
+---
+
 Document: llms/en-US/guide/configuration.md
 
 <!-- Source: docs/en/guide/configuration.md; locale: en-US; page: /en/guide/configuration/ -->
@@ -69398,6 +69411,30 @@ Files are regenerated during each documentation site build and deployed with the
 
 ---
 
+Document: llms/en-US/guide/mcp.md
+
+<!-- Source: docs/guide/mcp.en-US.md; locale: en-US; page: /en/guide/mcp/ -->
+
+# MCP setup and troubleshooting
+
+An official public MCP service is not available yet. Use the LLM documentation index today. Published service addresses, client configuration, version matching and troubleshooting will be documented here when available.
+
+[LLM documentation](llms/en-US/guide/llms.md) · [Cedar](https://cedar.show) · [Maple](https://maple.show)
+
+---
+
+Document: llms/en-US/guide/platform.md
+
+<!-- Source: docs/guide/platform.en-US.md; locale: en-US; page: /en/guide/platform/ -->
+
+# Platforms and compatibility
+
+Cedar targets desktop applications; Maple targets mobile applications. Choose by interaction and information density. Check the installed package peer dependencies and verify your target browsers.
+
+[LLM documentation](llms/en-US/guide/llms.md) · [Cedar](https://cedar.show) · [Maple](https://maple.show)
+
+---
+
 Document: llms/en-US/guide/quickstart.md
 
 <!-- Source: docs/en/guide/quickstart.md; locale: en-US; page: /en/guide/quickstart/ -->
@@ -69440,6 +69477,30 @@ The component style entry includes the required foundation styles. Run your proj
 
 ---
 
+Document: llms/en-US/guide/skills.md
+
+<!-- Source: docs/guide/skills.en-US.md; locale: en-US; page: /en/guide/skills/ -->
+
+# Skills and team rules
+
+Agree on version checks, official examples, semantic tokens and type and interaction verification. An installable official Skill is not available yet. Record team rules in AGENTS.md and link to official documentation instead of copying API tables.
+
+[LLM documentation](llms/en-US/guide/llms.md) · [Cedar](https://cedar.show) · [Maple](https://maple.show)
+
+---
+
+Document: llms/en-US/guide/solutions.md
+
+<!-- Source: docs/guide/solutions.en-US.md; locale: en-US; page: /en/guide/solutions/ -->
+
+# CLI and solution access
+
+Open Features and scenarios to explore complete workflows and inspect example source. One-command scenario installation and Registry distribution are not available yet. Component development tooling is distinct from scenario installation.
+
+[LLM documentation](llms/en-US/guide/llms.md) · [Cedar](https://cedar.show) · [Maple](https://maple.show)
+
+---
+
 Document: llms/en-US/guide/theme.md
 
 <!-- Source: docs/guide/theme.en-US.md; locale: en-US; page: /en/guide/theme/ -->
@@ -69447,6 +69508,34 @@ Document: llms/en-US/guide/theme.md
 # Theme Customization
 
 See [Theme Customization](llms/en-US/themes.md) for presets, variable overrides, local themes and the ThemeProvider API.
+
+---
+
+Document: llms/en-US/guide/tools.md
+
+<!-- Source: docs/guide/tools.en-US.md; locale: en-US; page: /en/guide/tools/ -->
+
+# Tools and content reference
+
+Use component manuals for APIs and minimal examples, scenarios for complete implementations, and the LLM index for AI-readable references. Verify results against your installed version and runtime behavior.
+
+[LLM documentation](llms/en-US/guide/llms.md) · [Cedar](https://cedar.show) · [Maple](https://maple.show)
+
+---
+
+Document: llms/en-US/guide/updates.md
+
+<!-- Source: docs/guide/updates.en-US.md; locale: en-US; page: /en/guide/updates/ -->
+
+# Updates and migration
+
+Check package versions and release notes before upgrading. Review affected props, events, types and theme variables, keep the dependency lockfile and verify critical workflows. Do not assume API compatibility without migration guidance.
+
+## Changelog
+
+[Read the changelog](en/changelog)
+
+[LLM documentation](llms/en-US/guide/llms.md) · [Cedar](https://cedar.show) · [Maple](https://maple.show)
 
 ---
 
