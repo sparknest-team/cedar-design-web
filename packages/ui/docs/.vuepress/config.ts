@@ -7,7 +7,6 @@ import hopeTheme from './theme'
 import { localizedPages } from './i18n/pages'
 import { codeBlockPlugin } from './plugin-code-block/src/node'
 // import { prismjsPlugin } from '@vuepress/plugin-prismjs'
-import { slimsearchPlugin } from '@vuepress/plugin-slimsearch'
 import components from 'unplugin-vue-components/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import type { Plugin } from 'vite'
@@ -60,6 +59,7 @@ function uploadMockPlugin(): Plugin {
 }
 
 export default defineUserConfig({
+  head: [['link', { rel: 'icon', type: 'image/svg+xml', href: `${process.env.FX_BASE || '/'}logo.svg` }]],
   title: 'Cedar Design Web',
   description: 'Cedar Design Web',
   base: (process.env.FX_BASE || '/') as any,
@@ -79,9 +79,6 @@ export default defineUserConfig({
     atomicTempPlugin(),
     localizedPages(),
     codeBlockPlugin,
-    slimsearchPlugin({
-      suggestion: false,
-    }),
   ],
   bundler: viteBundler({
     viteOptions: {

@@ -128,6 +128,11 @@ export const startSideBar: SidebarArrayOptions = [
       },
     ],
   },
+  { text: "更新与迁移", children: [
+    { text: "更新与迁移", link: "/guide/updates/" },
+    { text: "更新日志", link: "/changelog/" },
+    { text: "Roadmap", link: "/guide/roadmap/" },
+  ] },
 ];
 export const aiSideBar: SidebarArrayOptions = [{ text: "AI 与工具", children: [
   { text: "AI 快速开始", link: "/guide/ai/" },
@@ -136,11 +141,6 @@ export const aiSideBar: SidebarArrayOptions = [{ text: "AI 与工具", children:
   { text: "Skill 与团队规则", link: "/guide/skills/" },
   { text: "工具和内容参考", link: "/guide/tools/" },
   { text: "LLM 文档", link: "/guide/llms/" },
-]}];
-export const updatesSideBar: SidebarArrayOptions = [{ text: "更新与迁移", children: [
-  { text: "更新与迁移", link: "/guide/updates/" },
-  { text: "更新日志", link: "/changelog/" },
-  { text: "Roadmap", link: "/guide/roadmap/" },
 ]}];
 export const zhSideBar: SidebarOptions = {
   "/showcase/": showcaseSideBar,
@@ -159,8 +159,8 @@ export const zhSideBar: SidebarOptions = {
   "/guide/skills/": aiSideBar,
   "/guide/tools/": aiSideBar,
   "/guide/llms/": aiSideBar,
-  "/guide/updates/": updatesSideBar,
-  "/guide/roadmap/": updatesSideBar,
-  "/changelog/": updatesSideBar,
+  "/guide/updates/": startSideBar,
+  "/guide/roadmap/": startSideBar,
+  "/changelog/": startSideBar,
   "/": componentSideBar,
 };

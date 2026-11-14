@@ -19,12 +19,12 @@ export default hopeTheme(
 
     logo: '/logo.svg',
 
-    repo: 'https://xxx/pe.frontend/cedar/cedar-design-web',
+    repo: 'https://github.com/loca-spirit/cedar-design-web',
 
     navbarLayout: {
       start: ['Brand'],
       center: ['Links'],
-      end: ['Language', 'Repo', 'Search'],
+      end: [],
     },
 
     // docsDir: 'demo/theme-docs/src',
