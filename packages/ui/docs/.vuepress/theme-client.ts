@@ -74,7 +74,10 @@ export function bundleThemeClient(): Plugin {
       if (!entries.includes(file) && !id.startsWith(virtual)) return
       if (!pending) {
         const context = this
-        const requireVite = createRequire(require.resolve('vite'))
+        // VuePress owns the Vite/esbuild version used by this dev plugin.
+        // The UI package also installs a newer Vite for its test toolchain.
+        const requireBundler = createRequire(require.resolve('@vuepress/bundler-vite/package.json'))
+        const requireVite = createRequire(requireBundler.resolve('vite'))
         const { build } = requireVite('esbuild')
         pending = build({
           entryPoints: entries, outdir: '/__cedar_theme_bundle__', write: false,

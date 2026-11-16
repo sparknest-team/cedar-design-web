@@ -1,108 +1,153 @@
 <script setup lang="ts">
-import { ref } from "vue"
-import { proxyRefs as demoProxyRefs } from 'vue'
+import { useDemoLocale } from "../../__demos__/locale";
+const demoCopy = useDemoLocale("drawerPositionSizeComparison");
+import { ref } from "vue";
+import { proxyRefs as demoProxyRefs } from "vue";
 
-const scene1 = demoProxyRefs((() => {
+const scene1 = demoProxyRefs(
+  (() => {
+    const visibleSmall = ref(false);
 
-const visibleSmall = ref(false)
+    const visibleMedium = ref(false);
 
-const visibleMedium = ref(false)
+    const visibleLarge = ref(false);
 
-const visibleLarge = ref(false)
+    const handleClickSmall = () => {
+      visibleSmall.value = true;
+    };
 
+    const handleClickMedium = () => {
+      visibleMedium.value = true;
+    };
 
-const handleClickSmall = () => {
-  visibleSmall.value = true
-}
+    const handleClickLarge = () => {
+      visibleLarge.value = true;
+    };
 
-const handleClickMedium = () => {
-  visibleMedium.value = true
-}
+    const handleConfirm = () => {
+      visibleSmall.value = false;
+      visibleMedium.value = false;
+      visibleLarge.value = false;
+    };
 
-const handleClickLarge = () => {
-  visibleLarge.value = true
-}
+    const handleCancel = () => {
+      visibleSmall.value = false;
+      visibleMedium.value = false;
+      visibleLarge.value = false;
+    };
+    return {
+      visibleSmall,
+      visibleMedium,
+      visibleLarge,
+      handleClickSmall,
+      handleClickMedium,
+      handleClickLarge,
+      handleConfirm,
+      handleCancel,
+    };
+  })(),
+);
 
-const handleConfirm = () => {
-  visibleSmall.value = false
-  visibleMedium.value = false
-  visibleLarge.value = false
-}
+const scene2 = demoProxyRefs(
+  (() => {
+    const visible = ref(false);
 
-const handleCancel = () => {
-  visibleSmall.value = false
-  visibleMedium.value = false
-  visibleLarge.value = false
-}
-return { visibleSmall, visibleMedium, visibleLarge, handleClickSmall, handleClickMedium, handleClickLarge, handleConfirm, handleCancel }
-})())
+    const position = ref("right");
 
-const scene2 = demoProxyRefs((() => {
+    const handleClick = () => {
+      visible.value = true;
+    };
 
-const visible = ref(false)
+    const handleConfirm = () => {
+      visible.value = false;
+    };
 
-const position = ref('right')
-
-
-const handleClick = () => {
-  visible.value = true
-}
-
-const handleConfirm = () => {
-  visible.value = false
-}
-
-const handleCancel = () => {
-  visible.value = false
-}
-return { visible, position, handleClick, handleConfirm, handleCancel }
-})())
+    const handleCancel = () => {
+      visible.value = false;
+    };
+    return { visible, position, handleClick, handleConfirm, handleCancel };
+  })(),
+);
 </script>
 
 <template>
-<div class="demo-comparison">
-  <section class="demo-comparison-case demo-comparison-case--1" data-comparison-scene="size">
-    <h4><span lang="zh-CN">自定义宽度</span><span lang="en-US">Size</span></h4>
-    <c-space>
-        <c-button status="primary" @click="scene1.handleClickSmall">sm Drawer</c-button>
-        <c-button status="primary" @click="scene1.handleClickMedium">md Drawer</c-button>
-        <c-button status="primary" @click="scene1.handleClickLarge">lg Drawer</c-button>
+  <div class="demo-comparison">
+    <section
+      class="demo-comparison-case demo-comparison-case--1"
+      data-comparison-scene="size"
+    >
+      <h4>{{ demoCopy.size }}</h4>
+      <c-space>
+        <c-button status="primary" @click="scene1.handleClickSmall"
+          >sm Drawer</c-button
+        >
+        <c-button status="primary" @click="scene1.handleClickMedium"
+          >md Drawer</c-button
+        >
+        <c-button status="primary" @click="scene1.handleClickLarge"
+          >lg Drawer</c-button
+        >
       </c-space>
-      <c-drawer v-model:open="scene1.visibleSmall" :width="280" @confirm="scene1.handleConfirm" @cancel="scene1.handleCancel" unmount-on-close>
+      <c-drawer
+        v-model:open="scene1.visibleSmall"
+        :width="280"
+        @confirm="scene1.handleConfirm"
+        @cancel="scene1.handleCancel"
+        unmount-on-close
+      >
         <template #title>Title</template>
         <div>
-          You can customize modal body text by the current situation. This modal will be closed immediately once you press
-          the OK button.
+          You can customize modal body text by the current situation. This modal
+          will be closed immediately once you press the OK button.
         </div>
       </c-drawer>
-      <c-drawer v-model:open="scene1.visibleMedium" :width="420" @confirm="scene1.handleConfirm" @cancel="scene1.handleCancel" unmount-on-close>
+      <c-drawer
+        v-model:open="scene1.visibleMedium"
+        :width="420"
+        @confirm="scene1.handleConfirm"
+        @cancel="scene1.handleCancel"
+        unmount-on-close
+      >
         <template #title>Title</template>
         <div>
-          You can customize modal body text by the current situation. This modal will be closed immediately once you press
-          the OK button.
+          You can customize modal body text by the current situation. This modal
+          will be closed immediately once you press the OK button.
         </div>
       </c-drawer>
-      <c-drawer v-model:open="scene1.visibleLarge" :width="640" @confirm="scene1.handleConfirm" @cancel="scene1.handleCancel" unmount-on-close>
+      <c-drawer
+        v-model:open="scene1.visibleLarge"
+        :width="640"
+        @confirm="scene1.handleConfirm"
+        @cancel="scene1.handleCancel"
+        unmount-on-close
+      >
         <template #title>Title</template>
         <div>
-          You can customize modal body text by the current situation. This modal will be closed immediately once you press
-          the OK button.
+          You can customize modal body text by the current situation. This modal
+          will be closed immediately once you press the OK button.
         </div>
       </c-drawer>
-  </section>
+    </section>
 
-  <section class="demo-comparison-case demo-comparison-case--2" data-comparison-scene="location">
-    <h4><span lang="zh-CN">抽屉位置</span><span lang="en-US">Location</span></h4>
-    <c-radio-group v-model="scene2.position">
+    <section
+      class="demo-comparison-case demo-comparison-case--2"
+      data-comparison-scene="location"
+    >
+      <h4>{{ demoCopy.location }}</h4>
+      <c-radio-group v-model="scene2.position">
         <c-radio value="top">Top</c-radio>
         <c-radio value="right">Right</c-radio>
         <c-radio value="bottom">Bottom</c-radio>
         <c-radio value="left">Left</c-radio>
       </c-radio-group>
-      <div :style="{
-      marginTop: '20px'
-    }">
-        <c-button status="primary" @click="scene2.handleClick">Open Drawer</c-button>
+      <div
+        :style="{
+          marginTop: '20px',
+        }"
+      >
+        <c-button status="primary" @click="scene2.handleClick"
+          >Open Drawer</c-button
+        >
       </div>
       <c-drawer
         :width="340"
@@ -115,19 +160,27 @@ return { visible, position, handleClick, handleConfirm, handleCancel }
       >
         <template #title> Title </template>
         <div>
-          You can customize modal body text by the current situation. This modal will be closed immediately once you press
-          the OK button.
+          You can customize modal body text by the current situation. This modal
+          will be closed immediately once you press the OK button.
         </div>
       </c-drawer>
-  </section>
-</div>
+    </section>
+  </div>
 </template>
 
 <style scoped lang="less">
-.demo-comparison { display: grid; gap: 24px; min-width: 0; max-width: 100%; }
-.demo-comparison-case { min-width: 0; max-width: 100%; }
-.demo-comparison-case > h4 { margin: 0 0 12px; font-size: 14px; }
-html:not([lang='en-US']) .demo-comparison-case > h4 > [lang='en-US'],
-html[lang='en-US'] .demo-comparison-case > h4 > [lang='zh-CN'] { display: none; }
-
+.demo-comparison {
+  display: grid;
+  gap: 24px;
+  min-width: 0;
+  max-width: 100%;
+}
+.demo-comparison-case {
+  min-width: 0;
+  max-width: 100%;
+}
+.demo-comparison-case > h4 {
+  margin: 0 0 12px;
+  font-size: 14px;
+}
 </style>

@@ -1,3 +1,3 @@
-// Vitest Snapshot v1
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Tag > render 1`] = `"<transition-stub name=\\"c-tag-fade\\" appear=\\"false\\" persisted=\\"false\\" css=\\"true\\"><span class=\\"c-tag c-tag--size-md c-tag--variant-default c-tag--status-default c-tag--checked\\"><!--v-if--><!--v-if--><!--v-if--></span></transition-stub>"`;

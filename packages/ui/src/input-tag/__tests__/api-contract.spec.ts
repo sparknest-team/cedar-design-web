@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { readFileSync } from 'node:fs'
 import { expect, test } from 'vitest'
 import { inputTagEmits } from '../emits'

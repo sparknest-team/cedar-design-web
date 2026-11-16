@@ -24,10 +24,13 @@
     />
     <cascader-search-panel
       v-if="showSearchPanel"
-      :id="optionsId"
+      :id="multipleDialogId || optionsId"
+      :multiple-dialog="Boolean(multipleDialogId)"
+      :report-dialog-element="reportDialogElement"
       :options="filteredLeafOptions"
       :active-key="activeKey"
       :multiple="multiple"
+      :multiple-group="Boolean(editor && multiple)"
       :focus-recovery-enabled="Boolean(editor) || controller.computedOpen"
       :focus-fallback="focusSearchFallback"
       :check-strictly="checkStrictly"
@@ -64,7 +67,8 @@
 </template>
 <script setup lang="ts">
 import type { CompatibleReactive as UnwrapNestedRefs } from '../_utils/compatible-reactive'
-import { inject, onBeforeUnmount, ref, toRefs, useId } from "vue";
+import { inject, onBeforeUnmount, ref, toRefs } from "vue"
+import { useId } from '../_utils/vue-compat';
 import { useFieldTexts } from "../_components/field-presentation/texts";
 import { isolateEditorForm } from "../_components/field-presentation/form-bridge";
 import { provideFormErrorDescriptionBoundary } from "../form/error-description";
@@ -85,8 +89,10 @@ const optionsId = `cascader-editor-options-${useId()}`;
 const editor = inject(selectionEditorSurface, undefined);
 const searchInputRef = ref<{ focus: () => void }>();
 const focusEditorSearch = () => searchInputRef.value?.focus();
-const { controller, keyboardHandler, listboxId, focusFallback } = defineProps<{
+const { controller, keyboardHandler, listboxId, focusFallback, multipleDialogId, reportDialogElement } = defineProps<{
   controller: UnwrapNestedRefs<CascaderController>;
+  reportDialogElement?: (element: HTMLElement | null) => void
+  multipleDialogId?: string
   listboxId?: string
   focusFallback?: () => void;
   searchable?: boolean;

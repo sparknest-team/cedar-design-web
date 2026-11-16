@@ -1,20 +1,33 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
+const inlineCopy = useInlineDemoLocale("textareaAutoSizeInline");
 
-const content = ref('第一行 / First line')
-const boundedContent = ref('第一行 / First line\n第二行 / Second line')
-const maxRows = ref(5)
+import { ref } from "vue";
+
+const content = ref(inlineCopy.value.firstLine);
+const boundedContent = ref("第一行 / First line\n第二行 / Second line");
+const maxRows = ref(5);
 function fill() {
-  boundedContent.value = 'one\ntwo\nthree\nfour\nfive\nsix'
+  boundedContent.value = "one\ntwo\nthree\nfour\nfive\nsix";
 }
 </script>
 <template>
   <c-space direction="column" size="lg" fill>
-    <c-textarea default-value="原生三行 / Native three rows" :rows="3" aria-label="Native rows" />
-    <c-textarea v-model="content" auto-size placeholder="随内容增高 / Grow with content" />
+    <c-textarea
+      :default-value="inlineCopy.nativeThreeRows"
+      :rows="3"
+      aria-label="Native rows"
+    />
+    <c-textarea
+      v-model="content"
+      auto-size
+      :placeholder="inlineCopy.growWithContent"
+    />
     <c-space wrap>
-      <c-button @click="fill">填入六行 / Fill six lines</c-button>
-      <c-button @click="maxRows = maxRows === 5 ? 2 : 5">切换行数上限 / Toggle row limit: {{ maxRows }}</c-button>
+      <c-button @click="fill">{{ inlineCopy.fillSixLines }}</c-button>
+      <c-button @click="maxRows = maxRows === 5 ? 2 : 5"
+        >{{ inlineCopy.toggleRowLimit }} {{ maxRows }}</c-button
+      >
     </c-space>
     <template v-for="box in ['border-box', 'content-box']" :key="box">
       <p>{{ box }} · 2–{{ maxRows }} rows</p>

@@ -9,7 +9,6 @@ import {
   shallowReactive,
   inject,
   warn,
-  useId,
   provide,
   ref,
   toRefs,
@@ -18,7 +17,8 @@ import {
   type ComponentPublicInstance,
   type ExtractPropTypes,
   type SetupContext,
-} from "vue";
+} from "vue"
+import { useId } from '../_utils/vue-compat';
 import {
   defaultSelectionPresentation,
   useFieldPresentation,

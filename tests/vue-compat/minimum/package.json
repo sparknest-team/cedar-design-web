@@ -1,0 +1,9 @@
+{
+  "name": "@cedar-design/vue-compat-minimum-vue",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "vue": "3.2.47",
+    "@vue/server-renderer": "3.2.47"
+  }
+}

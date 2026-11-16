@@ -11,12 +11,12 @@ import {
   ref,
   toRefs,
   TransitionGroup,
-  useId,
   watch,
   type InputHTMLAttributes,
   type ComponentPublicInstance,
   type SlotsType,
 } from 'vue'
+import { useId } from '../_utils/vue-compat'
 import FeedbackIcon from '../_components/FeedbackIcon.vue'
 import ResizeObserver from '../_components/resize-observer'
 import { INPUT_EVENTS } from '../_utils/constant'
@@ -83,6 +83,7 @@ export default defineComponent({
     const { describe: describeError } = useFormErrorDescription()
     const inputRef = ref<HTMLInputElement>()
     const mirrorRef = ref<HTMLElement>()
+    const tagsRef = ref<{ $el: HTMLElement }>()
     const generatedId = useId()
     const splitAttrs = computed(() => splitInputAttrs(attrs, INPUT_EVENTS))
     const nativeAttrs = computed(() => splitAttrs.value.native as InputHTMLAttributes & Record<string, unknown>)
@@ -147,7 +148,7 @@ export default defineComponent({
       () => props.searchDelay,
       inputTagProps,
       false,
-      () => props.minSearchLength,
+      () => Math.max(1, props.minSearchLength),
     )
     const candidateOpen = ref(false)
     const dropdownRef = ref()
@@ -158,7 +159,7 @@ export default defineComponent({
     const optionsFilter = computed(() => !source.remote.value)
     const noSelectedKeys = ref<string[]>([])
     const candidateVisible = computed(() => searchEnabled.value && candidateOpen.value && _focused.value &&
-      !blocked.value && !props.disabledInput && computedInputValue.value.length >= props.minSearchLength)
+      !blocked.value && !props.disabledInput && computedInputValue.value.length >= Math.max(1, props.minSearchLength))
     const restoreInput = () => {
       if (inputRef.value && !isComposition.value) inputRef.value.value = computedInputValue.value
     }
@@ -314,14 +315,14 @@ export default defineComponent({
     })
     watch(computedInputValue, value => {
       if (!searchEnabled.value || !_focused.value || blocked.value || isComposition.value) return
-      candidateOpen.value = value.length >= props.minSearchLength
+      candidateOpen.value = value.length >= Math.max(1, props.minSearchLength)
       if (!candidateOpen.value) { source.cancel(); return }
       emit('search', value)
       void source.search(value)
     }, { flush: 'sync' })
-    watch(() => props.minSearchLength, () => {
+    watch(() => Math.max(1, props.minSearchLength), () => {
       if (!searchEnabled.value || !_focused.value || blocked.value || isComposition.value) return
-      candidateOpen.value = computedInputValue.value.length >= props.minSearchLength
+      candidateOpen.value = computedInputValue.value.length >= Math.max(1, props.minSearchLength)
       if (candidateOpen.value) void source.search(computedInputValue.value)
       else source.cancel()
     }, { flush: 'sync' })
@@ -372,7 +373,7 @@ export default defineComponent({
 
     const handleFocus = (ev: FocusEvent) => {
       _focused.value = true
-      if (searchEnabled.value && !blocked.value && !props.disabledInput && computedInputValue.value.length >= props.minSearchLength) {
+      if (searchEnabled.value && !blocked.value && !props.disabledInput && computedInputValue.value.length >= Math.max(1, props.minSearchLength)) {
         candidateOpen.value = true
         emit('search', computedInputValue.value)
         void source.search(computedInputValue.value)
@@ -445,6 +446,12 @@ export default defineComponent({
       }
     })
 
+    const revealInput = () => {
+      const container = tagsRef.value?.$el
+      if (_focused.value && container) container.scrollTop = container.scrollHeight
+    }
+    watch([computedInputValue, () => tags.value.length, _focused], revealInput, { flush: 'post' })
+
     const handleResize = () => {
       if (mirrorRef.value) {
         setInputWidth(mirrorRef.value.offsetWidth)
@@ -515,6 +522,7 @@ export default defineComponent({
                 </span>
               </ResizeObserver>
               <TransitionGroup
+                ref={tagsRef}
                 tag="span"
                 name={`${prefix}-zoom`}
                 // @ts-ignore

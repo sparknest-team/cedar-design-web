@@ -6,7 +6,8 @@ import StickyScrollbar from './StickyScrollbar.vue'
 import type { TablePaginationScope, TablePaginationConfig } from './types'
 import { tableProps } from "./props"
 import type { ComponentPublicInstance, CSSProperties, PropType, Slot } from "vue"
-import { Fragment, Teleport, computed, defineComponent, getCurrentInstance, inject, onActivated, onBeforeUnmount, onDeactivated, onMounted, provide, reactive, ref, shallowRef, toRaw, toRefs, useId, watch, watchEffect, watchPostEffect } from "vue"
+import { Fragment, Teleport, computed, defineComponent, getCurrentInstance, inject, onActivated, onBeforeUnmount, onDeactivated, onMounted, provide, reactive, ref, shallowRef, toRaw, toRefs, watch, watchEffect, watchPostEffect } from "vue"
+import { useId } from '../_utils/vue-compat'
 import { getPrefixCls, createNamespace } from "../_utils/global-config"
 import type { ComponentSize } from "../_utils/constant"
 import { isArray, isFunction, isNull, isNumber, isObject, isString, isUndefined } from "../_utils/is"
@@ -63,6 +64,13 @@ const DEFAULT_BORDERED = {
 };
 
 const { name } = createNamespace("table");
+
+function paginationTargetNeedsDefer(target: string | HTMLElement): boolean {
+  if (typeof target !== 'string') return !target.isConnected
+  if (typeof document === 'undefined') return true
+  // Avoid deferred Teleport updates after hydration on Vue 3.5.13 when the target already exists.
+  try { return !document.querySelector(target) } catch { return true }
+}
 
 export default defineComponent({
   name,
@@ -417,7 +425,7 @@ export default defineComponent({
         hasBodyHeightConstraint.value ||
         (props.stickyHeader !== false) ||
         isVirtualList.value ||
-        (hasHorizontalOverflow.value && flattenData.value.length === 0),
+        flattenData.value.length === 0,
     );
 
     const toCssSize = (value: number | string) =>
@@ -1499,12 +1507,15 @@ export default defineComponent({
       isObject(props.loading) ? props.loading : { loading: props.loading },
     );
 
+    const renderEmptyContent = (compact = false) => slots.empty
+      ? <TableSlot v-slots={forwardTableSlot(slots.empty)} />
+      : configCtx?.slots.empty?.({ component: "table" }) ?? <Empty imageSize={compact ? "var(--c-table-empty-image-size)" : undefined} />;
+
     const renderEmpty = (rowPosition?: number) => {
       return (
         <Tr empty aria-rowindex={rowPosition}>
           <Td colSpan={dataColumns.value.length + operations.value.length}>
-            {slots.empty ? <TableSlot v-slots={forwardTableSlot(slots.empty)} /> :
-              configCtx?.slots.empty?.({ component: "table" }) ?? <Empty />}
+            {renderEmptyContent()}
           </Td>
         </Tr>
       );
@@ -2143,7 +2154,33 @@ export default defineComponent({
                 renderHeaderPanel()
               ))}
             <ResizeObserver onResize={handleTbodyResize}>
-              {isVirtualList.value && flattenData.value.length ? (
+              {flattenData.value.length === 0 ? (
+                <div class={`${prefixCls}-empty-body`} style={{ maxHeight: bodyMaxHeight.value }}>
+                  <Component
+                    ref={tbodyComRef}
+                    class={`${prefixCls}-body`}
+                    {...((scrollbar.value || managedStickyFooter.value) ? {
+                      outerStyle: { height: "100%", minHeight: "0" },
+                      ...scrollbarProps.value,
+                      disableHorizontal: managedStickyFooter.value || !hasHorizontalOverflow.value,
+                    } : undefined)}
+                    onScroll={onTbodyScroll}
+                  >
+                    <table class={`${prefixCls}-element`} style={{ ...contentStyle.value, height: "100%" }} cellpadding={0} cellspacing={0}>
+                      {renderSemanticHeader('body')}
+                      <Tbody v-slots={{ tbody: slots.tbody }}>
+                        <Tr empty>
+                          <Td colSpan={dataColumns.value.length + operations.value.length} />
+                        </Tr>
+                      </Tbody>
+                    </table>
+                  </Component>
+                  {/* Keep the empty state outside the horizontal scroll container. */}
+                  <div class={`${prefixCls}-empty-overlay`}>
+                    <div class={`${prefixCls}-empty-content`}>{renderEmptyContent(true)}</div>
+                  </div>
+                </div>
+              ) : isVirtualList.value ? (
                 <VirtualList
                   v-slots={{
                     'list-prefix': () => renderSemanticHeader('body', positions),
@@ -2381,7 +2418,7 @@ export default defineComponent({
         </div>
       ) : renderPagination();
       const target = isObject(props.pagination) ? props.pagination.container : undefined;
-      return target ? <Teleport to={target} defer>{content}</Teleport> : content;
+      return target ? <Teleport to={target} defer={paginationTargetNeedsDefer(target)}>{content}</Teleport> : content;
     };
 
     const style = computed<CSSProperties | undefined>(() => {

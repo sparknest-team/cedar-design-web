@@ -1,4 +1,7 @@
 <script setup>
+import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
+const inlineCopy = useInlineDemoLocale("carouselAutoSizedInline");
+
 import { computed, ref } from "vue";
 const current = ref(1);
 const changes = ref(0);
@@ -19,11 +22,13 @@ const widths = computed(() => {
 
 <template>
   <section class="auto-sized-demo">
-    <c-checkbox v-model="wider"> Wider cards / 加宽卡片</c-checkbox>
-    <c-checkbox v-model="compact"> 300px viewport / 窄容器</c-checkbox>
-    <c-checkbox v-model="extra"> Extra card / 增加末项</c-checkbox>
-    <c-checkbox v-model="empty"> Empty / 清空项目</c-checkbox>
-    <c-checkbox v-model="reversed"> Reverse cards / 反转顺序</c-checkbox>
+    <c-checkbox v-model="wider"> {{ inlineCopy.widerCards }}</c-checkbox>
+    <c-checkbox v-model="compact">
+      {{ inlineCopy.text300pxViewport }}</c-checkbox
+    >
+    <c-checkbox v-model="extra"> {{ inlineCopy.extraCard }}</c-checkbox>
+    <c-checkbox v-model="empty"> {{ inlineCopy.empty }}</c-checkbox>
+    <c-checkbox v-model="reversed"> {{ inlineCopy.reverseCards }}</c-checkbox>
     <p role="status">Current: {{ current }} · Changes: {{ changes }}</p>
     <c-carousel
       v-model="current"

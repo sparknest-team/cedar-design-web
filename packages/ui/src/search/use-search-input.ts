@@ -1,4 +1,5 @@
-import { useId } from 'vue'
+
+import { useId } from '../_utils/vue-compat'
 import type { SearchResolvedProps } from './props'
 
 /** One accessible editor; the reference remains the sole native form value carrier. */

@@ -121,7 +121,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, ref, useAttrs, useId, watch, type InputHTMLAttributes } from 'vue'
+import { computed, nextTick, ref, useAttrs, watch, type InputHTMLAttributes } from 'vue'
+import { useId } from '../_utils/vue-compat'
 import { createNamespace } from '../_utils/global-config'
 import { useInputComposition } from '../_utils/input-composition'
 import FieldDecorator, { fieldDecoratorProps } from '../field-decorator'

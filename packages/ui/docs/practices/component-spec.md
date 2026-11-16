@@ -385,6 +385,11 @@ import type { ComponentProps } from "@cedar-design/ui-vue";
 要求：
 
 - 所有 `<demo src="...">` 路径必须是 `kebab-case`。
+- 共享中英文结构的 Demo 通过 `src/__demos__/locale` 的 `useDemoLocale` 读取示例字典，直接跟随文档顶部切换同步的全局语言；中英文文档引用同一个 Demo，不通过 `english` / `locale` 参数或英文包装组件选择语言。
+- 示例文案按场景维护在 `src/__demos__/locale/zh-cn.ts`、`en-us.ts`，包含标签、选项、说明、无障碍名称及带参数的提示；英文字典通过 `DemoMessages` 校验结构。组件中不混写中英文判断，也不将示例业务文案加入组件库公共语言包。
+- 用计算属性读取当前字典中的选项和展示数据；可编辑模型从字典复制初始值，切换语言不得覆盖用户已编辑的数据或修改字典对象。
+- 不通过双语 `<span lang>` 或 CSS `[lang]` 选择器实现 Demo 翻译；比较场景标题、公共对比提示统一维护在示例字典的 `comparison-zh-cn.ts` / `comparison-en-us.ts`。日期、时间和数字展示使用同模块的 `formatDemoDate` / `formatDemoTime` / `formatDemoDateTime` / `formatDemoNumber`，跟随顶部语言，避免写死地区或依赖操作系统语言。
+- `src/__demos__/locale/__tests__/global-language-audit.spec.ts` 全量检查组件 Demo 的上述约束；生成器输出也须使用相同字典入口，新增比较场景时同步登记字典键。
 - 当组件存在"父级配置 + 子级覆盖"机制时，必须在表格下方加 **注意** 段说明继承关系（参考 button README）。
 - `orientation` / `inset` / `spacing` 这类有方向语义的 prop，必须显式说明切换 orientation 后的视觉表现。
 
@@ -412,6 +417,13 @@ describe('Component', () => {
 
 - 文件后缀统一 `.test.tsx`。
 - 基础渲染快照必须有；后续可以追加交互 / props 切换测试。
+- Vitest 5 使用原生 worker 生命周期，不再维护 0.22 的 jsdom 补丁。默认隔离并行；`pnpm check:test-environment` 验证默认隔离、forks / threads 非隔离，以及同一进程连续重跑时 Vue DOM 与当前 jsdom 的构造器、选择器和点击事件一致。修改测试工具链时必须保留此门禁。
+- Vitest 模块缓存放在各测试 root 的 `.cache/vitest/modules`，与工作区其他项目和临时环境门禁隔离；Demo 交互测试按场景动态导入真实组件并注册所需依赖，避免筛选一个测试仍在收集阶段转换整库。
+- 单测通过 `scripts/testing/source-dependencies.mjs` 解析工作区 use/shared/icons 源码，图标根包命名导入按实际图标拆分；发布构建产物的契约由发布消费门禁验证，避免单测受清理或重建 `es` / `lib` 目录影响。
+- 新增或修改 Demo 后执行 `pnpm check:demo-i18n`：全量扫描 Demo 语言反模式、编译已迁移示例、验证顶部语言切换后的真实组件状态与交互，并验证测试加载环境和 Demo 生成器。目录级收集会自动包含新增的语言回归测试。
+- `pnpm quality` 首先执行上述门禁；GitHub `Quality` 工作流在所有 PR 和合并队列上运行，保留检查名 `quality`。CI 契约测试会拦截路径过滤、条件跳过、允许失败以及移除检查的配置变更。仓库管理员须在目标分支的保护规则 / Ruleset 中将 `quality`（GitHub Actions）设为 required status check，才能禁止失败时合并；仅提交工作流不会自动建立远端保护规则。
+- 纯文件系统 / 源码契约测试使用 `@vitest-environment node`；同时需要 DOM 和源码读取时，用 `resolve(import.meta.dirname, ...)` 定位文件。Vite 8 会把 `new URL(..., import.meta.url)` 识别为浏览器资源 URL，不能直接交给 Node 文件 API。
+- 同级 `afterEach` 默认逆序执行；需要先卸载组件再清空 DOM 时，将这两个步骤放在同一个清理钩子中，避免破坏 Teleport 锚点。
 
 ---
 

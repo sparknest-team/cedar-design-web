@@ -1,4 +1,5 @@
-import { computed, defineComponent, h, inject, mergeProps, nextTick, onActivated, onBeforeUnmount, onDeactivated, ref, useId, watch } from 'vue'
+import { computed, defineComponent, h, inject, mergeProps, nextTick, onActivated, onBeforeUnmount, onDeactivated, ref, watch } from 'vue'
+import { useId } from '../_utils/vue-compat'
 import { createNamespace } from '../_utils/global-config'
 import Trigger from '../trigger'
 import { useElementResize } from '../_utils/resize-observer'

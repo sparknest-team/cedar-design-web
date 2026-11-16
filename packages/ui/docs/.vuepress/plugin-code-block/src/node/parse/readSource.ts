@@ -25,8 +25,13 @@ export const parseImports = (rawCode: string, dirPath: string, sources: FileCode
   for (const mod of imports) {
     if (mod.startsWith('.')) {
       const filePath = resolve(dirPath, mod)
-      if (filePath) {
-        sources.push(readFileSource(filePath, noLineNumbers, deferHighlight, app))
+      if (filePath && !sources.some((source) => source.filePath === filePath)) {
+        const source = readFileSource(filePath, noLineNumbers, deferHighlight, app)
+        sources.push(source)
+        // Include shared example assets without traversing library implementations.
+        if (filePath.split(path.sep).includes('__demos__')) {
+          parseImports(source.rawCode, path.dirname(filePath), sources, noLineNumbers, deferHighlight, app)
+        }
       }
     }
   }

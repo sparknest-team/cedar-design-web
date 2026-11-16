@@ -7,6 +7,8 @@ permalink: /en/components/input-tag/
 
 Editable tag values with controlled array models. FormItem error messages are associated with the input alongside any existing `aria-describedby`.
 
+Tags wrap automatically and scroll inside the input after three rows. Candidates appear only for a non-empty query that meets `min-search-length`; focusing an empty input does not open the panel, and no dropdown arrow is shown by default.
+
 ## Reading direction
 
 Tags follow reading order while their source array stays unchanged. With empty input, Backspace removes the last closable value; Enter adds a tag. Composition does not submit or delete tags.
@@ -65,6 +67,22 @@ Compare sizes and disabled, read-only or error appearance while keeping the empt
 - `clearable`: Whether to allow clear
 
 <demo src="./__demos__/max.vue"></demo>
+
+## Data and options
+
+### Search and select tags
+
+Type or paste at least two characters to search; a sole enabled result is committed automatically and multiple results require selection.
+
+<demo src="./__demos__/search-options.vue"></demo>
+
+When `options` is supplied, typing or pasting searches only after `min-search-length` is reached. Arrays filter locally by label; loaders receive the query and `{ signal }`, and remote results are not filtered again. Composition completes before searching; shortening the query or blurring cancels pending work. Enter selects a highlighted candidate, or creates the typed value when a completed search returns no candidates. Loading, failed searches, and disabled matches never create a tag. `auto-commit-single` defaults to false and commits only the sole enabled result of the current search. Selected values are saved in the model. Resolve labels from current `options`, then `fallback-option`, the instance cache, and finally the raw value. Use `options` or `fallback-option` to restore labels after remounting.
+
+Selected tags display their label by default. Use `format-label` to format the text and `#label="{ data }"` for custom content. Slots take priority over formatting; neither changes search matching or the model. Read mode uses formatted text; use `#read` to customize read content.
+
+### Customize selected content
+
+<demo src="./__demos__/format-label.vue"></demo>
 
 ## Loading and waiting
 
@@ -128,20 +146,6 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 
 Public Props exclude the internal composition controls `baseCls`, `focused`, `disabledInput` and `uninjectFormItemContext`. A synchronous undefined return from before-commit waits for done; ordinary change / press-enter listeners do not await Promises. A deferred change may omit its source DOM event. Clearing defaults to [] in multiple mode and null in single mode; an explicit empty-value takes precedence.
 
-### Search and select tags
-
-Type or paste at least two characters to search; a sole enabled result is committed automatically and multiple results require selection.
-
-<demo src="./__demos__/search-options.vue"></demo>
-
-When `options` is supplied, typing or pasting searches only after `min-search-length` is reached. Arrays filter locally by label; loaders receive the query and `{ signal }`, and remote results are not filtered again. Composition completes before searching; shortening the query or blurring cancels pending work. Enter selects a highlighted candidate, or creates the typed value when a completed search returns no candidates. Loading, failed searches, and disabled matches never create a tag. `auto-commit-single` defaults to false and commits only the sole enabled result of the current search. Selected values are saved in the model. Resolve labels from current `options`, then `fallback-option`, the instance cache, and finally the raw value. Use `options` or `fallback-option` to restore labels after remounting.
-
-Selected tags display their label by default. Use `format-label` to format the text and `#label="{ data }"` for custom content. Slots take priority over formatting; neither changes search matching or the model. Read mode uses formatted text; use `#read` to customize read content.
-
-### Customize selected content
-
-<demo src="./__demos__/format-label.vue"></demo>
-
 ### InputTag Props
 
 | Parameter | Description | Type | Default |
@@ -152,7 +156,7 @@ Selected tags display their label by default. Use `format-label` to format the t
 | input-value **(v-model)** | The value of the input | `string` | `-` |
 | default-input-value | The default value of the input (uncontrolled state) | `string` | `''` |
 | options | Candidate array or remote loader; Enter can create the input when no result matches | `InputTagOption[] \| (query, { signal }) => InputTagOption[] \| Promise<InputTagOption[]>` | `-` |
-| min-search-length | Minimum query length before searching; 0 allows an empty query | `number` | `1` |
+| min-search-length | Minimum query length before searching; empty input never searches | `number` | `1` |
 | search-delay | Remote search debounce in milliseconds | `number` | `250` |
 | auto-commit-single | Automatically commit the only enabled result | `boolean` | `false` |
 | placeholder | Placeholder | `string` | `-` |
@@ -284,19 +288,19 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-input-tag-padding-x` | `4px` | `padding-inline-end`, `padding-inline-start` |
 | `--c-input-tag-size-lg-font-size` | `14px` | `font-size` |
 | `--c-input-tag-size-lg-padding-y` | `2px` | `padding-bottom`, `padding-top` |
-| `--c-input-tag-size-lg-tag-height` | `28px` | `line-height`, `min-height` |
+| `--c-input-tag-size-lg-tag-height` | `28px` | `line-height`, `max-height`, `min-height` |
 | `--c-input-tag-size-md-font-size` | `14px` | `font-size` |
 | `--c-input-tag-size-md-padding-y` | `2px` | `padding-bottom`, `padding-top` |
-| `--c-input-tag-size-md-tag-height` | `24px` | `line-height`, `min-height` |
+| `--c-input-tag-size-md-tag-height` | `24px` | `line-height`, `max-height`, `min-height` |
 | `--c-input-tag-size-sm-font-size` | `14px` | `font-size` |
 | `--c-input-tag-size-sm-padding-y` | `2px` | `padding-bottom`, `padding-top` |
-| `--c-input-tag-size-sm-tag-height` | `20px` | `line-height`, `min-height` |
+| `--c-input-tag-size-sm-tag-height` | `20px` | `line-height`, `max-height`, `min-height` |
 | `--c-input-tag-size-xl-font-size` | `16px` | `font-size` |
 | `--c-input-tag-size-xl-padding-y` | `4px` | `padding-bottom`, `padding-top` |
-| `--c-input-tag-size-xl-tag-height` | `32px` | `line-height`, `min-height` |
+| `--c-input-tag-size-xl-tag-height` | `32px` | `line-height`, `max-height`, `min-height` |
 | `--c-input-tag-size-xs-font-size` | `12px` | `font-size` |
 | `--c-input-tag-size-xs-padding-y` | `0px` | `padding-bottom`, `padding-top` |
-| `--c-input-tag-size-xs-tag-height` | `20px` | `line-height`, `min-height` |
+| `--c-input-tag-size-xs-tag-height` | `20px` | `line-height`, `max-height`, `min-height` |
 | `--c-input-tag-tag-color-bg` | `var(--c-sys-color-surface-default)` | `background-color` |
 | `--c-input-tag-tag-color-bg-disabled` | `var(--c-sys-color-state-hover)` | `background-color` |
 | `--c-input-tag-tag-color-bg-focus` | `var(--c-sys-color-state-hover)` | `background-color` |
@@ -305,7 +309,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-input-tag-tag-color-border-focus` | `var(--c-sys-color-state-hover)` | `border-color` |
 | `--c-input-tag-tag-font-size` | `12px` | `font-size` |
 | `--c-input-tag-tag-margin-right` | `4px` | `margin-inline-end` |
-| `--c-input-tag-tag-margin-y` | `2px` | `margin-bottom`, `margin-top` |
+| `--c-input-tag-tag-margin-y` | `2px` | `margin-bottom`, `margin-top`, `max-height` |
 
 </div>
 

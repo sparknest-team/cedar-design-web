@@ -109,7 +109,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, useId, watch, type AriaAttributes, type VNodeChild } from 'vue'
+import { computed, ref, watch, type AriaAttributes, type VNodeChild } from 'vue'
+import { useId } from '../../_utils/vue-compat'
 import { IconDown, IconSearch } from '@cedar-design/icons-vue'
 import FieldDecorator from '../../field-decorator/FieldDecorator.vue'
 import { fieldDecoratorProps } from '../../field-decorator/props'

@@ -62,3 +62,19 @@ test('external controlled pagination waits for the parent and retains ownership 
   expect(owner.text()).toContain('User 4'); expect(owner.text()).not.toContain('User 2')
  } finally { owner.unmount(); first.remove(); second.remove() }
 })
+
+test('pagination renders into a detached element and updates before it is connected', async () => {
+ const target = document.createElement('div')
+ const data = Array.from({ length: 5 }, (_, key) => ({ key, name: `User ${key}` }))
+ const owner = mount(Table, { props: { columns: [{ title: 'Name', dataIndex: 'name' }], data, pagination: { pageSize: 2, modelValue: 1, container: target } }, attachTo: document.body })
+ try {
+  await flushPromises()
+  expect(target.querySelector('.c-pagination')).toBeTruthy()
+  await owner.setProps({ pagination: { pageSize: 2, modelValue: 2, container: target } }); await flushPromises()
+  expect(owner.text()).toContain('User 2')
+  document.body.append(target)
+  await owner.setProps({ pagination: { pageSize: 2, modelValue: 3, container: target } }); await flushPromises()
+  expect(target.querySelector('.c-pagination')).toBeTruthy()
+  expect(owner.text()).toContain('User 4')
+ } finally { owner.unmount(); target.remove() }
+})

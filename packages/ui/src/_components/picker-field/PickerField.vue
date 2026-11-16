@@ -74,11 +74,11 @@ import {
   nextTick,
   ref,
   useAttrs,
-  useId,
   watch,
   type ComponentPublicInstance,
   type InputHTMLAttributes,
 } from 'vue'
+import { useId } from '../../_utils/vue-compat'
 import { IconCalendar, IconClockCircle } from '@cedar-design/icons-vue'
 import FieldDecorator from '../../field-decorator/FieldDecorator.vue'
 import { fieldDecoratorProps } from '../../field-decorator/props'

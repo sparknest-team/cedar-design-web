@@ -1,16 +1,19 @@
 <script setup>
-import { ref } from 'vue'
+import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
+const inlineCopy = useInlineDemoLocale("dividerWithTextInline");
 
-const rtl = ref(false)
+import { ref } from "vue";
+
+const rtl = ref(false);
 </script>
 
 <template>
   <div>
     <c-checkbox v-model="rtl">RTL</c-checkbox>
     <div :dir="rtl ? 'rtl' : 'ltr'">
-      <c-divider text-align="start" description="起点 / Start" />
-      <c-divider description="居中 / Center" />
-      <c-divider text-align="end" description="终点 / End" />
+      <c-divider text-align="start" :description="inlineCopy.start" />
+      <c-divider :description="inlineCopy.center" />
+      <c-divider text-align="end" :description="inlineCopy.end" />
     </div>
   </div>
 </template>

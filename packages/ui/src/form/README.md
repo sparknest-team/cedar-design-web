@@ -98,6 +98,18 @@ import type { FormProps } from "@cedar-design/ui-vue";
 
 <demo src="./__demos__/extra.vue"></demo>
 
+### 局部表单分区
+
+仅将现场处置 SOP、安全须知和处置要点放入分区，底部结束线区分后续未分组字段。 在表单上方切换分隔线、仅标题、边框卡片三种风格，已填内容保持不变；也可切换标题标记和底部结束线。卡片以外框表示范围，不重复显示结束线。FormSection 继承父 Form 的布局、标签宽度、禁用状态和校验；布局通过 Form / FormItem 的既有属性设置。请提供 title 或 title 插槽。当前不提供折叠与分区级布局覆盖。
+
+<demo src="./__demos__/section.vue"></demo>
+
+### 分区标题操作
+
+通过 extra 插槽在标题右侧放置操作。“引用模板”填充现场处置字段，“清空”只清空当前分区。可先修改分区外的技能等级，再点击操作，观察该值保持不变。
+
+<demo src="./__demos__/section-actions.vue"></demo>
+
 ### 标签宽度方案对比
 
 先输入数据，再切换自动测量、响应式栅格和固定宽度，三种方案使用同一份表单数据。修改最长标签或隐藏联系方式，观察自动测量更新。响应式方案在 576px 以下上下排列；固定宽度默认 6rem，联系方式单项覆盖为 8rem。
@@ -636,6 +648,26 @@ import type {
 ```
 自定义表单控件可在 `setup` 中调用 `useFormErrorDescription()`，将返回的 `describe(existingIds)` 绑定到实际交互元素的 `aria-describedby`。它会保留已有描述，并在 FormItem 显示或清除错误时同步添加或移除错误 ID；控件不在 FormItem 内时仅保留已有描述。
 
+### FormSection Props
+
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| id | 分区 ID，未设置时自动生成 | `string` | — |
+| title | 分区标题 | `string` | `''` |
+| description | 标题下方的补充说明 | `string` | `''` |
+| variant | 分区风格，card 带边框和内容内边距 | `'line' \| 'plain' \| 'card'` | `'line'` |
+| show-marker | 显示标题左侧的主题色标记 | `boolean` | `true` |
+| show-end-divider | 显示底部结束线，区分后续未分组字段；card 不重复绘制 | `boolean` | `false` |
+
+### FormSection Slots
+
+| 插槽 | 说明 |
+| --- | --- |
+| default | 分区内的表单字段 |
+| title | 自定义标题 |
+| description | 自定义说明 |
+| extra | 标题右侧操作 |
+
 ## CSS Variables
 
 <!-- component-css-variables:start -->
@@ -662,20 +694,43 @@ import type {
 | `--c-form-line-height` | `var(--c-line-height)` | `line-height`, `padding-top` |
 | `--c-form-required-symbol-color` | `var(--c-sys-color-content-danger)` | `color` |
 | `--c-form-required-symbol-font-size` | `var(--c-font-size-body-1)` | `font-size` |
+| `--c-form-section-accent-color` | `var(--c-sys-color-action-primary)` | `background` |
+| `--c-form-section-after-gap` | `24px` | `margin-block`, `padding-block-start` |
+| `--c-form-section-before-gap` | `32px` | `padding-block-start` |
+| `--c-form-section-card-background` | `var(--c-sys-color-surface-default)` | `background` |
+| `--c-form-section-card-padding` | `16px` | `padding` |
+| `--c-form-section-card-radius` | `6px` | `border-radius` |
+| `--c-form-section-description-color` | `var(--c-sys-color-content-secondary)` | `color` |
+| `--c-form-section-description-gap` | `4px` | `margin-block-start` |
+| `--c-form-section-description-line-height` | `20px` | `line-height` |
+| `--c-form-section-description-size` | `13px` | `font-size` |
+| `--c-form-section-divider-color` | `var(--c-sys-color-border-default)` | `border`, `border-block-start` |
+| `--c-form-section-divider-width` | `1px` | `border`, `border-block-start` |
+| `--c-form-section-end-divider-gap` | `24px` | `margin-block-start` |
+| `--c-form-section-header-gap` | `20px` | `margin-block-end` |
+| `--c-form-section-heading-gap` | `16px` | `margin-inline-start` |
+| `--c-form-section-marker-gap` | `8px` | `margin-inline-end`, `row-gap` |
+| `--c-form-section-marker-height` | `16px` | `height` |
+| `--c-form-section-marker-radius` | `2px` | `border-radius` |
+| `--c-form-section-marker-width` | `3px` | `width` |
+| `--c-form-section-title-color` | `var(--c-sys-color-content-primary)` | `color` |
+| `--c-form-section-title-line-height` | `24px` | `line-height` |
+| `--c-form-section-title-size` | `16px` | `font-size` |
+| `--c-form-section-title-weight` | `600` | `font-weight` |
 | `--c-form-size-lg-height` | `var(--c-size-lg)` | `line-height`, `min-height` |
-| `--c-form-size-lg-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height` |
+| `--c-form-size-lg-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height`, `padding-block-start` |
 | `--c-form-size-lg-label-font-size` | `var(--c-font-size-body-3)` | `font-size` |
 | `--c-form-size-md-height` | `var(--c-size-md)` | `line-height`, `min-height` |
-| `--c-form-size-md-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height` |
+| `--c-form-size-md-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height`, `padding-block-start` |
 | `--c-form-size-md-label-font-size` | `var(--c-font-size-body-3)` | `font-size` |
 | `--c-form-size-sm-height` | `var(--c-size-sm)` | `line-height`, `min-height` |
-| `--c-form-size-sm-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height` |
+| `--c-form-size-sm-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height`, `padding-block-start` |
 | `--c-form-size-sm-label-font-size` | `var(--c-font-size-body-3)` | `font-size` |
 | `--c-form-size-xl-height` | `var(--c-size-xl)` | `line-height`, `min-height` |
-| `--c-form-size-xl-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height` |
+| `--c-form-size-xl-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height`, `padding-block-start` |
 | `--c-form-size-xl-label-font-size` | `var(--c-sys-font-size-lg)` | `font-size` |
 | `--c-form-size-xs-height` | `var(--c-size-xs)` | `line-height`, `min-height` |
-| `--c-form-size-xs-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height` |
+| `--c-form-size-xs-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height`, `padding-block-start` |
 | `--c-form-size-xs-label-font-size` | `var(--c-font-size-body-1)` | `font-size` |
 | `--c-form-status-error-bg` | `var(--c-color-danger-light-1)` | `background-color` |
 | `--c-form-status-error-border-color` | `transparent` | `border-color` |

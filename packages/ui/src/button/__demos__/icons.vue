@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
+const inlineCopy = useInlineDemoLocale("buttonIconsInline");
+
 import { ref } from "vue";
 
 const sizes = ["xs", "sm", "md", "lg", "xl"] as const;
@@ -43,10 +46,10 @@ const items = [
     >
       <span>{{
         layout === "icon"
-          ? "Icon only / 纯图标"
+          ? inlineCopy.iconOnly
           : layout === "inline"
-            ? "Icon and text / 横排图文"
-            : "Stacked / 上下堆叠"
+            ? inlineCopy.iconAndText
+            : inlineCopy.stacked
       }}</span>
       <c-space wrap>
         <c-button

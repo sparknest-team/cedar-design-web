@@ -28,7 +28,7 @@ const EXPLICIT_INDEX_EXPORTS = new Map([
     'color-picker',
     [
       "export { default as ColorPicker, colorPickerProps, _ColorPickerComponent } from './color-picker'",
-      "export type { ColorPickerInstance, ColorPickerProps, RGB, HSV } from './color-picker'",
+      "export type { ColorPickerInstance, ColorPickerProps, ColorPickerSlots, ColorPickerTriggerSlotProps, RGB, HSV } from './color-picker'",
     ],
   ],
 ])

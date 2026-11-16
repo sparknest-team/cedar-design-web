@@ -8,7 +8,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, useId } from 'vue'
+import { defineComponent } from 'vue'
+import { useId } from '../_utils/vue-compat'
 import { optgroupProps } from './optgroup-props'
 import { createNamespace, getPrefixCls } from '../_utils/global-config'
 

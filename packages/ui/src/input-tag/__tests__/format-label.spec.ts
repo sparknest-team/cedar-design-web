@@ -55,11 +55,13 @@ test('option labels update reactively for nested groups and numeric identities',
 })
 
 test('an initial remote option remains displayed after later candidate searches', async () => {
-  const loader = async (query: string) => query ? [{ value: 'bob', label: 'Bob' }] : [{ value: 'alice', label: 'Alice' }]
-  const owner = mount(InputTag, { attachTo: document.body, props: { editMode: 'direct', modelValue: ['alice'], options: loader, minSearchLength: 0, searchDelay: 0 } })
+  const loader = vi.fn(async (query: string) => query === 'bob' ? [{ value: 'bob', label: 'Bob' }] : [{ value: 'alice', label: 'Alice' }])
+  const owner = mount(InputTag, { attachTo: document.body, props: { editMode: 'direct', modelValue: ['alice'], options: loader, minSearchLength: 1, searchDelay: 0 } })
+  const input = owner.get('input'); input.element.focus()
+  await input.setValue('alice'); await flushPromises()
+  expect(loader.mock.calls.map(([query]) => query)).toContain('alice')
   await flushPromises()
   expect(owner.text()).toContain('Alice')
-  const input = owner.get('input'); input.element.focus()
   await input.setValue('bob'); await flushPromises()
   expect(owner.text()).toContain('Alice')
   await owner.setProps({ readPretty: true }); await flushPromises()

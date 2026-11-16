@@ -54,7 +54,8 @@
 <script setup lang="ts">
 import PendingFeedback from '../pending-feedback/PendingFeedback.vue'
 import { useFormErrorDescription } from '../../form/error-description'
-import { computed, ref, useAttrs, useId } from 'vue'
+import { computed, ref, useAttrs } from 'vue'
+import { useId } from '../../_utils/vue-compat'
 import { IconEdit } from '@cedar-design/icons-vue/icon-edit'
 import { createNamespace } from '../../_utils/global-config'
 import { useI18n } from '../../locale'

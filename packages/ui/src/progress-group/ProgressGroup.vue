@@ -152,7 +152,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onActivated, onBeforeUnmount, onDeactivated, onMounted, ref, useId, useSlots, watch } from 'vue'
+import { computed, onActivated, onBeforeUnmount, onDeactivated, onMounted, ref, useSlots, watch } from 'vue'
+import { useId } from '../_utils/vue-compat'
 import { positiveLength } from '../progress/size'
 import { createNamespace } from '../_utils/global-config'
 import { progressGroupProps } from './props'

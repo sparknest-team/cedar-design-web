@@ -1,10 +1,14 @@
 import { useDemoControls } from "../../../test-utils/demo-controls";
 import { flushPromises, mount } from "@vue/test-utils";
-import { expect, test } from "vitest";
+import { afterEach, beforeEach, expect, test } from "vitest";
+import { addI18nMessages, cedarEnUS, useLocale } from "../../locale";
 import Carousel, { CarouselItem } from "..";
 import Demo from "../__demos__/interactive-content.vue";
 
 useDemoControls();
+addI18nMessages({ "en-US": cedarEnUS });
+beforeEach(() => useLocale("en-US"));
+afterEach(() => useLocale("zh-CN"));
 
 test("editable keys and pointer gestures stay local while background drags update the Demo model", async () => {
   const wrapper = mount(Demo, {
@@ -21,7 +25,7 @@ test("editable keys and pointer gestures stay local while background drags updat
     wrapper.findComponent(Carousel).vm.resize();
     await flushPromises();
     const status = () => wrapper.get("[role=status]").text();
-    const input = wrapper.get('input[aria-label="Slide 1"]');
+    const input = wrapper.get('input[aria-label="Slide1"]');
     await input.setValue("local-177");
     for (const key of ["ArrowLeft", "ArrowRight", "Home", "End"]) {
       await input.trigger("keydown", { key });
@@ -48,9 +52,9 @@ test("editable keys and pointer gestures stay local while background drags updat
     expect(status()).toBe("Current: 1 · Changes: 0");
     await drag(viewport, 450, 250);
     expect(status()).toBe("Current: 2 · Changes: 1");
-    await wrapper.get('input[aria-label="Slide 2"]').setValue("second-177");
+    await wrapper.get('input[aria-label="Slide2"]').setValue("second-177");
     await wrapper
-      .get('input[aria-label="Slide 2"]')
+      .get('input[aria-label="Slide2"]')
       .trigger("keydown", { key: "ArrowLeft" });
     expect(status()).toBe("Current: 2 · Changes: 1");
     await drag(viewport, 250, 450);
@@ -61,7 +65,7 @@ test("editable keys and pointer gestures stay local while background drags updat
       .trigger("keydown", { key: "ArrowRight" });
     expect(status()).toBe("Current: 2 · Changes: 3");
     expect(wrapper.findComponent(Carousel).props("modelValue")).toBe(2);
-    expect(wrapper.get('input[aria-label="Slide 2"]').element.value).toBe(
+    expect(wrapper.get('input[aria-label="Slide2"]').element.value).toBe(
       "second-177",
     );
   } finally {

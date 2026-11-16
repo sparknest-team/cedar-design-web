@@ -1,4 +1,5 @@
-import { defineComponent, computed, nextTick, useId, watch, type SlotsType } from 'vue'
+import { defineComponent, computed, nextTick, watch, type SlotsType } from 'vue'
+import { useId } from '../_utils/vue-compat'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
 import type { ColorPickerSlots, HSV } from './types'
 import Panel from './panel'

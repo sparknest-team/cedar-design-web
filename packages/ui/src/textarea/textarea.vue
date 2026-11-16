@@ -74,10 +74,10 @@ import {
   ref,
   toRefs,
   useAttrs,
-  useId,
   type CSSProperties,
   type TextareaHTMLAttributes,
 } from 'vue'
+import { useId } from '../_utils/vue-compat'
 import { createNamespace } from '../_utils/global-config'
 import { useInputComposition } from '../_utils/input-composition'
 import FieldDecorator, { fieldDecoratorProps } from '../field-decorator'

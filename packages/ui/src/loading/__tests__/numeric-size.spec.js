@@ -1,19 +1,19 @@
 import { mount } from '@vue/test-utils'
 import { beforeAll, afterAll, expect, test } from 'vitest'
 import { readFileSync } from 'node:fs'
-import { fileURLToPath } from 'node:url'
+import { resolve } from 'node:path'
 import less from 'less'
 import Loading from '..'
 
 let stylesheet
 beforeAll(async () => {
-  const filename = fileURLToPath(new URL('../style/index.less', import.meta.url))
+  const filename = resolve(import.meta.dirname, '../style/index.less')
   const { css } = await less.render(readFileSync(filename, 'utf8'), { filename })
   stylesheet = document.createElement('style')
   stylesheet.textContent = css
   document.head.appendChild(stylesheet)
 })
-afterAll(() => stylesheet.remove())
+afterAll(() => stylesheet?.remove())
 
 test.each(['wave', 'cube', 'rect', 'disappear'])('%s numeric size gives animation primitives nonzero dimensions', async type => {
   const wrapper = mount(Loading, { props: { type, size: 20 }, attachTo: document.body })

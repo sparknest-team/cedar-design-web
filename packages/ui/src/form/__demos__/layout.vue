@@ -1,97 +1,36 @@
 <script setup lang="ts">
+import { useDemoLocale } from "../../__demos__/locale";
 import { computed, reactive, ref } from "vue";
-import type { FieldEditMode, FormContentAlign, FormLayout } from '@cedar-design/ui-vue'
+import type {
+  FieldEditMode,
+  FormContentAlign,
+  FormLayout,
+} from "@cedar-design/ui-vue";
 
-const props = defineProps<{ english?: boolean }>();
+const copy = useDemoLocale("layout");
 const layout = ref<FormLayout>("horizontal");
 const itemLayout = ref<FormLayout | "inherit">("inherit");
 const mode = ref<FieldEditMode>("direct");
 const readPretty = ref(false);
 const contentAlign = ref<FormContentAlign>("start");
-const contentAlignOptions = ["start", "end", "left", "center", "right"].map((value) => ({
-  label: value,
-  value,
-}));
-const modeOptions = computed(() => (['direct', 'click', 'dblclick'] as const).map((value) => ({
-  label: (props.english ? {"direct": "Direct", "click": "Single click", "dblclick": "Double click"} : {"direct": "直接编辑", "click": "单击编辑", "dblclick": "双击编辑"})[value], value,
-})))
-const model = reactive(
-  props.english
-    ? {
-        name: "Alex",
-        department: "Product design",
-        notes: "Review progress every Wednesday and confirm the weekly plan.",
-      }
-    : {
-        name: "林晓",
-        department: "产品设计",
-        notes: "每周三同步进度，确认后更新本周安排。",
-      },
+const contentAlignOptions = ["start", "end", "left", "center", "right"].map(
+  (value) => ({
+    label: value,
+    value,
+  }),
 );
+const modeOptions = computed(() =>
+  (["direct", "click", "dblclick"] as const).map((value) => ({
+    label: copy.value.editModes[value],
+    value,
+  })),
+);
+const model = reactive({ ...copy.value.initialModel });
 const layouts = ["vertical", "horizontal", "inline"] as const;
 const layoutOptions = layouts.map((value) => ({ label: value, value }));
-const copy = computed(() =>
-  props.english
-    ? {
-        layout: "Form layout",
-        itemLayout: "Notes layout",
-        mode: "Edit mode",
-        readPretty: "Read only display (readPretty)",
-        contentAlign: "Content alignment",
-        inherit: "Inherit",
-        hint: "Switch between direct, click and dblclick editing and toggle readPretty independently. Switch content-align to compare value alignment; Notes can also override the form layout.",
-        modeDescription: {
-          direct: "Edit values directly in the form.",
-          click: "Click a value to edit it in a popover; confirm to save.",
-          dblclick:
-            "Double-click a value to edit it in a popover; confirm to save.",
-          readPretty:
-            "Show saved values as text. Compare alignment and wrapping with the labels.",
-        },
-        description: {
-          vertical:
-            "Labels appear above controls, with each field on its own row.",
-          horizontal:
-            "Labels appear beside controls, with each field on its own row.",
-          inline:
-            "Fields flow alongside one another and wrap when space runs out.",
-        },
-        name: "Name",
-        department: "Team",
-        notes: "Notes",
-        placeholder: "Enter a value",
-        help: "Help stays below the control as the layout changes.",
-        model: "Current values",
-      }
-    : {
-        layout: "表单布局",
-        itemLayout: "备注单项布局",
-        mode: "编辑模式 edit-mode",
-        readPretty: "纯阅读 readPretty",
-        contentAlign: "内容对齐 content-align",
-        inherit: "继承表单",
-        hint: "组合切换表单布局与 direct / click / dblclick 编辑方式，并独立开关 readPretty；通过 content-align 切换内容左、中、右对齐；备注还可单独设置布局。",
-        modeDescription: {
-          direct: "直接在表单中编辑字段值。",
-          click: "单击字段值进入编辑弹层，确认后保存。",
-          dblclick: "双击字段值进入编辑弹层，确认后保存。",
-          readPretty: "以纯文字展示已保存的值，观察与标签的对齐及长文字换行。",
-        },
-        description: {
-          vertical: "标签在上、控件在下，每个字段单独一行。",
-          horizontal: "标签在左、控件在右，每个字段单独一行。",
-          inline: "字段依次横向排列，空间不足时换行。",
-        },
-        name: "姓名",
-        department: "部门",
-        notes: "备注",
-        placeholder: "请输入",
-        help: "切换布局后，帮助文字仍显示在控件下方。",
-        model: "当前数据",
-      },
-);
+
 const itemLayoutOptions = computed(() => [
-  { label: copy.value.inherit, value: "inherit" },
+  { label: copy.value.labels.inherit, value: "inherit" },
   ...layoutOptions,
 ]);
 </script>
@@ -104,50 +43,50 @@ const itemLayoutOptions = computed(() => [
     data-config-comparison="form-layout"
   >
     <c-form layout="vertical" edit-mode="direct">
-      <c-form-item :label="copy.layout">
+      <c-form-item :label="copy.labels.layout">
         <c-radio-group
           v-model="layout"
-          :aria-label="copy.layout"
+          :aria-label="copy.labels.layout"
           :options="layoutOptions"
           variant="button"
           size="sm"
         />
       </c-form-item>
-      <c-form-item :label="copy.itemLayout">
+      <c-form-item :label="copy.labels.itemLayout">
         <c-radio-group
           v-model="itemLayout"
-          :aria-label="copy.itemLayout"
+          :aria-label="copy.labels.itemLayout"
           :options="itemLayoutOptions"
           size="sm"
         />
       </c-form-item>
-      <c-form-item :label="copy.mode">
+      <c-form-item :label="copy.labels.mode">
         <c-radio-group
           v-model="mode"
-          :aria-label="copy.mode"
+          :aria-label="copy.labels.mode"
           :options="modeOptions"
           variant="button"
           size="sm"
         />
       </c-form-item>
-      <c-form-item :label="copy.contentAlign">
+      <c-form-item :label="copy.labels.contentAlign">
         <c-radio-group
           v-model="contentAlign"
-          :aria-label="copy.contentAlign"
+          :aria-label="copy.labels.contentAlign"
           :options="contentAlignOptions"
           variant="button"
           size="sm"
         />
       </c-form-item>
-      <c-form-item :label="copy.readPretty">
+      <c-form-item :label="copy.labels.readPretty">
         <c-checkbox v-model="readPretty" data-read-pretty-toggle
           >readPretty</c-checkbox
         >
       </c-form-item>
     </c-form>
     <p>
-      {{ copy.hint }}<br />{{ copy.description[layout] }}<br />{{
-        copy.modeDescription[readPretty ? "readPretty" : mode]
+      {{ copy.labels.hint }}<br />{{ copy.labels.description[layout] }}<br />{{
+        copy.labels.modeDescription[readPretty ? "readPretty" : mode]
       }}
     </p>
     <c-form
@@ -160,22 +99,25 @@ const itemLayoutOptions = computed(() => [
       label-align="left"
       label-col-flex="6rem"
     >
-      <c-form-item field="name" :label="copy.name" required>
-        <c-input v-model="model.name" :placeholder="copy.placeholder" />
+      <c-form-item field="name" :label="copy.labels.name" required>
+        <c-input v-model="model.name" :placeholder="copy.labels.placeholder" />
       </c-form-item>
-      <c-form-item field="department" :label="copy.department">
-        <c-input v-model="model.department" :placeholder="copy.placeholder" />
+      <c-form-item field="department" :label="copy.labels.department">
+        <c-input
+          v-model="model.department"
+          :placeholder="copy.labels.placeholder"
+        />
       </c-form-item>
       <c-form-item
         field="notes"
-        :label="copy.notes"
+        :label="copy.labels.notes"
         :layout="itemLayout === 'inherit' ? undefined : itemLayout"
-        :help="copy.help"
+        :help="copy.labels.help"
       >
-        <c-input v-model="model.notes" :placeholder="copy.placeholder" />
+        <c-input v-model="model.notes" :placeholder="copy.labels.placeholder" />
       </c-form-item>
     </c-form>
-    <p role="status">{{ copy.model }}：{{ JSON.stringify(model) }}</p>
+    <p role="status">{{ copy.labels.model }}：{{ JSON.stringify(model) }}</p>
   </c-space>
 </template>
 

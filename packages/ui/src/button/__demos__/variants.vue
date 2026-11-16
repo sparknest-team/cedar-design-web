@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
+const inlineCopy = useInlineDemoLocale("buttonVariantsInline");
+
 import { computed, ref } from "vue";
 
 const variant = ref("default");
@@ -17,10 +20,34 @@ const statuses = [
   "danger",
 ];
 const backgrounds = [
-  { label: "Navy / 深蓝", value: "navy", color: "#17224B" },
-  { label: "White / 白色", value: "light", color: "#FFFFFF" },
-  { label: "Light gray / 浅灰", value: "muted", color: "#F5F5F5" },
-  { label: "Dark gray / 深灰", value: "dark", color: "#252525" },
+  {
+    get label() {
+      return inlineCopy.value.navy;
+    },
+    value: "navy",
+    color: "#17224B",
+  },
+  {
+    get label() {
+      return inlineCopy.value.white;
+    },
+    value: "light",
+    color: "#FFFFFF",
+  },
+  {
+    get label() {
+      return inlineCopy.value.lightGray;
+    },
+    value: "muted",
+    color: "#F5F5F5",
+  },
+  {
+    get label() {
+      return inlineCopy.value.darkGray;
+    },
+    value: "dark",
+    color: "#252525",
+  },
 ];
 const cardBackground = computed(
   () => backgrounds.find((item) => item.value === background.value)?.color,

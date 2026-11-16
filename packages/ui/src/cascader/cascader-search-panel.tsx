@@ -1,4 +1,4 @@
-import { computed, defineComponent, inject, nextTick, onBeforeUnmount, onBeforeUpdate, onUpdated, PropType, ref, watch } from 'vue'
+import { computed, defineComponent, inject, nextTick, onBeforeUnmount, onBeforeUpdate, onUpdated, PropType, ref, watch, watchPostEffect } from 'vue'
 import { useEmptySlot } from '../_components/selection-field/empty-slot'
 import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import Empty from '../empty'
@@ -21,6 +21,9 @@ export default defineComponent({
     loading: Boolean,
     activeKey: String,
     multiple: Boolean,
+    multipleGroup: Boolean,
+    multipleDialog: Boolean,
+    reportDialogElement: Function as PropType<(element: HTMLElement | null) => void>,
     focusRecoveryEnabled: { type: Boolean, default: true },
     focusFallback: Function as PropType<() => void>,
     checkStrictly: Boolean,
@@ -31,6 +34,12 @@ export default defineComponent({
   setup(props, { slots }) {
     const prefixCls = getPrefixCls('cascader')
     const panelRef = ref<{ $el: HTMLElement }>()
+    watchPostEffect(() => {
+      const panel = panelRef.value?.$el
+      const dialog = panel?.matches('[role="dialog"]') ? panel : panel?.querySelector<HTMLElement>('[role="dialog"]')
+      props.reportDialogElement?.(props.multipleDialog ? dialog ?? null : null)
+    })
+    onBeforeUnmount(() => props.reportDialogElement?.(null))
     let previousCheckbox: HTMLInputElement | null = null
     const ownFocusedCheckbox = () => {
       const panel = panelRef.value?.$el
@@ -130,7 +139,7 @@ export default defineComponent({
       }
       return (
         <ul
-          role="menu"
+          role={(props.multipleGroup || props.multipleDialog) ? "presentation" : "menu"}
           onFocusin={onFocusin}
           onFocusout={onFocusout}
           class={[
@@ -148,16 +157,17 @@ export default defineComponent({
               option={item}
               active={item.key === props.activeKey}
               multiple={props.multiple}
+              multipleGroupOption={(props.multipleGroup || props.multipleDialog)}
               checkStrictly={props.checkStrictly}
               pathLabel={props.pathLabel}
               searchOption
-              tabIndex={props.multiple || item.key === tabKey.value ? 0 : -1}
+              tabIndex={(props.multipleGroup || props.multipleDialog) ? -1 : props.multiple || item.key === tabKey.value ? 0 : -1}
             />
           ))}
         </ul>
       )
     }
 
-    return () => <Scrollbar ref={panelRef} class={[`${prefixCls}-panel`, `${prefixCls}-search-panel`]}>{renderContent()}</Scrollbar>
+    return () => <Scrollbar ref={panelRef} {...{ role: props.multipleDialog ? 'dialog' : props.multipleGroup ? 'group' : undefined, 'aria-label': (props.multipleGroup || props.multipleDialog) ? props.listboxLabel : undefined, 'aria-busy': (props.multipleGroup || props.multipleDialog) && props.loading ? true : undefined }} class={[`${prefixCls}-panel`, `${prefixCls}-search-panel`]}>{renderContent()}</Scrollbar>
   },
 })

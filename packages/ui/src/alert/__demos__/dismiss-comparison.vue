@@ -1,13 +1,16 @@
 <script setup lang="ts">
-
-
+import { useDemoLocale } from "../../__demos__/locale";
+const demoCopy = useDemoLocale("alertDismissComparison");
 </script>
 
 <template>
-<div class="demo-comparison">
-  <section class="demo-comparison-case demo-comparison-case--1" data-comparison-scene="closable">
-    <h4><span lang="zh-CN">可关闭</span><span lang="en-US">closable</span></h4>
-    <c-row :gutter="[40, 20]">
+  <div class="demo-comparison">
+    <section
+      class="demo-comparison-case demo-comparison-case--1"
+      data-comparison-scene="closable"
+    >
+      <h4>{{ demoCopy.closable }}</h4>
+      <c-row :gutter="[40, 20]">
         <c-col :span="12">
           <c-alert closable>This is an info alert.</c-alert>
         </c-col>
@@ -27,11 +30,14 @@
           </c-alert>
         </c-col>
       </c-row>
-  </section>
+    </section>
 
-  <section class="demo-comparison-case demo-comparison-case--2" data-comparison-scene="close-icon">
-    <h4><span lang="zh-CN">自定义关闭图标</span><span lang="en-US">close icon</span></h4>
-    <c-row :gutter="[40, 20]">
+    <section
+      class="demo-comparison-case demo-comparison-case--2"
+      data-comparison-scene="close-icon"
+    >
+      <h4>{{ demoCopy.closeIcon }}</h4>
+      <c-row :gutter="[40, 20]">
         <c-col :span="12">
           <c-alert closable>
             <template #close-icon>
@@ -47,15 +53,23 @@
           </c-alert>
         </c-col>
       </c-row>
-  </section>
-</div>
+    </section>
+  </div>
 </template>
 
 <style scoped lang="less">
-.demo-comparison { display: grid; gap: 24px; min-width: 0; max-width: 100%; }
-.demo-comparison-case { min-width: 0; max-width: 100%; }
-.demo-comparison-case > h4 { margin: 0 0 12px; font-size: 14px; }
-html:not([lang='en-US']) .demo-comparison-case > h4 > [lang='en-US'],
-html[lang='en-US'] .demo-comparison-case > h4 > [lang='zh-CN'] { display: none; }
-
+.demo-comparison {
+  display: grid;
+  gap: 24px;
+  min-width: 0;
+  max-width: 100%;
+}
+.demo-comparison-case {
+  min-width: 0;
+  max-width: 100%;
+}
+.demo-comparison-case > h4 {
+  margin: 0 0 12px;
+  font-size: 14px;
+}
 </style>

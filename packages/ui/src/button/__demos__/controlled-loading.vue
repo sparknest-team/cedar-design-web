@@ -1,29 +1,44 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-const saving = ref(false)
-const failing = ref(false)
-const message = ref('点击保存，观察业务控制的 loading / Click Save to start')
-const delay = () => new Promise(resolve => setTimeout(resolve, 800))
+import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
+const inlineCopy = useInlineDemoLocale("buttonControlledLoadingInline");
+
+import { computed, ref } from "vue";
+const saving = ref(false);
+const failing = ref(false);
+const messageKey = ref<keyof typeof inlineCopy.value>("clickSaveToStart");
+const message = computed(() => inlineCopy.value[messageKey.value]);
+const delay = () => new Promise((resolve) => setTimeout(resolve, 800));
 async function save() {
-  if (saving.value) return
-  saving.value = true
-  try { await delay(); message.value = '保存完成 / Saved' }
-  finally { saving.value = false }
+  if (saving.value) return;
+  saving.value = true;
+  try {
+    await delay();
+    messageKey.value = "saved";
+  } finally {
+    saving.value = false;
+  }
 }
 async function recover() {
-  if (failing.value) return
-  failing.value = true
-  try { await delay(); throw new Error('模拟请求失败 / Simulated failure') }
-  catch (error) { message.value = (error as Error).message }
-  finally { failing.value = false }
+  if (failing.value) return;
+  failing.value = true;
+  try {
+    await delay();
+    throw new Error(inlineCopy.value.simulatedFailure);
+  } catch {
+    messageKey.value = "simulatedFailure";
+  } finally {
+    failing.value = false;
+  }
 }
 </script>
 <template>
   <c-space direction="column" :size="12">
-    <p>click 支持 async 回调；业务通过 loading 展示等待，在 finally 中恢复。Async click handlers own their loading state.</p>
+    <p>{{ inlineCopy.asyncClickHandlersOwnTheir }}</p>
     <c-space wrap :size="12">
-      <c-button :loading="saving" @click="save">保存 / Save</c-button>
-      <c-button :loading="failing" @click="recover">失败与恢复 / Failure recovery</c-button>
+      <c-button :loading="saving" @click="save">{{ inlineCopy.save }}</c-button>
+      <c-button :loading="failing" @click="recover">{{
+        inlineCopy.failureRecovery
+      }}</c-button>
     </c-space>
     <p aria-live="polite">{{ message }}</p>
   </c-space>

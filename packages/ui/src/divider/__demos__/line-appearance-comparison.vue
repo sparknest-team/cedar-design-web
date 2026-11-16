@@ -1,82 +1,109 @@
 <script setup lang="ts">
-import { proxyRefs as demoProxyRefs } from 'vue'
+import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
+const inlineCopy = useInlineDemoLocale("dividerLineAppearanceComparisonInline");
 
-const scene1 = demoProxyRefs((() => {
+import { useDemoLocale } from "../../__demos__/locale";
+const demoCopy = useDemoLocale("dividerLineAppearanceComparison");
+import { proxyRefs as demoProxyRefs } from "vue";
 
-const presets = ['xs', 'sm', 'md', 'lg', 'xl']
-return { presets }
-})())
+const scene1 = demoProxyRefs(
+  (() => {
+    const presets = ["xs", "sm", "md", "lg", "xl"];
+    return { presets };
+  })(),
+);
 </script>
 
 <template>
-<div class="demo-comparison">
-  <section class="demo-comparison-case demo-comparison-case--1" data-comparison-scene="size-inset">
-    <h4><span lang="zh-CN">间距与缩进</span><span lang="en-US">Spacing &amp; Inset</span></h4>
-    <div>
+  <div class="demo-comparison">
+    <section
+      class="demo-comparison-case demo-comparison-case--1"
+      data-comparison-scene="size-inset"
+    >
+      <h4>{{ demoCopy.sizeInset }}</h4>
+      <div>
         <div v-for="size in scene1.presets" :key="size">
           <code>inset="{{ size }}" spacing="{{ size }}"</code>
           <c-divider :inset="size" :spacing="size" />
         </div>
-        <p>数值 / Number · inset=24, spacing=16</p>
+        <p>{{ inlineCopy.numberInset24Spacing16 }}</p>
         <c-divider :inset="24" :spacing="16" />
-        <p>CSS 长度 / CSS length · inset=2rem</p>
+        <p>{{ inlineCopy.cssLengthInset2rem }}</p>
         <c-divider inset="2rem" />
-        <p>非对称 / Asymmetric · inset=[8, 32], spacing=[12, 24]</p>
+        <p>{{ inlineCopy.asymmetricInset832Spacing }}</p>
         <c-divider :inset="[8, 32]" :spacing="[12, 24]" />
-        <p>竖直 / Vertical · inset=[8, 24], spacing=[12, 20]</p>
+        <p>{{ inlineCopy.verticalInset824Spacing }}</p>
         <div class="vertical-preview">
           <span>Before</span>
-          <c-divider orientation="vertical" :inset="[8, 24]" :spacing="[12, 20]" />
+          <c-divider
+            orientation="vertical"
+            :inset="[8, 24]"
+            :spacing="[12, 20]"
+          />
           <span>After</span>
         </div>
       </div>
-  </section>
+    </section>
 
-  <section class="demo-comparison-case demo-comparison-case--2" data-comparison-scene="line-type">
-    <h4><span lang="zh-CN">线型</span><span lang="en-US">Line Style</span></h4>
-    <div>
-        <p>实线 / solid</p>
+    <section
+      class="demo-comparison-case demo-comparison-case--2"
+      data-comparison-scene="line-type"
+    >
+      <h4>{{ demoCopy.lineType }}</h4>
+      <div>
+        <p>{{ inlineCopy.solid }}</p>
         <c-divider />
-        <p>虚线 / dashed</p>
+        <p>{{ inlineCopy.dashed }}</p>
         <c-divider type="dashed" />
-        <p>点线 / dotted</p>
+        <p>{{ inlineCopy.dotted }}</p>
         <c-divider type="dotted" />
-        <p>双线 / double · 3px</p>
+        <p>{{ inlineCopy.double3px }}</p>
         <c-divider type="double" :thickness="3" />
       </div>
-  </section>
+    </section>
 
-  <section class="demo-comparison-case demo-comparison-case--3" data-comparison-scene="opacity-color">
-    <h4><span lang="zh-CN">颜色、线宽与透明度</span><span lang="en-US">Color, Thickness &amp; Opacity</span></h4>
-    <div>
-        <p>主题色 / Theme color</p>
+    <section
+      class="demo-comparison-case demo-comparison-case--3"
+      data-comparison-scene="opacity-color"
+    >
+      <h4>{{ demoCopy.opacityColor }}</h4>
+      <div>
+        <p>{{ inlineCopy.themeColor }}</p>
         <c-divider color="var(--c-sys-color-action-primary)" />
-        <p>线宽 / Thickness · 3px</p>
+        <p>{{ inlineCopy.thickness3px }}</p>
         <c-divider :thickness="3" />
-        <p>半透明 / Half opacity · 0.5</p>
+        <p>{{ inlineCopy.halfOpacity05 }}</p>
         <c-divider :thickness="3" :opacity="0.5" />
-        <p>隐藏线条，保留间距 / Zero opacity preserves spacing</p>
+        <p>{{ inlineCopy.zeroOpacityPreservesSpacing }}</p>
         <c-divider :opacity="0" />
-        <p>细线优先 / Hairline overrides thickness</p>
+        <p>{{ inlineCopy.hairlineOverridesThickness }}</p>
         <c-divider hairline :thickness="4" />
       </div>
-  </section>
-</div>
+    </section>
+  </div>
 </template>
 
 <style scoped lang="less">
-.demo-comparison { display: grid; gap: 24px; min-width: 0; max-width: 100%; }
-.demo-comparison-case { min-width: 0; max-width: 100%; }
-.demo-comparison-case > h4 { margin: 0 0 12px; font-size: 14px; }
-html:not([lang='en-US']) .demo-comparison-case > h4 > [lang='en-US'],
-html[lang='en-US'] .demo-comparison-case > h4 > [lang='zh-CN'] { display: none; }
-.demo-comparison-case--1 {
-
-.vertical-preview {
-  display: flex;
-  align-items: center;
-  height: 96px;
+.demo-comparison {
+  display: grid;
+  gap: 24px;
+  min-width: 0;
+  max-width: 100%;
+}
+.demo-comparison-case {
+  min-width: 0;
+  max-width: 100%;
+}
+.demo-comparison-case > h4 {
+  margin: 0 0 12px;
+  font-size: 14px;
 }
 
+.demo-comparison-case--1 {
+  .vertical-preview {
+    display: flex;
+    align-items: center;
+    height: 96px;
+  }
 }
 </style>

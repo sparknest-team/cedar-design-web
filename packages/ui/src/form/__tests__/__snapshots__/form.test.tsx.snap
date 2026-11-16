@@ -1,3 +1,3 @@
-// Vitest Snapshot v1
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Form > render 1`] = `"<form class=\\"c-form c-form-layout-horizontal c-form-size-md\\"></form>"`;

@@ -93,7 +93,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject, nextTick, onMounted, ref, useAttrs, useId, watch, type InputHTMLAttributes } from 'vue'
+import { computed, inject, nextTick, onMounted, ref, useAttrs, watch, type InputHTMLAttributes } from 'vue'
+import { useId } from '../_utils/vue-compat'
 import { invokeBeforeCommit, useFieldPresentation } from '../_components/field-presentation/context'
 import FieldPresentation from '../_components/field-presentation/FieldPresentation.vue'
 import { useSelectionSession } from '../_components/selection-field/use-selection-session'

@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
+const inlineCopy = useInlineDemoLocale("fieldDecoratorControlSizesInline");
+
 import { ref } from "vue";
 const sizes = ["xs", "sm", "md", "lg", "xl"] as const;
 const variants = ["outline", "filled", "standard"] as const;
@@ -127,13 +130,10 @@ function resetSelections() {
     >
       <c-space wrap align="center" :size="12">
         <span>Selected / Clearable / Multiple — 有值、可清空与多选不换行</span>
-        <span
-          >Hover or focus truncated text; tap on touch screens /
-          悬停或聚焦省略正文查看全文；触屏点按查看，点外部关闭</span
-        >
-        <c-button size="sm" variant="outline" @click="resetSelections"
-          >Reset / 恢复选中值</c-button
-        >
+        <span>{{ inlineCopy.hoverOrFocusTruncatedText }}</span>
+        <c-button size="sm" variant="outline" @click="resetSelections">{{
+          inlineCopy.reset
+        }}</c-button>
       </c-space>
       <div class="control-size-comparison__grid">
         <div data-control="InputValue">

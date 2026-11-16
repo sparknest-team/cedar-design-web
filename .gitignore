@@ -48,3 +48,8 @@ lib
 packages/ui/docs/.vuepress/public/llms/
 packages/ui/docs/.vuepress/public/llms.txt
 packages/ui/docs/.vuepress/public/llms-full.txt
+
+# Vitest reports and generated artifacts
+.vitest/
+.vitest-cache/
+packages/ui/coverage/

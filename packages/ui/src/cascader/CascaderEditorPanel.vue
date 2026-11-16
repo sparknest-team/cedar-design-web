@@ -44,7 +44,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import { computed, inject, ref, useId, watch } from 'vue'
+import { computed, inject, ref, watch } from 'vue'
+import { useId } from '../_utils/vue-compat'
 import { useFieldTexts } from '../_components/field-presentation/texts'
 import { selectionEditorSurface } from '../_components/selected-options/context'
 import type { VirtualListProps } from '../_components/virtual-list-v2/interface'

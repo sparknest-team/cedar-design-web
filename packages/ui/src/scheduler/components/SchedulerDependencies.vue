@@ -32,7 +32,8 @@
   </svg>
 </template>
 <script setup lang="ts">
-import { ref, watch, nextTick, onBeforeUnmount, onMounted, onActivated, onDeactivated, useId } from "vue";
+import { ref, watch, nextTick, onBeforeUnmount, onMounted, onActivated, onDeactivated } from "vue"
+import { useId } from '../../_utils/vue-compat';
 import { useDirection, physicalScrollLeft } from "../../_utils/direction";
 import { schedulerTimeEdge } from "../coordinates";
 import { createNamespace } from "../../_utils/global-config";

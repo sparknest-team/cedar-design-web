@@ -90,7 +90,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onDeactivated, ref, useAttrs, useId, watch, type HTMLAttributes } from 'vue'
+import { computed, onBeforeUnmount, onDeactivated, ref, useAttrs, watch, type HTMLAttributes } from 'vue'
+import { useId } from '../_utils/vue-compat'
 import { useDirection } from '../_utils/direction'
 import { createNamespace } from '../_utils/global-config'
 import { positiveLength } from '../_utils/size-length'

@@ -1,4 +1,5 @@
 <script setup>
+import { formatDemoTime } from "../../__demos__/locale";
 import { ref } from "vue";
 
 const value = ref(["09:00", "18:00"]);
@@ -8,8 +9,10 @@ const disabled = ref(false);
 const events = ref([]);
 function record(name, value, dates) {
   const times = Array.isArray(dates)
-    ? dates.map((date) => date?.toLocaleTimeString())
-    : dates?.toLocaleTimeString();
+    ? dates.map((date) => (date == null ? undefined : formatDemoTime(date)))
+    : dates == null
+      ? undefined
+      : formatDemoTime(dates);
   events.value = [
     JSON.stringify({ event: name, value: value ?? null, time: times ?? null }),
     ...events.value,

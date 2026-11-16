@@ -17,6 +17,8 @@
     "type-tests/scheduler-api.ts",
     "type-tests/time-text-entry.ts",
     "type-tests/form-layout.ts",
+    "type-tests/form-section-contract.ts",
+    "type-tests/form-scroll-options.ts",
     "type-tests/date-panel-api.ts",
     "type-tests/p1-api.ts",
     "type-tests/p2-api.ts",

@@ -36,12 +36,14 @@ src/<component>/
 
 ## 开发命令
 
+工具链：Node 26.13.1（`.nvmrc` / `.node-version` / Volta；pnpm 通过 `.npmrc` 固定脚本和子进程运行时），pnpm 9.6.0，Vitest / UI / V8 coverage 5.1.0，Vite 8.3.8。仓库根目录执行下列命令。
+
 | 用途 | 命令 |
 | --- | --- |
-| 安装依赖 | `yarn` |
-| 跑单测 | `yarn vitest run` |
-| 跑指定组件 | `yarn vitest run src/<component>` |
-| 启动文档 | `yarn dev` |
+| 安装依赖 | `pnpm install` |
+| 跑单测 | `pnpm test` |
+| 跑指定组件 | `pnpm --dir packages/ui exec vitest run src/<component>` |
+| 启动文档 | `pnpm dev` |
 | 构建 npm 包（根目录含依赖包） | `pnpm build:lib` |
 | 构建文档 | `pnpm build:doc` |
 | 构建 npm 包及文档 | `pnpm build` |
@@ -92,7 +94,8 @@ src/<component>/
 
 ### 测试
 
-- 跑单组件：`yarn vitest run src/<component>`。
+- 跑单组件：`pnpm --dir packages/ui exec vitest run src/<component>`。
+- Vitest 非隔离模式的 Vue/jsdom 批次要求见 `docs/practices/component-spec.md` §9；回归入口为仓库根目录 `pnpm check:test-environment`。
 
 更多细节见 [docs/practices/component-spec.md](docs/practices/component-spec.md)。
 
@@ -103,3 +106,7 @@ src/<component>/
 ## 包名与框架边界
 
 包目录使用职责名，所有内部包（含私有包）以 -vue 结尾；与 React 的源码、CSS、token、preset、shared 和构建依赖完全独立。`pnpm check:packages` 验证目录、名称和直接依赖边界。
+
+## Vue 运行时版本兼容
+
+开发环境使用 catalog 固定的 Vue 稳定版，发布最低兼容 Vue 3.2.47。源码检查运行 `pnpm check:vue-compat:source`；构建后运行 `pnpm check:vue-compat`。新语法、声明降级、消费版本矩阵与 SSR 边界统一见同级 `design-ui/standards/build-and-ci.md` 的「Vue 开发版本与消费兼容性」。

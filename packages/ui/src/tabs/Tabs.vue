@@ -1,7 +1,8 @@
 <template><Render /></template>
 
 <script setup lang="ts">
-import { computed, h, nextTick, onBeforeUnmount, provide, ref, useAttrs, useId, watch, type VNode } from 'vue'
+import { computed, h, nextTick, onBeforeUnmount, provide, ref, useAttrs, watch, type VNode } from 'vue'
+import { useId } from '../_utils/vue-compat'
 import { useDirection } from '../_utils/direction'
 import { createNamespace } from '../_utils/global-config'
 import { flatten, tabsInjectionKey, type TabEntry } from './context'

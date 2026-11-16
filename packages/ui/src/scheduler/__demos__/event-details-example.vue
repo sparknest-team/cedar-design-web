@@ -173,6 +173,7 @@
   </c-dialog>
 </template>
 <script setup lang="ts">
+import { formatDemoDateTime, formatDemoTime } from "../../__demos__/locale";
 import { ref, shallowRef, watch } from "vue";
 import EventSummaryPopover from "./event-summary-popover.vue";
 import { cloneSchedulerEvent, schedulerDate } from "../core";
@@ -223,7 +224,7 @@ const events = ref<SchedulerEvent[]>([
 function timeRange(event: SchedulerEvent) {
   return event.start == null
     ? "未排期"
-    : `${schedulerDate(event.start).toLocaleString("zh-CN")} — ${schedulerDate(event.end!).toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" })}`;
+    : `${formatDemoDateTime(schedulerDate(event.start))} — ${formatDemoTime(schedulerDate(event.end!), { hour: "2-digit", minute: "2-digit" })}`;
 }
 function activate(value: SchedulerEditorRequest) {
   closePreviews();

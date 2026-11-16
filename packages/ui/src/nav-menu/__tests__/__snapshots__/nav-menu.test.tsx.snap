@@ -1,4 +1,4 @@
-// Vitest Snapshot v1
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`NavMenu options API > render 1`] = `
 "<nav class=\\"c-nav-menu c-nav-menu--vertical c-nav-menu--md\\" style=\\"--c-nav-menu-icon-size: 20px;\\">

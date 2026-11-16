@@ -6,6 +6,8 @@ permalink: /components/input-tag/
 
 用来输入标签。FormItem 有错误消息时，输入框会关联错误描述，并保留已有的 `aria-describedby`。
 
+标签自动换行，最多显示三行，超出后在输入框内滚动。候选面板仅在输入非空搜索内容且达到 `min-search-length` 时展示，空输入聚焦不会展开，也不显示默认下拉箭头。
+
 ## 阅读方向
 
 标签按阅读顺序排列，标签值的数组顺序保持不变。空输入时 Backspace 删除业务数组中最后一个可关闭标签；Enter 添加标签，输入法组合期间不触发标签提交或删除。
@@ -75,6 +77,22 @@ permalink: /components/input-tag/
 
 <demo src="./__demos__/max.vue"></demo>
 
+## 数据与选项
+
+### 搜索并选择标签
+
+输入或粘贴至少两个字符后搜索；唯一可选结果自动提交，多个结果由用户选择。
+
+<demo src="./__demos__/search-options.vue"></demo>
+
+配置 `options` 后，输入或粘贴达到 `min-search-length` 才搜索；数组按标签本地过滤，函数接收查询词和 `{ signal }`，返回候选数组。远程结果不再本地过滤。输入法组合完成后搜索，缩短输入或失焦会取消旧请求。加载中、无结果或失败时保留当前输入；配置候选后，Enter 优先选择高亮项；查询完成且无候选时，Enter 可添加原始输入。查询中、查询失败或候选被禁用时不会误创建。`auto-commit-single` 默认关闭，仅在当前搜索完成且恰有一个未禁用候选时提交；多个结果需要手动选择。选中的 `value` 存入模型；初始值及已选项优先从当前 `options` 解析名称，缺少时依次使用 `fallback-option`、当前实例缓存和原始值。重新挂载后可用 `options` 或 `fallback-option` 恢复标题。
+
+已选内容默认显示 `label`；`format-label` 可格式化文字，`#label="{ data }"` 可自定义已选标签的内容。插槽优先于格式化函数；它们不会改变搜索匹配或模型值。阅读态使用格式化文字，自定义阅读内容请使用 `#read`。
+
+### 自定义已选内容
+
+<demo src="./__demos__/format-label.vue"></demo>
+
 ## 加载与等待
 
 ### 受控加载
@@ -137,20 +155,6 @@ permalink: /components/input-tag/
 
 公开 Props 不包含 `baseCls`、`focused`、`disabledInput`、`uninjectFormItemContext`；这些是内部组合入口。before-commit 同步返回 undefined 时等待 done；普通 change / press-enter 等事件不等待 Promise。延迟模式的 change 事件可没有原始 DOM 事件。多值模式清空默认输出 []，单值模式默认输出 null；显式 empty-value 优先。
 
-### 搜索并选择标签
-
-输入或粘贴至少两个字符后搜索；唯一可选结果自动提交，多个结果由用户选择。
-
-<demo src="./__demos__/search-options.vue"></demo>
-
-配置 `options` 后，输入或粘贴达到 `min-search-length` 才搜索；数组按标签本地过滤，函数接收查询词和 `{ signal }`，返回候选数组。远程结果不再本地过滤。输入法组合完成后搜索，缩短输入或失焦会取消旧请求。加载中、无结果或失败时保留当前输入；配置候选后，Enter 优先选择高亮项；查询完成且无候选时，Enter 可添加原始输入。查询中、查询失败或候选被禁用时不会误创建。`auto-commit-single` 默认关闭，仅在当前搜索完成且恰有一个未禁用候选时提交；多个结果需要手动选择。选中的 `value` 存入模型；初始值及已选项优先从当前 `options` 解析名称，缺少时依次使用 `fallback-option`、当前实例缓存和原始值。重新挂载后可用 `options` 或 `fallback-option` 恢复标题。
-
-已选内容默认显示 `label`；`format-label` 可格式化文字，`#label="{ data }"` 可自定义已选标签的内容。插槽优先于格式化函数；它们不会改变搜索匹配或模型值。阅读态使用格式化文字，自定义阅读内容请使用 `#read`。
-
-### 自定义已选内容
-
-<demo src="./__demos__/format-label.vue"></demo>
-
 ### InputTag Props
 
 | 参数名                    | 描述                               | 类型                                              |   默认值   |
@@ -161,7 +165,7 @@ permalink: /components/input-tag/
 | input-value **(v-model)** | 输入框的值                         | `string`                                          |    `-`     |
 | default-input-value       | 输入框的默认值（非受控状态）       | `string`                                          |    `''`    |
 | options | 候选数组或远程查询函数；回车选择候选；无结果时可添加原始输入 | `InputTagOption[] \| (query, { signal }) => InputTagOption[] \| Promise<InputTagOption[]>` | `-` |
-| min-search-length | 输入多少字符后开始搜索；0 允许空查询 | `number` | `1` |
+| min-search-length | 开始搜索所需字符数；空输入不搜索 | `number` | `1` |
 | search-delay | 远程查询防抖时间，单位毫秒 | `number` | `250` |
 | auto-commit-single | 搜索完成且只有一个可选结果时自动提交 | `boolean` | `false` |
 | placeholder               | 占位符                             | `string`                                          |    `-`     |
@@ -295,19 +299,19 @@ Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，
 | `--c-input-tag-padding-x` | `4px` | `padding-inline-end`, `padding-inline-start` |
 | `--c-input-tag-size-lg-font-size` | `14px` | `font-size` |
 | `--c-input-tag-size-lg-padding-y` | `2px` | `padding-bottom`, `padding-top` |
-| `--c-input-tag-size-lg-tag-height` | `28px` | `line-height`, `min-height` |
+| `--c-input-tag-size-lg-tag-height` | `28px` | `line-height`, `max-height`, `min-height` |
 | `--c-input-tag-size-md-font-size` | `14px` | `font-size` |
 | `--c-input-tag-size-md-padding-y` | `2px` | `padding-bottom`, `padding-top` |
-| `--c-input-tag-size-md-tag-height` | `24px` | `line-height`, `min-height` |
+| `--c-input-tag-size-md-tag-height` | `24px` | `line-height`, `max-height`, `min-height` |
 | `--c-input-tag-size-sm-font-size` | `14px` | `font-size` |
 | `--c-input-tag-size-sm-padding-y` | `2px` | `padding-bottom`, `padding-top` |
-| `--c-input-tag-size-sm-tag-height` | `20px` | `line-height`, `min-height` |
+| `--c-input-tag-size-sm-tag-height` | `20px` | `line-height`, `max-height`, `min-height` |
 | `--c-input-tag-size-xl-font-size` | `16px` | `font-size` |
 | `--c-input-tag-size-xl-padding-y` | `4px` | `padding-bottom`, `padding-top` |
-| `--c-input-tag-size-xl-tag-height` | `32px` | `line-height`, `min-height` |
+| `--c-input-tag-size-xl-tag-height` | `32px` | `line-height`, `max-height`, `min-height` |
 | `--c-input-tag-size-xs-font-size` | `12px` | `font-size` |
 | `--c-input-tag-size-xs-padding-y` | `0px` | `padding-bottom`, `padding-top` |
-| `--c-input-tag-size-xs-tag-height` | `20px` | `line-height`, `min-height` |
+| `--c-input-tag-size-xs-tag-height` | `20px` | `line-height`, `max-height`, `min-height` |
 | `--c-input-tag-tag-color-bg` | `var(--c-sys-color-surface-default)` | `background-color` |
 | `--c-input-tag-tag-color-bg-disabled` | `var(--c-sys-color-state-hover)` | `background-color` |
 | `--c-input-tag-tag-color-bg-focus` | `var(--c-sys-color-state-hover)` | `background-color` |
@@ -316,7 +320,7 @@ Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，
 | `--c-input-tag-tag-color-border-focus` | `var(--c-sys-color-state-hover)` | `border-color` |
 | `--c-input-tag-tag-font-size` | `12px` | `font-size` |
 | `--c-input-tag-tag-margin-right` | `4px` | `margin-inline-end` |
-| `--c-input-tag-tag-margin-y` | `2px` | `margin-bottom`, `margin-top` |
+| `--c-input-tag-tag-margin-y` | `2px` | `margin-bottom`, `margin-top`, `max-height` |
 
 </div>
 

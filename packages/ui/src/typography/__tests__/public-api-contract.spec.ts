@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 import { afterEach, expect, test, vi } from 'vitest'
@@ -37,7 +38,7 @@ test('invalid heading and CSS row counts have safe fallbacks', async () => {
 })
 
 test.each(['README.md', 'README.en-US.md'])('%s lists the events and slots on each content component', (file) => {
-  const docs = readFileSync(new URL(`../${file}`, import.meta.url), 'utf8')
+  const docs = readFileSync(resolve(import.meta.dirname, '..', file), 'utf8')
   for (const component of ['TypographyText', 'TypographyTitle', 'TypographyParagraph']) {
     const section = (name: string) => docs.split(`### ${component} ${name}\n`)[1]?.split('\n### ')[0] ?? ''
     for (const event of Object.keys(typographyEmits)) expect(section('Events')).toContain(`| ${event} |`)

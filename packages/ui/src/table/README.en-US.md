@@ -87,7 +87,7 @@ Compare the same columns by switching layout, fit, grouped headers, resizing and
 
 An explicit `width` stays exact with flexible columns and `fit=true`. If every column has a width, or `fit=false`, proportional expansion still fills the container.
 
-<demo src="./__demos__/en-US/column-sizing-playground.vue"></demo>
+<demo src="./__demos__/column-sizing-playground.vue"></demo>
 
 ### Automatic scrolling and height
 
@@ -887,6 +887,8 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-table-column-insert-padding` | `16px 20px` | `padding` |
 | `--c-table-drag-handle-col-width` | `40px` | `max-width`, `min-width`, `width` |
 | `--c-table-editable-body-cell-border-color` | `var(--c-color-white)` | `border` |
+| `--c-table-empty-height` | `240px` | `height` |
+| `--c-table-empty-image-size` | `48px` | `font-size`, `height`, `width` |
 | `--c-table-expand-button-border-radius` | `2px` | `border-radius` |
 | `--c-table-expand-button-font-size` | `12px` | `font-size` |
 | `--c-table-expand-button-margin-right` | `var(--c-spacing-2)` | `margin-inline-end` |

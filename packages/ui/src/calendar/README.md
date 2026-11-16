@@ -173,12 +173,12 @@ import type { CalendarInstance } from "@cedar-design/ui-vue";
 | `--c-calendar-panel-bg-cell-selected` | `rgb(var(--c-primary-6))` | `background-color` |
 | `--c-calendar-panel-body-padding-horizontal` | `var(--c-spacing-7)` | `padding` |
 | `--c-calendar-panel-body-padding-vertical` | `14px` | `padding` |
-| `--c-calendar-panel-cell-boundary-border-radius` | `(   (var(~'--c-calendar-panel-date-cell-circle-height') + var(~'--c-calendar-panel-date-cell-padding-vertical') * 2) / 2 )` | `border-radius` |
+| `--c-calendar-panel-cell-boundary-border-radius` | `calc((var(--c-calendar-panel-date-cell-circle-height) + var(--c-calendar-panel-date-cell-padding-vertical) * 2) / 2)` | `border-radius` |
 | `--c-calendar-panel-cell-padding-vertical` | `var(--c-spacing-1)` | `padding` |
 | `--c-calendar-panel-cell-selected-border-radius` | `var(--c-border-radius-circle)` | `border-radius` |
 | `--c-calendar-panel-color-current-time-dot` | `rgb(var(--c-primary-6))` | `background-color` |
-| `--c-calendar-panel-date-cell-circle-height` | `var(--c-size-6)` | `height`, `line-height`, `min-width` |
-| `--c-calendar-panel-date-cell-padding-vertical` | `var(--c-spacing-2)` | `padding` |
+| `--c-calendar-panel-date-cell-circle-height` | `var(--c-size-6)` | `border-radius`, `height`, `line-height`, `min-width` |
+| `--c-calendar-panel-date-cell-padding-vertical` | `var(--c-spacing-2)` | `border-radius`, `padding` |
 | `--c-calendar-panel-date-value-font-size` | `var(--c-font-size-body-3)` | `font-size` |
 | `--c-calendar-panel-footer-height` | `38px` | `height`, `line-height` |
 | `--c-calendar-panel-header-icon-margin` | `var(--c-spacing-1)` | `margin-left`, `margin-right` |

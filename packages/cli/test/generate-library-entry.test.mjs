@@ -40,6 +40,7 @@ test('includes plugins declared with an install arrow property', async () => {
     const publicEntry = await readFile(join(root, 'src', 'index.ts'), 'utf8')
     assert.match(publicEntry, /export type \{ PopupContainer \} from '\.\/_utils\/popup-container'/)
     assert.match(publicEntry, /export \{ default as ColorPicker, colorPickerProps, _ColorPickerComponent \} from '\.\/color-picker'/)
+    assert.match(publicEntry, /export type \{[^}]*ColorPickerSlots[^}]*ColorPickerTriggerSlotProps[^}]*\} from '\.\/color-picker'/)
   } finally {
     await rm(root, { recursive: true, force: true })
   }

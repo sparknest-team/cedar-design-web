@@ -13,9 +13,9 @@ import {
   ref,
   toRef,
   toRefs,
-  useId,
   watch,
 } from 'vue'
+import { useId } from '../_utils/vue-compat'
 import ResizeObserver from '../_components/resize-observer'
 import { useFormItem } from '../_hooks/use-form-item'
 import { useOptionRequest } from '../_hooks/use-option-request'

@@ -1,29 +1,50 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
+const inlineCopy = useInlineDemoLocale("spaceSplitWrappingInline");
 
-const wrap = ref(true)
-const direction = ref<'row' | 'column'>('row')
-const items = ref(['A', 'B', 'C'])
+import { ref } from "vue";
+
+const wrap = ref(true);
+const direction = ref<"row" | "column">("row");
+const items = ref(["A", "B", "C"]);
 </script>
 <template>
   <c-space wrap :size="8">
-    <c-button data-space-toggle-wrap @click="wrap = !wrap">换行 / Wrap</c-button>
-    <c-button data-space-toggle-direction @click="direction = direction === 'row' ? 'column' : 'row'">方向 / Direction</c-button>
-    <c-button data-space-reorder @click="items = [...items].reverse()">重排 / Reorder</c-button>
+    <c-button data-space-toggle-wrap @click="wrap = !wrap">{{
+      inlineCopy.wrap
+    }}</c-button>
+    <c-button
+      data-space-toggle-direction
+      @click="direction = direction === 'row' ? 'column' : 'row'"
+      >{{ inlineCopy.direction }}</c-button
+    >
+    <c-button data-space-reorder @click="items = [...items].reverse()">{{
+      inlineCopy.reorder
+    }}</c-button>
   </c-space>
-  <p>输入草稿后切换布局或重排，文字仍跟随对应项。Drafts stay with their items.</p>
+  <p>{{ inlineCopy.draftsStayWithTheirItems }}</p>
   <div style="max-width: 100%; overflow: auto">
-    <c-space data-space-split-demo :size="12" :wrap="wrap" :direction="direction" style="width: 260px; max-width: 100%">
+    <c-space
+      data-space-split-demo
+      :size="12"
+      :wrap="wrap"
+      :direction="direction"
+      style="width: 260px; max-width: 100%"
+    >
       <template v-for="item in items" :key="item">
         <label class="space-split-field">
           <span>Item {{ item }}</span>
-          <c-input edit-mode="direct" :aria-label="'Draft ' + item" placeholder="草稿 / Draft" />
+          <c-input
+            edit-mode="direct"
+            :aria-label="'Draft ' + item"
+            :placeholder="inlineCopy.draft"
+          />
         </label>
       </template>
       <template #split><span aria-hidden="true">/</span></template>
     </c-space>
   </div>
-  <p>分隔符跟随前项，允许位于行尾。Separators stay with the preceding item.</p>
+  <p>{{ inlineCopy.separatorsStayWithThePreceding }}</p>
 </template>
 <style scoped>
 .space-split-field {

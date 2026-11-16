@@ -30,13 +30,13 @@ jobs:
           version: 9.6.0
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version-file: cedar-design-web/.nvmrc
           cache: pnpm
           cache-dependency-path: |
             cedar-design-web/pnpm-lock.yaml
             design-ui/pnpm-lock.yaml
           registry-url: https://registry.npmjs.org
-      - run: corepack pnpm install --frozen-lockfile
+      - run: npm exec --yes --package="$(node -p "require('./package.json').packageManager.split('+')[0]")" -- pnpm install --frozen-lockfile
         working-directory: design-ui
       - run: pnpm install --frozen-lockfile
       - run: pnpm spec:check

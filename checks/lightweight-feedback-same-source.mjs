@@ -8,6 +8,7 @@ const workspace = fileURLToPath(new URL("../../", import.meta.url));
 const cedar = resolve(workspace, "cedar-design-web/packages/ui/src");
 const maple = resolve(workspace, "maple-design-mobile/packages/ui/src");
 const read = (root, file) => readFileSync(resolve(root, file), "utf8");
+assert.equal(read(cedar, "_utils/vue-compat.ts"), read(maple, "utils/vue-compat.ts"), "Vue compatibility helpers differ");
 const normalize = (source) =>
   source
     .replaceAll("--c-", "--PREFIX-")
@@ -19,6 +20,7 @@ const normalize = (source) =>
     .replaceAll("../_utils/global-config", "../utils/components")
     .replaceAll("../_utils/maple/elements", "../utils/elements")
     .replaceAll("../_utils/popup-container", "../utils/popup-container")
+    .replaceAll("../_utils/vue-compat", "../utils/vue-compat")
     .replaceAll("./Message.vue", "./message.vue")
     .replace(/["';,]/g, "")
     .replace(/\s+/g, "");
@@ -41,9 +43,11 @@ for (const component of ["loading", "result"]) {
   );
 }
 
-const normalizeMessageService = (source) =>
-  normalize(source)
-    .replace("import{getPrefixCls}from../utils/components", "")
+const normalizeMessageService = async (source) =>
+  normalize(await normalizeTypeScript(source
+    .replace("import { getPrefixCls } from '../_utils/global-config'\n", "")
+    .replaceAll("../_utils/popup-container", "../utils/popup-container")
+    .replaceAll("./Message.vue", "./message.vue")))
     .replace(
       "[getPrefixCls(message-list)`${getPrefixCls(message-list)}-${position}`]",
       "[PREFIX-message-list`PREFIX-message-list-${position}`]",
@@ -71,8 +75,8 @@ for (const file of [
   );
 }
 assert.equal(
-  normalizeMessageService(read(cedar, "message/index.ts")),
-  normalizeMessageService(read(maple, "message/index.ts")),
+  await normalizeMessageService(read(cedar, "message/index.ts")),
+  await normalizeMessageService(read(maple, "message/index.ts")),
   "message service differs",
 );
 
@@ -126,9 +130,16 @@ for (const file of [
   "Success.vue",
   "Warning.vue",
 ]) {
+  const resultSource = async (root) => {
+    const source = read(root, `result/${file}`);
+    if (!file.endsWith(".tsx")) return normalize(source);
+    return normalize(await normalizeTypeScript(source
+      .replaceAll("../_utils/global-config", "../utils/components")
+      .replaceAll("../_utils/vue-compat", "../utils/vue-compat")));
+  };
   assert.equal(
-    normalize(read(cedar, `result/${file}`)),
-    normalize(read(maple, `result/${file}`)),
+    await resultSource(cedar),
+    await resultSource(maple),
     `result/${file} differs`,
   );
 }

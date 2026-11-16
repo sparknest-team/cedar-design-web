@@ -221,7 +221,11 @@ export function mockStubs() {
   }
 }
 
-export function mockConsole(method: keyof Console, fn: any = () => {}) {
+type ConsoleMethod = {
+  [Key in keyof Console]: Console[Key] extends (...args: any[]) => any ? Key : never
+}[keyof Console]
+
+export function mockConsole(method: ConsoleMethod, fn: any = () => {}) {
   const originMethod = console[method]
 
   console[method] = fn

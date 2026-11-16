@@ -16,11 +16,17 @@ import type { TimeProps, TimeInstance } from "@cedar-design/ui-vue";
 
 `empty-value` accepts explicit `null` (or `() => null`). Clearing publishes null unchanged; omitted values preserve the existing default. Editors render null as blank without converting ordinary empty-string input to null. In popup editing, clearing changes the draft; confirm commits it and cancel preserves the original model.
 
+The examples above compare shared formats, steps and bounds. The following examples focus on panel selection and confirmation. Input, clearing and popup controls belong to `Time`; the panel manages its own draft.
+
 ## Basic examples
 
 ### Basic usage
 
 <demo src="./__demos__/basic.vue"></demo>
+
+### Basic panel
+
+<demo src="./picker/__demos__/basic.vue"></demo>
 
 ## Appearance and presentation
 
@@ -107,6 +113,20 @@ Compare minute, second and 12-hour displays. Distinguish midnight (12 AM) from n
 
 <demo src="./__demos__/no-confirm.vue"></demo>
 
+### Disabled time options
+
+Disabled-hour callbacks always receive hours from 0 to 23, including in twelve-hour mode.
+
+<demo src="./picker/__demos__/disabled-parts.vue"></demo>
+
+### Panel confirmation and hidden options
+
+Select a draft, then confirm to commit it. Enable `disable-confirm` to commit valid selections immediately, or `hide-disabled-options` to hide disabled options. Changing rules does not submit an existing draft.
+
+<demo src="./picker/__demos__/panel-behavior.vue"></demo>
+
+Panel attributes are listed separately under **TimePicker Props** below. See [TimePicker events and slots](/en/components/time-picker/#timepicker-events) for the standalone panel reference.
+
 ## Input and state control
 
 ### Interaction state comparison
@@ -169,28 +189,6 @@ With open-trigger-target="icon", use the input area to edit or copy and the suff
 ### Shared field loading
 
 `loading` displays the shared field indicator. `loading-mode` is `default` (indicator) or `line` (an indeterminate bottom line); it defaults to `default`. Rendering belongs to FieldDecorator. Loading does not implicitly disable editing or change readonly. Set those states separately.
-
-## TimePicker embedded panel
-
-The examples above compare shared formats, steps and bounds. The following examples focus on panel selection and confirmation. Input, clearing and popup controls belong to `Time`; the panel manages its own draft.
-
-### Basic panel
-
-<demo src="./picker/__demos__/basic.vue"></demo>
-
-### Disabled time options
-
-Disabled-hour callbacks always receive hours from 0 to 23, including in twelve-hour mode.
-
-<demo src="./picker/__demos__/disabled-parts.vue"></demo>
-
-### Panel confirmation and hidden options
-
-Select a draft, then confirm to commit it. Enable `disable-confirm` to commit valid selections immediately, or `hide-disabled-options` to hide disabled options. Changing rules does not submit an existing draft.
-
-<demo src="./picker/__demos__/panel-behavior.vue"></demo>
-
-Panel attributes are listed separately under **TimePicker Props** below. See [TimePicker events and slots](/en/components/time-picker/#timepicker-events) for the standalone panel reference.
 
 ## Reading direction
 

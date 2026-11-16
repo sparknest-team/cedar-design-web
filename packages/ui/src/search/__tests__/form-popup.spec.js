@@ -11,8 +11,10 @@ const mount = (...args) => {
   wrappers.push(wrapper)
   return wrapper
 }
-afterEach(() => wrappers.splice(0).forEach(wrapper => { if (wrapper.exists()) wrapper.unmount() }))
-afterEach(() => { document.body.innerHTML = '' })
+afterEach(() => {
+  wrappers.splice(0).forEach(wrapper => { if (wrapper.exists()) wrapper.unmount() })
+  document.body.innerHTML = ''
+})
 function formContext(onChange) {
   return { [formItemInjectionKey]: { disabled: false, readonly: false, eventHandlers: { onChange } } }
 }

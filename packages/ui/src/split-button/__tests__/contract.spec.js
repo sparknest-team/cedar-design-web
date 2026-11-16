@@ -223,6 +223,7 @@ describe("SplitButton copied contract", () => {
       const wrapper = render({
         variant,
         status: "primary",
+        elevation: true,
         disabled: true,
         color: "#123456",
         textColor: "#ffffff",

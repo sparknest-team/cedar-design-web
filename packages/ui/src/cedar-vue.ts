@@ -30,7 +30,7 @@ import Drawer from './drawer'
 import Empty from './empty'
 import FieldDecorator from './field-decorator'
 import FilterForm from './filter-form'
-import Form, { FormItem } from './form'
+import Form, { FormItem, FormSection } from './form'
 import Grid, { GridItem } from './grid'
 import Hover, { HoverOverlay } from './hover'
 import Icon from './icon'
@@ -216,6 +216,7 @@ const CedarVue: Record<string, any> = {
   DateRangePicker,
   DescriptionsItem,
   FormItem,
+  FormSection,
   GridItem,
   HoverOverlay,
   ImagePreview,

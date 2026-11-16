@@ -24,7 +24,7 @@
       </c-button>
     </template>
     <template #resource-header="{ resource, date }">
-      <strong>{{ resource?.label ?? date.toLocaleDateString() }}</strong>
+      <strong>{{ resource?.label ?? formatDemoDate(date) }}</strong>
       <small v-if="resource">
         · {{ resource.disabled ? "维护中" : "可预约" }}</small
       >
@@ -38,6 +38,7 @@
   </c-scheduler>
 </template>
 <script setup lang="ts">
+import { formatDemoDate } from "../../__demos__/locale";
 import { ref } from "vue";
 import type {
   SchedulerEvent,

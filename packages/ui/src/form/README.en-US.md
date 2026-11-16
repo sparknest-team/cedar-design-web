@@ -85,7 +85,7 @@ import type { FormProps } from "@cedar-design/ui-vue";
 
 Combine `layout`, `content-align` with `direct / click / dblclick` editing and the independent `readPretty` boolean to compare label, value and wrapped-text alignment. Notes can override the form layout, and values survive every switch. Click or double-click a value to edit in a popover; readPretty displays saved text.
 
-<demo src="./__demos__/en-US/layout.vue"></demo>
+<demo src="./__demos__/layout.vue"></demo>
 
 ### Decoration
 
@@ -100,11 +100,23 @@ Preview configuration: `type="text"`, `placeholder="请输入"`.
 
 <demo src="./__demos__/extra.vue"></demo>
 
+### Partial form section
+
+Group only the onsite SOP, safety notice and key points. The end divider separates the following ungrouped fields. Switch between line, plain and card above the form; your entries are preserved. Toggle the title marker and end divider to compare boundaries. Card uses its outer border instead of a separate end divider.  FormSection inherits the parent Form layout, label sizing, disabled state and validation; use Form/FormItem layout props to configure them. Supply a title or title slot. Folding and local layout overrides are not supported.
+
+<demo src="./__demos__/section.vue"></demo>
+
+### Section header actions
+
+The extra slot places actions at the right of the title. Use template fills the three onsite fields; Clear resets them. Edit the outside skill level, then use either action to verify that it stays unchanged.
+
+<demo src="./__demos__/section-actions.vue"></demo>
+
 ### Label width strategies
 
 Enter values, then switch between measured labels, responsive columns and fixed widths: all three strategies retain the same form model. Edit the longest label or hide the contact field to observe remeasurement. Below 576px, the responsive strategy stacks labels above controls; fixed widths use 6rem with an 8rem contact-field override.
 
-<demo src="./__demos__/en-US/label-width-comparison.vue"></demo>
+<demo src="./__demos__/label-width-comparison.vue"></demo>
 
 ## Fields and data model
 
@@ -604,6 +616,26 @@ import type {
 ```
 Custom form controls can call `useFormErrorDescription()` in `setup` and bind `describe(existingIds)` to the interactive element's `aria-describedby`. Existing descriptions are preserved, and the FormItem error ID follows the visible error. Outside FormItem, only the existing descriptions are retained.
 
+### FormSection Props
+
+| Prop | Description | Type | Default |
+| --- | --- | --- | --- |
+| id | Section ID; generated when omitted | `string` | — |
+| title | Section title | `string` | `''` |
+| description | Supporting description | `string` | `''` |
+| variant | Section style; card uses a padded border | `'line' \| 'plain' \| 'card'` | `'line'` |
+| show-marker | Show the accent marker | `boolean` | `true` |
+| show-end-divider | Separate subsequent ungrouped fields; ignored for card | `boolean` | `false` |
+
+### FormSection Slots
+
+| Slot | Description |
+| --- | --- |
+| default | Form fields |
+| title | Custom title |
+| description | Custom description |
+| extra | Trailing header actions |
+
 ## CSS Variables
 
 <!-- component-css-variables:start -->
@@ -630,20 +662,43 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-form-line-height` | `var(--c-line-height)` | `line-height`, `padding-top` |
 | `--c-form-required-symbol-color` | `var(--c-sys-color-content-danger)` | `color` |
 | `--c-form-required-symbol-font-size` | `var(--c-font-size-body-1)` | `font-size` |
+| `--c-form-section-accent-color` | `var(--c-sys-color-action-primary)` | `background` |
+| `--c-form-section-after-gap` | `24px` | `margin-block`, `padding-block-start` |
+| `--c-form-section-before-gap` | `32px` | `padding-block-start` |
+| `--c-form-section-card-background` | `var(--c-sys-color-surface-default)` | `background` |
+| `--c-form-section-card-padding` | `16px` | `padding` |
+| `--c-form-section-card-radius` | `6px` | `border-radius` |
+| `--c-form-section-description-color` | `var(--c-sys-color-content-secondary)` | `color` |
+| `--c-form-section-description-gap` | `4px` | `margin-block-start` |
+| `--c-form-section-description-line-height` | `20px` | `line-height` |
+| `--c-form-section-description-size` | `13px` | `font-size` |
+| `--c-form-section-divider-color` | `var(--c-sys-color-border-default)` | `border`, `border-block-start` |
+| `--c-form-section-divider-width` | `1px` | `border`, `border-block-start` |
+| `--c-form-section-end-divider-gap` | `24px` | `margin-block-start` |
+| `--c-form-section-header-gap` | `20px` | `margin-block-end` |
+| `--c-form-section-heading-gap` | `16px` | `margin-inline-start` |
+| `--c-form-section-marker-gap` | `8px` | `margin-inline-end`, `row-gap` |
+| `--c-form-section-marker-height` | `16px` | `height` |
+| `--c-form-section-marker-radius` | `2px` | `border-radius` |
+| `--c-form-section-marker-width` | `3px` | `width` |
+| `--c-form-section-title-color` | `var(--c-sys-color-content-primary)` | `color` |
+| `--c-form-section-title-line-height` | `24px` | `line-height` |
+| `--c-form-section-title-size` | `16px` | `font-size` |
+| `--c-form-section-title-weight` | `600` | `font-weight` |
 | `--c-form-size-lg-height` | `var(--c-size-lg)` | `line-height`, `min-height` |
-| `--c-form-size-lg-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height` |
+| `--c-form-size-lg-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height`, `padding-block-start` |
 | `--c-form-size-lg-label-font-size` | `var(--c-font-size-body-3)` | `font-size` |
 | `--c-form-size-md-height` | `var(--c-size-md)` | `line-height`, `min-height` |
-| `--c-form-size-md-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height` |
+| `--c-form-size-md-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height`, `padding-block-start` |
 | `--c-form-size-md-label-font-size` | `var(--c-font-size-body-3)` | `font-size` |
 | `--c-form-size-sm-height` | `var(--c-size-sm)` | `line-height`, `min-height` |
-| `--c-form-size-sm-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height` |
+| `--c-form-size-sm-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height`, `padding-block-start` |
 | `--c-form-size-sm-label-font-size` | `var(--c-font-size-body-3)` | `font-size` |
 | `--c-form-size-xl-height` | `var(--c-size-xl)` | `line-height`, `min-height` |
-| `--c-form-size-xl-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height` |
+| `--c-form-size-xl-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height`, `padding-block-start` |
 | `--c-form-size-xl-label-font-size` | `var(--c-sys-font-size-lg)` | `font-size` |
 | `--c-form-size-xs-height` | `var(--c-size-xs)` | `line-height`, `min-height` |
-| `--c-form-size-xs-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height` |
+| `--c-form-size-xs-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height`, `padding-block-start` |
 | `--c-form-size-xs-label-font-size` | `var(--c-font-size-body-1)` | `font-size` |
 | `--c-form-status-error-bg` | `var(--c-color-danger-light-1)` | `background-color` |
 | `--c-form-status-error-border-color` | `transparent` | `border-color` |

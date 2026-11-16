@@ -18,7 +18,7 @@ test('the local search example filters candidates by name and ID', async () => {
     global: { components: { CMention: Mention, CSpace: Space } },
   })
   try {
-    const input = wrapper.get('input[aria-label="本地人员搜索 / Local people search"]')
+    const input = wrapper.get('input[aria-label="本地人员搜索"]')
     ;(input.element as HTMLInputElement).focus()
     await input.setValue('@小'); await settle()
     const dropdown = () => document.getElementById(input.attributes('aria-controls')!)
@@ -38,7 +38,7 @@ test('the remote search example keeps only the latest result after rapid input',
     global: { components: { CMention: Mention, CSpace: Space } },
   })
   try {
-    const input = wrapper.get('input[aria-label="异步人员搜索 / Remote people search"]')
+    const input = wrapper.get('input[aria-label="异步人员搜索"]')
     ;(input.element as HTMLInputElement).focus()
     await input.setValue('@xi'); await settle()
     const dropdown = () => document.getElementById(input.attributes('aria-controls')!)

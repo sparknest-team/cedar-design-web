@@ -32,7 +32,8 @@
 </template>
 
 <script setup lang="ts">
-import { Comment, Fragment, Text, useAttrs, useId, useSlots, type VNode } from 'vue'
+import { Comment, Fragment, Text, useAttrs, useSlots, type VNode } from 'vue'
+import { useId } from '../_utils/vue-compat'
 import { createNamespace } from '../_utils/global-config'
 import Trigger from '../trigger'
 import type { TriggerReferenceAttrs } from '../trigger'

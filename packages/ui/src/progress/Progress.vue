@@ -107,7 +107,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, useId } from 'vue'
+import { computed, ref } from 'vue'
+import { useId } from '../_utils/vue-compat'
 import { createNamespace } from '../_utils/global-config'
 import { normalizePercent } from './percent'
 import { progressProps } from './props'

@@ -45,6 +45,18 @@ export function createSiteResolver(sourceDir: string, modules = readSiteExports(
     ...resolver,
     resolve(name: string) {
       const result = resolver.resolve(name)
+      // A running docs server may still have the pre-build resolver registry.
+      // Public source exports are authoritative for newly added components.
+      if (!result && resolver.type === 'component' && /^C[A-Z]/.test(name)) {
+        const exported = `_${name.slice(1)}Component`
+        if (!modules.has(exported)) {
+          for (const [key, from] of readSiteExports(sourceDir)) modules.set(key, from)
+        }
+        const from = modules.get(exported)
+        if (from && existsSync(resolve(from, 'style/index.ts'))) {
+          return { from, name: exported, sideEffects: [`${from}/style`] }
+        }
+      }
       if (result?.from !== '@cedar-design/ui-vue') return result
       const from = modules.get(result.name)
       if (!from) throw new Error(`[Cedar docs] Missing public export: ${result.name}`)

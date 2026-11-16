@@ -1,4 +1,5 @@
-import { computed, inject, provide, useId, type ComputedRef, type InjectionKey } from 'vue'
+import { computed, inject, provide, type ComputedRef, type InjectionKey } from 'vue'
+import { useId } from '../_utils/vue-compat'
 
 const errorDescriptionKey: InjectionKey<ComputedRef<string | undefined>> = Symbol('form-error-description')
 

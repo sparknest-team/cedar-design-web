@@ -1,4 +1,7 @@
 <script setup>
+import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
+const inlineCopy = useInlineDemoLocale("carouselControlledInline");
+
 import { ref } from "vue";
 const current = ref(1);
 const accept = ref(true);
@@ -9,7 +12,7 @@ function update(value) {
 }
 </script>
 <template>
-  <c-checkbox v-model="accept"> Accept changes / 接受切换</c-checkbox>
+  <c-checkbox v-model="accept"> {{ inlineCopy.acceptChanges }}</c-checkbox>
   <p>Current: {{ current }} · Proposal: {{ proposal }}</p>
   <c-carousel
     :model-value="current"

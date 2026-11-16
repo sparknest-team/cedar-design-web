@@ -1,4 +1,7 @@
 <script setup>
+import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
+const inlineCopy = useInlineDemoLocale("watermarkImageInline");
+
 import { computed, ref } from "vue";
 const failed = ref(false);
 const errors = ref([]);
@@ -13,10 +16,10 @@ const image = computed(() =>
 </script>
 <template>
   <section class="watermark-image-failure-demo">
-    <c-checkbox v-model="failed"> Fail local image / 本地图片失败</c-checkbox>
-    <c-button html-type="button" :disabled="!failed" @click="failed = false"
-      >Restore image / 恢复图片</c-button
-    >
+    <c-checkbox v-model="failed"> {{ inlineCopy.failLocalImage }}</c-checkbox>
+    <c-button html-type="button" :disabled="!failed" @click="failed = false">{{
+      inlineCopy.restoreImage
+    }}</c-button>
     <c-watermark
       content="FALLBACK 201"
       :image="image"

@@ -1,4 +1,4 @@
-// Vitest Snapshot v1
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`TimePicker > render 1`] = `
 "<div class=\\"c-timepicker-container\\">
@@ -450,7 +450,7 @@ exports[`TimePicker > render 1`] = `
     <!--v-if-->
   </div>
   <!--v-if-->
-  <div class=\\"c-timepicker-footer-btn-wrapper\\"><button class=\\"c-button c-button--size-xs c-button--status-default c-button--variant-default c-elevation--2\\" type=\\"button\\">
+  <div class=\\"c-timepicker-footer-btn-wrapper\\"><button class=\\"c-button c-button--size-xs c-button--status-default c-button--variant-outline\\" type=\\"button\\">
       <!--v-if-->
       <!--v-if--><span class=\\"c-button__content\\">此刻</span>
       <div class=\\"c-hover-overlay\\"></div>

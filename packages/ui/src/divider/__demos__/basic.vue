@@ -1,7 +1,11 @@
+<script setup lang="ts">
+import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
+const inlineCopy = useInlineDemoLocale("dividerBasicInline");
+</script>
 <template>
   <div>
-    <p>内容上方 / Before</p>
+    <p>{{ inlineCopy.before }}</p>
     <c-divider />
-    <p>内容下方 / After</p>
+    <p>{{ inlineCopy.after }}</p>
   </div>
 </template>

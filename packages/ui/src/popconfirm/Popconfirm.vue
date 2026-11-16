@@ -60,7 +60,8 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, nextTick, onMounted, ref, useId, watch } from "vue";
+import { computed, defineComponent, nextTick, onMounted, ref, watch } from "vue"
+import { useId } from '../_utils/vue-compat';
 import { createNamespace, getPrefixCls } from "../_utils/global-config";
 import { IconInfoCircleFill } from "@cedar-design/icons-vue/icon-info-circle-fill";
 import { IconCheckCircleFill } from "@cedar-design/icons-vue/icon-check-circle-fill";

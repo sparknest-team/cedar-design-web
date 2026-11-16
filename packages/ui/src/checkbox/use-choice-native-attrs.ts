@@ -1,4 +1,5 @@
-import { computed, useAttrs, useId, type InputHTMLAttributes } from 'vue'
+import { computed, useAttrs, type InputHTMLAttributes } from 'vue'
+import { useId } from '../_utils/vue-compat'
 import { splitInputAttrs } from '../input/native-attrs'
 
 /** Native input owns field attributes; the label keeps layout and other DOM attrs. */

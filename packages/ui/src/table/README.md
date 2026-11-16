@@ -853,6 +853,8 @@ Table 继承最近的原生 `dir`；直接传入 `dir` 时，服务端首屏即�
 | `--c-table-column-insert-padding` | `16px 20px` | `padding` |
 | `--c-table-drag-handle-col-width` | `40px` | `max-width`, `min-width`, `width` |
 | `--c-table-editable-body-cell-border-color` | `var(--c-color-white)` | `border` |
+| `--c-table-empty-height` | `240px` | `height` |
+| `--c-table-empty-image-size` | `48px` | `font-size`, `height`, `width` |
 | `--c-table-expand-button-border-radius` | `2px` | `border-radius` |
 | `--c-table-expand-button-font-size` | `12px` | `font-size` |
 | `--c-table-expand-button-margin-right` | `var(--c-spacing-2)` | `margin-inline-end` |

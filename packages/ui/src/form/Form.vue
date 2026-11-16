@@ -13,6 +13,7 @@
 <script lang="ts">
 import type { SlotsType } from "vue";
 import type { FormSlots } from "./types";
+import type { FormScrollOptions } from "./scroll-options";
 import { provideEmptyValues } from "../_utils/empty-value";
 import {
   computed,
@@ -401,6 +402,8 @@ export default defineComponent({
       },
     ]);
 
+    const exposedScrollToField: (field: string, options?: FormScrollOptions, offset?: number, isEligible?: () => boolean) => void = scrollToField;
+
     return {
       cls,
       formRef,
@@ -411,7 +414,7 @@ export default defineComponent({
       innerResetFields: resetFields,
       innerClearValidate: clearValidate,
       innerSetFields: setFields,
-      innerScrollToField: scrollToField,
+      innerScrollToField: exposedScrollToField,
     };
   },
   methods: {

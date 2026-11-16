@@ -13,12 +13,11 @@
       "import": "./es/index.mjs",
       "require": "./lib/index.js"
     },
-    "./style": "./es/cedar.css",
-    "./package.json": "./package.json",
-    "./*/*/style": {
-      "import": "./es/*/*/style/index.mjs",
-      "require": "./lib/*/*/style/index.js"
+    "./style": {
+      "types": "./reset/index.d.ts",
+      "default": "./es/cedar.css"
     },
+    "./package.json": "./package.json",
     "./*/style": {
       "import": "./es/*/style/index.mjs",
       "require": "./lib/*/style/index.js"
@@ -33,7 +32,10 @@
       "import": "./es/scheduler/core/index.mjs",
       "require": "./lib/scheduler/core/index.js"
     },
-    "./reset.css": "./reset/index.css"
+    "./reset.css": {
+      "types": "./reset/index.d.ts",
+      "default": "./reset/index.css"
+    }
   },
   "files": [
     "es",
@@ -58,7 +60,7 @@
     "dtsgen": "tsx scripts dtsgen 'components/**/*.{ts,tsx,vue}'",
     "watch": "vite build --watch",
     "test:watch": "vitest",
-    "test": "vitest --run",
+    "test": "vitest run && vitest run --config docs/.vuepress/vitest.config.mts",
     "coverage": "vitest run --coverage",
     "format": "prettier --write .",
     "lint": "eslint src --ext .vue,.js,.ts,.tsx --max-warnings 0 && node ../../../design-ui/bin/api-naming-check.mjs",
@@ -113,18 +115,17 @@
     "@types/fs-extra": "^9.0.13",
     "@types/lodash-es": "^4.17.6",
     "@types/markdown-it": "^14.1.2",
-    "@types/node": "^20.12.12",
+    "@types/node": "^26.0.0",
     "@types/prompts": "^2.0.14",
     "@typescript-eslint/eslint-plugin": "^8.12.2",
     "@typescript-eslint/parser": "^8.12.2",
-    "@vitejs/plugin-vue": "^5.0.4",
-    "@vitejs/plugin-vue-jsx": "^3.1.0",
-    "@vitest/coverage-c8": "^0.22.1",
-    "@vitest/ui": "^1.6.0",
+    "@vitejs/plugin-vue": "6.0.11",
+    "@vitejs/plugin-vue-jsx": "5.1.6",
+    "@vitest/ui": "5.1.0",
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/eslint-config-typescript": "^7.0.0",
     "@vue/repl": "^4.4.2",
-    "@vue/runtime-core": "^3.2.47",
+    "@vue/runtime-core": "catalog:",
     "@vue/test-utils": "^2.0.2",
     "@vuepress/bundler-vite": "2.0.0-rc.18",
     "@vuepress/helper": "2.0.0-rc.63",
@@ -172,20 +173,19 @@
     "typescript": "~5.6.3",
     "unplugin-auto-import": "^20.3.0",
     "unplugin-vue-components": "^0.22.4",
-    "vite": "^5.3.2",
-    "vitest": "^0.22.1",
-    "vue": "^3.5.12",
+    "vite": "8.3.8",
+    "vitest": "5.1.0",
+    "vue": "catalog:",
     "vue-router": "^4.2.5",
     "vue-tsc": "^2.1.10",
     "vuepress": "2.0.0-rc.18",
     "vuepress-plugin-md-enhance": "^2.0.0-rc.43",
-    "vuepress-theme-hope": "2.0.0-rc.61"
+    "vuepress-theme-hope": "2.0.0-rc.61",
+    "@vitest/coverage-v8": "5.1.0",
+    "@vue/server-renderer": "catalog:"
   },
   "peerDependencies": {
-    "vue": "^3.5.12"
-  },
-  "overrides": {
-    "vue": "^3.5.12"
+    "vue": "^3.2.47"
   },
   "packageManager": "pnpm@9.6.0",
   "publishConfig": {

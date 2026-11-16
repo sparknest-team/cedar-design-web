@@ -1,5 +1,6 @@
 import type { VNode, CSSProperties } from 'vue'
-import { computed, defineComponent, isVNode, toRefs, useId } from 'vue'
+import { computed, defineComponent, isVNode, toRefs } from 'vue'
+import { useId } from '../_utils/vue-compat'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
 import { isFunction, isObject } from '../_utils/is'
 import { DescData, RenderData } from './types'

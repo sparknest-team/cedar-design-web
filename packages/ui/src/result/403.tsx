@@ -1,4 +1,5 @@
-import { defineComponent, useId } from 'vue'
+import { defineComponent } from 'vue'
+import { useId } from '../_utils/vue-compat'
 import { createNamespace } from '../_utils/global-config'
 
 

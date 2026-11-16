@@ -66,6 +66,19 @@ test('preserves aliases and splits mixed demo services without entering the runt
   expect(transform("import type { ImageProps } from '@cedar-design/ui-vue';", 'demo.vue')).toBeUndefined()
 })
 
+test('new public components resolve from source before the package registry is rebuilt', () => {
+  const modules = readSiteExports(sourceDir)
+  modules.set('_SourceOnlySectionComponent', `${sourceDir}/form`)
+  const [components] = createSiteResolver(sourceDir, modules)
+  expect(components.resolve('CSourceOnlySection')).toEqual({
+    from: `${sourceDir}/form`, name: '_SourceOnlySectionComponent', sideEffects: [`${sourceDir}/form/style`],
+  })
+  expect(components.resolve('CPrivateUnknown')).toBeUndefined()
+  expect(components.resolve('CFormSection')).toMatchObject({
+    from: `${sourceDir}/form`, name: '_FormSectionComponent',
+  })
+})
+
 
 test('named icon imports use published deep entries while intentional catalog imports stay intact', () => {
   const transform = createSiteImportPlugin(sourceDir).transform as Function

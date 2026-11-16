@@ -42,8 +42,8 @@ test('supports disabling styles and skips non-script requests', () => {
 })
 test('runs after TypeScript erasure without generating styles for type-only imports', async () => {
   const vite = await import(cliRequire.resolve('vite'))
-  const { transformWithEsbuild } = vite.default ?? vite
-  const { code } = await transformWithEsbuild("import type { MessageOptions } from '@cedar-design/ui-vue'; import { Message as notify } from '@cedar-design/ui-vue'; notify('hello')", '/src/demo.ts', { loader: 'ts' })
+  const { transformWithOxc } = vite.default ?? vite
+  const { code } = await transformWithOxc("import type { MessageOptions } from '@cedar-design/ui-vue'; import { Message as notify } from '@cedar-design/ui-vue'; notify('hello')", '/src/demo.ts', { lang: 'ts' })
   const result = transform(code, {}, '/src/demo.ts')
   assert(result.code.includes('@cedar-design/ui-vue/message/style'))
   assert(!result.code.includes('message-options/style'))

@@ -1,8 +1,8 @@
-// Vitest Snapshot v1
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Card > render 1`] = `
 "<div class=\\"c-card c-card--size-md c-card--variant-outline\\">
-  <div class=\\"c-card__floater\\" style=\\"width: 100%; height: 100%; top: auto; left: auto; overflow: hidden;\\">
+  <div class=\\"c-card__floater\\" style=\\"width: 100%; height: 100%; top: auto; left: auto; overflow: hidden; background: transparent;\\">
     <!--v-if-->
     <div class=\\"c-card__container\\">
       <!--v-if-->

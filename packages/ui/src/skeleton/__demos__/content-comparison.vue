@@ -1,19 +1,25 @@
 <script setup lang="ts">
-import { ref } from "vue"
-import { proxyRefs as demoProxyRefs } from 'vue'
+import { useDemoLocale } from "../../__demos__/locale";
+const demoCopy = useDemoLocale("skeletonContentComparison");
+import { ref } from "vue";
+import { proxyRefs as demoProxyRefs } from "vue";
 
-const scene1 = demoProxyRefs((() => {
-
-const loading = ref(true);
-return { loading }
-})())
+const scene1 = demoProxyRefs(
+  (() => {
+    const loading = ref(true);
+    return { loading };
+  })(),
+);
 </script>
 
 <template>
-<div class="demo-comparison">
-  <section class="demo-comparison-case demo-comparison-case--1" data-comparison-scene="title-and-rows">
-    <h4><span lang="zh-CN">标题与段落</span><span lang="en-US">title and rows</span></h4>
-    <c-skeleton
+  <div class="demo-comparison">
+    <section
+      class="demo-comparison-case demo-comparison-case--1"
+      data-comparison-scene="title-and-rows"
+    >
+      <h4>{{ demoCopy.titleAndRows }}</h4>
+      <c-skeleton
         title
         :rows="3"
         :loading="scene1.loading"
@@ -21,20 +27,31 @@ return { loading }
       >
         加载的数据
       </c-skeleton>
-  </section>
+    </section>
 
-  <section class="demo-comparison-case demo-comparison-case--2" data-comparison-scene="avatar-and-card">
-    <h4><span lang="zh-CN">头像与卡片</span><span lang="en-US">avatar and card</span></h4>
-    <c-skeleton title avatar card :rows="3">加载的数据</c-skeleton>
-  </section>
-</div>
+    <section
+      class="demo-comparison-case demo-comparison-case--2"
+      data-comparison-scene="avatar-and-card"
+    >
+      <h4>{{ demoCopy.avatarAndCard }}</h4>
+      <c-skeleton title avatar card :rows="3">加载的数据</c-skeleton>
+    </section>
+  </div>
 </template>
 
 <style scoped lang="less">
-.demo-comparison { display: grid; gap: 24px; min-width: 0; max-width: 100%; }
-.demo-comparison-case { min-width: 0; max-width: 100%; }
-.demo-comparison-case > h4 { margin: 0 0 12px; font-size: 14px; }
-html:not([lang='en-US']) .demo-comparison-case > h4 > [lang='en-US'],
-html[lang='en-US'] .demo-comparison-case > h4 > [lang='zh-CN'] { display: none; }
-
+.demo-comparison {
+  display: grid;
+  gap: 24px;
+  min-width: 0;
+  max-width: 100%;
+}
+.demo-comparison-case {
+  min-width: 0;
+  max-width: 100%;
+}
+.demo-comparison-case > h4 {
+  margin: 0 0 12px;
+  font-size: 14px;
+}
 </style>

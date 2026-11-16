@@ -1,8 +1,12 @@
+import { downlevelVueDeclarations } from '../../../../design-ui/packages/ui-build/src/vue-declarations.mjs'
 import { rm } from 'node:fs/promises'
 import { spawn } from 'node:child_process'
 import { resolve } from 'node:path'
 import vue from '@vitejs/plugin-vue'
+import ts from 'typescript'
 import { build } from 'vite'
+import { browserTargets } from '../../../../design-ui/packages/ui-build/src/browser-targets.mjs'
+import { writeDualDeclarations } from '../../../../design-ui/packages/ui-build/src/dual-declarations.mjs'
 
 const root = resolve(import.meta.dirname, '..')
 
@@ -24,11 +28,12 @@ async function buildModules(format, outDir, extension) {
     logLevel: 'warn',
     plugins: [vue()],
     build: {
+      target: [...browserTargets],
       emptyOutDir: false,
       copyPublicDir: false,
       minify: false,
       outDir,
-      rollupOptions: {
+      rolldownOptions: {
         input: resolve(root, 'src/index.ts'),
         external: ['vue'],
         preserveEntrySignatures: 'strict',
@@ -49,3 +54,5 @@ await Promise.all([
   buildModules('cjs', 'lib', 'cjs'),
   generateTypes(),
 ])
+downlevelVueDeclarations(root, 'types', ts)
+writeDualDeclarations(resolve(root, 'types'), ts)

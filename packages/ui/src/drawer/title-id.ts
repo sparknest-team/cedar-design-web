@@ -1,4 +1,5 @@
-import { getCurrentInstance, useId, type VNode } from 'vue'
+import { getCurrentInstance, type VNode } from 'vue'
+import { useId } from '../_utils/vue-compat'
 
 // Raw render() service roots do not share Vue's per-root useId counter.
 const serviceTitleIds = new WeakMap<VNode, string>()

@@ -1,6 +1,6 @@
 import { flushPromises, mount } from '@vue/test-utils'
-import { expect, it } from 'vitest'
-import EnglishDemo from '../__demos__/en-US/layout.vue'
+import { afterEach, expect, it } from 'vitest'
+import { addI18nMessages, cedarEnUS, useLocale } from '../../locale'
 import Demo from '../__demos__/layout.vue'
 import Checkbox from '../../checkbox'
 import Input from '../../input'
@@ -9,8 +9,12 @@ import Space from '../../space'
 import Form from '../Form.vue'
 import FormItem from '../FormItem.vue'
 
-it.each([Demo, EnglishDemo])('switches form and item layouts without losing entered values', async (component) => {
-  const wrapper = mount(component, {
+addI18nMessages({ 'en-US': cedarEnUS })
+afterEach(() => useLocale('zh-CN'))
+
+it.each(['zh-CN', 'en-US'])('switches form and item layouts without losing entered values (%s)', async (locale) => {
+  useLocale(locale)
+  const wrapper = mount(Demo, {
     global: {
       components: {
         CForm: Form,
@@ -48,10 +52,11 @@ it.each([Demo, EnglishDemo])('switches form and item layouts without losing ente
   }
 })
 
-it.each([Demo, EnglishDemo])(
+it.each(['zh-CN', 'en-US'])(
   'toggles readPretty independently for every presentation, layout and alignment',
-  async (component) => {
-    const wrapper = mount(component, {
+  async (locale) => {
+    useLocale(locale)
+    const wrapper = mount(Demo, {
       global: {
         components: {
           CForm: Form,

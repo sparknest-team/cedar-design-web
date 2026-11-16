@@ -58,7 +58,8 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, defineComponent, inject, onBeforeUnmount, onMounted, ref, useId, watch } from 'vue'
+import { computed, defineComponent, inject, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { useId } from '../_utils/vue-compat'
 import { createNamespace } from '../_utils/global-config'
 import { collapseKey, type CollapseContext } from './context'
 import { DefaultExpandIcon } from './platform'

@@ -71,7 +71,8 @@
 <script setup lang="ts">
 import { fieldEditorPanel } from "../../_components/field-presentation/context";
 import { isFieldOpenClick } from "../../_components/picker-field/open-trigger";
-import { computed, inject, ref, useId, useSlots } from "vue";
+import { computed, inject, ref, useSlots } from "vue"
+import { useId } from '../../_utils/vue-compat';
 import { IconCalendar } from "@cedar-design/icons-vue";
 import FeedbackIcon from "../../_components/FeedbackIcon.vue";
 import PickerField from "../../_components/picker-field/PickerField.vue";

@@ -2,6 +2,7 @@ name: Quality
 
 on:
   pull_request:
+  merge_group:
   push:
     branches: [main, master]
 
@@ -32,13 +33,13 @@ jobs:
           version: 9.6.0
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version-file: cedar-design-web/.nvmrc
           cache: pnpm
           cache-dependency-path: |
             cedar-design-web/pnpm-lock.yaml
             maple-design-mobile/pnpm-lock.yaml
             design-ui/pnpm-lock.yaml
-      - run: corepack pnpm install --frozen-lockfile
+      - run: npm exec --yes --package="$(node -p "require('./package.json').packageManager.split('+')[0]")" -- pnpm install --frozen-lockfile
         working-directory: design-ui
       - run: pnpm install --frozen-lockfile
         working-directory: maple-design-mobile
@@ -46,8 +47,11 @@ jobs:
       - run: pnpm exec playwright install --with-deps chromium firefox webkit
       - run: node ../design-ui/bin/ci-toolchain-check.mjs
       - run: node ../design-ui/bin/case-paths-check.mjs
+      - run: node --test scripts/quality/demo-i18n-ci.test.mjs
+        name: Verify mandatory Demo i18n CI wiring
       - run: node --test ../design-ui/bin/ci-contract.test.mjs ../design-ui/bin/ci-toolchain-check.test.mjs ../design-ui/bin/shared-source-contract.test.mjs ../design-ui/bin/case-paths-check.test.mjs ../design-ui/packages/ui-build/test/environment.test.mjs ../design-ui/browser/inventory.test.mjs ../design-ui/browser/navigation.test.mjs ../design-ui/browser/compatibility.test.mjs ../design-ui/browser/native-acceptance.test.mjs
       - run: pnpm quality
+        name: Demo i18n gate and full quality checks
       - uses: actions/upload-artifact@v4
         if: always()
         with:

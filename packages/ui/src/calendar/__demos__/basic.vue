@@ -1,14 +1,16 @@
 <template>
   <c-calendar v-model="value" />
-  <p class="demo-result">当前选择：{{ format(value) }}</p>
+  <p class="demo-result">{{ demoCopy.selection }}：{{ format(value) }}</p>
 </template>
 
 <script lang="ts" setup>
+import { useDemoLocale, formatDemoDate } from "../../__demos__/locale";
 import { ref } from "vue";
 
+const demoCopy = useDemoLocale("calendarBasic");
 const value = ref(new Date());
 const format = (value: Date) =>
-  value.toLocaleDateString("zh-CN", {
+  formatDemoDate(value, {
     year: "numeric",
     month: "long",
     day: "numeric",

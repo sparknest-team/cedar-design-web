@@ -50,6 +50,7 @@ declare module "vue" {
     CEmpty: (typeof import("@cedar-design/ui-vue"))["Empty"];
     CFieldDecorator: (typeof import("@cedar-design/ui-vue"))["FieldDecorator"];
     CForm: (typeof import("@cedar-design/ui-vue"))["Form"];
+    CFormSection: (typeof import("@cedar-design/ui-vue"))["FormSection"];
     CFormItem: (typeof import("@cedar-design/ui-vue"))["FormItem"];
     CGrid: (typeof import("@cedar-design/ui-vue"))["Grid"];
     CGridItem: (typeof import("@cedar-design/ui-vue"))["GridItem"];

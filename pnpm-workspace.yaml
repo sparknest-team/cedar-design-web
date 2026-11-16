@@ -1,11 +1,15 @@
 packages:
   - 'packages/*'
+  - 'tests/vue-compat/*'
 
 catalog:
   typescript: 5.3.3
-  vue: 3.5.13
+  vue: 3.5.45
+  '@vue/runtime-core': 3.5.45
+  '@vue/compiler-sfc': 3.5.45
+  '@vue/server-renderer': 3.5.45
   tsup: 7.2.0
-  '@types/node': ^18.7.20
+  '@types/node': ^26.0.0
 
 overrides:
   '@vueuse/core': 12.8.2

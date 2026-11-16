@@ -1,4 +1,4 @@
-// Vitest Snapshot v1
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Progress complete contract > installs and renders default text 1`] = `
 "<div class=\\"c-progress c-progress--line c-progress--md c-progress--default\\" role=\\"progressbar\\" aria-valuemin=\\"0\\" aria-valuemax=\\"100\\" aria-valuenow=\\"0\\">

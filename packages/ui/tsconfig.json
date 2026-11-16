@@ -19,6 +19,7 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "allowSyntheticDefaultImports": true,
+    "allowImportingTsExtensions": true,
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "resolveJsonModule": true,
@@ -48,5 +49,5 @@
       "vue": ["./node_modules/vue"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "vitest.config.ts", "docs/**/*.ts", "docs/**/*.d.ts", "docs/.vuepress/auto-imports.d.ts"]
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "*.config.mts", "docs/.vuepress/vitest.config.mts", "docs/**/*.ts", "docs/**/*.d.ts", "docs/.vuepress/auto-imports.d.ts"]
 }

@@ -1,25 +1,25 @@
-// Vitest Snapshot v1
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Scheduler > public registration, props and empty rendering 1`] = `
 "<section class=\\"c-scheduler\\" aria-label=\\"任务日程\\" aria-busy=\\"false\\" tabindex=\\"-1\\">
   <!--v-if-->
   <header class=\\"c-scheduler__toolbar\\">
-    <div class=\\"c-scheduler__navigation\\"><button aria-label=\\"上一页\\" class=\\"c-button c-button--size-md c-button--status-default c-button--variant-default c-elevation--2\\" type=\\"button\\">
+    <div class=\\"c-scheduler__navigation\\"><button aria-label=\\"上一页\\" class=\\"c-button c-button--size-md c-button--status-default c-button--variant-outline\\" type=\\"button\\">
         <!--v-if-->
         <!--v-if--><span class=\\"c-button__content\\"><span dir=\\"ltr\\" aria-hidden=\\"true\\">‹</span></span>
         <div class=\\"c-hover-overlay\\"></div>
-      </button><button class=\\"c-button c-button--size-md c-button--status-default c-button--variant-default c-elevation--2\\" type=\\"button\\">
+      </button><button class=\\"c-button c-button--size-md c-button--status-default c-button--variant-outline\\" type=\\"button\\">
         <!--v-if-->
         <!--v-if--><span class=\\"c-button__content\\">今天</span>
         <div class=\\"c-hover-overlay\\"></div>
-      </button><button aria-label=\\"下一页\\" class=\\"c-button c-button--size-md c-button--status-default c-button--variant-default c-elevation--2\\" type=\\"button\\">
+      </button><button aria-label=\\"下一页\\" class=\\"c-button c-button--size-md c-button--status-default c-button--variant-outline\\" type=\\"button\\">
         <!--v-if-->
         <!--v-if--><span class=\\"c-button__content\\"><span dir=\\"ltr\\" aria-hidden=\\"true\\">›</span></span>
         <div class=\\"c-hover-overlay\\"></div>
       </button><strong class=\\"c-scheduler__range-title\\">9月7日周一 – 9月13日周日</strong></div>
     <div class=\\"c-scheduler__navigation\\">
       <div class=\\"c-select c-scheduler__mode-select\\">
-        <div class=\\"c-field-decorator c-field-decorator--size-md c-field-decorator--variant-filled c-selection-field\\">
+        <div class=\\"c-field-decorator c-field-decorator--size-md c-field-decorator--variant-outline c-selection-field\\">
           <!--v-if--><span class=\\"c-field-decorator__middle\\"><span class=\\"c-selection-field__content\\"><span class=\\"c-selection-field__selection\\"><span class=\\"c-selection-field__label\\">议程</span></span><input aria-label=\\"任务日程\\" id=\\"v-1\\" class=\\"c-selection-field__input c-selection-field__input--with-value\\" readonly=\\"\\" aria-expanded=\\"false\\" aria-autocomplete=\\"none\\" role=\\"combobox\\" autocomplete=\\"off\\" value=\\"\\"></span></span>
           <!--v-if--><span class=\\"c-field-decorator__suffix\\"><button type=\\"button\\" class=\\"c-field-decorator__clear-btn\\" aria-label=\\"清空\\"><svg xmlns=\\"http://www.w3.org/2000/svg\\" fill=\\"none\\" stroke=\\"currentColor\\" viewBox=\\"0 0 48 48\\" width=\\"1em\\" height=\\"1em\\" class=\\"c-icon c-icon-close-circle-fill\\" stroke-width=\\"4\\" stroke-linecap=\\"butt\\" stroke-linejoin=\\"miter\\" aria-hidden=\\"true\\" role=\\"img\\"><!--v-if--><path fill=\\"currentColor\\" fill-rule=\\"evenodd\\" stroke=\\"none\\" d=\\"M24 44c11.046 0 20-8.954 20-20S35.046 4 24 4 4 12.954 4 24s8.954 20 20 20m4.955-27.771-4.95 4.95-4.95-4.95a1 1 0 0 0-1.414 0l-1.414 1.414a1 1 0 0 0 0 1.414l4.95 4.95-4.95 4.95a1 1 0 0 0 0 1.414l1.414 1.414a1 1 0 0 0 1.414 0l4.95-4.95 4.95 4.95a1 1 0 0 0 1.414 0l1.414-1.414a1 1 0 0 0 0-1.414l-4.95-4.95 4.95-4.95a1 1 0 0 0 0-1.414l-1.414-1.414a1 1 0 0 0-1.414 0\\" clip-rule=\\"evenodd\\"></path></svg></button><!--v-if--><button type=\\"button\\" data-field-open-trigger=\\"\\" aria-label=\\"请选择\\" aria-expanded=\\"false\\" aria-haspopup=\\"listbox\\" class=\\"c-selection-field__icon\\"><svg xmlns=\\"http://www.w3.org/2000/svg\\" fill=\\"none\\" stroke=\\"currentColor\\" viewBox=\\"0 0 48 48\\" width=\\"1em\\" height=\\"1em\\" class=\\"c-icon c-icon-down\\" stroke-width=\\"4\\" stroke-linecap=\\"butt\\" stroke-linejoin=\\"miter\\" aria-hidden=\\"true\\" role=\\"img\\"><!--v-if--><path d=\\"M39.6 17.443 24.043 33 8.487 17.443\\"></path></svg></button></span>
           <!--v-if--><span class=\\"c-field-decorator__border\\" aria-hidden=\\"true\\"></span><span class=\\"c-field-decorator__border-state\\" aria-hidden=\\"true\\"></span>
@@ -29,7 +29,7 @@ exports[`Scheduler > public registration, props and empty rendering 1`] = `
       <!--teleport end-->
       <!--v-if-->
       <!--v-if-->
-      <!--v-if--><button class=\\"c-button c-button--size-md c-button--status-primary c-button--variant-default c-elevation--2\\" type=\\"button\\">
+      <!--v-if--><button class=\\"c-button c-button--size-md c-button--status-primary c-button--variant-outline\\" type=\\"button\\">
         <!--v-if-->
         <!--v-if--><span class=\\"c-button__content\\">新建日程</span>
         <div class=\\"c-hover-overlay\\"></div>

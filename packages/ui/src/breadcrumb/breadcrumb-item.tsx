@@ -1,4 +1,5 @@
-import { computed, defineComponent, getCurrentInstance, ref, useId } from 'vue'
+import { computed, defineComponent, getCurrentInstance, ref } from 'vue'
+import { useId } from '../_utils/vue-compat'
 import { createNamespace } from '../_utils/global-config'
 import { IconMore, IconDown, useBreadcrumbDropdownLabel, useBreadcrumbLabels } from './platform'
 import { useBreadcrumb } from './provide'

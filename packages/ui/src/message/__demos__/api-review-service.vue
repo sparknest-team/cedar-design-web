@@ -1,4 +1,7 @@
 <script setup>
+import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
+const inlineCopy = useInlineDemoLocale("messageApiReviewServiceInline");
+
 import { onUnmounted, shallowRef } from "vue";
 import { Message as ReviewService } from "@cedar-design/ui-vue";
 import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPanel.vue";
@@ -8,8 +11,8 @@ const handle = shallowRef();
 const sample = {
   src: "/cat.jpg",
   images: ["/cat.jpg", "/cat2.jpg"],
-  title: "审查 / Review",
-  content: "组合配置和回调后再次触发 / Trigger after combining controls",
+  title: inlineCopy.value.review,
+  content: inlineCopy.value.triggerAfterCombiningControls,
   message: "Review",
   duration: 0,
   actions: [{ name: "Review A" }, { name: "Review B", disabled: true }],
@@ -109,21 +112,19 @@ onUnmounted(() => {
     :service="service"
     :handle="handle"
     :method-defaults="methodDefaults"
-    ><p>
-      修改配置后点击触发；可在下方选择方法、编辑参数并查看调用结果 / Trigger
-      after changing controls; inspect methods and results below.
-    </p>
+    ><p>{{ inlineCopy.triggerAfterChangingControlsInspect }}</p>
     <c-space wrap
-      ><c-button @click="run(scope.bindings, scope.record)"
-        >触发 / Trigger</c-button
+      ><c-button @click="run(scope.bindings, scope.record)">{{
+        inlineCopy.trigger
+      }}</c-button
       ><c-button
         :disabled="typeof handle?.update !== 'function'"
         @click="act('update', scope.record)"
-        >更新返回句柄 / Update handle</c-button
+        >{{ inlineCopy.updateHandle }}</c-button
       ><c-button
         :disabled="typeof handle?.close !== 'function'"
         @click="act('close', scope.record)"
-        >关闭返回句柄 / Close handle</c-button
+        >{{ inlineCopy.closeHandle }}</c-button
       ></c-space
     ></DemoApiReviewPanel
   >

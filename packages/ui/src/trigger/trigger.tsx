@@ -115,6 +115,7 @@ export default defineComponent({
       visible,
       reference,
       popup,
+      popupTarget: positionContainer,
       isMovingBlur,
       request,
       isTopLayer: platform.onStackTop,

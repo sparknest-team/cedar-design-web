@@ -1,4 +1,5 @@
-import { computed, defineComponent, mergeProps, nextTick, toRefs, useId, watch } from 'vue'
+import { computed, defineComponent, mergeProps, nextTick, toRefs, watch } from 'vue'
+import { useId } from '../_utils/vue-compat'
 import { createNamespace } from '../_utils/global-config'
 import { isFunction, isNumber, isString } from '../_utils/is'
 import { useChoiceState } from '../checkbox/choice-state'

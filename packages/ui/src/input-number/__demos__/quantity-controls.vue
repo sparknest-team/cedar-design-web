@@ -1,81 +1,100 @@
 <script setup lang="ts">
-import { onBeforeUnmount, ref, shallowRef } from 'vue'
+import { useDemoLocale } from "../../__demos__/locale";
+import { computed, onBeforeUnmount, ref, shallowRef } from "vue";
 
-const props = defineProps<{ english?: boolean }>()
-const value = ref<number | null | undefined>(2)
-const disableInput = ref(true)
-const disableIncrement = ref(false)
-const disableDecrement = ref(false)
-const incrementButton = ref(true)
-const decrementButton = ref(true)
-const press = ref(true)
-const lastStep = ref('—')
+const copy = useDemoLocale("quantityControls");
+const value = ref<number | null | undefined>(2);
+const disableInput = ref(true);
+const disableIncrement = ref(false);
+const disableDecrement = ref(false);
+const incrementButton = ref(true);
+const decrementButton = ref(true);
+const press = ref(true);
+const lastStep = ref("—");
 function handleStep(next: number, direction: string) {
-  lastStep.value = `${direction}: ${next}`
+  lastStep.value = `${direction}: ${next}`;
 }
-const approved = ref<number | null | undefined>(2)
-const blocked = ref(false)
-const pending = ref(false)
-const status = ref('—')
-const decision = shallowRef<((allowed: boolean) => void) | undefined>()
-const fail = shallowRef<(() => void) | undefined>()
+const approved = ref<number | null | undefined>(2);
+const blocked = ref(false);
+const pending = ref(false);
+const statusKey = ref<
+  "waiting" | "cancelled" | "approved" | "rejected" | "failed"
+>();
+const proposedValue = shallowRef<unknown>();
+const status = computed(() => {
+  if (!statusKey.value) return "—";
+  return statusKey.value === "waiting"
+    ? copy.value.waiting(proposedValue.value)
+    : copy.value[statusKey.value];
+});
+const decision = shallowRef<((allowed: boolean) => void) | undefined>();
+const fail = shallowRef<(() => void) | undefined>();
 function beforeCommit(
   { value: next }: { value: unknown },
   _done: (allow?: boolean) => void,
   { signal }: { signal: AbortSignal },
 ) {
-  pending.value = true
-  status.value = props.english ? `Waiting to commit ${next ?? 'empty'}` : `等待提交 ${next ?? '空值'}`
+  pending.value = true;
+  proposedValue.value = next;
+  statusKey.value = "waiting";
   return new Promise<void | false>((resolve, reject) => {
     const cleanup = () => {
-      signal.removeEventListener('abort', cancel)
-      pending.value = false
-      decision.value = undefined
-      fail.value = undefined
-    }
+      signal.removeEventListener("abort", cancel);
+      pending.value = false;
+      decision.value = undefined;
+      fail.value = undefined;
+    };
     const cancel = () => {
-      cleanup()
-      status.value = props.english ? 'Cancelled; old result ignored' : '已取消，旧结果不再生效'
-      resolve(false)
-    }
-    signal.addEventListener('abort', cancel, { once: true })
+      cleanup();
+      statusKey.value = "cancelled";
+      resolve(false);
+    };
+    signal.addEventListener("abort", cancel, { once: true });
     decision.value = (allowed) => {
-      cleanup()
-      status.value = allowed ? (props.english ? 'Approved' : '已允许') : props.english ? 'Rejected' : '已拒绝'
-      resolve(allowed ? undefined : false)
-    }
+      cleanup();
+      statusKey.value = allowed ? "approved" : "rejected";
+      resolve(allowed ? undefined : false);
+    };
     fail.value = () => {
-      cleanup()
-      status.value = props.english ? 'Request failed; value preserved' : '请求失败，保留原值'
-      reject(new Error(props.english ? 'Quantity request failed' : '数量提交失败'))
-    }
-  })
+      cleanup();
+      statusKey.value = "failed";
+      reject(new Error(copy.value.requestError));
+    };
+  });
 }
-onBeforeUnmount(() => decision.value?.(false))
+onBeforeUnmount(() => decision.value?.(false));
 </script>
 
 <template>
   <div class="quantity-controls-demo">
     <h4>
-      {{ english ? 'Quantity controls and step direction' : '数量控制与步进方向' }}
+      {{ copy.title }}
     </h4>
     <c-space wrap>
-      <c-checkbox v-model="disableInput" edit-mode="direct">{{ english ? 'Buttons only' : '禁止手输' }}</c-checkbox>
+      <c-checkbox v-model="disableInput" edit-mode="direct">{{
+        copy.buttonsOnly
+      }}</c-checkbox>
       <c-checkbox v-model="disableIncrement" edit-mode="direct">{{
-        english ? 'Disable increase' : '禁用增加'
+        copy.disableIncrease
       }}</c-checkbox>
       <c-checkbox v-model="disableDecrement" edit-mode="direct">{{
-        english ? 'Disable decrease' : '禁用减少'
+        copy.disableDecrease
       }}</c-checkbox>
-      <c-checkbox v-model="incrementButton" edit-mode="direct">{{ english ? 'Show increase' : '显示增加' }}</c-checkbox>
-      <c-checkbox v-model="decrementButton" edit-mode="direct">{{ english ? 'Show decrease' : '显示减少' }}</c-checkbox>
-      <c-checkbox v-model="press" edit-mode="direct">{{ english ? 'Long press' : '开启长按' }}</c-checkbox>
+      <c-checkbox v-model="incrementButton" edit-mode="direct">{{
+        copy.showIncrease
+      }}</c-checkbox>
+      <c-checkbox v-model="decrementButton" edit-mode="direct">{{
+        copy.showDecrease
+      }}</c-checkbox>
+      <c-checkbox v-model="press" edit-mode="direct">{{
+        copy.longPress
+      }}</c-checkbox>
     </c-space>
     <c-input-number
       v-model="value"
       edit-mode="direct"
       mode="button"
-      aria-label="数量控制示例"
+      :aria-label="copy.quantityInput"
       :disable-input="disableInput"
       :disable-increment="disableIncrement"
       :disable-decrement="disableDecrement"
@@ -86,36 +105,40 @@ onBeforeUnmount(() => decision.value?.(false))
       :max="10"
       @step="handleStep"
     />
-    <p role="status">{{ english ? 'Accepted step' : '已接受的步进' }}：{{ lastStep }}</p>
+    <p role="status">{{ copy.acceptedStep }}：{{ lastStep }}</p>
     <h4>
-      {{ english ? 'Approve, reject or cancel an asynchronous commit' : '异步允许、拒绝与取消提交' }}
+      {{ copy.asyncTitle }}
     </h4>
     <p>
-      {{
-        english
-          ? 'Step, type or clear the value, then choose an approval result below. Pending operations cannot overlap. External updates and disabling cancel the old request.'
-          : '加减、输入或清空后，在下方手动选择审批结果。等待时不能重复提交；外部回填或禁用会取消旧请求。'
-      }}
+      {{ copy.asyncHint }}
     </p>
     <c-input-number
       v-model="approved"
       edit-mode="direct"
       mode="button"
       clearable
-      aria-label="异步数量示例"
+      :aria-label="copy.asyncInput"
       :before-commit="beforeCommit"
       loading-mode="line"
       :disabled="blocked"
     />
     <c-space wrap>
-      <c-button :disabled="!pending" @click="decision?.(true)">{{ english ? 'Approve' : '允许本次变更' }}</c-button>
-      <c-button :disabled="!pending" @click="decision?.(false)">{{ english ? 'Reject' : '拒绝本次变更' }}</c-button>
-      <c-button :disabled="!pending" @click="fail?.()">{{ english ? 'Simulate failure' : '模拟失败' }}</c-button>
-      <c-button @click="approved = 10">{{ english ? 'Set external value to 10' : '外部回填 10' }}</c-button>
+      <c-button :disabled="!pending" @click="decision?.(true)">{{
+        copy.approve
+      }}</c-button>
+      <c-button :disabled="!pending" @click="decision?.(false)">{{
+        copy.reject
+      }}</c-button>
+      <c-button :disabled="!pending" @click="fail?.()">{{
+        copy.simulateFailure
+      }}</c-button>
+      <c-button @click="approved = 10">{{ copy.externalValue }}</c-button>
       <c-button @click="blocked = !blocked">{{
-        blocked ? (english ? 'Enable' : '恢复可用') : english ? 'Disable' : '禁用控件'
+        blocked ? copy.enable : copy.disable
       }}</c-button>
     </c-space>
-    <p role="status">{{ status }}；{{ english ? 'Committed value' : '已提交值' }}：{{ approved ?? '—' }}</p>
+    <p role="status">
+      {{ status }}；{{ copy.committedValue }}：{{ approved ?? "—" }}
+    </p>
   </div>
 </template>
