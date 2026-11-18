@@ -16,7 +16,7 @@
     "typecheck": "pnpm --filter @cedar-design/ui-vue typecheck && pnpm --dir packages/ui exec vue-tsc --noEmit -p tsconfig.p1-api.json",
     "spec:check": "node scripts/quality/spec-check.mjs",
     "package:check": "node scripts/quality/package-check.mjs && node scripts/quality/native-esm-check.mjs",
-    "quality": "pnpm check:demo-i18n && pnpm check:packages && pnpm check:shared && pnpm check:runtime-dependencies && pnpm check:vue-compat:source && pnpm build:lib && pnpm check:vue-compat && pnpm spec:check && pnpm check:style-vars && pnpm lint && pnpm typecheck && pnpm test && pnpm check:direction && pnpm check:cli && pnpm check:resolver && pnpm check:doc-pipeline && pnpm build:doc && pnpm package:check && pnpm check:published-environment && pnpm check:docs-theme && pnpm check:docs-components && pnpm check:compatibility",
+    "quality": "pnpm check:install-patches && pnpm check:demo-i18n && pnpm check:packages && pnpm check:shared && pnpm check:runtime-dependencies && pnpm check:vue-compat:source && pnpm build:lib && pnpm check:vue-compat && pnpm spec:check && pnpm check:style-vars && pnpm lint && pnpm typecheck && pnpm test && pnpm check:direction && pnpm check:cli && pnpm check:resolver && pnpm check:doc-pipeline && pnpm build:doc && pnpm package:check && pnpm check:published-environment && pnpm check:docs-theme && pnpm check:docs-components && pnpm check:compatibility",
     "check:doc-pipeline": "node --test ../design-ui/bin/public-documentation-policy.test.mjs ../design-ui/bin/component-css-docs.test.mjs && node ../design-ui/bin/public-docs-check.mjs && node --test ../design-ui/bin/clean-public-component-docs.test.mjs ../design-ui/bin/normalize-api-headings.test.mjs ../design-ui/bin/api-document-structure.test.mjs ../design-ui/bin/llms-docs.test.mjs ../design-ui/bin/group-demo-sections.test.mjs ../design-ui/bin/group-maple-examples.test.mjs ../design-ui/bin/compose-demo-comparison.test.mjs ../design-ui/bin/demo-config-comparison.test.mjs ../design-ui/bin/demo-content-parity.test.mjs ../design-ui/bin/api-documentation-locales.test.mjs && pnpm --dir packages/ui exec vitest run --config docs/.vuepress/vitest.config.mts --maxWorkers=1 --no-file-parallelism",
     "check:docs-theme": "node --test scripts/browser/docs-theme.test.mjs",
     "check:docs-components": "node --test scripts/browser/components.test.mjs",
@@ -62,7 +62,8 @@
     "check:demo-i18n": "node --test scripts/quality/demo-i18n-ci.test.mjs && pnpm check:test-environment && node --test ../design-ui/bin/compose-demo-comparison.test.mjs ../design-ui/bin/demo-config-comparison.test.mjs && pnpm --dir packages/ui exec vitest run src/__demos__/locale --maxWorkers=1 --no-file-parallelism",
     "hooks:install": "node scripts/git-hooks.mjs install",
     "pr:merge": "node scripts/pr-merge.mjs",
-    "check:pr-workflow": "node --test ../design-ui/bin/pr-workflow.test.mjs"
+    "check:pr-workflow": "node --test ../design-ui/bin/pr-workflow.test.mjs",
+    "check:install-patches": "node --test scripts/quality/source-map-patch.test.mjs"
   },
   "packageManager": "pnpm@9.6.0",
   "devDependencies": {

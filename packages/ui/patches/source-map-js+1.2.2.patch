@@ -1,5 +1,4 @@
 diff --git a/node_modules/source-map-js/lib/quick-sort.js b/node_modules/source-map-js/lib/quick-sort.js
-index 9f4e16f..98bf53a 100644
 --- a/node_modules/source-map-js/lib/quick-sort.js
 +++ b/node_modules/source-map-js/lib/quick-sort.js
 @@ -107,9 +107,7 @@ function SortTemplate(comparator) {
@@ -12,4 +11,4 @@ index 9f4e16f..98bf53a 100644
 +  return SortTemplate(comparator);
  }
  
- /**
+ let isEvalAllowed = (function () {
