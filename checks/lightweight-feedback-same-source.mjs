@@ -1,3 +1,4 @@
+import { assertCopiedVueCompat } from "../../design-ui/bin/copied-source-normalization.mjs";
 import { normalizeTypeScript } from "./normalize-source.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -8,7 +9,7 @@ const workspace = fileURLToPath(new URL("../../", import.meta.url));
 const cedar = resolve(workspace, "cedar-design-web/packages/ui/src");
 const maple = resolve(workspace, "maple-design-mobile/packages/ui/src");
 const read = (root, file) => readFileSync(resolve(root, file), "utf8");
-assert.equal(read(cedar, "_utils/vue-compat.ts"), read(maple, "utils/vue-compat.ts"), "Vue compatibility helpers differ");
+assertCopiedVueCompat(read(cedar, "_utils/vue-compat.ts"), read(maple, "utils/vue-compat.ts"));
 const normalize = (source) =>
   source
     .replaceAll("--c-", "--PREFIX-")

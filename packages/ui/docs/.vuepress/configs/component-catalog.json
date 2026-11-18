@@ -3304,6 +3304,30 @@
     },
     {
       "coreStrengths": [],
+      "featurePoints": [],
+      "id": "section",
+      "name": "Section 内容分区",
+      "group": "layout",
+      "route": "/components/section/",
+      "feature": "通过标题、说明和操作组织内容分区，自动适配表单布局。",
+      "members": [],
+      "topics": [],
+      "demos": [
+        {
+          "title": "普通分区",
+          "source": "src/section/__demos__/plain.vue",
+          "anchor": "普通分区"
+        },
+        {
+          "title": "带线分区",
+          "source": "src/section/__demos__/line.vue",
+          "anchor": "带线分区"
+        }
+      ],
+      "references": []
+    },
+    {
+      "coreStrengths": [],
       "featurePoints": [
         {
           "id": "variant",
@@ -5679,8 +5703,14 @@
         {
           "id": "alignment",
           "label": "对齐、间距与嵌套",
-          "status": "candidate",
-          "demos": [],
+          "status": "demo",
+          "demos": [
+            {
+              "title": "组合 Tabs 与嵌套卡片",
+              "source": "src/card/__demos__/nested-tabs.vue",
+              "anchor": "组合-tabs-与嵌套卡片"
+            }
+          ],
           "evidence": [
             {
               "library": "quasar",
@@ -5725,6 +5755,11 @@
           "anchor": "本组配置对照"
         },
         {
+          "title": "组合 Tabs 与嵌套卡片",
+          "source": "src/card/__demos__/nested-tabs.vue",
+          "anchor": "组合-tabs-与嵌套卡片"
+        },
+        {
           "title": "长标题与提示",
           "source": "src/card/__demos__/tooltip.vue",
           "anchor": "长标题与提示"
@@ -5745,9 +5780,9 @@
           "anchor": "本组配置对照"
         },
         {
-          "title": "全屏展开与关闭",
+          "title": "浮动展开与关闭",
           "source": "src/card/__demos__/floating.vue",
-          "anchor": "全屏展开与关闭"
+          "anchor": "浮动展开与关闭"
         },
         {
           "title": "本组配置对照",
@@ -14851,8 +14886,14 @@
         {
           "id": "custom",
           "label": "插槽与自定义内容",
-          "status": "candidate",
-          "demos": [],
+          "status": "demo",
+          "demos": [
+            {
+              "title": "自定义已选内容",
+              "source": "src/input-tag/__demos__/format-label.vue",
+              "anchor": "自定义已选内容"
+            }
+          ],
           "evidence": [
             {
               "library": "naive-ui",
@@ -14981,8 +15022,14 @@
         {
           "id": "search",
           "label": "搜索、匹配与过滤",
-          "status": "candidate",
-          "demos": [],
+          "status": "demo",
+          "demos": [
+            {
+              "title": "搜索并选择标签",
+              "source": "src/input-tag/__demos__/search-options.vue",
+              "anchor": "搜索并选择标签"
+            }
+          ],
           "evidence": [
             {
               "library": "quasar",
@@ -15115,7 +15162,9 @@
         "尺寸",
         "变体与外观",
         "加载与异步",
-        "受控值"
+        "受控值",
+        "搜索与过滤",
+        "定制与组合"
       ],
       "demos": [
         {
@@ -15134,9 +15183,34 @@
           "anchor": "本组配置对照"
         },
         {
+          "title": "搜索并选择标签",
+          "source": "src/input-tag/__demos__/search-options.vue",
+          "anchor": "搜索并选择标签"
+        },
+        {
+          "title": "自定义已选内容",
+          "source": "src/input-tag/__demos__/format-label.vue",
+          "anchor": "自定义已选内容"
+        },
+        {
           "title": "受控加载",
           "source": "src/input-tag/__demos__/loading.vue",
           "anchor": "受控加载"
+        },
+        {
+          "title": "粘贴链接并获取标题",
+          "source": "src/input-tag/__demos__/link-title.vue",
+          "anchor": "粘贴链接并获取标题"
+        },
+        {
+          "title": "原始值反显",
+          "source": "src/input-tag/__demos__/fallback-option.vue",
+          "anchor": "原始值反显"
+        },
+        {
+          "title": "保存后异步反显",
+          "source": "src/input-tag/__demos__/async-fallback-restore.vue",
+          "anchor": "保存后异步反显"
         }
       ],
       "references": [
@@ -15998,9 +16072,9 @@
               "anchor": "外观组合"
             },
             {
-              "title": "外观与浮动提示",
+              "title": "外观与颜色",
               "source": "src/auto-complete/__demos__/decorator.vue",
-              "anchor": "外观与浮动提示"
+              "anchor": "外观与颜色"
             }
           ],
           "evidence": [
@@ -16075,8 +16149,14 @@
         {
           "id": "custom",
           "label": "插槽与自定义内容",
-          "status": "candidate",
-          "demos": [],
+          "status": "demo",
+          "demos": [
+            {
+              "title": "自定义文本提交",
+              "source": "src/auto-complete/__demos__/custom-draft.vue",
+              "anchor": "自定义文本提交"
+            }
+          ],
           "evidence": [
             {
               "library": "element-plus",
@@ -16358,6 +16438,7 @@
         "键盘与焦点",
         "定制与组合",
         "大数据",
+        "确认与取消",
         "边界与恢复"
       ],
       "demos": [
@@ -16365,6 +16446,11 @@
           "title": "基础输入与选择",
           "source": "src/auto-complete/__demos__/basic.vue",
           "anchor": "基础输入与选择"
+        },
+        {
+          "title": "自定义文本提交",
+          "source": "src/auto-complete/__demos__/custom-draft.vue",
+          "anchor": "自定义文本提交"
         },
         {
           "title": "外观组合",
@@ -16397,9 +16483,9 @@
           "anchor": "本组配置对照"
         },
         {
-          "title": "外观与浮动提示",
+          "title": "外观与颜色",
           "source": "src/auto-complete/__demos__/decorator.vue",
-          "anchor": "外观与浮动提示"
+          "anchor": "外观与颜色"
         },
         {
           "title": "交互状态切换",
@@ -16824,6 +16910,24 @@
               "url": "https://github.com/arco-design/arco-design-vue/blob/ee158dd75e81f636f34d1929fd3b19b5a6f0e32a/packages/web-vue/components/mention/__demo__/prefix.md"
             }
           ]
+        },
+        {
+          "id": "search",
+          "label": "搜索、匹配与过滤",
+          "status": "demo",
+          "demos": [
+            {
+              "title": "候选筛选与异步搜索",
+              "source": "src/mention/__demos__/search-options.vue",
+              "anchor": "候选筛选与异步搜索"
+            },
+            {
+              "title": "异步搜索与阅读态反显",
+              "source": "src/mention/__demos__/async-read-pretty.vue",
+              "anchor": "异步搜索与阅读态反显"
+            }
+          ],
+          "evidence": []
         }
       ],
       "id": "mention",
@@ -16835,6 +16939,7 @@
       "topics": [
         "加载与异步",
         "受控值",
+        "搜索与过滤",
         "边界与恢复"
       ],
       "demos": [
@@ -16842,6 +16947,26 @@
           "title": "基础用法",
           "source": "src/mention/__demos__/basic.vue",
           "anchor": "基础用法"
+        },
+        {
+          "title": "原子提及与值反显",
+          "source": "src/mention/__demos__/atomic-mention.vue",
+          "anchor": "原子提及与值反显"
+        },
+        {
+          "title": "候选筛选与异步搜索",
+          "source": "src/mention/__demos__/search-options.vue",
+          "anchor": "候选筛选与异步搜索"
+        },
+        {
+          "title": "异步搜索与阅读态反显",
+          "source": "src/mention/__demos__/async-read-pretty.vue",
+          "anchor": "异步搜索与阅读态反显"
+        },
+        {
+          "title": "保存后异步反显",
+          "source": "src/mention/__demos__/async-fallback-restore.vue",
+          "anchor": "保存后异步反显"
         },
         {
           "title": "本组配置对照",
@@ -17790,7 +17915,7 @@
           "label": "受控值与默认值",
           "status": "documented",
           "demos": [],
-          "documentation": "| `model-value / default-value` | 受控值 / 非受控初始值 | `Value` | `单选 ''，多选 []` |",
+          "documentation": "| `model-value` | 受控选中值，支持 v-model | `Value \\| null` | `undefined` |",
           "evidence": [
             {
               "library": "quasar",
@@ -18467,6 +18592,7 @@
         "多选与范围",
         "定制与组合",
         "大数据",
+        "确认与取消",
         "边界与恢复"
       ],
       "demos": [
@@ -18489,6 +18615,11 @@
           "title": "本组配置对照",
           "source": "src/select/__demos__/multiple.vue",
           "anchor": "本组配置对照"
+        },
+        {
+          "title": "单选确认方式",
+          "source": "src/select/__demos__/confirmation.vue",
+          "anchor": "单选确认方式"
         },
         {
           "title": "同名选项",
@@ -19157,7 +19288,7 @@
           "label": "受控值与默认值",
           "status": "documented",
           "demos": [],
-          "documentation": "| model-value / v-model | string / null | undefined | 受控人员标识；显式 null 保持为空。 |",
+          "documentation": "| model-value | PeopleSelectValue | `undefined` | 单选为人员 ID，多选为 ID 数组；显式 null 保持为空。 支持 `v-model`。 |",
           "evidence": [
             {
               "library": "quasar",
@@ -19257,8 +19388,14 @@
         {
           "id": "loading",
           "label": "加载状态与重复操作",
-          "status": "candidate",
-          "demos": [],
+          "status": "demo",
+          "demos": [
+            {
+              "title": "options 加载函数",
+              "source": "src/people-select/__demos__/options-loader.vue",
+              "anchor": "options-加载函数"
+            }
+          ],
           "evidence": [
             {
               "library": "element-plus",
@@ -19561,8 +19698,21 @@
       "route": "/components/people-select/",
       "feature": "request / resolve 分工，阅读态回显和业务操作区。",
       "members": [],
-      "topics": [],
+      "topics": [
+        "加载与异步",
+        "多选与范围"
+      ],
       "demos": [
+        {
+          "title": "单选与多选",
+          "source": "src/people-select/__demos__/multiple.vue",
+          "anchor": "单选与多选"
+        },
+        {
+          "title": "options 加载函数",
+          "source": "src/people-select/__demos__/options-loader.vue",
+          "anchor": "options-加载函数"
+        },
         {
           "title": "完整业务示例",
           "source": "src/people-select/__demos__/injected-services.vue",
@@ -20278,8 +20428,14 @@
         {
           "id": "multiple",
           "label": "多选、标签与数量限制",
-          "status": "candidate",
-          "demos": [],
+          "status": "demo",
+          "demos": [
+            {
+              "title": "复选多选",
+              "source": "src/tree-select/__demos__/multiple.vue",
+              "anchor": "复选多选"
+            }
+          ],
           "evidence": [
             {
               "library": "element-plus",
@@ -20407,8 +20563,14 @@
         {
           "id": "tree-check",
           "label": "勾选、半选与级联策略",
-          "status": "candidate",
-          "demos": [],
+          "status": "demo",
+          "demos": [
+            {
+              "title": "复选多选",
+              "source": "src/tree-select/__demos__/multiple.vue",
+              "anchor": "复选多选"
+            }
+          ],
           "evidence": [
             {
               "library": "element-plus",
@@ -20455,13 +20617,19 @@
       "feature": "层级值、搜索匹配、清空约定与字段阅读编辑。",
       "members": [],
       "topics": [
-        "搜索与过滤"
+        "搜索与过滤",
+        "多选与范围"
       ],
       "demos": [
         {
           "title": "基础用法",
           "source": "src/tree-select/__demos__/basic.vue",
           "anchor": "基础用法"
+        },
+        {
+          "title": "复选多选",
+          "source": "src/tree-select/__demos__/multiple.vue",
+          "anchor": "复选多选"
         },
         {
           "title": "本组配置对照",
@@ -27511,8 +27679,14 @@
         {
           "id": "disabled",
           "label": "禁用与只读",
-          "status": "documented",
-          "demos": [],
+          "status": "demo",
+          "demos": [
+            {
+              "title": "禁用部分时间选项",
+              "source": "src/time/picker/__demos__/disabled-parts.vue",
+              "anchor": "禁用部分时间选项"
+            }
+          ],
           "documentation": "| `readonly`       | 只读             | 交互状态对比、选择与提交、多个字段与浮层切换 |",
           "evidence": [
             {
@@ -27680,6 +27854,11 @@
               "title": "字段外壳与配置边界",
               "source": "src/time/__demos__/field-appearance.vue",
               "anchor": "字段外壳与配置边界"
+            },
+            {
+              "title": "禁用部分时间选项",
+              "source": "src/time/picker/__demos__/disabled-parts.vue",
+              "anchor": "禁用部分时间选项"
             }
           ],
           "evidence": [
@@ -27743,9 +27922,9 @@
               "anchor": "跳过确认"
             },
             {
-              "title": "选择与提交",
-              "source": "src/time/__demos__/selection-events.vue",
-              "anchor": "选择与提交"
+              "title": "面板确认与隐藏选项",
+              "source": "src/time/picker/__demos__/panel-behavior.vue",
+              "anchor": "面板确认与隐藏选项"
             }
           ],
           "evidence": [
@@ -27788,6 +27967,7 @@
       "topics": [
         "尺寸",
         "变体与外观",
+        "禁用与只读",
         "受控值",
         "多选与范围",
         "确认与取消",
@@ -27798,6 +27978,11 @@
           "title": "基本用法",
           "source": "src/time/__demos__/basic.vue",
           "anchor": "基本用法"
+        },
+        {
+          "title": "基础面板",
+          "source": "src/time/picker/__demos__/basic.vue",
+          "anchor": "基础面板"
         },
         {
           "title": "本组配置对照",
@@ -27838,6 +28023,16 @@
           "title": "跳过确认",
           "source": "src/time/__demos__/no-confirm.vue",
           "anchor": "跳过确认"
+        },
+        {
+          "title": "禁用部分时间选项",
+          "source": "src/time/picker/__demos__/disabled-parts.vue",
+          "anchor": "禁用部分时间选项"
+        },
+        {
+          "title": "面板确认与隐藏选项",
+          "source": "src/time/picker/__demos__/panel-behavior.vue",
+          "anchor": "面板确认与隐藏选项"
         },
         {
           "title": "交互状态切换",
@@ -33085,6 +33280,16 @@
           "anchor": "额外信息和帮助信息"
         },
         {
+          "title": "局部表单分区",
+          "source": "src/form/__demos__/section.vue",
+          "anchor": "局部表单分区"
+        },
+        {
+          "title": "分区标题操作",
+          "source": "src/form/__demos__/section-actions.vue",
+          "anchor": "分区标题操作"
+        },
+        {
           "title": "固定标签宽度",
           "source": "src/form/__demos__/label-width-comparison.vue",
           "anchor": "固定标签宽度"
@@ -33897,9 +34102,9 @@
               "anchor": "基础用法"
             },
             {
-              "title": "动态只读与禁用",
-              "source": "src/upload/__demos__/state-controls.vue",
-              "anchor": "动态只读与禁用"
+              "title": "只读、禁用与纯阅读",
+              "source": "src/upload/__demos__/states.vue",
+              "anchor": "只读、禁用与纯阅读"
             }
           ],
           "documentation": "| empty-values | readonly unknown[] | 字段 > FormItem > Form > 组件族默认；完整覆盖，不合并 |",
@@ -33918,7 +34123,7 @@
           "label": "受控值与默认值",
           "status": "documented",
           "demos": [],
-          "documentation": "| model-value / default-value                                  | UploadFileItem[]                                         | 受控值 / 非受控初值[]                             |",
+          "documentation": "| model-value | `UploadFileItem[] \\| null` | `undefined` | 受控文件列表，配合 v-model 使用 |",
           "evidence": [
             {
               "library": "naive-ui",
@@ -33935,9 +34140,9 @@
           "status": "demo",
           "demos": [
             {
-              "title": "图卡、插槽与自定义预览",
+              "title": "自定义入口与预览",
               "source": "src/upload/__demos__/custom-surface.vue",
-              "anchor": "图卡、插槽与自定义预览"
+              "anchor": "自定义入口与预览"
             }
           ],
           "evidence": [
@@ -34001,17 +34206,30 @@
           ]
         },
         {
+          "id": "read-edit",
+          "label": "阅读态、编辑与确认",
+          "status": "demo",
+          "demos": [
+            {
+              "title": "只读、禁用与纯阅读",
+              "source": "src/upload/__demos__/states.vue",
+              "anchor": "只读、禁用与纯阅读"
+            }
+          ],
+          "evidence": []
+        },
+        {
           "id": "upload-drop",
           "label": "拖放与多文件选择",
           "status": "demo",
           "demos": [
             {
-              "title": "目录选择与多文件回退",
-              "source": "src/upload/__demos__/directory.vue",
-              "anchor": "目录选择与多文件回退"
+              "title": "拖拽上传",
+              "source": "src/upload/__demos__/draggable-picture.vue",
+              "anchor": "拖拽上传"
             }
           ],
-          "documentation": "| multiple / directory / draggable                             | boolean                                                  | false                                             |",
+          "documentation": "| directory | `boolean` | `false` | 选择文件夹；不支持的设备可使用 multiple 作为回退 |",
           "evidence": [
             {
               "library": "element-plus",
@@ -34063,12 +34281,12 @@
           "status": "demo",
           "demos": [
             {
-              "title": "目录选择与多文件回退",
+              "title": "选择文件夹",
               "source": "src/upload/__demos__/directory.vue",
-              "anchor": "目录选择与多文件回退"
+              "anchor": "选择文件夹"
             }
           ],
-          "documentation": "| multiple / directory / draggable                             | boolean                                                  | false                                             |",
+          "documentation": "| directory | `boolean` | `false` | 选择文件夹；不支持的设备可使用 multiple 作为回退 |",
           "evidence": [
             {
               "library": "element-plus",
@@ -34114,12 +34332,12 @@
           "status": "demo",
           "demos": [
             {
-              "title": "替换后的约束校验",
-              "source": "src/upload/__demos__/replacement-validation.vue",
-              "anchor": "替换后的约束校验"
+              "title": "文件类型、数量与大小",
+              "source": "src/upload/__demos__/picture-limits.vue",
+              "anchor": "文件类型、数量与大小"
             }
           ],
-          "documentation": "| accept / capture                                             | `string / UploadCapture`<br>`UploadCapture: boolean \\| 'user' \\| 'environment' \\| undefined` | 未指定                                            |",
+          "documentation": "| accept | `string` | `undefined` | 允许选择的文件类型，例如 image/* |",
           "evidence": [
             {
               "library": "element-plus",
@@ -34157,14 +34375,9 @@
           "status": "demo",
           "demos": [
             {
-              "title": "手动队列和可取消请求",
-              "source": "src/upload/__demos__/queue-request.vue",
-              "anchor": "手动队列和可取消请求"
-            },
-            {
-              "title": "上传前准备与取消竞争",
-              "source": "src/upload/__demos__/prepare-request.vue",
-              "anchor": "上传前准备与取消竞争"
+              "title": "手动上传、进度与重试",
+              "source": "src/upload/__demos__/manual-upload.vue",
+              "anchor": "手动上传、进度与重试"
             }
           ],
           "evidence": [
@@ -34197,9 +34410,14 @@
           "status": "demo",
           "demos": [
             {
-              "title": "图卡、插槽与自定义预览",
-              "source": "src/upload/__demos__/custom-surface.vue",
-              "anchor": "图卡、插槽与自定义预览"
+              "title": "拖拽上传",
+              "source": "src/upload/__demos__/draggable-picture.vue",
+              "anchor": "拖拽上传"
+            },
+            {
+              "title": "文件类型、数量与大小",
+              "source": "src/upload/__demos__/picture-limits.vue",
+              "anchor": "文件类型、数量与大小"
             }
           ],
           "evidence": [
@@ -34248,10 +34466,12 @@
       "feature": "本地读取、手动队列、可取消请求与异步准备。",
       "members": [],
       "topics": [
+        "尺寸",
         "禁用与只读",
-        "加载与异步",
         "定制与组合",
-        "确认与取消"
+        "拖动与排序",
+        "确认与取消",
+        "边界与恢复"
       ],
       "demos": [
         {
@@ -34260,64 +34480,79 @@
           "anchor": "基础用法"
         },
         {
-          "title": "动态只读与禁用",
-          "source": "src/upload/__demos__/state-controls.vue",
-          "anchor": "动态只读与禁用"
+          "title": "列表展示方式",
+          "source": "src/upload/__demos__/list-type.vue",
+          "anchor": "列表展示方式"
         },
         {
-          "title": "交互状态切换",
-          "source": "src/upload/__demos__/state-lab.vue",
-          "anchor": "交互状态切换"
+          "title": "上传入口位置",
+          "source": "src/upload/__demos__/trigger-position.vue",
+          "anchor": "上传入口位置"
         },
         {
-          "title": "图卡、插槽与自定义预览",
-          "source": "src/upload/__demos__/custom-surface.vue",
-          "anchor": "图卡、插槽与自定义预览"
+          "title": "拖拽上传",
+          "source": "src/upload/__demos__/draggable-picture.vue",
+          "anchor": "拖拽上传"
         },
         {
-          "title": "目录选择与多文件回退",
+          "title": "文件类型、数量与大小",
+          "source": "src/upload/__demos__/picture-limits.vue",
+          "anchor": "文件类型、数量与大小"
+        },
+        {
+          "title": "单文件与替换",
+          "source": "src/upload/__demos__/replacement.vue",
+          "anchor": "单文件与替换"
+        },
+        {
+          "title": "选择文件夹",
           "source": "src/upload/__demos__/directory.vue",
-          "anchor": "目录选择与多文件回退"
+          "anchor": "选择文件夹"
         },
         {
-          "title": "剪贴板图片与读取校验",
-          "source": "src/upload/__demos__/clipboard.vue",
-          "anchor": "剪贴板图片与读取校验"
+          "title": "图片与视频预览",
+          "source": "src/upload/__demos__/preview.vue",
+          "anchor": "图片与视频预览"
         },
         {
-          "title": "替换后的约束校验",
-          "source": "src/upload/__demos__/replacement-validation.vue",
-          "anchor": "替换后的约束校验"
+          "title": "只读、禁用与纯阅读",
+          "source": "src/upload/__demos__/states.vue",
+          "anchor": "只读、禁用与纯阅读"
         },
         {
-          "title": "外部管理进度",
-          "source": "src/upload/__demos__/external-state.vue",
-          "anchor": "外部管理进度"
+          "title": "自定义入口与预览",
+          "source": "src/upload/__demos__/custom-surface.vue",
+          "anchor": "自定义入口与预览"
         },
         {
-          "title": "手动队列和可取消请求",
-          "source": "src/upload/__demos__/queue-request.vue",
-          "anchor": "手动队列和可取消请求"
+          "title": "手动上传、进度与重试",
+          "source": "src/upload/__demos__/manual-upload.vue",
+          "anchor": "手动上传、进度与重试"
         },
         {
           "title": "删除前确认",
-          "source": "src/upload/__demos__/before-remove.vue",
+          "source": "src/upload/__demos__/remove-confirm.vue",
           "anchor": "删除前确认"
         },
         {
-          "title": "上传前准备与取消竞争",
-          "source": "src/upload/__demos__/prepare-request.vue",
-          "anchor": "上传前准备与取消竞争"
+          "title": "由业务管理上传状态",
+          "source": "src/upload/__demos__/external-state.vue",
+          "anchor": "由业务管理上传状态"
         },
         {
-          "title": "异步请求元数据",
-          "source": "src/upload/__demos__/metadata-request.vue",
-          "anchor": "异步请求元数据"
+          "title": "外置上传按钮",
+          "source": "src/upload/__demos__/external-trigger.vue",
+          "anchor": "外置上传按钮"
         },
         {
-          "title": "请求句柄迟到与取消",
-          "source": "src/upload/__demos__/late-request.vue",
-          "anchor": "请求句柄迟到与取消"
+          "title": "Dialog 中上传",
+          "source": "src/upload/__demos__/dialog-upload.vue",
+          "anchor": "dialog-中上传"
+        },
+        {
+          "title": "接入剪贴板图片",
+          "source": "src/upload/__demos__/clipboard.vue",
+          "anchor": "接入剪贴板图片"
         }
       ],
       "references": [
@@ -41274,7 +41509,7 @@
               "anchor": "预览入口与受控"
             }
           ],
-          "documentation": "| model-value / v-model | number | - | 受控图片序号，从 1 开始 |",
+          "documentation": "| model-value | number | `-` | 受控图片序号，从 1 开始 支持 `v-model`。 |",
           "evidence": []
         },
         {
@@ -49196,6 +49431,11 @@
           "anchor": "自定义底部"
         },
         {
+          "title": "上下分割线",
+          "source": "src/dialog/__demos__/dividers.vue",
+          "anchor": "上下分割线"
+        },
+        {
           "title": "定制按钮文字",
           "source": "src/dialog/__demos__/custom-text.vue",
           "anchor": "定制按钮文字"
@@ -49798,6 +50038,11 @@
           "title": "自定义节点",
           "source": "src/drawer/__demos__/custom-node.vue",
           "anchor": "自定义节点"
+        },
+        {
+          "title": "上下分割线",
+          "source": "src/drawer/__demos__/dividers.vue",
+          "anchor": "上下分割线"
         },
         {
           "title": "函数调用",
@@ -50581,19 +50826,8 @@
         {
           "id": "theme",
           "label": "主题切换与局部覆盖",
-          "status": "demo",
-          "demos": [
-            {
-              "title": "变量覆盖",
-              "source": "src/theme-provider/__demos__/basic.vue",
-              "anchor": "变量覆盖"
-            },
-            {
-              "title": "根部与嵌套",
-              "source": "src/theme-provider/__demos__/local-theme.vue",
-              "anchor": "根部与嵌套"
-            }
-          ],
+          "status": "candidate",
+          "demos": [],
           "evidence": [
             {
               "library": "vuetify",
@@ -50619,18 +50853,7 @@
       "feature": "应用根部与局部主题、嵌套、品牌预设、变量覆盖和弹层继承。",
       "members": [],
       "topics": [],
-      "demos": [
-        {
-          "title": "变量覆盖",
-          "source": "src/theme-provider/__demos__/basic.vue",
-          "anchor": "变量覆盖"
-        },
-        {
-          "title": "根部与嵌套",
-          "source": "src/theme-provider/__demos__/local-theme.vue",
-          "anchor": "根部与嵌套"
-        }
-      ],
+      "demos": [],
       "references": [
         {
           "library": "vuetify",
@@ -50771,7 +50994,7 @@
           "label": "禁用与只读",
           "status": "documented",
           "demos": [],
-          "documentation": "| `disabled` / `readonly` / `error` | `boolean` | 消费者合并 Form / Group 后传入 |",
+          "documentation": "| `disabled` | `boolean` | 消费者合并 Form / Group 后传入的禁用状态 |",
           "evidence": [
             {
               "library": "element-plus",

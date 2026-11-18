@@ -1,18 +1,15 @@
 import { withInstall } from '../_utils/global-config'
 import _Form from './Form.vue'
 import _FormItem from './FormItem.vue'
-import _FormSection from './FormSection.vue'
-import { formSectionProps } from './section-props'
 import { formItemProps } from './item-props'
 import { formProps } from './props'
 
-const Form: import('../_utils/global-config').CedarComponentWithInstall<typeof _Form & { Item: typeof _FormItem; Section: typeof _FormSection }> = withInstall(
+const Form: import('../_utils/global-config').CedarComponentWithInstall<typeof _Form & { Item: typeof _FormItem }> = withInstall(
   _Form,
   Object.assign(_Form, {
     Item: _FormItem,
-    Section: _FormSection,
   }),
-  { components: [_Form, _FormItem, _FormSection] },
+  { components: [_Form, _FormItem] },
 )
 
 export type FormInstance = InstanceType<typeof _Form>
@@ -41,8 +38,3 @@ export type { FormItemAsteriskPosition, FormItemValidateStatus } from './item-de
 export type { FieldEditMode, BeforeFieldCommit } from '../_components/field-presentation/context'
 
 export type { FieldData, FormEmits, FormSlots, FormItemSlots, FormEditingError, FormSubmitError } from './types'
-
-export { _FormSection as FormSection, formSectionProps }
-export const _FormSectionComponent: typeof _FormSection = _FormSection
-export type FormSectionInstance = InstanceType<typeof _FormSection>
-export type { FormSectionProps, FormSectionSlots, FormSectionVariant } from './section-props'

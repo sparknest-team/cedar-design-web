@@ -1,35 +1,35 @@
-import { createApp, defineComponent, h, nextTick, reactive } from "vue";
+import { defineComponent, h, nextTick, reactive } from "vue";
 import { renderToString } from "@vue/server-renderer";
 import { mount } from "@vue/test-utils";
 import { describe, expect, it } from "vitest";
-import Form, { FormSection, formSectionProps } from "..";
+import Form from "..";
+import Section from "../../section";
 import FormItem from "../FormItem.vue";
 import Input from "../../input";
 import { inject } from "vue";
 import { formInjectionKey } from "../context";
 
-describe("FormSection", () => {
+describe("Section", () => {
   it("switches styles without remounting fields and uses the card border as its end boundary", async () => {
-    const wrapper = mount(FormSection, {
-      props: { title: "现场处置", showEndDivider: true },
+    const wrapper = mount(Section, {
+      props: { title: "现场处置", variant: "line", showEndDivider: true },
       slots: { default: () => h("input") },
     });
     try {
-      expect(formSectionProps.variant.default).toBe("line");
       const input = wrapper.get("input").element;
       await wrapper.get("input").setValue("Draft onsite instructions");
-      expect(wrapper.find(".c-form-section__line").exists()).toBe(true);
+      expect(wrapper.find(".c-section__line").exists()).toBe(true);
       for (const variant of ["card", "plain", "line"] as const) {
         await wrapper.setProps({ variant });
-        expect(wrapper.classes()).toContain(`c-form-section--${variant}`);
+        expect(wrapper.classes()).toContain(`c-section--${variant}`);
         expect(wrapper.get("input").element).toBe(input);
         expect(wrapper.get("input").element.value).toBe(
           "Draft onsite instructions",
         );
-        expect(wrapper.find(".c-form-section__line").exists()).toBe(
+        expect(wrapper.find(".c-section__line").exists()).toBe(
           variant === "line",
         );
-        expect(wrapper.find(".c-form-section__end-divider").exists()).toBe(
+        expect(wrapper.find(".c-section__end-divider").exists()).toBe(
           variant !== "card",
         );
       }
@@ -37,16 +37,12 @@ describe("FormSection", () => {
       wrapper.unmount();
     }
   });
-  it("registers with Form and preserves the following ungrouped fields", async () => {
-    const app = createApp({}).use(Form);
-    expect(app.component("CFormSection")).toBeTruthy();
-    expect(Form.Section).toBe(FormSection);
-    expect(formSectionProps.showEndDivider.default).toBe(false);
+  it("adapts its defaults inside Form and preserves the following ungrouped fields", async () => {
     const sectionState = reactive({ showEndDivider: true, showMarker: true });
     const wrapper = mount(Form, {
       slots: {
         default: () => [
-          h(FormSection, { title: "现场处置", ...sectionState }, () =>
+          h(Section, { title: "现场处置", ...sectionState }, () =>
             h(FormItem, { label: "安全须知" }, () => h("input")),
           ),
           h(FormItem, { label: "技能等级" }, () => h("input")),
@@ -55,13 +51,15 @@ describe("FormSection", () => {
     });
     try {
       const section = wrapper.get("section");
+      expect(section.classes()).toContain("c-section--form");
+      expect(section.get(".c-section__line").exists()).toBe(true);
       expect(section.get("h3").text()).toBe("现场处置");
       expect(section.attributes("aria-labelledby")).toBe(
         section.get("h3").attributes("id"),
       );
       expect(section.findAll("input")).toHaveLength(1);
       expect(
-        section.get(".c-form-section__end-divider").attributes("aria-hidden"),
+        section.get(".c-section__end-divider").attributes("aria-hidden"),
       ).toBe("true");
       expect(section.element.nextElementSibling?.textContent).toContain(
         "技能等级",
@@ -69,8 +67,8 @@ describe("FormSection", () => {
       sectionState.showEndDivider = false;
       sectionState.showMarker = false;
       await nextTick();
-      expect(section.find(".c-form-section__end-divider").exists()).toBe(false);
-      expect(section.find(".c-form-section__marker").exists()).toBe(false);
+      expect(section.find(".c-section__end-divider").exists()).toBe(false);
+      expect(section.find(".c-section__marker").exists()).toBe(false);
     } finally {
       wrapper.unmount();
     }
@@ -89,7 +87,7 @@ describe("FormSection", () => {
       slots: {
         default: () => [
           h(Probe),
-          h(FormSection, { title: "现场处置" }, () => h(Probe)),
+          h(Section, { title: "现场处置" }, () => h(Probe)),
         ],
       },
     });
@@ -114,7 +112,7 @@ describe("FormSection", () => {
       slots: {
         default: () => [
           h(FormItem, { field: "outside", label: "外部字段" }, () => h(Input)),
-          h(FormSection, { title: "现场处置" }, () =>
+          h(Section, { title: "现场处置" }, () =>
             h(FormItem, { field: "inside", label: "安全须知" }, () => h(Input)),
           ),
         ],
@@ -144,8 +142,8 @@ describe("FormSection", () => {
           ),
       ).toBe(true);
       await wrapper.setProps({ layout: "inline" });
-      expect(wrapper.get(".c-form-section__content").classes()).toContain(
-        "c-form-section__content--inline",
+      expect(wrapper.get(".c-section__content").classes()).toContain(
+        "c-section__content--inline",
       );
     } finally {
       wrapper.unmount();
@@ -158,7 +156,7 @@ describe("FormSection", () => {
       props: { model, editMode: "direct" },
       slots: {
         default: () => [
-          h(FormSection, { title: "现场处置" }, () =>
+          h(Section, { title: "现场处置" }, () =>
             h(
               FormItem,
               {
@@ -205,7 +203,7 @@ describe("FormSection", () => {
         "div",
         [1, 2].map(() =>
           h(
-            FormSection,
+            Section,
             { description: "填写现场指引" },
             {
               title: () => "现场处置",
@@ -222,10 +220,10 @@ describe("FormSection", () => {
     expect(sections[0].id).not.toBe(sections[1].id);
     for (const section of sections) {
       expect(section.getAttribute("aria-labelledby")).toBe(
-        section.querySelector("h3")?.id,
+        section.querySelector("h2")?.id,
       );
       expect(section.getAttribute("aria-describedby")).toBe(
-        section.querySelector(".c-form-section__description")?.id,
+        section.querySelector(".c-section__description")?.id,
       );
       expect(section.querySelector("button")?.textContent).toBe("引用模板");
     }

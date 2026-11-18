@@ -7,7 +7,8 @@ import Trigger from '../../trigger'
 
 const tick = async () => { await nextTick(); await nextTick() }
 for (const unmountOnClose of [false, true]) {
-  test(`a sibling reference closes an open root and child with unmountOnClose=${unmountOnClose}`, async () => {
+  for (const keyboard of [false, true]) {
+  test(`a sibling reference closes an open root and child with unmountOnClose=${unmountOnClose}, keyboard=${keyboard}`, async () => {
     const wrapper = mount({ render: () => h('div', [
       h(Menu, { popupContainer: false, unmountOnClose, submenuTrigger: 'click', options: [{ value: 'parent', label: 'Parent', children: [{ value: 'child', label: 'Child' }] }] }, { default: () => h('button', 'First') }),
       h(Menu, { popupContainer: false, unmountOnClose, options: [{ value: 'other', label: 'Other' }] }, { default: () => h('button', 'Second') }),
@@ -18,7 +19,14 @@ for (const unmountOnClose of [false, true]) {
       const branch = menus[0].findComponent(MenuBranch)
       await branch.findComponent(MenuOption).trigger('click'); await tick()
       expect(branch.findComponent(Trigger).props('open')).toBe(true)
-      await wrapper.findAll('button')[1].trigger('click'); await tick()
+      const second = wrapper.findAll('button')[1]
+      if (keyboard) {
+        second.element.focus()
+        second.element.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }))
+      } else {
+        await second.trigger('click')
+      }
+      await tick()
       expect(menus[0].emitted('update:open')).toEqual([[true], [false]])
       expect(menus[1].emitted('update:open')).toEqual([[true]])
       expect(menus[0].vm.computedOpen).toBe(false)
@@ -26,4 +34,5 @@ for (const unmountOnClose of [false, true]) {
       if (branch.exists()) expect(branch.findComponent(Trigger).props('open')).toBe(false)
     } finally { wrapper.unmount() }
   })
+  }
 }

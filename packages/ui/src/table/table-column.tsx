@@ -5,6 +5,8 @@ import {
   inject,
   onBeforeUnmount,
   onUpdated,
+  markRaw,
+  shallowReactive,
   PropType,
   provide,
   reactive,
@@ -236,6 +238,8 @@ export default defineComponent({
       }
     }, { flush: "sync" })
 
+    const slotStore = markRaw(shallowReactive({ ...slots }))
+
     const column = reactive({
       [TABLE_COLUMN_COMPONENT]: true,
       dataIndex,
@@ -258,11 +262,14 @@ export default defineComponent({
       index,
       tooltip,
       children: childrenColumns,
-      slots,
+      slots: slotStore,
     })
 
     onUpdated(() => {
-      column.slots = { ...slots }
+      for (const key of Object.keys(slotStore)) {
+        if (!(key in slots)) delete slotStore[key]
+      }
+      for (const key of Object.keys(slots)) slotStore[key] = slots[key]
     })
 
     if (instance) {

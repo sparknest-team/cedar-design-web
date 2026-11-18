@@ -237,3 +237,87 @@ describe('virtual table row positions', () => {
     wrapper.unmount()
   })
 })
+
+it('does not publish virtual row positions when a custom tbody inserts a row', async () => {
+  const Body = defineComponent({
+    setup(_, { slots }) {
+      return () => h('tbody', [h('tr', { 'data-extra-row': '' }, [h('td', 'Extra')]), slots.default?.()])
+    },
+  })
+  const wrapper = mount(Table, { props, slots: { tbody: () => h(Body) } })
+  try {
+    await flushPromises()
+    const table = wrapper.get('.c-table-body table')
+    expect(table.find('[data-extra-row]').exists()).toBe(true)
+    expect(table.attributes('aria-rowcount')).toBeUndefined()
+    expect(table.findAll('tr').every(row => row.attributes('aria-rowindex') === undefined)).toBe(true)
+  } finally { wrapper.unmount() }
+})
+
+it('updates a virtual tbody slot while preserving row nodes and drafts', async () => {
+  const enabled = ref(false)
+  const marker = ref('one')
+  const wrapper = mount({
+    setup: () => () => h(Table, { ...props, columns: [{ title: 'Name', dataIndex: 'name', slotName: 'name' }] }, {
+      ...(enabled.value ? { tbody: () => h('tbody', { 'data-marker': marker.value }) } : {}),
+      name: () => h('input'),
+    }),
+  }, { attachTo: document.body })
+  try {
+    await flushPromises()
+    const input = wrapper.get('tbody input').element as HTMLInputElement
+    input.value = 'draft'
+    input.focus()
+    enabled.value = true
+    await nextTick(); await flushPromises()
+    expect(wrapper.get('tbody').attributes('data-marker')).toBe('one')
+    expect(wrapper.get('tbody input').element).toBe(input)
+    expect(input.value).toBe('draft')
+    expect(document.activeElement).toBe(input)
+    marker.value = 'two'
+    await nextTick(); await flushPromises()
+    expect(wrapper.get('tbody').attributes('data-marker')).toBe('two')
+    expect(wrapper.get('tbody input').element).toBe(input)
+    enabled.value = false
+    await nextTick(); await flushPromises()
+    expect(wrapper.get('tbody').attributes('data-marker')).toBeUndefined()
+    expect(wrapper.get('tbody input').element).toBe(input)
+  } finally { wrapper.unmount() }
+})
+
+it('renders and hydrates a custom virtual tbody without replacing rows', async () => {
+  const createApp = () => createSSRApp({
+    render: () => h(Table, props, { tbody: () => h('tbody', { 'data-custom-body': 'yes' }) }),
+  })
+  const html = await renderToString(createApp())
+  const container = document.createElement('div')
+  container.innerHTML = html
+  document.body.append(container)
+  const body = container.querySelector('tbody[data-custom-body]')
+  expect(body).not.toBeNull()
+  const row = body!.querySelector('tr')
+  const warnings: string[] = []
+  const app = createApp()
+  app.config.warnHandler = message => warnings.push(message)
+  try {
+    app.mount(container)
+    await nextTick()
+    expect(container.querySelector('tbody[data-custom-body]')).toBe(body)
+    expect(body!.querySelector('tr')).toBe(row)
+    expect(warnings).toEqual([])
+  } finally { app.unmount(); container.remove() }
+})
+
+it('does not invoke tbody when an explicit virtual list component overrides it', async () => {
+  const tbody = vi.fn(() => h('tbody', { 'data-custom-body': '' }))
+  const wrapper = mount(Table, {
+    props: { ...props, virtualListProps: { ...props.virtualListProps, component: { list: 'table', content: 'tbody' } } },
+    slots: { tbody },
+  })
+  try {
+    await flushPromises()
+    expect(wrapper.find('.c-table-body tbody').exists()).toBe(true)
+    expect(wrapper.find('[data-custom-body]').exists()).toBe(false)
+    expect(tbody).not.toHaveBeenCalled()
+  } finally { wrapper.unmount() }
+})

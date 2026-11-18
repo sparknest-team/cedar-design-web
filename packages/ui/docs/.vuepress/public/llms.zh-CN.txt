@@ -1,4 +1,4 @@
-# Cedar Design Web
+﻿# Cedar Design Web
 
 > Vue 3 component library. Package: @cedar-design/ui-vue. Component prefix: C / c-.
 
@@ -78,6 +78,7 @@ Documentation language: zh-CN.
 - [Scheduler 日程调度](./llms/zh-CN/components/scheduler.md): /components/scheduler/
 - [Scrollbar](./llms/zh-CN/components/scrollbar.md): /components/scrollbar/
 - [Search](./llms/zh-CN/components/search.md): /components/search/
+- [Section 内容分区](./llms/zh-CN/components/section.md): /components/section/
 - [Segmented 分段控制器](./llms/zh-CN/components/segmented.md): /components/segmented/
 - [Select](./llms/zh-CN/components/select.md): /components/select/
 - [Skeleton](./llms/zh-CN/components/skeleton.md): /components/skeleton/

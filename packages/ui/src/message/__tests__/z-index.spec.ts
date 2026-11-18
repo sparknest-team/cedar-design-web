@@ -2,7 +2,7 @@ import { mount } from '@vue/test-utils'
 import { nextTick } from 'vue'
 import { afterEach, expect, test } from 'vitest'
 import Dialog from '../../dialog/Dialog.vue'
-import OtherPopup from '../../drawer/Drawer.vue'
+import OtherPopup from '../../drawer/drawer.vue'
 import Message from '..'
 import MessageComponent from '../Message.vue'
 

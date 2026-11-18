@@ -127,6 +127,8 @@ In the single-value bounds Demo, tightening the minimum retains committed 10:30:
 
 <demo src="./__demos__/no-confirm.vue"></demo>
 
+## 独立时间面板
+
 ### 禁用部分时间选项
 
 禁用小时回调始终使用 0–23，十二小时显示也不改变回调参数。

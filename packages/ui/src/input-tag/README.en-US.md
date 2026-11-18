@@ -150,15 +150,15 @@ Public Props exclude the internal composition controls `baseCls`, `focused`, `di
 
 | Parameter | Description | Type | Default |
 | ------------------------- | ---------------------------------- | ------------------------------------------------- | :--------: |
-| multiple | Whether to allow multiple tags; false replaces the previous value | `boolean` | `true` |
-| model-value **(v-model)** | Array in multiple mode, scalar or null in single mode | `InputTagValue` | `-` |
+| multiple | Allow multiple tags; false replaces the previous value | `boolean` | `true` |
+| model-value **(v-model)** | An array in multiple mode; a scalar or null in single mode | `InputTagValue` | `-` |
 | default-value | Default value (uncontrolled state) | `InputTagValue` | `[]` / `null` |
 | input-value **(v-model)** | The value of the input | `string` | `-` |
 | default-input-value | The default value of the input (uncontrolled state) | `string` | `''` |
-| options | Candidate array or remote loader; Enter can create the input when no result matches | `InputTagOption[] \| (query, { signal }) => InputTagOption[] \| Promise<InputTagOption[]>` | `-` |
+| options | Candidate array or remote loader; Enter selects a candidate or adds the raw input when no results remain | `InputTagOption[] \| (query, { signal }) => InputTagOption[] \| Promise<InputTagOption[]>` | `-` |
 | min-search-length | Minimum query length before searching; empty input never searches | `number` | `1` |
-| search-delay | Remote search debounce in milliseconds | `number` | `250` |
-| auto-commit-single | Automatically commit the only enabled result | `boolean` | `false` |
+| search-delay | Remote search debounce delay in milliseconds | `number` | `250` |
+| auto-commit-single | Automatically commit the sole enabled result after a search completes | `boolean` | `false` |
 | placeholder | Placeholder | `string` | `-` |
 | disabled | Whether disabled | `boolean` | `-` |
 | error | Whether it is an error state | `boolean` | `-` |
@@ -176,7 +176,7 @@ Public Props exclude the internal composition controls `baseCls`, `focused`, `di
 
 | loading | Business-controlled loading state; does not block input | `boolean` | `false` |
 | loading-mode | Shared field feedback appearance, independent of Loading animation types | `'default' \| 'line'` | `'default'` |
-| empty-value | Clear output; defaults to [] in multiple mode and null in single mode | `InputTagValue \| (() => InputTagValue)` | `[]` |
+| empty-value | Value emitted when cleared; defaults to [] in multiple mode and null in single mode | `InputTagValue \| (() => InputTagValue)` | `[]` |
 | empty-values | Empty-value recognition; field takes precedence over FormItem and Form | `readonly unknown[]` | `-` |
 | empty-text | Read empty text; an explicit empty string is valid | `string` | `'-'` |
 | edit-mode | Editing mode; field takes precedence over FormItem and Form | `'direct' \| 'click' \| 'dblclick'` | `'direct'` |
@@ -194,7 +194,7 @@ Public Props exclude the internal composition controls `baseCls`, `focused`, `di
 | update:inputValue | Separate input draft update proposal | inputValue: `string` |
 | update:open | Controlled editor visibility update | open: `boolean` |
 | open-change | Actual editor visibility change | open: `boolean` |
-| search | Emitted for an eligible input query | query: `string` |
+| search | Emitted when input changes after the minimum query length is reached | query: `string` |
 | select | Emitted when a candidate is committed | value: `string \| number`, option: `SelectOptionInfo` |
 | load-error | Remote candidate loading failed | error: `unknown` |
 | change | Emitted when the value changes | value: `InputTagValue`<br>ev?: `Event` |
@@ -218,7 +218,7 @@ Public methods remain callable from initial component mount. Stored methods reso
 
 | Slot | Description | Prop |
 | ------ | :------------------: | --------------- |
-| label | Displayed selected label | data: `TagData` |
+| label | Display content for selected tags | data: `TagData` |
 | prefix | Prefix content | - |
 | suffix | Suffix content | - |
 | clear-icon | Custom clear control | clear: `(event?: Event) => void` |

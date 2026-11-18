@@ -9,7 +9,7 @@ The active sorted column exposes ascending or descending order through `aria-sor
 
 Default row selection controls use the row key in their accessible names, and the select-all control uses a localized name. An explicit selection column title takes precedence.
 
-When a height constraint, sticky header, or virtual list splits the table into multiple native tables, the data and summary tables include semantic headers in the same table, associated with cells through `headers`. The data table’s semantic header reflects the current sort; the summary table uses separate summary data and does not claim that its rows are sorted. An explicit `headers` on the `td` slot takes precedence; the caller is responsible for referencing valid headers in the same table. Adding, removing, or replacing structural `thead`, `tbody`, `tr`, `th`, and `td` slots updates the table; associated semantic headers also follow `th` changes. Content slots such as empty state, footer, summary cells, and named columns also support dynamic insertion, removal, and replacement. Screen-reader and complex custom-header acceptance is still pending; verify the target environment and provide accessible alternatives where needed.
+When a height constraint, sticky header, or virtual list splits the table into multiple native tables, the data and summary tables include semantic headers in the same table, associated with cells through `headers`. The data table’s semantic header reflects the current sort; the summary table uses separate summary data and does not claim that its rows are sorted. An explicit `headers` on the `td` slot takes precedence; the caller is responsible for referencing valid headers in the same table. Adding, removing, or replacing structural `thead`, `tbody`, `tr`, `th`, and `td` slots updates the table; associated semantic headers also follow `th` changes. Virtual tables support a custom `tbody`; automatic virtual row counts and indices are omitted because the custom container may change the row structure. Content slots such as empty state, footer, summary cells, and named columns also support dynamic insertion, removal, and replacement. Screen-reader and complex custom-header acceptance is still pending; verify the target environment and provide accessible alternatives where needed.
 
 ## Basic examples
 
@@ -232,7 +232,7 @@ The pagination slot receives { page, pageSize, total, onChange, onPageSizeChange
 
 ### Mount pagination externally
 
-`pagination.container` accepts a CSS selector or HTMLElement. Omitting it keeps the footer inside Table. Only placement changes: page state, slicing, events and the sticky horizontal rail remain managed by Table. No slot or separate pager state is required. Keep the host in the same scroll context and use display: contents when needed. The target must exist; Vue 3.5 defer supports targets created in the same render batch. SSR hosts must handle Teleport output. Give asynchronously loaded tables separate pagination targets and inject each target’s Teleport content into its corresponding host. A shared target can misassociate content or events when the server and client hydrate async branches in different orders. pagination=false still disables Table pagination and slicing entirely.
+`pagination.container` accepts a CSS selector or HTMLElement. Omitting it keeps the footer inside Table. Only placement changes: page state, slicing, events and the sticky horizontal rail remain managed by Table. No slot or separate pager state is required. Keep the host in the same scroll context and use display: contents when needed. The target must exist; a selector target can be created later in the same render batch. SSR hosts must handle Teleport output. Give asynchronously loaded tables separate pagination targets and inject each target’s Teleport content into its corresponding host. A shared target can misassociate content or events when the server and client hydrate async branches in different orders. pagination=false still disables Table pagination and slicing entirely.
 
 ```vue
 <c-table
@@ -298,6 +298,8 @@ Sticky pagination suppresses the internal horizontal thumb/native scrollbar and 
 <demo src="./__demos__/tree-children.vue"></demo>
 
 ### Sort And Filter
+
+When the initial server render of Cedar Table must apply a default filter, pass the columns through `:columns` and set `filterable.defaultFilteredValue`. Columns declared with `<c-table-column>` do not guarantee filtered rows in the server HTML.
 
 - `columns`: Column info of the table
 - `data`: Table data
@@ -625,7 +627,7 @@ The state argument of `select`, `selectAll`, `expand`, and `expandAll` defaults 
 
 Title and cell named slots, column `title`, `cell`, `filter-icon` and `filter-content`, `empty`, `footer`, `expand-row`, `expand-icon`, pagination slots, `summary-cell`, `drag-handle-icon`, extra-column header/cell slots, and `header-cell-actions` support `v-for` with `v-memo` in their content.
 
-Server rendering currently fails when `v-for` and `v-memo` are combined inside custom `thead`, `tbody`, `tr`, `th` or `td` structural slots, even when the loop array is empty. The same issue is reproducible in ordinary component slots with Vue 3.5.12 and 3.5.39. Temporarily remove `v-memo` from these slots when SSR is required.
+During server-side rendering, combining `v-for` and `v-memo` inside custom `thead`, `tbody`, `tr`, `th`, or `td` structural slots currently causes a rendering error, even when the array is empty. In the tested Vue versions from 3.2.47 through 3.5.45, directly invoking a compiled slot and rendering it with `h()` also reproduces the error; a minimal template `<slot>` forwarding case works. For SSR, temporarily remove `v-memo` from these structural slots.
 
 `TableColumn` entries declared in `#columns`, including grouped and dynamic columns, render their headers and data cells on the server. Columns can also be defined with the `columns` prop.
 

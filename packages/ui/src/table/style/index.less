@@ -692,14 +692,10 @@
     background-color: var(~"--c-table-header-cell-bg");
   }
 
-  &:not(&-empty) &-header::-webkit-scrollbar {
+  &-header::-webkit-scrollbar {
     // 仅隐藏横向滚动条
     height: 0;
     background-color: transparent;
-  }
-
-  &&-empty &-header {
-    overflow-x: auto;
   }
 
   &-empty-body {

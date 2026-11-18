@@ -25,7 +25,7 @@ export function focusExplicitSlider(event: MouseEvent) {
   // Native label activation happens after propagation: honor ancestor cancellation
   // and do not override focus that an event handler moved in the meantime.
   setTimeout(() => {
-    if (event.defaultPrevented || !label.isConnected || label.getAttribute('for') !== id ||
+    if (event.defaultPrevented || !label.isConnected || label.getRootNode() !== root || label.getAttribute('for') !== id ||
       root.getElementById(id) !== target || root.activeElement !== previous ||
       label.ownerDocument.activeElement !== previousDocument) return
     const sliders = target.matches('[role="slider"]') ? [target] : Array.from(target.querySelectorAll('[role="slider"]'))

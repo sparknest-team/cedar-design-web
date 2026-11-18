@@ -110,3 +110,7 @@ src/<component>/
 ## Vue 运行时版本兼容
 
 开发环境使用 catalog 固定的 Vue 稳定版，发布最低兼容 Vue 3.2.47。源码检查运行 `pnpm check:vue-compat:source`；构建后运行 `pnpm check:vue-compat`。新语法、声明降级、消费版本矩阵与 SSR 边界统一见同级 `design-ui/standards/build-and-ci.md` 的「Vue 开发版本与消费兼容性」。
+
+## 提交与合并
+
+本地 commit 只运行根目录 `.githooks` 的轻量检查；完整校验放到 PR Quality。提交推送任务不重复运行完整 quality，合并使用根目录 `pnpm pr:merge <PR编号>`。流程见根目录 `PR_WORKFLOW.md`。

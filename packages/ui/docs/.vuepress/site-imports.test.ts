@@ -74,8 +74,8 @@ test('new public components resolve from source before the package registry is r
     from: `${sourceDir}/form`, name: '_SourceOnlySectionComponent', sideEffects: [`${sourceDir}/form/style`],
   })
   expect(components.resolve('CPrivateUnknown')).toBeUndefined()
-  expect(components.resolve('CFormSection')).toMatchObject({
-    from: `${sourceDir}/form`, name: '_FormSectionComponent',
+  expect(components.resolve('CSection')).toMatchObject({
+    from: `${sourceDir}/section`, name: '_SectionComponent',
   })
 })
 

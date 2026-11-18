@@ -1,6 +1,6 @@
 import { flushPromises, mount } from '@vue/test-utils'
 import { expect, it } from 'vitest'
-import Search from '../Search.vue'
+import Search from '../search.vue'
 import HistoryPresentation from '../history-presentation.vue'
 
 it('uses only direct and popup edit modes', async () => {

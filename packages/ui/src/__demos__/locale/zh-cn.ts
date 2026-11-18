@@ -4,6 +4,18 @@ const messages = {
   ...inlineMessages,
   ...comparisonMessages,
   section: {
+    permissions: "成员权限",
+    scope: "权限变更将应用到所有项目成员。",
+    admin: "管理员",
+    manage: "管理成员、修改项目设置",
+    member: "成员",
+    update: "查看项目、更新任务",
+    history: "发布记录",
+    latest: "只看最新",
+    all: "查看全部",
+    exportRelease: "v1.2 · 新增项目导出",
+    memberRelease: "v1.1 · 新增成员管理",
+
     text: {
       event: "事件类型",
       level: "事件级别",

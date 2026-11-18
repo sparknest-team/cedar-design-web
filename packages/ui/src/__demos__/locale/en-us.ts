@@ -6,6 +6,18 @@ const messages = {
   ...inlineMessages,
   ...comparisonMessages,
   section: {
+    permissions: "Member permissions",
+    scope: "Permission changes apply to all project members.",
+    admin: "Administrator",
+    manage: "Manage members and project settings",
+    member: "Member",
+    update: "View the project and update tasks",
+    history: "Release history",
+    latest: "Show latest",
+    all: "Show all",
+    exportRelease: "v1.2 · Added project export",
+    memberRelease: "v1.1 · Added member management",
+
     text: {
       event: "Event type",
       level: "Event level",

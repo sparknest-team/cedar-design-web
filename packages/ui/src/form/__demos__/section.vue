@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { FormSectionVariant } from "../section-props";
+import type { SectionVariant } from "../../section/props";
 import { useDemoLocale } from "../../__demos__/locale";
 import { computed, reactive, ref } from "vue";
 const copy = useDemoLocale("section");
 
-const variant = ref<FormSectionVariant>("line");
+const variant = ref<SectionVariant>("line");
 const showMarker = ref(true);
 const showEndDivider = ref(true);
 const variantOptions = computed(() =>
@@ -87,7 +87,7 @@ const certificateOptions = computed(() => [
         />
       </c-form-item>
 
-      <c-form-section
+      <c-section
         :title="copy.text.section"
         :variant="variant"
         :show-marker="showMarker"
@@ -114,7 +114,7 @@ const certificateOptions = computed(() => [
             show-word-limit
           />
         </c-form-item>
-      </c-form-section>
+      </c-section>
 
       <c-form-item field="skill" :label="copy.text.skill">
         <c-select

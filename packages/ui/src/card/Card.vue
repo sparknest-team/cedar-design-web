@@ -135,6 +135,7 @@ import { createNamespace, formatElevation } from '../_utils/global-config'
 import { usePopupLayer } from '../_utils/popup-layer'
 import { toSizeUnit } from '../_utils/maple/elements'
 import { cardProps } from './props'
+import { watchDetachedCard } from './detached-card-monitor'
 import BaseDivider from '../divider'
 import { useCardSize, useCardCloseLabel } from './platform'
 
@@ -175,10 +176,11 @@ let disposed = false
     const floater = shallowRef<ReturnType<typeof setTimeout> | null>(null)
 
     const cardDocument = shallowRef<Document>()
+    const cardConnected = ref(true)
 
     useLock(
       () => props.floating,
-      () => !isRow.value,
+      () => !isRow.value && cardConnected.value,
       () => (cardDocument.value ?? card.value?.ownerDocument)?.body,
     )
 
@@ -263,11 +265,14 @@ function updateReturnFocus(open: boolean) {
 }
 
 const wantsFloating = () => props.floating && !isRow.value
-const { onStackTop, syncOwner } = usePopupLayer(wantsFloating, zIndex, () => cardDocument.value ?? card.value?.ownerDocument, true)
+const { onStackTop, syncOwner } = usePopupLayer(() => wantsFloating() && cardConnected.value, zIndex, () => cardDocument.value ?? card.value?.ownerDocument, true)
 const available = () => active && !disposed
 
 let focusRootObserver: MutationObserver | undefined
+let stopDetachedCard: (() => void) | undefined
 function stopFocusRootTracking() {
+  stopDetachedCard?.()
+  stopDetachedCard = undefined
   focusRootObserver?.disconnect()
   focusRootObserver = undefined
 }
@@ -281,6 +286,13 @@ function trackFocusRoot() {
   const update = () => {
     if (!available() || !wantsFloating() || card.value !== element) return
     cardDocument.value = element.ownerDocument
+    cardConnected.value = element.isConnected
+    if (element.isConnected) {
+      stopDetachedCard?.()
+      stopDetachedCard = undefined
+    } else if (!stopDetachedCard) {
+      stopDetachedCard = watchDetachedCard(() => { if (element.isConnected) update() })
+    }
     if (motionDocument !== element.ownerDocument) trackMotion(element)
     if (openingFrameDocument && openingFrameDocument !== element.ownerDocument && openingWaiting) floating(true)
     const root = element.getRootNode()
@@ -515,6 +527,10 @@ function handleFloatingKeydown(event: KeyboardEvent) {
   const owner = card.value?.ownerDocument
   if (owner && cardDocument.value !== owner) {
     cardDocument.value = owner
+    syncOwner()
+  }
+  if (card.value?.isConnected && !cardConnected.value) {
+    cardConnected.value = true
     syncOwner()
   }
   if (!onStackTop(event)) return

@@ -49,11 +49,10 @@ Choose a dimension to compare all its values side by side while keeping other se
 | `title` | Title | Images and directions |
 | `image-src` | Cover image URL; cover slot takes precedence | Images and directions |
 | `image-alt` | Image alternative text | Images and directions |
-| `image-fit` | Cover image fit, default cover | Images and directions |
+| `image-fit` | Cover image fit mode; defaults to cover | Images and directions |
 | `image-height` | Image height; numbers use px | Images and directions |
 | `image-width` | Image width; numbers use px | Images and directions |
 <!-- demo-config-notes:end -->
-
 
 <demo src="./__demos__/image.vue"></demo>
 
@@ -189,7 +188,7 @@ The default close button uses the current locale's close label; override it with
 | Slot | Description | Prop |
 | --- | --- | --- |
 | default | Body | — |
-| cover | Cover; overrides image-src | — |
+| cover | Cover content; overrides the image-src image | — |
 | header | Entire header; overrides title, title-action and subtitle | — |
 | title | Title | `{ slotClass: string }` |
 | title-action | Title action | — |

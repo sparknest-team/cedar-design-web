@@ -30,7 +30,7 @@ import Drawer from './drawer'
 import Empty from './empty'
 import FieldDecorator from './field-decorator'
 import FilterForm from './filter-form'
-import Form, { FormItem, FormSection } from './form'
+import Form, { FormItem } from './form'
 import Grid, { GridItem } from './grid'
 import Hover, { HoverOverlay } from './hover'
 import Icon from './icon'
@@ -67,6 +67,7 @@ import Row from './row'
 import Scheduler from './scheduler'
 import Scrollbar from './scrollbar'
 import Search from './search'
+import Section from './section'
 import Segmented from './segmented'
 import Select, { Optgroup, Option } from './select'
 import Skeleton, { SkeletonLine, SkeletonShape } from './skeleton'
@@ -166,6 +167,7 @@ const components: Record<string, Plugin> = {
   Scheduler: Scheduler as Plugin,
   Scrollbar: Scrollbar as Plugin,
   Search: Search as Plugin,
+  Section: Section as Plugin,
   Segmented: Segmented as Plugin,
   Select: Select as Plugin,
   Skeleton: Skeleton as Plugin,
@@ -216,7 +218,6 @@ const CedarVue: Record<string, any> = {
   DateRangePicker,
   DescriptionsItem,
   FormItem,
-  FormSection,
   GridItem,
   HoverOverlay,
   ImagePreview,
