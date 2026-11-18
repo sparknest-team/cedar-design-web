@@ -13,6 +13,7 @@ import {
 // importing every demo made even a dictionary-only test transform the whole UI.
 const plugins = {
   Form: () => import("../../../form"),
+  Section: () => import("../../../section"),
   Input: () => import("../../../input"),
   InputNumber: () => import("../../../input-number"),
   Select: () => import("../../../select"),
@@ -101,9 +102,21 @@ const demos: Record<
     zh: "自定义格式",
     en: "format",
   },
+  sectionPlain: {
+    load: () => import("../../../section/__demos__/plain.vue"),
+    plugins: ["Section"],
+    zh: "成员权限",
+    en: "Member permissions",
+  },
+  sectionLine: {
+    load: () => import("../../../section/__demos__/line.vue"),
+    plugins: ["Section", "Button"],
+    zh: "发布记录",
+    en: "Release history",
+  },
   section: {
     load: () => import("../../../form/__demos__/section.vue"),
-    plugins: ["Form", "Select", "Textarea", "Radio", "Checkbox", "Space"],
+    plugins: ["Form", "Section", "Select", "Textarea", "Radio", "Checkbox", "Space"],
     zh: "现场处置",
     en: "Onsite handling",
   },

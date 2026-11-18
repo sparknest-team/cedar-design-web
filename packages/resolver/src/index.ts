@@ -44,7 +44,6 @@ const styleDirAliases: Record<string, string> = {
   CheckboxGroup: "checkbox",
   RadioGroup: "radio",
   FormItem: "form",
-  FormSection: "form",
   ListItem: "list",
   TimelineItem: "timeline",
   DescriptionsItem: "descriptions",

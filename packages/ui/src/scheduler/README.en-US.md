@@ -1,5 +1,6 @@
 ---
 lang: en-US
+deferExamples: true
 permalink: /en/components/scheduler/
 ---
 

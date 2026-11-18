@@ -126,7 +126,7 @@ async function themeState(page, theme) {
     assert.equal(
       darkColor(state[field]),
       theme.dark,
-      `${field} must follow ${theme.label}`,
+      `${field} must follow ${theme.label}: ${state[field]}`,
     );
   }
   assert.ok(
@@ -271,11 +271,7 @@ async function interact(page, component) {
       mimeType: "text/plain",
       buffer: Buffer.from("Cedar production upload regression"),
     });
-    await page.waitForFunction(() =>
-      document
-        .querySelector(".vmi-previewer-example")
-        ?.textContent.includes("最近读取：production-demo.txt"),
-    );
+    await demo.getByText("production-demo.txt", { exact: true }).waitFor();
     assert.match(await demo.innerText(), /production-demo\.txt/);
   } else if (component === "image") {
     const image = demo.locator("img").first();
@@ -294,7 +290,7 @@ async function interact(page, component) {
       .locator("[data-image-preview-image]")
       .evaluate((element) => element.decode());
     await preview
-      .getByRole("button", { name: "Close image preview", exact: true })
+      .getByRole("button", { name: "关闭图片预览", exact: true })
       .click();
     await preview.waitFor({ state: "hidden" });
     const demos = await readDemos("image");
@@ -493,30 +489,30 @@ describe(
                   failures.push(`${response.status()}: ${response.url()}`);
               });
               await navigateWithDiagnostics(page, `${origin}/components/tabs/`);
-              const menu = page.getByRole("button", {
-                name: "切换主题",
-                exact: true,
+              const menu = page.locator("details.docs-select").filter({
+                has: page.locator('summary[aria-label="主题"]'),
               });
-              await menu.click();
+              const trigger = menu.locator("summary");
+              await trigger.click();
               assert.equal(
-                await page.getByRole("menuitemradio").count(),
+                await menu.getByRole("button").count(),
                 2,
                 "Cedar exposes light and dark, no stale theme options",
               );
               const opposite = themes.find(
                 (option) => option.dark !== theme.dark,
               );
-              await page
-                .getByRole("menuitemradio", {
+              await menu
+                .getByRole("button", {
                   name: opposite.label,
                   exact: true,
                 })
                 .click();
               await sourceState(page, "tabs");
               const beforeSwitch = await themeState(page, opposite);
-              await menu.click();
-              await page
-                .getByRole("menuitemradio", { name: theme.label, exact: true })
+              await trigger.click();
+              await menu
+                .getByRole("button", { name: theme.label, exact: true })
                 .click();
               await sourceState(page, "tabs");
               const switched = await themeState(page, theme);
@@ -537,17 +533,17 @@ describe(
                 switched,
                 "theme and source colors survive a full reload",
               );
-              await menu.click();
+              await trigger.click();
               assert.equal(
-                await page
-                  .getByRole("menuitemradio", {
+                await menu
+                  .getByRole("button", {
                     name: theme.label,
                     exact: true,
                   })
-                  .getAttribute("aria-checked"),
+                  .getAttribute("aria-pressed"),
                 "true",
               );
-              await menu.click();
+              await trigger.click();
 
               for (const component of components) {
                 await t.test(component, async () => {

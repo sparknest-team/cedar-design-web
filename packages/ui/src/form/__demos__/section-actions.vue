@@ -25,7 +25,7 @@ function clearSection() {
       label-col-flex="7rem"
       edit-mode="direct"
     >
-      <c-form-section
+      <c-section
         :title="copy.text.section"
         :description="copy.actionsDescription"
         show-end-divider
@@ -49,7 +49,7 @@ function clearSection() {
         <c-form-item field="points" :label="copy.text.points"
           ><c-textarea v-model="model.points" :max-length="200" show-word-limit
         /></c-form-item>
-      </c-form-section>
+      </c-section>
       <c-form-item field="skill" :label="copy.text.skill"
         ><c-input v-model="model.skill"
       /></c-form-item>

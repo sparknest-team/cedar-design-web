@@ -1,0 +1,3 @@
+- [x] Move form grouping into Section and remove the old public entry points.
+- [x] Register Section and add bilingual documentation and examples.
+- [x] Cover public behavior and retain FormSection regression coverage.

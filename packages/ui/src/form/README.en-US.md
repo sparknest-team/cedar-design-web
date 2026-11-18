@@ -12,6 +12,8 @@ Horizontal form items use zero Row gutter by default, preserving the standard 16
 
 When `validate-status="error"` has no automatic validation error, the field associates visible `help` text or slot content through `aria-describedby`, preserving any supplied description. An automatic error takes precedence.
 
+In SSR with Vue 3.2.47, if multiple asynchronous form items resolve in opposite orders on the server and client, updating one item can duplicate generated description IDs or associate it with another field’s error. Giving the Input a stable `id` alone does not prevent this; the same scenario passed with Vue 3.5.45.
+
 For a deferred Slider inside Shadow DOM, a popup teleported to `body` may not resolve ID references to hints or errors inside the shadow root. Set `:popup-container="false"`, or pass an element within the same ShadowRoot as `popup-container`, to keep the popup and hints in the same root. Provide clear control names, and account for the container’s styling, positioning, and clipping.
 
 In direct edit mode, for a visible label on a single field, match FormItem `label-attrs.for` to the control `id`. The native inputs in selection, date and time fields do not let their placeholder override an associated label. An explicit `aria-label` or `aria-labelledby` retains its native accessible-name precedence. Placeholder is only a fallback when no label is supplied; provide clear labels. Date and time range fields in FormItem associate the form label with their group; use `input-attrs` to give the endpoints distinct names. If `label-attrs.for` targets another control, the label is not associated with the range group. Without `for`, the range currently references the nearest FormItem label even when that item contains other controls. For mixed fields, put the range in a separate styled FormItem with its own name, or explicitly target the intended control with `for` and name the other controls separately. When `for` matches a single-value Slider’s `id`, its thumb and optional numeric input use the label; clicking the default native label focuses the enabled thumb; preventing the label click default cancels that focus. When `for` matches a range Slider’s `id`, the form label names the group; use an `aria-label` array to name the endpoints separately. The `tooltip` button is independently focusable and its name is not added to the field label.
@@ -102,7 +104,7 @@ Preview configuration: `type="text"`, `placeholder="请输入"`.
 
 ### Partial form section
 
-Group only the onsite SOP, safety notice and key points. The end divider separates the following ungrouped fields. Switch between line, plain and card above the form; your entries are preserved. Toggle the title marker and end divider to compare boundaries. Card uses its outer border instead of a separate end divider.  FormSection inherits the parent Form layout, label sizing, disabled state and validation; use Form/FormItem layout props to configure them. Supply a title or title slot. Folding and local layout overrides are not supported.
+Group only the onsite SOP, safety notice and key points. The end divider separates the following ungrouped fields. Switch between line, plain and card above the form; your entries are preserved. Toggle the title marker and end divider to compare boundaries. Card uses its outer border instead of a separate end divider.  Section adapts its layout to the parent Form. Fields receive label sizing, disabled state and validation directly from Form; use Form/FormItem layout props to configure them. Supply a title or title slot. Folding and local layout overrides are not supported.
 
 <demo src="./__demos__/section.vue"></demo>
 
@@ -616,25 +618,7 @@ import type {
 ```
 Custom form controls can call `useFormErrorDescription()` in `setup` and bind `describe(existingIds)` to the interactive element's `aria-describedby`. Existing descriptions are preserved, and the FormItem error ID follows the visible error. Outside FormItem, only the existing descriptions are retained.
 
-### FormSection Props
-
-| Prop | Description | Type | Default |
-| --- | --- | --- | --- |
-| id | Section ID; generated when omitted | `string` | — |
-| title | Section title | `string` | `''` |
-| description | Supporting description | `string` | `''` |
-| variant | Section style; card uses a padded border | `'line' \| 'plain' \| 'card'` | `'line'` |
-| show-marker | Show the accent marker | `boolean` | `true` |
-| show-end-divider | Separate subsequent ungrouped fields; ignored for card | `boolean` | `false` |
-
-### FormSection Slots
-
-| Slot | Description |
-| --- | --- |
-| default | Form fields |
-| title | Custom title |
-| description | Custom description |
-| extra | Trailing header actions |
+See [Section](/en/components/section/) for section props and slots.
 
 ## CSS Variables
 
@@ -662,29 +646,6 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-form-line-height` | `var(--c-line-height)` | `line-height`, `padding-top` |
 | `--c-form-required-symbol-color` | `var(--c-sys-color-content-danger)` | `color` |
 | `--c-form-required-symbol-font-size` | `var(--c-font-size-body-1)` | `font-size` |
-| `--c-form-section-accent-color` | `var(--c-sys-color-action-primary)` | `background` |
-| `--c-form-section-after-gap` | `24px` | `margin-block`, `padding-block-start` |
-| `--c-form-section-before-gap` | `32px` | `padding-block-start` |
-| `--c-form-section-card-background` | `var(--c-sys-color-surface-default)` | `background` |
-| `--c-form-section-card-padding` | `16px` | `padding` |
-| `--c-form-section-card-radius` | `6px` | `border-radius` |
-| `--c-form-section-description-color` | `var(--c-sys-color-content-secondary)` | `color` |
-| `--c-form-section-description-gap` | `4px` | `margin-block-start` |
-| `--c-form-section-description-line-height` | `20px` | `line-height` |
-| `--c-form-section-description-size` | `13px` | `font-size` |
-| `--c-form-section-divider-color` | `var(--c-sys-color-border-default)` | `border`, `border-block-start` |
-| `--c-form-section-divider-width` | `1px` | `border`, `border-block-start` |
-| `--c-form-section-end-divider-gap` | `24px` | `margin-block-start` |
-| `--c-form-section-header-gap` | `20px` | `margin-block-end` |
-| `--c-form-section-heading-gap` | `16px` | `margin-inline-start` |
-| `--c-form-section-marker-gap` | `8px` | `margin-inline-end`, `row-gap` |
-| `--c-form-section-marker-height` | `16px` | `height` |
-| `--c-form-section-marker-radius` | `2px` | `border-radius` |
-| `--c-form-section-marker-width` | `3px` | `width` |
-| `--c-form-section-title-color` | `var(--c-sys-color-content-primary)` | `color` |
-| `--c-form-section-title-line-height` | `24px` | `line-height` |
-| `--c-form-section-title-size` | `16px` | `font-size` |
-| `--c-form-section-title-weight` | `600` | `font-weight` |
 | `--c-form-size-lg-height` | `var(--c-size-lg)` | `line-height`, `min-height` |
 | `--c-form-size-lg-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height`, `padding-block-start` |
 | `--c-form-size-lg-label-font-size` | `var(--c-font-size-body-3)` | `font-size` |

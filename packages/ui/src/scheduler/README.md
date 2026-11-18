@@ -1,4 +1,5 @@
 ---
+deferExamples: true
 permalink: /components/scheduler/
 ---
 

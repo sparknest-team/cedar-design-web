@@ -11,6 +11,8 @@ permalink: /components/form/
 
 显式 `validate-status="error"` 且没有自动校验错误时，字段会通过 `aria-describedby` 关联可见的 `help` 文案或插槽；业务已有的描述会保留。自动错误出现时优先关联自动错误。
 
+在 Vue 3.2.47 的 SSR 场景中，如果多个异步表单项在服务端和客户端的完成顺序相反，后续单独更新某一项时，自动错误描述可能重复 ID 或指向其他字段。仅为 Input 设置稳定 `id` 不能避免此问题；Vue 3.5.45 的同场景对照正常。
+
 在 Shadow DOM 中使用延迟编辑 Slider 时，若弹层传送到 `body`，浏览器可能无法通过 ID 将弹层内控件与 Shadow DOM 中的提示或错误关联。可设置 `:popup-container="false"`，或将 `popup-container` 设为同一 ShadowRoot 内的元素，使弹层与提示留在同一根节点；仍需为控件提供清晰名称。容器元素需要由应用提供，并考虑样式、定位和裁剪。
 
 直接编辑模式下，为单个字段设置可见标签时，可将 FormItem 的 `label-attrs` 中的 `for` 与控件的 `id` 对应；选择、日期和时间字段的原生输入不会用 placeholder 覆盖已关联的标签。显式 `aria-label` 或 `aria-labelledby` 仍按原生无障碍名称规则优先。placeholder 只是未提供标签时的回退，不能替代清晰的字段标签。日期和时间范围字段在 FormItem 中会将表单标签关联到范围分组；仍需通过 `input-attrs` 分别提供能够区分起止端点的名称。若 `label-attrs.for` 指向其他控件，不会将该标签误关联到范围分组。 当前未设置 `for` 时，范围控件会引用最近的 FormItem 标签，即使同一表单项还有其他控件。混合字段请将范围控件放在独立的有样式 FormItem 中并分别命名，或通过明确的 `for` 指向实际目标并为其他控件提供独立名称。单值 Slider 在 `for` 匹配组件 `id` 时为滑块及可选数字输入关联该标签；点击默认原生标签可聚焦未禁用的滑块；阻止标签点击默认行为可取消该聚焦。范围 Slider 的 `id` 与 `for` 匹配时，表单标签命名整个分组；仍应使用 `aria-label` 数组分别命名两个端点。 `tooltip` 提示按钮可单独聚焦，其名称不会合并到字段标签中。
@@ -100,7 +102,7 @@ import type { FormProps } from "@cedar-design/ui-vue";
 
 ### 局部表单分区
 
-仅将现场处置 SOP、安全须知和处置要点放入分区，底部结束线区分后续未分组字段。 在表单上方切换分隔线、仅标题、边框卡片三种风格，已填内容保持不变；也可切换标题标记和底部结束线。卡片以外框表示范围，不重复显示结束线。FormSection 继承父 Form 的布局、标签宽度、禁用状态和校验；布局通过 Form / FormItem 的既有属性设置。请提供 title 或 title 插槽。当前不提供折叠与分区级布局覆盖。
+仅将现场处置 SOP、安全须知和处置要点放入分区，底部结束线区分后续未分组字段。 在表单上方切换分隔线、仅标题、边框卡片三种风格，已填内容保持不变；也可切换标题标记和底部结束线。卡片以外框表示范围，不重复显示结束线。CSection 自动适配父 Form 的布局。组内字段直接从父 Form 获取标签宽度、禁用状态和校验规则；布局通过 Form / FormItem 的既有属性设置。请提供 title 或 title 插槽。当前不提供折叠与分区级布局覆盖。
 
 <demo src="./__demos__/section.vue"></demo>
 
@@ -648,25 +650,7 @@ import type {
 ```
 自定义表单控件可在 `setup` 中调用 `useFormErrorDescription()`，将返回的 `describe(existingIds)` 绑定到实际交互元素的 `aria-describedby`。它会保留已有描述，并在 FormItem 显示或清除错误时同步添加或移除错误 ID；控件不在 FormItem 内时仅保留已有描述。
 
-### FormSection Props
-
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| id | 分区 ID，未设置时自动生成 | `string` | — |
-| title | 分区标题 | `string` | `''` |
-| description | 标题下方的补充说明 | `string` | `''` |
-| variant | 分区风格，card 带边框和内容内边距 | `'line' \| 'plain' \| 'card'` | `'line'` |
-| show-marker | 显示标题左侧的主题色标记 | `boolean` | `true` |
-| show-end-divider | 显示底部结束线，区分后续未分组字段；card 不重复绘制 | `boolean` | `false` |
-
-### FormSection Slots
-
-| 插槽 | 说明 |
-| --- | --- |
-| default | 分区内的表单字段 |
-| title | 自定义标题 |
-| description | 自定义说明 |
-| extra | 标题右侧操作 |
+分区的属性和插槽见 [Section 内容分区](/components/section/)。
 
 ## CSS Variables
 
@@ -694,29 +678,6 @@ import type {
 | `--c-form-line-height` | `var(--c-line-height)` | `line-height`, `padding-top` |
 | `--c-form-required-symbol-color` | `var(--c-sys-color-content-danger)` | `color` |
 | `--c-form-required-symbol-font-size` | `var(--c-font-size-body-1)` | `font-size` |
-| `--c-form-section-accent-color` | `var(--c-sys-color-action-primary)` | `background` |
-| `--c-form-section-after-gap` | `24px` | `margin-block`, `padding-block-start` |
-| `--c-form-section-before-gap` | `32px` | `padding-block-start` |
-| `--c-form-section-card-background` | `var(--c-sys-color-surface-default)` | `background` |
-| `--c-form-section-card-padding` | `16px` | `padding` |
-| `--c-form-section-card-radius` | `6px` | `border-radius` |
-| `--c-form-section-description-color` | `var(--c-sys-color-content-secondary)` | `color` |
-| `--c-form-section-description-gap` | `4px` | `margin-block-start` |
-| `--c-form-section-description-line-height` | `20px` | `line-height` |
-| `--c-form-section-description-size` | `13px` | `font-size` |
-| `--c-form-section-divider-color` | `var(--c-sys-color-border-default)` | `border`, `border-block-start` |
-| `--c-form-section-divider-width` | `1px` | `border`, `border-block-start` |
-| `--c-form-section-end-divider-gap` | `24px` | `margin-block-start` |
-| `--c-form-section-header-gap` | `20px` | `margin-block-end` |
-| `--c-form-section-heading-gap` | `16px` | `margin-inline-start` |
-| `--c-form-section-marker-gap` | `8px` | `margin-inline-end`, `row-gap` |
-| `--c-form-section-marker-height` | `16px` | `height` |
-| `--c-form-section-marker-radius` | `2px` | `border-radius` |
-| `--c-form-section-marker-width` | `3px` | `width` |
-| `--c-form-section-title-color` | `var(--c-sys-color-content-primary)` | `color` |
-| `--c-form-section-title-line-height` | `24px` | `line-height` |
-| `--c-form-section-title-size` | `16px` | `font-size` |
-| `--c-form-section-title-weight` | `600` | `font-weight` |
 | `--c-form-size-lg-height` | `var(--c-size-lg)` | `line-height`, `min-height` |
 | `--c-form-size-lg-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height`, `padding-block-start` |
 | `--c-form-size-lg-label-font-size` | `var(--c-font-size-body-3)` | `font-size` |

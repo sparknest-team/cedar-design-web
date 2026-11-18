@@ -24,7 +24,7 @@ import { useElementResize } from '../_utils/resize-observer'
 import Scrollbar from '../scrollbar'
 import { createNamespace } from '../_utils/global-config'
 defineOptions({ name: createNamespace('table-sticky-scrollbar').name })
-const props = defineProps<{ container?: HTMLElement; active?: boolean }>()
+const props = defineProps<{ container?: HTMLElement; active?: boolean; layoutWidth?: number }>()
 const { dir } = useDirection(() => props.container)
 const { n } = createNamespace('table')
 const scrollbar = ref<InstanceType<typeof Scrollbar>>()
@@ -67,10 +67,12 @@ function measure() {
   viewport.value = container.clientWidth
   void nextTick(() => {
     if (!active || props.container !== container) return
-    scrollbar.value?.handleResize()
     sync()
+    scrollbar.value?.handleResize()
   })
 }
+// Column layout can clamp scrollLeft before the resize observer delivers its callback.
+watch(() => props.layoutWidth, measure, { flush: 'post' })
 useElementResize(() => [props.container, props.container?.firstElementChild], () => active && !!props.container, measure)
 function bind() {
   cleanup?.()

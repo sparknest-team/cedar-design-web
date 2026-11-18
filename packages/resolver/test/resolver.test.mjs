@@ -14,6 +14,15 @@ test('standalone icons include motion styles unless disabled', () => {
   assert.equal(unstyled.resolve('CIconCheck').sideEffects, undefined)
 })
 
+test("resolves the standalone Section and its stylesheet", () => {
+  assert.deepEqual(components.resolve("CSection"), {
+    from: "@cedar-design/ui-vue",
+    name: "_SectionComponent",
+    sideEffects: ["@cedar-design/ui-vue/section/style"],
+  });
+  assert.equal(components.resolve("CFormSection"), undefined);
+});
+
 test("resolves Menu and MenuOption through the menu style entry", () => {
   for (const name of ["Menu", "MenuOption"]) {
     assert.deepEqual(components.resolve(`C${name}`), {

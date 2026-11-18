@@ -92,6 +92,12 @@
       "route": "/components/space/"
     },
     {
+      "id": "section",
+      "name": "Section 内容分区",
+      "group": "layout",
+      "route": "/components/section/"
+    },
+    {
       "id": "divider",
       "name": "Divider 分割线",
       "group": "layout",

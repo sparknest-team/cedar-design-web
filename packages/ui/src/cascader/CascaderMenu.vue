@@ -26,7 +26,7 @@
       v-if="showSearchPanel"
       :id="multipleDialogId || optionsId"
       :multiple-dialog="Boolean(multipleDialogId)"
-      :report-dialog-element="reportDialogElement"
+      :report-popup-element="reportPopupElement"
       :options="filteredLeafOptions"
       :active-key="activeKey"
       :multiple="multiple"
@@ -89,9 +89,9 @@ const optionsId = `cascader-editor-options-${useId()}`;
 const editor = inject(selectionEditorSurface, undefined);
 const searchInputRef = ref<{ focus: () => void }>();
 const focusEditorSearch = () => searchInputRef.value?.focus();
-const { controller, keyboardHandler, listboxId, focusFallback, multipleDialogId, reportDialogElement } = defineProps<{
+const { controller, keyboardHandler, listboxId, focusFallback, multipleDialogId, reportPopupElement } = defineProps<{
   controller: UnwrapNestedRefs<CascaderController>;
-  reportDialogElement?: (element: HTMLElement | null) => void
+  reportPopupElement?: (element: HTMLElement | null) => void
   multipleDialogId?: string
   listboxId?: string
   focusFallback?: () => void;

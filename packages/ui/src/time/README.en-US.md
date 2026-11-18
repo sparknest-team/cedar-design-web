@@ -113,6 +113,8 @@ Compare minute, second and 12-hour displays. Distinguish midnight (12 AM) from n
 
 <demo src="./__demos__/no-confirm.vue"></demo>
 
+## Standalone time panels
+
 ### Disabled time options
 
 Disabled-hour callbacks always receive hours from 0 to 23, including in twelve-hour mode.

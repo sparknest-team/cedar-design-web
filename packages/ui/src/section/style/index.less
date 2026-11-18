@@ -1,0 +1,133 @@
+@import './token.less';
+
+.c-section {
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100%;
+
+  &--form {
+    flex: none;
+    grid-column: 1 / -1;
+    margin-block: 0 var(--c-section-after-gap);
+    padding-block-start: var(--c-section-before-gap);
+
+    &:first-child {
+      padding-block-start: 0;
+    }
+    &:last-child {
+      margin-block-end: 0;
+    }
+  }
+
+  &__surface {
+    box-sizing: border-box;
+    min-width: 0;
+    width: 100%;
+  }
+  &--card > &__surface {
+    padding: var(--c-section-card-padding);
+    border: var(--c-section-divider-width) solid
+      var(--c-section-divider-color);
+    border-radius: var(--c-section-card-radius);
+    background: var(--c-section-card-background);
+  }
+  &__label {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    max-width: 100%;
+  }
+  &__header {
+    margin-block-end: var(--c-section-header-gap);
+  }
+  &__heading {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    row-gap: var(--c-section-marker-gap);
+    min-width: 0;
+  }
+  &__marker {
+    flex: none;
+    width: var(--c-section-marker-width);
+    height: var(--c-section-marker-height);
+    margin-inline-end: var(--c-section-marker-gap);
+    border-radius: var(--c-section-marker-radius);
+    background: var(--c-section-accent-color);
+  }
+  &__title {
+    min-width: 0;
+    margin: 0;
+    overflow-wrap: anywhere;
+    color: var(--c-section-title-color);
+    font-size: var(--c-section-title-size);
+    font-weight: var(--c-section-title-weight);
+    line-height: var(--c-section-title-line-height);
+  }
+  &__line,
+  &__spacer {
+    flex: 1;
+    min-width: 0;
+    margin-inline-start: var(--c-section-heading-gap);
+  }
+  &__line {
+    border-block-start: var(--c-section-divider-width) solid
+      var(--c-section-divider-color);
+  }
+  &__extra {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    flex: none;
+    margin-inline-start: var(--c-section-heading-gap);
+  }
+  &__description {
+    margin-block-start: var(--c-section-description-gap);
+    overflow-wrap: anywhere;
+    color: var(--c-section-description-color);
+    font-size: var(--c-section-description-size);
+    line-height: var(--c-section-description-line-height);
+  }
+  &__content {
+    min-width: 0;
+  }
+  &--form > &__surface > &__content {
+    display: flex;
+    flex-direction: column;
+  }
+  &--form > &__surface > &__content--inline {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  &--form > &__surface > &__content > .c-form-item:last-child {
+    margin-bottom: 0;
+  }
+  &__end-divider {
+    margin-block-start: var(--c-section-end-divider-gap);
+    border-block-start: var(--c-section-divider-width) solid
+      var(--c-section-divider-color);
+  }
+}
+
+// The previous field already owns its trailing spacing. Complete it to 32px.
+.c-form-item + .c-section--form {
+  padding-block-start: max(
+    0px,
+    calc(
+      var(--c-section-before-gap) -
+        var(
+          --c-internal-form-item-margin-bottom,
+          var(--c-form-size-md-item-margin-bottom)
+        )
+    )
+  );
+}
+.c-form-item-error + .c-section--form,
+.c-form-item-has-help + .c-section--form {
+  padding-block-start: var(--c-section-before-gap);
+}
+.c-section--form + .c-section--form {
+  padding-block-start: max(
+    0px,
+    calc(var(--c-section-before-gap) - var(--c-section-after-gap))
+  );
+}

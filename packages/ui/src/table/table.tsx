@@ -5,8 +5,8 @@ import { physicalScrollLeft, inlineScrollLeft, setInlineScrollLeft, useDirection
 import StickyScrollbar from './StickyScrollbar.vue'
 import type { TablePaginationScope, TablePaginationConfig } from './types'
 import { tableProps } from "./props"
-import type { ComponentPublicInstance, CSSProperties, PropType, Slot } from "vue"
-import { Fragment, Teleport, computed, defineComponent, getCurrentInstance, inject, onActivated, onBeforeUnmount, onDeactivated, onMounted, provide, reactive, ref, shallowRef, toRaw, toRefs, watch, watchEffect, watchPostEffect } from "vue"
+import type { ComponentPublicInstance, CSSProperties, PropType, Slot, VNode } from "vue"
+import { Fragment, Teleport, cloneVNode, isVNode, computed, defineComponent, getCurrentInstance, inject, nextTick, onActivated, onBeforeUnmount, onDeactivated, onMounted, provide, reactive, ref, shallowRef, toRaw, toRefs, watch, watchEffect, watchPostEffect } from "vue"
 import { useId } from '../_utils/vue-compat'
 import { getPrefixCls, createNamespace } from "../_utils/global-config"
 import type { ComponentSize } from "../_utils/constant"
@@ -47,6 +47,7 @@ import { useFilter } from "./hooks/use-filter"
 import { useSorter } from "./hooks/use-sorter"
 import ClientOnly from "../_components/client-only"
 import { useSpan } from "./hooks/use-span"
+import { getComponentsFromVNode } from "../_utils/vue-utils"
 import { useChildrenComponents } from "../_hooks/use-children-components"
 import Scrollbar, { ScrollbarProps } from "../scrollbar"
 import { useComponentRef } from "../_hooks/use-component-ref"
@@ -64,13 +65,6 @@ const DEFAULT_BORDERED = {
 };
 
 const { name } = createNamespace("table");
-
-function paginationTargetNeedsDefer(target: string | HTMLElement): boolean {
-  if (typeof target !== 'string') return !target.isConnected
-  if (typeof document === 'undefined') return true
-  // Avoid deferred Teleport updates after hydration on Vue 3.5.13 when the target already exists.
-  try { return !document.querySelector(target) } catch { return true }
-}
 
 export default defineComponent({
   name,
@@ -412,6 +406,9 @@ export default defineComponent({
     const { componentRef: theadComRef, elementRef: theadRef } =
       useComponentRef("containerRef");
     const containerElement = computed(() => {
+      // Vue 3.2 can evaluate direction watchers synchronously during SSR setup.
+      // Both container refs are empty until mounting, before splitTable is ready.
+      if (!contentRef.value && !tbodyRef.value) return undefined;
       if (splitTable.value) {
         return tbodyRef.value;
       }
@@ -554,26 +551,26 @@ export default defineComponent({
         () => props.size,
         readingDirection,
       ],
-      ([columns, slotColumns]) => {
+      ([columns, slotColumns, , extraConfig, size, direction]) => {
         const baseColumns = [...(slotColumns ?? columns ?? [])];
-        if (extraColumnConfig.value.enabled) {
+        if (extraConfig.enabled) {
           const extraCls = `${prefixCls}-extra-column-cell`;
           baseColumns.push(markTableExtraColumn({
-            dataIndex: extraColumnConfig.value.dataIndex,
+            dataIndex: extraConfig.dataIndex,
             title: "",
             width: getExtraColumnWidth(
-              props.size,
-              extraColumnConfig.value.width,
+              size,
+              extraConfig.width,
             ),
-            fixed: extraColumnConfig.value.fixed,
-            align: extraColumnConfig.value.align,
+            fixed: extraConfig.fixed,
+            align: extraConfig.align,
             headerCellClass: extraCls,
             cellClass: extraCls,
             slotName: "extra-column-cell",
             render: () => null,
           }));
         }
-        const result = getGroupColumns(baseColumns, dataColumnMap, columnWidth, readingDirection.value);
+        const result = getGroupColumns(baseColumns, dataColumnMap, columnWidth, direction);
         dataColumns.value = result.dataColumns;
         groupColumns.value = result.groupColumns;
       },
@@ -1110,6 +1107,14 @@ export default defineComponent({
       if (theadRef.value) setInlineScrollLeft(theadRef.value, offset);
       if (summaryRef.value) setInlineScrollLeft(summaryRef.value, offset);
     }
+    // Replacing the body does not emit a scroll event for its initial position.
+    watch(containerElement, (body) => {
+      if (!body) return;
+      containerScrollLeft.value = body.scrollLeft;
+      readingOffset = inlineScrollLeft(body);
+      syncHorizontalPanels();
+      setAlignPosition();
+    }, { flush: "post" });
     const onTbodyScroll = (event: Event) => {
       handleScroll(event);
       syncHorizontalPanels();
@@ -1576,7 +1581,7 @@ export default defineComponent({
     // Account for each visible tree or detail row, not merely virtual items.
     const calculateVirtualRowPositions = () => {
       const virtual = props.virtualListProps as (VirtualListProps & { listAttrs?: unknown }) | undefined;
-      if (!virtual || !flattenData.value.length || slots.tr ||
+      if (!virtual || !flattenData.value.length || slots.tr || slots.tbody ||
         virtual.data !== undefined || virtual.component !== undefined || virtual.listAttrs !== undefined ||
         (virtual.threshold && flattenData.value.length <= virtual.threshold)) return undefined;
       const headerRows = props.showHeader ? displayHeaderRows.value.length : 0;
@@ -2094,7 +2099,7 @@ export default defineComponent({
       </Thead>
     );
 
-    const managedStickyFooter = computed(() => props.pagination !== false && props.stickyPagination !== false);
+    const managedStickyFooter = computed(() => props.pagination !== false && props.stickyPagination !== false && (flattenData.value.length > 0 || sortedData.value.length > 0));
     const renderContent = () => {
       // Slots can change without invalidating a computed value. Capture once
       // per render so slot changes are observed without per-row scans in SSR.
@@ -2114,9 +2119,9 @@ export default defineComponent({
             }}
             {...((scrollbar.value || managedStickyFooter.value)
               ? {
-                  hide: flattenData.value.length !== 0,
                   disableVertical: true,
                   ...scrollbarProps.value,
+                  hide: true,
                   disableHorizontal: managedStickyFooter.value || !hasHorizontalOverflow.value,
                 }
               : undefined)}
@@ -2198,7 +2203,7 @@ export default defineComponent({
                   itemKey="_key"
                   component={{
                     list: "table",
-                    content: "tbody",
+                    content: props.virtualListProps?.component === undefined ? firstStructuralNode(slots.tbody?.()) ?? "tbody" : "tbody",
                   }}
                   listAttrs={{
                     class: `${prefixCls}-element`,
@@ -2410,15 +2415,41 @@ export default defineComponent({
       );
     };
 
+    const paginationTarget = computed(() => isObject(props.pagination) ? props.pagination.container : undefined);
+    const readyPaginationTarget = shallowRef<string | HTMLElement>();
+    let paginationTargetEpoch = 0;
+    watch(paginationTarget, (target) => {
+      const epoch = ++paginationTargetEpoch;
+      if (!target || typeof target !== 'string' || typeof document === 'undefined') {
+        readyPaginationTarget.value = target;
+        return;
+      }
+      const resolve = () => {
+        try { return document.querySelector(target) } catch { return null }
+      };
+      if (resolve()) {
+        readyPaginationTarget.value = target;
+        return;
+      }
+      // The selector may be rendered later in the same update. Vue 3.2 does
+      // not support Teleport's defer prop, so wait until that update finishes.
+      void nextTick(() => {
+        if (epoch !== paginationTargetEpoch) return;
+        if (resolve()) readyPaginationTarget.value = target;
+        else if (process.env.NODE_ENV !== 'production') console.warn(`[Table] Pagination target not found: ${target}`);
+      });
+    }, { immediate: true });
+    onBeforeUnmount(() => { paginationTargetEpoch++ });
+
     const renderPaginationArea = () => {
       const content = props.stickyPagination !== false ? (
         <div {...themeScope.value} dir={readingDirection.value} class={`${prefixCls}-footer-sticky`} style={[themeScope.value.style, isNumber(props.stickyPagination) ? { bottom: `${props.stickyPagination}px` } : undefined]}>
-          <StickyScrollbar container={containerElement.value} active={tableHovered.value || tableFocused.value} />
+          <StickyScrollbar layoutWidth={bodyWidth.value} container={containerElement.value} active={tableHovered.value || tableFocused.value} />
           {renderPagination(true)}
         </div>
       ) : renderPagination();
-      const target = isObject(props.pagination) ? props.pagination.container : undefined;
-      return target ? <Teleport to={target} defer={paginationTargetNeedsDefer(target)}>{content}</Teleport> : content;
+      const target = readyPaginationTarget.value;
+      return target ? <Teleport to={target}>{content}</Teleport> : paginationTarget.value ? null : content;
     };
 
     const style = computed<CSSProperties | undefined>(() => {
@@ -2454,6 +2485,31 @@ export default defineComponent({
       setup: () => () => renderTable(),
     });
 
+    const onColumnsChanged = (subTree?: VNode) => {
+      if (!subTree) return getComponents();
+      const next = getComponentsFromVNode(subTree, createNamespace("table-column").name);
+      if (next.length !== components.value.length || next.some((id, index) => id !== components.value[index])) components.value = next;
+    };
+    const normalizeColumnSlotNodes = (value: any): any => {
+      if (Array.isArray(value)) return value.map(normalizeColumnSlotNodes);
+      if (!isVNode(value)) return value;
+      if (value.type === Fragment) {
+        const node = cloneVNode(value);
+        node.patchFlag = -2;
+        (node as any).dynamicChildren = null;
+        node.children = normalizeColumnSlotNodes(value.children);
+        return node;
+      }
+      if ((value.type as any)?.name === createNamespace("table-column").name) {
+        const node = cloneVNode(value);
+        node.patchFlag = 16;
+        return node;
+      }
+      return value;
+    };
+    let cachedColumnsSlot: Slot | undefined;
+    let cachedColumnsVNode: VNode | undefined;
+    let columnsKey = 0;
     const render = () => {
       const snapshot = currentSlotSnapshot();
       if (slots.default) {
@@ -2475,7 +2531,13 @@ export default defineComponent({
           </ResizeObserver>
         );
       }
-      children.value = slots.columns ? [<TableColumnSlot onChanged={getComponents} v-slots={forwardTableSlot(slots.columns)} />] : undefined;
+      if (slots.columns !== cachedColumnsSlot) {
+        cachedColumnsSlot = slots.columns;
+        cachedColumnsVNode = slots.columns
+          ? <TableColumnSlot revision={++columnsKey} onChanged={onColumnsChanged} v-slots={{ default: (...args: any[]) => normalizeColumnSlotNodes((cachedColumnsSlot as any)(...args)), $stable: true } as any} />
+          : undefined;
+      }
+      children.value = cachedColumnsVNode ? [cachedColumnsVNode] : undefined;
       // fix #1724 sortedData.value.length > 0
       return (
         <ResizeObserver onResize={handleTableResize}>

@@ -153,6 +153,8 @@ With Teleport, variables must be in the actual popup scope, for example through 
 
 `trigger="focus"` supports keyboard focus. `esc-to-close` lets only the topmost popup handle Escape. Trigger does not assign `role`, `aria-describedby` or business labels; semantic wrappers such as Tooltip, Popover and Menu must supply them.
 
+With focus triggers, one outside pointer interaction that causes both blur and click requests closing once. If controlled state rejects the request, a later independent click can request closing again; `click-outside` continues to report outside click events.
+
 ## Native event modifiers on reference elements
 
 Native `click`, `mouseenter`, `mouseleave`, `focusin`, `focusout`, `contextmenu` listeners and `.once`, `.capture`, `.passive` modifiers bind to the actual reference element, not the popup. `.once` follows the native element's listener lifetime. Replacing a callback does not reactivate a consumed listener; replacing the reference or removing and readding a listener starts a new lifetime. Deactivation/unmount unbind listeners. Listeners only notify; returned Promises do not drive opening/loading, and errors enter Vue's event error chain.

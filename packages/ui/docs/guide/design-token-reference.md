@@ -2557,6 +2557,40 @@ expand-duration／fade-duration 消费到 transform／opacity 过渡；运行时
 
 </div>
 
+## section
+
+声明来源: `src/section/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
+| --- | --- | --- | --- |
+| `--c-section-accent-color` | 公开 | `var(--c-sys-color-action-primary)` | 本组件 CSS<br>`background` |
+| `--c-section-after-gap` | 公开 | `24px` | 本组件 CSS<br>`margin-block`, `padding-block-start` |
+| `--c-section-before-gap` | 公开 | `32px` | 本组件 CSS<br>`padding-block-start` |
+| `--c-section-card-background` | 公开 | `var(--c-sys-color-surface-default)` | 本组件 CSS<br>`background` |
+| `--c-section-card-padding` | 公开 | `16px` | 本组件 CSS<br>`padding` |
+| `--c-section-card-radius` | 公开 | `6px` | 本组件 CSS<br>`border-radius` |
+| `--c-section-description-color` | 公开 | `var(--c-sys-color-content-secondary)` | 本组件 CSS<br>`color` |
+| `--c-section-description-gap` | 公开 | `4px` | 本组件 CSS<br>`margin-block-start` |
+| `--c-section-description-line-height` | 公开 | `20px` | 本组件 CSS<br>`line-height` |
+| `--c-section-description-size` | 公开 | `13px` | 本组件 CSS<br>`font-size` |
+| `--c-section-divider-color` | 公开 | `var(--c-sys-color-border-default)` | 本组件 CSS<br>`border`, `border-block-start` |
+| `--c-section-divider-width` | 公开 | `1px` | 本组件 CSS<br>`border`, `border-block-start` |
+| `--c-section-end-divider-gap` | 公开 | `24px` | 本组件 CSS<br>`margin-block-start` |
+| `--c-section-header-gap` | 公开 | `20px` | 本组件 CSS<br>`margin-block-end` |
+| `--c-section-heading-gap` | 公开 | `16px` | 本组件 CSS<br>`margin-inline-start` |
+| `--c-section-marker-gap` | 公开 | `8px` | 本组件 CSS<br>`margin-inline-end`, `row-gap` |
+| `--c-section-marker-height` | 公开 | `16px` | 本组件 CSS<br>`height` |
+| `--c-section-marker-radius` | 公开 | `2px` | 本组件 CSS<br>`border-radius` |
+| `--c-section-marker-width` | 公开 | `3px` | 本组件 CSS<br>`width` |
+| `--c-section-title-color` | 公开 | `var(--c-sys-color-content-primary)` | 本组件 CSS<br>`color` |
+| `--c-section-title-line-height` | 公开 | `24px` | 本组件 CSS<br>`line-height` |
+| `--c-section-title-size` | 公开 | `16px` | 本组件 CSS<br>`font-size` |
+| `--c-section-title-weight` | 公开 | `600` | 本组件 CSS<br>`font-weight` |
+
+</div>
+
 ## segmented
 
 声明来源: `src/segmented/style/token.less`
