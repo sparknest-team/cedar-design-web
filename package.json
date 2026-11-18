@@ -9,7 +9,7 @@
     "build:doc": "pnpm --filter @cedar-design/ui-vue build:doc",
     "build:presets": "pnpm --filter @cedar-design/preset-unocss-vue build && pnpm --filter @cedar-design/preset-tailwindcss-vue build",
     "changeset": "changeset",
-    "version-packages": "changeset version && pnpm install --lockfile-only --ignore-scripts",
+    "version-packages": "node ../design-ui/bin/check-major-release.mjs && changeset version && pnpm install --lockfile-only --ignore-scripts",
     "dev": "pnpm --filter @cedar-design/ui-vue dev",
     "test": "pnpm --filter @cedar-design/ui-vue test",
     "test:watch": "pnpm --filter @cedar-design/ui-vue test:watch",
