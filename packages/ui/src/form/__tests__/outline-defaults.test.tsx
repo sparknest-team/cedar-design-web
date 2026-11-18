@@ -3,7 +3,7 @@ import { mount } from "@vue/test-utils";
 import { expect, test } from "vitest";
 import Input from "../../input";
 import InputGroup from "../../input/InputGroup.vue";
-import Textarea from "../../textarea/Textarea.vue";
+import Textarea from "../../textarea/textarea.vue";
 import Select from "../../select";
 import Cascader from "../../cascader";
 import InputTag from "../../input-tag";
