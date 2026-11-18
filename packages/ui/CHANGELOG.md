@@ -1,14 +1,44 @@
 ---
+
+## 2.0.0
+### Major Changes
+
+
+
+- [#1](https://github.com/loca-spirit/cedar-design-web/pull/1) [`38eb17b`](https://github.com/loca-spirit/cedar-design-web/commit/38eb17b7aeb14ce04638b3e51c8286d7dab5787d) Thanks [@loca-spirit](https://github.com/loca-spirit)! - Replace CFormSection and Form.Section with CSection. Import Section and its types from the Section entry and rename c-form-section CSS overrides to c-section. Inside Form, Section retains the previous field layout and appearance.
+
+
+### Minor Changes
+
+
+
+- [`c3b76e0`](https://github.com/loca-spirit/cedar-design-web/commit/c3b76e0d3578aecf4b446e527400d2ce12a78618) - Develop with Vue 3.5.45 while supporting consumers on Vue 3.2.47 and later Vue 3 releases. Preserve compatible component IDs and public declarations, and gate releases on packed runtime and type compatibility checks.
+  
+  The peer minimum is explicitly Vue 3.2.47. Packages previously advertising ^3.2.0 require a major release under the repository compatibility policy; consumers on 3.2.0–3.2.46 must update within the 3.2 line. No release is performed by this change.
+
+### Patch Changes
+
+
+
+- [#1](https://github.com/loca-spirit/cedar-design-web/pull/1) [`38eb17b`](https://github.com/loca-spirit/cedar-design-web/commit/38eb17b7aeb14ce04638b3e51c8286d7dab5787d) Thanks [@loca-spirit](https://github.com/loca-spirit)! - Close an open menu branch when another menu is opened from the keyboard.
+
+
+
+- [#1](https://github.com/loca-spirit/cedar-design-web/pull/1) [`38eb17b`](https://github.com/loca-spirit/cedar-design-web/commit/38eb17b7aeb14ce04638b3e51c8286d7dab5787d) Thanks [@loca-spirit](https://github.com/loca-spirit)! - Remove patch-package from the published component library's runtime dependencies. Documentation-only dependency patches are managed by pnpm during development installation.
+
+- Updated dependencies [[`c3b76e0`](https://github.com/loca-spirit/cedar-design-web/commit/c3b76e0d3578aecf4b446e527400d2ce12a78618)]:
+  - @cedar-design/use-vue@2.0.0
+  - @cedar-design/icons-vue@2.0.0
 permalink: /changelog/
 ---
 
-[//]: # 'template'
-[//]: # '## 1.1.2'
-[//]: # '#### Feature'
-[//]: # '#### Fix'
-[//]: # '#### Style'
-[//]: # '#### Breaking Change'
-[//]: # '#### Remove'
+[//]: # "template"
+[//]: # "## 1.1.2"
+[//]: # "#### Feature"
+[//]: # "#### Fix"
+[//]: # "#### Style"
+[//]: # "#### Breaking Change"
+[//]: # "#### Remove"
 
 ## Unreleased
 
