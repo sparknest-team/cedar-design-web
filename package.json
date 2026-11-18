@@ -37,7 +37,6 @@
     "preview": "pnpm --filter @cedar-design/ui-vue preview",
     "release": "node scripts/release.mjs",
     "prepare": "node scripts/git-hooks.mjs install",
-    "postinstall": "patch-package --patch-dir packages/ui/patches",
     "check:tabs": "node checks/tabs-same-source.mjs",
     "check:rate": "node checks/rate-same-source.mjs",
     "check:ripple": "node checks/ripple-same-source.mjs",
@@ -91,6 +90,10 @@
       "@sparknest/ui-doc-preview-vue": "link:../design-ui/packages/ui-doc-preview",
       "@sparknest/ui-icons-vue": "link:../design-ui/packages/ui-icons",
       "@sparknest/theme-contract-vue": "link:../design-ui/packages/theme-contract"
+    },
+    "patchedDependencies": {
+      "@vuepress/plugin-slimsearch@2.0.0-rc.63": "patches/@vuepress__plugin-slimsearch@2.0.0-rc.63.patch",
+      "source-map-js@1.2.2": "patches/source-map-js@1.2.2.patch"
     }
   },
   "volta": {

@@ -17,11 +17,11 @@ test('source-map-js patch matches the installed version and preserves sorting', 
     const directory = join(fixture, 'node_modules/source-map-js/lib')
     mkdirSync(directory, { recursive: true })
     copyFileSync(join(dirname(manifest), 'lib/quick-sort.js'), join(directory, 'quick-sort.js'))
-    const patch = join(root, 'packages/ui/patches/source-map-js+1.2.2.patch')
+    const patch = join(root, 'patches/source-map-js@1.2.2.patch')
     // CI postinstall has already applied the patch; normalize only this disposable copy.
-    if (spawnSync('git', ['apply', '--check', patch], { cwd: fixture }).status !== 0) execFileSync('git', ['apply', '--reverse', patch], { cwd: fixture })
-    execFileSync('git', ['apply', '--check', patch], { cwd: fixture })
-    execFileSync('git', ['apply', patch], { cwd: fixture })
+    if (spawnSync('git', ['apply', '--check', patch], { cwd: join(fixture, 'node_modules/source-map-js') }).status !== 0) execFileSync('git', ['apply', '--reverse', patch], { cwd: join(fixture, 'node_modules/source-map-js') })
+    execFileSync('git', ['apply', '--check', patch], { cwd: join(fixture, 'node_modules/source-map-js') })
+    execFileSync('git', ['apply', patch], { cwd: join(fixture, 'node_modules/source-map-js') })
     const { quickSort } = require(join(directory, 'quick-sort.js'))
     const ascending = [4, 1, 3, 1, 2]
     quickSort(ascending, (a, b) => a - b)
@@ -34,4 +34,15 @@ test('source-map-js patch matches the installed version and preserves sorting', 
     assert.deepEqual(offset, [99, 1, 2, 3])
     assert.match(readFileSync(join(directory, 'quick-sort.js'), 'utf8'), /function cloneSort\(comparator\) \{\s*return SortTemplate\(comparator\);/)
   } finally { rmSync(fixture, { recursive: true, force: true }) }
+})
+
+test('published UI and install lifecycle do not depend on patch-package', () => {
+  const rootManifest = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'))
+  const uiManifest = JSON.parse(readFileSync(join(root, 'packages/ui/package.json'), 'utf8'))
+  for (const manifest of [rootManifest, uiManifest]) {
+    for (const field of ['dependencies', 'devDependencies', 'optionalDependencies', 'peerDependencies']) assert.equal(manifest[field]?.['patch-package'], undefined)
+    assert.ok(!Object.values(manifest.scripts || {}).some(script => /\bpatch-package\b/.test(script)))
+  }
+  assert.equal(rootManifest.pnpm.patchedDependencies['source-map-js@1.2.2'], 'patches/source-map-js@1.2.2.patch')
+  assert.equal(rootManifest.pnpm.patchedDependencies['@vuepress/plugin-slimsearch@2.0.0-rc.63'], 'patches/@vuepress__plugin-slimsearch@2.0.0-rc.63.patch')
 })
