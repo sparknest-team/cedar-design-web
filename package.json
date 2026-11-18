@@ -9,7 +9,7 @@
     "build:doc": "pnpm --filter @cedar-design/ui-vue build:doc",
     "build:presets": "pnpm --filter @cedar-design/preset-unocss-vue build && pnpm --filter @cedar-design/preset-tailwindcss-vue build",
     "changeset": "changeset",
-    "version-packages": "changeset version",
+    "version-packages": "changeset version && pnpm install --lockfile-only --ignore-scripts",
     "dev": "pnpm --filter @cedar-design/ui-vue dev",
     "test": "pnpm --filter @cedar-design/ui-vue test",
     "test:watch": "pnpm --filter @cedar-design/ui-vue test:watch",
@@ -36,7 +36,7 @@
     "clean-cache": "pnpm --filter @cedar-design/ui-vue clean-cache",
     "preview": "pnpm --filter @cedar-design/ui-vue preview",
     "release": "node scripts/release.mjs",
-    "prepare": "husky install packages/ui/.husky",
+    "prepare": "node scripts/git-hooks.mjs install",
     "postinstall": "patch-package --patch-dir packages/ui/patches",
     "check:tabs": "node checks/tabs-same-source.mjs",
     "check:rate": "node checks/rate-same-source.mjs",
@@ -59,7 +59,10 @@
     "check:packages": "node --test scripts/quality/package-boundary-check.test.mjs && node scripts/quality/package-boundary-check.mjs",
     "check:vue-compat:source": "node ../design-ui/bin/vue-compat-check.mjs --source",
     "check:vue-compat": "node --test ../design-ui/bin/vue-compat-check.test.mjs && node ../design-ui/bin/vue-compat-check.mjs",
-    "check:demo-i18n": "node --test scripts/quality/demo-i18n-ci.test.mjs && pnpm check:test-environment && node --test ../design-ui/bin/compose-demo-comparison.test.mjs ../design-ui/bin/demo-config-comparison.test.mjs && pnpm --dir packages/ui exec vitest run src/__demos__/locale --maxWorkers=1 --no-file-parallelism"
+    "check:demo-i18n": "node --test scripts/quality/demo-i18n-ci.test.mjs && pnpm check:test-environment && node --test ../design-ui/bin/compose-demo-comparison.test.mjs ../design-ui/bin/demo-config-comparison.test.mjs && pnpm --dir packages/ui exec vitest run src/__demos__/locale --maxWorkers=1 --no-file-parallelism",
+    "hooks:install": "node scripts/git-hooks.mjs install",
+    "pr:merge": "node scripts/pr-merge.mjs",
+    "check:pr-workflow": "node --test ../design-ui/bin/pr-workflow.test.mjs"
   },
   "packageManager": "pnpm@9.6.0",
   "devDependencies": {
