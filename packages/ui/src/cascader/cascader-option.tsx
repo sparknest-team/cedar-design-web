@@ -135,7 +135,15 @@ export default defineComponent({
       return getCheckedStatus(props.option, cascaderCtx.valueMap)
     })
 
+    const isMenuCheckbox = computed(() => props.multiple && !props.searchOption && !props.option.selectionDisabled)
     const isMenuRadio = computed(() => !props.multiple && (props.searchOption || props.option.isLeaf || props.checkStrictly))
+
+    const menuChecked = computed(() => {
+      if (isMenuCheckbox.value && checkedStatus.value.indeterminate) return 'mixed'
+      if (isMenuCheckbox.value || (isMenuRadio.value && !props.listboxOption)) {
+        return Boolean(checkedStatus.value.checked)
+      }
+    })
 
     const renderLabelContent = () => {
       if (props.pathLabel) {
@@ -164,9 +172,9 @@ export default defineComponent({
       <li
         tabindex={props.multipleGroupOption ? undefined : props.tabIndex}
         id={props.optionId}
-        role={props.multipleGroupOption ? 'presentation' : props.listboxOption ? 'option' : isMenuRadio.value ? 'menuitemradio' : 'menuitem'}
+        role={props.multipleGroupOption ? 'presentation' : props.listboxOption ? 'option' : isMenuCheckbox.value ? 'menuitemcheckbox' : isMenuRadio.value ? 'menuitemradio' : 'menuitem'}
         aria-selected={props.listboxOption ? props.listboxSelected : undefined}
-        aria-checked={!props.listboxOption && isMenuRadio.value ? Boolean(checkedStatus.value.checked) : undefined}
+        aria-checked={menuChecked.value}
         data-cascader-key={props.option.key}
         aria-busy={isBusy.value || undefined}
         aria-disabled={props.multipleGroupOption ? undefined : props.option.disabled}
@@ -181,6 +189,7 @@ export default defineComponent({
           <span class={`${prefixCls}-checkbox`} onClick={(event: MouseEvent) => event.stopPropagation()}>
             <Checkbox
               editMode="direct"
+              {...(props.searchOption ? {} : { tabindex: -1 })}
               uninjectGroupContext
               modelValue={Boolean(checkedStatus.value.checked)}
               indeterminate={checkedStatus.value.indeterminate}

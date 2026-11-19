@@ -1,5 +1,5 @@
 import { h, nextTick, ref } from 'vue'
-import { mount } from '@vue/test-utils'
+import { flushPromises, mount } from '@vue/test-utils'
 import { expect, test } from 'vitest'
 import Form from '../../form/Form.vue'
 import FormItem from '../../form/FormItem.vue'
@@ -143,5 +143,25 @@ test('custom trigger owns its label target while the popup has a distinct id', a
     expect(document.querySelectorAll('#pick-color')).toHaveLength(1)
     expect(document.querySelectorAll('#color-popup')).toHaveLength(1)
     expect((wrapper.get('label').element as HTMLLabelElement).control).toBe(wrapper.get('button#pick-color').element)
+  } finally { wrapper.unmount() }
+})
+
+test.each([false, true])('moves the implicit color label to a mixed group (inline=%s)', async inline => {
+  const mixed = ref(false)
+  const wrapper = mount(FormItem, { props: { label: 'Color', editMode: 'direct' }, slots: {
+    default: () => [h(ColorPicker, { hideTrigger: inline }), mixed.value ? h('input', { 'aria-label': 'Reason' }) : null],
+  } })
+  try {
+    const target = () => wrapper.get(inline ? '.c-color-picker-panel' : 'button.c-color-picker')
+    const label = wrapper.get('label').attributes('id')
+    await flushPromises()
+    expect(target().attributes('aria-labelledby')?.split(' ')).toContain(label)
+    mixed.value = true
+    await flushPromises()
+    expect(target().attributes('aria-labelledby')).toBeUndefined()
+    expect(wrapper.get('[role=group]').attributes('aria-labelledby')).toBe(label)
+    mixed.value = false
+    await flushPromises()
+    expect(target().attributes('aria-labelledby')?.split(' ')).toContain(label)
   } finally { wrapper.unmount() }
 })

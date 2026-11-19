@@ -755,7 +755,7 @@ permalink: /guide/design-token-reference/
 | `--c-checkbox-action-padding` | 公开 | `5px` | 本组件 CSS<br>`padding` |
 | `--c-checkbox-animation-duration` | 公开 | `var(--c-transition-duration-3)` | 本组件 CSS<br>`transition` |
 | `--c-checkbox-control-border-radius` | 公开 | `2px` | 本组件 CSS<br>`border-radius` |
-| `--c-checkbox-control-color` | 公开 | `var(--c-sys-color-content-secondary)` | 本组件 CSS<br>`color` |
+| `--c-checkbox-control-color` | 公开 | `var(--c-sys-color-border-default)` | 本组件 CSS<br>`color` |
 | `--c-checkbox-control-color-checked` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color`, `outline` |
 | `--c-checkbox-control-color-disabled` | 公开 | `var(--c-sys-color-content-disabled)` | 本组件 CSS<br>`color` |
 | `--c-checkbox-control-color-error` | 公开 | `var(--c-sys-color-content-danger)` | 本组件 CSS<br>`color` |
@@ -1282,7 +1282,7 @@ permalink: /guide/design-token-reference/
 | `--c-field-variant-outline-border-color-disabled` | 公开 | `var(--c-sys-color-border-subtle)` | 本组件 CSS<br>`border-color` |
 | `--c-field-variant-outline-border-color-error` | 公开 | `var(--c-sys-color-status-danger)` | 本组件 CSS<br>`border-color` |
 | `--c-field-variant-outline-border-color-focus` | 公开 | `var(--c-sys-color-action-primary)` | 本组件 CSS<br>`border-color` |
-| `--c-field-variant-outline-border-color-hover` | 公开 | `var(--c-sys-color-border-strong)` | 本组件 CSS<br>`border-color` |
+| `--c-field-variant-outline-border-color-hover` | 公开 | `color-mix(in srgb, var(--c-field-variant-outline-border-color) 80%, var(--c-sys-color-border-strong))` | 本组件 CSS<br>`border-color` |
 | `--c-field-variant-standard-line-color` | 公开 | `var(--c-field-blur-color)` | 本组件 CSS<br>`border-bottom` |
 | `--c-field-variant-standard-line-color-disabled` | 公开 | `var(--c-sys-color-border-subtle)` | 本组件 CSS<br>`border-bottom-color` |
 | `--c-field-variant-standard-line-color-error` | 公开 | `var(--c-field-error-color)` | 本组件 CSS<br>`border-bottom-color` |
@@ -2325,7 +2325,7 @@ permalink: /guide/design-token-reference/
 | `--c-internal-radio-segment-radius` | 内部 | `var(--c-sys-radius-md)` | 本组件 CSS<br>`border-radius` |
 | `--c-radio-action-padding` | 公开 | `calc((var(--c-internal-radio-mask-height) / 2) - (var(--c-radio-control-size) / 2))` | 本组件 CSS<br>`padding` |
 | `--c-radio-animation-duration` | 公开 | `var(--c-transition-duration-3)` | 本组件 CSS<br>`transition` |
-| `--c-radio-control-color` | 公开 | `var(--c-sys-color-content-secondary)` | 本组件 CSS<br>`color` |
+| `--c-radio-control-color` | 公开 | `var(--c-sys-color-border-default)` | 本组件 CSS<br>`color` |
 | `--c-radio-control-color-checked` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color`, `outline` |
 | `--c-radio-control-color-disabled` | 公开 | `var(--c-sys-color-content-disabled)` | 本组件 CSS<br>`color` |
 | `--c-radio-control-color-error` | 公开 | `var(--c-sys-color-content-danger)` | 本组件 CSS<br>`box-shadow`, `color` |

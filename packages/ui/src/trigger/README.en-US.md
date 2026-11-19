@@ -98,7 +98,7 @@ With Teleport, variables must be in the actual popup scope, for example through 
 | auto-fit-position | Flip and constrain to the viewport when space is insufficient | `boolean` | `true` |
 | auto-fit-popup-width | Match popup width to the reference | `boolean` | `false` |
 | auto-fit-popup-min-width | Match minimum popup width to the reference | `boolean` | `false` |
-| auto-fix-position | Observe reference element size changes; disabling this still observes the popup and positioning parent and responds to window changes | `boolean` | `true` |
+| auto-fix-position | Reposition when the reference changes size or when a CSS transition or animation on the reference or its ancestors ends or is canceled. Popup, positioning parent and window resize handling remain active when disabled | `boolean` | `true` |
 | update-at-scroll | Reposition while scrolling | `boolean` | `false` |
 | scroll-to-close | Close when scrolling exceeds the threshold | `boolean` | `false` |
 | scroll-to-close-distance | Close threshold | `number` | `0` |

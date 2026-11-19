@@ -1,5 +1,5 @@
 import { h, nextTick, ref } from 'vue'
-import { mount } from '@vue/test-utils'
+import { flushPromises, mount } from '@vue/test-utils'
 import { expect, test } from 'vitest'
 import Form from '../../form/Form.vue'
 import FormItem from '../../form/FormItem.vue'
@@ -63,20 +63,26 @@ test('the transfer group can use its FormItem label without overriding explicit 
 })
 
 test('a mixed native input and transfer follows explicit label target changes', async () => {
-  const attrs = ref<Record<string, string>>({})
+  const mixed = ref(true)
   const wrapper = mount(FormItem, {
     props: { label: 'Items', editMode: 'direct' },
-    slots: { default: () => [h('input', { id: 'other' }), h(Transfer, { data: [], editMode: 'direct' })] },
+    slots: { default: () => [mixed.value ? h('input', { id: 'other' }) : null, h(Transfer, { data: [], editMode: 'direct' })] },
   })
   try {
     const group = () => wrapper.get('.c-transfer')
     const labelId = wrapper.get('label').attributes('id')
-    expect(group().attributes('aria-labelledby')).toBe(labelId)
-    attrs.value = { for: 'other' }
-    await wrapper.setProps({ labelAttrs: attrs.value })
+    await flushPromises()
+    expect(group().attributes('aria-labelledby')).toBeUndefined()
+    expect(wrapper.get('[role=group]').attributes('aria-labelledby')).toBe(labelId)
+    await wrapper.setProps({ labelAttrs: { for: 'other' } })
     expect(wrapper.get('label').attributes('for')).toBe('other')
     expect(group().attributes('aria-labelledby')).toBeUndefined()
     await wrapper.setProps({ labelAttrs: {} })
+    await flushPromises()
+    expect(group().attributes('aria-labelledby')).toBeUndefined()
+    expect(wrapper.get('[role=group]').attributes('aria-labelledby')).toBe(labelId)
+    mixed.value = false
+    await flushPromises()
     expect(group().attributes('aria-labelledby')).toBe(labelId)
   } finally { wrapper.unmount() }
 })

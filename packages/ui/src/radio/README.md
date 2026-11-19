@@ -396,7 +396,7 @@ Cedar 使用 edit-mode="click" / "dblclick" 在字段附近打开编辑浮层，
 | --- | --- | --- |
 | `--c-radio-action-padding` | `calc((var(--c-internal-radio-mask-height) / 2) - (var(--c-radio-control-size) / 2))` | `padding` |
 | `--c-radio-animation-duration` | `var(--c-transition-duration-3)` | `transition` |
-| `--c-radio-control-color` | `var(--c-sys-color-content-secondary)` | `color` |
+| `--c-radio-control-color` | `var(--c-sys-color-border-default)` | `color` |
 | `--c-radio-control-color-checked` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-radio-control-color-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
 | `--c-radio-control-color-error` | `var(--c-sys-color-content-danger)` | `box-shadow`, `color` |
