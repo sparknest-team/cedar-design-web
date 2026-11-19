@@ -124,6 +124,7 @@ export default defineComponent({
     const renderInput = () => {
       return (
         <button
+          data-form-composite={formLabel ? '' : undefined}
           type="button"
           id={attrs.id as string | undefined}
           disabled={props.disabled}
@@ -149,6 +150,7 @@ export default defineComponent({
         <Panel
           {...(props.hideTrigger ? {
             ...attrs,
+            'data-form-composite': formLabel ? '' : undefined,
             role: typeof attrs.role === 'string' ? attrs.role : (describeError(attrs['aria-describedby']) || autoPanelLabel.value || attrs['aria-label'] || attrs['aria-labelledby']) ? 'group' : undefined,
             'aria-labelledby': attrs['aria-labelledby'] ?? autoPanelLabel.value,
             'aria-describedby': describeError(attrs['aria-describedby']),

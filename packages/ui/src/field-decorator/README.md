@@ -141,7 +141,7 @@ FieldDecorator 是 Input、Textarea、Select 与日期时间控件的展示外�
 | `--c-field-variant-outline-border-color-disabled` | `var(--c-sys-color-border-subtle)` | `border-color` |
 | `--c-field-variant-outline-border-color-error` | `var(--c-sys-color-status-danger)` | `border-color` |
 | `--c-field-variant-outline-border-color-focus` | `var(--c-sys-color-action-primary)` | `border-color` |
-| `--c-field-variant-outline-border-color-hover` | `var(--c-sys-color-border-strong)` | `border-color` |
+| `--c-field-variant-outline-border-color-hover` | `color-mix(in srgb, var(--c-field-variant-outline-border-color) 80%, var(--c-sys-color-border-strong))` | `border-color` |
 | `--c-field-variant-standard-line-color` | `var(--c-field-blur-color)` | `border-bottom` |
 | `--c-field-variant-standard-line-color-disabled` | `var(--c-sys-color-border-subtle)` | `border-bottom-color` |
 | `--c-field-variant-standard-line-color-error` | `var(--c-field-error-color)` | `border-bottom-color` |

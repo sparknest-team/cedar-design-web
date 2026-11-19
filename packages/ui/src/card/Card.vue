@@ -123,6 +123,7 @@
 </template>
 
 <script setup lang="ts">
+import { isShadowRoot } from '../_utils/is-shadow-root'
 import { computed, nextTick, ref, shallowRef, watch, onBeforeUnmount, onDeactivated, onMounted, onActivated } from 'vue'
 import { IconClose as MIconClose } from '@cedar-design/icons-vue'
 import { doubleRaf, getRect } from '@cedar-design/shared-vue'
@@ -200,7 +201,7 @@ function closestAcrossRoots(element: Element | null, selector: string): Element 
     const match = element.closest(selector)
     if (match) return match
     const root = element.getRootNode()
-    element = 'host' in root ? (root as ShadowRoot).host : null
+    element = isShadowRoot(root) ? root.host : null
   }
   return null
 }
@@ -208,7 +209,7 @@ function composedContains(container: Element | null, element: Element | null): b
   while (container && element) {
     if (container.contains(element)) return true
     const root = element.getRootNode()
-    element = 'host' in root ? (root as ShadowRoot).host : null
+    element = isShadowRoot(root) ? root.host : null
   }
   return false
 }
@@ -301,7 +302,7 @@ function trackFocusRoot() {
     let node: Node | null = element.parentNode
     while (node) {
       next.push(node)
-      node = node.parentNode ?? ('host' in node ? (node as ShadowRoot).host : null)
+      node = node.parentNode ?? (isShadowRoot(node) ? node.host : null)
     }
     if (next.length === ancestors.length && next.every((entry, index) => entry === ancestors[index])) return
     focusRootObserver?.disconnect()
@@ -524,6 +525,14 @@ function dropdown() {
 }
 function handleFloatingKeydown(event: KeyboardEvent) {
   if (!available() || !wantsFloating() || event.key !== 'Escape' || event.isComposing || event.keyCode === 229 || event.defaultPrevented) return
+  // Let the browser dispatch cancel to a nested native dialog first.
+  const insideNativeModal = event.composedPath().some(target => {
+    const dialog = target as HTMLDialogElement
+    if (dialog.localName !== 'dialog' || !dialog.open) return false
+    if ('closedBy' in dialog && ['closerequest', 'any'].includes(String(dialog.closedBy))) return true
+    return !dialog.ownerDocument.defaultView?.CSS?.supports('selector(:modal)') || dialog.matches(':modal')
+  })
+  if (insideNativeModal) return
   const owner = card.value?.ownerDocument
   if (owner && cardDocument.value !== owner) {
     cardDocument.value = owner

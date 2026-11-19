@@ -593,6 +593,7 @@ export default defineComponent({
     const render = () => searchEnabled.value ? (
       <Trigger
         trigger="focus"
+        unmountOnClose={true}
         placement="bottom-start"
         popupOffset={4}
         preventFocus

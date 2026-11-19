@@ -23,7 +23,7 @@ export function startKeyboardLazy(
   if (!forward) return task
   return task.then(async () => {
     await nextTick()
-    if (!target?.isConnected || target.ownerDocument.activeElement !== target || !stillActive(node.key)) return
+    if (!target?.isConnected || (target.getRootNode() as Document | ShadowRoot).activeElement !== target || !stillActive(node.key)) return
     navigate(event, right)
     focus()
   })

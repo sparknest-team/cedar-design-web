@@ -533,7 +533,9 @@ export function useCascaderController(
             computedValueMap.value,
           ).checked;
         }
-        setSelectedPath(activeOption.value.key);
+        if ((ev as KeyboardEvent).key !== ' ' || !(ev.target as Element | null)?.matches('[role="menuitemcheckbox"]')) {
+          setSelectedPath(activeOption.value.key)
+        }
         handleClickOption(activeOption.value, checked);
       }
     } else {
@@ -596,7 +598,7 @@ export function useCascaderController(
       return
     }
     const target = event.target as Element | null
-    const option = target?.closest?.('[role="menuitem"][data-cascader-key], [role="menuitemradio"][data-cascader-key], [role="option"][data-cascader-key]')
+    const option = target?.closest?.('[role="menuitem"][data-cascader-key], [role="menuitemradio"][data-cascader-key], [role="menuitemcheckbox"][data-cascader-key], [role="option"][data-cascader-key]')
     if (event.key === ' ' && !option) return
     const panelSelector = `.${getPrefixCls('cascader')}-panel, .${getPrefixCls('cascader')}-editor-panel`
     const originPanel = option?.closest(panelSelector)

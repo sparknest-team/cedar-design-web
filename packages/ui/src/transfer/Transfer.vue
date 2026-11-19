@@ -1,5 +1,5 @@
 <template>
-  <div ref="root" v-bind="$attrs" :role="typeof $attrs.role === 'string' ? $attrs.role : (describeError($attrs['aria-describedby']) || autoLabelId || $attrs['aria-label'] || $attrs['aria-labelledby'] ? 'group' : undefined)" :aria-labelledby="'aria-labelledby' in $attrs ? ($attrs['aria-labelledby'] as string | undefined) : ('aria-label' in $attrs || $attrs.role === 'presentation' || $attrs.role === 'none' ? undefined : autoLabelId)" :aria-describedby="describeError($attrs['aria-describedby'])" :class="cls">
+  <div ref="root" :data-form-composite="hasFormLabel ? '' : undefined" v-bind="$attrs" :role="typeof $attrs.role === 'string' ? $attrs.role : (describeError($attrs['aria-describedby']) || autoLabelId || $attrs['aria-label'] || $attrs['aria-labelledby'] ? 'group' : undefined)" :aria-labelledby="'aria-labelledby' in $attrs ? ($attrs['aria-labelledby'] as string | undefined) : ('aria-label' in $attrs || $attrs.role === 'presentation' || $attrs.role === 'none' ? undefined : autoLabelId)" :aria-describedby="describeError($attrs['aria-describedby'])" :class="cls">
     <transfer-view
       type="source"
       :class="`${prefixCls}-view-source`"
@@ -391,6 +391,7 @@ export default defineComponent({
 
     return {
       describeError,
+      hasFormLabel: Boolean(formLabel),
       autoLabelId,
       root,
       dir,

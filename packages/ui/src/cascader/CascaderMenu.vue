@@ -24,8 +24,8 @@
     />
     <cascader-search-panel
       v-if="showSearchPanel"
-      :id="multipleDialogId || optionsId"
-      :multiple-dialog="Boolean(multipleDialogId)"
+      :id="dialogId || optionsId"
+      :multiple-dialog="Boolean(dialogId)"
       :report-popup-element="reportPopupElement"
       :options="filteredLeafOptions"
       :active-key="activeKey"
@@ -47,7 +47,10 @@
     <component
       :is="editor ? CascaderEditorPanel : BaseCascaderPanel"
       v-else
-      :id="optionsId"
+      ref="hierarchyPanel"
+      :id="dialogId || optionsId"
+      :role="dialogId ? 'dialog' : undefined"
+      :aria-label="dialogId ? texts.select.value : undefined"
       :display-columns="displayColumns"
       :selected-path="selectedPath"
       :active-key="activeKey"
@@ -67,7 +70,7 @@
 </template>
 <script setup lang="ts">
 import type { CompatibleReactive as UnwrapNestedRefs } from '../_utils/compatible-reactive'
-import { inject, onBeforeUnmount, ref, toRefs } from "vue"
+import { computed, inject, onBeforeUnmount, ref, toRefs } from "vue"
 import { useId } from '../_utils/vue-compat';
 import { useFieldTexts } from "../_components/field-presentation/texts";
 import { isolateEditorForm } from "../_components/field-presentation/form-bridge";
@@ -89,15 +92,18 @@ const optionsId = `cascader-editor-options-${useId()}`;
 const editor = inject(selectionEditorSurface, undefined);
 const searchInputRef = ref<{ focus: () => void }>();
 const focusEditorSearch = () => searchInputRef.value?.focus();
-const { controller, keyboardHandler, listboxId, focusFallback, multipleDialogId, reportPopupElement } = defineProps<{
+const { controller, keyboardHandler, listboxId, focusFallback, dialogId, reportPopupElement } = defineProps<{
   controller: UnwrapNestedRefs<CascaderController>;
   reportPopupElement?: (element: HTMLElement | null) => void
-  multipleDialogId?: string
+  dialogId?: string
   listboxId?: string
   focusFallback?: () => void;
   searchable?: boolean;
   keyboardHandler?: (event: KeyboardEvent) => void | Promise<void>;
 }>();
+const hierarchyPanel = ref<{ $el: HTMLElement }>()
+const hierarchyElement = computed(() => hierarchyPanel.value?.$el)
+defineExpose({ hierarchyElement })
 let menuDisposed = false;
 onBeforeUnmount(() => { menuDisposed = true; });
 const focusSearchFallback = () => {

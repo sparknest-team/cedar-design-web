@@ -1,3 +1,4 @@
+import { isShadowRoot } from '../_utils/is-shadow-root'
 import { computed, defineComponent, inject, nextTick, onBeforeUnmount, onBeforeUpdate, onUpdated, PropType, ref, watch, watchPostEffect } from 'vue'
 import { useEmptySlot } from '../_components/selection-field/empty-slot'
 import { createNamespace, getPrefixCls } from '../_utils/global-config'
@@ -55,12 +56,13 @@ export default defineComponent({
     const isFocusUnclaimed = (root: Document | ShadowRoot, doc: Document) => {
       const active = root.activeElement
       if (active && active !== doc.body && active !== doc.documentElement) return false
-      if ('host' in root) {
+      if (isShadowRoot(root)) {
         let host = root.host
-        while ('host' in host.getRootNode()) {
-          const parent = host.getRootNode() as ShadowRoot
+        let parent = host.getRootNode()
+        while (isShadowRoot(parent)) {
           if (parent.activeElement && parent.activeElement !== host) return false
           host = parent.host
+          parent = host.getRootNode()
         }
         if (doc.activeElement && doc.activeElement !== host && doc.activeElement !== doc.body && doc.activeElement !== doc.documentElement) return false
       }

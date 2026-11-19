@@ -46,7 +46,10 @@
     >
       <div :class="`${prefixCls}-content-wrapper`">
         <div
+          ref="contentRef"
           :style="contentStyle"
+          :role="nativeGroup ? 'group' : undefined"
+          :aria-labelledby="nativeGroup ? resolvedLabelAttrs.id : undefined"
           :class="[
             `${prefixCls}-content`,
             {
@@ -77,6 +80,7 @@
 </template>
 
 <script lang="ts">
+import { useNativeLabel } from "./use-native-label";
 import type { SlotsType } from "vue";
 import type { FormItemSlots } from "./types";
 import { provideEmptyValues } from "../_utils/empty-value";
@@ -244,11 +248,21 @@ export default defineComponent({
       visible: () => !props.hideLabel && Boolean(props.label || slots.label),
       attributes: () => props.labelAttrs,
     });
-    const resolvedLabelAttrs = computed(() => ({
-      ...props.labelAttrs,
-      ...(labelContext.ownId.value ? { id: labelContext.ownId.value } : {}),
-      ...(presentationState.readPretty.value ? { for: undefined } : {}),
-    }));
+    const contentRef = ref<HTMLElement>();
+    const nativeGroup = labelContext.group
+    const nativeTarget = useNativeLabel(contentRef, nativeGroup, `.${prefixCls}`, () =>
+      props.labelComponent === 'label' && !presentationState.readPretty.value &&
+      props.labelAttrs?.for === undefined && props.labelAttrs?.htmlFor === undefined
+        ? labelContext.ownId.value : undefined,
+    )
+    const resolvedLabelAttrs = computed(() => {
+      const { for: explicitFor, htmlFor, ...attrs } = props.labelAttrs ?? {}
+      return {
+        ...attrs,
+        ...(labelContext.ownId.value ? { id: labelContext.ownId.value } : {}),
+        for: presentationState.readPretty.value ? undefined : explicitFor ?? htmlFor ?? nativeTarget.value,
+      }
+    });
 
 
     const mergedRules = computed(() => {
@@ -274,6 +288,7 @@ export default defineComponent({
     );
 
     const formItemCtx = inject(formItemInjectionKey, undefined);
+    const delegatesFeedback = computed(() => props.noStyle && !presentationState.readPretty.value);
     const feedbackOwner = Symbol('form-item-feedback');
     const feedbackSources = new Map<string, Map<symbol, { status: ValidateStatus | ""; message: string }>>();
 
@@ -302,17 +317,17 @@ export default defineComponent({
       validateStatus[field] = effective.status;
       validateMessage[field] = effective.message;
 
-      if (props.noStyle) {
+      if (delegatesFeedback.value) {
         formItemCtx?.updateValidateState(field, effective, feedbackOwner);
       }
     };
 
     // A no-style item delegates feedback to its parent. Keep the parent in
     // sync when that ownership changes after an error has already been set.
-    watch(() => props.noStyle, (noStyle) => {
+    watch(delegatesFeedback, (delegate) => {
       if (!formItemCtx) return;
       for (const name of Object.keys(validateStatus)) {
-        formItemCtx.updateValidateState(name, noStyle
+        formItemCtx.updateValidateState(name, delegate
           ? { status: validateStatus[name], message: validateMessage[name] ?? '' }
           : { status: '', message: '' }, feedbackOwner);
       }
@@ -613,6 +628,8 @@ export default defineComponent({
     return {
       presentationState,
       resolvedLabelAttrs,
+      nativeGroup,
+      contentRef,
       prefixCls,
       contentStyle,
       labelRegistry:
