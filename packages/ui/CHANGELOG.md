@@ -1,32 +1,9 @@
 ---
 
-## 1.3.0
-### Minor Changes
-
-
-
-- [#6](https://github.com/loca-spirit/cedar-design-web/pull/6) [`6620155`](https://github.com/loca-spirit/cedar-design-web/commit/6620155abe7d3bb91703996e62a3fe8eeb518b14) Thanks [@loca-spirit](https://github.com/loca-spirit)! - Release the public packages together at 1.2.0 so applications can install matching versions.
-
-
-### Patch Changes
-
-
-
-- [#6](https://github.com/loca-spirit/cedar-design-web/pull/6) [`6620155`](https://github.com/loca-spirit/cedar-design-web/commit/6620155abe7d3bb91703996e62a3fe8eeb518b14) Thanks [@loca-spirit](https://github.com/loca-spirit)! - Keep a standard Textarea without a suffix within the field's width.
-
-
-
-- [#6](https://github.com/loca-spirit/cedar-design-web/pull/6) [`6620155`](https://github.com/loca-spirit/cedar-design-web/commit/6620155abe7d3bb91703996e62a3fe8eeb518b14) Thanks [@loca-spirit](https://github.com/loca-spirit)! - Fix keyboard listener types in Trigger while preserving Escape handling and listener cleanup across document windows.
-
-- Updated dependencies [[`6620155`](https://github.com/loca-spirit/cedar-design-web/commit/6620155abe7d3bb91703996e62a3fe8eeb518b14)]:
-  - @cedar-design/icons-vue@1.3.0
-  - @cedar-design/shared-vue@1.2.0
-  - @cedar-design/use-vue@1.3.0
-
 ## 1.2.0
 ### Minor Changes
 
-
+- [#6](https://github.com/loca-spirit/cedar-design-web/pull/6) [`6620155`](https://github.com/loca-spirit/cedar-design-web/commit/6620155abe7d3bb91703996e62a3fe8eeb518b14) Thanks [@loca-spirit](https://github.com/loca-spirit)! - Release the public packages together at 1.2.0 so applications can install matching versions.
 
 - [#1](https://github.com/loca-spirit/cedar-design-web/pull/1) [`38eb17b`](https://github.com/loca-spirit/cedar-design-web/commit/38eb17b7aeb14ce04638b3e51c8286d7dab5787d) Thanks [@loca-spirit](https://github.com/loca-spirit)! - Replace CFormSection and Form.Section with CSection. Import Section and its types from the Section entry and rename c-form-section CSS overrides to c-section. Inside Form, Section retains the previous field layout and appearance.
 
@@ -38,7 +15,16 @@
 
 ### Patch Changes
 
+- [#6](https://github.com/loca-spirit/cedar-design-web/pull/6) [`6620155`](https://github.com/loca-spirit/cedar-design-web/commit/6620155abe7d3bb91703996e62a3fe8eeb518b14) Thanks [@loca-spirit](https://github.com/loca-spirit)! - Keep a standard Textarea without a suffix within the field's width.
 
+
+
+- [#6](https://github.com/loca-spirit/cedar-design-web/pull/6) [`6620155`](https://github.com/loca-spirit/cedar-design-web/commit/6620155abe7d3bb91703996e62a3fe8eeb518b14) Thanks [@loca-spirit](https://github.com/loca-spirit)! - Fix keyboard listener types in Trigger while preserving Escape handling and listener cleanup across document windows.
+
+- Updated dependencies [[`6620155`](https://github.com/loca-spirit/cedar-design-web/commit/6620155abe7d3bb91703996e62a3fe8eeb518b14)]:
+  - @cedar-design/icons-vue@1.2.0
+  - @cedar-design/shared-vue@1.2.0
+  - @cedar-design/use-vue@1.2.0
 
 - [#5](https://github.com/loca-spirit/cedar-design-web/pull/5) [`60c9c1a`](https://github.com/loca-spirit/cedar-design-web/commit/60c9c1a504108fde2acfde47e84554770e57835b) Thanks [@loca-spirit](https://github.com/loca-spirit)! - Fix native form label targeting and nested field feedback, Cascader keyboard and search ownership, popup reference motion tracking, and inherited reading direction. Align Checkbox and Radio theme tokens and refresh their documentation.
 
