@@ -13,10 +13,12 @@ const theme = ref<"light" | "dark">("dark");
     <c-theme-provider :theme="theme" class="theme-region">
       <p>{{ inlineCopy.outer }} {{ theme }}</p>
       <c-button status="primary">{{ inlineCopy.themedButton }}</c-button>
-      <c-select
+      <c-form-item layout="vertical" hide-label>
+<c-select
         :options="[{ label: 'Body popup inherits theme', value: 1 }]"
         :placeholder="inlineCopy.openPopup"
       />
+</c-form-item>
       <c-theme-provider theme="light" class="theme-region">
         <p>{{ inlineCopy.nestedLight }}</p>
         <c-button variant="outline">{{ inlineCopy.lightButton }}</c-button>
