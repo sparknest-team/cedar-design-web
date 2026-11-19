@@ -47,20 +47,24 @@ test("window changes preserve drag targets and data changes reset stale size cac
     title: "Task",
     start: "2026-09-22T09:00:00",
     end: "2026-09-22T10:00:00",
-    resourceIds: ["r900"],
+    resourceIds: ["r40"],
   };
-  const w = setup({ defaultValue: [event], history: true });
+  const w = setup({
+    resources: resources.slice(0, 80),
+    defaultValue: [event],
+    history: true,
+  });
   try {
-    w.getComponent(VirtualList).vm.scrollTo({ index: 900 });
+    w.getComponent(VirtualList).vm.scrollTo({ index: 40 });
     await flushPromises();
     const card = w.getComponent(Card);
     card.vm.$emit("drag-start", card.props("event"), false);
-    await w.find('[data-scheduler-resource="r901"]').trigger("drop");
+    await w.find('[data-scheduler-resource="r41"]').trigger("drop");
     await flushPromises();
     expect(
       (w.emitted("update:modelValue")![0][0] as any[])[0].resourceIds,
-    ).toEqual(["r901"]);
-    expect(w.find('[data-scheduler-resource="r900"]').exists()).toBe(true);
+    ).toEqual(["r41"]);
+    expect(w.find('[data-scheduler-resource="r40"]').exists()).toBe(true);
     await w.setProps({ resources: resources.slice(0, 2) });
     expect(w.findAll(".c-scheduler__timeline-row")).toHaveLength(2);
   } finally {
