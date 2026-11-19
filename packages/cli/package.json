@@ -1,6 +1,6 @@
 {
   "name": "@cedar-design/cli-vue",
-  "version": "1.1.12",
+  "version": "1.2.0",
   "description": "Cedar build and development CLI",
   "license": "MIT",
   "type": "module",
