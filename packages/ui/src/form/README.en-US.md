@@ -10,7 +10,7 @@ Horizontal form items use zero Row gutter by default, preserving the standard 16
 
 ## Field names
 
-After mounting, the default label focuses the only text input, textarea or select in the field content. Adding a second independent control gives the group the visible label’s name. Give each control its own accessible name. For the association to work in server-rendered HTML, or to target a specific control in a composite field, set `label-attrs.for` and the matching control `id`. When both `for` and `htmlFor` are supplied, `for` takes precedence. Read-only display clears the target.
+After mounting, the default label focuses the only text input, textarea or select in the field content. Adding a second independent control gives the group the visible label’s name. Give each control its own accessible name. For the association to work in server-rendered HTML, or to target a specific control in a composite field, set `label-attrs.for` and the matching control `id`. When both `for` and `htmlFor` are supplied, `for` takes precedence. Read-only display clears the target. In streamed HTML the label can reach the browser before an asynchronous child chooses which fields to render. For a clickable first-paint label, allocate a stable ID in the parent and forward it through the child component to its native input. Use distinct IDs for repeated rows.
 
 When `validate-status="error"` has no automatic validation error, the field associates visible `help` text or slot content through `aria-describedby`, preserving any supplied description. An automatic error takes precedence.
 
@@ -515,6 +515,8 @@ Layout, label/content columns, styles, alignment and flex inherit from Form when
 | label-attrs | Native label attributes; for targets the actual control id | `object` | `-` |
 
 ### FormItem Slots
+
+When rendering a list of inputs in the default slot on the server, use `v-for` with a stable `:key`. Adding `v-memo` to the same node can leave the inputs out of the initial HTML. This applies to both values of `no-style`. To keep `v-memo`, move the list template into a separate Vue component and render that component in the slot, for example `<FieldList :rows="rows" />`. Keep the loop, key, and memo dependencies together in `FieldList.vue`.
 
 | Slot | Description | Prop |
 | ------ | :------: | ---- |

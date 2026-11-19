@@ -20,6 +20,24 @@ line 在标题后绘制装饰线，操作放入 extra 插槽。
 
 <demo src="./__demos__/line.vue"></demo>
 
+### 卡片与自定义标题
+
+通过 title 和 description 插槽提供卡片标题与说明。打开 `show-marker` 显示标题色条，用 `heading-level` 指定标题层级。
+
+<demo src="./__demos__/card.vue"></demo>
+
+### 有标题、仅说明与纯正文
+
+切换 plain、line、card，并分别勾选标题和说明，观察同一份内容在不同组合下的效果。初始只显示正文。两个选项都关闭时，整个头部会收起，line 的标题装饰线也随之收起。
+
+<demo src="./__demos__/heading-options.vue"></demo>
+
+### 行内表单分组
+
+放在 Form 中时，Section 默认采用 line 并显示标题色条。字段跟随 inline 布局横排，空间不足时换行。开启 `show-end-divider` 可在字段下方添加结束线。
+
+<demo src="./__demos__/inline-form.vue"></demo>
+
 ## API
 
 ### Section Props

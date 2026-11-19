@@ -24,7 +24,61 @@ function bilingual(value: string) {
 }
 const languageName = /^(?:english|isEnglish|isEn|lang|language|locale)$/i;
 
+const siteLanguages = new Set(["zh-CN", "en-US"]);
+const equalityOperators = new Set<ts.SyntaxKind>([
+  ts.SyntaxKind.EqualsEqualsToken,
+  ts.SyntaxKind.EqualsEqualsEqualsToken,
+  ts.SyntaxKind.ExclamationEqualsToken,
+  ts.SyntaxKind.ExclamationEqualsEqualsToken,
+]);
+
+function inspectScript(code: string, report: (reason: string) => void) {
+  const tree = ts.createSourceFile(
+    "demo.tsx",
+    code,
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.TSX,
+  );
+  function script(node: ts.Node) {
+    if (
+      (ts.isStringLiteral(node) ||
+        ts.isNoSubstitutionTemplateLiteral(node)) &&
+      bilingual(node.text)
+    )
+      report("mixed bilingual literal");
+    if (ts.isIdentifier(node) && languageName.test(node.text))
+      report(`local language identifier ${node.text}`);
+    if (
+      ts.isCallExpression(node) &&
+      ts.isIdentifier(node.expression) &&
+      ["useLocale", "addI18nMessages"].includes(node.expression.text)
+    )
+      report("local language mutation");
+    if (
+      ts.isBinaryExpression(node) &&
+      equalityOperators.has(node.operatorToken.kind) &&
+      [node.left, node.right].some(
+        (operand) => ts.isStringLiteralLike(operand) && siteLanguages.has(operand.text),
+      )
+    )
+      report("local language comparison: read demo copy through useDemoLocale(scope)");
+    ts.forEachChild(node, script);
+  }
+  script(tree);
+}
+
 describe("all component demos follow the global language", () => {
+  it.each([
+    "english.value = language === 'en-US'",
+    "watch(getLocale, (next) => { active.value = next === 'en-US' })",
+    "'zh-CN' !== getLocale() ? first : second",
+  ])("rejects a local language comparison in %s", (code) => {
+    const reasons: string[] = [];
+    inspectScript(code, (reason) => reasons.push(reason));
+    expect(reasons).toContain("local language comparison: read demo copy through useDemoLocale(scope)");
+  });
+
   it("contains no local language selectors, bilingual DOM, or browser-dependent formatting", () => {
     const violations: string[] = [];
     const files = globSync("src/**/__demos__/**/*.vue", { cwd: root });
@@ -39,7 +93,7 @@ describe("all component demos follow the global language", () => {
         if (/\[lang\s*[=|]/.test(style.content)) report("CSS language branch");
       }
       function template(node: any) {
-        if (node.type === 5) inspectScript(node.content.content);
+        if (node.type === 5) inspectScript(node.content.content, report);
         if (
           node.type === 2 &&
           (bilingual(node.content) ||
@@ -47,7 +101,7 @@ describe("all component demos follow the global language", () => {
         )
           report("mixed bilingual text");
         for (const prop of node.props ?? []) {
-          if (prop.type === 7 && prop.exp) inspectScript(prop.exp.content);
+          if (prop.type === 7 && prop.exp) inspectScript(prop.exp.content, report);
           const name = prop.type === 6 ? prop.name : prop.arg?.content;
           if (prop.type === 6 && prop.value && bilingual(prop.value.content))
             report("mixed bilingual attribute");
@@ -63,35 +117,8 @@ describe("all component demos follow the global language", () => {
       }
       if (descriptor.template)
         template(parseTemplate(descriptor.template.content));
-      function inspectScript(code: string) {
-        const tree = ts.createSourceFile(
-          file + ".ts",
-          code,
-          ts.ScriptTarget.Latest,
-          true,
-          ts.ScriptKind.TSX,
-        );
-        function script(node: ts.Node) {
-          if (
-            (ts.isStringLiteral(node) ||
-              ts.isNoSubstitutionTemplateLiteral(node)) &&
-            bilingual(node.text)
-          )
-            report("mixed bilingual literal");
-          if (ts.isIdentifier(node) && languageName.test(node.text))
-            report(`local language identifier ${node.text}`);
-          if (
-            ts.isCallExpression(node) &&
-            ts.isIdentifier(node.expression) &&
-            ["useLocale", "addI18nMessages"].includes(node.expression.text)
-          )
-            report("local language mutation");
-          ts.forEachChild(node, script);
-        }
-        script(tree);
-      }
       for (const block of [descriptor.scriptSetup, descriptor.script])
-        if (block) inspectScript(block.content);
+        if (block) inspectScript(block.content, report);
       if (/\.toLocale(?:DateString|TimeString|String)\s*\(/.test(source))
         report("formatting bypasses the global locale");
     }

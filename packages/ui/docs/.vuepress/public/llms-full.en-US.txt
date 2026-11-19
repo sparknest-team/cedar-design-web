@@ -19479,6 +19479,104 @@ function reset() {
 </style>
 ```
 
+### Above a table
+
+The filter and table share the same left edge. Enter an order number or customer name to filter the rows.
+
+Example source: src/filter-form/__demos__/above-table.vue
+
+```vue
+<script setup lang="ts">
+import { computed, ref } from 'vue'
+import { Input, type FilterFormField } from '@cedar-design/ui-vue'
+import { useDemoLocale } from '../../__demos__/locale'
+
+const copy = useDemoLocale('filterFormLayout')
+const filter = ref<Record<string, unknown>>({})
+const fields = computed<FilterFormField[]>(() => [
+  { field: 'keyword', label: copy.value.keyword, component: Input, props: { clearable: true } },
+])
+const columns = computed(() => [
+  { title: copy.value.order, dataIndex: 'key' },
+  { title: copy.value.customer, dataIndex: 'customer' },
+])
+const orders = [
+  { key: 'SO-1042', customer: 'Lin Chen' },
+  { key: 'SO-1043', customer: 'Maya Patel' },
+  { key: 'SO-1044', customer: 'Alex Kim' },
+]
+const rows = computed(() => {
+  const keyword = String(filter.value.keyword ?? '').trim().toLowerCase()
+  return orders.filter(({ key, customer }) => [key, customer].some(value => value.toLowerCase().includes(keyword)))
+})
+</script>
+
+<template>
+  <div class="order-table">
+    <c-filter-form v-model="filter" :fields="fields" :collapsible="false" />
+    <c-table :columns="columns" :data="rows" :pagination="false" />
+  </div>
+</template>
+
+<style scoped>
+.order-table {
+  display: grid;
+  gap: var(--c-sys-space-5);
+}
+</style>
+```
+
+### Inside a Card
+
+An outline Card supplies the border, surface and padding around the filters. Apply or reset the status filter to update the order list.
+
+Example source: src/filter-form/__demos__/inside-card.vue
+
+```vue
+<script setup lang="ts">
+import { computed, ref } from 'vue'
+import { Select, type FilterFormField } from '@cedar-design/ui-vue'
+import { useDemoLocale } from '../../__demos__/locale'
+
+const copy = useDemoLocale('filterFormLayout')
+const filter = ref<Record<string, unknown>>({})
+const appliedStatus = ref('')
+const fields = computed<FilterFormField[]>(() => [{
+  field: 'status',
+  label: copy.value.status,
+  component: Select,
+  props: { clearable: true, options: [
+    { label: copy.value.open, value: 'open' },
+    { label: copy.value.closed, value: 'closed' },
+  ] },
+}])
+const orders = [
+  { id: 'SO-1042', status: 'open' },
+  { id: 'SO-1043', status: 'closed' },
+  { id: 'SO-1044', status: 'open' },
+] as const
+const rows = computed(() => orders.filter(order => !appliedStatus.value || order.status === appliedStatus.value))
+function reset() {
+  filter.value = {}
+  appliedStatus.value = ''
+}
+</script>
+
+<template>
+  <c-card :title="copy.title" variant="outline">
+    <c-filter-form v-model="filter" :fields="fields" :collapsible="false">
+      <template #actions>
+        <c-button @click="reset">{{ copy.reset }}</c-button>
+        <c-button status="primary" @click="appliedStatus = String(filter.status ?? '')">{{ copy.search }}</c-button>
+      </template>
+    </c-filter-form>
+  </c-card>
+  <ul :aria-label="copy.orders">
+    <li v-for="order in rows" :key="order.id">{{ order.id }} · {{ copy[order.status] }}</li>
+  </ul>
+</template>
+```
+
 ## Content and presentation
 
 ### Registered Fields
@@ -19753,17 +19851,12 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | --- | --- | --- |
 | `--c-filter-form-action-offset` | `calc(1em * var(--c-form-line-height) + var(--c-form-vertical-label-margin-bottom))` | `padding-top` |
 | `--c-filter-form-actions-gap` | `var(--c-sys-space-5)` | `gap` |
-| `--c-filter-form-background-color` | `var(--c-sys-color-surface-default)` | `background-color` |
+| `--c-filter-form-background-color` | `transparent` | `background-color` |
 | `--c-filter-form-border-color` | `var(--c-sys-color-border-subtle)` | `border` |
-| `--c-filter-form-border-radius` | `var(--c-border-radius-md)` | `border-radius` |
-| `--c-filter-form-border-width` | `1px` | `border` |
-| `--c-filter-form-collapse-color` | `var(--c-color-text-2)` | `color` |
-| `--c-filter-form-collapse-gap` | `4px` | `gap` |
-| `--c-filter-form-collapse-hover-color` | `var(--c-sys-color-content-brand)` | `color`, `outline` |
-| `--c-filter-form-focus-offset` | `3px` | `outline-offset` |
-| `--c-filter-form-focus-width` | `2px` | `outline` |
+| `--c-filter-form-border-radius` | `0px` | `border-radius` |
+| `--c-filter-form-border-width` | `0px` | `border` |
 | `--c-filter-form-item-margin-bottom` | `0px` | `margin-bottom` |
-| `--c-filter-form-padding` | `var(--c-sys-space-7)` | `padding` |
+| `--c-filter-form-padding` | `0px` | `padding` |
 
 </div>
 
@@ -46592,6 +46685,104 @@ const copy = useDemoLocale('section')
 
 const expanded = ref(false)
 </script>
+```
+
+### Card with a custom heading
+
+Use the title and description slots for the card header. `show-marker` adds an accent before the heading, and `heading-level` sets its HTML level.
+
+Example source: src/section/__demos__/card.vue
+
+```vue
+<script setup lang="ts">
+import { useDemoLocale } from '../../__demos__/locale'
+
+const copy = useDemoLocale('section')
+</script>
+
+<template>
+  <c-section variant="card" show-marker :heading-level="3">
+    <template #title>{{ copy.history }}</template>
+    <template #description>{{ copy.latestRelease }}</template>
+    <p>{{ copy.exportRelease }}</p>
+  </c-section>
+</template>
+```
+
+### With or without a heading
+
+Switch between plain, line and card, then toggle the heading and description independently. The example starts with just the body. With both options off, Section omits the header, including the line in the line variant.
+
+Example source: src/section/__demos__/heading-options.vue
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useDemoLocale } from '../../__demos__/locale'
+import type { SectionVariant } from '../props'
+
+const copy = useDemoLocale('section')
+const variants = ['plain', 'line', 'card'] as const
+const variant = ref<SectionVariant>('card')
+const withTitle = ref(false)
+const withDescription = ref(false)
+</script>
+
+<template>
+  <c-space direction="column" align="stretch">
+    <c-radio-group
+      v-model="variant"
+      :aria-label="copy.variantLabel"
+      :options="variants.map(value => ({ value, label: value }))"
+    />
+    <c-space wrap>
+      <c-checkbox v-model="withTitle">{{ copy.withTitle }}</c-checkbox>
+      <c-checkbox v-model="withDescription">{{ copy.withDescription }}</c-checkbox>
+    </c-space>
+    <c-section
+      :variant="variant"
+      :title="withTitle ? copy.permissions : undefined"
+      :description="withDescription ? copy.scope : undefined"
+    >
+      <dl>
+        <dt>{{ copy.admin }}</dt>
+        <dd>{{ copy.manage }}</dd>
+        <dt>{{ copy.member }}</dt>
+        <dd>{{ copy.update }}</dd>
+      </dl>
+    </c-section>
+  </c-space>
+</template>
+```
+
+### Grouping inline form fields
+
+Inside Form, Section defaults to line with a heading marker. The fields follow the inline layout and wrap when space is limited. `show-end-divider` adds a line after the fields.
+
+Example source: src/section/__demos__/inline-form.vue
+
+```vue
+<script setup lang="ts">
+import { reactive } from 'vue'
+import { useDemoLocale } from '../../__demos__/locale'
+
+const copy = useDemoLocale('layout')
+const section = useDemoLocale('section')
+const model = reactive({ name: '', department: '' })
+</script>
+
+<template>
+  <c-form :model="model" layout="inline" edit-mode="direct">
+    <c-section :title="section.memberDetails" show-end-divider>
+      <c-form-item field="name" :label="copy.labels.name">
+        <c-input v-model="model.name" />
+      </c-form-item>
+      <c-form-item field="department" :label="copy.labels.department">
+        <c-input v-model="model.department" />
+      </c-form-item>
+    </c-section>
+  </c-form>
+</template>
 ```
 
 ## API

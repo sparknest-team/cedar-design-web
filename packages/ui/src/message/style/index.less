@@ -137,8 +137,11 @@
   opacity: 0;
 }
 
-.fade-message-leave-active {
+.fade-message-leave-active:not(.c-message-standalone) {
   position: absolute;
+}
+
+.fade-message-leave-active {
   transition: opacity var(~"--c-message-transition-duration")
     var(~"--c-message-transition-timing-function");
 }

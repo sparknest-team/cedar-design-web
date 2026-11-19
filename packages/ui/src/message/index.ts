@@ -1,3 +1,4 @@
+import { useVisualSurface } from '../_utils/visual-surface'
 import { useFeedbackZIndex } from '../context/zIndex'
 import type { App, AppContext } from 'vue'
 import { createVNode, defineComponent, h, nextTick, render, shallowReactive } from 'vue'
@@ -53,7 +54,9 @@ class MessageManager {
 
     const Host = defineComponent({
       setup: () => {
+        this.host.setAttribute('data-card-feedback-host', '')
         const zIndex = useFeedbackZIndex(() => target.ownerDocument)
+        useVisualSurface(() => this.items.length ? this.host : undefined, () => zIndex.value)
         return () => h(
           'div',
           {

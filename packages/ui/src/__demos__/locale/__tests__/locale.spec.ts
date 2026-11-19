@@ -102,6 +102,24 @@ const demos: Record<
     zh: "自定义格式",
     en: "format",
   },
+  sectionCard: {
+    load: () => import("../../../section/__demos__/card.vue"),
+    plugins: ["Section"],
+    zh: "最近一次发布的更新内容。",
+    en: "Changes in the latest release.",
+  },
+  sectionHeadingOptions: {
+    load: () => import("../../../section/__demos__/heading-options.vue"),
+    plugins: ["Section", "Radio", "Checkbox", "Space"],
+    zh: "显示标题",
+    en: "Show heading",
+  },
+  sectionInlineForm: {
+    load: () => import("../../../section/__demos__/inline-form.vue"),
+    plugins: ["Section", "Form", "Input"],
+    zh: "成员信息",
+    en: "Member details",
+  },
   sectionPlain: {
     load: () => import("../../../section/__demos__/plain.vue"),
     plugins: ["Section"],
@@ -229,6 +247,24 @@ describe("demo locales", () => {
     },
     120_000,
   );
+  it("previews each Section variant with and without a heading or description", async () => {
+    const wrapper = await render("sectionHeadingOptions");
+    const section = wrapper.get("section");
+    const [title, description] = wrapper.findAll('input[type="checkbox"]');
+    for (const radio of wrapper.findAll('input[type="radio"]')) {
+      await radio.setValue(true);
+      expect(section.classes()).toContain(`c-section--${(radio.element as HTMLInputElement).value}`);
+      expect(section.find(".c-section__header").exists()).toBe(false);
+      await title.setValue(true);
+      expect(section.get("h2").text()).toBe("成员权限");
+      await description.setValue(true);
+      expect(section.get(".c-section__description").text()).toContain("权限变更");
+      await title.setValue(false);
+      expect(section.find("h2").exists()).toBe(false);
+      expect(section.find(".c-section__description").exists()).toBe(true);
+      await description.setValue(false);
+    }
+  });
   it("formats dates and numbers reactively using the header language", () => {
     const date = new Date(2026, 8, 9, 13, 5);
     const result = computed(() => [

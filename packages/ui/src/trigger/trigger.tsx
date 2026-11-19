@@ -1,3 +1,4 @@
+import { useVisualSurface } from '../_utils/visual-surface'
 import {
   Comment,
   Fragment,
@@ -99,6 +100,7 @@ export default defineComponent({
       else emit('closed')
     })
 
+    useVisualSurface(() => renderState.displayed.value ? popup.value : undefined, () => platform.zIndex.value)
     const positioner = useTriggerPositioner(props, {
       direction: dir,
       container: positionContainer,

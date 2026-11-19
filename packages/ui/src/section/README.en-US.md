@@ -17,6 +17,24 @@ Group a heading, description, actions and content in a page, drawer or card. Out
 
 <demo src="./__demos__/line.vue"></demo>
 
+### Card with a custom heading
+
+Use the title and description slots for the card header. `show-marker` adds an accent before the heading, and `heading-level` sets its HTML level.
+
+<demo src="./__demos__/card.vue"></demo>
+
+### With or without a heading
+
+Switch between plain, line and card, then toggle the heading and description independently. The example starts with just the body. With both options off, Section omits the header, including the line in the line variant.
+
+<demo src="./__demos__/heading-options.vue"></demo>
+
+### Grouping inline form fields
+
+Inside Form, Section defaults to line with a heading marker. The fields follow the inline layout and wrap when space is limited. `show-end-divider` adds a line after the fields.
+
+<demo src="./__demos__/inline-form.vue"></demo>
+
 ## API
 
 ### Section Props

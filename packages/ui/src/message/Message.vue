@@ -5,10 +5,12 @@
       name="fade-message"
       :appear="!hydrating"
       @after-enter="emit('opened')"
-      @after-leave="emit('closed')"
+      @before-leave="keepLeavingSurface"
+      @after-leave="finishLeave"
     >
       <div
         v-if="open"
+        ref="surface"
       :dir="readingDirection"
         v-bind="mergeProps(themeScope, regionAttrs())"
         :style="{ '--c-internal-message-z-index': feedbackZIndex }"
@@ -60,10 +62,11 @@
 </template>
 
 <script setup lang="ts">
+import { useVisualSurface } from '../_utils/visual-surface'
 import { useFeedbackZIndex } from '../context/zIndex'
 import { useThemeScope } from '../theme-provider/context'
 import { useDirection } from '../_utils/direction'
-import { mergeProps, useAttrs, defineComponent, getCurrentInstance, onMounted, Transition, watch, type PropType } from 'vue';
+import { mergeProps, useAttrs, defineComponent, getCurrentInstance, onMounted, shallowRef, Transition, watch, type PropType } from 'vue';
 import { IconCheckCircleFill } from '@cedar-design/icons-vue/icon-check-circle-fill';
 import { IconClose } from '@cedar-design/icons-vue/icon-close';
 import { IconCloseCircleFill } from '@cedar-design/icons-vue/icon-close-circle-fill';
@@ -112,6 +115,20 @@ const feedbackZIndex = useFeedbackZIndex(() => {
     ? (typeof document === 'undefined' ? undefined : document)
     : target.ownerDocument
 })
+const surface = shallowRef<HTMLElement>()
+const leavingSurface = shallowRef<HTMLElement>()
+useVisualSurface(
+  () => props.popupContainer === false ? undefined : surface.value ?? leavingSurface.value,
+  () => feedbackZIndex.value,
+  'positioned',
+)
+function keepLeavingSurface(element: Element) {
+  leavingSurface.value = element as HTMLElement
+}
+function finishLeave(element: Element) {
+  if (leavingSurface.value === element) leavingSurface.value = undefined
+  emit('closed')
+}
 const requestClose = () => emit("update:open", false);
 const { pause, resume, restart } = useMessageTimer({
   open: () => props.open,

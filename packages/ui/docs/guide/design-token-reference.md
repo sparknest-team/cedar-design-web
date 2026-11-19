@@ -1304,17 +1304,12 @@ permalink: /guide/design-token-reference/
 | --- | --- | --- | --- |
 | `--c-filter-form-action-offset` | 公开 | `calc(1em * var(--c-form-line-height) + var(--c-form-vertical-label-margin-bottom))` | 本组件 CSS<br>`padding-top` |
 | `--c-filter-form-actions-gap` | 公开 | `var(--c-sys-space-5)` | 本组件 CSS<br>`gap` |
-| `--c-filter-form-background-color` | 公开 | `var(--c-sys-color-surface-default)` | 本组件 CSS<br>`background-color` |
+| `--c-filter-form-background-color` | 公开 | `transparent` | 本组件 CSS<br>`background-color` |
 | `--c-filter-form-border-color` | 公开 | `var(--c-sys-color-border-subtle)` | 本组件 CSS<br>`border` |
-| `--c-filter-form-border-radius` | 公开 | `var(--c-border-radius-md)` | 本组件 CSS<br>`border-radius` |
-| `--c-filter-form-border-width` | 公开 | `1px` | 本组件 CSS<br>`border` |
-| `--c-filter-form-collapse-color` | 公开 | `var(--c-color-text-2)` | 本组件 CSS<br>`color` |
-| `--c-filter-form-collapse-gap` | 公开 | `4px` | 本组件 CSS<br>`gap` |
-| `--c-filter-form-collapse-hover-color` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color`, `outline` |
-| `--c-filter-form-focus-offset` | 公开 | `3px` | 本组件 CSS<br>`outline-offset` |
-| `--c-filter-form-focus-width` | 公开 | `2px` | 本组件 CSS<br>`outline` |
+| `--c-filter-form-border-radius` | 公开 | `0px` | 本组件 CSS<br>`border-radius` |
+| `--c-filter-form-border-width` | 公开 | `0px` | 本组件 CSS<br>`border` |
 | `--c-filter-form-item-margin-bottom` | 公开 | `0px` | 本组件 CSS<br>`margin-bottom` |
-| `--c-filter-form-padding` | 公开 | `var(--c-sys-space-7)` | 本组件 CSS<br>`padding` |
+| `--c-filter-form-padding` | 公开 | `0px` | 本组件 CSS<br>`padding` |
 
 </div>
 

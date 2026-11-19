@@ -19719,9 +19719,9 @@ Document: llms/zh-CN/components/filter-form.md
 
 在 `fields` 中直接传入组件并配置字段。宽屏会自动多列展示，超出时可展开/收起。
 
-筛选容器使用主题表面色（亮色为白色、暗色随主题适配）、轻描边与20px内边距，不再使用输入控件的浅填充背景。操作区按按钮实际宽度自适应预留列数，展开/收起与操作按钮始终保持一行，并与字段控件顶边对齐。收起时操作区位于首行右侧；展开后字段使用完整列布局，操作区位于最后一行右侧，末行空间不足时另起一行靠右。容器或按钮宽度变化时自动重新计算预留空间。单列/双列折叠默认保留一行字段和独立操作行，避免只剩按钮。展开/收起为原生按钮，支持Tab聚焦、Enter/空格操作并提供aria-expanded。行间距默认16px，可由grid-props.rowGap覆盖。
+操作区按按钮实际宽度自适应预留列数，展开/收起与操作按钮始终保持一行，并与字段控件顶边对齐。收起时操作区位于首行右侧；展开后字段使用完整列布局，操作区位于最后一行右侧，末行空间不足时另起一行靠右。容器或按钮宽度变化时自动重新计算预留空间。单列/双列折叠默认保留一行字段和独立操作行，避免只剩按钮。展开/收起为原生按钮，支持Tab聚焦、Enter/空格操作并提供aria-expanded。行间距默认16px，可由grid-props.rowGap覆盖。
 
-The filter uses the theme surface with a subtle border and 20px inset, rather than an input-fill background. Actions reserve columns according to their actual width, with the expand/collapse control and action buttons kept on one line. Collapsed actions sit at the right of the first row. Expanded fields use the full column layout, with actions at the right of the last row, or on a new row when there is insufficient space. Resizing the container or changing button widths recalculates the reservation. One- and two-column collapse retain a row of fields above the actions by default. Expand/collapse is a native keyboard-accessible button with aria-expanded. The default 16px row gap can be overridden through grid-props.rowGap.
+Actions reserve columns according to their actual width, with the expand/collapse control and action buttons kept on one line. Collapsed actions sit at the right of the first row. Expanded fields use the full column layout, with actions at the right of the last row, or on a new row when there is insufficient space. Resizing the container or changing button widths recalculates the reservation. One- and two-column collapse retain a row of fields above the actions by default. Expand/collapse is a native keyboard-accessible button with aria-expanded. The default 16px row gap can be overridden through grid-props.rowGap.
 
 Example source: src/filter-form/__demos__/basic.vue
 
@@ -19877,6 +19877,104 @@ const fields: FilterFormField[] = [
 ```
 
 所有字段组件统一使用 `modelValue` / `update:modelValue` 同步值。自定义组件也应遵循该协议；其他协议可通过包装组件适配。值同步与 FilterForm 的防抖 `change` 通知独立，`autoEmitChange: false` 时值仍会即时同步。
+
+### 直接放在表格上方
+
+筛选栏和表格左边缘对齐。输入订单号或客户名称，表格会实时显示匹配的订单。
+
+Example source: src/filter-form/__demos__/above-table.vue
+
+```vue
+<script setup lang="ts">
+import { computed, ref } from 'vue'
+import { Input, type FilterFormField } from '@cedar-design/ui-vue'
+import { useDemoLocale } from '../../__demos__/locale'
+
+const copy = useDemoLocale('filterFormLayout')
+const filter = ref<Record<string, unknown>>({})
+const fields = computed<FilterFormField[]>(() => [
+  { field: 'keyword', label: copy.value.keyword, component: Input, props: { clearable: true } },
+])
+const columns = computed(() => [
+  { title: copy.value.order, dataIndex: 'key' },
+  { title: copy.value.customer, dataIndex: 'customer' },
+])
+const orders = [
+  { key: 'SO-1042', customer: 'Lin Chen' },
+  { key: 'SO-1043', customer: 'Maya Patel' },
+  { key: 'SO-1044', customer: 'Alex Kim' },
+]
+const rows = computed(() => {
+  const keyword = String(filter.value.keyword ?? '').trim().toLowerCase()
+  return orders.filter(({ key, customer }) => [key, customer].some(value => value.toLowerCase().includes(keyword)))
+})
+</script>
+
+<template>
+  <div class="order-table">
+    <c-filter-form v-model="filter" :fields="fields" :collapsible="false" />
+    <c-table :columns="columns" :data="rows" :pagination="false" />
+  </div>
+</template>
+
+<style scoped>
+.order-table {
+  display: grid;
+  gap: var(--c-sys-space-5);
+}
+</style>
+```
+
+### 用 Card 包裹筛选区
+
+由 outline Card 提供边框、背景和内边距。选择订单状态后点击查询，或点击重置恢复全部订单。
+
+Example source: src/filter-form/__demos__/inside-card.vue
+
+```vue
+<script setup lang="ts">
+import { computed, ref } from 'vue'
+import { Select, type FilterFormField } from '@cedar-design/ui-vue'
+import { useDemoLocale } from '../../__demos__/locale'
+
+const copy = useDemoLocale('filterFormLayout')
+const filter = ref<Record<string, unknown>>({})
+const appliedStatus = ref('')
+const fields = computed<FilterFormField[]>(() => [{
+  field: 'status',
+  label: copy.value.status,
+  component: Select,
+  props: { clearable: true, options: [
+    { label: copy.value.open, value: 'open' },
+    { label: copy.value.closed, value: 'closed' },
+  ] },
+}])
+const orders = [
+  { id: 'SO-1042', status: 'open' },
+  { id: 'SO-1043', status: 'closed' },
+  { id: 'SO-1044', status: 'open' },
+] as const
+const rows = computed(() => orders.filter(order => !appliedStatus.value || order.status === appliedStatus.value))
+function reset() {
+  filter.value = {}
+  appliedStatus.value = ''
+}
+</script>
+
+<template>
+  <c-card :title="copy.title" variant="outline">
+    <c-filter-form v-model="filter" :fields="fields" :collapsible="false">
+      <template #actions>
+        <c-button @click="reset">{{ copy.reset }}</c-button>
+        <c-button status="primary" @click="appliedStatus = String(filter.status ?? '')">{{ copy.search }}</c-button>
+      </template>
+    </c-filter-form>
+  </c-card>
+  <ul :aria-label="copy.orders">
+    <li v-for="order in rows" :key="order.id">{{ order.id }} · {{ copy[order.status] }}</li>
+  </ul>
+</template>
+```
 
 ## 内容与展示
 
@@ -20150,17 +20248,12 @@ field 支持与 FormItem 一致的点号及方括号路径。写入时自动创�
 | --- | --- | --- |
 | `--c-filter-form-action-offset` | `calc(1em * var(--c-form-line-height) + var(--c-form-vertical-label-margin-bottom))` | `padding-top` |
 | `--c-filter-form-actions-gap` | `var(--c-sys-space-5)` | `gap` |
-| `--c-filter-form-background-color` | `var(--c-sys-color-surface-default)` | `background-color` |
+| `--c-filter-form-background-color` | `transparent` | `background-color` |
 | `--c-filter-form-border-color` | `var(--c-sys-color-border-subtle)` | `border` |
-| `--c-filter-form-border-radius` | `var(--c-border-radius-md)` | `border-radius` |
-| `--c-filter-form-border-width` | `1px` | `border` |
-| `--c-filter-form-collapse-color` | `var(--c-color-text-2)` | `color` |
-| `--c-filter-form-collapse-gap` | `4px` | `gap` |
-| `--c-filter-form-collapse-hover-color` | `var(--c-sys-color-content-brand)` | `color`, `outline` |
-| `--c-filter-form-focus-offset` | `3px` | `outline-offset` |
-| `--c-filter-form-focus-width` | `2px` | `outline` |
+| `--c-filter-form-border-radius` | `0px` | `border-radius` |
+| `--c-filter-form-border-width` | `0px` | `border` |
 | `--c-filter-form-item-margin-bottom` | `0px` | `margin-bottom` |
-| `--c-filter-form-padding` | `var(--c-sys-space-7)` | `padding` |
+| `--c-filter-form-padding` | `0px` | `padding` |
 
 </div>
 
@@ -47790,6 +47883,104 @@ const expanded = ref(false)
 </script>
 ```
 
+### 卡片与自定义标题
+
+通过 title 和 description 插槽提供卡片标题与说明。打开 `show-marker` 显示标题色条，用 `heading-level` 指定标题层级。
+
+Example source: src/section/__demos__/card.vue
+
+```vue
+<script setup lang="ts">
+import { useDemoLocale } from '../../__demos__/locale'
+
+const copy = useDemoLocale('section')
+</script>
+
+<template>
+  <c-section variant="card" show-marker :heading-level="3">
+    <template #title>{{ copy.history }}</template>
+    <template #description>{{ copy.latestRelease }}</template>
+    <p>{{ copy.exportRelease }}</p>
+  </c-section>
+</template>
+```
+
+### 有标题、仅说明与纯正文
+
+切换 plain、line、card，并分别勾选标题和说明，观察同一份内容在不同组合下的效果。初始只显示正文。两个选项都关闭时，整个头部会收起，line 的标题装饰线也随之收起。
+
+Example source: src/section/__demos__/heading-options.vue
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useDemoLocale } from '../../__demos__/locale'
+import type { SectionVariant } from '../props'
+
+const copy = useDemoLocale('section')
+const variants = ['plain', 'line', 'card'] as const
+const variant = ref<SectionVariant>('card')
+const withTitle = ref(false)
+const withDescription = ref(false)
+</script>
+
+<template>
+  <c-space direction="column" align="stretch">
+    <c-radio-group
+      v-model="variant"
+      :aria-label="copy.variantLabel"
+      :options="variants.map(value => ({ value, label: value }))"
+    />
+    <c-space wrap>
+      <c-checkbox v-model="withTitle">{{ copy.withTitle }}</c-checkbox>
+      <c-checkbox v-model="withDescription">{{ copy.withDescription }}</c-checkbox>
+    </c-space>
+    <c-section
+      :variant="variant"
+      :title="withTitle ? copy.permissions : undefined"
+      :description="withDescription ? copy.scope : undefined"
+    >
+      <dl>
+        <dt>{{ copy.admin }}</dt>
+        <dd>{{ copy.manage }}</dd>
+        <dt>{{ copy.member }}</dt>
+        <dd>{{ copy.update }}</dd>
+      </dl>
+    </c-section>
+  </c-space>
+</template>
+```
+
+### 行内表单分组
+
+放在 Form 中时，Section 默认采用 line 并显示标题色条。字段跟随 inline 布局横排，空间不足时换行。开启 `show-end-divider` 可在字段下方添加结束线。
+
+Example source: src/section/__demos__/inline-form.vue
+
+```vue
+<script setup lang="ts">
+import { reactive } from 'vue'
+import { useDemoLocale } from '../../__demos__/locale'
+
+const copy = useDemoLocale('layout')
+const section = useDemoLocale('section')
+const model = reactive({ name: '', department: '' })
+</script>
+
+<template>
+  <c-form :model="model" layout="inline" edit-mode="direct">
+    <c-section :title="section.memberDetails" show-end-divider>
+      <c-form-item field="name" :label="copy.labels.name">
+        <c-input v-model="model.name" />
+      </c-form-item>
+      <c-form-item field="department" :label="copy.labels.department">
+        <c-input v-model="model.department" />
+      </c-form-item>
+    </c-section>
+  </c-form>
+</template>
+```
+
 ## API
 
 ### Section Props
@@ -75141,17 +75332,12 @@ Document: llms/zh-CN/guide/design-token-reference.md
 | --- | --- | --- | --- |
 | `--c-filter-form-action-offset` | 公开 | `calc(1em * var(--c-form-line-height) + var(--c-form-vertical-label-margin-bottom))` | 本组件 CSS<br>`padding-top` |
 | `--c-filter-form-actions-gap` | 公开 | `var(--c-sys-space-5)` | 本组件 CSS<br>`gap` |
-| `--c-filter-form-background-color` | 公开 | `var(--c-sys-color-surface-default)` | 本组件 CSS<br>`background-color` |
+| `--c-filter-form-background-color` | 公开 | `transparent` | 本组件 CSS<br>`background-color` |
 | `--c-filter-form-border-color` | 公开 | `var(--c-sys-color-border-subtle)` | 本组件 CSS<br>`border` |
-| `--c-filter-form-border-radius` | 公开 | `var(--c-border-radius-md)` | 本组件 CSS<br>`border-radius` |
-| `--c-filter-form-border-width` | 公开 | `1px` | 本组件 CSS<br>`border` |
-| `--c-filter-form-collapse-color` | 公开 | `var(--c-color-text-2)` | 本组件 CSS<br>`color` |
-| `--c-filter-form-collapse-gap` | 公开 | `4px` | 本组件 CSS<br>`gap` |
-| `--c-filter-form-collapse-hover-color` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color`, `outline` |
-| `--c-filter-form-focus-offset` | 公开 | `3px` | 本组件 CSS<br>`outline-offset` |
-| `--c-filter-form-focus-width` | 公开 | `2px` | 本组件 CSS<br>`outline` |
+| `--c-filter-form-border-radius` | 公开 | `0px` | 本组件 CSS<br>`border-radius` |
+| `--c-filter-form-border-width` | 公开 | `0px` | 本组件 CSS<br>`border` |
 | `--c-filter-form-item-margin-bottom` | 公开 | `0px` | 本组件 CSS<br>`margin-bottom` |
-| `--c-filter-form-padding` | 公开 | `var(--c-sys-space-7)` | 本组件 CSS<br>`padding` |
+| `--c-filter-form-padding` | 公开 | `0px` | 本组件 CSS<br>`padding` |
 
 </div>
 

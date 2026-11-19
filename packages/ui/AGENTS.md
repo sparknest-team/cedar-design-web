@@ -77,6 +77,8 @@ src/<component>/
 
 ### Demo / 样例
 
+- 双语 Demo 使用 `const copy = useDemoLocale('组件或场景键')`。在 `src/__demos__/locale/{zh-cn,en-us}.ts` 补文案，模板读取 `copy`。不要在 Demo 中监听语言并维护本地布尔值。参考 [Section 示例](src/section/__demos__/plain.vue)，修改后运行仓库根目录的 `pnpm check:demo-i18n`。
+
 - demo 里的 icon 必须用 kebab + `c-` 前缀，如 `<c-icon-more />`，**禁止**裸 PascalCase `<More />`——`CedarResolver` 只匹配 `^C[A-Z]`，不会解析裸 `Icon`。
 - demo 文件名 kebab-case；`<demo src="./__demos__/xxx.vue">` 路径同名。
 
