@@ -6,6 +6,12 @@
     margin-inline-end: calc(-1 * var(--c-field-padding-horizontal));
     padding-inline-end: calc(var(--c-textarea-padding-horizontal) + var(--c-field-padding-horizontal));
   }
+  // Standard fields have no horizontal inset for the resize grip to occupy.
+  .c-field-decorator--variant-standard:not(:has(.c-field-decorator__suffix)) &__inner {
+    width: 100%;
+    margin-inline-end: 0;
+    padding-inline-end: var(--c-textarea-padding-horizontal);
+  }
   .c-field-decorator:has(.c-field-decorator__suffix) {
     container-type: inline-size;
   }
