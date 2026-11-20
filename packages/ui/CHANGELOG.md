@@ -1,6 +1,30 @@
 # @cedar-design/ui-vue
 
+## 1.3.0
+
+### Minor Changes
+
+- [#8](https://github.com/loca-spirit/cedar-design-web/pull/8) [`059ce60`](https://github.com/loca-spirit/cedar-design-web/commit/059ce60c8f5aafb2f913a5ffd246ef114c6e9d69) Thanks [@loca-spirit](https://github.com/loca-spirit)! - Add opt-in TableCore JS, types and styles for native flat-data rendering, adaptive widths and frozen columns. Provide separate headless filter/sort state and explicit client processing entries. Extract shared rendering and private capability modules while preserving the complete Table API, default behavior and desktop interactions.
+
+- [#8](https://github.com/loca-spirit/cedar-design-web/pull/8) [`059ce60`](https://github.com/loca-spirit/cedar-design-web/commit/059ce60c8f5aafb2f913a5ffd246ef114c6e9d69) Thanks [@loca-spirit](https://github.com/loca-spirit)! - Support logical start and end alignment through the Table pagination configuration.
+
+  Table now renders its pagination bar below the rows. Replace the former `page-position` option with `pagination.align` when selecting the start or end edge.
+
+### Patch Changes
+
+- [#8](https://github.com/loca-spirit/cedar-design-web/pull/8) [`059ce60`](https://github.com/loca-spirit/cedar-design-web/commit/059ce60c8f5aafb2f913a5ffd246ef114c6e9d69) Thanks [@loca-spirit](https://github.com/loca-spirit)! - Extract Table column-width allocation and frozen-column offsets into dependency-free layout modules while preserving the existing Table API and behavior. Add compatibility and production-consumer bundle baselines for the refactor.
+
+- [#8](https://github.com/loca-spirit/cedar-design-web/pull/8) [`059ce60`](https://github.com/loca-spirit/cedar-design-web/commit/059ce60c8f5aafb2f913a5ffd246ef114c6e9d69) Thanks [@loca-spirit](https://github.com/loca-spirit)! - Extract Table summary data, span/render orchestration and virtual row planning/list adaptation into private feature modules. Preserve the public API, default pipeline, slots, events, refs and lazy detail evaluation, and add published-format compatibility and bundle regressions.
+
+- [#8](https://github.com/loca-spirit/cedar-design-web/pull/8) [`059ce60`](https://github.com/loca-spirit/cedar-design-web/commit/059ce60c8f5aafb2f913a5ffd246ef114c6e9d69) Thanks [@loca-spirit](https://github.com/loca-spirit)! - Fix native form label targeting and nested field feedback, Cascader keyboard and search ownership, popup reference motion tracking, and inherited reading direction. Align Checkbox and Radio theme tokens and refresh their documentation.
+
+- [#8](https://github.com/loca-spirit/cedar-design-web/pull/8) [`059ce60`](https://github.com/loca-spirit/cedar-design-web/commit/059ce60c8f5aafb2f913a5ffd246ef114c6e9d69) Thanks [@loca-spirit](https://github.com/loca-spirit)! - Remove the FilterForm padding, border, corner radius and background tokens. FilterForm has zero outer margin and padding and no border across themes. Wrap it in Card for a bordered panel.
+
+- Updated dependencies [[`059ce60`](https://github.com/loca-spirit/cedar-design-web/commit/059ce60c8f5aafb2f913a5ffd246ef114c6e9d69)]:
+  - @cedar-design/use-vue@1.2.2
+
 ## 1.2.0
+
 ### Minor Changes
 
 - [#6](https://github.com/sparknest-team/cedar-design-web/pull/6) [`6620155`](https://github.com/sparknest-team/cedar-design-web/commit/6620155abe7d3bb91703996e62a3fe8eeb518b14) Thanks [@sparknest-team](https://github.com/sparknest-team)! - Release the public packages together at 1.2.0 so applications can install matching versions.
@@ -39,7 +63,8 @@
 - Updated dependencies [[`60c9c1a`](https://github.com/sparknest-team/cedar-design-web/commit/60c9c1a504108fde2acfde47e84554770e57835b), [`c3b76e0`](https://github.com/sparknest-team/cedar-design-web/commit/c3b76e0d3578aecf4b446e527400d2ce12a78618)]:
   - @cedar-design/use-vue@1.2.0
   - @cedar-design/icons-vue@1.2.0
-permalink: /changelog/
+    permalink: /changelog/
+
 ---
 
 [//]: # "template"

@@ -1,6 +1,13 @@
 # @cedar-design/use-vue
 
+## 1.2.2
+
+### Patch Changes
+
+- [#8](https://github.com/loca-spirit/cedar-design-web/pull/8) [`059ce60`](https://github.com/loca-spirit/cedar-design-web/commit/059ce60c8f5aafb2f913a5ffd246ef114c6e9d69) Thanks [@loca-spirit](https://github.com/loca-spirit)! - Fix native form label targeting and nested field feedback, Cascader keyboard and search ownership, popup reference motion tracking, and inherited reading direction. Align Checkbox and Radio theme tokens and refresh their documentation.
+
 ## 1.2.0
+
 ### Minor Changes
 
 - [#6](https://github.com/sparknest-team/cedar-design-web/pull/6) [`6620155`](https://github.com/sparknest-team/cedar-design-web/commit/6620155abe7d3bb91703996e62a3fe8eeb518b14) Thanks [@sparknest-team](https://github.com/sparknest-team)! - Release the public packages together at 1.2.0 so applications can install matching versions.
